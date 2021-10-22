@@ -13,8 +13,7 @@ export function initLog() {
   const isStatic = mx.settings.mode.static === true;
   if (!window.logger) {
     window.logger = new Logger({
-      //url: h.getApiUrl('collectLogs'),
-      url: 'http://apidev.mapx.localhost:8880/collect/logs/',
+      url: h.getApiUrl('collectLogs'),
       timeCollect: 15000,
       baseForm: {},
       validate: formatValidateLog
