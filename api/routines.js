@@ -7,10 +7,16 @@ moduleAlias.addAliases({
   '@mapx': __dirname + '/modules/',
   '@root': __dirname
 });
+const {once, onceInterval} = require('@mapx/helpers');
+
+/**
+ * Rountines' scripts
+ */
+
 const migrate = require('@mapx/migrate');
 const language = require('@mapx/language');
 const {updateIndexes} = require('@mapx/search');
-const {once, onceInterval} = require('@mapx/helpers');
+const {updateGeoIpTable} = require('@mapx/ip');
 
 /*
  * Rename
@@ -19,6 +25,7 @@ const {once, onceInterval} = require('@mapx/helpers');
 const updateDb = () => migrate.apply();
 const updateLanguage = () => language.init();
 const updateIndexesRoutine = () => updateIndexes({});
+const updateGeoIpTableRoutine = () => updateGeoIpTable();
 
 /**
  * Config
@@ -41,14 +48,36 @@ const optCommon = {
 const optHourly = Object.assign({}, optCommon, {
   /**
    * Each hour
-   * intervalMs: 1 * 60 * 60 * 1000,
    */
   intervalMs: 1 * 60 * 60 * 1000,
   before: false
 });
+const optWeekly = Object.assign({}, optCommon, {
+  /**
+   * Each week
+   */
+  intervalMs: 1 * 7 * 24 * 60 * 60 * 1000,
+  before: false
+});
 
 /**
- * Apply
+ * Apply at start, once
  */
-once([updateDb, updateLanguage, updateIndexes], optCommon);
+once(
+  [
+    updateDb,
+    updateLanguage, 
+    updateIndexesRoutine,
+    updateGeoIpTableRoutine
+  ],
+  optCommon
+);
+
+/**
+ * Apply at interval
+ */
 onceInterval([updateIndexesRoutine], optHourly);
+onceInterval([updateGeoIpTableRoutine], optWeekly);
+
+
+

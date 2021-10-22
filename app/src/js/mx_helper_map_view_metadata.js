@@ -62,7 +62,7 @@ export async function viewToMetaModal(view) {
 
   meta.id = id;
 
-  const elViewMeta = metaViewToUi(meta);
+  const elViewMeta = await metaViewToUi(meta);
 
   if (elViewMeta) {
     elContent.appendChild(elViewMeta);
@@ -132,7 +132,7 @@ export function metaSourceRasterToUi(rasterMeta) {
   });
 }
 
-function metaViewToUi(meta) {
+async function metaViewToUi(meta) {
   const h = mx.helpers;
   const prefixKey = 'meta_view_';
   const keys = [
@@ -164,6 +164,29 @@ function metaViewToUi(meta) {
       return row;
     });
 
+  const elPie = h.el('div', {
+    class: ['panel', 'panel-default'],
+    style: {
+      width: '100%',
+      maxWidth: '100%'
+    }
+  });
+
+  h.onNextFrame(() => {
+    metaCountByCountryToPie(meta.stat_n_add_by_country, elPie);
+  });
+
+  /*elAuto('array_table', meta.stat_n_add_by_country, {*/
+  /*tableHeadersClasses: ['col-sm-9', 'col-sm-3'],*/
+  /*tableTitleAsLanguageKey: true,*/
+  /*tableHeadersLabels: [*/
+  /*'meta_view_stat_n_add_by_country_col_code',*/
+  /*'meta_view_stat_n_add_by_country_col_name',*/
+  /*'meta_view_stat_n_add_by_country_col_count'*/
+  /*],*/
+  /*tableTitle: 'meta_view_table_n_add_by_country'*/
+  /*}),*/
+
   return el(
     'div',
     elAuto('array_table', tblSummary, {
@@ -173,15 +196,7 @@ function metaViewToUi(meta) {
       tableTitleAsLanguageKey: true,
       stringAsLanguageKey: true
     }),
-    elAuto('array_table', meta.stat_n_add_by_country, {
-      tableHeadersClasses: ['col-sm-9', 'col-sm-3'],
-      tableTitleAsLanguageKey: true,
-      tableHeadersLabels: [
-        'meta_view_stat_n_add_by_country_col_name',
-        'meta_view_stat_n_add_by_country_col_count'
-      ],
-      tableTitle: 'meta_view_table_n_add_by_country'
-    }),
+    elPie,
     elAuto('array_table', meta.table_editors, {
       booleanValues: ['✓', ''],
       tableHeadersClasses: ['col-sm-6', 'col-sm-3', 'col-sm-3'],
@@ -194,6 +209,66 @@ function metaViewToUi(meta) {
       tableTitle: 'meta_view_table_editors_title'
     })
   );
+}
+
+async function metaCountByCountryToPie(table, elPie) {
+  const h = mx.helpers;
+  try {
+    const highcharts = await h.moduleLoad('highcharts');
+    /**
+     * User pie
+     */
+    const maxOpenCount = table.reduce((a, c) => (a > c ? a : c), 0);
+    const data = table.map((r) => {
+      return {
+        name: r.country_name || r.country || 'Unknown',
+        y: r.count,
+        sliced: r.count === maxOpenCount,
+        selected: r.count === maxOpenCount
+      };
+    });
+    const colors = mx.theme.getTheme().colors;
+    highcharts.chart(elPie, {
+      chart: {
+        styledMode: false,
+        backgroundColor: colors.mx_ui_background,
+        plotBackgroundColor: colors.mx_ui_background.color,
+        plotBorderWidth: 0,
+        plotShadow: false,
+        type: 'pie'
+      },
+      title: {
+        text: await h.getDictItem('meta_view_stat_n_add_by_country')
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      accessibility: {
+        point: {
+          valueSuffix: ''
+        }
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+          }
+        }
+      },
+      series: [
+        {
+          name: await h.getDictItem('meta_view_stat_n_add_by_country_variable'),
+          colorByPoint: true,
+          data: data
+        }
+      ]
+    });
+  } catch (e) {
+    console.warn(e);
+  }
 }
 
 /**

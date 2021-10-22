@@ -5606,23 +5606,13 @@
   },
   {
     "id": "meta_view_stat_n_add_by_country",
-    "en": "Number of activations by country",
-    "ru": "Количество активаций по странам"
+    "en": "Reads per countries",
+    "ru": "Читает по странам"
   },
   {
-    "id": "meta_view_table_n_add_by_country",
-    "en": "Activation per countries",
-    "ru": "Активация по странам"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_col_name",
-    "en": "Country",
-    "ru": "Страна"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_col_count",
-    "en": "Number of activations",
-    "ru": "Количество активаций"
+    "id": "meta_view_stat_n_add_by_country_variable",
+    "en": "Percentage",
+    "ru": "Процент"
   },
   {
     "id": "meta_source_title",

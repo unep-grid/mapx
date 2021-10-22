@@ -13,34 +13,42 @@ v_date_created AS (
   ORDER BY date_modified ASC LIMIT 1
 ),
 v_log AS (
- SELECT pid, ip_user,id_user, is_guest
+ SELECT pid, ip_user, id_user, is_guest
   FROM mx_logs
   WHERE data #>> '{"id_view"}' = '{{idView}}'
   AND id_log = 'view_add'
 ),
-ip_cntry AS (
-  SELECT DISTINCT ON (ip_user, data #>> '{country}')
-  l.ip_user,
-  l.data #>> '{country}'AS country 
-  FROM
-  mx_logs l,
-  v_log v
-  WHERE
-  l.id_log = 'session_start' 
-  AND v.ip_user = l.ip_user 
+v_log_ip_country AS (
+  SELECT v.pid,
+   v.id_user,
+   v.is_guest,
+   coalesce(m.country_name,'unknown') country_name,
+   m.country_iso_code country
+  FROM v_log v
+  LEFT JOIN
+  mx_ip m ON
+  v.ip_user <<= m.network
 ),
 v_stat_add_count_by_country AS (
   SELECT
-  coalesce(NULLIF(c.country,''),'?') AS country,
+  country,
+  country_name,
   COUNT (*) 
   FROM
-  v_log v LEFT JOIN ip_cntry c USING (ip_user)
+  v_log_ip_country 
   GROUP BY
-  country
+  country,
+  country_name
+),
+v_stat_add_count_by_country_order AS (
+  SELECT *
+  FROM 
+  v_stat_add_count_by_country
+  ORDER BY count desc
 ),
 v_stat_add_count_by_country_json AS (
  SELECT json_agg(row_to_json(t)) tbl 
- FROM v_stat_add_count_by_country t
+ FROM v_stat_add_count_by_country_order t
 ),
 v_stat_add_count_by_users AS (
   SELECT COUNT(pid)

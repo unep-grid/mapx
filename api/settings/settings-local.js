@@ -16,6 +16,9 @@ module.exports = Object.assign(s, {
     port: env.REDIS_PORT,
     host: env.REDIS_HOST
   },
+  geoip: {
+    licenseKey : env.MAXMIND_GEOIP_LICENSE_KEY,
+  },
   meili: {
     master_key: env.MEILI_MASTER_KEY,
     port: env.MEILI_PORT,

@@ -5606,23 +5606,13 @@
   },
   {
     "id": "meta_view_stat_n_add_by_country",
-    "en": "Number of activations by country",
-    "ar": "عدد عمليات التنشيط حسب البلد"
+    "en": "Reads per countries",
+    "ar": "يقرأ في البلدان"
   },
   {
-    "id": "meta_view_table_n_add_by_country",
-    "en": "Activation per countries",
-    "ar": "التنشيط لكل دولة"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_col_name",
-    "en": "Country",
-    "ar": "دولة"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_col_count",
-    "en": "Number of activations",
-    "ar": "عدد التنشيطات"
+    "id": "meta_view_stat_n_add_by_country_variable",
+    "en": "Percentage",
+    "ar": "النسبة المئوية"
   },
   {
     "id": "meta_source_title",

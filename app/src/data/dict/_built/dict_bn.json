@@ -5606,23 +5606,13 @@
   },
   {
     "id": "meta_view_stat_n_add_by_country",
-    "en": "Number of activations by country",
-    "bn": "দেশ অনুযায়ী সক্রিয়তার সংখ্যা"
+    "en": "Reads per countries",
+    "bn": "প্রতি দেশ পড়ে"
   },
   {
-    "id": "meta_view_table_n_add_by_country",
-    "en": "Activation per countries",
-    "bn": "প্রতি দেশ অ্যাক্টিভেশন"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_col_name",
-    "en": "Country",
-    "bn": "দেশ"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_col_count",
-    "en": "Number of activations",
-    "bn": "সক্রিয়করণের সংখ্যা"
+    "id": "meta_view_stat_n_add_by_country_variable",
+    "en": "Percentage",
+    "bn": "শতাংশ"
   },
   {
     "id": "meta_source_title",

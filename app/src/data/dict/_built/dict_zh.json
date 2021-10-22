@@ -5606,23 +5606,13 @@
   },
   {
     "id": "meta_view_stat_n_add_by_country",
-    "en": "Number of activations by country",
-    "zh": "按国家/地区划分的激活次数"
+    "en": "Reads per countries",
+    "zh": "每个国家/地区的阅读次数"
   },
   {
-    "id": "meta_view_table_n_add_by_country",
-    "en": "Activation per countries",
-    "zh": "每个国家的激活"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_col_name",
-    "en": "Country",
-    "zh": "国家"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_col_count",
-    "en": "Number of activations",
-    "zh": "激活次数"
+    "id": "meta_view_stat_n_add_by_country_variable",
+    "en": "Percentage",
+    "zh": "百分比"
   },
   {
     "id": "meta_source_title",

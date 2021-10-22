@@ -1,0 +1,31 @@
+.highcharts-title {
+  fill: var(--mx_ui_text) !important;
+  letter-spacing: 0.1em !important;
+  font-size: 1.2em !important;
+  font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
+}
+.highcharts-subtitle {
+  font-style: italic;
+  fill: var(--mx_ui_text) !important;
+}
+.highcharts-caption {
+  fill: var(--mx_ui_text) !important;
+}
+.highcharts-button-box {
+  fill: var(--mx_ui_background_faded) !important;
+}
+.highcharts-background,
+.highcharts-plot-border {
+  fill: var(--mx_ui_background) !important;
+}
+.highcharts-menu {
+  background-color: var(--mx_ui_background) !important;
+  border: 1px solid var(--mx_ui_border) !important;
+  box-shadow: var(--mx_ui_box_shadow) !important;
+}
+.highcharts-menu-item {
+  color: var(--mx_ui_text) !important;
+}
+.highcharts-credits {
+  opacity: 0.5 !important;
+}

@@ -5606,23 +5606,13 @@
   },
   {
     "id": "meta_view_stat_n_add_by_country",
-    "en": "Number of activations by country",
-    "fr": "Nombre d'activations par pays"
+    "en": "Reads per countries",
+    "fr": "Lectures par pays"
   },
   {
-    "id": "meta_view_table_n_add_by_country",
-    "en": "Activation per countries",
-    "fr": "Activation par pays"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_col_name",
-    "en": "Country",
-    "fr": "Pays"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_col_count",
-    "en": "Number of activations",
-    "fr": "Nombre d'activations"
+    "id": "meta_view_stat_n_add_by_country_variable",
+    "en": "Percentage",
+    "fr": "Pourcentage"
   },
   {
     "id": "meta_source_title",

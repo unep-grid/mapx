@@ -5606,23 +5606,13 @@
   },
   {
     "id": "meta_view_stat_n_add_by_country",
-    "en": "Number of activations by country",
-    "ps": "د هیواد له مخې د فعالیتونو شمیر"
+    "en": "Reads per countries",
+    "ps": "په هر هیواد کې لوستل کیږي"
   },
   {
-    "id": "meta_view_table_n_add_by_country",
-    "en": "Activation per countries",
-    "ps": "په هر هیواد کې فعالیت"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_col_name",
-    "en": "Country",
-    "ps": "هیواد"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_col_count",
-    "en": "Number of activations",
-    "ps": "د فعالیتونو شمیر"
+    "id": "meta_view_stat_n_add_by_country_variable",
+    "en": "Percentage",
+    "ps": "سلنه"
   },
   {
     "id": "meta_source_title",

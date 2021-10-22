@@ -25,11 +25,14 @@ module.exports = {
     port: 6379,
     host: 'localhost'
   },
+  geoip: {
+    licenseKey: null
+  },
   meili: {
     master_key: null,
     port: 7700,
     host: 'meili',
-    protocol : 'http://'
+    protocol: 'http://'
   },
   db: {
     name: 'postgres',
