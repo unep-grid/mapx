@@ -1,3 +1,10 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.26' target='_blank'>1.9.26</a>
+   - APP/API
+    - Improved mirror api :
+      - Standalone tool in the toolbox to edit a single URL - Useful for dashboards, custom views.
+      - In raster tile's view edition, an option is available to automatically switch on/off mirroring on all urls. Sould work on WMS Capabilities, tiles, GetFeatures and legends
+      - Support for templating. e.g. {x}/{y}/{z}
+      - Added rate limite ( 1000req per 15min, default wait );
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.25' target='_blank'>1.9.25</a>
    - APP
       - Added menu in view's metadata panel to quickly access sections and scroll back
