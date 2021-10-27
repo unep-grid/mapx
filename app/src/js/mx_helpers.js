@@ -50,6 +50,7 @@ export * from './mx_helper_ip.js';
 export * from './mx_helper_sdk.js';
 export * from './mx_helper_issues.js';
 export * from './mx_helper_legend_vt.js';
+export * from './load_test/index.js';
 
 /**
  * imported module available in mx.helpers
