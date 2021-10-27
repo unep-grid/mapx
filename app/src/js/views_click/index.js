@@ -9,6 +9,7 @@ import {viewToTableAttributeModal} from './../mx_helper_source_attribute_table.j
 import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
 import {getDictItem} from './../mx_helper_language.js';
 import {uploadGeoJSONModal} from './../mx_helper_upload_source.js';
+import {modalMirror} from './../mirror_util';
 import {
   downloadViewRaster,
   downloadViewGeoJSON,
@@ -49,6 +50,11 @@ async function handleViewClick(event) {
      * tests
      */
     t = [
+      {
+        comment: 'target is the mirror helper button',
+        test: dataset.tool_id === 'btn_mirror_url',
+        action: modalMirror
+      },
       {
         comment: 'target is a shiny action button',
         test: dataset.view_action_handler === 'shiny',
@@ -221,7 +227,7 @@ async function handleViewClick(event) {
           const view = getView(idView);
           const filter = ['any'];
           const rules = path(view, '_rulesLegend', []);
-          for(const li of legendInputs){
+          for (const li of legendInputs) {
             if (li.checked) {
               const index = li.dataset.view_action_index * 1;
               const ruleIndex = rules[index];
@@ -324,13 +330,15 @@ async function handleViewClick(event) {
           await Promise.all([r]);
         }
 
-        mx.events.fire({
-          type: 'view_panel_click',
-          data: {
-            idView: dataset.view_action_target,
-            idAction: dataset.view_action_key
-          }
-        });
+        if (dataset.view_action_key) {
+          mx.events.fire({
+            type: 'view_panel_click',
+            data: {
+              idView: dataset.view_action_target,
+              idAction: dataset.view_action_key
+            }
+          });
+        }
 
         if (!t[i].allowDefault) {
           /* Skip default */

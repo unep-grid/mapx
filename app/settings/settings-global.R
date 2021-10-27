@@ -95,6 +95,7 @@ config[["api"]] <- list(
   routes = list(
     getSearchKey = "/get/search/key",
     getIpInfo = "/get/ip",
+    getMirror = "/get/mirror",
     getConfigMap = '/get/config/map',
     getTile = "/get/tile/{x}/{y}/{z}.mvt",
     getSourceMetadata = "/get/source/metadata/",

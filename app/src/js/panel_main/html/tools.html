@@ -1,4 +1,8 @@
-<div id="mxTabPanelTools" class="mx-tab--panel mx-tab--panel-border-padding" data-panel="tools">
+<div
+  id="mxTabPanelTools"
+  class="mx-tab--panel mx-tab--panel-border-padding"
+  data-panel="tools"
+>
   <!-- highlight -->
   <div class="mx-tab--content-scrollable mx-tab--content-padding">
     <h4 data-lang_key="title_config_highlight"></h4>
@@ -75,14 +79,15 @@
     <div id="uiBtnShowAppConfig" class="mx-tools-group shiny-html-output"></div>
     <div id="uiBtnProjectConfig" class="mx-tools-group shiny-html-output"></div>
     <h3 data-lang_key="title_utilities"></h3>
-    <hr />
-    <details>
-      <summary data-lang_key="title_settings_colors"></summary>
-      <div class="mx-settings-colors"><div id="mxInputThemeColors"></div></div>
-    </details>
-
-    <hr />
     <div class="mx-tools-group">
+      <button
+        id="btnMirrorUrl"
+        data-lang_key="tool_mirror_toolbox_btn"
+        data-tool_id="btn_mirror_url"
+        class="btn btn-default"
+      >
+        mirror
+      </button>
       <button
         id="btnClearCache"
         class="btn btn-default"
@@ -97,13 +102,22 @@
       >
         Reset default panel sizes
       </button>
-<button
+      <button
         id="btnShowSearchApiConfig"
         class="btn btn-default"
         data-lang_key="search_show_api_config"
       >
         Get search API key and configuration
       </button>
+      <hr />
+      <details>
+        <summary data-lang_key="title_settings_colors"></summary>
+        <div class="mx-settings-colors">
+          <div id="mxInputThemeColors"></div>
+        </div>
+      </details>
+
+      <hr />
     </div>
     <div>
       <hr />

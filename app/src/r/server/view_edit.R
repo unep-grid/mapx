@@ -369,6 +369,11 @@ observe({
                     choices = c(512,256)
                     ),
                   checkboxInput(
+                    inputId = "checkRasterTileUseMirror",
+                    label =  d("tool_mirror_enable_for_view_raster_tiles",language),
+                    value = .get(viewData,c("data","source","useMirror"))
+                    ),
+                  checkboxInput(
                     inputId = "checkShowWmsGenerator",
                     label = "Display WMS tools"
                     ),
@@ -457,7 +462,8 @@ observe({
                     services = .get(config,c("wms")),
                     selectorParent = '#wmsGenerator',
                     selectorTileInput = '#textRasterTileUrl',
-                    selectorLegendInput = '#textRasterTileLegend'
+                    selectorLegendInput = '#textRasterTileLegend',
+                    selectorUseMirror = '#checkRasterTileUseMirror'
                     #selectorMetaInput = '#textRasterTileUrlMetadata'
                     ))
               }
@@ -1012,8 +1018,9 @@ observeEvent(input$btnViewSave,{
         legend = input$textRasterTileLegend,
         #urlMetadata = input$textRasterTileUrlMetadata,
         #urlDownload = input$textRasterTileUrlDownload,
-        tileSize = as.integer(input$selectRasterTileSize)
-        )
+        tileSize = as.integer(input$selectRasterTileSize),
+        useMirror = input$checkRasterTileUseMirror
+      )
 
        view[[c("data","source","legendTitles")]] <- input$viewRasterLegendTitles_values$data
     }

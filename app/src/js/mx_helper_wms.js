@@ -1,5 +1,6 @@
 import {miniCacheSet, miniCacheGet} from './minicache';
 import {el, elSpanTranslate} from './el_mapx/index.js';
+import {mirrorUrlCreate} from './mirror_util';
 export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers};
 
 /**
@@ -15,12 +16,20 @@ export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers};
  *TODO: event delegation, destroy method
  */
 async function wmsBuildQueryUi(opt) {
-  opt = Object.assign({}, {useCache: false, timestamp: null}, opt);
+  opt = Object.assign(
+    {},
+    {useMirror: false, useCache: false, timestamp: null},
+    opt
+  );
 
   const h = mx.helpers;
   await h.moduleLoad('selectize');
   const elInputTiles = document.querySelector(opt.selectorTileInput);
   const elInputLegend = document.querySelector(opt.selectorLegendInput);
+  const elInputAddMirror = document.querySelector(opt.selectorUseMirror);
+  if (elInputAddMirror) {
+    opt.useMirror = !!elInputAddMirror.checked;
+  }
   const elParent =
     document.querySelector(opt.selectorParent) || elInputTile.parentElement;
   const services = opt.services;
@@ -30,6 +39,10 @@ async function wmsBuildQueryUi(opt) {
   if (!elInputTiles || !elInputLegend) {
     return;
   }
+
+  /**
+   * Build
+   */
 
   const elSelectServices = el('select', {
     class: 'form-control'
@@ -118,6 +131,7 @@ async function wmsBuildQueryUi(opt) {
           searchParams: {
             timestamp: opt.timestamp
           },
+          useMirror: opt.useMirror,
           useCache: opt.useCache
         }
       });
@@ -271,15 +285,16 @@ async function wmsBuildQueryUi(opt) {
 }
 
 async function wmsGetCapabilities(baseUrl, opt) {
+  const h = mx.helpers;
   opt = Object.assign(
     {},
     {
       useCache: true,
-      searchParams: null
+      searchParams: null,
+      useMirror: false
     },
     opt
   );
-  const h = mx.helpers;
   const def = {};
   const queryString = h.objToParams(
     Object.assign(
@@ -307,10 +322,11 @@ async function wmsGetCapabilities(baseUrl, opt) {
 
   const ignoreCache =
     opt.useCache === false || mx.settings.cacheIgnore === true || !data;
-
+  const useMirror = !!opt.useMirror;
   if (ignoreCache) {
     console.log('WMS GetCapabilities from server');
-    const xmlString = await h.fetchProgress_xhr(url, {
+    const urlFetch = useMirror ? mirrorUrlCreate(url) : url;
+    const xmlString = await h.fetchProgress_xhr(urlFetch, {
       maxSize: mx.settings.maxByteFetch,
       timeout: 2e4
     });
@@ -415,7 +431,7 @@ export async function wmsQuery(opt) {
   const urlBase = opt.url;
   const modeObject = opt.asObject === true || false;
   const ignoreBbox = true;
-
+  const useMirror = h.path(opt,'getCapabilities.useMirror',false);
   /**
    * Return fetch promise
    */
@@ -514,7 +530,8 @@ export async function wmsQuery(opt) {
   /**
    * Apply GetFeatureInfo
    */
-  const response = await fetch(url);
+  const urlFetch = useMirror ? mirrorUrlCreate(url) : url;
+  const response = await fetch(urlFetch);
 
   if (response.exceptions) {
     console.warn(res.exceptions);

@@ -9,7 +9,7 @@ const def = {
   binsNumber: 5,
   stats: ['base', 'attributes', 'temporal', 'spatial'],
   timestamp: null,
-  nullValue : null
+  nullValue: null
 };
 
 /**
@@ -26,8 +26,8 @@ export async function getViewSourceSummary(view, opt) {
     {
       idView: view.id,
       timestamp: view._src_timestamp,
-      idAttr : h.path(view,'data.attribute.name'),
-      idSource : h.path(view,'data.source.layerInfo.name')
+      idAttr: h.path(view, 'data.attribute.name'),
+      idSource: h.path(view, 'data.source.layerInfo.name')
     },
     opt
   );
@@ -73,7 +73,6 @@ export async function getViewSourceSummary(view, opt) {
   return out;
 }
 
-
 /**
  * Get vector source summary
  */
@@ -94,9 +93,11 @@ export async function getSourceVtSummary(opt) {
       delete opt[k];
     }
   });
- 
+
   if (!h.isViewId(opt.idView) && !h.isSourceId(opt.idSource)) {
-    console.warn('getSourceVtSummary : at least id source or id view are required');
+    console.warn(
+      'getSourceVtSummary : at least id source or id view are required'
+    );
     return {};
   }
 
@@ -108,7 +109,6 @@ export async function getSourceVtSummary(opt) {
   const query = h.objToParams(opt);
   const url = `${urlSourceSummary}?${query}`;
   let summary;
-
 
   if (opt.useCache) {
     summary = await miniCacheGet(url);
@@ -151,8 +151,6 @@ export async function getSourceVtSummary(opt) {
   }
   summary._origin = origin;
 
-
-
   return summary;
 }
 
@@ -194,6 +192,7 @@ export async function getSourceRtSummary(view) {
   const h = mx.helpers;
   const out = {};
   const url = h.path(view, 'data.source.tiles', []);
+  const useMirror = h.path(view, 'data.source.useMirror', false);
   if (url.length === 0) {
     return out;
   }
@@ -213,6 +212,7 @@ export async function getSourceRtSummary(view) {
 
   const layerName = q.layers[0];
   const endpoint = urlQuery.split('?')[0];
+  const timeStamp = h.path(view, 'date_modified', null);
 
   const layers = await h.wmsGetLayers(endpoint, {
     getCapabilities: {
@@ -220,7 +220,8 @@ export async function getSourceRtSummary(view) {
         /**
          * timestamp : Used to invalidate getCapabilities cache
          */
-        timestamp: h.path(view, 'date_modified', null)
+        timestamp: timeStamp,
+        useMirror: useMirror
       }
     }
   });

@@ -14,6 +14,7 @@ import {MapxDraw} from './draw';
 import {NotifCenter} from './notif_center/';
 import {cleanDiacritic} from './string_util/';
 import chroma from 'chroma-js';
+import {mirrorUrlCreate} from './mirror_util';
 /**
  * TODO: convert this in a MapxMap Class
  */
@@ -1567,80 +1568,91 @@ export async function addSourceFromView(o) {
   const validType = isVt || isRt || isGj;
   const hasSource = !!p(o.view, 'data.source');
 
-  if (validType && hasSource) {
-    const project = p(mx, 'settings.project.id');
-    const projectView = p(o.view, 'project');
-    const projectsView = p(o.view, 'data.projects') || [];
-    const isEditable = h.isViewEditable(o.view);
-    const isLocationOk =
-      o.noLocationCheck ||
-      projectView === project ||
-      projectsView.indexOf(project) > -1;
-
-    if (!isLocationOk && isEditable) {
-      /*
-       * This should be handled in DB. TODO:check why this is needed here...
-       */
-      o.view._edit = false;
-    }
-
-    const idSource = o.view.id + '-SRC';
-
-    if (isVt) {
-      /**
-       * When adding source, we request the timestamp via ['base'] stat,
-       * without cache to be sure to have the latest value.
-       */
-      const summary = await h.getViewSourceSummary(o.view, {
-        stats: ['base'],
-        useCache: false
-      });
-      const baseUrl = h.getApiUrl('getTile');
-      const srcTimestamp = p(summary, 'timestamp', null);
-      let url = `${baseUrl}?view=${o.view.id}`;
-      if (srcTimestamp) {
-        url = `${url}&timestamp=${srcTimestamp}`;
-      }
-      o.view.data.source.tiles = [url, url];
-      o.view.data.source.promoteId = 'gid';
-    }
-
-    if (isGj) {
-      /**
-       * Add gid property if it does not exist
-       */
-      const features = h.path(o.view, 'data.source.data.features', []);
-      let gid = 1;
-      features.forEach((f) => {
-        if (!f.properties) {
-          f.properties = {};
-        }
-        if (!f.properties.gid) {
-          f.properties.gid = gid++;
-        }
-      });
-      o.view.data.source.promoteId = 'gid';
-    }
-
-    const sourceExists = !!o.map.getSource(idSource);
-
-    if (sourceExists) {
-      /**
-       * Handle case when old layers remain in map
-       * This could prevent source removal
-       */
-      h.removeLayersByPrefix({
-        prefix: o.view.id,
-        map: o.map
-      });
-      /**
-       * Remove old source
-       */
-      o.map.removeSource(idSource);
-    }
-
-    o.map.addSource(idSource, o.view.data.source);
+  if (!validType || !hasSource) {
+    return;
   }
+  const project = p(mx, 'settings.project.id');
+  const projectView = p(o.view, 'project');
+  const projectsView = p(o.view, 'data.projects') || [];
+  const useMirror = p(o.view, 'data.source.useMirror');
+  const isEditable = h.isViewEditable(o.view);
+  const isLocationOk =
+    o.noLocationCheck ||
+    projectView === project ||
+    projectsView.indexOf(project) > -1;
+
+  if (!isLocationOk && isEditable) {
+    /*
+     * This should be handled in DB. TODO:check why this is needed here...
+     */
+    o.view._edit = false;
+  }
+
+  const idSource = o.view.id + '-SRC';
+
+  if (isVt) {
+    /**
+     * When adding source, we request the timestamp via ['base'] stat,
+     * without cache to be sure to have the latest value.
+     */
+    const summary = await h.getViewSourceSummary(o.view, {
+      stats: ['base'],
+      useCache: false
+    });
+    const baseUrl = h.getApiUrl('getTile');
+    const srcTimestamp = p(summary, 'timestamp', null);
+    let url = `${baseUrl}?view=${o.view.id}`;
+    if (srcTimestamp) {
+      url = `${url}&timestamp=${srcTimestamp}`;
+    }
+    o.view.data.source.tiles = [url, url];
+    o.view.data.source.promoteId = 'gid';
+  }
+
+  if (isGj) {
+    /**
+     * Add gid property if it does not exist
+     */
+    const features = h.path(o.view, 'data.source.data.features', []);
+    let gid = 1;
+    features.forEach((f) => {
+      if (!f.properties) {
+        f.properties = {};
+      }
+      if (!f.properties.gid) {
+        f.properties.gid = gid++;
+      }
+    });
+    o.view.data.source.promoteId = 'gid';
+  }
+
+  const sourceExists = !!o.map.getSource(idSource);
+
+  if (sourceExists) {
+    /**
+     * Handle case when old layers remain in map
+     * This could prevent source removal
+     */
+    h.removeLayersByPrefix({
+      prefix: o.view.id,
+      map: o.map
+    });
+    /**
+     * Remove old source
+     */
+    o.map.removeSource(idSource);
+  }
+
+  const source = h.clone(o.view.data.source);
+
+  if (isRt && useMirror) {
+    const tiles = source.tiles;
+    for (let i = 0, iL = tiles.length ; i < iL; i++) {
+      tiles[i] = mirrorUrlCreate(tiles[i]);
+    }
+  }
+
+  o.map.addSource(idSource, source);
 }
 
 /**
@@ -3924,6 +3936,7 @@ async function viewLayersAddRt(o) {
   const legendB64Default = require('../../src/svg/no_legend.svg');
   const legendUrl = h.path(view, 'data.source.legend', null);
   const tiles = h.path(view, 'data.source.tiles', null);
+  const useMirror = h.path(view, 'data.source.useMirror', false);
   const hasTiles =
     h.isArray(tiles) && tiles.length > 0 && h.isArrayOf(tiles, h.isUrl);
   const legendTitle = h.getLabelFromObjectPath({
@@ -3931,11 +3944,19 @@ async function viewLayersAddRt(o) {
     path: 'data.source.legendTitles',
     defaultValue: null
   });
+  const hasLegendUrl = h.isUrl(legendUrl);
   const elLegendImageBox = h.el('div', {class: 'mx-legend-box'});
   let isLegendDefault = false;
 
   if (!hasTiles) {
     return false;
+  }
+  const tilesCopy = [...tiles];
+
+  if (useMirror) {
+    for (let i = 0, iL = tilesCopy.length; i < iL; i++) {
+      tilesCopy[i] = mirrorUrlCreate(tiles[i]);
+    }
   }
 
   /**
@@ -3989,22 +4010,22 @@ async function viewLayersAddRt(o) {
   /*  If no legend url is provided, use a minima */
   let legendB64 = null;
 
-  if (!h.isUrl(legendUrl)) {
+  if (!hasLegendUrl) {
     view._miniMap = new RasterMiniMap({
       elContainer: elLegendImageBox,
       width: 40,
       height: 40,
       mapSync: map,
-      tiles: tiles
+      tiles: tilesCopy
     });
     /* Raster MiniMap added, here */
     return true;
   }
 
+  const legendUrlFetch = useMirror ? mirrorUrlCreate(legendUrl) : legendUrl;
+
   /* Get a base64 image from url */
-  if (h.isUrl(legendUrl)) {
-    legendB64 = await h.urlToImageBase64(legendUrl);
-  }
+  legendB64 = await h.urlToImageBase64(legendUrlFetch);
 
   /* If empty data or length < 'data:image/png;base64,' length */
   if (!h.isBase64img(legendB64)) {
@@ -4985,6 +5006,7 @@ export function getLayersPropertiesAtPoint(opt) {
    */
   function fetchRasterProp(view) {
     const url = h.path(view, 'data.source.tiles', [])[0].split('?');
+    const useMirror = h.path(view, 'data.source.useMirror', false);
     const endpoint = url[0];
     const urlFull = `${endpoint}?${url[1]}`;
     const params = h.getQueryParametersAsObject(urlFull, {lowerCase: true});
@@ -5002,6 +5024,7 @@ export function getLayersPropertiesAtPoint(opt) {
         url: endpoint,
         asObject: modeObject,
         getCapabilities: {
+          useMirror: useMirror,
           searchParams: {
             /**
              * timestamp : Used to invalidate getCapabilities cache

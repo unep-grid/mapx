@@ -1,34 +1,22 @@
-const request = require('request');
+const fetch = require('node-fetch');
+const {sendError} = require('@mapx/helpers');
+const rateLimit = require("express-rate-limit");
+const mwLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  max: 1000
+});
 /**
  * Request handler / middleware
  */
 
-module.exports.mwGet = [mirrorHandler];
+module.exports.mwGet = [mwLimiter, mwMirror];
 
-function mirrorHandler(req, res) {
-  const query = req.query;
-
-  const options = {
-    url: query.url,
-    method: 'GET',
-    headers: JSON.parse(query.headers || null),
-    qs: JSON.parse(query.query || null)
-  };
-
+async function mwMirror(req, res) {
   try {
-    request(options, (error, response, body) => {
-      if (error) {
-        throw new Error(error);
-      }
-      Object.keys(response.headers).forEach((k) =>
-        res.setHeader(k, response.headers[k])
-      );
-      return res.send(body);
-    });
+    const url = req.query.url;
+    const r = await fetch(url);
+    r.body.pipe(res);
   } catch (e) {
-    return res.send({
-      type: 'error',
-      msg: e
-    });
+    return sendError(res, e);
   }
 }

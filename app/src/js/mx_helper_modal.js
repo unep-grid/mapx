@@ -220,7 +220,7 @@ export function modal(o) {
           class: ['mx-modal-body', 'mx-scroll-styled']
         },
         (elContent = el('div', {
-          style: styleContent || {position:'relative'},
+          style: styleContent || {position: 'relative'},
           class: ['mx-modal-content']
         }))
       )),
@@ -399,6 +399,7 @@ export function modalConfirm(opt) {
  * @param {String|Promise|Element} opt.label Input label
  * @param {String|Promise|Element} opt.cancel Cancel text
  * @param {String|Promise|Element} opt.confirm Confirm text
+ * @param {Function} opt.onInput Callback on input with (value, elBtnConfirm) as args
  * @return {Promise} resolve to input type
  */
 export function modalPrompt(opt) {
@@ -417,6 +418,7 @@ export function modalPrompt(opt) {
   opt.inputOptions = Object.assign({}, def.inputOptions, opt.inputOptions);
   return new Promise((resolve) => {
     const elInput = el('input', opt.inputOptions);
+
     const elContent = el(
       'div',
       {class: 'form-group'},
@@ -443,6 +445,9 @@ export function modalPrompt(opt) {
         class: 'btn btn-default',
         on: {
           click: () => {
+            if(elBtnConfirm.disabled){
+              return;
+            }
             resolve(elInput.value);
             elModal.close();
           }
@@ -450,6 +455,16 @@ export function modalPrompt(opt) {
       },
       opt.confirm || h.getDictItem('btn_confirm')
     );
+
+    if (opt.onInput instanceof Function) {
+      elInput.addEventListener('input', () =>
+        opt.onInput(elInput.value, elBtnConfirm)
+      );
+      /**
+       * Validate for default
+       */
+      opt.onInput(elInput.value, elBtnConfirm);
+    }
 
     elModal = modal({
       noShinyBinding: true,
