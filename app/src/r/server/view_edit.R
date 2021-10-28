@@ -370,17 +370,17 @@ observe({
                     ),
                   checkboxInput(
                     inputId = "checkRasterTileUseMirror",
-                    label =  d("tool_mirror_enable_for_view_raster_tiles",language),
+                    label = mxDictTranlateTagDesc("tool_mirror_enable",language),
                     value = .get(viewData,c("data","source","useMirror"))
                     ),
                   checkboxInput(
                     inputId = "checkShowWmsGenerator",
-                    label = "Display WMS tools"
+                    label = mxDictTranlateTagDesc("wms_display_tool", language)
                     ),
                   conditionalPanel(condition="input.checkShowWmsGenerator == true",
                     tags$div(
                       class = "well",
-                      tags$h3("WMS URL helper"),
+                      tags$h3(mxDictTranslateTag("wms_display_tool_title",language)),
                       tags$hr(),
                       tags$div(id="wmsGenerator")
                     )

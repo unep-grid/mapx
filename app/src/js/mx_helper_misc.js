@@ -27,6 +27,24 @@ export function updateIfEmpty(target, source) {
 
 }
 
+
+/**
+ * Set app busy mode 
+ * @param {Object} opt
+ * @param {Boolean} opt.back
+ * @param {Boolean} opt.icon
+ */
+export function setBusy(enable) {
+  if (enable === true) {
+    document.body.style.cursor = 'progress';
+  } else {
+    document.body.style.cursor = 'auto';
+  }
+}
+
+
+
+
 /**
  * Retrieve nested item from object/array
  * @param {Object|Array} obj
@@ -1403,11 +1421,11 @@ export function jsonToObj(m) {
 
 /** Used for shiny to print a message in js console. Usefull when the R console is not visible
  * @param{Object} m Options
- * @param {String} m.msg Message to print
+ * @param {String} m.message Message to print
+ * @param {String} m.msg (alias)
  */
-
 export function jsDebugMsg(m) {
-  console.log(m.msg);
+  console.log(m.message||m.msg);
 }
 
 /** Add or remove a class depending on enable option. The element has a class, ex. "hidden" and this will remove the class if m.enable is true.
@@ -2018,7 +2036,7 @@ export function handleRequestMessage(msg, msgs, on) {
           }
 
           var isObject = mx.helpers.isObject(m);
-          var msg = isObject ? m.msg : m;
+          var msg = isObject ? m.message || m.msg : m;
           var type = m.type || 'default';
 
           if (msgs[msg]) {

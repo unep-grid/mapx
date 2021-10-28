@@ -145,8 +145,8 @@ Simple validation tool for MapX specific values
 <dt><a href="#isEqual">isEqual(x, y)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Test for object equality</p>
 </dd>
-<dt><a href="#isUrl">isUrl(url)</a></dt>
-<dd><p>Validate url</p>
+<dt><a href="#isUrlHttps">isUrlHttps(url)</a> ⇒ <code>Boolean</code></dt>
+<dd><p>Validate url with https</p>
 </dd>
 <dt><a href="#isUrlValidWms">isUrlValidWms(url, opt)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Check if it&#39;s expected url for wms end point.</p>
@@ -647,14 +647,12 @@ Test for object equality
 | x | <code>Object</code> | First object to compare |
 | y | <code>Object</code> | Second object to compare |
 
-<a name="isUrl"></a>
+<a name="isUrlHttps"></a>
 
-## isUrl(url)
-Validate url
+## isUrlHttps(url) ⇒ <code>Boolean</code>
+Validate url with https
 
 **Kind**: global function  
-**Note**: https://stackoverflow.com/questions/8667070/javascript-regular-expression-to-validate-url  
-**Note**: https://mathiasbynens.be/demo/url-regex  
 
 | Param | Type | Description |
 | --- | --- | --- |

@@ -38,7 +38,6 @@ export * from './mx_helper_canvas_star.js';
 export * from './mx_helper_canvas.js';
 export * from './mx_helper_jed.js';
 export * from './mx_helper_epsgio.js';
-export * from './mx_helper_wms.js';
 export * from './mx_helper_filter_views.js';
 export * from './mx_helper_module_loader.js';
 export * from './mx_helper_source_attribute_table.js';
@@ -50,7 +49,6 @@ export * from './mx_helper_ip.js';
 export * from './mx_helper_sdk.js';
 export * from './mx_helper_issues.js';
 export * from './mx_helper_legend_vt.js';
-export * from './load_test/index.js';
 
 /**
  * imported module available in mx.helpers
@@ -64,3 +62,6 @@ export * from './is_test_mapx';
 export * from './user_pref';
 export * from './mapboxgl_json_editor';
 export * from './commonloc';
+export * from './load_test';
+export * from './wms';
+

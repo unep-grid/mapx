@@ -58,3 +58,5 @@ export function isViewOpen(view) {
   view = getView(view);
   return test.isView(view) && view._open === true;
 }
+
+

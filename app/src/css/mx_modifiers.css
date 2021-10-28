@@ -179,7 +179,7 @@ span.mx-badge-role {
 .mx .list-group-item {
   color: var(--mx_ui_text);
   border-color: var(--mx_ui_border);
-  background-color: var(--mx_ui_background);
+  background-color: var(--mx_ui_background_accent);
 }
 
 .mx .selectize-control.multi .selectize-input > .active {

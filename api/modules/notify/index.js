@@ -58,7 +58,7 @@ module.exports.mwNotify = function(io) {
         type: 'info',
         level: 'verbose',
         title: null,
-        msg: null,
+        message: null,
         data: null,
         value: null,
         timestamp: new Date() * 1

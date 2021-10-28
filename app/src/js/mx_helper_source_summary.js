@@ -215,13 +215,13 @@ export async function getSourceRtSummary(view) {
   const timeStamp = h.path(view, 'date_modified', null);
 
   const layers = await h.wmsGetLayers(endpoint, {
-    getCapabilities: {
+    optGetCapabilities: {
+      useMirror: useMirror,
       searchParams: {
         /**
          * timestamp : Used to invalidate getCapabilities cache
          */
         timestamp: timeStamp,
-        useMirror: useMirror
       }
     }
   });

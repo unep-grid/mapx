@@ -12,11 +12,11 @@ const mwLimiter = rateLimit({
 module.exports.mwGet = [mwLimiter, mwMirror];
 
 async function mwMirror(req, res) {
+  const url = req.query.url;
   try {
-    const url = req.query.url;
     const r = await fetch(url);
-    r.body.pipe(res);
+    return r.body.pipe(res);
   } catch (e) {
-    return sendError(res, e);
+    return sendError(res, e, 500 );
   }
 }

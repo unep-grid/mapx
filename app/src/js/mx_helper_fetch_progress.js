@@ -5,7 +5,8 @@ export async function fetchJsonProgress(url, opt) {
      * Response not implemented ?
      * -> try with xhr
      */
-    return fetchJsonProgress_xhr(url, opt);
+    const data = await fetchProgress_xhr(url, opt);
+    return JSON.parse(data);
   } else {
     return r.json();
   }
@@ -25,15 +26,15 @@ const defProgress = {
  * Produce a promise that reject after mx.settings.maxTimeFetch ms ellapsed
  * @return {Promise}
  */
-
-function getPromMaxTime() {
+function getPromMaxTime(ms) {
+  if (!ms) {
+    ms = mx.settings.maxTimeFetch;
+  }
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject(
-        `fetchProgress : timeout exceeded ( ${mx.settings.maxTimeFetch} ms )`
-      );
+      reject({message: `fetchProgress : timeout exceeded ( ${ms} ms )`});
       resolve(null);
-    }, mx.settings.maxTimeFetch);
+    }, ms);
   });
 }
 
@@ -117,65 +118,6 @@ export async function fetchProgress(url, opt) {
 }
 
 /**
- *  Fetch : wrapper around XMLHttp request + progress + json
- *  @param {String} url url to fetch
- *  @param {Object} opt options
- */
-export function fetchJsonProgress_xhr(url, opt) {
-  opt = Object.assign({}, defProgress, opt);
-  let hasMapxContentLength = false;
-
-  const promTimeout = getPromMaxTime();
-  const promFetch = new Promise((resolve, reject) => {
-    let xmlhttp = new XMLHttpRequest();
-
-    xmlhttp.open('GET', url, true);
-    xmlhttp.onprogress = (d) => {
-      let p = {
-        total: d.total,
-        loaded: d.loaded
-      };
-      if (p.total === 0 || !d.lengthComputable) {
-        let cLength =
-          (d.target.getResponseHeader('mapx-content-length') ||
-            d.target.getResponseHeader('content-length')) * 1;
-        if (cLength > 0) {
-          p.total = cLength;
-          hasMapxContentLength = true;
-        }
-      }
-
-      if (hasMapxContentLength) {
-        p.loaded = d.target.response.length;
-      }
-      opt.onProgress(p);
-    };
-    xmlhttp.onerror = (err) => {
-      reject(err);
-    };
-    xmlhttp.onload = onLoad;
-
-    xmlhttp.send();
-
-    /**
-     * Helpers
-     */
-    function onLoad() {
-      var that = this;
-      if (that.status !== 200) {
-        reject(`Unable to fetch ${url} ${that.responseText}`);
-      } else {
-        let data = JSON.parse(that.responseText);
-        resolve(data);
-      }
-      opt.onComplete();
-    }
-  });
-
-  return Promise.race([promFetch, promTimeout]);
-}
-
-/**
  *  Fetch : wrapper around XMLHttp request + progress
  *  @param {String} url url to fetch
  *  @param {Object} opt options
@@ -224,51 +166,30 @@ export async function fetchProgress_xhr(url, opt) {
       }
       opt.onProgress(p);
     };
-    xmlhttp.onerror = (err) => {
-      reject(err);
+    xmlhttp.onerror = () => {
+      /*
+       * Only network issue. If status code, handled ni onload
+       */
+      reject(`fetchProgress_xhr : Network/Security issue e.g. missing CORS`);
     };
-    xmlhttp.onload = onLoad;
-
-    xmlhttp.send();
-
     /**
-     * Helpers
-     */
-    function onLoad() {
-      var that = this;
-      if (that.status !== 200) {
-        reject(`Unable to fetch ${url} ${that.responseText}`);
+    * ⚠️  Using this require function instead of arrow function
+    */ 
+    xmlhttp.onload = function(e){
+      const res = this;
+      if (res.status !== 200) {
+        /**
+         * Handle non-newtork issue / result
+         */
+        reject(res.responseText);
       } else {
-        resolve(that.responseText);
+        resolve(res.responseText);
       }
       opt.onComplete();
-    }
+    };
+
+    xmlhttp.send();
   });
 
   return Promise.race([promFetch, promTimeout]);
-}
-
-/**
- * Fetch using MapX mirror : bypass cors browser verification
- * @param {Object} opt Option
- * @param {String} opt.endpoint Endpoint to query
- * @param {Object|String} opt.query Query
- * @return Fetch response
- */
-export async function fetchMirror(opt) {
-  const h = mx.helpers;
-  const esc = encodeURIComponent;
-
-  if (!h.isUrl(opt.endpoint)) {
-    throw new Error('Invalid endpoint', opt.endpoint);
-  }
-
-  if (h.isObject(opt.query)) {
-    opt.query = h.objToParams(opt.query);
-  }
-
-  const urlMirror = h.getApiUrl('/get/mirror');
-  const urlFetch = esc(`${opt.endpoint}?${opt.query}`);
-  const url = `${urlMirror}?url=${urlFetch}`;
-  return fetchProgress(url, opt);
 }

@@ -447,6 +447,42 @@ mxDictTranslateSimple <- function(id,
 dd <- mxDictTranslateSimple
 
 
+#' Tranlsation + html tag
+#' 
+#' @param {Character} id Dict id 
+#' @param {Character} language id 
+#' @return {shiny.tag}
+mxDictTranslateTag <- function(id,language=NULL){
+  tags$span(
+    dd(id,language),
+    `data-lang_key` = id,
+    style = "display:inline-block"
+  )
+}
+
+#' Tranlsation + html tag with description (_desc suffix)
+#' 
+#' @param {Character} id Dict id 
+#' @param {Character} language id 
+#' @return {shiny.tag}
+mxDictTranlateTagDesc <- function(id,language=NULL){
+  idDesc <- sprintf('%s_desc',id)
+  tags$div(
+    tags$span(
+      dd(id,language=language),
+      `data-lang_key` = id,
+      style="display:block"
+      ),
+    tags$span(
+      style="display:block",
+      dd(idDesc,language=language),
+      class = 'text-muted',
+      `data-lang_key` = idDesc
+    )
+  )
+}
+
+
 #' Get dictionnary entry by key for a given language (translate)
 #' @param id {string} Id of element to extract
 #' @param lang {string} Two letters code for given language
@@ -459,7 +495,16 @@ dd <- mxDictTranslateSimple
 #'    before :  0.012 [s]
 #'    after : 0.001 [s]
 #' @export
-mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE,dict=NULL,web=FALSE,asChar=FALSE,debug=F){
+mxDictTranslate <- function(
+  id=NULL,
+  lang=NULL,
+  langDefault="en",
+  namedVector=FALSE,
+  dict=NULL,
+  web=FALSE,
+  asChar=FALSE,
+  debug=F
+  ){
   out <- NULL
 
   # if no dictionary provided, search for one in parent env
@@ -561,6 +606,11 @@ mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE
 }
 # shortcut
 d <- mxDictTranslate
+
+
+
+
+
 
 #' Create source named list from layer table
 #' @param layerTable {table} table with columns "id", "title", "date_modified"

@@ -308,7 +308,7 @@ export class NotifCenter {
   }
 
   validateNotif(notif) {
-    const mendatory = ['type', 'msg'];
+    const mendatory = ['type', 'message'];
     const isObj = isObject(notif);
     return isObj && mendatory.reduce((a, k) => a && notif[k], true);
   }
@@ -321,7 +321,7 @@ export class NotifCenter {
     nc._handler_info(notif);
     if (await nc.hasNotifPermission()) {
       new Notification(notif.title, {
-        body: notif.msg,
+        body: notif.message,
         icon: nc.opt.ui.logo
       });
     }
@@ -358,7 +358,7 @@ export class NotifCenter {
         elBar.style.width = `${notif.value}%`;
       }
       const elMsg = elProgress.querySelector('.nc-progress-message');
-      elMsg.innerHTML = notif.msg || elMsg.innerHTML;
+      elMsg.innerHTML = notif.message || elMsg.innerHTML;
     }
     return {
       save: true
@@ -455,7 +455,7 @@ export class NotifCenter {
         id: notif.id,
         class: ['nc-notif', `nc-notif-info-${notif.level || 'default'}`]
       },
-      notif.msg
+      notif.message
     );
   }
 
@@ -471,7 +471,7 @@ export class NotifCenter {
         {
           class: ['nc-progress-message']
         },
-        notif.msg
+        notif.message
       ),
       el(
         'div',

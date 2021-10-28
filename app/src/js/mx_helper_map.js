@@ -15,8 +15,14 @@ import {NotifCenter} from './notif_center/';
 import {cleanDiacritic} from './string_util/';
 import chroma from 'chroma-js';
 import {mirrorUrlCreate} from './mirror_util';
+import {setBusy} from './mx_helper_misc.js';
+import {modal,modalGetAll,modalCloseAll} from './mx_helper_modal.js';
+import {errorHandler} from './error_handler/index.js'
+
 /**
- * TODO: convert this in a MapxMap Class
+ * Convert point in  degrees to meter 
+ * @lngLat {PointLike} lngLat 
+ * @return {PointLike} reprojected point
  */
 export function degreesToMeters(lngLat) {
   const x = (lngLat.lng * 20037508.34) / 180;
@@ -29,6 +35,11 @@ export function degreesToMeters(lngLat) {
   };
 }
 
+/**
+ * Convert point in meter to degrees
+ * @lngLat {PointLike} lngLat 
+ * @return {PointLike} reprojected point
+ */
 export function metersToDegrees(point) {
   const lng = (point.x * 180) / 20037508.34;
   const lat =
@@ -309,7 +320,7 @@ export async function setProject(idProject, opt) {
   /**
    * Check if some modal are still there
    */
-  const modals = h.modalGetAll({ignoreSelectors: ['#uiSelectProject']});
+  const modals = modalGetAll({ignoreSelectors: ['#uiSelectProject']});
   const askConfirm =
     opt.askConfirm || (opt.askConfirmIfModal && modals.length > 0);
   let changeNow = true;
@@ -373,7 +384,7 @@ export async function setProject(idProject, opt) {
   }
 
   function closeModals() {
-    h.modalCloseAll();
+    modalCloseAll();
   }
 }
 
@@ -451,7 +462,7 @@ export function initListenerGlobal() {
     target: window,
     type: ['error', 'unhandledrejection'],
     idGroup: 'base',
-    callback: h.handleIssues
+    callback: errorHandler
   });
 }
 
@@ -1066,7 +1077,7 @@ export function initMapListener(map) {
         return;
       }
     }
-    h.handleIssues(e);
+    errorHandler(e);
   });
 
   /**
@@ -1472,14 +1483,14 @@ export function geolocateUser() {
   };
 
   if (hasGeolocator) {
-    h.setBusy(true);
+    setBusy(true);
     navigator.geolocation.getCurrentPosition(success, error, options);
   } else {
     error({message: 'Browser not compatible'});
   }
 
   function success(pos) {
-    h.setBusy(false);
+    setBusy(false);
     const crd = pos.coords;
     map.flyTo({center: [crd.longitude, crd.latitude], zoom: 10});
   }
@@ -1489,8 +1500,8 @@ export function geolocateUser() {
       ['error_cant_geolocate_msg', 'error_geolocate_issue'],
       lang
     ).then((it) => {
-      h.setBusy(false);
-      h.modal({
+      setBusy(false);
+      modal({
         id: 'geolocate_error',
         title: it[1],
         content: '<p> ' + it[0] + '</p> <p> ( ' + err.message + ' ) </p>'
@@ -1498,22 +1509,6 @@ export function geolocateUser() {
     });
   }
 }
-
-/**
- * Set app busy mode
- 
- * @param {Object} opt
- * @param {Boolean} opt.back
- * @param {Boolean} opt.icon
- */
-export function setBusy(enable) {
-  if (enable === true) {
-    document.body.style.cursor = 'progress';
-  } else {
-    document.body.style.cursor = 'auto';
-  }
-}
-
 /**
  * Reset project : remove view, dashboards, etc
  * NOTE: Shiny require at least one argument. Not used, but, needed.
@@ -4079,7 +4074,7 @@ async function viewLayersAddRt(o) {
     });
 
     /* Add in modal */
-    h.modal({
+    modal({
       title: title,
       id: 'legend-raster-' + view.id,
       content: imgModal,
@@ -5023,7 +5018,7 @@ export function getLayersPropertiesAtPoint(opt) {
         styles: params.styles,
         url: endpoint,
         asObject: modeObject,
-        getCapabilities: {
+        optGetCapabilities: {
           useMirror: useMirror,
           searchParams: {
             /**

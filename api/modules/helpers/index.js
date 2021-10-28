@@ -69,11 +69,9 @@ function sendError(res, error, code) {
   if(!code){
     code = '200'
   }
+  error =  Object.assign({},{message:'Error'},error,{type:'error'});
   res.status(code).send(
-    toRes({
-      type: 'error',
-      msg: error.message
-    })
+    toRes(error)
   );
 }
 

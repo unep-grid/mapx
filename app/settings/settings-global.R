@@ -254,28 +254,40 @@ config[["ui"]] <- list(
 #
 config[["wms"]] = list(
   list(
-    label="datacore",
-    value="https://datacore.unepgrid.ch/geoserver/wms"
+    label = "datacore",
+    value = "https://datacore.unepgrid.ch/geoserver/wms"
     ),
   list(
-    label="preview",
-    value="https://preview.grid.unep.ch/geoserver/wms"
+    label = "preview",
+    value = "https://preview.grid.unep.ch/geoserver/wms"
     ),
   list(
-    label="forestCover",
-    value="https://gis-gfw.wri.org/arcgis/services/forest_change/MapServer/WMSServer"
+    label = "forestCover",
+    value = "https://gis-gfw.wri.org/arcgis/services/forest_change/MapServer/WMSServer"
     ),
   list(
-    label="columbia.edu",
-    value="https://sedac.ciesin.columbia.edu/geoserver/wms"
+    label = "columbia.edu",
+    value = "https://sedac.ciesin.columbia.edu/geoserver/wms"
     ),
   list(
-    label="sampleserver6.arcgisonline.com",
-    value="https://sampleserver6.arcgisonline.com/arcgis/services/911CallsHotspot/MapServer/WMSServer"
+    label = "sampleserver6.arcgisonline.com",
+    value = "https://sampleserver6.arcgisonline.com/arcgis/services/911CallsHotspot/MapServer/WMSServer"
     ),
   list(
-    label="nowcoast.noaa.gov",
-    value="https://nowcoast.noaa.gov/arcgis/services/nowcoast/analysis_meteohydro_sfc_qpe_time/MapServer/WmsServer"
+    label = "nowcoast.noaa.gov",
+    value = "https://nowcoast.noaa.gov/arcgis/services/nowcoast/analysis_meteohydro_sfc_qpe_time/MapServer/WmsServer"
+    ),
+  list(
+    label = "idesa.gob.ar",
+    value = "http://geoportal.idesa.gob.ar/geoserver/wms"
+    ),
+  list(
+    label = "mapas.apn.gob.ar",
+    value = "https://mapas.apn.gob.ar/geoserver/ows"
+    ),
+  list(
+    label = "geointa.inta.gov.ar",
+    value = "http://geointa.inta.gov.ar/geoserver/gwc/service/wms"
   )
 )
 

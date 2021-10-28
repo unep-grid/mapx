@@ -26,8 +26,9 @@ observeEvent(reactData$showShareManager,{
     #
     # Translation
     #
-    tt <- function(id,web=T){d(id,lang=language,web=web)}
-
+    tt <- function(id){mxDictTranslateTag(id,language=language)}
+    ttd <- function(id){mxDictTranslateTagDesc(id,language=language)}
+  
     #
     # Share URL block
     #
@@ -59,7 +60,7 @@ observeEvent(reactData$showShareManager,{
             class = "form-control btn-square btn-black",
             tags$i(class="fa fa-clipboard"),
             onclick="mx.helpers.copyText('txtShareBuilt')"
-            )
+          )
           ),
         tags$span(
           class="input-group-btn",   
@@ -68,8 +69,8 @@ observeEvent(reactData$showShareManager,{
             class = "form-control btn-square btn-black ",
             onclick="mx.helpers.shareTwitter('txtShareLink')",
             tags$i(class="fa fa-twitter")
-            )
           )
+        )
         ),
       #
       # Options
@@ -95,33 +96,27 @@ observeEvent(reactData$showShareManager,{
                 choices = config$languages$list,
                 multiple = FALSE,
                 selected = language,
-              ),
+                ),
               #
               # Static mode
               #
               checkboxInput("checkShareStatic",
-                label = tt("share_mode_static_label"),
+                label = ttd("share_mode_static_label"),
                 value = TRUE
-                ),
-              span(class = "text-muted",
-                tt('share_mode_static_desc')
                 ),
               #
               # Views to share
               #
               checkboxInput("checkShareViews",
-                label = tt("share_views_check_label"),
+                label = ttd("share_views_check_label"),
                 value = TRUE
-                ),
-              span(class = "text-muted",
-                tt("share_views_check_desc")
                 ),
               conditionalPanel(
                 condition = "input.checkShareViews",
                 tagList(
                   selectizeInput(
                     "selectShareViews",
-                    label = NULL,
+                    label = d('share_views_select'),
                     choices = viewsList,
                     multiple = TRUE,
                     selected = viewsToShare,
@@ -142,13 +137,10 @@ observeEvent(reactData$showShareManager,{
                 condition = 'input.checkShareStatic',
                 tagList(
                   checkboxInput("checkShareZoomToViews",
-                    label = tt("share_views_zoom_label"),
+                    label = ttd("share_views_zoom_label"),
                     value = TRUE
-                    ),
-                  span(class="text-muted",
-                    tt("share_views_zoom_desc")
-                    )
                   )
+                )
                 ),
               #
               # App options
@@ -160,11 +152,8 @@ observeEvent(reactData$showShareManager,{
                   # Views to open
                   #
                   checkboxInput("checkShareViewsOpen",
-                    label = tt("share_views_open_check_label"),
+                    label = ttd("share_views_open_check_label"),
                     value = TRUE
-                    ),
-                  span(class = "text-muted",
-                    tt("share_views_open_check_desc")
                     ),
                   conditionalPanel(
                     condition = "input.checkShareViewsOpen",
@@ -184,10 +173,7 @@ observeEvent(reactData$showShareManager,{
                   # Views collections
                   #
                   checkboxInput("checkShareCollections",
-                    label = tt("share_collections_check_label")
-                    ),
-                  span(class = "text-muted",
-                    tt("share_collections_check_desc")
+                    label = ttd("share_collections_check_label")
                     ),
                   conditionalPanel(
                     condition = "input.checkShareCollections",
@@ -219,19 +205,13 @@ observeEvent(reactData$showShareManager,{
                   # Ignore/hide categories
                   #
                   checkboxInput("checkHideCategory",
-                    label = tt('share_category_hide')
-                    ),
-                  span(class="text-muted",
-                    tt("share_category_hide_desc")
+                    label = ttd('share_category_hide')
                     ),
                   #
                   # Set filter activated
                   #
                   checkboxInput("checkFilterActivated",
-                    label = tt('share_filter_activated')
-                    ),
-                  span(class="text-muted",
-                    tt("share_filter_activated_desc")
+                    label = ttd('share_filter_activated')
                   )
                 )
                 ),
@@ -239,10 +219,7 @@ observeEvent(reactData$showShareManager,{
               # Map position
               #
               checkboxInput("checkShareMapPosition",
-                label = tt("share_map_pos_check_label")
-                ),
-              span(class = "text-muted",
-                tt("share_map_pos_check_desc")
+                label = ttd("share_map_pos_check_label")
                 ),
               conditionalPanel(
                 condition = "input.checkShareMapPosition",
@@ -252,16 +229,13 @@ observeEvent(reactData$showShareManager,{
               # Iframe
               #
               checkboxInput("checkShareIframe",
-                label = tt('share_iframe_check_label')
-                ),
-              span(class="text-muted",
-                tt("share_iframe_check_desc")
-                )
+                label = ttd('share_iframe_check_label')
               )
             )
           )
         )
       )
+    )
 
     #
     # Build modal

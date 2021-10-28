@@ -94,6 +94,12 @@ details > summary {
   display: list-item;
 }
 
+pre {
+ white-space: pre-wrap;    
+ word-wrap: break-word;      
+}
+
+
 .mx-inline-progress-container {
   width: 100%;
   height: 10px;
@@ -1069,10 +1075,12 @@ details > summary {
 .help-block {
   font-size: 0.8em;
 }
-.text-muted {
+.text-muted, 
+.text-muted > * {
   font-size: 0.9em;
   text-align: justify;
   hyphens: auto;
+  color: var(--mx_ui_text_faded);
 }
 
 /**
