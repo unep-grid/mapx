@@ -1,8 +1,8 @@
 [
   {
-     "id": "tool_mirror_enable_for_view_raster_tiles",
-    "en": "Use URL mirroring ( enable SSL + add MapX' cors )",
-    "fr": "Utiliser la mise en miroir d'URL (activer SSL + ajouter les cors de MapX)",
+    "id": "tool_mirror_enable",
+    "en": "Use URL mirroring.",
+    "fr": "",
     "es": "",
     "ru": "",
     "zh": "",
@@ -11,7 +11,19 @@
     "ps": "",
     "bn": "",
     "de": ""
-  
+  },
+  {
+    "id": "tool_mirror_enable_desc",
+    "en": "Can solves missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "tool_mirror_toolbox_btn",
@@ -26,7 +38,7 @@
     "bn": "",
     "de": ""
   },
-{
+  {
     "id": "tool_mirror_title",
     "en": "Mirrored URL utility",
     "fr": "",
@@ -39,7 +51,7 @@
     "bn": "",
     "de": ""
   },
-{
+  {
     "id": "tool_mirror_enter_url",
     "en": "Enter a valid URL",
     "fr": "",
@@ -52,7 +64,7 @@
     "bn": "",
     "de": ""
   },
-{
+  {
     "id": "tool_mirror_btn_create",
     "en": "Create",
     "fr": "",
@@ -65,7 +77,7 @@
     "bn": "",
     "de": ""
   },
-{
+  {
     "id": "tool_mirror_res_url",
     "en": "Mirrored URL",
     "fr": "",

@@ -2160,21 +2160,6 @@
     "bn": "এই ভিউতে একটি লিঙ্ক ভাগ করুন "
   },
   {
-    "id": "btn_opt_share_to_project",
-    "en": "Share this view in another project",
-    "bn": "এই প্রকল্পটি অন্য প্রকল্পে ভাগ করুন "
-  },
-  {
-    "id": "share_in_project_no_publisher_project",
-    "en": "You have no project yet where to publish this view",
-    "bn": "এই দৃশ্যটি কোথায় প্রকাশ করবেন আপনার কোনও প্রকল্প নেই "
-  },
-  {
-    "id": "share_in_project_no_view",
-    "en": "No view to share",
-    "bn": "ভাগ করার মত কোনও দৃশ্য নেই "
-  },
-  {
     "id": "btn_opt_start_story",
     "en": "Read this story map",
     "bn": "এই গল্পের মানচিত্র পড়ুন "
@@ -5816,8 +5801,23 @@
   },
   {
     "id": "wms_select_reviewed_service",
-    "en": "Select stored service",
-    "bn": "সঞ্চিত পরিষেবা নির্বাচন করুন "
+    "en": "Select a service preset",
+    "bn": "একটি পরিষেবা প্রিসেট নির্বাচন করুন"
+  },
+  {
+    "id": "wms_display_tool_title",
+    "en": "WMS configurator",
+    "bn": "WMS কনফিগারার"
+  },
+  {
+    "id": "wms_display_tool",
+    "en": "Display WMS configurator",
+    "bn": "WMS কনফিগারেশন প্রদর্শন করুন"
+  },
+  {
+    "id": "wms_display_tool_desc",
+    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
+    "bn": "WMS হোস্ট বেছে নেওয়ার টুল এবং টাইলস এবং কিংবদন্তির জন্য স্বয়ংক্রিয়ভাবে URL তৈরি করে"
   },
   {
     "id": "wms_select_layer",
@@ -6250,159 +6250,9 @@
     "bn": "প্রকল্পের নিশ্চয়তা পরিবর্তন করুন "
   },
   {
-    "id": "share_map_pos_set",
-    "en": "Set map position",
-    "bn": "মানচিত্রের অবস্থান নির্ধারণ করুন "
-  },
-  {
-    "id": "share_map_pos_get",
-    "en": "Get current position",
-    "bn": "বর্তমান অবস্থান পান "
-  },
-  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "bn": "খালি "
-  },
-  {
-    "id": "share_manager_title",
-    "en": "Sharing manager",
-    "bn": "শেয়ারিং ম্যানেজার "
-  },
-  {
-    "id": "share_link_title",
-    "en": "Share link",
-    "bn": "লিঙ্ক ভাগ করুন "
-  },
-  {
-    "id": "share_options",
-    "en": "Show/hide settings",
-    "bn": "সেটিংস দেখান/লুকান"
-  },
-  {
-    "id": "share_mode_static_label",
-    "en": "Use the mode 'static' ( recommended )",
-    "bn": "'স্ট্যাটিক' মোডটি ব্যবহার করুন (প্রস্তাবিত) "
-  },
-  {
-    "id": "share_mode_warn",
-    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
-    "bn": "এই লিঙ্কটি গ্রহণকারী যে কেউ নির্বাচিত ভিউয়ের বিষয়বস্তু দেখতে পাবে। আপনি যদি সংবেদনশীল তথ্য শেয়ার করতে চান, ব্যবহারকারীদের আপনার প্রকল্প বা ব্যক্তিগত প্রকল্পে আমন্ত্রণ জানান এবং সে অনুযায়ী অ্যাক্সেস এবং পড়ার অধিকার নির্ধারণ করুন। ডিফল্টরূপে, স্ট্যাটিক মোড সক্ষম করা হয়, যা ম্যাপএক্সের একটি হালকা, পঠনযোগ্য সংস্করণ। সেটিংসে আরো তথ্য।"
-  },
-  {
-    "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "bn": "সীমিত কার্যকারিতা সহ, ম্যাপএক্সের হালকা ও দ্রুততর সংস্করণ ব্যবহার করে আপনি যদি একটি দৃশ্য ভাগ করতে চান তবে 'স্ট্যাটিক' মোড ব্যবহার করুন। আপনি যদি একটি গল্পের মানচিত্র যোগ করেন, তাহলে এটি স্বয়ংক্রিয়ভাবে শুরু হবে, অন্য কোনো দৃশ্য বাতিল করে"
-  },
-  {
-    "id": "share_views_check_label",
-    "en": "Add views to share",
-    "bn": "ভাগ করে নেওয়ার জন্য দর্শন যুক্ত করুন "
-  },
-  {
-    "id": "share_views_check_desc",
-    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
-    "bn": "প্রদর্শনের জন্য দর্শন। তালিকাটি পুনরায় সাজানো যেতে পারে: শীর্ষ দর্শনে শীর্ষে স্তর প্রদর্শিত হবে। 'স্ট্যাটিক' মোডে, এই মতামতগুলি স্বয়ংক্রিয়ভাবে রেন্ডার হবে। গল্পের মানচিত্র সরাসরি শুরু হবে। 'সাধারণ' মোডে, ভিউগুলি তালিকায় প্রদর্শিত হবে এবং নির্বাচনটি খালি থাকলে প্রকল্পের সমস্ত মতামত তালিকাভুক্ত করা হবে। "
-  },
-  {
-    "id": "share_views_zoom_label",
-    "en": "Zoom to views extent",
-    "bn": "দেখার পরিমাণে জুম করুন "
-  },
-  {
-    "id": "share_views_zoom_desc",
-    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
-    "bn": "'স্থিতিশীল' মোডে, এটি উপলব্ধ হলে স্তর স্তর পরিমাণে মানচিত্রের সীমা সেট করবে। "
-  },
-  {
-    "id": "share_views_open_check_label",
-    "en": "Set views to activate",
-    "bn": "সক্রিয় করতে দর্শন সেট করুন "
-  },
-  {
-    "id": "share_views_open_check_desc",
-    "en": "Add views to be automatically activated when the application is launched.",
-    "bn": "অ্যাপ্লিকেশন চালু হলে স্বয়ংক্রিয়ভাবে সক্রিয় হওয়ার জন্য ভিউ যোগ করুন।"
-  },
-  {
-    "id": "share_collections_check_label",
-    "en": "Set collections",
-    "bn": "সংগ্রহ সেট করুন "
-  },
-  {
-    "id": "share_collections_check_operator_label",
-    "en": "Selection mode (if more that one collection)",
-    "bn": "নির্বাচন মোড (যদি আরও এক সংগ্রহ হয়) "
-  },
-  {
-    "id": "share_collections_check_operator_all",
-    "en": "Intersection",
-    "bn": "ছেদ করা "
-  },
-  {
-    "id": "share_collections_check_operator_any",
-    "en": "Union",
-    "bn": "মিলন "
-  },
-  {
-    "id": "share_collections_check_desc",
-    "en": "Add groups of views by using collections",
-    "bn": "সংগ্রহগুলি ব্যবহার করে দর্শনগুলির গোষ্ঠী যুক্ত করুন "
-  },
-  {
-    "id": "share_map_pos_check_label",
-    "en": "Set map position",
-    "bn": "মানচিত্রের অবস্থান নির্ধারণ করুন "
-  },
-  {
-    "id": "share_map_pos_check_desc",
-    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
-    "bn": "মানচিত্রের অবস্থান নির্ধারণ পুরো বিশ্বের প্রতিনিধিত্বকে প্রকাশ করার পরিবর্তে একটি সংজ্ঞায়িত স্থানিক প্রসার প্রদর্শন করবে। "
-  },
-  {
-    "id": "share_iframe_check_label",
-    "en": "Embed in HTML tags",
-    "bn": "এইচটিএমএল ট্যাগগুলিতে এম্বেড করুন "
-  },
-  {
-    "id": "share_iframe_check_desc",
-    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "bn": "লিঙ্কটি একটিতে এম্বেড করুন<iframe> এইচটিএমএল ট্যাগটি সহজেই আপনার ওয়েবসাইটে ম্যাপএক্স যুক্ত করতে পারে।</iframe> "
-  },
-  {
-    "id": "share_in_project_title",
-    "en": "Share in another project",
-    "bn": "অন্য প্রকল্পে ভাগ করুন "
-  },
-  {
-    "id": "share_in_project_desc",
-    "en": "Share a view in a project where you have publisher rights",
-    "bn": "এমন একটি প্রকল্পে একটি দৃশ্য ভাগ করুন যেখানে আপনার প্রকাশকের অধিকার রয়েছে "
-  },
-  {
-    "id": "share_in_project_btn",
-    "en": "Add in selected project",
-    "bn": "নির্বাচিত প্রকল্পে যুক্ত করুন "
-  },
-  {
-    "id": "share_filter_activated",
-    "en": "Filter activated view by default",
-    "bn": "ডিফল্টরূপে ফিল্টার অ্যাক্টিভেটেড ভিউ "
-  },
-  {
-    "id": "share_filter_activated_desc",
-    "en": "This option will show only views set to be opened from the beginning",
-    "bn": "এই বিকল্পটি প্রথম থেকে খোলার জন্য সেট দেখানো হবে "
-  },
-  {
-    "id": "share_category_hide",
-    "en": "Hide categories",
-    "bn": "বিভাগগুলি লুকান "
-  },
-  {
-    "id": "share_category_hide_desc",
-    "en": "Categories will be hidden in the list of views by default",
-    "bn": "বিভাগগুলি ডিফল্টরূপে দর্শনের তালিকায় লুকানো থাকবে "
   },
   {
     "id": "jenks",
@@ -6640,9 +6490,14 @@
     "bn": "বিজ্ঞপ্তি "
   },
   {
-    "id": "tool_mirror_enable_for_view_raster_tiles",
-    "en": "Use URL mirroring ( enable SSL + add MapX' cors )",
-    "bn": "ইউআরএল মিররিং ব্যবহার করুন (SSL সক্ষম করুন + MapX' cors যোগ করুন)"
+    "id": "tool_mirror_enable",
+    "en": "Use URL mirroring.",
+    "bn": "ইউআরএল মিররিং ব্যবহার করুন।"
+  },
+  {
+    "id": "tool_mirror_enable_desc",
+    "en": "Can solves missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
+    "bn": "অনুপস্থিত TLS শংসাপত্র সমাধান করতে পারে (যেমন প্রোটোকল 'https:' এর পরিবর্তে 'http:') বা ভুল কনফিগার করা CORS হেডার। TLS শংসাপত্র পুরানো বা অবৈধ হলে এটি কাজ করবে না। প্রয়োজনে প্রদানকারীর সাথে যোগাযোগ করুন। নোট করুন যে এই পরিষেবাটি ব্যবহারকারীদের আইপি ব্যবহার করে একটি হারের সীমা নির্ধারণ করবে"
   },
   {
     "id": "tool_mirror_toolbox_btn",
@@ -6863,6 +6718,176 @@
     "id": "search_results_empty",
     "en": "No views found",
     "bn": "কোনো ভিউ পাওয়া যায়নি"
+  },
+  {
+    "id": "share_manager_title",
+    "en": "Sharing manager",
+    "bn": "শেয়ারিং ম্যানেজার "
+  },
+  {
+    "id": "share_link_title",
+    "en": "Share link",
+    "bn": "লিঙ্ক ভাগ করুন "
+  },
+  {
+    "id": "share_options",
+    "en": "Show/hide settings",
+    "bn": "সেটিংস দেখান/লুকান"
+  },
+  {
+    "id": "share_mode_warn",
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "bn": "এই লিঙ্কটি গ্রহণকারী যে কেউ নির্বাচিত ভিউয়ের বিষয়বস্তু দেখতে পাবে। আপনি যদি সংবেদনশীল তথ্য শেয়ার করতে চান, ব্যবহারকারীদের আপনার প্রকল্প বা ব্যক্তিগত প্রকল্পে আমন্ত্রণ জানান এবং সে অনুযায়ী অ্যাক্সেস এবং পড়ার অধিকার নির্ধারণ করুন। ডিফল্টরূপে, স্ট্যাটিক মোড সক্ষম করা হয়, যা ম্যাপএক্সের একটি হালকা, পঠনযোগ্য সংস্করণ। সেটিংসে আরো তথ্য।"
+  },
+  {
+    "id": "share_mode_static_label",
+    "en": "Use the mode 'static' ( recommended )",
+    "bn": "'স্ট্যাটিক' মোডটি ব্যবহার করুন (প্রস্তাবিত) "
+  },
+  {
+    "id": "share_mode_static_label_desc",
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
+    "bn": "আপনি যদি সীমিত কার্যকারিতা সহ MapX এর একটি হালকা এবং দ্রুত সংস্করণ ব্যবহার করে একটি দৃশ্য ভাগ করতে চান তবে 'স্থির' মোড ব্যবহার করুন৷ যদি আপনি একটি গল্প মানচিত্র যোগ করেন, এটি স্বয়ংক্রিয়ভাবে শুরু হবে, অন্য কোনো দৃশ্য বাদ দিয়ে"
+  },
+  {
+    "id": "share_views_check_label",
+    "en": "Add views to share",
+    "bn": "ভাগ করে নেওয়ার জন্য দর্শন যুক্ত করুন "
+  },
+  {
+    "id": "share_views_select",
+    "en": "Select views",
+    "bn": "ভিউ নির্বাচন করুন"
+  },
+  {
+    "id": "share_views_check_label_desc",
+    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
+    "bn": "প্রদর্শনের জন্য ভিউ। তালিকাটি পুনর্বিন্যাস করা যেতে পারে: শীর্ষ দৃশ্যগুলির উপরে স্তরগুলি প্রদর্শিত হবে। 'স্ট্যাটিক' মোডে, সেই দৃশ্যগুলি স্বয়ংক্রিয়ভাবে রেন্ডার করা হবে। গল্প মানচিত্র সরাসরি শুরু হবে. 'স্বাভাবিক' মোডে, ভিউগুলি তালিকায় প্রদর্শিত হবে এবং যদি নির্বাচন খালি থাকে তবে প্রকল্পের সমস্ত দৃশ্য তালিকাভুক্ত করা হবে।"
+  },
+  {
+    "id": "share_views_zoom_label",
+    "en": "Zoom to views extent",
+    "bn": "দেখার পরিমাণে জুম করুন "
+  },
+  {
+    "id": "share_views_zoom_label_desc",
+    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
+    "bn": "'স্ট্যাটিক' মোডে, যদি উপলব্ধ থাকে তবে এটি ভিউ লেয়ারের সীমার সাথে মানানসই করার জন্য মানচিত্রের সীমা নির্ধারণ করবে।"
+  },
+  {
+    "id": "share_views_open_check_label",
+    "en": "Set views to activate",
+    "bn": "সক্রিয় করতে দর্শন সেট করুন "
+  },
+  {
+    "id": "share_views_open_check_label_desc",
+    "en": "Add views to be automatically activated when the application is launched.",
+    "bn": "অ্যাপ্লিকেশন চালু হলে স্বয়ংক্রিয়ভাবে সক্রিয় হতে ভিউ যোগ করুন।"
+  },
+  {
+    "id": "share_collections_check_label",
+    "en": "Set collections",
+    "bn": "সংগ্রহ সেট করুন "
+  },
+  {
+    "id": "share_collections_check_label_desc",
+    "en": "Add groups of views by using collections",
+    "bn": "সংগ্রহ ব্যবহার করে ভিউ গ্রুপ যোগ করুন"
+  },
+  {
+    "id": "share_collections_check_operator_label",
+    "en": "Selection mode (if more that one collection)",
+    "bn": "নির্বাচন মোড (যদি আরও এক সংগ্রহ হয়) "
+  },
+  {
+    "id": "share_collections_check_operator_all",
+    "en": "Intersection",
+    "bn": "ছেদ করা "
+  },
+  {
+    "id": "share_collections_check_operator_any",
+    "en": "Union",
+    "bn": "মিলন "
+  },
+  {
+    "id": "share_map_pos_check_label",
+    "en": "Set map position",
+    "bn": "মানচিত্রের অবস্থান নির্ধারণ করুন "
+  },
+  {
+    "id": "share_map_pos_check_label_desc",
+    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
+    "bn": "মানচিত্রের অবস্থান সেট করা সমগ্র বিশ্বের একটি প্রতিনিধিত্ব প্রকাশের পরিবর্তে একটি সংজ্ঞায়িত স্থানিক প্রসারিত দেখাবে।"
+  },
+  {
+    "id": "share_iframe_check_label",
+    "en": "Embed in HTML tags",
+    "bn": "এইচটিএমএল ট্যাগগুলিতে এম্বেড করুন "
+  },
+  {
+    "id": "share_iframe_check_label_desc",
+    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
+    "bn": "একটি লিঙ্ক এম্বেড করুন<iframe> আপনার ওয়েবসাইটে সহজেই MapX যোগ করতে HTML ট্যাগ।</iframe>"
+  },
+  {
+    "id": "share_filter_activated",
+    "en": "Filter activated view by default",
+    "bn": "ডিফল্টরূপে ফিল্টার অ্যাক্টিভেটেড ভিউ "
+  },
+  {
+    "id": "share_filter_activated_desc",
+    "en": "This option will show only views set to be opened from the beginning",
+    "bn": "এই বিকল্পটি প্রথম থেকে খোলার জন্য সেট দেখানো হবে "
+  },
+  {
+    "id": "share_category_hide",
+    "en": "Hide categories",
+    "bn": "বিভাগগুলি লুকান "
+  },
+  {
+    "id": "share_category_hide_desc",
+    "en": "Categories will be hidden in the list of views by default",
+    "bn": "বিভাগগুলি ডিফল্টরূপে দর্শনের তালিকায় লুকানো থাকবে "
+  },
+  {
+    "id": "share_map_pos_set",
+    "en": "Set map position",
+    "bn": "মানচিত্রের অবস্থান নির্ধারণ করুন "
+  },
+  {
+    "id": "share_map_pos_get",
+    "en": "Get current position",
+    "bn": "বর্তমান অবস্থান পান "
+  },
+  {
+    "id": "btn_opt_share_to_project",
+    "en": "Share this view in another project",
+    "bn": "এই প্রকল্পটি অন্য প্রকল্পে ভাগ করুন "
+  },
+  {
+    "id": "share_in_project_no_publisher_project",
+    "en": "You have no project yet where to publish this view",
+    "bn": "এই দৃশ্যটি কোথায় প্রকাশ করবেন আপনার কোনও প্রকল্প নেই "
+  },
+  {
+    "id": "share_in_project_no_view",
+    "en": "No view to share",
+    "bn": "ভাগ করার মত কোনও দৃশ্য নেই "
+  },
+  {
+    "id": "share_in_project_title",
+    "en": "Share in another project",
+    "bn": "অন্য প্রকল্পে ভাগ করুন "
+  },
+  {
+    "id": "share_in_project_desc",
+    "en": "Share a view in a project where you have publisher rights",
+    "bn": "এমন একটি প্রকল্পে একটি দৃশ্য ভাগ করুন যেখানে আপনার প্রকাশকের অধিকার রয়েছে "
+  },
+  {
+    "id": "share_in_project_btn",
+    "en": "Add in selected project",
+    "bn": "নির্বাচিত প্রকল্পে যুক্ত করুন "
   },
   {
     "id": "mx_ui_text",

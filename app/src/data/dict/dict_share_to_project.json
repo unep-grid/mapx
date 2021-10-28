@@ -1,0 +1,80 @@
+[
+  {
+    "id": "btn_opt_share_to_project",
+    "en": "Share this view in another project",
+    "fr": "Partager cette vue dans un autre projet",
+    "es": "Compartir la vista a otro proyecto",
+    "ru": "",
+    "zh": "分享此视图到另一个项目",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "share_in_project_no_publisher_project",
+    "en": "You have no project yet where to publish this view",
+    "fr": "Vous n'avez pas encore de projet où publier cette vue",
+    "es": "No hay ningún proyecto donde publicar esta vista",
+    "ru": "",
+    "zh": "你还没有项目，无法发布此视图",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "share_in_project_no_view",
+    "en": "No view to share",
+    "fr": "Aucune vue à partager",
+    "es": "No hay ninguna vista a compartir",
+    "ru": "",
+    "zh": "没有视图可以分享",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "share_in_project_title",
+    "en": "Share in another project",
+    "fr": "Partager dans un autre projet",
+    "es": "Compartir en otro proyecto",
+    "ru": "",
+    "zh": "分享到另一个项目",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "share_in_project_desc",
+    "en": "Share a view in a project where you have publisher rights",
+    "fr": "Partager une vue vers un projet où vous avez des droits de publisher",
+    "es": "Compartir una vista en un proyecto en el que tiene derecho de publicación",
+    "ru": "",
+    "zh": "在你拥有发布者权限的项目中分享视图",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "share_in_project_btn",
+    "en": "Add in selected project",
+    "fr": "Ajouter au projet sélectionné",
+    "es": "Adjuntar al proyecto seleccionado",
+    "ru": "",
+    "zh": "加入选定的项目",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  }
+]

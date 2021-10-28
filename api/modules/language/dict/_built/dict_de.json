@@ -2160,21 +2160,6 @@
     "de": "Teilen Sie einen Link zu dieser Ansicht "
   },
   {
-    "id": "btn_opt_share_to_project",
-    "en": "Share this view in another project",
-    "de": "Teilen Sie diese Ansicht in einem anderen Projekt "
-  },
-  {
-    "id": "share_in_project_no_publisher_project",
-    "en": "You have no project yet where to publish this view",
-    "de": "Sie haben noch kein Projekt, in dem Sie diese Ansicht veröffentlichen möchten "
-  },
-  {
-    "id": "share_in_project_no_view",
-    "en": "No view to share",
-    "de": "Keine Ansicht zum Teilen "
-  },
-  {
     "id": "btn_opt_start_story",
     "en": "Read this story map",
     "de": "Lesen Sie diese Story Map "
@@ -5816,8 +5801,23 @@
   },
   {
     "id": "wms_select_reviewed_service",
-    "en": "Select stored service",
-    "de": "Wählen Sie den gespeicherten Dienst aus "
+    "en": "Select a service preset",
+    "de": "Wählen Sie eine Dienstvoreinstellung"
+  },
+  {
+    "id": "wms_display_tool_title",
+    "en": "WMS configurator",
+    "de": "WMS-Konfigurator"
+  },
+  {
+    "id": "wms_display_tool",
+    "en": "Display WMS configurator",
+    "de": "WMS-Konfigurator anzeigen"
+  },
+  {
+    "id": "wms_display_tool_desc",
+    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
+    "de": "Tool zum Auswählen von WMS-Hosts und Erstellen von URLs automatisch URL für Kacheln und Legenden"
   },
   {
     "id": "wms_select_layer",
@@ -6250,159 +6250,9 @@
     "de": "Projektbestätigung ändern "
   },
   {
-    "id": "share_map_pos_set",
-    "en": "Set map position",
-    "de": "Kartenposition einstellen "
-  },
-  {
-    "id": "share_map_pos_get",
-    "en": "Get current position",
-    "de": "Aktuelle Position abrufen "
-  },
-  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "de": "Leer "
-  },
-  {
-    "id": "share_manager_title",
-    "en": "Sharing manager",
-    "de": "Sharing Manager "
-  },
-  {
-    "id": "share_link_title",
-    "en": "Share link",
-    "de": "Einen Link teilen "
-  },
-  {
-    "id": "share_options",
-    "en": "Show/hide settings",
-    "de": "Einstellungen ein-/ausblenden"
-  },
-  {
-    "id": "share_mode_static_label",
-    "en": "Use the mode 'static' ( recommended )",
-    "de": "Verwenden Sie den Modus 'statisch' (empfohlen) "
-  },
-  {
-    "id": "share_mode_warn",
-    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
-    "de": "Jeder, der diesen Link erhält, kann den Inhalt der ausgewählten Ansichten sehen. Wenn Sie sensible Informationen teilen möchten, laden Sie Benutzer zu Ihrem Projekt oder privaten Projekt ein und legen Sie die Zugriffs- und Leserechte entsprechend fest. Standardmäßig ist der statische Modus aktiviert, bei dem es sich um eine schlanke, schreibgeschützte Version von MapX handelt. Weitere Informationen in den Einstellungen."
-  },
-  {
-    "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "de": "Verwenden Sie den 'statischen' Modus, wenn Sie eine Ansicht mit einer schlanken und schnelleren Version von MapX mit eingeschränkten Funktionen teilen möchten. Wenn Sie eine Story-Map hinzufügen, startet sie automatisch und verwirft alle anderen Ansichten"
-  },
-  {
-    "id": "share_views_check_label",
-    "en": "Add views to share",
-    "de": "Fügen Sie Ansichten zum Teilen hinzu "
-  },
-  {
-    "id": "share_views_check_desc",
-    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
-    "de": "Zu zeigende Ansichten. Die Liste kann neu angeordnet werden: In Draufsichten werden Ebenen oben angezeigt. Im statischen Modus werden diese Ansichten automatisch gerendert. Story Maps werden direkt gestartet. Im \"normalen\" Modus werden die Ansichten in der Liste angezeigt. Wenn die Auswahl leer ist, werden alle Ansichten des Projekts aufgelistet. "
-  },
-  {
-    "id": "share_views_zoom_label",
-    "en": "Zoom to views extent",
-    "de": "Auf Ansicht vergrößern "
-  },
-  {
-    "id": "share_views_zoom_desc",
-    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
-    "de": "Im statischen Modus wird die Kartenausdehnung so eingestellt, dass sie der Ausdehnung der Ansichtsebenen entspricht, sofern verfügbar. "
-  },
-  {
-    "id": "share_views_open_check_label",
-    "en": "Set views to activate",
-    "de": "Legen Sie die zu aktivierenden Ansichten fest "
-  },
-  {
-    "id": "share_views_open_check_desc",
-    "en": "Add views to be automatically activated when the application is launched.",
-    "de": "Fügen Sie Ansichten hinzu, die beim Starten der Anwendung automatisch aktiviert werden sollen."
-  },
-  {
-    "id": "share_collections_check_label",
-    "en": "Set collections",
-    "de": "Sammlungen festlegen "
-  },
-  {
-    "id": "share_collections_check_operator_label",
-    "en": "Selection mode (if more that one collection)",
-    "de": "Auswahlmodus (wenn mehr als eine Sammlung) "
-  },
-  {
-    "id": "share_collections_check_operator_all",
-    "en": "Intersection",
-    "de": "Überschneidung "
-  },
-  {
-    "id": "share_collections_check_operator_any",
-    "en": "Union",
-    "de": "Union "
-  },
-  {
-    "id": "share_collections_check_desc",
-    "en": "Add groups of views by using collections",
-    "de": "Fügen Sie mithilfe von Sammlungen Gruppen von Ansichten hinzu "
-  },
-  {
-    "id": "share_map_pos_check_label",
-    "en": "Set map position",
-    "de": "Kartenposition einstellen "
-  },
-  {
-    "id": "share_map_pos_check_desc",
-    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
-    "de": "Wenn Sie die Position der Karte festlegen, wird eine definierte räumliche Ausdehnung angezeigt, anstatt eine Darstellung der gesamten Welt anzuzeigen. "
-  },
-  {
-    "id": "share_iframe_check_label",
-    "en": "Embed in HTML tags",
-    "de": "In HTML-Tags einbetten "
-  },
-  {
-    "id": "share_iframe_check_desc",
-    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "de": "Betten Sie den Link in ein<iframe> HTML-Tag zum einfachen Hinzufügen von MapX zu Ihrer Website.</iframe> "
-  },
-  {
-    "id": "share_in_project_title",
-    "en": "Share in another project",
-    "de": "In einem anderen Projekt teilen "
-  },
-  {
-    "id": "share_in_project_desc",
-    "en": "Share a view in a project where you have publisher rights",
-    "de": "Teilen Sie eine Ansicht in einem Projekt, für das Sie Publisher-Rechte haben "
-  },
-  {
-    "id": "share_in_project_btn",
-    "en": "Add in selected project",
-    "de": "In ausgewähltem Projekt hinzufügen "
-  },
-  {
-    "id": "share_filter_activated",
-    "en": "Filter activated view by default",
-    "de": "Aktivierte Ansicht standardmäßig filtern "
-  },
-  {
-    "id": "share_filter_activated_desc",
-    "en": "This option will show only views set to be opened from the beginning",
-    "de": "Diese Option zeigt nur Ansichten an, die von Anfang an geöffnet werden sollen "
-  },
-  {
-    "id": "share_category_hide",
-    "en": "Hide categories",
-    "de": "Kategorien ausblenden "
-  },
-  {
-    "id": "share_category_hide_desc",
-    "en": "Categories will be hidden in the list of views by default",
-    "de": "Kategorien werden standardmäßig in der Liste der Ansichten ausgeblendet "
   },
   {
     "id": "jenks",
@@ -6640,9 +6490,14 @@
     "de": "Benachrichtigungen "
   },
   {
-    "id": "tool_mirror_enable_for_view_raster_tiles",
-    "en": "Use URL mirroring ( enable SSL + add MapX' cors )",
-    "de": "URL-Spiegelung verwenden ( SSL aktivieren + MapX' Cors hinzufügen )"
+    "id": "tool_mirror_enable",
+    "en": "Use URL mirroring.",
+    "de": "Verwenden Sie die URL-Spiegelung."
+  },
+  {
+    "id": "tool_mirror_enable_desc",
+    "en": "Can solves missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
+    "de": "Kann fehlendes TLS-Zertifikat (zB Protokoll 'http:' statt 'https:') oder falsch konfigurierte CORS-Header beheben. Es funktioniert nicht, wenn das TLS-Zertifikat veraltet oder ungültig ist. Wenden Sie sich bei Bedarf an den Anbieter. Beachten Sie, dass dieser Dienst die IP der Benutzer verwendet, um eine Ratenbegrenzung festzulegen"
   },
   {
     "id": "tool_mirror_toolbox_btn",
@@ -6863,6 +6718,176 @@
     "id": "search_results_empty",
     "en": "No views found",
     "de": "Keine Ansichten gefunden"
+  },
+  {
+    "id": "share_manager_title",
+    "en": "Sharing manager",
+    "de": "Sharing Manager "
+  },
+  {
+    "id": "share_link_title",
+    "en": "Share link",
+    "de": "Einen Link teilen "
+  },
+  {
+    "id": "share_options",
+    "en": "Show/hide settings",
+    "de": "Einstellungen ein-/ausblenden"
+  },
+  {
+    "id": "share_mode_warn",
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "de": "Jeder, der diesen Link erhält, kann den Inhalt der ausgewählten Ansichten sehen. Wenn Sie sensible Informationen teilen möchten, laden Sie Benutzer zu Ihrem Projekt oder privaten Projekt ein und legen Sie die Zugriffs- und Leserechte entsprechend fest. Standardmäßig ist der statische Modus aktiviert, bei dem es sich um eine schlanke, schreibgeschützte Version von MapX handelt. Weitere Informationen in den Einstellungen."
+  },
+  {
+    "id": "share_mode_static_label",
+    "en": "Use the mode 'static' ( recommended )",
+    "de": "Verwenden Sie den Modus 'statisch' (empfohlen) "
+  },
+  {
+    "id": "share_mode_static_label_desc",
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
+    "de": "Verwenden Sie den 'statischen' Modus, wenn Sie eine Ansicht mit einer schlanken und schnelleren Version von MapX mit eingeschränkten Funktionen teilen möchten. Wenn Sie eine Story-Map hinzufügen, startet sie automatisch und verwirft alle anderen Ansichten"
+  },
+  {
+    "id": "share_views_check_label",
+    "en": "Add views to share",
+    "de": "Fügen Sie Ansichten zum Teilen hinzu "
+  },
+  {
+    "id": "share_views_select",
+    "en": "Select views",
+    "de": "Ansichten auswählen"
+  },
+  {
+    "id": "share_views_check_label_desc",
+    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
+    "de": "Ansichten zum Anzeigen. Die Liste kann neu angeordnet werden: Bei Draufsichten werden Ebenen oben angezeigt. Im 'statischen' Modus werden diese Ansichten automatisch gerendert. Story Maps werden direkt gestartet. Im 'normalen' Modus werden die Ansichten in der Liste angezeigt und wenn die Auswahl leer ist, werden alle Ansichten des Projekts aufgelistet."
+  },
+  {
+    "id": "share_views_zoom_label",
+    "en": "Zoom to views extent",
+    "de": "Auf Ansicht vergrößern "
+  },
+  {
+    "id": "share_views_zoom_label_desc",
+    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
+    "de": "Im 'statischen' Modus wird die Kartenausdehnung so eingestellt, dass sie der Ansichtsebenenausdehnung entspricht, falls verfügbar."
+  },
+  {
+    "id": "share_views_open_check_label",
+    "en": "Set views to activate",
+    "de": "Legen Sie die zu aktivierenden Ansichten fest "
+  },
+  {
+    "id": "share_views_open_check_label_desc",
+    "en": "Add views to be automatically activated when the application is launched.",
+    "de": "Fügen Sie Ansichten hinzu, die beim Starten der Anwendung automatisch aktiviert werden sollen."
+  },
+  {
+    "id": "share_collections_check_label",
+    "en": "Set collections",
+    "de": "Sammlungen festlegen "
+  },
+  {
+    "id": "share_collections_check_label_desc",
+    "en": "Add groups of views by using collections",
+    "de": "Fügen Sie Gruppen von Ansichten hinzu, indem Sie Sammlungen verwenden"
+  },
+  {
+    "id": "share_collections_check_operator_label",
+    "en": "Selection mode (if more that one collection)",
+    "de": "Auswahlmodus (wenn mehr als eine Sammlung) "
+  },
+  {
+    "id": "share_collections_check_operator_all",
+    "en": "Intersection",
+    "de": "Überschneidung "
+  },
+  {
+    "id": "share_collections_check_operator_any",
+    "en": "Union",
+    "de": "Union "
+  },
+  {
+    "id": "share_map_pos_check_label",
+    "en": "Set map position",
+    "de": "Kartenposition einstellen "
+  },
+  {
+    "id": "share_map_pos_check_label_desc",
+    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
+    "de": "Wenn Sie die Position der Karte festlegen, wird eine definierte räumliche Ausdehnung angezeigt, anstatt eine Darstellung der ganzen Welt zu zeigen."
+  },
+  {
+    "id": "share_iframe_check_label",
+    "en": "Embed in HTML tags",
+    "de": "In HTML-Tags einbetten "
+  },
+  {
+    "id": "share_iframe_check_label_desc",
+    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
+    "de": "Betten Sie den Link in eine ein<iframe> HTML-Tag zum einfachen Hinzufügen von MapX zu Ihrer Website.</iframe>"
+  },
+  {
+    "id": "share_filter_activated",
+    "en": "Filter activated view by default",
+    "de": "Aktivierte Ansicht standardmäßig filtern "
+  },
+  {
+    "id": "share_filter_activated_desc",
+    "en": "This option will show only views set to be opened from the beginning",
+    "de": "Diese Option zeigt nur Ansichten an, die von Anfang an geöffnet werden sollen "
+  },
+  {
+    "id": "share_category_hide",
+    "en": "Hide categories",
+    "de": "Kategorien ausblenden "
+  },
+  {
+    "id": "share_category_hide_desc",
+    "en": "Categories will be hidden in the list of views by default",
+    "de": "Kategorien werden standardmäßig in der Liste der Ansichten ausgeblendet "
+  },
+  {
+    "id": "share_map_pos_set",
+    "en": "Set map position",
+    "de": "Kartenposition einstellen "
+  },
+  {
+    "id": "share_map_pos_get",
+    "en": "Get current position",
+    "de": "Aktuelle Position abrufen "
+  },
+  {
+    "id": "btn_opt_share_to_project",
+    "en": "Share this view in another project",
+    "de": "Teilen Sie diese Ansicht in einem anderen Projekt "
+  },
+  {
+    "id": "share_in_project_no_publisher_project",
+    "en": "You have no project yet where to publish this view",
+    "de": "Sie haben noch kein Projekt, in dem Sie diese Ansicht veröffentlichen möchten "
+  },
+  {
+    "id": "share_in_project_no_view",
+    "en": "No view to share",
+    "de": "Keine Ansicht zum Teilen "
+  },
+  {
+    "id": "share_in_project_title",
+    "en": "Share in another project",
+    "de": "In einem anderen Projekt teilen "
+  },
+  {
+    "id": "share_in_project_desc",
+    "en": "Share a view in a project where you have publisher rights",
+    "de": "Teilen Sie eine Ansicht in einem Projekt, für das Sie Publisher-Rechte haben "
+  },
+  {
+    "id": "share_in_project_btn",
+    "en": "Add in selected project",
+    "de": "In ausgewähltem Projekt hinzufügen "
   },
   {
     "id": "mx_ui_text",

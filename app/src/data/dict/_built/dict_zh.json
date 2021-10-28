@@ -2160,21 +2160,6 @@
     "zh": "分享此视图的链接"
   },
   {
-    "id": "btn_opt_share_to_project",
-    "en": "Share this view in another project",
-    "zh": "分享此视图到另一个项目"
-  },
-  {
-    "id": "share_in_project_no_publisher_project",
-    "en": "You have no project yet where to publish this view",
-    "zh": "你还没有项目，无法发布此视图"
-  },
-  {
-    "id": "share_in_project_no_view",
-    "en": "No view to share",
-    "zh": "没有视图可以分享"
-  },
-  {
     "id": "btn_opt_start_story",
     "en": "Read this story map",
     "zh": "阅读此Story Map"
@@ -5816,8 +5801,23 @@
   },
   {
     "id": "wms_select_reviewed_service",
-    "en": "Select stored service",
-    "zh": "选择存储的服务"
+    "en": "Select a service preset",
+    "zh": "选择服务预设"
+  },
+  {
+    "id": "wms_display_tool_title",
+    "en": "WMS configurator",
+    "zh": "WMS 配置器"
+  },
+  {
+    "id": "wms_display_tool",
+    "en": "Display WMS configurator",
+    "zh": "显示 WMS 配置器"
+  },
+  {
+    "id": "wms_display_tool_desc",
+    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
+    "zh": "用于选择 WMS 主机并自动构建 URL 的工具 图块和图例的 URL"
   },
   {
     "id": "wms_select_layer",
@@ -6250,159 +6250,9 @@
     "zh": "确认更改项目"
   },
   {
-    "id": "share_map_pos_set",
-    "en": "Set map position",
-    "zh": "设置地图位置"
-  },
-  {
-    "id": "share_map_pos_get",
-    "en": "Get current position",
-    "zh": "获取当前位置"
-  },
-  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "zh": "空"
-  },
-  {
-    "id": "share_manager_title",
-    "en": "Sharing manager",
-    "zh": "分享管理"
-  },
-  {
-    "id": "share_link_title",
-    "en": "Share link",
-    "zh": "分享链接"
-  },
-  {
-    "id": "share_options",
-    "en": "Show/hide settings",
-    "zh": "显示/隐藏设置"
-  },
-  {
-    "id": "share_mode_static_label",
-    "en": "Use the mode 'static' ( recommended )",
-    "zh": "使用“静态”模式（推荐）"
-  },
-  {
-    "id": "share_mode_warn",
-    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
-    "zh": "收到此链接的任何人都可以看到所选视图的内容。如果您想共享敏感信息，请邀请用户加入您的项目或私人项目，并相应地设置访问和阅读权限。默认情况下启用静态模式，这是 MapX 的轻量级只读版本。设置中的更多信息。"
-  },
-  {
-    "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "zh": "如果您想使用功能有限的轻量级和更快的 MapX 版本共享视图，请使用“静态”模式。如果您添加故事地图，它将自动启动，丢弃任何其他视图"
-  },
-  {
-    "id": "share_views_check_label",
-    "en": "Add views to share",
-    "zh": "添加要分享的视图"
-  },
-  {
-    "id": "share_views_check_desc",
-    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
-    "zh": "要显示的视图。 列表可以重新排序：顶部视图将显示在顶部的图层。 在“静态”模式下，这些视图将自动呈现。 Story Map将直接启动。 在“正常”模式下，视图将显示在列表中，如果所选内容为空，则将列出项目的所有视图。"
-  },
-  {
-    "id": "share_views_zoom_label",
-    "en": "Zoom to views extent",
-    "zh": "缩放到视图范围"
-  },
-  {
-    "id": "share_views_zoom_desc",
-    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
-    "zh": "在“静态”模式下，将设置地图范围以适应视图图层范围（如果可用）。"
-  },
-  {
-    "id": "share_views_open_check_label",
-    "en": "Set views to activate",
-    "zh": "设置要激活的试图"
-  },
-  {
-    "id": "share_views_open_check_desc",
-    "en": "Add views to be automatically activated when the application is launched.",
-    "zh": "添加要在应用程序启动时自动激活的视图。"
-  },
-  {
-    "id": "share_collections_check_label",
-    "en": "Set collections",
-    "zh": "设置集合"
-  },
-  {
-    "id": "share_collections_check_operator_label",
-    "en": "Selection mode (if more that one collection)",
-    "zh": "选择模式（如果多于一个集合）"
-  },
-  {
-    "id": "share_collections_check_operator_all",
-    "en": "Intersection",
-    "zh": "交集"
-  },
-  {
-    "id": "share_collections_check_operator_any",
-    "en": "Union",
-    "zh": "并集"
-  },
-  {
-    "id": "share_collections_check_desc",
-    "en": "Add groups of views by using collections",
-    "zh": "使用集合添加视图组"
-  },
-  {
-    "id": "share_map_pos_check_label",
-    "en": "Set map position",
-    "zh": "设置地图位置"
-  },
-  {
-    "id": "share_map_pos_check_desc",
-    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
-    "zh": "设置地图的位置将显示已定义的空间范围，而非世界地图。"
-  },
-  {
-    "id": "share_iframe_check_label",
-    "en": "Embed in HTML tags",
-    "zh": "嵌入HTML标签"
-  },
-  {
-    "id": "share_iframe_check_desc",
-    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "zh": "将链接嵌入 <iframe> HTML标签中，即可轻松的将MapX添加到你的网站。"
-  },
-  {
-    "id": "share_in_project_title",
-    "en": "Share in another project",
-    "zh": "分享到另一个项目"
-  },
-  {
-    "id": "share_in_project_desc",
-    "en": "Share a view in a project where you have publisher rights",
-    "zh": "在你拥有发布者权限的项目中分享视图"
-  },
-  {
-    "id": "share_in_project_btn",
-    "en": "Add in selected project",
-    "zh": "加入选定的项目"
-  },
-  {
-    "id": "share_filter_activated",
-    "en": "Filter activated view by default",
-    "zh": "默认筛选已激活视图"
-  },
-  {
-    "id": "share_filter_activated_desc",
-    "en": "This option will show only views set to be opened from the beginning",
-    "zh": "仅显示初始设定为打开的视图"
-  },
-  {
-    "id": "share_category_hide",
-    "en": "Hide categories",
-    "zh": "隐藏类别"
-  },
-  {
-    "id": "share_category_hide_desc",
-    "en": "Categories will be hidden in the list of views by default",
-    "zh": "试图列表默认隐藏类别"
   },
   {
     "id": "jenks",
@@ -6640,9 +6490,14 @@
     "zh": "通知事项 "
   },
   {
-    "id": "tool_mirror_enable_for_view_raster_tiles",
-    "en": "Use URL mirroring ( enable SSL + add MapX' cors )",
-    "zh": "使用 URL 镜像（启用 SSL + 添加 MapX' cors）"
+    "id": "tool_mirror_enable",
+    "en": "Use URL mirroring.",
+    "zh": "使用 URL 镜像。"
+  },
+  {
+    "id": "tool_mirror_enable_desc",
+    "en": "Can solves missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
+    "zh": "可以解决缺少 TLS 证书（例如协议“http:”而不是“https:”）或错误配置的 CORS 标头。如果 TLS 证书已过时或无效，它将不起作用。如果需要，请联系供应商。请注意，此服务将使用用户的 IP 来设置速率限制"
   },
   {
     "id": "tool_mirror_toolbox_btn",
@@ -6863,6 +6718,176 @@
     "id": "search_results_empty",
     "en": "No views found",
     "zh": "未找到任何视图"
+  },
+  {
+    "id": "share_manager_title",
+    "en": "Sharing manager",
+    "zh": "分享管理"
+  },
+  {
+    "id": "share_link_title",
+    "en": "Share link",
+    "zh": "分享链接"
+  },
+  {
+    "id": "share_options",
+    "en": "Show/hide settings",
+    "zh": "显示/隐藏设置"
+  },
+  {
+    "id": "share_mode_warn",
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "zh": "收到此链接的任何人都可以看到所选视图的内容。如果您想共享敏感信息，请邀请用户加入您的项目或私人项目，并相应地设置访问和阅读权限。默认情况下启用静态模式，这是 MapX 的轻量级只读版本。设置中的更多信息。"
+  },
+  {
+    "id": "share_mode_static_label",
+    "en": "Use the mode 'static' ( recommended )",
+    "zh": "使用“静态”模式（推荐）"
+  },
+  {
+    "id": "share_mode_static_label_desc",
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
+    "zh": "如果您想使用功能有限的轻量级和更快的 MapX 版本共享视图，请使用“静态”模式。如果您添加故事地图，它将自动启动，丢弃任何其他视图"
+  },
+  {
+    "id": "share_views_check_label",
+    "en": "Add views to share",
+    "zh": "添加要分享的视图"
+  },
+  {
+    "id": "share_views_select",
+    "en": "Select views",
+    "zh": "选择视图"
+  },
+  {
+    "id": "share_views_check_label_desc",
+    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
+    "zh": "要显示的视图。 列表可以重新排序：顶部视图将显示在顶部的图层。 在“静态”模式下，这些视图将自动呈现。 Story Map将直接启动。 在“正常”模式下，视图将显示在列表中，如果所选内容为空，则将列出项目的所有视图。"
+  },
+  {
+    "id": "share_views_zoom_label",
+    "en": "Zoom to views extent",
+    "zh": "缩放到视图范围"
+  },
+  {
+    "id": "share_views_zoom_label_desc",
+    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
+    "zh": "在“静态”模式下，将设置地图范围以适应视图图层范围（如果可用）。"
+  },
+  {
+    "id": "share_views_open_check_label",
+    "en": "Set views to activate",
+    "zh": "设置要激活的试图"
+  },
+  {
+    "id": "share_views_open_check_label_desc",
+    "en": "Add views to be automatically activated when the application is launched.",
+    "zh": "添加要在应用程序启动时自动激活的视图。"
+  },
+  {
+    "id": "share_collections_check_label",
+    "en": "Set collections",
+    "zh": "设置集合"
+  },
+  {
+    "id": "share_collections_check_label_desc",
+    "en": "Add groups of views by using collections",
+    "zh": "使用集合添加视图组"
+  },
+  {
+    "id": "share_collections_check_operator_label",
+    "en": "Selection mode (if more that one collection)",
+    "zh": "选择模式（如果多于一个集合）"
+  },
+  {
+    "id": "share_collections_check_operator_all",
+    "en": "Intersection",
+    "zh": "交集"
+  },
+  {
+    "id": "share_collections_check_operator_any",
+    "en": "Union",
+    "zh": "并集"
+  },
+  {
+    "id": "share_map_pos_check_label",
+    "en": "Set map position",
+    "zh": "设置地图位置"
+  },
+  {
+    "id": "share_map_pos_check_label_desc",
+    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
+    "zh": "设置地图的位置将显示已定义的空间范围，而非世界地图。"
+  },
+  {
+    "id": "share_iframe_check_label",
+    "en": "Embed in HTML tags",
+    "zh": "嵌入HTML标签"
+  },
+  {
+    "id": "share_iframe_check_label_desc",
+    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
+    "zh": "将链接嵌入 <iframe> HTML标签中，即可轻松的将MapX添加到你的网站。"
+  },
+  {
+    "id": "share_filter_activated",
+    "en": "Filter activated view by default",
+    "zh": "默认筛选已激活视图"
+  },
+  {
+    "id": "share_filter_activated_desc",
+    "en": "This option will show only views set to be opened from the beginning",
+    "zh": "仅显示初始设定为打开的视图"
+  },
+  {
+    "id": "share_category_hide",
+    "en": "Hide categories",
+    "zh": "隐藏类别"
+  },
+  {
+    "id": "share_category_hide_desc",
+    "en": "Categories will be hidden in the list of views by default",
+    "zh": "试图列表默认隐藏类别"
+  },
+  {
+    "id": "share_map_pos_set",
+    "en": "Set map position",
+    "zh": "设置地图位置"
+  },
+  {
+    "id": "share_map_pos_get",
+    "en": "Get current position",
+    "zh": "获取当前位置"
+  },
+  {
+    "id": "btn_opt_share_to_project",
+    "en": "Share this view in another project",
+    "zh": "分享此视图到另一个项目"
+  },
+  {
+    "id": "share_in_project_no_publisher_project",
+    "en": "You have no project yet where to publish this view",
+    "zh": "你还没有项目，无法发布此视图"
+  },
+  {
+    "id": "share_in_project_no_view",
+    "en": "No view to share",
+    "zh": "没有视图可以分享"
+  },
+  {
+    "id": "share_in_project_title",
+    "en": "Share in another project",
+    "zh": "分享到另一个项目"
+  },
+  {
+    "id": "share_in_project_desc",
+    "en": "Share a view in a project where you have publisher rights",
+    "zh": "在你拥有发布者权限的项目中分享视图"
+  },
+  {
+    "id": "share_in_project_btn",
+    "en": "Add in selected project",
+    "zh": "加入选定的项目"
   },
   {
     "id": "mx_ui_text",
