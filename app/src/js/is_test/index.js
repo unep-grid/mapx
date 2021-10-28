@@ -527,17 +527,34 @@ export function isEqual(x, y) {
 /**
  * Validate url
  * @param {String} url to test
+ * @note new version uses Url & tryCatch
  * @note https://stackoverflow.com/questions/8667070/javascript-regular-expression-to-validate-url
  * @note https://mathiasbynens.be/demo/url-regex
+ * @return {Boolean}
  */
 export function isUrl(url) {
-  return (
-    isString(url) &&
-    /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(
-      url
-    )
-  );
+  try{
+     new URL(url);
+    return true;
+  }catch(e){
+    return false;
+  }
 }
+
+/**
+ * Validate url with https 
+ * @param {String} url to test
+ * @return {Boolean}
+ */
+export function isUrlHttps(url){
+  try{
+    const u = new URL(url);
+    return u.protocol === 'https:';
+  }catch(e){
+    return false;
+  }
+}
+
 
 /**
  * Check if it's expected url for wms end point.
@@ -555,7 +572,6 @@ export function isUrlValidWms(url, opt) {
   url = url.toLowerCase();
 
   const u = new URL(url);
-  const okHttps = u.protocol === 'https:';
   const service = u.searchParams.get('service');
   const okWms =
     isString(service) &&
@@ -563,7 +579,7 @@ export function isUrlValidWms(url, opt) {
     (opt.layers ? u.searchParams.has('layers') : true) &&
     (opt.styles ? u.searchParams.has('styles') : true);
 
-  return okHttps && okWms;
+  return okWms;
 }
 
 /**
