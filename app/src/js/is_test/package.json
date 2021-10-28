@@ -1,6 +1,6 @@
 {
   "name": "@fxi/mx_valid",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "validator for MapX",
   "source": "index.js",
   "main": "dist/mx_valid.js",
