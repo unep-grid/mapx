@@ -1,3 +1,6 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.27' target='_blank'>1.9.27</a>
+   - APP/API
+    - Minor refactoring of WMS configurator and mirror API. Improved error message handling during configuration. Improved labels, description and translations. Impacts also share manager UI and globally error handling.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.26' target='_blank'>1.9.26</a>
    - APP/API
     - Improved mirror api :
