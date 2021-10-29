@@ -1,3 +1,10 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.28' target='_blank'>1.9.28</a>
+   - APP
+    - Solves bug with translated labels (typo) + edge case when dict had duplicated key
+    - Removed own email address in readers and viewers list, as it was redundant with 'self' in view's editor. Possible duplicated elsewhere.
+    - Added description for tile's size input in raster tile view editor.
+    - Tiles size is used now during WMS url creation. If the value change after the url is built, it does not change it.
+    - Misc wording in translation 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.27' target='_blank'>1.9.27</a>
    - APP/API
     - Minor refactoring of WMS configurator and mirror API. Improved error message handling during configuration. Improved labels, description and translations. Impacts also share manager UI and globally error handling.
