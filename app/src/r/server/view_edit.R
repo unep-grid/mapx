@@ -17,6 +17,7 @@ observe({
 
         isGuest <- isGuestUser()
         userData <- reactUser$data
+        idUser <- userData$id
         userRole <- getUserRole()
         language <- reactData$language
         project <- reactData$project
@@ -86,7 +87,8 @@ observe({
           viewReaders <- c("self",.get(viewData,c("readers")))
           viewEditors <- c("self",.get(viewData,c("editors")))
           viewEditors <- unique(c(viewEditors,.get(viewData,c("editor"))))
-
+          viewReaders <- viewReaders[!viewReaders == idUser]
+          viewEditors <- viewEditors[!viewEditors == idUser]
           #
           # View collection
           #
@@ -364,18 +366,18 @@ observe({
                 uiType <- tagList(
                   selectizeInput(
                     inputId = "selectRasterTileSize",
-                    label = d("source_raster_tile_size",language),
+                    label = mxDictTranslateTagDesc("source_raster_tile_size",language),
                     selected = .get(viewData,c("data","source","tileSize")),
-                    choices = c(512,256)
+                    choices = c(256,512)
                     ),
                   checkboxInput(
                     inputId = "checkRasterTileUseMirror",
-                    label = mxDictTranlateTagDesc("tool_mirror_enable",language),
+                    label = mxDictTranslateTagDesc("tool_mirror_enable",language),
                     value = .get(viewData,c("data","source","useMirror"))
                     ),
                   checkboxInput(
                     inputId = "checkShowWmsGenerator",
-                    label = mxDictTranlateTagDesc("wms_display_tool", language)
+                    label = mxDictTranslateTagDesc("wms_display_tool", language)
                     ),
                   conditionalPanel(condition="input.checkShowWmsGenerator == true",
                     tags$div(
@@ -463,7 +465,8 @@ observe({
                     selectorParent = '#wmsGenerator',
                     selectorTileInput = '#textRasterTileUrl',
                     selectorLegendInput = '#textRasterTileLegend',
-                    selectorUseMirror = '#checkRasterTileUseMirror'
+                    selectorUseMirror = '#checkRasterTileUseMirror',
+                    selectorTileSizeInput = '#selectRasterTileSize'
                     #selectorMetaInput = '#textRasterTileUrlMetadata'
                     ))
               }

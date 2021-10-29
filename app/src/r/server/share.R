@@ -116,7 +116,7 @@ observeEvent(reactData$showShareManager,{
                 tagList(
                   selectizeInput(
                     "selectShareViews",
-                    label = d('share_views_select'),
+                    label = tt('share_views_select'),
                     choices = viewsList,
                     multiple = TRUE,
                     selected = viewsToShare,
@@ -194,8 +194,8 @@ observeEvent(reactData$showShareManager,{
                           label = tt("share_collections_check_operator_label"),
                           choiceValues = c('ALL','ANY'),
                           choiceNames = c(
-                            tt('share_collections_check_operator_all',F),                     
-                            tt('share_collections_check_operator_any',F)
+                            dd('share_collections_check_operator_all',language),                     
+                            dd('share_collections_check_operator_any',language)
                           )
                         )
                       )
@@ -435,7 +435,7 @@ observeEvent(input$shareMapPosition_init,{
 
   mxCatch("Share : handle map position",{
     language <- reactData$language 
-    tt <- function(id){d(id,lang=language,web=F)}
+    tt <- function(id){dd(id,lang=language)}
 
     project <- reactData$project
     projectData <- mxDbGetProjectData(project)

@@ -433,15 +433,24 @@ mxUnescapeNewLine <- function(txt){
 #' @param language {Character} Language (two letters code)
 #' @return Dictionary item
 mxDictTranslateSimple <- function(id,
-  language=.get(config,c('languages','codes')),
-  dict=.get(config,"dict")
+  language = .get(config,c('languages','codes')),
+  dict = .get(config,"dict")
   ){
   language = match.arg(language)
   if(noDataCheck(dict)) return(id)
-  out <- dict[ dict$id == id, language ]
-  if(noDataCheck(out))   out <- dict[dict$id==id,'en']
-  if(noDataCheck(out))   out <- id
-  return(out)
+  out <- dict[ dict$id == id, c(language,'en') ]
+  nOut <- nrow(out)
+  if(nOut == 0){
+     return(id);
+  }
+  if(nOut > 1){
+    out <- out[c(1),]
+  }
+  str <- out[,c(language)]
+  if(noDataCheck(str)){
+     return(out[,c('en')])
+  }
+  return(str)
 }
 
 dd <- mxDictTranslateSimple
@@ -465,7 +474,7 @@ mxDictTranslateTag <- function(id,language=NULL){
 #' @param {Character} id Dict id 
 #' @param {Character} language id 
 #' @return {shiny.tag}
-mxDictTranlateTagDesc <- function(id,language=NULL){
+mxDictTranslateTagDesc <- function(id,language=NULL){
   idDesc <- sprintf('%s_desc',id)
   tags$div(
     tags$span(

@@ -17,6 +17,8 @@ export async function wmsBuildQueryUi(opt) {
   const elInputTiles = document.querySelector(opt.selectorTileInput);
   const elInputLegend = document.querySelector(opt.selectorLegendInput);
   const elInputAddMirror = document.querySelector(opt.selectorUseMirror);
+  const elInputTileSize = document.querySelector(opt.selectorTileSizeInput);
+
   const elParent =
     document.querySelector(opt.selectorParent) || elInputTile.parentElement;
   const services = opt.services;
@@ -237,8 +239,8 @@ export async function wmsBuildQueryUi(opt) {
     elInputTiles.value = urlTile({
       layer: layer,
       url: elInputService.value,
-      width: 512,
-      height: 512
+      width: elInputTileSize.value || 512,
+      height: elInputTileSize.value || 512
     });
     elInputLegend.value = urlLegend({
       url: elInputService.value,

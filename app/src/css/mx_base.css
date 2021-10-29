@@ -1079,10 +1079,15 @@ pre {
 .text-muted > * {
   font-size: 0.9em;
   text-align: justify;
+  font-weight: normal;
   hyphens: auto;
   color: var(--mx_ui_text_faded);
+  transition:color ease-in-out 100ms;
 }
-
+.text-muted:hover, 
+.text-muted:hover > * {
+  color: var(--mx_ui_text);
+}
 /**
 * EPSG epsg ; projection code select group list
 */
