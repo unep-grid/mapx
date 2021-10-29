@@ -124,7 +124,7 @@ mxSendMail <- function(
       notif = list(
         idGroup = idGroupNotify,
         type = 'info',
-        msg = txt,
+        message = txt,
         title = d("email_manager_title",language),
         level = ifelse(success,'message','warning')
         )

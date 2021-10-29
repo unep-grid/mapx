@@ -73,7 +73,7 @@ async function exportHandler(req, res, next) {
     next();
   } catch (e) {
     await res.notifyInfoError('job_state', {
-      msg: e.message
+      message: e.message
     });
     next(e);
   }
@@ -136,7 +136,7 @@ async function extractFromPostgres(config, res) {
   }
 
   await res.notifyInfoMessage('job_state', {
-    msg: t(language, 'get_source_email_dl_link', {
+    message: t(language, 'get_source_email_dl_link', {
       email: email,
       url: dataUrl,
       title: title
@@ -145,7 +145,7 @@ async function extractFromPostgres(config, res) {
 
   if (!format || !fileFormat[format]) {
     await res.notifyInfoWarning('job_state', {
-      msg: t(language, 'get_source_format_invalid', {format, formatDefault})
+      message: t(language, 'get_source_format_invalid', {format, formatDefault})
     });
     format = formatDefault;
   }
@@ -156,7 +156,7 @@ async function extractFromPostgres(config, res) {
   const metadata = await getSourceMetadata({id: id});
 
   await res.notifyInfoVerbose('job_state', {
-    msg: t(language, 'get_source_meta_extracted')
+    message: t(language, 'get_source_meta_extracted')
   });
 
   /*
@@ -190,7 +190,7 @@ async function extractFromPostgres(config, res) {
   }
 
   await res.notifyInfoMessage('job_state', {
-    msg: t(language, 'get_source_extraction_wait', {
+    message: t(language, 'get_source_extraction_wait', {
       format: format
     })
   });
@@ -263,13 +263,13 @@ async function extractFromPostgres(config, res) {
         res.notifyProgress('job_state', {
           idMerge: 'get_source_zip_progress',
           type: 'progress',
-          msg: t(language, 'get_source_zip_progress'),
+          message: t(language, 'get_source_zip_progress'),
           value: percent
         });
       },
       onWarning: (err) => {
         res.notifyInfoWarning('job_state', {
-          msg: t(language, 'get_source_zip_warning', {
+          message: t(language, 'get_source_zip_warning', {
             err: err
           })
         });
@@ -287,12 +287,12 @@ async function extractFromPostgres(config, res) {
    */
   await res.notifyProgress('job_state', {
     idMerge: 'get_source_zip_progress',
-    msg: t(language, 'get_source_zip_progress'),
+    message : t(language, 'get_source_zip_progress'),
     value: 100
   });
 
   await res.notifyInfoSuccess('job_state', {
-    msg: t(language, 'get_source_conversion_done_link', {
+    message: t(language, 'get_source_conversion_done_link', {
       url: dataUrl,
       format: format,
       title: title
@@ -306,7 +306,7 @@ async function extractFromPostgres(config, res) {
 
   await res.notifyBrowser('job_state', {
     title: t(language, 'get_source_conversion_done_browser_title'),
-    msg: t(language, 'get_source_conversion_done_browser', {
+    message: t(language, 'get_source_conversion_done_browser', {
       title: title
     })
   });
@@ -338,7 +338,7 @@ async function extractFromPostgres(config, res) {
     if (useFakeProg) {
       res.notifyProgress('job_state', {
         idMerge: 'get_source_conversion_progress',
-        msg: t(language, 'get_source_conversion_progress'),
+        message: t(language, 'get_source_conversion_progress'),
         value: fakeProg++
       });
     } else {
@@ -348,7 +348,7 @@ async function extractFromPostgres(config, res) {
       for (let i = 0, iL = progs.length; i < iL; i++) {
         res.notifyProgress('job_state', {
           idMerge: 'get_source_conversion_progress',
-          msg: t(language, 'get_source_conversion_progress'),
+          message: t(language, 'get_source_conversion_progress'),
           value: progs[i]
         });
       }
@@ -356,7 +356,7 @@ async function extractFromPostgres(config, res) {
 
     if (!isProg && text.length > 5) {
       res.notifyInfoVerbose('job_state', {
-        msg: t(language, 'get_source_conversion_stdout', {
+        message: t(language, 'get_source_conversion_stdout', {
           stdout: text
         })
       });
@@ -368,7 +368,7 @@ async function extractFromPostgres(config, res) {
   function ogrStderr(data) {
     res.notifyInfoWarning('job_state', {
       idMerge: 'get_source_conversion_stderr',
-      msg: t(language, 'get_source_conversion_stderr', {
+      message: t(language, 'get_source_conversion_stderr', {
         stderr: data.toString('utf8')
       })
     });

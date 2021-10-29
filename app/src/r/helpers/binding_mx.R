@@ -397,7 +397,7 @@ mxFlashIcon = function(icon="cog",text="",update=runif(1),session=shiny::getDefa
 #' @return
 mxNotify = function(notif,update=runif(1),session=shiny::getDefaultReactiveDomain()){
   isList <- is.list(notif)
-  hasMsg <- isList && !noDataCheck(notif$msg)
+  hasMsg <- isList && !noDataCheck(notif$message)
   hasType <- isList && !noDataCheck(notif$type)
   hasSession <- !noDataCheck(session)
   if(hasSession && isList && hasMsg && hasType){
