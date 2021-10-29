@@ -6496,8 +6496,8 @@
   },
   {
     "id": "tool_mirror_enable_desc",
-    "en": "Can solves missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
-    "zh": "可以解决缺少 TLS 证书（例如协议“http:”而不是“https:”）或错误配置的 CORS 标头。如果 TLS 证书已过时或无效，它将不起作用。如果需要，请联系供应商。请注意，此服务将使用用户的 IP 来设置速率限制"
+    "en": "This can solve issues related to a missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
+    "zh": "这可以解决与缺少 TLS 证书（例如协议“http:”而不是“https:”）或错误配置的 CORS 标头相关的问题。如果 TLS 证书已过时或无效，它将不起作用。如果需要，请联系供应商。请注意，此服务将使用用户的 IP 来设置速率限制"
   },
   {
     "id": "tool_mirror_toolbox_btn",

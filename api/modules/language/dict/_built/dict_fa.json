@@ -6496,8 +6496,8 @@
   },
   {
     "id": "tool_mirror_enable_desc",
-    "en": "Can solves missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
-    "fa": "می تواند گواهی TLS گم شده را حل کند (مثلاً پروتکل 'http:' به جای 'https:') یا سرصفحه های CORS پیکربندی نادرست. اگر گواهی TLS قدیمی یا نامعتبر باشد، کار نخواهد کرد. در صورت نیاز با ارائه دهنده تماس بگیرید. توجه داشته باشید که این سرویس از IP کاربران برای تعیین محدودیت نرخ استفاده می کند"
+    "en": "This can solve issues related to a missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
+    "fa": "این می‌تواند مشکلات مربوط به گواهینامه TLS مفقود را حل کند (مثلاً پروتکل 'http:' به جای 'https:') یا سرصفحه‌های CORS پیکربندی نادرست. اگر گواهی TLS قدیمی یا نامعتبر باشد، کار نخواهد کرد. در صورت نیاز با ارائه دهنده تماس بگیرید. توجه داشته باشید که این سرویس از IP کاربران برای تعیین محدودیت نرخ استفاده می کند"
   },
   {
     "id": "tool_mirror_toolbox_btn",

@@ -6496,8 +6496,8 @@
   },
   {
     "id": "tool_mirror_enable_desc",
-    "en": "Can solves missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
-    "ps": "کولی شي د ورک شوي TLS سند حل کړي (د مثال پروتوکول 'http:' د 'https:' پرځای) یا غلط ترتیب شوي CORS سرلیکونه. دا به کار ونکړي که د TLS سند زوړ یا غلط وي. که اړتیا وي د چمتو کونکي سره اړیکه ونیسئ. په یاد ولرئ چې دا خدمت به د کاروونکو IP کاروي ترڅو د نرخ محدودیت تنظیم کړي"
+    "en": "This can solve issues related to a missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
+    "ps": "دا کولی شي د ورک شوي TLS سند پورې اړوند مسلې حل کړي (د مثال پروتوکول 'http:' د 'https:' پرځای) یا غلط ترتیب شوي CORS سرلیکونه. دا به کار ونکړي که د TLS سند زوړ یا غلط وي. که اړتیا وي د چمتو کونکي سره اړیکه ونیسئ. په یاد ولرئ چې دا خدمت به د کاروونکو IP کاروي ترڅو د نرخ محدودیت تنظیم کړي"
   },
   {
     "id": "tool_mirror_toolbox_btn",

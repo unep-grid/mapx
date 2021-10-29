@@ -6496,8 +6496,8 @@
   },
   {
     "id": "tool_mirror_enable_desc",
-    "en": "Can solves missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
-    "bn": "অনুপস্থিত TLS শংসাপত্র সমাধান করতে পারে (যেমন প্রোটোকল 'https:' এর পরিবর্তে 'http:') বা ভুল কনফিগার করা CORS হেডার। TLS শংসাপত্র পুরানো বা অবৈধ হলে এটি কাজ করবে না। প্রয়োজনে প্রদানকারীর সাথে যোগাযোগ করুন। নোট করুন যে এই পরিষেবাটি ব্যবহারকারীদের আইপি ব্যবহার করে একটি হারের সীমা নির্ধারণ করবে"
+    "en": "This can solve issues related to a missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
+    "bn": "এটি একটি অনুপস্থিত TLS শংসাপত্র (যেমন প্রোটোকল 'https:' এর পরিবর্তে 'http:') বা ভুল কনফিগার করা CORS শিরোনাম সম্পর্কিত সমস্যাগুলি সমাধান করতে পারে। TLS শংসাপত্র পুরানো বা অবৈধ হলে এটি কাজ করবে না। প্রয়োজনে প্রদানকারীর সাথে যোগাযোগ করুন। নোট করুন যে এই পরিষেবাটি ব্যবহারকারীদের আইপি ব্যবহার করে একটি হারের সীমা নির্ধারণ করবে"
   },
   {
     "id": "tool_mirror_toolbox_btn",

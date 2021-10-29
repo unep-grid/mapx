@@ -6496,8 +6496,8 @@
   },
   {
     "id": "tool_mirror_enable_desc",
-    "en": "Can solves missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
-    "ar": "يمكن أن يحل شهادة TLS المفقودة (مثل البروتوكول \"http:\" بدلاً من \"https:\") أو رؤوس CORS التي تم تكوينها بشكل خاطئ. لن يعمل إذا كانت شهادة TLS قديمة أو غير صالحة. اتصل بالمزود إذا لزم الأمر. لاحظ أن هذه الخدمة ستستخدم IP الخاص بالمستخدمين لتعيين حد للمعدل"
+    "en": "This can solve issues related to a missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
+    "ar": "يمكن أن يؤدي ذلك إلى حل المشكلات المتعلقة بشهادة TLS المفقودة (مثل البروتوكول \"http:\" بدلاً من \"https:\") أو رؤوس CORS التي تم تكوينها بشكل خاطئ. لن يعمل إذا كانت شهادة TLS قديمة أو غير صالحة. اتصل بالمزود إذا لزم الأمر. لاحظ أن هذه الخدمة ستستخدم IP الخاص بالمستخدمين لتعيين حد للمعدل"
   },
   {
     "id": "tool_mirror_toolbox_btn",

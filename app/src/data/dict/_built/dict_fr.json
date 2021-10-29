@@ -6496,8 +6496,8 @@
   },
   {
     "id": "tool_mirror_enable_desc",
-    "en": "Can solves missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
-    "fr": "Peut résoudre le certificat TLS manquant (par exemple, le protocole « http : » au lieu de « https : ») ou les en-têtes CORS mal configurés. Cela ne fonctionnera pas si le certificat TLS est obsolète ou invalide. Contactez le fournisseur si nécessaire. Notez que ce service utilisera l'adresse IP des utilisateurs pour définir une limite de débit"
+    "en": "This can solve issues related to a missing TLS certificate (e.g. protocol 'http:' instead of 'https:') or misconfigured CORS headers. It will not work if TLS certificate is outdated or invalid. Contact the provider if required. Note that this service will use users' IP to set a rate limite",
+    "fr": "Cela peut résoudre les problèmes liés à un certificat TLS manquant (par exemple, le protocole « http : » au lieu de « https : ») ou des en-têtes CORS mal configurés. Cela ne fonctionnera pas si le certificat TLS est obsolète ou invalide. Contactez le fournisseur si nécessaire. Notez que ce service utilisera l'adresse IP des utilisateurs pour définir une limite de débit"
   },
   {
     "id": "tool_mirror_toolbox_btn",
