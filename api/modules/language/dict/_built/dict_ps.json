@@ -3340,6 +3340,11 @@
     "ps": "د پکسلونو اندازه"
   },
   {
+    "id": "source_raster_tile_size_desc",
+    "en": "This value should match image dimensions (width x height in pixels) returned by the server. If the URL of the tiles server specifies other dimensions, it will not work.",
+    "ps": "دا ارزښت باید د عکس ابعاد سره سمون ولري (په پکسل کې عرض x لوړوالی) د سرور لخوا بیرته راستانه شوي. که د ټایل سرور URL نور ابعاد مشخص کړي، دا به کار ونکړي."
+  },
+  {
     "id": "source_raster_tile_url",
     "en": "URL of tiles endpoint ",
     "ps": "د وروستیو پکسلونو پته"
@@ -5800,46 +5805,6 @@
     "ps": "تر یو حده"
   },
   {
-    "id": "wms_select_reviewed_service",
-    "en": "Select a service preset",
-    "ps": "د خدماتو وړاندې کولو غوره کړئ"
-  },
-  {
-    "id": "wms_display_tool_title",
-    "en": "WMS configurator",
-    "ps": "د WMS ترتیب کوونکی"
-  },
-  {
-    "id": "wms_display_tool",
-    "en": "Display WMS configurator",
-    "ps": "د WMS ترتیب کوونکی ښکاره کړئ"
-  },
-  {
-    "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
-    "ps": "د WMS کوربه غوره کولو لپاره وسیله او د ټایلونو او افسانو لپاره په اوتومات ډول URL جوړ کړئ"
-  },
-  {
-    "id": "wms_select_layer",
-    "en": "Select layer",
-    "ps": "پرت وټاکئ "
-  },
-  {
-    "id": "wms_input_service_url",
-    "en": "Enter service URL",
-    "ps": "د خدمت یو ار ایل داخل کړئ "
-  },
-  {
-    "id": "wms_btn_generate_url",
-    "en": "Update generated URL ( tiles server, legends )",
-    "ps": "تولید شوی URL تازه کړئ (د ټایلونو سرور ، کنډکونه) "
-  },
-  {
-    "id": "wms_btn_get_layers",
-    "en": "Update layer list",
-    "ps": "د پرت لیست تازه کول "
-  },
-  {
     "id": "app_maintenance_title",
     "en": "Maintenance",
     "ps": "ساتنه "
@@ -7073,5 +7038,45 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "ps": "نقشه: د اوبو د بدن متن لنډیز "
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select a service preset",
+    "ps": "د خدماتو وړاندې کولو غوره کړئ"
+  },
+  {
+    "id": "wms_display_tool_title",
+    "en": "WMS configurator",
+    "ps": "د WMS ترتیب کوونکی"
+  },
+  {
+    "id": "wms_display_tool",
+    "en": "Display WMS configurator",
+    "ps": "د WMS ترتیب کوونکی ښکاره کړئ"
+  },
+  {
+    "id": "wms_display_tool_desc",
+    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
+    "ps": "د WMS کوربه غوره کولو لپاره وسیله او د ټایلونو او افسانو لپاره په اوتومات ډول URL جوړ کړئ"
+  },
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer",
+    "ps": "پرت وټاکئ "
+  },
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL",
+    "ps": "د خدمت یو ار ایل داخل کړئ "
+  },
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )",
+    "ps": "تولید شوی URL تازه کړئ (د ټایلونو سرور ، کنډکونه) "
+  },
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list",
+    "ps": "د پرت لیست تازه کول "
   }
 ]

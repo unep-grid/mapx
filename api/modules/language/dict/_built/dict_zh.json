@@ -3340,6 +3340,11 @@
     "zh": "切片（像元）大小"
   },
   {
+    "id": "source_raster_tile_size_desc",
+    "en": "This value should match image dimensions (width x height in pixels) returned by the server. If the URL of the tiles server specifies other dimensions, it will not work.",
+    "zh": "此值应与服务器返回的图像尺寸（宽度 x 高度，以像素为单位）相匹配。如果tiles服务器的URL指定了其他维度，则不起作用。"
+  },
+  {
     "id": "source_raster_tile_url",
     "en": "URL of tiles endpoint ",
     "zh": "切片端点的URL"
@@ -5800,46 +5805,6 @@
     "zh": "部分"
   },
   {
-    "id": "wms_select_reviewed_service",
-    "en": "Select a service preset",
-    "zh": "选择服务预设"
-  },
-  {
-    "id": "wms_display_tool_title",
-    "en": "WMS configurator",
-    "zh": "WMS 配置器"
-  },
-  {
-    "id": "wms_display_tool",
-    "en": "Display WMS configurator",
-    "zh": "显示 WMS 配置器"
-  },
-  {
-    "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
-    "zh": "用于选择 WMS 主机并自动构建 URL 的工具 图块和图例的 URL"
-  },
-  {
-    "id": "wms_select_layer",
-    "en": "Select layer",
-    "zh": "选择图层"
-  },
-  {
-    "id": "wms_input_service_url",
-    "en": "Enter service URL",
-    "zh": "输入服务的URL"
-  },
-  {
-    "id": "wms_btn_generate_url",
-    "en": "Update generated URL ( tiles server, legends )",
-    "zh": "更新生成的URL（切片服务器，图例）"
-  },
-  {
-    "id": "wms_btn_get_layers",
-    "en": "Update layer list",
-    "zh": "更新图层列表"
-  },
-  {
     "id": "app_maintenance_title",
     "en": "Maintenance",
     "zh": "维护"
@@ -7073,5 +7038,45 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "zh": "地图：水体文本边框"
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select a service preset",
+    "zh": "选择服务预设"
+  },
+  {
+    "id": "wms_display_tool_title",
+    "en": "WMS configurator",
+    "zh": "WMS 配置器"
+  },
+  {
+    "id": "wms_display_tool",
+    "en": "Display WMS configurator",
+    "zh": "显示 WMS 配置器"
+  },
+  {
+    "id": "wms_display_tool_desc",
+    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
+    "zh": "用于选择 WMS 主机并自动构建 URL 的工具 图块和图例的 URL"
+  },
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer",
+    "zh": "选择图层"
+  },
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL",
+    "zh": "输入服务的URL"
+  },
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )",
+    "zh": "更新生成的URL（切片服务器，图例）"
+  },
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list",
+    "zh": "更新图层列表"
   }
 ]

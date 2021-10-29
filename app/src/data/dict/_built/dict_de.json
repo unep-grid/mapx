@@ -3340,6 +3340,11 @@
     "de": "Größe der Kacheln (Pixel) "
   },
   {
+    "id": "source_raster_tile_size_desc",
+    "en": "This value should match image dimensions (width x height in pixels) returned by the server. If the URL of the tiles server specifies other dimensions, it will not work.",
+    "de": "Dieser Wert sollte mit den vom Server zurückgegebenen Bildabmessungen (Breite x Höhe in Pixel) übereinstimmen. Wenn die URL des Kachelservers andere Dimensionen angibt, funktioniert es nicht."
+  },
+  {
     "id": "source_raster_tile_url",
     "en": "URL of tiles endpoint ",
     "de": "URL des Kachelendpunkts "
@@ -5800,46 +5805,6 @@
     "de": "Teilweise "
   },
   {
-    "id": "wms_select_reviewed_service",
-    "en": "Select a service preset",
-    "de": "Wählen Sie eine Dienstvoreinstellung"
-  },
-  {
-    "id": "wms_display_tool_title",
-    "en": "WMS configurator",
-    "de": "WMS-Konfigurator"
-  },
-  {
-    "id": "wms_display_tool",
-    "en": "Display WMS configurator",
-    "de": "WMS-Konfigurator anzeigen"
-  },
-  {
-    "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
-    "de": "Tool zum Auswählen von WMS-Hosts und Erstellen von URLs automatisch URL für Kacheln und Legenden"
-  },
-  {
-    "id": "wms_select_layer",
-    "en": "Select layer",
-    "de": "Ebene auswählen "
-  },
-  {
-    "id": "wms_input_service_url",
-    "en": "Enter service URL",
-    "de": "Geben Sie die Service-URL ein "
-  },
-  {
-    "id": "wms_btn_generate_url",
-    "en": "Update generated URL ( tiles server, legends )",
-    "de": "Generierte URL aktualisieren (Kachelserver, Legenden) "
-  },
-  {
-    "id": "wms_btn_get_layers",
-    "en": "Update layer list",
-    "de": "Ebenenliste aktualisieren "
-  },
-  {
     "id": "app_maintenance_title",
     "en": "Maintenance",
     "de": "Instandhaltung "
@@ -7073,5 +7038,45 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "de": "Karte: Wasserkörpertextumriss "
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select a service preset",
+    "de": "Wählen Sie eine Dienstvoreinstellung"
+  },
+  {
+    "id": "wms_display_tool_title",
+    "en": "WMS configurator",
+    "de": "WMS-Konfigurator"
+  },
+  {
+    "id": "wms_display_tool",
+    "en": "Display WMS configurator",
+    "de": "WMS-Konfigurator anzeigen"
+  },
+  {
+    "id": "wms_display_tool_desc",
+    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
+    "de": "Tool zum Auswählen von WMS-Hosts und Erstellen von URLs automatisch URL für Kacheln und Legenden"
+  },
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer",
+    "de": "Ebene auswählen "
+  },
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL",
+    "de": "Geben Sie die Service-URL ein "
+  },
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )",
+    "de": "Generierte URL aktualisieren (Kachelserver, Legenden) "
+  },
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list",
+    "de": "Ebenenliste aktualisieren "
   }
 ]

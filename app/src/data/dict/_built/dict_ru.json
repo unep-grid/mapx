@@ -3340,6 +3340,11 @@
     "ru": "Размер плитки (в пикселях) "
   },
   {
+    "id": "source_raster_tile_size_desc",
+    "en": "This value should match image dimensions (width x height in pixels) returned by the server. If the URL of the tiles server specifies other dimensions, it will not work.",
+    "ru": "Это значение должно соответствовать размерам изображения (ширина x высота в пикселях), возвращаемым сервером. Если в URL-адресе сервера плиток указаны другие размеры, это не сработает."
+  },
+  {
     "id": "source_raster_tile_url",
     "en": "URL of tiles endpoint ",
     "ru": "URL конечной точки плиток "
@@ -5800,46 +5805,6 @@
     "ru": "Частично "
   },
   {
-    "id": "wms_select_reviewed_service",
-    "en": "Select a service preset",
-    "ru": "Выберите предустановку услуги"
-  },
-  {
-    "id": "wms_display_tool_title",
-    "en": "WMS configurator",
-    "ru": "Конфигуратор WMS"
-  },
-  {
-    "id": "wms_display_tool",
-    "en": "Display WMS configurator",
-    "ru": "Показать конфигуратор WMS"
-  },
-  {
-    "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
-    "ru": "Инструмент для выбора хостов WMS и автоматического создания URL URL для плиток и легенд"
-  },
-  {
-    "id": "wms_select_layer",
-    "en": "Select layer",
-    "ru": "Выбрать слой "
-  },
-  {
-    "id": "wms_input_service_url",
-    "en": "Enter service URL",
-    "ru": "Введите URL службы "
-  },
-  {
-    "id": "wms_btn_generate_url",
-    "en": "Update generated URL ( tiles server, legends )",
-    "ru": "Обновить сгенерированный URL (сервер плиток, легенды) "
-  },
-  {
-    "id": "wms_btn_get_layers",
-    "en": "Update layer list",
-    "ru": "Обновить список слоев "
-  },
-  {
     "id": "app_maintenance_title",
     "en": "Maintenance",
     "ru": "Обслуживание "
@@ -7073,5 +7038,45 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "ru": "Карта: контур текста водоема "
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select a service preset",
+    "ru": "Выберите предустановку услуги"
+  },
+  {
+    "id": "wms_display_tool_title",
+    "en": "WMS configurator",
+    "ru": "Конфигуратор WMS"
+  },
+  {
+    "id": "wms_display_tool",
+    "en": "Display WMS configurator",
+    "ru": "Показать конфигуратор WMS"
+  },
+  {
+    "id": "wms_display_tool_desc",
+    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
+    "ru": "Инструмент для выбора хостов WMS и автоматического создания URL URL для плиток и легенд"
+  },
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer",
+    "ru": "Выбрать слой "
+  },
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL",
+    "ru": "Введите URL службы "
+  },
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )",
+    "ru": "Обновить сгенерированный URL (сервер плиток, легенды) "
+  },
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list",
+    "ru": "Обновить список слоев "
   }
 ]

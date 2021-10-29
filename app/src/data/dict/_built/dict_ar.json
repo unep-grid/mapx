@@ -3340,6 +3340,11 @@
     "ar": "حجم المربعات (بكسل) "
   },
   {
+    "id": "source_raster_tile_size_desc",
+    "en": "This value should match image dimensions (width x height in pixels) returned by the server. If the URL of the tiles server specifies other dimensions, it will not work.",
+    "ar": "يجب أن تتطابق هذه القيمة مع أبعاد الصورة (العرض × الارتفاع بالبكسل) التي يعرضها الخادم. إذا كان عنوان URL لخادم المربعات يحدد أبعادًا أخرى ، فلن يعمل."
+  },
+  {
     "id": "source_raster_tile_url",
     "en": "URL of tiles endpoint ",
     "ar": "عنوان URL لنقطة نهاية المربعات "
@@ -5800,46 +5805,6 @@
     "ar": "جزئيا "
   },
   {
-    "id": "wms_select_reviewed_service",
-    "en": "Select a service preset",
-    "ar": "حدد خدمة الضبط المسبق"
-  },
-  {
-    "id": "wms_display_tool_title",
-    "en": "WMS configurator",
-    "ar": "مكون WMS"
-  },
-  {
-    "id": "wms_display_tool",
-    "en": "Display WMS configurator",
-    "ar": "عرض مكون WMS"
-  },
-  {
-    "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
-    "ar": "أداة لاختيار مضيفي WMS وإنشاء عنوان URL تلقائيًا للبلاط والأساطير"
-  },
-  {
-    "id": "wms_select_layer",
-    "en": "Select layer",
-    "ar": "حدد الطبقة "
-  },
-  {
-    "id": "wms_input_service_url",
-    "en": "Enter service URL",
-    "ar": "أدخل عنوان URL للخدمة "
-  },
-  {
-    "id": "wms_btn_generate_url",
-    "en": "Update generated URL ( tiles server, legends )",
-    "ar": "تحديث URL الذي تم إنشاؤه (خادم المربعات ، الأساطير) "
-  },
-  {
-    "id": "wms_btn_get_layers",
-    "en": "Update layer list",
-    "ar": "تحديث قائمة الطبقة "
-  },
-  {
     "id": "app_maintenance_title",
     "en": "Maintenance",
     "ar": "اعمال صيانة "
@@ -7073,5 +7038,45 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "ar": "الخريطة: مخطط نص الجسم المائي "
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select a service preset",
+    "ar": "حدد خدمة الضبط المسبق"
+  },
+  {
+    "id": "wms_display_tool_title",
+    "en": "WMS configurator",
+    "ar": "مكون WMS"
+  },
+  {
+    "id": "wms_display_tool",
+    "en": "Display WMS configurator",
+    "ar": "عرض مكون WMS"
+  },
+  {
+    "id": "wms_display_tool_desc",
+    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
+    "ar": "أداة لاختيار مضيفي WMS وإنشاء عنوان URL تلقائيًا للبلاط والأساطير"
+  },
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer",
+    "ar": "حدد الطبقة "
+  },
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL",
+    "ar": "أدخل عنوان URL للخدمة "
+  },
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )",
+    "ar": "تحديث URL الذي تم إنشاؤه (خادم المربعات ، الأساطير) "
+  },
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list",
+    "ar": "تحديث قائمة الطبقة "
   }
 ]

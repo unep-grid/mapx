@@ -2672,6 +2672,10 @@
     "en": "Size of the tiles (pixels)"
   },
   {
+    "id": "source_raster_tile_size_desc",
+    "en": "This value should match image dimensions (width x height in pixels) returned by the server. If the URL of the tiles server specifies other dimensions, it will not work."
+  },
+  {
     "id": "source_raster_tile_url",
     "en": "URL of tiles endpoint "
   },
@@ -4640,38 +4644,6 @@
     "en": "Partially"
   },
   {
-    "id": "wms_select_reviewed_service",
-    "en": "Select a service preset"
-  },
-  {
-    "id": "wms_display_tool_title",
-    "en": "WMS configurator"
-  },
-  {
-    "id": "wms_display_tool",
-    "en": "Display WMS configurator"
-  },
-  {
-    "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends"
-  },
-  {
-    "id": "wms_select_layer",
-    "en": "Select layer"
-  },
-  {
-    "id": "wms_input_service_url",
-    "en": "Enter service URL"
-  },
-  {
-    "id": "wms_btn_generate_url",
-    "en": "Update generated URL ( tiles server, legends )"
-  },
-  {
-    "id": "wms_btn_get_layers",
-    "en": "Update layer list"
-  },
-  {
     "id": "app_maintenance_title",
     "en": "Maintenance"
   },
@@ -5658,5 +5630,37 @@
   {
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline"
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select a service preset"
+  },
+  {
+    "id": "wms_display_tool_title",
+    "en": "WMS configurator"
+  },
+  {
+    "id": "wms_display_tool",
+    "en": "Display WMS configurator"
+  },
+  {
+    "id": "wms_display_tool_desc",
+    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends"
+  },
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer"
+  },
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL"
+  },
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )"
+  },
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list"
   }
 ]

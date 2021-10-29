@@ -3340,6 +3340,11 @@
     "fa": "اندازه پکسل ها"
   },
   {
+    "id": "source_raster_tile_size_desc",
+    "en": "This value should match image dimensions (width x height in pixels) returned by the server. If the URL of the tiles server specifies other dimensions, it will not work.",
+    "fa": "این مقدار باید با ابعاد تصویر (عرض x ارتفاع بر حسب پیکسل) برگردانده شده توسط سرور مطابقت داشته باشد. اگر URL سرور کاشی ابعاد دیگری را مشخص کند، کار نخواهد کرد."
+  },
+  {
     "id": "source_raster_tile_url",
     "en": "URL of tiles endpoint ",
     "fa": "آدرس پکسل های آخری"
@@ -5800,46 +5805,6 @@
     "fa": "تا اندازه ای"
   },
   {
-    "id": "wms_select_reviewed_service",
-    "en": "Select a service preset",
-    "fa": "یک سرویس از پیش تنظیم شده را انتخاب کنید"
-  },
-  {
-    "id": "wms_display_tool_title",
-    "en": "WMS configurator",
-    "fa": "پیکربندی WMS"
-  },
-  {
-    "id": "wms_display_tool",
-    "en": "Display WMS configurator",
-    "fa": "نمایش پیکربندی WMS"
-  },
-  {
-    "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
-    "fa": "ابزاری برای انتخاب میزبان های WMS و ایجاد URL به طور خودکار برای کاشی ها و افسانه ها"
-  },
-  {
-    "id": "wms_select_layer",
-    "en": "Select layer",
-    "fa": "لایه را انتخاب کنید "
-  },
-  {
-    "id": "wms_input_service_url",
-    "en": "Enter service URL",
-    "fa": "آدرس URL سرویس را وارد کنید "
-  },
-  {
-    "id": "wms_btn_generate_url",
-    "en": "Update generated URL ( tiles server, legends )",
-    "fa": "URL تولید شده را به روز کنید (سرور کاشی ، افسانه ها) "
-  },
-  {
-    "id": "wms_btn_get_layers",
-    "en": "Update layer list",
-    "fa": "لیست لایه را به روز کنید "
-  },
-  {
     "id": "app_maintenance_title",
     "en": "Maintenance",
     "fa": "نگهداری "
@@ -7073,5 +7038,45 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "fa": "نقشه: طرح متن متن متناسب با آب "
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select a service preset",
+    "fa": "یک سرویس از پیش تنظیم شده را انتخاب کنید"
+  },
+  {
+    "id": "wms_display_tool_title",
+    "en": "WMS configurator",
+    "fa": "پیکربندی WMS"
+  },
+  {
+    "id": "wms_display_tool",
+    "en": "Display WMS configurator",
+    "fa": "نمایش پیکربندی WMS"
+  },
+  {
+    "id": "wms_display_tool_desc",
+    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
+    "fa": "ابزاری برای انتخاب میزبان های WMS و ایجاد URL به طور خودکار برای کاشی ها و افسانه ها"
+  },
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer",
+    "fa": "لایه را انتخاب کنید "
+  },
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL",
+    "fa": "آدرس URL سرویس را وارد کنید "
+  },
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )",
+    "fa": "URL تولید شده را به روز کنید (سرور کاشی ، افسانه ها) "
+  },
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list",
+    "fa": "لیست لایه را به روز کنید "
   }
 ]

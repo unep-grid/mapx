@@ -3340,6 +3340,11 @@
     "fr": "Taille des tuiles (pixels)"
   },
   {
+    "id": "source_raster_tile_size_desc",
+    "en": "This value should match image dimensions (width x height in pixels) returned by the server. If the URL of the tiles server specifies other dimensions, it will not work.",
+    "fr": "Cette valeur doit correspondre aux dimensions de l'image (largeur x hauteur en pixels) renvoyées par le serveur. Si l'URL du serveur de tuiles spécifie d'autres dimensions, cela ne fonctionnera pas."
+  },
+  {
     "id": "source_raster_tile_url",
     "en": "URL of tiles endpoint ",
     "fr": "URL du serveur de tuiles"
@@ -5800,46 +5805,6 @@
     "fr": "Partiel"
   },
   {
-    "id": "wms_select_reviewed_service",
-    "en": "Select a service preset",
-    "fr": "Sélectionnez un service prédéfini"
-  },
-  {
-    "id": "wms_display_tool_title",
-    "en": "WMS configurator",
-    "fr": "Configurateur WMS"
-  },
-  {
-    "id": "wms_display_tool",
-    "en": "Display WMS configurator",
-    "fr": "Afficher le configurateur WMS"
-  },
-  {
-    "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
-    "fr": "Outil pour choisir les hôtes WMS et créer automatiquement l'URL pour les tuiles et les légendes"
-  },
-  {
-    "id": "wms_select_layer",
-    "en": "Select layer",
-    "fr": "Séléctionner la couche"
-  },
-  {
-    "id": "wms_input_service_url",
-    "en": "Enter service URL",
-    "fr": "Entrez l'URL du service"
-  },
-  {
-    "id": "wms_btn_generate_url",
-    "en": "Update generated URL ( tiles server, legends )",
-    "fr": "Mettre à jour les URL ( serveur de tuile, légendes )"
-  },
-  {
-    "id": "wms_btn_get_layers",
-    "en": "Update layer list",
-    "fr": "Mettre à jour la liste des couches"
-  },
-  {
     "id": "app_maintenance_title",
     "en": "Maintenance",
     "fr": "Maintenance"
@@ -7073,5 +7038,45 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "fr": "Carte : bordure texte plan d'eau"
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select a service preset",
+    "fr": "Sélectionnez un service prédéfini"
+  },
+  {
+    "id": "wms_display_tool_title",
+    "en": "WMS configurator",
+    "fr": "Configurateur WMS"
+  },
+  {
+    "id": "wms_display_tool",
+    "en": "Display WMS configurator",
+    "fr": "Afficher le configurateur WMS"
+  },
+  {
+    "id": "wms_display_tool_desc",
+    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
+    "fr": "Outil pour choisir les hôtes WMS et créer automatiquement l'URL pour les tuiles et les légendes"
+  },
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer",
+    "fr": "Séléctionner la couche"
+  },
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL",
+    "fr": "Entrez l'URL du service"
+  },
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )",
+    "fr": "Mettre à jour les URL ( serveur de tuile, légendes )"
+  },
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list",
+    "fr": "Mettre à jour la liste des couches"
   }
 ]

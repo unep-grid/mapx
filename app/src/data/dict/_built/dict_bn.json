@@ -3340,6 +3340,11 @@
     "bn": "টাইলগুলির আকার (পিক্সেল) "
   },
   {
+    "id": "source_raster_tile_size_desc",
+    "en": "This value should match image dimensions (width x height in pixels) returned by the server. If the URL of the tiles server specifies other dimensions, it will not work.",
+    "bn": "এই মানটি সার্ভার দ্বারা প্রত্যাবর্তিত চিত্রের মাত্রা (পিক্সেলে প্রস্থ x উচ্চতা) এর সাথে মেলে। যদি টাইলস সার্ভারের URL অন্যান্য মাত্রা নির্দিষ্ট করে তবে এটি কাজ করবে না।"
+  },
+  {
     "id": "source_raster_tile_url",
     "en": "URL of tiles endpoint ",
     "bn": "টাইলগুলির শেষ পয়েন্টের URL "
@@ -5800,46 +5805,6 @@
     "bn": "আংশিকভাবে "
   },
   {
-    "id": "wms_select_reviewed_service",
-    "en": "Select a service preset",
-    "bn": "একটি পরিষেবা প্রিসেট নির্বাচন করুন"
-  },
-  {
-    "id": "wms_display_tool_title",
-    "en": "WMS configurator",
-    "bn": "WMS কনফিগারার"
-  },
-  {
-    "id": "wms_display_tool",
-    "en": "Display WMS configurator",
-    "bn": "WMS কনফিগারেশন প্রদর্শন করুন"
-  },
-  {
-    "id": "wms_display_tool_desc",
-    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
-    "bn": "WMS হোস্ট বেছে নেওয়ার টুল এবং টাইলস এবং কিংবদন্তির জন্য স্বয়ংক্রিয়ভাবে URL তৈরি করে"
-  },
-  {
-    "id": "wms_select_layer",
-    "en": "Select layer",
-    "bn": "স্তর নির্বাচন করুন "
-  },
-  {
-    "id": "wms_input_service_url",
-    "en": "Enter service URL",
-    "bn": "পরিষেবা URL প্রবেশ করান "
-  },
-  {
-    "id": "wms_btn_generate_url",
-    "en": "Update generated URL ( tiles server, legends )",
-    "bn": "উত্পন্ন URL আপডেট করুন (টাইলস সার্ভার, কিংবদন্তী) "
-  },
-  {
-    "id": "wms_btn_get_layers",
-    "en": "Update layer list",
-    "bn": "স্তর তালিকা আপডেট করুন "
-  },
-  {
     "id": "app_maintenance_title",
     "en": "Maintenance",
     "bn": "রক্ষণাবেক্ষণ "
@@ -7073,5 +7038,45 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "bn": "মানচিত্র: জলের দেহের পাঠ্য রূপরেখা "
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select a service preset",
+    "bn": "একটি পরিষেবা প্রিসেট নির্বাচন করুন"
+  },
+  {
+    "id": "wms_display_tool_title",
+    "en": "WMS configurator",
+    "bn": "WMS কনফিগারার"
+  },
+  {
+    "id": "wms_display_tool",
+    "en": "Display WMS configurator",
+    "bn": "WMS কনফিগারেশন প্রদর্শন করুন"
+  },
+  {
+    "id": "wms_display_tool_desc",
+    "en": "Tool to choose WMS hosts and build URL automatically URL for tiles and legends",
+    "bn": "WMS হোস্ট বেছে নেওয়ার টুল এবং টাইলস এবং কিংবদন্তির জন্য স্বয়ংক্রিয়ভাবে URL তৈরি করে"
+  },
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer",
+    "bn": "স্তর নির্বাচন করুন "
+  },
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL",
+    "bn": "পরিষেবা URL প্রবেশ করান "
+  },
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )",
+    "bn": "উত্পন্ন URL আপডেট করুন (টাইলস সার্ভার, কিংবদন্তী) "
+  },
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list",
+    "bn": "স্তর তালিকা আপডেট করুন "
   }
 ]
