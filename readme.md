@@ -106,12 +106,10 @@ $ npm run dev
 - Launch the server from within the running `app` container. In another terminal window, launch the dev server :
 
 ```sh
-docker-compose exec app /bin/bash
-$ cd /appdev
-$ R
+docker-compose exec -w /appdev app R
 > source('run.R') 
-# OR, as a single line :
-docker-compose exec app R -e 'setwd("/appdev");source("run.R")'
+# OR, as a single line for a non-interactive session:
+docker-compose exec -w /appdev app Rscript --vanilla run.R
 ```
 
 Then, an instance of mapx should be available at <http://dev.mapx.localhost:8880/> for which the source code from `./app/` is mounted as `/appdev/` in the container.
