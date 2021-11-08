@@ -221,6 +221,8 @@ function loadHighcharts() {
     import('highcharts/modules/stock'),
     import('highcharts/modules/heatmap'),
     import('highcharts/modules/exporting.js'),
+    //import('highcharts/modules/dummbell.js'),
+    //import('highcharts/modules/lollipop.js'),
     import('highcharts/modules/export-data.js')
   ]).then((m) => {
     var Highcharts = m[0].default;
@@ -230,6 +232,8 @@ function loadHighcharts() {
     m[4].default(Highcharts);
     m[5].default(Highcharts);
     m[6].default(Highcharts);
+    //m[7].default(Highcharts);
+    //m[8].default(Highcharts);
     return Promise.resolve(Highcharts);
   });
 }

@@ -1,4 +1,5 @@
 import {el} from '@fxi/el';
+import {ObserveMutationAttribute} from './mutations_observer/index.js';
 
 /**
  * Display a panel modal
@@ -20,12 +21,13 @@ export function modal(o) {
   const h = mx.helpers;
   const id = o.id || h.makeId();
 
-  var elTitle,
+  let elTitle,
     elCollapse,
     elBody,
     elContent,
     elButtons,
     elButtonClose,
+    elJedContainers,
     /**
      * Get or create modal and background
      */
@@ -35,13 +37,16 @@ export function modal(o) {
   if (!hasModal) {
     elModal = buildModal(id, o.style, o.styleContent);
   }
+  const oa = new ObserveMutationAttribute({
+    el: elModal,
+    cb: o.onMutation
+  });
 
-  var hasJquery = h.isFunction(window.jQuery);
-  var hasShiny = h.isObject(window.Shiny);
-  var elJedContainers;
-  var hasSelectize = hasJquery && h.isFunction(window.Selectize);
-  var startBodyScrollPos = 0;
-  var noShinyBinding =
+  const hasJquery = h.isFunction(window.jQuery);
+  const hasShiny = h.isObject(window.Shiny);
+  const hasSelectize = hasJquery && h.isFunction(window.Selectize);
+  const startBodyScrollPos = 0;
+  const noShinyBinding =
     !hasShiny || h.isBoolean(o.noShinyBinding) ? o.noShinyBinding : false;
 
   o.addSelectize = o.addSelectize === false ? false : true;
@@ -56,8 +61,8 @@ export function modal(o) {
   }
 
   if (hasModal && o.replace) {
-    var oldBody = elModal.querySelector('.mx-modal-body');
-    var rectModal = elModal.getBoundingClientRect();
+    const oldBody = elModal.querySelector('.mx-modal-body');
+    const rectModal = elModal.getBoundingClientRect();
 
     if (hasShiny && !noShinyBinding) {
       Shiny.unbindAll(elModal);
@@ -136,7 +141,7 @@ export function modal(o) {
 
   elModal.close = close;
   elModal.setTitle = setTitle;
-
+  elModal.addMutationObserver = oa.setCb;
   /**
    * Add to dom
    */
@@ -270,13 +275,19 @@ export function modal(o) {
   }
 
   function close() {
+    if (oa) {
+      /**
+       * Destroy mutation observer
+       */
+      oa.destroy();
+    }
     if (h.isElement(elContent)) {
       /**
        * Remove jed editors
        */
       elJedContainers = elContent.querySelectorAll('[data-jed_id]');
       elJedContainers.forEach((elJed) => {
-        var jedId = elJed.dataset.jed_id;
+        const jedId = elJed.dataset.jed_id;
         if (jed.editors[jedId] && h.isFunction(jed.editors[jedId].destroy)) {
           jed.editors[jedId].destroy();
         }
@@ -445,7 +456,7 @@ export function modalPrompt(opt) {
         class: 'btn btn-default',
         on: {
           click: () => {
-            if(elBtnConfirm.disabled){
+            if (elBtnConfirm.disabled) {
               return;
             }
             resolve(elInput.value);

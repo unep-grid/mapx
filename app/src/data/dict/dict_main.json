@@ -10270,8 +10270,8 @@
     "de": ""
   },
   {
-    "id": "meta_view_stat_n_add_by_distinct_users",
-    "en": "Number of activations by distinct registered users",
+    "id": "meta_view_stat_n_add_by_users_distinct",
+    "en": "distinct",
     "fr": "",
     "es": "",
     "ru": "",
@@ -10297,7 +10297,7 @@
   }, 
   {
     "id": "meta_view_stat_n_add_by_country",
-    "en": "Reads per countries",
+    "en": "Activations per countries",
     "fr": "",
     "es": "",
     "ru": "",
@@ -10309,8 +10309,47 @@
     "de": ""
   },
   {
-    "id": "meta_view_stat_n_add_by_country_variable",
-    "en": "Percentage",
+    "id": "meta_view_stat_n_add_by_country_last_year",
+    "en": "Activations per country ( last 12 months ) ",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_axis",
+    "en": "Number of activations (logarithmic scale)",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_stat_activations",
+    "en": "activations",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_stat_others_countries",
+    "en": "Others",
     "fr": "",
     "es": "",
     "ru": "",

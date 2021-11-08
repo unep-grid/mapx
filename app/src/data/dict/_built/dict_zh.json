@@ -5585,9 +5585,9 @@
     "zh": "注册用户激活次数"
   },
   {
-    "id": "meta_view_stat_n_add_by_distinct_users",
-    "en": "Number of activations by distinct registered users",
-    "zh": "不同注册用户的激活次数"
+    "id": "meta_view_stat_n_add_by_users_distinct",
+    "en": "distinct",
+    "zh": "清楚的"
   },
   {
     "id": "meta_view_stat_n_add_by_guests",
@@ -5596,13 +5596,28 @@
   },
   {
     "id": "meta_view_stat_n_add_by_country",
-    "en": "Reads per countries",
-    "zh": "每个国家/地区的阅读次数"
+    "en": "Activations per countries",
+    "zh": "每个国家的激活"
   },
   {
-    "id": "meta_view_stat_n_add_by_country_variable",
-    "en": "Percentage",
-    "zh": "百分比"
+    "id": "meta_view_stat_n_add_by_country_last_year",
+    "en": "Activations per country ( last 12 months ) ",
+    "zh": "每个国家/地区的激活次数（过去 12 个月）"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_axis",
+    "en": "Number of activations (logarithmic scale)",
+    "zh": "激活次数（对数刻度）"
+  },
+  {
+    "id": "meta_view_stat_activations",
+    "en": "activations",
+    "zh": "激活"
+  },
+  {
+    "id": "meta_view_stat_others_countries",
+    "en": "Others",
+    "zh": "其他"
   },
   {
     "id": "meta_source_title",

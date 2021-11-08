@@ -13,7 +13,7 @@ v_date_created AS (
   ORDER BY date_modified ASC LIMIT 1
 ),
 v_log AS NOT MATERIALIZED (
- SELECT pid, ip_user, id_user, is_guest
+ SELECT pid, ip_user, id_user, is_guest, date_modified
   FROM mx_logs
   WHERE data #>> '{"id_view"}' = '{{idView}}'
   AND id_log = 'view_add'
@@ -28,6 +28,8 @@ v_log_ip_country AS (
   LEFT JOIN
   mx_ip m ON
   v.ip_user <<= m.network
+  WHERE 
+  v.date_modified > (CURRENT_DATE - 365)
 ),
 v_stat_add_count_by_country AS (
   SELECT

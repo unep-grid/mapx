@@ -5585,9 +5585,9 @@
     "es": "Número de activaciones por usuarios registrados"
   },
   {
-    "id": "meta_view_stat_n_add_by_distinct_users",
-    "en": "Number of activations by distinct registered users",
-    "es": "Número de activaciones por distintos usuarios registrados"
+    "id": "meta_view_stat_n_add_by_users_distinct",
+    "en": "distinct",
+    "es": "distinto"
   },
   {
     "id": "meta_view_stat_n_add_by_guests",
@@ -5596,13 +5596,28 @@
   },
   {
     "id": "meta_view_stat_n_add_by_country",
-    "en": "Reads per countries",
-    "es": "Lecturas por países"
+    "en": "Activations per countries",
+    "es": "Activaciones por países"
   },
   {
-    "id": "meta_view_stat_n_add_by_country_variable",
-    "en": "Percentage",
-    "es": "Porcentaje"
+    "id": "meta_view_stat_n_add_by_country_last_year",
+    "en": "Activations per country ( last 12 months ) ",
+    "es": "Activaciones por país (últimos 12 meses)"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_axis",
+    "en": "Number of activations (logarithmic scale)",
+    "es": "Número de activaciones (escala logarítmica)"
+  },
+  {
+    "id": "meta_view_stat_activations",
+    "en": "activations",
+    "es": "activaciones"
+  },
+  {
+    "id": "meta_view_stat_others_countries",
+    "en": "Others",
+    "es": "Otros"
   },
   {
     "id": "meta_source_title",

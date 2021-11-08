@@ -72,7 +72,7 @@ export async function viewToMetaModal(view) {
   }
   meta.id = id;
 
-  const elViewMeta = await metaViewToUi(meta);
+  const elViewMeta = await metaViewToUi(meta, elModal);
 
   if (elViewMeta) {
     elContent.appendChild(elViewMeta);
@@ -156,7 +156,7 @@ export function metaSourceRasterToUi(rasterMeta) {
   });
 }
 
-async function metaViewToUi(meta) {
+async function metaViewToUi(meta, elModal) {
   const h = mx.helpers;
   const prefixKey = 'meta_view_';
   const keys = [
@@ -172,40 +172,56 @@ async function metaViewToUi(meta) {
     'editors',
     'stat_n_add',
     'stat_n_add_by_guests',
-    'stat_n_add_by_users',
-    'stat_n_add_by_distinct_users'
+    'stat_n_add_by_users'
   ];
-
-  let tblSummary = h.objectToArray(meta, true);
-
-  tblSummary = tblSummary
+  const txtDistinct = await h.getDictItem('meta_view_stat_n_add_by_users_distinct');
+  const tblSummaryFull = h.objectToArray(meta, true);
+  const tblSummary = tblSummaryFull
     .filter((row) => keys.includes(row.key))
     .sort((a, b) => {
       return keys.indexOf(a.key) - keys.indexOf(b.key);
     })
     .map((row) => {
+      /**
+       * Add distinct user in by_user
+       */
+      if (row.key === 'stat_n_add_by_users') {
+        const rowDistinct = tblSummaryFull.find(
+          (row) => row.key === 'stat_n_add_by_distinct_users'
+        );
+        const valueDistinct = rowDistinct.value;
+        row.value = `${row.value} ( ${valueDistinct} ${txtDistinct} )`;
+      }
+      /**
+       * Match sql table with dict labels
+       * e.g. "meta_view_"+ "stat_n_add_by_users"
+       */
+
       row.key = prefixKey + row.key; // to match dict labels
       return row;
     });
+
 
   /**
    * highcharts needs the container to be rendered
    * to find the size.. Create the container now,
    * render later :
    */
-  const elPie = h.el('div', {
+  const elPlot = h.el('div', {
     class: ['panel', 'panel-default'],
     style: {
       width: '100%',
-      maxWidth: '100%'
+      maxWidth: '100%',
+      display: 'flex',
+      justifyContent: 'center'
     }
   });
-  const elPiePanel = h.elPanel({
+  const elPlotPanel = h.elPanel({
     title: h.elSpanTranslate('meta_view_stat_n_add_by_country'),
-    content: elPie
+    content: elPlot
   });
   setTimeout(() => {
-    metaCountByCountryToPie(meta.stat_n_add_by_country, elPie);
+    metaCountByCountryToPlot(meta.stat_n_add_by_country, elPlot, elModal);
   }, 100);
 
   /*elAuto('array_table', meta.stat_n_add_by_country, {*/
@@ -226,9 +242,10 @@ async function metaViewToUi(meta) {
       tableHeadersSkip: true,
       tableTitle: 'meta_view_table_summary_title',
       tableTitleAsLanguageKey: true,
-      stringAsLanguageKey: true
+      stringAsLanguageKey: true,
+      numberStyle: {marginRight:'5px'}
     }),
-    elPiePanel,
+    elPlotPanel,
     elAuto('array_table', meta.table_editors, {
       booleanValues: ['✓', ''],
       tableHeadersClasses: ['col-sm-6', 'col-sm-3', 'col-sm-3'],
@@ -243,61 +260,144 @@ async function metaViewToUi(meta) {
   );
 }
 
-async function metaCountByCountryToPie(table, elPie) {
+function randomTable(n) {
+  const ctries = ['CHE', 'COD', 'USA', 'FRE', 'ITA', 'GER', 'COL', 'AFG'];
+  const s = [];
+  for (let i = 0; i < n; i++) {
+    s.push(ctries[Math.floor(Math.random() * ctries.length)]);
+  }
+
+  const data = s.map((c, i) => {
+    return {
+      country: c,
+      country_name: c,
+      count: Math.floor(Math.random() * 100 * (1 / (i + 1)))
+    };
+  });
+  data.sort((a, b) => b.count - a.count);
+  return data;
+}
+
+/**
+ * Build plot
+ * @param {Array} table Array of value [{country:<2 leter code>,contry_name:<string>,count:<integer>},<...>]
+ * @param {Element} elPlot Target element
+ * @param {Element} elModal Modal element
+ * @param {Boolean} useRandom Use rando data ( for dev)
+ * @return {Object} Highcharts instance
+ */
+async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
   const h = mx.helpers;
   try {
     const highcharts = await h.moduleLoad('highcharts');
     /**
-     * User pie
+     * Reads per country, first 20
      */
-    const maxOpenCount = table.reduce((a, c) => (a > c ? a : c), 0);
+    if (useRandom) {
+      table = randomTable(100);
+    }
+
+    const nCountryMap = new Map();
+    for (let i = 0, iL = table.length; i < iL; i++) {
+      const t = table[i];
+      if (!t.country) {
+        t.country = '?';
+      }
+      nCountryMap.set(t.country, t.country_name || t.country || 'Unknown');
+    }
+
     const data = table.map((r) => {
       return {
-        name: r.country_name || r.country || 'Unknown',
-        y: r.count,
-        sliced: r.count === maxOpenCount,
-        selected: r.count === maxOpenCount
+        name: r.country,
+        y: r.count
       };
     });
+    if (data.length > 20) {
+      const merged = data.splice(20, data.length);
+      const sum = merged.reduce((a, d) => a + d.y, 0);
+      data.push({
+        name: await h.getDictItem('meta_view_stat_others_countries'),
+        y: sum
+      });
+    }
+
+    const txtReads = await h.getDictItem('meta_view_stat_activations');
     const colors = mx.theme.getTheme().colors;
-    highcharts.chart(elPie, {
+
+    const chart = highcharts.chart(elPlot, {
       chart: {
+        type: 'column',
+        height: chartHeight(),
+        inverted: true,
         styledMode: false,
         backgroundColor: colors.mx_ui_background,
         plotBackgroundColor: colors.mx_ui_background.color,
         plotBorderWidth: 0,
-        plotShadow: false,
-        type: 'pie'
+        plotShadow: false
       },
       title: {
-        text: await h.getDictItem('meta_view_stat_n_add_by_country')
+        text: await h.getDictItem('meta_view_stat_n_add_by_country_last_year')
       },
-      tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-      },
-      accessibility: {
-        point: {
-          valueSuffix: ''
+      xAxis: {
+        categories: data.map((d) => d.name),
+        title: {
+          text: null
         }
       },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-          }
+      yAxis: {
+        type: 'logarithmic',
+        title: {
+          text: await h.getDictItem('meta_view_stat_n_add_by_country_axis')
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      tooltip: {
+        formatter: function() {
+          return ` ${nCountryMap.get(this.x)} : ${this.y} ${txtReads}`;
         }
       },
       series: [
         {
-          name: await h.getDictItem('meta_view_stat_n_add_by_country_variable'),
-          colorByPoint: true,
+          name: await h.getDictItem('meta_view_stat_n_add_by_country'),
           data: data
         }
-      ]
+      ],
+      credits: {
+        enabled: false
+      },
+      exporting: {
+        buttons: {
+          contextButton: {
+            menuItems: [
+              'printChart',
+              'separator',
+              'downloadPNG',
+              'downloadJPEG',
+              'downloadSVG',
+              'separator',
+              'downloadCSV',
+              'downloadXLS'
+            ]
+          }
+        }
+      }
     });
+    if (elModal) {
+      let idT = 0;
+      elModal.addMutationObserver(() => {
+        clearTimeout(idT);
+        idT = setTimeout(() => {
+          const w = elPlot.getBoundingClientRect().width;
+          chart.setSize(w);
+        }, 50);
+      });
+    }
+
+    function chartHeight() {
+      return data.length * 20 + 100;
+    }
   } catch (e) {
     console.warn(e);
   }

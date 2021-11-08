@@ -5585,9 +5585,9 @@
     "ps": "د راجستر شوي کاروونکو لخوا د فعالیتونو شمیر"
   },
   {
-    "id": "meta_view_stat_n_add_by_distinct_users",
-    "en": "Number of activations by distinct registered users",
-    "ps": "د ځانګړو راجستر شوي کاروونکو لخوا د فعالیتونو شمیر"
+    "id": "meta_view_stat_n_add_by_users_distinct",
+    "en": "distinct",
+    "ps": "جلا"
   },
   {
     "id": "meta_view_stat_n_add_by_guests",
@@ -5596,13 +5596,28 @@
   },
   {
     "id": "meta_view_stat_n_add_by_country",
-    "en": "Reads per countries",
-    "ps": "په هر هیواد کې لوستل کیږي"
+    "en": "Activations per countries",
+    "ps": "په هر هیواد کې فعالیتونه"
   },
   {
-    "id": "meta_view_stat_n_add_by_country_variable",
-    "en": "Percentage",
-    "ps": "سلنه"
+    "id": "meta_view_stat_n_add_by_country_last_year",
+    "en": "Activations per country ( last 12 months ) ",
+    "ps": "په هر هیواد کې فعالیتونه (په تیرو 12 میاشتو کې)"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_axis",
+    "en": "Number of activations (logarithmic scale)",
+    "ps": "د فعالیتونو شمیر (لوګاریتمیک پیمانه)"
+  },
+  {
+    "id": "meta_view_stat_activations",
+    "en": "activations",
+    "ps": "فعاليتونه"
+  },
+  {
+    "id": "meta_view_stat_others_countries",
+    "en": "Others",
+    "ps": "نور"
   },
   {
     "id": "meta_source_title",
