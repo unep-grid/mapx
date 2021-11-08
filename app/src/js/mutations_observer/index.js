@@ -29,7 +29,6 @@ export class ObserveMutationAttribute {
   }
   setCb(fun) {
     const oa = this;
-    console.log('setCb',fun);
     oa._opt.cb = fun;
   }
   onMutation() {

@@ -174,7 +174,9 @@ async function metaViewToUi(meta, elModal) {
     'stat_n_add_by_guests',
     'stat_n_add_by_users'
   ];
-  const txtDistinct = await h.getDictItem('meta_view_stat_n_add_by_users_distinct');
+  const txtDistinct = await h.getDictItem(
+    'meta_view_stat_n_add_by_users_distinct'
+  );
   const tblSummaryFull = h.objectToArray(meta, true);
   const tblSummary = tblSummaryFull
     .filter((row) => keys.includes(row.key))
@@ -200,7 +202,6 @@ async function metaViewToUi(meta, elModal) {
       row.key = prefixKey + row.key; // to match dict labels
       return row;
     });
-
 
   /**
    * highcharts needs the container to be rendered
@@ -243,7 +244,7 @@ async function metaViewToUi(meta, elModal) {
       tableTitle: 'meta_view_table_summary_title',
       tableTitleAsLanguageKey: true,
       stringAsLanguageKey: true,
-      numberStyle: {marginRight:'5px'}
+      numberStyle: {marginRight: '5px'}
     }),
     elPlotPanel,
     elAuto('array_table', meta.table_editors, {
@@ -289,6 +290,10 @@ function randomTable(n) {
 async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
   const h = mx.helpers;
   try {
+    if (h.isEmpty(table)) {
+      return;
+    }
+
     const highcharts = await h.moduleLoad('highcharts');
     /**
      * Reads per country, first 20
