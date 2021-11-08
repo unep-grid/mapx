@@ -3,7 +3,7 @@ const {sendError} = require('@mapx/helpers');
 const rateLimit = require("express-rate-limit");
 const mwLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, 
-  max: 1000
+  max: 2000
 });
 /**
  * Request handler / middleware

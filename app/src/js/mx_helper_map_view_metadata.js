@@ -214,7 +214,8 @@ async function metaViewToUi(meta, elModal) {
       width: '100%',
       maxWidth: '100%',
       display: 'flex',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      overflow: 'visible'
     }
   });
   const elPlotPanel = h.elPanel({
@@ -389,6 +390,15 @@ async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
         }
       }
     });
+    /**
+     * Small height = panel from file menu hidden.
+     * -> overflow visible to fix that
+     */
+    chart.container.style.overflow = 'visible';
+
+    /**
+     * Handle mutation from modal here
+     */
     if (elModal) {
       let idT = 0;
       elModal.addMutationObserver(() => {
