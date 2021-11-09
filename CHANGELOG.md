@@ -1,3 +1,6 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.30' target='_blank'>1.9.30</a>
+   - API
+    - Added mirror api rate limits in env file 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.29' target='_blank'>1.9.29</a>
    - APP
     - Revision of view metadata panel (#762) :
@@ -9,6 +12,8 @@
       - Set view activation per distinct registered user in the same cell as view activations per users to save space and avoid confusion
       - Limit count pers country to the last 12 months
       - Wording
+    - API
+      - Changed mirror api rate limit to 2000
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.28' target='_blank'>1.9.28</a>
    - APP
     - Solves bug with translated labels (typo) + edge case when dict had duplicated key
