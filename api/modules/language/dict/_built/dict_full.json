@@ -14522,16 +14522,16 @@
   },
   {
     "id": "meta_view_stat_n_add_by_users_distinct",
-    "en": "distinct",
-    "fr": "distinct",
-    "es": "distinto",
-    "ru": "отчетливый",
-    "zh": "清楚的",
-    "ar": "خامد",
-    "fa": "متمایز",
-    "ps": "جلا",
-    "bn": "স্বতন্ত্র",
-    "de": "unterscheidbar"
+    "en": "distinct user(s)",
+    "fr": "utilisateur(s) distinct(s)",
+    "es": "usuario (s) distinto",
+    "ru": "отдельный пользователь (и)",
+    "zh": "不同的用户",
+    "ar": "مستخدم (مستخدمون) مميزون",
+    "fa": "کاربر(های) متمایز",
+    "ps": "جلا کارونکي",
+    "bn": "স্বতন্ত্র ব্যবহারকারী(গুলি)",
+    "de": "unterschiedliche Benutzer"
   },
   {
     "id": "meta_view_stat_n_add_by_guests",

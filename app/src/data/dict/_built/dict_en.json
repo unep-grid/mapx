@@ -4469,7 +4469,7 @@
   },
   {
     "id": "meta_view_stat_n_add_by_users_distinct",
-    "en": "distinct"
+    "en": "distinct user(s)"
   },
   {
     "id": "meta_view_stat_n_add_by_guests",

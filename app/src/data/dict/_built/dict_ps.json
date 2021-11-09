@@ -5586,8 +5586,8 @@
   },
   {
     "id": "meta_view_stat_n_add_by_users_distinct",
-    "en": "distinct",
-    "ps": "جلا"
+    "en": "distinct user(s)",
+    "ps": "جلا کارونکي"
   },
   {
     "id": "meta_view_stat_n_add_by_guests",
