@@ -1,9 +1,10 @@
 const fetch = require('node-fetch');
 const {sendError} = require('@mapx/helpers');
+const settings = require('@root/settings');
 const rateLimit = require("express-rate-limit");
 const mwLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, 
-  max: 2000
+  windowMs: settings.mirror.rateWindowMinutes * 60 * 1000,
+  max: settings.mirror.rateLimit
 });
 /**
  * Request handler / middleware

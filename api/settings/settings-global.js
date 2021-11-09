@@ -20,6 +20,10 @@ module.exports = {
   map: {
     token: ''
   },
+  mirror: {
+    rateLimit: 2000,
+    rateWindowMinutes : 15
+  },
   redis: {
     user: 'redis',
     port: 6379,
