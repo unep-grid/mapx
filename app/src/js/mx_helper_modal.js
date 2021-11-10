@@ -33,6 +33,8 @@ export function modal(o) {
      */
     elModal = document.getElementById(o.id);
 
+  let startBodyScrollPos = 0;
+
   const hasModal = h.isElement(elModal);
   if (!hasModal) {
     elModal = buildModal(id, o.style, o.styleContent);
@@ -45,7 +47,6 @@ export function modal(o) {
   const hasJquery = h.isFunction(window.jQuery);
   const hasShiny = h.isObject(window.Shiny);
   const hasSelectize = hasJquery && h.isFunction(window.Selectize);
-  const startBodyScrollPos = 0;
   const noShinyBinding =
     !hasShiny || h.isBoolean(o.noShinyBinding) ? o.noShinyBinding : false;
 
