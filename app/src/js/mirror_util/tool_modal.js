@@ -4,7 +4,9 @@ import {modal, modalPrompt} from './../mx_helper_modal';
 import {isUrl} from './../is_test/index.js';
 import {mirrorUrlCreate} from './index.js';
 //const urlDummy = 'http://tile.openstreetmap.org/${z}/${x}/${y}.png';
-const urlDummy ='https://app.staging.mapx.org/sprites/sprite.png';
+//const urlDummy ='https://app.staging.mapx.org/sprites/sprite.png';
+const urlPlaceholder = 'https://a.tile.thunderforest.com/cycle/{z}/{x}/{y}@2x.png'
+const urlDummy = 'https://a.tile.thunderforest.com/cycle/14/8531/5803@2x.png'
 
 export async function modalMirror() {
   try {
@@ -14,7 +16,8 @@ export async function modalMirror() {
       confirm: elSpanTranslate('tool_mirror_btn_create'),
       inputOptions: {
         type: 'text',
-        value: urlDummy
+        value: urlDummy,
+        placeholder : urlPlaceholder
       },
       onInput: (url, elBtnConfirm) => {
         const valid = isUrl(url);
