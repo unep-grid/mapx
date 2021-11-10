@@ -55,7 +55,7 @@ async function sendMailApi(req, res) {
     });
 
     if (!validation.ok) {
-      throw new Error(validation);
+      throw new Error(JSON.stringify(validation));
     }
 
     try {
@@ -95,7 +95,7 @@ async function sendMailApi(req, res) {
       res.status(503).send(e);
     }
   } catch (e) {
-    return res.status(403).send('Bad request ' + e);
+    return res.status(403).send(e);
   }
 }
 

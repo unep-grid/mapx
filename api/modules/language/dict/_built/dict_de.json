@@ -4216,13 +4216,13 @@
   },
   {
     "id": "project_invite_message_subject",
-    "en": "Invitation to join the project \"{{project}}\"",
-    "de": "Einladung zum Projekt \" {{project}} \"\" "
+    "en": "Invitation to join the project {{project}}",
+    "de": "Einladung zur Teilnahme am Projekt {{project}}"
   },
   {
     "id": "project_invite_message_accept",
-    "en": "Accept invitation to the project \"{{project}}\"",
-    "de": "Einladung zum Projekt annehmen \" {{project}} \"\" "
+    "en": "Accept invitation to the project {{project}}",
+    "de": "Einladung zum Projekt annehmen {{project}}"
   },
   {
     "id": "project_invite_message_sent",

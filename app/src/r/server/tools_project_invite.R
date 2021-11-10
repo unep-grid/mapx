@@ -368,7 +368,7 @@ observeEvent(input$btnSendInviteMessage,{
       # Title
       title <- dd('project_invite_message_title',languageDest)
 
-           # Send mail with default template
+      # Send mail with default template
       mxSendMail(
         from = emailAdmin,
         to = email,

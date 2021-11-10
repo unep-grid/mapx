@@ -6709,8 +6709,8 @@
   },
   {
     "id": "project_invite_message_subject",
-    "en": "Invitation to join the project \"{{project}}\"",
-    "fr": "Invitation à rejoindre le projet \"{{project}}\"",
+    "en": "Invitation to join the project {{project}}",
+    "fr": "Invitation à rejoindre le projet {{project}}",
     "es": "",
     "ru": "",
     "zh": "",
@@ -6722,8 +6722,8 @@
   },
   {
     "id": "project_invite_message_accept",
-    "en": "Accept invitation to the project \"{{project}}\"",
-    "fr": "Accepter l'invitation au projet \"{{project}}\"",
+    "en": "Accept invitation to the project {{project}}",
+    "fr": "Accepter l'invitation au projet {{project}}",
     "es": "",
     "ru": "",
     "zh": "",

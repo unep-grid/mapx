@@ -3373,11 +3373,11 @@
   },
   {
     "id": "project_invite_message_subject",
-    "en": "Invitation to join the project \"{{project}}\""
+    "en": "Invitation to join the project {{project}}"
   },
   {
     "id": "project_invite_message_accept",
-    "en": "Accept invitation to the project \"{{project}}\""
+    "en": "Accept invitation to the project {{project}}"
   },
   {
     "id": "project_invite_message_sent",
