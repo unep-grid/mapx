@@ -1,7 +1,7 @@
-import {el} from '@fxi/el';
+import {el, svg} from './../el/src/index.js';
 import {getDictItem} from './../mx_helper_language.js';
 import * as test from './../is_test_mapx/index.js';
-export {el, elAuto, elPanel, elButtonIcon, elSpanTranslate};
+export {el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate};
 
 function elAuto(render, data, opt) {
   opt = opt || {};
@@ -17,7 +17,7 @@ function elAuto(render, data, opt) {
     tableContainerHeaderClass: ['panel-heading'],
     tableContainerClass: ['panel', 'panel-default'],
     booleanValues: [true, false],
-    stringStyle: {marginRight:'5px'},
+    stringStyle: {marginRight: '5px'},
     numberStyle: {float: 'right'},
     dateStyle: {float: 'right'},
     langKeyPrefix: '',

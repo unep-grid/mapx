@@ -11,7 +11,7 @@ observeEvent(input$dashboardEdit_init,{
     language = reactData$language
     dashboard = .get(view,c("data","dashboard"))
     widgets = .get(dashboard,c("widgets"))
-    titles = .get(view,c("data","title"))
+    #titles = .get(view,c("data","title"))
     viewType = .get(view,c('type'))
 
 
@@ -94,28 +94,29 @@ observeEvent(input$dashboardEdit_init,{
       type = "object", 
       properties = 
         list(
-          title = mxSchemaMultiLingualInput(
-            keyTitle = "view_dashboard_title",
-            format = "text",
-            default = titles,
-            language = language
-            ),
+#          title = mxSchemaMultiLingualInput(
+            #keyTitle = "view_dashboard_title",
+            #format = "text",
+            #default = titles,
+            #language = language
+            #),
           `modules` = list(
-            title = t("view_dashboard_txt_which_module"),
-            description = t("view_dashboard_txt_desc_module"),
+            title = t("view_dashboard_txt_module"),
+            description = t("view_dashboard_txt_module_desc"),
             type = "array",
             uniqueItems = TRUE,
             items = list(
               type = "string",
               enum = list("highcharts","d3","d3-geo","topojson","selectize","nouislider")
-              )
-            ),
+            )
+            ), 
           layout = list(
             title = t("view_dashboard_txt_layout"),
-            description = t("view_dashboard_txt_desc_layout"),
+            description = t("view_dashboard_txt_layout_desc"),
             type = "string",
             enum = c('fit','vertical','horizontal', 'full'),
-            default = 'fit' ,
+            default = 'fit',
+            format = 'radio',
             options = list(
               enum_titles = list(
                 t('view_dashboard_txt_layout_fit'),
@@ -124,6 +125,18 @@ observeEvent(input$dashboardEdit_init,{
                 t('view_dashboard_txt_layout_full')
               )
             )
+            ),
+          panel_init_close = list(
+            title = t("view_dashboard_panel_init_closed"), 
+            description = t("view_dashboard_panel_init_closed_desc"), 
+            type = "boolean",
+            format = "checkbox"
+            ),
+          disabled = list(
+            title = t("view_dashboard_disable"), 
+            description = t("view_dashboard_disable_desc"), 
+            type = "boolean",
+            format = "checkbox"
             ),
           widgets = list(
             type = "array",
@@ -137,13 +150,19 @@ observeEvent(input$dashboardEdit_init,{
                 collapsed=TRUE
                 ),
               properties = list(
+                disabled = list(
+                  title = t("view_dashboard_widget_disable"), 
+                  description = t("view_dashboard_widget_disable_desc"), 
+                  type = "boolean",
+                  format = "checkbox"
+                  ),
                 `source` = list(
                   title = t("view_dashboard_txt_which_data"),
                   type = "string",
                   enum = srcDataOption,
                   options = list(
                     enum_titles = srcDataLabels
-                    )
+                  )
                   ),
                 `sourceIgnoreEmpty` = list(
                   title = t("view_dashboard_txt_ignore_empty_data"),
@@ -155,17 +174,19 @@ observeEvent(input$dashboardEdit_init,{
                   title = t("view_dashboard_txt_width"),
                   type = "string",
                   enum = widgetSizesValues,
+                  default = widgetSizesValues[[2]],
                   options = list(
                     enum_titles = widgetSizesLabels
-                    )
+                  )
                   ),
                 `height` = list(
                   title = t("view_dashboard_txt_height"),
                   type = "string",
                   enum = widgetSizesValues,
+                  default = widgetSizesValues[[2]],
                   options = list(
                     enum_titles = widgetSizesLabels
-                    )
+                  )
                   ),
                 `addColorBackground` = list(
                   title = t("view_dashboard_txt_add_background_color"),
@@ -188,11 +209,11 @@ observeEvent(input$dashboardEdit_init,{
                   type = "string",
                   format = "textarea",
                   default =.get(config,c("templates","text","widget_function"))
-                  )
                 )
               )
-            ) 
-          )
+            )
+          ) 
+        )
       )
 
     viewTimeStamp <- as.numeric(

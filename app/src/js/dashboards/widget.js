@@ -1,13 +1,15 @@
 import {el} from '@fxi/el';
-import {helpers as h} from './../mx.js';
-import {ListenerStore} from '../listener_store/index.js';
-
+import {ListenerStore} from './../listener_store/index.js';
+import {path, any, setClickHandler} from './../mx_helper_misc.js';
+import {getLayersPropertiesAtPoint} from './../mx_helper_map.js';
+import {isEmpty} from './../is_test/index.js';
 /**
  * Widget method
  */
 
 const defaults = {
   conf: {
+    disabled: false,
     source: 'none',
     width: 'x50',
     height: 'y50',
@@ -36,6 +38,17 @@ class Widget {
     if (widget._init) {
       return;
     }
+    if (widget.isDisabled()) {
+      return;
+    }
+    /**
+     * Set init state now :
+     * -> async action later
+     * -> need in destroy()
+     */
+
+    widget._init = true;
+
     widget.ls = new ListenerStore();
     widget.id = Math.random().toString(32);
     /**
@@ -57,17 +70,18 @@ class Widget {
       for (var r in register) {
         widget[r] = register[r];
       }
-      widget.modules = h.path(widget.opt, 'dashboard.modules', {});
+      widget.modules = path(widget.opt, 'dashboard.modules', {});
       widget.add();
       widget.setUpdateDataMethod();
-      /**
-       * Set init flag to true
-       */
-      widget._init = true;
     } catch (e) {
       console.error(e);
       widget.destroy();
     }
+  }
+
+  isDisabled() {
+    const widget = this;
+    return path(widget, 'opt.conf.disabled', false);
   }
 
   /**
@@ -75,7 +89,7 @@ class Widget {
    */
   updateDataFromAttribute() {
     const widget = this;
-    var d = h.path(widget.opt, 'view.data.attribute.table', []);
+    var d = path(widget.opt, 'view.data.attribute.table', []);
     widget.setData(d);
   }
 
@@ -104,13 +118,13 @@ class Widget {
    */
   getWidgetDataFromLinkedView(e) {
     const widget = this;
-    const idView = h.path(widget.opt, 'view.id', widget.id);
-    const viewType = h.path(widget.opt, 'view.type', null);
+    const idView = path(widget.opt, 'view.id', widget.id);
+    const viewType = path(widget.opt, 'view.type', null);
 
     if (!viewType || !idView) {
       return [];
     }
-    const items = h.getLayersPropertiesAtPoint({
+    const items = getLayersPropertiesAtPoint({
       map: widget.opt.map,
       type: viewType,
       point: e ? e.point : null,
@@ -195,16 +209,7 @@ class Widget {
   build() {
     const widget = this;
     const conf = widget.opt.conf;
-    const lang = h.path(
-      widget,
-      'dashboard.opt.dashboard.language',
-      h.path(widget, 'opt.language')
-    );
-    const title = h.path(
-      widget,
-      `view.data.dashboard.title.${lang}`,
-      h.path(widget, 'view._title', '')
-    );
+    const title = path(widget, 'opt.view._title', '');
 
     widget.el = el(
       'div',
@@ -248,16 +253,16 @@ class Widget {
   }
 
   get grid() {
-    return h.path(this.opt, 'grid', {});
+    return path(this.opt, 'grid', {});
   }
   get dashboard() {
-    return h.path(this.opt, 'dashboard', {});
+    return path(this.opt, 'dashboard', {});
   }
   get map() {
-    return h.path(this.opt, 'map', {});
+    return path(this.opt, 'map', {});
   }
   get view() {
-    return h.path(this.opt, 'view', {});
+    return path(this.opt, 'view', {});
   }
   destroy(skipOnRemove) {
     const widget = this;
@@ -267,74 +272,68 @@ class Widget {
       return;
     }
     widget._destroyed = true;
-
-    /**
-     * Remove from grid
-     */
-    widget.grid.remove(widget.el);
-
-    /**
-     * Remove all listeners
-     */
-    widget.ls.destroy();
-
-    /**
-     * Remove elements
-     */
-    while (widget.el.firstElementChild) {
-      widget.el.firstElementChild.remove();
-    }
-    widget.el.remove();
-
-    /*
-     * Exec widget on remove
-     */
-    if (!skipOnRemove) {
-      /*
-       * Case normal remove
+    if (widget._init) {
+      /**
+       * Remove from grid
        */
-      widget.onRemove(widget);
-    }
+      widget.grid.remove(widget.el);
 
-    /**
-     * Remove timers if any
-     */
-    if (widget.timer) {
-      window.clearInterval(widget.timer);
-      window.clearTimeout(widget.timer);
+      /**
+       * Remove all listeners
+       */
+      widget.ls.destroy();
+
+      /**
+       * Remove elements
+       */
+      while (widget.el.firstElementChild) {
+        widget.el.firstElementChild.remove();
+      }
+      widget.el.remove();
+
+      /*
+       * Exec widget on remove
+       */
+      if (!skipOnRemove) {
+        /*
+         * Case normal remove
+         */
+        widget.onRemove(widget);
+      }
+
+      /**
+       * Remove timers if any
+       */
+      if (widget.timer) {
+        window.clearInterval(widget.timer);
+        window.clearTimeout(widget.timer);
+      }
+      /**
+       * Don't intercept click
+       */
+      widget.handleClick(false);
     }
 
     /**
      * Remove from dashboard config
      */
     dashboard.removeWidget(widget);
-
-    /**
-     * Don't intercept click
-     */
-    widget.handleClick(false);
   }
 
   handleClick(enable) {
     const widget = this;
     const widgets = widget.dashboard.widgets;
     widget._handleClick = enable === true;
-    const dashboardHandleClick = h.any(
+    const dashboardHandleClick = any(
       widgets.map((w) => w._handleClick === true)
     );
     /**
      * Update global click handling
      */
-    h.setClickHandler({
+    setClickHandler({
       type: 'dashboard',
       enable: dashboardHandleClick
     });
-
-    /*console.log({*/
-    //widget : widget,
-    //handleclick: widget._handleClick,
-    //dashboardHandleClick: dashboardHandleClick
-    /*});*/
   }
 
   setContent(c) {
@@ -345,7 +344,7 @@ class Widget {
 
   setData(d) {
     const widget = this;
-    const hasData = !h.isEmpty(d);
+    const hasData = !isEmpty(d);
     const ignoreEmptyData = widget.opt.conf.sourceIgnoreEmpty;
     const triggerOnData = hasData || (!hasData && !ignoreEmptyData);
     if (triggerOnData) {

@@ -3745,6 +3745,36 @@
     "de": "Dein Skript "
   },
   {
+    "id": "view_dashboard_disable",
+    "en": "Disable this dashboard",
+    "de": "Dieses Dashboard deaktivieren"
+  },
+  {
+    "id": "view_dashboard_disable_desc",
+    "en": "If checked, this will prevent all widgets from this dashboard to be rendered. Useful to quickly unpublish a dashboard : check this option + save a version. Uncheck during development + preview.",
+    "de": "Wenn diese Option aktiviert ist, wird das Rendern dieses Widgets verhindert. Nützlich, um die Veröffentlichung eines Widgets schnell aufzuheben: Aktivieren Sie diese Option und speichern Sie eine Version. Deaktivieren Sie während der Entwicklung + Vorschau."
+  },
+  {
+    "id": "view_dashboard_widget_disable",
+    "en": "Disable this widget",
+    "de": "Dieses Widget deaktivieren"
+  },
+  {
+    "id": "view_dashboard_widget_disable_desc",
+    "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
+    "de": "Wenn diese Option aktiviert ist, wird das Rendern dieses Widgets verhindert. Nützlich, um die Veröffentlichung eines Widgets schnell aufzuheben: Aktivieren Sie diese Option und speichern Sie eine Version. Deaktivieren Sie während der Entwicklung + Vorschau."
+  },
+  {
+    "id": "view_dashboard_panel_init_closed",
+    "en": "Keep the dashboard panel closed",
+    "de": "Halten Sie das Armaturenbrett geschlossen"
+  },
+  {
+    "id": "view_dashboard_panel_init_closed_desc",
+    "en": "If checked, this will prevent the initial dashboard panel to be open. Does not affect existing dashboard already open",
+    "de": "Wenn diese Option aktiviert ist, wird dadurch verhindert, dass das anfängliche Dashboard-Panel geöffnet wird. Hat keinen Einfluss auf bestehendes Dashboard, das bereits geöffnet ist"
+  },
+  {
     "id": "view_dashboard_src_layerChange",
     "en": "All attributes and values from the displayed features",
     "de": "Alle Attribute und Werte aus den angezeigten Features "
@@ -3776,18 +3806,23 @@
   },
   {
     "id": "view_dashboard_txt_layout",
-    "en": "Initial dashboard layout",
-    "de": "Anfängliches Dashboard-Layout "
+    "en": "Dashboard layout",
+    "de": "Dashboard-Layout"
   },
   {
-    "id": "view_dashboard_txt_desc_layout",
+    "id": "view_dashboard_txt_layout_desc",
     "en": "Set the initial dashboard layout",
-    "de": "Legen Sie das anfängliche Dashboard-Layout fest "
+    "de": "Legen Sie das anfängliche Dashboard-Layout fest"
   },
   {
     "id": "view_dashboard_txt_layout_full",
     "en": "Full size",
     "de": "Volle Größe "
+  },
+  {
+    "id": "view_dashboard_txt_layout_panel_closed",
+    "en": "Panel closed",
+    "de": "Panel geschlossen"
   },
   {
     "id": "view_dashboard_txt_layout_fit",
@@ -3835,14 +3870,14 @@
     "de": "Ereignisse ignorieren, die ein leeres Array zurückgeben? "
   },
   {
-    "id": "view_dashboard_txt_which_module",
+    "id": "view_dashboard_txt_module",
     "en": "Which modules to load?",
-    "de": "Welche Module sollen geladen werden? "
+    "de": "Welche Module laden?"
   },
   {
-    "id": "view_dashboard_txt_desc_module",
+    "id": "view_dashboard_txt_module_desc",
     "en": "Modules will be loaded under `widget.modules`",
-    "de": "Module werden unter \"widget.modules\" geladen "
+    "de": "Module werden unter `widget.modules` geladen"
   },
   {
     "id": "view_dashboard_txt_width",

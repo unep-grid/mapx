@@ -1,26 +1,36 @@
-export {el};
+export {el,svg};
 
+const NSSvg = 'http://www.w3.org/2000/svg';
 const config = {
   listeners: [],
   debug: true,
   interval: null
 };
 
+
+function svg(tagName, ...opt){
+  return el(tagName,true,...opt);
+}
+
 /**
  * clean listeners at interval
  */
 function el(tagName, ...opt) {
-  var item;
+  let item, elOut;
 
   if (!config.interval) {
     config.interval = setInterval(cleanListeners, 1e4);
     window.el_config = config;
   }
-
+  let svgMode = opt[0] === true;
   /**
    * Create element
    */
-  var elOut = document.createElement(tagName);
+  if (svgMode) {
+    elOut = document.createElementNS(NSSvg, tagName);
+  } else {
+    elOut = document.createElement(tagName);
+  }
 
   /**
    * Compute options
@@ -40,8 +50,9 @@ function el(tagName, ...opt) {
           isFunction(item[1])
         ) {
           /**
-          * If array = allow third item as listener option
-          */ 
+           * If array = allow third item as listener option
+           */
+
           elOut.addEventListener(item[0], item[1], item[2]);
           elOut.dataset.el_id_listener = Math.random().toString(32);
           /**
@@ -82,7 +93,15 @@ function el(tagName, ...opt) {
         ) {
           elOut.checked = item === true;
         } else {
-          elOut.setAttribute(k, o[k]);
+          if (svgMode) {
+            try{ 
+            elOut.setAttributeNS(null, k, o[k]);
+            }catch(e){
+            elOut.setAttribute(k, o[k]);
+            }
+          } else {
+            elOut.setAttribute(k, o[k]);
+          }
         }
       });
     }
@@ -118,7 +137,11 @@ function el(tagName, ...opt) {
     if (isHTML(str) || tagName === 'style') {
       elOut.innerHTML = str;
     } else if (isString(str)) {
-      elOut.innerText = str;
+      if(svgMode){
+        elOut.textContent = str;
+      }else{
+        elOut.innerText = str;
+      }
     }
   }
 }

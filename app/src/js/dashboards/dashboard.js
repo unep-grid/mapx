@@ -1,6 +1,7 @@
 import {Widget} from './widget.js';
 import {ButtonPanel} from './../button_panel';
-import {modulesLoad} from './../mx_helper_module_loader.js';
+import {modulesLoad} from './../modules_loader_async';
+import {all} from './../mx_helper_misc.js';
 import {el} from '@fxi/el';
 import Muuri from 'muuri';
 import './style.css';
@@ -38,7 +39,7 @@ const defaults = {
     button_lang_key: 'button_dashboard_panel',
     button_classes: ['fa', 'fa-pie-chart'],
     tooltip_position: 'top-left',
-    container_classes : ['button-panel--container-no-full-height'],
+    container_classes: ['button-panel--container-no-full-height'],
     position: 'bottom-right'
   }
 };
@@ -61,15 +62,18 @@ class Dashboard {
     d.modules = {};
     d.widgets = [];
     d.cb = [];
+    d.elDashboard = el('div', {class: 'dashboard'});
+
+    /*
+     * Panel
+     */
     d.panel = new ButtonPanel(d.opt.panel);
-    if(d.panel.isSmallHeight()){
+    if (d.panel.isSmallHeight()) {
       d.panel.height = '50vh';
     }
-    d.elDashboard = el('div', {class: 'dashboard'});
     d.panel.elPanelContent.appendChild(d.elDashboard);
-    d.grid = new Muuri(d.elDashboard, d.opt.grid);
     d.panel.on('resize', () => {
-      d.grid.refreshItems().layout();
+      d.updateGridLayout();
     });
     d.panel.on('open', () => {
       d.show();
@@ -77,6 +81,16 @@ class Dashboard {
     d.panel.on('close', () => {
       d.hide();
     });
+
+    /*
+     * Grid
+     */
+    d.grid = new Muuri(d.elDashboard, d.opt.grid);
+
+    /**
+     * Init event
+     */
+
     d.fire('init');
   }
 
@@ -116,8 +130,7 @@ class Dashboard {
     const d = this;
     d.panel.open();
     d.grid.show(d.grid.getItems());
-    d.setPanelInitSize();
-    d.grid.refreshItems().layout();
+    d.updateGridLayout();
     d._visible = true;
     d.fire('show');
   }
@@ -136,11 +149,11 @@ class Dashboard {
 
   toggle() {
     const d = this;
-    d.panel.toggle(); 
+    d.panel.toggle();
     d.fire('toggle');
   }
 
-  setPanelInitSize() {
+  updatePanelLayout() {
     const d = this;
     const layout = d.opt.dashboard.layout;
     switch (layout) {
@@ -161,6 +174,11 @@ class Dashboard {
     }
   }
 
+  updateGridLayout() {
+    const d = this;
+    d.grid.refreshItems().layout();
+  }
+
   fitPanelToWidgets() {
     const d = this;
     d.fitPanelToWidgetsWidth();
@@ -169,7 +187,7 @@ class Dashboard {
 
   fitPanelToWidgetsWidth() {
     const d = this;
-    if(d.panel.isSmallWidth()){
+    if (d.panel.isSmallWidth()) {
       return;
     }
     const m = d.opt.dashboard.marginFitWidth;
@@ -184,7 +202,7 @@ class Dashboard {
 
   fitPanelToWidgetsHeight() {
     const d = this;
-    if(d.panel.isSmallHeight()){
+    if (d.panel.isSmallHeight()) {
       return;
     }
     const m = d.opt.dashboard.marginFitHeight;
@@ -215,9 +233,11 @@ class Dashboard {
   removeWidgets() {
     const d = this;
     while (d.widgets.length) {
-      d.widgets[d.widgets.length - 1].destroy();
+      const id = d.widgets.length - 1;
+      d.widgets[id].destroy();
       d.widgets.pop();
     }
+    d.updateGridLayout();
     d.autoDestroy();
   }
 
@@ -228,48 +248,64 @@ class Dashboard {
       d.widgets[pos].destroy();
       d.widgets.splice(pos, 1);
     }
+    d.updateGridLayout();
     d.autoDestroy();
+  }
+
+  allWidgetsDisabled() {
+    const d = this;
+    const disabled = [];
+    for (const w of d.widgets) {
+      disabled.push(w.isDisabled());
+    }
+    return all(disabled);
   }
 
   autoDestroy() {
     const d = this;
-    if (d.widgets.length === 0) {
+    const allDisabled = d.allWidgetsDisabled();
+    const destroy = d.widgets.length === 0 || allDisabled;
+    if (destroy) {
       d.destroy();
     }
   }
 
-  addWidgetsAsync(conf) {
+  async addWidgetsAsync(conf) {
     const d = this;
+    const widgets = [];
     d.opt.dashboard.modules.push(...(conf.modules || []));
-    return modulesLoad(d.opt.dashboard.modules)
-      .then((modules) => {
-        /**
-         * Store modules
-         */
-        d.opt.dashboard.modules.forEach((n, i) => {
-          d.modules[n] = modules[i];
-        });
-      })
-      .then(() => {
-        /**
-         * Build widgets
-         */
-        const widgets = conf.widgets.map((w) => {
-          return new Widget({
-            conf: w,
-            grid: d.grid,
-            dashboard: d,
-            modules: d.modules,
-            view: conf.view,
-            map: conf.map
-          });
-        });
-        d.widgets.push(...widgets);
-        /**
-         * Return only added widgets
-         */
-        return widgets;
+
+    const modules = await modulesLoad(d.opt.dashboard.modules);
+    /**
+     * Store modules
+     */
+    d.opt.dashboard.modules.forEach((n, i) => {
+      d.modules[n] = modules[i];
+    });
+    /**
+     * Build widgets
+     */
+    for (const cw of conf.widgets) {
+      const widget = new Widget({
+        conf: cw,
+        grid: d.grid,
+        dashboard: d,
+        modules: d.modules,
+        view: conf.view,
+        map: conf.map
       });
+      d.widgets.push(widget);
+      widget._id = conf.view.id;
+      widgets.push(widget);
+    }
+
+    d.panel.shakeButton({type: 'look_at_me'});
+    d.updatePanelLayout();
+    d.updateGridLayout();
+    /**
+     * Return only added widgets
+     */
+    return widgets;
   }
 }
 

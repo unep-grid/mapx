@@ -2996,6 +2996,30 @@
     "en": "Your script"
   },
   {
+    "id": "view_dashboard_disable",
+    "en": "Disable this dashboard"
+  },
+  {
+    "id": "view_dashboard_disable_desc",
+    "en": "If checked, this will prevent all widgets from this dashboard to be rendered. Useful to quickly unpublish a dashboard : check this option + save a version. Uncheck during development + preview."
+  },
+  {
+    "id": "view_dashboard_widget_disable",
+    "en": "Disable this widget"
+  },
+  {
+    "id": "view_dashboard_widget_disable_desc",
+    "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview."
+  },
+  {
+    "id": "view_dashboard_panel_init_closed",
+    "en": "Keep the dashboard panel closed"
+  },
+  {
+    "id": "view_dashboard_panel_init_closed_desc",
+    "en": "If checked, this will prevent the initial dashboard panel to be open. Does not affect existing dashboard already open"
+  },
+  {
     "id": "view_dashboard_src_layerChange",
     "en": "All attributes and values from the displayed features"
   },
@@ -3021,15 +3045,19 @@
   },
   {
     "id": "view_dashboard_txt_layout",
-    "en": "Initial dashboard layout"
+    "en": "Dashboard layout"
   },
   {
-    "id": "view_dashboard_txt_desc_layout",
+    "id": "view_dashboard_txt_layout_desc",
     "en": "Set the initial dashboard layout"
   },
   {
     "id": "view_dashboard_txt_layout_full",
     "en": "Full size"
+  },
+  {
+    "id": "view_dashboard_txt_layout_panel_closed",
+    "en": "Panel closed"
   },
   {
     "id": "view_dashboard_txt_layout_fit",
@@ -3068,11 +3096,11 @@
     "en": "Ignore events that returns an empty array ?"
   },
   {
-    "id": "view_dashboard_txt_which_module",
+    "id": "view_dashboard_txt_module",
     "en": "Which modules to load?"
   },
   {
-    "id": "view_dashboard_txt_desc_module",
+    "id": "view_dashboard_txt_module_desc",
     "en": "Modules will be loaded under `widget.modules`"
   },
   {

@@ -1,6 +1,6 @@
 import {isUrl} from './../is_test/index.js';
 import {modal} from './../mx_helper_modal.js';
-import {moduleLoad} from './../mx_helper_module_loader.js';
+import {moduleLoad} from './../modules_loader_async';
 import {setBusy} from './../mx_helper_misc.js';
 import {el, elSpanTranslate} from './../el_mapx/index.js';
 import {wmsGetLayers, urlTile, urlLegend} from './index.js';

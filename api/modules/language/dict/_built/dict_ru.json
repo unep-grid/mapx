@@ -3745,6 +3745,36 @@
     "ru": "Ваш сценарий "
   },
   {
+    "id": "view_dashboard_disable",
+    "en": "Disable this dashboard",
+    "ru": "Отключить эту панель"
+  },
+  {
+    "id": "view_dashboard_disable_desc",
+    "en": "If checked, this will prevent all widgets from this dashboard to be rendered. Useful to quickly unpublish a dashboard : check this option + save a version. Uncheck during development + preview.",
+    "ru": "Если этот флажок установлен, это предотвратит рендеринг этого виджета. Полезно для быстрой отмены публикации виджета: отметьте эту опцию + сохраните версию. Снимите флажок во время разработки + предварительного просмотра."
+  },
+  {
+    "id": "view_dashboard_widget_disable",
+    "en": "Disable this widget",
+    "ru": "Отключить этот виджет"
+  },
+  {
+    "id": "view_dashboard_widget_disable_desc",
+    "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
+    "ru": "Если этот флажок установлен, это предотвратит рендеринг этого виджета. Полезно для быстрой отмены публикации виджета: отметьте эту опцию + сохраните версию. Снимите флажок во время разработки + предварительного просмотра."
+  },
+  {
+    "id": "view_dashboard_panel_init_closed",
+    "en": "Keep the dashboard panel closed",
+    "ru": "Держите панель приборной панели закрытой"
+  },
+  {
+    "id": "view_dashboard_panel_init_closed_desc",
+    "en": "If checked, this will prevent the initial dashboard panel to be open. Does not affect existing dashboard already open",
+    "ru": "Если этот флажок установлен, это предотвратит открытие начальной панели панели инструментов. Не влияет на уже открытую существующую панель управления"
+  },
+  {
     "id": "view_dashboard_src_layerChange",
     "en": "All attributes and values from the displayed features",
     "ru": "Все атрибуты и значения отображаемых функций "
@@ -3776,18 +3806,23 @@
   },
   {
     "id": "view_dashboard_txt_layout",
-    "en": "Initial dashboard layout",
-    "ru": "Первоначальный макет приборной панели "
+    "en": "Dashboard layout",
+    "ru": "Макет приборной панели"
   },
   {
-    "id": "view_dashboard_txt_desc_layout",
+    "id": "view_dashboard_txt_layout_desc",
     "en": "Set the initial dashboard layout",
-    "ru": "Установите исходный макет панели инструментов "
+    "ru": "Установите исходный макет панели инструментов"
   },
   {
     "id": "view_dashboard_txt_layout_full",
     "en": "Full size",
     "ru": "Полный размер "
+  },
+  {
+    "id": "view_dashboard_txt_layout_panel_closed",
+    "en": "Panel closed",
+    "ru": "Панель закрыта"
   },
   {
     "id": "view_dashboard_txt_layout_fit",
@@ -3835,14 +3870,14 @@
     "ru": "Игнорировать события, возвращающие пустой массив? "
   },
   {
-    "id": "view_dashboard_txt_which_module",
+    "id": "view_dashboard_txt_module",
     "en": "Which modules to load?",
-    "ru": "Какие модули загружать? "
+    "ru": "Какие модули загружать?"
   },
   {
-    "id": "view_dashboard_txt_desc_module",
+    "id": "view_dashboard_txt_module_desc",
     "en": "Modules will be loaded under `widget.modules`",
-    "ru": "Модули будут загружены в `widget.modules` "
+    "ru": "Модули будут загружены в `widget.modules`"
   },
   {
     "id": "view_dashboard_txt_width",

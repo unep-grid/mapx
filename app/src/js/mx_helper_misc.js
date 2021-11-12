@@ -10,7 +10,7 @@ import {IconFlash} from './icon_flash';
 export function updateIfEmpty(target, source) {
   const h = mx.helpers;
 
-  if(!target){
+  if (!target) {
     target = {};
   }
 
@@ -24,12 +24,10 @@ export function updateIfEmpty(target, source) {
     }
   }
   return target;
-
 }
 
-
 /**
- * Set app busy mode 
+ * Set app busy mode
  * @param {Object} opt
  * @param {Boolean} opt.back
  * @param {Boolean} opt.icon
@@ -41,9 +39,6 @@ export function setBusy(enable) {
     document.body.style.cursor = 'auto';
   }
 }
-
-
-
 
 /**
  * Retrieve nested item from object/array
@@ -133,21 +128,25 @@ export function getClickHandlers() {
 }
 
 /**
- * All member should be true, return boolean
+ * All member should be true or truthy
  *
  * @param {Array} a input array
  * @example all([null,0,"a",true]) === false
- * @example all(["",1,"a",true]) === true
+ * @example all([1,true,{},"a",0]) === false
+ * @example all([" ",1,"a",true]) === true
  * @return {Boolean}
  */
 export function all(a) {
-  var r = false;
-  var l;
-  a.forEach(function(o, i) {
-    l = Boolean(o);
-    r = i === 0 ? l : r && l;
-  });
-  return r;
+  if (a.length === 0) {
+    return false;
+  }
+  for (const i of a) {
+    const b = Boolean(i);
+    if (b === false) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -737,23 +736,23 @@ export function sendAjax(o) {
  * @param {Function} o.onSuccess Function to call on success
  * @param {Function} o.onError Function to call on error
  */
-export function getCSV(o) {
-  return import('csvjson').then(function(csvjson) {
-    sendAjax({
-      type: 'get',
-      url: o.url,
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader('Accept', 'text/csv; charset=utf-8');
-      },
-      onSuccess: function(res) {
-        if (res) {
-          var data = csvjson.toObject(res);
-          o.onSuccess(data);
-        }
-      },
-      onError: o.onError,
-      onComplete: o.onComplete
-    });
+export async function getCSV(o) {
+  const h = mx.helpers;
+  const csvjson = await h.moduleLoad('csvjson');
+  sendAjax({
+    type: 'get',
+    url: o.url,
+    beforeSend: function(xhr) {
+      xhr.setRequestHeader('Accept', 'text/csv; charset=utf-8');
+    },
+    onSuccess: function(res) {
+      if (res) {
+        const data = csvjson.toObject(res);
+        o.onSuccess(data);
+      }
+    },
+    onError: o.onError || console.error,
+    onComplete: o.onComplete || null
   });
 }
 
@@ -1425,7 +1424,7 @@ export function jsonToObj(m) {
  * @param {String} m.msg (alias)
  */
 export function jsDebugMsg(m) {
-  console.log(m.message||m.msg);
+  console.log(m.message || m.msg);
 }
 
 /** Add or remove a class depending on enable option. The element has a class, ex. "hidden" and this will remove the class if m.enable is true.
@@ -2036,7 +2035,7 @@ export function handleRequestMessage(msg, msgs, on) {
           }
 
           var isObject = mx.helpers.isObject(m);
-          var msg = isObject ? m.message || m.msg : m;
+          var msg = isObject ? m.message || m.msg : m;
           var type = m.type || 'default';
 
           if (msgs[msg]) {

@@ -90,6 +90,10 @@
   box-shadow: var(--mx_ui_box_shadow);
 }
 
+.jed-container h3 {
+  font-size: 1.1rem;
+}
+
 /**
 * Pickr modifier
 */

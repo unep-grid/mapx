@@ -5486,6 +5486,84 @@
     "de": ""
   },
   {
+    "id": "view_dashboard_disable",
+    "en": "Disable this dashboard",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "view_dashboard_disable_desc",
+    "en": "If checked, this will prevent all widgets from this dashboard to be rendered. Useful to quickly unpublish a dashboard : check this option + save a version. Uncheck during development + preview.",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "view_dashboard_widget_disable",
+    "en": "Disable this widget",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "view_dashboard_widget_disable_desc",
+    "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "view_dashboard_panel_init_closed",
+    "en": "Keep the dashboard panel closed",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+ {
+    "id": "view_dashboard_panel_init_closed_desc",
+    "en": "If checked, this will prevent the initial dashboard panel to be open. Does not affect existing dashboard already open",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "view_dashboard_src_layerChange",
     "en": "All attributes and values from the displayed features",
     "fr": "Tous les attributs et valeurs affichés de la couche affichée",
@@ -5565,11 +5643,11 @@
   },
   {
     "id": "view_dashboard_txt_layout",
-    "en": "Initial dashboard layout",
+    "en": "Dashboard layout",
     "fr": "Agencement du tableau de bord",
     "es": "",
     "ru": "",
-    "zh": "初始化操控版布局",
+    "zh":"",
     "ar": "",
     "fa": "",
     "ps": "",
@@ -5577,7 +5655,7 @@
     "de": ""
   },
   {
-    "id": "view_dashboard_txt_desc_layout",
+    "id": "view_dashboard_txt_layout_desc",
     "en": "Set the initial dashboard layout",
     "fr": "Ajuste l'agencement initiale du tableau de bord",
     "es": "",
@@ -5596,6 +5674,19 @@
     "es": "",
     "ru": "",
     "zh": "最大尺寸",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "view_dashboard_txt_layout_panel_closed",
+    "en": "Panel closed",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
     "ar": "",
     "fa": "",
     "ps": "",
@@ -5720,7 +5811,7 @@
     "de": ""
   },
   {
-    "id": "view_dashboard_txt_which_module",
+    "id": "view_dashboard_txt_module",
     "en": "Which modules to load?",
     "fr": "Quels modules charger ?",
     "es": "Qué módulo cargar?",
@@ -5733,7 +5824,7 @@
     "de": ""
   },
   {
-    "id": "view_dashboard_txt_desc_module",
+    "id": "view_dashboard_txt_module_desc",
     "en": "Modules will be loaded under `widget.modules`",
     "fr": "Les modules seront disponible dans `widget.modules`",
     "es": "Los módulo estarán disponsibles en `widget.modules`",

@@ -15,13 +15,13 @@
 
   JSONEditor.defaults.editors.ace = JSONEditor.defaults.editors.string.extend({
     refreshValue: function() {
-      this.value = this.value || '';
-      this.serialized = this.value;
+      const editor = this;
+      editor.value = editor.value || '';
+      editor.serialized = editor.value;
     },
     setValue: function(value, initial, from_template) {
-      var self = this;
-
-      if (this.template && !from_template) {
+      const editor = this;
+      if (editor.template && !from_template) {
         return;
       }
 
@@ -29,192 +29,209 @@
       else if (typeof value === 'object') value = JSON.stringify(value);
       else if (typeof value !== 'string') value = '' + value;
 
-      if (value === this.serialized) return;
+      if (value === editor.serialized) return;
 
       // Sanitize value before setting it
-      var sanitized = this.sanitize(value);
+      const sanitized = editor.sanitize(value);
 
-      if (this.input.value === sanitized) {
+      if (editor.input.value === sanitized) {
         return;
       }
 
-      this.value = sanitized;
+      editor.value = sanitized;
 
-      if (this.ace_editor) {
-        this.ace_editor.setValue(sanitized);
+      if (editor._ace_editor) {
+        editor._ace_editor.setValue(sanitized);
       }
 
-      var changed = from_template || this.getValue() !== value;
+      const changed = from_template || editor.getValue() !== value;
 
-      this.refreshValue();
+      editor.refreshValue();
 
-      if (initial) this.is_dirty = false;
-      else if (this.jsoneditor.options.show_errors === 'change')
-        this.is_dirty = true;
+      if (initial) editor.is_dirty = false;
+      else if (editor.jsoneditor.options.show_errors === 'change')
+        editor.is_dirty = true;
 
-      if (this.adjust_height) this.adjust_height(this.input);
+      if (editor.adjust_height) editor.adjust_height(editor.input);
 
-      // Bubble this setValue to parents if the value changed
-      this.onChange(changed);
+      // Bubble editor setValue to parents if the value changed
+      editor.onChange(changed);
     },
-    afterInputReady: function() {
-      const that = this;
-      const mode = that.options.language;
+    afterInputReady: async function() {
+      const h = mx.helpers;
+      const editor = this;
+      const mode = editor.options.language;
 
       const editors = window.jed.aceEditors || [];
 
-      if (that.options.hidden) {
-        that.theme.afterInputReady(that.input);
+      if (editor.options.hidden) {
+        editor.theme.afterInputReady(editor.input);
       } else {
-        return mx.helpers
-          .modulesLoad(['ace', 'js-beautify'])
+        /**
+         * Load module
+         */
 
-          .then(function(m) {
-            that.ace_container = document.createElement('div');
-            that.ace_container.style.width = '100%';
-            that.ace_container.style.position = 'relative';
-            that.input.parentNode.insertBefore(that.ace_container, that.input);
-            that.input.style.display = 'none';
+        const modules = await h.modulesLoad(['ace', 'js-beautify']);
 
-            that.ace_editor = window.ace.edit(that.ace_container, {
-              mode: `ace/mode/${mode}`
-            });
+        /**
+         * Add layout
+         */
+        editor._el_tool_container = document.createElement('div');
+        editor._el_ace_container = document.createElement('div');
+        editor._el_ace_container.style.width = '100%';
+        editor._el_ace_container.style.position = 'relative';
+        editor.input.parentNode.insertBefore(
+          editor._el_ace_container,
+          editor.input
+        );
+        editor.input.style.display = 'none';
 
-            that.ace_editor._set_theme_auto = () => {
-              const mode = mx.theme.mode;
-              let idTheme = 'ace/theme/github';
-              if (mode === 'dark') {
-                idTheme = 'ace/theme/monokai';
-              }
-              that.ace_editor.setOptions({
-                theme: idTheme
-              });
-            };
+        editor._ace_editor = window.ace.edit(editor._el_ace_container);
 
-            that.ace_editor.setValue(that.getValue() || '');
-            that.ace_editor.getSession().selection.clearSelection();
-
-            that.ace_editor.setOptions({
-              minLines: 1,
-              maxLines: Infinity,
-              autoScrollEditorIntoView: true,
-              wrap: true,
-              indentedSoftWrap: false
-            });
-
-            that.ace_editor._set_theme_auto();
-
-            // Listen for changes
-            that.ace_editor.on('change', function() {
-              var val = that.ace_editor.getValue() || '';
-              that.value = val;
-              that.refreshValue();
-              that.is_dirty = true;
-              that.onChange(true);
-            });
-
-            that.theme.afterInputReady(that.input);
-
-            /**
-             * Save in ace editors
-             */
-            editors.push(that.ace_editor);
-
-            /**
-             * Add toolbar
-             */
-
-            var elToolContainer = document.createElement('div');
-
-            /**
-             * Set readonly if needed
-             */
-            if (that.options.readOnly === true) {
-              that.ace_editor.setReadOnly(true);
+        editor._ace_editor.session.on('changeMode', (e, session) => {
+          if ('ace/mode/javascript' === session.getMode().$id) {
+            if (!!session.$worker) {
+              session.$worker.send('setOptions', [
+                {
+                  esversion: 9,
+                  esnext: false
+                }
+              ]);
             }
+          }
+        });
 
-            /**
-             * Add beautify button
-             */
-            if (
-              (mode === 'javascript' || mode === 'json') &&
-              that.options.readOnly !== true
-            ) {
-              var elBeautifyBtn = document.createElement('button');
-              elBeautifyBtn.className = 'btn btn-info';
-              elBeautifyBtn.innerHTML = 'tidy';
-              elBeautifyBtn.addEventListener('click', () => {
-                var b = m[1].js;
-                var s = that.ace_editor.getSession();
-                new Promise(function(resolve) {
-                  resolve(s.getValue() || '');
-                })
-                  .then(function(val) {
-                    return b(val);
-                  })
-                  .then(function(tidy) {
-                    s.setValue(tidy);
-                  })
-                  .catch(function(e) {
-                    mx.helpers.modal({
-                      id: 'modalError',
-                      title: 'Error',
-                      content: '<p>Error during tidy process :' + e
-                    });
-                  });
-              });
+        editor._ace_editor.session.setMode(`ace/mode/${mode}`);
 
-              elToolContainer.appendChild(elBeautifyBtn);
-            }
-
-            /**
-             * Add optional help panel
-             */
-            if (that.options.htmlHelp) {
-              var elHelp = mx.helpers.textToDom(that.options.htmlHelp);
-              var elBtn = document.createElement('button');
-
-              elBtn.className = 'btn btn-info';
-              elBtn.innerHTML = 'help';
-              elBtn.addEventListener('click', function() {
-                mx.helpers.modal({
-                  id: 'modalHelp',
-                  title: 'Map-x help',
-                  content: elHelp
-                });
-              });
-
-              elToolContainer.appendChild(elBtn);
-            }
-
-            /**
-             * Insert toolbar before input
-             */
-            that.input.parentNode.insertBefore(
-              elToolContainer,
-              that.ace_container
-            );
+        editor._ace_editor._set_theme_auto = () => {
+          const mode = mx.theme.mode;
+          let idTheme = 'ace/theme/github';
+          if (mode === 'dark') {
+            idTheme = 'ace/theme/monokai';
+          }
+          editor._ace_editor.setOptions({
+            theme: idTheme
           });
+        };
+
+        editor._ace_editor.setValue(editor.getValue() || '');
+        editor._ace_editor.getSession().selection.clearSelection();
+
+        editor._ace_editor.setOptions({
+          minLines: 1,
+          maxLines: Infinity,
+          autoScrollEditorIntoView: true,
+          wrap: false,
+          indentedSoftWrap: false
+        });
+
+        editor._ace_editor.setOption('indentedSoftWrap', false);
+
+        editor._ace_editor._set_theme_auto();
+
+        /*
+         * Listen for changes
+         */
+        editor._ace_editor.on('change', function() {
+          const val = editor._ace_editor.getValue() || '';
+          editor.value = val;
+          editor.refreshValue();
+          editor.is_dirty = true;
+          editor.onChange(true);
+        });
+
+        editor.theme.afterInputReady(editor.input);
+
+        /**
+         * Save in ace editors
+         */
+        editors.push(editor._ace_editor);
+
+        /**
+         * Set readonly if needed
+         */
+        if (editor.options.readOnly === true) {
+          editor._ace_editor.setReadOnly(true);
+        }
+
+        /**
+         * Add beautify button
+         */
+        if (
+          (mode === 'javascript' || mode === 'json') &&
+          editor.options.readOnly !== true
+        ) {
+          const elBeautifyBtn = document.createElement('button');
+          elBeautifyBtn.className = 'btn btn-info';
+          elBeautifyBtn.innerHTML = 'tidy';
+          elBeautifyBtn.addEventListener('click', async () => {
+            try {
+              const beautify = modules[1].js;
+              const session = editor._ace_editor.getSession();
+              const code = session.getValue() || '';
+              const codeClean = await beautify(code);
+              session.setValue(codeClean);
+            } catch (e) {
+              h.modal({
+                id: 'modalError',
+                title: 'Error',
+                content: '<p>Error during tidy process :' + JSON.stringify(e)
+              });
+            }
+          });
+
+          editor._el_tool_container.appendChild(elBeautifyBtn);
+        }
+
+        /**
+         * Add optional help panel
+         */
+        if (editor.options.htmlHelp) {
+          const elHelp = h.textToDom(editor.options.htmlHelp);
+          const elBtn = document.createElement('button');
+
+          elBtn.className = 'btn btn-info';
+          elBtn.innerHTML = 'help';
+          elBtn.addEventListener('click', function() {
+            h.modal({
+              id: 'modalHelp',
+              title: 'Map-x help',
+              content: elHelp
+            });
+          });
+
+          editor._el_tool_container.appendChild(elBtn);
+        }
+
+        /**
+         * Insert toolbar before input
+         */
+        editor.input.parentNode.insertBefore(
+          editor._el_tool_container,
+          editor._el_ace_container
+        );
       }
     },
     disable: function() {
-      this.input.disabled = true;
-      if (this.ace_editor) {
-        this.ace_editor.setReadOnly(true);
+      const editor = this;
+      editor.input.disabled = true;
+      if (editor._ace_editor) {
+        editor._ace_editor.setReadOnly(true);
       }
-      this._super();
+      editor._super();
     },
     enable: function() {
-      if (!this.always_disabled) {
-        this.input.disabled = false;
-        if (this.ace_editor) {
-          this.ace_editor.setReadOnly(false);
+      const editor = this;
+      if (!editor.always_disabled) {
+        editor.input.disabled = false;
+        if (editor._ace_editor) {
+          editor._ace_editor.setReadOnly(false);
         }
       }
-      this._super();
+      editor._super();
     },
     destroy: function() {
-      const aceEditor = this.ace_editor;
+      const aceEditor = this._ace_editor;
       const aceEditors = window.jed.aceEditors;
       if (aceEditor) {
         aceEditor.destroy();

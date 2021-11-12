@@ -2,6 +2,7 @@
 import {el} from './../el/src/index.js';
 import {ListenerStore, EventSimple} from '../listener_store/index.js';
 import {isNumeric} from '../is_test/index.js';
+import {shake} from '../elshake';
 import './style.less';
 
 window._button_panels = [];
@@ -65,6 +66,16 @@ class ButtonPanel extends EventSimple {
     panel.restoreSize();
     panel.on('resize', panel.saveSize.bind(panel));
     panel.on('resize-auto', panel.saveSize.bind(panel));
+  }
+
+  destroy() {
+    const panel = this;
+    const idW =  _button_panels.indexOf(panel);
+    panel.fire('destroy');
+    panel.cb.length = 0;
+    panel.elContainer.remove();
+    panel.ls.destroy();
+    _button_panels.splice(idW,1)
   }
 
   setAnimmateDuration(ms) {
@@ -439,12 +450,14 @@ class ButtonPanel extends EventSimple {
     }
   }
 
-  shake() {
+  shake(opt) {
     const panel = this;
-    panel.elContainer.classList.add('button-panel--shake');
-    setTimeout(() => {
-      panel.elContainer.classList.remove('button-panel--shake');
-    }, 820);
+    shake(panel.elContainer,opt);
+  }
+
+  shakeButton(opt) {
+    const panel = this;
+    shake(panel.elBtnPanel,opt);
   }
 
   resizeAuto(type) {
@@ -547,13 +560,7 @@ class ButtonPanel extends EventSimple {
     }
   }
 
-  destroy() {
-    const panel = this;
-    panel.fire('destroy');
-    panel.cb.length = 0;
-    panel.elContainer.remove();
-    panel.ls.destroy();
-  }
+
 
   isVisible() {
     const panel = this;

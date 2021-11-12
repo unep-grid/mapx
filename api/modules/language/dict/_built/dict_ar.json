@@ -3745,6 +3745,36 @@
     "ar": "السيناريو الخاص بك "
   },
   {
+    "id": "view_dashboard_disable",
+    "en": "Disable this dashboard",
+    "ar": "تعطيل لوحة القيادة هذه"
+  },
+  {
+    "id": "view_dashboard_disable_desc",
+    "en": "If checked, this will prevent all widgets from this dashboard to be rendered. Useful to quickly unpublish a dashboard : check this option + save a version. Uncheck during development + preview.",
+    "ar": "إذا تم تحديده ، فسيؤدي ذلك إلى منع عرض هذه الأداة. من المفيد إلغاء نشر عنصر واجهة مستخدم بسرعة: حدد هذا الخيار + احفظ إصدارًا. قم بإلغاء التحديد أثناء التطوير + المعاينة."
+  },
+  {
+    "id": "view_dashboard_widget_disable",
+    "en": "Disable this widget",
+    "ar": "تعطيل هذه القطعة"
+  },
+  {
+    "id": "view_dashboard_widget_disable_desc",
+    "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
+    "ar": "إذا تم تحديده ، فسيؤدي ذلك إلى منع عرض هذه الأداة. من المفيد إلغاء نشر عنصر واجهة مستخدم بسرعة: حدد هذا الخيار + احفظ إصدارًا. قم بإلغاء التحديد أثناء التطوير + المعاينة."
+  },
+  {
+    "id": "view_dashboard_panel_init_closed",
+    "en": "Keep the dashboard panel closed",
+    "ar": "حافظ على لوحة لوحة القيادة مغلقة"
+  },
+  {
+    "id": "view_dashboard_panel_init_closed_desc",
+    "en": "If checked, this will prevent the initial dashboard panel to be open. Does not affect existing dashboard already open",
+    "ar": "إذا تم تحديده ، فسيؤدي ذلك إلى منع فتح لوحة لوحة القيادة الأولية. لا يؤثر على لوحة المعلومات الموجودة المفتوحة بالفعل"
+  },
+  {
     "id": "view_dashboard_src_layerChange",
     "en": "All attributes and values from the displayed features",
     "ar": "جميع السمات والقيم من المعالم المعروضة "
@@ -3776,18 +3806,23 @@
   },
   {
     "id": "view_dashboard_txt_layout",
-    "en": "Initial dashboard layout",
-    "ar": "التخطيط الأولي للوحة القيادة "
+    "en": "Dashboard layout",
+    "ar": "تخطيط لوحة القيادة"
   },
   {
-    "id": "view_dashboard_txt_desc_layout",
+    "id": "view_dashboard_txt_layout_desc",
     "en": "Set the initial dashboard layout",
-    "ar": "قم بتعيين تخطيط لوحة القيادة الأولي "
+    "ar": "قم بتعيين تخطيط لوحة القيادة الأولي"
   },
   {
     "id": "view_dashboard_txt_layout_full",
     "en": "Full size",
     "ar": "الحجم الكامل "
+  },
+  {
+    "id": "view_dashboard_txt_layout_panel_closed",
+    "en": "Panel closed",
+    "ar": "لوحة مغلقة"
   },
   {
     "id": "view_dashboard_txt_layout_fit",
@@ -3835,14 +3870,14 @@
     "ar": "تجاهل الأحداث التي ترجع مصفوفة فارغة؟ "
   },
   {
-    "id": "view_dashboard_txt_which_module",
+    "id": "view_dashboard_txt_module",
     "en": "Which modules to load?",
-    "ar": "ما الوحدات النمطية للتحميل؟ "
+    "ar": "ما الوحدات النمطية للتحميل؟"
   },
   {
-    "id": "view_dashboard_txt_desc_module",
+    "id": "view_dashboard_txt_module_desc",
     "en": "Modules will be loaded under `widget.modules`",
-    "ar": "سيتم تحميل الوحدات ضمن \"widget.modules\" "
+    "ar": "سيتم تحميل الوحدات ضمن \"widget.modules\""
   },
   {
     "id": "view_dashboard_txt_width",

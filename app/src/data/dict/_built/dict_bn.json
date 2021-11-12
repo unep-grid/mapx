@@ -3745,6 +3745,36 @@
     "bn": "আপনার লিপি "
   },
   {
+    "id": "view_dashboard_disable",
+    "en": "Disable this dashboard",
+    "bn": "এই ড্যাশবোর্ড নিষ্ক্রিয় করুন"
+  },
+  {
+    "id": "view_dashboard_disable_desc",
+    "en": "If checked, this will prevent all widgets from this dashboard to be rendered. Useful to quickly unpublish a dashboard : check this option + save a version. Uncheck during development + preview.",
+    "bn": "যদি চেক করা হয়, তাহলে এটি এই উইজেটটিকে রেন্ডার হতে বাধা দেবে। একটি উইজেট দ্রুত অপ্রকাশিত করতে দরকারী: এই বিকল্পটি চেক করুন + একটি সংস্করণ সংরক্ষণ করুন৷ বিকাশ + পূর্বরূপের সময় টিক চিহ্ন সরিয়ে দিন।"
+  },
+  {
+    "id": "view_dashboard_widget_disable",
+    "en": "Disable this widget",
+    "bn": "এই উইজেট নিষ্ক্রিয় করুন"
+  },
+  {
+    "id": "view_dashboard_widget_disable_desc",
+    "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
+    "bn": "চেক করা হলে, এটি এই উইজেটটিকে রেন্ডার হতে বাধা দেবে। একটি উইজেট দ্রুত অপ্রকাশিত করতে দরকারী: এই বিকল্পটি চেক করুন + একটি সংস্করণ সংরক্ষণ করুন৷ বিকাশ + পূর্বরূপের সময় টিক চিহ্ন মুক্ত করুন।"
+  },
+  {
+    "id": "view_dashboard_panel_init_closed",
+    "en": "Keep the dashboard panel closed",
+    "bn": "ড্যাশবোর্ড প্যানেল বন্ধ রাখুন"
+  },
+  {
+    "id": "view_dashboard_panel_init_closed_desc",
+    "en": "If checked, this will prevent the initial dashboard panel to be open. Does not affect existing dashboard already open",
+    "bn": "চেক করা থাকলে, এটি প্রাথমিক ড্যাশবোর্ড প্যানেল খোলা হতে বাধা দেবে। ইতিমধ্যে খোলা বিদ্যমান ড্যাশবোর্ড প্রভাবিত করে না"
+  },
+  {
     "id": "view_dashboard_src_layerChange",
     "en": "All attributes and values from the displayed features",
     "bn": "প্রদর্শিত বৈশিষ্ট্যগুলি থেকে সমস্ত বৈশিষ্ট্য এবং মান "
@@ -3776,18 +3806,23 @@
   },
   {
     "id": "view_dashboard_txt_layout",
-    "en": "Initial dashboard layout",
-    "bn": "প্রাথমিক ড্যাশবোর্ড লেআউট "
+    "en": "Dashboard layout",
+    "bn": "ড্যাশবোর্ড লেআউট"
   },
   {
-    "id": "view_dashboard_txt_desc_layout",
+    "id": "view_dashboard_txt_layout_desc",
     "en": "Set the initial dashboard layout",
-    "bn": "প্রাথমিক ড্যাশবোর্ড লেআউট সেট করুন "
+    "bn": "প্রাথমিক ড্যাশবোর্ড লেআউট সেট করুন"
   },
   {
     "id": "view_dashboard_txt_layout_full",
     "en": "Full size",
     "bn": "পূর্ণ আকার "
+  },
+  {
+    "id": "view_dashboard_txt_layout_panel_closed",
+    "en": "Panel closed",
+    "bn": "প্যানেল বন্ধ"
   },
   {
     "id": "view_dashboard_txt_layout_fit",
@@ -3835,14 +3870,14 @@
     "bn": "এমন ইভেন্টগুলি উপেক্ষা করুন যা খালি অ্যারেটি দেয়? "
   },
   {
-    "id": "view_dashboard_txt_which_module",
+    "id": "view_dashboard_txt_module",
     "en": "Which modules to load?",
-    "bn": "কোন মডিউল লোড করতে হবে? "
+    "bn": "কোন মডিউল লোড করতে?"
   },
   {
-    "id": "view_dashboard_txt_desc_module",
+    "id": "view_dashboard_txt_module_desc",
     "en": "Modules will be loaded under `widget.modules`",
-    "bn": "মডিউলগুলি `উইজেট.মোডিউলস` এর অধীনে লোড করা হবে` "
+    "bn": "মডিউলগুলি `widget.modules` এর অধীনে লোড করা হবে"
   },
   {
     "id": "view_dashboard_txt_width",

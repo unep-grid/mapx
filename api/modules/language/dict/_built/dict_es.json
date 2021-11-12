@@ -3745,6 +3745,36 @@
     "es": "Vuestro script"
   },
   {
+    "id": "view_dashboard_disable",
+    "en": "Disable this dashboard",
+    "es": "Deshabilitar este panel"
+  },
+  {
+    "id": "view_dashboard_disable_desc",
+    "en": "If checked, this will prevent all widgets from this dashboard to be rendered. Useful to quickly unpublish a dashboard : check this option + save a version. Uncheck during development + preview.",
+    "es": "Si se marca, esto evitará que se procese este widget. Útil para anular la publicación de un widget rápidamente: marque esta opción + guarde una versión. Desmarque durante el desarrollo + vista previa."
+  },
+  {
+    "id": "view_dashboard_widget_disable",
+    "en": "Disable this widget",
+    "es": "Desactivar este widget"
+  },
+  {
+    "id": "view_dashboard_widget_disable_desc",
+    "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
+    "es": "Si se marca, esto evitará que se procese este widget. Útil para anular la publicación de un widget rápidamente: marque esta opción + guarde una versión. Desmarque durante el desarrollo + vista previa."
+  },
+  {
+    "id": "view_dashboard_panel_init_closed",
+    "en": "Keep the dashboard panel closed",
+    "es": "Mantenga el panel del tablero cerrado"
+  },
+  {
+    "id": "view_dashboard_panel_init_closed_desc",
+    "en": "If checked, this will prevent the initial dashboard panel to be open. Does not affect existing dashboard already open",
+    "es": "Si se marca, esto evitará que se abra el panel del tablero inicial. No afecta el panel de control existente que ya está abierto"
+  },
+  {
     "id": "view_dashboard_src_layerChange",
     "en": "All attributes and values from the displayed features",
     "es": "Todos los atributos y valores de los objetos mostrados"
@@ -3776,18 +3806,23 @@
   },
   {
     "id": "view_dashboard_txt_layout",
-    "en": "Initial dashboard layout",
-    "es": "Diseño del tablero inicial "
+    "en": "Dashboard layout",
+    "es": "Diseño del tablero"
   },
   {
-    "id": "view_dashboard_txt_desc_layout",
+    "id": "view_dashboard_txt_layout_desc",
     "en": "Set the initial dashboard layout",
-    "es": "Establecer el diseño del tablero inicial "
+    "es": "Establecer el diseño del tablero inicial"
   },
   {
     "id": "view_dashboard_txt_layout_full",
     "en": "Full size",
     "es": "Tamaño completo "
+  },
+  {
+    "id": "view_dashboard_txt_layout_panel_closed",
+    "en": "Panel closed",
+    "es": "Panel cerrado"
   },
   {
     "id": "view_dashboard_txt_layout_fit",
@@ -3835,12 +3870,12 @@
     "es": "Ignorar los eventos que devuelven una orden vacía"
   },
   {
-    "id": "view_dashboard_txt_which_module",
+    "id": "view_dashboard_txt_module",
     "en": "Which modules to load?",
     "es": "Qué módulo cargar?"
   },
   {
-    "id": "view_dashboard_txt_desc_module",
+    "id": "view_dashboard_txt_module_desc",
     "en": "Modules will be loaded under `widget.modules`",
     "es": "Los módulo estarán disponsibles en `widget.modules`"
   },

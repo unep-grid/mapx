@@ -20,7 +20,6 @@ export * from './mx_helper_map_draw.js';
 export * from './mx_helper_ui_color.js';
 export * from './mx_helper_story.js';
 export * from './mx_helper_draggable.js';
-export * from './mx_helper_dashboard.js';
 export * from './mx_helper_map_pixop.js';
 export * from './mx_helper_map_composer.js';
 export * from './mx_helper_map_dragdrop.js';
@@ -39,7 +38,6 @@ export * from './mx_helper_canvas.js';
 export * from './mx_helper_jed.js';
 export * from './mx_helper_epsgio.js';
 export * from './mx_helper_filter_views.js';
-export * from './mx_helper_module_loader.js';
 export * from './mx_helper_source_attribute_table.js';
 export * from './mx_helper_source_summary.js';
 export * from './mx_helper_fetch_progress.js';
@@ -53,6 +51,7 @@ export * from './mx_helper_legend_vt.js';
 /**
  * imported module available in mx.helpers
  */
+export * from './modules_loader_async/index.js';
 export * from './animation_frame/index.js';
 export * from './array_stat/index.js';
 export * from './color_utils/index.js';

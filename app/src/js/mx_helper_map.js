@@ -16,12 +16,12 @@ import {cleanDiacritic} from './string_util/';
 import chroma from 'chroma-js';
 import {mirrorUrlCreate} from './mirror_util';
 import {setBusy} from './mx_helper_misc.js';
-import {modal,modalGetAll,modalCloseAll} from './mx_helper_modal.js';
-import {errorHandler} from './error_handler/index.js'
+import {modal, modalGetAll, modalCloseAll} from './mx_helper_modal.js';
+import {errorHandler} from './error_handler/index.js';
 
 /**
- * Convert point in  degrees to meter 
- * @lngLat {PointLike} lngLat 
+ * Convert point in  degrees to meter
+ * @lngLat {PointLike} lngLat
  * @return {PointLike} reprojected point
  */
 export function degreesToMeters(lngLat) {
@@ -37,7 +37,7 @@ export function degreesToMeters(lngLat) {
 
 /**
  * Convert point in meter to degrees
- * @lngLat {PointLike} lngLat 
+ * @lngLat {PointLike} lngLat
  * @return {PointLike} reprojected point
  */
 export function metersToDegrees(point) {
@@ -1642,7 +1642,7 @@ export async function addSourceFromView(o) {
 
   if (isRt && useMirror) {
     const tiles = source.tiles;
-    for (let i = 0, iL = tiles.length ; i < iL; i++) {
+    for (let i = 0, iL = tiles.length; i < iL; i++) {
       tiles[i] = mirrorUrlCreate(tiles[i]);
     }
   }
@@ -2571,6 +2571,11 @@ export async function makeDashboard(o) {
     return;
   }
 
+  if(config.disabled){
+    console.warn('Dashboard disabled');
+    return;
+  }
+
   /*
    * Modules should array of string. In older version, single string was an option
    */
@@ -2585,8 +2590,12 @@ export async function makeDashboard(o) {
    * individual widgets stored in view (._widgets)
    */
   const Dashboard = await h.moduleLoad('dashboard');
+  const hasStory = h.isStoryPlaying();
   const hasDashboard =
     mx.dashboard instanceof Dashboard && !mx.dashboard.isDestroyed();
+
+  
+
 
   if (!hasDashboard) {
     /**
@@ -2613,7 +2622,11 @@ export async function makeDashboard(o) {
         button_text: 'dashboard',
         button_lang_key: 'button_dashboard_panel',
         button_classes: ['fa', 'fa-pie-chart'],
-        position: 'bottom-right'
+        position: 'bottom-right',
+        container_style: {
+          minWidth: '100px',
+          minHeight: '100px'
+        }
       }
     });
 
@@ -2658,22 +2671,27 @@ export async function makeDashboard(o) {
         d.fitPanelToWidgetsHeight();
       }
     });
+
+    const keepClose = hasStory || config.panel_init_close === true;
+
+    if (!keepClose) {
+      mx.dashboard.show();
+    }
   }
 
-  const widgets = await mx.dashboard.addWidgetsAsync({
+  view._widgets = await mx.dashboard.addWidgetsAsync({
     widgets: config.widgets,
     modules: config.modules,
     view: view,
     map: map
   });
+  
+  /** 
+  * If no widged rendered or all disabled, destroy
+  */ 
+  mx.dashboard.autoDestroy();
 
-  view._widgets = widgets;
-  const hasStory = h.isStoryPlaying();
-  if (hasStory) {
-    mx.dashboard.hide();
-  } else {
-    mx.dashboard.show();
-  }
+
 }
 
 /**
@@ -4732,52 +4750,51 @@ export async function viewFilterToolsInit(id, opt) {
 /**
  * Clean stored modules : dashboard, custom view, etc.
  */
-export function viewModulesRemove(view) {
+export async function viewModulesRemove(view) {
   const h = mx.helpers;
-  return new Promise((resolve) => {
-    view = h.isViewId(view) ? h.getView(view) : view;
 
-    if (!h.isView(view)) {
-      resolve(true);
-    }
-    const it = view._filters_tools || {};
-    delete view._filters_tools;
+  view = h.isViewId(view) ? h.getView(view) : view;
 
-    if (h.isFunction(view._onRemoveCustomView)) {
-      view._onRemoveCustomView();
-    }
-    if (h.isElement(view._elLegend)) {
-      view._elLegend.remove();
-    }
-
-    if (h.isArray(view._widgets)) {
-      view._widgets.forEach((w) => {
-        w.destroy();
-      });
-      if (mx.dashboard && mx.dashboard.widgets.length === 0) {
-        mx.dashboard.destroy();
-      }
-    }
-    if (view._miniMap) {
-      view._miniMap.destroy();
-    }
-
-    if (it) {
-      if (it.searchBox) {
-        it.searchBox.destroy();
-      }
-      if (it.transparencySlider) {
-        it.transparencySlider.destroy();
-      }
-      if (it.numericSlider) {
-        it.numericSlider.destroy();
-      }
-      if (it.timeSlider) {
-        it.timeSlider.destroy();
-      }
-    }
+  if (!h.isView(view)) {
     resolve(true);
-  });
+  }
+  const it = view._filters_tools || {};
+  delete view._filters_tools;
+
+  if (h.isFunction(view._onRemoveCustomView)) {
+    view._onRemoveCustomView();
+  }
+  if (h.isElement(view._elLegend)) {
+    view._elLegend.remove();
+  }
+
+  if (h.isArray(view._widgets)) {
+    for (const widget of view._widgets) {
+      widget.destroy();
+    }
+    if (mx.dashboard && mx.dashboard.widgets.length === 0) {
+      mx.dashboard.destroy();
+    }
+  }
+  if (view._miniMap) {
+    view._miniMap.destroy();
+  }
+
+  if (it) {
+    if (it.searchBox) {
+      it.searchBox.destroy();
+    }
+    if (it.transparencySlider) {
+      it.transparencySlider.destroy();
+    }
+    if (it.numericSlider) {
+      it.numericSlider.destroy();
+    }
+    if (it.timeSlider) {
+      it.timeSlider.destroy();
+    }
+  }
+  return true;
 }
 
 export function viewsModulesRemove(views) {

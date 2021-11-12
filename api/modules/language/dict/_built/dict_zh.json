@@ -3745,6 +3745,36 @@
     "zh": "你的脚本"
   },
   {
+    "id": "view_dashboard_disable",
+    "en": "Disable this dashboard",
+    "zh": "禁用此仪表板"
+  },
+  {
+    "id": "view_dashboard_disable_desc",
+    "en": "If checked, this will prevent all widgets from this dashboard to be rendered. Useful to quickly unpublish a dashboard : check this option + save a version. Uncheck during development + preview.",
+    "zh": "如果选中，这将阻止呈现此小部件。用于快速取消发布小部件：选中此选项 + 保存版本。在开发 + 预览期间取消选中。"
+  },
+  {
+    "id": "view_dashboard_widget_disable",
+    "en": "Disable this widget",
+    "zh": "禁用此小部件"
+  },
+  {
+    "id": "view_dashboard_widget_disable_desc",
+    "en": "If checked, this will prevent this widget to be rendered. Useful to quickly unpublish a widget : check this option + save a version. Uncheck during development + preview.",
+    "zh": "如果选中，这将阻止呈现此小部件。用于快速取消发布小部件：选中此选项 + 保存版本。在开发 + 预览期间取消选中。"
+  },
+  {
+    "id": "view_dashboard_panel_init_closed",
+    "en": "Keep the dashboard panel closed",
+    "zh": "保持仪表板关闭"
+  },
+  {
+    "id": "view_dashboard_panel_init_closed_desc",
+    "en": "If checked, this will prevent the initial dashboard panel to be open. Does not affect existing dashboard already open",
+    "zh": "如果选中，这将阻止打开初始仪表板面板。不影响已经打开的现有仪表板"
+  },
+  {
     "id": "view_dashboard_src_layerChange",
     "en": "All attributes and values from the displayed features",
     "zh": "已显示要素的所有属性和值"
@@ -3776,11 +3806,11 @@
   },
   {
     "id": "view_dashboard_txt_layout",
-    "en": "Initial dashboard layout",
-    "zh": "初始化操控版布局"
+    "en": "Dashboard layout",
+    "zh": "仪表盘布局"
   },
   {
-    "id": "view_dashboard_txt_desc_layout",
+    "id": "view_dashboard_txt_layout_desc",
     "en": "Set the initial dashboard layout",
     "zh": "设置操控版初始布局"
   },
@@ -3788,6 +3818,11 @@
     "id": "view_dashboard_txt_layout_full",
     "en": "Full size",
     "zh": "最大尺寸"
+  },
+  {
+    "id": "view_dashboard_txt_layout_panel_closed",
+    "en": "Panel closed",
+    "zh": "面板关闭"
   },
   {
     "id": "view_dashboard_txt_layout_fit",
@@ -3835,12 +3870,12 @@
     "zh": "忽略返回空数组的事件？"
   },
   {
-    "id": "view_dashboard_txt_which_module",
+    "id": "view_dashboard_txt_module",
     "en": "Which modules to load?",
     "zh": "加载哪些模块？"
   },
   {
-    "id": "view_dashboard_txt_desc_module",
+    "id": "view_dashboard_txt_module_desc",
     "en": "Modules will be loaded under `widget.modules`",
     "zh": "模块将被加载到 widget.modules 下"
   },
