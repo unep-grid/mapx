@@ -1,3 +1,12 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.31-alpha.0' target='_blank'>1.9.31-alpha.0</a>
+   - APP 
+    - Added option to enable / disable widget and dashboard + modified UX accordingly
+    - Modified Ace editor for json-editor : no wrap + transformed to await/async.
+    - New default value for widget : more complete example, more verbose. 
+    - Quick change for el module : handle SVG nodes.
+    - Removed default link in mirror utilities and use a tile server link and add a placeholder with {z}/{x}/{y} template as demo  
+   - API
+    - Fix bug with email sending (double quote not valid in subject)
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.30' target='_blank'>1.9.30</a>
    - API
     - Added mirror api rate limits in env file 
