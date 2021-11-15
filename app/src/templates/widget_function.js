@@ -92,7 +92,7 @@ return {
      * Callback called once when the widget is removed or errored
      *  
      */
-    onRemove: function(widget) {
+    onRemove: async function(widget) {
         widget._svg.remove();
         console.log('removed');
     },
@@ -101,13 +101,13 @@ return {
      * Callback called each time data is received
      * 
      */
-    onData: function(widget, data) {
+    onData: async function(widget, data) {
         /**
          * Do something with the data:
          * - Update sizes, text, etc...
          */
         console.log('data received', data);
-        widget._txt.textContent = 'data!'
+        const l = data.length;
+        widget._txt.textContent = `Received ${l} item${l>1?'s':''}`
     }
 };
-

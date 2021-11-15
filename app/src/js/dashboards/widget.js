@@ -14,10 +14,10 @@ const defaults = {
     width: 'x50',
     height: 'y50',
     addColorBackground: false,
-    colorBackground: '#fff',
+    colorBackground: '#000000',
     sourceIgnoreEmpty: true,
     script:
-      'return { onAdd:console.log, onRemove:console.log, onData:console.log}'
+      'return { async onAdd:console.log, async onRemove:console.log, async onData:console.log}'
   },
   language: 'en',
   map: null,
@@ -66,13 +66,17 @@ class Widget {
      * Eval the script, dump error in console
      */
     try {
-      const register = await widget.strToObj(widget.opt.conf.script);
-      for (var r in register) {
+      const register = widget.strToObj(widget.opt.conf.script);
+      /**
+       * Copy cb as widget method
+       */
+
+      for (const r in register) {
         widget[r] = register[r];
       }
       widget.modules = path(widget.opt, 'dashboard.modules', {});
-      widget.add();
-      widget.setUpdateDataMethod();
+      await widget.add();
+      await widget.setUpdateDataMethod();
     } catch (e) {
       console.error(e);
       widget.destroy();
@@ -87,30 +91,40 @@ class Widget {
   /**
    * Update widget data using attributes
    */
-  updateDataFromAttribute() {
-    const widget = this;
-    var d = path(widget.opt, 'view.data.attribute.table', []);
-    widget.setData(d);
+  async updateDataFromAttribute() {
+    try {
+      const widget = this;
+      var d = path(widget.opt, 'view.data.attribute.table', []);
+      await widget.setData(d);
+    } catch (e) {
+      console.error('Error update data from attribute', e);
+    }
   }
 
   /**
    * Update widget data after a click
    */
-  updateDataFromLayerAtMousePosition(e) {
-    const widget = this;
-    widget.getWidgetDataFromLinkedView(e).then(function(data) {
-      widget.setData(data);
-    });
+  async updateDataFromLayerAtMousePosition(e) {
+    try {
+      const widget = this;
+      const data = await widget.getWidgetDataFromLinkedView(e);
+      await widget.setData(data);
+    } catch (e) {
+      console.error('Error update data at mouse position', e);
+    }
   }
 
   /**
    * Update widget data after any map rendering
    */
-  updateDataFromLayerOnRender() {
-    const widget = this;
-    widget.getWidgetDataFromLinkedView().then((data) => {
-      widget.setData(data);
-    });
+  async updateDataFromLayerOnRender() {
+    try {
+      const widget = this;
+      const data = widget.getWidgetDataFromLinkedView();
+      await widget.setData(data);
+    } catch (e) {
+      console.error('Error update data at layer render', e);
+    }
   }
 
   /**
@@ -134,17 +148,16 @@ class Widget {
   }
   /**
    * Instantiate widget method for setting data
+   * NOTE: updateData* function are async. Make sure it's try/catched.
    */
-  setUpdateDataMethod() {
+  async setUpdateDataMethod() {
     const widget = this;
     const map = widget.opt.map;
-
     switch (widget.opt.conf.source) {
       case 'none':
-        widget.setData();
         break;
       case 'viewFreqTable':
-        widget.updateDataFromAttribute();
+        await widget.updateDataFromAttribute();
         break;
       case 'layerChange':
         widget.ls.addListener({
@@ -238,10 +251,10 @@ class Widget {
     );
   }
 
-  add() {
+  async add() {
     const widget = this;
     const grid = widget.grid;
-    widget.onAdd(widget);
+    await widget.onAdd(widget);
     widget.ls.addListener({
       target: widget.elButtonClose,
       bind: widget,
@@ -342,44 +355,45 @@ class Widget {
     widget.elContent.innerHTML = c;
   }
 
-  setData(d) {
+  async setData(d) {
     const widget = this;
+    if(widget._destroyed){
+      return;
+    }
     const hasData = !isEmpty(d);
     const ignoreEmptyData = widget.opt.conf.sourceIgnoreEmpty;
     const triggerOnData = hasData || (!hasData && !ignoreEmptyData);
     if (triggerOnData) {
-      widget.data = hasData ? d : [];
-      widget.onData(widget, widget.data);
+      widget.data = hasData ? await d : [];
+      await widget.onData(widget, widget.data);
     }
   }
 
   strToObj(str) {
-    const w = this;
-    return new Promise(function(resolve, reject) {
-      var r = {};
-      if (str) {
-        r = new Function(str)();
+    try {
+      const w = this;
+      const r = new Function(str)();
+      for (const f in r) {
+        const rBinded = r[f].bind(w);
+        const skipIfOnRemove = f === 'onRemove';
+        r[f] = w.tryCatched(rBinded, skipIfOnRemove);
       }
-      if (r) {
-        for (var f in r) {
-          var rBinded = r[f].bind(w);
-          r[f] = w.tryCatched(rBinded, f === 'onRemove');
-        }
-        resolve(r);
-      } else {
-        reject(`strToObj failed. Script = ${str}`);
-      }
-    });
+      return r;
+    } catch (e) {
+      console.warn(`strToObj failed. Script = ${str}`);
+      // pass error further.
+      throw e;
+    }
   }
 
-  tryCatched(fun, skipOnRemove) {
+  tryCatched(fun, skipDestroy) {
     const widget = this;
-    return function(...args) {
+    return async function(...args) {
       try {
-        return fun(...args);
+        return await fun(...args);
       } catch (e) {
         console.error(e);
-        widget.destroy(skipOnRemove);
+        widget.destroy(skipDestroy);
       }
     };
   }

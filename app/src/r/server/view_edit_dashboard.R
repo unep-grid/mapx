@@ -174,7 +174,7 @@ observeEvent(input$dashboardEdit_init,{
                   title = t("view_dashboard_txt_width"),
                   type = "string",
                   enum = widgetSizesValues,
-                  default = widgetSizesValues[[2]],
+                  default = widgetSizesValues[[4]],
                   options = list(
                     enum_titles = widgetSizesLabels
                   )
@@ -198,7 +198,7 @@ observeEvent(input$dashboardEdit_init,{
                   title = t("view_dashboard_txt_color_background"),
                   type = "string",
                   format = "color",
-                  default = "#fff"
+                  default = "#000000"
                   ),
                 `script` = list(
                   title = t("view_dashboard_script"),

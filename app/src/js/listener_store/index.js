@@ -66,6 +66,7 @@ class ListenerStore {
     }
     opt.target = opt.target || document.window;
     opt.debounce = opt.debounce === true;
+    
     if (opt.throttle) {
       opt.callback = li.throttle(opt.callback, {
         bind: opt.bind || li,
