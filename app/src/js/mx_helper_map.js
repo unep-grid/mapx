@@ -2571,7 +2571,7 @@ export async function makeDashboard(o) {
     return;
   }
 
-  if(config.disabled){
+  if (config.disabled) {
     console.warn('Dashboard disabled');
     return;
   }
@@ -2590,12 +2590,13 @@ export async function makeDashboard(o) {
    * individual widgets stored in view (._widgets)
    */
   const Dashboard = await h.moduleLoad('dashboard');
-  const hasStory = h.isStoryPlaying();
+  const storyDashboardMode = h.getStoryDashboardMode();
   const hasDashboard =
     mx.dashboard instanceof Dashboard && !mx.dashboard.isDestroyed();
 
-  
-
+  if (storyDashboardMode === 'disabled') {
+    return;
+  }
 
   if (!hasDashboard) {
     /**
@@ -2672,10 +2673,24 @@ export async function makeDashboard(o) {
       }
     });
 
-    const keepClose = hasStory || config.panel_init_close === true;
-
-    if (!keepClose) {
-      mx.dashboard.show();
+    /**
+     * Should the panel be automatically open ?
+     * - If storymap prevent it, no
+     * - If storymap request it, yes
+     * - By default, yes, unless dashboard
+     *   configuration says otherwise.
+     */
+    switch (storyDashboardMode) {
+      case 'closed':
+        break;
+      case 'open':
+        mx.dashboard.show();
+        break;
+      case 'inherit':
+      default:
+        if (!config.panel_init_close) {
+          mx.dashboard.show();
+        }
     }
   }
 
@@ -2685,13 +2700,12 @@ export async function makeDashboard(o) {
     view: view,
     map: map
   });
-  
-  /** 
-  * If no widged rendered or all disabled, destroy
-  */ 
+
+  /**
+   * If no widged rendered or all disabled, destroy
+   */
+
   mx.dashboard.autoDestroy();
-
-
 }
 
 /**

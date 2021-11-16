@@ -3170,6 +3170,41 @@
     "zh": "组织名称"
   },
   {
+    "id": "story_dashboard_panel_handling",
+    "en": "Dashboards display mode",
+    "zh": "如果选定的视图具有关联的仪表板，它们应该如何呈现？"
+  },
+  {
+    "id": "story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
+    "zh": "如果选定的视图具有关联的仪表板，它应该如何呈现？"
+  },
+  {
+    "id": "story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
+    "zh": "如果选定的视图具有关联的仪表板，它应该如何全局呈现？覆盖在所有步骤配置中设置的仪表板行为。"
+  },
+  {
+    "id": "schema_story_dashboard_panel_inherit",
+    "en": "Inherit (default)",
+    "zh": "继承（默认）"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel",
+    "zh": "打开仪表板面板"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel",
+    "zh": "关闭仪表板面板"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards",
+    "zh": "不呈现仪表板"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "zh": "使用当前地图参数更新"
@@ -5256,8 +5291,8 @@
   },
   {
     "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "zh": "“ 3d地形”将使高程以3维显示。在相机倾斜的情况下进行高变焦时很有用。使用控制键和鼠标修改音高和方位。 "
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "zh": "“3d 地形”将使高程显示为 3 维。这在高变焦时很有用，相机倾斜。使用您的控制键和鼠标来修改俯仰和方位。"
   },
   {
     "id": "schema_story_screen_res_desc",

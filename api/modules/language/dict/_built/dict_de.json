@@ -3170,6 +3170,41 @@
     "de": "Name der Organisation "
   },
   {
+    "id": "story_dashboard_panel_handling",
+    "en": "Dashboards display mode",
+    "de": "Wenn ausgewählte Ansichten über verknüpfte Dashboards verfügen, wie sollen diese gerendert werden?"
+  },
+  {
+    "id": "story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
+    "de": "Wenn ausgewählte Ansichten über ein zugehöriges Dashboard verfügen, wie sollte es gerendert werden?"
+  },
+  {
+    "id": "story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
+    "de": "Wenn ausgewählte Ansichten über ein zugehöriges Dashboard verfügen, wie sollte es global gerendert werden? Überschreibt das in allen Schrittkonfigurationen festgelegte Dashboard-Verhalten."
+  },
+  {
+    "id": "schema_story_dashboard_panel_inherit",
+    "en": "Inherit (default)",
+    "de": "Vererben (Standard)"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel",
+    "de": "Öffnen Sie das Dashboard-Panel"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel",
+    "de": "Schließen Sie das Armaturenbrett"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards",
+    "de": "Dashboards nicht rendern"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "de": "Aktualisieren Sie mit den aktuellen Kartenparametern "
@@ -5256,8 +5291,8 @@
   },
   {
     "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "de": "Das '3D-Gelände' lässt die Höhe in 3 Dimensionen erscheinen. Dies ist nützlich bei hohem Zoom bei geneigter Kamera. Verwenden Sie Ihre Steuertaste und Ihre Maus, um die Steigung und Peilung zu ändern. "
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "de": "Das '3D-Gelände' lässt die Höhe in 3 Dimensionen erscheinen. Dies ist nützlich bei hohem Zoom, wenn die Kamera geneigt ist. Verwenden Sie Ihre Steuerungstaste und Ihre Maus, um die Tonhöhe und die Peilung zu ändern."
   },
   {
     "id": "schema_story_screen_res_desc",

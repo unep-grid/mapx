@@ -3170,6 +3170,41 @@
     "fa": "نام سازمان"
   },
   {
+    "id": "story_dashboard_panel_handling",
+    "en": "Dashboards display mode",
+    "fa": "اگر نمای(های) انتخاب شده دارای داشبوردهای مرتبط باشد، چگونه باید رندر شوند؟"
+  },
+  {
+    "id": "story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
+    "fa": "اگر نمای(های) انتخاب شده دارای داشبورد مرتبط باشد، چگونه باید ارائه شود؟"
+  },
+  {
+    "id": "story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
+    "fa": "اگر نمای(های) انتخاب شده دارای داشبورد مرتبط باشد، چگونه باید به صورت سراسری ارائه شود؟ مجموعه رفتار داشبورد را در تمام پیکربندی‌های مراحل بازنویسی می‌کند."
+  },
+  {
+    "id": "schema_story_dashboard_panel_inherit",
+    "en": "Inherit (default)",
+    "fa": "ارث بری (پیش فرض)"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel",
+    "fa": "پنل داشبورد را باز کنید"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel",
+    "fa": "پنل داشبورد را ببندید"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards",
+    "fa": "داشبوردها را رندر نکنید"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "fa": "تجدید با استفاده از پارامتر های موجود"
@@ -5256,8 +5291,8 @@
   },
   {
     "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "fa": "\"زمین سه بعدی\" باعث می شود که ارتفاع در 3 بعد ظاهر شود. این در حالی است که دوربین کج است و در بزرگنمایی زیاد مفید است. با استفاده از کلید کنترل و موس خود ، پیچ و بلبرینگ را تغییر دهید. "
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "fa": "\"زمین سه بعدی\" باعث می شود ارتفاع در 3 بعد ظاهر شود. این در زوم بالا، با کج شدن دوربین مفید است. از کلید کنترل و موس خود برای تغییر گام و بلبرینگ استفاده کنید."
   },
   {
     "id": "schema_story_screen_res_desc",

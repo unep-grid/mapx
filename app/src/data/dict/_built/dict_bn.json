@@ -3170,6 +3170,41 @@
     "bn": "অর্গানাইজেশন নাম "
   },
   {
+    "id": "story_dashboard_panel_handling",
+    "en": "Dashboards display mode",
+    "bn": "যদি নির্বাচিত দৃশ্য(গুলি) এর সাথে যুক্ত ড্যাশবোর্ড থাকে, তাহলে সেগুলি কীভাবে রেন্ডার করা উচিত?"
+  },
+  {
+    "id": "story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
+    "bn": "যদি নির্বাচিত দৃশ্য(গুলি) এর সাথে যুক্ত ড্যাশবোর্ড থাকে, তাহলে এটি কীভাবে রেন্ডার করা উচিত?"
+  },
+  {
+    "id": "story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
+    "bn": "যদি নির্বাচিত দৃশ্য(গুলি) এর সাথে যুক্ত ড্যাশবোর্ড থাকে, তাহলে এটি কীভাবে বিশ্বব্যাপী রেন্ডার করা উচিত? সমস্ত ধাপ কনফিগারেশনে সেট করা ড্যাশবোর্ড আচরণ ওভাররাইট করে।"
+  },
+  {
+    "id": "schema_story_dashboard_panel_inherit",
+    "en": "Inherit (default)",
+    "bn": "উত্তরাধিকারী (ডিফল্ট)"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel",
+    "bn": "ড্যাশবোর্ড প্যানেল খুলুন"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel",
+    "bn": "ড্যাশবোর্ড প্যানেল বন্ধ করুন"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards",
+    "bn": "ড্যাশবোর্ড রেন্ডার করবেন না"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "bn": "বর্তমান মানচিত্রের পরামিতিগুলি ব্যবহার করে আপডেট করুন "
@@ -5256,8 +5291,8 @@
   },
   {
     "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "bn": "'3 ডি অঞ্চল' উচ্চতা 3 মাত্রায় প্রদর্শিত হবে। এটি উচ্চ জুমে ব্যবহারযোগ্য, ক্যামেরাটি কাত করে দেওয়া হয়েছে। পিচ এবং ভারবহন পরিবর্তন করতে আপনার নিয়ন্ত্রণ কী এবং আপনার মাউস ব্যবহার করুন। "
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "bn": "'3d ভূখণ্ড' উচ্চতাকে 3 মাত্রায় দেখাবে। ক্যামেরা কাত হয়ে উচ্চ জুমে এটি উপযোগী। পিচ এবং বিয়ারিং পরিবর্তন করতে আপনার নিয়ন্ত্রণ কী এবং আপনার মাউস ব্যবহার করুন।"
   },
   {
     "id": "schema_story_screen_res_desc",

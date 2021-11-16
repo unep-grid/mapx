@@ -73,6 +73,19 @@ export function isStoryPlaying() {
 }
 
 /**
+ * Check if a story is playing
+ * @return {String}
+ */
+export function getStoryDashboardMode() {
+  const h = mx.helpers;
+  const isNotPlaying = !h.isStoryPlaying();
+  if (isNotPlaying) {
+    return;
+  }
+  return h.path(mx, 'data.story.data._dashboard_behaviour', null);
+}
+
+/**
  * Close current story if any.
  */
 export function storyClose() {
@@ -220,29 +233,28 @@ async function setLocalViews(o) {
 /**
  * Add controller and build UI
  */
-function setUi(o) {
-  return new Promise(function(resolve) {
-    /* display story controls */
-    mx.helpers.storyController(o);
+async function setUi(o) {
+  const h = mx.helpers;
+  /* display story controls */
+  h.storyController(o);
 
-    /* Save data object */
-    mx.data.story = o;
+  /* Save data object */
+  mx.data.story = o;
 
-    /* Generate story ui */
-    mx.helpers.storyBuild(o);
+  /* Generate story ui */
+  h.storyBuild(o);
 
-    /* Alter wrapper class */
-    o.data.classWrapper =
-      mx.helpers.path(o.view, 'data.story.settings.class_wrapper') ||
-      'mx-story-screen-720p';
+  /* Alter wrapper class */
+  o.data.classWrapper =
+    h.path(o.view, 'data.story.settings.class_wrapper') ||
+    'mx-story-screen-720p';
 
-    if (o.data.classWrapper) {
-      initAdaptiveScreen(o);
-    }
+  if (o.data.classWrapper) {
+    initAdaptiveScreen(o);
+  }
 
-    /* Return options */
-    resolve(o);
-  });
+  /* Return options */
+  return o;
 }
 
 /**
@@ -1426,6 +1438,7 @@ export function storyPlayStep(o) {
   const h = mx.helpers;
   const steps = h.path(o, 'view.data.story.steps', []);
   const data = h.path(mx.data, 'story.data', {});
+  const settings = h.path(o, 'view.data.story.settings', {});
   const elLegendContainer = o.elLegendContainer;
   const stepNum = o.stepNum;
   const m = h.getMapData();
@@ -1452,30 +1465,25 @@ export function storyPlayStep(o) {
    * Set base map mode
    */
   if (step.base_layer) {
-    if (step.base_layer.add_aerial) {
-      data.ctrlAerial.action('show');
-    } else {
-      data.ctrlAerial.action('hide');
-    }
-    if (step.base_layer.add_3d_terrain) {
-      data.ctrlMode3d.action('show');
-    } else {
-      data.ctrlMode3d.action('hide');
-    }
+    const actionAerial = step.base_layer.add_aerial ? 'show' : 'hide';
+    const actionTerrain = step.base_layer.add_3d_terrain ? 'show' : 'hide';
+    data.ctrlAerial.action(actionAerial);
+    data.ctrlMode3d.action(actionTerrain);
   }
 
   /**
    * Fly to position
    */
   if (anim.method === 'fitBounds') {
-    if (pos.s && pos.n && pos.e && pos.w) {
-      m.map.fitBounds([pos.w, pos.s, pos.e, pos.n]);
-      m.map.once('moveend', function() {
-        m.map.easeTo({pitch: 0.0});
-      });
-    } else {
-      throw new Error('Missing position to fitbounds');
+    for (const p of ['w', 'e', 's', 'n']) {
+      if (h.isEmpty(pos[p])) {
+        throw new Error(`Missing position ${p} to fitbounds`);
+      }
     }
+    m.map.fitBounds([pos.w, pos.s, pos.e, pos.n]);
+    m.map.once('moveend', function() {
+      m.map.easeTo({pitch: 0.0});
+    });
   } else {
     m.map[anim.method]({
       duration: anim.duration,
@@ -1485,6 +1493,21 @@ export function storyPlayStep(o) {
       pitch: pos.pitch,
       center: [pos.lng, pos.lat]
     });
+  }
+
+  /**
+   * Set dashboard behaviour
+   */
+  const dDefault = 'inherit';
+  const dGlobal = h.path(settings, 'dashboards_panel_behaviour', null);
+  const dStep = h.path(step, 'dashboards_panel_behaviour', null);
+
+  if (dGlobal && dGlobal !== dDefault) {
+    data._dashboard_behaviour = dGlobal;
+  } else if (dStep && dStep !== dDefault) {
+    data._dashboard_behaviour = dStep;
+  } else {
+    data._dashboard_behaviour = dDefault;
   }
 
   /**

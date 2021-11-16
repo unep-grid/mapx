@@ -3170,6 +3170,41 @@
     "ps": "د سازمان نوم"
   },
   {
+    "id": "story_dashboard_panel_handling",
+    "en": "Dashboards display mode",
+    "ps": "که چیرې ټاکل شوي لیدونه اړوند ډشبورډونه ولري، نو دوی باید څنګه وړاندې شي؟"
+  },
+  {
+    "id": "story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
+    "ps": "که چیرې ټاکل شوي لیدونه اړوند ډشبورډ ولري، دا باید څنګه وړاندې شي؟"
+  },
+  {
+    "id": "story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
+    "ps": "که ټاکل شوي لیدونه یو تړلی ډشبورډ ولري، دا باید په نړیواله کچه څنګه وړاندې شي؟ د ډشبورډ چلند په ټولو مرحلو ترتیبونو کې تنظیم شوی له سره لیکي."
+  },
+  {
+    "id": "schema_story_dashboard_panel_inherit",
+    "en": "Inherit (default)",
+    "ps": "میراث (ډیفالټ)"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel",
+    "ps": "د ډشبورډ پینل خلاص کړئ"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel",
+    "ps": "د ډشبورډ پینل بند کړئ"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards",
+    "ps": "ډشبورډونه مه ورکوئ"
+  },
+  {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",
     "ps": "د اوسنۍ نقشې پارامترونه آپډیټ کړئ"
@@ -5256,8 +5291,8 @@
   },
   {
     "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "ps": "د 3d خاوره به لوړوالی په 3 ابعادو کې څرګند شي. دا په لوړ زوم کې ګټور دی ، د کیمرې سره ټیل شوی. د کنټرول کیلي او ماوس د پیچ او بیرنگ بدلولو لپاره وکاروئ. "
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "ps": "'3d خاوره' به لوړوالی په 3 ابعادو کې څرګند کړي. دا په لوړ زوم کې ګټور دی، د کیمرې سره ټیک شوی. خپل د کنټرول کیلي او خپل موږک وکاروئ د پچ او بییرنګ بدلولو لپاره."
   },
   {
     "id": "schema_story_screen_res_desc",

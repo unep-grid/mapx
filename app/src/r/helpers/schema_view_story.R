@@ -19,6 +19,59 @@ mxSchemaViewStory <- function(view,views,language){
 
   mxCounter(reset=T)
 
+
+  #
+  # Settings page resolution
+  #
+  settingsPageClass = list(
+    type = "string",
+    title = tt("schema_story_screen_res"),
+    minLength = 1,
+    description = tt("schema_story_screen_res_desc"),
+    enum = list(
+      "mx-story-screen-240p",
+      "mx-story-screen-360p",
+      "mx-story-screen-480p",
+      "mx-story-screen-720p",
+      "mx-story-screen-1080p",
+      "mx-story-screen-1440p"
+      ),
+    options = list(
+      enum_titles = list(
+        "240p (16:9)",
+        "360p (16:9)",
+        "480p (16:9)",
+        "720p (16:9)",
+        "1080p (16:9)",
+        "1440p (16:9)"
+      )
+      ),
+    default = "mx-story-screen-720p"
+  )
+
+  settingsDashboards = list(
+    type = "string",
+    title = tt("story_dashboard_panel_handling"),
+    description =tt("story_dashboard_panel_handling_desc"),
+    enum =  list(
+      "inherit",   # -> null / default 
+      "disabled",  # -> do not render 
+      "closed",    # -> force closed 
+      "open"       # -> force open
+      ),
+    default = "story_dashboard_panel_default",
+    options =  list(
+      enum_titles = list(
+        tt("schema_story_dashboard_panel_inherit"),
+        tt("schema_story_dashboard_panel_disabled"),
+        tt("schema_story_dashboard_panel_closed"), 
+        tt("schema_story_dashboard_panel_open")      
+      )
+    )
+  )
+  settingsDashboardsRoot <- settingsDashboards
+  settingsDashboardsRoot$description <- tt("story_dashboard_panel_handling_root_desc")
+
   #
   # Multiple associated view object
   #
@@ -489,39 +542,11 @@ mxSchemaViewStory <- function(view,views,language){
       base_layer = stepBaseLayer,
       position = stepMapPosition,
       animation = stepMapAnimation,
-      autoplay = stepAutoplay
+      autoplay = stepAutoplay,
+      dashboards_panel_behaviour = settingsDashboards
     )
   )
 
-
-  #
-  # Settings page resolution
-  #
-  settingsPageClass = list(
-    type = "string",
-    title = tt("schema_story_screen_res"),
-    minLength = 1,
-    description = tt("schema_story_screen_res_desc"),
-    enum = list(
-      "mx-story-screen-240p",
-      "mx-story-screen-360p",
-      "mx-story-screen-480p",
-      "mx-story-screen-720p",
-      "mx-story-screen-1080p",
-      "mx-story-screen-1440p"
-      ),
-    options = list(
-      enum_titles = list(
-        "240p (16:9)",
-        "360p (16:9)",
-        "480p (16:9)",
-        "720p (16:9)",
-        "1080p (16:9)",
-        "1440p (16:9)"
-      )
-      ),
-    default = "mx-story-screen-720p"
-  )
 
   #
   # Final schema
@@ -537,7 +562,8 @@ mxSchemaViewStory <- function(view,views,language){
           collapsed = TRUE
           ),
         properties = list(
-          class_wrapper = settingsPageClass
+          class_wrapper = settingsPageClass,
+          dashboards_panel_behaviour = settingsDashboardsRoot
         )
         ),
       steps = list(
