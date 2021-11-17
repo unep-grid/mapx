@@ -3991,7 +3991,7 @@
     "de": ""
   },
   {
-    "id": "story_dashboard_panel_handling",
+    "id": "schema_story_dashboard_panel_handling",
     "en": "Dashboards display mode",
     "fr": "",
     "es": "",
@@ -4004,7 +4004,7 @@
     "de": ""
   },
   {
-    "id": "story_dashboard_panel_handling_desc",
+    "id": "schema_story_dashboard_panel_handling_desc",
     "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
     "fr": "",
     "es": "",
@@ -4017,8 +4017,8 @@
     "de": ""
   },
   {
-    "id": "story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
     "fr": "",
     "es": "",
     "ru": "",
@@ -4030,8 +4030,21 @@
     "de": ""
   },
   {
-    "id": "schema_story_dashboard_panel_inherit",
-    "en": "Inherit (default)",
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
     "fr": "",
     "es": "",
     "ru": "",
@@ -4081,7 +4094,98 @@
     "bn": "",
     "de": ""
   },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+{
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
 
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
   {
     "id": "schema_story_pos_get",
     "en": "Update using current map parameters",

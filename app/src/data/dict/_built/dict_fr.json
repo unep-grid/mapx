@@ -3170,24 +3170,29 @@
     "fr": "Nom de l’organisation"
   },
   {
-    "id": "story_dashboard_panel_handling",
+    "id": "schema_story_dashboard_panel_handling",
     "en": "Dashboards display mode",
-    "fr": "Si les vues sélectionnées ont des tableaux de bord associés, comment doivent-ils être rendus ?"
+    "fr": "Mode d'affichage des tableaux de bord"
   },
   {
-    "id": "story_dashboard_panel_handling_desc",
+    "id": "schema_story_dashboard_panel_handling_desc",
     "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
     "fr": "Si les vues sélectionnées ont un tableau de bord associé, comment doit-il être rendu ?"
   },
   {
-    "id": "story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
-    "fr": "Si les vues sélectionnées ont un tableau de bord associé, comment doit-il être rendu globalement ? Remplace le comportement du tableau de bord défini dans toutes les configurations d'étapes."
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "fr": "Si les vues sélectionnées ont un tableau de bord associé, comment doit-il être rendu globalement ? La configuration des étapes sera ignorée, le cas échéant."
   },
   {
-    "id": "schema_story_dashboard_panel_inherit",
-    "en": "Inherit (default)",
-    "fr": "Hériter (par défaut)"
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "fr": "Utiliser l'option d'affichage par défaut du tableau de bord"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "fr": "Utiliser les options d'affichage définies à chaque étape"
   },
   {
     "id": "schema_story_dashboard_panel_open",
@@ -3203,6 +3208,41 @@
     "id": "schema_story_dashboard_panel_disabled",
     "en": "Do not render dashboards",
     "fr": "Ne pas afficher les tableaux de bord"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "fr": "Mode d'affichage des légendes"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "fr": "Définissez la manière dont le panneau de légende doit être affiché."
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "fr": "Définissez la manière dont le panneau de légende doit être affiché globalement. La configuration des étapes sera ignorée, le cas échéant."
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "fr": "Utiliser la valeur par défaut de l'application"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "fr": "Utiliser l'option d'affichage définie à chaque étape"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "fr": "Ouvrir le panneau des légendes"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "fr": "Fermer le panneau des légendes"
   },
   {
     "id": "schema_story_pos_get",

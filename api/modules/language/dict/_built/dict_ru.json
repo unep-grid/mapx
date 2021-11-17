@@ -3170,24 +3170,29 @@
     "ru": "Название организации "
   },
   {
-    "id": "story_dashboard_panel_handling",
+    "id": "schema_story_dashboard_panel_handling",
     "en": "Dashboards display mode",
-    "ru": "Если выбранные представления имеют связанные панели мониторинга, как они должны отображаться?"
+    "ru": "Режим отображения дашбордов"
   },
   {
-    "id": "story_dashboard_panel_handling_desc",
+    "id": "schema_story_dashboard_panel_handling_desc",
     "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
     "ru": "Если выбранные представления имеют связанную панель мониторинга, как ее следует отображать?"
   },
   {
-    "id": "story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
-    "ru": "Если выбранные представления имеют связанную панель мониторинга, как они должны отображаться глобально? Заменяет поведение панели управления, заданное во всех конфигурациях шагов."
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "ru": "Если выбранные представления имеют связанную панель мониторинга, как они должны отображаться глобально? Конфигурация шагов будет проигнорирована, если применимо."
   },
   {
-    "id": "schema_story_dashboard_panel_inherit",
-    "en": "Inherit (default)",
-    "ru": "Наследовать (по умолчанию)"
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "ru": "Использовать параметр отображения панели мониторинга по умолчанию"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "ru": "Используйте параметры отображения, определенные на каждом этапе"
   },
   {
     "id": "schema_story_dashboard_panel_open",
@@ -3203,6 +3208,41 @@
     "id": "schema_story_dashboard_panel_disabled",
     "en": "Do not render dashboards",
     "ru": "Не отображать дашборды"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "ru": "Режим отображения легенд"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "ru": "Установите способ отображения панели легенды."
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "ru": "Установите глобальное отображение панели легенды. Конфигурация шагов будет проигнорирована, если применимо."
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "ru": "Использовать приложение по умолчанию"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "ru": "Используйте параметр отображения, определенный на каждом этапе"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "ru": "Откройте панель легенд"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "ru": "Закройте панель легенд"
   },
   {
     "id": "schema_story_pos_get",

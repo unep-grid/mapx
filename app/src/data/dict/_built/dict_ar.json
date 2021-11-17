@@ -3170,24 +3170,29 @@
     "ar": "اسم المنظمة "
   },
   {
-    "id": "story_dashboard_panel_handling",
+    "id": "schema_story_dashboard_panel_handling",
     "en": "Dashboards display mode",
-    "ar": "إذا كانت طريقة العرض (العروض) المحددة لها لوحات معلومات مرتبطة ، فكيف يجب عرضها؟"
+    "ar": "وضع عرض لوحات العدادات"
   },
   {
-    "id": "story_dashboard_panel_handling_desc",
+    "id": "schema_story_dashboard_panel_handling_desc",
     "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
     "ar": "إذا كانت طريقة العرض (العروض) المحددة لها لوحة معلومات مرتبطة ، فكيف يجب عرضها؟"
   },
   {
-    "id": "story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
-    "ar": "إذا كانت طريقة العرض (العروض) المحددة لها لوحة معلومات مرتبطة ، فكيف يجب عرضها بشكل عام؟ يستبدل سلوك لوحة المعلومات المعين في جميع تكوينات الخطوات."
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "ar": "إذا كانت طريقة العرض (العروض) المحددة لها لوحة معلومات مرتبطة ، فكيف يجب عرضها بشكل عام؟ سيتم تجاهل خطوات التكوين ، إن أمكن."
   },
   {
-    "id": "schema_story_dashboard_panel_inherit",
-    "en": "Inherit (default)",
-    "ar": "وراثة (افتراضي)"
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "ar": "استخدم خيار العرض الافتراضي للوحة القيادة"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "ar": "استخدم خيارات العرض المحددة في كل خطوة"
   },
   {
     "id": "schema_story_dashboard_panel_open",
@@ -3203,6 +3208,41 @@
     "id": "schema_story_dashboard_panel_disabled",
     "en": "Do not render dashboards",
     "ar": "لا تقدم لوحات العدادات"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "ar": "وضع عرض الأساطير"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "ar": "تعيين كيفية عرض لوحة وسيلة الإيضاح."
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "ar": "قم بتعيين كيفية عرض لوحة الأسطورة بشكل عام. سيتم تجاهل خطوات التكوين ، إن أمكن."
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "ar": "استخدم التطبيق الافتراضي"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "ar": "استخدم خيار العرض المحدد في كل خطوة"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "ar": "افتح لوحة Legends"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "ar": "أغلق لوحة وسائل الإيضاح"
   },
   {
     "id": "schema_story_pos_get",

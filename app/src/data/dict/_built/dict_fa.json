@@ -3170,24 +3170,29 @@
     "fa": "نام سازمان"
   },
   {
-    "id": "story_dashboard_panel_handling",
+    "id": "schema_story_dashboard_panel_handling",
     "en": "Dashboards display mode",
-    "fa": "اگر نمای(های) انتخاب شده دارای داشبوردهای مرتبط باشد، چگونه باید رندر شوند؟"
+    "fa": "حالت نمایش داشبورد"
   },
   {
-    "id": "story_dashboard_panel_handling_desc",
+    "id": "schema_story_dashboard_panel_handling_desc",
     "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
-    "fa": "اگر نمای(های) انتخاب شده دارای داشبورد مرتبط باشد، چگونه باید ارائه شود؟"
+    "fa": "اگر نمای(های) انتخاب شده دارای داشبورد مرتبط باشد، چگونه باید رندر شود؟"
   },
   {
-    "id": "story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
-    "fa": "اگر نمای(های) انتخاب شده دارای داشبورد مرتبط باشد، چگونه باید به صورت سراسری ارائه شود؟ مجموعه رفتار داشبورد را در تمام پیکربندی‌های مراحل بازنویسی می‌کند."
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "fa": "اگر نمای(های) انتخاب شده دارای داشبورد مرتبط باشد، چگونه باید به صورت سراسری ارائه شود؟ در صورت وجود، پیکربندی مراحل نادیده گرفته خواهد شد."
   },
   {
-    "id": "schema_story_dashboard_panel_inherit",
-    "en": "Inherit (default)",
-    "fa": "ارث بری (پیش فرض)"
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "fa": "از گزینه نمایش پیش فرض داشبورد استفاده کنید"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "fa": "از گزینه های نمایش تعریف شده در هر مرحله استفاده کنید"
   },
   {
     "id": "schema_story_dashboard_panel_open",
@@ -3203,6 +3208,41 @@
     "id": "schema_story_dashboard_panel_disabled",
     "en": "Do not render dashboards",
     "fa": "داشبوردها را رندر نکنید"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "fa": "حالت نمایش افسانه ها"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "fa": "نحوه نمایش پنل افسانه را تنظیم کنید."
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "fa": "تنظیم کنید که چگونه پنل افسانه به صورت جهانی نمایش داده شود. در صورت وجود، پیکربندی مراحل نادیده گرفته خواهد شد."
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "fa": "از پیش فرض برنامه استفاده کنید"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "fa": "از گزینه نمایش تعریف شده در هر مرحله استفاده کنید"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "fa": "پنل legends را باز کنید"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "fa": "پانل افسانه ها را ببندید"
   },
   {
     "id": "schema_story_pos_get",

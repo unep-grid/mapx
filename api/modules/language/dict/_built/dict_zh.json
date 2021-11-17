@@ -3170,24 +3170,29 @@
     "zh": "组织名称"
   },
   {
-    "id": "story_dashboard_panel_handling",
+    "id": "schema_story_dashboard_panel_handling",
     "en": "Dashboards display mode",
-    "zh": "如果选定的视图具有关联的仪表板，它们应该如何呈现？"
+    "zh": "仪表盘显示模式"
   },
   {
-    "id": "story_dashboard_panel_handling_desc",
+    "id": "schema_story_dashboard_panel_handling_desc",
     "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
     "zh": "如果选定的视图具有关联的仪表板，它应该如何呈现？"
   },
   {
-    "id": "story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
-    "zh": "如果选定的视图具有关联的仪表板，它应该如何全局呈现？覆盖在所有步骤配置中设置的仪表板行为。"
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "zh": "如果选定的视图具有关联的仪表板，它应该如何全局呈现？如果适用，将忽略步骤配置。"
   },
   {
-    "id": "schema_story_dashboard_panel_inherit",
-    "en": "Inherit (default)",
-    "zh": "继承（默认）"
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "zh": "使用仪表板默认显示选项"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "zh": "使用每个步骤中定义的显示选项"
   },
   {
     "id": "schema_story_dashboard_panel_open",
@@ -3203,6 +3208,41 @@
     "id": "schema_story_dashboard_panel_disabled",
     "en": "Do not render dashboards",
     "zh": "不呈现仪表板"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "zh": "图例显示模式"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "zh": "设置图例面板的显示方式。"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "zh": "设置图例面板应如何全局显示。如果适用，将忽略步骤配置。"
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "zh": "使用应用程序默认值"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "zh": "使用每个步骤中定义的显示选项"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "zh": "打开图例面板"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "zh": "关闭图例面板"
   },
   {
     "id": "schema_story_pos_get",

@@ -3170,24 +3170,29 @@
     "es": "Nombre de la organización"
   },
   {
-    "id": "story_dashboard_panel_handling",
+    "id": "schema_story_dashboard_panel_handling",
     "en": "Dashboards display mode",
-    "es": "Si las vistas seleccionadas tienen paneles de control asociados, ¿cómo se deben representar?"
+    "es": "Modo de visualización de paneles"
   },
   {
-    "id": "story_dashboard_panel_handling_desc",
+    "id": "schema_story_dashboard_panel_handling_desc",
     "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
     "es": "Si las vistas seleccionadas tienen un panel asociado, ¿cómo se debe representar?"
   },
   {
-    "id": "story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
-    "es": "Si las vistas seleccionadas tienen un panel de control asociado, ¿cómo debería representarse globalmente? Sobrescribe el comportamiento del tablero establecido en todas las configuraciones de pasos."
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "es": "Si las vistas seleccionadas tienen un panel asociado, ¿cómo debería representarse globalmente? Los pasos de configuración se ignorarán, si corresponde."
   },
   {
-    "id": "schema_story_dashboard_panel_inherit",
-    "en": "Inherit (default)",
-    "es": "Heredar (predeterminado)"
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "es": "Usar la opción de visualización predeterminada del tablero"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "es": "Utilice las opciones de visualización definidas en cada paso"
   },
   {
     "id": "schema_story_dashboard_panel_open",
@@ -3203,6 +3208,41 @@
     "id": "schema_story_dashboard_panel_disabled",
     "en": "Do not render dashboards",
     "es": "No renderizar paneles"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "es": "Modo de visualización de leyendas"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "es": "Establezca cómo se debe mostrar el panel de leyenda."
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "es": "Establezca cómo se debe mostrar el panel de leyenda de forma global. Los pasos de configuración se ignorarán, si corresponde."
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "es": "Usar la aplicación predeterminada"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "es": "Utilice la opción de visualización definida en cada paso"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "es": "Abre el panel de leyendas"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "es": "Cerrar el panel de leyendas"
   },
   {
     "id": "schema_story_pos_get",

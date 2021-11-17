@@ -3170,24 +3170,29 @@
     "bn": "অর্গানাইজেশন নাম "
   },
   {
-    "id": "story_dashboard_panel_handling",
+    "id": "schema_story_dashboard_panel_handling",
     "en": "Dashboards display mode",
-    "bn": "যদি নির্বাচিত দৃশ্য(গুলি) এর সাথে যুক্ত ড্যাশবোর্ড থাকে, তাহলে সেগুলি কীভাবে রেন্ডার করা উচিত?"
+    "bn": "ড্যাশবোর্ড প্রদর্শন মোড"
   },
   {
-    "id": "story_dashboard_panel_handling_desc",
+    "id": "schema_story_dashboard_panel_handling_desc",
     "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
     "bn": "যদি নির্বাচিত দৃশ্য(গুলি) এর সাথে যুক্ত ড্যাশবোর্ড থাকে, তাহলে এটি কীভাবে রেন্ডার করা উচিত?"
   },
   {
-    "id": "story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
-    "bn": "যদি নির্বাচিত দৃশ্য(গুলি) এর সাথে যুক্ত ড্যাশবোর্ড থাকে, তাহলে এটি কীভাবে বিশ্বব্যাপী রেন্ডার করা উচিত? সমস্ত ধাপ কনফিগারেশনে সেট করা ড্যাশবোর্ড আচরণ ওভাররাইট করে।"
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "bn": "যদি নির্বাচিত দৃশ্য(গুলি) এর সাথে যুক্ত ড্যাশবোর্ড থাকে, তাহলে এটি কীভাবে বিশ্বব্যাপী রেন্ডার করা উচিত? স্টেপ কনফিগারেশন উপেক্ষা করা হবে, যদি প্রযোজ্য হয়।"
   },
   {
-    "id": "schema_story_dashboard_panel_inherit",
-    "en": "Inherit (default)",
-    "bn": "উত্তরাধিকারী (ডিফল্ট)"
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "bn": "ড্যাশবোর্ড ডিফল্ট প্রদর্শন বিকল্প ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "bn": "প্রতিটি ধাপে সংজ্ঞায়িত প্রদর্শন বিকল্পগুলি ব্যবহার করুন"
   },
   {
     "id": "schema_story_dashboard_panel_open",
@@ -3203,6 +3208,41 @@
     "id": "schema_story_dashboard_panel_disabled",
     "en": "Do not render dashboards",
     "bn": "ড্যাশবোর্ড রেন্ডার করবেন না"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "bn": "কিংবদন্তি প্রদর্শন মোড"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "bn": "লিজেন্ড প্যানেল কিভাবে প্রদর্শিত হবে তা সেট করুন।"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "bn": "বিশ্বব্যাপী কিংবদন্তি প্যানেল কীভাবে প্রদর্শিত হবে তা সেট করুন। স্টেপ কনফিগারেশন উপেক্ষা করা হবে, যদি প্রযোজ্য হয়।"
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "bn": "অ্যাপ্লিকেশন ডিফল্ট ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "bn": "প্রতিটি ধাপে সংজ্ঞায়িত প্রদর্শন বিকল্পটি ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "bn": "কিংবদন্তি প্যানেল খুলুন"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "bn": "কিংবদন্তি প্যানেল বন্ধ করুন"
   },
   {
     "id": "schema_story_pos_get",

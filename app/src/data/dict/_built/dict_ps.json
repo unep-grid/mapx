@@ -3170,24 +3170,29 @@
     "ps": "د سازمان نوم"
   },
   {
-    "id": "story_dashboard_panel_handling",
+    "id": "schema_story_dashboard_panel_handling",
     "en": "Dashboards display mode",
-    "ps": "که چیرې ټاکل شوي لیدونه اړوند ډشبورډونه ولري، نو دوی باید څنګه وړاندې شي؟"
+    "ps": "د ډشبورډ د ښودلو حالت"
   },
   {
-    "id": "story_dashboard_panel_handling_desc",
+    "id": "schema_story_dashboard_panel_handling_desc",
     "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
     "ps": "که چیرې ټاکل شوي لیدونه اړوند ډشبورډ ولري، دا باید څنګه وړاندې شي؟"
   },
   {
-    "id": "story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Overwrites dashboard behaviour set in all steps configurations.",
-    "ps": "که ټاکل شوي لیدونه یو تړلی ډشبورډ ولري، دا باید په نړیواله کچه څنګه وړاندې شي؟ د ډشبورډ چلند په ټولو مرحلو ترتیبونو کې تنظیم شوی له سره لیکي."
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "ps": "که ټاکل شوي لیدونه یو تړلی ډشبورډ ولري، دا باید په نړیواله کچه څنګه وړاندې شي؟ د ګامونو ترتیب به له پامه غورځول شي، که د تطبیق وړ وي."
   },
   {
-    "id": "schema_story_dashboard_panel_inherit",
-    "en": "Inherit (default)",
-    "ps": "میراث (ډیفالټ)"
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "ps": "د ډشبورډ ډیفالټ ښودنې اختیار وکاروئ"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "ps": "د ښودلو اختیارونه وکاروئ چې په هر ګام کې تعریف شوي"
   },
   {
     "id": "schema_story_dashboard_panel_open",
@@ -3203,6 +3208,41 @@
     "id": "schema_story_dashboard_panel_disabled",
     "en": "Do not render dashboards",
     "ps": "ډشبورډونه مه ورکوئ"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "ps": "د لیجنډ ښودلو حالت"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "ps": "تنظیم کړئ چې څنګه د لیجنډ پینل باید ښکاره شي."
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "ps": "تنظیم کړئ چې څنګه د لیجنډ پینل باید په نړیواله کچه ښکاره شي. د ګامونو ترتیب به له پامه غورځول شي، که د تطبیق وړ وي."
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "ps": "د غوښتنلیک ډیفالټ وکاروئ"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "ps": "په هر ګام کې تعریف شوي د ښودلو اختیار وکاروئ"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "ps": "د لیجنډ پینل خلاص کړئ"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "ps": "د لیجنډ پینل بند کړئ"
   },
   {
     "id": "schema_story_pos_get",
