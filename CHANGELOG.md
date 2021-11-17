@@ -1,3 +1,8 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.31-alpha.1' target='_blank'>1.9.31-alpha.1</a>
+   - APP
+    - Story map reader + editor partial refactoring: generalized async support + reworked logic. Required to fine tune async dashboard manipuation. Could be unstable in this version
+    - Improved logic for controling dashbaord + legends display in story map
+    - Removed dashboard / view interaction from map helpers: use dedicated module instead + fragmented long function in multiple utilities.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.31-alpha.0' target='_blank'>1.9.31-alpha.0</a>
    - APP 
     - Added option to enable / disable widget and dashboard + modified UX accordingly
