@@ -49,29 +49,59 @@ mxSchemaViewStory <- function(view,views,language){
     default = "mx-story-screen-720p"
   )
 
-  settingsDashboards = list(
+  #
+  # Setting panel behaviour
+  # -> used in root and in steps 
+  #
+  settingsDashboardsPanel = list(
     type = "string",
-    title = tt("story_dashboard_panel_handling"),
-    description =tt("story_dashboard_panel_handling_desc"),
+    title = tt("schema_story_dashboard_panel_handling"),
+    description =tt("schema_story_dashboard_panel_handling_desc"),
     enum =  list(
-      "inherit",   # -> null / default 
+      "default",   # -> null / default 
       "disabled",  # -> do not render 
       "closed",    # -> force closed 
       "open"       # -> force open
       ),
-    default = "story_dashboard_panel_default",
+    default = "inherit",
     options =  list(
       enum_titles = list(
-        tt("schema_story_dashboard_panel_inherit"),
+        tt("schema_story_dashboard_panel_default"),
         tt("schema_story_dashboard_panel_disabled"),
         tt("schema_story_dashboard_panel_closed"), 
         tt("schema_story_dashboard_panel_open")      
       )
     )
   )
-  settingsDashboardsRoot <- settingsDashboards
-  settingsDashboardsRoot$description <- tt("story_dashboard_panel_handling_root_desc")
+  settingsDashboardsPanelRoot <- settingsDashboardsPanel
+  settingsDashboardsPanelRoot$description <- tt("schema_story_dashboard_panel_handling_root_desc")
+  settingsDashboardsPanelRoot$options$enum_titles[[1]] <- tt("schema_story_dashboard_panel_root_default")
 
+  #
+  # Setting panel behaviour
+  # -> used in root and in steps 
+  #
+  settingsLegendsPanel = list(
+    type = "string",
+    title = tt("schema_story_legends_panel_handling"),
+    description =tt("schema_story_legends_panel_handling_desc"),
+    enum =  list(
+      "default",   # -> default 
+      "open",      # -> force open
+      "closed"     # -> force closed 
+      ),
+    default = "default",
+    options =  list(
+      enum_titles = list(
+        tt("schema_story_legends_panel_default"),
+        tt("schema_story_legends_panel_open"),
+        tt("schema_story_legends_panel_closed")
+      )
+    )
+  )
+  settingsLegendsPanelRoot <- settingsLegendsPanel
+  settingsLegendsPanelRoot$description <- tt("schema_story_legends_panel_handling_root_desc")
+  settingsLegendsPanelRoot$options$enum_titles[[1]] <- tt("schema_story_legends_panel_root_default")
   #
   # Multiple associated view object
   #
@@ -543,7 +573,8 @@ mxSchemaViewStory <- function(view,views,language){
       position = stepMapPosition,
       animation = stepMapAnimation,
       autoplay = stepAutoplay,
-      dashboards_panel_behaviour = settingsDashboards
+      dashboards_panel_behaviour = settingsDashboardsPanel,
+      legends_panel_behaviour = settingsLegendsPanel
     )
   )
 
@@ -563,7 +594,8 @@ mxSchemaViewStory <- function(view,views,language){
           ),
         properties = list(
           class_wrapper = settingsPageClass,
-          dashboards_panel_behaviour = settingsDashboardsRoot
+          dashboards_panel_behaviour = settingsDashboardsPanelRoot,
+          legends_panel_behaviour = settingsLegendsPanelRoot
         )
         ),
       steps = list(

@@ -4,6 +4,7 @@ import './style.css';
 const def = {
   icon: 'gears',
   duration: 800,
+  removePrevious : true,
   scaleStart: 1,
   scaleEnd: 1.4,
   opacityStart: 0.2,
@@ -12,12 +13,18 @@ const def = {
   y: null
 };
 
+let previous;
+
 class IconFlash {
   constructor(opt) {
     if (typeof opt === 'string') {
       opt = {icon: opt};
     }
     opt = Object.assign({}, def, opt);
+    if(previous && opt.removePrevious){
+     previous.destroy();
+    }
+    previous = this;
     this.opt = opt;
     this.build();
     this.flash();
@@ -46,10 +53,11 @@ class IconFlash {
   }
 
   flash() {
+    
     setTimeout(this.activate.bind(this), 10);
+
   }
   activate() {
-    //this.elIcon.style.fontSize = `${this.opt.endSize}px`;
     this.elIcon.style.transform = `scale(${this.opt.scaleEnd})`;
     this.elIcon.style.opacity = this.opt.opacityEnd;
     setTimeout(this.destroy.bind(this), this.opt.duration);

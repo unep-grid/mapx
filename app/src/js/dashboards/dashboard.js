@@ -59,6 +59,7 @@ class Dashboard {
     if (d._init) {
       return;
     }
+    d._open = false;
     d.modules = {};
     d.widgets = [];
     d.cb = [];
@@ -126,25 +127,36 @@ class Dashboard {
     }
   }
 
-  show() {
-    const d = this;
-    d.panel.open();
-    d.grid.show(d.grid.getItems());
-    d.updateGridLayout();
-    d._visible = true;
-    d.fire('show');
-  }
-
   isVisible() {
     const d = this;
     return d.panel.isVisible();
   }
 
+  isActive() {
+    const d = this;
+    return d.panel.isActive();
+  }
+
+  show() {
+    const d = this;
+    if (d._open === false) {
+      d._open = true;
+      d.panel.open();
+      d.grid.show(d.grid.getItems());
+      d.updateGridLayout();
+      d.fire('show');
+    }
+  }
+
   hide() {
     const d = this;
-    d.panel.close();
-    d.grid.hide(d.grid.getItems());
-    d.fire('hide');
+    console.log('dashboard hide requested');
+    if (d._open === true) {
+      d._open = false;
+      d.panel.close();
+      d.grid.hide(d.grid.getItems());
+      d.fire('hide');
+    }
   }
 
   toggle() {
@@ -238,7 +250,6 @@ class Dashboard {
       d.widgets.pop();
     }
     d.updateGridLayout();
-    d.autoDestroy();
   }
 
   removeWidget(widget) {
@@ -249,7 +260,6 @@ class Dashboard {
       d.widgets.splice(pos, 1);
     }
     d.updateGridLayout();
-    d.autoDestroy();
   }
 
   allWidgetsDisabled() {
@@ -274,7 +284,6 @@ class Dashboard {
     const d = this;
     const widgets = [];
     d.opt.dashboard.modules.push(...(conf.modules || []));
-
     const modules = await modulesLoad(d.opt.dashboard.modules);
     /**
      * Store modules
@@ -286,26 +295,36 @@ class Dashboard {
      * Build widgets
      */
     for (const cw of conf.widgets) {
-      const widget = new Widget({
-        conf: cw,
-        grid: d.grid,
-        dashboard: d,
-        modules: d.modules,
-        view: conf.view,
-        map: conf.map
-      });
-      d.widgets.push(widget);
-      widget._id = conf.view.id;
-      widgets.push(widget);
+      if (!cw.disabled) {
+        const widget = new Widget({
+          conf: cw,
+          grid: d.grid,
+          dashboard: d,
+          modules: d.modules,
+          view: conf.view,
+          map: conf.map
+        });
+        d.widgets.push(widget);
+        widget._id = conf.view.id;
+        widgets.push(widget);
+      }
     }
 
-    d.panel.shakeButton({type: 'look_at_me'});
+    /**
+     * Layout update
+     */
     d.updatePanelLayout();
     d.updateGridLayout();
+
     /**
      * Return only added widgets
      */
     return widgets;
+  }
+
+  shakeButton(opt) {
+    const d = this;
+    d.panel.shakeButton(opt);
   }
 }
 

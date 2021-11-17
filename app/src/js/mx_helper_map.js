@@ -2255,7 +2255,7 @@ export function viewsLayersOrderUpdate(o) {
       o.order || h.getViewsOrder() || views.map((v) => v.id) || null;
 
     if (!order || order.length === 0) {
-      return;
+      resolve(order);
     }
 
     /**
@@ -2296,7 +2296,6 @@ export function viewsLayersOrderUpdate(o) {
         layers: order
       }
     });
-
     resolve(order);
   });
 }
@@ -2554,158 +2553,6 @@ export async function makeNumericSlider(o) {
       }, 100)
     );
   }
-}
-
-/**
- * Init view dashboard
- * @param {Object} o Options
- * @param {Object} o.view View to configure dashboard
- */
-export async function makeDashboard(o) {
-  const h = mx.helpers;
-  const view = o.view;
-  const config = h.isView(view) && h.path(view, 'data.dashboard', {});
-  const map = h.getMap();
-
-  if (h.isEmpty(config)) {
-    return;
-  }
-
-  if (config.disabled) {
-    console.warn('Dashboard disabled');
-    return;
-  }
-
-  /*
-   * Modules should array of string. In older version, single string was an option
-   */
-  config.modules = h.isArray(config.modules)
-    ? config.modules
-    : h.isString(config.modules)
-    ? [config.modules]
-    : [];
-
-  /**
-   * Single dashboard for all view;
-   * individual widgets stored in view (._widgets)
-   */
-  const Dashboard = await h.moduleLoad('dashboard');
-  const storyDashboardMode = h.getStoryDashboardMode();
-  const hasDashboard =
-    mx.dashboard instanceof Dashboard && !mx.dashboard.isDestroyed();
-
-  if (storyDashboardMode === 'disabled') {
-    return;
-  }
-
-  if (!hasDashboard) {
-    /**
-     * Create a new dashboard, save it in mx object
-     */
-    mx.dashboard = new Dashboard({
-      dashboard: {
-        layout: config.layout
-      },
-      grid: {
-        dragEnabled: true,
-        layout: {
-          horizontal: false,
-          fillGaps: true,
-          alignRight: false,
-          alignBottom: false,
-          rounding: true
-        }
-      },
-      panel: {
-        elContainer: document.body,
-        title_text: h.getDictItem('Dashboard'),
-        title_lang_key: 'dashboard',
-        button_text: 'dashboard',
-        button_lang_key: 'button_dashboard_panel',
-        button_classes: ['fa', 'fa-pie-chart'],
-        position: 'bottom-right',
-        container_style: {
-          minWidth: '100px',
-          minHeight: '100px'
-        }
-      }
-    });
-
-    /**
-     * If a story is playing and the dashboard
-     * is shown, unlock the story
-     */
-    mx.dashboard.on('show', () => {
-      const hasStory = h.isStoryPlaying();
-      if (hasStory) {
-        h.storyControlMapPan('unlock');
-      }
-    });
-
-    /**
-     * If a story is playing and the dashboard
-     * is closed or destroy, lock the story
-     */
-    mx.dashboard.on('hide', () => {
-      const hasStory = h.isStoryPlaying();
-      if (hasStory) {
-        h.storyControlMapPan('lock');
-      }
-    });
-
-    mx.dashboard.on('destroy', () => {
-      const hasStory = h.isStoryPlaying();
-      if (hasStory) {
-        h.storyControlMapPan('lock');
-      }
-    });
-    /**
-     * If the dashboard panel is automatically resizing,
-     * fit to widgets
-     */
-    mx.dashboard.panel.on('resize-auto', (panel, type) => {
-      const d = mx.dashboard;
-      if (type === 'half-width') {
-        d.fitPanelToWidgetsWidth();
-      }
-      if (type === 'half-height') {
-        d.fitPanelToWidgetsHeight();
-      }
-    });
-
-    /**
-     * Should the panel be automatically open ?
-     * - If storymap prevent it, no
-     * - If storymap request it, yes
-     * - By default, yes, unless dashboard
-     *   configuration says otherwise.
-     */
-    switch (storyDashboardMode) {
-      case 'closed':
-        break;
-      case 'open':
-        mx.dashboard.show();
-        break;
-      case 'inherit':
-      default:
-        if (!config.panel_init_close) {
-          mx.dashboard.show();
-        }
-    }
-  }
-
-  view._widgets = await mx.dashboard.addWidgetsAsync({
-    widgets: config.widgets,
-    modules: config.modules,
-    view: view,
-    map: map
-  });
-
-  /**
-   * If no widged rendered or all disabled, destroy
-   */
-
-  mx.dashboard.autoDestroy();
 }
 
 /**
@@ -3447,7 +3294,7 @@ export function existsInList(li, it, val, inverse) {
 }
 
 /**
- * Add MapX view on the map
+ * Add MapX view's layer on the map
  * @param {object} o Options
  * @param {string} o.id map id
  * @param {string} o.idView view id
@@ -3459,10 +3306,12 @@ export function existsInList(li, it, val, inverse) {
  */
 export async function viewLayersAdd(o) {
   const h = mx.helpers;
+  const dh = h.dashboardHelper;
   const m = h.getMapData(o.id);
   if (o.idView) {
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
   }
+  const isStory = h.isStoryPlaying();
   const idLayerBefore = o.before
     ? h.getLayerNamesByPrefix({prefix: o.before})[0]
     : mx.settings.layerBefore;
@@ -3536,10 +3385,16 @@ export async function viewLayersAdd(o) {
    * Add views layers
    */
   await handleLayer(idType);
+
   /**
-   * Dashboard
+   * Create dashboard.
+   * - As story steps could manage dashboard state,
+   *   it's rendered inside the story
    */
-  await h.makeDashboard({view: view});
+  if (!isStory) {
+    await dh.viewAutoDashboardAsync(view);
+    dh.autoDestroy();
+  }
 
   /**
    * View aded fully : send event
@@ -4766,6 +4621,7 @@ export async function viewFilterToolsInit(id, opt) {
  */
 export async function viewModulesRemove(view) {
   const h = mx.helpers;
+  const dh = h.dashboardHelper;
 
   view = h.isViewId(view) ? h.getView(view) : view;
 
@@ -4780,18 +4636,17 @@ export async function viewModulesRemove(view) {
   }
   if (h.isElement(view._elLegend)) {
     view._elLegend.remove();
+    delete view._elLegend;
   }
 
-  if (h.isArray(view._widgets)) {
-    for (const widget of view._widgets) {
-      widget.destroy();
-    }
-    if (mx.dashboard && mx.dashboard.widgets.length === 0) {
-      mx.dashboard.destroy();
-    }
+  if (dh.viewHasWidget(view)) {
+    dh.viewRmWidgets(view);
+    dh.autoDestroy();
   }
+
   if (view._miniMap) {
     view._miniMap.destroy();
+    delete view._miniMap;
   }
 
   if (it) {

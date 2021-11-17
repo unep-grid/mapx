@@ -82,8 +82,11 @@ class Button extends EventSimple {
     );
   }
 
-  shake() {
-    shake(this.elButton);
+  shake(type) {
+    shake(this.elButton, {
+      type: 
+      type
+    });
   }
 
   action(event) {

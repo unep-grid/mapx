@@ -241,7 +241,7 @@ async function loadJsonEditor() {
 }
 
 async function loadHandsontable() {
-  const m = Promise.all([
+  const m = await Promise.all([
     import('handsontable'),
     import('handsontable/dist/handsontable.css'),
     import('handsontable/languages/de-DE.js'),

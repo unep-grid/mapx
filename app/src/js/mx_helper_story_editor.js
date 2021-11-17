@@ -1,4 +1,3 @@
-
 var customStyle = [
   /* Table classes from bootstrap */
   {t: 'Table base', c: 'table', f: ['table']},
@@ -33,158 +32,141 @@ var customStyle = [
  * Init editing function
  * @param {Options} o story options
  */
-export function initEditing(o) {
-  var ContentTools;
-
-  return Promise.all([
+export async function initEditing(o) {
+  const m = await Promise.all([
     import('ContentTools'),
     import('ContentTools/build/content-tools.min.css')
-  ])
-    .then(function(m) {
-      ContentTools = m[0].default;
-      return import('./../coffee/mx_extend_content_tools.coffee');
-    })
-    .then(function() {
-      /*
-       * Get ContentTools and set upload logic
-       */
+  ]);
+  const ContentTools = m[0].default;
+  await import('./../coffee/mx_extend_content_tools.coffee');
 
-      if (!ContentTools._init) {
-        ContentTools.DEFAULT_TOOLS = [
-          [
-            'h1',
-            'h2',
-            'h3',
-            'h4',
-            'h5',
-            'paragraph',
-            'blockquote',
-            'preformatted'
-          ],
-          ['italic', 'bold'],
-          ['align-left', 'align-center', 'align-right'],
-          [
-            'unordered-list',
-            'ordered-list',
-            'table',
-            'indent',
-            'unindent',
-            'line-break'
-          ],
-          ['link', 'image', 'video'],
-          ['undo', 'redo', 'remove']
-        ];
+  /*
+   * Get ContentTools and set upload logic
+   */
 
-        var style = customStyle.map(function(s) {
-          return new ContentTools.Style(s.t, s.c, s.f);
-        });
-        ContentTools.StylePalette.add(style);
-        ContentTools.IMAGE_UPLOADER = contentToolsImageUploader;
-        ContentTools._init = true;
-      }
-      /**
-       * If not already set, create a new editor instance
-       */
-      if (!o.data.ct_editor) {
-        o.data.ct_editor = ContentTools.EditorApp.get();
+  if (!ContentTools._init) {
+    ContentTools.DEFAULT_TOOLS = [
+      ['h1', 'h2', 'h3', 'h4', 'h5', 'paragraph', 'blockquote', 'preformatted'],
+      ['italic', 'bold'],
+      ['align-left', 'align-center', 'align-right'],
+      [
+        'unordered-list',
+        'ordered-list',
+        'table',
+        'indent',
+        'unindent',
+        'line-break'
+      ],
+      ['link', 'image', 'video'],
+      ['undo', 'redo', 'remove']
+    ];
 
-        /**
-         * Add custom button logic
-         */
-        var elBtnModalPreview = document.getElementById('btnViewPreviewStory');
-        var elBtnModalSave = document.getElementById('btnViewSaveStory');
-        //var elBtnStoryClose = document.getElementById("btnViewStoryCancel");
-        var elModalEditView = document.getElementById('modalViewEdit');
-        /**
-         * Set a remove function for custom buttons
-         */
+    const style = customStyle.map(function(s) {
+      return new ContentTools.Style(s.t, s.c, s.f);
+    });
+    ContentTools.StylePalette.add(style);
+    ContentTools.IMAGE_UPLOADER = contentToolsImageUploader;
+    ContentTools._init = true;
+  }
+  /**
+   * If not already set, create a new editor instance
+   */
+  if (!o.data.ct_editor) {
+    o.data.ct_editor = ContentTools.EditorApp.get();
 
-        o.data.ct_editor.remove = function() {
-          o.data.ct_editor.destroy();
-        };
+    /**
+     * Add custom button logic
+     */
+    const elBtnModalPreview = document.getElementById('btnViewPreviewStory');
+    const elBtnModalSave = document.getElementById('btnViewSaveStory');
+    //var elBtnStoryClose = document.getElementById("btnViewStoryCancel");
+    const elModalEditView = document.getElementById('modalViewEdit');
+    /**
+     * Set a remove function for custom buttons
+     */
 
-        /**
-         * Init editor
-         */
-        o.data.ct_editor.init(
-          '*[data-editable]', // class of region editable
-          'data-name', // name of regions
-          null, // fixture test
-          true
-        );
+    o.data.ct_editor.remove = function() {
+      o.data.ct_editor.destroy();
+    };
 
-        /**
-         * On start
-         */
-        o.data.ct_editor.addEventListener('start', function() {
-          elBtnModalSave.setAttribute('disabled', true);
-          elBtnModalPreview.setAttribute('disabled', true);
-          //elBtnStoryClose.setAttribute("disabled",true);
-          elModalEditView.classList.add('mx-hide');
-          /* If jed has an story editor, disable it during edition */
-          if (jed.editors.storyEdit) {
-            jed.editors.storyEdit.disable();
-          }
-        });
+    /**
+     * Init editor
+     */
+    o.data.ct_editor.init(
+      '*[data-editable]', // class of region editable
+      'data-name', // name of regions
+      null, // fixture test
+      true
+    );
 
-        /**
-         * On cancel
-         */
-        o.data.ct_editor.addEventListener('revert', function() {
-          elBtnModalSave.removeAttribute('disabled');
-          elBtnModalPreview.removeAttribute('disabled');
-          elModalEditView.classList.remove('mx-hide');
-          //elBtnStoryClose.removeAttribute("disabled");
-          if (jed.editors.storyEdit) {
-            jed.editors.storyEdit.enable();
-          }
-        });
-
-        /**
-         * On save
-         */
-        o.data.ct_editor.addEventListener('saved', function(ev) {
-          var regions;
-
-          elBtnModalSave.removeAttribute('disabled');
-          elBtnModalPreview.removeAttribute('disabled');
-          //elBtnStoryClose.removeAttribute("disabled");
-          elModalEditView.classList.remove('mx-hide');
-          // Check that something changed
-          regions = ev.detail().regions;
-          if (jed.editors.storyEdit) {
-            jed.editors.storyEdit.enable();
-          }
-          if (Object.keys(regions).length === 0) {
-            return;
-          }
-
-          if (jed.editors.storyEdit) {
-            var j = jed.editors.storyEdit;
-            this.busy(true);
-
-            for (var k in regions) {
-              var t = regions[k];
-              var s = k.split(':');
-              var step = +s[0];
-              var slide = +s[1];
-              var lang = mx.settings.language;
-              var e = j.getEditor(
-                'root.steps.' + step + '.slides.' + slide + '.html.' + lang
-              );
-              if (e && e.setValue) {
-                e.setValue(t);
-              }
-            }
-            this.busy(false);
-          }
-        });
+    /**
+     * On start
+     */
+    o.data.ct_editor.addEventListener('start', function() {
+      elBtnModalSave.setAttribute('disabled', true);
+      elBtnModalPreview.setAttribute('disabled', true);
+      //elBtnStoryClose.setAttribute("disabled",true);
+      elModalEditView.classList.add('mx-hide');
+      /* If jed has an story editor, disable it during edition */
+      if (jed.editors.storyEdit) {
+        jed.editors.storyEdit.disable();
       }
     });
+
+    /**
+     * On cancel
+     */
+    o.data.ct_editor.addEventListener('revert', function() {
+      elBtnModalSave.removeAttribute('disabled');
+      elBtnModalPreview.removeAttribute('disabled');
+      elModalEditView.classList.remove('mx-hide');
+      //elBtnStoryClose.removeAttribute("disabled");
+      if (jed.editors.storyEdit) {
+        jed.editors.storyEdit.enable();
+      }
+    });
+
+    /**
+     * On save
+     */
+    o.data.ct_editor.addEventListener('saved', function(ev) {
+      elBtnModalSave.removeAttribute('disabled');
+      elBtnModalPreview.removeAttribute('disabled');
+      elModalEditView.classList.remove('mx-hide');
+      // Check that something changed
+      const regions = ev.detail().regions;
+      if (jed.editors.storyEdit) {
+        jed.editors.storyEdit.enable();
+      }
+      if (Object.keys(regions).length === 0) {
+        return;
+      }
+
+      if (jed.editors.storyEdit) {
+        const j = jed.editors.storyEdit;
+        this.busy(true);
+
+        for (var k in regions) {
+          const t = regions[k];
+          const s = k.split(':');
+          const step = +s[0];
+          const slide = +s[1];
+          const lang = mx.settings.language;
+          const e = j.getEditor(
+            'root.steps.' + step + '.slides.' + slide + '.html.' + lang
+          );
+          if (e && e.setValue) {
+            e.setValue(t);
+          }
+        }
+        this.busy(false);
+      }
+    });
+  }
 }
 
 function contentToolsImageUploader(dialog) {
-  var file, image, url, xhr, height, width, type;
+  let image, url, xhr, height, width, type;
 
   /**
    * Cancel upload
@@ -212,8 +194,8 @@ function contentToolsImageUploader(dialog) {
    * File is loaded
    */
   dialog.addEventListener('imageuploader.fileready', function(ev) {
-    var fileReader = new FileReader();
-    file = ev.detail().file;
+    const fileReader = new FileReader();
+    const file = ev.detail().file;
     type = file.type;
     image = new Image();
     fileReader.readAsDataURL(file);
@@ -234,20 +216,19 @@ function contentToolsImageUploader(dialog) {
    * Insert image
    */
   dialog.addEventListener('imageuploader.save', function() {
-    var canvas, ctx;
-    var h = mx.helpers;
+    const h = mx.helpers;
     if (h.path(mx, 'settings.user.guest')) {
       return;
     }
-    canvas = document.createElement('canvas');
+    const canvas = document.createElement('canvas');
     canvas.height = height;
     canvas.width = width;
-    ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d');
     ctx.drawImage(image, 0, 0);
     ctx.save();
     canvas.toBlob(
       function(blob) {
-        var form = new FormData();
+        const form = new FormData();
         form.append('image', blob);
         form.append('width', width);
         form.append('height', height);
@@ -308,24 +289,21 @@ function contentToolsImageUploader(dialog) {
   });
 
   function setMaxWidth(maxWidth, onLoad) {
-    var ratio, scale, canvas, ctx, newWidth, newHeight;
-
-    ratio = height / width;
-    scale = maxWidth / width;
+    const ratio = height / width;
 
     if (width <= maxWidth) {
       onLoad(url, width, height);
     } else {
-      newWidth = maxWidth;
-      newHeight = newWidth * ratio;
-      canvas = document.createElement('canvas');
+      const newWidth = maxWidth;
+      const newHeight = newWidth * ratio;
+      const canvas = document.createElement('canvas');
       canvas.height = newHeight;
       canvas.width = newWidth;
-      ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext('2d');
       ctx.save();
       ctx.drawImage(image, 0, 0, width, height, 0, 0, newWidth, newHeight);
       ctx.restore();
-      url = canvas.toDataURL();
+      const url = canvas.toDataURL();
       image.src = url;
       image.onload = function() {
         width = this.width;
@@ -336,13 +314,13 @@ function contentToolsImageUploader(dialog) {
   }
 
   function rotateImage(degrees) {
-    var angle, canvas, ctx, to_radians, x, y, origWidth, origHeight;
-    angle = degrees % 360;
-    to_radians = Math.PI / 180;
-    canvas = document.createElement('canvas');
+    //const angle, canvas, ctx, to_radians, x, y, origWidth, origHeight;
+    const angle = degrees % 360;
+    const to_radians = Math.PI / 180;
+    const canvas = document.createElement('canvas');
 
-    origWidth = width;
-    origHeight = height;
+    const origWidth = width;
+    const origHeight = height;
     if (angle === 90 || angle === -270 || angle === 270 || angle === -90) {
       width = origHeight;
       height = origWidth;
@@ -363,14 +341,14 @@ function contentToolsImageUploader(dialog) {
     canvas.width = width;
     canvas.height = height;
 
-    ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d');
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(angle * to_radians);
     ctx.drawImage(image, -origWidth / 2, -origHeight / 2);
     ctx.restore();
 
-    url = canvas.toDataURL();
+    const url = canvas.toDataURL();
     image.src = url;
 
     image.onload = function() {
@@ -380,4 +358,3 @@ function contentToolsImageUploader(dialog) {
     };
   }
 }
-

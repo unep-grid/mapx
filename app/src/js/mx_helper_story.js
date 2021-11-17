@@ -1,6 +1,7 @@
 import {initEditing} from './mx_helper_story_editor.js';
 import {ButtonPanel} from './button_panel/index.js';
 import {isViewId} from './is_test/index.js';
+import {waitFrameAsync} from './animation_frame/index.js';
 /**
  * Story map prototype
  * TODO:
@@ -9,6 +10,7 @@ import {isViewId} from './is_test/index.js';
  * - Use css transition for step animation instead of scrollFromTo
  * - If scroll is still needed, use wheel event deltaY
  * - Use transform translateY on the story element
+ * - Use async/await instead of promise chaining.
  */
 
 /**
@@ -47,20 +49,20 @@ const settings = {
  * @param {Boolean} o.edit Enable editing
  * @param {Boolean} o.update Update : partial cleaning
  * @param {Boolean} o.storyAutoStart Bypass everything, start story, don't display back button
- * @param
  */
-export function storyRead(o) {
-  if (o.close) {
-    return storyClose();
+export async function storyRead(o) {
+  try {
+    if (o.close) {
+      return storyClose();
+    }
+    await getStory(o);
+    await cleanInit(o);
+    await setLocalViews(o);
+    await setUi(o);
+    await start(o);
+  } catch (e) {
+    console.error(e);
   }
-  return getStory(o)
-    .then(cleanInit)
-    .then(setLocalViews)
-    .then(setUi)
-    .then(setListeners)
-    .catch((e) => {
-      console.error(e);
-    });
 }
 
 /**
@@ -70,19 +72,6 @@ export function isStoryPlaying() {
   const h = mx.helpers;
   const s = h.path(mx, 'data.story', {});
   return s.enable === true;
-}
-
-/**
- * Check if a story is playing
- * @return {String}
- */
-export function getStoryDashboardMode() {
-  const h = mx.helpers;
-  const isNotPlaying = !h.isStoryPlaying();
-  if (isNotPlaying) {
-    return;
-  }
-  return h.path(mx, 'data.story.data._dashboard_behaviour', null);
 }
 
 /**
@@ -261,7 +250,7 @@ async function setUi(o) {
  * Add listeners : scroll, key, adaptive screen
  */
 
-async function setListeners(o) {
+async function start(o) {
   /**
    * Handle key events
    */
@@ -277,10 +266,16 @@ async function setListeners(o) {
    */
   initButtonsListener(o);
 
+  /**
+   * Init map pan controller
+   */
+
+  storyControlMapPan('recalc');
+
   /* Listen to scroll on the main container. */
-  storyOnScroll({
+  await storyOnScroll({
     selector: '.mx-story',
-    callback: storyUpdateSlides,
+    callbackAsync: storyUpdateSlides,
     view: o.view,
     data: o.data,
     enableCheck: function() {
@@ -289,11 +284,9 @@ async function setListeners(o) {
     startPos: o.startScroll
   });
 
-  /* Set lock map pan to current value */
-  storyControlMapPan('recalc');
-
-  /* Return options */
-  return o;
+  /**
+   * Ended
+   */
 }
 
 /**
@@ -471,9 +464,8 @@ function setScrollData(o) {
  * @param {String|Element} o.selector
  * @param {Function} o.callback Callback function. All options will be provided to this callback function
  */
-function storyOnScroll(o) {
-  var data, posNow, posLast;
-  var nf = mx.helpers.onNextFrame;
+async function storyOnScroll(o) {
+  let data, posNow, posLast;
   /*
    * Store start values
    */
@@ -483,7 +475,6 @@ function storyOnScroll(o) {
    * Start loop
    */
   updateLayout();
-  loop();
   /**
    * Trigger step config
    */
@@ -494,29 +485,39 @@ function storyOnScroll(o) {
     group: 'story_map'
   });
 
+  let i = 0;
+  await loop();
+
+  /**
+   * Helpers
+   */
+
+  /* update story map layout  */
   function updateLayout() {
     o.data.setWrapperLayout(o);
     setScrollData(o);
     setStepConfig(o);
   }
 
-  /*
-   * Loop : run a function if scroll is done on an element
-   */
-  function loop() {
-    if (o.enableCheck()) {
+  /* main animation loop */
+  async function loop() {
+    const isEnabled = o.enableCheck();
+    if (isEnabled) {
       data = o.onScrollData;
       // NOTE: scrollTop does not reflect actual dimension but non scaled ones.
       posNow = data.elScroll.scrollTop * data.scaleWrapper || 1;
       posLast = data.distTop;
       if (posLast === posNow) {
-        nf(loop);
+        await waitFrameAsync();
+        await loop();
         return false;
       } else {
         o.onScrollData.distTop = posNow;
       }
-      o.callback(o);
-      nf(loop);
+      await o.callbackAsync(o);
+      await waitFrameAsync();
+      await loop();
+      return true;
     }
   }
 }
@@ -528,7 +529,6 @@ function initButtonsListener(o) {
    * Button Legend
    */
   o.data.buttonLegend = new ButtonPanel({
-    //elContainer: o.data.elMapContainer,
     elContainer: document.body,
     panelFull: true,
     position: 'bottom-left',
@@ -699,26 +699,28 @@ function setStepConfig(o) {
  * @param {Object} o.onScrollData Data from onScroll function
  * @param {Object} o.view View object
  */
-export function storyUpdateSlides(o) {
+async function storyUpdateSlides(o) {
   /*
    * Apply style
    */
-  var data = o.onScrollData;
-  var percent = 0;
-  var elSlides;
-  var elStep;
-  var elBullet;
-  var elBullets = o.data.elBullets;
-  var isActive, isInRange, isInRangeAnim, toActivate;
-  var clHidden = 'mx-visibility-hidden';
-  var clRemove = 'mx-display-none';
-  var isHidden = false;
+  let data = o.onScrollData;
+  let percent = 0;
+  let elSlides;
+  let elStep;
+  let elBullet;
+  let elBullets = o.data.elBullets;
+  let elLegendContainer = o.data.buttonLegend.elPanelContent;
+  let isActive, isInRange, isInRangeAnim, toActivate;
+  let clHidden = 'mx-visibility-hidden';
+  let clRemove = 'mx-display-none';
+  let isHidden = false;
+  let config;
+
   if (!o.enableCheck()) {
     return;
   }
 
-  //for (var s = 0, sL = data.stepsConfig.length; s < sL; s++) {
-  data.stepsConfig.forEach((config, s) => {
+  for (let s = 0, sL = data.stepsConfig.length; s < sL; s++) {
     /**
      *   1       2       s       e       5       6
      *   |.......|.......|.......|.......|.......|
@@ -734,6 +736,7 @@ export function storyUpdateSlides(o) {
     isHidden = config.elStep.classList.contains(clHidden);
     elStep = config.elStep;
     elSlides = config.elSlides;
+
     /**
      * Update slide animation
      */
@@ -741,32 +744,32 @@ export function storyUpdateSlides(o) {
       if (isHidden) {
         elStep.classList.remove(clHidden);
       }
-      elSlides.forEach((elSlide, i) => {
-        var slideTransform = mx.helpers.storySetTransform({
-          data: config.slidesConfig[i],
+
+      let i = 0;
+      for (const elSlide of elSlides) {
+        const slideTransform = storySetTransform({
+          data: config.slidesConfig[i++],
           percent: percent
         });
         elSlide.classList.remove(clRemove);
         elSlide.style[data.scrollFun] = slideTransform;
-      });
-    } else {
-      if (!isHidden) {
-        elStep.classList.add(clHidden);
-        elSlides.forEach((elSlide) => {
-          elSlide.classList.add(clRemove);
-        });
+      }
+    } else if (!isHidden) {
+      elStep.classList.add(clHidden);
+      for (const elSlide of elSlides) {
+        elSlide.classList.add(clRemove);
       }
     }
 
-    /**
-     * Play step
-     */
     if (toActivate) {
-      mx.helpers.storyPlayStep({
+      /**
+       * Play step
+       */
+      await storyPlayStep({
         id: 'map_main',
         view: o.view,
         stepNum: s,
-        elLegendContainer: o.data.buttonLegend.elPanelContent
+        elLegendContainer: elLegendContainer
       });
       data.stepActive = s;
 
@@ -791,7 +794,7 @@ export function storyUpdateSlides(o) {
       const dist = bContWidth / 2 - (s + 1) * bItemWidth;
       elBullets.style.transform = `translateX(${dist}px)`;
     }
-  });
+  }
 }
 
 /*
@@ -970,8 +973,9 @@ export async function storyAutoPlay(cmd) {
  * @param {String} cmd Action : recalc, unlock, toggle;
  */
 export function storyControlMapPan(cmd) {
+  const h = mx.helpers;
+  const dh = h.dashboardHelper;
   const valid = ['recalc', 'lock', 'unlock', 'toggle'].indexOf(cmd) > -1;
-
   if (!valid) {
     cmd = 'toggle';
   }
@@ -980,6 +984,10 @@ export function storyControlMapPan(cmd) {
   const elButton = btn.elButton;
   const elIcon = elButton.querySelector('.fa');
   const elStory = document.getElementById('story');
+  if (!elStory) {
+    return;
+  }
+
   const classLock = 'fa-lock';
   const classUnlock = 'fa-unlock';
   const classNoEvent = 'mx-events-off';
@@ -1003,6 +1011,7 @@ export function storyControlMapPan(cmd) {
     elStory.classList.add(classNoEvent);
     if (!isRecalc && hasChanged) {
       mx.helpers.iconFlash('unlock');
+      //btn.shake('look_at_me')
     }
   } else {
     mx.events.fire('story_lock');
@@ -1011,9 +1020,11 @@ export function storyControlMapPan(cmd) {
     elStory.classList.remove(classNoEvent);
     if (!isRecalc && hasChanged) {
       mx.helpers.iconFlash('lock');
+      //btn.shake('look_at_me')
     }
-    if (mx.dashboard && mx.dashboard.panel) {
-      mx.dashboard.panel.close(true);
+    if (dh.hasInstance()) {
+      const d = dh.getInstance();
+      d.hide();
     }
   }
 }
@@ -1076,7 +1087,7 @@ export function storyController(o) {
     /**
      *Check for previews views list ( in case of update );
      */
-    var oldViews = h.path(mx.data, 'story.data.views');
+    let oldViews = h.path(mx.data, 'story.data.views');
     if (!h.isArrayOfViewsId(oldViews)) {
       oldViews = h.getViewsLayersVisibles();
     }
@@ -1119,7 +1130,7 @@ export function storyController(o) {
     /**
      * Lock story
      */
-    h.storyControlMapPan('lock');
+    storyControlMapPan('lock');
 
     /**
      * Remvove registered listener
@@ -1172,7 +1183,7 @@ export function storyController(o) {
       }
 
       /**
-       * Rest previous position
+       * Reset previous position
        */
       if (!updateMode && o.data.position) {
         const pos = o.data.position;
@@ -1186,13 +1197,9 @@ export function storyController(o) {
 
       if (o.data.elBullets) {
         o.data.elBullets.remove();
-      } else {
-        console.log('no bullets');
       }
       if (o.data.elBulletsContainer) {
         o.data.elBulletsContainer.remove();
-      } else {
-        console.log('no bullets container');
       }
 
       if (o.data.elScroll) {
@@ -1432,7 +1439,7 @@ export function storySetTransform(o) {
   return tt.join(' ');
 }
 
-export function storyPlayStep(o) {
+export async function storyPlayStep(o) {
   o = o || {};
   o.id = o.id || 'map_main';
   const h = mx.helpers;
@@ -1496,21 +1503,6 @@ export function storyPlayStep(o) {
   }
 
   /**
-   * Set dashboard behaviour
-   */
-  const dDefault = 'inherit';
-  const dGlobal = h.path(settings, 'dashboards_panel_behaviour', null);
-  const dStep = h.path(step, 'dashboards_panel_behaviour', null);
-
-  if (dGlobal && dGlobal !== dDefault) {
-    data._dashboard_behaviour = dGlobal;
-  } else if (dStep && dStep !== dDefault) {
-    data._dashboard_behaviour = dStep;
-  } else {
-    data._dashboard_behaviour = dDefault;
-  }
-
-  /**
    * Views set
    */
   const vStep = step.views.map((v) => v.view);
@@ -1521,9 +1513,10 @@ export function storyPlayStep(o) {
   /**
    * Add view if not alredy there
    */
-  const vPromAdded = vToAdd.map((v, i) => {
-    const vPrevious = vStep[i - 1] || mx.settings.layerBefore;
-    return h.viewLayersAdd({
+  let i = 0;
+  for (const v of vToAdd) {
+    const vPrevious = vStep[i++ - 1] || mx.settings.layerBefore;
+    await h.viewLayersAdd({
       id: o.id,
       idView: v,
       openView: false,
@@ -1531,29 +1524,116 @@ export function storyPlayStep(o) {
       before: vPrevious,
       elLegendContainer: elLegendContainer
     });
-  });
+  }
 
   /**
    * Remove view not used
    */
-  const vPromRemoved = vToRemove.map((v) => {
-    return h.viewLayersRemove({
+  for (const v of vToRemove) {
+    await h.viewLayersRemove({
       id: o.id,
       idView: v,
       elLegendContainer: elLegendContainer
     });
-    //h.viewModulesRemove(v);
+  }
+
+  await h.viewsLayersOrderUpdate({
+    order: vStep,
+    id: o.id
   });
 
   /**
-   * Once everything is done set order
+   * Update panels behaviour
    */
-  Promise.all([...vPromAdded, ...vPromRemoved])
-    .then(() => {
-      return h.viewsLayersOrderUpdate({
-        order: vStep,
-        id: o.id
-      });
-    })
-    .catch((e) => console.error);
+  await updatePanelBehaviour(data, settings, step);
+}
+
+async function updatePanelBehaviour(data, settings, step) {
+  const h = mx.helpers;
+  const dh = h.dashboardHelper;
+  const idViews = h.path(step, 'views', []).map((v) => v.view || v);
+
+  /**
+   * Set dashboard panel behaviour
+   * -> used in buildDashboard()
+   */
+  const dDefault = 'default';
+  const dRoot = h.path(settings, 'dashboards_panel_behaviour', null);
+  const dStep = h.path(step, 'dashboards_panel_behaviour', null);
+  let dBehaviour;
+
+  if (dRoot && dRoot !== dDefault) {
+    dBehaviour = dRoot;
+  } else if (dStep && dStep !== dDefault) {
+    dBehaviour = dStep;
+  } else {
+    dBehaviour = dDefault;
+  }
+
+  if (dBehaviour === 'disabled') {
+    dh.rmInstance();
+  } else {
+    /**
+     * Add widgets
+     */
+    for (const v of idViews) {
+      await dh.viewAddWidgetsAsync(v);
+    }
+    const dashboard = dh.getInstance();
+
+    /**
+     * If a dashboard exists, apply behaviour
+     */
+    if (dashboard) {
+      switch (dBehaviour) {
+        case 'open':
+          dashboard.show();
+          break;
+        case 'closed':
+          dashboard.hide();
+          break;
+        default:
+          /**
+           * Get the the default from the first
+           * view with config
+           */
+          for (const v of idViews) {
+            const config = dh.viewConfigGet(v);
+            if (config) {
+              if (!config.panel_init_close) {
+                dashboard.show();
+              }
+              break;
+            }
+          }
+      }
+    }
+  }
+
+  /**
+   * Set legend panel behaviour
+   */
+  const lDefault = 'default';
+  const lRoot = h.path(settings, 'legends_panel_behaviour', null);
+  const lStep = h.path(step, 'legends_panel_behaviour', null);
+  let lBehaviour;
+
+  if (lRoot && lRoot !== lDefault) {
+    lBehaviour = lRoot;
+  } else if (lStep && lStep !== lDefault) {
+    lBehaviour = lStep;
+  } else {
+    lBehaviour = lDefault;
+  }
+
+  switch (lBehaviour) {
+    case 'open':
+      data.buttonLegend.open();
+      break;
+    case 'closed':
+      data.buttonLegend.close();
+      break;
+    default:
+      null;
+  }
 }

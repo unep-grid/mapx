@@ -560,8 +560,6 @@ class ButtonPanel extends EventSimple {
     }
   }
 
-
-
   isVisible() {
     const panel = this;
     return !panel.elContainer.classList.contains('button-panel--hidden');

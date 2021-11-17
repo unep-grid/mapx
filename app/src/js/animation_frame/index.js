@@ -37,4 +37,17 @@ function cancelFrame(id) {
   }
 }
 
-export {onNextFrame, cancelFrame};
+/**
+* Wait next frame async
+* @return {Promise} next frame;
+*/ 
+function waitFrameAsync(){
+  return new Promise((r)=>{
+    nf(r);
+  })
+}
+
+
+
+
+export {onNextFrame, cancelFrame, waitFrameAsync};

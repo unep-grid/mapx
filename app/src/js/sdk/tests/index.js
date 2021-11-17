@@ -125,12 +125,12 @@ mapx.once('ready', async () => {
         }
       },
       {
-        name: 'test 50 random common locations',
+        name: 'test 20 random common locations',
         timeout: 20000,
         test: async function(codes) {
           const item = this;
           const now = performance.now();
-          const n = 50;
+          const n = 20;
           const l = codes.length;
           await mapx.ask('map_wait_idle');
           for (let i = 0; i < n; i++) {

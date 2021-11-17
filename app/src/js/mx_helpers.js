@@ -20,6 +20,7 @@ export * from './mx_helper_map_draw.js';
 export * from './mx_helper_ui_color.js';
 export * from './mx_helper_story.js';
 export * from './mx_helper_draggable.js';
+export * from './mx_helper_map_dashboard.js';
 export * from './mx_helper_map_pixop.js';
 export * from './mx_helper_map_composer.js';
 export * from './mx_helper_map_dragdrop.js';

@@ -32,7 +32,9 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} exists
    */
   has_dashboard() {
-    return !!mx.dashboard && !mx.dashboard._destroyed;
+    const rslv = this;
+    const dh = rslv._h.dashboardHelper;
+    return dh.hasInstance();
   }
 
   /**
@@ -159,10 +161,11 @@ class MapxResolversStatic extends ResolversBase {
    */
   set_dashboard_visibility(opt) {
     const rslv = this;
+    const dh = rslv._h.dashboardHelper;
     if (!rslv.has_dashboard()) {
       throw new Error('No dashboard container found');
     }
-    const panel = mx.dashboard;
+    const panel = dh.getInstance().panel
     return rslv._handle_panel_visibility(panel, opt);
   }
 
@@ -172,7 +175,9 @@ class MapxResolversStatic extends ResolversBase {
    */
   is_dashboard_visible() {
     const rslv = this;
-    return rslv.has_dashboard() && mx.dashboard.isVisible();
+    const dh = rslv._h.dashboardHelper;
+    const d = dh.getInstance();
+    return rslv.has_dashboard() && d.isVisible();
   }
 
   /**
