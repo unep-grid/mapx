@@ -9803,16 +9803,16 @@
   },
   {
     "id": "view_add_overlap_layer",
-    "en": "Add an mask",
+    "en": "Add a mask",
     "fr": "Ajouter un masque",
     "es": "Añadir una máscara",
-    "ru": "Добавить маску ",
+    "ru": "Добавить маску",
     "zh": "添加蒙版",
-    "ar": "أضف قناعًا ",
+    "ar": "أضف قناعًا",
     "fa": "افزودن نقاب",
     "ps": "د ماسک زیاتول",
-    "bn": "একটি মাস্ক যুক্ত করুন ",
-    "de": "Fügen Sie eine Maske hinzu "
+    "bn": "একটি মুখোশ যোগ করুন",
+    "de": "Maske hinzufügen"
   },
   {
     "id": "view_component",
