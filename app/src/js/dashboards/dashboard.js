@@ -150,7 +150,6 @@ class Dashboard {
 
   hide() {
     const d = this;
-    console.log('dashboard hide requested');
     if (d._open === true) {
       d._open = false;
       d.panel.close();
