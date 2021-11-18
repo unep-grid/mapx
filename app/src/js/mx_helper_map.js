@@ -1107,7 +1107,7 @@ export function initMapListener(map) {
   });
 
   mx.events.on({
-    type: ['view_add', 'view_remove'],
+    type: ['view_add', 'view_remove', 'story_step'],
     idGroup: 'highlight_clear',
     callback: () => {
       mx.highlighter.clean();
@@ -1372,7 +1372,6 @@ export async function handleClickEvent(e, idMap) {
         idGroup: 'click_popup',
         callback: () => {
           popup.remove();
-          mx.highlighter.clean();
         }
       });
 
