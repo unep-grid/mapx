@@ -330,7 +330,7 @@ function initMouseMoveListener(o) {
     mx.listeners.addListener({
       target: window,
       callback: mouseHider,
-      type: 'mousemove',
+      type: ['mousemove','click'],
       group: 'story_map',
       onRemove: destroy
     });
@@ -549,8 +549,29 @@ function initButtonsListener(o) {
   /**
    * Control panel buttons
    */
-  o.data.ctrlMode3d = mx.panel_tools.controls.getButton('btn_3d_terrain');
-  o.data.ctrlAerial = mx.panel_tools.controls.getButton('btn_theme_sat');
+  const keyBtn3d = settings.ctrl_btn_3d_terrain;
+  const keyBtnSat = settings.ctrl_btn_theme_sat;
+  const keyBtnUnlock = settings.ctrl_btn_lock;
+
+  o.data.ctrlMode3d = mx.panel_tools.controls.getButton(keyBtn3d);
+  o.data.ctrlAerial = mx.panel_tools.controls.getButton(keyBtnSat);
+  o.data.ctrlLock = mx.panel_tools.controls.getButton(keyBtnUnlock); 
+  
+  /**
+  * Locked 
+  */ 
+  mx.listeners.addListener({
+    target: o.data.elStory,
+    type: 'click',
+    callback: (e)=>{
+      mx.panel_tools.panel.open();
+      o.data.ctrlLock.shake('look_at_me');
+      mx.helpers.iconFlash('ban');
+    },
+    group: 'story_map'
+  });
+
+
 
   /**
    * Bullets
@@ -1011,7 +1032,6 @@ export function storyControlMapPan(cmd) {
     elStory.classList.add(classNoEvent);
     if (!isRecalc && hasChanged) {
       mx.helpers.iconFlash('unlock');
-      //btn.shake('look_at_me')
     }
   } else {
     mx.events.fire('story_lock');
@@ -1020,7 +1040,6 @@ export function storyControlMapPan(cmd) {
     elStory.classList.remove(classNoEvent);
     if (!isRecalc && hasChanged) {
       mx.helpers.iconFlash('lock');
-      //btn.shake('look_at_me')
     }
     if (dh.hasInstance()) {
       const d = dh.getInstance();
