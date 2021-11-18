@@ -86,14 +86,12 @@ mxSchemaViewStory <- function(view,views,language){
     title = tt("schema_story_legends_panel_handling"),
     description =tt("schema_story_legends_panel_handling_desc"),
     enum =  list(
-      "default",   # -> default 
       "open",      # -> force open
       "closed"     # -> force closed 
       ),
-    default = "default",
+    default = "closed",
     options =  list(
       enum_titles = list(
-        tt("schema_story_legends_panel_default"),
         tt("schema_story_legends_panel_open"),
         tt("schema_story_legends_panel_closed")
       )
@@ -101,7 +99,12 @@ mxSchemaViewStory <- function(view,views,language){
   )
   settingsLegendsPanelRoot <- settingsLegendsPanel
   settingsLegendsPanelRoot$description <- tt("schema_story_legends_panel_handling_root_desc")
-  settingsLegendsPanelRoot$options$enum_titles[[1]] <- tt("schema_story_legends_panel_root_default")
+  settingsLegendsPanelRoot$default<- "default"
+  settingsLegendsPanelRoot$enum <- c("default",settingsLegendsPanelRoot$enum)
+  settingsLegendsPanelRoot$options$enum_titles<- c(
+    tt("schema_story_legends_panel_root_default"),
+    settingsLegendsPanelRoot$options$enum_titles
+  )
   #
   # Multiple associated view object
   #

@@ -1558,11 +1558,14 @@ async function updatePanelBehaviour(data, settings, step) {
    * -> used in buildDashboard()
    */
   const dDefault = 'default';
+  const dClosed = 'closed';
   const dRoot = h.path(settings, 'dashboards_panel_behaviour', null);
   const dStep = h.path(step, 'dashboards_panel_behaviour', null);
   let dBehaviour;
 
-  if (dRoot && dRoot !== dDefault) {
+  if (mx.settings.initClosedPanels) {
+    dBehaviour = dClosed;
+  } else if (dRoot && dRoot !== dDefault) {
     dBehaviour = dRoot;
   } else if (dStep && dStep !== dDefault) {
     dBehaviour = dStep;
@@ -1574,7 +1577,7 @@ async function updatePanelBehaviour(data, settings, step) {
     dh.rmInstance();
   } else {
     /**
-     * Add widgets
+     * Add widgets if any
      */
     for (const v of idViews) {
       await dh.viewAddWidgetsAsync(v);
@@ -1600,7 +1603,9 @@ async function updatePanelBehaviour(data, settings, step) {
           for (const v of idViews) {
             const config = dh.viewConfigGet(v);
             if (config) {
-              if (!config.panel_init_close) {
+              if (config.panel_init_close) {
+                dashboard.hide();
+              } else {
                 dashboard.show();
               }
               break;
@@ -1614,11 +1619,14 @@ async function updatePanelBehaviour(data, settings, step) {
    * Set legend panel behaviour
    */
   const lDefault = 'default';
+  const lClosed = 'closed';
   const lRoot = h.path(settings, 'legends_panel_behaviour', null);
   const lStep = h.path(step, 'legends_panel_behaviour', null);
   let lBehaviour;
 
-  if (lRoot && lRoot !== lDefault) {
+  if (mx.settings.initClosedPanels) {
+    lBehaviour = lClosed;
+  } else if (lRoot && lRoot !== lDefault) {
     lBehaviour = lRoot;
   } else if (lStep && lStep !== lDefault) {
     lBehaviour = lStep;

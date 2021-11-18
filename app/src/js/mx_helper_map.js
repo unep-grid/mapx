@@ -1372,6 +1372,7 @@ export async function handleClickEvent(e, idMap) {
         idGroup: 'click_popup',
         callback: () => {
           popup.remove();
+          mx.highlighter.clean();
         }
       });
 
