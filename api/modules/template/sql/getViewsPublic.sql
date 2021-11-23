@@ -2,7 +2,7 @@ WITH
 /**
 * Use only public proejct
 */
-projects_public as ( 
+projects_public AS NOT MATERIALIZED ( 
   SELECT *,
       CASE WHEN coalesce(title #>> '{"{{language}}"}','') = ''
         THEN 
@@ -23,7 +23,7 @@ projects_public as (
 /**
 * Filter view by type
 */
-views_subset as (
+views_subset AS NOT MATERIALIZED (
   SELECT
   id,
   editor,
