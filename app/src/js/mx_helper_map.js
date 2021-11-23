@@ -1561,7 +1561,7 @@ export async function addSourceFromView(o) {
   }
   const project = p(mx, 'settings.project.id');
   const projectView = p(o.view, 'project');
-  const projectsView = p(o.view, 'data.projects') || [];
+  const projectsView = p(o.view, 'data.projects',[]);
   const useMirror = p(o.view, 'data.source.useMirror');
   const isEditable = h.isViewEditable(o.view);
   const isLocationOk =
@@ -4862,7 +4862,7 @@ export function getLayersPropertiesAtPoint(opt) {
    */
   idViews
     .map((idView) => h.getView(idView))
-    .filter((view) => type.indexOf(view.type) > -1)
+    .filter((view) => type.includes(view?.type))
     .forEach((view) => {
       if (!h.isView(view)) {
         console.warn('Not a view:', view, ' opt:', opt);
