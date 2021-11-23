@@ -1,17 +1,26 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.31-alpha.2' target='_blank'>1.9.31-alpha.2</a>
+  - APP
+    - Story map code refactoring. 
+      - Should fully support async functions. 
+      - Flatten / improved the code structure : more small blocks. Step prior converting to class.
+      - Added hard aggressive stop function to avoid the map to add layers after the story is quit
+    - New keybord shortcut 'l'. Works in edition mode if the focus is on the map and the text editor is not active
+  - API 
+    - Get all public views : cut request duration by half. 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.31-alpha.1' target='_blank'>1.9.31-alpha.1</a>
    - APP
-    - Story map reader + editor partial refactoring: generalized async support + reworked logic. Required to fine tune async dashboard manipuation. Could be unstable in this version
-    - Improved logic for controling dashbaord + legends display in story map
-    - Removed dashboard / view interaction from map helpers: use dedicated module instead + fragmented long function in multiple utilities.
+     - Story map reader + editor partial refactoring: generalized async support + reworked logic. Required to fine tune async dashboard manipuation. Could be unstable in this version
+     - Improved logic for controling dashbaord + legends display in story map
+     - Removed dashboard / view interaction from map helpers: use dedicated module instead + fragmented long function in multiple utilities.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.31-alpha.0' target='_blank'>1.9.31-alpha.0</a>
    - APP 
-    - Added option to enable / disable widget and dashboard + modified UX accordingly
-    - Modified Ace editor for json-editor : no wrap + transformed to await/async.
-    - New default value for widget : more complete example, more verbose. 
-    - Quick change for el module : handle SVG nodes.
-    - Removed default link in mirror utilities and use a tile server link and add a placeholder with {z}/{x}/{y} template as demo  
+     - Added option to enable / disable widget and dashboard + modified UX accordingly
+     - Modified Ace editor for json-editor : no wrap + transformed to await/async.
+     - New default value for widget : more complete example, more verbose. 
+     - Quick change for el module : handle SVG nodes.
+     - Removed default link in mirror utilities and use a tile server link and add a placeholder with {z}/{x}/{y} template as demo  
    - API
-    - Fix bug with email sending (double quote not valid in subject)
+     - Fix bug with email sending (double quote not valid in subject)
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.30' target='_blank'>1.9.30</a>
    - API
     - Added mirror api rate limits in env file 
@@ -30,14 +39,14 @@
       - Changed mirror api rate limit to 2000
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.28' target='_blank'>1.9.28</a>
    - APP
-    - Solves bug with translated labels (typo) + edge case when dict had duplicated key
-    - Removed own email address in readers and viewers list, as it was redundant with 'self' in view's editor. Possible duplicated elsewhere.
-    - Added description for tile's size input in raster tile view editor.
-    - Tiles size is used now during WMS url creation. If the value change after the url is built, it does not change it.
-    - Misc wording in translation 
+     - Solves bug with translated labels (typo) + edge case when dict had duplicated key
+     - Removed own email address in readers and viewers list, as it was redundant with 'self' in view's editor. Possible duplicated elsewhere.
+     - Added description for tile's size input in raster tile view editor.
+     - Tiles size is used now during WMS url creation. If the value change after the url is built, it does not change it.
+     - Misc wording in translation 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.27' target='_blank'>1.9.27</a>
    - APP/API
-    - Minor refactoring of WMS configurator and mirror API. Improved error message handling during configuration. Improved labels, description and translations. Impacts also share manager UI and globally error handling.
+     - Minor refactoring of WMS configurator and mirror API. Improved error message handling during configuration. Improved labels, description and translations. Impacts also share manager UI and globally error handling.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.26' target='_blank'>1.9.26</a>
    - APP/API
     - Improved mirror api :
