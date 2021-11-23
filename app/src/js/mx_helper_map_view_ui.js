@@ -266,7 +266,7 @@ export async function viewsListRenderNew(o) {
        */
       {id: 'set_drag_image', action: handleSetDragImage},
       {id: 'set_drag_text', action: handleSetDragText},
-      {id: 'state_save_local', action: h.iconFlashSave},
+      {id: 'state_save_local', action: h.itemFlashSave},
       {id: 'state_sanitize', action: sanitizeState},
       {id: 'get_item_text_by_id', action: h.getViewTitleNormalized},
       {id: 'get_item_date_by_id', action: h.getViewDateModified},

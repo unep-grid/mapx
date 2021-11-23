@@ -229,7 +229,7 @@ async function viewCreateDashboardAsync(idView) {
   store.dashboard.on('show', () => {
     const hasStory = h.isStoryPlaying();
     if (hasStory) {
-      h.storyControlMapPan('unlock');
+      h.storyMapLock('unlock');
     }
   });
 
@@ -238,17 +238,16 @@ async function viewCreateDashboardAsync(idView) {
    * is closed or destroy, lock the story
    */
   store.dashboard.on('hide', () => {
-    console.log('dashboard on hide');
     const hasStory = h.isStoryPlaying();
     if (hasStory) {
-      h.storyControlMapPan('lock');
+      h.storyMapLock('lock');
     }
   });
 
   store.dashboard.on('destroy', () => {
     const hasStory = h.isStoryPlaying();
     if (hasStory) {
-      h.storyControlMapPan('lock');
+      h.storyMapLock('lock');
     }
   });
   /**

@@ -1,6 +1,6 @@
-import {ButtonCircle} from './../icon_flash';
+import {FlashCircle} from './../icon_flash';
 import {modal, modalConfirm} from './../mx_helper_modal.js';
-import {storyRead} from './../mx_helper_story.js';
+import {storyRead} from './../story_map/index.js';
 import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
 import {getDictItem} from './../mx_helper_language.js';
 import {EventSimple} from './../listener_store';
@@ -902,7 +902,7 @@ class Search extends EventSimple {
     }
   }
   vFeedback(event) {
-    new ButtonCircle({
+    new FlashCircle({
       x: event.clientX,
       y: event.clientY
     });

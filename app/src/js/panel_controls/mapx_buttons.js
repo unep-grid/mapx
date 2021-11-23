@@ -1,15 +1,13 @@
 import {Button} from './button.js';
 import screenfull from 'screenfull';
+import {mapComposerModalAuto} from './../mx_helper_map_composer.js'
+import {geolocateUser, getMap, getLayerNamesByPrefix} from './../mx_helper_map.js';
+import {toggleSpotlight} from './../mx_helper_map_pixop.js';
 import {
-  path,
-  storyControlMapPan,
-  isStoryPlaying,
-  mapComposerModalAuto,
-  geolocateUser,
-  toggleSpotlight,
-  btnToggleLayer,
-  getMap
-} from './../mx_helpers.js';
+  storyMapLock,
+  storyClose,
+  isStoryPlaying
+} from  './../story_map/index.js'
 
 export function generateButtons() {
   return [
@@ -17,24 +15,13 @@ export function generateButtons() {
       key: 'btn_story_close',
       display: false,
       classesIcon: ['fa', 'fa-arrow-left'],
-      action: function() {
-        const btn = this;
-        const story = path(mx, 'data.story');
-        if (story) {
-          story.data.close(btn);
-        }
-      }
+      action: storyClose
     }),
     new Button({
       key: 'btn_story_unlock_map',
       display: false,
       classesIcon: ['fa', 'fa-lock'],
-      action: function() {
-        const story = path(mx, 'data.story');
-        if (story) {
-          storyControlMapPan();
-        }
-      }
+      action: storyMapLock
     }),
     new Button({
       key: 'btn_zoom_in',
@@ -97,12 +84,11 @@ export function generateButtons() {
     new Button({
       key: 'btn_3d_terrain',
       classesIcon: ['mx-mountain'],
-      // ()=> = this does not work;
       action: function(cmd) {
         const btn = this;
         const map = getMap();
         cmd = typeof cmd === 'string' ? cmd : 'toggle';
-        const enabled = btnToggleLayer({
+        const enabled = toggleLayer({
           id: 'map_main',
           idLayer: 'terrain_sky',
           elButton: btn.elButton,
@@ -112,21 +98,22 @@ export function generateButtons() {
         if (!storyPlaying) {
           map.flyTo({pitch: enabled ? 60 : 0});
         }
+        return enabled;
       }
     }),
     new Button({
       key: 'btn_theme_sat',
       classesIcon: ['fa', 'fa-plane'],
-      // ()=> = this does not work;
       action: function(cmd) {
         const btn = this;
         cmd = typeof cmd === 'string' ? cmd : 'toggle';
-        btnToggleLayer({
+        const enabled = toggleLayer({
           id: 'map_main',
           idLayer: 'mapbox_satellite',
           elButton: btn.elButton,
           action: cmd
         });
+        return enabled;
       }
     }),
     new Button({
@@ -181,4 +168,54 @@ function toggleTheme() {
   const elIcon = this.elButton.querySelector('.fa');
   elIcon.classList.toggle('fa-rotate-180');
   mx.theme.toggleDarkMode();
+}
+
+
+/**
+ * Toggle visibility for existing layer in style
+ * TODO: This is quite messy : simplify, generalize
+ * @param {Object} opt options
+ * @param {String} opt.idLayer Layer id to toggle
+ * @param {Element} opt.elButton Button element to add 'active' class
+ * @param {String} opt.action hide, show, toggle
+ * @return {String} Toggled
+ */
+function toggleLayer(opt) {
+  const def = {
+    action: 'toggle'
+  };
+  opt = Object.assign({}, def, opt);
+  const altLayers = [];
+  const map = getMap();
+  const btn = opt.elButton;
+  const layer = map.getLayer(opt.idLayer);
+  const isAerial = opt.idLayer === 'mapbox_satellite'; // hide also shades...
+  const isTerrain = opt.idLayer === 'terrain_sky'; // hide shade + show terrain...
+  const isVisible = layer.visibility === 'visible';
+  const reqShow = opt.action === 'show';
+  const reqHide = opt.action === 'hide';
+  const reqToggle = opt.action === 'toggle';
+  const toShow = reqToggle ? !isVisible : reqShow || !reqHide;
+
+  if (isAerial || isTerrain) {
+    /**
+     * Special case : aerial and terrain mode should not have
+     * hillshading or bathymetry.
+     */
+    altLayers.push(...getLayerNamesByPrefix({prefix: 'hillshading'}));
+    altLayers.push(...getLayerNamesByPrefix({prefix: 'bathymetry'}));
+  }
+
+  map.setLayoutProperty(opt.idLayer, 'visibility', toShow ? 'visible' : 'none');
+
+  for (let id of altLayers) {
+    map.setLayoutProperty(id, 'visibility', toShow ? 'none' : 'visible');
+  }
+  if (isTerrain) {
+    map.setTerrain(toShow ? {source: 'mapbox_dem', exaggeration: 1.5} : null);
+  }
+  if (btn) {
+    btn.classList[toShow ? 'add' : 'remove']('active');
+  }
+  return toShow;
 }

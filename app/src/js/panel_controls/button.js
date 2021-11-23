@@ -1,7 +1,7 @@
 //import {el} from '@fxi/el';
 import {el} from '../el/src/index.js';
 import {getDictItem} from './../mx_helpers.js';
-import {ButtonCircle} from './../icon_flash/index.js';
+import {FlashCircle} from './../icon_flash/index.js';
 import {bindAll} from './../bind_class_methods/index.js';
 import {EventSimple} from '../listener_store/index.js';
 import {shake} from '../elshake/index.js';
@@ -48,7 +48,7 @@ class Button extends EventSimple {
      * Build button ui.
      */
     btn.elButton = el(
-      'div',
+      'button',
       {
         on: {click: btn.action},
         class: [
@@ -66,7 +66,7 @@ class Button extends EventSimple {
         },
         'aria-label': getDictItem(opt.key)
       },
-      el('div', {
+      el('i', {
         class: opt.classesIcon
       })
     );
@@ -84,22 +84,27 @@ class Button extends EventSimple {
 
   shake(type) {
     shake(this.elButton, {
-      type: 
-      type
+      type: type
     });
   }
 
   action(event) {
     const btn = this;
     btn.flash(event);
-    btn.opt.action(event);
+    return btn.opt.action(event);
   }
 
   flash(event) {
-    new ButtonCircle({
-      x: event.clientX,
-      y: event.clientY
-    });
+    if (event instanceof Event) {
+      new FlashCircle({
+        x: event.clientX,
+        y: event.clientY
+      });
+    }
+  }
+
+  isActive(){
+    return this.elButton.classList.contains('active');
   }
 
   show() {

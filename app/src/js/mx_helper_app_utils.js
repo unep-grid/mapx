@@ -1,5 +1,5 @@
 import {miniCacheClear} from './minicache';
-import {IconFlash} from './icon_flash/index.js';
+import {FlashItem} from './icon_flash/index.js';
 import {getDictItem, getDictTemplate} from './mx_helper_language.js';
 import {modalConfirm} from './mx_helper_modal.js';
 import {removeCookie} from './mx_helper_cookies.js';
@@ -27,7 +27,7 @@ export async function clearMapxCache() {
       }
       miniCacheClear();
       clearServiceWorker();
-      new IconFlash('trash-o');
+      new FlashItem('trash-o');
       const confirmReload = await modalConfirm({
         title: getDictItem('utils_clear_cache_reload_title'),
         content: getDictItem('utils_clear_cache_reload')

@@ -34,7 +34,14 @@ mxSchemaViewStory <- function(view,views,language){
       "mx-story-screen-480p",
       "mx-story-screen-720p",
       "mx-story-screen-1080p",
-      "mx-story-screen-1440p"
+      "mx-story-screen-1440p",
+      "mx-story-screen-240p-v",
+      "mx-story-screen-360p-v",
+      "mx-story-screen-480p-v",
+      "mx-story-screen-720p-v",
+      "mx-story-screen-1080p-v",
+      "mx-story-screen-1440p-v"
+
       ),
     options = list(
       enum_titles = list(
@@ -43,7 +50,13 @@ mxSchemaViewStory <- function(view,views,language){
         "480p (16:9)",
         "720p (16:9)",
         "1080p (16:9)",
-        "1440p (16:9)"
+        "1440p (16:9)",
+        "240p (9:16, vertical)",
+        "360p (9:16, vertical)",
+        "480p (9:16, vertical)",
+        "720p (9:16, vertical)",
+        "1080p (9:16, vertical)",
+        "1440p (9:16, vertical)"
       )
       ),
     default = "mx-story-screen-720p"
@@ -245,6 +258,7 @@ mxSchemaViewStory <- function(view,views,language){
         name = list(
           title = tt("schema_story_slide_classes_name"), 
           type = "string",
+          default = "card",
           enum = c(
             "card",
             "image-cover",

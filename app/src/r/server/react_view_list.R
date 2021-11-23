@@ -66,7 +66,6 @@ reactViewsCompact <- reactive({
 
 reactViewsListIdAll <- reactive({
 
-  timer <- mxTimeDiff("Fetching all view")
   update <- reactData$updateViewList
   updateFetchOnly <- reactData$updateViewListFetchOnly
   userData <- reactUser$data
@@ -75,6 +74,7 @@ reactViewsListIdAll <- reactive({
   idUser <- userData$id
   token <- reactUser$token
 
+  timerFetchPublic <- mxTimeDiff("Fetching all view public")
   viewsPublic <- mxApiGetViewsAllPublicProject(
     idUser = idUser,
     idProject = idProject, 
@@ -84,7 +84,9 @@ reactViewsListIdAll <- reactive({
     language = language,
     keys = c("id","_title","_title_project")
     )
- 
+  mxTimeDiff(timerFetchPublic)
+
+  timerFetchProject <- mxTimeDiff("Fetching views project")
   viewsProject <-  mxApiGetViews(
     idUser = idUser,
     idProject = idProject,
@@ -93,6 +95,9 @@ reactViewsListIdAll <- reactive({
     language = language,
     keys = c("id","_title","_title_project")
     )
+  mxTimeDiff(timerFetchProject)
+
+  timer <- mxTimeDiff("Fetching all view: post process")
 
   viewsProjectList <- vapply(viewsProject,function(v){v$id},character(1))
   viewsProjectTitle <- vapply(viewsProject,function(v){

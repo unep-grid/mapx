@@ -3,8 +3,9 @@ import './style.css';
 
 const def = {
   icon: 'gears',
+  text: '',
   duration: 800,
-  removePrevious : true,
+  removePrevious: true,
   scaleStart: 1,
   scaleEnd: 1.4,
   opacityStart: 0.2,
@@ -15,76 +16,91 @@ const def = {
 
 let previous;
 
-class IconFlash {
+class FlashItem {
   constructor(opt) {
+    const fi = this;
     if (typeof opt === 'string') {
       opt = {icon: opt};
     }
     opt = Object.assign({}, def, opt);
-    if(previous && opt.removePrevious){
-     previous.destroy();
+    if (previous && opt.removePrevious) {
+      previous.destroy();
     }
     previous = this;
-    this.opt = opt;
-    this.build();
-    this.flash();
+    fi.opt = opt;
+    fi.build();
+    fi.flash();
   }
 
   build() {
-    this.elContainer = el(
+    const fi = this;
+    fi.elFlash = el('i', {
+      class: ['fa', `fa-${fi.opt.icon}`],
+      style: {
+        transform: `scale(${fi.opt.scaleStart})`,
+        opacity: fi.opt.opacityStart,
+        transition: `all ${fi.opt.duration}ms ease-out`
+      }
+    });
+    if (fi.opt.text) {
+      fi.elFlash.innerText = fi.opt.text;
+      fi.elFlash.className = '';
+    }
+
+    fi.elContainer = el(
       'div',
       {
         class: 'icon-flash',
         style: {
-          top: this.opt.y ? `${this.opt.y}px` : null,
-          left: this.opt.x ? `${this.opt.x}px` : null
+          top: fi.opt.y ? `${fi.opt.y}px` : null,
+          left: fi.opt.x ? `${fi.opt.x}px` : null
         }
       },
-      (this.elIcon = el('i', {
-        class: ['fa', `fa-${this.opt.icon}`],
-        style: {
-          transform: `scale(${this.opt.scaleStart})`,
-          opacity: this.opt.opacityStart,
-          transition: `all ${this.opt.duration}ms ease-out`
-        }
-      }))
+      fi.elFlash
     );
-    document.body.appendChild(this.elContainer);
+    document.body.appendChild(fi.elContainer);
   }
 
   flash() {
-    
-    setTimeout(this.activate.bind(this), 10);
-
+    const fi = this;
+    setTimeout(fi.activate.bind(fi), 10);
   }
   activate() {
-    this.elIcon.style.transform = `scale(${this.opt.scaleEnd})`;
-    this.elIcon.style.opacity = this.opt.opacityEnd;
-    setTimeout(this.destroy.bind(this), this.opt.duration);
+    const fi = this;
+    fi.elFlash.style.transform = `scale(${fi.opt.scaleEnd})`;
+    fi.elFlash.style.opacity = fi.opt.opacityEnd;
+    setTimeout(fi.destroy.bind(fi), fi.opt.duration);
   }
   destroy() {
-    this.elContainer.remove();
+    const fi = this;
+    fi.elContainer.remove();
   }
 }
 
-class ButtonCircle extends IconFlash {
+class FlashCircle extends FlashItem {
   constructor(opt) {
-    super(Object.assign({},{
-      icon: 'circle-thin',
-      duration: 600,
-      scaleStart: 0.3,
-      scaleEnd: 0.6,
-      opacityStart: 0.05,
-      opacityEnd: 0,
-      x: null,
-      y: null
-    },opt));
+    super(
+      Object.assign(
+        {},
+        {
+          icon: 'circle-thin',
+          duration: 600,
+          scaleStart: 0.3,
+          scaleEnd: 0.6,
+          opacityStart: 0.05,
+          opacityEnd: 0,
+          x: null,
+          y: null
+        },
+        opt
+      )
+    );
   }
 }
 
-export {ButtonCircle, IconFlash, randomFlashIcon};
+export {FlashCircle, FlashItem, randomFlashItem};
 
-function randomFlashIcon(n) {
+function randomFlashItem(n) {
   var r = document.body.getBoundingClientRect();
   var iter = 10;
 
@@ -103,7 +119,7 @@ function randomFlashIcon(n) {
     }
   }
   function draw() {
-    new IconFlash({
+    new FlashItem({
       icon: 'circle-o',
       x: random(0, r.width),
       y: random(0, r.height),

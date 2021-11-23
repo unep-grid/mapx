@@ -18,7 +18,6 @@ export * from './mx_helper_validate_geom_tool.js';
 export * from './mx_helper_map.js';
 export * from './mx_helper_map_draw.js';
 export * from './mx_helper_ui_color.js';
-export * from './mx_helper_story.js';
 export * from './mx_helper_draggable.js';
 export * from './mx_helper_map_dashboard.js';
 export * from './mx_helper_map_pixop.js';
@@ -52,6 +51,7 @@ export * from './mx_helper_legend_vt.js';
 /**
  * imported module available in mx.helpers
  */
+export * from './story_map/index.js';
 export * from './modules_loader_async/index.js';
 export * from './animation_frame/index.js';
 export * from './array_stat/index.js';

@@ -26,7 +26,7 @@ import {errorHandler} from './error_handler/index.js';
  */
 export function degreesToMeters(lngLat) {
   const x = (lngLat.lng * 20037508.34) / 180;
-  var y =
+  let y =
     Math.log(Math.tan(((90 + lng.lat) * Math.PI) / 360)) / (Math.PI / 180);
   y = (y * 20037508.34) / 180;
   return {
@@ -1069,14 +1069,7 @@ export function initMapListener(map) {
   /**
    * Error handling
    */
-  map.on('error', function(e) {
-    const msg = h.path(e, 'error.message');
-
-    if (msg) {
-      if (msg.indexOf('http status 200') > 0) {
-        return;
-      }
-    }
+  map.on('error', (e)=>{
     errorHandler(e);
   });
 
@@ -2765,6 +2758,7 @@ export async function viewLayersRemove(o) {
   if (!h.isView(view)) {
     return false;
   }
+
   const now = Date.now();
   const viewDuration = now - view._added_at || 0;
   delete view._added_at;
@@ -4626,8 +4620,9 @@ export async function viewModulesRemove(view) {
   view = h.isViewId(view) ? h.getView(view) : view;
 
   if (!h.isView(view)) {
-    resolve(true);
+    return false;
   }
+  
   const it = view._filters_tools || {};
   delete view._filters_tools;
 
@@ -5333,55 +5328,6 @@ export function flyTo(o) {
   }
 }
 
-/**
- * Toggle visibility for existing layer in style
- * TODO: This is quite messy : simplify, generalize
- * @param {Object} opt options
- * @param {String} opt.idLayer Layer id to toggle
- * @param {Element} opt.elButton Button element to add 'active' class
- * @param {String} opt.action hide, show, toggle
- * @return {String} Toggled
- */
-export function btnToggleLayer(opt) {
-  const def = {
-    action: 'toggle'
-  };
-  const h = mx.helpers;
-  const map = h.getMap();
-  const btn = opt.elButton;
-  const layer = map.getLayer(opt.idLayer);
-  const altLayers = [];
-
-  opt = Object.assign({}, def, opt);
-  const isAerial = opt.idLayer === 'mapbox_satellite'; // hide also shades...
-  const isTerrain = opt.idLayer === 'terrain_sky'; // hide shade + show terrain...
-  const isVisible = layer.visibility === 'visible';
-  const reqShow = opt.action === 'show';
-  const reqHide = opt.action === 'hide';
-  const reqToggle = opt.action === 'toggle';
-  const toShow = reqToggle ? !isVisible : reqShow || !reqHide;
-
-  if (isAerial || isTerrain) {
-    /**
-     * Special case : aerial and terrain mode should not have
-     * hillshading or bathymetry.
-     */
-    altLayers.push(...h.getLayerNamesByPrefix({prefix: 'hillshading'}));
-    altLayers.push(...h.getLayerNamesByPrefix({prefix: 'bathymetry'}));
-  }
-
-  map.setLayoutProperty(opt.idLayer, 'visibility', toShow ? 'visible' : 'none');
-  for (let id of altLayers) {
-    map.setLayoutProperty(id, 'visibility', toShow ? 'none' : 'visible');
-  }
-  if (isTerrain) {
-    map.setTerrain(toShow ? {source: 'mapbox_dem', exaggeration: 1.5} : null);
-  }
-  if (btn) {
-    btn.classList[toShow ? 'add' : 'remove']('active');
-  }
-  return toShow;
-}
 
 /**
  * getMercCoords
@@ -5701,7 +5647,8 @@ export function getView(id) {
     id = id.idView;
   }
   if (!h.isViewId(id)) {
-    throw new Error('No valid view id given');
+    console.warn('No  valid id given. Received ',id);
+    return;
   }
   return h.getViews({idView: id})[0];
 }

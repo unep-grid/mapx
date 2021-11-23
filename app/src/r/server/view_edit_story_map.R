@@ -60,9 +60,6 @@ observeEvent(input$btnViewCloseStory,{
 
   if(isTRUE(reactData$storyPreviewed)){ 
     mglReadStory(
-      view = view,
-      edit = FALSE,
-      update = FALSE,
       close = TRUE
       )
     reactData$storyPreviewed <- FALSE

@@ -1,5 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 import style from '!postcss-loader!less-loader?{"mimetype":"text/css"}!./style.less';
+import {errorHandler} from './../error_handler/index.js';
 
 const def = {
   elContainer: document.body,
@@ -22,7 +23,7 @@ class RasterMiniMap {
   destroy() {
     const mm = this;
     mm.syncEnd();
-    if(!mm.map._removed){
+    if (!mm.map._removed) {
       mm.map.remove();
     }
     mm.el.remove();
@@ -74,7 +75,7 @@ class RasterMiniMap {
     const mm = this;
     return mm.map.getCanvas().toDataURL('png');
   }
-  
+
   init() {
     const mm = this;
     mm._hasSyncMap = mm.opt.mapSync instanceof mapboxgl.Map;
@@ -91,7 +92,7 @@ class RasterMiniMap {
     mm.el.style.width = mm.opt.width + 'px';
     mm.el.style.height = mm.opt.height + 'px';
     mm.el.classList.add('rmm');
-   
+
     /**
      * Root element
      */
@@ -133,6 +134,9 @@ class RasterMiniMap {
           }
         ]
       }
+    });
+    mm.map.on('error', (e) => {
+      errorHandler(e);
     });
     /**
      * Add sync

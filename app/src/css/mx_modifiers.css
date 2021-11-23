@@ -254,21 +254,21 @@ span.mx-badge-role {
 }
 
 .mx .btn-circle,
-.mx .btn-circle:hover > div,
-.mx .btn-circle:hover > div:before {
+.mx .btn-circle:hover > i,
+.mx .btn-circle:hover > i:before {
   background-color: var(--mx_ui_background);
   color: var(--mx_ui_text);
 }
 
 .mx .btn-circle:hover,
-.mx .btn-circle:hover > div,
-.mx .btn-circle:hover > div:before {
+.mx .btn-circle:hover > i,
+.mx .btn-circle:hover > i:before {
   background-color: var(--mx_ui_background_contrast);
 }
 
 .mx .btn-circle.active,
-.mx .btn-circle.active > div,
-.mx .btn-circle.active > div:before {
+.mx .btn-circle.active > i,
+.mx .btn-circle.active > i:before {
   background-color: var(--mx_ui_text);
   color: var(--mx_ui_background);
 }

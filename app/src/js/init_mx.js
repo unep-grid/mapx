@@ -13,7 +13,6 @@ import '../css/mx_mapbox.css';
 import '../css/mx_tabs.css';
 import '../css/mx_table.css';
 import '../css/mx_modal.css';
-import '../css/mx_story.css';
 import '../css/mx_project_list.css';
 import '../css/mx_handsontable.css';
 import '../css/mx_legends.css';

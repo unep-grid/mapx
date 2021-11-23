@@ -277,7 +277,7 @@ export async function vtStyleBuilder(opt) {
           'click',
           () => {
             opt.onDone(opt._data, opt._mergeLabelByRow);
-            h.iconFlashSave();
+            h.itemFlashSave();
           }
         ]
       },

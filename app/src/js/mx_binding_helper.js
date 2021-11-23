@@ -34,7 +34,7 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler("mxInjectHead",h.injectHead);
   Shiny.addCustomMessageHandler("mxUpdateSelectizeItems",h.updateSelectizeItems);
   Shiny.addCustomMessageHandler("mxInitSelectizeAll",h.initSelectizeAll);
-  Shiny.addCustomMessageHandler('mxFlashIcon', h.iconFlash);
+  Shiny.addCustomMessageHandler('mxFlashIcon', h.itemFlash);
   //Shiny.addCustomMessageHandler('mxUpdateSettingsUser', h.updateSettingsUser );
   Shiny.addCustomMessageHandler('mxUpdateSettings', h.updateSettings );
   Shiny.addCustomMessageHandler('mxUpdateCheckboxInput', h.updateCheckboxInput );

@@ -670,7 +670,7 @@ pre {
   margin: 4px;
 }
 
-.btn-circle > div {
+.btn-circle > i {
   position: relative;
   display: flex;
   align-items: center;

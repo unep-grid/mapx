@@ -1,4 +1,8 @@
-var customStyle = [
+import {sendData,path} from './../mx_helper_misc.js';
+import {getApiUrl} from './../mx_helper_map.js';
+import {modal} from './../mx_helper_modal.js';
+
+const customStyle = [
   /* Table classes from bootstrap */
   {t: 'Table base', c: 'table', f: ['table']},
   {t: 'Table bordered', c: 'table-bordered', f: ['table']},
@@ -30,15 +34,22 @@ var customStyle = [
 
 /**
  * Init editing function
- * @param {Options} o story options
+ * @param {Object} sate Story state
  */
-export async function initEditing(o) {
+export async function initEditing(state) {
+
+  if(state._init_editing){
+     return;
+  }
+  state._init_editing = true;
+
+
   const m = await Promise.all([
     import('ContentTools'),
     import('ContentTools/build/content-tools.min.css')
   ]);
   const ContentTools = m[0].default;
-  await import('./../coffee/mx_extend_content_tools.coffee');
+  await import('./coffee/mx_extend_content_tools.coffee');
 
   /*
    * Get ContentTools and set upload logic
@@ -71,28 +82,26 @@ export async function initEditing(o) {
   /**
    * If not already set, create a new editor instance
    */
-  if (!o.data.ct_editor) {
-    o.data.ct_editor = ContentTools.EditorApp.get();
+  if (!state.ct_editor) {
+    state.ct_editor = ContentTools.EditorApp.get();
 
     /**
      * Add custom button logic
      */
     const elBtnModalPreview = document.getElementById('btnViewPreviewStory');
     const elBtnModalSave = document.getElementById('btnViewSaveStory');
-    //var elBtnStoryClose = document.getElementById("btnViewStoryCancel");
     const elModalEditView = document.getElementById('modalViewEdit');
     /**
      * Set a remove function for custom buttons
      */
-
-    o.data.ct_editor.remove = function() {
-      o.data.ct_editor.destroy();
+    state.ct_editor_remove = ()=>{
+      state.ct_editor.destroy();
     };
 
     /**
      * Init editor
      */
-    o.data.ct_editor.init(
+    state.ct_editor.init(
       '*[data-editable]', // class of region editable
       'data-name', // name of regions
       null, // fixture test
@@ -102,7 +111,7 @@ export async function initEditing(o) {
     /**
      * On start
      */
-    o.data.ct_editor.addEventListener('start', function() {
+    state.ct_editor.addEventListener('start', ()=>{
       elBtnModalSave.setAttribute('disabled', true);
       elBtnModalPreview.setAttribute('disabled', true);
       //elBtnStoryClose.setAttribute("disabled",true);
@@ -116,7 +125,7 @@ export async function initEditing(o) {
     /**
      * On cancel
      */
-    o.data.ct_editor.addEventListener('revert', function() {
+    state.ct_editor.addEventListener('revert', ()=>{
       elBtnModalSave.removeAttribute('disabled');
       elBtnModalPreview.removeAttribute('disabled');
       elModalEditView.classList.remove('mx-hide');
@@ -129,7 +138,7 @@ export async function initEditing(o) {
     /**
      * On save
      */
-    o.data.ct_editor.addEventListener('saved', function(ev) {
+    state.ct_editor.addEventListener('saved',function(ev){
       elBtnModalSave.removeAttribute('disabled');
       elBtnModalPreview.removeAttribute('disabled');
       elModalEditView.classList.remove('mx-hide');
@@ -216,8 +225,7 @@ function contentToolsImageUploader(dialog) {
    * Insert image
    */
   dialog.addEventListener('imageuploader.save', function() {
-    const h = mx.helpers;
-    if (h.path(mx, 'settings.user.guest')) {
+    if (path(mx, 'settings.user.guest')) {
       return;
     }
     const canvas = document.createElement('canvas');
@@ -232,12 +240,12 @@ function contentToolsImageUploader(dialog) {
         form.append('image', blob);
         form.append('width', width);
         form.append('height', height);
-        form.append('token', h.path(mx, 'settings.user.token'));
-        form.append('idUser', h.path(mx, 'settings.user.id'));
-        form.append('project', h.path(mx, 'settings.project.id'));
+        form.append('token', path(mx, 'settings.user.token'));
+        form.append('idUser', path(mx, 'settings.user.id'));
+        form.append('project', path(mx, 'settings.project.id'));
 
-        mx.helpers.sendData({
-          url: mx.helpers.getApiUrl('uploadImage'),
+        sendData({
+          url: getApiUrl('uploadImage'),
           data: form,
           onProgress: function(progress) {
             dialog.progress(progress * 100);
@@ -259,7 +267,7 @@ function contentToolsImageUploader(dialog) {
             });
           },
           onError: function(er) {
-            mx.helpers.modal({
+          modal({
               title: 'Error during the upload',
               content: 'An error occured during the upload : ' + er,
               styleString: 'z-index:11000'

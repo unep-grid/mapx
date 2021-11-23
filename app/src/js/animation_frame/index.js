@@ -13,8 +13,8 @@ let nf =
   };
 
 /**
-* Bug in Edge / ie 11;
-*/
+ * Bug in Edge / ie 11;
+ */
 nf = nf.bind(window);
 cf = cf.bind(window);
 
@@ -32,22 +32,26 @@ function onNextFrame(cb) {
  * @param {Number} frame number
  */
 function cancelFrame(id) {
-  if(id > 0 ){
+  if (id > 0) {
     cf(id);
   }
 }
 
 /**
-* Wait next frame async
-* @return {Promise} next frame;
-*/ 
-function waitFrameAsync(){
-  return new Promise((r)=>{
-    nf(r);
-  })
+ * Wait next frame async
+ * @return {Promise} next frame;
+ */
+
+function waitFrameAsync() {
+  return new Promise((r) => {
+      nf(r);
+  });
 }
 
+function waitTimeoutAsync(t) {
+  return new Promise((r) => {
+    setTimeout(r, t || 1);
+  });
+}
 
-
-
-export {onNextFrame, cancelFrame, waitFrameAsync};
+export {onNextFrame, cancelFrame, waitFrameAsync, waitTimeoutAsync};

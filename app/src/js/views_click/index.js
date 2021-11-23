@@ -2,9 +2,9 @@ import {el, elSpanTranslate} from './../el_mapx/index.js';
 import {isIconFont, isCanvas} from './../is_test_mapx';
 import {path} from './../mx_helper_misc.js';
 import {modal, modalConfirm} from './../mx_helper_modal.js';
-import {ButtonCircle} from './../icon_flash';
+import {FlashCircle} from './../icon_flash';
 import {displayMetadataIssuesModal} from './../mx_helper_map_view_badges.js';
-import {storyRead} from './../mx_helper_story.js';
+import {storyRead} from './../story_map/index.js';
 import {viewToTableAttributeModal} from './../mx_helper_source_attribute_table.js';
 import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
 import {getDictItem} from './../mx_helper_language.js';
@@ -321,7 +321,7 @@ async function handleViewClick(event) {
     for (let i = 0; i < t.length; i++) {
       if (!found && t[i].test === true) {
         found = true;
-        new ButtonCircle({
+        new FlashCircle({
           x: event.clientX,
           y: event.clientY
         });
