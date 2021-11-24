@@ -3140,6 +3140,21 @@
     "es": "Zoom máximo para mostrar los datos"
   },
   {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "es": "Tiempo de espera antes de disminuir la opacidad [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "es": "Retraso antes de disminuir la opacidad de los paneles y las viñetas de navegación en caso de inactividad del mouse"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "es": "Consejos:"
+  },
+  {
     "id": "schema_story_tips_title",
     "en": "Tips:",
     "es": "Consejos:"

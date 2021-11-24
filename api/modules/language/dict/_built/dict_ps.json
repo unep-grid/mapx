@@ -3140,6 +3140,21 @@
     "ps": "د ډیټا ښودلو لپاره اعظمي زوم "
   },
   {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "ps": "د شفافیت کمولو دمخه وخت پای [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "ps": "د موږک د غیرفعالیت په صورت کې د پینلونو او نیویګیشن ګولیو د شفافیت کمولو دمخه ځنډ"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "ps": "لارښوونې: "
+  },
+  {
     "id": "schema_story_tips_title",
     "en": "Tips:",
     "ps": "لارښوونې: "
@@ -5277,12 +5292,12 @@
   {
     "id": "schema_story_autoplay_timeout",
     "en": "Timeout [ms]",
-    "ps": "د وخت وخت [م.م.] "
+    "ps": "وخت ختم [ms]"
   },
   {
     "id": "schema_story_autoplay_timeout_desc",
     "en": "Waiting time before going to the next step.",
-    "ps": "راتلونکي مرحلې ته د تګ دمخه د انتظار وخت. "
+    "ps": "بل ګام ته د تګ دمخه د انتظار وخت."
   },
   {
     "id": "schema_story_autoplay_transition",

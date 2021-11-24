@@ -3140,6 +3140,21 @@
     "fa": "بزرگنمایی حداکثر برای نمایش داده ها "
   },
   {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "fa": "مهلت زمانی قبل از کاهش شفافیت [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "fa": "تاخیر قبل از کاهش شفافیت پانل ها و گلوله های ناوبری در صورت عدم فعالیت ماوس"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "fa": "نکات: "
+  },
+  {
     "id": "schema_story_tips_title",
     "en": "Tips:",
     "fa": "نکات: "
@@ -5277,12 +5292,12 @@
   {
     "id": "schema_story_autoplay_timeout",
     "en": "Timeout [ms]",
-    "fa": "مهلت زمانی [میلی ثانیه] "
+    "fa": "مهلت زمانی [ms]"
   },
   {
     "id": "schema_story_autoplay_timeout_desc",
     "en": "Waiting time before going to the next step.",
-    "fa": "زمان انتظار قبل از رفتن به مرحله بعدی. "
+    "fa": "زمان انتظار قبل از رفتن به مرحله بعدی."
   },
   {
     "id": "schema_story_autoplay_transition",

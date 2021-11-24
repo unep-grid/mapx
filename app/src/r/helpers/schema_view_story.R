@@ -19,6 +19,19 @@ mxSchemaViewStory <- function(view,views,language){
 
   mxCounter(reset=T)
 
+  #
+  # Opacity auto timeout 
+  #
+
+  settingsOpacityTimeout <- list(
+    title = tt("schema_story_opacity_timeout"),
+    description = tt("schema_story_opacity_timeout_desc"),
+    type="number",
+    minimum=0,
+    maximum=30000,
+    default = 3000 
+  )
+
 
   #
   # Settings page resolution
@@ -612,7 +625,8 @@ mxSchemaViewStory <- function(view,views,language){
         properties = list(
           class_wrapper = settingsPageClass,
           dashboards_panel_behaviour = settingsDashboardsPanelRoot,
-          legends_panel_behaviour = settingsLegendsPanelRoot
+          legends_panel_behaviour = settingsLegendsPanelRoot,
+          opacity_auto_timeout = settingsOpacityTimeout
         )
         ),
       steps = list(

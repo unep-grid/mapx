@@ -2512,6 +2512,18 @@
     "en": "Maximum zoom to display the data"
   },
   {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:"
+  },
+  {
     "id": "schema_story_tips_title",
     "en": "Tips:"
   },

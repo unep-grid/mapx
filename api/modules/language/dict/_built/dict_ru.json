@@ -3140,6 +3140,21 @@
     "ru": "Максимальный масштаб для отображения данных "
   },
   {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "ru": "Тайм-аут до уменьшения непрозрачности [мс]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "ru": "Задержка перед уменьшением непрозрачности панелей и маркеров навигации в случае бездействия мыши"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "ru": "Подсказки: "
+  },
+  {
     "id": "schema_story_tips_title",
     "en": "Tips:",
     "ru": "Подсказки: "
@@ -5277,12 +5292,12 @@
   {
     "id": "schema_story_autoplay_timeout",
     "en": "Timeout [ms]",
-    "ru": "Тайм-аут [мс] "
+    "ru": "Тайм-аут [мс]"
   },
   {
     "id": "schema_story_autoplay_timeout_desc",
     "en": "Waiting time before going to the next step.",
-    "ru": "Время ожидания перед переходом к следующему шагу. "
+    "ru": "Время ожидания перед переходом к следующему шагу."
   },
   {
     "id": "schema_story_autoplay_transition",

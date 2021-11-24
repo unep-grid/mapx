@@ -3913,6 +3913,45 @@
     "de": ""
   },
   {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "fr": "Conseils",
+    "es": "Consejos:",
+    "ru": "",
+    "zh": "提示：",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "schema_story_tips_title",
     "en": "Tips:",
     "fr": "Conseils",
@@ -4120,7 +4159,7 @@
     "bn": "",
     "de": ""
   },
-{
+  {
     "id": "schema_story_legends_panel_handling_root_desc",
     "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
     "fr": "",

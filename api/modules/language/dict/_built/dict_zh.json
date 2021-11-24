@@ -3140,6 +3140,21 @@
     "zh": "最大缩放以显示数据"
   },
   {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "zh": "降低不透明度前的超时时间 [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "zh": "在鼠标不活动的情况下，在降低面板和导航项目符号的不透明度之前延迟"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "zh": "提示："
+  },
+  {
     "id": "schema_story_tips_title",
     "en": "Tips:",
     "zh": "提示："

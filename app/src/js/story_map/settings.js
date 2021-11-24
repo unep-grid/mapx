@@ -30,6 +30,7 @@ const settings = {
   },
   sizes: {
     text: 40
-  }
+  },
+  opacity_auto_timeout : 3000
 };
 export {settings};

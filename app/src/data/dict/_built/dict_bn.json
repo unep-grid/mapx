@@ -3140,6 +3140,21 @@
     "bn": "ডেটা প্রদর্শন করতে সর্বোচ্চ জুম "
   },
   {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "bn": "অস্বচ্ছতা হ্রাস করার আগে সময়সীমা [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "bn": "মাউস নিষ্ক্রিয়তার ক্ষেত্রে প্যানেল এবং নেভিগেশন বুলেটগুলির অস্বচ্ছতা হ্রাস করার আগে বিলম্ব করুন"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "bn": "পরামর্শ: "
+  },
+  {
     "id": "schema_story_tips_title",
     "en": "Tips:",
     "bn": "পরামর্শ: "
@@ -5277,12 +5292,12 @@
   {
     "id": "schema_story_autoplay_timeout",
     "en": "Timeout [ms]",
-    "bn": "সময়সীমা [এমএস] "
+    "bn": "সময় শেষ"
   },
   {
     "id": "schema_story_autoplay_timeout_desc",
     "en": "Waiting time before going to the next step.",
-    "bn": "পরবর্তী পদক্ষেপে যাওয়ার আগে অপেক্ষা করার সময়। "
+    "bn": "পরবর্তী ধাপে যাওয়ার আগে অপেক্ষার সময়।"
   },
   {
     "id": "schema_story_autoplay_transition",

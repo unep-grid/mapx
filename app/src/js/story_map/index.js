@@ -172,6 +172,7 @@ function initKeydownListener() {
 # @param {Object} o Story options
 */
 function initMouseMoveListener() {
+  const s = getSettings();
   onNextFrame(() => {
     let timer;
     let destroyed = false;
@@ -199,6 +200,8 @@ function initMouseMoveListener() {
       group: 'story_map',
       onRemove: destroy
     });
+    
+    mx.events.on('story_step',mouseHider);
 
     function mouseHider() {
       if (timer) {
@@ -209,7 +212,7 @@ function initMouseMoveListener() {
         if (!destroyed) {
           hide();
         }
-      }, 5000);
+      }, s.opacity_auto_timeout || 1000);
     }
 
     function hide() {
@@ -239,6 +242,7 @@ function initMouseMoveListener() {
 
     function destroy() {
       destroyed = true;
+      mx.events.off('story_step',mouseHider);
       show();
       clean();
     }

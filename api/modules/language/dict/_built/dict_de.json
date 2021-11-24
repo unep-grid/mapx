@@ -3140,6 +3140,21 @@
     "de": "Maximaler Zoom zur Anzeige der Daten "
   },
   {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "de": "Timeout vor dem Verringern der Deckkraft [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "de": "Verzögerung vor dem Verringern der Deckkraft von Bedienfeldern und Navigationspunkten bei Inaktivität der Maus"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "de": "Tipps: "
+  },
+  {
     "id": "schema_story_tips_title",
     "en": "Tips:",
     "de": "Tipps: "
@@ -5277,12 +5292,12 @@
   {
     "id": "schema_story_autoplay_timeout",
     "en": "Timeout [ms]",
-    "de": "Zeitüberschreitung [ms] "
+    "de": "Zeitüberschreitung [ms]"
   },
   {
     "id": "schema_story_autoplay_timeout_desc",
     "en": "Waiting time before going to the next step.",
-    "de": "Wartezeit, bevor Sie mit dem nächsten Schritt fortfahren. "
+    "de": "Wartezeit bis zum nächsten Schritt."
   },
   {
     "id": "schema_story_autoplay_transition",

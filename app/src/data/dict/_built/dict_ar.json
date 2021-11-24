@@ -3140,6 +3140,21 @@
     "ar": "أقصى تكبير لعرض البيانات "
   },
   {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "ar": "المهلة قبل تقليل التعتيم [مللي ثانية]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "ar": "تأخير قبل تقليل عتامة اللوحات ورموز التنقل في حالة عدم نشاط الماوس"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "ar": "نصائح: "
+  },
+  {
     "id": "schema_story_tips_title",
     "en": "Tips:",
     "ar": "نصائح: "
@@ -5277,12 +5292,12 @@
   {
     "id": "schema_story_autoplay_timeout",
     "en": "Timeout [ms]",
-    "ar": "المهلة [مللي ثانية] "
+    "ar": "المهلة [مللي ثانية]"
   },
   {
     "id": "schema_story_autoplay_timeout_desc",
     "en": "Waiting time before going to the next step.",
-    "ar": "وقت الانتظار قبل الانتقال إلى الخطوة التالية. "
+    "ar": "وقت الانتظار قبل الانتقال إلى الخطوة التالية."
   },
   {
     "id": "schema_story_autoplay_transition",
