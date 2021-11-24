@@ -12,7 +12,7 @@ import {
 
 const settingsWorker = {
   resolvers: {},
-  eventStore: null
+  events: null
 };
 
 /**
@@ -24,7 +24,7 @@ class FrameWorker extends Events {
    * create a worke
    * @param {Object} opt options
    * @param {Resolver} opt.resolvers Resolver
-   * @param {EventSimple} opt.eventSimple EventSimple
+   * @param {EventSimple} opt.events EventSimple
    */
   constructor(opt) {
     super();
@@ -73,7 +73,7 @@ class FrameWorker extends Events {
 
     if (
       isObject(fw.opt.events) &&
-      fw.opt.events.className === 'EventSimple'
+      fw.opt.events?.constructor?.name === 'EventSimple'
     ) {
       fw._events = fw.opt.events;
       fw._events.addPassthrough({
@@ -149,8 +149,8 @@ class FrameWorker extends Events {
   removeListener() {
     const fw = this;
     window.removeEventListener('message', fw.handleMessageManager);
-    if (fw._eventsStore) {
-      fw._eventStore.destroy();
+    if (fw._events) {
+      fw._events.destroy();
     }
   }
   /**
