@@ -1687,6 +1687,11 @@ async function updatePanelBehaviour(state, settings, step) {
             }
           }
       }
+
+      /**
+      * Auto destroy e.g. if empty
+      */ 
+      dashboard.autoDestroy();
     }
   }
 
