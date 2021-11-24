@@ -1100,7 +1100,7 @@ export function initMapListener(map) {
   });
 
   mx.events.on({
-    type: ['view_add', 'view_remove', 'story_step'],
+    type: ['view_add', 'view_remove', 'story_step', 'story_close'],
     idGroup: 'highlight_clear',
     callback: () => {
       mx.highlighter.clean();

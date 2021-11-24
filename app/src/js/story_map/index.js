@@ -297,6 +297,7 @@ export async function storyClose() {
   const state = getState();
   stop();
   state.enable = false;
+  mx.events.fire('story_close');
   removeAllListeners();
   if (state.ct_editor_remove) {
     state.ct_editor_remove();
