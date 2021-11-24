@@ -1361,7 +1361,7 @@ export async function handleClickEvent(e, idMap) {
         .addTo(map);
 
       mx.events.once({
-        type: ['view_remove', 'view_add', 'story_step', 'story_lock'],
+        type: ['view_remove', 'view_add', 'story_step', 'story_lock', 'story_close'],
         idGroup: 'click_popup',
         callback: () => {
           popup.remove();
