@@ -1,3 +1,8 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.31' target='_blank'>1.9.31</a>
+  - APP 
+     - Improved event manager
+  - SDK
+    - Updated dependencies 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.31-alpha.2' target='_blank'>1.9.31-alpha.2</a>
   - APP
     - Story map code refactoring. 
