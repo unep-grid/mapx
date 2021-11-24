@@ -35,18 +35,18 @@
   },
   "homepage": "https://github.com/unep-grid/map-x-mgl/app/src/js/sdk/#readme",
   "devDependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.16.0",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/preset-env": "^7.11.0",
-    "core-js": "^3.6.5",
-    "eslint": "^7.0.0",
-    "eslint-plugin-react": "^7.20.0",
-    "jsdoc-to-markdown": "^7.0.0",
+    "@babel/preset-env": "^7.16.4",
+    "core-js": "^3.19.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.27.1",
+    "jsdoc-to-markdown": "^7.1.0",
     "live-server": "^1.2.1",
-    "microbundle": "^0.12.3"
+    "microbundle": "^0.12.4"
   },
   "dependencies": {
-    "@fxi/el": "0.1.5",
-    "@fxi/mx_valid": "0.0.9"
+    "@fxi/el": "^0.1.6",
+    "@fxi/mx_valid": "^0.0.11"
   }
 }
