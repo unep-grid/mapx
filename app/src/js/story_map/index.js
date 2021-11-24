@@ -159,11 +159,24 @@ function initClickListener() {
  * Init listener for keydown event on window
  */
 function initKeydownListener() {
+  const map = getMap();
+  const state = getState();
+  state.map_keyboard_enabled = map.keyboard.isEnabled();
+
+  if (state.map_keyboard_enabled) {
+    map.keyboard.disable();
+  }
+
   mx.listeners.addListener({
     target: window,
     type: 'keydown',
     callback: storyHandleKeyDown,
-    group: 'story_map'
+    group: 'story_map',
+    onRemove: () => {
+      if (state.map_keyboard_enabled) {
+        map.keyboard.enable();
+      }
+    }
   });
 }
 
@@ -200,8 +213,8 @@ function initMouseMoveListener() {
       group: 'story_map',
       onRemove: destroy
     });
-    
-    mx.events.on('story_step',mouseHider);
+
+    mx.events.on('story_step', mouseHider);
 
     function mouseHider() {
       if (timer) {
@@ -242,7 +255,7 @@ function initMouseMoveListener() {
 
     function destroy() {
       destroyed = true;
-      mx.events.off('story_step',mouseHider);
+      mx.events.off('story_step', mouseHider);
       show();
       clean();
     }
@@ -808,8 +821,7 @@ async function updateBullets() {
 
 const keyState = {
   keys: [],
-  idTimeout: 0,
-  busy : false
+  idTimeout: 0
 };
 
 async function storyHandleKeyDown(event) {
@@ -819,11 +831,6 @@ async function storyHandleKeyDown(event) {
     return;
   }
 
-  if(keyState.busy){
-    return;
-  }
-  keyState.busy = true;
-
   const editMode = state.edit === true;
   const isEditing = editMode && state?.ct_editor?.isEditing();
   const editAndMapFocus = editMode && !isEditing && hasFocusOnMap();
@@ -832,7 +839,7 @@ async function storyHandleKeyDown(event) {
   if (!valid) {
     return;
   }
-  
+
   const isNum = isNumeric(event.key);
 
   if (isNum) {
@@ -851,7 +858,6 @@ async function storyHandleKeyDown(event) {
         console.warn(e);
       }
     }, 200);
-    keyState.busy = false;
     return;
   }
 
@@ -885,8 +891,6 @@ async function storyHandleKeyDown(event) {
     default:
       return;
   }
-
-  keyState.busy = false;
 
   function prevent() {
     event.preventDefault();
@@ -1217,12 +1221,12 @@ function resetControls() {
   const state = getState();
   if (state.hasAerial) {
     state.ctrlAerial.action('show');
-  }else{
+  } else {
     state.ctrlAerial.action('hide');
   }
   if (state.has3d) {
     state.ctrlMode3d.action('show');
-  }else{
+  } else {
     state.ctrlMode3d.action('hide');
   }
   if (isArray(state.controlsAdded)) {
@@ -1698,8 +1702,9 @@ async function updatePanelBehaviour(state, settings, step) {
       }
 
       /**
-      * Auto destroy e.g. if empty
-      */ 
+       * Auto destroy e.g. if empty
+       */
+
       dashboard.autoDestroy();
     }
   }
@@ -1742,7 +1747,7 @@ export function hasFocusOnMap() {
   if (elActive === elMapC) {
     return true;
   }
-  if(elActive.classList.contains('form-control')){
+  if (elActive.classList.contains('form-control')) {
     return false;
   }
   while (elActive) {
