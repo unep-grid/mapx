@@ -1,3 +1,6 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.32' target='_blank'>1.9.32</a>
+  - SDK
+    - Fixed bug with passthrough events : mapx events not transmited to the SDK manager
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.31' target='_blank'>1.9.31</a>
   - APP 
      - Improved event manager
