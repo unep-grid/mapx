@@ -3,7 +3,7 @@ import {el} from '../el/src/index.js';
 import {getDictItem} from './../mx_helpers.js';
 import {FlashCircle} from './../icon_flash/index.js';
 import {bindAll} from './../bind_class_methods/index.js';
-import {EventSimple} from '../listener_store/index.js';
+import {EventSimple} from '../event_simple';
 import {shake} from '../elshake/index.js';
 
 class Button extends EventSimple {

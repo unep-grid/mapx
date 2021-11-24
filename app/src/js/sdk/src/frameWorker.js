@@ -24,7 +24,7 @@ class FrameWorker extends Events {
    * create a worke
    * @param {Object} opt options
    * @param {Resolver} opt.resolvers Resolver
-   * @param {EventStore} opt.eventStore EventStore
+   * @param {EventSimple} opt.eventSimple EventSimple
    */
   constructor(opt) {
     super();
@@ -72,11 +72,11 @@ class FrameWorker extends Events {
     });
 
     if (
-      isObject(fw.opt.eventStore) &&
-      fw.opt.eventStore.className === 'EventStore'
+      isObject(fw.opt.events) &&
+      fw.opt.events.className === 'EventSimple'
     ) {
-      fw._eventStore = fw.opt.eventStore;
-      fw._eventStore.addPassthrough({
+      fw._events = fw.opt.events;
+      fw._events.addPassthrough({
         cb: (d) => {
           fw.postEvent({value: d});
         }

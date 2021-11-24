@@ -7,7 +7,7 @@ import {getDictTemplate} from './../mx_helper_language.js';
 import {bindAll} from './../bind_class_methods/index.js';
 import {spatialDataToView} from './../mx_helper_map_dragdrop.js';
 import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
-import {EventSimple} from '../listener_store/index.js';
+import {EventSimple} from '../event_simple';
 
 import './style.less';
 

@@ -3,7 +3,7 @@ import {Map} from 'mapbox-gl';
 /**
  * Event management
  */
-class ListenerStore {
+export class ListenerStore {
   constructor() {
     this.className = 'ListenerStore';
     this.listeners = [];
@@ -66,7 +66,7 @@ class ListenerStore {
     }
     opt.target = opt.target || document.window;
     opt.debounce = opt.debounce === true;
-    
+
     if (opt.throttle) {
       opt.callback = li.throttle(opt.callback, {
         bind: opt.bind || li,
@@ -172,159 +172,7 @@ class ListenerStore {
   }
 }
 
-class EventStore {
-  constructor() {
-    this.className = 'EventStore';
-    this.lStore = new ListenerStore();
-    this.passthroughs = [];
-  }
-  destroy() {
-    this.lStore.destroy();
-  }
 
-  /**
-   * Delegate fire event to another function
-   * @param {Object} opt Options
-   * @param {Function} opt.cb Callback
-   */
-  addPassthrough(opt) {
-    opt = Object.assign({}, opt);
-    var eStore = this;
-    if (opt.cb) {
-      eStore.passthroughs.push(opt);
-    }
-  }
-
-  /**
-   * Fire event type, trigger linked callback
-   * @param {Object} opt options
-   * @param {String||Array} opt.type Type of event
-   * @param {String} opt.idGroup id of group.
-   * @param {data} opt.data Data to pass to callback
-   */
-  fire(opt) {
-    if (typeof opt === 'string') {
-      opt = {type: opt};
-    }
-    opt = Object.assign({}, opt);
-    if (!opt.type) {
-      throw new Error('Missing type argument');
-    }
-    let eStore = this;
-    let li = eStore.lStore;
-    let ls = li.getListenerByTypeGroup(opt.type, opt.idGroup);
-
-    ls.forEach((l) => {
-      l.callback(opt.data);
-    });
-
-    eStore.passthroughs.forEach((p) => {
-      p.cb(opt);
-    });
-  }
-  /**
-   * Register new listener for eventy type
-   * @param {Object||String} opt options or event type
-   * @param {String||Array} opt.type Type of event
-   * @param {String} opt.idGroup Id of group
-   * @param {Function} opt.callback Callback to trigger
-   * @param {Function} cb Alternative callback to trigger
-   * @param {String} id Alternative id group
-   */
-  on(opt, cb, id) {
-    if (typeof opt === 'string' && cb instanceof Function) {
-      opt = {
-        type: opt,
-        idGroup: id || 'default',
-        callback: cb
-      };
-    }
-
-    opt = Object.assign({}, opt);
-    if (!opt.type || !opt.idGroup || !opt.callback) {
-      throw new Error('Missing argument');
-    }
-    let li = this.lStore;
-    li.addListener({
-      type: opt.type,
-      idGroup: opt.idGroup,
-      callback: opt.callback
-    });
-  }
-  /**
-   * Register new listener to use once
-   * @param {Object} opt options
-   * @param {String||Array} opt.type Type of event
-   * @param {String} opt.idGroup Id of group
-   * @param {Function} opt.callback Callback to trigger
-   */
-  once(opt) {
-    opt = Object.assign({}, opt);
-    if (!opt.type || !opt.idGroup || !opt.callback) {
-      throw new Error('Missing argument');
-    }
-    let li = this.lStore;
-    li.addListenerOnce({
-      type: opt.type,
-      idGroup: opt.idGroup,
-      callback: opt.callback
-    });
-  }
-  /**
-   * Remove listener
-   * @param {Object} opt options
-   * @param {String||Array} opt.type Type of event
-   * @param {String} opt.idGroup Id of group
-   */
-  off(opt) {
-    opt = Object.assign({}, opt);
-    let li = this.lStore;
-    li.removeListenerByTypeGroup(opt.type, opt.idGroup);
-  }
-}
-
-/**
- * Simple event management
- */
-
-class EventSimple {
-  constructor() {
-    const evt = this;
-    evt.cb = [];
-  }
-  fire(type, data) {
-    const evt = this;
-    evt.cb.forEach((c) => {
-      if (c.type === type) {
-        c.cb(evt, data);
-      }
-    });
-  }
-  on(type, cb) {
-    const evt = this;
-    const item = evt.cb.reduce((a, c) => {
-      return a || (c.type === type && c.cb === cb ? c : a);
-    }, false);
-    if (!item) {
-      evt.cb.push({
-        type: type,
-        cb: cb
-      });
-    }
-  }
-  off(type, cb) {
-    const evt = this;
-    const item = evt.cb.reduce((a, c) => {
-      return a || (c.type === type && c.cb === cb ? c : a);
-    }, false);
-    if (item) {
-      const pos = evt.cb.indexOf(item);
-      evt.cb.splice(pos, 1);
-    }
-  }
-}
-
-export {ListenerStore, EventStore, EventSimple};
 
 /**
  * Helpers

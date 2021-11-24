@@ -1,6 +1,7 @@
 //import {el} from '@fxi/el';
 import {el} from './../el/src/index.js';
-import {ListenerStore, EventSimple} from '../listener_store/index.js';
+import {ListenerStore} from '../listener_store';
+import {EventSimple} from '../event_simple';
 import {isNumeric} from '../is_test/index.js';
 import {shake} from '../elshake';
 import './style.less';

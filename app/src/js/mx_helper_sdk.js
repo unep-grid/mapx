@@ -22,7 +22,7 @@ window.addEventListener('load', () => {
 
       window.mxsdkworker = new Worker({
         resolvers: resolvers,
-        eventStore: mx.events,
+        events: mx.events,
         sdkToken: sdkToken
       });
     }

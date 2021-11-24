@@ -1,6 +1,6 @@
 import {el} from '@fxi/el';
 import {Button} from './button.js';
-import {EventSimple} from '../listener_store/index.js';
+import {EventSimple} from '../event_simple';
 
 class ButtonsControls extends EventSimple {
   constructor(buttons) {

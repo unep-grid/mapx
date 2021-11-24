@@ -902,7 +902,7 @@ export async function initMapx(o) {
     /**
      * Build theme config inputs only when settings tab is displayed
      */
-    mx.panel_main.on('tab_change', (e, id) => {
+    mx.panel_main.on('tab_change', (id) => {
       if (id === 'tools') {
         const elInputs = document.getElementById('mxInputThemeColors');
         mx.theme.linkInputs(elInputs);
@@ -926,7 +926,7 @@ export async function initMapx(o) {
     /**
      * On tab change to search, perform a search
      */
-    mx.panel_main.on('tab_change', async (e, id) => {
+    mx.panel_main.on('tab_change', async (id) => {
       if (id === 'search') {
         await mx.search.initCheck();
         mx.search._elInput.focus();
@@ -940,9 +940,11 @@ export async function initMapx(o) {
       type: 'language_change',
       idGroup: 'search_index',
       callback: (data) => {
-        mx.search.setLanguage({
-          language: data?.new_language
-        });
+        if (mx.search) {
+          mx.search.setLanguage({
+            language: data?.new_language
+          });
+        }
       }
     });
 
@@ -1069,7 +1071,7 @@ export function initMapListener(map) {
   /**
    * Error handling
    */
-  map.on('error', (e)=>{
+  map.on('error', (e) => {
     errorHandler(e);
   });
 
@@ -1102,7 +1104,7 @@ export function initMapListener(map) {
   mx.events.on({
     type: ['view_add', 'view_remove', 'story_step', 'story_close'],
     idGroup: 'highlight_clear',
-    callback: () => {
+    callback: (d) => {
       mx.highlighter.clean();
     }
   });
@@ -1361,7 +1363,13 @@ export async function handleClickEvent(e, idMap) {
         .addTo(map);
 
       mx.events.once({
-        type: ['view_remove', 'view_add', 'story_step', 'story_lock', 'story_close'],
+        type: [
+          'view_remove',
+          'view_add',
+          'story_step',
+          'story_lock',
+          'story_close'
+        ],
         idGroup: 'click_popup',
         callback: () => {
           popup.remove();
@@ -1561,7 +1569,7 @@ export async function addSourceFromView(o) {
   }
   const project = p(mx, 'settings.project.id');
   const projectView = p(o.view, 'project');
-  const projectsView = p(o.view, 'data.projects',[]);
+  const projectsView = p(o.view, 'data.projects', []);
   const useMirror = p(o.view, 'data.source.useMirror');
   const isEditable = h.isViewEditable(o.view);
   const isLocationOk =
@@ -4622,7 +4630,7 @@ export async function viewModulesRemove(view) {
   if (!h.isView(view)) {
     return false;
   }
-  
+
   const it = view._filters_tools || {};
   delete view._filters_tools;
 
@@ -5328,7 +5336,6 @@ export function flyTo(o) {
   }
 }
 
-
 /**
  * getMercCoords
  *
@@ -5647,7 +5654,7 @@ export function getView(id) {
     id = id.idView;
   }
   if (!h.isViewId(id)) {
-    console.warn('No  valid id given. Received ',id);
+    console.warn('No  valid id given. Received ', id);
     return;
   }
   return h.getViews({idView: id})[0];

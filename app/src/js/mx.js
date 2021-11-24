@@ -4,7 +4,8 @@ import {version} from './../../package.json';
 import localforage from 'localforage';
 import mapboxgl from 'mapbox-gl';
 import {settings} from './mx_settings_default.js';
-import {ListenerStore, EventStore} from './listener_store/index.js';
+import {ListenerStore} from './listener_store';
+import {EventSimple} from './event_simple';
 import {HintHack} from './hint_hack/index.js';
 
 const templates = {
@@ -25,7 +26,7 @@ const data = {
 };
 const initQueryParams = {}; // set in init_common.js
 const listeners = new ListenerStore();
-const events = new EventStore();
+const events = new EventSimple();
 const hinthack = new HintHack();
 const selectize = {};
 const editors = {};

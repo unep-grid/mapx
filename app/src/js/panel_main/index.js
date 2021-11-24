@@ -2,7 +2,7 @@ import {ButtonPanel} from './../button_panel';
 import {el} from './../el/src/index.js';
 import {bindAll} from './../bind_class_methods/index.js';
 import './less/mx_panel.less';
-import {EventSimple} from './../listener_store';
+import {EventSimple} from './../event_simple';
 
 /**
  * This is a partial implementation of the main MapX panel
@@ -46,6 +46,10 @@ class MainPanel extends EventSimple {
 
   init() {
     const mp = this;
+    if(mp._init){
+      return;
+    }
+    mp._init = true;
 
     const hasShiny = !!window.Shiny;
     const htmlImport = [

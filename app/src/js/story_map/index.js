@@ -806,9 +806,10 @@ async function updateBullets() {
  * listen for keydown
  */
 
-const comboKey = {
+const keyState = {
   keys: [],
-  idTimeout: 0
+  idTimeout: 0,
+  busy : false
 };
 
 async function storyHandleKeyDown(event) {
@@ -818,6 +819,11 @@ async function storyHandleKeyDown(event) {
     return;
   }
 
+  if(keyState.busy){
+    return;
+  }
+  keyState.busy = true;
+
   const editMode = state.edit === true;
   const isEditing = editMode && state?.ct_editor?.isEditing();
   const editAndMapFocus = editMode && !isEditing && hasFocusOnMap();
@@ -826,7 +832,7 @@ async function storyHandleKeyDown(event) {
   if (!valid) {
     return;
   }
-
+  
   const isNum = isNumeric(event.key);
 
   if (isNum) {
@@ -834,17 +840,18 @@ async function storyHandleKeyDown(event) {
      * Combo : 1 ... 2 -> 12
      */
     prevent();
-    clearTimeout(comboKey.idTimeout);
-    comboKey.keys.push(event.key);
-    comboKey.idTimeout = setTimeout(async () => {
+    clearTimeout(keyState.idTimeout);
+    keyState.keys.push(event.key);
+    keyState.idTimeout = setTimeout(async () => {
       try {
-        const sNum = comboKey.keys.join('') * 1;
-        comboKey.keys.length = 0;
+        const sNum = keyState.keys.join('') * 1;
+        keyState.keys.length = 0;
         await storyGoTo(sNum - 1);
       } catch (e) {
         console.warn(e);
       }
     }, 200);
+    keyState.busy = false;
     return;
   }
 
@@ -878,6 +885,8 @@ async function storyHandleKeyDown(event) {
     default:
       return;
   }
+
+  keyState.busy = false;
 
   function prevent() {
     event.preventDefault();
