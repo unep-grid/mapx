@@ -1198,24 +1198,34 @@ export async function initMapxStatic(o) {
       });
       return;
     }
+  }
 
-    const btnLegend = new ButtonPanel({
-      id: 'button_legend',
-      elContainer: document.body,
-      panelFull: true,
-      position: 'top-left',
-      tooltip_position: 'right',
-      button_text: h.getDictItem('button_legend_button'),
-      button_lang_key: 'button_legend_button',
-      button_classes: ['fa', 'fa-list-ul'],
-      container_style: {
-        width: '300px',
-        height: '300px',
-        minWidth: '200px',
-        minHeight: '200px'
-      }
-    });
+  /**
+   * Create button panel for legends
+   * -> Story module add its own legend panel.
+   */
+  mx.panel_legend = new ButtonPanel({
+    id: 'button_legend',
+    elContainer: document.body,
+    panelFull: true,
+    position: 'top-left',
+    tooltip_position: 'right',
+    button_text: h.getDictItem('button_legend_button'),
+    button_lang_key: 'button_legend_button',
+    button_classes: ['fa', 'fa-list-ul'],
+    container_style: {
+      width: '300px',
+      height: '300px',
+      minWidth: '200px',
+      minHeight: '200px'
+    }
+  });
 
+  /**
+   * If there is view, render all
+   */
+
+  if (mapData.views && mapData.views.length) {
     /**
      * Extract all views bounds
      */
@@ -1230,7 +1240,7 @@ export async function initMapxStatic(o) {
     for (const view of mapData.views) {
       await h.viewLayersAdd({
         view: view,
-        elLegendContainer: btnLegend.elPanelContent,
+        elLegendContainer: mx.panel_legend.elPanelContent,
         addTitle: true
       });
     }
@@ -2866,7 +2876,6 @@ export async function viewAdd(view) {
      * - Search list need quickly an
      *   event to trigger toggles
      */
-
     _viewUiOpen(view);
     await h.viewLayersAdd({
       view: view
@@ -3312,6 +3321,9 @@ export async function viewLayersAdd(o) {
   const m = h.getMapData(o.id);
   if (o.idView) {
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
+  }
+  if (!o.elLegendContainer && mx.panel_legend) {
+    o.elLegendContainer = mx.panel_legend.elPanelContent;
   }
   const isStory = h.isStoryPlaying();
   const idLayerBefore = o.before
