@@ -1,3 +1,12 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.33' target='_blank'>1.9.33</a>
+  - APP
+    -  Dashboard: 
+      - Removed internal event system, replaced by EventSimple; 
+      - Solved issue with auto-resizing events callbacks
+    - Story map:
+      - Handling of empty story: display a message and clean state
+      - Do not use keyboard handler for the navigate the map
+      - Fix issue with keybaord events not working
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.32' target='_blank'>1.9.32</a>
   - SDK
     - Fixed bug with passthrough events : mapx events not transmited to the SDK manager
