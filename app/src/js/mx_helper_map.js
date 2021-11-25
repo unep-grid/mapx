@@ -1335,10 +1335,10 @@ export async function handleClickEvent(e, idMap) {
   const hasLayer = h.getLayerNamesByPrefix().length > 0;
   const map = h.getMap(idMap);
   const clickModes = h.getClickHandlers();
-  const hasDashboard = clickModes.indexOf('dashboard') > -1;
-  const hasDraw = clickModes.indexOf('draw') > -1;
-  const hasSdk = clickModes.indexOf('sdk') > -1;
-  const hasCC = clickModes.indexOf('cc') > -1;
+  const hasDashboard = clickModes.includes('dashboard');
+  const hasDraw = clickModes.includes('draw');
+  const hasSdk = clickModes.includes('sdk');
+  const hasCC = clickModes.includes('cc');
   const addPopup = !(hasCC || hasSdk || hasDraw || hasDashboard);
   const addHighlight = !hasDraw;
 
@@ -1353,16 +1353,20 @@ export async function handleClickEvent(e, idMap) {
      * Extract attributes, return an object with idView
      * as key and prmises as value
      */
-    const layersAttributes = h.getLayersPropertiesAtPoint({
+    const layersAttributes = await h.getLayersPropertiesAtPoint({
       map: map,
       point: e.point,
       type: ['vt', 'gj', 'cc', 'rt'],
       asObject: true
     });
+    if (h.isEmpty(layersAttributes)) {
+      return;
+    }
+
     /**
      * Dispatch to event
      */
-    promAttributesToEvent(layersAttributes, e);
+    await attributesToEvent(layersAttributes, e);
 
     if (addPopup) {
       /**
@@ -1421,7 +1425,7 @@ export async function handleClickEvent(e, idMap) {
  * @param {Object} List of promise of attributes with layers id as key
  * @param {Event} e Map click event
  */
-function promAttributesToEvent(layersAttributes, e) {
+async function attributesToEvent(layersAttributes, e) {
   const h = mx.helpers;
   const isValid = h.isObject(layersAttributes) && h.isObject(e);
 
@@ -1436,25 +1440,24 @@ function promAttributesToEvent(layersAttributes, e) {
   const nViews = idViews.length;
   let processed = 0;
   for (let idView in layersAttributes) {
-    dispatch(layersAttributes, idView);
+    await dispatch(layersAttributes, idView);
   }
   /**
    * Wait promise and fire event with attributes values as
    * data
    */
-  function dispatch(layersAttributes, idView) {
-    layersAttributes[idView].then((attributes) => {
-      mx.events.fire({
-        type: 'click_attributes',
-        data: {
-          part: ++processed,
-          nPart: nViews,
-          idView: idView,
-          attributes: attributes,
-          point: e.point,
-          lngLat: e.lngLat
-        }
-      });
+  async function dispatch(layersAttributes, idView) {
+    const attributes = await layersAttributes[idView];
+    mx.events.fire({
+      type: 'click_attributes',
+      data: {
+        part: ++processed,
+        nPart: nViews,
+        idView: idView,
+        attributes: attributes,
+        point: e.point,
+        lngLat: e.lngLat
+      }
     });
   }
 }

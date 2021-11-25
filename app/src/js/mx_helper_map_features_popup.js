@@ -110,6 +110,7 @@ export function featuresToPopup(o) {
 
       var attrNames = Object.keys(attributes);
 
+
       if (attrNames.length === 0) {
         elLayer.appendChild(await elIssueMessage('noValue'));
         return;
@@ -193,7 +194,6 @@ export function featuresToPopup(o) {
              * In other cases, add values as span
              */
             elValue = h.el('div');
-            /* jshint ignore:start */
             if (h.isArray(value)) {
               value.forEach((v) => {
                 elValue.appendChild(
@@ -213,7 +213,6 @@ export function featuresToPopup(o) {
               elValue.innerText = value;
             }
 
-            /* jshint ignore:end*/
           }
 
           /**
@@ -222,6 +221,7 @@ export function featuresToPopup(o) {
           elPropToggles.appendChild(elValue);
         }
       });
+
 
       /**
        * Udate readmore
