@@ -5,6 +5,7 @@ import {all} from './../mx_helper_misc.js';
 import {el} from '@fxi/el';
 import Muuri from 'muuri';
 import './style.css';
+import {waitFrameAsync} from '../animation_frame/index.js';
 
 const defaults = {
   dashboard: {
@@ -312,6 +313,7 @@ class Dashboard {
     /**
      * Layout update
      */
+    await waitFrameAsync();
     d.updatePanelLayout();
     d.updateGridLayout();
 
