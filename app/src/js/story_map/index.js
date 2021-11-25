@@ -3,6 +3,7 @@ import {getDictItem, getLabelFromObjectPath} from './../mx_helper_language.js';
 import {el} from '@fxi/el';
 import {ButtonPanel} from './../button_panel/index.js';
 import {errorHandler} from './../error_handler/index.js';
+import {modal} from './../mx_helper_modal.js';
 import {
   onNextFrame,
   waitFrameAsync,
@@ -308,7 +309,6 @@ async function storyUiClear() {
  */
 export async function storyClose() {
   const state = getState();
-  stop();
   state.enable = false;
   mx.events.fire('story_close');
   removeAllListeners();
@@ -316,22 +316,15 @@ export async function storyClose() {
     state.ct_editor_remove();
   }
   await waitTimeoutAsync(100);
-  await stop();
+  await storyStop();
   await storyUiClear();
   await storyMapLock('lock');
   new FlashItem('sign-out');
   await appStateRestore();
-
-  for (const k in story) {
-    delete story[k];
-  }
-
-  for (const k in state) {
-    delete state[k];
-  }
+  await cleanState();
 }
 
-async function stop() {
+export async function storyStop() {
   const map = getMap();
   try {
     map.stop(false);
@@ -342,6 +335,19 @@ async function stop() {
   const mapBusy = !map.isStyleLoaded();
   if (mapBusy) {
     await map.once('idle');
+  }
+}
+
+async function cleanState() {
+  const story = getStory();
+  const state = getState();
+
+  for (const k in story) {
+    delete story[k];
+  }
+
+  for (const k in state) {
+    delete state[k];
   }
 }
 
@@ -357,6 +363,12 @@ async function initStory() {
   if (isStory(state.view)) {
     state.idView = state.view.id;
   } else {
+    modal({
+      title: 'Error',
+      content: 'Invalid or empty story',
+      addBackground : true
+    });
+    await cleanState();
     throw new Error('No story to read');
   }
   Object.assign(story, state.view.data.story);
@@ -447,7 +459,6 @@ async function start() {
   /**
    * Handle init stroll value
    */
-  //await initStoryScroll();
   if (state.currentStep > 0) {
     await storyGoTo(state.currentStep);
   }
@@ -1532,6 +1543,7 @@ export async function storyPlayStep(stepNum) {
   if (steps.length === 0) {
     return;
   }
+  map.stop();
   mx.events.fire('story_step');
   state.currentStep = stepNum;
   state.stepActive = stepNum;
