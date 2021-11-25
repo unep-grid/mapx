@@ -6,7 +6,7 @@ import {el} from '@fxi/el';
 import Muuri from 'muuri';
 import './style.css';
 import {waitFrameAsync} from '../animation_frame/index.js';
-
+import {EventSimple} from '../event_simple';
 const defaults = {
   dashboard: {
     widgets: [],
@@ -45,8 +45,9 @@ const defaults = {
   }
 };
 
-class Dashboard {
+class Dashboard extends EventSimple {
   constructor(opt) {
+    super();
     const d = this;
     d.opt = {};
     for (var k in defaults) {
@@ -63,7 +64,7 @@ class Dashboard {
     d._open = false;
     d.modules = {};
     d.widgets = [];
-    d.cb = [];
+    //d.cb = [];
     d.elDashboard = el('div', {class: 'dashboard'});
 
     /*
@@ -84,6 +85,19 @@ class Dashboard {
       d.hide();
     });
 
+    /**
+     * If the dashboard panel is automatically resizing,
+     * fit to widgets
+     */
+    d.panel.on('resize-auto', (type) => {
+      if (type === 'half-width') {
+        d.fitPanelToWidgetsWidth();
+      }
+      if (type === 'half-height') {
+        d.fitPanelToWidgetsHeight();
+      }
+    });
+
     /*
      * Grid
      */
@@ -94,38 +108,6 @@ class Dashboard {
      */
 
     d.fire('init');
-  }
-
-  fire(type, data) {
-    const d = this;
-    d.cb.forEach((c) => {
-      if (c.type === type) {
-        c.cb(d, data);
-      }
-    });
-  }
-
-  on(type, cb) {
-    const d = this;
-    const item = d.cb.reduce((a, c) => {
-      return a || (c.type === type && c.cb === cb ? c : a);
-    }, false);
-    if (!item) {
-      d.cb.push({
-        type: type,
-        cb: cb
-      });
-    }
-  }
-  off(type, cb) {
-    const d = this;
-    const item = d.cb.reduce((a, c) => {
-      return a || (c.type === type && c.cb === cb ? c : a);
-    }, false);
-    if (item) {
-      const pos = d.cb.indexOf(item);
-      d.cb.splice(pos, 1);
-    }
   }
 
   isVisible() {
@@ -237,6 +219,7 @@ class Dashboard {
     }
     d._destroyed = true;
     d.removeWidgets();
+    d.clearCallbacks();  
     d.panel.destroy();
     d.grid.destroy();
     d.fire('destroy');

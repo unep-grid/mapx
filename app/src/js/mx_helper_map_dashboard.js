@@ -250,19 +250,7 @@ async function viewCreateDashboardAsync(idView) {
       h.storyMapLock('lock');
     }
   });
-  /**
-   * If the dashboard panel is automatically resizing,
-   * fit to widgets
-   */
-  store.dashboard.panel.on('resize-auto', (panel, type) => {
-    const d = store.dashboard;
-    if (type === 'half-width') {
-      d.fitPanelToWidgetsWidth();
-    }
-    if (type === 'half-height') {
-      d.fitPanelToWidgetsHeight();
-    }
-  });
+
 
   return true;
 }

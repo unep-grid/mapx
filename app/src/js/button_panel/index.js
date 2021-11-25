@@ -72,8 +72,8 @@ class ButtonPanel extends EventSimple {
   destroy() {
     const panel = this;
     const idW =  _button_panels.indexOf(panel);
+    panel.clearCallbacks();  
     panel.fire('destroy');
-    panel.cb.length = 0;
     panel.elContainer.remove();
     panel.ls.destroy();
     _button_panels.splice(idW,1)

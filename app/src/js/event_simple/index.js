@@ -85,6 +85,10 @@ export class EventSimple {
   }
   destroy() {
     const evt = this;
+    evt.clearCallbacks(); 
+  }
+  clearCallbacks() {
+    const evt = this;
     evt.passthroughs.length = 0;
     evt.cb.length = 0;
   }
