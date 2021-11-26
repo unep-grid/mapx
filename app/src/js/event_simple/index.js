@@ -67,7 +67,7 @@ export class EventSimple {
         group = type.idGroup || type.group || group;
         type = type.type;
       }
-      cb = cb || console.log;
+      cb = cb || function(){};
       const cbProm = function(d){
         resolve(d);
         return cb(d)
