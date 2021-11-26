@@ -123,8 +123,6 @@ $ node -e 'console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS)'
 # > /home/<your name>/.google_cloud_<your service>.json
 ```
 
-
-
 ### Development session for the `api` service
 
 Setup the environmental variables for the `api` service in `mapx.dev.env` as follows:
@@ -169,8 +167,12 @@ cd /apidev
 npm run
 ```
 
-### 
+### Development session for the `routines` service
 
+```sh
+docker-compose exec -w /routinesdev routines node inspect routines.js
+debug> c
+```
 
 # Countries boundaries layer
 
