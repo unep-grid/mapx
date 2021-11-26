@@ -311,6 +311,7 @@ export function getAppPathUrl(id) {
  */
 export async function setProject(idProject, opt) {
   const h = mx.helpers;
+  const hasShiny = window.Shiny;
   opt = Object.assign({}, {askConfirmIfModal: true, askConfirm: false}, opt);
   const idCurrentProject = h.path(mx, 'settings.project.id');
 
@@ -341,50 +342,31 @@ export async function setProject(idProject, opt) {
    * Change confirmed : remove all views, close modals, send
    * selected project to shiny
    */
-  function change() {
-    return new Promise((resolve) => {
-      closeModals();
-      h.setQueryParametersInitReset();
-      const hasShiny = window.Shiny;
-
-      mx.events.once({
-        type: 'settings_project_change',
-        idGroup: 'project_change',
-        callback: (s) => {
-          const idProjectNew = h.path(s, 'new_project');
-          if (idProjectNew !== idProject) {
-            resolve(false);
-          } else {
-            mx.events.once({
-              type: 'views_list_updated',
-              idGroup: 'project_change',
-              callback: () => {
-                if (h.isFunction(opt.onSuccess)) {
-                  opt.onSuccess();
-                }
-                resolve(true);
-              }
-            });
-          }
-        }
-      });
-
-      if (hasShiny) {
-        Shiny.onInputChange('selectProject', idProject);
-      }
-
-      mx.events.fire({
-        type: 'project_change',
-        data: {
-          new_project: idProject,
-          old_project: idCurrentProject
-        }
-      });
-    });
-  }
-
-  function closeModals() {
+  async function change() {
     modalCloseAll();
+    h.setQueryParametersInitReset();
+    if (hasShiny) {
+      Shiny.onInputChange('selectProject', idProject);
+    }
+    const r = await Promise.all([
+      mx.events.once('settings_project_change'),
+      mx.events.once('views_list_updated')
+    ]);
+    const idProjectNew = h.path(r[0], 'new_project');
+    if (idProjectNew !== idProject) {
+      console.warn('Project did not change', {idProjectNew, idProject});
+      return false;
+    }
+    if (h.isFunction(opt.onSuccess)) {
+      opt.onSuccess();
+    }
+    mx.events.fire({
+      type: 'project_change',
+      data: {
+        new_project: idProject,
+        old_project: idCurrentProject
+      }
+    });
   }
 }
 

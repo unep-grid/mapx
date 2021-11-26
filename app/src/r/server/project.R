@@ -22,7 +22,7 @@ observe({
     #
     project_ui <- input$selectProject 
     project_query <- .get(reactChain$requestProject,c('value','project'),query$project)
-
+    
     #
     # Deduced
     #
@@ -100,8 +100,9 @@ observe({
         if(noDataCheck(roles$groups)) project_out <- project_def;
 
 
-        #if(isTRUE(query$project != project_out)){
-        if(isTRUE(project_query != project_out)){
+        noAccess <- isTRUE(project_query != project_out) 
+
+        if( noAccess ){
           #
           # Handle case when requested project is known, but user can't
           # access it.
@@ -125,8 +126,8 @@ observe({
               #
               reactChainCallback('requestProject',
                 value = list(
-                  views = query$views,
-                  project = query$project
+                  #views = query$views,
+                  project = project_query
                 )
               )
             }
@@ -148,7 +149,7 @@ observe({
       # Set requested project to null
       #
       query$project <<- NULL
-
+      reactChain$requestProject <<- NULL 
     })
 
 })
@@ -332,6 +333,9 @@ observeEvent(reactData$project,{
   idProject <- reactData$project
   projectData <- mxDbGetProjectData(idProject)
   isGuest <- isGuestUser()
+  roles <- getUserRole() 
+
+  mxDebugMsg('PROJECT UPDATE PROJECT to' + idProject)
 
   mxUpdateQueryParameters(list(
       project = idProject
@@ -353,6 +357,8 @@ observeEvent(reactData$project,{
     )
   }
 
+  reactData$updateViewsList <- getUserAtProject()
+
 })
 
 #
@@ -367,8 +373,13 @@ observe({
   hasMap <- isTRUE(reactData$mapIsReady)
   update <- reactData$updateProject
  
+
   isolate({
     if( hasMap && hasProject ){
+
+
+      mxDebugMsg('PROJECT UPDATE MAP for' + project)
+    
 
       projectData <- mxDbGetProjectData(project)
       countryClip <- projectData$countries

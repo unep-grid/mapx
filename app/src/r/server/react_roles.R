@@ -23,7 +23,12 @@ getUserRole <- reactive({
 
  return(roles)
 
-
 })
 
+getUserAtProject <- reactive({
+  roles <- list()
+  idProject <- reactData$project
+  idUser <- reactUser$data$id
+  sprintf('%s@%s',idUser,idProject)
+})
 

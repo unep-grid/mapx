@@ -3,8 +3,8 @@
 #' Set user id
 #' @param userData {list} list of user data such as id, email, nickname
 #' @export
-mxUpdateSettings <- function( userData, session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mxUpdateSettings",userData)
+mxUpdateSettings <- function( settings, session=shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mxUpdateSettings",settings)
 }
 
 

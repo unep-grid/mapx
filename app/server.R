@@ -31,17 +31,20 @@ server <- function(input,output,session){
     # See all defaults in /src/js/mx_settings_default.js
     #
     list(
-      api = .get(config,c("api")),
-      search = .get(config, c("search")),
-      validation = .get(config,c('validation')),
+      api         = .get(config,c("api")),
+      search      = .get(config, c("search")),
+      validation  = .get(config,c('validation')),
       dbLogLevels = .get(config,c("db_log","levels"),default=c("ERROR")),
-      language = .get(config,c("language","default")),
-      languages = .get(config,c("languages","codes")),
-      project =  .get(config,c("project","default")),
-      countries =.get(config,c("countries","table","id")),
-      map = .get(config,c("map")),
-      paths = .get(config,c("paths")),
-      links = .get(config,c("links"))
+      language    = .get(config,c("language","default")),
+      languages   = .get(config,c("languages","codes")),
+      project     = list (
+        id = .get(config,c("project","default")),
+        public = TRUE
+      ),
+      countries   = .get(config,c("countries","table","id")),
+      map         = .get(config,c("map")),
+      paths       = .get(config,c("paths")),
+      links       = .get(config,c("links"))
     )
   )
 

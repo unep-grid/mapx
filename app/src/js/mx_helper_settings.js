@@ -7,7 +7,9 @@ export function updateSettings(o) {
   const h = mx.helpers;
   const oldSettings = clone(mx.settings);
   h.mergeDeep(mx.settings, o);
+ 
   const delta = diff(oldSettings, mx.settings);
+ 
   mx.events.fire({
     type: 'settings_change',
     data: {
@@ -39,4 +41,5 @@ export function updateSettings(o) {
       }
     });
   }
+  
 }

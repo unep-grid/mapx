@@ -12,8 +12,6 @@ observe({
   token <- reactUser$token
   roles <- getUserRole()
 
-  mxDebugMsg("Update client user settings")
-
   mxUpdateSettings(list(
       user = list(
         roles = roles,
@@ -22,7 +20,9 @@ observe({
         email =  userEmail,
         token = token
       )
-))
+      ))
+
+  reactData$updateViewsList <- getUserAtProject()
 
 },priority=1) # Should happen every time before map
 
