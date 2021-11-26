@@ -3155,11 +3155,6 @@
     "bn": "পরামর্শ: "
   },
   {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "bn": "পরামর্শ: "
-  },
-  {
     "id": "schema_story_tips",
     "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
     "bn": "<p>পাঠকদের জন্য বিরামবিহীন অভিজ্ঞতা প্রদানের জন্য এখানে ভাল অনুশীলনের তালিকা রয়েছে:</p><ol><li> সহজবোধ্য রাখো.</li><li> আপনার দর্শকদের আগ্রহ বজায় রাখতে ছোট গল্পের মানচিত্র তৈরি করা ভাল।</li><li> ভাল পাঠযোগ্যতার জন্য, একই ধাপে প্রতি ধাপে দুটি স্লাইড এবং মানচিত্রে দুটি স্তরের বেশি না হওয়ার পরামর্শ দেওয়া হয়।</li><li> ছবি, ভিডিও এবং ইনফোগ্রাফিকগুলি আপনার গল্পটিকে প্রাসঙ্গিক করে তোলার জন্য দরকারী এবং প্রভাবশালী মাধ্যম হতে পারে। তবে তাদের আপনার গল্পের স্থানিক উপাদানটিকে ছাপিয়ে দেওয়া উচিত নয়। মানচিত্রগুলি এর কেন্দ্রে থাকা উচিত।</li><li> প্রভাব, ট্রানজিশন বা 3 ডি রূপান্তরগুলি ধীর ডিভাইসে আপনার গল্পের মানচিত্রের পঠনযোগ্যতাকে প্রভাবিত করতে পারে, এগুলিকে অল্প পরিমাণে ব্যবহার করুন।</li></ol> "

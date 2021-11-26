@@ -3155,11 +3155,6 @@
     "es": "Consejos:"
   },
   {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "es": "Consejos:"
-  },
-  {
     "id": "schema_story_tips",
     "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
     "es": "<p>Aquí hay una lista de buenas prácticas para proporcionar una experiencia perfecta para los lectores:</p><ol><li> Mantenlo simple.</li><li>Es mejor crear mapas narrativos cortas para mantener el interés de su audiencia.</li><li>Para una buena legibilidad, se recomienda no exceder dos diapositivas por pasos y más de dos capas en el mapa en el mismo paso.</li><li>Imágenes, videos e infografías pueden ser medios útiles e impactantes para contextualizar su narración. Sin embargo, no deberían eclipsar el componente espacial de su narración. Los mapas deben estar en el centro.</li><li>Los efectos, las transiciones o las transformaciones en 3D pueden afectar la legibilidad de su story map en dispositivos lentos, úselos con moderación.</li></ol>"

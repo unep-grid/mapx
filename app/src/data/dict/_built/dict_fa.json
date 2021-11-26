@@ -3155,11 +3155,6 @@
     "fa": "نکات: "
   },
   {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "fa": "نکات: "
-  },
-  {
     "id": "schema_story_tips",
     "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
     "fa": "<p style=\";text-align:right;direction:rtl\">در اینجا لیستی از اقدامات خوب برای ارائه یک تجربه یکپارچه برای خوانندگان آورده شده است:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> ساده باش</li><li style=\";text-align:right;direction:rtl\"> بهتر است برای حفظ علاقه مخاطبان خود نقشه های داستان کوتاه ایجاد کنید.</li><li style=\";text-align:right;direction:rtl\"> برای خوانایی خوب ، توصیه می شود در همان مرحله از دو اسلاید و بیش از دو لایه روی نقشه فراتر نروید.</li><li style=\";text-align:right;direction:rtl\"> تصاویر ، فیلم ها و اینفوگرافیک ها می توانند رسانه های مفید و تأثیرگذاری برای متنی سازی داستان شما باشند. با این حال ، آنها نباید م componentلفه فضایی داستان شما را تحت الشعاع قرار دهند. نقشه ها باید در مرکز آن باشند.</li><li style=\";text-align:right;direction:rtl\"> جلوه ها ، انتقال ها یا تبدیل های سه بعدی می توانند بر خوانایی نقشه داستان شما در دستگاه های کند تأثیر بگذارند ، از آنها کم استفاده کنید.</li></ol> "

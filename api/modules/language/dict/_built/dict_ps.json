@@ -3155,11 +3155,6 @@
     "ps": "لارښوونې: "
   },
   {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "ps": "لارښوونې: "
-  },
-  {
     "id": "schema_story_tips",
     "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
     "ps": "<p style=\";text-align:right;direction:rtl\">دلته د ښو عملونو لیست دی چې د لوستونکو لپاره بې تجربه تجربه چمتو کوي:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> دا ساده وساتئ.</li><li style=\";text-align:right;direction:rtl\"> دا غوره ده چې د لنډې کیسې نقشه جوړه کړئ ترڅو ستاسو د لیدونکو علاقه وساتي.</li><li style=\";text-align:right;direction:rtl\"> د ښه لوستلو لپاره ، سپارښتنه کیږي چې په هر مرحله کې دوه سلایډونه او په ورته مرحله کې په نقشه کې له دوه پرتونو څخه ډیر نه.</li><li style=\";text-align:right;direction:rtl\"> انځورونه ، ویډیوګانې او انفرافګرافونه ستاسو د کیسې شرایطو لپاره ګټور او اغیزمنې مینځنۍ کیدی شي. په هرصورت ، دوی باید ستاسو د کیسې ځایي برخې تر سیوري لاندې نه کړي. نقشې باید په خپل مرکز کې وي.</li><li style=\";text-align:right;direction:rtl\"> تاثیرات ، لیږدونې یا 3d بدلونونه کولی شي په ورو وسیلو کې ستاسو د کیسې نقشې لوستلو اغیزه وکړي ، په لږه اندازه یې وکاروئ.</li></ol> "

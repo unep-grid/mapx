@@ -3155,11 +3155,6 @@
     "zh": "提示："
   },
   {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "zh": "提示："
-  },
-  {
     "id": "schema_story_tips",
     "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
     "zh": "<p>这里列出了一些能够为读者提供流畅体验的好方法：</p><ol><li>保持简单。</li><li>建议创建简短的Story Map，以吸引读者。</li><li>为了获得良好的可读性，建议每步不超过两张幻灯片，并且在同一步骤中不超过两个图层。</li><li>图片、视频和信息图表可以作为有效且有影响力的媒介来将你的故事情景化。但是，它们不应掩盖故事的空间信息。地图应是故事的中心。</li><li>效果，过渡或3D转换会影响Story Map在慢速设备上的可读性，请谨慎使用。</li></ol>"
