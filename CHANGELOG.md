@@ -1,3 +1,6 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.1' target='_blank'>1.9.35-alpha.1</a>
+  - APP
+    - Should solve issue #672, race condition during login process: views list requested before setting the project.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.34' target='_blank'>1.9.34</a>
   - APP/API
      - Removed duplicated dict key, not allowed in `mx_languages` table
