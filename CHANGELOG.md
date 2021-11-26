@@ -1,6 +1,13 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.34' target='_blank'>1.9.34</a>
+  - APP/API
+     - Removed duplicated dict key, not allowed in `mx_languages` table
+  - APP
+     - Added instruction in README.md for developing routines
+     - Attributes to popup : improved async support
+     - SDK : solved an issue with custom code view with missing legend in static mode when no views were added from query
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.33' target='_blank'>1.9.33</a>
   - APP
-    -  Dashboard: 
+    - Dashboard: 
       - Removed internal event system, replaced by EventSimple; 
       - Solved issue with auto-resizing events callbacks
     - Story map:
@@ -9,12 +16,12 @@
       - Fix issue with keybaord events not working
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.32' target='_blank'>1.9.32</a>
   - SDK
-    - Fixed bug with passthrough events : mapx events not transmited to the SDK manager
+     - Fixed bug with passthrough events : mapx events not transmited to the SDK manager
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.31' target='_blank'>1.9.31</a>
   - APP 
      - Improved event manager
   - SDK
-    - Updated dependencies 
+     - Updated dependencies 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.31-alpha.2' target='_blank'>1.9.31-alpha.2</a>
   - APP
     - Story map code refactoring. 
