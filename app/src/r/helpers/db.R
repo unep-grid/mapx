@@ -285,7 +285,12 @@ mxDbUpdateAllViewDataFromSource <- function(idSource,onProgress=function(progres
 #' @param query SQL query
 #' @param {RPostgreSQL} con Connexion object
 #' @export
-mxDbGetQuery <- function(query,stringAsFactors=FALSE,con=NULL,onError=function(r){r}){
+mxDbGetQuery <- function(
+  query,
+  stringAsFactors = FALSE,
+  con = NULL,
+  onError = function(r){r}
+  ){
   res <- NULL
   hasCon <- !noDataCheck(con)
   #
@@ -305,6 +310,7 @@ mxDbGetQuery <- function(query,stringAsFactors=FALSE,con=NULL,onError=function(r
     #
     # ⚠️  RPostgreSQL complain about jsonb.. 
     # TODO: Check if this has been fixed and remove suppressWarnings
+    # ⚠️  Impossible to produce parametrized requests. Does not work in RPostgreSQL_0.6-2
     #
     if(timing){
       timer <- mxTimeDiff('request')

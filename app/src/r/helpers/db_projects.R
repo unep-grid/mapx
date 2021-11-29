@@ -525,9 +525,20 @@ mxDbProjectTitleExists <- function(title,ignore=NULL,languages=NULL){
 
   if(noDataCheck(title)) return(FALSE)
   if(noDataCheck(ignore)) ignore = ""
+
+  title <- gsub("'","''",title)
+  title <- gsub("\"","\\\"",title)
+  title <- gsub(";","\\;",title)
+
   projectsTable <- .get(config,c("pg","tables","projects"))
   languages <- .get(config,c("languages","codes"))
-  language <- paste(sprintf("title@>'{\"%1$s\":\"%2$s\"}' IS TRUE",languages,title),collapse=" OR ")
+  language <- paste(
+    sprintf(
+      "lower(title #>> '{%1$s}') = lower('%2$s')",
+      languages,
+      title
+      ),collapse=" OR "
+  )
 
   sql <- sprintf("
     SELECT EXISTS(
@@ -539,7 +550,6 @@ mxDbProjectTitleExists <- function(title,ignore=NULL,languages=NULL){
     language,
     ignore
     )
-
   res <- mxDbGetQuery(sql)
 
   return(isTRUE(res$exists))

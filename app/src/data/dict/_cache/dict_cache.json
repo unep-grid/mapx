@@ -6513,6 +6513,19 @@
     "de": "Dieser Titel existiert bereits "
   },
   {
+    "id": "error_title_failed",
+    "en": "Error during validation",
+    "fr": "Erreur lors de la validation",
+    "es": "Error durante la validación",
+    "ru": "Ошибка при проверке",
+    "zh": "验证期间出错",
+    "ar": "خطأ أثناء التحقق من الصحة",
+    "fa": "خطا در حین اعتبارسنجی",
+    "ps": "د تایید پرمهال تېروتنه",
+    "bn": "যাচাইকরণের সময় ত্রুটি",
+    "de": "Fehler bei der Validierung"
+  },
+  {
     "id": "error_title_no_match",
     "en": "The title does not match",
     "fr": "Le titre ne correspond pas",
@@ -8188,19 +8201,6 @@
     "ps": "د موږک د غیرفعالیت په صورت کې د پینلونو او نیویګیشن ګولیو د شفافیت کمولو دمخه ځنډ",
     "bn": "মাউস নিষ্ক্রিয়তার ক্ষেত্রে প্যানেল এবং নেভিগেশন বুলেটগুলির অস্বচ্ছতা হ্রাস করার আগে বিলম্ব করুন",
     "de": "Verzögerung vor dem Verringern der Deckkraft von Bedienfeldern und Navigationspunkten bei Inaktivität der Maus"
-  },
-  {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "fr": "Conseils",
-    "es": "Consejos:",
-    "ru": "Подсказки: ",
-    "zh": "提示：",
-    "ar": "نصائح: ",
-    "fa": "نکات: ",
-    "ps": "لارښوونې: ",
-    "bn": "পরামর্শ: ",
-    "de": "Tipps: "
   },
   {
     "id": "schema_story_tips_title",

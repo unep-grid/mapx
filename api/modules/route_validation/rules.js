@@ -50,6 +50,9 @@ const rules = [
       };
     }
   },
+  /*
+   * Date  / time
+   */
   {
     key: ['timestamp'],
     test: (d) => {
@@ -72,6 +75,9 @@ const rules = [
       };
     }
   },
+  /*
+   * Numeric
+   */
   {
     key: ['maxRowsCount'],
     test: (d) => {
@@ -95,7 +101,7 @@ const rules = [
   {
     key: ['maxByPage'],
     test: (d) => {
-      isValid = mx_valid.isNumeric(d) && d > 0 && d <= 1000; 
+      isValid = mx_valid.isNumeric(d) && d > 0 && d <= 1000;
       return {
         valid: isValid,
         value: isValid ? d * 1 : 20
@@ -116,7 +122,7 @@ const rules = [
     key: ['nullValue'],
     test: (d) => {
       isValid = mx_valid.isSafe(d);
-      if(!isValid){
+      if (!isValid) {
         d = null;
       }
       return {
@@ -135,6 +141,9 @@ const rules = [
       };
     }
   },
+  /**
+   * Stats
+   */
   {
     key: ['binsMethod'],
     test: (d) => {
@@ -160,6 +169,9 @@ const rules = [
       };
     }
   },
+  /**
+   * Various id : user, project, views...
+   */
   {
     key: ['idUser', 'user'],
     test: (d) => {
@@ -231,6 +243,10 @@ const rules = [
       };
     }
   },
+  /**
+   * Query by collection
+   * TODO: collections : should check for special char
+   */
   {
     key: 'collections',
     test: (d) => {
@@ -254,6 +270,9 @@ const rules = [
       };
     }
   },
+  /**
+   * Source attribute query
+   */
   {
     key: ['idAttr', 'attribute', 'column'],
     test: (d) => {
@@ -261,6 +280,21 @@ const rules = [
       return {
         valid: isValid,
         value: isValid ? d : null
+      };
+    }
+  },
+  /**
+   * Views by project : keys
+   * TODO: selectKeysPublic not used ?
+   */
+  {
+    key: 'selectKeysPublic',
+    test: (d) => {
+      d = asArray(d);
+      isValid = d.reduce((a, x) => a && viewKeysPublic.indexOf(x) > -1, true);
+      return {
+        valid: isValid,
+        value: d.length === 0 ? [viewKeysPublic[0]] : d
       };
     }
   },
@@ -275,6 +309,9 @@ const rules = [
       };
     }
   },
+  /**
+   * Array of view type
+   */
   {
     key: ['types', 'idTypes'],
     test: (d) => {
@@ -286,17 +323,9 @@ const rules = [
       };
     }
   },
-  {
-    key: 'selectKeysPublic',
-    test: (d) => {
-      d = asArray(d);
-      isValid = d.reduce((a, x) => a && viewKeysPublic.indexOf(x) > -1, true);
-      return {
-        valid: isValid,
-        value: d.length === 0 ? [viewKeysPublic[0]] : d
-      };
-    }
-  },
+  /**
+   * Roles
+   */
   {
     key: ['roleMax', 'filterViewsByRoleMax', 'role'],
     test: (d) => {
@@ -306,15 +335,9 @@ const rules = [
       };
     }
   },
-  {
-    key: ['email', 'from', 'to'],
-    test: (d) => {
-      return {
-        valid: mx_valid.isEmail(d),
-        value: d
-      };
-    }
-  },
+  /*
+   * Language with fallback
+   */
   {
     key: 'language',
     test: (d) => {
@@ -325,22 +348,44 @@ const rules = [
       };
     }
   },
+  /**
+   * email fields
+   */
+  {
+    key: ['email', 'from', 'to'],
+    test: (d) => {
+      return {
+        valid: mx_valid.isEmail(d),
+        value: d
+      };
+    }
+  },
+
+  {
+    key: ['title', 'subject', 'subtitle', 'subjectPrefix', 'content'],
+    test: (d) => {
+      const isValid = mx_valid.isStringRange(d, 1, 10000);
+      return {
+        valid: isValid,
+        value: d
+      };
+    }
+  },
+  /**
+   * Search in db : avoid special char
+   */
   {
     key: [
-      'title',
       'titlePrefix',
       'titleFuzzy',
       'titleRegex',
-      'subject',
-      'subtitle',
-      'subjectPrefix',
       'searchQuery',
       'searchText',
       'name',
       'code'
     ],
     test: (d) => {
-      const notAllowed = new RegExp("[_;'\"]");
+      const notAllowed = new RegExp('[_;\'"]');
       const isValid = !notAllowed.test(d) && mx_valid.isStringRange(d, 1, 200);
       return {
         valid: isValid,
@@ -348,15 +393,9 @@ const rules = [
       };
     }
   },
-  {
-    key: ['content'],
-    test: (d) => {
-      return {
-        valid: mx_valid.isStringRange(d, 1),
-        value: d
-      };
-    }
-  },
+  /**
+   * Token
+   */
   {
     key: ['idSocket', 'token'],
     test: (d) => {
@@ -366,6 +405,9 @@ const rules = [
       };
     }
   },
+  /*
+   * Search index
+   */
   {
     key: ['searchIndexName'],
     test: (d) => {

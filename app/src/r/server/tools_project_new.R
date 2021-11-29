@@ -52,40 +52,39 @@ observeEvent(input$txtProjectTitle,{
 
   if(!isTRUE(reactData$projectAllowedToCreate)) return()
 
-  v <- .get(config,c('validation','input','nchar'))
-  projectTitle <- trimws(input$txtProjectTitle)
-  language <- reactData$language 
-  errors <- logical(0)
-  warning <- logical(0)
+  mxCatch('Validate project title',{
 
-  errors['error_title_short'] <- noDataCheck(projectTitle) || nchar(projectTitle) < v$projectTitle$min
-  errors['error_title_long'] <- nchar(projectTitle) > v$projectTitle$max
-  errors['error_title_bad'] <- mxProfanityChecker(projectTitle)
-  errors['error_title_exists'] <-  mxDbProjectTitleExists(projectTitle)
+    v <- .get(config,c('validation','input','nchar'))
+    projectTitle <- trimws(input$txtProjectTitle)
+    language <- reactData$language 
+    errors <- logical(0)
+    warning <- logical(0)
+    errors['error_title_short'] <- noDataCheck(projectTitle) || nchar(projectTitle) < v$projectTitle$min
+    errors['error_title_long'] <- nchar(projectTitle) > v$projectTitle$max
+    errors['error_title_bad'] <- mxProfanityChecker(projectTitle)
+    errors['error_title_exists'] <- mxDbProjectTitleExists(projectTitle)
+    errors <- errors[errors]
+    hasError <- length(errors) > 0
 
-  errors <- errors[errors]
-  hasError <- length(errors) > 0
+    if(hasError) projectTitle <-  reactData$projectAddId
 
-
-  if(hasError) projectTitle <-  reactData$projectAddId
-
-  mxUiHide(
-    id = "btnAddProjectConfirm",
-    hide = FALSE,
-    disable = hasError
+    mxUiHide(
+      id = "btnAddProjectConfirm",
+      hide = FALSE,
+      disable = hasError
     )
 
-  output$createNewProject_validation <- renderUI(
-    mxErrorsToUi(
-      errors = errors,
-      warning = warning,
-      language = language
+    output$createNewProject_validation <- renderUI(
+      mxErrorsToUi(
+        errors = errors,
+        warning = warning,
+        language = language
       )
     )
 
-  reactData$projectAddHasError <- hasError
-  reactData$projectAddTitle <- projectTitle
-
+    reactData$projectAddHasError <- hasError
+    reactData$projectAddTitle <- projectTitle
+      })
 })
 
 observeEvent(input$btnAddProjectConfirm,{
