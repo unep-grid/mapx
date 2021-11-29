@@ -1,4 +1,4 @@
-- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.35-alpha.2' target='_blank'>1.8.35-alpha.2</a>
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.2' target='_blank'>1.8.35-alpha.2</a>
  - APP/API 
     - Handling apostrophes in project's title and fields of the email sender 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.1' target='_blank'>1.9.35-alpha.1</a>
