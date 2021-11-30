@@ -261,7 +261,8 @@ mxSchemaViewStyle <- function(
       title = tt("schema_style_hide_nulls"),
       description = tt("schema_style_hide_nulls_desc"),
       type = "boolean",
-      format = "checkbox"
+      format = "checkbox",
+      default  = TRUE
       )
     )
 
