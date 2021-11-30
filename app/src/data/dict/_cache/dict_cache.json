@@ -6513,19 +6513,6 @@
     "de": "Dieser Titel existiert bereits "
   },
   {
-    "id": "error_title_failed",
-    "en": "Error during validation",
-    "fr": "Erreur lors de la validation",
-    "es": "Error durante la validación",
-    "ru": "Ошибка при проверке",
-    "zh": "验证期间出错",
-    "ar": "خطأ أثناء التحقق من الصحة",
-    "fa": "خطا در حین اعتبارسنجی",
-    "ps": "د تایید پرمهال تېروتنه",
-    "bn": "যাচাইকরণের সময় ত্রুটি",
-    "de": "Fehler bei der Validierung"
-  },
-  {
     "id": "error_title_no_match",
     "en": "The title does not match",
     "fr": "Le titre ne correspond pas",

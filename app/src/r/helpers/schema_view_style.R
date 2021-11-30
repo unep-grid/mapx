@@ -240,10 +240,8 @@ mxSchemaViewStyle <- function(
       default = list(
         list(
           value = NULL,
-          labels = list(
-            "en"  =   "NO DATA"
-            ),
-          color = "#000",
+          label_en = 'No data',
+          color = "#A9A9A9",
           opacity = 0.7,
           size = ifelse(isPoint,7,1),
           sprite = ""

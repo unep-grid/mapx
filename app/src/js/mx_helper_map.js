@@ -2052,10 +2052,15 @@ export function viewLiAction(o) {
  * @param {array} opt.filter
  * @param {Number} opt.size
  * @param {string} opt.sprite
+ * @return {Object} Layer
  */
 export function makeSimpleLayer(opt) {
   const h = mx.helpers;
-  let ran, colA, colB, layer;
+  let colA, colB, layer;
+
+  /**
+   * Will be stored as layer.meta
+   */
 
   const def = {
     id: null,
@@ -2120,13 +2125,15 @@ export function makeSimpleLayer(opt) {
       : opt.size;
 
   if (!opt.hexColor) {
-    ran = Math.random();
-    colA = h.randomHsl(0.5, ran);
-    colB = h.randomHsl(0.8, ran);
-  } else {
-    colA = opt.hexColor;
-    colB = opt.hexColor;
+    /*
+     * could be a default, but to avoid using chroma
+     * each time..
+     */
+    opt.hexColor = chroma.random().hex();
   }
+
+  colA = opt.hexColor;
+  colB = opt.hexColor;
 
   /**
    * Extract hex
@@ -2218,12 +2225,7 @@ export function makeSimpleLayer(opt) {
   /*
    * MapX stuff
    */
-  layer.metadata = {
-    position: opt.position,
-    priority: opt.priority,
-    idView: opt.idView,
-    filterOrig: opt.filter
-  };
+  layer.metadata = opt;
   return layer;
 }
 
@@ -2970,7 +2972,7 @@ export function viewSetFilter(o) {
    */
 
   for (let layer of layers) {
-    let filterOrig = h.path(layer, 'metadata.filterOrig', null);
+    let filterOrig = h.path(layer, 'metadata.filter', null);
     let filterFinal = [];
     if (!filterOrig) {
       filterFinal.push('all', ...filterNew);
@@ -3356,10 +3358,10 @@ export async function viewLayersAdd(o) {
     id: idMap,
     prefix: idView
   });
+
   /*
    * Remove modules if needed
    */
-
   await viewModulesRemove(view);
 
   /**
@@ -4123,9 +4125,9 @@ export async function viewLayersAddVt(o) {
   /**
    * Set style type
    */
-  const useStyleNull = !hideNulls;
   const useStyleCustom = h.isObject(styleCustom) && styleCustom.enable === true;
   const useStyleDefault = !useStyleCustom && !hasStyleRules;
+  const useStyleNull = !useStyleDefault && !hideNulls;
   const useStyleAll = !useStyleCustom && !useStyleDefault && hasRuleAll;
   const useStyleFull = !useStyleCustom && !useStyleAll && hasStyleRules;
 
@@ -4156,7 +4158,7 @@ export async function viewLayersAddVt(o) {
         position: 0,
         priority: 0,
         idView: idView,
-        filterOrig: []
+        filter: []
       }
     };
     layers.push(layerCustom);
@@ -4174,6 +4176,13 @@ export async function viewLayersAddVt(o) {
       geomType: geomType
     });
     layers.push(layerDefault);
+    const ruleDefault = {
+      label_en: 'Default',
+      value: 'all',
+      color: layerDefault?.metadata?.hexColor,
+      size: layerDefault?.metadata?.size
+    };
+    rules.push(ruleDefault);
   }
 
   /**
@@ -4358,8 +4367,13 @@ export async function viewLayersAddVt(o) {
 
     filter.push(...filterIncludeNull);
 
-    const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== 'none';
+    h.updateIfEmpty(ruleNulls,{
+        color :  '#A9A9A9',
+        size : 2,
+        label_en: await h.getDictItem('schema_style_nulls')
+    });
 
+    const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== 'none';
     const layerNull = _build_layer({
       idSuffix: '_null',
       priority: 1,
@@ -4692,7 +4706,7 @@ export function viewLayersAddGj(opt) {
         priority: 0,
         position: 0,
         idView: opt.view.id,
-        filterOrig: []
+        filter: []
       };
     }
 

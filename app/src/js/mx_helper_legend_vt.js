@@ -18,29 +18,31 @@ export function buildLegendVt(view) {
   let id = 0;
   for (const rule of rules) {
     const lang = h.checkLanguage({obj: rule, path: 'label_', concat: true});
-    const label = h.firstOf([rule['label_' + lang], rule.value]);
+    const label = h.firstOf([rule['label_' + lang], rule.value, 'No data']);
     const hasSprite = !!rule.sprite;
     const inputId = h.makeId();
     const colStyle = {};
 
     colStyle.opacity = rule.opacity;
-    colStyle.backgroundColor = rule.color;
+    colStyle.backgroundColor = rule.color || '#FF0';
 
     if (isLine) {
       colStyle.height = `${rule.size}px`;
     }
     if (isPoint) {
-      colStyle.height = `${rule.size}px`;
-      colStyle.width = `${rule.size}px`;
       if (!hasSprite) {
         colStyle.borderRadius = `50%`;
+        colStyle.height = `${rule.size}px`;
+        colStyle.width = `${rule.size}px`;
       } else {
-        colStyle.webKitMaskImage = rule.sprite;
-        colStyle.webKitMaskSize = 'contain';
-        colStyle.webKitMaskRepeat = 'no-repeat';
+        colStyle.webkitMaskImage = rule.sprite;
+        colStyle.webkitMaskSize = 'contain';
+        colStyle.webkitMaskRepeat = 'no-repeat';
         colStyle.maskImage = rule.sprite;
         colStyle.maskSize = 'contain';
-        colStyle.masRepeat = 'no-repeat';
+        colStyle.maskRepeat = 'no-repeat';
+        colStyle.height = `${rule.size * 10}px`;
+        colStyle.width = `${rule.size * 10}px`;
       }
     }
 
