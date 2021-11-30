@@ -3440,6 +3440,26 @@
     "ps": "لینک ډاونلوډ کړئ "
   },
   {
+    "id": "source_raster_download_error_title",
+    "en": "The configured URL is not valid",
+    "ps": "ترتیب شوی URL د اعتبار وړ ندی"
+  },
+  {
+    "id": "source_raster_download_error",
+    "en": "The download URL is not set or not valid, please contact the view publisher",
+    "ps": "د ډاونلوډ URL نه دی ټاکل شوی یا اعتبار نلري، مهرباني وکړئ د لید خپرونکي سره اړیکه ونیسئ"
+  },
+  {
+    "id": "source_raster_download_open_external_title",
+    "en": "This will open a new window outside this application",
+    "ps": "دا به د دې غوښتنلیک بهر یوه نوې کړکۍ پرانیزي"
+  },
+  {
+    "id": "source_raster_download_open_external",
+    "en": "<span> Do you want to visit the following link <pre> {{url}} </pre></span>",
+    "ps": "<span>ایا تاسو غواړئ لاندې لینک ته لاړ شئ</span><pre style=\";text-align:right;direction:rtl\"><span> {{url}}</span></pre>"
+  },
+  {
     "id": "source_raster_tile_url_metadata",
     "en": "Link to the metadata",
     "ps": "میټاډاټا ته لینک "

@@ -3440,6 +3440,26 @@
     "zh": "下载链接"
   },
   {
+    "id": "source_raster_download_error_title",
+    "en": "The configured URL is not valid",
+    "zh": "配置的 URL 无效"
+  },
+  {
+    "id": "source_raster_download_error",
+    "en": "The download URL is not set or not valid, please contact the view publisher",
+    "zh": "下载地址未设置或无效，请联系查看发布者"
+  },
+  {
+    "id": "source_raster_download_open_external_title",
+    "en": "This will open a new window outside this application",
+    "zh": "这将在此应用程序之外打开一个新窗口"
+  },
+  {
+    "id": "source_raster_download_open_external",
+    "en": "<span> Do you want to visit the following link <pre> {{url}} </pre></span>",
+    "zh": "<span>您要访问以下链接吗</span><pre><span> {{url}}</span></pre>"
+  },
+  {
     "id": "source_raster_tile_url_metadata",
     "en": "Link to the metadata",
     "zh": "元数据链接"

@@ -3440,6 +3440,26 @@
     "ru": "Ссылка для скачивания "
   },
   {
+    "id": "source_raster_download_error_title",
+    "en": "The configured URL is not valid",
+    "ru": "Настроенный URL недействителен"
+  },
+  {
+    "id": "source_raster_download_error",
+    "en": "The download URL is not set or not valid, please contact the view publisher",
+    "ru": "URL загрузки не задан или недействителен, обратитесь к издателю просмотра"
+  },
+  {
+    "id": "source_raster_download_open_external_title",
+    "en": "This will open a new window outside this application",
+    "ru": "Это откроет новое окно за пределами этого приложения"
+  },
+  {
+    "id": "source_raster_download_open_external",
+    "en": "<span> Do you want to visit the following link <pre> {{url}} </pre></span>",
+    "ru": "<span>Вы хотите перейти по следующей ссылке</span><pre><span> {{url}}</span></pre>"
+  },
+  {
     "id": "source_raster_tile_url_metadata",
     "en": "Link to the metadata",
     "ru": "Ссылка на метаданные "

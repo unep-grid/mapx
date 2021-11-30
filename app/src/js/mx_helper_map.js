@@ -97,7 +97,6 @@ export async function downloadViewRaster(opt) {
     throw new Error(`No view with id ${idView}`);
   }
   let url = '';
-  //const title = h.getViewTitle(view).replace(/\s/, '_');
   const dlItem = h.path(view, 'data.source.meta.origin.source.urls', [])[0];
   if (h.isObject(dlItem)) {
     url = dlItem.url;
@@ -107,40 +106,38 @@ export async function downloadViewRaster(opt) {
   }
   //let filename = title;
 
-  if (h.isUrl(url)) {
-    /**
-     * Confirm
-     */
-
-    const c = await modalConfirm({
-      title: 'This will open a new window outside this application.',
-      content: h.el(
-        'div',
-        h.el(
-          'span',
-          'Do you want to visit the following link:',
-          h.el('pre', url)
-        )
-      ),
-      addBackground: true
+  if (!h.isUrl(url)) {
+    h.modal({
+      title: await h.getDictItem('source_raster_download_error_title'),
+      content: await h.getDictItem('source_raster_download_error'),
+      addBackground : true
     });
-    if (!c) {
-      return;
-    }
-
-    /**
-     * Don't try to download in the same page :
-     * Fetching can be very long, longer than mapx session AND HUGE
-     * using <a href=... download> , a same origin could be required by firefox
-     * using download js will try to fetch or xhr, which is basicaly the same as
-     * fetching ourself the file, and add a <a href='blob'>.
-     * href + target _blank
-     */
-    let elA = h.el('a', {href: url, target: '_blank'});
-    elA.click();
-  } else {
-    throw new Error(`Not a valid URL: ${url}`);
+    return;
   }
+
+  /**
+   * Confirm
+   */
+  const c = await modalConfirm({
+    title: await h.getDictItem('source_raster_download_open_external_title'),
+    content: await h.getDictTemplate('source_raster_download_open_external', {
+      url: url
+    }),
+    addBackground: true
+  });
+  if (!c) {
+    return;
+  }
+
+  /**
+   * Don't try to download in the same page :
+   * Fetching can be very long, longer than mapx session AND HUGE
+   * using <a href=... download> , a same origin could be required by firefox
+   * using download js will try to fetch or xhr, which is basicaly the same as
+   * fetching ourself the file, and add a <a href='blob'>.
+   * href + target _blank
+   */
+  window.open(url, '_blank');
   return opt;
 }
 
@@ -4367,10 +4364,10 @@ export async function viewLayersAddVt(o) {
 
     filter.push(...filterIncludeNull);
 
-    h.updateIfEmpty(ruleNulls,{
-        color :  '#A9A9A9',
-        size : 2,
-        label_en: await h.getDictItem('schema_style_nulls')
+    h.updateIfEmpty(ruleNulls, {
+      color: '#A9A9A9',
+      size: 2,
+      label_en: await h.getDictItem('schema_style_nulls')
     });
 
     const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== 'none';

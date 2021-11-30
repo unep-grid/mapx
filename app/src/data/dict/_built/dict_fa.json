@@ -3440,6 +3440,26 @@
     "fa": "لینک دانلود "
   },
   {
+    "id": "source_raster_download_error_title",
+    "en": "The configured URL is not valid",
+    "fa": "URL پیکربندی شده معتبر نیست"
+  },
+  {
+    "id": "source_raster_download_error",
+    "en": "The download URL is not set or not valid, please contact the view publisher",
+    "fa": "URL دانلود تنظیم نشده یا معتبر نیست، لطفا با ناشر view تماس بگیرید"
+  },
+  {
+    "id": "source_raster_download_open_external_title",
+    "en": "This will open a new window outside this application",
+    "fa": "با این کار یک پنجره جدید در خارج از این برنامه باز می شود"
+  },
+  {
+    "id": "source_raster_download_open_external",
+    "en": "<span> Do you want to visit the following link <pre> {{url}} </pre></span>",
+    "fa": "<span>آیا می خواهید به لینک زیر مراجعه کنید</span><pre style=\";text-align:right;direction:rtl\"><span> {{url}}</span></pre>"
+  },
+  {
     "id": "source_raster_tile_url_metadata",
     "en": "Link to the metadata",
     "fa": "پیوند به فراداده "

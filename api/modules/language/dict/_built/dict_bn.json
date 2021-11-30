@@ -3440,6 +3440,26 @@
     "bn": "ডাউনলোড লিংক "
   },
   {
+    "id": "source_raster_download_error_title",
+    "en": "The configured URL is not valid",
+    "bn": "কনফিগার করা URLটি বৈধ নয়৷"
+  },
+  {
+    "id": "source_raster_download_error",
+    "en": "The download URL is not set or not valid, please contact the view publisher",
+    "bn": "ডাউনলোড URL সেট করা নেই বা বৈধ নয়, অনুগ্রহ করে দর্শন প্রকাশকের সাথে যোগাযোগ করুন৷"
+  },
+  {
+    "id": "source_raster_download_open_external_title",
+    "en": "This will open a new window outside this application",
+    "bn": "এটি এই অ্যাপ্লিকেশনের বাইরে একটি নতুন উইন্ডো খুলবে"
+  },
+  {
+    "id": "source_raster_download_open_external",
+    "en": "<span> Do you want to visit the following link <pre> {{url}} </pre></span>",
+    "bn": "<span>আপনি নিম্নলিখিত লিঙ্কে যেতে চান</span><pre><span> {{url}}</span></pre>"
+  },
+  {
     "id": "source_raster_tile_url_metadata",
     "en": "Link to the metadata",
     "bn": "মেটাডেটার লিঙ্ক "

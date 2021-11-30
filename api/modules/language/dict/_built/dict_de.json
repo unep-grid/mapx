@@ -3440,6 +3440,26 @@
     "de": "Download-Link "
   },
   {
+    "id": "source_raster_download_error_title",
+    "en": "The configured URL is not valid",
+    "de": "Die konfigurierte URL ist ungültig"
+  },
+  {
+    "id": "source_raster_download_error",
+    "en": "The download URL is not set or not valid, please contact the view publisher",
+    "de": "Die Download-URL ist nicht festgelegt oder ungültig. Bitte wenden Sie sich an den Ansichtsherausgeber"
+  },
+  {
+    "id": "source_raster_download_open_external_title",
+    "en": "This will open a new window outside this application",
+    "de": "Dies öffnet ein neues Fenster außerhalb dieser Anwendung"
+  },
+  {
+    "id": "source_raster_download_open_external",
+    "en": "<span> Do you want to visit the following link <pre> {{url}} </pre></span>",
+    "de": "<span>Möchten Sie den folgenden Link besuchen?</span><pre><span> {{url}}</span></pre>"
+  },
+  {
     "id": "source_raster_tile_url_metadata",
     "en": "Link to the metadata",
     "de": "Link zu den Metadaten "

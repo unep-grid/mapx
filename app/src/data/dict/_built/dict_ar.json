@@ -3440,6 +3440,26 @@
     "ar": "رابط التحميل "
   },
   {
+    "id": "source_raster_download_error_title",
+    "en": "The configured URL is not valid",
+    "ar": "عنوان URL الذي تم تكوينه غير صالح"
+  },
+  {
+    "id": "source_raster_download_error",
+    "en": "The download URL is not set or not valid, please contact the view publisher",
+    "ar": "عنوان URL للتنزيل غير محدد أو غير صالح ، يرجى الاتصال بناشر العرض"
+  },
+  {
+    "id": "source_raster_download_open_external_title",
+    "en": "This will open a new window outside this application",
+    "ar": "سيؤدي هذا إلى فتح نافذة جديدة خارج هذا التطبيق"
+  },
+  {
+    "id": "source_raster_download_open_external",
+    "en": "<span> Do you want to visit the following link <pre> {{url}} </pre></span>",
+    "ar": "<span>هل تريد زيارة الرابط التالي</span><pre style=\";text-align:right;direction:rtl\"><span> {{url}}</span></pre>"
+  },
+  {
     "id": "source_raster_tile_url_metadata",
     "en": "Link to the metadata",
     "ar": "ارتباط بالبيانات الوصفية "

@@ -8944,6 +8944,58 @@
     "de": "Download-Link "
   },
   {
+    "id": "source_raster_download_error_title",
+    "en": "The configured URL is not valid",
+    "fr": "L'URL configurée n'est pas valide",
+    "es": "La URL configurada no es válida",
+    "ru": "Настроенный URL недействителен",
+    "zh": "配置的 URL 无效",
+    "ar": "عنوان URL الذي تم تكوينه غير صالح",
+    "fa": "URL پیکربندی شده معتبر نیست",
+    "ps": "ترتیب شوی URL د اعتبار وړ ندی",
+    "bn": "কনফিগার করা URLটি বৈধ নয়৷",
+    "de": "Die konfigurierte URL ist ungültig"
+  },
+  {
+    "id": "source_raster_download_error",
+    "en": "The download URL is not set or not valid, please contact the view publisher",
+    "fr": "L'URL de téléchargement n'est pas définie ou n'est pas valide, veuillez contacter l'éditeur de la vue",
+    "es": "La URL de descarga no está configurada o no es válida, comuníquese con el editor de la vista.",
+    "ru": "URL загрузки не задан или недействителен, обратитесь к издателю просмотра",
+    "zh": "下载地址未设置或无效，请联系查看发布者",
+    "ar": "عنوان URL للتنزيل غير محدد أو غير صالح ، يرجى الاتصال بناشر العرض",
+    "fa": "URL دانلود تنظیم نشده یا معتبر نیست، لطفا با ناشر view تماس بگیرید",
+    "ps": "د ډاونلوډ URL نه دی ټاکل شوی یا اعتبار نلري، مهرباني وکړئ د لید خپرونکي سره اړیکه ونیسئ",
+    "bn": "ডাউনলোড URL সেট করা নেই বা বৈধ নয়, অনুগ্রহ করে দর্শন প্রকাশকের সাথে যোগাযোগ করুন৷",
+    "de": "Die Download-URL ist nicht festgelegt oder ungültig. Bitte wenden Sie sich an den Ansichtsherausgeber"
+  },
+  {
+    "id": "source_raster_download_open_external_title",
+    "en": "This will open a new window outside this application",
+    "fr": "Cela ouvrira une nouvelle fenêtre en dehors de cette application",
+    "es": "Esto abrirá una nueva ventana fuera de esta aplicación.",
+    "ru": "Это откроет новое окно за пределами этого приложения",
+    "zh": "这将在此应用程序之外打开一个新窗口",
+    "ar": "سيؤدي هذا إلى فتح نافذة جديدة خارج هذا التطبيق",
+    "fa": "با این کار یک پنجره جدید در خارج از این برنامه باز می شود",
+    "ps": "دا به د دې غوښتنلیک بهر یوه نوې کړکۍ پرانیزي",
+    "bn": "এটি এই অ্যাপ্লিকেশনের বাইরে একটি নতুন উইন্ডো খুলবে",
+    "de": "Dies öffnet ein neues Fenster außerhalb dieser Anwendung"
+  },
+  {
+    "id": "source_raster_download_open_external",
+    "en": "<span> Do you want to visit the following link <pre> {{url}} </pre></span>",
+    "fr": "<span>Voulez-vous visiter le lien suivant</span><pre><span> {{url}}</span></pre>",
+    "es": "<span>Quieres visitar el siguiente enlace</span><pre><span> {{url}}</span></pre>",
+    "ru": "<span>Вы хотите перейти по следующей ссылке</span><pre><span> {{url}}</span></pre>",
+    "zh": "<span>您要访问以下链接吗</span><pre><span> {{url}}</span></pre>",
+    "ar": "<span>هل تريد زيارة الرابط التالي</span><pre style=\";text-align:right;direction:rtl\"><span> {{url}}</span></pre>",
+    "fa": "<span>آیا می خواهید به لینک زیر مراجعه کنید</span><pre style=\";text-align:right;direction:rtl\"><span> {{url}}</span></pre>",
+    "ps": "<span>ایا تاسو غواړئ لاندې لینک ته لاړ شئ</span><pre style=\";text-align:right;direction:rtl\"><span> {{url}}</span></pre>",
+    "bn": "<span>আপনি নিম্নলিখিত লিঙ্কে যেতে চান</span><pre><span> {{url}}</span></pre>",
+    "de": "<span>Möchten Sie den folgenden Link besuchen?</span><pre><span> {{url}}</span></pre>"
+  },
+  {
     "id": "source_raster_tile_url_metadata",
     "en": "Link to the metadata",
     "fr": "Lien vers les métadonnées",
