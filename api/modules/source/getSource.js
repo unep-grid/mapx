@@ -245,7 +245,7 @@ async function extractFromPostgres(config, res) {
     date: `${Date()}`
   });
   await writeFile(`${folderPath}/info.txt`, txtTimeStamp);
-  await writeFile(`${folderPath}/metadata.json`, JSON.stringify(metadata));
+  await writeFile(`${folderPath}/metadata.json`, JSON.stringify(metadata,0,2));
 
   /**
    * Archive data
