@@ -1804,7 +1804,7 @@ export async function updateViewsList(opt) {
        * Set flat mode (hide categories)
        */
       if (conf.isFlatMode) {
-        viewsList.setModeFlat(true);
+        viewsList.setModeFlat(true, {permanent: true});
       }
       const idViewsOpen = conf.idViewsOpen;
       const idViews = conf.idViews;

@@ -648,8 +648,11 @@ class NestedList {
   }
 
   setModeFlat(enable, opt) {
-    opt = opt || {};
     const li = this;
+    if(li.isModeFlatPermanent()){
+        return;
+    }
+    opt = Object.assign({},{permanent:false},opt);
     enable = enable === true;
     let el = li.elRoot;
     let els = li.getChildrenTarget(el);
@@ -659,9 +662,15 @@ class NestedList {
       }
     });
     li._is_mode_flat = enable;
+    if(opt.permanent){
+      li._is_mode_flat_permanent = enable;
+    }
   }
   isModeFlat() {
     return this._is_mode_flat;
+  }
+  isModeFlatPermanent() {
+    return this._is_mode_flat_permanent;
   }
   setGroupTitle(el, title) {
     const li = this;
