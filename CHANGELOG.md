@@ -1,3 +1,7 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.3' target='_blank'>1.9.35-alpha.3</a>
+ - APP
+   - Improved vector views with no style defined or when no nulls rule defined (#772, #773)
+   - Fixed an issue that prevented symbols of point features being shown in legends.  
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.2' target='_blank'>1.8.35-alpha.2</a>
  - APP/API 
     - Handling apostrophes in project's title and fields of the email sender 
