@@ -110,7 +110,7 @@ export async function downloadViewRaster(opt) {
     h.modal({
       title: await h.getDictItem('source_raster_download_error_title'),
       content: await h.getDictItem('source_raster_download_error'),
-      addBackground : true
+      addBackground: true
     });
     return;
   }
@@ -5470,31 +5470,36 @@ export function getViewLegend(id, opt) {
   if (h.isView(id)) {
     id = id.id;
   }
-  let view = h.getView(id);
-  let elLegend = view._elLegend;
-  let elLegendClone;
-  let hasLegend = h.isElement(elLegend);
-  let useClone = opt.clone === true;
-  let hasMiniMap = view._legend_minimap instanceof RasterMiniMap;
+  const view = h.getView(id);
+  const elLegend = view._elLegend;
+  const hasLegend = h.isElement(elLegend);
+  const useClone = opt.clone === true;
+  const hasMiniMap = view._legend_minimap instanceof RasterMiniMap;
 
-  if (hasLegend && useClone) {
-    elLegendClone = elLegend.cloneNode(true);
+  if (!hasLegend) {
+    return h.el('div');
   }
-  if (hasLegend && useClone && hasMiniMap) {
-    var img = view._legend_minimap.getImage();
-    var elImg = h.el('img', {src: img});
+
+  if (!useClone) {
+    return elLegend;
+  }
+
+  const elLegendClone = elLegend.cloneNode(true);
+  if (hasMiniMap) {
+    const img = view._legend_minimap.getImage();
+    const elImg = h.el('img', {src: img});
     elLegendClone.appendChild(elImg);
   }
-  if (hasLegend && useClone && opt.input === false) {
+  if (opt.input === false) {
     elLegendClone.querySelectorAll('input').forEach((e) => e.remove());
   }
-  if (useClone && opt.style === false) {
+  if (opt.style === false) {
     elLegendClone.style = '';
   }
-  if (useClone && opt.class === false) {
+  if (opt.class === false) {
     elLegendClone.className = '';
   }
-  return elLegendClone || elLegend || h.el('div');
+  return elLegendClone;
 }
 
 /**
