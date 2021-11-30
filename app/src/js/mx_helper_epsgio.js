@@ -1,50 +1,78 @@
 export function epsgBuildSearchBox(opt) {
   const h = mx.helpers;
   const el = h.el;
-
-  var selector = opt.selector;
-  var elInput = document.querySelector(selector);
-
+  const selector = opt.selector;
+  const elInput = document.querySelector(selector);
+  const hasShiny = h.isObject(Shiny) && Shiny.onInputChange;
   if (!elInput) {
     console.warn(`epsgBuildSearchBox : element ${selector} not found`);
     return;
   }
 
-  elInput.classList.add('mx-hide');
+  const elInputParent = elInput.parentElement;
 
-  var elInputParent = elInput.parentElement;
+  /*
+   * hide actual input
+   */
+  elInput.style.display = 'none';
 
-  var elEpsgChange = el(
+  /*
+   * New inputs
+   */
+  const elEpsgInput = el('input', {
+    class: ['form-control'],
+    placeholder: 'Epsg code. e.g. 4326',
+    dataset: {
+      lang_key: 'epsg_placeholder_input',
+      lang_type: 'placeholder'
+    },
+    value: elInput.value ? elInput.value * 1 : '',
+    id: 'epsgTextInput'
+  });
+
+  const elButtonGroup = el(
+    'span',
+    {
+      class: ['input-group-btn']
+    },
+    el('button', {
+      class: ['btn', 'btn-default'],
+      dataset: {lang_key: 'epsg_btn_open_search'},
+      innerText: 'Search',
+      on: ['click', toggleSearch]
+    })
+  );
+
+  const elEpsgChange = el(
     'div',
     {
       class: ['input-group']
     },
-    el('input', {
-      class: ['form-control'],
-      placeholder: 'Epsg code. e.g. 4326',
-      dataset: {
-        lang_key: 'epsg_placeholder_input',
-        lang_type: 'placeholder'
-      },
-      //disabled : true,
-      value: elInput.value ? elInput.value * 1 : '',
-      id: 'epsgTextInput'
-    }),
-    el(
-      'span',
-      {
-        class: ['input-group-btn']
-      },
-      el('button', {
-        class: ['btn', 'btn-default'],
-        dataset: {lang_key: 'epsg_btn_open_search'},
-        innerText: 'Search',
-        on: ['click', showSearch]
-      })
-    )
+    elEpsgInput,
+    elButtonGroup
   );
 
-  var elSearchGroup = el(
+  /**
+   * Search group
+   */
+
+  const elInputSearch = el('input', {
+    class: ['form-control'],
+    placeholder: 'Enter country/region name',
+    dataset: {
+      lang_key: 'epsg_placeholder_search',
+      lang_type: 'placeholder'
+    },
+    type: 'text',
+    id: 'epsgSearchInput'
+  });
+
+  const elResults = el('div', {
+    id: 'epsgListResults',
+    on: ['click', choose, true],
+  });
+
+  const elSearchGroup = el(
     'div',
     {
       class: ['epsgio-box', 'well'],
@@ -62,16 +90,7 @@ export function epsgBuildSearchBox(opt) {
       {
         class: ['input-group']
       },
-      el('input', {
-        class: ['form-control'],
-        placeholder: 'Enter country/region name',
-        dataset: {
-          lang_key: 'epsg_placeholder_search',
-          lang_type: 'placeholder'
-        },
-        type: 'text',
-        id: 'epsgSearchInput'
-      }),
+      elInputSearch,
       el(
         'span',
         {
@@ -85,67 +104,55 @@ export function epsgBuildSearchBox(opt) {
         })
       )
     ),
-    el('div', {
-      id: 'epsgListResults'
-    })
+    elResults
   );
 
+  /**
+   * Append to the parent
+   */
   elInputParent.appendChild(elEpsgChange);
   elInputParent.appendChild(elSearchGroup);
 
   /**
    * Update labels
    */
-
   h.updateLanguageElements({el: elInputParent});
 
   /**
    * Show or hide search block
    */
-  function showSearch() {
-    var isVisible = elSearchGroup.style.display === 'block';
-    if (isVisible) {
-      elSearchGroup.style.display = 'none';
-    } else {
-      elSearchGroup.style.display = 'block';
-    }
+  function toggleSearch() {
+    const isVisible = elSearchGroup.style.display === 'block';
+    elSearchGroup.style.display = isVisible ? 'none' : 'block';
   }
 
   /**
    * Update input using value of returned code
    */
   function choose(e) {
-    var code = e.toElement.dataset.code;
-    var elEpsg = getEl('epsgTextInput');
+    const code = e?.target?.dataset?.code;
+    if (!code) {
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
     elInput.value = code;
-    elEpsg.value = code;
-    if (h.isObject(Shiny) && Shiny.onInputChange) {
+    elEpsgInput.value = code;
+    if (hasShiny) {
       Shiny.onInputChange(elInput.id, code);
     }
     elSearchGroup.style.display = 'none';
-    return '';
-  }
-  /**
-   * Simple wrapper to get nested elements by id
-   */
-  function getEl(id) {
-    return elInputParent.querySelector('#' + id);
+    return code;
   }
   /**
    * Search epsg.io database and build results list as buttons
    */
   async function searchEpsg() {
-    var elInputSearch = getEl('epsgSearchInput');
-    var elResults = getEl('epsgListResults');
-    var txt = elInputSearch.value;
+    const txt = elInputSearch.value;
 
     if (!txt) {
       return;
     }
-
-    /**
-     * Reset list search
-     */
     elResults.innerHTML = '';
 
     const res = await epsgQuery(txt);
@@ -157,14 +164,13 @@ export function epsgBuildSearchBox(opt) {
       elEmpty.innerText = await h.getDictItem('noValue');
       elResults.appendChild(elEmpty);
     } else {
-      res.forEach((r) => {
+      for (const r of res) {
         /**
          * Build select button
          */
         const elRow = el(
           'div',
           el('button', {
-            on: ['click', choose],
             innerText: r.name + ' (' + r.code + ')',
             class: ['btn', 'btn-default', 'epsgio-btn-choose'],
             dataset: {
@@ -173,7 +179,7 @@ export function epsgBuildSearchBox(opt) {
           })
         );
         elResults.appendChild(elRow);
-      });
+      }
     }
   }
 }
@@ -181,7 +187,7 @@ export function epsgBuildSearchBox(opt) {
 /**
  * Search epsg.io database using string value
  * @param {String} str Any string, like country name, region, or code
- * @return {Array} Array of match projection system
+ * @return {Promise<Array>} Array of match projection system
  */
 export async function epsgQuery(str) {
   const url = `https://epsg.io/?q=${str}&format=json`;
