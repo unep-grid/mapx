@@ -15,8 +15,6 @@ observeEvent(reactData$updateViewsList,{
   if(!hasRole) return()
   if(!hasProject) return()
 
-  mxDebugMsg('PROJECT UPDATE VIEWS for' + project)
-
   mglUpdateViewsList(
     id = .get(config,c("map","id")),
     project = project,

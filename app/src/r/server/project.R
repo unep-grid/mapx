@@ -335,8 +335,6 @@ observeEvent(reactData$project,{
   isGuest <- isGuestUser()
   roles <- getUserRole() 
 
-  mxDebugMsg('PROJECT UPDATE PROJECT to' + idProject)
-
   mxUpdateQueryParameters(list(
       project = idProject
       ))
@@ -375,11 +373,7 @@ observe({
  
 
   isolate({
-    if( hasMap && hasProject ){
-
-
-      mxDebugMsg('PROJECT UPDATE MAP for' + project)
-    
+    if( hasMap && hasProject ){ 
 
       projectData <- mxDbGetProjectData(project)
       countryClip <- projectData$countries
