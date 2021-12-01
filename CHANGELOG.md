@@ -1,13 +1,25 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.4' target='_blank'>1.9.35-alpha.4</a>
+  - APP/API 
+    - Added analyze helper to solve issue when creating new layer from the overlap tool
+    - Added option in 'validate geometry tool' to also analyze geom; 
+    - Improved zoom to view : if the extent is saved in cache and not valid, it's retrieved from the server in an alternative step.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.3' target='_blank'>1.9.35-alpha.3</a>
- - APP
-   - Improved vector views with no style defined or when no nulls rule defined (#772, #773)
-   - Fixed an issue that prevented symbols of point features being shown in legends.  
+  - APP
+    - Improved vector views with no style defined or when no nulls rule defined (#772, #773)
+    - Fixed an issue that prevented symbols of point features being shown in legends.  
+    - Improvement of support for viewsListFlatMode: added a permanent option (internally) so the option is kept event after switching 'filter activated views list'
+    - Solved an issue with missing legend when using the map composer for geojson sources
+    - Added translation + logic to handle missing or wrong raster source download URL
+    - View style : default set 'do not display missing values' to true
+    - Weird typo in epsg form: solved + code cleaning
+  - API 
+    - Source metadata json layout in downloaded folder (#763)
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.2' target='_blank'>1.8.35-alpha.2</a>
- - APP/API 
+  - APP/API 
     - Handling apostrophes in project's title and fields of the email sender 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.1' target='_blank'>1.9.35-alpha.1</a>
   - APP
-     - Should solve issue #672, race condition during login process: views list requested before setting the project.
+    - Should solve issue #672, race condition during login process: views list requested before setting the project.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.34' target='_blank'>1.9.34</a>
   - APP/API
      - Removed duplicated dict key, not allowed in `mx_languages` table
