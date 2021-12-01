@@ -5170,6 +5170,11 @@
     "fa": "URL"
   },
   {
+    "id": "origin_source_url_label_title",
+    "en": "URL label (optional)",
+    "fa": "برچسب URL (اختیاری)"
+  },
+  {
     "id": "origin_title",
     "en": "Source",
     "fa": "منبع"

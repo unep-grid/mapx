@@ -83,12 +83,12 @@ export async function downloadViewGeoJSON(opt) {
 }
 
 /**
- * Download view raster
+ * Download external source
  * @param {Object} opt Options
  * @param {String} opt.idView Id of the rt view
- * @return {Object} input options, with new key "url".
+ * @return {Object} input options, with new key "url", first url and all items in an array [{<label>,<url>,<is_download_link>}]
  */
-export async function downloadViewRaster(opt) {
+export async function downloadViewSourceExternal(opt) {
   opt = Object.assign({}, {idView: null, mode: null}, opt);
   const h = mx.helpers;
   const view = h.getView(opt.idView);
@@ -96,49 +96,106 @@ export async function downloadViewRaster(opt) {
   if (!h.isView(view)) {
     throw new Error(`No view with id ${idView}`);
   }
-  let url = '';
-  const dlItem = h.path(view, 'data.source.meta.origin.source.urls', [])[0];
-  if (h.isObject(dlItem)) {
-    url = dlItem.url;
-  }
-  if (!url) {
-    url = h.path(view, 'data.source.urlDownload');
-  }
-  //let filename = title;
+  const urlItems = h.path(view, 'data.source.meta.origin.source.urls', []);
 
-  if (!h.isUrl(url)) {
+  if (urlItems.length === 0) {
+    /**
+     * Manual support for previous method to store the dl url
+     * NOTE: should match the schema
+     */
+    const legacyUrl = h.path(view, 'data.source.urlDownload');
+    if (legacyUrl) {
+      urlItems.push({
+        url: legacyUrl,
+        is_download_link: true,
+        label: 'Download'
+      });
+    }
+  }
+  const urlItemsClean = urlItems.filter(
+    (urlItem) => h.isObject(urlItem) && h.isUrl(urlItem.url)
+  );
+
+  /**
+   * Warn if there is an no valid url
+   */
+  if (h.isEmpty(urlItemsClean)) {
     h.modal({
       title: await h.getDictItem('source_raster_download_error_title'),
       content: await h.getDictItem('source_raster_download_error'),
       addBackground: true
     });
-    return;
+    return opt;
   }
 
   /**
-   * Confirm
+   * Keep compatibility with the SDK resolver
    */
-  const c = await modalConfirm({
-    title: await h.getDictItem('source_raster_download_open_external_title'),
-    content: await h.getDictTemplate('source_raster_download_open_external', {
-      url: url
-    }),
+  opt.url = urlItemsClean[0].url;
+  opt.urlItems = urlItemsClean;
+
+  /**
+   * Build ui
+   */
+  const elContent = h.el(
+    'div',
+    {
+      class: 'list-group'
+    },
+    urlItemsClean.map((item) => {
+      const isDl = item.is_download_link === true;
+      const hasLabel = h.isNotEmpty(item.label);
+      const elItem = h.el(
+        'button',
+        {
+          on: ['click', dl],
+          class: 'list-group-item',
+          dataset: {url: item.url}
+        },
+        h.el(
+          'div',
+          {
+            style: {
+              display: 'flex',
+              justifyContent: 'space-between'
+            }
+          },
+          h.el('i', {class: ['fa', isDl ? 'fa-download' : 'fa-external-link']}),
+          h.el(
+            'span',
+            {
+              style: {
+                maxWidth: '80%',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }
+            },
+            hasLabel ? item.label : item.url
+          )
+        )
+      );
+      return elItem;
+    })
+  );
+
+  const elModal = h.modal({
+    title: await h.getDictItem('meta_source_url_download'),
+    content: elContent,
     addBackground: true
   });
-  if (!c) {
-    return;
-  }
 
-  /**
-   * Don't try to download in the same page :
-   * Fetching can be very long, longer than mapx session AND HUGE
-   * using <a href=... download> , a same origin could be required by firefox
-   * using download js will try to fetch or xhr, which is basicaly the same as
-   * fetching ourself the file, and add a <a href='blob'>.
-   * href + target _blank
-   */
-  window.open(url, '_blank');
   return opt;
+
+  function dl(e) {
+    /**
+     * Open a new windows, let the browser handle the dl or page load
+     */
+
+    const url = e.currentTarget.dataset?.url;
+    window.open(url, '_blank');
+    elModal.close();
+  }
 }
 
 /**

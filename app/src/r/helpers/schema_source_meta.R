@@ -436,6 +436,11 @@ mxSchemaSourceMeta <- function(
                       title = t("origin_source_url_title"),
                       type = "string",
                       format = "uri"
+                    ),
+                    label = list(
+                      title = t("origin_source_url_label_title"),
+                      type = "string",
+                      format = "string"
                     )
                   )
                 )

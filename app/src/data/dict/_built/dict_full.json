@@ -13442,6 +13442,19 @@
     "de": "URL "
   },
   {
+    "id": "origin_source_url_label_title",
+    "en": "URL label (optional)",
+    "fr": "Libellé de l'URL (facultatif)",
+    "es": "Etiqueta de URL (opcional)",
+    "ru": "Ярлык URL (необязательно)",
+    "zh": "网址标签（可选）",
+    "ar": "تسمية URL (اختياري)",
+    "fa": "برچسب URL (اختیاری)",
+    "ps": "د URL لیبل (اختیاری)",
+    "bn": "URL লেবেল (ঐচ্ছিক)",
+    "de": "URL-Label (optional)"
+  },
+  {
     "id": "origin_title",
     "en": "Source",
     "fr": "Origine",

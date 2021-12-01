@@ -5170,6 +5170,11 @@
     "bn": "ইউআরএল "
   },
   {
+    "id": "origin_source_url_label_title",
+    "en": "URL label (optional)",
+    "bn": "URL লেবেল (ঐচ্ছিক)"
+  },
+  {
     "id": "origin_title",
     "en": "Source",
     "bn": "উৎস "

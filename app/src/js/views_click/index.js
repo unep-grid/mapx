@@ -11,7 +11,7 @@ import {getDictItem} from './../mx_helper_language.js';
 import {uploadGeoJSONModal} from './../mx_helper_upload_source.js';
 import {modalMirror} from './../mirror_util';
 import {
-  downloadViewRaster,
+  downloadViewSourceExternal,
   downloadViewGeoJSON,
   resetViewStyle,
   viewsCheckedUpdate,
@@ -135,10 +135,10 @@ async function handleViewClick(event) {
       },
       {
         comment: 'target is the get raster button',
-        test: dataset.view_action_key === 'btn_opt_get_raster',
+        test: dataset.view_action_key === 'btn_opt_get_external',
         action: function() {
           const viewTarget = dataset.view_action_target;
-          downloadViewRaster({idView: viewTarget});
+          downloadViewSourceExternal({idView: viewTarget});
         }
       },
       {

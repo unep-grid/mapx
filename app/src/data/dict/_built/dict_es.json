@@ -5170,6 +5170,11 @@
     "es": "URL"
   },
   {
+    "id": "origin_source_url_label_title",
+    "en": "URL label (optional)",
+    "es": "Etiqueta de URL (opcional)"
+  },
+  {
     "id": "origin_title",
     "en": "Source",
     "es": "Información de distribución"

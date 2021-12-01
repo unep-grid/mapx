@@ -5170,6 +5170,11 @@
     "fr": "URL"
   },
   {
+    "id": "origin_source_url_label_title",
+    "en": "URL label (optional)",
+    "fr": "Libellé de l'URL (facultatif)"
+  },
+  {
     "id": "origin_title",
     "en": "Source",
     "fr": "Origine"

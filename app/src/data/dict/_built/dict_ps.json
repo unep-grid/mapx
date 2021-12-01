@@ -5170,6 +5170,11 @@
     "ps": "URL"
   },
   {
+    "id": "origin_source_url_label_title",
+    "en": "URL label (optional)",
+    "ps": "د URL لیبل (اختیاری)"
+  },
+  {
     "id": "origin_title",
     "en": "Source",
     "ps": "سرچینه"

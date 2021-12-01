@@ -508,14 +508,22 @@ class MapxResolversStatic extends ResolversBase {
   }
 
   /**
-   * Get the download link of the raster source
+   * Get the download links of an external source set in metadata (custom code, raster, etc)
    * @param {Object} opt Options
-   * @param {String} opt.idView Raster view id
-   * @return {Object} input options, with new key : url. E.g. {idView:<abc>,url:<url>}
+   * @param {String} opt.idView view view id
+   * @return {Object} input options, with new key : url. E.g. {idView:<abc>,url:<first url>,urlItems:[{<url>,<label>,<is_download_link>}]}
+   */
+  download_view_source_external(opt) {
+    const rslv = this;
+    return rslv._h.downloadViewSourceExternal(opt);
+  }
+
+  /**
+   * Get the download link of the raster source (same as download_view_source_external)
    */
   download_view_source_raster(opt) {
     const rslv = this;
-    return rslv._h.downloadViewRaster(opt);
+    return rslv.download_view_source_external(opt);
   }
 
   /**
