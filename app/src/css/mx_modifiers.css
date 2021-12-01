@@ -7,9 +7,8 @@ body.mx {
 }
 
 input {
-  accent-color : var(--mx_ui_input_accent);
+  accent-color: var(--mx_ui_input_accent);
 }
-
 
 /**
 * Input
@@ -123,7 +122,7 @@ input {
   color: var(--mx_ui_border);
 }
 
-.mx .mapboxgl-map, 
+.mx .mapboxgl-map,
 .mx .mapboxgl-canvas {
   outline: none;
 }
@@ -134,6 +133,11 @@ input {
   background-color: var(--mx_ui_background);
   box-shadow: var(--mx_ui_box_shadow);
   border-radius: 10px;
+}
+
+.mx .selectize-dropdown .optgroup-header {
+  color : var(--mx_ui_text_faded);
+  background-color: var(--mx_ui_background_accent);
 }
 
 
@@ -194,6 +198,10 @@ span.mx-badge-role {
   background: var(--mx_ui_text);
 }
 
+.mx button.list-group-item:hover {
+  background-color: var(--mx_ui_background_contrast);
+}
+
 .list-group .list-group-item-member {
   border: 1px solid var(--mx_ui_border);
 }
@@ -230,8 +238,6 @@ span.mx-badge-role {
   outline: 0;
   text-shadow: none;
 }
-
-
 
 .mx [class*='hint--']:after {
   box-shadow: var(--mx_ui_box_shadow);
@@ -437,7 +443,7 @@ span.mx-badge-role {
   border-color: var(--mx_ui_border);
 }
 
-.mx .table > tbody > tr:nth-child(odd){
+.mx .table > tbody > tr:nth-child(odd) {
   background-color: var(--mx_ui_background_accent);
 }
 

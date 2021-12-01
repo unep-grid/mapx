@@ -82,20 +82,14 @@ export async function downloadViewGeoJSON(opt) {
   return opt;
 }
 
-/**
- * Download external source
- * @param {Object} opt Options
- * @param {String} opt.idView Id of the rt view
- * @return {Object} input options, with new key "url", first url and all items in an array [{<label>,<url>,<is_download_link>}]
- */
-export async function downloadViewSourceExternal(opt) {
-  opt = Object.assign({}, {idView: null, mode: null}, opt);
-  const h = mx.helpers;
-  const view = h.getView(opt.idView);
 
-  if (!h.isView(view)) {
-    throw new Error(`No view with id ${idView}`);
-  }
+/**
+* Get url items from view's meta 
+* @param {Object} view 
+* @return {Array} array of download url items [{<label>,<url>,<is_download_link>}] 
+*/
+export  function getDownloadUrlItemsFromViewMeta(view){
+  const h = mx.helpers;
   const urlItems = h.path(view, 'data.source.meta.origin.source.urls', []);
 
   if (urlItems.length === 0) {
@@ -115,6 +109,40 @@ export async function downloadViewSourceExternal(opt) {
   const urlItemsClean = urlItems.filter(
     (urlItem) => h.isObject(urlItem) && h.isUrl(urlItem.url)
   );
+
+  return urlItemsClean;
+}
+
+
+/**
+* Check if view's meta has download url items 
+* @param {Object} view 
+* @return {Boolean} has items
+*/ 
+export function hasDownloadUrlItemsFromViewMeta(view){
+  return getDownloadUrlItemsFromViewMeta(view).length > 0;
+}
+
+
+/**
+ * Download external source
+ * @param {Object} opt Options
+ * @param {String} opt.idView Id of the rt view
+ * @return {Object} input options, with new key "url", first url and all items in an array [{<label>,<url>,<is_download_link>}]
+ */
+export async function downloadViewSourceExternal(opt) {
+  opt = Object.assign({}, {idView: null, mode: null}, opt);
+  const h = mx.helpers;
+  const view = h.getView(opt.idView);
+
+  if (!h.isView(view)) {
+    throw new Error(`No view with id ${idView}`);
+  }
+
+  /*
+  * Retrieve urls list
+  */ 
+  const urlItemsClean = getDownloadUrlItemsFromViewMeta(view);
 
   /**
    * Warn if there is an no valid url

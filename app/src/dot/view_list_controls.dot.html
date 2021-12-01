@@ -12,10 +12,7 @@ const isRt = view.type === 'rt' ;
 const isTemp = !!view._temp ;
 const isRtWms = h.isViewWms(view) ;
 const isVtWithAttr = isVt && h.path(view,'data.attribute.name') ;
-const isRtCcWithDownload = (isRt || isCc) && (
-    h.path(view,'data.source.urlDownload',false) ||
-    h.path(view,'data.source.meta.origin.source.urls',[]).length > 0
-    );
+const isRtCcWithDownload = (isRt || isCc) && h.hasDownloadUrlItemsFromViewMeta(view);
 const uIsPublisher = h.path(mx,'settings.user.roles.publisher');
 const uIsAdmin = h.path(mx,'settings.user.roles.admin');
 }}
