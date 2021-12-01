@@ -12,7 +12,8 @@ const {
   registerOrRemoveSource,
   removeSource,
   getColumnsNames,
-  areLayersValid
+  areLayersValid,
+  analyzeSource
 } = require('@mapx/db-utils');
 
 const toRes = helpers.toRes;
@@ -124,6 +125,7 @@ async function getOverlapHandler(req, res) {
 
     if (method === 'createSource') {
       await getOverlapCreateSource(config);
+      await analyzeSource(idSource);
     } else {
       await getOverlapArea(config);
     }

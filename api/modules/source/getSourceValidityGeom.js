@@ -19,11 +19,13 @@ async function validateLayerHandler(req, res) {
   var idSource = req.query.idSource;
   var useCache = req.query.useCache;
   var autoCorrect = req.query.autoCorrect;
+  var analyze = req.query.analyze;
 
   try {
     res.setHeader('Content-Type', 'application/json');
     useCache = helpers.toBoolean(useCache, true);
     autoCorrect = helpers.toBoolean(autoCorrect, false);
+    analyze = helpers.toBoolean(analyze,true);
 
     res.write(
       toRes({
@@ -35,7 +37,7 @@ async function validateLayerHandler(req, res) {
       })
     );
 
-    const validity = await isLayerValid(idSource, useCache, autoCorrect);
+    const validity = await isLayerValid(idSource, useCache, autoCorrect, analyze);
 
     res.write(
       toRes({

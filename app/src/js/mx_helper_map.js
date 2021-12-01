@@ -5171,21 +5171,30 @@ export async function zoomToViewId(o) {
     }
 
     async function zoom() {
-      const sum = await h.getViewSourceSummary(view);
-      const extent = h.path(sum, 'extent_sp', null);
+      const conf = {
+        sum: await h.getViewSourceSummary(view, {useCache: true})
+      };
+      conf.extent = h.path(conf.sum, 'extent_sp', null);
 
       if (cancelByTimeout) {
         return;
       }
 
-      if (!extent) {
-        console.warn(`zoomToViewId no extent found for ${view.id}`);
-        return;
+      if (!h.isBbox(conf.extent)) {
+        conf.sum = await h.getViewSourceSummary(view, {useCache: false});
+        conf.extent = h.path(conf.sum, 'extent_sp', null);
+        if (cancelByTimeout) {
+          return;
+        }
+        if (!h.isBbox(conf.extent)) {
+          console.warn(`zoomToViewId no extent found for ${view.id}`);
+          return;
+        }
       }
 
       const llb = new mx.mapboxgl.LngLatBounds(
-        [extent.lng1, extent.lat1],
-        [extent.lng2, extent.lat2]
+        [conf.extent.lng1, conf.extent.lat1],
+        [conf.extent.lng2, conf.extent.lat2]
       );
 
       map.fitBounds(llb);

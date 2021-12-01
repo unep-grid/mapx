@@ -21,7 +21,7 @@ async function wmsGetCapabilities(baseUrl, opt) {
   opt = Object.assign(
     {},
     {
-      useCache: mx.settings.cacheIgnore,
+      useCache: mx.settings.useCache,
       searchParams: null,
       useMirror: false
     },

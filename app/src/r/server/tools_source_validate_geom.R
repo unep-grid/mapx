@@ -37,6 +37,11 @@ observeEvent(input$btnValidateSourceGeom,{
                 value = TRUE
                 ),
               checkboxInput(
+                inputId = "checkSourceValidateGeomAnalyze",
+                label = d("source_validate_geom_analyze",language),
+                value = TRUE
+                ),
+              checkboxInput(
                 inputId = "checkSourceValidateGeomAutoCorrect",
                 label = d("source_validate_geom_auto_correct",language),
                 value = FALSE
@@ -133,6 +138,7 @@ observeEvent(input$btnValidateGeom,{
 
   opt <- input$checkSourceValidateGeomOptions
   useCache <- ifelse(opt,input$checkSourceValidateGeomUseCache,TRUE)
+  analyze <- ifelse(opt,input$checkSourceValidateGeomAnalyze,TRUE)
   autoCorrect <- ifelse(opt,input$checkSourceValidateGeomAutoCorrect,FALSE)
 
   mglGetValidateSourceGeom(list(
@@ -140,6 +146,7 @@ observeEvent(input$btnValidateGeom,{
       idSource = input$selectSourceValidateGeom,
       useCache = useCache,
       autoCorrect = autoCorrect,
+      analyze = analyze,
       idListMessage = "ulValidateGeomMessage",
       idButtonValidate = "btnValidateGeom"
       ))

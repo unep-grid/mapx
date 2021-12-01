@@ -4,7 +4,7 @@ const def = {
   idView: null,
   idSource: null,
   idAttr: null,
-  useCache: true,
+  useCache: false,
   binsMethod: 'jenks',
   binsNumber: 5,
   stats: ['base', 'attributes', 'temporal', 'spatial'],
@@ -27,7 +27,8 @@ export async function getViewSourceSummary(view, opt) {
       idView: view.id,
       timestamp: view._src_timestamp,
       idAttr: h.path(view, 'data.attribute.name'),
-      idSource: h.path(view, 'data.source.layerInfo.name')
+      idSource: h.path(view, 'data.source.layerInfo.name'),
+      useCache : mx.settings.useCache
     },
     opt
   );
@@ -104,7 +105,7 @@ export async function getSourceVtSummary(opt) {
   /*
    * Fetch summary or use cache
    */
-  opt.useCache = mx.settings.cacheIgnore === false && opt.useCache === true;
+  opt.useCache = opt.useCache === true;
   const urlSourceSummary = h.getApiUrl('getSourceSummary');
   const query = h.objToParams(opt);
   const url = `${urlSourceSummary}?${query}`;
@@ -121,7 +122,6 @@ export async function getSourceVtSummary(opt) {
     origin = 'fetch';
     const resp = await fetch(url);
     summary = await resp.json();
-
     miniCacheSet(url, summary, {
       ttl: mx.settings.maxTimeCache
     });

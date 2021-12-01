@@ -103,7 +103,7 @@ let settings = {
   maxTimeFetch: 1000 * 60, // 1 minute
   maxTimeCache: 1000 * 60 * 60 * 24, // aka ttl = 1 day
   //maxTimeCache : 1, // aka ttl = 1 day
-  cacheIgnore: false,
+  useCache: true,
   user: {},
   ui: {
     colors: null

@@ -88,7 +88,7 @@ async function getSourceSummary(opt) {
     .digest('hex');
 
   const cached = opt.useCache ? await redisGet(hash) : false;
- 
+
   if (cached) {
     const data = JSON.parse(cached);
     data.timing = Date.now() - start;

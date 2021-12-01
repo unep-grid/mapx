@@ -15,7 +15,8 @@ export function getValidateSourceGeom(opt) {
     token: mx.settings.user.token,
     idProject: mx.settings.project.id,
     useCache: opt.useCache || false,
-    autoCorrect: opt.autoCorrect || false
+    autoCorrect: opt.autoCorrect || false,
+    analyze : opt.analyze || true
   };
 
   var params = h.objToParams(query);
@@ -74,6 +75,10 @@ export function getValidateSourceGeom(opt) {
             h.el(
               'li',
               h.el('span', 'Automatic correction: ' + msg.autoCorrect || false)
+            ),
+            h.el(
+              'li',
+              h.el('span', 'Analyze ' + msg.analyze || false)
             )
           ),
           h.el('hr')

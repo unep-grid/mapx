@@ -15,8 +15,27 @@ export function isEmpty(item) {
   return false;
 }
 
+/**
+ * Inverse isEmpty
+ */
 export function isNotEmpty(item) {
   return !isEmpty(item);
+}
+
+/**
+ * Simple lat/lng bbox expected from source summary
+ * @note : currently match api/modules/template/sql/getSourceSummary_ext_sp.sql
+ * @param {Object} item
+ * @return {Boolean} Is lat/lng bbox object
+ */
+export function isBbox(item) {
+  return (
+    isObject(item) &&
+    isNotEmpty(item.lat1) &&
+    isNotEmpty(item.lat2) &&
+    isNotEmpty(item.lng1) &&
+    isNotEmpty(item.lng2)
+  );
 }
 
 /**
@@ -357,16 +376,13 @@ export function isStringRange(str, min, max) {
 /**
  * Test for special char : not allowed
  */
-const regexSafe = new RegExp(
-  /^[^{}(),+=:;?\'\"\\\/\s]*$/
-);
-
+const regexSafe = new RegExp(/^[^{}(),+=:;?\'\"\\\/\s]*$/);
 
 /**
-* Test if input is "safe" 
-* -> avoid dangerous stuff for db : columns, values, .. when prepared queries are not possible. Not secure client side.
-* @param {Any} Any 
-*/
+ * Test if input is "safe"
+ * -> avoid dangerous stuff for db : columns, values, .. when prepared queries are not possible. Not secure client side.
+ * @param {Any} Any
+ */
 export function isSafe(x) {
   if (!x) {
     return true;
@@ -533,28 +549,27 @@ export function isEqual(x, y) {
  * @return {Boolean}
  */
 export function isUrl(url) {
-  try{
-     new URL(url);
+  try {
+    new URL(url);
     return true;
-  }catch(e){
+  } catch (e) {
     return false;
   }
 }
 
 /**
- * Validate url with https 
+ * Validate url with https
  * @param {String} url to test
  * @return {Boolean}
  */
-export function isUrlHttps(url){
-  try{
+export function isUrlHttps(url) {
+  try {
     const u = new URL(url);
     return u.protocol === 'https:';
-  }catch(e){
+  } catch (e) {
     return false;
   }
 }
-
 
 /**
  * Check if it's expected url for wms end point.

@@ -102,6 +102,15 @@ async function encrypt(txt) {
 }
 
 /**
+ * Update table stats using ANALYZE
+ * @param {String} idTable Id of the table
+ */
+async function analyzeSource(idTable) {
+  const sqlAnalyze = `ANALYZE ${idTable}`;
+  await pgWrite.query(sqlAnalyze);
+}
+
+/**
  * Register a source in mx_sources
  * @param {String} idSource Id of the source
  * @param {Integer} idUser Id of the user
@@ -155,7 +164,6 @@ async function registerSource(
     $4::text,
     '{"meta":{"text":{"title":{"en":"${title}"}}}}' 
   )`;
-
   await pgWrite.query(sqlAddSource, [idSource, idUser, type, idProject]);
   return true;
 }
@@ -316,10 +324,13 @@ async function getLayerTitle(idLayer, language) {
  * @param {String} idLayer id of the layer to check
  * @param {Boolean} useCache Use cache
  * @param {Boolean} autoCorrect Try an automatic correction
+ * @param {Boolean} autoCorrect Try an automatic correction
+ * @return {<Promise>Object} Geom validiy summary
  */
-async function isLayerValid(idLayer, useCache, autoCorrect) {
+async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
   useCache = toBoolean(useCache, true);
   autoCorrect = toBoolean(autoCorrect, false);
+  analyze = toBoolean(analyze,true);
 
   var idValidColumn = '_mx_valid';
 
@@ -375,6 +386,14 @@ async function isLayerValid(idLayer, useCache, autoCorrect) {
   GROUP BY ${idValidColumn}`;
 
   const title = await getLayerTitle(idLayer);
+
+  /**
+  * ANALYZE first
+  */
+  if(analyze){
+    await analyzeSource(idLayer);
+  }
+
   /**
    * Invalidate if not use cache
    */
@@ -423,7 +442,8 @@ async function isLayerValid(idLayer, useCache, autoCorrect) {
     title: title,
     status: out,
     useCache: useCache,
-    autoCorrect: autoCorrect
+    autoCorrect: autoCorrect,
+    analyze : analyze
   };
 }
 
@@ -456,5 +476,6 @@ module.exports = {
   decrypt,
   encrypt,
   registerSource,
-  registerOrRemoveSource
+  registerOrRemoveSource,
+  analyzeSource
 };
