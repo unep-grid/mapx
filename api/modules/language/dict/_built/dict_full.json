@@ -9139,6 +9139,19 @@
     "de": "Expertenoptionen anzeigen "
   },
   {
+    "id": "source_validate_geom_analyze",
+    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
+    "fr": "Effectuez « ANALYSE » sur cette couche, ce qui mettra à jour les statistiques de PostgreSQL",
+    "es": "Realice 'ANALYZE` en esta capa, que actualizará las estadísticas de PostgreSQL",
+    "ru": "Выполните ANALYZE на этом слое, чтобы обновить статистику PostgreSQL.",
+    "zh": "在这一层上执行“ANALYZE”，这将更新 PostgreSQL 统计信息",
+    "ar": "نفذ \"ANALYZE\" على هذه الطبقة ، والتي ستحدث إحصائيات PostgreSQL",
+    "fa": "\"ANALYZE\" را در این لایه انجام دهید، که آمار PostgreSQL را به روز می کند",
+    "ps": "په دې پرت کې 'ANALYZE' ترسره کړئ، کوم چې به د PostgreSQL احصایې تازه کړي",
+    "bn": "এই স্তরে 'ANALYZE' সম্পাদন করুন, যা PostgreSQL পরিসংখ্যান আপডেট করবে",
+    "de": "Führen Sie 'ANALYZE' auf dieser Ebene aus, wodurch die PostgreSQL-Statistiken aktualisiert werden"
+  },
+  {
     "id": "source_validate_geom_use_cache",
     "en": "Use cached results – if any – instead of recalculate",
     "fr": "Utiliser les résultat en cache – si existant – au lieu de recalculer",

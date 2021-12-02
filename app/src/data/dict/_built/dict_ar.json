@@ -3515,6 +3515,11 @@
     "ar": "عرض خيارات الخبراء "
   },
   {
+    "id": "source_validate_geom_analyze",
+    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
+    "ar": "نفذ \"ANALYZE\" على هذه الطبقة ، والتي ستحدث إحصائيات PostgreSQL"
+  },
+  {
     "id": "source_validate_geom_use_cache",
     "en": "Use cached results – if any – instead of recalculate",
     "ar": "استخدم النتائج المخزنة مؤقتًا - إن وجدت - بدلاً من إعادة الحساب "

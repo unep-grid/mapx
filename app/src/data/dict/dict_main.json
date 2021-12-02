@@ -4888,6 +4888,19 @@
     "de": ""
   },
   {
+    "id": "source_validate_geom_analyze",
+    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "source_validate_geom_use_cache",
     "en": "Use cached results – if any – instead of recalculate",
     "fr": "Utiliser les résultat en cache – si existant – au lieu de recalculer",

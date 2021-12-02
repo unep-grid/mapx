@@ -3515,6 +3515,11 @@
     "zh": "显示专家选项"
   },
   {
+    "id": "source_validate_geom_analyze",
+    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
+    "zh": "在这一层上执行“ANALYZE”，这将更新 PostgreSQL 统计信息"
+  },
+  {
     "id": "source_validate_geom_use_cache",
     "en": "Use cached results – if any – instead of recalculate",
     "zh": "使用缓存结果（如有）而不是重新计算"

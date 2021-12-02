@@ -3515,6 +3515,11 @@
     "es": "Mostrar opciones avanzadas"
   },
   {
+    "id": "source_validate_geom_analyze",
+    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
+    "es": "Realice 'ANALYZE` en esta capa, que actualizará las estadísticas de PostgreSQL"
+  },
+  {
     "id": "source_validate_geom_use_cache",
     "en": "Use cached results – if any – instead of recalculate",
     "es": "Utilizar resultados en caché, si hay, en lugar recalcular"

@@ -3515,6 +3515,11 @@
     "de": "Expertenoptionen anzeigen "
   },
   {
+    "id": "source_validate_geom_analyze",
+    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
+    "de": "Führen Sie 'ANALYZE' auf dieser Ebene aus, wodurch die PostgreSQL-Statistiken aktualisiert werden"
+  },
+  {
     "id": "source_validate_geom_use_cache",
     "en": "Use cached results – if any – instead of recalculate",
     "de": "Verwenden Sie zwischengespeicherte Ergebnisse (falls vorhanden), anstatt sie neu zu berechnen "

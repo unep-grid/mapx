@@ -3515,6 +3515,11 @@
     "ps": "د ماهر اختیارونه وښایاست "
   },
   {
+    "id": "source_validate_geom_analyze",
+    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
+    "ps": "په دې پرت کې 'ANALYZE' ترسره کړئ، کوم چې به د PostgreSQL احصایې تازه کړي"
+  },
+  {
     "id": "source_validate_geom_use_cache",
     "en": "Use cached results – if any – instead of recalculate",
     "ps": "د محاسبې پرځای زیرمه شوي پایلې - که کوم دي - وکاروئ "

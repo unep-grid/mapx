@@ -3515,6 +3515,11 @@
     "bn": "বিশেষজ্ঞের বিকল্পগুলি দেখান "
   },
   {
+    "id": "source_validate_geom_analyze",
+    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
+    "bn": "এই স্তরে 'ANALYZE' সম্পাদন করুন, যা PostgreSQL পরিসংখ্যান আপডেট করবে"
+  },
+  {
     "id": "source_validate_geom_use_cache",
     "en": "Use cached results – if any – instead of recalculate",
     "bn": "পুনরায় গণনার পরিবর্তে ক্যাশেড ফলাফলগুলি - যদি থাকে তবে - ব্যবহার করুন "

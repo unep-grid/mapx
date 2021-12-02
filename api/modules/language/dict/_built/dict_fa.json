@@ -3515,6 +3515,11 @@
     "fa": "گزینه های متخصص را نشان دهید "
   },
   {
+    "id": "source_validate_geom_analyze",
+    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
+    "fa": "\"ANALYZE\" را در این لایه انجام دهید، که آمار PostgreSQL را به روز می کند"
+  },
+  {
     "id": "source_validate_geom_use_cache",
     "en": "Use cached results – if any – instead of recalculate",
     "fa": "به جای محاسبه مجدد ، از نتایج ذخیره شده - در صورت وجود - استفاده کنید "
