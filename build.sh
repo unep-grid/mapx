@@ -79,8 +79,10 @@ REP_APP_TAG='s/mx-app-shiny:'"$OLD_VERSION"'-debian/mx-app-shiny:'"$NEW_VERSION"
 perl -pi -e $REP_API_TAG ./docker-compose.yml
 perl -pi -e $REP_APP_TAG ./docker-compose.yml
 
+#echo "- <a href='${REPO}/tree/${NEW_VERSION}' target='_blank'>${NEW_VERSION}</a>"\
+
 echo "Write changes"
-echo "- <a href='${REPO}/tree/${NEW_VERSION}' target='_blank'>${NEW_VERSION}</a>"\
+echo "  - [${NEW_VERSION}](${REPO}/tree/${NEW_VERSION}) \n"\
   > $CHANGELOG_TMP
 cat $CHANGELOG >> $CHANGELOG_TMP
 cp $CHANGELOG_TMP $CHANGELOG 
