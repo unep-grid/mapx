@@ -596,7 +596,8 @@ MapX resolvers available in static and app
     * [.get_view_layer_transparency(opt)](#MapxResolversStatic+get_view_layer_transparency) ⇒ <code>Number</code>
     * [.view_add(opt)](#MapxResolversStatic+view_add) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.view_remove(opt)](#MapxResolversStatic+view_remove) ⇒ <code>Boolean</code>
-    * [.download_view_source_raster(opt)](#MapxResolversStatic+download_view_source_raster) ⇒ <code>Object</code>
+    * [.download_view_source_external(opt)](#MapxResolversStatic+download_view_source_external) ⇒ <code>Object</code>
+    * [.download_view_source_raster()](#MapxResolversStatic+download_view_source_raster)
     * [.download_view_source_vector(opt)](#MapxResolversStatic+download_view_source_vector) ⇒ <code>Object</code>
     * [.download_view_source_geojson(opt)](#MapxResolversStatic+download_view_source_geojson) ⇒ <code>Object</code>
     * [.show_modal_map_composer()](#MapxResolversStatic+show_modal_map_composer) ⇒ <code>Boolean</code>
@@ -1075,19 +1076,25 @@ remove a view
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
 
-<a name="MapxResolversStatic+download_view_source_raster"></a>
+<a name="MapxResolversStatic+download_view_source_external"></a>
 
-#### mapxResolversStatic.download\_view\_source\_raster(opt) ⇒ <code>Object</code>
-Get the download link of the raster source
+#### mapxResolversStatic.download\_view\_source\_external(opt) ⇒ <code>Object</code>
+Get the download links of an external source set in metadata (custom code, raster, etc)
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Object</code> - input options, with new key : url. E.g. {idView:<abc>,url:<url>}  
+**Returns**: <code>Object</code> - input options, with new key : url. E.g. {idView:<abc>,url:<first url>,urlItems:[{<url>,<label>,<is_download_link>}]}  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
-| opt.idView | <code>String</code> | Raster view id |
+| opt.idView | <code>String</code> | view view id |
 
+<a name="MapxResolversStatic+download_view_source_raster"></a>
+
+#### mapxResolversStatic.download\_view\_source\_raster()
+Get the download link of the raster source (same as download_view_source_external)
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 <a name="MapxResolversStatic+download_view_source_vector"></a>
 
 #### mapxResolversStatic.download\_view\_source\_vector(opt) ⇒ <code>Object</code>
