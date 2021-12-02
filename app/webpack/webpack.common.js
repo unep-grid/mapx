@@ -55,7 +55,7 @@ module.exports = {
       {from: './src/glyphs/dist/svg/', to: 'sprites/svg/'},
       {from: './src/glyphs/dist/fontstack', to: 'fontstack/'},
       {from: './src/favicons', to: '.'},
-      {from: './src/js/sdk/dist/', to: 'sdk/', ignore:['.DS_Store']}
+      {from: './src/js/sdk/dist/', to: 'sdk/', ignore: ['.DS_Store']}
     ])
   ],
   module: {
@@ -117,6 +117,14 @@ module.exports = {
       {
         test: /\.mp3$/,
         loader: 'file-loader'
+      },
+      {
+        test: /\.md$/,
+        use: [
+          {
+            loader: 'file-loader'
+          }
+        ]
       }
     ]
   }

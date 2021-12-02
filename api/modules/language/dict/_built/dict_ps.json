@@ -4641,8 +4641,28 @@
   },
   {
     "id": "update_app_msg",
-    "en": "MapX has been updated, this page will be reloaded now.",
-    "ps": "میپ ایکس تازه شوی ، دا پا pageه به اوس بیا پورته شي. "
+    "en": "MapX has been updated, confirm restart",
+    "ps": "MapX تازه شوی، بیا پیل تایید کړئ"
+  },
+  {
+    "id": "update_app_button_read_changlog",
+    "en": "Read the changelog",
+    "ps": "د چینج لاګ ولولئ"
+  },
+  {
+    "id": "update_app_modal_title",
+    "en": "MapX updated",
+    "ps": "MapX تازه شوی"
+  },
+  {
+    "id": "update_app_button_confirm",
+    "en": "Restart now",
+    "ps": "اوس بیا پیل کړئ"
+  },
+  {
+    "id": "update_app_button_later",
+    "en": "Later",
+    "ps": "وروسته"
   },
   {
     "id": "btn_clear_cache",

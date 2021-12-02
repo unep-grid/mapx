@@ -1111,3 +1111,9 @@ pre {
   max-width: 500px;
   width: max-content;
 }
+
+
+.mx-version {
+  cursor:pointer;
+}
+

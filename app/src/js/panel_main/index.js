@@ -3,6 +3,7 @@ import {el} from './../el/src/index.js';
 import {bindAll} from './../bind_class_methods/index.js';
 import './less/mx_panel.less';
 import {EventSimple} from './../event_simple';
+import {modalChangelog} from './../changelog';
 
 /**
  * This is a partial implementation of the main MapX panel
@@ -77,6 +78,7 @@ class MainPanel extends EventSimple {
       const elVersion = mp.elContent.querySelector('.mx-version');
       if (elVersion) {
         elVersion.innerText = mp.opt.mapx.version;
+        elVersion.addEventListener('click',modalChangelog);
       }
     }
     mp.elTabs = mp.elContent.querySelector('.mx-tab--tabs');

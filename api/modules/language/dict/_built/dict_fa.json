@@ -4641,8 +4641,28 @@
   },
   {
     "id": "update_app_msg",
-    "en": "MapX has been updated, this page will be reloaded now.",
-    "fa": "MapX به روز شده است ، این صفحه اکنون بارگیری می شود. "
+    "en": "MapX has been updated, confirm restart",
+    "fa": "MapX به روز شده است، راه اندازی مجدد را تأیید کنید"
+  },
+  {
+    "id": "update_app_button_read_changlog",
+    "en": "Read the changelog",
+    "fa": "تغییرات را بخوانید"
+  },
+  {
+    "id": "update_app_modal_title",
+    "en": "MapX updated",
+    "fa": "MapX به روز شد"
+  },
+  {
+    "id": "update_app_button_confirm",
+    "en": "Restart now",
+    "fa": "اکنون دوباره راه اندازی کنید"
+  },
+  {
+    "id": "update_app_button_later",
+    "en": "Later",
+    "fa": "بعد"
   },
   {
     "id": "btn_clear_cache",

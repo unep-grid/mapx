@@ -3713,7 +3713,23 @@
   },
   {
     "id": "update_app_msg",
-    "en": "MapX has been updated, this page will be reloaded now."
+    "en": "MapX has been updated, confirm restart"
+  },
+  {
+    "id": "update_app_button_read_changlog",
+    "en": "Read the changelog"
+  },
+  {
+    "id": "update_app_modal_title",
+    "en": "MapX updated"
+  },
+  {
+    "id": "update_app_button_confirm",
+    "en": "Restart now"
+  },
+  {
+    "id": "update_app_button_later",
+    "en": "Later"
   },
   {
     "id": "btn_clear_cache",

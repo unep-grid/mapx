@@ -4641,8 +4641,28 @@
   },
   {
     "id": "update_app_msg",
-    "en": "MapX has been updated, this page will be reloaded now.",
-    "ru": "MapX обновлен, сейчас эта страница будет перезагружена. "
+    "en": "MapX has been updated, confirm restart",
+    "ru": "MapX обновлен, подтвердите перезагрузку"
+  },
+  {
+    "id": "update_app_button_read_changlog",
+    "en": "Read the changelog",
+    "ru": "Прочтите журнал изменений"
+  },
+  {
+    "id": "update_app_modal_title",
+    "en": "MapX updated",
+    "ru": "MapX обновлен"
+  },
+  {
+    "id": "update_app_button_confirm",
+    "en": "Restart now",
+    "ru": "Перезагрузить сейчас"
+  },
+  {
+    "id": "update_app_button_later",
+    "en": "Later",
+    "ru": "Потом"
   },
   {
     "id": "btn_clear_cache",

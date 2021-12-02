@@ -4641,8 +4641,28 @@
   },
   {
     "id": "update_app_msg",
-    "en": "MapX has been updated, this page will be reloaded now.",
-    "fr": "MapX a été mis à jour, cette page va être rechargée maintenant."
+    "en": "MapX has been updated, confirm restart",
+    "fr": "MapX a été mis à jour, confirmez le redémarrage"
+  },
+  {
+    "id": "update_app_button_read_changlog",
+    "en": "Read the changelog",
+    "fr": "Lire le changelog"
+  },
+  {
+    "id": "update_app_modal_title",
+    "en": "MapX updated",
+    "fr": "MapX mis à jour"
+  },
+  {
+    "id": "update_app_button_confirm",
+    "en": "Restart now",
+    "fr": "Redémarrer maintenant"
+  },
+  {
+    "id": "update_app_button_later",
+    "en": "Later",
+    "fr": "Plus tard"
   },
   {
     "id": "btn_clear_cache",

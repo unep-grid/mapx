@@ -4641,8 +4641,28 @@
   },
   {
     "id": "update_app_msg",
-    "en": "MapX has been updated, this page will be reloaded now.",
-    "zh": "MapX 已更新，此页面现在将重新加载"
+    "en": "MapX has been updated, confirm restart",
+    "zh": "MapX已更新，确认重启"
+  },
+  {
+    "id": "update_app_button_read_changlog",
+    "en": "Read the changelog",
+    "zh": "阅读变更日志"
+  },
+  {
+    "id": "update_app_modal_title",
+    "en": "MapX updated",
+    "zh": "MapX 已更新"
+  },
+  {
+    "id": "update_app_button_confirm",
+    "en": "Restart now",
+    "zh": "现在重启"
+  },
+  {
+    "id": "update_app_button_later",
+    "en": "Later",
+    "zh": "之后"
   },
   {
     "id": "btn_clear_cache",

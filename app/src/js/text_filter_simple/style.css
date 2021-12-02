@@ -1,0 +1,19 @@
+.txt-filter--header {
+  padding: 20px;
+  position: sticky;
+  top: 0;
+  background: var(--mx_ui_background_transparent);
+  backdrop-filter: blur(3px);
+  border: 1px solid var(--mx_ui_border);
+  border-radius: 10px;
+}
+.txt-filter--content {
+  margin-bottom: 20px;
+}
+.txt-filter--wrapper {
+  padding: 0px;
+}
+.txt-filter--box {
+  outline: 1px solid var(--mx_ui_input_accent);
+}
+

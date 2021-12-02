@@ -4641,8 +4641,28 @@
   },
   {
     "id": "update_app_msg",
-    "en": "MapX has been updated, this page will be reloaded now.",
-    "bn": "ম্যাপএক্স আপডেট করা হয়েছে, এই পৃষ্ঠাটি এখনই পুনরায় লোড করা হবে। "
+    "en": "MapX has been updated, confirm restart",
+    "bn": "MapX আপডেট করা হয়েছে, রিস্টার্ট নিশ্চিত করুন"
+  },
+  {
+    "id": "update_app_button_read_changlog",
+    "en": "Read the changelog",
+    "bn": "চেঞ্জলগ পড়ুন"
+  },
+  {
+    "id": "update_app_modal_title",
+    "en": "MapX updated",
+    "bn": "MapX আপডেট করা হয়েছে"
+  },
+  {
+    "id": "update_app_button_confirm",
+    "en": "Restart now",
+    "bn": "এখন আবার চালু করুন"
+  },
+  {
+    "id": "update_app_button_later",
+    "en": "Later",
+    "bn": "পরে"
   },
   {
     "id": "btn_clear_cache",
