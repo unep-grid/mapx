@@ -7,18 +7,17 @@ const urlRemote =
 
 export async function changeLogHtml(remote) {
   let txt;
-  const {marked} = await import('marked');
+  const showdown = await import('showdown');
   if (remote) {
     const res = await fetch(urlRemote);
     txt = await res.text();
-  } else {
+  }
+  if (!txt) {
     txt = await import('../../../../CHANGELOG.md');
   }
-
-  /**
-   * TODO: sanitized output
-   */
-  return marked(txt, {gfm: true, smartLists: true});
+  const converter = new showdown.Converter();
+  const html = converter.makeHtml(txt);
+  return html;
 }
 
 export async function modalChangelog(remote) {
