@@ -1,5 +1,10 @@
+  - [1.9.35-rc.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.35-rc.2) 
+      
+      - APP 
+          - Replaced the markdown parser
 
   - [1.9.35-rc.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.35-rc.1)
+
       - APP
           - Missing key in dictionnary for ANALYZE tool  
           - Reorganisation of cache cleaning function : impacts service workers too 
