@@ -111,7 +111,6 @@ function handleRegistration(registration) {
     );
 
     handleNewServiceWorker(registration, async () => {
-      debugger;
       await showRefreshUI(registration);
       return resolve(true);
     });
