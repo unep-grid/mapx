@@ -1,3 +1,9 @@
+
+  - [1.9.35-rc.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.35-rc.1)
+      - APP
+          - Missing key in dictionnary for ANALYZE tool  
+          - Reorganisation of cache cleaning function : impacts service workers too 
+
   - [1.9.35-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.5)
     
       - APP
