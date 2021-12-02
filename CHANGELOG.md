@@ -157,11 +157,10 @@
     - Vector views style : if the auto style is used, the upper bound option must be checked. It's done automatically when the style is applied.
   - API : bbox route returns status 200 and a message if no extent found
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.15' target='_blank'>1.9.15</a>
+
   - APP
     - Style editor : if numeric variable is identical in from / to bounds, it uses now the === operator.
     - Default circle size when no radius is defined, set to 10.
-
-## Changelog
 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.14' target='_blank'>1.9.14</a>
   - APP :
@@ -816,12 +815,15 @@
     - App
       - Solve issue where validation message did not work : login window, new view name, new project name, etc..
 - <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.47">1.5.47</a>
+
   - Improvement
+
     - APP
 
       - Map Composer : new feature : change font size of current item; better resolution handling; various fixes;
       - Share manager : add auto start option for story map
       - Dashboard : add an option to ignore or not events that return no data or an empty array. Added callback arguments in widgets; Solved issues with dashboard modal window title;
+
 - <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.46">1.5.46</a>
   - Improvement
     - APP

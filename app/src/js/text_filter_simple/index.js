@@ -40,11 +40,11 @@ export class TextFilter {
   search() {
     const sr = this;
     const txt = sr._elInput.value;
+    clearTimeout(sr._search_to_id);
     if (!txt || txt.length < 3) {
       return sr.reset();
     }
     let found = true;
-    clearTimeout(sr._search_to_id);
     sr._search_to_id = setTimeout(() => {
       const re = new RegExp(`${txt}`, 'gi');
       sr.reset();

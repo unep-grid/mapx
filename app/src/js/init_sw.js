@@ -2,6 +2,11 @@ import {modalChangelog} from './changelog/index.js';
 import {getDictItem} from './mx_helper_language.js';
 import {modalConfirm} from './mx_helper_modal.js';
 import {el} from './el/src';
+import {
+  clearSwCache,
+  clearForageCache,
+  clearServiceWorker
+} from './cache_management/index.js';
 
 /**
  * Register and handle service worker events
@@ -18,15 +23,13 @@ const isCompatible =
   'caches' in window;
 
 let blockReload = false;
-let debug = true;
-let hadSW = false;
 
 console.log('INIT SW');
 
 if (isCompatible) {
   cleanIfNeeded();
 } else {
-  log('SW not supported');
+  console.log('SW not supported');
 }
 
 /**
@@ -36,20 +39,24 @@ if (isCompatible) {
 async function cleanIfNeeded() {
   const test = await hasEnoughStorage();
   if (test === true) {
-    log(`SW - Storage seems ok, register service worker.`);
+    console.log(`SW - Storage seems ok, register service worker.`);
     addListener();
   } else {
-    log(`SW - There is not enough storage, MapX will try to remove cache.`);
-    await cleanSw();
-    await clearSwCache();
-    const testAfter = hasEnoughStorage();
+    console.log(
+      `SW - There is not enough storage, MapX will try to remove cache.`
+    );
+    const hadSW = await clearServiceWorker();
+    const hadCache = await clearSwCache();
+    const hadForage = await clearForageCache();
+    const testAfter = await hasEnoughStorage();
+    if (hadSW || hadCache || hadForage) {
+      console.log(`SW - Cache removed`);
+    }
     if (testAfter === true) {
       return addListener();
     }
-    if (hadSW) {
-      restart();
-    }
-    log(
+
+    console.log(
       `SW - Lack of storage space, MapX will not try to register service worker restart.`
     );
   }
@@ -71,33 +78,16 @@ async function hasEnoughStorage() {
   const estimate = await navigator.storage.estimate();
   const percent = (estimate.usage / estimate.quota) * 100;
   const percentString = percent.toFixed(2) + '%';
-  log(`SW - User quota: ${toMib(estimate.quota)}`);
-  log(`SW - User percent: ${percentString}`);
-  log(`SW - MapX usage: ${toMib(estimate.usage)}`);
-  log(`SW - MapX min quota: ${toMib(minQuota)}`);
-  log(`SW - MapX max usage: ${toMib(maxUsage)}`);
+  console.log(`SW - User quota: ${toMib(estimate.quota)}`);
+  console.log(`SW - User percent: ${percentString}`);
+  console.log(`SW - MapX usage: ${toMib(estimate.usage)}`);
+  console.log(`SW - MapX min quota: ${toMib(minQuota)}`);
+  console.log(`SW - MapX max usage: ${toMib(maxUsage)}`);
   return estimate.quota > minQuota && estimate.usage < maxUsage;
 }
 
-async function cleanSw() {
-  const registrations = navigator.serviceWorker.getRegistrations();
-  log(`SW - Unregister all Service Worker`);
-  for (const registration of registrations) {
-    hadSW = true;
-    registration.unregister();
-  }
-}
-
-async function clearSwCache() {
-  log(`SW - Clear cache`);
-  const items = caches.keys();
-  for (const item of items) {
-    await caches.delete(item);
-  }
-}
-
 async function handleInitSw() {
-  log('SW - register !');
+  console.log('SW - register !');
   const registration = await navigator.serviceWorker.register(
     '/service-worker.js'
   );
@@ -179,7 +169,7 @@ async function showRefreshUI(registration) {
     return update();
   }
   const t = getDictItem;
-  
+
   const elBtnChanges = el(
     'button',
     {class: ['btn', 'btn-default'], on: ['click', () => modalChangelog(true)]},
@@ -188,10 +178,10 @@ async function showRefreshUI(registration) {
   const elMessage = el('p', t('update_app_msg'));
 
   const res = await modalConfirm({
-    title:  t('update_app_modal_title'),
+    title: t('update_app_modal_title'),
     content: el('div', [elMessage, elBtnChanges]),
-    confirm : t('update_app_button_confirm'),
-    cancel : t('update_app_button_later') 
+    confirm: t('update_app_button_confirm'),
+    cancel: t('update_app_button_later')
   });
 
   if (res === true) {
@@ -203,14 +193,5 @@ async function showRefreshUI(registration) {
       return;
     }
     registration.waiting.postMessage('mx_install');
-  }
-}
-
-/**
- * Display messages if debug mode
- */
-function log(msg) {
-  if (debug) {
-    console.log(msg);
   }
 }
