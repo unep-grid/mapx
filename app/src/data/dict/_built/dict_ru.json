@@ -4505,6 +4505,36 @@
     "ru": "Использовать текущие параметры карты "
   },
   {
+    "id": "project_map_proj_set",
+    "en": "Map projection (experimental)",
+    "ru": "Проекция карты (экспериментальная)"
+  },
+  {
+    "id": "project_map_proj_name",
+    "en": "Projection name",
+    "ru": "Название проекции"
+  },
+  {
+    "id": "project_map_proj_center_latitude",
+    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
+    "ru": "Центр - Широта (Альберс, Ламбер Коник)"
+  },
+  {
+    "id": "project_map_proj_center_longitude",
+    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
+    "ru": "Центр - долгота (Альберс, Ламбер Коник)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_0",
+    "en": "Latitude North (Albers, Lamber Conic )",
+    "ru": "Широта на север (Альберс, Ламбер Коник)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_1",
+    "en": "Latitude South (Albers, Lamber Conic )",
+    "ru": "Южная широта (Альберс, Ламбер Коник)"
+  },
+  {
     "id": "map_fit_to_bounds",
     "en": "Use extent to center the map",
     "ru": "Используйте экстент для центрирования карты "

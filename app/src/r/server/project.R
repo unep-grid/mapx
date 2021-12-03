@@ -378,6 +378,7 @@ observe({
       projectData <- mxDbGetProjectData(project)
       countryClip <- projectData$countries
       mapPos <- projectData$map_position 
+      mapProj <- projectData$map_projection
       language <- reactData$language
       hasNoClip <- noDataCheck(countryClip) || "WLD" %in% countryClip
       
@@ -413,6 +414,21 @@ observe({
         id = idMap,
         mapPos
         )
+
+      if(noDataCheck(mapProj)){
+        mglSetMapProjection(
+          id = idMap,
+          name = 'mercator'
+        )
+      }else{
+        mglSetMapProjection(
+          id = idMap,
+          name = mapProj$name,
+          center = list(mapProj$center_lng,mapProj$center_lat),
+          parallels = list(mapProj$parallels_lat_0,mapProj$parallels_lat_1)
+        )
+      }
+    
 
     }
 

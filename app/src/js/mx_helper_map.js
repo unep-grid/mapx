@@ -82,13 +82,12 @@ export async function downloadViewGeoJSON(opt) {
   return opt;
 }
 
-
 /**
-* Get url items from view's meta 
-* @param {Object} view 
-* @return {Array} array of download url items [{<label>,<url>,<is_download_link>}] 
-*/
-export  function getDownloadUrlItemsFromViewMeta(view){
+ * Get url items from view's meta
+ * @param {Object} view
+ * @return {Array} array of download url items [{<label>,<url>,<is_download_link>}]
+ */
+export function getDownloadUrlItemsFromViewMeta(view) {
   const h = mx.helpers;
   const urlItems = h.path(view, 'data.source.meta.origin.source.urls', []);
 
@@ -113,16 +112,15 @@ export  function getDownloadUrlItemsFromViewMeta(view){
   return urlItemsClean;
 }
 
-
 /**
-* Check if view's meta has download url items 
-* @param {Object} view 
-* @return {Boolean} has items
-*/ 
-export function hasDownloadUrlItemsFromViewMeta(view){
+ * Check if view's meta has download url items
+ * @param {Object} view
+ * @return {Boolean} has items
+ */
+
+export function hasDownloadUrlItemsFromViewMeta(view) {
   return getDownloadUrlItemsFromViewMeta(view).length > 0;
 }
-
 
 /**
  * Download external source
@@ -140,8 +138,9 @@ export async function downloadViewSourceExternal(opt) {
   }
 
   /*
-  * Retrieve urls list
-  */ 
+   * Retrieve urls list
+   */
+
   const urlItemsClean = getDownloadUrlItemsFromViewMeta(view);
 
   /**
@@ -5435,6 +5434,31 @@ export function flyTo(o) {
         map.flyTo(opt);
       }
     }
+  }
+}
+
+/**
+ * Set map projection
+ * @param {Object} opt options
+ * @param {String} opt.id map id
+ * @param {String} opt.name
+ * @param {Array} opt.center
+ * @param {Array} opt.parallels
+ */
+export function setMapProjection(opt) {
+  const h = mx.helpers;
+  const map = h.getMap(opt.id);
+  const def = {
+    name: 'mercator',
+    center: [0, 0],
+    parallels: [0, 0]
+  };
+  opt = Object.assign({}, def, opt);
+  if (map) {
+    map.setProjection(opt.name, {
+      center: opt.center,
+      parallels: opt.parallels
+    });
   }
 }
 

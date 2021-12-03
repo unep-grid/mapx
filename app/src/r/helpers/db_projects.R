@@ -344,16 +344,29 @@ mxDbProjectCheckEmailMembership <-function(email,idProject){
 #' @param {String} project Project id
 #' @return raw list of data
 mxDbGetProjectData <- function(idProject){
-  projectData <- as.list(mxDbGetQuery("SELECT * from mx_projects where id='" + idProject + "' OR id_old='"+ idProject +"'")[1,])
+  projectData <- as.list(
+    mxDbGetQuery(
+      "SELECT * from mx_projects where id='" + idProject + "' OR id_old='"+ idProject +"'"
+      )[1,])
 
   if(noDataCheck(projectData)) {
     return(list())
   }
-
   for(i in 1:length(projectData)){
      p <- projectData[i]
      n <- names(p)
-     if( n %in% c("title","description","admins","members","publishers","contacts","map_position","countries","states_views")){
+     if( n %in% c(
+         "title",
+         "description",
+         "admins",
+         "members",
+         "publishers",
+         "contacts",
+         "map_position",
+         "map_projection",
+         "countries",
+         "states_views"
+         )){
        val = p[[1]]
        if(!noDataCheck(val)){
          projectData[[i]] <- fromJSON(val,simplifyDataFrame=FALSE)
@@ -397,6 +410,7 @@ mxDbSaveProjectData <- function(idProject,values = list(
     members = NULL,
     publishers = NULL,
     map_position = NULL,
+    map_projection = NULL,
     countries = NULL,
     creator = NULL,
     allow_join = NULL,
@@ -413,8 +427,18 @@ mxDbSaveProjectData <- function(idProject,values = list(
     }
     return(isNotNull)
   }
-
-  for( key in c("title","description","admins","members","publishers","map_position","countries","states_views")){
+  keys = c(
+    "title",
+    "description",
+    "admins",
+    "members",
+    "publishers",
+    "map_position",
+    "map_projection",
+    "countries",
+    "states_views"
+  )
+  for( key in keys ){
     value <- values[[key]]
     toUpdate <- notNull(value)
     if(toUpdate){

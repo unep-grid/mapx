@@ -4505,6 +4505,36 @@
     "fr": "Utiliser les paramètres actuels de la carte"
   },
   {
+    "id": "project_map_proj_set",
+    "en": "Map projection (experimental)",
+    "fr": "Projection cartographique (expérimentale)"
+  },
+  {
+    "id": "project_map_proj_name",
+    "en": "Projection name",
+    "fr": "Nom de la projection"
+  },
+  {
+    "id": "project_map_proj_center_latitude",
+    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
+    "fr": "Centre - Latitude ( Albers, Lamber Conic )"
+  },
+  {
+    "id": "project_map_proj_center_longitude",
+    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
+    "fr": "Centre - Longitude ( Albers, Lamber Conic )"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_0",
+    "en": "Latitude North (Albers, Lamber Conic )",
+    "fr": "Latitude Nord (Albers, Lamber Conic)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_1",
+    "en": "Latitude South (Albers, Lamber Conic )",
+    "fr": "Latitude Sud (Albers, Lamber Conic)"
+  },
+  {
     "id": "map_fit_to_bounds",
     "en": "Use extent to center the map",
     "fr": "Utiliser l'étendue pour centrer la carte"

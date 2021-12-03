@@ -49,6 +49,7 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler('mglSetHighlightedCountries', h.setHighlightedCountries);
   Shiny.addCustomMessageHandler('mglAddLayer',  h.addLayer );
   Shiny.addCustomMessageHandler('mglFlyTo', h.flyTo );
+  Shiny.addCustomMessageHandler('mglSetMapProjection', h.setMapProjection);
   Shiny.addCustomMessageHandler('mglSyncAllMaps', h.syncAll );
   Shiny.addCustomMessageHandler('mglUpdateViewsList',h.updateViewsList);
   Shiny.addCustomMessageHandler('mglRemoveView', h.viewDelete );

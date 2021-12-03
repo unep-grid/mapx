@@ -1,5 +1,6 @@
 #
 # Project config
+# TODO: merge multiple schemas into one. 
 #
 observeEvent(input$btnShowProjectConfig,{
 
@@ -19,6 +20,7 @@ observeEvent(input$btnShowProjectConfig,{
       jedOutput("projectTitleSchema"),
       jedOutput("projectDescriptionSchema"),
       jedOutput("projectMapPosition"),
+      jedOutput("projectMapProjection"),
       selectizeInput(
         "selectProjectConfigCountries",
         label = d("project_countries_highlight",language,web=F),
@@ -161,7 +163,79 @@ observe({
 })
 
 
+observeEvent(input$projectMapProjection_init,{
 
+  userRole <- getUserRole()
+  isAdmin <- isTRUE(userRole$admin)
+  if( isAdmin ){
+
+    project <- reactData$project
+    projectData <- mxDbGetProjectData(project)
+    language <- reactData$language 
+    tt <- function(id){d(id,language,web=F)}
+    mapProjection <- .get(projectData,c("map_projection"))
+
+    schema <- list(
+      type = "object",
+      title = tt("project_map_proj_set"),
+      properties = list(
+        name = list(
+          title = tt("project_map_proj_name"),
+          type = "string",
+          enum = list(
+            "albers",
+            "equalEarth",
+            "mercator",
+            "lambertConformalConic",
+            "winkelTripel",
+            "naturalEarth",
+            "equirectangular"
+            ),
+          default = "mercator"
+          ),
+        center_lat = list(
+          type="number",
+          title = tt("project_map_proj_center_latitude"),
+          minimum=-90,
+          maximum=90,
+          default=0
+          ),
+        center_lng = list(
+          title = tt("project_map_proj_center_longitude"),
+          type="number",
+          minimum=-180,
+          maximum=180,
+          default=0
+          ),
+        parallels_lat_0 = list(
+          type="number",
+          title = tt("project_map_proj_parallels_latitude_0"),
+          minimum=-90,
+          maximum=90,
+          default=0
+          ),
+        parallels_lat_1 = list(
+          type="number",
+          title = tt("project_map_proj_parallels_latitude_1"),
+          minimum=-90,
+          maximum=90,
+          default=0
+        ) 
+      )
+    )
+
+      jedSchema(
+        id="projectMapProjection",
+        schema=schema,
+        startVal=mapProjection,
+        options = list(
+          getValidationOnChange = TRUE,
+          getValuesOnChange = TRUE
+        )
+      )
+
+  }
+})
 
 
 observeEvent(input$projectMapPosition_init,{
@@ -363,6 +437,7 @@ observeEvent(input$btnSaveProjectConfig,{
         members = NULL,
         publishers = NULL,
         map_position = input$projectMapPosition_values$data,
+        map_projection = input$projectMapProjection_values$data,
         countries = countries,
         creator = NULL,
         allow_join = allowJoin

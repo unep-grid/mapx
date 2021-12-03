@@ -4505,6 +4505,36 @@
     "ar": "استخدم معلمات الخريطة الحالية "
   },
   {
+    "id": "project_map_proj_set",
+    "en": "Map projection (experimental)",
+    "ar": "إسقاط الخريطة (تجريبي)"
+  },
+  {
+    "id": "project_map_proj_name",
+    "en": "Projection name",
+    "ar": "اسم الإسقاط"
+  },
+  {
+    "id": "project_map_proj_center_latitude",
+    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
+    "ar": "المركز - خط العرض (ألبرز ، لامبر كونيك)"
+  },
+  {
+    "id": "project_map_proj_center_longitude",
+    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
+    "ar": "المركز - خط الطول (ألبرز ، لامبر كونيك)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_0",
+    "en": "Latitude North (Albers, Lamber Conic )",
+    "ar": "خط العرض الشمالي (ألبرز ، لامبر كونيك)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_1",
+    "en": "Latitude South (Albers, Lamber Conic )",
+    "ar": "خط العرض الجنوبي (ألبرز ، لامبر كونيك)"
+  },
+  {
     "id": "map_fit_to_bounds",
     "en": "Use extent to center the map",
     "ar": "استخدم المدى لتوسيط الخريطة "

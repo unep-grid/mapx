@@ -266,6 +266,41 @@ mglFlyTo <- function( id=NULL, mapPosition, session=shiny::getDefaultReactiveDom
     )
 }
 
+#' Set map projection 
+#' @param id map id
+#' @param name  Projection name 
+#' @param center  Center 
+#' @param parallels  Parallels 
+#' @param {Reactive} session Shiny session
+#' @export
+mglSetMapProjection <- function(
+  id = NULL,
+  name = c(
+    "albers",
+    "equalEarth",
+    "mercator",
+    "lambertConformalConic",
+    "winkelTripel",
+    "naturalEarth",
+    "equirectangular"
+    ), 
+  center = list(0,0), 
+  parallels = list(0,0), 
+  session = shiny::getDefaultReactiveDomain()
+  ){
+
+  stopifnot(!noDataCheck(id))
+  session$sendCustomMessage("mglSetMapProjection",list(
+      id = id,
+      name  = name,
+      center  = center,
+      parallels =  parallels
+  )
+  )
+}
+
+
+
 #' Set label language
 #' @param id Map id
 #' @param language two letter language ex. en, fr, ru, es

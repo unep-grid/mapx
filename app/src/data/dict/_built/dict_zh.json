@@ -4505,6 +4505,36 @@
     "zh": "使用当前地图参数"
   },
   {
+    "id": "project_map_proj_set",
+    "en": "Map projection (experimental)",
+    "zh": "地图投影（实验性）"
+  },
+  {
+    "id": "project_map_proj_name",
+    "en": "Projection name",
+    "zh": "投影名称"
+  },
+  {
+    "id": "project_map_proj_center_latitude",
+    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
+    "zh": "中心 - 纬度（Albers，Lamber Conic）"
+  },
+  {
+    "id": "project_map_proj_center_longitude",
+    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
+    "zh": "中心 - 经度 (Albers, Lamber Conic)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_0",
+    "en": "Latitude North (Albers, Lamber Conic )",
+    "zh": "北纬 (Albers, Lamber Conic )"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_1",
+    "en": "Latitude South (Albers, Lamber Conic )",
+    "zh": "南纬 (Albers, Lamber Conic )"
+  },
+  {
     "id": "map_fit_to_bounds",
     "en": "Use extent to center the map",
     "zh": "使用扩展范围使地图居中"

@@ -4505,6 +4505,36 @@
     "bn": "বর্তমান মানচিত্রের পরামিতিগুলি ব্যবহার করুন "
   },
   {
+    "id": "project_map_proj_set",
+    "en": "Map projection (experimental)",
+    "bn": "মানচিত্র অভিক্ষেপ (পরীক্ষামূলক)"
+  },
+  {
+    "id": "project_map_proj_name",
+    "en": "Projection name",
+    "bn": "অভিক্ষেপের নাম"
+  },
+  {
+    "id": "project_map_proj_center_latitude",
+    "en": "Center - Latitude ( Albers, Lamber Conic ) ",
+    "bn": "কেন্দ্র - অক্ষাংশ ( Albers, Lamber Conic )"
+  },
+  {
+    "id": "project_map_proj_center_longitude",
+    "en": "Center - Longitude ( Albers, Lamber Conic ) ",
+    "bn": "কেন্দ্র - দ্রাঘিমাংশ ( Albers, Lamber Conic )"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_0",
+    "en": "Latitude North (Albers, Lamber Conic )",
+    "bn": "অক্ষাংশ উত্তর (আলবার্স, ল্যাম্বার কনিক)"
+  },
+  {
+    "id": "project_map_proj_parallels_latitude_1",
+    "en": "Latitude South (Albers, Lamber Conic )",
+    "bn": "অক্ষাংশ দক্ষিণ (আলবার্স, ল্যাম্বার কনিক)"
+  },
+  {
     "id": "map_fit_to_bounds",
     "en": "Use extent to center the map",
     "bn": "মানচিত্রকে কেন্দ্র করতে ব্যাপ্তি ব্যবহার করুন "
