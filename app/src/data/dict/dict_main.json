@@ -522,7 +522,7 @@
   {
     "id": "btn_source_validate_geom",
     "en": "Geometry validation",
-    "fr": "Validation de geometries",
+    "fr": "Validation de géométries",
     "es": "Validación de geometrías",
     "ru": "",
     "zh": "几何验证",
@@ -717,7 +717,7 @@
   {
     "id": "title_overlap_tools",
     "en": "Area intersection utilities",
-    "fr": "Utilitaire d'analyse de chevauchement",
+    "fr": "Utilitaires d'analyse de chevauchement",
     "es": "Herramientas de análisis de intersección",
     "ru": "",
     "zh": "重叠分析工具",
@@ -743,7 +743,7 @@
   {
     "id": "btn_edit_source_metadata",
     "en": "Edit sources metadata",
-    "fr": "Editer les métadonnées des sources",
+    "fr": "Éditer les métadonnées des sources",
     "es": "Editar los metadatos de la fuente de datos",
     "ru": "",
     "zh": "编辑源的元数据",
@@ -6281,7 +6281,7 @@
   {
     "id": "view_new_text",
     "en": "Create a new View",
-    "fr": "Créer une nouevelle Vue",
+    "fr": "Créer une nouvelle Vue",
     "es": "Crear una nueva Vista",
     "ru": "",
     "zh": "创建新视图",
