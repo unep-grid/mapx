@@ -3640,6 +3640,19 @@
     "de": "Fügen Sie ein neues Polygon in Form eines Kreises mit einem definierten Radius hinzu "
   },
   {
+    "id": "draw_feature_type",
+    "en": "Feature type",
+    "fr": "Type d'entité",
+    "es": "Tipo de característica",
+    "ru": "Тип функции",
+    "zh": "特征类型",
+    "ar": "نوع الميزة",
+    "fa": "نوع ویژگی",
+    "ps": "د فیچر ډول",
+    "bn": "বৈশিষ্ট্যের ধরন",
+    "de": "Funktionstyp"
+  },
+  {
     "id": "en",
     "en": "English",
     "fr": "Anglais",
@@ -4515,13 +4528,13 @@
     "en": "API SQL query maker",
     "fr": "Requête SQL pour l'API",
     "es": "Consulta SQL para el API",
-    "ru": "Создатель запросов API SQL ",
+    "ru": "Создатель запросов API SQL",
     "zh": "API SQL查询生成器",
-    "ar": "صانع استعلام SQL API ",
-    "fa": "API SQL سازنده پرس و جو ",
-    "ps": "د API SQL پوښتنه جوړونکی ",
-    "bn": "এপিআই এসকিউএল ক্যোয়ার প্রস্তুতকারক ",
-    "de": "API SQL Query Maker "
+    "ar": "صانع استعلام SQL API",
+    "fa": "API SQL query maker",
+    "ps": "د API SQL پوښتنې جوړونکی",
+    "bn": "API SQL ক্যোয়ারী মেকার",
+    "de": "API SQL-Abfragehersteller"
   },
   {
     "id": "label_query_write",
@@ -4745,17 +4758,17 @@
     "de": "Bearbeiten ausgewählt "
   },
   {
-    "id": "btn_edit_source",
-    "en": "Manage sources",
-    "fr": "Gérer les sources",
-    "es": "Gestionar fuentes de datos",
-    "ru": "Управление источниками ",
-    "zh": "管理源",
-    "ar": "إدارة المصادر ",
-    "fa": "منابع را مدیریت کنید ",
-    "ps": "سرچینې اداره کړئ ",
-    "bn": "উত্স পরিচালনা করুন ",
-    "de": "Quellen verwalten "
+    "id": "btn_edit_source_settings",
+    "en": "Edit source settings",
+    "fr": "Éditer les paramètres d'une sources",
+    "es": "Editar la configuración de la fuente",
+    "ru": "Изменить настройки источника",
+    "zh": "编辑源设置",
+    "ar": "تحرير إعدادات المصدر",
+    "fa": "تنظیمات منبع را ویرایش کنید",
+    "ps": "د سرچینې ترتیبات سم کړئ",
+    "bn": "উৎস সেটিংস সম্পাদনা করুন",
+    "de": "Quelleinstellungen bearbeiten"
   },
   {
     "id": "btn_source_overlap_utilities",
@@ -4994,7 +5007,7 @@
   {
     "id": "btn_edit_source_metadata",
     "en": "Edit sources metadata",
-    "fr": "Editer les métadonnées des sources",
+    "fr": "Éditer les métadonnées des sources",
     "es": "Editar los metadatos de la fuente de datos",
     "ru": "Редактировать метаданные источников ",
     "zh": "编辑源的元数据",
@@ -7957,16 +7970,16 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "fr": "Opacité",
-    "es": "Opacidad",
-    "ru": "Непрозрачность ",
-    "zh": "不透明度",
-    "ar": "العتامة ",
-    "fa": "مکدریت",
-    "ps": "مکدریت",
-    "bn": "অস্বচ্ছতা ",
-    "de": "Opazität "
+    "en": "Transparency",
+    "fr": "Transparence",
+    "es": "Transparencia",
+    "ru": "Прозрачность",
+    "zh": "透明度",
+    "ar": "الشفافية",
+    "fa": "شفافیت",
+    "ps": "روڼتیا",
+    "bn": "স্বচ্ছতা",
+    "de": "Transparenz"
   },
   {
     "id": "schema_style_rule",
@@ -10491,17 +10504,17 @@
     "de": "Quellmetadaten bearbeiten "
   },
   {
-    "id": "source_edit",
-    "en": "Edit source",
-    "fr": "Édition de la source",
-    "es": "Editar la fuente de datos",
-    "ru": "Редактировать источник ",
-    "zh": "编辑源",
-    "ar": "تحرير المصدر ",
-    "fa": "منبع را ویرایش کنید ",
-    "ps": "سرچینه ",
-    "bn": "উত্স সম্পাদনা করুন ",
-    "de": "Quelle bearbeiten "
+    "id": "source_edit_settings",
+    "en": "Edit source settings",
+    "fr": "Éditer les paramètres de la source",
+    "es": "Editar la configuración de la fuente",
+    "ru": "Изменить настройки источника",
+    "zh": "编辑源设置",
+    "ar": "تحرير إعدادات المصدر",
+    "fa": "تنظیمات منبع را ویرایش کنید",
+    "ps": "د سرچینې ترتیبات سم کړئ",
+    "bn": "উৎস সেটিংস সম্পাদনা করুন",
+    "de": "Quelleinstellungen bearbeiten"
   },
   {
     "id": "view_id",
@@ -17810,19 +17823,6 @@
     "de": "Schließe und erinnere mich nicht daran"
   },
   {
-    "id": "search_show_api_config",
-    "en": "Get search API key and configuration",
-    "fr": "Obtenir la clé et la configuration de l'API de recherche",
-    "es": "Obtenga la clave y la configuración de la API de búsqueda",
-    "ru": "Получить ключ и конфигурацию API поиска",
-    "zh": "获取搜索 API 密钥和配置",
-    "ar": "الحصول على مفتاح البحث والتكوين API",
-    "fa": "کلید و پیکربندی API جستجو را دریافت کنید",
-    "ps": "د لټون API کیلي او تنظیمات ترلاسه کړئ",
-    "bn": "অনুসন্ধান API কী এবং কনফিগারেশন পান",
-    "de": "Such-API-Schlüssel und -Konfiguration abrufen"
-  },
-  {
     "id": "search_results_loading",
     "en": "Loading...",
     "fr": "Chargement...",
@@ -17860,6 +17860,58 @@
     "ps": "هیڅ لید ونه موندل شو",
     "bn": "কোনো ভিউ পাওয়া যায়নি",
     "de": "Keine Ansichten gefunden"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration",
+    "fr": "Obtenir la clé et la configuration de l'API de recherche",
+    "es": "Obtenga la clave y la configuración de la API de búsqueda",
+    "ru": "Получить ключ и конфигурацию API поиска",
+    "zh": "获取搜索 API 密钥和配置",
+    "ar": "الحصول على مفتاح البحث والتكوين API",
+    "fa": "کلید و پیکربندی API جستجو را دریافت کنید",
+    "ps": "د لټون API کیلي او تنظیمات ترلاسه کړئ",
+    "bn": "অনুসন্ধান API কী এবং কনফিগারেশন পান",
+    "de": "Such-API-Schlüssel und -Konfiguration abrufen"
+  },
+  {
+    "id": "search_api_key",
+    "en": "Search engine API key",
+    "fr": "Clé API du moteur de recherche",
+    "es": "Clave de API del motor de búsqueda",
+    "ru": "Ключ API поисковой системы",
+    "zh": "搜索引擎 API 密钥",
+    "ar": "مفتاح API لمحرك البحث",
+    "fa": "کلید API موتور جستجو",
+    "ps": "د لټون انجن API کلیدي",
+    "bn": "সার্চ ইঞ্জিন API কী",
+    "de": "Suchmaschinen-API-Schlüssel"
+  },
+  {
+    "id": "search_api_host",
+    "en": "Search engine API host",
+    "fr": "Hôte d'API de moteur de recherche",
+    "es": "Host de la API del motor de búsqueda",
+    "ru": "Хост API поисковой системы",
+    "zh": "搜索引擎 API 主机",
+    "ar": "مضيف API محرك البحث",
+    "fa": "میزبان API موتور جستجو",
+    "ps": "د لټون انجن API کوربه",
+    "bn": "সার্চ ইঞ্জিন API হোস্ট",
+    "de": "Suchmaschinen-API-Host"
+  },
+  {
+    "id": "search_api_request_examples",
+    "en": "Exemples",
+    "fr": "Exemples",
+    "es": "Ejemplos",
+    "ru": "Примеры",
+    "zh": "例子",
+    "ar": "أمثلة",
+    "fa": "نمونه ها",
+    "ps": "مثالونه",
+    "bn": "উদাহরণ",
+    "de": "Beispiele"
   },
   {
     "id": "share_manager_title",

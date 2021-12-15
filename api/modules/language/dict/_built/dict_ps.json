@@ -1400,6 +1400,11 @@
     "ps": "د ټاکل شوې رادېو سره د حلقې په ب inه کې نوی کثیر العاده اضافه کړئ "
   },
   {
+    "id": "draw_feature_type",
+    "en": "Feature type",
+    "ps": "د فیچر ډول"
+  },
+  {
     "id": "en",
     "en": "English",
     "ps": "انګلیسي"
@@ -1737,7 +1742,7 @@
   {
     "id": "btn_show_db_query_maker",
     "en": "API SQL query maker",
-    "ps": "د API SQL پوښتنه جوړونکی "
+    "ps": "د API SQL پوښتنې جوړونکی"
   },
   {
     "id": "label_query_write",
@@ -1825,9 +1830,9 @@
     "ps": "ټاکل شوی "
   },
   {
-    "id": "btn_edit_source",
-    "en": "Manage sources",
-    "ps": "سرچینې اداره کړئ "
+    "id": "btn_edit_source_settings",
+    "en": "Edit source settings",
+    "ps": "د سرچینې ترتیبات سم کړئ"
   },
   {
     "id": "btn_source_overlap_utilities",
@@ -3061,8 +3066,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "ps": "مکدریت"
+    "en": "Transparency",
+    "ps": "روڼتیا"
   },
   {
     "id": "schema_style_rule",
@@ -4035,9 +4040,9 @@
     "ps": "د سرچینې مېټاډاټا "
   },
   {
-    "id": "source_edit",
-    "en": "Edit source",
-    "ps": "سرچینه "
+    "id": "source_edit_settings",
+    "en": "Edit source settings",
+    "ps": "د سرچینې ترتیبات سم کړئ"
   },
   {
     "id": "view_id",
@@ -6850,11 +6855,6 @@
     "ps": "نږدې یې کړئ او ما ته دا یاد مه کوئ"
   },
   {
-    "id": "search_show_api_config",
-    "en": "Get search API key and configuration",
-    "ps": "د لټون API کیلي او تنظیمات ترلاسه کړئ"
-  },
-  {
     "id": "search_results_loading",
     "en": "Loading...",
     "ps": "بارول ..."
@@ -6868,6 +6868,26 @@
     "id": "search_results_empty",
     "en": "No views found",
     "ps": "هیڅ لید ونه موندل شو"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration",
+    "ps": "د لټون API کیلي او تنظیمات ترلاسه کړئ"
+  },
+  {
+    "id": "search_api_key",
+    "en": "Search engine API key",
+    "ps": "د لټون انجن API کلیدي"
+  },
+  {
+    "id": "search_api_host",
+    "en": "Search engine API host",
+    "ps": "د لټون انجن API کوربه"
+  },
+  {
+    "id": "search_api_request_examples",
+    "en": "Exemples",
+    "ps": "مثالونه"
   },
   {
     "id": "share_manager_title",

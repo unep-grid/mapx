@@ -1400,6 +1400,11 @@
     "fr": "Ajouter un nouveau polygone en forme de cercle, avec un rayon défini "
   },
   {
+    "id": "draw_feature_type",
+    "en": "Feature type",
+    "fr": "Type d'entité"
+  },
+  {
     "id": "en",
     "en": "English",
     "fr": "Anglais"
@@ -1825,9 +1830,9 @@
     "fr": "Éditer la sélection"
   },
   {
-    "id": "btn_edit_source",
-    "en": "Manage sources",
-    "fr": "Gérer les sources"
+    "id": "btn_edit_source_settings",
+    "en": "Edit source settings",
+    "fr": "Éditer les paramètres d'une sources"
   },
   {
     "id": "btn_source_overlap_utilities",
@@ -1922,7 +1927,7 @@
   {
     "id": "btn_edit_source_metadata",
     "en": "Edit sources metadata",
-    "fr": "Editer les métadonnées des sources"
+    "fr": "Éditer les métadonnées des sources"
   },
   {
     "id": "btn_finish",
@@ -3061,8 +3066,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "fr": "Opacité"
+    "en": "Transparency",
+    "fr": "Transparence"
   },
   {
     "id": "schema_style_rule",
@@ -4035,9 +4040,9 @@
     "fr": "Édition des métadonnées de la source"
   },
   {
-    "id": "source_edit",
-    "en": "Edit source",
-    "fr": "Édition de la source"
+    "id": "source_edit_settings",
+    "en": "Edit source settings",
+    "fr": "Éditer les paramètres de la source"
   },
   {
     "id": "view_id",
@@ -6850,11 +6855,6 @@
     "fr": "Ferme et ne me rappelle pas ça"
   },
   {
-    "id": "search_show_api_config",
-    "en": "Get search API key and configuration",
-    "fr": "Obtenir la clé et la configuration de l'API de recherche"
-  },
-  {
     "id": "search_results_loading",
     "en": "Loading...",
     "fr": "Chargement..."
@@ -6868,6 +6868,26 @@
     "id": "search_results_empty",
     "en": "No views found",
     "fr": "Aucune vue trouvée"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration",
+    "fr": "Obtenir la clé et la configuration de l'API de recherche"
+  },
+  {
+    "id": "search_api_key",
+    "en": "Search engine API key",
+    "fr": "Clé API du moteur de recherche"
+  },
+  {
+    "id": "search_api_host",
+    "en": "Search engine API host",
+    "fr": "Hôte d'API de moteur de recherche"
+  },
+  {
+    "id": "search_api_request_examples",
+    "en": "Exemples",
+    "fr": "Exemples"
   },
   {
     "id": "share_manager_title",

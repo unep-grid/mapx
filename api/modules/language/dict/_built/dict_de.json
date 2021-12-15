@@ -1400,6 +1400,11 @@
     "de": "Fügen Sie ein neues Polygon in Form eines Kreises mit einem definierten Radius hinzu "
   },
   {
+    "id": "draw_feature_type",
+    "en": "Feature type",
+    "de": "Funktionstyp"
+  },
+  {
     "id": "en",
     "en": "English",
     "de": "Englisch "
@@ -1737,7 +1742,7 @@
   {
     "id": "btn_show_db_query_maker",
     "en": "API SQL query maker",
-    "de": "API SQL Query Maker "
+    "de": "API SQL-Abfragehersteller"
   },
   {
     "id": "label_query_write",
@@ -1825,9 +1830,9 @@
     "de": "Bearbeiten ausgewählt "
   },
   {
-    "id": "btn_edit_source",
-    "en": "Manage sources",
-    "de": "Quellen verwalten "
+    "id": "btn_edit_source_settings",
+    "en": "Edit source settings",
+    "de": "Quelleinstellungen bearbeiten"
   },
   {
     "id": "btn_source_overlap_utilities",
@@ -3061,8 +3066,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "de": "Opazität "
+    "en": "Transparency",
+    "de": "Transparenz"
   },
   {
     "id": "schema_style_rule",
@@ -4035,9 +4040,9 @@
     "de": "Quellmetadaten bearbeiten "
   },
   {
-    "id": "source_edit",
-    "en": "Edit source",
-    "de": "Quelle bearbeiten "
+    "id": "source_edit_settings",
+    "en": "Edit source settings",
+    "de": "Quelleinstellungen bearbeiten"
   },
   {
     "id": "view_id",
@@ -6850,11 +6855,6 @@
     "de": "Schließe und erinnere mich nicht daran"
   },
   {
-    "id": "search_show_api_config",
-    "en": "Get search API key and configuration",
-    "de": "Such-API-Schlüssel und -Konfiguration abrufen"
-  },
-  {
     "id": "search_results_loading",
     "en": "Loading...",
     "de": "Wird geladen..."
@@ -6868,6 +6868,26 @@
     "id": "search_results_empty",
     "en": "No views found",
     "de": "Keine Ansichten gefunden"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration",
+    "de": "Such-API-Schlüssel und -Konfiguration abrufen"
+  },
+  {
+    "id": "search_api_key",
+    "en": "Search engine API key",
+    "de": "Suchmaschinen-API-Schlüssel"
+  },
+  {
+    "id": "search_api_host",
+    "en": "Search engine API host",
+    "de": "Suchmaschinen-API-Host"
+  },
+  {
+    "id": "search_api_request_examples",
+    "en": "Exemples",
+    "de": "Beispiele"
   },
   {
     "id": "share_manager_title",

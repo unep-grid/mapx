@@ -5,9 +5,9 @@
 
 
 
-observeEvent(input$btnEditSources,{
+observeEvent(input$btnEditSourceSettings,{
 
-  mxCatch(title="btn edit source",{
+  mxCatch(title="btn edit source settings",{
     userRole <- getUserRole()
     isPublisher <- "publishers" %in% userRole$groups
     language <- reactData$language
@@ -27,7 +27,7 @@ observeEvent(input$btnEditSources,{
 
       uiOut <- tagList(
         selectizeInput(
-          inputId = "selectSourceLayerEdit",
+          inputId = "selectSourceSettings",
           label = d("source_select_layer",language),
           choices = layers,
           multiple = FALSE,
@@ -39,15 +39,15 @@ observeEvent(input$btnEditSources,{
 
       btn <- list(
         actionButton(
-          "btnEditSourceManage",
+          "btnEditSourceSettingsConfirm",
           d("btn_edit_selected",language),
           disabled = disabled
         )
       )
 
       mxModal(
-        id = "editSourceManage",
-        title = d("source_edit",language),
+        id = "editSourceSettings",
+        title = d("source_edit_settings",language),
         content = uiOut,
         buttons = btn,
         textCloseButton = d("btn_close",language)
@@ -61,9 +61,9 @@ observeEvent(input$btnEditSources,{
 #
 # Trigger source manage
 #
-observeEvent(input$btnEditSourceManage,{
+observeEvent(input$btnEditSourceSettingsConfirm,{
   reactData$triggerSourceManage <- list(
-    idSource = input$selectSourceLayerEdit,
+    idSource = input$selectSourceSettings,
     update = runif(1)
   )
 })
@@ -78,7 +78,7 @@ observeEvent(reactData$triggerSourceManage,{
   isAllowed <- layer %in% layers
 
   mxToggleButton(
-    id="btnEditSourceManage",
+    id="btnSourceSettingsConfirm",
     disable = !isAllowed 
   )
 })
@@ -87,7 +87,7 @@ observeEvent(reactData$triggerSourceManage,{
 
 observeEvent(reactData$triggerSourceManage,{
 
-  mxCatch(title="Edit source manage",{
+  mxCatch(title="Edit source settings",{
     userRole <- getUserRole()
     isPublisher <- "publishers" %in% userRole$groups
     language <- reactData$language
@@ -181,7 +181,7 @@ observeEvent(reactData$triggerSourceManage,{
           )
           ),
         tblViews,    
-        uiOutput("uiValidateSourceEdit")
+        uiOutput("uiValidateSourceSettings")
       )
 
 
@@ -207,11 +207,11 @@ observeEvent(reactData$triggerSourceManage,{
       }
 
       mxModal(
-        id="editSourceManage",
-        title="Edit sources",
-        content=uiOut,
-        buttons=btnList,
-        textCloseButton=d("btn_close",language)
+        id = "editSourceSettings",
+        title = d("source_edit_settings",language),
+        content = uiOut,
+        buttons = btnList,
+        textCloseButton = d("btn_close",language)
       )
 
     }
@@ -265,7 +265,7 @@ observe({
     reactData$sourceEditBlockUpdate <- blockUpdate
     reactData$sourceEditBlockDelete <- blockDelete
 
-    output$uiValidateSourceEdit <- renderUI(
+    output$uiValidateSourceSettings <- renderUI(
       mxErrorsToUi(
         errors = errors,
         warning = warning,

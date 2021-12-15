@@ -1400,6 +1400,11 @@
     "zh": "添加具有定义半径的圆形的新多边形 "
   },
   {
+    "id": "draw_feature_type",
+    "en": "Feature type",
+    "zh": "特征类型"
+  },
+  {
     "id": "en",
     "en": "English",
     "zh": "英语"
@@ -1825,9 +1830,9 @@
     "zh": "编辑选定内容"
   },
   {
-    "id": "btn_edit_source",
-    "en": "Manage sources",
-    "zh": "管理源"
+    "id": "btn_edit_source_settings",
+    "en": "Edit source settings",
+    "zh": "编辑源设置"
   },
   {
     "id": "btn_source_overlap_utilities",
@@ -3061,8 +3066,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "zh": "不透明度"
+    "en": "Transparency",
+    "zh": "透明度"
   },
   {
     "id": "schema_style_rule",
@@ -4035,9 +4040,9 @@
     "zh": "编辑源的元数据"
   },
   {
-    "id": "source_edit",
-    "en": "Edit source",
-    "zh": "编辑源"
+    "id": "source_edit_settings",
+    "en": "Edit source settings",
+    "zh": "编辑源设置"
   },
   {
     "id": "view_id",
@@ -6850,11 +6855,6 @@
     "zh": "关闭，不要提醒我这个"
   },
   {
-    "id": "search_show_api_config",
-    "en": "Get search API key and configuration",
-    "zh": "获取搜索 API 密钥和配置"
-  },
-  {
     "id": "search_results_loading",
     "en": "Loading...",
     "zh": "正在加载..."
@@ -6868,6 +6868,26 @@
     "id": "search_results_empty",
     "en": "No views found",
     "zh": "未找到任何视图"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration",
+    "zh": "获取搜索 API 密钥和配置"
+  },
+  {
+    "id": "search_api_key",
+    "en": "Search engine API key",
+    "zh": "搜索引擎 API 密钥"
+  },
+  {
+    "id": "search_api_host",
+    "en": "Search engine API host",
+    "zh": "搜索引擎 API 主机"
+  },
+  {
+    "id": "search_api_request_examples",
+    "en": "Exemples",
+    "zh": "例子"
   },
   {
     "id": "share_manager_title",

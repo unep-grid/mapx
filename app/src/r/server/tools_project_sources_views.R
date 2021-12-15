@@ -43,10 +43,10 @@ observe({
           `data-lang_key` = "btn_source_overlap_utilities"
           ),
         actionButton(
-          label = d("btn_edit_source",language),
-          inputId = "btnEditSources",
+          label = d("btn_edit_source_settings",language),
+          inputId = "btnEditSourceSettings",
           class = "btn btn-default",
-          `data-lang_key` = "btn_edit_source"
+          `data-lang_key` = "btn_edit_source_settings"
           ),
         actionButton(
           label = d("btn_edit_source_metadata",language),
