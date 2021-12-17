@@ -33,7 +33,6 @@ class Search extends EventSimple {
     super();
     const s = this;
     s.setOpt(opt);
-    //s.search = pDebounce(s.search, 150).bind(s);
     s.update = pDebounce(s.update, 200).bind(s);
     s._handle_infinite_scroll = pDebounce(s._handle_infinite_scroll, 200).bind(
       s
@@ -100,19 +99,20 @@ class Search extends EventSimple {
       return;
     }
     const url = `${s.opt('protocol')}${s.opt('host')}:${s.opt('port')}`;
+    const language = s.opt('language');
     const elConfig = el('div', [
-      el('label', 'Search engine API key'),
+      el('label',getDictItem('search_api_key')),
       el('pre', s.opt('key')),
-      el('label', 'Search engine host'),
+      el('label', getDictItem('search_api_host')),
       el('pre', url),
-      el('label', 'Example'),
+      el('label', getDictItem('search_api_request_examples')),
       el(
         'details',
         {open: true},
-        el('summary', 'CURL'),
+        el('summary', 'curl'),
         el(
           'pre',
-          `curl '${url}/indexes/views_en/search' \\\n` +
+          `curl '${url}/indexes/views_${language}/search' \\\n` +
             `-H 'X-Meili-API-Key: ${s.opt('key')}' \\\n` +
             `--data-raw '{"q":"water"}' \\\n` +
             `--compressed;\n`
@@ -120,7 +120,7 @@ class Search extends EventSimple {
       )
     ]);
     s._elModalShowApiConfig = modal({
-      title: 'Search engine API',
+      title: getDictItem('search_show_api_config'),
       content: elConfig,
       addBackground: true,
       onClose: () => {
@@ -131,12 +131,13 @@ class Search extends EventSimple {
 
   async setLanguage(opt) {
     const s = this;
-    if (!s.isReady) {
-      return;
-    }
+
     opt = Object.assign({}, {reset: true, language: 'en'}, opt);
     if (opt.language) {
       s.setOpt({language: opt.language});
+    }
+    if (!s.isReady) {
+      return;
     }
     await s.setIndex();
     await s.setLocaleFlatpickr();
@@ -1348,7 +1349,7 @@ class Search extends EventSimple {
        */
       return results;
     } catch (e) {
-      console.warn('Issue while searching', {error: e});
+      console.warn('Issue while searching',e);
     }
   }
 

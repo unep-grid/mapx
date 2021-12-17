@@ -1400,6 +1400,11 @@
     "bn": "সংজ্ঞাযুক্ত ব্যাসার্ধ সহ বৃত্তের আকারে একটি নতুন বহুভুজ যুক্ত করুন "
   },
   {
+    "id": "draw_feature_type",
+    "en": "Feature type",
+    "bn": "বৈশিষ্ট্যের ধরন"
+  },
+  {
     "id": "en",
     "en": "English",
     "bn": "ইংরেজি "
@@ -1737,7 +1742,7 @@
   {
     "id": "btn_show_db_query_maker",
     "en": "API SQL query maker",
-    "bn": "এপিআই এসকিউএল ক্যোয়ার প্রস্তুতকারক "
+    "bn": "API SQL ক্যোয়ারী মেকার"
   },
   {
     "id": "label_query_write",
@@ -1825,9 +1830,9 @@
     "bn": "সম্পাদনা নির্বাচন করা হয়েছে "
   },
   {
-    "id": "btn_edit_source",
-    "en": "Manage sources",
-    "bn": "উত্স পরিচালনা করুন "
+    "id": "btn_edit_source_settings",
+    "en": "Edit source settings",
+    "bn": "উৎস সেটিংস সম্পাদনা করুন"
   },
   {
     "id": "btn_source_overlap_utilities",
@@ -3061,8 +3066,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "bn": "অস্বচ্ছতা "
+    "en": "Transparency",
+    "bn": "স্বচ্ছতা"
   },
   {
     "id": "schema_style_rule",
@@ -4035,9 +4040,9 @@
     "bn": "উত্স মেটাডেটা সম্পাদনা করুন "
   },
   {
-    "id": "source_edit",
-    "en": "Edit source",
-    "bn": "উত্স সম্পাদনা করুন "
+    "id": "source_edit_settings",
+    "en": "Edit source settings",
+    "bn": "উৎস সেটিংস সম্পাদনা করুন"
   },
   {
     "id": "view_id",
@@ -6880,11 +6885,6 @@
     "bn": "বন্ধ করুন এবং আমাকে এটি মনে করিয়ে দিবেন না"
   },
   {
-    "id": "search_show_api_config",
-    "en": "Get search API key and configuration",
-    "bn": "অনুসন্ধান API কী এবং কনফিগারেশন পান"
-  },
-  {
     "id": "search_results_loading",
     "en": "Loading...",
     "bn": "লোড হচ্ছে ..."
@@ -6898,6 +6898,26 @@
     "id": "search_results_empty",
     "en": "No views found",
     "bn": "কোনো ভিউ পাওয়া যায়নি"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration",
+    "bn": "অনুসন্ধান API কী এবং কনফিগারেশন পান"
+  },
+  {
+    "id": "search_api_key",
+    "en": "Search engine API key",
+    "bn": "সার্চ ইঞ্জিন API কী"
+  },
+  {
+    "id": "search_api_host",
+    "en": "Search engine API host",
+    "bn": "সার্চ ইঞ্জিন API হোস্ট"
+  },
+  {
+    "id": "search_api_request_examples",
+    "en": "Exemples",
+    "bn": "উদাহরণ"
   },
   {
     "id": "share_manager_title",

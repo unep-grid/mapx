@@ -2,6 +2,10 @@
 
       - APP 
           - Added support for setting project's projection
+  - [1.9.35](https://github.com/unep-grid/map-x-mgl/tree/1.9.35) \n
+
+      - APP
+          - Clean version + changelog 
 
   - [1.9.35-rc.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.35-rc.2) 
       

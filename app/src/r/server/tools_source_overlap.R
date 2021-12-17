@@ -62,10 +62,10 @@ observeEvent(input$btnAnalysisOverlap,{
             choices = mxGetCountryList(language,includeWorld=F),
             selected = countries
             ),
-          radioButtons("radioOverlapMode", d("radio_source_overlap_mode"),
+          radioButtons("radioOverlapMode", d("radio_source_overlap_mode",language),
             choiceNames = list(
-              d('source_overlap_mode_area'),
-              d('source_overlap_mode_create_source')
+              d('source_overlap_mode_area',language),
+              d('source_overlap_mode_create_source',language)
               ),
             choiceValues = list(
               "getArea","createSource"

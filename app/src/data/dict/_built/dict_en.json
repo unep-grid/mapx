@@ -1120,6 +1120,10 @@
     "en": "Add a new polygon in the shape of a circle, with a defined radius"
   },
   {
+    "id": "draw_feature_type",
+    "en": "Feature type"
+  },
+  {
     "id": "en",
     "en": "English"
   },
@@ -1460,8 +1464,8 @@
     "en": "Edit selected"
   },
   {
-    "id": "btn_edit_source",
-    "en": "Manage sources"
+    "id": "btn_edit_source_settings",
+    "en": "Edit source settings"
   },
   {
     "id": "btn_source_overlap_utilities",
@@ -2449,7 +2453,7 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity"
+    "en": "Transparency"
   },
   {
     "id": "schema_style_rule",
@@ -3228,8 +3232,8 @@
     "en": "Edit source metadata"
   },
   {
-    "id": "source_edit",
-    "en": "Edit source"
+    "id": "source_edit_settings",
+    "en": "Edit source settings"
   },
   {
     "id": "view_id",
@@ -5504,10 +5508,6 @@
     "en": "Close and don't remind me this"
   },
   {
-    "id": "search_show_api_config",
-    "en": "Get search API key and configuration"
-  },
-  {
     "id": "search_results_loading",
     "en": "Loading..."
   },
@@ -5518,6 +5518,22 @@
   {
     "id": "search_results_empty",
     "en": "No views found"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration"
+  },
+  {
+    "id": "search_api_key",
+    "en": "Search engine API key"
+  },
+  {
+    "id": "search_api_host",
+    "en": "Search engine API host"
+  },
+  {
+    "id": "search_api_request_examples",
+    "en": "Exemples"
   },
   {
     "id": "share_manager_title",

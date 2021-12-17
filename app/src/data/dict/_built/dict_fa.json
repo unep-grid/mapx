@@ -1400,6 +1400,11 @@
     "fa": "چند ضلعی جدید به شکل دایره ، با شعاع مشخص اضافه کنید "
   },
   {
+    "id": "draw_feature_type",
+    "en": "Feature type",
+    "fa": "نوع ویژگی"
+  },
+  {
     "id": "en",
     "en": "English",
     "fa": "انگلیسی"
@@ -1737,7 +1742,7 @@
   {
     "id": "btn_show_db_query_maker",
     "en": "API SQL query maker",
-    "fa": "API SQL سازنده پرس و جو "
+    "fa": "API SQL query maker"
   },
   {
     "id": "label_query_write",
@@ -1825,9 +1830,9 @@
     "fa": "ویرایش انتخاب شد "
   },
   {
-    "id": "btn_edit_source",
-    "en": "Manage sources",
-    "fa": "منابع را مدیریت کنید "
+    "id": "btn_edit_source_settings",
+    "en": "Edit source settings",
+    "fa": "تنظیمات منبع را ویرایش کنید"
   },
   {
     "id": "btn_source_overlap_utilities",
@@ -3061,8 +3066,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "fa": "مکدریت"
+    "en": "Transparency",
+    "fa": "شفافیت"
   },
   {
     "id": "schema_style_rule",
@@ -4035,9 +4040,9 @@
     "fa": "ویرایش فراداده منبع "
   },
   {
-    "id": "source_edit",
-    "en": "Edit source",
-    "fa": "منبع را ویرایش کنید "
+    "id": "source_edit_settings",
+    "en": "Edit source settings",
+    "fa": "تنظیمات منبع را ویرایش کنید"
   },
   {
     "id": "view_id",
@@ -6880,11 +6885,6 @@
     "fa": "ببند و این را به من یادآوری نکن"
   },
   {
-    "id": "search_show_api_config",
-    "en": "Get search API key and configuration",
-    "fa": "کلید و پیکربندی API جستجو را دریافت کنید"
-  },
-  {
     "id": "search_results_loading",
     "en": "Loading...",
     "fa": "بارگذاری..."
@@ -6898,6 +6898,26 @@
     "id": "search_results_empty",
     "en": "No views found",
     "fa": "هیچ نمایشی یافت نشد"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration",
+    "fa": "کلید و پیکربندی API جستجو را دریافت کنید"
+  },
+  {
+    "id": "search_api_key",
+    "en": "Search engine API key",
+    "fa": "کلید API موتور جستجو"
+  },
+  {
+    "id": "search_api_host",
+    "en": "Search engine API host",
+    "fa": "میزبان API موتور جستجو"
+  },
+  {
+    "id": "search_api_request_examples",
+    "en": "Exemples",
+    "fa": "نمونه ها"
   },
   {
     "id": "share_manager_title",
