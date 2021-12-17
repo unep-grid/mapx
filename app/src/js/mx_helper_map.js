@@ -1004,7 +1004,6 @@ export async function initMapx(o) {
       idGroup: 'search_index',
       callback: (data) => {
         if (mx.search) {
-          debugger;
           mx.search.setLanguage({
             language: data?.new_language
           });
