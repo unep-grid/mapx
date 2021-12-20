@@ -2286,6 +2286,7 @@ export function makeSimpleLayer(opt) {
           'icon-allow-overlap': true,
           'icon-ignore-placement': false,
           'icon-optional': true,
+          'icon-anchor' : 'bottom',
           'text-field': opt.showSymbolLabel ? opt.label + '' || '' : '',
           'text-variable-anchor': opt.showSymbolLabel
             ? ['bottom-left', 'bottom-right', 'top-right', 'top-left']
