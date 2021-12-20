@@ -13,16 +13,17 @@ export function buildLegendVt(view) {
   const isLine = h.path(view, 'data.geometry.type') == 'line';
   const isPolygon = h.path(view, 'data.geometry.type') == 'polygon';
   const isNumeric = h.path(view, 'data.attribute.type') !== 'string';
-
   const aElRules = [];
+
   let id = 0;
   for (const rule of rules) {
     const lang = h.checkLanguage({obj: rule, path: 'label_', concat: true});
     const label = h.firstOf([rule['label_' + lang], rule.value, 'No data']);
-    const hasSprite = !!rule.sprite;
     const inputId = h.makeId();
     const colStyle = {};
-
+    const hasSprite = !!rule.sprite;
+    const spriteImage = h.getSpriteImage(rule.sprite);
+    
     colStyle.opacity = rule.opacity;
     colStyle.backgroundColor = rule.color || '#FF0';
 
@@ -35,14 +36,14 @@ export function buildLegendVt(view) {
         colStyle.height = `${rule.size}px`;
         colStyle.width = `${rule.size}px`;
       } else {
-        colStyle.webkitMaskImage = rule.sprite;
+        colStyle.webkitMaskImage = `url(${spriteImage.url()})`;
         colStyle.webkitMaskSize = 'contain';
         colStyle.webkitMaskRepeat = 'no-repeat';
-        colStyle.maskImage = rule.sprite;
+        colStyle.maskImage = `url(${spriteImage.url()})`;
         colStyle.maskSize = 'contain';
         colStyle.maskRepeat = 'no-repeat';
-        colStyle.height = `${rule.size * 10}px`;
-        colStyle.width = `${rule.size * 10}px`;
+        colStyle.height = `${rule.size}px`;
+        colStyle.width = `${rule.size}px`;
       }
     }
 
@@ -71,7 +72,7 @@ export function buildLegendVt(view) {
               ? h.el('div', {
                   class: 'mx-legend-vt-rule-background',
                   style: {
-                    backgroundImage: rule.sprite
+                    backgroundImage: `url(${spriteImage.url()})`
                   }
                 })
               : null

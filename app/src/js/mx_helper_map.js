@@ -2117,6 +2117,43 @@ export function viewLiAction(o) {
 }
 
 /**
+ * Get sprite / image data from mapbox imageManager
+ * @param {String} id Sprite id
+ * @return {Object} Sprite {<height>,<width>,<widthDrp>,<heightDpr>,<url()>}
+ */
+export function getSpriteImage(id) {
+  if (!id) {
+    return;
+  }
+  const map = mx.helpers.getMap();
+  const sprite = map.style.imageManager.images[id];
+  if (!sprite) {
+    console.warn(`Unknown sprite ${id}`);
+  }
+  const out = {
+    widthDpr: sprite.data.width,
+    heightDpr: sprite.data.height,
+    width: sprite.data.width / sprite.pixelRatio,
+    height: sprite.data.height / sprite.pixelRatio
+  };
+
+  out.url = () => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = out.widthDpr;
+    canvas.height = out.heightDpr;
+    canvas.style.height = `${out.height}px`;
+    canvas.style.width = `${out.width}px`;
+    const imData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    imData.data.set(sprite.data.data);
+    ctx.putImageData(imData, 0, 0);
+    return canvas.toDataURL('image/png');
+  };
+
+  return out;
+}
+
+/**
  * Create a simple layer
  * @param {object} opt Options
  * @param {string} opt.id Id of the layer
@@ -2137,7 +2174,6 @@ export function viewLiAction(o) {
  */
 export function makeSimpleLayer(opt) {
   const h = mx.helpers;
-  let colA, colB, layer;
 
   /**
    * Will be stored as layer.meta
@@ -2168,6 +2204,15 @@ export function makeSimpleLayer(opt) {
 
   h.updateIfEmpty(opt, def);
 
+  if (!opt.id) {
+    console.warn('makeSimpleLayer: layer with no ID');
+    return;
+  }
+
+  /**
+   * Size / Zoom factor
+   */
+
   if (h.isEmpty(opt.size)) {
     switch (opt.geomType) {
       case 'point':
@@ -2180,16 +2225,13 @@ export function makeSimpleLayer(opt) {
         opt.size = 2;
     }
   }
-
-  if (!opt.id) {
-    console.warn('makeSimpleLayer: layer with no ID');
-    return;
-  }
-
   if (opt.sprite === 'none') {
     opt.sprite = null;
   }
-
+  if (opt.sprite) {
+    const spriteImage = h.getSpriteImage(opt.sprite);
+    opt.size = opt.size / spriteImage.width;
+  }
   const funSizeByZoom = [
     'interpolate',
     ['exponential', opt.sizeFactorZoomExponent],
@@ -2199,114 +2241,117 @@ export function makeSimpleLayer(opt) {
     opt.zoomMax,
     opt.sizeFactorZoomMax * opt.size
   ];
-
-  opt.size =
-    opt.sizeFactorZoomMax > 0 || opt.sizeFactorZoomMin > 0
-      ? funSizeByZoom
-      : opt.size;
-
-  if (!opt.hexColor) {
-    /*
-     * could be a default, but to avoid using chroma
-     * each time..
-     */
-    opt.hexColor = chroma.random().hex();
-  }
-
-  colA = opt.hexColor;
-  colB = opt.hexColor;
+  const hasZoomFactor =
+    opt.sizeFactorZoomMax !== 0 || opt.sizeFactorZoomMin !== 0;
+  opt.size = hasZoomFactor ? funSizeByZoom : opt.size;
 
   /**
-   * Extract hex
+   * Color
    */
-  colA = chroma(colA)
+
+  if (!opt.hexColor) {
+    opt.hexColor = chroma.random().hex();
+  }
+  const colA = chroma(opt.hexColor)
     .alpha(opt.opacity)
     .css();
-  colB = chroma(colB)
+  const colB = chroma(opt.hexColor)
     .alpha(opt.opacity)
     .darken(1)
     .css();
 
-  layer = {
-    symbol: {
-      type: 'symbol',
-      layout: {
-        'icon-image': opt.sprite,
-        'icon-size': opt.size,
-        'icon-allow-overlap': true,
-        'icon-ignore-placement': false,
-        'icon-optional': true,
-        'text-field': opt.showSymbolLabel ? opt.label + '' || '' : '',
-        'text-variable-anchor': opt.showSymbolLabel
-          ? ['bottom-left', 'bottom-right', 'top-right', 'top-left']
-          : [],
-        'text-font': ['Arial'],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 1, 10, 18, 20],
-        'text-radial-offset': 1.2,
-        'text-justify': 'auto'
-      },
-      paint: {
-        'icon-opacity': opt.opacity || 1,
-        'icon-halo-width': 0,
-        'icon-halo-color': colB,
-        'icon-color': colA,
-        'text-color': colA,
-        'text-halo-color': '#FFF',
-        'text-halo-blur': 0,
-        'text-halo-width': 1.2,
-        'text-translate': [0, 0]
-      }
-    },
-    point: {
-      type: 'circle',
-      paint: {
-        //'circle-opacity': opt.opacity,
-        'circle-color': colA,
-        'circle-radius': opt.size
-      }
-    },
-    polygon: {
-      type: 'fill',
-      paint: {
-        'fill-color': colA,
-        'fill-outline-color': colB
-      }
-    },
-    pattern: {
-      type: 'fill',
-      paint: {
-        //'fill-opacity': opt.opacity,
-        'fill-pattern': opt.sprite,
-        'fill-antialias': false
-      }
-    },
-    line: {
-      type: 'line',
-      paint: {
-        'line-color': colA,
-        //'line-opacity': opt.opacity,
-        'line-width': opt.size
-      },
-      layout: {
-        'line-cap': 'round',
-        'line-join': 'round'
-      }
-    }
+  /**
+   * Base layer
+   */
+  const layer = {
+    id: `${opt.id}${opt.idSuffix}`,
+    source: opt.idSource,
+    minzoom: opt.zoomMin,
+    maxzoom: opt.zoomMax,
+    filter: opt.filter,
+    'source-layer': opt.idSourceLayer,
+    metadata: opt
   };
 
-  layer = layer[opt.geomType];
-
-  layer.id = `${opt.id}${opt.idSuffix}`;
-  layer.source = opt.idSource;
-  layer.minzoom = opt.zoomMin;
-  layer.maxzoom = opt.zoomMax;
-  layer.filter = opt.filter;
-  layer['source-layer'] = opt.idSourceLayer;
-
-  /*
-   * MapX stuff
+  /**
+   * Geom specific
    */
-  layer.metadata = opt;
+  switch (opt.geomType) {
+    case 'symbol':
+      Object.assign(layer, {
+        type: 'symbol',
+        layout: {
+          'icon-image': opt.sprite,
+          'icon-size': opt.size,
+          'icon-allow-overlap': true,
+          'icon-ignore-placement': false,
+          'icon-optional': true,
+          'text-field': opt.showSymbolLabel ? opt.label + '' || '' : '',
+          'text-variable-anchor': opt.showSymbolLabel
+            ? ['bottom-left', 'bottom-right', 'top-right', 'top-left']
+            : [],
+          'text-font': ['Arial'],
+          'text-size': ['interpolate', ['linear'], ['zoom'], 1, 10, 18, 20],
+          'text-radial-offset': 1.2,
+          'text-justify': 'auto'
+        },
+        paint: {
+          'icon-opacity': opt.opacity || 1,
+          'icon-halo-width': 0,
+          'icon-halo-color': colB,
+          'icon-color': colA,
+          'text-color': colA,
+          'text-halo-color': '#FFF',
+          'text-halo-blur': 0,
+          'text-halo-width': 1.2,
+          'text-translate': [0, 0]
+        }
+      });
+      break;
+    case 'point':
+      Object.assign(layer, {
+        type: 'circle',
+        paint: {
+          'circle-color': colA,
+          'circle-radius': opt.size / 2
+        }
+      });
+      break;
+    case 'polygon':
+      Object.assign(layer, {
+        type: 'fill',
+        paint: {
+          'fill-color': colA,
+          'fill-outline-color': colB
+        }
+      });
+      break;
+    case 'pattern':
+      Object.assign(layer, {
+        type: 'fill',
+        paint: {
+          'fill-pattern': opt.sprite,
+          'fill-antialias': false
+        }
+      });
+      break;
+    case 'line':
+      Object.assign(layer, {
+        type: 'line',
+        paint: {
+          'line-color': colA,
+          'line-width': opt.size
+        },
+        layout: {
+          'line-cap': 'round',
+          'line-join': 'round'
+        }
+      });
+      break;
+    default:
+      throw new Error(`${opt.geomType} not supported`);
+  }
+
   return layer;
 }
 
@@ -3079,12 +3124,13 @@ export function viewSetFilter(o) {
  */
 export function viewSetOpacity(o) {
   o = o || {};
+  const h = mx.helpers;
   const view = this;
   const idView = view.id;
   const opacity = o.opacity;
   const idMap = view._idMap ? view._idMap : mx.settings.map.id;
-  const map = mx.helpers.getMap(idMap);
-  const layers = mx.helpers.getLayerByPrefix({
+  const map = h.getMap(idMap);
+  const layers = h.getLayerByPrefix({
     map: map,
     prefix: idView
   });
@@ -4089,6 +4135,7 @@ export async function viewLayersAddVt(o) {
   const geomType = p(viewData, 'geometry.type', 'point');
   const source = p(viewData, 'source', {});
   const idSourceLayer = p(source, 'layerInfo.name');
+  let idInc = 0; // increment layer id last part
 
   /**
    * No layer id = stop;
@@ -4421,6 +4468,7 @@ export async function viewLayersAddVt(o) {
         });
 
         const layerSprite = _build_layer({
+          position: position,
           geomType: 'symbol',
           label: label,
           hexColor: rule.color,
@@ -4439,6 +4487,7 @@ export async function viewLayersAddVt(o) {
    * Handle layers order based on position
    */
   sortLayers(layers);
+  console.log(layers);
 
   /**
    * Handle layer for null values
@@ -4497,15 +4546,13 @@ export async function viewLayersAddVt(o) {
         ruleNext.value === rule.value &&
         ruleNext.color === rule.color;
 
-      if (hasSprite) {
-        rule.sprite = `url(sprites/svg/${rule.sprite}.svg)`;
-      } else {
+      if (!hasSprite) {
         rule.sprite = null;
       }
 
       if (isDuplicated) {
         if (nextHasSprite) {
-          rule.sprite = `${rule.sprite},url(sprites/svg/${ruleNext.sprite}.svg`;
+          rule.sprite = ruleNext.sprite;
         }
         idRulesToRemove.push(pos);
       }
@@ -4519,7 +4566,6 @@ export async function viewLayersAddVt(o) {
      * Add legend using template
      */
     view._rulesLegend = rulesLegend;
-
     const elLegend = h.elLegend(view, {
       type: 'vt',
       removeOld: true,
@@ -4551,6 +4597,7 @@ export async function viewLayersAddVt(o) {
     /*
      * Add layers to map
      */
+
     await addLayers(layers, o.before);
     await viewsLayersOrderUpdate();
 
@@ -4581,7 +4628,9 @@ export async function viewLayersAddVt(o) {
     );
 
     if (!config.id) {
-      config.id = idView + sepLayer + config.position + '_' + config.priority;
+      config.id = `${idView}${sepLayer}${config.position}_${
+        config.priority
+      }_${idInc++}`;
     }
 
     return makeSimpleLayer(config);
@@ -4729,6 +4778,7 @@ export async function viewModulesRemove(view) {
   if (h.isFunction(view._onRemoveCustomView)) {
     view._onRemoveCustomView();
   }
+
   if (h.isElement(view._elLegend)) {
     view._elLegend.remove();
     delete view._elLegend;

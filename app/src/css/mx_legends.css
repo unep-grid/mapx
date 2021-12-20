@@ -94,6 +94,8 @@
   width: 100%;
   height: 100%;
   position: absolute;
+  background-repeat: repeat;
+  background-size: 50%;
 }
 
 .mx-legend-vt-rule-color {
