@@ -11,9 +11,9 @@
   "author": "Fred Moser",
   "license": "MIT",
   "dependencies": {
-    "@mapbox/spritezero": "^7.0.0",
+    "@mapbox/spritezero": "^8.0.0",
     "fontmachine": "^0.2.0",
     "node-gzip": "^1.1.2",
-    "webfont": "^9.0.0"
+    "webfont": "^11.2.26"
   }
 }
