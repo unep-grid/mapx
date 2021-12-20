@@ -3066,8 +3066,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Transparency",
-    "es": "Transparencia"
+    "en": "Opacity",
+    "es": "Opacidad"
   },
   {
     "id": "schema_style_rule",

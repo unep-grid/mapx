@@ -7970,16 +7970,16 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Transparency",
-    "fr": "Transparence",
-    "es": "Transparencia",
-    "ru": "Прозрачность",
-    "zh": "透明度",
-    "ar": "الشفافية",
-    "fa": "شفافیت",
-    "ps": "روڼتیا",
-    "bn": "স্বচ্ছতা",
-    "de": "Transparenz"
+    "en": "Opacity",
+    "fr": "Opacité",
+    "es": "Opacidad",
+    "ru": "Непрозрачность",
+    "zh": "不透明度",
+    "ar": "العتامة",
+    "fa": "کدورت",
+    "ps": "شفافیت",
+    "bn": "অস্বচ্ছতা",
+    "de": "Opazität"
   },
   {
     "id": "schema_style_rule",

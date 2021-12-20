@@ -3066,8 +3066,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Transparency",
-    "ar": "الشفافية"
+    "en": "Opacity",
+    "ar": "العتامة"
   },
   {
     "id": "schema_style_rule",

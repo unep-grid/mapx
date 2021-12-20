@@ -3066,8 +3066,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Transparency",
-    "zh": "透明度"
+    "en": "Opacity",
+    "zh": "不透明度"
   },
   {
     "id": "schema_style_rule",

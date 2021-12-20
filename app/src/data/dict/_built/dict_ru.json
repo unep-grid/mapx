@@ -3066,8 +3066,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Transparency",
-    "ru": "Прозрачность"
+    "en": "Opacity",
+    "ru": "Непрозрачность"
   },
   {
     "id": "schema_style_rule",

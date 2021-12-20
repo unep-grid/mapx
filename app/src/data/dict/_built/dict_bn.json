@@ -3066,8 +3066,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Transparency",
-    "bn": "স্বচ্ছতা"
+    "en": "Opacity",
+    "bn": "অস্বচ্ছতা"
   },
   {
     "id": "schema_style_rule",
