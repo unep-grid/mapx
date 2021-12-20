@@ -1,7 +1,11 @@
-  - [1.9.36-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.36-alpha.1) 
-
+  - [1.9.36](https://github.com/unep-grid/map-x-mgl/tree/1.9.36) \n
+      
       - APP 
-          - Added support for setting project's projection
+          - Added support for setting project's map projection ( experimental )
+          - Improved symbols size rendering : symbols size should always map the size defined in pixels, except if "set size by zoom" is modified.
+          - Replaced geol hatched patterns by generated patterns
+          - Symbols anchor is set to bottom : if the map is tilted and rotated, they rotate along their Y axis and keep their initial positions. 
+           
   - [1.9.35](https://github.com/unep-grid/map-x-mgl/tree/1.9.35) \n
 
       - APP
