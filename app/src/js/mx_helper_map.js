@@ -2232,18 +2232,8 @@ export function makeSimpleLayer(opt) {
     const spriteImage = h.getSpriteImage(opt.sprite);
     opt.size = opt.size / spriteImage.width;
   }
-  const funSizeByZoom = [
-    'interpolate',
-    ['exponential', opt.sizeFactorZoomExponent],
-    ['zoom'],
-    opt.zoomMin,
-    opt.sizeFactorZoomMin * opt.size,
-    opt.zoomMax,
-    opt.sizeFactorZoomMax * opt.size
-  ];
-  const hasZoomFactor =
-    opt.sizeFactorZoomMax !== 0 || opt.sizeFactorZoomMin !== 0;
-  opt.size = hasZoomFactor ? funSizeByZoom : opt.size;
+ 
+
 
   /**
    * Color
@@ -2282,7 +2272,7 @@ export function makeSimpleLayer(opt) {
         type: 'symbol',
         layout: {
           'icon-image': opt.sprite,
-          'icon-size': opt.size,
+          'icon-size': size(),
           'icon-allow-overlap': true,
           'icon-ignore-placement': false,
           'icon-optional': true,
@@ -2314,7 +2304,7 @@ export function makeSimpleLayer(opt) {
         type: 'circle',
         paint: {
           'circle-color': colA,
-          'circle-radius': opt.size / 2
+          'circle-radius': size(0.5)
         }
       });
       break;
@@ -2323,7 +2313,8 @@ export function makeSimpleLayer(opt) {
         type: 'fill',
         paint: {
           'fill-color': colA,
-          'fill-outline-color': colB
+          //'fill-outline-color': colB
+          'fill-outline-color': 'rgba(0,0,0,0)'
         }
       });
       break;
@@ -2341,7 +2332,7 @@ export function makeSimpleLayer(opt) {
         type: 'line',
         paint: {
           'line-color': colA,
-          'line-width': opt.size
+          'line-width': size()
         },
         layout: {
           'line-cap': 'round',
@@ -2354,6 +2345,28 @@ export function makeSimpleLayer(opt) {
   }
 
   return layer;
+
+
+  function size(baseFactor){
+    const b =  baseFactor || 1;
+    const size = opt.size;
+    const hasZoomFactor =
+    opt.sizeFactorZoomMax !== 0 || opt.sizeFactorZoomMin !== 0;
+    if(!hasZoomFactor){
+     return size * baseFactor;
+    }
+    return [
+    'interpolate',
+    ['exponential', opt.sizeFactorZoomExponent],
+    ['zoom'],
+    opt.zoomMin,
+    opt.sizeFactorZoomMin * opt.size * b,
+    opt.zoomMax,
+    opt.sizeFactorZoomMax * opt.size * b
+  ];
+
+
+  }
 }
 
 /**
