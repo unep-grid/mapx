@@ -4501,7 +4501,6 @@ export async function viewLayersAddVt(o) {
    * Handle layers order based on position
    */
   sortLayers(layers);
-  console.log(layers);
 
   /**
    * Handle layer for null values
