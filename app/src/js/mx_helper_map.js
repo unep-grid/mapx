@@ -2353,7 +2353,7 @@ export function makeSimpleLayer(opt) {
     const hasZoomFactor =
     opt.sizeFactorZoomMax !== 0 || opt.sizeFactorZoomMin !== 0;
     if(!hasZoomFactor){
-     return size * baseFactor;
+     return size * b;
     }
     return [
     'interpolate',
