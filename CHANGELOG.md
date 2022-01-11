@@ -1,3 +1,12 @@
+  - [1.9.37](https://github.com/unep-grid/map-x-mgl/tree/1.9.37) 
+
+      - APP/SDK 
+          - Fix issue with projects change events not being fired correctly: impacted SDK
+          - Fix line and symbols not rendering (NaN size)
+          - Solves issue with point diameter->radius when using custom zoom function
+      - Internal
+          - Build script, missing -e in echo: new line returned as text. Fixed changelog too
+
   - [1.9.36](https://github.com/unep-grid/map-x-mgl/tree/1.9.36)
       
       - APP 
