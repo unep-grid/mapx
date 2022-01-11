@@ -82,7 +82,7 @@ perl -pi -e $REP_APP_TAG ./docker-compose.yml
 #echo "- <a href='${REPO}/tree/${NEW_VERSION}' target='_blank'>${NEW_VERSION}</a>"\
 
 echo "Write changes"
-echo "  - [${NEW_VERSION}](${REPO}/tree/${NEW_VERSION}) \n"\
+echo -e "  - [${NEW_VERSION}](${REPO}/tree/${NEW_VERSION}) \n"\
   > $CHANGELOG_TMP
 cat $CHANGELOG >> $CHANGELOG_TMP
 cp $CHANGELOG_TMP $CHANGELOG 

@@ -1,4 +1,4 @@
-  - [1.9.36](https://github.com/unep-grid/map-x-mgl/tree/1.9.36) \n
+  - [1.9.36](https://github.com/unep-grid/map-x-mgl/tree/1.9.36)
       
       - APP 
           - Added support for setting project's map projection ( experimental )
@@ -6,7 +6,7 @@
           - Replaced geol hatched patterns by generated patterns
           - Symbols anchor is set to bottom : if the map is tilted and rotated, they rotate along their Y axis and keep their initial positions. 
            
-  - [1.9.35](https://github.com/unep-grid/map-x-mgl/tree/1.9.35) \n
+  - [1.9.35](https://github.com/unep-grid/map-x-mgl/tree/1.9.35)
 
       - APP
           - Clean version + changelog 
