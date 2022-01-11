@@ -433,9 +433,12 @@ export async function setProject(idProject, opt) {
       mx.events.once('settings_project_change'),
       mx.events.once('views_list_updated')
     ]);
+
     const idProjectNew = h.path(r[0], 'new_project');
-    if (idProjectNew !== idProject) {
-      console.warn('Project did not change', {idProjectNew, idProject});
+    const idProjectOld = h.path(r[0], 'old_project');
+   
+    if (idProjectNew === idProjectOld) {
+      console.warn('Project did not change', {idProjectNew, idProjectOld});
       return false;
     }
     if (h.isFunction(opt.onSuccess)) {
@@ -448,6 +451,7 @@ export async function setProject(idProject, opt) {
         old_project: idCurrentProject
       }
     });
+    return true;
   }
 }
 

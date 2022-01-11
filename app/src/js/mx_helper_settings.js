@@ -29,15 +29,15 @@ export function updateSettings(o) {
       }
     });
   }
-  const projectChange = diff(oldSettings.project.id, mx.settings.project.id);
-
+  const projectChange = diff(oldSettings.project, mx.settings.project);
+ 
   if (projectChange) {
     mx.events.fire({
       type: 'settings_project_change',
       data: {
         delta: projectChange,
-        old_project: oldSettings.project.id,
-        new_project: mx.settings.project.id
+        old_project: oldSettings?.project?.id,
+        new_project: mx.settings?.project?.id
       }
     });
   }

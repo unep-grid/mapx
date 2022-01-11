@@ -109,6 +109,7 @@ class RasterMiniMap {
      */
     mm.elMap = document.createElement('div');
     mm.el.appendChild(mm.elMap);
+
     mm.map = new mapboxgl.Map({
       preserveDrawingBuffer: true,
       fadeDuration: 0,
