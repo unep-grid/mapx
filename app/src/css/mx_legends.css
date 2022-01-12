@@ -81,12 +81,10 @@
 }
 
 .mx-legend-vt-rule-color-wrapper {
-  max-height: 25px;
-  overflow: visible;
-  display: flex;
-  align-items: center;
-  max-height: 100%;
-  position: relative;
+    position: relative;
+    max-height: 100px;
+    max-width: 100px;
+    overflow: hidden;
 }
 
 .mx-legend-vt-rule-background {
@@ -101,7 +99,6 @@
 .mx-legend-vt-rule-color {
   height: 25px;
   width: 25px;
-  cursor: e-resize;
 }
 
 .mx-legend-vt-rule-content {

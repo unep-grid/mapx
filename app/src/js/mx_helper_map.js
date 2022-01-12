@@ -2127,14 +2127,14 @@ export function viewLiAction(o) {
  * @param {String} opt.color Optional color suported by chroma
  * @return {Object} Sprite {<height>,<width>,<widthDrp>,<heightDpr>,<url()>}
  */
-export function getSpriteImage(id,opt) {
+export function getSpriteImage(id, opt) {
+  const h = mx.helpers;
   if (!id) {
     return;
   }
 
-  opt = Object.assign({},{color:null},opt);
+  h.updateIfEmpty(opt, {color: null});
 
-  
   const map = mx.helpers.getMap();
   const sprite = map.style.imageManager.images[id];
   if (!sprite) {
@@ -2158,12 +2158,12 @@ export function getSpriteImage(id,opt) {
     const imData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     imData.data.set(sprite.data.data);
     if (color) {
-      const rgb = chroma(color).rgb();
+      const rgba = chroma(color).rgba();
       for (let i = 0; i < imData.data.length; i++) {
         const a = imData.data[i + 3];
         if (a > 0) {
-          for (let j = 0; j < 3; j++) {
-            imData.data[i + j] = rgb[j];
+          for (let j = 0; j < 4; j++) {
+            imData.data[i + j] = j === 3 ? ~~(rgba[j] * 255) : rgba[j];
           }
         }
       }

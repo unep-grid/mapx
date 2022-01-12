@@ -1,3 +1,5 @@
+import chroma from 'chroma-js';
+
 export function buildLegendVt(view) {
   const h = mx.helpers;
   const rules =
@@ -14,40 +16,50 @@ export function buildLegendVt(view) {
   const isPolygon = h.path(view, 'data.geometry.type') == 'polygon';
   const isNumeric = h.path(view, 'data.attribute.type') !== 'string';
   const aElRules = [];
+   
+
 
   let id = 0;
   for (const rule of rules) {
+    // TODO:this last minute default update should be handled in previous steps.. 
+    h.updateIfEmpty(rule,{opacity:1,color:'#F0F'})
+
+    /*
+    * Configure legend item
+    */  
     const lang = h.checkLanguage({obj: rule, path: 'label_', concat: true});
     const label = h.firstOf([rule['label_' + lang], rule.value, 'No data']);
     const inputId = h.makeId();
     const colStyle = {};
     const hasSprite = !!rule.sprite;
-    const spriteImage = hasSprite ? h.getSpriteImage(rule.sprite, isPoint? rule.color : null) : null;
-    
-    colStyle.opacity = rule.opacity;
+    const color = chroma(rule.color).alpha(rule.opacity).css();
+    const spriteImage = hasSprite
+      ? h.getSpriteImage(rule.sprite, {color:isPoint ? color : null})
+      : null;
+
+    //colStyle.opacity = rule.opacity;
 
     if (isLine) {
-      colStyle.backgroundColor = rule.color || '#FF0';
+      colStyle.backgroundColor = color ;
       colStyle.height = `${rule.size}px`;
     }
-    if(isPolygon){
-      colStyle.backgroundColor = rule.color || '#FF0';
+    if (isPolygon) {
+      colStyle.backgroundColor = color;
     }
     if (isPoint) {
       if (!hasSprite) {
         colStyle.borderRadius = `50%`;
         colStyle.height = `${rule.size}px`;
         colStyle.width = `${rule.size}px`;
+        colStyle.backgroundColor = color;
       } else {
-        colStyle.backgroundImage = `url(${spriteImage.url(rule.color)})`; 
+        colStyle.backgroundImage = `url(${spriteImage.url(color)})`;
         colStyle.backgroundSize = `${rule.size}px ${rule.size}px`;
         colStyle.backgroundRepeat = 'no-repeat';
         colStyle.height = `${rule.size}px`;
         colStyle.width = `${rule.size}px`;
       }
     }
-
-
 
     const elRule = h.el(
       'tr',
@@ -66,10 +78,7 @@ export function buildLegendVt(view) {
           {
             class: 'mx-legend-vt-td'
           },
-          h.el(
-            'div',
-            {class: 'mx-legend-vt-rule-color-wrapper'},
-            h.el('div', {class: 'mx-legend-vt-rule-color', style: colStyle}),
+          h.el('div', {class: 'mx-legend-vt-rule-color-wrapper'}, [
             isPolygon && hasSprite
               ? h.el('div', {
                   class: 'mx-legend-vt-rule-background',
@@ -77,8 +86,9 @@ export function buildLegendVt(view) {
                     backgroundImage: `url(${spriteImage.url()})`
                   }
                 })
-              : null
-          )
+              : null,
+            h.el('div', {class: 'mx-legend-vt-rule-color', style: colStyle})
+          ])
         ),
         h.el(
           'td',
