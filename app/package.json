@@ -46,7 +46,7 @@
     "modernizr": "^3.11.8",
     "modernizr-loader": "^1.0.1",
     "modernizr-webpack-plugin": "^1.0.7",
-    "papaparse": "^4.6.3",
+    "papaparse": "^5.2.0",
     "postcss-cssnext": "^3.1.1",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",
