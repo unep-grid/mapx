@@ -436,7 +436,7 @@ export async function setProject(idProject, opt) {
 
     const idProjectNew = h.path(r[0], 'new_project');
     const idProjectOld = h.path(r[0], 'old_project');
-   
+
     if (idProjectNew === idProjectOld) {
       console.warn('Project did not change', {idProjectNew, idProjectOld});
       return false;
@@ -2123,12 +2123,18 @@ export function viewLiAction(o) {
 /**
  * Get sprite / image data from mapbox imageManager
  * @param {String} id Sprite id
+ * @param {Object} opt Options
+ * @param {String} opt.color Optional color suported by chroma
  * @return {Object} Sprite {<height>,<width>,<widthDrp>,<heightDpr>,<url()>}
  */
-export function getSpriteImage(id) {
+export function getSpriteImage(id,opt) {
   if (!id) {
     return;
   }
+
+  opt = Object.assign({},{color:null},opt);
+
+  
   const map = mx.helpers.getMap();
   const sprite = map.style.imageManager.images[id];
   if (!sprite) {
@@ -2141,7 +2147,8 @@ export function getSpriteImage(id) {
     height: sprite.data.height / sprite.pixelRatio
   };
 
-  out.url = () => {
+  out.url = (color) => {
+    color = color || opt.color;
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = out.widthDpr;
@@ -2150,6 +2157,17 @@ export function getSpriteImage(id) {
     canvas.style.width = `${out.width}px`;
     const imData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     imData.data.set(sprite.data.data);
+    if (color) {
+      const rgb = chroma(color).rgb();
+      for (let i = 0; i < imData.data.length; i++) {
+        const a = imData.data[i + 3];
+        if (a > 0) {
+          for (let j = 0; j < 3; j++) {
+            imData.data[i + j] = rgb[j];
+          }
+        }
+      }
+    }
     ctx.putImageData(imData, 0, 0);
     return canvas.toDataURL('image/png');
   };
@@ -2236,8 +2254,6 @@ export function makeSimpleLayer(opt) {
     const spriteImage = h.getSpriteImage(opt.sprite);
     opt.size = opt.size / spriteImage.width;
   }
- 
-
 
   /**
    * Color
@@ -2280,7 +2296,7 @@ export function makeSimpleLayer(opt) {
           'icon-allow-overlap': true,
           'icon-ignore-placement': false,
           'icon-optional': true,
-          'icon-anchor' : 'bottom',
+          'icon-anchor': 'bottom',
           'text-field': opt.showSymbolLabel ? opt.label + '' || '' : '',
           'text-variable-anchor': opt.showSymbolLabel
             ? ['bottom-left', 'bottom-right', 'top-right', 'top-left']
@@ -2350,26 +2366,23 @@ export function makeSimpleLayer(opt) {
 
   return layer;
 
-
-  function size(baseFactor){
-    const b =  baseFactor || 1;
+  function size(baseFactor) {
+    const b = baseFactor || 1;
     const size = opt.size;
     const hasZoomFactor =
-    opt.sizeFactorZoomMax !== 0 || opt.sizeFactorZoomMin !== 0;
-    if(!hasZoomFactor){
-     return size * b;
+      opt.sizeFactorZoomMax !== 0 || opt.sizeFactorZoomMin !== 0;
+    if (!hasZoomFactor) {
+      return size * b;
     }
     return [
-    'interpolate',
-    ['exponential', opt.sizeFactorZoomExponent],
-    ['zoom'],
-    opt.zoomMin,
-    opt.sizeFactorZoomMin * opt.size * b,
-    opt.zoomMax,
-    opt.sizeFactorZoomMax * opt.size * b
-  ];
-
-
+      'interpolate',
+      ['exponential', opt.sizeFactorZoomExponent],
+      ['zoom'],
+      opt.zoomMin,
+      opt.sizeFactorZoomMin * opt.size * b,
+      opt.zoomMax,
+      opt.sizeFactorZoomMax * opt.size * b
+    ];
   }
 }
 

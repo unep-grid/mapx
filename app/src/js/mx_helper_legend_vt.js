@@ -22,13 +22,16 @@ export function buildLegendVt(view) {
     const inputId = h.makeId();
     const colStyle = {};
     const hasSprite = !!rule.sprite;
-    const spriteImage = h.getSpriteImage(rule.sprite);
+    const spriteImage = hasSprite ? h.getSpriteImage(rule.sprite, isPoint? rule.color : null) : null;
     
     colStyle.opacity = rule.opacity;
-    colStyle.backgroundColor = rule.color || '#FF0';
 
     if (isLine) {
+      colStyle.backgroundColor = rule.color || '#FF0';
       colStyle.height = `${rule.size}px`;
+    }
+    if(isPolygon){
+      colStyle.backgroundColor = rule.color || '#FF0';
     }
     if (isPoint) {
       if (!hasSprite) {
@@ -36,16 +39,15 @@ export function buildLegendVt(view) {
         colStyle.height = `${rule.size}px`;
         colStyle.width = `${rule.size}px`;
       } else {
-        colStyle.webkitMaskImage = `url(${spriteImage.url()})`;
-        colStyle.webkitMaskSize = 'contain';
-        colStyle.webkitMaskRepeat = 'no-repeat';
-        colStyle.maskImage = `url(${spriteImage.url()})`;
-        colStyle.maskSize = 'contain';
-        colStyle.maskRepeat = 'no-repeat';
+        colStyle.backgroundImage = `url(${spriteImage.url(rule.color)})`; 
+        colStyle.backgroundSize = `${rule.size}px ${rule.size}px`;
+        colStyle.backgroundRepeat = 'no-repeat';
         colStyle.height = `${rule.size}px`;
         colStyle.width = `${rule.size}px`;
       }
     }
+
+
 
     const elRule = h.el(
       'tr',
