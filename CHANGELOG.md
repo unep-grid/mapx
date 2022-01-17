@@ -1,3 +1,8 @@
+  - [1.9.39-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.1) 
+
+      - APP  
+          - Story image uploader : solved rotate + crop issue ( #783 )
+
   - [1.9.38](https://github.com/unep-grid/map-x-mgl/tree/1.9.38) 
 
       - APP 
