@@ -1,4 +1,4 @@
-import {sendData,path} from './../mx_helper_misc.js';
+import {sendData, path} from './../mx_helper_misc.js';
 import {getApiUrl} from './../mx_helper_map.js';
 import {modal} from './../mx_helper_modal.js';
 
@@ -37,12 +37,10 @@ const customStyle = [
  * @param {Object} sate Story state
  */
 export async function initEditing(state) {
-
-  if(state._init_editing){
-     return;
+  if (state._init_editing) {
+    return;
   }
   state._init_editing = true;
-
 
   const m = await Promise.all([
     import('ContentTools'),
@@ -94,7 +92,7 @@ export async function initEditing(state) {
     /**
      * Set a remove function for custom buttons
      */
-    state.ct_editor_remove = ()=>{
+    state.ct_editor_remove = () => {
       state.ct_editor.destroy();
     };
 
@@ -111,7 +109,7 @@ export async function initEditing(state) {
     /**
      * On start
      */
-    state.ct_editor.addEventListener('start', ()=>{
+    state.ct_editor.addEventListener('start', () => {
       elBtnModalSave.setAttribute('disabled', true);
       elBtnModalPreview.setAttribute('disabled', true);
       //elBtnStoryClose.setAttribute("disabled",true);
@@ -125,7 +123,7 @@ export async function initEditing(state) {
     /**
      * On cancel
      */
-    state.ct_editor.addEventListener('revert', ()=>{
+    state.ct_editor.addEventListener('revert', () => {
       elBtnModalSave.removeAttribute('disabled');
       elBtnModalPreview.removeAttribute('disabled');
       elModalEditView.classList.remove('mx-hide');
@@ -138,7 +136,7 @@ export async function initEditing(state) {
     /**
      * On save
      */
-    state.ct_editor.addEventListener('saved',function(ev){
+    state.ct_editor.addEventListener('saved', function(ev) {
       elBtnModalSave.removeAttribute('disabled');
       elBtnModalPreview.removeAttribute('disabled');
       elModalEditView.classList.remove('mx-hide');
@@ -175,7 +173,7 @@ export async function initEditing(state) {
 }
 
 function contentToolsImageUploader(dialog) {
-  let image, url, xhr, height, width, type;
+  let image, url, xhr, height, width, type, x, y;
 
   /**
    * Cancel upload
@@ -214,7 +212,7 @@ function contentToolsImageUploader(dialog) {
       image.onload = function() {
         width = this.width;
         height = this.height;
-        setMaxWidth(1200, function(url, width, height) {
+        setMaxWidth(1200, (url, width, height) => {
           dialog.populate(url, [width, height]);
         });
       };
@@ -225,21 +223,31 @@ function contentToolsImageUploader(dialog) {
    * Insert image
    */
   dialog.addEventListener('imageuploader.save', function() {
-    if (path(mx, 'settings.user.guest')) {
+    if (!mx.settings.user.roles.publisher) {
       return;
     }
     const canvas = document.createElement('canvas');
     canvas.height = height;
     canvas.width = width;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(image, 0, 0);
+
+    const cropRegion = dialog.cropRegion();
+    const cropX = parseInt(image.width * cropRegion[1]);
+    const cropY = parseInt(image.height * cropRegion[0]);
+    const cropW = parseInt(image.width * (cropRegion[3] - cropRegion[1]));
+    const cropH = parseInt(image.height * (cropRegion[2] - cropRegion[0]));
+
+    canvas.width = cropW;
+    canvas.height = cropH;
+    ctx.drawImage(image, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
     ctx.save();
+
     canvas.toBlob(
       function(blob) {
         const form = new FormData();
         form.append('image', blob);
-        form.append('width', width);
-        form.append('height', height);
+        form.append('width', cropW);
+        form.append('height', cropH);
         form.append('token', path(mx, 'settings.user.token'));
         form.append('idUser', path(mx, 'settings.user.id'));
         form.append('project', path(mx, 'settings.project.id'));
@@ -267,7 +275,7 @@ function contentToolsImageUploader(dialog) {
             });
           },
           onError: function(er) {
-          modal({
+            modal({
               title: 'Error during the upload',
               content: 'An error occured during the upload : ' + er,
               styleString: 'z-index:11000'
@@ -298,7 +306,6 @@ function contentToolsImageUploader(dialog) {
 
   function setMaxWidth(maxWidth, onLoad) {
     const ratio = height / width;
-
     if (width <= maxWidth) {
       onLoad(url, width, height);
     } else {
@@ -326,7 +333,6 @@ function contentToolsImageUploader(dialog) {
     const angle = degrees % 360;
     const to_radians = Math.PI / 180;
     const canvas = document.createElement('canvas');
-
     const origWidth = width;
     const origHeight = height;
     if (angle === 90 || angle === -270 || angle === 270 || angle === -90) {
