@@ -1808,7 +1808,6 @@ export async function updateViewsList(opt) {
     useQueryFilters: true
   };
   opt = h.updateIfEmpty(opt, def);
-
   const viewsToAdd = opt.viewsList;
   const hasViewsList = h.isArrayOfViews(viewsToAdd) && h.isNotEmpty(viewsToAdd);
 
@@ -1857,7 +1856,7 @@ export async function updateViewsList(opt) {
      */
     const data = await h.fetchViews({
       onProgress: updateProgress,
-      project: opt.project,
+      idProject: opt.project,
       useQueryFilters: opt.useQueryFilters
     });
     views.push(...data.views);

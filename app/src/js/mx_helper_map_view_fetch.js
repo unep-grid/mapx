@@ -19,7 +19,7 @@ export async function fetchViews(o) {
     roleMax: ''
   };
   const opt = Object.assign({}, def, o);
-
+ 
   if (opt.useQueryFilters) {
     const optQuery = h.getQueryViewsInit();
     h.updateIfEmpty(opt, optQuery);

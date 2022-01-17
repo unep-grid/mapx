@@ -25,8 +25,12 @@ getUserRole <- reactive({
 
 })
 
+#
+# Concatenate id user and project 
+# -> Can be used to trigger update of views list
+# exemple: 145@MX-QNN-G0C-I6F-GZB-MPA 
+#
 getUserAtProject <- reactive({
-  roles <- list()
   idProject <- reactData$project
   idUser <- reactUser$data$id
   sprintf('%s@%s',idUser,idProject)
