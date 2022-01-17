@@ -1,9 +1,18 @@
+  - [1.9.38](https://github.com/unep-grid/map-x-mgl/tree/1.9.38) 
+
+      - APP 
+          - Fix some securtiy issue `npm audit fix`
+          - Client view fetch typo: project => idProject, should solve #785
+          - Search tool: larger vertical space in button groups to avoid scrollbars
+
   - [1.9.37](https://github.com/unep-grid/map-x-mgl/tree/1.9.37) 
 
       - APP/SDK 
-          - Fix issue with projects change events not being fired correctly: impacted SDK
+          - Removed e-resize in legend; fix issues with rendering legend symbols
           - Fix line and symbols not rendering (NaN size)
           - Solves issue with point diameter->radius when using custom zoom function
+      - SDK 
+          - Fix issue with projects change events not being fired correctly: impacted SDK
       - Internal
           - Build script, missing -e in echo: new line returned as text. Fixed changelog too
 
