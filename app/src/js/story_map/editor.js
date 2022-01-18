@@ -173,7 +173,16 @@ export async function initEditing(state) {
 }
 
 function contentToolsImageUploader(dialog) {
-  let image, url, xhr, height, width, type, x, y;
+  let image, url, xhr, height, width, typeFile, x, y;
+  let supportWebp = false;
+
+  /**
+   * Webp check ( for saving, display support >95% )
+   */
+
+  testWebp((supported) => {
+    supportWebp = supported;
+  });
 
   /**
    * Cancel upload
@@ -203,7 +212,7 @@ function contentToolsImageUploader(dialog) {
   dialog.addEventListener('imageuploader.fileready', function(ev) {
     const fileReader = new FileReader();
     const file = ev.detail().file;
-    type = file.type;
+    typeFile = file.type;
     image = new Image();
     fileReader.readAsDataURL(file);
     fileReader.addEventListener('load', function(e) {
@@ -212,7 +221,7 @@ function contentToolsImageUploader(dialog) {
       image.onload = function() {
         width = this.width;
         height = this.height;
-        setMaxWidth(1200, (url, width, height) => {
+        setMaxWidth(2400, (url, width, height) => {
           dialog.populate(url, [width, height]);
         });
       };
@@ -243,51 +252,8 @@ function contentToolsImageUploader(dialog) {
     ctx.save();
 
     canvas.toBlob(
-      function(blob) {
-        const form = new FormData();
-        form.append('image', blob);
-        form.append('width', cropW);
-        form.append('height', cropH);
-        form.append('token', path(mx, 'settings.user.token'));
-        form.append('idUser', path(mx, 'settings.user.id'));
-        form.append('project', path(mx, 'settings.project.id'));
-
-        sendData({
-          url: getApiUrl('uploadImage'),
-          data: form,
-          onProgress: function(progress) {
-            dialog.progress(progress * 100);
-          },
-          onSuccess: function(data) {
-            data = data.split('\t\n');
-            data.forEach((d) => {
-              try {
-                d = JSON.parse(d);
-              } catch (err) {}
-              if (d.msg && d.msg.url && d.msg.size) {
-                dialog.save(d.msg.url, d.msg.size, {
-                  alt: 'img',
-                  'data-ce-max-width': d.msg.size[0]
-                });
-              } else {
-                console.log(d);
-              }
-            });
-          },
-          onError: function(er) {
-            modal({
-              title: 'Error during the upload',
-              content: 'An error occured during the upload : ' + er,
-              styleString: 'z-index:11000'
-            });
-          }
-        });
-
-        // Set the dialog state to uploading and reset the progress bar to 0
-        dialog.state('uploading');
-        dialog.progress(0);
-      },
-      type || 'image/jpeg',
+      buildSendBlob(cropW, cropH),
+      supportWebp ? 'image/webp' : typeFile || 'image/jpeg',
       0.95
     );
   });
@@ -303,6 +269,53 @@ function contentToolsImageUploader(dialog) {
     rotateImage(90);
     dialog.busy(false);
   });
+
+  function buildSendBlob(width, height) {
+    return function sendBlob(blob) {
+      const form = new FormData();
+      form.append('image', blob);
+      form.append('width', width);
+      form.append('height', height);
+      form.append('token', path(mx, 'settings.user.token'));
+      form.append('idUser', path(mx, 'settings.user.id'));
+      form.append('project', path(mx, 'settings.project.id'));
+
+      sendData({
+        url: getApiUrl('uploadImage'),
+        data: form,
+        onProgress: function(progress) {
+          dialog.progress(progress * 100);
+        },
+        onSuccess: function(data) {
+          data = data.split('\t\n');
+          data.forEach((d) => {
+            try {
+              d = JSON.parse(d);
+            } catch (err) {}
+            if (d.msg && d.msg.url && d.msg.size) {
+              dialog.save(d.msg.url, d.msg.size, {
+                alt: 'img',
+                'data-ce-max-width': d.msg.size[0]
+              });
+            } else {
+              console.log(d);
+            }
+          });
+        },
+        onError: function(er) {
+          modal({
+            title: 'Error during the upload',
+            content: 'An error occured during the upload : ' + er,
+            styleString: 'z-index:11000'
+          });
+        }
+      });
+
+      // Set the dialog state to uploading and reset the progress bar to 0
+      dialog.state('uploading');
+      dialog.progress(0);
+    };
+  }
 
   function setMaxWidth(maxWidth, onLoad) {
     const ratio = height / width;
@@ -370,5 +383,14 @@ function contentToolsImageUploader(dialog) {
       height = this.height;
       dialog.populate(url, [width, height]);
     };
+  }
+
+  function testWebp(callback) {
+    const webP = new Image();
+    webP.onload = webP.onerror = () => {
+      callback(webP.height == 2);
+    };
+    webP.src =
+      'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
   }
 }
