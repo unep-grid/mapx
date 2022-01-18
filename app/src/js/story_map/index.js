@@ -6,6 +6,7 @@ import {errorHandler} from './../error_handler/index.js';
 import {modal} from './../mx_helper_modal.js';
 import {
   onNextFrame,
+  cancelFrame,
   waitFrameAsync,
   waitTimeoutAsync
 } from './../animation_frame/index.js';
@@ -187,80 +188,81 @@ function initKeydownListener() {
 */
 function initMouseMoveListener() {
   const s = getSettings();
-  onNextFrame(() => {
-    let timer;
-    let destroyed = false;
-    const elBody = document.body;
-    const elCtrls = elBody.querySelectorAll(`
+  let timer;
+  let destroyed = false;
+  let idFrameHideShow;
+  const elBody = document.body;
+  const elCtrls = elBody.querySelectorAll(`
       .mx-story-step-bullets,
       .mapboxgl-ctrl-bottom-left,
       .mapboxgl-ctrl-bottom-right,
       .mapboxgl-ctrl-top-right,
       .button-panel--main
       `);
-    //.button-panel--main : hidden or displayed by user choice
+  //.button-panel--main : hidden or displayed by user choice
 
-    const classOpacitySmooth = 'mx-smooth-opacity';
-    const classNoCursor = 'nocursor';
+  const classOpacitySmooth = 'mx-smooth-opacity';
+  const classNoCursor = 'nocursor';
 
-    for (const elCtrl of elCtrls) {
-      elCtrl.classList.add(classOpacitySmooth);
+  for (const elCtrl of elCtrls) {
+    elCtrl.classList.add(classOpacitySmooth);
+  }
+
+  mx.listeners.addListener({
+    target: window,
+    callback: mouseHider,
+    type: ['mousemove', 'click', 'wheel'],
+    group: 'story_map',
+    onRemove: destroy
+  });
+
+  mx.events.on('story_step', mouseHider);
+
+  function mouseHider() {
+    if (timer) {
+      clearTimeout(timer);
     }
-
-    mx.listeners.addListener({
-      target: window,
-      callback: mouseHider,
-      type: ['mousemove', 'click'],
-      group: 'story_map',
-      onRemove: destroy
-    });
-
-    mx.events.on('story_step', mouseHider);
-
-    function mouseHider() {
-      if (timer) {
-        clearTimeout(timer);
+    show();
+    timer = setTimeout(() => {
+      if (!destroyed) {
+        hide();
       }
-      show();
-      timer = setTimeout(() => {
-        if (!destroyed) {
-          hide();
-        }
-      }, s.opacity_auto_timeout || 1000);
-    }
+    }, s.opacity_auto_timeout || 1000);
+  }
 
-    function hide() {
-      onNextFrame(() => {
-        elCtrls.forEach((el) => {
-          el.style.opacity = 0.25;
-        });
-        elBody.classList.add(classNoCursor);
+  function hide() {
+    cancelFrame(idFrameHideShow);
+    idFrameHideShow = onNextFrame(() => {
+      elCtrls.forEach((el) => {
+        el.style.opacity = 0.25;
       });
-    }
+      elBody.classList.add(classNoCursor);
+    });
+  }
 
-    function show() {
-      onNextFrame(() => {
-        elCtrls.forEach((el) => {
-          el.style.opacity = 1;
-        });
-        elBody.classList.remove(classNoCursor);
-      });
-    }
-
-    function clean() {
+  function show() {
+    cancelFrame(idFrameHideShow);
+    idFrameHideShow = onNextFrame(() => {
       elCtrls.forEach((el) => {
         el.style.opacity = 1;
-        el.classList.remove(classOpacitySmooth);
       });
-    }
+      elBody.classList.remove(classNoCursor);
+    });
+  }
 
-    function destroy() {
-      destroyed = true;
-      mx.events.off('story_step', mouseHider);
-      show();
-      clean();
-    }
-  });
+  function clean() {
+    elCtrls.forEach((el) => {
+      el.style.opacity = 1;
+      el.classList.remove(classOpacitySmooth);
+    });
+  }
+
+  function destroy() {
+    destroyed = true;
+    mx.events.off('story_step', mouseHider);
+    show();
+    clean();
+  }
 }
 
 function updateSettings() {
@@ -366,7 +368,7 @@ async function initStory() {
     modal({
       title: 'Error',
       content: 'Invalid or empty story',
-      addBackground : true
+      addBackground: true
     });
     await cleanState();
     throw new Error('No story to read');
@@ -763,7 +765,7 @@ async function storyUpdateSlides() {
     config = sc[s];
     percent = ((config.end - sd.distTop) / (config.height * 2)) * 100;
     isInRange = percent < 75 && percent >= 25;
-    isInRangeAnim = percent < 100 && percent >= 0;
+    isInRangeAnim = percent < 600 && percent >= -500;
     isActive = state.stepActive === s;
     toActivate = isInRange && !isActive;
     elStep = config.elStep;
@@ -1276,6 +1278,7 @@ async function initLegendPanel() {
     button_text: getDictItem('button_legend_button'),
     button_lang_key: 'button_legend_button',
     button_classes: ['fa', 'fa-list-ul'],
+    item_content_classes: ['button-panel--item-content-flex-col'],
     container_classes: ['button-panel--container-no-full-width'],
     container_style: {
       width: '300px',
@@ -1611,7 +1614,7 @@ export async function storyPlayStep(stepNum) {
   const vToAdd = getArrayDiff(vStep, vVisible);
 
   /**
-   * Add view if not alredy there
+   * Add views if not alredy there
    */
   let i = 0;
   for (const v of vToAdd) {
@@ -1626,7 +1629,7 @@ export async function storyPlayStep(stepNum) {
   }
 
   /**
-   * Remove view not used
+   * Remove views not used
    */
   for (const v of vToRemove) {
     await viewLayersRemove({
@@ -1639,10 +1642,33 @@ export async function storyPlayStep(stepNum) {
     order: vStep
   });
 
+  await viewsLegendsOrderUpdate({
+    elContainer: elLegendContainer,
+    order: vStep
+  });
+
   /**
    * Update panels behaviour
    */
   await updatePanelBehaviour(state, settings, step);
+}
+
+/**
+* Update legend position
+* @param {Object} opt options
+* @param {Element} opt.elContainer Legend Container element
+* @param {Array} opt.order Array of view id to sort legend
+*/ 
+async function viewsLegendsOrderUpdate(opt) {
+  let pos = 0;
+  for (const idView of opt.order) {
+    const elLegend = opt.elContainer.querySelector(
+      `[data-id_view="${idView}"]`
+    );
+    if(elLegend){
+      elLegend.style.order = pos++;
+    }
+  }
 }
 
 async function updatePanelBehaviour(state, settings, step) {

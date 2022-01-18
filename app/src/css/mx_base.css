@@ -99,6 +99,10 @@ pre {
  word-wrap: break-word;      
 }
 
+img, video, picture {
+  object-fit: contain;
+}
+
 
 .mx-inline-progress-container {
   width: 100%;

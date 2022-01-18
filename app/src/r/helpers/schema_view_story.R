@@ -273,8 +273,9 @@ mxSchemaViewStory <- function(view,views,language){
           type = "string",
           default = "card",
           enum = c(
-            "card",
             "image-cover",
+            "card",
+            "blur",
             "shadow",
             "text-center",
             "text-left",
@@ -364,22 +365,22 @@ mxSchemaViewStory <- function(view,views,language){
           title = tt("schema_story_slide_effect_start"), 
           type = "number",
           default = 0L, 
-          minimum = -100L,
-          maximum = 100L
+          minimum = -1000L,
+          maximum = 1000L
           ), 
         e = list(
           title = tt("schema_story_slide_effect_end"),
           type = "number",
           default = 100L,
-          minimum = -100L,
-          maximum = 100L
+          minimum = -1000L,
+          maximum = 1000L
           ),
         o = list(
           title = tt("schema_story_slide_effect_offset"),
           type = "number",
           default = 0L,
-          minimum = -100L,
-          maximum = 100L
+          minimum = -1000L,
+          maximum = 1000L
           ),
         f = list(
           title = tt("schema_story_slide_effect_factor"),
