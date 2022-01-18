@@ -1,3 +1,16 @@
+  - [1.9.39-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.2) 
+
+      - APP
+          - Story Map :
+            - Fixed legends order. Should work even if no new views added ( #538 )
+            - Show / hide story control after a delay, wheel events trigger 'show'
+            - New slide class 'blur': alternative to opacity, which is used very often
+            - Improved class 'shadow'
+            - Re-added rounded borders to card class instead of all slides, which produced unwanted gaps in corners
+            - Fixed issue in start / end limit in slide animation: animations were stoping too early
+            - Editor: added webp support during upload ( better compression ) and set new limit to 2400px ( auto cropped );
+          - RasterMiniMap in legends : test new script order for improving performance at creation time
+
   - [1.9.39-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.1) 
 
       - APP  
