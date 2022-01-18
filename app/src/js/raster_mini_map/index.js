@@ -10,7 +10,8 @@ const def = {
   zoom: 3,
   tileSize: 256,
   tiles: [],
-  mapSync: null
+  mapSync: null,
+  onAdded: null
 };
 
 class RasterMiniMap {
@@ -83,7 +84,7 @@ class RasterMiniMap {
      * Set style
      */
     mm.elStyle = document.createElement('style');
-    mm.elStyle.type = 'text/css';
+    mm.elStyle.setAttribute('type', 'text/css');
     mm.elStyle.appendChild(document.createTextNode(style));
     /**
      * Main element
@@ -143,6 +144,13 @@ class RasterMiniMap {
      * Add sync
      */
     mm.syncStart();
+
+    /**
+     * onAdded Callback
+     */
+    if (mm.opt.onAdded) {
+      mm.opt.onAdded(mm);
+    }
   }
 }
 

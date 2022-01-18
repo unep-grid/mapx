@@ -3746,7 +3746,9 @@ export function elLegend(view, opt) {
   const elLegendGroup = h.el(
     'div',
     {
-      class: 'mx-view-legend-group'
+      class: 'mx-view-legend-group',
+      dataset: {id_view: idView},
+      style: {order: 0}
     },
     opt.addTitle ? elLegendTitle : null,
     elLegend
@@ -4051,14 +4053,19 @@ async function viewLayersAddRt(o) {
   let legendB64 = null;
 
   if (!hasLegendUrl) {
-    view._miniMap = new RasterMiniMap({
-      elContainer: elLegendImageBox,
-      width: 40,
-      height: 40,
-      mapSync: map,
-      tiles: tilesCopy
+    h.onNextFrame(() => {
+      new RasterMiniMap({
+        elContainer: elLegendImageBox,
+        width: 40,
+        height: 40,
+        mapSync: map,
+        tiles: tilesCopy,
+        onAdded: (miniMap) => {
+          /* Raster MiniMap added, here */
+          view._miniMap = miniMap;
+        }
+      });
     });
-    /* Raster MiniMap added, here */
     return true;
   }
 
@@ -5671,7 +5678,7 @@ export function getViewLegend(id, opt) {
   const elLegend = view._elLegend;
   const hasLegend = h.isElement(elLegend);
   const useClone = opt.clone === true;
-  const hasMiniMap = view._legend_minimap instanceof RasterMiniMap;
+  const hasMiniMap = view._miniMap instanceof RasterMiniMap;
 
   if (!hasLegend) {
     return h.el('div');
@@ -5683,7 +5690,7 @@ export function getViewLegend(id, opt) {
 
   const elLegendClone = elLegend.cloneNode(true);
   if (hasMiniMap) {
-    const img = view._legend_minimap.getImage();
+    const img = view._miniMap.getImage();
     const elImg = h.el('img', {src: img});
     elLegendClone.appendChild(elImg);
   }
