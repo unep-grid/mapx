@@ -107,6 +107,13 @@ export async function setViewBadges(view) {
     badges.push(elBadgeEdit);
 
     /**
+    * View metadata button / badge 
+    */ 
+    const elBadgeMeta =  elBadge('meta', {id:view.id}); 
+    badges.push(elBadgeMeta);
+
+
+    /**
      * Single loop add badge
      */
     for (let b of badges) {
@@ -190,6 +197,20 @@ function elBadge(type, opt) {
         tooltipKey: hasEdit ? 'view_badge_editable' : 'view_badge_locked',
         style : {
           color :  hasEdit ? 'LimeGreen' : 'OrangeRed'
+        }
+      });
+    }
+    case 'meta': {
+      return createViewBadge({
+        iconClasses: ['fa', 'fa-info-circle'],
+        tooltipClasses: ['hint--bottom-right'],
+        tooltipKey: 'btn_opt_meta',
+        style : {
+          color : 'royalblue'
+        },
+        dataset: {
+          view_action_key: 'btn_opt_meta',
+          view_action_target: opt.id
         }
       });
     }

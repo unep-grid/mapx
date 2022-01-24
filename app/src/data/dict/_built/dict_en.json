@@ -1432,6 +1432,10 @@
     "en": "Close"
   },
   {
+    "id": "btn_open",
+    "en": "Open"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project"
   },
@@ -4720,7 +4724,7 @@
     "en": "Data without temporal values"
   },
   {
-    "id": "meta_view_projects_titles",
+    "id": "meta_view_projects_data",
     "en": "Also published in those projects"
   },
   {
@@ -5541,7 +5545,7 @@
   },
   {
     "id": "share_link_title",
-    "en": "Share link"
+    "en": "Share link / code "
   },
   {
     "id": "share_options",
@@ -5646,6 +5650,34 @@
   {
     "id": "share_map_pos_get",
     "en": "Get current position"
+  },
+  {
+    "id": "share_method",
+    "en": "Sharing method "
+  },
+  {
+    "id": "share_views_select_method",
+    "en": "Views selection"
+  },
+  {
+    "id": "share_views_select_method_map_layer",
+    "en": "Views with layers currently displayed on map"
+  },
+  {
+    "id": "share_views_select_method_story_step",
+    "en": "Views of the current story step"
+  },
+  {
+    "id": "share_views_select_method_current_url",
+    "en": "Views set in the current URL"
+  },
+  {
+    "id": "share_views_select_method_story_itself",
+    "en": "This story map"
+  },
+  {
+    "id": "share_views_select_method_map_list_open",
+    "en": "All views open in the list"
   },
   {
     "id": "btn_opt_share_to_project",

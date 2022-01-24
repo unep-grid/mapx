@@ -3,6 +3,7 @@ import screenfull from 'screenfull';
 import {mapComposerModalAuto} from './../mx_helper_map_composer.js'
 import {geolocateUser, getMap, getLayerNamesByPrefix} from './../mx_helper_map.js';
 import {toggleSpotlight} from './../mx_helper_map_pixop.js';
+import {ShareModal} from './../share_modal/index.js';
 import {
   storyMapLock,
   storyClose,
@@ -137,7 +138,14 @@ export function generateButtons() {
           value: 'showAbout'
         });
       }
-    })
+    }),
+    new Button({
+      key: 'btn_share',
+      classesIcon: ['fa', 'fa-share-alt'],
+      action: ()=>{
+         new ShareModal();
+      }
+    }),
   ];
 }
 

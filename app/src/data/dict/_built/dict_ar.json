@@ -1790,6 +1790,11 @@
     "ar": "قريب "
   },
   {
+    "id": "btn_open",
+    "en": "Open",
+    "ar": "فتح"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "ar": "طلب عضوية لهذا المشروع "
@@ -5900,9 +5905,9 @@
     "ar": "بيانات بدون قيم زمنية "
   },
   {
-    "id": "meta_view_projects_titles",
+    "id": "meta_view_projects_data",
     "en": "Also published in those projects",
-    "ar": "نشرت أيضا في تلك المشاريع "
+    "ar": "نشرت أيضا في تلك المشاريع"
   },
   {
     "id": "meta_view_project_title",
@@ -6926,8 +6931,8 @@
   },
   {
     "id": "share_link_title",
-    "en": "Share link",
-    "ar": "رابط المشاركة "
+    "en": "Share link / code ",
+    "ar": "رابط المشاركة / الرمز"
   },
   {
     "id": "share_options",
@@ -7058,6 +7063,41 @@
     "id": "share_map_pos_get",
     "en": "Get current position",
     "ar": "احصل على المنصب الحالي "
+  },
+  {
+    "id": "share_method",
+    "en": "Sharing method ",
+    "ar": "طريقة المشاركة"
+  },
+  {
+    "id": "share_views_select_method",
+    "en": "Views selection",
+    "ar": "اختيار المشاهدات"
+  },
+  {
+    "id": "share_views_select_method_map_layer",
+    "en": "Views with layers currently displayed on map",
+    "ar": "المشاهدات مع الطبقات المعروضة حاليا على الخريطة"
+  },
+  {
+    "id": "share_views_select_method_story_step",
+    "en": "Views of the current story step",
+    "ar": "وجهات نظر خطوة القصة الحالية"
+  },
+  {
+    "id": "share_views_select_method_current_url",
+    "en": "Views set in the current URL",
+    "ar": "طرق العرض المحددة في عنوان URL الحالي"
+  },
+  {
+    "id": "share_views_select_method_story_itself",
+    "en": "This story map",
+    "ar": "خريطة القصة هذه"
+  },
+  {
+    "id": "share_views_select_method_map_list_open",
+    "en": "All views open in the list",
+    "ar": "جميع وجهات النظر مفتوحة في القائمة"
   },
   {
     "id": "btn_opt_share_to_project",

@@ -1,0 +1,105 @@
+[
+  {
+    "id": "soc_link_url",
+    "label": "URL",
+    "template": "{{url}}",
+    "disable_encode":true
+  },
+  {
+    "id": "soc_link_iframe",
+    "label": "IFRAME",
+    "template": "<iframe width='800' height='500' src='{{url}}' frameborder='0' allowfullscreen></iframe>",
+    "disable_link": true,
+    "disable_encode":true
+  },
+  {
+    "id": "soc_link_twitter",
+    "label": "Twitter",
+    "template": "https://twitter.com/intent/tweet?url={{url}}&text={{title}}&via={{user_id}}&hashtags={{hash_tags}}"
+  },
+  {
+    "id": "soc_link_linkedin",
+    "label": "Linkedin",
+    "template": "https://www.linkedin.com/sharing/share-offsite/?url={{url}}"
+  },
+  {
+    "id": "soc_link_skype",
+    "label": "Skype",
+    "template": "https://web.skype.com/share?url={{url}}&text={{text}}"
+  },
+  {
+    "id": "soc_link_facebook",
+    "label": "Facebook",
+    "template": "https://www.facebook.com/sharer.php?u={{url}}"
+  },
+  {
+    "id": "soc_link_reddit",
+    "label": "Reddit",
+    "template": "https://reddit.com/submit?url={{url}}&title={{title}}"
+  },
+  {
+    "id": "soc_link_whatsapp",
+    "label": "WhatsApp",
+    "template": "https://api.whatsapp.com/send?phone={{phone_number}}&text={{title}}%20{{url}}"
+  },
+  {
+    "id": "soc_link_ycombinator",
+    "label": "Y Combinator",
+    "template": "https://news.ycombinator.com/submitlink?u={{url}}&t={{title}}"
+  },
+  {
+    "id": "soc_link_diaspora",
+    "label": "Diaspora",
+    "template": "https://share.diasporafoundation.org/?title={{title}}&url={{url}}"
+  },
+  {
+    "id": "soc_link_tencent_qq",
+    "label": "Tencent QQ",
+    "template": "http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url={{url}}&title={{title}}&summary={{text}}"
+  },
+  {
+    "id": "soc_link_vk",
+    "label": "VK (vk.com)",
+    "template": "http://vk.com/share.php?url={{url}}&title={{title}}&comment={{text}}"
+  },
+  {
+    "id": "soc_link_ok_ru",
+    "label": "OK (ok.ru)",
+    "template": "http://vk.com/share.php?url={{url}}&title={{title}}&comment={{text}}"
+  },
+  {
+    "id": "soc_link_weibo",
+    "label": "Weibo",
+    "template": "http://service.weibo.com/share/share.php?url={{url}}&appkey=&title={{title}}&pic=&ralateUid="
+  },
+  {
+    "id": "soc_link_douban",
+    "label": "Douban",
+    "template": "http://www.douban.com/recommend/?name={{title}}&text={{text}}&comment={{url}}&href={{url}}"
+  },
+  {
+    "id": "soc_link_renren",
+    "label": "Renren",
+    "template": "http://widget.renren.com/dialog/share?resourceUrl={{url}}&srcUrl={{url}}&title={{title}}&description={{text}}"
+  },
+  {
+    "id": "soc_link_xin",
+    "label": "Xin",
+    "template": "https://www.xing.com/spi/shares/new?url={{url}}"
+  },
+  {
+    "id": "soc_link_lineme",
+    "label": "Line.me",
+    "template": "https://lineit.line.me/share/ui?url={{url}}&text={{text}}"
+  },
+  {
+    "id": "soc_link_telegram",
+    "label": "Telegram",
+    "template": "https://t.me/share/url?url={{url}}&text={{text}}"
+  },
+  {
+    "id": "soc_link_threma",
+    "label": "Threma",
+    "template": "threema://compose?text={{url}}&id={{user_id}}"
+  }
+]

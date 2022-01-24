@@ -1790,6 +1790,11 @@
     "zh": "关闭"
   },
   {
+    "id": "btn_open",
+    "en": "Open",
+    "zh": "打开"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "zh": "申请成为此项目的成员"
@@ -5900,7 +5905,7 @@
     "zh": "没有时间值的数据"
   },
   {
-    "id": "meta_view_projects_titles",
+    "id": "meta_view_projects_data",
     "en": "Also published in those projects",
     "zh": "也发布在这些项目中"
   },
@@ -6926,8 +6931,8 @@
   },
   {
     "id": "share_link_title",
-    "en": "Share link",
-    "zh": "分享链接"
+    "en": "Share link / code ",
+    "zh": "分享链接/代码"
   },
   {
     "id": "share_options",
@@ -7058,6 +7063,41 @@
     "id": "share_map_pos_get",
     "en": "Get current position",
     "zh": "获取当前位置"
+  },
+  {
+    "id": "share_method",
+    "en": "Sharing method ",
+    "zh": "分享方式"
+  },
+  {
+    "id": "share_views_select_method",
+    "en": "Views selection",
+    "zh": "视图选择"
+  },
+  {
+    "id": "share_views_select_method_map_layer",
+    "en": "Views with layers currently displayed on map",
+    "zh": "当前显示在地图上的图层的视图"
+  },
+  {
+    "id": "share_views_select_method_story_step",
+    "en": "Views of the current story step",
+    "zh": "当前故事步骤的视图"
+  },
+  {
+    "id": "share_views_select_method_current_url",
+    "en": "Views set in the current URL",
+    "zh": "当前 URL 中设置的视图"
+  },
+  {
+    "id": "share_views_select_method_story_itself",
+    "en": "This story map",
+    "zh": "这个故事地图"
+  },
+  {
+    "id": "share_views_select_method_map_list_open",
+    "en": "All views open in the list",
+    "zh": "在列表中打开所有视图"
   },
   {
     "id": "btn_opt_share_to_project",

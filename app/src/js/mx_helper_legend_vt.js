@@ -27,7 +27,7 @@ export function buildLegendVt(view) {
     /*
     * Configure legend item
     */  
-    const lang = h.checkLanguage({obj: rule, path: 'label_', concat: true});
+    const lang = h.checkLanguage({obj: rule, path: '', prefix: 'label_'});
     const label = h.firstOf([rule['label_' + lang], rule.value, 'No data']);
     const inputId = h.makeId();
     const colStyle = {};

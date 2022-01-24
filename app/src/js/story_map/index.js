@@ -278,12 +278,41 @@ function getSettings() {
 
 /**
  * Check if a story is playing
+ * @return {Boolean} story is playing
  */
 export function isStoryPlaying() {
   const state = getState();
   return state.enable === true;
 }
 
+/**
+* Get story id
+* @return {String} Story views' id
+*/ 
+export function getStoryId() {
+  if (!isStoryPlaying()) {
+    return null;
+  }
+  const state = getState();
+  return state.idView;
+}
+
+/**
+* Get current views featured in step
+* @return {Array} array of views id
+*/
+export function getViewsStep(){
+  if (!isStoryPlaying()) {
+    return null;
+  }
+  const state = getState();
+  return state.step.views;
+}
+
+
+/**
+* Get current state 
+*/ 
 function getState() {
   return state;
 }
@@ -452,6 +481,8 @@ async function initViews() {
 
 async function start() {
   const state = getState();
+
+  mx.events.fire('story_start');
   /**
    * Initial layout
    */
@@ -1179,6 +1210,7 @@ async function appStateSave() {
      * Clear views
      */
     for (const id of oldViews) {
+      console.log('story remove view', id);
       await viewRemove(id);
     }
 
@@ -1548,13 +1580,13 @@ export async function storyPlayStep(stepNum) {
   }
   map.stop();
   mx.events.fire('story_step');
-  state.currentStep = stepNum;
-  state.stepActive = stepNum;
-
-  /**
+    /**
    * retrieve step information
    */
   const step = steps[stepNum];
+  state.currentStep = stepNum;
+  state.stepActive = stepNum;
+  state.step = step;
   const pos = step.position;
   const anim = Object.assign(
     {},
@@ -1654,18 +1686,19 @@ export async function storyPlayStep(stepNum) {
 }
 
 /**
-* Update legend position
-* @param {Object} opt options
-* @param {Element} opt.elContainer Legend Container element
-* @param {Array} opt.order Array of view id to sort legend
-*/ 
+ * Update legend position
+ * @param {Object} opt options
+ * @param {Element} opt.elContainer Legend Container element
+ * @param {Array} opt.order Array of view id to sort legend
+ */
+
 async function viewsLegendsOrderUpdate(opt) {
   let pos = 0;
   for (const idView of opt.order) {
     const elLegend = opt.elContainer.querySelector(
       `[data-id_view="${idView}"]`
     );
-    if(elLegend){
+    if (elLegend) {
       elLegend.style.order = pos++;
     }
   }

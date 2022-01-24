@@ -203,11 +203,20 @@ export function firstOf(a) {
  * Simple templating system
  * @param {String} template e.g. "Loading view {{vn}} in {{vl}} "
  * @param {Object} data to update the template with. e.g. {vn:8,vl:10}
- * @param {String} parsed string
+ * @param {Object} opt Options,
+ * @param {Boolean} opt.encodeURIComponent Encode 
+ * @return {String} parsed string
  */
-export function parseTemplate(template, data) {
+export function parseTemplate(template, data,opt) {
+  opt = Object.assign({
+     encodeURIComponent:false
+  },opt)
   return template.replace(/{{([^{}]+)}}/g, function(matched, key) {
-    return data[key];
+    let txt =  data[key] || '';
+    if(opt.encodeURIComponent){
+      txt = encodeURIComponent(txt); 
+    }
+    return txt
   });
 }
 

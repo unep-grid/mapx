@@ -637,9 +637,29 @@ export function initListenersApp() {
   });
 
   mx.events.on({
-    type: ['views_list_updated', 'view_added', 'view_removed', 'mapx_ready'],
+    type: ['views_list_updated', 'view_add', 'view_remove', 'mapx_ready'],
     idGroup: 'update_btn_filter_view_activated',
     callback: updateBtnFilterActivated
+  });
+
+  mx.events.on({
+    type: ['view_added', 'view_removed', 'story_step'],
+    idGroup: 'update_share_modale',
+    callback: () => {
+      if (window._share_modal) {
+        window._share_modal.update();
+      }
+    }
+  });
+
+  mx.events.on({
+    type: ['story_start', 'story_close'],
+    idGroup: 'update_share_modale_story',
+    callback: () => {
+      if (window._share_modal) {
+        window._share_modal.init();
+      }
+    }
   });
 
   mx.listeners.addListener({
@@ -2080,12 +2100,18 @@ export async function viewsCheckedUpdate(o) {
  * Get id of views with visible layers on map
  * @return {Array}
  */
-export function getViewsLayersVisibles() {
+export function getViewsLayersVisibles(reverse) {
   const h = mx.helpers;
-  return h.getLayerNamesByPrefix({
+  const views = h.getLayerNamesByPrefix({
     prefix: 'MX-',
     base: true
   });
+
+  if (reverse) {
+    views.reverse();
+  }
+
+  return views;
 }
 
 /**

@@ -98,7 +98,6 @@ export async function viewToMetaModal(view) {
   /**
    * Build menu
    */
-
   const elFirst = elContent.firstElementChild;
   const elsHeader = elContent.querySelectorAll('.panel-heading');
   const idMenu = h.makeId();
@@ -166,7 +165,7 @@ async function metaViewToUi(meta, elModal) {
     'date_modified',
     'date_created',
     'project_title',
-    'projects_titles',
+    'projects_data',
     'collections',
     'readers',
     'editors',
@@ -194,11 +193,83 @@ async function metaViewToUi(meta, elModal) {
         const valueDistinct = rowDistinct.value;
         row.value = `${row.value} ( ${valueDistinct} ${txtDistinct} )`;
       }
+
+      /**
+       * Add project link
+       */
+      if (row.key === 'project_title') {
+        const linkProj = new URL(window.location.origin);
+        const sp = linkProj.searchParams;
+        sp.set('project', meta.project);
+        sp.set('viewsOpen', meta.id);
+        sp.set('viewsListFilterActivated', true);
+        row.value = h.el(
+          'a',
+          {
+            href: linkProj,
+            target: '_blank'
+          },
+          h.getLanguageItem(row.value)
+        );
+      }
+
+      /**
+       * Add view static link
+       */
+      if (row.key === 'title') {
+        const linkView = new URL(window.location.origin);
+        linkView.pathname = '/static.html';
+        linkView.searchParams.set('views', meta.id);
+        linkView.searchParams.set('zoomToViews', true);
+
+        row.value = h.el(
+          'a',
+          {
+            href: linkView,
+            target: '_blank'
+          },
+          h.isLanguageObject(row.value) //-> titles...
+            ? h.getLanguageItem(row.value)
+            : row.value
+        );
+      }
+
+      /**
+       * Add projects list link
+       */
+      if (row.key === 'projects_data') {
+        const elProjects = [];
+        for (const projectData of row.value) {
+          const isPublic = !!projectData.public;
+          const linkProj = new URL(window.location.origin);
+          const sp = linkProj.searchParams;
+          const title = h.getLanguageItem(projectData.title);
+          sp.set('project', projectData.id);
+          sp.set('viewsOpen', meta.id);
+          sp.set('viewsListFilterActivated', true);
+          const elLink = h.el(
+            'a',
+            {
+              href: linkProj,
+              target: '_blank',
+              style: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }
+            },
+            h.el('span', title),
+            isPublic ? null : h.el('i', {class: ['fa', 'fa-lock']})
+          );
+          elProjects.push(elLink);
+        }
+        row.value = elProjects;
+      }
+
       /**
        * Match sql table with dict labels
        * e.g. "meta_view_"+ "stat_n_add_by_users"
        */
-
       row.key = prefixKey + row.key; // to match dict labels
       return row;
     });

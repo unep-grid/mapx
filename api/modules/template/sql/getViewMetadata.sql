@@ -123,8 +123,14 @@ v_projects_distinct AS (
   FROM
   v_projects_id_all 
 ),
-v_projects_titles_json AS (
-  SELECT json_agg(title) tbl
+v_projects_data_json AS (
+  SELECT json_agg(
+    json_build_object(
+     'title', p.title,
+     'id', p.id,
+     'public',p.public
+    )
+  ) tbl
   FROM mx_projects p, v_projects_distinct vpd 
   WHERE p.id = vpd.id
 ),
@@ -145,6 +151,7 @@ v_meta AS (
     'project', to_json(vl.project),
     'projects', (vl.data #> '{"projects"}')::json,
     'project_title', to_json(vpt.title),
+    'projects_data', to_json(vpds.tbl),
     'readers', to_json(vl.readers),
     'editors', to_json(vl.editors),
     'date_modified', to_json(vl.date_modified),
@@ -153,7 +160,6 @@ v_meta AS (
     'title', ( vl.data #> '{"title"}')::json,
     'abstract', (vl.data #> '{"abstract"}')::json,
     'classes', (vl.data #> '{"classes"}')::json,
-    'projects_titles', vpts.tbl,
     'collections', (vl.data #> '{"collections"}')::json,
     'table_editors', ve.tbl
   ) AS meta
@@ -164,7 +170,7 @@ v_meta AS (
   v_stat_add_count_by_distinct_users vs_add_by_distinct_users,
   v_stat_add_count_by_country_json vs_add_by_country,
   v_project_title vpt,
-  v_projects_titles_json vpts,
+  v_projects_data_json vpds,
   v_editor_json ve
 )
 

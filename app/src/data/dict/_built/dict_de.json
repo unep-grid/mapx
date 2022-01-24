@@ -1790,6 +1790,11 @@
     "de": "Schließen "
   },
   {
+    "id": "btn_open",
+    "en": "Open",
+    "de": "Offen"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "de": "Mitgliedschaftsantrag für dieses Projekt "
@@ -5900,9 +5905,9 @@
     "de": "Daten ohne zeitliche Werte "
   },
   {
-    "id": "meta_view_projects_titles",
+    "id": "meta_view_projects_data",
     "en": "Also published in those projects",
-    "de": "Auch in diesen Projekten veröffentlicht "
+    "de": "Auch in diesen Projekten veröffentlicht"
   },
   {
     "id": "meta_view_project_title",
@@ -6926,8 +6931,8 @@
   },
   {
     "id": "share_link_title",
-    "en": "Share link",
-    "de": "Einen Link teilen "
+    "en": "Share link / code ",
+    "de": "Link / Code teilen"
   },
   {
     "id": "share_options",
@@ -7058,6 +7063,41 @@
     "id": "share_map_pos_get",
     "en": "Get current position",
     "de": "Aktuelle Position abrufen "
+  },
+  {
+    "id": "share_method",
+    "en": "Sharing method ",
+    "de": "Sharing-Methode"
+  },
+  {
+    "id": "share_views_select_method",
+    "en": "Views selection",
+    "de": "Auswahl von Ansichten"
+  },
+  {
+    "id": "share_views_select_method_map_layer",
+    "en": "Views with layers currently displayed on map",
+    "de": "Ansichten mit Layern, die derzeit auf der Karte angezeigt werden"
+  },
+  {
+    "id": "share_views_select_method_story_step",
+    "en": "Views of the current story step",
+    "de": "Ansichten des aktuellen Story-Schritts"
+  },
+  {
+    "id": "share_views_select_method_current_url",
+    "en": "Views set in the current URL",
+    "de": "Ansichten, die in der aktuellen URL festgelegt sind"
+  },
+  {
+    "id": "share_views_select_method_story_itself",
+    "en": "This story map",
+    "de": "Diese Storymap"
+  },
+  {
+    "id": "share_views_select_method_map_list_open",
+    "en": "All views open in the list",
+    "de": "Alle Ansichten werden in der Liste geöffnet"
   },
   {
     "id": "btn_opt_share_to_project",

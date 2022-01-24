@@ -1790,6 +1790,11 @@
     "es": "Cerrar"
   },
   {
+    "id": "btn_open",
+    "en": "Open",
+    "es": "Abierto"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "es": "Solicitar membresía para este proyecto"
@@ -5900,7 +5905,7 @@
     "es": "Datos sin valores temporales"
   },
   {
-    "id": "meta_view_projects_titles",
+    "id": "meta_view_projects_data",
     "en": "Also published in those projects",
     "es": "También publicado en estos proyectos"
   },
@@ -6926,8 +6931,8 @@
   },
   {
     "id": "share_link_title",
-    "en": "Share link",
-    "es": "Compartir enlace"
+    "en": "Share link / code ",
+    "es": "Compartir enlace / código"
   },
   {
     "id": "share_options",
@@ -7058,6 +7063,41 @@
     "id": "share_map_pos_get",
     "en": "Get current position",
     "es": "Obtener la posición actual"
+  },
+  {
+    "id": "share_method",
+    "en": "Sharing method ",
+    "es": "método de compartir"
+  },
+  {
+    "id": "share_views_select_method",
+    "en": "Views selection",
+    "es": "Selección de vistas"
+  },
+  {
+    "id": "share_views_select_method_map_layer",
+    "en": "Views with layers currently displayed on map",
+    "es": "Vistas con capas mostradas actualmente en el mapa"
+  },
+  {
+    "id": "share_views_select_method_story_step",
+    "en": "Views of the current story step",
+    "es": "Vistas del paso actual de la historia"
+  },
+  {
+    "id": "share_views_select_method_current_url",
+    "en": "Views set in the current URL",
+    "es": "Vistas configuradas en la URL actual"
+  },
+  {
+    "id": "share_views_select_method_story_itself",
+    "en": "This story map",
+    "es": "Este mapa de la historia"
+  },
+  {
+    "id": "share_views_select_method_map_list_open",
+    "en": "All views open in the list",
+    "es": "Todas las vistas abiertas en la lista"
   },
   {
     "id": "btn_opt_share_to_project",

@@ -14,11 +14,11 @@ input {
 * Input
 */
 
-.mx select {
-  appearance: none;
-  padding: 5px;
-  background: var(--mx_ui_background);
-}
+/*.mx select {*/
+  /*appearance: none;*/
+  /*padding: 5px;*/
+  /*background: var(--mx_ui_background);*/
+/*}*/
 
 .mx input {
   background: var(--mx_ui_background);

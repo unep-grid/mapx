@@ -43,7 +43,7 @@ export function isBbox(item) {
  * @param {Object} item
  */
 export function isObject(item) {
-  return !!item && typeof item === 'object' && !Array.isArray(item);
+  return !!item && typeof item === 'object' && !Array.isArray(item) && !isElement(item);
 }
 
 /**
@@ -549,6 +549,12 @@ export function isEqual(x, y) {
  * @return {Boolean}
  */
 export function isUrl(url) {
+  if (url instanceof URL) {
+    return true;
+  }
+  if (!isString(url)) {
+    return false;
+  }
   try {
     new URL(url);
     return true;

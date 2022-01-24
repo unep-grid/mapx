@@ -390,6 +390,19 @@
     "de": ""
   },
   {
+    "id": "btn_open",
+    "en": "Open",
+    "fr": "Ouvrir",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "fr": "Demande d'adhésion à ce projet",
@@ -11076,7 +11089,7 @@
     "de": ""
   },
   {
-    "id": "meta_view_projects_titles",
+    "id": "meta_view_projects_data",
     "en": "Also published in those projects",
     "fr": "Aussi publié dans ces projets",
     "es": "También publicado en estos proyectos",

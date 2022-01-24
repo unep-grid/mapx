@@ -43,6 +43,12 @@ export async function updateLanguage(language) {
   await updateLanguageViewsList();
 }
 
+/**
+ * Split strings in multiple line
+ * e.g. for tooltype.
+ * @param {String} str Input string
+ * @retur {String} string separated by new line (\n)
+ */
 export function splitnwords(str) {
   return str
     .split(/((?:\w+ ){6})/g)
@@ -50,6 +56,11 @@ export function splitnwords(str) {
     .join('\n');
 }
 
+/**
+ * Get Full dictionnary for a language
+ * @param {String} lang Language code (e.g. 'en')
+ * @return {Promise<Object>} Full dictionnary object
+ */
 const _dict_cache = {};
 export async function getDict(lang) {
   'use strict';
@@ -296,12 +307,12 @@ export function getLabelFromObjectPath(o) {
 
 /**
  * Check language code for the view item and control fallback
- * @param {object} o options
- * @param {object} o.obj object to check
- * @param {string} o.path path to the string to check
- * @param {string} o.language language code expected
- * @param {array} o.languages code for fallback
- * @param {boolean} o.concat concat language with path instead of select children
+ * @param {Object} opt options
+ * @param {Object} opt.obj object to check
+ * @param {String} opt.path path to the string to check
+ * @param {String} opt.language language code expected
+ * @param {Array} opt.languages code for fallback
+ * @param {String} opt.prefix Language prefix. e.g. 'label_' -> 'label_en'
  * @example
  *     checkLanguage({
  *         obj : it,
@@ -310,41 +321,27 @@ export function getLabelFromObjectPath(o) {
  *         languages :  ["en","de","ru"]
  *     })
  */
-export function checkLanguage(o) {
-  'use strict';
-  const langs = o.languages || mx.settings.languages;
-  const concat = !!o.concat;
-  let lang = o.language || mx.settings.language || langs[0];
-  let out = lang;
-  let found = false;
+export function checkLanguage(opt) {
+  const h = mx.helpers;
+  const s = mx.settings;
+  const def = {
+    obj: {},
+    path: '',
+    languages: s.languages,
+    language: s.language || s.languages[0],
+    prefix: null
+  };
 
-  /**
-   * Test if lang value return something
-   */
-  function test() {
-    var p = concat ? o.path + lang : o.path + '.' + lang;
-    found = !!mx.helpers.path(o.obj, p);
-  }
+  const o = Object.assign({}, def, opt);
+  const langs = [o.language, ...o.languages];
 
-  /**
-   * Initial language test
-   */
-  test();
-
-  /**
-   * If nothing found, iterrate through languages
-   */
-  if (!found) {
-    for (var l in langs) {
-      lang = langs[l];
-      test();
-      if (found) {
-        return lang;
-      }
+  for (const lang of langs) {
+    const notEmpty = !!h.path(o.obj, o.path, o.prefix + lang);
+    if (notEmpty) {
+      return lang;
     }
   }
-
-  return out;
+  return def.language;
 }
 
 /**
@@ -356,12 +353,32 @@ export function checkLanguage(o) {
  */
 export function getTranslationFromObject(o) {
   o = Object.assign({}, o);
-  var h = mx.helpers;
-  var lang = checkLanguage(o);
-  var out = h.path(o.obj, o.path + '.' + lang, '');
+  const h = mx.helpers;
+  const lang = checkLanguage(o);
+  const out = h.path(o.obj, o.path + '.' + lang, '');
   return out;
 }
 
+/**
+ * Get language from language object
+ * NOTE Simple version of `getTranslationFromObject`, without path
+ * @param {Object} obj Language object
+ * @param {String} lang Language code
+ * @return {String} item
+ */
+export function getLanguageItem(obj, lang) {
+  lang = checkLanguage({
+    obj,
+    language: lang
+  });
+  return obj[lang];
+}
+
+/**
+ * Update language views list
+ * @param {Object} o options
+ * @param {String} o.lang Language
+ */
 export async function updateLanguageViewsList(o) {
   o = Object.assign({}, o);
   const h = mx.helpers;
@@ -494,12 +511,13 @@ export async function updateLanguageMap(o) {
 }
 
 /**
-* Get dict id by name + language 
-*/ 
+ * Get dict id by name + language
+ */
+
 export async function getDictItemId(txt, language) {
-  language = language || mx.settings.language ||  'en';
+  language = language || mx.settings.language || 'en';
   const dict = await getDict(language);
-  const reg = new RegExp('^' + txt );
+  const reg = new RegExp('^' + txt);
   const res = dict.find((d) => {
     return d[language].match(reg) || d.en.match(reg);
   });

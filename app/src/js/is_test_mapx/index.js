@@ -16,17 +16,20 @@ export function isLanguageObject(item) {
   if (!isObject) {
     return false;
   }
-  let keys = Object.keys(item);
+  const keys = Object.keys(item);
   /**
    * No other keys than language code allowed,
    * but missing keys accepted.
    */
+  let valid = false;
   for (let k of keys) {
     if(!isLanguageId(k)){
       return false;
+    }else{
+      valid = true;
     }
   }
-  return true;
+  return valid;
 }
 
 /**

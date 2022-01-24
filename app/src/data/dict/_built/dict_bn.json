@@ -1790,6 +1790,11 @@
     "bn": "বন্ধ "
   },
   {
+    "id": "btn_open",
+    "en": "Open",
+    "bn": "খোলা"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "bn": "এই প্রকল্পের জন্য সদস্যতার অনুরোধ "
@@ -5900,9 +5905,9 @@
     "bn": "অস্থায়ী মান ব্যতীত ডেটা "
   },
   {
-    "id": "meta_view_projects_titles",
+    "id": "meta_view_projects_data",
     "en": "Also published in those projects",
-    "bn": "সেই প্রকল্পগুলিতেও প্রকাশিত "
+    "bn": "সেইসব প্রকল্পেও প্রকাশিত হয়েছে"
   },
   {
     "id": "meta_view_project_title",
@@ -6926,8 +6931,8 @@
   },
   {
     "id": "share_link_title",
-    "en": "Share link",
-    "bn": "লিঙ্ক ভাগ করুন "
+    "en": "Share link / code ",
+    "bn": "লিঙ্ক/কোড শেয়ার করুন"
   },
   {
     "id": "share_options",
@@ -7058,6 +7063,41 @@
     "id": "share_map_pos_get",
     "en": "Get current position",
     "bn": "বর্তমান অবস্থান পান "
+  },
+  {
+    "id": "share_method",
+    "en": "Sharing method ",
+    "bn": "শেয়ারিং পদ্ধতি"
+  },
+  {
+    "id": "share_views_select_method",
+    "en": "Views selection",
+    "bn": "ভিউ নির্বাচন"
+  },
+  {
+    "id": "share_views_select_method_map_layer",
+    "en": "Views with layers currently displayed on map",
+    "bn": "বর্তমানে মানচিত্রে প্রদর্শিত স্তর সহ দৃশ্য"
+  },
+  {
+    "id": "share_views_select_method_story_step",
+    "en": "Views of the current story step",
+    "bn": "বর্তমান গল্প ধাপের দৃশ্য"
+  },
+  {
+    "id": "share_views_select_method_current_url",
+    "en": "Views set in the current URL",
+    "bn": "বর্তমান URL-এ ভিউ সেট করা হয়েছে"
+  },
+  {
+    "id": "share_views_select_method_story_itself",
+    "en": "This story map",
+    "bn": "এই গল্প মানচিত্র"
+  },
+  {
+    "id": "share_views_select_method_map_list_open",
+    "en": "All views open in the list",
+    "bn": "সমস্ত ভিউ তালিকায় খোলা"
   },
   {
     "id": "btn_opt_share_to_project",

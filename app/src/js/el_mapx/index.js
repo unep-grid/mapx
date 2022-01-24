@@ -57,6 +57,9 @@ function elAuto(render, data, opt) {
     if (test.isDateString(x)) {
       return renderDate(x);
     }
+    if (test.isEmail(x)) {
+      return renderEmail(x);
+    }
     if (test.isUrl(x)) {
       return renderUrl(x);
     }
@@ -77,6 +80,9 @@ function elAuto(render, data, opt) {
     }
     if (test.isTable(x)) {
       return renderArrayTable(x);
+    }
+    if (test.isArrayOf(x, test.isElement)) {
+      return renderArrayElement(x);
     }
     if (test.isArray(x)) {
       return renderArrayAuto(x);
@@ -110,6 +116,20 @@ function elAuto(render, data, opt) {
       })
     );
   }
+  function renderArrayElement(arr) {
+    return el(
+      'ul',
+      {
+        style: {
+          maxHeight: '200px',
+          overflow: 'auto'
+        }
+      },
+      arr.map((d) => {
+        return el('li', d);
+      })
+    );
+  }
   function renderDate(date) {
     var dateDefault = '0001-01-01';
     if (date === dateDefault) {
@@ -128,6 +148,21 @@ function elAuto(render, data, opt) {
         href: url
       },
       label
+    );
+  }
+  function renderEmail(email) {
+    return el(
+      'a',
+      {
+        target: '_blank',
+        href: `mailto:${email}`,
+        style: {
+          maxWidth: '100%',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap'
+        }
+      },
+      email
     );
   }
   function renderString(str, asLanguageKey) {
@@ -150,20 +185,10 @@ function elAuto(render, data, opt) {
     );
   }
   function renderArrayString(arr) {
-    return el(
-      'div',
-      arr.map((str) => {
-        return renderString(str);
-      })
-    );
+    return el('div', arr.map(renderString));
   }
   function renderArrayAuto(arr) {
-    return el(
-      'div',
-      arr.map((x) => {
-        return renderAuto(x);
-      })
-    );
+    return el('div', arr.map(renderAuto));
   }
   function renderArrayTable(array) {
     var hLabels = opt.tableHeadersLabels || [];
@@ -297,6 +322,7 @@ function elSpanTranslate(key, lang) {
  * @param {Object} opt.style Additional style
  * @param {String} opt.badgeContent Value to show in badge
  * @param {Element} opt.content Additinal content
+ * @param {Object} opt.config Additional "el" config
  */
 function elButtonIcon(key, opt) {
   opt = Object.assign(
@@ -308,7 +334,8 @@ function elButtonIcon(key, opt) {
       dataset: {},
       badgeContent: null,
       style: null,
-      content: null
+      content: null,
+      config : null
     },
     opt
   );
@@ -330,7 +357,8 @@ function elButtonIcon(key, opt) {
       type: 'button',
       class: ['btn', 'btn-default', 'btn-icon', ...opt.classes],
       dataset: opt.dataset,
-      style: opt.style
+      style: opt.style,
+      ...opt.config
     },
     [
       addBadge ? el('span', {class: ['badge']}, `${opt.badgeContent}`) : false,

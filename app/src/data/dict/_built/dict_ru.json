@@ -1790,6 +1790,11 @@
     "ru": "Закрывать "
   },
   {
+    "id": "btn_open",
+    "en": "Open",
+    "ru": "Открытым"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "ru": "Запрос на участие в этом проекте "
@@ -5900,9 +5905,9 @@
     "ru": "Данные без временных значений "
   },
   {
-    "id": "meta_view_projects_titles",
+    "id": "meta_view_projects_data",
     "en": "Also published in those projects",
-    "ru": "Также опубликовано в этих проектах "
+    "ru": "Также опубликовано в этих проектах"
   },
   {
     "id": "meta_view_project_title",
@@ -6926,8 +6931,8 @@
   },
   {
     "id": "share_link_title",
-    "en": "Share link",
-    "ru": "Поделиться ссылкой "
+    "en": "Share link / code ",
+    "ru": "Поделитесь ссылкой/кодом"
   },
   {
     "id": "share_options",
@@ -7058,6 +7063,41 @@
     "id": "share_map_pos_get",
     "en": "Get current position",
     "ru": "Получить текущую позицию "
+  },
+  {
+    "id": "share_method",
+    "en": "Sharing method ",
+    "ru": "Способ обмена"
+  },
+  {
+    "id": "share_views_select_method",
+    "en": "Views selection",
+    "ru": "Выбор просмотров"
+  },
+  {
+    "id": "share_views_select_method_map_layer",
+    "en": "Views with layers currently displayed on map",
+    "ru": "Представления со слоями, отображаемыми в данный момент на карте"
+  },
+  {
+    "id": "share_views_select_method_story_step",
+    "en": "Views of the current story step",
+    "ru": "Просмотры текущего шага истории"
+  },
+  {
+    "id": "share_views_select_method_current_url",
+    "en": "Views set in the current URL",
+    "ru": "Просмотры, установленные в текущем URL"
+  },
+  {
+    "id": "share_views_select_method_story_itself",
+    "en": "This story map",
+    "ru": "Эта история карта"
+  },
+  {
+    "id": "share_views_select_method_map_list_open",
+    "en": "All views open in the list",
+    "ru": "Все виды открываются в списке"
   },
   {
     "id": "btn_opt_share_to_project",

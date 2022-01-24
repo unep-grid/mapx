@@ -1790,6 +1790,11 @@
     "fr": "Fermer"
   },
   {
+    "id": "btn_open",
+    "en": "Open",
+    "fr": "Ouvrir"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "fr": "Demande d'adhésion à ce projet"
@@ -5900,7 +5905,7 @@
     "fr": "Donnée sans valeur temporelle"
   },
   {
-    "id": "meta_view_projects_titles",
+    "id": "meta_view_projects_data",
     "en": "Also published in those projects",
     "fr": "Aussi publié dans ces projets"
   },
@@ -6926,8 +6931,8 @@
   },
   {
     "id": "share_link_title",
-    "en": "Share link",
-    "fr": "Partager un lien"
+    "en": "Share link / code ",
+    "fr": "Partager le lien/code"
   },
   {
     "id": "share_options",
@@ -7058,6 +7063,41 @@
     "id": "share_map_pos_get",
     "en": "Get current position",
     "fr": "Obtenir la position actuelle"
+  },
+  {
+    "id": "share_method",
+    "en": "Sharing method ",
+    "fr": "Méthode de partage"
+  },
+  {
+    "id": "share_views_select_method",
+    "en": "Views selection",
+    "fr": "Sélection de vues"
+  },
+  {
+    "id": "share_views_select_method_map_layer",
+    "en": "Views with layers currently displayed on map",
+    "fr": "Vues avec des couches actuellement affichées sur la carte"
+  },
+  {
+    "id": "share_views_select_method_story_step",
+    "en": "Views of the current story step",
+    "fr": "Vues de l'étape actuelle de l'histoire"
+  },
+  {
+    "id": "share_views_select_method_current_url",
+    "en": "Views set in the current URL",
+    "fr": "Vues définies dans l'URL actuelle"
+  },
+  {
+    "id": "share_views_select_method_story_itself",
+    "en": "This story map",
+    "fr": "Cette carte du récit"
+  },
+  {
+    "id": "share_views_select_method_map_list_open",
+    "en": "All views open in the list",
+    "fr": "Toutes les vues ouvertes dans la liste"
   },
   {
     "id": "btn_opt_share_to_project",
