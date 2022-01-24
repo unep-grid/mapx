@@ -1,3 +1,12 @@
+  - [1.9.39-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.3) 
+
+      - APP
+          - New sharing manager available in story, static and app mode. Feature available as control button:
+            - Multiple social app support : Linkedin, Facebook, Twitter, Direct Link, iframe
+            - Multiple views selection : layers on map, view open in list, story step views, etc.
+            - Auto update according to context and driven by events : view added / removed, story step, story open / close
+            - Will replace all others sharing system, now independent.
+
   - [1.9.39-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.2) 
 
       - APP
