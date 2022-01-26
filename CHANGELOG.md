@@ -1,3 +1,12 @@
+  - [1.9.39-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.4) 
+
+      - App 
+          - Fixed a bug in story map where the views of a step were not correcty updated after a preview 
+          - Fixed a bug in view's metadata module, in case no projects data was retrieved
+          - Modal panel : collapsed mode do not hide buttons bar and messages text. 
+      - GeoServer
+          - Added documentation about the current interaction between MapX and GeoServer
+
   - [1.9.39-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.3) 
 
       - APP
