@@ -36,7 +36,7 @@
   max-height: calc(100% - 30px);
   max-width: 100%;
   min-width: 300px;
-  min-height: 150px;
+  min-height: 90px;
   border-radius: 10px;
   z-index: 2000;
   right: 0;
@@ -68,15 +68,14 @@
   }
 }
 
-.mx-modal-container.mx-modal-collapsed .mx-modal-foot,
 .mx-modal-container.mx-modal-collapsed .mx-modal-body {
   display: none;
 }
 
 .mx-modal-container.mx-modal-collapsed {
-  min-height: 45px !important;
-  height: 45px !important;
   overflow: hidden;
+  resize: none;
+  height: 90px!important;
 }
 
 .mx-modal-top {
