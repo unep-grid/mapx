@@ -124,13 +124,14 @@ v_projects_distinct AS (
   v_projects_id_all 
 ),
 v_projects_data_json AS (
-  SELECT json_agg(
+  -- json_agg should return an empty array, but returns null instead, if no values
+  SELECT coalesce(json_agg(
     json_build_object(
      'title', p.title,
      'id', p.id,
      'public',p.public
     )
-  ) tbl
+  ),'[]') tbl
   FROM mx_projects p, v_projects_distinct vpd 
   WHERE p.id = vpd.id
 ),
