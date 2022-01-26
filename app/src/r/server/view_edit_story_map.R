@@ -113,7 +113,6 @@ observeEvent(input$storyEdit_values,{
     time <- Sys.time()
 
     view <- .set(view,c("data","story"), story)
-
     #
     # Add missing views refs
     #

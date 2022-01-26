@@ -96,8 +96,9 @@ async function init(opt) {
   const state = getState();
   Object.assign(state, opt);
   if (state.elStory) {
-    state.initScroll = state.elStory.scrollTop;
     state.update = true;
+    state.initScroll = state.elStory.scrollTop;
+    state.stepUpdate = state.stepActive;
   }
   state.map = getMap();
   state.enable = true;
@@ -286,9 +287,10 @@ export function isStoryPlaying() {
 }
 
 /**
-* Get story id
-* @return {String} Story views' id
-*/ 
+ * Get story id
+ * @return {String} Story views' id
+ */
+
 export function getStoryId() {
   if (!isStoryPlaying()) {
     return null;
@@ -298,10 +300,10 @@ export function getStoryId() {
 }
 
 /**
-* Get current views featured in step
-* @return {Array} array of views id
-*/
-export function getViewsStep(){
+ * Get current views featured in step
+ * @return {Array} array of views id
+ */
+export function getViewsStep() {
   if (!isStoryPlaying()) {
     return null;
   }
@@ -309,10 +311,10 @@ export function getViewsStep(){
   return state.step.views;
 }
 
-
 /**
-* Get current state 
-*/ 
+ * Get current state
+ */
+
 function getState() {
   return state;
 }
@@ -490,12 +492,15 @@ async function start() {
   updateLayout();
 
   /**
-   * Handle init stroll value
+   * Handle update step 
    */
-  if (state.currentStep > 0) {
-    await storyGoTo(state.currentStep);
+  if(state.initScroll){
+    state.elStory.scrollTop = state.initScroll;
   }
-
+  if (state.stepUpdate) {
+    state.stepActive=null;
+    await storyGoTo(state.stepUpdate);
+  }
   /**
    * Render
    */
@@ -503,6 +508,7 @@ async function start() {
 
   /* main animation loop */
   async function render() {
+    await waitFrameAsync();
     const sd = state.scrollData;
 
     if (!isStoryPlaying()) {
@@ -513,13 +519,11 @@ async function start() {
     const posNow = state.elStory.scrollTop * state.scaleWrapper || 1;
     const posLast = sd.distTop;
     if (posLast === posNow) {
-      await waitFrameAsync();
       return render();
     }
 
     sd.distTop = posNow;
     await storyUpdateSlides();
-    await waitFrameAsync();
     return render();
   }
 }
@@ -1580,7 +1584,7 @@ export async function storyPlayStep(stepNum) {
   }
   map.stop();
   mx.events.fire('story_step');
-    /**
+  /**
    * retrieve step information
    */
   const step = steps[stepNum];
