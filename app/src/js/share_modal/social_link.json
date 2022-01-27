@@ -98,8 +98,8 @@
     "template": "https://t.me/share/url?url={{url}}&text={{text}}"
   },
   {
-    "id": "soc_link_threma",
-    "label": "Threma",
+    "id": "soc_link_threema",
+    "label": "Threema",
     "template": "threema://compose?text={{url}}&id={{user_id}}"
   }
 ]
