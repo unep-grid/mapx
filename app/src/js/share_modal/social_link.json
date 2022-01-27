@@ -83,8 +83,8 @@
     "template": "http://widget.renren.com/dialog/share?resourceUrl={{url}}&srcUrl={{url}}&title={{title}}&description={{text}}"
   },
   {
-    "id": "soc_link_xin",
-    "label": "Xin",
+    "id": "soc_link_xing",
+    "label": "Xing",
     "template": "https://www.xing.com/spi/shares/new?url={{url}}"
   },
   {
