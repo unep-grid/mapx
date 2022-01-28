@@ -1,7 +1,13 @@
 import socialLinks from './social_link.json';
 import shareMode from './share_mode.json';
 import {modal} from '../mx_helper_modal';
-import {el, elButtonIcon, elSpanTranslate} from '../el_mapx';
+import {
+  el,
+  elButtonFa,
+  elSpanTranslate,
+  elCheckbox,
+  elDetails
+} from '../el_mapx';
 import {isStoryPlaying, getStoryId, getViewsStep} from '../story_map/index.js';
 import {parseTemplate} from '../mx_helper_misc.js';
 import {getViewsLayersVisibles, getViewsOpen} from '../mx_helper_map.js';
@@ -20,10 +26,10 @@ const state = {
     zoomToViews: true
   },
   form: {
-    share_link_txt: '',
-    share_link_select: '',
+    share_form_txt: '',
+    share_form_select: '',
     share_views_select: '',
-    share_link_static: ''
+    share_form_static: ''
   }
 };
 
@@ -76,28 +82,32 @@ export class ShareModal {
     /**
      * Controls
      */
-
     const elButtons = [
-      this.elButton('btn_close', 'times', this.destroy),
-      this.elButton('btn_copy', 'clipboard', this.copy),
-      (this._el_button_open = this.elButton(
-        'btn_open',
-        'external-link',
-        this.open
-      ))
+      elButtonFa('btn_close', {
+        icon: 'times',
+        action: this.destroy
+      }),
+      elButtonFa('btn_copy', {
+        icon: 'clipboard',
+        action: this.copy
+      }),
+      (this._el_button_open = elButtonFa('btn_open', {
+        icon: 'external-link',
+        actiom: this.open
+      }))
     ];
 
     /**
      * Link / Code text
      */
     this._el_input = el('textarea', {
-      name: 'share_link_txt',
-      id: 'share_link_txt',
+      name: 'share_form_txt',
+      id: 'share_form_txt',
       rows: 5,
       class: 'form-control'
     });
     const elLinkText = el('div', {class: 'form-group'}, [
-      el('label', {for: 'share_link_txt'}, t('share_link_title')),
+      el('label', {for: 'share_form_txt'}, t('share_form_title')),
       el('small', {class: 'help-block'}, t('share_mode_warn')),
       this._el_input
     ]);
@@ -106,14 +116,13 @@ export class ShareModal {
      * Template selection
      */
     const elLinkSelect = el('div', {class: 'form-group'}, [
-      el('label', {for: 'share_link_select'}, t('share_method')),
+      el('label', {for: 'share_form_select'}, t('share_method')),
       el(
         'select',
         {
-          name: 'share_link_select',
-          id: 'share_link_select',
-          class: 'form-control',
-          on: ['change', this.update]
+          name: 'share_form_select',
+          id: 'share_form_select',
+          class: 'form-control'
         },
         socialLinks.map((s) => el('option', {value: s.id}, s.label))
       )
@@ -140,8 +149,7 @@ export class ShareModal {
         {
           name: 'share_views_select',
           id: 'share_views_select',
-          class: 'form-control',
-          on: ['change', this.update]
+          class: 'form-control'
         },
         sModes.map((idMode) => el('option', {value: idMode}, t(idMode)))
       )
@@ -150,28 +158,26 @@ export class ShareModal {
     /**
      * Static /
      */
-    const elLinkStatic = el('div', {class: 'checkbox'}, [
-      el('label', {for: 'share_link_static'}, [
-        el('input', {
-          name: 'share_link_static',
-          id: 'share_link_static',
-          type: 'checkbox',
-          checked: true,
-          on: ['change', this.update]
-        }),
-        el('span', t('share_mode_static_label'))
-      ])
+    const elLinkStatic = elCheckbox('share_mode_static_label', {
+      keyDesc: 'share_mode_static_label_desc',
+      name: 'share_form_static'
+    });
+
+    /**
+     * Details
+     */
+    const elOptions = elDetails('share_form_details', 'share_options', [
+      el('div', elLinkStatic)
     ]);
 
     /**
      * Form
      */
-    this._el_form = el('form', {name: 'share_link_form', id: 'test'}, [
-      elLinkText,
-      elLinkSelect,
-      elViewsSelect,
-      elLinkStatic
-    ]);
+    this._el_form = el(
+      'form',
+      {name: 'share_form_form', id: 'test', on: ['change', this.update]},
+      [elLinkText, elLinkSelect, elViewsSelect, elOptions]
+    );
     this._el_content.appendChild(this._el_form);
 
     /**
@@ -258,7 +264,7 @@ export class ShareModal {
      */
     const text = 'Shared from MapX';
     const title = 'MapX';
-    const idLinkItem = state.form.share_link_select;
+    const idLinkItem = state.form.share_form_select;
     const linkItem = this.getLinkItem(idLinkItem);
     if (!linkItem) {
       console.warn(`${idLinkItem} not found`);
@@ -266,7 +272,7 @@ export class ShareModal {
     }
     const disableLink = !!linkItem.disable_link;
     const disableEncode = !!linkItem.disable_encode;
-    const useStatic = state.form.share_link_static === 'on';
+    const useStatic = state.form.share_form_static === 'on';
     if (useStatic) {
       url.pathname = '/static.html';
     } else {
@@ -326,22 +332,7 @@ export class ShareModal {
     const elTemp = el('input', {type: 'text'});
     elTemp.value = state.shareString;
     elTemp.select();
-    //debugger;
-    //elTemp.setSelectRange(0, 1e6);
     navigator.clipboard.writeText(elTemp.value);
     new FlashItem('clipboard');
-  }
-
-  /**
-   * Simple button
-   */
-  elButton(key, icon, action) {
-    return elButtonIcon(key, {
-      icon: `fa-${icon}`,
-      mode: 'text_icon',
-      config: {
-        on: {click: action}
-      }
-    });
   }
 }

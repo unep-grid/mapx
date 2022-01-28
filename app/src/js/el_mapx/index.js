@@ -3,6 +3,36 @@ import {getDictItem} from './../mx_helper_language.js';
 import * as test from './../is_test_mapx/index.js';
 export {el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate};
 
+
+/**
+* MapX "components" 
+*/ 
+
+
+
+
+/**
+* Auto renderer : table,array, string, boolean,... 
+* @param {String} render Renderer type : auto, string, date, boolean, array_auto, arra_table, array_string 
+* @param {Object} data Data/content to render. element, string, date, etc..
+* @param {Object} opt Options additional options. 
+* @param {String} opt.render Renderer (alternative)
+* @param {Boolean} opt.tableHeadersSkip No header in table
+* @param {Array} opt.tableHeadersClasses Table array of classes for headers
+* @param {Array} opt.tableHeadersLabels Table array of labels 
+* @param {String} opt.tableTitle Table title
+* @param {Boolean} opt.tableTitleAsLanguageKey Use table title as language key (attempt to translate)
+* @param {Array} opt.tableClass Table array of classes 
+* @param {Array} opt.tableContainerHeaderClass Table container header array of claseses
+* @param {Array} opt.tableContainerClass Table container array of classes 
+* @param {Array} opt.booleanValues Array of boolean values e.g. ["yes","no"], ["☑","✖️"]
+* @param {Object} opt.stringStyle Object for string style. e.g. {float:'right'}
+* @param {Object} opt.numberStyle Object for nuemeric style e.g. {margin:'3px'}
+* @param {Object} opt.dateStyle Object for date style. e.g. {background:'red'}
+* @param {String} opt.langKeyPrefix Language prefix for translation ['open','close'] + prefix 'btn_' -> 'btn_open', 'btn_close'
+* @param {Boolean} opt.stringAsLanguageKey Use string as language key 
+* @param {String} opt.urlDefaultLabel Defaut label for links. e.g. "[ link ]"
+*/ 
 function elAuto(render, data, opt) {
   opt = opt || {};
 
@@ -335,7 +365,7 @@ function elButtonIcon(key, opt) {
       badgeContent: null,
       style: null,
       content: null,
-      config : null
+      config: null
     },
     opt
   );
@@ -375,3 +405,83 @@ function elButtonIcon(key, opt) {
   }
   return elBtn;
 }
+
+/**
+ * Standard fa icon button ( alternative to elButtonIcon )
+ * @param {String} key Translation key
+ * @param {Object} opt Options
+ * @param {String} opt.icon Font awesome icon name e.g. fa-lock => 'lock'
+ * @param {Function} opt.action Callback when clicked
+ */
+export function elButtonFa(key, opt) {
+  opt = Object.assign(
+    {},
+    {
+      icon: 'question',
+      action: () => {}
+    },
+    opt
+  );
+  return elButtonIcon(key, {
+    icon: `fa-${opt.icon}`,
+    mode: 'text_icon',
+    config: {
+      on: {click: opt.action}
+    }
+  });
+}
+
+/**
+ * Standard checkbox
+ * @param {String} key Translation key
+ * @param {Object} opt Options
+ * @param {String} opt.id Element id
+ * @param {String} opt.action Callback
+ * @param {Boolean} opt.checked Checked at start
+ * @param {Boolean} opt.name Form element name
+ */
+export function elCheckbox(key, opt) {
+  opt = Object.assign(
+    {},
+    {
+      id: Math.random().toString(32),
+      action: () => {},
+      checked: true,
+      name : null
+    },
+    opt
+  );
+
+  return el('div', {class: 'checkbox'}, [
+    el('label', {for: opt.id}, [
+      el('input', {
+        name: opt.id,
+        id: opt.id,
+        name : opt.name,
+        type: 'checkbox',
+        checked: opt.checked,
+        on: ['change', opt.action]
+      }),
+      elSpanTranslate(key),
+      opt.keyDesc
+        ? el(
+            'div',
+            {class: ['text-muted', 'help-box']},
+            elSpanTranslate(opt.keyDesc)
+          )
+        : null
+    ])
+  ]);
+}
+
+/**
+ * Detail element
+ * @param {String} id Element id
+ * @param {String} key Translation key
+ * @param {Element} content Content
+ */
+export function elDetails(id, key, content) {
+  return el('details', {id}, el('summary', elSpanTranslate(key)), content);
+}
+
+
