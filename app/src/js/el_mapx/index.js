@@ -3,36 +3,33 @@ import {getDictItem} from './../mx_helper_language.js';
 import * as test from './../is_test_mapx/index.js';
 export {el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate};
 
+/**
+ * MapX "components"
+ */
 
 /**
-* MapX "components" 
-*/ 
+ * Auto renderer : table,array, string, boolean,...
+ * @param {String} render Renderer type : auto, string, date, boolean, array_auto, arra_table, array_string
+ * @param {Object} data Data/content to render. element, string, date, etc..
+ * @param {Object} opt Options additional options.
+ * @param {String} opt.render Renderer (alternative)
+ * @param {Boolean} opt.tableHeadersSkip No header in table
+ * @param {Array} opt.tableHeadersClasses Table array of classes for headers
+ * @param {Array} opt.tableHeadersLabels Table array of labels
+ * @param {String} opt.tableTitle Table title
+ * @param {Boolean} opt.tableTitleAsLanguageKey Use table title as language key (attempt to translate)
+ * @param {Array} opt.tableClass Table array of classes
+ * @param {Array} opt.tableContainerHeaderClass Table container header array of claseses
+ * @param {Array} opt.tableContainerClass Table container array of classes
+ * @param {Array} opt.booleanValues Array of boolean values e.g. ["yes","no"], ["☑","✖️"]
+ * @param {Object} opt.stringStyle Object for string style. e.g. {float:'right'}
+ * @param {Object} opt.numberStyle Object for nuemeric style e.g. {margin:'3px'}
+ * @param {Object} opt.dateStyle Object for date style. e.g. {background:'red'}
+ * @param {String} opt.langKeyPrefix Language prefix for translation ['open','close'] + prefix 'btn_' -> 'btn_open', 'btn_close'
+ * @param {Boolean} opt.stringAsLanguageKey Use string as language key
+ * @param {String} opt.urlDefaultLabel Defaut label for links. e.g. "[ link ]"
+ */
 
-
-
-
-/**
-* Auto renderer : table,array, string, boolean,... 
-* @param {String} render Renderer type : auto, string, date, boolean, array_auto, arra_table, array_string 
-* @param {Object} data Data/content to render. element, string, date, etc..
-* @param {Object} opt Options additional options. 
-* @param {String} opt.render Renderer (alternative)
-* @param {Boolean} opt.tableHeadersSkip No header in table
-* @param {Array} opt.tableHeadersClasses Table array of classes for headers
-* @param {Array} opt.tableHeadersLabels Table array of labels 
-* @param {String} opt.tableTitle Table title
-* @param {Boolean} opt.tableTitleAsLanguageKey Use table title as language key (attempt to translate)
-* @param {Array} opt.tableClass Table array of classes 
-* @param {Array} opt.tableContainerHeaderClass Table container header array of claseses
-* @param {Array} opt.tableContainerClass Table container array of classes 
-* @param {Array} opt.booleanValues Array of boolean values e.g. ["yes","no"], ["☑","✖️"]
-* @param {Object} opt.stringStyle Object for string style. e.g. {float:'right'}
-* @param {Object} opt.numberStyle Object for nuemeric style e.g. {margin:'3px'}
-* @param {Object} opt.dateStyle Object for date style. e.g. {background:'red'}
-* @param {String} opt.langKeyPrefix Language prefix for translation ['open','close'] + prefix 'btn_' -> 'btn_open', 'btn_close'
-* @param {Boolean} opt.stringAsLanguageKey Use string as language key 
-* @param {String} opt.urlDefaultLabel Defaut label for links. e.g. "[ link ]"
-*/ 
 function elAuto(render, data, opt) {
   opt = opt || {};
 
@@ -447,7 +444,7 @@ export function elCheckbox(key, opt) {
       id: Math.random().toString(32),
       action: () => {},
       checked: true,
-      name : null
+      name: null
     },
     opt
   );
@@ -457,7 +454,7 @@ export function elCheckbox(key, opt) {
       el('input', {
         name: opt.id,
         id: opt.id,
-        name : opt.name,
+        name: opt.name,
         type: 'checkbox',
         checked: opt.checked,
         on: ['change', opt.action]
@@ -483,5 +480,3 @@ export function elCheckbox(key, opt) {
 export function elDetails(id, key, content) {
   return el('details', {id}, el('summary', elSpanTranslate(key)), content);
 }
-
-

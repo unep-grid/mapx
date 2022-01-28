@@ -164,7 +164,7 @@ export class ShareModal {
     });
 
     /**
-     * Details
+     * Options / advanced config
      */
     const elOptions = elDetails('share_form_details', 'share_options', [
       el('div', elLinkStatic)
