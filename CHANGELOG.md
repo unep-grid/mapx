@@ -1,3 +1,9 @@
+  - [1.9.39-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.5) 
+
+      - App
+          - Major refactoring of the sharing manager ( requires additional improvement ).
+          - Updated mapbox gl to 2.7.0: main change improvement of transparency on line features.
+
   - [1.9.39-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.4) 
 
       - App 
