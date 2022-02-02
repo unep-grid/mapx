@@ -494,6 +494,7 @@ export function isModeLocked() {
 
 export function initListenerGlobal() {
   const h = mx.helpers;
+  const map = h.getMap();
   /**
    * Handle view click
    */
@@ -530,6 +531,34 @@ export function initListenerGlobal() {
     type: ['error', 'unhandledrejection'],
     idGroup: 'base',
     callback: errorHandler
+  });
+
+  /**
+   *  Events
+   */
+  mx.events.on({
+    type: ['view_added', 'view_removed', 'story_step'],
+    idGroup: 'update_share_modale',
+    callback: () => {
+      if (window._share_modal) {
+        window._share_modal.update();
+      }
+    }
+  });
+  mx.events.on({
+    type: ['story_start', 'story_close'],
+    idGroup: 'update_share_modale_story',
+    callback: () => {
+      if (window._share_modal) {
+        window._share_modal.init();
+      }
+    }
+  });
+
+  map.on('move', () => {
+    if (window._share_modal) {
+      window._share_modal.update();
+    }
   });
 }
 
@@ -640,26 +669,6 @@ export function initListenersApp() {
     type: ['views_list_updated', 'view_add', 'view_remove', 'mapx_ready'],
     idGroup: 'update_btn_filter_view_activated',
     callback: updateBtnFilterActivated
-  });
-
-  mx.events.on({
-    type: ['view_added', 'view_removed', 'story_step'],
-    idGroup: 'update_share_modale',
-    callback: () => {
-      if (window._share_modal) {
-        window._share_modal.update();
-      }
-    }
-  });
-
-  mx.events.on({
-    type: ['story_start', 'story_close'],
-    idGroup: 'update_share_modale_story',
-    callback: () => {
-      if (window._share_modal) {
-        window._share_modal.init();
-      }
-    }
   });
 
   mx.listeners.addListener({
@@ -907,11 +916,13 @@ export async function initMapx(o) {
   }
 
   /*
-   * Check url for lat, lng and zoom
+   * Update map pos with values from query
    */
   const queryLat = h.getQueryParameter('lat')[0];
   const queryLng = h.getQueryParameter('lng')[0];
   const queryZoom = h.getQueryParameter(['z', 'zoom'])[0];
+  const queryPitch = h.getQueryParameter(['p', 'pitch'])[0];
+  const queryBearing = h.getQueryParameter(['b', 'bearing'])[0];
 
   if (queryLat) {
     mp.center = null;
@@ -924,7 +935,12 @@ export async function initMapx(o) {
   if (queryZoom) {
     mp.z = queryZoom * 1 || 0;
   }
-
+  if (queryPitch) {
+    mp.p = queryPitch * 1 || 0;
+  }
+  if (queryBearing) {
+    mp.b = queryBearing * 1 || 0;
+  }
   /* map options */
   const mapOptions = {
     container: o.id, // container id
@@ -935,15 +951,17 @@ export async function initMapx(o) {
     attributionControl: false,
     crossSourceCollisions: true,
     zoom: mp.z || mp.zoom || 0,
-    bearing: mp.bearing || 0,
-    pitch: mp.pitch || 0,
+    bearing: mp.b || mp.bearing || 0,
+    pitch: mp.p || mp.pitch || 0,
     center: mp.center || [mp.lng || 0, mp.lat || 0]
   };
-
   /*
    * Create map object
    */
   o.map = new mx.mapboxgl.Map(mapOptions);
+  // Multiple maps were originally planned, never happened.
+  // -> many function have an option for getting the map by id, but
+  //    only one really exists. TODO: refactoring
   mx.maps[o.id].map = o.map;
   const elCanvas = o.map.getCanvas();
   elCanvas.setAttribute('tabindex', '-1');
@@ -5812,18 +5830,17 @@ export function getViewsFilter(o) {
  * @param {string} o.id map id
  */
 export function getMapPos(o) {
+  const h = mx.helpers;
   o = o || {};
-  let out, map, bounds, center, zoom, bearing, pitch;
-  const r = mx.helpers.round;
-  map = mx.helpers.getMap(o.id);
+  const r = h.round;
+  const map = h.getMap(o.id);
+  const bounds = map.getBounds();
+  const center = map.getCenter();
+  const zoom = map.getZoom();
+  const bearing = map.getBearing();
+  const pitch = map.getPitch();
 
-  bounds = map.getBounds();
-  center = map.getCenter();
-  zoom = map.getZoom();
-  bearing = map.getBearing();
-  pitch = map.getPitch();
-
-  out = {
+  return {
     n: r(bounds.getNorth()),
     s: r(bounds.getSouth()),
     e: r(bounds.getEast()),
@@ -5834,8 +5851,6 @@ export function getMapPos(o) {
     p: r(pitch),
     z: r(zoom)
   };
-
-  return out;
 }
 
 /**

@@ -6930,14 +6930,14 @@
     "bn": "শেয়ারিং ম্যানেজার "
   },
   {
-    "id": "share_link_title",
+    "id": "share_form_title",
     "en": "Share link / code ",
     "bn": "লিঙ্ক/কোড শেয়ার করুন"
   },
   {
     "id": "share_options",
-    "en": "Show/hide settings",
-    "bn": "সেটিংস দেখান/লুকান"
+    "en": "Settings",
+    "bn": "সেটিংস"
   },
   {
     "id": "share_mode_warn",
@@ -6950,94 +6950,44 @@
     "bn": "'স্ট্যাটিক' মোডটি ব্যবহার করুন (প্রস্তাবিত) "
   },
   {
-    "id": "share_mode_static_label_desc",
+    "id": "share_mode_static_desc",
     "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "bn": "আপনি যদি সীমিত কার্যকারিতা সহ MapX এর একটি হালকা এবং দ্রুত সংস্করণ ব্যবহার করে একটি দৃশ্য ভাগ করতে চান তবে 'স্থির' মোড ব্যবহার করুন৷ যদি আপনি একটি গল্প মানচিত্র যোগ করেন, এটি স্বয়ংক্রিয়ভাবে শুরু হবে, অন্য কোনো দৃশ্য বাদ দিয়ে"
-  },
-  {
-    "id": "share_views_check_label",
-    "en": "Add views to share",
-    "bn": "ভাগ করে নেওয়ার জন্য দর্শন যুক্ত করুন "
-  },
-  {
-    "id": "share_views_select",
-    "en": "Select views",
-    "bn": "ভিউ নির্বাচন করুন"
-  },
-  {
-    "id": "share_views_check_label_desc",
-    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
-    "bn": "প্রদর্শনের জন্য ভিউ। তালিকাটি পুনর্বিন্যাস করা যেতে পারে: শীর্ষ দৃশ্যগুলির উপরে স্তরগুলি প্রদর্শিত হবে। 'স্ট্যাটিক' মোডে, সেই দৃশ্যগুলি স্বয়ংক্রিয়ভাবে রেন্ডার করা হবে। গল্প মানচিত্র সরাসরি শুরু হবে. 'স্বাভাবিক' মোডে, ভিউগুলি তালিকায় প্রদর্শিত হবে এবং যদি নির্বাচন খালি থাকে তবে প্রকল্পের সমস্ত দৃশ্য তালিকাভুক্ত করা হবে।"
+    "bn": "আপনি যদি সীমিত কার্যকারিতা সহ MapX এর একটি হালকা এবং দ্রুত সংস্করণ ব্যবহার করে একটি ভিউ শেয়ার করতে চান তবে 'স্ট্যাটিক' মোড ব্যবহার করুন। যদি আপনি একটি গল্প মানচিত্র যোগ করেন, এটি স্বয়ংক্রিয়ভাবে শুরু হবে, অন্য কোনো দৃশ্য বাদ দিয়ে"
   },
   {
     "id": "share_views_zoom_label",
-    "en": "Zoom to views extent",
-    "bn": "দেখার পরিমাণে জুম করুন "
+    "en": "Zoom to all views extent, starting from initial position.",
+    "bn": "প্রারম্ভিক অবস্থান থেকে শুরু করে সমস্ত দর্শনের সীমাতে জুম করুন।"
   },
   {
-    "id": "share_views_zoom_label_desc",
-    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
-    "bn": "'স্ট্যাটিক' মোডে, যদি উপলব্ধ থাকে তবে এটি ভিউ লেয়ারের সীমার সাথে মানানসই করার জন্য মানচিত্রের সীমা নির্ধারণ করবে।"
+    "id": "share_views_zoom_desc",
+    "en": "Extents of all views will be computed. If no view is selected, this option will be ignored",
+    "bn": "সমস্ত দর্শনের সীমা গণনা করা হবে। যদি কোন দৃশ্য নির্বাচন না করা হয়, এই বিকল্পটি উপেক্ষা করা হবে"
   },
   {
-    "id": "share_views_open_check_label",
-    "en": "Set views to activate",
-    "bn": "সক্রিয় করতে দর্শন সেট করুন "
+    "id": "share_views_open_label",
+    "en": "Activate views",
+    "bn": "ভিউ সক্রিয় করুন"
   },
   {
-    "id": "share_views_open_check_label_desc",
-    "en": "Add views to be automatically activated when the application is launched.",
-    "bn": "অ্যাপ্লিকেশন চালু হলে স্বয়ংক্রিয়ভাবে সক্রিয় হতে ভিউ যোগ করুন।"
+    "id": "share_views_open_desc",
+    "en": "Open/Activate selected views at startup",
+    "bn": "স্টার্টআপে নির্বাচিত ভিউ খুলুন/সক্রিয় করুন"
   },
   {
-    "id": "share_collections_check_label",
-    "en": "Set collections",
-    "bn": "সংগ্রহ সেট করুন "
+    "id": "share_map_pos_label",
+    "en": "Set initial map position",
+    "bn": "প্রাথমিক মানচিত্রের অবস্থান সেট করুন"
   },
   {
-    "id": "share_collections_check_label_desc",
-    "en": "Add groups of views by using collections",
-    "bn": "সংগ্রহ ব্যবহার করে ভিউ গ্রুপ যোগ করুন"
+    "id": "share_map_pos_desc",
+    "en": "The current extent, tilt and bearing of the map will be used. Project's default will not be applied.",
+    "bn": "মানচিত্রের বর্তমান ব্যাপ্তি, কাত এবং বিয়ারিং ব্যবহার করা হবে। প্রকল্পের ডিফল্ট প্রয়োগ করা হবে না."
   },
   {
-    "id": "share_collections_check_operator_label",
-    "en": "Selection mode (if more that one collection)",
-    "bn": "নির্বাচন মোড (যদি আরও এক সংগ্রহ হয়) "
-  },
-  {
-    "id": "share_collections_check_operator_all",
-    "en": "Intersection",
-    "bn": "ছেদ করা "
-  },
-  {
-    "id": "share_collections_check_operator_any",
-    "en": "Union",
-    "bn": "মিলন "
-  },
-  {
-    "id": "share_map_pos_check_label",
-    "en": "Set map position",
-    "bn": "মানচিত্রের অবস্থান নির্ধারণ করুন "
-  },
-  {
-    "id": "share_map_pos_check_label_desc",
-    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
-    "bn": "মানচিত্রের অবস্থান সেট করা সমগ্র বিশ্বের একটি প্রতিনিধিত্ব প্রকাশের পরিবর্তে একটি সংজ্ঞায়িত স্থানিক প্রসারিত দেখাবে।"
-  },
-  {
-    "id": "share_iframe_check_label",
-    "en": "Embed in HTML tags",
-    "bn": "এইচটিএমএল ট্যাগগুলিতে এম্বেড করুন "
-  },
-  {
-    "id": "share_iframe_check_label_desc",
-    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "bn": "একটি লিঙ্ক এম্বেড করুন<iframe> আপনার ওয়েবসাইটে সহজেই MapX যোগ করতে HTML ট্যাগ।</iframe>"
-  },
-  {
-    "id": "share_filter_activated",
+    "id": "share_filter_activated_label",
     "en": "Filter activated view by default",
-    "bn": "ডিফল্টরূপে ফিল্টার অ্যাক্টিভেটেড ভিউ "
+    "bn": "ডিফল্টরূপে সক্রিয় ভিউ ফিল্টার করুন"
   },
   {
     "id": "share_filter_activated_desc",
@@ -7045,9 +6995,9 @@
     "bn": "এই বিকল্পটি প্রথম থেকে খোলার জন্য সেট দেখানো হবে "
   },
   {
-    "id": "share_category_hide",
+    "id": "share_category_hide_label",
     "en": "Hide categories",
-    "bn": "বিভাগগুলি লুকান "
+    "bn": "বিভাগগুলি লুকান"
   },
   {
     "id": "share_category_hide_desc",
@@ -7055,24 +7005,19 @@
     "bn": "বিভাগগুলি ডিফল্টরূপে দর্শনের তালিকায় লুকানো থাকবে "
   },
   {
-    "id": "share_map_pos_set",
-    "en": "Set map position",
-    "bn": "মানচিত্রের অবস্থান নির্ধারণ করুন "
-  },
-  {
-    "id": "share_map_pos_get",
-    "en": "Get current position",
-    "bn": "বর্তমান অবস্থান পান "
-  },
-  {
-    "id": "share_method",
-    "en": "Sharing method ",
+    "id": "share_template_label",
+    "en": "Sharing method",
     "bn": "শেয়ারিং পদ্ধতি"
   },
   {
-    "id": "share_views_select_method",
+    "id": "share_views_select_label",
     "en": "Views selection",
     "bn": "ভিউ নির্বাচন"
+  },
+  {
+    "id": "share_views_select_method_all",
+    "en": "All views in this project",
+    "bn": "এই প্রকল্পের সব মতামত"
   },
   {
     "id": "share_views_select_method_map_layer",
@@ -7098,6 +7043,31 @@
     "id": "share_views_select_method_map_list_open",
     "en": "All views open in the list",
     "bn": "সমস্ত ভিউ তালিকায় খোলা"
+  },
+  {
+    "id": "share_msg_views_count_empty_static",
+    "en": "No view selected. Please open / select at least one view.",
+    "bn": "কোন ভিউ নির্বাচন করা হয়নি। অন্তত একটি দৃশ্য খুলুন / নির্বাচন করুন."
+  },
+  {
+    "id": "share_msg_views_count_empty",
+    "en": "No view selected. The default behaviour will be to open a project with all views listed. Other views handling options will be ignored.",
+    "bn": "কোন ভিউ নির্বাচন করা হয়নি। ডিফল্ট আচরণ তালিকাভুক্ত সমস্ত দর্শন সহ একটি প্রকল্প খুলতে হবে। অন্যান্য ভিউ হ্যান্ডলিং বিকল্প উপেক্ষা করা হবে."
+  },
+  {
+    "id": "share_msg_views_count_single",
+    "en": "The link will share a single view.",
+    "bn": "লিঙ্কটি একটি একক ভিউ শেয়ার করবে।"
+  },
+  {
+    "id": "share_msg_views_count_multiple",
+    "en": "The link will share {{n}} views.",
+    "bn": "লিংক শেয়ার করবেন {{n}} ভিউ"
+  },
+  {
+    "id": "share_msg_multiple_views_story_static",
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
+    "bn": "নির্বাচন একটি গল্প মানচিত্র অন্তর্ভুক্ত: অন্যান্য দৃশ্য উপেক্ষা করা হবে এবং গল্প মানচিত্র স্বয়ংক্রিয়ভাবে চালানো হবে"
   },
   {
     "id": "btn_opt_share_to_project",

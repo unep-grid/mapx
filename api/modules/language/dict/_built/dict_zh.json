@@ -6930,14 +6930,14 @@
     "zh": "分享管理"
   },
   {
-    "id": "share_link_title",
+    "id": "share_form_title",
     "en": "Share link / code ",
     "zh": "分享链接/代码"
   },
   {
     "id": "share_options",
-    "en": "Show/hide settings",
-    "zh": "显示/隐藏设置"
+    "en": "Settings",
+    "zh": "设置"
   },
   {
     "id": "share_mode_warn",
@@ -6950,92 +6950,42 @@
     "zh": "使用“静态”模式（推荐）"
   },
   {
-    "id": "share_mode_static_label_desc",
+    "id": "share_mode_static_desc",
     "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "zh": "如果您想使用功能有限的轻量级和更快的 MapX 版本共享视图，请使用“静态”模式。如果您添加故事地图，它将自动启动，丢弃任何其他视图"
-  },
-  {
-    "id": "share_views_check_label",
-    "en": "Add views to share",
-    "zh": "添加要分享的视图"
-  },
-  {
-    "id": "share_views_select",
-    "en": "Select views",
-    "zh": "选择视图"
-  },
-  {
-    "id": "share_views_check_label_desc",
-    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
-    "zh": "要显示的视图。 列表可以重新排序：顶部视图将显示在顶部的图层。 在“静态”模式下，这些视图将自动呈现。 Story Map将直接启动。 在“正常”模式下，视图将显示在列表中，如果所选内容为空，则将列出项目的所有视图。"
+    "zh": "如果您想使用功能有限的轻量级和更快版本的 MapX 共享视图，请使用“静态”模式。如果您添加故事地图，它将自动启动，丢弃任何其他视图"
   },
   {
     "id": "share_views_zoom_label",
-    "en": "Zoom to views extent",
-    "zh": "缩放到视图范围"
+    "en": "Zoom to all views extent, starting from initial position.",
+    "zh": "从初始位置开始缩放到所有视图范围。"
   },
   {
-    "id": "share_views_zoom_label_desc",
-    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
-    "zh": "在“静态”模式下，将设置地图范围以适应视图图层范围（如果可用）。"
+    "id": "share_views_zoom_desc",
+    "en": "Extents of all views will be computed. If no view is selected, this option will be ignored",
+    "zh": "将计算所有视图的范围。如果没有选择视图，这个选项将被忽略"
   },
   {
-    "id": "share_views_open_check_label",
-    "en": "Set views to activate",
-    "zh": "设置要激活的试图"
+    "id": "share_views_open_label",
+    "en": "Activate views",
+    "zh": "激活视图"
   },
   {
-    "id": "share_views_open_check_label_desc",
-    "en": "Add views to be automatically activated when the application is launched.",
-    "zh": "添加要在应用程序启动时自动激活的视图。"
+    "id": "share_views_open_desc",
+    "en": "Open/Activate selected views at startup",
+    "zh": "在启动时打开/激活选定的视图"
   },
   {
-    "id": "share_collections_check_label",
-    "en": "Set collections",
-    "zh": "设置集合"
+    "id": "share_map_pos_label",
+    "en": "Set initial map position",
+    "zh": "设置初始地图位置"
   },
   {
-    "id": "share_collections_check_label_desc",
-    "en": "Add groups of views by using collections",
-    "zh": "使用集合添加视图组"
+    "id": "share_map_pos_desc",
+    "en": "The current extent, tilt and bearing of the map will be used. Project's default will not be applied.",
+    "zh": "将使用地图的当前范围、倾斜度和方位。不会应用项目的默认值。"
   },
   {
-    "id": "share_collections_check_operator_label",
-    "en": "Selection mode (if more that one collection)",
-    "zh": "选择模式（如果多于一个集合）"
-  },
-  {
-    "id": "share_collections_check_operator_all",
-    "en": "Intersection",
-    "zh": "交集"
-  },
-  {
-    "id": "share_collections_check_operator_any",
-    "en": "Union",
-    "zh": "并集"
-  },
-  {
-    "id": "share_map_pos_check_label",
-    "en": "Set map position",
-    "zh": "设置地图位置"
-  },
-  {
-    "id": "share_map_pos_check_label_desc",
-    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
-    "zh": "设置地图的位置将显示已定义的空间范围，而非世界地图。"
-  },
-  {
-    "id": "share_iframe_check_label",
-    "en": "Embed in HTML tags",
-    "zh": "嵌入HTML标签"
-  },
-  {
-    "id": "share_iframe_check_label_desc",
-    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "zh": "将链接嵌入 <iframe> HTML标签中，即可轻松的将MapX添加到你的网站。"
-  },
-  {
-    "id": "share_filter_activated",
+    "id": "share_filter_activated_label",
     "en": "Filter activated view by default",
     "zh": "默认筛选已激活视图"
   },
@@ -7045,7 +6995,7 @@
     "zh": "仅显示初始设定为打开的视图"
   },
   {
-    "id": "share_category_hide",
+    "id": "share_category_hide_label",
     "en": "Hide categories",
     "zh": "隐藏类别"
   },
@@ -7055,24 +7005,19 @@
     "zh": "试图列表默认隐藏类别"
   },
   {
-    "id": "share_map_pos_set",
-    "en": "Set map position",
-    "zh": "设置地图位置"
-  },
-  {
-    "id": "share_map_pos_get",
-    "en": "Get current position",
-    "zh": "获取当前位置"
-  },
-  {
-    "id": "share_method",
-    "en": "Sharing method ",
+    "id": "share_template_label",
+    "en": "Sharing method",
     "zh": "分享方式"
   },
   {
-    "id": "share_views_select_method",
+    "id": "share_views_select_label",
     "en": "Views selection",
     "zh": "视图选择"
+  },
+  {
+    "id": "share_views_select_method_all",
+    "en": "All views in this project",
+    "zh": "此项目中的所有视图"
   },
   {
     "id": "share_views_select_method_map_layer",
@@ -7098,6 +7043,31 @@
     "id": "share_views_select_method_map_list_open",
     "en": "All views open in the list",
     "zh": "在列表中打开所有视图"
+  },
+  {
+    "id": "share_msg_views_count_empty_static",
+    "en": "No view selected. Please open / select at least one view.",
+    "zh": "未选择视图。请打开/选择至少一个视图。"
+  },
+  {
+    "id": "share_msg_views_count_empty",
+    "en": "No view selected. The default behaviour will be to open a project with all views listed. Other views handling options will be ignored.",
+    "zh": "未选择视图。默认行为将是打开一个列出所有视图的项目。其他视图处理选项将被忽略。"
+  },
+  {
+    "id": "share_msg_views_count_single",
+    "en": "The link will share a single view.",
+    "zh": "该链接将共享一个视图。"
+  },
+  {
+    "id": "share_msg_views_count_multiple",
+    "en": "The link will share {{n}} views.",
+    "zh": "链接会分享 {{n}}意见。"
+  },
+  {
+    "id": "share_msg_multiple_views_story_static",
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
+    "zh": "选择包括故事地图：其他视图将被忽略，故事地图将自动播放"
   },
   {
     "id": "btn_opt_share_to_project",

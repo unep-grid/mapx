@@ -7,9 +7,9 @@ import {Checkbox} from './components/checkbox.js';
 import {Switch} from './../switch/index.js';
 import {ListenerStore} from './../listener_store/index.js';
 import {path} from './../mx_helper_misc.js';
-import {el} from '@fxi/el';
+import {el} from '../el/src/index.js';
 import {getDictItem} from './../mx_helper_language.js';
-import './style.css';
+import './style.less';
 const settings = {
   onFilter: (idViews) => {
     console.log(idViews);

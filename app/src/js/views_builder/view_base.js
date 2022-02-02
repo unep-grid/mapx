@@ -1,6 +1,5 @@
-import {checkLanguage} from '../mx_helper_language.js';
-
-import {el} from '@fxi/el';
+import {getLabelFromObjectPath} from '../mx_helper_language.js';
+import {el} from '../el/src/index.js';
 
 class ViewBase {
   constructor(view, enable) {
@@ -26,33 +25,34 @@ class ViewBase {
     }
   }
   destroy() {
-    let elParent = this.el.parentElement;
+    const elParent = this.el.parentElement;
     if (elParent) {
       elParent.removeChild(this.el);
     }
   }
   build(enable) {
     enable = !!enable;
-    let vb = this;
-    let view = vb.view;
-    let lang = checkLanguage({obj: view, path: 'data.title'});
+    const vb = this;
+    const view = vb.view;
+    const title = getLabelFromObjectPath({
+      obj: view,
+      path: 'data.title'
+    });
 
-    let title = view.data.title ? view.data.title[lang] : 'Undefined';
+    const elButton = el('div', {class: 'mx-view-tgl-btn'});
 
-    let elButton = el('div', {class: 'mx-view-tgl-btn'});
-
-    let elTitle = el(
+    const elTitle = el(
       'span',
       {class: ['mx-view-tgl-title', 'li-drag-handle']},
       title
     );
 
-    let elBadges = el('div', {
+    const elBadges = el('div', {
       id: 'view_badges_' + view.id,
       class: 'mx-view-badges'
     });
 
-    let elClasses = el(
+    const elClasses = el(
       'span',
       {
         class: 'mx-view-item-classes'
@@ -60,10 +60,10 @@ class ViewBase {
       view.data.classes,
       view.type
     );
-    let elIndex = el('span', {
+    const elIndex = el('span', {
       class: 'mx-view-item-index'
     });
-    let elToggleMore = el(
+    const elToggleMore = el(
       'div',
       {
         class: 'mx-view-tgl-more-container'
@@ -76,7 +76,7 @@ class ViewBase {
       })
     );
 
-    let elInput = el('input', {
+    const elInput = el('input', {
       id: 'check_view_enable_' + view.id,
       class: 'mx-view-tgl-input',
       type: 'checkbox',
@@ -90,7 +90,7 @@ class ViewBase {
       elInput.checked = true;
     }
 
-    let elLabel = el(
+    const elLabel = el(
       'label',
       {
         class: ['mx-view-tgl-content'],
@@ -103,7 +103,7 @@ class ViewBase {
       elIndex
     );
 
-    let elView = el(
+    const elView = el(
       'div',
       {
         dataset: {

@@ -29,10 +29,10 @@ mxParseQuery <- function(urlSearch){
   #
   query$lat  = as.numeric(query$lat)
   query$lng = as.numeric(query$lng)
-  if(!noDataCheck(query$zoom)){
-    query$zoom = as.numeric(query$zoom)
+  if(!noDataCheck(query[['zoom']])){
+    query$zoom = as.numeric(query[['zoom']])
   }else{
-    query$zoom = as.numeric(query$z)
+    query$zoom = as.numeric(query[['z']])
   }
 
   #

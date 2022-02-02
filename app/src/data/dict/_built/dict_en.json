@@ -5544,12 +5544,12 @@
     "en": "Sharing manager"
   },
   {
-    "id": "share_link_title",
+    "id": "share_form_title",
     "en": "Share link / code "
   },
   {
     "id": "share_options",
-    "en": "Show/hide settings"
+    "en": "Settings"
   },
   {
     "id": "share_mode_warn",
@@ -5560,75 +5560,35 @@
     "en": "Use the mode 'static' ( recommended )"
   },
   {
-    "id": "share_mode_static_label_desc",
+    "id": "share_mode_static_desc",
     "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views"
   },
   {
-    "id": "share_views_check_label",
-    "en": "Add views to share"
-  },
-  {
-    "id": "share_views_select",
-    "en": "Select views"
-  },
-  {
-    "id": "share_views_check_label_desc",
-    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed."
-  },
-  {
     "id": "share_views_zoom_label",
-    "en": "Zoom to views extent"
+    "en": "Zoom to all views extent, starting from initial position."
   },
   {
-    "id": "share_views_zoom_label_desc",
-    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available."
+    "id": "share_views_zoom_desc",
+    "en": "Extents of all views will be computed. If no view is selected, this option will be ignored"
   },
   {
-    "id": "share_views_open_check_label",
-    "en": "Set views to activate"
+    "id": "share_views_open_label",
+    "en": "Activate views"
   },
   {
-    "id": "share_views_open_check_label_desc",
-    "en": "Add views to be automatically activated when the application is launched."
+    "id": "share_views_open_desc",
+    "en": "Open/Activate selected views at startup"
   },
   {
-    "id": "share_collections_check_label",
-    "en": "Set collections"
+    "id": "share_map_pos_label",
+    "en": "Set initial map position"
   },
   {
-    "id": "share_collections_check_label_desc",
-    "en": "Add groups of views by using collections"
+    "id": "share_map_pos_desc",
+    "en": "The current extent, tilt and bearing of the map will be used. Project's default will not be applied."
   },
   {
-    "id": "share_collections_check_operator_label",
-    "en": "Selection mode (if more that one collection)"
-  },
-  {
-    "id": "share_collections_check_operator_all",
-    "en": "Intersection"
-  },
-  {
-    "id": "share_collections_check_operator_any",
-    "en": "Union"
-  },
-  {
-    "id": "share_map_pos_check_label",
-    "en": "Set map position"
-  },
-  {
-    "id": "share_map_pos_check_label_desc",
-    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world."
-  },
-  {
-    "id": "share_iframe_check_label",
-    "en": "Embed in HTML tags"
-  },
-  {
-    "id": "share_iframe_check_label_desc",
-    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website."
-  },
-  {
-    "id": "share_filter_activated",
+    "id": "share_filter_activated_label",
     "en": "Filter activated view by default"
   },
   {
@@ -5636,7 +5596,7 @@
     "en": "This option will show only views set to be opened from the beginning"
   },
   {
-    "id": "share_category_hide",
+    "id": "share_category_hide_label",
     "en": "Hide categories"
   },
   {
@@ -5644,20 +5604,16 @@
     "en": "Categories will be hidden in the list of views by default"
   },
   {
-    "id": "share_map_pos_set",
-    "en": "Set map position"
+    "id": "share_template_label",
+    "en": "Sharing method"
   },
   {
-    "id": "share_map_pos_get",
-    "en": "Get current position"
-  },
-  {
-    "id": "share_method",
-    "en": "Sharing method "
-  },
-  {
-    "id": "share_views_select_method",
+    "id": "share_views_select_label",
     "en": "Views selection"
+  },
+  {
+    "id": "share_views_select_method_all",
+    "en": "All views in this project"
   },
   {
     "id": "share_views_select_method_map_layer",
@@ -5678,6 +5634,26 @@
   {
     "id": "share_views_select_method_map_list_open",
     "en": "All views open in the list"
+  },
+  {
+    "id": "share_msg_views_count_empty_static",
+    "en": "No view selected. Please open / select at least one view."
+  },
+  {
+    "id": "share_msg_views_count_empty",
+    "en": "No view selected. The default behaviour will be to open a project with all views listed. Other views handling options will be ignored."
+  },
+  {
+    "id": "share_msg_views_count_single",
+    "en": "The link will share a single view."
+  },
+  {
+    "id": "share_msg_views_count_multiple",
+    "en": "The link will share {{n}} views."
+  },
+  {
+    "id": "share_msg_multiple_views_story_static",
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played"
   },
   {
     "id": "btn_opt_share_to_project",

@@ -6930,14 +6930,14 @@
     "fr": "Gestionnaire de partage"
   },
   {
-    "id": "share_link_title",
+    "id": "share_form_title",
     "en": "Share link / code ",
     "fr": "Partager le lien/code"
   },
   {
     "id": "share_options",
-    "en": "Show/hide settings",
-    "fr": "Afficher/masquer les paramètres"
+    "en": "Settings",
+    "fr": "Réglages"
   },
   {
     "id": "share_mode_warn",
@@ -6950,92 +6950,42 @@
     "fr": "Partager en mode 'statique' ( recommandé )"
   },
   {
-    "id": "share_mode_static_label_desc",
+    "id": "share_mode_static_desc",
     "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "fr": "Utilisez le mode « statique » si vous souhaitez partager une vue en utilisant une version légère et plus rapide de MapX, avec des fonctionnalités limitées. Si vous ajoutez une Story Map, elle démarrera automatiquement, en supprimant toutes les autres vues"
-  },
-  {
-    "id": "share_views_check_label",
-    "en": "Add views to share",
-    "fr": "Ajouter des vues à partager"
-  },
-  {
-    "id": "share_views_select",
-    "en": "Select views",
-    "fr": "Sélectionner les vues"
-  },
-  {
-    "id": "share_views_check_label_desc",
-    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
-    "fr": "Les vues à afficher. La liste peut être réordonnée: les couches des vues en haut de la liste seront visibles au-dessus des autres sur la carte. En mode 'statique' les données des vues seront automatiquement chargées dans l'interface. En mode 'normal', les vues seront disponibles dans la liste et si aucune vue n'est sélectionnée, toutes les vues du projet seront listées."
+    "fr": "Utilisez le mode 'statique' si vous souhaitez partager une vue en utilisant une version légère et plus rapide de MapX, avec des fonctionnalités limitées. Si vous ajoutez une Story Map, elle démarrera automatiquement, supprimant toutes les autres vues"
   },
   {
     "id": "share_views_zoom_label",
-    "en": "Zoom to views extent",
-    "fr": "Zoom sur l'étendue des vues"
+    "en": "Zoom to all views extent, starting from initial position.",
+    "fr": "Zoom sur l'étendue de toutes les vues, à partir de la position initiale."
   },
   {
-    "id": "share_views_zoom_label_desc",
-    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
-    "fr": "Avec le mode 'statique', cette option permet de centrer la carte sur l'étendue des couches contenues dans cette vue, si cela est possible."
+    "id": "share_views_zoom_desc",
+    "en": "Extents of all views will be computed. If no view is selected, this option will be ignored",
+    "fr": "Les étendues de toutes les vues seront calculées. Si aucune vue n'est sélectionnée, cette option sera ignorée"
   },
   {
-    "id": "share_views_open_check_label",
-    "en": "Set views to activate",
-    "fr": "Ajouter des vues à activer"
+    "id": "share_views_open_label",
+    "en": "Activate views",
+    "fr": "Activer les vues"
   },
   {
-    "id": "share_views_open_check_label_desc",
-    "en": "Add views to be automatically activated when the application is launched.",
-    "fr": "Ajoutez des vues à activer automatiquement au lancement de l'application."
+    "id": "share_views_open_desc",
+    "en": "Open/Activate selected views at startup",
+    "fr": "Ouvrir/activer les vues sélectionnées au démarrage"
   },
   {
-    "id": "share_collections_check_label",
-    "en": "Set collections",
-    "fr": "Paramétrer les collections"
+    "id": "share_map_pos_label",
+    "en": "Set initial map position",
+    "fr": "Définir la position initiale de la carte"
   },
   {
-    "id": "share_collections_check_label_desc",
-    "en": "Add groups of views by using collections",
-    "fr": "Ajouter des groupes de vues en utilisant des collections"
+    "id": "share_map_pos_desc",
+    "en": "The current extent, tilt and bearing of the map will be used. Project's default will not be applied.",
+    "fr": "L'étendue, l'inclinaison et le relèvement actuels de la carte seront utilisés. La valeur par défaut du projet ne sera pas appliquée."
   },
   {
-    "id": "share_collections_check_operator_label",
-    "en": "Selection mode (if more that one collection)",
-    "fr": "Mode de sélection (si plus qu'une collection)"
-  },
-  {
-    "id": "share_collections_check_operator_all",
-    "en": "Intersection",
-    "fr": "Intersection"
-  },
-  {
-    "id": "share_collections_check_operator_any",
-    "en": "Union",
-    "fr": "Union"
-  },
-  {
-    "id": "share_map_pos_check_label",
-    "en": "Set map position",
-    "fr": "Paramétrer la position de la carte"
-  },
-  {
-    "id": "share_map_pos_check_label_desc",
-    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
-    "fr": "Les paramètres de positionnement de la carte permettent de définir l'étendue spatiale à afficher, au lieu d'exposer la carte représentant le monde entier."
-  },
-  {
-    "id": "share_iframe_check_label",
-    "en": "Embed in HTML tags",
-    "fr": "Inclure les tags HTML"
-  },
-  {
-    "id": "share_iframe_check_label_desc",
-    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "fr": "Inclure le lien dans un <iframe> pour facilement inclure MapX dans votre site web"
-  },
-  {
-    "id": "share_filter_activated",
+    "id": "share_filter_activated_label",
     "en": "Filter activated view by default",
     "fr": "Filtrer les vues activées par défaut"
   },
@@ -7045,7 +6995,7 @@
     "fr": "Cette option permet de n'afficher que les vues ouvertes à l'initialisation"
   },
   {
-    "id": "share_category_hide",
+    "id": "share_category_hide_label",
     "en": "Hide categories",
     "fr": "Cacher les catégories"
   },
@@ -7055,24 +7005,19 @@
     "fr": "La liste des vues n'affichera pas les catégories par défaut"
   },
   {
-    "id": "share_map_pos_set",
-    "en": "Set map position",
-    "fr": "Définir la position de la carte"
-  },
-  {
-    "id": "share_map_pos_get",
-    "en": "Get current position",
-    "fr": "Obtenir la position actuelle"
-  },
-  {
-    "id": "share_method",
-    "en": "Sharing method ",
+    "id": "share_template_label",
+    "en": "Sharing method",
     "fr": "Méthode de partage"
   },
   {
-    "id": "share_views_select_method",
+    "id": "share_views_select_label",
     "en": "Views selection",
     "fr": "Sélection de vues"
+  },
+  {
+    "id": "share_views_select_method_all",
+    "en": "All views in this project",
+    "fr": "Toutes les vues de ce projet"
   },
   {
     "id": "share_views_select_method_map_layer",
@@ -7098,6 +7043,31 @@
     "id": "share_views_select_method_map_list_open",
     "en": "All views open in the list",
     "fr": "Toutes les vues ouvertes dans la liste"
+  },
+  {
+    "id": "share_msg_views_count_empty_static",
+    "en": "No view selected. Please open / select at least one view.",
+    "fr": "Aucune vue sélectionnée. Veuillez ouvrir/sélectionner au moins une vue."
+  },
+  {
+    "id": "share_msg_views_count_empty",
+    "en": "No view selected. The default behaviour will be to open a project with all views listed. Other views handling options will be ignored.",
+    "fr": "Aucune vue sélectionnée. Le comportement par défaut consistera à ouvrir un projet avec toutes les vues répertoriées. Les autres options de gestion des vues seront ignorées."
+  },
+  {
+    "id": "share_msg_views_count_single",
+    "en": "The link will share a single view.",
+    "fr": "Le lien partagera une vue unique."
+  },
+  {
+    "id": "share_msg_views_count_multiple",
+    "en": "The link will share {{n}} views.",
+    "fr": "Le lien partagera {{n}} vues."
+  },
+  {
+    "id": "share_msg_multiple_views_story_static",
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
+    "fr": "La sélection comprend une Story Map : les autres vues seront ignorées et la Story Map sera automatiquement lue"
   },
   {
     "id": "btn_opt_share_to_project",

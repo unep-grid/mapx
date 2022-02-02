@@ -10,6 +10,7 @@ import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
 import {getDictItem} from './../mx_helper_language.js';
 import {uploadGeoJSONModal} from './../mx_helper_upload_source.js';
 import {modalMirror} from './../mirror_util';
+import {ShareModal} from './../share_modal/index.js';
 import {
   downloadViewSourceExternal,
   downloadViewGeoJSON,
@@ -103,6 +104,13 @@ async function handleViewClick(event) {
           const viewTarget = dataset.view_action_target;
           const view = getView(viewTarget);
           await setProject(view.project, {askConfirm: true});
+        }
+      },
+      {
+        comment: 'target is the share button',
+        test: dataset.view_action_key === 'btn_opt_share',
+        action: async function() {
+          new ShareModal();
         }
       },
       {

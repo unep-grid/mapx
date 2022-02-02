@@ -1,6 +1,7 @@
 import {el, svg} from './../el/src/index.js';
 import {getDictItem} from './../mx_helper_language.js';
 import * as test from './../is_test_mapx/index.js';
+import {parseTemplate} from '../mx_helper_misc.js';
 export {el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate};
 
 /**
@@ -323,18 +324,35 @@ function elPanel(opt) {
 /**
  * Create a tag and set translation item in it
  * @param {String} keys Key to look for in the dictionnary
- * @param {String} lang  Two letters language code
+ * @param {Object} opt Options 
+ * @param {String} opt.lang Two letter code language 
+ * @param {Object} opt.data Data for templating
+
  * @return {Element} span element with dataset-lang_key
  */
-function elSpanTranslate(key, lang) {
+function elSpanTranslate(key, opt) {
+  opt = Object.assign({}, {lang: null, data: null}, opt);
+
+  const promText = getDictItem(key, opt.lang).then((t) => {
+    if (opt.data) {
+      return parseTemplate(t, opt.data);
+    }
+    return t;
+  });
+
+  const dataset = {
+    lang_key: key
+  };
+  if (opt.data) {
+    dataset.lang_data = JSON.stringify(opt.data);
+  }
+
   return el(
     'span',
     {
-      dataset: {
-        lang_key: key
-      }
+      dataset
     },
-    getDictItem(key, lang)
+    promText
   );
 }
 
@@ -430,12 +448,14 @@ export function elButtonFa(key, opt) {
 
 /**
  * Standard checkbox
- * @param {String} key Translation key
+ * @param {String} key Unique key : used form name + translation
  * @param {Object} opt Options
  * @param {String} opt.id Element id
+ * @param {String} opt.dataset Additional custom data-
  * @param {String} opt.action Callback
  * @param {Boolean} opt.checked Checked at start
- * @param {Boolean} opt.name Form element name
+ * @param {Boolean} opt.keyLabel Optional translation key for label
+ * @param {Boolean} opt.keyDesc Optional translation key for descriptiom
  */
 export function elCheckbox(key, opt) {
   opt = Object.assign(
@@ -444,7 +464,9 @@ export function elCheckbox(key, opt) {
       id: Math.random().toString(32),
       action: () => {},
       checked: true,
-      name: null
+      keyLabel: null,
+      keyDesc: null,
+      dataset : ''
     },
     opt
   );
@@ -452,31 +474,85 @@ export function elCheckbox(key, opt) {
   return el('div', {class: 'checkbox'}, [
     el('label', {for: opt.id}, [
       el('input', {
-        name: opt.id,
+        name: key,
         id: opt.id,
-        name: opt.name,
         type: 'checkbox',
         checked: opt.checked,
-        on: ['change', opt.action]
+        value : true,
+        on: ['change', opt.action],
+        dataset: opt.dataset
       }),
-      elSpanTranslate(key),
-      opt.keyDesc
-        ? el(
-            'div',
-            {class: ['text-muted', 'help-box']},
-            elSpanTranslate(opt.keyDesc)
-          )
-        : null
+      elSpanTranslate(opt.keyLabel ? opt.keyLabel : `${key}_label`),
+      el(
+        'div',
+        {class: ['text-muted', 'help-box']},
+        elSpanTranslate(opt.keyDesc ? opt.keyDesc : `${key}_desc`)
+      )
     ])
+  ]);
+}
+/**
+ * Standard select
+ * @param {String} key Unique key : used form name + translation
+ * @param {Object} opt Options
+ * @param {String} opt.id Element id
+ * @param {String} opt.dataset Additional custom data-
+ * @param {String} opt.action Callback
+ * @param {Boolean} opt.keyLabel Optional translation key for label
+ * @param {Boolean} opt.keyDesc Optional translation key for descriptiom
+ */
+export function elSelect(key, opt) {
+  opt = Object.assign(
+    {},
+    {
+      id: Math.random().toString(32),
+      action: () => {},
+      items: [],
+      keyLabel: null,
+      keyDesc: null,
+      dataset : ''
+    },
+    opt
+  );
+
+  return el('div', {class: 'form-group'}, [
+    el(
+      'label',
+      {for: opt.id},
+      elSpanTranslate(opt.keyLabel ? opt.keyLabel : `${key}_label`)
+    ),
+    el(
+      'select',
+      {
+        name: key,
+        id: opt.id,
+        class: 'form-control',
+        dataset: opt.dataset
+      },
+      opt.items
+    )
   ]);
 }
 
 /**
  * Detail element
- * @param {String} id Element id
  * @param {String} key Translation key
  * @param {Element} content Content
  */
-export function elDetails(id, key, content) {
-  return el('details', {id}, el('summary', elSpanTranslate(key)), content);
+export function elDetails(key, content) {
+  return el('details', el('summary', elSpanTranslate(key)), content);
+}
+
+/**
+ * Create alert box
+ * @param {String} key Translation key
+ * @param {String} type Alert type : warning, info, success, danger
+ */
+export function elAlert(key, type, opt) {
+  const elAlert = el(
+    'div',
+    {class: ['alert', `alert-${type}`], role: 'alert'},
+    elSpanTranslate(key, opt)
+  );
+  return elAlert;
 }

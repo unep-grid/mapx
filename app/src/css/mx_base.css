@@ -95,14 +95,15 @@ details > summary {
 }
 
 pre {
- white-space: pre-wrap;    
- word-wrap: break-word;      
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
-img, video, picture {
+img,
+video,
+picture {
   object-fit: contain;
 }
-
 
 .mx-inline-progress-container {
   width: 100%;
@@ -697,7 +698,6 @@ img, video, picture {
   font-size: 0.8em;
 }
 
-
 /*
  * Forms
  */
@@ -1079,19 +1079,38 @@ img, video, picture {
 .help-block {
   font-size: 0.8em;
 }
-.text-muted, 
+.text-muted,
 .text-muted > * {
   font-size: 0.9em;
   text-align: justify;
   font-weight: normal;
   hyphens: auto;
   color: var(--mx_ui_text_faded);
-  transition:color ease-in-out 100ms;
+  transition: color ease-in-out 100ms;
 }
-.text-muted:hover, 
+.text-muted:hover,
 .text-muted:hover > * {
   color: var(--mx_ui_text);
 }
+.alert.alert-success,
+.alert.alert-info,
+.alert.alert-warning,
+.alert.alert-danger {
+  background: none;
+}
+.alert.alert-success {
+  border-color: var(--mx_ui_message_success);
+}
+.alert.alert-info {
+  border-color: var(--mx_ui_message_info);
+}
+.alert.alert-warning {
+  border-color: var(--mx_ui_message_warning);
+}
+.alert.alert-danger {
+  border-color: var(--mx_ui_message_danger);
+}
+
 /**
 * EPSG epsg ; projection code select group list
 */
@@ -1116,8 +1135,6 @@ img, video, picture {
   width: max-content;
 }
 
-
 .mx-version {
-  cursor:pointer;
+  cursor: pointer;
 }
-

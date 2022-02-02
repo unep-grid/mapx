@@ -211,7 +211,7 @@ export function parseTemplate(template, data,opt) {
   opt = Object.assign({
      encodeURIComponent:false
   },opt)
-  return template.replace(/{{([^{}]+)}}/g, function(matched, key) {
+  return template.replace(/{{([^{}]+)}}/g, (_, key)=>{
     let txt =  data[key] || '';
     if(opt.encodeURIComponent){
       txt = encodeURIComponent(txt); 

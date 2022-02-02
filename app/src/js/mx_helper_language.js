@@ -1,4 +1,5 @@
-import {isStringRange} from './is_test/index.js';
+import {isStringRange,isNotEmpty} from './is_test/index.js';
+import {parseTemplate} from './mx_helper_misc.js';
 
 /**
  * Update language : Elements, view list and map
@@ -33,10 +34,12 @@ export async function updateLanguage(language) {
    * Update lang of interface
    */
   await updateLanguageElements();
+  
   /**
    * Update map language
    */
   await updateLanguageMap();
+  
   /**
    * Update views language : labels, desc, title
    */
@@ -120,7 +123,7 @@ export async function updateLanguageElements(o) {
   const h = mx.helpers;
   let langDefault = 'en';
   o.lang = o.lang || mx.settings.language || langDefault;
-  let els, el, doc, label, found, type, id;
+  let els, el, doc, label, found, type, id, data;
   let i, iL, j, jL;
   let changes = [];
   const dict = await getDict(o.lang);
@@ -136,6 +139,7 @@ export async function updateLanguageElements(o) {
     el = els[i];
     type = el.dataset.lang_type;
     id = el.dataset.lang_key;
+    data = el.dataset.lang_data;
     found = false;
     label = '';
 
@@ -160,6 +164,10 @@ export async function updateLanguageElements(o) {
           label = dict[j][lang];
           if (!label) {
             label = dict[j][langDefault];
+          }
+          if(isNotEmpty(data)){
+            data = JSON.parse(data);
+            label = parseTemplate(label,data);
           }
         }
       }
@@ -251,7 +259,7 @@ export async function getDictItem(key, lang) {
  */
 export async function getDictTemplate(key, data, lang) {
   const template = await getDictItem(key, lang);
-  return template.replace(/{{([^{}]+)}}/g, (matched, key) => {
+  return template.replace(/{{([^{}]+)}}/g, (_, key) => {
     return data[key];
   });
 }
@@ -408,7 +416,7 @@ export async function updateLanguageViewsList(o) {
        * Update rt legend text only
        */
       if (elLegendRtTitle) {
-        const legendTitle = h.getLabelFromObjectPath({
+        const legendTitle = getLabelFromObjectPath({
           lang: lang,
           obj: view,
           path: 'data.source.legendTitles',
@@ -424,7 +432,7 @@ export async function updateLanguageViewsList(o) {
        * Update view title
        */
       if (elTitle) {
-        elTitle.innerHTML = h.getLabelFromObjectPath({
+        elTitle.innerHTML = getLabelFromObjectPath({
           lang: lang,
           obj: view,
           path: 'data.title'
@@ -435,7 +443,7 @@ export async function updateLanguageViewsList(o) {
        * Update view description
        */
       if (elText) {
-        elText.innerHTML = h.getLabelFromObjectPath({
+        elText.innerHTML = getLabelFromObjectPath({
           lang: lang,
           obj: view,
           path: 'data.abstract'

@@ -28,6 +28,7 @@ config[["links"]] <- list(
   repositoryWiki = "https://github.com/unep-grid/map-x-mgl/wiki", 
   repositoryWikiMapComposer = "https://github.com/unep-grid/map-x-mgl/wiki/Map-composer",
   repositoryWikiDrawTool = "https://github.com/unep-grid/map-x-mgl/wiki/Draw-tool",
+  repositoryWikiSharingManager = "https://github.com/unep-grid/map-x-mgl/wiki/Sharing-Manager",
   appKnowlegdeBase = 'https://www.mapx.org/knowledge-base/'
 )
 

@@ -409,7 +409,7 @@ observe({
       }
 
       mapPos$jump = TRUE
-
+      
       mglFlyTo(
         id = idMap,
         mapPos

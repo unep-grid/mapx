@@ -4,6 +4,11 @@
     "mode": ["app"]
   },
   {
+    "id": "share_views_select_method_all",
+    "mode": [],
+    "comment" :"disabled"
+  },
+  {
     "id": "share_views_select_method_story_itself",
     "mode": ["story"]
   },

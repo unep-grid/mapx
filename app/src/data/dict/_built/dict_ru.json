@@ -6930,14 +6930,14 @@
     "ru": "Менеджер обмена "
   },
   {
-    "id": "share_link_title",
+    "id": "share_form_title",
     "en": "Share link / code ",
     "ru": "Поделитесь ссылкой/кодом"
   },
   {
     "id": "share_options",
-    "en": "Show/hide settings",
-    "ru": "Показать / скрыть настройки"
+    "en": "Settings",
+    "ru": "Настройки"
   },
   {
     "id": "share_mode_warn",
@@ -6950,94 +6950,44 @@
     "ru": "Используйте режим 'статический' (рекомендуется) "
   },
   {
-    "id": "share_mode_static_label_desc",
+    "id": "share_mode_static_desc",
     "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "ru": "Используйте «статический» режим, если вы хотите поделиться представлением с помощью облегченной и более быстрой версии MapX с ограниченными функциями. Если вы добавите карту-историю, она запустится автоматически, все остальные виды будут удалены."
-  },
-  {
-    "id": "share_views_check_label",
-    "en": "Add views to share",
-    "ru": "Добавьте просмотры, чтобы поделиться "
-  },
-  {
-    "id": "share_views_select",
-    "en": "Select views",
-    "ru": "Выберите представления"
-  },
-  {
-    "id": "share_views_check_label_desc",
-    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
-    "ru": "Просмотры для отображения. Список можно переупорядочить: на видах сверху будут отображаться слои сверху. В «статическом» режиме эти представления будут отображаться автоматически. Сюжетные карты начнутся сразу. В «нормальном» режиме представления будут отображаться в списке, и если выделение пусто, будут перечислены все представления проекта."
+    "ru": "Используйте «статический» режим, если вы хотите поделиться видом с помощью облегченной и быстрой версии MapX с ограниченными функциями. Если вы добавите карту-историю, она запустится автоматически, отбросив любые другие представления."
   },
   {
     "id": "share_views_zoom_label",
-    "en": "Zoom to views extent",
-    "ru": "Увеличить до экстента просмотра "
+    "en": "Zoom to all views extent, starting from initial position.",
+    "ru": "Приблизьтесь ко всем экстентам видов, начиная с исходного положения."
   },
   {
-    "id": "share_views_zoom_label_desc",
-    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
-    "ru": "В «статическом» режиме экстент карты будет соответствовать экстенту слоев представлений, если он доступен."
+    "id": "share_views_zoom_desc",
+    "en": "Extents of all views will be computed. If no view is selected, this option will be ignored",
+    "ru": "Экстенты всех представлений будут вычислены. Если представление не выбрано, этот параметр будет проигнорирован."
   },
   {
-    "id": "share_views_open_check_label",
-    "en": "Set views to activate",
-    "ru": "Установите виды для активации "
+    "id": "share_views_open_label",
+    "en": "Activate views",
+    "ru": "Активировать просмотры"
   },
   {
-    "id": "share_views_open_check_label_desc",
-    "en": "Add views to be automatically activated when the application is launched.",
-    "ru": "Добавьте представления, которые будут автоматически активироваться при запуске приложения."
+    "id": "share_views_open_desc",
+    "en": "Open/Activate selected views at startup",
+    "ru": "Открыть/активировать выбранные представления при запуске"
   },
   {
-    "id": "share_collections_check_label",
-    "en": "Set collections",
-    "ru": "Установить коллекции "
+    "id": "share_map_pos_label",
+    "en": "Set initial map position",
+    "ru": "Установить начальное положение карты"
   },
   {
-    "id": "share_collections_check_label_desc",
-    "en": "Add groups of views by using collections",
-    "ru": "Добавляйте группы представлений с помощью коллекций"
+    "id": "share_map_pos_desc",
+    "en": "The current extent, tilt and bearing of the map will be used. Project's default will not be applied.",
+    "ru": "Будут использоваться текущий экстент, наклон и азимут карты. Значение проекта по умолчанию не будет применяться."
   },
   {
-    "id": "share_collections_check_operator_label",
-    "en": "Selection mode (if more that one collection)",
-    "ru": "Режим выделения (если более одной коллекции) "
-  },
-  {
-    "id": "share_collections_check_operator_all",
-    "en": "Intersection",
-    "ru": "Пересечение "
-  },
-  {
-    "id": "share_collections_check_operator_any",
-    "en": "Union",
-    "ru": "Союз "
-  },
-  {
-    "id": "share_map_pos_check_label",
-    "en": "Set map position",
-    "ru": "Установить положение на карте "
-  },
-  {
-    "id": "share_map_pos_check_label_desc",
-    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
-    "ru": "Установка положения карты покажет определенную пространственную протяженность вместо отображения всего мира."
-  },
-  {
-    "id": "share_iframe_check_label",
-    "en": "Embed in HTML tags",
-    "ru": "Встраивать в HTML-теги "
-  },
-  {
-    "id": "share_iframe_check_label_desc",
-    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "ru": "Вставьте ссылку в<iframe> HTML-тег, чтобы легко добавить MapX на ваш сайт.</iframe>"
-  },
-  {
-    "id": "share_filter_activated",
+    "id": "share_filter_activated_label",
     "en": "Filter activated view by default",
-    "ru": "Фильтровать активированный вид по умолчанию "
+    "ru": "Фильтр активированного представления по умолчанию"
   },
   {
     "id": "share_filter_activated_desc",
@@ -7045,9 +6995,9 @@
     "ru": "Эта опция покажет только те виды, которые будут открываться с самого начала. "
   },
   {
-    "id": "share_category_hide",
+    "id": "share_category_hide_label",
     "en": "Hide categories",
-    "ru": "Скрыть категории "
+    "ru": "Скрыть категории"
   },
   {
     "id": "share_category_hide_desc",
@@ -7055,24 +7005,19 @@
     "ru": "По умолчанию категории будут скрыты в списке просмотров. "
   },
   {
-    "id": "share_map_pos_set",
-    "en": "Set map position",
-    "ru": "Установить положение на карте "
-  },
-  {
-    "id": "share_map_pos_get",
-    "en": "Get current position",
-    "ru": "Получить текущую позицию "
-  },
-  {
-    "id": "share_method",
-    "en": "Sharing method ",
+    "id": "share_template_label",
+    "en": "Sharing method",
     "ru": "Способ обмена"
   },
   {
-    "id": "share_views_select_method",
+    "id": "share_views_select_label",
     "en": "Views selection",
     "ru": "Выбор просмотров"
+  },
+  {
+    "id": "share_views_select_method_all",
+    "en": "All views in this project",
+    "ru": "Все просмотры в этом проекте"
   },
   {
     "id": "share_views_select_method_map_layer",
@@ -7098,6 +7043,31 @@
     "id": "share_views_select_method_map_list_open",
     "en": "All views open in the list",
     "ru": "Все виды открываются в списке"
+  },
+  {
+    "id": "share_msg_views_count_empty_static",
+    "en": "No view selected. Please open / select at least one view.",
+    "ru": "Представление не выбрано. Пожалуйста, откройте/выберите хотя бы одно представление."
+  },
+  {
+    "id": "share_msg_views_count_empty",
+    "en": "No view selected. The default behaviour will be to open a project with all views listed. Other views handling options will be ignored.",
+    "ru": "Представление не выбрано. Поведением по умолчанию будет открытие проекта со всеми перечисленными представлениями. Другие параметры обработки представлений будут игнорироваться."
+  },
+  {
+    "id": "share_msg_views_count_single",
+    "en": "The link will share a single view.",
+    "ru": "Ссылка будет иметь общий вид."
+  },
+  {
+    "id": "share_msg_views_count_multiple",
+    "en": "The link will share {{n}} views.",
+    "ru": "Ссылка будет делиться {{n}} взгляды."
+  },
+  {
+    "id": "share_msg_multiple_views_story_static",
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
+    "ru": "Выбор включает в себя карту-историю: другие виды будут игнорироваться, а карта-история будет воспроизводиться автоматически."
   },
   {
     "id": "btn_opt_share_to_project",

@@ -52,4 +52,14 @@
   --mx_ui_view_sm_checked: hsla(216, 42%, 65%, 1);
   --mx_ui_view_cc: hsla(348, 100%, 50%, 1);
   --mx_ui_view_cc_checked: hsla(348, 100%, 61%, 1);
+
+  /**
+  * Messages 
+  */
+  --mx_ui_message_success:#2ebf64;
+  --mx_ui_message_info:var(--mx_ui_link);
+  --mx_ui_message_warning:#f1d742;
+  --mx_ui_message_danger:#f17642;
+
+
 }

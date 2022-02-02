@@ -2,6 +2,13 @@ import {el} from './el/src/index.js';
 import {ObserveMutationAttribute} from './mutations_observer/index.js';
 
 /**
+* TODO: 
+* - this helper should be converted to Class
+* - avoid manual DOM element extension (close,addMutationObserver,setTitle..) 
+*/
+
+
+/**
  * Display a panel modal
  * @param {Object} o Options
  * @param {String} o.id Id of the box. Default : random
@@ -139,6 +146,7 @@ export function modal(o) {
   }
 
   setTitle(o.title);
+
 
   elModal.close = close;
   elModal.setTitle = setTitle;
