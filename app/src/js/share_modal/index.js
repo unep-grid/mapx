@@ -25,13 +25,12 @@ import './style.less';
 const t = elSpanTranslate;
 
 const state = {
+  url: null,
   modeCurrent: 'static',
   shareString: '',
   mapPosItems: ['p', 'b', 'z', 'lat', 'lng'],
-  params: {
-    views: null,
-    project: null
-  },
+  prevent: new Set(),
+  views: [],
   /** note : unchecked checkbox are not included in formData.-
    * -> using keys of this object in loop is required to
    *    get all values during update..
@@ -44,8 +43,8 @@ const state = {
     share_map_pos: null,
     share_mode_static: null,
     share_category_hide: null,
-    share_filter_activated: null,
-    share_views_open: null
+    share_filter_activated: null
+    //share_views_open: null
   }
 };
 
@@ -84,10 +83,6 @@ export class ShareModal {
    */
   destroy() {
     const sm = this;
-    if (sm._destroyed) {
-      return;
-    }
-    sm._destroyed = true;
     sm._modal.close();
     delete window._share_modal;
   }
@@ -97,16 +92,13 @@ export class ShareModal {
    */
   update() {
     const sm = this;
-    // Inital state form update according to settings
+    state.prevent.clear();
     sm._update_state_form();
-    // Update views selection based on settings
     sm._update_views();
-    // Rebuild final URL
     sm._update_url();
-    // re save state after url update
-    sm._update_state_form();
-    // validation
+    sm._update_template();
     sm.validate();
+    sm._update_options_visibility();
   }
 
   /**
@@ -124,29 +116,29 @@ export class ShareModal {
    * Update views list
    */
   _update_views() {
-    const views = (state.params.views = []);
     const sMode = state.form.share_views_select;
+    state.views.length = 0;
     switch (sMode) {
       case 'share_views_select_method_all':
-        // Disabled 
+        // Disabled
         break;
       case 'share_views_select_method_story_step':
-        views.push(...getViewsStep());
+        state.views.push(...getViewsStep());
         break;
       case 'share_views_select_method_story_itself':
-        views.push(getStoryId());
+        state.views.push(getStoryId());
         break;
       case 'share_views_select_method_map_layer':
-        views.push(...getViewsLayersVisibles(true));
+        state.views.push(...getViewsLayersVisibles(true));
         break;
       case 'share_views_select_method_map_list_open':
-        views.push(...getViewsOpen());
+        state.views.push(...getViewsOpen());
         break;
       case 'share_views_select_method_current_url':
-        views.push(...getQueryParametersAsObject().views);
+        state.views.push(...getQueryParametersAsObject().views);
         break;
     }
-    return views;
+    return state.views;
   }
 
   /**
@@ -156,8 +148,9 @@ export class ShareModal {
   validate() {
     const sm = this;
     const msgs = [];
-    const idViews = state.params.views;
+    const idViews = state.views;
     const useStatic = !!state.form.share_mode_static;
+
     const count = idViews.length;
     const hasStory = getViews({idView: idViews}).reduce(
       (a, c) => a || c.type === 'sm',
@@ -187,6 +180,8 @@ export class ShareModal {
     }
     if (count === 0) {
       if (useStatic) {
+        state.prevent.add('copy');
+        state.prevent.add('open');
         msgs.push({
           type: 'danger',
           key: 'share_msg_views_count_empty_static'
@@ -208,29 +203,36 @@ export class ShareModal {
 
   _validate_messages(msgs) {
     const sm = this;
-    let hasError = false;
     const elMsgContainer = sm._el_msg_container;
     while (elMsgContainer.firstElementChild) {
       elMsgContainer.firstElementChild.remove();
     }
     for (const msg of msgs) {
       const elMsg = elAlert(msg.key, msg.type, msg.data);
-      if (msg.type === 'danger') {
-        hasError = true;
-      }
       elMsgContainer.appendChild(elMsg);
     }
+  }
 
-    sm.allowBtnOpen(!hasError);
-    sm.allowBtnCopy(!hasError);
+  _update_options_visibility() {
+    const sm = this;
+    const f = state.form;
+    const hasViews = state.views.length > 0;
+    const linkStatic = f.share_mode_static;
+    sm.setClassDisable(sm._el_settings_app, linkStatic);
+    sm.setClassDisable(sm._el_views_zoom, !hasViews || !linkStatic);
+    sm.setClassDisable(sm._el_views_filters, !hasViews);
+    sm.allowBtnOpen(!state.prevent.has('open'));
+    sm.allowBtnCopy(!state.prevent.has('copy'));
   }
 
   /**
    * Update  URL to share
    */
+
   _update_url() {
-    const sm = this;
-    const url = new URL(window.location.href);
+    const url = new URL(window.origin);
+    const hasViews = state.views.length > 0;
+    const f = state.form;
 
     /**
      * Update base searchParams ( views, project )
@@ -245,28 +247,26 @@ export class ShareModal {
     /**
      * Mode Static
      */
-    const f = state.form;
     url.pathname = f.share_mode_static ? '/static.html' : '/';
 
     /**
-     * Zoom to views after initial pos
+     * Options
      */
-    url.searchParams.set('zoomToViews', !!f.share_views_zoom);
-
-    /**
-     * App options
-     */
+    url.searchParams.set('language', mx.settings.language);
     if (f.share_mode_static) {
-      // Skip app options, disable group 
-      sm.setClassDisable(sm._el_settings_app,true);
+      if (hasViews) {
+        url.searchParams.set('views', state.views);
+        url.searchParams.set('zoomToViews', !!f.share_views_zoom);
+      }
     } else {
-      // Handle app options
-      sm.setClassDisable(sm._el_settings_app,false);
+      url.searchParams.set('project', mx.settings.project.id);
       url.searchParams.set('viewsListFlatMode', f.share_category_hide);
-      if (f.share_views_open) {
-        url.searchParams.set('viewsOpen', state.params.views);
-      } else {
-        url.searchParams.set('views', state.params.views);
+      if (hasViews) {
+        url.searchParams.set('viewsOpen', state.views);
+        url.searchParams.set(
+          'viewsListFilterActivated',
+          f.share_filter_activated
+        );
       }
     }
 
@@ -282,16 +282,27 @@ export class ShareModal {
         url.searchParams.set(i, pos[i]);
       }
     }
+    /**
+     * Update url
+     */
 
+    this.url = url;
+  }
+
+  _update_template() {
+    const sm = this;
     /**
      * Handle template
      */
-    const text = 'Shared from MapX';
-    const title = 'MapX';
+    const url = sm.url;
     const idLinkItem = state.form.share_template;
     const linkItem = sm.getLinkItem(idLinkItem);
     const disableLink = !!linkItem.disable_link;
     const disableEncode = !!linkItem.disable_encode;
+    // TODO: convert those as input.
+    const text = 'Shared from MapX';
+    const title = 'MapX';
+    // replace values in template, if avaialble.
     const txt = parseTemplate(
       linkItem.template,
       {
@@ -303,9 +314,13 @@ export class ShareModal {
         encodeURIComponent: !disableEncode
       }
     );
-    sm.allowBtnOpen(!disableLink);
+
+    // Set share string in state and form
     state.shareString = txt;
     sm._el_input.innerText = txt;
+    if (disableLink) {
+      state.prevent.add('open');
+    }
     return txt;
   }
 
@@ -455,12 +470,16 @@ export class ShareModal {
     // mode app
     sm._el_settings_app = el('div', [
       elCheckbox('share_category_hide', {checked: false}),
-      elCheckbox('share_filter_activated', {checked: false}),
-      elCheckbox('share_views_open', {checked: false})
+      (sm._el_views_filters = elCheckbox('share_filter_activated', {
+        checked: false
+      }))
     ]);
     // all modes
     const elCheckboxStatic = elCheckbox('share_mode_static', {checked: true});
-    const elCheckboxZoomViews = elCheckbox('share_views_zoom', {checked: true});
+    const elCheckboxZoomViews = (sm._el_views_zoom = elCheckbox(
+      'share_views_zoom',
+      {checked: true}
+    ));
     const elCheckboxMapPos = elCheckbox('share_map_pos', {checked: true});
 
     /**
@@ -472,11 +491,9 @@ export class ShareModal {
         'div',
         {class: 'well', style: {maxHeight: '300px', overflowY: 'auto'}},
         [
-          elSelectTemplate,
-          elSelectViewsGroup,
-          elCheckboxZoomViews,
-          elCheckboxMapPos,
           elCheckboxStatic,
+          elCheckboxMapPos,
+          elCheckboxZoomViews,
           sm._el_settings_app
         ]
       )
@@ -488,7 +505,13 @@ export class ShareModal {
     sm._el_form = el(
       'form',
       {name: 'share_form', id: 'test', on: ['change', sm.update]},
-      [elFormCode, elFormOptions, elFormValidation]
+      [
+        elFormCode,
+        elSelectTemplate,
+        elSelectViewsGroup,
+        elFormOptions,
+        elFormValidation
+      ]
     );
     sm._el_content.appendChild(sm._el_form);
 

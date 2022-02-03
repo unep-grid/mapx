@@ -550,6 +550,7 @@ export function initListenerGlobal() {
     idGroup: 'update_share_modale_story',
     callback: () => {
       if (window._share_modal) {
+        console.log('Re init after story start/stop')
         window._share_modal.init();
       }
     }

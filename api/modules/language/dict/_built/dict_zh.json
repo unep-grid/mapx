@@ -6981,12 +6981,12 @@
   },
   {
     "id": "share_map_pos_desc",
-    "en": "The current extent, tilt and bearing of the map will be used. Project's default will not be applied.",
-    "zh": "将使用地图的当前范围、倾斜度和方位。不会应用项目的默认值。"
+    "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
+    "zh": "将使用地图的当前范围、倾斜度和方位。项目默认值因此被覆盖。"
   },
   {
     "id": "share_filter_activated_label",
-    "en": "Filter activated view by default",
+    "en": "Filter activated views",
     "zh": "默认筛选已激活视图"
   },
   {
@@ -7021,8 +7021,8 @@
   },
   {
     "id": "share_views_select_method_map_layer",
-    "en": "Views with layers currently displayed on map",
-    "zh": "当前显示在地图上的图层的视图"
+    "en": "Only active views with layers on map",
+    "zh": "仅在地图上有图层的活动视图"
   },
   {
     "id": "share_views_select_method_story_step",
@@ -7041,8 +7041,8 @@
   },
   {
     "id": "share_views_select_method_map_list_open",
-    "en": "All views open in the list",
-    "zh": "在列表中打开所有视图"
+    "en": "All active views",
+    "zh": "所有活动视图"
   },
   {
     "id": "share_msg_views_count_empty_static",

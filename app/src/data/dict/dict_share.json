@@ -144,7 +144,7 @@
   },
   {
     "id": "share_map_pos_desc",
-    "en": "The current extent, tilt and bearing of the map will be used. Project's default will not be applied.",
+    "en":"The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "fr": "",
     "es": "",
     "ru": "",
@@ -157,8 +157,8 @@
   },
   {
     "id": "share_filter_activated_label",
-    "en": "Filter activated view by default",
-    "fr": "Filtrer les vues activées par défaut",
+    "en": "Filter activated views",
+    "fr": "",
     "es": "",
     "ru": "",
     "zh": "默认筛选已激活视图",
@@ -248,7 +248,7 @@
   },
   {
     "id": "share_views_select_method_map_layer",
-    "en": "Views with layers currently displayed on map",
+    "en": "Only active views with layers on map",
     "fr": "",
     "es": "",
     "ru": "",
@@ -300,7 +300,7 @@
   },
   {
     "id": "share_views_select_method_map_list_open",
-    "en": "All views open in the list",
+    "en": "All active views",
     "fr": "",
     "es": "",
     "ru": "",

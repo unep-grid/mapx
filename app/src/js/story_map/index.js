@@ -307,8 +307,21 @@ export function getViewsStep() {
   if (!isStoryPlaying()) {
     return null;
   }
+  const views = [];
   const state = getState();
-  return state.step.views;
+  /**
+  * TODO : Duplicate code ! merge this code with getStoryViewsId
+  */ 
+  for (const item of state.step.views) {
+    if (isViewId(item)) {
+      views.push(id);
+    } else if (isObject(item) && isViewId(item.id)) {
+      views.push(item.id);
+    } else if (isObject(item) && isViewId(item.view)) {
+      views.push(item.view);
+    }
+  }
+  return views;
 }
 
 /**
@@ -492,13 +505,13 @@ async function start() {
   updateLayout();
 
   /**
-   * Handle update step 
+   * Handle update step
    */
-  if(state.initScroll){
+  if (state.initScroll) {
     state.elStory.scrollTop = state.initScroll;
   }
   if (state.stepUpdate) {
-    state.stepActive=null;
+    state.stepActive = null;
     await storyGoTo(state.stepUpdate);
   }
   /**

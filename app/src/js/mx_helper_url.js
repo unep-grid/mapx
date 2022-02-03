@@ -86,11 +86,10 @@ export function getQueryInit() {
   const h = mx.helpers;
   const qViews = h.getQueryViewsInit();
   const config = {
-    isFlatMode: h.getQueryParameterInit('viewsListFlatMode', false)[0],
-    isFilterActivated: h.getQueryParameterInit(
-      'viewsListFilterActivated',
-      false
-    )[0]
+    isFlatMode:
+      h.getQueryParameterInit('viewsListFlatMode', false)[0] === 'true',
+    isFilterActivated:
+      h.getQueryParameterInit('viewsListFilterActivated', false)[0] === 'true'
   };
   Object.assign(config, qViews);
   return config;

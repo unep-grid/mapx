@@ -6981,13 +6981,13 @@
   },
   {
     "id": "share_map_pos_desc",
-    "en": "The current extent, tilt and bearing of the map will be used. Project's default will not be applied.",
-    "fa": "وسعت فعلی، شیب و باربری نقشه استفاده خواهد شد. پیش فرض پروژه اعمال نخواهد شد."
+    "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
+    "fa": "وسعت فعلی، شیب و باربری نقشه استفاده خواهد شد. بنابراین پیش فرض های پروژه بازنویسی می شوند."
   },
   {
     "id": "share_filter_activated_label",
-    "en": "Filter activated view by default",
-    "fa": "نمای فعال را به طور پیش فرض فیلتر کنید"
+    "en": "Filter activated views",
+    "fa": "نماهای فعال شده را فیلتر کنید"
   },
   {
     "id": "share_filter_activated_desc",
@@ -7021,8 +7021,8 @@
   },
   {
     "id": "share_views_select_method_map_layer",
-    "en": "Views with layers currently displayed on map",
-    "fa": "نماهایی با لایه هایی که در حال حاضر روی نقشه نمایش داده می شوند"
+    "en": "Only active views with layers on map",
+    "fa": "فقط نماهای فعال با لایه های روی نقشه"
   },
   {
     "id": "share_views_select_method_story_step",
@@ -7041,8 +7041,8 @@
   },
   {
     "id": "share_views_select_method_map_list_open",
-    "en": "All views open in the list",
-    "fa": "همه نماها در لیست باز می شوند"
+    "en": "All active views",
+    "fa": "همه نماهای فعال"
   },
   {
     "id": "share_msg_views_count_empty_static",

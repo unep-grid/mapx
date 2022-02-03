@@ -6981,13 +6981,13 @@
   },
   {
     "id": "share_map_pos_desc",
-    "en": "The current extent, tilt and bearing of the map will be used. Project's default will not be applied.",
-    "de": "Die aktuelle Ausdehnung, Neigung und Peilung der Karte werden verwendet. Der Standardwert des Projekts wird nicht angewendet."
+    "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
+    "de": "Die aktuelle Ausdehnung, Neigung und Peilung der Karte werden verwendet. Projektvorgaben werden damit überschrieben."
   },
   {
     "id": "share_filter_activated_label",
-    "en": "Filter activated view by default",
-    "de": "Standardmäßig aktivierte Ansicht filtern"
+    "en": "Filter activated views",
+    "de": "Aktivierte Ansichten filtern"
   },
   {
     "id": "share_filter_activated_desc",
@@ -7021,8 +7021,8 @@
   },
   {
     "id": "share_views_select_method_map_layer",
-    "en": "Views with layers currently displayed on map",
-    "de": "Ansichten mit Layern, die derzeit auf der Karte angezeigt werden"
+    "en": "Only active views with layers on map",
+    "de": "Nur aktive Ansichten mit Ebenen auf der Karte"
   },
   {
     "id": "share_views_select_method_story_step",
@@ -7041,8 +7041,8 @@
   },
   {
     "id": "share_views_select_method_map_list_open",
-    "en": "All views open in the list",
-    "de": "Alle Ansichten werden in der Liste geöffnet"
+    "en": "All active views",
+    "de": "Alle aktiven Aufrufe"
   },
   {
     "id": "share_msg_views_count_empty_static",

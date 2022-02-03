@@ -6981,13 +6981,13 @@
   },
   {
     "id": "share_map_pos_desc",
-    "en": "The current extent, tilt and bearing of the map will be used. Project's default will not be applied.",
-    "fr": "L'étendue, l'inclinaison et le relèvement actuels de la carte seront utilisés. La valeur par défaut du projet ne sera pas appliquée."
+    "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
+    "fr": "L'étendue, l'inclinaison et le relèvement actuels de la carte seront utilisés. Les valeurs par défaut du projet sont ainsi écrasées."
   },
   {
     "id": "share_filter_activated_label",
-    "en": "Filter activated view by default",
-    "fr": "Filtrer les vues activées par défaut"
+    "en": "Filter activated views",
+    "fr": "Filtrer les vues activées"
   },
   {
     "id": "share_filter_activated_desc",
@@ -7021,8 +7021,8 @@
   },
   {
     "id": "share_views_select_method_map_layer",
-    "en": "Views with layers currently displayed on map",
-    "fr": "Vues avec des couches actuellement affichées sur la carte"
+    "en": "Only active views with layers on map",
+    "fr": "Uniquement les vues actives avec des couches sur la carte"
   },
   {
     "id": "share_views_select_method_story_step",
@@ -7041,8 +7041,8 @@
   },
   {
     "id": "share_views_select_method_map_list_open",
-    "en": "All views open in the list",
-    "fr": "Toutes les vues ouvertes dans la liste"
+    "en": "All active views",
+    "fr": "Toutes les vues actives"
   },
   {
     "id": "share_msg_views_count_empty_static",
