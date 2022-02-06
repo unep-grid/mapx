@@ -122,23 +122,25 @@
     flex-wrap: wrap;
     max-height: 6em;
     overflow: auto;
+   
     > .search--button-keyword {
       cursor: pointer;
       margin: 3px;
-      text-transform: capitalize;
       font-size: 0.85em;
       > * {
         pointer-events: none;
       }
       > span {
         margin: 3px;
+        display:inline-block; // required for first-letter;
       }
-      /*&:hover {*/
+      > span::first-letter {
+      text-transform: uppercase;
+    }
       opacity: 1;
-      /*}*/
     }
     .search--button-keyword-enabled {
-      text-decoration:underline;
+      text-decoration: underline;
     }
   }
   .search--flag {
