@@ -1,3 +1,19 @@
+  - [1.9.39-alpha.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.6) 
+
+      - App
+          - Sharing manager :
+            - Support for language change  
+            - Include 3d relief + aerial mode if map position is enabled
+            - Removed sharing button in view's tools
+            - Removed R sharing module
+            - Modified SDK resolver with deprecation notice for previous method 
+            - SDK : added resolver to open, close and retrieve generated url
+            - Added basic tests ( end-to-end via SDK )  
+            - Revision of logic according to users feedbacks  
+            - Support for predefined views list mode: e.g. injected from SDK.
+          - Search tool : clickable tags should only capitalize the first letter
+          - Fixed a bug were pressing tab in login/user profile form shifted the UI
+
   - [1.9.39-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.5) 
 
       - App

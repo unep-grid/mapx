@@ -146,7 +146,6 @@ MapX resolvers available in app only
     * [.show_modal_view_meta()](#MapxResolversApp+show_modal_view_meta) ⇒ <code>Boolean</code>
     * [.launch_chaos_test()](#MapxResolversApp+launch_chaos_test) ⇒ <code>Boolean</code>
     * [.show_modal_view_edit()](#MapxResolversApp+show_modal_view_edit) ⇒ <code>Boolean</code>
-    * [.show_modal_share(opt)](#MapxResolversApp+show_modal_share) ⇒ <code>Boolean</code>
     * [.show_modal_tool(opt)](#MapxResolversApp+show_modal_tool) ⇒ <code>Boolean</code> \| <code>Array</code>
     * [.get_user_id()](#MapxResolversApp+get_user_id) ⇒ <code>Number</code>
     * [.set_token(Mapx)](#MapxResolversApp+set_token)
@@ -209,19 +208,6 @@ Show view edit modal window
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 **Returns**: <code>Boolean</code> - done  
-<a name="MapxResolversApp+show_modal_share"></a>
-
-#### mapxResolversApp.show\_modal\_share(opt) ⇒ <code>Boolean</code>
-Show sharing modal window
-
-**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
-**Returns**: <code>Boolean</code> - Done  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| opt | <code>Object</code> | Options |
-| opt.idView | <code>String</code> | Id view to share |
-
 <a name="MapxResolversApp+show_modal_tool"></a>
 
 #### mapxResolversApp.show\_modal\_tool(opt) ⇒ <code>Boolean</code> \| <code>Array</code>
@@ -563,6 +549,9 @@ MapX resolvers available in static and app
     * [.set_3d_terrain(opt)](#MapxResolversStatic+set_3d_terrain)
     * [.set_mode_3d(opt)](#MapxResolversStatic+set_mode_3d)
     * [.set_mode_aerial(opt)](#MapxResolversStatic+set_mode_aerial)
+    * [.show_modal_share(opt)](#MapxResolversStatic+show_modal_share) ⇒ <code>Boolean</code>
+    * [.close_modal_share()](#MapxResolversStatic+close_modal_share) ⇒ <code>Boolean</code>
+    * [.get_modal_share_string()](#MapxResolversStatic+get_modal_share_string) ⇒ <code>String</code>
     * [.set_theme(opt)](#MapxResolversStatic+set_theme) ⇒ <code>Boolean</code>
     * [.get_themes_id()](#MapxResolversStatic+get_themes_id) ⇒ <code>Array</code>
     * [.get_themes()](#MapxResolversStatic+get_themes) ⇒ <code>Object</code>
@@ -710,6 +699,33 @@ Set related layers visibility, change control buttons state
 | opt | <code>Object</code> | Options |
 | opt.action | <code>String</code> | Action to perform: 'show','hide','toggle' |
 
+<a name="MapxResolversStatic+show_modal_share"></a>
+
+#### mapxResolversStatic.show\_modal\_share(opt) ⇒ <code>Boolean</code>
+Show sharing modal
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Boolean</code> - Done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> \| <code>Array</code> | Id view to share |
+
+<a name="MapxResolversStatic+close_modal_share"></a>
+
+#### mapxResolversStatic.close\_modal\_share() ⇒ <code>Boolean</code>
+Close sharing modal
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Boolean</code> - Done  
+<a name="MapxResolversStatic+get_modal_share_string"></a>
+
+#### mapxResolversStatic.get\_modal\_share\_string() ⇒ <code>String</code>
+Get sharing string
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>String</code> - Sharing string ( code / url )  
 <a name="MapxResolversStatic+set_theme"></a>
 
 #### mapxResolversStatic.set\_theme(opt) ⇒ <code>Boolean</code>
@@ -1302,7 +1318,7 @@ Get current map bounds as array
 
 #### mapxResolversStatic.map(opt) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>
 Generic map (mapbox-gl-js) methods
-This gives you low level access to the `map` methods. Most methods work, but not all. 
+This gives you low level access to the `map` methods. Most methods work, but not all.
 see https://docs.mapbox.com/mapbox-gl-js/api/map for all references
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
