@@ -6771,8 +6771,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Display on map",
-    "zh": "在地图上显示"
+    "en": "Activate this view",
+    "zh": "激活此视图"
   },
   {
     "id": "search_view_link",
@@ -6951,8 +6951,8 @@
   },
   {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "zh": "如果您想使用功能有限的轻量级和更快版本的 MapX 共享视图，请使用“静态”模式。如果您添加故事地图，它将自动启动，丢弃任何其他视图"
+    "en": "Use the 'static' mode if you want to share a view using a lightweight version of MapX, with limited functionalities. If you add a story map, it will start automatically.",
+    "zh": "如果您想使用功能有限的轻量级 MapX 共享视图，请使用“静态”模式。如果您添加故事地图，它将自动启动。"
   },
   {
     "id": "share_views_zoom_label",
@@ -7001,8 +7001,8 @@
   },
   {
     "id": "share_category_hide_desc",
-    "en": "Categories will be hidden in the list of views by default",
-    "zh": "试图列表默认隐藏类别"
+    "en": "Categories will be hidden in the list of views",
+    "zh": "类别将隐藏在视图列表中"
   },
   {
     "id": "share_template_label",
@@ -7020,9 +7020,9 @@
     "zh": "此项目中的所有视图"
   },
   {
-    "id": "share_views_select_method_map_layer",
-    "en": "Only active views with layers on map",
-    "zh": "仅在地图上有图层的活动视图"
+    "id": "share_views_select_method_preselect",
+    "en": "Preselected views",
+    "zh": "预选视图"
   },
   {
     "id": "share_views_select_method_story_step",
@@ -7036,7 +7036,7 @@
   },
   {
     "id": "share_views_select_method_story_itself",
-    "en": "This story map",
+    "en": "This Story Map",
     "zh": "这个故事地图"
   },
   {
@@ -7046,13 +7046,18 @@
   },
   {
     "id": "share_msg_views_count_empty_static",
-    "en": "No view selected. Please open / select at least one view.",
-    "zh": "未选择视图。请打开/选择至少一个视图。"
+    "en": "Nothing to share. Please enable 'initial map position' setting or select at least one view",
+    "zh": "没什么可分享的。请启用“初始地图位置”设置或选择至少一个视图"
   },
   {
-    "id": "share_msg_views_count_empty",
-    "en": "No view selected. The default behaviour will be to open a project with all views listed. Other views handling options will be ignored.",
-    "zh": "未选择视图。默认行为将是打开一个列出所有视图的项目。其他视图处理选项将被忽略。"
+    "id": "share_msg_views_count_empty_static_map_pos",
+    "en": "No view selected. Only base layers and map position will be shared",
+    "zh": "未选择视图。仅共享基础图层和地图位置"
+  },
+  {
+    "id": "share_msg_views_count_empty_full_project",
+    "en": "No view selected. The whole project will be shared, but no views will be activated.",
+    "zh": "未选择视图。整个项目将被共享，但不会激活任何视图。"
   },
   {
     "id": "share_msg_views_count_single",
@@ -7068,6 +7073,21 @@
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
     "zh": "选择包括故事地图：其他视图将被忽略，故事地图将自动播放"
+  },
+  {
+    "id": "btn_copy_share",
+    "en": "Copy the result",
+    "zh": "复制结果"
+  },
+  {
+    "id": "btn_open_share",
+    "en": "Share",
+    "zh": "分享"
+  },
+  {
+    "id": "btn_help_wiki",
+    "en": "Open help",
+    "zh": "打开帮助"
   },
   {
     "id": "btn_opt_share_to_project",

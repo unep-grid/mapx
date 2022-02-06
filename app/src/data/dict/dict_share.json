@@ -66,7 +66,7 @@
   },
   {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
+    "en": "Use the 'static' mode if you want to share a view using a lightweight version of MapX, with limited functionalities. If you add a story map, it will start automatically.",
     "fr": "",
     "es": "",
     "ru": "",
@@ -144,7 +144,7 @@
   },
   {
     "id": "share_map_pos_desc",
-    "en":"The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
+    "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "fr": "",
     "es": "",
     "ru": "",
@@ -196,11 +196,11 @@
   },
   {
     "id": "share_category_hide_desc",
-    "en": "Categories will be hidden in the list of views by default",
-    "fr": "La liste des vues n'affichera pas les catégories par défaut",
+    "en": "Categories will be hidden in the list of views",
+    "fr": "La liste des vues n'affichera pas les catégories",
     "es": "",
     "ru": "",
-    "zh": "试图列表默认隐藏类别",
+    "zh": "",
     "ar": "",
     "fa": "",
     "ps": "",
@@ -247,8 +247,8 @@
     "de": ""
   },
   {
-    "id": "share_views_select_method_map_layer",
-    "en": "Only active views with layers on map",
+    "id": "share_views_select_method_preselect",
+    "en": "Preselected views",
     "fr": "",
     "es": "",
     "ru": "",
@@ -287,7 +287,7 @@
   },
   {
     "id": "share_views_select_method_story_itself",
-    "en": "This story map",
+    "en": "This Story Map",
     "fr": "",
     "es": "",
     "ru": "",
@@ -313,7 +313,7 @@
   },
   {
     "id": "share_msg_views_count_empty_static",
-    "en": "No view selected. Please open / select at least one view.",
+    "en": "Nothing to share. Please enable 'initial map position' setting or select at least one view",
     "fr": "",
     "es": "",
     "ru": "",
@@ -325,8 +325,21 @@
     "de": ""
   },
   {
-    "id": "share_msg_views_count_empty",
-    "en": "No view selected. The default behaviour will be to open a project with all views listed. Other views handling options will be ignored.",
+    "id": "share_msg_views_count_empty_static_map_pos",
+    "en": "No view selected. Only base layers and map position will be shared",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "share_msg_views_count_empty_full_project",
+    "en": "No view selected. The whole project will be shared, but no views will be activated.",
     "fr": "",
     "es": "",
     "ru": "",
@@ -366,6 +379,45 @@
   {
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_copy_share",
+    "en": "Copy the result",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_open_share",
+    "en": "Share",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_help_wiki",
+    "en": "Open help",
     "fr": "",
     "es": "",
     "ru": "",

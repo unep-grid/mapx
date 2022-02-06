@@ -537,30 +537,28 @@ export function initListenerGlobal() {
    *  Events
    */
   mx.events.on({
-    type: ['view_added', 'view_removed', 'story_step'],
+    type: ['view_added', 'view_removed', 'story_step', 'language_change'],
     idGroup: 'update_share_modale',
-    callback: () => {
-      if (window._share_modal) {
-        window._share_modal.update();
-      }
-    }
+    callback: updateSharingTool
   });
   mx.events.on({
     type: ['story_start', 'story_close'],
     idGroup: 'update_share_modale_story',
-    callback: () => {
-      if (window._share_modal) {
-        console.log('Re init after story start/stop')
-        window._share_modal.init();
-      }
-    }
+    callback: resetSharingTool
   });
+  map.on('move', updateSharingTool);
+  map.on('styledata', updateSharingTool);
 
-  map.on('move', () => {
+  function updateSharingTool() {
     if (window._share_modal) {
       window._share_modal.update();
     }
-  });
+  }
+  function resetSharingTool() {
+    if (window._share_modal) {
+      window._share_modal.reset();
+    }
+  }
 }
 
 /**
@@ -1093,6 +1091,19 @@ export async function initMapx(o) {
   });
   if (!mx.settings.initClosedPanels) {
     mx.panel_tools.panel.open();
+  }
+
+  /**
+   * Initial mode terrain 3d / Sat
+   */
+  const ctrls = mx.panel_tools.controls;
+  const enable3d = h.getQueryParameter('t3d')[0] === 'true';
+  const enableSat = h.getQueryParameter('sat')[0] === 'true';
+  if (enable3d) {
+    ctrls.getButton('btn_3d_terrain').action('enable');
+  }
+  if (enableSat) {
+    ctrls.getButton('btn_theme_sat').action('enable');
   }
 
   /**
@@ -5833,6 +5844,7 @@ export function getViewsFilter(o) {
 export function getMapPos(o) {
   const h = mx.helpers;
   o = o || {};
+  const ctrls = mx.panel_tools.controls;
   const r = h.round;
   const map = h.getMap(o.id);
   const bounds = map.getBounds();
@@ -5840,8 +5852,9 @@ export function getMapPos(o) {
   const zoom = map.getZoom();
   const bearing = map.getBearing();
   const pitch = map.getPitch();
-
-  return {
+  const modeSat = ctrls.getButton('btn_theme_sat').isActive();
+  const mode3d = ctrls.getButton('btn_3d_terrain').isActive();
+  const out = {
     n: r(bounds.getNorth()),
     s: r(bounds.getSouth()),
     e: r(bounds.getEast()),
@@ -5850,8 +5863,11 @@ export function getMapPos(o) {
     lng: r(center.lng),
     b: r(bearing),
     p: r(pitch),
-    z: r(zoom)
+    z: r(zoom),
+    sat: modeSat,
+    t3d: mode3d
   };
+  return out;
 }
 
 /**

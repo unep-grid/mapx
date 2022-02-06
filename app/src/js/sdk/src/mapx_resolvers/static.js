@@ -1,5 +1,5 @@
 import {ResolversBase} from './base.js';
-
+import {ShareModal} from './../../../share_modal/index.js';
 /**
  * MapX resolvers available in static and app
  */
@@ -63,7 +63,6 @@ class MapxResolversStatic extends ResolversBase {
    * @param {Object} opt Options
    * @param {String} opt.action Action to perform: 'enable','disable','toggle'
    */
-
   set_3d_terrain(opt) {
     const ctrl = mx.panel_tools.controls.getButton('btn_3d_terrain');
     if (ctrl && ctrl.action) {
@@ -76,25 +75,68 @@ class MapxResolversStatic extends ResolversBase {
    * @param {Object} opt Options
    * @param {String} opt.action Action to perform: 'show','hide','toggle'
    */
-
   set_mode_3d(opt) {
     const ctrl = mx.panel_tools.controls.getButton('btn_3d_terrain');
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
   }
+
   /**
    * Enable or disable aerial/satelite mode
    * Set related layers visibility, change control buttons state
    * @param {Object} opt Options
    * @param {String} opt.action Action to perform: 'show','hide','toggle'
    */
-
   set_mode_aerial(opt) {
     const ctrl = mx.panel_tools.controls.getButton('btn_theme_sat');
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
+  }
+
+  /**
+   * Show sharing modal
+   * @param {Object} opt Options
+   * @param {String|Array} opt.idView Id view to share
+   * @return {Boolean} Done
+   */
+  async show_modal_share(opt) {
+    opt = Object.assign({idView:[]}, opt);
+    const rslv = this;
+    const h = rslv._h;
+    const idViews = h.isArray(opt.idView) ? opt.idView : [opt.idView];
+    const sm = new ShareModal({
+      views: idViews
+    });
+    await sm.once('updated');
+  }
+
+  /**
+   * Close sharing modal
+   * @return {Boolean} Done
+   */
+  async close_modal_share() {
+    const sm = window._share_modal;
+    if (sm) {
+      const promClosed = sm.once('closed');
+      sm.close();
+      await promClosed;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Get sharing string
+   * @return {String} Sharing string ( code / url )
+   */
+  get_modal_share_string() {
+    if (!window._share_modal) {
+      throw new Error('No share modal found');
+    }
+    return window._share_modal.getShareString();
   }
 
   /**
@@ -165,7 +207,7 @@ class MapxResolversStatic extends ResolversBase {
     if (!rslv.has_dashboard()) {
       throw new Error('No dashboard container found');
     }
-    const panel = dh.getInstance().panel
+    const panel = dh.getInstance().panel;
     return rslv._handle_panel_visibility(panel, opt);
   }
 
@@ -722,9 +764,13 @@ class MapxResolversStatic extends ResolversBase {
   map_fly_to(opt) {
     const rslv = this;
     const map = rslv._h.getMap();
-    return rslv._map_resolve_when('moveend', () => {
-      map.flyTo(opt);
-    },opt);
+    return rslv._map_resolve_when(
+      'moveend',
+      () => {
+        map.flyTo(opt);
+      },
+      opt
+    );
   }
 
   /**
@@ -736,9 +782,13 @@ class MapxResolversStatic extends ResolversBase {
   map_jump_to(opt) {
     const rslv = this;
     const map = rslv._h.getMap();
-    return rslv._map_resolve_when('moveend', () => {
-      map.jumpTo(opt);
-    },opt);
+    return rslv._map_resolve_when(
+      'moveend',
+      () => {
+        map.jumpTo(opt);
+      },
+      opt
+    );
   }
 
   /**
@@ -772,7 +822,7 @@ class MapxResolversStatic extends ResolversBase {
 
   /**
    * Generic map (mapbox-gl-js) methods
-   * This gives you low level access to the `map` methods. Most methods work, but not all. 
+   * This gives you low level access to the `map` methods. Most methods work, but not all.
    * see https://docs.mapbox.com/mapbox-gl-js/api/map for all references
    * @example
    * mapx.ask('map',{
@@ -812,35 +862,35 @@ class MapxResolversStatic extends ResolversBase {
   }
 
   //map_set_free_camera_position(opt) {
-    /**
-     *  Note, moving z when pitch is set, the camera points to different
-     *  x/y extent. If not set here, map center can be altaered.
-     *  z  ┌───────────────────────┬─────────────────────┐
-     *     │                       │                     │
-     *  0.8├─────┐                 │                     │
-     *     │     │                 │                     │
-     *  0.5├──┐  │                 │                     │
-     *     │  │  │                 │                     │
-     *     └──┴──┴─────────────────┴─────────────────────┘
-     *        -0.9 -0.8           0,0                   x/y
-     */
-    //const rslv = this;
-    //const map = rslv._h.getMap();
-    //const cam = map.getFreeCameraOptions();
-    //if (typeof opt.altitude !== 'undefined') {
-      //let lngLat;
-      //if (opt.y && opt.x) {
-        //lngLat = new mx.mapboxgl.MercatorCoordinate(opt.x, opt.y, 0);
-      //} else {
-        //lngLat = cam.position.toLngLat();
-      //}
-      //opt.z = mx.mapboxgl.MercatorCoordinate.fromLngLat(lngLat, opt.altitude).z;
-      //delete opt.altitude;
-    //}
-    //Object.assign(cam.position, opt);
-    //console.log(cam.position);
-    //map.setFreeCameraOptions(cam);
-    //return true;
+  /**
+   *  Note, moving z when pitch is set, the camera points to different
+   *  x/y extent. If not set here, map center can be altaered.
+   *  z  ┌───────────────────────┬─────────────────────┐
+   *     │                       │                     │
+   *  0.8├─────┐                 │                     │
+   *     │     │                 │                     │
+   *  0.5├──┐  │                 │                     │
+   *     │  │  │                 │                     │
+   *     └──┴──┴─────────────────┴─────────────────────┘
+   *        -0.9 -0.8           0,0                   x/y
+   */
+  //const rslv = this;
+  //const map = rslv._h.getMap();
+  //const cam = map.getFreeCameraOptions();
+  //if (typeof opt.altitude !== 'undefined') {
+  //let lngLat;
+  //if (opt.y && opt.x) {
+  //lngLat = new mx.mapboxgl.MercatorCoordinate(opt.x, opt.y, 0);
+  //} else {
+  //lngLat = cam.position.toLngLat();
+  //}
+  //opt.z = mx.mapboxgl.MercatorCoordinate.fromLngLat(lngLat, opt.altitude).z;
+  //delete opt.altitude;
+  //}
+  //Object.assign(cam.position, opt);
+  //console.log(cam.position);
+  //map.setFreeCameraOptions(cam);
+  //return true;
   //}
 
   /**
@@ -850,8 +900,8 @@ class MapxResolversStatic extends ResolversBase {
   async map_wait_idle() {
     const rslv = this;
     const map = rslv._h.getMap();
-    const isMoving  = map.isMoving();
-    if(isMoving){
+    const isMoving = map.isMoving();
+    if (isMoving) {
       await map.once('idle');
     }
     return true;

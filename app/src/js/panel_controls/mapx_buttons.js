@@ -1,14 +1,18 @@
 import {Button} from './button.js';
 import screenfull from 'screenfull';
-import {mapComposerModalAuto} from './../mx_helper_map_composer.js'
-import {geolocateUser, getMap, getLayerNamesByPrefix} from './../mx_helper_map.js';
+import {mapComposerModalAuto} from './../mx_helper_map_composer.js';
+import {
+  geolocateUser,
+  getMap,
+  getLayerNamesByPrefix
+} from './../mx_helper_map.js';
 import {toggleSpotlight} from './../mx_helper_map_pixop.js';
 import {ShareModal} from './../share_modal/index.js';
 import {
   storyMapLock,
   storyClose,
   isStoryPlaying
-} from  './../story_map/index.js'
+} from './../story_map/index.js';
 
 export function generateButtons() {
   return [
@@ -63,7 +67,7 @@ export function generateButtons() {
       classesIcon: ['mx-north-arrow'],
       action: () => {
         const map = getMap();
-        map.easeTo({bearing: 0, pitch:0});
+        map.easeTo({bearing: 0, pitch: 0});
       }
     }),
     new Button({
@@ -95,9 +99,10 @@ export function generateButtons() {
           elButton: btn.elButton,
           action: cmd
         });
+        const curPitch = map.getPitch();
         const storyPlaying = isStoryPlaying();
         if (!storyPlaying) {
-          map.flyTo({pitch: enabled ? 60 : 0});
+          map.flyTo({pitch: enabled ? (curPitch > 0 ? curPitch : 60) : 0});
         }
         return enabled;
       }
@@ -142,10 +147,10 @@ export function generateButtons() {
     new Button({
       key: 'btn_share',
       classesIcon: ['fa', 'fa-share-alt'],
-      action: ()=>{
-         new ShareModal();
+      action: () => {
+        new ShareModal();
       }
-    }),
+    })
   ];
 }
 
@@ -177,7 +182,6 @@ function toggleTheme() {
   elIcon.classList.toggle('fa-rotate-180');
   mx.theme.toggleDarkMode();
 }
-
 
 /**
  * Toggle visibility for existing layer in style
@@ -220,7 +224,7 @@ function toggleLayer(opt) {
     map.setLayoutProperty(id, 'visibility', toShow ? 'none' : 'visible');
   }
   if (isTerrain) {
-    map.setTerrain(toShow ? {source: 'mapbox_dem', exaggeration: 1.5} : null);
+    map.setTerrain(toShow ? {source: 'mapbox_dem', exaggeration: 1} : null);
   }
   if (btn) {
     btn.classList[toShow ? 'add' : 'remove']('active');

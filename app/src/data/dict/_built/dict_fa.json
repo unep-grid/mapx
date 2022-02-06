@@ -6771,8 +6771,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Display on map",
-    "fa": "نمایش بر روی نقشه"
+    "en": "Activate this view",
+    "fa": "این نما را فعال کنید"
   },
   {
     "id": "search_view_link",
@@ -6951,8 +6951,8 @@
   },
   {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "fa": "اگر می‌خواهید با استفاده از نسخه سبک‌وزن و سریع‌تر MapX، با قابلیت‌های محدود، نمایی را به اشتراک بگذارید، از حالت «استاتیک» استفاده کنید. اگر یک نقشه داستان اضافه کنید، به طور خودکار شروع می شود و سایر نماها را حذف می کند"
+    "en": "Use the 'static' mode if you want to share a view using a lightweight version of MapX, with limited functionalities. If you add a story map, it will start automatically.",
+    "fa": "اگر می خواهید با استفاده از یک نسخه سبک وزن MapX، با عملکردهای محدود، نمایی را به اشتراک بگذارید، از حالت \"ایستا\" استفاده کنید. اگر یک نقشه داستان اضافه کنید، به طور خودکار شروع می شود."
   },
   {
     "id": "share_views_zoom_label",
@@ -7001,8 +7001,8 @@
   },
   {
     "id": "share_category_hide_desc",
-    "en": "Categories will be hidden in the list of views by default",
-    "fa": "دسته ها به طور پیش فرض در لیست بازدیدها پنهان می شوند "
+    "en": "Categories will be hidden in the list of views",
+    "fa": "دسته ها در لیست بازدیدها پنهان خواهند شد"
   },
   {
     "id": "share_template_label",
@@ -7020,9 +7020,9 @@
     "fa": "تمامی نماها در این پروژه"
   },
   {
-    "id": "share_views_select_method_map_layer",
-    "en": "Only active views with layers on map",
-    "fa": "فقط نماهای فعال با لایه های روی نقشه"
+    "id": "share_views_select_method_preselect",
+    "en": "Preselected views",
+    "fa": "نماهای از پیش انتخاب شده"
   },
   {
     "id": "share_views_select_method_story_step",
@@ -7036,7 +7036,7 @@
   },
   {
     "id": "share_views_select_method_story_itself",
-    "en": "This story map",
+    "en": "This Story Map",
     "fa": "این نقشه داستان"
   },
   {
@@ -7046,13 +7046,18 @@
   },
   {
     "id": "share_msg_views_count_empty_static",
-    "en": "No view selected. Please open / select at least one view.",
-    "fa": "هیچ نمایی انتخاب نشده است. لطفاً حداقل یک نما را باز کنید / انتخاب کنید."
+    "en": "Nothing to share. Please enable 'initial map position' setting or select at least one view",
+    "fa": "چیزی برای اشتراک گذاری نیست لطفاً تنظیمات \"موقعیت اولیه نقشه\" را فعال کنید یا حداقل یک نمای را انتخاب کنید"
   },
   {
-    "id": "share_msg_views_count_empty",
-    "en": "No view selected. The default behaviour will be to open a project with all views listed. Other views handling options will be ignored.",
-    "fa": "هیچ نمایی انتخاب نشده است. رفتار پیش‌فرض باز کردن یک پروژه با تمام نماهای فهرست شده خواهد بود. سایر گزینه های مدیریت نماها نادیده گرفته خواهند شد."
+    "id": "share_msg_views_count_empty_static_map_pos",
+    "en": "No view selected. Only base layers and map position will be shared",
+    "fa": "هیچ نمایی انتخاب نشده است. فقط لایه های پایه و موقعیت نقشه به اشتراک گذاشته می شود"
+  },
+  {
+    "id": "share_msg_views_count_empty_full_project",
+    "en": "No view selected. The whole project will be shared, but no views will be activated.",
+    "fa": "هیچ نمایی انتخاب نشده است. کل پروژه به اشتراک گذاشته خواهد شد، اما هیچ دیدگاهی فعال نخواهد شد."
   },
   {
     "id": "share_msg_views_count_single",
@@ -7068,6 +7073,21 @@
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
     "fa": "انتخاب شامل یک نقشه داستان است: سایر نماها نادیده گرفته می شوند و نقشه داستان به طور خودکار پخش می شود"
+  },
+  {
+    "id": "btn_copy_share",
+    "en": "Copy the result",
+    "fa": "نتیجه را کپی کنید"
+  },
+  {
+    "id": "btn_open_share",
+    "en": "Share",
+    "fa": "اشتراک گذاری"
+  },
+  {
+    "id": "btn_help_wiki",
+    "en": "Open help",
+    "fa": "راهنما را باز کنید"
   },
   {
     "id": "btn_opt_share_to_project",

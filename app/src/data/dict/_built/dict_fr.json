@@ -6771,8 +6771,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Display on map",
-    "fr": "Afficher sur la carte"
+    "en": "Activate this view",
+    "fr": "Activer cette vue"
   },
   {
     "id": "search_view_link",
@@ -6951,8 +6951,8 @@
   },
   {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "fr": "Utilisez le mode 'statique' si vous souhaitez partager une vue en utilisant une version légère et plus rapide de MapX, avec des fonctionnalités limitées. Si vous ajoutez une Story Map, elle démarrera automatiquement, supprimant toutes les autres vues"
+    "en": "Use the 'static' mode if you want to share a view using a lightweight version of MapX, with limited functionalities. If you add a story map, it will start automatically.",
+    "fr": "Utilisez le mode 'statique' si vous souhaitez partager une vue en utilisant une version allégée de MapX, avec des fonctionnalités limitées. Si vous ajoutez une Story Map, elle démarrera automatiquement."
   },
   {
     "id": "share_views_zoom_label",
@@ -7001,8 +7001,8 @@
   },
   {
     "id": "share_category_hide_desc",
-    "en": "Categories will be hidden in the list of views by default",
-    "fr": "La liste des vues n'affichera pas les catégories par défaut"
+    "en": "Categories will be hidden in the list of views",
+    "fr": "La liste des vues n'affichera pas les catégories"
   },
   {
     "id": "share_template_label",
@@ -7020,9 +7020,9 @@
     "fr": "Toutes les vues de ce projet"
   },
   {
-    "id": "share_views_select_method_map_layer",
-    "en": "Only active views with layers on map",
-    "fr": "Uniquement les vues actives avec des couches sur la carte"
+    "id": "share_views_select_method_preselect",
+    "en": "Preselected views",
+    "fr": "Vues présélectionnées"
   },
   {
     "id": "share_views_select_method_story_step",
@@ -7036,8 +7036,8 @@
   },
   {
     "id": "share_views_select_method_story_itself",
-    "en": "This story map",
-    "fr": "Cette carte du récit"
+    "en": "This Story Map",
+    "fr": "Cette Story Map"
   },
   {
     "id": "share_views_select_method_map_list_open",
@@ -7046,13 +7046,18 @@
   },
   {
     "id": "share_msg_views_count_empty_static",
-    "en": "No view selected. Please open / select at least one view.",
-    "fr": "Aucune vue sélectionnée. Veuillez ouvrir/sélectionner au moins une vue."
+    "en": "Nothing to share. Please enable 'initial map position' setting or select at least one view",
+    "fr": "Rien à partager. Veuillez activer le paramètre \"Position initiale sur la carte\" ou sélectionner au moins une vue"
   },
   {
-    "id": "share_msg_views_count_empty",
-    "en": "No view selected. The default behaviour will be to open a project with all views listed. Other views handling options will be ignored.",
-    "fr": "Aucune vue sélectionnée. Le comportement par défaut consistera à ouvrir un projet avec toutes les vues répertoriées. Les autres options de gestion des vues seront ignorées."
+    "id": "share_msg_views_count_empty_static_map_pos",
+    "en": "No view selected. Only base layers and map position will be shared",
+    "fr": "Aucune vue sélectionnée. Seules les couches de base et la position de la carte seront partagées"
+  },
+  {
+    "id": "share_msg_views_count_empty_full_project",
+    "en": "No view selected. The whole project will be shared, but no views will be activated.",
+    "fr": "Aucune vue sélectionnée. L'ensemble du projet sera partagé, mais aucune vue ne sera activée."
   },
   {
     "id": "share_msg_views_count_single",
@@ -7068,6 +7073,21 @@
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
     "fr": "La sélection comprend une Story Map : les autres vues seront ignorées et la Story Map sera automatiquement lue"
+  },
+  {
+    "id": "btn_copy_share",
+    "en": "Copy the result",
+    "fr": "Copiez le résultat"
+  },
+  {
+    "id": "btn_open_share",
+    "en": "Share",
+    "fr": "Partager"
+  },
+  {
+    "id": "btn_help_wiki",
+    "en": "Open help",
+    "fr": "Ouvrir l'aide"
   },
   {
     "id": "btn_opt_share_to_project",

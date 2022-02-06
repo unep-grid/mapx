@@ -6771,8 +6771,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Display on map",
-    "de": "Auf Karte anzeigen"
+    "en": "Activate this view",
+    "de": "Aktivieren Sie diese Ansicht"
   },
   {
     "id": "search_view_link",
@@ -6951,8 +6951,8 @@
   },
   {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "de": "Verwenden Sie den „statischen“ Modus, wenn Sie eine Ansicht mit einer leichten und schnelleren Version von MapX mit eingeschränkten Funktionen teilen möchten. Wenn Sie eine Story-Map hinzufügen, wird sie automatisch gestartet und alle anderen Ansichten werden verworfen"
+    "en": "Use the 'static' mode if you want to share a view using a lightweight version of MapX, with limited functionalities. If you add a story map, it will start automatically.",
+    "de": "Verwenden Sie den „statischen“ Modus, wenn Sie eine Ansicht mit einer leichten Version von MapX mit eingeschränkten Funktionen teilen möchten. Wenn Sie eine Story-Map hinzufügen, wird sie automatisch gestartet."
   },
   {
     "id": "share_views_zoom_label",
@@ -7001,8 +7001,8 @@
   },
   {
     "id": "share_category_hide_desc",
-    "en": "Categories will be hidden in the list of views by default",
-    "de": "Kategorien werden standardmäßig in der Liste der Ansichten ausgeblendet "
+    "en": "Categories will be hidden in the list of views",
+    "de": "Kategorien werden in der Liste der Ansichten ausgeblendet"
   },
   {
     "id": "share_template_label",
@@ -7020,9 +7020,9 @@
     "de": "Alle Ansichten in diesem Projekt"
   },
   {
-    "id": "share_views_select_method_map_layer",
-    "en": "Only active views with layers on map",
-    "de": "Nur aktive Ansichten mit Ebenen auf der Karte"
+    "id": "share_views_select_method_preselect",
+    "en": "Preselected views",
+    "de": "Vorausgewählte Ansichten"
   },
   {
     "id": "share_views_select_method_story_step",
@@ -7036,8 +7036,8 @@
   },
   {
     "id": "share_views_select_method_story_itself",
-    "en": "This story map",
-    "de": "Diese Storymap"
+    "en": "This Story Map",
+    "de": "Diese Story-Map"
   },
   {
     "id": "share_views_select_method_map_list_open",
@@ -7046,13 +7046,18 @@
   },
   {
     "id": "share_msg_views_count_empty_static",
-    "en": "No view selected. Please open / select at least one view.",
-    "de": "Keine Ansicht ausgewählt. Bitte mindestens eine Ansicht öffnen / auswählen."
+    "en": "Nothing to share. Please enable 'initial map position' setting or select at least one view",
+    "de": "Nichts zu teilen. Bitte aktivieren Sie die Einstellung „anfängliche Kartenposition“ oder wählen Sie mindestens eine Ansicht aus"
   },
   {
-    "id": "share_msg_views_count_empty",
-    "en": "No view selected. The default behaviour will be to open a project with all views listed. Other views handling options will be ignored.",
-    "de": "Keine Ansicht ausgewählt. Das Standardverhalten besteht darin, ein Projekt mit allen aufgelisteten Ansichten zu öffnen. Andere Behandlungsoptionen für Ansichten werden ignoriert."
+    "id": "share_msg_views_count_empty_static_map_pos",
+    "en": "No view selected. Only base layers and map position will be shared",
+    "de": "Keine Ansicht ausgewählt. Nur Basis-Layer und Kartenposition werden geteilt"
+  },
+  {
+    "id": "share_msg_views_count_empty_full_project",
+    "en": "No view selected. The whole project will be shared, but no views will be activated.",
+    "de": "Keine Ansicht ausgewählt. Das gesamte Projekt wird geteilt, aber es werden keine Ansichten aktiviert."
   },
   {
     "id": "share_msg_views_count_single",
@@ -7068,6 +7073,21 @@
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
     "de": "Die Auswahl umfasst eine Story-Map: andere Ansichten werden ignoriert und die Story-Map wird automatisch abgespielt"
+  },
+  {
+    "id": "btn_copy_share",
+    "en": "Copy the result",
+    "de": "Kopieren Sie das Ergebnis"
+  },
+  {
+    "id": "btn_open_share",
+    "en": "Share",
+    "de": "Teilen"
+  },
+  {
+    "id": "btn_help_wiki",
+    "en": "Open help",
+    "de": "Hilfe öffnen"
   },
   {
     "id": "btn_opt_share_to_project",

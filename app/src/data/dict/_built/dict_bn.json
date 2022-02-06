@@ -6771,8 +6771,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Display on map",
-    "bn": "মানচিত্রে প্রদর্শন করুন"
+    "en": "Activate this view",
+    "bn": "এই দৃশ্য সক্রিয় করুন"
   },
   {
     "id": "search_view_link",
@@ -6951,8 +6951,8 @@
   },
   {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "bn": "আপনি যদি সীমিত কার্যকারিতা সহ MapX এর একটি হালকা এবং দ্রুত সংস্করণ ব্যবহার করে একটি ভিউ শেয়ার করতে চান তবে 'স্ট্যাটিক' মোড ব্যবহার করুন। যদি আপনি একটি গল্প মানচিত্র যোগ করেন, এটি স্বয়ংক্রিয়ভাবে শুরু হবে, অন্য কোনো দৃশ্য বাদ দিয়ে"
+    "en": "Use the 'static' mode if you want to share a view using a lightweight version of MapX, with limited functionalities. If you add a story map, it will start automatically.",
+    "bn": "আপনি যদি সীমিত কার্যকারিতা সহ MapX-এর হালকা সংস্করণ ব্যবহার করে একটি দৃশ্য শেয়ার করতে চান তবে 'স্থির' মোড ব্যবহার করুন। আপনি একটি গল্প মানচিত্র যোগ করলে, এটি স্বয়ংক্রিয়ভাবে শুরু হবে।"
   },
   {
     "id": "share_views_zoom_label",
@@ -7001,8 +7001,8 @@
   },
   {
     "id": "share_category_hide_desc",
-    "en": "Categories will be hidden in the list of views by default",
-    "bn": "বিভাগগুলি ডিফল্টরূপে দর্শনের তালিকায় লুকানো থাকবে "
+    "en": "Categories will be hidden in the list of views",
+    "bn": "দর্শনের তালিকায় বিভাগগুলি লুকানো থাকবে"
   },
   {
     "id": "share_template_label",
@@ -7020,9 +7020,9 @@
     "bn": "এই প্রকল্পের সব মতামত"
   },
   {
-    "id": "share_views_select_method_map_layer",
-    "en": "Only active views with layers on map",
-    "bn": "মানচিত্রে স্তর সহ শুধুমাত্র সক্রিয় দৃশ্য"
+    "id": "share_views_select_method_preselect",
+    "en": "Preselected views",
+    "bn": "পূর্বনির্বাচিত ভিউ"
   },
   {
     "id": "share_views_select_method_story_step",
@@ -7036,7 +7036,7 @@
   },
   {
     "id": "share_views_select_method_story_itself",
-    "en": "This story map",
+    "en": "This Story Map",
     "bn": "এই গল্প মানচিত্র"
   },
   {
@@ -7046,13 +7046,18 @@
   },
   {
     "id": "share_msg_views_count_empty_static",
-    "en": "No view selected. Please open / select at least one view.",
-    "bn": "কোন ভিউ নির্বাচন করা হয়নি। অন্তত একটি দৃশ্য খুলুন / নির্বাচন করুন."
+    "en": "Nothing to share. Please enable 'initial map position' setting or select at least one view",
+    "bn": "ভাগ করার কিছুই নেই। অনুগ্রহ করে 'প্রাথমিক মানচিত্র অবস্থান' সেটিং সক্ষম করুন বা অন্তত একটি দৃশ্য নির্বাচন করুন৷"
   },
   {
-    "id": "share_msg_views_count_empty",
-    "en": "No view selected. The default behaviour will be to open a project with all views listed. Other views handling options will be ignored.",
-    "bn": "কোন ভিউ নির্বাচন করা হয়নি। ডিফল্ট আচরণ তালিকাভুক্ত সমস্ত দর্শন সহ একটি প্রকল্প খুলতে হবে। অন্যান্য ভিউ হ্যান্ডলিং বিকল্প উপেক্ষা করা হবে."
+    "id": "share_msg_views_count_empty_static_map_pos",
+    "en": "No view selected. Only base layers and map position will be shared",
+    "bn": "কোন ভিউ নির্বাচন করা হয়নি। শুধুমাত্র ভিত্তি স্তর এবং মানচিত্রের অবস্থান ভাগ করা হবে"
+  },
+  {
+    "id": "share_msg_views_count_empty_full_project",
+    "en": "No view selected. The whole project will be shared, but no views will be activated.",
+    "bn": "কোন ভিউ নির্বাচন করা হয়নি। পুরো প্রকল্প ভাগ করা হবে, কিন্তু কোন ভিউ সক্রিয় করা হবে না."
   },
   {
     "id": "share_msg_views_count_single",
@@ -7068,6 +7073,21 @@
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
     "bn": "নির্বাচন একটি গল্প মানচিত্র অন্তর্ভুক্ত: অন্যান্য দৃশ্য উপেক্ষা করা হবে এবং গল্প মানচিত্র স্বয়ংক্রিয়ভাবে চালানো হবে"
+  },
+  {
+    "id": "btn_copy_share",
+    "en": "Copy the result",
+    "bn": "ফলাফল কপি করুন"
+  },
+  {
+    "id": "btn_open_share",
+    "en": "Share",
+    "bn": "শেয়ার করুন"
+  },
+  {
+    "id": "btn_help_wiki",
+    "en": "Open help",
+    "bn": "সাহায্য খুলুন"
   },
   {
     "id": "btn_opt_share_to_project",

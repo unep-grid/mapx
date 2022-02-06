@@ -97,17 +97,6 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
       <div class="fa fa-sliders"></div>
     </li>
     {{?}}
-    {{? !isGj }}
-    <li
-      class="mx-pointer btn-circle btn-circle-small hint--top"
-      data-view_action_key="btn_opt_meta"
-      data-view_action_target="{{=view.id}}"
-      data-lang_key="btn_opt_meta"
-      data-lang_type="tooltip"
-    >
-      <div class="fa fa-info-circle"></div>
-    </li>
-    {{?}} 
     {{? isVtWithAttr && !isTemp }}
     <li
       class="mx-pointer btn-circle btn-circle-small hint--top"
@@ -231,17 +220,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
       <div class="fa fa-trash-o"></div>
     </li>
     {{?}} 
-    {{? (isSm || isVt || isRt || isCc ) && !isTemp }}
-    <li
-      class="mx-pointer btn-circle btn-circle-small hint--top"
-      data-lang_key="btn_opt_share"
-      data-lang_type="tooltip"
-      data-view_action_key="btn_opt_share"
-      data-view_action_target="{{=view.id}}"
-    >
-      <div class="fa fa-share-alt"></div>
-    </li>
-    {{? isRegistered && !isTemp }}
+    {{? isRegistered && (isSm || isVt || isRt || isCc ) && !isTemp }}
     <li
       class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_share_to_project"
@@ -252,7 +231,6 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     >
       <div class="fa fa-share"></div>
     </li>
-    {{?}}
     {{?}} 
     {{? !isCurrentProject }}
     <li

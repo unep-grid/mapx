@@ -1,6 +1,5 @@
 import {MapxResolversStatic} from './static.js';
 
-
 /**
  * MapX resolvers available in app only
  */
@@ -46,12 +45,12 @@ class MapxResolversApp extends MapxResolversStatic {
   }
 
   /**
-  * Launch chaos test : open / close views by batch for a minute
-  * @return {Boolean} pass 
-  */
-  async launch_chaos_test(opt){
+   * Launch chaos test : open / close views by batch for a minute
+   * @return {Boolean} pass
+   */
+  async launch_chaos_test(opt) {
     const rslv = this;
-    opt = Object.assign({}, {nBatch:5,duration:1000}, opt);
+    opt = Object.assign({}, {nBatch: 5, duration: 1000}, opt);
     const res = await rslv._h.chaosTest(opt);
     return res;
   }
@@ -86,27 +85,6 @@ class MapxResolversApp extends MapxResolversStatic {
   }
 
   /**
-   * Show sharing modal window
-   * @param {Object} opt Options
-   * @param {String} opt.idView Id view to share
-   * @return {Boolean} Done
-   */
-  show_modal_share(opt) {
-    opt = Object.assign({}, opt);
-    const rslv = this;
-    const view = rslv._h.getView(opt.idView);
-    const isView = opt.idView && rslv._h.isView(view);
-    if (isView) {
-      return rslv._shiny_input('mx_client_view_action', {
-        action: 'btn_opt_share',
-        target: opt.idView
-      });
-    } else {
-      return rslv._shiny_input('btnIframeBuilder');
-    }
-  }
-
-  /**
    * Show modal for tools
    * @param {Object} opt Options
    * @param {String} opt.tool Id of the tools
@@ -119,7 +97,9 @@ class MapxResolversApp extends MapxResolversStatic {
     const tools = {
       sharing_manager: {
         roles: ['public'],
-        id: 'btnIframeBuilder'
+        id: 'btnIframeBuilder',
+        deprecated: true,
+        new_resolver: 'open_modal_share'
       },
       view_new: {
         roles: ['publishers', 'admins'],
@@ -184,6 +164,19 @@ class MapxResolversApp extends MapxResolversStatic {
     });
 
     if (pass) {
+      /**
+       * Deprecated handling + fallback
+       */
+      if (conf.deprecated) {
+        console.warn(
+          `The tool ${opt.tool} is deprecated. Use ${conf.new_resolver}. instead`
+        );
+        return rslv[conf.new_method]();
+      }
+
+      /**
+       * Trigger Shiny input
+       */
       rslv._shiny_input(conf.id, {randomNumber: true});
       return true;
     }

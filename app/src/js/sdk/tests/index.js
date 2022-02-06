@@ -102,8 +102,9 @@ mapx.once('ready', async () => {
   t.check('chaos views display', {
     tests: [
       {
-        name: 'Adding / removing views in random order during a specified duration',
-        timeout : 30000,
+        name:
+          'Adding / removing views in random order during a specified duration',
+        timeout: 30000,
         test: async () => {
           return await mapx.ask('launch_chaos_test', {
             nBatch: 5,
@@ -786,7 +787,7 @@ mapx.once('ready', async () => {
       }
     ]
   });
-  t.check('Trigger share module for a view', {
+  t.check('Sharing module', {
     init: async () => {
       const view = await mapx.ask('_get_random_view', {
         type: ['vt', 'rt', 'sm', 'cc']
@@ -794,43 +795,31 @@ mapx.once('ready', async () => {
       await mapx.ask('show_modal_share', {
         idView: view.id
       });
-      return null;
+      return {
+        id: view.id
+      };
     },
     tests: [
       {
-        name: 'has modal',
-        test: async () => {
-          const hasModalEl = await mapx.ask('has_el_id', {
-            id: 'modalShare',
-            timeout: 3000
-          });
-          await mapx.ask('close_modal_all');
-          return hasModalEl;
-        }
-      }
-    ]
-  });
-  t.check('Tools - trigger sharing manager', {
-    init: async () => {
-      return mapx.ask('show_modal_tool', {tool: 'sharing_manager'});
-    },
-    tests: [
-      {
-        name: 'has modal',
+        name: 'has valid url with view id',
         test: async (r) => {
-          if (!r) {
-            return false;
-          }
-          const hasModalEl = await mapx.ask('has_el_id', {
-            id: 'modalShare',
-            timeout: 2000
-          });
+          const urlString = await mapx.ask('get_modal_share_string');
+          const url = new URL(urlString);
+          const hasId = url.searchParams.get('views') === r.id;
+          return hasId;
+        }
+      },
+      {
+        name: 'can be closed',
+        test: async () => {
+          const hadModal = await mapx.ask('close_modal_share');
           await mapx.ask('close_modal_all');
-          return hasModalEl;
+          return hadModal; 
         }
       }
     ]
   });
+ 
   t.check('Tools - add new view', {
     init: async () => {
       await stopIfGuest();

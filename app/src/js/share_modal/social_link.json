@@ -1,16 +1,23 @@
 [
   {
     "id": "soc_link_url",
-    "label": "URL",
+    "label": "Direct link",
     "template": "{{url}}",
-    "disable_encode":true
+    "disable_encode": true,
+    "disable_link_app": true
+  },
+  {
+    "id": "soc_link_mail",
+    "label": "Email",
+    "template": "mailto:{{email}}?subject={{title}}&body={{text}} %0D {{url}}",
+    "disable_encode": false
   },
   {
     "id": "soc_link_iframe",
-    "label": "IFRAME",
+    "label": "Embed (iframe)",
     "template": "<iframe width='800' height='500' src='{{url}}' frameborder='0' allowfullscreen></iframe>",
     "disable_link": true,
-    "disable_encode":true
+    "disable_encode": true
   },
   {
     "id": "soc_link_twitter",

@@ -6771,8 +6771,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Display on map",
-    "ru": "Показать на карте"
+    "en": "Activate this view",
+    "ru": "Активировать это представление"
   },
   {
     "id": "search_view_link",
@@ -6951,8 +6951,8 @@
   },
   {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
-    "ru": "Используйте «статический» режим, если вы хотите поделиться видом с помощью облегченной и быстрой версии MapX с ограниченными функциями. Если вы добавите карту-историю, она запустится автоматически, отбросив любые другие представления."
+    "en": "Use the 'static' mode if you want to share a view using a lightweight version of MapX, with limited functionalities. If you add a story map, it will start automatically.",
+    "ru": "Используйте «статический» режим, если вы хотите поделиться видом с помощью облегченной версии MapX с ограниченными функциями. Если вы добавите карту-историю, она запустится автоматически."
   },
   {
     "id": "share_views_zoom_label",
@@ -7001,8 +7001,8 @@
   },
   {
     "id": "share_category_hide_desc",
-    "en": "Categories will be hidden in the list of views by default",
-    "ru": "По умолчанию категории будут скрыты в списке просмотров. "
+    "en": "Categories will be hidden in the list of views",
+    "ru": "Категории будут скрыты в списке просмотров"
   },
   {
     "id": "share_template_label",
@@ -7020,9 +7020,9 @@
     "ru": "Все просмотры в этом проекте"
   },
   {
-    "id": "share_views_select_method_map_layer",
-    "en": "Only active views with layers on map",
-    "ru": "Только активные виды со слоями на карте"
+    "id": "share_views_select_method_preselect",
+    "en": "Preselected views",
+    "ru": "Предварительно выбранные представления"
   },
   {
     "id": "share_views_select_method_story_step",
@@ -7036,8 +7036,8 @@
   },
   {
     "id": "share_views_select_method_story_itself",
-    "en": "This story map",
-    "ru": "Эта история карта"
+    "en": "This Story Map",
+    "ru": "Эта история Карта"
   },
   {
     "id": "share_views_select_method_map_list_open",
@@ -7046,13 +7046,18 @@
   },
   {
     "id": "share_msg_views_count_empty_static",
-    "en": "No view selected. Please open / select at least one view.",
-    "ru": "Представление не выбрано. Пожалуйста, откройте/выберите хотя бы одно представление."
+    "en": "Nothing to share. Please enable 'initial map position' setting or select at least one view",
+    "ru": "Нечего делить. Включите настройку «Исходное положение на карте» или выберите хотя бы один вид."
   },
   {
-    "id": "share_msg_views_count_empty",
-    "en": "No view selected. The default behaviour will be to open a project with all views listed. Other views handling options will be ignored.",
-    "ru": "Представление не выбрано. Поведением по умолчанию будет открытие проекта со всеми перечисленными представлениями. Другие параметры обработки представлений будут игнорироваться."
+    "id": "share_msg_views_count_empty_static_map_pos",
+    "en": "No view selected. Only base layers and map position will be shared",
+    "ru": "Представление не выбрано. Будут опубликованы только базовые слои и положение карты."
+  },
+  {
+    "id": "share_msg_views_count_empty_full_project",
+    "en": "No view selected. The whole project will be shared, but no views will be activated.",
+    "ru": "Представление не выбрано. Весь проект будет общим, но просмотры не будут активированы."
   },
   {
     "id": "share_msg_views_count_single",
@@ -7068,6 +7073,21 @@
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
     "ru": "Выбор включает в себя карту-историю: другие виды будут игнорироваться, а карта-история будет воспроизводиться автоматически."
+  },
+  {
+    "id": "btn_copy_share",
+    "en": "Copy the result",
+    "ru": "Скопируйте результат"
+  },
+  {
+    "id": "btn_open_share",
+    "en": "Share",
+    "ru": "доля"
+  },
+  {
+    "id": "btn_help_wiki",
+    "en": "Open help",
+    "ru": "Открыть справку"
   },
   {
     "id": "btn_opt_share_to_project",
