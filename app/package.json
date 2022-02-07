@@ -3,6 +3,17 @@
   "version": "1.9.39-alpha.7",
   "description": "",
   "main": "main.js",
+  "browserslist": "last 2 years",
+  "scripts": {
+    "test": "-",
+    "build": "webpack --config ./webpack/webpack.prod.js",
+    "prod": "npm run build_dict && npm run build",
+    "dev": "webpack --watch --config ./webpack/webpack.dev.js",
+    "build_dict": "node ./src/node/build_dict.js dict.config.json",
+    "lint": "eslint ./src/js"
+  },
+  "author": "",
+  "license": "GPL 3.0",
   "devDependencies": {
     "@babel/cli": "^7.16.0",
     "@babel/core": "^7.16.0",
@@ -126,14 +137,5 @@
     "vanilla-picker": "^2.12.1",
     "webpack-jquery-ui": "^2.0.1",
     "wms-capabilities": "^0.4.1"
-  },
-  "scripts": {
-    "test": "-",
-    "prod": "npm run build_dict && webpack --config ./webpack/webpack.prod.js",
-    "dev": "webpack --watch --config ./webpack/webpack.dev.js",
-    "build_dict": "node ./src/node/build_dict.js dict.config.json",
-    "lint": "eslint ./src/js"
-  },
-  "author": "",
-  "license": "ISC"
+  }
 }

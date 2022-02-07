@@ -2,6 +2,7 @@ import {Events} from './events.js';
 import {parse, stringify} from './helpers.js';
 import {isObject} from '@fxi/mx_valid';
 import {version} from '../package.json';
+import {EventSimple} from '../../event_simple/index.js';
 
 import {
   MessageFrameCom,
@@ -35,7 +36,9 @@ class FrameWorker extends Events {
     }
     if (!opt.sdkToken) {
       opt.sdkToken = Math.random().toString(32);
-      console.warn('Missing sdkToken : multiple SDK instances on the same page not supported.');
+      console.warn(
+        'Missing sdkToken : multiple SDK instances on the same page not supported.'
+      );
     }
     fw.handleMessageManager = fw.handleMessageManager.bind(fw);
     fw.init();
@@ -71,10 +74,7 @@ class FrameWorker extends Events {
       key: 'log_worker_ready'
     });
 
-    if (
-      isObject(fw.opt.events) &&
-      fw.opt.events?.constructor?.name === 'EventSimple'
-    ) {
+    if (fw.opt.events instanceof EventSimple) {
       fw._events = fw.opt.events;
       fw._events.addPassthrough({
         cb: (d) => {
