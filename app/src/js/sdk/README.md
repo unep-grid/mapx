@@ -1389,8 +1389,8 @@ Get Bounding box for code iso3, m49 and text + language
 | Param | Type | Description |
 | --- | --- | --- |
 | o | <code>Object</code> | options |
-| o.code | <code>String</code> | Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004' |
-| o.name | <code>String</code> | Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh |
+| o.code | <code>String</code> \| <code>Array.&lt;string&gt;</code> | Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004' |
+| o.name | <code>String</code> \| <code>Array.&lt;string&gt;</code> | Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh |
 
 <a name="MapxResolversStatic+common_loc_fit_bbox"></a>
 
@@ -1403,8 +1403,8 @@ Set map bounding box based on code (ISO 3166-1 alpha-3 (ex. AFG, COD) and UN M49
 | Param | Type | Description |
 | --- | --- | --- |
 | o | <code>Object</code> | options |
-| o.code | <code>String</code> | Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004' |
-| o.name | <code>String</code> | Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh |
+| o.code | <code>String</code> \| <code>Array.&lt;string&gt;</code> | Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004' |
+| o.name | <code>String</code> \| <code>Array.&lt;string&gt;</code> | Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh |
 | o.param | <code>Object</code> | Animation options, see https://docs.mapbox.com/mapbox-gl-js/api/properties/#animationoptions |
 
 

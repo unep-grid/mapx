@@ -942,8 +942,8 @@ class MapxResolversStatic extends ResolversBase {
   /**
    * Get Bounding box for code iso3, m49 and text + language
    * @param {Object} o options
-   * @param {String} o.code Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004'
-   * @param {String} o.name Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh
+   * @param {(String|string[])} o.code Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004'
+   * @param {(String|string[])} o.name Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh
    * @return {Promise<Array>} Array of geographic bounds [west, south, east, north]
    */
   common_loc_get_bbox(opt) {
@@ -954,8 +954,8 @@ class MapxResolversStatic extends ResolversBase {
   /**
    * Set map bounding box based on code (ISO 3166-1 alpha-3 (ex. AFG, COD) and UN M49 region codes) or name (ex. Africa)
    * @param {Object} o options
-   * @param {String} o.code Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004'
-   * @param {String} o.name Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh
+   * @param {(String|string[])} o.code Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004'
+   * @param {(String|string[])} o.name Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh
    * @param {Object} o.param Animation options, see https://docs.mapbox.com/mapbox-gl-js/api/properties/#animationoptions
    * @return {Promise<Array>} Array of geographic bounds [west, south, east, north]
    */
