@@ -1,3 +1,9 @@
+  - [1.9.39.alpha.7](https://github.com/unep-grid/map-x-mgl/tree/1.9.39.alpha.7) 
+
+      - App
+          - CommonLoc : allow multiple code as input : the extent of extents will be computed #786
+          - Updated SDK build dependencies 
+
   - [1.9.39-alpha.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.6) 
 
       - App
