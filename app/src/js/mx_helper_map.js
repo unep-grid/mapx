@@ -18,6 +18,7 @@ import {mirrorUrlCreate} from './mirror_util';
 import {setBusy} from './mx_helper_misc.js';
 import {modal, modalGetAll, modalCloseAll} from './mx_helper_modal.js';
 import {errorHandler} from './error_handler/index.js';
+import {waitTimeoutAsync} from './animation_frame';
 
 /**
  * Convert point in  degrees to meter
@@ -4831,7 +4832,6 @@ export async function viewFilterToolsInit(id, opt) {
     if (!h.isView(view)) {
       return;
     }
-    const idView = view.id;
     const idMap = mx.settings.map.id;
     if (view._filters_tools) {
       return;
@@ -5388,7 +5388,7 @@ export async function zoomToViewId(o) {
       return;
     }
 
-    const res = await Promise.race([zoom(), wait(timeout)]);
+    const res = await Promise.race([zoom(), waitTimeoutAsync(timeout,cancel)]);
 
     if (res === 'timeout') {
       console.warn(
@@ -5427,13 +5427,8 @@ export async function zoomToViewId(o) {
       return true;
     }
 
-    async function wait(n) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          cancelByTimeout = true;
-          resolve('timeout');
-        }, n || 1000);
-      });
+    function cancel(){
+        cancelByTimeout=true;
     }
   } catch (e) {
     throw new Error(e);

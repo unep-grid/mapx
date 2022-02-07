@@ -141,7 +141,7 @@ mapx.once('ready', async () => {
             const r = Math.floor(Math.random() * l);
             const c = codes[r];
             const bbx = await mapx.ask('common_loc_fit_bbox', {
-              code: c,
+              code: i % 2 ? c : [c],
               param: {duration: 200}
             });
             const bbxA = await mapx.ask('map_get_bounds_array');
@@ -814,12 +814,11 @@ mapx.once('ready', async () => {
         test: async () => {
           const hadModal = await mapx.ask('close_modal_share');
           await mapx.ask('close_modal_all');
-          return hadModal; 
+          return hadModal;
         }
       }
     ]
   });
- 
   t.check('Tools - add new view', {
     init: async () => {
       await stopIfGuest();

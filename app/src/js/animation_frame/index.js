@@ -44,13 +44,18 @@ function cancelFrame(id) {
 
 function waitFrameAsync() {
   return new Promise((r) => {
-      nf(r);
+    nf(r);
   });
 }
 
-function waitTimeoutAsync(t) {
+function waitTimeoutAsync(t, cb) {
   return new Promise((r) => {
-    setTimeout(r, t || 1);
+    setTimeout(() => {
+      if (cb instanceof Function) {
+        cb(t);
+      }
+      r();
+    }, t || 1);
   });
 }
 
