@@ -10,10 +10,12 @@
   "directories": {
     "example": "example"
   },
+  "amdName":"mxsdk",
   "scripts": {
     "test": "microbundle --external none -o dist --no-compress && live-server tests --mount=/dist:dist --mount=/data:data",
     "dev": "microbundle --external none watch -o dist --no-compress",
-    "dev-live": "live-server dev --mount=/dist:dist --mount=/data:data",
+    "serve": "live-server dev --mount=/dist:dist --mount=/data:data",
+    "build-serve":"npm run build && live-server dev --mount=/dist:dist" , 
     "examples": "microbundle --external none -o dist --no-compress && live-server examples --mount=/dist:dist",
     "examples-lint": "eslint examples/",
     "build": "microbundle --external none -o dist && npm run jsdoc",
@@ -39,11 +41,11 @@
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/preset-env": "^7.16.4",
     "core-js": "^3.19.1",
-    "eslint": "^7.32.0",
+    "eslint": "^8.8.0",
     "eslint-plugin-react": "^7.27.1",
     "jsdoc-to-markdown": "^7.1.0",
-    "live-server": "^1.2.1",
-    "microbundle": "^0.12.4"
+    "live-server": "^1.1.0",
+    "microbundle": "^0.14.2"
   },
   "dependencies": {
     "@fxi/el": "^0.1.6",

@@ -1,8 +1,8 @@
 html,
 body {
   font-family: helvetica;
-  height:100%;
-  width:100%;
+  height: 100%;
+  width: 100%;
 }
 
 .container {
@@ -15,9 +15,13 @@ body {
   background: #eee;
   font-size: 0.8em;
   padding: 0 1em;
-  max-width: 200px
+  max-width: 200px;
 }
 
 .pane-right {
   flex-grow: 1;
+}
+
+.out {
+  width: 300px;
 }
