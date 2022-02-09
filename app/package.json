@@ -13,7 +13,7 @@
     "lint": "eslint ./src/js"
   },
   "author": "",
-  "license": "GPL 3.0",
+  "license": "GPLv3",
   "devDependencies": {
     "@babel/cli": "^7.16.0",
     "@babel/core": "^7.16.0",

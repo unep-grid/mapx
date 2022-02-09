@@ -10,12 +10,12 @@
   "directories": {
     "example": "example"
   },
-  "amdName":"mxsdk",
+  "amdName": "mxsdk",
   "scripts": {
     "test": "microbundle --external none -o dist --no-compress && live-server tests --mount=/dist:dist --mount=/data:data",
     "dev": "microbundle --external none watch -o dist --no-compress",
     "serve": "live-server dev --mount=/dist:dist --mount=/data:data",
-    "build-serve":"npm run build && live-server dev --mount=/dist:dist" , 
+    "build-serve": "npm run build && live-server dev --mount=/dist:dist",
     "examples": "microbundle --external none -o dist --no-compress && live-server examples --mount=/dist:dist",
     "examples-lint": "eslint examples/",
     "build": "microbundle --external none -o dist && npm run jsdoc",
