@@ -27,7 +27,7 @@
     "meilisearch": "^0.18.1",
     "module-alias": "^2.2.2",
     "multer": "^1.4.2",
-    "node-fetch": "^2.0.0",
+    "node-fetch": "^2.6.7",
     "node-sql-parser": "^3.1.0",
     "node-stream-zip": "^1.15.0",
     "nodemailer": "^4.7.0",
