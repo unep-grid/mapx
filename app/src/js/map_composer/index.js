@@ -2,7 +2,8 @@ import * as def from './default.js';
 import {Workspace} from './components/index.js';
 import {Toolbar} from './components/index.js';
 import {EditorToolbar} from './components/text_editor.js';
-import {el} from '@fxi/el';
+import {waitTimeoutAsync} from '../animation_frame/index.js';
+import {el} from '../el/src/index.js';
 import {unitConvert} from './components/helpers';
 import './style/map_composer.less';
 const getDevicePixelRatio = Object.getOwnPropertyDescriptor(
@@ -13,10 +14,24 @@ const getDevicePixelRatio = Object.getOwnPropertyDescriptor(
 class MapComposer {
   constructor(elContainer, state, options) {
     const mc = this;
-    window.mc = mc; // for easy access in console. To remove in prod.
-    mc.options =  Object.assign({}, def.options, options);
+    window._mc = mc; // for easy access in console. To remove in prod.
+    mc.options = Object.assign({}, def.options, options);
     mc.state = Object.assign({}, def.state, state);
+
+    mc.setMode = mc.setMode.bind(mc);
+    mc.setDpi = mc.setDpi.bind(mc);
+    mc.setUnit = mc.setUnit.bind(mc);
+    mc.setPageWidth = mc.setPageWidth.bind(mc);
+    mc.setPageHeight = mc.setPageHeight.bind(mc);
+    mc.setScale = mc.setScale.bind(mc);
+    mc.setLegendColumnCount = mc.setLegendColumnCount.bind(mc);
+
     mc.initRoot(elContainer);
+    mc.init().catch(console.error);
+  }
+
+  async init() {
+    const mc = this;
     mc.toolbar = new Toolbar(mc);
     mc.workspace = new Workspace(mc);
     mc.editor = new EditorToolbar(mc, {
@@ -24,15 +39,15 @@ class MapComposer {
     });
     mc.page = mc.workspace.page;
     mc.errors = [];
+    await mc.setDpi(mc.state.dpi);
+    await mc.setUnit(mc.state.unit);
+    await mc.setMode(mc.state.mode);
     mc.ready = true;
-    mc.setDpi(mc.state.dpi);
-    mc.setUnit(mc.state.unit);
-    mc.setMode(mc.state.mode);
   }
 
   initRoot(elContainer) {
     const mc = this;
-    if (false && elContainer.attachShadow instanceof Function) {
+    if (0 && elContainer.attachShadow instanceof Function) {
       /**
        * NOTE; Render map composer in shadow dom : sounds good, doesnt work
        * HTMLtoCanvas does not work well and
@@ -66,49 +81,63 @@ class MapComposer {
   }
   destroy() {
     const mc = this;
-    mc.setDpi();
+    mc.setDpi().catch(console.error);
     mc.workspace.destroy();
     mc.toolbar.destroy();
     mc.el.remove();
     mc.options.onDestroy();
   }
 
-  setState(id, value) {
+  async setState(id, value) {
     const mc = this;
-    return {
-      mode: mc.setMode.bind(mc),
-      dpi: mc.setDpi.bind(mc),
-      unit: mc.setUnit.bind(mc),
-      page_width: mc.setPageWidth.bind(mc),
-      page_height: mc.setPageHeight.bind(mc),
-      content_scale: mc.setScale.bind(mc),
-      legends_n_columns: mc.setLegendColumnCount.bind(mc)
-    }[id](value);
+    switch (id) {
+      case 'mode':
+        await mc.setMode(value);
+        break;
+      case 'dpi':
+        await mc.setDpi(value);
+        break;
+      case 'unit':
+        await mc.setUnit(value);
+        break;
+      case 'page_width':
+        mc.setPageWidth(value);
+        break;
+      case 'page_height':
+        mc.setPageHeight(value);
+        break;
+      case 'content_scale':
+        mc.setScale(value);
+        break;
+      case 'legends_n_columns':
+        mc.setLegendColumnCount(value);
+        break;
+      default:
+        console.warn(`setState not handled for ${id}`);
+    }
   }
 
-  setMode(mode) {
+  async setMode(mode) {
     const mc = this;
     let modes = mc.state.modes_internal;
     mc.state.mode = mode;
-    modes.forEach((m) => {
+    for (const m of modes) {
       if (mode !== m) {
         mc.el.classList.remove('mc-mode-' + m);
       } else {
         mc.el.classList.add('mc-mode-' + m);
       }
-    });
-
+    }
     if (mode === 'layout') {
       mc.editor.enable();
     } else {
       mc.editor.disable();
     }
-
-    return Promise.all([mc.resizeEachMap()]);
+    await mc.resizeEachMap();
   }
 
   updatePageSizes() {
-    mc = this;
+    const mc = this;
     mc.setPageHeight();
     mc.setPageWidth();
   }
@@ -131,35 +160,41 @@ class MapComposer {
     mc.page.setHeight(h);
   }
 
-  setUnit(unit) {
+  async setUnit(unit) {
     const mc = this;
     if (!mc.ready) {
       return;
     }
     if (unit === 'px') {
-      mc.setDpi();
+      await mc.setDpi();
     } else {
-      mc.setDpi(mc.state.dpi);
+      await mc.setDpi(mc.state.dpi);
     }
     const dpi = mc.state.dpi;
-    const sizeStep = Math.ceil(unitConvert({
-      value: mc.state.grid_snap_size * window.devicePixelRatio,
-      unitFrom: 'px',
-      unitTo: unit,
-      dpi: dpi
-    }));
-    mc.state.page_width = Math.round(unitConvert({
-      value: mc.state.page_width,
-      unitFrom: mc.state.unit,
-      unitTo: unit,
-      dpi: dpi
-    }));
-    mc.state.page_height = Math.round(unitConvert({
-      value: mc.state.page_height,
-      unitFrom: mc.state.unit,
-      unitTo: unit,
-      dpi: dpi
-    }));
+    const sizeStep = Math.ceil(
+      unitConvert({
+        value: mc.state.grid_snap_size * window.devicePixelRatio,
+        unitFrom: 'px',
+        unitTo: unit,
+        dpi: dpi
+      })
+    );
+    mc.state.page_width = Math.round(
+      unitConvert({
+        value: mc.state.page_width,
+        unitFrom: mc.state.unit,
+        unitTo: unit,
+        dpi: dpi
+      })
+    );
+    mc.state.page_height = Math.round(
+      unitConvert({
+        value: mc.state.page_height,
+        unitFrom: mc.state.unit,
+        unitTo: unit,
+        dpi: dpi
+      })
+    );
     mc.toolbar.elInputPageWidth.setAttribute('step', sizeStep);
     mc.toolbar.elInputPageWidth.setAttribute('min', sizeStep);
     mc.toolbar.elInputPageWidth.setAttribute('max', sizeStep * 1000);
@@ -175,7 +210,7 @@ class MapComposer {
     mc.updatePageSizes();
     //mc.updatePageContentScale();
   }
-  setDpi(dpi) {
+  async setDpi(dpi) {
     const mc = this;
     if (!mc.ready) {
       return;
@@ -197,7 +232,7 @@ class MapComposer {
       mc.state.dpi = nDpi;
       mc.toolbar.elInputDpi.value = mc.state.dpi;
       mc.updatePageSizes();
-      mc.resizeEachMap();
+      await mc.resizeEachMap();
     }
     //mc.updatePageContentScale();
   }
@@ -211,7 +246,7 @@ class MapComposer {
   }
 
   updatePageContentScale() {
-    mc = this;
+    const mc = this;
     if (!mc.ready) {
       return;
     }
@@ -243,29 +278,27 @@ class MapComposer {
     });
   }
 
-  resizeEachMap() {
+  async resizeEachMap() {
     const mc = this;
-    const promItems = mc.page.items.map((i) => {
-      return new Promise((resolve) => {
-        if (i.map) {
-          setTimeout(() => {
-            /**
-            * Add a timeout : the UI is not always fully rendered : the resize 
-            * operate on old dimension. 
-            * alternative, set an MultationObserver ...
-            */
-            i.map.resize();
-            i.map.once('render', () => {
-              resolve(true);
-            });
-            i.map.setBearing(i.map.getBearing());
-          }, 10);
-        } else {
-          resolve(true);
-        }
-      });
-    });
-    return Promise.all(promItems);
+    for (const item of mc.page.items) {
+      if (item.map) {
+        const wOrig = item.width;
+        item.setWidth(wOrig + 5, true);
+        await waitTimeoutAsync(100); // Wait for UI to settle
+        item.setWidth(wOrig, true);
+        await waitTimeoutAsync(100); // Wait for UI to settle
+        /*item */
+        /*const elMapCanvas = item.map.getCanvas();*/
+        /*
+         * After a dpi change, the map
+         * dimensions did not change.
+         * resize method is not called:
+         * see https://github.com/mapbox/mapbox-gl-js/blob/9f780181794d2a41b0ae65abf60eb741677819e0/src/ui/map.js#L736
+         * Soo.
+         * little hack here
+         */
+      }
+    }
   }
 }
 

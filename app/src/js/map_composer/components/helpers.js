@@ -1,17 +1,17 @@
 export {unitConvert, debounce, onNextFrame, cancelFrame};
 
 function debounce(func, wait, immediate) {
-  var timeout;
+  let timeout;
   return function() {
-    var context = this,
+    const context = this,
       args = arguments;
-    var later = function() {
+    const later = function() {
       timeout = null;
       if (!immediate) {
         func.apply(context, args);
       }
     };
-    var callNow = immediate && !timeout;
+    const callNow = immediate && !timeout;
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
     if (callNow) {
@@ -20,9 +20,9 @@ function debounce(func, wait, immediate) {
   };
 }
 
-var idDefault = 0;
+let idDefault = 0;
 
-var nf =
+const nf =
   window.requestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   window.mozRequestAnimationFrame ||
@@ -41,7 +41,7 @@ function onNextFrame(cb) {
   return idDefault;
 }
 
-var cf = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+let cf = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 /**
  * Cancel a requested frame id
  * @param {Number} frame number
@@ -54,10 +54,10 @@ function cancelFrame(id) {
  * Convert length unit. mm <-> px <-> in
  */
 function unitConvert(opt) {
-  var v = opt.value || 0;
-  var dpi = opt.dpi;
-  var unitFrom = opt.unitFrom || 'px';
-  var unitTo = opt.unitTo || 'px';
+  const v = opt.value || 0;
+  const dpi = opt.dpi;
+  const unitFrom = opt.unitFrom || 'px';
+  const unitTo = opt.unitTo || 'px';
 
   if (unitFrom === unitTo) {
     return v;

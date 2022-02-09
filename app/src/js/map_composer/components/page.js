@@ -1,4 +1,4 @@
-import {el} from '@fxi/el';
+import {el} from '../../el/src/index.js';
 import {Box} from './box.js';
 import {Item} from './item.js';
 import download from 'downloadjs';
@@ -7,8 +7,8 @@ import html2canvas from 'html2canvas';
 class Page extends Box {
   constructor(boxParent) {
     super(boxParent);
-    var page = this;
-    var state = page.state;
+    const page = this;
+    const state = page.state;
     page.title = 'page';
     page.init({
       class: ['mc-page'],
@@ -28,11 +28,11 @@ class Page extends Box {
   }
 
   onResize() {
-    var page = this;
-    var mc = page.mc;
+    const page = this;
+    const mc = page.mc;
     page.displayDim();
-    var w = Math.round(page.toLengthUnit(page.width));
-    var h = Math.round(page.toLengthUnit(page.height));
+    const w = Math.round(page.toLengthUnit(page.width));
+    const h = Math.round(page.toLengthUnit(page.height));
     page.mc.toolbar.elInputPageWidth.value = w;
     page.mc.toolbar.elInputPageHeight.value = h;
     mc.setState('page_width', w);
@@ -40,43 +40,36 @@ class Page extends Box {
   }
 
   onRemove() {
-    var page = this;
+    const page = this;
     page.items.forEach((i) => {
       i.destroy();
     });
   }
 
-  exportPng() {
-    var page = this;
-    var mc = page.mc;
-    var elPrint = page.el;
-    var curMode = mc.state.mode;
-    var curDpi = mc.state.dpi;
-
-    mc.setMode('print')
-      .then(() => {
-        return html2canvas(elPrint, {
-          logging: false
-        });
-      })
-      .then((canvas) => {
-        var data = canvas.toDataURL('image/png');
-        mc.setDpi();
-        return download(data, 'map-composer-export.png', 'image/png');
-      })
-      .then(() => {
-        mc.setMode(curMode);
-        setTimeout(() => {
-          mc.setDpi(curDpi);
-        }, 100);
-      })
-      .catch((e) => {
-        mc.displayWarning(
-          'Oups, something went wrong during the rendering, please read the console log.'
-        );
-        console.error(e);
-        mc.setMode(curMode);
+  async exportPng() {
+    const page = this;
+    const mc = page.mc;
+    const curMode = mc.state.mode;
+    const curDpi = mc.state.dpi;
+    try {
+      const page = this;
+      const elPrint = page.el;
+      await mc.setMode('print');
+      const canvas = await html2canvas(elPrint, {
+        logging: false
       });
+      const data = canvas.toDataURL('image/png');
+      download(data, 'map-composer-export.png', 'image/png');
+      await mc.setMode(curMode);
+      await mc.setDpi(curDpi);
+    } catch (e) {
+      mc.displayWarning(
+        'Oups, something went wrong during the rendering, please read the console log.'
+      );
+      console.error(e);
+      await mc.setMode(curMode);
+      await mc.setDpi(curDpi);
+    }
   }
 
   buildEl() {
@@ -86,17 +79,17 @@ class Page extends Box {
   }
 
   addItems() {
-    var page = this;
+    const page = this;
     page.items = page.state.items.map((config) => {
       return new Item(page, config);
     });
   }
 
   placeItems() {
-    var page = this;
+    const page = this;
+    const g = page.state.grid_snap_size * 10;
     let y = 0;
     let x = 0;
-    var g = page.state.grid_snap_size * 10;
     page.items.forEach((i) => {
       i.setTopLeft({
         top: y,

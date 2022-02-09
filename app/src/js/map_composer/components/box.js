@@ -1,11 +1,11 @@
 import {MessageFlash} from './message_flash.js';
-import {el} from '@fxi/el';
+import {el} from '../../el/src/index.js';
 import {onNextFrame} from './helpers.js';
 import {ListenerStore} from './../../listener_store/index.js';
 
 class Box {
   constructor(boxParent) {
-    let box = this;
+    const box = this;
     box.mc = boxParent.mc || boxParent;
     box[boxParent.title] = boxParent;
     box.boxParent = boxParent;
@@ -32,7 +32,7 @@ class Box {
 
   init(opt) {
     opt = opt || {};
-    var box = this;
+    const box = this;
     box.config = opt;
     box.id = Math.random().toString(32);
     box.elContent = opt.content || el('div');
@@ -122,8 +122,8 @@ class Box {
   }
 
   createEl(classes) {
-    var box = this;
-    var elBox = el('div', {
+    const box = this;
+    const elBox = el('div', {
       class: ['mc-box'].concat(classes || [])
     });
     elBox.box = box;
@@ -135,7 +135,7 @@ class Box {
   }
 
   destroy() {
-    var box = this;
+    const box = this;
     box.el.remove();
     box.lStore.removeListenerByGroup(box.id);
     if (box.config.onRemove) {
@@ -144,13 +144,13 @@ class Box {
   }
 
   addHandle(type, opt) {
-    var box = this;
-    var title = box.title;
-    var base = {
+    const box = this;
+    const title = box.title;
+    const base = {
       title: title,
       class: ['mc-handle', 'mc-handle-' + type]
     };
-    var conf = Object.assign({}, base, opt);
+    const conf = Object.assign({}, base, opt);
     box.addEl(el('div', conf));
   }
 
@@ -164,7 +164,7 @@ class Box {
   }
 
   addHandleResize() {
-    var box = this;
+    const box = this;
     ['top', 'left', 'bottom', 'right'].forEach((d) => {
       box.addHandle('resize-' + d, {
         dataset: {
@@ -198,18 +198,18 @@ class Box {
   }
 
   _updateContentScale() {
-    var box = this;
+    const box = this;
     if (!box.elContent) {
       return;
     }
-    var scale = box.contentScale;
+    const scale = box.contentScale;
     if (scale === 1) {
       box.elContent.style.width = '100%';
       box.elContent.style.height = '100%';
       box.setTransform('content', 'scale', 1);
     } else {
-      var hP = (1 / scale) * 100;
-      var wP = hP;
+      const hP = (1 / scale) * 100;
+      const wP = hP;
       box.elContent.style.width = wP + '%';
       box.elContent.style.height = hP + '%';
       box.setTransform('content', 'scale', scale);
@@ -217,22 +217,22 @@ class Box {
   }
 
   validateSize() {
-    var box = this;
-    var mc = box.mc;
-    var max = mc.state.canvas_max_area;
-    var area = (box.width / box.state.scale) * (box.height / box.state.scale);
+    const box = this;
+    const mc = box.mc;
+    const max = mc.state.canvas_max_area;
+    const area = (box.width / box.state.scale) * (box.height / box.state.scale);
     if (area >= max) {
       mc.displayWarning('Your browser will not handle this kind of size');
     }
   }
 
   setTransform(target, type, ...args) {
-    var box = this;
-    var elTarget = target === 'content' ? box.elContent : box.el;
-    var str = '(' + args.join(',') + ')';
+    const box = this;
+    const elTarget = target === 'content' ? box.elContent : box.el;
+    const str = '(' + args.join(',') + ')';
     box.transform[target][type] = str;
 
-    var out = Object.keys(box.transform[target])
+    const out = Object.keys(box.transform[target])
       .map((k) => {
         return k + box.transform[target][k];
       })
@@ -241,7 +241,7 @@ class Box {
   }
 
   resetContentTransform(target) {
-    var elTarget = target === 'content' ? box.elContent : box.el;
+    const elTarget = target === 'content' ? box.elContent : box.el;
     box.transform[target] = {};
     elTarget.style.transform = '';
   }
@@ -251,9 +251,9 @@ class Box {
   }
 
   get rect() {
-    var sTop = this.el.scrollTop;
-    var sLeft = this.el.scrollLeft;
-    var rect = this.calcRect();
+    const sTop = this.el.scrollTop;
+    const sLeft = this.el.scrollLeft;
+    const rect = this.calcRect();
     return {
       bottom: rect.bottom - sTop,
       top: rect.top - sTop,
@@ -265,49 +265,49 @@ class Box {
   }
 
   setTopLeft(opt) {
-    var box = this;
+    const box = this;
     // unit conversion
-    var newLeft = opt.inPx
+    const newLeft = opt.inPx
       ? opt.left || box.left || 0
       : box.toLengthPixel(opt.left) || box.left || 0;
-    var newTop = opt.inPx
+    const newTop = opt.inPx
       ? opt.top || box.top || 0
       : box.toLengthPixel(opt.top) || box.top || 0;
 
     // get limits
-    var rBox = box.rect;
-    var rParent = box.boxParent.rect;
-    var rMax = box.boxBound.rect;
-    var b = box.boundEdges;
-    var dTop = rMax.top - rParent.top;
-    var dLeft = rMax.left - rParent.left;
+    const rBox = box.rect;
+    const rParent = box.boxParent.rect;
+    const rMax = box.boxBound.rect;
+    const b = box.boundEdges;
+    const dTop = rMax.top - rParent.top;
+    const dLeft = rMax.left - rParent.left;
 
     // test colisions
-    var hitLeft = b.left && rMax.left + newLeft - dLeft <= rMax.left;
-    var hitRight =
+    const hitLeft = b.left && rMax.left + newLeft - dLeft <= rMax.left;
+    const hitRight =
       b.right && rMax.left + newLeft + rBox.width - dLeft >= rMax.right;
-    var hitTop = b.top && rMax.top + newTop - dTop < rMax.top;
-    var hitBottom =
+    const hitTop = b.top && rMax.top + newTop - dTop < rMax.top;
+    const hitBottom =
       b.bottom && rMax.top + newTop + rBox.height - dTop >= rMax.bottom;
 
     // apply limits
-    newLeft = hitLeft || hitRight ? box.left || 0 : newLeft;
-    newTop = hitBottom || hitTop ? box.top || 0 : newTop;
+    const newLeftLimit = hitLeft || hitRight ? box.left || 0 : newLeft;
+    const newTopLimit = hitBottom || hitTop ? box.top || 0 : newTop;
 
     // snapping
-    newLeft = box.snapToGrid(newLeft);
-    newTop = box.snapToGrid(newTop);
+    const newLeftSnap = box.snapToGrid(newLeftLimit);
+    const newTopSnap = box.snapToGrid(newTopLimit);
 
     onNextFrame(() => {
       box.setTransform(
         'box',
         'translate3d',
-        newLeft + 'px',
-        newTop + 'px',
+        newLeftSnap + 'px',
+        newTopSnap + 'px',
         '0'
       );
-      box.top = newTop;
-      box.left = newLeft;
+      box.top = newTopSnap;
+      box.left = newLeftSnap;
       box.onDrag();
     });
     return {
@@ -322,51 +322,53 @@ class Box {
   }
 
   snapToGrid(length) {
-    var box = this;
-    var res = box.state.grid_snap_size;
+    const box = this;
+    const res = box.state.grid_snap_size;
     //return Math.ceil(length / res) * res;
     return Math.round(length / res) * res;
   }
 
   setWidth(w, inPx) {
-    var box = this;
-    w = inPx ? w : box.toLengthPixel(w);
-    w = box.snapToGrid(w);
-    box.width = w;
-    box.el.style.width = w + 'px';
+    const box = this;
+    const wUnit = inPx ? w : box.toLengthPixel(w);
+    const wSnap = box.snapToGrid(wUnit);
+    box.width = wSnap;
+    box.el.style.width = `${wSnap}px`;
     box.validateSize();
     box.onResize();
     return w;
   }
 
   setHeight(h, inPx) {
-    var box = this;
-    h = inPx ? h : box.toLengthPixel(h);
-    h = box.snapToGrid(h);
-    box.height = h;
-    box.el.style.height = h + 'px';
+    const box = this;
+    const hUnit = inPx ? h : box.toLengthPixel(h);
+    const hSnap = box.snapToGrid(hUnit);
+    box.height = hSnap;
+    box.el.style.height = `${hSnap}px`;
     box.validateSize();
     box.onResize();
     return h;
   }
 
   displayDim() {
-    var box = this;
+    const box = this;
     if (box.isBusy) {
       return;
     }
-    var unit = box.state.unit;
-    var w = box.toLengthUnit(box.width);
-    var h = box.toLengthUnit(box.height);
-    w = unit === 'in' ? Math.round(w * 100) / 100 : Math.round(w);
-    h = unit === 'in' ? Math.round(h * 100) / 100 : Math.round(h);
-    box.message.flash(w + ' x ' + h);
+    const unit = box.state.unit;
+    const wUnit = box.toLengthUnit(box.width);
+    const hUnit = box.toLengthUnit(box.height);
+    const wDisp =
+      unit === 'in' ? Math.round(wUnit * 100) / 100 : Math.round(wUnit);
+    const hDisp =
+      unit === 'in' ? Math.round(hUnit * 100) / 100 : Math.round(hUnit);
+    box.message.flash(`${wDisp} x ${hDisp}`);
   }
 
   toLengthPixel(length) {
-    var box = this;
-    var state = box.state;
-    var r = window.devicePixelRatio;
+    const box = this;
+    const state = box.state;
+    const r = window.devicePixelRatio;
     length /= r;
     if (state.unit === 'px') {
       return length;
@@ -378,13 +380,13 @@ class Box {
   }
 
   toLengthUnit(px) {
-    var state = this.state;
-    var r = window.devicePixelRatio;
+    const state = this.state;
+    const r = window.devicePixelRatio;
     px *= r;
     if (state.unit === 'px') {
       return px;
     }
-    var out = px / state.dpi;
+    let out = px / state.dpi;
     if (state.unit === 'mm') {
       out *= 25.4;
     }
@@ -395,7 +397,7 @@ class Box {
     return this._content_scale;
   }
   setContentScale(scale) {
-    var box = this;
+    const box = this;
     box._content_scale = scale;
     box._updateContentScale();
     box.onResize();
@@ -407,36 +409,36 @@ class Box {
   }
 
   setTextSize(size) {
-    var box = this;
+    const box = this;
     size = size < 5 ? 5 : size > 30 ? 30 : size ? size : 12;
     box._text_size = size;
     box.elContent.style.fontSize = size + 'px';
   }
 
   sizeTextMore() {
-    var box = this;
-    var size = box.textSize + 1;
+    const box = this;
+    const size = box.textSize + 1;
     box.setTextSize(size);
   }
   sizeTextLess() {
-    var box = this;
-    var size = box.textSize - 1;
+    const box = this;
+    const size = box.textSize - 1;
     box.setTextSize(size);
   }
 
   setScale(scale) {
-    var box = this;
+    const box = this;
     box._scale = scale;
     box.setTransform('box', 'scale', scale);
   }
 
   makeDraggable() {
-    var box = this;
+    const box = this;
     box.addHandleDrag();
   }
 
   makeResizable() {
-    var box = this;
+    const box = this;
     box.addHandleResize();
   }
 }
@@ -444,16 +446,16 @@ class Box {
 export {Box};
 
 function dragResizeListener(e) {
-  var box = this;
-  var elTarget = e.target;
-  var d = elTarget.dataset;
+  const box = this;
+  const elTarget = e.target;
+  const d = elTarget.dataset;
   // read the property of the handle;
-  var idAction = d.mc_action;
-  var idType = d.mc_event_type;
-  var isDrag = idAction === 'box_drag';
-  var isResize = idAction === 'box_resize';
-  var isMouseDown = idType === 'mousedown';
-  var isDragResize = isDrag || isResize;
+  const idAction = d.mc_action;
+  const idType = d.mc_event_type;
+  const isDrag = idAction === 'box_drag';
+  const isResize = idAction === 'box_resize';
+  const isMouseDown = idType === 'mousedown';
+  const isDragResize = isDrag || isResize;
 
   if (isMouseDown && isDragResize) {
     if (box.isDragging() || box.isResizing()) {
@@ -478,16 +480,16 @@ function dragResizeListener(e) {
 }
 
 function startDragResize(opt) {
-  var box = opt.box;
-  var e = opt.e;
-  var isDrag = opt.type === 'box_drag';
-  var oX = box.left || 0;
-  var oY = box.top || 0;
-  var oW = box.width || 0;
-  var oH = box.height || 0;
-  var cX = e.clientX;
-  var cY = e.clientY;
-  var rDir = e.target.dataset.mc_resize_dir;
+  const box = opt.box;
+  const e = opt.e;
+  const isDrag = opt.type === 'box_drag';
+  const oX = box.left || 0;
+  const oY = box.top || 0;
+  const oW = box.width || 0;
+  const oH = box.height || 0;
+  const cX = e.clientX;
+  const cY = e.clientY;
+  const rDir = e.target.dataset.mc_resize_dir;
 
   box.lStore.addListener({
     target: window,
@@ -508,8 +510,8 @@ function startDragResize(opt) {
   function drag(e) {
     e.stopPropagation();
     const box = this;
-    var dX = e.clientX - cX;
-    var dY = e.clientY - cY;
+    const dX = e.clientX - cX;
+    const dY = e.clientY - cY;
     box.setTopLeft({
       left: oX + dX,
       top: oY + dY,
@@ -520,25 +522,31 @@ function startDragResize(opt) {
   function resize(e) {
     e.stopPropagation();
     const box = this;
-    var dX = e.clientX - cX;
-    var dY = e.clientY - cY;
-    var drag = {};
+    const dX = e.clientX - cX;
+    const dY = e.clientY - cY;
+    const drag = {};
     if (rDir === 'left') {
-      drag = box.setTopLeft({
-        left: oX + dX,
-        top: oY,
-        inPx: true
-      });
+      Object.assign(
+        drag,
+        box.setTopLeft({
+          left: oX + dX,
+          top: oY,
+          inPx: true
+        })
+      );
       if (!drag.hitLeft) {
         box.setWidth(oW - dX, true);
       }
     }
     if (rDir === 'top') {
-      drag = box.setTopLeft({
-        left: oX,
-        top: oY + dY,
-        inPx: true
-      });
+      Object.assign(
+        drag,
+        box.setTopLeft({
+          left: oX,
+          top: oY + dY,
+          inPx: true
+        })
+      );
       if (!drag.hitTop) {
         box.setHeight(oH - dY, true);
       }

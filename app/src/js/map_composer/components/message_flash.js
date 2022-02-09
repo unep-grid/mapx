@@ -1,4 +1,4 @@
-import {el} from '@fxi/el';
+import {el} from '../../el/src/index.js';
 import {debounce} from './helpers.js';
 
 class MessageFlash {
@@ -9,7 +9,7 @@ class MessageFlash {
   }
 
   addTo(elContainer) {
-    var mf = this;
+    const mf = this;
     
     mf.elMessageContainer = el(
       'div',
@@ -20,13 +20,13 @@ class MessageFlash {
   }
 
   destroy() {
-    var mf = this;
+    const mf = this;
     clearTimeout(mf._msgTimeout);
     mf.elMesssageContainer.remove();
   }
 
   _flash(str, duration) {
-    var mf = this;
+    const mf = this;
     duration = duration || 2000;
     str = str || '';
     mf.cancel();
@@ -38,23 +38,23 @@ class MessageFlash {
   }
 
   setMessage(str){
-    var mf = this; 
+    const mf = this; 
     mf.elMessage.innerText = str;
   }
 
   cancel(){
-    var mf = this;
+    const mf = this;
     clearTimeout(mf.timeout);
     mf.disable();
   }
 
   activate(){
-    var mf = this;
+    const mf = this;
     mf.elMessageContainer.classList.add('active');
   }
 
   disable(){
-    var mf = this;
+    const mf = this;
     mf.elMessageContainer.classList.remove('active');
   }
 

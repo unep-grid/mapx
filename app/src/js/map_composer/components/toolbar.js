@@ -1,10 +1,10 @@
-import {el} from '@fxi/el';
+import {el} from '../../el/src/index.js';
 import {Box} from './box.js';
 
 class Toolbar extends Box {
   constructor(boxParent) {
     super(boxParent);
-    var toolbar = this;
+    const toolbar = this;
     toolbar.title = 'toolbar';
     toolbar.init({
       class: ['mc-toolbar'],
@@ -37,19 +37,19 @@ class Toolbar extends Box {
   onRemove() {}
 
   buildEl() {
-    var toolbar = this;
-    var state = toolbar.state;
-    var elUnitOptions = state.units.map((u) => {
+    const toolbar = this;
+    const state = toolbar.state;
+    const elUnitOptions = state.units.map((u) => {
       return state.unit === u
         ? el('option', {selected: true}, u)
         : el('option', u);
     });
-    var elModesOptions = state.modes.map((u) => {
+    const elModesOptions = state.modes.map((u) => {
       return state.mode === u
         ? el('option', {selected: true}, u)
         : el('option', u);
     });
-    var sizeStep = state.grid_snap_size * window.devicePixelRatio;
+    const sizeStep = state.grid_snap_size * window.devicePixelRatio;
     return el(
       'form',
       {
@@ -238,39 +238,39 @@ class Toolbar extends Box {
 export {Toolbar};
 
 function clickCallback(e) {
-  var toolbar = this;
-  var mc = toolbar.mc;
+  const toolbar = this;
+  const mc = toolbar.mc;
   if (!mc.ready) {
     return;
   }
-  var elTarget = e.target;
-  var d = elTarget.dataset;
-  var idAction = d.mc_action;
+  const elTarget = e.target;
+  const d = elTarget.dataset;
+  const idAction = d.mc_action;
   if (idAction === 'export_page') {
     mc.workspace.page.exportPng();
   }
 }
 
 function changeCallback(e) {
-  var toolbar = this;
-  var mc = toolbar.mc;
+  const toolbar = this;
+  const mc = toolbar.mc;
   if (!mc.ready) {
     return;
   }
-  var elTarget = e.target;
-  var d = elTarget.dataset;
-  var idAction = d.mc_action;
+  const elTarget = e.target;
+  const d = elTarget.dataset;
+  const idAction = d.mc_action;
   if (idAction === 'update_state') {
-    var value = validateValue(e.target);
-    var idState = d.mc_state_name;
+    const value = validateValue(e.target);
+    const idState = d.mc_state_name;
     mc.setState(idState, value);
   }
 }
 
 function validateValueNumber(el) {
-  var value = el.value * 1;
-  var min = el.min * 1;
-  var max = el.max * 1;
+  let value = el.value * 1;
+  const min = el.min * 1;
+  const max = el.max * 1;
   if (value >= max) {
     value = max;
   }
@@ -282,7 +282,7 @@ function validateValueNumber(el) {
 }
 
 function validateValueString(el) {
-  var value = el.value + '';
+  const value = el.value + '';
   el.value = value;
   return value;
 }

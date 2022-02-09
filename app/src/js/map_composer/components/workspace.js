@@ -1,11 +1,11 @@
-import {el} from '@fxi/el';
+import {el} from '../../el/src/index.js';
 import {Page} from './page.js';
 import {Box} from './box.js';
 
 class Workspace extends Box {
   constructor(boxParent) {
     super(boxParent);
-    var workspace = this;
+    const workspace = this;
     workspace.title = 'workspace';
     workspace.init({
       class: ['mc-workspace'],
@@ -25,7 +25,7 @@ class Workspace extends Box {
   }
 
   onRemove() {
-    var ws = this;
+    const ws = this;
     ws.page.destroy();
   }
 

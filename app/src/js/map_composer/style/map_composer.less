@@ -45,6 +45,15 @@
     background: #fff;
     position: relative;
   }
+  .mc-page-content {
+    &::after {
+      content: '';
+      inset: 0;
+      position: absolute;
+      outline: 1px dashed red;
+      pointer-events: none;
+    }
+  }
   .mc-item {
     position: absolute;
     z-index: 0;

@@ -5,7 +5,7 @@ import {el} from '@fxi/el';
  */
 class EditorToolbar {
   constructor(boxParent, config) {
-    var ed = this;
+    const ed = this;
     config = config || {};
     ed.config = config;
     ed.boxParent = boxParent;
@@ -14,7 +14,7 @@ class EditorToolbar {
   }
 
   enable() {
-    var ed = this;
+    const ed = this;
     if (ed.enabled === true) {
       return;
     }
@@ -42,8 +42,8 @@ class EditorToolbar {
   }
 
   setTargetEditable(v) {
-    var ed = this;
-    var elsEditables = ed.boxTarget.elContent.querySelectorAll(
+    const ed = this;
+    const elsEditables = ed.boxTarget.elContent.querySelectorAll(
       '[data-mc_editable=true]'
     );
     if (v === true) {
@@ -54,7 +54,7 @@ class EditorToolbar {
   }
 
   disable() {
-    var ed = this;
+    const ed = this;
     if (ed.enabled === true) {
       ed.el.remove();
       ed.setTargetEditable(false);
@@ -179,14 +179,14 @@ function edit(e) {
   e.preventDefault();
   e.stopPropagation();
   e.stopImmediatePropagation();
-  var boxTarget = this;
-  var elTarget = e.target;
-  var d = elTarget.dataset;
+  const boxTarget = this;
+  const elTarget = e.target;
+  const d = elTarget.dataset;
   // read the property of the handle;
-  var cmd = d.mc_cmd;
-  var idType = d.mc_event_type;
-  var isClick = idType === 'click';
-  var hasCmd = !!cmd;
+  let cmd = d.mc_cmd;
+  const idType = d.mc_event_type;
+  const isClick = idType === 'click';
+  const hasCmd = !!cmd;
 
   if (isClick && hasCmd) {
     cmd = cmd.split(':');
