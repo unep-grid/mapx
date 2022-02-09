@@ -1,3 +1,16 @@
+  - [1.9.39-alpha.8](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.8) 
+      
+      - APP
+          - MapComposer
+            - Should fix issue with #797, where change in DPI failed to update the map canvas due to mapbox restriction: poor resolution map output; 
+            - Migrated old Promise based code to async/await; 
+            - Rewrite North Arrow module as a Class;
+            - Modernisation of the code: const/async/await... 
+            - Added red frame to visualise the page limit : visible even when the map is larger than the page; 
+          -SDK
+            - frameworker : Unexpected constructor name in passthrough event manager only in built package. No mapx/map event were reported back to the sdk manager
+
+
   - [1.9.39.alpha.7](https://github.com/unep-grid/map-x-mgl/tree/1.9.39.alpha.7) 
 
       - App
