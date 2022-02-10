@@ -7071,8 +7071,8 @@
   },
   {
     "id": "share_msg_multiple_views_story_static",
-    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
-    "ps": "په انتخاب کې د کیسې نقشه شامله ده: نور لیدونه به له پامه غورځول شي او د کیسې نقشه به په اوتومات ډول پلی شي"
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static mode' in settings to prevent this.",
+    "ps": "په انتخاب کې د کیسې نقشه شامله ده: نور لیدونه به له پامه غورځول شي او د کیسې نقشه به په اوتومات ډول پلی شي. د نورو لیدونو څخه انتخاب کړئ یا د دې مخنیوي لپاره په ترتیباتو کې 'جامد حالت' غیر فعال کړئ."
   },
   {
     "id": "btn_copy_share",

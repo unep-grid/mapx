@@ -7071,8 +7071,8 @@
   },
   {
     "id": "share_msg_multiple_views_story_static",
-    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
-    "fa": "انتخاب شامل یک نقشه داستان است: سایر نماها نادیده گرفته می شوند و نقشه داستان به طور خودکار پخش می شود"
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static mode' in settings to prevent this.",
+    "fa": "انتخاب شامل یک نقشه داستان است: سایر نماها نادیده گرفته می شوند و نقشه داستان به طور خودکار پخش می شود. برای جلوگیری از این امر، نماهای دیگران را انتخاب کنید یا «حالت استاتیک» را در تنظیمات غیرفعال کنید."
   },
   {
     "id": "btn_copy_share",

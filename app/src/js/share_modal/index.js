@@ -98,6 +98,10 @@ export class ShareModal extends EventSimple {
    */
   close() {
     const sm = this;
+    if(sm._closed){
+       return;
+    }
+    sm._closed = true;
     sm._modal.close();
     sm.fire('closed');
     sm.destroy();
@@ -538,7 +542,8 @@ export class ShareModal extends EventSimple {
       addSelectize: false,
       noShinyBinding: true,
       removeCloseButton: true,
-      addBackground: false
+      addBackground: false,
+      onClose : sm.close
     });
   }
 

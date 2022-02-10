@@ -7071,8 +7071,8 @@
   },
   {
     "id": "share_msg_multiple_views_story_static",
-    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
-    "bn": "নির্বাচন একটি গল্প মানচিত্র অন্তর্ভুক্ত: অন্যান্য দৃশ্য উপেক্ষা করা হবে এবং গল্প মানচিত্র স্বয়ংক্রিয়ভাবে চালানো হবে"
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static mode' in settings to prevent this.",
+    "bn": "নির্বাচন একটি গল্প মানচিত্র অন্তর্ভুক্ত: অন্যান্য দৃশ্য উপেক্ষা করা হবে এবং গল্প মানচিত্র স্বয়ংক্রিয়ভাবে চালানো হবে. এটি প্রতিরোধ করতে অন্যদের ভিউ নির্বাচন করুন বা সেটিংসে 'স্ট্যাটিক মোড' নিষ্ক্রিয় করুন।"
   },
   {
     "id": "btn_copy_share",

@@ -18383,16 +18383,16 @@
   },
   {
     "id": "share_msg_multiple_views_story_static",
-    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
-    "fr": "La sélection comprend une Story Map : les autres vues seront ignorées et la Story Map sera automatiquement lue",
-    "es": "La selección incluye un mapa de la historia: se ignorarán otras vistas y el mapa de la historia se reproducirá automáticamente",
-    "ru": "Выбор включает в себя карту-историю: другие виды будут игнорироваться, а карта-история будет воспроизводиться автоматически.",
-    "zh": "选择包括故事地图：其他视图将被忽略，故事地图将自动播放",
-    "ar": "يتضمن التحديد خريطة قصة: سيتم تجاهل طرق العرض الأخرى وسيتم تشغيل خريطة القصة تلقائيًا",
-    "fa": "انتخاب شامل یک نقشه داستان است: سایر نماها نادیده گرفته می شوند و نقشه داستان به طور خودکار پخش می شود",
-    "ps": "په انتخاب کې د کیسې نقشه شامله ده: نور لیدونه به له پامه غورځول شي او د کیسې نقشه به په اوتومات ډول پلی شي",
-    "bn": "নির্বাচন একটি গল্প মানচিত্র অন্তর্ভুক্ত: অন্যান্য দৃশ্য উপেক্ষা করা হবে এবং গল্প মানচিত্র স্বয়ংক্রিয়ভাবে চালানো হবে",
-    "de": "Die Auswahl umfasst eine Story-Map: andere Ansichten werden ignoriert und die Story-Map wird automatisch abgespielt"
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static mode' in settings to prevent this.",
+    "fr": "La sélection comprend une Story Map : les autres vues seront ignorées et la Story Map sera automatiquement lue. Désélectionnez les autres vues ou désactivez le \"mode statique\" dans les paramètres pour éviter cela.",
+    "es": "La selección incluye un mapa de la historia: se ignorarán otras vistas y el mapa de la historia se reproducirá automáticamente. Anule la selección de otras vistas o desactive el 'modo estático' en la configuración para evitar esto.",
+    "ru": "Выбор включает в себя карту-историю: другие виды будут игнорироваться, а карта-история будет воспроизводиться автоматически. Отмените выбор других представлений или деактивируйте «статический режим» в настройках, чтобы предотвратить это.",
+    "zh": "选择包括故事地图：其他视图将被忽略，故事地图将自动播放。取消选择其他视图或停用设置中的“静态模式”以防止这种情况发生。",
+    "ar": "يتضمن التحديد خريطة قصة: سيتم تجاهل طرق العرض الأخرى وسيتم تشغيل خريطة القصة تلقائيًا. قم بإلغاء تحديد عروض الآخرين أو قم بإلغاء تنشيط \"الوضع الثابت\" في الإعدادات لمنع ذلك.",
+    "fa": "انتخاب شامل یک نقشه داستان است: سایر نماها نادیده گرفته می شوند و نقشه داستان به طور خودکار پخش می شود. برای جلوگیری از این امر، نماهای دیگران را انتخاب کنید یا «حالت استاتیک» را در تنظیمات غیرفعال کنید.",
+    "ps": "په انتخاب کې د کیسې نقشه شامله ده: نور لیدونه به له پامه غورځول شي او د کیسې نقشه به په اوتومات ډول پلی شي. د نورو لیدونو څخه انتخاب کړئ یا د دې مخنیوي لپاره په ترتیباتو کې 'جامد حالت' غیر فعال کړئ.",
+    "bn": "নির্বাচন একটি গল্প মানচিত্র অন্তর্ভুক্ত: অন্যান্য দৃশ্য উপেক্ষা করা হবে এবং গল্প মানচিত্র স্বয়ংক্রিয়ভাবে চালানো হবে. এটি প্রতিরোধ করতে অন্যদের ভিউ নির্বাচন করুন বা সেটিংসে 'স্ট্যাটিক মোড' নিষ্ক্রিয় করুন।",
+    "de": "Die Auswahl umfasst eine Story-Map: andere Ansichten werden ignoriert und die Story-Map wird automatisch abgespielt. Deaktivieren Sie andere Ansichten oder deaktivieren Sie den statischen Modus in den Einstellungen, um dies zu verhindern."
   },
   {
     "id": "btn_copy_share",

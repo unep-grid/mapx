@@ -7071,8 +7071,8 @@
   },
   {
     "id": "share_msg_multiple_views_story_static",
-    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played",
-    "es": "La selección incluye un mapa de la historia: se ignorarán otras vistas y el mapa de la historia se reproducirá automáticamente"
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static mode' in settings to prevent this.",
+    "es": "La selección incluye un mapa de la historia: se ignorarán otras vistas y el mapa de la historia se reproducirá automáticamente. Anule la selección de otras vistas o desactive el 'modo estático' en la configuración para evitar esto."
   },
   {
     "id": "btn_copy_share",
