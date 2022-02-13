@@ -30,7 +30,7 @@
     "node-fetch": "^2.0.0",
     "node-sql-parser": "^3.9.4",
     "node-stream-zip": "^1.15.0",
-    "nodemailer": "^4.7.0",
+    "nodemailer": "^6.7.2",
     "pg": "^8.7.3",
     "pg-copy-streams": "^6.0.2",
     "redis": "^2.8.0",
