@@ -1,0 +1,11 @@
+{
+  "viewport": "width=device-width, initial-scale=1, maximum-scale=1",
+  "description": "MapX, an online platform for managing geospatial data on natural resources",
+  "author": "unepgrid.ch",
+  "google": "notranslate",
+  "theme-color": "#15b0f8",
+  "msapplication-TileColor": "#15b0f8",
+  "cache-control": {"http-equiv": "Cache-Control", "content": "no-store"},
+  "expires": {"http-equiv": "Expires", "content": "0"},
+  "x-ua-compatible": {"http-equiv": "X-UA-Compatible", "content": "IE=edge"}
+}

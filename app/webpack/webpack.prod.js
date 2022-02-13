@@ -4,9 +4,9 @@ const common = require('./webpack.common.js');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const meta = require('./meta.json');
 
 const {GenerateSW} = require('workbox-webpack-plugin');
-
 module.exports = merge(common, {
   cache: false,
   mode: 'production',
@@ -18,14 +18,16 @@ module.exports = merge(common, {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
+      meta: meta,
       template: './src/html/static.html',
       filename: './static.html',
       chunks: ['sw', 'mx', 'theme', 'static', 'jquery']
     }),
     new HtmlWebpackPlugin({
-      inject: 'head',
+      meta: meta,
       template: './src/html/index.html',
-      chunks: ['sw', 'mx','theme','jquery', 'shiny']
+      filename: './index.html',
+      chunks: ['sw', 'mx', 'theme', 'jquery', 'shiny']
     }),
     new CopyWebpackPlugin([
       {
@@ -35,15 +37,10 @@ module.exports = merge(common, {
     ]),
     new GenerateSW({
       swDest: './service-worker.js',
-      mode : 'production',
+      mode: 'production',
       skipWaiting: false,
       clientsClaim: true,
-      exclude : [
-        /\.DS_Store/,
-        /.*\.swp$/,
-        /^fontstack/, 
-        /^sprites/
-      ],
+      exclude: [/\.DS_Store/, /.*\.swp$/, /^fontstack/, /^sprites/],
       importScripts: ['sw_listen_skip_waiting_install.js'],
       runtimeCaching: [
         {

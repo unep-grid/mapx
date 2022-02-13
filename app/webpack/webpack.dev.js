@@ -5,6 +5,7 @@ const common = require('./webpack.common.js');
 const {WatchFolderPlugin} = require('./webpack.watch_folder.js');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const meta = require('./meta.json');
 require('dotenv').config({path: '../mapx.dev.env'});
 
 module.exports = merge(common, {
@@ -23,13 +24,15 @@ module.exports = merge(common, {
       script: 'npm run build_dict'
     }),
     new HtmlWebpackPlugin({
+      meta : meta,
       template: './src/html/static.html',
       filename: './static.html',
-      chunks: ['mx','theme', 'static', 'jquery']
+      chunks: ['mx','theme', 'static', 'jquery'],
     }),
     new HtmlWebpackPlugin({
-      inject: 'head',
+      meta : meta,
       template: './src/html/index.html',
+      filename: './index.html',
       chunks: ['mx', 'theme', 'jquery', 'shiny']
     }),
     new webpack.DefinePlugin({
