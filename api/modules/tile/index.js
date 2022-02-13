@@ -71,7 +71,6 @@ async function mwGet(req, res) {
 async function getTile(res, hash, data) {
   try {
     const zTileB64 = await redisGet(hash);
-
     if (zTileB64) {
       return sendTileZip(res, Buffer(zTileB64, 'base64'));
     }

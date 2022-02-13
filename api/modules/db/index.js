@@ -98,14 +98,17 @@ try {
   const clientRedis = redis.createClient({
     url: 'redis://' + s.redis.host + ':' + s.redis.port
   });
-
+  clientRedis.connect().catch(e=>{
+    console.log('Unable to connect',e);
+    process.exit(-1);
+  })
   clientRedis.on('error', (err) => {
     console.error('Unexpected error on redis client', err);
     process.exit(-1);
   });
 
-  const redisGet = promisify(clientRedis.get).bind(clientRedis);
-  const redisSet = promisify(clientRedis.set).bind(clientRedis);
+  const redisGet = clientRedis.get.bind(clientRedis);
+  const redisSet = clientRedis.set.bind(clientRedis);
 
   /**
    * MeiliSearch

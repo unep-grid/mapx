@@ -33,7 +33,7 @@
     "nodemailer": "^6.7.2",
     "pg": "^8.7.3",
     "pg-copy-streams": "^6.0.2",
-    "redis": "^2.8.0",
+    "redis": "^4.0.3",
     "request": "^2.88.2",
     "socket.io": "^3.1.2",
     "sphericalmercator": "^1.0.5",
