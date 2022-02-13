@@ -1,6 +1,6 @@
 const bodyParser = require('body-parser');
 const Ajv = require('ajv');
-const sql = require('sql');
+const sql = require('node-sql-2');
 const {pgWrite} = require('@mapx/db');
 const ip = require('@mapx/ip');
 const schema = require('@mapx/schema');

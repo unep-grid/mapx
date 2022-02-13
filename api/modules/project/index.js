@@ -1,4 +1,4 @@
-const sql = require('sql');
+const sql = require('node-sql-2');
 const {pgRead} = require('@mapx/db');
 const {project} = require('@mapx/db-models');
 const {validateTokenHandler} = require('@mapx/authentication');
