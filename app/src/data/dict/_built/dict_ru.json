@@ -6941,8 +6941,8 @@
   },
   {
     "id": "share_mode_warn",
-    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
-    "ru": "Любой, кто получил эту ссылку, мог видеть содержание выбранных представлений. Если вы хотите поделиться конфиденциальной информацией, пригласите пользователей в свой проект или частный проект и соответствующим образом установите права доступа и чтения. По умолчанию включен статический режим, который представляет собой облегченную версию MapX только для чтения. Больше информации в настройках."
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the 'static' mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "ru": "Любой, кто получит эту ссылку, сможет увидеть содержимое выбранных представлений. Если вы хотите поделиться конфиденциальной информацией, пригласите пользователей в свой проект или частный проект и установите соответствующие права доступа и чтения. По умолчанию включен «статический» режим, который представляет собой облегченную версию MapX только для чтения. Подробнее в настройках."
   },
   {
     "id": "share_mode_static_label",
@@ -7026,8 +7026,8 @@
   },
   {
     "id": "share_views_select_method_story_step",
-    "en": "Views of the current story step",
-    "ru": "Просмотры текущего шага истории"
+    "en": "Active views in the current step",
+    "ru": "Активные представления на текущем шаге"
   },
   {
     "id": "share_views_select_method_current_url",
@@ -7071,8 +7071,8 @@
   },
   {
     "id": "share_msg_multiple_views_story_static",
-    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static mode' in settings to prevent this.",
-    "ru": "Выбор включает в себя карту-историю: другие виды будут игнорироваться, а карта-история будет воспроизводиться автоматически. Отмените выбор других представлений или деактивируйте «статический режим» в настройках, чтобы предотвратить это."
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static' mode in settings to prevent this.",
+    "ru": "Выбор включает в себя карту-историю: другие виды будут игнорироваться, а карта-история будет воспроизводиться автоматически. Отмените выбор других представлений или отключите «статический» режим в настройках, чтобы предотвратить это."
   },
   {
     "id": "btn_copy_share",

@@ -6941,8 +6941,8 @@
   },
   {
     "id": "share_mode_warn",
-    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
-    "es": "Cualquiera que reciba este enlace podría ver el contenido de las vistas seleccionadas. Si desea compartir información confidencial, invite a los usuarios a su proyecto o proyecto privado y configure los derechos de acceso y lectura en consecuencia. De forma predeterminada, el modo estático está habilitado, que es una versión ligera y de solo lectura de MapX. Más información en la configuración."
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the 'static' mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "es": "Cualquiera que reciba este enlace podría ver el contenido de las vistas seleccionadas. Si desea compartir información confidencial, invite a los usuarios a su proyecto o proyecto privado y configure los derechos de acceso y lectura en consecuencia. De manera predeterminada, el modo 'estático' está habilitado, que es una versión liviana de solo lectura de MapX. Más info en ajustes."
   },
   {
     "id": "share_mode_static_label",
@@ -7026,8 +7026,8 @@
   },
   {
     "id": "share_views_select_method_story_step",
-    "en": "Views of the current story step",
-    "es": "Vistas del paso actual de la historia"
+    "en": "Active views in the current step",
+    "es": "Vistas activas en el paso actual"
   },
   {
     "id": "share_views_select_method_current_url",
@@ -7071,8 +7071,8 @@
   },
   {
     "id": "share_msg_multiple_views_story_static",
-    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static mode' in settings to prevent this.",
-    "es": "La selección incluye un mapa de la historia: se ignorarán otras vistas y el mapa de la historia se reproducirá automáticamente. Anule la selección de otras vistas o desactive el 'modo estático' en la configuración para evitar esto."
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static' mode in settings to prevent this.",
+    "es": "La selección incluye un mapa de la historia: se ignorarán otras vistas y el mapa de la historia se reproducirá automáticamente. Anule la selección de otras vistas o desactive el modo 'estático' en la configuración para evitar esto."
   },
   {
     "id": "btn_copy_share",

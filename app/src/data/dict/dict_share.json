@@ -40,7 +40,7 @@
   },
   {
     "id": "share_mode_warn",
-    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the 'static' mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
     "fr": "",
     "es": "",
     "ru": "",
@@ -261,7 +261,7 @@
   },
   {
     "id": "share_views_select_method_story_step",
-    "en": "Views of the current story step",
+    "en": "Active views in the current step",
     "fr": "",
     "es": "",
     "ru": "",
@@ -378,7 +378,7 @@
   },
   {
     "id": "share_msg_multiple_views_story_static",
-    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static mode' in settings to prevent this.",
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static' mode in settings to prevent this.",
     "fr": "",
     "es": "",
     "ru": "",

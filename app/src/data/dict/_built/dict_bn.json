@@ -6941,8 +6941,8 @@
   },
   {
     "id": "share_mode_warn",
-    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
-    "bn": "এই লিঙ্কটি গ্রহণকারী যে কেউ নির্বাচিত ভিউয়ের বিষয়বস্তু দেখতে পাবে। আপনি যদি সংবেদনশীল তথ্য শেয়ার করতে চান, ব্যবহারকারীদের আপনার প্রকল্প বা ব্যক্তিগত প্রকল্পে আমন্ত্রণ জানান এবং সে অনুযায়ী অ্যাক্সেস এবং পড়ার অধিকার নির্ধারণ করুন। ডিফল্টরূপে, স্ট্যাটিক মোড সক্ষম করা হয়, যা ম্যাপএক্সের একটি হালকা, পঠনযোগ্য সংস্করণ। সেটিংসে আরো তথ্য।"
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the 'static' mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "bn": "এই লিঙ্ক প্রাপ্ত যে কেউ নির্বাচিত ভিউ এর বিষয়বস্তু দেখতে পারেন. আপনি যদি সংবেদনশীল তথ্য ভাগ করতে চান, আপনার প্রকল্প বা ব্যক্তিগত প্রকল্পে ব্যবহারকারীদের আমন্ত্রণ জানান এবং সেই অনুযায়ী অ্যাক্সেস এবং পড়ার অধিকার সেট করুন। ডিফল্টরূপে, 'স্ট্যাটিক' মোড সক্ষম করা হয়েছে, যা MapX-এর একটি হালকা, পঠনযোগ্য সংস্করণ। সেটিংসে আরও তথ্য।"
   },
   {
     "id": "share_mode_static_label",
@@ -7026,8 +7026,8 @@
   },
   {
     "id": "share_views_select_method_story_step",
-    "en": "Views of the current story step",
-    "bn": "বর্তমান গল্প ধাপের দৃশ্য"
+    "en": "Active views in the current step",
+    "bn": "বর্তমান ধাপে সক্রিয় ভিউ"
   },
   {
     "id": "share_views_select_method_current_url",
@@ -7071,8 +7071,8 @@
   },
   {
     "id": "share_msg_multiple_views_story_static",
-    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static mode' in settings to prevent this.",
-    "bn": "নির্বাচন একটি গল্প মানচিত্র অন্তর্ভুক্ত: অন্যান্য দৃশ্য উপেক্ষা করা হবে এবং গল্প মানচিত্র স্বয়ংক্রিয়ভাবে চালানো হবে. এটি প্রতিরোধ করতে অন্যদের ভিউ নির্বাচন করুন বা সেটিংসে 'স্ট্যাটিক মোড' নিষ্ক্রিয় করুন।"
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static' mode in settings to prevent this.",
+    "bn": "নির্বাচন একটি গল্প মানচিত্র অন্তর্ভুক্ত: অন্যান্য দৃশ্য উপেক্ষা করা হবে এবং গল্প মানচিত্র স্বয়ংক্রিয়ভাবে চালানো হবে. এটি প্রতিরোধ করতে অন্যদের ভিউ নির্বাচন করুন বা সেটিংসে 'স্ট্যাটিক' মোড নিষ্ক্রিয় করুন।"
   },
   {
     "id": "btn_copy_share",

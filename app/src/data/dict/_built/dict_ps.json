@@ -6941,8 +6941,8 @@
   },
   {
     "id": "share_mode_warn",
-    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
-    "ps": "هرڅوک چې دا لینک ترلاسه کوي کولی شي د ټاکل شوي نظریاتو مینځپانګه وګوري. که تاسو غواړئ حساس معلومات شریک کړئ ، کاروونکو ته خپلې پروژې یا شخصي پروژې ته بلنه ورکړئ او د دې مطابق د لاسرسي او لوستلو حقونه تنظیم کړئ. د ډیفالټ په واسطه ، سټاټیک حالت فعال شوی ، کوم چې د سپک وزن لرونکی ، یوازې د لوستلو لپاره د MapX نسخه ده. په ترتیباتو کې نور معلومات."
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the 'static' mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "ps": "هرڅوک چې دا لینک ترلاسه کوي کولی شي د ټاکل شوي لیدونو مینځپانګه وګوري. که تاسو غواړئ حساس معلومات شریک کړئ، کاروونکي خپلې پروژې یا شخصي پروژې ته بلنه ورکړئ او د هغې مطابق د لاسرسي او لوستلو حقونه تنظیم کړئ. په ډیفالټ ډول، 'جامد' حالت فعال شوی، کوم چې د MapX یو لږ وزن، یوازې د لوستلو نسخه ده. نور معلومات په ترتیباتو کې."
   },
   {
     "id": "share_mode_static_label",
@@ -7026,8 +7026,8 @@
   },
   {
     "id": "share_views_select_method_story_step",
-    "en": "Views of the current story step",
-    "ps": "د اوسنۍ کیسې مرحلې لید"
+    "en": "Active views in the current step",
+    "ps": "په اوسني ګام کې فعال نظرونه"
   },
   {
     "id": "share_views_select_method_current_url",
@@ -7071,8 +7071,8 @@
   },
   {
     "id": "share_msg_multiple_views_story_static",
-    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static mode' in settings to prevent this.",
-    "ps": "په انتخاب کې د کیسې نقشه شامله ده: نور لیدونه به له پامه غورځول شي او د کیسې نقشه به په اوتومات ډول پلی شي. د نورو لیدونو څخه انتخاب کړئ یا د دې مخنیوي لپاره په ترتیباتو کې 'جامد حالت' غیر فعال کړئ."
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static' mode in settings to prevent this.",
+    "ps": "په انتخاب کې د کیسې نقشه شامله ده: نور لیدونه به له پامه غورځول شي او د کیسې نقشه به په اوتومات ډول پلی شي. د نورو لیدونو څخه انتخاب کړئ یا د دې مخنیوي لپاره په ترتیباتو کې 'جامد' حالت غیر فعال کړئ."
   },
   {
     "id": "btn_copy_share",

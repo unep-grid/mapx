@@ -6941,8 +6941,8 @@
   },
   {
     "id": "share_mode_warn",
-    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
-    "ar": "يمكن لأي شخص يتلقى هذا الارتباط رؤية محتوى طرق العرض المحددة. إذا كنت ترغب في مشاركة معلومات حساسة ، فقم بدعوة المستخدمين إلى مشروعك أو مشروعك الخاص وقم بتعيين حقوق الوصول والقراءة وفقًا لذلك. افتراضيًا ، يتم تمكين الوضع الثابت ، وهو إصدار خفيف الوزن للقراءة فقط من MapX. مزيد من المعلومات في الإعدادات."
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the 'static' mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "ar": "يمكن لأي شخص يتلقى هذا الارتباط رؤية محتوى طرق العرض المحددة. إذا كنت ترغب في مشاركة معلومات حساسة ، فقم بدعوة المستخدمين إلى مشروعك أو مشروعك الخاص وقم بتعيين حقوق الوصول والقراءة وفقًا لذلك. افتراضيًا ، يتم تمكين الوضع \"الثابت\" ، وهو إصدار خفيف الوزن للقراءة فقط من MapX. مزيد من المعلومات في الإعدادات."
   },
   {
     "id": "share_mode_static_label",
@@ -7026,8 +7026,8 @@
   },
   {
     "id": "share_views_select_method_story_step",
-    "en": "Views of the current story step",
-    "ar": "وجهات نظر خطوة القصة الحالية"
+    "en": "Active views in the current step",
+    "ar": "عروض نشطة في الخطوة الحالية"
   },
   {
     "id": "share_views_select_method_current_url",
@@ -7071,8 +7071,8 @@
   },
   {
     "id": "share_msg_multiple_views_story_static",
-    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static mode' in settings to prevent this.",
-    "ar": "يتضمن التحديد خريطة قصة: سيتم تجاهل طرق العرض الأخرى وسيتم تشغيل خريطة القصة تلقائيًا. قم بإلغاء تحديد عروض الآخرين أو قم بإلغاء تنشيط \"الوضع الثابت\" في الإعدادات لمنع ذلك."
+    "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static' mode in settings to prevent this.",
+    "ar": "يتضمن التحديد خريطة قصة: سيتم تجاهل طرق العرض الأخرى وسيتم تشغيل خريطة القصة تلقائيًا. قم بإلغاء تحديد عروض الآخرين أو قم بإلغاء تنشيط الوضع \"الثابت\" في الإعدادات لمنع ذلك."
   },
   {
     "id": "btn_copy_share",
