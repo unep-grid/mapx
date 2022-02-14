@@ -98,8 +98,8 @@ export class ShareModal extends EventSimple {
    */
   close() {
     const sm = this;
-    if(sm._closed){
-       return;
+    if (sm._closed) {
+      return;
     }
     sm._closed = true;
     sm._modal.close();
@@ -187,7 +187,10 @@ export class ShareModal extends EventSimple {
         state.views.push(...(getViewsOpen() || []));
         break;
       case 'share_views_select_method_current_url':
-        state.views.push(...(getQueryParametersAsObject().views || []));
+        const p = getQueryParametersAsObject();
+        const vFilter = p.views || p.idViews || [];
+        vFilter.push(...(p.viewsOpen || p.idViewsOpen || []));
+        state.views.push(...vFilter);
         break;
       /**
        * Disabled handler
@@ -390,6 +393,7 @@ export class ShareModal extends EventSimple {
     const disableLinkApp = linkItem.disable_link_app && !useStatic;
     const disableLink = linkItem.disable_link;
     const disableEncode = !!linkItem.disable_encode;
+    const disableCopy = linkItem.disable_copy;
     // TODO: convert those as input.
     const text = 'Shared from MapX';
     const title = 'MapX';
@@ -411,6 +415,9 @@ export class ShareModal extends EventSimple {
     sm._el_input.innerText = txt;
     if (disableLink || disableLinkApp) {
       state.prevent.add('open');
+    }
+    if (disableCopy) {
+      state.prevent.add('copy');
     }
     return txt;
   }
@@ -543,7 +550,7 @@ export class ShareModal extends EventSimple {
       noShinyBinding: true,
       removeCloseButton: true,
       addBackground: false,
-      onClose : sm.close
+      onClose: sm.close
     });
   }
 

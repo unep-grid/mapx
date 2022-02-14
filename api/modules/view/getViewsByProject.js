@@ -17,7 +17,8 @@ const validateParamsHandler = getParamsValidator({
     'roleMax',
     'language',
     'publicOnly',
-    'email'
+    'email',
+    'allViews'
   ]
 });
 
@@ -82,7 +83,7 @@ async function getViews(opt) {
    * set boolean beforehand, here.
    */
   opt.hasFilterTypes = opt.types.length > 0;
-  opt.hasFilterViews = opt.idViews.length > 0;
+  opt.hasFilterViews = opt.idViews.length > 0 && !opt.allViews;
   opt.hasFilterCollections = opt.collections.length > 0;
   /**
    * Convert array to sql code for the template

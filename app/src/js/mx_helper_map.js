@@ -1870,9 +1870,11 @@ export async function updateViewsList(opt) {
    * Set fetch mode
    */
   if (hasViewsList) {
+    /* Views are given, add them */
     views.push(viewsToAdd);
     await addLocal(viewsToAdd);
   } else {
+    /* Views should be fetched */
     views.push(...(await addAsyncAll()));
   }
 

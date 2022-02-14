@@ -1,25 +1,36 @@
 let start;
 
-
-
 export async function fetchViews(o) {
   const h = mx.helpers;
   o = o || {};
+  const queryItems = [
+    'idProject',
+    'idUser',
+    'language',
+    'token',
+    'idViews',
+    'collections',
+    'collectionsSelectOperator',
+    'roleMax',
+    'allViews'
+  ];
+
   const def = {
     idProject: mx.settings.project.id,
     idUser: mx.settings.user.id,
     language: mx.settings.language || mx.settings.languages[0],
     token: mx.settings.user.token,
     useQueryFilters: null,
-    idViewsOpen: [],
-    collections: [],
     idViews: [],
+    idViewsOpen: [],
+    allViews: false,
+    collections: [],
     collectionsSelectOperator: '',
     noViews: null,
     roleMax: ''
   };
   const opt = Object.assign({}, def, o);
- 
+
   if (opt.useQueryFilters) {
     const optQuery = h.getQueryViewsInit();
     h.updateIfEmpty(opt, optQuery);
@@ -50,25 +61,28 @@ export async function fetchViews(o) {
     return Promise.resolve(dataDefault);
   }
 
-  if (opt.idViews.length > 0 && opt.idViewsOpen.length > 0) {
+  /**
+   * if idViews is empty,set allViews to true
+   * -> handled in server too
+   */
+  if (h.isEmpty(opt.idViews)) {
+    opt.allViews = true;
+  }
+
+  /**
+   * Add idViewsOpen to views
+   */
+  if (h.isArrayOfViewsId(opt.idViewsOpen)) {
     opt.idViews.push(...opt.idViewsOpen);
   }
 
   opt.idViews = h.getArrayDistinct(opt.idViews);
 
-  const queryString = h.objToParams({
-    idProject: opt.idProject,
-    idUser: opt.idUser,
-    language: opt.language,
-    token: opt.token,
-    idViews: opt.idViews,
-    collections: opt.collections,
-    collectionsSelectOperator: opt.collectionsSelectOperator,
-    roleMax: opt.roleMax
-  });
-
-  const url = ` ${host}?${queryString}`;
-
+  const url = new URL(host);
+  for (let id of queryItems) {
+    url.searchParams.set(id,opt[id]);
+  }
+  
   const data = await h.fetchJsonProgress(url, {
     onProgress: opt.onProgress || onProgress,
     onError: opt.onError || onError,
