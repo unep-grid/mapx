@@ -1,3 +1,28 @@
+  - [1.9.39-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-beta.1) 
+      
+      - APP 
+        - Search tool, style : fixed keyword no more underlined, Capitalzed keyword in facet view; minor changes
+        - Sharing Tool improvement : 
+          - Copy allowed for: iframe, direct line. Other modes : disable copy
+          - Text change 'Active views in the current step'
+          - Sharing step's views : import missing views as temporary view when using project/app mode.
+          - Text change " 'static' mode   " standardisation
+        - Simplification of meta tags handling + attempt to add minimal support for opengraph/twitter, but that requires full path links to assets + SSR. We don't do that. yet.
+        -  fixed issue where switching project while the modal was open; Text/language change
+      - Dependencies 
+        - Glyphs : moved dependencies to devDependencies
+        - APP 
+	  - Safe, non breaking update
+        - API
+ 	  - Safe, non breaking update
+	  - Updated mocha ( security issue, not prod, but... )
+ 	  - Rename requires import for sql -> 
+ 	  - Solve critical security issue with sql package: swicthed to node-sql-2
+          - Critical update for Redis DB client
+	  - Critical upgraded for nodemailer ( ⚠️ all mail based features affected )
+        - Probe
+	  - Upgrade deps 
+
   - [1.9.39-alpha.8](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.8) 
       
       - APP
