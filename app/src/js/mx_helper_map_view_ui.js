@@ -162,7 +162,10 @@ export async function viewsListAddSingle(view, settings) {
   mData.views.unshift(view);
 
   if (staticMode) {
-    await h.viewLayersAdd({idView: view.id});
+    await h.viewLayersAdd({
+      idView: view.id,
+      addTitle: true
+    });
   } else {
     await mData.viewsList.addItem(settings);
     mData.viewsFilter.update();
