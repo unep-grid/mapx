@@ -1,3 +1,9 @@
+  - [1.9.39-beta.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-beta.2) 
+      
+      - SDK
+        - In static mode, 'get_sdk_methods' has been fixed.
+        - In static mode, adding a view using 'view_add' should also create the view's title block in the legend panel (#803)
+
   - [1.9.39-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-beta.1) 
       
       - APP 
