@@ -10,7 +10,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_sdk_methods() {
     const reg = new RegExp('^_');
-    const methods = Object.getOwnPropertyNames(ResolversStatic.prototype);
+    const methods = Object.getOwnPropertyNames(MapxResolversStatic.prototype);
     return methods.splice(1, methods.length).filter((m) => !m.match(reg));
   }
   /**
