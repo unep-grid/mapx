@@ -1,5 +1,5 @@
 export function fetchSourceTableAttribute(opt) {
-  opt = Object.assign({},opt);
+  opt = Object.assign({}, opt);
   const h = mx.helpers;
   const host = h.getApiUrl('getSourceTableAttribute');
   const params = h.objToParams({
@@ -16,7 +16,7 @@ export function fetchSourceTableAttribute(opt) {
 }
 
 export async function showSourceTableAttributeModal(opt) {
-  opt = Object.assign({},opt);
+  opt = Object.assign({}, opt);
   if (!opt.idSource) {
     return Promise.resolve(false);
   }
@@ -69,6 +69,19 @@ export async function showSourceTableAttributeModal(opt) {
   if (!allowDownload) {
     elButtonDownload.setAttribute('disabled', true);
   }
+
+  const elButtonHelp = el(
+    'button',
+    {
+      class: 'btn btn-default',
+      on: {
+        click: handleHelp
+      },
+      title: 'Help'
+    },
+    'Help'
+  );
+
   const elButtonClearFilter = el(
     'button',
     {
@@ -81,7 +94,7 @@ export async function showSourceTableAttributeModal(opt) {
     'Clear filter'
   );
   const elTitle = el('div');
-  const buttons = [elButtonClearFilter, elButtonDownload];
+  const buttons = [elButtonHelp, elButtonClearFilter, elButtonDownload];
   if (!hasData) {
     elTable = el('span', 'no data');
     buttons.length = 0;
@@ -91,7 +104,9 @@ export async function showSourceTableAttributeModal(opt) {
     title: elTitle,
     content: elTable,
     onClose: destroy,
-    buttons: buttons
+    buttons: buttons,
+    addSelectize: false,
+    noShinyBinding: true
   });
 
   if (!hasData) {
@@ -286,6 +301,11 @@ export function getTableAttributeConfigFromView(view) {
     labels: labels,
     attributes: attributes
   };
+}
+
+function handleHelp(){
+  const wLink = new URL(mx.settings.links.repositoryWikiAttributeTable);
+  window.open(wLink, '_blank');
 }
 
 function getHandsonLanguageCode() {
