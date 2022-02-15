@@ -53,7 +53,7 @@
   },
   {
     "id": "share_mode_static_label",
-    "en": "Use the mode 'static' ( recommended )",
+    "en": "Share in 'static' mode ( recommended )",
     "fr": "Partager en mode 'statique' ( recommandé )",
     "es": "Usar el modo 'estático' (recomendado)",
     "ru": "",
@@ -388,44 +388,6 @@
     "ps": "",
     "bn": "",
     "de": ""
-  },
-  {
-    "id": "btn_copy_share",
-    "en": "Copy the result",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "btn_open_share",
-    "en": "Share",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "btn_help_wiki",
-    "en": "Open help",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
   }
+
 ]

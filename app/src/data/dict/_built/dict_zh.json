@@ -1660,16 +1660,6 @@
     "zh": "底部"
   },
   {
-    "id": "btn_browse",
-    "en": "Browse...",
-    "zh": "浏览"
-  },
-  {
-    "id": "btn_help",
-    "en": "Help",
-    "zh": "帮助"
-  },
-  {
     "id": "epsg_set_projection_export",
     "en": "Set the export projection, using a code from the EPSG format",
     "zh": "使用 EPSG 代码设置导出数据的投影"
@@ -1778,6 +1768,21 @@
     "id": "btn_copy",
     "en": "Copy",
     "zh": "复制"
+  },
+  {
+    "id": "btn_share",
+    "en": "Share",
+    "zh": "复制"
+  },
+  {
+    "id": "btn_browse",
+    "en": "Browse...",
+    "zh": "浏览"
+  },
+  {
+    "id": "btn_help",
+    "en": "Help",
+    "zh": "帮助"
   },
   {
     "id": "btn_geolocate_user",
@@ -6946,7 +6951,7 @@
   },
   {
     "id": "share_mode_static_label",
-    "en": "Use the mode 'static' ( recommended )",
+    "en": "Share in 'static' mode ( recommended )",
     "zh": "使用“静态”模式（推荐）"
   },
   {
@@ -7073,21 +7078,6 @@
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static' mode in settings to prevent this.",
     "zh": "选择包括故事地图：其他视图将被忽略，故事地图将自动播放。取消选择其他视图或在设置中停用“静态”模式以防止这种情况发生。"
-  },
-  {
-    "id": "btn_copy_share",
-    "en": "Copy the result",
-    "zh": "复制结果"
-  },
-  {
-    "id": "btn_open_share",
-    "en": "Share",
-    "zh": "分享"
-  },
-  {
-    "id": "btn_help_wiki",
-    "en": "Open help",
-    "zh": "打开帮助"
   },
   {
     "id": "btn_opt_share_to_project",

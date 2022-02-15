@@ -1660,16 +1660,6 @@
     "fa": "پایین"
   },
   {
-    "id": "btn_browse",
-    "en": "Browse...",
-    "fa": "مرور کردن... "
-  },
-  {
-    "id": "btn_help",
-    "en": "Help",
-    "fa": "کمک "
-  },
-  {
     "id": "epsg_set_projection_export",
     "en": "Set the export projection, using a code from the EPSG format",
     "fa": "پیش بینی صادرات را با استفاده از کدی از قالب EPSG تنظیم کنید "
@@ -1778,6 +1768,21 @@
     "id": "btn_copy",
     "en": "Copy",
     "fa": "کپی 🀄 "
+  },
+  {
+    "id": "btn_share",
+    "en": "Share",
+    "fa": "اشتراک گذاری"
+  },
+  {
+    "id": "btn_browse",
+    "en": "Browse...",
+    "fa": "مرور کردن... "
+  },
+  {
+    "id": "btn_help",
+    "en": "Help",
+    "fa": "کمک "
   },
   {
     "id": "btn_geolocate_user",
@@ -6946,8 +6951,8 @@
   },
   {
     "id": "share_mode_static_label",
-    "en": "Use the mode 'static' ( recommended )",
-    "fa": "از حالت \"ثابت\" استفاده کنید (توصیه می شود) "
+    "en": "Share in 'static' mode ( recommended )",
+    "fa": "اشتراک‌گذاری در حالت «استاتیک» (توصیه می‌شود)"
   },
   {
     "id": "share_mode_static_desc",
@@ -7073,21 +7078,6 @@
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static' mode in settings to prevent this.",
     "fa": "انتخاب شامل یک نقشه داستان است: سایر نماها نادیده گرفته می شوند و نقشه داستان به طور خودکار پخش می شود. برای جلوگیری از این امر، نماهای دیگران را انتخاب کنید یا حالت \"ایستا\" را در تنظیمات غیرفعال کنید."
-  },
-  {
-    "id": "btn_copy_share",
-    "en": "Copy the result",
-    "fa": "نتیجه را کپی کنید"
-  },
-  {
-    "id": "btn_open_share",
-    "en": "Share",
-    "fa": "اشتراک گذاری"
-  },
-  {
-    "id": "btn_help_wiki",
-    "en": "Open help",
-    "fa": "راهنما را باز کنید"
   },
   {
     "id": "btn_opt_share_to_project",

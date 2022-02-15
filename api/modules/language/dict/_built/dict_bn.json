@@ -1660,16 +1660,6 @@
     "bn": "নীচে "
   },
   {
-    "id": "btn_browse",
-    "en": "Browse...",
-    "bn": "ব্রাউজ করুন ... "
-  },
-  {
-    "id": "btn_help",
-    "en": "Help",
-    "bn": "সহায়তা "
-  },
-  {
     "id": "epsg_set_projection_export",
     "en": "Set the export projection, using a code from the EPSG format",
     "bn": "ইপিএসজি ফর্ম্যাট থেকে একটি কোড ব্যবহার করে রফতানি অভিক্ষেপ সেট করুন "
@@ -1778,6 +1768,21 @@
     "id": "btn_copy",
     "en": "Copy",
     "bn": "কপি "
+  },
+  {
+    "id": "btn_share",
+    "en": "Share",
+    "bn": "শেয়ার করুন"
+  },
+  {
+    "id": "btn_browse",
+    "en": "Browse...",
+    "bn": "ব্রাউজ করুন ... "
+  },
+  {
+    "id": "btn_help",
+    "en": "Help",
+    "bn": "সহায়তা "
   },
   {
     "id": "btn_geolocate_user",
@@ -6946,8 +6951,8 @@
   },
   {
     "id": "share_mode_static_label",
-    "en": "Use the mode 'static' ( recommended )",
-    "bn": "'স্ট্যাটিক' মোডটি ব্যবহার করুন (প্রস্তাবিত) "
+    "en": "Share in 'static' mode ( recommended )",
+    "bn": "'স্ট্যাটিক' মোডে শেয়ার করুন (প্রস্তাবিত)"
   },
   {
     "id": "share_mode_static_desc",
@@ -7073,21 +7078,6 @@
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static' mode in settings to prevent this.",
     "bn": "নির্বাচন একটি গল্প মানচিত্র অন্তর্ভুক্ত: অন্যান্য দৃশ্য উপেক্ষা করা হবে এবং গল্প মানচিত্র স্বয়ংক্রিয়ভাবে চালানো হবে. এটি প্রতিরোধ করতে অন্যদের ভিউ নির্বাচন করুন বা সেটিংসে 'স্ট্যাটিক' মোড নিষ্ক্রিয় করুন।"
-  },
-  {
-    "id": "btn_copy_share",
-    "en": "Copy the result",
-    "bn": "ফলাফল কপি করুন"
-  },
-  {
-    "id": "btn_open_share",
-    "en": "Share",
-    "bn": "শেয়ার করুন"
-  },
-  {
-    "id": "btn_help_wiki",
-    "en": "Open help",
-    "bn": "সাহায্য খুলুন"
   },
   {
     "id": "btn_opt_share_to_project",

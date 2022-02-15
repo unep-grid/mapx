@@ -1328,14 +1328,6 @@
     "en": "Bottom"
   },
   {
-    "id": "btn_browse",
-    "en": "Browse..."
-  },
-  {
-    "id": "btn_help",
-    "en": "Help"
-  },
-  {
     "id": "epsg_set_projection_export",
     "en": "Set the export projection, using a code from the EPSG format"
   },
@@ -1422,6 +1414,18 @@
   {
     "id": "btn_copy",
     "en": "Copy"
+  },
+  {
+    "id": "btn_share",
+    "en": "Share"
+  },
+  {
+    "id": "btn_browse",
+    "en": "Browse..."
+  },
+  {
+    "id": "btn_help",
+    "en": "Help"
   },
   {
     "id": "btn_geolocate_user",
@@ -5557,7 +5561,7 @@
   },
   {
     "id": "share_mode_static_label",
-    "en": "Use the mode 'static' ( recommended )"
+    "en": "Share in 'static' mode ( recommended )"
   },
   {
     "id": "share_mode_static_desc",
@@ -5658,18 +5662,6 @@
   {
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static' mode in settings to prevent this."
-  },
-  {
-    "id": "btn_copy_share",
-    "en": "Copy the result"
-  },
-  {
-    "id": "btn_open_share",
-    "en": "Share"
-  },
-  {
-    "id": "btn_help_wiki",
-    "en": "Open help"
   },
   {
     "id": "btn_opt_share_to_project",

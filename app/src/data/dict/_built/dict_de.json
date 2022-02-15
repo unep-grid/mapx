@@ -1660,16 +1660,6 @@
     "de": "Unterseite "
   },
   {
-    "id": "btn_browse",
-    "en": "Browse...",
-    "de": "Durchsuche... "
-  },
-  {
-    "id": "btn_help",
-    "en": "Help",
-    "de": "Hilfe "
-  },
-  {
     "id": "epsg_set_projection_export",
     "en": "Set the export projection, using a code from the EPSG format",
     "de": "Legen Sie die Exportprojektion mit einem Code aus dem EPSG-Format fest "
@@ -1778,6 +1768,21 @@
     "id": "btn_copy",
     "en": "Copy",
     "de": "Kopieren "
+  },
+  {
+    "id": "btn_share",
+    "en": "Share",
+    "de": "Teilen"
+  },
+  {
+    "id": "btn_browse",
+    "en": "Browse...",
+    "de": "Durchsuche... "
+  },
+  {
+    "id": "btn_help",
+    "en": "Help",
+    "de": "Hilfe "
   },
   {
     "id": "btn_geolocate_user",
@@ -6946,8 +6951,8 @@
   },
   {
     "id": "share_mode_static_label",
-    "en": "Use the mode 'static' ( recommended )",
-    "de": "Verwenden Sie den Modus 'statisch' (empfohlen) "
+    "en": "Share in 'static' mode ( recommended )",
+    "de": "Teilen im statischen Modus (empfohlen)"
   },
   {
     "id": "share_mode_static_desc",
@@ -7073,21 +7078,6 @@
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static' mode in settings to prevent this.",
     "de": "Die Auswahl umfasst eine Story-Map: andere Ansichten werden ignoriert und die Story-Map wird automatisch abgespielt. Deaktivieren Sie andere Ansichten oder deaktivieren Sie den statischen Modus in den Einstellungen, um dies zu verhindern."
-  },
-  {
-    "id": "btn_copy_share",
-    "en": "Copy the result",
-    "de": "Kopieren Sie das Ergebnis"
-  },
-  {
-    "id": "btn_open_share",
-    "en": "Share",
-    "de": "Teilen"
-  },
-  {
-    "id": "btn_help_wiki",
-    "en": "Open help",
-    "de": "Hilfe öffnen"
   },
   {
     "id": "btn_opt_share_to_project",

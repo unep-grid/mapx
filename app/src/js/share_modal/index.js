@@ -518,15 +518,15 @@ export class ShareModal extends EventSimple {
       icon: 'times',
       action: sm.close
     });
-    sm._el_button_help = elButtonFa('btn_help_wiki', {
+    sm._el_button_help = elButtonFa('btn_help', {
       icon: 'question-circle',
       action: sm.openHelp
     });
-    sm._el_button_copy = elButtonFa('btn_copy_share', {
+    sm._el_button_copy = elButtonFa('btn_copy', {
       icon: 'clipboard',
       action: sm.copy
     });
-    sm._el_button_open = elButtonFa('btn_open_share', {
+    sm._el_button_open = elButtonFa('btn_share', {
       icon: 'external-link',
       action: sm.openLink
     });

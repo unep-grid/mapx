@@ -4316,32 +4316,6 @@
     "de": "Unterseite "
   },
   {
-    "id": "btn_browse",
-    "en": "Browse...",
-    "fr": "Ouvrir",
-    "es": "Abrir",
-    "ru": "Просматривать... ",
-    "zh": "浏览",
-    "ar": "تصفح... ",
-    "fa": "مرور کردن... ",
-    "ps": "لټون کول ... ",
-    "bn": "ব্রাউজ করুন ... ",
-    "de": "Durchsuche... "
-  },
-  {
-    "id": "btn_help",
-    "en": "Help",
-    "fr": "Aide",
-    "es": "Ayuda",
-    "ru": "Помощь ",
-    "zh": "帮助",
-    "ar": "مساعدة ",
-    "fa": "کمک ",
-    "ps": "مرسته ",
-    "bn": "সহায়তা ",
-    "de": "Hilfe "
-  },
-  {
     "id": "epsg_set_projection_export",
     "en": "Set the export projection, using a code from the EPSG format",
     "fr": "Définir la projection d'exportation en utilisant un code du format EPSG",
@@ -4626,6 +4600,45 @@
     "ps": "کاپي ",
     "bn": "কপি ",
     "de": "Kopieren "
+  },
+  {
+    "id": "btn_share",
+    "en": "Share",
+    "fr": "Partager",
+    "es": "Compartir",
+    "ru": "доля",
+    "zh": "复制",
+    "ar": "شارك",
+    "fa": "اشتراک گذاری",
+    "ps": "شریکول",
+    "bn": "শেয়ার করুন",
+    "de": "Teilen"
+  },
+  {
+    "id": "btn_browse",
+    "en": "Browse...",
+    "fr": "Ouvrir",
+    "es": "Abrir",
+    "ru": "Просматривать... ",
+    "zh": "浏览",
+    "ar": "تصفح... ",
+    "fa": "مرور کردن... ",
+    "ps": "لټون کول ... ",
+    "bn": "ব্রাউজ করুন ... ",
+    "de": "Durchsuche... "
+  },
+  {
+    "id": "btn_help",
+    "en": "Help",
+    "fr": "Aide",
+    "es": "Ayuda",
+    "ru": "Помощь ",
+    "zh": "帮助",
+    "ar": "مساعدة ",
+    "fa": "کمک ",
+    "ps": "مرسته ",
+    "bn": "সহায়তা ",
+    "de": "Hilfe "
   },
   {
     "id": "btn_geolocate_user",
@@ -18058,16 +18071,16 @@
   },
   {
     "id": "share_mode_static_label",
-    "en": "Use the mode 'static' ( recommended )",
+    "en": "Share in 'static' mode ( recommended )",
     "fr": "Partager en mode 'statique' ( recommandé )",
     "es": "Usar el modo 'estático' (recomendado)",
-    "ru": "Используйте режим 'статический' (рекомендуется) ",
+    "ru": "Поделиться в «статическом» режиме (рекомендуется)",
     "zh": "使用“静态”模式（推荐）",
-    "ar": "استخدم الوضع \"ثابت\" (موصى به) ",
-    "fa": "از حالت \"ثابت\" استفاده کنید (توصیه می شود) ",
-    "ps": "حالت 'مستحکم' وکاروئ (وړاندیز شوی) ",
-    "bn": "'স্ট্যাটিক' মোডটি ব্যবহার করুন (প্রস্তাবিত) ",
-    "de": "Verwenden Sie den Modus 'statisch' (empfohlen) "
+    "ar": "المشاركة في الوضع \"الثابت\" (موصى به)",
+    "fa": "اشتراک‌گذاری در حالت «استاتیک» (توصیه می‌شود)",
+    "ps": "په 'جامد' حالت کې شریک کړئ (سپارښتنه شوی)",
+    "bn": "'স্ট্যাটিক' মোডে শেয়ার করুন (প্রস্তাবিত)",
+    "de": "Teilen im statischen Modus (empfohlen)"
   },
   {
     "id": "share_mode_static_desc",
@@ -18393,45 +18406,6 @@
     "ps": "په انتخاب کې د کیسې نقشه شامله ده: نور لیدونه به له پامه غورځول شي او د کیسې نقشه به په اوتومات ډول پلی شي. د نورو لیدونو څخه انتخاب کړئ یا د دې مخنیوي لپاره په ترتیباتو کې 'جامد' حالت غیر فعال کړئ.",
     "bn": "নির্বাচন একটি গল্প মানচিত্র অন্তর্ভুক্ত: অন্যান্য দৃশ্য উপেক্ষা করা হবে এবং গল্প মানচিত্র স্বয়ংক্রিয়ভাবে চালানো হবে. এটি প্রতিরোধ করতে অন্যদের ভিউ নির্বাচন করুন বা সেটিংসে 'স্ট্যাটিক' মোড নিষ্ক্রিয় করুন।",
     "de": "Die Auswahl umfasst eine Story-Map: andere Ansichten werden ignoriert und die Story-Map wird automatisch abgespielt. Deaktivieren Sie andere Ansichten oder deaktivieren Sie den statischen Modus in den Einstellungen, um dies zu verhindern."
-  },
-  {
-    "id": "btn_copy_share",
-    "en": "Copy the result",
-    "fr": "Copiez le résultat",
-    "es": "Copia el resultado",
-    "ru": "Скопируйте результат",
-    "zh": "复制结果",
-    "ar": "انسخ النتيجة",
-    "fa": "نتیجه را کپی کنید",
-    "ps": "پایله کاپي کړئ",
-    "bn": "ফলাফল কপি করুন",
-    "de": "Kopieren Sie das Ergebnis"
-  },
-  {
-    "id": "btn_open_share",
-    "en": "Share",
-    "fr": "Partager",
-    "es": "Cuota",
-    "ru": "доля",
-    "zh": "分享",
-    "ar": "شارك",
-    "fa": "اشتراک گذاری",
-    "ps": "شریکول",
-    "bn": "শেয়ার করুন",
-    "de": "Teilen"
-  },
-  {
-    "id": "btn_help_wiki",
-    "en": "Open help",
-    "fr": "Ouvrir l'aide",
-    "es": "Abrir ayuda",
-    "ru": "Открыть справку",
-    "zh": "打开帮助",
-    "ar": "افتح المساعدة",
-    "fa": "راهنما را باز کنید",
-    "ps": "خلاص مرسته",
-    "bn": "সাহায্য খুলুন",
-    "de": "Hilfe öffnen"
   },
   {
     "id": "btn_opt_share_to_project",

@@ -1660,16 +1660,6 @@
     "ps": "لاندې"
   },
   {
-    "id": "btn_browse",
-    "en": "Browse...",
-    "ps": "لټون کول ... "
-  },
-  {
-    "id": "btn_help",
-    "en": "Help",
-    "ps": "مرسته "
-  },
-  {
     "id": "epsg_set_projection_export",
     "en": "Set the export projection, using a code from the EPSG format",
     "ps": "د EPSG ب formatه څخه د کوډ په کارولو سره د صادراتو پروجیکشن ترتیب کړئ "
@@ -1778,6 +1768,21 @@
     "id": "btn_copy",
     "en": "Copy",
     "ps": "کاپي "
+  },
+  {
+    "id": "btn_share",
+    "en": "Share",
+    "ps": "شریکول"
+  },
+  {
+    "id": "btn_browse",
+    "en": "Browse...",
+    "ps": "لټون کول ... "
+  },
+  {
+    "id": "btn_help",
+    "en": "Help",
+    "ps": "مرسته "
   },
   {
     "id": "btn_geolocate_user",
@@ -6946,8 +6951,8 @@
   },
   {
     "id": "share_mode_static_label",
-    "en": "Use the mode 'static' ( recommended )",
-    "ps": "حالت 'مستحکم' وکاروئ (وړاندیز شوی) "
+    "en": "Share in 'static' mode ( recommended )",
+    "ps": "په 'جامد' حالت کې شریک کړئ (سپارښتنه شوی)"
   },
   {
     "id": "share_mode_static_desc",
@@ -7073,21 +7078,6 @@
     "id": "share_msg_multiple_views_story_static",
     "en": "The selection includes a story map: other views will be ignored and the story map will automatically be played. Unselect others views or deactivate the 'static' mode in settings to prevent this.",
     "ps": "په انتخاب کې د کیسې نقشه شامله ده: نور لیدونه به له پامه غورځول شي او د کیسې نقشه به په اوتومات ډول پلی شي. د نورو لیدونو څخه انتخاب کړئ یا د دې مخنیوي لپاره په ترتیباتو کې 'جامد' حالت غیر فعال کړئ."
-  },
-  {
-    "id": "btn_copy_share",
-    "en": "Copy the result",
-    "ps": "پایله کاپي کړئ"
-  },
-  {
-    "id": "btn_open_share",
-    "en": "Share",
-    "ps": "شریکول"
-  },
-  {
-    "id": "btn_help_wiki",
-    "en": "Open help",
-    "ps": "خلاص مرسته"
   },
   {
     "id": "btn_opt_share_to_project",
