@@ -1786,8 +1786,8 @@
   },
   {
     "id": "btn_geolocate_user",
-    "en": "Geolocate",
-    "ps": "لغوه کړی"
+    "en": "Zoom to my location",
+    "ps": "زما ځای ته زوم"
   },
   {
     "id": "btn_close",
@@ -6045,86 +6045,6 @@
     "ps": "میپ ایکس اوس مهال د سرور ساتنې له امله شتون نلري.<br> د ورځې وروسته بیرته راشه!<br><br> مخلص ، ستاسو د MapX ټیم "
   },
   {
-    "id": "pk_panel_options",
-    "en": "Display options",
-    "ps": "غوراوي ښودل "
-  },
-  {
-    "id": "pk_tab_settings",
-    "en": "Palette tool",
-    "ps": "د پیلټ توکی "
-  },
-  {
-    "id": "pk_tab_palettes",
-    "en": "Palettes",
-    "ps": "پیلیټونه "
-  },
-  {
-    "id": "pk_tab_edit_json",
-    "en": "Edit JSON",
-    "ps": "JSON "
-  },
-  {
-    "id": "pk_btn_add",
-    "en": "Add",
-    "ps": "اضافه کول "
-  },
-  {
-    "id": "pk_btn_close",
-    "en": "Close",
-    "ps": "بندول "
-  },
-  {
-    "id": "pk_slider_n_hue_rotation",
-    "en": "Number of hue rotation",
-    "ps": "د رنګ څرولو شمیره "
-  },
-  {
-    "id": "pk_slider_n_colors",
-    "en": "Number of colors",
-    "ps": "د رنګونو شمیر "
-  },
-  {
-    "id": "pk_slider_hue_shift",
-    "en": "Hue shift",
-    "ps": "د رنګ بدلون "
-  },
-  {
-    "id": "pk_slider_colors",
-    "en": "Colors space",
-    "ps": "د رنګونو ځای "
-  },
-  {
-    "id": "pk_slider_saturation",
-    "en": "Saturation",
-    "ps": "تسکین "
-  },
-  {
-    "id": "pk_slider_luminosity",
-    "en": "Luminosity",
-    "ps": "روښانه "
-  },
-  {
-    "id": "pk_slider_randomize",
-    "en": "Shuffle",
-    "ps": "ډډ کول "
-  },
-  {
-    "id": "pk_slider_reverse",
-    "en": "Reverse",
-    "ps": "بېرته "
-  },
-  {
-    "id": "pk_slider_diverge",
-    "en": "Diverge",
-    "ps": "بیلول "
-  },
-  {
-    "id": "pk_btn_set_default_palette",
-    "en": "Use the default palette",
-    "ps": "د تلواله پیلیټ وکاروه "
-  },
-  {
     "id": "draft_recover_modal_title",
     "en": "Data recovery",
     "ps": "د معلوماتو بیا رغونه "
@@ -6600,6 +6520,11 @@
     "ps": "د کنټرول پینل "
   },
   {
+    "id": "btn_bug_report",
+    "en": "Report a bug / feature request",
+    "ps": "د بګ / فیچر غوښتنه راپور کړئ"
+  },
+  {
     "id": "fetch_views_not_found_modal_title",
     "en": "Views not found",
     "ps": "لیدونه ونه موندل شول"
@@ -6723,6 +6648,86 @@
     "id": "tool_mirror_res_warn",
     "en": "The raw data will be read from our server. However, we do not store or use it in any way. Everything is simply reflected. IP addresses are stored in memory to prevent abuse.",
     "ps": "خام معلومات به زموږ له سرور څخه لوستل شي. په هرصورت، موږ دا په هیڅ ډول ذخیره یا نه کاروو. هرڅه په ساده ډول منعکس کیږي. IP پتې په حافظه کې ساتل کیږي ترڅو د ناوړه ګټه اخیستنې مخه ونیسي."
+  },
+  {
+    "id": "pk_panel_options",
+    "en": "Display options",
+    "ps": "غوراوي ښودل "
+  },
+  {
+    "id": "pk_tab_settings",
+    "en": "Palette tool",
+    "ps": "د پیلټ توکی "
+  },
+  {
+    "id": "pk_tab_palettes",
+    "en": "Palettes",
+    "ps": "پیلیټونه "
+  },
+  {
+    "id": "pk_tab_edit_json",
+    "en": "Edit JSON",
+    "ps": "JSON "
+  },
+  {
+    "id": "pk_btn_add",
+    "en": "Add",
+    "ps": "اضافه کول "
+  },
+  {
+    "id": "pk_btn_close",
+    "en": "Close",
+    "ps": "بندول "
+  },
+  {
+    "id": "pk_slider_n_hue_rotation",
+    "en": "Number of hue rotation",
+    "ps": "د رنګ څرولو شمیره "
+  },
+  {
+    "id": "pk_slider_n_colors",
+    "en": "Number of colors",
+    "ps": "د رنګونو شمیر "
+  },
+  {
+    "id": "pk_slider_hue_shift",
+    "en": "Hue shift",
+    "ps": "د رنګ بدلون "
+  },
+  {
+    "id": "pk_slider_colors",
+    "en": "Colors space",
+    "ps": "د رنګونو ځای "
+  },
+  {
+    "id": "pk_slider_saturation",
+    "en": "Saturation",
+    "ps": "تسکین "
+  },
+  {
+    "id": "pk_slider_luminosity",
+    "en": "Luminosity",
+    "ps": "روښانه "
+  },
+  {
+    "id": "pk_slider_randomize",
+    "en": "Shuffle",
+    "ps": "ډډ کول "
+  },
+  {
+    "id": "pk_slider_reverse",
+    "en": "Reverse",
+    "ps": "بېرته "
+  },
+  {
+    "id": "pk_slider_diverge",
+    "en": "Diverge",
+    "ps": "بیلول "
+  },
+  {
+    "id": "pk_btn_set_default_palette",
+    "en": "Use the default palette",
+    "ps": "د تلواله پیلیټ وکاروه "
   },
   {
     "id": "search_placeholder",

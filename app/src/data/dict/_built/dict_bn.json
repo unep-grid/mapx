@@ -1786,8 +1786,8 @@
   },
   {
     "id": "btn_geolocate_user",
-    "en": "Geolocate",
-    "bn": "জিওলোকট "
+    "en": "Zoom to my location",
+    "bn": "আমার অবস্থান জুম"
   },
   {
     "id": "btn_close",
@@ -6045,86 +6045,6 @@
     "bn": "সার্ভার রক্ষণাবেক্ষণের কারণে ম্যাপএক্স বর্তমানে অনুপলব্ধ।<br> দিনের পর দিন ফিরে আসুন!<br><br> আন্তরিকভাবে, আপনার ম্যাপএক্স টিম "
   },
   {
-    "id": "pk_panel_options",
-    "en": "Display options",
-    "bn": "প্রদর্শনের বিকল্পগুলি "
-  },
-  {
-    "id": "pk_tab_settings",
-    "en": "Palette tool",
-    "bn": "প্যালেট সরঞ্জাম "
-  },
-  {
-    "id": "pk_tab_palettes",
-    "en": "Palettes",
-    "bn": "প্যালেটস "
-  },
-  {
-    "id": "pk_tab_edit_json",
-    "en": "Edit JSON",
-    "bn": "JSON সম্পাদনা করুন "
-  },
-  {
-    "id": "pk_btn_add",
-    "en": "Add",
-    "bn": "অ্যাড "
-  },
-  {
-    "id": "pk_btn_close",
-    "en": "Close",
-    "bn": "বন্ধ "
-  },
-  {
-    "id": "pk_slider_n_hue_rotation",
-    "en": "Number of hue rotation",
-    "bn": "হু আবর্তনের সংখ্যা "
-  },
-  {
-    "id": "pk_slider_n_colors",
-    "en": "Number of colors",
-    "bn": "রঙের সংখ্যা "
-  },
-  {
-    "id": "pk_slider_hue_shift",
-    "en": "Hue shift",
-    "bn": "হিউ শিফট "
-  },
-  {
-    "id": "pk_slider_colors",
-    "en": "Colors space",
-    "bn": "রঙের স্থান "
-  },
-  {
-    "id": "pk_slider_saturation",
-    "en": "Saturation",
-    "bn": "স্যাচুরেশন "
-  },
-  {
-    "id": "pk_slider_luminosity",
-    "en": "Luminosity",
-    "bn": "উজ্জ্বলতা "
-  },
-  {
-    "id": "pk_slider_randomize",
-    "en": "Shuffle",
-    "bn": "অদলবদল "
-  },
-  {
-    "id": "pk_slider_reverse",
-    "en": "Reverse",
-    "bn": "বিপরীত "
-  },
-  {
-    "id": "pk_slider_diverge",
-    "en": "Diverge",
-    "bn": "ডাইভার্জ "
-  },
-  {
-    "id": "pk_btn_set_default_palette",
-    "en": "Use the default palette",
-    "bn": "ডিফল্ট প্যালেট ব্যবহার করুন "
-  },
-  {
     "id": "draft_recover_modal_title",
     "en": "Data recovery",
     "bn": "তথ্য পুনরুদ্ধার "
@@ -6600,6 +6520,11 @@
     "bn": "প্যানেল নিয়ন্ত্রণ করে "
   },
   {
+    "id": "btn_bug_report",
+    "en": "Report a bug / feature request",
+    "bn": "একটি বাগ / বৈশিষ্ট্য অনুরোধ রিপোর্ট করুন"
+  },
+  {
     "id": "fetch_views_not_found_modal_title",
     "en": "Views not found",
     "bn": "ভিউ পাওয়া যায়নি"
@@ -6723,6 +6648,86 @@
     "id": "tool_mirror_res_warn",
     "en": "The raw data will be read from our server. However, we do not store or use it in any way. Everything is simply reflected. IP addresses are stored in memory to prevent abuse.",
     "bn": "কাঁচা তথ্য আমাদের সার্ভার থেকে পড়া হবে. যাইহোক, আমরা এটি কোন ভাবেই সংরক্ষণ করি না বা ব্যবহার করি না। সবকিছু সহজভাবে প্রতিফলিত হয়. অপব্যবহার প্রতিরোধ করার জন্য IP ঠিকানাগুলি মেমরিতে সংরক্ষণ করা হয়।"
+  },
+  {
+    "id": "pk_panel_options",
+    "en": "Display options",
+    "bn": "প্রদর্শনের বিকল্পগুলি "
+  },
+  {
+    "id": "pk_tab_settings",
+    "en": "Palette tool",
+    "bn": "প্যালেট সরঞ্জাম "
+  },
+  {
+    "id": "pk_tab_palettes",
+    "en": "Palettes",
+    "bn": "প্যালেটস "
+  },
+  {
+    "id": "pk_tab_edit_json",
+    "en": "Edit JSON",
+    "bn": "JSON সম্পাদনা করুন "
+  },
+  {
+    "id": "pk_btn_add",
+    "en": "Add",
+    "bn": "অ্যাড "
+  },
+  {
+    "id": "pk_btn_close",
+    "en": "Close",
+    "bn": "বন্ধ "
+  },
+  {
+    "id": "pk_slider_n_hue_rotation",
+    "en": "Number of hue rotation",
+    "bn": "হু আবর্তনের সংখ্যা "
+  },
+  {
+    "id": "pk_slider_n_colors",
+    "en": "Number of colors",
+    "bn": "রঙের সংখ্যা "
+  },
+  {
+    "id": "pk_slider_hue_shift",
+    "en": "Hue shift",
+    "bn": "হিউ শিফট "
+  },
+  {
+    "id": "pk_slider_colors",
+    "en": "Colors space",
+    "bn": "রঙের স্থান "
+  },
+  {
+    "id": "pk_slider_saturation",
+    "en": "Saturation",
+    "bn": "স্যাচুরেশন "
+  },
+  {
+    "id": "pk_slider_luminosity",
+    "en": "Luminosity",
+    "bn": "উজ্জ্বলতা "
+  },
+  {
+    "id": "pk_slider_randomize",
+    "en": "Shuffle",
+    "bn": "অদলবদল "
+  },
+  {
+    "id": "pk_slider_reverse",
+    "en": "Reverse",
+    "bn": "বিপরীত "
+  },
+  {
+    "id": "pk_slider_diverge",
+    "en": "Diverge",
+    "bn": "ডাইভার্জ "
+  },
+  {
+    "id": "pk_btn_set_default_palette",
+    "en": "Use the default palette",
+    "bn": "ডিফল্ট প্যালেট ব্যবহার করুন "
   },
   {
     "id": "search_placeholder",

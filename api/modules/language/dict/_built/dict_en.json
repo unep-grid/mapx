@@ -1429,7 +1429,7 @@
   },
   {
     "id": "btn_geolocate_user",
-    "en": "Geolocate"
+    "en": "Zoom to my location"
   },
   {
     "id": "btn_close",
@@ -4836,70 +4836,6 @@
     "en": "MapX is currently unavailable due to server maintenance. <br> Come back later in the day !  <br> <br> Sincerely, your MapX team"
   },
   {
-    "id": "pk_panel_options",
-    "en": "Display options"
-  },
-  {
-    "id": "pk_tab_settings",
-    "en": "Palette tool"
-  },
-  {
-    "id": "pk_tab_palettes",
-    "en": "Palettes"
-  },
-  {
-    "id": "pk_tab_edit_json",
-    "en": "Edit JSON"
-  },
-  {
-    "id": "pk_btn_add",
-    "en": "Add"
-  },
-  {
-    "id": "pk_btn_close",
-    "en": "Close"
-  },
-  {
-    "id": "pk_slider_n_hue_rotation",
-    "en": "Number of hue rotation"
-  },
-  {
-    "id": "pk_slider_n_colors",
-    "en": "Number of colors"
-  },
-  {
-    "id": "pk_slider_hue_shift",
-    "en": "Hue shift"
-  },
-  {
-    "id": "pk_slider_colors",
-    "en": "Colors space"
-  },
-  {
-    "id": "pk_slider_saturation",
-    "en": "Saturation"
-  },
-  {
-    "id": "pk_slider_luminosity",
-    "en": "Luminosity"
-  },
-  {
-    "id": "pk_slider_randomize",
-    "en": "Shuffle"
-  },
-  {
-    "id": "pk_slider_reverse",
-    "en": "Reverse"
-  },
-  {
-    "id": "pk_slider_diverge",
-    "en": "Diverge"
-  },
-  {
-    "id": "pk_btn_set_default_palette",
-    "en": "Use the default palette"
-  },
-  {
     "id": "draft_recover_modal_title",
     "en": "Data recovery"
   },
@@ -5280,6 +5216,10 @@
     "en": "Controls panel"
   },
   {
+    "id": "btn_bug_report",
+    "en": "Report a bug / feature request"
+  },
+  {
     "id": "fetch_views_not_found_modal_title",
     "en": "Views not found"
   },
@@ -5378,6 +5318,70 @@
   {
     "id": "tool_mirror_res_warn",
     "en": "The raw data will be read from our server. However, we do not store or use it in any way. Everything is simply reflected. IP addresses are stored in memory to prevent abuse."
+  },
+  {
+    "id": "pk_panel_options",
+    "en": "Display options"
+  },
+  {
+    "id": "pk_tab_settings",
+    "en": "Palette tool"
+  },
+  {
+    "id": "pk_tab_palettes",
+    "en": "Palettes"
+  },
+  {
+    "id": "pk_tab_edit_json",
+    "en": "Edit JSON"
+  },
+  {
+    "id": "pk_btn_add",
+    "en": "Add"
+  },
+  {
+    "id": "pk_btn_close",
+    "en": "Close"
+  },
+  {
+    "id": "pk_slider_n_hue_rotation",
+    "en": "Number of hue rotation"
+  },
+  {
+    "id": "pk_slider_n_colors",
+    "en": "Number of colors"
+  },
+  {
+    "id": "pk_slider_hue_shift",
+    "en": "Hue shift"
+  },
+  {
+    "id": "pk_slider_colors",
+    "en": "Colors space"
+  },
+  {
+    "id": "pk_slider_saturation",
+    "en": "Saturation"
+  },
+  {
+    "id": "pk_slider_luminosity",
+    "en": "Luminosity"
+  },
+  {
+    "id": "pk_slider_randomize",
+    "en": "Shuffle"
+  },
+  {
+    "id": "pk_slider_reverse",
+    "en": "Reverse"
+  },
+  {
+    "id": "pk_slider_diverge",
+    "en": "Diverge"
+  },
+  {
+    "id": "pk_btn_set_default_palette",
+    "en": "Use the default palette"
   },
   {
     "id": "search_placeholder",

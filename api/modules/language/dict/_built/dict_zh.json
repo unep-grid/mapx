@@ -1772,7 +1772,7 @@
   {
     "id": "btn_share",
     "en": "Share",
-    "zh": "复制"
+    "zh": "分享"
   },
   {
     "id": "btn_browse",
@@ -1786,8 +1786,8 @@
   },
   {
     "id": "btn_geolocate_user",
-    "en": "Geolocate",
-    "zh": "地理位置"
+    "en": "Zoom to my location",
+    "zh": "缩放到我的位置"
   },
   {
     "id": "btn_close",
@@ -6045,86 +6045,6 @@
     "zh": "由于服务器维护，MapX当前不可用。 <br> 请稍后回来！ <br>此致，<br>敬礼！<br> MapX Team"
   },
   {
-    "id": "pk_panel_options",
-    "en": "Display options",
-    "zh": "显示选项"
-  },
-  {
-    "id": "pk_tab_settings",
-    "en": "Palette tool",
-    "zh": "调色板工具"
-  },
-  {
-    "id": "pk_tab_palettes",
-    "en": "Palettes",
-    "zh": "调色板"
-  },
-  {
-    "id": "pk_tab_edit_json",
-    "en": "Edit JSON",
-    "zh": "编辑JSON"
-  },
-  {
-    "id": "pk_btn_add",
-    "en": "Add",
-    "zh": "添加"
-  },
-  {
-    "id": "pk_btn_close",
-    "en": "Close",
-    "zh": "关闭"
-  },
-  {
-    "id": "pk_slider_n_hue_rotation",
-    "en": "Number of hue rotation",
-    "zh": "色调旋转次数"
-  },
-  {
-    "id": "pk_slider_n_colors",
-    "en": "Number of colors",
-    "zh": "颜色的数量"
-  },
-  {
-    "id": "pk_slider_hue_shift",
-    "en": "Hue shift",
-    "zh": "色调变换"
-  },
-  {
-    "id": "pk_slider_colors",
-    "en": "Colors space",
-    "zh": "颜色空间"
-  },
-  {
-    "id": "pk_slider_saturation",
-    "en": "Saturation",
-    "zh": "饱和度"
-  },
-  {
-    "id": "pk_slider_luminosity",
-    "en": "Luminosity",
-    "zh": "亮度"
-  },
-  {
-    "id": "pk_slider_randomize",
-    "en": "Shuffle",
-    "zh": "随机"
-  },
-  {
-    "id": "pk_slider_reverse",
-    "en": "Reverse",
-    "zh": "反向"
-  },
-  {
-    "id": "pk_slider_diverge",
-    "en": "Diverge",
-    "zh": "发散"
-  },
-  {
-    "id": "pk_btn_set_default_palette",
-    "en": "Use the default palette",
-    "zh": "使用默认调色板"
-  },
-  {
     "id": "draft_recover_modal_title",
     "en": "Data recovery",
     "zh": "数据恢复"
@@ -6600,6 +6520,11 @@
     "zh": "控制面板 "
   },
   {
+    "id": "btn_bug_report",
+    "en": "Report a bug / feature request",
+    "zh": "报告错误/功能请求"
+  },
+  {
     "id": "fetch_views_not_found_modal_title",
     "en": "Views not found",
     "zh": "未找到视图"
@@ -6723,6 +6648,86 @@
     "id": "tool_mirror_res_warn",
     "en": "The raw data will be read from our server. However, we do not store or use it in any way. Everything is simply reflected. IP addresses are stored in memory to prevent abuse.",
     "zh": "原始数据将从我们的服务器读取。但是，我们不会以任何方式存储或使用它。一切都简单地反映了。 IP 地址存储在内存中以防止滥用。"
+  },
+  {
+    "id": "pk_panel_options",
+    "en": "Display options",
+    "zh": "显示选项"
+  },
+  {
+    "id": "pk_tab_settings",
+    "en": "Palette tool",
+    "zh": "调色板工具"
+  },
+  {
+    "id": "pk_tab_palettes",
+    "en": "Palettes",
+    "zh": "调色板"
+  },
+  {
+    "id": "pk_tab_edit_json",
+    "en": "Edit JSON",
+    "zh": "编辑JSON"
+  },
+  {
+    "id": "pk_btn_add",
+    "en": "Add",
+    "zh": "添加"
+  },
+  {
+    "id": "pk_btn_close",
+    "en": "Close",
+    "zh": "关闭"
+  },
+  {
+    "id": "pk_slider_n_hue_rotation",
+    "en": "Number of hue rotation",
+    "zh": "色调旋转次数"
+  },
+  {
+    "id": "pk_slider_n_colors",
+    "en": "Number of colors",
+    "zh": "颜色的数量"
+  },
+  {
+    "id": "pk_slider_hue_shift",
+    "en": "Hue shift",
+    "zh": "色调变换"
+  },
+  {
+    "id": "pk_slider_colors",
+    "en": "Colors space",
+    "zh": "颜色空间"
+  },
+  {
+    "id": "pk_slider_saturation",
+    "en": "Saturation",
+    "zh": "饱和度"
+  },
+  {
+    "id": "pk_slider_luminosity",
+    "en": "Luminosity",
+    "zh": "亮度"
+  },
+  {
+    "id": "pk_slider_randomize",
+    "en": "Shuffle",
+    "zh": "随机"
+  },
+  {
+    "id": "pk_slider_reverse",
+    "en": "Reverse",
+    "zh": "反向"
+  },
+  {
+    "id": "pk_slider_diverge",
+    "en": "Diverge",
+    "zh": "发散"
+  },
+  {
+    "id": "pk_btn_set_default_palette",
+    "en": "Use the default palette",
+    "zh": "使用默认调色板"
   },
   {
     "id": "search_placeholder",

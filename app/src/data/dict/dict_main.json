@@ -322,7 +322,7 @@
     "fa": "لغو ",
     "ps": "لغوه کړی",
     "bn": "",
-    "de": ""
+    "de": "Abbrechen"
   },
   {
     "id": "btn_copy",
@@ -335,7 +335,7 @@
     "fa": "",
     "ps": "",
     "bn": "",
-    "de": ""
+    "de": "Kopieren"
   },
   {
     "id": "btn_share",
@@ -343,25 +343,25 @@
     "fr": "Partager",
     "es": "Compartir",
     "ru": "",
-    "zh": "复制",
+    "zh": "分享",
     "ar": "",
     "fa": "",
     "ps": "",
     "bn": "",
-    "de": ""
+    "de": "Teilen"
   },
   {
     "id": "btn_browse",
     "en": "Browse...",
-    "fr": "Ouvrir",
-    "es": "Abrir",
+    "fr": "Ouvrir...",
+    "es": "Abrir...",
     "ru": "",
     "zh": "浏览",
     "ar": "",
     "fa": "",
     "ps": "",
     "bn": "",
-    "de": ""
+    "de": "Öffnen..."
   },
   {
     "id": "btn_help",
@@ -374,20 +374,20 @@
     "fa": "",
     "ps": "",
     "bn": "",
-    "de": ""
+    "de": "Hilfe"
   },
   {
     "id": "btn_geolocate_user",
-    "en": "Geolocate",
-    "fr": "Géolocaliser",
-    "es": "Geolocalizar",
+    "en": "Zoom to my location",
+    "fr": "Zoom sur ma position",
+    "es": "",
     "ru": "",
-    "zh": "地理位置",
+    "zh": "",
     "ar": "",
-    "fa": "لغو ",
-    "ps": "لغوه کړی",
+    "fa": "",
+    "ps": "",
     "bn": "",
-    "de": ""
+    "de": "Zu meinem Standort zoomen"
   },
   {
     "id": "btn_close",
@@ -400,7 +400,7 @@
     "fa": "بستن",
     "ps": "وتړئ",
     "bn": "",
-    "de": ""
+    "de": "Schliessen"
   },
   {
     "id": "btn_open",
@@ -413,7 +413,7 @@
     "fa": "",
     "ps": "",
     "bn": "",
-    "de": ""
+    "de": "Öffnen"
   },
   {
     "id": "btn_join_project_long",
@@ -11453,214 +11453,6 @@
     "de": ""
   },
   {
-    "id": "pk_panel_options",
-    "en": "Display options",
-    "fr": "Afficher les options",
-    "es": "Opciones de muestra",
-    "ru": "",
-    "zh": "显示选项",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_tab_settings",
-    "en": "Palette tool",
-    "fr": "Outil de palette",
-    "es": "Herramienta de paleta",
-    "ru": "",
-    "zh": "调色板工具",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_tab_palettes",
-    "en": "Palettes",
-    "fr": "Palettes",
-    "es": "Paletas",
-    "ru": "",
-    "zh": "调色板",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_tab_edit_json",
-    "en": "Edit JSON",
-    "fr": "Éditer en JSON",
-    "es": "Editar en JSON",
-    "ru": "",
-    "zh": "编辑JSON",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_btn_add",
-    "en": "Add",
-    "fr": "Ajout",
-    "es": "Añadir",
-    "ru": "",
-    "zh": "添加",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_btn_close",
-    "en": "Close",
-    "fr": "Fermer",
-    "es": "Cerrar",
-    "ru": "",
-    "zh": "关闭",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_slider_n_hue_rotation",
-    "en": "Number of hue rotation",
-    "fr": "Nombre de rotation des teintes",
-    "es": "Número de rotación del tinte",
-    "ru": "",
-    "zh": "色调旋转次数",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_slider_n_colors",
-    "en": "Number of colors",
-    "fr": "Nombre de couleurs",
-    "es": "Número de colores",
-    "ru": "",
-    "zh": "颜色的数量",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_slider_hue_shift",
-    "en": "Hue shift",
-    "fr": "Décalage de teintes",
-    "es": "Decálogo de tintes",
-    "ru": "",
-    "zh": "色调变换",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_slider_colors",
-    "en": "Colors space",
-    "fr": "Espace de couleurs",
-    "es": "Espacio de colores",
-    "ru": "",
-    "zh": "颜色空间",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_slider_saturation",
-    "en": "Saturation",
-    "fr": "Saturation",
-    "es": "Saturacion",
-    "ru": "",
-    "zh": "饱和度",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_slider_luminosity",
-    "en": "Luminosity",
-    "fr": "Luminosité",
-    "es": "Luminosidad",
-    "ru": "",
-    "zh": "亮度",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_slider_randomize",
-    "en": "Shuffle",
-    "fr": "Aléatoire",
-    "es": "Aleatorio",
-    "ru": "",
-    "zh": "随机",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_slider_reverse",
-    "en": "Reverse",
-    "fr": "Inverser l'ordre",
-    "es": "Invertir el orden",
-    "ru": "",
-    "zh": "反向",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_slider_diverge",
-    "en": "Diverge",
-    "fr": "Diverger",
-    "es": "Divergir",
-    "ru": "",
-    "zh": "发散",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "pk_btn_set_default_palette",
-    "en": "Use the default palette",
-    "fr": "Utiliser la palette par default",
-    "es": "Utilizar la paleta predeterminada",
-    "ru": "",
-    "zh": "使用默认调色板",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
     "id": "draft_recover_modal_title",
     "en": "Data recovery",
     "fr": "Récupération de données",
@@ -12886,6 +12678,19 @@
     "id": "btn_panel_controls",
     "en": "Controls panel",
     "fr": "Panneau des contrôles",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_bug_report",
+    "en": "Report a bug / feature request",
+    "fr": "Signaler un bug / demande de fonctionnalité",
     "es": "",
     "ru": "",
     "zh": "",

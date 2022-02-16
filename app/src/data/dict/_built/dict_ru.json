@@ -1786,8 +1786,8 @@
   },
   {
     "id": "btn_geolocate_user",
-    "en": "Geolocate",
-    "ru": "Геолокации "
+    "en": "Zoom to my location",
+    "ru": "Увеличить мое местоположение"
   },
   {
     "id": "btn_close",
@@ -6045,86 +6045,6 @@
     "ru": "MapX в настоящее время недоступен из-за технического обслуживания сервера.<br> Вернись позже днем!<br><br> С уважением, ваша команда MapX "
   },
   {
-    "id": "pk_panel_options",
-    "en": "Display options",
-    "ru": "Показать варианты "
-  },
-  {
-    "id": "pk_tab_settings",
-    "en": "Palette tool",
-    "ru": "Инструмент палитры "
-  },
-  {
-    "id": "pk_tab_palettes",
-    "en": "Palettes",
-    "ru": "Палитры "
-  },
-  {
-    "id": "pk_tab_edit_json",
-    "en": "Edit JSON",
-    "ru": "Редактировать JSON "
-  },
-  {
-    "id": "pk_btn_add",
-    "en": "Add",
-    "ru": "Добавлять "
-  },
-  {
-    "id": "pk_btn_close",
-    "en": "Close",
-    "ru": "Закрывать "
-  },
-  {
-    "id": "pk_slider_n_hue_rotation",
-    "en": "Number of hue rotation",
-    "ru": "Количество вращений оттенка "
-  },
-  {
-    "id": "pk_slider_n_colors",
-    "en": "Number of colors",
-    "ru": "Кол-во цветов "
-  },
-  {
-    "id": "pk_slider_hue_shift",
-    "en": "Hue shift",
-    "ru": "Сдвиг оттенка "
-  },
-  {
-    "id": "pk_slider_colors",
-    "en": "Colors space",
-    "ru": "Цветовое пространство "
-  },
-  {
-    "id": "pk_slider_saturation",
-    "en": "Saturation",
-    "ru": "Насыщенность "
-  },
-  {
-    "id": "pk_slider_luminosity",
-    "en": "Luminosity",
-    "ru": "Яркость "
-  },
-  {
-    "id": "pk_slider_randomize",
-    "en": "Shuffle",
-    "ru": "Перемешать "
-  },
-  {
-    "id": "pk_slider_reverse",
-    "en": "Reverse",
-    "ru": "Обеспечить регресс "
-  },
-  {
-    "id": "pk_slider_diverge",
-    "en": "Diverge",
-    "ru": "Расходиться "
-  },
-  {
-    "id": "pk_btn_set_default_palette",
-    "en": "Use the default palette",
-    "ru": "Использовать палитру по умолчанию "
-  },
-  {
     "id": "draft_recover_modal_title",
     "en": "Data recovery",
     "ru": "Восстановление данных "
@@ -6600,6 +6520,11 @@
     "ru": "Панель управления "
   },
   {
+    "id": "btn_bug_report",
+    "en": "Report a bug / feature request",
+    "ru": "Сообщить об ошибке / запросе функции"
+  },
+  {
     "id": "fetch_views_not_found_modal_title",
     "en": "Views not found",
     "ru": "Просмотры не найдены"
@@ -6723,6 +6648,86 @@
     "id": "tool_mirror_res_warn",
     "en": "The raw data will be read from our server. However, we do not store or use it in any way. Everything is simply reflected. IP addresses are stored in memory to prevent abuse.",
     "ru": "Необработанные данные будут считаны с нашего сервера. Однако мы никоим образом не храним и не используем их. Все просто отражается. IP-адреса хранятся в памяти для предотвращения злоупотреблений."
+  },
+  {
+    "id": "pk_panel_options",
+    "en": "Display options",
+    "ru": "Показать варианты "
+  },
+  {
+    "id": "pk_tab_settings",
+    "en": "Palette tool",
+    "ru": "Инструмент палитры "
+  },
+  {
+    "id": "pk_tab_palettes",
+    "en": "Palettes",
+    "ru": "Палитры "
+  },
+  {
+    "id": "pk_tab_edit_json",
+    "en": "Edit JSON",
+    "ru": "Редактировать JSON "
+  },
+  {
+    "id": "pk_btn_add",
+    "en": "Add",
+    "ru": "Добавлять "
+  },
+  {
+    "id": "pk_btn_close",
+    "en": "Close",
+    "ru": "Закрывать "
+  },
+  {
+    "id": "pk_slider_n_hue_rotation",
+    "en": "Number of hue rotation",
+    "ru": "Количество вращений оттенка "
+  },
+  {
+    "id": "pk_slider_n_colors",
+    "en": "Number of colors",
+    "ru": "Кол-во цветов "
+  },
+  {
+    "id": "pk_slider_hue_shift",
+    "en": "Hue shift",
+    "ru": "Сдвиг оттенка "
+  },
+  {
+    "id": "pk_slider_colors",
+    "en": "Colors space",
+    "ru": "Цветовое пространство "
+  },
+  {
+    "id": "pk_slider_saturation",
+    "en": "Saturation",
+    "ru": "Насыщенность "
+  },
+  {
+    "id": "pk_slider_luminosity",
+    "en": "Luminosity",
+    "ru": "Яркость "
+  },
+  {
+    "id": "pk_slider_randomize",
+    "en": "Shuffle",
+    "ru": "Перемешать "
+  },
+  {
+    "id": "pk_slider_reverse",
+    "en": "Reverse",
+    "ru": "Обеспечить регресс "
+  },
+  {
+    "id": "pk_slider_diverge",
+    "en": "Diverge",
+    "ru": "Расходиться "
+  },
+  {
+    "id": "pk_btn_set_default_palette",
+    "en": "Use the default palette",
+    "ru": "Использовать палитру по умолчанию "
   },
   {
     "id": "search_placeholder",

@@ -150,6 +150,13 @@ export function generateButtons() {
       action: () => {
         new ShareModal();
       }
+    }),
+    new Button({
+      key: 'btn_bug_report',
+      classesIcon: ['fa', 'fa-bug'],
+      action: () => {
+        window.open(mx.settings.links.repositoryIssues, '_blank');
+      }
     })
   ];
 }

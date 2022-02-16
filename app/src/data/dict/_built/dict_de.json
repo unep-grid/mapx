@@ -1762,12 +1762,12 @@
   {
     "id": "btn_cancel",
     "en": "Cancel",
-    "de": "Stornieren "
+    "de": "Abbrechen"
   },
   {
     "id": "btn_copy",
     "en": "Copy",
-    "de": "Kopieren "
+    "de": "Kopieren"
   },
   {
     "id": "btn_share",
@@ -1777,27 +1777,27 @@
   {
     "id": "btn_browse",
     "en": "Browse...",
-    "de": "Durchsuche... "
+    "de": "Öffnen..."
   },
   {
     "id": "btn_help",
     "en": "Help",
-    "de": "Hilfe "
+    "de": "Hilfe"
   },
   {
     "id": "btn_geolocate_user",
-    "en": "Geolocate",
-    "de": "Geolocate "
+    "en": "Zoom to my location",
+    "de": "Zu meinem Standort zoomen"
   },
   {
     "id": "btn_close",
     "en": "Close",
-    "de": "Schließen "
+    "de": "Schliessen"
   },
   {
     "id": "btn_open",
     "en": "Open",
-    "de": "Offen"
+    "de": "Öffnen"
   },
   {
     "id": "btn_join_project_long",
@@ -6045,86 +6045,6 @@
     "de": "MapX ist derzeit aufgrund der Serverwartung nicht verfügbar.<br> Komm später am Tag zurück!<br><br> Mit freundlichen Grüßen Ihr MapX-Team "
   },
   {
-    "id": "pk_panel_options",
-    "en": "Display options",
-    "de": "Anzeigeoptionen "
-  },
-  {
-    "id": "pk_tab_settings",
-    "en": "Palette tool",
-    "de": "Palettenwerkzeug "
-  },
-  {
-    "id": "pk_tab_palettes",
-    "en": "Palettes",
-    "de": "Paletten "
-  },
-  {
-    "id": "pk_tab_edit_json",
-    "en": "Edit JSON",
-    "de": "Bearbeiten Sie JSON "
-  },
-  {
-    "id": "pk_btn_add",
-    "en": "Add",
-    "de": "Hinzufügen "
-  },
-  {
-    "id": "pk_btn_close",
-    "en": "Close",
-    "de": "Schließen "
-  },
-  {
-    "id": "pk_slider_n_hue_rotation",
-    "en": "Number of hue rotation",
-    "de": "Anzahl der Farbtonrotationen "
-  },
-  {
-    "id": "pk_slider_n_colors",
-    "en": "Number of colors",
-    "de": "Anzahl der Farben "
-  },
-  {
-    "id": "pk_slider_hue_shift",
-    "en": "Hue shift",
-    "de": "Farbtonverschiebung "
-  },
-  {
-    "id": "pk_slider_colors",
-    "en": "Colors space",
-    "de": "Farben Raum "
-  },
-  {
-    "id": "pk_slider_saturation",
-    "en": "Saturation",
-    "de": "Sättigung "
-  },
-  {
-    "id": "pk_slider_luminosity",
-    "en": "Luminosity",
-    "de": "Helligkeit "
-  },
-  {
-    "id": "pk_slider_randomize",
-    "en": "Shuffle",
-    "de": "Mischen "
-  },
-  {
-    "id": "pk_slider_reverse",
-    "en": "Reverse",
-    "de": "Umkehren "
-  },
-  {
-    "id": "pk_slider_diverge",
-    "en": "Diverge",
-    "de": "Divergieren "
-  },
-  {
-    "id": "pk_btn_set_default_palette",
-    "en": "Use the default palette",
-    "de": "Verwenden Sie die Standardpalette "
-  },
-  {
     "id": "draft_recover_modal_title",
     "en": "Data recovery",
     "de": "Datenwiederherstellung "
@@ -6600,6 +6520,11 @@
     "de": "Bedienfeld "
   },
   {
+    "id": "btn_bug_report",
+    "en": "Report a bug / feature request",
+    "de": "Melden Sie einen Fehler / eine Feature-Anfrage"
+  },
+  {
     "id": "fetch_views_not_found_modal_title",
     "en": "Views not found",
     "de": "Ansichten nicht gefunden"
@@ -6723,6 +6648,86 @@
     "id": "tool_mirror_res_warn",
     "en": "The raw data will be read from our server. However, we do not store or use it in any way. Everything is simply reflected. IP addresses are stored in memory to prevent abuse.",
     "de": "Die Rohdaten werden von unserem Server gelesen. Wir speichern oder verwenden sie jedoch in keiner Weise. Alles wird einfach reflektiert. IP-Adressen werden im Speicher gespeichert, um Missbrauch zu verhindern."
+  },
+  {
+    "id": "pk_panel_options",
+    "en": "Display options",
+    "de": "Anzeigeoptionen "
+  },
+  {
+    "id": "pk_tab_settings",
+    "en": "Palette tool",
+    "de": "Palettenwerkzeug "
+  },
+  {
+    "id": "pk_tab_palettes",
+    "en": "Palettes",
+    "de": "Paletten "
+  },
+  {
+    "id": "pk_tab_edit_json",
+    "en": "Edit JSON",
+    "de": "Bearbeiten Sie JSON "
+  },
+  {
+    "id": "pk_btn_add",
+    "en": "Add",
+    "de": "Hinzufügen "
+  },
+  {
+    "id": "pk_btn_close",
+    "en": "Close",
+    "de": "Schließen "
+  },
+  {
+    "id": "pk_slider_n_hue_rotation",
+    "en": "Number of hue rotation",
+    "de": "Anzahl der Farbtonrotationen "
+  },
+  {
+    "id": "pk_slider_n_colors",
+    "en": "Number of colors",
+    "de": "Anzahl der Farben "
+  },
+  {
+    "id": "pk_slider_hue_shift",
+    "en": "Hue shift",
+    "de": "Farbtonverschiebung "
+  },
+  {
+    "id": "pk_slider_colors",
+    "en": "Colors space",
+    "de": "Farben Raum "
+  },
+  {
+    "id": "pk_slider_saturation",
+    "en": "Saturation",
+    "de": "Sättigung "
+  },
+  {
+    "id": "pk_slider_luminosity",
+    "en": "Luminosity",
+    "de": "Helligkeit "
+  },
+  {
+    "id": "pk_slider_randomize",
+    "en": "Shuffle",
+    "de": "Mischen "
+  },
+  {
+    "id": "pk_slider_reverse",
+    "en": "Reverse",
+    "de": "Umkehren "
+  },
+  {
+    "id": "pk_slider_diverge",
+    "en": "Diverge",
+    "de": "Divergieren "
+  },
+  {
+    "id": "pk_btn_set_default_palette",
+    "en": "Use the default palette",
+    "de": "Verwenden Sie die Standardpalette "
   },
   {
     "id": "search_placeholder",

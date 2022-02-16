@@ -1786,8 +1786,8 @@
   },
   {
     "id": "btn_geolocate_user",
-    "en": "Geolocate",
-    "fa": "لغو "
+    "en": "Zoom to my location",
+    "fa": "به مکان من زوم کنید"
   },
   {
     "id": "btn_close",
@@ -6045,86 +6045,6 @@
     "fa": "MapX در حال حاضر به دلیل نگهداری سرور در دسترس نیست.<br> در روز بعد برگرد!<br><br> با احترام ، تیم MapX شما "
   },
   {
-    "id": "pk_panel_options",
-    "en": "Display options",
-    "fa": "گزینه های نمایش "
-  },
-  {
-    "id": "pk_tab_settings",
-    "en": "Palette tool",
-    "fa": "ابزار پالت "
-  },
-  {
-    "id": "pk_tab_palettes",
-    "en": "Palettes",
-    "fa": "پالت ها "
-  },
-  {
-    "id": "pk_tab_edit_json",
-    "en": "Edit JSON",
-    "fa": "JSON را ویرایش کنید "
-  },
-  {
-    "id": "pk_btn_add",
-    "en": "Add",
-    "fa": "اضافه کردن "
-  },
-  {
-    "id": "pk_btn_close",
-    "en": "Close",
-    "fa": "نزدیک "
-  },
-  {
-    "id": "pk_slider_n_hue_rotation",
-    "en": "Number of hue rotation",
-    "fa": "تعداد چرخش رنگ "
-  },
-  {
-    "id": "pk_slider_n_colors",
-    "en": "Number of colors",
-    "fa": "تعداد رنگها "
-  },
-  {
-    "id": "pk_slider_hue_shift",
-    "en": "Hue shift",
-    "fa": "تغییر رنگ "
-  },
-  {
-    "id": "pk_slider_colors",
-    "en": "Colors space",
-    "fa": "فضای رنگها "
-  },
-  {
-    "id": "pk_slider_saturation",
-    "en": "Saturation",
-    "fa": "اشباع "
-  },
-  {
-    "id": "pk_slider_luminosity",
-    "en": "Luminosity",
-    "fa": "درخشندگی "
-  },
-  {
-    "id": "pk_slider_randomize",
-    "en": "Shuffle",
-    "fa": "بر زدن "
-  },
-  {
-    "id": "pk_slider_reverse",
-    "en": "Reverse",
-    "fa": "معکوس "
-  },
-  {
-    "id": "pk_slider_diverge",
-    "en": "Diverge",
-    "fa": "واگرایی "
-  },
-  {
-    "id": "pk_btn_set_default_palette",
-    "en": "Use the default palette",
-    "fa": "از پالت پیش فرض استفاده کنید "
-  },
-  {
     "id": "draft_recover_modal_title",
     "en": "Data recovery",
     "fa": "بازیابی اطلاعات "
@@ -6600,6 +6520,11 @@
     "fa": "پانل کنترل "
   },
   {
+    "id": "btn_bug_report",
+    "en": "Report a bug / feature request",
+    "fa": "گزارش یک اشکال / درخواست ویژگی"
+  },
+  {
     "id": "fetch_views_not_found_modal_title",
     "en": "Views not found",
     "fa": "بازدیدها یافت نشد"
@@ -6723,6 +6648,86 @@
     "id": "tool_mirror_res_warn",
     "en": "The raw data will be read from our server. However, we do not store or use it in any way. Everything is simply reflected. IP addresses are stored in memory to prevent abuse.",
     "fa": "داده های خام از سرور ما خوانده می شود. با این حال، ما آن را به هیچ وجه ذخیره یا استفاده نمی کنیم. همه چیز به سادگی منعکس می شود. آدرس های IP در حافظه ذخیره می شوند تا از سوء استفاده جلوگیری شود."
+  },
+  {
+    "id": "pk_panel_options",
+    "en": "Display options",
+    "fa": "گزینه های نمایش "
+  },
+  {
+    "id": "pk_tab_settings",
+    "en": "Palette tool",
+    "fa": "ابزار پالت "
+  },
+  {
+    "id": "pk_tab_palettes",
+    "en": "Palettes",
+    "fa": "پالت ها "
+  },
+  {
+    "id": "pk_tab_edit_json",
+    "en": "Edit JSON",
+    "fa": "JSON را ویرایش کنید "
+  },
+  {
+    "id": "pk_btn_add",
+    "en": "Add",
+    "fa": "اضافه کردن "
+  },
+  {
+    "id": "pk_btn_close",
+    "en": "Close",
+    "fa": "نزدیک "
+  },
+  {
+    "id": "pk_slider_n_hue_rotation",
+    "en": "Number of hue rotation",
+    "fa": "تعداد چرخش رنگ "
+  },
+  {
+    "id": "pk_slider_n_colors",
+    "en": "Number of colors",
+    "fa": "تعداد رنگها "
+  },
+  {
+    "id": "pk_slider_hue_shift",
+    "en": "Hue shift",
+    "fa": "تغییر رنگ "
+  },
+  {
+    "id": "pk_slider_colors",
+    "en": "Colors space",
+    "fa": "فضای رنگها "
+  },
+  {
+    "id": "pk_slider_saturation",
+    "en": "Saturation",
+    "fa": "اشباع "
+  },
+  {
+    "id": "pk_slider_luminosity",
+    "en": "Luminosity",
+    "fa": "درخشندگی "
+  },
+  {
+    "id": "pk_slider_randomize",
+    "en": "Shuffle",
+    "fa": "بر زدن "
+  },
+  {
+    "id": "pk_slider_reverse",
+    "en": "Reverse",
+    "fa": "معکوس "
+  },
+  {
+    "id": "pk_slider_diverge",
+    "en": "Diverge",
+    "fa": "واگرایی "
+  },
+  {
+    "id": "pk_btn_set_default_palette",
+    "en": "Use the default palette",
+    "fa": "از پالت پیش فرض استفاده کنید "
   },
   {
     "id": "search_placeholder",

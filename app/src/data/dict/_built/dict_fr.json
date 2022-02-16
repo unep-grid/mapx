@@ -1777,7 +1777,7 @@
   {
     "id": "btn_browse",
     "en": "Browse...",
-    "fr": "Ouvrir"
+    "fr": "Ouvrir..."
   },
   {
     "id": "btn_help",
@@ -1786,8 +1786,8 @@
   },
   {
     "id": "btn_geolocate_user",
-    "en": "Geolocate",
-    "fr": "Géolocaliser"
+    "en": "Zoom to my location",
+    "fr": "Zoom sur ma position"
   },
   {
     "id": "btn_close",
@@ -6045,86 +6045,6 @@
     "fr": "MapX est temporairement indisponible, des travaux de maintenance sont en cours. <br> Merci de revenir plus tard dans la journée ! <br><br> Votre équipe MapX."
   },
   {
-    "id": "pk_panel_options",
-    "en": "Display options",
-    "fr": "Afficher les options"
-  },
-  {
-    "id": "pk_tab_settings",
-    "en": "Palette tool",
-    "fr": "Outil de palette"
-  },
-  {
-    "id": "pk_tab_palettes",
-    "en": "Palettes",
-    "fr": "Palettes"
-  },
-  {
-    "id": "pk_tab_edit_json",
-    "en": "Edit JSON",
-    "fr": "Éditer en JSON"
-  },
-  {
-    "id": "pk_btn_add",
-    "en": "Add",
-    "fr": "Ajout"
-  },
-  {
-    "id": "pk_btn_close",
-    "en": "Close",
-    "fr": "Fermer"
-  },
-  {
-    "id": "pk_slider_n_hue_rotation",
-    "en": "Number of hue rotation",
-    "fr": "Nombre de rotation des teintes"
-  },
-  {
-    "id": "pk_slider_n_colors",
-    "en": "Number of colors",
-    "fr": "Nombre de couleurs"
-  },
-  {
-    "id": "pk_slider_hue_shift",
-    "en": "Hue shift",
-    "fr": "Décalage de teintes"
-  },
-  {
-    "id": "pk_slider_colors",
-    "en": "Colors space",
-    "fr": "Espace de couleurs"
-  },
-  {
-    "id": "pk_slider_saturation",
-    "en": "Saturation",
-    "fr": "Saturation"
-  },
-  {
-    "id": "pk_slider_luminosity",
-    "en": "Luminosity",
-    "fr": "Luminosité"
-  },
-  {
-    "id": "pk_slider_randomize",
-    "en": "Shuffle",
-    "fr": "Aléatoire"
-  },
-  {
-    "id": "pk_slider_reverse",
-    "en": "Reverse",
-    "fr": "Inverser l'ordre"
-  },
-  {
-    "id": "pk_slider_diverge",
-    "en": "Diverge",
-    "fr": "Diverger"
-  },
-  {
-    "id": "pk_btn_set_default_palette",
-    "en": "Use the default palette",
-    "fr": "Utiliser la palette par default"
-  },
-  {
     "id": "draft_recover_modal_title",
     "en": "Data recovery",
     "fr": "Récupération de données"
@@ -6600,6 +6520,11 @@
     "fr": "Panneau des contrôles"
   },
   {
+    "id": "btn_bug_report",
+    "en": "Report a bug / feature request",
+    "fr": "Signaler un bug / demande de fonctionnalité"
+  },
+  {
     "id": "fetch_views_not_found_modal_title",
     "en": "Views not found",
     "fr": "Vues non trouvées"
@@ -6723,6 +6648,86 @@
     "id": "tool_mirror_res_warn",
     "en": "The raw data will be read from our server. However, we do not store or use it in any way. Everything is simply reflected. IP addresses are stored in memory to prevent abuse.",
     "fr": "Les données brutes seront lues à partir de notre serveur. Cependant, nous ne les stockons ni ne les utilisons de quelque manière que ce soit. Tout est simplement réfléchi. Les adresses IP sont stockées en mémoire pour éviter les abus."
+  },
+  {
+    "id": "pk_panel_options",
+    "en": "Display options",
+    "fr": "Afficher les options"
+  },
+  {
+    "id": "pk_tab_settings",
+    "en": "Palette tool",
+    "fr": "Outil de palette"
+  },
+  {
+    "id": "pk_tab_palettes",
+    "en": "Palettes",
+    "fr": "Palettes"
+  },
+  {
+    "id": "pk_tab_edit_json",
+    "en": "Edit JSON",
+    "fr": "Éditer en JSON"
+  },
+  {
+    "id": "pk_btn_add",
+    "en": "Add",
+    "fr": "Ajout"
+  },
+  {
+    "id": "pk_btn_close",
+    "en": "Close",
+    "fr": "Fermer"
+  },
+  {
+    "id": "pk_slider_n_hue_rotation",
+    "en": "Number of hue rotation",
+    "fr": "Nombre de rotation des teintes"
+  },
+  {
+    "id": "pk_slider_n_colors",
+    "en": "Number of colors",
+    "fr": "Nombre de couleurs"
+  },
+  {
+    "id": "pk_slider_hue_shift",
+    "en": "Hue shift",
+    "fr": "Décalage de teintes"
+  },
+  {
+    "id": "pk_slider_colors",
+    "en": "Colors space",
+    "fr": "Espace de couleurs"
+  },
+  {
+    "id": "pk_slider_saturation",
+    "en": "Saturation",
+    "fr": "Saturation"
+  },
+  {
+    "id": "pk_slider_luminosity",
+    "en": "Luminosity",
+    "fr": "Luminosité"
+  },
+  {
+    "id": "pk_slider_randomize",
+    "en": "Shuffle",
+    "fr": "Aléatoire"
+  },
+  {
+    "id": "pk_slider_reverse",
+    "en": "Reverse",
+    "fr": "Inverser l'ordre"
+  },
+  {
+    "id": "pk_slider_diverge",
+    "en": "Diverge",
+    "fr": "Diverger"
+  },
+  {
+    "id": "pk_btn_set_default_palette",
+    "en": "Use the default palette",
+    "fr": "Utiliser la palette par default"
   },
   {
     "id": "search_placeholder",
