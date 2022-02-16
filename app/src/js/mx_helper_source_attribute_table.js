@@ -1,3 +1,5 @@
+import {getArrayDistinct} from './array_stat/index.js';
+
 export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({}, opt);
   const h = mx.helpers;
@@ -289,7 +291,7 @@ export function getTableAttributeConfigFromView(view) {
   attributes = h.isArray(attributes) ? attributes : [attributes];
   attributes = attributes.concat(attribute);
   attributes = attributes.concat(['gid']);
-  attributes = h.getArrayStat({arr: attributes, stat: 'distinct'});
+  attributes = getArrayDistinct(attributes);
   let labelsDict = h.path(view, '_meta.text.attributes_alias') || {};
   let labels = attributes.map((a) => {
     return labelsDict[a] ? labelsDict[a][language] || labelsDict[a].en || a : a;

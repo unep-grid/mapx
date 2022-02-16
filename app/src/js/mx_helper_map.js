@@ -19,6 +19,7 @@ import {setBusy} from './mx_helper_misc.js';
 import {modal, modalGetAll, modalCloseAll} from './mx_helper_modal.js';
 import {errorHandler} from './error_handler/index.js';
 import {waitTimeoutAsync} from './animation_frame';
+import {getArrayDiff, getArrayDistinct} from './array_stat/index.js';
 
 /**
  * Convert point in  degrees to meter
@@ -1292,7 +1293,7 @@ export async function initMapxStatic(o) {
     'idViewsOpen'
   ]);
 
-  const idViews = h.getArrayDistinct(idViewsQuery).reverse();
+  const idViews = getArrayDistinct(idViewsQuery).reverse();
 
   /**
    * Update language
@@ -1953,11 +1954,22 @@ export async function updateViewsList(opt) {
         viewsList.setModeFlat(true, {permanent: true});
       }
       const idViewsOpen = conf.idViewsOpen;
-      const idViews = conf.idViews;
       const isFilterActivated = conf.isFilterActivated;
 
       /**
-       * Add/open views
+       * Move view to open to the top
+       */
+      if (idViewsOpen.length) {
+        const idViewsOpenInv = idViewsOpen.reverse();
+        viewsList.setModeAnimate(false);
+        for (const id of idViewsOpenInv) {
+          viewsList.moveTargetTop(id);
+        }
+        viewsList.setModeAnimate(true);
+      }
+
+      /**
+       * Add views views
        */
       for (const id of idViewsOpen) {
         await h.viewAdd(id);
@@ -1972,17 +1984,10 @@ export async function updateViewsList(opt) {
       }
 
       /**
-       * set order
+       * Update layers order
        */
-      if (idViews.length || idViewsOpen.length) {
-        const ids = Array.from(new Set([...idViews,...idViewsOpen])); 
-        viewsList.setModeAnimate(false);
-        for(const id of ids.reverse()){
-         viewsList.moveTargetTop(id);
-        }
-        viewsList.setModeAnimate(true);
-        await h.viewsLayersOrderUpdate()
-      }
+
+      await h.viewsLayersOrderUpdate();
     }
 
     mx.events.fire({
@@ -2100,8 +2105,8 @@ export async function viewsCheckedUpdate(o) {
    * Update views groups
    */
   vVisible.push(...h.getViewsOpen());
-  vToRemove.push(...h.getArrayDiff(vVisible, vChecked));
-  vToAdd.push(...h.getArrayDiff(vChecked, vVisible));
+  vToRemove.push(...getArrayDiff(vVisible, vChecked));
+  vToAdd.push(...getArrayDiff(vChecked, vVisible));
 
   /**
    * View to add
@@ -3369,7 +3374,7 @@ export function getLayerByPrefix(o) {
     const layerNames = layers.map((l) =>
       o.base ? h.getLayerBaseName(l.id) : l.id
     );
-    return h.getArrayDistinct(layerNames);
+    return getArrayDistinct(layerNames);
   } else {
     return layers;
   }
@@ -5207,10 +5212,7 @@ export function getLayersPropertiesAtPoint(opt) {
               let value = f.properties[p];
               let values = out[p] || [];
               values = values.concat(value);
-              out[p] = h.getArrayStat({
-                stat: 'distinct',
-                arr: values
-              });
+              out[p] = getArrayDistinct(values);
             }
           }
         } else {
@@ -5236,7 +5238,7 @@ export async function makeSearchBox(o) {
   }
   const elViewParent = h.getViewEl(view).parentElement;
 
-  const s = await h.moduleLoad('selectize');
+  await h.moduleLoad('selectize');
 
   const attr = h.path(view, 'data.attribute.name');
 

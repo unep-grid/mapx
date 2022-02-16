@@ -246,6 +246,7 @@ function getArrayIntersect(a, b) {
 /**
  * Deduplicate items
  * @param {Array} a First array
+ * @return {Array} Array with no duplicate
  */
 function getArrayDistinct(a) {
   return Array.from(new Set(a));

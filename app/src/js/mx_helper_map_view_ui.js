@@ -1,6 +1,7 @@
 import {NestedList} from './nested_list/index.js';
 import {ViewsFilter} from './views_filter/index.js';
 import {ViewBase} from './views_builder/view_base.js';
+import {getArrayDistinct} from './array_stat/index.js';
 
 /**
  * Get the current project views state.
@@ -72,7 +73,7 @@ export function getProjectViewsCollections(opt) {
     }
     return a.concat(h.path(v, 'data.collections', []));
   }, []);
-  return h.getArrayDistinct(collections);
+  return getArrayDistinct(collections);
 }
 
 /**

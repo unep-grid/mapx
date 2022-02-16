@@ -1,5 +1,5 @@
 import {uiReadMore} from './readmore/index.js';
-
+import {getArrayStat} from './array_stat/index.js';
 /*
  * Convert result from getFeaturesValuesByLayers to HTML
  * @param {Object} o Options
@@ -122,7 +122,7 @@ export function featuresToPopup(o) {
       attrNames.forEach((attribute) => {
         var elValue, elPropContainer, elPropToggles;
 
-        var values = h.getArrayStat({
+        var values = getArrayStat({
           stat: 'sortNatural',
           arr: attributes[attribute]
         });

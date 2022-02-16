@@ -1,5 +1,5 @@
 import {FlashItem} from './icon_flash';
-
+import {getArrayDistinct} from './array_stat/index.js';
 /**
  * Fill mising value of target with source object
  * NOTE: Similar to Object.assign, with handling of  "empty" values for each types ('',{},[],null,undefined, ...)
@@ -204,19 +204,22 @@ export function firstOf(a) {
  * @param {String} template e.g. "Loading view {{vn}} in {{vl}} "
  * @param {Object} data to update the template with. e.g. {vn:8,vl:10}
  * @param {Object} opt Options,
- * @param {Boolean} opt.encodeURIComponent Encode 
+ * @param {Boolean} opt.encodeURIComponent Encode
  * @return {String} parsed string
  */
-export function parseTemplate(template, data,opt) {
-  opt = Object.assign({
-     encodeURIComponent:false
-  },opt)
-  return template.replace(/{{([^{}]+)}}/g, (_, key)=>{
-    let txt =  data[key] || '';
-    if(opt.encodeURIComponent){
-      txt = encodeURIComponent(txt); 
+export function parseTemplate(template, data, opt) {
+  opt = Object.assign(
+    {
+      encodeURIComponent: false
+    },
+    opt
+  );
+  return template.replace(/{{([^{}]+)}}/g, (_, key) => {
+    let txt = data[key] || '';
+    if (opt.encodeURIComponent) {
+      txt = encodeURIComponent(txt);
     }
-    return txt
+    return txt;
   });
 }
 
@@ -657,8 +660,7 @@ export function getDistinctIndexWords(view) {
     toString(view.data.abstract);
 
   str = str.replace(/[^0-9a-zA-Z]+/g, ';').split(';');
-
-  str = mx.helpers.getArrayStat({arr: str, stat: 'distinct'});
+  str = getArrayDistinct(str);
   return str.join(' ');
 }
 
@@ -1792,7 +1794,7 @@ export function htmlToData(o) {
           }
         }
       }
-      return mx.helpers.getArrayStat({arr: result, stat: 'distinct'}).join(' ');
+      return getArrayDistinct(result).join(' ');
     }
 
     // looping through the element's children
@@ -1802,8 +1804,7 @@ export function htmlToData(o) {
         styles = styles.concat(readStyles(toArray(el.children)));
         return styles;
       }, []);
-
-      return mx.helpers.getArrayStat({arr: res, stat: 'distinct'}).join(' ');
+      return getArrayDistinct(res).join(' ');
     }
 
     function setImage(url, resolve, reject) {

@@ -1,5 +1,5 @@
+import {getArrayDistinct, getArrayDiff} from './array_stat/index.js';
 let start;
-
 export async function fetchViews(o) {
   const h = mx.helpers;
   o = o || {};
@@ -76,7 +76,7 @@ export async function fetchViews(o) {
     opt.idViews.push(...opt.idViewsOpen);
   }
 
-  opt.idViews = h.getArrayDistinct(opt.idViews);
+  opt.idViews = getArrayDistinct(opt.idViews);
 
   const url = new URL(host);
   for (let id of queryItems) {
@@ -98,7 +98,7 @@ export async function fetchViews(o) {
    */
   const hasModalLogin = !!document.getElementById('loginCode');
   const idViewsExist = dataOut.views.map((v) => v.id);
-  const idViewsDiff = h.getArrayDiff(
+  const idViewsDiff = getArrayDiff(
     opt.idViews,
     idViewsExist
   );
@@ -114,7 +114,7 @@ export async function fetchViews(o) {
       }
       dataOut.views.unshift(...tmpViews);
       const idViewsAll = dataOut.views.map((v) => v.id);
-      const idViewsNotFound = h.getArrayDiff(
+      const idViewsNotFound = getArrayDiff(
         idViewsDiff,
         idViewsAll
       );
