@@ -97,9 +97,10 @@ export async function fetchViews(o) {
    * Handle requested but missing views
    */
   const hasModalLogin = !!document.getElementById('loginCode');
+  const idViewsExist = dataOut.views.map((v) => v.id);
   const idViewsDiff = h.getArrayDiff(
     opt.idViews,
-    dataOut.views.map((v) => v.id)
+    idViewsExist
   );
   if (idViewsDiff.length > 0 && !hasModalLogin) {
     const addViewTemp = await h.modalConfirm({
@@ -112,9 +113,10 @@ export async function fetchViews(o) {
         view._temp = true;
       }
       dataOut.views.unshift(...tmpViews);
+      const idViewsAll = dataOut.views.map((v) => v.id);
       const idViewsNotFound = h.getArrayDiff(
         idViewsDiff,
-        dataOut.views.map((v) => v.id)
+        idViewsAll
       );
       if (idViewsNotFound.length > 0) {
         h.modal({
@@ -125,7 +127,6 @@ export async function fetchViews(o) {
       }
     }
   }
-
   return dataOut;
 }
 

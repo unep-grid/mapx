@@ -538,7 +538,13 @@ export function initListenerGlobal() {
    *  Events
    */
   mx.events.on({
-    type: ['view_added', 'view_removed', 'story_step', 'language_change'],
+    type: [
+      'view_added',
+      'view_removed',
+      'story_step',
+      'language_change',
+      'views_list_ordered'
+    ],
     idGroup: 'update_share_modale',
     callback: updateSharingTool
   });
@@ -1817,13 +1823,14 @@ export async function getViewRemote(idView) {
  */
 export async function getViewsRemote(idViews) {
   const h = mx.helpers;
-  const views = await Promise.all(idViews.map((id) => getViewRemote(id)));
-  return views.reduce((a, v) => {
-    if (h.isView(v)) {
-      a.push(v);
+  const views = [];
+  for (let id of idViews) {
+    const view = await getViewRemote(id);
+    if (h.isView(view)) {
+      views.push(view);
     }
-    return a;
-  }, []);
+  }
+  return views;
 }
 
 /**
@@ -1935,7 +1942,6 @@ export async function updateViewsList(opt) {
     /**
      * Add additional logic if query param should be used
      */
-
     if (opt.useQueryFilters) {
       const conf = h.getQueryInit();
       const viewsList = h.getViewsList();
@@ -1949,6 +1955,7 @@ export async function updateViewsList(opt) {
       const idViewsOpen = conf.idViewsOpen;
       const idViews = conf.idViews;
       const isFilterActivated = conf.isFilterActivated;
+
       /**
        * Add/open views
        */
@@ -1967,12 +1974,14 @@ export async function updateViewsList(opt) {
       /**
        * set order
        */
-      if (idViews.length) {
-        viewsList.sortGroup(null, {
-          mode: 'ids',
-          asc: true,
-          ids: idViews
-        });
+      if (idViews.length || idViewsOpen.length) {
+        const ids = Array.from(new Set([...idViews,...idViewsOpen])); 
+        viewsList.setModeAnimate(false);
+        for(const id of ids.reverse()){
+         viewsList.moveTargetTop(id);
+        }
+        viewsList.setModeAnimate(true);
+        await h.viewsLayersOrderUpdate()
       }
     }
 
@@ -2126,6 +2135,13 @@ export async function viewsCheckedUpdate(o) {
    * Set layer order
    */
   await h.viewsLayersOrderUpdate(o);
+
+  /**
+   * Fire event
+   */
+  mx.events.fire({
+    type: 'views_list_ordered'
+  });
   return done;
 }
 
@@ -2565,13 +2581,15 @@ export function updateViewParams(o) {
  * @return {Array} view id array or null
  */
 export function getViewsOrder() {
-  const res = [];
   const viewContainer = document.querySelector('.mx-views-list');
   if (!viewContainer) {
     return null;
   }
   const els = viewContainer.querySelectorAll('.mx-view-item');
-  els.forEach((el) => res.push(el.dataset.view_id));
+  const res = [];
+  for (let el of els) {
+    res.push(el.dataset.view_id);
+  }
   return res;
 }
 
@@ -3122,10 +3140,10 @@ export async function viewRemove(view) {
 export function getViewsOpen() {
   const h = mx.helpers;
   const open = [];
-  const views = h.getViews();
-  for (const view of views) {
-    if (h.isViewOpen(view)) {
-      open.push(view.id);
+  const viewOrder = h.getViewsOrder();
+  for (let idView of viewOrder) {
+    if (h.isViewOpen(idView)) {
+      open.push(idView);
     }
   }
   return open;
@@ -5390,7 +5408,7 @@ export async function zoomToViewId(o) {
       return;
     }
 
-    const res = await Promise.race([zoom(), waitTimeoutAsync(timeout,cancel)]);
+    const res = await Promise.race([zoom(), waitTimeoutAsync(timeout, cancel)]);
 
     if (res === 'timeout') {
       console.warn(
@@ -5429,8 +5447,8 @@ export async function zoomToViewId(o) {
       return true;
     }
 
-    function cancel(){
-        cancelByTimeout=true;
+    function cancel() {
+      cancelByTimeout = true;
     }
   } catch (e) {
     throw new Error(e);
