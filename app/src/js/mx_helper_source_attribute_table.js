@@ -1,4 +1,6 @@
 import {getArrayDistinct} from './array_stat/index.js';
+import {modalMarkdown} from './modal_markdown/index.js';
+import {getDictItem} from './mx_helper_language.js';
 
 export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({}, opt);
@@ -212,7 +214,7 @@ export async function showSourceTableAttributeModal(opt) {
       return;
     }
     let title = h.getViewTitle(view);
-    h.getDictItem('tbl_attr_modal_title')
+    getDictItem('tbl_attr_modal_title')
       .then((t) => {
         elTitle.innerText = t + ' – ' + title;
       })
@@ -305,9 +307,11 @@ export function getTableAttributeConfigFromView(view) {
   };
 }
 
-function handleHelp(){
-  const wLink = new URL(mx.settings.links.repositoryWikiAttributeTable);
-  window.open(wLink, '_blank');
+function handleHelp() {
+  return modalMarkdown({
+    title: getDictItem('btn_help'),
+    wiki: 'Attribute-table'
+  });
 }
 
 function getHandsonLanguageCode() {

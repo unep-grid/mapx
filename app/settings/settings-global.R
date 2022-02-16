@@ -22,6 +22,7 @@ config[['brand']] <- list(
   name = 'MapX'
 )
 
+# ⚠️  also defined in app/src/js/mx_settings_global.json 
 config[["links"]] <- list(
   mainProjectPage = "https://mapx.org",
   repositoryIssues = "https://github.com/unep-grid/map-x-mgl/issues",

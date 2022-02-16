@@ -1800,6 +1800,11 @@
     "de": "Öffnen"
   },
   {
+    "id": "btn_open_wiki",
+    "en": "Open the wiki",
+    "de": "Wiki öffnen"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "de": "Mitgliedschaftsantrag für dieses Projekt "

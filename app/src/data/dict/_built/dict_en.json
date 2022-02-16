@@ -1440,6 +1440,10 @@
     "en": "Open"
   },
   {
+    "id": "btn_open_wiki",
+    "en": "Open the wiki"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project"
   },

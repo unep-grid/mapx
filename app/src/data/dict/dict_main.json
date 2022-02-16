@@ -416,6 +416,19 @@
     "de": "Öffnen"
   },
   {
+    "id": "btn_open_wiki",
+    "en": "Open the wiki",
+    "fr": "Ouvrir le wiki",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": "Wiki öffnen"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "fr": "Demande d'adhésion à ce projet",

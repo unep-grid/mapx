@@ -13,6 +13,7 @@ import {
   storyClose,
   isStoryPlaying
 } from './../story_map/index.js';
+import {modalMarkdown} from '../modal_markdown/index.js';
 
 export function generateButtons() {
   return [
@@ -136,11 +137,10 @@ export function generateButtons() {
     new Button({
       key: 'btn_about',
       classesIcon: ['fa', 'fa-info'],
-      ignore: () => mx.settings.mode.static === true,
-      action: () => {
-        Shiny.onInputChange('btn_control', {
-          time: new Date(),
-          value: 'showAbout'
+      action: async () => {
+        return modalMarkdown({
+          title: 'Disclaimer',
+          txt: await import('./../../md/disclaimer.md')
         });
       }
     }),

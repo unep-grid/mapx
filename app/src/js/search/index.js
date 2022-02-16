@@ -4,6 +4,7 @@ import {storyRead} from './../story_map/index.js';
 import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
 import {getDictItem} from './../mx_helper_language.js';
 import {EventSimple} from './../event_simple';
+import {modalMarkdown} from './../modal_markdown/index.js';
 import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
 import {el, elSpanTranslate, elButtonIcon} from '../el_mapx/index.js';
 import {prefGet, prefSet} from './../user_pref';
@@ -28,6 +29,7 @@ import {
 } from './../is_test/index.js';
 
 import {def} from './default.js';
+
 class Search extends EventSimple {
   constructor(opt) {
     super();
@@ -101,7 +103,7 @@ class Search extends EventSimple {
     const url = `${s.opt('protocol')}${s.opt('host')}:${s.opt('port')}`;
     const language = s.opt('language');
     const elConfig = el('div', [
-      el('label',getDictItem('search_api_key')),
+      el('label', getDictItem('search_api_key')),
       el('pre', s.opt('key')),
       el('label', getDictItem('search_api_host')),
       el('pre', url),
@@ -639,12 +641,19 @@ class Search extends EventSimple {
       content: s._elFilterFlag
     });
 
+    s._elBtnHelp = elButtonIcon('search_help_ui', {
+      icon: 'fa-question',
+      mode: 'icon',
+      classes: [],
+      dataset: {action: 'show_help'}
+    });
+
     s._elInputContainer = el(
       'div',
       {
         class: 'search--input-container'
       },
-      [s._elInput, s._elBtnClear, s._elBtnToggleFilters]
+      [s._elInput, s._elBtnHelp, s._elBtnClear, s._elBtnToggleFilters]
     );
     return s._elInputContainer;
   }
@@ -761,6 +770,14 @@ class Search extends EventSimple {
           {
             s._elFilters.classList.toggle('search--hidden');
             s.vFeedback(e);
+          }
+          break;
+        case 'show_help':
+          {
+            modalMarkdown({
+              title: getDictItem('btn_help'),
+              wiki: 'Search-tool-UI'
+            });
           }
           break;
         case 'update_facet_filter':
@@ -1349,7 +1366,7 @@ class Search extends EventSimple {
        */
       return results;
     } catch (e) {
-      console.warn('Issue while searching',e);
+      console.warn('Issue while searching', e);
     }
   }
 

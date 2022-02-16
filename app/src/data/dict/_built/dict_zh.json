@@ -1800,6 +1800,11 @@
     "zh": "打开"
   },
   {
+    "id": "btn_open_wiki",
+    "en": "Open the wiki",
+    "zh": "打开维基"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "zh": "申请成为此项目的成员"

@@ -1,6 +1,16 @@
-export {mapComposerModalAuto};
+import {getDictItem} from './mx_helper_language.js';
+import {modalMarkdown} from './modal_markdown/index.js';
+import {modal} from './mx_helper_modal.js';
+import {el} from './el/src/index.js';
+import {
+  getMap,
+  getLayerNamesByPrefix,
+  getViewDescription,
+  getViewLegend,
+  getViewTitle
+} from './mx_helper_map.js';
 
-function mapComposerModalAuto() {
+export async function mapComposerModalAuto() {
   const h = mx.helpers;
   const idComposer = 'mapcomposer';
   const oldComposer = document.getElementById(idComposer);
@@ -9,9 +19,9 @@ function mapComposerModalAuto() {
     return false;
   }
 
-  const map = h.getMap();
+  const map = getMap();
 
-  const vVisible = h.getLayerNamesByPrefix({
+  const vVisible = getLayerNamesByPrefix({
     id: map.id,
     prefix: 'MX-',
     base: true
@@ -27,9 +37,9 @@ function mapComposerModalAuto() {
   });
 
   vVisible.forEach((id) => {
-    const title = h.getViewTitle(id);
-    const description = h.getViewDescription(id);
-    const elLegend = h.getViewLegend(id, {
+    const title = getViewTitle(id);
+    const description = getViewDescription(id);
+    const elLegend = getViewLegend(id, {
       clone: true,
       input: false,
       class: true,
@@ -86,65 +96,68 @@ function mapComposerModalAuto() {
   /**
    * Run map composer
    */
-  return h.moduleLoad('map_composer').then((MapComposer) => {
-    const elContainer = h.el('div');
+  const module = await import('./map_composer/index.js');
+  const MapComposer = module.MapComposer;
 
-    state.items.forEach((i) => {
-      if (i.type === 'map') {
-        Object.assign(i.options, {
-          attributionControl: false,
-          style: style,
-          center: map.getCenter(),
-          zoom: map.getZoom(),
-          pitch : map.getPitch(),
-          bearing: map.getBearing()
-        });
-      }
-    });
+  const elContainer = el('div');
 
-    const elBtnHelp = h.el(
-      'div',
-      {
-        class: 'btn btn-default',
-        on: {
-          click: () => {
-            var link = mx.settings.links.repositoryWikiMapComposer;
-            window.open(link, '_blank');
-          }
-        }
-      },
-      h.getDictItem('btn_help')
-    );
-
-    const mc = new MapComposer(elContainer, state, {
-      onDestroy: () => {
-        map.resize();
-      }
-    });
-
-    h.modal({
-      title: 'Map Composer',
-      id: idComposer,
-      buttons: [elBtnHelp],
-      content: elContainer,
-      addSelectize: false,
-      onClose: destroy,
-      addBackground: true,
-      style: {
-        position: 'absolute',
-        width: '80%',
-        height: '100%'
-      },
-      styleContent: {
-        padding: '0px'
-      }
-    });
-
-    function destroy() {
-      mc.destroy();
+  state.items.forEach((i) => {
+    if (i.type === 'map') {
+      Object.assign(i.options, {
+        attributionControl: false,
+        style: style,
+        center: map.getCenter(),
+        zoom: map.getZoom(),
+        pitch: map.getPitch(),
+        bearing: map.getBearing()
+      });
     }
-
-    window.mc = mc;
-    return true;
   });
+
+  const elBtnHelp = el(
+    'div',
+    {
+      class: 'btn btn-default',
+      on: {
+        click: () => {
+          return modalMarkdown({
+            title: getDictItem('btn_help'),
+            wiki: 'Map-composer'
+          });
+        }
+      }
+    },
+    getDictItem('btn_help')
+  );
+
+  const mc = new MapComposer(elContainer, state, {
+    onDestroy: () => {
+      map.resize();
+    }
+  });
+
+  modal({
+    title: 'Map Composer',
+    id: idComposer,
+    buttons: [elBtnHelp],
+    content: elContainer,
+    addSelectize: false,
+    onClose: destroy,
+    addBackground: true,
+    style: {
+      position: 'absolute',
+      width: '80%',
+      height: '100%'
+    },
+    styleContent: {
+      padding: '0px'
+    }
+  });
+
+  function destroy() {
+    mc.destroy();
+  }
+
+  window.mc = mc;
+  return true;
 }

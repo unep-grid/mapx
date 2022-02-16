@@ -4680,6 +4680,19 @@
     "de": "Öffnen"
   },
   {
+    "id": "btn_open_wiki",
+    "en": "Open the wiki",
+    "fr": "Ouvrir le wiki",
+    "es": "abre la wiki",
+    "ru": "Откройте вики",
+    "zh": "打开维基",
+    "ar": "افتح الويكي",
+    "fa": "ویکی را باز کنید",
+    "ps": "ويکي پرانيزئ",
+    "bn": "উইকি খুলুন",
+    "de": "Wiki öffnen"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "fr": "Demande d'adhésion à ce projet",

@@ -1800,6 +1800,11 @@
     "ar": "فتح"
   },
   {
+    "id": "btn_open_wiki",
+    "en": "Open the wiki",
+    "ar": "افتح الويكي"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "ar": "طلب عضوية لهذا المشروع "

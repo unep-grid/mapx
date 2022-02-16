@@ -1800,6 +1800,11 @@
     "bn": "খোলা"
   },
   {
+    "id": "btn_open_wiki",
+    "en": "Open the wiki",
+    "bn": "উইকি খুলুন"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "bn": "এই প্রকল্পের জন্য সদস্যতার অনুরোধ "

@@ -661,6 +661,7 @@ picture {
 .btn-icon > span,
 .btn-icon > i {
   pointer-events: none;
+  min-width: 1em;
 }
 
 .btn-circle {
@@ -1078,6 +1079,10 @@ picture {
 */
 .help-block {
   font-size: 0.8em;
+}
+code {
+  color: var(--mx_ui_link);
+  background-color: var(--mx_ui_background_faded);
 }
 .text-muted,
 .text-muted > * {

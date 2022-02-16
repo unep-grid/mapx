@@ -1800,6 +1800,11 @@
     "ps": "خلاص"
   },
   {
+    "id": "btn_open_wiki",
+    "en": "Open the wiki",
+    "ps": "ويکي پرانيزئ"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "ps": "د دې پروژې لپاره د غړیتوب غوښتنه "

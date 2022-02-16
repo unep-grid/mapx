@@ -1800,6 +1800,11 @@
     "fa": "باز کن"
   },
   {
+    "id": "btn_open_wiki",
+    "en": "Open the wiki",
+    "fa": "ویکی را باز کنید"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "fa": "درخواست عضویت در این پروژه "

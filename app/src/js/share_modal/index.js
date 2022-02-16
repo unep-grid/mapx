@@ -2,6 +2,7 @@ import socialLinks from './social_link.json';
 import shareMode from './share_mode.json';
 import {modal} from '../mx_helper_modal';
 import {EventSimple} from '../event_simple/index.js';
+import {getDictItem} from './../mx_helper_language.js';
 import {
   el,
   elButtonFa,
@@ -23,6 +24,7 @@ import {
 import {FlashItem} from '../icon_flash/index.js';
 import {getQueryParametersAsObject} from '../mx_helper_url.js';
 import './style.less';
+import {modalMarkdown} from '../modal_markdown';
 
 const t = elSpanTranslate;
 
@@ -484,8 +486,10 @@ export class ShareModal extends EventSimple {
    * Open sharing manager wiki
    */
   openHelp() {
-    const wLink = new URL(mx.settings.links.repositoryWikiSharingManager);
-    window.open(wLink, '_blank');
+    return modalMarkdown({
+      title: getDictItem('btn_help'),
+      wiki: 'Sharing-Manager'
+    });
   }
 
   /**

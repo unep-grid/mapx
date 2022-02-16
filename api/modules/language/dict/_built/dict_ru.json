@@ -1800,6 +1800,11 @@
     "ru": "Открытым"
   },
   {
+    "id": "btn_open_wiki",
+    "en": "Open the wiki",
+    "ru": "Откройте вики"
+  },
+  {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
     "ru": "Запрос на участие в этом проекте "

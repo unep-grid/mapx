@@ -3,18 +3,7 @@ import * as styleDefault from './../data/style/style_mapx.json';
 let settings = {
   devicePixelRatio: 0, // updated by getPixelRatio()
   language: 'en',
-  languages: [
-    'en',
-    'fr',
-    'es',
-    'ar',
-    'ru',
-    'zh',
-    'de',
-    'bn',
-    'fa',
-    'ps'
-  ],
+  languages: ['en', 'fr', 'es', 'ar', 'ru', 'zh', 'de', 'bn', 'fa', 'ps'],
   highlightedCountries: [],
   initClosedPanels: false,
   project: {},
@@ -52,7 +41,7 @@ let settings = {
     upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
     routes: {
       getSearchKey: '/get/search/key',
-      getMirror:'/get/mirror',
+      getMirror: '/get/mirror',
       getApiSql: '/get/sql',
       getConfigMap: '/get/config/map',
       getIpInfo: '/get/ip',
@@ -82,7 +71,11 @@ let settings = {
     'theme',
     'colors'
   ],
-  links: [],
+  // ⚠️ also defined in app/settings/settings-global.R
+  links: {
+    repositoryIssues: 'https://github.com/unep-grid/map-x-mgl/issues',
+    appKnowlegdeBase: 'https://www.mapx.org/knowledge-base/'
+  },
   mode: {
     static: false,
     app: false
