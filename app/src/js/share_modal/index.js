@@ -412,7 +412,7 @@ export class ShareModal extends EventSimple {
 
     // Set share string in state and form
     state.shareString = txt;
-    sm._el_input.innerText = txt;
+    sm._el_input.value = txt;
     if (disableLink || disableLinkApp) {
       state.prevent.add('open');
     }
