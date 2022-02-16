@@ -1,15 +1,47 @@
-/* jshint esversion :6 */
-
 export {getArrayStat, getArrayDiff, getArrayIntersect, getArrayDistinct};
-
-
 
 /**
  * Clone an array
  * @param {Array} Source to clone
  */
 function getArrayClone(arr) {
- return arr.slice(0);
+  return arr.slice(0);
+}
+
+/**
+ * Numeric sort
+ * @param {Any} a First element
+ * @param {Any} b Second element
+ * @return {Integer} > 0 b before a, <0a before b, ===0 original order
+ */
+function sortNumber(a, b) {
+  return a - b;
+}
+
+/**
+ *  Natural sort
+ * @note https://gist.github.com/devinus/453520
+ * @param {Any} a First element
+ * @param {Any} b Second element
+ * @return {Integer} > 0 b before a, <0a before b, ===0 original order
+ */
+const numGroups = /(-?\d*\.?\d+)/g;
+function naturalSort(a, b) {
+  const aa = String(a).split(numGroups),
+    bb = String(b).split(numGroups),
+    min = Math.min(aa.length, bb.length);
+
+  for (var i = 0; i < min; i++) {
+    const x = parseFloat(aa[i]) || aa[i].toLowerCase(),
+      y = parseFloat(bb[i]) || bb[i].toLowerCase();
+    if (x < y) {
+      return -1;
+    } else if (x > y) {
+      return 1;
+    }
+  }
+
+  return 0;
 }
 
 /* Get stat of an array
@@ -35,42 +67,17 @@ function getArrayStat(o) {
   ) {
     o.stat = 'quantiles';
   }
-  var arr = getArrayClone(o.arr);
-  var stat = o.stat ? o.stat : 'max';
-  var len_o = arr.length;
-  var len = len_o;
-
-  function sortNumber(a, b) {
-    return a - b;
-  }
-  // https://gist.github.com/devinus/453520
-  var numGroups = /(-?\d*\.?\d+)/g;
-
-  var naturalSort = function(a, b) {
-    var aa = String(a).split(numGroups),
-      bb = String(b).split(numGroups),
-      min = Math.min(aa.length, bb.length);
-
-    for (var i = 0; i < min; i++) {
-      var x = parseFloat(aa[i]) || aa[i].toLowerCase(),
-        y = parseFloat(bb[i]) || bb[i].toLowerCase();
-      if (x < y) {
-        return -1;
-      } else if (x > y) {
-        return 1;
-      }
-    }
-
-    return 0;
-  };
-
-  var opt = {
+  const arr = getArrayClone(o.arr);
+  const stat = o.stat ? o.stat : 'max';
+  const len_o = arr.length;
+  const len = len_o;
+  const opt = {
     sortNatural: function() {
       return arr.sort(naturalSort);
     },
     max: function() {
-      var max = -Infinity;
-      var v = 0;
+      const max = -Infinity;
+      const v = 0;
       while (len--) {
         v = arr.pop();
         if (v > max) {
@@ -80,9 +87,9 @@ function getArrayStat(o) {
       return max;
     },
     min: function() {
-      var min = Infinity;
+      const min = Infinity;
       while (len--) {
-        var v = arr.pop();
+        const v = arr.pop();
         if (v < min) {
           min = v;
         }
@@ -90,21 +97,21 @@ function getArrayStat(o) {
       return min;
     },
     sum: function() {
-      var sum = 0;
+      const sum = 0;
       while (len--) {
         sum += arr.pop();
       }
       return sum;
     },
     mean: function() {
-      var sum = getArrayStat({
+      const sum = getArrayStat({
         stat: 'sum',
         arr: arr
       });
       return sum / len_o;
     },
     median: function() {
-      var median = getArrayStat({
+      const median = getArrayStat({
         stat: 'quantile',
         arr: arr,
         percentile: 50
@@ -112,23 +119,23 @@ function getArrayStat(o) {
       return median;
     },
     quantile: function() {
-      var result;
+      let result;
       arr.sort(sortNumber);
       o.percentile = o.percentile ? o.percentile : 50;
-      var index = (o.percentile / 100) * (arr.length - 1);
+      const index = (o.percentile / 100) * (arr.length - 1);
       if (Math.floor(index) === index) {
         result = arr[index];
       } else {
-        var i = Math.floor(index);
-        var fraction = index - i;
+        const i = Math.floor(index);
+        const fraction = index - i;
         result = arr[i] + (arr[i + 1] - arr[i]) * fraction;
       }
       return result;
     },
     quantiles: function() {
-      var quantiles = {};
+      const quantiles = {};
       o.percentile.forEach(function(x) {
-        var res = getArrayStat({
+        const res = getArrayStat({
           stat: 'quantile',
           arr: arr,
           percentile: x
@@ -142,14 +149,14 @@ function getArrayStat(o) {
     },
     diff: function() {},
     frequency: function() {
-      var areObjects =
+      const areObjects =
         arr[0] && typeof arr[0] === 'object' && arr[0].constructor === Object;
-      var colNames = o.colNames;
+      let colNames = o.colNames;
       if (areObjects) {
-        if (colNames.constructor !== Array){
+        if (colNames.constructor !== Array) {
           throw 'colnames must be array';
         }
-        if (colNames.length === 0){
+        if (colNames.length === 0) {
           colNames = Object.keys(arr[0]);
         }
       } else {
@@ -158,19 +165,20 @@ function getArrayStat(o) {
           arr: arr
         });
       }
-      var table = {};
-      var val;
-      var colName;
+      let val;
+      let colName;
 
-      for (var j = 0, jL = colNames.length; j < jL; j++) {
+      const table = {};
+
+      for (let j = 0, jL = colNames.length; j < jL; j++) {
         colName = colNames[j];
         table[colName] = areObjects ? {} : 0;
-        for (var i = 0, iL = arr.length; i < iL; i++) {
+        for (let i = 0, iL = arr.length; i < iL; i++) {
           if (areObjects) {
             val = arr[i][colName] || null;
             table[colName][val] = table[colName][val] + 1 || 1;
           } else {
-            if (arr[i] === colName){
+            if (arr[i] === colName) {
               table[colName]++;
             }
           }
@@ -179,19 +187,18 @@ function getArrayStat(o) {
       return table;
     },
     sumBy: function() {
-      var colNames = o.colNames;
-      if (colNames.constructor !== Array){
+      const colNames = o.colNames;
+      if (colNames.constructor !== Array) {
         throw 'colnames must be array';
       }
-      if (colNames.length === 0){
+      if (colNames.length === 0) {
         colNames = Object.keys(arr[1]);
       }
-      var table = {};
-      var val, prevVal;
-      var colName;
-      for (var j = 0, jL = colNames.length; j < jL; j++) {
+      const table = {};
+      let val, prevVal, colName;
+      for (let j = 0, jL = colNames.length; j < jL; j++) {
         colName = colNames[j];
-        for (var i = 0, iL = arr.length; i < iL; i++) {
+        for (let i = 0, iL = arr.length; i < iL; i++) {
           val = arr[i][colName] || 0;
           prevVal = table[colName] || 0;
           table[colName] = prevVal + val;
@@ -210,10 +217,14 @@ function getArrayStat(o) {
  * @param {Array} b Array of reference
  */
 function getArrayDiff(a, b) {
-  var bSet = new Set(b);
-  return a.filter(function(x) {
-    return !bSet.has(x);
-  });
+  const bSet = new Set(b);
+  const out = [];
+  for (let item of a) {
+    if (!bSet.has(item)) {
+      out.push(item);
+    }
+  }
+  return out;
 }
 
 /**
@@ -222,10 +233,14 @@ function getArrayDiff(a, b) {
  * @param {Array} b Second array
  */
 function getArrayIntersect(a, b) {
-  var bSet = new Set(b);
-  return a.filter(function(x) {
-    return bSet.has(x);
-  });
+  const bSet = new Set(b);
+  const out = [];
+  for (let item of a) {
+    if (bSet.has(item)) {
+      out.push(item);
+    }
+  }
+  return out;
 }
 
 /**
