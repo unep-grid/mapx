@@ -1,8 +1,21 @@
+  - [1.9.39](https://github.com/unep-grid/map-x-mgl/tree/1.9.39) 
+
+      - APP 
+        - Disclaimer available from static mode
+        - Search tool : added help button
+        - New module to render Markdown files from text, url or from file
+        - All wiki linked to a help button are readable from the interface
+        - Cleaned some modules that used global `mx` object (on going process)
+        - Removed views order from URL search parameters in app mode: use order from viewsOpen only
+        - Sharing tool:
+          - Fixed a bug that prevented update after manual change in textarea.
+          - Improved translation 
+
   - [1.9.39-beta.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-beta.2) 
       
       - SDK
-        - In static mode, 'get_sdk_methods' has been fixed.
-        - In static mode, adding a view using 'view_add' should also create the view's title block in the legend panel (#803)
+        - In static mode, `get_sdk_methods` has been fixed.
+        - In static mode, adding a view using `view_add` should also create the view's title block in the legend panel (#803)
 
   - [1.9.39-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-beta.1) 
       
