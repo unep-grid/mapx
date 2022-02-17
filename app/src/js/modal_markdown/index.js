@@ -48,6 +48,7 @@ export async function modalMarkdown(options) {
   if (opt.txt) {
     const showdown = await import('showdown');
     const converter = new showdown.Converter();
+    converter.setFlavor('github');
     opt.content = converter.makeHtml(opt.txt);
   }
 
