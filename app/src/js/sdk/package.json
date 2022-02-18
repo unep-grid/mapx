@@ -46,9 +46,5 @@
     "jsdoc-to-markdown": "^7.1.0",
     "live-server": "^1.1.0",
     "microbundle": "^0.14.2"
-  },
-  "dependencies": {
-    "@fxi/el": "^0.1.6",
-    "@fxi/mx_valid": "^0.0.11"
   }
 }
