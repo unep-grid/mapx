@@ -1,123 +1,79 @@
-function handleProgressUpdate(f) {
-  var helper = mx.helpers;
-  return function(e) {
-    if (e.lengthComputable) {
-      var percentLoaded = Math.round((e.loaded / e.total) * 50);
-      helper.progressScreen({
-        enable: true,
-        id: f.name,
-        percent: percentLoaded,
-        text: f.name + ' loading (' + percentLoaded + '%)'
-      });
-    }
-  };
-}
+import {modal} from './mx_helper_modal.js';
+import {makeId, getExtension, progressScreen} from './mx_helper_misc.js';
+import {isUploadFileSizeValid} from './mx_helper_upload_source.js';
+import {isView, isJson, isString} from './is_test';
+import {viewsListAddSingle} from './mx_helper_map_view_ui.js';
+import {moduleLoad} from './modules_loader_async/index.js';
 
-function handleProgressInit(f) {
-  var helper = mx.helpers;
-  return function() {
-    helper.progressScreen({
-      enable: true,
-      id: f.name,
-      percent: 0,
-      text: f.name + ' init .. '
-    });
-  };
-}
+import {
+  viewAdd,
+  getView,
+  getViewsListId,
+  getViewJson,
+  getMap,
+  isModeLocked
+} from './mx_helper_map.js';
 
-function handleProgressError(f) {
-  var helper = mx.helpers;
-  return function() {
-    helper.progressScreen({
-      enable: true,
-      id: f.name,
-      percent: 100,
-      text: f.name + 'stop .. '
-    });
-  };
-}
+// default proj
+const projDest =
+  '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees';
 
 // handle zip to geojson
-export function zipToGeoJSON(data) {
-  var shp,
-    dbf,
-    prj,
-    err = '';
-  var projOrig,
-    projDest =
-      '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees';
-  var helper = this;
-  var shapefile, JSZip, turf, proj4;
-
-  return Promise.all([
-    import('jszip'),
-    import('shapefile'),
-    import('proj4'),
-    import('@turf/meta')
-  ])
-    .then(function(m) {
-      JSZip = m[0];
-      shapefile = m[1];
-      proj4 = m[2].default || m[2];
-      turf = m[3];
-      return JSZip.loadAsync(data);
-    })
-    .then(function(files) {
-      var fileData = files.files;
-
-      for (var f in fileData) {
-        var ext = mx.helpers.getExtension(f);
-        if (ext === '.dbf') {
-          dbf = fileData[f];
-        }
-        if (ext === '.shp') {
-          shp = fileData[f];
-        }
-        if (ext === '.prj') {
-          prj = fileData[f];
-        }
+export async function zipToGeoJSON(data) {
+  let err = '';
+  try {
+    const JSZip = await import('jszip');
+    const shapefile = await import('shapefile');
+    const proj4 = (await import('proj4')).default;
+    const turf = await import('@turf/meta');
+    const files = await JSZip.loadAsync(data);
+    const fileData = files.files;
+    let dbf, shp, prj;
+    for (let f in fileData) {
+      const ext = getExtension(f);
+      if (ext === '.dbf') {
+        dbf = fileData[f];
       }
-
-      if (!shp) {
-        err = err + ' No shp file found in archive, abord.';
+      if (ext === '.shp') {
+        shp = fileData[f];
       }
-      if (!dbf) {
-        err = err + ' No dbf file found in archive, abord.';
+      if (ext === '.prj') {
+        prj = fileData[f];
       }
-      if (!prj) {
-        err = err + ' No prj file found in archive, abord.';
-      }
+    }
 
-      var rShp = shp.async('Uint8Array');
-      var rDbf = dbf.async('Uint8Array');
-      var rPrj = prj.async('text');
+    if (!shp) {
+      err = err + ' No shp file found in archive, abord.';
+    }
+    if (!dbf) {
+      err = err + ' No dbf file found in archive, abord.';
+    }
+    if (!prj) {
+      err = err + ' No prj file found in archive, abord.';
+    }
+    if (err) {
+      throw new error(err);
+    }
 
-      return Promise.all([rShp, rDbf, rPrj]);
-    })
-    .then(function(v) {
-      projOrig = v[2];
+    const shpR = await shp.async('Uint8Array');
+    const dbfR = await dbf.async('Uint8Array');
+    const projOrigR = await prj.async('text');
+    const gj = await shapefile.read(shpR, dbfR);
 
-      return shapefile.read(v[0], v[1]);
-    })
-    .then(function(gj) {
-      var newCoord = [];
+    let newCoord;
 
-      return new Promise(function(resolve) {
-        turf.coordEach(gj, function(coord) {
-          newCoord = proj4(projOrig, projDest, coord);
-          coord[0] = newCoord[0];
-          coord[1] = newCoord[1];
-        });
-
-        resolve(gj);
-      });
-    })
-    .catch(function(e) {
-      helper.modal({
-        content: e + ' / ' + err,
-        title: 'Error while reading shapefile'
-      });
+    turf.coordEach(gj, function(coord) {
+      newCoord = proj4(projOrigR, projDest, coord);
+      coord[0] = newCoord[0];
+      coord[1] = newCoord[1];
     });
+    return gj;
+  } catch (e) {
+    modal({
+      content: e + ' / ' + err,
+      title: 'Error while reading shapefile'
+    });
+  }
 }
 
 /**
@@ -125,54 +81,63 @@ export function zipToGeoJSON(data) {
  * @param {String} data data to parse
  * @param {String} Data type. Eg. kml, gpx, geojson
  */
-
-export function parseDataToGeoJSON(data, fileType) {
-  var out;
+export async function parseDataToGeoJSON(data, fileType) {
+  let out;
   switch (fileType) {
     case 'kml':
-      out = import('togeojson').then(function(toGeoJSON) {
-        return toGeoJSON.kml(new DOMParser().parseFromString(data, 'text/xml'));
-      });
+      out = await xmlToGeojson(data, 'kml');
       break;
     case 'gpx':
-      out = import('togeojson').then(function(toGeoJSON) {
-        return toGeoJSON.gpx(new DOMParser().parseFromString(data, 'text/xml'));
-      });
+      out = await xmlToGeojson(data, 'gpx');
       break;
     case 'zip':
-      out = mx.helpers.zipToGeoJSON(data);
+      out = await zipToGeoJSON(data);
       break;
     case 'geojson':
-      out = new Promise(function(resolve) {
-        if (mx.helpers.isString(data)) {
-          resolve(JSON.parse(data));
-        } else {
-          resolve(data);
-        }
-      });
+      if (isString(data)) {
+        out = JSON.parse(data);
+      } else {
+        out = data;
+      }
       break;
     default:
-      out = new Promise(function() {
-        console.log("Can't read data in " + format + ' format');
-      });
-      break;
+      throw new Error(`Data ${format} not supported`);
   }
 
   return out;
 }
 
+/**
+ *  Convert xml string data type, gpx or kml to geojson
+ * @param {String} data XML data
+ * @param {String} type kml or gpx
+ * @return {Promise<GeoJSON>}
+ */
+async function xmlToGeojson(data, type) {
+  const toGeoJSON = await import('@tmcw/togeojson');
+  const xmlDom = new DOMParser().parseFromString(data, 'text/xml');
+  let out;
+  switch (type) {
+    case 'gpx':
+      out = toGeoJSON.gpx(xmlDom);
+      break;
+    case 'kml':
+      out = toGeoJSON.kml(xmlDom);
+      break;
+  }
+  return out;
+}
+
 // handle worker
 function handleFileParser(f) {
-  const h = mx.helpers;
-
   return async function handler(e) {
     /**
      * Test for size
      */
 
-    let isSizeValid = h.isUploadFileSizeValid(f, {showModal: true});
+    let isSizeValid = isUploadFileSizeValid(f, {showModal: true});
     if (!isSizeValid) {
-      h.progressScreen({
+      progressScreen({
         enable: false,
         id: f.name
       });
@@ -187,7 +152,8 @@ function handleFileParser(f) {
       data: e.target.result,
       save: true
     });
-    await h.viewsListAddSingle(view, {
+
+    await viewsListAddSingle(view, {
       open: true
     });
     return view;
@@ -195,14 +161,13 @@ function handleFileParser(f) {
 }
 
 export async function spatialDataToView(opt) {
-  const h = mx.helpers;
-  const idRandom = h.makeId();
+  const idRandom = makeId();
 
   const c = Object.assign(
     {},
     {
       worker: null,
-      map: h.getMap(),
+      map: getMap(),
       gj: null, // maybe not used
       data: null,
       view: null,
@@ -217,23 +182,23 @@ export async function spatialDataToView(opt) {
   /**
    * Init
    */
-  const geojsonWorker = await h.moduleLoad('mx-drag-drop-worker');
+  const geojsonWorker = await moduleLoad('mx-drag-drop-worker');
   c.worker = new geojsonWorker();
 
   /**
    * Parse data according to filetype
    */
-  const gJson = await h.parseDataToGeoJSON(c.data, c.fileType);
+  const gJson = await parseDataToGeoJSON(c.data, c.fileType);
 
   const promView = new Promise((resolve) => {
     /*
      * handle message received
      */
     c.worker.onmessage = function(e) {
-      var m = e.data;
+      const m = e.data;
 
       if (m.progress) {
-        h.progressScreen({
+        progressScreen({
           enable: true,
           id: c.fileName,
           percent: m.progress,
@@ -266,7 +231,7 @@ export async function spatialDataToView(opt) {
           m.extent[3] = 85;
         }
 
-        var a = new mx.mapboxgl.LngLatBounds(
+        const a = new mx.mapboxgl.LngLatBounds(
           new mx.mapboxgl.LngLat(m.extent[0], m.extent[1]),
           new mx.mapboxgl.LngLat(m.extent[2], m.extent[3])
         );
@@ -275,7 +240,7 @@ export async function spatialDataToView(opt) {
 
       // If layer is valid and returned
       if (m.layer) {
-        h.progressScreen({
+        progressScreen({
           enable: true,
           id: c.fileName,
           percent: 100,
@@ -284,7 +249,7 @@ export async function spatialDataToView(opt) {
 
         m.layer.metadata = {
           prority: 0,
-          position :0,
+          position: 0,
           idView: m.id,
           filterOrig: []
         };
@@ -338,16 +303,15 @@ export async function spatialDataToView(opt) {
     data: gJson,
     fileName: c.fileName,
     fileType: c.fileType,
-    id: `MX-GJ-${h.makeId(10)}`
+    id: `MX-GJ-${makeId(10)}`
   });
 
   return promView;
 }
 
 async function saveInLocalDb(opt) {
-  const h = mx.helpers;
   await mx.data.geojson.setItem(opt.view.id, {
-    view: h.getViewJson(opt.view, {asString: false})
+    view: getViewJson(opt.view, {asString: false})
   });
   console.log(
     `Data saved and registered as geojson source. Id = ${opt.view.id} `
@@ -365,7 +329,6 @@ export function handleMapDragOver(evt) {
  */
 export function handleMapDrop(evt) {
   evt.preventDefault();
-  const h = mx.helpers;
   let dt = evt.dataTransfer;
 
   if (!dt) {
@@ -374,7 +337,7 @@ export function handleMapDrop(evt) {
 
   let files = evt.dataTransfer.files;
   let data = evt.dataTransfer.getData('application/json');
-  let hasData = h.isJson(data);
+  let hasData = isJson(data);
   let hasFiles = files.length > 0;
 
   if (hasData || hasFiles) {
@@ -389,7 +352,7 @@ export function handleMapDrop(evt) {
   }
   if (hasData) {
     const view = JSON.parse(data);
-    if (h.isView(view)) {
+    if (isView(view)) {
       handleView(view);
     }
   }
@@ -399,14 +362,13 @@ export function handleMapDrop(evt) {
  * Drop event contains view data
  */
 function handleView(view) {
-  const h = mx.helpers;
-  const idViews = h.getViews().map((v) => v.id);
+  const idViews = getViewsListId();
   if (idViews.indexOf(view.id) > -1) {
-    const viewOld = h.getView(view.id);
-    h.viewAdd(viewOld);
+    const viewOld = getView(view.id);
+    viewAdd(viewOld);
   } else {
     view._temp = true;
-    h.viewsListAddSingle(view);
+    viewsListAddSingle(view);
   }
 }
 
@@ -414,14 +376,12 @@ function handleView(view) {
  * Drop event as files
  */
 export function handleFiles(files) {
-  var helper = mx.helpers;
-
-  if (helper.isModeLocked()) {
+  if (isModeLocked()) {
     return;
   }
 
-  var nFiles = files.length;
-  var exts = {
+  const nFiles = files.length;
+  const exts = {
     '.json': 'geojson',
     '.geojson': 'geojson',
     '.kml': 'kml',
@@ -430,9 +390,9 @@ export function handleFiles(files) {
   };
 
   // In case of multiple file, loop on them
-  for (var i = 0; i < nFiles; i++) {
-    var f = files[i];
-    f.fileType = exts[helper.getExtension(f.name)];
+  for (let i = 0; i < nFiles; i++) {
+    const f = files[i];
+    f.fileType = exts[getExtension(f.name)];
 
     // Only process geojson files. Validate later.
     if (!f.fileType) {
@@ -445,7 +405,7 @@ export function handleFiles(files) {
     }
 
     // get a new reader
-    var reader = new FileReader();
+    const reader = new FileReader();
     // handle events
     reader.onloadstart = handleProgressInit(f);
     reader.onprogress = handleProgressUpdate(f);
@@ -461,4 +421,40 @@ export function handleFiles(files) {
       reader.readAsText(f);
     }
   }
+}
+
+function handleProgressUpdate(f) {
+  return function(e) {
+    if (e.lengthComputable) {
+      const percentLoaded = Math.round((e.loaded / e.total) * 50);
+      progressScreen({
+        enable: true,
+        id: f.name,
+        percent: percentLoaded,
+        text: f.name + ' loading (' + percentLoaded + '%)'
+      });
+    }
+  };
+}
+
+function handleProgressInit(f) {
+  return function() {
+    progressScreen({
+      enable: true,
+      id: f.name,
+      percent: 0,
+      text: f.name + ' init .. '
+    });
+  };
+}
+
+function handleProgressError(f) {
+  return function() {
+    progressScreen({
+      enable: true,
+      id: f.name,
+      percent: 100,
+      text: f.name + 'stop .. '
+    });
+  };
 }
