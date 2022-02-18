@@ -1,6 +1,31 @@
+# Generates sprites + fonts + glyphs for MapX
+
+Wrapper for 
+
+- `@mapbox/spritezero` -> svg to sprites 
+- `svgo` -> svg optimisation
+- `webfont` -> webfont building 
+- `fontmachine` -> GL-ready pbfs [ DEPRECATED ]
 
 
-This requires node 10. Tested with node 10.24
+## Usage
+
+Config `config.json`
+```json
+{
+  "svgs" :  "./source/svg/**/svg/*.svg", -> sources of svgs to convert
+  "ttfs": "./source/ttf/*.ttf", -> source of ttf font to handle 
+  "ratios": [1, 2, 4], -> sprites device pixel ratio
+  "out":"./dist", -> out directory 
+  "fontNameSvg":"mx" -> generated font name 
+}
+```
+
+Launch : `npm run build`
+
+### Caveats
+
+*This requires node 10. Tested with node 10.24*
 
 Ex. with n ( node version manager )
 
