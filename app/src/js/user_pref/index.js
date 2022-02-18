@@ -1,7 +1,7 @@
 import {jsoneditor} from 'json-editor';
 import localforage from 'localforage';
 import {modal} from './../mx_helper_modal.js';
-import {el} from '@fxi/el';
+import {el} from './../el/src/index.js';
 import './../../css/mx_jed.css';
 import schema from './schema.json';
 

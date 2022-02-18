@@ -1,5 +1,5 @@
 import {settings} from './data/settings.js';
-import {el} from '@fxi/el';
+import {el} from './../el/src/index.js';
 import {Item} from './components/item.js';
 import {Group} from './components/group.js';
 import {ContextMenu} from './components/contextMenu.js';

@@ -1,4 +1,4 @@
-import {el} from '@fxi/el';
+import {el} from './el/src/index.js';
 import {path, vtStyleBuilder} from './mx_helpers.js';
 
 (function() {

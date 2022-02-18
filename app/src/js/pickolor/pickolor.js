@@ -1,12 +1,10 @@
-/* jshint esversion:6*/
-
 import './pickolor.css';
 import 'nouislider/distribute/nouislider.css';
 
 import noUiSlider from 'nouislider';
 import chroma from 'chroma-js';
 import localforage from 'localforage';
-import {el} from '@fxi/el';
+import {el} from './../el/src/index.js';
 import {draggable} from './draggable.js';
 import * as frameTool from './onNextFrame.js';
 import * as options from './options.js';

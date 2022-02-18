@@ -1,4 +1,4 @@
-import {el} from '@fxi/el';
+import {el} from './../el/src/index.js';
 import {formatZeros, path} from './../mx_helpers.js';
 import mapxlogo from './../../svg/map-x-logo-full.svg';
 /**

@@ -1,5 +1,4 @@
-import * as t from '@fxi/mx_valid';
-
+import * as t from '../../is_test/index.js';
 export {parse, stringify};
 
 class JsonSanitizer {

@@ -1,4 +1,4 @@
-import {el} from '@fxi/el';
+import {el} from './../el/src/index.js';
 import {ButtonPanel} from '../button_panel';
 import {bindAll} from '../bind_class_methods';
 import localforage from 'localforage';

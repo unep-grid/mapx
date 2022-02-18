@@ -1,6 +1,6 @@
 import './style.less';
 import {getDictItem, getLabelFromObjectPath} from './../mx_helper_language.js';
-import {el} from '@fxi/el';
+import {el} from './../el/src/index.js';
 import {ButtonPanel} from './../button_panel/index.js';
 import {errorHandler} from './../error_handler/index.js';
 import {modal} from './../mx_helper_modal.js';

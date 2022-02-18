@@ -1,5 +1,5 @@
 import {getLayerNamesByPrefix} from './../mx_helpers.js';
-import {el} from '@fxi/el';
+import {el} from './../el/src/index.js';
 
 function PixOp(config) {
   'use strict';

@@ -1,4 +1,4 @@
-import {el} from '@fxi/el';
+import {el} from './../el/src/index.js';
 import {settings} from './settings.js';
 import {onNextFrame} from './../animation_frame/index.js';
 import './style.css';

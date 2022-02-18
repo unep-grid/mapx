@@ -1,4 +1,4 @@
-import {el} from '@fxi/el';
+import {el} from './../el/src/index.js';
 import {ListenerStore} from './../listener_store/index.js';
 import './switch.css';
 

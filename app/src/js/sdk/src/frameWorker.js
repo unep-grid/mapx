@@ -1,6 +1,6 @@
 import {Events} from './events.js';
 import {parse, stringify} from './helpers.js';
-import {isObject} from '@fxi/mx_valid';
+import {isObject} from '../../is_test/index.js';
 import {version} from '../package.json';
 import {EventSimple} from '../../event_simple/index.js';
 

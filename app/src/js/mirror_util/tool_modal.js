@@ -1,4 +1,4 @@
-import {el} from '@fxi/el';
+import {el} from './../el/src/index.js';
 import {elSpanTranslate} from './../el_mapx';
 import {modal, modalPrompt} from './../mx_helper_modal';
 import {isUrl} from './../is_test/index.js';

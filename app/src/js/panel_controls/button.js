@@ -1,4 +1,3 @@
-//import {el} from '@fxi/el';
 import {el} from '../el/src/index.js';
 import {getDictItem} from './../mx_helpers.js';
 import {FlashCircle} from './../icon_flash/index.js';

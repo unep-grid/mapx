@@ -1,4 +1,4 @@
-import {el} from '@fxi/el';
+import {el} from './../../el/src/index.js';
 
 /**
  * Based on https://jsfiddle.net/RokoCB/az7f38w7/

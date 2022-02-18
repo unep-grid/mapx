@@ -1,4 +1,4 @@
-import {el} from '@fxi/el';
+import {el} from './el/src/index.js';
 import Picker from 'vanilla-picker';
 
 const color_pickers = [];

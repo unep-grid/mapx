@@ -1,7 +1,6 @@
-/* jshint esversion:6*/
 import './style.css';
 import Pickolor from "./pickolor";
-import {el} from '@fxi/el';
+import {el} from './../el/src/index.js';
 
 
 for( var i = 0 ; i< 5; i++){

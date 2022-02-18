@@ -1,4 +1,3 @@
-//import {el} from '@fxi/el';
 import {el} from './../el/src/index.js';
 import {ListenerStore} from '../listener_store';
 import {EventSimple} from '../event_simple';
