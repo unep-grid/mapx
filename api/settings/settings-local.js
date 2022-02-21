@@ -13,7 +13,7 @@ module.exports = Object.assign(s, {
   },
   mirror: {
     rateLimit: env.MAPX_MIRROR_RATE_LIMIT,
-    rateWindowMinutes : env.MAPX_MIRROR_RATE_WINDOW_MINUTES
+    rateWindowMinutes: env.MAPX_MIRROR_RATE_WINDOW_MINUTES
   },
   redis: {
     user: env.REDIS_USER,
@@ -21,13 +21,19 @@ module.exports = Object.assign(s, {
     host: env.REDIS_HOST
   },
   geoip: {
-    licenseKey : env.MAXMIND_GEOIP_LICENSE_KEY,
+    licenseKey: env.MAXMIND_GEOIP_LICENSE_KEY
   },
   meili: {
     master_key: env.MEILI_MASTER_KEY,
     port: env.MEILI_PORT,
     host: env.MEILI_HOST,
-    protocol : env.MEILI_PROTOCOL
+    protocol: env.MEILI_PROTOCOL
+  },
+  geoserver: {
+    password: env.GEOSERVER_ADMIN_PASSWORD,
+    user: env.GEOSERVER_ADMIN_USERNAME,
+    url: env.GEOSERVER_URL,
+    url_public: env.GEOSERVER_URL_PUBLIC
   },
   db: {
     name: env.POSTGRES_DB,

@@ -22,7 +22,7 @@ module.exports = {
   },
   mirror: {
     rateLimit: 2000,
-    rateWindowMinutes : 15
+    rateWindowMinutes: 15
   },
   redis: {
     user: 'redis',
@@ -37,6 +37,12 @@ module.exports = {
     port: 7700,
     host: 'meili',
     protocol: 'http://'
+  },
+  geoserver: {
+    password: 'letmein',
+    user: 'admin',
+    url: 'http://localhost:8080',
+    url_public: 'http://localhost:8080'
   },
   db: {
     name: 'postgres',

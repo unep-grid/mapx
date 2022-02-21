@@ -2,8 +2,10 @@ const s = require('@root/settings');
 //const fs = require('fs');
 const {Pool, types} = require('pg');
 const redis = require('redis');
-const {promisify} = require('util');
 const {MeiliSearch} = require('meilisearch');
+const {GeoServerRestClient} = require('geoserver-node-client');
+
+
 try {
   /*
    * custom type parsing
@@ -118,15 +120,24 @@ try {
     apiKey: s.meili.master_key || null
   });
 
+  /**
+  * GeoServer 
+  */
+  const geoserver = new GeoServerRestClient(
+    s.geoserver.url,
+    s.geoserver.user,
+    s.geoserver.password
+  )
+
   module.exports = {
     redisGet,
     redisSet,
-    clientRedis,
     pgCustom,
     pgRead,
     pgWrite,
     pgAdmin,
-    meili
+    meili,
+    geoserver
   };
 } catch (e) {
   console.error('Unexpected error during clients init', e);
