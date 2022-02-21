@@ -1,3 +1,8 @@
+  - [1.9.40-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.1) 
+
+      - APP 
+        - Maintenance : fixed some security issues + code cleaning
+
   - [1.9.39](https://github.com/unep-grid/map-x-mgl/tree/1.9.39) 
 
       - APP 
