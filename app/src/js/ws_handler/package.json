@@ -11,7 +11,7 @@
     "ws",
     "mapx"
   ],
-  "author": "",
+  "author": "unepgrid.ch",
   "license": "MIT",
   "dependencies": {
     "socket.io": "^3.0.3",

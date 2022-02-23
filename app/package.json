@@ -12,7 +12,7 @@
     "build_dict": "node ./src/node/build_dict.js dict.config.json",
     "lint": "eslint ./src/js"
   },
-  "author": "",
+  "author": "unepgrid.ch",
   "license": "GPLv3",
   "devDependencies": {
     "@babel/cli": "^7.16.0",

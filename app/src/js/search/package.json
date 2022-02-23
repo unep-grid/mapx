@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "unepgrid.ch",
+  "license": "MIT",
   "dependencies": {
     "flatpickr": "^4.6.9",
     "meilisearch": "^0.18.1",

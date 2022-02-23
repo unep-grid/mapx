@@ -109,7 +109,6 @@ mxSendMail <- function(
       encrypted = encrypt
       ))
 
-
   success <- class(res) == "list" && to %in% res$accepted
 
   if(useNotify){

@@ -1897,7 +1897,6 @@ export function shareTwitter(id) {
   var params = {
     url: url,
     text: 'Shared from MapX',
-    //via: "Fred_Moser",
     hashtags: 'mapx'
   };
 

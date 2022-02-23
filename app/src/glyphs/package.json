@@ -8,7 +8,7 @@
   "keywords": [
     "sprite"
   ],
-  "author": "Fred Moser",
+  "author": "unepgrid.ch",
   "license": "MIT",
   "devDependencies": {
     "@mapbox/spritezero": "^8.0.0",
