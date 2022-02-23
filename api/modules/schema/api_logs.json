@@ -70,8 +70,8 @@
       "title": "Project id",
       "default": null,
       "examples": ["MX-T6R-PJF-2DF-3OI-LBF"],
-      "min": 22,
-      "max": 22
+      "minLength": 22,
+      "maxLength": 22
     }
   }
 }

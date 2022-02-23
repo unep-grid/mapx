@@ -1,35 +1,36 @@
 /**
  * Helpers
  */
-const {redisGet, redisSet, pgRead} = require('@mapx/db');
-const helpers = require('@mapx/helpers');
-const template = require('@mapx/template');
-const db = require('@mapx/db-utils');
-const crypto = require('crypto');
-const util = require('util');
-const zlib = require('zlib');
-const geojsonvt = require('geojson-vt');
-const vtpbf = require('vt-pbf');
+import {redisGet, redisSet, pgRead} from '#mapx/db';
+import {parseTemplate, attrToPgCol} from '#mapx/helpers';
+import {templates} from '#mapx/template';
+import {getSourceLastTimestamp} from '#mapx/db-utils';
+import crypto from 'crypto';
+import util from 'util';
+import zlib from 'zlib';
+import geojsonvt from 'geojson-vt';
+import vtpbf from 'vt-pbf';
+const isString = (a) => typeof a === 'string';
 const gzip = util.promisify(zlib.gzip);
 
-module.exports = {mwGet};
+export default {mwGet};
 /**
  * Get tile
  */
-async function mwGet(req, res) {
+export async function mwGet(req, res) {
   try {
     const data = {idView: req.query.view};
-    const sqlViewInfo = helpers.parseTemplate(
-      template.getViewSourceAndAttributes,
+    const sqlViewInfo = parseTemplate(
+      templates.getViewSourceAndAttributes,
       data
     );
     const resultView = await pgRead.query(sqlViewInfo);
 
     if (resultView.rowCount !== 1) {
-      throw new Error('Error fetching view source and attribute');
+      throw Error('Error fetching view source and attribute');
     }
 
-    const viewSrcConfig = resultView.rows[0];
+    const [viewSrcConfig] = resultView.rows;
 
     /*
      * viewSrcAttr attributes:
@@ -44,17 +45,17 @@ async function mwGet(req, res) {
     data.x = req.params.x * 1;
     data.y = req.params.y * 1;
     data.view = req.query.view;
-    data.attributes = helpers.attrToPgCol(data.attribute, data.attributes);
+    data.attributes = attrToPgCol(data.attribute, data.attributes);
 
     if (!data.layer || data.layer === Object) {
       sendTileEmpty(res);
       return;
     }
 
-    data.sourceTimestamp = await db.getSourceLastTimestamp(data.layer);
+    data.sourceTimestamp = await getSourceLastTimestamp(data.layer);
 
     if (data.mask) {
-      data.maskTimestamp = await db.getSourceLastTimestamp(data.mask);
+      data.maskTimestamp = await getSourceLastTimestamp(data.mask);
     }
 
     const hash = crypto
@@ -62,7 +63,7 @@ async function mwGet(req, res) {
       .update(JSON.stringify(data))
       .digest('hex');
 
-    return getTile(res, hash, data);
+    return await getTile(res, hash, data);
   } catch (e) {
     return sendTileError(res, e);
   }
@@ -75,7 +76,7 @@ async function getTile(res, hash, data) {
       return sendTileZip(res, Buffer(zTileB64, 'base64'));
     }
 
-    return getTilePg(res, hash, data);
+    return await getTilePg(res, hash, data);
   } catch (e) {
     return sendTileError(res, e);
   }
@@ -85,18 +86,18 @@ async function getTilePg(res, hash, data) {
   try {
     let str = '';
 
-    if (data.mask && typeof data.mask === 'string') {
-      str = template.getGeojsonTileOverlap;
+    if (data.mask && isString(data.mask)) {
+      str = templates.getGeojsonTileOverlap;
     } else {
-      str = template.getGeojsonTile;
+      str = templates.getGeojsonTile;
     }
 
-    const qs = helpers.parseTemplate(str, data);
+    const qs = parseTemplate(str, data);
     const out = await pgRead.query(qs);
 
     if (out.rowCount > 0) {
-      const geojson = await rowsToGeoJSON(out.rows, out.types);
-      const buffer = await geojsonToPbf(geojson, data);
+      const geojson = rowsToGeoJSON(out.rows);
+      const buffer = geojsonToPbf(geojson, data);
       const zBuffer = await gzip(buffer);
       sendTileZip(res, zBuffer);
       redisSet(hash, zBuffer.toString('base64'));
@@ -122,13 +123,13 @@ function sendTileError(res, err) {
   res.status(500).send(err.message);
 }
 
-async function rowsToGeoJSON(rows) {
+function rowsToGeoJSON(rows) {
   const features = rows.map((r) => {
     var properties = {};
     for (var attribute in r) {
       if (attribute !== 'geom') {
         if (r[attribute] instanceof Date) {
-          r[attribute] = r[attribute] * 1;
+          r[attribute] *= 1;
         }
         if (r[attribute] === null) {
           r[attribute] = '';
@@ -149,12 +150,12 @@ async function rowsToGeoJSON(rows) {
   };
 }
 
-async function geojsonToPbf(geojson, data) {
+function geojsonToPbf(geojson, data) {
   const pbfOptions = {};
   const tileIndex = geojsonvt(geojson, {
     maxZoom: data.zoom + 1,
     indexMaxZoom: data.zoom - 1,
-    tolerence: 2000 / (512 * Math.pow(data.zoom, 2))
+    tolerence: 2000 / (512 * data.zoom ** 2)
   });
   const tile = tileIndex.getTile(data.zoom, data.x, data.y);
   if (!tile) {

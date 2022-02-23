@@ -1,4 +1,4 @@
-module.exports = {
+const settings_global = {
   api: {
     host: 'api',
     port: '8080',
@@ -30,7 +30,8 @@ module.exports = {
     host: 'localhost'
   },
   geoip: {
-    licenseKey: null
+    licenseKey: null,
+    urlService :'http://localhost?licence={{licenseKey}}'
   },
   meili: {
     master_key: null,
@@ -179,3 +180,6 @@ module.exports = {
     }
   }
 };
+
+
+export {settings_global};

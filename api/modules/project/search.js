@@ -1,36 +1,39 @@
-const {pgRead} = require('@mapx/db');
-const {getParamsValidator} = require('@mapx/route_validation');
-const {getProjectsPublicSearch} = require('@mapx/template');
-const {parseTemplate, sendJSON, sendError, arrayToPgArray} = require('@mapx/helpers');
+import {pgRead} from '#mapx/db';
+import {getParamsValidator} from '#mapx/route_validation';
+import {templates} from '#mapx/template';
+import {
+  parseTemplate,
+  sendJSON,
+  sendError,
+  arrayToPgArray
+} from '#mapx/helpers';
 
 const validateParamsHandler = getParamsValidator({
   required: ['titleRegex', 'language'],
-  expected : ['idProjects','pageNumber','maxByPage']
+  expected: ['idProjects', 'pageNumber', 'maxByPage']
 });
 
 const mwProjectSearchText = [validateParamsHandler, handlerSearchText];
 
-module.exports = {
-   mwProjectSearchText
+export  {
+  mwProjectSearchText
 };
 
 async function handlerSearchText(req, res) {
   try {
-    const q = parseTemplate(getProjectsPublicSearch, {
+    const q = parseTemplate(templates.getProjectsPublicSearch, {
       language: req.query.language,
       titleRegex: req.query.titleRegex,
-      idProjects : arrayToPgArray(req.query.idProjects),
-      limit : req.query.maxByPage,
-      offset : (req.query.pageNumber-1) * req.query.maxByPage 
+      idProjects: arrayToPgArray(req.query.idProjects),
+      limit: req.query.maxByPage,
+      offset: (req.query.pageNumber - 1) * req.query.maxByPage
     });
     const now = Date.now();
     const result = await pgRead.query(q);
     const out = result.rows[0]?.res || {};
-    out.timing_ms = (Date.now() - now);
-    sendJSON(res,out);
+    out.timing_ms = Date.now() - now;
+    sendJSON(res, out);
   } catch (err) {
     sendError(res, err);
   }
 }
-
-

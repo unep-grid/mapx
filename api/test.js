@@ -1,4 +1,4 @@
-const Mocha = require('mocha');
+import Mocha from 'mocha';
 
 const mocha = new Mocha();
 mocha.addFile('test/testMiscellaneous');

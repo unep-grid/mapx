@@ -1,8 +1,14 @@
-const {mwGet, mwGetMetadata, getViewMetadata} = require(__dirname+'/getView.js');
-const {mwGetListPublic, getViewsPublic} = require(__dirname+'/getViewsPublic.js');
-const {mwGetListByProject, getViews, getProjectViewsStates} = require(__dirname+'/getViewsByProject.js');
+import {mwGet, mwGetMetadata, getViewMetadata} from './getView.js';
+import {mwGetListPublic, getViewsPublic} from './getViewsPublic.js';
+import {
+  mwGetListByProject,
+  getViews,
+  getProjectViewsStates
+} from './getViewsByProject.js';
 
-module.exports = {
+export {getViews, getViewsPublic, getViewMetadata, getProjectViewsStates};
+
+export default {
   /**
    * middleware
    */

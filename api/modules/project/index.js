@@ -1,9 +1,11 @@
-const sql = require('node-sql-2');
-const {pgRead} = require('@mapx/db');
-const {project} = require('@mapx/db-models');
-const {validateTokenHandler} = require('@mapx/authentication');
-const {getParamsValidator} = require('@mapx/route_validation');
-const {mwProjectSearchText} = require('./search.js');
+import {Sql} from 'sql-ts';
+const sql = new Sql('postgres');
+
+import {pgRead} from '#mapx/db';
+import {project} from '#mapx/db-models';
+import {validateTokenHandler} from '#mapx/authentication';
+import {getParamsValidator} from '#mapx/route_validation';
+import {mwProjectSearchText} from './search.js';
 
 const validateParamsHandler = getParamsValidator({
   expected: [
@@ -17,27 +19,24 @@ const validateParamsHandler = getParamsValidator({
   ]
 });
 
-module.exports.mwProjectSearchText = mwProjectSearchText;
-
-module.exports.mwGetListByUser = [
+const mwGetListByUser = [
   validateParamsHandler,
   validateTokenHandler,
   getProjectsByUserRouteHandler
 ];
 
+export default {mwProjectSearchText, mwGetListByUser};
+
 async function getProjectsByUserRouteHandler(req, res) {
   var idUser = req.query.idUser;
-  var rq = Object.assign(
-    {},
-    {
-      language: 'en',
-      role: 'any',
-      title: null,
-      titlePrefix: null,
-      titleFuzzy: null
-    },
-    req.query
-  );
+  var rq = {
+    language: 'en',
+    role: 'any',
+    title: null,
+    titlePrefix: null,
+    titleFuzzy: null,
+    ...req.query
+  };
 
   try {
     const result = await getProjectsByUserHelper(
@@ -52,11 +51,11 @@ async function getProjectsByUserRouteHandler(req, res) {
     /**
      * As it's not done in sql, set title default if empty
      */
-    result.rows.forEach((r) => {
+    for (const r of result.rows) {
       if (!r.title) {
         r.title = r.title_en;
       }
-    });
+    }
 
     res.json(result.rows);
   } catch (e) {
@@ -66,7 +65,7 @@ async function getProjectsByUserRouteHandler(req, res) {
   }
 }
 
-function getProjectsByUserHelper(
+async function getProjectsByUserHelper(
   idUser,
   lc = 'en',
   role = 'any',
@@ -133,5 +132,6 @@ function getProjectsByUserHelper(
     WITH project_role AS (${pSql.toString()})
     SELECT * FROM project_role WHERE ${roleCondition}
     `;
-  return pgRead.query(sqlStr);
+  const rows = await pgRead.query(sqlStr);
+  return rows;
 }

@@ -1,26 +1,29 @@
-const settings = require('@root/settings');
-const {promisify} = require('util');
-const {pipeline} = require('stream');
-const {pgAdmin, pgWrite} = require('@mapx/db');
-const {from} = require('pg-copy-streams');
-const {createWriteStream, mkdtempSync, existsSync} = require('fs');
-const {unlink} = require('fs/promises');
+import {settings} from '#root/settings';
+import {promisify} from 'util';
+import {pipeline} from 'stream';
+import {pgAdmin, pgWrite} from '#mapx/db';
+import {parseTemplate} from '#mapx/helpers';
+import pkgPgCopyStream from 'pg-copy-streams';
+import {createWriteStream, mkdtempSync, existsSync} from 'fs';
+import {unlink} from 'fs/promises';
+import StreamZip from 'node-stream-zip';
+import path from 'path';
+import os from 'os';
+import fetch from 'node-fetch';
+import {confCode, confFinal, confName} from './tables.js';
+
 const pipe = promisify(pipeline);
-const StreamZip = require('node-stream-zip');
-const path = require('path');
-const os = require('os');
-const fetch = require('node-fetch');
-const {confCode, confFinal, confName} = require('./tables.js');
+
+const {from} = pkgPgCopyStream;
+
 const s = settings.geoip;
-const url = `https://download.maxmind.com/app/geoip_download?suffix=zip&edition_id=GeoLite2-Country-CSV&license_key=${
-  s.licenseKey
-}`;
+const url = parseTemplate(s.urlTemplate, s);
 
 const tmpDirPath = mkdtempSync(path.join(os.tmpdir(), 'geoip-'));
 const tmpArchivePath = path.join(tmpDirPath, 'archive.zip');
 const tblsTemp = [confCode, confName];
 
-module.exports.updateGeoIpTable = async () => {
+export const updateGeoIpTable = async () => {
   await update(url);
 };
 
@@ -29,7 +32,7 @@ async function update(url) {
   try {
     const res = await fetch(url);
     if (!res.ok) {
-      throw new Error(`Download http error: ${res.status}`);
+      throw Error(`Download http error: ${res.status}`);
     }
 
     /**

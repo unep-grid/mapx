@@ -1,26 +1,32 @@
-const s = require('@root/settings');
-//const fs = require('fs');
-const {Pool, types} = require('pg');
-const redis = require('redis');
-const {MeiliSearch} = require('meilisearch');
-const {GeoServerRestClient} = require('geoserver-node-client');
+import {settings as s}  from '#root/settings' ;
+import pg from 'pg';
+import redis from 'redis';
+import {MeiliSearch} from 'meilisearch';
+import GeoServerRestClient from 'geoserver-node-client';
 
+const {Pool, types} = pg;
+
+
+let redisGet;
+let redisSet;
+let pgCustom;
+let pgRead;
+let pgWrite;
+let pgAdmin;
+let meili;
+let geoserver;
 
 try {
   /*
    * custom type parsing
    */
-  types.setTypeParser(1700, (val) => {
-    return parseFloat(val);
-  });
-  types.setTypeParser(20, (value) => {
-    return parseInt(value);
-  });
+  types.setTypeParser(1700, (val) => parseFloat(val));
+  types.setTypeParser(20, (value) => parseInt(value));
 
   /**
    * Set write pool
    */
-  const pgWrite = new Pool({
+  pgWrite = new Pool({
     host: s.db.host,
     user: s.db.write.user,
     database: s.db.name,
@@ -38,7 +44,7 @@ try {
   /**
    * Set read pool
    */
-  const pgRead = new Pool({
+  pgRead = new Pool({
     host: s.db.host,
     user: s.db.read.user,
     database: s.db.name,
@@ -58,7 +64,7 @@ try {
    * Set custom pool
    */
 
-  const pgCustom = new Pool({
+  pgCustom = new Pool({
     host: s.db.host,
     user: s.db.custom.user,
     database: s.db.name,
@@ -77,7 +83,7 @@ try {
   /**
    * Set master pool
    */
-  const pgAdmin = new Pool({
+  pgAdmin = new Pool({
     host: s.db.host,
     user: s.db.admin.user,
     database: s.db.name,
@@ -96,50 +102,49 @@ try {
   /**
    * Redis
    */
-
   const clientRedis = redis.createClient({
     url: 'redis://' + s.redis.host + ':' + s.redis.port
   });
-  clientRedis.connect().catch(e=>{
-    console.log('Unable to connect',e);
+  clientRedis.connect().catch((e) => {
+    console.log('Unable to connect', e);
     process.exit(-1);
-  })
+  });
   clientRedis.on('error', (err) => {
     console.error('Unexpected error on redis client', err);
     process.exit(-1);
   });
 
-  const redisGet = clientRedis.get.bind(clientRedis);
-  const redisSet = clientRedis.set.bind(clientRedis);
+  redisGet = clientRedis.get.bind(clientRedis);
+  redisSet = clientRedis.set.bind(clientRedis);
 
   /**
    * MeiliSearch
    */
-  const meili = new MeiliSearch({
+  meili = new MeiliSearch({
     host: `http://${s.meili.host}:${s.meili.port}`,
     apiKey: s.meili.master_key || null
   });
 
   /**
-  * GeoServer 
-  */
-  const geoserver = new GeoServerRestClient(
+   * GeoServer
+   */
+  geoserver = new GeoServerRestClient(
     s.geoserver.url,
     s.geoserver.user,
     s.geoserver.password
-  )
-
-  module.exports = {
-    redisGet,
-    redisSet,
-    pgCustom,
-    pgRead,
-    pgWrite,
-    pgAdmin,
-    meili,
-    geoserver
-  };
+  );
 } catch (e) {
   console.error('Unexpected error during clients init', e);
   process.exit(-1);
 }
+
+export {
+  redisGet,
+  redisSet,
+  pgCustom,
+  pgRead,
+  pgWrite,
+  pgAdmin,
+  meili,
+  geoserver
+};

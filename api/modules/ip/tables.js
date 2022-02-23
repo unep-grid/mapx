@@ -1,10 +1,10 @@
-const sql = require('node-sql-2');
-sql.setDialect('postgres');
+import {Sql} from 'sql-ts';
+const sql = new Sql('postgres');
 
 const confCode = {
   filesRegex: [
-    new RegExp('^.*GeoLite2-Country-Blocks-IPv6.csv$'),
-    new RegExp('^.*GeoLite2-Country-Blocks-IPv4.csv$')
+    /^.*GeoLite2-Country-Blocks-IPv6.csv$/,
+    /^.*GeoLite2-Country-Blocks-IPv4.csv$/
   ],
   table: {
     name: '_tmp_ip_code',
@@ -20,7 +20,7 @@ const confCode = {
 };
 
 const confName = {
-  filesRegex: [new RegExp('^.*GeoLite2-Country-Locations-en.csv$')],
+  filesRegex: [/^.*GeoLite2-Country-Locations-en.csv$/],
   table: {
     name: '_tmp_ip_name',
     columns: [
@@ -48,9 +48,6 @@ const confFinal = {
 confCode.sqlTbl = sql.define(confCode.table);
 confName.sqlTbl = sql.define(confName.table);
 confFinal.sqlTbl = sql.define(confFinal.table);
+const tblIp = confFinal.sqlTbl;
 
-exports.confCode = confCode;
-exports.confName = confName;
-exports.confFinal = confFinal;
-exports.tblIp = confFinal.sqlTbl;
-
+export {tblIp, confFinal, confName, confCode};

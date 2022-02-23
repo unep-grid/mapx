@@ -1,19 +1,21 @@
-const {redisGet, redisSet, pgRead} = require('@mapx/db');
-const {getParamsValidator} = require('@mapx/route_validation');
-const {sendError, sendJSON} = require('@mapx/helpers');
-const crypto = require('crypto');
+import {redisGet, redisSet, pgRead} from '#mapx/db';
+import {getParamsValidator} from '#mapx/route_validation';
+import {sendError, sendJSON} from '#mapx/helpers';
+import crypto from 'crypto';
 const validateParamsHandlerBbox = getParamsValidator({
   expected: ['name', 'code', 'srid', 'language']
 });
 
 const mwGetBbox = [validateParamsHandlerBbox, handlerBbox];
 
-module.exports = {
+export  {
   mwGetBbox
 };
 
 async function handlerBbox(req, res) {
-  const query = req.query;
+  const {
+    query
+  } = req;
   try {
     query.code = query.code || query.name;
 
@@ -38,10 +40,10 @@ async function handlerBbox(req, res) {
       return sendJSON(res, JSON.parse(cached));
     } else {
       const result = await pgRead.query(q);
-      const data = result.rows[0];
+      const [data] = result.rows;
 
       if (!data || !data?.bbox) {
-        throw new Error(`No result found for ${query.code}`);
+        throw Error(`No result found for ${query.code}`);
       }
       const coords = data?.bbox?.coordinates[0];
 

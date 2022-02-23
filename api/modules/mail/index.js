@@ -1,26 +1,28 @@
-const bodyParser = require('body-parser');
-const htmlToText = require('html-to-text');
-const nodemailer = require('nodemailer');
-const template = require('@mapx/template');
-const settings = require('@root/settings');
-const {paramsValidator} = require('@mapx/route_validation');
-const {parseTemplate} = require('@mapx/helpers');
-const {decrypt} = require('@mapx/db-utils');
+import bodyParser from 'body-parser';
+import {htmlToText} from 'html-to-text';
+import nodemailer from 'nodemailer';
+import {templates} from '#mapx/template';
+import {settings} from '#root/settings';
+import {paramsValidator} from '#mapx/route_validation';
+import {parseTemplate} from '#mapx/helpers';
+import {decrypt} from '#mapx/db-utils';
 
-module.exports.mwSend = [
+const isString = (a) => typeof a === 'string';
+
+export const mwSend = [
   bodyParser.urlencoded({extended: false}),
   bodyParser.json(),
   sendMailApi
 ];
 
-module.exports.sendMail = sendMail;
-module.exports.sendMailAuto = sendMailAuto;
+export default {mwSend};
+
 /**
  * helpers
  *
  */
 
-async function sendMailApi(req, res) {
+export async function sendMailApi(req, res) {
   try {
     const dat = req.body;
     /*
@@ -30,7 +32,7 @@ async function sendMailApi(req, res) {
     if (dat.encrypted) {
       conf = await decrypt(dat.msg);
     } else {
-      if (typeof dat.msg === 'string') {
+      if (isString(dat.msg)) {
         conf = JSON.parse(dat.msg);
       } else {
         conf = dat.msg;
@@ -55,7 +57,7 @@ async function sendMailApi(req, res) {
     });
 
     if (!validation.ok) {
-      throw new Error(JSON.stringify(validation));
+      throw Error(JSON.stringify(validation));
     }
 
     try {
@@ -108,13 +110,16 @@ async function sendMailApi(req, res) {
  * @param {String} opt.text Email text version
  * @param {String} opt.html Email body html version
  */
-function sendMail(opt) {
+export function sendMail(opt) {
   return new Promise(function(resolve, reject) {
     var transporter = nodemailer.createTransport(settings.mail.config);
     var def = settings.mail.options;
-    const options = Object.assign({}, def, opt);
+    const options = {
+      ...def,
+      ...opt
+    };
     if (!options.to || !options.from || !options.subject) {
-      throw new Error('sendMail: invalid configuration ');
+      throw Error('sendMail: invalid configuration ');
     }
     transporter.sendMail(options, function(error, info) {
       if (error) {
@@ -125,6 +130,7 @@ function sendMail(opt) {
     });
   });
 }
+
 /**
  * Send a mail
  * @param {Object} opt options
@@ -136,15 +142,19 @@ function sendMail(opt) {
  * @param {String} opt.content,
  * @param {String} opt.subjectPrefix Subject prefix
  */
-function sendMailAuto(config) {
-  const c = Object.assign({}, settings.mail.options, config);
+export async function sendMailAuto(config) {
+  const c = {
+    ...settings.mail.options,
+    ...config
+  };
   if (!c.subtitle) {
     c.subtitle = c.subject;
   }
-  const html = template.email_base;
-  c.footer = template.email_footer;
+  const html = templates.email_base;
+  c.footer = templates.email_footer;
   const body = parseTemplate(html, c);
   c.html = body;
-  c.text = htmlToText.fromString(body);
-  return sendMail(c);
+  c.text = htmlToText(body);
+  const res = await sendMail(c);
+  return res
 }

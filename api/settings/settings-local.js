@@ -1,7 +1,7 @@
-const s = require('./settings-global.js');
+import {settings_global} from './settings-global.js';
 const env = process.env;
 
-module.exports = Object.assign(s, {
+const settings = Object.assign({}, settings_global, {
   api: {
     host: env.API_HOST,
     port: env.API_PORT,
@@ -21,7 +21,9 @@ module.exports = Object.assign(s, {
     host: env.REDIS_HOST
   },
   geoip: {
-    licenseKey: env.MAXMIND_GEOIP_LICENSE_KEY
+    licenseKey: env.MAXMIND_GEOIP_LICENSE_KEY,
+    urlTemplate:
+      'https://download.maxmind.com/app/geoip_download?suffix=zip&edition_id=GeoLite2-Country-CSV&license_key={{licenseKey}}'
   },
   meili: {
     master_key: env.MEILI_MASTER_KEY,
@@ -134,3 +136,5 @@ module.exports = Object.assign(s, {
     }
   }
 });
+
+export {settings};

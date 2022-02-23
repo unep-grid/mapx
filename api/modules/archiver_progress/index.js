@@ -1,7 +1,5 @@
-const archiver = require('archiver');
-const fs = require('fs');
-
-module.exports = archiverProgress;
+import archiver from 'archiver';
+import fs from 'fs';
 
 /**
  * Wrapper for promisified archiver
@@ -13,10 +11,13 @@ module.exports = archiverProgress;
  * @param {Function} options.onWarning Callback for warning
  * @return Promise
  */
-function archiverProgress(options) {
+export function archiverProgress(options) {
   return new Promise((resolve, reject) => {
     try {
-      options = Object.assign({}, {maxWarning: 10}, options);
+      options = {
+        maxWarning: 10,
+        ...options
+      };
 
       /**
        * ZIP IT
@@ -70,10 +71,8 @@ function archiverProgress(options) {
       archive.on('warning', (err) => {
         try {
           if (err.code === 'ENOENT') {
-            if (archiveWarningCount++ < options.maxWarning) {
-              if (options.onWarning) {
-                options.onWarning(err);
-              }
+            if (archiveWarningCount++ < options.maxWarning && options.onWarning) {
+              options.onWarning(err);
             }
           } else {
             reject(err);
@@ -90,22 +89,22 @@ function archiverProgress(options) {
        * TODO: This does not work... -> use fsPromise::writeFile instead !
        */
       if (options.textFiles) {
-        options.textFiles.forEach((t) => {
+        for (const t of options.textFiles) {
           archive.append(Buffer.from(t.text), {name: t.name});
-        });
+        }
       }
 
       /**
        * Add folders
        */
       if (options.folders) {
-        options.folders.forEach((t) => {
+        for (const t of options.folders) {
           /**
            * Archivers consider / as subfolder...
            */
           t.name = t.name.replace(/\//gi, '');
           archive.directory(t.path, t.name);
-        });
+        }
       }
 
       /**

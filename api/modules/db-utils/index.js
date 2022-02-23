@@ -1,16 +1,13 @@
-/**
- * mapx api db-utils
- */
-const {pgRead, pgWrite} = require('@mapx/db');
-const settings = require('@root/settings');
-const {parseTemplate, toBoolean} = require('@mapx/helpers');
-const template = require('@mapx/template');
-const valid = require('@fxi/mx_valid');
+import {pgRead, pgWrite} from '#mapx/db';
+import {settings} from '#root/settings';
+import {parseTemplate, toBoolean} from '#mapx/helpers';
+import {templates} from '#mapx/template';
+import {isArray, isSourceId, isNumeric, isProjectId} from '@fxi/mx_valid';
 
 /**
  * crypto key
  */
-const key = settings.db.crypto.key;
+const {key} = settings.db.crypto;
 
 /**
  * Test if a table exists
@@ -28,7 +25,7 @@ async function tableExists(idTable, schema) {
    AND    table_name = '${idTable}'
    )`;
   const res = await pgRead.query(sqlExists);
-  const exists = res.rowCount > 0 && res.rows[0].exists === true;
+  const exists = res.rowCount > 0 && res.rows[0].exists;
 
   return exists;
 }
@@ -59,11 +56,11 @@ async function tableHasValues(idTable, schema) {
    * Check if at least one attribute column besides gid and geom
    * exists and has value;
    */
-  const firstRow = resFirstRow.rows[0];
+  const [firstRow] = resFirstRow.rows;
   const attributes = Object.keys(firstRow);
 
   for (const attr of attributes) {
-    const hasAttr = !!attr && !['gid', 'geom'].includes(attr);
+    const hasAttr = attr && !['gid', 'geom'].includes(attr);
     if (hasAttr && firstRow[attr]) {
       return true;
     }
@@ -77,7 +74,7 @@ async function tableHasValues(idTable, schema) {
  * @return {String} decrypted message
  */
 async function decrypt(txt) {
-  const sqlDecrypt = "SELECT mx_decrypt('" + txt + "','" + key + "') as msg";
+  const sqlDecrypt = `SELECT mx_decrypt('` + txt + `','` + key + `') as msg`;
   const res = await pgRead.query(sqlDecrypt);
   if (res.rowCount > 0) {
     return JSON.parse(res.rows[0].msg);
@@ -91,8 +88,8 @@ async function decrypt(txt) {
  * @param {String} txt Message to encrypt
  * @return {String} encrypted message
  */
-async function encrypt(txt) {
-  const sql = "SELECT mx_encrypt('" + txt + "','" + key + "') as msg";
+function encrypt(txt) {
+  const sql = `SELECT mx_encrypt('` + txt + `','` + key + `') as msg`;
   const result = pgRead.query(sql);
   if (result.rowCount > 0) {
     return result.rows[0].msg;
@@ -138,18 +135,18 @@ async function registerSource(
   /**
    * Validation
    */
-  if (!valid.isSourceId(idSource)) {
-    throw new Error('Register source : idSource not valid');
+  if (!isSourceId(idSource)) {
+    throw Error('Register source : idSource not valid');
   }
-  if (!valid.isProjectId(idProject)) {
-    throw new Error('Register source : idProject not valid');
+  if (!isProjectId(idProject)) {
+    throw Error('Register source : idProject not valid');
   }
-  if (!valid.isNumeric(idUser)) {
+  if (!isNumeric(idUser)) {
     // check instead of existing user...
-    throw new Error('Register source : idUser not valid');
+    throw Error('Register source : idUser not valid');
   }
   if (!['vector', 'raster', 'tabular'].includes(type)) {
-    throw new Error('Register source : type not valid');
+    throw Error('Register source : type not valid');
   }
 
   const sqlAddSource = `INSERT INTO mx_sources (
@@ -202,7 +199,7 @@ async function registerOrRemoveSource(
     stats.removed = await removeSource(idSource);
   }
 
-  if (stats.removed === false) {
+  if (!stats.removed) {
     await registerSource(idSource, idUser, idProject, title, type);
     stats.registered = true;
   }
@@ -251,18 +248,18 @@ async function getColumnsNames(idLayer) {
  * @return {String} type
  */
 async function getColumnsTypesSimple(idSource, idAttr) {
-  if (!valid.isSourceId(idSource) || !idAttr) {
+  if (!isSourceId(idSource) || !idAttr) {
     return null;
   }
-  const cNames = valid.isArray(idAttr) ? idAttr : [idAttr];
-  const cNamesTxt = `('${cNames.join("','")}')`;
+  const cNames = isArray(idAttr) ? idAttr : [idAttr];
+  const cNamesTxt = `('${cNames.join(`','`)}')`;
 
   const opt = {
     idSource: idSource,
     idAttributesString: cNamesTxt
   };
 
-  const sqlSrcAttr = parseTemplate(template.getColumnsTypesSimple, opt);
+  const sqlSrcAttr = parseTemplate(templates.getColumnsTypesSimple, opt);
   const resp = await pgRead.query(sqlSrcAttr);
   return resp.rows;
 }
@@ -273,7 +270,7 @@ async function getColumnsTypesSimple(idSource, idAttr) {
  * @return {numeric} timetamp
  */
 async function getSourceLastTimestamp(idSource) {
-  if (!valid.isSourceId(idSource)) {
+  if (!isSourceId(idSource)) {
     return null;
   }
   const q = `WITH maxTimestampData as (
@@ -294,7 +291,7 @@ async function getSourceLastTimestamp(idSource) {
             )
           SELECT max(t) as timestamp from maxBoth;`;
   const data = await pgRead.query(q);
-  const row = data.rows[0];
+  const [row] = data.rows;
 
   if (row) {
     return row.timestamp;
@@ -315,7 +312,7 @@ async function getLayerTitle(idLayer, language) {
     values: [idLayer]
   };
   const res = await pgRead.query(queryAttributes);
-  const titles = res.rows[0];
+  const [titles] = res.rows;
   return titles.title_lang || titles.title_en || idLayer;
 }
 
@@ -330,7 +327,7 @@ async function getLayerTitle(idLayer, language) {
 async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
   useCache = toBoolean(useCache, true);
   autoCorrect = toBoolean(autoCorrect, false);
-  analyze = toBoolean(analyze,true);
+  analyze = toBoolean(analyze, true);
 
   var idValidColumn = '_mx_valid';
 
@@ -388,9 +385,9 @@ async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
   const title = await getLayerTitle(idLayer);
 
   /**
-  * ANALYZE first
-  */
-  if(analyze){
+   * ANALYZE first
+   */
+  if (analyze) {
     await analyzeSource(idLayer);
   }
 
@@ -424,7 +421,7 @@ async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
     nInvalid: 0
   };
 
-  res.rows.forEach((row) => {
+  for (const row of res.rows) {
     var n = row.n ? row.n * 1 || 0 : 0;
     switch (row.valid) {
       case true:
@@ -434,16 +431,16 @@ async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
         out.nInvalid = n;
         break;
     }
-  });
+  }
 
   return {
     id: idLayer,
-    valid: out.nInvalid === 0,
+    valid: true,
     title: title,
     status: out,
     useCache: useCache,
     autoCorrect: autoCorrect,
-    analyze : analyze
+    analyze: analyze
   };
 }
 
@@ -453,9 +450,9 @@ async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
  * @param {Boolean} force Force revalidation of previously wrong geom
  */
 function areLayersValid(idsLayers, useCache, autoCorrect) {
-  idsLayers = idsLayers instanceof Array ? idsLayers : [idsLayers];
-  var queries = idsLayers.map(function(id) {
-    return isLayerValid(id, useCache, autoCorrect);
+  if (!isArray(idsLayers)) idsLayers = [idsLayers];
+  var queries = idsLayers.map(async function(id) {
+    return await isLayerValid(id, useCache, autoCorrect);
   });
   return Promise.all(queries);
 }
@@ -463,7 +460,7 @@ function areLayersValid(idsLayers, useCache, autoCorrect) {
 /**
  * Exports
  */
-module.exports = {
+export {
   getColumnsNames,
   getColumnsTypesSimple,
   getSourceLastTimestamp,

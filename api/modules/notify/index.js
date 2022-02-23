@@ -1,9 +1,9 @@
-const {toRes, randomString, asyncDelay} = require('@mapx/helpers');
+import {toRes, randomString, asyncDelay} from '#mapx/helpers';
 
 /**
  * Unify notification for web socket and http write
  */
-module.exports.mwNotify = function(io) {
+export const mwNotify = io => {
   let id = 0;
   return (req, res, next) => {
     const idRequest = randomString('mx_req', 2, 6, true);
@@ -63,7 +63,10 @@ module.exports.mwNotify = function(io) {
         value: null,
         timestamp: new Date() * 1
       };
-      const out = Object.assign({}, def, opt);
+      const out = {
+        ...def,
+        ...opt
+      };
       if (idSocket) {
         await res.wsEmitTo(ioType, out);
       }

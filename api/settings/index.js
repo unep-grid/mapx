@@ -1,1 +1,2 @@
-module.exports = require("./settings-local.js");
+import {settings} from './settings-local.js';
+export {settings};

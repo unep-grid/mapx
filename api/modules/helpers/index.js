@@ -1,7 +1,10 @@
-const path = require('path');
-const fs = require('fs');
-const zlib = require('zlib');
-const settings = require('@root/settings');
+import path from 'path';
+import fs from 'fs';
+import zlib from 'zlib';
+import {settings} from '#root/settings';
+
+const {isArray} = Array;
+const isString = (a) => typeof a === 'string';
 
 /**
  * Conversion of array of column names to pg columns
@@ -13,16 +16,15 @@ function toPgColumn(arr) {
 /**
  * Get distinct value in array
  */
-
 function getDistinct(arr) {
   var test = {};
   var out = [];
-  arr.forEach(function(v) {
+  for (const v of arr) {
     if (!test[v]) {
       test[v] = true;
       out.push(v);
     }
-  });
+  }
   return out;
 }
 /**
@@ -42,8 +44,11 @@ function toRes(obj) {
  * @param {Object} opt.etag If set, add custom etag
  */
 function sendJSON(res, data, opt) {
-  opt = Object.assign({}, {end: true}, opt);
-  opt.end = opt.end === true || false;
+  opt = {
+    end: true,
+    ...opt
+  };
+  opt.end = opt.end || false;
   data = JSON.stringify(data || '');
   res.setHeader('Mapx-Content-Length', data.length || 0);
   res.setHeader('Content-Type', 'application/json');
@@ -66,13 +71,15 @@ function sendJSON(res, data, opt) {
  * @return null
  */
 function sendError(res, error, code) {
-  if(!code){
-    code = '200'
+  if (!code) {
+    code = '200';
   }
-  error =  Object.assign({},{message:'Error'},error,{type:'error'});
-  res.status(code).send(
-    toRes(error)
-  );
+  error = {
+    message: 'Error',
+    ...error,
+    type: 'error'
+  };
+  res.status(code).send(toRes(error));
 }
 
 /**
@@ -86,7 +93,7 @@ function toBoolean(value, def) {
   var tValue = typeof value;
 
   if (tDef !== 'boolean') {
-    throw new Error('toBoolean : default not boolean');
+    throw Error('toBoolean : default not boolean');
   }
   if (tValue === 'boolean') {
     return value;
@@ -139,16 +146,14 @@ function randomString(prefix, nRep, nChar, toLower, toUpper) {
  */
 function readTxt(p) {
   p = path.resolve(p);
-  return fs.readFileSync(p, (endoding = 'UTF-8'));
+  return fs.readFileSync(p, {encoding: 'UTF-8'});
 }
 
 /**
  * Simple template parsing
  */
 function parseTemplate(template, data) {
-  return template.replace(/{{([^{}]+)}}/g, (matched, key) => {
-    return data[key];
-  });
+  return template.replace(/{{([^{}]+)}}/g, (_, key) => data[key]);
 }
 
 /**
@@ -186,7 +191,7 @@ function attrToPgCol(attribute, attributes) {
     attributes = [attributes];
   }
   var attr = getDistinct(attribute.concat(attributes));
-  if (attr.indexOf('gid') === -1) {
+  if (!attr.includes('gid')) {
     attr.push('gid');
   }
   return toPgColumn(attr);
@@ -199,14 +204,14 @@ function attrToPgCol(attribute, attributes) {
  * @param {Any} def Default value, in case of empty array.
  */
 function arrayToPgArray(arr, def) {
-  if (typeof arr === 'string') {
+  if (isString(arr)) {
     arr = [arr];
   }
   arr = arr || [];
   if (arr.length === 0) {
-    return def || "('')";
-  } 
-  return "('" + arr.join("','") + "')";
+    return def || `('')`;
+  }
+  return `('` + arr.join(`','`) + `')`;
 }
 
 /**
@@ -232,7 +237,7 @@ function dataToJsonZip(data) {
  * @param {String} reason Error message
  */
 function stop(reason) {
-  throw new Error(reason);
+  throw Error(reason);
 }
 
 /**
@@ -242,7 +247,7 @@ function stop(reason) {
 function asArray(v) {
   v = v || [];
   var r = [];
-  if (v instanceof Array) {
+  if (isArray(v)) {
     r = cleanArray(v);
   } else {
     r = cleanArray(v.split(','));
@@ -270,7 +275,7 @@ function findValues(obj, key) {
   if (!obj) {
     return list;
   }
-  if (obj instanceof Array) {
+  if (isArray(obj)) {
     for (i in obj) {
       list = list.concat(findValues(obj[i], key));
     }
@@ -294,7 +299,7 @@ function findValues(obj, key) {
 /**
  * Get config from client
  */
-function mwGetConfigMap(req, res) {
+function mwGetConfigMap(_, res) {
   return sendJSON(res, settings.map);
 }
 
@@ -303,7 +308,7 @@ function mwGetConfigMap(req, res) {
  */
 function wait(duration) {
   return new Promise((resolve) => {
-      setTimeout(()=>resolve({_timeout:duration}), duration);
+    setTimeout(() => resolve({_timeout: duration}), duration);
   });
 }
 const asyncDelay = wait;
@@ -318,15 +323,12 @@ const asyncDelay = wait;
  * @param {Function} opt.onError Cb on error
  */
 async function once(cbs, opt) {
-  opt = Object.assign(
-    {},
-    {
-      onError: console.error,
-      onSuccess: console.log,
-      timeoutMs: 1 * 60 * 1000
-    },
-    opt
-  );
+  opt = {
+    onError: console.error,
+    onSuccess: console.log,
+    timeoutMs: 1 * 60 * 1000,
+    ...opt
+  };
   try {
     const r = await withTimeLimit(cbs, opt.timeoutMs);
     opt.onSuccess(cbs, r);
@@ -348,14 +350,11 @@ async function once(cbs, opt) {
  */
 async function onceInterval(cbs, opt) {
   try {
-    opt = Object.assign(
-      {},
-      {
-        intervalMs: 1 * 60 * 60 * 1000,
-        before: false
-      },
-      opt
-    );
+    opt = {
+      intervalMs: 1 * 60 * 60 * 1000,
+      before: false,
+      ...opt
+    };
     if (opt.before) {
       await once(cbs, opt);
     }
@@ -385,19 +384,19 @@ async function withTimeLimit(cbs, timeoutMs, cbTimeout) {
   }
   const hasFallback = cbTimeout instanceof Function;
   const out = [];
-  for(const cb of cbs){
+  for (const cb of cbs) {
     let res = await Promise.race([cb(), asyncDelay(timeoutMs)]);
     /**
-    * Reject if timeouted and apply fallback cb (cbTimeout)
-    */
-    if (res && res._timeout) {
-        if (hasFallback) {
-          res = await cbTimeout(cb);
-        } else {
-          throw new Error(`Timeout reached for ${cb.name} (${timeoutMs})`);
-        }
+     * Reject if timeouted and apply fallback cb (cbTimeout)
+     */
+    if (res?._timeout) {
+      if (hasFallback) {
+        res = await cbTimeout(cb);
+      } else {
+        throw Error(`Timeout reached for ${cb.name} (${timeoutMs})`);
       }
-      out.push({cb:cb, res:res});
+    }
+    out.push({cb: cb, res: res});
   }
 
   return out;
@@ -406,7 +405,7 @@ async function withTimeLimit(cbs, timeoutMs, cbTimeout) {
 /**
  * Set default headers
  */
-function mwSetHeaders(req, res, next) {
+function mwSetHeaders(_, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Expose-Headers', 'Content-Length');
   res.header('Access-Control-Expose-Headers', 'Mapx-Content-Length');
@@ -420,7 +419,7 @@ function mwSetHeaders(req, res, next) {
 /**
  * Exports
  */
-module.exports = {
+export {
   toPgColumn,
   attrToPgCol,
   arrayToPgArray,

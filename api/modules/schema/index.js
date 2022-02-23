@@ -1,3 +1,8 @@
-const path = require('path');
+import { readFile } from 'fs/promises';
+const apiLogs = JSON.parse(
+  await readFile(
+    new URL('./api_logs.json', import.meta.url)
+  )
+);
 
-module.exports.apiLogs = require(path.join(__dirname,'api_logs.json'));
+export {apiLogs};

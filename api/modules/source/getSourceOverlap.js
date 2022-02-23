@@ -1,26 +1,26 @@
-const wktToJson = require('wellknown').parse;
-const martinez = require('martinez-polygon-clipping');
-const turf = require('@turf/turf');
-const helpers = require('@mapx/helpers');
-const {sendMailAuto} = require('@mapx/mail');
-const {pgWrite} = require('@mapx/db');
-const {
+import {isArray} from '@fxi/mx_valid';
+import {parse as wktToJson} from 'wellknown';
+import martinez from 'martinez-polygon-clipping';
+import {multiPolygon, area as getArea} from '@turf/turf';
+import {toRes, randomString, attrToPgCol} from '#mapx/helpers';
+import {sendMailAuto} from '#mapx/mail';
+import {pgWrite} from '#mapx/db';
+import {
   validateTokenHandler,
   validateRoleHandlerFor
-} = require('@mapx/authentication');
-const {
+} from '#mapx/authentication';
+import {
   registerOrRemoveSource,
   removeSource,
   getColumnsNames,
   areLayersValid,
   analyzeSource
-} = require('@mapx/db-utils');
+} from '#mapx/db-utils';
 
-const toRes = helpers.toRes;
 /**
  * Upload's middleware
  */
-module.exports.mwGetOverlap = [
+export const mwGetOverlap = [
   validateTokenHandler,
   validateRoleHandlerFor('member'),
   getOverlapHandler
@@ -32,17 +32,18 @@ async function getOverlapHandler(req, res) {
   const countries = req.query.countries
     ? req.query.countries.split(',') || []
     : [];
-  const idProject = req.query.idProject;
+  const {
+    idProject,
+
+    sourceTitle = 'Overlap ' +
+      Math.random()
+        .toString(36)
+        .substring(1, 7)
+  } = req.query;
   const idUser = req.query.idUser * 1;
   const emailUser = req.query.email;
 
-  const sourceTitle =
-    req.query.sourceTitle ||
-    'Overlap ' +
-      Math.random()
-        .toString(36)
-        .substring(1, 7);
-  const idSource = helpers.randomString('mx_vector', 4, 5).toLowerCase();
+  const idSource = randomString('mx_vector', 4, 5).toLowerCase();
 
   const method = req.query.method || 'getArea' || 'createSource';
   res.setHeader('Content-Type', 'application/json');
@@ -102,7 +103,7 @@ async function getOverlapHandler(req, res) {
 
     const layersValidated = await areLayersValid(layers, true, false);
 
-    layersValidated.forEach((layer) => {
+    for (const layer of layersValidated) {
       if (!layer.valid) {
         res.write(
           toRes({
@@ -112,7 +113,7 @@ async function getOverlapHandler(req, res) {
             } ) has invalid geometries. Please correct them and try again`
           })
         );
-        throw new Error('Invalid geometry found');
+        throw Error('Invalid geometry found');
       } else {
         res.write(
           toRes({
@@ -121,7 +122,7 @@ async function getOverlapHandler(req, res) {
           })
         );
       }
-    });
+    }
 
     if (method === 'createSource') {
       await getOverlapCreateSource(config);
@@ -187,13 +188,16 @@ async function getOverlapCreateSource(options) {
   var layers = options.layers;
   var nLayers = layers.length;
 
-  var layerAliasPrevious, layerAlias, layerCurrent, attr;
+  var layerAliasPrevious;
+  var layerAlias;
+  var layerCurrent;
+  var attr;
   var finalBlock = false;
 
   let attrOut = await getColumnsNames(options.mainLayer);
 
   attrOut = attrOut.filter((a) => a !== 'geom');
-  attrOut = helpers.attrToPgCol(attrOut);
+  attrOut = attrToPgCol(attrOut);
 
   send.message('Build query');
 
@@ -206,13 +210,11 @@ async function getOverlapCreateSource(options) {
   /**
    * Country block
    */
-  sqlQuery =
-    sqlQuery +
-    `
-      WITH countries as (
-        SELECT ST_Union(geom) geom from mx_countries
-        WHERE iso3code = ANY($1::text[])
-      ),`;
+  sqlQuery += `
+    WITH countries as (
+      SELECT ST_Union(geom) geom from mx_countries
+      WHERE iso3code = ANY($1::text[])
+    ),`;
 
   /**
    * Layers block
@@ -260,10 +262,8 @@ async function getOverlapCreateSource(options) {
      * Final query to build the table
      */
     if (finalBlock) {
-      sqlQuery =
-        sqlQuery +
-        `
-          SELECT ${attr} geom from ${layerAlias}`;
+      sqlQuery += `
+        SELECT ${attr} geom from ${layerAlias}`;
     }
   }
 
@@ -275,7 +275,7 @@ async function getOverlapCreateSource(options) {
   });
   const reg = await registerOrRemoveSource(options);
 
-  if (reg.registered === false) {
+  if (!reg.registered) {
     send.message('No records, table removed');
     if (options.emailUser) {
       sendMailAuto({
@@ -326,7 +326,7 @@ async function getOverlapArea(options) {
   var countries = options.countries || [];
   var layers = options.layers || [];
 
-  send.message = send.message || cons;
+  send.message = send.message || '';
   send.area = send.area || function() {};
 
   send.message(
@@ -342,12 +342,12 @@ async function getOverlapArea(options) {
 
   // Test countries input
   if (countries.length !== 1) {
-    throw new Error('The number of countries is invalid!');
+    throw Error('The number of countries is invalid!');
   }
 
   // Test layers input
   if (layers.length === 0 || layers.length > 3) {
-    throw new Error('The number of layers is invalid!');
+    throw Error('The number of layers is invalid!');
   }
 
   // Parameterized query that returns a GeometryCollection containing the countries' geom
@@ -366,7 +366,7 @@ async function getOverlapArea(options) {
 
   // Parameterized query that returns a GeometryCollection containing the layer's geom
   for (var i = 0, iL = layers.length; i < iL; i++) {
-    if (hasCountries === true) {
+    if (hasCountries) {
       req = {
         text: `WITH countries AS(
             SELECT geom as geom
@@ -378,7 +378,7 @@ async function getOverlapArea(options) {
         values: [countries],
         rowMode: 'array'
       };
-    } else if (hasCountries === false) {
+    } else if (!hasCountries) {
       req = {
         text: `SELECT ST_AsText(ST_Buffer(ST_Collect(l.geom),0))
           FROM ' + layers[i] + ' l`,
@@ -395,7 +395,7 @@ async function getOverlapArea(options) {
 
     return pgWrite.query(l).then((res) => {
       send.message('Extract data of layer ' + i);
-      data = res.rows[0];
+      [data] = res.rows;
       out = wktArrayToJson(data);
       return out;
     });
@@ -415,8 +415,7 @@ async function getOverlapArea(options) {
   ) {
     dataLayers = dataLayersJSONFiltered.reduce((intersection, layer, index) => {
       var lc = layer.coordinates;
-      intersection =
-        intersection instanceof Array ? intersection : intersection.coordinates;
+      if (!isArray(intersection)) intersection = intersection.coordinates;
       send.message('Intersect between layer ' + index + ' and previous');
       if (areCoordsValid(lc, intersection)) {
         return martinez.intersection(lc, intersection);
@@ -433,7 +432,7 @@ async function getOverlapArea(options) {
     dataLayers = [];
   }
 
-  if (dataLayers instanceof Array && dataLayers.length > 0) {
+  if (isArray(dataLayers) && dataLayers.length > 0) {
     dataCountriesWKT = await pgWrite.query(queryCountries);
   }
 
@@ -451,11 +450,11 @@ async function getOverlapArea(options) {
       cIntersect = martinez.intersection(cCountries, cLayers);
     }
 
-    if (cIntersect instanceof Array && cIntersect.length > 0) {
+    if (isArray(cIntersect) && cIntersect.length > 0) {
       send.message('Build geometry');
-      cIntersectMultiPolygon = turf.multiPolygon(cIntersect);
+      cIntersectMultiPolygon = multiPolygon(cIntersect);
       send.message('Compute area');
-      area = turf.area(cIntersectMultiPolygon);
+      area = getArea(cIntersectMultiPolygon);
     }
   }
   send.area(area);
@@ -474,9 +473,7 @@ async function getOverlapArea(options) {
  *  @return {Boolean} Both are valid
  */
 function areCoordsValid(a, b) {
-  return (
-    a instanceof Array && b instanceof Array && a.length > 0 && b.length > 0
-  );
+  return isArray(a) && isArray(b) && a.length > 0 && b.length > 0;
 }
 
 /* Parse & stringify Well-Known Text (WKT) into GeoJSON
@@ -485,7 +482,7 @@ function areCoordsValid(a, b) {
  */
 function wktArrayToJson(a) {
   var out = {};
-  a = a instanceof Array ? a[0] : null;
-  out = a ? wktToJson(a) : a;
+  a = isArray(a) ? a[0] : null;
+  out = a && wktToJson(a);
   return out;
 }

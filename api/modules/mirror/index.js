@@ -1,7 +1,7 @@
-const fetch = require('node-fetch');
-const {sendError} = require('@mapx/helpers');
-const settings = require('@root/settings');
-const rateLimit = require("express-rate-limit");
+import fetch from 'node-fetch';
+import {sendError} from '#mapx/helpers';
+import {settings} from '#root/settings';
+import rateLimit from 'express-rate-limit';
 const mwLimiter = rateLimit({
   windowMs: settings.mirror.rateWindowMinutes * 60 * 1000,
   max: settings.mirror.rateLimit
@@ -9,15 +9,16 @@ const mwLimiter = rateLimit({
 /**
  * Request handler / middleware
  */
+const mwGet = [mwLimiter, mwMirror];
 
-module.exports.mwGet = [mwLimiter, mwMirror];
+export default {mwGet};
 
 async function mwMirror(req, res) {
-  const url = req.query.url;
+  const {url} = req.query;
   try {
     const r = await fetch(url);
     return r.body.pipe(res);
   } catch (e) {
-    return sendError(res, e, 500 );
+    return sendError(res, e, 500);
   }
 }

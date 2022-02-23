@@ -1,11 +1,11 @@
-const {getRule} = require('./rules.js');
-const {stop} = require('@mapx/helpers');
+import {getRule} from './rules.js';
+import {stop} from '#mapx/helpers';
 const settings = {
   required: [],
   expected: []
 };
 
-module.exports = {
+export  {
   getParamsValidator,
   paramsValidator
 };
@@ -22,7 +22,10 @@ module.exports = {
  * @returns {Array} out.invalid Invalid params
  */
 function paramsValidator(obj, opt) {
-  opt = Object.assign({}, settings, opt);
+  opt = {
+    ...settings,
+    ...opt
+  };
   opt.expected = Array.from(new Set(opt.expected.concat(opt.required)));
   const out = {
     unexpected: [],
@@ -34,16 +37,16 @@ function paramsValidator(obj, opt) {
   /**
    * Validate expected param
    */
-  Object.keys(obj).forEach((k) => {
-    if (opt.expected.indexOf(k) === -1) {
+  for (const k of Object.keys(obj)) {
+    if (!opt.expected.includes(k)) {
       out.unexpected.push(k);
     }
-  });
+  }
 
   /**
    * Validate each param
    */
-  opt.expected.forEach((k) => {
+  for (const k of opt.expected) {
     let isRequired = opt.required.indexOf(k) > -1;
     let rule = getRule(k);
     let value = obj[k];
@@ -53,14 +56,14 @@ function paramsValidator(obj, opt) {
       out.missing.push(k);
     }
 
-    if (rule && rule.test) {
+    if (rule?.test) {
       // at least validated empty string (required by validator);
       try{
         result = rule.test(value || '');
         if (!result.valid && isRequired) {
           out.invalid.push(k);
         }
-      }catch(e){
+      }catch {
         out.invalid.push(k);
       }
       /**
@@ -71,8 +74,8 @@ function paramsValidator(obj, opt) {
     } else {
       obj[k] = null;
     }
-  });
-  
+  }
+
   out.ok =
     out.missing.length === 0 &&
     out.unexpected.length === 0 &&
@@ -85,7 +88,7 @@ function paramsValidator(obj, opt) {
  * Get a custom validator middleware
  */
 function getParamsValidator(opt) {
-  return function(req, res, next) {
+  return (req, res, next) => {
     req = req || {};
     try {
       /**

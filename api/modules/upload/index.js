@@ -1,7 +1,7 @@
-const mwImage = require('./image.js').mwUpload;
-const mwVector = require('./vector.js').mwUpload;
+import {mwUpload as mwImage } from './image.js';
+import {mwUpload as mwVector} from './vector.js';
 
-module.exports = {
+export default  {
   mwImage,
   mwVector
 };

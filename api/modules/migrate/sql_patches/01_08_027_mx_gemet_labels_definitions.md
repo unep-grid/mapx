@@ -1,15 +1,12 @@
-## Gemet db -> mapx mx_gemet 
-
+## Gemet db -> mapx mx_gemet
 
 Using a copy of the GEMET database requested from https://www.eionet.europa.eu/gemet/, we buit a table for all concepts labels and definitions, for all MapX languages. The dump was then saved in `api/modules/migrate/sql_patches`
 
-_warning_ Manual work is needed to be applied as a patch, see next section
+*warning* Manual work is needed to be applied as a patch, see next section
 
-
-### Script to reshape 
+### Script to reshape
 
 The script to build the table *where the gemet db exists; e.g. not in mapx db instance*:
-
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
@@ -164,12 +161,6 @@ note: this could be configured in `pg_dump` ?
 - ADD `GRANT select ON mx_gemet TO mapxr`;
 - Check ownership: it should be mapxw, e.g. `ALTER TABLE public.mx_gemet OWNER TO mapxw;`
 - Remove psql `SET` instruction
-- ADD `DROP TABLE IF EXISTS mx_gemet CASCADE` at the top 
+- ADD `DROP TABLE IF EXISTS mx_gemet CASCADE` at the top
 - reformat inserts to have :
   INSERT ... values (...),(...); instead of one insert per line.
-
-
-
-
-
-

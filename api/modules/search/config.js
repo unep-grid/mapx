@@ -1,7 +1,8 @@
-const {validation_defaults} = require('@root/settings');
-const languages = validation_defaults.languages;
+import {settings} from '#root/settings';
+const { validation_defaults } = settings;
+const {languages} = validation_defaults;
 
-const config = {
+export const config = {
   // Distinct keywords currently used
   idx_keywords: {
     primaryKey: 'id_hash',
@@ -71,4 +72,3 @@ const config = {
   }
 };
 
-exports.config = config;

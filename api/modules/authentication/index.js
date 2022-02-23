@@ -1,13 +1,12 @@
-const {pgWrite} = require('@mapx/db');
-const helpers = require('@mapx/helpers');
-const template = require('@mapx/template');
-const {decrypt} = require('@mapx/db-utils');
-const toRes = helpers.toRes;
+import {pgWrite} from '#mapx/db';
+import {toRes} from '#mapx/helpers';
+import {templates} from '#mapx/template';
+import {decrypt} from '#mapx/db-utils';
 
 /**
  * Exports
  */
-module.exports = {
+export  {
   validateTokenHandler,
   validateRoleHandlerFor,
   validateToken,
@@ -18,17 +17,19 @@ module.exports = {
  * Validate / authenticate user
  */
 async function validateTokenHandler(req, res, next) {
-  let idUser, userToken;
+  let idUser;
+  let userToken;
+  //let userEmail;
   const hasBody = typeof req.body === 'object';
 
   if (hasBody) {
     idUser = req.body.idUser;
     userToken = req.body.token;
-    userEmail = req.body.email;
+    //userEmail = req.body.email;
   } else {
     idUser = req.query.idUser;
     userToken = req.query.token;
-    userEmail = req.query.email;
+    //userEmail = req.query.email;
   }
 
   var tokenData = {isValid: false};
@@ -55,7 +56,7 @@ async function validateTokenHandler(req, res, next) {
       }
       next();
     } else {
-      throw new Error('Token not valid');
+      throw Error('Token not valid');
     }
   } catch (e) {
     /**
@@ -84,7 +85,9 @@ async function validateTokenHandler(req, res, next) {
 
 function validateRoleHandlerFor(role) {
   return async function(req, res, next) {
-    let roles, idUser, idProject;
+    let roles;
+    let idUser;
+    let idProject;
     const hasBody = typeof req.body === 'object';
 
     try {
@@ -98,8 +101,8 @@ function validateRoleHandlerFor(role) {
 
       roles = await getUserRole(idUser, idProject);
 
-      if (roles[role] !== true) {
-        throw new Error('Unautorized role');
+      if (!roles[role]) {
+        throw Error('Unautorized role');
       } else {
         next();
       }
@@ -135,7 +138,7 @@ function validateRoleHandlerFor(role) {
  */
 async function getUserRole(idUser, idProject) {
   idUser = idUser * 1 || null;
-  const sqlProject = template.getUserRoles;
+  const sqlProject = templates.getUserRoles;
   const res = await pgWrite.query(sqlProject, [idProject]);
 
   if (res.rowCount === 0) {
@@ -151,13 +154,13 @@ async function getUserRole(idUser, idProject) {
   /**
    * Eval roles
    */
-  const pData = res.rows[0];
+  const [pData] = res.rows;
 
   const hasAdminRole = pData.admins.indexOf(idUser) > -1;
   const hasPublisherRole = pData.publishers.indexOf(idUser) > -1;
   const hasMemberRole = pData.members.indexOf(idUser) > -1;
   const hasGuestRole =
-    pData.public === true &&
+    pData.public &&
     !hasMemberRole &&
     !hasPublisherRole &&
     !hasAdminRole;
@@ -217,7 +220,7 @@ async function validateToken(userToken) {
  */
 async function validateUser(idUser, keyUser) {
   idUser = idUser * 1 || null;
-  var sqlUser = template.getCheckUserIdKey;
+  var sqlUser = templates.getCheckUserIdKey;
   const res = await pgWrite.query(sqlUser, [idUser * 1, keyUser]);
   const isValid = res.rowCount === 1 && res.rows[0].id === idUser;
   const email = isValid ? res.rows[0].email : null;

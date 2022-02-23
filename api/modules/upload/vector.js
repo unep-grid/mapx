@@ -1,90 +1,76 @@
-/**
- * Uppload vector + conversion into postgres layer + register source
- *
- * TODO:: A LOT of unexpected issues occured here: GDAL issue, enormous files, malformed data, projection error....
- * This part has been fixed many times, but it needs a refactoring + dedicated function for adding/removing source +
- * usage of schema / models.etc..
- */
-const multer = require('multer');
-const {access, unlink} = require('fs/promises');
-const path = require('path');
-const {spawn} = require('child_process');
+import multer from "multer";
+import { access, unlink } from "fs/promises";
+import path from "path";
+import { spawn } from "child_process";
 
-const {sendMailAuto} = require('@mapx/mail');
-const {handleErrorText} = require('@mapx/error');
-const settings = require('@root/settings');
-const {toRes, randomString} = require('@mapx/helpers');
-const {
+import { sendMailAuto } from "#mapx/mail";
+import { handleErrorText } from "#mapx/error";
+import { settings } from "#root/settings";
+import { toRes, randomString } from "#mapx/helpers";
+import {
   removeSource,
   isLayerValid,
   tableHasValues,
-  registerOrRemoveSource
-} = require('@mapx/db-utils');
-const {
+  registerOrRemoveSource,
+} from "#mapx/db-utils";
+import {
   validateTokenHandler,
-  validateRoleHandlerFor
-} = require('@mapx/authentication');
+  validateRoleHandlerFor,
+} from "#mapx/authentication";
 
 /*
  * Shortcut
  */
-const emailAdmin = settings.mail.config.emailAdmin;
+const { emailAdmin } = settings.mail.config;
 
 /**
  * Set multer storage
  */
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (_, __, cb) => {
     const pathTemp = settings.vector.path.temporary;
     cb(null, pathTemp);
   },
-  filename: (req, file, cb) => {
+  filename: (_, file, cb) => {
     const now = Date.now();
-    const regSpaces = new RegExp(/\s+/, 'g');
-    const name = file.originalname.replace(regSpaces, '_');
+    const regSpaces = new RegExp(/\s+/, "g");
+    const name = file.originalname.replace(regSpaces, "_");
     const filename = `${now}_${name}`;
     cb(null, filename);
-  }
+  },
 });
 
-const uploadHandler = multer({storage: storage}).single('vector');
+const uploadHandler = multer({ storage: storage }).single("vector");
+
 /**
  * Upload's middleware
  */
-module.exports.mwUpload = [
+export const mwUpload = [
   uploadHandler,
   validateTokenHandler,
-  validateRoleHandlerFor('publisher'),
+  validateRoleHandlerFor("publisher"),
   convertOgrHandler,
-  addSourceHandler
+  addSourceHandler,
 ];
-
-/*
- * Export other utils
- */
-
-module.exports.convertOgrHandler = convertOgrHandler;
-module.exports.fileToPostgres = fileToPostgres;
 
 /**
  * Convert data
  */
-async function convertOgrHandler(req, res, next) {
-  const hasBody = typeof req.body === 'object' && req.file;
+export async function convertOgrHandler(req, res, next) {
+  const hasBody = typeof req.body === "object" && req.file;
 
   if (!hasBody) {
-    throw new Error('Empty body');
+    throw Error("Empty body");
   }
 
   const userEmail = req.body.email;
-  const sourceSrs = req.body.sourceSrs;
-  const title = req.body.title;
+  const { sourceSrs, title } = req.body;
   const fileName = req.file.filename;
   const isZipped =
-    req.file.mimetype === 'application/zip' ||
-    req.file.mimetype === 'application/x-zip-compressed' ||
-    req.file.mimetype === 'multipart/x-zip';
-  const isCsv = req.file.mimeType === 'text/csv' || !!fileName.match(/.csv$/);
+    req.file.mimetype === "application/zip" ||
+    req.file.mimetype === "application/x-zip-compressed" ||
+    req.file.mimetype === "multipart/x-zip";
+  const isCsv = req.file.mimeType === "text/csv" || !!fileName.match(/.csv$/);
 
   await fileToPostgres({
     isZipped: isZipped,
@@ -100,7 +86,7 @@ async function convertOgrHandler(req, res, next) {
         res.write(
           toRes({
             type: data.type,
-            msg: data.msg
+            msg: data.msg,
           })
         );
       }
@@ -111,19 +97,19 @@ async function convertOgrHandler(req, res, next) {
 
       res.write(
         toRes({
-          type: 'error',
-          msg: err
+          type: "error",
+          msg: err,
         })
       );
-      
+
       sendMailAuto({
-        to: [userEmail, emailAdmin].join(','),
+        to: [userEmail, emailAdmin].join(","),
         content: data.msg,
-        subject: subject
+        subject: subject,
       });
 
       res.status(500).end();
-    }
+    },
   });
 }
 
@@ -131,24 +117,21 @@ async function convertOgrHandler(req, res, next) {
  * Handler for adding reccord in source table
  */
 async function addSourceHandler(req, res) {
-  const title = req.body.title;
-  const email = req.body.email;
+  const { title, email, idSource } = req.body;
   const idProject = req.body.project;
   const idUser = req.body.idUser * 1;
-  const idSource = req.body.idSource;
   const fileToRemove = req.file.path;
   const fileName = req.file.filename;
   const msg = {};
-  const isCsv = req.file.mimetype === 'text/csv' || !!fileName.match(/.csv$/);
-  const sourceType = isCsv ? 'tabular' : 'vector';
-  const isVector = sourceType === 'vector';
+  const isCsv = req.file.mimetype === "text/csv" || !!fileName.match(/.csv$/);
+  const sourceType = isCsv ? "tabular" : "vector";
+  const isVector = sourceType === "vector";
   let isValid = true;
 
   msg.waitValidation = `Geometry validation – This could take a while, please wait. If an error occurs, a message will be displayed `;
   msg.addedNewEntry = `Added new entry "${title}" ( ${idSource} ) in project ${idProject}.`;
   msg.invalidGeom = `Some geometries were not valid and some MapX functions will therefore not work properly. Please correct those geometries.`;
-  msg.sourceNotRegistered =
-    "The source can't be registered, check if attributes table has at least one row";
+  msg.sourceNotRegistered = `The source can't be registered, check if attributes table has at least one row`;
   msg.titleMailSuccess = `MapX import success for source ${title}`;
   msg.titleMailError = `MapX import failed for source ${title}`;
 
@@ -161,8 +144,8 @@ async function addSourceHandler(req, res) {
       sourceType
     );
 
-    if (reg.registered !== true) {
-      throw new Error(msg.sourceNotRegistered);
+    if (!reg.registered) {
+      throw Error(msg.sourceNotRegistered);
     }
 
     /**
@@ -171,8 +154,8 @@ async function addSourceHandler(req, res) {
     if (isVector) {
       res.write(
         toRes({
-          type: 'message',
-          msg: msg.waitValidation
+          type: "message",
+          msg: msg.waitValidation,
         })
       );
       const layerTest = await isLayerValid(idSource, false);
@@ -180,8 +163,8 @@ async function addSourceHandler(req, res) {
       if (!isValid) {
         res.write(
           toRes({
-            type: 'warning',
-            msg: msg.invalidGeom
+            type: "warning",
+            msg: msg.invalidGeom,
           })
         );
       }
@@ -191,15 +174,15 @@ async function addSourceHandler(req, res) {
 
     res.write(
       toRes({
-        type: 'message',
-        msg: `Cleaned temporary files: ${fileRemoved}`
+        type: "message",
+        msg: `Cleaned temporary files: ${fileRemoved}`,
       })
     );
 
     res.write(
       toRes({
-        type: 'end',
-        msg: msg.addedNewEntry
+        type: "end",
+        msg: msg.addedNewEntry,
       })
     );
 
@@ -208,8 +191,8 @@ async function addSourceHandler(req, res) {
         to: [email],
         content: isValid
           ? msg.addedNewEntry
-          : msg.addedNewEntry + '\n' + msg.invalidGeom,
-        subject: msg.titleMailSuccess
+          : msg.addedNewEntry + "\n" + msg.invalidGeom,
+        subject: msg.titleMailSuccess,
       });
     }
 
@@ -219,30 +202,30 @@ async function addSourceHandler(req, res) {
       /**
        * In case of error, send a mail
        */
-      var msgError = msg.titleMailError + ': ' + err;
+      var msgError = msg.titleMailError + ": " + err;
       res.write(
         toRes({
-          type: 'error',
-          msg: msgError
+          type: "error",
+          msg: msgError,
         })
       );
       sendMailAuto({
-        to: [email, emailAdmin].join(','),
+        to: [email, emailAdmin].join(","),
         content: msgError,
-        subject: msg.titleMailError
+        subject: msg.titleMailError,
       });
 
       await cleanAll(fileToRemove, idSource, res);
-      res.status('403').end();
+      res.status("403").end();
     } catch (err) {
       res.write(
         toRes({
-          type: 'error',
-          msg: `Unexpected error :  ${err} `
+          type: "error",
+          msg: `Unexpected error :  ${err} `,
         })
       );
 
-      res.status('403').end();
+      res.status("403").end();
     }
   }
 }
@@ -256,7 +239,7 @@ async function cleanFile(fileToRemove) {
     await access(fileToRemove);
     await unlink(fileToRemove);
   } catch (e) {
-    console.error('cleanFile error', e);
+    console.error("cleanFile error", e);
     removed = false;
   }
   return removed;
@@ -270,8 +253,8 @@ async function cleanAll(fileToRemove, idSource, res) {
   const fileRemoved = await cleanFile(fileToRemove);
   res.write(
     toRes({
-      type: 'message',
-      msg: `Removed source : ${sourceRemoved}; Removed file : ${fileRemoved}`
+      type: "message",
+      msg: `Removed source : ${sourceRemoved}; Removed file : ${fileRemoved}`,
     })
   );
 }
@@ -283,38 +266,43 @@ async function cleanAll(fileToRemove, idSource, res) {
  * @param {String} config.fileName Filename
  * @param {String} config.sourceSrs Original SRS
  * @param {Boolean} config.isCsv CSV mode -> type tabular
+ * @param {Boolean} config.isZipped Is zipped -> type shapefile
  * @param {Function} config.onError Callback on error
  * @param {Function} config.onMessage Callback on message
  * @param {Function} config.onSuccess Callback on success
  */
-async function fileToPostgres(config) {
+export async function fileToPostgres(config) {
   config = config || {};
-  const fileName = config.fileName;
-  const sourceSrs = config.sourceSrs;
-  const onMessage = config.onMessage || function() {};
-  const onError = config.onError || function() {};
-  const onSuccess = config.onSuccess || function() {};
-  const idSource = randomString('mx_vector', 4, 5).toLowerCase();
-  const isZipped = config.isZipped === true;
-  const isCsv = config.isCsv === true;
+  const {
+    fileName,
+    sourceSrs,
+    onMessage = function () {},
+    onError = function () {},
+    onSuccess = function () {},
+  } = config;
 
   try {
+    const idSource = randomString("mx_vector", 4, 5).toLowerCase();
+
+    const isZipped = Boolean(config.isZipped);
+    const isCsv = Boolean(config.isCsv);
+
     if (!fileName) {
-      throw new Error('No filename given');
+      throw Error("No filename given");
     }
 
     let filePath = path.format({
       dir: settings.vector.path.temporary,
-      base: fileName
+      base: fileName,
     });
 
     if (isZipped) {
-      filePath = '/vsizip/' + filePath;
+      filePath = "/vsizip/" + filePath;
     }
 
     onMessage({
-      msg: 'Conversion : please wait ...',
-      type: 'message'
+      msg: "Conversion : please wait ...",
+      type: "message",
     });
 
     /**
@@ -340,61 +328,62 @@ async function fileToPostgres(config) {
      * using a script. This should be a temporary fix.
      */
     const args = [
-      path.join(__dirname, '/sh/import_vector.sh'),
+      new URL("./sh/import_vector.sh", import.meta.url).pathname,
       filePath,
       idSource,
       sourceSrs,
-      isCsv ? 'yes' : 'no'
+      isCsv ? "yes" : "no",
     ];
-    const ogr = spawn('sh', args);
+    const ogr = spawn("sh", args);
 
-    ogr.stdout.on('data', (data) => {
-      data = data.toString('utf8');
-      let progressNums = data.split('.');
+    ogr.stdout.on("data", (data) => {
+      data = data.toString("utf8");
+      let progressNums = data.split(".");
       let hasProg = false;
-      progressNums.forEach((prog) => {
-        prog = parseFloat(prog);
-        if (!isNaN(prog) && isFinite(prog)) {
+      let progFloat;
+      for (const prog of progressNums) {
+        progFloat = parseFloat(prog);
+        if (!isNaN(progFloat) && isFinite(progFloat)) {
           hasProg = true;
           onMessage({
-            msg: prog,
-            type: 'progress'
+            msg: progFloat,
+            type: "progress",
           });
         }
-      });
+      }
       if (!hasProg) {
         onMessage({
           msg: data,
-          type: 'message'
+          type: "message",
         });
       }
     });
 
-    ogr.stderr.on('data', (data) => {
-      data = data.toString('utf8');
+    ogr.stderr.on("data", (data) => {
+      data = data.toString("utf8");
       onMessage({
         msg: handleErrorText(data),
-        type: 'warning'
+        type: "warning",
       });
     });
 
-    ogr.on('exit', async (code, signal) => {
+    ogr.on("exit", async (code, signal) => {
       try {
         if (code !== 0) {
-          throw new Error(
+          throw Error(
             `The import function exited with code ${code} ( ${signal} )`
           );
         }
         const hasValues = await tableHasValues(idSource);
         if (!hasValues) {
-          throw new Error(
+          throw Error(
             `The table ${idSource} is not valid. At least one attribute with value is required.`
           );
         }
 
         onMessage({
           msg: `The import was successful`,
-          type: 'message'
+          type: "message",
         });
 
         onSuccess(idSource);
@@ -402,14 +391,14 @@ async function fileToPostgres(config) {
         const err = handleErrorText(e);
         const sourceRemoved = await removeSource(idSource);
         onError({
-          msg: `${err}. Source removed : ${sourceRemoved}`
+          msg: `${err}. Source removed : ${sourceRemoved}`,
         });
         return;
       }
     });
   } catch (e) {
     onError({
-      msg: `An error occured in import function (${handleErrorText(e)})`
+      msg: `An error occured in import function (${handleErrorText(e)})`,
     });
   }
 }

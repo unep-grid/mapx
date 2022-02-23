@@ -1,8 +1,8 @@
-const {pgRead} = require('@mapx/db');
-const {parseTemplate, sendJSON, sendError} = require('@mapx/helpers');
-const template = require('@mapx/template');
-const {validateTokenHandler} = require('@mapx/authentication');
-const {getParamsValidator} = require('@mapx/route_validation');
+import {pgRead} from '#mapx/db';
+import {parseTemplate, sendJSON, sendError} from '#mapx/helpers';
+import {templates} from '#mapx/template';
+import {validateTokenHandler} from '#mapx/authentication';
+import {getParamsValidator} from '#mapx/route_validation';
 
 const validateParamsHandler = getParamsValidator({
   required: ['idUser', 'idProject', 'token'],
@@ -15,7 +15,7 @@ const mwGetListPublic = [
   getViewsPublicHandler
 ];
 
-module.exports = {
+export  {
   mwGetListPublic,
   getViewsPublic
 };
@@ -54,12 +54,12 @@ async function getViewsPublic(opt) {
   /**
    * Convert array to sql code for the template
    */
-  opt.sqlTypesFilter = opt.types.map((c) => "'" + c + "'").join(',');
+  opt.sqlTypesFilter = opt.types.map((c) => `'` + c + `'`).join(',');
 
   /**
    * Parse sql template
    */
-  const sql = parseTemplate(template.getViewsPublic, opt);
+  const sql = parseTemplate(templates.getViewsPublic, opt);
 
   /**
    * Query DB

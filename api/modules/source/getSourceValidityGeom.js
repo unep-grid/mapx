@@ -1,15 +1,11 @@
-const helpers = require('@mapx/helpers');
-const toRes = helpers.toRes;
-const {isLayerValid} = require('@mapx/db-utils');
-const {
-  validateTokenHandler,
-  validateRoleHandlerFor
-} = require('@mapx/authentication');
+import {toRes,toBoolean} from '#mapx/helpers';
+import {isLayerValid} from '#mapx/db-utils';
+import {validateTokenHandler, validateRoleHandlerFor} from '#mapx/authentication';
 
 /**
  * Upload's middleware
  */
-module.exports.mwGetGeomValidate = [
+export const mwGetGeomValidate = [
   validateTokenHandler,
   validateRoleHandlerFor('member'),
   validateLayerHandler
@@ -23,9 +19,9 @@ async function validateLayerHandler(req, res) {
 
   try {
     res.setHeader('Content-Type', 'application/json');
-    useCache = helpers.toBoolean(useCache, true);
-    autoCorrect = helpers.toBoolean(autoCorrect, false);
-    analyze = helpers.toBoolean(analyze,true);
+    useCache = toBoolean(useCache, true);
+    autoCorrect = toBoolean(autoCorrect, false);
+    analyze = toBoolean(analyze,true);
 
     res.write(
       toRes({

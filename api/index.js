@@ -1,56 +1,47 @@
-/**
- * Import modules
- */
+import {settings}  from '#root/settings' ;
+import http  from 'http' ;
+import express  from 'express' ;
+import {Server as SocketServer}  from 'socket.io' ;
+import view  from '#mapx/view' ;
+import query  from '#mapx/query' ;
+import source  from '#mapx/source' ;
+import project  from '#mapx/project' ;
+import upload  from '#mapx/upload' ;
+import mirror  from '#mapx/mirror' ;
+import mail  from '#mapx/mail' ;
+import ip from '#mapx/ip' ;
+import tile  from '#mapx/tile' ;
+import log  from '#mapx/log' ;
+import {mwSetHeaders, mwGetConfigMap}  from '#mapx/helpers' ;
+import {mwIoConnect}  from '#mapx/io' ;
+import {mwNotify}  from '#mapx/notify' ;
+import {mwGemetSearchText, mwGemetSearchConcept}  from '#mapx/gemet' ;
+import {mwGetSearchKey}  from '#mapx/search' ;
+import {mwGetBbox}  from '#mapx/bbox' ;
 
-/**
- * Set local module path
- * ( to avoid require.main.require or ../../mess)
- */
-const moduleAlias = require('module-alias');
-moduleAlias.addAliases({
-  '@mapx': __dirname + '/modules/',
-  '@root': __dirname
-});
 
-const http = require('http');
-const express = require('express');
-const sock = require('socket.io');
-const settings = require('@root/settings');
-const view = require('@mapx/view');
-const query = require('@mapx/query');
-const source = require('@mapx/source');
-const project = require('@mapx/project');
-const upload = require('@mapx/upload');
-const mirror = require('@mapx/mirror');
-const mail = require('@mapx/mail');
-const ip = require('@mapx/ip');
-const tile = require('@mapx/tile');
-const log = require('@mapx/log');
-const {mwSetHeaders, mwGetConfigMap} = require('@mapx/helpers');
-const {mwIoConnect} = require('@mapx/io');
-const {mwNotify} = require('@mapx/notify');
-const {mwGemetSearchText, mwGemetSearchConcept} = require('@mapx/gemet');
-const {mwGetSearchKey} = require('@mapx/search');
-const {mwGetBbox} = require('@mapx/bbox');
 /**
  * If port argument is set, use this instead
  * e.g. node inspect index.js port=3333
  * will replace the port by 3333
  */
-let port = settings.api.port || 3030;
-process.argv.forEach((val) => {
-  val = val.split('=');
-  if (val[0] === 'port') {
-    port = val[1];
+let {
+ port = 3030
+} = settings.api;
+
+for (const val of process.argv) {
+  const v = val.split('=');
+  if (v[0] === 'port') {
+    [, port] = v;
   }
-});
+}
 
 /**
  * Init
  */
 const app = express();
 const server = http.createServer(app);
-const io = sock(server, settings.socket_io);
+const io = new SocketServer(server, settings.socket_io);
 app.use(mwSetHeaders);
 app.set('trust proxy', true);
 app.use('/download', express.static(settings.vector.path.download));

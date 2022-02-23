@@ -1,28 +1,34 @@
-const {readTxt, parseTemplate} = require('@mapx/helpers');
-const {pgAdmin, pgRead} = require('@mapx/db');
+import {readTxt, parseTemplate} from '#mapx/helpers';
+import {pgAdmin, pgRead} from '#mapx/db';
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import {fileURLToPath} from 'url';
+import {dirname} from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const dir = 'dict/_built';
 const db = {};
-const files = fs.readdirSync(path.join(__dirname, dir));
+const files = fs.readdirSync(new URL(dir, import.meta.url).pathname);
 const dicts_lang = files.filter((f) => f.match(/.*dict_[a-z]{2}\.json$/gm));
 const dict_full = path.join(__dirname, dir, 'dict_full.json');
 
-dicts_lang.forEach((file) => {
-  const name = path.parse(file).name;
+for (const file of dicts_lang) {
+  const {
+    name
+  } = path.parse(file);
   const lang = name.split(/_|\./)[1];
   const data = JSON.parse(readTxt(path.join(__dirname, dir, file)));
   db[lang] = {};
-  data.forEach((d) => {
+  for (const d of data) {
     db[lang][d.id] = d[lang] || d.en || d.id;
-  });
-});
+  }
+}
 
 /**
  * Init language;
  */
-async function init() {
+export async function init() {
   try {
     /**
      * Copy in postgres
@@ -44,16 +50,19 @@ async function init() {
  * @param {Object} data Data used for templating e.g. 'User name is {{name}}' + {name:'bob'} = 'User name is bob'
  * @return {String}
  */
-function translate(lang, id, data) {
+export function translate(lang, id, data) {
   let item;
   try {
     item = db[lang || 'en'][id];
     if (data) {
       item = parseTemplate(item, data);
     }
-  } catch (e) {}
+  } catch(e){
+    console.error(e)
+  }
   return item || id;
 }
+export const t = translate
 
 /**
  * Import dict CSV
@@ -91,7 +100,7 @@ async function importDict() {
 /**
  * Get m49 and iso3 countries translation
  */
-async function getDictM49iso3() {
+export async function getDictM49iso3() {
   try {
     const resp = await pgRead.query(
       `select * from mx_dict_translate where id ~ '(^m49_.*|^[A-Z]{3})'`
@@ -101,13 +110,3 @@ async function getDictM49iso3() {
     console.error(e);
   }
 }
-
-/**
- * Exports
- */
-module.exports = {
-  t: translate,
-  translate,
-  init,
-  getDictM49iso3
-};

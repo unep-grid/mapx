@@ -1,11 +1,13 @@
-const {mwGet} = require('./getSource.js');
-const {mwGetMetadata, getSourceMetadata} = require('./getSourceMetadata.js');
-const {mwGetSummary, getSourceSummary} = require('./getSourceSummary.js');
-const {mwGetOverlap} = require('./getSourceOverlap.js');
-const {mwGetAttributeTable} = require('./getSourceTableAttribute.js');
-const {mwGetGeomValidate} = require('./getSourceValidityGeom.js');
+import {mwGet} from './getSource.js';
+import {mwGetMetadata, getSourceMetadata} from './getSourceMetadata.js';
+import {mwGetSummary, getSourceSummary} from './getSourceSummary.js';
+import {mwGetOverlap} from './getSourceOverlap.js';
+import {mwGetAttributeTable} from './getSourceTableAttribute.js';
+import {mwGetGeomValidate} from './getSourceValidityGeom.js';
 
-module.exports={
+export {getSourceMetadata, getSourceSummary};
+
+export default {
   /**
    * Middleware
    */

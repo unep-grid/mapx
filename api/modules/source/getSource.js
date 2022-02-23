@@ -1,26 +1,21 @@
-//var ogr2ogr = require("ogr2ogr");
-//const spawn = require('child_process').spawn;
-//const fs = require('fs');
-const {mkdir, writeFile, access} = require('fs/promises');
-const helpers = require('@mapx/helpers');
-const settings = require('@root/settings');
-const archiverProgress = require('@mapx/archiver_progress');
-const {validateTokenHandler} = require('@mapx/authentication');
-const {asyncSpawn} = require('@mapx/async_spawn');
-const {
-  getColumnsNames,
-  isLayerValid,
-  getLayerTitle
-} = require('@mapx/db-utils');
-const {sendMailAuto} = require('@mapx/mail');
-const valid = require('@fxi/mx_valid');
-const {getIntersectionCountry} = require('@mapx/template');
-const {t} = require('@mapx/language');
-const getSourceMetadata = require('./getSourceMetadata.js').getSourceMetadata;
+import {isArray} from '@fxi/mx_valid';
+import {mkdir, writeFile, access} from 'fs/promises';
+import {randomString, parseTemplate, attrToPgCol} from '#mapx/helpers';
+import {settings} from '#root/settings';
+import {archiverProgress} from '#mapx/archiver_progress';
+import {validateTokenHandler} from '#mapx/authentication';
+import {asyncSpawn} from '#mapx/async_spawn';
+import {getColumnsNames, isLayerValid, getLayerTitle} from '#mapx/db-utils';
+import {sendMailAuto} from '#mapx/mail';
+import {templates} from '#mapx/template';
+import {t} from '#mapx/language';
+import {getSourceMetadata} from './getSourceMetadata.js';
 
-//const emailAdmin = settings.mail.config.emailAdmin;
+const isString = (a) => typeof a === 'string';
+
 const apiPort = settings.api.port_public;
 const apiHost = settings.api.host_public;
+
 let apiHostUrl = '';
 if (apiPort === 443 || apiPort === '443') {
   apiHostUrl = 'https://' + apiHost;
@@ -65,7 +60,7 @@ const formatDefault = 'GPKG';
 /**
  * Request handler / middleware
  */
-module.exports.mwGet = [validateTokenHandler, exportHandler];
+export const mwGet = [validateTokenHandler, exportHandler];
 
 async function exportHandler(req, res, next) {
   try {
@@ -84,15 +79,12 @@ async function exportHandler(req, res, next) {
  */
 async function extractFromPostgres(config, res) {
   const id = config.layer || config.idSource;
-  const email = config.email || 'en';
-  const language = config.language;
-  const epsgCode = config.epsgCode || 4326;
-  const filename = config.filename || id;
-  const ext = fileFormat[config.format].ext;
+  const {email = 'en', language, epsgCode = 4326, filename = id} = config;
+  const {ext} = fileFormat[config.format];
   const layername = filename;
   let title = await getLayerTitle(id, language);
-  let format = config.format;
-  let iso3codes = config.iso3codes;
+  let {format} = config;
+  let {iso3codes} = config;
   let isShapefile = false;
   /**
    * OGR sql -> select and/or clipping
@@ -102,7 +94,7 @@ async function extractFromPostgres(config, res) {
   /**
    * folder local path. eg. /shared/download/mx_dl_1234 and /shared/download/mx_dl_1234.zip
    */
-  const folderName = helpers.randomString('mx_dl');
+  const folderName = randomString('mx_dl');
   const folderPath = settings.vector.path.download + '/' + folderName;
   const filePath = folderPath + '/' + filename + '.' + ext;
   const folderPathZip = folderPath + '.zip';
@@ -114,22 +106,22 @@ async function extractFromPostgres(config, res) {
   const dataUrl = apiHostUrl + folderUrlZip;
 
   if (!id) {
-    throw new Error('No id');
+    throw Error('No id');
   }
   if (!email) {
-    throw new Error('No email');
+    throw Error('No email');
   }
 
-  if (typeof iso3codes === 'string') {
+  if (isString(iso3codes)) {
     iso3codes = iso3codes.split(',');
   }
 
-  if (iso3codes && valid.isArray(iso3codes)) {
+  if (iso3codes && isArray(iso3codes)) {
     iso3codes = iso3codes.filter((i) => {
       return i && i.length === 3;
     });
   }
-  const hasCountryClip = valid.isArray(iso3codes) && iso3codes.length > 0;
+  const hasCountryClip = isArray(iso3codes) && iso3codes.length > 0;
 
   if (ext === 'shp') {
     isShapefile = true;
@@ -169,10 +161,10 @@ async function extractFromPostgres(config, res) {
    */
   if (hasCountryClip) {
     const test = await isLayerValid(id, true, false);
-    if (test.valid === true) {
+    if (test.valid) {
       sqlOGR = getSqlClip(id, iso3codes, attr);
     } else {
-      throw new Error(
+      throw Error(
         t(language, 'get_source_invalid_geom', {
           idLayer: test.id,
           title: test.title
@@ -185,7 +177,7 @@ async function extractFromPostgres(config, res) {
    */
   try {
     await access(folderPath);
-  } catch (e) {
+  } catch {
     await mkdir(folderPath);
   }
 
@@ -235,17 +227,20 @@ async function extractFromPostgres(config, res) {
     const msg = t(language, 'get_source_conversion_error', {
       error: e
     });
-    throw new Error(msg);
+    throw Error(msg);
   }
 
   /**
    * Add files
    */
   const txtTimeStamp = t(language, 'get_source_file_timestamp', {
-    date: `${Date()}`
+    date: String(Date())
   });
   await writeFile(`${folderPath}/info.txt`, txtTimeStamp);
-  await writeFile(`${folderPath}/metadata.json`, JSON.stringify(metadata,0,2));
+  await writeFile(
+    `${folderPath}/metadata.json`,
+    JSON.stringify(metadata, 0, 2)
+  );
 
   /**
    * Archive data
@@ -279,7 +274,7 @@ async function extractFromPostgres(config, res) {
     const err = t(language, 'get_source_zip_error', {
       err: e
     });
-    throw new Error(err);
+    throw Error(err);
   }
 
   /**
@@ -287,7 +282,7 @@ async function extractFromPostgres(config, res) {
    */
   await res.notifyProgress('job_state', {
     idMerge: 'get_source_zip_progress',
-    message : t(language, 'get_source_zip_progress'),
+    message: t(language, 'get_source_zip_progress'),
     value: 100
   });
 
@@ -377,10 +372,10 @@ async function extractFromPostgres(config, res) {
 
 function getSqlClip(idSource, iso3codes, attributes) {
   const attrNoGeom = attributes.filter((a) => a !== 'geom');
-  const attrPg = helpers.attrToPgCol(attrNoGeom);
-  const iso3string = `'${iso3codes.join("','")}'`;
+  const attrPg = attrToPgCol(attrNoGeom);
+  const iso3string = `'${iso3codes.join(`','`)}'`;
 
-  const sql = helpers.parseTemplate(getIntersectionCountry, {
+  const sql = parseTemplate(templates.getIntersectionCountry, {
     idLayer: idSource,
     attributes: attrPg,
     idLayerCountry: 'mx_countries',

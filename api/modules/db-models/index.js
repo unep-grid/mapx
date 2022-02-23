@@ -1,5 +1,5 @@
-const sql = require('node-sql-2');
-sql.setDialect('postgres');
+import {Sql} from 'sql-ts';
+const sql = new Sql('postgres');
 
 const user = sql.define({
   name: 'mx_users',
@@ -69,7 +69,7 @@ project.default = {
   contacts: '[]',
   states_views: '[]'
 };
-module.exports = {
+export  {
   user,
   project
 };

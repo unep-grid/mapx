@@ -1,8 +1,8 @@
-const {pgRead} = require('@mapx/db');
-const {parseTemplate, sendJSON, sendError} = require('@mapx/helpers');
-const template = require('@mapx/template');
-const {validateTokenHandler} = require('@mapx/authentication');
-const {getParamsValidator} = require('@mapx/route_validation');
+import {pgRead} from '#mapx/db';
+import {parseTemplate, sendJSON, sendError} from '#mapx/helpers';
+import {templates} from '#mapx/template';
+import {validateTokenHandler} from '#mapx/authentication';
+import {getParamsValidator} from '#mapx/route_validation';
 
 const validateParamsHandler = getParamsValidator({
   required: ['idUser', 'idProject', 'token'],
@@ -28,7 +28,7 @@ const mwGetListByProject = [
   getViewsHandler
 ];
 
-module.exports = {
+export  {
   getViews,
   getProjectViewsStates,
   mwGetListByProject
@@ -58,7 +58,7 @@ async function getViewsHandler(req, res) {
 async function getProjectViewsStates(opt) {
   opt = opt || {};
   let states = [];
-  const sql = parseTemplate(template.getProjectViewsStates, opt);
+  const sql = parseTemplate(templates.getProjectViewsStates, opt);
   const res = await pgRead.query(sql);
   if (res.rowCount > 0) {
     states = res.rows[0].states_views;
@@ -96,7 +96,7 @@ async function getViews(opt) {
   /**
    * Parse sql template
    */
-  const sql = parseTemplate(template.getViewsByProject, opt);
+  const sql = parseTemplate(templates.getViewsByProject, opt);
 
   /**
    * Query

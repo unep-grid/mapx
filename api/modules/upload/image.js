@@ -1,20 +1,20 @@
-const {
+import {
   validateTokenHandler,
   validateRoleHandlerFor
-} = require('@mapx/authentication');
-const s = require('@root/settings');
+} from '#mapx/authentication';
+import {settings} from '#root/settings';
 
-const multer = require('multer');
-const fs = require('fs');
-const crypto = require('crypto');
-const path = require('path');
-const md5File = require('md5-file');
+import multer from 'multer';
+import fs from 'fs';
+import crypto from 'crypto';
+import path from 'path';
+import md5File from 'md5-file';
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    const pathTemp = s.image.path.temporary;
+  destination: function(_, __, cb) {
+    const pathTemp = settings.image.path.temporary;
     cb(null, pathTemp);
   },
-  filename: function(req, file, cb) {
+  filename: function(_, __, cb) {
     const fileHash = crypto
       .createHash('md5')
       .update(Date.now() + '')
@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage}).single('image');
 
-module.exports.mwUpload = [
+export const mwUpload = [
   uploadHandler,
   validateTokenHandler,
   validateRoleHandlerFor('member'),
@@ -40,31 +40,29 @@ function uploadHandler(req, res, next) {
   });
 }
 
-function moveFilesHandler(req, res, next) {
+async function moveFilesHandler(req, _, next) {
   const userFolder = req.body.idUser;
   const oldPath = req.file.path;
-  const imgFolder = s.image.path.permanent;
-  const imgUrl = s.image.path.url;
+  const imgFolder = settings.image.path.permanent;
+  const imgUrl = settings.image.path.url;
   const dir = path.resolve(imgFolder, userFolder);
 
-  md5File(oldPath, function(err, fileHash) {
-    if (err) {
-      throw err;
-    }
+  try {
+    const fileHash = await md5File(oldPath);
 
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
 
     const newPath = path.resolve(dir, fileHash);
-
     const url = path.resolve(imgUrl, userFolder, fileHash);
+    await copyFile(oldPath, newPath);
 
-    copyFile(oldPath, newPath).then(function() {
-      req.file.url = url;
-      next();
-    });
-  });
+    req.file.url = url;
+    next();
+  } catch (e) {
+    throw new Error(e);
+  }
 }
 
 function copyFile(source, target) {

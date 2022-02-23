@@ -1,22 +1,12 @@
-/**
- * Set local module path
- * ( to avoid require.main.require or ../../mess)
- */
-const moduleAlias = require('module-alias');
-moduleAlias.addAliases({
-  '@mapx': __dirname + '/modules/',
-  '@root': __dirname
-});
-const {once, onceInterval} = require('@mapx/helpers');
+import * as migrate from '#mapx/migrate';
+import * as language from '#mapx/language';
+import {updateIndexes} from '#mapx/search';
+import {updateGeoIpTable} from '#mapx/ip';
+import {once, onceInterval} from '#mapx/helpers';
 
 /**
  * Rountines' scripts
  */
-
-const migrate = require('@mapx/migrate');
-const language = require('@mapx/language');
-const {updateIndexes} = require('@mapx/search');
-const {updateGeoIpTable} = require('@mapx/ip');
 
 /*
  * Rename
@@ -45,20 +35,26 @@ const optCommon = {
     console.error(`Update for ${str} had issue`, e);
   }
 };
-const optHourly = Object.assign({}, optCommon, {
-  /**
-   * Each hour
-   */
-  intervalMs: 1 * 60 * 60 * 1000,
-  before: false
-});
-const optWeekly = Object.assign({}, optCommon, {
-  /**
-   * Each week
-   */
-  intervalMs: 1 * 7 * 24 * 60 * 60 * 1000,
-  before: false
-});
+const optHourly = {
+ ...optCommon,
+
+ /**
+  * Each hour
+  */
+ intervalMs: 1 * 60 * 60 * 1000,
+
+ before: false
+};
+const optWeekly = {
+ ...optCommon,
+
+ /**
+  * Each week
+  */
+ intervalMs: 1 * 7 * 24 * 60 * 60 * 1000,
+
+ before: false
+};
 
 /**
  * Apply at start, once

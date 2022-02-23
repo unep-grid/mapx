@@ -1,4 +1,4 @@
-const {spawn} = require('child_process');
+import {spawn} from 'child_process';
 /**
  * Spawn async wrapper
  * Modified from https://github.com/mgenware/promised-spawn
@@ -10,10 +10,13 @@ const def = {
   maxError: 20
 };
 
-module.exports = {asyncSpawn};
+export {asyncSpawn};
 
 function asyncSpawn(args, options) {
-  options = Object.assign({}, def, options);
+  options = {
+    ...def,
+    ...options
+  };
   return new Promise((resolve, reject) => {
     const process = spawn.apply(undefined, args);
     process.stdout.on('data', (data) => {
@@ -44,7 +47,7 @@ function asyncSpawn(args, options) {
       if (code === 0 || code === '0') {
         resolve(0);
       } else {
-        const error = new Error(`Process exited with code ${code}`);
+        const error = Error(`Process exited with code ${code}`);
         error.code = code;
         reject(error);
       }

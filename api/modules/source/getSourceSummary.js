@@ -1,11 +1,16 @@
-const crypto = require('crypto');
-const {isSourceId, isViewId, isNumeric} = require('@fxi/mx_valid');
+import crypto from 'crypto';
+import {isSourceId, isViewId} from '@fxi/mx_valid';
 
-const {redisGet, redisSet, pgRead} = require('@mapx/db');
-const {getParamsValidator} = require('@mapx/route_validation');
-const helpers = require('@mapx/helpers');
-const template = require('@mapx/template');
-const db = require('@mapx/db-utils');
+import {redisGet, redisSet, pgRead} from '#mapx/db';
+import {getParamsValidator} from '#mapx/route_validation';
+import {parseTemplate, sendJSON, sendError} from '#mapx/helpers';
+import {templates} from '#mapx/template';
+
+import {
+  getColumnsTypesSimple,
+  getColumnsNames,
+  getSourceLastTimestamp
+} from '#mapx/db-utils';
 
 const validateParamsHandler = getParamsValidator({
   expected: [
@@ -23,8 +28,7 @@ const validateParamsHandler = getParamsValidator({
   ]
 });
 
-module.exports.mwGetSummary = [validateParamsHandler, getSummaryHandler];
-module.exports.getSourceSummary = getSourceSummary;
+export const mwGetSummary = [validateParamsHandler, getSummaryHandler];
 
 async function getSummaryHandler(req, res) {
   try {
@@ -42,10 +46,10 @@ async function getSummaryHandler(req, res) {
     });
 
     if (data) {
-      helpers.sendJSON(res, data, {end: true});
+      sendJSON(res, data, {end: true});
     }
   } catch (e) {
-    helpers.sendError(res, e);
+    sendError(res, e);
   }
 }
 
@@ -59,9 +63,19 @@ async function getSummaryHandler(req, res) {
  * @param {String} opt.nullValue Value to express nulls
  * @return {Object} metadata object
  */
+export /**
+ * Helper to get source stats from db
+ * @param {Object} opt options
+ * @param {String} opt.idSource Id of the source
+ * @param {String} opt.idView Id of the view
+ * @param {String} opt.idAttr Id of the attribute (optional)
+ * @param {String} opt.format format (disabled now. Will be mapx-json or iso-xml)
+ * @param {String} opt.nullValue Value to express nulls
+ * @return {Object} metadata object
+ */
 async function getSourceSummary(opt) {
   if (!isSourceId(opt.idSource) && !isViewId(opt.idView)) {
-    throw new Error('Missing id of the source or the view');
+    throw Error('Missing id of the source or the view');
   }
   if (!opt.idAttr || opt.idAttr === 'undefined') {
     opt.idAttr = null;
@@ -73,10 +87,10 @@ async function getSourceSummary(opt) {
   }
 
   const start = Date.now();
-  const stats = opt.stats;
-  const columns = await db.getColumnsNames(opt.idSource);
-  const timestamp = await db.getSourceLastTimestamp(opt.idSource);
-  const tableTypes = await db.getColumnsTypesSimple(opt.idSource, columns);
+  const {stats} = opt;
+  const columns = await getColumnsNames(opt.idSource);
+  const timestamp = await getSourceLastTimestamp(opt.idSource);
+  const tableTypes = await getColumnsTypesSimple(opt.idSource, columns);
 
   const attrType = opt.idAttr
     ? tableTypes.filter((r) => r.id === opt.idAttr)[0].value
@@ -142,7 +156,7 @@ async function getSourceSummary(opt) {
 }
 
 async function getOrCalc(idTemplate, opt) {
-  const sql = helpers.parseTemplate(template[idTemplate], opt);
+  const sql = parseTemplate(templates[idTemplate], opt);
 
   const hash = crypto
     .createHash('md5')
@@ -172,13 +186,10 @@ async function getOrCalc(idTemplate, opt) {
  */
 async function updateSourceFromView(opt) {
   if (opt.idView) {
-    const sqlSrcAttr = helpers.parseTemplate(
-      template.getViewSourceAndAttributes,
-      opt
-    );
+    const sqlSrcAttr = parseTemplate(templates.getViewSourceAndAttributes, opt);
     const respSrcAttr = await pgRead.query(sqlSrcAttr);
     if (respSrcAttr.rowCount > 0) {
-      const srcAttr = respSrcAttr.rows[0];
+      const [srcAttr] = respSrcAttr.rows;
       if (srcAttr.layer) {
         opt.idSource = srcAttr.layer;
       }

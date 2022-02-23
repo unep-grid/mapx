@@ -1,8 +1,10 @@
-const {pgRead} = require('@mapx/db');
-const db = require('@mapx/db-utils');
-const helpers = require('@mapx/helpers');
+import {pgRead} from '#mapx/db';
+import {getColumnsNames} from '#mapx/db-utils';
+import {getDistinct, toPgColumn, sendJSON, sendError} from '#mapx/helpers';
 
-module.exports.mwGetAttributeTable = [getSourceAttributeTableHandler];
+const isString = (a) => typeof a === 'string';
+
+export const mwGetAttributeTable = [getSourceAttributeTableHandler];
 
 async function getSourceAttributeTableHandler(req, res) {
   try {
@@ -10,37 +12,37 @@ async function getSourceAttributeTableHandler(req, res) {
       id: req.query.id,
       attributes: req.query.attributes
     });
-    helpers.sendJSON(res, data, {end: true});
+    sendJSON(res, data, {end: true});
   } catch (e) {
-    helpers.sendError(res, e);
+    sendError(res, e);
   }
 }
 
 async function getSourceAttributeTable(opt) {
-  var idSource = opt.id;
-  var attributes = opt.attributes || [];
-  if (typeof attributes === 'string') {
+  const attributesToIgnore = ['geom'];
+  const idSource = opt.id;
+  let attributes = opt.attributes || [];
+  let query = '';
+
+  if (isString(attributes)) {
     attributes = attributes.split(',');
   }
-  var attributesToIgnore = ['geom'];
-  var query = '';
 
   if (!idSource || attributes.length === 0) {
     return [];
   }
 
-  const attr = await db.getColumnsNames(idSource);
+  const attr = await getColumnsNames(idSource);
   let attributesSelect = attr.filter((a) => {
-    return attributesToIgnore.indexOf(a) === -1 && attributes.indexOf(a) > -1;
+    return !attributesToIgnore.includes(a) && attributes.indexOf(a) > -1;
   });
-
 
   if (attributesSelect.length === 0) {
     return [];
   }
 
-  attributesSelect = helpers.getDistinct(attributesSelect);
-  attributesSelect = helpers.toPgColumn(attributesSelect);
+  attributesSelect = getDistinct(attributesSelect);
+  attributesSelect = toPgColumn(attributesSelect);
   query = `SELECT ${attributesSelect} FROM ${idSource} `;
   const res = await pgRead.query(query);
 

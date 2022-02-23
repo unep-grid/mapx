@@ -1,7 +1,7 @@
-const {readTxt, parseTemplate} = require('@mapx/helpers');
-const {pgAdmin} = require('@mapx/db');
-const path = require('path');
-const fs = require('fs');
+import {readTxt, parseTemplate} from '#mapx/helpers';
+import {pgAdmin} from '#mapx/db';
+import path from 'path';
+import fs from 'fs';
 
 /**
  * ROLL FORWARD ONLY migration patches
@@ -10,10 +10,10 @@ const fs = require('fs');
 /**
  * Paths
  */
-const dirSqlPatches = path.join(__dirname, 'sql_patches');
+const dirSqlPatches = new URL('sql_patches', import.meta.url).pathname;
 //const dirSqlRoutines = path.join(__dirname, 'sql_routines') # not used
-const dirSqlBase = path.join(__dirname, 'sql_base');
-const dirSqlAdmin = path.join(__dirname, 'sql_admin');
+const dirSqlBase = new URL('sql_base', import.meta.url).pathname;
+const dirSqlAdmin = new URL('sql_admin', import.meta.url).pathname;
 
 /*
  * Load sql/templates
@@ -28,7 +28,7 @@ const sqlIsInit = readTxt(path.join(dirSqlBase, 'exists.sql'));
 /**
  * Apply patch with logs
  */
-async function apply() {
+export async function apply() {
   try {
     const r = await applyPatches();
     if (r.length > 0) {
@@ -40,7 +40,7 @@ async function apply() {
     /*
     * Handled in parent, e.g. once / withTimeLimit 
     */ 
-    throw new Error(e); 
+    throw Error(e); 
   }
 }
 
@@ -127,7 +127,7 @@ async function applyPatches() {
            * Log an error + stop early, this should be rollbacked
            */
           console.error(`Patch ${id} not applied`, e);
-          throw new Error(e);
+          throw Error(e);
         }
       }
     }
@@ -137,14 +137,9 @@ async function applyPatches() {
      * Rollack and propagate
      */
     client.query('ROLLBACK');
-    throw new Error(e);
+    throw Error(e);
   } finally {
     client.release();
   }
   return applied;
 }
-
-/**
- * Exports
- */
-module.exports.apply = apply;

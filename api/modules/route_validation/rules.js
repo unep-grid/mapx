@@ -1,12 +1,22 @@
-const {asArray} = require('@mapx/helpers');
-const {validation_defaults} = require('@root/settings');
-const mx_valid = require('@fxi/mx_valid');
-const def = validation_defaults;
+import {
+  isEmail,
+  isViewId,
+  isProjectId,
+  isSafe,
+  isArray,
+  isString,
+  isStringRange,
+  isSourceId,
+  isDateString,
+  isNumeric,
+  isBoolean
+} from '@fxi/mx_valid';
+import {asArray} from '#mapx/helpers';
+import {settings} from '#root/settings';
+const def = settings.validation_defaults;
 let isValid = false;
 
-module.exports = {
-  getRule
-};
+export {getRule};
 
 /**
  * NOTE: put this in .env or config file
@@ -27,9 +37,16 @@ const rules = [
     /**
      * Generic boolean
      */
-    key: ['useCache', 'binsCompute', 'publicOnly', 'isGuest', 'encrypt','allViews'],
+    key: [
+      'useCache',
+      'binsCompute',
+      'publicOnly',
+      'isGuest',
+      'encrypt',
+      'allViews'
+    ],
     test: (d) => {
-      if (mx_valid.isString(d)) {
+      if (isString(d)) {
         switch (d) {
           case 'true':
             d = true;
@@ -42,7 +59,7 @@ const rules = [
         }
       }
 
-      isValid = mx_valid.isBoolean(d);
+      isValid = isBoolean(d);
 
       return {
         valid: isValid,
@@ -56,7 +73,7 @@ const rules = [
   {
     key: ['timestamp'],
     test: (d) => {
-      isValid = mx_valid.isDateString(d) || (mx_valid.isNumeric(d) && d > 0);
+      isValid = isDateString(d) || (isNumeric(d) && d > 0);
       return {
         valid: isValid,
         value: isValid ? d * 1 : null
@@ -81,7 +98,7 @@ const rules = [
   {
     key: ['maxRowsCount'],
     test: (d) => {
-      isValid = mx_valid.isNumeric(d) && d > 0;
+      isValid = isNumeric(d) && d > 0;
       return {
         valid: isValid,
         value: isValid ? d * 1 : 1e4
@@ -91,7 +108,7 @@ const rules = [
   {
     key: ['binsNumber'],
     test: (d) => {
-      isValid = mx_valid.isNumeric(d) && d > 0 && d <= 100; // see mx_helper_map_view_style.js
+      isValid = isNumeric(d) && d > 0 && d <= 100; // see mx_helper_map_view_style.js
       return {
         valid: isValid,
         value: isValid ? d * 1 : 5
@@ -101,7 +118,7 @@ const rules = [
   {
     key: ['maxByPage'],
     test: (d) => {
-      isValid = mx_valid.isNumeric(d) && d > 0 && d <= 1000;
+      isValid = isNumeric(d) && d > 0 && d <= 1000;
       return {
         valid: isValid,
         value: isValid ? d * 1 : 20
@@ -111,7 +128,7 @@ const rules = [
   {
     key: ['pageNumber'],
     test: (d) => {
-      isValid = mx_valid.isNumeric(d) && d >= 1; // see mx_helper_map_view_style.js
+      isValid = isNumeric(d) && d >= 1; // see mx_helper_map_view_style.js
       return {
         valid: isValid,
         value: isValid ? d * 1 : 1
@@ -121,7 +138,7 @@ const rules = [
   {
     key: ['nullValue'],
     test: (d) => {
-      isValid = mx_valid.isSafe(d);
+      isValid = isSafe(d);
       if (!isValid) {
         d = null;
       }
@@ -134,7 +151,7 @@ const rules = [
   {
     key: ['srid'],
     test: (d) => {
-      isValid = mx_valid.isNumeric(d) && d >= 0;
+      isValid = isNumeric(d) && d >= 0;
       return {
         valid: isValid,
         value: isValid ? d * 1 : 4326
@@ -159,10 +176,10 @@ const rules = [
     key: ['stats'],
     test: (d) => {
       const methods = ['base', 'temporal', 'spatial', 'attributes'];
-      d = mx_valid.isString(d) ? d.split(',') : d;
+      if (isString(d)) d = d.split(',');
       const isValid =
-        mx_valid.isArray(d) &&
-        d.reduce((a, c) => (a === false ? a : methods.indexOf(c) > -1), true);
+        isArray(d) &&
+        d.reduce((a, c) => (!a ? a : methods.indexOf(c) > -1), true);
       return {
         valid: isValid,
         value: isValid ? d : methods
@@ -175,7 +192,7 @@ const rules = [
   {
     key: ['idUser', 'user'],
     test: (d) => {
-      isValid = mx_valid.isNumeric(d);
+      isValid = isNumeric(d);
       return {
         valid: isValid,
         value: isValid ? d * 1 : idUserPublic
@@ -184,18 +201,16 @@ const rules = [
   },
   {
     key: ['idProject', 'project', 'idProjectExclude', 'idProjectOption'],
-    test: (d) => {
-      return {
-        valid: mx_valid.isProjectId(d),
-        value: d
-      };
-    }
+    test: (d) => ({
+      valid: isProjectId(d),
+      value: d
+    })
   },
   {
     key: ['idProjects'],
     test: (d) => {
       d = asArray(d);
-      isValid = d.reduce((a, id) => a && mx_valid.isProjectId(id), true);
+      isValid = d.reduce((a, id) => a && isProjectId(id), true);
       return {
         valid: isValid,
         value: d
@@ -205,8 +220,9 @@ const rules = [
   {
     key: ['idSource'],
     test: (d) => {
+      isValid = isSourceId(d) && !tableNotQueryable.includes(d);
       return {
-        valid: mx_valid.isSourceId(d) && tableNotQueryable.indexOf(d) === -1,
+        valid: isValid,
         value: d
       };
     }
@@ -215,7 +231,7 @@ const rules = [
     key: ['idViews', 'views'],
     test: (d) => {
       d = asArray(d);
-      isValid = d.reduce((a, x) => a && mx_valid.isViewId(x), true);
+      isValid = d.reduce((a, x) => a && isViewId(x), true);
       return {
         valid: isValid,
         value: isValid ? d : []
@@ -226,7 +242,7 @@ const rules = [
     key: ['idConcepts'],
     test: (d) => {
       d = asArray(d);
-      isValid = d.reduce((a, x) => a && mx_valid.isStringRange(x, 1, 6), true);
+      isValid = d.reduce((a, x) => a && isStringRange(x, 1, 6), true);
       return {
         valid: isValid,
         value: isValid ? d : []
@@ -236,7 +252,7 @@ const rules = [
   {
     key: ['idView'],
     test: (d) => {
-      isValid = mx_valid.isViewId(d);
+      isValid = isViewId(d);
       return {
         valid: isValid,
         value: isValid ? d : null
@@ -251,10 +267,7 @@ const rules = [
     key: 'collections',
     test: (d) => {
       d = asArray(d);
-      isValid = d.reduce(
-        (a, x) => a && mx_valid.isStringRange(x, 1, 200),
-        true
-      );
+      isValid = d.reduce((a, x) => a && isStringRange(x, 1, 200), true);
       return {
         valid: isValid,
         value: d
@@ -263,12 +276,10 @@ const rules = [
   },
   {
     key: 'collectionsSelectOperator',
-    test: (d) => {
-      return {
-        valid: true,
-        value: arrayOperators[d] || arrayOperators.OR
-      };
-    }
+    test: (d) => ({
+      valid: true,
+      value: arrayOperators[d] || arrayOperators.OR
+    })
   },
   /**
    * Source attribute query
@@ -276,7 +287,7 @@ const rules = [
   {
     key: ['idAttr', 'attribute', 'column'],
     test: (d) => {
-      isValid = tableAttrNotQueryable.indexOf(d) === -1;
+      isValid = !tableAttrNotQueryable.includes(d);
       return {
         valid: isValid,
         value: isValid ? d : null
@@ -328,12 +339,10 @@ const rules = [
    */
   {
     key: ['roleMax', 'filterViewsByRoleMax', 'role'],
-    test: (d) => {
-      return {
-        valid: roles.indexOf(d) > -1,
-        value: d ? d : roles[0]
-      };
-    }
+    test: (d) => ({
+      valid: roles.indexOf(d) > -1,
+      value: d || roles[0]
+    })
   },
   /*
    * Language with fallback
@@ -353,18 +362,16 @@ const rules = [
    */
   {
     key: ['email', 'from', 'to'],
-    test: (d) => {
-      return {
-        valid: mx_valid.isEmail(d),
-        value: d
-      };
-    }
+    test: (d) => ({
+      valid: isEmail(d),
+      value: d
+    })
   },
 
   {
     key: ['title', 'subject', 'subtitle', 'subjectPrefix', 'content'],
     test: (d) => {
-      const isValid = mx_valid.isStringRange(d, 1, 10000);
+      const isValid = isStringRange(d, 1, 10000);
       return {
         valid: isValid,
         value: d
@@ -385,8 +392,8 @@ const rules = [
       'code'
     ],
     test: (d) => {
-      const notAllowed = new RegExp('[_;\'"]');
-      const isValid = !notAllowed.test(d) && mx_valid.isStringRange(d, 1, 200);
+      const notAllowed = /[_;'"]/;
+      const isValid = !notAllowed.test(d) && isStringRange(d, 1, 200);
       return {
         valid: isValid,
         value: d
@@ -398,12 +405,10 @@ const rules = [
    */
   {
     key: ['idSocket', 'token'],
-    test: (d) => {
-      return {
-        valid: mx_valid.isStringRange(d, 1, 600),
-        value: d
-      };
-    }
+    test: (d) => ({
+      valid: isStringRange(d, 1, 600),
+      value: d
+    })
   },
   /*
    * Search index
@@ -422,7 +427,7 @@ const rules = [
 
 function getRule(key) {
   return rules.find((r) => {
-    if (r.key instanceof Array) {
+    if (isArray(r.key)) {
       return r.key.indexOf(key) > -1;
     } else {
       return r.key === key;

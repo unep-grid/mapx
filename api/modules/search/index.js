@@ -1,18 +1,23 @@
-const {meili, pgRead} = require('@mapx/db');
-const {getParamsValidator} = require('@mapx/route_validation');
-const valid = require('@fxi/mx_valid');
-const {validateTokenHandler} = require('@mapx/authentication');
-const {sendError, sendJSON, wait} = require('@mapx/helpers');
-const template = require('@mapx/template');
-const {validation_defaults} = require('@root/settings');
-const languages = validation_defaults.languages;
-const {config} = require(__dirname + '/config.js');
-const {getDictM49iso3} = require('@mapx/language');
+import {meili, pgRead} from '#mapx/db';
+import {getParamsValidator} from '#mapx/route_validation';
+import {isObject} from '@fxi/mx_valid';
+import {validateTokenHandler} from '#mapx/authentication';
+import {sendError, sendJSON, wait} from '#mapx/helpers';
+import {templates} from '#mapx/template';
+import {settings} from '#root/settings';
+import {htmlToText} from 'html-to-text';
+import {config} from './config.js';
+import {getDictM49iso3} from '#mapx/language';
+
+const {validation_defaults } = settings;
+const {
+  languages
+} = validation_defaults;
+
 const validateParamsHandler = getParamsValidator({
   required: ['idUser', 'token'],
   expected: ['searchIndexName', 'searchQuery']
 });
-const {htmlToText} = require('html-to-text');
 
 const mwSearch = [validateParamsHandler, validateTokenHandler, handlerSearch];
 const mwGetSearchKey = [
@@ -21,7 +26,7 @@ const mwGetSearchKey = [
   handlerKey
 ];
 
-module.exports = {
+export  {
   mwSearch,
   mwGetSearchKey,
   updateIndexes
@@ -33,7 +38,7 @@ async function updateIndexes() {
   try {
     const cid = config.idx_views;
     const start = Date.now();
-    const result = await pgRead.query(template.getViewsPublicForSearchIndex);
+    const result = await pgRead.query(templates.getViewsPublicForSearchIndex);
     /**
      * TODO this step, m49 dict matching, could be done within the query
      */
@@ -101,9 +106,7 @@ async function updateIndexes() {
        * Update index
        */
       console.log(`Update index for language ${language}`);
-      const doc = documents.map((item) => {
-        return flatLanguageStrings(item, language);
-      });
+      const doc = documents.map(item => flatLanguageStrings(item, language));
 
       await indexView.addDocuments(doc);
       /**
@@ -192,7 +195,7 @@ function flatLanguageStrings(item, language) {
    */
   for (let p of pd) {
     for (let k in p) {
-      if (valid.isObject(p[k])) {
+      if (isObject(p[k])) {
         p[k] = p[k][language] || p[k][languages.default];
       }
     }

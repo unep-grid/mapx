@@ -5,6 +5,7 @@
   },
   "extends": ["prettier", "eslint:recommended"],
   "parserOptions": {
-    "ecmaVersion": 2020
+    "sourceType": "module",
+    "ecmaVersion": 2021
   }
 }

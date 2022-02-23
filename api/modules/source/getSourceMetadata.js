@@ -1,11 +1,9 @@
-const {pgRead} = require('@mapx/db');
-const helpers = require('@mapx/helpers');
-const template = require('@mapx/template');
-const valid = require('@fxi/mx_valid');
+import {pgRead} from '#mapx/db';
+import {sendError, sendJSON, parseTemplate} from '#mapx/helpers';
+import {templates} from '#mapx/template';
+import {isSourceId} from '@fxi/mx_valid';
 
-module.exports.mwGetMetadata = [getSourceMetadataHandler];
-
-module.exports.getSourceMetadata = getSourceMetadata;
+export const mwGetMetadata = [getSourceMetadataHandler];
 
 async function getSourceMetadataHandler(req, res) {
   try {
@@ -13,9 +11,9 @@ async function getSourceMetadataHandler(req, res) {
       id: req.params.id,
       format: 'mapx-json'
     });
-    helpers.sendJSON(res, data, {end: true});
+    sendJSON(res, data, {end: true});
   } catch (e) {
-    helpers.sendError(res, e);
+    sendError(res, e);
   }
 }
 
@@ -26,17 +24,24 @@ async function getSourceMetadataHandler(req, res) {
  * @param {String} opt.format format (disabled now. Will be mapx-json or iso-xml)
  * @return {Object} metadata object
  */
-async function getSourceMetadata(opt) {
-  var meta,
-    out,
-    def = {};
+/**
+ * Helper to get source metadata from db
+ * @param {Object} opt options
+ * @param {String} opt.id Id of the source
+ * @param {String} opt.format format (disabled now. Will be mapx-json or iso-xml)
+ * @return {Object} metadata object
+ */
+export async function getSourceMetadata(opt) {
+  var meta;
+  var out;
+  var def = {};
   var id = opt.id;
 
-  if (!valid.isSourceId(id)) {
-    throw new Error('So valid source id');
+  if (!isSourceId(id)) {
+    throw Error('Not valid source id');
   }
 
-  const sql = helpers.parseTemplate(template.getSourceMetadata, {
+  const sql = parseTemplate(templates.getSourceMetadata, {
     idSource: id
   });
   const res = await pgRead.query(sql);
@@ -45,7 +50,7 @@ async function getSourceMetadata(opt) {
     return def;
   }
 
-  out = res.rows[0];
+  [out] = res.rows;
   meta = out.metadata;
   meta._email_editor = out.email_editor;
   meta._date_modified = out.date_modified;
