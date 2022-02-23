@@ -21,6 +21,12 @@ Simple validation tool for MapX specific values
 <dt><a href="#isEmpty">isEmpty(item)</a></dt>
 <dd><p>Test if entry is empty : empty array, empty string, etc.</p>
 </dd>
+<dt><a href="#isNotEmpty">isNotEmpty()</a></dt>
+<dd><p>Inverse isEmpty</p>
+</dd>
+<dt><a href="#isBbox">isBbox(item)</a> ⇒ <code>Boolean</code></dt>
+<dd><p>Simple lat/lng bbox expected from source summary</p>
+</dd>
 <dt><a href="#isObject">isObject(item)</a></dt>
 <dd><p>Test if entry is an object</p>
 </dd>
@@ -121,7 +127,7 @@ Simple validation tool for MapX specific values
 <dd><p>Test if entry is string and have the correct number of characters</p>
 </dd>
 <dt><a href="#isSafe">isSafe(Any)</a></dt>
-<dd><p>Test if input is &quot;safe&quot; 
+<dd><p>Test if input is &quot;safe&quot;
 -&gt; avoid dangerous stuff for db : columns, values, .. when prepared queries are not possible. Not secure client side.</p>
 </dd>
 <dt><a href="#isValidType">isValidType(type, group)</a></dt>
@@ -181,6 +187,25 @@ Test if entry is empty : empty array, empty string, etc.
 | Param | Type | Description |
 | --- | --- | --- |
 | item | <code>Any</code> | item to test |
+
+<a name="isNotEmpty"></a>
+
+## isNotEmpty()
+Inverse isEmpty
+
+**Kind**: global function  
+<a name="isBbox"></a>
+
+## isBbox(item) ⇒ <code>Boolean</code>
+Simple lat/lng bbox expected from source summary
+
+**Kind**: global function  
+**Returns**: <code>Boolean</code> - Is lat/lng bbox object  
+**Note**: : currently match api/modules/template/sql/getSourceSummary_ext_sp.sql  
+
+| Param | Type |
+| --- | --- |
+| item | <code>Object</code> | 
 
 <a name="isObject"></a>
 
@@ -556,7 +581,7 @@ Test if entry is string and have the correct number of characters
 <a name="isSafe"></a>
 
 ## isSafe(Any)
-Test if input is "safe" 
+Test if input is "safe"
 -> avoid dangerous stuff for db : columns, values, .. when prepared queries are not possible. Not secure client side.
 
 **Kind**: global function  

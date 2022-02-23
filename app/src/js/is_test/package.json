@@ -1,12 +1,12 @@
 {
   "name": "@fxi/mx_valid",
-  "version": "0.0.11",
-  "description": "validator for MapX",
-  "source": "index.js",
-  "main": "dist/mx_valid.js",
+  "version": "0.0.15",
+  "description": "Internal validation utilities for MapX",
+  "main": "index.js",
   "module": "dist/mx_valid.mjs",
   "unpkg": "dist/mx_valid.umd.js",
   "browser": "dist/mx_valid.umd.js",
+  "type":"module",
   "scripts": {
     "build": "microbundle -o dist && npm run jsdoc",
     "prod": "npm run build && npm publish",
@@ -23,7 +23,7 @@
     "mapx",
     "validation"
   ],
-  "author": "Fred Moser",
+  "author": "unepgrid.ch",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/unep-grid/map-x-mgl/issues"
@@ -35,7 +35,7 @@
     "@babel/preset-env": "^7.15.0",
     "core-js": "^3.16.4",
     "jsdoc-to-markdown": "^7.0.0",
-    "microbundle": "^0.13.3"
+    "microbundle": "^0.14.0"
   },
   "dependencies": {}
 }
