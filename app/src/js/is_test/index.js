@@ -43,7 +43,12 @@ export function isBbox(item) {
  * @param {Object} item
  */
 export function isObject(item) {
-  return !!item && typeof item === 'object' && !Array.isArray(item) && !isElement(item);
+  return (
+    !!item &&
+    typeof item === 'object' &&
+    !Array.isArray(item) &&
+    !isElement(item)
+  );
 }
 
 /**
@@ -259,6 +264,9 @@ export function isPromise(item) {
  * @param {Element} item item to test
  */
 export function isCanvas(item) {
+  if (typeof HTMLCanvasElement === 'undefined') {
+    return false;
+  }
   return item instanceof HTMLCanvasElement;
 }
 
@@ -354,7 +362,7 @@ export function isBoolean(b) {
  * @param {Object} map Map object
  */
 export function isMap(map) {
-  return isObject(map) && map._canvas instanceof HTMLCanvasElement;
+  return isObject(map) && isCanvas(map._canvas);
 }
 /**
  * Test if entry is string and have the correct number of characters
@@ -475,6 +483,9 @@ export function isFunction(fun) {
  * @param {Object} obj object to test
  */
 export function isElement(obj) {
+  if (typeof Element === 'undefined') {
+    return false;
+  }
   return obj instanceof Element;
 }
 
