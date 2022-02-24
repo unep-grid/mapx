@@ -1,6 +1,6 @@
-FROM node:15.8.0-alpine as builder
+FROM node:16.14.0-alpine3.15 as builder
 
-ARG GDAL_VERSION=v3.1.3
+ARG GDAL_VERSION=v3.4.1
 ARG LIBKML_VERSION=1.3.0
 
 ARG GDAL_DEPS_DEV='\
@@ -124,7 +124,7 @@ RUN \
   rm -rf /build && \
   rm -rf /var/cache/apk/*
 
-FROM node:12.19-alpine as final
+FROM node:16.14.0-alpine3.15 as final
 
 COPY --from=builder / /
  
