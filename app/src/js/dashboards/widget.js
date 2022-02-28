@@ -30,7 +30,6 @@ class Widget {
     const widget = this;
     widget.opt = Object.assign({}, defaults, opt);
     widget.opt.conf = Object.assign({}, defaults.conf, opt.conf);
-    widget.init();
   }
 
   async init() {
@@ -75,8 +74,7 @@ class Widget {
         widget[r] = register[r];
       }
       widget.modules = path(widget.opt, 'dashboard.modules', {});
-      await widget.add();
-      await widget.setUpdateDataMethod();
+      widget.add();
     } catch (e) {
       console.error(e);
       widget.destroy();
@@ -251,10 +249,9 @@ class Widget {
     );
   }
 
-  async add() {
+  add() {
     const widget = this;
-    const grid = widget.grid;
-    await widget.onAdd(widget);
+    widget.grid.add(widget.el);
     widget.ls.addListener({
       target: widget.elButtonClose,
       bind: widget,
@@ -262,7 +259,19 @@ class Widget {
       group: 'base',
       type: 'click'
     });
-    grid.add(widget.el);
+    /**
+    * Do not wait, use promise + catch,
+    * as wait would block all other widgets to render
+    */ 
+    widget
+      .onAdd(widget)
+      .then(() => {
+         return widget.setUpdateDataMethod();
+      })
+      .catch((e) => {
+        console.error(e);
+        widget.destroy();
+      });
   }
 
   get grid() {
@@ -357,7 +366,7 @@ class Widget {
 
   async setData(d) {
     const widget = this;
-    if(widget._destroyed){
+    if (widget._destroyed) {
       return;
     }
     const hasData = !isEmpty(d);

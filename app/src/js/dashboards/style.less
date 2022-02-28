@@ -1,0 +1,95 @@
+.dashboard {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  .widget {
+    display: block;
+    position: absolute;
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+  }
+  .widget--content {
+    background: var(--mx_ui_background);
+    color: var(--mx_ui_text);
+    border: none;
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    overflow: hidden;
+    border: 1px solid var(--mx_ui_border);
+    border-radius: 11px;
+    &:empty:after {
+      content: 'Empty widget';
+      text-align: center;
+      height:100%;
+      padding: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .btn-widget {
+    opacity: 0.2;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    text-align: center;
+    line-height: 10px;
+    padding: 0px;
+    padding-bottom: 3px;
+    margin: 2px;
+    font-size: 10px;
+    transition: opacity 0.3s ease-in-out, width 0.3s ease-in-out,
+      height 0.3s ease-in-out;
+    z-index: 100;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  .btn-widget-group {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    z-index: 1;
+    bottom: 0;
+  }
+  .widget.muuri-item-dragging {
+    z-index: 3;
+  }
+  .widget.muuri-item-releasing {
+    z-index: 2;
+  }
+  .widget.muuri-item-hidden {
+    z-index: 0;
+  }
+}
+.widget.y50 {
+  height: 50px;
+}
+.widget.y1 {
+  height: 160px;
+}
+.widget.y2 {
+  height: 325px;
+}
+.widget.y3 {
+  height: 490px;
+  height: 655px;
+}
+.widget.x50 {
+  width: 50px;
+}
+.widget.x1 {
+  width: 160px;
+}
+.widget.x2 {
+  width: 325px;
+}
+.widget.x3 {
+  width: 490px;
+}
+.widget.x4 {
+  width: 655px;
+}

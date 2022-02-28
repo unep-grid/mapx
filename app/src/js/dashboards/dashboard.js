@@ -4,9 +4,11 @@ import {modulesLoad} from './../modules_loader_async';
 import {all} from './../mx_helper_misc.js';
 import {el} from '@fxi/el';
 import Muuri from 'muuri';
-import './style.css';
 import {waitFrameAsync} from '../animation_frame/index.js';
 import {EventSimple} from '../event_simple';
+
+import './style.less';
+
 const defaults = {
   dashboard: {
     widgets: [],
@@ -287,6 +289,7 @@ class Dashboard extends EventSimple {
           view: conf.view,
           map: conf.map
         });
+        await widget.init();
         d.widgets.push(widget);
         widget._id = conf.view.id;
         widgets.push(widget);
