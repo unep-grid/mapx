@@ -1,3 +1,10 @@
+  - [1.9.39.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.39.1) 
+
+      - APP
+        - Fix an issue preventing Dashboard to be listed in 'Advanded views filter'
+        - Fix async precedence issue occuring when some dashboard requested widget with long waiting time.
+        - Allow optional legend when adding vt view : should solve issue when story map play some step that feature views with widget.
+
   - [1.9.39](https://github.com/unep-grid/map-x-mgl/tree/1.9.39) 
 
       - APP 
