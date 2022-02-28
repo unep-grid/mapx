@@ -9,6 +9,8 @@ import {ListenerStore} from './../listener_store/index.js';
 import {path} from './../mx_helper_misc.js';
 import {el} from '../el/src/index.js';
 import {getDictItem} from './../mx_helper_language.js';
+import {isEmpty} from './../is_test/index.js';
+
 import './style.less';
 const settings = {
   onFilter: (idViews) => {
@@ -574,8 +576,8 @@ function setViewsComponents(views) {
     isRt = v.type === 'rt';
     isGj = v.type === 'gj';
 
-    widgets = path(v, 'data.dashboard.widgets', '');
-    story = path(v, 'data.story.steps', '');
+    widgets = path(v, 'data.dashboard.widgets', []);
+    story = path(v, 'data.story.steps', []);
     overlap = path(v, 'data.source.layerInfo.maskName', '');
     attributes = path(v, 'data.attribute.names', '');
     customStyle = path(v, 'data.style.custom', '');
@@ -598,7 +600,7 @@ function setViewsComponents(views) {
       components.push('sm');
     }
 
-    if (Array.isArray(widgets)) {
+    if (!isEmpty(widgets)) {
       components.push('dashboard');
     }
 
