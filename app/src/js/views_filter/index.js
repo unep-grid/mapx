@@ -9,6 +9,8 @@ import {ListenerStore} from './../listener_store/index.js';
 import {path} from './../mx_helper_misc.js';
 import {el} from '../el/src/index.js';
 import {getDictItem} from './../mx_helper_language.js';
+import {isEmpty} from './../is_test/index.js';
+
 import './style.less';
 const settings = {
   onFilter: (idViews) => {
@@ -286,7 +288,7 @@ class ViewsFilter {
     const clActive = 'active';
     const id = elBtn.id;
     const isActive = elBtn.classList.contains(clActive) === true;
-    const isToggle = typeof(enable) !== 'boolean';
+    const isToggle = typeof enable !== 'boolean';
 
     if (isToggle) {
       enable = !isActive;
@@ -561,7 +563,7 @@ function setViewsComponents(views) {
       isCc,
       isRt,
       widgets,
-      story,
+      storySteps,
       overlap,
       attributes,
       customStyle,
@@ -574,8 +576,8 @@ function setViewsComponents(views) {
     isRt = v.type === 'rt';
     isGj = v.type === 'gj';
 
-    widgets = path(v, 'data.dashboard.widgets', '');
-    story = path(v, 'data.story.steps', '');
+    widgets = path(v, 'data.dashboard.widgets', []);
+    storySteps = path(v, 'data.story.steps', []);
     overlap = path(v, 'data.source.layerInfo.maskName', '');
     attributes = path(v, 'data.attribute.names', '');
     customStyle = path(v, 'data.style.custom', '');
@@ -594,11 +596,11 @@ function setViewsComponents(views) {
       components.push('rt');
     }
 
-    if (isSm && story && story.length) {
+    if (isSm && !isEmpty(storySteps)) {
       components.push('sm');
     }
 
-    if (Array.isArray(widgets)) {
+    if (!isEmpty(widgets)) {
       components.push('dashboard');
     }
 
@@ -644,9 +646,9 @@ export function getFreqTable(views) {
 
   const stat = {};
 
-  views.forEach((v)=>{
+  views.forEach((v) => {
     checkboxes.components.push(...path(v, '_components', []));
-    checkboxes.collections.push(...path(v, 'data.collections', []));    
+    checkboxes.collections.push(...path(v, 'data.collections', []));
   });
 
   // groupes
@@ -742,10 +744,10 @@ function updateCheckboxes() {
       const checkbox = new Checkbox({
         order: i,
         id: key,
-        label_key: key,  
+        label_key: key,
         label: label,
-        tooltip_key : tooltipKey,
-        tooltip_text : tooltipText,
+        tooltip_key: tooltipKey,
+        tooltip_text: tooltipText,
         count: tbl[key],
         type: type
       });

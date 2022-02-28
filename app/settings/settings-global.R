@@ -97,6 +97,7 @@ config[["api"]] <- list(
   protocol = "http:",
   upload_size_max = 200 * 1024^2,#100MiB
   routes = list(
+    getApiSql = "/get/sql",  
     getSearchKey = "/get/search/key",
     getIpInfo = "/get/ip",
     getMirror = "/get/mirror",

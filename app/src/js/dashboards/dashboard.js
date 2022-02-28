@@ -4,7 +4,7 @@ import {modulesLoad} from './../modules_loader_async';
 import {all} from './../mx_helper_misc.js';
 import {el} from './../el/src/index.js';
 import Muuri from 'muuri';
-import './style.css';
+import './style.less';
 import {waitFrameAsync} from '../animation_frame/index.js';
 import {EventSimple} from '../event_simple';
 const defaults = {
@@ -290,6 +290,7 @@ class Dashboard extends EventSimple {
         d.widgets.push(widget);
         widget._id = conf.view.id;
         widgets.push(widget);
+        await widget.init();
       }
     }
 

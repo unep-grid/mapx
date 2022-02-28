@@ -4232,6 +4232,7 @@ async function viewLayersAddRt(o) {
  * @param {Object} o Options
  * @param {Object} o.view View data
  * @param {Object} o.map Map object
+ * @param {Boolean} o.addLegend
  * @param {Element} o.elLegendContainer Legend container
  * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
@@ -4254,6 +4255,7 @@ export async function viewLayersAddVt(o) {
   const geomType = p(viewData, 'geometry.type', 'point');
   const source = p(viewData, 'source', {});
   const idSourceLayer = p(source, 'layerInfo.name');
+  const addLegend = h.isEmpty(o.addLegend) ? true : !!o.addLegend;
   let idInc = 0; // increment layer id last part
 
   /**
@@ -4640,86 +4642,86 @@ export async function viewLayersAddVt(o) {
   /**
    * Add layer and legends
    */
+
   if (layers.length > 0) {
-    /**
-     * Clean rules;
-     * - If next rules is identical, remove it from legend
-     * - Set sprite path
-     */
-    const rulesLegend = h.clone(rules);
-    if (useStyleNull) {
-      rulesLegend.push(ruleNulls);
-    }
-
-    let pos = 0;
-    const idRulesToRemove = [];
-    for (const rule of rulesLegend) {
-      const ruleNext = rulesLegend[++pos];
-      const hasSprite = rule.sprite && rule.sprite !== 'none';
-      const nextHasSprite =
-        !!ruleNext && ruleNext.sprite && ruleNext.sprite !== 'none';
-
-      const isDuplicated =
-        ruleNext &&
-        ruleNext.value === rule.value &&
-        ruleNext.color === rule.color;
-
-      if (!hasSprite) {
-        rule.sprite = null;
-      }
-
-      if (isDuplicated) {
-        if (nextHasSprite) {
-          rule.sprite = ruleNext.sprite;
-        }
-        idRulesToRemove.push(pos);
-      }
-    }
-
-    while (idRulesToRemove.length) {
-      const rulePos = idRulesToRemove.pop();
-      rulesLegend.splice(rulePos, 1);
-    }
-    /*
-     * Add legend using template
-     */
-    view._rulesLegend = rulesLegend;
-    const elLegend = h.elLegend(view, {
-      type: 'vt',
-      removeOld: true,
-      elLegendContainer: o.elLegendContainer,
-      addTitle: o.addTitle
-    });
-    if (h.isElement(elLegend)) {
+    if (addLegend) {
       /**
-       * viewLayersAddVt rendering time [ms] with:
-       * el + ecoregion2017
-       * 606
-       * 534
-       * 504
-       * 403
-       *
-       * dot + ecoregion2017
-       * 517
-       * 725
-       * 928
-       * 660
+       * Clean rules;
+       * - If next rules is identical, remove it from legend
+       * - Set sprite path
        */
-      // el
-      const elLegendContent = mx.helpers.buildLegendVt(view);
-      elLegend.appendChild(elLegendContent);
-      // dot
-      //elLegend.innerHTML = mx.templates.viewListLegend(view);
+      const rulesLegend = h.clone(rules);
+      if (useStyleNull) {
+        rulesLegend.push(ruleNulls);
+      }
+
+      let pos = 0;
+      const idRulesToRemove = [];
+      for (const rule of rulesLegend) {
+        const ruleNext = rulesLegend[++pos];
+        const hasSprite = rule.sprite && rule.sprite !== 'none';
+        const nextHasSprite =
+          !!ruleNext && ruleNext.sprite && ruleNext.sprite !== 'none';
+
+        const isDuplicated =
+          ruleNext &&
+          ruleNext.value === rule.value &&
+          ruleNext.color === rule.color;
+
+        if (!hasSprite) {
+          rule.sprite = null;
+        }
+
+        if (isDuplicated) {
+          if (nextHasSprite) {
+            rule.sprite = ruleNext.sprite;
+          }
+          idRulesToRemove.push(pos);
+        }
+      }
+
+      while (idRulesToRemove.length) {
+        const rulePos = idRulesToRemove.pop();
+        rulesLegend.splice(rulePos, 1);
+      }
+      /*
+       * Add legend using template
+       */
+      view._rulesLegend = rulesLegend;
+      const elLegend = h.elLegend(view, {
+        type: 'vt',
+        removeOld: true,
+        elLegendContainer: o.elLegendContainer,
+        addTitle: o.addTitle
+      });
+      if (h.isElement(elLegend)) {
+        /**
+         * viewLayersAddVt rendering time [ms] with:
+         * el + ecoregion2017
+         * 606
+         * 534
+         * 504
+         * 403
+         *
+         * dot + ecoregion2017
+         * 517
+         * 725
+         * 928
+         * 660
+         */
+        // el
+        const elLegendContent = mx.helpers.buildLegendVt(view);
+        elLegend.appendChild(elLegendContent);
+        // dot
+        //elLegend.innerHTML = mx.templates.viewListLegend(view);
+      }
     }
 
     /*
      * Add layers to map
      */
-
     await addLayers(layers, o.before);
     await viewsLayersOrderUpdate();
-
-    return true;
   } else {
     return false;
   }
