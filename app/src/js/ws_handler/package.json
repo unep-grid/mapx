@@ -14,7 +14,6 @@
   "author": "unepgrid.ch",
   "license": "MIT",
   "dependencies": {
-    "socket.io": "^3.0.3",
-    "socket.io-client": "^3.0.3"
+    "socket.io-client": "^4.0.0"
   }
 }

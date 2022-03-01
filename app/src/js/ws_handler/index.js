@@ -1,4 +1,4 @@
-import io from 'socket.io-client';
+import {io} from 'socket.io-client';
 import {isObject, isFunction} from '../is_test/index.js';
 import {bindAll} from '../bind_class_methods';
 
