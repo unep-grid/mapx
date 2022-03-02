@@ -1,3 +1,10 @@
+  - [1.9.40-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.2) 
+      
+      - APP/API
+        - API refactoring : conversion to ESM 
+        - Updated dependencies
+        - Merged hot fixes from 1.9.39.1 
+      
   - [1.9.40-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.1) 
 
       - APP 
