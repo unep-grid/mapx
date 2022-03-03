@@ -1,0 +1,18 @@
+# User : postgres
+# Password : example 
+
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - .:/shared
+    ports : 
+      - 54321:5432
+
+
