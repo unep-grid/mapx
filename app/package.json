@@ -131,6 +131,7 @@
     "shapefile": "^0.6.5",
     "showdown": "^1.9.1",
     "svg-inline-loader": "^0.8.2",
+    "tom-select": "^2.0.1",
     "topojson-client": "^3.1.0",
     "vanilla-picker": "^2.12.1",
     "webpack-jquery-ui": "^2.0.1",

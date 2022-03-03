@@ -15,9 +15,9 @@ input {
 */
 
 /*.mx select {*/
-  /*appearance: none;*/
-  /*padding: 5px;*/
-  /*background: var(--mx_ui_background);*/
+/*appearance: none;*/
+/*padding: 5px;*/
+/*background: var(--mx_ui_background);*/
 /*}*/
 
 .mx input {
@@ -136,12 +136,11 @@ input {
 }
 
 .mx .selectize-dropdown .optgroup-header {
-  color : var(--mx_ui_text_faded);
+  color: var(--mx_ui_text_faded);
   background-color: var(--mx_ui_background_accent);
 }
 
-
-.mx .selectize-input input {
+.mx .selectize-input input{
   color: var(--mx_ui_text);
 }
 
@@ -178,7 +177,8 @@ span.mx-badge-role {
 .mx .selectize-control.single .selectize-input,
 .mx .selectize-control.single .selectize-input.input-active,
 .mx .selectize-control.single .selectize-input .dropdown-active,
-.mx .selectize-dropdown .create * .mx .selectize-input,
+.mx .selectize-dropdown .create *,
+.mx .selectize-input,
 .mx .selectize-control.multi .selectize-input > div,
 .mx .list-group-item {
   color: var(--mx_ui_text);
@@ -213,7 +213,7 @@ span.mx-badge-role {
 
 .mx .selectize-control.single .selectize-input:after,
 .mx .selectize-control.single .selectize-input.dropdown-active:after,
-.mx .selectize-dropdown.form-control {
+.mx .selectize-dropdown.form-control{
   background-color: var(--mx_ui_background);
   border-color: var(--mx_ui_border);
 }

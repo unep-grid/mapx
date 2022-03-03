@@ -1,11 +1,5 @@
 .search--container {
-  --search_highlight: linear-gradient(
-    to right,
-    rgb(17, 178, 248),
-    rgba(17, 178, 248, 20%) 4%,
-    rgba(17, 176, 248, 48%)
-  );
-
+  
   @import 'style_pagination.less';
   @import 'style_stats.less';
   @import 'style_filters.less';
@@ -109,10 +103,7 @@
       em {
         font-style: normal;
         color: var(--mx_ui_text);
-        border-radius: 0em 0.3em;
-        background-image: var(--search_highlight);
-        -webkit-box-decoration-break: clone;
-        box-decoration-break: clone;
+        border-bottom: 1px solid var(--mx_ui_link);
       }
     }
   }

@@ -28,7 +28,8 @@ const modules = {
   'chroma-js': loadChromaJs,
   'radio-group': loadRadioGroup,
   proj4: loadProj4,
-  button_panel: loadButtonPanel
+  button_panel: loadButtonPanel,
+  'tom-select': loadTomSelect
 };
 
 export async function moduleLoad(name) {
@@ -151,6 +152,13 @@ async function loadPickolor() {
     import('../../js/pickolor/pickolor.css')
   ]);
   return m[0].default;
+}
+
+async function loadTomSelect() {
+  const {default: TomSelect} = await import('tom-select');
+  // require sortable ? await import('webpack-jquery-ui/sortable'),
+  await import('../../css/mx_tom_select.css');
+  return TomSelect;
 }
 
 async function loadSelectize() {
