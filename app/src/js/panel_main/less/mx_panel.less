@@ -63,7 +63,7 @@
 .mx-tab--tabs {
   display: flex;
   background: var(--mx_ui_background_faded);
-  position:relative;
+  position: relative;
   &:after {
     // Hide shadow from tab
     content: '';
@@ -87,6 +87,12 @@
     position: relative;
     background: none;
     border: none;
+    &:first-of-type {
+      border-top-left-radius: 0px;
+    }
+    &:last-of-type {
+      border-top-right-radius: 0px;
+    }
     &:not(.active):not(:hover):after {
       content: '';
       border-left: 1px solid var(--mx_ui_border);
