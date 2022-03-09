@@ -158,6 +158,7 @@ export class NotifCenter {
   }
   clear() {
     const nc = this;
+    nc.setSeenAll();
     if (nc.elContainer) {
       nc.elContainer.innerHTML = '';
     }
