@@ -6425,11 +6425,6 @@
     "zh": "已经从...删除： {{group}}\n "
   },
   {
-    "id": "get_source_format_invalid",
-    "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "zh": "无效的格式 {{format}}，使用默认格式 {{formatDefault}}。 "
-  },
-  {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
     "zh": "提取元数据 "

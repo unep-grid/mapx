@@ -6425,11 +6425,6 @@
     "bn": "থেকে সরানো: {{group}}\n "
   },
   {
-    "id": "get_source_format_invalid",
-    "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "bn": "ভুল ফরম্যাট {{format}} , ডিফল্ট ফর্ম্যাট ব্যবহার করে {{formatDefault}} । "
-  },
-  {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
     "bn": "মেটাডেটা বের করা হয়েছে "

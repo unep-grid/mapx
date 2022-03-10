@@ -6425,11 +6425,6 @@
     "fa": "حذف شده از: {{group}}\n "
   },
   {
-    "id": "get_source_format_invalid",
-    "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "fa": "قالب نامعتبر است {{format}} ، با استفاده از قالب پیش فرض {{formatDefault}} . "
-  },
-  {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
     "fa": "فراداده استخراج شد "

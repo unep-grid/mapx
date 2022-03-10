@@ -6425,11 +6425,6 @@
     "es": "retirado de: {{group}}\n "
   },
   {
-    "id": "get_source_format_invalid",
-    "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "es": "Formato inválido {{format}} , usando el formato predeterminado {{formatDefault}} . "
-  },
-  {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
     "es": "Metadatos extraídos "

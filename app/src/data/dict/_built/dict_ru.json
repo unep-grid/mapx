@@ -6425,11 +6425,6 @@
     "ru": "удалено из: {{group}}\n "
   },
   {
-    "id": "get_source_format_invalid",
-    "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "ru": "Недопустимый формат {{format}} , используя формат по умолчанию {{formatDefault}} . "
-  },
-  {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
     "ru": "Метаданные извлечены "

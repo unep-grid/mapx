@@ -6425,11 +6425,6 @@
     "ar": "تمت إزالته من: {{group}}\n "
   },
   {
-    "id": "get_source_format_invalid",
-    "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "ar": "تنسيق غير صالح {{format}} باستخدام التنسيق الافتراضي {{formatDefault}} . "
-  },
-  {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
     "ar": "استخراج البيانات الوصفية "
