@@ -1,4 +1,5 @@
-import {isArray} from '@fxi/mx_valid';
+import {isArray, isString} from '@fxi/mx_valid';
+import {join} from 'path';
 import {mkdir, writeFile, access} from 'fs/promises';
 import {randomString, parseTemplate, attrToPgCol} from '#mapx/helpers';
 import {settings} from '#root/settings';
@@ -10,14 +11,24 @@ import {sendMailAuto} from '#mapx/mail';
 import {templates} from '#mapx/template';
 import {t} from '#mapx/language';
 import {getSourceMetadata} from './getSourceMetadata.js';
+import {getParamsValidator} from '#mapx/route_validation';
+import {getFormatExt} from '#mapx/file_formats';
 
-const isString = (a) => typeof a === 'string';
+const validateParamsHandlerText = getParamsValidator({
+  required: ['email', 'idSource', 'idUser', 'idProject', 'token', 'idSocket'],
+  expected: ['filename', 'iso3codes', 'epsgCode', 'srid', 'language', 'format']
+});
 
-const apiPort = settings.api.port_public;
+const maxMergeMessage = 20;
+
+/**
+ * Set port / url
+ */
 const apiHost = settings.api.host_public;
+const apiPort = settings.api.port_public * 1;
 
 let apiHostUrl = '';
-if (apiPort === 443 || apiPort === '443') {
+if (apiPort === 443) {
   apiHostUrl = 'https://' + apiHost;
 } else if (apiPort === 80) {
   apiHostUrl = 'http://' + apiHost;
@@ -25,42 +36,14 @@ if (apiPort === 443 || apiPort === '443') {
   apiHostUrl = 'http://' + apiHost + ':' + apiPort;
 }
 
-const maxMergeMessage = 20;
-const fileFormat = {
-  GPKG: {
-    ext: 'gpkg'
-  },
-  GML: {
-    ext: 'gml'
-  },
-  KML: {
-    ext: 'kml'
-  },
-  GPX: {
-    ext: 'gpx'
-  },
-  GeoJSON: {
-    ext: 'geojson'
-  },
-  'ESRI Shapefile': {
-    ext: 'shp'
-  },
-  CSV: {
-    ext: 'csv'
-  },
-  DXF: {
-    ext: 'dxf'
-  },
-  SQLite: {
-    ext: 'sqlite'
-  }
-};
-
-const formatDefault = 'GPKG';
 /**
  * Request handler / middleware
  */
-export const mwGet = [validateTokenHandler, exportHandler];
+export const mwGet = [
+  validateParamsHandlerText,
+  validateTokenHandler,
+  exportHandler
+];
 
 async function exportHandler(req, res, next) {
   try {
@@ -78,39 +61,45 @@ async function exportHandler(req, res, next) {
  * Exportation script
  */
 async function extractFromPostgres(config, res) {
-  const id = config.layer || config.idSource;
-  const {email = 'en', language, epsgCode = 4326, filename = id} = config;
-  const {ext} = fileFormat[config.format];
-  const layername = filename;
-  let title = await getLayerTitle(id, language);
-  let {format} = config;
-  let {iso3codes} = config;
   let isShapefile = false;
-  /**
-   * OGR sql -> select and/or clipping
+  let {
+    email,
+    idSource,
+    filename,
+    language = 'en',
+    epsgCode = 4326,
+    iso3codes = [],
+    format = 'GPKG'
+  } = config;
+
+  /*
+   * Extra validation :
+   * should be already handled in route validation
    */
-  let sqlOGR = `SELECT * from ${id}`;
+  if (!idSource) {
+    throw Error('No source id');
+  }
+  if (!email) {
+    throw Error('No email');
+  }
+  const layername = filename ? filename : idSource;
+  const ext = getFormatExt(config.format);
+  const title = await getLayerTitle(idSource, language);
 
   /**
    * folder local path. eg. /shared/download/mx_dl_1234 and /shared/download/mx_dl_1234.zip
    */
   const folderName = randomString('mx_dl');
-  const folderPath = settings.vector.path.download + '/' + folderName;
-  const filePath = folderPath + '/' + filename + '.' + ext;
+  const folderPath = join(settings.vector.path.download, folderName);
+  const filePath = join(folderPath, layername + ext[0]);
   const folderPathZip = folderPath + '.zip';
   /**
    * url lcoation. eg /download/mx_dl_1234.zip
    */
-  const folderUrl = settings.vector.path.download_url;
-  const folderUrlZip = folderUrl + folderName + '.zip';
-  const dataUrl = apiHostUrl + folderUrlZip;
-
-  if (!id) {
-    throw Error('No id');
-  }
-  if (!email) {
-    throw Error('No email');
-  }
+  const folderPathPublic = settings.vector.path.download_url;
+  const folderPathPublicZip = join(folderPathPublic, folderName + '.zip');
+  const dataUrl = new URL(apiHostUrl); // don't mutate original URL
+  dataUrl.pathname = folderPathPublicZip;
 
   if (isString(iso3codes)) {
     iso3codes = iso3codes.split(',');
@@ -135,43 +124,37 @@ async function extractFromPostgres(config, res) {
     })
   });
 
-  if (!format || !fileFormat[format]) {
-    await res.notifyInfoWarning('job_state', {
-      message: t(language, 'get_source_format_invalid', {format, formatDefault})
-    });
-    format = formatDefault;
-  }
-
   /**
    * Extract metadata ->  attached file
    */
-  const metadata = await getSourceMetadata({id: id});
+  const metadata = await getSourceMetadata({id: idSource});
 
   await res.notifyInfoVerbose('job_state', {
     message: t(language, 'get_source_meta_extracted')
   });
 
-  /*
-   *  Get attributes
-   */
-  const attr = await getColumnsNames(id);
-
   /**
-   * Set SQL for clipping
+   * Set SQL
    */
-  if (hasCountryClip) {
-    const test = await isLayerValid(id, true, false);
-    if (test.valid) {
-      sqlOGR = getSqlClip(id, iso3codes, attr);
-    } else {
-      throw Error(
-        t(language, 'get_source_invalid_geom', {
-          idLayer: test.id,
-          title: test.title
-        })
-      );
+  let sqlOGR;
+  const attributes = await getColumnsNames(idSource);
+  const attributesExclude = ['_mx_valid', 'gid'];
+
+  for (const a of attributesExclude) {
+    const pos = attributes.indexOf(a);
+    if (pos > -1) {
+      attributes.splice(pos, 1);
     }
   }
+
+  const attrPg = attrToPgCol(attributes);
+
+  if (!hasCountryClip) {
+    sqlOGR = `SELECT ${attrPg} from ${idSource}`;
+  } else {
+    sqlOGR = await getSqlClip(idSource, iso3codes, attrPg);
+  }
+
   /**
    * Create folder
    */
@@ -318,6 +301,11 @@ async function extractFromPostgres(config, res) {
   }
 
   /**
+   * End
+   */
+  res.end();
+
+  /**
    * Helpers
    */
 
@@ -370,9 +358,18 @@ async function extractFromPostgres(config, res) {
   }
 }
 
-function getSqlClip(idSource, iso3codes, attributes) {
-  const attrNoGeom = attributes.filter((a) => a !== 'geom');
-  const attrPg = attrToPgCol(attrNoGeom);
+async function getSqlClip(idSource, iso3codes, attrPg) {
+  /* Clip requires valid geom */
+  const test = await isLayerValid(idSource, true, false);
+  if (!test.valid) {
+    throw new Error(
+      t(language, 'get_source_invalid_geom', {
+        idLayer: test.id,
+        title: test.title
+      })
+    );
+  }
+
   const iso3string = `'${iso3codes.join(`','`)}'`;
 
   const sql = parseTemplate(templates.getIntersectionCountry, {

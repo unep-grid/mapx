@@ -45,7 +45,9 @@ export async function mwGet(req, res) {
     data.x = req.params.x * 1;
     data.y = req.params.y * 1;
     data.view = req.query.view;
-    data.attributes = attrToPgCol(data.attribute, data.attributes);
+    data.attributes = attrToPgCol(data.attribute, data.attributes, {
+      gidAdd: true
+    });
 
     if (!data.layer || data.layer === Object) {
       sendTileEmpty(res);

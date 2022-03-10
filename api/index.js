@@ -1,33 +1,31 @@
-import {settings}  from '#root/settings' ;
-import http  from 'http' ;
-import express  from 'express' ;
-import {Server as SocketServer}  from 'socket.io' ;
-import view  from '#mapx/view' ;
-import query  from '#mapx/query' ;
-import source  from '#mapx/source' ;
-import project  from '#mapx/project' ;
-import upload  from '#mapx/upload' ;
-import mirror  from '#mapx/mirror' ;
-import mail  from '#mapx/mail' ;
-import ip from '#mapx/ip' ;
-import tile  from '#mapx/tile' ;
-import log  from '#mapx/log' ;
-import {mwSetHeaders, mwGetConfigMap}  from '#mapx/helpers' ;
-import {mwIoConnect}  from '#mapx/io' ;
-import {mwNotify}  from '#mapx/notify' ;
-import {mwGemetSearchText, mwGemetSearchConcept}  from '#mapx/gemet' ;
-import {mwGetSearchKey}  from '#mapx/search' ;
-import {mwGetBbox}  from '#mapx/bbox' ;
-
+import {settings} from '#root/settings';
+import http from 'http';
+import express from 'express';
+import {Server as SocketServer} from 'socket.io';
+import view from '#mapx/view';
+import query from '#mapx/query';
+import source from '#mapx/source';
+import project from '#mapx/project';
+import upload from '#mapx/upload';
+import mirror from '#mapx/mirror';
+import mail from '#mapx/mail';
+import ip from '#mapx/ip';
+import tile from '#mapx/tile';
+import log from '#mapx/log';
+import {mwSetHeaders, mwGetConfigMap} from '#mapx/helpers';
+import {mwIoConnect} from '#mapx/io';
+import {mwNotify} from '#mapx/notify';
+import {mwGemetSearchText, mwGemetSearchConcept} from '#mapx/gemet';
+import {mwGetSearchKey} from '#mapx/search';
+import {mwGetBbox} from '#mapx/bbox';
+import {mwGetFormatsList} from '#mapx/file_formats';
 
 /**
  * If port argument is set, use this instead
  * e.g. node inspect index.js port=3333
  * will replace the port by 3333
  */
-let {
- port = 3030
-} = settings.api;
+let {port = 3030} = settings.api;
 
 for (const val of process.argv) {
   const v = val.split('=');
@@ -69,6 +67,7 @@ app.get('/get/sql/', query.mwGet);
 app.get('/get/mirror/', mirror.mwGet);
 
 app.get('/get/config/map', mwGetConfigMap);
+app.get('/get/file/formats/list', mwGetFormatsList);
 app.get('/get/source/', [mwNotify(io), ...source.mwGet]);
 app.get('/get/source/metadata/:id', source.mwGetMetadata);
 app.get('/get/source/summary/', source.mwGetSummary);
@@ -79,9 +78,9 @@ app.get('/get/ip', ip.mwGet);
 app.get('/get/search/key', mwGetSearchKey);
 app.get('/get/gemet/search', mwGemetSearchText);
 app.get('/get/gemet/concept', mwGemetSearchConcept);
-app.get('/get/bbox/',mwGetBbox);
+app.get('/get/bbox/', mwGetBbox);
 app.get('/get/projects/list/user/', project.mwGetListByUser);
-app.get('/get/project/search',project.mwProjectSearchText);
+app.get('/get/project/search', project.mwProjectSearchText);
 
 app.post('/upload/image/', upload.mwImage);
 app.post('/upload/vector/', upload.mwVector);

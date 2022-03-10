@@ -1,10 +1,9 @@
+import {isArray, isString, isEmpty} from '@fxi/mx_valid';
 import path from 'path';
 import fs from 'fs';
 import zlib from 'zlib';
 import {settings} from '#root/settings';
-
-const {isArray} = Array;
-const isString = (a) => typeof a === 'string';
+import {readFile} from 'fs/promises';
 
 /**
  * Conversion of array of column names to pg columns
@@ -169,7 +168,7 @@ function readTemplate(file, data) {
  * Get user ip
  */
 const ip = {
-  get: function(req, res) {
+  get: function (req, res) {
     res.send(req.ip);
   }
 };
@@ -177,24 +176,23 @@ const ip = {
 /**
  * Attributes to pg col
  */
-function attrToPgCol(attribute, attributes) {
-  if (!attribute || attribute.constructor === Object) {
-    attribute = [];
-  }
-  if (!attributes || attributes.constructor === Object) {
-    attributes = [];
-  }
-  if (attribute.constructor !== Array) {
+function attrToPgCol(attribute = 'gid', attributes = [], opt) {
+  const {gidAdd = false} = opt || {gidAdd: false};
+
+  if (isString(attribute)) {
     attribute = [attribute];
   }
-  if (attributes.constructor !== Array) {
+  if (isString(attributes)) {
     attributes = [attributes];
   }
-  var attr = getDistinct(attribute.concat(attributes));
-  if (!attr.includes('gid')) {
-    attr.push('gid');
+
+  attributes = [...attributes, ...attribute];
+
+  if (gidAdd) {
+    attributes.push('gid');
   }
-  return toPgColumn(attr);
+
+  return toPgColumn(getDistinct(attributes));
 }
 
 /**
@@ -222,7 +220,7 @@ function arrayToPgArray(arr, def) {
 function dataToJsonZip(data) {
   const buffer = Buffer.from(JSON.stringify(data), 'utf-8');
   return new Promise((resolve, reject) => {
-    zlib.gzip(buffer, function(err, zOut) {
+    zlib.gzip(buffer, function (err, zOut) {
       if (err) {
         reject(err);
       } else {
@@ -245,14 +243,24 @@ function stop(reason) {
  * @param {String} v String value to convert
  */
 function asArray(v) {
-  v = v || [];
-  var r = [];
-  if (isArray(v)) {
-    r = cleanArray(v);
-  } else {
-    r = cleanArray(v.split(','));
+  
+  if (isEmpty(v) || v === 'null') {
+    return [];
   }
-  return r;
+
+  if (isString(v) && v.includes(',')) {
+    v = v.split(',');
+  }
+
+  if (isString(v)) {
+     return [v];
+  }
+
+  if (isArray(v)) {
+    return cleanArray(v);
+  }
+
+  return [];
 }
 
 /**
@@ -260,7 +268,12 @@ function asArray(v) {
  * @param {Array} arr Array to clean
  */
 function cleanArray(arr) {
-  return arr.reduce((a, v) => (v ? a.concat(v) : a), []);
+  for (const [i,v] of arr.entries()) {
+    if (isEmpty(v) || v === 'null') {
+      arr.splice(i, 1);
+    }
+  }
+  return arr;
 }
 
 /**
@@ -417,6 +430,18 @@ function mwSetHeaders(_, res, next) {
 }
 
 /**
+ * Parse JSON from file
+ * @param {String} file Filepath
+ * @param {String} base base, ex. import.meta.url
+ * @return {Promise<Object>}
+ */
+async function readJSON(file, base) {
+  const url = new URL(file, base);
+  const data = await readFile(url);
+  return JSON.parse(data);
+}
+
+/**
  * Exports
  */
 export {
@@ -442,11 +467,12 @@ export {
   once,
   onceInterval,
   withTimeLimit,
+  readJSON,
   /**
    * Middleware
    */
   mwGetConfigMap,
   mwSetHeaders,
-  /** check if used **/
+  /** probably not used **/
   ip
 };

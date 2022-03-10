@@ -1,8 +1,5 @@
-import { readFile } from 'fs/promises';
-const apiLogs = JSON.parse(
-  await readFile(
-    new URL('./api_logs.json', import.meta.url)
-  )
-);
+import {readJSON} from '#mapx/helpers';
 
-export {apiLogs};
+/* JSON schema for client logs */
+export const apiLogs = await readJSON('./api_logs.json', import.meta.url);
+

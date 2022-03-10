@@ -16705,19 +16705,6 @@
     "de": "entfernt von: {{group}}\n "
   },
   {
-    "id": "get_source_format_invalid",
-    "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "fr": "Format invalide {{format}} , en utilisant le format par défaut {{formatDefault}} . ",
-    "es": "Formato inválido {{format}} , usando el formato predeterminado {{formatDefault}} . ",
-    "ru": "Недопустимый формат {{format}} , используя формат по умолчанию {{formatDefault}} . ",
-    "zh": "无效的格式 {{format}}，使用默认格式 {{formatDefault}}。 ",
-    "ar": "تنسيق غير صالح {{format}} باستخدام التنسيق الافتراضي {{formatDefault}} . ",
-    "fa": "قالب نامعتبر است {{format}} ، با استفاده از قالب پیش فرض {{formatDefault}} . ",
-    "ps": "ناباوره ب .ه {{format}} د افتراضي ب usingه کاروي {{formatDefault}} . ",
-    "bn": "ভুল ফরম্যাট {{format}} , ডিফল্ট ফর্ম্যাট ব্যবহার করে {{formatDefault}} । ",
-    "de": "Ungültiges Format {{format}} im Standardformat {{formatDefault}} . "
-  },
-  {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
     "fr": "Métadonnées extraites ",

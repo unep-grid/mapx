@@ -1,0 +1,102 @@
+[
+  {
+    "default": true,
+    "name": "GeoPackage",
+    "driver": "GPKG",
+    "type": "vector",
+    "fileExt": [".gpkg"],
+    "multiple": false,
+    "upload": true,
+    "download": true
+  },
+  {
+    "name": "CSV",
+    "driver": "CSV",
+    "type": "vector",
+    "fileExt": [".csv"],
+    "multiple": false,
+    "upload": true,
+    "download": false
+  },
+  {
+    "name": "Postgres SQL dump",
+    "driver": "PGDUMP",
+    "type": "vector",
+    "fileExt": [".sql"],
+    "multiple": false,
+    "upload": false,
+    "download": true
+  },
+  {
+    "name": "ESRI Shapefile",
+    "type": "vector",
+    "driver": "ESRI Shapefile",
+    "fileExt": [".shp", ".shx", ".dbf", ".prj"],
+    "multiple": true,
+    "upload": true,
+    "download": true
+  },
+  {
+    "name": "GeoJSON",
+    "type": "vector",
+    "fileExt": [".geojson", ".json"],
+    "driver": "GeoJSON",
+    "multiple": false,
+    "upload": true,
+    "download": true
+  },
+  {
+    "name": "TopoJSON",
+    "type": "vector",
+    "fileExt": [".topojson", ".json"],
+    "driver": "TopoJSON",
+    "multiple": false,
+    "upload": true,
+    "download": false
+  },
+  {
+    "name": "Geography Markup Language (GML)",
+    "driver": "GML",
+    "type": "vector",
+    "fileExt": [".gml", ".xml"],
+    "multiple": false,
+    "upload": true,
+    "download": true
+  },
+  {
+    "name": "GPX",
+    "driver": "GPX",
+    "type": "vector",
+    "fileExt": [".gpx"],
+    "multiple": false,
+    "upload": true,
+    "download": true
+  },
+  {
+    "name": "Keyhole Markup Language (KML)",
+    "driver": "KML",
+    "type": "vector",
+    "fileExt": [".kml"],
+    "multiple": false,
+    "upload": true,
+    "download": true
+  },
+  {
+    "name": "SQLite",
+    "driver": "SQLite",
+    "type": "vector",
+    "fileExt": [".sqlite", ".db"],
+    "multiple": false,
+    "upload": true,
+    "download": true
+  },
+  {
+    "name": "DXF",
+    "driver": "DXF",
+    "type": "vector",
+    "fileExt": [".dxf"],
+    "multiple": false,
+    "upload": true,
+    "download": true
+  }
+]

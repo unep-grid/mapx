@@ -6425,11 +6425,6 @@
     "ps": "د دې څخه لرې شوی: {{group}}\n "
   },
   {
-    "id": "get_source_format_invalid",
-    "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "ps": "ناباوره ب .ه {{format}} د افتراضي ب usingه کاروي {{formatDefault}} . "
-  },
-  {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
     "ps": "میٹاਡੇټا ایستل شوی "

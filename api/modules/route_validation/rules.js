@@ -11,6 +11,7 @@ import {
   isNumeric,
   isBoolean
 } from '@fxi/mx_valid';
+import {isFormatValid} from '#mapx/file_formats';
 import {asArray} from '#mapx/helpers';
 import {settings} from '#root/settings';
 const def = settings.validation_defaults;
@@ -149,7 +150,7 @@ const rules = [
     }
   },
   {
-    key: ['srid'],
+    key: ['srid', 'epsgCode'],
     test: (d) => {
       isValid = isNumeric(d) && d >= 0;
       return {
@@ -218,6 +219,17 @@ const rules = [
     }
   },
   {
+    key: ['iso3codes'],
+    test: (d) => {
+      d = asArray(d);
+      isValid = d.reduce((a, id) => a && isStringRange(id, 3, 3), true);
+      return {
+        valid: isValid,
+        value: d
+      };
+    }
+  },
+  {
     key: ['idSource'],
     test: (d) => {
       isValid = isSourceId(d) && !tableNotQueryable.includes(d);
@@ -271,6 +283,16 @@ const rules = [
       return {
         valid: isValid,
         value: d
+      };
+    }
+  },
+  {
+    key: 'format',
+    test: (d) => {
+      isValid = isFormatValid(d);
+      return {
+        valid: isValid,
+        value: isValid ? d : null
       };
     }
   },
@@ -330,7 +352,7 @@ const rules = [
       isValid = d.reduce((a, x) => a && types.indexOf(x) > -1, true);
       return {
         valid: isValid,
-        value: d.length === 0 ? types : d
+        value: d
       };
     }
   },
@@ -358,7 +380,7 @@ const rules = [
     }
   },
   /**
-   * email fields
+   * email / file fields (not safe for DB)
    */
   {
     key: ['email', 'from', 'to'],
@@ -369,7 +391,14 @@ const rules = [
   },
 
   {
-    key: ['title', 'subject', 'subtitle', 'subjectPrefix', 'content'],
+    key: [
+      'filename',
+      'title',
+      'subject',
+      'subtitle',
+      'subjectPrefix',
+      'content'
+    ],
     test: (d) => {
       const isValid = isStringRange(d, 1, 10000);
       return {
