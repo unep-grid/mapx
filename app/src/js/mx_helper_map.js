@@ -20,6 +20,7 @@ import {modal, modalGetAll, modalCloseAll} from './mx_helper_modal.js';
 import {errorHandler} from './error_handler/index.js';
 import {waitTimeoutAsync} from './animation_frame';
 import {getArrayDiff, getArrayDistinct} from './array_stat/index.js';
+import {getApiUrl} from './api_routes';
 
 /**
  * Convert point in  degrees to meter
@@ -315,77 +316,6 @@ export async function getLoginInfo() {
 }
 
 /**
- * Get url for service
- * @param {String} id Id of service : api, search .. .
- * @param {String} route Additional route id, if exists in config
- * @return {String} url
- */
-export function getServiceUrl(id, route) {
-  const s = mx.settings;
-  const service = s[id];
-  if (location.protocol === 'https:') {
-    service.protocol = 'https:';
-  }
-  const urlBase = `${service.protocol}//${service.host_public}:${
-    service.port_public
-  }`;
-  if (!route) {
-    return urlBase;
-  }
-  return urlBase + (service.routes[route] || route);
-}
-export function getApiUrl(route) {
-  return getServiceUrl('api', route);
-}
-export function getSearchUrl() {
-  return getServiceUrl('search');
-}
-
-/**
- * Set mapx API host info when started without server app
- */
-const regexDefaultSubDomain = new RegExp(/^(app|dev)\..*\.[a-z]{1,}$/);
-export function setApiUrlAuto() {
-  const loc = new URL(window.location.href);
-  const hasDefaultSubDomain = regexDefaultSubDomain.test(loc.hostname);
-  /**
-   * Use mx.settings default or,
-   * if has default subdomain, webpack variables OR
-   * modified url based on standard
-   */
-  if (hasDefaultSubDomain) {
-    /**
-     * If no webpack variables found, replace by defaults
-     */
-    const apiHost =
-      typeof API_HOST_PUBLIC === 'undefined'
-        ? loc.hostname.replace(/^(app|dev)\./, 'api.')
-        : API_HOST_PUBLIC;
-    const apiPortPublic =
-      typeof API_PORT_PUBLIC === 'undefined' ? loc.port : API_PORT_PUBLIC;
-
-    /**
-     * Set API url based on current location
-     */
-    Object.assign(mx.settings.api, {
-      host_public: apiHost,
-      protocol: loc.protocol,
-      port_public: apiPortPublic
-    });
-  }
-}
-
-/**
- * Get url for path relative to the app
- * @param {String} id Id of the path : sprite, download, etc
- */
-export function getAppPathUrl(id) {
-  const s = mx.settings;
-  const loc = window.location.origin;
-  return loc + '/' + s.paths[id];
-}
-
-/**
  * Set the project manually
  * @param {String} idProject project to load
  * @param {Object} opt Options
@@ -602,7 +532,7 @@ export function initListenersApp() {
   mx.events.on({
     type: 'language_change',
     idGroup: 'view_filter_tag_lang',
-    callback: function() {
+    callback: function () {
       const mData = h.getMapData();
       if (mData.viewsFilter) {
         mData.viewsFilter.updateCheckboxesOrder();
@@ -633,7 +563,7 @@ export function initListenersApp() {
   mx.events.on({
     type: 'project_change',
     idGroup: 'project_change',
-    callback: function() {
+    callback: function () {
       const clActive = 'active';
       const clHide = 'mx-hide';
       const elBtn = document.getElementById('btnFilterShowPanel');
@@ -656,7 +586,7 @@ export function initListenersApp() {
   mx.events.on({
     type: 'views_list_updated',
     idGroup: 'view_list_updated',
-    callback: function() {
+    callback: function () {
       h.getProjectViewsCollectionsShiny({
         idInput: 'viewsListCollections'
       });
@@ -897,7 +827,6 @@ export async function initMapx(o) {
    */
   mx.settings.style.sprite = h.getAppPathUrl('sprites');
   mx.settings.style.glyphs = h.getAppPathUrl('fontstack');
-
   /**
    * Handle socket io session
    */
@@ -1733,7 +1662,7 @@ export async function addSourceFromView(o) {
       stats: ['base'],
       useCache: false
     });
-    const baseUrl = h.getApiUrl('getTile');
+    const baseUrl = getApiUrl('getTile');
     const srcTimestamp = p(summary, 'timestamp', null);
     let url = `${baseUrl}?view=${o.view.id}`;
     if (srcTimestamp) {
@@ -1796,25 +1725,31 @@ export async function addSourceFromView(o) {
  */
 export async function getViewRemote(idView) {
   const h = mx.helpers;
-  const apiUrlViews = mx.helpers.getApiUrl('getView');
+  const apiUrlViews = getApiUrl('getView');
+  const isValid = h.isViewId(idView) && h.isUrl(apiUrlViews);
 
-  if (!idView || !apiUrlViews) {
-    throw new Error('Missing id or fetch URL');
+  if (!isValid) {
+    throw new Error('Invalid view id or URL');
   }
 
-  /* get view, force update */
+  /*
+   * View URL, + date to avoid cache
+   */
   const keyNet = `${apiUrlViews}${idView}?date=${Date.now()}`;
 
   const res = await fetch(keyNet);
+
   if (res.status !== 200) {
     return null;
   }
+
   const view = await res.json();
 
   if (h.isView(view)) {
     view._edit = false;
     view._static = true;
   }
+
   return view;
 }
 /**
@@ -2341,13 +2276,8 @@ export function makeSimpleLayer(opt) {
   if (!opt.hexColor) {
     opt.hexColor = chroma.random().hex();
   }
-  const colA = chroma(opt.hexColor)
-    .alpha(opt.opacity)
-    .css();
-  const colB = chroma(opt.hexColor)
-    .alpha(opt.opacity)
-    .darken(1)
-    .css();
+  const colA = chroma(opt.hexColor).alpha(opt.opacity).css();
+  const colB = chroma(opt.hexColor).alpha(opt.opacity).darken(1).css();
 
   /**
    * Base layer
@@ -2678,7 +2608,7 @@ export async function makeTransparencySlider(o) {
    */
   slider.on(
     'update',
-    mx.helpers.debounce(function(n, h) {
+    mx.helpers.debounce(function (n, h) {
       const view = slider._view;
       const opacity = 1 - n[h] * 0.01;
       view._setOpacity({opacity: opacity});
@@ -2822,11 +2752,11 @@ export async function makeTimeSlider(o) {
    * Create a time slider for each time enabled view
    */
   /* from slider to num */
-  const fFrom = function(x) {
+  const fFrom = function (x) {
     return x;
   };
   /* num to slider */
-  const fTo = function(x) {
+  const fTo = function (x) {
     return Math.round(x);
   };
 
@@ -2930,7 +2860,7 @@ export function handleViewValueFilterText(o) {
    * Set listener for each view search input
    * NOTE: keyup is set globaly, on the whole view list
    */
-  return function(event) {
+  return function (event) {
     let action, el, idView, search, options;
     el = event.target;
 
@@ -3410,7 +3340,7 @@ export function removeLayersByPrefix(o) {
     prefix: o.prefix
   });
 
-  layers.forEach(function(l) {
+  layers.forEach(function (l) {
     if (map.getLayer(l)) {
       map.removeLayer(l);
       result.push(l);
@@ -3439,12 +3369,12 @@ export function syncAll(o) {
     ids.push(m);
   }
 
-  ids.forEach(function(x) {
+  ids.forEach(function (x) {
     let others, m, locked, exists, pos, m2;
 
     others = [];
 
-    ids.forEach(function(i) {
+    ids.forEach(function (i) {
       if (i !== x) {
         others.push(i);
       }
@@ -3456,7 +3386,7 @@ export function syncAll(o) {
 
     if (enabled) {
       if (!exists) {
-        maps[x].listener.sync = function() {
+        maps[x].listener.sync = function () {
           if (!locked) {
             pos = {
               center: m.getCenter(),
@@ -3465,7 +3395,7 @@ export function syncAll(o) {
               bearing: m.getBearing()
             };
             locked = true;
-            others.forEach(function(o) {
+            others.forEach(function (o) {
               m2 = maps[o].map;
               m2.setCenter(pos.center);
               m2.setZoom(pos.zoom);
@@ -3657,7 +3587,7 @@ export async function viewLayersAdd(o) {
   function handleLayer(viewType) {
     /* Switch on view type*/
     const types = {
-      rt: function() {
+      rt: function () {
         return viewLayersAddRt({
           view: view,
           map: m.map,
@@ -3666,7 +3596,7 @@ export async function viewLayersAdd(o) {
           addTitle: o.addTitle
         });
       },
-      cc: function() {
+      cc: function () {
         return viewLayersAddCc({
           view: view,
           map: m.map,
@@ -3675,7 +3605,7 @@ export async function viewLayersAdd(o) {
           addTitle: o.addTitle
         });
       },
-      vt: function() {
+      vt: function () {
         return viewLayersAddVt({
           view: view,
           map: m.map,
@@ -3685,7 +3615,7 @@ export async function viewLayersAdd(o) {
           addTitle: o.addTitle
         });
       },
-      gj: function() {
+      gj: function () {
         return viewLayersAddGj({
           view: view,
           map: m.map,
@@ -3694,7 +3624,7 @@ export async function viewLayersAdd(o) {
           addTitle: o.addTitle
         });
       },
-      sm: function() {
+      sm: function () {
         return Promise.resolve(true);
       }
     };
@@ -4004,7 +3934,7 @@ async function viewLayersAddCc(o) {
     opt.map.removeSource(opt.idSource);
   }
 
-  view._onRemoveCustomView = function() {
+  view._onRemoveCustomView = function () {
     mx.listeners.removeListenerByGroup(idListener);
 
     if (!opt._init || opt._closed) {
@@ -4031,7 +3961,7 @@ async function viewLayersAddCc(o) {
     e.stopPropagation();
   }
   function tryCatched(fun) {
-    return function(...args) {
+    return function (...args) {
       try {
         return fun(...args);
       } catch (e) {
@@ -5029,7 +4959,7 @@ export function getRenderedLayersArea(o) {
         features: []
       };
 
-      features.forEach(function(f) {
+      features.forEach(function (f) {
         geomTemp.features.push({
           type: 'Feature',
           properties: {},
@@ -5048,7 +4978,7 @@ export function getRenderedLayersArea(o) {
         group: 'compute_layer_area',
         target: worker,
         type: 'message',
-        callback: function(e) {
+        callback: function (e) {
           if (e.data.message) {
             o.onMessage(e.data.message);
           }
@@ -5068,10 +4998,10 @@ export function sendRenderedLayersAreaToUi(o) {
     getRenderedLayersArea({
       id: o.id,
       prefix: o.prefix,
-      onMessage: function(msg) {
+      onMessage: function (msg) {
         el.innerHTML = msg;
       },
-      onEnd: function(msg) {
+      onEnd: function (msg) {
         el.innerHTML = '~ ' + msg + ' km2';
       }
     });
@@ -5272,7 +5202,7 @@ export async function makeSearchBox(o) {
     const view = this.view;
     const listObj = this.getValue();
     const filter = ['any'];
-    listObj.forEach(function(x) {
+    listObj.forEach(function (x) {
       filter.push(['==', attr, x]);
     });
     view._setFilter({
@@ -5320,7 +5250,7 @@ export function filterViewValues(o) {
       });
       values = {};
 
-      features.forEach(function(f) {
+      features.forEach(function (f) {
         const value = f.properties[attr];
         const splited = value.split(/\s*,\s*/);
         if (splited.indexOf(search) > -1) {
@@ -5535,7 +5465,7 @@ export async function zoomToViewIdVisible(o) {
     layers: idLayerAll
   });
 
-  features.forEach(function(x) {
+  features.forEach(function (x) {
     geomTemp.features.push(x);
   });
 
@@ -5674,9 +5604,7 @@ export function getViewTitleNormalized(view, lang) {
     path: 'data.title',
     defaultValue: ''
   });
-  title = cleanDiacritic(title)
-    .toLowerCase()
-    .trim();
+  title = cleanDiacritic(title).toLowerCase().trim();
   return title;
 }
 
@@ -5986,15 +5914,18 @@ export function makeLayerJiggle(mapId, prefix) {
 
     const m = mx.helpers.getMap(mapId);
 
-    layersName.forEach(function(x) {
+    layersName.forEach(function (x) {
       const l = m.getLayer(x);
       const t = l.type;
       const o = varTranslate[t];
       const max = 20;
       const time = 200;
-      const dist = [[-20, 0], [20, 0]];
+      const dist = [
+        [-20, 0],
+        [20, 0]
+      ];
       let n = 0;
-      const interval = setInterval(function() {
+      const interval = setInterval(function () {
         if (n < max) {
           n++;
           m.setPaintProperty(x, o, dist[n % 2]);
@@ -6085,22 +6016,25 @@ export async function shinyNotify(opt) {
  * Fetch search API, using user id and token stored in config
  * @return {Promise<String>} Search api key
  */
-
 async function getSearchApiKey() {
-  const h = mx.helpers;
-  const urlKey = getApiUrl('getSearchKey');
-  const ss = mx.settings;
-  const qs = h.objToParams({
-    idUser: ss.user.id,
-    token: ss.user.token
-  });
-  const urlKeyFetch = `${urlKey}?${qs}`;
-  const r = await fetch(urlKeyFetch);
-  const keyData = await r.json();
-  if (keyData?.type === 'error') {
-    throw new Error(keyData.message);
+  try {
+    const ss = mx.settings;
+    const urlKey = new URL(getApiUrl('getSearchKey'));
+    urlKey.searchParams.set('idUser', ss.user.id);
+    urlKey.searchParams.set('token', ss.user.token);
+    const r = await fetch(urlKey);
+    if (r.ok) {
+      const keyData = await r.json();
+      if (keyData?.type === 'error') {
+        throw new Error(keyData.message);
+      }
+      return keyData.key;
+    } else {
+      throw new Error('getSearchKey failed');
+    }
+  } catch (e) {
+    console.error(e);
   }
-  return keyData.key;
 }
 
 export async function chaosTest(opt) {

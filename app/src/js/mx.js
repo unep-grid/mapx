@@ -3,7 +3,7 @@ import * as helpers from './mx_helpers.js';
 import {version} from './../../package.json';
 import localforage from 'localforage';
 import mapboxgl from 'mapbox-gl';
-import {settings} from './mx_settings_default.js';
+import {settings} from './settings/index.js';
 import {ListenerStore} from './listener_store';
 import {EventSimple} from './event_simple';
 import {HintHack} from './hint_hack/index.js';

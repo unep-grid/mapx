@@ -1,28 +1,26 @@
-import {getApiUrl} from './../mx_helper_map.js';
+import {getApiUrl} from './../api_routes';
 import {isUrl} from './../is_test/index.js';
 import {modalMirror} from './tool_modal.js';
 
 export {modalMirror};
 
-
 /**
-* Create a composite url for our miror 
-* @example 
-* // returns http://test.com/get/mirror?url=http%3A%2F%2Fgoogle.com
-* mirrorUrlCreate('http://google.com');
-* @param {String} url URL to access
-* @return {String} url string e.g. 
-*/
+ * Create a composite url for our miror
+ * @example
+ * // returns http://test.com/get/mirror?url=http%3A%2F%2Fgoogle.com
+ * mirrorUrlCreate('http://google.com');
+ * @param {String} url URL to access
+ * @return {String} url string e.g.
+ */
 export function mirrorUrlCreate(url) {
   if (!isUrl(url)) {
     throw new Error(`Not a valid URL`);
   }
-  if(isMirrorUrl(url)){
+  if (isMirrorUrl(url)) {
     console.warn('Trying to create an mirrored url already mirrored');
     return url;
   }
-  const urlApiMirror = getApiUrl('getMirror');
-  const mUrl = new URL(urlApiMirror);
+  const mUrl = new URL(getApiUrl('getMirror'));
   mUrl.searchParams.set('url', url);
   /**
    * Replace % utf8 escaped brackets by the actual character.
@@ -37,28 +35,27 @@ export function mirrorUrlCreate(url) {
 }
 
 /**
-* Test if an url is mirrored
-* @example 
-* // returns true
-* isMirrorUrl('http://test.com/get/mirror?url=http%3A%2F%2Fgoogle.com');
-* @param {String} url URL string to test
-* @return {Boolean} contains expected path for mirror url
-*/
+ * Test if an url is mirrored
+ * @example
+ * // returns true
+ * isMirrorUrl('http://test.com/get/mirror?url=http%3A%2F%2Fgoogle.com');
+ * @param {String} url URL string to test
+ * @return {Boolean} contains expected path for mirror url
+ */
 export function isMirrorUrl(url) {
-  const urlApiMirror = getApiUrl('getMirror');
-  const mUrl = new URL(urlApiMirror);
+  const mUrl = new URL(getApiUrl('getMirror'));
   const tUrl = new URL(url);
   return mUrl.pathname === tUrl.pathname;
 }
 
 /**
-* Extract mirrored url
-* @example 
-* // returns https://google.com
-* mirrorUrlGet('http://test.com/get/mirror?url=http%3A%2F%2Fgoogle.com')
-* @param {String} url Input mirror url
-* @return {String} mirrored url.
-*/ 
+ * Extract mirrored url
+ * @example
+ * // returns https://google.com
+ * mirrorUrlGet('http://test.com/get/mirror?url=http%3A%2F%2Fgoogle.com')
+ * @param {String} url Input mirror url
+ * @return {String} mirrored url.
+ */
 export function mirrorUrlGet(url) {
   if (!isMirrorUrl(url)) {
     console.warn('Trying to get the mirrored url from a non-mirrored url');
@@ -67,4 +64,3 @@ export function mirrorUrlGet(url) {
   const mUrl = new URL(url);
   return mUrl.searchParams.get('url');
 }
-

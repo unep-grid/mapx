@@ -452,6 +452,8 @@ config[["data"]] <- list()
 #
 # https://en.wikipedia.org/wiki/GIS_file_formats
 # http://www.w3schools.com/tags/att_input_accept.asp
+# ⚠️  Redefined in src/js/settings/index.js:
+# To be removed when upload/download fully migrated
 config[[c("data","format")]] <- list(
   list(
     name = "ESRI Shapefile",

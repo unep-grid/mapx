@@ -1,5 +1,4 @@
 /*jshint esversion: 6 */
-//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; 
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const {WatchFolderPlugin} = require('./webpack.watch_folder.js');
@@ -18,7 +17,6 @@ module.exports = merge(common, {
     ignored: ['node_modules']
   },
   plugins: [
-    //new BundleAnalyzerPlugin(),
     new WatchFolderPlugin({
       folder: './src/data/dict',
       script: 'npm run build_dict'

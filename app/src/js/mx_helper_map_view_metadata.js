@@ -1,6 +1,6 @@
 import {getGemetConcept, getGemetConceptLink} from './gemet_util/index.js';
 import {el, elAuto} from './el_mapx';
-
+import {getApiUrl} from './api_routes';
 /**
  * Get view's source metadata
  * @param {String} id Name/Id of the source layer
@@ -9,7 +9,7 @@ export async function fetchSourceMetadata(id) {
   if (!id) {
     return console.warn('getSourceMetaDataRemote : missing id');
   }
-  const urlSourceMeta = mx.helpers.getApiUrl('getSourceMetadata');
+  const urlSourceMeta = getApiUrl('getSourceMetadata');
   const date = performance.now();
   const url = `${urlSourceMeta}${id}?date=${date}`;
   const r = await fetch(url);
@@ -22,11 +22,10 @@ export async function fetchSourceMetadata(id) {
  * @param {String} id Name/Id of the view
  */
 export async function fetchViewMetadata(id) {
-  const h = mx.helpers;
   if (!id) {
     return console.warn('fetchViewMetadata : missing id');
   }
-  const urlViewMeta = h.getApiUrl('getViewMetadata');
+  const urlViewMeta = getApiUrl('getViewMetadata');
   const date = performance.now();
   const url = `${urlViewMeta}${id}?date=${date}`;
   const r = await fetch(url);

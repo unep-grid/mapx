@@ -1,5 +1,6 @@
-import {isStringRange,isNotEmpty} from './is_test/index.js';
-import {parseTemplate} from './mx_helper_misc.js';
+import {isElement, isStringRange, isNotEmpty} from './is_test';
+import {path, parseTemplate} from './mx_helper_misc.js';
+import {getViews} from './mx_helper_map.js';
 
 /**
  * Update language : Elements, view list and map
@@ -34,12 +35,12 @@ export async function updateLanguage(language) {
    * Update lang of interface
    */
   await updateLanguageElements();
-  
+
   /**
    * Update map language
    */
   await updateLanguageMap();
-  
+
   /**
    * Update views language : labels, desc, title
    */
@@ -120,7 +121,6 @@ export async function getDict(lang) {
  */
 export async function updateLanguageElements(o) {
   o = Object.assign({}, o);
-  const h = mx.helpers;
   let langDefault = 'en';
   o.lang = o.lang || mx.settings.language || langDefault;
   let els, el, doc, label, found, type, id, data;
@@ -130,7 +130,7 @@ export async function updateLanguageElements(o) {
   const lang = o.lang;
 
   // if no el to look at, serach the whole document
-  doc = h.isElement(o.el) ? o.el : document;
+  doc = isElement(o.el) ? o.el : document;
 
   // fetch all elements with data-lang_key attr
   els = doc.querySelectorAll('[data-lang_key]');
@@ -165,9 +165,9 @@ export async function updateLanguageElements(o) {
           if (!label) {
             label = dict[j][langDefault];
           }
-          if(isNotEmpty(data)){
+          if (isNotEmpty(data)) {
             data = JSON.parse(data);
-            label = parseTemplate(label,data);
+            label = parseTemplate(label, data);
           }
         }
       }
@@ -274,20 +274,19 @@ export async function getDictTemplate(key, data, lang) {
  */
 export function getLabelFromObjectPath(o) {
   'use strict';
-  const h = mx.helpers;
   const defaultLang = 'en';
   o.lang = o.lang ? o.lang : mx.settings.language || defaultLang;
   o.sep = o.sep ? o.sep : '.';
   o.path = o.path ? o.path + o.sep : '';
   const defaultValue = o.defaultValue || '';
   const langs = mx.settings.languages;
-  let out = h.path(o.obj, o.path + o.lang, null);
+  let out = path(o.obj, o.path + o.lang, null);
 
   if (!out) {
     /**
      * Try default language
      */
-    out = h.path(o.obj, o.path + defaultLang, null);
+    out = path(o.obj, o.path + defaultLang, null);
   }
 
   if (!out) {
@@ -296,7 +295,7 @@ export function getLabelFromObjectPath(o) {
      */
     out = langs.reduce((a, l) => {
       if (!a) {
-        return h.path(o.obj, o.path + l, null);
+        return path(o.obj, o.path + l, null);
       } else {
         return a;
       }
@@ -344,7 +343,7 @@ export function checkLanguage(opt) {
   const langs = [o.language, ...o.languages];
 
   for (const lang of langs) {
-    const notEmpty = !!h.path(o.obj, o.path, o.prefix + lang);
+    const notEmpty = !!path(o.obj, o.path, o.prefix + lang);
     if (notEmpty) {
       return lang;
     }
@@ -361,9 +360,8 @@ export function checkLanguage(opt) {
  */
 export function getTranslationFromObject(o) {
   o = Object.assign({}, o);
-  const h = mx.helpers;
   const lang = checkLanguage(o);
-  const out = h.path(o.obj, o.path + '.' + lang, '');
+  const out = path(o.obj, o.path + '.' + lang, '');
   return out;
 }
 
@@ -389,10 +387,9 @@ export function getLanguageItem(obj, lang) {
  */
 export async function updateLanguageViewsList(o) {
   o = Object.assign({}, o);
-  const h = mx.helpers;
   const lang = o.lang || mx.settings.language;
-  const views = h.getViews();
-  const isModeStatic = h.path(mx, 'settings.mode.static') === true;
+  const views = getViews();
+  const isModeStatic = path(mx, 'settings.mode.static') === true;
 
   try {
     if (isModeStatic) {

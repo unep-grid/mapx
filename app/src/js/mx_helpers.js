@@ -1,4 +1,3 @@
-/* jshint esversion :6 */
 export * from './mx_helper_settings.js';
 export * from './mx_helper_cookies.js';
 export * from './mx_helper_log.js';
@@ -36,7 +35,6 @@ export * from './mx_helper_map_features_popup.js';
 export * from './mx_helper_canvas_star.js';
 export * from './mx_helper_canvas.js';
 export * from './mx_helper_jed.js';
-export * from './mx_helper_epsgio.js';
 export * from './mx_helper_filter_views.js';
 export * from './mx_helper_source_attribute_table.js';
 export * from './mx_helper_source_summary.js';
@@ -51,12 +49,15 @@ export * from './mx_helper_legend_vt.js';
 /**
  * imported module available in mx.helpers
  */
-export * from './story_map/index.js';
-export * from './modules_loader_async/index.js';
-export * from './animation_frame/index.js';
-export * from './array_stat/index.js';
-export * from './color_utils/index.js';
-export * from './el_mapx/index.js';
+
+export * from './epsgio';
+export * from './api_routes';
+export * from './story_map';
+export * from './modules_loader_async';
+export * from './animation_frame';
+export * from './array_stat';
+export * from './color_utils';
+export * from './el_mapx';
 export * from './is_test';
 export * from './is_test_mapx';
 export * from './user_pref';

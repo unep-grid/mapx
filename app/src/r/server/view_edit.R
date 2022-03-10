@@ -50,9 +50,11 @@ observe({
             )
           mxTimeDiff(timer)
 
+
           if(noDataCheck(viewData)){
                return()
           }
+
           if(length(viewData) > 1){
             #
             # mxApiGetViews did not found the view and return everything. 

@@ -11,6 +11,12 @@ module.exports = {
   node: {
     fs: 'empty'
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    },
+    runtimeChunk: 'single'
+  },
   entry: {
     mx: './src/js/init_mx.js',
     jquery: './src/js/init_jquery.js',

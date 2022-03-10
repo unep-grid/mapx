@@ -1,7 +1,10 @@
+import {getApiUrl} from './api_routes';
+import {fetchJsonProgress} from './mx_helper_fetch_progress.js';
 let start;
 
-export function fetchProjects(opt) {
-  const h = mx.helpers;
+export async function fetchProjects(opt) {
+  start = performance.now();
+
   const defaults = {
     idUser: mx.settings.user.id,
     language: mx.settings.language,
@@ -10,43 +13,39 @@ export function fetchProjects(opt) {
     titlePrefix: null,
     titleFuzzy: null,
     token: mx.settings.user.token,
-    onProgress: onProgress,
-    onError: onError,
+    onProgress: () => {},
+    onError: console.error,
     onComplete: onComplete
   };
 
   opt = Object.assign({}, defaults, opt);
 
-  const host = h.getApiUrl('getProjectsListByUser');
-  const query = h.objToParams({
-    idUser: opt.idUser,
-    language: opt.language,
-    token: opt.token,
-    role : opt.role,
-    titlePrefix: opt.titlePrefix,
-    titleFuzzy: opt.titleFuzzy
+  const url = new URL(getApiUrl('getProjectsListByUser'));
+
+  const qp = [
+    'idUser',
+    'token',
+    'role',
+    'language',
+    'titlePrefix',
+    'titleFuzzy'
+  ];
+ 
+  for (const s of qp) {
+    url.searchParams.set(s, opt[s] || "");
+  }
+
+  const data = await fetchJsonProgress(url, {
+    onProgress: opt.onProgress,
+    onError: opt.onError,
+    onComplete: opt.onComplete
   });
-  const url = `${host}?${query}`;
 
-  start = performance.now();
+  if (data.type === 'error') {
+    throw new Error(data.message);
+  }
 
-  return h
-    .fetchJsonProgress(url, {
-      onProgress: opt.onProgress,
-      onError: opt.onError,
-      onComplete: opt.onComplete
-    })
-    .then((data) => {
-      data = data || [];
-      console.log(`Projects n: ${data.length}`);
-      return data;
-    });
-}
-
-function onProgress() {}
-
-function onError(d) {
-  console.error(d);
+  return data || data;
 }
 
 function onComplete() {

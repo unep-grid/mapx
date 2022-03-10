@@ -1,11 +1,12 @@
 import {getArrayDistinct} from './array_stat/index.js';
 import {modalMarkdown} from './modal_markdown/index.js';
 import {getDictItem} from './mx_helper_language.js';
+import {getApiUrl} from './api_routes';
 
 export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({}, opt);
   const h = mx.helpers;
-  const host = h.getApiUrl('getSourceTableAttribute');
+  const host = getApiUrl('getSourceTableAttribute');
   const params = h.objToParams({
     id: opt.idSource,
     attributes: opt.attributes

@@ -1,5 +1,5 @@
+import {getApiUrl} from './../api_routes';
 import {sendData, path} from './../mx_helper_misc.js';
-import {getApiUrl} from './../mx_helper_map.js';
 import {modal} from './../mx_helper_modal.js';
 
 const customStyle = [

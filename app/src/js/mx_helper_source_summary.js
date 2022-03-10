@@ -1,4 +1,22 @@
 import {miniCacheSet, miniCacheGet, miniCacheRemove} from './minicache';
+import {getApiUrl} from './api_routes';
+import {getView, getViewTitle} from './mx_helper_map.js';
+import {path} from './mx_helper_misc.js';
+import {objToParams, getQueryParametersAsObject} from './mx_helper_url';
+import {el, elAuto} from './el_mapx';
+import {modal} from './mx_helper_modal.js';
+import {wmsGetLayers} from './wms';
+import {moduleLoad} from './modules_loader_async';
+import {epsgQuery} from './epsgio';
+import {
+  isViewGj,
+  isUrlValidWms,
+  isSourceId,
+  isViewId,
+  isString,
+  isObject,
+  isArray
+} from './is_test';
 
 const def = {
   idView: null,
@@ -19,16 +37,15 @@ const def = {
  * @return {Object} source summary
  */
 export async function getViewSourceSummary(view, opt) {
-  const h = mx.helpers;
-  view = h.getView(view);
+  view = getView(view);
   opt = Object.assign(
     {},
     {
       idView: view.id,
       timestamp: view._src_timestamp,
-      idAttr: h.path(view, 'data.attribute.name'),
-      idSource: h.path(view, 'data.source.layerInfo.name'),
-      useCache : mx.settings.useCache
+      idAttr: path(view, 'data.attribute.name'),
+      idSource: path(view, 'data.source.layerInfo.name'),
+      useCache: mx.settings.useCache
     },
     opt
   );
@@ -49,7 +66,7 @@ export async function getViewSourceSummary(view, opt) {
    * ⚠️  Ensure compatibility with previous source summary method,
    * generated when the view was saved and not on the fly
    */
-  if (h.isObject(out.attribute_stat)) {
+  if (isObject(out.attribute_stat)) {
     view.data.attribute = Object.assign({}, view.data.attribute, {
       name: out.attribute_stat.attribute,
       type: out.attribute_stat.type === 'continuous' ? 'number' : 'string',
@@ -59,13 +76,13 @@ export async function getViewSourceSummary(view, opt) {
     });
   }
 
-  if (h.isObject(out.extent_time)) {
+  if (isObject(out.extent_time)) {
     view.data.period = Object.assign({}, view.data.period, {
       extent: out.extent_time
     });
   }
 
-  if (h.isObject(out.extent_sp)) {
+  if (isObject(out.extent_sp)) {
     view.data.geometry = Object.assign({}, view.data.geometry, {
       extent: out.extent_sp
     });
@@ -78,7 +95,6 @@ export async function getViewSourceSummary(view, opt) {
  * Get vector source summary
  */
 export async function getSourceVtSummary(opt) {
-  const h = mx.helpers;
   const start = performance.now();
   let origin = 'cache';
   /*
@@ -95,7 +111,7 @@ export async function getSourceVtSummary(opt) {
     }
   });
 
-  if (!h.isViewId(opt.idView) && !h.isSourceId(opt.idSource)) {
+  if (!isViewId(opt.idView) && !isSourceId(opt.idSource)) {
     console.warn(
       'getSourceVtSummary : at least id source or id view are required'
     );
@@ -106,8 +122,8 @@ export async function getSourceVtSummary(opt) {
    * Fetch summary or use cache
    */
   opt.useCache = opt.useCache === true;
-  const urlSourceSummary = h.getApiUrl('getSourceSummary');
-  const query = h.objToParams(opt);
+  const urlSourceSummary = getApiUrl('getSourceSummary');
+  const query = objToParams(opt);
   const url = `${urlSourceSummary}?${query}`;
   let summary;
 
@@ -130,7 +146,7 @@ export async function getSourceVtSummary(opt) {
   /*
    * handle errors
    */
-  if (h.isObject(summary) && summary.type === 'error') {
+  if (isObject(summary) && summary.type === 'error') {
     console.warn(summary);
     miniCacheRemove(url);
     return {};
@@ -155,31 +171,28 @@ export async function getSourceVtSummary(opt) {
 }
 
 export async function getSourceVtSummaryUI(opt) {
-  const h = mx.helpers;
-  const summary = await h.getSourceVtSummary(opt);
+  const summary = await getSourceVtSummary(opt);
   const aStat = summary.attribute_stat;
-  const elContainer = h.el('div');
+  const elContainer = el('div');
   let title = opt.idSource || opt.idView;
   let titleTable = 'Table';
-  if (h.isViewId(opt.idView)) {
-    title = h.getViewTitle(opt.idView);
+  if (isViewId(opt.idView)) {
+    title = getViewTitle(opt.idView);
   }
 
   if (aStat.type === 'continuous') {
     aStat.table.forEach((r) => {
       Object.keys(r).forEach((k) => (r[k] = Math.round(r[k] * 1000) / 1000));
     });
-    titleTable = `${titleTable} ( Method : ${
-      aStat.binsMethod
-    }, number of bins : ${aStat.binsNumber} )`;
+    titleTable = `${titleTable} ( Method : ${aStat.binsMethod}, number of bins : ${aStat.binsNumber} )`;
   }
-  const elTable = h.elAuto('array_table', aStat.table, {
+  const elTable = elAuto('array_table', aStat.table, {
     tableTitle: titleTable
   });
 
   elContainer.appendChild(elTable);
 
-  h.modal({
+  modal({
     title: title,
     content: elContainer
   });
@@ -189,20 +202,19 @@ export async function getSourceVtSummaryUI(opt) {
  * Get raster (wms) source summary
  */
 export async function getSourceRtSummary(view) {
-  const h = mx.helpers;
   const out = {};
-  const url = h.path(view, 'data.source.tiles', []);
-  const useMirror = h.path(view, 'data.source.useMirror', false);
+  const url = path(view, 'data.source.tiles', []);
+  const useMirror = path(view, 'data.source.useMirror', false);
   if (url.length === 0) {
     return out;
   }
   const urlQuery = url[0];
-  if (!h.isUrlValidWms(urlQuery)) {
+  if (!isUrlValidWms(urlQuery)) {
     return out;
   }
-  const q = h.getQueryParametersAsObject(urlQuery);
+  const q = getQueryParametersAsObject(urlQuery);
 
-  if (!h.isArray(q.layers) && !h.isArray(q.LAYERS)) {
+  if (!isArray(q.layers) && !isArray(q.LAYERS)) {
     return out;
   }
 
@@ -212,22 +224,22 @@ export async function getSourceRtSummary(view) {
 
   const layerName = q.layers[0];
   const endpoint = urlQuery.split('?')[0];
-  const timeStamp = h.path(view, 'date_modified', null);
+  const timeStamp = path(view, 'date_modified', null);
 
-  const layers = await h.wmsGetLayers(endpoint, {
+  const layers = await wmsGetLayers(endpoint, {
     optGetCapabilities: {
       useMirror: useMirror,
       searchParams: {
         /**
          * timestamp : Used to invalidate getCapabilities cache
          */
-        timestamp: timeStamp,
+        timestamp: timeStamp
       }
     }
   });
 
   const layer = layers.find((l) => {
-    const nameMatch = h.isString(l.Name) && l.Name === layerName;
+    const nameMatch = isString(l.Name) && l.Name === layerName;
     if (nameMatch) {
       return true;
     }
@@ -248,8 +260,8 @@ export async function getSourceRtSummary(view) {
   });
 
   const validBbox =
-    h.isObject(layer) &&
-    h.isArray(layer.BoundingBox) &&
+    isObject(layer) &&
+    isArray(layer.BoundingBox) &&
     layer.BoundingBox.length > 0;
 
   if (!validBbox) {
@@ -269,7 +281,7 @@ export async function getSourceRtSummary(view) {
 
       bbx = layer.BoundingBox.find((b) => b.crs === 'EPSG:4326');
 
-      if (h.isObject(bbx) && h.isArray(bbx.extent)) {
+      if (isObject(bbx) && isArray(bbx.extent)) {
         /**
          *  SAMPLE FROM GEOSERVER
          *"[
@@ -290,11 +302,11 @@ export async function getSourceRtSummary(view) {
          * try reprojection
          */
         bbx = layer.BoundingBox[0];
-        const epsg = h.isString(bbx.crs) ? bbx.crs.split(':')[1] : null;
+        const epsg = isString(bbx.crs) ? bbx.crs.split(':')[1] : null;
 
         if (epsg) {
-          const proj4 = await h.moduleLoad('proj4');
-          const resEpsg = await h.epsgQuery(epsg);
+          const proj4 = await moduleLoad('proj4');
+          const resEpsg = await epsgQuery(epsg);
           const proj4from = resEpsg.find((r) => r.proj4).proj4;
 
           const proj4to = '+proj=longlat +datum=WGS84 +no_defs';
@@ -320,10 +332,9 @@ export async function getSourceRtSummary(view) {
 }
 
 export async function getSourceGjSummary(view) {
-  const h = mx.helpers;
   const out = {};
-  if (h.isViewGj(view)) {
-    out.extent_sp = h.path(view, 'data.geometry.extent', {});
+  if (isViewGj(view)) {
+    out.extent_sp = path(view, 'data.geometry.extent', {});
   }
   return out;
 }

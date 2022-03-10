@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; 
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -10,12 +11,8 @@ const {GenerateSW} = require('workbox-webpack-plugin');
 module.exports = merge(common, {
   cache: false,
   mode: 'production',
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
-    }
-  },
   plugins: [
+    //new BundleAnalyzerPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       meta: meta,

@@ -13,7 +13,7 @@ mxApiFetch <- function(route,listParam, asDataFrame = FALSE){
   url <- "http://" + host + ":" + port + route + '?' + param
   data <- fromJSON(url, simplifyDataFrame = asDataFrame)
   if(isTRUE(!noDataCheck(data)) && isTRUE(data$type == "error")){
-    stop(data$msg)
+    stop(data$message)
   }
   return(data)
 }
@@ -124,7 +124,6 @@ mxApiGetViews <-  function(
       types = types
       )
     )
-
   return(res$views)
 }
 

@@ -1,5 +1,5 @@
 import {config} from './config.js';
-import {getApiUrl} from './../mx_helper_map.js';
+import {getApiUrl} from './../api_routes';
 
 /**
  * Get array of concepts by similarity search

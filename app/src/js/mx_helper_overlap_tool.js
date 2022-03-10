@@ -1,16 +1,20 @@
+import {getApiUrl} from './api_routes';
+import {objToParams} from './mx_helper_url.js';
+import {getJSON, handleRequestMessage} from './mx_helper_misc.js';
+import {el} from './el/src/index.js';
+
 export function getOverlapAnalysis(opt) {
-  if (mx.settings.user.guest){
+  if (mx.settings.user.guest) {
     return;
   }
 
-  var h = mx.helpers;
-  var elForm = document.getElementById(opt.idForm);
-  var elButtonCompute = document.getElementById(opt.idButtonAnalyse);
-  var elTextAreaResult = elForm.querySelector('#' + opt.idTextResult);
-  var elListMessage = elForm.querySelector('#' + opt.idListMessage);
+  const elForm = document.getElementById(opt.idForm);
+  const elButtonCompute = document.getElementById(opt.idButtonAnalyse);
+  const elTextAreaResult = elForm.querySelector('#' + opt.idTextResult);
+  const elListMessage = elForm.querySelector('#' + opt.idListMessage);
 
-  var host = h.getApiUrl('getSourceOverlap');
-  var query = {
+  const host = getApiUrl('getSourceOverlap');
+  const query = {
     layers: opt.layers.join(','),
     countries: opt.countries.join(','),
     method: opt.method || 'getArea',
@@ -20,21 +24,20 @@ export function getOverlapAnalysis(opt) {
     sourceTitle: opt.sourceTitle
   };
 
-  var params = h.objToParams(query);
-  var url = host + '?' + params;
+  const params = objToParams(query);
+  const url = host + '?' + params;
 
   elButtonCompute.setAttribute('disabled', 'disabled');
 
-  h.getJSON({
+  getJSON({
     maxWait: 1e3 * 120,
     url: url,
     onProgress: handleMessage,
     onMessage: handleMessage,
     onSuccess: handleMessage,
     onError: handleMessage,
-    onTimeout: function(err) {
-      console.log(err);
-      var elTimeout = h.el('li', 'Timeout reached, cancelled analysis.');
+    onTimeout: function (_) {
+      const elTimeout = el('li', 'Timeout reached, cancelled analysis.');
       elListMessage.appendChild(elTimeout);
       elButtonCompute.removeAttribute('disabled');
     }
@@ -46,32 +49,30 @@ export function getOverlapAnalysis(opt) {
     });
   }
 
-  var messageStore = {};
+  const messageStore = {};
 
   function handleMessage(msg) {
-    return h.handleRequestMessage(msg, messageStore, {
-      result: function(msg) {
+    return handleRequestMessage(msg, messageStore, {
+      result: function (msg) {
         if (msg.content === 'area') {
-          var area = msg.value;
-          var elArea = h.el(
+          const area = msg.value;
+          const elArea = el(
             'li',
             {class: ['mx-log-item', 'mx-log-white']},
             'Area = ' + area + '[' + msg.unit + ']'
           );
           elListMessage.appendChild(elArea);
-          if (msg.unit === 'm2'){
+          if (msg.unit === 'm2') {
             area = area / 1e6;
           }
           elTextAreaResult.innerText = Math.round(area * 1000) / 1000;
         }
         if (msg.content === 'sourceMeta') {
-          var m = msg.value;
-          console.log(m);
           updateLayerList();
         }
       },
-      error: function(msg) {
-        var elErr = h.el(
+      error: function (msg) {
+        const elErr = el(
           'li',
           {class: ['mx-log-item', 'mx-log-red']},
           JSON.stringify(msg)
@@ -79,12 +80,12 @@ export function getOverlapAnalysis(opt) {
         elListMessage.appendChild(elErr);
         elButtonCompute.removeAttribute('disabled');
       },
-      message: function(msg) {
-        var elMsg = h.el('li', {class: ['mx-log-item', 'mx-log-blue']}, msg);
+      message: function (msg) {
+        const elMsg = el('li', {class: ['mx-log-item', 'mx-log-blue']}, msg);
         elListMessage.appendChild(elMsg);
       },
-      warning: function(msg) {
-        var li = el(
+      warning: function (msg) {
+        const li = el(
           'li',
           {
             class: ['mx-log-item', 'mx-log-orange']
@@ -93,21 +94,20 @@ export function getOverlapAnalysis(opt) {
         );
         elProgressMessage.appendChild(li);
       },
-      timing: function(msg) {
-        console.log(msg);
-        var txtTiming = 'duration = ' + msg.duration + '[' + msg.unit + ']';
-        var elTiming = h.el(
+      timing: function (msg) {
+        const txtTiming = 'duration = ' + msg.duration + '[' + msg.unit + ']';
+        const elTiming = el(
           'li',
           {class: ['mx-log-item', 'mx-log-blue']},
           txtTiming
         );
         elListMessage.appendChild(elTiming);
       },
-      end: function(msg) {
-        var elEnd = h.el('li', {class: ['mx-log-item', 'mx-log-green']}, msg);
+      end: function (msg) {
+        const elEnd = el('li', {class: ['mx-log-item', 'mx-log-green']}, msg);
         elListMessage.appendChild(elEnd);
         elButtonCompute.removeAttribute('disabled');
-        elListMessage.appendChild(h.el('hr'));
+        elListMessage.appendChild(el('hr'));
       }
     });
   }

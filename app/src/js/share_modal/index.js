@@ -1,8 +1,18 @@
-import socialLinks from './social_link.json';
-import shareMode from './share_mode.json';
 import {modal} from '../mx_helper_modal';
 import {EventSimple} from '../event_simple/index.js';
 import {getDictItem} from './../mx_helper_language.js';
+import {isStoryPlaying, getStoryId, getViewsStep} from '../story_map/index.js';
+import {isArrayOfViewsId} from '../is_test/index.js';
+import {parseTemplate} from '../mx_helper_misc.js';
+import {FlashItem} from '../icon_flash/index.js';
+import {getQueryParametersAsObject} from '../mx_helper_url.js';
+import {modalMarkdown} from '../modal_markdown';
+import {
+  getViews,
+  getViewsLayersVisibles,
+  getViewsOpen,
+  getMapPos
+} from '../mx_helper_map.js';
 import {
   el,
   elButtonFa,
@@ -12,19 +22,11 @@ import {
   elDetails,
   elAlert
 } from '../el_mapx';
-import {isStoryPlaying, getStoryId, getViewsStep} from '../story_map/index.js';
-import {isArrayOfViewsId} from '../is_test/index.js';
-import {parseTemplate} from '../mx_helper_misc.js';
-import {
-  getViews,
-  getViewsLayersVisibles,
-  getViewsOpen,
-  getMapPos
-} from '../mx_helper_map.js';
-import {FlashItem} from '../icon_flash/index.js';
-import {getQueryParametersAsObject} from '../mx_helper_url.js';
 import './style.less';
-import {modalMarkdown} from '../modal_markdown';
+import socialLinks from './social_link.json';
+import shareMode from './share_mode.json';
+
+
 
 const t = elSpanTranslate;
 

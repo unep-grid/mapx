@@ -57,7 +57,6 @@ import {settings} from './settings.js';
 const viewsAdditional = []; // will be in state
 const story = {};
 const state = {};
-
 window._sm = {story, state};
 
 /**
@@ -327,7 +326,6 @@ export function getViewsStep() {
 /**
  * Get current state
  */
-
 function getState() {
   return state;
 }

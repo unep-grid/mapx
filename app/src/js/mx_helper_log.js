@@ -1,4 +1,7 @@
 import {Logger} from './logger';
+import {getApiUrl} from './api_routes';
+import {isViewId} from './is_test';
+import {updateIfEmpty} from './mx_helper_misc.js';
 
 /**
  * Logger object
@@ -9,11 +12,10 @@ window.logger = null;
  * Init log
  */
 export function initLog() {
-  const h = mx.helpers;
   const isStatic = mx.settings.mode.static === true;
   if (!window.logger) {
     window.logger = new Logger({
-      url: h.getApiUrl('collectLogs'),
+      url: getApiUrl('collectLogs'),
       timeCollect: 15000,
       baseForm: {},
       validate: formatValidateLog
@@ -27,7 +29,7 @@ export function initLog() {
     type: 'view_added',
     idGroup: 'mx_log',
     callback: (d) => {
-      if (h.isViewId(d.idView)) {
+      if (isViewId(d.idView)) {
         logger.add({
           id_log: 'view_add',
           data: {
@@ -45,7 +47,7 @@ export function initLog() {
     type: 'view_removed',
     idGroup: 'mx_log',
     callback: (d) => {
-      if (h.isViewId(d.idView) && d.duration > 0) {
+      if (isViewId(d.idView) && d.duration > 0) {
         logger.add({
           id_log: 'view_remove',
           data: {
@@ -149,7 +151,6 @@ export function initLog() {
  * @param {String} log.id_log log id (in mx.settings.logs.ids)
  */
 function formatValidateLog(log) {
-  const h = mx.helpers;
   const s = mx.settings.logs;
   if (s.disabled) {
     /**
@@ -173,7 +174,7 @@ function formatValidateLog(log) {
   /**
    * Update log input with default
    */
-  h.updateIfEmpty(log, def);
+  updateIfEmpty(log, def);
 
   /**
    * Soft validate

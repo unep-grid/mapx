@@ -48,6 +48,7 @@ export class NotifCenter {
       nc.updateOptions(opt);
       nc.clear();
       nc.store = await nc.createStorage();
+      nc.setSeenAll();
 
       /**
        * Panel button
@@ -158,7 +159,6 @@ export class NotifCenter {
   }
   clear() {
     const nc = this;
-    nc.setSeenAll();
     if (nc.elContainer) {
       nc.elContainer.innerHTML = '';
     }
@@ -236,9 +236,7 @@ export class NotifCenter {
     return elProgress;
   }
   idRandom() {
-    return Math.random()
-      .toString(32)
-      .split('.')[1];
+    return Math.random().toString(32).split('.')[1];
   }
   async notify(notif, opt) {
     try {

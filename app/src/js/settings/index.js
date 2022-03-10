@@ -1,4 +1,4 @@
-import * as styleDefault from './../data/style/style_mapx.json';
+import * as styleDefault from './../../data/style/style_mapx.json';
 
 let settings = {
   devicePixelRatio: 0, // updated by getPixelRatio()
@@ -59,7 +59,8 @@ let settings = {
       downloadSourceGet: '/', // location given by the api
       uploadImage: '/upload/image/',
       uploadVector: '/upload/vector/',
-      collectLogs: '/collect/logs/'
+      collectLogs: '/collect/logs/',
+      getFileFormatsList : '/get/file/formats/list'
     }
   },
   // see https://github.com/unep-grid/map-x-mgl/issues/472
