@@ -21,6 +21,7 @@ import {errorHandler} from './error_handler/index.js';
 import {waitTimeoutAsync} from './animation_frame';
 import {getArrayDiff, getArrayDistinct} from './array_stat/index.js';
 import {getApiUrl} from './api_routes';
+import {ModalDownloadSource} from './download_source';
 
 /**
  * Convert point in  degrees to meter
@@ -796,6 +797,11 @@ export async function initMapx(o) {
     },
     mx.maps[o.id]
   );
+
+  new ModalDownloadSource({
+      email : mx.settings.user.guest ? null: mx.settings.user.email,
+      idSource :'mx_vector_1wocf_efpgd_qjts6_oqgz4'
+  });
 
   /**
    * Set mode

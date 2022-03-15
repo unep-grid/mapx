@@ -55,12 +55,13 @@ let settings = {
       getView: '/get/view/item/',
       getViewsListByProject: '/get/views/list/project/',
       getViewsListGlobalPublic: '/get/views/list/global/public',
+      getFileFormatsList : '/get/file/formats/list',
+      getEpsgCodesFull : '/get/epsg/codes/full',
       downloadSourceCreate: '/get/source/',
       downloadSourceGet: '/', // location given by the api
       uploadImage: '/upload/image/',
       uploadVector: '/upload/vector/',
       collectLogs: '/collect/logs/',
-      getFileFormatsList : '/get/file/formats/list'
     }
   },
   // see https://github.com/unep-grid/map-x-mgl/issues/472
