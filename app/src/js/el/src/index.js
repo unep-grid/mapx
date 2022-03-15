@@ -1,4 +1,14 @@
-export {el,svg};
+import {
+  isPromise,
+  isObject,
+  isElement,
+  isArray,
+  isString,
+  isHTML,
+  isFunction
+} from './../../is_test';
+
+export {el, svg};
 
 const NSSvg = 'http://www.w3.org/2000/svg';
 const config = {
@@ -7,9 +17,8 @@ const config = {
   interval: null
 };
 
-
-function svg(tagName, ...opt){
-  return el(tagName,true,...opt);
+function svg(tagName, ...opt) {
+  return el(tagName, true, ...opt);
 }
 
 /**
@@ -35,13 +44,13 @@ function el(tagName, ...opt) {
   /**
    * Compute options
    */
-  opt.forEach((o) => {
+  for (const o of opt) {
     /**
      * Object part el("div",{Object})
      */
     if (isObject(o) && !isArray(o)) {
       const keys = Object.keys(o);
-      keys.forEach((k) => {
+      for (const k of keys) {
         item = o[k];
         if (
           k === 'on' &&
@@ -64,7 +73,7 @@ function el(tagName, ...opt) {
             listener: item[1]
           });
         } else if (k === 'on' && isObject(item)) {
-          Object.keys(item).forEach((i) => {
+          for (const i in item) {
             if (isFunction(item[i])) {
               elOut.addEventListener(i, item[i]);
               elOut.dataset.el_id_listener = Math.random().toString(32);
@@ -77,43 +86,43 @@ function el(tagName, ...opt) {
                 listener: item[i]
               });
             }
-          });
+          }
         } else if (k === 'innerText' && isString(item)) {
           elOut.innerText = item;
         } else if ((k === 'dataset' || k === 'style') && isObject(item)) {
-          Object.keys(item).forEach((i) => {
+          for (const i in item) {
             elOut[k][i] = item[i];
-          });
+          }
         } else if (k === 'class' && isArray(item)) {
-          item.forEach((c) => elOut.classList.add(c));
+          for (const c of item) {
+            elOut.classList.add(c);
+          }
         } else if (
           tagName === 'input' &&
           k === 'checked' &&
           o.type === 'checkbox'
         ) {
           elOut.checked = item === true;
-        } else {
-          if (svgMode) {
-            try{ 
+        } else if (svgMode) {
+          try {
             elOut.setAttributeNS(null, k, o[k]);
-            }catch(e){
-            elOut.setAttribute(k, o[k]);
-            }
-          } else {
+          } catch (e) {
             elOut.setAttribute(k, o[k]);
           }
+        } else if (o[k]) {
+          elOut.setAttribute(k, o[k]);
         }
-      });
+      }
     }
     /**
      * Array part el("div",[Array])
      */
     if (isArray(o)) {
-      o.forEach((elChildren) => {
+      for (const elChildren of o) {
         if (isElement(elChildren)) {
           elOut.appendChild(elChildren);
         }
-      });
+      }
     }
     /**
      * Element part el("div",>Element>)
@@ -125,11 +134,11 @@ function el(tagName, ...opt) {
      * HTML part el("div",>Element>)
      */
     if (isPromise(o)) {
-      o.then(setContent);
+      o.then(setContent).catch(console.error);
     } else {
       setContent(o);
     }
-  });
+  }
 
   return elOut;
 
@@ -137,69 +146,17 @@ function el(tagName, ...opt) {
     if (isHTML(str) || tagName === 'style') {
       elOut.innerHTML = str;
     } else if (isString(str)) {
-      if(svgMode){
+      if (svgMode) {
         elOut.textContent = str;
-      }else{
-        elOut.innerText = str;
+      } else {
+        if (tagName === 'input') {
+          elOut.value = str;
+        } else {
+          elOut.innerText = str;
+        }
       }
     }
   }
-}
-
-/**
- * Test if entry is an aray
- * @param {Array} item
- */
-function isObject(item) {
-  return !!item && typeof item === 'object' && !Array.isArray(item);
-}
-
-/**
- * Test if entry is an aray
- * @param {Array} item array
- */
-function isArray(item) {
-  return !!item && typeof item === 'object' && Array.isArray(item);
-}
-
-/**
- * Test if string contain HTML
- * @param {String} str string to test
- * @note https://stackoverflow.com/questions/15458876/check-if-a-string-is-html-or-not#answer-36773193
- */
-function isHTML(str) {
-  return isString(str) && /(<([^>]+)>)/i.test(str);
-}
-
-/**
- * Test if it's a promise
- * @param {Promise} prom Promise to test
- */
-function isPromise(prom) {
-  return prom instanceof Promise;
-}
-
-/**
- * Test if entry is string
- * @param {String} str string to test
- */
-function isString(str) {
-  return typeof str === 'string';
-}
-/**
- * Test if entry is function
- * @param {Function} fun Function to test
- */
-function isFunction(fun) {
-  return fun instanceof Function;
-}
-
-/**
- * Check if an object is a html element
- * @param {Object} obj object to test
- */
-function isElement(obj) {
-  return obj instanceof Element || obj instanceof DocumentFragment;
 }
 
 /**
