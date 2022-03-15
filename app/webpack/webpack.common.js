@@ -94,6 +94,14 @@ module.exports = {
         use: {loader: 'worker-loader'}
       },
       {
+        test: /mapbox-gl-rtl-text.js$/,
+        use: [
+          {
+            loader: 'file-loader'
+          }
+        ]
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
