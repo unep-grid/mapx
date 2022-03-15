@@ -1097,6 +1097,10 @@ code {
 .text-muted:hover > * {
   color: var(--mx_ui_text);
 }
+.text-muted.space-around {
+  margin: 0 5px 0 5px;
+}
+
 .alert.alert-success,
 .alert.alert-info,
 .alert.alert-warning,
