@@ -528,7 +528,9 @@ export async function updateLanguageMap(o) {
     return;
   }
 
-
+  if (rtlLang.includes(lang)) {
+    await mapboxRTLload();
+  }
 
   /**
    * Set language in layers
@@ -567,3 +569,40 @@ export async function getDictItemId(txt, language) {
 }
 
 
+/**
+* Load LTR plugin for mapbox gl
+* @notes Webpack config :
+* {
+*   test: /mapbox-gl-rtl-text.js$/,
+*     use: [
+*       {
+*         loader: 'file-loader'
+*       }
+*     ]
+* } 
+* @return {Promise<boolean>} success
+*/
+let rtlLoaded = false;
+async function mapboxRTLload() {
+  if (rtlLoaded) {
+    return true;
+  }
+  const {default: rtlModule} = await import('@mapbox/mapbox-gl-rtl-text/mapbox-gl-rtl-text.js');
+
+  return new Promise((resolve, reject) => {
+    try {
+      mx.mapboxgl.setRTLTextPlugin(
+        rtlModule,
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            rtlLoaded = true;
+            resolve(true);
+          }
+        },
+        false
+      )
+    } catch (e) {reject(e)}
+  })
+}
