@@ -1245,6 +1245,41 @@
     "ps": "زيمبابوي"
   },
   {
+    "id": "dl_title",
+    "en": "Download",
+    "ps": "ډاونلوډ کړئ"
+  },
+  {
+    "id": "dl_title_not_allowed",
+    "en": "Download not allowed",
+    "ps": "ډاونلوډ اجازه نه لري"
+  },
+  {
+    "id": "dl_select_file_format",
+    "en": "File format",
+    "ps": "د دوتنې بڼه"
+  },
+  {
+    "id": "dl_select_srid",
+    "en": "Spatial reference system / SRID",
+    "ps": "د ځایی حوالې سیسټم / SRID"
+  },
+  {
+    "id": "dl_select_clip_countries",
+    "en": "Countries used for clipping",
+    "ps": "هغه هیوادونه چې د کلپ کولو لپاره کارول کیږي"
+  },
+  {
+    "id": "dl_email",
+    "en": "Email",
+    "ps": "ایمیل"
+  },
+  {
+    "id": "dl_filename",
+    "en": "Filename",
+    "ps": "د دوتنې نوم"
+  },
+  {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
     "ps": "د ویکټر ډرا اوزارونه وباسئ "
