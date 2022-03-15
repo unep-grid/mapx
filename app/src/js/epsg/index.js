@@ -1,6 +1,7 @@
 import {modal} from './../mx_helper_modal.js';
 import {el} from './../el/src/index.js';
 import {moduleLoad} from './../modules_loader_async/index.js';
+import {getApiUrl} from './../api_routes';
 
 export class ModalEpsg {
   constructor() {
@@ -27,7 +28,6 @@ export class ModalEpsg {
   async build() {
     const me = this;
     const TomSelect = await moduleLoad('tom-select');
-    const {default: data} = await import('./epsg_codes.json');
     const elSelect = el('select');
     const elContent = el('div', elSelect);
 
@@ -38,10 +38,27 @@ export class ModalEpsg {
     });
 
     me._ts = new TomSelect(elSelect, {
-      options: data,
       valueField: 'srid',
       searchField: ['srid', 'name', 'region'],
       allowEmptyOption: true,
+      options: null,
+      load: async (_, callback) => {
+        try {
+          const ts = this;
+          if (ts.loading > 1) {
+            callback();
+            return;
+          }
+          const url = getApiUrl('getEpsgCodesFull');
+          const epsgCodeResp = await fetch(url);
+          const epsgCodes = await epsgCodeResp.json();
+          callback(epsgCodes);
+          ts.settings.load = null;
+        } catch (e) {
+          console.error(e);
+          callback();
+        }
+      },
       create: false,
       sortField: {field: 'srid'},
       items: [4326],

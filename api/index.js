@@ -19,6 +19,7 @@ import {mwGemetSearchText, mwGemetSearchConcept} from '#mapx/gemet';
 import {mwGetSearchKey} from '#mapx/search';
 import {mwGetBbox} from '#mapx/bbox';
 import {mwGetFormatsList} from '#mapx/file_formats';
+import {mwGetEpsgCodesFull} from '#mapx/epsg';
 
 /**
  * If port argument is set, use this instead
@@ -67,6 +68,7 @@ app.get('/get/sql/', query.mwGet);
 app.get('/get/mirror/', mirror.mwGet);
 
 app.get('/get/config/map', mwGetConfigMap);
+app.get('/get/epsg/codes/full', mwGetEpsgCodesFull);
 app.get('/get/file/formats/list', mwGetFormatsList);
 app.get('/get/source/', [mwNotify(io), ...source.mwGet]);
 app.get('/get/source/metadata/:id', source.mwGetMetadata);
