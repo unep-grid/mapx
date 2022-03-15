@@ -48,7 +48,7 @@ export * from './mx_helper_legend_vt.js';
 /**
  * imported module available in mx.helpers
  */
-//export * from './language';
+export * from './language';
 export * from './epsgio';
 export * from './api_routes';
 export * from './story_map';
