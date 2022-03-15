@@ -5,7 +5,7 @@ import {isString, isEmpty, isArrayOfViewsId} from './is_test';
 import {fetchJsonProgress} from './mx_helper_fetch_progress.js';
 import {modal, modalConfirm} from './mx_helper_modal.js';
 import {getQueryViewsInit} from './mx_helper_url.js';
-import {getDictItem} from './mx_helper_language.js';
+import {getDictItem, getLanguageCurrent} from './language';
 import {getViewsRemote} from './mx_helper_map.js';
 
 let start;
@@ -27,7 +27,7 @@ export async function fetchViews(o) {
   const def = {
     idProject: mx.settings.project.id,
     idUser: mx.settings.user.id,
-    language: mx.settings.language || mx.settings.languages[0],
+    language: getLanguageCurrent(),
     token: mx.settings.user.token,
     useQueryFilters: null,
     idViews: [],

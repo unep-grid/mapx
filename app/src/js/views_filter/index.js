@@ -8,7 +8,7 @@ import {Switch} from './../switch/index.js';
 import {ListenerStore} from './../listener_store/index.js';
 import {path} from './../mx_helper_misc.js';
 import {el} from '../el/src/index.js';
-import {getDictItem} from './../mx_helper_language.js';
+import {getDictItem} from './../language';
 import {isEmpty} from './../is_test/index.js';
 
 import './style.less';

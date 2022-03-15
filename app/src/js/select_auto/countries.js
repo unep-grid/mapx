@@ -1,8 +1,12 @@
 import {el, elSpanTranslate} from '../el_mapx';
+import {getLanguagesAll} from '../language';
+
+const langs = getLanguagesAll();
+
 
 export const config = {
   valueField: 'id',
-  searchField: ['id', 'en'],
+  searchField: ['id', ...langs],
   allowEmptyOption: true,
   options: null,
   create: false,
@@ -13,7 +17,6 @@ export const config = {
   plugins: ['remove_button'],
   load: async function (_, callback) {
     const tom = this;
-
     try {
       if (tom.loading > 1) {
         callback();
@@ -31,20 +34,22 @@ export const config = {
   },
   render: {
     option: (data, escape) => {
+      const id = escape(data.id);
       return el(
         'div',
-        el('h4', elSpanTranslate(data.id)),
-        el('small', `${escape(data.id)}`)
+        el('h4', elSpanTranslate(id)),
+        el('small', `${id}`)
       );
     },
     item: (data, escape) => {
+      const id = escape(data.id);
       return el(
         'div',
-        el('span', elSpanTranslate(data.id)),
+        el('span', elSpanTranslate(id)),
         el(
           'span',
           {class: ['text-muted', 'space-around']},
-          ` ${escape(data.id)}`
+          ` ${id}`
         )
       );
     }

@@ -43,9 +43,6 @@ export class SelectAuto {
 
   async loadConfig(type) {
     const out = {};
-
-    console.log(out);
-
     switch (type) {
       case 'epsg':
         const epsg = await import('./epsg');

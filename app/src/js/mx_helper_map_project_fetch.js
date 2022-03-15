@@ -1,4 +1,5 @@
 import {getApiUrl} from './api_routes';
+import {getLanguageCurrent} from './language';
 import {fetchJsonProgress} from './mx_helper_fetch_progress.js';
 let start;
 
@@ -7,7 +8,7 @@ export async function fetchProjects(opt) {
 
   const defaults = {
     idUser: mx.settings.user.id,
-    language: mx.settings.language,
+    language: getLanguageCurrent(),
     role: 'any',
     title: null,
     titlePrefix: null,

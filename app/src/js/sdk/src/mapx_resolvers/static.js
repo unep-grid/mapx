@@ -1,5 +1,7 @@
 import {ResolversBase} from './base.js';
 import {ShareModal} from './../../../share_modal/index.js';
+import {getLanguageCurrent, getLanguagesAll, updateLanguage} from '../../../language/index.js';
+
 /**
  * MapX resolvers available in static and app
  */
@@ -102,7 +104,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} Done
    */
   async show_modal_share(opt) {
-    opt = Object.assign({idView:[]}, opt);
+    opt = Object.assign({idView: []}, opt);
     const rslv = this;
     const h = rslv._h;
     const idViews = h.isArray(opt.idView) ? opt.idView : [opt.idView];
@@ -259,7 +261,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {String} Two letters language code
    */
   get_language() {
-    return mx.settings.language;
+    return getLanguageCurrent()
   }
 
   /**
@@ -269,9 +271,8 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} Laguage change process finished
    */
   set_language(opt) {
-    const rslv = this;
     opt = Object.assign({}, {lang: 'en'}, opt);
-    return rslv._h.updateLanguage(opt.lang);
+    return updateLanguage(opt.lang);
   }
 
   /**
@@ -279,7 +280,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Array} Array of two letters language code
    */
   get_languages() {
-    return mx.settings.languages;
+    return getLanguagesAll();
   }
 
   /**

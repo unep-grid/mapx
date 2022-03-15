@@ -1,5 +1,5 @@
 import './style.less';
-import {getDictItem, getLabelFromObjectPath} from './../mx_helper_language.js';
+import {getDictItem, getLabelFromObjectPath} from './../language';
 import {el} from './../el/src/index.js';
 import {ButtonPanel} from './../button_panel/index.js';
 import {errorHandler} from './../error_handler/index.js';

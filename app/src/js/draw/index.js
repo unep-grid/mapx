@@ -4,7 +4,7 @@ import {modal, modalConfirm, modalPrompt} from './../mx_helper_modal.js';
 import {modalMarkdown} from './../modal_markdown/index.js';
 import {Button} from './../panel_controls/button.js';
 import {ControlsPanel} from './../panel_controls/index.js';
-import {getDictItem} from './../mx_helper_language.js';
+import {getDictItem} from './../language';
 import {bindAll} from './../bind_class_methods/index.js';
 import {spatialDataToView} from './../mx_helper_map_dragdrop.js';
 import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';

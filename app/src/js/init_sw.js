@@ -1,5 +1,5 @@
 import {modalChangelog} from './changelog/index.js';
-import {getDictItem} from './mx_helper_language.js';
+import {getDictItem} from './language';
 import {modalConfirm} from './mx_helper_modal.js';
 import {el} from './el/src';
 import {

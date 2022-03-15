@@ -1,3 +1,6 @@
+import {getLanguageCurrent} from "./language";
+
+
 /**
  * @param {Object} o options
  * @param {String} o.id Id of target element
@@ -18,7 +21,8 @@ export async function jedInit(o) {
   if (dict) {
     JSONEditor.defaults.languages = dict;
   }
-  JSONEditor.defaults.language = mx.settings.language;
+  JSONEditor.defaults.language = getLanguageCurrent() 
+
   const elJed = document.getElementById(id);
   let draftLock = true;
   let draftDbTimeStamp = 0;
@@ -458,7 +462,8 @@ function formatDateTime(posix) {
 async function getDictJsonEditorDict() {
   const h = mx.helpers;
   const out = {};
-  const dict = await h.getDict(mx.settings.language);
+  const lang = getLanguageCurrent()
+  const dict = await h.getDict(lang);
   /**
    * For each item
    */

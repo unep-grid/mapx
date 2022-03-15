@@ -1,6 +1,6 @@
 import {el, elSpanTranslate} from './el_mapx';
 import {modal} from './mx_helper_modal.js';
-import {getDictItem, updateLanguageElements} from './mx_helper_language.js';
+import {getDictItem, updateLanguageElements} from './language';
 import {getApiUrl} from './api_routes';
 import {isString} from './is_test';
 import {

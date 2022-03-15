@@ -1,6 +1,6 @@
 import {getArrayDistinct} from './array_stat/index.js';
 import {modalMarkdown} from './modal_markdown/index.js';
-import {getDictItem} from './mx_helper_language.js';
+import {getDictItem, getLanguageCurrent} from './language';
 import {getApiUrl} from './api_routes';
 
 export function fetchSourceTableAttribute(opt) {
@@ -282,7 +282,7 @@ export function viewToTableAttributeModal(idView) {
 
 export function getTableAttributeConfigFromView(view) {
   let h = mx.helpers;
-  let language = mx.settings.language;
+  let language = getLanguageCurrent();
 
   if (view.type !== 'vt' || !view._meta) {
     console.warn('Only vt view with ._meta are supported');
@@ -316,7 +316,7 @@ function handleHelp() {
 }
 
 function getHandsonLanguageCode() {
-  let lang = mx.settings.language;
+  let lang = getLanguageCurrent();
   let languages = {
     de: 'de-DE',
     es: 'es-MX',

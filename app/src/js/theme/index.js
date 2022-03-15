@@ -1,6 +1,6 @@
 import {el} from './../el/src/index.js';
 import {ListenerStore} from './../listener_store/index.js';
-import {getDictItem} from './../mx_helper_language.js';
+import {getDictItem} from './../language';
 import chroma from 'chroma-js';
 import './style.css';
 import * as themes from './presets.js';

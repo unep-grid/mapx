@@ -1,7 +1,7 @@
 import {el} from './el/src/index.js';
 import {ObserveMutationAttribute} from './mutations_observer/index.js';
 import {makeId, textToDom} from './mx_helper_misc.js';
-import {getDictItem} from './mx_helper_language.js';
+import {getDictItem} from './language';
 import {draggable} from './mx_helper_draggable.js';
 import {
   removeSelectizeGroupById,

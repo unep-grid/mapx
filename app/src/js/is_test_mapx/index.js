@@ -1,3 +1,4 @@
+import {getLanguagesAll} from '../language/index.js';
 import * as test from './../is_test/index.js';
 import {getView} from './../mx_helper_map.js';
 export * from './../is_test/index.js';
@@ -38,7 +39,8 @@ export function isLanguageObject(item) {
 * @return {Boolean}
 */ 
 export function isLanguageId(id){
-  return mx.settings.languages.includes(id)
+  const languages = getLanguagesAll();
+  return languages.includes(id)
 }
 
 

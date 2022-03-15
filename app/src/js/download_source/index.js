@@ -3,7 +3,7 @@ import {SelectAuto} from '../select_auto';
 import {buildForm} from './form.js';
 import {fetchSourceMetadata} from './../mx_helper_map_view_metadata';
 import {el, elSpanTranslate} from './../el_mapx';
-import {getLanguageItem} from './../mx_helper_language';
+import {getLanguageCurrent, getLanguageItem} from './../language';
 import {settings} from './../settings';
 
 const options = {
@@ -35,7 +35,7 @@ export class ModalDownloadSource {
         return await me.buildNotAllowed();
       }
       if (!opt.language) {
-        me._opt.language = settings.language;
+        me._opt.language = getLanguageCurrent();
       }
 
       if (!opt.filename) {

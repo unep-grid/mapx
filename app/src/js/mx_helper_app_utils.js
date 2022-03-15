@@ -1,5 +1,5 @@
 import {FlashItem} from './icon_flash/index.js';
-import {getDictItem, getDictTemplate} from './mx_helper_language.js';
+import {getDictItem, getDictTemplate} from './language';
 import {modalConfirm} from './mx_helper_modal.js';
 import {clearAllCache, getStorageEstimate} from './cache_management/index.js';
 import {removeCookie} from './mx_helper_cookies.js';

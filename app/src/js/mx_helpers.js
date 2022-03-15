@@ -6,7 +6,6 @@ export * from './mx_helper_utils_json.js';
 export * from './mx_helper_misc.js';
 export * from './mx_helper_modal.js';
 export * from './mx_helper_selectize.js';
-export * from './mx_helper_language.js';
 export * from './mx_helper_app_utils.js';
 export * from './mx_helper_list_projects.js';
 export * from './mx_helper_intersect.js';
@@ -49,7 +48,7 @@ export * from './mx_helper_legend_vt.js';
 /**
  * imported module available in mx.helpers
  */
-
+//export * from './language';
 export * from './epsgio';
 export * from './api_routes';
 export * from './story_map';

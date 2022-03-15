@@ -1,4 +1,4 @@
-import {getLabelFromObjectPath} from '../mx_helper_language.js';
+import {getLabelFromObjectPath} from '../language';
 import {el} from '../el/src/index.js';
 
 class ViewBase {

@@ -7,7 +7,7 @@ import {displayMetadataIssuesModal} from './../mx_helper_map_view_badges.js';
 import {storyRead} from './../story_map/index.js';
 import {viewToTableAttributeModal} from './../mx_helper_source_attribute_table.js';
 import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
-import {getDictItem} from './../mx_helper_language.js';
+import {getDictItem, getLanguageCurrent} from './../language';
 import {uploadGeoJSONModal} from './../mx_helper_upload_source.js';
 import {modalMirror} from './../mirror_util';
 import {ShareModal} from './../share_modal/index.js';
@@ -292,7 +292,7 @@ async function handleViewClick(event) {
           const idView = dataset.view_action_target;
           const view = getView(idView);
           const link = path(view, 'data.source.urlMetadata');
-          const lang = mx.settings.language;
+          const lang = getLanguageCurrent();
           let title =
             path(view, `data.title.${lang}`) || path(view, 'data.title.en');
 

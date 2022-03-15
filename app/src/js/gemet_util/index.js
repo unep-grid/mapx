@@ -1,14 +1,15 @@
 import {config} from './config.js';
 import {getApiUrl} from './../api_routes';
+import {getLanguageCurrent} from '../language/index.js';
 
 /**
  * Get array of concepts by similarity search
  * @param {String} txt Value to search
  * @return {Object} {hits:[{type:<string>,concept:<id>,text:<string>}], ...}
  */
-async function searchGemet(txt) {
+export async function searchGemet(txt) {
   try {
-    const lang = mx.settings.language;
+    const lang = getLanguageCurrent();
     const url = new URL(getApiUrl(config.path_api_search));
     url.searchParams.set('language', lang);
     url.searchParams.set('searchText', txt);
@@ -28,9 +29,9 @@ async function searchGemet(txt) {
  * @param {String|array} id Id of the concept or array of id
  * @return {Object} {label:<string>,value:id,definition:<string>}
  */
-async function getGemetConcept(id) {
+export async function getGemetConcept(id) {
   try {
-    const lang = mx.settings.language;
+    const lang = getLanguageCurrent();
     const url = new URL(getApiUrl(config.path_api_concept));
     url.searchParams.set('idConcepts', id);
     url.searchParams.set('language', lang);
@@ -45,10 +46,15 @@ async function getGemetConcept(id) {
   }
 }
 
-function getGemetConceptLink(id) {
+/**
+* Get concept link
+* @param {String} id Id of the concept
+* @return {URL}
+*/
+export function getGemetConceptLink(id) {
+  const lang = getLanguageCurrent();
   const url = new URL(config.thesaurus_link + id);
-  url.searchParams.set('language', mx.settings.language);
+  url.searchParams.set('language', lang);
   return url;
 }
 
-export {searchGemet, getGemetConcept, getGemetConceptLink};

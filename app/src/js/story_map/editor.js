@@ -1,3 +1,4 @@
+import {getLanguageCurrent} from '../language';
 import {getApiUrl} from './../api_routes';
 import {sendData, path} from './../mx_helper_misc.js';
 import {modal} from './../mx_helper_modal.js';
@@ -158,7 +159,7 @@ export async function initEditing(state) {
           const s = k.split(':');
           const step = +s[0];
           const slide = +s[1];
-          const lang = mx.settings.language;
+          const lang = getLanguageCurrent();
           const e = j.getEditor(
             'root.steps.' + step + '.slides.' + slide + '.html.' + lang
           );

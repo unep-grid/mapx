@@ -1,8 +1,12 @@
+import {elSpanTranslate} from './el_mapx';
 import {cleanDiacritic} from './string_util/';
+import {el} from './el_mapx';
+import {path} from './mx_helper_misc.js';
+import {requestProjectMembership, setProject} from './mx_helper_map.js';
+import {getDictItem} from './language';
 
-export function renderUserProjectsList(o) {
-  var h = mx.helpers;
-  var el = h.el;
+export async function renderUserProjectsList(o) {
+
   var elDest, elContainer, elProjects, elSearchInput, elsRows;
   var cnt = 0;
   var dat = o.projects;
@@ -10,11 +14,11 @@ export function renderUserProjectsList(o) {
   var nRow = dat[idCol].length;
   var titles = Object.keys(dat);
   var nCol = titles.length;
-  var userIsGuest = h.path(mx, 'settings.user.guest') === true;
+  var userIsGuest = path(mx, 'settings.user.guest') === true;
 
   /* render */
 
-  render();
+  await render();
 
   /**
    * Helpers
@@ -24,14 +28,13 @@ export function renderUserProjectsList(o) {
     window.setTimeout(render, 1);
   }
 
-  function render() {
+  async function render() {
     elDest = document.getElementById(o.idList);
     if (cnt++ < 5) {
       if (elDest) {
-        build();
+        await build();
         addToDest();
       } else {
-        console.log('El dest for project rendering is not here yet, wait');
         wait();
       }
     }
@@ -48,7 +51,7 @@ export function renderUserProjectsList(o) {
   /**
    * Main build function
    */
-  function build() {
+  async function build() {
     elContainer = el(
       'div',
       {
@@ -66,7 +69,7 @@ export function renderUserProjectsList(o) {
       ))
     );
 
-    buildSearch();
+    await buildSearch();
     buildRows();
     listen();
   }
@@ -95,7 +98,7 @@ export function renderUserProjectsList(o) {
     mx.listeners.addListener({
       target: elProjects,
       bind: elProjects,
-      type: ['click','keydown'],
+      type: ['click', 'keydown'],
       idGroup: 'project_list',
       callback: handleClick,
       debounce: true,
@@ -109,18 +112,18 @@ export function renderUserProjectsList(o) {
   function handleClick(e) {
     const el = e.target;
     const ds = el.dataset;
-    if(e.type === 'keydown' && e.key !== 'Enter' ){
-       return;
+    if (e.type === 'keydown' && e.key !== 'Enter') {
+      return;
     }
 
     const actions = {
-      request_membership: ()=>{
+      request_membership: () => {
         if (ds.allow_join === 'true' && !userIsGuest) {
-          h.requestProjectMembership(ds.request_membership);
+          requestProjectMembership(ds.request_membership)
         }
       },
-      load_project: ()=>{
-        h.setProject(ds.load_project, {
+      load_project: () => {
+        setProject(ds.load_project, {
           onSuccess: detach
         });
       }
@@ -160,34 +163,25 @@ export function renderUserProjectsList(o) {
    * Build rows
    */
   function buildRows() {
-    var i,
-      iL,
-      j,
-      jL,
-      row = {};
-    for (i = 0, iL = nRow; i < iL; i++) {
-      row = {};
-      for (j = 0, jL = nCol; j < jL; j++) {
+    for (let i = 0, iL = nRow; i < iL; i++) {
+      const row = {};
+      for (let j = 0, jL = nCol; j < jL; j++) {
         row[titles[j]] = dat[titles[j]][i];
       }
       if (row.id !== mx.settings.project.id) {
-        var elRow = buildRow(row);
+        const elRow = buildRow(row);
         elsRows.push(elRow);
         elProjects.appendChild(elRow);
       }
     }
-
-    //elsRows = elProjects.querySelectorAll('.mx-list-projects-row');
   }
 
   /**
    * Simple search tool
    */
-  function buildSearch() {
+  async function buildSearch() {
     elSearchInput.dataset.project_search = true;
-    h.getDictItem('project_search_values').then(function(txt) {
-      elSearchInput.placeholder = txt;
-    });
+    elSearchInput.placeholder = await getDictItem('project_search_values');
   }
 
   /**
@@ -263,23 +257,19 @@ export function renderUserProjectsList(o) {
   /**
    * helpers
    */
-
   function makeBadges(opt) {
-    var dat = opt.dat;
-    var elBadgeContainer = el('div');
-    var roles = ['admin', 'publisher', 'member'];
-    var roleSet =  false;
+    let roleSet = false;
+    const dat = opt.dat;
+    const roles = ['admin', 'publisher', 'member'];
+    const elBadgeContainer = el('div');
     opt.elTarget.appendChild(elBadgeContainer);
-    roles.forEach((r) => {
-      if (!roleSet && dat[r]) {
+    for (const role in roles) {
+      if (!roleSet && dat[role]) {
         roleSet = true;
-        var elBadgeMember = el('span', {class: 'mx-badge-role'});
+        const elBadgeMember = elSpanTranslate(role, {class: 'mx-badge-role'});
         elBadgeContainer.appendChild(elBadgeMember);
-        h.getDictItem(r).then(function(t) {
-          elBadgeMember.innerText = t;
-        });
       }
-    });
+    }
     /* Join Button if no role  */
     makeJoinButton({
       dat: dat,
@@ -288,22 +278,22 @@ export function renderUserProjectsList(o) {
   }
 
   function makeJoinButton(opt) {
-    var dat = opt.dat;
-    var elBtn = el('a');
-    if (!(dat.member || dat.admin || dat.publisher) && !userIsGuest) {
-      elBtn.href = '#';
-      elBtn.dataset.request_membership = dat[idCol];
-      elBtn.dataset.allow_join = dat.allow_join;
+    const dat = opt.dat;
+    const elTarget = opt.elTarget;
+    const allowJoin = !(dat.member || dat.admin || dat.publisher) && !userIsGuest
+    if (allowJoin) {
+      const elBtn = el('a', {
+        href: '#',
+        dataset: {
+          request_membership: dat[idCol],
+          allow_join: dat.allow_join
+        }
+      }, elSpanTranslate('btn_join_project')
+      );
       if (!dat.allow_join) {
         elBtn.classList.add('mx-not-allowed');
       }
-
-      h.getDictItem('btn_join_project', mx.settings.language).then(function(
-        it
-      ) {
-        elBtn.innerText = it;
-      });
-      opt.elTarget.appendChild(elBtn);
+      elTarget.appendChild(elBtn);
     }
   }
 }

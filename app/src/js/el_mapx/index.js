@@ -1,5 +1,5 @@
 import {el, svg} from './../el/src/index.js';
-import {getDictItem} from './../mx_helper_language.js';
+import {getDictItem, getLanguageCurrent, getLanguagesAll} from './../language';
 import * as test from './../is_test_mapx/index.js';
 import {parseTemplate} from '../mx_helper_misc.js';
 export {el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate};
@@ -125,9 +125,9 @@ function elAuto(render, data, opt) {
     return renderString(str + '');
   }
   function renderStringLanguage(obj) {
-    var lang = mx.settings.language;
-    var langs = mx.settings.languages;
-    var str = obj[lang] || obj[langs.filter((l) => obj[l])[0]];
+    const lang = getLanguageCurrent();
+    const langs = getLanguagesAll();
+    const str = obj[lang] || obj[langs.filter((l) => obj[l])[0]];
     return renderString(str, false);
   }
   function renderStringLanguageArray(arr) {

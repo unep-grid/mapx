@@ -1,5 +1,5 @@
 import {isTouchDevice} from '../is_touch_device/index.js';
-import {getDictItem} from '../mx_helper_language.js';
+import {getDictItem} from '../language';
 
 const def = {
   style: {

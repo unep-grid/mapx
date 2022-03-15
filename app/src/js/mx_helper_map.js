@@ -22,6 +22,7 @@ import {waitTimeoutAsync} from './animation_frame';
 import {getArrayDiff, getArrayDistinct} from './array_stat/index.js';
 import {getApiUrl} from './api_routes';
 import {ModalDownloadSource} from './download_source';
+import {getDictItem, getLanguageCurrent, getLanguageDefault, getLanguagesAll} from './language';
 
 /**
  * Convert point in  degrees to meter
@@ -151,9 +152,10 @@ export async function downloadViewSourceExternal(opt) {
    * Warn if there is an no valid url
    */
   if (h.isEmpty(urlItemsClean)) {
+
     h.modal({
-      title: await h.getDictItem('source_raster_download_error_title'),
-      content: await h.getDictItem('source_raster_download_error'),
+      title: getDictItem('source_raster_download_error_title'),
+      content: getDictItem('source_raster_download_error'),
       addBackground: true
     });
     return opt;
@@ -211,7 +213,7 @@ export async function downloadViewSourceExternal(opt) {
   );
 
   const elModal = h.modal({
-    title: await h.getDictItem('meta_source_url_download'),
+    title: getDictItem('meta_source_url_download'),
     content: elContent,
     addBackground: true
   });
@@ -312,7 +314,7 @@ export async function getLoginInfo() {
     idProject: s.project.id,
     isGuest: s.user.guest,
     token: s.user.token,
-    language: s.language
+    language: getLanguageCurrent()
   };
 }
 
@@ -677,8 +679,8 @@ export function initListenersApp() {
  */
 export async function updateUiSettings() {
   const h = mx.helpers;
-  const langDef = mx.settings.languages[0];
-  const lang = mx.settings.language;
+  const langDef = getLanguageDefault();
+  const lang = getLanguageCurrent();
   /**
    * User / login labels
    */
@@ -687,17 +689,17 @@ export async function updateUiSettings() {
   const sRole = h.path(mx, 'settings.user.roles', {});
 
   if (sUser.guest) {
-    elBtnLogin.innerText = await h.getDictItem('login_label');
+    elBtnLogin.innerText = await getDictItem('login_label');
   } else {
     const role = sRole.admin
       ? 'admin'
       : sRole.publisher
-      ? 'publisher'
-      : sRole.member
-      ? 'member'
-      : 'public';
+        ? 'publisher'
+        : sRole.member
+          ? 'member'
+          : 'public';
 
-    const roleLabel = await h.getDictItem(role);
+    const roleLabel = await getDictItem(role);
     elBtnLogin.innerText = `${sUser.email} – ${roleLabel}`;
   }
 
@@ -720,7 +722,7 @@ export async function updateUiSettings() {
    */
   await h.updateLanguage();
   const elBtnLanguage = document.getElementById('btnShowLanguageLabel');
-  elBtnLanguage.innerText = await h.getDictItem(lang);
+  elBtnLanguage.innerText = await getDictItem(lang);
 }
 
 /**
@@ -799,8 +801,8 @@ export async function initMapx(o) {
   );
 
   new ModalDownloadSource({
-      email : mx.settings.user.guest ? null: mx.settings.user.email,
-      idSource :'mx_vector_1wocf_efpgd_qjts6_oqgz4'
+    email: mx.settings.user.guest ? null : mx.settings.user.email,
+    idSource: 'mx_vector_1wocf_efpgd_qjts6_oqgz4'
   });
 
   /**
@@ -930,7 +932,7 @@ export async function initMapx(o) {
         id: 'main_panel',
         elContainer: document.body,
         position: 'top-left',
-        button_text: h.getDictItem('btn_panel_main'),
+        button_text: getDictItem('btn_panel_main'),
         button_lang_key: 'btn_panel_main',
         tooltip_position: 'bottom-right',
         button_classes: ['fa', 'fa-list-ul'],
@@ -966,7 +968,7 @@ export async function initMapx(o) {
       host: mx.settings.search.host,
       protocol: mx.settings.search.protocol,
       port: mx.settings.search.port,
-      language: mx.settings.language,
+      language: getLanguageCurrent(),
       index_template: 'views_{{language}}'
     });
 
@@ -1013,7 +1015,7 @@ export async function initMapx(o) {
       elContainer: document.body,
       position: 'top-right',
       noHandles: true,
-      button_text: h.getDictItem('btn_panel_controls'),
+      button_text: getDictItem('btn_panel_controls'),
       button_lang_key: 'btn_panel_controls',
       tooltip_position: 'bottom-left',
       handles: ['free'],
@@ -1214,10 +1216,9 @@ export function initMapListener(map) {
 export async function initMapxStatic(o) {
   const h = mx.helpers;
   const map = h.getMap();
-  const settings = mx.settings;
   const mapData = h.getMapData();
   const zoomToViews = h.getQueryParameter('zoomToViews')[0] === 'true';
-  const language = h.getQueryParameter('language')[0] || settings.languages[0];
+  const language = h.getQueryParameter('language')[0] || getLanguageDefault();
   /**
    * NOTE: all views are
    */
@@ -1270,7 +1271,7 @@ export async function initMapxStatic(o) {
     panelFull: true,
     position: 'top-left',
     tooltip_position: 'right',
-    button_text: h.getDictItem('button_legend_button'),
+    button_text: getDictItem('button_legend_button'),
     button_lang_key: 'button_legend_button',
     button_classes: ['fa', 'fa-list-ul'],
     container_style: {
@@ -1544,8 +1545,7 @@ export function getLocalForageData(o) {
  * @return null
  */
 export function geolocateUser() {
-  const h = mx.helpers;
-  const lang = mx.settings.language;
+  const lang = getLanguageCurrent();
   const hasGeolocator = !!navigator.geolocation;
 
   const o = {idMap: mx.settings.map.id};
@@ -1570,7 +1570,7 @@ export function geolocateUser() {
   }
 
   function error(err) {
-    h.getDictItem(
+    getDictItem(
       ['error_cant_geolocate_msg', 'error_geolocate_issue'],
       lang
     ).then((it) => {
@@ -4556,7 +4556,7 @@ export async function viewLayersAddVt(o) {
     h.updateIfEmpty(ruleNulls, {
       color: '#A9A9A9',
       size: 2,
-      label_en: await h.getDictItem('schema_style_nulls')
+      label_en: await getDictItem('schema_style_nulls')
     });
 
     const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== 'none';
@@ -4684,9 +4684,8 @@ export async function viewLayersAddVt(o) {
     );
 
     if (!config.id) {
-      config.id = `${idView}${sepLayer}${config.position}_${
-        config.priority
-      }_${idInc++}`;
+      config.id = `${idView}${sepLayer}${config.position}_${config.priority
+        }_${idInc++}`;
     }
 
     return makeSimpleLayer(config);
@@ -5054,8 +5053,8 @@ export function getLayersPropertiesAtPoint(opt) {
   idViews = hasViewId
     ? [opt.idView]
     : h.getLayerNamesByPrefix({
-        base: true
-      });
+      base: true
+    });
 
   if (idViews.length === 0) {
     return items;
@@ -5585,11 +5584,11 @@ export function getMercCoords(x, y, z) {
  */
 export function getViewTitle(view, lang) {
   const h = mx.helpers;
-  const langs = mx.settings.languages;
+  const langs = getLanguagesAll();
   if (!h.isView(view)) {
     view = h.getView(view);
   }
-  lang = lang || mx.settings.language;
+  lang = lang || getLanguageCurrent();
   return h.getLabelFromObjectPath({
     obj: view,
     path: 'data.title',
@@ -5605,7 +5604,7 @@ export function getViewTitleNormalized(view, lang) {
     view = h.getView(view);
   }
   let title = h.getLabelFromObjectPath({
-    lang: lang || mx.settings.language,
+    lang: lang || getLanguageCurrent(),
     obj: view,
     path: 'data.title',
     defaultValue: ''
@@ -5650,8 +5649,8 @@ export function getViewDescription(id, lang) {
   if (typeof id === 'string') {
     view = mx.helpers.getView(id);
   }
-  lang = lang || mx.settings.language;
-  const langs = mx.settings.languages;
+  lang = lang || getLanguageCurrent();
+  const langs = getLanguagesAll();
 
   return mx.helpers.getLabelFromObjectPath({
     obj: view,

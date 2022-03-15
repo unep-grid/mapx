@@ -2,7 +2,7 @@ import {FlashCircle} from './../icon_flash';
 import {modal, modalConfirm} from './../mx_helper_modal.js';
 import {storyRead} from './../story_map/index.js';
 import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
-import {getDictItem} from './../mx_helper_language.js';
+import {getDictItem} from './../language';
 import {EventSimple} from './../event_simple';
 import {modalMarkdown} from './../modal_markdown/index.js';
 import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';

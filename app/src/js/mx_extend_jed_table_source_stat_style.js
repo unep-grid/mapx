@@ -1,5 +1,7 @@
 import {el} from './el/src/index.js';
 import {path, vtStyleBuilder} from './mx_helpers.js';
+import {getLanguageCurrent} from './language'
+
 
 (function() {
   'use strict';
@@ -52,7 +54,7 @@ import {path, vtStyleBuilder} from './mx_helpers.js';
           const schema = editor.getItemSchema();
           const style = editor.parent.getValue();
           const idView = path(schema, 'options.idView');
-          const lang = mx.settings.language;
+          const lang = getLanguageCurrent();
           const nullValue = style?.nulls[0]?.value || null;
           const editorUpperBound = editor.parent.getChildEditors()
             .includeUpperBoundInInterval;

@@ -1,6 +1,6 @@
 import {modal} from '../mx_helper_modal';
 import {EventSimple} from '../event_simple/index.js';
-import {getDictItem} from './../mx_helper_language.js';
+import {getDictItem, getLanguageCurrent} from './../language';
 import {isStoryPlaying, getStoryId, getViewsStep} from '../story_map/index.js';
 import {isArrayOfViewsId} from '../is_test/index.js';
 import {parseTemplate} from '../mx_helper_misc.js';
@@ -347,7 +347,8 @@ export class ShareModal extends EventSimple {
     /**
      * Options
      */
-    url.searchParams.set('language', mx.settings.language);
+    const lang = getLanguageCurrent();
+    url.searchParams.set('language', lang);
     if (f.share_mode_static) {
       if (hasViews) {
         url.searchParams.set('views', state.views);

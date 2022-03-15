@@ -1,5 +1,6 @@
 import {uiReadMore} from './readmore/index.js';
 import {getArrayStat} from './array_stat/index.js';
+import {getLanguageCurrent} from './language';
 /*
  * Convert result from getFeaturesValuesByLayers to HTML
  * @param {Object} o Options
@@ -62,7 +63,7 @@ export function featuresToPopup(o) {
 
   async function renderItem(idView, promAttributes) {
     const view = h.getView(idView);
-    const language = mx.settings.language;
+    const language = getLanguageCurrent();
     const labels = h.path(view, '_meta.text.attributes_alias');
     const isVector = view.type === 'vt' || view.type === 'gj';
     const title = h.getViewTitle(idView);

@@ -1,4 +1,4 @@
-import {getDictItem} from './mx_helper_language.js';
+import {getDictItem} from './language';
 import {modalMarkdown} from './modal_markdown/index.js';
 import {modal} from './mx_helper_modal.js';
 import {el} from './el/src/index.js';

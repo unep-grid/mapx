@@ -1,6 +1,47 @@
-import {isElement, isStringRange, isNotEmpty} from './is_test';
-import {path, parseTemplate} from './mx_helper_misc.js';
-import {getViews} from './mx_helper_map.js';
+import {isArray, isMap, isElement, isStringRange, isNotEmpty, isString} from './../is_test';
+import {path, parseTemplate, objectToArray} from './../mx_helper_misc.js';
+import {getViews, getMap, getLayerNamesByPrefix} from './../mx_helper_map.js';
+import {getArrayDistinct} from '../array_stat';
+
+/**
+* Set current language ( for updating ui/views, use updateLanguage )
+* @param {String} lang Iso2 language code
+* @return {String} matched language
+*/
+export function setLanguageCurrent(lang) {
+  const languages = getLanguagesAll();
+  if (!languages.includes(lang)) {
+    lang = languages[0]
+  }
+  mx.settings.language = lang;
+  return lang
+}
+
+/**
+* Get current language
+* @return {String} language code
+*/
+export function getLanguageCurrent() {
+  const language = mx.settings.language || getLanguagesAll()[0];
+  return language;
+}
+
+/**
+* Get all languages
+* @return {Array} languages code
+*/
+export function getLanguagesAll() {
+  const languages = mx.settings.languages || ['en']
+  return getArrayDistinct(languages);
+}
+
+/**
+* Get default language
+* @return {String} language code
+*/
+export function getLanguageDefault() {
+  return getLanguagesAll()[0];
+}
 
 /**
  * Update language : Elements, view list and map
@@ -10,11 +51,9 @@ export async function updateLanguage(language) {
   const validLang = isStringRange(language, 2, 2);
 
   if (!validLang) {
-    language = mx.settings.language || 'en';
+    language = getLanguageCurrent();
   }
-
-  mx.settings.language = language;
-  const lang = mx.settings.language;
+  const lang = setLanguageCurrent(language);
 
   /**
    * Fire language_change
@@ -67,9 +106,8 @@ export function splitnwords(str) {
  */
 const _dict_cache = {};
 export async function getDict(lang) {
-  'use strict';
-  lang = lang || mx.settings.language || 'en';
-  var out;
+  lang = lang || getLanguageCurrent();
+  let out;
 
   if (_dict_cache[lang]) {
     return _dict_cache[lang];
@@ -77,37 +115,37 @@ export async function getDict(lang) {
 
   switch (lang) {
     case 'en':
-      out = await import('../data/dict/_built/dict_en.json');
+      out = await import('../../data/dict/_built/dict_en.json');
       break;
     case 'fr':
-      out = await import('../data/dict/_built/dict_fr.json');
+      out = await import('../../data/dict/_built/dict_fr.json');
       break;
     case 'es':
-      out = await import('../data/dict/_built/dict_es.json');
+      out = await import('../../data/dict/_built/dict_es.json');
       break;
     case 'de':
-      out = await import('../data/dict/_built/dict_de.json');
+      out = await import('../../data/dict/_built/dict_de.json');
       break;
     case 'ru':
-      out = await import('../data/dict/_built/dict_ru.json');
+      out = await import('../../data/dict/_built/dict_ru.json');
       break;
     case 'fa':
-      out = await import('../data/dict/_built/dict_fa.json');
+      out = await import('../../data/dict/_built/dict_fa.json');
       break;
     case 'ps':
-      out = await import('../data/dict/_built/dict_ps.json');
+      out = await import('../../data/dict/_built/dict_ps.json');
       break;
     case 'bn':
-      out = await import('../data/dict/_built/dict_bn.json');
+      out = await import('../../data/dict/_built/dict_bn.json');
       break;
     case 'zh':
-      out = await import('../data/dict/_built/dict_zh.json');
+      out = await import('../../data/dict/_built/dict_zh.json');
       break;
     case 'ar':
-      out = await import('../data/dict/_built/dict_ar.json');
+      out = await import('../../data/dict/_built/dict_ar.json');
       break;
     default:
-      out = await import('../data/dict/_built/dict_en.json');
+      out = await import('../../data/dict/_built/dict_en.json');
       break;
   }
   _dict_cache[lang] = out.default;
@@ -121,8 +159,7 @@ export async function getDict(lang) {
  */
 export async function updateLanguageElements(o) {
   o = Object.assign({}, o);
-  let langDefault = 'en';
-  o.lang = o.lang || mx.settings.language || langDefault;
+  o.lang = o.lang || getLanguageCurrent();
   let els, el, doc, label, found, type, id, data;
   let i, iL, j, jL;
   let changes = [];
@@ -217,37 +254,40 @@ export async function updateLanguageElements(o) {
  * Get value from the dictionary for a given key and language. Fallback to "def"
  * @param {string} keys Key to look for in the dictionnary
  * @param {string} lang  Two letters language code
+ * @return {Promise<String|Array>} If key is an array, array of item, else string.
  */
 export async function getDictItem(key, lang) {
-  'use strict';
-  let keys = [];
-  let defaultLang = 'en';
-  let isArray = key instanceof Array;
-  lang = lang || mx.settings.language || defaultLang;
+  lang = lang || getLanguageCurrent();
+  const keys = [];
+  const defaultLang = getLanguageDefault();
+  const kIsArray = isArray(key);
+  const dict = await getDict(lang);
+  const res = [];
 
-  let dict = await getDict(lang);
-
-  if (!(dict instanceof Array)) {
-    dict = mx.helpers.objectToArray(dict);
+  if (!isArray(dict)) {
+    dict = objectToArray(dict);
   }
 
-  if (isArray) {
-    keys = key;
-  } else {
-    keys = keys.concat(key);
+  if (isString(key)) {
+    key = [key];
   }
 
-  let res = keys.reduce((a, k) => {
-    const item = dict.find((a) => {
-      return a.id === k;
-    });
-    const out = item ? item[lang] || item[defaultLang] : k;
-    a.push(out);
-    return a;
-  }, []);
+  keys.push(...key);
 
-  res = isArray ? res : res[0];
-  return res;
+  for (const k of keys) {
+    let found = false;
+    for (const d of dict) {
+      if (!found && d.id === k) {
+        res.push(d[lang] || d[defaultLang] || k);
+        found = true
+      }
+    }
+    if (!found) {
+      res.push(k);
+    }
+  }
+
+  return kIsArray ? res : res[0];
 }
 
 /**
@@ -267,39 +307,30 @@ export async function getDictTemplate(key, data, lang) {
 /**
  * Get label value from an object path.
  * @param {Object} o Options
- * @param {string} o.lang Selected language two letter code. Default = mx.settings.language
+ * @param {string} o.lang Selected language two letter code.
  * @param {Any} o.defaultValue Default value
  * @param {Object} o.obj Object containing the value
  * @param {String} o.path Path to the value container. Eg. "data.title"
  */
 export function getLabelFromObjectPath(o) {
-  'use strict';
-  const defaultLang = 'en';
-  o.lang = o.lang ? o.lang : mx.settings.language || defaultLang;
+  const langs = getLanguagesAll();
+  const defaultValue = o.defaultValue || '';
+
+  o.lang = o.lang ? o.lang : getLanguageCurrent();
   o.sep = o.sep ? o.sep : '.';
   o.path = o.path ? o.path + o.sep : '';
-  const defaultValue = o.defaultValue || '';
-  const langs = mx.settings.languages;
   let out = path(o.obj, o.path + o.lang, null);
 
-  if (!out) {
-    /**
-     * Try default language
-     */
-    out = path(o.obj, o.path + defaultLang, null);
-  }
 
   if (!out) {
     /**
      * Try alternative language
      */
-    out = langs.reduce((a, l) => {
-      if (!a) {
-        return path(o.obj, o.path + l, null);
-      } else {
-        return a;
+    for (const l of langs) {
+      if (!out) {
+        out = path(o.obj, o.path + l, null);
       }
-    }, null);
+    }
   }
 
   if (!out) {
@@ -320,6 +351,7 @@ export function getLabelFromObjectPath(o) {
  * @param {String} opt.language language code expected
  * @param {Array} opt.languages code for fallback
  * @param {String} opt.prefix Language prefix. e.g. 'label_' -> 'label_en'
+ * @return {Sting} Language for which the object as value.
  * @example
  *     checkLanguage({
  *         obj : it,
@@ -329,18 +361,19 @@ export function getLabelFromObjectPath(o) {
  *     })
  */
 export function checkLanguage(opt) {
-  const h = mx.helpers;
-  const s = mx.settings;
   const def = {
     obj: {},
     path: '',
-    languages: s.languages,
-    language: s.language || s.languages[0],
+    languages: getLanguagesAll(),
+    language: getLanguageCurrent(),
     prefix: null
   };
-
   const o = Object.assign({}, def, opt);
-  const langs = [o.language, ...o.languages];
+  /*
+  * Put code expected in first position and
+  * remove duplicate if any
+  */
+  const langs = getArrayDistinct([o.language, ...o.languages]);
 
   for (const lang of langs) {
     const notEmpty = !!path(o.obj, o.path, o.prefix + lang);
@@ -348,6 +381,9 @@ export function checkLanguage(opt) {
       return lang;
     }
   }
+  /**
+  * Nothing found. Fallack to default language
+  */
   return def.language;
 }
 
@@ -387,7 +423,7 @@ export function getLanguageItem(obj, lang) {
  */
 export async function updateLanguageViewsList(o) {
   o = Object.assign({}, o);
-  const lang = o.lang || mx.settings.language;
+  const lang = o.lang || getLanguageDefault();
   const views = getViews();
   const isModeStatic = path(mx, 'settings.mode.static') === true;
 
@@ -453,6 +489,10 @@ export async function updateLanguageViewsList(o) {
   return true;
 }
 
+
+
+
+
 /**
  * Set or Update language of a layer, based on text-field attribute.
  * @param {object} o Options
@@ -460,67 +500,62 @@ export async function updateLanguageViewsList(o) {
  * @param {string} [o.language='en'] Two letter language code
  */
 export async function updateLanguageMap(o) {
-  o = Object.assign({}, o);
-  var map = mx.helpers.getMap(o.id);
-  if (!mx.helpers.isMap(map)) {
-    return;
-  }
-  var mapLang = ['en', 'es', 'fr', 'de', 'ru', 'zh', 'pt', 'ar'];
-  var defaultLang = 'en';
-  var layers = [
+  o = Object.assign({}, {
+    language: getLanguageCurrent()
+  }, o);
+
+  /**
+  * Map do not yet support all MapX languages. Subset here:
+  */
+  const mapLang = ['en', 'es', 'fr', 'de', 'ru', 'zh', 'pt', 'ar'];
+  const rtlLang = ['ar']
+  const defaultLang = mapLang[0];
+  const lang = mapLang.includes(o.language) ? o.language : defaultLang
+  const layers = [
     'place-label-city',
     'place-label-capital',
     'country-label',
     'water-label-line',
     'water-label-point',
-    'poi-label'
+    'poi-label',
+    'road-label'
   ];
 
-  if (map) {
-    if (!o.language || mapLang.indexOf(o.language) === -1) {
-      o.language = mx.settings.language;
-    }
+  const map = getMap(o.id);
 
-    if (!o.language) {
-      o.language = defaultLang;
-    }
-
-    /*
-     * set default to english for the map layers if not in language set
-     */
-    if (mapLang.indexOf(o.language) === -1) {
-      o.language = defaultLang;
-    }
-
-    /**
-     * Set language in layers
-     */
-    for (var i = 0; i < layers.length; i++) {
-      var layer = layers[i];
-      var layerExists =
-        mx.helpers.getLayerNamesByPrefix({
-          id: o.id,
-          prefix: layer
-        }).length > 0;
-
-      if (layerExists) {
-        map.setLayoutProperty(layer, 'text-field', [
-          'coalesce',
-          ['get', `name_${o.language}`],
-          ['get', 'name_en']
-        ]);
-      }
-    }
-    return true;
+  if (!isMap(map)) {
+    console.error('updateLanguageMap require a Map');
+    return;
   }
+
+
+
+  /**
+   * Set language in layers
+   */
+  for (const layer of layers) {
+    const layerExists =
+      getLayerNamesByPrefix({
+        id: o.id,
+        prefix: layer
+      }).length > 0;
+
+    if (layerExists) {
+      map.setLayoutProperty(layer, 'text-field', [
+        'coalesce',
+        ['get', `name_${lang}`],
+        ['get', 'name_en']
+      ]);
+    }
+  }
+  return true;
 }
 
 /**
  * Get dict id by name + language
  */
-
 export async function getDictItemId(txt, language) {
-  language = language || mx.settings.language || 'en';
+  language = language || getLanguageCurrent();
   const dict = await getDict(language);
   const reg = new RegExp('^' + txt);
   const res = dict.find((d) => {
@@ -530,3 +565,5 @@ export async function getDictItemId(txt, language) {
     return res.id;
   }
 }
+
+

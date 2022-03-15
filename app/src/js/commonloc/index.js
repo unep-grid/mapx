@@ -1,6 +1,6 @@
 import commonloc from './locations.json';
 import {isString} from './../is_test/index.js';
-import {getDictItem, getDictItemId} from './../mx_helper_language.js';
+import {getDictItem, getDictItemId} from './../language';
 import {getMap, getBoundsArray} from './../mx_helper_map.js';
 import {getArrayDiff} from './../array_stat';
 /**
