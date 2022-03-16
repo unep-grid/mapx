@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import {isSourceId, isViewId} from '@fxi/mx_valid';
-
 import {redisGet, redisSet, pgRead} from '#mapx/db';
 import {getParamsValidator} from '#mapx/route_validation';
 import {parseTemplate, sendJSON, sendError} from '#mapx/helpers';
@@ -63,17 +62,7 @@ async function getSummaryHandler(req, res) {
  * @param {String} opt.nullValue Value to express nulls
  * @return {Object} metadata object
  */
-export /**
- * Helper to get source stats from db
- * @param {Object} opt options
- * @param {String} opt.idSource Id of the source
- * @param {String} opt.idView Id of the view
- * @param {String} opt.idAttr Id of the attribute (optional)
- * @param {String} opt.format format (disabled now. Will be mapx-json or iso-xml)
- * @param {String} opt.nullValue Value to express nulls
- * @return {Object} metadata object
- */
-async function getSourceSummary(opt) {
+export async function getSourceSummary(opt) {
   if (!isSourceId(opt.idSource) && !isViewId(opt.idView)) {
     throw Error('Missing id of the source or the view');
   }

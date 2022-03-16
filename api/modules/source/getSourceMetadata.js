@@ -24,13 +24,6 @@ async function getSourceMetadataHandler(req, res) {
  * @param {String} opt.format format (disabled now. Will be mapx-json or iso-xml)
  * @return {Object} metadata object
  */
-/**
- * Helper to get source metadata from db
- * @param {Object} opt options
- * @param {String} opt.id Id of the source
- * @param {String} opt.format format (disabled now. Will be mapx-json or iso-xml)
- * @return {Object} metadata object
- */
 export async function getSourceMetadata(opt) {
   var meta;
   var out;
