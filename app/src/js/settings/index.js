@@ -58,7 +58,8 @@ let settings = {
       getFileFormatsList : '/get/file/formats/list',
       getEpsgCodesFull : '/get/epsg/codes/full',
       downloadSourceCreate: '/get/source/',
-      downloadSourceGet: '/', // location given by the api
+      getSourceDownload: '/get/source/',
+      //downloadSourceGet: '/', // location given by the api
       uploadImage: '/upload/image/',
       uploadVector: '/upload/vector/',
       collectLogs: '/collect/logs/',

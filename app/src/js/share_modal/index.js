@@ -669,6 +669,9 @@ export class ShareModal extends EventSimple {
       ]
     );
 
+    /**
+    * Remove previous content, if required
+    */ 
     while (sm._el_content.firstElementChild) {
       sm._el_content.firstElementChild.remove();
     }

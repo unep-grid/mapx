@@ -11,6 +11,7 @@ import {getDictItem, getLanguageCurrent} from './../language';
 import {uploadGeoJSONModal} from './../mx_helper_upload_source.js';
 import {modalMirror} from './../mirror_util';
 import {ShareModal} from './../share_modal/index.js';
+import {downloadViewVector} from '../mx_helper_map.js';
 import {
   downloadViewSourceExternal,
   downloadViewGeoJSON,
@@ -147,6 +148,14 @@ async function handleViewClick(event) {
         action: function() {
           const viewTarget = dataset.view_action_target;
           downloadViewSourceExternal({idView: viewTarget});
+        }
+      },
+      {
+        comment: 'target is the download vector button',
+        test: dataset.view_action_key === 'btn_opt_download',
+        action: function() {
+          const idView = dataset.view_action_target;
+          return downloadViewVector(idView);
         }
       },
       {
@@ -334,6 +343,7 @@ async function handleViewClick(event) {
           y: event.clientY
         });
         const r = t[i].action();
+        
         if (r instanceof Promise) {
           await Promise.all([r]);
         }

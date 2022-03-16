@@ -1,44 +1,52 @@
-import {isArray, isMap, isElement, isStringRange, isNotEmpty, isString} from './../is_test';
-import {path, parseTemplate, objectToArray} from './../mx_helper_misc.js';
-import {getViews, getMap, getLayerNamesByPrefix} from './../mx_helper_map.js';
-import {getArrayDistinct} from '../array_stat';
+import {
+  isArray,
+  isMap,
+  isElement,
+  isStringRange,
+  isNotEmpty,
+  isString,
+  isEmpty,
+} from "./../is_test";
+import { path, parseTemplate, objectToArray } from "./../mx_helper_misc.js";
+import { getViews, getMap, getLayerNamesByPrefix } from "./../mx_helper_map.js";
+import { getArrayDistinct } from "../array_stat";
 
 /**
-* Set current language ( for updating ui/views, use updateLanguage )
-* @param {String} lang Iso2 language code
-* @return {String} matched language
-*/
+ * Set current language ( for updating ui/views, use updateLanguage )
+ * @param {String} lang Iso2 language code
+ * @return {String} matched language
+ */
 export function setLanguageCurrent(lang) {
   const languages = getLanguagesAll();
   if (!languages.includes(lang)) {
-    lang = languages[0]
+    lang = languages[0];
   }
   mx.settings.language = lang;
-  return lang
+  return lang;
 }
 
 /**
-* Get current language
-* @return {String} language code
-*/
+ * Get current language
+ * @return {String} language code
+ */
 export function getLanguageCurrent() {
   const language = mx.settings.language || getLanguagesAll()[0];
   return language;
 }
 
 /**
-* Get all languages
-* @return {Array} languages code
-*/
+ * Get all languages
+ * @return {Array} languages code
+ */
 export function getLanguagesAll() {
-  const languages = mx.settings.languages || ['en']
+  const languages = mx.settings.languages || ["en"];
   return getArrayDistinct(languages);
 }
 
 /**
-* Get default language
-* @return {String} language code
-*/
+ * Get default language
+ * @return {String} language code
+ */
 export function getLanguageDefault() {
   return getLanguagesAll()[0];
 }
@@ -59,16 +67,16 @@ export async function updateLanguage(language) {
    * Fire language_change
    */
   mx.events.fire({
-    type: 'language_change',
+    type: "language_change",
     data: {
-      new_language: lang
-    }
+      new_language: lang,
+    },
   });
 
   /*
    * Set language for the document
    */
-  document.querySelector('html').setAttribute('lang', lang);
+  document.querySelector("html").setAttribute("lang", lang);
 
   /**
    * Update lang of interface
@@ -96,7 +104,7 @@ export function splitnwords(str) {
   return str
     .split(/((?:\w+ ){6})/g)
     .filter(Boolean)
-    .join('\n');
+    .join("\n");
 }
 
 /**
@@ -114,38 +122,38 @@ export async function getDict(lang) {
   }
 
   switch (lang) {
-    case 'en':
-      out = await import('../../data/dict/_built/dict_en.json');
+    case "en":
+      out = await import("../../data/dict/_built/dict_en.json");
       break;
-    case 'fr':
-      out = await import('../../data/dict/_built/dict_fr.json');
+    case "fr":
+      out = await import("../../data/dict/_built/dict_fr.json");
       break;
-    case 'es':
-      out = await import('../../data/dict/_built/dict_es.json');
+    case "es":
+      out = await import("../../data/dict/_built/dict_es.json");
       break;
-    case 'de':
-      out = await import('../../data/dict/_built/dict_de.json');
+    case "de":
+      out = await import("../../data/dict/_built/dict_de.json");
       break;
-    case 'ru':
-      out = await import('../../data/dict/_built/dict_ru.json');
+    case "ru":
+      out = await import("../../data/dict/_built/dict_ru.json");
       break;
-    case 'fa':
-      out = await import('../../data/dict/_built/dict_fa.json');
+    case "fa":
+      out = await import("../../data/dict/_built/dict_fa.json");
       break;
-    case 'ps':
-      out = await import('../../data/dict/_built/dict_ps.json');
+    case "ps":
+      out = await import("../../data/dict/_built/dict_ps.json");
       break;
-    case 'bn':
-      out = await import('../../data/dict/_built/dict_bn.json');
+    case "bn":
+      out = await import("../../data/dict/_built/dict_bn.json");
       break;
-    case 'zh':
-      out = await import('../../data/dict/_built/dict_zh.json');
+    case "zh":
+      out = await import("../../data/dict/_built/dict_zh.json");
       break;
-    case 'ar':
-      out = await import('../../data/dict/_built/dict_ar.json');
+    case "ar":
+      out = await import("../../data/dict/_built/dict_ar.json");
       break;
     default:
-      out = await import('../../data/dict/_built/dict_en.json');
+      out = await import("../../data/dict/_built/dict_en.json");
       break;
   }
   _dict_cache[lang] = out.default;
@@ -170,7 +178,7 @@ export async function updateLanguageElements(o) {
   doc = isElement(o.el) ? o.el : document;
 
   // fetch all elements with data-lang_key attr
-  els = doc.querySelectorAll('[data-lang_key]');
+  els = doc.querySelectorAll("[data-lang_key]");
 
   for (i = 0, iL = els.length; i < iL; i++) {
     el = els[i];
@@ -178,20 +186,20 @@ export async function updateLanguageElements(o) {
     id = el.dataset.lang_key;
     data = el.dataset.lang_data;
     found = false;
-    label = '';
+    label = "";
 
     /*
      * NOTE: BUG IN SAFARI : sometimes, dataset is not returning correctly
      */
     if (!type) {
-      type = el.getAttribute('data-lang_type');
+      type = el.getAttribute("data-lang_type");
     }
 
     /*
      * Default is text : inner text will be updated
      */
     if (!type) {
-      type = 'text';
+      type = "text";
     }
 
     for (j = 0, jL = dict.length; j < jL; j++) {
@@ -227,23 +235,23 @@ export async function updateLanguageElements(o) {
     if (!label) {
       return;
     }
-    if (type === 'title') {
-      el.setAttribute('title', label);
+    if (type === "title") {
+      el.setAttribute("title", label);
       return;
     }
-    if (type === 'tooltip') {
+    if (type === "tooltip") {
       if (el.dataset.lang_split) {
         label = splitnwords(label);
       }
-      el.setAttribute('aria-label', label);
-      if (el.className.indexOf('hint--') === -1) {
-        el.className += ' hint--left';
+      el.setAttribute("aria-label", label);
+      if (el.className.indexOf("hint--") === -1) {
+        el.className += " hint--left";
       }
       return;
     }
 
-    if (type === 'placeholder') {
-      el.setAttribute('placeholder', label);
+    if (type === "placeholder") {
+      el.setAttribute("placeholder", label);
       return;
     }
     el.innerText = label;
@@ -279,7 +287,7 @@ export async function getDictItem(key, lang) {
     for (const d of dict) {
       if (!found && d.id === k) {
         res.push(d[lang] || d[defaultLang] || k);
-        found = true
+        found = true;
       }
     }
     if (!found) {
@@ -314,13 +322,12 @@ export async function getDictTemplate(key, data, lang) {
  */
 export function getLabelFromObjectPath(o) {
   const langs = getLanguagesAll();
-  const defaultValue = o.defaultValue || '';
+  const defaultValue = o.defaultValue || "";
 
   o.lang = o.lang ? o.lang : getLanguageCurrent();
-  o.sep = o.sep ? o.sep : '.';
-  o.path = o.path ? o.path + o.sep : '';
+  o.sep = o.sep ? o.sep : ".";
+  o.path = o.path ? o.path + o.sep : "";
   let out = path(o.obj, o.path + o.lang, null);
-
 
   if (!out) {
     /**
@@ -363,28 +370,29 @@ export function getLabelFromObjectPath(o) {
 export function checkLanguage(opt) {
   const def = {
     obj: {},
-    path: '',
+    path: "",
     languages: getLanguagesAll(),
     language: getLanguageCurrent(),
-    prefix: null
+    prefix: "",
   };
   const o = Object.assign({}, def, opt);
   /*
-  * Put code expected in first position and
-  * remove duplicate if any
-  */
+   * Put code expected in first position and
+   * remove duplicate if any
+   */
   const langs = getArrayDistinct([o.language, ...o.languages]);
 
   for (const lang of langs) {
-    const notEmpty = !!path(o.obj, o.path, o.prefix + lang);
+    const value = path(o.obj, `${o.path}.${o.prefix + lang}`);
+    const notEmpty = !isEmpty(value);
     if (notEmpty) {
       return lang;
     }
   }
   /**
-  * Nothing found. Fallack to default language
-  */
-  return def.language;
+   * Nothing found. Fallack to default language
+   */
+  return getLanguageDefault();
 }
 
 /**
@@ -397,7 +405,7 @@ export function checkLanguage(opt) {
 export function getTranslationFromObject(o) {
   o = Object.assign({}, o);
   const lang = checkLanguage(o);
-  const out = path(o.obj, o.path + '.' + lang, '');
+  const out = path(o.obj, o.path + "." + lang, "");
   return out;
 }
 
@@ -405,15 +413,16 @@ export function getTranslationFromObject(o) {
  * Get language from language object
  * NOTE Simple version of `getTranslationFromObject`, without path
  * @param {Object} obj Language object
- * @param {String} lang Language code
+ * @param {String} language Language code
  * @return {String} item
  */
-export function getLanguageItem(obj, lang) {
-  lang = checkLanguage({
+export function getLanguageItem(obj, language) {
+  language = checkLanguage({
     obj,
-    language: lang
+    language,
   });
-  return obj[lang];
+  console.log(language);
+  return obj[language];
 }
 
 /**
@@ -425,7 +434,7 @@ export async function updateLanguageViewsList(o) {
   o = Object.assign({}, o);
   const lang = o.lang || getLanguageDefault();
   const views = getViews();
-  const isModeStatic = path(mx, 'settings.mode.static') === true;
+  const isModeStatic = path(mx, "settings.mode.static") === true;
 
   try {
     if (isModeStatic) {
@@ -433,10 +442,10 @@ export async function updateLanguageViewsList(o) {
     }
 
     views.forEach((view) => {
-      const elTitle = view._el.querySelector('.mx-view-tgl-title');
-      const elText = view._el.querySelector('.mx-view-item-desc');
-      const elLegendVt = view._el.querySelector('.mx-view-legend-vt');
-      const elLegendRtTitle = view._el.querySelector('.mx-legend-rt-title');
+      const elTitle = view._el.querySelector(".mx-view-tgl-title");
+      const elText = view._el.querySelector(".mx-view-item-desc");
+      const elLegendVt = view._el.querySelector(".mx-view-legend-vt");
+      const elLegendRtTitle = view._el.querySelector(".mx-legend-rt-title");
 
       /**
        * Regenerate vt legend
@@ -452,12 +461,12 @@ export async function updateLanguageViewsList(o) {
         const legendTitle = getLabelFromObjectPath({
           lang: lang,
           obj: view,
-          path: 'data.source.legendTitles',
-          defaultValue: null
+          path: "data.source.legendTitles",
+          defaultValue: null,
         });
         if (legendTitle) {
           elLegendRtTitle.innerText = legendTitle;
-          elLegendRtTitle.setAttribute('title', legendTitle);
+          elLegendRtTitle.setAttribute("title", legendTitle);
         }
       }
 
@@ -468,7 +477,7 @@ export async function updateLanguageViewsList(o) {
         elTitle.innerHTML = getLabelFromObjectPath({
           lang: lang,
           obj: view,
-          path: 'data.title'
+          path: "data.title",
         });
       }
 
@@ -479,19 +488,15 @@ export async function updateLanguageViewsList(o) {
         elText.innerHTML = getLabelFromObjectPath({
           lang: lang,
           obj: view,
-          path: 'data.abstract'
+          path: "data.abstract",
         });
       }
     });
   } catch (e) {
-    console.warn('updateLanguageViewsList error', e.message);
+    console.warn("updateLanguageViewsList error", e.message);
   }
   return true;
 }
-
-
-
-
 
 /**
  * Set or Update language of a layer, based on text-field attribute.
@@ -500,31 +505,35 @@ export async function updateLanguageViewsList(o) {
  * @param {string} [o.language='en'] Two letter language code
  */
 export async function updateLanguageMap(o) {
-  o = Object.assign({}, {
-    language: getLanguageCurrent()
-  }, o);
+  o = Object.assign(
+    {},
+    {
+      language: getLanguageCurrent(),
+    },
+    o
+  );
 
   /**
-  * Map do not yet support all MapX languages. Subset here:
-  */
-  const mapLang = ['en', 'es', 'fr', 'de', 'ru', 'zh', 'pt', 'ar'];
-  const rtlLang = ['ar']
+   * Map do not yet support all MapX languages. Subset here:
+   */
+  const mapLang = ["en", "es", "fr", "de", "ru", "zh", "pt", "ar"];
+  const rtlLang = ["ar"];
   const defaultLang = mapLang[0];
-  const lang = mapLang.includes(o.language) ? o.language : defaultLang
+  const lang = mapLang.includes(o.language) ? o.language : defaultLang;
   const layers = [
-    'place-label-city',
-    'place-label-capital',
-    'country-label',
-    'water-label-line',
-    'water-label-point',
-    'poi-label',
-    'road-label'
+    "place-label-city",
+    "place-label-capital",
+    "country-label",
+    "water-label-line",
+    "water-label-point",
+    "poi-label",
+    "road-label",
   ];
 
   const map = getMap(o.id);
 
   if (!isMap(map)) {
-    console.error('updateLanguageMap require a Map');
+    console.error("updateLanguageMap require a Map");
     return;
   }
 
@@ -539,14 +548,14 @@ export async function updateLanguageMap(o) {
     const layerExists =
       getLayerNamesByPrefix({
         id: o.id,
-        prefix: layer
+        prefix: layer,
       }).length > 0;
 
     if (layerExists) {
-      map.setLayoutProperty(layer, 'text-field', [
-        'coalesce',
-        ['get', `name_${lang}`],
-        ['get', 'name_en']
+      map.setLayoutProperty(layer, "text-field", [
+        "coalesce",
+        ["get", `name_${lang}`],
+        ["get", "name_en"],
       ]);
     }
   }
@@ -559,7 +568,7 @@ export async function updateLanguageMap(o) {
 export async function getDictItemId(txt, language) {
   language = language || getLanguageCurrent();
   const dict = await getDict(language);
-  const reg = new RegExp('^' + txt);
+  const reg = new RegExp("^" + txt);
   const res = dict.find((d) => {
     return d[language].match(reg) || d.en.match(reg);
   });
@@ -568,26 +577,27 @@ export async function getDictItemId(txt, language) {
   }
 }
 
-
 /**
-* Load LTR plugin for mapbox gl
-* @notes Webpack config :
-* {
-*   test: /mapbox-gl-rtl-text.js$/,
-*     use: [
-*       {
-*         loader: 'file-loader'
-*       }
-*     ]
-* } 
-* @return {Promise<boolean>} success
-*/
+ * Load LTR plugin for mapbox gl
+ * @notes Webpack config :
+ * {
+ *   test: /mapbox-gl-rtl-text.js$/,
+ *     use: [
+ *       {
+ *         loader: 'file-loader'
+ *       }
+ *     ]
+ * }
+ * @return {Promise<boolean>} success
+ */
 let rtlLoaded = false;
 async function mapboxRTLload() {
   if (rtlLoaded) {
     return true;
   }
-  const {default: rtlModule} = await import('@mapbox/mapbox-gl-rtl-text/mapbox-gl-rtl-text.js');
+  const { default: rtlModule } = await import(
+    "@mapbox/mapbox-gl-rtl-text/mapbox-gl-rtl-text.js"
+  );
 
   return new Promise((resolve, reject) => {
     try {
@@ -602,7 +612,9 @@ async function mapboxRTLload() {
           }
         },
         false
-      )
-    } catch (e) {reject(e)}
-  })
+      );
+    } catch (e) {
+      reject(e);
+    }
+  });
 }

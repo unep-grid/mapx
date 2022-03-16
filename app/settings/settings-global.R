@@ -6,8 +6,8 @@ config <- list()
 #
 # Shiny options
 #
-options(shiny.maxRequestSize=0) 
-options(shiny.reactlog=FALSE)
+options(shiny.maxRequestSize = 0)
+options(shiny.reactlog = FALSE)
 #
 # get info about the host
 #
@@ -18,33 +18,33 @@ config[["system"]] <- list(
 )
 
 
-config[['brand']] <- list(
-  name = 'MapX'
+config[["brand"]] <- list(
+  name = "MapX"
 )
 
-# ⚠️  also defined in app/src/js/mx_settings_global.json 
+# ⚠️  also defined in app/src/js/mx_settings_global.json
 config[["links"]] <- list(
   mainProjectPage = "https://mapx.org",
   repositoryIssues = "https://github.com/unep-grid/map-x-mgl/issues",
-  repositoryWiki = "https://github.com/unep-grid/map-x-mgl/wiki", 
+  repositoryWiki = "https://github.com/unep-grid/map-x-mgl/wiki",
   repositoryWikiMapComposer = "https://github.com/unep-grid/map-x-mgl/wiki/Map-composer",
   repositoryWikiDrawTool = "https://github.com/unep-grid/map-x-mgl/wiki/Draw-tool",
   repositoryWikiSharingManager = "https://github.com/unep-grid/map-x-mgl/wiki/Sharing-Manager",
   repositoryWikiAttributeTable = "https://github.com/unep-grid/map-x-mgl/wiki/Attribute-table",
   repositoryWikiSearchToolUI = "https://github.com/unep-grid/map-x-mgl/wiki/Search-tool-UI",
-  appKnowlegdeBase = 'https://www.mapx.org/knowledge-base/'
+  appKnowlegdeBase = "https://www.mapx.org/knowledge-base/"
 )
 
 #
 # MapX version
 #
-config$version = jsonlite::fromJSON('package.json')$version
+config$version <- jsonlite::fromJSON("package.json")$version
 
 
 #
 # Set MapX mode
 #
-#config[["mode"]] <- c("MAINTENANCE")
+# config[["mode"]] <- c("MAINTENANCE")
 config[["mode"]] <- c()
 
 
@@ -62,26 +62,26 @@ config[["browser"]] <- list(
     "hasLocalStorage",
     "hasSessionStorage",
     "hasGeolocation"
-  )  
+  )
 )
 
 #
 # Input control
 #
-config[['validation']] <- list(
+config[["validation"]] <- list(
   input = list(
     nchar = list(
-      sourceAbstract = list(min=1,max=5000),
-      sourceAttributesAlias = list(min=1,max=30),
-      sourceAttributesDesc = list(min=1,max=5000),
-      sourceLicense = list(min=1,max=5000),
-      sourceKeywords = list(min=1,max=30),
-      sourceTitle = list(min=1,max=300),
-      projectAbstract = list(min=1,max=5000),
-      projectTitle = list(min=1,max=150),
-      projectAlias = list(min=1,max=30),
-      viewAbstract = list(min=1,max=5000),
-      viewTitle = list(min=1,max=300)
+      sourceAbstract = list(min = 1, max = 5000),
+      sourceAttributesAlias = list(min = 1, max = 30),
+      sourceAttributesDesc = list(min = 1, max = 5000),
+      sourceLicense = list(min = 1, max = 5000),
+      sourceKeywords = list(min = 1, max = 30),
+      sourceTitle = list(min = 1, max = 300),
+      projectAbstract = list(min = 1, max = 5000),
+      projectTitle = list(min = 1, max = 150),
+      projectAlias = list(min = 1, max = 30),
+      viewAbstract = list(min = 1, max = 5000),
+      viewTitle = list(min = 1, max = 300)
     )
   )
 )
@@ -95,13 +95,13 @@ config[["api"]] <- list(
   host = "localhost",
   host_public = "locahost",
   protocol = "http:",
-  upload_size_max = 200 * 1024^2,#100MiB
+  upload_size_max = 200 * 1024^2, # 100MiB
   routes = list(
-    getApiSql = "/get/sql",  
+    getApiSql = "/get/sql",
     getSearchKey = "/get/search/key",
     getIpInfo = "/get/ip",
     getMirror = "/get/mirror",
-    getConfigMap = '/get/config/map',
+    getConfigMap = "/get/config/map",
     getTile = "/get/tile/{x}/{y}/{z}.mvt",
     getSourceMetadata = "/get/source/metadata/",
     getSourceSummary = "/get/source/summary/",
@@ -111,9 +111,10 @@ config[["api"]] <- list(
     getSourceTableAttribute = "/get/source/table/attribute",
     getView = "/get/view/item/",
     getViewsListByProject = "/get/views/list/project/",
-    getViewsListGlobalPublic ="/get/views/list/global/public",
+    getViewsListGlobalPublic = "/get/views/list/global/public",
     getProjectsListByUser = "/get/projects/list/user",
-    downloadSourceCreate = "/get/source/",
+    downloadSourceCreate = "/get/source/", #to remove
+    getSourceDownload = "/get/source/",
     downloadSourceGet = "/", # location given by the api
     uploadImage = "/upload/image/",
     uploadVector = "/upload/vector/",
@@ -134,26 +135,26 @@ config[["search"]] <- list(
 #
 # postgres configuration
 #
-config[["pg"]] = list(
-  host ='127.0.0.1',
-  dbname = 'mapx',
-  port = '5432',
-  user = 'mapxw',
+config[["pg"]] <- list(
+  host = "127.0.0.1",
+  dbname = "mapx",
+  port = "5432",
+  user = "mapxw",
   read = list(
     user = "mapxr",
-    password=""
-    ),
+    password = ""
+  ),
   encryptKey = "",
-  password= "",
+  password = "",
   geomCol = "geom",
   tables = list(
-    "users"="mx_users",
-    "views"="mx_views",
-    "views_latest"="mx_views_latest",
-    "projects"="mx_projects",
-    "sources"="mx_sources",
-    "config"="mx_config"
-    ),
+    "users" = "mx_users",
+    "views" = "mx_views",
+    "views_latest" = "mx_views_latest",
+    "projects" = "mx_projects",
+    "sources" = "mx_sources",
+    "config" = "mx_config"
+  ),
   poolMin = 1,
   poolMax = 1
 )
@@ -161,53 +162,53 @@ config[["pg"]] = list(
 #
 # Geoserver
 #
-config[["geoserver"]] = list(
-  url ='localhost:8080/geoserver',
-  urlPublic='http://127.0.0.1:8080/geoserver',
-  user = 'admin',
-  password = '1234',
+config[["geoserver"]] <- list(
+  url = "localhost:8080/geoserver",
+  urlPublic = "http://127.0.0.1:8080/geoserver",
+  user = "admin",
+  password = "1234",
   dataDir = "/tmp/",
   dataStore = list(
     sep = "@"
-    ),
+  ),
   services = list(
-    names = c("WMS","WFS","WCS"),
+    names = c("WMS", "WFS", "WCS"),
     groups = list(
       "gs_ws_a" = c("WMS"),
-      "gs_ws_b" = c("WMS","WFS","WCS")
-      ),
+      "gs_ws_b" = c("WMS", "WFS", "WCS")
+    ),
     groupSep = "@"
   )
 )
 
 #
-# web resources : will be exposed to the client using shiny::addRessourcePath. 
+# web resources : will be exposed to the client using shiny::addRessourcePath.
 # The key is used from the client as :
 # http://{location}:{port}/{prefix}/{resource.xxx}
 #
-config[["resources"]]  =  list(
+config[["resources"]] <- list(
   "dist" = file.path("www")
 )
 #
 # Client side path
 #
-config[['paths']] = list(
+config[["paths"]] <- list(
   sprites = "sprites/sprite",
   fontstack = "fontstack/{fontstack}/{range}.pbf"
 )
 
-config[['sprites_prefix']] <- list(
-  point = '^maki-',
-  polygon = '^t_|^geol_',
-  line = ''
+config[["sprites_prefix"]] <- list(
+  point = "^maki-",
+  polygon = "^t_|^geol_",
+  line = ""
 )
 
 #
 # Server and UI folder path
 #
-config[["srvPath"]] = file.path("src","r","server")
-#config[["uiPath"]] = file.path("src","ui")
-#config[["uploadDirPath"]] = tempdir()
+config[["srvPath"]] <- file.path("src", "r", "server")
+# config[["uiPath"]] = file.path("src","ui")
+# config[["uploadDirPath"]] = tempdir()
 
 #
 # Import dictionaries
@@ -221,12 +222,12 @@ config[["dictionaries"]] <- list(
 
 
 #
-# Update main dictionary 
+# Update main dictionary
 #
-config[["dict"]] <- .get(config,c("dictionaries","main"))
+config[["dict"]] <- .get(config, c("dictionaries", "main"))
 
 
-# map default 
+# map default
 #
 config[["map"]] <- list(
   zoom = 4.936283,
@@ -245,11 +246,11 @@ config[["ui"]] <- list(
   ids = list(
     idViewsListContainer = "viewListContainer", # include filters and search field
     idViewsList = "viewListContent", # include views
-    idDashboards= "mxDashboards",
-    idDashboardsButton= "btnTabDashboard",
-    idDashboardsPanel= "mxDashboardsPanel",
+    idDashboards = "mxDashboards",
+    idDashboardsButton = "btnTabDashboard",
+    idDashboardsPanel = "mxDashboardsPanel",
     idInputThemeColors = "mxInputThemeColors"
-    ),
+  ),
   ui = list()
 )
 
@@ -257,39 +258,39 @@ config[["ui"]] <- list(
 #
 # wms sources
 #
-config[["wms"]] = list(
+config[["wms"]] <- list(
   list(
     label = "datacore",
     value = "https://datacore.unepgrid.ch/geoserver/wms"
-    ),
+  ),
   list(
     label = "preview",
     value = "https://preview.grid.unep.ch/geoserver/wms"
-    ),
+  ),
   list(
     label = "forestCover",
     value = "https://gis-gfw.wri.org/arcgis/services/forest_change/MapServer/WMSServer"
-    ),
+  ),
   list(
     label = "columbia.edu",
     value = "https://sedac.ciesin.columbia.edu/geoserver/wms"
-    ),
+  ),
   list(
     label = "sampleserver6.arcgisonline.com",
     value = "https://sampleserver6.arcgisonline.com/arcgis/services/911CallsHotspot/MapServer/WMSServer"
-    ),
+  ),
   list(
     label = "nowcoast.noaa.gov",
     value = "https://nowcoast.noaa.gov/arcgis/services/nowcoast/analysis_meteohydro_sfc_qpe_time/MapServer/WmsServer"
-    ),
+  ),
   list(
     label = "idesa.gob.ar",
     value = "http://geoportal.idesa.gob.ar/geoserver/wms"
-    ),
+  ),
   list(
     label = "mapas.apn.gob.ar",
     value = "https://mapas.apn.gob.ar/geoserver/ows"
-    ),
+  ),
   list(
     label = "geointa.inta.gov.ar",
     value = "http://geointa.inta.gov.ar/geoserver/gwc/service/wms"
@@ -301,10 +302,10 @@ config[["wms"]] = list(
 #
 config[["variables"]] <- list()
 
-config[[c("variables","time")]] <- list(
-  "t0"="mx_t0",
-  "t1"="mx_t1"
-) 
+config[[c("variables", "time")]] <- list(
+  "t0" = "mx_t0",
+  "t1" = "mx_t1"
+)
 
 #
 # Templates
@@ -312,17 +313,17 @@ config[[c("variables","time")]] <- list(
 config[["templates"]] <- list()
 
 # html template
-config[[c("templates","html")]] <-  list()
-config[[c("templates","html","email")]] <- paste(readLines("src/templates/email_base.html"),collapse="\n")
-config[[c("templates","html","email_footer")]] <- paste(readLines("src/templates/email_footer.html"),collapse="\n")
-config[[c("templates","html","email_error")]] <- paste(readLines("src/templates/email_error.html"),collapse="\n")
+config[[c("templates", "html")]] <- list()
+config[[c("templates", "html", "email")]] <- paste(readLines("src/templates/email_base.html"), collapse = "\n")
+config[[c("templates", "html", "email_footer")]] <- paste(readLines("src/templates/email_footer.html"), collapse = "\n")
+config[[c("templates", "html", "email_error")]] <- paste(readLines("src/templates/email_error.html"), collapse = "\n")
 
 # text template
-config[[c("templates","text")]] <-  list()
-config[[c("templates","text","widget_function")]] <- paste(readLines("src/templates/widget_function.js"),collapse="\n")
-config[[c("templates","text","custom_view")]] <- paste(readLines("src/templates/custom_view.js"),collapse="\n")
-config[[c("templates","text","custom_paint")]] <- paste(readLines("src/templates/custom_paint.json"),collapse="\n")
-config[[c("templates","text","custom_paint_example")]] <- paste(readLines("src/templates/custom_paint_example.json"),collapse="\n")
+config[[c("templates", "text")]] <- list()
+config[[c("templates", "text", "widget_function")]] <- paste(readLines("src/templates/widget_function.js"), collapse = "\n")
+config[[c("templates", "text", "custom_view")]] <- paste(readLines("src/templates/custom_view.js"), collapse = "\n")
+config[[c("templates", "text", "custom_paint")]] <- paste(readLines("src/templates/custom_paint.json"), collapse = "\n")
+config[[c("templates", "text", "custom_paint_example")]] <- paste(readLines("src/templates/custom_paint_example.json"), collapse = "\n")
 
 #
 # default languages
@@ -345,20 +346,20 @@ config[["languages"]][["list"]] <- list(
 config[["languages"]][["codes"]] <- unname(unlist(config[["languages"]][["list"]]))
 
 config[["language"]] <- list(
-  "default"="en"
+  "default" = "en"
 )
 #
 # Dictionnary of badwords for the profanity checker
 #
-config[["badwords"]] = list(
-  "path" = 'src/data/badwords',
+config[["badwords"]] <- list(
+  "path" = "src/data/badwords",
   "words" = list()
 )
 
-for(l in .get(config,c("languages","list"))){
-  dFile <- file.path(.get(config,c("badwords","path")),l)
-  if(file.exists(dFile)){
-    config[[c("badwords","words",l)]] <- readLines(dFile)
+for (l in .get(config, c("languages", "list"))) {
+  dFile <- file.path(.get(config, c("badwords", "path")), l)
+  if (file.exists(dFile)) {
+    config[[c("badwords", "words", l)]] <- readLines(dFile)
   }
 }
 
@@ -384,7 +385,7 @@ config[["root_mode"]] <- list(
   #
   # Members of the root group
   #
-  members = c(1) 
+  members = c(1)
 )
 
 #
@@ -395,22 +396,22 @@ config[["countries"]] <- list()
 #
 # Countries names and id without NA
 #
-config[[c("countries","table")]] <- na.omit(
-  .get(config,c("dictionaries","countries"))
+config[[c("countries", "table")]] <- na.omit(
+  .get(config, c("dictionaries", "countries"))
 )
 
 
 #
-# Buld geo keyword from list. 
-# List key is from 
+# Buld geo keyword from list.
+# List key is from
 #
 config[["m49_geo_keywords"]] <- list(
-  global=list("WLD"),
-  region=as.list(fromJSON('src/data/dict/dict_m49_regions.json')$id),
-  intermediate_region=as.list(fromJSON('src/data/dict/dict_m49_intermediate_regions.json')$id),
-  sub_region=as.list(fromJSON('src/data/dict/dict_m49_subregions.json')$id),
-  other_region=as.list(fromJSON('src/data/dict/dict_m49_custom.json')$id),
-  country=as.list(.get(config, c('countries','table','id'),list()))
+  global = list("WLD"),
+  region = as.list(fromJSON("src/data/dict/dict_m49_regions.json")$id),
+  intermediate_region = as.list(fromJSON("src/data/dict/dict_m49_intermediate_regions.json")$id),
+  sub_region = as.list(fromJSON("src/data/dict/dict_m49_subregions.json")$id),
+  other_region = as.list(fromJSON("src/data/dict/dict_m49_custom.json")$id),
+  country = as.list(.get(config, c("countries", "table", "id"), list()))
 )
 
 
@@ -430,12 +431,12 @@ config[["noData"]] <- list(
 #
 # views configuration
 #
-config[["views"]] = list()
+config[["views"]] <- list()
 
 #
 # Views type
 #
-config[[c("views","type")]] <- list(
+config[[c("views", "type")]] <- list(
   "vt", # vector tiles
   "rt", # raster tiles
   "sm", # story map
@@ -454,63 +455,63 @@ config[["data"]] <- list()
 # http://www.w3schools.com/tags/att_input_accept.asp
 # ⚠️  Redefined in src/js/settings/index.js:
 # To be removed when upload/download fully migrated
-config[[c("data","format")]] <- list(
+config[[c("data", "format")]] <- list(
   list(
     name = "ESRI Shapefile",
     type = "vector",
     driver = "ESRI Shapefile",
-    fileExt = c(".shp",".shx",".dbf",".prj"),
+    fileExt = c(".shp", ".shx", ".dbf", ".prj"),
     multiple = TRUE
-    ),
+  ),
   list(
     name = "GeoJSON",
     type = "vector",
-    fileExt = c(".geojson",".json"),
+    fileExt = c(".geojson", ".json"),
     driver = "GeoJSON",
     multiple = FALSE
-    ),
+  ),
   list(
     name = "GML",
     driver = "GML",
     type = "vector",
     fileExt = c(".kml"),
     multiple = FALSE
-    ),
+  ),
   list(
     name = "GPX",
     driver = "GPX",
     type = "vector",
     fileExt = c(".gpx"),
     multiple = FALSE
-    ),
+  ),
   list(
     name = "GPKG",
     driver = "GPKG",
     type = "vector",
     fileExt = c(".gpkg"),
-    multiple= FALSE
-    ),
+    multiple = FALSE
+  ),
   list(
     name = "KML",
     driver = "KML",
     type = "vector",
     fileExt = c(".kml"),
     multiple = FALSE
-    ),
+  ),
   list(
     name = "SQLite",
     driver = "SQLite",
     type = "vector",
     fileExt = c(".sqlite"),
     multiple = FALSE
-    ),
+  ),
   list(
     name = "DXF",
     driver = "DXF",
     type = "vector",
     fileExt = c(".dxf"),
     multiple = FALSE
-    ),
+  ),
   list(
     name = "CSV",
     driver = "CSV",
@@ -524,7 +525,7 @@ config[[c("data","format")]] <- list(
 #
 # Email configuration
 #
-config[["mail"]] =  list(
+config[["mail"]] <- list(
   "bot" = "bot@localhost",
   "guest" = "guest@localhost",
   "admin" = "admin@localhost"
@@ -534,7 +535,7 @@ config[["mail"]] =  list(
 # default user value
 #
 config[["users"]] <- list(
-  defaultEmail =  config[[c("mail","guest")]],
+  defaultEmail = config[[c("mail", "guest")]],
   defaultName = "user",
   loginTimerMinutes = 20,
   loginMaxAttempts = 5,
@@ -548,15 +549,15 @@ config[["users"]] <- list(
 #
 # default data
 #
-config[[c("users","data")]] <- list() 
+config[[c("users", "data")]] <- list()
 
 #
 # default data for new users
 #
-config[[c("users","data","public")]] <- list(
+config[[c("users", "data", "public")]] <- list(
   user = list(
-    cache = list (
-      last_project = config[["project"]][['default']],
+    cache = list(
+      last_project = config[["project"]][["default"]],
       last_language = config[["languages"]][["list"]][[1]]
     )
   )
@@ -565,12 +566,11 @@ config[[c("users","data","public")]] <- list(
 #
 # default data for new  superuser if database is empty
 #
-config[["users"]][["data"]][["superUser"]]  <- list(
+config[["users"]][["data"]][["superUser"]] <- list(
   user = list(
-    cache = list (
-      last_project = config[["project"]][['default']],
+    cache = list(
+      last_project = config[["project"]][["default"]],
       last_language = config[["languages"]][["list"]][[1]]
     )
   )
 )
-

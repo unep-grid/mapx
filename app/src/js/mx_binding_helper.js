@@ -57,7 +57,6 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler('mglUpdateView', h.viewsListUpdateSingle );
   Shiny.addCustomMessageHandler('mglReadStory', h.storyRead );
   Shiny.addCustomMessageHandler('mglReset', h.viewsCloseAll );
-  Shiny.addCustomMessageHandler('mglHandlerDownloadVectorSource', h.handlerDownloadVectorSource);
   Shiny.addCustomMessageHandler('mglGetOverlapAnalysis', h.getOverlapAnalysis);
   Shiny.addCustomMessageHandler('mglGetValidateSourceGeom', h.getValidateSourceGeom);
   Shiny.addCustomMessageHandler('mglGetSourceStatModal', h.getSourceVtSummaryUI);

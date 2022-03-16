@@ -1,6 +1,17 @@
-import {ResolversBase} from './base.js';
-import {ShareModal} from './../../../share_modal/index.js';
-import {getLanguageCurrent, getLanguagesAll, updateLanguage} from '../../../language/index.js';
+import { ResolversBase } from "./base.js";
+import { ShareModal } from "./../../../share_modal/index.js";
+import {
+  getLanguageCurrent,
+  getLanguagesAll,
+  updateLanguage,
+} from "../../../language/index.js";
+import { downloadViewVector } from "../../../mx_helper_map.js";
+import {
+  commonLocFitBbox,
+  commonLocGetBbox,
+  commonLocGetListCodes,
+  commonLocGetTableCodes,
+} from "../../../commonloc/index.js";
 
 /**
  * MapX resolvers available in static and app
@@ -11,7 +22,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Array} array of supported methods
    */
   get_sdk_methods() {
-    const reg = new RegExp('^_');
+    const reg = new RegExp("^_");
     const methods = Object.getOwnPropertyNames(MapxResolversStatic.prototype);
     return methods.splice(1, methods.length).filter((m) => !m.match(reg));
   }
@@ -66,7 +77,7 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.action Action to perform: 'enable','disable','toggle'
    */
   set_3d_terrain(opt) {
-    const ctrl = mx.panel_tools.controls.getButton('btn_3d_terrain');
+    const ctrl = mx.panel_tools.controls.getButton("btn_3d_terrain");
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
@@ -78,7 +89,7 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.action Action to perform: 'show','hide','toggle'
    */
   set_mode_3d(opt) {
-    const ctrl = mx.panel_tools.controls.getButton('btn_3d_terrain');
+    const ctrl = mx.panel_tools.controls.getButton("btn_3d_terrain");
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
@@ -91,7 +102,7 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.action Action to perform: 'show','hide','toggle'
    */
   set_mode_aerial(opt) {
-    const ctrl = mx.panel_tools.controls.getButton('btn_theme_sat');
+    const ctrl = mx.panel_tools.controls.getButton("btn_theme_sat");
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
@@ -104,14 +115,14 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} Done
    */
   async show_modal_share(opt) {
-    opt = Object.assign({idView: []}, opt);
+    opt = Object.assign({ idView: [] }, opt);
     const rslv = this;
     const h = rslv._h;
     const idViews = h.isArray(opt.idView) ? opt.idView : [opt.idView];
     const sm = new ShareModal({
-      views: idViews
+      views: idViews,
     });
-    await sm.once('updated');
+    await sm.once("updated");
   }
 
   /**
@@ -121,7 +132,7 @@ class MapxResolversStatic extends ResolversBase {
   async close_modal_share() {
     const sm = window._share_modal;
     if (sm) {
-      const promClosed = sm.once('closed');
+      const promClosed = sm.once("closed");
       sm.close();
       await promClosed;
       return true;
@@ -136,7 +147,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_modal_share_string() {
     if (!window._share_modal) {
-      throw new Error('No share modal found');
+      throw new Error("No share modal found");
     }
     return window._share_modal.getShareString();
   }
@@ -207,7 +218,7 @@ class MapxResolversStatic extends ResolversBase {
     const rslv = this;
     const dh = rslv._h.dashboardHelper;
     if (!rslv.has_dashboard()) {
-      throw new Error('No dashboard container found');
+      throw new Error("No dashboard container found");
     }
     const panel = dh.getInstance().panel;
     return rslv._handle_panel_visibility(panel, opt);
@@ -252,7 +263,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object} Current user ip object (ip, country, region, etc)
    */
   async get_user_ip() {
-    const rs = await fetch('https://api.mapx.org/get/ip');
+    const rs = await fetch("https://api.mapx.org/get/ip");
     return rs.json();
   }
 
@@ -261,7 +272,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {String} Two letters language code
    */
   get_language() {
-    return getLanguageCurrent()
+    return getLanguageCurrent();
   }
 
   /**
@@ -271,7 +282,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} Laguage change process finished
    */
   set_language(opt) {
-    opt = Object.assign({}, {lang: 'en'}, opt);
+    opt = Object.assign({}, { lang: "en" }, opt);
     return updateLanguage(opt.lang);
   }
 
@@ -327,10 +338,10 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_view_meta_vt_attribute(opt) {
     const rslv = this;
-    opt = Object.assign({}, {idView: null}, opt);
+    opt = Object.assign({}, { idView: null }, opt);
     const view = rslv._h.getView(opt.idView);
     if (rslv._h.isView(view)) {
-      return rslv._h.path(view, 'data.attribute', {});
+      return rslv._h.path(view, "data.attribute", {});
     }
   }
 
@@ -343,7 +354,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_view_meta(opt) {
     const rslv = this;
-    opt = Object.assign({}, {idView: null}, opt);
+    opt = Object.assign({}, { idView: null }, opt);
     return rslv._h.fetchViewMetadata(opt.idView);
   }
 
@@ -355,13 +366,13 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_view_table_attribute_config(opt) {
     const rslv = this;
-    opt = Object.assign({}, {idView: null}, opt);
+    opt = Object.assign({}, { idView: null }, opt);
     let out = null;
     if (opt.idView) {
       const view = rslv._h.getView(opt.idView);
       const config = rslv._h.getTableAttributeConfigFromView(view);
       out = {};
-      ['attributes', 'idSource', 'labels'].forEach((key) => {
+      ["attributes", "idSource", "labels"].forEach((key) => {
         out[key] = config[key];
       });
     }
@@ -376,14 +387,14 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_view_table_attribute_url(opt) {
     const rslv = this;
-    opt = Object.assign({}, {idView: null}, opt);
+    opt = Object.assign({}, { idView: null }, opt);
     let out = null;
     const config = rslv.get_view_table_attribute_config(opt);
     if (config) {
       let url_qs = `?id=${config.idSource}&attributes=${config.attributes.join(
-        ','
+        ","
       )}`;
-      out = rslv._h.getApiUrl('getSourceTableAttribute') + url_qs;
+      out = rslv._h.getApiUrl("getSourceTableAttribute") + url_qs;
     }
     return out;
   }
@@ -395,7 +406,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object}
    */
   async get_view_table_attribute(opt) {
-    opt = Object.assign({}, {idView: null}, opt);
+    opt = Object.assign({}, { idView: null }, opt);
     const rslv = this;
     const url = rslv.get_view_table_attribute_url(opt);
     if (url) {
@@ -416,7 +427,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_view_legend_image(opt) {
     const rslv = this;
-    return rslv._h.getViewLegendImage({view: opt.idView, format: opt.format});
+    return rslv._h.getViewLegendImage({ view: opt.idView, format: opt.format });
   }
 
   /**
@@ -426,8 +437,8 @@ class MapxResolversStatic extends ResolversBase {
    */
   set_view_layer_filter_text(opt) {
     return this._apply_filter_layer_select.bind(this)(
-      'searchBox',
-      'setValue',
+      "searchBox",
+      "setValue",
       opt
     );
   }
@@ -438,8 +449,8 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_view_layer_filter_text(opt) {
     return this._apply_filter_layer_select.bind(this)(
-      'searchBox',
-      'getValue',
+      "searchBox",
+      "getValue",
       opt
     );
   }
@@ -452,8 +463,8 @@ class MapxResolversStatic extends ResolversBase {
    */
   set_view_layer_filter_numeric(opt) {
     return this._apply_filter_layer_slider.bind(this)(
-      'numericSlider',
-      'set',
+      "numericSlider",
+      "set",
       opt
     );
   }
@@ -466,7 +477,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return null
    */
   set_view_layer_filter_time(opt) {
-    return this._apply_filter_layer_slider.bind(this)('timeSlider', 'set', opt);
+    return this._apply_filter_layer_slider.bind(this)("timeSlider", "set", opt);
   }
 
   /**
@@ -478,8 +489,8 @@ class MapxResolversStatic extends ResolversBase {
    */
   set_view_layer_transparency(opt) {
     return this._apply_filter_layer_slider.bind(this)(
-      'transparencySlider',
-      'set',
+      "transparencySlider",
+      "set",
       opt
     );
   }
@@ -491,7 +502,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Number|Array} values
    */
   get_view_layer_filter_numeric() {
-    return this._apply_filter_layer_slider.bind(this)('numericSlider', 'get');
+    return this._apply_filter_layer_slider.bind(this)("numericSlider", "get");
   }
 
   /**
@@ -501,7 +512,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Number|Array} values
    */
   get_view_layer_filter_time() {
-    return this._apply_filter_layer_slider.bind(this)('timeSlider', 'get');
+    return this._apply_filter_layer_slider.bind(this)("timeSlider", "get");
   }
 
   /**
@@ -512,8 +523,8 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_view_layer_transparency() {
     return this._apply_filter_layer_slider.bind(this)(
-      'transparencySlider',
-      'get'
+      "transparencySlider",
+      "get"
     );
   }
 
@@ -525,7 +536,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   async view_add(opt) {
     const rslv = this;
-    opt = Object.assign({}, {idView: null}, opt);
+    opt = Object.assign({}, { idView: null }, opt);
     const view =
       rslv._h.getView(opt.idView) || (await rslv._h.getViewRemote(opt.idView));
     const valid = rslv._h.isView(view);
@@ -533,7 +544,7 @@ class MapxResolversStatic extends ResolversBase {
       await rslv._h.viewsListAddSingle(view);
       return true;
     } else {
-      return rslv._err('err_view_invalid');
+      return rslv._err("err_view_invalid");
     }
   }
 
@@ -544,7 +555,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} done
    */
   async view_remove(opt) {
-    opt = Object.assign({}, {idView: null}, opt);
+    opt = Object.assign({}, { idView: null }, opt);
     const rslv = this;
     await rslv._h.viewRemove(opt.idView);
     return true;
@@ -576,8 +587,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object} input options E.g. {idView:<abc>}
    */
   download_view_source_vector(opt) {
-    const rslv = this;
-    return rslv._h.downloadViewVector(opt);
+    return downloadViewVector(opt.idView);
   }
 
   /**
@@ -627,7 +637,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_views_title(opt) {
     const rslv = this;
-    opt = Object.assign({}, {views: [], lang: 'en'}, opt);
+    opt = Object.assign({}, { views: [], lang: "en" }, opt);
     return rslv._h.getViewsTitleNormalized(opt.views);
   }
 
@@ -668,10 +678,10 @@ class MapxResolversStatic extends ResolversBase {
       {
         data: null,
         save: false,
-        fileType: 'geojson',
+        fileType: "geojson",
         fileName: id,
         title: id,
-        abstract: id
+        abstract: id,
       },
       opt
     );
@@ -679,8 +689,8 @@ class MapxResolversStatic extends ResolversBase {
       opt.data = rslv._h.getGeoJSONRandomPoints(opt.random);
     }
     const view = await rslv._h.spatialDataToView(opt);
-    await rslv._h.viewsListAddSingle(view, {open: true});
-    const out = rslv._h.getViewJson(view, {asString: false});
+    await rslv._h.viewsListAddSingle(view, { open: true });
+    const out = rslv._h.getViewJson(view, { asString: false });
     return out;
   }
 
@@ -693,14 +703,14 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} done
    */
   view_geojson_set_style(opt) {
-    opt = Object.assign({}, {idView: null, layout: {}, paint: {}}, opt);
+    opt = Object.assign({}, { idView: null, layout: {}, paint: {} }, opt);
     const rslv = this;
     const map = rslv._h.getMap();
     const layer = map.getLayer(opt.idView);
     const paintProp = Object.keys(opt.paint);
     const layoutProp = Object.keys(opt.layout);
     if (!layer) {
-      return rslv._err('err_layer_not_found', {idView: opt.idView});
+      return rslv._err("err_layer_not_found", { idView: opt.idView });
     }
 
     if (paintProp.length > 0) {
@@ -725,7 +735,7 @@ class MapxResolversStatic extends ResolversBase {
   view_geojson_delete(opt) {
     const rslv = this;
     return rslv._h.viewDelete({
-      idView: opt.idView
+      idView: opt.idView,
     });
   }
 
@@ -741,9 +751,9 @@ class MapxResolversStatic extends ResolversBase {
   set_features_click_sdk_only(opt) {
     const rslv = this;
     return rslv._h.setClickHandler({
-      type: 'sdk',
+      type: "sdk",
       enable: opt.enable,
-      toggle: opt.toggle
+      toggle: opt.toggle,
     });
   }
 
@@ -766,7 +776,7 @@ class MapxResolversStatic extends ResolversBase {
     const rslv = this;
     const map = rslv._h.getMap();
     return rslv._map_resolve_when(
-      'moveend',
+      "moveend",
       () => {
         map.flyTo(opt);
       },
@@ -784,7 +794,7 @@ class MapxResolversStatic extends ResolversBase {
     const rslv = this;
     const map = rslv._h.getMap();
     return rslv._map_resolve_when(
-      'moveend',
+      "moveend",
       () => {
         map.jumpTo(opt);
       },
@@ -840,10 +850,10 @@ class MapxResolversStatic extends ResolversBase {
     const map = rslv._h.getMap();
     const m = map[opt.method];
     let res;
-    if (typeof m === 'undefined') {
+    if (typeof m === "undefined") {
       throw new Error(`Method ${opt.method} not found`);
     }
-    if (opt.method === 'once') {
+    if (opt.method === "once") {
       await map[opt.method](opt.parameters);
       return true;
     }
@@ -899,11 +909,11 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} Map is idle
    */
   async map_wait_idle() {
-    const rslv = this;
+    const rslv = this; 
     const map = rslv._h.getMap();
     const isMoving = map.isMoving();
     if (isMoving) {
-      await map.once('idle');
+      await map.once("idle");
     }
     return true;
   }
@@ -914,8 +924,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Array} Array of codes as strings
    */
   common_loc_get_list_codes() {
-    const rslv = this;
-    return rslv._h.commonLocGetListCodes();
+    commonLocGetListCodes();
   }
 
   /**
@@ -936,8 +945,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Promise<Array>} Array of codes and name as object
    */
   common_loc_get_table_codes(opt) {
-    const rslv = this;
-    return rslv._h.commonLocGetTableCodes(opt);
+    commonLocGetTableCodes(opt);
   }
 
   /**
@@ -948,8 +956,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Promise<Array>} Array of geographic bounds [west, south, east, north]
    */
   common_loc_get_bbox(opt) {
-    const rslv = this;
-    return rslv._h.commonLocGetBbox(opt);
+    commonLocGetBbox(opt);
   }
 
   /**
@@ -961,9 +968,8 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Promise<Array>} Array of geographic bounds [west, south, east, north]
    */
   common_loc_fit_bbox(opt) {
-    const rslv = this;
-    return rslv._h.commonLocFitBbox(opt);
+    commonLocFitBbox(opt);
   }
 }
 
-export {MapxResolversStatic};
+export { MapxResolversStatic };

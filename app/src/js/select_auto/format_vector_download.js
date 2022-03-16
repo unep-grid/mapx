@@ -1,10 +1,13 @@
-import {getApiUrl} from './../api_routes';
-import {el} from '../el_mapx';
+import { getApiUrl } from "./../api_routes";
+import { el } from "../el_mapx";
+import { isEmpty } from "../is_test";
+
+const defaultFormat = "GPKG";
 
 export const config = {
-  valueField: 'driver',
-  searchField: ['driver', 'name', 'fileExt'],
-  allowEmptyOption: true,
+  valueField: "driver",
+  searchField: ["driver", "name", "fileExt"],
+  allowEmptyOption: false,
   options: null,
   maxItems: 1,
   load: async function (_, callback) {
@@ -14,11 +17,11 @@ export const config = {
         callback();
         return;
       }
-      const url = getApiUrl('getFileFormatsList');
+      const url = getApiUrl("getFileFormatsList");
       const fileFormatsResp = await fetch(url);
       const fileFormats = await fileFormatsResp.json();
       const formatsVector = fileFormats.filter((f) => {
-        return f.download && f.type === 'vector';
+        return f.download && f.type === "vector";
       });
       callback(formatsVector);
       tom.settings.load = null;
@@ -28,23 +31,30 @@ export const config = {
     }
   },
   create: false,
-  sortField: {field: 'name'},
+  sortField: { field: "name" },
   onInitialize: async function () {
     const tom = this;
     await tom.load();
   },
   onLoad: function () {
     const tom = this;
-    tom.setValue('GPKG');
+    tom.setValue(defaultFormat);
   },
-  dropdownParent: 'body',
+  onBlur: function () {
+    const tom = this;
+    const v = tom.getValue();
+    if (isEmpty(v)) {
+      tom.setValue(defaultFormat);
+    }
+  },
+  dropdownParent: "body",
   render: {
     option: (data, escape) => {
       return el(
-        'div',
-        el('h4', escape(data.name)),
+        "div",
+        el("h4", escape(data.name)),
         el(
-          'small',
+          "small",
           `Driver: ${escape(data.driver)} | File extensions: ${escape(
             data.fileExt
           )}`
@@ -53,14 +63,14 @@ export const config = {
     },
     item: (data, escape) => {
       return el(
-        'div',
-        el('span', escape(data.name)),
+        "div",
+        el("span", escape(data.name)),
         el(
-          'span',
-          {class: ['text-muted', 'space-around']},
+          "span",
+          { class: ["text-muted", "space-around"] },
           `${escape(data.driver)}`
         )
       );
-    }
-  }
+    },
+  },
 };

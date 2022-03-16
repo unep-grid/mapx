@@ -1,10 +1,13 @@
-import {getApiUrl} from './../api_routes';
-import {el} from '../el_mapx';
+import { getApiUrl } from "./../api_routes";
+import { el } from "../el_mapx";
+import { isEmpty } from "../is_test";
+
+const defaultSrid = "4326";
 
 export const config = {
-  valueField: 'srid',
-  searchField: ['srid', 'name', 'region'],
-  allowEmptyOption: true,
+  valueField: "srid",
+  searchField: ["srid", "name", "region"],
+  allowEmptyOption: false,
   options: null,
   load: async function (_, callback) {
     const tom = this;
@@ -13,7 +16,7 @@ export const config = {
         callback();
         return;
       }
-      const url = getApiUrl('getEpsgCodesFull');
+      const url = getApiUrl("getEpsgCodesFull");
       const epsgCodeResp = await fetch(url);
       const epsgCodes = await epsgCodeResp.json();
       callback(epsgCodes);
@@ -24,30 +27,41 @@ export const config = {
     }
   },
   create: false,
-  sortField: {field: 'srid'},
+  sortField: { field: "srid" },
   onInitialize: async function () {
     const tom = this;
     await tom.load();
   },
   onLoad: function () {
     const tom = this;
-    tom.setValue(4326);
+    tom.setValue(defaultSrid);
   },
-  dropdownParent: 'body',
+  onBlur: function () {
+    const tom = this;
+    const v = tom.getValue();
+    if (isEmpty(v)) {
+      tom.setValue(defaultSrid);
+    }
+  },
+  dropdownParent: "body",
   render: {
     option: (data, escape) => {
       return el(
-        'div',
-        el('h4', escape(data.name)),
-        el('small', `EPSG:${escape(data.srid)} | ${escape(data.region)}`)
+        "div",
+        el("h4", escape(data.name)),
+        el("small", `EPSG:${escape(data.srid)} | ${escape(data.region)}`)
       );
     },
     item: (data, escape) => {
       return el(
-        'div',
-        el('span', escape(data.name)),
-        el('span', {class: ['text-muted','space-around']}, `EPSG:${escape(data.srid)}`)
+        "div",
+        el("span", escape(data.name)),
+        el(
+          "span",
+          { class: ["text-muted", "space-around"] },
+          `EPSG:${escape(data.srid)}`
+        )
       );
-    }
-  }
+    },
+  },
 };

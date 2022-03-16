@@ -1,28 +1,35 @@
-import {RadialProgress} from './radial_progress';
-import {handleViewClick} from './views_click';
-import {ButtonPanel} from './button_panel';
-import {RasterMiniMap} from './raster_mini_map';
-import {modalConfirm} from './mx_helper_modal.js';
-import {elSpanTranslate} from './el_mapx/index.js';
-import {Highlighter} from './features_highlight/';
-import {WsHandler} from './ws_handler/';
-import {MainPanel} from './panel_main';
-import {Search} from './search';
-import {MapxLogo, MapControlLiveCoord, MapControlScale} from './map_controls';
-import {ControlsPanel} from './panel_controls';
-import {MapxDraw} from './draw';
-import {NotifCenter} from './notif_center/';
-import {cleanDiacritic} from './string_util/';
-import chroma from 'chroma-js';
-import {mirrorUrlCreate} from './mirror_util';
-import {setBusy} from './mx_helper_misc.js';
-import {modal, modalGetAll, modalCloseAll} from './mx_helper_modal.js';
-import {errorHandler} from './error_handler/index.js';
-import {waitTimeoutAsync} from './animation_frame';
-import {getArrayDiff, getArrayDistinct} from './array_stat/index.js';
-import {getApiUrl} from './api_routes';
-import {ModalDownloadSource} from './download_source';
-import {getDictItem, getLanguageCurrent, getLanguageDefault, getLanguagesAll} from './language';
+import { RadialProgress } from "./radial_progress";
+import { handleViewClick } from "./views_click";
+import { ButtonPanel } from "./button_panel";
+import { RasterMiniMap } from "./raster_mini_map";
+import { modalConfirm } from "./mx_helper_modal.js";
+import { elSpanTranslate } from "./el_mapx/index.js";
+import { Highlighter } from "./features_highlight/";
+import { WsHandler } from "./ws_handler/";
+import { MainPanel } from "./panel_main";
+import { Search } from "./search";
+import { MapxLogo, MapControlLiveCoord, MapControlScale } from "./map_controls";
+import { ControlsPanel } from "./panel_controls";
+import { MapxDraw } from "./draw";
+import { NotifCenter } from "./notif_center/";
+import { cleanDiacritic } from "./string_util/";
+import chroma from "chroma-js";
+import { mirrorUrlCreate } from "./mirror_util";
+import { setBusy } from "./mx_helper_misc.js";
+import { modal, modalGetAll, modalCloseAll } from "./mx_helper_modal.js";
+import { errorHandler } from "./error_handler/index.js";
+import { waitTimeoutAsync } from "./animation_frame";
+import { getArrayDiff, getArrayDistinct } from "./array_stat/index.js";
+import { getApiUrl } from "./api_routes";
+import { ModalDownloadSource } from "./download_source";
+import {
+  getDictItem,
+  getLanguageCurrent,
+  getLanguageDefault,
+  getLanguagesAll,
+} from "./language";
+import { isView, isViewId } from "./is_test";
+import {getViewSourceSummary} from "./mx_helper_source_summary";
 
 /**
  * Convert point in  degrees to meter
@@ -36,7 +43,7 @@ export function degreesToMeters(lngLat) {
   y = (y * 20037508.34) / 180;
   return {
     x: x,
-    y: y
+    y: y,
   };
 }
 
@@ -52,7 +59,7 @@ export function metersToDegrees(point) {
     90;
   return {
     lat: lat,
-    lng: lng
+    lng: lng,
   };
 }
 
@@ -64,24 +71,24 @@ export function metersToDegrees(point) {
  * @return {Object} input options. If data, new key "data"
  */
 export async function downloadViewGeoJSON(opt) {
-  opt = Object.assign({}, {idView: null, mode: 'data'}, opt);
+  opt = Object.assign({}, { idView: null, mode: "data" }, opt);
   const h = mx.helpers;
   const view = h.getView(opt.idView);
 
   if (!h.isView(view)) {
     throw new Error(`No view with id ${opt.idView}`);
   }
-  const geojson = h.path(view, 'data.source.data');
-  let filename = h.path(view, 'data.title.en');
+  const geojson = h.path(view, "data.source.data");
+  let filename = h.path(view, "data.title.en");
   if (filename.search(/.geojson$/) === -1) {
     filename = `${view.id}.geojson`;
   }
-  if (opt.mode === 'file') {
-    const download = await h.moduleLoad('downloadjs');
+  if (opt.mode === "file") {
+    const download = await h.moduleLoad("downloadjs");
     const data = JSON.stringify(geojson);
     await download(data, filename);
   }
-  if (opt.mode === 'data') {
+  if (opt.mode === "data") {
     opt.data = geojson;
   }
   return opt;
@@ -94,19 +101,19 @@ export async function downloadViewGeoJSON(opt) {
  */
 export function getDownloadUrlItemsFromViewMeta(view) {
   const h = mx.helpers;
-  const urlItems = h.path(view, 'data.source.meta.origin.source.urls', []);
+  const urlItems = h.path(view, "data.source.meta.origin.source.urls", []);
 
   if (urlItems.length === 0) {
     /**
      * Manual support for previous method to store the dl url
      * NOTE: should match the schema
      */
-    const legacyUrl = h.path(view, 'data.source.urlDownload');
+    const legacyUrl = h.path(view, "data.source.urlDownload");
     if (legacyUrl) {
       urlItems.push({
         url: legacyUrl,
         is_download_link: true,
-        label: 'Download'
+        label: "Download",
       });
     }
   }
@@ -134,7 +141,7 @@ export function hasDownloadUrlItemsFromViewMeta(view) {
  * @return {Object} input options, with new key "url", first url and all items in an array [{<label>,<url>,<is_download_link>}]
  */
 export async function downloadViewSourceExternal(opt) {
-  opt = Object.assign({}, {idView: null, mode: null}, opt);
+  opt = Object.assign({}, { idView: null, mode: null }, opt);
   const h = mx.helpers;
   const view = h.getView(opt.idView);
 
@@ -152,11 +159,10 @@ export async function downloadViewSourceExternal(opt) {
    * Warn if there is an no valid url
    */
   if (h.isEmpty(urlItemsClean)) {
-
     h.modal({
-      title: getDictItem('source_raster_download_error_title'),
-      content: getDictItem('source_raster_download_error'),
-      addBackground: true
+      title: getDictItem("source_raster_download_error_title"),
+      content: getDictItem("source_raster_download_error"),
+      addBackground: true,
     });
     return opt;
   }
@@ -171,38 +177,40 @@ export async function downloadViewSourceExternal(opt) {
    * Build ui
    */
   const elContent = h.el(
-    'div',
+    "div",
     {
-      class: 'list-group'
+      class: "list-group",
     },
     urlItemsClean.map((item) => {
       const isDl = item.is_download_link === true;
       const hasLabel = h.isNotEmpty(item.label);
       const elItem = h.el(
-        'button',
+        "button",
         {
-          on: ['click', dl],
-          class: 'list-group-item',
-          dataset: {url: item.url}
+          on: ["click", dl],
+          class: "list-group-item",
+          dataset: { url: item.url },
         },
         h.el(
-          'div',
+          "div",
           {
             style: {
-              display: 'flex',
-              justifyContent: 'space-between'
-            }
+              display: "flex",
+              justifyContent: "space-between",
+            },
           },
-          h.el('i', {class: ['fa', isDl ? 'fa-download' : 'fa-external-link']}),
+          h.el("i", {
+            class: ["fa", isDl ? "fa-download" : "fa-external-link"],
+          }),
           h.el(
-            'span',
+            "span",
             {
               style: {
-                maxWidth: '80%',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }
+                maxWidth: "80%",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              },
             },
             hasLabel ? item.label : item.url
           )
@@ -213,9 +221,9 @@ export async function downloadViewSourceExternal(opt) {
   );
 
   const elModal = h.modal({
-    title: getDictItem('meta_source_url_download'),
+    title: getDictItem("meta_source_url_download"),
     content: elContent,
-    addBackground: true
+    addBackground: true,
   });
 
   return opt;
@@ -226,7 +234,7 @@ export async function downloadViewSourceExternal(opt) {
      */
 
     const url = e.currentTarget.dataset?.url;
-    window.open(url, '_blank');
+    window.open(url, "_blank");
     elModal.close();
   }
 }
@@ -237,8 +245,8 @@ export async function downloadViewSourceExternal(opt) {
  * @param {String} opt.idView Id of the vector view
  * @return {Object} input options
  */
-export async function downloadViewVector(opt) {
-  opt = Object.assign({}, {idView: null}, opt);
+export async function downloadViewVector_old(opt) {
+  opt = Object.assign({}, { idView: null }, opt);
   const h = mx.helpers;
   const view = h.getView(opt.idView);
 
@@ -248,10 +256,38 @@ export async function downloadViewVector(opt) {
 
   Shiny.onInputChange(`mx_client_view_action`, {
     target: view.id,
-    action: 'btn_opt_download',
-    time: new Date()
+    action: "btn_opt_download",
+    time: new Date(),
   });
   return opt;
+}
+/**
+ * Download source for vector view : show modal panel
+ * @param {String} idView Id of the vector view
+ * @return {Object} input options
+ */
+export async function downloadViewVector(idView) {
+  if (!isViewId(idView)) {
+    throw new Error(`View id ${idView} not valid`);
+  }
+
+  const view = getView(idView);
+
+  if (!isView(view)) {
+    throw new Error(`View ${idView} not found`);
+  }
+  const srcSummary = await getViewSourceSummary(view)
+  const idSocket = mx.ws?.io?.id;
+  new ModalDownloadSource({
+    email: mx.settings.user.guest ? null : mx.settings.user.email,
+    idSource: srcSummary.id,
+    idSocket: idSocket,
+    idProject: mx.settings.project.id,
+    idUser: mx.settings.user.id,
+    token : mx.settings.user.token
+  });
+
+  return idView;
 }
 
 /**
@@ -264,7 +300,7 @@ export async function downloadViewVector(opt) {
 export function getGeoJSONRandomPoints(opt) {
   opt = Object.assign(
     {},
-    {n: 101, latRange: [-85, 85], lngRange: [-180, 180]},
+    { n: 101, latRange: [-85, 85], lngRange: [-180, 180] },
     opt
   );
 
@@ -275,18 +311,18 @@ export function getGeoJSONRandomPoints(opt) {
   }
 
   return {
-    type: 'FeatureCollection',
-    features: features
+    type: "FeatureCollection",
+    features: features,
   };
 
   function feature() {
     return {
-      type: 'Feature',
+      type: "Feature",
       properties: {},
       geometry: {
-        type: 'Point',
-        coordinates: [randomInRange(opt.lngRange), randomInRange(opt.latRange)]
-      }
+        type: "Point",
+        coordinates: [randomInRange(opt.lngRange), randomInRange(opt.latRange)],
+      },
     };
   }
   function randomInRange(to) {
@@ -314,7 +350,7 @@ export async function getLoginInfo() {
     idProject: s.project.id,
     isGuest: s.user.guest,
     token: s.user.token,
-    language: getLanguageCurrent()
+    language: getLanguageCurrent(),
   };
 }
 
@@ -328,8 +364,8 @@ export async function getLoginInfo() {
 export async function setProject(idProject, opt) {
   const h = mx.helpers;
   const hasShiny = window.Shiny;
-  opt = Object.assign({}, {askConfirmIfModal: true, askConfirm: false}, opt);
-  const idCurrentProject = h.path(mx, 'settings.project.id');
+  opt = Object.assign({}, { askConfirmIfModal: true, askConfirm: false }, opt);
+  const idCurrentProject = h.path(mx, "settings.project.id");
 
   if (idProject === idCurrentProject) {
     return false;
@@ -337,15 +373,15 @@ export async function setProject(idProject, opt) {
   /**
    * Check if some modal are still there
    */
-  const modals = modalGetAll({ignoreSelectors: ['#uiSelectProject']});
+  const modals = modalGetAll({ ignoreSelectors: ["#uiSelectProject"] });
   const askConfirm =
     opt.askConfirm || (opt.askConfirmIfModal && modals.length > 0);
   let changeNow = true;
 
   if (askConfirm) {
     changeNow = await modalConfirm({
-      title: elSpanTranslate('modal_check_confirm_project_change_title'),
-      content: elSpanTranslate('modal_check_confirm_project_change_txt')
+      title: elSpanTranslate("modal_check_confirm_project_change_title"),
+      content: elSpanTranslate("modal_check_confirm_project_change_txt"),
     });
   }
   if (changeNow) {
@@ -362,29 +398,29 @@ export async function setProject(idProject, opt) {
     modalCloseAll();
     h.setQueryParametersInitReset();
     if (hasShiny) {
-      Shiny.onInputChange('selectProject', idProject);
+      Shiny.onInputChange("selectProject", idProject);
     }
     const r = await Promise.all([
-      mx.events.once('settings_project_change'),
-      mx.events.once('views_list_updated')
+      mx.events.once("settings_project_change"),
+      mx.events.once("views_list_updated"),
     ]);
 
-    const idProjectNew = h.path(r[0], 'new_project');
-    const idProjectOld = h.path(r[0], 'old_project');
+    const idProjectNew = h.path(r[0], "new_project");
+    const idProjectOld = h.path(r[0], "old_project");
 
     if (idProjectNew === idProjectOld) {
-      console.warn('Project did not change', {idProjectNew, idProjectOld});
+      console.warn("Project did not change", { idProjectNew, idProjectOld });
       return false;
     }
     if (h.isFunction(opt.onSuccess)) {
       opt.onSuccess();
     }
     mx.events.fire({
-      type: 'project_change',
+      type: "project_change",
       data: {
         new_project: idProject,
-        old_project: idCurrentProject
-      }
+        old_project: idCurrentProject,
+      },
     });
     return true;
   }
@@ -404,9 +440,9 @@ export function updateProject(opt) {
  * @param {String} idProject id of the project
  */
 export function requestProjectMembership(idProject) {
-  Shiny.onInputChange('requestProjectMembership', {
+  Shiny.onInputChange("requestProjectMembership", {
     id: idProject,
-    date: new Date()
+    date: new Date(),
   });
 }
 
@@ -417,8 +453,8 @@ export function requestProjectMembership(idProject) {
 export function isModeLocked() {
   const h = mx.helpers;
   let modeLocked =
-    h.getQueryParameterInit('noViews')[0] === 'true' ||
-    h.getQueryParameterInit('modeLocked')[0] === 'true';
+    h.getQueryParameterInit("noViews")[0] === "true" ||
+    h.getQueryParameterInit("modeLocked")[0] === "true";
 
   return !!modeLocked;
 }
@@ -435,16 +471,16 @@ export function initListenerGlobal() {
    */
   mx.listeners.addListener({
     target: document.body,
-    type: 'click',
-    idGroup: 'view_list',
-    callback: handleViewClick
+    type: "click",
+    idGroup: "view_list",
+    callback: handleViewClick,
   });
 
   /*
    * Fire session start
    */
   mx.events.fire({
-    type: 'session_start'
+    type: "session_start",
   });
 
   /*
@@ -452,20 +488,20 @@ export function initListenerGlobal() {
    */
   mx.listeners.addListener({
     target: window,
-    type: 'beforeunload',
-    idGroup: 'base',
+    type: "beforeunload",
+    idGroup: "base",
     callback: () => {
       mx.events.fire({
-        type: 'session_end'
+        type: "session_end",
       });
-    }
+    },
   });
 
   mx.listeners.addListener({
     target: window,
-    type: ['error', 'unhandledrejection'],
-    idGroup: 'base',
-    callback: errorHandler
+    type: ["error", "unhandledrejection"],
+    idGroup: "base",
+    callback: errorHandler,
   });
 
   /**
@@ -473,22 +509,22 @@ export function initListenerGlobal() {
    */
   mx.events.on({
     type: [
-      'view_added',
-      'view_removed',
-      'story_step',
-      'language_change',
-      'views_list_ordered'
+      "view_added",
+      "view_removed",
+      "story_step",
+      "language_change",
+      "views_list_ordered",
     ],
-    idGroup: 'update_share_modale',
-    callback: updateSharingTool
+    idGroup: "update_share_modale",
+    callback: updateSharingTool,
   });
   mx.events.on({
-    type: ['story_start', 'story_close'],
-    idGroup: 'update_share_modale_story',
-    callback: resetSharingTool
+    type: ["story_start", "story_close"],
+    idGroup: "update_share_modale_story",
+    callback: resetSharingTool,
   });
-  map.on('move', updateSharingTool);
-  map.on('styledata', updateSharingTool);
+  map.on("move", updateSharingTool);
+  map.on("styledata", updateSharingTool);
 
   function updateSharingTool() {
     if (window._share_modal) {
@@ -512,35 +548,35 @@ export function initListenersApp() {
    *  Other listener
    */
   mx.listeners.addListener({
-    target: document.getElementById('btnShowProject'),
-    type: 'click',
+    target: document.getElementById("btnShowProject"),
+    type: "click",
     callback: h.showSelectProject,
-    group: 'mapx_base'
+    group: "mapx_base",
   });
 
   mx.listeners.addListener({
-    target: document.getElementById('btnShowLanguage'),
-    type: 'click',
+    target: document.getElementById("btnShowLanguage"),
+    type: "click",
     callback: h.showSelectLanguage,
-    group: 'mapx_base'
+    group: "mapx_base",
   });
 
   mx.listeners.addListener({
-    target: document.getElementById('btnShowLogin'),
-    type: 'click',
+    target: document.getElementById("btnShowLogin"),
+    type: "click",
     callback: h.showLogin,
-    group: 'mapx_base'
+    group: "mapx_base",
   });
 
   mx.events.on({
-    type: 'language_change',
-    idGroup: 'view_filter_tag_lang',
+    type: "language_change",
+    idGroup: "view_filter_tag_lang",
     callback: function () {
       const mData = h.getMapData();
       if (mData.viewsFilter) {
         mData.viewsFilter.updateCheckboxesOrder();
       }
-    }
+    },
   });
 
   /**
@@ -550,104 +586,104 @@ export function initListenersApp() {
    */
 
   mx.events.on({
-    type: ['settings_user_change'],
-    idGroup: 'notif',
+    type: ["settings_user_change"],
+    idGroup: "notif",
     callback: (data) => {
       if (data.delta.id) {
         mx.nc.init({
           config: {
-            id: data.new_user.id
-          }
+            id: data.new_user.id,
+          },
         });
       }
-    }
+    },
   });
 
   mx.events.on({
-    type: 'project_change',
-    idGroup: 'project_change',
+    type: "project_change",
+    idGroup: "project_change",
     callback: function () {
-      const clActive = 'active';
-      const clHide = 'mx-hide';
-      const elBtn = document.getElementById('btnFilterShowPanel');
+      const clActive = "active";
+      const clHide = "mx-hide";
+      const elBtn = document.getElementById("btnFilterShowPanel");
       const isActive = elBtn.classList.contains(clActive);
-      const elPanel = document.getElementById('viewsFilterPanel');
+      const elPanel = document.getElementById("viewsFilterPanel");
       if (isActive) {
         elPanel.classList.add(clHide);
         elBtn.classList.remove(clActive);
       }
-    }
+    },
   });
 
   mx.events.on({
-    type: ['settings_user_change', 'settings_change'],
-    idGroup: 'mapx_base',
-    callback: h.updateUiSettings
+    type: ["settings_user_change", "settings_change"],
+    idGroup: "mapx_base",
+    callback: h.updateUiSettings,
   });
   h.updateUiSettings();
 
   mx.events.on({
-    type: 'views_list_updated',
-    idGroup: 'view_list_updated',
+    type: "views_list_updated",
+    idGroup: "view_list_updated",
     callback: function () {
       h.getProjectViewsCollectionsShiny({
-        idInput: 'viewsListCollections'
+        idInput: "viewsListCollections",
       });
-    }
+    },
   });
 
   mx.events.on({
-    type: ['view_created', 'view_deleted'],
-    idGroup: 'clean_history_and_state',
+    type: ["view_created", "view_deleted"],
+    idGroup: "clean_history_and_state",
     callback: () => {
       h.updateViewsFilter();
       h.viewsCheckedUpdate();
-    }
+    },
   });
 
   mx.events.on({
-    type: ['views_list_updated', 'view_add', 'view_remove', 'mapx_ready'],
-    idGroup: 'update_btn_filter_view_activated',
-    callback: updateBtnFilterActivated
+    type: ["views_list_updated", "view_add", "view_remove", "mapx_ready"],
+    idGroup: "update_btn_filter_view_activated",
+    callback: updateBtnFilterActivated,
   });
 
   mx.listeners.addListener({
-    target: document.getElementById('btnClearCache'),
-    type: 'click',
+    target: document.getElementById("btnClearCache"),
+    type: "click",
     callback: h.clearMapxCache,
-    group: 'mapx_base'
+    group: "mapx_base",
   });
 
   mx.listeners.addListener({
-    target: document.getElementById('btnShowSearchApiConfig'),
-    type: 'click',
+    target: document.getElementById("btnShowSearchApiConfig"),
+    type: "click",
     callback: () => {
       if (mx.search) {
         return mx.search.showApiConfig();
       }
     },
-    group: 'mapx_base'
+    group: "mapx_base",
   });
 
   mx.listeners.addListener({
-    target: document.getElementById('btnResetPanelSize'),
-    type: 'click',
+    target: document.getElementById("btnResetPanelSize"),
+    type: "click",
     callback: () => {
       if (window._button_panels) {
         _button_panels.forEach((p) => p.resetSize());
       }
     },
-    group: 'mapx_base'
+    group: "mapx_base",
   });
 
   mx.listeners.addListener({
-    target: document.getElementById('btnFilterShowPanel'),
-    type: 'click',
+    target: document.getElementById("btnFilterShowPanel"),
+    type: "click",
     callback: (e) => {
       let elBtn = e.target;
-      let clHide = 'mx-hide';
-      let clActive = 'active';
-      let elPanel = document.getElementById('viewsFilterPanel');
+      let clHide = "mx-hide";
+      let clActive = "active";
+      let elPanel = document.getElementById("viewsFilterPanel");
       let isHidden = elPanel.classList.contains(clHide);
       if (isHidden) {
         elPanel.classList.remove(clHide);
@@ -657,18 +693,18 @@ export function initListenersApp() {
         elBtn.classList.remove(clActive);
       }
     },
-    group: 'mapx_base'
+    group: "mapx_base",
   });
 
   /**
    * Redirect Shiny events
    */
   if (window.Shiny) {
-    $(document).on('shiny:connected', () => {
-      mx.events.fire('mapx_connected');
+    $(document).on("shiny:connected", () => {
+      mx.events.fire("mapx_connected");
     });
-    $(document).on('shiny:disconnected', () => {
-      mx.events.fire('mapx_disconnected');
+    $(document).on("shiny:disconnected", () => {
+      mx.events.fire("mapx_disconnected");
     });
   }
 }
@@ -684,20 +720,20 @@ export async function updateUiSettings() {
   /**
    * User / login labels
    */
-  const elBtnLogin = document.getElementById('btnShowLoginLabel');
-  const sUser = h.path(mx, 'settings.user', {});
-  const sRole = h.path(mx, 'settings.user.roles', {});
+  const elBtnLogin = document.getElementById("btnShowLoginLabel");
+  const sUser = h.path(mx, "settings.user", {});
+  const sRole = h.path(mx, "settings.user.roles", {});
 
   if (sUser.guest) {
-    elBtnLogin.innerText = await getDictItem('login_label');
+    elBtnLogin.innerText = await getDictItem("login_label");
   } else {
     const role = sRole.admin
-      ? 'admin'
+      ? "admin"
       : sRole.publisher
-        ? 'publisher'
-        : sRole.member
-          ? 'member'
-          : 'public';
+      ? "publisher"
+      : sRole.member
+      ? "member"
+      : "public";
 
     const roleLabel = await getDictItem(role);
     elBtnLogin.innerText = `${sUser.email} – ${roleLabel}`;
@@ -706,22 +742,22 @@ export async function updateUiSettings() {
   /**
    * Project labels
    */
-  const elBtnProject = document.getElementById('btnShowProjectLabel');
-  const elBtnProjectPrivate = document.getElementById('btnShowProjectPrivate');
-  const title = h.path(mx, 'settings.project.title');
+  const elBtnProject = document.getElementById("btnShowProjectLabel");
+  const elBtnProjectPrivate = document.getElementById("btnShowProjectPrivate");
+  const title = h.path(mx, "settings.project.title");
   elBtnProject.innerText =
     title[lang] || title[langDef] || mx.settings.project.id;
   if (mx.settings.project.public) {
-    elBtnProjectPrivate.classList.remove('fa-lock');
+    elBtnProjectPrivate.classList.remove("fa-lock");
   } else {
-    elBtnProjectPrivate.classList.add('fa-lock');
+    elBtnProjectPrivate.classList.add("fa-lock");
   }
 
   /**
    * Language
    */
   await h.updateLanguage();
-  const elBtnLanguage = document.getElementById('btnShowLanguageLabel');
+  const elBtnLanguage = document.getElementById("btnShowLanguageLabel");
   elBtnLanguage.innerText = await getDictItem(lang);
 }
 
@@ -731,7 +767,7 @@ export async function updateUiSettings() {
 export function updateBtnFilterActivated() {
   const h = mx.helpers;
   const views = h.getViews();
-  const elFilterActivated = document.getElementById('btnFilterChecked');
+  const elFilterActivated = document.getElementById("btnFilterChecked");
   /**
    * Check displayed views element
    */
@@ -742,7 +778,7 @@ export function updateBtnFilterActivated() {
     let elView = v._vb.getEl();
     let isOpen = v._vb.isOpen();
     let style = window.getComputedStyle(elView);
-    let isVisible = style.display !== 'none';
+    let isVisible = style.display !== "none";
 
     return a || (isOpen && isVisible);
   }, false);
@@ -750,11 +786,11 @@ export function updateBtnFilterActivated() {
   /**
    * Set elFilter disabled class
    */
-  const isActivated = elFilterActivated.classList.contains('active');
+  const isActivated = elFilterActivated.classList.contains("active");
   if (isActivated || hasViewsActivated) {
-    elFilterActivated.classList.remove('disabled');
+    elFilterActivated.classList.remove("disabled");
   } else {
-    elFilterActivated.classList.add('disabled');
+    elFilterActivated.classList.add("disabled");
   }
 }
 /**
@@ -795,27 +831,22 @@ export async function initMapx(o) {
   mx.maps[o.id] = Object.assign(
     {
       map: {},
-      views: []
+      views: [],
     },
     mx.maps[o.id]
   );
 
-  new ModalDownloadSource({
-    email: mx.settings.user.guest ? null : mx.settings.user.email,
-    idSource: 'mx_vector_1wocf_efpgd_qjts6_oqgz4'
-  });
-
   /**
    * Set mode
    */
-  if (!o.modeStatic && h.getQueryParameter('storyAutoStart')[0] === 'true') {
+  if (!o.modeStatic && h.getQueryParameter("storyAutoStart")[0] === "true") {
     /**
      * Temporary hack : force redirect here. URL rewrite in Traefik does
      * not allow lookaround : it's not possible to have non trivial redirect.
      */
     const url = new URL(window.location);
-    url.searchParams.set('storyAutoStart', false);
-    url.pathname = '/static.html';
+    url.searchParams.set("storyAutoStart", false);
+    url.pathname = "/static.html";
     window.location = url.href;
     return;
   }
@@ -823,7 +854,7 @@ export async function initMapx(o) {
   /**
    * Update closed panel setting
    */
-  if (h.getQueryParameter('closePanels')[0] === 'true') {
+  if (h.getQueryParameter("closePanels")[0] === "true") {
     mx.settings.initClosedPanels = true;
   }
 
@@ -833,8 +864,8 @@ export async function initMapx(o) {
   /**
    * Update  sprites path
    */
-  mx.settings.style.sprite = h.getAppPathUrl('sprites');
-  mx.settings.style.glyphs = h.getAppPathUrl('fontstack');
+  mx.settings.style.sprite = h.getAppPathUrl("sprites");
+  mx.settings.style.glyphs = h.getAppPathUrl("fontstack");
   /**
    * Handle socket io session
    */
@@ -846,15 +877,15 @@ export async function initMapx(o) {
         await mx.nc.notify(m); // wrap avoid double bind
       },
       server_state: () => {},
-      error: console.warn
-    }
+      error: console.warn,
+    },
   });
   /**
    * TEst if mapbox gl is supported
    */
   if (!mx.mapboxgl.supported()) {
     alert(
-      'This website will not work with your browser. Please upgrade it or use a compatible one.'
+      "This website will not work with your browser. Please upgrade it or use a compatible one."
     );
     return;
   }
@@ -862,11 +893,11 @@ export async function initMapx(o) {
   /*
    * Update map pos with values from query
    */
-  const queryLat = h.getQueryParameter('lat')[0];
-  const queryLng = h.getQueryParameter('lng')[0];
-  const queryZoom = h.getQueryParameter(['z', 'zoom'])[0];
-  const queryPitch = h.getQueryParameter(['p', 'pitch'])[0];
-  const queryBearing = h.getQueryParameter(['b', 'bearing'])[0];
+  const queryLat = h.getQueryParameter("lat")[0];
+  const queryLng = h.getQueryParameter("lng")[0];
+  const queryZoom = h.getQueryParameter(["z", "zoom"])[0];
+  const queryPitch = h.getQueryParameter(["p", "pitch"])[0];
+  const queryBearing = h.getQueryParameter(["b", "bearing"])[0];
 
   if (queryLat) {
     mp.center = null;
@@ -897,7 +928,7 @@ export async function initMapx(o) {
     zoom: mp.z || mp.zoom || 0,
     bearing: mp.b || mp.bearing || 0,
     pitch: mp.p || mp.pitch || 0,
-    center: mp.center || [mp.lng || 0, mp.lat || 0]
+    center: mp.center || [mp.lng || 0, mp.lat || 0],
   };
   /*
    * Create map object
@@ -908,12 +939,12 @@ export async function initMapx(o) {
   //    only one really exists. TODO: refactoring
   mx.maps[o.id].map = o.map;
   const elCanvas = o.map.getCanvas();
-  elCanvas.setAttribute('tabindex', '-1');
+  elCanvas.setAttribute("tabindex", "-1");
 
   /**
    * Wait for map to be loaded
    */
-  await o.map.once('load');
+  await o.map.once("load");
 
   /**
    * Link theme to map
@@ -926,23 +957,23 @@ export async function initMapx(o) {
      */
     mx.panel_main = new MainPanel({
       mapx: {
-        version: h.getVersion()
+        version: h.getVersion(),
       },
       panel: {
-        id: 'main_panel',
+        id: "main_panel",
         elContainer: document.body,
-        position: 'top-left',
-        button_text: getDictItem('btn_panel_main'),
-        button_lang_key: 'btn_panel_main',
-        tooltip_position: 'bottom-right',
-        button_classes: ['fa', 'fa-list-ul'],
+        position: "top-left",
+        button_text: getDictItem("btn_panel_main"),
+        button_lang_key: "btn_panel_main",
+        tooltip_position: "bottom-right",
+        button_classes: ["fa", "fa-list-ul"],
         container_style: {
-          width: '470px',
-          height: '90%',
-          minWidth: '340px',
-          minHeight: '450px'
-        }
-      }
+          width: "470px",
+          height: "90%",
+          minWidth: "340px",
+          minHeight: "450px",
+        },
+      },
     });
     if (!mx.settings.initClosedPanels) {
       mx.panel_main.panel.open();
@@ -951,9 +982,9 @@ export async function initMapx(o) {
     /**
      * Build theme config inputs only when settings tab is displayed
      */
-    mx.panel_main.on('tab_change', (id) => {
-      if (id === 'tools') {
-        const elInputs = document.getElementById('mxInputThemeColors');
+    mx.panel_main.on("tab_change", (id) => {
+      if (id === "tools") {
+        const elInputs = document.getElementById("mxInputThemeColors");
         mx.theme.linkInputs(elInputs);
       }
     });
@@ -964,19 +995,19 @@ export async function initMapx(o) {
     const key = await getSearchApiKey();
     mx.search = new Search({
       key: key,
-      container: '#mxTabPanelSearch',
+      container: "#mxTabPanelSearch",
       host: mx.settings.search.host,
       protocol: mx.settings.search.protocol,
       port: mx.settings.search.port,
       language: getLanguageCurrent(),
-      index_template: 'views_{{language}}'
+      index_template: "views_{{language}}",
     });
 
     /**
      * On tab change to search, perform a search
      */
-    mx.panel_main.on('tab_change', async (id) => {
-      if (id === 'search') {
+    mx.panel_main.on("tab_change", async (id) => {
+      if (id === "search") {
         await mx.search.initCheck();
         mx.search._elInput.focus();
       }
@@ -986,23 +1017,23 @@ export async function initMapx(o) {
      * On language change, update
      */
     mx.events.on({
-      type: 'language_change',
-      idGroup: 'search_index',
+      type: "language_change",
+      idGroup: "search_index",
       callback: (data) => {
         if (mx.search) {
           mx.search.setLanguage({
-            language: data?.new_language
+            language: data?.new_language,
           });
         }
-      }
+      },
     });
 
     mx.events.on({
-      type: ['view_ui_open', 'view_ui_close', 'view_deleted'],
-      idGroup: 'search_index',
+      type: ["view_ui_open", "view_ui_close", "view_deleted"],
+      idGroup: "search_index",
       callback: () => {
         mx.search._update_toggles_icons();
-      }
+      },
     });
   }
 
@@ -1011,28 +1042,28 @@ export async function initMapx(o) {
    */
   mx.panel_tools = new ControlsPanel({
     panel: {
-      id: 'controls_panel',
+      id: "controls_panel",
       elContainer: document.body,
-      position: 'top-right',
+      position: "top-right",
       noHandles: true,
-      button_text: getDictItem('btn_panel_controls'),
-      button_lang_key: 'btn_panel_controls',
-      tooltip_position: 'bottom-left',
-      handles: ['free'],
-      container_classes: ['button-panel--container-no-full-width'],
+      button_text: getDictItem("btn_panel_controls"),
+      button_lang_key: "btn_panel_controls",
+      tooltip_position: "bottom-left",
+      handles: ["free"],
+      container_classes: ["button-panel--container-no-full-width"],
       item_content_classes: [
-        'button-panel--item-content-transparent-background'
+        "button-panel--item-content-transparent-background",
       ],
       panel_style: {
-        marginTop: '40px'
+        marginTop: "40px",
       },
       container_style: {
-        width: '100px',
-        height: '340px',
-        minWidth: '49px',
-        minHeight: '49px'
-      }
-    }
+        width: "100px",
+        height: "340px",
+        minWidth: "49px",
+        minHeight: "49px",
+      },
+    },
   });
   if (!mx.settings.initClosedPanels) {
     mx.panel_tools.panel.open();
@@ -1042,13 +1073,13 @@ export async function initMapx(o) {
    * Initial mode terrain 3d / Sat
    */
   const ctrls = mx.panel_tools.controls;
-  const enable3d = h.getQueryParameter('t3d')[0] === 'true';
-  const enableSat = h.getQueryParameter('sat')[0] === 'true';
+  const enable3d = h.getQueryParameter("t3d")[0] === "true";
+  const enableSat = h.getQueryParameter("sat")[0] === "true";
   if (enable3d) {
-    ctrls.getButton('btn_3d_terrain').action('enable');
+    ctrls.getButton("btn_3d_terrain").action("enable");
   }
   if (enableSat) {
-    ctrls.getButton('btn_theme_sat').action('enable');
+    ctrls.getButton("btn_theme_sat").action("enable");
   }
 
   /**
@@ -1057,27 +1088,27 @@ export async function initMapx(o) {
   mx.draw = new MapxDraw({
     map: o.map,
     panel_tools: mx.panel_tools,
-    url_help: mx.settings.links.repositoryWikiDrawTool
+    url_help: mx.settings.links.repositoryWikiDrawTool,
   });
-  mx.draw.on('enable', () => {
+  mx.draw.on("enable", () => {
     mx.helpers.setClickHandler({
-      type: 'draw',
-      enable: true
+      type: "draw",
+      enable: true,
     });
   });
-  mx.draw.on('disable', () => {
+  mx.draw.on("disable", () => {
     mx.helpers.setClickHandler({
-      type: 'draw',
-      enable: false
+      type: "draw",
+      enable: false,
     });
   });
 
   /**
    * Add controls
    */
-  o.map.addControl(new MapControlLiveCoord(), 'bottom-right');
-  o.map.addControl(new MapControlScale(), 'bottom-right');
-  o.map.addControl(new MapxLogo(), 'bottom-left');
+  o.map.addControl(new MapControlLiveCoord(), "bottom-right");
+  o.map.addControl(new MapControlScale(), "bottom-right");
+  o.map.addControl(new MapxLogo(), "bottom-left");
 
   /**
    * Notification center
@@ -1087,26 +1118,26 @@ export async function initMapx(o) {
       id: mx.settings.user.id,
       on: {
         add: (nc) => {
-          mx.theme.on('mode_changed', nc.setMode);
+          mx.theme.on("mode_changed", nc.setMode);
         },
         remove: (nc) => {
-          mx.theme.off('mode_changed', nc.setMode);
-        }
-      }
+          mx.theme.off("mode_changed", nc.setMode);
+        },
+      },
     },
     ui: {
-      mode: mx.theme.mode
+      mode: mx.theme.mode,
     },
     panel: {
-      id: 'notif_center',
+      id: "notif_center",
       elContainer: document.body,
       container_style: {
-        width: '470px', // same as MainPanel
-        height: '40%',
-        minWidth: '340px',
-        minHeight: '100px'
-      }
-    }
+        width: "470px", // same as MainPanel
+        height: "40%",
+        minWidth: "340px",
+        minHeight: "100px",
+      },
+    },
   });
 
   /**
@@ -1133,24 +1164,24 @@ export function initMapListener(map) {
   /**
    * Error handling
    */
-  map.on('error', (e) => {
+  map.on("error", (e) => {
     errorHandler(e);
   });
 
   /**
    * Click event : build popup, ignore or redirect
    */
-  map.on('click', (e) => {
+  map.on("click", (e) => {
     h.handleClickEvent(e, map.id);
   });
 
   /**
    * Move north arrow
    */
-  map.on('rotate', () => {
+  map.on("rotate", () => {
     const r = -map.getBearing();
-    const northArrow = document.querySelector('.mx-north-arrow');
-    northArrow.style[h.cssTransformFun()] = 'rotateZ(' + r + 'deg) ';
+    const northArrow = document.querySelector(".mx-north-arrow");
+    northArrow.style[h.cssTransformFun()] = "rotateZ(" + r + "deg) ";
   });
 
   /**
@@ -1159,21 +1190,21 @@ export function initMapListener(map) {
   mx.highlighter = new Highlighter(map, {
     use_animation: true,
     register_listener: false, //use  same click as for popup
-    highlight_color: mx.theme.get('mx_map_feature_highlight').color,
-    regex_layer_id: /^MX/ // Highlighter will not work with feature without id : regex layer accordingly,
+    highlight_color: mx.theme.get("mx_map_feature_highlight").color,
+    regex_layer_id: /^MX/, // Highlighter will not work with feature without id : regex layer accordingly,
   });
 
   mx.events.on({
-    type: ['view_add', 'view_remove', 'story_step', 'story_close'],
-    idGroup: 'highlight_clear',
+    type: ["view_add", "view_remove", "story_step", "story_close"],
+    idGroup: "highlight_clear",
     callback: (d) => {
       mx.highlighter.clean();
-    }
+    },
   });
 
-  mx.theme.on('set_colors', (colors) => {
+  mx.theme.on("set_colors", (colors) => {
     mx.highlighter.setOptions({
-      highlight_color: colors.mx_map_feature_highlight.color
+      highlight_color: colors.mx_map_feature_highlight.color,
     });
     if (window.jed && jed.aceEditors) {
       jed.aceEditors.forEach((e) => e._set_theme_auto());
@@ -1183,7 +1214,7 @@ export function initMapListener(map) {
   /**
    * Mouse move handling
    */
-  map.on('mousemove', (e) => {
+  map.on("mousemove", (e) => {
     //    if (false) {
     /**
      * Change illuminaion direction accoding to mouse position
@@ -1206,10 +1237,10 @@ export function initMapListener(map) {
 
     const layers = h.getLayerNamesByPrefix({
       id: map.id,
-      prefix: 'MX' // custom code could be MXCC ...
+      prefix: "MX", // custom code could be MXCC ...
     });
-    const features = map.queryRenderedFeatures(e.point, {layers: layers});
-    map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+    const features = map.queryRenderedFeatures(e.point, { layers: layers });
+    map.getCanvas().style.cursor = features.length ? "pointer" : "";
   });
 }
 
@@ -1217,16 +1248,16 @@ export async function initMapxStatic(o) {
   const h = mx.helpers;
   const map = h.getMap();
   const mapData = h.getMapData();
-  const zoomToViews = h.getQueryParameter('zoomToViews')[0] === 'true';
-  const language = h.getQueryParameter('language')[0] || getLanguageDefault();
+  const zoomToViews = h.getQueryParameter("zoomToViews")[0] === "true";
+  const language = h.getQueryParameter("language")[0] || getLanguageDefault();
   /**
    * NOTE: all views are
    */
   const idViewsQuery = h.getQueryParameter([
-    'views',
-    'viewsOpen',
-    'idViews',
-    'idViewsOpen'
+    "views",
+    "viewsOpen",
+    "idViews",
+    "idViewsOpen",
   ]);
 
   const idViews = getArrayDistinct(idViewsQuery).reverse();
@@ -1249,13 +1280,13 @@ export async function initMapxStatic(o) {
     /*
      * If a story is found, ignore other options
      */
-    const story = mapData.views.find((v) => v.type === 'sm');
+    const story = mapData.views.find((v) => v.type === "sm");
     if (story) {
       h.storyRead({
         id: o.id,
         idView: story.id,
         save: false,
-        autoStart: true
+        autoStart: true,
       });
       return;
     }
@@ -1266,20 +1297,20 @@ export async function initMapxStatic(o) {
    * -> Story module add its own legend panel.
    */
   mx.panel_legend = new ButtonPanel({
-    id: 'button_legend',
+    id: "button_legend",
     elContainer: document.body,
     panelFull: true,
-    position: 'top-left',
-    tooltip_position: 'right',
-    button_text: getDictItem('button_legend_button'),
-    button_lang_key: 'button_legend_button',
-    button_classes: ['fa', 'fa-list-ul'],
+    position: "top-left",
+    tooltip_position: "right",
+    button_text: getDictItem("button_legend_button"),
+    button_lang_key: "button_legend_button",
+    button_classes: ["fa", "fa-list-ul"],
     container_style: {
-      width: '300px',
-      height: '300px',
-      minWidth: '200px',
-      minHeight: '200px'
-    }
+      width: "300px",
+      height: "300px",
+      minWidth: "200px",
+      minHeight: "200px",
+    },
   });
 
   /**
@@ -1302,16 +1333,16 @@ export async function initMapxStatic(o) {
       await h.viewLayersAdd({
         view: view,
         elLegendContainer: mx.panel_legend.elPanelContent,
-        addTitle: true
+        addTitle: true,
       });
     }
     await h.viewsLayersOrderUpdate({
-      order: idViews.reverse()
+      order: idViews.reverse(),
     });
   }
 
   mx.events.fire({
-    type: 'mapx_ready'
+    type: "mapx_ready",
   });
   return;
 }
@@ -1334,21 +1365,21 @@ export async function initMapxApp(opt) {
    * Fetch views
    */
   await h.updateViewsList({
-    useQueryFilters: opt.useQueryFilters
+    useQueryFilters: opt.useQueryFilters,
   });
 
   /**
    * Fire ready event
    */
   mx.events.fire({
-    type: 'mapx_ready'
+    type: "mapx_ready",
   });
 
   /*
    * If shiny, trigger read event
    */
   if (hasShiny) {
-    Shiny.onInputChange('mx_client_ready', new Date());
+    Shiny.onInputChange("mx_client_ready", new Date());
   }
 
   /**
@@ -1358,24 +1389,24 @@ export async function initMapxApp(opt) {
     /**
      * Allow view to be dropped when global drag mode is enabled
      */
-    elMap.classList.add('li-keep-enable-drop');
+    elMap.classList.add("li-keep-enable-drop");
 
     /**
      * Listen to drag/drop
      */
     mx.listeners.addListener({
       target: elMap,
-      type: 'dragover',
+      type: "dragover",
       callback: h.handleMapDragOver,
-      group: 'map_drag_over',
-      bind: mx
+      group: "map_drag_over",
+      bind: mx,
     });
     mx.listeners.addListener({
       target: elMap,
-      type: 'drop',
+      type: "drop",
       callback: h.handleMapDrop,
-      group: 'map_drag_over',
-      bind: mx
+      group: "map_drag_over",
+      bind: mx,
     });
   }
 
@@ -1396,16 +1427,16 @@ export async function handleClickEvent(e, idMap) {
   const hasLayer = h.getLayerNamesByPrefix().length > 0;
   const map = h.getMap(idMap);
   const clickModes = h.getClickHandlers();
-  const hasDashboard = clickModes.includes('dashboard');
-  const hasDraw = clickModes.includes('draw');
-  const hasSdk = clickModes.includes('sdk');
-  const hasCC = clickModes.includes('cc');
+  const hasDashboard = clickModes.includes("dashboard");
+  const hasDraw = clickModes.includes("draw");
+  const hasSdk = clickModes.includes("sdk");
+  const hasCC = clickModes.includes("cc");
   const addPopup = !(hasCC || hasSdk || hasDraw || hasDashboard);
   const addHighlight = !hasDraw;
 
   const retrieveAttributes = addPopup || hasSdk;
 
-  if (!hasLayer && type !== 'click') {
+  if (!hasLayer && type !== "click") {
     return;
   }
 
@@ -1417,8 +1448,8 @@ export async function handleClickEvent(e, idMap) {
     const layersAttributes = await h.getLayersPropertiesAtPoint({
       map: map,
       point: e.point,
-      type: ['vt', 'gj', 'cc', 'rt'],
-      asObject: true
+      type: ["vt", "gj", "cc", "rt"],
+      asObject: true,
     });
     if (h.isEmpty(layersAttributes)) {
       return;
@@ -1439,22 +1470,22 @@ export async function handleClickEvent(e, idMap) {
 
       mx.events.once({
         type: [
-          'view_remove',
-          'view_add',
-          'story_step',
-          'story_lock',
-          'story_close'
+          "view_remove",
+          "view_add",
+          "story_step",
+          "story_lock",
+          "story_close",
         ],
-        idGroup: 'click_popup',
+        idGroup: "click_popup",
         callback: () => {
           popup.remove();
-        }
+        },
       });
 
       /**
        * Remove highlighter too
        */
-      popup.on('close', () => {
+      popup.on("close", () => {
         mx.highlighter.clean();
       });
 
@@ -1463,7 +1494,7 @@ export async function handleClickEvent(e, idMap) {
        */
       h.featuresToPopup({
         layersAttributes: layersAttributes,
-        popup: popup
+        popup: popup,
       });
     }
   }
@@ -1510,15 +1541,15 @@ async function attributesToEvent(layersAttributes, e) {
   async function dispatch(layersAttributes, idView) {
     const attributes = await layersAttributes[idView];
     mx.events.fire({
-      type: 'click_attributes',
+      type: "click_attributes",
       data: {
         part: ++processed,
         nPart: nViews,
         idView: idView,
         attributes: attributes,
         point: e.point,
-        lngLat: e.lngLat
-      }
+        lngLat: e.lngLat,
+      },
     });
   }
 }
@@ -1535,7 +1566,7 @@ export function getLocalForageData(o) {
   db.getItem(o.idKey).then((item) => {
     Shiny.onInputChange(o.idInput, {
       item: item,
-      time: new Date()
+      time: new Date(),
     });
   });
 }
@@ -1548,37 +1579,37 @@ export function geolocateUser() {
   const lang = getLanguageCurrent();
   const hasGeolocator = !!navigator.geolocation;
 
-  const o = {idMap: mx.settings.map.id};
+  const o = { idMap: mx.settings.map.id };
   const map = getMap(o.idMap);
   const options = {
     enableHighAccuracy: false,
     timeout: 5000,
-    maximumAge: 0
+    maximumAge: 0,
   };
 
   if (hasGeolocator) {
     setBusy(true);
     navigator.geolocation.getCurrentPosition(success, error, options);
   } else {
-    error({message: 'Browser not compatible'});
+    error({ message: "Browser not compatible" });
   }
 
   function success(pos) {
     setBusy(false);
     const crd = pos.coords;
-    map.flyTo({center: [crd.longitude, crd.latitude], zoom: 10});
+    map.flyTo({ center: [crd.longitude, crd.latitude], zoom: 10 });
   }
 
   function error(err) {
     getDictItem(
-      ['error_cant_geolocate_msg', 'error_geolocate_issue'],
+      ["error_cant_geolocate_msg", "error_geolocate_issue"],
       lang
     ).then((it) => {
       setBusy(false);
       modal({
-        id: 'geolocate_error',
+        id: "geolocate_error",
         title: it[1],
-        content: '<p> ' + it[0] + '</p> <p> ( ' + err.message + ' ) </p>'
+        content: "<p> " + it[0] + "</p> <p> ( " + err.message + " ) </p>",
       });
     });
   }
@@ -1613,7 +1644,7 @@ export function addSourceFromViews(o) {
     o.views.forEach((v) => {
       h.addSourceFromView({
         map: o.map,
-        view: v
+        view: v,
       });
     });
   }
@@ -1630,20 +1661,20 @@ export async function addSourceFromView(o) {
   const h = mx.helpers;
   const p = h.path;
 
-  const vType = p(o.view, 'type');
-  const isVt = vType === 'vt';
-  const isRt = vType === 'rt';
-  const isGj = vType === 'gj';
+  const vType = p(o.view, "type");
+  const isVt = vType === "vt";
+  const isRt = vType === "rt";
+  const isGj = vType === "gj";
   const validType = isVt || isRt || isGj;
-  const hasSource = !!p(o.view, 'data.source');
+  const hasSource = !!p(o.view, "data.source");
 
   if (!validType || !hasSource) {
     return;
   }
-  const project = p(mx, 'settings.project.id');
-  const projectView = p(o.view, 'project');
-  const projectsView = p(o.view, 'data.projects', []);
-  const useMirror = p(o.view, 'data.source.useMirror');
+  const project = p(mx, "settings.project.id");
+  const projectView = p(o.view, "project");
+  const projectsView = p(o.view, "data.projects", []);
+  const useMirror = p(o.view, "data.source.useMirror");
   const isEditable = h.isViewEditable(o.view);
   const isLocationOk =
     o.noLocationCheck ||
@@ -1657,32 +1688,32 @@ export async function addSourceFromView(o) {
     o.view._edit = false;
   }
 
-  const idSource = o.view.id + '-SRC';
+  const idSource = o.view.id + "-SRC";
 
   if (isVt) {
     /**
      * When adding source, we request the timestamp via ['base'] stat,
      * without cache to be sure to have the latest value.
      */
-    const summary = await h.getViewSourceSummary(o.view, {
-      stats: ['base'],
-      useCache: false
+    const summary = await getViewSourceSummary(o.view, {
+      stats: ["base"],
+      useCache: false,
     });
-    const baseUrl = getApiUrl('getTile');
-    const srcTimestamp = p(summary, 'timestamp', null);
+    const baseUrl = getApiUrl("getTile");
+    const srcTimestamp = p(summary, "timestamp", null);
     let url = `${baseUrl}?view=${o.view.id}`;
     if (srcTimestamp) {
       url = `${url}&timestamp=${srcTimestamp}`;
     }
     o.view.data.source.tiles = [url, url];
-    o.view.data.source.promoteId = 'gid';
+    o.view.data.source.promoteId = "gid";
   }
 
   if (isGj) {
     /**
      * Add gid property if it does not exist
      */
-    const features = h.path(o.view, 'data.source.data.features', []);
+    const features = h.path(o.view, "data.source.data.features", []);
     let gid = 1;
     features.forEach((f) => {
       if (!f.properties) {
@@ -1692,7 +1723,7 @@ export async function addSourceFromView(o) {
         f.properties.gid = gid++;
       }
     });
-    o.view.data.source.promoteId = 'gid';
+    o.view.data.source.promoteId = "gid";
   }
 
   const sourceExists = !!o.map.getSource(idSource);
@@ -1704,7 +1735,7 @@ export async function addSourceFromView(o) {
      */
     h.removeLayersByPrefix({
       prefix: o.view.id,
-      map: o.map
+      map: o.map,
     });
     /**
      * Remove old source
@@ -1731,11 +1762,11 @@ export async function addSourceFromView(o) {
  */
 export async function getViewRemote(idView) {
   const h = mx.helpers;
-  const apiUrlViews = getApiUrl('getView');
+  const apiUrlViews = getApiUrl("getView");
   const isValid = h.isViewId(idView) && h.isUrl(apiUrlViews);
 
   if (!isValid) {
-    throw new Error('Invalid view id or URL');
+    throw new Error("Invalid view id or URL");
   }
 
   /*
@@ -1800,12 +1831,12 @@ export async function updateViewsList(opt) {
    * - app/src/r/helpers/binding_mgl.R
    */
   const def = {
-    id: 'map_main',
-    project: h.path(mx, 'settings.project.id'),
+    id: "map_main",
+    project: h.path(mx, "settings.project.id"),
     viewsList: [],
     render: false,
     resetViews: false,
-    useQueryFilters: true
+    useQueryFilters: true,
   };
   opt = h.updateIfEmpty(opt, def);
   const viewsToAdd = opt.viewsList;
@@ -1849,7 +1880,7 @@ export async function updateViewsList(opt) {
      * Local GeoJSON views
      */
     const viewsGeoJSON = await h.getGeoJSONViewsFromStorage({
-      project: opt.project
+      project: opt.project,
     });
     views.push(...viewsGeoJSON);
 
@@ -1859,12 +1890,12 @@ export async function updateViewsList(opt) {
     const data = await h.fetchViews({
       onProgress: updateProgress,
       idProject: opt.project,
-      useQueryFilters: opt.useQueryFilters
+      useQueryFilters: opt.useQueryFilters,
     });
     views.push(...data.views);
     state.push(
       ...data.states.reduce((a, s) => {
-        if (s.id === 'default') {
+        if (s.id === "default") {
           return s.state;
         } else {
           return a;
@@ -1878,7 +1909,7 @@ export async function updateViewsList(opt) {
     await h.viewsListRenderNew({
       id: opt.id,
       views: views,
-      state: state
+      state: state,
     });
 
     /**
@@ -1892,7 +1923,7 @@ export async function updateViewsList(opt) {
        * Set flat mode (hide categories)
        */
       if (conf.isFlatMode) {
-        viewsList.setModeFlat(true, {permanent: true});
+        viewsList.setModeFlat(true, { permanent: true });
       }
       const idViewsOpen = conf.idViewsOpen;
       const isFilterActivated = conf.isFilterActivated;
@@ -1932,7 +1963,7 @@ export async function updateViewsList(opt) {
     }
 
     mx.events.fire({
-      type: 'views_list_updated'
+      type: "views_list_updated",
     });
 
     return views;
@@ -1945,13 +1976,13 @@ export async function updateViewsList(opt) {
     }
     await h.viewsListAddSingle(view, {
       open: true,
-      render: true
+      render: true,
     });
     mx.events.fire({
-      type: 'views_list_updated'
+      type: "views_list_updated",
     });
     mx.events.fire({
-      type: 'view_created'
+      type: "view_created",
     });
     return view;
   }
@@ -1960,7 +1991,7 @@ export async function updateViewsList(opt) {
   function updateProgress(d) {
     d = d || {
       loaded: nCache + nNetwork,
-      total: nTot
+      total: nTot,
     };
 
     /**
@@ -1968,7 +1999,7 @@ export async function updateViewsList(opt) {
      */
 
     if (!elProgContainer) {
-      elProgContainer = document.querySelector('.mx-views-list');
+      elProgContainer = document.querySelector(".mx-views-list");
     }
 
     if (!prog && elProgContainer) {
@@ -1976,7 +2007,7 @@ export async function updateViewsList(opt) {
       prog = new RadialProgress(elProgContainer, {
         radius: 30,
         stroke: 4,
-        strokeColor: '#f00'
+        strokeColor: "#f00",
       });
     }
 
@@ -2067,9 +2098,9 @@ export async function viewsCheckedUpdate(o) {
       vVisible: getViewsLayersVisibles(),
       vChecked: vChecked,
       vToRemove: vToRemove,
-      vToAdd: vToAdd
+      vToAdd: vToAdd,
     };
-    Shiny.onInputChange('mx_client_views_status', summary);
+    Shiny.onInputChange("mx_client_views_status", summary);
   }
 
   /**
@@ -2086,7 +2117,7 @@ export async function viewsCheckedUpdate(o) {
    * Fire event
    */
   mx.events.fire({
-    type: 'views_list_ordered'
+    type: "views_list_ordered",
   });
   return done;
 }
@@ -2098,8 +2129,8 @@ export async function viewsCheckedUpdate(o) {
 export function getViewsLayersVisibles(reverse) {
   const h = mx.helpers;
   const views = h.getLayerNamesByPrefix({
-    prefix: 'MX-',
-    base: true
+    prefix: "MX-",
+    base: true,
   });
 
   if (reverse) {
@@ -2131,11 +2162,11 @@ export function viewLiAction(o) {
     "input[data-view_action_key='btn_toggle_view']"
   );
 
-  if (o.action === 'check' && elInput && !elInput.checked) {
+  if (o.action === "check" && elInput && !elInput.checked) {
     el.checked = true;
   }
 
-  if (o.action === 'uncheck' && elInput && elInput.checked) {
+  if (o.action === "uncheck" && elInput && elInput.checked) {
     el.checked = false;
   }
 }
@@ -2153,7 +2184,7 @@ export function getSpriteImage(id, opt) {
     return;
   }
 
-  h.updateIfEmpty(opt, {color: null});
+  h.updateIfEmpty(opt, { color: null });
 
   const map = mx.helpers.getMap();
   const sprite = map.style.imageManager.images[id];
@@ -2164,13 +2195,13 @@ export function getSpriteImage(id, opt) {
     widthDpr: sprite.data.width,
     heightDpr: sprite.data.height,
     width: sprite.data.width / sprite.pixelRatio,
-    height: sprite.data.height / sprite.pixelRatio
+    height: sprite.data.height / sprite.pixelRatio,
   };
 
   out.url = (color) => {
     color = color || opt.color;
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
     canvas.width = out.widthDpr;
     canvas.height = out.heightDpr;
     canvas.style.height = `${out.height}px`;
@@ -2189,7 +2220,7 @@ export function getSpriteImage(id, opt) {
       }
     }
     ctx.putImageData(imData, 0, 0);
-    return canvas.toDataURL('image/png');
+    return canvas.toDataURL("image/png");
   };
 
   return out;
@@ -2223,7 +2254,7 @@ export function makeSimpleLayer(opt) {
 
   const def = {
     id: null,
-    idSuffix: '',
+    idSuffix: "",
     priority: 0,
     idSourceLayer: null,
     idView: null,
@@ -2232,7 +2263,7 @@ export function makeSimpleLayer(opt) {
     showSymbolLabel: null,
     label: null,
     hexColor: null,
-    filter: ['all'],
+    filter: ["all"],
     size: null,
     sprite: null,
     // to document
@@ -2241,13 +2272,13 @@ export function makeSimpleLayer(opt) {
     sizeFactorZoomExponent: 1,
     zoomMin: 0,
     zoomMax: 22,
-    opacity: 0.5
+    opacity: 0.5,
   };
 
   h.updateIfEmpty(opt, def);
 
   if (!opt.id) {
-    console.warn('makeSimpleLayer: layer with no ID');
+    console.warn("makeSimpleLayer: layer with no ID");
     return;
   }
 
@@ -2257,17 +2288,17 @@ export function makeSimpleLayer(opt) {
 
   if (h.isEmpty(opt.size)) {
     switch (opt.geomType) {
-      case 'point':
+      case "point":
         opt.size = 10;
         break;
-      case 'symbol':
+      case "symbol":
         opt.size = 1;
         break;
       default:
         opt.size = 2;
     }
   }
-  if (opt.sprite === 'none') {
+  if (opt.sprite === "none") {
     opt.sprite = null;
   }
   if (opt.sprite) {
@@ -2294,85 +2325,85 @@ export function makeSimpleLayer(opt) {
     minzoom: opt.zoomMin,
     maxzoom: opt.zoomMax,
     filter: opt.filter,
-    'source-layer': opt.idSourceLayer,
-    metadata: opt
+    "source-layer": opt.idSourceLayer,
+    metadata: opt,
   };
 
   /**
    * Geom specific
    */
   switch (opt.geomType) {
-    case 'symbol':
+    case "symbol":
       Object.assign(layer, {
-        type: 'symbol',
+        type: "symbol",
         layout: {
-          'icon-image': opt.sprite,
-          'icon-size': size(),
-          'icon-allow-overlap': true,
-          'icon-ignore-placement': false,
-          'icon-optional': true,
-          'icon-anchor': 'bottom',
-          'text-field': opt.showSymbolLabel ? opt.label + '' || '' : '',
-          'text-variable-anchor': opt.showSymbolLabel
-            ? ['bottom-left', 'bottom-right', 'top-right', 'top-left']
+          "icon-image": opt.sprite,
+          "icon-size": size(),
+          "icon-allow-overlap": true,
+          "icon-ignore-placement": false,
+          "icon-optional": true,
+          "icon-anchor": "bottom",
+          "text-field": opt.showSymbolLabel ? opt.label + "" || "" : "",
+          "text-variable-anchor": opt.showSymbolLabel
+            ? ["bottom-left", "bottom-right", "top-right", "top-left"]
             : [],
-          'text-font': ['Arial'],
-          'text-size': ['interpolate', ['linear'], ['zoom'], 1, 10, 18, 20],
-          'text-radial-offset': 1.2,
-          'text-justify': 'auto'
+          "text-font": ["Arial"],
+          "text-size": ["interpolate", ["linear"], ["zoom"], 1, 10, 18, 20],
+          "text-radial-offset": 1.2,
+          "text-justify": "auto",
         },
         paint: {
-          'icon-opacity': opt.opacity || 1,
-          'icon-halo-width': 0,
-          'icon-halo-color': colB,
-          'icon-color': colA,
-          'text-color': colA,
-          'text-halo-color': '#FFF',
-          'text-halo-blur': 0,
-          'text-halo-width': 1.2,
-          'text-translate': [0, 0]
-        }
+          "icon-opacity": opt.opacity || 1,
+          "icon-halo-width": 0,
+          "icon-halo-color": colB,
+          "icon-color": colA,
+          "text-color": colA,
+          "text-halo-color": "#FFF",
+          "text-halo-blur": 0,
+          "text-halo-width": 1.2,
+          "text-translate": [0, 0],
+        },
       });
       break;
-    case 'point':
+    case "point":
       Object.assign(layer, {
-        type: 'circle',
+        type: "circle",
         paint: {
-          'circle-color': colA,
-          'circle-radius': size(0.5)
-        }
+          "circle-color": colA,
+          "circle-radius": size(0.5),
+        },
       });
       break;
-    case 'polygon':
+    case "polygon":
       Object.assign(layer, {
-        type: 'fill',
+        type: "fill",
         paint: {
-          'fill-color': colA,
+          "fill-color": colA,
           //'fill-outline-color': colB
-          'fill-outline-color': 'rgba(0,0,0,0)'
-        }
+          "fill-outline-color": "rgba(0,0,0,0)",
+        },
       });
       break;
-    case 'pattern':
+    case "pattern":
       Object.assign(layer, {
-        type: 'fill',
+        type: "fill",
         paint: {
-          'fill-pattern': opt.sprite,
-          'fill-antialias': false
-        }
+          "fill-pattern": opt.sprite,
+          "fill-antialias": false,
+        },
       });
       break;
-    case 'line':
+    case "line":
       Object.assign(layer, {
-        type: 'line',
+        type: "line",
         paint: {
-          'line-color': colA,
-          'line-width': size()
+          "line-color": colA,
+          "line-width": size(),
         },
         layout: {
-          'line-cap': 'round',
-          'line-join': 'round'
-        }
+          "line-cap": "round",
+          "line-join": "round",
+        },
       });
       break;
     default:
@@ -2390,13 +2421,13 @@ export function makeSimpleLayer(opt) {
       return size * b;
     }
     return [
-      'interpolate',
-      ['exponential', opt.sizeFactorZoomExponent],
-      ['zoom'],
+      "interpolate",
+      ["exponential", opt.sizeFactorZoomExponent],
+      ["zoom"],
       opt.zoomMin,
       opt.sizeFactorZoomMin * opt.size * b,
       opt.zoomMax,
-      opt.sizeFactorZoomMax * opt.size * b
+      opt.sizeFactorZoomMax * opt.size * b,
     ];
   }
 }
@@ -2420,7 +2451,7 @@ export function viewsLayersOrderUpdate(o) {
      * 3) Views list
      */
     const map = h.getMap(o.id);
-    const views = h.getViews({id: o.id});
+    const views = h.getViews({ id: o.id });
     const order =
       o.order || h.getViewsOrder() || views.map((v) => v.id) || null;
 
@@ -2432,7 +2463,7 @@ export function viewsLayersOrderUpdate(o) {
      * Get displayed layer
      */
     const layersDiplayed = h.getLayerByPrefix({
-      prefix: /^MX-/
+      prefix: /^MX-/,
     });
     /**
      * For each group (view id) [a,b,c],
@@ -2445,7 +2476,7 @@ export function viewsLayersOrderUpdate(o) {
     const sorted = [];
     for (let idView of order) {
       const layersView = layersDiplayed.filter(
-        (d) => h.path(d, 'metadata.idView', d.id) === idView
+        (d) => h.path(d, "metadata.idView", d.id) === idView
       );
 
       if (layersView.length > 0) {
@@ -2455,16 +2486,16 @@ export function viewsLayersOrderUpdate(o) {
           const idBefore = firstOfAll ? mx.settings.layerBefore : idPrevious;
           map.moveLayer(layer.id, idBefore);
           idPrevious = layer.id;
-          sorted.push({id: layer.id, idBefore});
+          sorted.push({ id: layer.id, idBefore });
         }
       }
     }
 
     mx.events.fire({
-      type: 'layers_ordered',
+      type: "layers_ordered",
       data: {
-        layers: order
-      }
+        layers: order,
+      },
     });
     resolve(order);
   });
@@ -2506,15 +2537,15 @@ function sortLayers(layers, reverse) {
  * Update view in params
  */
 export function updateViewParams(o) {
-  o = o || {id: mx.helpers.getMap()};
+  o = o || { id: mx.helpers.getMap() };
 
   const displayed = mx.helpers.getLayerNamesByPrefix({
     id: o.id,
-    prefix: 'MX-',
-    base: true
+    prefix: "MX-",
+    base: true,
   });
 
-  mx.helpers.setQueryParameters({views: displayed});
+  mx.helpers.setQueryParameters({ views: displayed });
 }
 
 /**
@@ -2522,11 +2553,11 @@ export function updateViewParams(o) {
  * @return {Array} view id array or null
  */
 export function getViewsOrder() {
-  const viewContainer = document.querySelector('.mx-views-list');
+  const viewContainer = document.querySelector(".mx-views-list");
   if (!viewContainer) {
     return null;
   }
-  const els = viewContainer.querySelectorAll('.mx-view-item');
+  const els = viewContainer.querySelectorAll(".mx-view-item");
   const res = [];
   for (let el of els) {
     res.push(el.dataset.view_id);
@@ -2543,20 +2574,20 @@ export function getViewsOrder() {
  */
 export function getViewJson(idView, opt) {
   const h = mx.helpers;
-  opt = Object.assign({}, {asString: true}, opt);
+  opt = Object.assign({}, { asString: true }, opt);
   const view = h.getView(idView);
   const keys = [
-    'id',
-    'editor',
-    'target',
-    'date_modified',
-    'data',
-    'type',
-    'pid',
-    'project',
-    'readers',
-    'editors',
-    '_edit'
+    "id",
+    "editor",
+    "target",
+    "date_modified",
+    "data",
+    "type",
+    "pid",
+    "project",
+    "readers",
+    "editors",
+    "_edit",
   ];
   const out = {};
   keys.forEach((k) => {
@@ -2588,7 +2619,7 @@ export async function makeTransparencySlider(o) {
     return;
   }
 
-  const module = await mx.helpers.moduleLoad('nouislider');
+  const module = await mx.helpers.moduleLoad("nouislider");
   const noUiSlider = module[0].default;
   const oldSlider = view._filters_tools.transparencySlider;
   if (oldSlider) {
@@ -2596,10 +2627,10 @@ export async function makeTransparencySlider(o) {
   }
 
   const slider = noUiSlider.create(el, {
-    range: {min: 0, max: 100},
+    range: { min: 0, max: 100 },
     step: 1,
     start: 0,
-    tooltips: false
+    tooltips: false,
   });
 
   slider._view = view;
@@ -2613,11 +2644,11 @@ export async function makeTransparencySlider(o) {
    *
    */
   slider.on(
-    'update',
+    "update",
     mx.helpers.debounce(function (n, h) {
       const view = slider._view;
       const opacity = 1 - n[h] * 0.01;
-      view._setOpacity({opacity: opacity});
+      view._setOpacity({ opacity: opacity });
     }, 10)
   );
 }
@@ -2645,10 +2676,10 @@ export async function makeNumericSlider(o) {
     oldSlider.destroy();
   }
 
-  const summary = await h.getViewSourceSummary(view);
+  const summary = await getViewSourceSummary(view);
 
-  let min = h.path(summary, 'attribute_stat.min', 0);
-  let max = h.path(summary, 'attribute_stat.max', min);
+  let min = h.path(summary, "attribute_stat.min", 0);
+  let max = h.path(summary, "attribute_stat.max", min);
 
   if (view && min !== null && max !== null) {
     if (min === max) {
@@ -2658,9 +2689,9 @@ export async function makeNumericSlider(o) {
 
     const range = {
       min: min,
-      max: max
+      max: max,
     };
-    module = await mx.helpers.moduleLoad('nouislider');
+    module = await mx.helpers.moduleLoad("nouislider");
     const noUiSlider = module[0].default;
 
     const slider = noUiSlider.create(el, {
@@ -2668,15 +2699,15 @@ export async function makeNumericSlider(o) {
       step: (min + max) / 1000,
       start: [min, max],
       connect: true,
-      behaviour: 'drag',
-      tooltips: false
+      behaviour: "drag",
+      tooltips: false,
     });
 
     slider._view = view;
-    slider._elMin = el.parentElement.querySelector('.mx-slider-range-min');
-    slider._elMax = el.parentElement.querySelector('.mx-slider-range-max');
-    slider._elDMax = el.parentElement.querySelector('.mx-slider-dyn-max');
-    slider._elDMin = el.parentElement.querySelector('.mx-slider-dyn-min');
+    slider._elMin = el.parentElement.querySelector(".mx-slider-range-min");
+    slider._elMax = el.parentElement.querySelector(".mx-slider-range-max");
+    slider._elDMax = el.parentElement.querySelector(".mx-slider-dyn-max");
+    slider._elDMin = el.parentElement.querySelector(".mx-slider-dyn-min");
 
     /**
      * update min / max range
@@ -2693,25 +2724,25 @@ export async function makeNumericSlider(o) {
      *
      */
     slider.on(
-      'update',
+      "update",
       h.debounce((n) => {
         const view = slider._view;
         const elDMin = slider._elDMin;
         const elDMax = slider._elDMax;
-        const k = h.path(view, 'data.attribute.name', '');
+        const k = h.path(view, "data.attribute.name", "");
 
         /* Update text values*/
         if (n[0]) {
           elDMin.innerHTML = n[0];
         }
         if (n[1]) {
-          elDMax.innerHTML = ' – ' + n[1];
+          elDMax.innerHTML = " – " + n[1];
         }
 
         const filter = [
-          'any',
-          ['all', ['<=', k, n[1] * 1], ['>=', k, n[0] * 1]],
-          ['!has', k]
+          "any",
+          ["all", ["<=", k, n[1] * 1], [">=", k, n[0] * 1]],
+          ["!has", k],
         ];
 
         if (h.isArray(view._null_filter)) {
@@ -2720,7 +2751,7 @@ export async function makeNumericSlider(o) {
 
         view._setFilter({
           filter: filter,
-          type: 'numeric_slider'
+          type: "numeric_slider",
         });
       }, 100)
     );
@@ -2733,8 +2764,8 @@ export async function makeNumericSlider(o) {
 export async function makeTimeSlider(o) {
   const h = mx.helpers;
   const k = {};
-  k.t0 = 'mx_t0';
-  k.t1 = 'mx_t1';
+  k.t0 = "mx_t0";
+  k.t1 = "mx_t1";
 
   const view = o.view;
   const elView = h.getViewEl(view);
@@ -2750,9 +2781,9 @@ export async function makeTimeSlider(o) {
     oldSlider.destroy();
   }
 
-  const summary = await h.getViewSourceSummary(view);
-  const extent = h.path(summary, 'extent_time', {});
-  const attributes = h.path(summary, 'attributes', []);
+  const summary = await getViewSourceSummary(view);
+  const extent = h.path(summary, "extent_time", {});
+  const attributes = h.path(summary, "attributes", []);
 
   /*
    * Create a time slider for each time enabled view
@@ -2782,13 +2813,13 @@ export async function makeTimeSlider(o) {
 
       const range = {
         min: min,
-        max: max
+        max: max,
       };
 
       start.push(min);
       start.push(max);
 
-      const module = await h.moduleLoad('nouislider');
+      const module = await h.moduleLoad("nouislider");
       const noUiSlider = module[0].default;
 
       const slider = noUiSlider.create(el, {
@@ -2796,22 +2827,22 @@ export async function makeTimeSlider(o) {
         step: 24 * 60 * 60 * 1000,
         start: start,
         connect: true,
-        behaviour: 'drag',
+        behaviour: "drag",
         tooltips: false,
         format: {
           to: fTo,
-          from: fFrom
-        }
+          from: fFrom,
+        },
       });
 
       /**
        * Save slider in the view and view ref in target
        */
       slider._view = view;
-      slider._elDMin = el.parentElement.querySelector('.mx-slider-dyn-min');
-      slider._elDMax = el.parentElement.querySelector('.mx-slider-dyn-max');
-      slider._elMin = el.parentElement.querySelector('.mx-slider-range-min');
-      slider._elMax = el.parentElement.querySelector('.mx-slider-range-max');
+      slider._elDMin = el.parentElement.querySelector(".mx-slider-dyn-min");
+      slider._elDMax = el.parentElement.querySelector(".mx-slider-dyn-max");
+      slider._elMin = el.parentElement.querySelector(".mx-slider-range-min");
+      slider._elMax = el.parentElement.querySelector(".mx-slider-range-max");
 
       slider._elMin.innerText = h.date(range.min);
       slider._elMax.innerText = h.date(range.max);
@@ -2819,7 +2850,7 @@ export async function makeTimeSlider(o) {
       view._filters_tools.timeSlider = slider;
 
       slider.on(
-        'update',
+        "update",
         h.debounce((t) => {
           const view = slider._view;
           const elDMax = slider._elDMax;
@@ -2829,26 +2860,26 @@ export async function makeTimeSlider(o) {
             elDMin.innerHTML = h.date(t[0]);
           }
           if (t[1]) {
-            elDMax.innerHTML = ' – ' + h.date(t[1]);
+            elDMax.innerHTML = " – " + h.date(t[1]);
           }
 
-          const filter = ['any'];
-          const filterAll = ['all'];
-          filter.push(['==', k.t0, -9e10]);
-          filter.push(['==', k.t1, -9e10]);
+          const filter = ["any"];
+          const filterAll = ["all"];
+          filter.push(["==", k.t0, -9e10]);
+          filter.push(["==", k.t1, -9e10]);
 
           if (hasT0 && hasT1) {
-            filterAll.push(['<=', k.t0, t[1] / 1000]);
-            filterAll.push(['>=', k.t1, t[0] / 1000]);
+            filterAll.push(["<=", k.t0, t[1] / 1000]);
+            filterAll.push([">=", k.t1, t[0] / 1000]);
           } else if (hasT0) {
-            filterAll.push(['>=', k.t0, t[0] / 1000]);
-            filterAll.push(['<=', k.t0, t[1] / 1000]);
+            filterAll.push([">=", k.t0, t[0] / 1000]);
+            filterAll.push(["<=", k.t0, t[1] / 1000]);
           }
           filter.push(filterAll);
 
           view._setFilter({
             filter: filter,
-            type: 'time_slider'
+            type: "time_slider",
           });
         }, 100)
       );
@@ -2873,7 +2904,7 @@ export function handleViewValueFilterText(o) {
     idView = el.dataset.view_action_target;
     action = el.dataset.view_action_key;
 
-    if (!idView || action !== 'view_search_value') {
+    if (!idView || action !== "view_search_value") {
       return;
     }
 
@@ -2882,7 +2913,7 @@ export function handleViewValueFilterText(o) {
     options = {
       id: o.id,
       idView: idView,
-      search: search
+      search: search,
     };
 
     filterViewValues(options);
@@ -2906,18 +2937,18 @@ export async function viewDelete(view) {
   const geojsonData = mx.data.geojson;
 
   await h.viewLayersRemove({
-    idView: view.id
+    idView: view.id,
   });
   mData.viewsList.removeItemById(view.id);
 
-  if (view.type === 'gj') {
+  if (view.type === "gj") {
     geojsonData.removeItem(view.id);
   }
 
   views.splice(vIndex, 1);
 
   mx.events.fire({
-    type: 'view_deleted'
+    type: "view_deleted",
   });
   return true;
 }
@@ -2943,27 +2974,27 @@ export async function viewLayersRemove(o) {
   delete view._added_at;
 
   mx.events.fire({
-    type: 'view_remove',
+    type: "view_remove",
     data: {
       idView: o.idView,
-      view: h.getViewJson(view, {asString: false})
-    }
+      view: h.getViewJson(view, { asString: false }),
+    },
   });
 
   h.removeLayersByPrefix({
     id: o.id,
-    prefix: o.idView
+    prefix: o.idView,
   });
 
   await h.viewModulesRemove(view);
 
   mx.events.fire({
-    type: 'view_removed',
+    type: "view_removed",
     data: {
       idView: o.idView,
       time: now,
-      duration: viewDuration
-    }
+      duration: viewDuration,
+    },
   });
 
   if (view._elLegendGroup) {
@@ -2988,10 +3019,10 @@ function _viewUiOpen(view) {
   }
   view._open = true;
   mx.events.fire({
-    type: 'view_ui_open',
+    type: "view_ui_open",
     data: {
-      idView: view.id
-    }
+      idView: view.id,
+    },
   });
   return true;
 }
@@ -3011,10 +3042,10 @@ async function _viewUiClose(view) {
   }
   view._open = false;
   mx.events.fire({
-    type: 'view_ui_close',
+    type: "view_ui_close",
     data: {
-      idView: view.id
-    }
+      idView: view.id,
+    },
   });
   return true;
 }
@@ -3039,10 +3070,10 @@ export async function viewAdd(view) {
      */
     _viewUiOpen(view);
     await h.viewLayersAdd({
-      view: view
+      view: view,
     });
     await h.updateLanguageElements({
-      el: h.getViewEl(view)
+      el: h.getViewEl(view),
     });
     return true;
   } catch (e) {
@@ -3065,7 +3096,7 @@ export async function viewRemove(view) {
     }
     _viewUiClose(view);
     await h.viewLayersRemove({
-      idView: view.id
+      idView: view.id,
     });
     return true;
   } catch (e) {
@@ -3112,17 +3143,17 @@ export function viewSetFilter(o) {
   const idView = view.id;
   const filterView = view._filters;
   const filter = o.filter;
-  const type = o.type ? o.type : 'default';
-  const layers = h.getLayerByPrefix({prefix: idView});
+  const type = o.type ? o.type : "default";
+  const layers = h.getLayerByPrefix({ prefix: idView });
   const hasFilter = h.isArray(filter) && filter.length > 1;
   const filterNew = [];
 
   mx.events.fire({
-    type: 'view_filter',
+    type: "view_filter",
     data: {
       idView: idView,
-      filter: filter
-    }
+      filter: filter,
+    },
   });
 
   /**
@@ -3146,10 +3177,10 @@ export function viewSetFilter(o) {
    */
 
   for (let layer of layers) {
-    let filterOrig = h.path(layer, 'metadata.filter', null);
+    let filterOrig = h.path(layer, "metadata.filter", null);
     let filterFinal = [];
     if (!filterOrig) {
-      filterFinal.push('all', ...filterNew);
+      filterFinal.push("all", ...filterNew);
     } else {
       filterFinal.push(...filterOrig, ...filterNew);
     }
@@ -3157,11 +3188,11 @@ export function viewSetFilter(o) {
   }
 
   mx.events.fire({
-    type: 'view_filtered',
+    type: "view_filtered",
     data: {
       idView: idView,
-      filter: filterView
-    }
+      filter: filterView,
+    },
   });
 }
 
@@ -3180,12 +3211,12 @@ export function viewSetOpacity(o) {
   const map = h.getMap(idMap);
   const layers = h.getLayerByPrefix({
     map: map,
-    prefix: idView
+    prefix: idView,
   });
 
   layers.forEach((layer) => {
-    const type = layer.type === 'symbol' ? 'icon' : layer.type;
-    const property = type + '-opacity';
+    const type = layer.type === "symbol" ? "icon" : layer.type;
+    const property = type + "-opacity";
     try {
       map.setPaintProperty(layer.id, property, opacity);
     } catch (e) {
@@ -3204,7 +3235,7 @@ export function viewSetOpacity(o) {
 export function plotTimeSliderData(o) {
   const data = o.data;
   const el = o.el;
-  o.type = o.type ? o.type : 'density';
+  o.type = o.type ? o.type : "density";
 
   if (!data || !data.year || !data.n) {
     return;
@@ -3212,12 +3243,12 @@ export function plotTimeSliderData(o) {
 
   const obj = {
     labels: data.year,
-    series: [data.n]
+    series: [data.n],
   };
 
   const options = {
     seriesBarDistance: 100,
-    height: '30px',
+    height: "30px",
     showPoint: false,
     showLine: false,
     showArea: true,
@@ -3226,19 +3257,19 @@ export function plotTimeSliderData(o) {
     axisX: {
       showGrid: false,
       showLabel: false,
-      offset: 0
+      offset: 0,
     },
     axisY: {
       showGrid: false,
       showLabel: false,
-      offset: 0
+      offset: 0,
     },
     chartPadding: 0,
-    low: 0
+    low: 0,
   };
 
-  divPlot = document.createElement('div');
-  divPlot.className = 'ct-chart ct-square mx-slider-chart';
+  divPlot = document.createElement("div");
+  divPlot.className = "ct-chart ct-square mx-slider-chart";
   el.append(divPlot);
   cL = new Chartist.Line(divPlot, obj, options);
 }
@@ -3253,7 +3284,7 @@ export function plotTimeSliderData(o) {
  */
 export function getLayerById(o) {
   o = o || {};
-  o.idLayer = o.idLayer || '';
+  o.idLayer = o.idLayer || "";
   const map = mx.helpers.getMap(o.id);
   const result = [];
 
@@ -3290,7 +3321,7 @@ export function getLayerByPrefix(o) {
     {
       prefix: /^MX/,
       base: false,
-      nameOnly: false
+      nameOnly: false,
     },
     o
   );
@@ -3299,7 +3330,7 @@ export function getLayerByPrefix(o) {
   const map = o.map || h.getMap(o.id);
 
   if (!h.isRegExp(o.prefix)) {
-    o.prefix = new RegExp('^' + o.prefix);
+    o.prefix = new RegExp("^" + o.prefix);
   }
 
   const layers = map
@@ -3321,7 +3352,7 @@ export function getLayerByPrefix(o) {
  */
 export function getLayerNamesByPrefix(o) {
   const h = mx.helpers;
-  o = Object.assign({}, {nameOnly: true}, o);
+  o = Object.assign({}, { nameOnly: true }, o);
   return h.getLayerByPrefix(o);
 }
 
@@ -3343,7 +3374,7 @@ export function removeLayersByPrefix(o) {
 
   const layers = mx.helpers.getLayerNamesByPrefix({
     map: map,
-    prefix: o.prefix
+    prefix: o.prefix,
   });
 
   layers.forEach(function (l) {
@@ -3398,7 +3429,7 @@ export function syncAll(o) {
               center: m.getCenter(),
               zoom: m.getZoom(),
               pitch: m.getPitch(),
-              bearing: m.getBearing()
+              bearing: m.getBearing(),
             };
             locked = true;
             others.forEach(function (o) {
@@ -3413,10 +3444,10 @@ export function syncAll(o) {
         };
       }
 
-      m.on('move', maps[x].listener.sync);
+      m.on("move", maps[x].listener.sync);
     } else {
       if (exists) {
-        m.off('move', maps[x].listener.sync);
+        m.off("move", maps[x].listener.sync);
       }
     }
   });
@@ -3436,11 +3467,11 @@ export function existsInList(li, it, val, inverse) {
       if (
         i === it &&
         (li[i] === val ||
-          (typeof val === 'object' &&
+          (typeof val === "object" &&
             JSON.stringify(li[i]) === JSON.stringify(val)))
       ) {
         return true;
-      } else if (typeof li[i] === 'object') {
+      } else if (typeof li[i] === "object") {
         if (this.existsInList(li[i], it, val, inverse)) {
           return true;
         }
@@ -3452,11 +3483,11 @@ export function existsInList(li, it, val, inverse) {
       if (
         j === it &&
         (li[j] !== val ||
-          (typeof val === 'object' &&
+          (typeof val === "object" &&
             JSON.stringify(li[j]) !== JSON.stringify(val)))
       ) {
         return true;
-      } else if (typeof li[j] === 'object') {
+      } else if (typeof li[j] === "object") {
         if (this.existsInList(li[j], it, val, inverse)) {
           return true;
         }
@@ -3489,7 +3520,7 @@ export async function viewLayersAdd(o) {
   }
   const isStory = h.isStoryPlaying();
   const idLayerBefore = o.before
-    ? h.getLayerNamesByPrefix({prefix: o.before})[0]
+    ? h.getLayerNamesByPrefix({ prefix: o.before })[0]
     : mx.settings.layerBefore;
   let view = o.view || h.getView(o.idView) || {};
 
@@ -3505,7 +3536,7 @@ export async function viewLayersAdd(o) {
    */
   if (!h.isView(view)) {
     console.warn(
-      'viewLayerAdd : view not found, locally or remotely. Options:',
+      "viewLayerAdd : view not found, locally or remotely. Options:",
       o
     );
     return;
@@ -3519,11 +3550,11 @@ export async function viewLayersAdd(o) {
    * Fire view add event
    */
   mx.events.fire({
-    type: 'view_add',
+    type: "view_add",
     data: {
       idView: idView,
-      view: h.getViewJson(view, {asString: false})
-    }
+      view: h.getViewJson(view, { asString: false }),
+    },
   });
 
   /*
@@ -3531,7 +3562,7 @@ export async function viewLayersAdd(o) {
    */
   h.removeLayersByPrefix({
     id: idMap,
-    prefix: idView
+    prefix: idView,
   });
 
   /*
@@ -3554,7 +3585,7 @@ export async function viewLayersAdd(o) {
    */
   await h.addSourceFromView({
     map: m.map,
-    view: view
+    view: view,
   });
 
   /*
@@ -3578,11 +3609,11 @@ export async function viewLayersAdd(o) {
   view._added_at = Date.now();
 
   mx.events.fire({
-    type: 'view_added',
+    type: "view_added",
     data: {
       idView: view.id,
-      time: view._added_at
-    }
+      time: view._added_at,
+    },
   });
 
   return true;
@@ -3599,7 +3630,7 @@ export async function viewLayersAdd(o) {
           map: m.map,
           before: idLayerBefore,
           elLegendContainer: o.elLegendContainer,
-          addTitle: o.addTitle
+          addTitle: o.addTitle,
         });
       },
       cc: function () {
@@ -3608,7 +3639,7 @@ export async function viewLayersAdd(o) {
           map: m.map,
           before: idLayerBefore,
           elLegendContainer: o.elLegendContainer,
-          addTitle: o.addTitle
+          addTitle: o.addTitle,
         });
       },
       vt: function () {
@@ -3618,7 +3649,7 @@ export async function viewLayersAdd(o) {
           debug: o.debug,
           before: idLayerBefore,
           elLegendContainer: o.elLegendContainer,
-          addTitle: o.addTitle
+          addTitle: o.addTitle,
         });
       },
       gj: function () {
@@ -3627,12 +3658,12 @@ export async function viewLayersAdd(o) {
           map: m.map,
           before: idLayerBefore,
           elLegendContainer: o.elLegendContainer,
-          addTitle: o.addTitle
+          addTitle: o.addTitle,
         });
       },
       sm: function () {
         return Promise.resolve(true);
-      }
+      },
     };
 
     return types[viewType]();
@@ -3656,7 +3687,7 @@ export function elLegend(view, opt) {
   const h = mx.helpers;
 
   if (!h.isView(view)) {
-    throw new Error('elLegend invalid view');
+    throw new Error("elLegend invalid view");
   }
 
   /**
@@ -3666,9 +3697,9 @@ export function elLegend(view, opt) {
     {},
     {
       removeOld: true,
-      type: 'vt',
+      type: "vt",
       addTitle: false,
-      elLegendContainer: null
+      elLegendContainer: null,
     },
     opt
   );
@@ -3714,59 +3745,59 @@ export function elLegend(view, opt) {
 
   const title = h.getLabelFromObjectPath({
     obj: view,
-    path: 'data.title',
-    defaultValue: '[ missing title ]'
+    path: "data.title",
+    defaultValue: "[ missing title ]",
   });
 
-  const elLegendTitle = h.el('div', [
+  const elLegendTitle = h.el("div", [
     h.el(
-      'div',
+      "div",
       {
-        class: ['mx-legend-view-title-container']
+        class: ["mx-legend-view-title-container"],
       },
       h.el(
-        'span',
+        "span",
         {
-          class: ['mx-legend-view-title', 'text-muted', 'hint--bottom'],
-          'aria-label': `${title}`
+          class: ["mx-legend-view-title", "text-muted", "hint--bottom"],
+          "aria-label": `${title}`,
         },
-        opt.addTitle ? title : ''
+        opt.addTitle ? title : ""
       ),
       h.el(
-        'span',
+        "span",
         {
-          class: 'hint--bottom',
+          class: "hint--bottom",
           dataset: {
-            view_action_key: 'btn_opt_meta',
+            view_action_key: "btn_opt_meta",
             view_action_target: view.id,
-            lang_key: 'btn_opt_meta',
-            lang_type: 'tooltip'
-          }
+            lang_key: "btn_opt_meta",
+            lang_type: "tooltip",
+          },
         },
-        h.el('i', {
-          class: ['fa', 'fa-info-circle', 'text-muted', 'mx-legend-btn-meta']
+        h.el("i", {
+          class: ["fa", "fa-info-circle", "text-muted", "mx-legend-btn-meta"],
         })
       )
-    )
+    ),
   ]);
 
   /**
    * Legend element
    */
-  const elLegend = h.el('div', {
-    class: 'mx-view-legend-' + opt.type,
-    id: idLegend
+  const elLegend = h.el("div", {
+    class: "mx-view-legend-" + opt.type,
+    id: idLegend,
   });
 
   /**
    * Legend group
    */
   const elLegendGroup = h.el(
-    'div',
+    "div",
     {
-      class: 'mx-view-legend-group',
-      dataset: {id_view: idView},
-      style: {order: 0}
+      class: "mx-view-legend-group",
+      dataset: { id_view: idView },
+      style: { order: 0 },
     },
     opt.addTitle ? elLegendTitle : null,
     elLegend
@@ -3799,22 +3830,22 @@ export function elLegend(view, opt) {
  */
 export async function getViewLegendImage(opt) {
   const h = mx.helpers;
-  opt = Object.assign({format: 'image/png'}, opt);
+  opt = Object.assign({ format: "image/png" }, opt);
   const view = h.getView(opt.view);
   const isVt = h.isViewVt(view);
   const isRt = !isVt && h.isViewRt(view);
   const isValid = isVt || isRt;
   const isOpen = isValid && h.isViewOpen(view);
 
-  let out = '';
+  let out = "";
   if (!isValid) {
-    return Promise.reject('not valid');
+    return Promise.reject("not valid");
   }
 
   if (isRt) {
-    const legendUrl = h.path(view, 'data.source.legend', null);
+    const legendUrl = h.path(view, "data.source.legend", null);
     if (!h.isUrl(legendUrl)) {
-      return Promise.reject('no legend');
+      return Promise.reject("no legend");
     }
     return h.urlToImageBase64(legendUrl);
   }
@@ -3827,29 +3858,29 @@ export async function getViewLegendImage(opt) {
 
       if (!hasLegend) {
         close();
-        return Promise.reject('no legend');
+        return Promise.reject("no legend");
       }
 
-      const elRules = view._elLegend.querySelector('.mx-legend-vt-rules');
+      const elRules = view._elLegend.querySelector(".mx-legend-vt-rules");
       const hasRules = h.isElement(elRules);
 
       if (!hasRules) {
         close();
-        return Promise.reject('no legend content');
+        return Promise.reject("no legend content");
       }
       const elRulesClone = elRules.cloneNode(true);
       document.body.appendChild(elRulesClone);
-      elRulesClone.style.position = 'absolute';
-      elRulesClone.style.border = 'none';
-      elRulesClone.style.overflow = 'visible';
+      elRulesClone.style.position = "absolute";
+      elRulesClone.style.border = "none";
+      elRulesClone.style.overflow = "visible";
 
-      const html2canvas = await h.moduleLoad('html2canvas');
+      const html2canvas = await h.moduleLoad("html2canvas");
       const canvas = await html2canvas(elRulesClone, {
-        logging: false
+        logging: false,
       });
       close();
       elRulesClone.remove();
-      out = canvas.toDataURL('image/png');
+      out = canvas.toDataURL("image/png");
 
       return out;
     } catch (e) {
@@ -3879,25 +3910,25 @@ async function viewLayersAddCc(o) {
   const h = mx.helpers;
   const view = o.view;
   const map = o.map;
-  const methods = mx.helpers.path(view, 'data.methods');
+  const methods = mx.helpers.path(view, "data.methods");
 
   const idView = view.id;
-  const idSource = idView + '-SRC';
-  const idListener = 'listener_cc_' + view.id;
+  const idSource = idView + "-SRC";
+  const idListener = "listener_cc_" + view.id;
 
   let cc;
 
   const elLegend = h.elLegend(view, {
-    type: 'cc',
+    type: "cc",
     elLegendContainer: o.elLegendContainer,
     addTitle: o.addTitle,
-    removeOld: true
+    removeOld: true,
   });
 
   try {
     cc = new Function(methods)();
   } catch (e) {
-    throw new Error('Failed to parse cc view', e.message);
+    throw new Error("Failed to parse cc view", e.message);
   }
 
   if (
@@ -3905,7 +3936,7 @@ async function viewLayersAddCc(o) {
     !(cc.onInit instanceof Function) ||
     !(cc.onClose instanceof Function)
   ) {
-    return console.warn('Invalid custom code  view');
+    return console.warn("Invalid custom code  view");
   }
 
   const opt = {
@@ -3916,14 +3947,14 @@ async function viewLayersAddCc(o) {
     idView: idView,
     idSource: idSource,
     idLegend: elLegend.id,
-    elLegend: elLegend
+    elLegend: elLegend,
   };
   opt.onInit = tryCatched(cc.onInit.bind());
   opt.onClose = cc.onClose.bind(opt);
 
   h.removeLayersByPrefix({
     prefix: opt.idView,
-    id: mx.settings.map.id
+    id: mx.settings.map.id,
   });
 
   /**
@@ -3932,8 +3963,8 @@ async function viewLayersAddCc(o) {
   mx.listeners.addListener({
     group: idListener,
     target: elLegend,
-    type: ['click', 'mousedown', 'change', 'input'],
-    callback: catchEvent
+    type: ["click", "mousedown", "change", "input"],
+    callback: catchEvent,
   });
 
   if (opt.map.getSource(opt.idSource)) {
@@ -3992,20 +4023,20 @@ async function viewLayersAddRt(o) {
   const map = o.map;
   const h = mx.helpers;
   const idView = view.id;
-  const idSource = idView + '-SRC';
-  const legendB64Default = require('../../src/svg/no_legend.svg');
-  const legendUrl = h.path(view, 'data.source.legend', null);
-  const tiles = h.path(view, 'data.source.tiles', null);
-  const useMirror = h.path(view, 'data.source.useMirror', false);
+  const idSource = idView + "-SRC";
+  const legendB64Default = require("../../src/svg/no_legend.svg");
+  const legendUrl = h.path(view, "data.source.legend", null);
+  const tiles = h.path(view, "data.source.tiles", null);
+  const useMirror = h.path(view, "data.source.useMirror", false);
   const hasTiles =
     h.isArray(tiles) && tiles.length > 0 && h.isArrayOf(tiles, h.isUrl);
   const legendTitle = h.getLabelFromObjectPath({
     obj: view,
-    path: 'data.source.legendTitles',
-    defaultValue: null
+    path: "data.source.legendTitles",
+    defaultValue: null,
   });
   const hasLegendUrl = h.isUrl(legendUrl);
-  const elLegendImageBox = h.el('div', {class: 'mx-legend-box'});
+  const elLegendImageBox = h.el("div", { class: "mx-legend-box" });
   let isLegendDefault = false;
 
   if (!hasTiles) {
@@ -4025,13 +4056,13 @@ async function viewLayersAddRt(o) {
   map.addLayer(
     {
       id: idView,
-      type: 'raster',
+      type: "raster",
       source: idSource,
       metadata: {
         idView: idView,
         priority: 0,
-        position: 0
-      }
+        position: 0,
+      },
     },
     o.before
   );
@@ -4042,10 +4073,10 @@ async function viewLayersAddRt(o) {
 
   /* Legend element */
   const elLegend = h.elLegend(view, {
-    type: 'rt',
+    type: "rt",
     elLegendContainer: o.elLegendContainer,
     addTitle: o.addTitle,
-    removeOld: true
+    removeOld: true,
   });
 
   if (!h.isElement(elLegend)) {
@@ -4055,9 +4086,9 @@ async function viewLayersAddRt(o) {
   /* Legend title  */
   if (legendTitle) {
     const elLabel = h.el(
-      'span',
+      "span",
       {
-        class: ['mx-legend-rt-title', 'text-muted']
+        class: ["mx-legend-rt-title", "text-muted"],
       },
       legendTitle
     );
@@ -4081,7 +4112,7 @@ async function viewLayersAddRt(o) {
         onAdded: (miniMap) => {
           /* Raster MiniMap added, here */
           view._miniMap = miniMap;
-        }
+        },
       });
     });
     return true;
@@ -4100,23 +4131,23 @@ async function viewLayersAddRt(o) {
 
   if (isLegendDefault) {
     /* Add tooltip 'missing legend' */
-    elLegend.classList.add('hint--bottom');
-    elLegend.dataset.lang_key = 'noLegend';
-    elLegend.dataset.lang_type = 'tooltip';
+    elLegend.classList.add("hint--bottom");
+    elLegend.dataset.lang_key = "noLegend";
+    elLegend.dataset.lang_type = "tooltip";
     h.updateLanguageElements({
-      el: o.elLegendContainer
+      el: o.elLegendContainer,
     });
   } else {
     /* Indicate that image can be zoomed */
-    elLegend.style.cursor = 'zoom-in';
+    elLegend.style.cursor = "zoom-in";
   }
   /* Create an image with given source */
-  const img = h.el('img', {alt: 'Legend'});
-  img.alt = 'Legend';
-  img.addEventListener('error', handleImgError);
-  img.addEventListener('load', handleLoad, {once: true});
+  const img = h.el("img", { alt: "Legend" });
+  img.alt = "Legend";
+  img.addEventListener("error", handleImgError);
+  img.addEventListener("load", handleLoad, { once: true });
   if (!isLegendDefault) {
-    img.addEventListener('click', handleClick);
+    img.addEventListener("click", handleClick);
   }
   /* Set base64 image as source */
   img.src = legendB64;
@@ -4133,22 +4164,22 @@ async function viewLayersAddRt(o) {
       legendTitle ||
       h.getLabelFromObjectPath({
         obj: view,
-        path: 'data.title',
-        defaultValue: '[ missing title ]'
+        path: "data.title",
+        defaultValue: "[ missing title ]",
       });
 
-    const imgModal = h.el('img', {
+    const imgModal = h.el("img", {
       src: img.src,
-      alt: 'Legend',
-      onerror: handleImgError
+      alt: "Legend",
+      onerror: handleImgError,
     });
 
     /* Add in modal */
     modal({
       title: title,
-      id: 'legend-raster-' + view.id,
+      id: "legend-raster-" + view.id,
       content: imgModal,
-      addBackground: false
+      addBackground: false,
     });
   }
 
@@ -4179,18 +4210,18 @@ export async function viewLayersAddVt(o) {
 
   const view = o.view;
   const idView = view.id;
-  const viewData = p(view, 'data');
-  const attr = p(viewData, 'attribute.name', null);
-  const idSource = view.id + '-SRC';
-  const style = p(viewData, 'style', {});
-  const zConfig = p(style, 'zoomConfig', {});
-  const showSymbolLabel = p(style, 'showSymbolLabel', false);
-  const includeUpper = p(style, 'includeUpperBoundInInterval', false);
-  const hideNulls = p(style, 'hideNulls', false);
-  const ruleNulls = p(style, 'nulls', [])[0] || {};
-  const geomType = p(viewData, 'geometry.type', 'point');
-  const source = p(viewData, 'source', {});
-  const idSourceLayer = p(source, 'layerInfo.name');
+  const viewData = p(view, "data");
+  const attr = p(viewData, "attribute.name", null);
+  const idSource = view.id + "-SRC";
+  const style = p(viewData, "style", {});
+  const zConfig = p(style, "zoomConfig", {});
+  const showSymbolLabel = p(style, "showSymbolLabel", false);
+  const includeUpper = p(style, "includeUpperBoundInInterval", false);
+  const hideNulls = p(style, "hideNulls", false);
+  const ruleNulls = p(style, "nulls", [])[0] || {};
+  const geomType = p(viewData, "geometry.type", "point");
+  const source = p(viewData, "source", {});
+  const idSourceLayer = p(source, "layerInfo.name");
   const addLegend = h.isEmpty(o.addLegend) ? true : !!o.addLegend;
   let idInc = 0; // increment layer id last part
 
@@ -4205,7 +4236,7 @@ export async function viewLayersAddVt(o) {
   /**
    * Init null value
    */
-  let nullValue = '';
+  let nullValue = "";
   if (ruleNulls.value) {
     nullValue = ruleNulls.value;
   }
@@ -4213,30 +4244,30 @@ export async function viewLayersAddVt(o) {
   /**
    * Source stat
    */
-  const sourceSummary = await h.getViewSourceSummary(view, {
+  const sourceSummary = await getViewSourceSummary(view, {
     nullValue: nullValue,
     idAttr: attr,
-    stats: ['attributes']
+    stats: ["attributes"],
   });
 
-  const statType = h.path(sourceSummary, 'attribute_stat.type', 'categorical');
-  const isNumeric = statType === 'continuous';
-  const rules = h.clone(p(style, 'rules', []));
+  const statType = h.path(sourceSummary, "attribute_stat.type", "categorical");
+  const isNumeric = statType === "continuous";
+  const rules = h.clone(p(style, "rules", []));
   const nRules = rules.length;
   const layers = [];
-  const styleCustom = JSON.parse(p(style, 'custom.json'));
-  const sepLayer = p(mx, 'settings.separators.sublayer');
+  const styleCustom = JSON.parse(p(style, "custom.json"));
+  const sepLayer = p(mx, "settings.separators.sublayer");
 
   /**
    * Updte filterNull ( after type is determined )
    */
   const filterIncludeNull = [];
   const filterExcludeNull = [];
-  for (const op of ['==', '!=']) {
-    const f = op === '==' ? filterIncludeNull : filterExcludeNull;
+  for (const op of ["==", "!="]) {
+    const f = op === "==" ? filterIncludeNull : filterExcludeNull;
     if (isNumeric) {
       if (h.isEmpty(nullValue)) {
-        f.push([op, attr, '']);
+        f.push([op, attr, ""]);
       } else {
         f.push([op, attr, nullValue * 1]);
       }
@@ -4244,7 +4275,7 @@ export async function viewLayersAddVt(o) {
       if (nullValue || nullValue === false) {
         f.push([op, attr, nullValue]);
       } else {
-        f.push([op, attr, '']);
+        f.push([op, attr, ""]);
       }
     }
   }
@@ -4257,14 +4288,14 @@ export async function viewLayersAddVt(o) {
     zoomMin: 0,
     sizeFactorZoomMax: 0,
     sizeFactorZoomMin: 0,
-    sizeFactorZoomExponent: 1
+    sizeFactorZoomExponent: 1,
   };
   const zoomConfig = Object.assign(zDef, zConfig);
 
   /**
    * Clean rules
    */
-  if (isNumeric && nullValue !== '' && isFinite(nullValue)) {
+  if (isNumeric && nullValue !== "" && isFinite(nullValue)) {
     // NOTE: ''*1 -> 0...
     nullValue = nullValue * 1;
   }
@@ -4290,8 +4321,8 @@ export async function viewLayersAddVt(o) {
   const rulesValues = {};
 
   if (isNumeric) {
-    rulesValues.min = p(sourceSummary, 'attribute_stat.min', -Infinity);
-    rulesValues.max = p(sourceSummary, 'attribute_stat.max', Infinity);
+    rulesValues.min = p(sourceSummary, "attribute_stat.min", -Infinity);
+    rulesValues.max = p(sourceSummary, "attribute_stat.max", Infinity);
   }
 
   for (const rule of rules) {
@@ -4302,7 +4333,7 @@ export async function viewLayersAddVt(o) {
   /**
    * Check rules
    */
-  const ruleAll = rules.find((r) => r.value === 'all');
+  const ruleAll = rules.find((r) => r.value === "all");
   const hasRuleAll = !!ruleAll;
   //const hasStyleRules = rules.length > 0 && rules[0].value !== undefined;
   const hasStyleRules = nRules > 0; // && rules[0].value !== undefined;
@@ -4333,8 +4364,8 @@ export async function viewLayersAddVt(o) {
     const layerCustom = {
       id: `${idView}${sepLayer}${0}__custom`,
       source: idSource,
-      'source-layer': idView,
-      type: styleCustom.type || 'circle',
+      "source-layer": idView,
+      type: styleCustom.type || "circle",
       paint: styleCustom.paint || {},
       layout: styleCustom.layout || {},
       minzoom: styleCustom.minzoom || zoomConfig.zoomMin,
@@ -4343,13 +4374,13 @@ export async function viewLayersAddVt(o) {
         position: 0,
         priority: 0,
         idView: idView,
-        filter: []
-      }
+        filter: [],
+      },
     };
     layers.push(layerCustom);
     view._setFilter({
-      filter: styleCustom.filter || ['all'],
-      type: 'custom_style'
+      filter: styleCustom.filter || ["all"],
+      type: "custom_style",
     });
   }
 
@@ -4358,14 +4389,14 @@ export async function viewLayersAddVt(o) {
    */
   if (useStyleDefault) {
     const layerDefault = _build_layer({
-      geomType: geomType
+      geomType: geomType,
     });
     layers.push(layerDefault);
     const ruleDefault = {
-      label_en: 'Default',
-      value: 'all',
+      label_en: "Default",
+      value: "all",
       color: layerDefault?.metadata?.hexColor,
-      size: layerDefault?.metadata?.size
+      size: layerDefault?.metadata?.size,
     };
     rules.push(ruleDefault);
   }
@@ -4374,10 +4405,10 @@ export async function viewLayersAddVt(o) {
    * Create layer for single rule covering all values
    */
   if (useStyleAll) {
-    const hasSprite = ruleAll.sprite && ruleAll.sprite !== 'none';
-    const hasSymbol = hasSprite && geomType === 'point';
-    const hasPattern = hasSprite && geomType === 'polygon';
-    const filter = ['all'];
+    const hasSprite = ruleAll.sprite && ruleAll.sprite !== "none";
+    const hasSymbol = hasSprite && geomType === "point";
+    const hasPattern = hasSprite && geomType === "polygon";
+    const filter = ["all"];
     filter.push(...filterExcludeNull);
     if (!hasSymbol) {
       /**
@@ -4390,7 +4421,7 @@ export async function viewLayersAddVt(o) {
         sprite: ruleAll.sprite,
         opacity: ruleAll.opacity,
         size: ruleAll.size,
-        filter: filter
+        filter: filter,
       });
 
       layers.push(layerAll);
@@ -4398,12 +4429,12 @@ export async function viewLayersAddVt(o) {
       if (hasPattern) {
         const layerPattern = _build_layer({
           priority: 0,
-          geomType: 'pattern',
+          geomType: "pattern",
           hexColor: ruleAll.color,
           sprite: ruleAll.sprite,
           opacity: ruleAll.opacity,
           size: ruleAll.size,
-          filter: filter
+          filter: filter,
         });
         layers.push(layerPattern);
       }
@@ -4413,19 +4444,19 @@ export async function viewLayersAddVt(o) {
        */
       const label = h.getLabelFromObjectPath({
         obj: ruleAll,
-        sep: '_',
-        path: 'label',
-        defaultValue: ruleAll.value
+        sep: "_",
+        path: "label",
+        defaultValue: ruleAll.value,
       });
 
       const layerSprite = _build_layer({
-        geomType: 'symbol',
+        geomType: "symbol",
         label: label,
         hexColor: ruleAll.color,
         sprite: ruleAll.sprite,
         opacity: ruleAll.opacity,
         size: ruleAll.size,
-        filter: filter
+        filter: filter,
       });
 
       layers.push(layerSprite);
@@ -4440,7 +4471,7 @@ export async function viewLayersAddVt(o) {
      * evaluate rules
      */
     rules.forEach((rule, i) => {
-      const filter = ['all'];
+      const filter = ["all"];
       /*
        * Set logic for rules
        */
@@ -4453,8 +4484,8 @@ export async function viewLayersAddVt(o) {
       /**
        * If no value_to, use next value, or use max, or null (non numeric)
        */
-      const nextValue = p(nextRule, 'value', rulesValues.max);
-      rule.value_to = p(rule, 'value_to', nextValue);
+      const nextValue = p(nextRule, "value", rulesValues.max);
+      rule.value_to = p(rule, "value_to", nextValue);
 
       const fromValue = rule.value;
       const toValue = isNumeric ? rule.value_to : null;
@@ -4462,23 +4493,23 @@ export async function viewLayersAddVt(o) {
       /**
        *  Symbols and pattern check
        */
-      const hasSprite = rule.sprite && rule.sprite !== 'none';
-      const hasSymbol = hasSprite && geomType === 'point';
-      const hasPattern = hasSprite && geomType === 'polygon';
+      const hasSprite = rule.sprite && rule.sprite !== "none";
+      const hasSymbol = hasSprite && geomType === "point";
+      const hasPattern = hasSprite && geomType === "polygon";
 
       if (isNumeric && !sameFromTo) {
         /**
          * Case where attr to filter is numeric
          */
-        const fromOp = isFirst ? '>=' : includeUpper ? '>' : '>=';
-        const toOp = isLast ? '<=' : includeUpper ? '<=' : '<';
+        const fromOp = isFirst ? ">=" : includeUpper ? ">" : ">=";
+        const toOp = isLast ? "<=" : includeUpper ? "<=" : "<";
         filter.push([fromOp, attr, fromValue]);
         filter.push([toOp, attr, toValue]);
       } else {
         /**
          * String and boolean
          */
-        filter.push(['==', attr, fromValue]);
+        filter.push(["==", attr, fromValue]);
       }
 
       filter.push(...filterExcludeNull);
@@ -4497,7 +4528,7 @@ export async function viewLayersAddVt(o) {
           opacity: rule.opacity,
           size: rule.size,
           sprite: rule.sprite,
-          filter: filter
+          filter: filter,
         });
         layers.push(layerMain);
 
@@ -4505,11 +4536,11 @@ export async function viewLayersAddVt(o) {
           const layerPattern = _build_layer({
             position: position,
             priority: 0,
-            geomType: 'pattern',
+            geomType: "pattern",
             hexColor: rule.color,
             opacity: rule.opacity,
             sprite: rule.sprite,
-            filter: filter
+            filter: filter,
           });
           layers.push(layerPattern);
         }
@@ -4519,20 +4550,20 @@ export async function viewLayersAddVt(o) {
          */
         const label = h.getLabelFromObjectPath({
           obj: rule,
-          sep: '_',
-          path: 'label',
-          defaultValue: rule.value
+          sep: "_",
+          path: "label",
+          defaultValue: rule.value,
         });
 
         const layerSprite = _build_layer({
           position: position,
-          geomType: 'symbol',
+          geomType: "symbol",
           label: label,
           hexColor: rule.color,
           opacity: rule.opacity,
           size: rule.size,
           sprite: rule.sprite,
-          filter: filter
+          filter: filter,
         });
 
         layers.push(layerSprite);
@@ -4549,26 +4580,26 @@ export async function viewLayersAddVt(o) {
    * Handle layer for null values
    */
   if (useStyleNull) {
-    const filter = ['all'];
+    const filter = ["all"];
 
     filter.push(...filterIncludeNull);
 
     h.updateIfEmpty(ruleNulls, {
-      color: '#A9A9A9',
+      color: "#A9A9A9",
       size: 2,
-      label_en: await getDictItem('schema_style_nulls')
+      label_en: await getDictItem("schema_style_nulls"),
     });
 
-    const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== 'none';
+    const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== "none";
     const layerNull = _build_layer({
-      idSuffix: '_null',
+      idSuffix: "_null",
       priority: 1,
-      geomType: geomType === 'point' && hasSprite ? 'symbol' : geomType,
+      geomType: geomType === "point" && hasSprite ? "symbol" : geomType,
       hexColor: ruleNulls.color,
       opacity: ruleNulls.opacity,
       size: ruleNulls.size,
       sprite: hasSprite ? ruleNulls.sprite : null,
-      filter: filter
+      filter: filter,
     });
     ruleNulls.filter = filter;
     view._null_filter = filter;
@@ -4595,9 +4626,9 @@ export async function viewLayersAddVt(o) {
       const idRulesToRemove = [];
       for (const rule of rulesLegend) {
         const ruleNext = rulesLegend[++pos];
-        const hasSprite = rule.sprite && rule.sprite !== 'none';
+        const hasSprite = rule.sprite && rule.sprite !== "none";
         const nextHasSprite =
-          !!ruleNext && ruleNext.sprite && ruleNext.sprite !== 'none';
+          !!ruleNext && ruleNext.sprite && ruleNext.sprite !== "none";
 
         const isDuplicated =
           ruleNext &&
@@ -4625,10 +4656,10 @@ export async function viewLayersAddVt(o) {
        */
       view._rulesLegend = rulesLegend;
       const elLegend = h.elLegend(view, {
-        type: 'vt',
+        type: "vt",
         removeOld: true,
         elLegendContainer: o.elLegendContainer,
-        addTitle: o.addTitle
+        addTitle: o.addTitle,
       });
       if (h.isElement(elLegend)) {
         /**
@@ -4670,7 +4701,7 @@ export async function viewLayersAddVt(o) {
         idSource: idSource,
         idSourceLayer: idView,
         idView: idView,
-        idSuffix: '',
+        idSuffix: "",
         position: 0,
         priority: 0,
         showSymbolLabel: showSymbolLabel,
@@ -4678,14 +4709,15 @@ export async function viewLayersAddVt(o) {
         sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
         sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
         zoomMax: zoomConfig.zoomMax,
-        zoomMin: zoomConfig.zoomMin
+        zoomMin: zoomConfig.zoomMin,
       },
       opt
     );
 
     if (!config.id) {
-      config.id = `${idView}${sepLayer}${config.position}_${config.priority
-        }_${idInc++}`;
+      config.id = `${idView}${sepLayer}${config.position}_${
+        config.priority
+      }_${idInc++}`;
     }
 
     return makeSimpleLayer(config);
@@ -4737,12 +4769,12 @@ export function viewFiltersInit(idView) {
    * Add methods
    */
   view._filters = {
-    style: ['all'],
-    legend: ['all'],
-    time_slider: ['all'],
-    search_box: ['all'],
-    numeric_slider: ['all'],
-    custom_style: ['all']
+    style: ["all"],
+    legend: ["all"],
+    time_slider: ["all"],
+    search_box: ["all"],
+    numeric_slider: ["all"],
+    custom_style: ["all"],
   };
   view._setFilter = h.viewSetFilter;
   view._setOpacity = h.viewSetOpacity;
@@ -4787,7 +4819,7 @@ export async function viewUiContent(id) {
  * @param {String|Object} id id or View to update
  */
 export async function viewFilterToolsInit(id, opt) {
-  opt = Object.assign({}, {clear: false}, opt);
+  opt = Object.assign({}, { clear: false }, opt);
   const h = mx.helpers;
   try {
     const view = h.getView(id);
@@ -4803,10 +4835,10 @@ export async function viewFilterToolsInit(id, opt) {
     /**
      * Add interactive module
      */
-    proms.push(h.makeTimeSlider({view: view, idMap: idMap}));
-    proms.push(h.makeNumericSlider({view: view, idMap: idMap}));
-    proms.push(h.makeTransparencySlider({view: view, idMap: idMap}));
-    proms.push(h.makeSearchBox({view: view, idMap: idMap}));
+    proms.push(h.makeTimeSlider({ view: view, idMap: idMap }));
+    proms.push(h.makeNumericSlider({ view: view, idMap: idMap }));
+    proms.push(h.makeTransparencySlider({ view: view, idMap: idMap }));
+    proms.push(h.makeSearchBox({ view: view, idMap: idMap }));
     await Promise.all(proms);
   } catch (e) {
     throw new Error(e);
@@ -4884,14 +4916,14 @@ export function viewsModulesRemove(views) {
 export function viewLayersAddGj(opt) {
   const h = mx.helpers;
   return new Promise((resolve) => {
-    const layer = h.path(opt.view, 'data.layer');
+    const layer = h.path(opt.view, "data.layer");
 
     if (!layer.metadata) {
       layer.metadata = {
         priority: 0,
         position: 0,
         idView: opt.view.id,
-        filter: []
+        filter: [],
       };
     }
 
@@ -4924,16 +4956,16 @@ export function setHighlightedCountries(o) {
   const countries = o.countries || null;
   const m = h.getMap(o.id);
   const hasCountries = h.isArray(countries) && countries.length > 0;
-  const hasWorld = hasCountries && countries.indexOf('WLD') > -1;
+  const hasWorld = hasCountries && countries.indexOf("WLD") > -1;
   let filter = [];
-  let rule = ['==', 'iso3code', ''];
+  let rule = ["==", "iso3code", ""];
   mx.settings.highlightedCountries = hasCountries ? countries : [];
 
   if (hasCountries && !hasWorld) {
-    rule = ['!in', 'iso3code'].concat(countries);
+    rule = ["!in", "iso3code"].concat(countries);
   }
 
-  filter = ['any', rule, ['!has', 'iso3code']];
+  filter = ["any", rule, ["!has", "iso3code"]];
 
   m.setFilter(o.idLayer, filter);
 }
@@ -4950,48 +4982,48 @@ export function getRenderedLayersArea(o) {
   const map = mx.helpers.getMap(o.id);
 
   if (map) {
-    const calcAreaWorker = require('./mx_helper_calc_area.worker.js');
+    const calcAreaWorker = require("./mx_helper_calc_area.worker.js");
     const layers = mx.helpers.getLayerNamesByPrefix({
       id: o.id,
-      prefix: o.prefix
+      prefix: o.prefix,
     });
 
     if (layers.length > 0) {
-      const features = map.queryRenderedFeatures({layers: layers});
+      const features = map.queryRenderedFeatures({ layers: layers });
 
       const geomTemp = {
-        type: 'FeatureCollection',
-        features: []
+        type: "FeatureCollection",
+        features: [],
       };
 
       features.forEach(function (f) {
         geomTemp.features.push({
-          type: 'Feature',
+          type: "Feature",
           properties: {},
-          geometry: f.geometry
+          geometry: f.geometry,
         });
       });
 
       const data = {
         geojson: geomTemp,
-        bbox: getBoundsArray(o)
+        bbox: getBoundsArray(o),
       };
 
       const worker = new calcAreaWorker();
       worker.postMessage(data);
       mx.listeners.addListener({
-        group: 'compute_layer_area',
+        group: "compute_layer_area",
         target: worker,
-        type: 'message',
+        type: "message",
         callback: function (e) {
           if (e.data.message) {
             o.onMessage(e.data.message);
           }
           if (e.data.end) {
             o.onEnd(e.data.end);
-            mx.listeners.removeListenerByGroup('compute_layer_area');
+            mx.listeners.removeListenerByGroup("compute_layer_area");
           }
-        }
+        },
       });
     }
   }
@@ -5007,8 +5039,8 @@ export function sendRenderedLayersAreaToUi(o) {
         el.innerHTML = msg;
       },
       onEnd: function (msg) {
-        el.innerHTML = '~ ' + msg + ' km2';
-      }
+        el.innerHTML = "~ " + msg + " km2";
+      },
     });
   }
 }
@@ -5042,9 +5074,9 @@ export function getLayersPropertiesAtPoint(opt) {
   const hasViewId = h.isString(opt.idView);
   const modeObject = opt.asObject === true || false;
   const items = {};
-  const excludeProp = ['mx_t0', 'mx_t1', 'gid'];
+  const excludeProp = ["mx_t0", "mx_t1", "gid"];
   let idViews = [];
-  let type = opt.type || 'vt' || 'rt' || 'gj';
+  let type = opt.type || "vt" || "rt" || "gj";
   type = h.isArray(type) ? type : [type];
   /**
    * Use id from idView as array OR get all mapx displayed base layer
@@ -5053,8 +5085,8 @@ export function getLayersPropertiesAtPoint(opt) {
   idViews = hasViewId
     ? [opt.idView]
     : h.getLayerNamesByPrefix({
-      base: true
-    });
+        base: true,
+      });
 
   if (idViews.length === 0) {
     return items;
@@ -5069,10 +5101,10 @@ export function getLayersPropertiesAtPoint(opt) {
     .filter((view) => type.includes(view?.type))
     .forEach((view) => {
       if (!h.isView(view)) {
-        console.warn('Not a view:', view, ' opt:', opt);
+        console.warn("Not a view:", view, " opt:", opt);
         return;
       }
-      if (view.type === 'rt') {
+      if (view.type === "rt") {
         items[view.id] = fetchRasterProp(view);
       } else {
         items[view.id] = fetchVectorProp(view);
@@ -5085,16 +5117,16 @@ export function getLayersPropertiesAtPoint(opt) {
    * Fetch properties on raster WMS layer
    */
   function fetchRasterProp(view) {
-    const url = h.path(view, 'data.source.tiles', [])[0].split('?');
-    const useMirror = h.path(view, 'data.source.useMirror', false);
+    const url = h.path(view, "data.source.tiles", [])[0].split("?");
+    const useMirror = h.path(view, "data.source.useMirror", false);
     const endpoint = url[0];
     const urlFull = `${endpoint}?${url[1]}`;
-    const params = h.getQueryParametersAsObject(urlFull, {lowerCase: true});
+    const params = h.getQueryParametersAsObject(urlFull, { lowerCase: true });
     const out = modeObject ? {} : [];
     /**
      * Check if this is a WMS valid param object
      */
-    const isWms = h.isUrlValidWms(urlFull, {layers: true, styles: true});
+    const isWms = h.isUrlValidWms(urlFull, { layers: true, styles: true });
 
     if (isWms) {
       return h.wmsQuery({
@@ -5109,9 +5141,9 @@ export function getLayersPropertiesAtPoint(opt) {
             /**
              * timestamp : Used to invalidate getCapabilities cache
              */
-            timestamp: h.path(view, 'date_modified', null)
-          }
-        }
+            timestamp: h.path(view, "date_modified", null),
+          },
+        },
       });
     } else {
       return Promise.resolve(out);
@@ -5127,11 +5159,11 @@ export function getLayersPropertiesAtPoint(opt) {
 
       const layers = h.getLayerNamesByPrefix({
         map: map,
-        prefix: id
+        prefix: id,
       });
 
       const features = map.queryRenderedFeatures(opt.point, {
-        layers: layers
+        layers: layers,
       });
 
       const out = modeObject ? {} : [];
@@ -5175,23 +5207,23 @@ export async function makeSearchBox(o) {
   }
   const elViewParent = h.getViewEl(view).parentElement;
 
-  await h.moduleLoad('selectize');
+  await h.moduleLoad("selectize");
 
-  const attr = h.path(view, 'data.attribute.name');
+  const attr = h.path(view, "data.attribute.name");
 
-  const summary = await h.getViewSourceSummary(view);
+  const summary = await getViewSourceSummary(view);
   const choices = summaryToChoices(summary);
 
   const searchBox = $(el)
     .selectize({
       dropdownParent: elViewParent,
-      placeholder: 'Search',
+      placeholder: "Search",
       choices: choices,
-      valueField: 'value',
-      labelField: 'label',
-      searchField: ['label'],
+      valueField: "value",
+      labelField: "label",
+      searchField: ["label"],
       options: choices,
-      onChange: selectOnChange
+      onChange: selectOnChange,
     })
     .data().selectize;
 
@@ -5206,22 +5238,22 @@ export async function makeSearchBox(o) {
   function selectOnChange() {
     const view = this.view;
     const listObj = this.getValue();
-    const filter = ['any'];
+    const filter = ["any"];
     listObj.forEach(function (x) {
-      filter.push(['==', attr, x]);
+      filter.push(["==", attr, x]);
     });
     view._setFilter({
       filter: filter,
-      type: 'search_box'
+      type: "search_box",
     });
   }
 
   function summaryToChoices(summary) {
-    const table = h.path(summary, 'attribute_stat.table', []);
+    const table = h.path(summary, "attribute_stat.table", []);
     return table.map((r) => {
       return {
         value: r.value,
-        label: `${r.value} (${r.count})`
+        label: `${r.value} (${r.count})`,
       };
     });
   }
@@ -5236,22 +5268,22 @@ export function filterViewValues(o) {
   idMap = o.id;
   idView = o.idView;
   search = o.search;
-  operator = o.operator || '>=';
-  filterType = o.filterType || 'filter';
+  operator = o.operator || ">=";
+  filterType = o.filterType || "filter";
 
   search = search.trim();
   isNumeric = mx.helpers.isNumeric(search);
   view = mx.helpers.getView(idView);
 
-  filter = ['all'];
+  filter = ["all"];
 
   if (search) {
     if (isNumeric) {
       filter = [operator, attr, search * 1];
     } else {
       map = mx.helpers.getMap(idMap);
-      features = map.querySourceFeatures(idView + '-SRC', {
-        sourceLayer: idView
+      features = map.querySourceFeatures(idView + "-SRC", {
+        sourceLayer: idView,
       });
       values = {};
 
@@ -5266,14 +5298,14 @@ export function filterViewValues(o) {
       values = Object.keys(values);
 
       if (values.length > 0) {
-        filter = ['in', attr].concat(values);
+        filter = ["in", attr].concat(values);
       }
     }
   }
 
   view._setFilter({
     filter: filter,
-    type: filterType
+    type: filterType,
   });
 }
 
@@ -5333,7 +5365,7 @@ export async function zoomToViewId(o) {
 
     if (h.isViewId(o)) {
       o = {
-        idView: o
+        idView: o,
       };
     }
 
@@ -5343,13 +5375,13 @@ export async function zoomToViewId(o) {
     const view = h.getView(o.idView);
 
     if (!h.isView(view)) {
-      console.warn('zoomToViewId : view object required');
+      console.warn("zoomToViewId : view object required");
       return;
     }
 
     const res = await Promise.race([zoom(), waitTimeoutAsync(timeout, cancel)]);
 
-    if (res === 'timeout') {
+    if (res === "timeout") {
       console.warn(
         `zoomToViewId for ${view.id}, was canceled ( ${timeout} ms )`
       );
@@ -5357,17 +5389,17 @@ export async function zoomToViewId(o) {
 
     async function zoom() {
       const conf = {
-        sum: await h.getViewSourceSummary(view, {useCache: true})
+        sum: await getViewSourceSummary(view, { useCache: true }),
       };
-      conf.extent = h.path(conf.sum, 'extent_sp', null);
+      conf.extent = h.path(conf.sum, "extent_sp", null);
 
       if (cancelByTimeout) {
         return;
       }
 
       if (!h.isBbox(conf.extent)) {
-        conf.sum = await h.getViewSourceSummary(view, {useCache: false});
-        conf.extent = h.path(conf.sum, 'extent_sp', null);
+        conf.sum = await getViewSourceSummary(view, { useCache: false });
+        conf.extent = h.path(conf.sum, "extent_sp", null);
         if (cancelByTimeout) {
           return;
         }
@@ -5400,17 +5432,16 @@ export async function zoomToViewId(o) {
  * @return {Object} MapBox gl bounds object
  */
 export async function getViewsBounds(views) {
-  const h = mx.helpers;
   views = views.constructor === Array ? views : [views];
   let set = false;
   const def = {
     lat1: 80,
     lat2: -80,
     lng1: 180,
-    lng2: -180
+    lng2: -180,
   };
 
-  let summaries = await Promise.all(views.map(h.getViewSourceSummary));
+  let summaries = await Promise.all(views.map(getViewSourceSummary));
   let extents = summaries.map((s) => s.extent_sp);
 
   let extent = extents.reduce(
@@ -5428,7 +5459,7 @@ export async function getViewsBounds(views) {
       lat1: 80,
       lat2: -80,
       lng1: 180,
-      lng2: -180
+      lng2: -180,
     }
   );
 
@@ -5450,24 +5481,24 @@ export async function getViewsBounds(views) {
  */
 export async function zoomToViewIdVisible(o) {
   const h = mx.helpers;
-  const bbox = await h.moduleLoad('turf-bbox');
+  const bbox = await h.moduleLoad("turf-bbox");
 
   let geomTemp, idLayerAll, features;
 
   geomTemp = {
-    type: 'FeatureCollection',
-    features: []
+    type: "FeatureCollection",
+    features: [],
   };
 
   const map = h.getMap(o.id);
 
   idLayerAll = h.getLayerNamesByPrefix({
     id: o.id,
-    prefix: o.idView
+    prefix: o.idView,
   });
 
   features = map.queryRenderedFeatures({
-    layers: idLayerAll
+    layers: idLayerAll,
   });
 
   features.forEach(function (x) {
@@ -5492,11 +5523,11 @@ export async function resetViewStyle(o) {
   }
   const view = h.getView(o.idView);
   h.updateLanguageElements({
-    el: view._el
+    el: view._el,
   });
   await h.viewLayersAdd({
     id: o.id,
-    idView: o.idView
+    idView: o.idView,
   });
   await h.viewsLayersOrderUpdate(o);
 }
@@ -5521,7 +5552,7 @@ export function flyTo(o) {
         center: [p.lng || 0, p.lat || 0],
         zoom: p.zoom || 0,
         jump: p.jump || false,
-        duration: o.duration || 3000
+        duration: o.duration || 3000,
       };
 
       if (opt.jump) {
@@ -5545,15 +5576,15 @@ export function setMapProjection(opt) {
   const h = mx.helpers;
   const map = h.getMap(opt.id);
   const def = {
-    name: 'mercator',
+    name: "mercator",
     center: [0, 0],
-    parallels: [0, 0]
+    parallels: [0, 0],
   };
   opt = Object.assign({}, def, opt);
   if (map) {
     map.setProjection(opt.name, {
       center: opt.center,
-      parallels: opt.parallels
+      parallels: opt.parallels,
     });
   }
 }
@@ -5591,10 +5622,10 @@ export function getViewTitle(view, lang) {
   lang = lang || getLanguageCurrent();
   return h.getLabelFromObjectPath({
     obj: view,
-    path: 'data.title',
+    path: "data.title",
     lang: lang,
     langs: langs,
-    defaultValue: '[ missing title ]'
+    defaultValue: "[ missing title ]",
   });
 }
 /* get view title  */
@@ -5606,8 +5637,8 @@ export function getViewTitleNormalized(view, lang) {
   let title = h.getLabelFromObjectPath({
     lang: lang || getLanguageCurrent(),
     obj: view,
-    path: 'data.title',
-    defaultValue: ''
+    path: "data.title",
+    defaultValue: "",
   });
   title = cleanDiacritic(title).toLowerCase().trim();
   return title;
@@ -5646,7 +5677,7 @@ export function getViewDateModified(view) {
  */
 export function getViewDescription(id, lang) {
   let view = id;
-  if (typeof id === 'string') {
+  if (typeof id === "string") {
     view = mx.helpers.getView(id);
   }
   lang = lang || getLanguageCurrent();
@@ -5654,10 +5685,10 @@ export function getViewDescription(id, lang) {
 
   return mx.helpers.getLabelFromObjectPath({
     obj: view,
-    path: 'data.abstract',
+    path: "data.abstract",
     lang: lang,
     langs: langs,
-    defaultValue: ''
+    defaultValue: "",
   });
 }
 
@@ -5674,7 +5705,7 @@ export function getViewDescription(id, lang) {
 export function getViewLegend(id, opt) {
   opt = Object.assign(
     {},
-    {clone: true, input: false, class: true, style: false},
+    { clone: true, input: false, class: true, style: false },
     opt
   );
 
@@ -5689,7 +5720,7 @@ export function getViewLegend(id, opt) {
   const hasMiniMap = view._miniMap instanceof RasterMiniMap;
 
   if (!hasLegend) {
-    return h.el('div');
+    return h.el("div");
   }
 
   if (!useClone) {
@@ -5699,17 +5730,17 @@ export function getViewLegend(id, opt) {
   const elLegendClone = elLegend.cloneNode(true);
   if (hasMiniMap) {
     const img = view._miniMap.getImage();
-    const elImg = h.el('img', {src: img});
+    const elImg = h.el("img", { src: img });
     elLegendClone.appendChild(elImg);
   }
   if (opt.input === false) {
-    elLegendClone.querySelectorAll('input').forEach((e) => e.remove());
+    elLegendClone.querySelectorAll("input").forEach((e) => e.remove());
   }
   if (opt.style === false) {
-    elLegendClone.style = '';
+    elLegendClone.style = "";
   }
   if (opt.class === false) {
-    elLegendClone.className = '';
+    elLegendClone.className = "";
   }
   return elLegendClone;
 }
@@ -5723,7 +5754,7 @@ export function getMap(idMap) {
   idMap = idMap || mx.settings.map.id;
 
   let map;
-  const isId = typeof idMap === 'string';
+  const isId = typeof idMap === "string";
   const isMap = !isId && mx.helpers.isMap(idMap);
 
   if (isMap) {
@@ -5804,8 +5835,8 @@ export function getMapPos(o) {
   const zoom = map.getZoom();
   const bearing = map.getBearing();
   const pitch = map.getPitch();
-  const modeSat = ctrls.getButton('btn_theme_sat').isActive();
-  const mode3d = ctrls.getButton('btn_3d_terrain').isActive();
+  const modeSat = ctrls.getButton("btn_theme_sat").isActive();
+  const mode3d = ctrls.getButton("btn_3d_terrain").isActive();
   const out = {
     n: r(bounds.getNorth()),
     s: r(bounds.getSouth()),
@@ -5817,7 +5848,7 @@ export function getMapPos(o) {
     p: r(pitch),
     z: r(zoom),
     sat: modeSat,
-    t3d: mode3d
+    t3d: mode3d,
   };
   return out;
 }
@@ -5846,17 +5877,17 @@ export function getViewsForJSON() {
   const h = mx.helpers;
   const views = h.getViews();
   const f = [
-    'id',
-    'editor',
-    'target',
-    'date_modified',
-    'data',
-    'type',
-    'pid',
-    'project',
-    'readers',
-    'editors',
-    '_edit'
+    "id",
+    "editor",
+    "target",
+    "date_modified",
+    "data",
+    "type",
+    "pid",
+    "project",
+    "readers",
+    "editors",
+    "_edit",
   ];
 
   const viewsClean = views.map((v) => {
@@ -5881,10 +5912,10 @@ export function getView(id) {
     id = id.idView;
   }
   if (!h.isViewId(id)) {
-    console.warn('No  valid id given. Received ', id);
+    console.warn("No  valid id given. Received ", id);
     return;
   }
-  return h.getViews({idView: id})[0];
+  return h.getViews({ idView: id })[0];
 }
 
 /**
@@ -5906,15 +5937,15 @@ export function getViewIndex(id) {
 export function makeLayerJiggle(mapId, prefix) {
   const layersName = mx.helpers.getLayerNamesByPrefix({
     id: mapId,
-    prefix: prefix
+    prefix: prefix,
   });
 
   if (layersName.length > 0) {
     const varTranslate = {
-      line: 'line-translate',
-      fill: 'fill-translate',
-      circle: 'circle-translate',
-      symbol: 'icon-translate'
+      line: "line-translate",
+      fill: "fill-translate",
+      circle: "circle-translate",
+      symbol: "icon-translate",
     };
 
     const m = mx.helpers.getMap(mapId);
@@ -5927,7 +5958,7 @@ export function makeLayerJiggle(mapId, prefix) {
       const time = 200;
       const dist = [
         [-20, 0],
-        [20, 0]
+        [20, 0],
       ];
       let n = 0;
       const interval = setInterval(function () {
@@ -5952,7 +5983,7 @@ export function makeLayerJiggle(mapId, prefix) {
  */
 export function setImmersiveMode(opt) {
   const h = mx.helpers;
-  opt = Object.assign({}, {enable: null, toggle: true, disable: null}, opt);
+  opt = Object.assign({}, { enable: null, toggle: true, disable: null }, opt);
   const panels = window._button_panels;
   if (h.isBoolean(opt.disable)) {
     opt.enable = !opt.disable;
@@ -6024,18 +6055,18 @@ export async function shinyNotify(opt) {
 async function getSearchApiKey() {
   try {
     const ss = mx.settings;
-    const urlKey = new URL(getApiUrl('getSearchKey'));
-    urlKey.searchParams.set('idUser', ss.user.id);
-    urlKey.searchParams.set('token', ss.user.token);
+    const urlKey = new URL(getApiUrl("getSearchKey"));
+    urlKey.searchParams.set("idUser", ss.user.id);
+    urlKey.searchParams.set("token", ss.user.token);
     const r = await fetch(urlKey);
     if (r.ok) {
       const keyData = await r.json();
-      if (keyData?.type === 'error') {
+      if (keyData?.type === "error") {
         throw new Error(keyData.message);
       }
       return keyData.key;
     } else {
-      throw new Error('getSearchKey failed');
+      throw new Error("getSearchKey failed");
     }
   } catch (e) {
     console.error(e);
@@ -6044,7 +6075,7 @@ async function getSearchApiKey() {
 
 export async function chaosTest(opt) {
   const h = mx.helpers;
-  opt = Object.assign({}, {nBatch: 5, duration: 1000}, opt);
+  opt = Object.assign({}, { nBatch: 5, duration: 1000 }, opt);
   await h.viewsCloseAll();
   const start = performance.now();
   const views = h.getViews();

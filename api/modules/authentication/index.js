@@ -1,16 +1,17 @@
-import {pgWrite} from '#mapx/db';
-import {toRes} from '#mapx/helpers';
-import {templates} from '#mapx/template';
-import {decrypt} from '#mapx/db-utils';
+import { pgWrite } from "#mapx/db";
+import { toRes } from "#mapx/helpers";
+import { templates } from "#mapx/template";
+import { decrypt } from "#mapx/db-utils";
+import { isEmail } from "@fxi/mx_valid";
 
 /**
  * Exports
  */
-export  {
+export {
   validateTokenHandler,
   validateRoleHandlerFor,
   validateToken,
-  validateUser
+  validateUser,
 };
 
 /**
@@ -19,21 +20,18 @@ export  {
 async function validateTokenHandler(req, res, next) {
   let idUser;
   let userToken;
-  //let userEmail;
-  const hasBody = typeof req.body === 'object';
+  const hasBody = typeof req.body === "object";
 
   if (hasBody) {
     idUser = req.body.idUser;
     userToken = req.body.token;
-    //userEmail = req.body.email;
   } else {
     idUser = req.query.idUser;
     userToken = req.query.token;
-    //userEmail = req.query.email;
   }
 
-  var tokenData = {isValid: false};
-  var userData = {isValid: false};
+  const tokenData = { isValid: false };
+  const userData = { isValid: false };
 
   try {
     /**
@@ -49,14 +47,22 @@ async function validateTokenHandler(req, res, next) {
      * Handle validation
      */
     if (tokenData.isValid && userData.isValid) {
+      /**
+       * Some methods require email that does not match
+       * userData.email. e.g. download source for unlogged session
+       */
       if (hasBody) {
-        req.body.email = userData.email;
+        if (!isEmail(req.body.email)) {
+          req.body.email = userData.email;
+        }
       } else {
-        req.query.email = userData.email;
+        if (!isEmail(req.query.email)) {
+          req.query.email = userData.email;
+        }
       }
       next();
     } else {
-      throw Error('Token not valid');
+      throw Error("Token not valid");
     }
   } catch (e) {
     /**
@@ -68,27 +74,27 @@ async function validateTokenHandler(req, res, next) {
      */
     res.write(
       toRes({
-        type: 'error',
+        type: "error",
         msg: {
-          reason: 'authentication failed',
+          reason: "authentication failed",
           status: {
             token_is_valid: tokenData.isValid,
-            user_is_valid: userData.isValid
-          }
-        }
+            user_is_valid: userData.isValid,
+          },
+        },
       })
     );
 
-    res.status('403').end();
+    res.status("403").end();
   }
 }
 
 function validateRoleHandlerFor(role) {
-  return async function(req, res, next) {
+  return async function (req, res, next) {
     let roles;
     let idUser;
     let idProject;
-    const hasBody = typeof req.body === 'object';
+    const hasBody = typeof req.body === "object";
 
     try {
       if (hasBody) {
@@ -102,7 +108,7 @@ function validateRoleHandlerFor(role) {
       roles = await getUserRole(idUser, idProject);
 
       if (!roles[role]) {
-        throw Error('Unautorized role');
+        throw Error("Unautorized role");
       } else {
         next();
       }
@@ -112,20 +118,20 @@ function validateRoleHandlerFor(role) {
        */
       res.write(
         toRes({
-          type: 'error',
+          type: "error",
           msg: {
-            reason: 'authentication failed',
+            reason: "authentication failed",
             status: {
               roleRequested: role,
               roles: roles.list,
               idProject: idProject,
               idUser: idUser,
-              err: e
-            }
-          }
+              err: e,
+            },
+          },
         })
       );
-      res.status('403').end();
+      res.status("403").end();
     }
   };
 }
@@ -147,7 +153,7 @@ async function getUserRole(idUser, idProject) {
       admin: false,
       publisher: false,
       member: false,
-      guest: false
+      guest: false,
     };
   }
 
@@ -160,23 +166,20 @@ async function getUserRole(idUser, idProject) {
   const hasPublisherRole = pData.publishers.indexOf(idUser) > -1;
   const hasMemberRole = pData.members.indexOf(idUser) > -1;
   const hasGuestRole =
-    pData.public &&
-    !hasMemberRole &&
-    !hasPublisherRole &&
-    !hasAdminRole;
+    pData.public && !hasMemberRole && !hasPublisherRole && !hasAdminRole;
   const roles = [];
 
   if (hasAdminRole) {
-    roles.push('admin');
+    roles.push("admin");
   }
   if (hasPublisherRole) {
-    roles.push('publisher');
+    roles.push("publisher");
   }
   if (hasMemberRole) {
-    roles.push('member');
+    roles.push("member");
   }
   if (hasGuestRole) {
-    roles.push('guest');
+    roles.push("guest");
   }
 
   return {
@@ -184,7 +187,7 @@ async function getUserRole(idUser, idProject) {
     admin: hasAdminRole,
     publisher: hasAdminRole || hasPublisherRole,
     member: hasAdminRole || hasPublisherRole || hasMemberRole,
-    guest: hasGuestRole
+    guest: hasGuestRole,
   };
 }
 
@@ -199,13 +202,13 @@ async function getUserRole(idUser, idProject) {
 async function validateToken(userToken) {
   const now = new Date().getTime() / 1000;
   if (!userToken) {
-    return {isValid: false};
+    return { isValid: false };
   }
   const tokenData = await decrypt(userToken);
   return {
     isGuest: tokenData.is_guest,
     key: tokenData.key,
-    isValid: tokenData.valid_until * 1 > now / 1000
+    isValid: tokenData.valid_until * 1 > now / 1000,
   };
 }
 
@@ -227,7 +230,6 @@ async function validateUser(idUser, keyUser) {
   return {
     idUser: idUser,
     email: email,
-    isValid: isValid
+    isValid: isValid,
   };
 }
-
