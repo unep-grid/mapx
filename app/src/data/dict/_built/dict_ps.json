@@ -1280,6 +1280,11 @@
     "ps": "د دوتنې نوم"
   },
   {
+    "id": "dl_error_email_not_valid",
+    "en": "Email not valid",
+    "ps": "بریښنالیک اعتبار نلري"
+  },
+  {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
     "ps": "د ویکټر ډرا اوزارونه وباسئ "
@@ -1828,6 +1833,11 @@
     "id": "btn_close",
     "en": "Close",
     "ps": "وتړئ"
+  },
+  {
+    "id": "btn_download",
+    "en": "Download",
+    "ps": "ډاونلوډ کړئ"
   },
   {
     "id": "btn_open",

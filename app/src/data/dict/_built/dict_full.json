@@ -3328,6 +3328,19 @@
     "de": "Dateiname"
   },
   {
+    "id": "dl_error_email_not_valid",
+    "en": "Email not valid",
+    "fr": "E-mail non valide",
+    "es": "Correo electrónico no válido",
+    "ru": "Электронная почта недействительна",
+    "zh": "电子邮件无效",
+    "ar": "البريد الإلكتروني غير صالح",
+    "fa": "ایمیل معتبر نیست",
+    "ps": "بریښنالیک اعتبار نلري",
+    "bn": "ইমেল বৈধ নয়",
+    "de": "E-Mail ungültig"
+  },
+  {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
     "fr": "Activer / désactiver les outils de dessin vectoriel ",
@@ -4756,6 +4769,19 @@
     "ps": "وتړئ",
     "bn": "বন্ধ ",
     "de": "Schliessen"
+  },
+  {
+    "id": "btn_download",
+    "en": "Download",
+    "fr": "Télécharger",
+    "es": "Descargar",
+    "ru": "Скачать",
+    "zh": "下载",
+    "ar": "تحميل",
+    "fa": "دانلود",
+    "ps": "ډاونلوډ کړئ",
+    "bn": "ডাউনলোড করুন",
+    "de": "Herunterladen"
   },
   {
     "id": "btn_open",

@@ -1280,6 +1280,11 @@
     "fa": "نام فایل"
   },
   {
+    "id": "dl_error_email_not_valid",
+    "en": "Email not valid",
+    "fa": "ایمیل معتبر نیست"
+  },
+  {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
     "fa": "ابزار رسم بردار را تغییر دهید "
@@ -1828,6 +1833,11 @@
     "id": "btn_close",
     "en": "Close",
     "fa": "بستن"
+  },
+  {
+    "id": "btn_download",
+    "en": "Download",
+    "fa": "دانلود"
   },
   {
     "id": "btn_open",

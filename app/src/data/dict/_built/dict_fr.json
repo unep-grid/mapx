@@ -1280,6 +1280,11 @@
     "fr": "Nom de fichier"
   },
   {
+    "id": "dl_error_email_not_valid",
+    "en": "Email not valid",
+    "fr": "E-mail non valide"
+  },
+  {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
     "fr": "Activer / désactiver les outils de dessin vectoriel "
@@ -1828,6 +1833,11 @@
     "id": "btn_close",
     "en": "Close",
     "fr": "Fermer"
+  },
+  {
+    "id": "btn_download",
+    "en": "Download",
+    "fr": "Télécharger"
   },
   {
     "id": "btn_open",

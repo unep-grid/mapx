@@ -403,6 +403,19 @@
     "de": "Schliessen"
   },
   {
+    "id": "btn_download",
+    "en": "Download",
+    "fr": "Télécharger",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "btn_open",
     "en": "Open",
     "fr": "Ouvrir",

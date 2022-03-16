@@ -1280,6 +1280,11 @@
     "ar": "اسم الملف"
   },
   {
+    "id": "dl_error_email_not_valid",
+    "en": "Email not valid",
+    "ar": "البريد الإلكتروني غير صالح"
+  },
+  {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
     "ar": "قم بتبديل أدوات رسم المتجه "
@@ -1828,6 +1833,11 @@
     "id": "btn_close",
     "en": "Close",
     "ar": "اغلاق"
+  },
+  {
+    "id": "btn_download",
+    "en": "Download",
+    "ar": "تحميل"
   },
   {
     "id": "btn_open",

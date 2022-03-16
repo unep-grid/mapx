@@ -1280,6 +1280,11 @@
     "zh": "文件名"
   },
   {
+    "id": "dl_error_email_not_valid",
+    "en": "Email not valid",
+    "zh": "电子邮件无效"
+  },
+  {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
     "zh": "切换矢量绘制工具 "
@@ -1828,6 +1833,11 @@
     "id": "btn_close",
     "en": "Close",
     "zh": "关闭"
+  },
+  {
+    "id": "btn_download",
+    "en": "Download",
+    "zh": "下载"
   },
   {
     "id": "btn_open",

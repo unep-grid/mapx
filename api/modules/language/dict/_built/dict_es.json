@@ -1280,6 +1280,11 @@
     "es": "Nombre del archivo"
   },
   {
+    "id": "dl_error_email_not_valid",
+    "en": "Email not valid",
+    "es": "Correo electrónico no válido"
+  },
+  {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
     "es": "Alternar las herramientas de dibujo de vectores "
@@ -1828,6 +1833,11 @@
     "id": "btn_close",
     "en": "Close",
     "es": "Cerrar"
+  },
+  {
+    "id": "btn_download",
+    "en": "Download",
+    "es": "Descargar"
   },
   {
     "id": "btn_open",

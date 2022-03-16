@@ -1280,6 +1280,11 @@
     "ru": "Имя файла"
   },
   {
+    "id": "dl_error_email_not_valid",
+    "en": "Email not valid",
+    "ru": "Электронная почта недействительна"
+  },
+  {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
     "ru": "Переключить инструменты векторного рисования "
@@ -1828,6 +1833,11 @@
     "id": "btn_close",
     "en": "Close",
     "ru": "Закрывать "
+  },
+  {
+    "id": "btn_download",
+    "en": "Download",
+    "ru": "Скачать"
   },
   {
     "id": "btn_open",

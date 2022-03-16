@@ -1280,6 +1280,11 @@
     "de": "Dateiname"
   },
   {
+    "id": "dl_error_email_not_valid",
+    "en": "Email not valid",
+    "de": "E-Mail ungültig"
+  },
+  {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
     "de": "Schalten Sie die Vektorzeichnungswerkzeuge um "
@@ -1828,6 +1833,11 @@
     "id": "btn_close",
     "en": "Close",
     "de": "Schliessen"
+  },
+  {
+    "id": "btn_download",
+    "en": "Download",
+    "de": "Herunterladen"
   },
   {
     "id": "btn_open",

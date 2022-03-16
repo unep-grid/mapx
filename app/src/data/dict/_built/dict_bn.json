@@ -1280,6 +1280,11 @@
     "bn": "ফাইলের নাম"
   },
   {
+    "id": "dl_error_email_not_valid",
+    "en": "Email not valid",
+    "bn": "ইমেল বৈধ নয়"
+  },
+  {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
     "bn": "ভেক্টর আঁকার সরঞ্জামগুলি টগল করুন "
@@ -1828,6 +1833,11 @@
     "id": "btn_close",
     "en": "Close",
     "bn": "বন্ধ "
+  },
+  {
+    "id": "btn_download",
+    "en": "Download",
+    "bn": "ডাউনলোড করুন"
   },
   {
     "id": "btn_open",
