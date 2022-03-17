@@ -1,12 +1,13 @@
 {
   "name": "@fxi/el",
-  "version": "0.1.6",
-  "main": "src/index.js",
-  "umd:main": "dist/el.umd.js",
-  "module": "dist/el.mjs",
-  "esmodule": "dist/foo.modern.js",
-  "unpkg": "dist/el.umd.js",
-  "browser": "dist/el.umd.js",
+  "version": "0.1.7",
+  "main": "./dist/el.cjs",
+  "module": "./dist/el.module.js",
+  "unpkg": "./dist/el.umd.js",
+  "exports": {
+    "require": "./dist/el.cjs",
+    "default": "./dist/el.modern.js"
+  },
   "amdName": "El",
   "repository": {
     "type": "git",
@@ -34,6 +35,7 @@
   "devDependencies": {
     "microbundle": "^0.14.0"
   },
+  "files":["dist","src"],
   "bugs": {
     "url": "https://github.com/unep-grid/map-x-mgl"
   },

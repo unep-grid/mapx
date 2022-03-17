@@ -1,12 +1,16 @@
 {
   "name": "@fxi/mx_valid",
-  "version": "0.0.17",
+  "version": "0.0.19",
   "description": "Internal validation utilities for MapX",
-  "main": "index.js",
-  "module": "dist/mx_valid.mjs",
-  "unpkg": "dist/mx_valid.umd.js",
-  "browser": "dist/mx_valid.umd.js",
-  "type":"module",
+  "type": "module",
+  "source": "./index.js",
+  "main": "./dist/mx_valid.cjs",
+  "module": "./dist/mx_valid.module.js",
+  "unpkg": "./dist/mx_valid.umd.js",
+  "exports": {
+    "require": "./dist/mx_valid.cjs",
+    "default": "./dist/mx_valid.modern.js"
+  },
   "scripts": {
     "build": "microbundle -o dist && npm run jsdoc",
     "prod": "npm run build && npm publish",
@@ -23,6 +27,7 @@
     "mapx",
     "validation"
   ],
+  "files":["dist"],
   "author": "unepgrid.ch",
   "license": "MIT",
   "bugs": {

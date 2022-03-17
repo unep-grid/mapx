@@ -2,14 +2,18 @@
   "name": "@fxi/mxsdk",
   "version": "1.9.40-alpha.2",
   "description": "sdk for mapx app",
-  "source": "src/index.js",
-  "main": "dist/mxsdk.js",
-  "module": "dist/mxsdk.mjs",
-  "unpkg": "dist/mxsdk.umd.js",
-  "browser": "dist/mxsdk.umd.js",
+  "source": "./src/index.js",
+  "main": "./dist/mxsdk.cjs",
+  "module": "./dist/mxsdk.module.js",
+  "unpkg": "./dist/mxsdk.umd.js",
+   "exports":{
+     "require":"./dist/mxsdk.cjs",
+     "default":"./dist/mxsdk.modern.js"
+  },
   "directories": {
     "example": "example"
   },
+  "files":["dist","src"],
   "amdName": "mxsdk",
   "scripts": {
     "test": "microbundle --external none -o dist --no-compress && live-server tests --mount=/dist:dist --mount=/data:data",

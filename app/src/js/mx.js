@@ -1,4 +1,3 @@
-/*jshint esversion: 6, node: true  */
 import * as helpers from './mx_helpers.js';
 import {version} from './../../package.json';
 import localforage from 'localforage';
