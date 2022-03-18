@@ -1,34 +1,34 @@
-import {FlashCircle} from './../icon_flash';
-import {modal, modalConfirm} from './../mx_helper_modal.js';
-import {storyRead} from './../story_map/index.js';
-import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
-import {getDictItem} from './../language';
-import {EventSimple} from './../event_simple';
-import {modalMarkdown} from './../modal_markdown/index.js';
-import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
-import {el, elSpanTranslate, elButtonIcon} from '../el_mapx/index.js';
-import {prefGet, prefSet} from './../user_pref';
-import {isDate} from './../is_test/index.js';
-import pDebounce from 'p-debounce';
+import { FlashCircle } from "./../icon_flash";
+import { modal, modalConfirm } from "./../mx_helper_modal.js";
+import { storyRead } from "./../story_map/index.js";
+import { viewToMetaModal } from "./../mx_helper_map_view_metadata.js";
+import { getDictItem } from "./../language";
+import { EventSimple } from "./../event_simple";
+import { modalMarkdown } from "./../modal_markdown/index.js";
+import { viewsListAddSingle } from "./../mx_helper_map_view_ui.js";
+import { el, elSpanTranslate, elButtonIcon } from "../el_mapx/index.js";
+import { prefGet, prefSet } from "./../user_pref";
+import { isDate } from "./../is_test/index.js";
+import pDebounce from "p-debounce";
 
 import {
   zoomToViewId,
   getView,
   getViewRemote,
   viewAdd,
-  isViewLocal,
   viewRemove,
-  getViewsOpen
-} from './../mx_helper_map.js';
+  getViewsOpen,
+} from "./../mx_helper_map.js";
 import {
-  isStory,
   isView,
+  isStory,
   isArray,
+  isBoolean,
+  isViewLocal,
   isStringRange,
-  isBoolean
-} from './../is_test/index.js';
+} from "./../is_test/index.js";
 
-import {def} from './default.js';
+import { def } from "./default.js";
 
 class Search extends EventSimple {
   constructor(opt) {
@@ -54,27 +54,27 @@ class Search extends EventSimple {
     /**
      * Dynamic import
      */
-    await import('./style.less');
-    await import('./style_flatpickr.less');
-    await import('/node_modules/nouislider/distribute/nouislider.css');
+    await import("./style.less");
+    await import("./style_flatpickr.less");
+    await import("/node_modules/nouislider/distribute/nouislider.css");
 
-    s._nouislider = (await import('nouislider')).default;
-    s._MeiliSearch = (await import('meilisearch')).MeiliSearch;
-    s._flatpickr = (await import('flatpickr')).default;
-    s._flatpickr_langs = await import('./flatpickr_locales');
-    s._elContainer = document.querySelector(s.opt('container'));
+    s._nouislider = (await import("nouislider")).default;
+    s._MeiliSearch = (await import("meilisearch")).MeiliSearch;
+    s._flatpickr = (await import("flatpickr")).default;
+    s._flatpickr_langs = await import("./flatpickr_locales");
+    s._elContainer = document.querySelector(s.opt("container"));
     s._meili = new s._MeiliSearch({
-      host: `${s.opt('protocol')}${s.opt('host')}:${s.opt('port')}`,
-      apiKey: s.opt('key') || null
+      host: `${s.opt("protocol")}${s.opt("host")}:${s.opt("port")}`,
+      apiKey: s.opt("key") || null,
     });
 
     /**
      * Build ui
      */
     await s.build();
-    await s.setLanguage({reset: false});
+    await s.setLanguage({ reset: false });
     await s.update();
-    s.fire('ready');
+    s.fire("ready");
     return s;
   }
 
@@ -88,7 +88,7 @@ class Search extends EventSimple {
       s._opt = def;
     }
     Object.assign(s._opt, opt);
-    s.fire('options_update', opt);
+    s.fire("options_update", opt);
   }
 
   get isReady() {
@@ -100,43 +100,43 @@ class Search extends EventSimple {
     if (s._elModalShowApiConfig) {
       return;
     }
-    const url = `${s.opt('protocol')}${s.opt('host')}:${s.opt('port')}`;
-    const language = s.opt('language');
-    const elConfig = el('div', [
-      el('label', getDictItem('search_api_key')),
-      el('pre', s.opt('key')),
-      el('label', getDictItem('search_api_host')),
-      el('pre', url),
-      el('label', getDictItem('search_api_request_examples')),
+    const url = `${s.opt("protocol")}${s.opt("host")}:${s.opt("port")}`;
+    const language = s.opt("language");
+    const elConfig = el("div", [
+      el("label", getDictItem("search_api_key")),
+      el("pre", s.opt("key")),
+      el("label", getDictItem("search_api_host")),
+      el("pre", url),
+      el("label", getDictItem("search_api_request_examples")),
       el(
-        'details',
-        {open: true},
-        el('summary', 'curl'),
+        "details",
+        { open: true },
+        el("summary", "curl"),
         el(
-          'pre',
+          "pre",
           `curl '${url}/indexes/views_${language}/search' \\\n` +
-            `-H 'X-Meili-API-Key: ${s.opt('key')}' \\\n` +
+            `-H 'X-Meili-API-Key: ${s.opt("key")}' \\\n` +
             `--data-raw '{"q":"water"}' \\\n` +
             `--compressed;\n`
         )
-      )
+      ),
     ]);
     s._elModalShowApiConfig = modal({
-      title: getDictItem('search_show_api_config'),
+      title: getDictItem("search_show_api_config"),
       content: elConfig,
       addBackground: true,
       onClose: () => {
         delete s._elModalShowApiConfig;
-      }
+      },
     });
   }
 
   async setLanguage(opt) {
     const s = this;
 
-    opt = Object.assign({}, {reset: true, language: 'en'}, opt);
+    opt = Object.assign({}, { reset: true, language: "en" }, opt);
     if (opt.language) {
-      s.setOpt({language: opt.language});
+      s.setOpt({ language: opt.language });
     }
     if (!s.isReady) {
       return;
@@ -150,14 +150,14 @@ class Search extends EventSimple {
      * Misc ui language
      */
 
-    const msgNoViews = await getDictItem('search_results_empty');
-    s._elResults.setAttribute('msg_no_views', msgNoViews);
+    const msgNoViews = await getDictItem("search_results_empty");
+    s._elResults.setAttribute("msg_no_views", msgNoViews);
   }
 
   async setLocaleFlatpickr(lang) {
     const s = this;
     if (!lang) {
-      lang = s.opt('language');
+      lang = s.opt("language");
     }
     if (!s._flatpickr_langs) {
       return;
@@ -170,7 +170,7 @@ class Search extends EventSimple {
      */
     let locFun = s._flatpickr_langs[lang];
     if (!locFun) {
-      locFun = s._flatpickr_langs['en'];
+      locFun = s._flatpickr_langs["en"];
     }
     const locs = await locFun();
     let loc = s._flatpickr.l10ns.default;
@@ -186,7 +186,7 @@ class Search extends EventSimple {
     }
     if (s._flatpickr_filters) {
       for (let f of s._flatpickr_filters) {
-        f.set('locale', lang);
+        f.set("locale", lang);
       }
     }
   }
@@ -194,9 +194,9 @@ class Search extends EventSimple {
   async setIndex(id) {
     const s = this;
     if (!id) {
-      id = s.template(s.opt('index_template'));
+      id = s.template(s.opt("index_template"));
     }
-    s.setOpt({index: id});
+    s.setOpt({ index: id });
     if (!s._meili) {
       return;
     }
@@ -213,51 +213,51 @@ class Search extends EventSimple {
     /**
      * Results
      */
-    s._elResults = el('div', {class: ['search--results']});
-    s._elResults.addEventListener('scroll', s._handle_infinite_scroll);
+    s._elResults = el("div", { class: ["search--results"] });
+    s._elResults.addEventListener("scroll", s._handle_infinite_scroll);
 
     /**
      * Pagination
      * MeiliSearch nbHits issue : no pagination possible, see #711
      */
     if (0) {
-      s._elPagination = el('div', {class: ['search--pagination']});
+      s._elPagination = el("div", { class: ["search--pagination"] });
     }
 
     /**
      * Filters and facet
      */
-    s._elFiltersFacets = el('div', {class: 'search--filter-facets'});
-    s._elFiltersDate = el('div', {class: 'search--filter-dates'});
-    s._elFiltersDateGroup = el('details', [
-      el('summary', elSpanTranslate('search_filter_date_details')),
-      s._elFiltersDate
+    s._elFiltersFacets = el("div", { class: "search--filter-facets" });
+    s._elFiltersDate = el("div", { class: "search--filter-dates" });
+    s._elFiltersDateGroup = el("details", [
+      el("summary", elSpanTranslate("search_filter_date_details")),
+      s._elFiltersDate,
     ]);
-    s._elFiltersYearsRange = el('div', {
-      class: ['search--filter-years', 'mx-slider-container']
+    s._elFiltersYearsRange = el("div", {
+      class: ["search--filter-years", "mx-slider-container"],
     });
     s._elFilters = el(
-      'div',
+      "div",
       {
-        class: ['search--filters', 'search--hidden']
+        class: ["search--filters", "search--hidden"],
       },
-      el('div', {class: 'search--filters-items'}, [
+      el("div", { class: "search--filters-items" }, [
         s._elFiltersYearsRange,
         s._elFiltersFacets,
-        s._elFiltersDateGroup
+        s._elFiltersDateGroup,
       ])
     );
 
     /**
      * Stats
      */
-    s._elStatHits = el('span', {
-      class: ['search--stats-item']
+    s._elStatHits = el("span", {
+      class: ["search--stats-item"],
     });
     s._elStats = el(
-      'div',
+      "div",
       {
-        class: ['search--stats']
+        class: ["search--stats"],
       },
       s._elStatHits
     );
@@ -266,8 +266,8 @@ class Search extends EventSimple {
      * Search header
      */
     s._elInputs = await s._build_input({
-      key_label: 'search_title',
-      key_placeholder: 'search_placeholder'
+      key_label: "search_title",
+      key_placeholder: "search_placeholder",
     });
 
     /**
@@ -275,10 +275,10 @@ class Search extends EventSimple {
      */
 
     s._elSearch = el(
-      'div',
+      "div",
       {
-        class: ['search--container'],
-        on: ['click', s._handle_click.bind(s)]
+        class: ["search--container"],
+        on: ["click", s._handle_click.bind(s)],
       },
       s._elInputs,
       s._elFilters,
@@ -298,7 +298,7 @@ class Search extends EventSimple {
 
   _update_facets(distrib) {
     const s = this;
-    const attrKeys = s.opt('keywords').map((k) => k.type);
+    const attrKeys = s.opt("keywords").map((k) => k.type);
 
     for (let attr of attrKeys) {
       /**
@@ -321,24 +321,24 @@ class Search extends EventSimple {
 
   _build_facets(distrib) {
     if (!distrib) {
-      console.warn('No facet distribution');
-      return el('span', '');
+      console.warn("No facet distribution");
+      return el("span", "");
     }
     const s = this;
     s._facets = {};
     s._facets_containers = [];
-    const attrKeys = s.opt('keywords').map((k) => k.type);
+    const attrKeys = s.opt("keywords").map((k) => k.type);
     const frag = new DocumentFragment();
 
     for (let attr of attrKeys) {
-      const aConf = s.opt('keywords').find((k) => k.type == attr);
+      const aConf = s.opt("keywords").find((k) => k.type == attr);
       const subgroups = aConf.subgroups;
       /**
        * source_keyword, source_keywords_m49, view_type
        */
-      const {elFacetGroup, elFacetItems} = build_facets_group(attr, {
+      const { elFacetGroup, elFacetItems } = build_facets_group(attr, {
         details: true,
-        open: !frag.firstElementChild
+        open: !frag.firstElementChild,
       });
       s._facets_containers.push(elFacetItems);
       frag.appendChild(elFacetGroup);
@@ -348,11 +348,11 @@ class Search extends EventSimple {
        */
 
       if (subgroups) {
-        elFacetItems.className = 'search--filter-facets-sub-items';
+        elFacetItems.className = "search--filter-facets-sub-items";
         for (let g of subgroups) {
-          const {elFacetGroup: elFg, elFacetItems: elFi} = build_facets_group(
+          const { elFacetGroup: elFg, elFacetItems: elFi } = build_facets_group(
             g.key,
-            {details: false}
+            { details: false }
           );
           elFacetItems.appendChild(elFg);
           g._elSubFacetItems = elFi;
@@ -386,7 +386,7 @@ class Search extends EventSimple {
             label: value,
             group: attr,
             checked: false,
-            id: k
+            id: k,
           });
           s._facets[k] = fc;
           if (!subgroups) {
@@ -406,29 +406,29 @@ class Search extends EventSimple {
 
     function build_facets_group(key, opt) {
       let elFacetItems;
-      opt = Object.assign({}, {details: true, open: false}, opt);
+      opt = Object.assign({}, { details: true, open: false }, opt);
       const elFacetGroup = el(
-        opt.details ? 'details' : 'div',
+        opt.details ? "details" : "div",
         {
-          class: 'search--filter-facets-group'
+          class: "search--filter-facets-group",
         },
         [
           el(
-            opt.details ? 'summary' : 'span',
+            opt.details ? "summary" : "span",
             {
-              class: 'search--filter-group-title'
+              class: "search--filter-group-title",
             },
             elSpanTranslate(`search_${key}`)
           ),
-          (elFacetItems = el('div', {
-            class: 'search--filter-facets-items'
-          }))
+          (elFacetItems = el("div", {
+            class: "search--filter-facets-items",
+          })),
         ]
       );
       if (opt.details && opt.open) {
-        elFacetGroup.setAttribute('open', true);
+        elFacetGroup.setAttribute("open", true);
       }
-      return {elFacetItems, elFacetGroup};
+      return { elFacetItems, elFacetGroup };
     }
 
     return frag;
@@ -449,32 +449,32 @@ class Search extends EventSimple {
     /**
      * Year slider container and labels
      */
-    const yMin = s.opt('dates').year_min;
-    const yMax = s.opt('dates').year_max;
+    const yMin = s.opt("dates").year_min;
+    const yMax = s.opt("dates").year_max;
 
-    const elSliderYear = el('div');
-    const elSliderYearInputMin = el('span', {
-      class: 'search--filter-years-value'
+    const elSliderYear = el("div");
+    const elSliderYearInputMin = el("span", {
+      class: "search--filter-years-value",
     });
-    const elSliderYearTitle = elSpanTranslate('search_year_composite_range');
+    const elSliderYearTitle = elSpanTranslate("search_year_composite_range");
 
-    const elSliderYearInputMax = el('span', {
-      class: 'search--filter-years-value'
+    const elSliderYearInputMax = el("span", {
+      class: "search--filter-years-value",
     });
 
     const elSliderYearRowTop = el(
-      'div',
+      "div",
       {
-        class: 'search--filter-years-row'
+        class: "search--filter-years-row",
       },
       [elSliderYearInputMin, elSliderYearTitle, elSliderYearInputMax]
     );
     const elSliderYearRowBottom = el(
-      'div',
+      "div",
       {
-        class: 'search--filter-years-row'
+        class: "search--filter-years-row",
       },
-      [el('span', `${yMin}`), el('span', `${yMax}`)]
+      [el("span", `${yMin}`), el("span", `${yMax}`)]
     );
 
     s._elFiltersYearsRange.appendChild(elSliderYearRowTop);
@@ -485,12 +485,12 @@ class Search extends EventSimple {
      * Slider
      */
     s._year_slider = s._nouislider.create(elSliderYear, {
-      range: {min: yMin, max: yMax},
+      range: { min: yMin, max: yMax },
       step: 1,
       start: [yMin, yMax],
       connect: true,
-      behaviour: 'drag',
-      tooltips: false
+      behaviour: "drag",
+      tooltips: false,
     });
     /**
      * - drag produce end event
@@ -498,15 +498,15 @@ class Search extends EventSimple {
      * -> unable to have a smart way of handling fast changes
      * -> using 'update' for all
      */
-    s._year_slider.on('update', update);
+    s._year_slider.on("update", update);
     /**
      * Update filters
      */
     async function update(d) {
       const start = parseInt(d[0]);
       const end = parseInt(d[1]);
-      const attrStart = 'range_start_at_year';
-      const attrEnd = 'range_end_at_year';
+      const attrStart = "range_start_at_year";
+      const attrEnd = "range_end_at_year";
       /**
        * Strict
        * :) [--|___-|--]
@@ -522,7 +522,7 @@ class Search extends EventSimple {
       const strFilter = `${attrStart} <= ${end} AND ${attrEnd} >= ${start}`;
       elSliderYearInputMin.dataset.year = start;
       elSliderYearInputMax.dataset.year = end;
-      s.setFilter('range_years', strFilter);
+      s.setFilter("range_years", strFilter);
       await s.update();
     }
   }
@@ -532,53 +532,54 @@ class Search extends EventSimple {
    */
   async _build_filter_date() {
     const s = this;
-    const attrDate = s.opt('attributes').date;
-    const attrDateRange = s.opt('attributes').date_range;
+    const attrDate = s.opt("attributes").date;
+    const attrDateRange = s.opt("attributes").date_range;
     s._flatpickr_filters = [];
     const attrDateItems = attrDate.map((attr) => {
-      return {attr, range: false};
+      return { attr, range: false };
     });
     attrDateItems.push(
       ...attrDateRange.map((attr) => {
-        return {attr, range: true};
+        return { attr, range: true };
       })
     );
-    const txtPlaceholder = await getDictItem('search_filter_date_placeholder');
+    const txtPlaceholder = await getDictItem("search_filter_date_placeholder");
     for (let item of attrDateItems) {
       /**
        * Layout
        */
-      const elFilterDate = el('input', {
-        type: 'text',
-        class: 'search--filter-date-input',
+      const elFilterDate = el("input", {
+        type: "text",
+        class: "search--filter-date-input",
         dataset: {
-          lang_key: 'source_filter_date_placeholder',
-          lang_type: 'placeholder'
+          lang_key: "source_filter_date_placeholder",
+          lang_type: "placeholder",
         },
         placeholder: txtPlaceholder,
-        id: Math.random().toString(32)
+        id: Math.random().toString(32),
       });
       const elFilterDateLabel = el(
-        'label',
+        "label",
         {
-          class: 'search--filter-date-label',
-          for: elFilterDate.id
+          class: "search--filter-date-label",
+          for: elFilterDate.id,
         },
         elSpanTranslate(`search_filter_${item.attr}`)
       );
-      const elFilterContainer = el('div', {class: 'search--filter-date-item'}, [
-        elFilterDateLabel,
-        elFilterDate
-      ]);
+      const elFilterContainer = el(
+        "div",
+        { class: "search--filter-date-item" },
+        [elFilterDateLabel, elFilterDate]
+      );
       s._elFiltersDate.appendChild(elFilterContainer);
       /**
        * Date picker
        */
       const fpickr = s._flatpickr(elFilterDate, {
-        mode: item.range ? 'range' : 'single',
+        mode: item.range ? "range" : "single",
         allowInput: true,
         onChange: async (e) => {
-          let strFilter = '';
+          let strFilter = "";
           const isDateA = isDate(e[0]);
           const isDateB = isDate(e[1]);
           if (item.range && isDateA && isDateB) {
@@ -586,13 +587,14 @@ class Search extends EventSimple {
             strFilter = `${strFilter} AND ${item.attr}<=${(e[1] * 1) / 1000}`;
           }
           if (!item.range && isDateA) {
-            const isStart = item.attr.includes('_start_');
-            strFilter = `${item.attr}${isStart ? '>' : '<'}=${(e[0] * 1) /
-              1000}`;
+            const isStart = item.attr.includes("_start_");
+            strFilter = `${item.attr}${isStart ? ">" : "<"}=${
+              (e[0] * 1) / 1000
+            }`;
           }
           s.setFilter(item.attr, strFilter);
           await s.update();
-        }
+        },
       });
       s._flatpickr_filters.push(fpickr);
     }
@@ -605,53 +607,53 @@ class Search extends EventSimple {
   async _build_input(opt) {
     const s = this;
     const id = Math.random().toString(32);
-    opt = Object.assign({}, {key_placeholder: null}, opt);
-    s._elInput = el('input', {
-      class: 'search--input',
+    opt = Object.assign({}, { key_placeholder: null }, opt);
+    s._elInput = el("input", {
+      class: "search--input",
       id: id,
-      type: 'text',
+      type: "text",
       dataset: {
         lang_key: opt.key_placeholder,
-        lang_type: 'placeholder'
+        lang_type: "placeholder",
       },
       placeholder: await getDictItem(opt.key_placeholder),
       on: {
         input: async () => {
           await s.update();
-        }
-      }
+        },
+      },
     });
 
-    s._elFilterFlag = el('span', {
-      class: ['search--flag']
+    s._elFilterFlag = el("span", {
+      class: ["search--flag"],
     });
 
-    s._elBtnClear = elButtonIcon('search_clear_query', {
-      icon: 'fa-undo',
-      mode: 'icon',
+    s._elBtnClear = elButtonIcon("search_clear_query", {
+      icon: "fa-undo",
+      mode: "icon",
       classes: [],
-      dataset: {action: 'search_clear'}
+      dataset: { action: "search_clear" },
     });
 
-    s._elBtnToggleFilters = elButtonIcon('search_filters', {
-      icon: 'fa-bars',
-      mode: 'icon',
+    s._elBtnToggleFilters = elButtonIcon("search_filters", {
+      icon: "fa-bars",
+      mode: "icon",
       classes: [],
-      dataset: {action: 'toggle_filters'},
-      content: s._elFilterFlag
+      dataset: { action: "toggle_filters" },
+      content: s._elFilterFlag,
     });
 
-    s._elBtnHelp = elButtonIcon('search_help_ui', {
-      icon: 'fa-question',
-      mode: 'icon',
+    s._elBtnHelp = elButtonIcon("search_help_ui", {
+      icon: "fa-question",
+      mode: "icon",
       classes: [],
-      dataset: {action: 'show_help'}
+      dataset: { action: "show_help" },
     });
 
     s._elInputContainer = el(
-      'div',
+      "div",
       {
-        class: 'search--input-container'
+        class: "search--input-container",
       },
       [s._elInput, s._elBtnHelp, s._elBtnClear, s._elBtnToggleFilters]
     );
@@ -678,7 +680,7 @@ class Search extends EventSimple {
     if (!s._built) {
       return;
     }
-    s._elInput.value = '';
+    s._elInput.value = "";
     const facets = s.getFacetsArray();
     for (let facet of facets) {
       if (facet.checked) {
@@ -689,8 +691,8 @@ class Search extends EventSimple {
     for (let date of dates) {
       date.clear();
     }
-    const yMin = s.opt('dates').year_min;
-    const yMax = s.opt('dates').year_max;
+    const yMin = s.opt("dates").year_min;
+    const yMax = s.opt("dates").year_max;
     s._year_slider.set([yMin, yMax]);
   }
   /**
@@ -701,7 +703,7 @@ class Search extends EventSimple {
     if (!s._built) {
       return;
     }
-    s._elInput.value = '';
+    s._elInput.value = "";
     const facets = s.getFacetsArray();
     for (let facet of facets) {
       facet.destroy();
@@ -719,23 +721,23 @@ class Search extends EventSimple {
     if (s._infinite_scroll_updating || s._infinite_scroll_last) {
       return;
     }
-    const {scrollTop, scrollHeight, clientHeight} = s._elResults;
+    const { scrollTop, scrollHeight, clientHeight } = s._elResults;
     try {
       if (clientHeight + scrollTop >= scrollHeight - 5) {
-        const msgLoading = await getDictItem('search_results_loading');
-        s._elResults.setAttribute('msg_loading', msgLoading);
+        const msgLoading = await getDictItem("search_results_loading");
+        s._elResults.setAttribute("msg_loading", msgLoading);
         s._infinite_page++;
         s._infinite_scroll_updating = true;
         const results = await s.update({
           append: true,
-          page: s._infinite_page
+          page: s._infinite_page,
         });
         if (results && results.hits.length === 0) {
           s._infinite_scroll_last = true;
-          const msgNoMore = await getDictItem('search_results_end_of');
-          s._elResults.setAttribute('msg_loading', msgNoMore);
+          const msgNoMore = await getDictItem("search_results_end_of");
+          s._elResults.setAttribute("msg_loading", msgNoMore);
         } else {
-          s._elResults.setAttribute('msg_loading', '');
+          s._elResults.setAttribute("msg_loading", "");
         }
       }
     } catch (e) {
@@ -750,37 +752,37 @@ class Search extends EventSimple {
     const action = ds.action;
     try {
       switch (action) {
-        case 'search_year_set_min':
+        case "search_year_set_min":
           {
             const values = s._year_slider.get();
             const change = parseInt(values[0]) !== parseInt(ds.year);
-            values[0] = change ? ds.year : s.opt('dates').year_min;
+            values[0] = change ? ds.year : s.opt("dates").year_min;
             s._year_slider.set(values);
           }
           break;
-        case 'search_year_set_max':
+        case "search_year_set_max":
           {
             const values = s._year_slider.get();
             const change = parseInt(values[1]) !== parseInt(ds.year);
-            values[1] = change ? ds.year : s.opt('dates').year_max;
+            values[1] = change ? ds.year : s.opt("dates").year_max;
             s._year_slider.set(values);
           }
           break;
-        case 'toggle_filters':
+        case "toggle_filters":
           {
-            s._elFilters.classList.toggle('search--hidden');
+            s._elFilters.classList.toggle("search--hidden");
             s.vFeedback(e);
           }
           break;
-        case 'show_help':
+        case "show_help":
           {
             modalMarkdown({
-              title: getDictItem('btn_help'),
-              wiki: 'Search-tool-UI'
+              title: getDictItem("btn_help"),
+              wiki: "Search-tool-UI",
             });
           }
           break;
-        case 'update_facet_filter':
+        case "update_facet_filter":
           await s.update();
           if (0) {
             /**
@@ -790,27 +792,27 @@ class Search extends EventSimple {
              */
 
             e.target.scrollIntoView({
-              block: 'center',
-              inline: 'nearest',
-              behaviour: 'smooth'
+              block: "center",
+              inline: "nearest",
+              behaviour: "smooth",
             });
           }
           break;
-        case 'search_clear':
+        case "search_clear":
           {
             s.vFeedback(e);
             s.clear();
           }
           break;
-        case 'search_set_page':
+        case "search_set_page":
           {
             s.vFeedback(e);
             await s.update({
-              page: ds.page
+              page: ds.page,
             });
           }
           break;
-        case 'search_keyword_toggle':
+        case "search_keyword_toggle":
           {
             const keyword = ds.keyword;
             const type = ds.type;
@@ -821,19 +823,19 @@ class Search extends EventSimple {
             }
           }
           break;
-        case 'search_view_link':
+        case "search_view_link":
           {
             s.vFeedback(e);
             const idView = ds.id_view;
             const urlStatic = new URL(window.location);
-            urlStatic.search = '';
-            urlStatic.pathname = s.opt('link_pathname');
-            urlStatic.searchParams.append('views', idView);
-            urlStatic.searchParams.append('zoomToViews', true);
-            window.open(urlStatic, '_newtab');
+            urlStatic.search = "";
+            urlStatic.pathname = s.opt("link_pathname");
+            urlStatic.searchParams.append("views", idView);
+            urlStatic.searchParams.append("zoomToViews", true);
+            window.open(urlStatic, "_newtab");
           }
           break;
-        case 'search_view_toggle':
+        case "search_view_toggle":
           {
             s.vFeedback(e);
             const idView = ds.id_view;
@@ -844,7 +846,7 @@ class Search extends EventSimple {
             const viewIsValid = isView(view);
 
             if (!viewIsValid) {
-              console.warn('View not valid');
+              console.warn("View not valid");
             }
             const viewIsStory = isStory(view);
             if (!viewIsLocal) {
@@ -856,20 +858,20 @@ class Search extends EventSimple {
                */
 
               view._temp = true;
-              await viewsListAddSingle(view, {open: false, render: true});
+              await viewsListAddSingle(view, { open: false, render: true });
               const showNotify = await prefGet(
-                'pref_show_notify_add_view_temp'
+                "pref_show_notify_add_view_temp"
               );
               if (showNotify === null || showNotify === true) {
                 const keepShowing = await modalConfirm({
-                  title: getDictItem('search_view_added_temporarily_title'),
-                  content: getDictItem('search_view_added_temporarily'),
+                  title: getDictItem("search_view_added_temporarily_title"),
+                  content: getDictItem("search_view_added_temporarily"),
                   cancel: getDictItem(
-                    'search_view_added_temporarily_ok_no_more'
+                    "search_view_added_temporarily_ok_no_more"
                   ),
-                  confirm: getDictItem('search_view_added_temporarily_ok')
+                  confirm: getDictItem("search_view_added_temporarily_ok"),
                 });
-                await prefSet('pref_show_notify_add_view_temp', keepShowing);
+                await prefSet("pref_show_notify_add_view_temp", keepShowing);
               }
             }
             /*
@@ -893,19 +895,19 @@ class Search extends EventSimple {
                * Story handling
                */
               const confirmed = await modalConfirm({
-                title: elSpanTranslate('search_story_auto_play_confirm_title'),
-                content: elSpanTranslate('search_story_auto_play_confirm')
+                title: elSpanTranslate("search_story_auto_play_confirm_title"),
+                content: elSpanTranslate("search_story_auto_play_confirm"),
               });
               if (!confirmed) {
                 return;
               }
               storyRead({
-                view: view
+                view: view,
               });
             }
           }
           break;
-        case 'search_show_view_meta':
+        case "search_show_view_meta":
           {
             const idView = ds.id_view;
             s.vFeedback(e);
@@ -916,25 +918,25 @@ class Search extends EventSimple {
           null;
       }
     } catch (e) {
-      console.warn('Search action handler failed ', e);
+      console.warn("Search action handler failed ", e);
     }
   }
   vFeedback(event) {
     new FlashCircle({
       x: event.clientX,
-      y: event.clientY
+      y: event.clientY,
     });
   }
   _build_result_list(hits) {
     const s = this;
     const frag = new DocumentFragment();
-    const confKeywords = s.opt('keywords');
+    const confKeywords = s.opt("keywords");
     const sliderYears = s._year_slider.get().map((v) => parseInt(v * 1));
     for (let v of hits) {
       /**
        * Add keywords buttons
        */
-      const elKeywords = el('div', {class: ['search--button-group']});
+      const elKeywords = el("div", { class: ["search--button-group"] });
       for (let k of confKeywords) {
         let keywords = v[k.type];
         if (keywords) {
@@ -944,25 +946,25 @@ class Search extends EventSimple {
           for (let keyword of keywords) {
             if (isStringRange(keyword, 2)) {
               const facetEnabled = s.hasFilterFacet(k.type, keyword);
-              const clEnabled = facetEnabled ? 'enabled' : 'disabled';
+              const clEnabled = facetEnabled ? "enabled" : "disabled";
               const elKeyword = el(
-                'div',
+                "div",
                 {
                   class: [
-                    'search--button-keyword',
-                    `search--button-keyword-${clEnabled}`
+                    "search--button-keyword",
+                    `search--button-keyword-${clEnabled}`,
                   ],
                   dataset: {
-                    action: 'search_keyword_toggle',
+                    action: "search_keyword_toggle",
                     keyword: keyword,
-                    type: k.type
-                  }
+                    type: k.type,
+                  },
                 },
                 [
-                  el('i', {
-                    class: ['fa', k.icon]
+                  el("i", {
+                    class: ["fa", k.icon],
                   }),
-                  elSpanTranslate(keyword)
+                  elSpanTranslate(keyword),
                 ]
               );
               elKeywords.appendChild(elKeyword);
@@ -975,122 +977,122 @@ class Search extends EventSimple {
        */
       const emphaseYearStart = sliderYears.includes(v.range_start_at_year);
       const emphaseYearEnd = sliderYears.includes(v.range_end_at_year);
-      const elYears = el('div', {class: ['search--button-group']}, [
+      const elYears = el("div", { class: ["search--button-group"] }, [
         el(
-          'div',
+          "div",
           {
             class: [
-              'search--button-keyword',
-              emphaseYearStart ? `search--button-keyword-enabled` : null
+              "search--button-keyword",
+              emphaseYearStart ? `search--button-keyword-enabled` : null,
             ],
             dataset: {
-              action: 'search_year_set_min',
-              year: v.range_start_at_year
-            }
+              action: "search_year_set_min",
+              year: v.range_start_at_year,
+            },
           },
           [
-            el('i', {
-              class: ['fa', 'fa-hourglass-start']
+            el("i", {
+              class: ["fa", "fa-hourglass-start"],
             }),
-            el('span', `${v.range_start_at_year}`)
+            el("span", `${v.range_start_at_year}`),
           ]
         ),
         el(
-          'div',
+          "div",
           {
             class: [
-              'search--button-keyword',
-              emphaseYearEnd ? `search--button-keyword-enabled` : null
+              "search--button-keyword",
+              emphaseYearEnd ? `search--button-keyword-enabled` : null,
             ],
             dataset: {
-              action: 'search_year_set_max',
-              year: v.range_end_at_year
-            }
+              action: "search_year_set_max",
+              year: v.range_end_at_year,
+            },
           },
           [
-            el('i', {
-              class: ['fa', 'fa-hourglass-end']
+            el("i", {
+              class: ["fa", "fa-hourglass-end"],
             }),
-            el('span', `${v.range_end_at_year}`)
+            el("span", `${v.range_end_at_year}`),
           ]
-        )
+        ),
       ]);
       /**
        * Add actions
        */
       const elButtonsBar = el(
-        'div',
-        {class: ['search--button-group', 'search--button-group-right']},
+        "div",
+        { class: ["search--button-group", "search--button-group-right"] },
         [
           el(
-            'div',
+            "div",
             {
-              class: ['search--button-keyword'],
-              dataset: {action: 'search_view_link', id_view: v.view_id}
+              class: ["search--button-keyword"],
+              dataset: { action: "search_view_link", id_view: v.view_id },
             },
             [
-              el('i', {
-                class: ['fa', 'fa-external-link']
+              el("i", {
+                class: ["fa", "fa-external-link"],
               }),
-              elSpanTranslate('search_view_link')
+              elSpanTranslate("search_view_link"),
             ]
           ),
           el(
-            'div',
+            "div",
             {
-              class: ['search--button-keyword'],
-              dataset: {action: 'search_show_view_meta', id_view: v.view_id}
+              class: ["search--button-keyword"],
+              dataset: { action: "search_show_view_meta", id_view: v.view_id },
             },
             [
-              el('i', {
-                class: ['fa', 'fa-info-circle']
+              el("i", {
+                class: ["fa", "fa-info-circle"],
               }),
-              elSpanTranslate('search_show_view_meta')
+              elSpanTranslate("search_show_view_meta"),
             ]
           ),
           el(
-            'div',
+            "div",
             {
-              class: ['search--button-keyword'],
-              dataset: {action: 'search_view_toggle', id_view: v.view_id}
+              class: ["search--button-keyword"],
+              dataset: { action: "search_view_toggle", id_view: v.view_id },
             },
             [
-              el('i', {
-                class: ['fa', 'fa-toggle-off']
+              el("i", {
+                class: ["fa", "fa-toggle-off"],
               }),
-              elSpanTranslate('search_view_toggle')
+              elSpanTranslate("search_view_toggle"),
             ]
-          )
+          ),
         ]
       );
       frag.appendChild(
         el(
-          'div',
-          {class: ['search--results-item']},
+          "div",
+          { class: ["search--results-item"] },
           el(
-            'div',
-            {class: 'search--item-title'},
-            el('span', s.formatCroppedText(v._formatted.view_title))
+            "div",
+            { class: "search--item-title" },
+            el("span", s.formatCroppedText(v._formatted.view_title))
           ),
           el(
-            'p',
+            "p",
             {
-              class: ['search--item-info']
+              class: ["search--item-info"],
             },
             [
-              {key: 'view_abstract', id: 'view_id', type: 'view'},
-              {key: 'source_title', id: 'source_id', type: 'source'},
-              {key: 'source_abstract', id: null, type: null},
-              {key: 'project_title', id: 'project_id', type: 'project'}
+              { key: "view_abstract", id: "view_id", type: "view" },
+              { key: "source_title", id: "source_id", type: "source" },
+              { key: "source_abstract", id: null, type: null },
+              { key: "project_title", id: "project_id", type: "project" },
             ].map((row) => {
               return el(
-                'span',
+                "span",
                 {
-                  class: ['search--item-info-snipet', 'hint--top'],
+                  class: ["search--item-info-snipet", "hint--top"],
                   dataset: {
                     lang_key: `search_${row.key}`,
-                    lang_type: 'tooltip'
-                  }
+                    lang_type: "tooltip",
+                  },
                 },
                 s.formatCroppedText(v._formatted[row.key])
               );
@@ -1119,18 +1121,18 @@ class Search extends EventSimple {
   cutext(str, max) {
     max = max || 50;
     // NOTE: Can split html div. but description should not contain html.
-    const wrds = (str || '').split(/\b/);
-    const strShow = wrds.filter((w, i) => i <= max).join('');
-    const strHide = wrds.filter((w, i) => i > max).join('');
+    const wrds = (str || "").split(/\b/);
+    const strShow = wrds.filter((w, i) => i <= max).join("");
+    const strHide = wrds.filter((w, i) => i > max).join("");
     if (strHide.length === 0) {
-      return el('span', str);
+      return el("span", str);
     }
-    const elSummary = el('summary', strShow);
-    const elHide = el('span', strHide);
+    const elSummary = el("summary", strShow);
+    const elHide = el("span", strHide);
     return el(
-      'details',
+      "details",
       {
-        class: ['search--cutext']
+        class: ["search--cutext"],
       },
       elSummary,
       elHide
@@ -1144,21 +1146,21 @@ class Search extends EventSimple {
 
   formatCroppedText(str) {
     if (!isStringRange(str, 1)) {
-      return '';
+      return "";
     }
     if (isStringRange(str, 1, 20)) {
-      return str + ' ';
+      return str + " ";
     }
     if (str[0] !== str[0].toUpperCase()) {
       str = `…${str}`;
     }
-    if (!['.', '!', '?', ')'].includes(str[str.length - 1])) {
+    if (![".", "!", "?", ")"].includes(str[str.length - 1])) {
       str = `${str}…`;
     }
     return str;
   }
   getFilters(op) {
-    op = op || 'AND';
+    op = op || "AND";
     const s = this;
     const filters = [];
     const inputFilters = s._filters;
@@ -1176,7 +1178,7 @@ class Search extends EventSimple {
   }
   getFiltersFacets(op) {
     const s = this;
-    op = op || 'AND';
+    op = op || "AND";
     const inner = [];
     const outer = [];
     if (!s._facets) {
@@ -1186,7 +1188,7 @@ class Search extends EventSimple {
     for (let key of keys) {
       const facet = s._facets[key];
       if (facet.checked) {
-        if (op === 'AND') {
+        if (op === "AND") {
           inner.push(key);
         } else {
           outer.push(key);
@@ -1226,8 +1228,8 @@ class Search extends EventSimple {
   }
   hasFilterDateSlider() {
     const s = this;
-    const yMin = s.opt('dates').year_min;
-    const yMax = s.opt('dates').year_max;
+    const yMin = s.opt("dates").year_min;
+    const yMax = s.opt("dates").year_max;
     const yrs = s._year_slider.get().map((v) => parseInt(v * 1));
     return !yrs.includes(yMin) || !yrs.includes(yMax);
   }
@@ -1236,7 +1238,7 @@ class Search extends EventSimple {
     const dates = s._flatpickr_filters;
     let out = false;
     for (let date of dates) {
-      const isRange = date.config.mode === 'range';
+      const isRange = date.config.mode === "range";
       const sel = date.selectedDates || [];
       const valid = isRange ? sel.length === 2 : sel.length === 1;
       out = out || valid;
@@ -1254,15 +1256,15 @@ class Search extends EventSimple {
     const hasFilterText = s.hasFilterText();
 
     if (hasFilter) {
-      s._elFilterFlag.classList.add('active');
+      s._elFilterFlag.classList.add("active");
     } else {
-      s._elFilterFlag.classList.remove('active');
+      s._elFilterFlag.classList.remove("active");
     }
 
     if (hasFilter || hasFilterText) {
-      s._elBtnClear.removeAttribute('disabled');
+      s._elBtnClear.removeAttribute("disabled");
     } else {
-      s._elBtnClear.setAttribute('disabled', true);
+      s._elBtnClear.setAttribute("disabled", true);
     }
   }
 
@@ -1274,7 +1276,7 @@ class Search extends EventSimple {
   async update(opt) {
     const s = this;
     const options = Object.assign(
-      {page: 0, append: false, page_stat: false},
+      { page: 0, append: false, page_stat: false },
       opt
     );
     if (options.append === false) {
@@ -1289,9 +1291,9 @@ class Search extends EventSimple {
     s._timer_update_cancel = performance.now();
     try {
       const timer = s._timer_update_cancel;
-      const attr = s.opt('attributes');
-      const hPage = s.opt('hitsPerPage');
-      const attrKeys = s.opt('keywords').map((k) => k.type);
+      const attr = s.opt("attributes");
+      const hPage = s.opt("hitsPerPage");
+      const attrKeys = s.opt("keywords").map((k) => k.type);
       const strFilters = s.getFilters();
       const facetFilters = s.getFiltersFacets();
 
@@ -1305,7 +1307,7 @@ class Search extends EventSimple {
         attributesToHighlight: attr.text,
         attributesToCrop: attr.text,
         facetsDistribution: attrKeys,
-        matches: false
+        matches: false,
       });
       /**
        * Search is not cancellable, but if the timer
@@ -1366,7 +1368,7 @@ class Search extends EventSimple {
        */
       return results;
     } catch (e) {
-      console.warn('Issue while searching', e);
+      console.warn("Issue while searching", e);
     }
   }
 
@@ -1386,11 +1388,11 @@ class Search extends EventSimple {
     for (let elT of elsToggle) {
       const idView = elT.dataset.id_view;
       const isOpen = idViewsOpen.includes(idView);
-      const elIcon = elT.querySelector('i');
+      const elIcon = elT.querySelector("i");
       if (isOpen) {
-        elIcon.classList.replace('fa-toggle-off', 'fa-toggle-on');
+        elIcon.classList.replace("fa-toggle-off", "fa-toggle-on");
       } else {
-        elIcon.classList.replace('fa-toggle-on', 'fa-toggle-off');
+        elIcon.classList.replace("fa-toggle-on", "fa-toggle-off");
       }
     }
   }
@@ -1407,17 +1409,17 @@ class Search extends EventSimple {
     const search = Object.assign(
       {},
       {
-        q: '',
+        q: "",
         offset: 0,
         limit: 20,
         filters: null,
         facetFilters: null,
         facetsDistribution: null,
-        attributesToRetrieve: ['*'],
+        attributesToRetrieve: ["*"],
         attributesToCrop: null,
         cropLength: 60,
         attributesToHighlight: null,
-        matches: false
+        matches: false,
       },
       opt
     );
@@ -1436,9 +1438,9 @@ class Search extends EventSimple {
     );
     const strTime = `${results.processingTimeMs}`;
     const strNbHit = `${results.nbHits}`;
-    const tmpl = await getDictItem('search_results_stats_pagination');
-    const txt = s.template(tmpl, {strNbHit, strTime, cPage, nPage});
-    s._elStatHits.setAttribute('stat', txt);
+    const tmpl = await getDictItem("search_results_stats_pagination");
+    const txt = s.template(tmpl, { strNbHit, strTime, cPage, nPage });
+    s._elStatHits.setAttribute("stat", txt);
   }
 
   /**
@@ -1448,19 +1450,19 @@ class Search extends EventSimple {
     const s = this;
     const strTime = `${results.processingTimeMs}`;
     const strNbHit = `${results.nbHits}`;
-    const tmpl = await getDictItem('search_results_stats_simple');
-    const txt = s.template(tmpl, {strNbHit, strTime});
-    s._elStatHits.setAttribute('stat', txt);
+    const tmpl = await getDictItem("search_results_stats_simple");
+    const txt = s.template(tmpl, { strNbHit, strTime });
+    s._elStatHits.setAttribute("stat", txt);
   }
   /**
    * Pagination builder
    */
   _build_pagination_items(results) {
-    const elItems = el('div', {class: ['search--pagination-items']});
+    const elItems = el("div", { class: ["search--pagination-items"] });
     const nPage = Math.ceil(results.nbHits / results.limit);
     const cPage =
       Math.ceil(nPage - (results.nbHits - results.offset) / results.limit) - 1;
-    let type = '';
+    let type = "";
     let fillerPos = [];
     /*
      * Pagination layout
@@ -1469,24 +1471,24 @@ class Search extends EventSimple {
       /**
        * oooooooXoo
        */
-      type = 'all';
+      type = "all";
     } else if (cPage < 4) {
       /**
        * ooXoo ooo
        */
-      type = '5_3';
+      type = "5_3";
       fillerPos.push(6);
     } else if (cPage > nPage - 4) {
       /**
        * ooo oXooo
        */
-      type = '3_5';
+      type = "3_5";
       fillerPos.push(4);
     } else {
       /**
        * ooo oXo ooo
        */
-      type = '3_5_3';
+      type = "3_5_3";
       fillerPos.push(...[3, nPage - 4]);
     }
     /**
@@ -1495,10 +1497,10 @@ class Search extends EventSimple {
     for (let i = 0; i < nPage; i++) {
       let add = false;
       switch (type) {
-        case 'all':
+        case "all":
           add = true;
           break;
-        case '3_5_3':
+        case "3_5_3":
           if (
             i < 3 ||
             i === cPage - 2 ||
@@ -1511,12 +1513,12 @@ class Search extends EventSimple {
             add = true;
           }
           break;
-        case '5_3':
+        case "5_3":
           if (i < 5 || i > nPage - 4) {
             add = true;
           }
           break;
-        case '3_5':
+        case "3_5":
           if (i < 3 || i > nPage - 6) {
             add = true;
           }
@@ -1527,8 +1529,8 @@ class Search extends EventSimple {
        * Add filler if needed
        */
       if (fillerPos.includes(i)) {
-        const elFiller = el('span', {
-          class: ['search--pagination-item-filler']
+        const elFiller = el("span", {
+          class: ["search--pagination-item-filler"],
         });
         elItems.appendChild(elFiller);
       }
@@ -1538,25 +1540,25 @@ class Search extends EventSimple {
          */
         let elItem;
         const elItemContainer = el(
-          'span',
+          "span",
           {
-            class: ['search--pagination-item-container'],
+            class: ["search--pagination-item-container"],
             dataset: {
-              action: 'search_set_page',
-              page: i
-            }
+              action: "search_set_page",
+              page: i,
+            },
           },
-          (elItem = el('span', {
-            class: ['search--pagination-item'],
-            dataset: {page: i + 1}
+          (elItem = el("span", {
+            class: ["search--pagination-item"],
+            dataset: { page: i + 1 },
           }))
         );
         /**
          * The item is the current page
          */
         if (i === cPage) {
-          elItem.classList.add('active');
-          elItem.setAttribute('disabled', true);
+          elItem.classList.add("active");
+          elItem.setAttribute("disabled", true);
         }
         /**
          * Add the item
@@ -1595,7 +1597,7 @@ class Facet {
         group: null,
         checked: false,
         order: 0,
-        enable: true
+        enable: true,
       },
       opt
     );
@@ -1615,31 +1617,31 @@ class Facet {
   }
   build() {
     const fc = this;
-    fc._elCheckbox = el('input', {
-      class: 'search--filter-facet-item-input',
-      type: 'checkbox',
+    fc._elCheckbox = el("input", {
+      class: "search--filter-facet-item-input",
+      type: "checkbox",
       dataset: {
-        action: 'update_facet_filter'
+        action: "update_facet_filter",
       },
-      id: Math.random().toString(32)
+      id: Math.random().toString(32),
     });
     const elLabelContent = elSpanTranslate(fc._opt.label);
     fc._elLabel = el(
-      'label',
-      {class: 'search--filter-facet-item-label', for: fc._elCheckbox.id},
+      "label",
+      { class: "search--filter-facet-item-label", for: fc._elCheckbox.id },
       elLabelContent
     );
-    fc._elCount = el('span', {
+    fc._elCount = el("span", {
       count: fc._opt.count,
-      class: 'search--filter-facet-item-count'
+      class: "search--filter-facet-item-count",
     });
     fc._elTag = el(
-      'div',
+      "div",
       {
-        class: 'search--filter-facet-item',
+        class: "search--filter-facet-item",
         style: {
-          order: 1000 - fc._opt.count
-        }
+          order: 1000 - fc._opt.count,
+        },
       },
       [fc._elCheckbox, fc._elLabel, fc._elCount]
     );
@@ -1669,9 +1671,9 @@ class Facet {
     }
     fc._opt.enable = value;
     if (value) {
-      fc._elTag.classList.remove('disabled');
+      fc._elTag.classList.remove("disabled");
     } else {
-      fc._elTag.classList.add('disabled');
+      fc._elTag.classList.add("disabled");
     }
   }
   get order() {
@@ -1694,7 +1696,7 @@ class Facet {
       return;
     }
     fc._opt.count = c;
-    fc._elCount.setAttribute('count', c);
+    fc._elCount.setAttribute("count", c);
     fc.enable = !!c;
     /*
      * Avoid reordening, as this produce
@@ -1708,4 +1710,4 @@ class Facet {
     }
   }
 }
-export {Search};
+export { Search };

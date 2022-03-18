@@ -44,9 +44,8 @@ export * from './mx_helper_sdk.js';
 export * from './mx_helper_issues.js';
 export * from './mx_helper_legend_vt.js';
 
-/**
- * imported module available in mx.helpers
- */
+/* imported module available in mx.helpers */
+
 export * from './language';
 export * from './epsgio';
 export * from './api_routes';

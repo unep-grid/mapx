@@ -676,6 +676,11 @@ picture {
   margin: 4px;
 }
 
+.btn-circle.disabled {
+  cursor: not-allowed;
+  opacity:0.5;
+}
+
 .btn-circle > i {
   position: relative;
   display: flex;

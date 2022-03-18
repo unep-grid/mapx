@@ -1,5 +1,5 @@
 import {el} from './../../el/src/index.js';
-import * as is from './../../is_test/index.js'
+import * as valid from './../../is_test/index.js'
 
 const defaults = {
   title: 'test',
@@ -32,7 +32,7 @@ const queue = [];
  * })
  *
  *
- * t.check('get view list',{
+ * t.test('get view list',{
  *    init : ()=>{
  *      return mapx.ask('get_views');
  *    },
@@ -46,9 +46,9 @@ const queue = [];
 export class Testing {
   constructor(opt) {
     const t = this;
-    t.h = is;
     t.opt = Object.assign({}, defaults, opt);
     t._results = [];
+    t.valid = valid;
   }
 
   destroy() {
@@ -60,7 +60,7 @@ export class Testing {
   run(opt) {
     const t = this;
     opt = Object.assign({}, opt);
-    if (is.isFunction(opt.finally)) {
+    if (valid.isFunction(opt.finally)) {
       t._finally = opt.finally;
     }
     t._next();
@@ -202,7 +202,7 @@ export class Testing {
     });
   }
   _promise(cb, data, test) {
-    cb = is.isFunction(cb) ? cb : () => {};
+    cb = valid.isFunction(cb) ? cb : () => {};
     if (test) {
       cb = cb.bind(test);
     }
@@ -247,7 +247,6 @@ export class Testing {
     };
   }
   _ui_result(name, section) {
-    const t = this;
     let elIcon, elTitle, elText, elTiming;
     const elLi = el(
       'li',
@@ -265,11 +264,12 @@ export class Testing {
     };
   }
   _is_in_opt_set(set, value) {
+    const t = this;
     let out = false;
-    if (this.opt[set] !== undefined && this.opt[set].length === 0) {
+    if (t.opt[set] !== undefined && t.opt[set].length === 0) {
       out = true;
     } else if (value !== undefined) {
-      out = this.opt[set].includes(value);
+      out = t.opt[set].includes(value);
     }
     return out;
   }

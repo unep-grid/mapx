@@ -1,4 +1,18 @@
-import {MapxResolversStatic} from './static.js';
+import { getToken, setToken } from "./../../../mx_helper_cookies.js";
+import { fetchProjects } from "./../../../mx_helper_map_project_fetch.js";
+import {
+  getView,
+  chaosTest,
+  setProject,
+  getMapData,
+  getViewsOrder,
+} from "../../../mx_helper_map.js";
+import { isView } from "./../../../is_test";
+import { viewToMetaModal } from "../../../mx_helper_map_view_metadata.js";
+import { getProjectViewsCollections } from "../../../mx_helper_map_view_ui.js";
+
+import { MapxResolversStatic } from "./static.js";
+import { isStringRange, isString } from "../../../is_test/index.js";
 
 /**
  * MapX resolvers available in app only
@@ -9,7 +23,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Array} array of supported methods
    */
   get_sdk_methods() {
-    const reg = new RegExp('^_');
+    const reg = new RegExp("^_");
     let methodsS = Object.getOwnPropertyNames(MapxResolversStatic.prototype);
     let methodsA = Object.getOwnPropertyNames(MapxResolversApp.prototype);
     methodsS = methodsS.splice(1, methodsS.length);
@@ -24,7 +38,7 @@ class MapxResolversApp extends MapxResolversStatic {
    */
   show_modal_login() {
     const rslv = this;
-    return rslv._shiny_input('btn_control', {value: 'showLogin'});
+    return rslv._shiny_input("btn_control", { value: "showLogin" });
   }
 
   /**
@@ -33,14 +47,14 @@ class MapxResolversApp extends MapxResolversStatic {
    */
   show_modal_view_meta(opt) {
     const rslv = this;
-    opt = Object.assign({}, {idView: null}, opt);
-    const view = rslv._h.getView(opt.idView);
-    const valid = rslv._h.isView(view);
+    opt = Object.assign({}, { idView: null }, opt);
+    const view = getView(opt.idView);
+    const valid = isView(view);
     if (valid) {
-      rslv._h.viewToMetaModal(view);
+      viewToMetaModal(view);
       return true;
     } else {
-      return rslv._err('err_view_invalid');
+      return rslv._err("err_view_invalid");
     }
   }
 
@@ -49,9 +63,8 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} pass
    */
   async launch_chaos_test(opt) {
-    const rslv = this;
-    opt = Object.assign({}, {nBatch: 5, duration: 1000}, opt);
-    const res = await rslv._h.chaosTest(opt);
+    opt = Object.assign({}, { nBatch: 5, duration: 1000 }, opt);
+    const res = await chaosTest(opt);
     return res;
   }
 
@@ -61,25 +74,25 @@ class MapxResolversApp extends MapxResolversStatic {
    */
   show_modal_view_edit(opt) {
     const rslv = this;
-    const pass = rslv.check_user_role_breaker(['publishers', 'admins']);
+    const pass = rslv.check_user_role_breaker(["publishers", "admins"]);
     if (!pass) {
       return;
     }
-    opt = Object.assign({}, {idView: null}, opt);
-    const view = rslv._h.getView(opt.idView);
-    const valid = rslv._h.isView(view);
+    opt = Object.assign({}, { idView: null }, opt);
+    const view = getView(opt.idView);
+    const valid = isView(view);
     const editable = valid && view._edit === true;
     if (valid && editable) {
-      rslv._shiny_input('mx_client_view_action', {
-        action: 'btn_opt_edit_config',
-        target: opt.idView
+      rslv._shiny_input("mx_client_view_action", {
+        action: "btn_opt_edit_config",
+        target: opt.idView,
       });
       return true;
     } else {
       if (!editable && valid) {
-        return rslv._err('err_view_not_editable');
+        return rslv._err("err_view_not_editable");
       } else {
-        return rslv._err('err_view_invalid');
+        return rslv._err("err_view_invalid");
       }
     }
   }
@@ -96,55 +109,55 @@ class MapxResolversApp extends MapxResolversStatic {
     opt = Object.assign({}, opt);
     const tools = {
       sharing_manager: {
-        roles: ['public'],
-        id: 'btnIframeBuilder',
+        roles: ["public"],
+        id: "btnIframeBuilder",
         deprecated: true,
-        new_resolver: 'open_modal_share'
+        new_resolver: "open_modal_share",
       },
       view_new: {
-        roles: ['publishers', 'admins'],
-        id: 'btnAddView'
+        roles: ["publishers", "admins"],
+        id: "btnAddView",
       },
       source_validate_geom: {
-        roles: ['publishers', 'admins'],
-        id: 'btnValidateSourceGeom'
+        roles: ["publishers", "admins"],
+        id: "btnValidateSourceGeom",
       },
       source_overlap_utilities: {
-        roles: ['publishers', 'admins'],
-        id: 'btnAnalysisOverlap'
+        roles: ["publishers", "admins"],
+        id: "btnAnalysisOverlap",
       },
       source_edit: {
-        roles: ['publishers', 'admins'],
-        id: 'btnEditSources'
+        roles: ["publishers", "admins"],
+        id: "btnEditSources",
       },
       source_metadata_edit: {
-        roles: ['publishers', 'admins'],
-        id: 'btnEditSourcesMetadata'
+        roles: ["publishers", "admins"],
+        id: "btnEditSourcesMetadata",
       },
       source_upload: {
-        roles: ['publishers', 'admins'],
-        id: 'btnUploadSourceApi'
+        roles: ["publishers", "admins"],
+        id: "btnUploadSourceApi",
       },
       db_temporary_connect: {
-        roles: ['publishers', 'admins'],
-        id: 'btnShowDbInfoSelf'
+        roles: ["publishers", "admins"],
+        id: "btnShowDbInfoSelf",
       },
       project_external_views: {
-        roles: ['publishers', 'admins'],
-        id: 'btnShowProjectExternalViews'
+        roles: ["publishers", "admins"],
+        id: "btnShowProjectExternalViews",
       },
       project_config: {
-        roles: ['admins'],
-        id: 'btnShowProjectConfig'
+        roles: ["admins"],
+        id: "btnShowProjectConfig",
       },
       project_invite_new_member: {
-        roles: ['admins'],
-        id: 'btnShowInviteMember'
+        roles: ["admins"],
+        id: "btnShowInviteMember",
       },
       project_define_roles: {
-        roles: ['admins'],
-        id: 'btnShowRoleManager'
-      }
+        roles: ["admins"],
+        id: "btnShowRoleManager",
+      },
     };
 
     if (opt.list) {
@@ -153,14 +166,14 @@ class MapxResolversApp extends MapxResolversStatic {
     const conf = tools[opt.tool];
 
     if (!conf) {
-      rslv._err('err_tool_not_found', {
-        idTool: opt.tool || 'null'
+      rslv._err("err_tool_not_found", {
+        idTool: opt.tool || "null",
       });
       return false;
     }
 
     const pass = rslv.check_user_role_breaker(conf.roles, {
-      id: opt.tool
+      id: opt.tool,
     });
 
     if (pass) {
@@ -177,7 +190,7 @@ class MapxResolversApp extends MapxResolversStatic {
       /**
        * Trigger Shiny input
        */
-      rslv._shiny_input(conf.id, {randomNumber: true});
+      rslv._shiny_input(conf.id, { randomNumber: true });
       return true;
     }
     return false;
@@ -199,11 +212,10 @@ class MapxResolversApp extends MapxResolversStatic {
    * session with mx.helpers.getToken() or with the SDK, get_mapx_token.
    * @param {String} Mapx valid encrypted token
    */
-
   set_token(str) {
-    const rslv = this;
-    if (str) {
-      rslv._h.setToken(str);
+    const valid = isStringRange(str, 10);
+    if (valid) {
+      return setToken(str);
     }
   }
 
@@ -211,11 +223,10 @@ class MapxResolversApp extends MapxResolversStatic {
    * Retrieve MapX token.
    * @return {String} MapX token.
    */
-
   get_token() {
-    const rslv = this;
-    return rslv._h.getToken();
+    return getToken();
   }
+
   /**
    * Get user roles
    * @return {Object} Current user roles
@@ -223,6 +234,7 @@ class MapxResolversApp extends MapxResolversStatic {
   get_user_roles() {
     return mx.settings.user.roles;
   }
+
   /**
    * Check if user as given role
    * @param {Object} opt Options
@@ -232,8 +244,8 @@ class MapxResolversApp extends MapxResolversStatic {
    */
   check_user_role(opt) {
     const rslv = this;
-    opt = Object.assign({}, {role: ['public'], all: true}, opt);
-    if (rslv._h.isString(opt.role)) {
+    opt = Object.assign({}, { role: ["public"], all: true }, opt);
+    if (isString(opt.role)) {
       opt.role = [opt.role];
     }
     const all = opt.all === true;
@@ -257,13 +269,13 @@ class MapxResolversApp extends MapxResolversStatic {
    */
   check_user_role_breaker(roleReq, opt) {
     const rslv = this;
-    opt = Object.assign({}, {reportError: true, id: null}, opt);
+    opt = Object.assign({}, { reportError: true, id: null }, opt);
     roleReq = roleReq || [];
-    const pass = rslv.check_user_role({role: roleReq, all: false});
+    const pass = rslv.check_user_role({ role: roleReq, all: false });
     if (!pass && opt.reportError) {
-      rslv._err('err_tool_roles_not_match', {
+      rslv._err("err_tool_roles_not_match", {
         idTool: opt.id,
-        roles: JSON.stringify(roleReq)
+        roles: JSON.stringify(roleReq),
       });
     }
     return pass;
@@ -274,7 +286,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {String} Current user email ( if logged, null if not)
    */
   get_user_email() {
-    return mx.settings.user.guest ? '' : mx.settings.user.email;
+    return mx.settings.user.guest ? "" : mx.settings.user.email;
   }
 
   /**
@@ -284,9 +296,8 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} Done
    */
   async set_project(opt) {
-    const rslv = this;
-    opt = Object.assign({}, {idProject: null}, opt);
-    return rslv._h.setProject(opt.idProject);
+    opt = Object.assign({}, { idProject: null }, opt);
+    return setProject(opt.idProject);
   }
   /**
    * Get projects list
@@ -294,8 +305,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Array} list of project for the current user, using optional filters
    */
   get_projects(opt) {
-    const rslv = this;
-    return rslv._h.fetchProjects(opt);
+    return fetchProjects(opt);
   }
 
   /**
@@ -313,8 +323,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Array} Array of collections names
    */
   get_project_collections(opt) {
-    const rslv = this;
-    return rslv._h.getProjectViewsCollections(opt);
+    return getProjectViewsCollections(opt);
   }
 
   /**
@@ -330,8 +339,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Array}
    */
   get_views_list_state() {
-    const rslv = this;
-    const v = rslv._h.getMapData().viewsList;
+    const v = getMapData().viewsList;
     return v.getState();
   }
 
@@ -374,9 +382,8 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} done
    */
   set_views_list_filters(opt) {
-    const rslv = this;
-    opt = Object.assign({}, {rules: [], mode: 'intersection'}, opt);
-    const vf = rslv._h.getMapData().viewsFilter;
+    opt = Object.assign({}, { rules: [], mode: "intersection" }, opt);
+    const vf = getMapData().viewsFilter;
     vf.filterCombined(opt);
     return vf.getRules();
   }
@@ -386,8 +393,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Array} Rule list
    */
   get_views_list_filters() {
-    const rslv = this;
-    const vf = rslv._h.getMapData().viewsFilter;
+    const vf = getMapData().viewsFilter;
     return vf.getRules();
   }
   /**
@@ -395,8 +401,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Array}
    */
   get_views_order() {
-    const rslv = this;
-    return rslv._h.getViewsOrder();
+    return getViewsOrder();
   }
 
   /**
@@ -406,12 +411,11 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} Done
    */
   set_views_list_state(opt) {
-    const rslv = this;
-    const v = rslv._h.getMapData().viewsList;
+    const v = getMapData().viewsList;
     v.setState({
       render: false,
       state: opt.state,
-      useStateStored: false
+      useStateStored: false,
     });
     return true;
   }
@@ -424,16 +428,15 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} Done
    */
   set_views_list_sort(opt) {
-    const rslv = this;
-    const v = rslv._h.getMapData().viewsList;
+    const v = getMapData().viewsList;
     /**
      * Sort group -> trigger viewsLayersOrderUpdate -> fire 'layers_ordered'
      */
     const prom = new Promise((resolve) => {
       mx.events.on({
-        type: 'layers_ordered',
-        idGroup: 'sdk_resolver',
-        callback: resolve
+        type: "layers_ordered",
+        idGroup: "sdk_resolver",
+        callback: resolve,
       });
     });
     v.sortGroup(null, opt);
@@ -448,9 +451,8 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} Sorted
    */
   is_views_list_sorted(opt) {
-    const rslv = this;
-    const v = rslv._h.getMapData().viewsList;
-    opt = Object.assign({}, {check: true}, opt);
+    const v = getMapData().viewsList;
+    opt = Object.assign({}, { check: true }, opt);
     return v.sortGroup(null, opt);
   }
 
@@ -461,8 +463,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} Done
    */
   move_view_top(opt) {
-    const rslv = this;
-    const v = rslv._h.getMapData().viewsList;
+    const v = getMapData().viewsList;
     v.moveTargetTop(opt.idView);
     return true;
   }
@@ -473,8 +474,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} Done
    */
   move_view_bottom(opt) {
-    const rslv = this;
-    const v = rslv._h.getMapData().viewsList;
+    const v = getMapData().viewsList;
     v.moveTargetBottom(opt.idView);
     return true;
   }
@@ -486,8 +486,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} Done
    */
   move_view_after(opt) {
-    const rslv = this;
-    const v = rslv._h.getMapData().viewsList;
+    const v = getMapData().viewsList;
     v.moveTargetAfter(opt.idView, opt.idViewAfter);
     return true;
   }
@@ -499,8 +498,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} Done
    */
   move_view_before(opt) {
-    const rslv = this;
-    const v = rslv._h.getMapData().viewsList;
+    const v = getMapData().viewsList;
     v.moveTargetBefore(opt.idView, opt.idViewBefore);
     return true;
   }
@@ -511,8 +509,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} Done
    */
   move_view_up(opt) {
-    const rslv = this;
-    const v = rslv._h.getMapData().viewsList;
+    const v = getMapData().viewsList;
     v.moveTargetUp(opt.idView);
     return true;
   }
@@ -523,8 +520,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} Done
    */
   move_view_down(opt) {
-    const rslv = this;
-    const v = rslv._h.getMapData().viewsList;
+    const v = getMapData().viewsList;
     v.moveTargetDown(opt.idView);
     return true;
   }
@@ -535,18 +531,18 @@ class MapxResolversApp extends MapxResolversStatic {
    */
   _shiny_input(id, opt) {
     if (mx.settings.mode.app) {
-      opt = Object.assign({time: new Date()}, opt);
+      opt = Object.assign({ time: new Date() }, opt);
       if (opt.randomNumber) {
         opt = Math.ceil(Math.random() * 1000);
       }
       Shiny.onInputChange(id, opt);
     } else {
-      return rslv._err('err_not_available_mode', {
-        mode: JSON.stringify(mx.settings.mode)
+      return rslv._err("err_not_available_mode", {
+        mode: JSON.stringify(mx.settings.mode),
       });
     }
     return true;
   }
 }
 
-export {MapxResolversApp};
+export { MapxResolversApp };

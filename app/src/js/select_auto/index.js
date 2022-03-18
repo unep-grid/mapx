@@ -1,28 +1,32 @@
-import {moduleLoad} from './../modules_loader_async/index.js';
-import {isElement} from './../is_test';
+import { moduleLoad } from "./../modules_loader_async/index.js";
+import { isElement } from "./../is_test";
+import {EventSimple} from "../event_simple/index.js";
 
 const def = {
   target: null,
-  type: 'epsg'
+  type: "epsg",
 };
 
-export class SelectAuto {
+export class SelectAuto extends EventSimple {
   constructor(opt) {
+    super();
     const se = this;
     if (isElement(opt)) {
-      const target = opt.querySelector('select');
+      const target = opt.querySelector("select");
       const type = target.dataset.type;
-      se._opt = {target, type};
-    }else{
+      se._opt = { target, type };
+    } else {
       se._opt = Object.assign({}, def, opt);
     }
     se.destroy = se.destroy.bind(se);
-    se.init().catch(console.erro);
+    se.init().catch(console.error);
   }
 
   async init() {
     const se = this;
     await se.build();
+    se.fire('init');
+    se._init = true;
   }
 
   destroy() {
@@ -32,28 +36,32 @@ export class SelectAuto {
     }
     se._destroyed = true;
     se._tom.destroy();
+    se.fire('destroyed');
   }
 
   async build() {
     const se = this;
-    const TomSelect = await moduleLoad('tom-select');
+    const TomSelect = await moduleLoad("tom-select");
     const config = await se.loadConfig(se._opt.type);
-    se._tom = new TomSelect(se._opt.target, config);
+    return new Promise((resolve) => {
+      config.onInitialize = resolve;
+      se._tom = new TomSelect(se._opt.target, config);
+    });
   }
 
   async loadConfig(type) {
     const out = {};
     switch (type) {
-      case 'epsg':
-        const epsg = await import('./epsg');
+      case "epsg":
+        const epsg = await import("./epsg");
         Object.assign(out, epsg.config);
         break;
-      case 'format_vector_download':
-        const format = await import('./format_vector_download');
+      case "format_vector_download":
+        const format = await import("./format_vector_download");
         Object.assign(out, format.config);
         break;
-      case 'countries':
-        const countries = await import('./countries');
+      case "countries":
+        const countries = await import("./countries");
         Object.assign(out, countries.config);
         break;
     }

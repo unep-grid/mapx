@@ -8,7 +8,7 @@ let nf =
   window.mozRequestAnimationFrame ||
   window.msRequestAnimationFrame ||
   window.oRequestAnimationFrame ||
-  function(callback) {
+  function (callback) {
     window.setTimeout(callback, 1000 / 60);
   };
 
@@ -48,6 +48,12 @@ function waitFrameAsync() {
   });
 }
 
+/**
+ * Wait async
+ * @param {Number} t ms to wait
+ * @param {Function} cb Optional callback
+ * @return {Promise}
+ */
 function waitTimeoutAsync(t, cb) {
   return new Promise((r) => {
     setTimeout(() => {
@@ -59,4 +65,4 @@ function waitTimeoutAsync(t, cb) {
   });
 }
 
-export {onNextFrame, cancelFrame, waitFrameAsync, waitTimeoutAsync};
+export { onNextFrame, cancelFrame, waitFrameAsync, waitTimeoutAsync };

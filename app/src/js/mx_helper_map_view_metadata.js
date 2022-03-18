@@ -1,17 +1,20 @@
 import {getGemetConcept, getGemetConceptLink} from './gemet_util/index.js';
 import {el, elAuto} from './el_mapx';
 import {getApiUrl} from './api_routes';
+import {isSourceId} from './is_test/index.js';
+
 /**
- * Get view's source metadata
+ * Get source metadata
+ * @note : For updating only. see <view>._meta and <view>._has_download
  * @param {String} id Name/Id of the source layer
  */
-export async function fetchSourceMetadata(id) {
-  if (!id) {
-    return console.warn('getSourceMetaDataRemote : missing id');
+export async function fetchSourceMetadata(idSource) {
+  if (!isSourceId(idSource)) {
+    throw new Error('getSourceMetadata : invalid id');
   }
   const urlSourceMeta = getApiUrl('getSourceMetadata');
   const date = performance.now();
-  const url = `${urlSourceMeta}${id}?date=${date}`;
+  const url = `${urlSourceMeta}${idSource}?date=${date}`;
   const r = await fetch(url);
   const meta = await r.json();
   return meta;
@@ -33,6 +36,11 @@ export async function fetchViewMetadata(id) {
   return meta;
 }
 
+
+/**
+* Display view metadata in a modal panel
+* @param {Object} view 
+*/ 
 export async function viewToMetaModal(view) {
   const h = mx.helpers;
   const id = h.isView(view) ? view.id : view;

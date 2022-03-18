@@ -156,17 +156,27 @@ AND
     ( p.u_is_admin AND v.readers ?| array['admins'] )
   )
 ),
-
 /**
- * Metadata
- */
+* Download external link
+*/ 
 v_meta AS (
+  SELECT 
+  v.*,
+  null as _id_source,
+  coalesce(data #> '{source,meta,origin,source,urls}', '[]'::jsonb ) @> '[{"is_download_link":true}]' as _has_download,
+  coalesce( v.data #> '{source,meta}','{}'::jsonb ) AS _meta
+  FROM v_all v
+  WHERE 
+  type !='vt' 
+  UNION
   SELECT
-  v.id as id,
-  coalesce( s.data #> '{meta}', v.data #> '{source,meta}','{}'::jsonb ) AS _meta,
-  v.data #> '{source,layerInfo,name}' AS _id_source
+  v.*,
+  s.id as _id_source,
+  coalesce( s.services, '[]'::jsonb ) @> '"mx_download"' _has_download,
+  coalesce( s.data #> '{meta}', '{}'::jsonb ) AS _meta
   FROM v_all v LEFT OUTER JOIN mx_sources s
   ON v.data #>> '{source,layerInfo,name}' = s.id
+  WHERE v.type = 'vt'
 ),
 /**
 * View list 
@@ -175,12 +185,8 @@ v_meta AS (
 v_list AS (
   SELECT 
   v.*,
-  m._meta,
-  m._id_source,
   p.title _title_project
-  FROM v_all v, v_meta m, p_base p 
-  WHERE v.id = m.id
+  FROM v_meta v, p_base p 
 )
 
 SELECT {{selectKeys}} FROM v_list;
-

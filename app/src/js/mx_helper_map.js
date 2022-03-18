@@ -21,16 +21,31 @@ import { errorHandler } from "./error_handler/index.js";
 import { waitTimeoutAsync } from "./animation_frame";
 import { getArrayDiff, getArrayDistinct } from "./array_stat/index.js";
 import { getApiUrl } from "./api_routes";
-import { ModalDownloadSource } from "./download_source";
+import { DownloadSourceModal } from "./download_source";
+import { getViewSourceSummary } from "./mx_helper_source_summary";
+import {fetchSourceMetadata} from "./mx_helper_map_view_metadata";
 import {
   getDictItem,
   getLanguageCurrent,
   getLanguageDefault,
   getLanguagesAll,
 } from "./language";
-import { isView, isViewId } from "./is_test";
-import {getViewSourceSummary} from "./mx_helper_source_summary";
 
+import {
+  isView,
+  isArray,
+  isViewId,
+  isViewRt,
+  isSourceId,
+  isViewLocal,
+  isViewEditable,
+  isViewDashboard,
+  isViewRtWithTiles,
+  isViewVtWithRules,
+  isViewDownloadable,
+  isViewRtWithLegend,
+  isViewVtWithAttributeType,
+} from "./is_test/index.js";
 /**
  * Convert point in  degrees to meter
  * @lngLat {PointLike} lngLat
@@ -39,7 +54,7 @@ import {getViewSourceSummary} from "./mx_helper_source_summary";
 export function degreesToMeters(lngLat) {
   const x = (lngLat.lng * 20037508.34) / 180;
   let y =
-    Math.log(Math.tan(((90 + lng.lat) * Math.PI) / 360)) / (Math.PI / 180);
+    Math.log(Math.tan(((90 + lngLat.lat) * Math.PI) / 360)) / (Math.PI / 180);
   y = (y * 20037508.34) / 180;
   return {
     x: x,
@@ -129,7 +144,6 @@ export function getDownloadUrlItemsFromViewMeta(view) {
  * @param {Object} view
  * @return {Boolean} has items
  */
-
 export function hasDownloadUrlItemsFromViewMeta(view) {
   return getDownloadUrlItemsFromViewMeta(view).length > 0;
 }
@@ -146,7 +160,7 @@ export async function downloadViewSourceExternal(opt) {
   const view = h.getView(opt.idView);
 
   if (!h.isView(view)) {
-    throw new Error(`No view with id ${idView}`);
+    throw new Error(`No view with id ${opt.idView}`);
   }
 
   /*
@@ -251,7 +265,7 @@ export async function downloadViewVector_old(opt) {
   const view = h.getView(opt.idView);
 
   if (!h.isView(view)) {
-    throw new Error(`No view with id ${idView}`);
+    throw new Error(`No view with id ${opt.idView}`);
   }
 
   Shiny.onInputChange(`mx_client_view_action`, {
@@ -276,18 +290,18 @@ export async function downloadViewVector(idView) {
   if (!isView(view)) {
     throw new Error(`View ${idView} not found`);
   }
-  const srcSummary = await getViewSourceSummary(view)
+  const srcSummary = await getViewSourceSummary(view);
   const idSocket = mx.ws?.io?.id;
-  new ModalDownloadSource({
+  const dl = new DownloadSourceModal({
     email: mx.settings.user.guest ? null : mx.settings.user.email,
     idSource: srcSummary.id,
     idSocket: idSocket,
     idProject: mx.settings.project.id,
     idUser: mx.settings.user.id,
-    token : mx.settings.user.token
+    token: mx.settings.user.token,
   });
 
-  return idView;
+  return dl ;
 }
 
 /**
@@ -1838,7 +1852,7 @@ export async function updateViewsList(opt) {
     resetViews: false,
     useQueryFilters: true,
   };
-  opt = h.updateIfEmpty(opt, def);
+  h.updateIfEmpty(opt, def);
   const viewsToAdd = opt.viewsList;
   const hasViewsList = h.isArrayOfViews(viewsToAdd) && h.isNotEmpty(viewsToAdd);
 
@@ -3833,7 +3847,7 @@ export async function getViewLegendImage(opt) {
   opt = Object.assign({ format: "image/png" }, opt);
   const view = h.getView(opt.view);
   const isVt = h.isViewVt(view);
-  const isRt = !isVt && h.isViewRt(view);
+  const isRt = !isVt && isViewRt(view);
   const isValid = isVt || isRt;
   const isOpen = isValid && h.isViewOpen(view);
 
@@ -5801,11 +5815,119 @@ export function getViewsListId() {
   const h = mx.helpers;
   return h.getViews().map((m) => m.id);
 }
+
+/**
+ * Get a random view by type and common selector
+ * @param {Object} config
+ * @param {Array} config.type Array of type to select eg. ['cc']
+ * @param {Boolean} config.rtHasTiles: false,
+ * @param {Boolean} config.vtHasRules: false,
+ * @param {Boolean | String} config.vtHasAttributeType: false,
+ * @param {Boolean} config.rtHasLegendLink: false,
+ * @param {Boolean} config.isEditable: false,
+ * @param {Boolean} config.isLocal: false,
+ * @return {Object} A view
+ */
+const _get_random_view_default = {
+  type: ["vt", "rt"],
+  rtHasTiles: false,
+  vtHasRules: false,
+  vtHasAttributeType: false,
+  rtHasLegendLink: false,
+  hasDashboard: false,
+  isEditable: false,
+  isDownloadble: false,
+  isLocal: false,
+};
+export function getViewRandom(config) {
+  const opt = Object.assign({}, _get_random_view_default, config);
+  if (!isArray(opt.type)) {
+    opt.type = [opt.type];
+  }
+  const out = [];
+  const views = getViews();
+
+  for (const view of views) {
+    const type = view.type;
+    const hasType = opt.type.includes(type);
+
+    if (!hasType) {
+      continue;
+    }
+
+    if (opt.isEditable && !isViewEditable(view)) {
+      continue;
+    }
+
+    if (opt.isLocal && !isViewLocal(view)) {
+      continue;
+    }
+
+    if(opt.isDownloadble && !isViewDownloadable(view)){
+       continue;
+    }
+
+    if (opt.hasDashboard && !isViewDashboard(view)) {
+      continue;
+    }
+
+    if (type === "vt") {
+      if (opt.vtHasRules && !isViewVtWithRules(view)) {
+        continue;
+      }
+      if (
+        opt.vtHasAttributeType &&
+        !isViewVtWithAttributeType(view, opt.hasAttributeType)
+      ) {
+        continue;
+      }
+    }
+
+    if (type === "rt") {
+      if (opt.rtHasTiles && !isViewRtWithTiles(view)) {
+        continue;
+      }
+      if (opt.rtHasLegendLink && !isViewRtWithLegend(view)) {
+        continue;
+      }
+    }
+    out.push(view);
+  }
+  const pos = Math.floor(Math.random() * (out.length - 1));
+  return out[pos];
+}
+
+/**
+ * Test remotely if the source of a vt view is downloadable.
+ * @param {String} idView View id
+ * @return {Promise<Boolean>} downloadable
+ */
+export async function isViewVtDownloadableRemote(idView) {
+  const view = getView(idView) || (await getViewRemote(idView));
+  const idSource = view?.data?.source?.layerInfo?.name;
+  return isSourceDownloadable(idSource);
+}
+
+/**
+ * Test remotely if a source is downloadable.
+ * @param {String} idSource Source id
+ * @return {Promise<Boolean>} downloadable
+ */
+export async function isSourceDownloadable(idSource) {
+  if (!isSourceId(idSource)) {
+    return false;
+  }
+  const meta = await fetchSourceMetadata(idSource);
+  const isDownloadable = !!meta?._services?.includes("mx_download");
+  return isDownloadable;
+}
+
 /**
  * Check if view is local
+ * @note Deprecated, use is_test / mx_valid isViewLocal
  * @return {Boolean} is local
  */
-export function isViewLocal(id) {
+export function _isViewLocal(id) {
   const h = mx.helpers;
   return !!h.getView(id);
 }

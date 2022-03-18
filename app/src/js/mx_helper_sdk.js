@@ -10,13 +10,9 @@ window.addEventListener('load', () => {
     callback: () => {
       let resolvers;
       if (mx.settings.mode.static) {
-        resolvers = new MapxResolversStatic({
-          helpers: mx.helpers
-        });
+        resolvers = new MapxResolversStatic();
       } else {
-        resolvers = new MapxResolversApp({
-          helpers: mx.helpers
-        });
+        resolvers = new MapxResolversApp();
       }
       const sdkToken = getQueryParameter('sdkToken')[0];
 

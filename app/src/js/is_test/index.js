@@ -3,10 +3,10 @@
  * @param {Any} item item to test
  */
 export function isEmpty(item) {
-  if (typeof item === 'undefined' || item === null) {
+  if (typeof item === "undefined" || item === null) {
     return true;
   } else if (isString(item)) {
-    return isEqual(item, '');
+    return isEqual(item, "");
   } else if (isObject(item)) {
     return isEqual(item, {});
   } else if (isArray(item)) {
@@ -45,7 +45,7 @@ export function isBbox(item) {
 export function isObject(item) {
   return (
     !!item &&
-    typeof item === 'object' &&
+    typeof item === "object" &&
     !Array.isArray(item) &&
     !isElement(item)
   );
@@ -70,15 +70,29 @@ export function isView(item) {
  * @param {Function} validator Additionnal validator that must return boolean
  */
 export function isViewType(item, type, validator) {
+  type = isArray(type) ? type : [type];
+
+  const viewOk = isView(item);
+
+  if (!viewOk) {
+    return false;
+  }
+
+  const typeOk = type.includes(item.type);
+
+  if (!typeOk) {
+    return false;
+  }
+
+  if (!validator) {
+    return true;
+  }
+
   if (isString(validator)) {
     validator = new Function(`return ${validator}`)();
   }
-  type = isArray(type) ? type : [type];
-  const valid = isFunction(validator) ? validator(item, this) : true;
-  const typeOk = type.reduce((a, t) => {
-    return a ? a : item.type === t;
-  }, false);
-  return isView(item) && typeOk && valid;
+  const valid = isFunction(validator) ? validator(item) : true;
+  return valid;
 }
 
 /**
@@ -86,7 +100,7 @@ export function isViewType(item, type, validator) {
  * @param {Object} item to test
  */
 export function isViewVt(item) {
-  return isViewType(item, 'vt');
+  return isViewType(item, "vt");
 }
 
 /**
@@ -94,14 +108,14 @@ export function isViewVt(item) {
  * @param {Object} item to test
  */
 export function isViewRt(item) {
-  return isViewType(item, 'rt');
+  return isViewType(item, "rt");
 }
 /**
  * Test if it's a MapX view of type gj
  * @param {Object} item to test
  */
 export function isViewGj(item) {
-  return isViewType(item, 'gj');
+  return isViewType(item, "gj");
 }
 /**
  * Test if it's a MapX view is editable
@@ -118,8 +132,60 @@ export function isViewLocal(item) {
   return (
     isView(item) &&
     isArray(item._components) &&
-    item._components.indexOf('view_local') > -1
+    item._components.indexOf("view_local") > -1
   );
+}
+
+/**
+* Test if view vt has style rules 
+* @param {Object} item to test
+*/ 
+export function isViewVtWithRules(item) {
+  return isViewVt(item) && !isEmpty(item?.data?.style?.rules);
+}
+
+/**
+* Test if view vt has specific attribute type r 
+* @param {Object} item to test
+* @param {String} attribute type e.g. string;
+*/ 
+export function isViewVtWithAttributeType(item,type = "string") {
+  return isViewVt(item) && item?.data?.attribute?.type === type;
+}
+
+
+/**
+* Test if view rt has legend url
+* @param {Object} item to test
+*/ 
+export function isViewRtWithLegend(item) {
+  return isViewRt(item) && isUrl(item?.data?.source?.legend);
+}
+
+/**
+* Test if view is downloadable
+* @param {Object} item to test
+*/
+export function isViewDownloadable(item){
+  return isView(item) && item._has_download;
+}
+
+
+/**
+* Test if view rt has tiles
+* @param {Object} item to test
+*/ 
+export function isViewRtWithTiles(item) {
+  return isViewRt(item) && !isEmpty(item?.data?.source?.tiles);
+}
+
+
+/**
+* Test if view  has dashbaord
+* @param {Object} item to test
+*/ 
+export function isViewDashboard(item) {
+  return isView(item) && !isEmpty(item?.data?.dashboard);
 }
 
 /**
@@ -128,7 +194,7 @@ export function isViewLocal(item) {
  * @return {Boolean}
  */
 export function isStory(item) {
-  return isViewType(item, 'sm') && !!item?.data?.story;
+  return isViewType(item, "sm") && !!item?.data?.story;
 }
 
 /**
@@ -203,7 +269,7 @@ export function isRegExp(value) {
  * @return {Boolean}
  */
 export function isProjectId(idProject) {
-  const reg = new RegExp('MX-.{3}-.{3}-.{3}-.{3}-.{3}');
+  const reg = new RegExp("MX-.{3}-.{3}-.{3}-.{3}-.{3}");
   return !!idProject && !!idProject.match(reg);
 }
 
@@ -213,7 +279,7 @@ export function isProjectId(idProject) {
  */
 export function isSourceId(id) {
   const reg = new RegExp(
-    '^mx_(vector|[a-z]{3})(_vector)?_([0-9a-z]{5,6})_([0-9a-z]{5,6})_[0-9a-z]{5,6}_[0-9a-z]{5,6}(_u_[0-9]+|_o_u_[0-9]+)?$'
+    "^mx_(vector|[a-z]{3})(_vector)?_([0-9a-z]{5,6})_([0-9a-z]{5,6})_[0-9a-z]{5,6}_[0-9a-z]{5,6}(_u_[0-9]+|_o_u_[0-9]+)?$"
   );
   return isString(id) && !!id.match(reg);
 }
@@ -232,7 +298,7 @@ export function isArrayOfSourceId(arr) {
  * @return {Boolean}
  */
 export function isViewId(idView) {
-  const expIdView = new RegExp('^MX-GJ-.{10}$|^MX-.{5}-.{5}-.{5}$');
+  const expIdView = new RegExp("^MX-GJ-.{10}$|^MX-.{5}-.{5}-.{5}$");
   return !!idView && isString(idView) && !!idView.match(expIdView);
 }
 /**
@@ -264,7 +330,7 @@ export function isPromise(item) {
  * @param {Element} item item to test
  */
 export function isCanvas(item) {
-  if (typeof HTMLCanvasElement === 'undefined') {
+  if (typeof HTMLCanvasElement === "undefined") {
     return false;
   }
   return item instanceof HTMLCanvasElement;
@@ -275,7 +341,7 @@ export function isCanvas(item) {
  * @param {Element} item item to test
  */
 export function isIconFont(item) {
-  return isElement(item) && item.classList.contains('fa');
+  return isElement(item) && item.classList.contains("fa");
 }
 
 /**
@@ -283,7 +349,7 @@ export function isIconFont(item) {
  * @param {Array} item array
  */
 export function isArray(item) {
-  return !!item && typeof item === 'object' && Array.isArray(item);
+  return !!item && typeof item === "object" && Array.isArray(item);
 }
 export function isArrayOfString(item) {
   return isArrayOf(item, isString);
@@ -338,7 +404,7 @@ export function isStringifiable(item) {
  * @return {Boolean}
  */
 export function isUndefined(item) {
-  return typeof item === 'undefined';
+  return typeof item === "undefined";
 }
 
 /**
@@ -373,7 +439,7 @@ export function isMap(map) {
 export function isStringRange(str, min, max) {
   min = min || 0;
   max = max || Infinity;
-  var isValid = !!str && typeof str === 'string';
+  var isValid = !!str && typeof str === "string";
   if (!isValid) {
     return false;
   }
@@ -413,7 +479,7 @@ export function isBase64img(str) {
     if (!isValid) {
       return false;
     }
-    let strb64 = str.split(',')[1];
+    let strb64 = str.split(",")[1];
     return isStringRange(strb64, 10);
   } catch (err) {
     return false;
@@ -428,15 +494,15 @@ export function isBase64img(str) {
 export function isValidType(type, group) {
   const types = {
     image: [
-      'image/apng',
-      'image/bmp',
-      'image/gif',
-      'image/jpeg',
-      'image/png',
-      'image/svg+xml',
-      'image/tiff',
-      'image/webp'
-    ]
+      "image/apng",
+      "image/bmp",
+      "image/gif",
+      "image/jpeg",
+      "image/png",
+      "image/svg+xml",
+      "image/tiff",
+      "image/webp",
+    ],
   };
   return types[group].indexOf(type) > -1;
 }
@@ -468,7 +534,7 @@ export function isEmail(email) {
  * @param {String} str string to test
  */
 export function isString(str) {
-  return typeof str === 'string';
+  return typeof str === "string";
 }
 /**
  * Test if entry is function
@@ -483,7 +549,7 @@ export function isFunction(fun) {
  * @param {Object} obj object to test
  */
 export function isElement(obj) {
-  if (typeof Element === 'undefined') {
+  if (typeof Element === "undefined") {
     return false;
   }
   return obj instanceof Element;
@@ -499,11 +565,6 @@ export function isElement(obj) {
  * @return {Boolean} Are those object equal ?
  */
 export function isEqual(x, y) {
-  'use strict';
-  /**
-   *
-   *
-   */
   if (x === null || x === undefined || y === null || y === undefined) {
     return x === y;
   }
@@ -542,10 +603,10 @@ export function isEqual(x, y) {
   // recursive object equality check
   var p = Object.keys(x);
   return (
-    Object.keys(y).every(function(i) {
+    Object.keys(y).every(function (i) {
       return p.indexOf(i) !== -1;
     }) &&
-    p.every(function(i) {
+    p.every(function (i) {
       return isEqual(x[i], y[i]);
     })
   );
@@ -582,7 +643,7 @@ export function isUrl(url) {
 export function isUrlHttps(url) {
   try {
     const u = new URL(url);
-    return u.protocol === 'https:';
+    return u.protocol === "https:";
   } catch (e) {
     return false;
   }
@@ -596,7 +657,7 @@ export function isUrlHttps(url) {
  * @return {Boolean} valid
  */
 export function isUrlValidWms(url, opt) {
-  opt = Object.assign({}, {layers: false}, opt);
+  opt = Object.assign({}, { layers: false }, opt);
   const okUrl = isUrl(url);
   if (!okUrl) {
     return false;
@@ -604,12 +665,12 @@ export function isUrlValidWms(url, opt) {
   url = url.toLowerCase();
 
   const u = new URL(url);
-  const service = u.searchParams.get('service');
+  const service = u.searchParams.get("service");
   const okWms =
     isString(service) &&
     !!service.match(/(wmsserver|wms)/i) &&
-    (opt.layers ? u.searchParams.has('layers') : true) &&
-    (opt.styles ? u.searchParams.has('styles') : true);
+    (opt.layers ? u.searchParams.has("layers") : true) &&
+    (opt.styles ? u.searchParams.has("styles") : true);
 
   return okWms;
 }

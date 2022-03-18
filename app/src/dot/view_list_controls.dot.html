@@ -11,6 +11,7 @@ const isGj = view.type === 'gj' ;
 const isRt = view.type === 'rt' ;
 const isTemp = !!view._temp ;
 const isRtWms = h.isViewWms(view) ;
+const isDownloadable = h.isViewDownloadable(view); 
 const isVtWithAttr = isVt && h.path(view,'data.attribute.name') ;
 const isRtCcWithDownload = (isRt || isCc) && h.hasDownloadUrlItemsFromViewMeta(view);
 const uIsPublisher = h.path(mx,'settings.user.roles.publisher');
@@ -97,24 +98,33 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
       <div class="fa fa-sliders"></div>
     </li>
     {{?}}
-    {{? isVtWithAttr && !isTemp }}
+    {{? isVtWithAttr }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--top"
-      data-lang_key="btn_opt_download"
+        class="mx-pointer btn-circle btn-circle-small hint--top {{? !isDownloadable }} disabled {{?}}"
       data-lang_type="tooltip"
+      {{? isDownloadable }}
+      data-lang_key="btn_opt_download"
       data-view_action_key="btn_opt_download"
       data-view_action_target="{{=view.id}}"
+      {{??}}
+      data-lang_key="btn_opt_download_not_allowed"
+      {{?}}
     >
       <div class="fa fa-cloud-download"></div>
     </li>
     {{?}} 
-    {{? isRtCcWithDownload }}
+    {{? isRt || isCc }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--top"
-      data-lang_key="btn_opt_download"
+      class="mx-pointer btn-circle btn-circle-small hint--top {{? !isDownloadable }} disabled {{?}}"
       data-lang_type="tooltip"
+      data-lang_key="btn_opt_download_not_allowed"
+      {{? isDownloadable }}
+      data-lang_key="btn_opt_download"
       data-view_action_key="btn_opt_get_external"
       data-view_action_target="{{=view.id}}"
+      {{??}}
+      data-lang_key="btn_opt_download_not_allowed"
+      {{?}}
     >
       <div class="fa fa-cloud-download"></div>
     </li>

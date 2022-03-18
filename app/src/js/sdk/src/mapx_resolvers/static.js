@@ -1,17 +1,56 @@
 import { ResolversBase } from "./base.js";
 import { ShareModal } from "./../../../share_modal/index.js";
+import { drawModeToggle } from "./../../../mx_helper_map_draw.js";
 import {
   getLanguageCurrent,
   getLanguagesAll,
   updateLanguage,
 } from "../../../language/index.js";
-import { downloadViewVector } from "../../../mx_helper_map.js";
+import {
+  getMap,
+  downloadViewVector,
+  setImmersiveMode,
+  getImmersiveMode,
+  getViewsForJSON,
+  getViewsLayersVisibles,
+  getView,
+  getViewLegendImage,
+  getViewRemote,
+  viewRemove,
+  downloadViewSourceExternal,
+  downloadViewGeoJSON,
+  getViewsTitleNormalized,
+  getGeoJSONRandomPoints,
+  getViewJson,
+  viewDelete,
+  getBoundsArray,
+} from "../../../mx_helper_map.js";
 import {
   commonLocFitBbox,
   commonLocGetBbox,
   commonLocGetListCodes,
   commonLocGetTableCodes,
 } from "../../../commonloc/index.js";
+import { isArray, isMap, isView } from "./../../../is_test";
+import { dashboardHelper } from "../../../mx_helper_map_dashboard.js";
+import {
+  fetchSourceMetadata,
+  fetchViewMetadata,
+} from "../../../mx_helper_map_view_metadata.js";
+import { getViewSourceSummary } from "../../../mx_helper_source_summary.js";
+import {
+  getClickHandlers,
+  makeId,
+  path,
+  setClickHandler,
+} from "../../../mx_helper_misc.js";
+import { getTableAttributeConfigFromView } from "../../../mx_helper_source_attribute_table.js";
+import { getApiUrl } from "../../../api_routes/index.js";
+import { viewsListAddSingle } from "../../../mx_helper_map_view_ui.js";
+import { mapComposerModalAuto } from "../../../mx_helper_map_composer.js";
+import { modalCloseAll } from "../../../mx_helper_modal.js";
+import { toggleSpotlight } from "../../../mx_helper_map_pixop.js";
+import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
 
 /**
  * MapX resolvers available in static and app
@@ -45,9 +84,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} exists
    */
   has_dashboard() {
-    const rslv = this;
-    const dh = rslv._h.dashboardHelper;
-    return dh.hasInstance();
+    return dashboardHelper.hasInstance();
   }
 
   /**
@@ -58,8 +95,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} enabled
    */
   set_immersive_mode(opt) {
-    const rslv = this;
-    return rslv._h.setImmersiveMode(opt);
+    return setImmersiveMode(opt);
   }
 
   /**
@@ -67,8 +103,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} Enabled
    */
   get_immersive_mode() {
-    const rslv = this;
-    return rslv._h.getImmersiveMode();
+    return getImmersiveMode();
   }
 
   /**
@@ -116,9 +151,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   async show_modal_share(opt) {
     opt = Object.assign({ idView: [] }, opt);
-    const rslv = this;
-    const h = rslv._h;
-    const idViews = h.isArray(opt.idView) ? opt.idView : [opt.idView];
+    const idViews = isArray(opt.idView) ? opt.idView : [opt.idView];
     const sm = new ShareModal({
       views: idViews,
     });
@@ -216,11 +249,11 @@ class MapxResolversStatic extends ResolversBase {
    */
   set_dashboard_visibility(opt) {
     const rslv = this;
-    const dh = rslv._h.dashboardHelper;
     if (!rslv.has_dashboard()) {
       throw new Error("No dashboard container found");
     }
-    const panel = dh.getInstance().panel;
+    const dh = dashboardHelper.getInstance();
+    const panel = dh.panel;
     return rslv._handle_panel_visibility(panel, opt);
   }
 
@@ -230,7 +263,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   is_dashboard_visible() {
     const rslv = this;
-    const dh = rslv._h.dashboardHelper;
+    const dh = dashboardHelper;
     const d = dh.getInstance();
     return rslv.has_dashboard() && d.isVisible();
   }
@@ -242,8 +275,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object} Source MapX metadata
    */
   get_source_meta(opt) {
-    const rslv = this;
-    return rslv._h.fetchSourceMetadata(opt.idSource, opt.force);
+    return fetchSourceMetadata(opt.idSource, opt.force);
   }
 
   /**
@@ -254,8 +286,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object} Source summary
    */
   get_view_source_summary(opt) {
-    const rslv = this;
-    return rslv._h.getViewSourceSummary(opt.idView, opt);
+    return getViewSourceSummary(opt.idView, opt);
   }
 
   /**
@@ -299,8 +330,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return  {Array} Array of views
    */
   get_views() {
-    const rslv = this;
-    return rslv._h.getViewsForJSON();
+    return getViewsForJSON();
   }
 
   /**
@@ -308,8 +338,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return  {Array} Array of views
    */
   get_views_with_visible_layer() {
-    const rslv = this;
-    return rslv._h.getViewsLayersVisibles();
+    return getViewsLayersVisibles();
   }
 
   /**
@@ -317,8 +346,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return  {Array} Array of id
    */
   get_views_id() {
-    const rslv = this;
-    return rslv._h.getViewsForJSON().map((v) => v.id);
+    return getViewsForJSON().map((v) => v.id);
   }
 
   /**
@@ -326,8 +354,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return  {Array} Array of id
    */
   get_views_id_open() {
-    const rslv = this;
-    return rslv._h.getViewsOpen();
+    return getViewsOpen();
   }
 
   /**
@@ -337,11 +364,10 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object} attribut metadata
    */
   get_view_meta_vt_attribute(opt) {
-    const rslv = this;
     opt = Object.assign({}, { idView: null }, opt);
-    const view = rslv._h.getView(opt.idView);
-    if (rslv._h.isView(view)) {
-      return rslv._h.path(view, "data.attribute", {});
+    const view = getView(opt.idView);
+    if (isView(view)) {
+      return path(view, "data.attribute", {});
     }
   }
 
@@ -353,9 +379,8 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Promise<Object>} view metadata
    */
   get_view_meta(opt) {
-    const rslv = this;
     opt = Object.assign({}, { idView: null }, opt);
-    return rslv._h.fetchViewMetadata(opt.idView);
+    return fetchViewMetadata(opt.idView);
   }
 
   /**
@@ -365,16 +390,14 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object}
    */
   get_view_table_attribute_config(opt) {
-    const rslv = this;
     opt = Object.assign({}, { idView: null }, opt);
-    let out = null;
+    const out = {};
     if (opt.idView) {
-      const view = rslv._h.getView(opt.idView);
-      const config = rslv._h.getTableAttributeConfigFromView(view);
-      out = {};
-      ["attributes", "idSource", "labels"].forEach((key) => {
+      const view = getView(opt.idView);
+      const config = getTableAttributeConfigFromView(view);
+      for (const key of ["attributes", "idSource", "labels"]) {
         out[key] = config[key];
-      });
+      }
     }
     return out;
   }
@@ -388,15 +411,13 @@ class MapxResolversStatic extends ResolversBase {
   get_view_table_attribute_url(opt) {
     const rslv = this;
     opt = Object.assign({}, { idView: null }, opt);
-    let out = null;
     const config = rslv.get_view_table_attribute_config(opt);
+    const url = new URL(getApiUrl("getSourceTableAttribute"));
     if (config) {
-      let url_qs = `?id=${config.idSource}&attributes=${config.attributes.join(
-        ","
-      )}`;
-      out = rslv._h.getApiUrl("getSourceTableAttribute") + url_qs;
+      url.searchParams.set("id", config.idSource);
+      url.searchParams.set("attributes", config.attributes.join(","));
     }
-    return out;
+    return url.toString();
   }
 
   /**
@@ -426,8 +447,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {String} PNG in base64 format
    */
   get_view_legend_image(opt) {
-    const rslv = this;
-    return rslv._h.getViewLegendImage({ view: opt.idView, format: opt.format });
+    return getViewLegendImage({ view: opt.idView, format: opt.format });
   }
 
   /**
@@ -537,11 +557,10 @@ class MapxResolversStatic extends ResolversBase {
   async view_add(opt) {
     const rslv = this;
     opt = Object.assign({}, { idView: null }, opt);
-    const view =
-      rslv._h.getView(opt.idView) || (await rslv._h.getViewRemote(opt.idView));
-    const valid = rslv._h.isView(view);
+    const view = getView(opt.idView) || (await getViewRemote(opt.idView));
+    const valid = isView(view);
     if (valid) {
-      await rslv._h.viewsListAddSingle(view);
+      await viewsListAddSingle(view);
       return true;
     } else {
       return rslv._err("err_view_invalid");
@@ -556,8 +575,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   async view_remove(opt) {
     opt = Object.assign({}, { idView: null }, opt);
-    const rslv = this;
-    await rslv._h.viewRemove(opt.idView);
+    await viewRemove(opt.idView);
     return true;
   }
 
@@ -568,16 +586,14 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object} input options, with new key : url. E.g. {idView:<abc>,url:<first url>,urlItems:[{<url>,<label>,<is_download_link>}]}
    */
   download_view_source_external(opt) {
-    const rslv = this;
-    return rslv._h.downloadViewSourceExternal(opt);
+    return downloadViewSourceExternal(opt);
   }
 
   /**
    * Get the download link of the raster source (same as download_view_source_external)
    */
   download_view_source_raster(opt) {
-    const rslv = this;
-    return rslv.download_view_source_external(opt);
+    return downloadViewSourceExternal(opt);
   }
 
   /**
@@ -586,8 +602,26 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.idView Vector view id
    * @return {Object} input options E.g. {idView:<abc>}
    */
-  download_view_source_vector(opt) {
-    return downloadViewVector(opt.idView);
+  async download_view_source_vector(opt) {
+    const dl = await downloadViewVector(opt.idView);
+    await dl.once("init");
+    return true;
+  }
+
+  /**
+   * Close download vector modal
+   * @return {Boolean} Done
+   */
+  async close_modal_download_vector() {
+    const dl = window._download_source_modal;
+    if (dl) {
+      const promClosed = dl.once("closed");
+      dl.close();
+      await promClosed;
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -598,8 +632,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object} input options E.g. {idView:<abc>, data:<data (if mode = data)>}
    */
   download_view_source_geojson(opt) {
-    const rslv = this;
-    return rslv._h.downloadViewGeoJSON(opt);
+    return downloadViewGeoJSON(opt);
   }
 
   /**
@@ -607,8 +640,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} done
    */
   show_modal_map_composer() {
-    const rslv = this;
-    return rslv._h.mapComposerModalAuto();
+    return mapComposerModalAuto();
   }
 
   /**
@@ -616,8 +648,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} done
    */
   close_modal_all() {
-    const rslv = this;
-    rslv._h.modalCloseAll();
+    modalCloseAll();
     return true;
   }
 
@@ -625,20 +656,19 @@ class MapxResolversStatic extends ResolversBase {
    * Toggle draw mode
    */
   toggle_draw_mode() {
-    const rslv = this;
-    return rslv._h.drawModeToggle();
+    return drawModeToggle();
   }
 
   /**
    * Get list of views title
    * @param {Object} opt options
    * @param {Array} opt.views List of views or views id
+   * @param {String} opt.lang Language code
    * @return {Array} Array of titles (string)
    */
   get_views_title(opt) {
-    const rslv = this;
     opt = Object.assign({}, { views: [], lang: "en" }, opt);
-    return rslv._h.getViewsTitleNormalized(opt.views);
+    return getViewsTitleNormalized(opt);
   }
 
   /**
@@ -650,8 +680,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object} options realised {enable:<false/true>,calcArea:<true/false>,nLayers:<n>}
    */
   set_vector_highlight(opt) {
-    const rslv = this;
-    return rslv._h.toggleSpotlight(opt);
+    return toggleSpotlight(opt);
   }
 
   /**
@@ -671,8 +700,8 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object} view
    */
   async view_geojson_create(opt) {
-    const rslv = this;
-    const id = `MX-GJ-${rslv._h.makeId(10)}`;
+    const rId = makeId(10);
+    const id = `MX-GJ-${rId}`;
     opt = Object.assign(
       {},
       {
@@ -686,11 +715,11 @@ class MapxResolversStatic extends ResolversBase {
       opt
     );
     if (opt.random && !opt.data) {
-      opt.data = rslv._h.getGeoJSONRandomPoints(opt.random);
+      opt.data = getGeoJSONRandomPoints(opt.random);
     }
-    const view = await rslv._h.spatialDataToView(opt);
-    await rslv._h.viewsListAddSingle(view, { open: true });
-    const out = rslv._h.getViewJson(view, { asString: false });
+    const view = await spatialDataToView(opt);
+    await viewsListAddSingle(view, { open: true });
+    const out = getViewJson(view, { asString: false });
     return out;
   }
 
@@ -705,7 +734,7 @@ class MapxResolversStatic extends ResolversBase {
   view_geojson_set_style(opt) {
     opt = Object.assign({}, { idView: null, layout: {}, paint: {} }, opt);
     const rslv = this;
-    const map = rslv._h.getMap();
+    const map = getMap();
     const layer = map.getLayer(opt.idView);
     const paintProp = Object.keys(opt.paint);
     const layoutProp = Object.keys(opt.layout);
@@ -714,14 +743,14 @@ class MapxResolversStatic extends ResolversBase {
     }
 
     if (paintProp.length > 0) {
-      paintProp.forEach((p) => {
+      for (const p of paintProp) {
         map.setPaintProperty(opt.idView, p, opt.paint[p]);
-      });
+      }
     }
     if (layoutProp.length > 0) {
-      layoutProp.forEach((p) => {
+      for (const p of layoutProp) {
         map.setLayoutProperty(opt.idView, p, opt.layout[p]);
-      });
+      }
     }
   }
 
@@ -732,11 +761,9 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.idView Id of the geojson view to delete.
    * @return {Boolean} done
    */
-  view_geojson_delete(opt) {
-    const rslv = this;
-    return rslv._h.viewDelete({
-      idView: opt.idView,
-    });
+  async view_geojson_delete(opt) {
+    const done = await viewDelete(opt);
+    return done;
   }
 
   /**
@@ -749,8 +776,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Array} Enabled modes
    */
   set_features_click_sdk_only(opt) {
-    const rslv = this;
-    return rslv._h.setClickHandler({
+    return setClickHandler({
       type: "sdk",
       enable: opt.enable,
       toggle: opt.toggle,
@@ -762,8 +788,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Array} Enabled modes
    */
   get_features_click_handlers() {
-    const rslv = this;
-    return rslv._h.getClickHandler();
+    return getClickHandlers();
   }
 
   /**
@@ -774,7 +799,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   map_fly_to(opt) {
     const rslv = this;
-    const map = rslv._h.getMap();
+    const map = getMap();
     return rslv._map_resolve_when(
       "moveend",
       () => {
@@ -792,7 +817,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   map_jump_to(opt) {
     const rslv = this;
-    const map = rslv._h.getMap();
+    const map = getMap();
     return rslv._map_resolve_when(
       "moveend",
       () => {
@@ -807,8 +832,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Float} zoom
    */
   map_get_zoom() {
-    const rslv = this;
-    const map = rslv._h.getMap();
+    const map = getMap();
     return map.getZoom();
   }
 
@@ -817,8 +841,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object} center
    */
   map_get_center() {
-    const rslv = this;
-    const map = rslv._h.getMap();
+    const map = getMap();
     return map.getCenter();
   }
 
@@ -827,8 +850,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Array} Bounds [west, south, east, north]
    */
   map_get_bounds_array() {
-    const rslv = this;
-    return rslv._h.getBoundsArray();
+    return getBoundsArray();
   }
 
   /**
@@ -846,8 +868,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Promise<Any|Boolean>} If returned value can be parsed, the value. If not, true;
    */
   async map(opt) {
-    const rslv = this;
-    const map = rslv._h.getMap();
+    const map = getMap();
     const m = map[opt.method];
     let res;
     if (typeof m === "undefined") {
@@ -865,52 +886,19 @@ class MapxResolversStatic extends ResolversBase {
       res = map[opt.method];
     }
 
-    if (rslv._h.isMap(res)) {
+    if (isMap(res)) {
       return true;
     }
 
     return res;
   }
 
-  //map_set_free_camera_position(opt) {
-  /**
-   *  Note, moving z when pitch is set, the camera points to different
-   *  x/y extent. If not set here, map center can be altaered.
-   *  z  ┌───────────────────────┬─────────────────────┐
-   *     │                       │                     │
-   *  0.8├─────┐                 │                     │
-   *     │     │                 │                     │
-   *  0.5├──┐  │                 │                     │
-   *     │  │  │                 │                     │
-   *     └──┴──┴─────────────────┴─────────────────────┘
-   *        -0.9 -0.8           0,0                   x/y
-   */
-  //const rslv = this;
-  //const map = rslv._h.getMap();
-  //const cam = map.getFreeCameraOptions();
-  //if (typeof opt.altitude !== 'undefined') {
-  //let lngLat;
-  //if (opt.y && opt.x) {
-  //lngLat = new mx.mapboxgl.MercatorCoordinate(opt.x, opt.y, 0);
-  //} else {
-  //lngLat = cam.position.toLngLat();
-  //}
-  //opt.z = mx.mapboxgl.MercatorCoordinate.fromLngLat(lngLat, opt.altitude).z;
-  //delete opt.altitude;
-  //}
-  //Object.assign(cam.position, opt);
-  //console.log(cam.position);
-  //map.setFreeCameraOptions(cam);
-  //return true;
-  //}
-
   /**
    * Async wait for map idle
    * @return {Boolean} Map is idle
    */
   async map_wait_idle() {
-    const rslv = this; 
-    const map = rslv._h.getMap();
+    const map = getMap();
     const isMoving = map.isMoving();
     if (isMoving) {
       await map.once("idle");
@@ -924,7 +912,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Array} Array of codes as strings
    */
   common_loc_get_list_codes() {
-    commonLocGetListCodes();
+    return commonLocGetListCodes();
   }
 
   /**
@@ -945,7 +933,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Promise<Array>} Array of codes and name as object
    */
   common_loc_get_table_codes(opt) {
-    commonLocGetTableCodes(opt);
+    return commonLocGetTableCodes(opt);
   }
 
   /**
@@ -956,7 +944,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Promise<Array>} Array of geographic bounds [west, south, east, north]
    */
   common_loc_get_bbox(opt) {
-    commonLocGetBbox(opt);
+    return commonLocGetBbox(opt);
   }
 
   /**
@@ -968,8 +956,43 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Promise<Array>} Array of geographic bounds [west, south, east, north]
    */
   common_loc_fit_bbox(opt) {
-    commonLocFitBbox(opt);
+    return commonLocFitBbox(opt);
   }
+
+  /**
+   * Not working
+   *   map_set_free_camera_position(opt) {
+   *
+   *      Note, moving z when pitch is set, the camera points to different
+   *      x/y extent. If not set here, map center can be altaered.
+   *      z  ┌───────────────────────┬─────────────────────┐
+   *         │                       │                     │
+   *      0.8├─────┐                 │                     │
+   *         │     │                 │                     │
+   *      0.5├──┐  │                 │                     │
+   *         │  │  │                 │                     │
+   *         └──┴──┴─────────────────┴─────────────────────┘
+   *            -0.9 -0.8           0,0                   x/y
+   *
+   *    const rslv = this;
+   *    const map = rslv._h.getMap();
+   *    const cam = map.getFreeCameraOptions();
+   *    if (typeof opt.altitude !== "undefined") {
+   *      let lngLat;
+   *      if (opt.y && opt.x) {
+   *        lngLat = new mx.mapboxgl.MercatorCoordinate(opt.x, opt.y, 0);
+   *      } else {
+   *        lngLat = cam.position.toLngLat();
+   *      }
+   *      opt.z = mx.mapboxgl.MercatorCoordinate.fromLngLat(lngLat, opt.altitude).z;
+   *      delete opt.altitude;
+   *    }
+   *    Object.assign(cam.position, opt);
+   *    console.log(cam.position);
+   *    map.setFreeCameraOptions(cam);
+   *    return true;
+   *  }
+   **/
 }
 
 export { MapxResolversStatic };

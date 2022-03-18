@@ -1,12 +1,14 @@
 import { modal } from "./../mx_helper_modal";
 import { SelectAuto } from "../select_auto";
 import { buildForm } from "./form.js";
-import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata";
 import { el, elSpanTranslate, elButtonFa, elAlert } from "./../el_mapx";
 import { getLanguageCurrent, getLanguageItem } from "./../language";
 import { isEmail } from "../is_test";
 import { getApiUrl } from "../api_routes";
-import {FlashItem} from "../icon_flash";
+import { FlashItem } from "../icon_flash";
+import { isSourceDownloadable } from "../mx_helpers";
+import { fetchSourceMetadata } from "../mx_helper_map_view_metadata";
+import { EventSimple } from "../event_simple";
 //import {settings} from './../settings';
 
 const options = {
@@ -23,10 +25,11 @@ const options = {
   language: "en",
 };
 
-export class ModalDownloadSource {
+export class DownloadSourceModal extends EventSimple {
   constructor(opt) {
+    super();
     const md = this;
-    md.destroy = md.destroy.bind(md);
+    md.close = md.close.bind(md);
     md.download = md.download.bind(md);
     md.validate = md.validate.bind(md);
     md.update = md.update.bind(md);
@@ -35,12 +38,16 @@ export class ModalDownloadSource {
 
   async init(opt) {
     const md = this;
+
+    if (window._download_source_modal instanceof DownloadSourceModal) {
+      window._download_source_modal.close();
+    }
+    window._download_source_modal = md;
+
     md._opt = Object.assign({}, options, opt);
     try {
-      md._destroy_store = [];
-      const meta = await fetchSourceMetadata(md._opt.idSource);
-      md._src_meta = meta;
-      const isDownloadable = !!meta?._services?.includes("mx_download");
+      md._select_auto_store = [];
+      const isDownloadable = await isSourceDownloadable(md._opt.idSource);
       if (!isDownloadable) {
         return await md.buildNotAllowed();
       }
@@ -49,6 +56,7 @@ export class ModalDownloadSource {
       }
 
       if (!opt.filename) {
+        const meta = await fetchSourceMetadata(md._opt.idSource);
         md._opt.filename = getLanguageItem(
           meta?.text?.title || {},
           md._opt.language
@@ -56,23 +64,25 @@ export class ModalDownloadSource {
       }
 
       await md.build();
+      md.fire("init");
     } catch (e) {
       console.error(e);
     }
   }
 
-  destroy() {
+  close() {
     const md = this;
-    if (md._destroyed) {
+    if (md._closed) {
       return;
     }
-    md._destroyed = true;
-    for (const d of md._destroy_store) {
+    md._closed = true;
+    for (const d of md._select_auto_store) {
       if (d.destroy) {
         d.destroy();
       }
     }
     md._modal.close();
+    md.fire("closed");
   }
 
   download() {
@@ -84,10 +94,17 @@ export class ModalDownloadSource {
       for (const k in opt) {
         url.searchParams.set(k, opt[k]);
       }
-      fetch(url).catch(console.error);
+      md.fire("download_start", { url });
+
+      fetch(url)
+        .then(() => {
+          md.fire("download_end", { url });
+        })
+        .catch(console.error);
+
       mx.nc.panel.open();
-      md.destroy();
-      new FlashItem('bell');
+      md.close();
+      new FlashItem("bell");
     }
   }
 
@@ -110,6 +127,7 @@ export class ModalDownloadSource {
       md._opt[k] = formData.get(k);
     }
     md.validate();
+    md.fire("updated");
   }
 
   validate() {
@@ -160,14 +178,14 @@ export class ModalDownloadSource {
 
   async buildNotAllowed() {
     const md = this;
-    //const meta = md._src_meta;
     md._modal = modal({
       title: elSpanTranslate("dl_title_not_allowed"),
       content: el("div", elSpanTranslate("dl_title_not_allowed")),
-      onClose: md.destroy,
+      onClose: md.close,
       addSelectize: false,
       noShinyBinding: true,
     });
+    md.fire("built");
   }
 
   async build() {
@@ -191,7 +209,7 @@ export class ModalDownloadSource {
      */
     md._el_button_close = elButtonFa("btn_close", {
       icon: "times",
-      action: md.destroy,
+      action: md.close,
     });
     md._el_button_download = elButtonFa("btn_download", {
       icon: "download",
@@ -208,7 +226,7 @@ export class ModalDownloadSource {
     md._modal = modal({
       title: elSpanTranslate("dl_title"),
       content: elContent,
-      onClose: md.destroy,
+      onClose: md.close,
       buttons: elModalButtons,
       removeCloseButton: true,
       addBackground: true,
@@ -222,9 +240,18 @@ export class ModalDownloadSource {
     const selectEpsg = new SelectAuto(elFormEpsg);
     const selectFormat = new SelectAuto(elFormFormat);
     const selectCountries = new SelectAuto(elFormCountries);
-    md._destroy_store.push(selectEpsg);
-    md._destroy_store.push(selectFormat);
-    md._destroy_store.push(selectCountries);
+
+    md._select_auto_store.push(selectEpsg);
+    md._select_auto_store.push(selectFormat);
+    md._select_auto_store.push(selectCountries);
+
+    for (const s of md._select_auto_store) {
+      if (!s._init) {
+        await s.once("init");
+      }
+    }
+
+    md.fire("built");
   }
 
   /**

@@ -266,6 +266,11 @@ export async function updateLanguageElements(o) {
  */
 export async function getDictItem(key, lang) {
   lang = lang || getLanguageCurrent();
+
+  if(isEmpty(key)){
+     return;
+  }
+
   const keys = [];
   const defaultLang = getLanguageDefault();
   const kIsArray = isArray(key);
@@ -279,6 +284,8 @@ export async function getDictItem(key, lang) {
   if (isString(key)) {
     key = [key];
   }
+
+ 
 
   keys.push(...key);
 
