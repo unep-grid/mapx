@@ -2125,6 +2125,11 @@
     "ar": "قم بتنزيل البيانات "
   },
   {
+    "id": "btn_opt_download_not_allowed",
+    "en": "Downloading not allowed. More info in metadata.",
+    "ar": "التنزيل غير مسموح به. مزيد من المعلومات في البيانات الوصفية."
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Configure this view",
     "ar": "تكوين هذا العرض "

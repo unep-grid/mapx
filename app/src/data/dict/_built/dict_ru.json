@@ -2125,6 +2125,11 @@
     "ru": "Скачать данные "
   },
   {
+    "id": "btn_opt_download_not_allowed",
+    "en": "Downloading not allowed. More info in metadata.",
+    "ru": "Загрузка запрещена. Подробнее в метаданных."
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Configure this view",
     "ru": "Настроить это представление "

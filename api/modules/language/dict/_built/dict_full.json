@@ -5525,6 +5525,19 @@
     "de": "Laden Sie die Daten herunter "
   },
   {
+    "id": "btn_opt_download_not_allowed",
+    "en": "Downloading not allowed. More info in metadata.",
+    "fr": "Le téléchargement n'est pas permis. Plus d'info dans les métadonnées.",
+    "es": "Descarga no permitida. Más info en metadatos.",
+    "ru": "Загрузка запрещена. Подробнее в метаданных.",
+    "zh": "不允许下载。元数据中的更多信息。",
+    "ar": "التنزيل غير مسموح به. مزيد من المعلومات في البيانات الوصفية.",
+    "fa": "دانلود مجاز نیست اطلاعات بیشتر در فراداده",
+    "ps": "د کښته کولو اجازه نشته. نور معلومات په میټاډاټا کې.",
+    "bn": "ডাউনলোড করা অনুমোদিত নয়। মেটাডেটা আরো তথ্য.",
+    "de": "Herunterladen nicht erlaubt. Weitere Informationen in den Metadaten."
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Configure this view",
     "fr": "Configurer la vue",

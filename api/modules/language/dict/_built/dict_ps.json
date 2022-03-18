@@ -2125,6 +2125,11 @@
     "ps": "ډیټا ډانلوډ کړئ"
   },
   {
+    "id": "btn_opt_download_not_allowed",
+    "en": "Downloading not allowed. More info in metadata.",
+    "ps": "د کښته کولو اجازه نشته. نور معلومات په میټاډاټا کې."
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Configure this view",
     "ps": "دا لید په لاره واچوئ"

@@ -2125,6 +2125,11 @@
     "es": "Descargar los datos"
   },
   {
+    "id": "btn_opt_download_not_allowed",
+    "en": "Downloading not allowed. More info in metadata.",
+    "es": "Descarga no permitida. Más info en metadatos."
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Configure this view",
     "es": "Configurar la vista"

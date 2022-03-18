@@ -2125,6 +2125,11 @@
     "fr": "Télécharger les données"
   },
   {
+    "id": "btn_opt_download_not_allowed",
+    "en": "Downloading not allowed. More info in metadata.",
+    "fr": "Le téléchargement n'est pas permis. Plus d'info dans les métadonnées."
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Configure this view",
     "fr": "Configurer la vue"

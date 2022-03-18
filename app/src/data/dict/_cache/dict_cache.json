@@ -3341,19 +3341,6 @@
     "de": "E-Mail ungültig"
   },
   {
-    "id": "dl_error_check_console",
-    "en": "Unexpected error: check the console",
-    "fr": "Erreur inattendue : vérifiez la console",
-    "es": "Error inesperado: revisa la consola",
-    "ru": "Непредвиденная ошибка: проверьте консоль",
-    "zh": "意外错误：检查控制台",
-    "ar": "خطأ غير متوقع: تحقق من وحدة التحكم",
-    "fa": "خطای غیرمنتظره: کنسول را بررسی کنید",
-    "ps": "غیر متوقع تېروتنه: کنسول چیک کړئ",
-    "bn": "অপ্রত্যাশিত ত্রুটি: কনসোল পরীক্ষা করুন",
-    "de": "Unerwarteter Fehler: Überprüfen Sie die Konsole"
-  },
-  {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
     "fr": "Activer / désactiver les outils de dessin vectoriel ",
@@ -5536,6 +5523,19 @@
     "ps": "ډیټا ډانلوډ کړئ",
     "bn": "ডেটা ডাউনলোড করুন ",
     "de": "Laden Sie die Daten herunter "
+  },
+  {
+    "id": "btn_opt_download_not_allowed",
+    "en": "Downloading not allowed. More info in metadata.",
+    "fr": "Le téléchargement n'est pas permis. Plus d'info dans les métadonnées.",
+    "es": "Descarga no permitida. Más info en metadatos.",
+    "ru": "Загрузка запрещена. Подробнее в метаданных.",
+    "zh": "不允许下载。元数据中的更多信息。",
+    "ar": "التنزيل غير مسموح به. مزيد من المعلومات في البيانات الوصفية.",
+    "fa": "دانلود مجاز نیست اطلاعات بیشتر در فراداده",
+    "ps": "د کښته کولو اجازه نشته. نور معلومات په میټاډاټا کې.",
+    "bn": "ডাউনলোড করা অনুমোদিত নয়। মেটাডেটা আরো তথ্য.",
+    "de": "Herunterladen nicht erlaubt. Weitere Informationen in den Metadaten."
   },
   {
     "id": "btn_opt_edit_config",

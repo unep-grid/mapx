@@ -2125,6 +2125,11 @@
     "zh": "下载数据"
   },
   {
+    "id": "btn_opt_download_not_allowed",
+    "en": "Downloading not allowed. More info in metadata.",
+    "zh": "不允许下载。元数据中的更多信息。"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Configure this view",
     "zh": "配置视图"

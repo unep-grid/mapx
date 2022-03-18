@@ -2125,6 +2125,11 @@
     "de": "Laden Sie die Daten herunter "
   },
   {
+    "id": "btn_opt_download_not_allowed",
+    "en": "Downloading not allowed. More info in metadata.",
+    "de": "Herunterladen nicht erlaubt. Weitere Informationen in den Metadaten."
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Configure this view",
     "de": "Konfigurieren Sie diese Ansicht "

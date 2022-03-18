@@ -2125,6 +2125,11 @@
     "bn": "ডেটা ডাউনলোড করুন "
   },
   {
+    "id": "btn_opt_download_not_allowed",
+    "en": "Downloading not allowed. More info in metadata.",
+    "bn": "ডাউনলোড করা অনুমোদিত নয়। মেটাডেটা আরো তথ্য."
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Configure this view",
     "bn": "এই দৃশ্যটি কনফিগার করুন "

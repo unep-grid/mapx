@@ -2125,6 +2125,11 @@
     "fa": "دانلود معلومات"
   },
   {
+    "id": "btn_opt_download_not_allowed",
+    "en": "Downloading not allowed. More info in metadata.",
+    "fa": "دانلود مجاز نیست اطلاعات بیشتر در فراداده"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Configure this view",
     "fa": "تنظیم این نمایه"
