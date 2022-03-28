@@ -17,6 +17,7 @@ export const config = {
         callback();
         return;
       }
+
       const url = getApiUrl("getFileFormatsList");
       const fileFormatsResp = await fetch(url);
       const fileFormats = await fileFormatsResp.json();
@@ -26,7 +27,6 @@ export const config = {
       callback(formatsVector);
       tom.settings.load = null;
     } catch (e) {
-      console.error(e);
       callback();
     }
   },

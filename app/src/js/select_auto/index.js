@@ -1,6 +1,6 @@
 import { moduleLoad } from "./../modules_loader_async/index.js";
 import { isElement } from "./../is_test";
-import {EventSimple} from "../event_simple/index.js";
+import { EventSimple } from "../event_simple/index.js";
 
 const def = {
   target: null,
@@ -25,7 +25,7 @@ export class SelectAuto extends EventSimple {
   async init() {
     const se = this;
     await se.build();
-    se.fire('init');
+    se.fire("init");
     se._init = true;
   }
 
@@ -36,7 +36,7 @@ export class SelectAuto extends EventSimple {
     }
     se._destroyed = true;
     se._tom.destroy();
-    se.fire('destroyed');
+    se.fire("destroyed");
   }
 
   async build() {
@@ -44,8 +44,8 @@ export class SelectAuto extends EventSimple {
     const TomSelect = await moduleLoad("tom-select");
     const config = await se.loadConfig(se._opt.type);
     return new Promise((resolve) => {
-      config.onInitialize = resolve;
       se._tom = new TomSelect(se._opt.target, config);
+      se._tom.on("initialize", resolve);
     });
   }
 
@@ -57,7 +57,7 @@ export class SelectAuto extends EventSimple {
         Object.assign(out, epsg.config);
         break;
       case "format_vector_download":
-        const format = await import("./format_vector_download");
+        const format = await import("./file_format_vector_dl");
         Object.assign(out, format.config);
         break;
       case "countries":
