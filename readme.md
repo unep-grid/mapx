@@ -19,8 +19,8 @@ Development servers are launched from within Docker containers, to match as clos
 
 ### Requirement
 
-- `docker` v20.10+, with docker-compose
-- `node` v14.15+
+- `docker` v20.10+
+- `node` v16.0+
 - `g++`
 
 ### Hosts
@@ -52,11 +52,11 @@ Finally, launch the mapx stack:
 
 ```sh
 # Pull the latest builds
-docker-compose pull
+docker compose pull
 # Launch postgres first : in case of first launch, some tables and roles must be created
-docker-compose up pg
+docker compose up pg
 # Launch other services
-docker-compose up
+docker compose up
 ```
 
 The application should be available at <http://app.mapx.localhost:8880/> (curl -H Host:app.mapx.localhost <http://127.0.0.1:8880/).>
@@ -65,7 +65,7 @@ An admin user is available as `admin@localhost` which can be used to login; get 
 
 #### Known issues
 
-Postgis: `OperationalError: could not access file "$libdir/postgis-X.X` _Solution:_ run `docker-compose exec pg update-postgis.sh`
+Postgis: `OperationalError: could not access file "$libdir/postgis-X.X` _Solution:_ run `docker compose exec pg update-postgis.sh`
 
 
 
@@ -106,10 +106,10 @@ $ npm run dev
 - Launch the server from within the running `app` container. In another terminal window, launch the dev server :
 
 ```sh
-docker-compose exec -w /appdev app R
+docker compose exec -w /appdev app R
 > source('run.R') 
 # OR, as a single line for a non-interactive session:
-docker-compose exec -w /appdev app Rscript --vanilla run.R
+docker compose exec -w /appdev app Rscript --vanilla run.R
 ```
 
 Then, an instance of mapx should be available at <http://dev.mapx.localhost:8880/> for which the source code from `./app/` is mounted as `/appdev/` in the container.
@@ -139,8 +139,8 @@ API_HOST_PUBLIC_DEV=apidev.mapx.localhost
 Start the `Express.js` development server:
 
 ```sh
-$ docker-compose up -d
-$ docker-compose exec api node inspect /apidev/index.js port=3333
+$ docker compose up -d
+$ docker compose exec api node inspect /apidev/index.js port=3333
 debug> c
 ```
 
@@ -162,7 +162,7 @@ API_HOST_PUBLIC_DEV=api.mapx.localhost
 Run tests within the development container:
 
 ```sh
-docker-compose exec api sh
+docker compose exec api sh
 cd /apidev
 npm run
 ```
@@ -170,7 +170,7 @@ npm run
 ### Development session for the `routines` service
 
 ```sh
-docker-compose exec -w /routinesdev routines node inspect routines.js
+docker compose exec -w /routinesdev routines node inspect routines.js
 debug> c
 ```
 
@@ -229,7 +229,7 @@ Procedure to follow if PostgreSQL passwords need to be updated for security reas
 1. Launch MapX stack with Docker Compose:
 
     ```sh
-    docker-compose up
+    docker compose up
     ```
 
 2. Once your stack is up, update PostgreSQL passwords in the environment file:
@@ -242,7 +242,7 @@ Procedure to follow if PostgreSQL passwords need to be updated for security reas
 3. Connect to PostgreSQL using psql:
 
     ```sh
-    docker-compose exec pg psql -U {POSTGRES_USER}
+    docker compose exec pg psql -U {POSTGRES_USER}
     ```
 
 4. Queries to run in psql to update the passwords. Be careful to respect the order in which the queries are run.
@@ -258,5 +258,5 @@ Procedure to follow if PostgreSQL passwords need to be updated for security reas
 5. Force Compose to stop and recreate all containers to avoid any problems related to passwords update:
 
     ```sh
-    docker-compose up -d --force-recreate
+    docker compose up -d --force-recreate
     ```
