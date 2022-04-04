@@ -65,7 +65,7 @@ export async function mwGet(req, res) {
       .update(JSON.stringify(data))
       .digest('hex');
 
-    return await getTile(res, hash, data);
+    return getTile(res, hash, data);
   } catch (e) {
     return sendTileError(res, e);
   }
@@ -78,7 +78,7 @@ async function getTile(res, hash, data) {
       return sendTileZip(res, Buffer(zTileB64, 'base64'));
     }
 
-    return await getTilePg(res, hash, data);
+    return getTilePg(res, hash, data);
   } catch (e) {
     return sendTileError(res, e);
   }
