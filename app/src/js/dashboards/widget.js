@@ -400,7 +400,7 @@ class Widget {
     const widget = this;
     return async function(...args) {
       try {
-        return await fun(...args);
+        return fun(...args);
       } catch (e) {
         console.error(e);
         widget.destroy(skipDestroy);

@@ -8,7 +8,7 @@ export async function getIpInfo() {
     const apiUrlViews = getApiUrl('getIpInfo');
     const resp = await fetch(apiUrlViews);
     if (resp.ok) {
-      return await resp.json();
+      return resp.json();
     }
     throw new Error('getIpInfo failed');
   } catch (e) {

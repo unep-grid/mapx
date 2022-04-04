@@ -53,7 +53,7 @@ export async function miniCacheRemove(key) {
 }
 
 export async function miniCacheClear() {
-  return await miniCacheDb.dropInstance();
+  return miniCacheDb.dropInstance();
 }
 
 async function wait(n) {

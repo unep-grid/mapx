@@ -57,7 +57,7 @@ export async function prefGetAll() {
 }
 export async function prefGetAllKeys() {
   try {
-    return await settings.keys();
+    return settings.keys();
   } catch (e) {
     console.warn('User get all pref issue', e);
   }

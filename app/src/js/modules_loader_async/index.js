@@ -124,19 +124,19 @@ async function loadWmsCapabilities() {
 }
 
 async function loadTopoJSON() {
-  return await import('topojson-client');
+  return import('topojson-client');
 }
 
 async function loadD3() {
-  return await import('d3');
+  return import('d3');
 }
 
 async function loadCsvJSON() {
-  return await import('csvjson');
+  return import('csvjson');
 }
 
 async function loadD3Geo() {
-  return await import('d3-geo');
+  return import('d3-geo');
 }
 
 async function loadNoUiSlider() {
@@ -229,7 +229,7 @@ async function loadHighcharts() {
 }
 
 async function loadShapefile() {
-  return await import('shapefile');
+  return import('shapefile');
 }
 
 async function loadJsonEditor() {

@@ -49,7 +49,7 @@ export class DownloadSourceModal extends EventSimple {
       md._select_auto_store = [];
       const isDownloadable = await isSourceDownloadable(md._opt.idSource);
       if (!isDownloadable) {
-        return await md.buildNotAllowed();
+        return md.buildNotAllowed();
       }
       if (!opt.language) {
         md._opt.language = getLanguageCurrent();

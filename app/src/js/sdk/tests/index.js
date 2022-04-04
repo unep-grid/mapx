@@ -105,7 +105,7 @@ mapx.once("ready", async () => {
         name: "Adding / removing views in random order during a specified duration",
         timeout: 30000,
         test: async () => {
-          return await mapx.ask("launch_chaos_test", {
+          return mapx.ask("launch_chaos_test", {
             nBatch: 5,
             duration: 20 * 1000,
           });
@@ -172,7 +172,7 @@ mapx.once("ready", async () => {
   });
   t.check("Immersive mode", {
     init: async () => {
-      return await mapx.ask("set_immersive_mode", { enable: true });
+      return mapx.ask("set_immersive_mode", { enable: true });
     },
     tests: [
       {
@@ -642,7 +642,7 @@ mapx.once("ready", async () => {
             idProject: newProject,
           });
           if (success) {
-            return await mapx.ask("set_project", { idProject: currProject });
+            return mapx.ask("set_project", { idProject: currProject });
           } else {
             return false;
           }
@@ -811,7 +811,7 @@ mapx.once("ready", async () => {
   t.check("Tools - add new view", {
     init: async () => {
       await stopIfGuest();
-      return await mapx.ask("show_modal_tool", { tool: "view_new" });
+      return mapx.ask("show_modal_tool", { tool: "view_new" });
     },
     tests: [
       {
@@ -833,7 +833,7 @@ mapx.once("ready", async () => {
   t.check("Tools - validate source geom", {
     init: async () => {
       await stopIfGuest();
-      return await mapx.ask("show_modal_tool", {
+      return mapx.ask("show_modal_tool", {
         tool: "source_validate_geom",
       });
     },
