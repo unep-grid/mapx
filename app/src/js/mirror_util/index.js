@@ -1,8 +1,8 @@
-import {getApiUrl} from './../api_routes';
-import {isUrl} from './../is_test/index.js';
-import {modalMirror} from './tool_modal.js';
+import { getApiUrl } from "./../api_routes";
+import { isUrl } from "./../is_test/index.js";
+import { modalMirror } from "./tool_modal.js";
 
-export {modalMirror};
+export { modalMirror };
 
 /**
  * Create a composite url for our miror
@@ -17,11 +17,11 @@ export function mirrorUrlCreate(url) {
     throw new Error(`Not a valid URL`);
   }
   if (isMirrorUrl(url)) {
-    console.warn('Trying to create an mirrored url already mirrored');
+    console.warn("Trying to create an mirrored url already mirrored");
     return url;
   }
-  const mUrl = new URL(getApiUrl('getMirror'));
-  mUrl.searchParams.set('url', url);
+  const mUrl = new URL(getApiUrl("getMirror"));
+  mUrl.searchParams.set("url", url);
   /**
    * Replace % utf8 escaped brackets by the actual character.
    * -> if not, {bbox-epsg-3857}, {z}, {x} template
@@ -31,7 +31,7 @@ export function mirrorUrlCreate(url) {
    * -> it should be fine and I don't know why there are
    *    escaped in the first place
    */
-  return mUrl.href.replaceAll('%7B', '{').replaceAll('%7D', '}');
+  return mUrl.href.replaceAll("%7B", "{").replaceAll("%7D", "}");
 }
 
 /**
@@ -43,7 +43,7 @@ export function mirrorUrlCreate(url) {
  * @return {Boolean} contains expected path for mirror url
  */
 export function isMirrorUrl(url) {
-  const mUrl = new URL(getApiUrl('getMirror'));
+  const mUrl = new URL(getApiUrl("getMirror"));
   const tUrl = new URL(url);
   return mUrl.pathname === tUrl.pathname;
 }
@@ -58,9 +58,21 @@ export function isMirrorUrl(url) {
  */
 export function mirrorUrlGet(url) {
   if (!isMirrorUrl(url)) {
-    console.warn('Trying to get the mirrored url from a non-mirrored url');
+    console.warn("Trying to get the mirrored url from a non-mirrored url");
     return url;
   }
   const mUrl = new URL(url);
-  return mUrl.searchParams.get('url');
+  return mUrl.searchParams.get("url");
+}
+
+
+/**
+* Fetch url, using mirror. Takes cares of mapbox bbox brackets 
+* @param {String} url Url to fetch
+* @param {Any} opt Fetch method options 
+* @return {Promise} Fetch promise 
+*/ 
+export function fetchMirror(url,opt) {
+  const urlMirror = mirrorUrlCreate(url);
+  return fetch(urlMirror,opt);
 }
