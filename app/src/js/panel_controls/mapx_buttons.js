@@ -5,7 +5,7 @@ import {
   geolocateUser,
   getMap,
   getLayerNamesByPrefix
-} from './../mx_helper_map.js';
+} from './../map_helpers/index.js';
 import {toggleSpotlight} from './../mx_helper_map_pixop.js';
 import {ShareModal} from './../share_modal/index.js';
 import {

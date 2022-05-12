@@ -1,7 +1,7 @@
 import commonloc from './locations.json';
 import {isString} from './../is_test/index.js';
 import {getDictItem, getDictItemId} from './../language';
-import {getMap, getBoundsArray} from './../mx_helper_map.js';
+import {getMap, getBoundsArray} from './../map_helpers/index.js';
 import {getArrayDiff} from './../array_stat';
 /**
  * FitBounds with name/code resolver for iso3,m49 and text

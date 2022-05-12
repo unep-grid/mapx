@@ -34,6 +34,12 @@ export  {
   mwGetListByProject
 };
 
+/**
+* Get views list by project + state 
+* @param {Object} req Request object
+* @param {Object} res Response object
+* @return null
+*/ 
 async function getViewsHandler(req, res) {
   try {
     const states = await getProjectViewsStates(req.query || {});
@@ -49,25 +55,9 @@ async function getViewsHandler(req, res) {
   }
 }
 
-/**
- * Helper to get project states
- * @param {Object} opt options
- * @param {String} opt.idProject Id of the project
- * @return {Promise<array>} project views state
- */
-async function getProjectViewsStates(opt) {
-  opt = opt || {};
-  let states = [];
-  const sql = parseTemplate(templates.getProjectViewsStates, opt);
-  const res = await pgRead.query(sql);
-  if (res.rowCount > 0) {
-    states = res.rows[0].states_views;
-  }
-  return states;
-}
 
 /**
- * Helper to get views list
+ * Get views list by project
  * @param {Object} opt options
  * @param {String} opt.idUser Id of the user
  * @param {String} opt.idProject Id of the project
@@ -107,3 +97,22 @@ async function getViews(opt) {
 
   return views;
 }
+
+
+/**
+ * Helper to get project states
+ * @param {Object} opt options
+ * @param {String} opt.idProject Id of the project
+ * @return {Promise<array>} project views state
+ */
+async function getProjectViewsStates(opt) {
+  opt = opt || {};
+  let states = [];
+  const sql = parseTemplate(templates.getProjectViewsStates, opt);
+  const res = await pgRead.query(sql);
+  if (res.rowCount > 0) {
+    states = res.rows[0].states_views;
+  }
+  return states;
+}
+

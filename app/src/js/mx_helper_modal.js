@@ -1,13 +1,13 @@
-import {el} from './el/src/index.js';
-import {ObserveMutationAttribute} from './mutations_observer/index.js';
-import {makeId, textToDom} from './mx_helper_misc.js';
-import {getDictItem} from './language';
-import {draggable} from './mx_helper_draggable.js';
+import { el } from "./el/src/index.js";
+import { ObserveMutationAttribute } from "./mutations_observer/index.js";
+import { makeId, textToDom } from "./mx_helper_misc.js";
+import { getDictItem } from "./language";
+import { draggable } from "./mx_helper_draggable.js";
 import {
   removeSelectizeGroupById,
   closeSelectizeGroupById,
-  initSelectizeAll
-} from './mx_helper_selectize.js';
+  initSelectizeAll,
+} from "./mx_helper_selectize.js";
 import {
   isPromise,
   isObject,
@@ -16,8 +16,8 @@ import {
   isFunction,
   isHTML,
   isArray,
-  isBoolean
-} from './is_test/index.js';
+  isBoolean,
+} from "./is_test/index.js";
 /**
  * TODO:
  * - this helper should be converted to Class
@@ -61,9 +61,10 @@ export function modal(o) {
   if (!hasModal) {
     elModal = buildModal(id, o.style, o.styleContent);
   }
+
   const oa = new ObserveMutationAttribute({
     el: elModal,
-    cb: o.onMutation
+    cb: o.onMutation,
   });
 
   const hasJquery = isFunction(window.jQuery);
@@ -84,7 +85,7 @@ export function modal(o) {
   }
 
   if (hasModal && o.replace) {
-    const oldBody = elModal.querySelector('.mx-modal-body');
+    const oldBody = elModal.querySelector(".mx-modal-body");
     const rectModal = elModal.getBoundingClientRect();
 
     if (hasShiny && !noShinyBinding) {
@@ -99,8 +100,8 @@ export function modal(o) {
 
     elModal.remove();
     elModal = buildModal(id, {
-      marginLeft: rectModal.left + 'px',
-      top: rectModal.top + 'px'
+      marginLeft: rectModal.left + "px",
+      top: rectModal.top + "px",
     });
   }
 
@@ -109,32 +110,36 @@ export function modal(o) {
   }
 
   if (o.styleString) {
+    // replace style object entirely
     elModal.style = o.styleString;
   }
+
   if (o.zIndex) {
     elModal.style.zIndex = o.zIndex;
   }
 
   if (o.minWidth) {
-    elModal.style.width = o.minWidth;
+    elModal.style.minWidth = o.minWidth;
   }
-
+  if (o.minHeight) {
+    elModal.style.minHeight = o.minHeight;
+  }
   if (!o.removeCloseButton) {
     elButtonClose = el(
-      'button',
+      "button",
       {
-        id: 'btnCloseModal',
-        class: ['btn', 'btn-default'],
+        id: "btnCloseModal",
+        class: ["btn", "btn-default"],
         on: {
-          click: close
-        }
+          click: close,
+        },
       },
       o.textCloseButton
     );
     if (!o.textCloseButton) {
-      getDictItem('btn_close').then((d) => {
+      getDictItem("btn_close").then((d) => {
         elButtonClose.innerText = d;
-        elButtonClose.dataset.lang_key = 'btn_close';
+        elButtonClose.dataset.lang_key = "btn_close";
       });
     }
     elButtons.appendChild(elButtonClose);
@@ -142,7 +147,7 @@ export function modal(o) {
 
   if (o.buttons) {
     o.buttons = isArray(o.buttons) ? o.buttons : [o.buttons];
-    o.buttons.forEach(function(b) {
+    o.buttons.forEach(function (b) {
       if (isHTML(b)) {
         b = textToDom(b);
       }
@@ -171,7 +176,7 @@ export function modal(o) {
   document.body.appendChild(elModal);
 
   if (o.addBackground) {
-    elModal.classList.add('mx-modal-background');
+    elModal.classList.add("mx-modal-background");
   }
 
   /**
@@ -186,8 +191,8 @@ export function modal(o) {
       id: id,
       selector: elModal,
       options: {
-        dropdownParent: document.body
-      }
+        dropdownParent: document.body,
+      },
     });
   }
 
@@ -196,7 +201,7 @@ export function modal(o) {
     debounceTime: 2000,
     onStart: () => {
       closeSelectizeGroupById(id);
-    }
+    },
   });
 
   /**
@@ -209,65 +214,65 @@ export function modal(o) {
    */
   function buildModal(idModal, style, styleContent) {
     const elModal = el(
-      'div',
+      "div",
       {
         id: idModal,
-        class: ['mx-modal-container', 'mx-draggable'],
-        style: style
+        class: ["mx-modal-container", "mx-draggable"],
+        style: style,
       },
       el(
-        'div',
+        "div",
         {
-          class: ['mx-drag-handle', 'mx-modal-top']
+          class: ["mx-drag-handle", "mx-modal-top"],
         },
-        (elTitle = el('div', {
-          class: ['mx-modal-drag-enable', 'mx-modal-title']
+        (elTitle = el("div", {
+          class: ["mx-modal-drag-enable", "mx-modal-title"],
         })),
-        (elCollapse = el('i', {
+        (elCollapse = el("i", {
           class: [
-            'mx-modal-top-btn-control',
-            'fa',
-            'fa-square-o',
-            'fa-minus-square'
+            "mx-modal-top-btn-control",
+            "fa",
+            "fa-square-o",
+            "fa-minus-square",
           ],
           on: [
-            'click',
+            "click",
             () => {
-              elCollapse.classList.toggle('fa-minus-square');
-              elModal.classList.toggle('mx-modal-collapsed');
-            }
-          ]
+              elCollapse.classList.toggle("fa-minus-square");
+              elModal.classList.toggle("mx-modal-collapsed");
+            },
+          ],
         }))
       ),
-      el('div', {
-        class: ['mx-modal-head']
+      el("div", {
+        class: ["mx-modal-head"],
       }),
       (elBody = el(
-        'div',
+        "div",
         {
-          class: ['mx-modal-body', 'mx-scroll-styled']
+          class: ["mx-modal-body", "mx-scroll-styled"],
         },
-        (elContent = el('div', {
+        (elContent = el("div", {
           style: styleContent,
-          class: ['mx-modal-content']
+          class: ["mx-modal-content"],
         }))
       )),
       el(
-        'div',
+        "div",
         {
-          class: ['mx-modal-foot']
+          class: ["mx-modal-foot"],
         },
-        (elButtons = el('div', {
-          class: ['btn-group', 'mx-modal-foot-btns']
+        (elButtons = el("div", {
+          class: ["btn-group", "mx-modal-foot-btns"],
         })),
-        el('div', {
-          id: idModal + '_txt',
-          class: ['shiny-text-output', 'mx-modal-foot-text']
+        el("div", {
+          id: idModal + "_txt",
+          class: ["shiny-text-output", "mx-modal-foot-text"],
         })
       ),
-      el('div', {
-        id: idModal + '_validation',
-        class: ['shiny-html-output', 'mx-modal-validation']
+      el("div", {
+        id: idModal + "_validation",
+        class: ["shiny-html-output", "mx-modal-validation"],
       })
     );
     return elModal;
@@ -308,7 +313,7 @@ export function modal(o) {
       /**
        * Remove jed editors
        */
-      elJedContainers = elContent.querySelectorAll('[data-jed_id]');
+      elJedContainers = elContent.querySelectorAll("[data-jed_id]");
       elJedContainers.forEach((elJed) => {
         const jedId = elJed.dataset.jed_id;
         if (jed.editors[jedId] && isFunction(jed.editors[jedId].destroy)) {
@@ -342,6 +347,32 @@ export function modal(o) {
 }
 
 /**
+ * Modal with default where non jquery + non-Shiny operations 
+ * @param {Object} opt Options ( passed to modal's options )
+ * @return {Element} modal element
+ */
+export function modalSimple(opt) {
+  const def = {
+    buttons: [],
+    title : 'Modal',
+    content : el('span','Content')
+  };
+
+  opt = Object.assign({}, def, opt);
+  
+  return modal({
+    // Set base modal options
+    ...opt,
+    // With priority to those options :
+    title: opt.title,
+    content: opt.content,
+    noShinyBinding: true,
+    addSelectize: false,
+    addBackground: true,
+  });
+}
+
+/**
  * Quickly close all modal windows
  */
 export function modalCloseAll() {
@@ -359,7 +390,7 @@ export function modalCloseAll() {
  */
 export function modalGetAll(opt) {
   opt = opt || {};
-  let selector = '.mx-modal-container';
+  let selector = ".mx-modal-container";
   const hasIgnores =
     isArray(opt.ignoreSelectors) && opt.ignoreSelectors.length > 0;
   if (hasIgnores) {
@@ -369,52 +400,57 @@ export function modalGetAll(opt) {
 }
 
 
+
 /**
  * Simple async dialog modal : display text + close button
- * @param {Object} opt Options
+ * @param {Object} opt Options ( passed to modal's options )
  * @param {String|Promise|Element} opt.title Title
  * @param {String|Promise|Element} opt.content Title
- * @param {String|Promise|Element} opt.close Close button text 
- * @param {Array} opt.buttons Additional buttons 
+ * @param {String|Promise|Element} opt.close Close button text
+ * @param {Array} opt.buttons Additional buttons
  * @return {Promise} resolve to boolean
  */
 export function modalDialog(opt) {
   let elModal;
   const def = {
-     buttons : []
-  }
-  opt = Object.assign({},def,opt)
+    buttons: [],
+  };
+  opt = Object.assign({}, def, opt);
   return new Promise((resolve) => {
-  
     const elBtnClose = el(
-      'div',
+      "div",
       {
-        class: 'btn btn-default',
+        class: "btn btn-default",
         on: {
           click: () => {
             resolve(true);
             elModal.close();
-          }
-        }
+          },
+        },
       },
-      opt.close || getDictItem('btn_close')
+      opt.close || getDictItem("btn_close")
     );
 
     elModal = modal({
+      // Set base modal options
+      ...opt,
+      // With priority to those options :
+      title: opt.title,
+      content: opt.content,
       noShinyBinding: true,
       addSelectize: false,
       removeCloseButton: true,
-      title: opt.title,
-      minWidth: opt.minWidth,
-      content: opt.content,
-      buttons: [elBtnClose,...opt.buttons],
+      buttons: [elBtnClose, ...opt.buttons],
       addBackground: true,
-      onClose: resolve
+      onClose: () => {
+        if (isFunction(opt.onClose)) {
+          opt.onClose();
+        }
+        resolve();
+      },
     });
   });
 }
-
-
 
 /**
  * Simple async confirm modal : confirm / cancel
@@ -428,34 +464,34 @@ export function modalDialog(opt) {
 export function modalConfirm(opt) {
   let elModal;
   return new Promise((resolve) => {
-    const elContent = el('div', opt.content);
+    const elContent = el("div", opt.content);
 
     const elBtnCancel = el(
-      'div',
+      "div",
       {
-        class: 'btn btn-default',
+        class: "btn btn-default",
         on: {
           click: () => {
             resolve(false);
             elModal.close();
-          }
-        }
+          },
+        },
       },
-      opt.cancel || getDictItem('btn_cancel')
+      opt.cancel || getDictItem("btn_cancel")
     );
 
     const elBtnConfirm = el(
-      'div',
+      "div",
       {
-        class: 'btn btn-default',
+        class: "btn btn-default",
         on: {
           click: () => {
             resolve(true);
             elModal.close();
-          }
-        }
+          },
+        },
       },
-      opt.confirm || getDictItem('btn_confirm')
+      opt.confirm || getDictItem("btn_confirm")
     );
 
     elModal = modal({
@@ -466,7 +502,12 @@ export function modalConfirm(opt) {
       content: elContent,
       buttons: [elBtnConfirm, elBtnCancel],
       addBackground: true,
-      onClose: resolve
+      onClose: () => {
+        if (isFunction(opt.onClose)) {
+          opt.onClose();
+        }
+        resolve();
+      },
     });
   });
 }
@@ -486,42 +527,46 @@ export function modalPrompt(opt) {
   let elModal;
   const def = {
     inputOptions: {
-      type: 'number',
-      class: 'form-control',
+      type: "number",
+      class: "form-control",
       min: 0,
       max: 1000,
       value: 10,
-      id: Math.random().toString(32)
-    }
+      id: Math.random().toString(32),
+    },
   };
   opt.inputOptions = Object.assign({}, def.inputOptions, opt.inputOptions);
   return new Promise((resolve) => {
-    const elInput = el('input', opt.inputOptions);
+    const elInput = el("input", opt.inputOptions);
 
     const elContent = el(
-      'div',
-      {class: 'form-group'},
-      el('label', {for: opt.inputOptions.id}, opt.label || 'Enter your value'),
+      "div",
+      { class: "form-group" },
+      el(
+        "label",
+        { for: opt.inputOptions.id },
+        opt.label || "Enter your value"
+      ),
       elInput
     );
     const elBtnCancel = el(
-      'div',
+      "div",
       {
-        class: 'btn btn-default',
+        class: "btn btn-default",
         on: {
           click: () => {
             resolve(false);
             elModal.close();
-          }
-        }
+          },
+        },
       },
-      opt.cancel || getDictItem('btn_cancel')
+      opt.cancel || getDictItem("btn_cancel")
     );
 
     const elBtnConfirm = el(
-      'div',
+      "div",
       {
-        class: 'btn btn-default',
+        class: "btn btn-default",
         on: {
           click: () => {
             if (elBtnConfirm.disabled) {
@@ -529,14 +574,14 @@ export function modalPrompt(opt) {
             }
             resolve(elInput.value);
             elModal.close();
-          }
-        }
+          },
+        },
       },
-      opt.confirm || getDictItem('btn_confirm')
+      opt.confirm || getDictItem("btn_confirm")
     );
 
     if (opt.onInput instanceof Function) {
-      elInput.addEventListener('input', () =>
+      elInput.addEventListener("input", () =>
         opt.onInput(elInput.value, elBtnConfirm)
       );
       /**
@@ -553,7 +598,12 @@ export function modalPrompt(opt) {
       content: elContent,
       buttons: [elBtnConfirm, elBtnCancel],
       addBackground: true,
-      onClose: resolve
+      onClose: () => {
+        if (isFunction(opt.onClose)) {
+          opt.onClose();
+        }
+        resolve();
+      },
     });
   });
 }

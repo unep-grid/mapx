@@ -1,185 +1,191 @@
 const settings_global = {
+  mapx: {
+    users: {
+      root: [1],
+      project_creator: [1],
+    },
+  },
   api: {
-    host: 'api',
-    port: '8080',
-    host_public: 'app.mapx.localhost',
-    port_public: '8880'
+    host: "api",
+    port: "8080",
+    host_public: "app.mapx.localhost",
+    port_public: "8880",
   },
   socket_io: {
     cors: {
-      methods: ['GET', 'POST'],
+      methods: ["GET", "POST"],
       credentials: true,
       origin: [
-        'http://dev.mapx.localhost:8880',
-        'app.mapx.localhost',
-        'app.mapx.org',
-        'app.staging.mapx.org'
-      ]
-    }
+        "http://dev.mapx.localhost:8880",
+        "app.mapx.localhost",
+        "app.mapx.org",
+        "app.staging.mapx.org",
+      ],
+    },
   },
   map: {
-    token: ''
+    token: "",
   },
   mirror: {
     rateLimit: 2000,
-    rateWindowMinutes: 15
+    rateWindowMinutes: 15,
   },
   redis: {
-    user: 'redis',
+    user: "redis",
     port: 6379,
-    host: 'localhost'
+    host: "localhost",
   },
   geoip: {
     licenseKey: null,
-    urlService :'http://localhost?licence={{licenseKey}}'
+    urlService: "http://localhost?licence={{licenseKey}}",
   },
   meili: {
     master_key: null,
     port: 7700,
-    host: 'meili',
-    protocol: 'http://'
+    host: "meili",
+    protocol: "http://",
   },
   geoserver: {
-    password: 'letmein',
-    user: 'admin',
-    url: 'http://localhost:8080',
-    url_public: 'http://localhost:8080'
+    password: "letmein",
+    user: "admin",
+    url: "http://localhost:8080",
+    url_public: "http://localhost:8080",
   },
   db: {
-    name: 'postgres',
+    name: "postgres",
     port: 5432,
-    host: 'localhost',
+    host: "localhost",
+    schema: "public",
     timeout: 1000 * 60 * 5, // 5 minutes
     poolMin: 1,
     poolMax: 1,
     admin: {
-      user: 'postgres',
-      password: '1234'
+      user: "postgres",
+      password: "1234",
     },
     write: {
-      user: 'postgres',
-      password: '1234'
+      user: "postgres",
+      password: "1234",
     },
     read: {
-      user: 'postgres',
-      password: '1234'
+      user: "postgres",
+      password: "1234",
     },
     crypto: {
-      key: '1234'
+      key: "1234",
     },
     stringRead:
-      'PG:host=localhost port=5432 user=postgres dbname=mydb password=pgpass',
+      "PG:host=localhost port=5432 user=postgres dbname=mydb password=pgpass",
     stringWrite:
-      'PG:host=localhost port=5432 user=postgres dbname=mydb password=pgpass'
+      "PG:host=localhost port=5432 user=postgres dbname=mydb password=pgpass",
   },
   image: {
     path: {
-      permanent: '/tmp/',
-      temporary: '/tmp/',
-      url: '/userdata/'
-    }
+      permanent: "/tmp/",
+      temporary: "/tmp/",
+      url: "/userdata/",
+    },
   },
   vector: {
     path: {
-      temporary: '/tmp/',
-      download: '/shared/download',
-      download_url: 'download'
-    }
+      temporary: "/tmp/",
+      download: "/shared/download",
+      download_url: "download",
+    },
   },
   mail: {
     config: {
-      emailAdmin: '',
-      host: 'mail.mapx.org',
+      emailAdmin: "",
+      host: "mail.mapx.org",
       port: 587,
       secure: false,
       auth: {
-        user: 'example@mapx.org',
-        pass: '1234'
-      }
+        user: "example@mapx.org",
+        pass: "1234",
+      },
     },
     options: {
-      from: 'bot@mapx.org',
+      from: "bot@mapx.org",
       to: null,
-      subject: 'test',
-      text: 'info',
-      html: '<b>info</b>',
+      subject: "test",
+      text: "info",
+      html: "<b>info</b>",
       // sendAuto
-      title: 'MapX',
+      title: "MapX",
       subtitle: null,
-      content: '<b>info</b>',
-      subjectPrefix: '[ MapX ]'
-    }
+      content: "<b>info</b>",
+      subjectPrefix: "[ MapX ]",
+    },
   },
   validation_defaults: {
     db: {
       array_operators: {
-        ALL: '?&',
-        ANY: '?|',
-        OR: '?|',
-        AND: '?&'
-      }
+        ALL: "?&",
+        ANY: "?|",
+        OR: "?|",
+        AND: "?&",
+      },
     },
     users: {
-      roles: ['admin', 'publisher', 'member', 'public'],
+      roles: ["admin", "publisher", "member", "public"],
       id_public: 96,
-      id_admin: 1
+      id_admin: 1,
     },
     languages: {
-      codes: ['fr', 'en', 'es', 'ar', 'ru', 'zh', 'de', 'bn', 'fa', 'ps'],
-      default: 'en'
+      codes: ["fr", "en", "es", "ar", "ru", "zh", "de", "bn", "fa", "ps"],
+      default: "en",
     },
     tables: {
-      attr_not_queryable: ['geom', 'gid', 'pid'],
+      attr_not_queryable: ["geom", "gid", "pid"],
       name_not_queryable: [
-        'mx_users',
-        'mx_sources',
-        'mx_views',
-        'mx_views_latest',
-        'mx_config',
-        'mx_logs'
-      ]
+        "mx_users",
+        "mx_sources",
+        "mx_views",
+        "mx_views_latest",
+        "mx_config",
+        "mx_logs",
+      ],
     },
     views: {
-      types: ['vt', 'rt', 'sm', 'cc'],
+      types: ["vt", "rt", "sm", "cc"],
       keys_out: [
-        '*',
-        'id',
-        'editor',
-        'date_modified',
-        'data',
-        'type',
-        'pid',
-        'project',
-        'readers',
-        'editors',
-        '_edit',
-        '_title',
-        '_title_project',
-        '_source',
-        '_meta'
+        "*",
+        "id",
+        "editor",
+        "date_modified",
+        "data",
+        "type",
+        "pid",
+        "project",
+        "readers",
+        "editors",
+        "_edit",
+        "_title",
+        "_title_project",
+        "_source",
+        "_meta",
       ],
       keys_out_public: [
-        '*',
-        'id',
-        'editor',
-        'date_modified',
-        'data',
-        'type',
-        'pid',
-        'project',
-        'readers',
-        'editors',
-        '_title',
-        '_title_project',
-        '_meta'
-      ]
+        "*",
+        "id",
+        "editor",
+        "date_modified",
+        "data",
+        "type",
+        "pid",
+        "project",
+        "readers",
+        "editors",
+        "_title",
+        "_title_project",
+        "_meta",
+      ],
     },
     search: {
-      index: 'views',
-      indices: ['views', 'projects', 'sources']
-    }
-  }
+      index: "views",
+      indices: ["views", "projects", "sources"],
+    },
+  },
 };
 
-
-export {settings_global};
+export { settings_global };

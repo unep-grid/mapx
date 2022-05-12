@@ -1,7 +1,7 @@
 import {el} from './../el/src/index.js';
 import {ListenerStore} from './../listener_store/index.js';
 import {path, any, setClickHandler} from './../mx_helper_misc.js';
-import {getLayersPropertiesAtPoint} from './../mx_helper_map.js';
+import {getLayersPropertiesAtPoint} from './../map_helpers/index.js';
 import {isEmpty} from './../is_test/index.js';
 /**
  * Widget method

@@ -6,7 +6,7 @@ import {
   setProject,
   getMapData,
   getViewsOrder,
-} from "../../../mx_helper_map.js";
+} from "../../../map_helpers/index.js";
 import { isView } from "./../../../is_test";
 import { viewToMetaModal } from "../../../mx_helper_map_view_metadata.js";
 import { getProjectViewsCollections } from "../../../mx_helper_map_view_ui.js";
@@ -63,7 +63,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} pass
    */
   async launch_chaos_test(opt) {
-    opt = Object.assign({}, { nBatch: 5, duration: 1000 }, opt);
+    opt = Object.assign({}, { run: 5, batch: 5, run_timeout: 1000 }, opt);
     const res = await chaosTest(opt);
     return res;
   }

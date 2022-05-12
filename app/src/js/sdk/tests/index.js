@@ -48,8 +48,10 @@ async function stopIfGuest() {
     return t.stop("Need logged user");
   }
 }
+
 mapx.once("ready", async () => {
   await stopIfGuest();
+
   t.check("Get list methods", {
     init: () => {
       return mapx.ask("get_sdk_methods");
@@ -63,6 +65,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Generic map methods", {
     tests: [
       {
@@ -99,20 +102,23 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("chaos views display", {
     tests: [
       {
         name: "Adding / removing views in random order during a specified duration",
-        timeout: 30000,
+        timeout: 60 * 1000,
         test: async () => {
           return mapx.ask("launch_chaos_test", {
-            nBatch: 5,
-            duration: 20 * 1000,
+            run: 5,
+            batch: 5,
+            run_timeout: 10 * 1000,
           });
         },
       },
     ],
   });
+
   t.check("Common loc", {
     init: () => {
       return mapx.ask("common_loc_get_list_codes");
@@ -170,6 +176,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Immersive mode", {
     init: async () => {
       return mapx.ask("set_immersive_mode", { enable: true });
@@ -201,6 +208,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get views list", {
     init: () => {
       return mapx.ask("get_views");
@@ -214,6 +222,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Trigger login window", {
     init: async () => {
       await stopIfGuest();
@@ -233,6 +242,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get / Set language", {
     tests: [
       {
@@ -249,6 +259,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get views id list", {
     init: () => {
       return mapx.ask("get_views_id");
@@ -262,6 +273,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get views with active layers on map", {
     init: async () => {
       const view = await mapx.ask("_get_random_view", {
@@ -293,6 +305,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Set view order", {
     init: async () => {
       await mapx.ask("set_views_list_sort", { asc: true, mode: "text" });
@@ -314,6 +327,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get view vt attribute meta", {
     init: async () => {
       const view = await mapx.ask("_get_random_view", {
@@ -334,6 +348,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get view table attribute config", {
     init: async () => {
       const view = await mapx.ask("_get_random_view", {
@@ -354,6 +369,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get view table attribute url", {
     init: async () => {
       const view = await mapx.ask("_get_random_view", {
@@ -374,6 +390,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get view table attribute", {
     init: async () => {
       const view = await mapx.ask("_get_random_view", {
@@ -394,6 +411,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get view vt source meta", {
     init: async () => {
       const view = await mapx.ask("_get_random_view", {
@@ -414,6 +432,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get view rt or vt legend", {
     init: async () => {
       const view = await mapx.ask("_get_random_view", {
@@ -432,6 +451,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get view meta", {
     timeout: 10000,
     init: async () => {
@@ -449,6 +469,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get user id", {
     init: () => {
       return mapx.ask("get_user_id");
@@ -462,6 +483,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get user ip", {
     init: () => {
       return mapx.ask("get_user_ip");
@@ -475,6 +497,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get user roles", {
     init: () => {
       return mapx.ask("get_user_roles");
@@ -488,6 +511,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get user email", {
     init: async () => {
       await stopIfGuest();
@@ -502,6 +526,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Filter view by text", {
     group: "filters",
     init: async () => {
@@ -543,6 +568,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get collection by project", {
     init: () => {
       return mapx.ask("get_project_collections");
@@ -556,6 +582,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Set dashboard visibility", {
     init: async () => {
       const view = await mapx.ask("_get_random_view", {
@@ -588,6 +615,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Get collection of open views", {
     init: async () => {
       const views = await mapx.ask("get_views");
@@ -620,6 +648,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Load projects", {
     init: () => {
       return mapx.ask("get_projects");
@@ -650,6 +679,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Show edit view modal", {
     init: async () => {
       await stopIfGuest();
@@ -691,6 +721,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Trigger map composer", {
     init: async () => {
       return mapx.ask("show_modal_map_composer");
@@ -709,6 +740,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Trigger download view source : vt", {
     init: async () => {
       await stopIfGuest();
@@ -737,6 +769,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("GeoJSON create view download geojson data", {
     init: async () => {
       const view = await mapx.ask("view_geojson_create", {
@@ -776,6 +809,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Sharing module", {
     init: async () => {
       const view = await mapx.ask("_get_random_view", {
@@ -808,6 +842,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Tools - add new view", {
     init: async () => {
       await stopIfGuest();
@@ -830,6 +865,7 @@ mapx.once("ready", async () => {
       },
     ],
   });
+
   t.check("Tools - validate source geom", {
     init: async () => {
       await stopIfGuest();

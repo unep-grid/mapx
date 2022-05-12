@@ -7,6 +7,7 @@ const enableAuth = false;
  * @return {Function} middleware for connection
  */
 export const mwIoConnect = (io) => async (socket) => {
+  
   io.on('disconnected', (socket) => {
     socket.emit('server_state', {
       type: 'message',

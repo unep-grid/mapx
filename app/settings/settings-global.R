@@ -119,7 +119,8 @@ config[["api"]] <- list(
     uploadImage = "/upload/image/",
     uploadVector = "/upload/vector/",
     postEmail = "/send/mail",
-    collectLogs = "/collect/logs/"
+    collectLogs = "/collect/logs/",
+    updateGeoserver = "/get/geoserver/rebuild/"
   )
 )
 

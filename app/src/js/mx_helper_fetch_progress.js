@@ -19,7 +19,7 @@ const defProgress = {
     throw new Error(e);
   },
   maxSize: Infinity,
-  headerContentLength: 'content-length'
+  headerContentLength: "content-length",
 };
 
 /**
@@ -32,7 +32,7 @@ function getPromMaxTime(ms) {
   }
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject({message: `fetchProgress : timeout exceeded ( ${ms} ms )`});
+      reject({ message: `fetchProgress : timeout exceeded ( ${ms} ms )` });
       resolve(null);
     }, ms);
   });
@@ -47,27 +47,27 @@ export async function fetchProgress(url, opt) {
   opt = Object.assign({}, defProgress, opt);
 
   const modeProgress = window.Response && window.ReadableStream;
-  let err = '';
+  let err = "";
   let loaded = 1;
   let total = 1;
 
   const promTimeout = getPromMaxTime();
-  const promFetch = fetch(url, {cache: 'no-cache'});
+  const promFetch = fetch(url, { cache: "no-cache" });
   const response = await Promise.race([promFetch, promTimeout]);
 
   if (!response.ok) {
-    err = response.status + ' ' + response.statusText;
+    err = response.status + " " + response.statusText;
     throw new Error(err);
   }
 
   const contentLength =
-    response.headers.get('Mapx-Content-Length') ||
-    response.headers.get('content-length');
+    response.headers.get("Mapx-Content-Length") ||
+    response.headers.get("content-length");
 
   if (!modeProgress || !contentLength) {
     opt.onProgress({
       loaded: loaded,
-      total: total
+      total: total,
     });
     return response;
   }
@@ -84,7 +84,7 @@ export async function fetchProgress(url, opt) {
       start(controller) {
         const reader = response.body.getReader();
         read(reader, controller);
-      }
+      },
     })
   );
 
@@ -94,11 +94,11 @@ export async function fetchProgress(url, opt) {
 
   async function read(reader, controller) {
     try {
-      const {done, value} = await reader.read();
+      const { done, value } = await reader.read();
       if (done) {
         opt.onComplete({
           loaded: loaded,
-          total: total
+          total: total,
         });
         controller.close();
         return;
@@ -106,13 +106,12 @@ export async function fetchProgress(url, opt) {
       loaded += value.byteLength;
       opt.onProgress({
         loaded: loaded,
-        total: total
+        total: total,
       });
       controller.enqueue(value);
       read(reader, controller);
     } catch (e) {
-      controller.error(error);
-      throw new Error(error);
+      throw new Error(e);
     }
   }
 }
@@ -125,12 +124,10 @@ export async function fetchProgress(url, opt) {
 export async function fetchProgress_xhr(url, opt) {
   opt = Object.assign({}, defProgress, opt);
 
-  const promTimeout = new Promise((resolve, reject) => {
+  const promTimeout = new Promise((_, reject) => {
     setTimeout(() => {
       reject(
-        `fetchProgress_xhr : timeout exceeded ( ${
-          mx.settings.maxTimeFetch
-        } ms )`
+        `fetchProgress_xhr : timeout exceeded ( ${mx.settings.maxTimeFetch} ms )`
       );
     }, mx.settings.maxTimeFetch);
   });
@@ -139,11 +136,11 @@ export async function fetchProgress_xhr(url, opt) {
     let xmlhttp = new XMLHttpRequest();
     let hasContentLength = false;
 
-    xmlhttp.open('GET', url, true);
+    xmlhttp.open("GET", url, true);
     xmlhttp.onprogress = (d) => {
       let p = {
         total: d.total,
-        loaded: d.loaded
+        loaded: d.loaded,
       };
       if (p.total === 0 || !d.lengthComputable) {
         let cLength = d.target.getResponseHeader(opt.headerContentLength) * 1;
@@ -173,9 +170,9 @@ export async function fetchProgress_xhr(url, opt) {
       reject(`fetchProgress_xhr : Network/Security issue e.g. missing CORS`);
     };
     /**
-    * ⚠️  Using this require function instead of arrow function
-    */ 
-    xmlhttp.onload = function(e){
+     * ⚠️  Using this require function instead of arrow function
+     */
+    xmlhttp.onload = function (e) {
       const res = this;
       if (res.status !== 200) {
         /**
@@ -193,3 +190,4 @@ export async function fetchProgress_xhr(url, opt) {
 
   return Promise.race([promFetch, promTimeout]);
 }
+

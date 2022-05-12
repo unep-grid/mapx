@@ -1,31 +1,33 @@
-import {el} from './../el/src/index.js';
-import {ListenerStore} from './../listener_store/index.js';
-import {getDictItem} from './../language';
-import chroma from 'chroma-js';
-import './style.css';
-import * as themes from './presets.js';
-import {layer_resolver, css_resolver} from './mapx_style_resolver.js';
-import {bindAll} from '../bind_class_methods';
-import switchOn from './sound/switch-on.mp3';
-import switchOff from './sound/switch-off.mp3';
-import {onNextFrame} from '../animation_frame/index.js';
+import { el } from "./../el/src/index.js";
+import { ListenerStore } from "./../listener_store/index.js";
+import { getDictItem } from "./../language";
+import chroma from "chroma-js";
+import "./style.css";
+import * as themes from "./presets.js";
+import { layer_resolver, css_resolver } from "./mapx_style_resolver.js";
+import { bindAll } from "../bind_class_methods";
+import switchOn from "./sound/switch-on.mp3";
+import switchOff from "./sound/switch-off.mp3";
+import { onNextFrame } from "../animation_frame/index.js";
 
 const global = {
   elStyle: null,
   elInputsContainer: null,
   map: null,
   themes: themes,
-  idThemeDefault: 'mapx',
-  idTheme: 'mapx',
+  idThemeDefault: "mapx",
+  idTheme: "mapx",
   colors: null,
   debug: false,
-  idThemesDarkLight: ['mapx', 'smartgray'],
+  idThemesToggle: ["mapx", "smartgray"],
+  idThemesLight : ["mapx"],
+  idThemesDark : ["smartgray"],
   on: {},
   sounds: {
-    'switch-test': switchOn,
-    'switch-on': switchOn,
-    'switch-off': switchOff
-  }
+    "switch-test": switchOn,
+    "switch-on": switchOn,
+    "switch-off": switchOff,
+  },
 };
 
 class Theme {
@@ -45,7 +47,7 @@ class Theme {
     t.ls = new ListenerStore();
 
     if (!global.elStyle) {
-      global.elStyle = el('style');
+      global.elStyle = el("style");
       document.head.appendChild(global.elStyle);
     }
 
@@ -106,7 +108,7 @@ class Theme {
     const theme = t.getTheme(id);
     if (theme.colors) {
       t._mode = theme.mode;
-      t.fire('mode_changed', t._mode);
+      t.fire("mode_changed", t._mode);
       t._id_theme = theme.id;
       t._theme = theme;
       t.setColors(theme.colors);
@@ -160,7 +162,7 @@ class Theme {
       }
       return valid;
     } catch (e) {
-      console.warn('Invalid colors.', e);
+      console.warn("Invalid colors.", e);
       return false;
     }
   }
@@ -175,10 +177,16 @@ class Theme {
     }
   }
 
+  isDarkMode() {
+    const t = this;
+    const idCurrent = t.id_theme;
+    return t.opt.idThemesDark.includes(idCurrent);
+  }
+
   toggleDarkMode(force) {
     const t = this;
     const idCurrent = t.id_theme;
-    const idsTheme = t.opt.idThemesDarkLight;
+    const idsTheme = t.opt.idThemesToggle;
     let pos = idsTheme.indexOf(idCurrent);
     if (force) {
       pos = 1;
@@ -190,9 +198,9 @@ class Theme {
       pos = 1;
     }
     if (pos === 1) {
-      t.sound('switch-off');
+      t.sound("switch-off");
     } else {
-      t.sound('switch-on');
+      t.sound("switch-on");
     }
     t.setColorsByThemeId(idsTheme[pos]);
   }
@@ -228,7 +236,7 @@ class Theme {
       t._updateMap();
     }
     t._colors = new_colors;
-    t.fire('set_colors', new_colors);
+    t.fire("set_colors", new_colors);
   }
 
   getColorThemeItem(id) {
@@ -257,7 +265,7 @@ class Theme {
     const skipWaitMapLoad = t._map_skip_wait_load;
 
     if (!isMapStyleLoaded && !skipWaitMapLoad) {
-      map.once('load', t._updateMap.bind(t));
+      map.once("load", t._updateMap.bind(t));
       return;
     }
     t._map_skip_wait_load = true;
@@ -293,64 +301,64 @@ class Theme {
   _buildInputGroup(cid) {
     const t = this;
     const colors = t.opt.colors;
-    const inputType = ['checkbox', 'color', 'range'];
+    const inputType = ["checkbox", "color", "range"];
     const color = chroma(colors[cid].color);
-    const visible = colors[cid].visibility === 'visible';
+    const visible = colors[cid].visibility === "visible";
 
     return el(
-      'div',
+      "div",
       {
         id: cid,
-        class: ['mx-theme--color-container']
+        class: ["mx-theme--color-container"],
       },
       el(
-        'span',
+        "span",
         {
-          class: ['mx-theme--color-label', 'hint--right'],
-          dataset: {lang_key: cid},
-          'aria-label': cid
+          class: ["mx-theme--color-label", "hint--right"],
+          dataset: { lang_key: cid },
+          "aria-label": cid,
         },
         getDictItem(cid)
       ),
       el(
-        'div',
+        "div",
         {
-          class: ['mx-theme--colors-input']
+          class: ["mx-theme--colors-input"],
         },
         inputType.map((type) => {
-          const isRange = type === 'range';
-          const isCheck = type === 'checkbox';
+          const isRange = type === "range";
+          const isCheck = type === "checkbox";
           const id = `${cid}_inputs_${type}`;
           const config = {
             id: id,
             type: type,
             dataset: {
-              action: 'update',
-              param: isRange ? 'alpha' : isCheck ? 'visibility' : 'hex',
-              id: cid
-            }
+              action: "update",
+              param: isRange ? "alpha" : isCheck ? "visibility" : "hex",
+              id: cid,
+            },
           };
           if (isRange) {
             config.min = 0;
             config.max = 1;
             config.step = 0.1;
           } else {
-            config.style = {maxWidth: '60px'};
+            config.style = { maxWidth: "60px" };
           }
-          const elInput = el('input', config);
+          const elInput = el("input", config);
           const elLabel = el(
-            'label',
+            "label",
             {
               for: id,
-              'aria-label': cid,
-              class: 'mx-theme--colors-input-wrap'
+              "aria-label": cid,
+              class: "mx-theme--colors-input-wrap",
             },
             `${type} input for ${id}`
           );
           const elWrap = el(
-            'div',
+            "div",
             {
-              id: `${cid}_inputs_wrap_${type}`
+              id: `${cid}_inputs_wrap_${type}`,
             },
             elInput,
             elLabel
@@ -360,7 +368,7 @@ class Theme {
             ? color.alpha()
             : isCheck
             ? true
-            : color.hex('rgb');
+            : color.hex("rgb");
 
           if (isCheck) {
             elInput.checked = visible;
@@ -381,10 +389,10 @@ class Theme {
       bind: t,
       target: elContainer,
       callback: t._updateFromInput,
-      group: 'base',
-      type: 'change',
+      group: "base",
+      type: "change",
       debounce: true,
-      debounceTime: 200
+      debounceTime: 200,
     });
     t._el_inputs_init = true;
     t.opt.elInputsContainer = elContainer;
@@ -399,18 +407,18 @@ class Theme {
     if (!(elContainer instanceof Element)) {
       return;
     }
-    elContainer.innerHTML = '';
+    elContainer.innerHTML = "";
     for (var cid in colors) {
       const elInputGrp = t._buildInputGroup(cid);
       elFrag.appendChild(elInputGrp);
     }
     /**
-    * Replacing input is not a priority. In case
-    * of theme change, a lot of update is happening
-    * at the same time. Building input in the next
-    * frame improve performance. That and using
-    * fragment require 10ms instead of 28ms.
-    */
+     * Replacing input is not a priority. In case
+     * of theme change, a lot of update is happening
+     * at the same time. Building input in the next
+     * frame improve performance. That and using
+     * fragment require 10ms instead of 28ms.
+     */
     onNextFrame(() => {
       elContainer.replaceChildren(elFrag);
     });
@@ -421,7 +429,7 @@ class Theme {
     t.inputs.forEach((input) => {
       const cid = input.dataset.id;
       if (!id || cid === id) {
-        const isCheck = input.type === 'checkbox';
+        const isCheck = input.type === "checkbox";
         const value = isCheck ? input.checked : input.value;
         const param = input.dataset.param;
         if (!out[cid]) {
@@ -433,10 +441,10 @@ class Theme {
 
     for (var cid in out) {
       out[cid] = {
-        visibility: out[cid].visibility === true ? 'visible' : 'none',
+        visibility: out[cid].visibility === true ? "visible" : "none",
         color: chroma(out[cid].hex)
           .alpha(out[cid].alpha * 1)
-          .css()
+          .css(),
       };
     }
     if (id) {
@@ -456,8 +464,8 @@ class Theme {
    */
   sound(id) {
     const t = this;
-    t._elAudio = t._elAudio || el('audio');
-    t._elAudio.setAttribute('src', t.opt.sounds[id]), t._elAudio.play();
+    t._elAudio = t._elAudio || el("audio");
+    t._elAudio.setAttribute("src", t.opt.sounds[id]), t._elAudio.play();
   }
 
   /**
@@ -466,7 +474,7 @@ class Theme {
   on(id, cb) {
     this.listeners.push({
       id: id,
-      cb: cb
+      cb: cb,
     });
   }
   fire(id, data) {
@@ -487,7 +495,7 @@ class Theme {
   }
 }
 
-export {Theme};
+export { Theme };
 
 function isJsonTxt(txt) {
   try {

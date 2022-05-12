@@ -1,5 +1,35 @@
 [
   {
+    "id": "code_integration_select_template_label",
+    "en": "Select template",
+    "ps": "ټیمپلیټ غوره کړئ"
+  },
+  {
+    "id": "code_integration_select_template_desc",
+    "en": "Code template, boilerplate, in another format",
+    "ps": "د کوډ ټیمپلیټ، بویلر پلیټ، په بل شکل کې"
+  },
+  {
+    "id": "code_integration_template_sld_layers",
+    "en": "SLD format",
+    "ps": "د SLD بڼه"
+  },
+  {
+    "id": "code_integration_template_mapbox_style",
+    "en": "Mapbox style (full)",
+    "ps": "د نقشه بکس سټایل (بشپړ)"
+  },
+  {
+    "id": "code_integration_template_mapbox_layers",
+    "en": "Mapbox style (layers only)",
+    "ps": "د نقشه بکس سټایل (یوازې پرتونه)"
+  },
+  {
+    "id": "code_integration_template_maplibre_simple_app",
+    "en": "Simple html/js app, using maplibre",
+    "ps": "ساده html/js ایپ، د میپلیبر په کارولو سره"
+  },
+  {
     "id": "ABW",
     "en": "Aruba",
     "ps": "آروبا"
@@ -1738,6 +1768,21 @@
     "id": "btn_add_source",
     "en": "Add a source layer",
     "ps": "د سرچینې لایه اضافه کړئ"
+  },
+  {
+    "id": "btn_update_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "ps": "جیوسرور تازه کړئ: د DB بیا جوړ کړئ"
+  },
+  {
+    "id": "btn_rebuild_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "ps": "جیوسرور تازه کړئ: د DB بیا جوړ کړئ"
+  },
+  {
+    "id": "btn_rebuild_geoserver_recalc_style",
+    "en": "Update geoserver : rebuild DB + recalc views style",
+    "ps": "جیوسرور تازه کړئ: د DB + recalc لیدونو سټایل بیا جوړ کړئ"
   },
   {
     "id": "btn_about",
@@ -4210,14 +4255,9 @@
     "ps": "اجازه راکړئ دا سرچینه ډاونلوډ شي "
   },
   {
-    "id": "gs_ws_a",
-    "en": "Publish all related views via WMS",
-    "ps": "ټول اړوند لیدونه د WMS له لارې خپاره کړئ "
-  },
-  {
     "id": "gs_ws_b",
-    "en": "Publish all related views via WMS/WFS/WCS",
-    "ps": "ټول اړوند لید د WMS / WFS / WCS له لارې خپاره کړئ "
+    "en": "Publish all related public views via WMS/WFS/WCS",
+    "ps": "ټول اړوند عامه نظرونه د WMS/WFS/WCS له لارې خپاره کړئ"
   },
   {
     "id": "src_download_issues",
@@ -6987,7 +7027,7 @@
   {
     "id": "share_manager_title",
     "en": "Sharing manager",
-    "ps": "د شریکولو مدیر "
+    "ps": "د شریکولو مدیر"
   },
   {
     "id": "share_form_title",

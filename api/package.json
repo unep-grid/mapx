@@ -4,8 +4,11 @@
   "description": "MapX express api",
   "main": "index.js",
   "scripts": {
-    "test": "API_PORT=3636; POSTGRES_DB=mapx_test; node test.js",
-    "lint": "eslint ./index.js && eslint ./routines.js"
+    "test": "echo 'test disabled' && exit 1",
+    "lint": "eslint ./index.js && eslint ./routines.js",
+    "docker": "npm run lint && ./build.sh -a",
+    "prod": "npm run lint",
+    "prod_docker": "npn run prod && ./build.sh -ap"
   },
   "author": "unepgrid.ch",
   "license": "MIT",
@@ -23,7 +26,7 @@
     "express": "^4.17.2",
     "express-rate-limit": "^6.3.0",
     "geojson-vt": "^3.2.1",
-    "geoserver-node-client": "^0.0.7",
+    "geoserver-node-client": "github:meggsimum/geoserver-node-client",
     "html-to-text": "^8.1.0",
     "martinez-polygon-clipping": "^0.7.1",
     "md5-file": "^5.0.0",

@@ -70,6 +70,12 @@ export function rgba2hex(rgb) {
   const c = chroma(rgb);
   return c.hex('rgb');
 }
+export function colorToHex(color) {
+  const c = chroma(color);
+  return c.hex('rgb');
+}
+
+
 
 /**
  * convert any color to obj with key alpha and hex color

@@ -1,5 +1,5 @@
 import {getApiUrl, setApiUrlAuto} from './api_routes';
-import {initMapx} from './mx_helper_map.js';
+import {initMapx} from './map_helpers/index.js';
 
 document.addEventListener('DOMContentLoaded', loadStatic);
 

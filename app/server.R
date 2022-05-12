@@ -2,9 +2,8 @@
 #
 #  SERVER FUNCTION
 #
-server <- function(input,output,session){
-
-  if("MAINTENANCE" %in% .get(config,c("mode"))){
+server <- function(input, output, session) {
+  if ("MAINTENANCE" %in% .get(config, c("mode"))) {
     #
     # Set maintenance mode, ignore everything else
     #
@@ -12,14 +11,14 @@ server <- function(input,output,session){
       base = config$srvPath,
       env = environment(),
       files = c(
-        'maintenance.R'
+        "maintenance.R"
       )
     )
     return()
   }
 
 
-  session$allowReconnect(TRUE);
+  session$allowReconnect(TRUE)
   #
   # Session query search string
   #
@@ -31,20 +30,20 @@ server <- function(input,output,session){
     # See all defaults in /src/js/mx_settings_default.js
     #
     list(
-      api         = .get(config,c("api")),
-      search      = .get(config, c("search")),
-      validation  = .get(config,c('validation')),
-      dbLogLevels = .get(config,c("db_log","levels"),default=c("ERROR")),
-      language    = .get(config,c("language","default")),
-      languages   = .get(config,c("languages","codes")),
-      project     = list (
-        id = .get(config,c("project","default")),
+      api = .get(config, c("api")),
+      search = .get(config, c("search")),
+      validation = .get(config, c("validation")),
+      dbLogLevels = .get(config, c("db_log", "levels"), default = c("ERROR")),
+      language = .get(config, c("language", "default")),
+      languages = .get(config, c("languages", "codes")),
+      project = list(
+        id = .get(config, c("project", "default")),
         public = TRUE
       ),
-      countries   = .get(config,c("countries","table","id")),
-      map         = .get(config,c("map")),
-      paths       = .get(config,c("paths")),
-      links       = .get(config,c("links"))
+      countries = .get(config, c("countries", "table", "id")),
+      map = .get(config, c("map")),
+      paths = .get(config, c("paths")),
+      links = .get(config, c("links"))
     )
   )
 
@@ -69,7 +68,7 @@ server <- function(input,output,session){
   #
   # Read once browser data, cookies, etc..
   #
-  obsBrowserData <- observeEvent(input$browserData,{
+  obsBrowserData <- observeEvent(input$browserData, {
     obsBrowserData$destroy()
     #
     # Get query and browser/navigator data
@@ -81,7 +80,7 @@ server <- function(input,output,session){
     #
     # Launch init
     #
-    mxCatch(title="MapX main process",{
+    mxCatch(title = "MapX main process", {
 
 
 
@@ -93,17 +92,17 @@ server <- function(input,output,session){
 
       userInfo <- mxLogin(
         email = emailInit,
-        browserData = browserData, 
-        query = query, 
+        browserData = browserData,
+        query = query,
         reactData = reactData
       )
 
       mxDebugMsg("LOGIN DONE")
       #
-      # Set reactUser reactives values 
+      # Set reactUser reactives values
       #
-      reactUser$data <- userInfo$info;
-      reactUser$token <- userInfo$token;
+      reactUser$data <- userInfo$info
+      reactUser$token <- userInfo$token
 
       #
       # Source reactive stuff needed for this session
@@ -123,7 +122,7 @@ server <- function(input,output,session){
           "controls.R",
           "map.R",
           "input_register.R",
-          "root_mode.R", 
+          "root_mode.R",
           #
           # Tools panel handler
           #
@@ -161,14 +160,14 @@ server <- function(input,output,session){
           #
           # Sharing tools
           #
-          #"share.R",
-          "share_to_project.R"
+          # "share.R",
+          "share_to_project.R",
+          #
+          # Root buttons
+          #
+          "tools_geoserver.R"
         )
       )
-
     })
   })
-
 }
-
-

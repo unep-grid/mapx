@@ -8,7 +8,7 @@ import {
   getViewDescription,
   getViewLegend,
   getViewTitle
-} from './mx_helper_map.js';
+} from './map_helpers/index.js';
 
 export async function mapComposerModalAuto() {
   const h = mx.helpers;

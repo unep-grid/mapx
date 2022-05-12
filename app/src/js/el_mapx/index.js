@@ -524,6 +524,7 @@ export function elSelect(key, opt) {
     el(
       'select',
       {
+        on : ['change',opt.action],
         name: key,
         id: opt.id,
         class: 'form-control',

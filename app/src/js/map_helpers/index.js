@@ -1,42 +1,120 @@
-import { RadialProgress } from "./radial_progress";
-import { handleViewClick } from "./views_click";
-import { ButtonPanel } from "./button_panel";
-import { RasterMiniMap } from "./raster_mini_map";
-import { modalConfirm } from "./mx_helper_modal.js";
-import { elSpanTranslate } from "./el_mapx/index.js";
-import { Highlighter } from "./features_highlight/";
-import { WsHandler } from "./ws_handler/";
-import { MainPanel } from "./panel_main";
-import { Search } from "./search";
-import { MapxLogo, MapControlLiveCoord, MapControlScale } from "./map_controls";
-import { ControlsPanel } from "./panel_controls";
-import { MapxDraw } from "./draw";
-import { NotifCenter } from "./notif_center/";
-import { cleanDiacritic } from "./string_util/";
+import { RadialProgress } from "./../radial_progress";
+import { handleViewClick } from "./../views_click";
+import { ButtonPanel } from "./../button_panel";
+import { RasterMiniMap } from "./../raster_mini_map";
+import { el, elSpanTranslate } from "./../el_mapx/index.js";
+import { Highlighter } from "./../features_highlight/";
+import { WsHandler } from "./../ws_handler/";
+import { MainPanel } from "./../panel_main";
+import { Search } from "./../search";
+import {
+  MapxLogo,
+  MapControlLiveCoord,
+  MapControlScale,
+} from "./../map_controls";
+import { ControlsPanel } from "./../panel_controls";
+import { MapxDraw } from "./../draw";
+import { NotifCenter } from "./../notif_center/";
+import { cleanDiacritic } from "./../string_util/";
 import chroma from "chroma-js";
-import { mirrorUrlCreate } from "./mirror_util";
-import { setBusy } from "./mx_helper_misc.js";
-import { modal, modalGetAll, modalCloseAll } from "./mx_helper_modal.js";
-import { errorHandler } from "./error_handler/index.js";
-import { waitTimeoutAsync } from "./animation_frame";
-import { getArrayDiff, getArrayDistinct } from "./array_stat/index.js";
-import { getApiUrl } from "./api_routes";
-import { DownloadSourceModal } from "./download_source";
-import { getViewSourceSummary } from "./mx_helper_source_summary";
-import {fetchSourceMetadata} from "./mx_helper_map_view_metadata";
+import { mirrorUrlCreate } from "./../mirror_util";
+import { getAppPathUrl } from "./../api_routes/index.js";
+import { isStoryPlaying, storyRead } from "./../story_map/index.js";
+import { fetchViews } from "./../mx_helper_map_view_fetch.js";
+import { wmsQuery } from "./../wms/index.js";
+import { clearMapxCache, getVersion } from "./../mx_helper_app_utils.js";
+import { onNextFrame } from "./../animation_frame/index.js";
+import { featuresToPopup } from "./../mx_helper_map_features_popup.js";
+import {
+  handleMapDragOver,
+  handleMapDrop,
+} from "./../mx_helper_map_dragdrop.js";
+import { getViewMapboxStyle, mapboxToSld } from "./../style_vt/index.js";
+import {
+  getProjectViewsCollectionsShiny,
+  updateViewsFilter,
+  viewsListRenderNew,
+  viewsListAddSingle,
+} from "./../mx_helper_map_view_ui.js";
+import { initLog } from "./../mx_helper_log.js";
+import { dashboardHelper } from "./../mx_helper_map_dashboard.js";
+import {
+  date,
+  updateIfEmpty,
+  round,
+  setBusy,
+  clone,
+  path,
+  urlToImageBase64,
+  showSelectProject,
+  showSelectLanguage,
+  showLogin,
+  debounce,
+  childRemover,
+  getClickHandlers,
+  setClickHandler,
+  cssTransformFun,
+} from "./../mx_helper_misc.js";
+import {
+  modal,
+  modalGetAll,
+  modalCloseAll,
+  modalConfirm,
+} from "./../mx_helper_modal.js";
+import { errorHandler } from "./../error_handler/index.js";
+import { waitTimeoutAsync } from "./../animation_frame";
+import { getArrayDiff, getArrayDistinct } from "./../array_stat/index.js";
+import { getApiUrl } from "./../api_routes";
+import { DownloadSourceModal } from "./../download_source";
+import { getViewSourceSummary } from "./../mx_helper_source_summary";
+import {
+  setQueryParametersInitReset,
+  getQueryParametersAsObject,
+  getQueryParameterInit,
+  getQueryParameter,
+  getQueryInit,
+  setQueryParameters,
+  cleanTemporaryQueryParameters,
+} from "./../mx_helper_url.js";
+import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata";
+import { buildLegendVt } from "./../legend_vt/index.js";
+import { getViewMapboxLayers } from "./../style_vt/index.js";
+import { moduleLoad } from "./../modules_loader_async";
 import {
   getDictItem,
   getLanguageCurrent,
   getLanguageDefault,
   getLanguagesAll,
-} from "./language";
+  getLabelFromObjectPath,
+  updateLanguage,
+  updateLanguageElements,
+} from "./../language";
 
 import {
+  isUrl,
   isView,
   isArray,
+  isArrayOf,
+  isUrlValidWms,
+  isObject,
+  isBbox,
+  isMap,
+  isEmpty,
   isViewId,
   isViewRt,
+  isViewVt,
+  isElement,
+  isNumeric,
+  isString,
+  isFunction,
+  isBoolean,
+  isViewOpen,
   isSourceId,
+  isNotEmpty,
+  isArrayOfViews,
+  isArrayOfViewsId,
+  isBase64img,
+  isRegExp,
   isViewLocal,
   isViewEditable,
   isViewDashboard,
@@ -45,7 +123,8 @@ import {
   isViewDownloadable,
   isViewRtWithLegend,
   isViewVtWithAttributeType,
-} from "./is_test/index.js";
+} from "./../is_test_mapx/index.js";
+
 /**
  * Convert point in  degrees to meter
  * @lngLat {PointLike} lngLat
@@ -87,19 +166,18 @@ export function metersToDegrees(point) {
  */
 export async function downloadViewGeoJSON(opt) {
   opt = Object.assign({}, { idView: null, mode: "data" }, opt);
-  const h = mx.helpers;
-  const view = h.getView(opt.idView);
+  const view = getView(opt.idView);
 
-  if (!h.isView(view)) {
+  if (!isView(view)) {
     throw new Error(`No view with id ${opt.idView}`);
   }
-  const geojson = h.path(view, "data.source.data");
-  let filename = h.path(view, "data.title.en");
+  const geojson = path(view, "data.source.data");
+  let filename = path(view, "data.title.en");
   if (filename.search(/.geojson$/) === -1) {
     filename = `${view.id}.geojson`;
   }
   if (opt.mode === "file") {
-    const download = await h.moduleLoad("downloadjs");
+    const download = await moduleLoad("downloadjs");
     const data = JSON.stringify(geojson);
     await download(data, filename);
   }
@@ -115,15 +193,14 @@ export async function downloadViewGeoJSON(opt) {
  * @return {Array} array of download url items [{<label>,<url>,<is_download_link>}]
  */
 export function getDownloadUrlItemsFromViewMeta(view) {
-  const h = mx.helpers;
-  const urlItems = h.path(view, "data.source.meta.origin.source.urls", []);
+  const urlItems = path(view, "data.source.meta.origin.source.urls", []);
 
   if (urlItems.length === 0) {
     /**
      * Manual support for previous method to store the dl url
      * NOTE: should match the schema
      */
-    const legacyUrl = h.path(view, "data.source.urlDownload");
+    const legacyUrl = path(view, "data.source.urlDownload");
     if (legacyUrl) {
       urlItems.push({
         url: legacyUrl,
@@ -133,7 +210,7 @@ export function getDownloadUrlItemsFromViewMeta(view) {
     }
   }
   const urlItemsClean = urlItems.filter(
-    (urlItem) => h.isObject(urlItem) && h.isUrl(urlItem.url)
+    (urlItem) => isObject(urlItem) && isUrl(urlItem.url)
   );
 
   return urlItemsClean;
@@ -156,10 +233,9 @@ export function hasDownloadUrlItemsFromViewMeta(view) {
  */
 export async function downloadViewSourceExternal(opt) {
   opt = Object.assign({}, { idView: null, mode: null }, opt);
-  const h = mx.helpers;
-  const view = h.getView(opt.idView);
+  const view = getView(opt.idView);
 
-  if (!h.isView(view)) {
+  if (!isView(view)) {
     throw new Error(`No view with id ${opt.idView}`);
   }
 
@@ -172,8 +248,8 @@ export async function downloadViewSourceExternal(opt) {
   /**
    * Warn if there is an no valid url
    */
-  if (h.isEmpty(urlItemsClean)) {
-    h.modal({
+  if (isEmpty(urlItemsClean)) {
+    modal({
       title: getDictItem("source_raster_download_error_title"),
       content: getDictItem("source_raster_download_error"),
       addBackground: true,
@@ -190,22 +266,22 @@ export async function downloadViewSourceExternal(opt) {
   /**
    * Build ui
    */
-  const elContent = h.el(
+  const elContent = el(
     "div",
     {
       class: "list-group",
     },
     urlItemsClean.map((item) => {
       const isDl = item.is_download_link === true;
-      const hasLabel = h.isNotEmpty(item.label);
-      const elItem = h.el(
+      const hasLabel = isNotEmpty(item.label);
+      const elItem = el(
         "button",
         {
           on: ["click", dl],
           class: "list-group-item",
           dataset: { url: item.url },
         },
-        h.el(
+        el(
           "div",
           {
             style: {
@@ -213,10 +289,10 @@ export async function downloadViewSourceExternal(opt) {
               justifyContent: "space-between",
             },
           },
-          h.el("i", {
+          el("i", {
             class: ["fa", isDl ? "fa-download" : "fa-external-link"],
           }),
-          h.el(
+          el(
             "span",
             {
               style: {
@@ -234,7 +310,7 @@ export async function downloadViewSourceExternal(opt) {
     })
   );
 
-  const elModal = h.modal({
+  const elModal = modal({
     title: getDictItem("meta_source_url_download"),
     content: elContent,
     addBackground: true,
@@ -261,10 +337,9 @@ export async function downloadViewSourceExternal(opt) {
  */
 export async function downloadViewVector_old(opt) {
   opt = Object.assign({}, { idView: null }, opt);
-  const h = mx.helpers;
-  const view = h.getView(opt.idView);
+  const view = getView(opt.idView);
 
-  if (!h.isView(view)) {
+  if (!isView(view)) {
     throw new Error(`No view with id ${opt.idView}`);
   }
 
@@ -301,7 +376,7 @@ export async function downloadViewVector(idView) {
     token: mx.settings.user.token,
   });
 
-  return dl ;
+  return dl;
 }
 
 /**
@@ -376,10 +451,9 @@ export async function getLoginInfo() {
  * @return null
  */
 export async function setProject(idProject, opt) {
-  const h = mx.helpers;
   const hasShiny = window.Shiny;
   opt = Object.assign({}, { askConfirmIfModal: true, askConfirm: false }, opt);
-  const idCurrentProject = h.path(mx, "settings.project.id");
+  const idCurrentProject = path(mx, "settings.project.id");
 
   if (idProject === idCurrentProject) {
     return false;
@@ -399,7 +473,7 @@ export async function setProject(idProject, opt) {
     });
   }
   if (changeNow) {
-    await h.viewsCloseAll();
+    await viewsCloseAll();
     const res = await change();
     return res;
   }
@@ -410,7 +484,7 @@ export async function setProject(idProject, opt) {
    */
   async function change() {
     modalCloseAll();
-    h.setQueryParametersInitReset();
+    setQueryParametersInitReset();
     if (hasShiny) {
       Shiny.onInputChange("selectProject", idProject);
     }
@@ -419,14 +493,14 @@ export async function setProject(idProject, opt) {
       mx.events.once("views_list_updated"),
     ]);
 
-    const idProjectNew = h.path(r[0], "new_project");
-    const idProjectOld = h.path(r[0], "old_project");
+    const idProjectNew = path(r[0], "new_project");
+    const idProjectOld = path(r[0], "old_project");
 
     if (idProjectNew === idProjectOld) {
       console.warn("Project did not change", { idProjectNew, idProjectOld });
       return false;
     }
-    if (h.isFunction(opt.onSuccess)) {
+    if (isFunction(opt.onSuccess)) {
       opt.onSuccess();
     }
     mx.events.fire({
@@ -446,7 +520,7 @@ export async function setProject(idProject, opt) {
  * @param {String} opt.idProject id of the project
  */
 export function updateProject(opt) {
-  return mx.helpers.setProject(opt.idProject, opt);
+  return setProject(opt.idProject, opt);
 }
 
 /**
@@ -465,10 +539,9 @@ export function requestProjectMembership(idProject) {
  * In such mode, no view can be added
  */
 export function isModeLocked() {
-  const h = mx.helpers;
   let modeLocked =
-    h.getQueryParameterInit("noViews")[0] === "true" ||
-    h.getQueryParameterInit("modeLocked")[0] === "true";
+    getQueryParameterInit("noViews")[0] === "true" ||
+    getQueryParameterInit("modeLocked")[0] === "true";
 
   return !!modeLocked;
 }
@@ -478,8 +551,7 @@ export function isModeLocked() {
  */
 
 export function initListenerGlobal() {
-  const h = mx.helpers;
-  const map = h.getMap();
+  const map = getMap();
   /**
    * Handle view click
    */
@@ -556,29 +628,27 @@ export function initListenerGlobal() {
  * Init app listeners
  */
 export function initListenersApp() {
-  const h = mx.helpers;
-
   /**
    *  Other listener
    */
   mx.listeners.addListener({
     target: document.getElementById("btnShowProject"),
     type: "click",
-    callback: h.showSelectProject,
+    callback: showSelectProject,
     group: "mapx_base",
   });
 
   mx.listeners.addListener({
     target: document.getElementById("btnShowLanguage"),
     type: "click",
-    callback: h.showSelectLanguage,
+    callback: showSelectLanguage,
     group: "mapx_base",
   });
 
   mx.listeners.addListener({
     target: document.getElementById("btnShowLogin"),
     type: "click",
-    callback: h.showLogin,
+    callback: showLogin,
     group: "mapx_base",
   });
 
@@ -586,7 +656,7 @@ export function initListenersApp() {
     type: "language_change",
     idGroup: "view_filter_tag_lang",
     callback: function () {
-      const mData = h.getMapData();
+      const mData = getMapData();
       if (mData.viewsFilter) {
         mData.viewsFilter.updateCheckboxesOrder();
       }
@@ -632,15 +702,15 @@ export function initListenersApp() {
   mx.events.on({
     type: ["settings_user_change", "settings_change"],
     idGroup: "mapx_base",
-    callback: h.updateUiSettings,
+    callback: updateUiSettings,
   });
-  h.updateUiSettings();
+  updateUiSettings();
 
   mx.events.on({
     type: "views_list_updated",
     idGroup: "view_list_updated",
     callback: function () {
-      h.getProjectViewsCollectionsShiny({
+      getProjectViewsCollectionsShiny({
         idInput: "viewsListCollections",
       });
     },
@@ -650,8 +720,8 @@ export function initListenersApp() {
     type: ["view_created", "view_deleted"],
     idGroup: "clean_history_and_state",
     callback: () => {
-      h.updateViewsFilter();
-      h.viewsCheckedUpdate();
+      updateViewsFilter();
+      viewsCheckedUpdate();
     },
   });
 
@@ -664,7 +734,7 @@ export function initListenersApp() {
   mx.listeners.addListener({
     target: document.getElementById("btnClearCache"),
     type: "click",
-    callback: h.clearMapxCache,
+    callback: clearMapxCache,
     group: "mapx_base",
   });
 
@@ -728,15 +798,14 @@ export function initListenersApp() {
  * after a settings change
  */
 export async function updateUiSettings() {
-  const h = mx.helpers;
   const langDef = getLanguageDefault();
   const lang = getLanguageCurrent();
   /**
    * User / login labels
    */
   const elBtnLogin = document.getElementById("btnShowLoginLabel");
-  const sUser = h.path(mx, "settings.user", {});
-  const sRole = h.path(mx, "settings.user.roles", {});
+  const sUser = path(mx, "settings.user", {});
+  const sRole = path(mx, "settings.user.roles", {});
 
   if (sUser.guest) {
     elBtnLogin.innerText = await getDictItem("login_label");
@@ -758,7 +827,7 @@ export async function updateUiSettings() {
    */
   const elBtnProject = document.getElementById("btnShowProjectLabel");
   const elBtnProjectPrivate = document.getElementById("btnShowProjectPrivate");
-  const title = h.path(mx, "settings.project.title");
+  const title = path(mx, "settings.project.title");
   elBtnProject.innerText =
     title[lang] || title[langDef] || mx.settings.project.id;
   if (mx.settings.project.public) {
@@ -770,7 +839,7 @@ export async function updateUiSettings() {
   /**
    * Language
    */
-  await h.updateLanguage();
+  await updateLanguage();
   const elBtnLanguage = document.getElementById("btnShowLanguageLabel");
   elBtnLanguage.innerText = await getDictItem(lang);
 }
@@ -779,8 +848,7 @@ export async function updateUiSettings() {
  * Check if there is view activated and disable button if needed
  */
 export function updateBtnFilterActivated() {
-  const h = mx.helpers;
-  const views = h.getViews();
+  const views = getViews();
   const elFilterActivated = document.getElementById("btnFilterChecked");
   /**
    * Check displayed views element
@@ -829,7 +897,6 @@ export function updateBtnFilterActivated() {
  * @param {Boolean} o.useQueryFilters Use query filters for fetch views
  */
 export async function initMapx(o) {
-  const h = mx.helpers;
   let mp;
   o = o || {};
   o.id = o.id || mx.settings.map.id;
@@ -853,7 +920,7 @@ export async function initMapx(o) {
   /**
    * Set mode
    */
-  if (!o.modeStatic && h.getQueryParameter("storyAutoStart")[0] === "true") {
+  if (!o.modeStatic && getQueryParameter("storyAutoStart")[0] === "true") {
     /**
      * Temporary hack : force redirect here. URL rewrite in Traefik does
      * not allow lookaround : it's not possible to have non trivial redirect.
@@ -868,7 +935,7 @@ export async function initMapx(o) {
   /**
    * Update closed panel setting
    */
-  if (h.getQueryParameter("closePanels")[0] === "true") {
+  if (getQueryParameter("closePanels")[0] === "true") {
     mx.settings.initClosedPanels = true;
   }
 
@@ -878,8 +945,8 @@ export async function initMapx(o) {
   /**
    * Update  sprites path
    */
-  mx.settings.style.sprite = h.getAppPathUrl("sprites");
-  mx.settings.style.glyphs = h.getAppPathUrl("fontstack");
+  mx.settings.style.sprite = getAppPathUrl("sprites");
+  mx.settings.style.glyphs = getAppPathUrl("fontstack");
   /**
    * Handle socket io session
    */
@@ -887,8 +954,39 @@ export async function initMapx(o) {
     url: getApiUrl(),
     auth: getLoginInfo, // evaluated for each connect
     handlers: {
-      job_state: async (m) => {
-        await mx.nc.notify(m); // wrap avoid double bind
+      job_state: async function (m) {
+        // Use wrapper to avoid this/bind issue
+        await mx.nc.notify(m);
+      },
+      job_request: async function (job) {
+        const ws = this;
+        switch (job.id_resolver) {
+          case "echo":
+            ws.emit(job.id, job.data);
+            break;
+          case "style_from_view":
+            const out = {};
+            try {
+              const view = await getViewRemote(job.data.idView);
+              const rules = view?.data?.style?.rules || [];
+              const hasRules = isNotEmpty(rules);
+              if (hasRules) {
+                out.mapbox = await getViewMapboxStyle(view);
+                out.sld = await mapboxToSld(out.mapbox, {
+                  fixFilters: true,
+                });
+              }
+            } catch (e) {
+              console.warn(
+                `Error processing style for view ${job.data.idView}, ${e.message}`
+              );
+            }
+            ws.emit(job.id, out);
+            break;
+          default:
+            console.warn("No job_request handler for", job);
+        }
+        return true;
       },
       server_state: () => {},
       error: console.warn,
@@ -907,11 +1005,11 @@ export async function initMapx(o) {
   /*
    * Update map pos with values from query
    */
-  const queryLat = h.getQueryParameter("lat")[0];
-  const queryLng = h.getQueryParameter("lng")[0];
-  const queryZoom = h.getQueryParameter(["z", "zoom"])[0];
-  const queryPitch = h.getQueryParameter(["p", "pitch"])[0];
-  const queryBearing = h.getQueryParameter(["b", "bearing"])[0];
+  const queryLat = getQueryParameter("lat")[0];
+  const queryLng = getQueryParameter("lng")[0];
+  const queryZoom = getQueryParameter(["z", "zoom"])[0];
+  const queryPitch = getQueryParameter(["p", "pitch"])[0];
+  const queryBearing = getQueryParameter(["b", "bearing"])[0];
 
   if (queryLat) {
     mp.center = null;
@@ -971,7 +1069,7 @@ export async function initMapx(o) {
      */
     mx.panel_main = new MainPanel({
       mapx: {
-        version: h.getVersion(),
+        version: getVersion(),
       },
       panel: {
         id: "main_panel",
@@ -1087,8 +1185,8 @@ export async function initMapx(o) {
    * Initial mode terrain 3d / Sat
    */
   const ctrls = mx.panel_tools.controls;
-  const enable3d = h.getQueryParameter("t3d")[0] === "true";
-  const enableSat = h.getQueryParameter("sat")[0] === "true";
+  const enable3d = getQueryParameter("t3d")[0] === "true";
+  const enableSat = getQueryParameter("sat")[0] === "true";
   if (enable3d) {
     ctrls.getButton("btn_3d_terrain").action("enable");
   }
@@ -1105,13 +1203,13 @@ export async function initMapx(o) {
     url_help: mx.settings.links.repositoryWikiDrawTool,
   });
   mx.draw.on("enable", () => {
-    mx.helpers.setClickHandler({
+    setClickHandler({
       type: "draw",
       enable: true,
     });
   });
   mx.draw.on("disable", () => {
-    mx.helpers.setClickHandler({
+    setClickHandler({
       type: "draw",
       enable: false,
     });
@@ -1157,24 +1255,22 @@ export async function initMapx(o) {
   /**
    * Init global listeners
    */
-  h.initLog();
-  h.initListenerGlobal();
-  h.initMapListener(o.map);
+  initLog();
+  initListenerGlobal();
+  initMapListener(o.map);
   /**
    * Load mapx app or static
    */
   if (mx.settings.mode.static) {
-    await h.initMapxStatic(o);
+    await initMapxStatic(o);
   } else {
-    await h.initMapxApp(o);
+    await initMapxApp(o);
   }
 
   return o;
 }
 
 export function initMapListener(map) {
-  const h = mx.helpers;
-
   /**
    * Error handling
    */
@@ -1186,7 +1282,7 @@ export function initMapListener(map) {
    * Click event : build popup, ignore or redirect
    */
   map.on("click", (e) => {
-    h.handleClickEvent(e, map.id);
+    handleClickEvent(e, map.id);
   });
 
   /**
@@ -1195,7 +1291,7 @@ export function initMapListener(map) {
   map.on("rotate", () => {
     const r = -map.getBearing();
     const northArrow = document.querySelector(".mx-north-arrow");
-    northArrow.style[h.cssTransformFun()] = "rotateZ(" + r + "deg) ";
+    northArrow.style[cssTransformFun()] = "rotateZ(" + r + "deg) ";
   });
 
   /**
@@ -1211,7 +1307,7 @@ export function initMapListener(map) {
   mx.events.on({
     type: ["view_add", "view_remove", "story_step", "story_close"],
     idGroup: "highlight_clear",
-    callback: (d) => {
+    callback: () => {
       mx.highlighter.clean();
     },
   });
@@ -1249,7 +1345,7 @@ export function initMapListener(map) {
     //);
     //}
 
-    const layers = h.getLayerNamesByPrefix({
+    const layers = getLayerNamesByPrefix({
       id: map.id,
       prefix: "MX", // custom code could be MXCC ...
     });
@@ -1259,15 +1355,14 @@ export function initMapListener(map) {
 }
 
 export async function initMapxStatic(o) {
-  const h = mx.helpers;
-  const map = h.getMap();
-  const mapData = h.getMapData();
-  const zoomToViews = h.getQueryParameter("zoomToViews")[0] === "true";
-  const language = h.getQueryParameter("language")[0] || getLanguageDefault();
+  const map = getMap();
+  const mapData = getMapData();
+  const zoomToViews = getQueryParameter("zoomToViews")[0] === "true";
+  const language = getQueryParameter("language")[0] || getLanguageDefault();
   /**
    * NOTE: all views are
    */
-  const idViewsQuery = h.getQueryParameter([
+  const idViewsQuery = getQueryParameter([
     "views",
     "viewsOpen",
     "idViews",
@@ -1279,7 +1374,7 @@ export async function initMapxStatic(o) {
   /**
    * Update language
    */
-  await h.updateLanguage(language);
+  await updateLanguage(language);
 
   /**
    * If no views, send mapx_ready early
@@ -1289,14 +1384,14 @@ export async function initMapxStatic(o) {
     /**
      * Get view and set order
      */
-    mapData.views = await h.getViewsRemote(idViews);
+    mapData.views = await getViewsRemote(idViews);
 
     /*
      * If a story is found, ignore other options
      */
     const story = mapData.views.find((v) => v.type === "sm");
     if (story) {
-      h.storyRead({
+      storyRead({
         id: o.id,
         idView: story.id,
         save: false,
@@ -1336,7 +1431,7 @@ export async function initMapxStatic(o) {
      * Extract all views bounds
      */
     if (zoomToViews) {
-      const bounds = await h.getViewsBounds(mapData.views);
+      const bounds = await getViewsBounds(mapData.views);
       map.fitBounds(bounds);
     }
 
@@ -1344,13 +1439,13 @@ export async function initMapxStatic(o) {
      * Display views
      */
     for (const view of mapData.views) {
-      await h.viewLayersAdd({
+      await viewLayersAdd({
         view: view,
         elLegendContainer: mx.panel_legend.elPanelContent,
         addTitle: true,
       });
     }
-    await h.viewsLayersOrderUpdate({
+    await viewsLayersOrderUpdate({
       order: idViews.reverse(),
     });
   }
@@ -1365,7 +1460,6 @@ export async function initMapxStatic(o) {
  * Init full app mode
  */
 export async function initMapxApp(opt) {
-  const h = mx.helpers;
   const map = opt.map;
   const elMap = map.getContainer();
   const hasShiny = !!window.Shiny;
@@ -1373,12 +1467,12 @@ export async function initMapxApp(opt) {
   /**
    * Init app listeners: view add, language, project change, etc.
    */
-  h.initListenersApp();
+  initListenersApp();
 
   /*
    * Fetch views
    */
-  await h.updateViewsList({
+  await updateViewsList({
     useQueryFilters: opt.useQueryFilters,
   });
 
@@ -1399,7 +1493,7 @@ export async function initMapxApp(opt) {
   /**
    * Handle drop view or spatial dataset
    */
-  if (h.handleMapDragOver && h.handleMapDrop) {
+  if (handleMapDragOver && handleMapDrop) {
     /**
      * Allow view to be dropped when global drag mode is enabled
      */
@@ -1411,14 +1505,14 @@ export async function initMapxApp(opt) {
     mx.listeners.addListener({
       target: elMap,
       type: "dragover",
-      callback: h.handleMapDragOver,
+      callback: handleMapDragOver,
       group: "map_drag_over",
       bind: mx,
     });
     mx.listeners.addListener({
       target: elMap,
       type: "drop",
-      callback: h.handleMapDrop,
+      callback: handleMapDrop,
       group: "map_drag_over",
       bind: mx,
     });
@@ -1428,7 +1522,7 @@ export async function initMapxApp(opt) {
    * From now, query parameter should be requested using
    * getQueryParameterInit
    */
-  h.cleanTemporaryQueryParameters();
+  cleanTemporaryQueryParameters();
 }
 
 /**
@@ -1437,10 +1531,9 @@ export async function initMapxApp(opt) {
  */
 export async function handleClickEvent(e, idMap) {
   const type = e.type;
-  const h = mx.helpers;
-  const hasLayer = h.getLayerNamesByPrefix().length > 0;
-  const map = h.getMap(idMap);
-  const clickModes = h.getClickHandlers();
+  const hasLayer = getLayerNamesByPrefix().length > 0;
+  const map = getMap(idMap);
+  const clickModes = getClickHandlers();
   const hasDashboard = clickModes.includes("dashboard");
   const hasDraw = clickModes.includes("draw");
   const hasSdk = clickModes.includes("sdk");
@@ -1459,13 +1552,13 @@ export async function handleClickEvent(e, idMap) {
      * Extract attributes, return an object with idView
      * as key and prmises as value
      */
-    const layersAttributes = await h.getLayersPropertiesAtPoint({
+    const layersAttributes = await getLayersPropertiesAtPoint({
       map: map,
       point: e.point,
       type: ["vt", "gj", "cc", "rt"],
       asObject: true,
     });
-    if (h.isEmpty(layersAttributes)) {
+    if (isEmpty(layersAttributes)) {
       return;
     }
 
@@ -1506,7 +1599,7 @@ export async function handleClickEvent(e, idMap) {
       /**
        * NOTE: see mx_helper_map_features_popup.js
        */
-      h.featuresToPopup({
+      featuresToPopup({
         layersAttributes: layersAttributes,
         popup: popup,
       });
@@ -1520,7 +1613,7 @@ export async function handleClickEvent(e, idMap) {
      * be done BEFORE updating highlighter.
      * onNextFrame seems to do the job by delaying the upadte to the next animation frame.
      */
-    h.onNextFrame(() => {
+    onNextFrame(() => {
       mx.highlighter.update(e);
     });
   }
@@ -1532,8 +1625,7 @@ export async function handleClickEvent(e, idMap) {
  * @param {Event} e Map click event
  */
 async function attributesToEvent(layersAttributes, e) {
-  const h = mx.helpers;
-  const isValid = h.isObject(layersAttributes) && h.isObject(e);
+  const isValid = isObject(layersAttributes) && isObject(e);
 
   if (!isValid) {
     return;
@@ -1635,33 +1727,14 @@ export function geolocateUser() {
  */
 export function viewsCloseAll(o) {
   o = o || {};
-  const h = mx.helpers;
-  const views = h.getViews();
   /*
    * Close and remove layers
    */
+  const views = getViews();
   const removed = views.map((view) => {
-    return h.viewRemove(view.id);
+    return viewRemove(view.id);
   });
   return Promise.all(removed);
-}
-
-/**
- * Add source from views array
- * @param {Object} o options
- * @param {Object} o.map Map object
- * @param {Array} o.views Views array
- */
-export function addSourceFromViews(o) {
-  const h = mx.helpers;
-  if (h.isArray(o.views)) {
-    o.views.forEach((v) => {
-      h.addSourceFromView({
-        map: o.map,
-        view: v,
-      });
-    });
-  }
 }
 
 /**
@@ -1672,8 +1745,7 @@ export function addSourceFromViews(o) {
  * @param {Boolean} o.noLocationCheck Don't check for location matching
  */
 export async function addSourceFromView(o) {
-  const h = mx.helpers;
-  const p = h.path;
+  const p = path;
 
   const vType = p(o.view, "type");
   const isVt = vType === "vt";
@@ -1689,7 +1761,7 @@ export async function addSourceFromView(o) {
   const projectView = p(o.view, "project");
   const projectsView = p(o.view, "data.projects", []);
   const useMirror = p(o.view, "data.source.useMirror");
-  const isEditable = h.isViewEditable(o.view);
+  const isEditable = isViewEditable(o.view);
   const isLocationOk =
     o.noLocationCheck ||
     projectView === project ||
@@ -1727,7 +1799,7 @@ export async function addSourceFromView(o) {
     /**
      * Add gid property if it does not exist
      */
-    const features = h.path(o.view, "data.source.data.features", []);
+    const features = path(o.view, "data.source.data.features", []);
     let gid = 1;
     features.forEach((f) => {
       if (!f.properties) {
@@ -1747,7 +1819,7 @@ export async function addSourceFromView(o) {
      * Handle case when old layers remain in map
      * This could prevent source removal
      */
-    h.removeLayersByPrefix({
+    removeLayersByPrefix({
       prefix: o.view.id,
       map: o.map,
     });
@@ -1757,7 +1829,7 @@ export async function addSourceFromView(o) {
     o.map.removeSource(idSource);
   }
 
-  const source = h.clone(o.view.data.source);
+  const source = clone(o.view.data.source);
 
   if (isRt && useMirror) {
     const tiles = source.tiles;
@@ -1775,9 +1847,8 @@ export async function addSourceFromView(o) {
  * @return {Promise} Promise resolving to object
  */
 export async function getViewRemote(idView) {
-  const h = mx.helpers;
   const apiUrlViews = getApiUrl("getView");
-  const isValid = h.isViewId(idView) && h.isUrl(apiUrlViews);
+  const isValid = isViewId(idView) && isUrl(apiUrlViews);
 
   if (!isValid) {
     throw new Error("Invalid view id or URL");
@@ -1796,7 +1867,7 @@ export async function getViewRemote(idView) {
 
   const view = await res.json();
 
-  if (h.isView(view)) {
+  if (isView(view)) {
     view._edit = false;
     view._static = true;
   }
@@ -1809,11 +1880,10 @@ export async function getViewRemote(idView) {
  * @return {Promise} Promise resolving to abject
  */
 export async function getViewsRemote(idViews) {
-  const h = mx.helpers;
   const views = [];
   for (let id of idViews) {
     const view = await getViewRemote(id);
-    if (h.isView(view)) {
+    if (isView(view)) {
       views.push(view);
     }
   }
@@ -1825,13 +1895,12 @@ export async function getViewsRemote(idViews) {
  * @param {Object} opt options
  * @param {String} opt.id ID of the map
  * @param {String} opt.project ID of the project
- * @param {Array} opt.viewList views list
+ * @param {Array} opt.viewsList views list
  * @param {Boolean} opt.render Render given view
  * @param {Boolean} opt.resetView Reset given view
  * @param {Boolean} opt.useQueryFilters In fetch all mode, use query filters
  */
 export async function updateViewsList(opt) {
-  const h = mx.helpers;
   const views = [];
   let elProgContainer;
   let nCache = 0,
@@ -1846,15 +1915,15 @@ export async function updateViewsList(opt) {
    */
   const def = {
     id: "map_main",
-    project: h.path(mx, "settings.project.id"),
+    project: path(mx, "settings.project.id"),
     viewsList: [],
     render: false,
     resetViews: false,
     useQueryFilters: true,
   };
-  h.updateIfEmpty(opt, def);
+  updateIfEmpty(opt, def);
   const viewsToAdd = opt.viewsList;
-  const hasViewsList = h.isArrayOfViews(viewsToAdd) && h.isNotEmpty(viewsToAdd);
+  const hasViewsList = isArrayOfViews(viewsToAdd) && isNotEmpty(viewsToAdd);
 
   if (hasViewsList) {
     nTot = viewsToAdd.length;
@@ -1893,7 +1962,7 @@ export async function updateViewsList(opt) {
     /**
      * Local GeoJSON views
      */
-    const viewsGeoJSON = await h.getGeoJSONViewsFromStorage({
+    const viewsGeoJSON = await getGeoJSONViewsFromStorage({
       project: opt.project,
     });
     views.push(...viewsGeoJSON);
@@ -1901,7 +1970,7 @@ export async function updateViewsList(opt) {
     /**
      * Remote views
      */
-    const data = await h.fetchViews({
+    const data = await fetchViews({
       onProgress: updateProgress,
       idProject: opt.project,
       useQueryFilters: opt.useQueryFilters,
@@ -1920,7 +1989,7 @@ export async function updateViewsList(opt) {
     /**
      * Render
      */
-    await h.viewsListRenderNew({
+    await viewsListRenderNew({
       id: opt.id,
       views: views,
       state: state,
@@ -1930,8 +1999,8 @@ export async function updateViewsList(opt) {
      * Add additional logic if query param should be used
      */
     if (opt.useQueryFilters) {
-      const conf = h.getQueryInit();
-      const viewsList = h.getViewsList();
+      const conf = getQueryInit();
+      const viewsList = getViewsList();
 
       /**
        * Set flat mode (hide categories)
@@ -1958,14 +2027,14 @@ export async function updateViewsList(opt) {
        * Add views views
        */
       for (const id of idViewsOpen) {
-        await h.viewAdd(id);
+        await viewAdd(id);
       }
 
       /**
        * If any view requested to be open, filter activated
        */
       if (isFilterActivated && idViewsOpen.length > 0) {
-        const viewsFilter = h.getViewsFilter();
+        const viewsFilter = getViewsFilter();
         viewsFilter.filterActivated(true);
       }
 
@@ -1973,7 +2042,7 @@ export async function updateViewsList(opt) {
        * Update layers order
        */
 
-      await h.viewsLayersOrderUpdate();
+      await viewsLayersOrderUpdate();
     }
 
     mx.events.fire({
@@ -1985,10 +2054,10 @@ export async function updateViewsList(opt) {
 
   /* Add single view object, typically after an update */
   async function addLocal(view) {
-    if (h.isArrayOfViews(view)) {
+    if (isArrayOfViews(view)) {
       view = view[0];
     }
-    await h.viewsListAddSingle(view, {
+    await viewsListAddSingle(view, {
       open: true,
       render: true,
     });
@@ -2017,7 +2086,7 @@ export async function updateViewsList(opt) {
     }
 
     if (!prog && elProgContainer) {
-      h.childRemover(elProgContainer);
+      childRemover(elProgContainer);
       prog = new RadialProgress(elProgContainer, {
         radius: 30,
         stroke: 4,
@@ -2039,7 +2108,7 @@ export async function updateViewsList(opt) {
  * Load geojson from localstorage,
  * @param {Object} o options
  * @param {String} o.project Current project to filter geojson view. Default to settings.project
- * @return {Array} array of views;
+ * @return {Promise<Array>} array of views;
  */
 export async function getGeoJSONViewsFromStorage(o) {
   const out = [];
@@ -2061,7 +2130,6 @@ export async function getGeoJSONViewsFromStorage(o) {
  * TODO: Early/historic code. Refactor this and integrate into a view class
  */
 export async function viewsCheckedUpdate(o) {
-  const h = mx.helpers;
   o = o || {};
 
   const vToAdd = [];
@@ -2090,19 +2158,19 @@ export async function viewsCheckedUpdate(o) {
   /**
    * Update views groups
    */
-  vVisible.push(...h.getViewsOpen());
+  vVisible.push(...getViewsOpen());
   vToRemove.push(...getArrayDiff(vVisible, vChecked));
   vToAdd.push(...getArrayDiff(vChecked, vVisible));
 
   /**
    * View to add
    */
-  proms.push(...vToAdd.map(h.viewAdd));
+  proms.push(...vToAdd.map(viewAdd));
 
   /**
    * View to remove
    */
-  proms.push(...vToRemove.map(h.viewRemove));
+  proms.push(...vToRemove.map(viewRemove));
 
   /**
    * Inform Shiny about the state
@@ -2125,7 +2193,7 @@ export async function viewsCheckedUpdate(o) {
   /**
    * Set layer order
    */
-  await h.viewsLayersOrderUpdate(o);
+  await viewsLayersOrderUpdate(o);
 
   /**
    * Fire event
@@ -2141,8 +2209,7 @@ export async function viewsCheckedUpdate(o) {
  * @return {Array}
  */
 export function getViewsLayersVisibles(reverse) {
-  const h = mx.helpers;
-  const views = h.getLayerNamesByPrefix({
+  const views = getLayerNamesByPrefix({
     prefix: "MX-",
     base: true,
   });
@@ -2193,14 +2260,13 @@ export function viewLiAction(o) {
  * @return {Object} Sprite {<height>,<width>,<widthDrp>,<heightDpr>,<url()>}
  */
 export function getSpriteImage(id, opt) {
-  const h = mx.helpers;
-  if (!id) {
+  if (isEmpty(id) || id === "none") {
     return;
   }
 
-  h.updateIfEmpty(opt, { color: null });
+  updateIfEmpty(opt, { color: null });
 
-  const map = mx.helpers.getMap();
+  const map = getMap();
   const sprite = map.style.imageManager.images[id];
   if (!sprite) {
     console.warn(`Unknown sprite ${id}`);
@@ -2251,6 +2317,7 @@ export function getSpriteImage(id, opt) {
  * @param {string} opt.idAfter Id of the layer after
  * @param {string} opt.idSource Id of the source
  * @param {string} opt.geomType Geometry type (point, line, polygon)
+ * @param {String} opt.type Data type (string,number)
  * @param {Boolean} opt.showSymbolLabel Show symbol with label
  * @param {String} opt.label Label text or expression
  * @param {string} opt.hexColor Hex color. If not provided, random color will be generated
@@ -2260,8 +2327,6 @@ export function getSpriteImage(id, opt) {
  * @return {Object} Layer
  */
 export function makeSimpleLayer(opt) {
-  const h = mx.helpers;
-
   /**
    * Will be stored as layer.meta
    */
@@ -2274,13 +2339,13 @@ export function makeSimpleLayer(opt) {
     idView: null,
     idAfter: null,
     geomType: null,
+    type: null,
     showSymbolLabel: null,
     label: null,
     hexColor: null,
     filter: ["all"],
     size: null,
     sprite: null,
-    // to document
     sizeFactorZoomMax: 0,
     sizeFactorZoomMin: 0,
     sizeFactorZoomExponent: 1,
@@ -2289,7 +2354,7 @@ export function makeSimpleLayer(opt) {
     opacity: 0.5,
   };
 
-  h.updateIfEmpty(opt, def);
+  updateIfEmpty(opt, def);
 
   if (!opt.id) {
     console.warn("makeSimpleLayer: layer with no ID");
@@ -2300,7 +2365,7 @@ export function makeSimpleLayer(opt) {
    * Size / Zoom factor
    */
 
-  if (h.isEmpty(opt.size)) {
+  if (isEmpty(opt.size)) {
     switch (opt.geomType) {
       case "point":
         opt.size = 10;
@@ -2315,8 +2380,8 @@ export function makeSimpleLayer(opt) {
   if (opt.sprite === "none") {
     opt.sprite = null;
   }
-  if (opt.sprite) {
-    const spriteImage = h.getSpriteImage(opt.sprite);
+  if (isNotEmpty(opt.sprite)) {
+    const spriteImage = getSpriteImage(opt.sprite);
     opt.size = opt.size / spriteImage.width;
   }
 
@@ -2455,7 +2520,6 @@ export function makeSimpleLayer(opt) {
  */
 
 export function viewsLayersOrderUpdate(o) {
-  const h = mx.helpers;
   o = o || {};
   return new Promise((resolve) => {
     /**
@@ -2464,10 +2528,9 @@ export function viewsLayersOrderUpdate(o) {
      * 2) Order of displayed views (ui, list)
      * 3) Views list
      */
-    const map = h.getMap(o.id);
-    const views = h.getViews({ id: o.id });
-    const order =
-      o.order || h.getViewsOrder() || views.map((v) => v.id) || null;
+    const map = getMap(o.id);
+    const views = getViews({ id: o.id });
+    const order = o.order || getViewsOrder() || views.map((v) => v.id) || null;
 
     if (!order || order.length === 0) {
       resolve(order);
@@ -2476,7 +2539,7 @@ export function viewsLayersOrderUpdate(o) {
     /**
      * Get displayed layer
      */
-    const layersDiplayed = h.getLayerByPrefix({
+    const layersDiplayed = getLayerByPrefix({
       prefix: /^MX-/,
     });
     /**
@@ -2490,11 +2553,18 @@ export function viewsLayersOrderUpdate(o) {
     const sorted = [];
     for (let idView of order) {
       const layersView = layersDiplayed.filter(
-        (d) => h.path(d, "metadata.idView", d.id) === idView
+        (d) => path(d, "metadata.idView", d.id) === idView
       );
 
       if (layersView.length > 0) {
+        /*
+         * Sort layers within view context
+         */
         sortLayers(layersView);
+
+        /**
+         * Sort layer within map context
+         */
         for (let layer of layersView) {
           const firstOfAll = incView++ === 0;
           const idBefore = firstOfAll ? mx.settings.layerBefore : idPrevious;
@@ -2532,8 +2602,7 @@ export function viewsLayersOrderUpdate(o) {
  * @param {Array} layers Layers list, with metadata attribute
  * @param {Boolean} reverse Reverse pos, keep priority
  */
-
-function sortLayers(layers, reverse) {
+export function sortLayers(layers, reverse) {
   layers.sort((a, b) => {
     const ap = a.metadata.position;
     const ar = a.metadata.priority;
@@ -2551,15 +2620,15 @@ function sortLayers(layers, reverse) {
  * Update view in params
  */
 export function updateViewParams(o) {
-  o = o || { id: mx.helpers.getMap() };
+  o = o || { id: getMap() };
 
-  const displayed = mx.helpers.getLayerNamesByPrefix({
+  const displayed = getLayerNamesByPrefix({
     id: o.id,
     prefix: "MX-",
     base: true,
   });
 
-  mx.helpers.setQueryParameters({ views: displayed });
+  setQueryParameters({ views: displayed });
 }
 
 /**
@@ -2587,9 +2656,8 @@ export function getViewsOrder() {
  * @return {String} JSON string with view data (or cleaned view object);
  */
 export function getViewJson(idView, opt) {
-  const h = mx.helpers;
   opt = Object.assign({}, { asString: true }, opt);
-  const view = h.getView(idView);
+  const view = getView(idView);
   const keys = [
     "id",
     "editor",
@@ -2633,7 +2701,7 @@ export async function makeTransparencySlider(o) {
     return;
   }
 
-  const module = await mx.helpers.moduleLoad("nouislider");
+  const module = await moduleLoad("nouislider");
   const noUiSlider = module[0].default;
   const oldSlider = view._filters_tools.transparencySlider;
   if (oldSlider) {
@@ -2659,7 +2727,7 @@ export async function makeTransparencySlider(o) {
    */
   slider.on(
     "update",
-    mx.helpers.debounce(function (n, h) {
+    debounce((n, h) => {
       const view = slider._view;
       const opacity = 1 - n[h] * 0.01;
       view._setOpacity({ opacity: opacity });
@@ -2675,7 +2743,6 @@ export async function makeTransparencySlider(o) {
 */
 export async function makeNumericSlider(o) {
   const view = o.view;
-  const h = mx.helpers;
 
   const el = document.querySelector(
     "[data-range_numeric_for='" + view.id + "']"
@@ -2692,8 +2759,8 @@ export async function makeNumericSlider(o) {
 
   const summary = await getViewSourceSummary(view);
 
-  let min = h.path(summary, "attribute_stat.min", 0);
-  let max = h.path(summary, "attribute_stat.max", min);
+  let min = path(summary, "attribute_stat.min", 0);
+  let max = path(summary, "attribute_stat.max", min);
 
   if (view && min !== null && max !== null) {
     if (min === max) {
@@ -2705,7 +2772,7 @@ export async function makeNumericSlider(o) {
       min: min,
       max: max,
     };
-    module = await mx.helpers.moduleLoad("nouislider");
+    module = await moduleLoad("nouislider");
     const noUiSlider = module[0].default;
 
     const slider = noUiSlider.create(el, {
@@ -2739,11 +2806,11 @@ export async function makeNumericSlider(o) {
      */
     slider.on(
       "update",
-      h.debounce((n) => {
+      debounce((n) => {
         const view = slider._view;
         const elDMin = slider._elDMin;
         const elDMax = slider._elDMax;
-        const k = h.path(view, "data.attribute.name", "");
+        const k = path(view, "data.attribute.name", "");
 
         /* Update text values*/
         if (n[0]) {
@@ -2755,11 +2822,11 @@ export async function makeNumericSlider(o) {
 
         const filter = [
           "any",
-          ["all", ["<=", k, n[1] * 1], [">=", k, n[0] * 1]],
-          ["!has", k],
+          ["all", ["<=", ["get", k], n[1] * 1], [">=", ["get", k], n[0] * 1]],
+          ["!", ["has", k]],
         ];
 
-        if (h.isArray(view._null_filter)) {
+        if (isArray(view._null_filter)) {
           filter.push(view._null_filter);
         }
 
@@ -2776,13 +2843,12 @@ export async function makeNumericSlider(o) {
  * Create and listen to time sliders
  */
 export async function makeTimeSlider(o) {
-  const h = mx.helpers;
   const k = {};
   k.t0 = "mx_t0";
   k.t1 = "mx_t1";
 
   const view = o.view;
-  const elView = h.getViewEl(view);
+  const elView = getViewEl(view);
   let el;
   if (elView) {
     el = elView.querySelector('[data-range_time_for="' + view.id + '"]');
@@ -2796,8 +2862,8 @@ export async function makeTimeSlider(o) {
   }
 
   const summary = await getViewSourceSummary(view);
-  const extent = h.path(summary, "extent_time", {});
-  const attributes = h.path(summary, "attributes", []);
+  const extent = path(summary, "extent_time", {});
+  const attributes = path(summary, "attributes", []);
 
   /*
    * Create a time slider for each time enabled view
@@ -2833,7 +2899,7 @@ export async function makeTimeSlider(o) {
       start.push(min);
       start.push(max);
 
-      const module = await h.moduleLoad("nouislider");
+      const module = await moduleLoad("nouislider");
       const noUiSlider = module[0].default;
 
       const slider = noUiSlider.create(el, {
@@ -2858,36 +2924,36 @@ export async function makeTimeSlider(o) {
       slider._elMin = el.parentElement.querySelector(".mx-slider-range-min");
       slider._elMax = el.parentElement.querySelector(".mx-slider-range-max");
 
-      slider._elMin.innerText = h.date(range.min);
-      slider._elMax.innerText = h.date(range.max);
+      slider._elMin.innerText = date(range.min);
+      slider._elMax.innerText = date(range.max);
 
       view._filters_tools.timeSlider = slider;
 
       slider.on(
         "update",
-        h.debounce((t) => {
+        debounce((t) => {
           const view = slider._view;
           const elDMax = slider._elDMax;
           const elDMin = slider._elDMin;
           /* Update text values*/
           if (t[0]) {
-            elDMin.innerHTML = h.date(t[0]);
+            elDMin.innerHTML = date(t[0]);
           }
           if (t[1]) {
-            elDMax.innerHTML = " – " + h.date(t[1]);
+            elDMax.innerHTML = " – " + date(t[1]);
           }
 
           const filter = ["any"];
           const filterAll = ["all"];
-          filter.push(["==", k.t0, -9e10]);
-          filter.push(["==", k.t1, -9e10]);
+          filter.push(["==", ["get", k.t0], -9e10]);
+          filter.push(["==", ["get", k.t1], -9e10]);
 
           if (hasT0 && hasT1) {
-            filterAll.push(["<=", k.t0, t[1] / 1000]);
-            filterAll.push([">=", k.t1, t[0] / 1000]);
+            filterAll.push(["<=", ["get", k.t0], t[1] / 1000]);
+            filterAll.push([">=", ["get", k.t1], t[0] / 1000]);
           } else if (hasT0) {
-            filterAll.push([">=", k.t0, t[0] / 1000]);
-            filterAll.push(["<=", k.t0, t[1] / 1000]);
+            filterAll.push([">=", ["get", k.t0], t[0] / 1000]);
+            filterAll.push(["<=", ["get", k.t0], t[1] / 1000]);
           }
           filter.push(filterAll);
 
@@ -2939,10 +3005,9 @@ export function handleViewValueFilterText(o) {
  * @param {Object} view View to remove from the list
  */
 export async function viewDelete(view) {
-  const h = mx.helpers;
-  const mData = h.getMapData();
-  const views = h.getViews();
-  view = h.getView(view);
+  const mData = getMapData();
+  const views = getViews();
+  view = getView(view);
   const exists = views.includes(view);
   if (!exists) {
     return;
@@ -2950,7 +3015,7 @@ export async function viewDelete(view) {
   const vIndex = views.indexOf(view);
   const geojsonData = mx.data.geojson;
 
-  await h.viewLayersRemove({
+  await viewLayersRemove({
     idView: view.id,
   });
   mData.viewsList.removeItemById(view.id);
@@ -2975,11 +3040,10 @@ export async function viewDelete(view) {
  * @param {Object} o.view view
  */
 export async function viewLayersRemove(o) {
-  const h = mx.helpers;
-  const view = o.view || h.getView(o.idView);
+  const view = o.view || getView(o.idView);
   o.id = o.id || mx.settings.map.id;
 
-  if (!h.isView(view)) {
+  if (!isView(view)) {
     return false;
   }
 
@@ -2991,16 +3055,16 @@ export async function viewLayersRemove(o) {
     type: "view_remove",
     data: {
       idView: o.idView,
-      view: h.getViewJson(view, { asString: false }),
+      view: getViewJson(view, { asString: false }),
     },
   });
 
-  h.removeLayersByPrefix({
+  removeLayersByPrefix({
     id: o.id,
     prefix: o.idView,
   });
 
-  await h.viewModulesRemove(view);
+  await viewModulesRemove(view);
 
   mx.events.fire({
     type: "view_removed",
@@ -3023,9 +3087,8 @@ export async function viewLayersRemove(o) {
  * @param {Object} view View to open
  */
 function _viewUiOpen(view) {
-  const h = mx.helpers;
-  view = h.getView(view);
-  if (!h.isView(view)) {
+  view = getView(view);
+  if (!isView(view)) {
     return;
   }
   if (view._vb) {
@@ -3046,9 +3109,8 @@ function _viewUiOpen(view) {
  * @param {String|View} idView id of the view or view object
  */
 async function _viewUiClose(view) {
-  const h = mx.helpers;
-  view = h.getView(view);
-  if (!h.isView(view)) {
+  view = getView(view);
+  if (!isView(view)) {
     return;
   }
   if (view._vb) {
@@ -3071,9 +3133,8 @@ async function _viewUiClose(view) {
  */
 export async function viewAdd(view) {
   try {
-    const h = mx.helpers;
-    view = h.getView(view);
-    if (!h.isView(view)) {
+    view = getView(view);
+    if (!isView(view)) {
       return;
     }
     /**
@@ -3083,11 +3144,11 @@ export async function viewAdd(view) {
      *   event to trigger toggles
      */
     _viewUiOpen(view);
-    await h.viewLayersAdd({
+    await viewLayersAdd({
       view: view,
     });
-    await h.updateLanguageElements({
-      el: h.getViewEl(view),
+    await updateLanguageElements({
+      el: getViewEl(view),
     });
     return true;
   } catch (e) {
@@ -3103,13 +3164,12 @@ export async function viewAdd(view) {
  */
 export async function viewRemove(view) {
   try {
-    const h = mx.helpers;
-    view = h.getView(view);
-    if (!h.isView(view)) {
+    view = getView(view);
+    if (!isView(view)) {
       return;
     }
     _viewUiClose(view);
-    await h.viewLayersRemove({
+    await viewLayersRemove({
       idView: view.id,
     });
     return true;
@@ -3124,11 +3184,10 @@ export async function viewRemove(view) {
  * @return {Array}
  */
 export function getViewsOpen() {
-  const h = mx.helpers;
   const open = [];
-  const viewOrder = h.getViewsOrder();
+  const viewOrder = getViewsOrder();
   for (let idView of viewOrder) {
-    if (h.isViewOpen(idView)) {
+    if (isViewOpen(idView)) {
       open.push(idView);
     }
   }
@@ -3151,15 +3210,14 @@ export function getViewEl(view) {
  */
 export function viewSetFilter(o) {
   o = o || {};
-  const h = mx.helpers;
-  const m = h.getMap();
+  const m = getMap();
   const view = this;
   const idView = view.id;
   const filterView = view._filters;
   const filter = o.filter;
   const type = o.type ? o.type : "default";
-  const layers = h.getLayerByPrefix({ prefix: idView });
-  const hasFilter = h.isArray(filter) && filter.length > 1;
+  const layers = getLayerByPrefix({ prefix: idView });
+  const hasFilter = isArray(filter) && filter.length > 1;
   const filterNew = [];
 
   mx.events.fire({
@@ -3191,7 +3249,7 @@ export function viewSetFilter(o) {
    */
 
   for (let layer of layers) {
-    let filterOrig = h.path(layer, "metadata.filter", null);
+    let filterOrig = path(layer, "metadata.filter", null);
     let filterFinal = [];
     if (!filterOrig) {
       filterFinal.push("all", ...filterNew);
@@ -3217,13 +3275,12 @@ export function viewSetFilter(o) {
  */
 export function viewSetOpacity(o) {
   o = o || {};
-  const h = mx.helpers;
   const view = this;
   const idView = view.id;
   const opacity = o.opacity;
   const idMap = view._idMap ? view._idMap : mx.settings.map.id;
-  const map = h.getMap(idMap);
-  const layers = h.getLayerByPrefix({
+  const map = getMap(idMap);
+  const layers = getLayerByPrefix({
     map: map,
     prefix: idView,
   });
@@ -3299,7 +3356,7 @@ export function plotTimeSliderData(o) {
 export function getLayerById(o) {
   o = o || {};
   o.idLayer = o.idLayer || "";
-  const map = mx.helpers.getMap(o.id);
+  const map = getMap(o.id);
   const result = [];
 
   if (map && o.idLayer) {
@@ -3340,10 +3397,9 @@ export function getLayerByPrefix(o) {
     o
   );
 
-  const h = mx.helpers;
-  const map = o.map || h.getMap(o.id);
+  const map = o.map || getMap(o.id);
 
-  if (!h.isRegExp(o.prefix)) {
+  if (!isRegExp(o.prefix)) {
     o.prefix = new RegExp("^" + o.prefix);
   }
 
@@ -3353,7 +3409,7 @@ export function getLayerByPrefix(o) {
 
   if (o.nameOnly) {
     const layerNames = layers.map((l) =>
-      o.base ? h.getLayerBaseName(l.id) : l.id
+      o.base ? getLayerBaseName(l.id) : l.id
     );
     return getArrayDistinct(layerNames);
   } else {
@@ -3365,9 +3421,8 @@ export function getLayerByPrefix(o) {
  * Get layer names by prefix
  */
 export function getLayerNamesByPrefix(o) {
-  const h = mx.helpers;
   o = Object.assign({}, { nameOnly: true }, o);
-  return h.getLayerByPrefix(o);
+  return getLayerByPrefix(o);
 }
 
 /**
@@ -3380,23 +3435,24 @@ export function getLayerNamesByPrefix(o) {
  */
 export function removeLayersByPrefix(o) {
   const result = [];
-  const map = o.map || mx.helpers.getMap(o.id);
+  const map = o.map || getMap(o.id);
 
   if (!map) {
     return result;
   }
 
-  const layers = mx.helpers.getLayerNamesByPrefix({
+  const layers = getLayerNamesByPrefix({
     map: map,
     prefix: o.prefix,
   });
 
-  layers.forEach(function (l) {
+  for (const l of layers) {
     if (map.getLayer(l)) {
       map.removeLayer(l);
       result.push(l);
     }
-  });
+  }
+  return result;
 }
 
 /**
@@ -3523,32 +3579,31 @@ export function existsInList(li, it, val, inverse) {
  * @param
  */
 export async function viewLayersAdd(o) {
-  const h = mx.helpers;
-  const dh = h.dashboardHelper;
-  const m = h.getMapData(o.id);
+  const dh = dashboardHelper;
+  const m = getMapData(o.id);
   if (o.idView) {
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
   }
   if (!o.elLegendContainer && mx.panel_legend) {
     o.elLegendContainer = mx.panel_legend.elPanelContent;
   }
-  const isStory = h.isStoryPlaying();
+  const isStory = isStoryPlaying();
   const idLayerBefore = o.before
-    ? h.getLayerNamesByPrefix({ prefix: o.before })[0]
+    ? getLayerNamesByPrefix({ prefix: o.before })[0]
     : mx.settings.layerBefore;
-  let view = o.view || h.getView(o.idView) || {};
+  let view = o.view || getView(o.idView) || {};
 
   /**
    * Solve case where view is not set : try to fetch remote
    */
-  if (!h.isView(view) && h.isViewId(o.idView)) {
+  if (!isView(view) && isViewId(o.idView)) {
     view = await getViewRemote(o.idView);
   }
 
   /*
    * Validation
    */
-  if (!h.isView(view)) {
+  if (!isView(view)) {
     console.warn(
       "viewLayerAdd : view not found, locally or remotely. Options:",
       o
@@ -3567,14 +3622,14 @@ export async function viewLayersAdd(o) {
     type: "view_add",
     data: {
       idView: idView,
-      view: h.getViewJson(view, { asString: false }),
+      view: getViewJson(view, { asString: false }),
     },
   });
 
   /*
    * Remove previous layer if needed
    */
-  h.removeLayersByPrefix({
+  removeLayersByPrefix({
     id: idMap,
     prefix: idView,
   });
@@ -3587,17 +3642,17 @@ export async function viewLayersAdd(o) {
   /**
    * Add content
    */
-  await h.viewUiContent(view);
+  await viewUiContent(view);
 
   /**
    * Set/Reset filter
    */
-  await h.viewFiltersInit(view);
+  await viewFiltersInit(view);
 
   /**
    * Add source from view
    */
-  await h.addSourceFromView({
+  await addSourceFromView({
     map: m.map,
     view: view,
   });
@@ -3697,10 +3752,8 @@ export async function viewLayersAdd(o) {
  * @param {String} opt.type Type of view (vt, rt)
  * @param {Boolean} opt.addTitle Add title
  */
-export function elLegend(view, opt) {
-  const h = mx.helpers;
-
-  if (!h.isView(view)) {
+export function elLegendBuild(view, opt) {
+  if (!isView(view)) {
     throw new Error("elLegend invalid view");
   }
 
@@ -3719,10 +3772,10 @@ export function elLegend(view, opt) {
   );
 
   const idView = view.id;
-  const elView = h.getViewEl(view);
-  const hasViewEl = h.isElement(elView);
+  const elView = getViewEl(view);
+  const hasViewEl = isElement(elView);
   const idLegend = `view_legend_${idView}`;
-  const hasExternalContainer = h.isElement(opt.elLegendContainer);
+  const hasExternalContainer = isElement(opt.elLegendContainer);
 
   /**
    * If no set external container, use container inside view element
@@ -3757,19 +3810,19 @@ export function elLegend(view, opt) {
     hasLegend = elLegendContainer.childElementCount > 0;
   }
 
-  const title = h.getLabelFromObjectPath({
+  const title = getLabelFromObjectPath({
     obj: view,
     path: "data.title",
     defaultValue: "[ missing title ]",
   });
 
-  const elLegendTitle = h.el("div", [
-    h.el(
+  const elLegendTitle = el("div", [
+    el(
       "div",
       {
         class: ["mx-legend-view-title-container"],
       },
-      h.el(
+      el(
         "span",
         {
           class: ["mx-legend-view-title", "text-muted", "hint--bottom"],
@@ -3777,7 +3830,7 @@ export function elLegend(view, opt) {
         },
         opt.addTitle ? title : ""
       ),
-      h.el(
+      el(
         "span",
         {
           class: "hint--bottom",
@@ -3788,7 +3841,7 @@ export function elLegend(view, opt) {
             lang_type: "tooltip",
           },
         },
-        h.el("i", {
+        el("i", {
           class: ["fa", "fa-info-circle", "text-muted", "mx-legend-btn-meta"],
         })
       )
@@ -3798,7 +3851,7 @@ export function elLegend(view, opt) {
   /**
    * Legend element
    */
-  const elLegend = h.el("div", {
+  const elLegend = el("div", {
     class: "mx-view-legend-" + opt.type,
     id: idLegend,
   });
@@ -3806,7 +3859,7 @@ export function elLegend(view, opt) {
   /**
    * Legend group
    */
-  const elLegendGroup = h.el(
+  const elLegendGroup = el(
     "div",
     {
       class: "mx-view-legend-group",
@@ -3843,13 +3896,12 @@ export function elLegend(view, opt) {
  * @return {String} Base64 Image
  */
 export async function getViewLegendImage(opt) {
-  const h = mx.helpers;
   opt = Object.assign({ format: "image/png" }, opt);
-  const view = h.getView(opt.view);
-  const isVt = h.isViewVt(view);
+  const view = getView(opt.view);
+  const isVt = isViewVt(view);
   const isRt = !isVt && isViewRt(view);
   const isValid = isVt || isRt;
-  const isOpen = isValid && h.isViewOpen(view);
+  const isOpen = isValid && isViewOpen(view);
 
   let out = "";
   if (!isValid) {
@@ -3857,18 +3909,18 @@ export async function getViewLegendImage(opt) {
   }
 
   if (isRt) {
-    const legendUrl = h.path(view, "data.source.legend", null);
-    if (!h.isUrl(legendUrl)) {
+    const legendUrl = path(view, "data.source.legend", null);
+    if (!isUrl(legendUrl)) {
       return Promise.reject("no legend");
     }
-    return h.urlToImageBase64(legendUrl);
+    return urlToImageBase64(legendUrl);
   }
 
   if (isVt) {
     try {
-      await h.viewAdd(view);
+      await viewAdd(view);
 
-      const hasLegend = h.isElement(view._elLegend);
+      const hasLegend = isElement(view._elLegend);
 
       if (!hasLegend) {
         close();
@@ -3876,7 +3928,7 @@ export async function getViewLegendImage(opt) {
       }
 
       const elRules = view._elLegend.querySelector(".mx-legend-vt-rules");
-      const hasRules = h.isElement(elRules);
+      const hasRules = isElement(elRules);
 
       if (!hasRules) {
         close();
@@ -3888,7 +3940,7 @@ export async function getViewLegendImage(opt) {
       elRulesClone.style.border = "none";
       elRulesClone.style.overflow = "visible";
 
-      const html2canvas = await h.moduleLoad("html2canvas");
+      const html2canvas = await moduleLoad("html2canvas");
       const canvas = await html2canvas(elRulesClone, {
         logging: false,
       });
@@ -3906,7 +3958,7 @@ export async function getViewLegendImage(opt) {
    */
   function close() {
     if (!isOpen) {
-      h.viewRemove(view);
+      viewRemove(view);
     }
   }
 }
@@ -3921,10 +3973,9 @@ export async function getViewLegendImage(opt) {
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 async function viewLayersAddCc(o) {
-  const h = mx.helpers;
   const view = o.view;
   const map = o.map;
-  const methods = mx.helpers.path(view, "data.methods");
+  const methods = path(view, "data.methods");
 
   const idView = view.id;
   const idSource = idView + "-SRC";
@@ -3932,7 +3983,7 @@ async function viewLayersAddCc(o) {
 
   let cc;
 
-  const elLegend = h.elLegend(view, {
+  const elLegend = elLegendBuild(view, {
     type: "cc",
     elLegendContainer: o.elLegendContainer,
     addTitle: o.addTitle,
@@ -3966,7 +4017,7 @@ async function viewLayersAddCc(o) {
   opt.onInit = tryCatched(cc.onInit.bind());
   opt.onClose = cc.onClose.bind(opt);
 
-  h.removeLayersByPrefix({
+  removeLayersByPrefix({
     prefix: opt.idView,
     id: mx.settings.map.id,
   });
@@ -4035,22 +4086,21 @@ async function viewLayersAddCc(o) {
 async function viewLayersAddRt(o) {
   const view = o.view;
   const map = o.map;
-  const h = mx.helpers;
   const idView = view.id;
   const idSource = idView + "-SRC";
-  const legendB64Default = require("../../src/svg/no_legend.svg");
-  const legendUrl = h.path(view, "data.source.legend", null);
-  const tiles = h.path(view, "data.source.tiles", null);
-  const useMirror = h.path(view, "data.source.useMirror", false);
+  const legendB64Default = require("../../../src/svg/no_legend.svg");
+  const legendUrl = path(view, "data.source.legend", null);
+  const tiles = path(view, "data.source.tiles", null);
+  const useMirror = path(view, "data.source.useMirror", false);
   const hasTiles =
-    h.isArray(tiles) && tiles.length > 0 && h.isArrayOf(tiles, h.isUrl);
-  const legendTitle = h.getLabelFromObjectPath({
+    isArray(tiles) && tiles.length > 0 && isArrayOf(tiles, isUrl);
+  const legendTitle = getLabelFromObjectPath({
     obj: view,
     path: "data.source.legendTitles",
     defaultValue: null,
   });
-  const hasLegendUrl = h.isUrl(legendUrl);
-  const elLegendImageBox = h.el("div", { class: "mx-legend-box" });
+  const hasLegendUrl = isUrl(legendUrl);
+  const elLegendImageBox = el("div", { class: "mx-legend-box" });
   let isLegendDefault = false;
 
   if (!hasTiles) {
@@ -4086,20 +4136,20 @@ async function viewLayersAddRt(o) {
    */
 
   /* Legend element */
-  const elLegend = h.elLegend(view, {
+  const elLegend = elLegendBuild(view, {
     type: "rt",
     elLegendContainer: o.elLegendContainer,
     addTitle: o.addTitle,
     removeOld: true,
   });
 
-  if (!h.isElement(elLegend)) {
+  if (!isElement(elLegend)) {
     return false;
   }
 
   /* Legend title  */
   if (legendTitle) {
-    const elLabel = h.el(
+    const elLabel = el(
       "span",
       {
         class: ["mx-legend-rt-title", "text-muted"],
@@ -4116,7 +4166,7 @@ async function viewLayersAddRt(o) {
   let legendB64 = null;
 
   if (!hasLegendUrl) {
-    h.onNextFrame(() => {
+    onNextFrame(() => {
       new RasterMiniMap({
         elContainer: elLegendImageBox,
         width: 40,
@@ -4135,10 +4185,10 @@ async function viewLayersAddRt(o) {
   const legendUrlFetch = useMirror ? mirrorUrlCreate(legendUrl) : legendUrl;
 
   /* Get a base64 image from url */
-  legendB64 = await h.urlToImageBase64(legendUrlFetch);
+  legendB64 = await urlToImageBase64(legendUrlFetch);
 
   /* If empty data or length < 'data:image/png;base64,' length */
-  if (!h.isBase64img(legendB64)) {
+  if (!isBase64img(legendB64)) {
     legendB64 = legendB64Default;
     isLegendDefault = true;
   }
@@ -4148,7 +4198,7 @@ async function viewLayersAddRt(o) {
     elLegend.classList.add("hint--bottom");
     elLegend.dataset.lang_key = "noLegend";
     elLegend.dataset.lang_type = "tooltip";
-    h.updateLanguageElements({
+    updateLanguageElements({
       el: o.elLegendContainer,
     });
   } else {
@@ -4156,7 +4206,7 @@ async function viewLayersAddRt(o) {
     elLegend.style.cursor = "zoom-in";
   }
   /* Create an image with given source */
-  const img = h.el("img", { alt: "Legend" });
+  const img = el("img", { alt: "Legend" });
   img.alt = "Legend";
   img.addEventListener("error", handleImgError);
   img.addEventListener("load", handleLoad, { once: true });
@@ -4176,13 +4226,13 @@ async function viewLayersAddRt(o) {
   function handleClick() {
     const title =
       legendTitle ||
-      h.getLabelFromObjectPath({
+      getLabelFromObjectPath({
         obj: view,
         path: "data.title",
         defaultValue: "[ missing title ]",
       });
 
-    const imgModal = h.el("img", {
+    const imgModal = el("img", {
       src: img.src,
       alt: "Legend",
       onerror: handleImgError,
@@ -4211,7 +4261,7 @@ async function viewLayersAddRt(o) {
 /**
  * Parse view of type vt and add it to the map
  * @param {Object} o Options
- * @param {Object} o.view View data
+ * @param {Object} o.view View
  * @param {Object} o.map Map object
  * @param {Boolean} o.addLegend
  * @param {Element} o.elLegendContainer Legend container
@@ -4219,522 +4269,141 @@ async function viewLayersAddRt(o) {
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 export async function viewLayersAddVt(o) {
-  const h = mx.helpers;
-  const p = h.path;
-
-  const view = o.view;
-  const idView = view.id;
-  const viewData = p(view, "data");
-  const attr = p(viewData, "attribute.name", null);
-  const idSource = view.id + "-SRC";
-  const style = p(viewData, "style", {});
-  const zConfig = p(style, "zoomConfig", {});
-  const showSymbolLabel = p(style, "showSymbolLabel", false);
-  const includeUpper = p(style, "includeUpperBoundInInterval", false);
-  const hideNulls = p(style, "hideNulls", false);
-  const ruleNulls = p(style, "nulls", [])[0] || {};
-  const geomType = p(viewData, "geometry.type", "point");
-  const source = p(viewData, "source", {});
-  const idSourceLayer = p(source, "layerInfo.name");
-  const addLegend = h.isEmpty(o.addLegend) ? true : !!o.addLegend;
-  let idInc = 0; // increment layer id last part
-
-  /**
-   * No layer id = stop;
-   */
-
-  if (!idSourceLayer) {
-    return false;
-  }
-
-  /**
-   * Init null value
-   */
-  let nullValue = "";
-  if (ruleNulls.value) {
-    nullValue = ruleNulls.value;
-  }
-
-  /**
-   * Source stat
-   */
-  const sourceSummary = await getViewSourceSummary(view, {
-    nullValue: nullValue,
-    idAttr: attr,
-    stats: ["attributes"],
-  });
-
-  const statType = h.path(sourceSummary, "attribute_stat.type", "categorical");
-  const isNumeric = statType === "continuous";
-  const rules = h.clone(p(style, "rules", []));
-  const nRules = rules.length;
-  const layers = [];
-  const styleCustom = JSON.parse(p(style, "custom.json"));
-  const sepLayer = p(mx, "settings.separators.sublayer");
-
-  /**
-   * Updte filterNull ( after type is determined )
-   */
-  const filterIncludeNull = [];
-  const filterExcludeNull = [];
-  for (const op of ["==", "!="]) {
-    const f = op === "==" ? filterIncludeNull : filterExcludeNull;
-    if (isNumeric) {
-      if (h.isEmpty(nullValue)) {
-        f.push([op, attr, ""]);
-      } else {
-        f.push([op, attr, nullValue * 1]);
-      }
-    } else {
-      if (nullValue || nullValue === false) {
-        f.push([op, attr, nullValue]);
-      } else {
-        f.push([op, attr, ""]);
-      }
-    }
-  }
-
-  /**
-   * Set zoom default
-   */
-  const zDef = {
-    zoomMax: 22,
-    zoomMin: 0,
-    sizeFactorZoomMax: 0,
-    sizeFactorZoomMin: 0,
-    sizeFactorZoomExponent: 1,
-  };
-  const zoomConfig = Object.assign(zDef, zConfig);
-
-  /**
-   * Clean rules
-   */
-  if (isNumeric && nullValue !== "" && isFinite(nullValue)) {
-    // NOTE: ''*1 -> 0...
-    nullValue = nullValue * 1;
-  }
-
-  let rInc = nRules;
-  while (rInc-- > 0) {
-    const rule = rules[rInc];
-
-    /**
-     * Check if it's a valid rule : it should be an object with
-     * at least a non-empty rule.value
-     */
-    let isValid = h.isObject(rule) && !h.isEmpty(rule.value);
-
-    if (!isValid) {
-      rules.splice(rInc, 1);
-    }
-  }
-
-  /**
-   * Set default numeric min / max
-   */
-  const rulesValues = {};
-
-  if (isNumeric) {
-    rulesValues.min = p(sourceSummary, "attribute_stat.min", -Infinity);
-    rulesValues.max = p(sourceSummary, "attribute_stat.max", Infinity);
-  }
-
-  for (const rule of rules) {
-    rule.rgba = h.colorToRgba(rule.color, rule.opacity);
-    rule.rgb = h.colorToRgba(rule.color);
-  }
-
-  /**
-   * Check rules
-   */
-  const ruleAll = rules.find((r) => r.value === "all");
-  const hasRuleAll = !!ruleAll;
-  //const hasStyleRules = rules.length > 0 && rules[0].value !== undefined;
-  const hasStyleRules = nRules > 0; // && rules[0].value !== undefined;
-
-  /**
-   * Set style type
-   */
-  const useStyleCustom = h.isObject(styleCustom) && styleCustom.enable === true;
-  const useStyleDefault = !useStyleCustom && !hasStyleRules;
-  const useStyleNull = !useStyleDefault && !hideNulls;
-  const useStyleAll = !useStyleCustom && !useStyleDefault && hasRuleAll;
-  const useStyleFull = !useStyleCustom && !useStyleAll && hasStyleRules;
-
-  if (
-    !useStyleCustom &&
-    !useStyleDefault &&
-    !useStyleAll &&
-    !useStyleFull &&
-    !useStyleNull
-  ) {
-    return;
-  }
-
-  /**
-   * Make custom layer
-   */
-  if (useStyleCustom) {
-    const layerCustom = {
-      id: `${idView}${sepLayer}${0}__custom`,
-      source: idSource,
-      "source-layer": idView,
-      type: styleCustom.type || "circle",
-      paint: styleCustom.paint || {},
-      layout: styleCustom.layout || {},
-      minzoom: styleCustom.minzoom || zoomConfig.zoomMin,
-      maxzoom: styleCustom.maxzoom || zoomConfig.zoomMax,
-      metadata: {
-        position: 0,
-        priority: 0,
-        idView: idView,
-        filter: [],
-      },
-    };
-    layers.push(layerCustom);
-    view._setFilter({
-      filter: styleCustom.filter || ["all"],
-      type: "custom_style",
-    });
-  }
-
-  /*
-   * Apply default style is no style is defined
-   */
-  if (useStyleDefault) {
-    const layerDefault = _build_layer({
-      geomType: geomType,
-    });
-    layers.push(layerDefault);
-    const ruleDefault = {
-      label_en: "Default",
-      value: "all",
-      color: layerDefault?.metadata?.hexColor,
-      size: layerDefault?.metadata?.size,
-    };
-    rules.push(ruleDefault);
-  }
-
-  /**
-   * Create layer for single rule covering all values
-   */
-  if (useStyleAll) {
-    const hasSprite = ruleAll.sprite && ruleAll.sprite !== "none";
-    const hasSymbol = hasSprite && geomType === "point";
-    const hasPattern = hasSprite && geomType === "polygon";
-    const filter = ["all"];
-    filter.push(...filterExcludeNull);
-    if (!hasSymbol) {
-      /**
-       * Base layer and pattern
-       */
-      const layerAll = _build_layer({
-        geomType: geomType,
-        priority: 1,
-        hexColor: ruleAll.color,
-        sprite: ruleAll.sprite,
-        opacity: ruleAll.opacity,
-        size: ruleAll.size,
-        filter: filter,
-      });
-
-      layers.push(layerAll);
-
-      if (hasPattern) {
-        const layerPattern = _build_layer({
-          priority: 0,
-          geomType: "pattern",
-          hexColor: ruleAll.color,
-          sprite: ruleAll.sprite,
-          opacity: ruleAll.opacity,
-          size: ruleAll.size,
-          filter: filter,
-        });
-        layers.push(layerPattern);
-      }
-    } else {
-      /**
-       * Symbol only
-       */
-      const label = h.getLabelFromObjectPath({
-        obj: ruleAll,
-        sep: "_",
-        path: "label",
-        defaultValue: ruleAll.value,
-      });
-
-      const layerSprite = _build_layer({
-        geomType: "symbol",
-        label: label,
-        hexColor: ruleAll.color,
-        sprite: ruleAll.sprite,
-        opacity: ruleAll.opacity,
-        size: ruleAll.size,
-        filter: filter,
-      });
-
-      layers.push(layerSprite);
-    }
-  }
-
-  /*
-   * Apply style if avaialble
-   */
-  if (useStyleFull) {
-    /**
-     * evaluate rules
-     */
-    rules.forEach((rule, i) => {
-      const filter = ["all"];
-      /*
-       * Set logic for rules
-       */
-      const nRules = rules.length - 1;
-      const position = style.reverseLayer ? nRules - i : i;
-      const isLast = i === nRules;
-      const isFirst = i === 0;
-
-      const nextRule = rules[i + 1];
-      /**
-       * If no value_to, use next value, or use max, or null (non numeric)
-       */
-      const nextValue = p(nextRule, "value", rulesValues.max);
-      rule.value_to = p(rule, "value_to", nextValue);
-
-      const fromValue = rule.value;
-      const toValue = isNumeric ? rule.value_to : null;
-      const sameFromTo = isNumeric && toValue === fromValue;
-      /**
-       *  Symbols and pattern check
-       */
-      const hasSprite = rule.sprite && rule.sprite !== "none";
-      const hasSymbol = hasSprite && geomType === "point";
-      const hasPattern = hasSprite && geomType === "polygon";
-
-      if (isNumeric && !sameFromTo) {
-        /**
-         * Case where attr to filter is numeric
-         */
-        const fromOp = isFirst ? ">=" : includeUpper ? ">" : ">=";
-        const toOp = isLast ? "<=" : includeUpper ? "<=" : "<";
-        filter.push([fromOp, attr, fromValue]);
-        filter.push([toOp, attr, toValue]);
-      } else {
-        /**
-         * String and boolean
-         */
-        filter.push(["==", attr, fromValue]);
-      }
-
-      filter.push(...filterExcludeNull);
-
-      rule.filter = filter;
-
-      if (!hasSymbol) {
-        /**
-         * Normal layer and pattern
-         */
-        const layerMain = _build_layer({
-          position: position,
-          priority: 1,
-          geomType: geomType,
-          hexColor: rule.color,
-          opacity: rule.opacity,
-          size: rule.size,
-          sprite: rule.sprite,
-          filter: filter,
-        });
-        layers.push(layerMain);
-
-        if (hasPattern) {
-          const layerPattern = _build_layer({
-            position: position,
-            priority: 0,
-            geomType: "pattern",
-            hexColor: rule.color,
-            opacity: rule.opacity,
-            sprite: rule.sprite,
-            filter: filter,
-          });
-          layers.push(layerPattern);
-        }
-      } else {
-        /**
-         * Layer for symbols
-         */
-        const label = h.getLabelFromObjectPath({
-          obj: rule,
-          sep: "_",
-          path: "label",
-          defaultValue: rule.value,
-        });
-
-        const layerSprite = _build_layer({
-          position: position,
-          geomType: "symbol",
-          label: label,
-          hexColor: rule.color,
-          opacity: rule.opacity,
-          size: rule.size,
-          sprite: rule.sprite,
-          filter: filter,
-        });
-
-        layers.push(layerSprite);
-      }
-    });
-  }
-
-  /**
-   * Handle layers order based on position
-   */
-  sortLayers(layers);
-
-  /**
-   * Handle layer for null values
-   */
-  if (useStyleNull) {
-    const filter = ["all"];
-
-    filter.push(...filterIncludeNull);
-
-    h.updateIfEmpty(ruleNulls, {
-      color: "#A9A9A9",
-      size: 2,
-      label_en: await getDictItem("schema_style_nulls"),
-    });
-
-    const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== "none";
-    const layerNull = _build_layer({
-      idSuffix: "_null",
-      priority: 1,
-      geomType: geomType === "point" && hasSprite ? "symbol" : geomType,
-      hexColor: ruleNulls.color,
-      opacity: ruleNulls.opacity,
-      size: ruleNulls.size,
-      sprite: hasSprite ? ruleNulls.sprite : null,
-      filter: filter,
-    });
-    ruleNulls.filter = filter;
-    view._null_filter = filter;
-    layers.push(layerNull);
-  }
-
+  const view = getView(o.view);
+  const addLegend = isEmpty(o.addLegend) ? true : !!o.addLegend;
+  const out = await getViewMapboxLayers(view);
+  const layers = out.layers;
+  const rules = out.rules;
   /**
    * Add layer and legends
    */
-
   if (layers.length > 0) {
+    /**
+     * Apply filters for custom style
+     * TODO: this could probably be done elsewhere
+     */
+    if (out.config.useStyleCustom && isFunction(view._setFilter)) {
+      view._setFilter({
+        filter: out?.config?.styleCustom.filter || ["all"],
+        type: "custom_style",
+      });
+    }
+
+    /**
+     * Set legend
+     */
     if (addLegend) {
-      /**
-       * Clean rules;
-       * - If next rules is identical, remove it from legend
-       * - Set sprite path
-       */
-      const rulesLegend = h.clone(rules);
-      if (useStyleNull) {
-        rulesLegend.push(ruleNulls);
-      }
-
-      let pos = 0;
-      const idRulesToRemove = [];
-      for (const rule of rulesLegend) {
-        const ruleNext = rulesLegend[++pos];
-        const hasSprite = rule.sprite && rule.sprite !== "none";
-        const nextHasSprite =
-          !!ruleNext && ruleNext.sprite && ruleNext.sprite !== "none";
-
-        const isDuplicated =
-          ruleNext &&
-          ruleNext.value === rule.value &&
-          ruleNext.color === rule.color;
-
-        if (!hasSprite) {
-          rule.sprite = null;
-        }
-
-        if (isDuplicated) {
-          if (nextHasSprite) {
-            rule.sprite = ruleNext.sprite;
-          }
-          idRulesToRemove.push(pos);
-        }
-      }
-
-      while (idRulesToRemove.length) {
-        const rulePos = idRulesToRemove.pop();
-        rulesLegend.splice(rulePos, 1);
-      }
-      /*
-       * Add legend using template
-       */
-      view._rulesLegend = rulesLegend;
-      const elLegend = h.elLegend(view, {
-        type: "vt",
-        removeOld: true,
+      setVtLegend({
+        rules: rules,
+        view: view,
         elLegendContainer: o.elLegendContainer,
         addTitle: o.addTitle,
       });
-      if (h.isElement(elLegend)) {
-        /**
-         * viewLayersAddVt rendering time [ms] with:
-         * el + ecoregion2017
-         * 606
-         * 534
-         * 504
-         * 403
-         *
-         * dot + ecoregion2017
-         * 517
-         * 725
-         * 928
-         * 660
-         */
-        // el
-        const elLegendContent = mx.helpers.buildLegendVt(view);
-        elLegend.appendChild(elLegendContent);
-        // dot
-        //elLegend.innerHTML = mx.templates.viewListLegend(view);
-      }
     }
 
     /*
-     * Add layers to map
+     * Add layers to the map
      */
     await addLayers(layers, o.before);
     await viewsLayersOrderUpdate();
   } else {
     return false;
   }
+}
 
-  function _build_layer(opt) {
-    const config = Object.assign(
-      {},
-      {
-        id: null,
-        idSource: idSource,
-        idSourceLayer: idView,
-        idView: idView,
-        idSuffix: "",
-        position: 0,
-        priority: 0,
-        showSymbolLabel: showSymbolLabel,
-        sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
-        sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
-        sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
-        zoomMax: zoomConfig.zoomMax,
-        zoomMin: zoomConfig.zoomMin,
-      },
-      opt
-    );
+/**
+ * Internal wrapper to set / update vt view legend
+ *
+ * @param {Object} options Options
+ */
+function setVtLegend(options) {
+  if (isEmpty(options)) {
+    options = {};
+  }
 
-    if (!config.id) {
-      config.id = `${idView}${sepLayer}${config.position}_${
-        config.priority
-      }_${idInc++}`;
+  const {
+    addTitle = false,
+    rules = [],
+    view = {},
+    elLegendContainer = null, // elLegendBuild find it
+  } = options;
+
+  /**
+   * Clean rules;
+   * - If next rules is identical, remove it from legend
+   * - Set sprite path
+   */
+  /*if (config.useStyleNull) {*/
+  /*rulesLegend.push(ruleNulls);*/
+  /*}*/
+
+  let pos = 0;
+  const idRulesToRemove = [];
+  for (const rule of rules) {
+    const ruleNext = rules[++pos];
+    const hasSprite = rule?.sprite !== "none";
+    const nextHasSprite = !!ruleNext && ruleNext?.sprite !== "none";
+
+    const isDuplicated =
+      ruleNext &&
+      ruleNext.value === rule.value &&
+      ruleNext.color === rule.color;
+
+    if (!hasSprite) {
+      rule.sprite = null;
     }
 
-    return makeSimpleLayer(config);
+    if (isDuplicated) {
+      if (nextHasSprite) {
+        rule.sprite = ruleNext.sprite;
+      }
+      idRulesToRemove.push(pos);
+    }
+  }
+
+  while (idRulesToRemove.length) {
+    const rulePos = idRulesToRemove.pop();
+    rules.splice(rulePos, 1);
+  }
+
+  /**
+   * Copy rules
+   */
+  const rulesLegend = clone(rules);
+
+  /*
+   * Add legend using template
+   */
+  const elLegend = elLegendBuild(view, {
+    type: "vt",
+    removeOld: true,
+    elLegendContainer: elLegendContainer,
+    addTitle: addTitle,
+  });
+  if (isElement(elLegend)) {
+    /**
+     * viewLayersAddVt rendering time :
+     * el + ecoregion2017
+     * 606 ms
+     * 534 ms
+     * 504 ms
+     * 403 ms
+     *
+     * dot + ecoregion2017
+     * 517 ms
+     * 725 ms
+     * 928 ms
+     * 660 ms
+     */
+    /**
+     * el
+     */
+    const elLegendContent = buildLegendVt(view, rulesLegend);
+    elLegend.appendChild(elLegendContent);
+    /*
+     * dot
+     */
+    //elLegend.innerHTML = mx.templates.viewListLegend(view);
   }
 }
 
@@ -4746,12 +4415,11 @@ export async function viewLayersAddVt(o) {
  */
 function addLayers(layers, idBefore) {
   return new Promise((resolve) => {
-    const h = mx.helpers;
-    const map = h.getMap();
+    const map = getMap();
     /**
      * Add bottom layers now
      */
-    for (let layer of layers) {
+    for (const layer of layers) {
       const hasLayer = map.getLayer(layer.id);
       const hasLayerBefore = map.getLayer(idBefore);
 
@@ -4772,11 +4440,11 @@ function addLayers(layers, idBefore) {
 /**
  * Add filtering system to views
  * @param {String|Object} idView id or View to update
+ * @return {Promise}
  */
 export function viewFiltersInit(idView) {
-  const h = mx.helpers;
-  const view = h.getView(idView);
-  if (!h.isView(view)) {
+  const view = getView(idView);
+  if (!isView(view)) {
     return;
   }
   /**
@@ -4790,19 +4458,18 @@ export function viewFiltersInit(idView) {
     numeric_slider: ["all"],
     custom_style: ["all"],
   };
-  view._setFilter = h.viewSetFilter;
-  view._setOpacity = h.viewSetOpacity;
+  view._setFilter = viewSetFilter;
+  view._setOpacity = viewSetOpacity;
 }
 
 export async function viewUiContent(id) {
-  const h = mx.helpers;
-  const view = h.getView(id);
-  if (!h.isView(view)) {
+  const view = getView(id);
+  if (!isView(view)) {
     return;
   }
 
-  const elView = h.getViewEl(view);
-  const hasViewEl = h.isElement(elView);
+  const elView = getViewEl(view);
+  const hasViewEl = isElement(elView);
 
   if (hasViewEl) {
     const elOptions = elView.querySelector(
@@ -4834,10 +4501,9 @@ export async function viewUiContent(id) {
  */
 export async function viewFilterToolsInit(id, opt) {
   opt = Object.assign({}, { clear: false }, opt);
-  const h = mx.helpers;
   try {
-    const view = h.getView(id);
-    if (!h.isView(view)) {
+    const view = getView(id);
+    if (!isView(view)) {
       return;
     }
     const idMap = mx.settings.map.id;
@@ -4849,10 +4515,10 @@ export async function viewFilterToolsInit(id, opt) {
     /**
      * Add interactive module
      */
-    proms.push(h.makeTimeSlider({ view: view, idMap: idMap }));
-    proms.push(h.makeNumericSlider({ view: view, idMap: idMap }));
-    proms.push(h.makeTransparencySlider({ view: view, idMap: idMap }));
-    proms.push(h.makeSearchBox({ view: view, idMap: idMap }));
+    proms.push(makeTimeSlider({ view: view, idMap: idMap }));
+    proms.push(makeNumericSlider({ view: view, idMap: idMap }));
+    proms.push(makeTransparencySlider({ view: view, idMap: idMap }));
+    proms.push(makeSearchBox({ view: view, idMap: idMap }));
     await Promise.all(proms);
   } catch (e) {
     throw new Error(e);
@@ -4863,23 +4529,22 @@ export async function viewFilterToolsInit(id, opt) {
  * Clean stored modules : dashboard, custom view, etc.
  */
 export async function viewModulesRemove(view) {
-  const h = mx.helpers;
-  const dh = h.dashboardHelper;
+  const dh = dashboardHelper;
 
-  view = h.isViewId(view) ? h.getView(view) : view;
+  view = isViewId(view) ? getView(view) : view;
 
-  if (!h.isView(view)) {
+  if (!isView(view)) {
     return false;
   }
 
   const it = view._filters_tools || {};
   delete view._filters_tools;
 
-  if (h.isFunction(view._onRemoveCustomView)) {
+  if (isFunction(view._onRemoveCustomView)) {
     view._onRemoveCustomView();
   }
 
-  if (h.isElement(view._elLegend)) {
+  if (isElement(view._elLegend)) {
     view._elLegend.remove();
     delete view._elLegend;
   }
@@ -4912,10 +4577,9 @@ export async function viewModulesRemove(view) {
 }
 
 export function viewsModulesRemove(views) {
-  const h = mx.helpers;
   views = views instanceof Array ? views : [views];
 
-  return Promise.all(views.map((v) => h.viewModulesRemove(v)));
+  return Promise.all(views.map((v) => viewModulesRemove(v)));
 }
 
 /**
@@ -4928,9 +4592,8 @@ export function viewsModulesRemove(views) {
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 export function viewLayersAddGj(opt) {
-  const h = mx.helpers;
   return new Promise((resolve) => {
-    const layer = h.path(opt.view, "data.layer");
+    const layer = path(opt.view, "data.layer");
 
     if (!layer.metadata) {
       layer.metadata = {
@@ -4954,8 +4617,7 @@ export function viewLayersAddGj(opt) {
  * @param {array} o.filter Filter array to apply
  */
 export function setFilter(o) {
-  const h = mx.helpers;
-  const m = h.getMap(o.id);
+  const m = getMap(o.id);
   m.setFilter(o.idView, o.filter);
 }
 /**
@@ -4966,20 +4628,19 @@ export function setFilter(o) {
  * @param {array} o.countries Array of countries code
  */
 export function setHighlightedCountries(o) {
-  const h = mx.helpers;
   const countries = o.countries || null;
-  const m = h.getMap(o.id);
-  const hasCountries = h.isArray(countries) && countries.length > 0;
+  const m = getMap(o.id);
+  const hasCountries = isArray(countries) && countries.length > 0;
   const hasWorld = hasCountries && countries.indexOf("WLD") > -1;
   let filter = [];
-  let rule = ["==", "iso3code", ""];
+  let rule = ["==", ["get", "iso3code"], ""];
   mx.settings.highlightedCountries = hasCountries ? countries : [];
 
   if (hasCountries && !hasWorld) {
-    rule = ["!in", "iso3code"].concat(countries);
+    rule = ["!", ["in", ["get", "iso3code"]].concat(countries)];
   }
 
-  filter = ["any", rule, ["!has", "iso3code"]];
+  filter = ["any", rule, ["!", ["has", "iso3code"]]];
 
   m.setFilter(o.idLayer, filter);
 }
@@ -4993,11 +4654,11 @@ export function setHighlightedCountries(o) {
  * @return {number} area in km2
  */
 export function getRenderedLayersArea(o) {
-  const map = mx.helpers.getMap(o.id);
+  const map = getMap(o.id);
 
   if (map) {
-    const calcAreaWorker = require("./mx_helper_calc_area.worker.js");
-    const layers = mx.helpers.getLayerNamesByPrefix({
+    const calcAreaWorker = require("./calc_area.mxworkers.js");
+    const layers = getLayerNamesByPrefix({
       id: o.id,
       prefix: o.prefix,
     });
@@ -5066,8 +4727,7 @@ export function sendRenderedLayersAreaToUi(o) {
  * @param {Object} o.map Map (optional, overwrite id)
  */
 export function getBoundsArray(o) {
-  const h = mx.helpers;
-  const map = h.getMap(o);
+  const map = getMap(o);
   const a = map.getBounds();
   return [a.getWest(), a.getSouth(), a.getEast(), a.getNorth()];
 }
@@ -5083,22 +4743,21 @@ export function getBoundsArray(o) {
  * @return {Object} Object with view id as keys
  */
 export function getLayersPropertiesAtPoint(opt) {
-  const h = mx.helpers;
-  const map = h.getMap(opt.map);
-  const hasViewId = h.isString(opt.idView);
+  const map = getMap(opt.map);
+  const hasViewId = isString(opt.idView);
   const modeObject = opt.asObject === true || false;
   const items = {};
   const excludeProp = ["mx_t0", "mx_t1", "gid"];
   let idViews = [];
   let type = opt.type || "vt" || "rt" || "gj";
-  type = h.isArray(type) ? type : [type];
+  type = isArray(type) ? type : [type];
   /**
    * Use id from idView as array OR get all mapx displayed base layer
    * to get array of view ID.
    */
   idViews = hasViewId
     ? [opt.idView]
-    : h.getLayerNamesByPrefix({
+    : getLayerNamesByPrefix({
         base: true,
       });
 
@@ -5111,10 +4770,10 @@ export function getLayersPropertiesAtPoint(opt) {
    * and fetch properties
    */
   idViews
-    .map((idView) => h.getView(idView))
+    .map((idView) => getView(idView))
     .filter((view) => type.includes(view?.type))
     .forEach((view) => {
-      if (!h.isView(view)) {
+      if (!isView(view)) {
         console.warn("Not a view:", view, " opt:", opt);
         return;
       }
@@ -5131,19 +4790,19 @@ export function getLayersPropertiesAtPoint(opt) {
    * Fetch properties on raster WMS layer
    */
   function fetchRasterProp(view) {
-    const url = h.path(view, "data.source.tiles", [])[0].split("?");
-    const useMirror = h.path(view, "data.source.useMirror", false);
+    const url = path(view, "data.source.tiles", [])[0].split("?");
+    const useMirror = path(view, "data.source.useMirror", false);
     const endpoint = url[0];
     const urlFull = `${endpoint}?${url[1]}`;
-    const params = h.getQueryParametersAsObject(urlFull, { lowerCase: true });
+    const params = getQueryParametersAsObject(urlFull, { lowerCase: true });
     const out = modeObject ? {} : [];
     /**
      * Check if this is a WMS valid param object
      */
-    const isWms = h.isUrlValidWms(urlFull, { layers: true, styles: true });
+    const isWms = isUrlValidWms(urlFull, { layers: true, styles: true });
 
     if (isWms) {
-      return h.wmsQuery({
+      return wmsQuery({
         point: opt.point,
         layers: params.layers,
         styles: params.styles,
@@ -5155,7 +4814,7 @@ export function getLayersPropertiesAtPoint(opt) {
             /**
              * timestamp : Used to invalidate getCapabilities cache
              */
-            timestamp: h.path(view, "date_modified", null),
+            timestamp: path(view, "date_modified", null),
           },
         },
       });
@@ -5171,7 +4830,7 @@ export function getLayersPropertiesAtPoint(opt) {
     return new Promise((resolve) => {
       const id = view.id;
 
-      const layers = h.getLayerNamesByPrefix({
+      const layers = getLayerNamesByPrefix({
         map: map,
         prefix: id,
       });
@@ -5213,17 +4872,16 @@ export function getLayersPropertiesAtPoint(opt) {
 
 /*selectize version*/
 export async function makeSearchBox(o) {
-  const h = mx.helpers;
   const view = o.view;
   const el = document.querySelector(`[data-search_box_for='${view.id}']`);
   if (!el) {
     return;
   }
-  const elViewParent = h.getViewEl(view).parentElement;
+  const elViewParent = getViewEl(view).parentElement;
 
-  await h.moduleLoad("selectize");
+  await moduleLoad("selectize");
 
-  const attr = h.path(view, "data.attribute.name");
+  const attr = path(view, "data.attribute.name");
 
   const summary = await getViewSourceSummary(view);
   const choices = summaryToChoices(summary);
@@ -5254,7 +4912,7 @@ export async function makeSearchBox(o) {
     const listObj = this.getValue();
     const filter = ["any"];
     listObj.forEach(function (x) {
-      filter.push(["==", attr, x]);
+      filter.push(["==", ["get", attr], x]);
     });
     view._setFilter({
       filter: filter,
@@ -5263,7 +4921,7 @@ export async function makeSearchBox(o) {
   }
 
   function summaryToChoices(summary) {
-    const table = h.path(summary, "attribute_stat.table", []);
+    const table = path(summary, "attribute_stat.table", []);
     return table.map((r) => {
       return {
         value: r.value,
@@ -5274,45 +4932,38 @@ export async function makeSearchBox(o) {
 }
 
 export function filterViewValues(o) {
-  let attr, idMap, idView, search;
-  let view, map, features, values, filter;
-  let isNumeric;
-
-  attr = o.attribute;
-  idMap = o.id;
-  idView = o.idView;
-  search = o.search;
-  operator = o.operator || ">=";
-  filterType = o.filterType || "filter";
-
-  search = search.trim();
-  isNumeric = mx.helpers.isNumeric(search);
-  view = mx.helpers.getView(idView);
-
-  filter = ["all"];
+  const search = path(o, "search", "").trim();
+  const attr = o.attribute;
+  const idView = o.idView;
+  const operator = o.operator || ">=";
+  const filterType = o.filterType || "filter";
+  const hasNumeric = isNumeric(search);
+  const view = getView(idView);
+  const map = getMap();
+  const idSource = `${idView}-SRC`;
+  const filter = ["all"];
 
   if (search) {
-    if (isNumeric) {
-      filter = [operator, attr, search * 1];
+    if (hasNumeric) {
+      filter.push([operator, ["get", attr], search * 1]);
     } else {
-      map = mx.helpers.getMap(idMap);
-      features = map.querySourceFeatures(idView + "-SRC", {
+      const features = map.querySourceFeatures(idSource, {
         sourceLayer: idView,
       });
-      values = {};
 
-      features.forEach(function (f) {
+      const values = {};
+      for (const f of features) {
         const value = f.properties[attr];
         const splited = value.split(/\s*,\s*/);
-        if (splited.indexOf(search) > -1) {
+        if (splited.includes(search)) {
           values[value] = true;
         }
-      });
+      }
 
-      values = Object.keys(values);
+      const valuesDistinct = Object.keys(values);
 
-      if (values.length > 0) {
-        filter = ["in", attr].concat(values);
+      if (isNotEmpty(valuesDistinct)) {
+        filter.push(["in", ["get", attr], ...valuesDistinct]);
       }
     }
   }
@@ -5332,8 +4983,7 @@ export function filterViewValues(o) {
  * @param {string} o.after
  */
 export function addLayer(o) {
-  const h = mx.helpers;
-  const map = h.getMap(o.id);
+  const map = getMap(o.id);
 
   if (map) {
     if (map.getLayer(o.layer.id)) {
@@ -5372,23 +5022,22 @@ export function addLayer(o) {
  */
 export async function zoomToViewId(o) {
   try {
-    const h = mx.helpers;
-    const map = h.getMap();
+    const map = getMap();
     const timeout = 3 * 1000;
     let cancelByTimeout = false;
 
-    if (h.isViewId(o)) {
+    if (isViewId(o)) {
       o = {
         idView: o,
       };
     }
 
-    const isArray = h.isArray(o.idView);
-    o.idView = isArray ? o.idView[0] : o.idView;
+    const hasArray = isArray(o.idView);
+    o.idView = hasArray ? o.idView[0] : o.idView;
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
-    const view = h.getView(o.idView);
+    const view = getView(o.idView);
 
-    if (!h.isView(view)) {
+    if (!isView(view)) {
       console.warn("zoomToViewId : view object required");
       return;
     }
@@ -5405,19 +5054,19 @@ export async function zoomToViewId(o) {
       const conf = {
         sum: await getViewSourceSummary(view, { useCache: true }),
       };
-      conf.extent = h.path(conf.sum, "extent_sp", null);
+      conf.extent = path(conf.sum, "extent_sp", null);
 
       if (cancelByTimeout) {
         return;
       }
 
-      if (!h.isBbox(conf.extent)) {
+      if (!isBbox(conf.extent)) {
         conf.sum = await getViewSourceSummary(view, { useCache: false });
-        conf.extent = h.path(conf.sum, "extent_sp", null);
+        conf.extent = path(conf.sum, "extent_sp", null);
         if (cancelByTimeout) {
           return;
         }
-        if (!h.isBbox(conf.extent)) {
+        if (!isBbox(conf.extent)) {
           console.warn(`zoomToViewId no extent found for ${view.id}`);
           return;
         }
@@ -5481,10 +5130,15 @@ export async function getViewsBounds(views) {
     extent = def;
   }
 
-  return new mx.mapboxgl.LngLatBounds(
+  return [
     [extent.lng1, extent.lat1],
-    [extent.lng2, extent.lat2]
-  );
+    [extent.lng2, extent.lat2],
+  ];
+
+  /*return new mx.mapboxgl.LngLatBounds(*/
+  /*[extent.lng1, extent.lat1],*/
+  /*[extent.lng2, extent.lat2]*/
+  /*);*/
 }
 
 /**
@@ -5494,8 +5148,7 @@ export async function getViewsBounds(views) {
  * @param {string} o.idView view id
  */
 export async function zoomToViewIdVisible(o) {
-  const h = mx.helpers;
-  const bbox = await h.moduleLoad("turf-bbox");
+  const bbox = await moduleLoad("turf-bbox");
 
   let geomTemp, idLayerAll, features;
 
@@ -5504,9 +5157,9 @@ export async function zoomToViewIdVisible(o) {
     features: [],
   };
 
-  const map = h.getMap(o.id);
+  const map = getMap(o.id);
 
-  idLayerAll = h.getLayerNamesByPrefix({
+  idLayerAll = getLayerNamesByPrefix({
     id: o.id,
     prefix: o.idView,
   });
@@ -5526,24 +5179,23 @@ export async function zoomToViewIdVisible(o) {
     const llb = new mx.mapboxgl.LngLatBounds(sw, ne);
     map.fitBounds(llb);
   } else {
-    h.zoomToViewId(o);
+    zoomToViewId(o);
   }
 }
 
 export async function resetViewStyle(o) {
-  const h = mx.helpers;
   if (!o.idView) {
     return;
   }
-  const view = h.getView(o.idView);
-  h.updateLanguageElements({
+  const view = getView(o.idView);
+  updateLanguageElements({
     el: view._el,
   });
-  await h.viewLayersAdd({
+  await viewLayersAdd({
     id: o.id,
     idView: o.idView,
   });
-  await h.viewsLayersOrderUpdate(o);
+  await viewsLayersOrderUpdate(o);
 }
 
 /**
@@ -5554,7 +5206,7 @@ export async function resetViewStyle(o) {
  * @param {number} o.param Parameters to use
  */
 export function flyTo(o) {
-  const map = mx.helpers.getMap(o.id);
+  const map = getMap(o.id);
 
   if (map) {
     const p = o.param;
@@ -5587,8 +5239,7 @@ export function flyTo(o) {
  * @param {Array} opt.parallels
  */
 export function setMapProjection(opt) {
-  const h = mx.helpers;
-  const map = h.getMap(opt.id);
+  const map = getMap(opt.id);
   const def = {
     name: "mercator",
     center: [0, 0],
@@ -5628,13 +5279,12 @@ export function getMercCoords(x, y, z) {
  * @return {String} title
  */
 export function getViewTitle(view, lang) {
-  const h = mx.helpers;
   const langs = getLanguagesAll();
-  if (!h.isView(view)) {
-    view = h.getView(view);
+  if (!isView(view)) {
+    view = getView(view);
   }
   lang = lang || getLanguageCurrent();
-  return h.getLabelFromObjectPath({
+  return getLabelFromObjectPath({
     obj: view,
     path: "data.title",
     lang: lang,
@@ -5644,11 +5294,10 @@ export function getViewTitle(view, lang) {
 }
 /* get view title  */
 export function getViewTitleNormalized(view, lang) {
-  const h = mx.helpers;
-  if (!h.isView(view)) {
-    view = h.getView(view);
+  if (!isView(view)) {
+    view = getView(view);
   }
-  let title = h.getLabelFromObjectPath({
+  let title = getLabelFromObjectPath({
     lang: lang || getLanguageCurrent(),
     obj: view,
     path: "data.title",
@@ -5665,10 +5314,8 @@ export function getViewTitleNormalized(view, lang) {
  * @return {Array} Array of titles
  */
 export function getViewsTitleNormalized(views, lang) {
-  const h = mx.helpers;
-  views =
-    h.isArrayOfViews(views) || h.isArrayOfViewsId(views) ? views : h.getViews();
-  return views.map((v) => h.getViewTitleNormalized(v, lang));
+  views = isArrayOfViews(views) || isArrayOfViewsId(views) ? views : getViews();
+  return views.map((v) => getViewTitleNormalized(v, lang));
 }
 
 /**
@@ -5677,9 +5324,8 @@ export function getViewsTitleNormalized(views, lang) {
  * @return {String} date of the last modification
  */
 export function getViewDateModified(view) {
-  const h = mx.helpers;
-  if (!h.isView(view)) {
-    view = h.getView(view);
+  if (!isView(view)) {
+    view = getView(view);
   }
   return view.date_modified;
 }
@@ -5692,12 +5338,12 @@ export function getViewDateModified(view) {
 export function getViewDescription(id, lang) {
   let view = id;
   if (typeof id === "string") {
-    view = mx.helpers.getView(id);
+    view = getView(id);
   }
   lang = lang || getLanguageCurrent();
   const langs = getLanguagesAll();
 
-  return mx.helpers.getLabelFromObjectPath({
+  return getLabelFromObjectPath({
     obj: view,
     path: "data.abstract",
     lang: lang,
@@ -5723,18 +5369,17 @@ export function getViewLegend(id, opt) {
     opt
   );
 
-  const h = mx.helpers;
-  if (h.isView(id)) {
+  if (isView(id)) {
     id = id.id;
   }
-  const view = h.getView(id);
+  const view = getView(id);
   const elLegend = view._elLegend;
-  const hasLegend = h.isElement(elLegend);
+  const hasLegend = isElement(elLegend);
   const useClone = opt.clone === true;
   const hasMiniMap = view._miniMap instanceof RasterMiniMap;
 
   if (!hasLegend) {
-    return h.el("div");
+    return el("div");
   }
 
   if (!useClone) {
@@ -5744,7 +5389,7 @@ export function getViewLegend(id, opt) {
   const elLegendClone = elLegend.cloneNode(true);
   if (hasMiniMap) {
     const img = view._miniMap.getImage();
-    const elImg = h.el("img", { src: img });
+    const elImg = el("img", { src: img });
     elLegendClone.appendChild(elImg);
   }
   if (opt.input === false) {
@@ -5769,9 +5414,9 @@ export function getMap(idMap) {
 
   let map;
   const isId = typeof idMap === "string";
-  const isMap = !isId && mx.helpers.isMap(idMap);
+  const hasMap = !isId && isMap(idMap);
 
-  if (isMap) {
+  if (hasMap) {
     return idMap;
   }
 
@@ -5780,7 +5425,7 @@ export function getMap(idMap) {
     map.id = idMap;
   }
 
-  if (mx.helpers.isMap(map)) {
+  if (isMap(map)) {
     return map;
   }
 }
@@ -5802,8 +5447,7 @@ export function getMapData(idMap) {
  * @return {ViewsList} ViewList
  */
 export function getViewsList(o) {
-  const h = mx.helpers;
-  const data = h.getMapData(o);
+  const data = getMapData(o);
   return data.viewsList;
 }
 
@@ -5812,8 +5456,7 @@ export function getViewsList(o) {
  * @return {Array} Ids of view
  */
 export function getViewsListId() {
-  const h = mx.helpers;
-  return h.getViews().map((m) => m.id);
+  return getViews().map((m) => m.id);
 }
 
 /**
@@ -5863,8 +5506,8 @@ export function getViewRandom(config) {
       continue;
     }
 
-    if(opt.isDownloadble && !isViewDownloadable(view)){
-       continue;
+    if (opt.isDownloadble && !isViewDownloadable(view)) {
+      continue;
     }
 
     if (opt.hasDashboard && !isViewDashboard(view)) {
@@ -5927,17 +5570,15 @@ export async function isSourceDownloadable(idSource) {
  * @note Deprecated, use is_test / mx_valid isViewLocal
  * @return {Boolean} is local
  */
-export function _isViewLocal(id) {
-  const h = mx.helpers;
-  return !!h.getView(id);
+export function hasViewLocal(id) {
+  return !!getView(id);
 }
 /**
  * Get view list object
  * @return {Object} ViewList
  */
 export function getViewsFilter(o) {
-  const h = mx.helpers;
-  const data = h.getMapData(o);
+  const data = getMapData(o);
   return data.viewsFilter;
 }
 
@@ -5947,11 +5588,9 @@ export function getViewsFilter(o) {
  * @param {string} o.id map id
  */
 export function getMapPos(o) {
-  const h = mx.helpers;
   o = o || {};
   const ctrls = mx.panel_tools.controls;
-  const r = h.round;
-  const map = h.getMap(o.id);
+  const map = getMap(o.id);
   const bounds = map.getBounds();
   const center = map.getCenter();
   const zoom = map.getZoom();
@@ -5960,15 +5599,15 @@ export function getMapPos(o) {
   const modeSat = ctrls.getButton("btn_theme_sat").isActive();
   const mode3d = ctrls.getButton("btn_3d_terrain").isActive();
   const out = {
-    n: r(bounds.getNorth()),
-    s: r(bounds.getSouth()),
-    e: r(bounds.getEast()),
-    w: r(bounds.getWest()),
-    lat: r(center.lat),
-    lng: r(center.lng),
-    b: r(bearing),
-    p: r(pitch),
-    z: r(zoom),
+    n: round(bounds.getNorth()),
+    s: round(bounds.getSouth()),
+    e: round(bounds.getEast()),
+    w: round(bounds.getWest()),
+    lat: round(center.lat),
+    lng: round(center.lng),
+    b: round(bearing),
+    p: round(pitch),
+    z: round(zoom),
     sat: modeSat,
     t3d: mode3d,
   };
@@ -5984,20 +5623,18 @@ export function getMapPos(o) {
  */
 export function getViews(o) {
   o = o || {};
-  const h = mx.helpers;
-  const d = h.getMapData(o.id);
+  const d = getMapData(o.id);
   const views = d.views || [];
 
   if (o.idView) {
-    o.idView = h.isArray(o.idView) ? o.idView : [o.idView];
+    o.idView = isArray(o.idView) ? o.idView : [o.idView];
     return views.filter((v) => o.idView.indexOf(v.id) > -1);
   } else {
     return views;
   }
 }
 export function getViewsForJSON() {
-  const h = mx.helpers;
-  const views = h.getViews();
+  const views = getViews();
   const f = [
     "id",
     "editor",
@@ -6026,18 +5663,17 @@ export function getViewsForJSON() {
  * @param {String|Object} id Id of the view or view object or view list
  */
 export function getView(id) {
-  const h = mx.helpers;
-  if (h.isView(id)) {
+  if (isView(id)) {
     return id;
   }
-  if (h.isObject(id) && h.isViewId(id.idView)) {
+  if (isObject(id) && isViewId(id.idView)) {
     id = id.idView;
   }
-  if (!h.isViewId(id)) {
+  if (!isViewId(id)) {
     console.warn("No  valid id given. Received ", id);
     return;
   }
-  return h.getViews({ idView: id })[0];
+  return getViews({ idView: id })[0];
 }
 
 /**
@@ -6046,9 +5682,8 @@ export function getView(id) {
  * @param {String} idMap Id of the map
  */
 export function getViewIndex(id) {
-  const h = mx.helpers;
-  const view = h.getView(id);
-  const d = mx.helpers.getMapData();
+  const view = getView(id);
+  const d = getMapData();
   const views = d.views || [];
   return views.indexOf(view);
 }
@@ -6057,7 +5692,7 @@ export function getViewIndex(id) {
  * Toy function to make layer move
  */
 export function makeLayerJiggle(mapId, prefix) {
-  const layersName = mx.helpers.getLayerNamesByPrefix({
+  const layersName = getLayerNamesByPrefix({
     id: mapId,
     prefix: prefix,
   });
@@ -6070,7 +5705,7 @@ export function makeLayerJiggle(mapId, prefix) {
       symbol: "icon-translate",
     };
 
-    const m = mx.helpers.getMap(mapId);
+    const m = getMap(mapId);
 
     layersName.forEach(function (x) {
       const l = m.getLayer(x);
@@ -6104,14 +5739,13 @@ export function makeLayerJiggle(mapId, prefix) {
  * @return {Boolean} enabled
  */
 export function setImmersiveMode(opt) {
-  const h = mx.helpers;
   opt = Object.assign({}, { enable: null, toggle: true, disable: null }, opt);
   const panels = window._button_panels;
-  if (h.isBoolean(opt.disable)) {
+  if (isBoolean(opt.disable)) {
     opt.enable = !opt.disable;
   }
-  const force = opt.toggle === false || h.isBoolean(opt.enable);
-  const isImmersive = h.getImmersiveMode();
+  const force = opt.toggle === false || isBoolean(opt.enable);
+  const isImmersive = getImmersiveMode();
   let immersive = false;
   if (force) {
     immersive = opt.enable === true;
@@ -6196,48 +5830,78 @@ async function getSearchApiKey() {
 }
 
 export async function chaosTest(opt) {
-  const h = mx.helpers;
-  opt = Object.assign({}, { nBatch: 5, duration: 1000 }, opt);
-  await h.viewsCloseAll();
-  const start = performance.now();
-  const views = h.getViews();
-  const curProject = mx.settings.project;
-  try {
-    while (!isCanceled()) {
-      const tt = [];
-      for (let i = 0; i < opt.nBatch; i++) {
-        tt.push(t());
-      }
-      await Promise.all(tt);
-      await wait();
+  opt = Object.assign({}, { run: 5, batch: 5, run_timeout: 10 * 1000 }, opt);
+  const views = getViews();
+  const layersBefore = getLayerNamesByPrefix();
+  const viewsBefore = getViewsOpen();
+  
+
+  for (let i = 0; i < opt.run; i++) {
+    const tt = [];
+    for (let j = 0; j < opt.batch; j++) {
+      tt.push(t());
+    }
+    const promOk = Promise.all(tt);
+    const promFail = stopIfTimeout(opt.run_timeout);
+    await Promise.race([promOk, promFail]);
+    await wait(100);
+  }
+
+  return valid();
+
+  /**
+   * Helpers
+   */
+  function valid() {
+    /*
+     * Check state before adding
+     */
+    const layersAfter = getLayerNamesByPrefix();
+    const viewsAfter = getViewsOpen();
+
+    /**
+     * Validation
+     */
+    const validLN = layersBefore.length === layersAfter.length;
+    const validVN = viewsBefore.length === viewsAfter.length;
+
+    if (!validLN || !validVN) {
+      return false;
     }
 
-    await wait(1000);
-    const nViews = h.getViewsOpen().length;
-    const nLayers = h.getLayerNamesByPrefix().length;
+    const hasLayers = layersBefore.reduce(
+      (a, c) => a && layersAfter.includes(c),
+      true
+    );
 
-    return nViews === 0 && nLayers === 0;
-  } catch (e) {
-    console.warn(e);
+    const hasViews = viewsBefore.reduce(
+      (a, c) => a && viewsAfter.includes(c),
+      true
+    );
+
+    if (!hasLayers || !hasViews) {
+      return false;
+    }
+
+    return true;
+  }
+
+  async function stopIfTimeout(t) {
+    await wait(t);
+    throw new Error(`Run Timeout after : + ${t * 1} ms`);
   }
 
   async function t() {
     const pos = Math.floor(Math.random() * views.length);
     const view = views[pos];
-    await h.viewAdd(view);
-    await wait();
-    await h.viewRemove(view);
+    await viewAdd(view);
+    await wait(rt(1000));
+    await viewRemove(view);
   }
   function wait(t) {
-    return new Promise((r) => setTimeout(r, t || rt()));
+    return new Promise((r) => setTimeout(r, t || 100));
   }
-  function rt() {
-    return Math.random() * 1000 + 100;
-  }
-  function isCanceled() {
-    return (
-      performance.now() - start >= opt.duration ||
-      curProject !== mx.settings.project
-    );
+  function rt(t) {
+    return Math.round(Math.random() * t);
   }
 }

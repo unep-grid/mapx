@@ -1,4 +1,3 @@
-
 export class ObserveMutationAttribute {
   constructor(opt) {
     const oa = this;
@@ -15,12 +14,12 @@ export class ObserveMutationAttribute {
     oa._el = opt.el;
     oa._observer = new MutationObserver((mts) => {
       for (const mt of mts) {
-        if (mt.type === 'attributes' || mt.type === 'childList') {
-          oa.onMutation();
+        if (mt.type === "attributes" || mt.type === "childList") {
+          oa.onMutation(mt);
         }
       }
     });
-    oa._observer.observe(oa._el, {attributes: true, childList: true});
+    oa._observer.observe(oa._el, { attributes: true, childList: true });
   }
   destroy() {
     const oa = this;
@@ -31,13 +30,13 @@ export class ObserveMutationAttribute {
     const oa = this;
     oa._opt.cb = fun;
   }
-  onMutation() {
+  onMutation(mt) {
     const oa = this;
     if (oa._destroyed) {
       return;
     }
     if (oa._opt.cb instanceof Function) {
-      oa._opt.cb(oa.el);
+      oa._opt.cb(mt);
     }
   }
 }

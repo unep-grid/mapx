@@ -1,9 +1,9 @@
-import {isArray, isString, isEmpty} from '@fxi/mx_valid';
-import path from 'path';
-import fs from 'fs';
-import zlib from 'zlib';
-import {settings} from '#root/settings';
-import {readFile} from 'fs/promises';
+import { isArray, isString, isEmpty } from "@fxi/mx_valid";
+import path from "path";
+import fs from "fs";
+import zlib from "zlib";
+import { settings } from "#root/settings";
+import { readFile } from "fs/promises";
 
 /**
  * Conversion of array of column names to pg columns
@@ -31,7 +31,7 @@ function getDistinct(arr) {
  * @param {Object} obj object to be converted in string for messages
  */
 function toRes(obj) {
-  return JSON.stringify(obj) + '\t\n';
+  return JSON.stringify(obj) + "\t\n";
 }
 
 /**
@@ -45,15 +45,15 @@ function toRes(obj) {
 function sendJSON(res, data, opt) {
   opt = {
     end: true,
-    ...opt
+    ...opt,
   };
   opt.end = opt.end || false;
-  data = JSON.stringify(data || '');
-  res.setHeader('Mapx-Content-Length', data.length || 0);
-  res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Cache-Control', 'max-age=0, s-maxage=0');
+  data = JSON.stringify(data || "");
+  res.setHeader("Mapx-Content-Length", data.length || 0);
+  res.setHeader("Content-Type", "application/json");
+  res.setHeader("Cache-Control", "max-age=0, s-maxage=0");
   if (opt.etag) {
-    res.setHeader('Etag', opt.etag);
+    res.setHeader("Etag", opt.etag);
   }
   if (opt.end) {
     res.send(data);
@@ -71,12 +71,12 @@ function sendJSON(res, data, opt) {
  */
 function sendError(res, error, code) {
   if (!code) {
-    code = '200';
+    code = "200";
   }
   error = {
-    message: 'Error',
+    message: "Error",
     ...error,
-    type: 'error'
+    type: "error",
   };
   res.status(code).send(toRes(error));
 }
@@ -91,19 +91,19 @@ function toBoolean(value, def) {
   var tDef = typeof def;
   var tValue = typeof value;
 
-  if (tDef !== 'boolean') {
-    throw Error('toBoolean : default not boolean');
+  if (tDef !== "boolean") {
+    throw Error("toBoolean : default not boolean");
   }
-  if (tValue === 'boolean') {
+  if (tValue === "boolean") {
     return value;
   }
-  if (tValue === 'undefined') {
+  if (tValue === "undefined") {
     return def;
   }
-  if (value === 'true' || value === 't') {
+  if (value === "true" || value === "t") {
     return true;
   }
-  if (value === 'false' || value === 'f') {
+  if (value === "false" || value === "f") {
     return false;
   }
   return Boolean(value);
@@ -115,14 +115,14 @@ function toBoolean(value, def) {
 function randomString(prefix, nRep, nChar, toLower, toUpper) {
   nRep = nRep || 4;
   nChar = nChar || 5;
-  prefix = prefix || 'mx';
+  prefix = prefix || "mx";
   toLower = toLower || false;
   toUpper = toUpper || false;
   var out = [];
-  var sep = '_';
-  var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  var sep = "_";
+  var chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   var n = chars.length - 1;
-  var c = '';
+  var c = "";
   for (var i = 0; i < nRep; i++) {
     out.push(sep);
     for (var j = 0; j < nChar; j++) {
@@ -130,7 +130,7 @@ function randomString(prefix, nRep, nChar, toLower, toUpper) {
       out.push(c);
     }
   }
-  out = prefix + out.join('');
+  out = prefix + out.join("");
   if (toLower) {
     out = out.toLowerCase();
   }
@@ -145,7 +145,7 @@ function randomString(prefix, nRep, nChar, toLower, toUpper) {
  */
 function readTxt(p) {
   p = path.resolve(p);
-  return fs.readFileSync(p, {encoding: 'UTF-8'});
+  return fs.readFileSync(p, { encoding: "UTF-8" });
 }
 
 /**
@@ -170,14 +170,14 @@ function readTemplate(file, data) {
 const ip = {
   get: function (req, res) {
     res.send(req.ip);
-  }
+  },
 };
 
 /**
  * Attributes to pg col
  */
-function attrToPgCol(attribute = 'gid', attributes = [], opt) {
-  const {gidAdd = false} = opt || {gidAdd: false};
+function attrToPgCol(attribute = "gid", attributes = [], opt) {
+  const { gidAdd = false } = opt || { gidAdd: false };
 
   if (isString(attribute)) {
     attribute = [attribute];
@@ -189,7 +189,7 @@ function attrToPgCol(attribute = 'gid', attributes = [], opt) {
   attributes = [...attributes, ...attribute];
 
   if (gidAdd) {
-    attributes.push('gid');
+    attributes.push("gid");
   }
 
   return toPgColumn(getDistinct(attributes));
@@ -218,7 +218,7 @@ function arrayToPgArray(arr, def) {
  * @return {Promise} Promise object with zip buffer
  */
 function dataToJsonZip(data) {
-  const buffer = Buffer.from(JSON.stringify(data), 'utf-8');
+  const buffer = Buffer.from(JSON.stringify(data), "utf-8");
   return new Promise((resolve, reject) => {
     zlib.gzip(buffer, function (err, zOut) {
       if (err) {
@@ -243,17 +243,16 @@ function stop(reason) {
  * @param {String} v String value to convert
  */
 function asArray(v) {
-  
-  if (isEmpty(v) || v === 'null') {
+  if (isEmpty(v) || v === "null") {
     return [];
   }
 
-  if (isString(v) && v.includes(',')) {
-    v = v.split(',');
+  if (isString(v) && v.includes(",")) {
+    v = v.split(",");
   }
 
   if (isString(v)) {
-     return [v];
+    return [v];
   }
 
   if (isArray(v)) {
@@ -268,8 +267,8 @@ function asArray(v) {
  * @param {Array} arr Array to clean
  */
 function cleanArray(arr) {
-  for (const [i,v] of arr.entries()) {
-    if (isEmpty(v) || v === 'null') {
+  for (const [i, v] of arr.entries()) {
+    if (isEmpty(v) || v === "null") {
       arr.splice(i, 1);
     }
   }
@@ -298,7 +297,7 @@ function findValues(obj, key) {
     list.push(obj[key]);
   }
 
-  if (typeof obj === 'object' && obj !== null) {
+  if (typeof obj === "object" && obj !== null) {
     var children = Object.keys(obj);
     if (children.length > 0) {
       for (i = 0; i < children.length; i++) {
@@ -321,7 +320,7 @@ function mwGetConfigMap(_, res) {
  */
 function wait(duration) {
   return new Promise((resolve) => {
-    setTimeout(() => resolve({_timeout: duration}), duration);
+    setTimeout(() => resolve({ _timeout: duration }), duration);
   });
 }
 const asyncDelay = wait;
@@ -340,7 +339,7 @@ async function once(cbs, opt) {
     onError: console.error,
     onSuccess: console.log,
     timeoutMs: 1 * 60 * 1000,
-    ...opt
+    ...opt,
   };
   try {
     const r = await withTimeLimit(cbs, opt.timeoutMs);
@@ -366,7 +365,7 @@ async function onceInterval(cbs, opt) {
     opt = {
       intervalMs: 1 * 60 * 60 * 1000,
       before: false,
-      ...opt
+      ...opt,
     };
     if (opt.before) {
       await once(cbs, opt);
@@ -409,7 +408,7 @@ async function withTimeLimit(cbs, timeoutMs, cbTimeout) {
         throw Error(`Timeout reached for ${cb.name} (${timeoutMs})`);
       }
     }
-    out.push({cb: cb, res: res});
+    out.push({ cb: cb, res: res });
   }
 
   return out;
@@ -419,12 +418,12 @@ async function withTimeLimit(cbs, timeoutMs, cbTimeout) {
  * Set default headers
  */
 function mwSetHeaders(_, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Expose-Headers', 'Content-Length');
-  res.header('Access-Control-Expose-Headers', 'Mapx-Content-Length');
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Expose-Headers", "Content-Length");
+  res.header("Access-Control-Expose-Headers", "Mapx-Content-Length");
   res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
   );
   next();
 }
@@ -440,6 +439,24 @@ async function readJSON(file, base) {
   const data = await readFile(url);
   return JSON.parse(data);
 }
+
+/**
+ * Pretty JSON
+ * @return {String}  JSON formated
+ */
+function prettyJson(obj) {
+  return JSON.stringify(obj, null, 2);
+}
+
+/**
+* Print meaningfull time step 
+* @param {Number} time Starting time
+*/
+function timeStep(start){
+  return Math.round(( Date.now()-start)*1000)/1000;
+}
+
+
 
 /**
  * Exports
@@ -468,11 +485,13 @@ export {
   onceInterval,
   withTimeLimit,
   readJSON,
+  prettyJson,
+  timeStep,
   /**
    * Middleware
    */
   mwGetConfigMap,
   mwSetHeaders,
   /** probably not used **/
-  ip
+  ip,
 };

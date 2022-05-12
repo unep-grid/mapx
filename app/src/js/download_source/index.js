@@ -39,35 +39,36 @@ export class DownloadSourceModal extends EventSimple {
   async init(opt) {
     const md = this;
 
+    if (md._init) {
+      return;
+    }
+    md._init = true;
+
     if (window._download_source_modal instanceof DownloadSourceModal) {
       window._download_source_modal.close();
     }
     window._download_source_modal = md;
 
     md._opt = Object.assign({}, options, opt);
-    try {
-      md._select_auto_store = [];
-      const isDownloadable = await isSourceDownloadable(md._opt.idSource);
-      if (!isDownloadable) {
-        return md.buildNotAllowed();
-      }
-      if (!opt.language) {
-        md._opt.language = getLanguageCurrent();
-      }
-
-      if (!opt.filename) {
-        const meta = await fetchSourceMetadata(md._opt.idSource);
-        md._opt.filename = getLanguageItem(
-          meta?.text?.title || {},
-          md._opt.language
-        );
-      }
-
-      await md.build();
-      md.fire("init");
-    } catch (e) {
-      console.error(e);
+    md._select_auto_store = [];
+    const isDownloadable = await isSourceDownloadable(md._opt.idSource);
+    if (!isDownloadable) {
+      return md.buildNotAllowed();
     }
+    if (!opt.language) {
+      md._opt.language = getLanguageCurrent();
+    }
+
+    if (!opt.filename) {
+      const meta = await fetchSourceMetadata(md._opt.idSource);
+      md._opt.filename = getLanguageItem(
+        meta?.text?.title || {},
+        md._opt.language
+      );
+    }
+
+    await md.build();
+    md.fire("init");
   }
 
   close() {
@@ -76,36 +77,41 @@ export class DownloadSourceModal extends EventSimple {
       return;
     }
     md._closed = true;
-    for (const d of md._select_auto_store) {
-      if (d.destroy) {
-        d.destroy();
+    for (const select_auto of md._select_auto_store) {
+      if (select_auto.destroy) {
+        select_auto.destroy();
       }
     }
     md._modal.close();
     md.fire("closed");
   }
 
-  download() {
-    const md = this;
-    const opt = md._opt;
-    const formIsValid = md.isValid();
-    if (formIsValid) {
-      const url = new URL(getApiUrl("getSourceDownload"));
-      for (const k in opt) {
-        url.searchParams.set(k, opt[k]);
+  async download() {
+    try {
+      const md = this;
+      const opt = md._opt;
+      const formIsValid = md.isValid();
+      if (formIsValid) {
+        const url = new URL(getApiUrl("getSourceDownload"));
+        for (const k in opt) {
+          url.searchParams.set(k, opt[k]);
+        }
+        mx.nc.panel.open();
+        md.close();
+        new FlashItem("bell");
+        await md.downloadUrl(url);
+        return true;
       }
-      md.fire("download_start", { url });
-
-      fetch(url)
-        .then(() => {
-          md.fire("download_end", { url });
-        })
-        .catch(console.error);
-
-      mx.nc.panel.open();
-      md.close();
-      new FlashItem("bell");
+    } catch (e) {
+      console.error(e);
     }
+  }
+
+  async downloadUrl(url) {
+    const md = this;
+    md.fire("download_start", { url });
+    await fetch(url);
+    md.fire("download_end", { url });
   }
 
   update(id) {
@@ -245,10 +251,11 @@ export class DownloadSourceModal extends EventSimple {
     md._select_auto_store.push(selectFormat);
     md._select_auto_store.push(selectCountries);
 
-    for (const s of md._select_auto_store) {
-      if (!s._init) {
-        await s.once("init");
+    for (const select_auto of md._select_auto_store) {
+      if (!select_auto._built) {
+        await select_auto.once("built");
       }
+      
     }
 
     md.fire("built");

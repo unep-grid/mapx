@@ -1,22 +1,23 @@
 mxSchemaViewStyle <- function(
   viewData,
   language = "fr"
-  ){
-
+) {
   conf <- mxGetDefaultConfig()
 
   view <- viewData
-  jsonPaint <- .get(conf,c("templates","text","custom_paint"))
-  jsonPaintExample <- .get(conf,c("templates","text","custom_paint_example"))
-  geomType <- .get(viewData,c("data","geometry","type"))
+  jsonPaint <- .get(conf, c("templates", "text", "custom_paint"))
+  jsonPaintExample <- .get(conf, c("templates", "text", "custom_paint_example"))
+  geomType <- .get(viewData, c("data", "geometry", "type"))
   isPoint <- geomType == "point"
 
-  if(noDataCheck(view)) return()
+  if (noDataCheck(view)) {
+    return()
+  }
 
   #
   # Keep track of property order
   #
-  mxCounter(reset=T)
+  mxCounter(reset = T)
 
   #
   # language settings
@@ -24,67 +25,68 @@ mxSchemaViewStyle <- function(
   l <- language
 
   # all languages
-  ll <- .get(conf,c("languages","codes"))
+  ll <- .get(conf, c("languages", "codes"))
 
   #
   # data
   #
-  data <- .get(view,c("data"))
+  data <- .get(view, c("data"))
 
   #
   # id
   #
-  idView <- .get(view,c("id"))
+  idView <- .get(view, c("id"))
 
   #
   # import style
   #
-  style <- .get(data,c("style"))
+  style <- .get(data, c("style"))
 
   #
   # shortcut to translate function
   #
 
-  tt = function(id){
-    d(id,lang=l,web=F,asChar=T)
+  tt <- function(id) {
+    d(id, lang = l, web = F, asChar = T)
   }
 
   #
   # retrieve default
   #
 
-  variableName <- .get(data,c("attribute","name"))
-  variableNames <- .get(data,c("attribute","names"))
-  layerName <- .get(data,c("source","layerInfo","name"))
+  variableName <- .get(data, c("attribute", "name"))
+  variableNames <- .get(data, c("attribute", "names"))
+  layerName <- .get(data, c("source", "layerInfo", "name"))
   srcSummary <- mxApiGetSourceSummary(
     idSource = layerName,
     idAttr = variableName
   )
 
   isContinuous <- identical(
-    'continuous',
-    .get(srcSummary,
-    c(
-      'attribute_stat',
-      'type'
+    "continuous",
+    .get(
+      srcSummary,
+      c(
+        "attribute_stat",
+        "type"
       )
     )
   )
 
-  if(isContinuous){
+  if (isContinuous) {
     values <- NULL
-  }else{
-    table <- .get(srcSummary,c('attribute_stat','table'))
-    values <- c('all',sapply(table,`[[`,c('value')))
+  } else {
+    table <- .get(srcSummary, c("attribute_stat", "table"))
+    values <- c("all", sapply(table, `[[`, c("value")))
   }
 
   #
   # sprite settings
   #
   jsonSpritePath <- file.path("src/glyphs/dist/sprites/sprite.json")
-  
+
   # stop if the path is not found
-  if(!file.exists(jsonSpritePath)) stop("json path is not found")
+  if (!file.exists(jsonSpritePath)) stop("json path is not found")
 
   # fetch sprite name
   sprites <- sort(names(jsonlite::fromJSON(jsonSpritePath)))
@@ -92,8 +94,8 @@ mxSchemaViewStyle <- function(
   # Points : maki-
   # Polygon : t_ & geol_
   #
-  spritesPrefix <-  .get(config, c('sprites_prefix'))
-  sprites <- sprites[grepl(spritesPrefix[[geomType]],sprites)]
+  spritesPrefix <- .get(config, c("sprites_prefix"))
+  sprites <- sprites[grepl(spritesPrefix[[geomType]], sprites)]
 
 
 
@@ -104,33 +106,35 @@ mxSchemaViewStyle <- function(
   # labels
   labels <- list()
 
-  for(i in ll){
+  for (i in ll) {
     r <- list(
       list(
         title = tt("schema_style_label"),
         type = "string",
         options = list(
           hidden = i != l
-          )
         )
       )
-    names(r)<- sprintf("label_%s",i)
-    labels <- c(labels,r)
+    )
+    names(r) <- sprintf("label_%s", i)
+    labels <- c(labels, r)
   }
 
   # value
-  if(isContinuous){
-    min <- .get(srcSummary,
+  if (isContinuous) {
+    min <- .get(
+      srcSummary,
       c(
-        'attribute_stat',
-        'min'
+        "attribute_stat",
+        "min"
       )
     )
-    
-    max <- .get(srcSummary,
+
+    max <- .get(
+      srcSummary,
       c(
-        'attribute_stat',
-        'max'
+        "attribute_stat",
+        "max"
       )
     )
 
@@ -152,16 +156,15 @@ mxSchemaViewStyle <- function(
         # maximum =  max
       )
     )
-
-  }else{
+  } else {
     value <- list(
       value = list(
         title = tt("schema_style_value"),
         type = "string",
         enum = as.list(values),
         minLength = 0
-        )
       )
+    )
   }
   # color
   color <- list(
@@ -170,49 +173,49 @@ mxSchemaViewStyle <- function(
       type = "string",
       format = "color-picker",
       default = "#f1f3d7"
-      )
     )
+  )
 
   # opacity
-  opacity <-  list(
+  opacity <- list(
     opacity = list(
       title = tt("schema_style_opacity"),
       type = "number",
-      enum = c(0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1),
+      enum = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1),
       default = 0.7
-      )
     )
+  )
 
   # size
   size <- list(
     size = list(
       title = tt("schema_style_size"),
       type = "number",
-      default = ifelse(isPoint,7,1)
-      )
+      default = ifelse(isPoint, 7, 1)
     )
+  )
 
   # sprite
-  sprite <-  list(
+  sprite <- list(
     sprite = list(
       title = tt("schema_style_sprite"),
       type = "string",
-      enum = c("none",sprites)
-      )
+      enum = c("none", sprites)
     )
+  )
 
 
   #
   #  set rules list
-  # 
+  #
 
   nullsValue <- list(
     value = list(
       title = tt("schema_style_value"),
       type = "string",
       minLength = 0
-      )
     )
+  )
 
   nulls <- list(
     nulls = list(
@@ -224,7 +227,7 @@ mxSchemaViewStyle <- function(
         disable_array_add = TRUE,
         disable_array_delete = TRUE,
         collapsed = TRUE
-        ),
+      ),
       items = list(
         type = "object",
         title = tt("schema_style_nulls"),
@@ -236,14 +239,14 @@ mxSchemaViewStyle <- function(
           size,
           sprite
         )
-        ),
+      ),
       default = list(
         list(
           value = NULL,
-          label_en = 'No data',
+          label_en = "No data",
           color = "#A9A9A9",
           opacity = 0.7,
-          size = ifelse(isPoint,7,1),
+          size = ifelse(isPoint, 7, 1),
           sprite = ""
         )
       )
@@ -262,16 +265,16 @@ mxSchemaViewStyle <- function(
       description = tt("schema_style_hide_nulls_desc"),
       type = "boolean",
       format = "checkbox",
-      default  = TRUE
-      )
+      default = TRUE
     )
+  )
 
 
 
 
   #
   #  set rules list
-  # 
+  #
   rules <- list(
     rules = list(
       propertyOrder = 3,
@@ -283,7 +286,7 @@ mxSchemaViewStyle <- function(
         title = tt("schema_style_rule"),
         options = list(
           idView = idView
-          ),
+        ),
         properties = c(
           value,
           labels,
@@ -291,14 +294,14 @@ mxSchemaViewStyle <- function(
           opacity,
           size,
           sprite
-          )
         )
       )
     )
+  )
 
 
   #
-  # Numeric : Include next value in class 
+  # Numeric : Include next value in class
   # >a  to <=b -> if checked
   # or
   # >=a to < b
@@ -308,25 +311,25 @@ mxSchemaViewStyle <- function(
       title = tt("schema_style_include_upper_bound"),
       description = tt("schema_style_include_upper_bound_desc"),
       type = "boolean",
-      format ="checkbox",
+      format = "checkbox",
       default = TRUE
-      )
     )
+  )
 
   ##
   # NOTE: remove items from dictionnary
   ## Exclude min / max as absolute bounds
   ## ( retrieved from source stat )
-  #excludeMinMax <- list(
-    #excludeMinMax = list(
-      #propertyOrder = 4,
-      #title = tt("schema_style_exclude_min_max"),
-      #description = tt("schema_style_exclude_min_max_desc"),
-      #type = "boolean",
-      #format ="checkbox",
-      #default = FALSE
-      #)
-    #)
+  # excludeMinMax <- list(
+  # excludeMinMax = list(
+  # propertyOrder = 4,
+  # title = tt("schema_style_exclude_min_max"),
+  # description = tt("schema_style_exclude_min_max_desc"),
+  # type = "boolean",
+  # format ="checkbox",
+  # default = FALSE
+  # )
+  # )
 
 
   #
@@ -339,12 +342,12 @@ mxSchemaViewStyle <- function(
       description = tt("schema_style_reverse_order_desc"),
       type = "boolean",
       format = "checkbox"
-      )
     )
-  
+  )
+
   showSymbolLabel <- NULL
 
-  if(isPoint){
+  if (isPoint) {
     showSymbolLabel <- list(
       showSymbolLabel = list(
         propertyOrder = 6,
@@ -366,8 +369,8 @@ mxSchemaViewStyle <- function(
       description = tt("schema_style_size_zoom_max_desc"),
       type = "number",
       default = 0
-      )
     )
+  )
 
   sizeFactorZoomMin <- list(
     sizeFactorZoomMin = list(
@@ -375,8 +378,8 @@ mxSchemaViewStyle <- function(
       description = tt("schema_style_size_zoom_min_desc"),
       type = "number",
       default = 0
-      )
     )
+  )
 
   sizeFactorZoomExponent <- list(
     sizeFactorZoomExponent = list(
@@ -384,8 +387,8 @@ mxSchemaViewStyle <- function(
       description = tt("schema_style_size_zoom_exponent_desc"),
       type = "number",
       default = 1
-      )
     )
+  )
 
   zoomMin <- list(
     zoomMin = list(
@@ -393,8 +396,8 @@ mxSchemaViewStyle <- function(
       description = tt("schema_style_zoom_min_desc"),
       type = "number",
       default = 0
-      )
     )
+  )
 
   zoomMax <- list(
     zoomMax = list(
@@ -402,56 +405,57 @@ mxSchemaViewStyle <- function(
       description = tt("schema_style_zoom_max_desc"),
       type = "number",
       default = 22
-      )
     )
+  )
 
 
-  zoomConfig = list(
-    zoomConfig = list (
-      #type = "object",
+  zoomConfig <- list(
+    zoomConfig = list(
+      # type = "object",
       propertyOrder = 7,
       title = tt("schema_style_config_zoom"),
       options = list(
         collapsed = TRUE
-        ),
+      ),
       properties = c(
         zoomMin,
         zoomMax,
         sizeFactorZoomMax,
         sizeFactorZoomMin,
         sizeFactorZoomExponent
-        )
       )
     )
+  )
 
 
   #
   # set paint
   #
 
-  htmlHelp = as.character(
+  htmlHelp <- as.character(
     tags$div(
       tags$p(
-        sprintf("
+        sprintf(
+          "
           This editor can set and overwrite rules values.
           Rules are still used for legend.
           Current secondary variables are : zoom;  %1$s
           ",
-          paste(variableNames,collapse="; ")
-          )
-        ),
-      mxFold(content=tags$code(jsonPaintExample),labelText="Example")
-      )
+          paste(variableNames, collapse = "; ")
+        )
+      ),
+      mxFold(content = tags$code(jsonPaintExample), labelText = "Example")
     )
+  )
 
-  custom = list(
-    custom = list (
+  custom <- list(
+    custom = list(
       type = "object",
       propertyOrder = 8,
       title = tt("custom_style"),
       options = list(
         collapsed = TRUE
-        ),
+      ),
       properties = c(
         json = list(
           list(
@@ -460,28 +464,28 @@ mxSchemaViewStyle <- function(
               language = "javascript",
               editor = "ace",
               htmlHelp = htmlHelp
-              ),
+            ),
             type = "string",
             format = "textarea",
             default = jsonPaint
-            )
           )
         )
       )
     )
+  )
 
   #
   # Legend title
   #
-  titleLegend = list(
+  titleLegend <- list(
     titleLegend = mxSchemaMultiLingualInput(
       language = l,
-      keyTitle="schema_style_title_legend",
-      default = list(en="Legend"),
-      type="string",
+      keyTitle = "schema_style_title_legend",
+      default = list(en = "Legend"),
+      type = "string",
       propertyOrder = 9
-      )
     )
+  )
 
   #
   # main properties
@@ -489,9 +493,9 @@ mxSchemaViewStyle <- function(
   properties <- c(
     nulls,
     rules,
-    if(isPoint) zoomConfig,
-    if(isContinuous) includeUpperBoundInInterval,
-    #if(isContinuous) excludeMinMax,
+    if (isPoint) zoomConfig,
+    if (isContinuous) includeUpperBoundInInterval,
+    # if(isContinuous) excludeMinMax,
     reverseLayer,
     showSymbolLabel,
     hideNulls,
@@ -505,10 +509,7 @@ mxSchemaViewStyle <- function(
     title = tt("view"),
     type = "object",
     properties = properties
-    )
+  )
 
   return(schema)
 }
-
-
-

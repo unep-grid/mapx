@@ -6,7 +6,7 @@ import {fetchJsonProgress} from './mx_helper_fetch_progress.js';
 import {modal, modalConfirm} from './mx_helper_modal.js';
 import {getQueryViewsInit} from './mx_helper_url.js';
 import {getDictItem, getLanguageCurrent} from './language';
-import {getViewsRemote} from './mx_helper_map.js';
+import {getViewsRemote} from './map_helpers/index.js';
 
 let start;
 export async function fetchViews(o) {

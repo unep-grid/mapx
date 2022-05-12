@@ -132,7 +132,7 @@ export function isViewLocal(item) {
   return (
     isView(item) &&
     isArray(item._components) &&
-    item._components.indexOf("view_local") > -1
+    item._components.includes("view_local")
   );
 }
 

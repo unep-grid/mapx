@@ -1,5 +1,35 @@
 [
   {
+    "id": "code_integration_select_template_label",
+    "en": "Select template",
+    "de": "Vorlage auswählen"
+  },
+  {
+    "id": "code_integration_select_template_desc",
+    "en": "Code template, boilerplate, in another format",
+    "de": "Codevorlage, Boilerplate, in einem anderen Format"
+  },
+  {
+    "id": "code_integration_template_sld_layers",
+    "en": "SLD format",
+    "de": "SLD-Format"
+  },
+  {
+    "id": "code_integration_template_mapbox_style",
+    "en": "Mapbox style (full)",
+    "de": "Mapbox-Stil (vollständig)"
+  },
+  {
+    "id": "code_integration_template_mapbox_layers",
+    "en": "Mapbox style (layers only)",
+    "de": "Mapbox-Stil (nur Ebenen)"
+  },
+  {
+    "id": "code_integration_template_maplibre_simple_app",
+    "en": "Simple html/js app, using maplibre",
+    "de": "Einfache HTML/JS-App mit Maplibre"
+  },
+  {
     "id": "ABW",
     "en": "Aruba",
     "de": "Aruba"
@@ -1738,6 +1768,21 @@
     "id": "btn_add_source",
     "en": "Add a source layer",
     "de": "Fügen Sie eine Quellenebene hinzu "
+  },
+  {
+    "id": "btn_update_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "de": "Geoserver aktualisieren: DB neu aufbauen"
+  },
+  {
+    "id": "btn_rebuild_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "de": "Geoserver aktualisieren: DB neu aufbauen"
+  },
+  {
+    "id": "btn_rebuild_geoserver_recalc_style",
+    "en": "Update geoserver : rebuild DB + recalc views style",
+    "de": "Geoserver aktualisieren: DB neu erstellen + Ansichtsstil neu berechnen"
   },
   {
     "id": "btn_about",
@@ -4210,14 +4255,9 @@
     "de": "Lassen Sie diese Quelle herunterladen "
   },
   {
-    "id": "gs_ws_a",
-    "en": "Publish all related views via WMS",
-    "de": "Veröffentlichen Sie alle zugehörigen Ansichten über WMS "
-  },
-  {
     "id": "gs_ws_b",
-    "en": "Publish all related views via WMS/WFS/WCS",
-    "de": "Veröffentlichen Sie alle zugehörigen Ansichten über WMS / WFS / WCS "
+    "en": "Publish all related public views via WMS/WFS/WCS",
+    "de": "Veröffentlichen Sie alle zugehörigen öffentlichen Ansichten über WMS/WFS/WCS"
   },
   {
     "id": "src_download_issues",
@@ -6987,7 +7027,7 @@
   {
     "id": "share_manager_title",
     "en": "Sharing manager",
-    "de": "Sharing Manager "
+    "de": "Freigabemanager"
   },
   {
     "id": "share_form_title",

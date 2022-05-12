@@ -1,5 +1,35 @@
 [
   {
+    "id": "code_integration_select_template_label",
+    "en": "Select template",
+    "ru": "Выберите шаблон"
+  },
+  {
+    "id": "code_integration_select_template_desc",
+    "en": "Code template, boilerplate, in another format",
+    "ru": "Шаблон кода, шаблон, в другом формате"
+  },
+  {
+    "id": "code_integration_template_sld_layers",
+    "en": "SLD format",
+    "ru": "SLD-формат"
+  },
+  {
+    "id": "code_integration_template_mapbox_style",
+    "en": "Mapbox style (full)",
+    "ru": "Стиль Mapbox (полный)"
+  },
+  {
+    "id": "code_integration_template_mapbox_layers",
+    "en": "Mapbox style (layers only)",
+    "ru": "Стиль Mapbox (только слои)"
+  },
+  {
+    "id": "code_integration_template_maplibre_simple_app",
+    "en": "Simple html/js app, using maplibre",
+    "ru": "Простое приложение html/js, использующее maplibre"
+  },
+  {
     "id": "ABW",
     "en": "Aruba",
     "ru": "Аруба"
@@ -1738,6 +1768,21 @@
     "id": "btn_add_source",
     "en": "Add a source layer",
     "ru": "Добавить исходный слой "
+  },
+  {
+    "id": "btn_update_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "ru": "Обновить геосервер: перестроить БД"
+  },
+  {
+    "id": "btn_rebuild_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "ru": "Обновить геосервер: перестроить БД"
+  },
+  {
+    "id": "btn_rebuild_geoserver_recalc_style",
+    "en": "Update geoserver : rebuild DB + recalc views style",
+    "ru": "Обновить геосервер: перестроить БД + пересчитать стиль представлений"
   },
   {
     "id": "btn_about",
@@ -4210,14 +4255,9 @@
     "ru": "Разрешить загрузку этого источника "
   },
   {
-    "id": "gs_ws_a",
-    "en": "Publish all related views via WMS",
-    "ru": "Публикация всех связанных представлений через WMS "
-  },
-  {
     "id": "gs_ws_b",
-    "en": "Publish all related views via WMS/WFS/WCS",
-    "ru": "Публикация всех связанных представлений через WMS / WFS / WCS "
+    "en": "Publish all related public views via WMS/WFS/WCS",
+    "ru": "Публикация всех связанных общедоступных представлений через WMS/WFS/WCS"
   },
   {
     "id": "src_download_issues",
@@ -6987,7 +7027,7 @@
   {
     "id": "share_manager_title",
     "en": "Sharing manager",
-    "ru": "Менеджер обмена "
+    "ru": "Менеджер обмена"
   },
   {
     "id": "share_form_title",

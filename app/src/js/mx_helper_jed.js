@@ -1,6 +1,8 @@
-import {getLanguageCurrent} from "./language";
-
-
+import { getLanguageCurrent } from "./language";
+import { isEmpty } from "./is_test_mapx";
+import { path } from "./mx_helper_misc.js";
+import { getViewJson } from "./map_helpers/index.js";
+import { getViewMapboxStyle, mapboxToSld } from "./style_vt/index.js";
 /**
  * @param {Object} o options
  * @param {String} o.id Id of target element
@@ -12,7 +14,7 @@ export async function jedInit(o) {
   const h = mx.helpers;
 
   const dict = await getDictJsonEditorDict();
-  await h.moduleLoad('json-editor');
+  await h.moduleLoad("json-editor");
   const id = o.id;
   const schema = o.schema;
   const startVal = o.startVal;
@@ -21,7 +23,7 @@ export async function jedInit(o) {
   if (dict) {
     JSONEditor.defaults.languages = dict;
   }
-  JSONEditor.defaults.language = getLanguageCurrent() 
+  JSONEditor.defaults.language = getLanguageCurrent();
 
   const elJed = document.getElementById(id);
   let draftLock = true;
@@ -41,8 +43,8 @@ export async function jedInit(o) {
       aceEditors: [],
       extend: {
         position: {},
-        texteditor: {}
-      }
+        texteditor: {},
+      },
     };
   }
 
@@ -55,14 +57,14 @@ export async function jedInit(o) {
   // opt can't be changed after instantiation.
   const opt = {
     ajax: true,
-    theme: 'bootstrap3',
-    iconlib: 'bootstrap3',
+    theme: "bootstrap3",
+    iconlib: "bootstrap3",
     disable_collapse: false,
     disable_properties: true,
     disableSelectize: false,
     disable_edit_json: false,
     required_by_default: true,
-    show_errors: 'always',
+    show_errors: "always",
     no_additional_properties: true,
     schema: schema,
     startval: startVal,
@@ -70,17 +72,18 @@ export async function jedInit(o) {
     draftAutoSaveId: null,
     draftTimestamp: null,
     getValidationOnChange: false,
-    getValuesOnChange: false
+    getValuesOnChange: false,
+    hooksOnGet: [],
   };
 
-   Object.assign(opt_final, opt, options);
+  Object.assign(opt_final, opt, options);
 
   if (opt_final.draftAutoSaveId && opt_final.draftAutoSaveDbTimestamp) {
-    idDraft = id + '@' + opt_final.draftAutoSaveId;
+    idDraft = id + "@" + opt_final.draftAutoSaveId;
     draftDbTimeStamp = opt_final.draftAutoSaveDbTimestamp;
   }
 
-  JSONEditor.plugins.ace.theme = 'github';
+  JSONEditor.plugins.ace.theme = "github";
   JSONEditor.plugins.selectize.enable = !opt_final.disableSelectize;
 
   /**
@@ -92,22 +95,23 @@ export async function jedInit(o) {
   /**
    * Create new editor
    */
-  elJed.innerHTML = '';
+  elJed.innerHTML = "";
   elJed.dataset.jed_id = id;
   const editor = new JSONEditor(elJed, opt_final);
   jed.editors[id] = editor;
+
+  /**
+   * Translate not available in custom validator (not binded)..
+   * we set one globaly here in jed object. Used in e.g. mx_extend_validation.js
+   */
   if (!jed.helper.translate) {
-    /**
-     * Translate not available in custom validator (not binded)..
-     * we set one globaly here in jed object. Used in e.g. mx_extend_validation.js
-     */
     jed.helper.translate = editor.translate;
   }
 
   /**
    * Test for readyness
    */
-  editor.on('ready', async function() {
+  editor.on("ready", async function () {
     /**
      * Auto save draft
      */
@@ -115,7 +119,7 @@ export async function jedInit(o) {
       try {
         const draft = await mx.data.draft.getItem(idDraft);
         draftLock = false;
-        if (!draft || draft.type !== 'draft') {
+        if (!draft || draft.type !== "draft") {
           return;
         }
         const draftClientTimeStamp = draft.timestamp;
@@ -128,7 +132,7 @@ export async function jedInit(o) {
             idDraft: idDraft,
             timeDb: opt_final.draftAutoSaveDbTimestamp,
             draft: draft,
-            saved: opt_final.startval
+            saved: opt_final.startval,
           });
         }
       } catch (e) {
@@ -140,22 +144,22 @@ export async function jedInit(o) {
      * Report ready state to shiny
      */
     if (window.Shiny) {
-      Shiny.onInputChange(id + '_ready', new Date());
+      Shiny.onInputChange(id + "_ready", new Date());
     } else {
-      console.log(id + '_ready');
+      console.log(id + "_ready");
     }
   });
 
   /**
    * On editor change
    */
-  editor.on('change', async function() {
+  editor.on("change", async function () {
     if (idDraft && !draftLock) {
       const data = editor.getValue();
       await mx.data.draft.setItem(idDraft, {
-        type: 'draft',
+        type: "draft",
         timestamp: Math.round(Date.now() / 1000),
-        data: data
+        data: data,
       });
     }
 
@@ -168,13 +172,13 @@ export async function jedInit(o) {
       /**
        * Continous validation transfer on input
        */
-      jedGetValidationById({id: id, idEvent: 'change'});
+      jedGetValidationById({ id: id, idEvent: "change" });
     }
     if (opt_final.getValuesOnChange) {
       /**
        * Continous data transfer on input
        */
-      jedGetValuesById({id: id, idEvent: 'change'});
+      jedGetValuesById({ id: id, idEvent: "change" });
     }
   });
 }
@@ -186,22 +190,17 @@ function jedValidateSize(editor) {
   const h = mx.helpers;
   const values = editor.getValue();
 
-  return h.getSizeOf(values, false).then(function(size) {
+  return h.getSizeOf(values, false).then(function (size) {
     if (size > mx.settings.maxByteJed) {
       const sizeReadable = h.formatByteSize(size);
       h.modal({
         addBackground: true,
-        id: 'warningSize',
-        title:
-          'Warning : size greater than ' +
-          mx.settings.maxByteJed +
-          ' ( ' +
-          sizeReadable +
-          ')',
+        id: "warningSize",
+        title: `Warning : size greater than ${mx.settings.maxByteJed} ( ${sizeReadable} )`,
         content: h.el(
-          'b',
-          'Warning: this form data is too big. Please remove unnecessary item(s) and/or source data (images, binary files) from a dedicated server.'
-        )
+          "b",
+          "Warning: this form data is too big. Please remove unnecessary item(s) and/or source data (images, binary files) from a dedicated server."
+        ),
       });
     }
   });
@@ -213,10 +212,10 @@ function jedValidateSize(editor) {
  */
 function jedAddAncestorErrors(editor) {
   const elEditor = editor.element;
-  const elsJedError = elEditor.querySelectorAll('.jed-error');
+  const elsJedError = elEditor.querySelectorAll(".jed-error");
 
   for (let i = 0; i < elsJedError.length; i++) {
-    elsJedError[i].classList.remove('jed-error');
+    elsJedError[i].classList.remove("jed-error");
   }
 
   const valid = editor.validate();
@@ -224,14 +223,14 @@ function jedAddAncestorErrors(editor) {
 
   if (issueLength > 0) {
     valid.forEach((v) => {
-      const p = v.path.split('.');
+      const p = v.path.split(".");
       const pL = p.length;
       for (let k = 0; k < pL; k++) {
         const elError = elEditor.querySelector(
-          "[data-schemapath='" + p.join('.') + "']"
+          "[data-schemapath='" + p.join(".") + "']"
         );
         if (elError) {
-          elError.classList.add('jed-error');
+          elError.classList.add("jed-error");
         }
         p.pop();
       }
@@ -246,9 +245,9 @@ function jedAddAncestorErrors(editor) {
 export function jedRemoveDraft(o) {
   const idEditor = o.id;
   const idItem = o.idItem;
-  const idDraft = idEditor + '@' + idItem;
+  const idDraft = idEditor + "@" + idItem;
   mx.data.draft.removeItem(idDraft).then(() => {
-    console.log('item ' + idDraft + 'removed from mx.data.draft');
+    console.log("item " + idDraft + "removed from mx.data.draft");
   });
 }
 
@@ -260,27 +259,35 @@ export function jedRemoveDraft(o) {
 export function jedUpdate(o) {
   const id = o.id;
   const val = o.val;
-  const jed = mx.helpers.path(window, 'jed.editors.' + id);
+  const jed = path(window, "jed.editors." + id);
   if (jed) {
     jed.setValue(val);
   }
 }
 
-/** Get jed editor value
+/**
+ * Get jed editor value
  * @param {Object} o options
  * @param {String} o.id Id of target element
  */
-export function jedGetValuesById(o) {
+export async function jedGetValuesById(o) {
   const id = o.id;
-  const jed = mx.helpers.path(window, 'jed.editors.' + id);
+  const jed = path(window, "jed.editors." + id);
   if (jed) {
     const values = {
       data: jed.getValue(),
       time: Date.now(),
-      idEvent: o.idEvent
+      idEvent: o.idEvent,
     };
     if (values && window.Shiny) {
-      Shiny.onInputChange(id + '_values', values);
+      /**
+       * Apply value transform on get values
+       */
+      const hasHooks = !isEmpty(jed.options.hooksOnGet);
+      if (hasHooks) {
+        await jedHooksApply(values, jed.options.hooksOnGet);
+      }
+      Shiny.onInputChange(id + "_values", values);
     } else {
       return values;
     }
@@ -293,15 +300,15 @@ export function jedGetValuesById(o) {
  */
 export function jedGetValidationById(o) {
   const id = o.id;
-  const jed = mx.helpers.path(window, 'jed.editors.' + id);
+  const jed = path(window, "jed.editors." + id);
   if (jed) {
     const valid = {
       data: jed.validate(),
       time: Date.now(),
-      idEvent: o.idEvent
+      idEvent: o.idEvent,
     };
     if (window.Shiny) {
-      Shiny.onInputChange(id + '_issues', valid);
+      Shiny.onInputChange(id + "_issues", valid);
     } else {
       return values;
     }
@@ -319,10 +326,10 @@ async function jedShowDraftRecovery(o) {
   const h = mx.helpers;
   const el = h.el;
 
-  if (!o.draft || o.draft.type !== 'draft') {
+  if (!o.draft || o.draft.type !== "draft") {
     throw new Error({
-      msg: 'Invalid draft',
-      data: o.draft
+      msg: "Invalid draft",
+      data: o.draft,
     });
   }
 
@@ -333,109 +340,109 @@ async function jedShowDraftRecovery(o) {
   const dateTimeBrowser = formatDateTime(o.draft.timestamp);
 
   const diff = await getDiff();
-  const isEmpty = h.isEmpty(diff);
-  if (isEmpty) {
+  const hasEmptyDiff = isEmpty(diff);
+  if (hasEmptyDiff) {
     return;
   }
 
-  const btnYes = el('button', {
-    type: 'button',
-    class: ['btn', 'btn-default'],
-    on: ['click', restore],
+  const btnYes = el("button", {
+    type: "button",
+    class: ["btn", "btn-default"],
+    on: ["click", restore],
     dataset: {
-      lang_key: 'draft_recover_use_most_recent'
-    }
+      lang_key: "draft_recover_use_most_recent",
+    },
   });
 
-  const btnDiffData = el('button', {
-    type: 'button',
-    class: ['btn', 'btn-default'],
-    on: ['click', previewDiff],
+  const btnDiffData = el("button", {
+    type: "button",
+    class: ["btn", "btn-default"],
+    on: ["click", previewDiff],
     dataset: {
-      lang_key: 'draft_recover_preview_diff'
-    }
+      lang_key: "draft_recover_preview_diff",
+    },
   });
 
   let elData;
 
   const modal = h.modal({
     addBackground: true,
-    id: 'modalDataRecovery',
-    title: h.el('span', {dataset: {lang_key: 'draft_recover_modal_title'}}),
+    id: "modalDataRecovery",
+    title: h.el("span", { dataset: { lang_key: "draft_recover_modal_title" } }),
     buttons: [btnYes, btnDiffData],
-    textCloseButton: el('span', {
-      dataset: {lang_key: 'draft_recover_cancel'}
+    textCloseButton: el("span", {
+      dataset: { lang_key: "draft_recover_cancel" },
     }),
     content: el(
-      'div',
-      el('h3', {
+      "div",
+      el("h3", {
         dataset: {
-          lang_key: 'draft_recover_summary_title'
-        }
+          lang_key: "draft_recover_summary_title",
+        },
       }),
       el(
-        'p',
+        "p",
         el(
-          'ul',
+          "ul",
           el(
-            'li',
-            el('span', {
-              dataset: {lang_key: 'draft_recover_last_saved_date'}
+            "li",
+            el("span", {
+              dataset: { lang_key: "draft_recover_last_saved_date" },
             }),
-            el('span', ': ' + dateTimeDb)
+            el("span", ": " + dateTimeDb)
           ),
           el(
-            'li',
-            el('span', {
-              dataset: {lang_key: 'draft_recover_recovered_date'}
+            "li",
+            el("span", {
+              dataset: { lang_key: "draft_recover_recovered_date" },
             }),
-            el('span', ': ' + dateTimeBrowser)
+            el("span", ": " + dateTimeBrowser)
           )
         ),
-        (elData = el('div'))
+        (elData = el("div"))
       )
-    )
+    ),
   });
 
   h.updateLanguageElements({
-    el: modal
+    el: modal,
   });
 
   function getDiff() {
     return h.jsonDiff(dbData, recoveredData, {
-      propertyFilter: function(name) {
+      propertyFilter: function (name) {
         const firstChar = name.slice(0, 1);
         /**
          * Set of known key that should not be used in diff
          */
         return (
-          name !== 'spriteEnable' && firstChar !== '_' && firstChar !== '$'
+          name !== "spriteEnable" && firstChar !== "_" && firstChar !== "$"
         );
-      }
+      },
     });
   }
 
   async function previewDiff() {
-    const elItem = el('div', {
-      class: ['mx-diff-item']
+    const elItem = el("div", {
+      class: ["mx-diff-item"],
     });
-    elData.innerHTML = '';
-    elData.classList.add('mx-diff-items');
+    elData.innerHTML = "";
+    elData.classList.add("mx-diff-items");
     elData.appendChild(
-      el('h3', el('span', {dataset: {lang_key: 'draft_recover_diffs'}}))
+      el("h3", el("span", { dataset: { lang_key: "draft_recover_diffs" } }))
     );
     elData.appendChild(elItem);
     const html = await h.jsonDiff(dbData, recoveredData, {
       toHTML: true,
-      propertyFilter: function(name) {
+      propertyFilter: function (name) {
         const firstChar = name.slice(0, 1);
         /**
          * Set of known key that should not be used in diff
          */
         return (
-          name !== 'spriteEnable' && firstChar !== '_' && firstChar !== '$'
+          name !== "spriteEnable" && firstChar !== "_" && firstChar !== "$"
         );
-      }
+      },
     });
     elItem.innerHTML = html;
   }
@@ -451,7 +458,7 @@ function formatDateTime(posix) {
   const d = new Date(posix * 1000);
   const date = d.toLocaleDateString();
   const time = d.toLocaleTimeString();
-  return date + ' at ' + time;
+  return date + " at " + time;
 }
 
 /**
@@ -462,7 +469,7 @@ function formatDateTime(posix) {
 async function getDictJsonEditorDict() {
   const h = mx.helpers;
   const out = {};
-  const lang = getLanguageCurrent()
+  const lang = getLanguageCurrent();
   const dict = await h.getDict(lang);
   /**
    * For each item
@@ -475,7 +482,7 @@ async function getDictJsonEditorDict() {
      */
 
     for (let l in d) {
-      if (l === 'id') {
+      if (l === "id") {
         continue;
       }
       if (!out[l]) {
@@ -485,4 +492,28 @@ async function getDictJsonEditorDict() {
     }
   }
   return out;
+}
+
+/**
+ * View save, convert style
+ */
+async function jedHooksApply(value, hooks) {
+  try {
+    for (const hook of hooks) {
+      switch (hook?.id) {
+        case "view_style_add_sld":
+          const idView = hook.idView;
+          const view = getViewJson(idView, { asString: false });
+          view.data.style = Object.assign({}, view.data.style, value);
+          const styleMapbox = await getViewMapboxStyle(view);
+          const styleSld = await mapboxToSld(styleMapbox, { fixFilters: true });
+          value._style_sld = styleSld;
+          value._style_mapbox = JSON.stringify(styleMapbox);
+        default:
+          null;
+      }
+    }
+  } catch (e) {
+    console.warn(e);
+  }
 }

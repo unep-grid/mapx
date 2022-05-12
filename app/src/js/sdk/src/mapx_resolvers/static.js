@@ -24,7 +24,7 @@ import {
   getViewJson,
   viewDelete,
   getBoundsArray,
-} from "../../../mx_helper_map.js";
+} from "../../../map_helpers/index.js";
 import {
   commonLocFitBbox,
   commonLocGetBbox,

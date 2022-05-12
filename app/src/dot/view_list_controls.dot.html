@@ -112,6 +112,15 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     >
       <div class="fa fa-cloud-download"></div>
     </li>
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--top"
+      data-lang_key="btn_opt_code_integration"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_code_integration"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-file-code-o"></div>
+    </li>
     {{?}} 
     {{? isRt || isCc }}
     <li
@@ -252,6 +261,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
       <div class="fa fa-home"></div>
     </li>
     {{?}}
+
   </ul>
 </div>
 

@@ -1,10 +1,28 @@
 
 
+#' Update / Rebuild geoserver request
+#'
+#' @param recalcStyle Also recalc styles / save new view version
+#' @param session Shiny session object.
+#' @export
+mxGeoserverRebuild <- function(
+  recalcStyle = FALSE,
+  session = shiny:::getDefaultReactiveDomain()
+) {
+  session$sendCustomMessage(
+    type = "mxGeoserverRebuild",
+    list(
+      recalcStyle = isTRUE(recalcStyle)
+    )
+  )
+}
+
+
 #' Set user id
 #' @param userData {list} list of user data such as id, email, nickname
 #' @export
-mxUpdateSettings <- function( settings, session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mxUpdateSettings",settings)
+mxUpdateSettings <- function(settings, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mxUpdateSettings", settings)
 }
 
 
@@ -14,40 +32,40 @@ mxUpdateSettings <- function( settings, session=shiny::getDefaultReactiveDomain(
 #'
 #' Action or other button can be disabled using the attribute "disabled". This function can update a button state using this method.
 #'
-#' @param id Id of the button. 
+#' @param id Id of the button.
 #' @param session Shiny session object.
 #' @param disable State of the button
 #' @export
-mxToggleButton <- function(id,disable=TRUE,warning=FALSE,session=shiny:::getDefaultReactiveDomain()) {
+mxToggleButton <- function(id, disable = TRUE, warning = FALSE, session = shiny:::getDefaultReactiveDomain()) {
   res <- list(
     id = id,
     disable = disable,
     warning = warning
-    )
+  )
   session$sendCustomMessage(
-    type="mxButtonToggle",
+    type = "mxButtonToggle",
     res
-    )
+  )
 }
 
 #' Alter checkbox input
 #'
 #'
-#' @param id Id of the input. 
+#' @param id Id of the input.
 #' @param disable Disabled
 #' @param checked Checked
 #' @param session Shiny session object.
 #' @export
-mxUpdateCheckboxInput <- function(id,disabled=NULL,checked=NULL,session=shiny:::getDefaultReactiveDomain()) {
+mxUpdateCheckboxInput <- function(id, disabled = NULL, checked = NULL, session = shiny:::getDefaultReactiveDomain()) {
   res <- list(
     id = id,
     disabled = disabled,
     checked = checked
-    )
+  )
   session$sendCustomMessage(
-    type="mxUpdateCheckboxInput",
+    type = "mxUpdateCheckboxInput",
     res
-    )
+  )
 }
 
 
@@ -55,16 +73,16 @@ mxUpdateCheckboxInput <- function(id,disabled=NULL,checked=NULL,session=shiny:::
 #' @param {character} text Text to send
 #' @session {reactive} Shiny reactive object
 #' @export
-mxDebugToJs<-function(text,session=getDefaultReactiveDomain()){
-  if(!noDataCheck(session)){
-    res <-   session$sendCustomMessage(
+mxDebugToJs <- function(text, session = getDefaultReactiveDomain()) {
+  if (!noDataCheck(session)) {
+    res <- session$sendCustomMessage(
       type = "mxJsDebugMsg",
       list(
         date = Sys.time(),
         msg = text
-        )
       )
-  }else{
+    )
+  } else {
     mxDebugMsg(text)
   }
 }
@@ -74,47 +92,45 @@ mxDebugToJs<-function(text,session=getDefaultReactiveDomain()){
 #'
 #' Action or other button can be disabled using the attribute "disabled". This function can update a button state using this method.
 #'
-#' @param id Id of the button. 
+#' @param id Id of the button.
 #' @param session Shiny session object.
 #' @param disable State of the button
 #' @export
-mxActionButtonState <- function(id,disable=FALSE,warning=FALSE,session=shiny:::getDefaultReactiveDomain()) {
+mxActionButtonState <- function(id, disable = FALSE, warning = FALSE, session = shiny:::getDefaultReactiveDomain()) {
   res <- list(
     id = id,
     disable = disable,
     warning = warning
-    )
+  )
   session$sendCustomMessage(
-    type="mxSetButonState",
+    type = "mxSetButonState",
     res
-    )
+  )
 }
 
 
 #' Control visbility of elements
-#' 
+#'
 #' Display or hide element by id, without removing element AND without having element's space empty in UI. This function add or remove mx-hide class to the element.
 #'
 #' @param session Shiny session
-#' @param id Id of element to enable/disable 
+#' @param id Id of element to enable/disable
 #' @param enable Boolean. Enable or not.
 #' @export
-mxUiHide <- function(id=NULL,class=NULL,disable=TRUE,hide=TRUE,hideClass="mx-hide",session=shiny:::getDefaultReactiveDomain()){
-
-  out = jsonlite::toJSON(list(
-      id = id,
-      class = class,
-      hide = hide,
-      disable = disable,
-      hideClass = hideClass
-      ),auto_unbox=T)
+mxUiHide <- function(id = NULL, class = NULL, disable = TRUE, hide = TRUE, hideClass = "mx-hide", session = shiny:::getDefaultReactiveDomain()) {
+  out <- jsonlite::toJSON(list(
+    id = id,
+    class = class,
+    hide = hide,
+    disable = disable,
+    hideClass = hideClass
+  ), auto_unbox = T)
 
 
   session$sendCustomMessage(
     type = "mxUiHide",
     out
-    )
-
+  )
 }
 
 #' remove element by class or id
@@ -122,53 +138,53 @@ mxUiHide <- function(id=NULL,class=NULL,disable=TRUE,hide=TRUE,hideClass="mx-hid
 #' @param class class name to remove
 #' @param id id to remove
 #' @export
-mxRemoveEl <- function(session=getDefaultReactiveDomain(),class=NULL,id=NULL){
-
-  if(is.null(class) && is.null(id)) return()
+mxRemoveEl <- function(session = getDefaultReactiveDomain(), class = NULL, id = NULL) {
+  if (is.null(class) && is.null(id)) {
+    return()
+  }
 
   sel <- ifelse(
     is.null(class),
-    paste0('#',id),
-    paste0('.',class)
-    )
+    paste0("#", id),
+    paste0(".", class)
+  )
 
   res <- list(
     element = sel
-    )
+  )
 
   session$sendCustomMessage(
-    type="mxRemoveEl",
+    type = "mxRemoveEl",
     res
-    )
-
+  )
 }
 
 
 
 #' Update text by id
 #'
-#' Search for given id and update content. 
-#' 
+#' Search for given id and update content.
+#'
 #' @param session Shiny session
 #' @param id Id of the element
 #' @param text New text
 #' @export
-mxUpdateText<-function(id,text=NULL,ui=NULL,addId=FALSE,session=shiny:::getDefaultReactiveDomain()){
-  if(is.null(text) && is.null(ui)){
+mxUpdateText <- function(id, text = NULL, ui = NULL, addId = FALSE, session = shiny:::getDefaultReactiveDomain()) {
+  if (is.null(text) && is.null(ui)) {
     return(NULL)
-  }else{
-    if(is.null(ui)){
+  } else {
+    if (is.null(ui)) {
       textb64 <- mxEncode(text)
-      val=list(
+      val <- list(
         id = id,
         txt = textb64,
         addId = addId
-        )
+      )
       session$sendCustomMessage(
-        type="mxUpdateText",
+        type = "mxUpdateText",
         val
-        )
-    }else{
+      )
+    } else {
       session$output[[id]] <- renderUI(ui)
     }
   }
@@ -177,46 +193,46 @@ mxUpdateText<-function(id,text=NULL,ui=NULL,addId=FALSE,session=shiny:::getDefau
 
 #' Update value by id
 #'
-#' Search for given id and update value. 
-#' 
+#' Search for given id and update value.
+#'
 #' @param session Shiny session
 #' @param id Id of the element
 #' @param  value New text value
 #' @export
-mxUpdateValue <- function(id,value,session=shiny:::getDefaultReactiveDomain()){
-  if(is.null(value) || is.null(id)){
+mxUpdateValue <- function(id, value, session = shiny:::getDefaultReactiveDomain()) {
+  if (is.null(value) || is.null(id)) {
     return()
-  }else{
+  } else {
     res <- list(
-      id=id,
-      val=value
-      )
+      id = id,
+      val = value
+    )
     session$sendCustomMessage(
-      type="mxUpdateValue",
+      type = "mxUpdateValue",
       res
-      )
+    )
   }
 }
 
 #' Convert list to html, client side
 #'
-#' Search for given id and update value. 
-#' 
+#' Search for given id and update value.
+#'
 #' @param session Shiny session
 #' @param id Id of the element
 #' @param  data List to convert
 #' @export
-mxJsonToHtml <- function(id,data,session=shiny:::getDefaultReactiveDomain()){
-  if(is.null(data) || is.null(id)){
+mxJsonToHtml <- function(id, data, session = shiny:::getDefaultReactiveDomain()) {
+  if (is.null(data) || is.null(id)) {
     return()
-  }else{
+  } else {
     session$sendCustomMessage(
-      type="mxJsonToHtml",
+      type = "mxJsonToHtml",
       list(
         id = id,
-        data = jsonlite::toJSON(data,auto_unbox=T)
-        )
+        data = jsonlite::toJSON(data, auto_unbox = T)
       )
+    )
   }
 }
 
@@ -232,14 +248,13 @@ mxJsonToHtml <- function(id,data,session=shiny:::getDefaultReactiveDomain()){
 #' @return NULL
 #' @export
 mxSetCookie <- function(
-  cookie=NULL,
-  expireDays=NULL,
-  deleteAll=FALSE,
-  reloadPage=FALSE,
-  session=getDefaultReactiveDomain()
-  ){
-
-  cmd = list()
+  cookie = NULL,
+  expireDays = NULL,
+  deleteAll = FALSE,
+  reloadPage = FALSE,
+  session = getDefaultReactiveDomain()
+) {
+  cmd <- list()
   cmd$domain <- session$url_hostname
   cmd$path <- session$url_pathname
   cmd$deleteAll <- deleteAll
@@ -249,9 +264,9 @@ mxSetCookie <- function(
   cmd$expiresInSec <- expireDays * 86400
 
   session$sendCustomMessage(
-    type="mxSetCookie",
+    type = "mxSetCookie",
     cmd
-    )
+  )
 }
 
 #' Progress bar controller
@@ -261,47 +276,44 @@ mxSetCookie <- function(
 #' @param text Character Text of the progress bar
 #' @param session Shiny session object
 #' @export
-mxProgress = function(id="default",text="",percent=1,enable=TRUE,session=shiny:::getDefaultReactiveDomain()){
+mxProgress <- function(id = "default", text = "", percent = 1, enable = TRUE, session = shiny:::getDefaultReactiveDomain()) {
   res <- list(
     id = id,
     enable = enable,
     text = text,
     percent = percent
-    )
+  )
 
   session$sendCustomMessage(
-    type="mxProgress",
+    type = "mxProgress",
     res
-    )
+  )
 }
 
 
 #' Update selectize input
 #' @param {character} id of the input
 #' @param {list} List of items. Keys should be the same as the input. eg "list(list('label'='label','value'='test'))"
-mxUpdateSelectizeItems <- function(id,items,session=shiny:::getDefaultReactiveDomain()){
-  session$sendCustomMessage("mxUpdateSelectizeItems",list(
-      id=id,
-      items=items
-      ))
+mxUpdateSelectizeItems <- function(id, items, session = shiny:::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mxUpdateSelectizeItems", list(
+    id = id,
+    items = items
+  ))
 }
 
 
 #' Init all selectize input in children elements
 #' @param {character} id of the input
-mxInitSelectizeAll <- function(id,session=shiny:::getDefaultReactiveDomain()){
-  session$sendCustomMessage("mxInitSelectizeAll",list(
-      selector= "#"+id,
-      ))
-};
-
-
-
+mxInitSelectizeAll <- function(id, session = shiny:::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mxInitSelectizeAll", list(
+    selector = "#" + id,
+  ))
+}
 #' Create a modal window
 #' @param id {string} Id of the modal
 #' @param close {logical} Ask to close an existing modal
 #' @param replace {logical} Ask to replace an existing modal
-#' @param title {character|shiny.tag} Optional title 
+#' @param title {character|shiny.tag} Optional title
 #' @param zIndex {Number} set zIndex
 #' @param subtitle {character|shiny.tag} Optional subtitle
 #' @param content {character|shiny.tag} Optional content
@@ -313,7 +325,7 @@ mxInitSelectizeAll <- function(id,session=shiny:::getDefaultReactiveDomain()){
 #' @param removeCloseButton {logical} Remove close button
 #' @param textCloseButton {character|shiny.tag} Text of the default close button
 #' @param session {shiny.session} Default session object
-mxModal = function(
+mxModal <- function(
   id = NULL,
   close = F,
   replace = T,
@@ -328,15 +340,15 @@ mxModal = function(
   addBackground = T,
   removeCloseButton = F,
   textCloseButton = "ok",
-  session=shiny::getDefaultReactiveDomain()){
-
-
-  if(!noDataCheck(buttons) && is.list(buttons)){
-    buttons <- lapply(buttons,function(b){as.character(b)})
+  session = shiny::getDefaultReactiveDomain()) {
+  if (!noDataCheck(buttons) && is.list(buttons)) {
+    buttons <- lapply(buttons, function(b) {
+      as.character(b)
+    })
   }
-  
+
   session$sendCustomMessage(
-    type="mxModal",
+    type = "mxModal",
     list(
       id = id,
       replace = as.logical(replace),
@@ -352,61 +364,56 @@ mxModal = function(
       addSelectize = as.logical(addSelectize),
       removeCloseButton = as.logical(removeCloseButton),
       close = as.logical(close)
-      )
     )
+  )
 }
 
-#' Update URL params 
-#' 
+#' Update URL params
+#'
 #' Update url using a list of key pair values in a list
 #'
 #' @param data {List} List of key par values. eg. list("x"=2)
 #' @param session {Session} Shiny session
-mxUpdateQueryParameters = function(data=list(),session=shiny::getDefaultReactiveDomain()){
-  session$sendCustomMessage("mxSetQueryParametersUpdate",data)
+mxUpdateQueryParameters <- function(data = list(), session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mxSetQueryParametersUpdate", data)
 }
 
 #' Validate metadata
-#' 
+#'
 #' Update url using a list of key pair values in a list
 #'
 #' @param metadata {List} Metadata to validate
 #' @param session {Session} Shiny session
-mxValidateMetadataModal = function(metadata=list(),session=shiny::getDefaultReactiveDomain()){
-
-  session$sendCustomMessage("mxValidateMetadataModal",list(
-      metadata = metadata
-      )
-    )
-
+mxValidateMetadataModal <- function(metadata = list(), session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mxValidateMetadataModal", list(
+    metadata = metadata
+  ))
 }
 
 #' Display an flash icon
 #' @param icon {Character} Fontawesome icon to display
-mxFlashIcon = function(icon="cog",text="",update=runif(1),session=shiny::getDefaultReactiveDomain()){
-  session$sendCustomMessage("mxFlashIcon",list(
-      icon = icon
-      ))
+mxFlashIcon <- function(icon = "cog", text = "", update = runif(1), session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mxFlashIcon", list(
+    icon = icon
+  ))
 }
 
 #' Notification binding
 #'
 #' @param notif {List} notif list with at least msg and type param
-#' @param update {Any} Ignore cached request, if any. 
+#' @param update {Any} Ignore cached request, if any.
 #' @param session {Session} Shiny session
 #' @return
-mxNotify = function(notif,update=runif(1),session=shiny::getDefaultReactiveDomain()){
+mxNotify <- function(notif, update = runif(1), session = shiny::getDefaultReactiveDomain()) {
   isList <- is.list(notif)
   hasMsg <- isList && !noDataCheck(notif$message)
   hasType <- isList && !noDataCheck(notif$type)
   hasSession <- !noDataCheck(session)
-  if(hasSession && isList && hasMsg && hasType){
-    notif$timestamp = as.numeric(Sys.time())*1000
-    session$sendCustomMessage("mxNotify",list(
-        update = update,
-        notif = notif
-    )
-    )
+  if (hasSession && isList && hasMsg && hasType) {
+    notif$timestamp <- as.numeric(Sys.time()) * 1000
+    session$sendCustomMessage("mxNotify", list(
+      update = update,
+      notif = notif
+    ))
   }
 }
-

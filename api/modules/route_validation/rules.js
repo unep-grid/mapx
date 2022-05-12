@@ -44,7 +44,8 @@ const rules = [
       'publicOnly',
       'isGuest',
       'encrypt',
-      'allViews'
+      'allViews',
+      'overwriteStyle'
     ],
     test: (d) => {
       if (isString(d)) {
@@ -262,7 +263,7 @@ const rules = [
     }
   },
   {
-    key: ['idView'],
+    key: ['idView','view'],
     test: (d) => {
       isValid = isViewId(d);
       return {

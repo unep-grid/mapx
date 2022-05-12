@@ -83,11 +83,11 @@
       "color": "rgba(48,48,48,0)"
     },
     "mx_map_text_road": {
-      "visibility": "visible",
+      "visibility": "none",
       "color": "rgba(121,121,121,0.5)"
     },
     "mx_map_text_road_outline": {
-      "visibility": "visible",
+      "visibility": "none",
       "color": "rgba(220,220,220,0.2)"
     },
     "mx_map_text_water": {
@@ -111,11 +111,11 @@
       "color": "rgba(20,20,20,0.4)"
     },
     "mx_map_road": {
-      "visibility": "visible",
+      "visibility": "none",
       "color": "rgb(255,255,255)"
     },
     "mx_map_road_border": {
-      "visibility": "visible",
+      "visibility": "none",
       "color": "rgba(220,220,220,0.5)"
     },
     "mx_map_building": {

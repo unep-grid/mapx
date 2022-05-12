@@ -5,7 +5,7 @@ import {
   getViewRandom,
   getViewJson,
   viewFilterToolsInit,
-} from "../../../mx_helper_map";
+} from "../../../map_helpers/index.js";
 
 /**
  * App and Static resolver base

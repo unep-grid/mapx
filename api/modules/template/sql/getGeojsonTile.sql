@@ -3,7 +3,7 @@ WITH bboxLatLong AS (
 ),
 tileExtent as (
   SELECT
-  {{attributes}},
+  {{attributes_pg}},
   CASE WHEN {{zoom}} > 10 THEN layer.{{geom}}
        ELSE ST_simplify(layer.{{geom}},(50/(512*(({{zoom}}+1)^2))))
       END geom
@@ -18,7 +18,7 @@ tileExtent as (
   )
 )
 
-SELECT {{attributes}}, 
+SELECT {{attributes_pg}}, 
 ST_AsGeoJSON({{geom}}) geom 
 FROM tileExtent
 

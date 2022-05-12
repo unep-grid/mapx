@@ -8,14 +8,14 @@ mask as(
   k.{{geom}} && b.{{geom}}
 ),
 main as(
-  SELECT m.{{geom}}, {{attributes}}
+  SELECT m.{{geom}}, {{attributes_pg}}
   FROM  {{layer}} m, mask k, bbox b
   WHERE
   m.{{geom}} && b.{{geom}} AND 
   m.{{geom}} && k.{{geom}}
 ),
 overlap as (
-  SELECT {{attributes}},
+  SELECT {{attributes_pg}},
   CASE WHEN GeometryType(m.{{geom}}) != $$POINT$$
     THEN
     CASE 
@@ -38,13 +38,13 @@ ELSE
   WHERE ST_Intersects(m.geom,k.geom)
 ),
 simple as (
-  SELECT {{attributes}},
+  SELECT {{attributes_pg}},
   ST_simplify(overlap.{{geom}},(50/(512*(({{zoom}}+1)^2)))) geom
   FROM overlap
 )
 
 
-SELECT {{attributes}}, 
+SELECT {{attributes_pg}}, 
 ST_AsGeoJSON({{geom}}) geom 
 FROM simple
 

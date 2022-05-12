@@ -11,7 +11,6 @@ tryCatch(
     library(parallel)
     library(curl)
     library(xml2)
-    library(geosapi)
     library(pool)
 
     #
@@ -76,25 +75,41 @@ tryCatch(
     }
   },
   error = function(e) {
+
     #
-    # This is pretty bad, report by email
+    # Show error as warning t
     #
-    mxSendMail(
-      to = config$mail$admin,
-      subject = "Init early error",
-      content = sprintf(
-        "API HOST PUBLIC: %1$s;\nERROR: %2$s",
-        Sys.getenv("API_HOST_PUBLIC"),
-        as.character(e)
-      ),
-      # if the db is down, do not try to encrypt
-      encrypt = F
-    )
-    mxDbPoolClose()
     warning(e)
+
+    #
+    # If available, send mail
+    #
+    if (exists("mxSendMail")) {
+      mxSendMail(
+        to = config$mail$admin,
+        subject = "Init early error",
+        content = sprintf(
+          "API HOST PUBLIC: %1$s;\nERROR: %2$s",
+          Sys.getenv("API_HOST_PUBLIC"),
+          as.character(e)
+        ),
+        # if the db is down, do not try to encrypt
+        encrypt = F
+      )
+    }
+    #
+    # If available, clean DB pool
+    #
+    if (exists('mxDbPoolClose')) {
+      mxDbPoolClose()
+    }
+
+    #
+    # Quit and set status 1
+    #
     quit(
       save = "no",
-      status = 1
+      status = 1,
     )
   }
 )

@@ -1,41 +1,41 @@
-import {Sql} from 'sql-ts';
-const sql = new Sql('postgres');
+import { Sql } from "sql-ts";
+const sql = new Sql("postgres");
 
-import {pgRead} from '#mapx/db';
-import {project} from '#mapx/db-models';
-import {validateTokenHandler} from '#mapx/authentication';
-import {getParamsValidator} from '#mapx/route_validation';
-import {mwProjectSearchText} from './search.js';
+import { pgRead } from "#mapx/db";
+import { project } from "#mapx/db-models";
+import { validateTokenHandler } from "#mapx/authentication";
+import { getParamsValidator } from "#mapx/route_validation";
+import { mwProjectSearchText } from "./search.js";
 
 const validateParamsHandler = getParamsValidator({
   expected: [
-    'language',
-    'role',
-    'title',
-    'titlePrefix',
-    'titleFuzzy',
-    'token',
-    'idUser'
-  ]
+    "language",
+    "role",
+    "title",
+    "titlePrefix",
+    "titleFuzzy",
+    "token",
+    "idUser",
+  ],
 });
 
 const mwGetListByUser = [
   validateParamsHandler,
   validateTokenHandler,
-  getProjectsByUserRouteHandler
+  getProjectsByUserRouteHandler,
 ];
 
-export default {mwProjectSearchText, mwGetListByUser};
+export default { mwProjectSearchText, mwGetListByUser };
 
 async function getProjectsByUserRouteHandler(req, res) {
   var idUser = req.query.idUser;
   var rq = {
-    language: 'en',
-    role: 'any',
+    language: "en",
+    role: "any",
     title: null,
     titlePrefix: null,
     titleFuzzy: null,
-    ...req.query
+    ...req.query,
   };
 
   try {
@@ -61,28 +61,30 @@ async function getProjectsByUserRouteHandler(req, res) {
   } catch (e) {
     console.log(e);
     res.status(500);
-    res.send('Data query error!');
+    res.send("Data query error!");
   }
 }
 
 async function getProjectsByUserHelper(
   idUser,
-  lc = 'en',
-  role = 'any',
+  lc = "en",
+  role = "any",
   title = null,
   titlePrefix = null,
   titleFuzzy = null
 ) {
-  if (title && title.indexOf('*') > -1) {
-    const starPos = title.indexOf('*');
+  if (title && title.indexOf("*") > -1) {
+    const starPos = title.indexOf("*");
     titlePrefix = title.substring(0, starPos);
     title = null;
   }
 
-  var hasRole = ['member', 'publisher', 'admin'].includes(role);
-  var roleCondition = hasRole ? role : `public OR member OR publisher OR admin`;
+  const hasRole = ["member", "publisher", "admin"].includes(role);
+  const roleCondition = hasRole
+    ? role
+    : `public OR member OR publisher OR admin`;
 
-  var pSql = project
+  const pSql = project
     .select(`id`)
     .select(`title ->> '${lc}' as title`)
     .select(`description ->> '${lc}' as description`)
@@ -101,7 +103,7 @@ async function getProjectsByUserHelper(
   if (title) {
     pSql.where(
       project.title
-        .keyText('en')
+        .keyText("en")
         .equals(title)
         .or(project.title.keyText(lc).equals(title))
     );
@@ -110,7 +112,7 @@ async function getProjectsByUserHelper(
   if (titlePrefix) {
     pSql.where(
       project.title
-        .keyText('en')
+        .keyText("en")
         .ilike(`${titlePrefix}%`)
         .or(project.title.keyText(lc).ilike(`${titlePrefix}%`))
     );
@@ -119,11 +121,11 @@ async function getProjectsByUserHelper(
   if (titleFuzzy) {
     pSql.where(
       sql
-        .function('SIMILARITY')(project.title.keyText('en'), titleFuzzy)
+        .function("SIMILARITY")(project.title.keyText("en"), titleFuzzy)
         .gt(0)
         .or(
           sql
-            .function('SIMILARITY')(project.title.keyText(lc), titleFuzzy)
+            .function("SIMILARITY")(project.title.keyText(lc), titleFuzzy)
             .gt(0)
         )
     );
@@ -134,4 +136,15 @@ async function getProjectsByUserHelper(
     `;
   const rows = await pgRead.query(sqlStr);
   return rows;
+}
+
+/**
+ * Get a list of all projects
+ *
+ */
+export async function getProjectsIdAll() {
+  const req = project.select("id").from(project).toQuery();
+  const res = await pgRead.query(req);
+  const ids = res.rows.map((r) => r.id);
+  return ids;
 }

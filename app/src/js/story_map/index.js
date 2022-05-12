@@ -44,7 +44,7 @@ import {
   viewsLayersOrderUpdate,
   getMap,
   getViewsLayersVisibles
-} from './../mx_helper_map.js';
+} from './../map_helpers/index.js';
 
 /**
  * Default settings

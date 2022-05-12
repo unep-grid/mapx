@@ -19,9 +19,18 @@ Development servers are launched from within Docker containers, to match as clos
 
 ### Requirement
 
+__Mendatory__ 
+
 - `docker` v20.10+
+
+__Optional__  
+
 - `node` v16.0+
 - `g++`
+- `npm`
+- `yq`
+- `git`
+
 
 ### Hosts
 
@@ -45,7 +54,7 @@ The included `docker-compose.yml` allows to setup a development environment.
 Trigger the following script which init some required directories and copy the default environment variable to `./mapx.dev.env` (if missing):
 
 ```sh
-./docker-compose.init.sh
+./mapx.dev.init.sh
 ```
 
 Finally, launch the mapx stack:
@@ -53,8 +62,10 @@ Finally, launch the mapx stack:
 ```sh
 # Pull the latest builds
 docker compose pull
+
 # Launch postgres first : in case of first launch, some tables and roles must be created
 docker compose up pg
+
 # Launch other services
 docker compose up
 ```
@@ -63,11 +74,50 @@ The application should be available at <http://app.mapx.localhost:8880/> (curl -
 
 An admin user is available as `admin@localhost` which can be used to login; get the password by browsing the web mail at <http://mail.mapx.localhost:8880/.>
 
+
+### Docker : build for prod  
+
+```sh
+./build.sh -v <version>
+```
+
+### Docker : re-build individual docker images for local dev 
+
+*app*
+
+```sh
+# Build app js code, update docker image
+cd /app/ 
+npm run docker 
+```
+
+*api/express*
+
+```sh
+# Build api js code, update docker image
+cd /api/
+npm run docker 
+```
+
+*geoserver*
+
+```sh
+# Update geoserver docker image 
+cd /geoserver/
+./build -a
+```
+
+*meili search*
+
+```sh
+# Update meili docker image 
+cd /meili/
+./build -a
+```
+
 #### Known issues
 
 Postgis: `OperationalError: could not access file "$libdir/postgis-X.X` _Solution:_ run `docker compose exec pg update-postgis.sh`
-
-
 
 
 ### Development session for the `app` service
@@ -77,8 +127,10 @@ Install all modules listed as dependencies in `package.json` for the `app` servi
 ```sh
 cd ./app
 npm install
+
 cd ./app/src/js/sdk/
 npm install
+
 cd ./app/src/js/ws_handler/
 npm install
 ```
@@ -88,8 +140,10 @@ Optionally, if you want to develop submodules as `el`, `mx_valid` or rebuilding 
 ```sh 
 cd ./app/src/js/el/
 npm install
+
 cd ./app/src/js/is_test/
 npm install
+
 cd ./app/glyphs/
 npm install 
 ```
@@ -108,6 +162,7 @@ $ npm run dev
 ```sh
 docker compose exec -w /appdev app R
 > source('run.R') 
+
 # OR, as a single line for a non-interactive session:
 docker compose exec -w /appdev app Rscript --vanilla run.R
 ```
@@ -140,7 +195,7 @@ Start the `Express.js` development server:
 
 ```sh
 $ docker compose up -d
-$ docker compose exec api node inspect /apidev/index.js port=3333
+$ docker compose exec -w /apidev api node inspect index.js port=3333
 debug> c
 ```
 
@@ -162,9 +217,8 @@ API_HOST_PUBLIC_DEV=api.mapx.localhost
 Run tests within the development container:
 
 ```sh
-docker compose exec api sh
-cd /apidev
-npm run
+docker compose exec -w /apidev api sh
+npm run test
 ```
 
 ### Development session for the `routines` service

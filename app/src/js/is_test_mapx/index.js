@@ -1,6 +1,6 @@
 import {getLanguagesAll} from '../language/index.js';
 import * as test from './../is_test/index.js';
-import {getView} from './../mx_helper_map.js';
+import {getView} from './../map_helpers/index.js';
 export * from './../is_test/index.js';
 /**
  * MapX specific method to extend 'is_test'

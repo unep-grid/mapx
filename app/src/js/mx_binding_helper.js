@@ -1,81 +1,83 @@
-/*jshint esversion: 6 , node: true */
+import { geoserver } from "./geoserver/index.js";
 
-$(document).on('shiny:connected', function() {
+$(document).on("shiny:connected", function () {
   const h = mx.helpers;
 
   /**
    * Set init query parameters
    */
   h.setQueryParametersInit();
-  Shiny.onInputChange('urlSearchQuery',h.getQueryParametersInit());
-  Shiny.onInputChange('browserData',h.getBrowserData());
+  input("urlSearchQuery", h.getQueryParametersInit());
+  input("browserData", h.getBrowserData());
 
   /**
-  * General bindings
-  */
+   * General bindings
+   */
 
-  //Shiny.addCustomMessageHandler("mxUpdateLanguage", h.updateLanguage);
-  Shiny.addCustomMessageHandler("mxSetCookie",h.writeCookie);
-  Shiny.addCustomMessageHandler('mxModal', h.modal);
-  Shiny.addCustomMessageHandler('mxSetElementAttribute', h.setElementAttribute);
-  Shiny.addCustomMessageHandler("mxSetImageAttributes", h.setImageAttributes);
-  Shiny.addCustomMessageHandler("mxUiHide", h.hide);
-  Shiny.addCustomMessageHandler("mxValidateMetadataModal", h.validateMetadataModal);
-  Shiny.addCustomMessageHandler("mxSetQueryParametersUpdate", h.setQueryParametersUpdate);
-  Shiny.addCustomMessageHandler("mxUpdateText", h.updateText);
-  Shiny.addCustomMessageHandler("mxEpsgBuildSearchBox", h.epsgBuildSearchBox);
-  Shiny.addCustomMessageHandler("mxWmsBuildQueryUi", h.wmsBuildQueryUi);
-  Shiny.addCustomMessageHandler("mxJsDebugMsg", h.jsDebugMsg);
-  Shiny.addCustomMessageHandler("mxButtonToggle", h.buttonToggle);
-  Shiny.addCustomMessageHandler("mxJsonToObj", h.jsonToObj);
-  Shiny.addCustomMessageHandler("mxJsonToHtml", h.objectToHTML);
-  Shiny.addCustomMessageHandler("mxProgress",h.progressScreen);
-  Shiny.addCustomMessageHandler("mxRenderUserProjectsList",h.renderUserProjectsList);
-  Shiny.addCustomMessageHandler("mxInjectHead",h.injectHead);
-  Shiny.addCustomMessageHandler("mxUpdateSelectizeItems",h.updateSelectizeItems);
-  Shiny.addCustomMessageHandler("mxInitSelectizeAll",h.initSelectizeAll);
-  Shiny.addCustomMessageHandler('mxFlashIcon', h.itemFlash);
-  //Shiny.addCustomMessageHandler('mxUpdateSettingsUser', h.updateSettingsUser );
-  Shiny.addCustomMessageHandler('mxUpdateSettings', h.updateSettings );
-  Shiny.addCustomMessageHandler('mxUpdateCheckboxInput', h.updateCheckboxInput );
-  Shiny.addCustomMessageHandler('mxNotify', h.shinyNotify);
-  
-  /**
-  * Mapx map and view related binding
-  */
-  Shiny.addCustomMessageHandler("mglUpdateViewsBadges", h.updateViewsBadges);
-  Shiny.addCustomMessageHandler('mglRenderViewsList', h.viewsListRenderNew );
-  Shiny.addCustomMessageHandler('mglSetFilter', h.setFilter );
-  Shiny.addCustomMessageHandler('mglSetHighlightedCountries', h.setHighlightedCountries);
-  Shiny.addCustomMessageHandler('mglAddLayer',  h.addLayer );
-  Shiny.addCustomMessageHandler('mglFlyTo', h.flyTo );
-  Shiny.addCustomMessageHandler('mglSetMapProjection', h.setMapProjection);
-  Shiny.addCustomMessageHandler('mglSyncAllMaps', h.syncAll );
-  Shiny.addCustomMessageHandler('mglUpdateViewsList',h.updateViewsList);
-  Shiny.addCustomMessageHandler('mglRemoveView', h.viewDelete );
-  Shiny.addCustomMessageHandler('mglGetLocalForageData', h.getLocalForageData );
-  Shiny.addCustomMessageHandler('mglUpdateView', h.viewsListUpdateSingle );
-  Shiny.addCustomMessageHandler('mglReadStory', h.storyRead );
-  Shiny.addCustomMessageHandler('mglReset', h.viewsCloseAll );
-  Shiny.addCustomMessageHandler('mglGetOverlapAnalysis', h.getOverlapAnalysis);
-  Shiny.addCustomMessageHandler('mglGetValidateSourceGeom', h.getValidateSourceGeom);
-  Shiny.addCustomMessageHandler('mglGetSourceStatModal', h.getSourceVtSummaryUI);
-  Shiny.addCustomMessageHandler('mglGetProjectViewsState', h.getProjectViewsState);
-  Shiny.addCustomMessageHandler("mglUpdateProject", h.updateProject);
-  Shiny.addCustomMessageHandler('mglGetProjectViewsCollections', h.getProjectViewsCollectionsShiny);
-  Shiny.addCustomMessageHandler('mglInit', h.initMapx );
+  //bind("mxUpdateLanguage", h.updateLanguage);
+  bind("mxSetCookie", h.writeCookie);
+  bind("mxModal", h.modal);
+  bind("mxSetElementAttribute", h.setElementAttribute);
+  bind("mxSetImageAttributes", h.setImageAttributes);
+  bind("mxUiHide", h.hide);
+  bind("mxValidateMetadataModal", h.validateMetadataModal);
+  bind("mxSetQueryParametersUpdate", h.setQueryParametersUpdate);
+  bind("mxUpdateText", h.updateText);
+  bind("mxEpsgBuildSearchBox", h.epsgBuildSearchBox);
+  bind("mxWmsBuildQueryUi", h.wmsBuildQueryUi);
+  bind("mxJsDebugMsg", h.jsDebugMsg);
+  bind("mxButtonToggle", h.buttonToggle);
+  bind("mxJsonToObj", h.jsonToObj);
+  bind("mxJsonToHtml", h.objectToHTML);
+  bind("mxProgress", h.progressScreen);
+  bind("mxRenderUserProjectsList", h.renderUserProjectsList);
+  bind("mxInjectHead", h.injectHead);
+  bind("mxUpdateSelectizeItems", h.updateSelectizeItems);
+  bind("mxInitSelectizeAll", h.initSelectizeAll);
+  bind("mxFlashIcon", h.itemFlash);
+  //bind('mxUpdateSettingsUser', h.updateSettingsUser );
+  bind("mxUpdateSettings", h.updateSettings);
+  bind("mxUpdateCheckboxInput", h.updateCheckboxInput);
+  bind("mxNotify", h.shinyNotify);
+  bind("mxGeoserverRebuild", geoserver.rebuild);
 
   /**
-  * Jed comands binding
-  */
-  Shiny.addCustomMessageHandler('jedInit',h.jedInit);
-  Shiny.addCustomMessageHandler('jedUpdate',h.jedUpdate);
-  Shiny.addCustomMessageHandler('jedTriggerGetValidation',h.jedGetValidationById);
-  Shiny.addCustomMessageHandler('jedTriggerGetValues',h.jedGetValuesById);
+   * Mapx map and view related binding
+   */
+  bind("mglUpdateViewsBadges", h.updateViewsBadges);
+  bind("mglRenderViewsList", h.viewsListRenderNew);
+  bind("mglSetFilter", h.setFilter);
+  bind("mglSetHighlightedCountries", h.setHighlightedCountries);
+  bind("mglAddLayer", h.addLayer);
+  bind("mglFlyTo", h.flyTo);
+  bind("mglSetMapProjection", h.setMapProjection);
+  bind("mglSyncAllMaps", h.syncAll);
+  bind("mglUpdateViewsList", h.updateViewsList);
+  bind("mglRemoveView", h.viewDelete);
+  bind("mglGetLocalForageData", h.getLocalForageData);
+  bind("mglUpdateView", h.viewsListUpdateSingle);
+  bind("mglReadStory", h.storyRead);
+  bind("mglReset", h.viewsCloseAll);
+  bind("mglGetOverlapAnalysis", h.getOverlapAnalysis);
+  bind("mglGetValidateSourceGeom", h.getValidateSourceGeom);
+  bind("mglGetSourceStatModal", h.getSourceVtSummaryUI);
+  bind("mglGetProjectViewsState", h.getProjectViewsState);
+  bind("mglUpdateProject", h.updateProject);
+  bind("mglGetProjectViewsCollections", h.getProjectViewsCollectionsShiny);
+  bind("mglInit", h.initMapx);
 
+  /**
+   * Jed comands binding
+   */
+  bind("jedInit", h.jedInit);
+  bind("jedUpdate", h.jedUpdate);
+  bind("jedTriggerGetValidation", h.jedGetValidationById);
+  bind("jedTriggerGetValues", h.jedGetValuesById);
+
+  function input(id, cb) {
+    return Shiny.onInputChange(id, cb);
+  }
+  function bind(id, cb) {
+    return Shiny.addCustomMessageHandler(id, cb);
+  }
 });
-
-
-
-
-

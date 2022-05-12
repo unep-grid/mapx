@@ -26,7 +26,7 @@ services:
     networks:
       - backend
       - frontend
-    image: getmeili/meilisearch:v0.20.0
+    image: fredmoser/meili:0.20.0-alpine
     env_file: mapx.dev.env
     restart: always
     hostname: search
@@ -44,8 +44,7 @@ services:
       - backend
       - frontend
     env_file: mapx.dev.env
-    build: ./app/.
-    image: fredmoser/mx-app-shiny:1.9.40-alpha.2-debian
+    image: fredmoser/mapx_app:1.9.40-alpha.3
     restart: always
     ports:
       - 3838
@@ -55,6 +54,10 @@ services:
       - traefik
     labels:
       - 'traefik.enable=true'
+      - "traefik.http.middlewares.cors.headers.accesscontrolallowmethods=GET"
+      - "traefik.http.middlewares.cors.headers.accesscontrolalloworigin=*"
+      - "traefik.http.middlewares.cors.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.cors.headers.addvaryheader=true"
       - 'traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL:no-cache'
       - 'traefik.http.routers.app.rule=Host(`app.mapx.localhost`)'
       - 'traefik.http.routers.app.entrypoints=web'
@@ -64,6 +67,7 @@ services:
       - 'traefik.http.routers.dev.entrypoints=web'
       - 'traefik.http.routers.dev.service=dev'
       - 'traefik.http.services.dev.loadbalancer.server.port=3434'
+      - "traefik.http.routers.dev.middlewares=cors,nocache"
     volumes:
       - ./app:/appdev
       - ./_shared:/shared
@@ -72,8 +76,7 @@ services:
       - backend
       - frontend
     env_file: mapx.dev.env
-    build: ./api/.
-    image: fredmoser/mx-api-node:1.9.40-alpha.2-alpine
+    image: fredmoser/mapx_api:1.9.40-alpha.3
     restart: always
     ports:
       - 3030
@@ -103,8 +106,7 @@ services:
       - backend
       - frontend
     env_file: mapx.dev.env
-    build: ./geoserver/.
-    image: fredmoser/mx-api-geoserver:2.18.1-alpine
+    image: fredmoser/geoserver:2.20-slim-buster
     ports:
       - 8882:8080
     volumes:
@@ -119,7 +121,8 @@ services:
       - backend
       - frontend
     env_file: mapx.dev.env
-    image: postgis/postgis:13-3.1-alpine
+    #image: postgis/postgis:13-3.1-alpine # https://github.com/postgis/docker-postgis/issues/216
+    image: ghcr.io/baosystems/postgis:13-3.2
     restart: always
     hostname: pg
     volumes:
@@ -132,7 +135,7 @@ services:
     networks:
       - backend
     env_file: mapx.dev.env
-    image: fredmoser/mx-api-node:1.9.40-alpha.2-alpine
+    image: fredmoser/mx-api-node:1.9.40-alpha.3-alpine
     hostname: mx_routines
     depends_on:
       - pg
@@ -145,7 +148,7 @@ services:
   redis:
     networks:
       - backend
-    image: redis:alpine
+    image: redis:6.2.6-alpine3.15
     restart: always
     hostname: redis
     command: redis-server /usr/local/etc/redis/redis.conf
@@ -153,29 +156,6 @@ services:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
     ports:
       - 6379
-  probe:
-    networks:
-      - frontend
-    build: ./probe/.
-    image: fredmoser/mx-probe:0.2-go
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.probe.rule=Host(`probe.mapx.localhost`)'
-      - 'traefik.http.routers.probe.entrypoints=web'
-      - 'traefik.http.services.probe.loadbalancer.server.port=8080'
-    ports:
-      - 8080
-  wsecho:
-    networks:
-      - frontend
-    image: jmalloc/echo-server
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.wsecho.rule=Host(`wsecho.mapx.localhost`)'
-      - 'traefik.http.routers.wsecho.entrypoints=web'
-      - 'traefik.http.services.wsecho.loadbalancer.server.port=8080'
-    ports:
-      - 8080
   mailhog:
     networks:
       - frontend

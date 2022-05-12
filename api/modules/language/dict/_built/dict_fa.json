@@ -1,5 +1,35 @@
 [
   {
+    "id": "code_integration_select_template_label",
+    "en": "Select template",
+    "fa": "الگو را انتخاب کنید"
+  },
+  {
+    "id": "code_integration_select_template_desc",
+    "en": "Code template, boilerplate, in another format",
+    "fa": "قالب کد، دیگ بخار، در قالبی دیگر"
+  },
+  {
+    "id": "code_integration_template_sld_layers",
+    "en": "SLD format",
+    "fa": "فرمت SLD"
+  },
+  {
+    "id": "code_integration_template_mapbox_style",
+    "en": "Mapbox style (full)",
+    "fa": "سبک نقشه باکس (کامل)"
+  },
+  {
+    "id": "code_integration_template_mapbox_layers",
+    "en": "Mapbox style (layers only)",
+    "fa": "سبک Mapbox (فقط لایه‌ها)"
+  },
+  {
+    "id": "code_integration_template_maplibre_simple_app",
+    "en": "Simple html/js app, using maplibre",
+    "fa": "برنامه ساده html/js با استفاده از maplibre"
+  },
+  {
     "id": "ABW",
     "en": "Aruba",
     "fa": "آروبا"
@@ -1738,6 +1768,21 @@
     "id": "btn_add_source",
     "en": "Add a source layer",
     "fa": "افزودن لایه اصلی"
+  },
+  {
+    "id": "btn_update_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "fa": "به روز رسانی geoserver: بازسازی DB"
+  },
+  {
+    "id": "btn_rebuild_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "fa": "به روز رسانی geoserver: بازسازی DB"
+  },
+  {
+    "id": "btn_rebuild_geoserver_recalc_style",
+    "en": "Update geoserver : rebuild DB + recalc views style",
+    "fa": "به روز رسانی geoserver: بازسازی DB + recalc style views"
   },
   {
     "id": "btn_about",
@@ -4210,14 +4255,9 @@
     "fa": "اجازه دهید این منبع بارگیری شود "
   },
   {
-    "id": "gs_ws_a",
-    "en": "Publish all related views via WMS",
-    "fa": "همه نماهای مرتبط را از طریق WMS منتشر کنید "
-  },
-  {
     "id": "gs_ws_b",
-    "en": "Publish all related views via WMS/WFS/WCS",
-    "fa": "همه نماهای مرتبط را از طریق WMS / WFS / WCS منتشر کنید "
+    "en": "Publish all related public views via WMS/WFS/WCS",
+    "fa": "همه نماهای عمومی مرتبط را از طریق WMS/WFS/WCS منتشر کنید"
   },
   {
     "id": "src_download_issues",
@@ -6987,7 +7027,7 @@
   {
     "id": "share_manager_title",
     "en": "Sharing manager",
-    "fa": "مدیر اشتراک گذاری "
+    "fa": "مدیر اشتراک گذاری"
   },
   {
     "id": "share_form_title",

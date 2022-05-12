@@ -1,3 +1,4 @@
 #!/bin/sh
 
-exec Rscript --vanilla run.R $SHINY_PORT
+echo "START MAPX"
+exec Rscript run.R $SHINY_PORT

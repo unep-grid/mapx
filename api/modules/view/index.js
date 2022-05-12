@@ -1,12 +1,21 @@
-import {mwGet, mwGetMetadata, getViewMetadata} from './getView.js';
-import {mwGetListPublic, getViewsPublic} from './getViewsPublic.js';
+import { mwGet, mwGetMetadata, getViewMetadata } from "./getView.js";
+import { mwGetListPublic, getViewsPublic } from "./getViewsPublic.js";
+import { getViewsGeoserver } from "./getViewsGeoserver.js";
+import { setViewStyleAlt } from "./setViewStyleAlt.js";
 import {
   mwGetListByProject,
   getViews,
-  getProjectViewsStates
-} from './getViewsByProject.js';
+  getProjectViewsStates,
+} from "./getViewsByProject.js";
 
-export {getViews, getViewsPublic, getViewMetadata, getProjectViewsStates};
+export {
+  getViews,
+  getViewsPublic,
+  getViewMetadata,
+  getProjectViewsStates,
+  getViewsGeoserver,
+  setViewStyleAlt,
+};
 
 export default {
   /**
@@ -22,5 +31,7 @@ export default {
   getViews,
   getViewsPublic,
   getViewMetadata,
-  getProjectViewsStates
+  getProjectViewsStates,
+  getViewsGeoserver,
+  setViewStyleAlt,
 };

@@ -2,7 +2,7 @@ import {elSpanTranslate} from './el_mapx';
 import {cleanDiacritic} from './string_util/';
 import {el} from './el_mapx';
 import {path} from './mx_helper_misc.js';
-import {requestProjectMembership, setProject} from './mx_helper_map.js';
+import {requestProjectMembership, setProject} from './map_helpers/index.js';
 import {getDictItem} from './language';
 
 export async function renderUserProjectsList(o) {

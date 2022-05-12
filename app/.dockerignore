@@ -3,17 +3,17 @@
 **
 
 # Don't ignore that
-!/src/r
-!/src/data
-!/src/templates
-!/src/glyphs/dist/sprites
-!/www
+!settings/**
+!src/r/**
+!src/data/**
+!src/templates/**
+!src/glyphs/dist/sprites/**
+!www/**
 !global.R
 !server.R
 !run.R
 !start_mapx.sh
 !package.json
-!/settings
 
 
 # But ignore this inside it
@@ -21,6 +21,9 @@
 **/*.swp
 **/*.log
 **/.DS_Store
+**/node_modules
+**/_archives
+
 
 # Swap
 [._]*.s[a-v][a-z]

@@ -1,5 +1,35 @@
 [
   {
+    "id": "code_integration_select_template_label",
+    "en": "Select template",
+    "es": "Seleccionar plantilla"
+  },
+  {
+    "id": "code_integration_select_template_desc",
+    "en": "Code template, boilerplate, in another format",
+    "es": "Plantilla de código, repetitivo, en otro formato"
+  },
+  {
+    "id": "code_integration_template_sld_layers",
+    "en": "SLD format",
+    "es": "formato SLD"
+  },
+  {
+    "id": "code_integration_template_mapbox_style",
+    "en": "Mapbox style (full)",
+    "es": "Estilo Mapbox (completo)"
+  },
+  {
+    "id": "code_integration_template_mapbox_layers",
+    "en": "Mapbox style (layers only)",
+    "es": "Estilo Mapbox (solo capas)"
+  },
+  {
+    "id": "code_integration_template_maplibre_simple_app",
+    "en": "Simple html/js app, using maplibre",
+    "es": "Aplicación simple html/js, usando maplibre"
+  },
+  {
     "id": "ABW",
     "en": "Aruba",
     "es": "Aruba"
@@ -1738,6 +1768,21 @@
     "id": "btn_add_source",
     "en": "Add a source layer",
     "es": "Añadir una capa fuente"
+  },
+  {
+    "id": "btn_update_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "es": "Actualizar geoservidor: reconstruir DB"
+  },
+  {
+    "id": "btn_rebuild_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "es": "Actualizar geoservidor: reconstruir DB"
+  },
+  {
+    "id": "btn_rebuild_geoserver_recalc_style",
+    "en": "Update geoserver : rebuild DB + recalc views style",
+    "es": "Actualizar geoserver: reconstruir DB + recalc vistas estilo"
   },
   {
     "id": "btn_about",
@@ -4210,14 +4255,9 @@
     "es": "Autorizar esta fuente de datos para ser descargada"
   },
   {
-    "id": "gs_ws_a",
-    "en": "Publish all related views via WMS",
-    "es": "Publicar todas las vistas relacionadas por WMS"
-  },
-  {
     "id": "gs_ws_b",
-    "en": "Publish all related views via WMS/WFS/WCS",
-    "es": "Publicar todas las vistas relacionadas por WMS/WFS/WCS"
+    "en": "Publish all related public views via WMS/WFS/WCS",
+    "es": "Publique todas las vistas públicas relacionadas a través de WMS/WFS/WCS"
   },
   {
     "id": "src_download_issues",

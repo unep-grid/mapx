@@ -1,8 +1,8 @@
 
 
 # local folder: do not add to git
-_trash
-_archives
+**/_trash
+**/_archives
 _mail.txt
 _logs.txt
 _shared

@@ -1,5 +1,35 @@
 [
   {
+    "id": "code_integration_select_template_label",
+    "en": "Select template",
+    "fr": "Sélectionnez le modèle"
+  },
+  {
+    "id": "code_integration_select_template_desc",
+    "en": "Code template, boilerplate, in another format",
+    "fr": "Modèle de code, passe-partout, dans un autre format"
+  },
+  {
+    "id": "code_integration_template_sld_layers",
+    "en": "SLD format",
+    "fr": "Format SLD"
+  },
+  {
+    "id": "code_integration_template_mapbox_style",
+    "en": "Mapbox style (full)",
+    "fr": "Style Mapbox (complet)"
+  },
+  {
+    "id": "code_integration_template_mapbox_layers",
+    "en": "Mapbox style (layers only)",
+    "fr": "Style Mapbox (couches uniquement)"
+  },
+  {
+    "id": "code_integration_template_maplibre_simple_app",
+    "en": "Simple html/js app, using maplibre",
+    "fr": "Application html/js simple, utilisant maplibre"
+  },
+  {
     "id": "ABW",
     "en": "Aruba",
     "fr": "Aruba"
@@ -1738,6 +1768,21 @@
     "id": "btn_add_source",
     "en": "Add a source layer",
     "fr": "Ajouter une couche source"
+  },
+  {
+    "id": "btn_update_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "fr": "Mettre à jour le géoserveur : reconstruire la base de données"
+  },
+  {
+    "id": "btn_rebuild_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "fr": "Mettre à jour le géoserveur : reconstruire la base de données"
+  },
+  {
+    "id": "btn_rebuild_geoserver_recalc_style",
+    "en": "Update geoserver : rebuild DB + recalc views style",
+    "fr": "Mettre à jour le géoserveur : reconstruire la BD + recalculer le style des vues"
   },
   {
     "id": "btn_about",
@@ -4210,14 +4255,9 @@
     "fr": "Autoriser le téléchargement de cette source"
   },
   {
-    "id": "gs_ws_a",
-    "en": "Publish all related views via WMS",
-    "fr": "Publier toutes les vues liées via WMS"
-  },
-  {
     "id": "gs_ws_b",
-    "en": "Publish all related views via WMS/WFS/WCS",
-    "fr": "Publier toutes les vues liées via WMS/WFS/WCS"
+    "en": "Publish all related public views via WMS/WFS/WCS",
+    "fr": "Publier toutes les vues publiques liées via WMS/WFS/WCS"
   },
   {
     "id": "src_download_issues",

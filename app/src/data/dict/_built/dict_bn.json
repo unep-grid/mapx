@@ -1,5 +1,35 @@
 [
   {
+    "id": "code_integration_select_template_label",
+    "en": "Select template",
+    "bn": "টেমপ্লেট নির্বাচন করুন"
+  },
+  {
+    "id": "code_integration_select_template_desc",
+    "en": "Code template, boilerplate, in another format",
+    "bn": "কোড টেমপ্লেট, বয়লারপ্লেট, অন্য ফর্ম্যাটে"
+  },
+  {
+    "id": "code_integration_template_sld_layers",
+    "en": "SLD format",
+    "bn": "SLD বিন্যাস"
+  },
+  {
+    "id": "code_integration_template_mapbox_style",
+    "en": "Mapbox style (full)",
+    "bn": "ম্যাপবক্স শৈলী (সম্পূর্ণ)"
+  },
+  {
+    "id": "code_integration_template_mapbox_layers",
+    "en": "Mapbox style (layers only)",
+    "bn": "ম্যাপবক্স শৈলী (শুধুমাত্র স্তর)"
+  },
+  {
+    "id": "code_integration_template_maplibre_simple_app",
+    "en": "Simple html/js app, using maplibre",
+    "bn": "ম্যাপলিব্রে ব্যবহার করে সহজ এইচটিএমএল/জেএস অ্যাপ"
+  },
+  {
     "id": "ABW",
     "en": "Aruba",
     "bn": "আরুবা"
@@ -1738,6 +1768,21 @@
     "id": "btn_add_source",
     "en": "Add a source layer",
     "bn": "একটি উত্স স্তর যোগ করুন "
+  },
+  {
+    "id": "btn_update_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "bn": "জিওসার্ভার আপডেট করুন: ডিবি পুনর্নির্মাণ করুন"
+  },
+  {
+    "id": "btn_rebuild_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "bn": "জিওসার্ভার আপডেট করুন: ডিবি পুনর্নির্মাণ করুন"
+  },
+  {
+    "id": "btn_rebuild_geoserver_recalc_style",
+    "en": "Update geoserver : rebuild DB + recalc views style",
+    "bn": "জিওসার্ভার আপডেট করুন: ডিবি + রিকালক ভিউ স্টাইল পুনর্নির্মাণ করুন"
   },
   {
     "id": "btn_about",
@@ -4210,14 +4255,9 @@
     "bn": "এই উত্সটি ডাউনলোড করার অনুমতি দিন "
   },
   {
-    "id": "gs_ws_a",
-    "en": "Publish all related views via WMS",
-    "bn": "ডাব্লুএমএস এর মাধ্যমে সম্পর্কিত সমস্ত মতামত প্রকাশ করুন "
-  },
-  {
     "id": "gs_ws_b",
-    "en": "Publish all related views via WMS/WFS/WCS",
-    "bn": "ডাব্লুএমএস / ডাব্লুএফএস / ডাব্লুসিএস এর মাধ্যমে সম্পর্কিত সমস্ত মতামত প্রকাশ করুন "
+    "en": "Publish all related public views via WMS/WFS/WCS",
+    "bn": "WMS/WFS/WCS এর মাধ্যমে সমস্ত সম্পর্কিত সর্বজনীন মতামত প্রকাশ করুন"
   },
   {
     "id": "src_download_issues",
@@ -6987,7 +7027,7 @@
   {
     "id": "share_manager_title",
     "en": "Sharing manager",
-    "bn": "শেয়ারিং ম্যানেজার "
+    "bn": "শেয়ারিং ম্যানেজার"
   },
   {
     "id": "share_form_title",

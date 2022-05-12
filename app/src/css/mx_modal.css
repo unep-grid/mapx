@@ -18,7 +18,7 @@
 }
 
 .mx-modal-container.mx-modal-background:before {
-  content: '';
+  content: "";
   opacity: 0.8;
   width: 100%;
   height: 100%;
@@ -75,7 +75,7 @@
 .mx-modal-container.mx-modal-collapsed {
   overflow: hidden;
   resize: none;
-  height: 90px!important;
+  height: 90px !important;
 }
 
 .mx-modal-top {
@@ -109,11 +109,16 @@
   overflow-y: auto;
   overflow-x: hidden;
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .mx-modal-content {
   height: 100%;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 @media screen and (max-width: 640px), (max-height: 640px) {

@@ -1,5 +1,35 @@
 [
   {
+    "id": "code_integration_select_template_label",
+    "en": "Select template",
+    "zh": "选择模板"
+  },
+  {
+    "id": "code_integration_select_template_desc",
+    "en": "Code template, boilerplate, in another format",
+    "zh": "代码模板，样板，另一种格式"
+  },
+  {
+    "id": "code_integration_template_sld_layers",
+    "en": "SLD format",
+    "zh": "SLD 格式"
+  },
+  {
+    "id": "code_integration_template_mapbox_style",
+    "en": "Mapbox style (full)",
+    "zh": "Mapbox 样式（完整）"
+  },
+  {
+    "id": "code_integration_template_mapbox_layers",
+    "en": "Mapbox style (layers only)",
+    "zh": "Mapbox 样式（仅限图层）"
+  },
+  {
+    "id": "code_integration_template_maplibre_simple_app",
+    "en": "Simple html/js app, using maplibre",
+    "zh": "简单的 html/js 应用，使用 maplibre"
+  },
+  {
     "id": "ABW",
     "en": "Aruba",
     "zh": "阿鲁巴"
@@ -1738,6 +1768,21 @@
     "id": "btn_add_source",
     "en": "Add a source layer",
     "zh": "添加源图层"
+  },
+  {
+    "id": "btn_update_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "zh": "更新地理服务器：重建数据库"
+  },
+  {
+    "id": "btn_rebuild_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "zh": "更新地理服务器：重建数据库"
+  },
+  {
+    "id": "btn_rebuild_geoserver_recalc_style",
+    "en": "Update geoserver : rebuild DB + recalc views style",
+    "zh": "更新地理服务器：重建数据库 + 重新计算视图样式"
   },
   {
     "id": "btn_about",
@@ -4210,14 +4255,9 @@
     "zh": "允许下载此源"
   },
   {
-    "id": "gs_ws_a",
-    "en": "Publish all related views via WMS",
-    "zh": "通过WMS发布所有相关视图"
-  },
-  {
     "id": "gs_ws_b",
-    "en": "Publish all related views via WMS/WFS/WCS",
-    "zh": "通过WMS/WFS/WCS发布所有相关视图"
+    "en": "Publish all related public views via WMS/WFS/WCS",
+    "zh": "通过 WMS/WFS/WCS 发布所有相关公共视图"
   },
   {
     "id": "src_download_issues",

@@ -1,0 +1,51 @@
+{
+  "name": "mx-api",
+  "version": "1.9.40-alpha.2",
+  "description": "MapX express api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'test disabled' && exit 1",
+    "lint": "eslint ./index.js && eslint ./routines.js",
+    "docker": "npm run lint && ./build.sh -a",
+    "docker_prod": "npn run lint && ./build.sh -ap"
+  },
+  "author": "unepgrid.ch",
+  "license": "MIT",
+  "type": "module",
+  "imports": {
+    "#root/*": "./*/index.js",
+    "#mapx/*": "./modules/*/index.js"
+  },
+  "dependencies": {
+    "@fxi/mx_valid": "^0.0.19",
+    "@turf/turf": "^6.5.0",
+    "ajv": "^8.10.0",
+    "archiver": "^5.3.0",
+    "body-parser": "^1.19.2",
+    "express": "^4.17.2",
+    "express-rate-limit": "^6.3.0",
+    "geojson-vt": "^3.2.1",
+    "geoserver-node-client": "github:meggsimum/geoserver-node-client",
+    "html-to-text": "^8.1.0",
+    "martinez-polygon-clipping": "^0.7.1",
+    "md5-file": "^5.0.0",
+    "meilisearch": "0.18.1",
+    "multer": "^1.4.4",
+    "node-fetch": "^3.2.0",
+    "node-sql-parser": "^4.1.1",
+    "node-stream-zip": "^1.15.0",
+    "nodemailer": "^6.7.2",
+    "pg": "^8.7.3",
+    "pg-copy-streams": "^6.0.2",
+    "redis": "^4.0.3",
+    "socket.io": "^4.0.0",
+    "sql-ts": "^6.1.0",
+    "vt-pbf": "^3.1.3",
+    "wellknown": "^0.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^8.4.0",
+    "mocha": "^9.2.0"
+  }
+}

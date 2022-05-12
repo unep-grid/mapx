@@ -1,13 +1,13 @@
-import {miniCacheSet, miniCacheGet, miniCacheRemove} from './minicache';
-import {getApiUrl} from './api_routes';
-import {getView, getViewTitle} from './mx_helper_map.js';
-import {path} from './mx_helper_misc.js';
-import {objToParams, getQueryParametersAsObject} from './mx_helper_url';
-import {el, elAuto} from './el_mapx';
-import {modal} from './mx_helper_modal.js';
-import {wmsGetLayers} from './wms';
-import {moduleLoad} from './modules_loader_async';
-import {epsgQuery} from './epsgio';
+import { miniCacheSet, miniCacheGet, miniCacheRemove } from "./minicache";
+import { getApiUrl } from "./api_routes";
+import { getView, getViewTitle } from "./map_helpers/index.js";
+import { path } from "./mx_helper_misc.js";
+import { objToParams, getQueryParametersAsObject } from "./mx_helper_url";
+import { el, elAuto } from "./el_mapx";
+import { modal } from "./mx_helper_modal.js";
+import { wmsGetLayers } from "./wms";
+import { moduleLoad } from "./modules_loader_async";
+import { epsgQuery } from "./epsgio";
 import {
   isViewGj,
   isUrlValidWms,
@@ -15,19 +15,19 @@ import {
   isViewId,
   isString,
   isObject,
-  isArray
-} from './is_test';
+  isArray,
+} from "./is_test";
 
 const def = {
   idView: null,
   idSource: null,
   idAttr: null,
   useCache: false,
-  binsMethod: 'jenks',
+  binsMethod: "jenks",
   binsNumber: 5,
-  stats: ['base', 'attributes', 'temporal', 'spatial'],
+  stats: ["base", "attributes", "temporal", "spatial"],
   timestamp: null,
-  nullValue: null
+  nullValue: null,
 };
 
 /**
@@ -43,22 +43,22 @@ export async function getViewSourceSummary(view, opt) {
     {
       idView: view.id,
       timestamp: view._src_timestamp,
-      idAttr: path(view, 'data.attribute.name'),
-      idSource: path(view, 'data.source.layerInfo.name'),
-      useCache: mx.settings.useCache
+      idAttr: path(view, "data.attribute.name"),
+      idSource: path(view, "data.source.layerInfo.name"),
+      useCache: mx.settings.useCache,
     },
     opt
   );
 
   let out = {};
 
-  if (view.type === 'vt') {
+  if (view.type === "vt") {
     out = await getSourceVtSummary(opt);
   }
-  if (view.type === 'rt') {
+  if (view.type === "rt") {
     out = await getSourceRtSummary(view);
   }
-  if (view.type === 'gj') {
+  if (view.type === "gj") {
     out = await getSourceGjSummary(view);
   }
 
@@ -69,22 +69,22 @@ export async function getViewSourceSummary(view, opt) {
   if (isObject(out.attribute_stat)) {
     view.data.attribute = Object.assign({}, view.data.attribute, {
       name: out.attribute_stat.attribute,
-      type: out.attribute_stat.type === 'continuous' ? 'number' : 'string',
+      type: out.attribute_stat.type === "continuous" ? "number" : "string",
       max: out.attribute_stat.max,
       min: out.attribute_stat.min,
-      table: out.attribute_stat.table
+      table: out.attribute_stat.table,
     });
   }
 
   if (isObject(out.extent_time)) {
     view.data.period = Object.assign({}, view.data.period, {
-      extent: out.extent_time
+      extent: out.extent_time,
     });
   }
 
   if (isObject(out.extent_sp)) {
     view.data.geometry = Object.assign({}, view.data.geometry, {
-      extent: out.extent_sp
+      extent: out.extent_sp,
     });
   }
   view._src_timestamp = out.timestamp;
@@ -96,7 +96,7 @@ export async function getViewSourceSummary(view, opt) {
  */
 export async function getSourceVtSummary(opt) {
   const start = performance.now();
-  let origin = 'cache';
+  let origin = "cache";
   /*
    * Set defaults
    */
@@ -113,7 +113,7 @@ export async function getSourceVtSummary(opt) {
 
   if (!isViewId(opt.idView) && !isSourceId(opt.idSource)) {
     console.warn(
-      'getSourceVtSummary : at least id source or id view are required'
+      "getSourceVtSummary : at least id source or id view are required"
     );
     return {};
   }
@@ -122,7 +122,7 @@ export async function getSourceVtSummary(opt) {
    * Fetch summary or use cache
    */
   opt.useCache = opt.useCache === true;
-  const urlSourceSummary = getApiUrl('getSourceSummary');
+  const urlSourceSummary = getApiUrl("getSourceSummary");
   const query = objToParams(opt);
   const url = `${urlSourceSummary}?${query}`;
   let summary;
@@ -130,23 +130,23 @@ export async function getSourceVtSummary(opt) {
   if (opt.useCache) {
     summary = await miniCacheGet(url);
     if (summary) {
-      origin = 'cache';
+      origin = "cache";
     }
   }
 
   if (!summary) {
-    origin = 'fetch';
+    origin = "fetch";
     const resp = await fetch(url);
     summary = await resp.json();
     miniCacheSet(url, summary, {
-      ttl: mx.settings.maxTimeCache
+      ttl: mx.settings.maxTimeCache,
     });
   }
 
   /*
    * handle errors
    */
-  if (isObject(summary) && summary.type === 'error') {
+  if (isObject(summary) && summary.type === "error") {
     console.warn(summary);
     miniCacheRemove(url);
     return {};
@@ -158,11 +158,11 @@ export async function getSourceVtSummary(opt) {
   if (0) {
     console.table([
       {
-        op: 'getSourceSummary',
+        op: "getSourceSummary",
         origin: origin,
         timing: Math.round(performance.now() - start),
-        timestamp: summary.timestamp
-      }
+        timestamp: summary.timestamp,
+      },
     ]);
   }
   summary._origin = origin;
@@ -173,28 +173,28 @@ export async function getSourceVtSummary(opt) {
 export async function getSourceVtSummaryUI(opt) {
   const summary = await getSourceVtSummary(opt);
   const aStat = summary.attribute_stat;
-  const elContainer = el('div');
+  const elContainer = el("div");
   let title = opt.idSource || opt.idView;
-  let titleTable = 'Table';
+  let titleTable = "Table";
   if (isViewId(opt.idView)) {
     title = getViewTitle(opt.idView);
   }
 
-  if (aStat.type === 'continuous') {
+  if (aStat.type === "continuous") {
     aStat.table.forEach((r) => {
       Object.keys(r).forEach((k) => (r[k] = Math.round(r[k] * 1000) / 1000));
     });
     titleTable = `${titleTable} ( Method : ${aStat.binsMethod}, number of bins : ${aStat.binsNumber} )`;
   }
-  const elTable = elAuto('array_table', aStat.table, {
-    tableTitle: titleTable
+  const elTable = elAuto("array_table", aStat.table, {
+    tableTitle: titleTable,
   });
 
   elContainer.appendChild(elTable);
 
   modal({
     title: title,
-    content: elContainer
+    content: elContainer,
   });
 }
 
@@ -203,8 +203,8 @@ export async function getSourceVtSummaryUI(opt) {
  */
 export async function getSourceRtSummary(view) {
   const out = {};
-  const url = path(view, 'data.source.tiles', []);
-  const useMirror = path(view, 'data.source.useMirror', false);
+  const url = path(view, "data.source.tiles", []);
+  const useMirror = path(view, "data.source.useMirror", false);
   if (url.length === 0) {
     return out;
   }
@@ -223,8 +223,8 @@ export async function getSourceRtSummary(view) {
   }
 
   const layerName = q.layers[0];
-  const endpoint = urlQuery.split('?')[0];
-  const timeStamp = path(view, 'date_modified', null);
+  const endpoint = urlQuery.split("?")[0];
+  const timeStamp = path(view, "date_modified", null);
 
   const layers = await wmsGetLayers(endpoint, {
     optGetCapabilities: {
@@ -233,9 +233,9 @@ export async function getSourceRtSummary(view) {
         /**
          * timestamp : Used to invalidate getCapabilities cache
          */
-        timestamp: timeStamp
-      }
-    }
+        timestamp: timeStamp,
+      },
+    },
   });
 
   const layer = layers.find((l) => {
@@ -253,7 +253,7 @@ export async function getSourceRtSummary(view) {
     /**
      * Match layer name to.. composite name ?
      */
-    const nameComposite = l.Name.split(':');
+    const nameComposite = l.Name.split(":");
     if (nameComposite[1]) {
       return nameComposite[1] === layerName;
     }
@@ -265,7 +265,7 @@ export async function getSourceRtSummary(view) {
     layer.BoundingBox.length > 0;
 
   if (!validBbox) {
-    console.warn('No valid BoundingBox found');
+    console.warn("No valid BoundingBox found");
   } else {
     try {
       let bbx;
@@ -279,7 +279,7 @@ export async function getSourceRtSummary(view) {
        *  (0,1)......./
        */
 
-      bbx = layer.BoundingBox.find((b) => b.crs === 'EPSG:4326');
+      bbx = layer.BoundingBox.find((b) => b.crs === "EPSG:4326");
 
       if (isObject(bbx) && isArray(bbx.extent)) {
         /**
@@ -295,23 +295,23 @@ export async function getSourceRtSummary(view) {
           lng1: bbx.extent[0],
           lat2: bbx.extent[1],
           lng2: bbx.extent[2],
-          lat1: bbx.extent[3]
+          lat1: bbx.extent[3],
         };
       } else {
         /**
          * try reprojection
          */
         bbx = layer.BoundingBox[0];
-        const epsg = isString(bbx.crs) ? bbx.crs.split(':')[1] : null;
+        const epsg = isString(bbx.crs) ? bbx.crs.split(":")[1] : null;
 
         if (epsg) {
-          const proj4 = await moduleLoad('proj4');
+          const proj4 = await moduleLoad("proj4");
           const resEpsg = await epsgQuery(epsg);
           const proj4from = resEpsg.find((r) => r.proj4).proj4;
 
-          const proj4to = '+proj=longlat +datum=WGS84 +no_defs';
-          const sw_o = {x: bbx.extent[0], y: bbx.extent[1]};
-          const ne_o = {x: bbx.extent[2], y: bbx.extent[3]};
+          const proj4to = "+proj=longlat +datum=WGS84 +no_defs";
+          const sw_o = { x: bbx.extent[0], y: bbx.extent[1] };
+          const ne_o = { x: bbx.extent[2], y: bbx.extent[3] };
           const sw = proj4(proj4from, proj4to, sw_o);
           const ne = proj4(proj4from, proj4to, ne_o);
 
@@ -319,7 +319,7 @@ export async function getSourceRtSummary(view) {
             lng1: sw.x,
             lat2: sw.y,
             lng2: ne.x,
-            lat1: ne.y
+            lat1: ne.y,
           };
         }
       }
@@ -334,7 +334,7 @@ export async function getSourceRtSummary(view) {
 export async function getSourceGjSummary(view) {
   const out = {};
   if (isViewGj(view)) {
-    out.extent_sp = path(view, 'data.geometry.extent', {});
+    out.extent_sp = path(view, "data.geometry.extent", {});
   }
   return out;
 }

@@ -8,7 +8,7 @@ import {
   isEmpty,
 } from "./../is_test";
 import { path, parseTemplate, objectToArray } from "./../mx_helper_misc.js";
-import { getViews, getMap, getLayerNamesByPrefix } from "./../mx_helper_map.js";
+import { getViews, getMap, getLayerNamesByPrefix } from "./../map_helpers/index.js";
 import { getArrayDistinct } from "../array_stat";
 
 /**
@@ -428,7 +428,6 @@ export function getLanguageItem(obj, language) {
     obj,
     language,
   });
-  console.log(language);
   return obj[language];
 }
 

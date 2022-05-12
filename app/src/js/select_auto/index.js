@@ -24,9 +24,12 @@ export class SelectAuto extends EventSimple {
 
   async init() {
     const se = this;
+    if (se._init) {
+      return;
+    }
+    se._init = true;
     await se.build();
     se.fire("init");
-    se._init = true;
   }
 
   destroy() {
@@ -35,7 +38,9 @@ export class SelectAuto extends EventSimple {
       return;
     }
     se._destroyed = true;
-    se._tom.destroy();
+    if (se?._tom?.destroy) {
+      se._tom.destroy();
+    }
     se.fire("destroyed");
   }
 
@@ -45,7 +50,19 @@ export class SelectAuto extends EventSimple {
     const config = await se.loadConfig(se._opt.type);
     return new Promise((resolve) => {
       se._tom = new TomSelect(se._opt.target, config);
-      se._tom.on("initialize", resolve);
+      /*
+       *
+       * -> bug, doesn't work ...
+       *
+       * se._tom.on("initialize", () => {
+       *  resolve(true);
+       * });
+       */ 
+      setTimeout(() => {
+        se._built = true;
+        se.fire("built");
+        resolve(true);
+      }, 1000);
     });
   }
 

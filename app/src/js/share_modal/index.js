@@ -1,4 +1,4 @@
-import {modal} from '../mx_helper_modal';
+import {modal} from '../mx_helper_modal.js';
 import {EventSimple} from '../event_simple/index.js';
 import {getDictItem, getLanguageCurrent} from './../language';
 import {isStoryPlaying, getStoryId, getViewsStep} from '../story_map/index.js';
@@ -12,7 +12,7 @@ import {
   getViewsLayersVisibles,
   getViewsOpen,
   getMapPos
-} from '../mx_helper_map.js';
+} from '../map_helpers/index.js';
 import {
   el,
   elButtonFa,

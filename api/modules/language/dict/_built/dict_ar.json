@@ -1,5 +1,35 @@
 [
   {
+    "id": "code_integration_select_template_label",
+    "en": "Select template",
+    "ar": "حدد قالب"
+  },
+  {
+    "id": "code_integration_select_template_desc",
+    "en": "Code template, boilerplate, in another format",
+    "ar": "قالب التعليمات البرمجية ، المعياري ، بتنسيق آخر"
+  },
+  {
+    "id": "code_integration_template_sld_layers",
+    "en": "SLD format",
+    "ar": "تنسيق SLD"
+  },
+  {
+    "id": "code_integration_template_mapbox_style",
+    "en": "Mapbox style (full)",
+    "ar": "نمط Mapbox (ممتلئ)"
+  },
+  {
+    "id": "code_integration_template_mapbox_layers",
+    "en": "Mapbox style (layers only)",
+    "ar": "نمط Mapbox (الطبقات فقط)"
+  },
+  {
+    "id": "code_integration_template_maplibre_simple_app",
+    "en": "Simple html/js app, using maplibre",
+    "ar": "تطبيق html / js بسيط باستخدام maplibre"
+  },
+  {
     "id": "ABW",
     "en": "Aruba",
     "ar": "أروبا"
@@ -1738,6 +1768,21 @@
     "id": "btn_add_source",
     "en": "Add a source layer",
     "ar": "أضف طبقة مصدر "
+  },
+  {
+    "id": "btn_update_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "ar": "تحديث الخادم الجغرافي: إعادة بناء قاعدة البيانات"
+  },
+  {
+    "id": "btn_rebuild_geoserver",
+    "en": "Update geoserver : rebuild DB",
+    "ar": "تحديث الخادم الجغرافي: إعادة بناء قاعدة البيانات"
+  },
+  {
+    "id": "btn_rebuild_geoserver_recalc_style",
+    "en": "Update geoserver : rebuild DB + recalc views style",
+    "ar": "تحديث الخادم الجغرافي: إعادة بناء أسلوب عرض DB + إعادة حساب"
   },
   {
     "id": "btn_about",
@@ -4210,14 +4255,9 @@
     "ar": "السماح بتحميل هذا المصدر "
   },
   {
-    "id": "gs_ws_a",
-    "en": "Publish all related views via WMS",
-    "ar": "انشر جميع المشاهدات ذات الصلة عبر WMS "
-  },
-  {
     "id": "gs_ws_b",
-    "en": "Publish all related views via WMS/WFS/WCS",
-    "ar": "انشر جميع العروض ذات الصلة عبر WMS / WFS / WCS "
+    "en": "Publish all related public views via WMS/WFS/WCS",
+    "ar": "انشر جميع الآراء العامة ذات الصلة عبر WMS / WFS / WCS"
   },
   {
     "id": "src_download_issues",
@@ -6987,7 +7027,7 @@
   {
     "id": "share_manager_title",
     "en": "Sharing manager",
-    "ar": "مدير تقاسم "
+    "ar": "مدير تقاسم"
   },
   {
     "id": "share_form_title",

@@ -448,12 +448,16 @@ async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
  * Check for multiple layer geom validity
  * @param {Array} idsLayer Array of id of layer to check
  * @param {Boolean} force Force revalidation of previously wrong geom
+ * @return {Promise<Object>} validation object
  */
 function areLayersValid(idsLayers, useCache, autoCorrect) {
-  if (!isArray(idsLayers)) idsLayers = [idsLayers];
-  var queries = idsLayers.map(async function(id) {
-    return await isLayerValid(id, useCache, autoCorrect);
-  });
+  if (!isArray(idsLayers)){
+    idsLayers = [idsLayers];
+  }
+  const queries = [];
+  for(const id of idsLayers){
+    queries.push(isLayerValid(id, useCache, autoCorrect))
+  } 
   return Promise.all(queries);
 }
 

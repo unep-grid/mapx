@@ -18,13 +18,13 @@ import {
   viewAdd,
   viewRemove,
   getViewsOpen,
-} from "./../mx_helper_map.js";
+  hasViewLocal,
+} from "./../map_helpers/index.js";
 import {
   isView,
   isStory,
   isArray,
   isBoolean,
-  isViewLocal,
   isStringRange,
 } from "./../is_test/index.js";
 
@@ -839,7 +839,7 @@ class Search extends EventSimple {
           {
             s.vFeedback(e);
             const idView = ds.id_view;
-            const viewIsLocal = isViewLocal(idView);
+            const viewIsLocal = hasViewLocal(idView);
             const view = viewIsLocal
               ? getView(idView)
               : await getViewRemote(idView);

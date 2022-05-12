@@ -1,132 +1,273 @@
 #!/bin/bash
+set -e
 
 #
 # Script to build and push new image in remote docker repository
 #
-BRANCH=$(git branch --show-current)
-REMOTE=github
-NEW_VERSION=$1
-OLD_VERSION=`cat version.txt`
-echo $NEW_VERSION
-FG_GREEN="\033[32m"
-FG_NORMAL="\033[0m"
-CHANGES_CHECK=$(git status --porcelain | wc -l)
-DIR_APP=app
-DIR_SDK=app/src/js/sdk
-DIR_CUR=$(pwd)
-CUR_HASH=$(git rev-parse HEAD)
-CHANGELOG_TMP=/tmp/tmp_mgl_changes.md
-CHANGELOG=CHANGELOG.md
 
+DRY="true" 
 REPO="https://github.com/unep-grid/map-x-mgl"
+BRANCH=$(git branch --show-current)
+REMOTE="github"
+DOCKER_REPO_APP="fredmoser/mapx_app"
+DOCKER_REPO_API="fredmoser/mapx_api"
 
-USAGE="Usage : bash build.sh $OLD_VERSION"
+NEW_VERSION=""
+OLD_VERSION=$(cat version.txt)
 
-if [ -z "$NEW_VERSION" ] || [ "$NEW_VERSION" == "$OLD_VERSION" ]
-then
-  echo "Wrong or missing version. Old version version =  $OLD_VERSION new version = $NEW_VERSION"
-  echo "$USAGE"
-  exit 1
-fi
+FG_GREEN="\033[32m"
+FG_RED="\033[31m"
+FG_NORMAL="\033[0m"
+FG_CYAN="\033[36m"
 
-echo -e "Build, commit and push $FG_GREEN$NEW_VERSION$FG_NORMAL on branch $FG_GREEN$BRANCH$FG_NORMAL in remote $FG_GREEN$REMOTE$FG_NORMAL [YES/NO]"
+DIR_CUR="$(pwd)"
+DIR_APP="$DIR_CUR/app"
+DIR_SDK="$DIR_CUR/app/src/js/sdk"
+DIR_API="$DIR_CUR/api"
 
-read confirm_diff
+CHANGES_CHECK="$(git status --porcelain | wc -l)"
+CUR_HASH="$(git rev-parse HEAD)"
+CHANGELOG="changelog.md"
+CHANGELOG_TMP="/tmp/changelog.md"
 
-if [ "$confirm_diff" != "YES"  ]
-then
-  echo "Stop here " 
-  exit 1
-fi
+#
+# Helpers 
+#
+usage() {
+  echo -e "Usage: $0 [-v version <version>. E.g. \"-v $FG_CYAN$OLD_VERSION$FG_NORMAL\" ] [-a actually do it]" 1>&2; 
 
+  if [[ -z $DRY ]]
+  then
+    exit 1
+  fi
 
-if [ $CHANGES_CHECK -gt 0 ]
+}
+
+# generic error
+error()
+{
+  echo -e "${FG_RED}ERROR${FG_NORMAL}: $1"
+  if [[ $2 -eq 1 ]]
+  then
+    usage
+  fi
+  if [[ -z $DRY ]]
+  then
+    exit 1
+  fi
+}
+
+# Update version in package.json
+update_json()
+{
+  yq -i '.version = "'$NEW_VERSION'"' $1
+}
+
+# Check tooling 
+check_command()
+{
+  if [[ -z `command -v $1` ]]; 
+  then 
+    error "Missing command $1, please install it"
+  fi
+}
+
+#--------------------------------------------------------------------------------
+# Check installed tools  
+#--------------------------------------------------------------------------------
+
+check_command 'yq'
+check_command 'git'
+check_command 'docker'
+check_command 'npm'
+check_command 'vim'
+
+#--------------------------------------------------------------------------------
+# Parse options 
+#--------------------------------------------------------------------------------
+
+while getopts "hav:" opt; do
+  case "$opt" in
+    h|\?)
+      usage
+      ;;
+    v)
+      NEW_VERSION=$OPTARG
+      ;;
+    a)
+      DRY=""
+      ;;
+  esac
+done
+
+if [[ $CHANGES_CHECK -gt 0 ]]
 then 
-  echo "This project as uncommited changes, stop here"
-  exit 1
-fi
-#
-# Should pass js linting
-#
-cd $DIR_APP
-npm run lint
-
-if [ $? -eq 0 ]; then
-  echo Linting passed
-else
-  echo Liniting failed
-  exit 1
+  error "This project has uncommited changes"
 fi
 
-cd $DIR_CUR
+if [[ -z "$NEW_VERSION" ]]
+then 
+  error "Missing version" 1
+fi
 
-
-#
-# Update version + verification
-#
-
-echo "Update package.json"
-REP_PACKAGE_VERSION='s/"version": "'"$OLD_VERSION"'"/"version": "'"$NEW_VERSION"'"/g'
-perl -pi -e "$REP_PACKAGE_VERSION" ./app/package.json
-perl -pi -e "$REP_PACKAGE_VERSION" ./api/package.json
-perl -pi -e "$REP_PACKAGE_VERSION" ./app/src/js/sdk/package.json
-echo "Update version.txt"
-REP_VERSION='s/'"$OLD_VERSION"'/'"$NEW_VERSION"'/g'
-perl -pi -e "$REP_VERSION" version.txt
-echo "Update docker-compose.yml"
-REP_API_TAG='s/mx-api-node:'"$OLD_VERSION"'-alpine/mx-api-node:'"$NEW_VERSION"'-alpine/g'
-REP_APP_TAG='s/mx-app-shiny:'"$OLD_VERSION"'-debian/mx-app-shiny:'"$NEW_VERSION"'-debian/g'
-perl -pi -e $REP_API_TAG ./docker-compose.yml
-perl -pi -e $REP_APP_TAG ./docker-compose.yml
-
-#echo "- <a href='${REPO}/tree/${NEW_VERSION}' target='_blank'>${NEW_VERSION}</a>"\
-
-echo "Write changes"
-echo -e "  - [${NEW_VERSION}](${REPO}/tree/${NEW_VERSION}) \n"\
-  > $CHANGELOG_TMP
-cat $CHANGELOG >> $CHANGELOG_TMP
-cp $CHANGELOG_TMP $CHANGELOG 
-vim $CHANGELOG
-
-echo "Get diff"
-git --no-pager diff --minimal
-
-echo "Verify git diff of versioning changes. Continue (commit, build, push) ? [YES/NO]"
-
-read confirm_diff
-
-if [ "$confirm_diff" != "YES"  ]
+if [[ "$NEW_VERSION" == "$OLD_VERSION" ]]
 then
-  echo "Stop here, stash changes. rollback to $CUR_HASH " 
-  git stash
-  exit 1
+  error "Same old/new version" 1
 fi
 
-echo "Build sdk prod"
-cd $DIR_CUR
-cd $DIR_SDK
-npm run prod
+DOCKER_TAG_API="$DOCKER_REPO_API:$NEW_VERSION"
+DOCKER_TAG_APP="$DOCKER_REPO_APP:$NEW_VERSION"
 
-echo "Build webpack prod"
-# AFTER SDK, as it copy built packages in www/sdk 
-cd $DIR_CUR
+
+#--------------------------------------------------------------------------------
+# Confirm
+#--------------------------------------------------------------------------------
+
+MSG_CONFIRM="Build, commit and push $FG_GREEN$NEW_VERSION$FG_NORMAL on branch $FG_GREEN$BRANCH$FG_NORMAL in remote $FG_GREEN$REMOTE$FG_NORMAL [YES/NO]"
+
+if [[ -z $DRY ]]
+then
+  MSG_CONFIRM="Dry mode ${FG_GREEN}DISABLED${FG_NORMAL}: $MSG_CONFIRM"
+else
+  MSG_CONFIRM="Dry mode ${FG_CYAN}ENABLED${FG_NORMAL}: $MSG_CONFIRM"
+fi
+
+echo -e "$MSG_CONFIRM "
+
+if [[ -z $DRY ]]
+then
+  read confirm_diff
+  if [[ "$confirm_diff" != "YES"  ]]
+  then
+    error "User cancelled"
+    exit 1
+  fi
+fi 
+
+#--------------------------------------------------------------------------------
+# Linting 
+#--------------------------------------------------------------------------------
+
 cd $DIR_APP
-npm run prod
+echo "Lint app"
+if [[ -z $DRY ]]
+then
+  npm run lint
+fi 
 
-echo "Build app"
+if [[ ! $? -eq 0 ]]
+then
+  error "App linting failed"
+fi
+
+cd $DIR_API
+echo "Lint api"
+if [[ -z $DRY ]]
+then
+  npm run lint
+fi 
+
+if [[ ! $? -eq 0 ]]
+then
+  error "Api linting failed"
+fi
+
 cd $DIR_CUR
-docker-compose build app 
 
-echo "Build api"
-docker-compose build api
+#--------------------------------------------------------------------------------
+# Update versions in files 
+#--------------------------------------------------------------------------------
 
-echo "Push images, git stage, commit, tag"
-docker-compose push api
-docker-compose push app
-git add .
-git commit -m "auto build version $NEW_VERSION"
-git tag $NEW_VERSION
-git push $REMOTE $BRANCH --tags
+
+echo -e "Update versions in version.txt, package.json to $FG_GREEN$NEW_VERSION$FG_NORMAL "
+echo -e "Update api image in docker-compose.yml to $FG_GREEN$DOCKER_TAG_API$FG_NORMAL "
+echo -e "Update app image in docker-compose.yml to $FG_GREEN$DOCKER_TAG_APP$FG_NORMAL "
+
+if [[ -z DRY ]]
+then
+  # Package, versions.txt
+  echo $NEW_VERSION > version.txt 
+  update_json ./app/package.json 
+  update_json ./app/src/js/sdk/package.json 
+  update_json ./api/package.json 
+
+  # Compose file
+  yq -i '.services.app.image ="'$DOCKER_TAG_APP'"' docker-compose.yml
+  yq -i '.services.api.image ="'$DOCKER_TAG_API'"' docker-compose.yml
+fi
+
+
+#--------------------------------------------------------------------------------
+# Write changes 
+#--------------------------------------------------------------------------------
+
+MSG_HEAD_CHANGE="[${NEW_VERSION}](${REPO}/tree/${NEW_VERSION})"
+
+echo "Write change header: $MSG_HEAD_CHANGE "
+
+if [[ -z DRY ]]
+then
+
+  echo -e "  - $MSG_HEAD_CHANGE \n"\
+    > $CHANGELOG_TMP
+
+  cat $CHANGELOG >> $CHANGELOG_TMP
+  cp $CHANGELOG_TMP $CHANGELOG 
+  vim $CHANGELOG
+
+  echo "Get diff"
+  git --no-pager diff --minimal
+
+  echo "Verify git diff of versioning changes. Continue (commit, build, push) ? [YES/NO]"
+
+  read confirm_diff
+
+  if [[ "$confirm_diff" != "YES"  ]]
+  then
+    echo "Stop here, stash changes. rollback to $CUR_HASH " 
+    git stash
+    exit 1
+  fi
+
+fi
+
+#--------------------------------------------------------------------------------
+# Build prod 
+#--------------------------------------------------------------------------------
+
+echo "Build sdk, app, api prod + build docker images"
+
+if [[ -z DRY ]]
+then 
+
+  echo "Build sdk prod"
+  cd $DIR_SDK
+  npm run prod
+
+  echo "Build app prod"
+  cd $DIR_APP
+  npm run prod_docker 
+
+  echo "Build api prod"
+  cd $DIR_API
+  npm run prod_docker 
+
+fi
+
+#--------------------------------------------------------------------------------
+# Git commit 
+#--------------------------------------------------------------------------------
+
+echo "Commit"
+
+if [[ -z DRY ]]
+then 
+
+  git add .
+  git commit -m "auto build version $NEW_VERSION"
+  git tag $NEW_VERSION
+  git push $REMOTE $BRANCH --tags
+
+fi
 
 echo "Done"
-

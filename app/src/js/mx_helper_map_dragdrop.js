@@ -12,7 +12,7 @@ import {
   getViewJson,
   getMap,
   isModeLocked
-} from './mx_helper_map.js';
+} from './map_helpers/';
 
 // default proj
 const projDest =

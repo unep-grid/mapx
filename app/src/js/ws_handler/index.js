@@ -1,28 +1,28 @@
-import {io} from 'socket.io-client';
-import {isObject, isFunction} from '../is_test/index.js';
-import {bindAll} from '../bind_class_methods';
+import { io } from "socket.io-client";
+import { isObject, isFunction } from "../is_test/index.js";
+import { bindAll } from "../bind_class_methods";
 
 /**
  * Wrapper for socket-io
  */
 
 const def = {
-  url: '',
+  url: "",
   onError: console.log,
   auth: {
     idUser: null,
     idProject: null,
     token: null,
-    isGuest: true
+    isGuest: true,
   },
   handlers: {
     server_state: console.log,
     job_state: console.log,
-    error: console.warn
-  }
+    error: console.warn,
+  },
 };
 const cache = {
-  io: null
+  io: null,
 };
 
 class WsHandler {
@@ -42,9 +42,10 @@ class WsHandler {
     /**
      * Register handlers
      */
-    Object.keys(ws.opt.handlers).forEach((k) => {
-      ws.io.on(k, ws.opt.handlers[k].bind(ws));
-    });
+    for (const key in ws.opt.handlers) {
+      const handler = ws.opt.handlers[key].bind(ws);
+      ws.io.on(key, handler);
+    }
   }
   async connect() {
     const ws = this;
@@ -62,11 +63,11 @@ class WsHandler {
     }
     const query = Object.assign({}, def.auth, authO);
     const arrQuery = [];
-    for (let k in query) {
+    for (const k in query) {
       arrQuery.push(`${k}=${JSON.stringify(query[k])}`);
     }
-    const url = `${ws.opt.url}?${arrQuery.join('&')}`;
-    ws.io = io(url, {transports: ['websocket']});
+    const url = `${ws.opt.url}?${arrQuery.join("&")}`;
+    ws.io = io(url, { transports: ["websocket"] });
     cache.io = ws.io;
   }
 
@@ -95,4 +96,4 @@ class WsHandler {
   }
 }
 
-export {WsHandler};
+export { WsHandler };
