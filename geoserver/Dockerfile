@@ -1,25 +1,32 @@
 # vim:set ft=dockerfile:
 
-FROM openjdk:8-alpine
+FROM openjdk:11-slim-buster
 
-MAINTAINER Fred Moser <moser.frederic@gmail.com>
+MAINTAINER Fred Moser <frederic.moser@unepgrid.ch>
 
-ENV GEOSERVER_VERSION=2.18.1
+ARG GEOSERVER_VERSION=2.20
+
 ENV GEOSERVER_HOME=/geoserver
 ENV GEOSERVER_DATA_DIR=${GEOSERVER_HOME}/data_dir
 ENV GEOSERVER_ADMIN_PASSWORD=1234
-ENV JAVA_OPTS -Xms128m -Xmx512m -XX:MaxPermSize=512m
+
+WORKDIR $GEOSERVER_HOME
 
 RUN set -x \
-  && apk add --no-cache openssl \
-  && mkdir $GEOSERVER_HOME \
-  && wget -O $GEOSERVER_HOME/geoserver.zip https://downloads.sourceforge.net/project/geoserver/GeoServer/$GEOSERVER_VERSION/geoserver-$GEOSERVER_VERSION-bin.zip \
-  && unzip -d $GEOSERVER_HOME $GEOSERVER_HOME/geoserver.zip \
-  && rm -rf $GEOSERVER_HOME/geoserver.zip \
-  && adduser -S geoserver \
+  && apt-get update \
+  && apt-get -y upgrade \
+  && apt-get -y install --no-install-recommends  openssl wget unzip libfreetype6 \
+  && wget -O geoserver.zip https://build.geoserver.org/geoserver/${GEOSERVER_VERSION}.x/geoserver-${GEOSERVER_VERSION}.x-latest-bin.zip \
+  && unzip -d . geoserver.zip \
+  && rm -rf geoserver.zip \
+  && wget -O mbstyle.zip https://build.geoserver.org/geoserver/${GEOSERVER_VERSION}.x/ext-latest/geoserver-${GEOSERVER_VERSION}-SNAPSHOT-mbstyle-plugin.zip \
+  && unzip -od ./webapps/geoserver/WEB-INF/lib mbstyle.zip \
+  && rm -rf mbstyle.zip \
+  && useradd -ms /bin/bash geoserver \
   && chown -R geoserver $GEOSERVER_HOME 
-  
-WORKDIR $GEOSERVER_HOME
+ 
+USER geoserver
+
 VOLUME $GEOSERVER_DATA_DIR
 
 COPY ./start.sh ./start.sh
