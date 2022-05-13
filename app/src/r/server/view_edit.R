@@ -779,14 +779,6 @@ observeEvent(input$btnViewDeleteConfirm, {
   email <- reactUser$data$email
 
   if (noDataCheck(idView)) mxDebugMsg("View to delete not found")
-  #
-  # Update geoserver publication
-  #
-  #mxPublishGeoServerViewAutoAsync(
-    #email = email,
-    #idView = idView,
-    #publish = FALSE
-  #)
 
   #
   # Remove all views rows
@@ -1010,16 +1002,12 @@ observeEvent(input$btnViewSave, {
       #
       # Update view data
       #
-      view <- mxUpdateDefViewVt(view, sourceData, sourceDataMask, additionalAttributes)
-
-      #
-      # Update geoserver publication
-      #
-      #mxPublishGeoServerViewAutoAsync(
-        #email = email,
-        #idView = idView,
-        #publish = isPublishable
-      #)
+      view <- mxUpdateDefViewVt(
+        view,
+        sourceData,
+        sourceDataMask,
+        additionalAttributes
+      )
     }
     #
     # raster tiles

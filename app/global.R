@@ -26,7 +26,6 @@ tryCatch(
     mxSource("src/r/helpers/query_parser.R")
     mxSource("src/r/helpers/email_sender.R")
     mxSource("src/r/helpers/api_fetch.R")
-    mxSource("src/r/helpers/geoserver.R")
     mxSource("src/r/helpers/story_auto_start.R")
     mxSource("src/r/helpers/db.R")
     mxSource("src/r/helpers/db_pool.R")

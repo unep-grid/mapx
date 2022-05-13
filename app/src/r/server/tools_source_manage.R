@@ -111,10 +111,6 @@ observeEvent(reactData$triggerSourceManage, {
       }
       names(sourceEditServices) <- d(sourceEditServices, lang = language)
 
-      # mx_download -> MapX : button download in each view
-      # ogc_read -> Geoserver : workspace_a, wms
-      # ogc_download -> geoserver : workspace_b, wms, wmts, wcs/wfs
-
       #
       # Format view list by email
       #
