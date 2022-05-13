@@ -11,7 +11,7 @@
 .mx-view-badges {
   opacity: 0.4;
   display: flex;
-  filter: saturate(.4);
+  filter: saturate(0.4);
   transition: opacity ease-in-out 0.3s, filter ease-in-out 0.3s;
 }
 
@@ -59,7 +59,7 @@
 }
 
 .mx-views-list:empty:after {
-  content: '0 views';
+  content: "0 views";
   text-align: center;
   padding: 50px;
   display: flex;
@@ -242,6 +242,11 @@
   cursor: wait;
 }
 
+.mx-search-tool-content {
+  padding: 0 20px 0 20px;
+  border: 1px solid var(--mx_ui_border);
+  border-radius: 10px;
+}
 /**
  * View toggle button
  */

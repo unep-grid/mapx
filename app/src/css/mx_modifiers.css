@@ -310,26 +310,8 @@ span.mx-badge-role {
 }
 
 /**
-* Slider
-*/
-.mx .mx-slider-container .noUi-horizontal .noUi-handle {
-  background-color: var(--mx_ui_background);
-  border: 1px solid var(--mx_ui_border);
-  outline: none;
-}
-
-.mx .mx-slider-container .noUi-target {
-  border: 1px solid var(--mx_ui_border);
-}
-
-.mx .mx-slider-container .noUi-connect {
-  background: var(--mx_ui_border);
-}
-
-.mx .mx-slider-container .noUi-horizontal .noUi-tooltip {
-  color: var(--mx_ui_text);
-}
-
+* Step bullet
+*/ 
 .mx-story-step-bullet,
 .mx-story-btn-legend {
   background: var(--mx_ui_background);

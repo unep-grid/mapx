@@ -7,6 +7,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import '../css/mx_variables.css';
 import '../css/mx_base.css';
+import '../css/mx_sliders.css';
 import '../css/mx_ace_editor.css';
 import '../css/mx_modifiers.css';
 import '../css/mx_mapbox.css';
