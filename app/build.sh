@@ -9,7 +9,7 @@ set -e
 source ./../sh/build_docker_multiarch.sh 
 
 MAPX_VERSION=$(cat ./../version.txt)
-R_VERSION="4.2.1"
+R_VERSION="4.2.0"
 R_DATE="2022-05-01"
 NAME="mapx_app"
 REPO="fredmoser"

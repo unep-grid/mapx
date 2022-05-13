@@ -1,6 +1,6 @@
 {
   "name": "mx-api",
-  "version": "1.9.40-alpha.2",
+  "version": "1.9.40-alpha.4",
   "description": "MapX express api",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "lint": "eslint ./index.js && eslint ./routines.js",
     "docker": "npm run lint && ./build.sh -a",
     "prod": "npm run lint",
-    "prod_docker": "npn run prod && ./build.sh -ap"
+    "prod_docker": "npm run prod && ./build.sh -ap"
   },
   "author": "unepgrid.ch",
   "license": "MIT",

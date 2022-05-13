@@ -588,6 +588,7 @@ MapX resolvers available in static and app
     * [.download_view_source_external(opt)](#MapxResolversStatic+download_view_source_external) ⇒ <code>Object</code>
     * [.download_view_source_raster()](#MapxResolversStatic+download_view_source_raster)
     * [.download_view_source_vector(opt)](#MapxResolversStatic+download_view_source_vector) ⇒ <code>Object</code>
+    * [.close_modal_download_vector()](#MapxResolversStatic+close_modal_download_vector) ⇒ <code>Boolean</code>
     * [.download_view_source_geojson(opt)](#MapxResolversStatic+download_view_source_geojson) ⇒ <code>Object</code>
     * [.show_modal_map_composer()](#MapxResolversStatic+show_modal_map_composer) ⇒ <code>Boolean</code>
     * [.close_modal_all()](#MapxResolversStatic+close_modal_all) ⇒ <code>Boolean</code>
@@ -1124,6 +1125,13 @@ Open the download modal for vector views
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>String</code> | Vector view id |
 
+<a name="MapxResolversStatic+close_modal_download_vector"></a>
+
+#### mapxResolversStatic.close\_modal\_download\_vector() ⇒ <code>Boolean</code>
+Close download vector modal
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Boolean</code> - Done  
 <a name="MapxResolversStatic+download_view_source_geojson"></a>
 
 #### mapxResolversStatic.download\_view\_source\_geojson(opt) ⇒ <code>Object</code>
@@ -1170,6 +1178,7 @@ Get list of views title
 | --- | --- | --- |
 | opt | <code>Object</code> | options |
 | opt.views | <code>Array</code> | List of views or views id |
+| opt.lang | <code>String</code> | Language code |
 
 <a name="MapxResolversStatic+set_vector_highlight"></a>
 

@@ -1,5 +1,4 @@
 version: '3.2'
-
 # ports : host:container
 services:
   traefik:
@@ -44,7 +43,7 @@ services:
       - backend
       - frontend
     env_file: mapx.dev.env
-    image: fredmoser/mapx_app:1.9.40-alpha.3
+    image: fredmoser/mapx_app:1.9.40-alpha.4
     restart: always
     ports:
       - 3838
@@ -76,7 +75,7 @@ services:
       - backend
       - frontend
     env_file: mapx.dev.env
-    image: fredmoser/mapx_api:1.9.40-alpha.3
+    image: fredmoser/mapx_api:1.9.40-alpha.4
     restart: always
     ports:
       - 3030
@@ -167,10 +166,8 @@ services:
       - 'traefik.http.routers.mailhog.rule=Host(`mail.mapx.localhost`)'
       - 'traefik.http.routers.mailhog.entrypoints=web'
       - 'traefik.http.services.mailhog.loadbalancer.server.port=8025'
-
 volumes:
   searchmeili:
-
 networks:
   frontend:
   backend:

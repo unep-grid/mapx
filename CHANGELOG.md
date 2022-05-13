@@ -1,3 +1,12 @@
+  - [1.9.40-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.4) 
+
+     - APP/API 
+        - Major refactoring : migration of geoserver helpers to nodejs
+        - New module to create style from boilerplate: html/js app, full style, layers and SLD
+        - New build scripts for multi arch support
+        - New download module, independent from app service
+        - Many small changes
+
   - [1.9.40-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.2) 
       
       - APP/API

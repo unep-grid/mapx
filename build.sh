@@ -60,7 +60,7 @@ error()
 # Update version in package.json
 update_json()
 {
-  yq -i '.version = "'$NEW_VERSION'"' $1
+  yq -P -i '.version = "'$NEW_VERSION'"' $1
 }
 
 # Check tooling 
