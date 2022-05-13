@@ -175,6 +175,30 @@ fi
 cd $DIR_CUR
 
 #--------------------------------------------------------------------------------
+# Build prod 
+#--------------------------------------------------------------------------------
+
+echo "Build sdk, app, api prod + build docker images"
+
+if [[ -z $DRY ]]
+then 
+
+  echo "Build sdk prod"
+  cd $DIR_SDK
+  npm run prod
+
+  echo "Build app prod"
+  cd $DIR_APP
+  npm run prod_docker 
+
+  echo "Build api prod"
+  cd $DIR_API
+  npm run prod_docker 
+
+fi
+
+
+#--------------------------------------------------------------------------------
 # Update versions in files 
 #--------------------------------------------------------------------------------
 
@@ -228,30 +252,6 @@ then
     git stash
     exit 1
   fi
-
-fi
-
-#--------------------------------------------------------------------------------
-# Build prod 
-#--------------------------------------------------------------------------------
-
-echo "Build sdk, app, api prod + build docker images"
-
-if [[ -z $DRY ]]
-then 
-
-  echo "Build sdk prod"
-  cd $DIR_SDK
-  npm run prod
-
-  echo "Build app prod"
-  cd $DIR_APP
-  npm run prod_docker 
-
-  echo "Build api prod"
-  cd $DIR_API
-  npm run prod_docker 
-
 fi
 
 #--------------------------------------------------------------------------------
