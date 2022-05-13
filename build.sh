@@ -183,7 +183,7 @@ echo -e "Update versions in version.txt, package.json to $FG_GREEN$NEW_VERSION$F
 echo -e "Update api image in docker-compose.yml to $FG_GREEN$DOCKER_TAG_API$FG_NORMAL "
 echo -e "Update app image in docker-compose.yml to $FG_GREEN$DOCKER_TAG_APP$FG_NORMAL "
 
-if [[ -z DRY ]]
+if [[ -z $DRY ]]
 then
   # Package, versions.txt
   echo $NEW_VERSION > version.txt 
@@ -205,7 +205,7 @@ MSG_HEAD_CHANGE="[${NEW_VERSION}](${REPO}/tree/${NEW_VERSION})"
 
 echo "Write change header: $MSG_HEAD_CHANGE "
 
-if [[ -z DRY ]]
+if [[ -z $DRY ]]
 then
 
   echo -e "  - $MSG_HEAD_CHANGE \n"\
@@ -237,7 +237,7 @@ fi
 
 echo "Build sdk, app, api prod + build docker images"
 
-if [[ -z DRY ]]
+if [[ -z $DRY ]]
 then 
 
   echo "Build sdk prod"
@@ -260,7 +260,7 @@ fi
 
 echo "Commit"
 
-if [[ -z DRY ]]
+if [[ -z $DRY ]]
 then 
 
   git add .
