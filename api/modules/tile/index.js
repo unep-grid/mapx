@@ -19,6 +19,7 @@ const gzip = util.promisify(zlib.gzip);
  */
 const validateParamsHandlerText = getParamsValidator({
   required: ["view"],
+  expected : ["timestamp"]
 });
 
 export const mwGet = [validateParamsHandlerText, handlerTile];
