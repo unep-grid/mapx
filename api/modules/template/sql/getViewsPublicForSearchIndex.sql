@@ -251,9 +251,24 @@ views_built AS (
     ) AS meta_multilingual,
     p.projects_data,
     p.projects_id,
-    m.meta #> '{text, keywords, keys}' AS source_keywords,
-    m.meta #> '{text, keywords, keys_m49}' AS source_keywords_m49,
-    m.meta #> '{text, keywords, keys_gemet}' AS source_keywords_gemet,
+    /**
+    * R jsonlite bug : list of one converted to 'string'
+    */ 
+    CASE jsonb_typeof(m.meta -> '{text, keywords, keys}')
+      WHEN 'array' THEN m.meta #> '{text, keywords, keys}'
+      WHEN 'string' THEN jsonb_build_array(m.meta #> '{text, keywords, keys}')
+      ELSE '[]'::jsonb
+    END AS source_keywords,
+    CASE jsonb_typeof(m.meta #> '{text, keywords, keys_m49}')
+      WHEN 'array' THEN m.meta #> '{text, keywords, keys_m49}'
+      WHEN 'string' THEN jsonb_build_array(m.meta #> '{text, keywords, keys_m49}')
+      ELSE '[]'::jsonb
+    END AS source_keywords_m49,
+    CASE jsonb_typeof(m.meta #> '{text, keywords, keys_gemet}')
+      WHEN 'array' THEN m.meta #> '{text, keywords, keys_gemet}'
+      WHEN 'string' THEN jsonb_build_array(m.meta #> '{text, keywords, keys_gemet}')
+      ELSE '[]'::jsonb
+    END AS source_keywords_gemet,
     NULLIF(
       m.meta #>> '{temporal, range, start_at}',
       '0001-01-01'
@@ -321,9 +336,9 @@ views_built_types AS (
     projects_data,
     projects_id,
     view_type,
-    COALESCE(source_keywords, '[]'::jsonb) AS source_keywords,
-    COALESCE(source_keywords_m49, '[]'::jsonb) AS source_keywords_m49,
-    COALESCE(source_keywords_gemet, '[]'::jsonb) AS source_keywords_gemet,
+    source_keywords,
+    source_keywords_m49,
+    source_keywords_gemet,
     COALESCE(source_keywords_gemet_multilingual, '[]'::jsonb) AS source_keywords_gemet_multilingual,
     EXTRACT(
       EPOCH
