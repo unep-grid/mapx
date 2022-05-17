@@ -60,7 +60,7 @@ error()
 # Update version in package.json
 update_json()
 {
-  yq -P -i '.version = "'$NEW_VERSION'"' $1
+  yq -o=json -P -i '.version = "'$NEW_VERSION'"' $1
 }
 
 # Check tooling 
@@ -162,8 +162,8 @@ then
   update_json ./api/package.json 
 
   # Compose file
-  yq -i '.services.app.image ="'$DOCKER_TAG_APP'"' docker-compose.yml
-  yq -i '.services.api.image ="'$DOCKER_TAG_API'"' docker-compose.yml
+  yq -o='yml' -i '.services.app.image ="'$DOCKER_TAG_APP'"' docker-compose.yml
+  yq -o='yml' -i '.services.api.image ="'$DOCKER_TAG_API'"' docker-compose.yml
 fi
 
 
