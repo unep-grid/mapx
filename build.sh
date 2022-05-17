@@ -162,8 +162,8 @@ then
   update_json ./api/package.json 
 
   # Compose file
-  yq -o='yml' -i '.services.app.image ="'$DOCKER_TAG_APP'"' docker-compose.yml
-  yq -o='yml' -i '.services.api.image ="'$DOCKER_TAG_API'"' docker-compose.yml
+  yq -o='yaml' -i '.services.app.image ="'$DOCKER_TAG_APP'"' docker-compose.yml
+  yq -o='yaml' -i '.services.api.image ="'$DOCKER_TAG_API'"' docker-compose.yml
 fi
 
 
