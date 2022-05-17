@@ -39,7 +39,11 @@ RUN apt-get update
 RUN apt install -y $r_deps_sys 
 RUN apt install -y $r_deps_dev 
 
-
+#
+# Install wrapper : 
+#  - Use date to fix package version  
+#  - QUIT if errored
+#
 RUN echo  "\
 rep <- getOption('repos');\
 rep['CRAN'] <- 'https://mran.microsoft.com/snapshot/$R_DATE';\
@@ -53,7 +57,6 @@ install = function(pkg){ \
       quit('no',status=1);\
       })\
 }" > /etc/R/Rprofile.site
-
 
 #
 # Install step by step, easier ro recover.         
@@ -80,14 +83,34 @@ ARG MAPX_HOME
 ARG R_LIBS
 ENV R_LIBS=$R_LIBS
 
-EXPOSE 3838
-VOLUME /shared
-
 COPY --from=builder / /
-RUN useradd -ms /bin/bash mapx
 
 WORKDIR $MAPX_HOME
-USER mapx
+
 COPY . .
 
+#--------------------- Debian / alpine user setting ----------------------------
+ENV USER=app
+ENV GROUP=mapx
+ENV GID=12345
+ENV DATADIR=/shared
+
+RUN addgroup \
+    --system \
+     $GROUP &&\
+    adduser \
+     --system \
+     --disabled-password \
+     --gecos ""\
+     --ingroup $GROUP \
+     --no-create-home \
+     --uid $GID $USER 
+
+RUN mkdir -p $DATADIR && chown -R $USER:$GROUP $DATADIR 
+
+VOLUME $DATADIR
+USER $USER 
+#-------------------------------------------------------------------------------
+
+EXPOSE 3838
 CMD ["sh","./start_mapx.sh"]

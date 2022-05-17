@@ -136,19 +136,38 @@ ENV NODE_ENV=production
 
 COPY --from=builder / /
 
-RUN addgroup -S mapx && adduser -S mapx -G mapx
-
 WORKDIR /api
 
 COPY . .
 
+#
+# If no dev dependencies required, build node_modules here,
+# 
 RUN npm install --production && \
-    rm package-lock.json && \
-    addgroup -S app && adduser -S -G mapx app
+    rm package-lock.json 
 
-USER mapx
+#--------------------- Debian / alpine user setting ----------------------------
+ENV USER=api
+ENV GROUP=mapx
+ENV GID=12345
+ENV DATADIR=/shared 
+
+RUN addgroup \
+    --system \
+     $GROUP &&\
+    adduser \
+     --system \
+     --disabled-password \
+     --gecos ""\
+     --ingroup $GROUP \
+     --no-create-home \
+     --uid $GID $USER 
+
+RUN mkdir -p $DATADIR && chown -R $USER:$GROUP $DATADIR 
+USER $USER 
+VOLUME $DATADIR 
+#-------------------------------------------------------------------------------
 
 EXPOSE 3030
-VOLUME /shared
 
 CMD ["node", "index.js"]

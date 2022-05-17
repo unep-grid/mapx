@@ -32,7 +32,29 @@ RUN apk update --quiet \
 
 COPY --from=compiler /build/meilisearch-${VERSION}/target/release/meilisearch .
 
-EXPOSE 7700/tcp
+#--------------------- Debian / alpine user setting ----------------------------
+ENV USER=meili
+ENV GROUP=mapx
+ENV GID=89129
+ENV DATADIR=/data.ms 
 
+RUN addgroup \
+    --system \
+     $GROUP &&\
+    adduser \
+     --system \
+     --disabled-password \
+     --gecos ""\
+     --ingroup $GROUP \
+     --no-create-home \
+     --uid $GID $USER 
+
+RUN mkdir -p $DATADIR && chown -R $USER:$GROUP $DATADIR 
+
+USER $USER 
+VOLUME $DATADIR
+#-------------------------------------------------------------------------------
+
+EXPOSE 7700/tcp
 ENTRYPOINT ["tini", "--"]
 CMD ./meilisearch

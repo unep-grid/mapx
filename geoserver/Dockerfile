@@ -6,11 +6,13 @@ MAINTAINER Fred Moser <frederic.moser@unepgrid.ch>
 
 ARG GEOSERVER_VERSION=2.20
 
+# Can't be changed
+ENV GEOSERVER_DATA_DIR=/geoserver/db
 ENV GEOSERVER_HOME=/geoserver
-ENV GEOSERVER_DATA_DIR=${GEOSERVER_HOME}/data_dir
-ENV GEOSERVER_ADMIN_PASSWORD=1234
-
 WORKDIR $GEOSERVER_HOME
+
+# Used in startup script, can be changed 
+ENV GEOSERVER_ADMIN_PASSWORD=1234
 
 RUN set -x \
   && apt-get update \
@@ -21,13 +23,31 @@ RUN set -x \
   && rm -rf geoserver.zip \
   && wget -O mbstyle.zip https://build.geoserver.org/geoserver/${GEOSERVER_VERSION}.x/ext-latest/geoserver-${GEOSERVER_VERSION}-SNAPSHOT-mbstyle-plugin.zip \
   && unzip -od ./webapps/geoserver/WEB-INF/lib mbstyle.zip \
-  && rm -rf mbstyle.zip \
-  && useradd -ms /bin/bash geoserver \
-  && chown -R geoserver $GEOSERVER_HOME 
- 
-USER geoserver
+  && rm -rf mbstyle.zip
 
-VOLUME $GEOSERVER_DATA_DIR
+
+#--------------------- Debian / alpine user setting ----------------------------
+ENV USER=geoserver
+ENV GROUP=geoserver
+ENV GID=66712
+ENV DATADIR=$GEOSERVER_DATA_DIR
+
+RUN addgroup \
+    --system \
+     $GROUP &&\
+    adduser \
+     --system \
+     --disabled-password \
+     --gecos ""\
+     --ingroup $GROUP \
+     --no-create-home \
+     --uid $GID $USER 
+
+RUN  chown -R $USER:$GROUP $GEOSERVER_HOME
+
+RUN mkdir -p $DATADIR && chown -R $USER:$GROUP $DATADIR 
+USER $USER 
+#-------------------------------------------------------------------------------
 
 COPY ./start.sh ./start.sh
 
