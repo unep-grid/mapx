@@ -1,3 +1,9 @@
+  - [1.9.40-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.5) 
+
+     - APP/API 
+        - Fixed built script / Docker files 
+        - Fixed SQL for search index update
+     
   - [1.9.40-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.4) 
 
      - APP/API 

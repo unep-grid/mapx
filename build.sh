@@ -217,9 +217,10 @@ then
   echo "Build api prod"
   cd $DIR_API
   npm run prod_docker 
-
+  
 fi
 
+cd $DIR_CUR
 
 
 #--------------------------------------------------------------------------------
