@@ -145,6 +145,29 @@ then
 fi 
 
 #--------------------------------------------------------------------------------
+# Update versions in files 
+#--------------------------------------------------------------------------------
+
+
+echo -e "Update versions in version.txt, package.json to $FG_GREEN$NEW_VERSION$FG_NORMAL "
+echo -e "Update api image in docker-compose.yml to $FG_GREEN$DOCKER_TAG_API$FG_NORMAL "
+echo -e "Update app image in docker-compose.yml to $FG_GREEN$DOCKER_TAG_APP$FG_NORMAL "
+
+if [[ -z $DRY ]]
+then
+  # Package, versions.txt
+  echo $NEW_VERSION > version.txt 
+  update_json ./app/package.json 
+  update_json ./app/src/js/sdk/package.json 
+  update_json ./api/package.json 
+
+  # Compose file
+  yq -i '.services.app.image ="'$DOCKER_TAG_APP'"' docker-compose.yml
+  yq -i '.services.api.image ="'$DOCKER_TAG_API'"' docker-compose.yml
+fi
+
+
+#--------------------------------------------------------------------------------
 # Linting 
 #--------------------------------------------------------------------------------
 
@@ -197,28 +220,6 @@ then
 
 fi
 
-
-#--------------------------------------------------------------------------------
-# Update versions in files 
-#--------------------------------------------------------------------------------
-
-
-echo -e "Update versions in version.txt, package.json to $FG_GREEN$NEW_VERSION$FG_NORMAL "
-echo -e "Update api image in docker-compose.yml to $FG_GREEN$DOCKER_TAG_API$FG_NORMAL "
-echo -e "Update app image in docker-compose.yml to $FG_GREEN$DOCKER_TAG_APP$FG_NORMAL "
-
-if [[ -z $DRY ]]
-then
-  # Package, versions.txt
-  echo $NEW_VERSION > version.txt 
-  update_json ./app/package.json 
-  update_json ./app/src/js/sdk/package.json 
-  update_json ./api/package.json 
-
-  # Compose file
-  yq -i '.services.app.image ="'$DOCKER_TAG_APP'"' docker-compose.yml
-  yq -i '.services.api.image ="'$DOCKER_TAG_API'"' docker-compose.yml
-fi
 
 
 #--------------------------------------------------------------------------------
