@@ -247,6 +247,7 @@ async function createDatastore(ws) {
 
 async function getNamespaceIdAll() {
   const res = await grc.namespaces.getAll();
-  const ids_ns = res.namespaces.namespace.map((w) => w.name);
+  const namespaces = res.namespaces?.namespace || [];
+  const ids_ns = namespaces.map((w) => w.name);
   return ids_ns;
 }
