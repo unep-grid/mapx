@@ -47,6 +47,7 @@ RUN  chown -R $USER:$GROUP $GEOSERVER_HOME
 
 RUN mkdir -p $DATADIR && chown -R $USER:$GROUP $DATADIR 
 USER $USER 
+VOLUME $DATADIR
 #-------------------------------------------------------------------------------
 
 COPY ./start.sh ./start.sh
