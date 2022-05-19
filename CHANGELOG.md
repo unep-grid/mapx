@@ -1,3 +1,12 @@
+  - [1.9.40-alpha.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.6) 
+
+     -APP         
+        - Hide collections 
+
+     - Internal
+        - Docker images fix gid/uid 
+        - Added volume in geoserver Dockerfile
+
   - [1.9.40-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.5) 
 
      - APP/API 
