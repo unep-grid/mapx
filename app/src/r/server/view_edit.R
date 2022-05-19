@@ -245,18 +245,20 @@ observe({
                 #
                 # Collections
                 #
-                selectizeInput(
-                  inputId = "selViewCollectionsUpdate",
-                  label = d("view_collections", language),
-                  choices = collectionsTags,
-                  selected = collectionsCurrent,
-                  multiple = TRUE,
-                  options = list(
-                    create = userRole$publisher,
-                    sortField = "label",
-                    plugins = list("remove_button")
+                if (FALSE) {
+                  selectizeInput(
+                    inputId = "selViewCollectionsUpdate",
+                    label = d("view_collections", language),
+                    choices = collectionsTags,
+                    selected = collectionsCurrent,
+                    multiple = TRUE,
+                    options = list(
+                      create = userRole$publisher,
+                      sortField = "label",
+                      plugins = list("remove_button")
+                    )
                   )
-                )
+                }
               )
 
               #

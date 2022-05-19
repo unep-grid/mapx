@@ -1,18 +1,17 @@
-import {el} from '../../el/src/index.js';
-import {onNextFrame} from '../../animation_frame/index.js';
+import { el } from "../../el/src/index.js";
+import { onNextFrame } from "../../animation_frame/index.js";
 
 let settings = {
   onDestroy: () => {},
-  onBuild: () => {},
   onSetState: () => {},
   id: Math.random().toString(32),
-  type: '',
-  label: 'label',
+  type: "",
+  label: "label",
   tooltip_key: null,
   tooltip_text: null,
   count: 0,
   animate: true,
-  animateType: 'seq_counter' // or 'class'
+  animateType: "seq_counter", // or 'class'
 };
 
 class Checkbox {
@@ -91,11 +90,11 @@ class Checkbox {
     //const skipEnable = enable && enabled;
     //const skipDisable = !enable && !enabled;
     if (enable) {
-      this.elCheck.classList.remove('disabled');
-      this.elCheck.removeAttribute('disabled');
+      this.elCheck.classList.remove("disabled");
+      this.elCheck.removeAttribute("disabled");
     } else {
-      this.elCheck.classList.add('disabled');
-      this.elCheck.setAttribute('disabled', true);
+      this.elCheck.classList.add("disabled");
+      this.elCheck.setAttribute("disabled", true);
     }
     cbx._is_enabled = enabled;
   }
@@ -108,7 +107,7 @@ class Checkbox {
 
   _animateCountUpdate() {
     const cbx = this;
-    const animSeqCounter = cbx.opt.animateType === 'seq_counter';
+    const animSeqCounter = cbx.opt.animateType === "seq_counter";
     if (animSeqCounter) {
       cbx._animateCountProg();
     } else {
@@ -127,13 +126,13 @@ class Checkbox {
   _animateCountClass() {
     const cbx = this;
     cbx._setAnimating(true);
-    cbx.elLabelCount.classList.add('updating');
+    cbx.elLabelCount.classList.add("updating");
     setTimeout(() => {
       onNextFrame(() => {
         const count = cbx.getCount();
         cbx._setCountLabel(count);
         cbx._setAnimating(false);
-        cbx.elLabelCount.classList.remove('updating');
+        cbx.elLabelCount.classList.remove("updating");
       });
     }, 500);
   }
@@ -177,34 +176,30 @@ class Checkbox {
   }
   setLabel(txt) {
     const cbx = this;
-    if (txt instanceof Promise) {
-      txt.then((t) => {
-        set(t);
-      });
-    } else {
-      set(txt);
+    const curTxt = cbx.elLabelText.innerText;
+
+    if (!txt) {
+      txt = curTxt;
     }
-    function set(txt) {
-      const curTxt = cbx.elLabelText.innerText;
-      if (txt && txt !== curTxt) {
-        if (!txt) {
-          txt = curTxt;
-        }
-        cbx._label = txt;
-        cbx.elLabelText.innerText = txt;
-      }
+
+    if (txt && txt !== curTxt) {
+      cbx._label = txt;
+      cbx.elLabelText.innerText = txt;
     }
   }
   setLabelKey(key) {
     const cbx = this;
+    debugger;
     cbx._label_key = key;
     cbx.elLabelText.dataset.lang_key = cbx._label_key;
   }
   getLabelKey() {
-    return this._label_key || '';
+    return this._label_key || "";
   }
   getLabel() {
-    this.setLabel();
+    if (!this._label) {
+      this.setLabel();
+    }
     return this._label;
   }
   getType() {
@@ -228,77 +223,74 @@ class Checkbox {
   }
 
   build() {
-    buildCheckbox.bind(this)();
-    this.opt.onBuild.bind(this)();
+    this.buildCheckbox();
   }
-}
 
-export {Checkbox};
+  buildCheckbox() {
+    const cbx = this;
+    let elLabel;
+    let elLabelText;
+    let elLabelCount;
+    let elCheck;
 
-function buildCheckbox() {
-  const cbx = this;
-  let elLabel;
-  let elLabelText;
-  let elLabelCount;
-  let elCheck;
-
-  const elCheckbox = el(
-    'div',
-    {
-      class: 'vf-checkbox',
-      style: {
-        order: cbx._order
-      }
-    },
-    (elCheck = el('input', {
-      id: 'checkbox_' + cbx.id,
-      class: ['filter', 'vf-checkbox-input'],
-      dataset: {
-        filter: cbx.id,
-        type: cbx._type
-      },
-      type: 'checkbox'
-    })),
-    elLabel = el(
-      'label',
+    const elCheckbox = el(
+      "div",
       {
-        class: ['vf-checkbox-label','hint--bottom-right'],
-        for: 'checkbox_' + cbx.id,
-        dataset : {
-          lang_key: cbx._tooltip_key,
-          lang_type : 'tooltip',
-        }
+        class: "vf-checkbox",
+        style: {
+          order: cbx._order,
+        },
       },
-      (elLabelText = el('span', {
-        class: 'vf-checkbox-filter-text',
+      (elCheck = el("input", {
+        id: "checkbox_" + cbx.id,
+        class: ["filter", "vf-checkbox-input"],
         dataset: {
-          lang_key: cbx._label_key
-        }
-      },
-        cbx._label
-      )),
-      (elLabelCount = el('span', {
-        class: 'vf-checkbox-filter-count'
-      }))
-    )
-  );
+          filter: cbx.id,
+          type: cbx._type,
+        },
+        type: "checkbox",
+      })),
+      (elLabel = el(
+        "label",
+        {
+          class: ["vf-checkbox-label", "hint--bottom-right"],
+          for: "checkbox_" + cbx.id,
+          dataset: {
+            lang_key: cbx._tooltip_key,
+            lang_type: "tooltip",
+          },
+        },
+        (elLabelText = el(
+          "span",
+          {
+            class: "vf-checkbox-filter-text",
+            dataset: {
+              lang_key: cbx._label_key,
+            },
+          },
+          cbx._label
+        )),
+        (elLabelCount = el("span", {
+          class: "vf-checkbox-filter-count",
+        }))
+      ))
+    );
 
-  cbx.el = elCheckbox;
-  cbx.el.checkbox = cbx;
-  cbx.elLabelText = elLabelText;
-  cbx.elLabelCount = elLabelCount;
-  cbx.elCheck = elCheck;
+    cbx.el = elCheckbox;
+    cbx.el.checkbox = cbx;
+    cbx.elLabelText = elLabelText;
+    cbx.elLabelCount = elLabelCount;
+    cbx.elCheck = elCheck;
 
-  cbx.setCount(cbx._count);
+    cbx.setCount(cbx._count);
 
-  // tooltip text 
-  if(cbx._tooltip_text instanceof Promise){
-    cbx._tooltip_text.then(t => {
-      elLabel.setAttribute('aria-label', t);
-    })
+    // tooltip text
+    if (cbx._tooltip_text instanceof Promise) {
+      cbx._tooltip_text.then((t) => {
+        elLabel.setAttribute("aria-label", t);
+      });
+    }
   }
-
-
-  //cbx.setLabel(cbx._label);
-  //cbx.setLabelKey(cbx._label_key);
 }
+
+export { Checkbox };

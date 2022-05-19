@@ -4,27 +4,48 @@ FROM openjdk:11-slim-buster
 
 MAINTAINER Fred Moser <frederic.moser@unepgrid.ch>
 
-ARG GEOSERVER_VERSION=2.20
-
-# Can't be changed
-ENV GEOSERVER_DATA_DIR=/geoserver/db
-ENV GEOSERVER_HOME=/geoserver
-WORKDIR $GEOSERVER_HOME
-
+ARG GEOSERVER_VERSION=2.20.4
 # Used in startup script, can be changed 
 ENV GEOSERVER_ADMIN_PASSWORD=1234
+
+
+# Can't be changed
+ARG DEBIAN_FRONTEND=noninteractive
+
+ENV GEOSERVER_DATA_DIR=/geoserver/db
+ENV GEOSERVER_HOME=/geoserver
+
+ENV INITIAL_MEMORY="2G"
+ENV MAXIMUM_MEMORY="4G"
+ENV JAIEXT_ENABLED="true"
+ENV GEOSERVER_OPTS=" \
+  -Dorg.geotools.coverage.jaiext.enabled=${JAIEXT_ENABLED} \
+  -Duser.timezone=UTC \
+  -Dorg.geotools.shapefile.datetime=true"
+
+
+ENV JAVA_OPTS="-Xms${INITIAL_MEMORY} -Xmx${MAXIMUM_MEMORY} \
+  -Djava.awt.headless=true -server \
+  -Dfile.encoding=UTF8 \
+  -Djavax.servlet.request.encoding=UTF-8 \
+  -Djavax.servlet.response.encoding=UTF-8 \
+  -XX:SoftRefLRUPolicyMSPerMB=36000 -XX:+UseG1GC \
+  -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 \
+  ${GEOSERVER_OPTS}"
+
+# Install directory
+WORKDIR $GEOSERVER_HOME
 
 RUN set -x \
   && apt-get update \
   && apt-get -y upgrade \
-  && apt-get -y install --no-install-recommends  openssl wget unzip libfreetype6 \
-  && wget -O geoserver.zip https://build.geoserver.org/geoserver/${GEOSERVER_VERSION}.x/geoserver-${GEOSERVER_VERSION}.x-latest-bin.zip \
+  && apt-get -y install --no-install-recommends openssl wget unzip libfreetype6 fontconfig \
+  && wget -O geoserver.zip https://downloads.sourceforge.net/project/geoserver/GeoServer/$GEOSERVER_VERSION/geoserver-$GEOSERVER_VERSION-bin.zip \
   && unzip -d . geoserver.zip \
   && rm -rf geoserver.zip \
-  && wget -O mbstyle.zip https://build.geoserver.org/geoserver/${GEOSERVER_VERSION}.x/ext-latest/geoserver-${GEOSERVER_VERSION}-SNAPSHOT-mbstyle-plugin.zip \
+  && wget -O mbstyle.zip https://downloads.sourceforge.net/project/geoserver/GeoServer/$GEOSERVER_VERSION/extensions/geoserver-$GEOSERVER_VERSION-mbstyle-plugin.zip \
   && unzip -od ./webapps/geoserver/WEB-INF/lib mbstyle.zip \
   && rm -rf mbstyle.zip
-
 
 #--------------------- Debian / alpine user setting ----------------------------
 ENV USER=geoserver

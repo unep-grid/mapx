@@ -1,30 +1,33 @@
 import {
   getArrayDistinct,
   getArrayStat,
-  getArrayIntersect
-} from '../array_stat/index.js';
-import {Checkbox} from './components/checkbox.js';
-import {Switch} from './../switch/index.js';
-import {ListenerStore} from './../listener_store/index.js';
-import {path} from './../mx_helper_misc.js';
-import {el} from '../el/src/index.js';
-import {getDictItem} from './../language';
-import {isEmpty} from './../is_test/index.js';
+  getArrayIntersect,
+} from "../array_stat/index.js";
+import { Checkbox } from "./components/checkbox.js";
+import { Switch } from "./../switch/index.js";
+import { ListenerStore } from "./../listener_store/index.js";
+import { path } from "./../mx_helper_misc.js";
+import { el } from "../el/src/index.js";
+import { getDictItem } from "./../language";
+import { isEmpty } from "./../is_test/index.js";
 
-import './style.less';
+import "./style.less";
 const settings = {
   onFilter: (idViews) => {
     console.log(idViews);
   },
   onUpdateCount: (nTot, nFilter) => {
-    console.table({nTot: nTot, nFilter: nFilter});
+    console.table({ nTot: nTot, nFilter: nFilter });
   },
-  mode: 'intersection',
+  typesAllowed: ["view_components", "view_collections"],
+  typesSelect: ["view_components"],
+  typesTooltip: ["view_components"],
+  mode: "intersection",
   elFilterText: document.body,
   elFilterTags: document.body,
   elFilterActivated: document.body,
   views: [],
-  debug: false
+  debug: false,
 };
 
 class ViewsFilter {
@@ -38,11 +41,11 @@ class ViewsFilter {
     vf.update();
   }
 
-  update() {
+  async update() {
     const vf = this;
     vf.removeRules();
     vf.updateViewsComponents();
-    vf.updateCheckboxes();
+    await vf.updateCheckboxes();
   }
 
   initStorage(views) {
@@ -58,47 +61,47 @@ class ViewsFilter {
 
     vf._lStore.addListener({
       target: vf.opt.elFilterActivated,
-      type: ['click'],
+      type: ["click"],
       callback: vf.filterActivated,
-      group: 'view_filter',
-      bind: vf
+      group: "view_filter",
+      bind: vf,
     });
 
     vf._lStore.addListener({
       target: vf.opt.elFilterTags,
-      type: ['click'],
+      type: ["click"],
       callback: handleFilterViewIdByCheckbox,
-      group: 'view_filter',
-      bind: vf
+      group: "view_filter",
+      bind: vf,
     });
     vf._lStore.addListener({
       target: vf.opt.elFilterText,
-      type: ['keyup'],
+      type: ["keyup"],
       callback: handleFilterViewIdByText,
-      group: 'view_filter',
+      group: "view_filter",
       debounce: true,
       debounceTime: 100,
-      bind: vf
+      bind: vf,
     });
   }
   initSwitchMode() {
     const vf = this;
     vf.switchMode = new Switch(vf.opt.elFilterSwitch, {
       labelLeft: el(
-        'div',
-        {dataset: {lang_key: 'filter_views_list_mode_intersection'}},
-        'Intersection'
+        "div",
+        { dataset: { lang_key: "filter_views_list_mode_intersection" } },
+        "Intersection"
       ),
       labelRight: el(
-        'div',
-        {dataset: {lang_key: 'filter_views_list_mode_union'}},
-        'Union'
+        "div",
+        { dataset: { lang_key: "filter_views_list_mode_union" } },
+        "Union"
       ),
       onChange: (enabled) => {
-        const op = enabled === true ? 'union' : 'intersection';
+        const op = enabled === true ? "union" : "intersection";
         vf.setMode(op, false);
-        vf.apply('handler_switch_mode');
-      }
+        vf.apply("handler_switch_mode");
+      },
     });
   }
 
@@ -120,7 +123,7 @@ class ViewsFilter {
       vf.updateCount();
     }
     if (vf.opt.debug) {
-      console.log('filter', from, rules);
+      console.log("filter", from, rules);
     }
   }
 
@@ -158,12 +161,12 @@ class ViewsFilter {
         type: null,
         id: null,
         group: null,
-        enable: false
+        enable: false,
       },
       rule
     );
 
-    const hash = [rule.group, rule.type, rule.id].join(':');
+    const hash = [rule.group, rule.type, rule.id].join(":");
     const rules = vf.getRules();
     const ruleStored = vf.getRuleByHash(hash);
     const ruleExists = !!ruleStored;
@@ -195,7 +198,7 @@ class ViewsFilter {
   getViewsIdSubset() {
     const vf = this;
     const rules = vf.getRules();
-    const isIntersect = vf.opt.mode.toLowerCase() === 'intersection';
+    const isIntersect = vf.opt.mode.toLowerCase() === "intersection";
     const viewsBase = isIntersect ? vf.getViewsId() : [];
     const subset = rules.reduce((a, r) => {
       const idViews = r.idViews;
@@ -218,9 +221,9 @@ class ViewsFilter {
 
   setMode(op, updateSwitch) {
     const vf = this;
-    const modes = ['intersection', 'union'];
+    const modes = ["intersection", "union"];
     const opfinal = modes.indexOf(op) > -1 ? op : modes[0];
-    const enableSwitch = opfinal === 'union';
+    const enableSwitch = opfinal === "union";
     vf.opt.mode = opfinal;
     if (updateSwitch !== false) {
       vf.switchMode.setState(enableSwitch);
@@ -252,7 +255,7 @@ class ViewsFilter {
       {
         reset: false,
         rules: [],
-        mode: 'intersection'
+        mode: "intersection",
       },
       opt
     );
@@ -262,10 +265,10 @@ class ViewsFilter {
     }
 
     opt.rules.forEach((r) => {
-      if (r.type === 'view_collections' || r.type === 'view_components') {
+      if (r.type === "view_collections" || r.type === "view_components") {
         vf.updateCheckboxState(r);
       }
-      if (r.type === 'text') {
+      if (r.type === "text") {
         vf.updateRuleByText(r, true);
       }
     });
@@ -275,7 +278,7 @@ class ViewsFilter {
     });
 
     vf.setMode(opt.mode);
-    vf.apply('filter_combined');
+    vf.apply("filter_combined");
   }
 
   /**
@@ -285,10 +288,10 @@ class ViewsFilter {
   filterActivated(enable) {
     const vf = this;
     const elBtn = vf.opt.elFilterActivated;
-    const clActive = 'active';
+    const clActive = "active";
     const id = elBtn.id;
     const isActive = elBtn.classList.contains(clActive) === true;
-    const isToggle = typeof enable !== 'boolean';
+    const isToggle = typeof enable !== "boolean";
 
     if (isToggle) {
       enable = !isActive;
@@ -323,17 +326,17 @@ class ViewsFilter {
      * Update rule
      */
     vf.updateRule({
-      group: 'input',
-      type: 'views_activated',
+      group: "input",
+      type: "views_activated",
       id: id,
       idViews: idViews,
-      enable: enable
+      enable: enable,
     });
 
     /**
      * Apply
      */
-    vf.apply('handler_activated');
+    vf.apply("handler_activated");
   }
 
   updateCheckboxState(opt) {
@@ -343,7 +346,7 @@ class ViewsFilter {
       {
         type: null,
         value: [],
-        state: true
+        state: true,
       },
       opt
     );
@@ -374,8 +377,8 @@ class ViewsFilter {
     opt = Object.assign(
       {},
       {
-        value: '',
-        state: false
+        value: "",
+        state: false,
       },
       opt
     );
@@ -390,8 +393,8 @@ class ViewsFilter {
     const idViews = views.reduce((a, v) => {
       const found =
         enable &&
-        Object.values(path(v, 'data.title', {}))
-          .join(' ')
+        Object.values(path(v, "data.title", {}))
+          .join(" ")
           .toLowerCase()
           .search(expr) > -1;
 
@@ -403,11 +406,11 @@ class ViewsFilter {
     }, []);
 
     vf.updateRule({
-      group: 'input',
-      type: 'text',
+      group: "input",
+      type: "text",
       id: id,
       idViews: idViews,
-      enable: enable
+      enable: enable,
     });
   }
 
@@ -438,11 +441,11 @@ class ViewsFilter {
     }
 
     vf.updateRule({
-      group: 'checkbox',
+      group: "checkbox",
       type: type,
       id: id,
       idViews: idViews,
-      enable: state
+      enable: state,
     });
   }
 
@@ -454,12 +457,102 @@ class ViewsFilter {
     }
   }
 
-  updateCheckboxes() {
-    return updateCheckboxes.bind(this)();
+  async updateCheckboxes() {
+    const vf = this;
+    const views = vf.getViews();
+    const elContainer = vf.opt.elFilterTags;
+    const table = getFreqTable(views);
+    const elCheckboxes = document.createDocumentFragment();
+    const labels = [];
+
+    const groupsContent = {};
+    const parts = [];
+
+    vf.clear();
+
+    for (const type of vf.opt.typesSelect) {
+      if (!vf.opt.typesAllowed.includes(type)) {
+        continue;
+      }
+      groupsContent[type] = elGroup();
+      parts.push(elTitleKey(type));
+      parts.push(groupsContent[type]);
+    }
+
+    for (const elPart of parts) {
+      elCheckboxes.appendChild(elPart);
+    }
+
+    for (const type of vf.opt.typesSelect) {
+      const tableType = table[type];
+      const addTooltip = vf.opt.typesTooltip.includes(type);
+      const keys = Object.keys(tableType);
+      const elParent = groupsContent[type];
+      if (keys.length === 0) {
+        elParent.appendChild(elEmpty());
+      }
+      let pos = 0;
+      for (const key of keys) {
+        const label = await getDictItem(key);
+        const tooltipKey = addTooltip ? `${key}_desc` : null;
+        const tooltipText = addTooltip ? await getDictItem(tooltipKey) : null;
+
+        const checkbox = new Checkbox({
+          order: pos++,
+          id: key,
+          label: label,
+          label_key: key,
+          tooltip_text: tooltipText,
+          tooltip_key: tooltipKey,
+          count: tableType[key],
+          type: type,
+        });
+        vf.addCheckbox(checkbox, elParent);
+        labels.push(label);
+      }
+    }
+
+    /**
+     * Render fragment
+     */
+    elContainer.appendChild(elCheckboxes);
+
+    /**
+     * Wait labels to be rendered
+     */
+    await Promise.all(labels);
+
+    /**
+     * Update checkboxes order after labels are updated
+     */
+    vf.updateCheckboxesOrder();
   }
 
   updateCheckboxesOrder() {
-    return updateCheckboxesOrder.bind(this)();
+    const vf = this;
+    const checkboxes = vf.getCheckboxes();
+    let pos, aLabel, bLabel;
+
+    for (const type of vf.opt.typesSelect) {
+      const tt = checkboxes.filter((checkbox) => checkbox.getType() === type);
+      pos = 0;
+      
+      tt.sort((a, b) => {
+        aLabel = n(a.getLabel());
+        bLabel = n(b.getLabel());
+        if (aLabel > bLabel) {
+          return 1;
+        }
+        if (bLabel > aLabel) {
+          return -1;
+        }
+        return 0;
+      });
+
+      for (const t of tt) {
+        t.setOrder(pos++);
+      }
+    }
   }
 
   reset() {
@@ -472,9 +565,9 @@ class ViewsFilter {
     const elFilter = vf.opt.elFilterActivated;
     const elFilterText = vf.opt.elFilterText;
 
-    elFilter.classList.remove('active');
-    elFilterText.value = '';
-    vf.apply('reset');
+    elFilter.classList.remove("active");
+    elFilterText.value = "";
+    vf.apply("reset");
   }
 
   clear() {
@@ -497,7 +590,7 @@ class ViewsFilter {
     const vf = this;
     const views = vf.getViews();
     const viewsSubset = vf.getViewsSubset();
-    const isIntersect = vf.opt.mode === 'intersection';
+    const isIntersect = vf.opt.mode === "intersection";
     const viewsDisplayed = isIntersect ? viewsSubset : views;
     const checkboxes = vf.getCheckboxes();
     const checkboxesCount = getFreqTable(viewsDisplayed);
@@ -515,7 +608,7 @@ class ViewsFilter {
     });
     vf.opt.onUpdateCount({
       nTot: views.length,
-      nSubset: viewsSubset.length
+      nSubset: viewsSubset.length,
     });
   }
 
@@ -526,7 +619,7 @@ class ViewsFilter {
   }
 }
 
-export {ViewsFilter};
+export { ViewsFilter };
 
 /**
  * Helpers
@@ -534,12 +627,12 @@ export {ViewsFilter};
 function isFound(view, type, filter) {
   let found = false;
   switch (type) {
-    case 'view_collections':
+    case "view_collections":
       if (view.data && view.data.collections) {
         found = view.data.collections.indexOf(filter) > -1;
       }
       break;
-    case 'view_components':
+    case "view_components":
       if (view._components) {
         found = view._components.indexOf(filter) > -1;
       }
@@ -570,45 +663,47 @@ function setViewsComponents(views) {
       local,
       editable;
 
-    isVt = v.type === 'vt';
-    isSm = v.type === 'sm';
-    isCc = v.type === 'cc';
-    isRt = v.type === 'rt';
-    isGj = v.type === 'gj';
+    isVt = v.type === "vt";
+    isSm = v.type === "sm";
+    isCc = v.type === "cc";
+    isRt = v.type === "rt";
+    isGj = v.type === "gj";
 
-    widgets = path(v, 'data.dashboard.widgets', []);
-    storySteps = path(v, 'data.story.steps', []);
-    overlap = path(v, 'data.source.layerInfo.maskName', '');
-    attributes = path(v, 'data.attribute.names', '');
-    customStyle = path(v, 'data.style.custom', '');
-    local = path(v, 'project') === mx.settings.project.id;
-    editable = path(v, '_edit') === true;
+    widgets = path(v, "data.dashboard.widgets", []);
+    storySteps = path(v, "data.story.steps", []);
+    overlap = path(v, "data.source.layerInfo.maskName", "");
+    attributes = path(v, "data.attribute.names", "");
+    customStyle = path(v, "data.style.custom", "");
+    
+    local = path(v, "project") === mx.settings.project.id;
+
+    editable = path(v, "_edit") === true;
 
     if (isVt) {
-      components.push('vt');
+      components.push("vt");
     }
 
     if (isGj) {
-      components.push('gj');
+      components.push("gj");
     }
 
     if (isRt) {
-      components.push('rt');
+      components.push("rt");
     }
 
     if (isSm && !isEmpty(storySteps)) {
-      components.push('sm');
+      components.push("sm");
     }
 
     if (!isEmpty(widgets)) {
-      components.push('dashboard');
+      components.push("dashboard");
     }
 
-    if (isVt && attributes && attributes.indexOf('mx_t0') > -1) {
-      components.push('time_slider');
+    if (isVt && attributes && attributes.indexOf("mx_t0") > -1) {
+      components.push("time_slider");
     }
-    if (isVt && typeof overlap === 'string' && overlap.length) {
-      components.push('overlap');
+    if (isVt && typeof overlap === "string" && overlap.length) {
+      components.push("overlap");
     }
     if (
       isVt &&
@@ -616,17 +711,17 @@ function setViewsComponents(views) {
       customStyle.json &&
       JSON.parse(customStyle.json).enable
     ) {
-      components.push('custom_style');
+      components.push("custom_style");
     }
     if (isCc) {
-      components.push('custom_code');
+      components.push("custom_code");
     }
 
     if (editable && local) {
-      components.push('view_editable');
+      components.push("view_editable");
     }
     if (local) {
-      components.push('view_local');
+      components.push("view_local");
     }
 
     v._components = components;
@@ -641,163 +736,69 @@ export function getFreqTable(views) {
   const path = mx.helpers.path;
   const checkboxes = {
     components: [],
-    collections: []
+    collections: [],
   };
-
   const stat = {};
 
   views.forEach((v) => {
-    checkboxes.components.push(...path(v, '_components', []));
-    checkboxes.collections.push(...path(v, 'data.collections', []));
+    checkboxes.components.push(...path(v, "_components", []));
+    checkboxes.collections.push(...path(v, "data.collections", []));
   });
 
-  // groupes
+  /*
+   * groups
+   */
   stat.view_components = getArrayStat({
     arr: checkboxes.components,
-    stat: 'frequency'
+    stat: "frequency",
   });
 
   stat.view_collections = getArrayStat({
     arr: checkboxes.collections,
-    stat: 'frequency'
+    stat: "frequency",
   });
 
   return stat;
 }
 
-function updateCheckboxesOrder() {
-  const vf = this;
-  const checkboxes = vf.getCheckboxes();
-  const types = ['view_components', 'view_collections'];
-
-  types.forEach((t) => {
-    const tt = checkboxes.filter((checkbox) => checkbox.getType() === t);
-    tt.sort((a, b) => {
-      let aLabel = n(a.getLabel());
-      let bLabel = n(b.getLabel());
-      if (aLabel > bLabel) {
-        return 1;
-      }
-      if (bLabel > aLabel) {
-        return -1;
-      }
-      return 0;
-    });
-    tt.forEach((t, i) => {
-      t.setOrder(i);
-    });
-  });
-
-  /**
-   * Normalise
-   */
-  function n(txt) {
-    if (!txt || !txt.toLowerCase) {
-      return txt;
-    }
-    return txt.toLowerCase().trim();
-  }
+/**
+ * Helpers
+ */
+function elTitleKey(key) {
+  return el(
+    "span",
+    {
+      class: "vf-checkbox-group-title",
+      dataset: { lang_key: key },
+    },
+    getDictItem(key)
+  );
 }
 
-function updateCheckboxes() {
-  const vf = this;
-  const views = vf.getViews();
-  const elContainer = vf.opt.elFilterTags;
-  const table = getFreqTable(views);
-  const types = Object.keys(table);
-  const elCheckboxes = document.createDocumentFragment();
-  const labels = [];
-
-  let elTypes;
-  let elCollections;
-  vf.clear();
-
-  const parts = [
-    elTitleKey('view_components'),
-    (elTypes = elGroup()),
-    elTitleKey('view_collections'),
-    (elCollections = elGroup())
-  ];
-
-  parts.forEach((p) => {
-    elCheckboxes.appendChild(p);
+function elGroup() {
+  return el("div", {
+    class: ["vf-checkbox-group"],
   });
+}
+function elEmpty() {
+  return el(
+    "div",
+    {
+      class: ["vf-checkbox-empty"],
+      dataset: { lang_key: "view_filter_no_items" },
+    },
+    getDictItem("view_filter_no_items")
+  );
+}
 
-  const groups = {
-    view_components: elTypes,
-    view_collections: elCollections
-  };
-
-  types.forEach((type) => {
-    const tbl = table[type];
-    const addTooltip = type !== 'view_collections';
-    const keys = Object.keys(tbl);
-    const elParent = groups[type];
-    if (keys.length === 0) {
-      elParent.appendChild(elEmpty());
-    }
-    keys.forEach((key, i) => {
-      const label = getDictItem(key);
-      const tooltipKey = addTooltip ? `${key}_desc` : null;
-      const tooltipText = addTooltip ? getDictItem(tooltipKey) : null;
-
-      const checkbox = new Checkbox({
-        order: i,
-        id: key,
-        label_key: key,
-        label: label,
-        tooltip_key: tooltipKey,
-        tooltip_text: tooltipText,
-        count: tbl[key],
-        type: type
-      });
-      vf.addCheckbox(checkbox, elParent);
-      labels.push(label);
-    });
-  });
-
-  /**
-   * Update checkboxes order when checkboxes labels are updated
-   */
-  Promise.all(labels).then(() => {
-    return vf.updateCheckboxesOrder();
-  });
-
-  /**
-   * Render fragment
-   */
-  elContainer.appendChild(elCheckboxes);
-  /**
-   * Helpers
-   */
-
-  function elTitleKey(key) {
-    return el(
-      'span',
-      {
-        class: 'vf-checkbox-group-title',
-        dataset: {lang_key: key}
-      },
-      getDictItem(key)
-    );
+/**
+ * Normalise
+ */
+function n(txt) {
+  if (!txt || !txt.toLowerCase) {
+    return txt;
   }
-
-  function elGroup() {
-    return el('div', {
-      class: ['vf-checkbox-group']
-    });
-  }
-  function elEmpty() {
-    var promText = getDictItem('view_filter_no_items');
-    return el(
-      'div',
-      {
-        class: ['vf-checkbox-empty'],
-        dataset: {lang_key: 'view_filter_no_items'}
-      },
-      promText
-    );
-  }
+  return txt.toLowerCase().trim();
 }
 
 function handleFilterViewIdByText(event) {
@@ -805,9 +806,9 @@ function handleFilterViewIdByText(event) {
   const text = event.target.value.toLowerCase();
 
   vf.updateRuleByText({
-    value: text
+    value: text,
   });
-  vf.apply('handler_text');
+  vf.apply("handler_text");
 }
 
 function handleFilterViewIdByCheckbox(event) {
@@ -827,7 +828,7 @@ function handleFilterViewIdByCheckbox(event) {
 
   const cbx = elCheckbox.checkbox;
   vf.updateRuleByCheckbox(cbx);
-  vf.apply('handler_checkbox');
+  vf.apply("handler_checkbox");
 }
 
 /**
@@ -852,16 +853,16 @@ function findCheckbox(el) {
 }
 
 function txtToRegex(txt) {
-  txt = txt || '';
-  txt = txt.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  txt = txt || "";
+  txt = txt.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
   // OR
 
   if (txt.match(/ or /)) {
-    txt = txt.split(' or ').join('|');
+    txt = txt.split(" or ").join("|");
   }
   // AND
   if (txt.match(/ and /)) {
-    txt = '(?=' + txt.split(' and ').join(')(=?') + ')';
+    txt = "(?=" + txt.split(" and ").join(")(=?") + ")";
   }
 
   return new RegExp(txt);

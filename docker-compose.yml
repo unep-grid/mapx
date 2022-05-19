@@ -105,7 +105,7 @@ services:
       - backend
       - frontend
     env_file: mapx.dev.env
-    image: fredmoser/geoserver:2.20
+    image: fredmoser/geoserver:2.20.4
     ports:
       - 8882:8080
     volumes:

@@ -26,7 +26,10 @@ echo "Update default password"
 
 echo ${ADMIN_XML} > ${GEOSERVER_DATA_DIR}/security/usergroup/default/users.xml
 
-export HTTPS_PROXY_NAME=$GEOSERVER_URL_PUBLIC
+# export HTTPS_PROXY_NAME=$GEOSERVER_URL_PUBLIC
+
+echo $JAVA_OPTS
+
 
 sh ${GEOSERVER_HOME}"/bin/startup.sh"
 
