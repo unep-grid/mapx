@@ -92,11 +92,13 @@ COPY . .
 #--------------------- Debian / alpine user setting ----------------------------
 ENV USER=app
 ENV GROUP=mapx
-ENV GID=12345
+ENV UID=12345
+ENV GID=101
 ENV DATADIR=/shared
 
 RUN addgroup \
     --system \
+    --gid $GID\
      $GROUP &&\
     adduser \
      --system \
@@ -104,7 +106,8 @@ RUN addgroup \
      --gecos ""\
      --ingroup $GROUP \
      --no-create-home \
-     --uid $GID $USER 
+     --uid $UID \
+     $USER 
 
 RUN mkdir -p $DATADIR && chown -R $USER:$GROUP $DATADIR 
 

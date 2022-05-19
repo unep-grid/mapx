@@ -35,11 +35,13 @@ COPY --from=compiler /build/meilisearch-${VERSION}/target/release/meilisearch .
 #--------------------- Debian / alpine user setting ----------------------------
 ENV USER=meili
 ENV GROUP=mapx
-ENV GID=89129
+ENV UID=89129
+ENV GID=101
 ENV DATADIR=/data.ms 
 
 RUN addgroup \
     --system \
+    --gid $GID\
      $GROUP &&\
     adduser \
      --system \
@@ -47,7 +49,7 @@ RUN addgroup \
      --gecos ""\
      --ingroup $GROUP \
      --no-create-home \
-     --uid $GID $USER 
+     --uid $UID $USER 
 
 RUN mkdir -p $DATADIR && chown -R $USER:$GROUP $DATADIR 
 

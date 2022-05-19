@@ -50,11 +50,13 @@ RUN set -x \
 #--------------------- Debian / alpine user setting ----------------------------
 ENV USER=geoserver
 ENV GROUP=geoserver
-ENV GID=66712
+ENV UID=66712
+ENV GID=101
 ENV DATADIR=$GEOSERVER_DATA_DIR
 
 RUN addgroup \
     --system \
+    --gid $GID \
      $GROUP &&\
     adduser \
      --system \
@@ -62,7 +64,7 @@ RUN addgroup \
      --gecos ""\
      --ingroup $GROUP \
      --no-create-home \
-     --uid $GID $USER 
+     --uid $UID $USER 
 
 RUN  chown -R $USER:$GROUP $GEOSERVER_HOME
 
