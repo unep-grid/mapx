@@ -1290,9 +1290,9 @@
     "ar": "تنسيق الملف"
   },
   {
-    "id": "dl_select_srid",
-    "en": "Spatial reference system / SRID",
-    "ar": "نظام الإسناد المكاني / SRID"
+    "id": "dl_select_epsg_code",
+    "en": "Spatial reference system: EPSG code",
+    "ar": "نظام الإسناد المكاني: كود EPSG"
   },
   {
     "id": "dl_select_clip_countries",

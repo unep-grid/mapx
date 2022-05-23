@@ -1290,9 +1290,9 @@
     "ps": "د دوتنې بڼه"
   },
   {
-    "id": "dl_select_srid",
-    "en": "Spatial reference system / SRID",
-    "ps": "د ځایی حوالې سیسټم / SRID"
+    "id": "dl_select_epsg_code",
+    "en": "Spatial reference system: EPSG code",
+    "ps": "د ځایی حوالې سیسټم: EPSG کوډ"
   },
   {
     "id": "dl_select_clip_countries",

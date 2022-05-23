@@ -1290,9 +1290,9 @@
     "fa": "فرمت فایل"
   },
   {
-    "id": "dl_select_srid",
-    "en": "Spatial reference system / SRID",
-    "fa": "سیستم مرجع فضایی / SRID"
+    "id": "dl_select_epsg_code",
+    "en": "Spatial reference system: EPSG code",
+    "fa": "سیستم مرجع فضایی: کد EPSG"
   },
   {
     "id": "dl_select_clip_countries",

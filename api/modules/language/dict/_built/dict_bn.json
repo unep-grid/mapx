@@ -1290,9 +1290,9 @@
     "bn": "ফাইলের বিন্যাস"
   },
   {
-    "id": "dl_select_srid",
-    "en": "Spatial reference system / SRID",
-    "bn": "স্থানিক রেফারেন্স সিস্টেম / SRID"
+    "id": "dl_select_epsg_code",
+    "en": "Spatial reference system: EPSG code",
+    "bn": "স্থানিক রেফারেন্স সিস্টেম: EPSG কোড"
   },
   {
     "id": "dl_select_clip_countries",

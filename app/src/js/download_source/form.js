@@ -1,5 +1,5 @@
 import { el, elSpanTranslate } from "./../el_mapx";
-import { isEmail } from "./../is_test";
+//import { isEmail } from "./../is_test";
 const st = elSpanTranslate;
 
 export function buildForm(md) {
@@ -12,10 +12,10 @@ export function buildForm(md) {
     {
       class: "form-group",
     },
-    el("label", { for: "dl_srid" }, st("dl_select_srid")),
+    el("label", { for: "dl_epsg_code" }, st("dl_select_epsg_code")),
     el("select", {
-      id: "dl_srid",
-      name: "srid",
+      id: "dl_epsg_code",
+      name: "epsgCode",
       dataset: { type: "epsg" },
     })
   );

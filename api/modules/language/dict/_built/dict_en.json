@@ -1032,8 +1032,8 @@
     "en": "File format"
   },
   {
-    "id": "dl_select_srid",
-    "en": "Spatial reference system / SRID"
+    "id": "dl_select_epsg_code",
+    "en": "Spatial reference system: EPSG code"
   },
   {
     "id": "dl_select_clip_countries",

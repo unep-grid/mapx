@@ -13,10 +13,12 @@ import { t } from "#mapx/language";
 import { getSourceMetadata } from "./getSourceMetadata.js";
 import { getParamsValidator } from "#mapx/route_validation";
 import { getFormatExt } from "#mapx/file_formats";
+import slugify from "slugify";
+
 
 const validateParamsHandlerText = getParamsValidator({
   required: ["email", "idSource", "idUser", "idProject", "token", "idSocket"],
-  expected: ["filename", "iso3codes", "epsgCode", "srid", "language", "format"],
+  expected: ["filename", "iso3codes", "epsgCode", "language", "format"],
 });
 
 const maxMergeMessage = 20;
@@ -82,7 +84,7 @@ async function extractFromPostgres(config, res) {
   if (!isEmail(email)) {
     throw Error("No email");
   }
-  const layername = filename ? filename : idSource;
+  const layername = filename ? slugify(filename,'_') : idSource;
   const ext = getFormatExt(config.format);
   const title = await getLayerTitle(idSource, language);
 

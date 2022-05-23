@@ -1290,9 +1290,9 @@
     "zh": "文件格式"
   },
   {
-    "id": "dl_select_srid",
-    "en": "Spatial reference system / SRID",
-    "zh": "空间参考系统/SRID"
+    "id": "dl_select_epsg_code",
+    "en": "Spatial reference system: EPSG code",
+    "zh": "空间参考系统：EPSG代码"
   },
   {
     "id": "dl_select_clip_countries",

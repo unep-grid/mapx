@@ -3,7 +3,7 @@ import { SelectAuto } from "../select_auto";
 import { buildForm } from "./form.js";
 import { el, elSpanTranslate, elButtonFa, elAlert } from "./../el_mapx";
 import { getLanguageCurrent, getLanguageItem } from "./../language";
-import { isEmail } from "../is_test";
+import { isEmail, isArray } from "../is_test";
 import { getApiUrl } from "../api_routes";
 import { FlashItem } from "../icon_flash";
 import { isSourceDownloadable } from "../mx_helpers";
@@ -19,7 +19,7 @@ const options = {
   token: null,
   email: null,
   format: "GPKG",
-  srid: 4326,
+  epsgCode: 4326,
   filename: null,
   iso3codes: [],
   language: "en",
@@ -123,17 +123,22 @@ export class DownloadSourceModal extends EventSimple {
 
     /* partial update  */
     if (isSingleUpdate) {
-      const value = formData.get(id);
+      const value = md.isMultiple(id) ? formData.getAll(id) : formData.get(id);
+      console.log(value);
       md._opt[id] = value;
       md.validate();
       return;
     }
     /* full update  */
-    for (const k of formData.keys()) {
-      md._opt[k] = formData.get(k);
+    for (const id of formData.keys()) {
+      md._opt[id] = md.isMultiple(id) ? formData.getAll(id) : formData.get(id);
     }
     md.validate();
     md.fire("updated");
+  }
+
+  isMultiple(id) {
+    return isArray(options[id]);
   }
 
   validate() {
@@ -255,7 +260,6 @@ export class DownloadSourceModal extends EventSimple {
       if (!select_auto._built) {
         await select_auto.once("built");
       }
-      
     }
 
     md.fire("built");

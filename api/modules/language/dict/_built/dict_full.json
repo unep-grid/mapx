@@ -3354,17 +3354,17 @@
     "de": "Datei Format"
   },
   {
-    "id": "dl_select_srid",
-    "en": "Spatial reference system / SRID",
-    "fr": "Système de référence spatiale / SRID",
-    "es": "Sistema de referencia espacial / SRID",
-    "ru": "Пространственная система отсчета / SRID",
-    "zh": "空间参考系统/SRID",
-    "ar": "نظام الإسناد المكاني / SRID",
-    "fa": "سیستم مرجع فضایی / SRID",
-    "ps": "د ځایی حوالې سیسټم / SRID",
-    "bn": "স্থানিক রেফারেন্স সিস্টেম / SRID",
-    "de": "Raumbezugssystem / SRID"
+    "id": "dl_select_epsg_code",
+    "en": "Spatial reference system: EPSG code",
+    "fr": "Référentiel spatial : code EPSG",
+    "es": "Sistema de referencia espacial: código EPSG",
+    "ru": "Пространственная система отсчета: код EPSG",
+    "zh": "空间参考系统：EPSG代码",
+    "ar": "نظام الإسناد المكاني: كود EPSG",
+    "fa": "سیستم مرجع فضایی: کد EPSG",
+    "ps": "د ځایی حوالې سیسټم: EPSG کوډ",
+    "bn": "স্থানিক রেফারেন্স সিস্টেম: EPSG কোড",
+    "de": "Räumliches Bezugssystem: EPSG-Code"
   },
   {
     "id": "dl_select_clip_countries",
