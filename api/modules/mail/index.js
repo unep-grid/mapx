@@ -1,21 +1,21 @@
-import bodyParser from 'body-parser';
-import {htmlToText} from 'html-to-text';
-import nodemailer from 'nodemailer';
-import {templates} from '#mapx/template';
-import {settings} from '#root/settings';
-import {paramsValidator} from '#mapx/route_validation';
-import {parseTemplate} from '#mapx/helpers';
-import {decrypt} from '#mapx/db-utils';
+import bodyParser from "body-parser";
+import { htmlToText } from "html-to-text";
+import nodemailer from "nodemailer";
+import { templates } from "#mapx/template";
+import { settings } from "#root/settings";
+import { paramsValidator } from "#mapx/route_validation";
+import { parseTemplate } from "#mapx/helpers";
+import { decrypt } from "#mapx/db-utils";
 
-const isString = (a) => typeof a === 'string';
+const isString = (a) => typeof a === "string";
 
 export const mwSend = [
-  bodyParser.urlencoded({extended: false}),
+  bodyParser.urlencoded({ extended: false }),
   bodyParser.json(),
-  sendMailApi
+  sendMailApi,
 ];
 
-export default {mwSend};
+export default { mwSend };
 
 /**
  * helpers
@@ -43,17 +43,17 @@ export async function sendMailApi(req, res) {
      */
     const validation = paramsValidator(conf, {
       expected: [
-        'from',
-        'to',
-        'subject',
-        'title',
-        'subtitle',
-        'content',
-        'validUntil',
-        'subjectPrefix',
-        'encrypt'
+        "from",
+        "to",
+        "subject",
+        "title",
+        "subtitle",
+        "content",
+        "validUntil",
+        "subjectPrefix",
+        "encrypt",
       ],
-      required: ['from', 'to', 'subject', 'content', 'validUntil']
+      required: ["from", "to", "subject", "content", "validUntil"],
     });
 
     if (!validation.ok) {
@@ -95,7 +95,7 @@ export async function sendMailApi(req, res) {
        * };
        */
       res.status(503).send(e);
-      console.error('Error during sendMail:',e.message);
+      console.error("Error during sendMail:", e.message);
     }
   } catch (e) {
     return res.status(403).send(e);
@@ -112,17 +112,17 @@ export async function sendMailApi(req, res) {
  * @param {String} opt.html Email body html version
  */
 export function sendMail(opt) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     var transporter = nodemailer.createTransport(settings.mail.config);
     var def = settings.mail.options;
     const options = {
       ...def,
-      ...opt
+      ...opt,
     };
     if (!options.to || !options.from || !options.subject) {
-      throw Error('sendMail: invalid configuration ');
+      throw Error("sendMail: invalid configuration ");
     }
-    transporter.sendMail(options, function(error, info) {
+    transporter.sendMail(options, function (error, info) {
       if (error) {
         reject(error);
       } else {
@@ -146,7 +146,7 @@ export function sendMail(opt) {
 export async function sendMailAuto(config) {
   const c = {
     ...settings.mail.options,
-    ...config
+    ...config,
   };
   if (!c.subtitle) {
     c.subtitle = c.subject;
@@ -157,5 +157,5 @@ export async function sendMailAuto(config) {
   c.html = body;
   c.text = htmlToText(body);
   const res = await sendMail(c);
-  return res
+  return res;
 }
