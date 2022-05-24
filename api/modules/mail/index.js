@@ -6,8 +6,7 @@ import { settings } from "#root/settings";
 import { paramsValidator } from "#mapx/route_validation";
 import { parseTemplate } from "#mapx/helpers";
 import { decrypt } from "#mapx/db-utils";
-
-const isString = (a) => typeof a === "string";
+import { isEmail, isString } from "@fxi/mx_valid";
 
 export const mwSend = [
   bodyParser.urlencoded({ extended: false }),
@@ -113,16 +112,32 @@ export async function sendMailApi(req, res) {
  */
 export function sendMail(opt) {
   return new Promise(function (resolve, reject) {
-    var transporter = nodemailer.createTransport(settings.mail.config);
-    var def = settings.mail.options;
-    const options = {
+    const transporter = nodemailer.createTransport(settings.mail.config);
+    const def = settings.mail.options;
+    const mail = {
       ...def,
       ...opt,
     };
-    if (!options.to || !options.from || !options.subject) {
+
+    /**
+     * Set envelope if sender is not the same as the
+     * SMTP config email
+     */
+    if (mail.from != def.from) {
+      mail.envelope = {
+        from: mail.from,
+        to: mail.to,
+      };
+      mail.from = def.from;
+    }
+
+    const valid =
+      isEmail(mail.from) && isEmail(mail.to) && isString(mail.subject);
+
+    if (!valid) {
       throw Error("sendMail: invalid configuration ");
     }
-    transporter.sendMail(options, function (error, info) {
+    transporter.sendMail(mail, function (error, info) {
       if (error) {
         reject(error);
       } else {
