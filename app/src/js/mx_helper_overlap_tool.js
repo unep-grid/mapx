@@ -55,7 +55,7 @@ export function getOverlapAnalysis(opt) {
     return handleRequestMessage(msg, messageStore, {
       result: function (msg) {
         if (msg.content === 'area') {
-          const area = msg.value;
+          let area = msg.value;
           const elArea = el(
             'li',
             {class: ['mx-log-item', 'mx-log-white']},
