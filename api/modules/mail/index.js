@@ -95,6 +95,7 @@ export async function sendMailApi(req, res) {
        * };
        */
       res.status(503).send(e);
+      console.error('Error during sendMail:',e.message);
     }
   } catch (e) {
     return res.status(403).send(e);
