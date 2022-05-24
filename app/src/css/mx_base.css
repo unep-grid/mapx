@@ -602,7 +602,6 @@ picture {
 .btn-icon > span,
 .btn-icon > i {
   pointer-events: none;
-  min-width: 1em;
 }
 
 .btn-circle {
