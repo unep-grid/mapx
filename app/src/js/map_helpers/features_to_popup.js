@@ -1,6 +1,11 @@
-import { uiReadMore } from "./readmore/index.js";
-import { getArrayStat } from "./array_stat/index.js";
-import { getLanguageCurrent } from "./language";
+import { uiReadMore } from "./../readmore/index.js";
+import { getArrayStat } from "./../array_stat/index.js";
+import { getDictItem, getLanguageCurrent } from "./../language";
+import { getView, getViewTitle } from "./index.js";
+import { path, uiToggleBtn, parentFinder } from "./../mx_helper_misc.js";
+import { el } from "./../el/src/index.js";
+import { isEmpty, isElement, isNumeric, isArray } from "./../is_test/index.js";
+
 /*
  * Convert result from getFeaturesValuesByLayers to HTML
  * @param {Object} o Options
@@ -8,10 +13,9 @@ import { getLanguageCurrent } from "./language";
  * @param {Object} o.layersAttributes Attributes by layer {<abc>:{<attr>:[<values>,...]}}
  */
 export function featuresToPopup(o) {
-  const h = mx.helpers;
   const popup = o.popup;
   const attributes = o.layersAttributes;
-  const elContainer = h.el("div", {
+  const elContainer = el("div", {
     class: ["mx-popup-container", "mx-scroll-styled"],
   });
   const filters = {};
@@ -35,12 +39,12 @@ export function featuresToPopup(o) {
    * Helpers
    */
   async function elIssueMessage(idMsg) {
-    var elIssue = h.el("div", "no values");
+    const elIssue = el("div", "no values");
     idMsg = idMsg || "noValue";
     /**
      * Translate label
      */
-    const txt = await h.getDictItem(idMsg);
+    const txt = await getDictItem(idMsg);
     elIssue.innerText = txt;
     elIssue.dataset.lang_key = idMsg;
     return elIssue;
@@ -55,25 +59,24 @@ export function featuresToPopup(o) {
   }
 
   function render() {
-    var idView;
-    for (idView in attributes) {
+    for (const idView in attributes) {
       renderItem(idView, attributes[idView]);
     }
   }
 
   async function renderItem(idView, promAttributes) {
-    const view = h.getView(idView);
+    const view = getView(idView);
     const language = getLanguageCurrent();
-    const labels = h.path(view, "_meta.text.attributes_alias");
+    const labels = path(view, "_meta.text.attributes_alias");
     const isVector = view.type === "vt" || view.type === "gj";
-    const title = h.getViewTitle(idView);
+    const title = getViewTitle(idView);
     var elLayer, elProps, elWait;
 
     try {
       /**
        * Build content elements
        */
-      elLayer = h.el(
+      elLayer = el(
         "div",
         {
           class: "mx-prop-group",
@@ -81,23 +84,23 @@ export function featuresToPopup(o) {
             l: idView,
           },
         },
-        h.el(
+        el(
           "span",
           {
             class: "mx-prop-layer-title",
           },
           title
         ),
-        (elWait = h.el(
+        (elWait = el(
           "div",
           {
             class: "mx-inline-spinner-container",
           },
-          h.el("div", {
+          el("div", {
             class: "fa fa-cog fa-spin",
           })
         )),
-        (elProps = h.el("div"))
+        (elProps = el("div"))
       );
 
       elContainer.appendChild(elLayer);
@@ -106,10 +109,8 @@ export function featuresToPopup(o) {
        * Attributes to ui
        */
       const attributes = await promAttributes;
-
       elWait.remove();
-
-      var attrNames = Object.keys(attributes);
+      const attrNames = Object.keys(attributes);
 
       if (attrNames.length === 0) {
         elLayer.appendChild(await elIssueMessage("noValue"));
@@ -119,18 +120,20 @@ export function featuresToPopup(o) {
       /**
        * For each attributes, add
        */
-      attrNames.forEach((attribute) => {
-        var elValue, elPropContainer, elPropToggles;
+      for (const attribute of attrNames) {
+        let elValue, elPropContainer, elPropToggles;
+        let label = attribute;
 
-        var values = getArrayStat({
+        const values = getArrayStat({
           stat: "sortNatural",
           arr: attributes[attribute],
         });
 
-        var hasValues = values.length > 0;
-        values = hasValues ? values : ["-"];
+        const hasValues = values.length > 0;
+        if (!hasValues) {
+          values.push("-");
+        }
 
-        var label = attribute;
         if (labels && labels[attribute]) {
           label =
             labels[attribute][language] || labels[attribute].en || attribute;
@@ -139,19 +142,19 @@ export function featuresToPopup(o) {
         /**
          * Build property elements
          */
-        elPropContainer = h.el(
+        elPropContainer = el(
           "div",
           {
             class: "mx-prop-container",
           },
-          h.el(
+          el(
             "div",
-            h.el(
+            el(
               "div",
               {
                 class: "mx-prop-content",
               },
-              h.el(
+              el(
                 "span",
                 {
                   class: "mx-prop-title",
@@ -159,7 +162,7 @@ export function featuresToPopup(o) {
                 },
                 label
               ),
-              (elPropToggles = h.el("div", {
+              (elPropToggles = el("div", {
                 class: "mx-prop-toggles",
               }))
             )
@@ -177,14 +180,14 @@ export function featuresToPopup(o) {
             /**
              * Case vector, add button and listener
              */
-            elValue = h.uiToggleBtn({
+            elValue = uiToggleBtn({
               label: value,
               onChange: filterValues,
               data: {
                 layer: idView,
                 attribute: attribute,
                 value: value,
-                type: h.isNumeric(value) ? "numeric" : "string",
+                type: isNumeric(value) ? "numeric" : "string",
               },
               labelBoxed: true,
               checked: false,
@@ -193,11 +196,11 @@ export function featuresToPopup(o) {
             /**
              * In other cases, add values as span
              */
-            elValue = h.el("div");
-            if (h.isArray(value)) {
+            elValue = el("div");
+            if (isArray(value)) {
               value.forEach((v) => {
                 elValue.appendChild(
-                  h.el(
+                  el(
                     "span",
                     {
                       class: "mx-prop-static",
@@ -207,7 +210,7 @@ export function featuresToPopup(o) {
                 );
               });
             } else {
-              elValue = h.el("span", {
+              elValue = el("span", {
                 class: "mx-prop-static",
               });
               elValue.innerText = value;
@@ -219,17 +222,17 @@ export function featuresToPopup(o) {
            */
           elPropToggles.appendChild(elValue);
         }
-      });
+      }
 
       /**
        * Udate readmore
        */
       updateReadMore();
     } catch (err) {
-      if (h.isElement(elLayer)) {
+      if (isElement(elLayer)) {
         elLayer.appendChild(await elIssueMessage("property_list_failed"));
       }
-      if (h.isElement(elWait)) {
+      if (isElement(elWait)) {
         elWait.remove();
       }
       console.error(err);
@@ -237,12 +240,12 @@ export function featuresToPopup(o) {
   }
 
   function resetFilter() {
-    for (var idV in filters) {
-      var view = h.getView(idV);
-    if (!view._setFilter) {
-      debugger;
-      return;
-    }
+    for (const idV in filters) {
+      const view = getView(idV);
+
+      if (!view._setFilter) {
+        return;
+      }
 
       view._setFilter({
         filter: ["all"],
@@ -253,20 +256,17 @@ export function featuresToPopup(o) {
 
   function filterValues(e) {
     const elBtn = e.target;
-    const elChecks = h
-      .parentFinder({
-        selector: elBtn,
-        class: "mx-prop-group",
-      })
-      .querySelectorAll(".check-toggle input");
+    const elChecks = parentFinder({
+      selector: elBtn,
+      class: "mx-prop-group",
+    }).querySelectorAll(".check-toggle input");
     const layer = elBtn.dataset.layer;
 
     filters[layer] = ["any"];
 
-    h.forEachEl({
-      els: elChecks,
-      callback: updateFilters,
-    });
+    for (const elCheck of elChecks) {
+      updateFilters(elCheck);
+    }
 
     applyFilters(layer);
   }
@@ -277,7 +277,7 @@ export function featuresToPopup(o) {
     const type = el.dataset.type;
     const attribute = el.dataset.attribute;
     const add = el.checked;
-    const isNum = !h.isEmpty(type) ? type === "numeric" : h.isNumeric(value);
+    const isNum = !isEmpty(type) ? type === "numeric" : isNumeric(value);
     let rule = [];
     if (add) {
       if (isNum) {
@@ -298,7 +298,7 @@ export function featuresToPopup(o) {
 
   function applyFilters(idV) {
     const filter = filters[idV];
-    const view = h.getView(idV);
+    const view = getView(idV);
     if (!view._setFilter) {
       debugger;
       return;

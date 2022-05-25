@@ -1,3 +1,5 @@
+import { featuresToPopup } from "./features_to_popup.js";
+
 import { RadialProgress } from "./../radial_progress";
 import { handleViewClick } from "./../views_click";
 import { ButtonPanel } from "./../button_panel";
@@ -24,7 +26,6 @@ import { fetchViews } from "./../mx_helper_map_view_fetch.js";
 import { wmsQuery } from "./../wms/index.js";
 import { clearMapxCache, getVersion } from "./../mx_helper_app_utils.js";
 import { onNextFrame } from "./../animation_frame/index.js";
-import { featuresToPopup } from "./../mx_helper_map_features_popup.js";
 import {
   handleMapDragOver,
   handleMapDrop,
@@ -2822,8 +2823,8 @@ export async function makeNumericSlider(o) {
 
         const filter = [
           "any",
+          ["!=", ["typeof", ["get", k]], "number"],
           ["all", ["<=", ["get", k], n[1] * 1], [">=", ["get", k], n[0] * 1]],
-          ["!", ["has", k]],
         ];
 
         if (isArray(view._null_filter)) {
@@ -2943,19 +2944,36 @@ export async function makeTimeSlider(o) {
             elDMax.innerHTML = " – " + date(t[1]);
           }
 
-          const filter = ["any"];
           const filterAll = ["all"];
-          filter.push(["==", ["get", k.t0], -9e10]);
-          filter.push(["==", ["get", k.t1], -9e10]);
+          
+          const filter = ["any",
+                ["==", ["typeof", ["get", k.t0]], "string"],
+                ["==", ["typeof", ["get", k.t1]], "string"],
+          ];
+          
+          //filter.push(["==", ["get", k.t0], -9e10]);
+          //filter.push(["==", ["get", k.t1], -9e10]);
 
           if (hasT0 && hasT1) {
-            filterAll.push(["<=", ["get", k.t0], t[1] / 1000]);
-            filterAll.push([">=", ["get", k.t1], t[0] / 1000]);
+            filterAll.push(
+              ...[
+                ["<=", ["get", k.t0], t[1] / 1000],
+                [">=", ["get", k.t1], t[0] / 1000],
+              ]
+            );
           } else if (hasT0) {
-            filterAll.push([">=", ["get", k.t0], t[0] / 1000]);
-            filterAll.push(["<=", ["get", k.t0], t[1] / 1000]);
+            filterAll.push(
+              ...[
+                [">=", ["get", k.t0], t[0] / 1000],
+                ["<=", ["get", k.t0], t[1] / 1000],
+              ]
+            );
           }
           filter.push(filterAll);
+
+
+
+          console.log(filter);
 
           view._setFilter({
             filter: filter,
@@ -4748,6 +4766,7 @@ export function getLayersPropertiesAtPoint(opt) {
   const modeObject = opt.asObject === true || false;
   const items = {};
   const excludeProp = ["mx_t0", "mx_t1", "gid"];
+  //const excludeProp = [];
   let idViews = [];
   let type = opt.type || "vt" || "rt" || "gj";
   type = isArray(type) ? type : [type];
@@ -5834,7 +5853,6 @@ export async function chaosTest(opt) {
   const views = getViews();
   const layersBefore = getLayerNamesByPrefix();
   const viewsBefore = getViewsOpen();
-  
 
   for (let i = 0; i < opt.run; i++) {
     const tt = [];
