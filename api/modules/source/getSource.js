@@ -154,7 +154,7 @@ async function extractFromPostgres(config, res) {
   if (!hasCountryClip) {
     sqlOGR = `SELECT ${attrPg} from ${idSource}`;
   } else {
-    sqlOGR = await getSqlClip(idSource, iso3codes, attrPg);
+    sqlOGR = await getSqlClip(idSource, iso3codes, attrPg, language);
   }
 
   /**
@@ -236,7 +236,7 @@ async function extractFromPostgres(config, res) {
       folders: [
         {
           path: folderPath,
-          name: title,
+          name: layername,
         },
       ],
       onProgress: (percent) => {
@@ -360,9 +360,10 @@ async function extractFromPostgres(config, res) {
   }
 }
 
-async function getSqlClip(idSource, iso3codes, attrPg) {
+async function getSqlClip(idSource, iso3codes, attrPg, language) {
   /* Clip requires valid geom */
   const test = await isLayerValid(idSource, true, false);
+  
   if (!test.valid) {
     throw new Error(
       t(language, "get_source_invalid_geom", {
