@@ -35,14 +35,14 @@ const isVtTemporal = h.hasIndex(vtProps,'mx_t0');
   {{? isVtGjWithNumber }}
   <div class="mx-slider-container">
     <div class="mx-slider-header">
-      <div
+      <label
         class="mx-slider-title"
         data-lang_key="btn_opt_numeric"
         data-lang_type="text"
-        ></div>
+        ></label>
       <div class="mx-slider-dyn">
-        <div class="mx-slider-dyn-min">0</div>
-        <div class="mx-slider-dyn-max">0</div>
+        <span class="mx-slider-dyn-min">0</span>
+        <span class="mx-slider-dyn-max">0</span>
       </div>
     </div>
     <div
@@ -50,22 +50,22 @@ const isVtTemporal = h.hasIndex(vtProps,'mx_t0');
       data-range_numeric_for="{{=view.id}}"
       ></div>
     <div class="mx-slider-range">
-      <div class="mx-slider-range-min">0</div>
-      <div class="mx-slider-range-max">0</div>
+      <span class="mx-slider-range-min">0</span>
+      <span class="mx-slider-range-max">0</span>
     </div>
   </div>
   {{?}}
   {{?isVtTemporal}}
   <div class="mx-slider-container">
     <div class="mx-slider-header">
-      <div
+      <label
         class="mx-slider-title"
         data-lang_key="btn_opt_date"
         data-lang_type="text"
-        ></div>
+        ></label>
       <div class="mx-slider-dyn">
-        <div class="mx-slider-dyn-min"></div>
-        <div class="mx-slider-dyn-max"></div>
+        <span class="mx-slider-dyn-min"></span>
+        <span class="mx-slider-dyn-max"></span>
       </div>
     </div>
     <div
@@ -73,8 +73,8 @@ const isVtTemporal = h.hasIndex(vtProps,'mx_t0');
       data-range_time_for="{{=view.id}}"
       ></div>
     <div class="mx-slider-range">
-      <div class="mx-slider-range-min">0</div>
-      <div class="mx-slider-range-max">0</div>
+      <span class="mx-slider-range-min">0</span>
+      <span class="mx-slider-range-max">0</span>
     </div>
   </div>
   {{?}}
@@ -92,8 +92,8 @@ const isVtTemporal = h.hasIndex(vtProps,'mx_t0');
       data-transparency_for="{{=view.id}}"
       ></div>
     <div class="mx-slider-range">
-      <div class="mx-slider-range-min">0%</div>
-      <div class="mx-slider-range-max">100%</div>
+      <span class="mx-slider-range-min">0%</span>
+      <span class="mx-slider-range-max">100%</span>
     </div>
   </div>
   </div>

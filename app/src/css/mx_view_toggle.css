@@ -225,6 +225,9 @@
 .mx-view-tgl-more label {
   font-size: 0.9em;
 }
+.mx-view-tgl-more span {
+  font-size: 0.8em;
+}
 
 .mx-view-content {
   column-width: 190px;
@@ -243,7 +246,7 @@
 }
 
 .mx-search-tool-content {
-  padding: 0 20px 0 20px;
+  padding: 20px 20px;
   border: 1px solid var(--mx_ui_border);
   border-radius: 10px;
 }
