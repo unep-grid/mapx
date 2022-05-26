@@ -1,5 +1,10 @@
 [
   {
+    "id": "btn_opt_code_integration",
+    "en": "Code template / boilerplate / other format",
+    "zh": "代码模板/样板/其他格式"
+  },
+  {
     "id": "code_integration_select_template_label",
     "en": "Select template",
     "zh": "选择模板"

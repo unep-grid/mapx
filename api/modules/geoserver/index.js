@@ -1,5 +1,3 @@
-//import { getSourceMetadata } from "./getSourceMetadata.js";
-import GeoServerRestClient from "geoserver-node-client";
 import { getParamsValidator } from "#mapx/route_validation";
 import {
   validateTokenHandler,
@@ -11,12 +9,9 @@ import { getProjectsIdAll } from "#mapx/project";
 import { getViewsGeoserver } from "#mapx/view";
 import { timeStep, sendError } from "#mapx/helpers";
 import { isEmpty, isNotEmpty } from "@fxi/mx_valid";
-//import { setViewSld } from "#mapx/view";
 import { setViewStyleAlt } from "#mapx/view";
+import { geoserver as grc } from "#mapx/db";
 
-const url = settings.geoserver.url;
-const pw = settings.geoserver.password;
-const user = settings.geoserver.user;
 const db = settings.db;
 const ns = "http://geoserver";
 
@@ -32,7 +27,7 @@ export const mwGeoserverRebuild = [
   handlerRebuildGeoserver,
 ];
 
-const grc = new GeoServerRestClient(url, user, pw);
+//const grc = new GeoServerRestClient(url, user, pw);
 
 /**
  * Update handler
@@ -51,6 +46,9 @@ export async function handlerRebuildGeoserver(req, res) {
     state.running = false;
     await res.notifyInfoError("job_state", {
       message: e.message,
+    });
+    await res.notifyInfoError("job_state", {
+      message: e.stack,
     });
   }
   res.end();
@@ -77,7 +75,7 @@ async function rebuild(query, res) {
   await res.notifyProgress("job_state", {
     idMerge: "update_geoserver_progress",
     type: "progress",
-    message: `Extracting projects info... [${timeStep(start)} ms]`,
+    message: `Extracting projects info...]`,
     value: 0,
   });
 
@@ -88,7 +86,7 @@ async function rebuild(query, res) {
   await res.notifyProgress("job_state", {
     idMerge: "update_geoserver_progress",
     type: "progress",
-    message: `Handling workspaces... [${timeStep(start)} ms]`,
+    message: `Workspaces...`,
     value: 10,
   });
 
@@ -121,7 +119,7 @@ async function rebuild(query, res) {
   await res.notifyProgress("job_state", {
     idMerge: "update_geoserver_progress",
     type: "progress",
-    message: `Datastores.. [${timeStep(start)} ms]`,
+    message: `Datastores...`,
     value: 30,
   });
 
@@ -139,7 +137,7 @@ async function rebuild(query, res) {
   await res.notifyProgress("job_state", {
     idMerge: "update_geoserver_progress",
     type: "progress",
-    message: `Layers.. [${timeStep(start)} ms]`,
+    message: `Layers..`,
     value: 80,
   });
   const prom_layers = [];
@@ -169,7 +167,7 @@ async function rebuild(query, res) {
   await res.notifyProgress("job_state", {
     idMerge: "update_geoserver_progress",
     type: "progress",
-    message: `Done ! [${timeStep(start)} ms]`,
+    message: `Done in ${timeStep(start) / 1000} [s]`,
     value: 100,
   });
 
@@ -221,7 +219,7 @@ async function createLayer(layer, res, overwriteStyle) {
 
   if (hasStyle) {
     await grc.styles.publish(ws, layer.id, styleToPublish);
-    await grc.styles.assignStyleToLayer(ws, layer.id, idStyle, wsStyle, true);
+    await grc.styles.assignStyleToLayer(ws, layer.id, wsStyle, idStyle, true);
   }
 
   return true;

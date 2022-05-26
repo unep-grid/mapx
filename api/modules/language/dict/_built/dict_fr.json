@@ -1,5 +1,10 @@
 [
   {
+    "id": "btn_opt_code_integration",
+    "en": "Code template / boilerplate / other format",
+    "fr": "Modèle de code / passe-partout / autre format"
+  },
+  {
     "id": "code_integration_select_template_label",
     "en": "Select template",
     "fr": "Sélectionnez le modèle"

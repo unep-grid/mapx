@@ -1,11 +1,10 @@
-import {settings as s}  from '#root/settings' ;
-import pg from 'pg';
-import redis from 'redis';
-import {MeiliSearch} from 'meilisearch';
-import GeoServerRestClient from 'geoserver-node-client';
+import { settings as s } from "#root/settings";
+import pg from "pg";
+import redis from "redis";
+import { MeiliSearch } from "meilisearch";
+import { GeoServerRestClient } from "geoserver-node-client";
 
-const {Pool, types} = pg;
-
+const { Pool, types } = pg;
 
 let redisGet;
 let redisSet;
@@ -33,11 +32,11 @@ try {
     password: s.db.write.password,
     port: s.db.port,
     max: s.db.poolMax,
-    application_name: 'mx_api_write'
+    application_name: "mx_api_write",
   });
 
-  pgWrite.on('error', (err) => {
-    console.error('Unexpected error on postgres client write', err);
+  pgWrite.on("error", (err) => {
+    console.error("Unexpected error on postgres client write", err);
     process.exit(-1);
   });
 
@@ -52,11 +51,11 @@ try {
     port: s.db.port,
     statement_timeout: s.db.timeout,
     max: s.db.poolMax,
-    application_name: 'mx_api_read'
+    application_name: "mx_api_read",
   });
 
-  pgRead.on('error', (err) => {
-    console.error('Unexpected error on postgres client read', err);
+  pgRead.on("error", (err) => {
+    console.error("Unexpected error on postgres client read", err);
     process.exit(-1);
   });
 
@@ -72,11 +71,11 @@ try {
     port: s.db.port,
     statement_timeout: s.db.timeout,
     max: s.db.poolMax,
-    application_name: 'mx_api_custom'
+    application_name: "mx_api_custom",
   });
 
-  pgCustom.on('error', (err) => {
-    console.error('Unexpected error on postgres client custom', err);
+  pgCustom.on("error", (err) => {
+    console.error("Unexpected error on postgres client custom", err);
     process.exit(-1);
   });
 
@@ -91,11 +90,11 @@ try {
     port: s.db.port,
     statement_timeout: s.db.timeout,
     max: s.db.poolMax,
-    application_name: 'mx_api_admin'
+    application_name: "mx_api_admin",
   });
 
-  pgAdmin.on('error', (err) => {
-    console.error('Unexpected error on postgres client admin', err);
+  pgAdmin.on("error", (err) => {
+    console.error("Unexpected error on postgres client admin", err);
     process.exit(-1);
   });
 
@@ -103,14 +102,14 @@ try {
    * Redis
    */
   const clientRedis = redis.createClient({
-    url: 'redis://' + s.redis.host + ':' + s.redis.port
+    url: "redis://" + s.redis.host + ":" + s.redis.port,
   });
   clientRedis.connect().catch((e) => {
-    console.log('Unable to connect', e);
+    console.log("Unable to connect", e);
     process.exit(-1);
   });
-  clientRedis.on('error', (err) => {
-    console.error('Unexpected error on redis client', err);
+  clientRedis.on("error", (err) => {
+    console.error("Unexpected error on redis client", err);
     process.exit(-1);
   });
 
@@ -122,7 +121,7 @@ try {
    */
   meili = new MeiliSearch({
     host: `http://${s.meili.host}:${s.meili.port}`,
-    apiKey: s.meili.master_key || null
+    apiKey: s.meili.master_key || null,
   });
 
   /**
@@ -134,7 +133,7 @@ try {
     s.geoserver.password
   );
 } catch (e) {
-  console.error('Unexpected error during clients init', e);
+  console.error("Unexpected error during clients init", e);
   process.exit(-1);
 }
 
@@ -146,5 +145,5 @@ export {
   pgWrite,
   pgAdmin,
   meili,
-  geoserver
+  geoserver,
 };

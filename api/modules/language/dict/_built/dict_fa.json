@@ -1,5 +1,10 @@
 [
   {
+    "id": "btn_opt_code_integration",
+    "en": "Code template / boilerplate / other format",
+    "fa": "قالب کد / دیگ بخار / قالب دیگر"
+  },
+  {
     "id": "code_integration_select_template_label",
     "en": "Select template",
     "fa": "الگو را انتخاب کنید"

@@ -1,5 +1,10 @@
 [
   {
+    "id": "btn_opt_code_integration",
+    "en": "Code template / boilerplate / other format",
+    "bn": "কোড টেমপ্লেট / বয়লারপ্লেট / অন্যান্য বিন্যাস"
+  },
+  {
     "id": "code_integration_select_template_label",
     "en": "Select template",
     "bn": "টেমপ্লেট নির্বাচন করুন"
