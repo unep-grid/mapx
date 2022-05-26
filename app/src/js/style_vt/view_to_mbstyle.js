@@ -1,16 +1,23 @@
 import { colorToHex } from "./../color_utils";
 import { getView, getMap, getViewTitle } from "../map_helpers/index.js";
-
 import { getViewMapboxLayers } from "./view_to_mb_layers";
 
 /**
  * Create mapbox style from view's layers
  * @param {String|object} idView Id of the view or view
+ * @param {Object} opt Options
+ * @param {Boolean} opt.useLabelAsId Set id based on rule's label (e.g. for sld)
+ * @param {Boolean} opt.addMetadata Add metadata (types...)
  * @return {Promise<Object>} Style object
  */
-export async function getViewMapboxStyle(idView) {
+export async function getViewMapboxStyle(idView, opt) {
+  const { useLabelAsId = false, addMetadata = false } = opt || {};
+
   const view = getView(idView);
-  const base = await getViewMapboxLayers(view);
+  const base = await getViewMapboxLayers(view, {
+    useLabelAsId,
+    addMetadata,
+  });
   const map = getMap();
   const style = map.getStyle();
   const title = getViewTitle(view);
@@ -73,13 +80,15 @@ export async function getViewMapboxStyle(idView) {
     }
   }
 
-  /**
-   * Add metadata
-   */
-  style.metadata = {
-    type_all_numeric: types.reduce((a, t) => a && t === "number", true),
-    types: types,
-  };
+  if (addMetadata) {
+    /**
+     * Add metadata
+     */
+    style.metadata = {
+      type_all_numeric: types.reduce((a, t) => a && t === "number", true),
+      types: types,
+    };
+  }
 
   return style;
 }

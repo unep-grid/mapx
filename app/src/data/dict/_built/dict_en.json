@@ -1,5 +1,9 @@
 [
   {
+    "id": "btn_opt_code_integration",
+    "en": "Code template / boilerplate / other format"
+  },
+  {
     "id": "code_integration_select_template_label",
     "en": "Select template"
   },

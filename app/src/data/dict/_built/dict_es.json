@@ -1,5 +1,10 @@
 [
   {
+    "id": "btn_opt_code_integration",
+    "en": "Code template / boilerplate / other format",
+    "es": "Plantilla de código/repetitivo/otro formato"
+  },
+  {
     "id": "code_integration_select_template_label",
     "en": "Select template",
     "es": "Seleccionar plantilla"

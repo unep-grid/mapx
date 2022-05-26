@@ -32,6 +32,10 @@ let settings = {
     port: "8880",
     protocol: "http://",
   },
+  cdn: {
+    template:
+      "https://cdn.jsdelivr.net/gh/unep-grid/map-x-mgl@{{version}}/{{path}}",
+  },
   api: {
     host: "api",
     port: "3333",
@@ -87,11 +91,11 @@ let settings = {
   paths: {
     sprites: "sprites/sprite",
     fontstack: "fontstack/{fontstack}/{range}.pbf",
+    svg : "sprites/svg/"
   },
   style: styleDefault.default,
   layerBefore: "mxlayers",
   separators: {
-    //sublayer: '-@'
     sublayer: "@",
   },
   clickHandlers: [],

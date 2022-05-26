@@ -1,29 +1,176 @@
-import { isArray, isEmpty,} from "./../is_test/index.js";
+import { isUrl, isArray, isEmpty } from "./../is_test/index.js";
+import { parseTemplate } from "./../mx_helper_misc.js";
+import { settings } from "./../settings/index.js";
+import { getVersion } from "./../mx_helper_app_utils.js";
 /**
  * Extract layers from view
  * @param {String|Object} v id of the view or view
  * @return {Promise<Array>} Array of layers
  */
-
 export async function mapboxToSld(style, opt) {
   const { MapboxStyleParser } = await import("geostyler-mapbox-parser");
   const { SldStyleParser } = await import("geostyler-sld-parser");
 
-  opt = Object.assign({}, { fixFilters: true }, opt);
+  opt = Object.assign(
+    {},
+    {
+      mergeSymbolizers: true,
+      fixFilters: true,
+      fixImageCdn: true,
+      fixIconSize: true,
+    },
+    opt
+  );
 
   const fixNumeric = !!style?.metadata?.type_all_numeric;
   const mapbox = new MapboxStyleParser();
   const sld = new SldStyleParser();
-  const gstyle = await mapbox.readStyle(style);
+
+  mapbox.ignoreConversionErrors = true;
+  const gstyle = await mapbox.readStyle(style, {});
 
   if (opt.fixFilters) {
     geostylerFixFilters(gstyle, {
       fixNumeric: fixNumeric,
     });
   }
+
+  if (opt.mergeSymbolizers) {
+    geostylerFixDuplicate(gstyle);
+  }
+
+  if (opt.fixImageCdn) {
+    geostylerFixImageCdn(gstyle);
+  }
+
+  if (opt.fixIconSize) {
+    geostylerFixIconSize(gstyle);
+  }
+
   const out = await sld.writeStyle(gstyle.output);
+
   return out.output;
 }
+
+/**
+ * Merge symbolizers to avoid duplcated rules
+ * @param {Object} GeoStyler style
+ */
+function geostylerFixDuplicate(gstyle) {
+  const rules = gstyle?.output?.rules || [];
+
+  /**
+   * Merge duplicates
+   */
+  for (const rule of rules) {
+    if (rule._duplicate) {
+      continue;
+    }
+    for (const ruleCheck of rules) {
+      if (rule !== ruleCheck && rule.name === ruleCheck.name) {
+        rule.symbolizers.push(...ruleCheck.symbolizers);
+        ruleCheck._duplicate = true;
+      }
+    }
+  }
+
+  let len = rules.length;
+  while (len--) {
+    const rule = rules[len];
+    if (rule._duplicate) {
+      rules.splice(len, 1);
+    }
+  }
+}
+
+/**
+ * Replace sprite url by actual svg file url, using a cdn
+ * @param {Object} GeoStyler style
+ */
+function geostylerFixImageCdn(gstyle) {
+  const rules = gstyle?.output?.rules || [];
+  for (const rule of rules) {
+    for (const symbolizer of rule.symbolizers) {
+      switch (symbolizer.kind) {
+        case "Icon":
+          const img = spriteToCdnLink(symbolizer?.image, {
+            fill: symbolizer.color,
+            dummyExt: ".svg", // converter expects .svg at the end...
+          });
+          if (isUrl(img)) {
+            symbolizer.image = img.toString();
+          }
+          break;
+        case "Fill":
+          const gFill = symbolizer?.graphicFill;
+          if (gFill) {
+            const img = spriteToCdnLink(gFill?.image);
+            if (isUrl(img)) {
+              gFill.image = img.toString();
+            }
+          }
+      }
+    }
+  }
+}
+
+/**
+ * Fix icon sizes
+ * @param {Object} GeoStyler style
+ */
+function geostylerFixIconSize(gstyle) {
+  const rules = gstyle?.output?.rules || [];
+  for (const rule of rules) {
+    for (const symbolizer of rule.symbolizers) {
+      switch (symbolizer.kind) {
+        case "Icon":
+          symbolizer.size = symbolizer.size * 10;
+          break;
+      }
+    }
+  }
+}
+
+/**
+ * Convert a sprint string to CDN link
+ * @param {String} sprite link, e.g. '/sprites/?name=geol_hatch_02'
+ * @param {Object} params Search parameters e.g. {fill:'#FF0000'};
+ * @return {String} url
+ */
+function spriteToCdnLink(str, params) {
+  if (!str) {
+    return;
+  }
+  const url = new URL(location.origin + str);
+  const version = getVersion();
+  const name = url.searchParams.get("name");
+  if (!name) {
+    return;
+  }
+  const path = `app/src/glyphs/dist/svg/${name}.svg`;
+  const cdnTemplate = settings.cdn.template;
+  const urlImage = new URL(parseTemplate(cdnTemplate, { version, path }));
+  if (params) {
+    for (const p in params) {
+      urlImage.searchParams.set(p, params[p]);
+    }
+  }
+  return urlImage;
+}
+
+/*async function svgPathFill(url,color){*/
+/*const resp = await fetch(url);*/
+/*const svgStringOrig = await resp.text();*/
+/*const svg = new DOMParser().parseFromString(svgStringOrig,'image/svg+xml');*/
+/*const path = svg.querySelector("path");*/
+/*path.setAttribute("style",`fill:${color}`);*/
+/*const svgString = new XMLSerializer().serializeToString(svg);*/
+/*const svgStringClean = encodeURIComponent(svgString);*/
+/*const svgB64 = window.btoa(svgStringClean);*/
+/*const imgString = `data:image/svg+xml;base64,${svgB64}`;*/
+/*console.log(imgString);*/
+/*return imgString;*/
+/*}*/
 
 /*
  * Fix / update geostyler output

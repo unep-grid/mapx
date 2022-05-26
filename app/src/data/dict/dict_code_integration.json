@@ -1,5 +1,18 @@
 [
   {
+    "id": "btn_opt_code_integration",
+    "en": "Code template / boilerplate / other format",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "code_integration_select_template_label",
     "en": "Select template",
     "fr": "",

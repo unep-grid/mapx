@@ -1,5 +1,18 @@
 [
   {
+    "id": "btn_opt_code_integration",
+    "en": "Code template / boilerplate / other format",
+    "fr": "Modèle de code / passe-partout / autre format",
+    "es": "Plantilla de código/repetitivo/otro formato",
+    "ru": "Шаблон кода/шаблон/другой формат",
+    "zh": "代码模板/样板/其他格式",
+    "ar": "قالب الكود / المعياري / تنسيق آخر",
+    "fa": "قالب کد / دیگ بخار / قالب دیگر",
+    "ps": "د کوډ ټیمپلیټ / بویلر پلیټ / نور شکل",
+    "bn": "কোড টেমপ্লেট / বয়লারপ্লেট / অন্যান্য বিন্যাস",
+    "de": "Codevorlage / Boilerplate / anderes Format"
+  },
+  {
     "id": "code_integration_select_template_label",
     "en": "Select template",
     "fr": "Sélectionnez le modèle",

@@ -430,7 +430,11 @@ observeEvent(input$btnUpdateSource, {
     #
     # Invalidate source list
     #
-
     reactData$updateEditSourceLayerList <- runif(1)
+
+    #
+    # Invalidate view list 
+    #
+    reactData$updateViewsList <- runif(1)
   })
 })

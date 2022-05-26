@@ -1,3 +1,4 @@
+import { makeSimpleLayer } from "./simple_layer.js";
 import { settings } from "./../settings/index.js";
 import {
   makeId,
@@ -9,16 +10,18 @@ import { isNotEmpty, isEmpty, isObject } from "./../is_test/index.js";
 import { colorToRgba } from "./../color_utils";
 import { getLabelFromObjectPath, getDictItem } from "../language";
 import { getViewSourceSummary } from "./../mx_helper_source_summary.js";
-import {
-  getView,
-  sortLayers,
-  makeSimpleLayer,
-} from "../map_helpers/index.js";
+import { getView, sortLayers } from "../map_helpers/index.js";
 
+/**
+ * Create mapbox layers from mapx's style
+ * @param {Object|String} v View or view's id
+ * @param {Object} opt Options
+ * @param {Boolean} opt.useLabelAsId Set id based on rule's label (e.g. for sld)
+ * @return {Promise<Array>} Array of mapbox layers
+ */
+export async function getViewMapboxLayers(v, opt) {
+  const { useLabelAsId = false } = opt || {};
 
-
-
-export async function getViewMapboxLayers(v) {
   const view = getView(v);
   const idView = view.id;
   const idSource = `${view.id}-SRC`;
@@ -111,7 +114,6 @@ export async function getViewMapboxLayers(v) {
       }
     }
   }
-
 
   /**
    * Set zoom default
@@ -210,11 +212,13 @@ export async function getViewMapboxLayers(v) {
    * Apply default style is no style is defined
    */
   if (useStyleDefault) {
+    const label = "Default";
     const layerDefault = _build_layer({
       geomType: geomType,
+      label: label,
     });
     const ruleDefault = {
-      label_en: "Default",
+      label_en: label,
       value: "all",
       color: layerDefault?.metadata?.hexColor,
       size: layerDefault?.metadata?.size,
@@ -247,20 +251,19 @@ export async function getViewMapboxLayers(v) {
       const layerAll = _build_layer({
         geomType: geomType,
         type: isNumeric ? "number" : "string",
-        //priority: 1,
         priority: 0,
         hexColor: ruleAll.color,
         sprite: ruleAll.sprite,
         opacity: ruleAll.opacity,
         size: ruleAll.size,
         filter: filter,
+        rule: ruleAll,
       });
 
       layers.push(layerAll);
 
       if (hasPattern) {
         const layerPattern = _build_layer({
-          //priority: 0,
           priority: 1,
           geomType: "pattern",
           hexColor: ruleAll.color,
@@ -268,6 +271,7 @@ export async function getViewMapboxLayers(v) {
           opacity: ruleAll.opacity,
           size: ruleAll.size,
           filter: filter,
+          rule: ruleAll,
         });
         layers.push(layerPattern);
       }
@@ -275,21 +279,15 @@ export async function getViewMapboxLayers(v) {
       /**
        * Symbol only
        */
-      const label = getLabelFromObjectPath({
-        obj: ruleAll,
-        sep: "_",
-        path: "label",
-        defaultValue: ruleAll.value,
-      });
 
       const layerSprite = _build_layer({
         geomType: "symbol",
-        label: label,
         hexColor: ruleAll.color,
         sprite: ruleAll.sprite,
         opacity: ruleAll.opacity,
         size: ruleAll.size,
         filter: filter,
+        rule: ruleAll,
       });
 
       layers.push(layerSprite);
@@ -367,6 +365,7 @@ export async function getViewMapboxLayers(v) {
           size: rule.size,
           sprite: rule.sprite,
           filter: filter,
+          rule: rule,
         });
         layers.push(layerMain);
 
@@ -379,6 +378,7 @@ export async function getViewMapboxLayers(v) {
             opacity: rule.opacity,
             sprite: rule.sprite,
             filter: filter,
+            rule: rule,
           });
           layers.push(layerPattern);
         }
@@ -386,22 +386,15 @@ export async function getViewMapboxLayers(v) {
         /**
          * Layer for symbols
          */
-        const label = getLabelFromObjectPath({
-          obj: rule,
-          sep: "_",
-          path: "label",
-          defaultValue: rule.value,
-        });
-
         const layerSprite = _build_layer({
           position: position,
           geomType: "symbol",
-          label: label,
           hexColor: rule.color,
           opacity: rule.opacity,
           size: rule.size,
           sprite: rule.sprite,
           filter: filter,
+          rule : rule
         });
 
         layers.push(layerSprite);
@@ -430,6 +423,7 @@ export async function getViewMapboxLayers(v) {
       size: ruleNulls.size,
       sprite: hasSprite ? ruleNulls.sprite : null,
       filter: filter,
+      rule : ruleNulls
     });
     ruleNulls.filter = filter;
     // Hack to reference null in makeNumericSlider
@@ -462,6 +456,7 @@ export async function getViewMapboxLayers(v) {
       {},
       {
         id: null,
+        rule: {},
         idSource: idSource,
         idSourceLayer: idView,
         idView: idView,
@@ -475,15 +470,25 @@ export async function getViewMapboxLayers(v) {
         sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
         zoomMax: zoomConfig.zoomMax,
         zoomMin: zoomConfig.zoomMin,
+        useLabelAsId: useLabelAsId,
       },
       opt
     );
 
+    if (!config.label && config.rule) {
+      config.label = getLabelFromObjectPath({
+        obj: config.rule,
+        sep: "_",
+        path: "label",
+        defaultValue: config.rule.value,
+      });
+    }
+
     if (!config.id) {
-      config.id = `${idView}${sepLayer}${makeId()}`;
+      config.id = idView;
+      config.idSuffix = makeId();
     }
 
     return makeSimpleLayer(config);
   }
 }
-

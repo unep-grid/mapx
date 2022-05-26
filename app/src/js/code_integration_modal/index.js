@@ -1,4 +1,3 @@
-import { settings } from "./../settings/index.js";
 import { modalSimple } from "./../mx_helper_modal.js";
 import { el, elSelect, elButtonFa } from "./../el_mapx/index.js";
 import { moduleLoad } from "./../modules_loader_async/index.js";
@@ -176,12 +175,18 @@ export class ModalCodeIntegration {
 
   async getTemplateData(id) {
     const mci = this;
-    const style = await getViewMapboxStyle(mci._config.idView);
-
     const out = {
       str: "",
       language: "html",
     };
+
+    const useLabelAsId = id === "template_sld_layers";
+    const addMetadata = id == "template_sld_layers";
+
+    const style = await getViewMapboxStyle(mci._config.idView, {
+      useLabelAsId,
+      addMetadata,
+    });
 
     switch (id) {
       case "template_maplibre_simple_app":
@@ -205,9 +210,7 @@ export class ModalCodeIntegration {
         out.language = "json";
         break;
       case "template_sld_layers":
-        out.str = await mapboxToSld(style, {
-          fixFilters: true,
-        });
+        out.str = await mapboxToSld(style);
         out.language = "html";
     }
 
