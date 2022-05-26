@@ -1,3 +1,32 @@
+  - [1.9.40-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-beta.1) 
+
+     - APP
+        - SLD multiple issues: 
+            - Use labels as rule id; 
+            - Fixed failing filters; 
+            - Setup as CDN for images; 
+            - Experimental colors param for SVG; 
+            - Merging symbolyzers e.g. sprites + polygon = single SLD layer;
+            - Fixed icon sizes;
+        - Maki icons : Set SVG path fill by param [experimental], for SLD dynamic colors
+        - Download tool : filename -> layername + foldername
+        - View sliders / filters layout fix
+        - Solved issue with the `time_slider` filter: ignore missing numeric value converted as empty string
+        - Project deletion: removed remaining geoserver code that produced bugs
+        - Fixed overlap area calc issue
+        - Fixed issue with deformed flag in catalog filters
+
+    - API
+        - Upgraded geoserver client: fixed breaking changes; code formating
+        - Send mail. Report errors in api logs 
+        - Fixed the SMTP 'from' mismatch
+        - Download tool: 
+            - Fixed bad filename,
+            - Fixed multiple iso3,
+            - Fixed reprojection
+    - Geoserver 
+        - Start script : add geoserver contacts + set proxy url in global.xml
+
   - [1.9.40-alpha.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.6) 
 
      -APP         
