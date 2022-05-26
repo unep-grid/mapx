@@ -33,6 +33,7 @@ const svgs = glob.sync(config.svgs).map((f) => {
 });
 
 svgs.forEach((svg) => {
+  debugger;
   svgo.optimize(svg.svg).then((r) => {
     const svgPath = path.join(dirOutSvg, svg.name);
     fs.writeFileSync(svgPath, r.data);

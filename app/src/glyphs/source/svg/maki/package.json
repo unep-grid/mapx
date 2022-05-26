@@ -1,0 +1,16 @@
+{
+  "name": "mapx_maki_alt",
+  "version": "0.0.1",
+  "description": "Mapx maki icons + fill by param",
+  "main": "index.js",
+  "type":"module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "unepgrid.ch",
+  "license": "MIT",
+  "dependencies": {
+    "fast-xml-parser": "^4.0.7",
+    "glob": "^8.0.3"
+  }
+}

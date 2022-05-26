@@ -5,6 +5,10 @@
   "scripts": {
     "build": "node index.js"
   },
+  "engines" : { 
+    "npm" : ">=7.0.0",
+    "node" : "10.24.1"
+  },
   "keywords": [
     "sprite"
   ],
