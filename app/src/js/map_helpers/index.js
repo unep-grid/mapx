@@ -972,11 +972,11 @@ export async function initMapx(o) {
               const rules = view?.data?.style?.rules || [];
               const hasRules = isNotEmpty(rules);
               if (hasRules) {
-                out.mapbox = await getViewMapboxStyle(view,{
+                out.mapbox = await getViewMapboxStyle(view, {
                   useLabelAsId: true,
-                  addMetadata: true
+                  addMetadata: true,
                 });
-                out.sld = await mapboxToSld(out.mapbox)
+                out.sld = await mapboxToSld(out.mapbox);
               }
             } catch (e) {
               console.warn(
@@ -2291,12 +2291,19 @@ export function getSpriteImage(id, opt) {
     const imData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     imData.data.set(sprite.data.data);
     if (color) {
+      let i, j, u;
       const rgba = chroma(color).rgba();
-      for (let i = 0; i < imData.data.length; i++) {
-        const a = imData.data[i + 3];
-        if (a > 0) {
-          for (let j = 0; j < 4; j++) {
-            imData.data[i + j] = j === 3 ? ~~(rgba[j] * 255) : rgba[j];
+      const n = imData.data.length ;
+      // convert + floor alpha 0-1 to 0-255
+      rgba[3] = ~~(rgba[3] * 255);
+      // loop pixels 
+      for (i = 0; i < n; i += 4) {
+        // test if pixel is visible
+        u = imData.data[i] > 1 || imData.data[i + 1] > 1 || imData.data[i + 2] > 1;
+        if (u) {
+          // replace color 
+          for (j = 0; j < 4; j++) {
+            imData.data[i + j] = rgba[j];
           }
         }
       }
