@@ -21,7 +21,7 @@ const global = {
   debug: false,
   idThemesToggle: ["mapx", "smartgray"],
   idThemesLight : ["mapx"],
-  idThemesDark : ["smartgray"],
+  idThemesDark : ["smartgray","waterdark"],
   on: {},
   sounds: {
     "switch-test": switchOn,
