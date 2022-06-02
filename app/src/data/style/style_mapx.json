@@ -1701,7 +1701,7 @@
       "source-layer": "admin",
       "filter": ["all", ["!=", ["get", "maritime"], "false"]],
       "layout": {
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "line-color": "rgb(255,255,255)",
