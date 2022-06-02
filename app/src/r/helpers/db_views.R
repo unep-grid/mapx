@@ -3,29 +3,37 @@
 #'
 #' @param viewName view name to check
 #' @export
-mxDbViewTitleExists <- function(title,project,languages=NULL){
-
-  if(noDataCheck(title)) return(FALSE)
-
-  viewsTable <- .get(config,c("pg","tables","views_latest"))
-
-  if(is.null(languages)){
-    languages = config[["languages"]][["list"]]
+mxDbViewTitleExists <- function(title, project, languages = NULL) {
+  if (noDataCheck(title)) {
+    return(FALSE)
   }
 
-  language <- paste(sprintf("data@>'{\"title\":{\"%1$s\":\"%2$s\"}}' IS TRUE",languages,title),collapse=" OR ")
+  viewsTable <- .get(config, c("pg", "tables", "views_latest"))
 
-  sql <- sprintf("
+  if (is.null(languages)) {
+    languages <- config[["languages"]][["list"]]
+  }
+
+  language <- paste(
+    sprintf(
+      "data@>'{\"title\":{\"%1$s\":\"%2$s\"}}' IS TRUE",
+      languages,
+      title
+    ),
+    collapse = " OR "
+  )
+
+  sql <- sprintf(
+    "
     SELECT EXISTS(
-      SELECT id FROM \"%1$s\" t1 
-      WHERE (%2$s) 
-      AND project = '%4$s'
+      SELECT id FROM \"%1$s\" t1
+      WHERE (%2$s)
+      AND project = '%3$s'
       );",
     viewsTable,
     language,
-    title,
     project
-    )
+  )
 
   res <- mxDbGetQuery(sql)
 
@@ -38,21 +46,20 @@ mxDbViewTitleExists <- function(title,project,languages=NULL){
 #'
 #' @param idSource Source (layer) id
 #'
-mxDbGetViewsIdBySourceId <- function(idSource,selectAlsoByMask=TRUE,language="en"){
-
+mxDbGetViewsIdBySourceId <- function(idSource, selectAlsoByMask = TRUE, language = "en") {
   tableName <- "mx_views_latest"
-  strMask = ifelse(
+  strMask <- ifelse(
     isTRUE(selectAlsoByMask),
     "OR data#>>'{\"source\",\"layerInfo\",\"maskName\"}' = '" + idSource + "'",
     ""
-    )
+  )
 
   sql <- "
   WITH views_table AS (
-    SELECT 
+    SELECT
     " + tableName + ".editor,
-    " + tableName + ".id, 
-    " + tableName + ".data#>>'{\"attribute\",\"name\"}' as variable, 
+    " + tableName + ".id,
+    " + tableName + ".data#>>'{\"attribute\",\"name\"}' as variable,
     " + tableName + ".pid,
     " + tableName + ".project,
     " + tableName + ".readers@>'\"public\"' as is_public,
@@ -62,31 +69,30 @@ mxDbGetViewsIdBySourceId <- function(idSource,selectAlsoByMask=TRUE,language="en
     ELSE data#>>'{\"title\",\"en\"}'
     END AS title
     FROM mx_views_latest
-    WHERE 
-    data #>> '{\"source\",\"layerInfo\",\"name\"}' = '" + idSource +"'
+    WHERE
+    data #>> '{\"source\",\"layerInfo\",\"name\"}' = '" + idSource + "'
     " + strMask + ")
 
   SELECT views_table.*, mx_users.email
   FROM views_table
-  JOIN mx_users 
+  JOIN mx_users
   ON views_table.editor = mx_users.id"
 
-  timer <- mxTimeDiff('mxDbGetViewsIdBySourceId')
+  timer <- mxTimeDiff("mxDbGetViewsIdBySourceId")
   out <- mxDbGetQuery(sql)
-  mxTimeDiff(timer);
+  mxTimeDiff(timer)
 
   return(out)
-
 }
 
 #' Get a view's project
 #'
 #' @param idView {Character} id of the view
 #'
-mxDbGetViewProject <- function(idView){
+mxDbGetViewProject <- function(idView) {
   mxDbGetQuery("
-    SELECT project 
-    FROM mx_views_latest 
+    SELECT project
+    FROM mx_views_latest
     WHERE id='" + idView + "'")$project
 }
 
@@ -94,10 +100,10 @@ mxDbGetViewProject <- function(idView){
 #'
 #' @param idView {Character} id of the view
 #'
-mxDbGetViewMainSource <- function(idView){
+mxDbGetViewMainSource <- function(idView) {
   mxDbGetQuery("
-    SELECT data#>>'{\"source\",\"layerInfo\",\"name\"}' id 
-    FROM mx_views_latest 
+    SELECT data#>>'{\"source\",\"layerInfo\",\"name\"}' id
+    FROM mx_views_latest
     WHERE id='" + idView + "'")$id
 }
 
@@ -105,14 +111,15 @@ mxDbGetViewMainSource <- function(idView){
 #'
 #' @param idsViews Source (layer) id
 #'
-mxDbGetViewsTitle <- function(idsViews,asNamedList=TRUE,language="en", prefix=""){
-
+mxDbGetViewsTitle <- function(idsViews, asNamedList = TRUE, language = "en", prefix = "") {
   tableName <- "mx_views_latest"
 
-  if(noDataCheck(idsViews)) return("")
+  if (noDataCheck(idsViews)) {
+    return("")
+  }
 
   sql <- "
-  SELECT 
+  SELECT
   id,
   CASE
   WHEN data#>>'{\"title\",\"" + language + "\"}' != ''
@@ -120,21 +127,19 @@ mxDbGetViewsTitle <- function(idsViews,asNamedList=TRUE,language="en", prefix=""
   ELSE data#>>'{\"title\",\"en\"}'
   END AS title
   FROM mx_views_latest
-  WHERE id IN ('" + paste(idsViews,collapse="','") + "')
+  WHERE id IN ('" + paste(idsViews, collapse = "','") + "')
   ORDER BY title asc"
 
   out <- mxDbGetQuery(sql)
-  if(!noDataCheck(prefix)){
-     out$title = paste(prefix, out$title)
+  if (!noDataCheck(prefix)) {
+    out$title <- paste(prefix, out$title)
   }
 
-  if(asNamedList){
+  if (asNamedList) {
     titles <- out$title
     out <- as.list(out$id)
-    names(out)<-titles
+    names(out) <- titles
   }
 
   return(out)
-
 }
-
