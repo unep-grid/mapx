@@ -1,6 +1,27 @@
+  - [1.9.40](https://github.com/unep-grid/map-x-mgl/tree/1.9.40) 
+
+    - APP
+        - SLD conversion: add an option to simplify expression in in layer creation
+        - Added theme preset 'waterdark' not linked, available using `mx.theme.setColorsByThemeId("waterdark")`
+        - Updated UN country labels (turkey->Türkiye); updated bathymetry
+        - Style conversion:
+            - Fixed issue with polygon with rule 'all' + sprite not rendered properly;
+            - Fixed symbol label colors + position
+            - Fix coloring issue of sprite in legends
+        - Fixed issue in login process, if stored user id was corrupted; 
+        - Basemap: maritime border set visibility to none
+        - Country highlight: fixed filter expression
+        - Formating + code cleaning
+    - APP / API
+        - Dictionnary update: Türkiye + #833 
+    - Mail (dev) 
+        - Invite jim, the chaos monkey, in dev mailhog service
+    - API
+        - Mail: explicit error message in logs
+
   - [1.9.40-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-beta.1) 
 
-     - APP
+    - APP
         - SLD multiple issues: 
             - Use labels as rule id; 
             - Fixed failing filters; 

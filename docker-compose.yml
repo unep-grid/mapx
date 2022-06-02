@@ -43,7 +43,7 @@ services:
       - backend
       - frontend
     env_file: mapx.dev.env
-    image: fredmoser/mapx_app:1.9.40-beta.1
+    image: fredmoser/mapx_app:1.9.40
     restart: always
     ports:
       - 3838
@@ -75,7 +75,7 @@ services:
       - backend
       - frontend
     env_file: mapx.dev.env
-    image: fredmoser/mapx_api:1.9.40-beta.1
+    image: fredmoser/mapx_api:1.9.40
     restart: always
     ports:
       - 3030
@@ -161,7 +161,7 @@ services:
     image: mailhog/mailhog
     logging:
       driver: none
-    command: 
+    command:
       - '--invite-jim=true'
       - '--jim-reject-sender=0.1'
     labels:
