@@ -124,7 +124,6 @@ export class DownloadSourceModal extends EventSimple {
     /* partial update  */
     if (isSingleUpdate) {
       const value = md.isMultiple(id) ? formData.getAll(id) : formData.get(id);
-      console.log(value);
       md._opt[id] = value;
       md.validate();
       return;
