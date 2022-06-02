@@ -17,10 +17,11 @@ import { getView, sortLayers } from "../map_helpers/index.js";
  * @param {Object|String} v View or view's id
  * @param {Object} opt Options
  * @param {Boolean} opt.useLabelAsId Set id based on rule's label (e.g. for sld)
+ * @param {Boolean} opt.simplifyExpression Simplify expressions (e.g. for SLD)
  * @return {Promise<Array>} Array of mapbox layers
  */
 export async function getViewMapboxLayers(v, opt) {
-  const { useLabelAsId = false } = opt || {};
+  const { useLabelAsId = false, simplifyExpression = false } = opt || {};
 
   const view = getView(v);
   const idView = view.id;
@@ -472,6 +473,7 @@ export async function getViewMapboxLayers(v, opt) {
         zoomMax: zoomConfig.zoomMax,
         zoomMin: zoomConfig.zoomMin,
         useLabelAsId: useLabelAsId,
+        simplifyExpression : simplifyExpression
       },
       opt
     );

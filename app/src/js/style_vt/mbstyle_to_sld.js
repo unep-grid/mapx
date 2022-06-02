@@ -3,8 +3,9 @@ import { parseTemplate } from "./../mx_helper_misc.js";
 import { settings } from "./../settings/index.js";
 import { getVersion } from "./../mx_helper_app_utils.js";
 /**
- * Extract layers from view
- * @param {String|Object} v id of the view or view
+ * Extract SLD from Mapbox layers
+ * .. and fix common issues
+ * @param {Object} style Mapbox style
  * @return {Promise<Array>} Array of layers
  */
 export async function mapboxToSld(style, opt) {
@@ -26,9 +27,9 @@ export async function mapboxToSld(style, opt) {
   const mapbox = new MapboxStyleParser();
   const sld = new SldStyleParser();
 
-  mapbox.ignoreConversionErrors = true;
+  mapbox.ignoreConversionErrors = true; 
   const gstyle = await mapbox.readStyle(style, {});
-
+  
   if (opt.fixFilters) {
     geostylerFixFilters(gstyle, {
       fixNumeric: fixNumeric,
@@ -51,6 +52,7 @@ export async function mapboxToSld(style, opt) {
 
   return out.output;
 }
+
 
 /**
  * Merge symbolizers to avoid duplcated rules
@@ -227,9 +229,12 @@ function geostylerFixFilters(gstyle, opt) {
       if (isArray(filter)) {
         if (opKeep.includes(filter[0])) {
           /**
-           * Handle nested expr
+           * Handle nested expr 
            *           ↓
            * ["==",["get","x"],"y"]
+           *
+           * ⚠️  should have been handled previously via 
+           * 'simplifyExpression', but if used directly
            */
           if (isArray(filter[1])) {
             if (opExpr.includes(filter[1][0])) {

@@ -7,16 +7,22 @@ import { getViewMapboxLayers } from "./view_to_mb_layers";
  * @param {String|object} idView Id of the view or view
  * @param {Object} opt Options
  * @param {Boolean} opt.useLabelAsId Set id based on rule's label (e.g. for sld)
+ * @param {Boolean} opt.simplifyExpression Simplify expressions (e.g. for SLD)
  * @param {Boolean} opt.addMetadata Add metadata (types...)
  * @return {Promise<Object>} Style object
  */
 export async function getViewMapboxStyle(idView, opt) {
-  const { useLabelAsId = false, addMetadata = false } = opt || {};
+  const {
+    useLabelAsId = false,
+    addMetadata = false,
+    simplifyExpression = false,
+  } = opt || {};
 
   const view = getView(idView);
   const base = await getViewMapboxLayers(view, {
     useLabelAsId,
     addMetadata,
+    simplifyExpression,
   });
   const map = getMap();
   const style = map.getStyle();

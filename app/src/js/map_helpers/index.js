@@ -975,6 +975,7 @@ export async function initMapx(o) {
                 out.mapbox = await getViewMapboxStyle(view, {
                   useLabelAsId: true,
                   addMetadata: true,
+                  simplifyExpression : true,
                 });
                 out.sld = await mapboxToSld(out.mapbox);
               }

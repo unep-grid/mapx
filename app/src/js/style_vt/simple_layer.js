@@ -1,6 +1,6 @@
 import { settings } from "./../settings/index.js";
 import { updateIfEmpty } from "./../mx_helper_misc.js";
-import { isEmpty, isNotEmpty } from "./../is_test/index.js";
+import { isArray, isEmpty, isNotEmpty } from "./../is_test/index.js";
 import { getSpriteImage } from "./../map_helpers/index.js";
 import chroma from "chroma-js";
 
@@ -18,6 +18,7 @@ import chroma from "chroma-js";
  * @param {String} opt.type Data type (string,number)
  * @param {Boolean} opt.showSymbolLabel Show symbol with label
  * @param {Boolean} opt.useLabelAsId Ignore id and use label as layer id
+ * @param {Boolean} opt.simplifyExpression Simplify expression
  * @param {String} opt.label Label text or expression
  * @param {string} opt.hexColor Hex color. If not provided, random color will be generated
  * @param {array} opt.filter
@@ -53,6 +54,7 @@ export function makeSimpleLayer(opt) {
     opacity: 0.5,
     showSymbolLabel: null,
     useLabelAsId: null,
+    simplifyExpression: null,
   };
 
   updateIfEmpty(opt, def);
@@ -116,6 +118,19 @@ export function makeSimpleLayer(opt) {
   };
 
   /**
+   * Legacy filter conversion
+   */
+  if (opt.simplifyExpression) {
+    const f = layer.filter;
+    const opExpr = ["get"];
+    if (isArray(f[1])) {
+      if (opExpr.includes(f[1][0])) {
+        f[1] = f[1][1];
+      }
+    }
+  }
+
+  /**
    * Geom specific
    */
   switch (opt.geomType) {
@@ -134,11 +149,9 @@ export function makeSimpleLayer(opt) {
             ? ["bottom-left", "bottom-right"]
             : [],
           "text-font": ["Arial"],
-          /* 
-          * interpolation not supported in geostyler
-          * "text-size": ["interpolate", ["linear"], ["zoom"], 1, 10, 18, 20],
-          */
-          "text-size" : 10,
+          "text-size": opt.simplifyExpression
+            ? 10
+            : ["interpolate", ["linear"], ["zoom"], 1, 10, 18, 20],
           "text-radial-offset": 1.2,
           "text-justify": "auto",
         },
@@ -206,7 +219,7 @@ export function makeSimpleLayer(opt) {
     const size = opt.size;
     const hasZoomFactor =
       opt.sizeFactorZoomMax !== 0 || opt.sizeFactorZoomMin !== 0;
-    if (!hasZoomFactor) {
+    if (!hasZoomFactor || opt.simplifyExpression) {
       return size * b;
     }
     return [

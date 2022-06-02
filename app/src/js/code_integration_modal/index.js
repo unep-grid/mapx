@@ -181,11 +181,13 @@ export class ModalCodeIntegration {
     };
 
     const useLabelAsId = id === "template_sld_layers";
-    const addMetadata = id == "template_sld_layers";
+    const addMetadata = id === "template_sld_layers";
+    const simplifyExpression = id === "template_sld_layers";
 
     const style = await getViewMapboxStyle(mci._config.idView, {
       useLabelAsId,
       addMetadata,
+      simplifyExpression
     });
 
     switch (id) {

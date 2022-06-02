@@ -201,7 +201,7 @@ async function createLayer(layer, res, overwriteStyle) {
 
   const recalc =
     isEmpty(layer.style_mapbox) || isEmpty(layer.style_sld) || overwriteStyle;
-
+  
   if (recalc) {
     const data = await res.clientJobRequest("style_from_view", {
       idView: layer.id,
