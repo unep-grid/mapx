@@ -161,6 +161,9 @@ services:
     image: mailhog/mailhog
     logging:
       driver: none
+    command: 
+      - '--invite-jim=true'
+      - '--jim-reject-sender=0.1'
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.mailhog.rule=Host(`mail.mapx.localhost`)'
