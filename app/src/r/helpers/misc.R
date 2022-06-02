@@ -321,7 +321,6 @@ mxSchemaAttributeInput <- function(
 isEmpty <- function(val = NULL, debug = FALSE) {
   noDatas <- config$noData
 
-
   res <- isTRUE(
     is.null(val)
   ) ||
@@ -368,7 +367,7 @@ isEmpty <- function(val = NULL, debug = FALSE) {
 }
 
 noDataCheck <- isEmpty
-
+isNotEmpty <- function(...){!isEmpty(...)}
 
 #' Concatenate text
 #' @param x {string} left string or number
