@@ -94,7 +94,12 @@ export async function sendMailApi(req, res) {
        * };
        */
       res.status(503).send(e);
-      console.error("Error during sendMail:", e.message);
+      console.error({
+        title: "Error during sendMail",
+        message: e.message,
+        config: conf,
+        date: new Date(),
+      });
     }
   } catch (e) {
     return res.status(403).send(e);
@@ -171,6 +176,5 @@ export async function sendMailAuto(config) {
   const body = parseTemplate(html, c);
   c.html = body;
   c.text = htmlToText(body);
-  const res = await sendMail(c);
-  return res;
+  return sendMail(c);
 }
