@@ -51,7 +51,7 @@
   "sources": {
     "mapbox_composite": {
       "type": "vector",
-      "url": "mapbox://mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v8,helsinki.1v0c5pdr,helsinki.3uq8x12k,helsinki.6lefiu83"
+      "url": "mapbox://mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v8,mapbox-public.bathymetry,helsinki.22p5op78,helsinki.6lefiu83"
     },
     "mapbox_dem": {
       "type": "raster-dem",
@@ -248,8 +248,8 @@
       "id": "bathymetry",
       "type": "fill",
       "source": "mapbox_composite",
-      "source-layer": "bathymetry",
-      "minzoom": 3,
+      "source-layer": "water-depth",
+      "minzoom": 0,
       "filter": ["all", ["==", ["geometry-type"], "Polygon"]],
       "layout": {
         "visibility": "visible"
@@ -259,14 +259,19 @@
           "interpolate",
           ["linear"],
           ["zoom"],
-          3,
-          0.001,
-          4,
-          0.1,
+          0,
+          1,
+          5,
+          0.17,
           7,
-          1
+          0.04,
+          8,
+          0.02,
+          15,
+          0,
+          22,
+          0
         ],
-        "fill-outline-color": "hsla(0, 0%, 0%, 0)",
         "fill-color": [
           "interpolate",
           ["cubic-bezier", 0, 0.5, 1, 0.5],
