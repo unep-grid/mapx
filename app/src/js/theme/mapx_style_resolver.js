@@ -64,15 +64,6 @@ export function layer_resolver(c) {
       }
     },
     {
-      id: ['maritime'],
-      layout: {
-        visibility: c.mx_map_background.visibility
-      },
-      paint: {
-        'line-color': c.mx_map_background.color
-      }
-    },
-    {
       id: ['water'],
       layout: {
         visibility: c.mx_map_water.visibility

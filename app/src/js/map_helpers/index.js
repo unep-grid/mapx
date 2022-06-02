@@ -2293,15 +2293,18 @@ export function getSpriteImage(id, opt) {
     if (color) {
       let i, j, u;
       const rgba = chroma(color).rgba();
-      const n = imData.data.length ;
+      const n = imData.data.length;
       // convert + floor alpha 0-1 to 0-255
       rgba[3] = ~~(rgba[3] * 255);
-      // loop pixels 
+      // loop pixels
       for (i = 0; i < n; i += 4) {
         // test if pixel is visible
-        u = imData.data[i] > 1 || imData.data[i + 1] > 1 || imData.data[i + 2] > 1;
+        u =
+          imData.data[i] > 1 ||
+          imData.data[i + 1] > 1 ||
+          imData.data[i + 2] > 1;
         if (u) {
-          // replace color 
+          // replace color
           for (j = 0; j < 4; j++) {
             imData.data[i + j] = rgba[j];
           }
@@ -4448,21 +4451,30 @@ export function setFilter(o) {
  * @param {array} o.countries Array of countries code
  */
 export function setHighlightedCountries(o) {
-  const countries = o.countries || null;
+  o = Object.assign(
+    {},
+    {
+      id: null,
+      idLayer: "country-code",
+      countries: [],
+    },
+    o
+  );
+
+  const countries = o.countries;
   const m = getMap(o.id);
   const hasCountries = isArray(countries) && countries.length > 0;
   const hasWorld = hasCountries && countries.indexOf("WLD") > -1;
-  let filter = [];
-  let rule = ["==", ["get", "iso3code"], ""];
+  const filter = ["any"];
+
   mx.settings.highlightedCountries = hasCountries ? countries : [];
 
-  if (hasCountries && !hasWorld) {
-    rule = ["!", ["in", ["get", "iso3code"]].concat(countries)];
+  if (!hasWorld && hasCountries) {
+    filter.push(["==", ["get", "iso3code"], ""]);
+    filter.push(["!", ["in", ["get", "iso3code"], ["literal", countries]]]);
   }
 
-  filter = ["any", rule, ["!", ["has", "iso3code"]]];
-
-  m.setFilter(o.idLayer, filter);
+  return m.setFilter(o.idLayer, filter);
 }
 
 /**
