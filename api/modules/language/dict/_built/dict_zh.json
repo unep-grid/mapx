@@ -2821,8 +2821,8 @@
   },
   {
     "id": "login_required_for_project_access_guest",
-    "en": "Accessing a private project requires to be authenticated",
-    "zh": "访问私有项目需要经过身份验证 "
+    "en": "Accessing a private project requires authentication",
+    "zh": "访问私有项目需要身份验证"
   },
   {
     "id": "login_required_for_project_access_non_member",

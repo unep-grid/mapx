@@ -2821,8 +2821,8 @@
   },
   {
     "id": "login_required_for_project_access_guest",
-    "en": "Accessing a private project requires to be authenticated",
-    "es": "El acceso a un proyecto privado requiere estar autenticado "
+    "en": "Accessing a private project requires authentication",
+    "es": "Acceder a un proyecto privado requiere autenticación"
   },
   {
     "id": "login_required_for_project_access_non_member",

@@ -7333,16 +7333,16 @@
   },
   {
     "id": "login_required_for_project_access_guest",
-    "en": "Accessing a private project requires to be authenticated",
+    "en": "Accessing a private project requires authentication",
     "fr": "Accéder à un projet privé demande une authentification",
-    "es": "El acceso a un proyecto privado requiere estar autenticado ",
-    "ru": "Доступ к частному проекту требует аутентификации ",
-    "zh": "访问私有项目需要经过身份验证 ",
-    "ar": "يتطلب الوصول إلى مشروع خاص أن تتم المصادقة عليه ",
-    "fa": "دسترسی به یک پروژه خصوصی نیاز به احراز هویت دارد ",
-    "ps": "یوې خصوصي پروژې ته لاسرسی باید تصدیق شي ",
-    "bn": "একটি বেসরকারী প্রকল্প অ্যাক্সেস অনুমোদন করা প্রয়োজন ",
-    "de": "Der Zugriff auf ein privates Projekt muss authentifiziert werden "
+    "es": "Acceder a un proyecto privado requiere autenticación",
+    "ru": "Для доступа к частному проекту требуется аутентификация",
+    "zh": "访问私有项目需要身份验证",
+    "ar": "يتطلب الوصول إلى مشروع خاص المصادقة",
+    "fa": "دسترسی به یک پروژه خصوصی نیاز به احراز هویت دارد",
+    "ps": "شخصي پروژې ته لاسرسی تصدیق ته اړتیا لري",
+    "bn": "একটি ব্যক্তিগত প্রকল্প অ্যাক্সেসের জন্য প্রমাণীকরণ প্রয়োজন",
+    "de": "Für den Zugriff auf ein privates Projekt ist eine Authentifizierung erforderlich"
   },
   {
     "id": "login_required_for_project_access_non_member",
