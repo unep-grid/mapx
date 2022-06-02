@@ -131,11 +131,13 @@ export function makeSimpleLayer(opt) {
           "icon-anchor": "bottom",
           "text-field": opt.showSymbolLabel ? opt.label + "" || "" : "",
           "text-variable-anchor": opt.showSymbolLabel
-            ? ["bottom-left", "bottom-right", "top-right", "top-left"]
+            ? ["bottom-left", "bottom-right"]
             : [],
           "text-font": ["Arial"],
-          // interpolation not supported in geostyler
-          //"text-size": ["interpolate", ["linear"], ["zoom"], 1, 10, 18, 20],
+          /* 
+          * interpolation not supported in geostyler
+          * "text-size": ["interpolate", ["linear"], ["zoom"], 1, 10, 18, 20],
+          */
           "text-size" : 10,
           "text-radial-offset": 1.2,
           "text-justify": "auto",
@@ -145,11 +147,11 @@ export function makeSimpleLayer(opt) {
           "icon-halo-width": 0,
           "icon-halo-color": colB,
           "icon-color": colA,
-          "text-color": "#333",
+          "text-color": "#000",
           "text-halo-color": "#FFF",
-          "text-halo-blur": 0.7,
+          "text-halo-blur": 0.2,
           "text-halo-width": 1,
-          "text-translate": [0, 0],
+          "text-translate": [10, 10],
         },
       });
       break;

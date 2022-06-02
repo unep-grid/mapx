@@ -244,14 +244,30 @@ export async function getViewMapboxLayers(v, opt) {
       filter.push(...filterExcludeNull);
     }
 
-    if (!hasSymbol) {
+    if (hasSymbol) {
+      /**
+       * Symbol only
+       */
+      const layerSprite = _build_layer({
+        priority : 0,
+        geomType: "symbol",
+        hexColor: ruleAll.color,
+        sprite: ruleAll.sprite,
+        opacity: ruleAll.opacity,
+        size: ruleAll.size,
+        filter: filter,
+        rule: ruleAll,
+      });
+
+      layers.push(layerSprite);
+    } else {
       /**
        * Base layer and pattern
        */
       const layerAll = _build_layer({
         geomType: geomType,
         type: isNumeric ? "number" : "string",
-        priority: 0,
+        priority: 1,
         hexColor: ruleAll.color,
         sprite: ruleAll.sprite,
         opacity: ruleAll.opacity,
@@ -264,7 +280,7 @@ export async function getViewMapboxLayers(v, opt) {
 
       if (hasPattern) {
         const layerPattern = _build_layer({
-          priority: 1,
+          priority: 0,
           geomType: "pattern",
           hexColor: ruleAll.color,
           sprite: ruleAll.sprite,
@@ -275,22 +291,7 @@ export async function getViewMapboxLayers(v, opt) {
         });
         layers.push(layerPattern);
       }
-    } else {
-      /**
-       * Symbol only
-       */
 
-      const layerSprite = _build_layer({
-        geomType: "symbol",
-        hexColor: ruleAll.color,
-        sprite: ruleAll.sprite,
-        opacity: ruleAll.opacity,
-        size: ruleAll.size,
-        filter: filter,
-        rule: ruleAll,
-      });
-
-      layers.push(layerSprite);
     }
   }
 
@@ -394,7 +395,7 @@ export async function getViewMapboxLayers(v, opt) {
           size: rule.size,
           sprite: rule.sprite,
           filter: filter,
-          rule : rule
+          rule: rule,
         });
 
         layers.push(layerSprite);
@@ -423,7 +424,7 @@ export async function getViewMapboxLayers(v, opt) {
       size: ruleNulls.size,
       sprite: hasSprite ? ruleNulls.sprite : null,
       filter: filter,
-      rule : ruleNulls
+      rule: ruleNulls,
     });
     ruleNulls.filter = filter;
     // Hack to reference null in makeNumericSlider
