@@ -65,7 +65,7 @@ function sendJSON(res, data, opt) {
 /**
  * Simple send error wrapper
  * @param {Object} res Result object
- * @param {Error} error Error object
+ * @param {Error|String} error Error object
  * @param {Number} code Code of the error
  * @return null
  */
@@ -73,12 +73,18 @@ function sendError(res, error, code) {
   if (!code) {
     code = "200";
   }
-  error = {
+
+  if (isString(error)) {
+    error = { message: error };
+  }
+
+  const out = {
     message: "Error",
     ...error,
     type: "error",
   };
-  res.status(code).send(toRes(error));
+
+  res.status(code).send(toRes(out));
 }
 
 /**
@@ -449,14 +455,12 @@ function prettyJson(obj) {
 }
 
 /**
-* Print meaningfull time step 
-* @param {Number} time Starting time
-*/
-function timeStep(start){
-  return Math.round(( Date.now()-start)*1000)/1000;
+ * Print meaningfull time step
+ * @param {Number} time Starting time
+ */
+function timeStep(start) {
+  return Math.round((Date.now() - start) * 1000) / 1000;
 }
-
-
 
 /**
  * Exports
