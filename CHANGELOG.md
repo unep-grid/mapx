@@ -1,3 +1,10 @@
+  - [1.9.41](https://github.com/unep-grid/map-x-mgl/tree/1.9.41) 
+
+    - API
+        - Fixed simultaneous geoserver update
+    -APP
+        - Fixed SLD conversion for empty string : force null value instead to avoid missing literal tag
+
   - [1.9.40](https://github.com/unep-grid/map-x-mgl/tree/1.9.40) 
 
     - APP

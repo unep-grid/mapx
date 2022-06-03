@@ -43,7 +43,7 @@ services:
       - backend
       - frontend
     env_file: mapx.dev.env
-    image: fredmoser/mapx_app:1.9.40
+    image: fredmoser/mapx_app:1.9.41
     restart: always
     ports:
       - 3838
@@ -75,7 +75,7 @@ services:
       - backend
       - frontend
     env_file: mapx.dev.env
-    image: fredmoser/mapx_api:1.9.40
+    image: fredmoser/mapx_api:1.9.41
     restart: always
     ports:
       - 3030
