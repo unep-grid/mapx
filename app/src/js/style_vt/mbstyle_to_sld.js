@@ -27,9 +27,9 @@ export async function mapboxToSld(style, opt) {
   const mapbox = new MapboxStyleParser();
   const sld = new SldStyleParser();
 
-  mapbox.ignoreConversionErrors = true; 
+  mapbox.ignoreConversionErrors = true;
   const gstyle = await mapbox.readStyle(style, {});
-  
+
   if (opt.fixFilters) {
     geostylerFixFilters(gstyle, {
       fixNumeric: fixNumeric,
@@ -52,7 +52,6 @@ export async function mapboxToSld(style, opt) {
 
   return out.output;
 }
-
 
 /**
  * Merge symbolizers to avoid duplcated rules
@@ -229,11 +228,11 @@ function geostylerFixFilters(gstyle, opt) {
       if (isArray(filter)) {
         if (opKeep.includes(filter[0])) {
           /**
-           * Handle nested expr 
+           * Handle nested expr
            *           ↓
            * ["==",["get","x"],"y"]
            *
-           * ⚠️  should have been handled previously via 
+           * ⚠️  should have been handled previously via
            * 'simplifyExpression', but if used directly
            */
           if (isArray(filter[1])) {
@@ -247,11 +246,11 @@ function geostylerFixFilters(gstyle, opt) {
            * to
            * ["==","x",null]
            */
-          if (isNum) {
-            const val = filter[2];
-            if (isEmpty(val)) {
-              filter[2] = null;
-            } else {
+          const val = filter[2];
+          if (isEmpty(val)) {
+            filter[2] = null;
+          } else {
+            if (isNum) {
               filter[2] = val * 1;
             }
           }
