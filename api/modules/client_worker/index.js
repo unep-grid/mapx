@@ -1,4 +1,5 @@
 import { randomString } from "#mapx/helpers";
+import { isArray } from "@fxi/mx_valid";
 
 export const mwClientWorker = (io) => {
   return (req, res, next) => {
@@ -10,10 +11,12 @@ export const mwClientWorker = (io) => {
      */
     res.clientJobRequest = async (id_resolver, data) => {
       const sockets = await io.in(idSocket).fetchSockets();
+      if (!isArray(sockets) || sockets.length === 0) {
+        throw new Error(`No sockets for ${idSocket}`);
+      }
       const socket = sockets[0];
       return new Promise((resolve, reject) => {
         const idJob = randomString("job_");
-
         /*
          * Job done, result handling
          */
