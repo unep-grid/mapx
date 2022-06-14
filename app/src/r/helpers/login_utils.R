@@ -104,7 +104,7 @@ mxGetInitEmail <- function(browserData) {
       mxDebugMsg(paste("Login error", cond))
     }
   )
-  return(emaiGuest)
+  return(emailGuest)
 }
 
 #' Login : get user info and set cookies
