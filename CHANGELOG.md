@@ -1,3 +1,11 @@
+  - [1.9.42](https://github.com/unep-grid/map-x-mgl/tree/1.9.42) 
+ 
+    - API
+        - socket.io, Use Redis client adapter to solve issue in swarm mode
+        - websocket : during connection, if requested id/room not found, return an error
+    - APP
+        - Login function : typo email guest
+ 
   - [1.9.41](https://github.com/unep-grid/map-x-mgl/tree/1.9.41) 
 
     - API
