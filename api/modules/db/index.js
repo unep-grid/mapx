@@ -6,6 +6,13 @@ import { GeoServerRestClient } from "geoserver-node-client";
 
 const { Pool, types } = pg;
 
+/*
+* Can't export from try/catch.
+* An Error here should shut down the process
+* -> using let + reassign later  
+*/ 
+let clientRedis;
+let clientRedisAlt;
 let redisGet;
 let redisSet;
 let pgCustom;
@@ -101,10 +108,16 @@ try {
   /**
    * Redis
    */
-  const clientRedis = redis.createClient({
+  clientRedis = redis.createClient({
     url: "redis://" + s.redis.host + ":" + s.redis.port,
   });
+  clientRedisAlt = clientRedis.duplicate();
+
   clientRedis.connect().catch((e) => {
+    console.log("Unable to connect", e);
+    process.exit(-1);
+  });
+  clientRedisAlt.connect().catch((e) => {
     console.log("Unable to connect", e);
     process.exit(-1);
   });
@@ -138,6 +151,8 @@ try {
 }
 
 export {
+  clientRedis,
+  clientRedisAlt,
   redisGet,
   redisSet,
   pgCustom,

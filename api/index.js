@@ -2,6 +2,8 @@ import { settings } from "#root/settings";
 import http from "http";
 import express from "express";
 import { Server as SocketServer } from "socket.io";
+import { createAdapter } from "@socket.io/redis-adapter";
+import { clientRedis, clientRedisAlt } from "#mapx/db";
 import view from "#mapx/view";
 import query from "#mapx/query";
 import source from "#mapx/source";
@@ -50,6 +52,7 @@ app.use("/download", express.static(settings.vector.path.download));
  * Socket io
  */
 const io = new SocketServer(server, settings.socket_io);
+io.adapter(createAdapter(clientRedis, clientRedisAlt));
 io.on("connection", mwIoConnect(io));
 
 /*

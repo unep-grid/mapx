@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@fxi/mx_valid": "^0.0.19",
+    "@socket.io/redis-adapter": "^7.2.0",
     "@turf/turf": "^6.5.0",
     "ajv": "^8.10.0",
     "archiver": "^5.3.0",
@@ -38,7 +39,7 @@
     "nodemailer": "^6.7.2",
     "pg": "^8.7.3",
     "pg-copy-streams": "^6.0.2",
-    "redis": "^4.0.3",
+    "redis": "^4.1.0",
     "slugify": "^1.6.5",
     "socket.io": "^4.0.0",
     "sql-ts": "^6.1.0",
