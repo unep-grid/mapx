@@ -97,6 +97,9 @@ config[["api"]] <- list(
   protocol = "http:",
   upload_size_max = 200 * 1024^2, # 100MiB
   routes = list(
+    #
+    # http
+    #
     getApiSql = "/get/sql",
     getSearchKey = "/get/search/key",
     getIpInfo = "/get/ip",
@@ -113,14 +116,18 @@ config[["api"]] <- list(
     getViewsListByProject = "/get/views/list/project/",
     getViewsListGlobalPublic = "/get/views/list/global/public",
     getProjectsListByUser = "/get/projects/list/user",
-    downloadSourceCreate = "/get/source/", #to remove
-    getSourceDownload = "/get/source/",
-    downloadSourceGet = "/", # location given by the api
+    getSourceDownload = "/get/source/", #to replace by ws route
     uploadImage = "/upload/image/",
     uploadVector = "/upload/vector/",
     postEmail = "/send/mail",
     collectLogs = "/collect/logs/",
-    updateGeoserver = "/get/geoserver/rebuild/"
+    #
+    # ws
+    #
+    updateGeoserver = "/ws/update/geoserver",
+    downloadSource =  "/ws/download/source",
+    testJobSum = "/ws/get/test/job/sum",
+    testJobEcho =  "/ws/get/test/job/echo"
   )
 )
 

@@ -1,8 +1,8 @@
-import {el, elSpanTranslate} from './el_mapx';
-import {modal} from './mx_helper_modal.js';
-import {getDictItem, updateLanguageElements} from './language';
-import {getApiUrl} from './api_routes';
-import {isString} from './is_test';
+import { el, elSpanTranslate } from "./el_mapx";
+import { modal } from "./mx_helper_modal.js";
+import { getDictItem, updateLanguageElements } from "./language";
+import { getApiUrl } from "./api_routes";
+import { isString } from "./is_test";
 import {
   handleRequestMessage,
   sendData,
@@ -10,26 +10,27 @@ import {
   formatByteSize,
   path,
   parseTemplate,
-  makeId
-} from './mx_helper_misc.js';
+  makeId,
+} from "./mx_helper_misc.js";
+import { settings } from "./settings";
 
 export function triggerUploadForm(opt) {
   /*
    * Get elements
    */
   const elForm = document.getElementById(opt.idForm);
-  const elTitle = elForm.querySelector('#txtUploadSourceFileName');
-  const elEmail = elForm.querySelector('#txtEmailSourceUpload');
-  const elButton = document.getElementById('btnSourceUpload');
-  const elEpsgCode = elForm.querySelector('#epsgTextInput');
+  const elTitle = elForm.querySelector("#txtUploadSourceFileName");
+  const elEmail = elForm.querySelector("#txtEmailSourceUpload");
+  const elButton = document.getElementById("btnSourceUpload");
+  const elEpsgCode = elForm.querySelector("#epsgTextInput");
 
   /*
    * Create fake input
    */
-  const elInput = el('input', {
-    type: 'file',
-    class: 'mx-hide',
-    on: ['change', upload]
+  const elInput = el("input", {
+    type: "file",
+    class: "mx-hide",
+    on: ["change", upload],
   });
 
   elForm.appendChild(elInput);
@@ -42,31 +43,31 @@ export function triggerUploadForm(opt) {
     /*
      * Disable inputs
      */
-    elEmail.setAttribute('disabled', true);
-    elTitle.setAttribute('disabled', true);
-    elButton.setAttribute('disabled', true);
-    elEpsgCode.setAttribute('disabled', true);
+    elEmail.setAttribute("disabled", true);
+    elTitle.setAttribute("disabled", true);
+    elButton.setAttribute("disabled", true);
+    elEpsgCode.setAttribute("disabled", true);
 
     /**
      * Get values
      */
     const title = elTitle.value;
     const file = elInput.files[0];
-    const epsg = elEpsgCode.value + '';
+    const epsg = elEpsgCode.value + "";
 
     uploadSource({
       file: file,
       title: title,
       sourceSrs: epsg,
-      selectorProgressContainer: elForm
+      selectorProgressContainer: elForm,
     });
   }
 }
 
 export function uploadGeoJSONModal(idView) {
   mx.data.geojson.getItem(idView).then(function (item) {
-    const geojson = path(item, 'view.data.source.data');
-    const title = path(item, 'view.data.title.en');
+    const geojson = path(item, "view.data.source.data");
+    const title = path(item, "view.data.title.en");
     let hasIssue = false;
     if (!title) {
       title = idView;
@@ -75,37 +76,37 @@ export function uploadGeoJSONModal(idView) {
       return;
     }
 
-    const elBtnUpload = el('buton', {
-      class: 'btn btn-default',
-      on: ['click', upload],
+    const elBtnUpload = el("buton", {
+      class: "btn btn-default",
+      on: ["click", upload],
       dataset: {
-        lang_key: 'btn_upload'
-      }
-    });
-
-    const elInput = el('input', {
-      class: 'form-control',
-      id: 'txtInputSourceTitle',
-      type: 'text',
-      placeholder: 'Source title',
-      value: title,
-      on: ['input', validateTitle]
-    });
-
-    const elWarning = el('span');
-    const elProgress = el('div');
-
-    const elLabel = el('label', {
-      dataset: {
-        lang_key: 'src_upload_add'
+        lang_key: "btn_upload",
       },
-      for: 'txtInputSourceTitle'
+    });
+
+    const elInput = el("input", {
+      class: "form-control",
+      id: "txtInputSourceTitle",
+      type: "text",
+      placeholder: "Source title",
+      value: title,
+      on: ["input", validateTitle],
+    });
+
+    const elWarning = el("span");
+    const elProgress = el("div");
+
+    const elLabel = el("label", {
+      dataset: {
+        lang_key: "src_upload_add",
+      },
+      for: "txtInputSourceTitle",
     });
 
     const elFormGroup = el(
-      'div',
+      "div",
       {
-        class: 'form-group'
+        class: "form-group",
       },
       elLabel,
       elInput,
@@ -113,55 +114,55 @@ export function uploadGeoJSONModal(idView) {
       elProgress
     );
 
-    const elFormUpload = el('div', elFormGroup);
+    const elFormUpload = el("div", elFormGroup);
 
     const elModal = modal({
-      title: el('div', {
+      title: el("div", {
         dataset: {
-          lang_key: 'src_upload_add'
-        }
+          lang_key: "src_upload_add",
+        },
       }),
       content: elFormUpload,
       buttons: [elBtnUpload],
-      addBackground: true
+      addBackground: true,
     });
 
     updateLanguageElements({
-      el: elModal
+      el: elModal,
     });
 
     function upload() {
       if (hasIssue) {
         return;
       }
-      elBtnUpload.setAttribute('disabled', true);
+      elBtnUpload.setAttribute("disabled", true);
       elBtnUpload.remove();
       uploadSource({
         title: elInput.value || title || idView,
         geojson: geojson,
-        selectorProgressContainer: elProgress
+        selectorProgressContainer: elProgress,
       });
     }
 
     function validateTitle() {
       const title = elInput.value.trim();
-      const v = mx.settings.validation.input.nchar;
+      const v = settings.validation.input.nchar;
       hasIssue = false;
       if (title.length < v.sourceTitle.min) {
         hasIssue = true;
-        elWarning.innerText = 'Title too short';
+        elWarning.innerText = "Title too short";
       }
       if (title.length > v.sourceTitle.max) {
         hasIssue = true;
-        elWarning.innerText = 'Title too long';
+        elWarning.innerText = "Title too long";
       }
       if (hasIssue) {
-        elFormGroup.classList.add('has-error');
-        elBtnUpload.setAttribute('disabled', true);
+        elFormGroup.classList.add("has-error");
+        elBtnUpload.setAttribute("disabled", true);
       } else {
-        elBtnUpload.removeAttribute('disabled');
-        elFormGroup.classList.remove('has-error');
-        elWarning.innerText = '';
+        elBtnUpload.removeAttribute("disabled");
+        elFormGroup.classList.remove("has-error");
+        elWarning.innerText = "";
       }
     }
   });
@@ -175,13 +176,13 @@ export function uploadGeoJSONModal(idView) {
  * @return {Promise<Boolean>} Is the file below limit =
  */
 export async function isUploadFileSizeValid(file, opt) {
-  opt = Object.assign({}, {showModal: true}, opt);
-  const sizeMax = mx.settings.api.upload_size_max;
+  opt = Object.assign({}, { showModal: true }, opt);
+  const sizeMax = settings.api.upload_size_max;
   const isFile = file instanceof File;
   const isData = file && !isFile;
 
   if (!isFile && !isData) {
-    throw new Error('maxSizeFileTest : input is not a file or data');
+    throw new Error("maxSizeFileTest : input is not a file or data");
   }
 
   const size = await getSizeOf(file, false);
@@ -189,14 +190,14 @@ export async function isUploadFileSizeValid(file, opt) {
   const sizeOk = size <= sizeMax;
   if (!sizeOk) {
     if (opt.showModal) {
-      const elMessage = el('span');
-      const msg = await getDictItem('api_upload_file_max_size_exceeded');
+      const elMessage = el("span");
+      const msg = await getDictItem("api_upload_file_max_size_exceeded");
       const sizeHuman = formatByteSize(sizeMax);
-      elMessage.innerText = parseTemplate(msg, {size: sizeHuman});
+      elMessage.innerText = parseTemplate(msg, { size: sizeHuman });
       const modal = modal({
-        title: elSpanTranslate('api_upload_file_max_size_exceeded_title'),
-        id: 'modal_max_size_exceeded',
-        content: elMessage
+        title: elSpanTranslate("api_upload_file_max_size_exceeded_title"),
+        id: "modal_max_size_exceeded",
+        content: elMessage,
       });
     }
   }
@@ -224,7 +225,7 @@ export async function uploadSource(o) {
    * Server will validate token of the user,
    * but we can avoid much trouble here
    */
-  if (mx.settings.user.guest) {
+  if (settings.user.guest) {
     return;
   }
   if (!isSizeValid) {
@@ -234,18 +235,18 @@ export async function uploadSource(o) {
   /**
    ** rebuilding formdata, as append seems to add value in UI...
    **/
-  const host = getApiUrl('uploadVector');
+  const host = getApiUrl("uploadVector");
 
   if (o.geojson) {
     o.geojson = isString(o.geojson) ? o.geojson : JSON.stringify(o.geojson);
     let filename = o.title;
 
     if (o.title.search(/.geojson$/) === -1) {
-      filename = makeId(10) + '.geojson';
+      filename = makeId(10) + ".geojson";
     }
 
     o.file = new File([o.geojson], filename, {
-      type: 'application/json'
+      type: "application/json",
     });
   }
 
@@ -253,13 +254,13 @@ export async function uploadSource(o) {
    * create upload form
    */
   const form = new FormData();
-  form.append('title', o.title);
-  form.append('vector', o.file || o.geojson);
-  form.append('token', o.token || mx.settings.user.token);
-  form.append('idUser', o.idUser || mx.settings.user.id);
-  form.append('email', o.email || mx.settings.user.email);
-  form.append('project', o.idProject || mx.settings.project.id);
-  form.append('sourceSrs', o.sourceSrs || '');
+  form.append("title", o.title);
+  form.append("vector", o.file || o.geojson);
+  form.append("token", o.token || settings.user.token);
+  form.append("idUser", o.idUser || settings.user.id);
+  form.append("email", o.email || settings.user.email);
+  form.append("project", o.idProject || settings.project.id);
+  form.append("sourceSrs", o.sourceSrs || "");
 
   /**
    * Create ui
@@ -270,36 +271,35 @@ export async function uploadSource(o) {
       : document.querySelector(o.selectorProgressContainer);
 
   /* log messages */
-  let elProgressBar,
-    elProgressMessage;
+  let elProgressBar, elProgressMessage;
 
   const elProgressContainer = el(
-    'div',
+    "div",
     /**
      * Progress bar
      */
-    el('label', {
-      dataset: {lang_key: 'api_progress_title'}
+    el("label", {
+      dataset: { lang_key: "api_progress_title" },
     }),
     el(
-      'div',
+      "div",
       {
-        class: 'mx-inline-progress-container'
+        class: "mx-inline-progress-container",
       },
-      (elProgressBar = el('div', {
-        class: 'mx-inline-progress-bar'
+      (elProgressBar = el("div", {
+        class: "mx-inline-progress-bar",
       }))
     ),
     /**
      * Message box
      */
-    el('label', {dataset: {lang_key: 'api_log_title'}}),
+    el("label", { dataset: { lang_key: "api_log_title" } }),
     el(
-      'div',
+      "div",
       {
-        class: ['form-control', 'mx-logs']
+        class: ["form-control", "mx-logs"],
       },
-      (elProgressMessage = el('ul'))
+      (elProgressMessage = el("ul"))
     )
   );
 
@@ -321,16 +321,16 @@ export async function uploadSource(o) {
     },
     onError: function (er) {
       cleanMsg(er);
-    }
+    },
   });
 
   function updateTranslation() {
-    updateLanguageElements({el: elProgressContainer});
+    updateLanguageElements({ el: elProgressContainer });
   }
 
   function updateLayerList() {
-    Shiny.onInputChange('mx_client_update_source_list', {
-      date: new Date() * 1
+    Shiny.onInputChange("mx_client_update_source_list", {
+      date: new Date() * 1,
     });
   }
 
@@ -339,11 +339,11 @@ export async function uploadSource(o) {
   function cleanMsg(msg) {
     return handleRequestMessage(msg, messageStore, {
       end: function () {
-        const li = el('li', {
+        const li = el("li", {
           dataset: {
-            lang_key: 'api_upload_ready'
+            lang_key: "api_upload_ready",
           },
-          class: ['mx-log-item', 'mx-log-green']
+          class: ["mx-log-item", "mx-log-green"],
         });
         elProgressMessage.appendChild(li);
         updateLayerList();
@@ -351,9 +351,9 @@ export async function uploadSource(o) {
       },
       error: function (msg) {
         const li = el(
-          'li',
+          "li",
           {
-            class: ['mx-log-item', 'mx-log-red']
+            class: ["mx-log-item", "mx-log-red"],
           },
           msg
         );
@@ -361,9 +361,9 @@ export async function uploadSource(o) {
       },
       message: function (msg) {
         const li = el(
-          'li',
+          "li",
           {
-            class: ['mx-log-item', 'mx-log-blue']
+            class: ["mx-log-item", "mx-log-blue"],
           },
           msg
         );
@@ -371,25 +371,25 @@ export async function uploadSource(o) {
       },
       warning: function (msg) {
         const li = el(
-          'li',
+          "li",
           {
-            class: ['mx-log-item', 'mx-log-orange']
+            class: ["mx-log-item", "mx-log-orange"],
           },
           msg
         );
         elProgressMessage.appendChild(li);
       },
       progress: function (progress) {
-        elProgressBar.style.width = progress + '%';
+        elProgressBar.style.width = progress + "%";
         if (progress >= 99.9 && !uploadDone) {
           uploadDone = true;
           const li = el(
-            'li',
+            "li",
             {
-              class: ['mx-log-item', 'mx-log-white'],
+              class: ["mx-log-item", "mx-log-white"],
               dataset: {
-                lang_key: 'api_upload_done_wait_db'
-              }
+                lang_key: "api_upload_done_wait_db",
+              },
             },
             msg
           );
@@ -400,15 +400,15 @@ export async function uploadSource(o) {
       default: function (msg) {
         if (msg && msg.length > 3) {
           const li = el(
-            'li',
+            "li",
             {
-              class: ['mx-log-item', 'mx-log-gray']
+              class: ["mx-log-item", "mx-log-gray"],
             },
             msg
           );
           elProgressMessage.appendChild(li);
         }
-      }
+      },
     });
   }
 }

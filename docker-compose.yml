@@ -1,16 +1,29 @@
-version: '3.2'
+version: "3.8"
+
 # ports : host:container
+# Service format order :
+# image,
+# restart
+# depends_pn
+# env_file,
+# port,
+# networks,
+# volumes,
+# command,
+# deploy
+# labels
+
+volumes:
+  searchmeili:
+networks:
+  frontend:
+  backend:
+  traefik-frontend:
+    external: true
+
 services:
   traefik:
-    networks:
-      - backend
-      - frontend
     image: traefik:v2.3.2
-    command:
-      - '--api.insecure=true'
-      - '--providers.docker=true'
-      - '--providers.docker.exposedbydefault=false'
-      - '--entrypoints.web.address=:80'
     ports:
       - target: 80
         published: 8880
@@ -18,159 +31,233 @@ services:
       - target: 8080
         published: 8881
         mode: host
+    networks:
+      - backend
+      - frontend
+      - traefik-frontend
+    command:
+      - --api.insecure=true
+      - --providers.docker=true
+      #- --providers.docker.swarmmode=true
+      - --providers.docker.watch=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./_shared/traefik/certs:/certs
   search:
-    networks:
-      - backend
-      - frontend
     image: fredmoser/meili:0.20.0-alpine
+    restart: on-failure
     env_file: mapx.dev.env
-    restart: always
-    hostname: search
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.search.rule=Host(`search.mapx.localhost`)'
-      - 'traefik.http.routers.search.entrypoints=web'
-      - 'traefik.http.services.search.loadbalancer.server.port=7700'
-    volumes:
-      - searchmeili:/data.ms
     ports:
       - 7700
-  app:
     networks:
       - backend
       - frontend
-    env_file: mapx.dev.env
+      - traefik-frontend
+    volumes:
+      - searchmeili:/data.ms
+    labels:
+      traefik.enable: true
+      traefik.http.routers.search.rule: Host(`search.mapx.localhost`)
+      traefik.http.routers.search.entrypoints: web
+      traefik.http.services.search.loadbalancer.server.port: 7700
+  app:
     image: fredmoser/mapx_app:1.9.42
-    restart: always
+    restart: on-failure
+    depends_on:
+      - api
+      - pg
+      - traefik
+    env_file: mapx.dev.env
     ports:
       - 3838
-    hostname: mx_app
+    networks:
+      - backend
+      - frontend
+      - traefik-frontend
+    volumes:
+      - ./app:/app
+      - ./_shared:/shared
+    deploy:
+      mode: replicated
+      replicas: 2
+    labels:
+      traefik.enable: true
+      traefik.http.middlewares.cors.headers.accesscontrolallowmethods: GET
+      traefik.http.middlewares.cors.headers.accesscontrolalloworigin: "*"
+      traefik.http.middlewares.cors.headers.accesscontrolmaxage: 100
+      traefik.http.middlewares.cors.headers.addvaryheader: true
+      traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL: no-cache
+      traefik.http.routers.app.rule: Host(`app.mapx.localhost`)
+      traefik.http.routers.app.entrypoints: web
+      traefik.http.routers.app.middlewares: cors,nocache
+      traefik.http.services.app.loadbalancer.server.port: 3838
+  app_dev:
+    image: fredmoser/mapx_app:1.9.42
+    restart: on-failure
     depends_on:
       - pg
       - traefik
-    labels:
-      - 'traefik.enable=true'
-      - "traefik.http.middlewares.cors.headers.accesscontrolallowmethods=GET"
-      - "traefik.http.middlewares.cors.headers.accesscontrolalloworigin=*"
-      - "traefik.http.middlewares.cors.headers.accesscontrolmaxage=100"
-      - "traefik.http.middlewares.cors.headers.addvaryheader=true"
-      - 'traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL:no-cache'
-      - 'traefik.http.routers.app.rule=Host(`app.mapx.localhost`)'
-      - 'traefik.http.routers.app.entrypoints=web'
-      - 'traefik.http.routers.app.service=app'
-      - 'traefik.http.services.app.loadbalancer.server.port=3838'
-      - 'traefik.http.routers.dev.rule=Host(`dev.mapx.localhost`)'
-      - 'traefik.http.routers.dev.entrypoints=web'
-      - 'traefik.http.routers.dev.service=dev'
-      - 'traefik.http.services.dev.loadbalancer.server.port=3434'
-      - "traefik.http.routers.dev.middlewares=cors,nocache"
-    volumes:
-      - ./app:/appdev
-      - ./_shared:/shared
-  api:
+    env_file: mapx.dev.env
+    environment:
+      API_HOST: api_dev
+      API_PORT: 3333
+      API_PORT_PUBLIC: 8880
+      API_HOST_PUBLIC: apidev.mapx.localhost
+    ports:
+      - 3434
     networks:
       - backend
       - frontend
-    env_file: mapx.dev.env
+      - traefik-frontend
+    volumes:
+      - ./app:/app
+      - ./_shared:/shared
+    command: ["tail", "-f", "/dev/null"]
+    labels:
+      traefik.enable: true
+      traefik.http.middlewares.cors.headers.accesscontrolallowmethods: GET
+      traefik.http.middlewares.cors.headers.accesscontrolalloworigin: "*"
+      traefik.http.middlewares.cors.headers.accesscontrolmaxage: 100
+      traefik.http.middlewares.cors.headers.addvaryheader: true
+      traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL: no-cache
+      traefik.http.routers.dev.rule: Host(`dev.mapx.localhost`)
+      traefik.http.routers.dev.entrypoints: web
+      traefik.http.routers.dev.middlewares: cors,nocache
+      traefik.http.services.dev.loadbalancer.server.port: 3434
+  api:
     image: fredmoser/mapx_api:1.9.42
-    restart: always
-    ports:
-      - 3030
-    hostname: mx_api
+    restart: on-failure
     depends_on:
       - pg
       - redis
       - traefik
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL:no-cache'
-      - 'traefik.http.middlewares.wcompress.compress=true'
-      - 'traefik.http.middlewares.wcompress.compress.excludedcontenttypes=text/plain'
-      - 'traefik.http.routers.api.rule=Host(`api.mapx.localhost`)'
-      - 'traefik.http.routers.api.entrypoints=web'
-      - 'traefik.http.routers.api.service=api'
-      - 'traefik.http.services.api.loadbalancer.server.port=3030'
-      - 'traefik.http.routers.apidev.rule=Host(`apidev.mapx.localhost`)'
-      - 'traefik.http.routers.apidev.entrypoints=web'
-      - 'traefik.http.routers.apidev.service=apidev'
-      - 'traefik.http.services.apidev.loadbalancer.server.port=3333'
-    volumes:
-      - ./api:/apidev
-      - ./_shared:/shared
-  geoserver:
+    env_file: mapx.dev.env
+    ports:
+      - 3030
     networks:
       - backend
       - frontend
+      - traefik-frontend
+    volumes:
+      - ./api:/api
+      - ./_shared:/shared
+    deploy:
+      mode: replicated
+      replicas: 2
+    labels:
+      traefik.enable: true
+      #traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL: no-cache
+      traefik.http.middlewares.wcompress.compress: true
+      traefik.http.middlewares.wcompress.compress.excludedcontenttypes: text/plain
+      traefik.http.routers.api.rule: Host(`api.mapx.localhost`)
+      traefik.http.routers.api.entrypoints: web
+      traefik.http.routers.api.middlewares: wcompress,nocache
+      traefik.http.services.api.loadbalancer.server.port: 3030
+  api_dev:
+    image: fredmoser/mapx_api:1.9.42
+    restart: on-failure
+    depends_on:
+      - pg
+      - redis
+      - traefik
     env_file: mapx.dev.env
+    environment:
+      API_HOST: api_dev
+      API_HOST_PUBLIC: apidev.mapx.localhost
+    ports:
+      - 3333
+    networks:
+      - backend
+      - frontend
+      - traefik-frontend
+    volumes:
+      - ./api:/api
+      - ./_shared:/shared
+    command: ["tail", "-f", "/dev/null"]
+    labels:
+      traefik.enable: true
+      traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL: no-cache
+      traefik.http.middlewares.wcompress.compress: true
+      traefik.http.middlewares.wcompress.compress.excludedcontenttypes: text/plain
+      traefik.http.routers.apidev.rule: Host(`apidev.mapx.localhost`)
+      traefik.http.routers.apidev.entrypoints: web
+      traefik.http.routers.apidev.middlewares: wcompress,nocache
+      traefik.http.services.apidev.loadbalancer.server.port: 3333
+  geoserver:
     image: fredmoser/geoserver:2.20.4
+    restart: on-failure
+    env_file: mapx.dev.env
     ports:
       - 8882:8080
+    networks:
+      - backend
+      - frontend
+      - traefik-frontend
     volumes:
       - ./_shared/geoserver:/geoserver/db
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.geoserver.rule=Host(`geoserver.mapx.localhost`)'
-      - 'traefik.http.routers.geoserver.entrypoints=web'
-      - 'traefik.http.services.geoserver.loadbalancer.server.port=8080'
+      traefik.enable: true
+      traefik.http.routers.geoserver.rule: Host(`geoserver.mapx.localhost`)
+      traefik.http.routers.geoserver.entrypoints: web
+      traefik.http.services.geoserver.loadbalancer.server.port: 8080
+    deploy:
+      replicas: 1
   pg:
+    image: ghcr.io/baosystems/postgis:13-3.2
+    restart: on-failure
+    env_file: mapx.dev.env
+    ports:
+      - 5432:5432
     networks:
       - backend
       - frontend
-    env_file: mapx.dev.env
-    #image: postgis/postgis:13-3.1-alpine # https://github.com/postgis/docker-postgis/issues/216
-    image: ghcr.io/baosystems/postgis:13-3.2
-    restart: always
-    hostname: pg
+      - traefik-frontend
     volumes:
       - ./_shared:/shared
       - ./pg/init/script_initdb.sh:/docker-entrypoint-initdb.d/script_initdb.sh
       - ./pg/init/sql_files:/docker-entrypoint-initdb.d/sql_files
-    ports:
-      - 5432:5432
   routines:
+    image: fredmoser/mapx_api:1.9.42
+    restart: on-failure
+    env_file: mapx.dev.env
     networks:
       - backend
-    env_file: mapx.dev.env
-    image: fredmoser/mx-api-node:1.9.40-alpha.3-alpine
-    hostname: mx_routines
     depends_on:
       - pg
       - redis
       - traefik
       - search
-    command: ['node', '/routinesdev/routines.js']
     volumes:
-      - ./api:/routinesdev
+      - ./api:/api
+    command: ["node", "/api/routines.js"]
+    deploy:
+      replicas: 1
   redis:
-    networks:
-      - backend
     image: redis:6.2.6-alpine3.15
-    restart: always
-    hostname: redis
-    command: redis-server /usr/local/etc/redis/redis.conf
-    volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    restart: on-failure
     ports:
       - 6379
+    networks:
+      - backend
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
   mailhog:
+    image: mailhog/mailhog:v1.0.1
+    restart: on-failure
     networks:
       - frontend
-    image: mailhog/mailhog
+      - traefik-frontend
     logging:
       driver: none
     command:
-      - '--invite-jim=true'
-      - '--jim-reject-sender=0.1'
+      - --invite-jim=false
+      - --jim-reject-sender=0.5
+      - --jim-disconnect=0.8
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.mailhog.rule=Host(`mail.mapx.localhost`)'
-      - 'traefik.http.routers.mailhog.entrypoints=web'
-      - 'traefik.http.services.mailhog.loadbalancer.server.port=8025'
-volumes:
-  searchmeili:
-networks:
-  frontend:
-  backend:
+      traefik.enable: true
+      traefik.http.routers.mailhog.rule: Host(`mail.mapx.localhost`)
+      traefik.http.routers.mailhog.entrypoints: web
+      traefik.http.services.mailhog.loadbalancer.server.port: 8025

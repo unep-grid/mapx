@@ -160,11 +160,11 @@ $ npm run dev
 - Launch the server from within the running `app` container. In another terminal window, launch the dev server :
 
 ```sh
-docker compose exec -w /appdev app R
+docker compose exec app R
 > source('run.R') 
 
 # OR, as a single line for a non-interactive session:
-docker compose exec -w /appdev app Rscript --vanilla run.R
+docker compose exec app Rscript --vanilla run.R
 ```
 
 Then, an instance of mapx should be available at <http://dev.mapx.localhost:8880/> for which the source code from `./app/` is mounted as `/appdev/` in the container.
@@ -195,7 +195,7 @@ Start the `Express.js` development server:
 
 ```sh
 $ docker compose up -d
-$ docker compose exec -w /apidev api node inspect index.js port=3333
+$ docker compose exec api node inspect index.js port=3333
 debug> c
 ```
 
@@ -217,14 +217,14 @@ API_HOST_PUBLIC_DEV=api.mapx.localhost
 Run tests within the development container:
 
 ```sh
-docker compose exec -w /apidev api sh
+docker compose exec api sh
 npm run test
 ```
 
 ### Development session for the `routines` service
 
 ```sh
-docker compose exec -w /routinesdev routines node inspect routines.js
+docker compose exec routines node inspect routines.js
 debug> c
 ```
 

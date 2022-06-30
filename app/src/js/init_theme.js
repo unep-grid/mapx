@@ -1,24 +1,26 @@
-import {Theme} from './theme';
-import {getQueryParameter} from './mx_helper_url.js';
+import { Theme } from "./theme";
+import { getQueryParameter } from "./url_utils";
+import { settings } from "./settings";
 /**
  * Set theme
  */
-const queryIdTheme = getQueryParameter('theme')[0];
-const queryColors = getQueryParameter(['colors', 'style'])[0];
+const queryIdTheme = getQueryParameter("theme")[0];
+const queryColors = getQueryParameter(["colors", "style"])[0];
 const colors = queryIdTheme ? null : queryColors;
 
-mx.theme = new Theme({
+const theme = new Theme({
   idTheme: queryIdTheme,
-  colors: colors || mx.settings.ui.colors
+  colors: colors || settings.ui.colors,
 });
+
+export { theme };
 
 if (!colors) {
   /**
    * Auto
    */
-  initMatchMedia(mx.theme);
+  initMatchMedia(theme);
 }
-
 
 /*
  * Init match media query + listener
@@ -32,17 +34,17 @@ function initMatchMedia(theme) {
     /**
      * theme color auto
      */
-    const wMdark = window.matchMedia('(prefers-color-scheme: dark)');
-    const wMlight = window.matchMedia('(prefers-color-scheme: light)');
+    const wMdark = window.matchMedia("(prefers-color-scheme: dark)");
+    const wMlight = window.matchMedia("(prefers-color-scheme: light)");
 
     if (wMdark.matches) {
-      theme.setColorsByThemeId('smartgray');
+      theme.setColorsByThemeId("smartgray");
     }
-    wMdark.addEventListener('change', (e) => {
-      return e.matches && theme.setColorsByThemeId('smartgray');
+    wMdark.addEventListener("change", (e) => {
+      return e.matches && theme.setColorsByThemeId("smartgray");
     });
-    wMlight.addEventListener('change', (e) => {
-      return e.matches && theme.setColorsByThemeId('mapx');
+    wMlight.addEventListener("change", (e) => {
+      return e.matches && theme.setColorsByThemeId("mapx");
     });
   } catch (e) {
     console.warn(e);

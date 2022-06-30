@@ -41,3 +41,7 @@ export function reload() {
 export function getVersion() {
   return mx.version;
 }
+
+export function isProd(){
+ return location.protocol === 'https:';
+}

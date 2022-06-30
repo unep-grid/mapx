@@ -12598,7 +12598,7 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
     "fr": "",
     "es": "",
     "ru": "",

@@ -1,26 +1,29 @@
-
+import { settings } from "./settings";
+import { path, all } from "./mx_helper_misc.js";
+import { el } from "./el/src/index.js";
+import { getDictItem, updateLanguageElements } from "./language";
+import { modal } from "./mx_helper_modal";
+import { isEmail, isUrl, isEmpty, isStringRange, isDateString } from "./is_test";
 /**
-* Validate metadata for a view
-* @param {Object} view View object
-* @return {{results: Object, valid:Boolean, validated:Boolean}} 
-*/
+ * Validate metadata for a view
+ * @param {Object} view View object
+ * @return {{results: Object, valid:Boolean, validated:Boolean}}
+ */
 export function validateMetadataView(view) {
-  const h = mx.helpers;
-
   const out = {
     validated: false,
     valid: false,
-    results: {}
+    results: {},
   };
 
   try {
-    const meta = h.path(view,'_meta',{});
-    const attr = h.path(view, 'data.attribute.name');
+    const meta = path(view, "_meta", {});
+    const attr = path(view, "data.attribute.name");
     out.results = validateMetadataTests(meta, attr);
     out.validated = true;
-    out.valid = h.all(out.results.tests.map((t) => t.valid));
+    out.valid = all(out.results.tests.map((t) => t.valid));
   } catch (e) {
-    console.error('validateMetadataView error', e);
+    console.error("validateMetadataView error", e);
   }
   /**
    * Type not handled
@@ -34,7 +37,7 @@ export function validateMetadataView(view) {
  * @return {Array} array of tests
  */
 export function validateMetadataTests(meta, attr) {
-  const v = mx.settings.validation.input.nchar;
+  const v = settings.validation.input.nchar;
   const tests = [];
 
   if (attr) {
@@ -57,13 +60,13 @@ export function validateMetadataTests(meta, attr) {
       validateContact(meta),
       validateIssuance(meta),
       validateSource(meta),
-      validateLicense(meta, v.sourceLicense.min, v.sourceLicense.max)
+      validateLicense(meta, v.sourceLicense.min, v.sourceLicense.max),
     ]
   );
 
   return {
     tests: tests,
-    meta: meta
+    meta: meta,
   };
 }
 /**
@@ -77,24 +80,23 @@ export function validateMetadataTests(meta, attr) {
 function validateAttribute(meta, attr, min, max) {
   min = min || 3;
   max = max || 10;
-  const h = mx.helpers;
   const reasons = [];
-  const attributes = h.path(meta, 'text.attributes', {});
+  const attributes = path(meta, "text.attributes", {});
   // if no attr given, get the first one.
   attr = attr || Object.keys(attributes)[0];
-  const str = h.path(attributes, attr + '.en', '');
-  const hasAttr = h.isStringRange(attr) && h.isStringRange(str, min, max);
+  const str = path(attributes, attr + ".en", "");
+  const hasAttr = isStringRange(attr) && isStringRange(str, min, max);
 
   if (!hasAttr) {
-    reasons.push('validate_meta_invalid_attribute');
+    reasons.push("validate_meta_invalid_attribute");
   }
 
   const valid = hasAttr;
 
   return {
-    type: 'validate_meta_attribute',
+    type: "validate_meta_attribute",
     valid: valid,
-    reasons: reasons
+    reasons: reasons,
   };
 }
 
@@ -110,18 +112,17 @@ function validateAbstract(meta, min, max) {
   min = min || 3;
   max = max || 10;
   const reasons = [];
-  const h = mx.helpers;
-  const str = h.path(meta, 'text.abstract.en', '');
-  const hasAbstract = h.isStringRange(str, min, max);
+  const str = path(meta, "text.abstract.en", "");
+  const hasAbstract = isStringRange(str, min, max);
 
   if (!hasAbstract) {
-    reasons.push('validate_meta_invalid_abstract');
+    reasons.push("validate_meta_invalid_abstract");
   }
 
   return {
-    type: 'validate_meta_abstract',
+    type: "validate_meta_abstract",
     valid: hasAbstract,
-    reasons: reasons
+    reasons: reasons,
   };
 }
 
@@ -137,18 +138,17 @@ function validateTitle(meta, min, max) {
   min = min || 3;
   max = max || 10;
   const reasons = [];
-  const h = mx.helpers;
-  const str = h.path(meta, 'text.title.en', '');
-  const hasTitle = h.isStringRange(str, min, max);
+  const str = path(meta, "text.title.en", "");
+  const hasTitle = isStringRange(str, min, max);
 
   if (!hasTitle) {
-    reasons.push('validate_meta_invalid_title');
+    reasons.push("validate_meta_invalid_title");
   }
 
   return {
-    type: 'validate_meta_title',
+    type: "validate_meta_title",
     valid: hasTitle,
-    reasons: reasons
+    reasons: reasons,
   };
 }
 
@@ -164,25 +164,22 @@ function validateKeywords(meta, min, max) {
   min = min || 3;
   max = max || 10;
   const reasons = [];
-  const h = mx.helpers;
-  const keywords = h.path(meta, 'text.keywords.keys', []);
-  const hasKeywords = !h.isEmpty(keywords);
-  const hasValidKeywords = h.all(
-    keywords.map((k) => h.isStringRange(k, min, max))
-  );
+  const keywords = path(meta, "text.keywords.keys", []);
+  const hasKeywords = !isEmpty(keywords);
+  const hasValidKeywords = all(keywords.map((k) => isStringRange(k, min, max)));
 
   if (!hasKeywords) {
-    reasons.push('validate_meta_no_keyword');
+    reasons.push("validate_meta_no_keyword");
   }
 
   if (!hasValidKeywords) {
-    reasons.push('validate_meta_invalid_keyword');
+    reasons.push("validate_meta_invalid_keyword");
   }
 
   return {
-    type: 'validate_meta_keyword',
+    type: "validate_meta_keyword",
     valid: hasKeywords,
-    reasons: reasons
+    reasons: reasons,
   };
 }
 
@@ -198,25 +195,22 @@ function validateKeywordsM49(meta, min, max) {
   min = min || 3;
   max = max || 10;
   const reasons = [];
-  const h = mx.helpers;
-  const keywords = h.path(meta, 'text.keywords.keys_m49', []);
-  const hasKeywords = !h.isEmpty(keywords);
-  const hasValidKeywords = h.all(
-    keywords.map((k) => h.isStringRange(k, min, max))
-  );
+  const keywords = path(meta, "text.keywords.keys_m49", []);
+  const hasKeywords = !isEmpty(keywords);
+  const hasValidKeywords = all(keywords.map((k) => isStringRange(k, min, max)));
 
   if (!hasKeywords) {
-    reasons.push('validate_meta_no_keyword');
+    reasons.push("validate_meta_no_keyword");
   }
 
   if (!hasValidKeywords) {
-    reasons.push('validate_meta_invalid_keyword');
+    reasons.push("validate_meta_invalid_keyword");
   }
 
   return {
-    type: 'validate_meta_keyword_m49',
+    type: "validate_meta_keyword_m49",
     valid: hasKeywords,
-    reasons: reasons
+    reasons: reasons,
   };
 }
 
@@ -229,24 +223,23 @@ function validateKeywordsM49(meta, min, max) {
  */
 function validateContact(meta) {
   const reasons = [];
-  const h = mx.helpers;
-  const contacts = h.path(meta, 'contact.contacts', []);
-  const hasContact = !h.isEmpty(contacts);
-  const hasValidContact = h.all(contacts.map((c) => h.isEmail(c.email)));
+  const contacts = path(meta, "contact.contacts", []);
+  const hasContact = !isEmpty(contacts);
+  const hasValidContact = all(contacts.map((c) => isEmail(c.email)));
 
   if (!hasContact) {
-    reasons.push('validate_meta_no_contact');
+    reasons.push("validate_meta_no_contact");
   }
   if (!hasValidContact) {
-    reasons.push('validate_meta_invalid_contact_email');
+    reasons.push("validate_meta_invalid_contact_email");
   }
 
-  const valid = h.isEmpty(reasons);
+  const valid = isEmpty(reasons);
 
   return {
-    type: 'validate_meta_contact',
+    type: "validate_meta_contact",
     valid: valid,
-    reasons: reasons
+    reasons: reasons,
   };
 }
 /**
@@ -258,36 +251,35 @@ function validateContact(meta) {
  * @return {Object} Validation result : type, valid, reason
  */
 function validateIssuance(meta) {
-  const h = mx.helpers;
   const reasons = [];
 
-  const hasPeriodicity = h.isStringRange(
-    h.path(meta, 'temporal.issuance.periodicity', ''),
+  const hasPeriodicity = isStringRange(
+    path(meta, "temporal.issuance.periodicity", ""),
     3
   );
-  const hasReleasedAt = h.isDateString(
-    h.path(meta, 'temporal.issuance.released_at', '')
+  const hasReleasedAt = isDateString(
+    path(meta, "temporal.issuance.released_at", "")
   );
-  const hasModifiedAt = h.isDateString(
-    h.path(meta, 'temporal.issuance.modified_at', '')
+  const hasModifiedAt = isDateString(
+    path(meta, "temporal.issuance.modified_at", "")
   );
 
   if (!hasPeriodicity) {
-    reasons.push('validate_meta_invalid_issuance_periodicity');
+    reasons.push("validate_meta_invalid_issuance_periodicity");
   }
   if (!hasReleasedAt) {
-    reasons.push('validate_meta_invalid_issuance_released_at');
+    reasons.push("validate_meta_invalid_issuance_released_at");
   }
   if (!hasModifiedAt) {
-    reasons.push('validate_meta_invalid_issuance_modified_at');
+    reasons.push("validate_meta_invalid_issuance_modified_at");
   }
 
-  const valid = h.isEmpty(reasons);
+  const valid = isEmpty(reasons);
 
   return {
-    type: 'validate_meta_issuance',
+    type: "validate_meta_issuance",
     valid: valid,
-    reasons: reasons
+    reasons: reasons,
   };
 }
 /**
@@ -304,30 +296,27 @@ function validateLicense(meta, min, max) {
   min = min || 3;
   max = max || 10;
 
-  const h = mx.helpers;
-  const licenses = h.path(meta, 'license.licenses', []);
-  const hasLicense = !h.isEmpty(licenses);
-  const hasValidLicenses = h.all(
+  const licenses = path(meta, "license.licenses", []);
+  const hasLicense = !isEmpty(licenses);
+  const hasValidLicenses = all(
     licenses.map((l) => {
-      return (
-        h.isStringRange(l.text, min, max) && h.isStringRange(l.name, min, max)
-      );
+      return isStringRange(l.text, min, max) && isStringRange(l.name, min, max);
     })
   );
 
   if (!hasLicense) {
-    reasons.push('validate_meta_no_license');
+    reasons.push("validate_meta_no_license");
   }
   if (!hasValidLicenses) {
-    reasons.push('validate_meta_invalid_license');
+    reasons.push("validate_meta_invalid_license");
   }
 
   const valid = hasLicense && hasValidLicenses;
 
   return {
-    type: 'validate_meta_license',
+    type: "validate_meta_license",
     valid: valid,
-    reasons: reasons
+    reasons: reasons,
   };
 }
 
@@ -339,25 +328,24 @@ function validateLicense(meta, min, max) {
  * @return {Object} Validation result : type, valid, reason
  */
 function validateSource(meta) {
-  const h = mx.helpers;
   const reasons = [];
-  const sources = h.path(meta, 'origin.source.urls', []);
-  const hasSources = !h.isEmpty(sources);
-  const hasValidSources = h.all(sources.map((source) => h.isUrl(source.url)));
+  const sources = path(meta, "origin.source.urls", []);
+  const hasSources = !isEmpty(sources);
+  const hasValidSources = all(sources.map((source) => isUrl(source.url)));
 
   if (!hasSources) {
-    reasons.push('validate_meta_no_source');
+    reasons.push("validate_meta_no_source");
   }
   if (!hasValidSources) {
-    reasons.push('validate_meta_invalid_source');
+    reasons.push("validate_meta_invalid_source");
   }
 
   const valid = hasSources && hasValidSources;
 
   return {
-    type: 'validate_meta_source',
+    type: "validate_meta_source",
     valid: valid,
-    reasons: reasons
+    reasons: reasons,
   };
 }
 
@@ -367,8 +355,7 @@ function validateSource(meta) {
 export function validationMetadataTestsToHTML(results) {
   const tests = results.tests;
   const meta = results.meta;
-  const h = mx.helpers;
-  let elValidation = h.el('div');
+  let elValidation = el("div");
   let noIssue = true;
   let elItem;
   let elEditorInfo;
@@ -381,27 +368,27 @@ export function validationMetadataTestsToHTML(results) {
       return;
     }
     noIssue = false;
-    elItem = h.el(
-      'div',
+    elItem = el(
+      "div",
       {
-        class: ['mx-prop-group']
+        class: ["mx-prop-group"],
       },
-      h.el('h4', {
-        class: ['mx-prop-layer-title'],
+      el("h4", {
+        class: ["mx-prop-layer-title"],
         dataset: {
-          lang_key: t.type
-        }
+          lang_key: t.type,
+        },
       }),
-      h.el(
-        'ul',
+      el(
+        "ul",
         /**
          * For each reason, display the message in list
          */
         t.reasons.map((r) => {
-          return h.el('li', {
+          return el("li", {
             dataset: {
-              lang_key: r
-            }
+              lang_key: r,
+            },
           });
         })
       )
@@ -413,15 +400,15 @@ export function validationMetadataTestsToHTML(results) {
    * If there is no issue
    */
   if (noIssue) {
-    elValidation = h.el(
-      'div',
-      h.el('i', {
-        class: ['fa', 'fa-check']
+    elValidation = el(
+      "div",
+      el("i", {
+        class: ["fa", "fa-check"],
       }),
-      h.el('b', {
+      el("b", {
         dataset: {
-          lang_key: 'validate_meta_no_issue'
-        }
+          lang_key: "validate_meta_no_issue",
+        },
       })
     );
   }
@@ -429,21 +416,21 @@ export function validationMetadataTestsToHTML(results) {
    * Add editor info
    */
   if (meta && meta._emailEditor) {
-    elEditorInfo = h.el(
-      'div',
-      h.el('hr'),
-      h.el('h4', {
+    elEditorInfo = el(
+      "div",
+      el("hr"),
+      el("h4", {
         dataset: {
-          lang_key: 'source_last_editor_email'
-        }
+          lang_key: "source_last_editor_email",
+        },
       }),
-      h.el('p', meta._emailEditor)
+      el("p", meta._emailEditor)
     );
     elValidation.appendChild(elEditorInfo);
   }
 
-  h.updateLanguageElements({
-    el: elValidation
+  updateLanguageElements({
+    el: elValidation,
   });
 
   return elValidation;
@@ -452,20 +439,19 @@ export function validationMetadataTestsToHTML(results) {
 /**
  * Schema to modal validation window
  */
-export function validateMetadataModal(meta) {
+export async function validateMetadataModal(meta) {
   meta = meta.metadata ? meta.metadata : meta;
-  const h = mx.helpers;
-  const results = h.validateMetadataTests(meta);
+  const results = validateMetadataTests(meta);
   /**
    * Build a modal
    */
-  h.getDictItem('validate_meta_title').then((title) => {
-    h.modal({
-      id: 'modal_validation_metadata',
-      addBackground: true,
-      replace: true,
-      title: title,
-      content: h.validationMetadataTestsToHTML(results)
-    });
+  const title = await getDictItem("validate_meta_title");
+
+  modal({
+    id: "modal_validation_metadata",
+    addBackground: true,
+    replace: true,
+    title: title,
+    content: validationMetadataTestsToHTML(results),
   });
 }

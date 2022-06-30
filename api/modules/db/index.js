@@ -7,14 +7,16 @@ import { GeoServerRestClient } from "geoserver-node-client";
 const { Pool, types } = pg;
 
 /*
-* Can't export from try/catch.
-* An Error here should shut down the process
-* -> using let + reassign later  
-*/ 
+ * Can't export from try/catch.
+ * An Error here should shut down the process
+ * -> using let + reassign later
+ */
 let clientRedis;
 let clientRedisAlt;
 let redisGet;
 let redisSet;
+let redisGetJSON;
+let redisSetJSON;
 let pgCustom;
 let pgRead;
 let pgWrite;
@@ -125,9 +127,16 @@ try {
     console.error("Unexpected error on redis client", err);
     process.exit(-1);
   });
+  clientRedisAlt.on("error", (err) => {
+    console.error("Unexpected error on redis client alt", err);
+    process.exit(-1);
+  });
 
   redisGet = clientRedis.get.bind(clientRedis);
   redisSet = clientRedis.set.bind(clientRedis);
+
+  redisSetJSON = async (k, d) => redisSet(k, JSON.stringify(d));
+  redisGetJSON = async (k) => JSON.parse(await redisGet(k));
 
   /**
    * MeiliSearch
@@ -155,6 +164,8 @@ export {
   clientRedisAlt,
   redisGet,
   redisSet,
+  redisSetJSON,
+  redisGetJSON,
   pgCustom,
   pgRead,
   pgWrite,

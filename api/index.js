@@ -2,11 +2,7 @@ import { settings } from "#root/settings";
 import http from "http";
 import express from "express";
 import { Server as SocketServer } from "socket.io";
-import { createAdapter } from "@socket.io/redis-adapter";
-import { clientRedis, clientRedisAlt } from "#mapx/db";
-import view from "#mapx/view";
 import query from "#mapx/query";
-import source from "#mapx/source";
 import project from "#mapx/project";
 import upload from "#mapx/upload";
 import mirror from "#mapx/mirror";
@@ -14,16 +10,25 @@ import mail from "#mapx/mail";
 import ip from "#mapx/ip";
 import tile from "#mapx/tile";
 import log from "#mapx/log";
-import { mwGeoserverRebuild } from "#mapx/geoserver";
+import * as view from "#mapx/view";
+import * as source from "#mapx/source";
+//import { mwGeoserverRebuild } from "#mapx/geoserver";
 import { mwSetHeaders, mwGetConfigMap } from "#mapx/helpers";
-import { mwIoConnect } from "#mapx/io";
-import { mwNotify } from "#mapx/notify";
-import { mwClientWorker } from "#mapx/client_worker";
 import { mwGemetSearchText, mwGemetSearchConcept } from "#mapx/gemet";
 import { mwGetSearchKey } from "#mapx/search";
 import { mwGetBbox } from "#mapx/bbox";
 import { mwGetFormatsList } from "#mapx/file_formats";
 import { mwGetEpsgCodesFull } from "#mapx/epsg";
+import { ioMwAuthenticate } from "#mapx/authentication";
+import {
+  ioCreateAdapter,
+  ioConnect,
+  ioMwEmit,
+  ioMwNotify,
+  ioMwHandlers,
+  mwEmit,
+  mwNotify,
+} from "#mapx/io";
 
 /**
  * If port argument is set, use this instead
@@ -40,20 +45,28 @@ for (const val of process.argv) {
 }
 
 /**
- * App / Server
+ * Express
  */
 const app = express();
 const server = http.createServer(app);
+const mwDownload = express.static(settings.vector.path.download);
 app.use(mwSetHeaders);
+app.use(mwEmit);
+app.use(mwNotify);
 app.set("trust proxy", true);
-app.use("/download", express.static(settings.vector.path.download));
+app.use("/download", mwDownload);
 
 /**
  * Socket io
  */
 const io = new SocketServer(server, settings.socket_io);
-io.adapter(createAdapter(clientRedis, clientRedisAlt));
-io.on("connection", mwIoConnect(io));
+const ioRedisAdapter = ioCreateAdapter();
+io.adapter(ioRedisAdapter);
+io.use(ioMwAuthenticate);
+io.use(ioMwEmit);
+io.use(ioMwNotify);
+io.use(ioMwHandlers);
+io.on("connection", ioConnect);
 
 /*
  * Express routes
@@ -70,7 +83,7 @@ app.get("/get/mirror/", mirror.mwGet);
 app.get("/get/config/map", mwGetConfigMap);
 app.get("/get/epsg/codes/full", mwGetEpsgCodesFull);
 app.get("/get/file/formats/list", mwGetFormatsList);
-app.get("/get/source/", [mwNotify(io), ...source.mwGet]);
+//app.get("/get/source/", source.mwGet);
 app.get("/get/source/metadata/:id", source.mwGetMetadata);
 app.get("/get/source/summary/", source.mwGetSummary);
 app.get("/get/source/table/attribute/", source.mwGetAttributeTable);
@@ -83,12 +96,8 @@ app.get("/get/gemet/concept", mwGemetSearchConcept);
 app.get("/get/bbox/", mwGetBbox);
 app.get("/get/projects/list/user/", project.mwGetListByUser);
 app.get("/get/project/search", project.mwProjectSearchText);
-
-app.get("/get/geoserver/rebuild", [
-  mwNotify(io),
-  mwClientWorker(io),
-  ...mwGeoserverRebuild,
-]);
+//app.get("/get/io/test/job", mwIoFetchTest);
+//app.get("/get/geoserver/rebuild", mwGeoserverRebuild);
 
 app.post("/upload/image/", upload.mwImage);
 app.post("/upload/vector/", upload.mwVector);

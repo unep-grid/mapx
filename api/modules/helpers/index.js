@@ -70,8 +70,9 @@ function sendJSON(res, data, opt) {
  * @return null
  */
 function sendError(res, error, code) {
+  
   if (!code) {
-    code = "200";
+    code = 500;
   }
 
   if (isString(error)) {

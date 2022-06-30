@@ -14,6 +14,9 @@ const settings = Object.assign({}, settings_global, {
     host_public: env.API_HOST_PUBLIC,
     port_public: env.API_PORT_PUBLIC,
   },
+  session: {
+    secret: env.API_SESSION_SECRET,
+  },
   map: {
     token: env.MAPX_MAPBOX_TOKEN,
   },
@@ -28,8 +31,7 @@ const settings = Object.assign({}, settings_global, {
   },
   geoip: {
     licenseKey: env.MAXMIND_GEOIP_LICENSE_KEY,
-    urlTemplate:
-      "https://download.maxmind.com/app/geoip_download?suffix=zip&edition_id=GeoLite2-Country-CSV&license_key={{licenseKey}}",
+    urlTemplate: env.MAXMIND_URL_TEMPLATE
   },
   meili: {
     master_key: env.MEILI_MASTER_KEY,

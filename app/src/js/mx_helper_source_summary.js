@@ -2,12 +2,13 @@ import { miniCacheSet, miniCacheGet, miniCacheRemove } from "./minicache";
 import { getApiUrl } from "./api_routes";
 import { getView, getViewTitle } from "./map_helpers/index.js";
 import { path } from "./mx_helper_misc.js";
-import { objToParams, getQueryParametersAsObject } from "./mx_helper_url";
+import { objToParams, getQueryParametersAsObject } from "./url_utils";
 import { el, elAuto } from "./el_mapx";
 import { modal } from "./mx_helper_modal.js";
 import { wmsGetLayers } from "./wms";
 import { moduleLoad } from "./modules_loader_async";
 import { epsgQuery } from "./epsgio";
+import { settings } from "./settings";
 import {
   isViewGj,
   isUrlValidWms,
@@ -45,7 +46,7 @@ export async function getViewSourceSummary(view, opt) {
       timestamp: view._src_timestamp,
       idAttr: path(view, "data.attribute.name"),
       idSource: path(view, "data.source.layerInfo.name"),
-      useCache: mx.settings.useCache,
+      useCache: settings.useCache,
     },
     opt
   );
@@ -139,7 +140,7 @@ export async function getSourceVtSummary(opt) {
     const resp = await fetch(url);
     summary = await resp.json();
     miniCacheSet(url, summary, {
-      ttl: mx.settings.maxTimeCache,
+      ttl: settings.maxTimeCache,
     });
   }
 

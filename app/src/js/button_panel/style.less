@@ -35,11 +35,13 @@
         }
       }
     }
+    &.button-panel--container-resize {
+      user-select: none;
+    }
     &.active {
       &:hover,
       &.button-panel--container-resize {
         z-index: 1500;
-        user-select: none;
         .button-panel--item-handles {
           pointer-events: none;
         }

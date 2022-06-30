@@ -1,12 +1,11 @@
+import { ws, nc, events, listeners, theme } from "./../mx.js";
+import { settings } from "./../settings";
 import { featuresToPopup } from "./features_to_popup.js";
-
 import { RadialProgress } from "./../radial_progress";
 import { handleViewClick } from "./../views_click";
 import { ButtonPanel } from "./../button_panel";
 import { RasterMiniMap } from "./../raster_mini_map";
 import { el, elSpanTranslate } from "./../el_mapx/index.js";
-import { Highlighter } from "./../features_highlight/";
-import { WsHandler } from "./../ws_handler/";
 import { MainPanel } from "./../panel_main";
 import { Search } from "./../search";
 import {
@@ -24,13 +23,12 @@ import { getAppPathUrl } from "./../api_routes/index.js";
 import { isStoryPlaying, storyRead } from "./../story_map/index.js";
 import { fetchViews } from "./../mx_helper_map_view_fetch.js";
 import { wmsQuery } from "./../wms/index.js";
-import { clearMapxCache, getVersion } from "./../mx_helper_app_utils.js";
+import { clearMapxCache, getVersion } from "./../app_utils";
 import { onNextFrame } from "./../animation_frame/index.js";
 import {
   handleMapDragOver,
   handleMapDrop,
 } from "./../mx_helper_map_dragdrop.js";
-import { getViewMapboxStyle, mapboxToSld } from "./../style_vt/index.js";
 import {
   getProjectViewsCollectionsShiny,
   updateViewsFilter,
@@ -55,6 +53,7 @@ import {
   getClickHandlers,
   setClickHandler,
   cssTransformFun,
+  xyToDegree,
 } from "./../mx_helper_misc.js";
 import {
   modal,
@@ -66,7 +65,6 @@ import { errorHandler } from "./../error_handler/index.js";
 import { waitTimeoutAsync } from "./../animation_frame";
 import { getArrayDiff, getArrayDistinct } from "./../array_stat/index.js";
 import { getApiUrl } from "./../api_routes";
-import { DownloadSourceModal } from "./../download_source";
 import { getViewSourceSummary } from "./../mx_helper_source_summary";
 import {
   setQueryParametersInitReset,
@@ -76,7 +74,7 @@ import {
   getQueryInit,
   setQueryParameters,
   cleanTemporaryQueryParameters,
-} from "./../mx_helper_url.js";
+} from "./../url_utils";
 import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata";
 import { buildLegendVt } from "./../legend_vt/index.js";
 import { getViewMapboxLayers } from "./../style_vt/index.js";
@@ -125,6 +123,10 @@ import {
   isViewRtWithLegend,
   isViewVtWithAttributeType,
 } from "./../is_test_mapx/index.js";
+
+import { downloadViewVector } from "./download.js";
+
+export { downloadViewVector };
 
 /**
  * Convert point in  degrees to meter
@@ -331,56 +333,6 @@ export async function downloadViewSourceExternal(opt) {
 }
 
 /**
- * Download source for vector view : show modal panel
- * @param {Object} opt Options
- * @param {String} opt.idView Id of the vector view
- * @return {Object} input options
- */
-export async function downloadViewVector_old(opt) {
-  opt = Object.assign({}, { idView: null }, opt);
-  const view = getView(opt.idView);
-
-  if (!isView(view)) {
-    throw new Error(`No view with id ${opt.idView}`);
-  }
-
-  Shiny.onInputChange(`mx_client_view_action`, {
-    target: view.id,
-    action: "btn_opt_download",
-    time: new Date(),
-  });
-  return opt;
-}
-/**
- * Download source for vector view : show modal panel
- * @param {String} idView Id of the vector view
- * @return {Object} input options
- */
-export async function downloadViewVector(idView) {
-  if (!isViewId(idView)) {
-    throw new Error(`View id ${idView} not valid`);
-  }
-
-  const view = getView(idView);
-
-  if (!isView(view)) {
-    throw new Error(`View ${idView} not found`);
-  }
-  const srcSummary = await getViewSourceSummary(view);
-  const idSocket = mx.ws?.io?.id;
-  const dl = new DownloadSourceModal({
-    email: mx.settings.user.guest ? null : mx.settings.user.email,
-    idSource: srcSummary.id,
-    idSocket: idSocket,
-    idProject: mx.settings.project.id,
-    idUser: mx.settings.user.id,
-    token: mx.settings.user.token,
-  });
-
-  return dl;
-}
-
-/**
  * Get random geojson point
  * @param {Object} opt Options
  * @param {Number} opt.n points
@@ -434,7 +386,7 @@ export function getGeoJSONRandomPoints(opt) {
  * @returns {String} loginInfo.token Encrypted string with as {key:<key from mx_users>, is_guest: <boolean>, valid_until:<unixtime>}
  */
 export async function getLoginInfo() {
-  const s = mx.settings;
+  const s = settings;
   return {
     idUser: s.user.id,
     idProject: s.project.id,
@@ -490,8 +442,8 @@ export async function setProject(idProject, opt) {
       Shiny.onInputChange("selectProject", idProject);
     }
     const r = await Promise.all([
-      mx.events.once("settings_project_change"),
-      mx.events.once("views_list_updated"),
+      events.once("settings_project_change"),
+      events.once("views_list_updated"),
     ]);
 
     const idProjectNew = path(r[0], "new_project");
@@ -504,7 +456,7 @@ export async function setProject(idProject, opt) {
     if (isFunction(opt.onSuccess)) {
       opt.onSuccess();
     }
-    mx.events.fire({
+    events.fire({
       type: "project_change",
       data: {
         new_project: idProject,
@@ -556,7 +508,7 @@ export function initListenerGlobal() {
   /**
    * Handle view click
    */
-  mx.listeners.addListener({
+  listeners.addListener({
     target: document.body,
     type: "click",
     idGroup: "view_list",
@@ -566,25 +518,25 @@ export function initListenerGlobal() {
   /*
    * Fire session start
    */
-  mx.events.fire({
+  events.fire({
     type: "session_start",
   });
 
   /*
    * Fire session end
    */
-  mx.listeners.addListener({
+  listeners.addListener({
     target: window,
     type: "beforeunload",
     idGroup: "base",
     callback: () => {
-      mx.events.fire({
+      events.fire({
         type: "session_end",
       });
     },
   });
 
-  mx.listeners.addListener({
+  listeners.addListener({
     target: window,
     type: ["error", "unhandledrejection"],
     idGroup: "base",
@@ -594,7 +546,7 @@ export function initListenerGlobal() {
   /**
    *  Events
    */
-  mx.events.on({
+  events.on({
     type: [
       "view_added",
       "view_removed",
@@ -605,7 +557,7 @@ export function initListenerGlobal() {
     idGroup: "update_share_modale",
     callback: updateSharingTool,
   });
-  mx.events.on({
+  events.on({
     type: ["story_start", "story_close"],
     idGroup: "update_share_modale_story",
     callback: resetSharingTool,
@@ -632,28 +584,28 @@ export function initListenersApp() {
   /**
    *  Other listener
    */
-  mx.listeners.addListener({
+  listeners.addListener({
     target: document.getElementById("btnShowProject"),
     type: "click",
     callback: showSelectProject,
     group: "mapx_base",
   });
 
-  mx.listeners.addListener({
+  listeners.addListener({
     target: document.getElementById("btnShowLanguage"),
     type: "click",
     callback: showSelectLanguage,
     group: "mapx_base",
   });
 
-  mx.listeners.addListener({
+  listeners.addListener({
     target: document.getElementById("btnShowLogin"),
     type: "click",
     callback: showLogin,
     group: "mapx_base",
   });
 
-  mx.events.on({
+  events.on({
     type: "language_change",
     idGroup: "view_filter_tag_lang",
     callback: function () {
@@ -670,24 +622,31 @@ export function initListenersApp() {
    * will be loaded for that user,
    */
 
-  mx.events.on({
+  events.on({
     type: ["settings_user_change"],
     idGroup: "notif",
-    callback: (data) => {
+    callback: async (data) => {
       if (data.delta.id) {
-        mx.nc.init({
-          config: {
-            id: data.new_user.id,
-          },
-        });
+        /**
+         * Reconnect to ws
+         */
+        await ws.connect();
+        /**
+         * Re-init notifications control
+         */
+        await nc.init();
       }
     },
   });
 
-  mx.events.on({
+  events.on({
     type: "project_change",
     idGroup: "project_change",
-    callback: function () {
+    callback: async function () {
+      /**
+       * Project change
+       */
+      await ws.connect();
       const clActive = "active";
       const clHide = "mx-hide";
       const elBtn = document.getElementById("btnFilterShowPanel");
@@ -700,14 +659,14 @@ export function initListenersApp() {
     },
   });
 
-  mx.events.on({
+  events.on({
     type: ["settings_user_change", "settings_change"],
     idGroup: "mapx_base",
     callback: updateUiSettings,
   });
   updateUiSettings();
 
-  mx.events.on({
+  events.on({
     type: "views_list_updated",
     idGroup: "view_list_updated",
     callback: function () {
@@ -717,7 +676,7 @@ export function initListenersApp() {
     },
   });
 
-  mx.events.on({
+  events.on({
     type: ["view_created", "view_deleted"],
     idGroup: "clean_history_and_state",
     callback: () => {
@@ -726,20 +685,20 @@ export function initListenersApp() {
     },
   });
 
-  mx.events.on({
+  events.on({
     type: ["views_list_updated", "view_add", "view_remove", "mapx_ready"],
     idGroup: "update_btn_filter_view_activated",
     callback: updateBtnFilterActivated,
   });
 
-  mx.listeners.addListener({
+  listeners.addListener({
     target: document.getElementById("btnClearCache"),
     type: "click",
     callback: clearMapxCache,
     group: "mapx_base",
   });
 
-  mx.listeners.addListener({
+  listeners.addListener({
     target: document.getElementById("btnShowSearchApiConfig"),
     type: "click",
     callback: () => {
@@ -750,7 +709,7 @@ export function initListenersApp() {
     group: "mapx_base",
   });
 
-  mx.listeners.addListener({
+  listeners.addListener({
     target: document.getElementById("btnResetPanelSize"),
     type: "click",
     callback: () => {
@@ -761,7 +720,7 @@ export function initListenersApp() {
     group: "mapx_base",
   });
 
-  mx.listeners.addListener({
+  listeners.addListener({
     target: document.getElementById("btnFilterShowPanel"),
     type: "click",
     callback: (e) => {
@@ -786,10 +745,10 @@ export function initListenersApp() {
    */
   if (window.Shiny) {
     $(document).on("shiny:connected", () => {
-      mx.events.fire("mapx_connected");
+      events.fire("mapx_connected");
     });
     $(document).on("shiny:disconnected", () => {
-      mx.events.fire("mapx_disconnected");
+      events.fire("mapx_disconnected");
     });
   }
 }
@@ -829,9 +788,8 @@ export async function updateUiSettings() {
   const elBtnProject = document.getElementById("btnShowProjectLabel");
   const elBtnProjectPrivate = document.getElementById("btnShowProjectPrivate");
   const title = path(mx, "settings.project.title");
-  elBtnProject.innerText =
-    title[lang] || title[langDef] || mx.settings.project.id;
-  if (mx.settings.project.public) {
+  elBtnProject.innerText = title[lang] || title[langDef] || settings.project.id;
+  if (settings.project.public) {
     elBtnProjectPrivate.classList.remove("fa-lock");
   } else {
     elBtnProjectPrivate.classList.add("fa-lock");
@@ -879,7 +837,7 @@ export function updateBtnFilterActivated() {
 /**
  * Initial mgl and mapboxgl
  * @param {Object} o options
- * @param {String} o.id Id of the map. Default to mx.settings.map.id
+ * @param {String} o.id Id of the map. Default to settings.map.id
  * @param {Array} o.idViews Initial id views list
  * @param {Object} o.mapPosition Options (zoom, method, for center ing the map)
  * @param {Number} o.mapPosition.z Zoom
@@ -900,12 +858,13 @@ export function updateBtnFilterActivated() {
 export async function initMapx(o) {
   let mp;
   o = o || {};
-  o.id = o.id || mx.settings.map.id;
+  o.id = o.id || settings.map.id;
   mp = o.mapPosition || {};
+
   /**
    * Set mapbox gl token
    */
-  mx.mapboxgl.accessToken = o.token || mx.settings.map.token;
+  mx.mapboxgl.accessToken = o.token || settings.map.token;
 
   /**
    * MapX map data : views, config, etc..
@@ -937,66 +896,30 @@ export async function initMapx(o) {
    * Update closed panel setting
    */
   if (getQueryParameter("closePanels")[0] === "true") {
-    mx.settings.initClosedPanels = true;
+    settings.initClosedPanels = true;
   }
 
-  mx.settings.mode.static = o.modeStatic || mx.settings.mode.storyAutoStart;
-  mx.settings.mode.app = !mx.settings.mode.static;
+  settings.mode.static = o.modeStatic || settings.mode.storyAutoStart;
+  settings.mode.app = !settings.mode.static;
 
   /**
    * Update  sprites path
    */
-  mx.settings.style.sprite = getAppPathUrl("sprites");
-  mx.settings.style.glyphs = getAppPathUrl("fontstack");
+  settings.style.sprite = getAppPathUrl("sprites");
+  settings.style.glyphs = getAppPathUrl("fontstack");
+
   /**
-   * Handle socket io session
+   * WS connect + authentication
    */
-  mx.ws = new WsHandler({
-    url: getApiUrl(),
-    auth: getLoginInfo, // evaluated for each connect
-    handlers: {
-      job_state: async function (m) {
-        // Use wrapper to avoid this/bind issue
-        await mx.nc.notify(m);
-      },
-      job_request: async function (job) {
-        const ws = this;
-        switch (job.id_resolver) {
-          case "echo":
-            ws.emit(job.id, job.data);
-            break;
-          case "style_from_view":
-            const out = {};
-            try {
-              const view = await getViewRemote(job.data.idView);
-              const rules = view?.data?.style?.rules || [];
-              const hasRules = isNotEmpty(rules);
-              if (hasRules) {
-                out.mapbox = await getViewMapboxStyle(view, {
-                  useLabelAsId: true,
-                  addMetadata: true,
-                  simplifyExpression : true,
-                });
-                out.sld = await mapboxToSld(out.mapbox);
-              }
-            } catch (e) {
-              console.warn(
-                `Error processing style for view ${job.data.idView}, ${e.message}`
-              );
-            }
-            ws.emit(job.id, out);
-            break;
-          default:
-            console.warn("No job_request handler for", job);
-        }
-        return true;
-      },
-      server_state: () => {},
-      error: console.warn,
-    },
-  });
+  await ws.connect();
+
   /**
-   * TEst if mapbox gl is supported
+   * Init notification control
+   */
+  await nc.init();
+
+  /*
+   * test if mapbox gl is supported
    */
   if (!mx.mapboxgl.supported()) {
     alert(
@@ -1034,9 +957,9 @@ export async function initMapx(o) {
   /* map options */
   const mapOptions = {
     container: o.id, // container id
-    style: mx.settings.style, // mx default style
-    maxZoom: mx.settings.map.maxZoom,
-    minZoom: mx.settings.map.minZoom,
+    style: settings.style, // mx default style
+    maxZoom: settings.map.maxZoom,
+    minZoom: settings.map.minZoom,
     preserveDrawingBuffer: false,
     attributionControl: false,
     crossSourceCollisions: true,
@@ -1048,25 +971,26 @@ export async function initMapx(o) {
   /*
    * Create map object
    */
-  o.map = new mx.mapboxgl.Map(mapOptions);
+  const map = new mx.mapboxgl.Map(mapOptions);
   // Multiple maps were originally planned, never happened.
   // -> many function have an option for getting the map by id, but
   //    only one really exists. TODO: refactoring
-  mx.maps[o.id].map = o.map;
-  const elCanvas = o.map.getCanvas();
+  o.map = map;
+  mx.maps[o.id].map = map;
+  const elCanvas = map.getCanvas();
   elCanvas.setAttribute("tabindex", "-1");
 
   /**
    * Wait for map to be loaded
    */
-  await o.map.once("load");
+  await map.once("load");
 
   /**
    * Link theme to map
    */
-  mx.theme.linkMap(o.map);
+  theme.linkMap(map);
 
-  if (!mx.settings.mode.static) {
+  if (!settings.mode.static) {
     /**
      * Init left panel
      */
@@ -1090,7 +1014,7 @@ export async function initMapx(o) {
         },
       },
     });
-    if (!mx.settings.initClosedPanels) {
+    if (!settings.initClosedPanels) {
       mx.panel_main.panel.open();
     }
 
@@ -1100,7 +1024,7 @@ export async function initMapx(o) {
     mx.panel_main.on("tab_change", (id) => {
       if (id === "tools") {
         const elInputs = document.getElementById("mxInputThemeColors");
-        mx.theme.linkInputs(elInputs);
+        theme.linkInputs(elInputs);
       }
     });
 
@@ -1111,9 +1035,9 @@ export async function initMapx(o) {
     mx.search = new Search({
       key: key,
       container: "#mxTabPanelSearch",
-      host: mx.settings.search.host,
-      protocol: mx.settings.search.protocol,
-      port: mx.settings.search.port,
+      host: settings.search.host,
+      protocol: settings.search.protocol,
+      port: settings.search.port,
       language: getLanguageCurrent(),
       index_template: "views_{{language}}",
     });
@@ -1131,7 +1055,7 @@ export async function initMapx(o) {
     /**
      * On language change, update
      */
-    mx.events.on({
+    events.on({
       type: "language_change",
       idGroup: "search_index",
       callback: (data) => {
@@ -1143,7 +1067,7 @@ export async function initMapx(o) {
       },
     });
 
-    mx.events.on({
+    events.on({
       type: ["view_ui_open", "view_ui_close", "view_deleted"],
       idGroup: "search_index",
       callback: () => {
@@ -1180,7 +1104,8 @@ export async function initMapx(o) {
       },
     },
   });
-  if (!mx.settings.initClosedPanels) {
+
+  if (!settings.initClosedPanels) {
     mx.panel_tools.panel.open();
   }
 
@@ -1201,9 +1126,9 @@ export async function initMapx(o) {
    * Add mapx draw handler
    */
   mx.draw = new MapxDraw({
-    map: o.map,
+    map: map,
     panel_tools: mx.panel_tools,
-    url_help: mx.settings.links.repositoryWikiDrawTool,
+    url_help: settings.links.repositoryWikiDrawTool,
   });
   mx.draw.on("enable", () => {
     setClickHandler({
@@ -1221,50 +1146,20 @@ export async function initMapx(o) {
   /**
    * Add controls
    */
-  o.map.addControl(new MapControlLiveCoord(), "bottom-right");
-  o.map.addControl(new MapControlScale(), "bottom-right");
-  o.map.addControl(new MapxLogo(), "bottom-left");
-
-  /**
-   * Notification center
-   */
-  mx.nc = new NotifCenter({
-    config: {
-      id: mx.settings.user.id,
-      on: {
-        add: (nc) => {
-          mx.theme.on("mode_changed", nc.setMode);
-        },
-        remove: (nc) => {
-          mx.theme.off("mode_changed", nc.setMode);
-        },
-      },
-    },
-    ui: {
-      mode: mx.theme.mode,
-    },
-    panel: {
-      id: "notif_center",
-      elContainer: document.body,
-      container_style: {
-        width: "470px", // same as MainPanel
-        height: "40%",
-        minWidth: "340px",
-        minHeight: "100px",
-      },
-    },
-  });
+  map.addControl(new MapControlLiveCoord(), "bottom-right");
+  map.addControl(new MapControlScale(), "bottom-right");
+  map.addControl(new MapxLogo(), "bottom-left");
 
   /**
    * Init global listeners
    */
   initLog();
   initListenerGlobal();
-  initMapListener(o.map);
+  initMapListener(map);
   /**
    * Load mapx app or static
    */
-  if (mx.settings.mode.static) {
+  if (settings.mode.static) {
     await initMapxStatic(o);
   } else {
     await initMapxApp(o);
@@ -1300,14 +1195,9 @@ export function initMapListener(map) {
   /**
    * Highlight on event
    */
-  mx.highlighter = new Highlighter(map, {
-    use_animation: true,
-    register_listener: false, //use  same click as for popup
-    highlight_color: mx.theme.get("mx_map_feature_highlight").color,
-    regex_layer_id: /^MX/, // Highlighter will not work with feature without id : regex layer accordingly,
-  });
+  mx.highlighter.init(map);
 
-  mx.events.on({
+  events.on({
     type: ["view_add", "view_remove", "story_step", "story_close"],
     idGroup: "highlight_clear",
     callback: () => {
@@ -1315,7 +1205,7 @@ export function initMapListener(map) {
     },
   });
 
-  mx.theme.on("set_colors", (colors) => {
+  theme.on("set_colors", (colors) => {
     mx.highlighter.setOptions({
       highlight_color: colors.mx_map_feature_highlight.color,
     });
@@ -1328,25 +1218,26 @@ export function initMapListener(map) {
    * Mouse move handling
    */
   map.on("mousemove", (e) => {
-    //    if (false) {
-    /**
-     * Change illuminaion direction accoding to mouse position
-     * Quite intensive on GPU.
-     */
-    //const elCanvas = map.getCanvas();
-    //const dpx = window.devicePixelRatio || 1;
-    //const wMap = elCanvas.width;
-    //const hMap = elCanvas.height;
-    //const x = e.point.x - wMap / (2 * dpx);
-    //const y = hMap / (2 * dpx) - e.point.y;
-    //const deg = h.xyToDegree(x, y);
+    if (0) {
+      /**
+       * Change illuminaion direction accoding to mouse position
+       * - Quite intensive on GPU.
+       * - setPaintProperty seems buggy
+       */
+      const elCanvas = map.getCanvas();
+      const dpx = window.devicePixelRatio || 1;
+      const wMap = elCanvas.width;
+      const hMap = elCanvas.height;
+      const x = e.point.x - wMap / (2 * dpx);
+      const y = hMap / (2 * dpx) - e.point.y;
+      const deg = xyToDegree(x, y);
 
-    //map.setPaintProperty(
-    //'hillshading',
-    //'hillshade-illumination-direction',
-    //deg
-    //);
-    //}
+      map.setPaintProperty(
+        "hillshading",
+        "hillshade-illumination-direction",
+        deg
+      );
+    }
 
     const layers = getLayerNamesByPrefix({
       id: map.id,
@@ -1453,7 +1344,7 @@ export async function initMapxStatic(o) {
     });
   }
 
-  mx.events.fire({
+  events.fire({
     type: "mapx_ready",
   });
   return;
@@ -1482,7 +1373,7 @@ export async function initMapxApp(opt) {
   /**
    * Fire ready event
    */
-  mx.events.fire({
+  events.fire({
     type: "mapx_ready",
   });
 
@@ -1505,14 +1396,14 @@ export async function initMapxApp(opt) {
     /**
      * Listen to drag/drop
      */
-    mx.listeners.addListener({
+    listeners.addListener({
       target: elMap,
       type: "dragover",
       callback: handleMapDragOver,
       group: "map_drag_over",
       bind: mx,
     });
-    mx.listeners.addListener({
+    listeners.addListener({
       target: elMap,
       type: "drop",
       callback: handleMapDrop,
@@ -1578,7 +1469,7 @@ export async function handleClickEvent(e, idMap) {
         .setLngLat(map.unproject(e.point))
         .addTo(map);
 
-      mx.events.once({
+      events.once({
         type: [
           "view_remove",
           "view_add",
@@ -1649,7 +1540,7 @@ async function attributesToEvent(layersAttributes, e) {
    */
   async function dispatch(layersAttributes, idView) {
     const attributes = await layersAttributes[idView];
-    mx.events.fire({
+    events.fire({
       type: "click_attributes",
       data: {
         part: ++processed,
@@ -1688,7 +1579,7 @@ export function geolocateUser() {
   const lang = getLanguageCurrent();
   const hasGeolocator = !!navigator.geolocation;
 
-  const o = { idMap: mx.settings.map.id };
+  const o = { idMap: settings.map.id };
   const map = getMap(o.idMap);
   const options = {
     enableHighAccuracy: false,
@@ -2048,7 +1939,7 @@ export async function updateViewsList(opt) {
       await viewsLayersOrderUpdate();
     }
 
-    mx.events.fire({
+    events.fire({
       type: "views_list_updated",
     });
 
@@ -2064,10 +1955,10 @@ export async function updateViewsList(opt) {
       open: true,
       render: true,
     });
-    mx.events.fire({
+    events.fire({
       type: "views_list_updated",
     });
-    mx.events.fire({
+    events.fire({
       type: "view_created",
     });
     return view;
@@ -2116,7 +2007,7 @@ export async function updateViewsList(opt) {
 export async function getGeoJSONViewsFromStorage(o) {
   const out = [];
 
-  const project = o.project || mx.settings.project.id;
+  const project = o.project || settings.project.id;
   /**
    * extract views from local storage
    */
@@ -2201,7 +2092,7 @@ export async function viewsCheckedUpdate(o) {
   /**
    * Fire event
    */
-  mx.events.fire({
+  events.fire({
     type: "views_list_ordered",
   });
   return done;
@@ -2375,7 +2266,7 @@ export function viewsLayersOrderUpdate(o) {
          */
         for (let layer of layersView) {
           const firstOfAll = incView++ === 0;
-          const idBefore = firstOfAll ? mx.settings.layerBefore : idPrevious;
+          const idBefore = firstOfAll ? settings.layerBefore : idPrevious;
           map.moveLayer(layer.id, idBefore);
           idPrevious = layer.id;
           sorted.push({ id: layer.id, idBefore });
@@ -2383,7 +2274,7 @@ export function viewsLayersOrderUpdate(o) {
       }
     }
 
-    mx.events.fire({
+    events.fire({
       type: "layers_ordered",
       data: {
         layers: order,
@@ -2850,7 +2741,7 @@ export async function viewDelete(view) {
 
   views.splice(vIndex, 1);
 
-  mx.events.fire({
+  events.fire({
     type: "view_deleted",
   });
   return true;
@@ -2865,7 +2756,7 @@ export async function viewDelete(view) {
  */
 export async function viewLayersRemove(o) {
   const view = o.view || getView(o.idView);
-  o.id = o.id || mx.settings.map.id;
+  o.id = o.id || settings.map.id;
 
   if (!isView(view)) {
     return false;
@@ -2875,7 +2766,7 @@ export async function viewLayersRemove(o) {
   const viewDuration = now - view._added_at || 0;
   delete view._added_at;
 
-  mx.events.fire({
+  events.fire({
     type: "view_remove",
     data: {
       idView: o.idView,
@@ -2890,7 +2781,7 @@ export async function viewLayersRemove(o) {
 
   await viewModulesRemove(view);
 
-  mx.events.fire({
+  events.fire({
     type: "view_removed",
     data: {
       idView: o.idView,
@@ -2919,7 +2810,7 @@ function _viewUiOpen(view) {
     view._vb.open();
   }
   view._open = true;
-  mx.events.fire({
+  events.fire({
     type: "view_ui_open",
     data: {
       idView: view.id,
@@ -2941,7 +2832,7 @@ async function _viewUiClose(view) {
     view._vb.close();
   }
   view._open = false;
-  mx.events.fire({
+  events.fire({
     type: "view_ui_close",
     data: {
       idView: view.id,
@@ -3044,7 +2935,7 @@ export function viewSetFilter(o) {
   const hasFilter = isArray(filter) && filter.length > 1;
   const filterNew = [];
 
-  mx.events.fire({
+  events.fire({
     type: "view_filter",
     data: {
       idView: idView,
@@ -3083,7 +2974,7 @@ export function viewSetFilter(o) {
     m.setFilter(layer.id, filterFinal);
   }
 
-  mx.events.fire({
+  events.fire({
     type: "view_filtered",
     data: {
       idView: idView,
@@ -3102,7 +2993,7 @@ export function viewSetOpacity(o) {
   const view = this;
   const idView = view.id;
   const opacity = o.opacity;
-  const idMap = view._idMap ? view._idMap : mx.settings.map.id;
+  const idMap = view._idMap ? view._idMap : settings.map.id;
   const map = getMap(idMap);
   const layers = getLayerByPrefix({
     map: map,
@@ -3197,7 +3088,7 @@ export function getLayerById(o) {
  * @param {String} str Layer name to convert
  */
 export function getLayerBaseName(str) {
-  return str.split(mx.settings.separators.sublayer)[0];
+  return str.split(settings.separators.sublayer)[0];
 }
 
 /**
@@ -3406,7 +3297,7 @@ export async function viewLayersAdd(o) {
   const dh = dashboardHelper;
   const m = getMapData(o.id);
   if (o.idView) {
-    o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
+    o.idView = o.idView.split(settings.separators.sublayer)[0];
   }
   if (!o.elLegendContainer && mx.panel_legend) {
     o.elLegendContainer = mx.panel_legend.elPanelContent;
@@ -3414,7 +3305,7 @@ export async function viewLayersAdd(o) {
   const isStory = isStoryPlaying();
   const idLayerBefore = o.before
     ? getLayerNamesByPrefix({ prefix: o.before })[0]
-    : mx.settings.layerBefore;
+    : settings.layerBefore;
   let view = o.view || getView(o.idView) || {};
 
   /**
@@ -3436,13 +3327,13 @@ export async function viewLayersAdd(o) {
   }
 
   const idView = view.id;
-  const idMap = o.id || mx.settings.map.id;
+  const idMap = o.id || settings.map.id;
   const idType = view.type;
 
   /**
    * Fire view add event
    */
-  mx.events.fire({
+  events.fire({
     type: "view_add",
     data: {
       idView: idView,
@@ -3501,7 +3392,7 @@ export async function viewLayersAdd(o) {
    */
   view._added_at = Date.now();
 
-  mx.events.fire({
+  events.fire({
     type: "view_added",
     data: {
       idView: view.id,
@@ -3843,13 +3734,13 @@ async function viewLayersAddCc(o) {
 
   removeLayersByPrefix({
     prefix: opt.idView,
-    id: mx.settings.map.id,
+    id: settings.map.id,
   });
 
   /**
    * Avoid event to propagate
    */
-  mx.listeners.addListener({
+  listeners.addListener({
     group: idListener,
     target: elLegend,
     type: ["click", "mousedown", "change", "input"],
@@ -3861,7 +3752,7 @@ async function viewLayersAddCc(o) {
   }
 
   view._onRemoveCustomView = function () {
-    mx.listeners.removeListenerByGroup(idListener);
+    listeners.removeListenerByGroup(idListener);
 
     if (!opt._init || opt._closed) {
       return;
@@ -4251,7 +4142,7 @@ function addLayers(layers, idBefore) {
         map.removeLayer(layer.id);
       }
       if (!hasLayerBefore) {
-        idBefore = mx.settings.layerBefore;
+        idBefore = settings.layerBefore;
       }
 
       map.addLayer(layer, idBefore);
@@ -4330,7 +4221,7 @@ export async function viewFilterToolsInit(id, opt) {
     if (!isView(view)) {
       return;
     }
-    const idMap = mx.settings.map.id;
+    const idMap = settings.map.id;
     if (view._filters_tools) {
       return;
     }
@@ -4468,7 +4359,7 @@ export function setHighlightedCountries(o) {
   const hasWorld = hasCountries && countries.indexOf("WLD") > -1;
   const filter = ["any"];
 
-  mx.settings.highlightedCountries = hasCountries ? countries : [];
+  settings.highlightedCountries = hasCountries ? countries : [];
 
   if (!hasWorld && hasCountries) {
     filter.push(["==", ["get", "iso3code"], ""]);
@@ -4519,7 +4410,7 @@ export function getRenderedLayersArea(o) {
 
       const worker = new calcAreaWorker();
       worker.postMessage(data);
-      mx.listeners.addListener({
+      listeners.addListener({
         group: "compute_layer_area",
         target: worker,
         type: "message",
@@ -4529,7 +4420,7 @@ export function getRenderedLayersArea(o) {
           }
           if (e.data.end) {
             o.onEnd(e.data.end);
-            mx.listeners.removeListenerByGroup("compute_layer_area");
+            listeners.removeListenerByGroup("compute_layer_area");
           }
         },
       });
@@ -4842,7 +4733,7 @@ export function addLayer(o) {
        * Add before, if specified else use default
        */
       if (!map.getLayer(o.before)) {
-        o.before = mx.settings.layerBefore;
+        o.before = settings.layerBefore;
       }
       map.addLayer(o.layer, o.before);
     }
@@ -4868,7 +4759,7 @@ export async function zoomToViewId(o) {
 
     const hasArray = isArray(o.idView);
     o.idView = hasArray ? o.idView[0] : o.idView;
-    o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
+    o.idView = o.idView.split(settings.separators.sublayer)[0];
     const view = getView(o.idView);
 
     if (!isView(view)) {
@@ -5244,7 +5135,7 @@ export function getViewLegend(id, opt) {
  * @return {Object} map
  */
 export function getMap(idMap) {
-  idMap = idMap || mx.settings.map.id;
+  idMap = idMap || settings.map.id;
 
   let map;
   const isId = typeof idMap === "string";
@@ -5270,8 +5161,8 @@ export function getMap(idMap) {
  * @return {Object} data
  */
 export function getMapData(idMap) {
-  idMap = idMap || mx.settings.map.id;
-  const data = mx.maps[idMap || mx.settings.map.id];
+  idMap = idMap || settings.map.id;
+  const data = mx.maps[idMap || settings.map.id];
   data.id = idMap;
   return data;
 }
@@ -5633,8 +5524,8 @@ export function randomUiColorAuto() {
  */
 
 export async function shinyNotify(opt) {
-  if (mx.nc instanceof NotifCenter) {
-    mx.nc.notify(opt.notif);
+  if (nc instanceof NotifCenter) {
+    nc.notify(opt.notif);
   }
 }
 
@@ -5644,10 +5535,10 @@ export async function shinyNotify(opt) {
  */
 async function getSearchApiKey() {
   try {
-    const ss = mx.settings;
+    const s = settings;
     const urlKey = new URL(getApiUrl("getSearchKey"));
-    urlKey.searchParams.set("idUser", ss.user.id);
-    urlKey.searchParams.set("token", ss.user.token);
+    urlKey.searchParams.set("idUser", s.user.id);
+    urlKey.searchParams.set("token", s.user.token);
     const r = await fetch(urlKey);
     if (r.ok) {
       const keyData = await r.json();

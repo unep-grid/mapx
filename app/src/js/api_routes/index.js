@@ -1,4 +1,4 @@
-import {settings} from './../settings';
+import { settings } from "./../settings";
 
 /**
  * Get url for service
@@ -7,10 +7,10 @@ import {settings} from './../settings';
  * @return {String} url
  */
 export function getServiceUrl(id, route) {
-  const s = mx.settings;
+  const s = settings;
   const service = s[id];
-  if (location.protocol === 'https:') {
-    service.protocol = 'https:';
+  if (location.protocol === "https:") {
+    service.protocol = "https:";
   }
   /**
    * ⚠️  Can't use URL api: templating,e.g. {x}/{y}/{z} is not supported
@@ -25,11 +25,20 @@ export function getServiceUrl(id, route) {
 }
 
 /**
+ * Get api route by id
+ * @param {String} id Route id 
+ */
+export function getApiRoute(id) {
+  const s = settings;
+  return s.api.routes[id] || "/";
+}
+
+/**
  * API route resolver
  * @return {URL} api url + route
  */
 export function getApiUrl(route) {
-  return getServiceUrl('api', route);
+  return getServiceUrl("api", route);
 }
 
 /**
@@ -37,7 +46,7 @@ export function getApiUrl(route) {
  * @return {URL} search url;
  */
 export function getSearchUrl() {
-  return getServiceUrl('search');
+  return getServiceUrl("search");
 }
 
 /**
@@ -48,7 +57,7 @@ export function setApiUrlAuto() {
   const loc = new URL(window.location.href);
   const hasDefaultSubDomain = regexDefaultSubDomain.test(loc.hostname);
   /**
-   * Use mx.settings default or,
+   * Use settings default or,
    * if has default subdomain, webpack variables OR
    * modified url based on standard
    */
@@ -57,19 +66,19 @@ export function setApiUrlAuto() {
      * If no webpack variables found, replace by defaults
      */
     const apiHost =
-      typeof API_HOST_PUBLIC === 'undefined'
-        ? loc.hostname.replace(/^(app|dev)\./, 'api.')
+      typeof API_HOST_PUBLIC === "undefined"
+        ? loc.hostname.replace(/^(app|dev)\./, "api.")
         : API_HOST_PUBLIC;
     const apiPortPublic =
-      typeof API_PORT_PUBLIC === 'undefined' ? loc.port : API_PORT_PUBLIC;
+      typeof API_PORT_PUBLIC === "undefined" ? loc.port : API_PORT_PUBLIC;
 
     /**
      * Set API url based on current location
      */
-    Object.assign(mx.settings.api, {
+    Object.assign(settings.api, {
       host_public: apiHost,
       protocol: loc.protocol,
-      port_public: apiPortPublic
+      port_public: apiPortPublic,
     });
   }
 }

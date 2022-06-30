@@ -6561,8 +6561,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "zh": "使用格式完成转换 {{format}}。<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
+    "zh": "使用格式完成转换 {{format}}.下载链接：<a href=\"{{url}}\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",

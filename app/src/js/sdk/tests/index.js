@@ -66,6 +66,23 @@ mapx.once("ready", async () => {
     ],
   });
 
+  t.check("Check full websocket communication", {
+    init: async () => {
+      return Promise.all([
+        mapx.ask("test_ws", "job_sum"),
+        mapx.ask("test_ws", "job_echo"),
+      ]);
+    },
+    tests: [
+      {
+        name: "All tests should be true ",
+        test: (res) => {
+          return res.reduce((a, c) => a && c, true);
+        },
+      },
+    ],
+  });
+
   t.check("Generic map methods", {
     tests: [
       {

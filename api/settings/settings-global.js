@@ -5,6 +5,9 @@ const settings_global = {
       project_creator: [1],
     },
   },
+  session: {
+    secret: "cat",
+  },
   api: {
     host: "api",
     port: "8080",
@@ -12,6 +15,17 @@ const settings_global = {
     port_public: "8880",
   },
   socket_io: {
+    keys: {
+      redis_main: "api_io::",
+      redis_job: "api_io_job::",
+    },
+    cookie: {
+      name: "mx_api_io",
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      domain: "app.mapx.localhost",
+    },
     cors: {
       methods: ["GET", "POST"],
       credentials: true,
@@ -37,7 +51,7 @@ const settings_global = {
   },
   geoip: {
     licenseKey: null,
-    urlService: "http://localhost?licence={{licenseKey}}",
+    urlTemplate: "http://localhost?licence={{licenseKey}}",
   },
   meili: {
     master_key: null,

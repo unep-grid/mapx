@@ -4,11 +4,12 @@ import { buildForm } from "./form.js";
 import { el, elSpanTranslate, elButtonFa, elAlert } from "./../el_mapx";
 import { getLanguageCurrent, getLanguageItem } from "./../language";
 import { isEmail, isArray } from "../is_test";
-import { getApiUrl } from "../api_routes";
+import { getApiRoute, getApiUrl } from "../api_routes";
 import { FlashItem } from "../icon_flash";
 import { isSourceDownloadable } from "../mx_helpers";
 import { fetchSourceMetadata } from "../mx_helper_map_view_metadata";
 import { EventSimple } from "../event_simple";
+import { ws } from "../mx.js";
 //import {settings} from './../settings';
 
 const options = {
@@ -92,26 +93,16 @@ export class DownloadSourceModal extends EventSimple {
       const opt = md._opt;
       const formIsValid = md.isValid();
       if (formIsValid) {
-        const url = new URL(getApiUrl("getSourceDownload"));
-        for (const k in opt) {
-          url.searchParams.set(k, opt[k]);
-        }
+        const route = getApiRoute("downloadSource");
+        ws.emit(route, opt);
         mx.nc.panel.open();
         md.close();
         new FlashItem("bell");
-        await md.downloadUrl(url);
         return true;
       }
     } catch (e) {
       console.error(e);
     }
-  }
-
-  async downloadUrl(url) {
-    const md = this;
-    md.fire("download_start", { url });
-    await fetch(url);
-    md.fire("download_end", { url });
   }
 
   update(id) {

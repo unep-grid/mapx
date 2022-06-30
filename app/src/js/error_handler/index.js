@@ -1,5 +1,5 @@
-import {isJson, isString} from './../is_test/index.js';
-import {errorToWarn} from './errToWarn.js';
+import { isJson, isString } from "./../is_test/index.js";
+import { errorToWarn } from "./errToWarn.js";
 /**
  * Generic handler
  * @param {String|Object} err Error message or object
@@ -11,11 +11,11 @@ export function errorHandler(err) {
   if (src) {
     errObject.message = `${errObject.message} (source:${src} )`;
   }
-  
-  if(errObject._to_warn){
-    console.warn(errObject);
-  }else{
-    console.error(errObject);
+
+  if (errObject._to_warn) {
+    console.warn(errObject, errObject.stack);
+  } else {
+    console.error(errObject, errObject.stack);
   }
 }
 
@@ -26,7 +26,7 @@ export function errorHandler(err) {
  * @return {Error}
  */
 export function errorFormater(e) {
-  if (e instanceof Error) {
+  if (e instanceof Error || e instanceof ErrorEvent) {
     return e;
   }
   if (!e) {
@@ -37,7 +37,7 @@ export function errorFormater(e) {
   }
   if (isString(e)) {
     e = {
-      message: e
+      message: e,
     };
   }
   if (!e.message) {
@@ -46,9 +46,9 @@ export function errorFormater(e) {
       e?.error?.message ||
       e?.reason?.message ||
       e?.reason ||
-      'Unspecified';
+      "Unspecified";
     e = {
-      message: msg
+      message: msg,
     };
   }
 

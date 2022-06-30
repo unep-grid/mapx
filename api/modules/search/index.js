@@ -122,7 +122,7 @@ async function updateIndexes() {
   }
 }
 
-async function handlerKey(req, res) {
+async function handlerKey(_, res) {
   try {
     const keys = await meili.getKeys();
     sendJSON(

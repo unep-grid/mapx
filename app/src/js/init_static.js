@@ -1,11 +1,11 @@
-import {getApiUrl, setApiUrlAuto} from './api_routes';
-import {initMapx} from './map_helpers/index.js';
-
-document.addEventListener('DOMContentLoaded', loadStatic);
+import { getApiUrl, setApiUrlAuto } from "./api_routes";
+import { initMapx } from "./map_helpers/index.js";
+import { settings } from "./settings";
+document.addEventListener("DOMContentLoaded", loadStatic);
 
 async function loadStatic() {
   try {
-    console.log('STATIC MODE');
+    console.log("STATIC MODE");
     /*
      * Update api URL according to current path, local value or
      * weback env. variable.
@@ -15,12 +15,12 @@ async function loadStatic() {
     /**
      * Init static mode
      */
-    const resp = await fetch(getApiUrl('getConfigMap'));
+    const resp = await fetch(getApiUrl("getConfigMap"));
     const config = resp.ok ? await resp.json() : {};
-    mx.settings.map.token = config.token;
+    settings.map.token = config.token;
     return initMapx({
       token: config.token,
-      modeStatic: true
+      modeStatic: true,
     });
   } catch (e) {
     console.error(e);

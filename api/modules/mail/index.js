@@ -6,12 +6,12 @@ import { settings } from "#root/settings";
 import { paramsValidator } from "#mapx/route_validation";
 import { parseTemplate } from "#mapx/helpers";
 import { decrypt } from "#mapx/db-utils";
-import { isEmail, isString } from "@fxi/mx_valid";
+import { isEmail, isString, isArrayOf } from "@fxi/mx_valid";
 
 export const mwSend = [
   bodyParser.urlencoded({ extended: false }),
   bodyParser.json(),
-  sendMailApi,
+  mwSendMail,
 ];
 
 export default { mwSend };
@@ -21,7 +21,7 @@ export default { mwSend };
  *
  */
 
-export async function sendMailApi(req, res) {
+export async function mwSendMail(req, res) {
   try {
     const dat = req.body;
     /*
@@ -56,7 +56,7 @@ export async function sendMailApi(req, res) {
     });
 
     if (!validation.ok) {
-      throw Error(JSON.stringify(validation));
+      throw new Error(JSON.stringify(validation));
     }
 
     try {
@@ -94,12 +94,6 @@ export async function sendMailApi(req, res) {
        * };
        */
       res.status(503).send(e);
-      console.error({
-        title: "Error during sendMail",
-        message: e.message,
-        config: conf,
-        date: new Date(),
-      });
     }
   } catch (e) {
     return res.status(403).send(e);
@@ -115,8 +109,8 @@ export async function sendMailApi(req, res) {
  * @param {String} opt.text Email text version
  * @param {String} opt.html Email body html version
  */
-export function sendMail(opt) {
-  return new Promise(function (resolve, reject) {
+export async function sendMail(opt) {
+  try {
     const transporter = nodemailer.createTransport(settings.mail.config);
     const def = settings.mail.options;
     const mail = {
@@ -136,20 +130,28 @@ export function sendMail(opt) {
       mail.from = def.from;
     }
 
-    const valid =
-      isEmail(mail.from) && isEmail(mail.to) && isString(mail.subject);
+    const validTo = isEmail(mail.to) || isArrayOf(mail.to, isEmail);
+    const validFrom = isEmail(mail.from);
+    const validSubject = isString(mail.subject);
+
+    const valid = validTo && validFrom && validSubject;
 
     if (!valid) {
-      throw Error("sendMail: invalid configuration ");
+      throw new Error("sendMail: invalid configuration ");
     }
-    transporter.sendMail(mail, function (error, info) {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(info);
-      }
+
+    const info = await transporter.sendMail(mail);
+
+    return info;
+  } catch (err) {
+    console.error({
+      title: "Error during sendMail",
+      config: opt,
+      message: err.message,
+      date: new Date(),
     });
-  });
+    return err;
+  }
 }
 
 /**

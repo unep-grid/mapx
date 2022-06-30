@@ -88,6 +88,13 @@ class MapxResolversStatic extends ResolversBase {
   }
 
   /**
+   * End to end ws com testing
+   */
+  async test_ws(id) {
+    return await mx.ws.test(id);
+  }
+
+  /**
    * Toogle immersive mode: hide or show ALL panels.
    * @aram {Object} opt Options
    * @param {Boolean} opt.enable Force enable

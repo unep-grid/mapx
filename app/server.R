@@ -24,7 +24,6 @@ server <- function(input, output, session) {
   #
   query <- list()
 
-
   mxUpdateSettings(
     #
     # See all defaults in /src/js/mx_settings_default.js

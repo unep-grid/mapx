@@ -36,12 +36,12 @@ export default {mwCollect};
 /**
  * Collect
  */
-function mwCollectHelper(req, res) {
+async function mwCollectHelper(req, res) {
   try {
     const {ipGeo} = req;
     const isValid = validateLogs(req.body.logs);
     if (isValid) {
-      saveLogs(req.body.logs, ipGeo);
+      await saveLogs(req.body.logs, ipGeo);
       res.end();
     } else {
       res.send(isValid);
@@ -62,10 +62,10 @@ function validateLogs(logs) {
 /**
  * Save in DB
  */
-function saveLogs(logs, ipGeo) {
+async function saveLogs(logs, ipGeo) {
   const logsFormated = formatLogs(logs, ipGeo);
   const query = tblLogs.insert(logsFormated).toQuery();
-  pgWrite.query(query);
+  return pgWrite.query(query);
 }
 /**
  * Format : add date and ip
@@ -84,3 +84,4 @@ function formatLogs(logs, ipGeo) {
   }
   return logs;
 }
+

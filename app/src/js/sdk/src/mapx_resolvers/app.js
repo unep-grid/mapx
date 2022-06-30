@@ -10,9 +10,9 @@ import {
 import { isView } from "./../../../is_test";
 import { viewToMetaModal } from "../../../mx_helper_map_view_metadata.js";
 import { getProjectViewsCollections } from "../../../mx_helper_map_view_ui.js";
-
 import { MapxResolversStatic } from "./static.js";
 import { isStringRange, isString } from "../../../is_test/index.js";
+import { settings } from "./../../../settings";
 
 /**
  * MapX resolvers available in app only
@@ -201,7 +201,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Number} Current user id
    */
   get_user_id() {
-    return mx.settings.user.id;
+    return settings.user.id;
   }
 
   /**
@@ -232,7 +232,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Object} Current user roles
    */
   get_user_roles() {
-    return mx.settings.user.roles;
+    return settings.user.roles;
   }
 
   /**
@@ -286,7 +286,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {String} Current user email ( if logged, null if not)
    */
   get_user_email() {
-    return mx.settings.user.guest ? "" : mx.settings.user.email;
+    return settings.user.guest ? "" : settings.user.email;
   }
 
   /**
@@ -313,7 +313,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {String} Current project id
    */
   get_project() {
-    return mx.settings.project.id;
+    return settings.project.id;
   }
 
   /**
@@ -331,7 +331,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} User is guest
    */
   is_user_guest() {
-    return mx.settings.user.guest === true;
+    return settings.user.guest === true;
   }
 
   /**
@@ -530,7 +530,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @ignore
    */
   _shiny_input(id, opt) {
-    if (mx.settings.mode.app) {
+    if (settings.mode.app) {
       opt = Object.assign({ time: new Date() }, opt);
       if (opt.randomNumber) {
         opt = Math.ceil(Math.random() * 1000);
@@ -538,7 +538,7 @@ class MapxResolversApp extends MapxResolversStatic {
       Shiny.onInputChange(id, opt);
     } else {
       return rslv._err("err_not_available_mode", {
-        mode: JSON.stringify(mx.settings.mode),
+        mode: JSON.stringify(settings.mode),
       });
     }
     return true;

@@ -1,33 +1,34 @@
-import {getApiUrl} from './api_routes';
-import {objToParams} from './mx_helper_url.js';
-import {getJSON, handleRequestMessage} from './mx_helper_misc.js';
-import {el} from './el/src/index.js';
+import { getApiUrl } from "./api_routes";
+import { objToParams } from "./url_utils";
+import { getJSON, handleRequestMessage } from "./mx_helper_misc.js";
+import { el } from "./el/src/index.js";
+import { settings } from "./settings";
 
 export function getOverlapAnalysis(opt) {
-  if (mx.settings.user.guest) {
+  if (settings.user.guest) {
     return;
   }
 
   const elForm = document.getElementById(opt.idForm);
   const elButtonCompute = document.getElementById(opt.idButtonAnalyse);
-  const elTextAreaResult = elForm.querySelector('#' + opt.idTextResult);
-  const elListMessage = elForm.querySelector('#' + opt.idListMessage);
+  const elTextAreaResult = elForm.querySelector("#" + opt.idTextResult);
+  const elListMessage = elForm.querySelector("#" + opt.idListMessage);
 
-  const host = getApiUrl('getSourceOverlap');
+  const host = getApiUrl("getSourceOverlap");
   const query = {
-    layers: opt.layers.join(','),
-    countries: opt.countries.join(','),
-    method: opt.method || 'getArea',
-    idUser: mx.settings.user.id,
-    token: mx.settings.user.token,
-    idProject: mx.settings.project.id,
-    sourceTitle: opt.sourceTitle
+    layers: opt.layers.join(","),
+    countries: opt.countries.join(","),
+    method: opt.method || "getArea",
+    idUser: settings.user.id,
+    token: settings.user.token,
+    idProject: settings.project.id,
+    sourceTitle: opt.sourceTitle,
   };
 
   const params = objToParams(query);
-  const url = host + '?' + params;
+  const url = host + "?" + params;
 
-  elButtonCompute.setAttribute('disabled', 'disabled');
+  elButtonCompute.setAttribute("disabled", "disabled");
 
   getJSON({
     maxWait: 1e3 * 120,
@@ -37,15 +38,15 @@ export function getOverlapAnalysis(opt) {
     onSuccess: handleMessage,
     onError: handleMessage,
     onTimeout: function (_) {
-      const elTimeout = el('li', 'Timeout reached, cancelled analysis.');
+      const elTimeout = el("li", "Timeout reached, cancelled analysis.");
       elListMessage.appendChild(elTimeout);
-      elButtonCompute.removeAttribute('disabled');
-    }
+      elButtonCompute.removeAttribute("disabled");
+    },
   });
 
   function updateLayerList() {
-    Shiny.onInputChange('mx_client_update_source_list', {
-      date: new Date() * 1
+    Shiny.onInputChange("mx_client_update_source_list", {
+      date: new Date() * 1,
     });
   }
 
@@ -54,61 +55,61 @@ export function getOverlapAnalysis(opt) {
   function handleMessage(msg) {
     return handleRequestMessage(msg, messageStore, {
       result: function (msg) {
-        if (msg.content === 'area') {
+        if (msg.content === "area") {
           let area = msg.value;
           const elArea = el(
-            'li',
-            {class: ['mx-log-item', 'mx-log-white']},
-            'Area = ' + area + '[' + msg.unit + ']'
+            "li",
+            { class: ["mx-log-item", "mx-log-white"] },
+            "Area = " + area + "[" + msg.unit + "]"
           );
           elListMessage.appendChild(elArea);
-          if (msg.unit === 'm2') {
+          if (msg.unit === "m2") {
             area = area / 1e6;
           }
           elTextAreaResult.innerText = Math.round(area * 1000) / 1000;
         }
-        if (msg.content === 'sourceMeta') {
+        if (msg.content === "sourceMeta") {
           updateLayerList();
         }
       },
       error: function (msg) {
         const elErr = el(
-          'li',
-          {class: ['mx-log-item', 'mx-log-red']},
+          "li",
+          { class: ["mx-log-item", "mx-log-red"] },
           JSON.stringify(msg)
         );
         elListMessage.appendChild(elErr);
-        elButtonCompute.removeAttribute('disabled');
+        elButtonCompute.removeAttribute("disabled");
       },
       message: function (msg) {
-        const elMsg = el('li', {class: ['mx-log-item', 'mx-log-blue']}, msg);
+        const elMsg = el("li", { class: ["mx-log-item", "mx-log-blue"] }, msg);
         elListMessage.appendChild(elMsg);
       },
       warning: function (msg) {
         const li = el(
-          'li',
+          "li",
           {
-            class: ['mx-log-item', 'mx-log-orange']
+            class: ["mx-log-item", "mx-log-orange"],
           },
           msg
         );
         elProgressMessage.appendChild(li);
       },
       timing: function (msg) {
-        const txtTiming = 'duration = ' + msg.duration + '[' + msg.unit + ']';
+        const txtTiming = "duration = " + msg.duration + "[" + msg.unit + "]";
         const elTiming = el(
-          'li',
-          {class: ['mx-log-item', 'mx-log-blue']},
+          "li",
+          { class: ["mx-log-item", "mx-log-blue"] },
           txtTiming
         );
         elListMessage.appendChild(elTiming);
       },
       end: function (msg) {
-        const elEnd = el('li', {class: ['mx-log-item', 'mx-log-green']}, msg);
+        const elEnd = el("li", { class: ["mx-log-item", "mx-log-green"] }, msg);
         elListMessage.appendChild(elEnd);
-        elButtonCompute.removeAttribute('disabled');
-        elListMessage.appendChild(el('hr'));
-      }
+        elButtonCompute.removeAttribute("disabled");
+        elListMessage.appendChild(el("hr"));
+      },
     });
   }
 }

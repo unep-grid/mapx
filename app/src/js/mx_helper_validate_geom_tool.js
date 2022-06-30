@@ -1,5 +1,7 @@
+import {settings} from './settings';
+
 export function getValidateSourceGeom(opt) {
-  if (mx.settings.user.guest){
+  if (settings.user.guest){
     return;
   }
 
@@ -11,9 +13,9 @@ export function getValidateSourceGeom(opt) {
   var host = h.getApiUrl('getSourceValidateGeom');
   var query = {
     idSource: opt.idSource,
-    idUser: mx.settings.user.id,
-    token: mx.settings.user.token,
-    idProject: mx.settings.project.id,
+    idUser: settings.user.id,
+    token: settings.user.token,
+    idProject: settings.project.id,
     useCache: opt.useCache || false,
     autoCorrect: opt.autoCorrect || false,
     analyze : opt.analyze || true

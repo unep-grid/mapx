@@ -13,7 +13,8 @@ views_geoserver as (
     v.data #> '{abstract,en}' abstract,
     s.id_source,
     v.project id_project,
-    v.data #> '{style,_sld}' style_sld
+    v.data #> '{style,_sld}' style_sld,
+    v.data #> '{style,_mapbox}' style_mapbox
   FROM
     mx_views_latest v,
     src_enabled s
@@ -37,6 +38,7 @@ views_geoserver_extent as (
     id_source,
     id_project,
     style_sld,
+    style_mapbox,
     json_build_object(
       'miny',
       ST_Ymin(_extent),

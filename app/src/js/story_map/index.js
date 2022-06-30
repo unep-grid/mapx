@@ -1,25 +1,26 @@
-import './style.less';
-import {getDictItem, getLabelFromObjectPath} from './../language';
-import {el} from './../el/src/index.js';
-import {ButtonPanel} from './../button_panel/index.js';
-import {errorHandler} from './../error_handler/index.js';
-import {modal} from './../mx_helper_modal.js';
+import "./style.less";
+import { getDictItem, getLabelFromObjectPath } from "./../language";
+import { el } from "./../el/src/index.js";
+import { ButtonPanel } from "./../button_panel/index.js";
+import { errorHandler } from "./../error_handler/index.js";
+import { modal } from "./../mx_helper_modal.js";
+import { settings } from "./../settings";
 import {
   onNextFrame,
   cancelFrame,
   waitFrameAsync,
-  waitTimeoutAsync
-} from './../animation_frame/index.js';
-import {FlashItem} from './../icon_flash/index.js';
+  waitTimeoutAsync,
+} from "./../animation_frame/index.js";
+import { FlashItem } from "./../icon_flash/index.js";
 import {
   path,
   easingFun,
   scrollFromTo,
-  cssTransform
-} from './../mx_helper_misc.js';
-import {dashboardHelper} from './../mx_helper_map_dashboard.js';
-import {getArrayDiff} from './../array_stat/index.js';
-import {createCanvas} from './../mx_helper_canvas.js';
+  cssTransform,
+} from "./../mx_helper_misc.js";
+import { dashboardHelper } from "./../mx_helper_map_dashboard.js";
+import { getArrayDiff } from "./../array_stat/index.js";
+import { createCanvas } from "./../mx_helper_canvas.js";
 import {
   isJson,
   isArray,
@@ -28,8 +29,8 @@ import {
   isViewId,
   isNumeric,
   isEmpty,
-  isView
-} from './../is_test/index.js';
+  isView,
+} from "./../is_test/index.js";
 import {
   getMapPos,
   getViewRemote,
@@ -43,13 +44,8 @@ import {
   viewModulesRemove,
   viewsLayersOrderUpdate,
   getMap,
-  getViewsLayersVisibles
-} from './../map_helpers/index.js';
-
-/**
- * Default settings
- */
-import {settings} from './settings.js';
+  getViewsLayersVisibles,
+} from "./../map_helpers/index.js";
 
 /**
  * Story and state storage
@@ -57,7 +53,7 @@ import {settings} from './settings.js';
 const viewsAdditional = []; // will be in state
 const story = {};
 const state = {};
-window._sm = {story, state};
+window._sm = { story, state };
 
 /**
  * Read and evaluate story map
@@ -109,7 +105,7 @@ async function initListeners() {
    * Edit mode
    */
   if (state.edit) {
-    const {initEditing} = await import('./editor.js');
+    const { initEditing } = await import("./editor.js");
     await initEditing(state);
   } else {
     initMouseMoveListener();
@@ -124,7 +120,7 @@ async function initListeners() {
 }
 
 function removeAllListeners() {
-  mx.listeners.removeListenerByGroup('story_map');
+  mx.listeners.removeListenerByGroup("story_map");
 }
 
 function initClickListener() {
@@ -134,16 +130,16 @@ function initClickListener() {
    */
   mx.listeners.addListener({
     target: state.elStoryContainer,
-    type: 'click',
+    type: "click",
     callback: () => {
       if (state.ct_editor) {
         return;
       }
       mx.panel_tools.panel.open();
-      state.ctrlLock.shake('look_at_me');
-      new FlashItem('ban');
+      state.ctrlLock.shake("look_at_me");
+      new FlashItem("ban");
     },
-    group: 'story_map'
+    group: "story_map",
   });
 
   /**
@@ -151,9 +147,9 @@ function initClickListener() {
    */
   mx.listeners.addListener({
     target: state.elBullets,
-    type: 'click',
+    type: "click",
     callback: bulletScrollTo,
-    group: 'story_map'
+    group: "story_map",
   });
 }
 
@@ -171,14 +167,14 @@ function initKeydownListener() {
 
   mx.listeners.addListener({
     target: window,
-    type: 'keydown',
+    type: "keydown",
     callback: storyHandleKeyDown,
-    group: 'story_map',
+    group: "story_map",
     onRemove: () => {
       if (state.map_keyboard_enabled) {
         map.keyboard.enable();
       }
-    }
+    },
   });
 }
 
@@ -201,8 +197,8 @@ function initMouseMoveListener() {
       `);
   //.button-panel--main : hidden or displayed by user choice
 
-  const classOpacitySmooth = 'mx-smooth-opacity';
-  const classNoCursor = 'nocursor';
+  const classOpacitySmooth = "mx-smooth-opacity";
+  const classNoCursor = "nocursor";
 
   for (const elCtrl of elCtrls) {
     elCtrl.classList.add(classOpacitySmooth);
@@ -211,12 +207,12 @@ function initMouseMoveListener() {
   mx.listeners.addListener({
     target: window,
     callback: mouseHider,
-    type: ['mousemove', 'click', 'wheel'],
-    group: 'story_map',
-    onRemove: destroy
+    type: ["mousemove", "click", "wheel"],
+    group: "story_map",
+    onRemove: destroy,
   });
 
-  mx.events.on('story_step', mouseHider);
+  mx.events.on("story_step", mouseHider);
 
   function mouseHider() {
     if (timer) {
@@ -259,7 +255,7 @@ function initMouseMoveListener() {
 
   function destroy() {
     destroyed = true;
-    mx.events.off('story_step', mouseHider);
+    mx.events.off("story_step", mouseHider);
     show();
     clean();
   }
@@ -267,7 +263,7 @@ function initMouseMoveListener() {
 
 function updateSettings() {
   const story = getStory();
-  const sSettings = path(story, 'settings', {});
+  const sSettings = path(story, "settings", {});
   story._settings = Object.assign({}, settings, sSettings);
 }
 
@@ -309,8 +305,8 @@ export function getViewsStep() {
   const views = [];
   const state = getState();
   /**
-  * TODO : Duplicate code ! merge this code with getStoryViewsId
-  */ 
+   * TODO : Duplicate code ! merge this code with getStoryViewsId
+   */
   for (const item of state.step.views) {
     if (isViewId(item)) {
       views.push(id);
@@ -354,7 +350,7 @@ async function storyUiClear() {
 export async function storyClose() {
   const state = getState();
   state.enable = false;
-  mx.events.fire('story_close');
+  mx.events.fire("story_close");
   removeAllListeners();
   if (state.ct_editor_remove) {
     state.ct_editor_remove();
@@ -362,8 +358,8 @@ export async function storyClose() {
   await waitTimeoutAsync(100);
   await storyStop();
   await storyUiClear();
-  await storyMapLock('lock');
-  new FlashItem('sign-out');
+  await storyMapLock("lock");
+  new FlashItem("sign-out");
   await appStateRestore();
   await cleanState();
 }
@@ -378,7 +374,7 @@ export async function storyStop() {
   }
   const mapBusy = !map.isStyleLoaded();
   if (mapBusy) {
-    await map.once('idle');
+    await map.once("idle");
   }
 }
 
@@ -408,12 +404,12 @@ async function initStory() {
     state.idView = state.view.id;
   } else {
     modal({
-      title: 'Error',
-      content: 'Invalid or empty story',
-      addBackground: true
+      title: "Error",
+      content: "Invalid or empty story",
+      addBackground: true,
     });
     await cleanState();
-    throw new Error('No story to read');
+    throw new Error("No story to read");
   }
   Object.assign(story, state.view.data.story);
   updateSettings();
@@ -427,7 +423,7 @@ export async function cleanRemoveViews() {
 
   for (let idView of vVisible) {
     await viewLayersRemove({
-      idView: idView
+      idView: idView,
     });
     await viewModulesRemove(idView);
   }
@@ -495,7 +491,7 @@ async function initViews() {
 async function start() {
   const state = getState();
 
-  mx.events.fire('story_start');
+  mx.events.fire("story_start");
   /**
    * Initial layout
    */
@@ -546,9 +542,9 @@ async function start() {
 function initResizeListener() {
   mx.listeners.addListener({
     target: window,
-    type: 'resize',
+    type: "resize",
     callback: updateLayout,
-    group: 'story_map'
+    group: "story_map",
   });
 }
 
@@ -593,12 +589,12 @@ function updateAdaptiveLayout() {
 
   const height = state.rectStory.height * state.scaleWrapper;
   const width = state.rectStory.width * state.scaleWrapper;
-  state.elStoryContainer.style[cssTransform] = `translate(-50%,-50%) scale(${
-    state.scaleWrapper
-  })`;
+  state.elStoryContainer.style[
+    cssTransform
+  ] = `translate(-50%,-50%) scale(${state.scaleWrapper})`;
   state.elMapContainer.style.height = `${height}px`;
   state.elMapContainer.style.width = `${width}px`;
-  state.elMapContainer.style[cssTransform] = 'translate(-50%,-50%)';
+  state.elMapContainer.style[cssTransform] = "translate(-50%,-50%)";
   state.map.resize();
 }
 
@@ -706,10 +702,10 @@ function setStepConfig() {
   const state = getState();
   const sd = state.scrollData;
   const elBullets = state.elBullets;
-  const elSteps = state.elStory.querySelectorAll('.mx-story-step');
+  const elSteps = state.elStory.querySelectorAll(".mx-story-step");
 
   state.stepsConfig = [];
-  elBullets.innerHTML = '';
+  elBullets.innerHTML = "";
   let s = 0;
   for (const elStep of elSteps) {
     s++;
@@ -721,7 +717,7 @@ function setStepConfig() {
     const rect = elStep.getBoundingClientRect();
 
     config.elStep = elStep;
-    config.elSlides = elStep.querySelectorAll('.mx-story-slide');
+    config.elSlides = elStep.querySelectorAll(".mx-story-slide");
     config.slidesConfig = [];
 
     /*
@@ -737,14 +733,14 @@ function setStepConfig() {
      * Bullets init
      */
     const elBullet = el(
-      'div',
+      "div",
       {
-        class: ['mx-story-step-bullet', 'shadow', 'mx-pointer', 'hint--top'],
-        'aria-label': stepName ? stepName : `Step ${s}`,
+        class: ["mx-story-step-bullet", "shadow", "mx-pointer", "hint--top"],
+        "aria-label": stepName ? stepName : `Step ${s}`,
         dataset: {
           to: config.startUnscaled,
-          step: s - 1
-        }
+          step: s - 1,
+        },
       },
       `${s}`
     );
@@ -753,7 +749,7 @@ function setStepConfig() {
     config.elBullet = elBullet;
 
     if (s === 1) {
-      elBullet.classList.add('mx-story-step-active');
+      elBullet.classList.add("mx-story-step-active");
     }
 
     /*
@@ -765,7 +761,7 @@ function setStepConfig() {
         const slideConfigJSON = elSlide.dataset.slide_config;
         const validJSON = isJson(slideConfigJSON);
         if (validJSON) {
-          slideConfig.push(...JSON.parse(slideConfigJSON || '[]'));
+          slideConfig.push(...JSON.parse(slideConfigJSON || "[]"));
         }
       } catch (e) {
         console.error(e, slideConfig);
@@ -795,8 +791,8 @@ async function storyUpdateSlides() {
   let elSlides;
   let elStep;
   let isActive, isInRange, isInRangeAnim, toActivate;
-  let clHidden = 'mx-visibility-hidden';
-  let clRemove = 'mx-display-none';
+  let clHidden = "mx-visibility-hidden";
+  let clRemove = "mx-display-none";
   let isHidden = false;
   let config;
   if (!isStoryPlaying()) {
@@ -829,7 +825,7 @@ async function storyUpdateSlides() {
       for (const elSlide of elSlides) {
         const slideTransform = storySetTransform({
           config: config.slidesConfig[i++],
-          percent: percent
+          percent: percent,
         });
         elSlide.classList.remove(clRemove);
         elSlide.style[cssTransform] = slideTransform;
@@ -860,9 +856,9 @@ async function updateBullets() {
   for (const c of state.stepsConfig) {
     const elBullet = c.elBullet;
     if (b++ <= s) {
-      elBullet.classList.add('mx-story-step-active');
+      elBullet.classList.add("mx-story-step-active");
     } else {
-      elBullet.classList.remove('mx-story-step-active');
+      elBullet.classList.remove("mx-story-step-active");
     }
   }
   /**
@@ -880,7 +876,7 @@ async function updateBullets() {
 
 const keyState = {
   keys: [],
-  idTimeout: 0
+  idTimeout: 0,
 };
 
 async function storyHandleKeyDown(event) {
@@ -910,7 +906,7 @@ async function storyHandleKeyDown(event) {
     keyState.keys.push(event.key);
     keyState.idTimeout = setTimeout(async () => {
       try {
-        const sNum = keyState.keys.join('') * 1;
+        const sNum = keyState.keys.join("") * 1;
         keyState.keys.length = 0;
         await storyGoTo(sNum - 1);
       } catch (e) {
@@ -921,31 +917,31 @@ async function storyHandleKeyDown(event) {
   }
 
   switch (event.key) {
-    case 'Escape':
+    case "Escape":
       if (!state.autoStart && !state.edit) {
         prevent();
         await storyClose();
       }
       break;
-    case 'l':
+    case "l":
       prevent();
-      state.ctrlLock.action('toogle');
+      state.ctrlLock.action("toogle");
       break;
-    case ' ':
+    case " ":
       prevent();
-      await storyAutoPlay('start');
+      await storyAutoPlay("start");
       break;
-    case 'ArrowDown':
-    case 'ArrowRight':
+    case "ArrowDown":
+    case "ArrowRight":
       prevent();
-      await storyAutoPlay('stop');
-      await storyGoTo('next');
+      await storyAutoPlay("stop");
+      await storyGoTo("next");
       break;
-    case 'ArrowUp':
-    case 'ArrowLeft':
+    case "ArrowUp":
+    case "ArrowLeft":
       prevent();
-      await storyAutoPlay('stop');
-      await storyGoTo('previous');
+      await storyAutoPlay("stop");
+      await storyGoTo("previous");
       break;
     default:
       return;
@@ -974,13 +970,13 @@ export async function storyGoTo(to, useTimeout, funStop) {
   const maxStep = steps.length - 1;
 
   switch (to) {
-    case 'next':
-    case 'n':
+    case "next":
+    case "n":
       nextStep = currentStep + 1;
       destStep = nextStep > maxStep ? 0 : nextStep;
       break;
-    case 'previous':
-    case 'p':
+    case "previous":
+    case "p":
       previousStep = currentStep - 1;
       destStep = previousStep < 0 ? maxStep : previousStep;
       break;
@@ -992,17 +988,17 @@ export async function storyGoTo(to, useTimeout, funStop) {
 
   const stop = stepsDim[destStep].startUnscaled;
   const step = steps[currentStep];
-  const easing = path(step, 'autoplay.easing') || 'easeIn';
-  const duration = path(step, 'autoplay.duration') || 1000;
-  const easing_p = path(step, 'autoplay.easing_power') || 1;
+  const easing = path(step, "autoplay.easing") || "easeIn";
+  const duration = path(step, "autoplay.duration") || 1000;
+  const easing_p = path(step, "autoplay.easing_power") || 1;
 
   if (useTimeout) {
-    timeout = path(step, 'autoplay.timeout') || 1000;
+    timeout = path(step, "autoplay.timeout") || 1000;
   }
 
   const easeFun = easingFun({
     type: easing,
-    power: easing_p
+    power: easing_p,
   });
 
   const jump = state.storyGoToDone === false || Math.abs(stop - start) > height;
@@ -1017,7 +1013,7 @@ export async function storyGoTo(to, useTimeout, funStop) {
     to: stop,
     jump: jump,
     during: duration,
-    using: easeFun
+    using: easeFun,
   });
 
   await maxWait(promScroll, duration + timeout);
@@ -1026,7 +1022,7 @@ export async function storyGoTo(to, useTimeout, funStop) {
 
   return {
     step: destStep,
-    end: destStep === maxStep
+    end: destStep === maxStep,
   };
 }
 
@@ -1040,36 +1036,36 @@ function maxWait(prom, duration) {
       setTimeout(() => {
         resolve(true);
       }, duration);
-    })
+    }),
   ]);
 }
 
 export async function storyAutoPlay(cmd) {
   const state = getState();
   const enabled = state.autoplay || false;
-  const playStart = cmd === 'start' && !enabled;
-  const playStop = (cmd === 'stop' && enabled) || (cmd === 'start' && enabled);
-  const playNext = cmd === 'next' && enabled;
+  const playStart = cmd === "start" && !enabled;
+  const playStop = (cmd === "stop" && enabled) || (cmd === "start" && enabled);
+  const playNext = cmd === "next" && enabled;
 
-  const stopControl = function() {
+  const stopControl = function () {
     return state.autoplay === false;
   };
 
   if (playStart) {
-    new FlashItem('play');
+    new FlashItem("play");
     state.autoplay = true;
-    storyAutoPlay('next');
+    storyAutoPlay("next");
   }
 
   if (playStop) {
     state.autoplay = false;
-    new FlashItem('stop');
+    new FlashItem("stop");
   }
 
   if (playNext) {
-    await storyGoTo('next', true, stopControl);
+    await storyGoTo("next", true, stopControl);
     if (state.autoplay) {
-      storyAutoPlay('next');
+      storyAutoPlay("next");
     }
   }
   return state.autoplay;
@@ -1083,26 +1079,26 @@ export async function storyMapLock(cmd) {
   try {
     const dh = dashboardHelper;
     const state = getState();
-    const valid = ['recalc', 'lock', 'unlock', 'toggle'].includes(cmd);
+    const valid = ["recalc", "lock", "unlock", "toggle"].includes(cmd);
     if (!valid) {
-      cmd = 'toggle';
+      cmd = "toggle";
     }
     const btn = state.ctrlLock;
     const elButton = btn.elButton;
-    const elIcon = elButton.querySelector('.fa');
+    const elIcon = elButton.querySelector(".fa");
     const elStoryContainer = state.elStoryContainer;
-    const classLock = 'fa-lock';
-    const classUnlock = 'fa-unlock';
-    const classNoEvent = 'mx-events-off';
+    const classLock = "fa-lock";
+    const classUnlock = "fa-unlock";
+    const classNoEvent = "mx-events-off";
     const isLocked = elIcon.classList.contains(classLock);
     const isUnlocked = !isLocked;
-    const isRecalc = cmd === 'recalc';
+    const isRecalc = cmd === "recalc";
 
     const cases = {
       unlock: true,
       lock: false,
       recalc: !isLocked,
-      toggle: isLocked
+      toggle: isLocked,
     };
 
     const toUnlock = cases[cmd];
@@ -1113,15 +1109,15 @@ export async function storyMapLock(cmd) {
       elIcon.classList.add(classUnlock);
       elStoryContainer.classList.add(classNoEvent);
       if (!isRecalc && hasChanged) {
-        new FlashItem('unlock');
+        new FlashItem("unlock");
       }
     } else {
-      mx.events.fire('story_lock');
+      mx.events.fire("story_lock");
       elIcon.classList.add(classLock);
       elIcon.classList.remove(classUnlock);
       elStoryContainer.classList.remove(classNoEvent);
       if (!isRecalc && hasChanged) {
-        new FlashItem('lock');
+        new FlashItem("lock");
       }
       if (dh.hasInstance()) {
         const d = dh.getInstance();
@@ -1186,15 +1182,15 @@ async function storyControlsEnable() {
   /**
    * Preview button ( edit mode )
    */
-  const elBtnPreview = document.querySelector('#btnViewPreviewStory');
+  const elBtnPreview = document.querySelector("#btnViewPreviewStory");
   if (elBtnPreview) {
-    elBtnPreview.removeAttribute('disabled');
+    elBtnPreview.removeAttribute("disabled");
   }
 
   /**
    * Set control map pan lock mode
    */
-  await storyMapLock('recalc');
+  await storyMapLock("recalc");
 }
 
 async function appStateSave() {
@@ -1225,7 +1221,7 @@ async function appStateSave() {
      * Clear views
      */
     for (const id of oldViews) {
-      console.log('story remove view', id);
+      console.log("story remove view", id);
       await viewRemove(id);
     }
 
@@ -1233,8 +1229,8 @@ async function appStateSave() {
      * Hide modes
      */
 
-    state.ctrlAerial.action('hide');
-    state.ctrlMode3d.action('hide');
+    state.ctrlAerial.action("hide");
+    state.ctrlMode3d.action("hide");
 
     /*
      * save in state
@@ -1243,7 +1239,7 @@ async function appStateSave() {
       oldViews,
       position,
       hasAerial,
-      has3d
+      has3d,
     });
 
     state._app_state_saved = true;
@@ -1262,7 +1258,7 @@ async function appStateRestore() {
     zoom: pos.z,
     bearing: pos.b,
     pitch: pos.p,
-    center: [pos.lng, pos.lat]
+    center: [pos.lng, pos.lat],
   });
 
   resetMapStyle();
@@ -1280,14 +1276,14 @@ async function appStateRestore() {
 function resetControls() {
   const state = getState();
   if (state.hasAerial) {
-    state.ctrlAerial.action('show');
+    state.ctrlAerial.action("show");
   } else {
-    state.ctrlAerial.action('hide');
+    state.ctrlAerial.action("hide");
   }
   if (state.has3d) {
-    state.ctrlMode3d.action('show');
+    state.ctrlMode3d.action("show");
   } else {
-    state.ctrlMode3d.action('hide');
+    state.ctrlMode3d.action("hide");
   }
   if (isArray(state.controlsAdded)) {
     for (const ctrl of state.controlsAdded) {
@@ -1320,20 +1316,20 @@ async function initLegendPanel() {
   state.buttonLegend = new ButtonPanel({
     elContainer: document.body,
     panelFull: true,
-    position: 'bottom-left',
-    tooltip_position: 'right',
-    button_text: getDictItem('button_legend_button'),
-    button_lang_key: 'button_legend_button',
-    button_classes: ['fa', 'fa-list-ul'],
-    item_content_classes: ['button-panel--item-content-flex-col'],
-    container_classes: ['button-panel--container-no-full-width'],
+    position: "bottom-left",
+    tooltip_position: "right",
+    button_text: getDictItem("button_legend_button"),
+    button_lang_key: "button_legend_button",
+    button_classes: ["fa", "fa-list-ul"],
+    item_content_classes: ["button-panel--item-content-flex-col"],
+    container_classes: ["button-panel--container-no-full-width"],
     container_style: {
-      width: '300px',
-      height: '300px',
-      minWidth: '200px',
-      minHeight: '200px',
-      maxWidth: '50vw'
-    }
+      width: "300px",
+      height: "300px",
+      minWidth: "200px",
+      minHeight: "200px",
+      maxWidth: "50vw",
+    },
   });
 }
 function removeLegendPanel() {
@@ -1399,27 +1395,27 @@ async function buildMain() {
   /**
    * Story map container
    */
-  state.elStoryContainer = el('div', {
+  state.elStoryContainer = el("div", {
     class: s.class_container,
-    id: s.id_story
+    id: s.id_story,
   });
 
   state.elStory = el(
-    'div',
+    "div",
     {
-      class: s.class_story
+      class: s.class_story,
     },
     story.steps.map((step, stepNum) => {
       /**
        * For each step
        */
       return el(
-        'div',
+        "div",
         {
           class: s.class_step,
           dataset: {
-            step_name: step.name
-          }
+            step_name: step.name,
+          },
         },
         step.slides.map((slide, slideNum) => {
           const config = JSON.stringify(slide.effects || []);
@@ -1427,47 +1423,47 @@ async function buildMain() {
            * For each slide
            */
           return el(
-            'div',
+            "div",
             {
               dataset: {
-                slide_config: config
+                slide_config: config,
               },
 
               class: [s.class_slide].concat(
-                slide.classes.map((c) => s.class_story + '-' + c.name),
-                'mx-display-none'
-              )
+                slide.classes.map((c) => s.class_story + "-" + c.name),
+                "mx-display-none"
+              ),
             },
             el(
-              'div',
+              "div",
               {
                 class: s.class_slide_front,
                 style: {
                   color: slide.color_fg || s.colors.fg,
                   borderColor: slide.color_fg || s.colors.fg,
-                  fontSize: slide.size_text + 'px' || s.sizes.text + 'px',
-                  overflowY: slide.scroll_enable ? 'scroll' : 'hidden'
+                  fontSize: slide.size_text + "px" || s.sizes.text + "px",
+                  overflowY: slide.scroll_enable ? "scroll" : "hidden",
                 },
                 dataset: {
                   editable: true,
-                  name: stepNum + ':' + slideNum
-                }
+                  name: stepNum + ":" + slideNum,
+                },
               },
               glfo({
                 obj: slide,
-                path: 'html',
-                default: '<p></p>'
+                path: "html",
+                default: "<p></p>",
               })
             ),
-            el('div', {
+            el("div", {
               style: {
                 backgroundColor: slide.color_bg || s.colors.bg,
                 opacity:
                   slide.opacity_bg === 0
                     ? 0
-                    : slide.opacity_bg || s.colors.alpha
+                    : slide.opacity_bg || s.colors.alpha,
               },
-              class: s.class_slide_back
+              class: s.class_slide_back,
             })
           );
         }) // end slides
@@ -1484,11 +1480,11 @@ async function buildBullets() {
   /**
    * Bullets
    */
-  state.elBullets = el('div', {class: ['mx-story-step-bullets', 'noselect']});
+  state.elBullets = el("div", { class: ["mx-story-step-bullets", "noselect"] });
   state.elBulletsContainer = el(
-    'div',
+    "div",
     {
-      class: ['mx-story-step-bullets-container', 'noselect']
+      class: ["mx-story-step-bullets-container", "noselect"],
     },
     state.elBullets
   );
@@ -1501,7 +1497,7 @@ async function buildBullets() {
  */
 async function handleMissingImages() {
   const state = getState();
-  const imgs = state.elStory.querySelectorAll('img');
+  const imgs = state.elStory.querySelectorAll("img");
   for (const img of imgs) {
     img.onerror = () => {
       const imgRect = img.getBoundingClientRect();
@@ -1517,33 +1513,33 @@ async function handleMissingImages() {
 
 const tf = {
   0: () => {
-    return '';
+    return "";
   },
   1: (p) => {
-    return 'translate3d(' + p + '%,0,0)';
+    return "translate3d(" + p + "%,0,0)";
   },
   2: (p) => {
-    return 'translate3d(0,' + p + '%,0)';
+    return "translate3d(0," + p + "%,0)";
   },
   3: (p) => {
-    return 'translate3d(0,0,' + p + 'px)';
+    return "translate3d(0,0," + p + "px)";
   },
   4: (p) => {
     p = p * 3.6;
-    return 'rotate3d(1,0,0,' + p + 'deg)';
+    return "rotate3d(1,0,0," + p + "deg)";
   },
   5: (p) => {
     p = p * 3.6;
-    return 'rotate3d(0,1,0,' + p + 'deg)';
+    return "rotate3d(0,1,0," + p + "deg)";
   },
   6: (p) => {
     p = p * 3.6;
-    return 'rotate3d(0,0,1,' + p + 'deg)';
+    return "rotate3d(0,0,1," + p + "deg)";
   },
   7: (p) => {
     p = p / 100 + 1;
-    return 'scale(' + p + ')';
-  }
+    return "scale(" + p + ")";
+  },
 };
 
 /*
@@ -1577,7 +1573,7 @@ export function storySetTransform(o) {
     tt.push(tf[d.t](p));
   }
 
-  return tt.join(' ');
+  return tt.join(" ");
 }
 
 export async function storyPlayStep(stepNum) {
@@ -1587,14 +1583,14 @@ export async function storyPlayStep(stepNum) {
   const story = getStory();
   const state = getState();
   const settings = getSettings();
-  const steps = path(story, 'steps', []);
+  const steps = path(story, "steps", []);
   const elLegendContainer = state.buttonLegend.elPanelContent;
   const map = state.map;
   if (steps.length === 0) {
     return;
   }
   map.stop();
-  mx.events.fire('story_step');
+  mx.events.fire("story_step");
   /**
    * retrieve step information
    */
@@ -1607,22 +1603,22 @@ export async function storyPlayStep(stepNum) {
     {},
     {
       duration: 1000,
-      easing: 'easeIn',
+      easing: "easeIn",
       easing_power: 1,
-      method: 'easeTo'
+      method: "easeTo",
     },
     step.animation
   );
   const easing = easingFun({
     type: anim.easing,
-    power: anim.easing_power
+    power: anim.easing_power,
   });
   /**
    * Set base map mode
    */
   if (step.base_layer) {
-    const actionAerial = step.base_layer.add_aerial ? 'show' : 'hide';
-    const actionTerrain = step.base_layer.add_3d_terrain ? 'show' : 'hide';
+    const actionAerial = step.base_layer.add_aerial ? "show" : "hide";
+    const actionTerrain = step.base_layer.add_3d_terrain ? "show" : "hide";
     state.ctrlAerial.action(actionAerial);
     state.ctrlMode3d.action(actionTerrain);
   }
@@ -1630,16 +1626,16 @@ export async function storyPlayStep(stepNum) {
   /**
    * Fly to position
    */
-  if (anim.method === 'fitBounds') {
-    for (const p of ['w', 'e', 's', 'n']) {
+  if (anim.method === "fitBounds") {
+    for (const p of ["w", "e", "s", "n"]) {
       if (isEmpty(pos[p])) {
         pos[p] = 0;
         console.error(`Missing position ${p} to fitbounds`);
       }
     }
     map.fitBounds([pos.w, pos.s, pos.e, pos.n]);
-    map.once('moveend', () => {
-      map.easeTo({pitch: 0.0});
+    map.once("moveend", () => {
+      map.easeTo({ pitch: 0.0 });
     });
   } else {
     map[anim.method]({
@@ -1648,7 +1644,7 @@ export async function storyPlayStep(stepNum) {
       easing: easing,
       bearing: pos.bearing,
       pitch: pos.pitch,
-      center: [pos.lng, pos.lat]
+      center: [pos.lng, pos.lat],
     });
   }
 
@@ -1665,13 +1661,13 @@ export async function storyPlayStep(stepNum) {
    */
   let i = 0;
   for (const v of vToAdd) {
-    const vPrevious = vStep[i++ - 1] || mx.settings.layerBefore;
+    const vPrevious = vStep[i++ - 1] || settings.layerBefore;
     await viewLayersAdd({
       idView: v,
       openView: false,
       addTitle: true,
       before: vPrevious,
-      elLegendContainer
+      elLegendContainer,
     });
   }
 
@@ -1681,17 +1677,17 @@ export async function storyPlayStep(stepNum) {
   for (const v of vToRemove) {
     await viewLayersRemove({
       idView: v,
-      elLegendContainer
+      elLegendContainer,
     });
   }
 
   await viewsLayersOrderUpdate({
-    order: vStep
+    order: vStep,
   });
 
   await viewsLegendsOrderUpdate({
     elContainer: elLegendContainer,
-    order: vStep
+    order: vStep,
   });
 
   /**
@@ -1721,7 +1717,7 @@ async function viewsLegendsOrderUpdate(opt) {
 
 async function updatePanelBehaviour(state, settings, step) {
   const dh = dashboardHelper;
-  const idViews = path(step, 'views', []).map((v) => v.view || v);
+  const idViews = path(step, "views", []).map((v) => v.view || v);
 
   if (!isStoryPlaying()) {
     return;
@@ -1731,13 +1727,13 @@ async function updatePanelBehaviour(state, settings, step) {
    * Set dashboard panel behaviour
    * -> used in buildDashboard()
    */
-  const dDefault = 'default';
-  const dClosed = 'closed';
-  const dRoot = path(settings, 'dashboards_panel_behaviour', null);
-  const dStep = path(step, 'dashboards_panel_behaviour', null);
+  const dDefault = "default";
+  const dClosed = "closed";
+  const dRoot = path(settings, "dashboards_panel_behaviour", null);
+  const dStep = path(step, "dashboards_panel_behaviour", null);
   let dBehaviour;
 
-  if (mx.settings.initClosedPanels) {
+  if (settings.initClosedPanels) {
     dBehaviour = dClosed;
   } else if (dRoot && dRoot !== dDefault) {
     dBehaviour = dRoot;
@@ -1747,7 +1743,7 @@ async function updatePanelBehaviour(state, settings, step) {
     dBehaviour = dDefault;
   }
 
-  if (dBehaviour === 'disabled') {
+  if (dBehaviour === "disabled") {
     dh.rmInstance();
   } else {
     /**
@@ -1763,10 +1759,10 @@ async function updatePanelBehaviour(state, settings, step) {
      */
     if (dashboard) {
       switch (dBehaviour) {
-        case 'open':
+        case "open":
           dashboard.show();
           break;
-        case 'closed':
+        case "closed":
           dashboard.hide();
           break;
         default:
@@ -1798,13 +1794,13 @@ async function updatePanelBehaviour(state, settings, step) {
   /**
    * Set legend panel behaviour
    */
-  const lDefault = 'default';
-  const lClosed = 'closed';
-  const lRoot = path(settings, 'legends_panel_behaviour', null);
-  const lStep = path(step, 'legends_panel_behaviour', null);
+  const lDefault = "default";
+  const lClosed = "closed";
+  const lRoot = path(settings, "legends_panel_behaviour", null);
+  const lStep = path(step, "legends_panel_behaviour", null);
   let lBehaviour;
 
-  if (mx.settings.initClosedPanels) {
+  if (settings.initClosedPanels) {
     lBehaviour = lClosed;
   } else if (lRoot && lRoot !== lDefault) {
     lBehaviour = lRoot;
@@ -1815,10 +1811,10 @@ async function updatePanelBehaviour(state, settings, step) {
   }
 
   switch (lBehaviour) {
-    case 'open':
+    case "open":
       state.buttonLegend.open();
       break;
-    case 'closed':
+    case "closed":
       state.buttonLegend.close();
       break;
     default:
@@ -1833,7 +1829,7 @@ export function hasFocusOnMap() {
   if (elActive === elMapC) {
     return true;
   }
-  if (elActive.classList.contains('form-control')) {
+  if (elActive.classList.contains("form-control")) {
     return false;
   }
   while (elActive) {

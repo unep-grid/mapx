@@ -1,7 +1,28 @@
-import {NestedList} from './nested_list/index.js';
-import {ViewsFilter} from './views_filter/index.js';
-import {ViewBase} from './views_builder/view_base.js';
-import {getArrayDistinct} from './array_stat/index.js';
+import { NestedList } from "./nested_list/index.js";
+import { ViewsFilter } from "./views_filter/index.js";
+import { ViewBase } from "./views_builder/view_base.js";
+import { getArrayDistinct } from "./array_stat/index.js";
+import { settings } from "./settings";
+import { isView, isArray, isViewOpen, isObject } from "./is_test_mapx";
+import { path, itemFlashSave } from "./mx_helper_misc.js";
+import { getQueryParameterInit } from "./url_utils";
+import { getDictItem, updateLanguageElements } from "./language";
+import { setViewBadges } from "./mx_helper_map_view_badges.js";
+import { el } from "./el/src/index.js";
+import {
+  viewModulesRemove,
+  getView,
+  getMapData,
+  getViews,
+  viewLayersAdd,
+  viewsCloseAll,
+  viewAdd,
+  getViewTitleNormalized,
+  getViewDateModified,
+  viewsCheckedUpdate,
+  viewsLayersOrderUpdate,
+  updateBtnFilterActivated,
+} from "./map_helpers";
 
 /**
  * Get the current project views state.
@@ -12,21 +33,20 @@ import {getArrayDistinct} from './array_stat/index.js';
  * @return {Array} State
  */
 export function getProjectViewsState(opt) {
-  const h = mx.helpers;
   opt = Object.assign(
     {},
-    {idProject: mx.settings.project.id, idInput: 'projectViewsStates'},
+    { idProject: settings.project.id, idInput: "projectViewsStates" },
     opt
   );
   const idInput = opt.idInput;
-  const isCurrentProject = opt.idProject === mx.settings.project.id;
-  const hasShiny = h.isObject(window.Shiny);
+  const isCurrentProject = opt.idProject === settings.project.id;
+  const hasShiny = isObject(window.Shiny);
   const state = [];
   if (isCurrentProject) {
-    const mData = h.getMapData();
+    const mData = getMapData();
     if (mData.viewsList) {
       if (mData.viewsList.isModeFrozen()) {
-        alert('Operation not allowed : remove activated filters');
+        alert("Operation not allowed : remove activated filters");
         return;
       }
       state.push(...mData.viewsList.getState());
@@ -45,11 +65,10 @@ export function getProjectViewsState(opt) {
  * @param {String} opt.idInput Shiny input id,
  */
 export function getProjectViewsCollectionsShiny(opt) {
-  const h = mx.helpers;
-  opt = Object.assign({}, {idInput: 'projectViewsCollections'}, opt);
+  opt = Object.assign({}, { idInput: "projectViewsCollections" }, opt);
 
-  const hasShiny = h.isObject(window.Shiny);
-  const collections = h.getProjectViewsCollections();
+  const hasShiny = isObject(window.Shiny);
+  const collections = getProjectViewsCollections();
 
   if (hasShiny && opt.idInput) {
     Shiny.onInputChange(opt.idInput, collections);
@@ -64,14 +83,13 @@ export function getProjectViewsCollectionsShiny(opt) {
  * @return {Array} Array of names of collections
  */
 export function getProjectViewsCollections(opt) {
-  const h = mx.helpers;
-  opt = Object.assign({open: null}, opt);
+  opt = Object.assign({ open: null }, opt);
   const useOpen = opt.open === true;
-  const collections = h.getViews().reduce((a, v) => {
-    if (useOpen && !h.isViewOpen(v)) {
+  const collections = getViews().reduce((a, v) => {
+    if (useOpen && !isViewOpen(v)) {
       return a;
     }
-    return a.concat(h.path(v, 'data.collections', []));
+    return a.concat(path(v, "data.collections", []));
   }, []);
   return getArrayDistinct(collections);
 }
@@ -85,8 +103,8 @@ export function viewsToNestedListState(views) {
   return views.map((v) => {
     return {
       id: v.id,
-      group: 'root',
-      type: 'item'
+      group: "root",
+      type: "item",
     };
   });
 }
@@ -97,16 +115,15 @@ export function viewsToNestedListState(views) {
  * @return {Array} modified state
  */
 function sanitizeState(states) {
-  const h = mx.helpers;
-  const hasStateStored = h.isArray(states.stored) && states.stored.length > 0;
+  const hasStateStored = isArray(states.stored) && states.stored.length > 0;
   let state = hasStateStored ? states.stored : states.orig || [];
   /**
    * Trim state
    */
-  const views = h.getViews();
+  const views = getViews();
   const idsViews = views.map((v) => v.id);
   state = state.filter((s) => {
-    return s.type !== 'item' || idsViews.indexOf(s.id) > -1;
+    return s.type !== "item" || idsViews.indexOf(s.id) > -1;
   });
   /**
    * Expend state
@@ -115,7 +132,7 @@ function sanitizeState(states) {
   idsViews.forEach((i) => {
     const unrefer = idsState.indexOf(i) === -1;
     if (unrefer) {
-      const newItem = {id: i, type: 'item', render: true, moveTop: true};
+      const newItem = { id: i, type: "item", render: true, moveTop: true };
       state.push(newItem);
     }
   });
@@ -126,34 +143,33 @@ function sanitizeState(states) {
 /**
  * Add single view to the views list
  * @param {Object} view View object to add
- * @param {Object} settings
- * @param {String} settings.id
- * @param {Boolean} settings.moveTop Move view item to top
- * @param {Boolean} settings.render Trigger item rendering
- * @param {Boolean} settings.open Open and add view to the map
- * @param {Object} settings.view View object to render
- * @return {Promise<Object>} Object settings realised
+ * @param {Object} options
+ * @param {String} options.id
+ * @param {Boolean} options.moveTop Move view item to top
+ * @param {Boolean} options.render Trigger item rendering
+ * @param {Boolean} options.open Open and add view to the map
+ * @param {Object} options.view View object to render
+ * @return {Promise<Object>} Object options realised
  */
-export async function viewsListAddSingle(view, settings) {
-  settings = settings || {};
-  const h = mx.helpers;
-  const staticMode = !!mx.settings.mode.static;
+export async function viewsListAddSingle(view, options) {
+  options = options || {};
+  const staticMode = !!settings.mode.static;
 
-  if (!h.isView(view)) {
+  if (!isView(view)) {
     return;
   }
 
-  const settings_default = {
+  const opt_default = {
     id: view.id,
     moveTop: true,
     render: true,
     open: true,
-    view: view
+    view: view,
   };
 
-  settings = Object.assign({}, settings_default, settings);
+  options = Object.assign({}, opt_default, options);
 
-  const mData = h.getMapData();
+  const mData = getMapData();
   const ids = mData.views.map((v) => v.id);
   const idPosOld = ids.indexOf(view.id);
   const idNew = idPosOld === -1;
@@ -163,16 +179,16 @@ export async function viewsListAddSingle(view, settings) {
   mData.views.unshift(view);
 
   if (staticMode) {
-    await h.viewLayersAdd({
+    await viewLayersAdd({
       idView: view.id,
-      addTitle: true
+      addTitle: true,
     });
   } else {
-    await mData.viewsList.addItem(settings);
+    await mData.viewsList.addItem(options);
     mData.viewsFilter.update();
   }
 
-  return settings;
+  return options;
 }
 
 /**
@@ -180,20 +196,19 @@ export async function viewsListAddSingle(view, settings) {
  * @param {Object} view View object to add
  */
 export async function viewsListUpdateSingle(view) {
-  const h = mx.helpers;
-  const mData = mx.helpers.getMapData();
-  const oldView = h.getView(view.id);
-  if (h.isView(oldView)) {
-    await h.viewModulesRemove(oldView);
+  const mData = getMapData();
+  const oldView = getView(view.id);
+  if (isView(oldView)) {
+    await viewModulesRemove(oldView);
   } else {
-    console.warn('No old view to update');
+    console.warn("No old view to update");
   }
   Object.assign(oldView, view);
   const settings = {
     id: view.id,
     view: oldView,
     update: true,
-    open: true
+    open: true,
   };
   await mData.viewsList.updateItem(settings);
   mData.viewsFilter.updateViewsComponents();
@@ -201,8 +216,7 @@ export async function viewsListUpdateSingle(view) {
 }
 
 export function updateViewsFilter() {
-  const h = mx.helpers;
-  const mData = h.getMapData();
+  const mData = getMapData();
   mData.viewsFilter.update();
 }
 
@@ -214,20 +228,18 @@ export function updateViewsFilter() {
  * @param {boolean} o.add Add views to an existing list
  */
 export async function viewsListRenderNew(o) {
-  const h = mx.helpers;
   const idMap = o.id;
-  const mData = h.getMapData(idMap);
-  //const elViewsContainer = document.querySelector('.mx-views-container');
-  const elFilterText = document.getElementById('viewsFilterText');
-  const elFilterTags = document.getElementById('viewsFilterContainer');
-  const elFilterActivated = document.getElementById('btnFilterChecked');
-  const elFilterSwitch = document.getElementById('viewsFilterSwitch');
-  const elFilterCount = document.getElementById('viewsFilterCount');
-  const elViewsList = document.getElementById('mxViewsList');
+  const mData = getMapData(idMap);
+  const elFilterText = document.getElementById("viewsFilterText");
+  const elFilterTags = document.getElementById("viewsFilterContainer");
+  const elFilterActivated = document.getElementById("btnFilterChecked");
+  const elFilterSwitch = document.getElementById("viewsFilterSwitch");
+  const elFilterCount = document.getElementById("viewsFilterCount");
+  const elViewsList = document.getElementById("mxViewsList");
   const views = o.views;
-  const hasState = o.state && h.isArray(o.state) && o.state.length > 0;
-  const state = hasState ? o.state : h.viewsToNestedListState(views);
-  const noViewsMode = h.getQueryParameterInit('noViews')[0] === 'true';
+  const hasState = o.state && isArray(o.state) && o.state.length > 0;
+  const state = hasState ? o.state : viewsToNestedListState(views);
+  const noViewsMode = getQueryParameterInit("noViews")[0] === "true";
 
   if (mData.viewsFilter instanceof ViewsFilter) {
     await mData.viewsFilter.destroy();
@@ -252,37 +264,37 @@ export async function viewsListRenderNew(o) {
    * Create views list ui
    */
   mData.viewsList = new NestedList(elViewsList, {
-    id: mx.settings.project.id,
+    id: settings.project.id,
     state: state,
     locked: noViewsMode,
     useStateStored: true,
     autoMergeState: true,
     emptyLabel: getEmptyLabel(),
-    classDragHandle: 'li-drag-handle',
+    classDragHandle: "li-drag-handle",
     customDictItems: [
-      {id: 'name_group', en: 'category', fr: 'catégorie'},
-      {id: 'name_item', en: 'view', fr: 'vue'}
+      { id: "name_group", en: "category", fr: "catégorie" },
+      { id: "name_item", en: "view", fr: "vue" },
     ],
 
     eventsCallback: [
       /**
        * handlers non async
        */
-      {id: 'set_drag_image', action: handleSetDragImage},
-      {id: 'set_drag_text', action: handleSetDragText},
-      {id: 'state_save_local', action: h.itemFlashSave},
-      {id: 'state_sanitize', action: sanitizeState},
-      {id: 'get_item_text_by_id', action: h.getViewTitleNormalized},
-      {id: 'get_item_date_by_id', action: h.getViewDateModified},
+      { id: "set_drag_image", action: handleSetDragImage },
+      { id: "set_drag_text", action: handleSetDragText },
+      { id: "state_save_local", action: itemFlashSave },
+      { id: "state_sanitize", action: sanitizeState },
+      { id: "get_item_text_by_id", action: getViewTitleNormalized },
+      { id: "get_item_date_by_id", action: getViewDateModified },
 
       /**
        * Async handlers
        */
-      {id: 'render_item_content', action: handleRenderItemContent},
-      {id: 'state_reset', action: h.viewsCheckedUpdate},
-      {id: 'state_order', action: h.viewsLayersOrderUpdate},
-      {id: 'destroy', action: h.viewsCloseAll}
-    ]
+      { id: "render_item_content", action: handleRenderItemContent },
+      { id: "state_reset", action: viewsCheckedUpdate },
+      { id: "state_order", action: viewsLayersOrderUpdate },
+      { id: "destroy", action: viewsCloseAll },
+    ],
   });
 
   /**
@@ -293,18 +305,18 @@ export async function viewsListRenderNew(o) {
     elFilterTags: elFilterTags,
     elFilterSwitch: elFilterSwitch,
     elFilterText: elFilterText,
-    operator: 'and',
+    operator: "and",
     onFilter: (ids, rules) => {
       /*
        * Update filter activated button
        */
-      h.updateBtnFilterActivated();
+      updateBtnFilterActivated();
 
       /*
        * Apply filter to nested list
        */
       mData.viewsList.filterById(ids, {
-        flatMode: rules.length > 0
+        flatMode: rules.length > 0,
       });
     },
     onUpdateCount: (count) => {
@@ -312,7 +324,7 @@ export async function viewsListRenderNew(o) {
        * Update filter count
        */
       elFilterCount.innerText = `( ${count.nSubset} / ${count.nTot} )`;
-    }
+    },
   });
 
   /**
@@ -329,11 +341,11 @@ export async function viewsListRenderNew(o) {
     const isItem = !isGroup && li.isItem(el);
 
     if (isGroup) {
-      return el.querySelector('.li-group-header');
+      return el.querySelector(".li-group-header");
     }
 
     if (isItem) {
-      return el.querySelector('label');
+      return el.querySelector("label");
     }
     return el;
   }
@@ -349,7 +361,7 @@ export async function viewsListRenderNew(o) {
       return el.id;
     }
     if (isItem) {
-      const elView = el.querySelector('.mx-view-item');
+      const elView = el.querySelector(".mx-view-item");
       if (elView && elView._vb) {
         let out = mx.helpers.getViewJson(elView._vb.view);
         return out;
@@ -368,8 +380,6 @@ export async function viewsListRenderNew(o) {
       const li = this;
       const elItem = config.el;
       const data = config.data;
-      //const viewsOpen = h.getQueryParameterInit('viewsOpen');
-      //const viewsFilter = h.getViewsFilter();
       const update = data.update;
       const open = data.open === true;
       /**
@@ -385,7 +395,7 @@ export async function viewsListRenderNew(o) {
        * No given element, assume it's a view
        */
       const view = data.view || mData.views.find((v) => v.id === data.id);
-      const missing = !h.isView(view);
+      const missing = !isView(view);
 
       /**
        * View requested but not vailable)
@@ -417,20 +427,20 @@ export async function viewsListRenderNew(o) {
         elItem.appendChild(elView);
 
         if (update) {
-          await h.viewLayersAdd({
-            view: view
+          await viewLayersAdd({
+            view: view,
           });
-          await h.updateLanguageElements({
-            el: view._el
+          await updateLanguageElements({
+            el: view._el,
           });
         }
         if (!update && open) {
-          await h.viewAdd(view);
+          await viewAdd(view);
         }
-        await h.setViewBadges(view);
+        await setViewBadges(view);
       }
     } catch (e) {
-      console.error('handleRenderItemContent error', e);
+      console.error("handleRenderItemContent error", e);
     }
   }
 }
@@ -440,8 +450,7 @@ export async function viewsListRenderNew(o) {
  */
 export function setViewsListEmpty(enable) {
   enable = enable || false;
-  const h = mx.helpers;
-  const mData = h.getMapData();
+  const mData = getMapData();
   const viewList = mData.viewsList;
   if (viewList instanceof NestedList) {
     viewList.setModeEmpty(enable);
@@ -449,24 +458,26 @@ export function setViewsListEmpty(enable) {
 }
 
 function getEmptyLabel() {
-  const h = mx.helpers;
-  const noViewForced = h.getQueryParameterInit('noViews')[0] === 'true';
-  const noViewKey = noViewForced ? 'noView' : 'noViewOrig';
+  const noViewForced = getQueryParameterInit("noViews")[0] === "true";
+  const noViewKey = noViewForced ? "noView" : "noViewOrig";
   let elTitle;
-  const elItem = h.el(
-    'div',
+  const elItem = el(
+    "div",
     {
-      class: ['mx-view-item-empty']
+      class: ["mx-view-item-empty"],
     },
-    (elTitle = h.el('span', {
+    (elTitle = el("span", {
       dataset: {
-        lang_key: noViewKey
-      }
+        lang_key: noViewKey,
+      },
     }))
   );
-  h.getDictItem(noViewKey).then((item) => {
-    elTitle.innerHTML = item;
-  });
+  // Can't be async : catching within
+  getDictItem(noViewKey)
+    .then((item) => {
+      elTitle.innerHTML = item;
+    })
+    .catch(console.error);
 
   return elItem;
 }

@@ -1,18 +1,26 @@
-/**
- * TODO: use URL interface everywhere
- */
+import { initQueryParams } from "./../mx.js";
+import { settings } from "./../settings";
+
+import {
+  isArray,
+  isString,
+  isBoolean,
+  isObject,
+  isNumeric,
+  isArrayOfString,
+  isArrayOfNumber,
+} from "./../is_test";
 
 /**
- * Set url in mx object
- * NOTE: set in init_common.js
+ * Set url init param 
  * @param {Object} param Object to use as default. If empty, get current query parameters
  * @param {Object} opt Options
  * @param {Boolean} opt.reset Reset current init params ?
  */
 export function setQueryParametersInit(param, opt) {
-  opt = Object.assign({}, {reset: false}, opt);
+  opt = Object.assign({}, { reset: false }, opt);
   param = param || getQueryParametersAsObject();
-  const init = mx.initQueryParams;
+  const init = initQueryParams;
 
   if (opt.reset) {
     Object.keys(init).forEach((k) => {
@@ -28,11 +36,11 @@ export function setQueryParametersInit(param, opt) {
  * Reset init parameters
  */
 export function setQueryParametersInitReset() {
-  setQueryParametersInit(null, {reset: true});
+  setQueryParametersInit(null, { reset: true });
 }
 
 export function getQueryParametersInit() {
-  return mx.initQueryParams;
+  return initQueryParams;
 }
 
 /**
@@ -42,9 +50,8 @@ export function getQueryParametersInit() {
  */
 
 export function getQueryParameterInit(idParam, def) {
-  const h = mx.helpers;
   let out = [];
-  if (h.isArray(idParam)) {
+  if (isArray(idParam)) {
     idParam.forEach(add, true);
   } else {
     add(idParam);
@@ -53,11 +60,11 @@ export function getQueryParameterInit(idParam, def) {
   return asArray(out);
 
   function add(id) {
-    const value = mx.initQueryParams[id] || def;
-    if (typeof value === 'undefined') {
+    const value = initQueryParams[id] || def;
+    if (typeof value === "undefined") {
       return;
     }
-    if (h.isArray(value)) {
+    if (isArray(value)) {
       out.push(...value);
     } else {
       out.push(value);
@@ -66,49 +73,46 @@ export function getQueryParameterInit(idParam, def) {
 }
 
 export function getQueryViewsInit() {
-  const h = mx.helpers;
   return {
-    idViewsOpen: h.getQueryParameterInit(['idViewsOpen', 'viewsOpen']),
-    collections: h.getQueryParameterInit(['idCollections', 'collections']),
-    idViews: h.getQueryParameterInit(['idViews', 'views']),
-    collectionsSelectOperator: h.getQueryParameterInit(
-      'collectionsSelectOperator',
-      ''
+    idViewsOpen: getQueryParameterInit(["idViewsOpen", "viewsOpen"]),
+    collections: getQueryParameterInit(["idCollections", "collections"]),
+    idViews: getQueryParameterInit(["idViews", "views"]),
+    collectionsSelectOperator: getQueryParameterInit(
+      "collectionsSelectOperator",
+      ""
     )[0],
-    noViews: h.getQueryParameterInit('noViews', false)[0],
-    roleMax: h.getQueryParameterInit(
-      ['viewsRoleMax', 'filterViewsByRoleMax'],
-      ''
-    )[0]
+    noViews: getQueryParameterInit("noViews", false)[0],
+    roleMax: getQueryParameterInit(
+      ["viewsRoleMax", "filterViewsByRoleMax"],
+      ""
+    )[0],
   };
 }
 export function getQueryInit() {
-  const h = mx.helpers;
-  const qViews = h.getQueryViewsInit();
+  const qViews = getQueryViewsInit();
   const config = {
-    isFlatMode:
-      h.getQueryParameterInit('viewsListFlatMode', false)[0] === 'true',
+    isFlatMode: getQueryParameterInit("viewsListFlatMode", false)[0] === "true",
     isFilterActivated:
-      h.getQueryParameterInit('viewsListFilterActivated', false)[0] === 'true'
+      getQueryParameterInit("viewsListFilterActivated", false)[0] === "true",
   };
   Object.assign(config, qViews);
   return config;
 }
 
 /**
- * Remove query parameters item based on default set in mx.temporaryParamKeys
+ * Remove query parameters item based on default set in temporaryParamKeys
  */
 export function cleanTemporaryQueryParameters() {
   const params = getQueryParametersAsObject();
   const keysCurrent = Object.keys(params);
-  const keysPermanent = mx.settings.paramKeysPermanent || [];
+  const keysPermanent = settings.paramKeysPermanent || [];
 
   keysCurrent.forEach((k) => {
     if (keysPermanent.indexOf(k) === -1) {
       delete params[k];
     }
   });
-  setQueryParameters(params, {update: false});
+  setQueryParameters(params, { update: false });
 }
 
 /**
@@ -118,8 +122,7 @@ export function cleanTemporaryQueryParameters() {
  * @return {Array} Array of values from the query parameter
  */
 export function getQueryParameter(name) {
-  var h = mx.helpers;
-  if (h.isArray(name)) {
+  if (isArray(name)) {
     return getQueryParameter_array(name);
   } else {
     var url = new URL(window.location.href);
@@ -143,7 +146,7 @@ function getQueryParameter_array(names) {
  */
 export function getQueryParametersAsObject(urlString, opt) {
   const out = {};
-  opt = Object.assign({}, {lowerCase: false}, opt);
+  opt = Object.assign({}, { lowerCase: false }, opt);
   const url = new URL(urlString || window.location.href);
   url.searchParams.forEach((v, k) => {
     /**
@@ -160,21 +163,19 @@ export function getQueryParametersAsObject(urlString, opt) {
 }
 
 function asArray(str) {
-  const h = mx.helpers;
   return !str
     ? []
-    : h.isArray(str)
+    : isArray(str)
     ? str
-    : h.isString(str)
-    ? str.split(',')
+    : isString(str)
+    ? str.split(",")
     : [str];
 }
 function asString(array) {
-  const h = mx.helpers;
-  return h.isString(array)
+  return isString(array)
     ? array
-    : h.isArray(array)
-    ? array.join(',')
+    : isArray(array)
+    ? array.join(",")
     : JSON.stringify(array);
 }
 
@@ -187,20 +188,20 @@ function asString(array) {
  */
 export function setQueryParameters(params, opt) {
   opt = opt || {};
-  const searchString = opt.update ? window.location.search : '';
+  const searchString = opt.update ? window.location.search : "";
   const searchParams = new URLSearchParams(searchString);
   Object.keys(params).forEach((k) => {
     searchParams.set(k, asString(params[k]));
   });
-  const state = window.location.pathname + '?' + searchParams.toString();
-  history.pushState(null, '', state);
+  const state = window.location.pathname + "?" + searchParams.toString();
+  history.pushState(null, "", state);
 }
 /**
  * Update only version.
  * Shiny need a one parameter handler for binding, setQueryParameters takes two.
  */
 export function setQueryParametersUpdate(params) {
-  return setQueryParameters(params, {update: true});
+  return setQueryParameters(params, { update: true });
 }
 
 /**
@@ -211,26 +212,25 @@ export function setQueryParametersUpdate(params) {
  * @return {String} params string
  */
 export function objToParams(data) {
-  const h = mx.helpers;
   const esc = encodeURIComponent;
 
   const params = Object.keys(data).map((k) => {
     if (k) {
       let value = data[k];
       if (
-        h.isString(value) ||
-        h.isBoolean(value) ||
-        h.isObject(value) ||
-        h.isNumeric(value) ||
-        h.isArrayOfString(value) ||
-        h.isArrayOfNumber(value)
+        isString(value) ||
+        isBoolean(value) ||
+        isObject(value) ||
+        isNumeric(value) ||
+        isArrayOfString(value) ||
+        isArrayOfNumber(value)
       ) {
-        if (h.isObject(value)) {
+        if (isObject(value)) {
           value = JSON.stringify(value);
         }
         return `${esc(k)}=${esc(value)}`;
       }
     }
   });
-  return params.join('&');
+  return params.join("&");
 }

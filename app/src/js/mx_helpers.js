@@ -6,7 +6,6 @@ export * from './mx_helper_utils_json.js';
 export * from './mx_helper_misc.js';
 export * from './mx_helper_modal.js';
 export * from './mx_helper_selectize.js';
-export * from './mx_helper_app_utils.js';
 export * from './mx_helper_list_projects.js';
 export * from './mx_helper_intersect.js';
 export * from './mx_helper_upload_source.js';
@@ -36,7 +35,6 @@ export * from './mx_helper_source_attribute_table.js';
 export * from './mx_helper_source_summary.js';
 export * from './mx_helper_fetch_progress.js';
 export * from './mx_helper_root_mode.js';
-export * from './mx_helper_url.js';
 export * from './mx_helper_ip.js';
 export * from './mx_helper_sdk.js';
 export * from './mx_helper_issues.js';
@@ -45,6 +43,7 @@ export * from './mx_helper_issues.js';
 *  imported module available in mx.helpers:
 *  Access requested for widget code / cc code. 
 */
+export * from './app_utils';
 export * from './mirror_util';
 export * from './language';
 export * from './epsgio';
@@ -65,3 +64,4 @@ export * from './wms';
 export * from './style_vt';
 export * from './map_helpers';
 export * from './legend_vt';
+export * from './url_utils';

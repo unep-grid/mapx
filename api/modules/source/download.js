@@ -15,7 +15,6 @@ import { getParamsValidator } from "#mapx/route_validation";
 import { getFormatExt } from "#mapx/file_formats";
 import slugify from "slugify";
 
-
 const validateParamsHandlerText = getParamsValidator({
   required: ["email", "idSource", "idUser", "idProject", "token", "idSocket"],
   expected: ["filename", "iso3codes", "epsgCode", "language", "format"],
@@ -41,7 +40,7 @@ if (apiPort === 443) {
 /**
  * Request handler / middleware
  */
-export const mwGet = [
+export const mwDownloadSource = [
   validateParamsHandlerText,
   validateTokenHandler,
   exportHandler,
@@ -49,20 +48,33 @@ export const mwGet = [
 
 async function exportHandler(req, res, next) {
   try {
-    await extractFromPostgres(req.query, res);
-    next();
+    await extractFromPostgres(res, req.query);
+    res.end();
   } catch (e) {
-    await res.notifyInfoError("job_state", {
+    await res.notifyInfoError({
       message: e.message,
     });
     next(e);
   }
 }
 
+export async function ioDownloadSource(socket, options) {
+  try {
+    return extractFromPostgres(socket, options);
+  } catch (e) {
+    await socket.notifyInfoError({
+      message: e.message,
+    });
+  }
+}
+
 /**
  * Exportation script
  */
-async function extractFromPostgres(config, res) {
+async function extractFromPostgres(res, config) {
+  const idGroup = randomString("download_source");
+  const idProgress = randomString("progress");
+
   let isShapefile = false;
   let {
     email,
@@ -84,7 +96,7 @@ async function extractFromPostgres(config, res) {
   if (!isEmail(email)) {
     throw Error("No email");
   }
-  const layername = filename ? slugify(filename,'_') : idSource;
+  const layername = filename ? slugify(filename, "_") : idSource;
   const ext = getFormatExt(config.format);
   const title = await getLayerTitle(idSource, language);
 
@@ -118,7 +130,8 @@ async function extractFromPostgres(config, res) {
     isShapefile = true;
   }
 
-  await res.notifyInfoMessage("job_state", {
+  await res.notifyInfoMessage({
+    idGroup: idGroup,
     message: t(language, "get_source_email_dl_link", {
       email: email,
       url: dataUrl,
@@ -131,7 +144,8 @@ async function extractFromPostgres(config, res) {
    */
   const metadata = await getSourceMetadata({ id: idSource });
 
-  await res.notifyInfoVerbose("job_state", {
+  await res.notifyInfoVerbose({
+    idGroup: idGroup,
     message: t(language, "get_source_meta_extracted"),
   });
 
@@ -166,7 +180,8 @@ async function extractFromPostgres(config, res) {
     await mkdir(folderPath);
   }
 
-  await res.notifyInfoMessage("job_state", {
+  await res.notifyInfoMessage({
+    idGroup: idGroup,
     message: t(language, "get_source_extraction_wait", {
       format: format,
     }),
@@ -240,15 +255,17 @@ async function extractFromPostgres(config, res) {
         },
       ],
       onProgress: (percent) => {
-        res.notifyProgress("job_state", {
-          idMerge: "get_source_zip_progress",
+        res.notifyProgress({
+          idGroup: idGroup,
+          idProgress: idProgress,
           type: "progress",
           message: t(language, "get_source_zip_progress"),
           value: percent,
         });
       },
       onWarning: (err) => {
-        res.notifyInfoWarning("job_state", {
+        res.notifyInfoWarning({
+          idGroup: idGroup,
           message: t(language, "get_source_zip_warning", {
             err: err,
           }),
@@ -265,13 +282,15 @@ async function extractFromPostgres(config, res) {
   /**
    * Send messages
    */
-  await res.notifyProgress("job_state", {
-    idMerge: "get_source_zip_progress",
+  await res.notifyProgress({
+    idGroup: idGroup,
+    idProgress: idProgress,
     message: t(language, "get_source_zip_progress"),
     value: 100,
   });
 
-  await res.notifyInfoSuccess("job_state", {
+  await res.notifyInfoSuccess({
+    idGroup: idGroup,
     message: t(language, "get_source_conversion_done_link", {
       url: dataUrl,
       format: format,
@@ -284,15 +303,8 @@ async function extractFromPostgres(config, res) {
     },
   });
 
-  await res.notifyBrowser("job_state", {
-    title: t(language, "get_source_conversion_done_browser_title"),
-    message: t(language, "get_source_conversion_done_browser", {
-      title: title,
-    }),
-  });
-
   if (email) {
-    sendMailAuto({
+    await sendMailAuto({
       to: email,
       subject: "Export success",
       content: t(language, "get_source_conversion_done_email", {
@@ -301,11 +313,6 @@ async function extractFromPostgres(config, res) {
       }),
     });
   }
-
-  /**
-   * End
-   */
-  res.end();
 
   /**
    * Helpers
@@ -321,8 +328,9 @@ async function extractFromPostgres(config, res) {
     let useFakeProg = text.indexOf("Progress turned off") > -1;
 
     if (useFakeProg) {
-      res.notifyProgress("job_state", {
-        idMerge: "get_source_conversion_progress",
+      res.notifyProgress({
+        idGroup: idGroup,
+        idProgress: idProgress,
         message: t(language, "get_source_conversion_progress"),
         value: fakeProg++,
       });
@@ -331,8 +339,9 @@ async function extractFromPostgres(config, res) {
       const progs = stringToProgress(text);
       isProg = progs.length > 0;
       for (let i = 0, iL = progs.length; i < iL; i++) {
-        res.notifyProgress("job_state", {
-          idMerge: "get_source_conversion_progress",
+        res.notifyProgress({
+          idGroup: idGroup,
+          idProgress: idProgress,
           message: t(language, "get_source_conversion_progress"),
           value: progs[i],
         });
@@ -340,7 +349,8 @@ async function extractFromPostgres(config, res) {
     }
 
     if (!isProg && text.length > 5) {
-      res.notifyInfoVerbose("job_state", {
+      res.notifyInfoVerbose({
+        idGroup: idGroup,
         message: t(language, "get_source_conversion_stdout", {
           stdout: text,
         }),
@@ -351,8 +361,8 @@ async function extractFromPostgres(config, res) {
    * Handle ogr stderr (ogr warnings)
    */
   function ogrStderr(data) {
-    res.notifyInfoWarning("job_state", {
-      idMerge: "get_source_conversion_stderr",
+    res.notifyInfoWarning({
+      idGroup: idGroup,
       message: t(language, "get_source_conversion_stderr", {
         stderr: data.toString("utf8"),
       }),
@@ -363,7 +373,7 @@ async function extractFromPostgres(config, res) {
 async function getSqlClip(idSource, iso3codes, attrPg, language) {
   /* Clip requires valid geom */
   const test = await isLayerValid(idSource, true, false);
-  
+
   if (!test.valid) {
     throw new Error(
       t(language, "get_source_invalid_geom", {

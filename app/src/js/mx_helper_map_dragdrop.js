@@ -1,9 +1,10 @@
-import {modal} from './mx_helper_modal.js';
-import {makeId, getExtension, progressScreen} from './mx_helper_misc.js';
-import {isUploadFileSizeValid} from './mx_helper_upload_source.js';
-import {isView, isJson, isString} from './is_test';
-import {viewsListAddSingle} from './mx_helper_map_view_ui.js';
-import {moduleLoad} from './modules_loader_async/index.js';
+import { modal } from "./mx_helper_modal.js";
+import { makeId, getExtension, progressScreen } from "./mx_helper_misc.js";
+import { isUploadFileSizeValid } from "./mx_helper_upload_source.js";
+import { isView, isJson, isString } from "./is_test";
+import { viewsListAddSingle } from "./mx_helper_map_view_ui.js";
+import { moduleLoad } from "./modules_loader_async/index.js";
+import { settings } from "./settings";
 
 import {
   viewAdd,
@@ -11,58 +12,58 @@ import {
   getViewsListId,
   getViewJson,
   getMap,
-  isModeLocked
-} from './map_helpers/';
+  isModeLocked,
+} from "./map_helpers/";
 
 // default proj
 const projDest =
-  '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees';
+  "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees";
 
 // handle zip to geojson
 export async function zipToGeoJSON(data) {
-  let err = '';
+  let err = "";
   try {
-    const JSZip = await import('jszip');
-    const shapefile = await import('shapefile');
-    const proj4 = (await import('proj4')).default;
-    const turf = await import('@turf/meta');
+    const JSZip = await import("jszip");
+    const shapefile = await import("shapefile");
+    const proj4 = (await import("proj4")).default;
+    const turf = await import("@turf/meta");
     const files = await JSZip.loadAsync(data);
     const fileData = files.files;
     let dbf, shp, prj;
     for (let f in fileData) {
       const ext = getExtension(f);
-      if (ext === '.dbf') {
+      if (ext === ".dbf") {
         dbf = fileData[f];
       }
-      if (ext === '.shp') {
+      if (ext === ".shp") {
         shp = fileData[f];
       }
-      if (ext === '.prj') {
+      if (ext === ".prj") {
         prj = fileData[f];
       }
     }
 
     if (!shp) {
-      err = err + ' No shp file found in archive, abord.';
+      err = err + " No shp file found in archive, abord.";
     }
     if (!dbf) {
-      err = err + ' No dbf file found in archive, abord.';
+      err = err + " No dbf file found in archive, abord.";
     }
     if (!prj) {
-      err = err + ' No prj file found in archive, abord.';
+      err = err + " No prj file found in archive, abord.";
     }
     if (err) {
       throw new error(err);
     }
 
-    const shpR = await shp.async('Uint8Array');
-    const dbfR = await dbf.async('Uint8Array');
-    const projOrigR = await prj.async('text');
+    const shpR = await shp.async("Uint8Array");
+    const dbfR = await dbf.async("Uint8Array");
+    const projOrigR = await prj.async("text");
     const gj = await shapefile.read(shpR, dbfR);
 
     let newCoord;
 
-    turf.coordEach(gj, function(coord) {
+    turf.coordEach(gj, function (coord) {
       newCoord = proj4(projOrigR, projDest, coord);
       coord[0] = newCoord[0];
       coord[1] = newCoord[1];
@@ -70,8 +71,8 @@ export async function zipToGeoJSON(data) {
     return gj;
   } catch (e) {
     modal({
-      content: e + ' / ' + err,
-      title: 'Error while reading shapefile'
+      content: e + " / " + err,
+      title: "Error while reading shapefile",
     });
   }
 }
@@ -84,16 +85,16 @@ export async function zipToGeoJSON(data) {
 export async function parseDataToGeoJSON(data, fileType) {
   let out;
   switch (fileType) {
-    case 'kml':
-      out = await xmlToGeojson(data, 'kml');
+    case "kml":
+      out = await xmlToGeojson(data, "kml");
       break;
-    case 'gpx':
-      out = await xmlToGeojson(data, 'gpx');
+    case "gpx":
+      out = await xmlToGeojson(data, "gpx");
       break;
-    case 'zip':
+    case "zip":
       out = await zipToGeoJSON(data);
       break;
-    case 'geojson':
+    case "geojson":
       if (isString(data)) {
         out = JSON.parse(data);
       } else {
@@ -114,14 +115,14 @@ export async function parseDataToGeoJSON(data, fileType) {
  * @return {Promise<GeoJSON>}
  */
 async function xmlToGeojson(data, type) {
-  const toGeoJSON = await import('@tmcw/togeojson');
-  const xmlDom = new DOMParser().parseFromString(data, 'text/xml');
+  const toGeoJSON = await import("@tmcw/togeojson");
+  const xmlDom = new DOMParser().parseFromString(data, "text/xml");
   let out;
   switch (type) {
-    case 'gpx':
+    case "gpx":
       out = toGeoJSON.gpx(xmlDom);
       break;
-    case 'kml':
+    case "kml":
       out = toGeoJSON.kml(xmlDom);
       break;
   }
@@ -135,11 +136,11 @@ function handleFileParser(f) {
      * Test for size
      */
 
-    let isSizeValid = isUploadFileSizeValid(f, {showModal: true});
+    let isSizeValid = isUploadFileSizeValid(f, { showModal: true });
     if (!isSizeValid) {
       progressScreen({
         enable: false,
-        id: f.name
+        id: f.name,
       });
       return;
     }
@@ -150,11 +151,11 @@ function handleFileParser(f) {
       abstract: f.name,
       fileType: f.fileType,
       data: e.target.result,
-      save: true
+      save: true,
     });
 
     await viewsListAddSingle(view, {
-      open: true
+      open: true,
     });
     return view;
   };
@@ -174,7 +175,7 @@ export async function spatialDataToView(opt) {
       title: idRandom,
       fileName: idRandom,
       abstract: idRandom,
-      fileType: 'geojson'
+      fileType: "geojson",
     },
     opt
   );
@@ -182,7 +183,7 @@ export async function spatialDataToView(opt) {
   /**
    * Init
    */
-  const geojsonWorker = await moduleLoad('mx-drag-drop-worker');
+  const geojsonWorker = await moduleLoad("mx-drag-drop-worker");
   c.worker = new geojsonWorker();
 
   /**
@@ -194,7 +195,7 @@ export async function spatialDataToView(opt) {
     /*
      * handle message received
      */
-    c.worker.onmessage = function(e) {
+    c.worker.onmessage = function (e) {
       const m = e.data;
 
       if (m.progress) {
@@ -202,7 +203,7 @@ export async function spatialDataToView(opt) {
           enable: true,
           id: c.fileName,
           percent: m.progress,
-          text: c.fileName + ': ' + m.message
+          text: c.fileName + ": " + m.message,
         });
       }
 
@@ -244,49 +245,49 @@ export async function spatialDataToView(opt) {
           enable: true,
           id: c.fileName,
           percent: 100,
-          text: c.fileName + ' done'
+          text: c.fileName + " done",
         });
 
         m.layer.metadata = {
           prority: 0,
           position: 0,
           idView: m.id,
-          filterOrig: []
+          filterOrig: [],
         };
 
         // mx default view
         c.view = {
           id: m.id,
-          type: 'gj',
-          project: mx.settings.project.id,
+          type: "gj",
+          project: settings.project.id,
           date_modified: new Date().toLocaleDateString(),
           data: {
             title: {
-              en: c.title
+              en: c.title,
             },
             attributes: m.attributes,
             abstract: {
-              en: c.abstract || c.title
+              en: c.abstract || c.title,
             },
             geometry: {
               extent: {
                 lng1: m.extent[0],
                 lat1: m.extent[1],
                 lng2: m.extent[2],
-                lat2: m.extent[3]
-              }
+                lat2: m.extent[3],
+              },
             },
             layer: m.layer,
             source: {
-              type: 'geojson',
-              data: m.geojson
-            }
-          }
+              type: "geojson",
+              data: m.geojson,
+            },
+          },
         };
 
         if (c.save !== false) {
           saveInLocalDb({
-            view: c.view
+            view: c.view,
           });
         }
 
@@ -303,7 +304,7 @@ export async function spatialDataToView(opt) {
     data: gJson,
     fileName: c.fileName,
     fileType: c.fileType,
-    id: `MX-GJ-${makeId(10)}`
+    id: `MX-GJ-${makeId(10)}`,
   });
 
   return promView;
@@ -311,7 +312,7 @@ export async function spatialDataToView(opt) {
 
 async function saveInLocalDb(opt) {
   await mx.data.geojson.setItem(opt.view.id, {
-    view: getViewJson(opt.view, {asString: false})
+    view: getViewJson(opt.view, { asString: false }),
   });
   console.log(
     `Data saved and registered as geojson source. Id = ${opt.view.id} `
@@ -320,7 +321,7 @@ async function saveInLocalDb(opt) {
 
 export function handleMapDragOver(evt) {
   evt.preventDefault();
-  evt.dataTransfer.dropEffect = 'move'; // Explicitly show this is a copy.
+  evt.dataTransfer.dropEffect = "move"; // Explicitly show this is a copy.
 }
 
 /**
@@ -336,7 +337,7 @@ export function handleMapDrop(evt) {
   }
 
   let files = evt.dataTransfer.files;
-  let data = evt.dataTransfer.getData('application/json');
+  let data = evt.dataTransfer.getData("application/json");
   let hasData = isJson(data);
   let hasFiles = files.length > 0;
 
@@ -382,11 +383,11 @@ export function handleFiles(files) {
 
   const nFiles = files.length;
   const exts = {
-    '.json': 'geojson',
-    '.geojson': 'geojson',
-    '.kml': 'kml',
-    '.gpx': 'gpx',
-    '.zip': 'zip'
+    ".json": "geojson",
+    ".geojson": "geojson",
+    ".kml": "kml",
+    ".gpx": "gpx",
+    ".zip": "zip",
   };
 
   // In case of multiple file, loop on them
@@ -415,7 +416,7 @@ export function handleFiles(files) {
     /*
      * read the data
      */
-    if (f.fileType === 'zip') {
+    if (f.fileType === "zip") {
       reader.readAsArrayBuffer(f);
     } else {
       reader.readAsText(f);
@@ -424,37 +425,37 @@ export function handleFiles(files) {
 }
 
 function handleProgressUpdate(f) {
-  return function(e) {
+  return function (e) {
     if (e.lengthComputable) {
       const percentLoaded = Math.round((e.loaded / e.total) * 50);
       progressScreen({
         enable: true,
         id: f.name,
         percent: percentLoaded,
-        text: f.name + ' loading (' + percentLoaded + '%)'
+        text: f.name + " loading (" + percentLoaded + "%)",
       });
     }
   };
 }
 
 function handleProgressInit(f) {
-  return function() {
+  return function () {
     progressScreen({
       enable: true,
       id: f.name,
       percent: 0,
-      text: f.name + ' init .. '
+      text: f.name + " init .. ",
     });
   };
 }
 
 function handleProgressError(f) {
-  return function() {
+  return function () {
     progressScreen({
       enable: true,
       id: f.name,
       percent: 100,
-      text: f.name + 'stop .. '
+      text: f.name + "stop .. ",
     });
   };
 }

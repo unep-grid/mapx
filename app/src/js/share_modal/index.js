@@ -1,18 +1,22 @@
-import {modal} from '../mx_helper_modal.js';
-import {EventSimple} from '../event_simple/index.js';
-import {getDictItem, getLanguageCurrent} from './../language';
-import {isStoryPlaying, getStoryId, getViewsStep} from '../story_map/index.js';
-import {isArrayOfViewsId} from '../is_test/index.js';
-import {parseTemplate} from '../mx_helper_misc.js';
-import {FlashItem} from '../icon_flash/index.js';
-import {getQueryParametersAsObject} from '../mx_helper_url.js';
-import {modalMarkdown} from '../modal_markdown';
+import { modal } from "../mx_helper_modal.js";
+import { EventSimple } from "../event_simple/index.js";
+import { getDictItem, getLanguageCurrent } from "./../language";
+import {
+  isStoryPlaying,
+  getStoryId,
+  getViewsStep,
+} from "../story_map/index.js";
+import { isArrayOfViewsId } from "../is_test/index.js";
+import { parseTemplate } from "../mx_helper_misc.js";
+import { FlashItem } from "../icon_flash/index.js";
+import { getQueryParametersAsObject } from "../url_utils";
+import { modalMarkdown } from "../modal_markdown";
 import {
   getViews,
   getViewsLayersVisibles,
   getViewsOpen,
-  getMapPos
-} from '../map_helpers/index.js';
+  getMapPos,
+} from "../map_helpers/index.js";
 import {
   el,
   elButtonFa,
@@ -20,13 +24,12 @@ import {
   elCheckbox,
   elSelect,
   elDetails,
-  elAlert
-} from '../el_mapx';
-import './style.less';
-import socialLinks from './social_link.json';
-import shareMode from './share_mode.json';
-
-
+  elAlert,
+} from "../el_mapx";
+import "./style.less";
+import socialLinks from "./social_link.json";
+import shareMode from "./share_mode.json";
+import { settings } from "./../settings";
 
 const t = elSpanTranslate;
 
@@ -56,19 +59,19 @@ export class ShareModal extends EventSimple {
     sm._validate_opt();
     sm._init_modal();
     sm.reset();
-    sm.fire('init');
+    sm.fire("init");
   }
 
   _init_state(opt) {
     const sm = this;
     sm._state = {
       opt: {
-        views: []
+        views: [],
       },
       url: null,
-      modeCurrent: 'static',
-      shareString: '',
-      mapPosItems: ['p', 'b', 'z', 'lat', 'lng', 't3d', 'sat'],
+      modeCurrent: "static",
+      shareString: "",
+      mapPosItems: ["p", "b", "z", "lat", "lng", "t3d", "sat"],
       prevent: new Set(),
       views: [],
       /** note : unchecked checkbox are not included in formData.-
@@ -83,9 +86,9 @@ export class ShareModal extends EventSimple {
         share_map_pos: null,
         share_mode_static: null,
         share_category_hide: null,
-        share_filter_activated: null
+        share_filter_activated: null,
         //share_views_open: null
-      }
+      },
     };
     Object.assign(sm._state.opt, opt);
   }
@@ -94,7 +97,7 @@ export class ShareModal extends EventSimple {
     const sm = this;
     sm.build();
     sm.update();
-    sm.fire('reset');
+    sm.fire("reset");
   }
 
   /**
@@ -107,7 +110,7 @@ export class ShareModal extends EventSimple {
     }
     sm._closed = true;
     sm._modal.close();
-    sm.fire('closed');
+    sm.fire("closed");
     sm.destroy();
     delete window._share_modal;
   }
@@ -126,7 +129,7 @@ export class ShareModal extends EventSimple {
       sm._update_template();
       sm.validate();
       sm._update_options_visibility();
-      sm.fire('updated');
+      sm.fire("updated");
     }, 10);
   }
 
@@ -141,8 +144,8 @@ export class ShareModal extends EventSimple {
     if (views.length > 0) {
       if (!isArrayOfViewsId(views)) {
         msgs.push({
-          type: 'error',
-          key: 'share_msg_invalid_views'
+          type: "error",
+          key: "share_msg_invalid_views",
         });
       }
     }
@@ -178,19 +181,19 @@ export class ShareModal extends EventSimple {
     const sMode = state.form.share_views_select;
     state.views.length = 0;
     switch (sMode) {
-      case 'share_views_select_method_preselect':
+      case "share_views_select_method_preselect":
         state.views.push(...sm._get_views_opt());
         break;
-      case 'share_views_select_method_story_step':
+      case "share_views_select_method_story_step":
         state.views.push(...(getViewsStep() || []));
         break;
-      case 'share_views_select_method_story_itself':
+      case "share_views_select_method_story_itself":
         state.views.push(getStoryId());
         break;
-      case 'share_views_select_method_map_list_open':
+      case "share_views_select_method_map_list_open":
         state.views.push(...(getViewsOpen() || []));
         break;
-      case 'share_views_select_method_current_url':
+      case "share_views_select_method_current_url":
         const p = getQueryParametersAsObject();
         const vFilter = p.views || p.idViews || [];
         vFilter.push(...(p.viewsOpen || p.idViewsOpen || []));
@@ -199,9 +202,9 @@ export class ShareModal extends EventSimple {
       /**
        * Disabled handler
        */
-      case 'share_views_select_method_all':
+      case "share_views_select_method_all":
         break;
-      case 'share_views_select_method_map_layer':
+      case "share_views_select_method_map_layer":
         state.views.push(...(getViewsLayersVisibles(true) || []));
         break;
     }
@@ -217,9 +220,9 @@ export class ShareModal extends EventSimple {
     const idViews = sm._state.views;
     const useStatic = !!f.share_mode_static;
     const modeTargetStory =
-      f.share_views_select === 'share_views_select_method_story_itself';
-    const storyInViews = getViews({idView: idViews}).reduce(
-      (a, c) => a || c.type === 'sm',
+      f.share_views_select === "share_views_select_method_story_itself";
+    const storyInViews = getViews({ idView: idViews }).reduce(
+      (a, c) => a || c.type === "sm",
       false
     );
     return modeTargetStory || (useStatic && storyInViews);
@@ -237,45 +240,45 @@ export class ShareModal extends EventSimple {
     const useMapPos = !!state.form.share_map_pos;
     const count = idViews.length;
     const targetStory = sm.hasTargetStory();
-    const langData = {data: {n: count}};
+    const langData = { data: { n: count } };
 
     if (count === 1) {
       msgs.push({
-        type: 'info',
-        key: 'share_msg_views_count_single',
-        data: langData
+        type: "info",
+        key: "share_msg_views_count_single",
+        data: langData,
       });
     }
     if (count > 1) {
       msgs.push({
-        type: 'info',
-        key: 'share_msg_views_count_multiple',
-        data: langData
+        type: "info",
+        key: "share_msg_views_count_multiple",
+        data: langData,
       });
       if (targetStory) {
         msgs.push({
-          type: 'warning',
-          key: 'share_msg_multiple_views_story_static'
+          type: "warning",
+          key: "share_msg_multiple_views_story_static",
         });
       }
     }
     if (count === 0) {
       if (useStatic && !useMapPos) {
-        state.prevent.add('copy');
-        state.prevent.add('open');
+        state.prevent.add("copy");
+        state.prevent.add("open");
         msgs.push({
-          type: 'danger',
-          key: 'share_msg_views_count_empty_static'
+          type: "danger",
+          key: "share_msg_views_count_empty_static",
         });
       } else if (useStatic) {
         msgs.push({
-          type: 'warning',
-          key: 'share_msg_views_count_empty_static_map_pos'
+          type: "warning",
+          key: "share_msg_views_count_empty_static_map_pos",
         });
       } else {
         msgs.push({
-          type: 'warning',
-          key: 'share_msg_views_count_empty_full_project'
+          type: "warning",
+          key: "share_msg_views_count_empty_full_project",
         });
       }
     }
@@ -306,8 +309,8 @@ export class ShareModal extends EventSimple {
     const hasViews = state.views.length > 0;
     const linkStatic = f.share_mode_static;
     const targetStory = sm.hasTargetStory();
-    sm.allowBtnOpen(!state.prevent.has('open'));
-    sm.allowBtnCopy(!state.prevent.has('copy'));
+    sm.allowBtnOpen(!state.prevent.has("open"));
+    sm.allowBtnCopy(!state.prevent.has("copy"));
     sm.setClassDisable(sm._el_checkbox_category_hide, linkStatic);
     sm.setClassDisable(sm._el_checkbox_map_pos, targetStory);
     sm.setClassDisable(
@@ -327,7 +330,7 @@ export class ShareModal extends EventSimple {
     const hasViews = state.views.length > 0;
     const f = state.form;
     const targetStory =
-      f.share_views_select === 'share_views_select_method_story_itself';
+      f.share_views_select === "share_views_select_method_story_itself";
 
     /**
      * Update base searchParams ( views, project )
@@ -342,26 +345,26 @@ export class ShareModal extends EventSimple {
     /**
      * Mode Static
      */
-    url.pathname = f.share_mode_static ? '/static.html' : '/';
+    url.pathname = f.share_mode_static ? "/static.html" : "/";
 
     /**
      * Options
      */
     const lang = getLanguageCurrent();
-    url.searchParams.set('language', lang);
+    url.searchParams.set("language", lang);
     if (f.share_mode_static) {
       if (hasViews) {
-        url.searchParams.set('views', state.views);
+        url.searchParams.set("views", state.views);
         if (!targetStory) {
-          url.searchParams.set('zoomToViews', !!f.share_views_zoom);
+          url.searchParams.set("zoomToViews", !!f.share_views_zoom);
         }
       }
     } else {
-      url.searchParams.set('project', mx.settings.project.id);
-      url.searchParams.set('viewsListFlatMode', f.share_category_hide);
+      url.searchParams.set("project", settings.project.id);
+      url.searchParams.set("viewsListFlatMode", f.share_category_hide);
       if (hasViews) {
-        url.searchParams.set('viewsOpen', state.views);
-        url.searchParams.set('viewsListFilterActivated', true);
+        url.searchParams.set("viewsOpen", state.views);
+        url.searchParams.set("viewsListFilterActivated", true);
       }
     }
 
@@ -400,18 +403,18 @@ export class ShareModal extends EventSimple {
     const disableEncode = !!linkItem.disable_encode;
     const disableCopy = linkItem.disable_copy;
     // TODO: convert those as input.
-    const text = 'Shared from MapX';
-    const title = 'MapX';
+    const text = "Shared from MapX";
+    const title = "MapX";
     // replace values in template, if avaialble.
     const txt = parseTemplate(
       linkItem.template,
       {
         url,
         text,
-        title
+        title,
       },
       {
-        encodeURIComponent: !disableEncode
+        encodeURIComponent: !disableEncode,
       }
     );
 
@@ -419,10 +422,10 @@ export class ShareModal extends EventSimple {
     state.shareString = txt;
     sm._el_input.value = txt;
     if (disableLink || disableLinkApp) {
-      state.prevent.add('open');
+      state.prevent.add("open");
     }
     if (disableCopy) {
-      state.prevent.add('copy');
+      state.prevent.add("copy");
     }
     return txt;
   }
@@ -444,9 +447,9 @@ export class ShareModal extends EventSimple {
    */
   setAttrDisable(target, disable) {
     if (disable) {
-      target.setAttribute('disabled', true);
+      target.setAttribute("disabled", true);
     } else {
-      target.removeAttribute('disabled');
+      target.removeAttribute("disabled");
     }
   }
   allowBtnOpen(enable) {
@@ -459,9 +462,9 @@ export class ShareModal extends EventSimple {
   }
   setClassDisable(target, disable) {
     if (disable) {
-      target.classList.add('share--disabled');
+      target.classList.add("share--disabled");
     } else {
-      target.classList.remove('share--disabled');
+      target.classList.remove("share--disabled");
     }
   }
 
@@ -482,7 +485,7 @@ export class ShareModal extends EventSimple {
    */
   openLink() {
     const sm = this;
-    window.open(sm._el_input.value, '_blank');
+    window.open(sm._el_input.value, "_blank");
   }
 
   /**
@@ -490,8 +493,8 @@ export class ShareModal extends EventSimple {
    */
   openHelp() {
     return modalMarkdown({
-      title: getDictItem('btn_help'),
-      wiki: 'Sharing-Manager'
+      title: getDictItem("btn_help"),
+      wiki: "Sharing-Manager",
     });
   }
 
@@ -500,12 +503,12 @@ export class ShareModal extends EventSimple {
    */
   copy() {
     const sm = this;
-    const elTemp = el('input', {type: 'text'});
+    const elTemp = el("input", { type: "text" });
     elTemp.value = sm._state.shareString;
     elTemp.select();
     navigator.clipboard.writeText(elTemp.value);
-    new FlashItem('clipboard');
-    sm.fire('copied');
+    new FlashItem("clipboard");
+    sm.fire("copied");
   }
 
   /**
@@ -516,48 +519,48 @@ export class ShareModal extends EventSimple {
     if (sm._modal) {
       sm._modal.close();
     }
-    sm._el_content = el('div');
+    sm._el_content = el("div");
 
     /**
      * Modal buttons
      */
-    sm._el_button_close = elButtonFa('btn_close', {
-      icon: 'times',
-      action: sm.close
+    sm._el_button_close = elButtonFa("btn_close", {
+      icon: "times",
+      action: sm.close,
     });
-    sm._el_button_help = elButtonFa('btn_help', {
-      icon: 'question-circle',
-      action: sm.openHelp
+    sm._el_button_help = elButtonFa("btn_help", {
+      icon: "question-circle",
+      action: sm.openHelp,
     });
-    sm._el_button_copy = elButtonFa('btn_copy', {
-      icon: 'clipboard',
-      action: sm.copy
+    sm._el_button_copy = elButtonFa("btn_copy", {
+      icon: "clipboard",
+      action: sm.copy,
     });
-    sm._el_button_open = elButtonFa('btn_share', {
-      icon: 'external-link',
-      action: sm.openLink
+    sm._el_button_open = elButtonFa("btn_share", {
+      icon: "external-link",
+      action: sm.openLink,
     });
 
     const elModalButtons = [
       sm._el_button_close,
       sm._el_button_help,
       sm._el_button_copy,
-      sm._el_button_open
+      sm._el_button_open,
     ];
 
     /**
      * Create modal
      */
     sm._modal = modal({
-      id: 'share_modal',
+      id: "share_modal",
       content: sm._el_content,
-      title: t('share_manager_title'),
+      title: t("share_manager_title"),
       buttons: elModalButtons,
       addSelectize: false,
       noShinyBinding: true,
       removeCloseButton: true,
       addBackground: false,
-      onClose: sm.close
+      onClose: sm.close,
     });
   }
 
@@ -569,12 +572,12 @@ export class ShareModal extends EventSimple {
     const sViews = sm._get_views_opt();
     sm._state.modeCurrent =
       sViews.length > 0
-        ? 'preselect'
+        ? "preselect"
         : isStoryPlaying()
-        ? 'story'
-        : !!mx.settings.mode.app
-        ? 'app'
-        : 'static';
+        ? "story"
+        : !!settings.mode.app
+        ? "app"
+        : "static";
   }
 
   build() {
@@ -585,33 +588,37 @@ export class ShareModal extends EventSimple {
     /**
      * Link / Code text
      */
-    sm._el_input = el('textarea', {
-      name: 'share_code',
-      id: 'share_code',
+    sm._el_input = el("textarea", {
+      name: "share_code",
+      id: "share_code",
       rows: 4,
-      class: ['form-control', 'share--code']
+      class: ["form-control", "share--code"],
     });
 
-    sm._el_group_input = el('div', {class: 'form-group'}, [
+    sm._el_group_input = el("div", { class: "form-group" }, [
       el(
-        'label',
-        {class: 'share--label-group', for: 'share_code'},
-        t('share_form_title')
+        "label",
+        { class: "share--label-group", for: "share_code" },
+        t("share_form_title")
       ),
-      el('small', {class: ['help-block', 'text-muted']}, t('share_mode_warn')),
-      sm._el_input
+      el(
+        "small",
+        { class: ["help-block", "text-muted"] },
+        t("share_mode_warn")
+      ),
+      sm._el_input,
     ]);
 
     /**
      * Validation messages
      */
-    sm._el_container_validation = sm._el_msg_container = el('div');
+    sm._el_container_validation = sm._el_msg_container = el("div");
 
     /**
      * Template selection
      */
-    sm._el_select_template = elSelect('share_template', {
-      items: socialLinks.map((s) => el('option', {value: s.id}, s.label))
+    sm._el_select_template = elSelect("share_template", {
+      items: socialLinks.map((s) => el("option", { value: s.id }, s.label)),
     });
 
     /**
@@ -621,35 +628,35 @@ export class ShareModal extends EventSimple {
       .filter((s) => s.mode.includes(state.modeCurrent))
       .map((s) => s.id);
 
-    sm._el_select_mode = elSelect('share_views_select', {
-      items: sModes.map((idMode) => el('option', {value: idMode}, t(idMode)))
+    sm._el_select_mode = elSelect("share_views_select", {
+      items: sModes.map((idMode) => el("option", { value: idMode }, t(idMode))),
     });
 
     /**
      * Checkboxes
      */
     // mode app
-    sm._el_checkbox_category_hide = elCheckbox('share_category_hide', {
-      checked: false
+    sm._el_checkbox_category_hide = elCheckbox("share_category_hide", {
+      checked: false,
     });
     // all modes
-    sm._el_checkbox_static = elCheckbox('share_mode_static', {checked: true});
-    sm._el_checkbox_zoom = elCheckbox('share_views_zoom', {checked: true});
-    sm._el_checkbox_map_pos = elCheckbox('share_map_pos', {checked: true});
+    sm._el_checkbox_static = elCheckbox("share_mode_static", { checked: true });
+    sm._el_checkbox_zoom = elCheckbox("share_views_zoom", { checked: true });
+    sm._el_checkbox_map_pos = elCheckbox("share_map_pos", { checked: true });
 
     /**
      * Settings
      */
     sm._el_group_options = elDetails(
-      'share_options',
+      "share_options",
       el(
-        'div',
-        {class: 'well', style: {maxHeight: '300px', overflowY: 'auto'}},
+        "div",
+        { class: "well", style: { maxHeight: "300px", overflowY: "auto" } },
         [
           sm._el_checkbox_static,
           sm._el_checkbox_map_pos,
           sm._el_checkbox_zoom,
-          sm._el_checkbox_category_hide
+          sm._el_checkbox_category_hide,
         ]
       )
     );
@@ -658,25 +665,25 @@ export class ShareModal extends EventSimple {
      * Form
      */
     sm._el_form = el(
-      'form',
-      {name: 'share_form', id: 'test', on: ['change', sm.update]},
+      "form",
+      { name: "share_form", id: "test", on: ["change", sm.update] },
       [
         sm._el_group_input,
         sm._el_select_template,
         sm._el_select_mode,
         sm._el_group_options,
-        sm._el_container_validation
+        sm._el_container_validation,
       ]
     );
 
     /**
-    * Remove previous content, if required
-    */ 
+     * Remove previous content, if required
+     */
     while (sm._el_content.firstElementChild) {
       sm._el_content.firstElementChild.remove();
     }
 
     sm._el_content.appendChild(sm._el_form);
-    sm.fire('built');
+    sm.fire("built");
   }
 }

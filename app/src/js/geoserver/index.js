@@ -1,7 +1,14 @@
-import { getApiUrl } from "./../api_routes/index.js";
+import { getApiRoute } from "./../api_routes/index.js";
+import { nc, ws } from "./../mx.js";
+import { settings } from "./../settings";
 
 export const geoserver = {
-  rebuild: async (opt) => {
+  /*
+   * `opt` is defined in shiny binding:
+   *  - bind("mxGeoserverRebuild", geoserver.rebuild);
+   */
+  rebuild: (opt) => {
+    const route = getApiRoute("updateGeoserver");
     opt = Object.assign(
       {},
       {
@@ -10,16 +17,17 @@ export const geoserver = {
       opt
     );
 
-    mx.nc.panel.open();
-    const url = new URL(getApiUrl("updateGeoserver"));
-    const idSocket = mx.ws?.io?.id;
-    url.searchParams.set("idSocket", idSocket);
-    url.searchParams.set("idUser",mx.settings.user.id);
-    url.searchParams.set("token",mx.settings.user.token);
+    const config = {
+      idUser: settings.user.id,
+      token: settings.user.token,
+    };
 
     if (opt.recalcStyle) {
-      url.searchParams.set("overwriteStyle", true);
+      config.overwriteStyle = true;
     }
-    await fetch(url);
+
+    nc.panel.open();
+    ws.emit(route, config);
+    return true;
   },
 };

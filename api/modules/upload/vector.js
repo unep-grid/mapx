@@ -91,7 +91,7 @@ export async function convertOgrHandler(req, res, next) {
         );
       }
     },
-    onError: (data) => {
+    onError: async (data) => {
       const subject = `MapX conversion of "${title}" failed`;
       const err = `Error during the conversion of "${title}": ${data.msg}`;
 
@@ -102,7 +102,7 @@ export async function convertOgrHandler(req, res, next) {
         })
       );
 
-      sendMailAuto({
+      await sendMailAuto({
         to: [userEmail, emailAdmin].join(","),
         content: data.msg,
         subject: subject,
@@ -187,7 +187,7 @@ async function addSourceHandler(req, res) {
     );
 
     if (email) {
-      sendMailAuto({
+      await sendMailAuto({
         to: [email],
         content: isValid
           ? msg.addedNewEntry
@@ -209,7 +209,7 @@ async function addSourceHandler(req, res) {
           msg: msgError,
         })
       );
-      sendMailAuto({
+      await sendMailAuto({
         to: [email, emailAdmin].join(","),
         content: msgError,
         subject: msg.titleMailError,

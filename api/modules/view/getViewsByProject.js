@@ -1,60 +1,55 @@
-import {pgRead} from '#mapx/db';
-import {parseTemplate, sendJSON, sendError} from '#mapx/helpers';
-import {templates} from '#mapx/template';
-import {validateTokenHandler} from '#mapx/authentication';
-import {getParamsValidator} from '#mapx/route_validation';
+import { pgRead } from "#mapx/db";
+import { parseTemplate, sendJSON, sendError } from "#mapx/helpers";
+import { templates } from "#mapx/template";
+import { validateTokenHandler } from "#mapx/authentication";
+import { getParamsValidator } from "#mapx/route_validation";
 
 const validateParamsHandler = getParamsValidator({
-  required: ['idUser', 'idProject', 'token'],
+  required: ["idUser", "idProject", "token"],
   expected: [
-    'idProjectOption',
-    'idViews',
-    'collections',
-    'collectionsSelectOperator',
-    'selectKeys',
-    'selectKeysPublic',
-    'types',
-    'roleMax',
-    'language',
-    'publicOnly',
-    'email',
-    'allViews'
-  ]
+    "idProjectOption",
+    "idViews",
+    "collections",
+    "collectionsSelectOperator",
+    "selectKeys",
+    "selectKeysPublic",
+    "types",
+    "roleMax",
+    "language",
+    "publicOnly",
+    "email",
+    "allViews",
+  ],
 });
 
 const mwGetListByProject = [
   validateParamsHandler,
   validateTokenHandler,
-  getViewsHandler
+  getViewsHandler,
 ];
 
-export  {
-  getViews,
-  getProjectViewsStates,
-  mwGetListByProject
-};
+export { getViews, getProjectViewsStates, mwGetListByProject };
 
 /**
-* Get views list by project + state 
-* @param {Object} req Request object
-* @param {Object} res Response object
-* @return null
-*/ 
+ * Get views list by project + state
+ * @param {Object} req Request object
+ * @param {Object} res Response object
+ * @return null
+ */
 async function getViewsHandler(req, res) {
   try {
     const states = await getProjectViewsStates(req.query || {});
     const views = await getViews(req.query || {});
     const data = {
       states: states,
-      views: views
+      views: views,
     };
-    sendJSON(res, data, {end: true});
+    sendJSON(res, data, { end: true });
   } catch (e) {
     console.error(e);
     sendError(res, e);
   }
 }
-
 
 /**
  * Get views list by project
@@ -78,9 +73,9 @@ async function getViews(opt) {
   /**
    * Convert array to sql code for the template
    */
-  opt.sqlTypesFilter = opt.types.map((type) => `'${type}'`).join(',');
-  opt.sqlViewsFilter = opt.idViews.map((id) => `'${id}'`).join(',');
-  opt.sqlCollectionsFilter = opt.collections.map((col) => `'${col}'`).join(',');
+  opt.sqlTypesFilter = opt.types.map((type) => `'${type}'`).join(",");
+  opt.sqlViewsFilter = opt.idViews.map((id) => `'${id}'`).join(",");
+  opt.sqlCollectionsFilter = opt.collections.map((col) => `'${col}'`).join(",");
   opt.sqlCollectionsSelectOperator = opt.collectionsSelectOperator;
 
   /**
@@ -98,7 +93,6 @@ async function getViews(opt) {
   return views;
 }
 
-
 /**
  * Helper to get project states
  * @param {Object} opt options
@@ -115,4 +109,3 @@ async function getProjectViewsStates(opt) {
   }
   return states;
 }
-

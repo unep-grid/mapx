@@ -1,7 +1,14 @@
-import {miniCacheSet, miniCacheGet} from './../minicache';
-import {mirrorUrlCreate} from './../mirror_util';
-import {wmsBuildQueryUi} from './ui.js';
-export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers, urlTile, urlLegend};
+import { miniCacheSet, miniCacheGet } from "./../minicache";
+import { mirrorUrlCreate } from "./../mirror_util";
+import { wmsBuildQueryUi } from "./ui.js";
+import { settings } from "./../settings";
+export {
+  wmsBuildQueryUi,
+  wmsGetCapabilities,
+  wmsGetLayers,
+  urlTile,
+  urlLegend,
+};
 
 /**
  * Build the WMS helper component
@@ -15,15 +22,14 @@ export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers, urlTile, urlLegend};
  *
  *TODO: event delegation, destroy method
  */
-
 async function wmsGetCapabilities(baseUrl, opt) {
   const h = mx.helpers;
   opt = Object.assign(
     {},
     {
-      useCache: mx.settings.useCache,
+      useCache: settings.useCache,
       searchParams: null,
-      useMirror: false
+      useMirror: false,
     },
     opt
   );
@@ -31,9 +37,9 @@ async function wmsGetCapabilities(baseUrl, opt) {
     Object.assign(
       {},
       {
-        service: 'WMS',
-        request: 'GetCapabilities',
-        version: '1.1.1'
+        service: "WMS",
+        request: "GetCapabilities",
+        version: "1.1.1",
       },
       opt.searchParams
     )
@@ -43,9 +49,7 @@ async function wmsGetCapabilities(baseUrl, opt) {
   const url = `${baseUrl}?${queryString}`;
 
   if (!h.isUrlValidWms(url)) {
-    throw new Error(
-      `wmsGetCapabilities requires valid wms URL`
-    );
+    throw new Error(`wmsGetCapabilities requires valid wms URL`);
   }
 
   if (!useMirror && !h.isUrlHttps(url)) {
@@ -57,31 +61,31 @@ async function wmsGetCapabilities(baseUrl, opt) {
     );
   }
 
-  const WMSCapabilities = await h.moduleLoad('wms-capabilities');
+  const WMSCapabilities = await h.moduleLoad("wms-capabilities");
 
   const dataCache = await miniCacheGet(url);
 
   if (!ignoreCache && dataCache) {
-    console.log('WMS GetCapabilities from cache');
-    return h.path(dataCache, 'Capability', {});
+    console.log("WMS GetCapabilities from cache");
+    return h.path(dataCache, "Capability", {});
   }
 
-  console.log('WMS GetCapabilities from server');
+  console.log("WMS GetCapabilities from server");
   const urlFetch = useMirror ? mirrorUrlCreate(url) : url;
   const xmlString = await h.fetchProgress_xhr(urlFetch, {
-    maxSize: mx.settings.maxByteFetch,
-    timeout: 2e4
+    maxSize: settings.maxByteFetch,
+    timeout: 2e4,
   });
 
   const dataFetch = new WMSCapabilities(xmlString).toJSON();
-  miniCacheSet(url, dataFetch, {ttl: mx.settings.maxTimeCache});
-  return h.path(dataFetch, 'Capability', {});
+  miniCacheSet(url, dataFetch, { ttl: settings.maxTimeCache });
+  return h.path(dataFetch, "Capability", {});
 }
 
 async function wmsGetLayers(baseUrl, opt) {
   opt = opt || {};
-  const optGetCapabilities = Object.assign({},opt.optGetCapabilities);
-  opt = Object.assign({}, {optGetCapabilities}, opt);
+  const optGetCapabilities = Object.assign({}, opt.optGetCapabilities);
+  opt = Object.assign({}, { optGetCapabilities }, opt);
 
   const layers = [];
   const capability = await wmsGetCapabilities(baseUrl, opt.optGetCapabilities);
@@ -136,7 +140,7 @@ export async function wmsQuery(opt) {
   const urlBase = opt.url;
   const modeObject = opt.asObject === true || false;
   const ignoreBbox = true;
-  const useMirror = h.path(opt, 'optGetCapabilities.useMirror', false);
+  const useMirror = h.path(opt, "optGetCapabilities.useMirror", false);
   /**
    * Return fetch promise
    */
@@ -162,34 +166,34 @@ export async function wmsQuery(opt) {
   const styles = opt.styles;
   const props = modeObject ? {} : [];
   const query = {
-    version: '1.1.1',
-    service: 'WMS',
-    request: 'GetFeatureInfo',
+    version: "1.1.1",
+    service: "WMS",
+    request: "GetFeatureInfo",
     query_layers: layers,
     layers: layers,
     styles: styles,
-    info_format: 'application/json',
-    exceptions: 'application/vnd.ogc.se_xml',
+    info_format: "application/json",
+    exceptions: "application/vnd.ogc.se_xml",
     feature_count: 10,
     x: 5,
     y: 5,
     width: 9,
     height: 9,
-    srs: 'EPSG:4326',
-    bbox: minLng + ',' + minLat + ',' + maxLng + ',' + maxLat
+    srs: "EPSG:4326",
+    bbox: minLng + "," + minLat + "," + maxLng + "," + maxLat,
   };
   /**
    * Update formats using capabilities
    */
-  const allowedFormatsInfo = ['application/json', 'application/geojson'];
-  const formatsInfo = h.path(cap, 'Request.GetFeatureInfo.Format', []);
-  const layersAll = h.path(cap, 'Layer.Layer', []);
+  const allowedFormatsInfo = ["application/json", "application/geojson"];
+  const formatsInfo = h.path(cap, "Request.GetFeatureInfo.Format", []);
+  const layersAll = h.path(cap, "Layer.Layer", []);
 
   query.info_format = allowedFormatsInfo.reduce((a, f) => {
     return !a ? (formatsInfo.indexOf(f) > -1 ? f : a) : a;
   }, null);
 
-  query.exception = h.path(cap, 'Exception', [])[1];
+  query.exception = h.path(cap, "Exception", [])[1];
 
   /**
    * Test if layer is queryable
@@ -222,10 +226,10 @@ export async function wmsQuery(opt) {
 
   if (!validException || !validLayer || !validInfo) {
     console.warn({
-      'Request not fetched': url,
-      'Valid exception format': validException,
-      'Valid (queryable) layer': validLayer,
-      'Valid info format': validInfo
+      "Request not fetched": url,
+      "Valid exception format": validException,
+      "Valid (queryable) layer": validLayer,
+      "Valid info format": validInfo,
     });
     throw new Error(
       `Operation not permited by the requested server or layer, check console for details`
@@ -251,7 +255,7 @@ export async function wmsQuery(opt) {
         /*
          * Aggregate by attribute
          */
-        if (ignoreBbox && p !== 'bbox') {
+        if (ignoreBbox && p !== "bbox") {
           let value = f.properties[p];
           let values = props[p] || [];
           values = values.concat(value);
@@ -269,40 +273,38 @@ export async function wmsQuery(opt) {
 }
 
 function urlTile(opt) {
-
   let query = mx.helpers.objToParams({
-    bbox: 'bbx_mapbox',
-    service: 'WMS',
-    version: '1.1.1',
-    styles: '',
-    request: 'getMap',
+    bbox: "bbx_mapbox",
+    service: "WMS",
+    version: "1.1.1",
+    styles: "",
+    request: "getMap",
     ZINDEX: 10,
-    EXCEPTIONS: 'application/vnd.ogc.se_blank',
-    srs: 'EPSG:3857',
+    EXCEPTIONS: "application/vnd.ogc.se_blank",
+    srs: "EPSG:3857",
     layers: opt.layer,
-    format: 'image/png',
+    format: "image/png",
     transparent: true,
     height: opt.height || 512,
-    width: opt.width || 512
+    width: opt.width || 512,
   });
 
   // objToParam replace { and }. workaround here
-  query = query.replace('bbx_mapbox', '{bbox-epsg-3857}');
+  query = query.replace("bbx_mapbox", "{bbox-epsg-3857}");
 
-  return opt.url + '?' + query;
+  return opt.url + "?" + query;
 }
 
 function urlLegend(opt) {
   const query = mx.helpers.objToParams({
-    service: 'WMS',
-    version: '1.1.1',
-    style: '',
-    request: 'getLegendGraphic',
+    service: "WMS",
+    version: "1.1.1",
+    style: "",
+    request: "getLegendGraphic",
     layer: opt.layer,
-    format: 'image/png',
-    tranparent: true
+    format: "image/png",
+    tranparent: true,
   });
 
-  return opt.url + '?' + query;
+  return opt.url + "?" + query;
 }
-

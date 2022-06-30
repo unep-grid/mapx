@@ -10,9 +10,10 @@ import { path } from "./../mx_helper_misc.js";
 import { el } from "../el/src/index.js";
 import { getDictItem } from "./../language";
 import { isEmpty } from "./../is_test/index.js";
+import { settings } from "./../settings";
 
 import "./style.less";
-const settings = {
+const settingsDefault = {
   onFilter: (idViews) => {
     console.log(idViews);
   },
@@ -33,7 +34,7 @@ const settings = {
 class ViewsFilter {
   constructor(views, opt) {
     const vf = this;
-    vf.opt = Object.assign({}, settings, opt);
+    vf.opt = Object.assign({}, settingsDefault, opt);
     vf._lStore = new ListenerStore();
     vf.initStorage(views);
     vf.initListeners();
@@ -536,7 +537,7 @@ class ViewsFilter {
     for (const type of vf.opt.typesSelect) {
       const tt = checkboxes.filter((checkbox) => checkbox.getType() === type);
       pos = 0;
-      
+
       tt.sort((a, b) => {
         aLabel = n(a.getLabel());
         bLabel = n(b.getLabel());
@@ -674,8 +675,8 @@ function setViewsComponents(views) {
     overlap = path(v, "data.source.layerInfo.maskName", "");
     attributes = path(v, "data.attribute.names", "");
     customStyle = path(v, "data.style.custom", "");
-    
-    local = path(v, "project") === mx.settings.project.id;
+
+    local = path(v, "project") === settings.project.id;
 
     editable = path(v, "_edit") === true;
 
@@ -733,7 +734,6 @@ function setViewsComponents(views) {
  * @note : expect type, data.collections
  */
 export function getFreqTable(views) {
-  const path = mx.helpers.path;
   const checkboxes = {
     components: [],
     collections: [],

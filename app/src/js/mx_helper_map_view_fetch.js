@@ -1,42 +1,43 @@
-import {getArrayDistinct, getArrayDiff} from './array_stat/index.js';
-import {getApiUrl} from './api_routes';
-import {updateIfEmpty} from './mx_helper_misc.js';
-import {isString, isEmpty, isArrayOfViewsId} from './is_test';
-import {fetchJsonProgress} from './mx_helper_fetch_progress.js';
-import {modal, modalConfirm} from './mx_helper_modal.js';
-import {getQueryViewsInit} from './mx_helper_url.js';
-import {getDictItem, getLanguageCurrent} from './language';
-import {getViewsRemote} from './map_helpers/index.js';
+import { getArrayDistinct, getArrayDiff } from "./array_stat/index.js";
+import { getApiUrl } from "./api_routes";
+import { updateIfEmpty } from "./mx_helper_misc.js";
+import { isString, isEmpty, isArrayOfViewsId } from "./is_test";
+import { fetchJsonProgress } from "./mx_helper_fetch_progress.js";
+import { modal, modalConfirm } from "./mx_helper_modal.js";
+import { getQueryViewsInit } from "./url_utils";
+import { getDictItem, getLanguageCurrent } from "./language";
+import { getViewsRemote } from "./map_helpers/index.js";
+import { settings} from "./settings";
 
 let start;
 export async function fetchViews(o) {
   o = o || {};
 
   const queryItems = [
-    'idProject',
-    'idUser',
-    'language',
-    'token',
-    'idViews',
-    'collections',
-    'collectionsSelectOperator',
-    'roleMax',
-    'allViews'
+    "idProject",
+    "idUser",
+    "language",
+    "token",
+    "idViews",
+    "collections",
+    "collectionsSelectOperator",
+    "roleMax",
+    "allViews",
   ];
 
   const def = {
-    idProject: mx.settings.project.id,
-    idUser: mx.settings.user.id,
+    idProject: settings.project.id,
+    idUser: settings.user.id,
     language: getLanguageCurrent(),
-    token: mx.settings.user.token,
+    token: settings.user.token,
     useQueryFilters: null,
     idViews: [],
     idViewsOpen: [],
     allViews: false,
     collections: [],
-    collectionsSelectOperator: '',
+    collectionsSelectOperator: "",
     noViews: null,
-    roleMax: ''
+    roleMax: "",
   };
   const opt = Object.assign({}, def, o);
 
@@ -49,14 +50,14 @@ export async function fetchViews(o) {
     views: [],
     states: [],
     timing: 0,
-    noViews: false
+    noViews: false,
   };
 
   start = performance.now();
 
   const isModeNoViews =
     opt.noViews === true || isString(opt.noViews)
-      ? opt.noViews.toLowerCase() === 'true'
+      ? opt.noViews.toLowerCase() === "true"
       : false;
 
   if (isModeNoViews) {
@@ -85,7 +86,7 @@ export async function fetchViews(o) {
 
   opt.idViews = getArrayDistinct(opt.idViews);
 
-  const url = new URL(getApiUrl('getViewsListByProject'));
+  const url = new URL(getApiUrl("getViewsListByProject"));
   for (let id of queryItems) {
     url.searchParams.set(id, opt[id]);
   }
@@ -93,10 +94,10 @@ export async function fetchViews(o) {
   const data = await fetchJsonProgress(url, {
     onProgress: opt.onProgress || onProgress,
     onError: opt.onError || onError,
-    onComplete: opt.onComplete || onComplete
+    onComplete: opt.onComplete || onComplete,
   });
 
-  if (data.type === 'error') {
+  if (data.type === "error") {
     throw new Error(data.message);
   }
 
@@ -105,7 +106,7 @@ export async function fetchViews(o) {
   /**
    * Handle missing views
    */
-  const hasModalLogin = !!document.getElementById('loginCode');
+  const hasModalLogin = !!document.getElementById("loginCode");
   const idViewsExist = dataOut.views.map((v) => v.id);
   const idViewsDiff = getArrayDiff(opt.idViews, idViewsExist);
 
@@ -114,8 +115,8 @@ export async function fetchViews(o) {
      * Ask for temporary views
      */
     const addViewTemp = await modalConfirm({
-      title: getDictItem('fetch_views_add_temp_modal_title'),
-      content: getDictItem('fetch_views_add_temp_confirm')
+      title: getDictItem("fetch_views_add_temp_modal_title"),
+      content: getDictItem("fetch_views_add_temp_confirm"),
     });
 
     if (addViewTemp) {
@@ -133,9 +134,9 @@ export async function fetchViews(o) {
 
       if (idViewsNotFound.length > 0) {
         modal({
-          title: getDictItem('fetch_views_not_found_modal_title'),
-          content: getDictItem('fetch_views_not_found_message'),
-          addBackground: true
+          title: getDictItem("fetch_views_not_found_modal_title"),
+          content: getDictItem("fetch_views_not_found_message"),
+          addBackground: true,
         });
       }
     }

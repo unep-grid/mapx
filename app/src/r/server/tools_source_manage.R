@@ -328,7 +328,7 @@ observeEvent(input$btnDeleteSourceConfirm, {
   )
 
   mxModal(
-    id = "editSourceManage",
+    id = "editSourceSettings",
     close = TRUE
   )
 

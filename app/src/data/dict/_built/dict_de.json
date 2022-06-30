@@ -6561,8 +6561,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "de": "Konvertierung im Format {{format}} .<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
+    "de": "Konvertierung erfolgt mit Format {{format}} . Download-Link:<a href=\"{{url}}\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",

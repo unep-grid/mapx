@@ -1,6 +1,6 @@
 import * as styleDefault from "./../../data/style/style_mapx.json";
 
-let settings = {
+const settings = {
   devicePixelRatio: 0, // updated by getPixelRatio()
   language: "en",
   languages: ["en", "fr", "es", "ar", "ru", "zh", "de", "bn", "fa", "ps"],
@@ -44,6 +44,9 @@ let settings = {
     protocol: "https:",
     upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
     routes: {
+      /**
+       * http routes
+       */
       getSearchKey: "/get/search/key",
       getMirror: "/get/mirror",
       getApiSql: "/get/sql",
@@ -63,11 +66,16 @@ let settings = {
       getEpsgCodesFull: "/get/epsg/codes/full",
       downloadSourceCreate: "/get/source/",
       getSourceDownload: "/get/source/",
-      //downloadSourceGet: '/', // location given by the api
       uploadImage: "/upload/image/",
       uploadVector: "/upload/vector/",
       collectLogs: "/collect/logs/",
-      updateGeoserver: "/get/geoserver/rebuild/",
+      /*
+       * ws routes
+       */
+      updateGeoserver: "/ws/update/geoserver",
+      downloadSource: "/ws/download/source",
+      testJobSum: "/ws/get/test/job/sum",
+      testJobEcho: "/ws/get/test/job/echo",
     },
   },
   // see https://github.com/unep-grid/map-x-mgl/issues/472
@@ -91,7 +99,7 @@ let settings = {
   paths: {
     sprites: "sprites/sprite",
     fontstack: "fontstack/{fontstack}/{range}.pbf",
-    svg : "sprites/svg/"
+    svg: "sprites/svg/",
   },
   style: styleDefault.default,
   layerBefore: "mxlayers",

@@ -1,5 +1,5 @@
 .nc-main {
-  --nc_notif_message: #4246ef;
+  --nc_notif_message: #14b0f8;;
   --nc_notif_progress: #9c8e0f;
   --nc_notif_verbose: #5d5c5c;
   --nc_group_border: #525252;
@@ -48,8 +48,10 @@
   .nc-container {
     overflow: auto;
     width: 100%;
+    display: flex;
+    flex-direction: column;
     &:empty:after {
-      content: '0 Notification';
+      content: "0 Notification";
       text-align: center;
       padding: 50px;
       display: flex;
@@ -68,7 +70,7 @@
         padding: 10px;
         overflow: hidden;
         &:after {
-          content: '';
+          content: "";
           margin-left: 20px;
           margin-right: 20px;
           border-bottom: 1px solid var(--nc_group_border);

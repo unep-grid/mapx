@@ -1,8 +1,9 @@
-import * as migrate from '#mapx/migrate';
-import * as language from '#mapx/language';
-import {updateIndexes} from '#mapx/search';
-import {updateGeoIpTable} from '#mapx/ip';
-import {once, onceInterval} from '#mapx/helpers';
+import * as migrate from "#mapx/migrate";
+import * as language from "#mapx/language";
+import { updateIndexes } from "#mapx/search";
+import { updateGeoIpTable } from "#mapx/ip";
+import { updateGeoserver } from "#mapx/geoserver";
+import { once, onceInterval } from "#mapx/helpers";
 
 /**
  * Rountines' scripts
@@ -12,10 +13,11 @@ import {once, onceInterval} from '#mapx/helpers';
  * Rename
  * - Logs use method name for printing (r.name),
  */
-const updateDb = () => migrate.apply();
-const updateLanguage = () => language.init();
+const updateDbRoutine = () => migrate.apply();
+const updateLanguageRoutine = () => language.init();
 const updateIndexesRoutine = () => updateIndexes({});
 const updateGeoIpTableRoutine = () => updateGeoIpTable();
+const updateGeoserverRoutine = () => updateGeoserver();
 
 /**
  * Config
@@ -27,33 +29,41 @@ const optCommon = {
    */
   timeoutMs: 10 * 60 * 1000,
   onSuccess: (cbs) => {
-    const str = cbs.map((cb) => cb.name).join(',');
+    const str = cbs.map((cb) => cb.name).join(",");
     console.log(`Update success for ${str}`);
   },
   onError: (cbs, e) => {
-    const str = cbs.map((cb) => cb.name).join(',');
+    const str = cbs.map((cb) => cb.name).join(",");
     console.error(`Update for ${str} had issue`, e);
-  }
+  },
 };
 const optHourly = {
- ...optCommon,
+  ...optCommon,
 
- /**
-  * Each hour
-  */
- intervalMs: 1 * 60 * 60 * 1000,
+  /**
+   * Each hour
+   */
+  intervalMs: 1 * 60 * 60 * 1000,
 
- before: false
+  before: false,
 };
 const optWeekly = {
- ...optCommon,
+  ...optCommon,
 
- /**
-  * Each week
-  */
- intervalMs: 1 * 7 * 24 * 60 * 60 * 1000,
+  /**
+   * Each week
+   */
+  intervalMs: 1 * 7 * 24 * 60 * 60 * 1000,
 
- before: false
+  before: false,
+};
+const optDaily = {
+  ...optCommon,
+  /**
+   * Each day
+   */
+  intervalMs: 1 * 24 * 60 * 60 * 1000,
+  before: true,
 };
 
 /**
@@ -61,10 +71,10 @@ const optWeekly = {
  */
 once(
   [
-    updateDb,
-    updateLanguage, 
+    updateDbRoutine,
+    updateLanguageRoutine,
     updateIndexesRoutine,
-    updateGeoIpTableRoutine
+    updateGeoIpTableRoutine,
   ],
   optCommon
 );
@@ -74,6 +84,4 @@ once(
  */
 onceInterval([updateIndexesRoutine], optHourly);
 onceInterval([updateGeoIpTableRoutine], optWeekly);
-
-
-
+onceInterval([updateGeoserverRoutine], optDaily);

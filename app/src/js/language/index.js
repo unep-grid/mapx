@@ -8,8 +8,13 @@ import {
   isEmpty,
 } from "./../is_test";
 import { path, parseTemplate, objectToArray } from "./../mx_helper_misc.js";
-import { getViews, getMap, getLayerNamesByPrefix } from "./../map_helpers/index.js";
+import {
+  getViews,
+  getMap,
+  getLayerNamesByPrefix,
+} from "./../map_helpers/index.js";
 import { getArrayDistinct } from "../array_stat";
+import { settings } from "./../settings";
 
 /**
  * Set current language ( for updating ui/views, use updateLanguage )
@@ -21,7 +26,7 @@ export function setLanguageCurrent(lang) {
   if (!languages.includes(lang)) {
     lang = languages[0];
   }
-  mx.settings.language = lang;
+  settings.language = lang;
   return lang;
 }
 
@@ -30,7 +35,7 @@ export function setLanguageCurrent(lang) {
  * @return {String} language code
  */
 export function getLanguageCurrent() {
-  const language = mx.settings.language || getLanguagesAll()[0];
+  const language = settings.language || getLanguagesAll()[0];
   return language;
 }
 
@@ -39,7 +44,7 @@ export function getLanguageCurrent() {
  * @return {Array} languages code
  */
 export function getLanguagesAll() {
-  const languages = mx.settings.languages || ["en"];
+  const languages = settings.languages || ["en"];
   return getArrayDistinct(languages);
 }
 
@@ -267,8 +272,8 @@ export async function updateLanguageElements(o) {
 export async function getDictItem(key, lang) {
   lang = lang || getLanguageCurrent();
 
-  if(isEmpty(key)){
-     return;
+  if (isEmpty(key)) {
+    return;
   }
 
   const keys = [];
@@ -284,8 +289,6 @@ export async function getDictItem(key, lang) {
   if (isString(key)) {
     key = [key];
   }
-
- 
 
   keys.push(...key);
 

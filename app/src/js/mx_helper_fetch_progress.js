@@ -1,3 +1,5 @@
+import { settings } from "./settings";
+
 export async function fetchJsonProgress(url, opt) {
   const r = await fetchProgress(url, opt);
   if (!r || !r.json) {
@@ -23,12 +25,12 @@ const defProgress = {
 };
 
 /**
- * Produce a promise that reject after mx.settings.maxTimeFetch ms ellapsed
+ * Produce a promise that reject after settings.maxTimeFetch ms ellapsed
  * @return {Promise}
  */
 function getPromMaxTime(ms) {
   if (!ms) {
-    ms = mx.settings.maxTimeFetch;
+    ms = settings.maxTimeFetch;
   }
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -127,9 +129,9 @@ export async function fetchProgress_xhr(url, opt) {
   const promTimeout = new Promise((_, reject) => {
     setTimeout(() => {
       reject(
-        `fetchProgress_xhr : timeout exceeded ( ${mx.settings.maxTimeFetch} ms )`
+        `fetchProgress_xhr : timeout exceeded ( ${settings.maxTimeFetch} ms )`
       );
-    }, mx.settings.maxTimeFetch);
+    }, settings.maxTimeFetch);
   });
 
   const promFetch = new Promise((resolve, reject) => {
@@ -190,4 +192,3 @@ export async function fetchProgress_xhr(url, opt) {
 
   return Promise.race([promFetch, promTimeout]);
 }
-

@@ -1,4 +1,15 @@
-import {fetchSourceMetadata} from './mx_helpers';
+import { fetchSourceMetadata } from "./mx_helpers.js";
+import { path } from "./mx_helper_misc.js";
+import { modal } from "./mx_helper_modal.js";
+import { getView, getViews } from "./map_helpers";
+import { isArray } from "./is_test";
+import { settings } from "./settings";
+import { getDictItem, updateLanguageElements } from "./language";
+import { el } from "./el/src/index.js";
+import {
+  validationMetadataTestsToHTML,
+  validateMetadataView,
+} from "./mx_helper_metadata_validation.js";
 
 /*
  * Update metadata and views badges
@@ -6,30 +17,29 @@ import {fetchSourceMetadata} from './mx_helpers';
  * @param {Array} opt.views List of views or views id to update. By default, all
  */
 export async function updateViewsBadges(opt) {
-  const h = mx.helpers;
-  opt = Object.assign({}, {views: h.getViews()}, opt);
+  opt = Object.assign({}, { views: getViews() }, opt);
   try {
-    if (!h.isArray(opt.views)) {
-      throw new Error('Views must by array of views or view id');
+    if (!isArray(opt.views)) {
+      throw new Error("Views must by array of views or view id");
     }
     for (let v of opt.views) {
-      const view = h.getView(v);
+      const view = getView(v);
       if (view) {
         /**
          * Only local view
          */
-        if ((view.type = 'vt')) {
+        if ((view.type = "vt")) {
           /**
            * Update view meta from remote for vt
            */
-          const idSource = h.path(view, 'data.source.layerInfo.name');
+          const idSource = path(view, "data.source.layerInfo.name");
           view._meta = await fetchSourceMetadata(idSource);
         }
         await setViewBadges(view);
       }
     }
   } catch (e) {
-    console.error('updateViewsBadges error:', e);
+    console.error("updateViewsBadges error:", e);
   }
 }
 
@@ -38,28 +48,27 @@ export async function updateViewsBadges(opt) {
  * @param {Object} view View
  */
 export async function setViewBadges(view) {
-  const h = mx.helpers;
   try {
     const readers = view.readers || [];
-    const hasEdit = view._edit === true || view.type === 'gj';
-    const isShared = view.project !== mx.settings.project.id;
-    const isValidable = ['rt', 'vt', 'cc'].includes(view.type);
-    const hasPublic = readers.includes('public');
+    const hasEdit = view._edit === true || view.type === "gj";
+    const isShared = view.project !== settings.project.id;
+    const isValidable = ["rt", "vt", "cc"].includes(view.type);
+    const hasPublic = readers.includes("public");
     const elBadges = document.getElementById(`view_badges_${view.id}`);
     const isTemp = view._temp === true;
-    //const isPublisher = mx.settings.user.roles.publisher;
+    //const isPublisher = settings.user.roles.publisher;
 
     if (!elBadges) {
       return;
     }
-    elBadges.innerHTML = '';
+    elBadges.innerHTML = "";
     const badges = [];
 
     if (isTemp) {
       /**
        * Add public Badge
        */
-      const elBadgeLinkTemp = elBadge('temp-link');
+      const elBadgeLinkTemp = elBadge("temp-link");
       badges.push(elBadgeLinkTemp);
     }
 
@@ -67,7 +76,7 @@ export async function setViewBadges(view) {
       /**
        * Add public Badge
        */
-      const elBadgePublic = elBadge('public');
+      const elBadgePublic = elBadge("public");
       badges.push(elBadgePublic);
     }
 
@@ -79,13 +88,15 @@ export async function setViewBadges(view) {
        * Validate asynchronously metadata
        */
       if (hasPublic) {
-        const validation = h.validateMetadataView(view);
+        const validation = validateMetadataView(view);
 
         if (!validation.valid) {
           /**
            * Add not valid badge
            */
-          const elBadgeMeta = elBadge('meta-issues', {validation: validation});
+          const elBadgeMeta = elBadge("meta-issues", {
+            validation: validation,
+          });
           badges.push(elBadgeMeta);
         }
       }
@@ -95,7 +106,7 @@ export async function setViewBadges(view) {
      * Add shared badge
      */
     if (isShared) {
-      const elBadgeShared = elBadge('shared');
+      const elBadgeShared = elBadge("shared");
       badges.push(elBadgeShared);
     }
 
@@ -103,15 +114,14 @@ export async function setViewBadges(view) {
      * Add editable badge:
      * lock open or closed
      */
-    const elBadgeEdit = elBadge('edit', {editable: hasEdit});
+    const elBadgeEdit = elBadge("edit", { editable: hasEdit });
     badges.push(elBadgeEdit);
 
     /**
-    * View metadata button / badge 
-    */ 
-    const elBadgeMeta =  elBadge('meta', {id:view.id}); 
+     * View metadata button / badge
+     */
+    const elBadgeMeta = elBadge("meta", { id: view.id });
     badges.push(elBadgeMeta);
-
 
     /**
      * Single loop add badge
@@ -123,11 +133,11 @@ export async function setViewBadges(view) {
     /**
      * Update languages
      */
-    await h.updateLanguageElements({
-      el: elBadges
+    await updateLanguageElements({
+      el: elBadges,
     });
   } catch (e) {
-    console.error('setViewBadges error:', e);
+    console.error("setViewBadges error:", e);
   }
 }
 
@@ -135,87 +145,83 @@ export async function setViewBadges(view) {
  * Create el badge
  */
 function elBadge(type, opt) {
-  const h = mx.helpers;
   opt = Object.assign({}, opt);
   switch (type) {
-    case 'public': {
+    case "public": {
       return createViewBadge({
-        iconClasses: ['fa', 'fa-check-circle'],
-        tooltipClasses: ['hint--bottom-right'],
-        tooltipKey: 'view_badge_public_valid',
-        style : {
-          color : 'green'
-        }
-      });
-    }
-    case 'meta-issues': {
-      const results = h.path(opt, 'validation.results');
-      return createViewBadge({
-        iconClasses: [
-          'fa',
-          'fa-exclamation-triangle'
-        ],
+        iconClasses: ["fa", "fa-check-circle"],
+        tooltipClasses: ["hint--bottom-right"],
+        tooltipKey: "view_badge_public_valid",
         style: {
-          color: 'DarkOrange'
+          color: "green",
         },
-        tooltipClasses: ['hint--bottom-right'],
-        tooltipKey: 'view_badge_public_not_valid',
-        dataset: {
-          view_action_key: 'btn_badge_warning_invalid_meta',
-          view_action_data: JSON.stringify(results)
-        }
       });
     }
-    case 'temp-link': {
+    case "meta-issues": {
+      const results = path(opt, "validation.results");
       return createViewBadge({
-        iconClasses: ['fa', 'fa-chain'],
+        iconClasses: ["fa", "fa-exclamation-triangle"],
         style: {
-          color: 'HotPink'
+          color: "DarkOrange",
         },
-        tooltipClasses: ['hint--bottom-right'],
-        tooltipKey: 'view_badge_temp_shared',
+        tooltipClasses: ["hint--bottom-right"],
+        tooltipKey: "view_badge_public_not_valid",
         dataset: {
-          view_action_key: 'btn_badge_temp_shared'
-        }
+          view_action_key: "btn_badge_warning_invalid_meta",
+          view_action_data: JSON.stringify(results),
+        },
       });
     }
-    case 'shared': {
+    case "temp-link": {
       return createViewBadge({
-        iconClasses: ['fa', 'fa-share-alt-square'],
-        tooltipClasses: ['hint--bottom-right'],
-        tooltipKey: 'view_badge_shared',
-        style :  {
-           color : 'BlueViolet'
-        }
+        iconClasses: ["fa", "fa-chain"],
+        style: {
+          color: "HotPink",
+        },
+        tooltipClasses: ["hint--bottom-right"],
+        tooltipKey: "view_badge_temp_shared",
+        dataset: {
+          view_action_key: "btn_badge_temp_shared",
+        },
       });
     }
-    case 'edit': {
+    case "shared": {
+      return createViewBadge({
+        iconClasses: ["fa", "fa-share-alt-square"],
+        tooltipClasses: ["hint--bottom-right"],
+        tooltipKey: "view_badge_shared",
+        style: {
+          color: "BlueViolet",
+        },
+      });
+    }
+    case "edit": {
       const hasEdit = opt.editable;
       return createViewBadge({
-        iconClasses: ['fa', hasEdit ? 'fa-unlock' : 'fa-lock'],
-        tooltipClasses: ['hint--bottom-right'],
-        tooltipKey: hasEdit ? 'view_badge_editable' : 'view_badge_locked',
-        style : {
-          color :  hasEdit ? 'LimeGreen' : 'OrangeRed'
-        }
+        iconClasses: ["fa", hasEdit ? "fa-unlock" : "fa-lock"],
+        tooltipClasses: ["hint--bottom-right"],
+        tooltipKey: hasEdit ? "view_badge_editable" : "view_badge_locked",
+        style: {
+          color: hasEdit ? "LimeGreen" : "OrangeRed",
+        },
       });
     }
-    case 'meta': {
+    case "meta": {
       return createViewBadge({
-        iconClasses: ['fa', 'fa-info-circle'],
-        tooltipClasses: ['hint--bottom-right'],
-        tooltipKey: 'btn_opt_meta',
-        style : {
-          color : 'royalblue'
+        iconClasses: ["fa", "fa-info-circle"],
+        tooltipClasses: ["hint--bottom-right"],
+        tooltipKey: "btn_opt_meta",
+        style: {
+          color: "royalblue",
         },
         dataset: {
-          view_action_key: 'btn_opt_meta',
-          view_action_target: opt.id
-        }
+          view_action_key: "btn_opt_meta",
+          view_action_target: opt.id,
+        },
       });
     }
     default: {
-      console.warn('unknown badge');
+      console.warn("unknown badge");
     }
   }
 }
@@ -223,30 +229,33 @@ function elBadge(type, opt) {
  * create a view badge
  */
 function createViewBadge(opt) {
-  const el = mx.helpers.el;
-  opt = Object.assign({},{
-    dataset: {},
-    style : {}
-  },opt);
+  opt = Object.assign(
+    {},
+    {
+      dataset: {},
+      style: {},
+    },
+    opt
+  );
   opt.dataset = Object.assign(
     {},
     {
-      view_action_key: 'btn_badge_show_modal_badge',
+      view_action_key: "btn_badge_show_modal_badge",
       view_action_data: opt.tooltipKey,
-      lang_type: 'tooltip',
-      lang_key: opt.tooltipKey || ''
+      lang_type: "tooltip",
+      lang_key: opt.tooltipKey || "",
     },
     opt.dataset
   );
   return el(
-    'span',
+    "span",
     {
-      class: opt.tooltipClasses || 'hint--bottom-right',
-      dataset: opt.dataset
+      class: opt.tooltipClasses || "hint--bottom-right",
+      dataset: opt.dataset,
     },
-    el('i', {
-      class: opt.iconClasses || ['fa', 'fa-check-circle'],
-      style: opt.style
+    el("i", {
+      class: opt.iconClasses || ["fa", "fa-check-circle"],
+      style: opt.style,
     })
   );
 }
@@ -257,12 +266,11 @@ function createViewBadge(opt) {
  * @param {Object} results validation results
  */
 export async function displayMetadataIssuesModal(results) {
-  const h = mx.helpers;
-  h.modal({
-    id: 'modal_validation_metadata',
+  modal({
+    id: "modal_validation_metadata",
     replace: true,
-    title: await h.getDictItem('validate_meta_modal_title'),
-    content: h.validationMetadataTestsToHTML(results),
-    addBackground: true
+    title: await getDictItem("validate_meta_modal_title"),
+    content: validationMetadataTestsToHTML(results),
+    addBackground: true,
   });
 }

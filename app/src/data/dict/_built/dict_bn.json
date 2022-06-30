@@ -6561,8 +6561,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "bn": "ফর্ম্যাট ব্যবহার করে রূপান্তর হয়েছে {{format}} ।<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
+    "bn": "ফর্ম্যাট ব্যবহার করে রূপান্তর করা হয়েছে {{format}} . ডাউনলোড লিংক:<a href=\"{{url}}\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",

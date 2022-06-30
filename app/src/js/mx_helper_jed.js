@@ -3,6 +3,8 @@ import { isEmpty } from "./is_test_mapx";
 import { path } from "./mx_helper_misc.js";
 import { getViewJson } from "./map_helpers/index.js";
 import { getViewMapboxStyle, mapboxToSld } from "./style_vt/index.js";
+import { settings } from "./settings";
+
 /**
  * @param {Object} o options
  * @param {String} o.id Id of target element
@@ -191,12 +193,12 @@ function jedValidateSize(editor) {
   const values = editor.getValue();
 
   return h.getSizeOf(values, false).then(function (size) {
-    if (size > mx.settings.maxByteJed) {
+    if (size > settings.maxByteJed) {
       const sizeReadable = h.formatByteSize(size);
       h.modal({
         addBackground: true,
         id: "warningSize",
-        title: `Warning : size greater than ${mx.settings.maxByteJed} ( ${sizeReadable} )`,
+        title: `Warning : size greater than ${settings.maxByteJed} ( ${sizeReadable} )`,
         content: h.el(
           "b",
           "Warning: this form data is too big. Please remove unnecessary item(s) and/or source data (images, binary files) from a dedicated server."

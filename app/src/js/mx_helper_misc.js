@@ -1,7 +1,8 @@
 import { FlashItem } from "./icon_flash";
 import { getArrayDistinct } from "./array_stat/index.js";
-import { isEmpty} from "./is_test/index.js";
+import { isEmpty } from "./is_test/index.js";
 import copy from "fast-copy";
+import { settings } from "./settings";
 /**
  * Fill mising value of target with source object
  * NOTE: Similar to Object.assign, with handling of  "empty" values for each types ('',{},[],null,undefined, ...)
@@ -10,7 +11,6 @@ import copy from "fast-copy";
  * @return {Object} Update target
  */
 export function updateIfEmpty(target, source) {
-
   if (!target) {
     target = {};
   }
@@ -116,16 +116,16 @@ export function setClickHandler(opt) {
   }
 
   if (enable && !hasClickHandler) {
-    mx.settings.clickHandlers.push(type);
+    settings.clickHandlers.push(type);
   }
   if (!enable && hasClickHandler) {
-    mx.settings.clickHandlers.splice(posClickHandler, 1);
+    settings.clickHandlers.splice(posClickHandler, 1);
   }
-  return mx.settings.clickHandlers;
+  return settings.clickHandlers;
 }
 
 export function getClickHandlers() {
-  return mx.settings.clickHandlers;
+  return settings.clickHandlers;
 }
 
 /**

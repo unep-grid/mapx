@@ -8,16 +8,8 @@ import {
   getProjectViewsStates,
 } from "./getViewsByProject.js";
 
-export {
-  getViews,
-  getViewsPublic,
-  getViewMetadata,
-  getProjectViewsStates,
-  getViewsGeoserver,
-  setViewStyleAlt,
-};
 
-export default {
+export {
   /**
    * middleware
    */

@@ -1,24 +1,22 @@
-import {Logger} from './logger';
-import {getApiUrl} from './api_routes';
-import {isViewId} from './is_test';
-import {updateIfEmpty} from './mx_helper_misc.js';
+import { Logger } from "./logger";
+import { getApiUrl } from "./api_routes";
+import { isViewId } from "./is_test";
+import { updateIfEmpty } from "./mx_helper_misc.js";
+import { settings } from "./settings";
 
-/**
- * Logger object
- */
-window.logger = null;
+let logger;
 
 /**
  * Init log
  */
 export function initLog() {
-  const isStatic = mx.settings.mode.static === true;
-  if (!window.logger) {
-    window.logger = new Logger({
-      url: getApiUrl('collectLogs'),
+  const isStatic = settings.mode.static === true;
+  if (!logger) {
+     logger = new Logger({
+      url: getApiUrl("collectLogs"),
       timeCollect: 15000,
       baseForm: {},
-      validate: formatValidateLog
+      validate: formatValidateLog,
     });
   }
 
@@ -26,87 +24,87 @@ export function initLog() {
    * On view added
    */
   mx.events.on({
-    type: 'view_added',
-    idGroup: 'mx_log',
+    type: "view_added",
+    idGroup: "mx_log",
     callback: (d) => {
       if (isViewId(d.idView)) {
         logger.add({
-          id_log: 'view_add',
+          id_log: "view_add",
           data: {
-            id_view: d.idView
-          }
+            id_view: d.idView,
+          },
         });
       }
-    }
+    },
   });
 
   /**
    * On view removed
    */
   mx.events.on({
-    type: 'view_removed',
-    idGroup: 'mx_log',
+    type: "view_removed",
+    idGroup: "mx_log",
     callback: (d) => {
       if (isViewId(d.idView) && d.duration > 0) {
         logger.add({
-          id_log: 'view_remove',
+          id_log: "view_remove",
           data: {
             id_view: d.idView,
-            view_duration_seconds: d.duration / 1000
-          }
+            view_duration_seconds: d.duration / 1000,
+          },
         });
       }
-    }
+    },
   });
 
   /**
    * On session start
    */
   mx.events.on({
-    type: 'session_start',
-    idGroup: 'mx_log',
+    type: "session_start",
+    idGroup: "mx_log",
     callback: () => {
       logger.add({
-        id_log: 'session_start',
-        data: {}
+        id_log: "session_start",
+        data: {},
       });
       /*
        * Force collect
        */
       logger.collect();
-    }
+    },
   });
 
   /**
    * On session end
    */
   mx.events.on({
-    type: 'session_end',
-    idGroup: 'mx_log',
+    type: "session_end",
+    idGroup: "mx_log",
     callback: () => {
       logger.add({
-        id_log: 'session_end',
-        data: {}
+        id_log: "session_end",
+        data: {},
       });
       /*
        * Force collect
        */
       logger.collect();
-    }
+    },
   });
 
   /**
    * On lang change
    */
   mx.events.on({
-    type: 'language_change',
-    idGroup: 'mx_log',
+    type: "language_change",
+    idGroup: "mx_log",
     callback: (d) => {
       logger.add({
-        id_log: 'language_change',
-        data: d
+        id_log: "language_change",
+        data: d,
       });
-    }
+    },
   });
 
   if (!isStatic) {
@@ -114,30 +112,30 @@ export function initLog() {
      * On project change
      */
     mx.events.on({
-      type: 'project_change',
-      idGroup: 'mx_log',
+      type: "project_change",
+      idGroup: "mx_log",
       callback: (d) => {
         logger.add({
-          id_log: 'project_change',
-          data: d
+          id_log: "project_change",
+          data: d,
         });
-      }
+      },
     });
     /**
      * On view panel click
      */
     mx.events.on({
-      type: 'view_panel_click',
-      idGroup: 'mx_log',
+      type: "view_panel_click",
+      idGroup: "mx_log",
       callback: (d) => {
         logger.add({
-          id_log: 'view_panel_click',
+          id_log: "view_panel_click",
           data: {
             id_view: d.idView,
-            id_action: d.idAction
-          }
+            id_action: d.idAction,
+          },
         });
-      }
+      },
     });
   }
 }
@@ -146,12 +144,12 @@ export function initLog() {
  * Update and validate log
  * @param {Object} log Log object.
  * @param {Object} log.data data
- * @param {String} log.level log level (in mx.settings.logs.levels)
- * @param {String} log.side log side (in mx.settings.logs.sides)
- * @param {String} log.id_log log id (in mx.settings.logs.ids)
+ * @param {String} log.level log level (in settings.logs.levels)
+ * @param {String} log.side log side (in settings.logs.sides)
+ * @param {String} log.id_log log id (in settings.logs.ids)
  */
 function formatValidateLog(log) {
-  const s = mx.settings.logs;
+  const s = settings.logs;
   if (s.disabled) {
     /**
      * User should be able to disable logs (e.g. in a cookie);
@@ -161,14 +159,14 @@ function formatValidateLog(log) {
   /**
    * Set default
    */
-  const isStatic = mx.settings.mode.static === true;
+  const isStatic = settings.mode.static === true;
   const def = {
     is_static: isStatic,
-    is_guest: isStatic || mx.settings.user.guest === true,
-    id_user: mx.settings.user.id,
-    id_project: mx.settings.project.id,
-    side: 'browser',
-    level: 'USER_ACTION'
+    is_guest: isStatic || settings.user.guest === true,
+    id_user: settings.user.id,
+    id_project: settings.project.id,
+    side: "browser",
+    level: "USER_ACTION",
   };
 
   /**

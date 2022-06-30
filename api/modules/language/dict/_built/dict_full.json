@@ -17057,16 +17057,16 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "fr": "Conversion effectuée en utilisant le format {{format}} .<a href=\"{{url}}\"> {{title}}</a> ",
-    "es": "Conversión realizada usando formato {{format}} .<a href=\"{{url}}\"> {{title}}</a> ",
-    "ru": "Преобразование выполнено с использованием формата {{format}} .<a href=\"{{url}}\"> {{title}}</a> ",
-    "zh": "使用格式完成转换 {{format}}。<a href=\"{{url}}\"> {{title}}</a> ",
-    "ar": "تم التحويل باستخدام التنسيق {{format}} .<a href=\"{{url}}\"> {{title}}</a> ",
-    "fa": "تبدیل با استفاده از قالب انجام شد {{format}} .<a href=\"{{url}}\"> {{title}}</a> ",
-    "ps": "د شکل په کارولو سره تبادله ترسره شوه {{format}} .<a href=\"{{url}}\"> {{title}}</a> ",
-    "bn": "ফর্ম্যাট ব্যবহার করে রূপান্তর হয়েছে {{format}} ।<a href=\"{{url}}\"> {{title}}</a> ",
-    "de": "Konvertierung im Format {{format}} .<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
+    "fr": "Conversion effectuée à l'aide du format {{format}} . Lien de téléchargement:<a href=\"{{url}}\"> {{title}}</a>",
+    "es": "Conversión hecha usando formato {{format}} . Enlace de descarga:<a href=\"{{url}}\"> {{title}}</a>",
+    "ru": "Преобразование выполнено с использованием формата {{format}} . Ссылка на скачивание:<a href=\"{{url}}\"> {{title}}</a>",
+    "zh": "使用格式完成转换 {{format}}.下载链接：<a href=\"{{url}}\"> {{title}}</a>",
+    "ar": "تم التحويل باستخدام التنسيق {{format}} . رابط التحميل:<a href=\"{{url}}\"> {{title}}</a>",
+    "fa": "تبدیل با استفاده از فرمت انجام می شود {{format}} . لینک دانلود:<a href=\"{{url}}\"> {{title}}</a>",
+    "ps": "تبادله د شکل په کارولو سره ترسره کیږي {{format}} . د کښته کولو لینک:<a href=\"{{url}}\"> {{title}}</a>",
+    "bn": "ফর্ম্যাট ব্যবহার করে রূপান্তর করা হয়েছে {{format}} . ডাউনলোড লিংক:<a href=\"{{url}}\"> {{title}}</a>",
+    "de": "Konvertierung erfolgt mit Format {{format}} . Download-Link:<a href=\"{{url}}\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",
