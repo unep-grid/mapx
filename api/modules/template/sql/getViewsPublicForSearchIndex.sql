@@ -254,7 +254,7 @@ views_built AS (
     /**
     * R jsonlite bug : list of one converted to 'string'
     */ 
-    CASE jsonb_typeof(m.meta -> '{text, keywords, keys}')
+    CASE jsonb_typeof(m.meta #> '{text, keywords, keys}')
       WHEN 'array' THEN m.meta #> '{text, keywords, keys}'
       WHEN 'string' THEN jsonb_build_array(m.meta #> '{text, keywords, keys}')
       ELSE '[]'::jsonb
