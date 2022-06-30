@@ -1,11 +1,11 @@
-import {onNextFrame, cancelFrame} from '../animation_frame/index.js';
-import {Map} from 'mapbox-gl';
+import { onNextFrame, cancelFrame } from "../animation_frame/index.js";
+import { Map } from "mapbox-gl";
 /**
  * Event management
  */
 export class ListenerStore {
   constructor() {
-    this.className = 'ListenerStore';
+    this.className = "ListenerStore";
     this.listeners = [];
   }
   destroy() {
@@ -19,7 +19,7 @@ export class ListenerStore {
       /**
        * Cancel previous non-executed command and call again in x miliseconds
        */
-      return function() {
+      return function () {
         clearTimeout(idTimeout);
         const funCall = (e) => {
           autoPreventDefault(e);
@@ -29,7 +29,7 @@ export class ListenerStore {
         idTimeout = setTimeout(funCall, opt.time);
       };
     } else {
-      return function() {
+      return function () {
         cancelFrame(idTimeout);
         const funCall = (e) => {
           autoPreventDefault(e);
@@ -45,11 +45,11 @@ export class ListenerStore {
     /**
      * If less than x milliseconds ellapsed : ignore.
      */
-    opt = Object.assign({}, {time: 100}, opt);
+    opt = Object.assign({}, { time: 100 }, opt);
     var bind = opt.bind || this;
     var start = performance.now();
     var delta = 0;
-    return function(e) {
+    return function (e) {
       autoPreventDefault(e);
       delta = performance.now() - start;
       if (delta > opt.time) {
@@ -70,30 +70,30 @@ export class ListenerStore {
     if (opt.throttle) {
       opt.callback = li.throttle(opt.callback, {
         bind: opt.bind || li,
-        time: opt.throttleTime
+        time: opt.throttleTime,
       });
     } else if (opt.debounce) {
       opt.callback = li.debounce(opt.callback, {
         bind: opt.bind || li,
-        time: opt.debounceTime
+        time: opt.debounceTime,
       });
     } else {
       opt.callback = opt.callback.bind(opt.bind || li);
     }
-    opt.idGroup = opt.group || opt.idGroup || 'default';
+    opt.idGroup = opt.group || opt.idGroup || "default";
     opt.type = opt.type instanceof Array ? opt.type : [opt.type];
 
     li.listeners.push(opt);
 
     if (opt.target instanceof Element || opt.target instanceof Window) {
-      opt.type.forEach((t) => {
+      for (const t of opt.type) {
         opt.target.addEventListener(t, opt.callback, opt.options || false);
-      });
+      }
     }
     if (opt.target instanceof Map) {
-      opt.type.forEach((t) => {
+      for (const t of opt.type) {
         opt.target.on(t, opt.callback);
-      });
+      }
     }
     return opt;
   }
@@ -116,7 +116,7 @@ export class ListenerStore {
     index = isPos ? index : li.listeners.indexOf(index);
     const opt = li.listeners[index];
     if (!opt) {
-      throw new Error('Listener not found');
+      throw new Error("Listener not found");
     }
     li.listeners.splice(index, 1);
     opt.type = opt.type instanceof Array ? opt.type : [opt.type];
@@ -171,8 +171,6 @@ export class ListenerStore {
     }
   }
 }
-
-
 
 /**
  * Helpers
