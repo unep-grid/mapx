@@ -1,10 +1,11 @@
 {
-  "id": "smartgray",
+  "id": "mapx_dark",
   "description": {
-    "en": "Dark theme with blue water"
+    "en": "Dark gray theme."
   },
   "author": "F.Moser",
   "mode": "dark",
+  "sound": "switch-off",
   "colors": {
     "mx_ui_text": {
       "visibility": "visible",
@@ -92,23 +93,23 @@
     },
     "mx_map_text_water": {
       "visibility": "visible",
-      "color": "rgba(20,176,248,0.9)"
+      "color": "rgba(66,66,66,0.9)"
     },
     "mx_map_text_water_outline": {
       "visibility": "visible",
-      "color": "rgba(13,98,140,0.1)"
+      "color": "rgba(94,94,94,0.1)"
     },
     "mx_map_water": {
       "visibility": "visible",
-      "color": "rgb(10,68,97)"
+      "color": "rgb(121,121,121)"
     },
     "mx_map_bathymetry_high": {
       "visibility": "visible",
-      "color": "rgba(19,113,160,0.5)"
+      "color": "rgba(121,121,121,0.5)"
     },
     "mx_map_bathymetry_low": {
       "visibility": "visible",
-      "color": "rgba(5,19,26,0.5)"
+      "color": "rgba(66,66,66,0.5)"
     },
     "mx_map_road": {
       "visibility": "none",

@@ -188,7 +188,7 @@ function toggleFullScreen() {
 function toggleTheme() {
   const elIcon = this.elButton.querySelector(".fa");
   elIcon.classList.toggle("fa-rotate-180");
-  mx.theme.toggleDarkMode();
+  mx.theme.next();
 }
 
 /**

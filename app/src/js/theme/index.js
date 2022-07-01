@@ -1,42 +1,49 @@
+import { EventSimple } from "./../event_simple";
 import { el } from "./../el/src/index.js";
-import { ListenerStore } from "./../listener_store/index.js";
 import { getDictItem } from "./../language";
 import chroma from "chroma-js";
 import "./style.css";
-import * as themes from "./presets.js";
 import { layer_resolver, css_resolver } from "./mapx_style_resolver.js";
 import { bindAll } from "../bind_class_methods";
+import { isJson } from "../is_test";
+import { onNextFrame } from "../animation_frame/index.js";
+import * as mapx_light from "./themes/mapx_light.json";
+import * as mapx_dark from "./themes/mapx_dark.json";
+import * as ocean_dark from "./themes/ocean_dark.json";
+import * as ocean_light from "./themes/ocean_light.json";
 import switchOn from "./sound/switch-on.mp3";
 import switchOff from "./sound/switch-off.mp3";
-import { onNextFrame } from "../animation_frame/index.js";
+import waterDrops from "./sound/water-drops.mp3";
 
 const global = {
   elStyle: null,
   elInputsContainer: null,
   map: null,
-  themes: themes,
-  idThemeDefault: "mapx",
-  idTheme: "mapx",
+  themes: [
+    mapx_light.default,
+    mapx_dark.default,
+    ocean_light.default,
+    ocean_dark.default,
+  ],
+  id: "mapx_light",
+  id_default: "mapx_light",
   colors: null,
   debug: false,
-  idThemesToggle: ["mapx", "smartgray"],
-  idThemesLight : ["mapx"],
-  idThemesDark : ["smartgray","waterdark"],
   on: {},
   sounds: {
-    "switch-test": switchOn,
     "switch-on": switchOn,
     "switch-off": switchOff,
+    "water-drops": waterDrops,
   },
 };
 
-class Theme {
+class Theme extends EventSimple {
   constructor(opt) {
+    super();
     const t = this;
     bindAll(t);
-    t.opt = Object.assign({}, global, opt);
-    t.inputs = [];
-    t.listeners = [];
+    t._opt = Object.assign({}, global, opt);
+    t._inputs = [];
     t.init();
   }
   /**
@@ -44,78 +51,93 @@ class Theme {
    */
   init() {
     const t = this;
-    t.ls = new ListenerStore();
-
     if (!global.elStyle) {
       global.elStyle = el("style");
       document.head.appendChild(global.elStyle);
     }
-
-    Object.keys(t.opt.on).forEach((k) => {
-      t.on(k, t.opt.on[k]);
-    });
-
-    t.setColorsByThemeId();
+    for (const k in Object.keys(t._opt.on)) {
+      t.on(k, t._opt.on[k]);
+    }
+    const id_saved = localStorage.getItem("theme@id");
+    t.set(t._opt.id || id_saved || t._opt.id_default, false);
   }
 
-  get id_theme() {
-    return this._id_theme;
-  }
-
-  get theme() {
-    return this._theme || {};
-  }
-
-  get colors() {
-    return this._colors || {};
-  }
-
-  get mode() {
-    return this._mode;
-  }
-
-  destroy() {
+  /**
+   * Remove
+   */
+  remove() {
     const t = this;
-    t.ls.destroy();
+    t.destroy();
     if (global.elStyle) {
       global.elStyle.remove();
     }
-    if (t.elInputContainer) {
-      t.elInputsContainer.remove();
+    if (t._elInputsContainer) {
+      t._elInputsContainer.off("change", t.updateFromInput);
+      t._elInputsContainer.replaceChildren();
     }
   }
 
-  getTheme(id) {
-    const t = this;
-    const idTheme = id || t.id_theme || t.opt.idTheme;
-    const valid = t.validateThemeId(idTheme);
-    return t.opt.themes[valid ? idTheme : t.opt.idThemeDefault];
+  id() {
+    return this._theme.id;
   }
 
-  getThemesIdList() {
-    const t = this;
-    return Object.keys(t.opt.themes);
+  theme() {
+    return this._theme || {};
   }
 
-  getThemes() {
-    const t = this;
-    return t.opt.themes;
+  colors() {
+    return this._theme.colors || {};
   }
 
-  setColorsByThemeId(id) {
+  mode() {
+    return this._theme.mode;
+  }
+
+  ids() {
     const t = this;
-    id = id || t.opt.idTheme || t.opt.idThemeDefault;
-    const theme = t.getTheme(id);
+    return t._opt.themes.map((theme) => theme.id);
+  }
+
+  get(id) {
+    const t = this;
+    if (!id) {
+      id = t.id();
+    }
+    return t._opt.themes.find((theme) => theme.id === id);
+  }
+
+  getAll() {
+    const t = this;
+    return t._opt.themes;
+  }
+
+  set(id, save = true) {
+    const t = this;
+    const theme = t.get(id) || t.get(t._opt.id_default);
     if (theme.colors) {
-      t._mode = theme.mode;
-      t.fire("mode_changed", t._mode);
-      t._id_theme = theme.id;
+      t._id = theme.id;
       t._theme = theme;
       t.setColors(theme.colors);
-      t._buildInputs();
+      t.buildInputs();
+
+      if (save) {
+        t.setThemeUrl(id);
+        localStorage.setItem("theme@id", id);
+        if (theme.sound) {
+          t.sound(theme.sound);
+        }
+      }
+      t.fire("mode_changed", t.mode());
       return true;
     }
     return false;
+  }
+
+  setThemeUrl(id) {
+    const t = this;
+    const url = new URL(location.href);
+    url.searchParams.set("theme", id || t._opt.id_default);
+    history.replaceState(null, null, url);
   }
 
   sanitizeColors(colors) {
@@ -128,7 +150,7 @@ class Theme {
     }
 
     /* case json text */
-    if (!isValidInputColors && isJsonTxt(colors)) {
+    if (!isValidInputColors && isJson(colors)) {
       const colors_json = JSON.stringify(colors);
       if (t.validateColors(colors_json)) {
         return colors_json;
@@ -157,7 +179,7 @@ class Theme {
         layer_resolver(colors) &&
         css_resolver(colors) &&
         true;
-      if (t.opt.debug) {
+      if (t._opt.debug) {
         console.log(`Validated in ${performance.now() - start} [ms]`);
       }
       return valid;
@@ -167,97 +189,72 @@ class Theme {
     }
   }
 
-  validateThemeId(idTheme) {
-    const t = this;
-    const theme = t.opt.themes[idTheme];
-    if (theme && theme.colors) {
-      return t.validateColors(theme.colors);
-    } else {
-      return false;
-    }
-  }
-
   isDarkMode() {
     const t = this;
-    const idCurrent = t.id_theme;
-    return t.opt.idThemesDark.includes(idCurrent);
+    return t.mode() === "dark";
   }
 
-  toggleDarkMode(force) {
+  next() {
     const t = this;
-    const idCurrent = t.id_theme;
-    const idsTheme = t.opt.idThemesToggle;
-    let pos = idsTheme.indexOf(idCurrent);
-    if (force) {
-      pos = 1;
-    } else if (pos === -1) {
-      pos = 0;
-    } else if (pos === 1) {
-      pos = 0;
-    } else {
-      pos = 1;
-    }
-    if (pos === 1) {
-      t.sound("switch-off");
-    } else {
-      t.sound("switch-on");
-    }
-    t.setColorsByThemeId(idsTheme[pos]);
+    const ids = t.ids();
+    const id = t.id();
+    const last = ids.length - 1;
+    const pos = ids.indexOf(id);
+    const useFirst = pos + 1 > last;
+    const id_new = ids[useFirst ? 0 : pos + 1];
+    return t.set(id_new);
   }
 
-  setColorsByThemeNext() {
+  previous() {
     const t = this;
-    const idCurrent = t.id_theme;
-    const idsTheme = Object.keys(t.opt.themes);
-    let pos = idsTheme.indexOf(idCurrent);
-    if (pos === -1) {
-      pos = 0;
-    }
-    if (pos + 1 <= idsTheme.length - 1) {
-      pos++;
-    } else {
-      pos = 0;
-    }
-    t.setColorsByThemeId(idsTheme[pos]);
+    const ids = t.ids();
+    const id = t.id();
+    const last = ids.length - 1;
+    const pos = ids.indexOf(id);
+    const useLast = pos - 1 < 0;
+    const id_new = ids[useLast ? last : pos - 1];
+    return t.set(id_new);
   }
 
   setColors(colors) {
     const t = this;
-    const default_theme = t.getTheme();
+    const default_theme = t.theme();
     const new_colors = Object.assign(
       {},
       default_theme.colors,
-      colors || t.opt.colors
+      colors || t._opt.colors
     );
     const validColors = t.validateColors(new_colors);
     if (validColors) {
-      t.opt.colors = new_colors;
-      t._updateCss();
-      t._updateMap();
+      t._colors = new_colors;
+      t.updateCss();
+      t.updateMap();
+      t.fire("set_colors", new_colors);
     }
-    t._colors = new_colors;
-    t.fire("set_colors", new_colors);
   }
 
   getColorThemeItem(id) {
-    const item = this.getTheme().colors[id];
+    const t = this;
+    const item = t.colors()[id];
     if (item) {
       return item.color;
     }
   }
 
-  _updateCss() {
+  updateCss() {
     const t = this;
-    global.elStyle.textContent = css_resolver(t.opt.colors);
+    global.elStyle.textContent = css_resolver(t._colors);
   }
+
   linkMap(map) {
     const t = this;
-    t.opt.map = map;
-    t._updateMap();
+    t._map = map;
+    t.updateMap();
   }
-  _updateMap() {
+
+  updateMap() {
     const t = this;
-    const map = t.opt.map;
+    const map = t._map;
     if (!map) {
       return;
     }
@@ -268,39 +265,45 @@ class Theme {
       map.once("load", t._updateMap.bind(t));
       return;
     }
+
     t._map_skip_wait_load = true;
 
-    const layers = layer_resolver(t.opt.colors);
-    layers.forEach((grp) => {
-      grp.id.forEach((id) => {
+    const layers = layer_resolver(t._colors);
+
+    for (const grp of layers) {
+      for (const id of grp.id) {
+        const paint = grp.paint;
         const layer = map.getLayer(id);
+        const layout = grp.layout;
+
         if (!layer) {
           return console.warn(`Layer ${id} not found`);
         }
-        const paint = grp.paint;
+
         if (paint) {
-          for (var p in paint) {
+          for (const p in paint) {
             map.setPaintProperty(id, p, paint[p]);
           }
         }
-        const layout = grp.layout;
+
         if (layout) {
-          for (var l in layout) {
+          for (const l in layout) {
             map.setLayoutProperty(id, l, layout[l]);
           }
         }
-      });
-    });
-  }
-  _updateFromInput() {
-    const t = this;
-    t.opt.colors = t.getColorsFromInputs();
-    t.setColors();
+      }
+    }
   }
 
-  _buildInputGroup(cid) {
+  updateFromInput() {
     const t = this;
-    const colors = t.opt.colors;
+    const colors = t.getColorsFromInputs();
+    t.setColors(colors);
+  }
+
+  buildInputGroup(cid) {
+    const t = this;
+    const colors = t._colors;
     const inputType = ["checkbox", "color", "range"];
     const color = chroma(colors[cid].color);
     const visible = colors[cid].visibility === "visible";
@@ -373,43 +376,38 @@ class Theme {
           if (isCheck) {
             elInput.checked = visible;
           }
-          t.inputs.push(elInput);
+          t._inputs.push(elInput);
           return elWrap;
         })
       )
     );
   }
+
   linkInputs(elInputsContainer) {
     const t = this;
-    const elContainer = elInputsContainer || t.opt.elInputsContainer;
-    if (!elContainer instanceof Element || t._el_inputs_init) {
+    const elContainer = elInputsContainer || t._opt.elInputsContainer;
+    if (t._elInputsContainer) {
       return;
     }
-    t.ls.addListener({
-      bind: t,
-      target: elContainer,
-      callback: t._updateFromInput,
-      group: "base",
-      type: "change",
-      debounce: true,
-      debounceTime: 200,
-    });
-    t._el_inputs_init = true;
-    t.opt.elInputsContainer = elContainer;
-    t._buildInputs();
+    if (!elContainer instanceof Element) {
+      return;
+    }
+    elContainer.addEventListener("change", t.updateFromInput);
+    t._elInputsContainer = elContainer;
+    t.buildInputs();
   }
 
-  _buildInputs() {
+  buildInputs() {
     const t = this;
-    const colors = t.opt.colors;
-    const elContainer = t.opt.elInputsContainer;
+    const colors = t._colors;
+    const elContainer = t._elInputsContainer;
     const elFrag = new DocumentFragment();
     if (!(elContainer instanceof Element)) {
       return;
     }
-    elContainer.innerHTML = "";
-    for (var cid in colors) {
-      const elInputGrp = t._buildInputGroup(cid);
+    elContainer.replaceChildren();
+    for (const cid in colors) {
+      const elInputGrp = t.buildInputGroup(cid);
       elFrag.appendChild(elInputGrp);
     }
     /**
@@ -423,40 +421,30 @@ class Theme {
       elContainer.replaceChildren(elFrag);
     });
   }
-  getColorsFromInputs(id) {
+  getColorsFromInputs() {
     const t = this;
     const out = {};
-    t.inputs.forEach((input) => {
-      const cid = input.dataset.id;
-      if (!id || cid === id) {
-        const isCheck = input.type === "checkbox";
-        const value = isCheck ? input.checked : input.value;
-        const param = input.dataset.param;
-        if (!out[cid]) {
-          out[cid] = {};
-        }
-        out[cid][param] = value;
-      }
-    });
 
-    for (var cid in out) {
+    for (const input of t._inputs) {
+      const cid = input.dataset.id;
+      const isCheck = input.type === "checkbox";
+      const value = isCheck ? input.checked : input.value;
+      const param = input.dataset.param;
+      if (!out[cid]) {
+        out[cid] = {};
+      }
+      out[cid][param] = value;
+    }
+
+    for (const cid in out) {
+      const hex = out[cid].hex;
+      const alpha = out[cid].alpha * 1;
       out[cid] = {
         visibility: out[cid].visibility === true ? "visible" : "none",
-        color: chroma(out[cid].hex)
-          .alpha(out[cid].alpha * 1)
-          .css(),
+        color: chroma(hex).alpha(alpha).css(),
       };
     }
-    if (id) {
-      return out[id];
-    } else {
-      return out;
-    }
-  }
-
-  get(id) {
-    const t = this;
-    return t.colors[id];
+    return out;
   }
 
   /**
@@ -465,52 +453,21 @@ class Theme {
   sound(id) {
     const t = this;
     t._elAudio = t._elAudio || el("audio");
-    t._elAudio.setAttribute("src", t.opt.sounds[id]), t._elAudio.play();
-  }
-
-  /**
-   * Events
-   */
-  on(id, cb) {
-    this.listeners.push({
-      id: id,
-      cb: cb,
-    });
-  }
-  fire(id, data) {
-    this.listeners.forEach((l) => {
-      if (id === l.id) {
-        l.cb(data);
-      }
-    });
-  }
-  off(id, cb) {
-    let n = this.listeners.length;
-    while (n--) {
-      const l = this.listeners[n];
-      if (l.id === id && l.cb === cb) {
-        this.listeners.splice(n, 1);
-      }
-    }
+    t._elAudio.setAttribute("src", t._opt.sounds[id]), t._elAudio.play();
   }
 }
 
 export { Theme };
 
-function isJsonTxt(txt) {
-  try {
-    return JSON.parse(txt) && true;
-  } catch (e) {
-    return false;
-  }
-}
 function isBase64Json(txt) {
   try {
-    return isJsonTxt(atob(txt)) && true;
+    const jsonString = Buffer.from(txt, "base64").toString("utf8");
+    return isJson(jsonString);
   } catch (e) {
     return false;
   }
 }
 function b64ToJson(txt) {
-  return JSON.parse(atob(txt));
+  const jsonString = Buffer.from(txt, "base64").toString("utf8");
+  return JSON.parse(jsonString);
 }

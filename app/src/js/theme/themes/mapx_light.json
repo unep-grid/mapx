@@ -1,10 +1,11 @@
 {
-  "id": "mapx",
+  "id": "mapx_light",
   "description": {
     "en": "White and dark gray."
   },
   "mode": "light",
   "author": "F.Moser",
+  "sound": "switch-on",
   "colors": {
     "mx_ui_text": {
       "visibility": "visible",
@@ -14,7 +15,7 @@
       "visibility": "visible",
       "color": "rgb(17,176,248)"
     },
-  "mx_ui_input_accent": {
+    "mx_ui_input_accent": {
       "visibility": "visible",
       "color": "rgb(17,176,248)"
     },

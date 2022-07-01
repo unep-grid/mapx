@@ -71,7 +71,7 @@ export class ShareModal extends EventSimple {
       url: null,
       modeCurrent: "static",
       shareString: "",
-      mapPosItems: ["p", "b", "z", "lat", "lng", "t3d", "sat"],
+      mapPosItems: ["p", "b", "z", "lat", "lng", "t3d", "sat", "theme"],
       prevent: new Set(),
       views: [],
       /** note : unchecked checkbox are not included in formData.-

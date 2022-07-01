@@ -1210,7 +1210,9 @@ export function initMapListener(map) {
       highlight_color: colors.mx_map_feature_highlight.color,
     });
     if (window.jed && jed.aceEditors) {
-      jed.aceEditors.forEach((e) => e._set_theme_auto());
+      for (const e in jed.aceEditors) {
+        e._set_theme_auto();
+      }
     }
   });
 
@@ -5323,6 +5325,7 @@ export function getMapPos(o) {
   const pitch = map.getPitch();
   const modeSat = ctrls.getButton("btn_theme_sat").isActive();
   const mode3d = ctrls.getButton("btn_3d_terrain").isActive();
+  const idTheme = theme.id();
   const out = {
     n: round(bounds.getNorth()),
     s: round(bounds.getSouth()),
@@ -5335,6 +5338,7 @@ export function getMapPos(o) {
     z: round(zoom),
     sat: modeSat,
     t3d: mode3d,
+    theme: idTheme,
   };
   return out;
 }
