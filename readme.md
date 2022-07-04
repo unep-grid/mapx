@@ -157,17 +157,17 @@ $ cd ./app
 $ npm run dev
 ```
 
-- Launch the server from within the running `app` container. In another terminal window, launch the dev server :
+- Launch the server from within the running `app_dev` container. In another terminal window, launch the dev server :
 
 ```sh
-docker compose exec app R
+docker compose exec app_dev R
 > source('run.R') 
 
 # OR, as a single line for a non-interactive session:
-docker compose exec app Rscript --vanilla run.R
+docker compose exec app_dev Rscript --vanilla run.R
 ```
 
-Then, an instance of mapx should be available at <http://dev.mapx.localhost:8880/> for which the source code from `./app/` is mounted as `/appdev/` in the container.
+Then, an instance of mapx should be available at <http://dev.mapx.localhost:8880/> for which the source code from `./app/` is mounted as `/app/` in the container.
 
 __Note for auto-translation__:
 Automatic translation requires a valid Google cloud config file, which path should be refered in the host – not inside the docker container – as an environment variable named `GOOGLE_APPLICATION_CREDENTIALS`, accessible from your local node. You can test this with :
@@ -195,13 +195,13 @@ Start the `Express.js` development server:
 
 ```sh
 $ docker compose up -d
-$ docker compose exec api node inspect index.js port=3333
+$ docker compose exec api_dev node inspect index.js port=3333
 debug> c
 ```
 
-The instance now should use the api service at <http://apidev.mapx.localhost:8880/> for which the source from `./api/` is mounted as `/apidev/` in the container.
+The instance now should use the api service at <http://apidev.mapx.localhost:8880/> for which the source from `./api/` is mounted as `/api/` in the container.
 
-If you want to use the prod version of the `api` service, setup the environmental variables in `mapx.dev.env`as follows:
+If you want to use the prod version of the `api_dev` service, setup the environmental variables in `mapx.dev.env`as follows:
 
 ```sh
 API_HOST=api
@@ -210,6 +210,16 @@ API_PORT_DEV=3030
 API_PORT_PUBLIC=8880
 API_HOST_PUBLIC=api.mapx.localhost
 API_HOST_PUBLIC_DEV=api.mapx.localhost
+```
+
+### `app` end-to-end tests 
+
+Mapx use a custom end-to-end testing tool, which features the mapx's `sdk`. The testing coverage is partial, but should cover the largest part of all MapX features, while also tesing the `sdk`, as a all tests are written using common `sdk` async methods.  
+
+
+```sh
+cd app/src/js/sdk
+npn run tests 
 ```
 
 #### `api` tests
