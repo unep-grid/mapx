@@ -11804,6 +11804,19 @@
     "de": "Länder, die auf der Karte hervorgehoben werden sollen "
   },
   {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "fr": "Thème par défaut",
+    "es": "Tema predeterminado",
+    "ru": "Тема по умолчанию",
+    "zh": "默认主题",
+    "ar": "السمة الافتراضية",
+    "fa": "تم پیش‌فرض",
+    "ps": "ډیفالټ موضوع",
+    "bn": "ডিফল্ট থিম",
+    "de": "Standardthema"
+  },
+  {
     "id": "project_search_values",
     "en": "Search projects",
     "fr": "Rechercher de projets",

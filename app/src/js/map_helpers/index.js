@@ -852,14 +852,13 @@ export function updateBtnFilterActivated() {
  * @param {Object} o.mapPosition.bounds Mapbox bounds object
  * @param {Boolean} o.mapPosition.fitToBounds fit map to bounds
  * @param {Object} o.colorScheme Color sheme object
- * @param {String} o.idTheme  Id of the theme to use
+ * @param {String} o.idTheme Id of the theme to use
  * @param {Boolean} o.useQueryFilters Use query filters for fetch views
  */
 export async function initMapx(o) {
-  let mp;
   o = o || {};
   o.id = o.id || settings.map.id;
-  mp = o.mapPosition || {};
+  const mp = o.mapPosition || {};
 
   /**
    * Set mapbox gl token
@@ -972,13 +971,14 @@ export async function initMapx(o) {
    * Create map object
    */
   const map = new mx.mapboxgl.Map(mapOptions);
+  const elCanvas = map.getCanvas();
+  elCanvas.setAttribute("tabindex", "-1");
+
   // Multiple maps were originally planned, never happened.
   // -> many function have an option for getting the map by id, but
   //    only one really exists. TODO: refactoring
   o.map = map;
   mx.maps[o.id].map = map;
-  const elCanvas = map.getCanvas();
-  elCanvas.setAttribute("tabindex", "-1");
 
   /**
    * Wait for map to be loaded
@@ -989,6 +989,13 @@ export async function initMapx(o) {
    * Link theme to map
    */
   theme.linkMap(map);
+
+  /**
+   * Update theme, if required by init opt
+   */
+  if (theme.isValidId(o.idTheme)) {
+    theme.set(o.idTheme, { save_url: true, sound: false });
+  }
 
   if (!settings.mode.static) {
     /**
@@ -4978,6 +4985,17 @@ export function setMapProjection(opt) {
       center: opt.center,
       parallels: opt.parallels,
     });
+  }
+}
+
+/**
+ * Set theme
+ * @param {Object} opt options
+ * @param {String} opt.id Theme id
+ */
+export function setTheme(opt) {
+  if (theme.isValidId(opt.id)) {
+    theme.set(opt.id, { save_url: true, sound: false });
   }
 }
 

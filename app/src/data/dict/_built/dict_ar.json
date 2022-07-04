@@ -4540,6 +4540,11 @@
     "ar": "البلدان المراد تسليط الضوء عليها على الخريطة "
   },
   {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "ar": "السمة الافتراضية"
+  },
+  {
     "id": "project_search_values",
     "en": "Search projects",
     "ar": "مشاريع البحث "

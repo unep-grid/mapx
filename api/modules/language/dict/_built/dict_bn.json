@@ -4540,6 +4540,11 @@
     "bn": "দেশগুলিকে মানচিত্রে হাইলাইট করা হবে "
   },
   {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "bn": "ডিফল্ট থিম"
+  },
+  {
     "id": "project_search_values",
     "en": "Search projects",
     "bn": "প্রকল্প অনুসন্ধান করুন "

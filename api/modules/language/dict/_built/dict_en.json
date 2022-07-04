@@ -3632,6 +3632,10 @@
     "en": "Countries to be highlighted on the map"
   },
   {
+    "id": "project_id_theme",
+    "en": "Default theme"
+  },
+  {
     "id": "project_search_values",
     "en": "Search projects"
   },

@@ -51,6 +51,7 @@ $(document).on("shiny:connected", function () {
   bind("mglAddLayer", h.addLayer);
   bind("mglFlyTo", h.flyTo);
   bind("mglSetMapProjection", h.setMapProjection);
+  bind("mglSetTheme", h.setTheme);
   bind("mglSyncAllMaps", h.syncAll);
   bind("mglUpdateViewsList", h.updateViewsList);
   bind("mglRemoveView", h.viewDelete);

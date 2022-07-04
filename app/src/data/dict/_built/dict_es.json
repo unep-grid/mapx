@@ -4540,6 +4540,11 @@
     "es": "Países destacados en el mapa"
   },
   {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "es": "Tema predeterminado"
+  },
+  {
     "id": "project_search_values",
     "en": "Search projects",
     "es": "Buscar proyectos"

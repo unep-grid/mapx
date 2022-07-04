@@ -116,7 +116,7 @@
     "json-formatter-js": "^2.3.4",
     "jsondiffpatch": "^0.3.11",
     "jszip": "^3.7.1",
-    "mapbox-gl": "^2.7.0",
+    "mapbox-gl": "^2.9.0",
     "mapbox-gl-draw-circle": "^1.1.2",
     "martinez-polygon-clipping": "^0.5.0",
     "monaco-editor": "^0.33.0",

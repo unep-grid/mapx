@@ -43,7 +43,7 @@ function initMatchMedia(theme) {
     const wMlight = window.matchMedia("(prefers-color-scheme: light)");
 
     if (wMdark.matches) {
-      theme.set("mapx_dark");
+      theme.set("mapx_dark", { sound: false, save: false, save_url: false });
     }
     wMdark.addEventListener("change", (e) => {
       return e.matches && theme.set("mapx_dark");

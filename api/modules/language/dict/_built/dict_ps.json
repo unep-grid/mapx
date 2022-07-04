@@ -4540,6 +4540,11 @@
     "ps": "هیوادونه به په نقشه کې روښانه شي "
   },
   {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "ps": "ډیفالټ موضوع"
+  },
+  {
     "id": "project_search_values",
     "en": "Search projects",
     "ps": "پروژې لټول "

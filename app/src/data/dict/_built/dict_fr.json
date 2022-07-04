@@ -4540,6 +4540,11 @@
     "fr": "Pays mis en évidence sur la carte"
   },
   {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "fr": "Thème par défaut"
+  },
+  {
     "id": "project_search_values",
     "en": "Search projects",
     "fr": "Rechercher de projets"

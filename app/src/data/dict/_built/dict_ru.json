@@ -4540,6 +4540,11 @@
     "ru": "Страны, которые будут выделены на карте "
   },
   {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "ru": "Тема по умолчанию"
+  },
+  {
     "id": "project_search_values",
     "en": "Search projects",
     "ru": "Искать проекты "

@@ -59,7 +59,11 @@ class Theme extends EventSimple {
       t.on(k, t._opt.on[k]);
     }
     const id_saved = localStorage.getItem("theme@id");
-    t.set(t._opt.id || id_saved || t._opt.id_default, false);
+    t.set(t._opt.id || id_saved || t._opt.id_default, {
+      sound: false,
+      save: false,
+      save_url: false,
+    });
   }
 
   /**
@@ -98,6 +102,11 @@ class Theme extends EventSimple {
     return t._opt.themes.map((theme) => theme.id);
   }
 
+  isValidId(id) {
+    const t = this;
+    return t.ids().includes(id);
+  }
+
   get(id) {
     const t = this;
     if (!id) {
@@ -111,9 +120,16 @@ class Theme extends EventSimple {
     return t._opt.themes;
   }
 
-  set(id, save = true) {
+  set(id, opt) {
     const t = this;
-    const theme = t.get(id) || t.get(t._opt.id_default);
+    const { sound = true, save = true, save_url = true } = opt || {};
+    const valid = t.isValidId(id);
+    if (!valid) {
+      id = t.get(t._opt.id_default);
+    }
+
+    const theme = t.get(id);
+
     if (theme.colors) {
       t._id = theme.id;
       t._theme = theme;
@@ -121,12 +137,17 @@ class Theme extends EventSimple {
       t.buildInputs();
 
       if (save) {
-        t.setThemeUrl(id);
         localStorage.setItem("theme@id", id);
-        if (theme.sound) {
-          t.sound(theme.sound);
-        }
       }
+
+      if (sound && theme.sound) {
+        t.sound(theme.sound);
+      }
+
+      if (save_url) {
+        t.setThemeUrl(id);
+      }
+
       t.fire("mode_changed", t.mode());
       return true;
     }

@@ -5,14 +5,15 @@
 #' @param layerId Layer id
 #' @param filter Filter operator
 #' @export
-mglSetFilter <- function( id, layerId, filter, session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglSetFilter",
+mglSetFilter <- function(id, layerId, filter, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglSetFilter",
     list(
       id = id,
       idView = layerId,
       filter = filter
-      )
     )
+  )
 }
 
 
@@ -21,14 +22,15 @@ mglSetFilter <- function( id, layerId, filter, session=shiny::getDefaultReactive
 #' @param countrieses {List} List of countries
 #' @param idLayer {Character} country layer id
 #' @export
-mglSetHighlightedCountries <- function( id, countries, idLayer="country-code",session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglSetHighlightedCountries",
+mglSetHighlightedCountries <- function(id, countries, idLayer = "country-code", session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglSetHighlightedCountries",
     list(
       id = id,
       idLayer = idLayer,
       countries = countries
-      )
     )
+  )
 }
 
 
@@ -37,102 +39,109 @@ mglSetHighlightedCountries <- function( id, countries, idLayer="country-code",se
 #' @param opt {List} list of options
 #' @param idProject {Character} Id of the project
 #' @export
-mglGetProjectViewsState<- function(opt=list(),session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglGetProjectViewsState",
+mglGetProjectViewsState <- function(opt = list(), session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglGetProjectViewsState",
     opt
-    )
+  )
 }
 
 #' Set project
 #' @param idProject {Character} Id of the project
 #' @export
-mglUpdateProject <- function( idProject = config$project$default, session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglUpdateProject",list(
-      idProject = idProject
-      )
-    )
+mglUpdateProject <- function(idProject = config$project$default, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglUpdateProject", list(
+    idProject = idProject
+  ))
 }
 
 #' Update all view badges, and linked metadata if needed
 #' @param opt {List} list of option : forceUpadateMeta : force update of the metadata
 #' @export
-mglUpdateViewsBadges <- function(opt,session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglUpdateViewsBadges",
+mglUpdateViewsBadges <- function(opt, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglUpdateViewsBadges",
     opt
-    )
+  )
 }
 
 #' Get overlap result
 #' @param opt {List} list of option : idTextResult, layers, countries, method
 #' @export
-mglGetOverlapAnalysis <- function(opt,session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglGetOverlapAnalysis",
+mglGetOverlapAnalysis <- function(opt, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglGetOverlapAnalysis",
     opt
-    )
+  )
 }
 
 #' Get overlap result
 #' @param opt {List} list of option : idSource, idForm, useCache, autoCorrect
 #' @export
-mglGetValidateSourceGeom <- function(opt,session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglGetValidateSourceGeom",
+mglGetValidateSourceGeom <- function(opt, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglGetValidateSourceGeom",
     opt
-    )
+  )
 }
 
 #' Get overlap result
 #' @param opt {List} list of option : idSource, idView, binsNumber, binsMethod, etc..
 #' @export
-mglGetSourceStatModal <- function(opt,session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglGetSourceStatModal",
+mglGetSourceStatModal <- function(opt, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglGetSourceStatModal",
     opt
-    )
+  )
 }
 
 
 #' Set legend html template
 #' @param template {character} Dot.js compatible template for displaying legend
 #' @export
-mglSetLegendTemplate <- function( template, session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglSetLegendTemplate",
+mglSetLegendTemplate <- function(template, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglSetLegendTemplate",
     list(
       template = template
-      )
     )
+  )
 }
 
 #' Reset map, view and dashboards
 #' @param idMap {character} map id
 #' @export
-mglReset <- function( idMap, session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglReset",
+mglReset <- function(idMap, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglReset",
     list(
       idMap = idMap
-      )
     )
+  )
 }
 
 #' Reset map, view and dashboards
 #' @param idMap {character} map id
 #' @export
-mglHandlerDownloadVectorSource <- function( config, session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglHandlerDownloadVectorSource",config);
+mglHandlerDownloadVectorSource <- function(config, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglHandlerDownloadVectorSource", config)
 }
 
 
 
-#' Get client localForage object 
+#' Get client localForage object
 #' @param idStore localforage store id
 #' @param idKey Id of the object
 #' @param idInput Id to trigger when the operation is completed
-mglGetLocalForageData <- function(idStore,idKey,idInput,session=shiny::getDefaultReactiveDomain()){
-  session$sendCustomMessage("mglGetLocalForageData",
+mglGetLocalForageData <- function(idStore, idKey, idInput, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglGetLocalForageData",
     list(
       idInput = idInput,
       idKey = idKey,
       idStore = idStore
-      )
     )
+  )
 }
 
 
@@ -141,20 +150,20 @@ mglGetLocalForageData <- function(idStore,idKey,idInput,session=shiny::getDefaul
 #' Remove view
 #' @param idView {character} geojson view id
 #' @export
-mglRemoveView <- function( idView=NULL, session=shiny::getDefaultReactiveDomain()) {
-  
-  if(is.null(idView)) {
-        return();
-  } 
+mglRemoveView <- function(idView = NULL, session = shiny::getDefaultReactiveDomain()) {
+  if (is.null(idView)) {
+    return()
+  }
 
-  session$sendCustomMessage("mglRemoveView",
+  session$sendCustomMessage(
+    "mglRemoveView",
     list(
       idView = idView
-      )
     )
+  )
 }
 
-#' Update views list 
+#' Update views list
 #'
 #' Trigger an update or send new view list, possibly compact.
 #'
@@ -166,66 +175,63 @@ mglRemoveView <- function( idView=NULL, session=shiny::getDefaultReactiveDomain(
 #' @param resetViews {boolean} Removes old views
 #' @export
 mglUpdateViewsList <- function(
-  id = NULL, 
+  id = NULL,
   viewsList = NULL,
   render = TRUE,
   useQueryFilters = TRUE,
   project = NULL,
   resetViews = FALSE,
   session = shiny::getDefaultReactiveDomain()) {
-
   conf <- mxGetDefaultConfig()
 
-  if(noDataCheck(id)){
-    id <- conf[[c("map","id")]]
+  if (noDataCheck(id)) {
+    id <- conf[[c("map", "id")]]
   }
 
-  session$sendCustomMessage("mglUpdateViewsList",list(
-      id = id,
-      viewsList = viewsList,
-      render = render,
-      useQueryFilters = useQueryFilters,
-      project = project,
-      resetViews =resetViews
-      )
-  )
-
+  session$sendCustomMessage("mglUpdateViewsList", list(
+    id = id,
+    viewsList = viewsList,
+    render = render,
+    useQueryFilters = useQueryFilters,
+    project = project,
+    resetViews = resetViews
+  ))
 }
 
 
 #' Render view list
 #' @param id {character} map id
 #' @export
-mglRenderViewsList <- function(id=NULL, session=shiny::getDefaultReactiveDomain()){
+mglRenderViewsList <- function(id = NULL, session = shiny::getDefaultReactiveDomain()) {
+  if (noDataCheck(id)) id <- config[["map"]][["id"]]
 
-  if(noDataCheck(id))   id <- config[["map"]][["id"]]
-
-  session$sendCustomMessage("mglRenderViewsList",list(
-      id = id
-      ))
+  session$sendCustomMessage("mglRenderViewsList", list(
+    id = id
+  ))
 }
 
 
 #' Keep all maps position in sync
 #' @param enabled Boolean
 #' @export
-mglSyncAllMaps <- function( enabled=FALSE,  session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglSyncAllMaps",
+mglSyncAllMaps <- function(enabled = FALSE, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglSyncAllMaps",
     list(
       enabled = enabled
-      )
     )
+  )
 }
 
 #' Init map
 #' @param {list} config
-#' @note 
+#' @note
 #'
-#' id = map id. Id used in map element and mgl.data.id and map.id 
+#' id = map id. Id used in map element and mgl.data.id and map.id
 #' language 2 letter language code
-#' lat : initial lattitude in degrees 
-#' lng : initial logontitude 
-#' zoom : initial zoom 
+#' lat : initial lattitude in degrees
+#' lng : initial logontitude
+#' zoom : initial zoom
 #' paths : named list containing aths to resource (theme, style, sprite , ..)
 #' idViewsList : id of the element containing the view list
 #' idViewsListContainer : id of the view list parent element
@@ -236,17 +242,18 @@ mglSyncAllMaps <- function( enabled=FALSE,  session=shiny::getDefaultReactiveDom
 #' templateViewPopup : full html template to generate popup (using dot.js)
 #' templateViewLegend : full thml template to generate legend (using dot.js)
 #' templateViewStory : full html template to generate story map (using dot.js)
-#' 
-#' @export 
-mglInit <- function( config, session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglInit",
+#'
+#' @export
+mglInit <- function(config, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglInit",
     jsonlite::toJSON(
       config,
-      keep_vec_names=FALSE,
-      auto_unbox=TRUE,
-      null="null"
-      )
+      keep_vec_names = FALSE,
+      auto_unbox = TRUE,
+      null = "null"
     )
+  )
 }
 
 
@@ -255,27 +262,26 @@ mglInit <- function( config, session=shiny::getDefaultReactiveDomain()) {
 #' @param mapPosition List of options for destination position parameters
 #' @param {Reactive} session Shiny session
 #' @export
-mglFlyTo <- function( id=NULL, mapPosition, session=shiny::getDefaultReactiveDomain()) {
-
+mglFlyTo <- function(id = NULL, mapPosition, session = shiny::getDefaultReactiveDomain()) {
   stopifnot(!noDataCheck(id))
 
-  session$sendCustomMessage("mglFlyTo",list(
-      id = id,
-      param =  mapPosition
-      )
-    )
+  session$sendCustomMessage("mglFlyTo", list(
+    id = id,
+    param = mapPosition
+  ))
 }
 
-#' Set map projection 
+#' Set map projection
 #' @param id map id
-#' @param name  Projection name 
-#' @param center  Center 
-#' @param parallels  Parallels 
+#' @param name  Projection name
+#' @param center  Center
+#' @param parallels  Parallels
 #' @param {Reactive} session Shiny session
 #' @export
 mglSetMapProjection <- function(
   id = NULL,
   name = c(
+    "globe",
     "albers",
     "equalEarth",
     "mercator",
@@ -283,21 +289,37 @@ mglSetMapProjection <- function(
     "winkelTripel",
     "naturalEarth",
     "equirectangular"
-    ), 
-  center = list(0,0), 
-  parallels = list(0,0), 
+  ),
+  center = list(0, 0),
+  parallels = list(0, 0),
   session = shiny::getDefaultReactiveDomain()
-  ){
-
+) {
   stopifnot(!noDataCheck(id))
-  session$sendCustomMessage("mglSetMapProjection",list(
-      id = id,
-      name  = name,
-      center  = center,
-      parallels =  parallels
-  )
-  )
+  session$sendCustomMessage("mglSetMapProjection", list(
+    id = id,
+    name = name,
+    center = center,
+    parallels = parallels
+  ))
 }
+
+
+#' Set theme
+#' @param id Theme id
+#' @param {Reactive} session Shiny session
+#' @export
+mglSetTheme <- function(
+  id = NULL,
+  session = shiny::getDefaultReactiveDomain()
+) {
+  if (isEmpty(id)) {
+    return()
+  }
+  session$sendCustomMessage("mglSetTheme", list(
+    id = id
+  ))
+}
+
 
 
 
@@ -306,99 +328,97 @@ mglSetMapProjection <- function(
 #' @param language two letter language ex. en, fr, ru, es
 #' @param labelLayer Name of the layer that contains the label text to display
 #' @export
-mglSetLanguage <- function( id=NULL, language="en", labelLayer="country-label", session=shiny::getDefaultReactiveDomain()){
-
+mglSetLanguage <- function(id = NULL, language = "en", labelLayer = "country-label", session = shiny::getDefaultReactiveDomain()) {
   stopifnot(!noDataCheck(id))
 
-  session$sendCustomMessage("mglSetLanguage",
+  session$sendCustomMessage(
+    "mglSetLanguage",
     list(
       id = id,
-      language = substr(language,0,2),
+      language = substr(language, 0, 2),
       layerId = labelLayer
-      )
     )
+  )
 }
 
 
 #' Add sources
 #' @param id Map id
-#' @param sources named list that contain mapbox source. 
+#' @param sources named list that contain mapbox source.
 #' @export
-mglAddSources <- function( id = NULL, sources, session=shiny::getDefaultReactiveDomain() ){
-
-  if(noDataCheck(id)){
-    id <- .get(config,c("map","id"))
+mglAddSources <- function(id = NULL, sources, session = shiny::getDefaultReactiveDomain()) {
+  if (noDataCheck(id)) {
+    id <- .get(config, c("map", "id"))
   }
 
-  session$sendCustomMessage("mglAddSources",
+  session$sendCustomMessage(
+    "mglAddSources",
     list(
       id = id,
       sources = sources
-      )
     )
+  )
 }
 
 
-#' Update view 
+#' Update view
 #' @param id Map id
 #' @param viewData View list
 #' @export
-mglUpdateView <- function( viewData, session=shiny::getDefaultReactiveDomain() ){
-  session$sendCustomMessage("mglUpdateView",viewData);
+mglUpdateView <- function(viewData, session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglUpdateView", viewData)
 }
 
 #' Add a new layer
 #' @param id Map id
 #' @param before Layer name before wich to put this new layer
 #' @param options Layer description : e.g. list(id="test",type="fill","source"="test_source",paint=list(`fill-color`="#F00"))
-mglAddLayer <- function( id, before=NULL, options, session=shiny::getDefaultReactiveDomain()){
-
+mglAddLayer <- function(id, before = NULL, options, session = shiny::getDefaultReactiveDomain()) {
   stopifnot(is.list(options))
 
-  session$sendCustomMessage("mglAddLayer",
+  session$sendCustomMessage(
+    "mglAddLayer",
     list(
       id = id,
       before = before,
       layer = options
-      )
     )
-
+  )
 }
 
-#' Add source and layer generated by schema 
+#' Add source and layer generated by schema
 #' @param id
 #' @param style
 #' @param before
-mglAddAutoLayer <- function(id=NULL, style=NULL, before=NULL, session=shiny::getDefaultReactiveDomain()){
-
+mglAddAutoLayer <- function(id = NULL, style = NULL, before = NULL, session = shiny::getDefaultReactiveDomain()) {
   stopifnot(!noDataCheck(id))
   stopifnot(is.list(style))
   stopifnot(is.list(style$sources))
 
-  session$sendCustomMessage("mglAddAutoLayer",
+  session$sendCustomMessage(
+    "mglAddAutoLayer",
     list(
       id = id,
       style = style,
       before = before
-      )
     )
-
+  )
 }
 
 #' Live preview story map
 #' @param id Map id
 #' @param view View data
 #' @param save Save data in local storage client side
-#' @param edit Enable view edition 
+#' @param edit Enable view edition
 #' @param close Close the current story
 #' @param session Shiny session object
-mglReadStory <- function(id=NULL,view=list(),save=TRUE,update=TRUE,edit=TRUE,close=FALSE, session=shiny::getDefaultReactiveDomain()){
-
-  if(noDataCheck(id)){
-    id <- .get(config,c("map","id"))
+mglReadStory <- function(id = NULL, view = list(), save = TRUE, update = TRUE, edit = TRUE, close = FALSE, session = shiny::getDefaultReactiveDomain()) {
+  if (noDataCheck(id)) {
+    id <- .get(config, c("map", "id"))
   }
 
-  session$sendCustomMessage("mglReadStory",
+  session$sendCustomMessage(
+    "mglReadStory",
     list(
       id = id,
       view = view,
@@ -406,12 +426,6 @@ mglReadStory <- function(id=NULL,view=list(),save=TRUE,update=TRUE,edit=TRUE,clo
       edit = edit,
       close = close,
       update = update
-      )
     )
+  )
 }
-
-
-
-
-
-

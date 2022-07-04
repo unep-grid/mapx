@@ -381,6 +381,7 @@ observe({
       countryClip <- projectData$countries
       mapPos <- projectData$map_position
       mapProj <- projectData$map_projection
+      theme <- projectData$theme
       language <- reactData$language
       hasNoClip <- noDataCheck(countryClip) || "WLD" %in% countryClip
 
@@ -417,7 +418,12 @@ observe({
         mapPos
       )
 
-      if (noDataCheck(mapProj)) {
+      if(isNotEmpty(theme)){
+        mglSetTheme(theme)
+      }
+
+
+      if (isEmpty(mapProj)) {
         mglSetMapProjection(
           id = idMap,
           name = "mercator"

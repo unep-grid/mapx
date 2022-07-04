@@ -4540,6 +4540,11 @@
     "fa": "کشورهایی که باید روی نقشه برجسته شوند "
   },
   {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "fa": "تم پیش‌فرض"
+  },
+  {
     "id": "project_search_values",
     "en": "Search projects",
     "fa": "جستجوی پروژه ها "

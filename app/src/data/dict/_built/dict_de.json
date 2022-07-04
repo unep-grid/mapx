@@ -4540,6 +4540,11 @@
     "de": "Länder, die auf der Karte hervorgehoben werden sollen "
   },
   {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "de": "Standardthema"
+  },
+  {
     "id": "project_search_values",
     "en": "Search projects",
     "de": "Projekte suchen "

@@ -4540,6 +4540,11 @@
     "zh": "地图上要突出显示的国家/地区"
   },
   {
+    "id": "project_id_theme",
+    "en": "Default theme",
+    "zh": "默认主题"
+  },
+  {
     "id": "project_search_values",
     "en": "Search projects",
     "zh": "搜索项目"
