@@ -104,7 +104,7 @@
         editor._ace_editor.session.setMode(`ace/mode/${mode}`);
 
         editor._ace_editor._set_theme_auto = () => {
-          const mode = mx.theme.mode;
+          const mode = mx.theme.mode();
           let idTheme = 'ace/theme/github';
           if (mode === 'dark') {
             idTheme = 'ace/theme/monokai';
