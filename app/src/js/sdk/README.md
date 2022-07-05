@@ -544,6 +544,7 @@ MapX resolvers available in static and app
     * [.get_sdk_methods()](#MapxResolversStatic+get_sdk_methods) ⇒ <code>Array</code>
     * [.set_panel_left_visibility(opt)](#MapxResolversStatic+set_panel_left_visibility) ⇒ <code>Boolean</code>
     * [.has_dashboard()](#MapxResolversStatic+has_dashboard) ⇒ <code>Boolean</code>
+    * [.test_ws()](#MapxResolversStatic+test_ws)
     * [.set_immersive_mode()](#MapxResolversStatic+set_immersive_mode) ⇒ <code>Boolean</code>
     * [.get_immersive_mode()](#MapxResolversStatic+get_immersive_mode) ⇒ <code>Boolean</code>
     * [.set_3d_terrain(opt)](#MapxResolversStatic+set_3d_terrain)
@@ -641,6 +642,12 @@ Test if dashboard exists
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Boolean</code> - exists  
+<a name="MapxResolversStatic+test_ws"></a>
+
+#### mapxResolversStatic.test\_ws()
+End to end ws com testing
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 <a name="MapxResolversStatic+set_immersive_mode"></a>
 
 #### mapxResolversStatic.set\_immersive\_mode() ⇒ <code>Boolean</code>

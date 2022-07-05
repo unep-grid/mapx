@@ -1,3 +1,18 @@
+  
+  - [1.9.43-beta.0](https://github.com/unep-grid/map-x-mgl/tree/1.9.43-beta.0) 
+
+    - APP
+        - Fixed issue with geoserver not being updated when the service was deployed on multiple servers
+        - Filter map feature using attribute table : use expressions in filter, should solve #842
+        - Added theme selection and globe projection in project's configuration 
+        - Added new themes with blue water: cicle using themes selector or set it using url `?theme=<theme_id>` New themes : `ocean_dark`, `ocean_light`; 
+        - Use passive listener for panel touch events, avoid selection during resize 
+    - Routines
+        - Fixed search index issue in search tool, where keywords were missing: typo in `sql` (fixed by @thomaspiller)
+        - Added routine for updating geoserver each day 
+    - Internal 
+        - Removed babel, using esbuild within webpack 
+
   - [1.9.42](https://github.com/unep-grid/map-x-mgl/tree/1.9.42) 
  
     - API
