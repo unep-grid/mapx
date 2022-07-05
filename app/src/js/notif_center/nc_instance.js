@@ -30,7 +30,7 @@ class NotifCenterMapx extends NotifCenter {
         },
       },
       ui: {
-        mode: theme.mode,
+        mode: theme.mode(),
       },
       panel: {
         id: "notif_center",

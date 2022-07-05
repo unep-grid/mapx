@@ -1105,7 +1105,7 @@ export async function initMapx(o) {
       },
       container_style: {
         width: "100px",
-        height: "340px",
+        height: "400px",
         minWidth: "49px",
         minHeight: "49px",
       },
