@@ -1,6 +1,5 @@
 {
   "extends": ["prettier"],
-  "parser": "@babel/eslint-parser",
   "env": {
     "es6": true
   },
