@@ -398,6 +398,7 @@ observe({
         mapPos$zoom <- mapPos$z
         mapPos$z <- NULL
       }
+
       #
       # Read map position from query
       #
@@ -418,7 +419,7 @@ observe({
         mapPos
       )
 
-      if(isNotEmpty(theme)){
+      if (isNotEmpty(theme)) {
         mglSetTheme(theme)
       }
 
