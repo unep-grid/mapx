@@ -150,8 +150,8 @@ fi
 
 
 echo -e "Update versions in version.txt, package.json to $FG_GREEN$NEW_VERSION$FG_NORMAL "
-echo -e "Update api image in docker-compose.yml to $FG_GREEN$DOCKER_TAG_API$FG_NORMAL "
-echo -e "Update app image in docker-compose.yml to $FG_GREEN$DOCKER_TAG_APP$FG_NORMAL "
+echo -e "Update api/api_dev image in docker-compose.yml to $FG_GREEN$DOCKER_TAG_API$FG_NORMAL "
+echo -e "Update app/app_dev image in docker-compose.yml to $FG_GREEN$DOCKER_TAG_APP$FG_NORMAL "
 
 if [[ -z $DRY ]]
 then
@@ -163,7 +163,9 @@ then
 
   # Compose file
   yq -o='yaml' -i '.services.app.image ="'$DOCKER_TAG_APP'"' docker-compose.yml
+  yq -o='yaml' -i '.services.app_dev.image ="'$DOCKER_TAG_APP'"' docker-compose.yml
   yq -o='yaml' -i '.services.api.image ="'$DOCKER_TAG_API'"' docker-compose.yml
+  yq -o='yaml' -i '.services.api_dev.image ="'$DOCKER_TAG_API'"' docker-compose.yml
 fi
 
 
