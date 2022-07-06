@@ -1,6 +1,7 @@
-mxSchemaViewStory <- function(view,views,language){
-
-  if(noDataCheck(view)) return()
+mxSchemaViewStory <- function(view, views, language) {
+  if (noDataCheck(view)) {
+    return()
+  }
 
   #
   # language settings
@@ -8,35 +9,63 @@ mxSchemaViewStory <- function(view,views,language){
   l <- language
 
   # all languages
-  ll <- .get(config,c("languages","codes"))
+  ll <- .get(config, c("languages", "codes"))
 
   #
   # shortcut to translate function
   #
-  tt = function(id){
-    d(id,lang=l,web=F,asChar=T)
+  tt <- function(id) {
+    d(id, lang = l, web = F, asChar = T)
   }
 
-  mxCounter(reset=T)
+  mxCounter(reset = T)
 
   #
-  # Opacity auto timeout 
+  # Opacity auto timeout
   #
 
   settingsOpacityTimeout <- list(
     title = tt("schema_story_opacity_timeout"),
     description = tt("schema_story_opacity_timeout_desc"),
-    type="number",
-    minimum=0,
-    maximum=30000,
-    default = 3000 
+    type = "number",
+    minimum = 0,
+    maximum = 30000,
+    default = 3000
   )
+
+  #
+  # Settings theme
+  #
+  settingsTheme <- list(
+    type = "string",
+    title = tt("schema_story_theme"),
+    minLength = 1,
+    description = tt("schema_story_theme_desc"),
+    enum = list(
+      "default",
+      "mapx_dark",
+      "mapx_light",
+      "ocean_dark",
+      "ocean_light"
+    ),
+    options = list(
+      enum_titles = list(
+        "Default",
+        "MapX - dark",
+        "MapX - light",
+        "Ocean - dark",
+        "Ocean - light"
+      )
+    ),
+    default = "default"
+  )
+
 
 
   #
   # Settings page resolution
   #
-  settingsPageClass = list(
+  settingsPageClass <- list(
     type = "string",
     title = tt("schema_story_screen_res"),
     minLength = 1,
@@ -54,8 +83,7 @@ mxSchemaViewStory <- function(view,views,language){
       "mx-story-screen-720p-v",
       "mx-story-screen-1080p-v",
       "mx-story-screen-1440p-v"
-
-      ),
+    ),
     options = list(
       enum_titles = list(
         "240p (16:9)",
@@ -71,31 +99,31 @@ mxSchemaViewStory <- function(view,views,language){
         "1080p (9:16, vertical)",
         "1440p (9:16, vertical)"
       )
-      ),
+    ),
     default = "mx-story-screen-720p"
   )
 
   #
   # Setting panel behaviour
-  # -> used in root and in steps 
+  # -> used in root and in steps
   #
-  settingsDashboardsPanel = list(
+  settingsDashboardsPanel <- list(
     type = "string",
     title = tt("schema_story_dashboard_panel_handling"),
-    description =tt("schema_story_dashboard_panel_handling_desc"),
-    enum =  list(
-      "default",   # -> null / default 
-      "disabled",  # -> do not render 
-      "closed",    # -> force closed 
-      "open"       # -> force open
-      ),
+    description = tt("schema_story_dashboard_panel_handling_desc"),
+    enum = list(
+      "default", # -> null / default
+      "disabled", # -> do not render
+      "closed", # -> force closed
+      "open" # -> force open
+    ),
     default = "inherit",
-    options =  list(
+    options = list(
       enum_titles = list(
         tt("schema_story_dashboard_panel_default"),
         tt("schema_story_dashboard_panel_disabled"),
-        tt("schema_story_dashboard_panel_closed"), 
-        tt("schema_story_dashboard_panel_open")      
+        tt("schema_story_dashboard_panel_closed"),
+        tt("schema_story_dashboard_panel_open")
       )
     )
   )
@@ -105,18 +133,18 @@ mxSchemaViewStory <- function(view,views,language){
 
   #
   # Setting panel behaviour
-  # -> used in root and in steps 
+  # -> used in root and in steps
   #
-  settingsLegendsPanel = list(
+  settingsLegendsPanel <- list(
     type = "string",
     title = tt("schema_story_legends_panel_handling"),
-    description =tt("schema_story_legends_panel_handling_desc"),
-    enum =  list(
-      "open",      # -> force open
-      "closed"     # -> force closed 
-      ),
+    description = tt("schema_story_legends_panel_handling_desc"),
+    enum = list(
+      "open", # -> force open
+      "closed" # -> force closed
+    ),
     default = "closed",
-    options =  list(
+    options = list(
       enum_titles = list(
         tt("schema_story_legends_panel_open"),
         tt("schema_story_legends_panel_closed")
@@ -125,9 +153,9 @@ mxSchemaViewStory <- function(view,views,language){
   )
   settingsLegendsPanelRoot <- settingsLegendsPanel
   settingsLegendsPanelRoot$description <- tt("schema_story_legends_panel_handling_root_desc")
-  settingsLegendsPanelRoot$default<- "default"
-  settingsLegendsPanelRoot$enum <- c("default",settingsLegendsPanelRoot$enum)
-  settingsLegendsPanelRoot$options$enum_titles<- c(
+  settingsLegendsPanelRoot$default <- "default"
+  settingsLegendsPanelRoot$enum <- c("default", settingsLegendsPanelRoot$enum)
+  settingsLegendsPanelRoot$options$enum_titles <- c(
     tt("schema_story_legends_panel_root_default"),
     settingsLegendsPanelRoot$options$enum_titles
   )
@@ -136,13 +164,13 @@ mxSchemaViewStory <- function(view,views,language){
   #
   stepMapViews <- list(
     type = "array",
-    #format = "table",
+    # format = "table",
     title = tt("schema_story_views_activate"),
     options = list(
       collapsed = TRUE,
       disable_array_delete_all_rows = TRUE,
       disable_array_delete_last_row = TRUE
-      ),
+    ),
     items = list(
       type = "object",
       title = tt("view"),
@@ -178,50 +206,50 @@ mxSchemaViewStory <- function(view,views,language){
       idMap = "map_main",
       textButton = tt("schema_story_pos_get"),
       collapsed = TRUE
-      ),
+    ),
     properties = list(
       z = list(
-        title=tt("map_zoom"),
-        type="number",
-        minimum=0,
-        maximum=22
-        ),
+        title = tt("map_zoom"),
+        type = "number",
+        minimum = 0,
+        maximum = 22
+      ),
       lat = list(
-        title=tt("map_latitude_center"),
-        type="number",
-        minimum=-90,
-        maximum=90
-        ),
+        title = tt("map_latitude_center"),
+        type = "number",
+        minimum = -90,
+        maximum = 90
+      ),
       lng = list(
-        title=tt("map_longitude_center"),
-        type="number",
-        minimum=-180,
-        maximum=180
-        ),
+        title = tt("map_longitude_center"),
+        type = "number",
+        minimum = -180,
+        maximum = 180
+      ),
       pitch = list(
-        title=tt("map_pitch"),
-        type="number",
-        minimum=0,
-        maximum=80
-        ),
+        title = tt("map_pitch"),
+        type = "number",
+        minimum = 0,
+        maximum = 80
+      ),
       bearing = list(
-        title=tt("map_bearing"),
+        title = tt("map_bearing"),
         type = "number"
-        ),
+      ),
       n = list(
-        title=tt("map_north_max"),
+        title = tt("map_north_max"),
         type = "number"
-        ),
+      ),
       s = list(
-        title=tt("map_south_max"),
+        title = tt("map_south_max"),
         type = "number"
-        ),
+      ),
       e = list(
-        title=tt("map_east_max"),
+        title = tt("map_east_max"),
         type = "number"
-        ),
+      ),
       w = list(
-        title=tt("map_west_max"),
+        title = tt("map_west_max"),
         type = "number"
       )
     )
@@ -232,44 +260,44 @@ mxSchemaViewStory <- function(view,views,language){
   #
 
 
-  # 
+  #
   # Text / html
   #
 
   slideText <- mxSchemaMultiLingualInput(
     format = "textarea",
     options = list(
-      #editor = "ace",
-      #language ="html",
-      #addLiveEditBtn = TRUE,
-      #selectorLiveEdit = ".mx-story"
-      ),
-    language =  l,
+      # editor = "ace",
+      # language ="html",
+      # addLiveEditBtn = TRUE,
+      # selectorLiveEdit = ".mx-story"
+    ),
+    language = l,
     languagesRequired = c(),
-    languagesHidden = ll[!ll%in%l],
-    languagesReadOnly = ll[!ll%in%l],
-    #keyTitle = d("content",web=F),
+    languagesHidden = ll[!ll %in% l],
+    languagesReadOnly = ll[!ll %in% l],
+    # keyTitle = d("content",web=F),
     keyTitle = tt("content"),
     dict = config$dict
   )
 
   #
-  # Slide classes 
+  # Slide classes
   #
   slideClasses <- list(
     type = "array",
     format = "table",
-    title = tt("schema_story_slide_classes"), 
-    options =  list(
+    title = tt("schema_story_slide_classes"),
+    options = list(
       disable_array_delete_all_rows = TRUE,
       disable_array_delete_last_row = TRUE
-      ),
+    ),
     items = list(
       type = "object",
       title = tt("schema_class"),
       properties = list(
         name = list(
-          title = tt("schema_story_slide_classes_name"), 
+          title = tt("schema_story_slide_classes_name"),
           type = "string",
           default = "card",
           enum = c(
@@ -345,52 +373,52 @@ mxSchemaViewStory <- function(view,views,language){
     default = 40
   )
 
-  # 
+  #
   # Slide effect
   #
-  slideEffects = list(
+  slideEffects <- list(
     type = "array",
     format = "confirmDelete",
-    title = tt("schema_story_slide_effects"), 
+    title = tt("schema_story_slide_effects"),
     options = list(
       disable_array_delete_all_rows = TRUE,
       disable_array_delete_last_row = TRUE,
       collapsed = TRUE
-      ),
+    ),
     items = list(
-      type = "object", 
-      title = tt("schema_story_slide_effects"), 
+      type = "object",
+      title = tt("schema_story_slide_effects"),
       properties = list(
         s = list(
-          title = tt("schema_story_slide_effect_start"), 
+          title = tt("schema_story_slide_effect_start"),
           type = "number",
-          default = 0L, 
+          default = 0L,
           minimum = -1000L,
           maximum = 1000L
-          ), 
+        ),
         e = list(
           title = tt("schema_story_slide_effect_end"),
           type = "number",
           default = 100L,
           minimum = -1000L,
           maximum = 1000L
-          ),
+        ),
         o = list(
           title = tt("schema_story_slide_effect_offset"),
           type = "number",
           default = 0L,
           minimum = -1000L,
           maximum = 1000L
-          ),
+        ),
         f = list(
           title = tt("schema_story_slide_effect_factor"),
           type = "number",
           default = 1
-          ),
+        ),
         t = list(
           type = "integer",
-          title = tt("schema_story_slide_effect_type"), 
-          default = 0L, 
+          title = tt("schema_story_slide_effect_type"),
+          default = 0L,
           enum = 0:7,
           options = list(
             enum_titles = c(
@@ -409,7 +437,7 @@ mxSchemaViewStory <- function(view,views,language){
     )
   )
 
-  slideName = list(
+  slideName <- list(
     propertyOrder = 0,
     type = "string",
     title = tt("schema_story_slide_name")
@@ -425,7 +453,7 @@ mxSchemaViewStory <- function(view,views,language){
       disable_array_delete_all_rows = TRUE,
       disable_array_delete_last_row = TRUE,
       collapsed = TRUE
-      ),
+    ),
     title = tt("schema_story_slides"),
     items = list(
       type = "object",
@@ -442,10 +470,10 @@ mxSchemaViewStory <- function(view,views,language){
         scroll_enable = slideScroll,
         classes = slideClasses
       )
-      ),
+    ),
     options = list(
       collapsed = TRUE
-    )          
+    )
   )
 
 
@@ -465,7 +493,7 @@ mxSchemaViewStory <- function(view,views,language){
     title = tt("schema_story_map_anim_traj_method"),
     description = tt("schema_story_map_anim_traj_method_desc"),
     type = "string",
-    enum = list("flyTo","easeTo","jumpTo","fitBounds"),
+    enum = list("flyTo", "easeTo", "jumpTo", "fitBounds"),
     default = "jumpTo",
     options = list(
       enum_titles = list(
@@ -477,20 +505,20 @@ mxSchemaViewStory <- function(view,views,language){
     )
   )
 
-  animFunction = list(
+  animFunction <- list(
     title = tt("schema_story_map_anim_fun"),
     description = tt("schema_story_map_anim_fun_desc"),
-    type =  "string",
-    enum =  list("easeIn","easeOut","easeInOut")
+    type = "string",
+    enum = list("easeIn", "easeOut", "easeInOut")
   )
 
-  animFunctionPower = list(
+  animFunctionPower <- list(
     title = tt("schema_story_map_anim_fun_exp"),
     description = tt("schema_story_map_anim_fun_exp_desc"),
-    type =  "number",
+    type = "number",
     min = 0,
     max = 10,
-    default =1
+    default = 1
   )
 
   stepMapAnimation <- list(
@@ -501,7 +529,7 @@ mxSchemaViewStory <- function(view,views,language){
       method = animPathMethod,
       easing = animFunction,
       easing_power = animFunctionPower
-      ),
+    ),
     options = list(
       collapsed = TRUE
     )
@@ -526,20 +554,20 @@ mxSchemaViewStory <- function(view,views,language){
     default = 1
   )
 
-  autoplayAnimFunction = list(
+  autoplayAnimFunction <- list(
     title = tt("schema_story_map_anim_fun"),
     description = tt("schema_story_map_anim_fun_desc"),
-    type =  "string",
-    enum =  list("easeIn","easeOut","easeInOut")
+    type = "string",
+    enum = list("easeIn", "easeOut", "easeInOut")
   )
 
-  autoplayAnimFunctionPower = list(
+  autoplayAnimFunctionPower <- list(
     title = tt("schema_story_map_anim_fun_exp"),
     description = tt("schema_story_map_anim_fun_exp_desc"),
-    type =  "number",
+    type = "number",
     min = 0,
     max = 10,
-    default =1
+    default = 1
   )
 
   stepAutoplay <- list(
@@ -550,26 +578,26 @@ mxSchemaViewStory <- function(view,views,language){
       duration = autoplayTransition,
       easing = autoplayAnimFunction,
       easing_power = autoplayAnimFunctionPower
-      ),
+    ),
     options = list(
       collapsed = TRUE
     )
   )
 
-  stepName = list(
+  stepName <- list(
     type = "string",
     title = tt("schema_story_step_name")
   )
 
 
-  settingsAddTerrain3d = list(
+  settingsAddTerrain3d <- list(
     title = tt("schema_story_step_add_3d_terrain"),
     description = tt("schema_story_step_add_3d_terrain_desc"),
     type = "boolean",
     format = "checkbox",
     defaut = FALSE
   )
-  settingsAddAerial = list(
+  settingsAddAerial <- list(
     title = tt("schema_story_step_add_aerial"),
     description = tt("schema_story_step_add_aerial_desc"),
     type = "boolean",
@@ -583,19 +611,19 @@ mxSchemaViewStory <- function(view,views,language){
     properties = list(
       add_aerial = settingsAddAerial,
       add_3d_terrain = settingsAddTerrain3d
-      ),
+    ),
     options = list(
       collapsed = TRUE
     )
   )
 
-  stepConfig = list(
+  stepConfig <- list(
     type = "object",
     title = tt("schema_story_step"),
     headerTemplate = "{{ i1 }}. {{ self.name }}",
     options = list(
       collapsed = TRUE
-      ),
+    ),
     properties = list(
       name = stepName,
       slides = stepSlide,
@@ -613,32 +641,33 @@ mxSchemaViewStory <- function(view,views,language){
   #
   # Final schema
   #
-  main = list(
+  main <- list(
     title = tt("schema_story_title"),
-    type = "object", 
+    type = "object",
     properties = list(
       settings = list(
         type = "object",
         title = tt("schema_story_settings"),
         options = list(
           collapsed = TRUE
-          ),
+        ),
         properties = list(
+          theme = settingsTheme,
           class_wrapper = settingsPageClass,
           dashboards_panel_behaviour = settingsDashboardsPanelRoot,
           legends_panel_behaviour = settingsLegendsPanelRoot,
           opacity_auto_timeout = settingsOpacityTimeout
         )
-        ),
+      ),
       steps = list(
-        type = "array", 
+        type = "array",
         options = list(
           disable_array_delete_all_rows = TRUE,
           disable_array_delete_last_row = TRUE,
           collapsed = TRUE
-          ),
+        ),
         format = "confirmDelete",
-        title = tt("schema_story_steps"), 
+        title = tt("schema_story_steps"),
         items = stepConfig
       )
     )
@@ -646,5 +675,4 @@ mxSchemaViewStory <- function(view,views,language){
 
 
   return(main)
-
 }

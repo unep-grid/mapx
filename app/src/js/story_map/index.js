@@ -4,8 +4,9 @@ import { el } from "./../el/src/index.js";
 import { ButtonPanel } from "./../button_panel/index.js";
 import { errorHandler } from "./../error_handler/index.js";
 import { modal } from "./../mx_helper_modal.js";
-import { settings } from "./../settings";
+import { settings as settingsMapx } from "./../settings";
 import { settings as storySettings } from "./settings.js";
+import { theme } from "./../mx";
 import {
   onNextFrame,
   cancelFrame,
@@ -74,14 +75,17 @@ export async function storyRead(opt) {
     }
     await init(opt);
     await initStory();
+    await initSettings();
+    await initControls();
     await initViews();
     await build();
+    await initState();
+    await initTheme();
     await initListeners();
     await handleMissingImages();
-    await initControls();
     await initLegendPanel();
     await initAdaptiveLayout();
-    await appStateSave();
+    //await appStateSave();
     await start();
   } catch (e) {
     errorHandler(e);
@@ -262,7 +266,7 @@ function initMouseMoveListener() {
   }
 }
 
-function updateSettings() {
+async function initSettings() {
   const story = getStory();
   const sSettings = path(story, "settings", {});
   story._settings = Object.assign({}, storySettings, sSettings);
@@ -413,7 +417,6 @@ async function initStory() {
     throw new Error("No story to read");
   }
   Object.assign(story, state.view.data.story);
-  updateSettings();
 }
 
 export async function cleanRemoveViews() {
@@ -1150,7 +1153,6 @@ async function storyControlsEnable() {
   /**
    * Controls
    */
-
   if (autoStart || update) {
     keyBtnShow.push(...s.ctrl_btn_enable_update_mode);
   } else {
@@ -1194,7 +1196,18 @@ async function storyControlsEnable() {
   await storyMapLock("recalc");
 }
 
-async function appStateSave() {
+async function initTheme() {
+  const s = getSettings();
+  const useTheme = theme.isValidId(s.theme);
+  /*
+   * Set theme
+   */
+  if (useTheme) {
+    theme.set(s.theme, { sound: false, save: false, save_url: false });
+  }
+}
+
+async function initState() {
   const state = getState();
 
   if (state._app_state_saved) {
@@ -1219,6 +1232,11 @@ async function appStateSave() {
     const oldViews = getViewsLayersVisibles();
 
     /**
+     * Theme
+     */
+    const idTheme = theme.id();
+
+    /**
      * Clear views
      */
     for (const id of oldViews) {
@@ -1229,7 +1247,6 @@ async function appStateSave() {
     /**
      * Hide modes
      */
-
     state.ctrlAerial.action("hide");
     state.ctrlMode3d.action("hide");
 
@@ -1237,6 +1254,7 @@ async function appStateSave() {
      * save in state
      */
     Object.assign(state, {
+      idTheme,
       oldViews,
       position,
       hasAerial,
@@ -1253,6 +1271,7 @@ async function appStateRestore() {
   /**
    * Restore
    */
+  const idTheme = state.idTheme;
   const pos = state.position;
 
   map.jumpTo({
@@ -1262,6 +1281,7 @@ async function appStateRestore() {
     center: [pos.lng, pos.lat],
   });
 
+  theme.set(idTheme, { sound: false, save: false, save_url: true });
   resetMapStyle();
   resetControls();
   resetPanels();
@@ -1662,7 +1682,7 @@ export async function storyPlayStep(stepNum) {
    */
   let i = 0;
   for (const v of vToAdd) {
-    const vPrevious = vStep[i++ - 1] || settings.layerBefore;
+    const vPrevious = vStep[i++ - 1] || settingsMapx.layerBefore;
     await viewLayersAdd({
       idView: v,
       openView: false,
@@ -1734,7 +1754,7 @@ async function updatePanelBehaviour(state, settings, step) {
   const dStep = path(step, "dashboards_panel_behaviour", null);
   let dBehaviour;
 
-  if (settings.initClosedPanels) {
+  if (settingsMapx.initClosedPanels) {
     dBehaviour = dClosed;
   } else if (dRoot && dRoot !== dDefault) {
     dBehaviour = dRoot;
@@ -1801,7 +1821,7 @@ async function updatePanelBehaviour(state, settings, step) {
   const lStep = path(step, "legends_panel_behaviour", null);
   let lBehaviour;
 
-  if (settings.initClosedPanels) {
+  if (settingsMapx.initClosedPanels) {
     lBehaviour = lClosed;
   } else if (lRoot && lRoot !== lDefault) {
     lBehaviour = lRoot;
