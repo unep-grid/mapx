@@ -1,7 +1,8 @@
-import {getGemetConcept, getGemetConceptLink} from './gemet_util/index.js';
-import {el, elAuto} from './el_mapx';
-import {getApiUrl} from './api_routes';
-import {isSourceId} from './is_test/index.js';
+import { getGemetConcept, getGemetConceptLink } from "./gemet_util/index.js";
+import { el, elAuto } from "./el_mapx";
+import { getApiUrl } from "./api_routes";
+import { isSourceId } from "./is_test/index.js";
+import { theme } from "./mx";
 
 /**
  * Get source metadata
@@ -10,9 +11,9 @@ import {isSourceId} from './is_test/index.js';
  */
 export async function fetchSourceMetadata(idSource) {
   if (!isSourceId(idSource)) {
-    throw new Error('getSourceMetadata : invalid id');
+    throw new Error("getSourceMetadata : invalid id");
   }
-  const urlSourceMeta = getApiUrl('getSourceMetadata');
+  const urlSourceMeta = getApiUrl("getSourceMetadata");
   const date = performance.now();
   const url = `${urlSourceMeta}${idSource}?date=${date}`;
   const r = await fetch(url);
@@ -26,9 +27,9 @@ export async function fetchSourceMetadata(idSource) {
  */
 export async function fetchViewMetadata(id) {
   if (!id) {
-    return console.warn('fetchViewMetadata : missing id');
+    return console.warn("fetchViewMetadata : missing id");
   }
-  const urlViewMeta = getApiUrl('getViewMetadata');
+  const urlViewMeta = getApiUrl("getViewMetadata");
   const date = performance.now();
   const url = `${urlViewMeta}${id}?date=${date}`;
   const r = await fetch(url);
@@ -36,11 +37,10 @@ export async function fetchViewMetadata(id) {
   return meta;
 }
 
-
 /**
-* Display view metadata in a modal panel
-* @param {Object} view 
-*/ 
+ * Display view metadata in a modal panel
+ * @param {Object} view
+ */
 export async function viewToMetaModal(view) {
   const h = mx.helpers;
   const id = h.isView(view) ? view.id : view;
@@ -48,19 +48,19 @@ export async function viewToMetaModal(view) {
 
   if (!h.isView(view)) {
     return h.modal({
-      content: 'View not found'
+      content: "View not found",
     });
   }
 
   const meta = {};
-  const metaRasterLink = h.path(view, 'data.source.urlMetadata');
+  const metaRasterLink = h.path(view, "data.source.urlMetadata");
   const hasSourceMeta =
-    ['rt', 'vt', 'cc'].includes(view.type) &&
-    (view._meta || h.path(view, 'data.source.meta', false));
+    ["rt", "vt", "cc"].includes(view.type) &&
+    (view._meta || h.path(view, "data.source.meta", false));
 
-  const elContent = el('div');
-  const elTitleModal = el('span', {
-    dataset: {lang_key: 'meta_view_modal_title'}
+  const elContent = el("div");
+  const elTitleModal = el("span", {
+    dataset: { lang_key: "meta_view_modal_title" },
   });
 
   const elModal = h.modal({
@@ -68,8 +68,8 @@ export async function viewToMetaModal(view) {
     content: elContent,
     addBackground: true,
     style: {
-      width: '640px'
-    }
+      width: "640px",
+    },
   });
 
   const data = await fetchViewMetadata(id);
@@ -87,7 +87,7 @@ export async function viewToMetaModal(view) {
 
   if (metaRasterLink) {
     const elRasterMetaLink = metaSourceRasterToUi({
-      url: metaRasterLink
+      url: metaRasterLink,
     });
     if (elRasterMetaLink) {
       elContent.appendChild(elRasterMetaLink);
@@ -95,7 +95,7 @@ export async function viewToMetaModal(view) {
   }
 
   if (hasSourceMeta) {
-    const sourceMeta = view._meta || h.path(view, 'data.source.meta');
+    const sourceMeta = view._meta || h.path(view, "data.source.meta");
     sourceMeta._id_source = view._id_source;
     const elSourceMeta = await metaSourceToUi(sourceMeta);
     if (elSourceMeta) {
@@ -106,22 +106,22 @@ export async function viewToMetaModal(view) {
    * Build menu
    */
   const elFirst = elContent.firstElementChild;
-  const elsHeader = elContent.querySelectorAll('.panel-heading');
+  const elsHeader = elContent.querySelectorAll(".panel-heading");
   const idMenu = h.makeId();
-  const elMenu = h.el('div', {class: 'list-group', id: idMenu});
+  const elMenu = h.el("div", { class: "list-group", id: idMenu });
   elContent.insertBefore(elMenu, elFirst);
   for (const elHeader of elsHeader) {
     const idItem = h.makeId();
     elHeader.id = idItem;
-    const elBack = h.el('a', {
-      class: ['fa', 'fa-chevron-up'],
-      href: `#${idMenu}`
+    const elBack = h.el("a", {
+      class: ["fa", "fa-chevron-up"],
+      href: `#${idMenu}`,
     });
-    const elText = elHeader.querySelector('span');
-    const elItem = h.el('a', {
-      class: 'list-group-item',
+    const elText = elHeader.querySelector("span");
+    const elItem = h.el("a", {
+      class: "list-group-item",
       href: `#${idItem}`,
-      dataset: elText.dataset
+      dataset: elText.dataset,
     });
     elHeader.appendChild(elBack);
     elMenu.appendChild(elItem);
@@ -132,7 +132,7 @@ export async function viewToMetaModal(view) {
    */
 
   h.updateLanguageElements({
-    el: elModal
+    el: elModal,
   });
 }
 
@@ -142,46 +142,46 @@ export function metaSourceRasterToUi(rasterMeta) {
   rasterMeta = rasterMeta || {};
 
   if (!h.isUrl(rasterMeta.url)) {
-    return el('div');
+    return el("div");
   }
 
   rasterMeta = h.objectToArray(
     {
-      meta_view_raster_meta: rasterMeta.url
+      meta_view_raster_meta: rasterMeta.url,
     },
     true
   );
 
-  return elAuto('array_table', rasterMeta, {
-    render: 'array_table',
+  return elAuto("array_table", rasterMeta, {
+    render: "array_table",
     tableHeadersSkip: true,
-    tableTitle: 'meta_view_raster_meta',
+    tableTitle: "meta_view_raster_meta",
     tableTitleAsLanguageKey: true,
     stringAsLanguageKey: true,
-    urlDefaultLabel: 'Link'
+    urlDefaultLabel: "Link",
   });
 }
 
 async function metaViewToUi(meta, elModal) {
   const h = mx.helpers;
-  const prefixKey = 'meta_view_';
+  const prefixKey = "meta_view_";
   const keys = [
-    'title',
-    'id',
-    'abstract',
-    'date_modified',
-    'date_created',
-    'project_title',
-    'projects_data',
-    'collections',
-    'readers',
-    'editors',
-    'stat_n_add',
-    'stat_n_add_by_guests',
-    'stat_n_add_by_users'
+    "title",
+    "id",
+    "abstract",
+    "date_modified",
+    "date_created",
+    "project_title",
+    "projects_data",
+    "collections",
+    "readers",
+    "editors",
+    "stat_n_add",
+    "stat_n_add_by_guests",
+    "stat_n_add_by_users",
   ];
   const txtDistinct = await h.getDictItem(
-    'meta_view_stat_n_add_by_users_distinct'
+    "meta_view_stat_n_add_by_users_distinct"
   );
   const tblSummaryFull = h.objectToArray(meta, true);
   const tblSummary = tblSummaryFull
@@ -193,9 +193,9 @@ async function metaViewToUi(meta, elModal) {
       /**
        * Add distinct user in by_user
        */
-      if (row.key === 'stat_n_add_by_users') {
+      if (row.key === "stat_n_add_by_users") {
         const rowDistinct = tblSummaryFull.find(
-          (row) => row.key === 'stat_n_add_by_distinct_users'
+          (row) => row.key === "stat_n_add_by_distinct_users"
         );
         const valueDistinct = rowDistinct.value;
         row.value = `${row.value} ( ${valueDistinct} ${txtDistinct} )`;
@@ -204,17 +204,17 @@ async function metaViewToUi(meta, elModal) {
       /**
        * Add project link
        */
-      if (row.key === 'project_title') {
+      if (row.key === "project_title") {
         const linkProj = new URL(window.location.origin);
         const sp = linkProj.searchParams;
-        sp.set('project', meta.project);
-        sp.set('viewsOpen', meta.id);
-        sp.set('viewsListFilterActivated', true);
+        sp.set("project", meta.project);
+        sp.set("viewsOpen", meta.id);
+        sp.set("viewsListFilterActivated", true);
         row.value = h.el(
-          'a',
+          "a",
           {
             href: linkProj,
-            target: '_blank'
+            target: "_blank",
           },
           h.getLanguageItem(row.value)
         );
@@ -223,17 +223,17 @@ async function metaViewToUi(meta, elModal) {
       /**
        * Add view static link
        */
-      if (row.key === 'title') {
+      if (row.key === "title") {
         const linkView = new URL(window.location.origin);
-        linkView.pathname = '/static.html';
-        linkView.searchParams.set('views', meta.id);
-        linkView.searchParams.set('zoomToViews', true);
+        linkView.pathname = "/static.html";
+        linkView.searchParams.set("views", meta.id);
+        linkView.searchParams.set("zoomToViews", true);
 
         row.value = h.el(
-          'a',
+          "a",
           {
             href: linkView,
-            target: '_blank'
+            target: "_blank",
           },
           h.isLanguageObject(row.value) //-> titles...
             ? h.getLanguageItem(row.value)
@@ -244,29 +244,29 @@ async function metaViewToUi(meta, elModal) {
       /**
        * Add projects list link
        */
-      if (row.key === 'projects_data') {
+      if (row.key === "projects_data") {
         const elProjects = [];
         for (const projectData of row.value) {
           const isPublic = !!projectData.public;
           const linkProj = new URL(window.location.origin);
           const sp = linkProj.searchParams;
           const title = h.getLanguageItem(projectData.title);
-          sp.set('project', projectData.id);
-          sp.set('viewsOpen', meta.id);
-          sp.set('viewsListFilterActivated', true);
+          sp.set("project", projectData.id);
+          sp.set("viewsOpen", meta.id);
+          sp.set("viewsListFilterActivated", true);
           const elLink = h.el(
-            'a',
+            "a",
             {
               href: linkProj,
-              target: '_blank',
+              target: "_blank",
               style: {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              },
             },
-            h.el('span', title),
-            isPublic ? null : h.el('i', {class: ['fa', 'fa-lock']})
+            h.el("span", title),
+            isPublic ? null : h.el("i", { class: ["fa", "fa-lock"] })
           );
           elProjects.push(elLink);
         }
@@ -286,19 +286,19 @@ async function metaViewToUi(meta, elModal) {
    * to find the size.. Create the container now,
    * render later :
    */
-  const elPlot = h.el('div', {
-    class: ['panel', 'panel-default'],
+  const elPlot = h.el("div", {
+    class: ["panel", "panel-default"],
     style: {
-      width: '100%',
-      maxWidth: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      overflow: 'visible'
-    }
+      width: "100%",
+      maxWidth: "100%",
+      display: "flex",
+      justifyContent: "center",
+      overflow: "visible",
+    },
   });
   const elPlotPanel = h.elPanel({
-    title: h.elSpanTranslate('meta_view_stat_n_add_by_country'),
-    content: elPlot
+    title: h.elSpanTranslate("meta_view_stat_n_add_by_country"),
+    content: elPlot,
   });
   setTimeout(() => {
     metaCountByCountryToPlot(meta.stat_n_add_by_country, elPlot, elModal);
@@ -316,32 +316,32 @@ async function metaViewToUi(meta, elModal) {
   /*}),*/
 
   return el(
-    'div',
-    elAuto('array_table', tblSummary, {
-      render: 'array_table',
+    "div",
+    elAuto("array_table", tblSummary, {
+      render: "array_table",
       tableHeadersSkip: true,
-      tableTitle: 'meta_view_table_summary_title',
+      tableTitle: "meta_view_table_summary_title",
       tableTitleAsLanguageKey: true,
       stringAsLanguageKey: true,
-      numberStyle: {marginRight: '5px'}
+      numberStyle: { marginRight: "5px" },
     }),
     elPlotPanel,
-    elAuto('array_table', meta.table_editors, {
-      booleanValues: ['✓', ''],
-      tableHeadersClasses: ['col-sm-6', 'col-sm-3', 'col-sm-3'],
+    elAuto("array_table", meta.table_editors, {
+      booleanValues: ["✓", ""],
+      tableHeadersClasses: ["col-sm-6", "col-sm-3", "col-sm-3"],
       tableTitleAsLanguageKey: true,
       tableHeadersLabels: [
-        'meta_view_table_editors_email',
-        'meta_view_table_editors_changes',
-        'meta_view_table_editors_current'
+        "meta_view_table_editors_email",
+        "meta_view_table_editors_changes",
+        "meta_view_table_editors_current",
       ],
-      tableTitle: 'meta_view_table_editors_title'
+      tableTitle: "meta_view_table_editors_title",
     })
   );
 }
 
 function randomTable(n) {
-  const ctries = ['CHE', 'COD', 'USA', 'FRE', 'ITA', 'GER', 'COL', 'AFG'];
+  const ctries = ["CHE", "COD", "USA", "FRE", "ITA", "GER", "COL", "AFG"];
   const s = [];
   for (let i = 0; i < n; i++) {
     s.push(ctries[Math.floor(Math.random() * ctries.length)]);
@@ -351,7 +351,7 @@ function randomTable(n) {
     return {
       country: c,
       country_name: c,
-      count: Math.floor(Math.random() * 100 * (1 / (i + 1)))
+      count: Math.floor(Math.random() * 100 * (1 / (i + 1))),
     };
   });
   data.sort((a, b) => b.count - a.count);
@@ -373,7 +373,7 @@ async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
       return;
     }
 
-    const highcharts = await h.moduleLoad('highcharts');
+    const highcharts = await h.moduleLoad("highcharts");
     /**
      * Reads per country, first 20
      */
@@ -385,94 +385,94 @@ async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
     for (let i = 0, iL = table.length; i < iL; i++) {
       const t = table[i];
       if (!t.country) {
-        t.country = '?';
+        t.country = "?";
       }
-      nCountryMap.set(t.country, t.country_name || t.country || 'Unknown');
+      nCountryMap.set(t.country, t.country_name || t.country || "Unknown");
     }
 
     const data = table.map((r) => {
       return {
         name: r.country,
-        y: r.count
+        y: r.count,
       };
     });
     if (data.length > 20) {
       const merged = data.splice(20, data.length);
       const sum = merged.reduce((a, d) => a + d.y, 0);
       data.push({
-        name: await h.getDictItem('meta_view_stat_others_countries'),
-        y: sum
+        name: await h.getDictItem("meta_view_stat_others_countries"),
+        y: sum,
       });
     }
 
-    const txtReads = await h.getDictItem('meta_view_stat_activations');
-    const colors = mx.theme.getTheme().colors;
+    const txtReads = await h.getDictItem("meta_view_stat_activations");
+    const colors = theme.colors();
 
     const chart = highcharts.chart(elPlot, {
       chart: {
-        type: 'column',
+        type: "column",
         height: chartHeight(),
         inverted: true,
         styledMode: false,
         backgroundColor: colors.mx_ui_background,
         plotBackgroundColor: colors.mx_ui_background.color,
         plotBorderWidth: 0,
-        plotShadow: false
+        plotShadow: false,
       },
       title: {
-        text: await h.getDictItem('meta_view_stat_n_add_by_country_last_year')
+        text: await h.getDictItem("meta_view_stat_n_add_by_country_last_year"),
       },
       xAxis: {
         categories: data.map((d) => d.name),
         title: {
-          text: null
-        }
+          text: null,
+        },
       },
       yAxis: {
-        type: 'logarithmic',
+        type: "logarithmic",
         title: {
-          text: await h.getDictItem('meta_view_stat_n_add_by_country_axis')
-        }
+          text: await h.getDictItem("meta_view_stat_n_add_by_country_axis"),
+        },
       },
       legend: {
-        enabled: false
+        enabled: false,
       },
       tooltip: {
-        formatter: function() {
+        formatter: function () {
           return ` ${nCountryMap.get(this.x)} : ${this.y} ${txtReads}`;
-        }
+        },
       },
       series: [
         {
-          name: await h.getDictItem('meta_view_stat_n_add_by_country'),
-          data: data
-        }
+          name: await h.getDictItem("meta_view_stat_n_add_by_country"),
+          data: data,
+        },
       ],
       credits: {
-        enabled: false
+        enabled: false,
       },
       exporting: {
         buttons: {
           contextButton: {
             menuItems: [
-              'printChart',
-              'separator',
-              'downloadPNG',
-              'downloadJPEG',
-              'downloadSVG',
-              'separator',
-              'downloadCSV',
-              'downloadXLS'
-            ]
-          }
-        }
-      }
+              "printChart",
+              "separator",
+              "downloadPNG",
+              "downloadJPEG",
+              "downloadSVG",
+              "separator",
+              "downloadCSV",
+              "downloadXLS",
+            ],
+          },
+        },
+      },
     });
     /**
      * Small height = panel from file menu hidden.
      * -> overflow visible to fix that
      */
-    chart.container.style.overflow = 'visible';
+    chart.container.style.overflow = "visible";
 
     /**
      * Handle mutation from modal here
@@ -507,73 +507,73 @@ export async function metaSourceToUi(meta) {
   /**
    * Path to meta object
    */
-  const p = function(p, d) {
+  const p = function (p, d) {
     return h.path(meta, p, d);
   };
   /**
    * Label from object path
    */
-  const lfo = function(o, d, p) {
+  const lfo = function (o, d, p) {
     return glfo({
       obj: o,
       path: p,
-      default: d
+      default: d,
     });
   };
-  const l = function(p, d) {
+  const l = function (p, d) {
     return lfo(meta, d, p);
   };
 
   /**
    * Attributes table
    */
-  const tblAttributesRaw = oToA(p('text.attributes', {}), true);
-  const attrAlias = p('text.attributes_alias', {});
+  const tblAttributesRaw = oToA(p("text.attributes", {}), true);
+  const attrAlias = p("text.attributes_alias", {});
   const tblAttributes = tblAttributesRaw.map((r) => {
     r.key = el(
-      'div',
-      el('h5', lfo(attrAlias[r.key], r.key)),
-      el('span', {class: ['text-muted']}, r.key)
+      "div",
+      el("h5", lfo(attrAlias[r.key], r.key)),
+      el("span", { class: ["text-muted"] }, r.key)
     );
     r.value = lfo(r.value);
     return r;
   });
-  const elTblAttributes = elAuto('array_table', tblAttributes, {
+  const elTblAttributes = elAuto("array_table", tblAttributes, {
     tableHeadersSkip: true,
     tableTitleAsLanguageKey: true,
-    tableTitle: 'attributes_desc_title'
+    tableTitle: "attributes_desc_title",
   });
 
-  const urlHomepage = p('origin.homepage.url', '');
-  const urlSources = p('origin.source.urls', []).map((d) => d.url);
-  const urlAnnexes = p('annex.references', []).map((d) => d.url);
+  const urlHomepage = p("origin.homepage.url", "");
+  const urlSources = p("origin.source.urls", []).map((d) => d.url);
+  const urlAnnexes = p("annex.references", []).map((d) => d.url);
   const hasHomepage = h.isUrl(urlHomepage);
 
   const elHomepage = hasHomepage
     ? el(
-        'a',
+        "a",
         {
-          target: '_blank',
-          href: urlHomepage
+          target: "_blank",
+          href: urlHomepage,
         },
-        'Link'
+        "Link"
       )
-    : el('span');
+    : el("span");
 
   const elSourceUrl = el(
-    'ul',
+    "ul",
     urlSources.map((url) => {
       if (!h.isUrl(url)) {
         return;
       }
       let hostname = new URL(url).hostname;
       return el(
-        'li',
+        "li",
         el(
-          'a',
+          "a",
           {
-            target: '_blank',
-            href: url
+            target: "_blank",
+            href: url,
           },
           hostname
         )
@@ -581,19 +581,19 @@ export async function metaSourceToUi(meta) {
     })
   );
   const elAnnexesUrl = el(
-    'ul',
+    "ul",
     urlAnnexes.map((url) => {
       if (!h.isUrl(url)) {
         return;
       }
       let hostname = new URL(url).hostname;
       return el(
-        'li',
+        "li",
         el(
-          'a',
+          "a",
           {
-            target: '_blank',
-            href: url
+            target: "_blank",
+            href: url,
           },
           hostname
         )
@@ -601,78 +601,78 @@ export async function metaSourceToUi(meta) {
     })
   );
 
-  const elTitle = el('span', l('text.title'));
+  const elTitle = el("span", l("text.title"));
 
-  const elAbstract = el('p', l('text.abstract', '-'));
-  const elNotes = el('p', l('text.notes', '-'));
-  const elKeywords = elAuto('array_string', p('text.keywords.keys', ['-']));
+  const elAbstract = el("p", l("text.abstract", "-"));
+  const elNotes = el("p", l("text.notes", "-"));
+  const elKeywords = elAuto("array_string", p("text.keywords.keys", ["-"]));
   const elLicenses = el(
-    'ul',
-    p('license.licenses', []).map((lic) =>
-      el('li', [el('i', lic.name), el('p', lic.text)])
+    "ul",
+    p("license.licenses", []).map((lic) =>
+      el("li", [el("i", lic.name), el("p", lic.text)])
     )
   );
 
   const elKeywordsM49 = el(
-    'ul',
-    p('text.keywords.keys_m49', []).map((k) => el('li', h.getDictItem(k)))
+    "ul",
+    p("text.keywords.keys_m49", []).map((k) => el("li", h.getDictItem(k)))
   );
 
   const elKeywordsGemet = el(
-    'ul',
-    await gemetLi(p('text.keywords.keys_gemet', []))
+    "ul",
+    await gemetLi(p("text.keywords.keys_gemet", []))
   );
 
   const elLanguages = elAuto(
-    'array_string',
-    p('text.language.codes', []).map((l) => l.code),
+    "array_string",
+    p("text.language.codes", []).map((l) => l.code),
     {
-      stringAsLanguageKey: true
+      stringAsLanguageKey: true,
     }
   );
 
   const elContacts = el(
-    'ul',
-    p('contact.contacts', []).map((c) => {
+    "ul",
+    p("contact.contacts", []).map((c) => {
       return el(
-        'li',
+        "li",
         el(
-          'a',
+          "a",
           {
-            href: 'mailto:' + c.email
+            href: "mailto:" + c.email,
           },
           el(
-            'div',
-            el('span', c.name + (c.function ? ' ( ' + c.function + ' ) ' : ''))
+            "div",
+            el("span", c.name + (c.function ? " ( " + c.function + " ) " : ""))
           )
         ),
         el(
-          'span',
+          "span",
           {
-            class: 'text-muted'
+            class: "text-muted",
           },
           c.address
         )
       );
     })
   );
-  const elPeriodicity = elAuto('string', p('temporal.issuance.periodicity'), {
-    stringAsLanguageKey: true
+  const elPeriodicity = elAuto("string", p("temporal.issuance.periodicity"), {
+    stringAsLanguageKey: true,
   });
-  const elReleasedAt = elAuto('date', p('temporal.issuance.released_at', null));
-  const elModifiedAt = elAuto('date', p('temporal.issuance.modified_at', null));
+  const elReleasedAt = elAuto("date", p("temporal.issuance.released_at", null));
+  const elModifiedAt = elAuto("date", p("temporal.issuance.modified_at", null));
   const elIsTimeless = elAuto(
-    'boolean',
-    p('temporal.range.is_timeless', null),
+    "boolean",
+    p("temporal.range.is_timeless", null),
     {
-      booleanValues: ['yes', 'no'],
-      stringAsLanguageKey: true
+      booleanValues: ["yes", "no"],
+      stringAsLanguageKey: true,
     }
   );
-  const elStartAt = elAuto('date', p('temporal.range.start_at', null));
+  const elStartAt = elAuto("date", p("temporal.range.start_at", null));
 
-  const elEndAt = elAuto('date', p('temporal.range.end_at', null));
-  const elId = el('span', p('_id_source'));
+  const elEndAt = elAuto("date", p("temporal.range.end_at", null));
+  const elId = el("span", p("_id_source"));
   /**
    * Summary table
    */
@@ -696,21 +696,21 @@ export async function metaSourceToUi(meta) {
       licenses: elLicenses,
       start_at: elStartAt,
       end_at: elEndAt,
-      id: elId
+      id: elId,
     },
     // make an array of object
     true
   );
 
-  const elTblSummary = elAuto('array_table', tblSummary, {
+  const elTblSummary = elAuto("array_table", tblSummary, {
     tableHeadersSkip: true,
     tableTitleAsLanguageKey: true,
-    tableTitle: 'table_summary_title', // will be prefixed
-    langKeyPrefix: 'meta_source_',
-    stringAsLanguageKey: true
+    tableTitle: "table_summary_title", // will be prefixed
+    langKeyPrefix: "meta_source_",
+    stringAsLanguageKey: true,
   });
 
-  const elMeta = el('div', elTblSummary, elTblAttributes);
+  const elMeta = el("div", elTblSummary, elTblAttributes);
 
   return elMeta;
 }
@@ -729,12 +729,12 @@ async function gemetLi(ids) {
   const concepts = await getGemetConcept(ids);
   const lis = concepts.map((k) => {
     return el(
-      'li',
+      "li",
       el(
-        'a',
+        "a",
         {
-          target: '_blank',
-          href: getGemetConceptLink(k.concept)
+          target: "_blank",
+          href: getGemetConceptLink(k.concept),
         },
         k.label
       )

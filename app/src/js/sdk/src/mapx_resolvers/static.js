@@ -51,6 +51,7 @@ import { mapComposerModalAuto } from "../../../mx_helper_map_composer.js";
 import { modalCloseAll } from "../../../mx_helper_modal.js";
 import { toggleSpotlight } from "../../../mx_helper_map_pixop.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
+import { theme } from "./../../../mx";
 
 /**
  * MapX resolvers available in static and app
@@ -203,9 +204,9 @@ class MapxResolversStatic extends ResolversBase {
   set_theme(opt) {
     opt = Object.assign({}, opt);
     if (opt.idTheme) {
-      return mx.theme.setColorsByThemeId(opt.idTheme);
+      return theme.set(opt.idTheme);
     } else if (opt.colors) {
-      return mx.theme.setColors(opt.colors);
+      return theme.setColors(opt.colors);
     }
   }
 
@@ -214,7 +215,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Array} array of themes id
    */
   get_themes_id() {
-    return mx.theme.getThemesIdList();
+    return theme.ids();
   }
 
   /**
@@ -222,7 +223,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Object} Themes object with themes id as key
    */
   get_themes() {
-    return mx.theme.getThemes();
+    return theme.getAll();
   }
 
   /**
@@ -230,7 +231,7 @@ class MapxResolversStatic extends ResolversBase {
    * @return {string} Theme id
    */
   get_theme_id() {
-    return mx.theme.id_theme;
+    return theme.id();
   }
   /**
    * Check if element is visible, by id
