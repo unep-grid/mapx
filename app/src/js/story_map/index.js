@@ -5,6 +5,7 @@ import { ButtonPanel } from "./../button_panel/index.js";
 import { errorHandler } from "./../error_handler/index.js";
 import { modal } from "./../mx_helper_modal.js";
 import { settings } from "./../settings";
+import { settings as storySettings } from "./settings.js";
 import {
   onNextFrame,
   cancelFrame,
@@ -264,7 +265,7 @@ function initMouseMoveListener() {
 function updateSettings() {
   const story = getStory();
   const sSettings = path(story, "settings", {});
-  story._settings = Object.assign({}, settings, sSettings);
+  story._settings = Object.assign({}, storySettings, sSettings);
 }
 
 function getSettings() {
