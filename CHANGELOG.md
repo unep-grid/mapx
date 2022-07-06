@@ -1,3 +1,9 @@
+  - [1.9.43-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.43-beta.1) 
+
+    - APP
+        - PixOp : refactoring -> class + exported worker as file 
+        - StoryMap : added theme selection
+        - Fixed various themes bugs 
   
   - [1.9.43-beta.0](https://github.com/unep-grid/map-x-mgl/tree/1.9.43-beta.0) 
 
