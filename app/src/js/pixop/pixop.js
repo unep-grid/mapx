@@ -307,7 +307,7 @@ export class PixOp {
     return px;
   }
 
-  renderWorker = async function () {
+   async renderWorker() {
     const px = this;
     const opt = px.opt;
 
