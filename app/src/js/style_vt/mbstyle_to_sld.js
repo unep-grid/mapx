@@ -12,45 +12,53 @@ export async function mapboxToSld(style, opt) {
   const { MapboxStyleParser } = await import("geostyler-mapbox-parser");
   const { SldStyleParser } = await import("geostyler-sld-parser");
 
-  opt = Object.assign(
-    {},
-    {
-      mergeSymbolizers: true,
-      fixFilters: true,
-      fixImageCdn: true,
-      fixIconSize: true,
-    },
-    opt
-  );
+  try {
+    opt = Object.assign(
+      {},
+      {
+        mergeSymbolizers: true,
+        fixFilters: true,
+        fixImageCdn: true,
+        fixIconSize: true,
+      },
+      opt
+    );
 
-  const fixNumeric = !!style?.metadata?.type_all_numeric;
-  const mapbox = new MapboxStyleParser();
-  const sld = new SldStyleParser();
+    const fixNumeric = !!style?.metadata?.type_all_numeric;
+    const mapbox = new MapboxStyleParser();
+    const sld = new SldStyleParser();
 
-  mapbox.ignoreConversionErrors = true;
-  const gstyle = await mapbox.readStyle(style, {});
+    mapbox.ignoreConversionErrors = true;
+    const gstyle = await mapbox.readStyle(style, {});
+    if (isArray(gstyle?.errors) && gstyle.errors.length > 0) {
+      const errors = gstyle.errors.reduce((a, c) => a + ", " + c, "");
+      throw new Error(`Style had errors: ${errors}`);
+    }
+    if (opt.fixFilters) {
+      geostylerFixFilters(gstyle, {
+        fixNumeric: fixNumeric,
+      });
+    }
 
-  if (opt.fixFilters) {
-    geostylerFixFilters(gstyle, {
-      fixNumeric: fixNumeric,
-    });
+    if (opt.mergeSymbolizers) {
+      geostylerFixDuplicate(gstyle);
+    }
+
+    if (opt.fixImageCdn) {
+      geostylerFixImageCdn(gstyle);
+    }
+
+    if (opt.fixIconSize) {
+      geostylerFixIconSize(gstyle);
+    }
+
+    const out = await sld.writeStyle(gstyle.output);
+
+    return out.output;
+  } catch (e) {
+    console.warn(e);
   }
-
-  if (opt.mergeSymbolizers) {
-    geostylerFixDuplicate(gstyle);
-  }
-
-  if (opt.fixImageCdn) {
-    geostylerFixImageCdn(gstyle);
-  }
-
-  if (opt.fixIconSize) {
-    geostylerFixIconSize(gstyle);
-  }
-
-  const out = await sld.writeStyle(gstyle.output);
-
-  return out.output;
+  return "";
 }
 
 /**
@@ -211,8 +219,9 @@ function geostylerFixFilters(gstyle, opt) {
 
   for (const rule of gstyle.output.rules) {
     const filter_fix = [];
+    const filters = rule.filter || [];
     let fCount = 0;
-    for (const filter of rule.filter) {
+    for (const filter of filters) {
       /**
        * Handle combination operator
        */

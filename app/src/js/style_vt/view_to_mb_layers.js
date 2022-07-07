@@ -195,6 +195,7 @@ export async function getViewMapboxLayers(v, opt) {
       "source-layer": idView,
       type: styleCustom.type || "circle",
       paint: styleCustom.paint || {},
+      filter: styleCustom.filter || [">=", ["get", "gid"], 0],
       layout: styleCustom.layout || {},
       minzoom: styleCustom.minzoom || zoomConfig.zoomMin,
       maxzoom: styleCustom.maxzoom || zoomConfig.zoomMax,
@@ -250,7 +251,7 @@ export async function getViewMapboxLayers(v, opt) {
        * Symbol only
        */
       const layerSprite = _build_layer({
-        priority : 0,
+        priority: 0,
         geomType: "symbol",
         hexColor: ruleAll.color,
         sprite: ruleAll.sprite,
@@ -292,7 +293,6 @@ export async function getViewMapboxLayers(v, opt) {
         });
         layers.push(layerPattern);
       }
-
     }
   }
 
@@ -473,7 +473,7 @@ export async function getViewMapboxLayers(v, opt) {
         zoomMax: zoomConfig.zoomMax,
         zoomMin: zoomConfig.zoomMin,
         useLabelAsId: useLabelAsId,
-        simplifyExpression : simplifyExpression
+        simplifyExpression: simplifyExpression,
       },
       opt
     );

@@ -1,10 +1,9 @@
 {
-  "enable":false,
-  "paint":{},
-  "layout":{},
-  "filter":[],
-  "minzoom":0,
-  "maxzoom":22,
-  "type":"circle"
+  "enable": false,
+  "paint": {},
+  "layout": {},
+  "filter": [">", ["get", "gid"], 0],
+  "minzoom": 0,
+  "maxzoom": 22,
+  "type": "circle"
 }
-
