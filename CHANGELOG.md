@@ -1,3 +1,10 @@
+  - [1.9.43](https://github.com/unep-grid/map-x-mgl/tree/1.9.43) 
+    
+    - API
+        - Geoserver publishing : missing public project constraint
+    - APP
+        - Improved theme/projection labels in UI
+
   - [1.9.43-beta.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.43-beta.2) 
     
     - APP
