@@ -1,10 +1,15 @@
 WITH src_enabled as (
   SELECT
-    id id_source
+    s.id id_source
   FROM
-    mx_sources
+    mx_sources s,
+    mx_projects p
   WHERE
-    services ? 'gs_ws_b'
+    s.project = p.id 
+  AND
+    s.services ? 'gs_ws_b'
+  AND 
+   p.public
 ),
 views_geoserver as (
   SELECT
