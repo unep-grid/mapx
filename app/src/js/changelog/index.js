@@ -3,7 +3,7 @@ import {TextFilter} from './../text_filter_simple';
 import {el} from './../el/src';
 
 const urlRemote =
-  'https://raw.githubusercontent.com/unep-grid/map-x-mgl/master/CHANGELOG.md';
+  'https://raw.githubusercontent.com/unep-grid/map-x-mgl/main/CHANGELOG.md';
 
 export async function changeLogHtml(remote) {
   let txt;
