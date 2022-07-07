@@ -31,6 +31,7 @@ import {
   isViewId,
   isNumeric,
   isEmpty,
+  isNotEmpty,
   isView,
 } from "./../is_test/index.js";
 import {
@@ -81,6 +82,7 @@ export async function storyRead(opt) {
     await build();
     await initState();
     await initTheme();
+    await initProjection();
     await initListeners();
     await handleMissingImages();
     await initLegendPanel();
@@ -1207,9 +1209,22 @@ async function initTheme() {
   }
 }
 
+async function initProjection() {
+  const map = getMap();
+  const s = getSettings();
+  const useProj =
+    isNotEmpty(s.projection_name) && s.projection_name !== "default";
+  /*
+   * Set projection
+   */
+  if (useProj) {
+    map.setProjection(s.projection_name);
+  }
+}
+
 async function initState() {
   const state = getState();
-
+  const map = getMap();
   if (state._app_state_saved) {
     return;
   }
@@ -1237,6 +1252,11 @@ async function initState() {
     const idTheme = theme.id();
 
     /**
+     * Projection
+     */
+    const projection = map.getProjection();
+
+    /**
      * Clear views
      */
     for (const id of oldViews) {
@@ -1255,6 +1275,7 @@ async function initState() {
      */
     Object.assign(state, {
       idTheme,
+      projection,
       oldViews,
       position,
       hasAerial,
@@ -1274,6 +1295,8 @@ async function appStateRestore() {
   const idTheme = state.idTheme;
   const pos = state.position;
 
+  map.setProjection(state.projection);
+
   map.jumpTo({
     zoom: pos.z,
     bearing: pos.b,
@@ -1282,6 +1305,7 @@ async function appStateRestore() {
   });
 
   theme.set(idTheme, { sound: false, save: false, save_url: true });
+
   resetMapStyle();
   resetControls();
   resetPanels();

@@ -36,10 +36,10 @@ observeEvent(input$btnShowProjectConfig, {
         selected = projectData$theme,
         choices = c(
           "none",
-          "mapx_light",
-          "mapx_dark",
-          "ocean_light",
-          "ocean_dark"
+          "classic_light",
+          "classic_dark",
+          "water_light",
+          "water_dark"
         )
       ),
       tags$div(

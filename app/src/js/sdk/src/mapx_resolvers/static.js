@@ -204,7 +204,7 @@ class MapxResolversStatic extends ResolversBase {
   set_theme(opt) {
     opt = Object.assign({}, opt);
     if (opt.idTheme) {
-      return theme.set(opt.idTheme);
+      return theme.set(opt.idTheme, { save_url: true });
     } else if (opt.colors) {
       return theme.setColors(opt.colors);
     }

@@ -1,7 +1,7 @@
 {
-  "id": "ocean_light",
+  "id": "classic_light",
   "description": {
-    "en": "Ocean theme"
+    "en": "White and dark gray."
   },
   "mode": "light",
   "author": "F.Moser",
@@ -93,23 +93,23 @@
     },
     "mx_map_text_water": {
       "visibility": "visible",
-      "color": "rgba(37,78,101,0.9)"
+      "color": "rgba(47,47,47,0.7)"
     },
     "mx_map_text_water_outline": {
       "visibility": "visible",
-      "color": "rgba(46,60,71,0.1)"
+      "color": "rgba(71,71,71,0)"
     },
     "mx_map_water": {
       "visibility": "visible",
-      "color": "rgb(189,209,227)"
+      "color": "rgb(115,115,115)"
     },
     "mx_map_bathymetry_high": {
       "visibility": "visible",
-      "color": "rgba(109,156,190,0.5)"
+      "color": "rgba(100,100,100,0.4)"
     },
     "mx_map_bathymetry_low": {
       "visibility": "visible",
-      "color": "rgba(11,16,19,0.5)"
+      "color": "rgba(20,20,20,0.4)"
     },
     "mx_map_road": {
       "visibility": "none",

@@ -994,7 +994,7 @@ export async function initMapx(o) {
    * Update theme, if required by init opt
    */
   if (theme.isValidId(o.idTheme)) {
-    theme.set(o.idTheme, { save_url: true, sound: false });
+    theme.set(o.idTheme, { save_url: true });
   }
 
   if (!settings.mode.static) {
@@ -4995,7 +4995,7 @@ export function setMapProjection(opt) {
  */
 export function setTheme(opt) {
   if (theme.isValidId(opt.id)) {
-    theme.set(opt.id, { save_url: true, sound: false });
+    theme.set(opt.id, { save_url: true });
   }
 }
 

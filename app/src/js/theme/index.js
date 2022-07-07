@@ -7,10 +7,10 @@ import { layer_resolver, css_resolver } from "./mapx_style_resolver.js";
 import { bindAll } from "../bind_class_methods";
 import { isJson } from "../is_test";
 import { onNextFrame } from "../animation_frame/index.js";
-import * as mapx_light from "./themes/mapx_light.json";
-import * as mapx_dark from "./themes/mapx_dark.json";
-import * as ocean_dark from "./themes/ocean_dark.json";
-import * as ocean_light from "./themes/ocean_light.json";
+import * as classic_light from "./themes/classic_light.json";
+import * as classic_dark from "./themes/classic_dark.json";
+import * as water_dark from "./themes/water_dark.json";
+import * as water_light from "./themes/water_light.json";
 import switchOn from "./sound/switch-on.mp3";
 import switchOff from "./sound/switch-off.mp3";
 import waterDrops from "./sound/water-drops.mp3";
@@ -20,13 +20,13 @@ const global = {
   elInputsContainer: null,
   map: null,
   themes: [
-    mapx_light.default,
-    mapx_dark.default,
-    ocean_light.default,
-    ocean_dark.default,
+    classic_light.default,
+    classic_dark.default,
+    water_light.default,
+    water_dark.default,
   ],
-  id: "mapx_light",
-  id_default: "mapx_light",
+  id: "classic_light",
+  id_default: "classic_light",
   colors: null,
   debug: false,
   on: {},
@@ -122,12 +122,14 @@ class Theme extends EventSimple {
 
   set(id, opt) {
     const t = this;
-    const { sound = true, save = true, save_url = true } = opt || {};
+    let { sound = false, save = false, save_url = false } = opt || {};
     const valid = t.isValidId(id);
     if (!valid) {
-      id = t.get(t._opt.id_default);
+      id = t._opt.id_default;
+      // probably set in url or localStorage : overwrite that 
+      save_url = true;
+      save = true;
     }
-
     const theme = t.get(id);
 
     if (theme.colors) {
@@ -215,7 +217,7 @@ class Theme extends EventSimple {
     return t.mode() === "dark";
   }
 
-  next() {
+  next(opt) {
     const t = this;
     const ids = t.ids();
     const id = t.id();
@@ -223,10 +225,10 @@ class Theme extends EventSimple {
     const pos = ids.indexOf(id);
     const useFirst = pos + 1 > last;
     const id_new = ids[useFirst ? 0 : pos + 1];
-    return t.set(id_new);
+    return t.set(id_new, opt);
   }
 
-  previous() {
+  previous(opt) {
     const t = this;
     const ids = t.ids();
     const id = t.id();
@@ -234,7 +236,7 @@ class Theme extends EventSimple {
     const pos = ids.indexOf(id);
     const useLast = pos - 1 < 0;
     const id_new = ids[useLast ? last : pos - 1];
-    return t.set(id_new);
+    return t.set(id_new, opt);
   }
 
   setColors(colors) {

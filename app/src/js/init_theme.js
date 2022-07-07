@@ -43,13 +43,13 @@ function initMatchMedia(theme) {
     const wMlight = window.matchMedia("(prefers-color-scheme: light)");
 
     if (wMdark.matches) {
-      theme.set("mapx_dark", { sound: false, save: false, save_url: false });
+      theme.set("classic_dark");
     }
     wMdark.addEventListener("change", (e) => {
-      return e.matches && theme.set("mapx_dark");
+      return e.matches && theme.set("classic_dark");
     });
     wMlight.addEventListener("change", (e) => {
-      return e.matches && theme.set("mapx_light");
+      return e.matches && theme.set("classic_light");
     });
   } catch (e) {
     console.warn(e);

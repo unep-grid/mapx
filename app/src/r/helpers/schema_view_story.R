@@ -43,23 +43,53 @@ mxSchemaViewStory <- function(view, views, language) {
     description = tt("schema_story_theme_desc"),
     enum = list(
       "default",
-      "mapx_dark",
-      "mapx_light",
-      "ocean_dark",
-      "ocean_light"
+      "classic_dark",
+      "classic_light",
+      "water_dark",
+      "water_light"
     ),
     options = list(
       enum_titles = list(
-        "Default",
-        "MapX - dark",
-        "MapX - light",
-        "Ocean - dark",
-        "Ocean - light"
+        tt("schema_story_theme_default"),
+        "Classic - dark",
+        "Classic - light",
+        "Water - dark",
+        "Water - light"
       )
     ),
     default = "default"
   )
 
+  #
+  # Settings theme
+  #
+  settingsProj <- list(
+    type = "string",
+    title = tt("schema_story_projection"),
+    minLength = 1,
+    description = tt("schema_story_projection_desc"),
+    enum = list(
+      "default",
+      "globe",
+      "equalEarth",
+      "naturalEarth",
+      "winkelTripel",
+      "mercator",
+      "equirectangular"
+    ),
+    options = list(
+      enum_titles = list(
+        tt("schema_story_projection_default"),
+        "globe",
+        "equal earth",
+        "natural earth",
+        "winkel tripel",
+        "mercator",
+        "equirectangular"
+      )
+    ),
+    default = "default"
+  )
 
 
   #
@@ -653,6 +683,7 @@ mxSchemaViewStory <- function(view, views, language) {
         ),
         properties = list(
           theme = settingsTheme,
+          projection_name = settingsProj,
           class_wrapper = settingsPageClass,
           dashboards_panel_behaviour = settingsDashboardsPanelRoot,
           legends_panel_behaviour = settingsLegendsPanelRoot,
