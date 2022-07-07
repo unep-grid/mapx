@@ -6456,8 +6456,8 @@
   },
   {
     "id": "schema_story_theme_default",
-    "en": "Use the project default",
-    "ar": "استخدم الإعداد الافتراضي للمشروع"
+    "en": "Use the default",
+    "ar": "استخدم الافتراضي"
   },
   {
     "id": "schema_story_theme_step",

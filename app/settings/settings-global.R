@@ -66,6 +66,51 @@ config[["browser"]] <- list(
 )
 
 #
+# Themes
+#
+config[["themes"]] <- list(
+  default = "classic_light",
+  ids = c(
+    "classic_light",
+    "classic_dark",
+    "water_light",
+    "water_dark"
+  ),
+  names = c(
+    "Classic Light",
+    "Classic Dark",
+    "Water Light",
+    "Water Dark"
+  )
+)
+config$themes$idsNamed <- config$themes$ids
+names(config$themes$idsNamed) <- config$themes$names
+
+config[["projections"]] <- list(
+  default = "mercator",
+  ids = c(
+    "globe",
+    "albers",
+    "equalEarth",
+    "mercator",
+    "lambertConformalConic",
+    "winkelTripel",
+    "naturalEarth",
+    "equirectangular"
+  ),
+  names = c(
+    "Globe",
+    "Albers",
+    "Equal Earth",
+    "Mercator",
+    "Lambert Conformal Conic",
+    "Winkel Tripel",
+    "Natural Earth",
+    "Equirectangular"
+  )
+)
+
+#
 # Input control
 #
 config[["validation"]] <- list(
@@ -116,7 +161,7 @@ config[["api"]] <- list(
     getViewsListByProject = "/get/views/list/project/",
     getViewsListGlobalPublic = "/get/views/list/global/public",
     getProjectsListByUser = "/get/projects/list/user",
-    getSourceDownload = "/get/source/", #to replace by ws route
+    getSourceDownload = "/get/source/", # to replace by ws route
     uploadImage = "/upload/image/",
     uploadVector = "/upload/vector/",
     postEmail = "/send/mail",
@@ -125,9 +170,9 @@ config[["api"]] <- list(
     # ws
     #
     updateGeoserver = "/ws/update/geoserver",
-    downloadSource =  "/ws/download/source",
+    downloadSource = "/ws/download/source",
     testJobSum = "/ws/get/test/job/sum",
-    testJobEcho =  "/ws/get/test/job/echo"
+    testJobEcho = "/ws/get/test/job/echo"
   )
 )
 

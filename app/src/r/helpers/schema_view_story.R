@@ -41,20 +41,14 @@ mxSchemaViewStory <- function(view, views, language) {
     title = tt("schema_story_theme"),
     minLength = 1,
     description = tt("schema_story_theme_desc"),
-    enum = list(
+    enum = c(
       "default",
-      "classic_dark",
-      "classic_light",
-      "water_dark",
-      "water_light"
+      config$themes$ids
     ),
     options = list(
-      enum_titles = list(
+      enum_titles = c(
         tt("schema_story_theme_default"),
-        "Classic - dark",
-        "Classic - light",
-        "Water - dark",
-        "Water - light"
+        config$themes$names
       )
     ),
     default = "default"
@@ -68,24 +62,11 @@ mxSchemaViewStory <- function(view, views, language) {
     title = tt("schema_story_projection"),
     minLength = 1,
     description = tt("schema_story_projection_desc"),
-    enum = list(
-      "default",
-      "globe",
-      "equalEarth",
-      "naturalEarth",
-      "winkelTripel",
-      "mercator",
-      "equirectangular"
-    ),
+    enum = c("default", config$projections$ids),
     options = list(
-      enum_titles = list(
+      enum_titles = c(
         tt("schema_story_projection_default"),
-        "globe",
-        "equal earth",
-        "natural earth",
-        "winkel tripel",
-        "mercator",
-        "equirectangular"
+        config$projections$names
       )
     ),
     default = "default"

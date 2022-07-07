@@ -6456,8 +6456,8 @@
   },
   {
     "id": "schema_story_theme_default",
-    "en": "Use the project default",
-    "ru": "Использовать проект по умолчанию"
+    "en": "Use the default",
+    "ru": "Использовать значение по умолчанию"
   },
   {
     "id": "schema_story_theme_step",

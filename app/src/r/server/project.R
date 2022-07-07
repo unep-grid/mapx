@@ -427,7 +427,7 @@ observe({
       if (isEmpty(mapProj)) {
         mglSetMapProjection(
           id = idMap,
-          name = "mercator"
+          name = config$projections$default
         )
       } else {
         mglSetMapProjection(

@@ -6456,8 +6456,8 @@
   },
   {
     "id": "schema_story_theme_default",
-    "en": "Use the project default",
-    "zh": "使用项目默认值"
+    "en": "Use the default",
+    "zh": "使用默认值"
   },
   {
     "id": "schema_story_theme_step",

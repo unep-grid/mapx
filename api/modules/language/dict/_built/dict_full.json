@@ -16784,16 +16784,16 @@
   },
   {
     "id": "schema_story_theme_default",
-    "en": "Use the project default",
-    "fr": "Utiliser la valeur par défaut du projet",
-    "es": "Usar el proyecto por defecto",
-    "ru": "Использовать проект по умолчанию",
-    "zh": "使用项目默认值",
-    "ar": "استخدم الإعداد الافتراضي للمشروع",
-    "fa": "از پیش فرض پروژه استفاده کنید",
-    "ps": "د پروژې ډیفالټ وکاروئ",
-    "bn": "প্রকল্প ডিফল্ট ব্যবহার করুন",
-    "de": "Verwenden Sie den Projektstandard"
+    "en": "Use the default",
+    "fr": "Utiliser la valeur par défaut",
+    "es": "Usar el predeterminado",
+    "ru": "Использовать значение по умолчанию",
+    "zh": "使用默认值",
+    "ar": "استخدم الافتراضي",
+    "fa": "از پیش فرض استفاده کنید",
+    "ps": "ډیفالټ وکاروئ",
+    "bn": "ডিফল্ট ব্যবহার করুন",
+    "de": "Verwenden Sie die Standardeinstellung"
   },
   {
     "id": "schema_story_theme_step",

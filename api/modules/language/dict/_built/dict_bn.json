@@ -6456,8 +6456,8 @@
   },
   {
     "id": "schema_story_theme_default",
-    "en": "Use the project default",
-    "bn": "প্রকল্প ডিফল্ট ব্যবহার করুন"
+    "en": "Use the default",
+    "bn": "ডিফল্ট ব্যবহার করুন"
   },
   {
     "id": "schema_story_theme_step",

@@ -280,21 +280,12 @@ mglFlyTo <- function(id = NULL, mapPosition, session = shiny::getDefaultReactive
 #' @export
 mglSetMapProjection <- function(
   id = NULL,
-  name = c(
-    "globe",
-    "albers",
-    "equalEarth",
-    "mercator",
-    "lambertConformalConic",
-    "winkelTripel",
-    "naturalEarth",
-    "equirectangular"
-  ),
+  name = config$projections$ids,
   center = list(0, 0),
   parallels = list(0, 0),
   session = shiny::getDefaultReactiveDomain()
 ) {
-  stopifnot(!noDataCheck(id))
+
   session$sendCustomMessage("mglSetMapProjection", list(
     id = id,
     name = name,

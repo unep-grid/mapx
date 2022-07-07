@@ -6456,8 +6456,8 @@
   },
   {
     "id": "schema_story_theme_default",
-    "en": "Use the project default",
-    "es": "Usar el proyecto por defecto"
+    "en": "Use the default",
+    "es": "Usar el predeterminado"
   },
   {
     "id": "schema_story_theme_step",

@@ -34,13 +34,7 @@ observeEvent(input$btnShowProjectConfig, {
         "selectProjectConfigTheme",
         label = d("project_id_theme", language, web = F),
         selected = projectData$theme,
-        choices = c(
-          "none",
-          "classic_light",
-          "classic_dark",
-          "water_light",
-          "water_dark"
-        )
+        choices = config$themes$idsNamed
       ),
       tags$div(
         class = "well",
@@ -192,21 +186,18 @@ observeEvent(input$projectMapProjection_init, {
     schema <- list(
       type = "object",
       title = tt("project_map_proj_set"),
+      options = list(
+        collapsed = TRUE
+      ),
       properties = list(
         name = list(
           title = tt("project_map_proj_name"),
           type = "string",
-          enum = list(
-            "globe",
-            "albers",
-            "equalEarth",
-            "mercator",
-            "lambertConformalConic",
-            "winkelTripel",
-            "naturalEarth",
-            "equirectangular"
-          ),
-          default = "mercator"
+          enum = config$projection$ids,
+          default = config$projection$default,
+          options = list(
+            enum_titles = config$projections$names
+          )
         ),
         center_lat = list(
           type = "number",

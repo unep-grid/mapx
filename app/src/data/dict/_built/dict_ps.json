@@ -6456,8 +6456,8 @@
   },
   {
     "id": "schema_story_theme_default",
-    "en": "Use the project default",
-    "ps": "د پروژې ډیفالټ وکاروئ"
+    "en": "Use the default",
+    "ps": "ډیفالټ وکاروئ"
   },
   {
     "id": "schema_story_theme_step",

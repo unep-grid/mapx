@@ -6456,8 +6456,8 @@
   },
   {
     "id": "schema_story_theme_default",
-    "en": "Use the project default",
-    "fa": "از پیش فرض پروژه استفاده کنید"
+    "en": "Use the default",
+    "fa": "از پیش فرض استفاده کنید"
   },
   {
     "id": "schema_story_theme_step",
