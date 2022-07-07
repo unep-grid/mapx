@@ -3260,211 +3260,6 @@
     "zh": "最大缩放以显示数据"
   },
   {
-    "id": "schema_story_opacity_timeout",
-    "en": "Timeout before decreasing opacity [ms]",
-    "zh": "降低不透明度前的超时时间 [ms]"
-  },
-  {
-    "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "zh": "在鼠标不活动的情况下，在降低面板和导航项目符号的不透明度之前延迟"
-  },
-  {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "zh": "提示："
-  },
-  {
-    "id": "schema_story_tips",
-    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "zh": "<p>这里列出了一些能够为读者提供流畅体验的好方法：</p><ol><li>保持简单。</li><li>建议创建简短的Story Map，以吸引读者。</li><li>为了获得良好的可读性，建议每步不超过两张幻灯片，并且在同一步骤中不超过两个图层。</li><li>图片、视频和信息图表可以作为有效且有影响力的媒介来将你的故事情景化。但是，它们不应掩盖故事的空间信息。地图应是故事的中心。</li><li>效果，过渡或3D转换会影响Story Map在慢速设备上的可读性，请谨慎使用。</li></ol>"
-  },
-  {
-    "id": "schema_story_author",
-    "en": "Author of the story",
-    "zh": "故事作者"
-  },
-  {
-    "id": "schema_story_map_pos",
-    "en": "Position of the map",
-    "zh": "地图位置"
-  },
-  {
-    "id": "schema_story_meta",
-    "en": "Metadata",
-    "zh": "元数据"
-  },
-  {
-    "id": "schema_story_org",
-    "en": "Organisation name",
-    "zh": "组织名称"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling",
-    "en": "Dashboards display mode",
-    "zh": "仪表盘显示模式"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
-    "zh": "如果选定的视图具有关联的仪表板，它应该如何呈现？"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
-    "zh": "如果选定的视图具有关联的仪表板，它应该如何全局呈现？如果适用，将忽略步骤配置。"
-  },
-  {
-    "id": "schema_story_dashboard_panel_default",
-    "en": "Use the dashboard default display option",
-    "zh": "使用仪表板默认显示选项"
-  },
-  {
-    "id": "schema_story_dashboard_panel_root_default",
-    "en": "Use the display options defined in each steps",
-    "zh": "使用每个步骤中定义的显示选项"
-  },
-  {
-    "id": "schema_story_dashboard_panel_open",
-    "en": "Open the dashboard panel",
-    "zh": "打开仪表板面板"
-  },
-  {
-    "id": "schema_story_dashboard_panel_closed",
-    "en": "Close the dashboard panel",
-    "zh": "关闭仪表板面板"
-  },
-  {
-    "id": "schema_story_dashboard_panel_disabled",
-    "en": "Do not render dashboards",
-    "zh": "不呈现仪表板"
-  },
-  {
-    "id": "schema_story_legends_panel_handling",
-    "en": "Legends display mode",
-    "zh": "图例显示模式"
-  },
-  {
-    "id": "schema_story_legends_panel_handling_desc",
-    "en": "Set how the legend panel should be displayed.",
-    "zh": "设置图例面板的显示方式。"
-  },
-  {
-    "id": "schema_story_legends_panel_handling_root_desc",
-    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
-    "zh": "设置图例面板应如何全局显示。如果适用，将忽略步骤配置。"
-  },
-  {
-    "id": "schema_story_legends_panel_default",
-    "en": "Use the application default",
-    "zh": "使用应用程序默认值"
-  },
-  {
-    "id": "schema_story_legends_panel_root_default",
-    "en": "Use the display option defined in each steps",
-    "zh": "使用每个步骤中定义的显示选项"
-  },
-  {
-    "id": "schema_story_legends_panel_open",
-    "en": "Open the legends panel",
-    "zh": "打开图例面板"
-  },
-  {
-    "id": "schema_story_legends_panel_closed",
-    "en": "Close the legends panel",
-    "zh": "关闭图例面板"
-  },
-  {
-    "id": "schema_story_pos_get",
-    "en": "Update using current map parameters",
-    "zh": "使用当前地图参数更新"
-  },
-  {
-    "id": "schema_story_slide",
-    "en": "Slide",
-    "zh": "幻灯片"
-  },
-  {
-    "id": "schema_story_slide_color",
-    "en": "Color theme",
-    "zh": "颜色主题"
-  },
-  {
-    "id": "schema_story_slide_color_bg",
-    "en": "Background color",
-    "zh": "背景颜色"
-  },
-  {
-    "id": "schema_story_slide_color_fg",
-    "en": "Text color",
-    "zh": "文本颜色"
-  },
-  {
-    "id": "schema_story_slide_config",
-    "en": "Configuration",
-    "zh": "配置"
-  },
-  {
-    "id": "schema_story_slide_layout",
-    "en": "Content layout",
-    "zh": "内容布局"
-  },
-  {
-    "id": "schema_story_slide_opacity_bg",
-    "en": "Background opacity",
-    "zh": "背景不透明度"
-  },
-  {
-    "id": "schema_story_slide_pos_z",
-    "en": "Depth (z axis)",
-    "zh": "深度（Z轴）"
-  },
-  {
-    "id": "schema_story_slide_speed",
-    "en": "Speed ratio",
-    "zh": "速度比"
-  },
-  {
-    "id": "schema_story_slides",
-    "en": "Slides",
-    "zh": "幻灯片"
-  },
-  {
-    "id": "schema_story_step",
-    "en": "Step",
-    "zh": "步骤"
-  },
-  {
-    "id": "schema_story_step_content",
-    "en": "Content",
-    "zh": "内容"
-  },
-  {
-    "id": "schema_story_step_title",
-    "en": "Title ",
-    "zh": "标题"
-  },
-  {
-    "id": "schema_story_steps",
-    "en": "Steps",
-    "zh": "步骤"
-  },
-  {
-    "id": "schema_story_steps_title",
-    "en": "Steps of the story",
-    "zh": "故事步骤"
-  },
-  {
-    "id": "schema_story_text_pos",
-    "en": "Text position",
-    "zh": "文本位置"
-  },
-  {
-    "id": "schema_story_title",
-    "en": "Story",
-    "zh": "故事"
-  },
-  {
     "id": "schema_style_value",
     "en": "Value",
     "zh": "值"
@@ -5375,186 +5170,6 @@
     "zh": "MapX源的元数据编辑。"
   },
   {
-    "id": "schema_story_views_activate",
-    "en": "Views to activate",
-    "zh": "要激活的视图"
-  },
-  {
-    "id": "schema_story_slide_classes",
-    "en": "Slide classes",
-    "zh": "幻灯片类别"
-  },
-  {
-    "id": "schema_story_slide_classes_name",
-    "en": "Class names",
-    "zh": "类别名称"
-  },
-  {
-    "id": "schema_story_slide_allow_scroll",
-    "en": "Allow scrolling",
-    "zh": "允许滚动"
-  },
-  {
-    "id": "schema_story_slide_allow_scroll_desc",
-    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
-    "zh": "如果幻灯片内容超出范围，则会显示滚动条。"
-  },
-  {
-    "id": "schema_story_slide_base_txt_size_px",
-    "en": "Base text size in pixels",
-    "zh": "基础文字大小（以像素为单位）"
-  },
-  {
-    "id": "schema_story_slide_effects",
-    "en": "Effects",
-    "zh": "效果"
-  },
-  {
-    "id": "schema_story_slide_effect_start",
-    "en": "Start",
-    "zh": "开始"
-  },
-  {
-    "id": "schema_story_slide_effect_end",
-    "en": "End",
-    "zh": "结束"
-  },
-  {
-    "id": "schema_story_slide_effect_offset",
-    "en": "Offset",
-    "zh": "偏移"
-  },
-  {
-    "id": "schema_story_slide_effect_factor",
-    "en": "Factor",
-    "zh": "要素"
-  },
-  {
-    "id": "schema_story_slide_effect_type",
-    "en": "Type",
-    "zh": "类型"
-  },
-  {
-    "id": "schema_story_slide_name",
-    "en": "Slide name",
-    "zh": "幻灯片名称"
-  },
-  {
-    "id": "schema_story_map_anim_duration",
-    "en": "Animation duration [ms]",
-    "zh": "动画持续时间 [ms]"
-  },
-  {
-    "id": "schema_story_map_anim_duration_desc",
-    "en": "Change the total animation duration",
-    "zh": "更改动画总持续时间"
-  },
-  {
-    "id": "schema_story_map_anim_traj_method",
-    "en": "Trajectory method",
-    "zh": "轨迹法"
-  },
-  {
-    "id": "schema_story_map_anim_traj_method_desc",
-    "en": "Set the traveling method of the camera during the animation",
-    "zh": "设置动画过程中摄像机的移动方式"
-  },
-  {
-    "id": "schema_story_map_anim_fun",
-    "en": "Animation function",
-    "zh": "动画函数"
-  },
-  {
-    "id": "schema_story_map_anim_fun_desc",
-    "en": "Change the default animation function. Ease the start and/or end of the animation.",
-    "zh": "更改默认动画函数。缓入和缓出。"
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp",
-    "en": "Animation function exponent",
-    "zh": "动画函数-指数"
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp_desc",
-    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
-    "zh": "更改默认指数函数，这将放大或降低缓入的比率。"
-  },
-  {
-    "id": "schema_story_map_anim",
-    "en": "Map animation",
-    "zh": "地图动画"
-  },
-  {
-    "id": "schema_story_autoplay_timeout",
-    "en": "Timeout [ms]",
-    "zh": "超时 [ms]"
-  },
-  {
-    "id": "schema_story_autoplay_timeout_desc",
-    "en": "Waiting time before going to the next step.",
-    "zh": "下一步前的等待时间"
-  },
-  {
-    "id": "schema_story_autoplay_transition",
-    "en": "Transition [ms]",
-    "zh": "切换 [ms]"
-  },
-  {
-    "id": "schema_story_autoplay_transition_desc",
-    "en": "Duration of the transition between steps.",
-    "zh": "步骤切换的持续时间"
-  },
-  {
-    "id": "schema_story_autoplay",
-    "en": "Autoplay settings",
-    "zh": "自动播放设置"
-  },
-  {
-    "id": "schema_story_step_name",
-    "en": "Step name",
-    "zh": "步骤名称"
-  },
-  {
-    "id": "schema_story_screen_res",
-    "en": "Screen resolution",
-    "zh": "屏幕分辨率"
-  },
-  {
-    "id": "schema_story_step_base_layer",
-    "en": "Base layer configuration",
-    "zh": "基本层配置 "
-  },
-  {
-    "id": "schema_story_step_add_aerial",
-    "en": "Enable aerial mode for this step",
-    "zh": "为此步骤启用航拍模式 "
-  },
-  {
-    "id": "schema_story_step_add_aerial_desc",
-    "en": "The aerial mode add a high resolution aerial imagery to the map",
-    "zh": "航拍模式向地图添加高分辨率的航拍图像 "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain",
-    "en": "Enable '3d terrain' mode for this step",
-    "zh": "为此步骤启用“ 3d地形”模式 "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "zh": "“3d 地形”将使高程显示为 3 维。这在高变焦时很有用，相机倾斜。使用您的控制键和鼠标来修改俯仰和方位。"
-  },
-  {
-    "id": "schema_story_screen_res_desc",
-    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
-    "zh": "Story Map中页面的基础分辨率。它会自动缩放以适应屏幕并保留内容格式。"
-  },
-  {
-    "id": "schema_story_settings",
-    "en": "Settings",
-    "zh": "设置"
-  },
-  {
     "id": "button_legend_title",
     "en": "Legends",
     "zh": "图例"
@@ -6828,6 +6443,431 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "zh": "使用默认调色板"
+  },
+  {
+    "id": "schema_story_theme",
+    "en": "Theme",
+    "zh": "主题"
+  },
+  {
+    "id": "schema_story_theme_desc",
+    "en": "Change application and map colors scheme",
+    "zh": "更改应用程序和地图配色方案"
+  },
+  {
+    "id": "schema_story_theme_default",
+    "en": "Use the project default",
+    "zh": "使用项目默认值"
+  },
+  {
+    "id": "schema_story_theme_step",
+    "en": "Use the theme option defined in each steps",
+    "zh": "使用每个步骤中定义的主题选项"
+  },
+  {
+    "id": "schema_story_projection",
+    "en": "Projection",
+    "zh": "投影"
+  },
+  {
+    "id": "schema_story_projection_desc",
+    "en": "Change map projection",
+    "zh": "更改地图投影"
+  },
+  {
+    "id": "schema_story_projection_default",
+    "en": "Use the default projection",
+    "zh": "使用默认投影"
+  },
+  {
+    "id": "schema_story_projection_step",
+    "en": "Use the projection defined in each steps",
+    "zh": "使用每个步骤中定义的投影"
+  },
+  {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "zh": "降低不透明度前的超时时间 [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "zh": "在鼠标不活动的情况下，在降低面板和导航项目符号的不透明度之前延迟"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "zh": "提示："
+  },
+  {
+    "id": "schema_story_tips",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
+    "zh": "<p>这里列出了一些能够为读者提供流畅体验的好方法：</p><ol><li>保持简单。</li><li>建议创建简短的Story Map，以吸引读者。</li><li>为了获得良好的可读性，建议每步不超过两张幻灯片，并且在同一步骤中不超过两个图层。</li><li>图片、视频和信息图表可以作为有效且有影响力的媒介来将你的故事情景化。但是，它们不应掩盖故事的空间信息。地图应是故事的中心。</li><li>效果，过渡或3D转换会影响Story Map在慢速设备上的可读性，请谨慎使用。</li></ol>"
+  },
+  {
+    "id": "schema_story_author",
+    "en": "Author of the story",
+    "zh": "故事作者"
+  },
+  {
+    "id": "schema_story_map_pos",
+    "en": "Position of the map",
+    "zh": "地图位置"
+  },
+  {
+    "id": "schema_story_meta",
+    "en": "Metadata",
+    "zh": "元数据"
+  },
+  {
+    "id": "schema_story_org",
+    "en": "Organisation name",
+    "zh": "组织名称"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling",
+    "en": "Dashboards display mode",
+    "zh": "仪表盘显示模式"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
+    "zh": "如果选定的视图具有关联的仪表板，它应该如何呈现？"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "zh": "如果选定的视图具有关联的仪表板，它应该如何全局呈现？如果适用，将忽略步骤配置。"
+  },
+  {
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "zh": "使用仪表板默认显示选项"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "zh": "使用每个步骤中定义的显示选项"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel",
+    "zh": "打开仪表板面板"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel",
+    "zh": "关闭仪表板面板"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards",
+    "zh": "不呈现仪表板"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "zh": "图例显示模式"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "zh": "设置图例面板的显示方式。"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "zh": "设置图例面板应如何全局显示。如果适用，将忽略步骤配置。"
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "zh": "使用应用程序默认值"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "zh": "使用每个步骤中定义的显示选项"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "zh": "打开图例面板"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "zh": "关闭图例面板"
+  },
+  {
+    "id": "schema_story_pos_get",
+    "en": "Update using current map parameters",
+    "zh": "使用当前地图参数更新"
+  },
+  {
+    "id": "schema_story_slide",
+    "en": "Slide",
+    "zh": "幻灯片"
+  },
+  {
+    "id": "schema_story_slide_color",
+    "en": "Color theme",
+    "zh": "颜色主题"
+  },
+  {
+    "id": "schema_story_slide_color_bg",
+    "en": "Background color",
+    "zh": "背景颜色"
+  },
+  {
+    "id": "schema_story_slide_color_fg",
+    "en": "Text color",
+    "zh": "文本颜色"
+  },
+  {
+    "id": "schema_story_slide_config",
+    "en": "Configuration",
+    "zh": "配置"
+  },
+  {
+    "id": "schema_story_slide_layout",
+    "en": "Content layout",
+    "zh": "内容布局"
+  },
+  {
+    "id": "schema_story_slide_opacity_bg",
+    "en": "Background opacity",
+    "zh": "背景不透明度"
+  },
+  {
+    "id": "schema_story_slide_pos_z",
+    "en": "Depth (z axis)",
+    "zh": "深度（Z轴）"
+  },
+  {
+    "id": "schema_story_slide_speed",
+    "en": "Speed ratio",
+    "zh": "速度比"
+  },
+  {
+    "id": "schema_story_slides",
+    "en": "Slides",
+    "zh": "幻灯片"
+  },
+  {
+    "id": "schema_story_step",
+    "en": "Step",
+    "zh": "步骤"
+  },
+  {
+    "id": "schema_story_step_content",
+    "en": "Content",
+    "zh": "内容"
+  },
+  {
+    "id": "schema_story_step_title",
+    "en": "Title ",
+    "zh": "标题"
+  },
+  {
+    "id": "schema_story_steps",
+    "en": "Steps",
+    "zh": "步骤"
+  },
+  {
+    "id": "schema_story_steps_title",
+    "en": "Steps of the story",
+    "zh": "故事步骤"
+  },
+  {
+    "id": "schema_story_text_pos",
+    "en": "Text position",
+    "zh": "文本位置"
+  },
+  {
+    "id": "schema_story_title",
+    "en": "Story",
+    "zh": "故事"
+  },
+  {
+    "id": "schema_story_views_activate",
+    "en": "Views to activate",
+    "zh": "要激活的视图"
+  },
+  {
+    "id": "schema_story_slide_classes",
+    "en": "Slide classes",
+    "zh": "幻灯片类别"
+  },
+  {
+    "id": "schema_story_slide_classes_name",
+    "en": "Class names",
+    "zh": "类别名称"
+  },
+  {
+    "id": "schema_story_slide_allow_scroll",
+    "en": "Allow scrolling",
+    "zh": "允许滚动"
+  },
+  {
+    "id": "schema_story_slide_allow_scroll_desc",
+    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
+    "zh": "如果幻灯片内容超出范围，则会显示滚动条。"
+  },
+  {
+    "id": "schema_story_slide_base_txt_size_px",
+    "en": "Base text size in pixels",
+    "zh": "基础文字大小（以像素为单位）"
+  },
+  {
+    "id": "schema_story_slide_effects",
+    "en": "Effects",
+    "zh": "效果"
+  },
+  {
+    "id": "schema_story_slide_effect_start",
+    "en": "Start",
+    "zh": "开始"
+  },
+  {
+    "id": "schema_story_slide_effect_end",
+    "en": "End",
+    "zh": "结束"
+  },
+  {
+    "id": "schema_story_slide_effect_offset",
+    "en": "Offset",
+    "zh": "偏移"
+  },
+  {
+    "id": "schema_story_slide_effect_factor",
+    "en": "Factor",
+    "zh": "要素"
+  },
+  {
+    "id": "schema_story_slide_effect_type",
+    "en": "Type",
+    "zh": "类型"
+  },
+  {
+    "id": "schema_story_slide_name",
+    "en": "Slide name",
+    "zh": "幻灯片名称"
+  },
+  {
+    "id": "schema_story_map_anim_duration",
+    "en": "Animation duration [ms]",
+    "zh": "动画持续时间 [ms]"
+  },
+  {
+    "id": "schema_story_map_anim_duration_desc",
+    "en": "Change the total animation duration",
+    "zh": "更改动画总持续时间"
+  },
+  {
+    "id": "schema_story_map_anim_traj_method",
+    "en": "Trajectory method",
+    "zh": "轨迹法"
+  },
+  {
+    "id": "schema_story_map_anim_traj_method_desc",
+    "en": "Set the traveling method of the camera during the animation",
+    "zh": "设置动画过程中摄像机的移动方式"
+  },
+  {
+    "id": "schema_story_map_anim_fun",
+    "en": "Animation function",
+    "zh": "动画函数"
+  },
+  {
+    "id": "schema_story_map_anim_fun_desc",
+    "en": "Change the default animation function. Ease the start and/or end of the animation.",
+    "zh": "更改默认动画函数。缓入和缓出。"
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp",
+    "en": "Animation function exponent",
+    "zh": "动画函数-指数"
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp_desc",
+    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
+    "zh": "更改默认指数函数，这将放大或降低缓入的比率。"
+  },
+  {
+    "id": "schema_story_map_anim",
+    "en": "Map animation",
+    "zh": "地图动画"
+  },
+  {
+    "id": "schema_story_autoplay_timeout",
+    "en": "Timeout [ms]",
+    "zh": "超时 [ms]"
+  },
+  {
+    "id": "schema_story_autoplay_timeout_desc",
+    "en": "Waiting time before going to the next step.",
+    "zh": "下一步前的等待时间"
+  },
+  {
+    "id": "schema_story_autoplay_transition",
+    "en": "Transition [ms]",
+    "zh": "切换 [ms]"
+  },
+  {
+    "id": "schema_story_autoplay_transition_desc",
+    "en": "Duration of the transition between steps.",
+    "zh": "步骤切换的持续时间"
+  },
+  {
+    "id": "schema_story_autoplay",
+    "en": "Autoplay settings",
+    "zh": "自动播放设置"
+  },
+  {
+    "id": "schema_story_step_name",
+    "en": "Step name",
+    "zh": "步骤名称"
+  },
+  {
+    "id": "schema_story_screen_res",
+    "en": "Screen resolution",
+    "zh": "屏幕分辨率"
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "zh": "基本层配置 "
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "zh": "为此步骤启用航拍模式 "
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "zh": "航拍模式向地图添加高分辨率的航拍图像 "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "zh": "为此步骤启用“ 3d地形”模式 "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "zh": "“3d 地形”将使高程显示为 3 维。这在高变焦时很有用，相机倾斜。使用您的控制键和鼠标来修改俯仰和方位。"
+  },
+  {
+    "id": "schema_story_screen_res_desc",
+    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
+    "zh": "Story Map中页面的基础分辨率。它会自动缩放以适应屏幕并保留内容格式。"
+  },
+  {
+    "id": "schema_story_settings",
+    "en": "Settings",
+    "zh": "设置"
   },
   {
     "id": "search_placeholder",

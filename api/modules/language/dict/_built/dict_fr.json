@@ -3260,211 +3260,6 @@
     "fr": "Zoom maximum pour afficher la donnée"
   },
   {
-    "id": "schema_story_opacity_timeout",
-    "en": "Timeout before decreasing opacity [ms]",
-    "fr": "Délai avant diminution de l'opacité [ms]"
-  },
-  {
-    "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "fr": "Délai avant diminution de l'opacité des panneaux et des puces de navigation en cas d'inactivité de la souris"
-  },
-  {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "fr": "Conseils"
-  },
-  {
-    "id": "schema_story_tips",
-    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "fr": "<p>Afin d'assurer une lecture agréable de votre récit, voici une liste de bonnes pratiques que nous vous recommandons:</p><ol><li>Rester simple.</li><li>Il est préférable de créer des récits courts afin de conserver l’intérêt de votre public.</li><li>Pour une bonne lisibilité, il est recommandé de ne pas dépasser deux diapositives par étapes et de ne pas afficher plus de deux couches sur la carte durant une étape.</li><li>Les images, vidéos et infographies peuvent être des supports utiles et percutants pour contextualiser votre récit. Cependant, ils ne doivent pas occulter la composante spatiale de votre récit. Les cartes doivent être en son centre.</li><li>Les effets, transitions ou transformations 3D peuvent affecter la lisibilité de votre récit sur des appareils peu performants, utilisez-les avec parcimonie.</li></ol>"
-  },
-  {
-    "id": "schema_story_author",
-    "en": "Author of the story",
-    "fr": "Auteur de la carte narrative"
-  },
-  {
-    "id": "schema_story_map_pos",
-    "en": "Position of the map",
-    "fr": "Position de la carte"
-  },
-  {
-    "id": "schema_story_meta",
-    "en": "Metadata",
-    "fr": "Métadonées"
-  },
-  {
-    "id": "schema_story_org",
-    "en": "Organisation name",
-    "fr": "Nom de l’organisation"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling",
-    "en": "Dashboards display mode",
-    "fr": "Mode d'affichage des tableaux de bord"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
-    "fr": "Si les vues sélectionnées ont un tableau de bord associé, comment doit-il être rendu ?"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
-    "fr": "Si les vues sélectionnées ont un tableau de bord associé, comment doit-il être rendu globalement ? La configuration des étapes sera ignorée, le cas échéant."
-  },
-  {
-    "id": "schema_story_dashboard_panel_default",
-    "en": "Use the dashboard default display option",
-    "fr": "Utiliser l'option d'affichage par défaut du tableau de bord"
-  },
-  {
-    "id": "schema_story_dashboard_panel_root_default",
-    "en": "Use the display options defined in each steps",
-    "fr": "Utiliser les options d'affichage définies à chaque étape"
-  },
-  {
-    "id": "schema_story_dashboard_panel_open",
-    "en": "Open the dashboard panel",
-    "fr": "Ouvrir le panneau du tableau de bord"
-  },
-  {
-    "id": "schema_story_dashboard_panel_closed",
-    "en": "Close the dashboard panel",
-    "fr": "Fermer le panneau du tableau de bord"
-  },
-  {
-    "id": "schema_story_dashboard_panel_disabled",
-    "en": "Do not render dashboards",
-    "fr": "Ne pas afficher les tableaux de bord"
-  },
-  {
-    "id": "schema_story_legends_panel_handling",
-    "en": "Legends display mode",
-    "fr": "Mode d'affichage des légendes"
-  },
-  {
-    "id": "schema_story_legends_panel_handling_desc",
-    "en": "Set how the legend panel should be displayed.",
-    "fr": "Définissez la manière dont le panneau de légende doit être affiché."
-  },
-  {
-    "id": "schema_story_legends_panel_handling_root_desc",
-    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
-    "fr": "Définissez la manière dont le panneau de légende doit être affiché globalement. La configuration des étapes sera ignorée, le cas échéant."
-  },
-  {
-    "id": "schema_story_legends_panel_default",
-    "en": "Use the application default",
-    "fr": "Utiliser la valeur par défaut de l'application"
-  },
-  {
-    "id": "schema_story_legends_panel_root_default",
-    "en": "Use the display option defined in each steps",
-    "fr": "Utiliser l'option d'affichage définie à chaque étape"
-  },
-  {
-    "id": "schema_story_legends_panel_open",
-    "en": "Open the legends panel",
-    "fr": "Ouvrir le panneau des légendes"
-  },
-  {
-    "id": "schema_story_legends_panel_closed",
-    "en": "Close the legends panel",
-    "fr": "Fermer le panneau des légendes"
-  },
-  {
-    "id": "schema_story_pos_get",
-    "en": "Update using current map parameters",
-    "fr": "Mettre à jour avec les paramètres actuels de la carte"
-  },
-  {
-    "id": "schema_story_slide",
-    "en": "Slide",
-    "fr": "Diapositive"
-  },
-  {
-    "id": "schema_story_slide_color",
-    "en": "Color theme",
-    "fr": "Thème"
-  },
-  {
-    "id": "schema_story_slide_color_bg",
-    "en": "Background color",
-    "fr": "Couleur de l'arrière plan"
-  },
-  {
-    "id": "schema_story_slide_color_fg",
-    "en": "Text color",
-    "fr": "Couleur du texte"
-  },
-  {
-    "id": "schema_story_slide_config",
-    "en": "Configuration",
-    "fr": "Configuration"
-  },
-  {
-    "id": "schema_story_slide_layout",
-    "en": "Content layout",
-    "fr": "Disposition du contenu"
-  },
-  {
-    "id": "schema_story_slide_opacity_bg",
-    "en": "Background opacity",
-    "fr": "Opacité de l'arrière plan"
-  },
-  {
-    "id": "schema_story_slide_pos_z",
-    "en": "Depth (z axis)",
-    "fr": "Profondeur (axe z)"
-  },
-  {
-    "id": "schema_story_slide_speed",
-    "en": "Speed ratio",
-    "fr": "Vitesse de défilement"
-  },
-  {
-    "id": "schema_story_slides",
-    "en": "Slides",
-    "fr": "Diapositives"
-  },
-  {
-    "id": "schema_story_step",
-    "en": "Step",
-    "fr": "Étape"
-  },
-  {
-    "id": "schema_story_step_content",
-    "en": "Content",
-    "fr": "Contenu"
-  },
-  {
-    "id": "schema_story_step_title",
-    "en": "Title ",
-    "fr": "Titre"
-  },
-  {
-    "id": "schema_story_steps",
-    "en": "Steps",
-    "fr": "Étapes"
-  },
-  {
-    "id": "schema_story_steps_title",
-    "en": "Steps of the story",
-    "fr": "Étapes de la carte narrative"
-  },
-  {
-    "id": "schema_story_text_pos",
-    "en": "Text position",
-    "fr": "Position du texte"
-  },
-  {
-    "id": "schema_story_title",
-    "en": "Story",
-    "fr": "Récit"
-  },
-  {
     "id": "schema_style_value",
     "en": "Value",
     "fr": "Valeur"
@@ -5375,186 +5170,6 @@
     "fr": "Editeur de métadonnées pour la source de la donnée"
   },
   {
-    "id": "schema_story_views_activate",
-    "en": "Views to activate",
-    "fr": "Vues à activer"
-  },
-  {
-    "id": "schema_story_slide_classes",
-    "en": "Slide classes",
-    "fr": "Classes de diapositives"
-  },
-  {
-    "id": "schema_story_slide_classes_name",
-    "en": "Class names",
-    "fr": "Nom des classes"
-  },
-  {
-    "id": "schema_story_slide_allow_scroll",
-    "en": "Allow scrolling",
-    "fr": "Autoriser le défilement"
-  },
-  {
-    "id": "schema_story_slide_allow_scroll_desc",
-    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
-    "fr": "Si le contenu de la diapositive sort du conteneur, une barre de défilement sera affichée."
-  },
-  {
-    "id": "schema_story_slide_base_txt_size_px",
-    "en": "Base text size in pixels",
-    "fr": "Taille du texte de base en pixels"
-  },
-  {
-    "id": "schema_story_slide_effects",
-    "en": "Effects",
-    "fr": "Effets"
-  },
-  {
-    "id": "schema_story_slide_effect_start",
-    "en": "Start",
-    "fr": "Début"
-  },
-  {
-    "id": "schema_story_slide_effect_end",
-    "en": "End",
-    "fr": "Fin"
-  },
-  {
-    "id": "schema_story_slide_effect_offset",
-    "en": "Offset",
-    "fr": "Décalage"
-  },
-  {
-    "id": "schema_story_slide_effect_factor",
-    "en": "Factor",
-    "fr": "Facteur"
-  },
-  {
-    "id": "schema_story_slide_effect_type",
-    "en": "Type",
-    "fr": "Type"
-  },
-  {
-    "id": "schema_story_slide_name",
-    "en": "Slide name",
-    "fr": "Nom de la diapositive"
-  },
-  {
-    "id": "schema_story_map_anim_duration",
-    "en": "Animation duration [ms]",
-    "fr": "Durée de l'animation [ms]"
-  },
-  {
-    "id": "schema_story_map_anim_duration_desc",
-    "en": "Change the total animation duration",
-    "fr": "Modification de la durée totale de l'animation."
-  },
-  {
-    "id": "schema_story_map_anim_traj_method",
-    "en": "Trajectory method",
-    "fr": "Méthode de trajectoire"
-  },
-  {
-    "id": "schema_story_map_anim_traj_method_desc",
-    "en": "Set the traveling method of the camera during the animation",
-    "fr": "Définition de la méthode de déplacement de la caméra pendant l'animation."
-  },
-  {
-    "id": "schema_story_map_anim_fun",
-    "en": "Animation function",
-    "fr": "Fonction d'animation"
-  },
-  {
-    "id": "schema_story_map_anim_fun_desc",
-    "en": "Change the default animation function. Ease the start and/or end of the animation.",
-    "fr": "Modification de la fonction d'animation par défaut. Cela appliquera une fonction d’accélération au début et/ou à la fin de l'animation."
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp",
-    "en": "Animation function exponent",
-    "fr": "Exposant de la fonction d'animation"
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp_desc",
-    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
-    "fr": "Modification de l'exposant de la fonction d'animation. Cela amplifiera ou réduira le rythme de l'animation."
-  },
-  {
-    "id": "schema_story_map_anim",
-    "en": "Map animation",
-    "fr": "Animation de la carte"
-  },
-  {
-    "id": "schema_story_autoplay_timeout",
-    "en": "Timeout [ms]",
-    "fr": "Délai d'attente [ms]"
-  },
-  {
-    "id": "schema_story_autoplay_timeout_desc",
-    "en": "Waiting time before going to the next step.",
-    "fr": "Délai d'attente avant de passer à l'étape suivante."
-  },
-  {
-    "id": "schema_story_autoplay_transition",
-    "en": "Transition [ms]",
-    "fr": "Transition [ms]"
-  },
-  {
-    "id": "schema_story_autoplay_transition_desc",
-    "en": "Duration of the transition between steps.",
-    "fr": "Durée de la transition entre les étapes."
-  },
-  {
-    "id": "schema_story_autoplay",
-    "en": "Autoplay settings",
-    "fr": "Paramètres de lecture automatique"
-  },
-  {
-    "id": "schema_story_step_name",
-    "en": "Step name",
-    "fr": "Nom de l'étape"
-  },
-  {
-    "id": "schema_story_screen_res",
-    "en": "Screen resolution",
-    "fr": "Résolution de l'écran"
-  },
-  {
-    "id": "schema_story_step_base_layer",
-    "en": "Base layer configuration",
-    "fr": "Configuration de la couche de base"
-  },
-  {
-    "id": "schema_story_step_add_aerial",
-    "en": "Enable aerial mode for this step",
-    "fr": "Activer le mode aérien pour cette étape "
-  },
-  {
-    "id": "schema_story_step_add_aerial_desc",
-    "en": "The aerial mode add a high resolution aerial imagery to the map",
-    "fr": "Le mode aérien ajoute une imagerie aérienne haute résolution à la carte "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain",
-    "en": "Enable '3d terrain' mode for this step",
-    "fr": "Activez le mode 'terrain 3D' pour cette étape "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "fr": "Le 'terrain 3d' fera apparaître l'élévation en 3 dimensions. Ceci est utile à zoom élevé, avec la caméra inclinée. Utilisez votre touche de contrôle et votre souris pour modifier le pas et le cap."
-  },
-  {
-    "id": "schema_story_screen_res_desc",
-    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
-    "fr": "Résolution des étapes du récit. Ce dernier sera automatiquement mis à l'échelle pour s'adapter à l'écran et préserver le formatage du contenu."
-  },
-  {
-    "id": "schema_story_settings",
-    "en": "Settings",
-    "fr": "Paramètres"
-  },
-  {
     "id": "button_legend_title",
     "en": "Legends",
     "fr": "Légendes"
@@ -6828,6 +6443,431 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "fr": "Utiliser la palette par default"
+  },
+  {
+    "id": "schema_story_theme",
+    "en": "Theme",
+    "fr": "Thème"
+  },
+  {
+    "id": "schema_story_theme_desc",
+    "en": "Change application and map colors scheme",
+    "fr": "Modifier le jeu de couleurs de l'application et de la carte"
+  },
+  {
+    "id": "schema_story_theme_default",
+    "en": "Use the project default",
+    "fr": "Utiliser la valeur par défaut du projet"
+  },
+  {
+    "id": "schema_story_theme_step",
+    "en": "Use the theme option defined in each steps",
+    "fr": "Utilisez l'option de thème définie à chaque étape"
+  },
+  {
+    "id": "schema_story_projection",
+    "en": "Projection",
+    "fr": "Projection"
+  },
+  {
+    "id": "schema_story_projection_desc",
+    "en": "Change map projection",
+    "fr": "Modifier la projection cartographique"
+  },
+  {
+    "id": "schema_story_projection_default",
+    "en": "Use the default projection",
+    "fr": "Utiliser la projection par défaut"
+  },
+  {
+    "id": "schema_story_projection_step",
+    "en": "Use the projection defined in each steps",
+    "fr": "Utiliser la projection définie à chaque étape"
+  },
+  {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "fr": "Délai avant diminution de l'opacité [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "fr": "Délai avant diminution de l'opacité des panneaux et des puces de navigation en cas d'inactivité de la souris"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "fr": "Conseils"
+  },
+  {
+    "id": "schema_story_tips",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
+    "fr": "<p>Afin d'assurer une lecture agréable de votre récit, voici une liste de bonnes pratiques que nous vous recommandons:</p><ol><li>Rester simple.</li><li>Il est préférable de créer des récits courts afin de conserver l’intérêt de votre public.</li><li>Pour une bonne lisibilité, il est recommandé de ne pas dépasser deux diapositives par étapes et de ne pas afficher plus de deux couches sur la carte durant une étape.</li><li>Les images, vidéos et infographies peuvent être des supports utiles et percutants pour contextualiser votre récit. Cependant, ils ne doivent pas occulter la composante spatiale de votre récit. Les cartes doivent être en son centre.</li><li>Les effets, transitions ou transformations 3D peuvent affecter la lisibilité de votre récit sur des appareils peu performants, utilisez-les avec parcimonie.</li></ol>"
+  },
+  {
+    "id": "schema_story_author",
+    "en": "Author of the story",
+    "fr": "Auteur de la carte narrative"
+  },
+  {
+    "id": "schema_story_map_pos",
+    "en": "Position of the map",
+    "fr": "Position de la carte"
+  },
+  {
+    "id": "schema_story_meta",
+    "en": "Metadata",
+    "fr": "Métadonées"
+  },
+  {
+    "id": "schema_story_org",
+    "en": "Organisation name",
+    "fr": "Nom de l’organisation"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling",
+    "en": "Dashboards display mode",
+    "fr": "Mode d'affichage des tableaux de bord"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
+    "fr": "Si les vues sélectionnées ont un tableau de bord associé, comment doit-il être rendu ?"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "fr": "Si les vues sélectionnées ont un tableau de bord associé, comment doit-il être rendu globalement ? La configuration des étapes sera ignorée, le cas échéant."
+  },
+  {
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "fr": "Utiliser l'option d'affichage par défaut du tableau de bord"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "fr": "Utiliser les options d'affichage définies à chaque étape"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel",
+    "fr": "Ouvrir le panneau du tableau de bord"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel",
+    "fr": "Fermer le panneau du tableau de bord"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards",
+    "fr": "Ne pas afficher les tableaux de bord"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "fr": "Mode d'affichage des légendes"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "fr": "Définissez la manière dont le panneau de légende doit être affiché."
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "fr": "Définissez la manière dont le panneau de légende doit être affiché globalement. La configuration des étapes sera ignorée, le cas échéant."
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "fr": "Utiliser la valeur par défaut de l'application"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "fr": "Utiliser l'option d'affichage définie à chaque étape"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "fr": "Ouvrir le panneau des légendes"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "fr": "Fermer le panneau des légendes"
+  },
+  {
+    "id": "schema_story_pos_get",
+    "en": "Update using current map parameters",
+    "fr": "Mettre à jour avec les paramètres actuels de la carte"
+  },
+  {
+    "id": "schema_story_slide",
+    "en": "Slide",
+    "fr": "Diapositive"
+  },
+  {
+    "id": "schema_story_slide_color",
+    "en": "Color theme",
+    "fr": "Thème"
+  },
+  {
+    "id": "schema_story_slide_color_bg",
+    "en": "Background color",
+    "fr": "Couleur de l'arrière plan"
+  },
+  {
+    "id": "schema_story_slide_color_fg",
+    "en": "Text color",
+    "fr": "Couleur du texte"
+  },
+  {
+    "id": "schema_story_slide_config",
+    "en": "Configuration",
+    "fr": "Configuration"
+  },
+  {
+    "id": "schema_story_slide_layout",
+    "en": "Content layout",
+    "fr": "Disposition du contenu"
+  },
+  {
+    "id": "schema_story_slide_opacity_bg",
+    "en": "Background opacity",
+    "fr": "Opacité de l'arrière plan"
+  },
+  {
+    "id": "schema_story_slide_pos_z",
+    "en": "Depth (z axis)",
+    "fr": "Profondeur (axe z)"
+  },
+  {
+    "id": "schema_story_slide_speed",
+    "en": "Speed ratio",
+    "fr": "Vitesse de défilement"
+  },
+  {
+    "id": "schema_story_slides",
+    "en": "Slides",
+    "fr": "Diapositives"
+  },
+  {
+    "id": "schema_story_step",
+    "en": "Step",
+    "fr": "Étape"
+  },
+  {
+    "id": "schema_story_step_content",
+    "en": "Content",
+    "fr": "Contenu"
+  },
+  {
+    "id": "schema_story_step_title",
+    "en": "Title ",
+    "fr": "Titre"
+  },
+  {
+    "id": "schema_story_steps",
+    "en": "Steps",
+    "fr": "Étapes"
+  },
+  {
+    "id": "schema_story_steps_title",
+    "en": "Steps of the story",
+    "fr": "Étapes de la carte narrative"
+  },
+  {
+    "id": "schema_story_text_pos",
+    "en": "Text position",
+    "fr": "Position du texte"
+  },
+  {
+    "id": "schema_story_title",
+    "en": "Story",
+    "fr": "Récit"
+  },
+  {
+    "id": "schema_story_views_activate",
+    "en": "Views to activate",
+    "fr": "Vues à activer"
+  },
+  {
+    "id": "schema_story_slide_classes",
+    "en": "Slide classes",
+    "fr": "Classes de diapositives"
+  },
+  {
+    "id": "schema_story_slide_classes_name",
+    "en": "Class names",
+    "fr": "Nom des classes"
+  },
+  {
+    "id": "schema_story_slide_allow_scroll",
+    "en": "Allow scrolling",
+    "fr": "Autoriser le défilement"
+  },
+  {
+    "id": "schema_story_slide_allow_scroll_desc",
+    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
+    "fr": "Si le contenu de la diapositive sort du conteneur, une barre de défilement sera affichée."
+  },
+  {
+    "id": "schema_story_slide_base_txt_size_px",
+    "en": "Base text size in pixels",
+    "fr": "Taille du texte de base en pixels"
+  },
+  {
+    "id": "schema_story_slide_effects",
+    "en": "Effects",
+    "fr": "Effets"
+  },
+  {
+    "id": "schema_story_slide_effect_start",
+    "en": "Start",
+    "fr": "Début"
+  },
+  {
+    "id": "schema_story_slide_effect_end",
+    "en": "End",
+    "fr": "Fin"
+  },
+  {
+    "id": "schema_story_slide_effect_offset",
+    "en": "Offset",
+    "fr": "Décalage"
+  },
+  {
+    "id": "schema_story_slide_effect_factor",
+    "en": "Factor",
+    "fr": "Facteur"
+  },
+  {
+    "id": "schema_story_slide_effect_type",
+    "en": "Type",
+    "fr": "Type"
+  },
+  {
+    "id": "schema_story_slide_name",
+    "en": "Slide name",
+    "fr": "Nom de la diapositive"
+  },
+  {
+    "id": "schema_story_map_anim_duration",
+    "en": "Animation duration [ms]",
+    "fr": "Durée de l'animation [ms]"
+  },
+  {
+    "id": "schema_story_map_anim_duration_desc",
+    "en": "Change the total animation duration",
+    "fr": "Modification de la durée totale de l'animation."
+  },
+  {
+    "id": "schema_story_map_anim_traj_method",
+    "en": "Trajectory method",
+    "fr": "Méthode de trajectoire"
+  },
+  {
+    "id": "schema_story_map_anim_traj_method_desc",
+    "en": "Set the traveling method of the camera during the animation",
+    "fr": "Définition de la méthode de déplacement de la caméra pendant l'animation."
+  },
+  {
+    "id": "schema_story_map_anim_fun",
+    "en": "Animation function",
+    "fr": "Fonction d'animation"
+  },
+  {
+    "id": "schema_story_map_anim_fun_desc",
+    "en": "Change the default animation function. Ease the start and/or end of the animation.",
+    "fr": "Modification de la fonction d'animation par défaut. Cela appliquera une fonction d’accélération au début et/ou à la fin de l'animation."
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp",
+    "en": "Animation function exponent",
+    "fr": "Exposant de la fonction d'animation"
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp_desc",
+    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
+    "fr": "Modification de l'exposant de la fonction d'animation. Cela amplifiera ou réduira le rythme de l'animation."
+  },
+  {
+    "id": "schema_story_map_anim",
+    "en": "Map animation",
+    "fr": "Animation de la carte"
+  },
+  {
+    "id": "schema_story_autoplay_timeout",
+    "en": "Timeout [ms]",
+    "fr": "Délai d'attente [ms]"
+  },
+  {
+    "id": "schema_story_autoplay_timeout_desc",
+    "en": "Waiting time before going to the next step.",
+    "fr": "Délai d'attente avant de passer à l'étape suivante."
+  },
+  {
+    "id": "schema_story_autoplay_transition",
+    "en": "Transition [ms]",
+    "fr": "Transition [ms]"
+  },
+  {
+    "id": "schema_story_autoplay_transition_desc",
+    "en": "Duration of the transition between steps.",
+    "fr": "Durée de la transition entre les étapes."
+  },
+  {
+    "id": "schema_story_autoplay",
+    "en": "Autoplay settings",
+    "fr": "Paramètres de lecture automatique"
+  },
+  {
+    "id": "schema_story_step_name",
+    "en": "Step name",
+    "fr": "Nom de l'étape"
+  },
+  {
+    "id": "schema_story_screen_res",
+    "en": "Screen resolution",
+    "fr": "Résolution de l'écran"
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "fr": "Configuration de la couche de base"
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "fr": "Activer le mode aérien pour cette étape "
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "fr": "Le mode aérien ajoute une imagerie aérienne haute résolution à la carte "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "fr": "Activez le mode 'terrain 3D' pour cette étape "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "fr": "Le 'terrain 3d' fera apparaître l'élévation en 3 dimensions. Ceci est utile à zoom élevé, avec la caméra inclinée. Utilisez votre touche de contrôle et votre souris pour modifier le pas et le cap."
+  },
+  {
+    "id": "schema_story_screen_res_desc",
+    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
+    "fr": "Résolution des étapes du récit. Ce dernier sera automatiquement mis à l'échelle pour s'adapter à l'écran et préserver le formatage du contenu."
+  },
+  {
+    "id": "schema_story_settings",
+    "en": "Settings",
+    "fr": "Paramètres"
   },
   {
     "id": "search_placeholder",

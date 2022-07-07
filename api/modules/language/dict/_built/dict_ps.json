@@ -3260,211 +3260,6 @@
     "ps": "د ډیټا ښودلو لپاره اعظمي زوم "
   },
   {
-    "id": "schema_story_opacity_timeout",
-    "en": "Timeout before decreasing opacity [ms]",
-    "ps": "د شفافیت کمولو دمخه وخت پای [ms]"
-  },
-  {
-    "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "ps": "د موږک د غیرفعالیت په صورت کې د پینلونو او نیویګیشن ګولیو د شفافیت کمولو دمخه ځنډ"
-  },
-  {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "ps": "لارښوونې: "
-  },
-  {
-    "id": "schema_story_tips",
-    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "ps": "<p style=\";text-align:right;direction:rtl\">دلته د ښو عملونو لیست دی چې د لوستونکو لپاره بې تجربه تجربه چمتو کوي:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> دا ساده وساتئ.</li><li style=\";text-align:right;direction:rtl\"> دا غوره ده چې د لنډې کیسې نقشه جوړه کړئ ترڅو ستاسو د لیدونکو علاقه وساتي.</li><li style=\";text-align:right;direction:rtl\"> د ښه لوستلو لپاره ، سپارښتنه کیږي چې په هر مرحله کې دوه سلایډونه او په ورته مرحله کې په نقشه کې له دوه پرتونو څخه ډیر نه.</li><li style=\";text-align:right;direction:rtl\"> انځورونه ، ویډیوګانې او انفرافګرافونه ستاسو د کیسې شرایطو لپاره ګټور او اغیزمنې مینځنۍ کیدی شي. په هرصورت ، دوی باید ستاسو د کیسې ځایي برخې تر سیوري لاندې نه کړي. نقشې باید په خپل مرکز کې وي.</li><li style=\";text-align:right;direction:rtl\"> تاثیرات ، لیږدونې یا 3d بدلونونه کولی شي په ورو وسیلو کې ستاسو د کیسې نقشې لوستلو اغیزه وکړي ، په لږه اندازه یې وکاروئ.</li></ol> "
-  },
-  {
-    "id": "schema_story_author",
-    "en": "Author of the story",
-    "ps": "د تاریخچې لیکونکی"
-  },
-  {
-    "id": "schema_story_map_pos",
-    "en": "Position of the map",
-    "ps": "د نقشې ځای"
-  },
-  {
-    "id": "schema_story_meta",
-    "en": "Metadata",
-    "ps": "میتا ډیټا"
-  },
-  {
-    "id": "schema_story_org",
-    "en": "Organisation name",
-    "ps": "د سازمان نوم"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling",
-    "en": "Dashboards display mode",
-    "ps": "د ډشبورډ د ښودلو حالت"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
-    "ps": "که چیرې ټاکل شوي لیدونه اړوند ډشبورډ ولري، دا باید څنګه وړاندې شي؟"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
-    "ps": "که ټاکل شوي لیدونه یو تړلی ډشبورډ ولري، دا باید په نړیواله کچه څنګه وړاندې شي؟ د ګامونو ترتیب به له پامه غورځول شي، که د تطبیق وړ وي."
-  },
-  {
-    "id": "schema_story_dashboard_panel_default",
-    "en": "Use the dashboard default display option",
-    "ps": "د ډشبورډ ډیفالټ ښودنې اختیار وکاروئ"
-  },
-  {
-    "id": "schema_story_dashboard_panel_root_default",
-    "en": "Use the display options defined in each steps",
-    "ps": "د ښودلو اختیارونه وکاروئ چې په هر ګام کې تعریف شوي"
-  },
-  {
-    "id": "schema_story_dashboard_panel_open",
-    "en": "Open the dashboard panel",
-    "ps": "د ډشبورډ پینل خلاص کړئ"
-  },
-  {
-    "id": "schema_story_dashboard_panel_closed",
-    "en": "Close the dashboard panel",
-    "ps": "د ډشبورډ پینل بند کړئ"
-  },
-  {
-    "id": "schema_story_dashboard_panel_disabled",
-    "en": "Do not render dashboards",
-    "ps": "ډشبورډونه مه ورکوئ"
-  },
-  {
-    "id": "schema_story_legends_panel_handling",
-    "en": "Legends display mode",
-    "ps": "د لیجنډ ښودلو حالت"
-  },
-  {
-    "id": "schema_story_legends_panel_handling_desc",
-    "en": "Set how the legend panel should be displayed.",
-    "ps": "تنظیم کړئ چې څنګه د لیجنډ پینل باید ښکاره شي."
-  },
-  {
-    "id": "schema_story_legends_panel_handling_root_desc",
-    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
-    "ps": "تنظیم کړئ چې څنګه د لیجنډ پینل باید په نړیواله کچه ښکاره شي. د ګامونو ترتیب به له پامه غورځول شي، که د تطبیق وړ وي."
-  },
-  {
-    "id": "schema_story_legends_panel_default",
-    "en": "Use the application default",
-    "ps": "د غوښتنلیک ډیفالټ وکاروئ"
-  },
-  {
-    "id": "schema_story_legends_panel_root_default",
-    "en": "Use the display option defined in each steps",
-    "ps": "په هر ګام کې تعریف شوي د ښودلو اختیار وکاروئ"
-  },
-  {
-    "id": "schema_story_legends_panel_open",
-    "en": "Open the legends panel",
-    "ps": "د لیجنډ پینل خلاص کړئ"
-  },
-  {
-    "id": "schema_story_legends_panel_closed",
-    "en": "Close the legends panel",
-    "ps": "د لیجنډ پینل بند کړئ"
-  },
-  {
-    "id": "schema_story_pos_get",
-    "en": "Update using current map parameters",
-    "ps": "د اوسنۍ نقشې پارامترونه آپډیټ کړئ"
-  },
-  {
-    "id": "schema_story_slide",
-    "en": "Slide",
-    "ps": "ښوئېدل"
-  },
-  {
-    "id": "schema_story_slide_color",
-    "en": "Color theme",
-    "ps": "د شالید رنګ"
-  },
-  {
-    "id": "schema_story_slide_color_bg",
-    "en": "Background color",
-    "ps": "د شالید رنګ"
-  },
-  {
-    "id": "schema_story_slide_color_fg",
-    "en": "Text color",
-    "ps": "د متن رنګ"
-  },
-  {
-    "id": "schema_story_slide_config",
-    "en": "Configuration",
-    "ps": "عیارول"
-  },
-  {
-    "id": "schema_story_slide_layout",
-    "en": "Content layout",
-    "ps": "د منځپانګې ترتیب"
-  },
-  {
-    "id": "schema_story_slide_opacity_bg",
-    "en": "Background opacity",
-    "ps": "د شالید مکدریت"
-  },
-  {
-    "id": "schema_story_slide_pos_z",
-    "en": "Depth (z axis)",
-    "ps": "ژوروالی (Z محور)"
-  },
-  {
-    "id": "schema_story_slide_speed",
-    "en": "Speed ratio",
-    "ps": "د چټکتیا نسبت"
-  },
-  {
-    "id": "schema_story_slides",
-    "en": "Slides",
-    "ps": "ښوئېدنې"
-  },
-  {
-    "id": "schema_story_step",
-    "en": "Step",
-    "ps": "مرحله"
-  },
-  {
-    "id": "schema_story_step_content",
-    "en": "Content",
-    "ps": "منځپانګې"
-  },
-  {
-    "id": "schema_story_step_title",
-    "en": "Title ",
-    "ps": "عنوان"
-  },
-  {
-    "id": "schema_story_steps",
-    "en": "Steps",
-    "ps": "مرحلې"
-  },
-  {
-    "id": "schema_story_steps_title",
-    "en": "Steps of the story",
-    "ps": "د تاریخچې مرحلې"
-  },
-  {
-    "id": "schema_story_text_pos",
-    "en": "Text position",
-    "ps": "د متن ځای"
-  },
-  {
-    "id": "schema_story_title",
-    "en": "Story",
-    "ps": "تاریخچه"
-  },
-  {
     "id": "schema_style_value",
     "en": "Value",
     "ps": "ارزښت"
@@ -5375,186 +5170,6 @@
     "ps": "د معلوماتو سرچینې لپاره میټاټاټا اډیټر "
   },
   {
-    "id": "schema_story_views_activate",
-    "en": "Views to activate",
-    "ps": "د فعالولو لپاره نظریات "
-  },
-  {
-    "id": "schema_story_slide_classes",
-    "en": "Slide classes",
-    "ps": "د سلایډ ټولګی "
-  },
-  {
-    "id": "schema_story_slide_classes_name",
-    "en": "Class names",
-    "ps": "د ټولګي نومونه "
-  },
-  {
-    "id": "schema_story_slide_allow_scroll",
-    "en": "Allow scrolling",
-    "ps": "پرېښودو ته اجازه ورکړه "
-  },
-  {
-    "id": "schema_story_slide_allow_scroll_desc",
-    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
-    "ps": "که چیرې سلایډ مینځپانګه د کانتینر څخه بهر ځي ، نو یو سکرول بار به ښودل شي. "
-  },
-  {
-    "id": "schema_story_slide_base_txt_size_px",
-    "en": "Base text size in pixels",
-    "ps": "د متن متن اندازه په پکسل کې "
-  },
-  {
-    "id": "schema_story_slide_effects",
-    "en": "Effects",
-    "ps": "تاثیرات "
-  },
-  {
-    "id": "schema_story_slide_effect_start",
-    "en": "Start",
-    "ps": "پیل "
-  },
-  {
-    "id": "schema_story_slide_effect_end",
-    "en": "End",
-    "ps": "پای "
-  },
-  {
-    "id": "schema_story_slide_effect_offset",
-    "en": "Offset",
-    "ps": "آفیسټ "
-  },
-  {
-    "id": "schema_story_slide_effect_factor",
-    "en": "Factor",
-    "ps": "فکټور "
-  },
-  {
-    "id": "schema_story_slide_effect_type",
-    "en": "Type",
-    "ps": "ډول "
-  },
-  {
-    "id": "schema_story_slide_name",
-    "en": "Slide name",
-    "ps": "د سلایډ نوم "
-  },
-  {
-    "id": "schema_story_map_anim_duration",
-    "en": "Animation duration [ms]",
-    "ps": "د انیمیشن موده [MS] "
-  },
-  {
-    "id": "schema_story_map_anim_duration_desc",
-    "en": "Change the total animation duration",
-    "ps": "د حرکت کولو ټوله موده بدل کړئ "
-  },
-  {
-    "id": "schema_story_map_anim_traj_method",
-    "en": "Trajectory method",
-    "ps": "د تراژیدۍ میتود "
-  },
-  {
-    "id": "schema_story_map_anim_traj_method_desc",
-    "en": "Set the traveling method of the camera during the animation",
-    "ps": "د حرکت کولو پرمهال د کیمرې سفر کولو طریقه تنظیم کړئ "
-  },
-  {
-    "id": "schema_story_map_anim_fun",
-    "en": "Animation function",
-    "ps": "د حرکت کولو فن "
-  },
-  {
-    "id": "schema_story_map_anim_fun_desc",
-    "en": "Change the default animation function. Ease the start and/or end of the animation.",
-    "ps": "د ډیفالټ متحرک فنکشن بدل کړئ. د متحرکاتو پیل او / یا پای اسانه کړئ. "
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp",
-    "en": "Animation function exponent",
-    "ps": "د حرکت حرکت برخه "
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp_desc",
-    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
-    "ps": "د ډیفالټ فنکشن توکی بدل کړئ. دا به د نرمولو کچه پراخه کړي یا راټیټ کړي. "
-  },
-  {
-    "id": "schema_story_map_anim",
-    "en": "Map animation",
-    "ps": "نقشه حرکت کول "
-  },
-  {
-    "id": "schema_story_autoplay_timeout",
-    "en": "Timeout [ms]",
-    "ps": "وخت ختم [ms]"
-  },
-  {
-    "id": "schema_story_autoplay_timeout_desc",
-    "en": "Waiting time before going to the next step.",
-    "ps": "بل ګام ته د تګ دمخه د انتظار وخت."
-  },
-  {
-    "id": "schema_story_autoplay_transition",
-    "en": "Transition [ms]",
-    "ps": "لیږد [ایم ایس] "
-  },
-  {
-    "id": "schema_story_autoplay_transition_desc",
-    "en": "Duration of the transition between steps.",
-    "ps": "د مرحلو ترمینځ د لیږد موده. "
-  },
-  {
-    "id": "schema_story_autoplay",
-    "en": "Autoplay settings",
-    "ps": "د اتوماتیک تنظیمات "
-  },
-  {
-    "id": "schema_story_step_name",
-    "en": "Step name",
-    "ps": "ګام نوم "
-  },
-  {
-    "id": "schema_story_screen_res",
-    "en": "Screen resolution",
-    "ps": "د پردې هوارول "
-  },
-  {
-    "id": "schema_story_step_base_layer",
-    "en": "Base layer configuration",
-    "ps": "د بنسټ پرت ترتیب "
-  },
-  {
-    "id": "schema_story_step_add_aerial",
-    "en": "Enable aerial mode for this step",
-    "ps": "د دې مرحلې لپاره هوایی حالت فعال کړئ "
-  },
-  {
-    "id": "schema_story_step_add_aerial_desc",
-    "en": "The aerial mode add a high resolution aerial imagery to the map",
-    "ps": "هوایی حالت په نقشه کې د لوړ ریزولوشن هوایی عکس العمل اضافه کوي "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain",
-    "en": "Enable '3d terrain' mode for this step",
-    "ps": "د دې مرحلې لپاره د '3d خاورې' حالت فعال کړئ "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "ps": "'3d خاوره' به لوړوالی په 3 ابعادو کې څرګند کړي. دا په لوړ زوم کې ګټور دی، د کیمرې سره ټیک شوی. خپل د کنټرول کیلي او خپل موږک وکاروئ د پچ او بییرنګ بدلولو لپاره."
-  },
-  {
-    "id": "schema_story_screen_res_desc",
-    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
-    "ps": "د کیسې نقشې پر مهال د پا ofې اساس حل. دا به په اتوماتيک ډول د سکرین فټ کولو لپاره اندازه کړي او د مینځپانګو جوړښت خوندي کړي. "
-  },
-  {
-    "id": "schema_story_settings",
-    "en": "Settings",
-    "ps": "امستنې "
-  },
-  {
     "id": "button_legend_title",
     "en": "Legends",
     "ps": "کنډکونه "
@@ -6828,6 +6443,431 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "ps": "د تلواله پیلیټ وکاروه "
+  },
+  {
+    "id": "schema_story_theme",
+    "en": "Theme",
+    "ps": "موضوع"
+  },
+  {
+    "id": "schema_story_theme_desc",
+    "en": "Change application and map colors scheme",
+    "ps": "د غوښتنلیک او نقشې رنګ سکیم بدل کړئ"
+  },
+  {
+    "id": "schema_story_theme_default",
+    "en": "Use the project default",
+    "ps": "د پروژې ډیفالټ وکاروئ"
+  },
+  {
+    "id": "schema_story_theme_step",
+    "en": "Use the theme option defined in each steps",
+    "ps": "د موضوع انتخاب وکاروئ چې په هر ګام کې تعریف شوي"
+  },
+  {
+    "id": "schema_story_projection",
+    "en": "Projection",
+    "ps": "پروجیکشن"
+  },
+  {
+    "id": "schema_story_projection_desc",
+    "en": "Change map projection",
+    "ps": "د نقشې پروجیکشن بدل کړئ"
+  },
+  {
+    "id": "schema_story_projection_default",
+    "en": "Use the default projection",
+    "ps": "د ډیفالټ پروجیکشن وکاروئ"
+  },
+  {
+    "id": "schema_story_projection_step",
+    "en": "Use the projection defined in each steps",
+    "ps": "په هر ګام کې تعریف شوي پروجیکشن وکاروئ"
+  },
+  {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "ps": "د شفافیت کمولو دمخه وخت پای [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "ps": "د موږک د غیرفعالیت په صورت کې د پینلونو او نیویګیشن ګولیو د شفافیت کمولو دمخه ځنډ"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "ps": "لارښوونې: "
+  },
+  {
+    "id": "schema_story_tips",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
+    "ps": "<p style=\";text-align:right;direction:rtl\">دلته د ښو عملونو لیست دی چې د لوستونکو لپاره بې تجربه تجربه چمتو کوي:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> دا ساده وساتئ.</li><li style=\";text-align:right;direction:rtl\"> دا غوره ده چې د لنډې کیسې نقشه جوړه کړئ ترڅو ستاسو د لیدونکو علاقه وساتي.</li><li style=\";text-align:right;direction:rtl\"> د ښه لوستلو لپاره ، سپارښتنه کیږي چې په هر مرحله کې دوه سلایډونه او په ورته مرحله کې په نقشه کې له دوه پرتونو څخه ډیر نه.</li><li style=\";text-align:right;direction:rtl\"> انځورونه ، ویډیوګانې او انفرافګرافونه ستاسو د کیسې شرایطو لپاره ګټور او اغیزمنې مینځنۍ کیدی شي. په هرصورت ، دوی باید ستاسو د کیسې ځایي برخې تر سیوري لاندې نه کړي. نقشې باید په خپل مرکز کې وي.</li><li style=\";text-align:right;direction:rtl\"> تاثیرات ، لیږدونې یا 3d بدلونونه کولی شي په ورو وسیلو کې ستاسو د کیسې نقشې لوستلو اغیزه وکړي ، په لږه اندازه یې وکاروئ.</li></ol> "
+  },
+  {
+    "id": "schema_story_author",
+    "en": "Author of the story",
+    "ps": "د تاریخچې لیکونکی"
+  },
+  {
+    "id": "schema_story_map_pos",
+    "en": "Position of the map",
+    "ps": "د نقشې ځای"
+  },
+  {
+    "id": "schema_story_meta",
+    "en": "Metadata",
+    "ps": "میتا ډیټا"
+  },
+  {
+    "id": "schema_story_org",
+    "en": "Organisation name",
+    "ps": "د سازمان نوم"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling",
+    "en": "Dashboards display mode",
+    "ps": "د ډشبورډ د ښودلو حالت"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
+    "ps": "که چیرې ټاکل شوي لیدونه اړوند ډشبورډ ولري، دا باید څنګه وړاندې شي؟"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "ps": "که ټاکل شوي لیدونه یو تړلی ډشبورډ ولري، دا باید په نړیواله کچه څنګه وړاندې شي؟ د ګامونو ترتیب به له پامه غورځول شي، که د تطبیق وړ وي."
+  },
+  {
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "ps": "د ډشبورډ ډیفالټ ښودنې اختیار وکاروئ"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "ps": "د ښودلو اختیارونه وکاروئ چې په هر ګام کې تعریف شوي"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel",
+    "ps": "د ډشبورډ پینل خلاص کړئ"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel",
+    "ps": "د ډشبورډ پینل بند کړئ"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards",
+    "ps": "ډشبورډونه مه ورکوئ"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "ps": "د لیجنډ ښودلو حالت"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "ps": "تنظیم کړئ چې څنګه د لیجنډ پینل باید ښکاره شي."
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "ps": "تنظیم کړئ چې څنګه د لیجنډ پینل باید په نړیواله کچه ښکاره شي. د ګامونو ترتیب به له پامه غورځول شي، که د تطبیق وړ وي."
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "ps": "د غوښتنلیک ډیفالټ وکاروئ"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "ps": "په هر ګام کې تعریف شوي د ښودلو اختیار وکاروئ"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "ps": "د لیجنډ پینل خلاص کړئ"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "ps": "د لیجنډ پینل بند کړئ"
+  },
+  {
+    "id": "schema_story_pos_get",
+    "en": "Update using current map parameters",
+    "ps": "د اوسنۍ نقشې پارامترونه آپډیټ کړئ"
+  },
+  {
+    "id": "schema_story_slide",
+    "en": "Slide",
+    "ps": "ښوئېدل"
+  },
+  {
+    "id": "schema_story_slide_color",
+    "en": "Color theme",
+    "ps": "د شالید رنګ"
+  },
+  {
+    "id": "schema_story_slide_color_bg",
+    "en": "Background color",
+    "ps": "د شالید رنګ"
+  },
+  {
+    "id": "schema_story_slide_color_fg",
+    "en": "Text color",
+    "ps": "د متن رنګ"
+  },
+  {
+    "id": "schema_story_slide_config",
+    "en": "Configuration",
+    "ps": "عیارول"
+  },
+  {
+    "id": "schema_story_slide_layout",
+    "en": "Content layout",
+    "ps": "د منځپانګې ترتیب"
+  },
+  {
+    "id": "schema_story_slide_opacity_bg",
+    "en": "Background opacity",
+    "ps": "د شالید مکدریت"
+  },
+  {
+    "id": "schema_story_slide_pos_z",
+    "en": "Depth (z axis)",
+    "ps": "ژوروالی (Z محور)"
+  },
+  {
+    "id": "schema_story_slide_speed",
+    "en": "Speed ratio",
+    "ps": "د چټکتیا نسبت"
+  },
+  {
+    "id": "schema_story_slides",
+    "en": "Slides",
+    "ps": "ښوئېدنې"
+  },
+  {
+    "id": "schema_story_step",
+    "en": "Step",
+    "ps": "مرحله"
+  },
+  {
+    "id": "schema_story_step_content",
+    "en": "Content",
+    "ps": "منځپانګې"
+  },
+  {
+    "id": "schema_story_step_title",
+    "en": "Title ",
+    "ps": "عنوان"
+  },
+  {
+    "id": "schema_story_steps",
+    "en": "Steps",
+    "ps": "مرحلې"
+  },
+  {
+    "id": "schema_story_steps_title",
+    "en": "Steps of the story",
+    "ps": "د تاریخچې مرحلې"
+  },
+  {
+    "id": "schema_story_text_pos",
+    "en": "Text position",
+    "ps": "د متن ځای"
+  },
+  {
+    "id": "schema_story_title",
+    "en": "Story",
+    "ps": "تاریخچه"
+  },
+  {
+    "id": "schema_story_views_activate",
+    "en": "Views to activate",
+    "ps": "د فعالولو لپاره نظریات "
+  },
+  {
+    "id": "schema_story_slide_classes",
+    "en": "Slide classes",
+    "ps": "د سلایډ ټولګی "
+  },
+  {
+    "id": "schema_story_slide_classes_name",
+    "en": "Class names",
+    "ps": "د ټولګي نومونه "
+  },
+  {
+    "id": "schema_story_slide_allow_scroll",
+    "en": "Allow scrolling",
+    "ps": "پرېښودو ته اجازه ورکړه "
+  },
+  {
+    "id": "schema_story_slide_allow_scroll_desc",
+    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
+    "ps": "که چیرې سلایډ مینځپانګه د کانتینر څخه بهر ځي ، نو یو سکرول بار به ښودل شي. "
+  },
+  {
+    "id": "schema_story_slide_base_txt_size_px",
+    "en": "Base text size in pixels",
+    "ps": "د متن متن اندازه په پکسل کې "
+  },
+  {
+    "id": "schema_story_slide_effects",
+    "en": "Effects",
+    "ps": "تاثیرات "
+  },
+  {
+    "id": "schema_story_slide_effect_start",
+    "en": "Start",
+    "ps": "پیل "
+  },
+  {
+    "id": "schema_story_slide_effect_end",
+    "en": "End",
+    "ps": "پای "
+  },
+  {
+    "id": "schema_story_slide_effect_offset",
+    "en": "Offset",
+    "ps": "آفیسټ "
+  },
+  {
+    "id": "schema_story_slide_effect_factor",
+    "en": "Factor",
+    "ps": "فکټور "
+  },
+  {
+    "id": "schema_story_slide_effect_type",
+    "en": "Type",
+    "ps": "ډول "
+  },
+  {
+    "id": "schema_story_slide_name",
+    "en": "Slide name",
+    "ps": "د سلایډ نوم "
+  },
+  {
+    "id": "schema_story_map_anim_duration",
+    "en": "Animation duration [ms]",
+    "ps": "د انیمیشن موده [MS] "
+  },
+  {
+    "id": "schema_story_map_anim_duration_desc",
+    "en": "Change the total animation duration",
+    "ps": "د حرکت کولو ټوله موده بدل کړئ "
+  },
+  {
+    "id": "schema_story_map_anim_traj_method",
+    "en": "Trajectory method",
+    "ps": "د تراژیدۍ میتود "
+  },
+  {
+    "id": "schema_story_map_anim_traj_method_desc",
+    "en": "Set the traveling method of the camera during the animation",
+    "ps": "د حرکت کولو پرمهال د کیمرې سفر کولو طریقه تنظیم کړئ "
+  },
+  {
+    "id": "schema_story_map_anim_fun",
+    "en": "Animation function",
+    "ps": "د حرکت کولو فن "
+  },
+  {
+    "id": "schema_story_map_anim_fun_desc",
+    "en": "Change the default animation function. Ease the start and/or end of the animation.",
+    "ps": "د ډیفالټ متحرک فنکشن بدل کړئ. د متحرکاتو پیل او / یا پای اسانه کړئ. "
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp",
+    "en": "Animation function exponent",
+    "ps": "د حرکت حرکت برخه "
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp_desc",
+    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
+    "ps": "د ډیفالټ فنکشن توکی بدل کړئ. دا به د نرمولو کچه پراخه کړي یا راټیټ کړي. "
+  },
+  {
+    "id": "schema_story_map_anim",
+    "en": "Map animation",
+    "ps": "نقشه حرکت کول "
+  },
+  {
+    "id": "schema_story_autoplay_timeout",
+    "en": "Timeout [ms]",
+    "ps": "وخت ختم [ms]"
+  },
+  {
+    "id": "schema_story_autoplay_timeout_desc",
+    "en": "Waiting time before going to the next step.",
+    "ps": "بل ګام ته د تګ دمخه د انتظار وخت."
+  },
+  {
+    "id": "schema_story_autoplay_transition",
+    "en": "Transition [ms]",
+    "ps": "لیږد [ایم ایس] "
+  },
+  {
+    "id": "schema_story_autoplay_transition_desc",
+    "en": "Duration of the transition between steps.",
+    "ps": "د مرحلو ترمینځ د لیږد موده. "
+  },
+  {
+    "id": "schema_story_autoplay",
+    "en": "Autoplay settings",
+    "ps": "د اتوماتیک تنظیمات "
+  },
+  {
+    "id": "schema_story_step_name",
+    "en": "Step name",
+    "ps": "ګام نوم "
+  },
+  {
+    "id": "schema_story_screen_res",
+    "en": "Screen resolution",
+    "ps": "د پردې هوارول "
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "ps": "د بنسټ پرت ترتیب "
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "ps": "د دې مرحلې لپاره هوایی حالت فعال کړئ "
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "ps": "هوایی حالت په نقشه کې د لوړ ریزولوشن هوایی عکس العمل اضافه کوي "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "ps": "د دې مرحلې لپاره د '3d خاورې' حالت فعال کړئ "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "ps": "'3d خاوره' به لوړوالی په 3 ابعادو کې څرګند کړي. دا په لوړ زوم کې ګټور دی، د کیمرې سره ټیک شوی. خپل د کنټرول کیلي او خپل موږک وکاروئ د پچ او بییرنګ بدلولو لپاره."
+  },
+  {
+    "id": "schema_story_screen_res_desc",
+    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
+    "ps": "د کیسې نقشې پر مهال د پا ofې اساس حل. دا به په اتوماتيک ډول د سکرین فټ کولو لپاره اندازه کړي او د مینځپانګو جوړښت خوندي کړي. "
+  },
+  {
+    "id": "schema_story_settings",
+    "en": "Settings",
+    "ps": "امستنې "
   },
   {
     "id": "search_placeholder",

@@ -3260,211 +3260,6 @@
     "ru": "Максимальный масштаб для отображения данных "
   },
   {
-    "id": "schema_story_opacity_timeout",
-    "en": "Timeout before decreasing opacity [ms]",
-    "ru": "Тайм-аут до уменьшения непрозрачности [мс]"
-  },
-  {
-    "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "ru": "Задержка перед уменьшением непрозрачности панелей и маркеров навигации в случае бездействия мыши"
-  },
-  {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "ru": "Подсказки: "
-  },
-  {
-    "id": "schema_story_tips",
-    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "ru": "<p>Вот список передовых практик, которые помогут читателям беспрепятственно работать:</p><ol><li> Будь проще.</li><li> Лучше создавать карты рассказов, чтобы поддерживать интерес аудитории.</li><li> Для удобства чтения рекомендуется не превышать двух слайдов на шаг и более двух слоев на карте за один шаг.</li><li> Изображения, видео и инфографика могут быть полезными и эффективными средствами для контекстуализации вашей истории. Однако они не должны заслонять пространственную составляющую вашего рассказа. Карты должны быть в центре.</li><li> Эффекты, переходы или трехмерные преобразования могут повлиять на читаемость вашей карты-истории на медленных устройствах, поэтому используйте их экономно.</li></ol> "
-  },
-  {
-    "id": "schema_story_author",
-    "en": "Author of the story",
-    "ru": "Autor del mapa narrativo"
-  },
-  {
-    "id": "schema_story_map_pos",
-    "en": "Position of the map",
-    "ru": "Положение карты "
-  },
-  {
-    "id": "schema_story_meta",
-    "en": "Metadata",
-    "ru": "Метаданные "
-  },
-  {
-    "id": "schema_story_org",
-    "en": "Organisation name",
-    "ru": "Название организации "
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling",
-    "en": "Dashboards display mode",
-    "ru": "Режим отображения дашбордов"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
-    "ru": "Если выбранные представления имеют связанную панель мониторинга, как ее следует отображать?"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
-    "ru": "Если выбранные представления имеют связанную панель мониторинга, как они должны отображаться глобально? Конфигурация шагов будет проигнорирована, если применимо."
-  },
-  {
-    "id": "schema_story_dashboard_panel_default",
-    "en": "Use the dashboard default display option",
-    "ru": "Использовать параметр отображения панели мониторинга по умолчанию"
-  },
-  {
-    "id": "schema_story_dashboard_panel_root_default",
-    "en": "Use the display options defined in each steps",
-    "ru": "Используйте параметры отображения, определенные на каждом этапе"
-  },
-  {
-    "id": "schema_story_dashboard_panel_open",
-    "en": "Open the dashboard panel",
-    "ru": "Откройте панель управления"
-  },
-  {
-    "id": "schema_story_dashboard_panel_closed",
-    "en": "Close the dashboard panel",
-    "ru": "Закройте панель приборов"
-  },
-  {
-    "id": "schema_story_dashboard_panel_disabled",
-    "en": "Do not render dashboards",
-    "ru": "Не отображать дашборды"
-  },
-  {
-    "id": "schema_story_legends_panel_handling",
-    "en": "Legends display mode",
-    "ru": "Режим отображения легенд"
-  },
-  {
-    "id": "schema_story_legends_panel_handling_desc",
-    "en": "Set how the legend panel should be displayed.",
-    "ru": "Установите способ отображения панели легенды."
-  },
-  {
-    "id": "schema_story_legends_panel_handling_root_desc",
-    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
-    "ru": "Установите глобальное отображение панели легенды. Конфигурация шагов будет проигнорирована, если применимо."
-  },
-  {
-    "id": "schema_story_legends_panel_default",
-    "en": "Use the application default",
-    "ru": "Использовать приложение по умолчанию"
-  },
-  {
-    "id": "schema_story_legends_panel_root_default",
-    "en": "Use the display option defined in each steps",
-    "ru": "Используйте параметр отображения, определенный на каждом этапе"
-  },
-  {
-    "id": "schema_story_legends_panel_open",
-    "en": "Open the legends panel",
-    "ru": "Откройте панель легенд"
-  },
-  {
-    "id": "schema_story_legends_panel_closed",
-    "en": "Close the legends panel",
-    "ru": "Закройте панель легенд"
-  },
-  {
-    "id": "schema_story_pos_get",
-    "en": "Update using current map parameters",
-    "ru": "Обновить с использованием текущих параметров карты "
-  },
-  {
-    "id": "schema_story_slide",
-    "en": "Slide",
-    "ru": "Горка "
-  },
-  {
-    "id": "schema_story_slide_color",
-    "en": "Color theme",
-    "ru": "Цветовая тема "
-  },
-  {
-    "id": "schema_story_slide_color_bg",
-    "en": "Background color",
-    "ru": "Фоновый цвет "
-  },
-  {
-    "id": "schema_story_slide_color_fg",
-    "en": "Text color",
-    "ru": "Цвет текста "
-  },
-  {
-    "id": "schema_story_slide_config",
-    "en": "Configuration",
-    "ru": "Конфигурация "
-  },
-  {
-    "id": "schema_story_slide_layout",
-    "en": "Content layout",
-    "ru": "Макет содержания "
-  },
-  {
-    "id": "schema_story_slide_opacity_bg",
-    "en": "Background opacity",
-    "ru": "Непрозрачность фона "
-  },
-  {
-    "id": "schema_story_slide_pos_z",
-    "en": "Depth (z axis)",
-    "ru": "Глубина (ось z) "
-  },
-  {
-    "id": "schema_story_slide_speed",
-    "en": "Speed ratio",
-    "ru": "Коэффициент скорости "
-  },
-  {
-    "id": "schema_story_slides",
-    "en": "Slides",
-    "ru": "Слайды "
-  },
-  {
-    "id": "schema_story_step",
-    "en": "Step",
-    "ru": "Шаг "
-  },
-  {
-    "id": "schema_story_step_content",
-    "en": "Content",
-    "ru": "Содержание "
-  },
-  {
-    "id": "schema_story_step_title",
-    "en": "Title ",
-    "ru": "Заголовок "
-  },
-  {
-    "id": "schema_story_steps",
-    "en": "Steps",
-    "ru": "Шаги "
-  },
-  {
-    "id": "schema_story_steps_title",
-    "en": "Steps of the story",
-    "ru": "Шаги истории "
-  },
-  {
-    "id": "schema_story_text_pos",
-    "en": "Text position",
-    "ru": "Положение текста "
-  },
-  {
-    "id": "schema_story_title",
-    "en": "Story",
-    "ru": "История "
-  },
-  {
     "id": "schema_style_value",
     "en": "Value",
     "ru": "Ценить "
@@ -5375,186 +5170,6 @@
     "ru": "Редактор метаданных для источника данных "
   },
   {
-    "id": "schema_story_views_activate",
-    "en": "Views to activate",
-    "ru": "Просмотры для активации "
-  },
-  {
-    "id": "schema_story_slide_classes",
-    "en": "Slide classes",
-    "ru": "Слайд-классы "
-  },
-  {
-    "id": "schema_story_slide_classes_name",
-    "en": "Class names",
-    "ru": "Имена классов "
-  },
-  {
-    "id": "schema_story_slide_allow_scroll",
-    "en": "Allow scrolling",
-    "ru": "Разрешить прокрутку "
-  },
-  {
-    "id": "schema_story_slide_allow_scroll_desc",
-    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
-    "ru": "Если содержимое слайда выходит за пределы контейнера, отображается полоса прокрутки. "
-  },
-  {
-    "id": "schema_story_slide_base_txt_size_px",
-    "en": "Base text size in pixels",
-    "ru": "Базовый размер текста в пикселях "
-  },
-  {
-    "id": "schema_story_slide_effects",
-    "en": "Effects",
-    "ru": "Последствия "
-  },
-  {
-    "id": "schema_story_slide_effect_start",
-    "en": "Start",
-    "ru": "Начинать "
-  },
-  {
-    "id": "schema_story_slide_effect_end",
-    "en": "End",
-    "ru": "Конец "
-  },
-  {
-    "id": "schema_story_slide_effect_offset",
-    "en": "Offset",
-    "ru": "Компенсировать "
-  },
-  {
-    "id": "schema_story_slide_effect_factor",
-    "en": "Factor",
-    "ru": "Фактор "
-  },
-  {
-    "id": "schema_story_slide_effect_type",
-    "en": "Type",
-    "ru": "Тип "
-  },
-  {
-    "id": "schema_story_slide_name",
-    "en": "Slide name",
-    "ru": "Название слайда "
-  },
-  {
-    "id": "schema_story_map_anim_duration",
-    "en": "Animation duration [ms]",
-    "ru": "Продолжительность анимации [мс] "
-  },
-  {
-    "id": "schema_story_map_anim_duration_desc",
-    "en": "Change the total animation duration",
-    "ru": "Изменить общую продолжительность анимации "
-  },
-  {
-    "id": "schema_story_map_anim_traj_method",
-    "en": "Trajectory method",
-    "ru": "Метод траектории "
-  },
-  {
-    "id": "schema_story_map_anim_traj_method_desc",
-    "en": "Set the traveling method of the camera during the animation",
-    "ru": "Установите способ передвижения камеры во время анимации "
-  },
-  {
-    "id": "schema_story_map_anim_fun",
-    "en": "Animation function",
-    "ru": "Функция анимации "
-  },
-  {
-    "id": "schema_story_map_anim_fun_desc",
-    "en": "Change the default animation function. Ease the start and/or end of the animation.",
-    "ru": "Измените функцию анимации по умолчанию. Упростите начало и / или конец анимации. "
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp",
-    "en": "Animation function exponent",
-    "ru": "Показатель функции анимации "
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp_desc",
-    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
-    "ru": "Измените показатель функции по умолчанию. Это усилит или снизит скорость ослабления. "
-  },
-  {
-    "id": "schema_story_map_anim",
-    "en": "Map animation",
-    "ru": "Анимация карты "
-  },
-  {
-    "id": "schema_story_autoplay_timeout",
-    "en": "Timeout [ms]",
-    "ru": "Тайм-аут [мс]"
-  },
-  {
-    "id": "schema_story_autoplay_timeout_desc",
-    "en": "Waiting time before going to the next step.",
-    "ru": "Время ожидания перед переходом к следующему шагу."
-  },
-  {
-    "id": "schema_story_autoplay_transition",
-    "en": "Transition [ms]",
-    "ru": "Переход [мс] "
-  },
-  {
-    "id": "schema_story_autoplay_transition_desc",
-    "en": "Duration of the transition between steps.",
-    "ru": "Продолжительность перехода между шагами. "
-  },
-  {
-    "id": "schema_story_autoplay",
-    "en": "Autoplay settings",
-    "ru": "Настройки автозапуска "
-  },
-  {
-    "id": "schema_story_step_name",
-    "en": "Step name",
-    "ru": "Название шага "
-  },
-  {
-    "id": "schema_story_screen_res",
-    "en": "Screen resolution",
-    "ru": "Разрешение экрана "
-  },
-  {
-    "id": "schema_story_step_base_layer",
-    "en": "Base layer configuration",
-    "ru": "Конфигурация базового слоя "
-  },
-  {
-    "id": "schema_story_step_add_aerial",
-    "en": "Enable aerial mode for this step",
-    "ru": "Включите воздушный режим для этого шага "
-  },
-  {
-    "id": "schema_story_step_add_aerial_desc",
-    "en": "The aerial mode add a high resolution aerial imagery to the map",
-    "ru": "Аэрофотоснимок добавляет на карту аэрофотоснимки высокого разрешения. "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain",
-    "en": "Enable '3d terrain' mode for this step",
-    "ru": "Включите режим 3D Terrain для этого шага "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "ru": "«Трехмерный ландшафт» будет отображать высоту в 3-х измерениях. Это полезно при большом увеличении, когда камера наклонена. Используйте клавишу управления и мышь, чтобы изменить угол наклона и азимут."
-  },
-  {
-    "id": "schema_story_screen_res_desc",
-    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
-    "ru": "Базовое разрешение страницы во время карты-истории. Он автоматически масштабируется по размеру экрана и сохраняет форматирование содержимого. "
-  },
-  {
-    "id": "schema_story_settings",
-    "en": "Settings",
-    "ru": "Настройки "
-  },
-  {
     "id": "button_legend_title",
     "en": "Legends",
     "ru": "Легенды "
@@ -6828,6 +6443,431 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "ru": "Использовать палитру по умолчанию "
+  },
+  {
+    "id": "schema_story_theme",
+    "en": "Theme",
+    "ru": "Тема"
+  },
+  {
+    "id": "schema_story_theme_desc",
+    "en": "Change application and map colors scheme",
+    "ru": "Изменить цветовую схему приложения и карты"
+  },
+  {
+    "id": "schema_story_theme_default",
+    "en": "Use the project default",
+    "ru": "Использовать проект по умолчанию"
+  },
+  {
+    "id": "schema_story_theme_step",
+    "en": "Use the theme option defined in each steps",
+    "ru": "Используйте параметр темы, определенный в каждом шаге"
+  },
+  {
+    "id": "schema_story_projection",
+    "en": "Projection",
+    "ru": "Проекция"
+  },
+  {
+    "id": "schema_story_projection_desc",
+    "en": "Change map projection",
+    "ru": "Изменить проекцию карты"
+  },
+  {
+    "id": "schema_story_projection_default",
+    "en": "Use the default projection",
+    "ru": "Использовать проекцию по умолчанию"
+  },
+  {
+    "id": "schema_story_projection_step",
+    "en": "Use the projection defined in each steps",
+    "ru": "Используйте проекцию, определенную на каждом шаге"
+  },
+  {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "ru": "Тайм-аут до уменьшения непрозрачности [мс]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "ru": "Задержка перед уменьшением непрозрачности панелей и маркеров навигации в случае бездействия мыши"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "ru": "Подсказки: "
+  },
+  {
+    "id": "schema_story_tips",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
+    "ru": "<p>Вот список передовых практик, которые помогут читателям беспрепятственно работать:</p><ol><li> Будь проще.</li><li> Лучше создавать карты рассказов, чтобы поддерживать интерес аудитории.</li><li> Для удобства чтения рекомендуется не превышать двух слайдов на шаг и более двух слоев на карте за один шаг.</li><li> Изображения, видео и инфографика могут быть полезными и эффективными средствами для контекстуализации вашей истории. Однако они не должны заслонять пространственную составляющую вашего рассказа. Карты должны быть в центре.</li><li> Эффекты, переходы или трехмерные преобразования могут повлиять на читаемость вашей карты-истории на медленных устройствах, поэтому используйте их экономно.</li></ol> "
+  },
+  {
+    "id": "schema_story_author",
+    "en": "Author of the story",
+    "ru": "Autor del mapa narrativo"
+  },
+  {
+    "id": "schema_story_map_pos",
+    "en": "Position of the map",
+    "ru": "Положение карты "
+  },
+  {
+    "id": "schema_story_meta",
+    "en": "Metadata",
+    "ru": "Метаданные "
+  },
+  {
+    "id": "schema_story_org",
+    "en": "Organisation name",
+    "ru": "Название организации "
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling",
+    "en": "Dashboards display mode",
+    "ru": "Режим отображения дашбордов"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
+    "ru": "Если выбранные представления имеют связанную панель мониторинга, как ее следует отображать?"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "ru": "Если выбранные представления имеют связанную панель мониторинга, как они должны отображаться глобально? Конфигурация шагов будет проигнорирована, если применимо."
+  },
+  {
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "ru": "Использовать параметр отображения панели мониторинга по умолчанию"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "ru": "Используйте параметры отображения, определенные на каждом этапе"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel",
+    "ru": "Откройте панель управления"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel",
+    "ru": "Закройте панель приборов"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards",
+    "ru": "Не отображать дашборды"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "ru": "Режим отображения легенд"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "ru": "Установите способ отображения панели легенды."
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "ru": "Установите глобальное отображение панели легенды. Конфигурация шагов будет проигнорирована, если применимо."
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "ru": "Использовать приложение по умолчанию"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "ru": "Используйте параметр отображения, определенный на каждом этапе"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "ru": "Откройте панель легенд"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "ru": "Закройте панель легенд"
+  },
+  {
+    "id": "schema_story_pos_get",
+    "en": "Update using current map parameters",
+    "ru": "Обновить с использованием текущих параметров карты "
+  },
+  {
+    "id": "schema_story_slide",
+    "en": "Slide",
+    "ru": "Горка "
+  },
+  {
+    "id": "schema_story_slide_color",
+    "en": "Color theme",
+    "ru": "Цветовая тема "
+  },
+  {
+    "id": "schema_story_slide_color_bg",
+    "en": "Background color",
+    "ru": "Фоновый цвет "
+  },
+  {
+    "id": "schema_story_slide_color_fg",
+    "en": "Text color",
+    "ru": "Цвет текста "
+  },
+  {
+    "id": "schema_story_slide_config",
+    "en": "Configuration",
+    "ru": "Конфигурация "
+  },
+  {
+    "id": "schema_story_slide_layout",
+    "en": "Content layout",
+    "ru": "Макет содержания "
+  },
+  {
+    "id": "schema_story_slide_opacity_bg",
+    "en": "Background opacity",
+    "ru": "Непрозрачность фона "
+  },
+  {
+    "id": "schema_story_slide_pos_z",
+    "en": "Depth (z axis)",
+    "ru": "Глубина (ось z) "
+  },
+  {
+    "id": "schema_story_slide_speed",
+    "en": "Speed ratio",
+    "ru": "Коэффициент скорости "
+  },
+  {
+    "id": "schema_story_slides",
+    "en": "Slides",
+    "ru": "Слайды "
+  },
+  {
+    "id": "schema_story_step",
+    "en": "Step",
+    "ru": "Шаг "
+  },
+  {
+    "id": "schema_story_step_content",
+    "en": "Content",
+    "ru": "Содержание "
+  },
+  {
+    "id": "schema_story_step_title",
+    "en": "Title ",
+    "ru": "Заголовок "
+  },
+  {
+    "id": "schema_story_steps",
+    "en": "Steps",
+    "ru": "Шаги "
+  },
+  {
+    "id": "schema_story_steps_title",
+    "en": "Steps of the story",
+    "ru": "Шаги истории "
+  },
+  {
+    "id": "schema_story_text_pos",
+    "en": "Text position",
+    "ru": "Положение текста "
+  },
+  {
+    "id": "schema_story_title",
+    "en": "Story",
+    "ru": "История "
+  },
+  {
+    "id": "schema_story_views_activate",
+    "en": "Views to activate",
+    "ru": "Просмотры для активации "
+  },
+  {
+    "id": "schema_story_slide_classes",
+    "en": "Slide classes",
+    "ru": "Слайд-классы "
+  },
+  {
+    "id": "schema_story_slide_classes_name",
+    "en": "Class names",
+    "ru": "Имена классов "
+  },
+  {
+    "id": "schema_story_slide_allow_scroll",
+    "en": "Allow scrolling",
+    "ru": "Разрешить прокрутку "
+  },
+  {
+    "id": "schema_story_slide_allow_scroll_desc",
+    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
+    "ru": "Если содержимое слайда выходит за пределы контейнера, отображается полоса прокрутки. "
+  },
+  {
+    "id": "schema_story_slide_base_txt_size_px",
+    "en": "Base text size in pixels",
+    "ru": "Базовый размер текста в пикселях "
+  },
+  {
+    "id": "schema_story_slide_effects",
+    "en": "Effects",
+    "ru": "Последствия "
+  },
+  {
+    "id": "schema_story_slide_effect_start",
+    "en": "Start",
+    "ru": "Начинать "
+  },
+  {
+    "id": "schema_story_slide_effect_end",
+    "en": "End",
+    "ru": "Конец "
+  },
+  {
+    "id": "schema_story_slide_effect_offset",
+    "en": "Offset",
+    "ru": "Компенсировать "
+  },
+  {
+    "id": "schema_story_slide_effect_factor",
+    "en": "Factor",
+    "ru": "Фактор "
+  },
+  {
+    "id": "schema_story_slide_effect_type",
+    "en": "Type",
+    "ru": "Тип "
+  },
+  {
+    "id": "schema_story_slide_name",
+    "en": "Slide name",
+    "ru": "Название слайда "
+  },
+  {
+    "id": "schema_story_map_anim_duration",
+    "en": "Animation duration [ms]",
+    "ru": "Продолжительность анимации [мс] "
+  },
+  {
+    "id": "schema_story_map_anim_duration_desc",
+    "en": "Change the total animation duration",
+    "ru": "Изменить общую продолжительность анимации "
+  },
+  {
+    "id": "schema_story_map_anim_traj_method",
+    "en": "Trajectory method",
+    "ru": "Метод траектории "
+  },
+  {
+    "id": "schema_story_map_anim_traj_method_desc",
+    "en": "Set the traveling method of the camera during the animation",
+    "ru": "Установите способ передвижения камеры во время анимации "
+  },
+  {
+    "id": "schema_story_map_anim_fun",
+    "en": "Animation function",
+    "ru": "Функция анимации "
+  },
+  {
+    "id": "schema_story_map_anim_fun_desc",
+    "en": "Change the default animation function. Ease the start and/or end of the animation.",
+    "ru": "Измените функцию анимации по умолчанию. Упростите начало и / или конец анимации. "
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp",
+    "en": "Animation function exponent",
+    "ru": "Показатель функции анимации "
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp_desc",
+    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
+    "ru": "Измените показатель функции по умолчанию. Это усилит или снизит скорость ослабления. "
+  },
+  {
+    "id": "schema_story_map_anim",
+    "en": "Map animation",
+    "ru": "Анимация карты "
+  },
+  {
+    "id": "schema_story_autoplay_timeout",
+    "en": "Timeout [ms]",
+    "ru": "Тайм-аут [мс]"
+  },
+  {
+    "id": "schema_story_autoplay_timeout_desc",
+    "en": "Waiting time before going to the next step.",
+    "ru": "Время ожидания перед переходом к следующему шагу."
+  },
+  {
+    "id": "schema_story_autoplay_transition",
+    "en": "Transition [ms]",
+    "ru": "Переход [мс] "
+  },
+  {
+    "id": "schema_story_autoplay_transition_desc",
+    "en": "Duration of the transition between steps.",
+    "ru": "Продолжительность перехода между шагами. "
+  },
+  {
+    "id": "schema_story_autoplay",
+    "en": "Autoplay settings",
+    "ru": "Настройки автозапуска "
+  },
+  {
+    "id": "schema_story_step_name",
+    "en": "Step name",
+    "ru": "Название шага "
+  },
+  {
+    "id": "schema_story_screen_res",
+    "en": "Screen resolution",
+    "ru": "Разрешение экрана "
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "ru": "Конфигурация базового слоя "
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "ru": "Включите воздушный режим для этого шага "
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "ru": "Аэрофотоснимок добавляет на карту аэрофотоснимки высокого разрешения. "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "ru": "Включите режим 3D Terrain для этого шага "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "ru": "«Трехмерный ландшафт» будет отображать высоту в 3-х измерениях. Это полезно при большом увеличении, когда камера наклонена. Используйте клавишу управления и мышь, чтобы изменить угол наклона и азимут."
+  },
+  {
+    "id": "schema_story_screen_res_desc",
+    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
+    "ru": "Базовое разрешение страницы во время карты-истории. Он автоматически масштабируется по размеру экрана и сохраняет форматирование содержимого. "
+  },
+  {
+    "id": "schema_story_settings",
+    "en": "Settings",
+    "ru": "Настройки "
   },
   {
     "id": "search_placeholder",

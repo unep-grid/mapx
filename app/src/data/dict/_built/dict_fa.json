@@ -3260,211 +3260,6 @@
     "fa": "بزرگنمایی حداکثر برای نمایش داده ها "
   },
   {
-    "id": "schema_story_opacity_timeout",
-    "en": "Timeout before decreasing opacity [ms]",
-    "fa": "مهلت زمانی قبل از کاهش شفافیت [ms]"
-  },
-  {
-    "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "fa": "تاخیر قبل از کاهش شفافیت پانل ها و گلوله های ناوبری در صورت عدم فعالیت ماوس"
-  },
-  {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "fa": "نکات: "
-  },
-  {
-    "id": "schema_story_tips",
-    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "fa": "<p style=\";text-align:right;direction:rtl\">در اینجا لیستی از اقدامات خوب برای ارائه یک تجربه یکپارچه برای خوانندگان آورده شده است:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> ساده باش</li><li style=\";text-align:right;direction:rtl\"> بهتر است برای حفظ علاقه مخاطبان خود نقشه های داستان کوتاه ایجاد کنید.</li><li style=\";text-align:right;direction:rtl\"> برای خوانایی خوب ، توصیه می شود در همان مرحله از دو اسلاید و بیش از دو لایه روی نقشه فراتر نروید.</li><li style=\";text-align:right;direction:rtl\"> تصاویر ، فیلم ها و اینفوگرافیک ها می توانند رسانه های مفید و تأثیرگذاری برای متنی سازی داستان شما باشند. با این حال ، آنها نباید م componentلفه فضایی داستان شما را تحت الشعاع قرار دهند. نقشه ها باید در مرکز آن باشند.</li><li style=\";text-align:right;direction:rtl\"> جلوه ها ، انتقال ها یا تبدیل های سه بعدی می توانند بر خوانایی نقشه داستان شما در دستگاه های کند تأثیر بگذارند ، از آنها کم استفاده کنید.</li></ol> "
-  },
-  {
-    "id": "schema_story_author",
-    "en": "Author of the story",
-    "fa": "مولف داستان"
-  },
-  {
-    "id": "schema_story_map_pos",
-    "en": "Position of the map",
-    "fa": "موقعیت نقشه"
-  },
-  {
-    "id": "schema_story_meta",
-    "en": "Metadata",
-    "fa": "ابرداده"
-  },
-  {
-    "id": "schema_story_org",
-    "en": "Organisation name",
-    "fa": "نام سازمان"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling",
-    "en": "Dashboards display mode",
-    "fa": "حالت نمایش داشبورد"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
-    "fa": "اگر نمای(های) انتخاب شده دارای داشبورد مرتبط باشد، چگونه باید رندر شود؟"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
-    "fa": "اگر نمای(های) انتخاب شده دارای داشبورد مرتبط باشد، چگونه باید به صورت سراسری ارائه شود؟ در صورت وجود، پیکربندی مراحل نادیده گرفته خواهد شد."
-  },
-  {
-    "id": "schema_story_dashboard_panel_default",
-    "en": "Use the dashboard default display option",
-    "fa": "از گزینه نمایش پیش فرض داشبورد استفاده کنید"
-  },
-  {
-    "id": "schema_story_dashboard_panel_root_default",
-    "en": "Use the display options defined in each steps",
-    "fa": "از گزینه های نمایش تعریف شده در هر مرحله استفاده کنید"
-  },
-  {
-    "id": "schema_story_dashboard_panel_open",
-    "en": "Open the dashboard panel",
-    "fa": "پنل داشبورد را باز کنید"
-  },
-  {
-    "id": "schema_story_dashboard_panel_closed",
-    "en": "Close the dashboard panel",
-    "fa": "پنل داشبورد را ببندید"
-  },
-  {
-    "id": "schema_story_dashboard_panel_disabled",
-    "en": "Do not render dashboards",
-    "fa": "داشبوردها را رندر نکنید"
-  },
-  {
-    "id": "schema_story_legends_panel_handling",
-    "en": "Legends display mode",
-    "fa": "حالت نمایش افسانه ها"
-  },
-  {
-    "id": "schema_story_legends_panel_handling_desc",
-    "en": "Set how the legend panel should be displayed.",
-    "fa": "نحوه نمایش پنل افسانه را تنظیم کنید."
-  },
-  {
-    "id": "schema_story_legends_panel_handling_root_desc",
-    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
-    "fa": "تنظیم کنید که چگونه پنل افسانه به صورت جهانی نمایش داده شود. در صورت وجود، پیکربندی مراحل نادیده گرفته خواهد شد."
-  },
-  {
-    "id": "schema_story_legends_panel_default",
-    "en": "Use the application default",
-    "fa": "از پیش فرض برنامه استفاده کنید"
-  },
-  {
-    "id": "schema_story_legends_panel_root_default",
-    "en": "Use the display option defined in each steps",
-    "fa": "از گزینه نمایش تعریف شده در هر مرحله استفاده کنید"
-  },
-  {
-    "id": "schema_story_legends_panel_open",
-    "en": "Open the legends panel",
-    "fa": "پنل legends را باز کنید"
-  },
-  {
-    "id": "schema_story_legends_panel_closed",
-    "en": "Close the legends panel",
-    "fa": "پانل افسانه ها را ببندید"
-  },
-  {
-    "id": "schema_story_pos_get",
-    "en": "Update using current map parameters",
-    "fa": "تجدید با استفاده از پارامتر های موجود"
-  },
-  {
-    "id": "schema_story_slide",
-    "en": "Slide",
-    "fa": "رانش"
-  },
-  {
-    "id": "schema_story_slide_color",
-    "en": "Color theme",
-    "fa": "رنگ موضوع"
-  },
-  {
-    "id": "schema_story_slide_color_bg",
-    "en": "Background color",
-    "fa": "رنگ پس زمینه"
-  },
-  {
-    "id": "schema_story_slide_color_fg",
-    "en": "Text color",
-    "fa": "رنگ متن"
-  },
-  {
-    "id": "schema_story_slide_config",
-    "en": "Configuration",
-    "fa": "عیار سازی"
-  },
-  {
-    "id": "schema_story_slide_layout",
-    "en": "Content layout",
-    "fa": "طراحی محتوا"
-  },
-  {
-    "id": "schema_story_slide_opacity_bg",
-    "en": "Background opacity",
-    "fa": "مکدریت پس زمینه"
-  },
-  {
-    "id": "schema_story_slide_pos_z",
-    "en": "Depth (z axis)",
-    "fa": "عمق (محور z)"
-  },
-  {
-    "id": "schema_story_slide_speed",
-    "en": "Speed ratio",
-    "fa": "تناسب سرعت"
-  },
-  {
-    "id": "schema_story_slides",
-    "en": "Slides",
-    "fa": "رانش ها"
-  },
-  {
-    "id": "schema_story_step",
-    "en": "Step",
-    "fa": "مرحله"
-  },
-  {
-    "id": "schema_story_step_content",
-    "en": "Content",
-    "fa": "محتویات"
-  },
-  {
-    "id": "schema_story_step_title",
-    "en": "Title ",
-    "fa": "عنوان"
-  },
-  {
-    "id": "schema_story_steps",
-    "en": "Steps",
-    "fa": "مراحل"
-  },
-  {
-    "id": "schema_story_steps_title",
-    "en": "Steps of the story",
-    "fa": "مرحله از تاریخ"
-  },
-  {
-    "id": "schema_story_text_pos",
-    "en": "Text position",
-    "fa": "موقعیت متن"
-  },
-  {
-    "id": "schema_story_title",
-    "en": "Story",
-    "fa": "داستان"
-  },
-  {
     "id": "schema_style_value",
     "en": "Value",
     "fa": "قیمت"
@@ -5375,186 +5170,6 @@
     "fa": "ویرایشگر فراداده برای منبع داده ها "
   },
   {
-    "id": "schema_story_views_activate",
-    "en": "Views to activate",
-    "fa": "بازدیدها برای فعال شدن "
-  },
-  {
-    "id": "schema_story_slide_classes",
-    "en": "Slide classes",
-    "fa": "کلاسهای اسلاید "
-  },
-  {
-    "id": "schema_story_slide_classes_name",
-    "en": "Class names",
-    "fa": "نام کلاس ها "
-  },
-  {
-    "id": "schema_story_slide_allow_scroll",
-    "en": "Allow scrolling",
-    "fa": "پیمایش را مجاز کنید "
-  },
-  {
-    "id": "schema_story_slide_allow_scroll_desc",
-    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
-    "fa": "اگر محتوای اسلاید به خارج از ظرف برود ، نوار پیمایشی نمایش داده می شود. "
-  },
-  {
-    "id": "schema_story_slide_base_txt_size_px",
-    "en": "Base text size in pixels",
-    "fa": "اندازه متن پایه در پیکسل "
-  },
-  {
-    "id": "schema_story_slide_effects",
-    "en": "Effects",
-    "fa": "جلوه ها "
-  },
-  {
-    "id": "schema_story_slide_effect_start",
-    "en": "Start",
-    "fa": "شروع کنید "
-  },
-  {
-    "id": "schema_story_slide_effect_end",
-    "en": "End",
-    "fa": "پایان "
-  },
-  {
-    "id": "schema_story_slide_effect_offset",
-    "en": "Offset",
-    "fa": "انحراف "
-  },
-  {
-    "id": "schema_story_slide_effect_factor",
-    "en": "Factor",
-    "fa": "عامل "
-  },
-  {
-    "id": "schema_story_slide_effect_type",
-    "en": "Type",
-    "fa": "تایپ کنید "
-  },
-  {
-    "id": "schema_story_slide_name",
-    "en": "Slide name",
-    "fa": "نام اسلاید "
-  },
-  {
-    "id": "schema_story_map_anim_duration",
-    "en": "Animation duration [ms]",
-    "fa": "مدت زمان انیمیشن [میلی ثانیه] "
-  },
-  {
-    "id": "schema_story_map_anim_duration_desc",
-    "en": "Change the total animation duration",
-    "fa": "کل مدت زمان انیمیشن را تغییر دهید "
-  },
-  {
-    "id": "schema_story_map_anim_traj_method",
-    "en": "Trajectory method",
-    "fa": "روش خط سیر "
-  },
-  {
-    "id": "schema_story_map_anim_traj_method_desc",
-    "en": "Set the traveling method of the camera during the animation",
-    "fa": "روش پیمایش دوربین را هنگام انیمیشن تنظیم کنید "
-  },
-  {
-    "id": "schema_story_map_anim_fun",
-    "en": "Animation function",
-    "fa": "عملکرد انیمیشن "
-  },
-  {
-    "id": "schema_story_map_anim_fun_desc",
-    "en": "Change the default animation function. Ease the start and/or end of the animation.",
-    "fa": "عملکرد پیش فرض انیمیشن را تغییر دهید. شروع و / یا پایان انیمیشن را آسان کنید. "
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp",
-    "en": "Animation function exponent",
-    "fa": "نماینده عملکرد انیمیشن "
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp_desc",
-    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
-    "fa": "نمایانگر عملکرد پیش فرض را تغییر دهید. این میزان تخفیف را تقویت یا کاهش می دهد. "
-  },
-  {
-    "id": "schema_story_map_anim",
-    "en": "Map animation",
-    "fa": "انیمیشن نقشه "
-  },
-  {
-    "id": "schema_story_autoplay_timeout",
-    "en": "Timeout [ms]",
-    "fa": "مهلت زمانی [ms]"
-  },
-  {
-    "id": "schema_story_autoplay_timeout_desc",
-    "en": "Waiting time before going to the next step.",
-    "fa": "زمان انتظار قبل از رفتن به مرحله بعدی."
-  },
-  {
-    "id": "schema_story_autoplay_transition",
-    "en": "Transition [ms]",
-    "fa": "انتقال [میلی ثانیه] "
-  },
-  {
-    "id": "schema_story_autoplay_transition_desc",
-    "en": "Duration of the transition between steps.",
-    "fa": "مدت زمان انتقال بین مراحل. "
-  },
-  {
-    "id": "schema_story_autoplay",
-    "en": "Autoplay settings",
-    "fa": "تنظیمات پخش خودکار "
-  },
-  {
-    "id": "schema_story_step_name",
-    "en": "Step name",
-    "fa": "نام مرحله "
-  },
-  {
-    "id": "schema_story_screen_res",
-    "en": "Screen resolution",
-    "fa": "وضوح صفحه "
-  },
-  {
-    "id": "schema_story_step_base_layer",
-    "en": "Base layer configuration",
-    "fa": "پیکربندی لایه پایه "
-  },
-  {
-    "id": "schema_story_step_add_aerial",
-    "en": "Enable aerial mode for this step",
-    "fa": "حالت هوایی را برای این مرحله فعال کنید "
-  },
-  {
-    "id": "schema_story_step_add_aerial_desc",
-    "en": "The aerial mode add a high resolution aerial imagery to the map",
-    "fa": "حالت هوایی تصاویر هوایی با وضوح بالا را به نقشه اضافه می کند "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain",
-    "en": "Enable '3d terrain' mode for this step",
-    "fa": "حالت \"3D terrain\" را برای این مرحله فعال کنید "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "fa": "\"زمین سه بعدی\" باعث می شود ارتفاع در 3 بعد ظاهر شود. این در زوم بالا، با کج شدن دوربین مفید است. از کلید کنترل و موس خود برای تغییر گام و بلبرینگ استفاده کنید."
-  },
-  {
-    "id": "schema_story_screen_res_desc",
-    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
-    "fa": "وضوح صفحه در طول نقشه داستان. به طور خودکار مقیاس بندی می شود تا متناسب با صفحه باشد و قالب بندی محتوا را حفظ کند. "
-  },
-  {
-    "id": "schema_story_settings",
-    "en": "Settings",
-    "fa": "تنظیمات "
-  },
-  {
     "id": "button_legend_title",
     "en": "Legends",
     "fa": "افسانه ها "
@@ -6828,6 +6443,431 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "fa": "از پالت پیش فرض استفاده کنید "
+  },
+  {
+    "id": "schema_story_theme",
+    "en": "Theme",
+    "fa": "موضوع"
+  },
+  {
+    "id": "schema_story_theme_desc",
+    "en": "Change application and map colors scheme",
+    "fa": "تغییر برنامه و طرح رنگ نقشه"
+  },
+  {
+    "id": "schema_story_theme_default",
+    "en": "Use the project default",
+    "fa": "از پیش فرض پروژه استفاده کنید"
+  },
+  {
+    "id": "schema_story_theme_step",
+    "en": "Use the theme option defined in each steps",
+    "fa": "از گزینه تم تعریف شده در هر مرحله استفاده کنید"
+  },
+  {
+    "id": "schema_story_projection",
+    "en": "Projection",
+    "fa": "فرافکنی"
+  },
+  {
+    "id": "schema_story_projection_desc",
+    "en": "Change map projection",
+    "fa": "تغییر طرح ریزی نقشه"
+  },
+  {
+    "id": "schema_story_projection_default",
+    "en": "Use the default projection",
+    "fa": "از طرح پیش فرض استفاده کنید"
+  },
+  {
+    "id": "schema_story_projection_step",
+    "en": "Use the projection defined in each steps",
+    "fa": "از طرح ریزی تعریف شده در هر مرحله استفاده کنید"
+  },
+  {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "fa": "مهلت زمانی قبل از کاهش شفافیت [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "fa": "تاخیر قبل از کاهش شفافیت پانل ها و گلوله های ناوبری در صورت عدم فعالیت ماوس"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "fa": "نکات: "
+  },
+  {
+    "id": "schema_story_tips",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
+    "fa": "<p style=\";text-align:right;direction:rtl\">در اینجا لیستی از اقدامات خوب برای ارائه یک تجربه یکپارچه برای خوانندگان آورده شده است:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> ساده باش</li><li style=\";text-align:right;direction:rtl\"> بهتر است برای حفظ علاقه مخاطبان خود نقشه های داستان کوتاه ایجاد کنید.</li><li style=\";text-align:right;direction:rtl\"> برای خوانایی خوب ، توصیه می شود در همان مرحله از دو اسلاید و بیش از دو لایه روی نقشه فراتر نروید.</li><li style=\";text-align:right;direction:rtl\"> تصاویر ، فیلم ها و اینفوگرافیک ها می توانند رسانه های مفید و تأثیرگذاری برای متنی سازی داستان شما باشند. با این حال ، آنها نباید م componentلفه فضایی داستان شما را تحت الشعاع قرار دهند. نقشه ها باید در مرکز آن باشند.</li><li style=\";text-align:right;direction:rtl\"> جلوه ها ، انتقال ها یا تبدیل های سه بعدی می توانند بر خوانایی نقشه داستان شما در دستگاه های کند تأثیر بگذارند ، از آنها کم استفاده کنید.</li></ol> "
+  },
+  {
+    "id": "schema_story_author",
+    "en": "Author of the story",
+    "fa": "مولف داستان"
+  },
+  {
+    "id": "schema_story_map_pos",
+    "en": "Position of the map",
+    "fa": "موقعیت نقشه"
+  },
+  {
+    "id": "schema_story_meta",
+    "en": "Metadata",
+    "fa": "ابرداده"
+  },
+  {
+    "id": "schema_story_org",
+    "en": "Organisation name",
+    "fa": "نام سازمان"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling",
+    "en": "Dashboards display mode",
+    "fa": "حالت نمایش داشبورد"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
+    "fa": "اگر نمای(های) انتخاب شده دارای داشبورد مرتبط باشد، چگونه باید رندر شود؟"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "fa": "اگر نمای(های) انتخاب شده دارای داشبورد مرتبط باشد، چگونه باید به صورت سراسری ارائه شود؟ در صورت وجود، پیکربندی مراحل نادیده گرفته خواهد شد."
+  },
+  {
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "fa": "از گزینه نمایش پیش فرض داشبورد استفاده کنید"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "fa": "از گزینه های نمایش تعریف شده در هر مرحله استفاده کنید"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel",
+    "fa": "پنل داشبورد را باز کنید"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel",
+    "fa": "پنل داشبورد را ببندید"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards",
+    "fa": "داشبوردها را رندر نکنید"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "fa": "حالت نمایش افسانه ها"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "fa": "نحوه نمایش پنل افسانه را تنظیم کنید."
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "fa": "تنظیم کنید که چگونه پنل افسانه به صورت جهانی نمایش داده شود. در صورت وجود، پیکربندی مراحل نادیده گرفته خواهد شد."
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "fa": "از پیش فرض برنامه استفاده کنید"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "fa": "از گزینه نمایش تعریف شده در هر مرحله استفاده کنید"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "fa": "پنل legends را باز کنید"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "fa": "پانل افسانه ها را ببندید"
+  },
+  {
+    "id": "schema_story_pos_get",
+    "en": "Update using current map parameters",
+    "fa": "تجدید با استفاده از پارامتر های موجود"
+  },
+  {
+    "id": "schema_story_slide",
+    "en": "Slide",
+    "fa": "رانش"
+  },
+  {
+    "id": "schema_story_slide_color",
+    "en": "Color theme",
+    "fa": "رنگ موضوع"
+  },
+  {
+    "id": "schema_story_slide_color_bg",
+    "en": "Background color",
+    "fa": "رنگ پس زمینه"
+  },
+  {
+    "id": "schema_story_slide_color_fg",
+    "en": "Text color",
+    "fa": "رنگ متن"
+  },
+  {
+    "id": "schema_story_slide_config",
+    "en": "Configuration",
+    "fa": "عیار سازی"
+  },
+  {
+    "id": "schema_story_slide_layout",
+    "en": "Content layout",
+    "fa": "طراحی محتوا"
+  },
+  {
+    "id": "schema_story_slide_opacity_bg",
+    "en": "Background opacity",
+    "fa": "مکدریت پس زمینه"
+  },
+  {
+    "id": "schema_story_slide_pos_z",
+    "en": "Depth (z axis)",
+    "fa": "عمق (محور z)"
+  },
+  {
+    "id": "schema_story_slide_speed",
+    "en": "Speed ratio",
+    "fa": "تناسب سرعت"
+  },
+  {
+    "id": "schema_story_slides",
+    "en": "Slides",
+    "fa": "رانش ها"
+  },
+  {
+    "id": "schema_story_step",
+    "en": "Step",
+    "fa": "مرحله"
+  },
+  {
+    "id": "schema_story_step_content",
+    "en": "Content",
+    "fa": "محتویات"
+  },
+  {
+    "id": "schema_story_step_title",
+    "en": "Title ",
+    "fa": "عنوان"
+  },
+  {
+    "id": "schema_story_steps",
+    "en": "Steps",
+    "fa": "مراحل"
+  },
+  {
+    "id": "schema_story_steps_title",
+    "en": "Steps of the story",
+    "fa": "مرحله از تاریخ"
+  },
+  {
+    "id": "schema_story_text_pos",
+    "en": "Text position",
+    "fa": "موقعیت متن"
+  },
+  {
+    "id": "schema_story_title",
+    "en": "Story",
+    "fa": "داستان"
+  },
+  {
+    "id": "schema_story_views_activate",
+    "en": "Views to activate",
+    "fa": "بازدیدها برای فعال شدن "
+  },
+  {
+    "id": "schema_story_slide_classes",
+    "en": "Slide classes",
+    "fa": "کلاسهای اسلاید "
+  },
+  {
+    "id": "schema_story_slide_classes_name",
+    "en": "Class names",
+    "fa": "نام کلاس ها "
+  },
+  {
+    "id": "schema_story_slide_allow_scroll",
+    "en": "Allow scrolling",
+    "fa": "پیمایش را مجاز کنید "
+  },
+  {
+    "id": "schema_story_slide_allow_scroll_desc",
+    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
+    "fa": "اگر محتوای اسلاید به خارج از ظرف برود ، نوار پیمایشی نمایش داده می شود. "
+  },
+  {
+    "id": "schema_story_slide_base_txt_size_px",
+    "en": "Base text size in pixels",
+    "fa": "اندازه متن پایه در پیکسل "
+  },
+  {
+    "id": "schema_story_slide_effects",
+    "en": "Effects",
+    "fa": "جلوه ها "
+  },
+  {
+    "id": "schema_story_slide_effect_start",
+    "en": "Start",
+    "fa": "شروع کنید "
+  },
+  {
+    "id": "schema_story_slide_effect_end",
+    "en": "End",
+    "fa": "پایان "
+  },
+  {
+    "id": "schema_story_slide_effect_offset",
+    "en": "Offset",
+    "fa": "انحراف "
+  },
+  {
+    "id": "schema_story_slide_effect_factor",
+    "en": "Factor",
+    "fa": "عامل "
+  },
+  {
+    "id": "schema_story_slide_effect_type",
+    "en": "Type",
+    "fa": "تایپ کنید "
+  },
+  {
+    "id": "schema_story_slide_name",
+    "en": "Slide name",
+    "fa": "نام اسلاید "
+  },
+  {
+    "id": "schema_story_map_anim_duration",
+    "en": "Animation duration [ms]",
+    "fa": "مدت زمان انیمیشن [میلی ثانیه] "
+  },
+  {
+    "id": "schema_story_map_anim_duration_desc",
+    "en": "Change the total animation duration",
+    "fa": "کل مدت زمان انیمیشن را تغییر دهید "
+  },
+  {
+    "id": "schema_story_map_anim_traj_method",
+    "en": "Trajectory method",
+    "fa": "روش خط سیر "
+  },
+  {
+    "id": "schema_story_map_anim_traj_method_desc",
+    "en": "Set the traveling method of the camera during the animation",
+    "fa": "روش پیمایش دوربین را هنگام انیمیشن تنظیم کنید "
+  },
+  {
+    "id": "schema_story_map_anim_fun",
+    "en": "Animation function",
+    "fa": "عملکرد انیمیشن "
+  },
+  {
+    "id": "schema_story_map_anim_fun_desc",
+    "en": "Change the default animation function. Ease the start and/or end of the animation.",
+    "fa": "عملکرد پیش فرض انیمیشن را تغییر دهید. شروع و / یا پایان انیمیشن را آسان کنید. "
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp",
+    "en": "Animation function exponent",
+    "fa": "نماینده عملکرد انیمیشن "
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp_desc",
+    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
+    "fa": "نمایانگر عملکرد پیش فرض را تغییر دهید. این میزان تخفیف را تقویت یا کاهش می دهد. "
+  },
+  {
+    "id": "schema_story_map_anim",
+    "en": "Map animation",
+    "fa": "انیمیشن نقشه "
+  },
+  {
+    "id": "schema_story_autoplay_timeout",
+    "en": "Timeout [ms]",
+    "fa": "مهلت زمانی [ms]"
+  },
+  {
+    "id": "schema_story_autoplay_timeout_desc",
+    "en": "Waiting time before going to the next step.",
+    "fa": "زمان انتظار قبل از رفتن به مرحله بعدی."
+  },
+  {
+    "id": "schema_story_autoplay_transition",
+    "en": "Transition [ms]",
+    "fa": "انتقال [میلی ثانیه] "
+  },
+  {
+    "id": "schema_story_autoplay_transition_desc",
+    "en": "Duration of the transition between steps.",
+    "fa": "مدت زمان انتقال بین مراحل. "
+  },
+  {
+    "id": "schema_story_autoplay",
+    "en": "Autoplay settings",
+    "fa": "تنظیمات پخش خودکار "
+  },
+  {
+    "id": "schema_story_step_name",
+    "en": "Step name",
+    "fa": "نام مرحله "
+  },
+  {
+    "id": "schema_story_screen_res",
+    "en": "Screen resolution",
+    "fa": "وضوح صفحه "
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "fa": "پیکربندی لایه پایه "
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "fa": "حالت هوایی را برای این مرحله فعال کنید "
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "fa": "حالت هوایی تصاویر هوایی با وضوح بالا را به نقشه اضافه می کند "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "fa": "حالت \"3D terrain\" را برای این مرحله فعال کنید "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "fa": "\"زمین سه بعدی\" باعث می شود ارتفاع در 3 بعد ظاهر شود. این در زوم بالا، با کج شدن دوربین مفید است. از کلید کنترل و موس خود برای تغییر گام و بلبرینگ استفاده کنید."
+  },
+  {
+    "id": "schema_story_screen_res_desc",
+    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
+    "fa": "وضوح صفحه در طول نقشه داستان. به طور خودکار مقیاس بندی می شود تا متناسب با صفحه باشد و قالب بندی محتوا را حفظ کند. "
+  },
+  {
+    "id": "schema_story_settings",
+    "en": "Settings",
+    "fa": "تنظیمات "
   },
   {
     "id": "search_placeholder",

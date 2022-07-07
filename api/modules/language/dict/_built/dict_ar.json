@@ -3260,211 +3260,6 @@
     "ar": "أقصى تكبير لعرض البيانات "
   },
   {
-    "id": "schema_story_opacity_timeout",
-    "en": "Timeout before decreasing opacity [ms]",
-    "ar": "المهلة قبل تقليل التعتيم [مللي ثانية]"
-  },
-  {
-    "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "ar": "تأخير قبل تقليل عتامة اللوحات ورموز التنقل في حالة عدم نشاط الماوس"
-  },
-  {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "ar": "نصائح: "
-  },
-  {
-    "id": "schema_story_tips",
-    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "ar": "<p style=\";text-align:right;direction:rtl\">فيما يلي قائمة بالممارسات الجيدة لتوفير تجربة سلسة للقراء:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> أبقيها بسيطة.</li><li style=\";text-align:right;direction:rtl\"> من الأفضل إنشاء خرائط قصص قصيرة للحفاظ على اهتمام جمهورك.</li><li style=\";text-align:right;direction:rtl\"> لسهولة القراءة ، يوصى بعدم تجاوز شريحتين لكل خطوة وأكثر من طبقتين على الخريطة في نفس الخطوة.</li><li style=\";text-align:right;direction:rtl\"> يمكن أن تكون الصور ومقاطع الفيديو والرسوم البيانية وسائط مفيدة ومؤثرة لوضع قصتك في سياقها. ومع ذلك ، لا ينبغي أن تلقي بظلالها على المكون المكاني لقصتك. يجب أن تكون الخرائط في مركزها.</li><li style=\";text-align:right;direction:rtl\"> يمكن أن تؤثر التأثيرات أو التحولات أو التحويلات ثلاثية الأبعاد على قابلية قراءة خريطة قصتك على الأجهزة البطيئة ، فاستخدمها باعتدال.</li></ol> "
-  },
-  {
-    "id": "schema_story_author",
-    "en": "Author of the story",
-    "ar": "مؤلف القصة "
-  },
-  {
-    "id": "schema_story_map_pos",
-    "en": "Position of the map",
-    "ar": "موقع الخريطة "
-  },
-  {
-    "id": "schema_story_meta",
-    "en": "Metadata",
-    "ar": "البيانات الوصفية "
-  },
-  {
-    "id": "schema_story_org",
-    "en": "Organisation name",
-    "ar": "اسم المنظمة "
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling",
-    "en": "Dashboards display mode",
-    "ar": "وضع عرض لوحات العدادات"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
-    "ar": "إذا كانت طريقة العرض (العروض) المحددة لها لوحة معلومات مرتبطة ، فكيف يجب عرضها؟"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
-    "ar": "إذا كانت طريقة العرض (العروض) المحددة لها لوحة معلومات مرتبطة ، فكيف يجب عرضها بشكل عام؟ سيتم تجاهل خطوات التكوين ، إن أمكن."
-  },
-  {
-    "id": "schema_story_dashboard_panel_default",
-    "en": "Use the dashboard default display option",
-    "ar": "استخدم خيار العرض الافتراضي للوحة القيادة"
-  },
-  {
-    "id": "schema_story_dashboard_panel_root_default",
-    "en": "Use the display options defined in each steps",
-    "ar": "استخدم خيارات العرض المحددة في كل خطوة"
-  },
-  {
-    "id": "schema_story_dashboard_panel_open",
-    "en": "Open the dashboard panel",
-    "ar": "افتح لوحة لوحة القيادة"
-  },
-  {
-    "id": "schema_story_dashboard_panel_closed",
-    "en": "Close the dashboard panel",
-    "ar": "أغلق لوحة لوحة القيادة"
-  },
-  {
-    "id": "schema_story_dashboard_panel_disabled",
-    "en": "Do not render dashboards",
-    "ar": "لا تقدم لوحات العدادات"
-  },
-  {
-    "id": "schema_story_legends_panel_handling",
-    "en": "Legends display mode",
-    "ar": "وضع عرض الأساطير"
-  },
-  {
-    "id": "schema_story_legends_panel_handling_desc",
-    "en": "Set how the legend panel should be displayed.",
-    "ar": "تعيين كيفية عرض لوحة وسيلة الإيضاح."
-  },
-  {
-    "id": "schema_story_legends_panel_handling_root_desc",
-    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
-    "ar": "قم بتعيين كيفية عرض لوحة الأسطورة بشكل عام. سيتم تجاهل خطوات التكوين ، إن أمكن."
-  },
-  {
-    "id": "schema_story_legends_panel_default",
-    "en": "Use the application default",
-    "ar": "استخدم التطبيق الافتراضي"
-  },
-  {
-    "id": "schema_story_legends_panel_root_default",
-    "en": "Use the display option defined in each steps",
-    "ar": "استخدم خيار العرض المحدد في كل خطوة"
-  },
-  {
-    "id": "schema_story_legends_panel_open",
-    "en": "Open the legends panel",
-    "ar": "افتح لوحة Legends"
-  },
-  {
-    "id": "schema_story_legends_panel_closed",
-    "en": "Close the legends panel",
-    "ar": "أغلق لوحة وسائل الإيضاح"
-  },
-  {
-    "id": "schema_story_pos_get",
-    "en": "Update using current map parameters",
-    "ar": "التحديث باستخدام معلمات الخريطة الحالية "
-  },
-  {
-    "id": "schema_story_slide",
-    "en": "Slide",
-    "ar": "الانزلاق "
-  },
-  {
-    "id": "schema_story_slide_color",
-    "en": "Color theme",
-    "ar": "موضوع اللون "
-  },
-  {
-    "id": "schema_story_slide_color_bg",
-    "en": "Background color",
-    "ar": "لون الخلفية "
-  },
-  {
-    "id": "schema_story_slide_color_fg",
-    "en": "Text color",
-    "ar": "لون الخط "
-  },
-  {
-    "id": "schema_story_slide_config",
-    "en": "Configuration",
-    "ar": "إعدادات "
-  },
-  {
-    "id": "schema_story_slide_layout",
-    "en": "Content layout",
-    "ar": "تخطيط المحتوى "
-  },
-  {
-    "id": "schema_story_slide_opacity_bg",
-    "en": "Background opacity",
-    "ar": "تعتيم الخلفية "
-  },
-  {
-    "id": "schema_story_slide_pos_z",
-    "en": "Depth (z axis)",
-    "ar": "العمق (المحور z) "
-  },
-  {
-    "id": "schema_story_slide_speed",
-    "en": "Speed ratio",
-    "ar": "نسبة سرعة "
-  },
-  {
-    "id": "schema_story_slides",
-    "en": "Slides",
-    "ar": "الشرائح "
-  },
-  {
-    "id": "schema_story_step",
-    "en": "Step",
-    "ar": "خطوة "
-  },
-  {
-    "id": "schema_story_step_content",
-    "en": "Content",
-    "ar": "محتوى "
-  },
-  {
-    "id": "schema_story_step_title",
-    "en": "Title ",
-    "ar": "لقب "
-  },
-  {
-    "id": "schema_story_steps",
-    "en": "Steps",
-    "ar": "خطوات "
-  },
-  {
-    "id": "schema_story_steps_title",
-    "en": "Steps of the story",
-    "ar": "خطوات القصة "
-  },
-  {
-    "id": "schema_story_text_pos",
-    "en": "Text position",
-    "ar": "موقف النص "
-  },
-  {
-    "id": "schema_story_title",
-    "en": "Story",
-    "ar": "قصة "
-  },
-  {
     "id": "schema_style_value",
     "en": "Value",
     "ar": "قيمة "
@@ -5375,186 +5170,6 @@
     "ar": "محرر البيانات الوصفية لمصدر البيانات "
   },
   {
-    "id": "schema_story_views_activate",
-    "en": "Views to activate",
-    "ar": "طرق العرض للتفعيل "
-  },
-  {
-    "id": "schema_story_slide_classes",
-    "en": "Slide classes",
-    "ar": "فئات الشرائح "
-  },
-  {
-    "id": "schema_story_slide_classes_name",
-    "en": "Class names",
-    "ar": "أسماء الفئات "
-  },
-  {
-    "id": "schema_story_slide_allow_scroll",
-    "en": "Allow scrolling",
-    "ar": "السماح بالتمرير "
-  },
-  {
-    "id": "schema_story_slide_allow_scroll_desc",
-    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
-    "ar": "إذا انتقل محتوى الشريحة إلى خارج الحاوية ، فسيتم عرض شريط تمرير. "
-  },
-  {
-    "id": "schema_story_slide_base_txt_size_px",
-    "en": "Base text size in pixels",
-    "ar": "حجم النص الأساسي بالبكسل "
-  },
-  {
-    "id": "schema_story_slide_effects",
-    "en": "Effects",
-    "ar": "تأثيرات "
-  },
-  {
-    "id": "schema_story_slide_effect_start",
-    "en": "Start",
-    "ar": "بداية "
-  },
-  {
-    "id": "schema_story_slide_effect_end",
-    "en": "End",
-    "ar": "نهاية "
-  },
-  {
-    "id": "schema_story_slide_effect_offset",
-    "en": "Offset",
-    "ar": "عوض "
-  },
-  {
-    "id": "schema_story_slide_effect_factor",
-    "en": "Factor",
-    "ar": "عامل "
-  },
-  {
-    "id": "schema_story_slide_effect_type",
-    "en": "Type",
-    "ar": "اكتب "
-  },
-  {
-    "id": "schema_story_slide_name",
-    "en": "Slide name",
-    "ar": "اسم الشريحة "
-  },
-  {
-    "id": "schema_story_map_anim_duration",
-    "en": "Animation duration [ms]",
-    "ar": "مدة الرسوم المتحركة [مللي ثانية] "
-  },
-  {
-    "id": "schema_story_map_anim_duration_desc",
-    "en": "Change the total animation duration",
-    "ar": "تغيير إجمالي مدة الرسوم المتحركة "
-  },
-  {
-    "id": "schema_story_map_anim_traj_method",
-    "en": "Trajectory method",
-    "ar": "طريقة المسار "
-  },
-  {
-    "id": "schema_story_map_anim_traj_method_desc",
-    "en": "Set the traveling method of the camera during the animation",
-    "ar": "اضبط طريقة انتقال الكاميرا أثناء الرسم المتحرك "
-  },
-  {
-    "id": "schema_story_map_anim_fun",
-    "en": "Animation function",
-    "ar": "وظيفة الرسوم المتحركة "
-  },
-  {
-    "id": "schema_story_map_anim_fun_desc",
-    "en": "Change the default animation function. Ease the start and/or end of the animation.",
-    "ar": "تغيير وظيفة الرسوم المتحركة الافتراضية. سهولة بداية و / أو نهاية الرسم المتحرك. "
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp",
-    "en": "Animation function exponent",
-    "ar": "الأس وظيفة الرسوم المتحركة "
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp_desc",
-    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
-    "ar": "تغيير الأس الوظيفة الافتراضية. سيؤدي هذا إلى تضخيم أو تقليل معدل التخفيف. "
-  },
-  {
-    "id": "schema_story_map_anim",
-    "en": "Map animation",
-    "ar": "الرسوم المتحركة على الخريطة "
-  },
-  {
-    "id": "schema_story_autoplay_timeout",
-    "en": "Timeout [ms]",
-    "ar": "المهلة [مللي ثانية]"
-  },
-  {
-    "id": "schema_story_autoplay_timeout_desc",
-    "en": "Waiting time before going to the next step.",
-    "ar": "وقت الانتظار قبل الانتقال إلى الخطوة التالية."
-  },
-  {
-    "id": "schema_story_autoplay_transition",
-    "en": "Transition [ms]",
-    "ar": "الانتقال [مللي ثانية] "
-  },
-  {
-    "id": "schema_story_autoplay_transition_desc",
-    "en": "Duration of the transition between steps.",
-    "ar": "مدة الانتقال بين الخطوات. "
-  },
-  {
-    "id": "schema_story_autoplay",
-    "en": "Autoplay settings",
-    "ar": "إعدادات التشغيل التلقائي "
-  },
-  {
-    "id": "schema_story_step_name",
-    "en": "Step name",
-    "ar": "اسم الخطوة "
-  },
-  {
-    "id": "schema_story_screen_res",
-    "en": "Screen resolution",
-    "ar": "دقة الشاشة "
-  },
-  {
-    "id": "schema_story_step_base_layer",
-    "en": "Base layer configuration",
-    "ar": "تكوين الطبقة الأساسية "
-  },
-  {
-    "id": "schema_story_step_add_aerial",
-    "en": "Enable aerial mode for this step",
-    "ar": "قم بتمكين الوضع الجوي لهذه الخطوة "
-  },
-  {
-    "id": "schema_story_step_add_aerial_desc",
-    "en": "The aerial mode add a high resolution aerial imagery to the map",
-    "ar": "يضيف الوضع الجوي صورًا جوية عالية الدقة إلى الخريطة "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain",
-    "en": "Enable '3d terrain' mode for this step",
-    "ar": "قم بتمكين وضع \"التضاريس ثلاثية الأبعاد\" لهذه الخطوة "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "ar": "ستجعل \"التضاريس ثلاثية الأبعاد\" الارتفاع يظهر بثلاثة أبعاد. هذا مفيد عند التكبير العالي ، مع إمالة الكاميرا. استخدم مفتاح التحكم والماوس لتعديل درجة الصوت والاتجاه."
-  },
-  {
-    "id": "schema_story_screen_res_desc",
-    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
-    "ar": "الدقة الأساسية للصفحة أثناء خريطة القصة. سيتم تحجيمه تلقائيًا ليلائم الشاشة ويحافظ على تنسيق المحتوى. "
-  },
-  {
-    "id": "schema_story_settings",
-    "en": "Settings",
-    "ar": "إعدادات "
-  },
-  {
     "id": "button_legend_title",
     "en": "Legends",
     "ar": "أساطير "
@@ -6828,6 +6443,431 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "ar": "استخدم اللوحة الافتراضية "
+  },
+  {
+    "id": "schema_story_theme",
+    "en": "Theme",
+    "ar": "سمة"
+  },
+  {
+    "id": "schema_story_theme_desc",
+    "en": "Change application and map colors scheme",
+    "ar": "تغيير نظام ألوان التطبيق والخريطة"
+  },
+  {
+    "id": "schema_story_theme_default",
+    "en": "Use the project default",
+    "ar": "استخدم الإعداد الافتراضي للمشروع"
+  },
+  {
+    "id": "schema_story_theme_step",
+    "en": "Use the theme option defined in each steps",
+    "ar": "استخدم خيار السمة المحدد في كل خطوة"
+  },
+  {
+    "id": "schema_story_projection",
+    "en": "Projection",
+    "ar": "تنبؤ"
+  },
+  {
+    "id": "schema_story_projection_desc",
+    "en": "Change map projection",
+    "ar": "تغيير إسقاط الخريطة"
+  },
+  {
+    "id": "schema_story_projection_default",
+    "en": "Use the default projection",
+    "ar": "استخدم الإسقاط الافتراضي"
+  },
+  {
+    "id": "schema_story_projection_step",
+    "en": "Use the projection defined in each steps",
+    "ar": "استخدم الإسقاط المحدد في كل خطوة"
+  },
+  {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "ar": "المهلة قبل تقليل التعتيم [مللي ثانية]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "ar": "تأخير قبل تقليل عتامة اللوحات ورموز التنقل في حالة عدم نشاط الماوس"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "ar": "نصائح: "
+  },
+  {
+    "id": "schema_story_tips",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
+    "ar": "<p style=\";text-align:right;direction:rtl\">فيما يلي قائمة بالممارسات الجيدة لتوفير تجربة سلسة للقراء:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> أبقيها بسيطة.</li><li style=\";text-align:right;direction:rtl\"> من الأفضل إنشاء خرائط قصص قصيرة للحفاظ على اهتمام جمهورك.</li><li style=\";text-align:right;direction:rtl\"> لسهولة القراءة ، يوصى بعدم تجاوز شريحتين لكل خطوة وأكثر من طبقتين على الخريطة في نفس الخطوة.</li><li style=\";text-align:right;direction:rtl\"> يمكن أن تكون الصور ومقاطع الفيديو والرسوم البيانية وسائط مفيدة ومؤثرة لوضع قصتك في سياقها. ومع ذلك ، لا ينبغي أن تلقي بظلالها على المكون المكاني لقصتك. يجب أن تكون الخرائط في مركزها.</li><li style=\";text-align:right;direction:rtl\"> يمكن أن تؤثر التأثيرات أو التحولات أو التحويلات ثلاثية الأبعاد على قابلية قراءة خريطة قصتك على الأجهزة البطيئة ، فاستخدمها باعتدال.</li></ol> "
+  },
+  {
+    "id": "schema_story_author",
+    "en": "Author of the story",
+    "ar": "مؤلف القصة "
+  },
+  {
+    "id": "schema_story_map_pos",
+    "en": "Position of the map",
+    "ar": "موقع الخريطة "
+  },
+  {
+    "id": "schema_story_meta",
+    "en": "Metadata",
+    "ar": "البيانات الوصفية "
+  },
+  {
+    "id": "schema_story_org",
+    "en": "Organisation name",
+    "ar": "اسم المنظمة "
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling",
+    "en": "Dashboards display mode",
+    "ar": "وضع عرض لوحات العدادات"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
+    "ar": "إذا كانت طريقة العرض (العروض) المحددة لها لوحة معلومات مرتبطة ، فكيف يجب عرضها؟"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "ar": "إذا كانت طريقة العرض (العروض) المحددة لها لوحة معلومات مرتبطة ، فكيف يجب عرضها بشكل عام؟ سيتم تجاهل خطوات التكوين ، إن أمكن."
+  },
+  {
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "ar": "استخدم خيار العرض الافتراضي للوحة القيادة"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "ar": "استخدم خيارات العرض المحددة في كل خطوة"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel",
+    "ar": "افتح لوحة لوحة القيادة"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel",
+    "ar": "أغلق لوحة لوحة القيادة"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards",
+    "ar": "لا تقدم لوحات العدادات"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "ar": "وضع عرض الأساطير"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "ar": "تعيين كيفية عرض لوحة وسيلة الإيضاح."
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "ar": "قم بتعيين كيفية عرض لوحة الأسطورة بشكل عام. سيتم تجاهل خطوات التكوين ، إن أمكن."
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "ar": "استخدم التطبيق الافتراضي"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "ar": "استخدم خيار العرض المحدد في كل خطوة"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "ar": "افتح لوحة Legends"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "ar": "أغلق لوحة وسائل الإيضاح"
+  },
+  {
+    "id": "schema_story_pos_get",
+    "en": "Update using current map parameters",
+    "ar": "التحديث باستخدام معلمات الخريطة الحالية "
+  },
+  {
+    "id": "schema_story_slide",
+    "en": "Slide",
+    "ar": "الانزلاق "
+  },
+  {
+    "id": "schema_story_slide_color",
+    "en": "Color theme",
+    "ar": "موضوع اللون "
+  },
+  {
+    "id": "schema_story_slide_color_bg",
+    "en": "Background color",
+    "ar": "لون الخلفية "
+  },
+  {
+    "id": "schema_story_slide_color_fg",
+    "en": "Text color",
+    "ar": "لون الخط "
+  },
+  {
+    "id": "schema_story_slide_config",
+    "en": "Configuration",
+    "ar": "إعدادات "
+  },
+  {
+    "id": "schema_story_slide_layout",
+    "en": "Content layout",
+    "ar": "تخطيط المحتوى "
+  },
+  {
+    "id": "schema_story_slide_opacity_bg",
+    "en": "Background opacity",
+    "ar": "تعتيم الخلفية "
+  },
+  {
+    "id": "schema_story_slide_pos_z",
+    "en": "Depth (z axis)",
+    "ar": "العمق (المحور z) "
+  },
+  {
+    "id": "schema_story_slide_speed",
+    "en": "Speed ratio",
+    "ar": "نسبة سرعة "
+  },
+  {
+    "id": "schema_story_slides",
+    "en": "Slides",
+    "ar": "الشرائح "
+  },
+  {
+    "id": "schema_story_step",
+    "en": "Step",
+    "ar": "خطوة "
+  },
+  {
+    "id": "schema_story_step_content",
+    "en": "Content",
+    "ar": "محتوى "
+  },
+  {
+    "id": "schema_story_step_title",
+    "en": "Title ",
+    "ar": "لقب "
+  },
+  {
+    "id": "schema_story_steps",
+    "en": "Steps",
+    "ar": "خطوات "
+  },
+  {
+    "id": "schema_story_steps_title",
+    "en": "Steps of the story",
+    "ar": "خطوات القصة "
+  },
+  {
+    "id": "schema_story_text_pos",
+    "en": "Text position",
+    "ar": "موقف النص "
+  },
+  {
+    "id": "schema_story_title",
+    "en": "Story",
+    "ar": "قصة "
+  },
+  {
+    "id": "schema_story_views_activate",
+    "en": "Views to activate",
+    "ar": "طرق العرض للتفعيل "
+  },
+  {
+    "id": "schema_story_slide_classes",
+    "en": "Slide classes",
+    "ar": "فئات الشرائح "
+  },
+  {
+    "id": "schema_story_slide_classes_name",
+    "en": "Class names",
+    "ar": "أسماء الفئات "
+  },
+  {
+    "id": "schema_story_slide_allow_scroll",
+    "en": "Allow scrolling",
+    "ar": "السماح بالتمرير "
+  },
+  {
+    "id": "schema_story_slide_allow_scroll_desc",
+    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
+    "ar": "إذا انتقل محتوى الشريحة إلى خارج الحاوية ، فسيتم عرض شريط تمرير. "
+  },
+  {
+    "id": "schema_story_slide_base_txt_size_px",
+    "en": "Base text size in pixels",
+    "ar": "حجم النص الأساسي بالبكسل "
+  },
+  {
+    "id": "schema_story_slide_effects",
+    "en": "Effects",
+    "ar": "تأثيرات "
+  },
+  {
+    "id": "schema_story_slide_effect_start",
+    "en": "Start",
+    "ar": "بداية "
+  },
+  {
+    "id": "schema_story_slide_effect_end",
+    "en": "End",
+    "ar": "نهاية "
+  },
+  {
+    "id": "schema_story_slide_effect_offset",
+    "en": "Offset",
+    "ar": "عوض "
+  },
+  {
+    "id": "schema_story_slide_effect_factor",
+    "en": "Factor",
+    "ar": "عامل "
+  },
+  {
+    "id": "schema_story_slide_effect_type",
+    "en": "Type",
+    "ar": "اكتب "
+  },
+  {
+    "id": "schema_story_slide_name",
+    "en": "Slide name",
+    "ar": "اسم الشريحة "
+  },
+  {
+    "id": "schema_story_map_anim_duration",
+    "en": "Animation duration [ms]",
+    "ar": "مدة الرسوم المتحركة [مللي ثانية] "
+  },
+  {
+    "id": "schema_story_map_anim_duration_desc",
+    "en": "Change the total animation duration",
+    "ar": "تغيير إجمالي مدة الرسوم المتحركة "
+  },
+  {
+    "id": "schema_story_map_anim_traj_method",
+    "en": "Trajectory method",
+    "ar": "طريقة المسار "
+  },
+  {
+    "id": "schema_story_map_anim_traj_method_desc",
+    "en": "Set the traveling method of the camera during the animation",
+    "ar": "اضبط طريقة انتقال الكاميرا أثناء الرسم المتحرك "
+  },
+  {
+    "id": "schema_story_map_anim_fun",
+    "en": "Animation function",
+    "ar": "وظيفة الرسوم المتحركة "
+  },
+  {
+    "id": "schema_story_map_anim_fun_desc",
+    "en": "Change the default animation function. Ease the start and/or end of the animation.",
+    "ar": "تغيير وظيفة الرسوم المتحركة الافتراضية. سهولة بداية و / أو نهاية الرسم المتحرك. "
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp",
+    "en": "Animation function exponent",
+    "ar": "الأس وظيفة الرسوم المتحركة "
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp_desc",
+    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
+    "ar": "تغيير الأس الوظيفة الافتراضية. سيؤدي هذا إلى تضخيم أو تقليل معدل التخفيف. "
+  },
+  {
+    "id": "schema_story_map_anim",
+    "en": "Map animation",
+    "ar": "الرسوم المتحركة على الخريطة "
+  },
+  {
+    "id": "schema_story_autoplay_timeout",
+    "en": "Timeout [ms]",
+    "ar": "المهلة [مللي ثانية]"
+  },
+  {
+    "id": "schema_story_autoplay_timeout_desc",
+    "en": "Waiting time before going to the next step.",
+    "ar": "وقت الانتظار قبل الانتقال إلى الخطوة التالية."
+  },
+  {
+    "id": "schema_story_autoplay_transition",
+    "en": "Transition [ms]",
+    "ar": "الانتقال [مللي ثانية] "
+  },
+  {
+    "id": "schema_story_autoplay_transition_desc",
+    "en": "Duration of the transition between steps.",
+    "ar": "مدة الانتقال بين الخطوات. "
+  },
+  {
+    "id": "schema_story_autoplay",
+    "en": "Autoplay settings",
+    "ar": "إعدادات التشغيل التلقائي "
+  },
+  {
+    "id": "schema_story_step_name",
+    "en": "Step name",
+    "ar": "اسم الخطوة "
+  },
+  {
+    "id": "schema_story_screen_res",
+    "en": "Screen resolution",
+    "ar": "دقة الشاشة "
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "ar": "تكوين الطبقة الأساسية "
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "ar": "قم بتمكين الوضع الجوي لهذه الخطوة "
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "ar": "يضيف الوضع الجوي صورًا جوية عالية الدقة إلى الخريطة "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "ar": "قم بتمكين وضع \"التضاريس ثلاثية الأبعاد\" لهذه الخطوة "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "ar": "ستجعل \"التضاريس ثلاثية الأبعاد\" الارتفاع يظهر بثلاثة أبعاد. هذا مفيد عند التكبير العالي ، مع إمالة الكاميرا. استخدم مفتاح التحكم والماوس لتعديل درجة الصوت والاتجاه."
+  },
+  {
+    "id": "schema_story_screen_res_desc",
+    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
+    "ar": "الدقة الأساسية للصفحة أثناء خريطة القصة. سيتم تحجيمه تلقائيًا ليلائم الشاشة ويحافظ على تنسيق المحتوى. "
+  },
+  {
+    "id": "schema_story_settings",
+    "en": "Settings",
+    "ar": "إعدادات "
   },
   {
     "id": "search_placeholder",

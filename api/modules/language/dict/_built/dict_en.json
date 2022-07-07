@@ -2608,170 +2608,6 @@
     "en": "Maximum zoom to display the data"
   },
   {
-    "id": "schema_story_opacity_timeout",
-    "en": "Timeout before decreasing opacity [ms]"
-  },
-  {
-    "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity"
-  },
-  {
-    "id": "schema_story_tips_title",
-    "en": "Tips:"
-  },
-  {
-    "id": "schema_story_tips",
-    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>"
-  },
-  {
-    "id": "schema_story_author",
-    "en": "Author of the story"
-  },
-  {
-    "id": "schema_story_map_pos",
-    "en": "Position of the map"
-  },
-  {
-    "id": "schema_story_meta",
-    "en": "Metadata"
-  },
-  {
-    "id": "schema_story_org",
-    "en": "Organisation name"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling",
-    "en": "Dashboards display mode"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered?"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable."
-  },
-  {
-    "id": "schema_story_dashboard_panel_default",
-    "en": "Use the dashboard default display option"
-  },
-  {
-    "id": "schema_story_dashboard_panel_root_default",
-    "en": "Use the display options defined in each steps"
-  },
-  {
-    "id": "schema_story_dashboard_panel_open",
-    "en": "Open the dashboard panel"
-  },
-  {
-    "id": "schema_story_dashboard_panel_closed",
-    "en": "Close the dashboard panel"
-  },
-  {
-    "id": "schema_story_dashboard_panel_disabled",
-    "en": "Do not render dashboards"
-  },
-  {
-    "id": "schema_story_legends_panel_handling",
-    "en": "Legends display mode"
-  },
-  {
-    "id": "schema_story_legends_panel_handling_desc",
-    "en": "Set how the legend panel should be displayed."
-  },
-  {
-    "id": "schema_story_legends_panel_handling_root_desc",
-    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable."
-  },
-  {
-    "id": "schema_story_legends_panel_default",
-    "en": "Use the application default"
-  },
-  {
-    "id": "schema_story_legends_panel_root_default",
-    "en": "Use the display option defined in each steps"
-  },
-  {
-    "id": "schema_story_legends_panel_open",
-    "en": "Open the legends panel"
-  },
-  {
-    "id": "schema_story_legends_panel_closed",
-    "en": "Close the legends panel"
-  },
-  {
-    "id": "schema_story_pos_get",
-    "en": "Update using current map parameters"
-  },
-  {
-    "id": "schema_story_slide",
-    "en": "Slide"
-  },
-  {
-    "id": "schema_story_slide_color",
-    "en": "Color theme"
-  },
-  {
-    "id": "schema_story_slide_color_bg",
-    "en": "Background color"
-  },
-  {
-    "id": "schema_story_slide_color_fg",
-    "en": "Text color"
-  },
-  {
-    "id": "schema_story_slide_config",
-    "en": "Configuration"
-  },
-  {
-    "id": "schema_story_slide_layout",
-    "en": "Content layout"
-  },
-  {
-    "id": "schema_story_slide_opacity_bg",
-    "en": "Background opacity"
-  },
-  {
-    "id": "schema_story_slide_pos_z",
-    "en": "Depth (z axis)"
-  },
-  {
-    "id": "schema_story_slide_speed",
-    "en": "Speed ratio"
-  },
-  {
-    "id": "schema_story_slides",
-    "en": "Slides"
-  },
-  {
-    "id": "schema_story_step",
-    "en": "Step"
-  },
-  {
-    "id": "schema_story_step_content",
-    "en": "Content"
-  },
-  {
-    "id": "schema_story_step_title",
-    "en": "Title "
-  },
-  {
-    "id": "schema_story_steps",
-    "en": "Steps"
-  },
-  {
-    "id": "schema_story_steps_title",
-    "en": "Steps of the story"
-  },
-  {
-    "id": "schema_story_text_pos",
-    "en": "Text position"
-  },
-  {
-    "id": "schema_story_title",
-    "en": "Story"
-  },
-  {
     "id": "schema_style_value",
     "en": "Value"
   },
@@ -4300,150 +4136,6 @@
     "en": "Metadata editor for the source of the data"
   },
   {
-    "id": "schema_story_views_activate",
-    "en": "Views to activate"
-  },
-  {
-    "id": "schema_story_slide_classes",
-    "en": "Slide classes"
-  },
-  {
-    "id": "schema_story_slide_classes_name",
-    "en": "Class names"
-  },
-  {
-    "id": "schema_story_slide_allow_scroll",
-    "en": "Allow scrolling"
-  },
-  {
-    "id": "schema_story_slide_allow_scroll_desc",
-    "en": "If the slide content goes outside the container, a scrollbar will be displayed."
-  },
-  {
-    "id": "schema_story_slide_base_txt_size_px",
-    "en": "Base text size in pixels"
-  },
-  {
-    "id": "schema_story_slide_effects",
-    "en": "Effects"
-  },
-  {
-    "id": "schema_story_slide_effect_start",
-    "en": "Start"
-  },
-  {
-    "id": "schema_story_slide_effect_end",
-    "en": "End"
-  },
-  {
-    "id": "schema_story_slide_effect_offset",
-    "en": "Offset"
-  },
-  {
-    "id": "schema_story_slide_effect_factor",
-    "en": "Factor"
-  },
-  {
-    "id": "schema_story_slide_effect_type",
-    "en": "Type"
-  },
-  {
-    "id": "schema_story_slide_name",
-    "en": "Slide name"
-  },
-  {
-    "id": "schema_story_map_anim_duration",
-    "en": "Animation duration [ms]"
-  },
-  {
-    "id": "schema_story_map_anim_duration_desc",
-    "en": "Change the total animation duration"
-  },
-  {
-    "id": "schema_story_map_anim_traj_method",
-    "en": "Trajectory method"
-  },
-  {
-    "id": "schema_story_map_anim_traj_method_desc",
-    "en": "Set the traveling method of the camera during the animation"
-  },
-  {
-    "id": "schema_story_map_anim_fun",
-    "en": "Animation function"
-  },
-  {
-    "id": "schema_story_map_anim_fun_desc",
-    "en": "Change the default animation function. Ease the start and/or end of the animation."
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp",
-    "en": "Animation function exponent"
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp_desc",
-    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing."
-  },
-  {
-    "id": "schema_story_map_anim",
-    "en": "Map animation"
-  },
-  {
-    "id": "schema_story_autoplay_timeout",
-    "en": "Timeout [ms]"
-  },
-  {
-    "id": "schema_story_autoplay_timeout_desc",
-    "en": "Waiting time before going to the next step."
-  },
-  {
-    "id": "schema_story_autoplay_transition",
-    "en": "Transition [ms]"
-  },
-  {
-    "id": "schema_story_autoplay_transition_desc",
-    "en": "Duration of the transition between steps."
-  },
-  {
-    "id": "schema_story_autoplay",
-    "en": "Autoplay settings"
-  },
-  {
-    "id": "schema_story_step_name",
-    "en": "Step name"
-  },
-  {
-    "id": "schema_story_screen_res",
-    "en": "Screen resolution"
-  },
-  {
-    "id": "schema_story_step_base_layer",
-    "en": "Base layer configuration"
-  },
-  {
-    "id": "schema_story_step_add_aerial",
-    "en": "Enable aerial mode for this step"
-  },
-  {
-    "id": "schema_story_step_add_aerial_desc",
-    "en": "The aerial mode add a high resolution aerial imagery to the map"
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain",
-    "en": "Enable '3d terrain' mode for this step"
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing."
-  },
-  {
-    "id": "schema_story_screen_res_desc",
-    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating."
-  },
-  {
-    "id": "schema_story_settings",
-    "en": "Settings"
-  },
-  {
     "id": "button_legend_title",
     "en": "Legends"
   },
@@ -5462,6 +5154,346 @@
   {
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette"
+  },
+  {
+    "id": "schema_story_theme",
+    "en": "Theme"
+  },
+  {
+    "id": "schema_story_theme_desc",
+    "en": "Change application and map colors scheme"
+  },
+  {
+    "id": "schema_story_theme_default",
+    "en": "Use the project default"
+  },
+  {
+    "id": "schema_story_theme_step",
+    "en": "Use the theme option defined in each steps"
+  },
+  {
+    "id": "schema_story_projection",
+    "en": "Projection"
+  },
+  {
+    "id": "schema_story_projection_desc",
+    "en": "Change map projection"
+  },
+  {
+    "id": "schema_story_projection_default",
+    "en": "Use the default projection"
+  },
+  {
+    "id": "schema_story_projection_step",
+    "en": "Use the projection defined in each steps"
+  },
+  {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:"
+  },
+  {
+    "id": "schema_story_tips",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>"
+  },
+  {
+    "id": "schema_story_author",
+    "en": "Author of the story"
+  },
+  {
+    "id": "schema_story_map_pos",
+    "en": "Position of the map"
+  },
+  {
+    "id": "schema_story_meta",
+    "en": "Metadata"
+  },
+  {
+    "id": "schema_story_org",
+    "en": "Organisation name"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling",
+    "en": "Dashboards display mode"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable."
+  },
+  {
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed."
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable."
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel"
+  },
+  {
+    "id": "schema_story_pos_get",
+    "en": "Update using current map parameters"
+  },
+  {
+    "id": "schema_story_slide",
+    "en": "Slide"
+  },
+  {
+    "id": "schema_story_slide_color",
+    "en": "Color theme"
+  },
+  {
+    "id": "schema_story_slide_color_bg",
+    "en": "Background color"
+  },
+  {
+    "id": "schema_story_slide_color_fg",
+    "en": "Text color"
+  },
+  {
+    "id": "schema_story_slide_config",
+    "en": "Configuration"
+  },
+  {
+    "id": "schema_story_slide_layout",
+    "en": "Content layout"
+  },
+  {
+    "id": "schema_story_slide_opacity_bg",
+    "en": "Background opacity"
+  },
+  {
+    "id": "schema_story_slide_pos_z",
+    "en": "Depth (z axis)"
+  },
+  {
+    "id": "schema_story_slide_speed",
+    "en": "Speed ratio"
+  },
+  {
+    "id": "schema_story_slides",
+    "en": "Slides"
+  },
+  {
+    "id": "schema_story_step",
+    "en": "Step"
+  },
+  {
+    "id": "schema_story_step_content",
+    "en": "Content"
+  },
+  {
+    "id": "schema_story_step_title",
+    "en": "Title "
+  },
+  {
+    "id": "schema_story_steps",
+    "en": "Steps"
+  },
+  {
+    "id": "schema_story_steps_title",
+    "en": "Steps of the story"
+  },
+  {
+    "id": "schema_story_text_pos",
+    "en": "Text position"
+  },
+  {
+    "id": "schema_story_title",
+    "en": "Story"
+  },
+  {
+    "id": "schema_story_views_activate",
+    "en": "Views to activate"
+  },
+  {
+    "id": "schema_story_slide_classes",
+    "en": "Slide classes"
+  },
+  {
+    "id": "schema_story_slide_classes_name",
+    "en": "Class names"
+  },
+  {
+    "id": "schema_story_slide_allow_scroll",
+    "en": "Allow scrolling"
+  },
+  {
+    "id": "schema_story_slide_allow_scroll_desc",
+    "en": "If the slide content goes outside the container, a scrollbar will be displayed."
+  },
+  {
+    "id": "schema_story_slide_base_txt_size_px",
+    "en": "Base text size in pixels"
+  },
+  {
+    "id": "schema_story_slide_effects",
+    "en": "Effects"
+  },
+  {
+    "id": "schema_story_slide_effect_start",
+    "en": "Start"
+  },
+  {
+    "id": "schema_story_slide_effect_end",
+    "en": "End"
+  },
+  {
+    "id": "schema_story_slide_effect_offset",
+    "en": "Offset"
+  },
+  {
+    "id": "schema_story_slide_effect_factor",
+    "en": "Factor"
+  },
+  {
+    "id": "schema_story_slide_effect_type",
+    "en": "Type"
+  },
+  {
+    "id": "schema_story_slide_name",
+    "en": "Slide name"
+  },
+  {
+    "id": "schema_story_map_anim_duration",
+    "en": "Animation duration [ms]"
+  },
+  {
+    "id": "schema_story_map_anim_duration_desc",
+    "en": "Change the total animation duration"
+  },
+  {
+    "id": "schema_story_map_anim_traj_method",
+    "en": "Trajectory method"
+  },
+  {
+    "id": "schema_story_map_anim_traj_method_desc",
+    "en": "Set the traveling method of the camera during the animation"
+  },
+  {
+    "id": "schema_story_map_anim_fun",
+    "en": "Animation function"
+  },
+  {
+    "id": "schema_story_map_anim_fun_desc",
+    "en": "Change the default animation function. Ease the start and/or end of the animation."
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp",
+    "en": "Animation function exponent"
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp_desc",
+    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing."
+  },
+  {
+    "id": "schema_story_map_anim",
+    "en": "Map animation"
+  },
+  {
+    "id": "schema_story_autoplay_timeout",
+    "en": "Timeout [ms]"
+  },
+  {
+    "id": "schema_story_autoplay_timeout_desc",
+    "en": "Waiting time before going to the next step."
+  },
+  {
+    "id": "schema_story_autoplay_transition",
+    "en": "Transition [ms]"
+  },
+  {
+    "id": "schema_story_autoplay_transition_desc",
+    "en": "Duration of the transition between steps."
+  },
+  {
+    "id": "schema_story_autoplay",
+    "en": "Autoplay settings"
+  },
+  {
+    "id": "schema_story_step_name",
+    "en": "Step name"
+  },
+  {
+    "id": "schema_story_screen_res",
+    "en": "Screen resolution"
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration"
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step"
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing."
+  },
+  {
+    "id": "schema_story_screen_res_desc",
+    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating."
+  },
+  {
+    "id": "schema_story_settings",
+    "en": "Settings"
   },
   {
     "id": "search_placeholder",

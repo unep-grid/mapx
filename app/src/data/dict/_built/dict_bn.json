@@ -3260,211 +3260,6 @@
     "bn": "ডেটা প্রদর্শন করতে সর্বোচ্চ জুম "
   },
   {
-    "id": "schema_story_opacity_timeout",
-    "en": "Timeout before decreasing opacity [ms]",
-    "bn": "অস্বচ্ছতা হ্রাস করার আগে সময়সীমা [ms]"
-  },
-  {
-    "id": "schema_story_opacity_timeout_desc",
-    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
-    "bn": "মাউস নিষ্ক্রিয়তার ক্ষেত্রে প্যানেল এবং নেভিগেশন বুলেটগুলির অস্বচ্ছতা হ্রাস করার আগে বিলম্ব করুন"
-  },
-  {
-    "id": "schema_story_tips_title",
-    "en": "Tips:",
-    "bn": "পরামর্শ: "
-  },
-  {
-    "id": "schema_story_tips",
-    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "bn": "<p>পাঠকদের জন্য বিরামবিহীন অভিজ্ঞতা প্রদানের জন্য এখানে ভাল অনুশীলনের তালিকা রয়েছে:</p><ol><li> সহজবোধ্য রাখো.</li><li> আপনার দর্শকদের আগ্রহ বজায় রাখতে ছোট গল্পের মানচিত্র তৈরি করা ভাল।</li><li> ভাল পাঠযোগ্যতার জন্য, একই ধাপে প্রতি ধাপে দুটি স্লাইড এবং মানচিত্রে দুটি স্তরের বেশি না হওয়ার পরামর্শ দেওয়া হয়।</li><li> ছবি, ভিডিও এবং ইনফোগ্রাফিকগুলি আপনার গল্পটিকে প্রাসঙ্গিক করে তোলার জন্য দরকারী এবং প্রভাবশালী মাধ্যম হতে পারে। তবে তাদের আপনার গল্পের স্থানিক উপাদানটিকে ছাপিয়ে দেওয়া উচিত নয়। মানচিত্রগুলি এর কেন্দ্রে থাকা উচিত।</li><li> প্রভাব, ট্রানজিশন বা 3 ডি রূপান্তরগুলি ধীর ডিভাইসে আপনার গল্পের মানচিত্রের পঠনযোগ্যতাকে প্রভাবিত করতে পারে, এগুলিকে অল্প পরিমাণে ব্যবহার করুন।</li></ol> "
-  },
-  {
-    "id": "schema_story_author",
-    "en": "Author of the story",
-    "bn": "গল্পের লেখক "
-  },
-  {
-    "id": "schema_story_map_pos",
-    "en": "Position of the map",
-    "bn": "মানচিত্রের অবস্থান "
-  },
-  {
-    "id": "schema_story_meta",
-    "en": "Metadata",
-    "bn": "মেটাডেটা "
-  },
-  {
-    "id": "schema_story_org",
-    "en": "Organisation name",
-    "bn": "অর্গানাইজেশন নাম "
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling",
-    "en": "Dashboards display mode",
-    "bn": "ড্যাশবোর্ড প্রদর্শন মোড"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
-    "bn": "যদি নির্বাচিত দৃশ্য(গুলি) এর সাথে যুক্ত ড্যাশবোর্ড থাকে, তাহলে এটি কীভাবে রেন্ডার করা উচিত?"
-  },
-  {
-    "id": "schema_story_dashboard_panel_handling_root_desc",
-    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
-    "bn": "যদি নির্বাচিত দৃশ্য(গুলি) এর সাথে যুক্ত ড্যাশবোর্ড থাকে, তাহলে এটি কীভাবে বিশ্বব্যাপী রেন্ডার করা উচিত? স্টেপ কনফিগারেশন উপেক্ষা করা হবে, যদি প্রযোজ্য হয়।"
-  },
-  {
-    "id": "schema_story_dashboard_panel_default",
-    "en": "Use the dashboard default display option",
-    "bn": "ড্যাশবোর্ড ডিফল্ট প্রদর্শন বিকল্প ব্যবহার করুন"
-  },
-  {
-    "id": "schema_story_dashboard_panel_root_default",
-    "en": "Use the display options defined in each steps",
-    "bn": "প্রতিটি ধাপে সংজ্ঞায়িত প্রদর্শন বিকল্পগুলি ব্যবহার করুন"
-  },
-  {
-    "id": "schema_story_dashboard_panel_open",
-    "en": "Open the dashboard panel",
-    "bn": "ড্যাশবোর্ড প্যানেল খুলুন"
-  },
-  {
-    "id": "schema_story_dashboard_panel_closed",
-    "en": "Close the dashboard panel",
-    "bn": "ড্যাশবোর্ড প্যানেল বন্ধ করুন"
-  },
-  {
-    "id": "schema_story_dashboard_panel_disabled",
-    "en": "Do not render dashboards",
-    "bn": "ড্যাশবোর্ড রেন্ডার করবেন না"
-  },
-  {
-    "id": "schema_story_legends_panel_handling",
-    "en": "Legends display mode",
-    "bn": "কিংবদন্তি প্রদর্শন মোড"
-  },
-  {
-    "id": "schema_story_legends_panel_handling_desc",
-    "en": "Set how the legend panel should be displayed.",
-    "bn": "লিজেন্ড প্যানেল কিভাবে প্রদর্শিত হবে তা সেট করুন।"
-  },
-  {
-    "id": "schema_story_legends_panel_handling_root_desc",
-    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
-    "bn": "বিশ্বব্যাপী কিংবদন্তি প্যানেল কীভাবে প্রদর্শিত হবে তা সেট করুন। স্টেপ কনফিগারেশন উপেক্ষা করা হবে, যদি প্রযোজ্য হয়।"
-  },
-  {
-    "id": "schema_story_legends_panel_default",
-    "en": "Use the application default",
-    "bn": "অ্যাপ্লিকেশন ডিফল্ট ব্যবহার করুন"
-  },
-  {
-    "id": "schema_story_legends_panel_root_default",
-    "en": "Use the display option defined in each steps",
-    "bn": "প্রতিটি ধাপে সংজ্ঞায়িত প্রদর্শন বিকল্পটি ব্যবহার করুন"
-  },
-  {
-    "id": "schema_story_legends_panel_open",
-    "en": "Open the legends panel",
-    "bn": "কিংবদন্তি প্যানেল খুলুন"
-  },
-  {
-    "id": "schema_story_legends_panel_closed",
-    "en": "Close the legends panel",
-    "bn": "কিংবদন্তি প্যানেল বন্ধ করুন"
-  },
-  {
-    "id": "schema_story_pos_get",
-    "en": "Update using current map parameters",
-    "bn": "বর্তমান মানচিত্রের পরামিতিগুলি ব্যবহার করে আপডেট করুন "
-  },
-  {
-    "id": "schema_story_slide",
-    "en": "Slide",
-    "bn": "স্লাইড "
-  },
-  {
-    "id": "schema_story_slide_color",
-    "en": "Color theme",
-    "bn": "রঙ থিম "
-  },
-  {
-    "id": "schema_story_slide_color_bg",
-    "en": "Background color",
-    "bn": "পেছনের রং "
-  },
-  {
-    "id": "schema_story_slide_color_fg",
-    "en": "Text color",
-    "bn": "লেখার রঙ "
-  },
-  {
-    "id": "schema_story_slide_config",
-    "en": "Configuration",
-    "bn": "কনফিগারেশন "
-  },
-  {
-    "id": "schema_story_slide_layout",
-    "en": "Content layout",
-    "bn": "সামগ্রী বিন্যাস "
-  },
-  {
-    "id": "schema_story_slide_opacity_bg",
-    "en": "Background opacity",
-    "bn": "পটভূমি অস্বচ্ছতা "
-  },
-  {
-    "id": "schema_story_slide_pos_z",
-    "en": "Depth (z axis)",
-    "bn": "গভীরতা (z অক্ষ) "
-  },
-  {
-    "id": "schema_story_slide_speed",
-    "en": "Speed ratio",
-    "bn": "গতির অনুপাত "
-  },
-  {
-    "id": "schema_story_slides",
-    "en": "Slides",
-    "bn": "স্লাইডস "
-  },
-  {
-    "id": "schema_story_step",
-    "en": "Step",
-    "bn": "পদক্ষেপ "
-  },
-  {
-    "id": "schema_story_step_content",
-    "en": "Content",
-    "bn": "বিষয়বস্তু "
-  },
-  {
-    "id": "schema_story_step_title",
-    "en": "Title ",
-    "bn": "শিরোনাম "
-  },
-  {
-    "id": "schema_story_steps",
-    "en": "Steps",
-    "bn": "পদক্ষেপ "
-  },
-  {
-    "id": "schema_story_steps_title",
-    "en": "Steps of the story",
-    "bn": "গল্পের পদক্ষেপগুলি "
-  },
-  {
-    "id": "schema_story_text_pos",
-    "en": "Text position",
-    "bn": "পাঠ্য অবস্থান "
-  },
-  {
-    "id": "schema_story_title",
-    "en": "Story",
-    "bn": "গল্প "
-  },
-  {
     "id": "schema_style_value",
     "en": "Value",
     "bn": "মান "
@@ -5375,186 +5170,6 @@
     "bn": "ডেটা উত্সের জন্য মেটাডেটা সম্পাদক "
   },
   {
-    "id": "schema_story_views_activate",
-    "en": "Views to activate",
-    "bn": "সক্রিয় করার জন্য দর্শনগুলি "
-  },
-  {
-    "id": "schema_story_slide_classes",
-    "en": "Slide classes",
-    "bn": "স্লাইড ক্লাস "
-  },
-  {
-    "id": "schema_story_slide_classes_name",
-    "en": "Class names",
-    "bn": "শ্রেণীর নাম "
-  },
-  {
-    "id": "schema_story_slide_allow_scroll",
-    "en": "Allow scrolling",
-    "bn": "স্ক্রোলিংয়ের অনুমতি দিন "
-  },
-  {
-    "id": "schema_story_slide_allow_scroll_desc",
-    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
-    "bn": "যদি স্লাইডের সামগ্রীটি ধারকটির বাইরে চলে যায় তবে একটি স্ক্রোলবার প্রদর্শিত হবে। "
-  },
-  {
-    "id": "schema_story_slide_base_txt_size_px",
-    "en": "Base text size in pixels",
-    "bn": "বেস পাঠ্য আকার পিক্সেল "
-  },
-  {
-    "id": "schema_story_slide_effects",
-    "en": "Effects",
-    "bn": "প্রভাব "
-  },
-  {
-    "id": "schema_story_slide_effect_start",
-    "en": "Start",
-    "bn": "শুরু করুন "
-  },
-  {
-    "id": "schema_story_slide_effect_end",
-    "en": "End",
-    "bn": "শেষ "
-  },
-  {
-    "id": "schema_story_slide_effect_offset",
-    "en": "Offset",
-    "bn": "অফসেট "
-  },
-  {
-    "id": "schema_story_slide_effect_factor",
-    "en": "Factor",
-    "bn": "ফ্যাক্টর "
-  },
-  {
-    "id": "schema_story_slide_effect_type",
-    "en": "Type",
-    "bn": "প্রকার "
-  },
-  {
-    "id": "schema_story_slide_name",
-    "en": "Slide name",
-    "bn": "স্লাইডের নাম "
-  },
-  {
-    "id": "schema_story_map_anim_duration",
-    "en": "Animation duration [ms]",
-    "bn": "অ্যানিমেশন সময়কাল [এমএস] "
-  },
-  {
-    "id": "schema_story_map_anim_duration_desc",
-    "en": "Change the total animation duration",
-    "bn": "মোট অ্যানিমেশন সময়কাল পরিবর্তন করুন "
-  },
-  {
-    "id": "schema_story_map_anim_traj_method",
-    "en": "Trajectory method",
-    "bn": "ট্র্যাজেক্টরি পদ্ধতি "
-  },
-  {
-    "id": "schema_story_map_anim_traj_method_desc",
-    "en": "Set the traveling method of the camera during the animation",
-    "bn": "অ্যানিমেশন চলাকালীন ক্যামেরার ভ্রমণের পদ্ধতিটি সেট করুন "
-  },
-  {
-    "id": "schema_story_map_anim_fun",
-    "en": "Animation function",
-    "bn": "অ্যানিমেশন ফাংশন "
-  },
-  {
-    "id": "schema_story_map_anim_fun_desc",
-    "en": "Change the default animation function. Ease the start and/or end of the animation.",
-    "bn": "ডিফল্ট অ্যানিমেশন ফাংশন পরিবর্তন করুন। অ্যানিমেশনটির শুরু এবং / অথবা শেষটি সহজ করুন। "
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp",
-    "en": "Animation function exponent",
-    "bn": "অ্যানিমেশন ফাংশন ব্যয়কারী "
-  },
-  {
-    "id": "schema_story_map_anim_fun_exp_desc",
-    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
-    "bn": "ডিফল্ট ফাংশন এক্সপোনেন্ট পরিবর্তন করুন। এটি প্রশস্তকরণের হারকে প্রশস্ত বা হ্রাস করবে। "
-  },
-  {
-    "id": "schema_story_map_anim",
-    "en": "Map animation",
-    "bn": "মানচিত্র অ্যানিমেশন "
-  },
-  {
-    "id": "schema_story_autoplay_timeout",
-    "en": "Timeout [ms]",
-    "bn": "সময় শেষ"
-  },
-  {
-    "id": "schema_story_autoplay_timeout_desc",
-    "en": "Waiting time before going to the next step.",
-    "bn": "পরবর্তী ধাপে যাওয়ার আগে অপেক্ষার সময়।"
-  },
-  {
-    "id": "schema_story_autoplay_transition",
-    "en": "Transition [ms]",
-    "bn": "রূপান্তর [এমএস] "
-  },
-  {
-    "id": "schema_story_autoplay_transition_desc",
-    "en": "Duration of the transition between steps.",
-    "bn": "পদক্ষেপের মধ্যে রূপান্তরের সময়কাল। "
-  },
-  {
-    "id": "schema_story_autoplay",
-    "en": "Autoplay settings",
-    "bn": "অটোপ্লে সেটিংস "
-  },
-  {
-    "id": "schema_story_step_name",
-    "en": "Step name",
-    "bn": "পদক্ষেপের নাম "
-  },
-  {
-    "id": "schema_story_screen_res",
-    "en": "Screen resolution",
-    "bn": "পর্দা রেজল্যুশন "
-  },
-  {
-    "id": "schema_story_step_base_layer",
-    "en": "Base layer configuration",
-    "bn": "বেস স্তর কনফিগারেশন "
-  },
-  {
-    "id": "schema_story_step_add_aerial",
-    "en": "Enable aerial mode for this step",
-    "bn": "এই পদক্ষেপের জন্য বায়ু মোড সক্ষম করুন "
-  },
-  {
-    "id": "schema_story_step_add_aerial_desc",
-    "en": "The aerial mode add a high resolution aerial imagery to the map",
-    "bn": "এরিয়াল মোড মানচিত্রে একটি উচ্চ রেজোলিউশন বায়বীয় চিত্র যুক্ত করে "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain",
-    "en": "Enable '3d terrain' mode for this step",
-    "bn": "এই পদক্ষেপের জন্য '3 ডি অঞ্চল' মোড সক্ষম করুন "
-  },
-  {
-    "id": "schema_story_step_add_3d_terrain_desc",
-    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "bn": "'3d ভূখণ্ড' উচ্চতাকে 3 মাত্রায় দেখাবে। ক্যামেরা কাত হয়ে উচ্চ জুমে এটি উপযোগী। পিচ এবং বিয়ারিং পরিবর্তন করতে আপনার নিয়ন্ত্রণ কী এবং আপনার মাউস ব্যবহার করুন।"
-  },
-  {
-    "id": "schema_story_screen_res_desc",
-    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
-    "bn": "একটি গল্পের মানচিত্রের সময় পৃষ্ঠার বেস রেজোলিউশন। এটি স্বয়ংক্রিয়ভাবে স্ক্রিনে ফিট হওয়ার জন্য এবং সামগ্রী বিন্যাস সংরক্ষণের জন্য স্কেল করবে। "
-  },
-  {
-    "id": "schema_story_settings",
-    "en": "Settings",
-    "bn": "সেটিংস "
-  },
-  {
     "id": "button_legend_title",
     "en": "Legends",
     "bn": "কিংবদন্তি "
@@ -6828,6 +6443,431 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "bn": "ডিফল্ট প্যালেট ব্যবহার করুন "
+  },
+  {
+    "id": "schema_story_theme",
+    "en": "Theme",
+    "bn": "থিম"
+  },
+  {
+    "id": "schema_story_theme_desc",
+    "en": "Change application and map colors scheme",
+    "bn": "অ্যাপ্লিকেশন এবং মানচিত্রের রঙের স্কিম পরিবর্তন করুন"
+  },
+  {
+    "id": "schema_story_theme_default",
+    "en": "Use the project default",
+    "bn": "প্রকল্প ডিফল্ট ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_theme_step",
+    "en": "Use the theme option defined in each steps",
+    "bn": "প্রতিটি ধাপে সংজ্ঞায়িত থিম বিকল্পটি ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_projection",
+    "en": "Projection",
+    "bn": "অভিক্ষেপ"
+  },
+  {
+    "id": "schema_story_projection_desc",
+    "en": "Change map projection",
+    "bn": "মানচিত্র অভিক্ষেপ পরিবর্তন"
+  },
+  {
+    "id": "schema_story_projection_default",
+    "en": "Use the default projection",
+    "bn": "ডিফল্ট অভিক্ষেপ ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_projection_step",
+    "en": "Use the projection defined in each steps",
+    "bn": "প্রতিটি ধাপে সংজ্ঞায়িত অভিক্ষেপ ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_opacity_timeout",
+    "en": "Timeout before decreasing opacity [ms]",
+    "bn": "অস্বচ্ছতা হ্রাস করার আগে সময়সীমা [ms]"
+  },
+  {
+    "id": "schema_story_opacity_timeout_desc",
+    "en": "Delay before decreasing the opacity of panels and navigation bullets in case of mouse inactivity",
+    "bn": "মাউস নিষ্ক্রিয়তার ক্ষেত্রে প্যানেল এবং নেভিগেশন বুলেটগুলির অস্বচ্ছতা হ্রাস করার আগে বিলম্ব করুন"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "bn": "পরামর্শ: "
+  },
+  {
+    "id": "schema_story_tips",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
+    "bn": "<p>পাঠকদের জন্য বিরামবিহীন অভিজ্ঞতা প্রদানের জন্য এখানে ভাল অনুশীলনের তালিকা রয়েছে:</p><ol><li> সহজবোধ্য রাখো.</li><li> আপনার দর্শকদের আগ্রহ বজায় রাখতে ছোট গল্পের মানচিত্র তৈরি করা ভাল।</li><li> ভাল পাঠযোগ্যতার জন্য, একই ধাপে প্রতি ধাপে দুটি স্লাইড এবং মানচিত্রে দুটি স্তরের বেশি না হওয়ার পরামর্শ দেওয়া হয়।</li><li> ছবি, ভিডিও এবং ইনফোগ্রাফিকগুলি আপনার গল্পটিকে প্রাসঙ্গিক করে তোলার জন্য দরকারী এবং প্রভাবশালী মাধ্যম হতে পারে। তবে তাদের আপনার গল্পের স্থানিক উপাদানটিকে ছাপিয়ে দেওয়া উচিত নয়। মানচিত্রগুলি এর কেন্দ্রে থাকা উচিত।</li><li> প্রভাব, ট্রানজিশন বা 3 ডি রূপান্তরগুলি ধীর ডিভাইসে আপনার গল্পের মানচিত্রের পঠনযোগ্যতাকে প্রভাবিত করতে পারে, এগুলিকে অল্প পরিমাণে ব্যবহার করুন।</li></ol> "
+  },
+  {
+    "id": "schema_story_author",
+    "en": "Author of the story",
+    "bn": "গল্পের লেখক "
+  },
+  {
+    "id": "schema_story_map_pos",
+    "en": "Position of the map",
+    "bn": "মানচিত্রের অবস্থান "
+  },
+  {
+    "id": "schema_story_meta",
+    "en": "Metadata",
+    "bn": "মেটাডেটা "
+  },
+  {
+    "id": "schema_story_org",
+    "en": "Organisation name",
+    "bn": "অর্গানাইজেশন নাম "
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling",
+    "en": "Dashboards display mode",
+    "bn": "ড্যাশবোর্ড প্রদর্শন মোড"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered?",
+    "bn": "যদি নির্বাচিত দৃশ্য(গুলি) এর সাথে যুক্ত ড্যাশবোর্ড থাকে, তাহলে এটি কীভাবে রেন্ডার করা উচিত?"
+  },
+  {
+    "id": "schema_story_dashboard_panel_handling_root_desc",
+    "en": "If selected view(s) have an associated dashboard, how should it be rendered globally? Steps config will be ignored, if applicable.",
+    "bn": "যদি নির্বাচিত দৃশ্য(গুলি) এর সাথে যুক্ত ড্যাশবোর্ড থাকে, তাহলে এটি কীভাবে বিশ্বব্যাপী রেন্ডার করা উচিত? স্টেপ কনফিগারেশন উপেক্ষা করা হবে, যদি প্রযোজ্য হয়।"
+  },
+  {
+    "id": "schema_story_dashboard_panel_default",
+    "en": "Use the dashboard default display option",
+    "bn": "ড্যাশবোর্ড ডিফল্ট প্রদর্শন বিকল্প ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_dashboard_panel_root_default",
+    "en": "Use the display options defined in each steps",
+    "bn": "প্রতিটি ধাপে সংজ্ঞায়িত প্রদর্শন বিকল্পগুলি ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_dashboard_panel_open",
+    "en": "Open the dashboard panel",
+    "bn": "ড্যাশবোর্ড প্যানেল খুলুন"
+  },
+  {
+    "id": "schema_story_dashboard_panel_closed",
+    "en": "Close the dashboard panel",
+    "bn": "ড্যাশবোর্ড প্যানেল বন্ধ করুন"
+  },
+  {
+    "id": "schema_story_dashboard_panel_disabled",
+    "en": "Do not render dashboards",
+    "bn": "ড্যাশবোর্ড রেন্ডার করবেন না"
+  },
+  {
+    "id": "schema_story_legends_panel_handling",
+    "en": "Legends display mode",
+    "bn": "কিংবদন্তি প্রদর্শন মোড"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_desc",
+    "en": "Set how the legend panel should be displayed.",
+    "bn": "লিজেন্ড প্যানেল কিভাবে প্রদর্শিত হবে তা সেট করুন।"
+  },
+  {
+    "id": "schema_story_legends_panel_handling_root_desc",
+    "en": "Set how the legend panel should be displayed globally. Steps config will be ignored, if applicable.",
+    "bn": "বিশ্বব্যাপী কিংবদন্তি প্যানেল কীভাবে প্রদর্শিত হবে তা সেট করুন। স্টেপ কনফিগারেশন উপেক্ষা করা হবে, যদি প্রযোজ্য হয়।"
+  },
+  {
+    "id": "schema_story_legends_panel_default",
+    "en": "Use the application default",
+    "bn": "অ্যাপ্লিকেশন ডিফল্ট ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_legends_panel_root_default",
+    "en": "Use the display option defined in each steps",
+    "bn": "প্রতিটি ধাপে সংজ্ঞায়িত প্রদর্শন বিকল্পটি ব্যবহার করুন"
+  },
+  {
+    "id": "schema_story_legends_panel_open",
+    "en": "Open the legends panel",
+    "bn": "কিংবদন্তি প্যানেল খুলুন"
+  },
+  {
+    "id": "schema_story_legends_panel_closed",
+    "en": "Close the legends panel",
+    "bn": "কিংবদন্তি প্যানেল বন্ধ করুন"
+  },
+  {
+    "id": "schema_story_pos_get",
+    "en": "Update using current map parameters",
+    "bn": "বর্তমান মানচিত্রের পরামিতিগুলি ব্যবহার করে আপডেট করুন "
+  },
+  {
+    "id": "schema_story_slide",
+    "en": "Slide",
+    "bn": "স্লাইড "
+  },
+  {
+    "id": "schema_story_slide_color",
+    "en": "Color theme",
+    "bn": "রঙ থিম "
+  },
+  {
+    "id": "schema_story_slide_color_bg",
+    "en": "Background color",
+    "bn": "পেছনের রং "
+  },
+  {
+    "id": "schema_story_slide_color_fg",
+    "en": "Text color",
+    "bn": "লেখার রঙ "
+  },
+  {
+    "id": "schema_story_slide_config",
+    "en": "Configuration",
+    "bn": "কনফিগারেশন "
+  },
+  {
+    "id": "schema_story_slide_layout",
+    "en": "Content layout",
+    "bn": "সামগ্রী বিন্যাস "
+  },
+  {
+    "id": "schema_story_slide_opacity_bg",
+    "en": "Background opacity",
+    "bn": "পটভূমি অস্বচ্ছতা "
+  },
+  {
+    "id": "schema_story_slide_pos_z",
+    "en": "Depth (z axis)",
+    "bn": "গভীরতা (z অক্ষ) "
+  },
+  {
+    "id": "schema_story_slide_speed",
+    "en": "Speed ratio",
+    "bn": "গতির অনুপাত "
+  },
+  {
+    "id": "schema_story_slides",
+    "en": "Slides",
+    "bn": "স্লাইডস "
+  },
+  {
+    "id": "schema_story_step",
+    "en": "Step",
+    "bn": "পদক্ষেপ "
+  },
+  {
+    "id": "schema_story_step_content",
+    "en": "Content",
+    "bn": "বিষয়বস্তু "
+  },
+  {
+    "id": "schema_story_step_title",
+    "en": "Title ",
+    "bn": "শিরোনাম "
+  },
+  {
+    "id": "schema_story_steps",
+    "en": "Steps",
+    "bn": "পদক্ষেপ "
+  },
+  {
+    "id": "schema_story_steps_title",
+    "en": "Steps of the story",
+    "bn": "গল্পের পদক্ষেপগুলি "
+  },
+  {
+    "id": "schema_story_text_pos",
+    "en": "Text position",
+    "bn": "পাঠ্য অবস্থান "
+  },
+  {
+    "id": "schema_story_title",
+    "en": "Story",
+    "bn": "গল্প "
+  },
+  {
+    "id": "schema_story_views_activate",
+    "en": "Views to activate",
+    "bn": "সক্রিয় করার জন্য দর্শনগুলি "
+  },
+  {
+    "id": "schema_story_slide_classes",
+    "en": "Slide classes",
+    "bn": "স্লাইড ক্লাস "
+  },
+  {
+    "id": "schema_story_slide_classes_name",
+    "en": "Class names",
+    "bn": "শ্রেণীর নাম "
+  },
+  {
+    "id": "schema_story_slide_allow_scroll",
+    "en": "Allow scrolling",
+    "bn": "স্ক্রোলিংয়ের অনুমতি দিন "
+  },
+  {
+    "id": "schema_story_slide_allow_scroll_desc",
+    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
+    "bn": "যদি স্লাইডের সামগ্রীটি ধারকটির বাইরে চলে যায় তবে একটি স্ক্রোলবার প্রদর্শিত হবে। "
+  },
+  {
+    "id": "schema_story_slide_base_txt_size_px",
+    "en": "Base text size in pixels",
+    "bn": "বেস পাঠ্য আকার পিক্সেল "
+  },
+  {
+    "id": "schema_story_slide_effects",
+    "en": "Effects",
+    "bn": "প্রভাব "
+  },
+  {
+    "id": "schema_story_slide_effect_start",
+    "en": "Start",
+    "bn": "শুরু করুন "
+  },
+  {
+    "id": "schema_story_slide_effect_end",
+    "en": "End",
+    "bn": "শেষ "
+  },
+  {
+    "id": "schema_story_slide_effect_offset",
+    "en": "Offset",
+    "bn": "অফসেট "
+  },
+  {
+    "id": "schema_story_slide_effect_factor",
+    "en": "Factor",
+    "bn": "ফ্যাক্টর "
+  },
+  {
+    "id": "schema_story_slide_effect_type",
+    "en": "Type",
+    "bn": "প্রকার "
+  },
+  {
+    "id": "schema_story_slide_name",
+    "en": "Slide name",
+    "bn": "স্লাইডের নাম "
+  },
+  {
+    "id": "schema_story_map_anim_duration",
+    "en": "Animation duration [ms]",
+    "bn": "অ্যানিমেশন সময়কাল [এমএস] "
+  },
+  {
+    "id": "schema_story_map_anim_duration_desc",
+    "en": "Change the total animation duration",
+    "bn": "মোট অ্যানিমেশন সময়কাল পরিবর্তন করুন "
+  },
+  {
+    "id": "schema_story_map_anim_traj_method",
+    "en": "Trajectory method",
+    "bn": "ট্র্যাজেক্টরি পদ্ধতি "
+  },
+  {
+    "id": "schema_story_map_anim_traj_method_desc",
+    "en": "Set the traveling method of the camera during the animation",
+    "bn": "অ্যানিমেশন চলাকালীন ক্যামেরার ভ্রমণের পদ্ধতিটি সেট করুন "
+  },
+  {
+    "id": "schema_story_map_anim_fun",
+    "en": "Animation function",
+    "bn": "অ্যানিমেশন ফাংশন "
+  },
+  {
+    "id": "schema_story_map_anim_fun_desc",
+    "en": "Change the default animation function. Ease the start and/or end of the animation.",
+    "bn": "ডিফল্ট অ্যানিমেশন ফাংশন পরিবর্তন করুন। অ্যানিমেশনটির শুরু এবং / অথবা শেষটি সহজ করুন। "
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp",
+    "en": "Animation function exponent",
+    "bn": "অ্যানিমেশন ফাংশন ব্যয়কারী "
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp_desc",
+    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
+    "bn": "ডিফল্ট ফাংশন এক্সপোনেন্ট পরিবর্তন করুন। এটি প্রশস্তকরণের হারকে প্রশস্ত বা হ্রাস করবে। "
+  },
+  {
+    "id": "schema_story_map_anim",
+    "en": "Map animation",
+    "bn": "মানচিত্র অ্যানিমেশন "
+  },
+  {
+    "id": "schema_story_autoplay_timeout",
+    "en": "Timeout [ms]",
+    "bn": "সময় শেষ"
+  },
+  {
+    "id": "schema_story_autoplay_timeout_desc",
+    "en": "Waiting time before going to the next step.",
+    "bn": "পরবর্তী ধাপে যাওয়ার আগে অপেক্ষার সময়।"
+  },
+  {
+    "id": "schema_story_autoplay_transition",
+    "en": "Transition [ms]",
+    "bn": "রূপান্তর [এমএস] "
+  },
+  {
+    "id": "schema_story_autoplay_transition_desc",
+    "en": "Duration of the transition between steps.",
+    "bn": "পদক্ষেপের মধ্যে রূপান্তরের সময়কাল। "
+  },
+  {
+    "id": "schema_story_autoplay",
+    "en": "Autoplay settings",
+    "bn": "অটোপ্লে সেটিংস "
+  },
+  {
+    "id": "schema_story_step_name",
+    "en": "Step name",
+    "bn": "পদক্ষেপের নাম "
+  },
+  {
+    "id": "schema_story_screen_res",
+    "en": "Screen resolution",
+    "bn": "পর্দা রেজল্যুশন "
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "bn": "বেস স্তর কনফিগারেশন "
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "bn": "এই পদক্ষেপের জন্য বায়ু মোড সক্ষম করুন "
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "bn": "এরিয়াল মোড মানচিত্রে একটি উচ্চ রেজোলিউশন বায়বীয় চিত্র যুক্ত করে "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "bn": "এই পদক্ষেপের জন্য '3 ডি অঞ্চল' মোড সক্ষম করুন "
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimensions. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "bn": "'3d ভূখণ্ড' উচ্চতাকে 3 মাত্রায় দেখাবে। ক্যামেরা কাত হয়ে উচ্চ জুমে এটি উপযোগী। পিচ এবং বিয়ারিং পরিবর্তন করতে আপনার নিয়ন্ত্রণ কী এবং আপনার মাউস ব্যবহার করুন।"
+  },
+  {
+    "id": "schema_story_screen_res_desc",
+    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
+    "bn": "একটি গল্পের মানচিত্রের সময় পৃষ্ঠার বেস রেজোলিউশন। এটি স্বয়ংক্রিয়ভাবে স্ক্রিনে ফিট হওয়ার জন্য এবং সামগ্রী বিন্যাস সংরক্ষণের জন্য স্কেল করবে। "
+  },
+  {
+    "id": "schema_story_settings",
+    "en": "Settings",
+    "bn": "সেটিংস "
   },
   {
     "id": "search_placeholder",
