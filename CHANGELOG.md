@@ -1,3 +1,9 @@
+  - [1.9.43-beta.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.43-beta.2) 
+    
+    - APP
+        - StoryMap : added projection selection at story root level – without projection parameters for now.
+        - Themes : renamed themes ( breaking > 1.9.42 )   
+
   - [1.9.43-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.43-beta.1) 
 
     - APP
