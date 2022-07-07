@@ -1,3 +1,8 @@
+  - [1.9.43.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.43.1) 
+
+    - APP/API 
+        - Custom style can't be converted to SLD : ignore views that have custom style, are public, during the geoserver update. 
+
   - [1.9.43](https://github.com/unep-grid/map-x-mgl/tree/1.9.43) 
     
     - API
