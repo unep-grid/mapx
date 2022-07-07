@@ -50,8 +50,7 @@ const settings_global = {
     host: "localhost",
   },
   geoip: {
-    licenseKey: null,
-    urlTemplate: "http://localhost?licence={{licenseKey}}",
+    url_download: "http://localhost",
   },
   meili: {
     master_key: null,

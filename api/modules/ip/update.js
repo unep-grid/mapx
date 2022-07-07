@@ -2,7 +2,6 @@ import { settings } from "#root/settings";
 import { promisify } from "util";
 import { pipeline } from "stream";
 import { pgAdmin, pgWrite } from "#mapx/db";
-import { parseTemplate } from "#mapx/helpers";
 import pkgPgCopyStream from "pg-copy-streams";
 import { createWriteStream, mkdtempSync, existsSync } from "fs";
 import { unlink } from "fs/promises";
@@ -16,15 +15,12 @@ const pipe = promisify(pipeline);
 
 const { from } = pkgPgCopyStream;
 
-const s = settings.geoip;
-const url = parseTemplate(s.urlTemplate, s);
-
 const tmpDirPath = mkdtempSync(path.join(os.tmpdir(), "geoip-"));
 const tmpArchivePath = path.join(tmpDirPath, "archive.zip");
 const tblsTemp = [confCode, confName];
 
 export const updateGeoIpTable = async () => {
-  await update(url);
+  await update(settings.geoip.url_download);
 };
 
 async function update(url) {

@@ -30,8 +30,7 @@ const settings = Object.assign({}, settings_global, {
     host: env.REDIS_HOST,
   },
   geoip: {
-    licenseKey: env.MAXMIND_GEOIP_LICENSE_KEY,
-    urlTemplate: env.MAXMIND_URL_TEMPLATE
+    url_download : env.MAXMIND_URL_DOWNLOAD 
   },
   meili: {
     master_key: env.MEILI_MASTER_KEY,
