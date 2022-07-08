@@ -1,17 +1,15 @@
-WITH src_enabled as (
+WITH src_enabled AS (
   SELECT
     s.id id_source
   FROM
     mx_sources s,
     mx_projects p
   WHERE
-    s.project = p.id 
-  AND
-    s.services ? 'gs_ws_b'
-  AND 
-   p.public
+    s.project = p.id
+    AND (s.services ? 'gs_ws_a' OR s.services ? 'gs_ws_b')
+    AND p.public
 ),
-views_geoserver as (
+views_geoserver AS (
   SELECT
     v.id,
     v.data #> '{title,en}' title,
@@ -24,19 +22,21 @@ views_geoserver as (
     mx_views_latest v,
     src_enabled s
   WHERE
-    v.type = 'vt' 
+    v.type = 'vt'
     AND v.readers @> '["public"]'
     AND v.data #>> '{source,layerInfo,name}' = s.id_source
-    AND NOT (( v.data #>> '{style,custom,json}')::jsonb -> 'enable')::boolean
+    AND (
+      NOT v.data #> '{style}' ? 'custom' 
+      OR NOT ((v.data #>> '{style,custom,json}')::jsonb -> 'enable')::boolean)
 ),
-view_geoserver_extent_raw as (
+view_geoserver_extent_raw AS (
   SELECT
     *,
     ST_EstimatedExtent(id_source, 'geom') _extent
   FROM
     views_geoserver
 ),
-views_geoserver_extent as (
+views_geoserver_extent AS (
   SELECT
     id,
     title,
@@ -62,5 +62,5 @@ views_geoserver_extent as (
 )
 SELECT
   *
-from
+FROM
   views_geoserver_extent;
