@@ -1,3 +1,8 @@
+  - [1.9.43.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.43.2) 
+
+    - API 
+        - Geoserver views selection: views filtering improvement  
+
   - [1.9.43.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.43.1) 
 
     - APP/API 
