@@ -2446,13 +2446,13 @@
   },
   {
     "id": "btn_theme_sat",
-    "en": "Switch theme : aerial",
-    "ps": "هوایي"
+    "en": "Add an aerial imagery layer",
+    "ps": "د هوایی عکس العمل پرت اضافه کړئ"
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3d terrain",
-    "ps": "د 3d خاوره اضافه کړئ "
+    "en": "Add 3D terrain",
+    "ps": "د 3D خاوره اضافه کړئ"
   },
   {
     "id": "btn_toggle_all",

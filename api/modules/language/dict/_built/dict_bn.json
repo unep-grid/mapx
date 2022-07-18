@@ -2446,13 +2446,13 @@
   },
   {
     "id": "btn_theme_sat",
-    "en": "Switch theme : aerial",
-    "bn": "থিম স্যুইচ করুন: বায়বীয় "
+    "en": "Add an aerial imagery layer",
+    "bn": "একটি বায়বীয় চিত্র স্তর যোগ করুন"
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3d terrain",
-    "bn": "3 ডি অঞ্চল যুক্ত করুন "
+    "en": "Add 3D terrain",
+    "bn": "3D ভূখণ্ড যোগ করুন"
   },
   {
     "id": "btn_toggle_all",

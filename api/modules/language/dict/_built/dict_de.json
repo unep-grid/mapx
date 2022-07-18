@@ -2446,13 +2446,13 @@
   },
   {
     "id": "btn_theme_sat",
-    "en": "Switch theme : aerial",
-    "de": "Thema wechseln: Antenne "
+    "en": "Add an aerial imagery layer",
+    "de": "Fügen Sie einen Luftbild-Layer hinzu"
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3d terrain",
-    "de": "3D-Terrain hinzufügen "
+    "en": "Add 3D terrain",
+    "de": "Fügen Sie 3D-Gelände hinzu"
   },
   {
     "id": "btn_toggle_all",

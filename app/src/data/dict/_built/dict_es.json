@@ -2446,12 +2446,12 @@
   },
   {
     "id": "btn_theme_sat",
-    "en": "Switch theme : aerial",
-    "es": "Cambiar capa fuente: imagen aérea"
+    "en": "Add an aerial imagery layer",
+    "es": "Agregar una capa de imágenes aéreas"
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3d terrain",
+    "en": "Add 3D terrain",
     "es": "Añade relieve en 3D"
   },
   {

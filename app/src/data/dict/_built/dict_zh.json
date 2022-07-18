@@ -2446,12 +2446,12 @@
   },
   {
     "id": "btn_theme_sat",
-    "en": "Switch theme : aerial",
-    "zh": "切换主题：航空影像"
+    "en": "Add an aerial imagery layer",
+    "zh": "添加航空影像图层"
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3d terrain",
+    "en": "Add 3D terrain",
     "zh": "添加3D浮雕"
   },
   {

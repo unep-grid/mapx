@@ -2446,13 +2446,13 @@
   },
   {
     "id": "btn_theme_sat",
-    "en": "Switch theme : aerial",
-    "ru": "Тема переключения: антенна "
+    "en": "Add an aerial imagery layer",
+    "ru": "Добавьте слой аэрофотоснимков"
   },
   {
     "id": "btn_3d_terrain",
-    "en": "Add 3d terrain",
-    "ru": "Добавить трехмерный ландшафт "
+    "en": "Add 3D terrain",
+    "ru": "Добавьте 3D-территорию"
   },
   {
     "id": "btn_toggle_all",
