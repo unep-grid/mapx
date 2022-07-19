@@ -2036,8 +2036,13 @@
   },
   {
     "id": "btn_edit_source_metadata",
-    "en": "Edit sources metadata",
-    "bn": "সূত্রের মেটাডেটা সম্পাদনা করুন "
+    "en": "Edit source metadata",
+    "bn": "উৎস মেটাডেটা সম্পাদনা করুন"
+  },
+  {
+    "id": "btn_edit_source_attributes_table",
+    "en": "Edit source attributes table",
+    "bn": "উত্স বৈশিষ্ট্য টেবিল সম্পাদনা করুন"
   },
   {
     "id": "btn_finish",

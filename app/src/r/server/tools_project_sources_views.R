@@ -55,9 +55,15 @@ observe({
         ),
         actionButton(
           label = d("btn_edit_source_metadata", language),
-          inputId = "btnEditSourcesMetadata",
+          inputId = "btnEditSourceMetadata",
           class = "btn btn-default",
           `data-lang_key` = "btn_edit_source_metadata"
+        ),
+        actionButton(
+          label = d("btn_edit_source_attributes_table", language),
+          inputId = "btnEditSourceTable",
+          class = "btn btn-default",
+          `data-lang_key` = "btn_edit_source_attributes_table"
         ),
         actionButton(
           label = d("btn_add_source", language),

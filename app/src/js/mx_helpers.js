@@ -43,6 +43,7 @@ export * from './mx_helper_issues.js';
 *  imported module available in mx.helpers:
 *  Access requested for widget code / cc code. 
 */
+export * from './source/edit_table_instances.js';
 export * from './app_utils';
 export * from './mirror_util';
 export * from './language';

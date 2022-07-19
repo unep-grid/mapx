@@ -128,11 +128,11 @@ class MapxResolversApp extends MapxResolversStatic {
       },
       source_edit: {
         roles: ["publishers", "admins"],
-        id: "btnEditSources",
+        id: "btnEditSourceSettings",
       },
       source_metadata_edit: {
         roles: ["publishers", "admins"],
-        id: "btnEditSourcesMetadata",
+        id: "btnEditSourceMetadata",
       },
       source_upload: {
         roles: ["publishers", "admins"],

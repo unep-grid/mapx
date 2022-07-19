@@ -2,6 +2,7 @@ import { getArrayDistinct } from "./array_stat/index.js";
 import { modalMarkdown } from "./modal_markdown/index.js";
 import { getDictItem, getLanguageCurrent } from "./language";
 import { getApiUrl } from "./api_routes";
+import { getHandsonLanguageCode, typeConverter } from "./handsontable/utils.js";
 
 export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({}, opt);
@@ -49,7 +50,8 @@ export async function showSourceTableAttributeModal(opt) {
   const services = meta._services || [];
   const hasData = h.isArray(data) && data.length > 0;
   const license = "non-commercial-and-evaluation";
-  let elTable = el("div", {
+  const elContent = el("div", { class: "mx_handsontable" });
+  const elTable = el("div", {
     style: {
       width: "100%",
       height: "350px",
@@ -59,6 +61,7 @@ export async function showSourceTableAttributeModal(opt) {
       backgroundColor: "var(--mx_ui_shadow)",
     },
   });
+  elContent.appendChild(elTable);
   const allowDownload = services.indexOf("mx_download") > -1;
   const elButtonDownload = el(
     "button",
@@ -101,13 +104,13 @@ export async function showSourceTableAttributeModal(opt) {
   const elTitle = el("div");
   const buttons = [elButtonHelp, elButtonClearFilter, elButtonDownload];
   if (!hasData) {
-    elTable = el("span", "no data");
+    elTable.innerText = "no data";
     buttons.length = 0;
   }
 
   const elModal = h.modal({
     title: elTitle,
-    content: elTable,
+    content: elContent,
     onClose: destroy,
     buttons: buttons,
     addSelectize: false,
@@ -127,13 +130,14 @@ export async function showSourceTableAttributeModal(opt) {
       (v, t) => (v ? v : t.id === a ? t.value : v),
       null
     );
-
     return {
       type: typeConverter(type),
       data: a,
       readOnly: true,
     };
   });
+
+  debugger;
 
   hot = new handsontable(elTable, {
     columns: columns,
@@ -170,17 +174,6 @@ export async function showSourceTableAttributeModal(opt) {
   /**
    * Helpers
    */
-  function typeConverter(type) {
-    const def = "text";
-    return (
-      {
-        number: "numeric",
-        string: "text",
-        date: "date",
-      }[type] || def
-    );
-  }
-
   function handleDownload() {
     if (!allowDownload) {
       return;
@@ -312,18 +305,6 @@ function handleHelp() {
     title: getDictItem("btn_help"),
     wiki: "Attribute-table",
   });
-}
-
-function getHandsonLanguageCode() {
-  let lang = getLanguageCurrent();
-  let languages = {
-    de: "de-DE",
-    es: "es-MX",
-    fr: "fr-FR",
-    ru: "ru-RU",
-    zh: "zh-CN",
-  };
-  return languages[lang] || "en-US";
 }
 
 function listenMutationAttribute(el, cb) {

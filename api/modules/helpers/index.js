@@ -117,7 +117,14 @@ function toBoolean(value, def) {
 }
 
 /**
- * Random string composer : such as mx_mb9oa_6qmem_pkq9q_ajyer
+ * Random string composer for views id, source id, or any uniq identifier.
+ * 
+ * @param {String} prefix E.g. => mx_ in mx_123_124
+ * @param {Number} nRep Number of groups. E.g. 4 => 123_123_123_123 
+ * @param {nChar} nChar Number of characters per group : E.g. 2 => 12_12_12 
+ * @param {Boolean} toUpper To uppercase 
+ * @param {Boolean} toLower To lowercase
+ * @return {String} identifier 
  */
 function randomString(prefix, nRep, nChar, toLower, toUpper) {
   nRep = nRep || 4;
@@ -125,26 +132,26 @@ function randomString(prefix, nRep, nChar, toLower, toUpper) {
   prefix = prefix || "mx";
   toLower = toLower || false;
   toUpper = toUpper || false;
-  var out = [];
-  var sep = "_";
-  var chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var n = chars.length - 1;
-  var c = "";
-  for (var i = 0; i < nRep; i++) {
+  const out = [prefix];
+  const sep = "_";
+  const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const n = chars.length - 1;
+  
+  for (let i = 0; i < nRep; i++) {
     out.push(sep);
-    for (var j = 0; j < nChar; j++) {
-      c = chars[Math.round(Math.random() * n)];
-      out.push(c);
+    for (let j = 0; j < nChar; j++) {
+      out.push(chars[Math.round(Math.random() * n)]);
     }
   }
-  out = prefix + out.join("");
+
+  let outStr = out.join("");
   if (toLower) {
-    out = out.toLowerCase();
+    outStr = outStr.toLowerCase();
   }
   if (toUpper) {
-    out = out.toUpperCase();
+    outStr = outStr.toUpperCase();
   }
-  return out;
+  return outStr;
 }
 
 /*

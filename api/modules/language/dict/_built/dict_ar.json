@@ -2036,8 +2036,13 @@
   },
   {
     "id": "btn_edit_source_metadata",
-    "en": "Edit sources metadata",
-    "ar": "تحرير مصادر البيانات الوصفية "
+    "en": "Edit source metadata",
+    "ar": "تحرير البيانات الأولية المصدر"
+  },
+  {
+    "id": "btn_edit_source_attributes_table",
+    "en": "Edit source attributes table",
+    "ar": "تحرير جدول سمات المصدر"
   },
   {
     "id": "btn_finish",

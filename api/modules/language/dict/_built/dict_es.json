@@ -2036,8 +2036,13 @@
   },
   {
     "id": "btn_edit_source_metadata",
-    "en": "Edit sources metadata",
-    "es": "Editar los metadatos de la fuente de datos"
+    "en": "Edit source metadata",
+    "es": "Modificar los metadatos de una fuente."
+  },
+  {
+    "id": "btn_edit_source_attributes_table",
+    "en": "Edit source attributes table",
+    "es": "Editar la tabla de atributos de una fuente"
   },
   {
     "id": "btn_finish",

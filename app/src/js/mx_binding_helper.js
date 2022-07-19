@@ -65,6 +65,7 @@ $(document).on("shiny:connected", function () {
   bind("mglGetProjectViewsState", h.getProjectViewsState);
   bind("mglUpdateProject", h.updateProject);
   bind("mglGetProjectViewsCollections", h.getProjectViewsCollectionsShiny);
+  bind("mglEditTable", h.editTable);
   bind("mglInit", h.initMapx);
 
   /**

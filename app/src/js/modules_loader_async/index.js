@@ -248,13 +248,14 @@ async function loadJsonEditor() {
 
 async function loadHandsontable() {
   const m = await Promise.all([
-    import("handsontable"),
+    import("handsontable/dist/handsontable.full.js"),
     import("handsontable/dist/handsontable.css"),
-    import("handsontable/languages/de-DE.js"),
-    import("handsontable/languages/es-MX.js"),
-    import("handsontable/languages/fr-FR.js"),
-    import("handsontable/languages/ru-RU.js"),
-    import("handsontable/languages/zh-CN.js"),
+    import("../handsontable/style.css"),
+    //import("handsontable/dist/languages/de-DE.js"),
+    /*import("handsontable/languages/es-MX.js"),*/
+    /*import("handsontable/languages/fr-FR.js"),*/
+    /*import("handsontable/languages/ru-RU.js"),*/
+    /*import("handsontable/languages/zh-CN.js"),*/
   ]);
   return m[0].default;
 }

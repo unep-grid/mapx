@@ -2036,8 +2036,13 @@
   },
   {
     "id": "btn_edit_source_metadata",
-    "en": "Edit sources metadata",
-    "ru": "Редактировать метаданные источников "
+    "en": "Edit source metadata",
+    "ru": "Изменить исходные метаданные"
+  },
+  {
+    "id": "btn_edit_source_attributes_table",
+    "en": "Edit source attributes table",
+    "ru": "Изменить таблицу исходных атрибутов"
   },
   {
     "id": "btn_finish",

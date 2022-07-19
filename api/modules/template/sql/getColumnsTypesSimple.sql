@@ -1,5 +1,6 @@
 SELECT
 CASE 
+WHEN data_type='boolean' THEN 'boolean'
 WHEN data_type='character varying' THEN 'string'
 WHEN data_type='numeric' THEN 'number'
 WHEN data_type='integer' THEN 'number'

@@ -19,7 +19,7 @@ const def = {
   },
   handlers: {
     /**
-     * Example :
+     * Default handlers
      */
     notify: console.log,
     error: console.warn,
@@ -32,6 +32,10 @@ class WsHandler {
     const ws = this;
     ws._opt = Object.assign({}, def, opt);
     bindAll(ws);
+  }
+
+  get socket() {
+    return this?._socket;
   }
 
   get id() {
@@ -55,7 +59,7 @@ class WsHandler {
   async connect() {
     const ws = this;
     const auth = {};
-    
+
     if (ws.connected) {
       ws.destroy();
     }
@@ -70,7 +74,7 @@ class WsHandler {
     if (isFunction(ws._opt.url)) {
       ws._opt.url = await ws._opt.url();
     }
-    
+
     ws._auth = Object.assign({}, def.auth, auth);
 
     ws._manager = new Manager(ws._opt.url, {
@@ -122,7 +126,7 @@ class WsHandler {
    */
   emit(type, data) {
     const ws = this;
-    return ws._socket.emit(type,data);
+    return ws._socket.emit(type, data);
   }
 
   /**

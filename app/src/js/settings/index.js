@@ -72,10 +72,10 @@ const settings = {
       /*
        * ws routes
        */
-      updateGeoserver: "/ws/update/geoserver",
-      downloadSource: "/ws/download/source",
-      testJobSum: "/ws/get/test/job/sum",
-      testJobEcho: "/ws/get/test/job/echo",
+      updateGeoserver: "/client/geoserver/update",
+      downloadSource: "/client/source/download",
+      testJobSum: "/client/test/job/sum",
+      testJobEcho: "/client/test/job/echo",
     },
   },
   // see https://github.com/unep-grid/map-x-mgl/issues/472

@@ -2036,8 +2036,13 @@
   },
   {
     "id": "btn_edit_source_metadata",
-    "en": "Edit sources metadata",
-    "zh": "编辑源的元数据"
+    "en": "Edit source metadata",
+    "zh": "编辑源元数据"
+  },
+  {
+    "id": "btn_edit_source_attributes_table",
+    "en": "Edit source attributes table",
+    "zh": "编辑源属性表"
   },
   {
     "id": "btn_finish",

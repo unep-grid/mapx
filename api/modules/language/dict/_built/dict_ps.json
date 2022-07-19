@@ -2036,8 +2036,13 @@
   },
   {
     "id": "btn_edit_source_metadata",
-    "en": "Edit sources metadata",
-    "ps": "سرچینې میټاډاټا "
+    "en": "Edit source metadata",
+    "ps": "د سرچینې میټاډاټا ایډیټ کړئ"
+  },
+  {
+    "id": "btn_edit_source_attributes_table",
+    "en": "Edit source attributes table",
+    "ps": "د سرچینې ځانګړتیاو جدول ایډیټ کړئ"
   },
   {
     "id": "btn_finish",

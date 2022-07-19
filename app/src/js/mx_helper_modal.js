@@ -347,19 +347,20 @@ export function modal(o) {
 }
 
 /**
- * Modal with default where non jquery + non-Shiny operations 
+ * Modal with default where non jquery + non-Shiny operations
  * @param {Object} opt Options ( passed to modal's options )
  * @return {Element} modal element
  */
 export function modalSimple(opt) {
   const def = {
     buttons: [],
-    title : 'Modal',
-    content : el('span','Content')
+    title: "Modal",
+    content: el("span", "Content"),
+    addBackground: true,
   };
 
   opt = Object.assign({}, def, opt);
-  
+
   return modal({
     // Set base modal options
     ...opt,
@@ -368,7 +369,6 @@ export function modalSimple(opt) {
     content: opt.content,
     noShinyBinding: true,
     addSelectize: false,
-    addBackground: true,
   });
 }
 
@@ -398,8 +398,6 @@ export function modalGetAll(opt) {
   }
   return document.querySelectorAll(selector);
 }
-
-
 
 /**
  * Simple async dialog modal : display text + close button

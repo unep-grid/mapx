@@ -2036,8 +2036,13 @@
   },
   {
     "id": "btn_edit_source_metadata",
-    "en": "Edit sources metadata",
-    "fa": "فراداده منابع را ویرایش کنید "
+    "en": "Edit source metadata",
+    "fa": "ویرایش ابرداده منبع"
+  },
+  {
+    "id": "btn_edit_source_attributes_table",
+    "en": "Edit source attributes table",
+    "fa": "جدول ویژگی های منبع را ویرایش کنید"
   },
   {
     "id": "btn_finish",

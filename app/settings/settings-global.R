@@ -169,10 +169,10 @@ config[["api"]] <- list(
     #
     # ws
     #
-    updateGeoserver = "/ws/update/geoserver",
-    downloadSource = "/ws/download/source",
-    testJobSum = "/ws/get/test/job/sum",
-    testJobEcho = "/ws/get/test/job/echo"
+    updateGeoserver = "/client/geoserver/update",
+    downloadSource = "/client/source/download",
+    testJobSum = "/client/test/job/sum",
+    testJobEcho = "/client/test/job/echo"
   )
 )
 

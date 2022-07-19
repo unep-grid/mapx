@@ -104,7 +104,7 @@
     "geostyler": "^8.1.0",
     "geostyler-mapbox-parser": "^2.0.0",
     "geostyler-sld-parser": "^3.2.2",
-    "handsontable": "^7.4.2",
+    "handsontable": "^12.0.0",
     "highcharts": "^7.2.2",
     "hint.css": "^2.7.0",
     "html-minifier": "^4.0.0",

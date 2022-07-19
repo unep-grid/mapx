@@ -971,6 +971,7 @@ mxCatchHandler <- function(type = "error", cond = NULL, session = shiny::getDefa
       # outut user facing message
       #
       if (!noDataCheck(session)) {
+        browser()
         mxModal(
           id = randomString(),
           zIndex = 100000,
