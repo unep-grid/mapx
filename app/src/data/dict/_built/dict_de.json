@@ -1480,6 +1480,116 @@
     "de": "Funktionstyp"
   },
   {
+    "id": "btn_edit_undo",
+    "en": "Undo",
+    "de": "Rückgängig machen"
+  },
+  {
+    "id": "btn_edit_redo",
+    "en": "Redo",
+    "de": "Wiederholen"
+  },
+  {
+    "id": "btn_edit_add_column",
+    "en": "Add column",
+    "de": "Spalte hinzufügen"
+  },
+  {
+    "id": "btn_edit_remove_column",
+    "en": "Remove column",
+    "de": "Spalte entfernen"
+  },
+  {
+    "id": "btn_edit_autosave_label",
+    "en": "Auto save",
+    "de": "Automatisch speichern"
+  },
+  {
+    "id": "btn_edit_autosave_desc",
+    "en": "Automatically update the table and stream changes between other users, if any.",
+    "de": "Aktualisieren Sie die Tabelle automatisch und streamen Sie Änderungen zwischen anderen Benutzern, falls vorhanden."
+  },
+  {
+    "id": "edit_table_modal_add_column_type_title",
+    "en": "Add a new column column : type ",
+    "de": "Neue Spalte hinzufügen column : type"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_title",
+    "en": "Add a new column : name",
+    "de": "Fügen Sie eine neue Spalte hinzu: Name"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_label",
+    "en": "Column name",
+    "de": "Spaltenname"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_template",
+    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
+    "de": "Der Name darf nicht mit einer Zahl beginnen oder Sonderzeichen enthalten wie: \"';\\)('.\n\n - Minimale Länge : {{min_length}}\n - Maximale Länge : {{max_length}}\n - Sonderzeichen ersetzt: {{has_bad_chars}}\n - Name: {{column_name}}\n - Richtige Länge: {{correct_length}}\n - Ist verfügbar: {{is_available}}"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_next",
+    "en": "Next",
+    "de": "Nächste"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_label",
+    "en": "Select data type",
+    "de": "Datentyp auswählen"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_next",
+    "en": "Next",
+    "de": "Nächste"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_title",
+    "en": "Add a new column : confirm",
+    "de": "Neue Spalte hinzufügen: bestätigen"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_text",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
+    "de": "Fügen Sie eine neue Spalte mit dem Namen hinzu<b> {{column_name}}</b> des Typs<b> {{column_type}}</b> ? Die Änderung wird in der Datenbank und allen interaktiven Tabellen vorgenommen. Dies kann nicht rückgängig gemacht werden, aber das Werkzeug „Spalte entfernen“ funktioniert bei Bedarf."
+  },
+  {
+    "id": "btn_edit_table_modal_add_column_confirm",
+    "en": "Add the column",
+    "de": "Spalte hinzufügen"
+  },
+  {
+    "id": "edit_table_modal_remove_column_title",
+    "en": "Remove a column : selection",
+    "de": "Eine Spalte entfernen: Auswahl"
+  },
+  {
+    "id": "edit_table_modal_remove_column_label",
+    "en": "Column name",
+    "de": "Spaltenname"
+  },
+  {
+    "id": "edit_table_modal_remove_column_next",
+    "en": "Next",
+    "de": "Nächste"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_title",
+    "en": "Remove a column : confirm",
+    "de": "Spalte entfernen : bestätigen"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_text",
+    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "de": "Entfernen Sie eine Spalte mit dem Namen<i> {{column_name}}</i> ? Die Änderung wird in der Datenbank und allen interaktiven Tabellen vorgenommen. Dies kann nicht rückgängig gemacht werden: Daten können verloren gehen."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_column_confirm",
+    "en": "Remove the column",
+    "de": "Entfernen Sie die Säule"
+  },
+  {
     "id": "en",
     "en": "English",
     "de": "Englisch "

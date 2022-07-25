@@ -137,53 +137,50 @@ export function isViewLocal(item) {
 }
 
 /**
-* Test if view vt has style rules 
-* @param {Object} item to test
-*/ 
+ * Test if view vt has style rules
+ * @param {Object} item to test
+ */
 export function isViewVtWithRules(item) {
   return isViewVt(item) && !isEmpty(item?.data?.style?.rules);
 }
 
 /**
-* Test if view vt has specific attribute type r 
-* @param {Object} item to test
-* @param {String} attribute type e.g. string;
-*/ 
-export function isViewVtWithAttributeType(item,type = "string") {
+ * Test if view vt has specific attribute type r
+ * @param {Object} item to test
+ * @param {String} attribute type e.g. string;
+ */
+export function isViewVtWithAttributeType(item, type = "string") {
   return isViewVt(item) && item?.data?.attribute?.type === type;
 }
 
-
 /**
-* Test if view rt has legend url
-* @param {Object} item to test
-*/ 
+ * Test if view rt has legend url
+ * @param {Object} item to test
+ */
 export function isViewRtWithLegend(item) {
   return isViewRt(item) && isUrl(item?.data?.source?.legend);
 }
 
 /**
-* Test if view is downloadable
-* @param {Object} item to test
-*/
-export function isViewDownloadable(item){
+ * Test if view is downloadable
+ * @param {Object} item to test
+ */
+export function isViewDownloadable(item) {
   return isView(item) && item._has_download;
 }
 
-
 /**
-* Test if view rt has tiles
-* @param {Object} item to test
-*/ 
+ * Test if view rt has tiles
+ * @param {Object} item to test
+ */
 export function isViewRtWithTiles(item) {
   return isViewRt(item) && !isEmpty(item?.data?.source?.tiles);
 }
 
-
 /**
-* Test if view  has dashbaord
-* @param {Object} item to test
-*/ 
+ * Test if view  has dashbaord
+ * @param {Object} item to test
+ */
 export function isViewDashboard(item) {
   return isView(item) && !isEmpty(item?.data?.dashboard);
 }
@@ -422,6 +419,12 @@ export function isNumeric(n) {
 export function isBoolean(b) {
   return b === true || b === false;
 }
+export function isTrue(b) {
+  return b === true;
+}
+export function isFalse(b) {
+  return b === false;
+}
 
 /**
  * Test if is map
@@ -449,22 +452,52 @@ export function isStringRange(str, min, max) {
 
 /**
  * Test for special char : not allowed
+ * NOTES: if /g flag is set: inconsistant result:
+ * Regex.lastIndex is not reseted between calls,
+ * https://medium.com/@nikjohn/regex-test-returns-alternating-results-bd9a1ae42cdd
  */
-const regexSafe = new RegExp(/^[^{}(),+=:;?\'\"\\\/\s]*$/);
+const regexUnsafeName = /^[0-9\s]|[\\\;\:\(\)\'\"\*\+\{\}\s]/;
+const regexUnsafe = /[\\\;\:\(\)\'\"\*\+\{\}]/;
 
 /**
- * Test if input is "safe"
- * -> avoid dangerous stuff for db : columns, values, .. when prepared queries are not possible. Not secure client side.
- * @param {Any} Any
+ * Test if input value is "safe".
+ * Use server side
+ * -> avoid unwanted stuff for db : columns, values, .. when prepared queries are not possible.
+ * @param {Any} x Any
  */
 export function isSafe(x) {
-  if (!x) {
+  if (isEmpty(x)) {
     return true;
   }
   if (isNumeric(x)) {
     return true;
   }
-  return isString(x) && regexSafe.test(x);
+  return isString(x) && !regexUnsafe.test(x);
+}
+
+/**
+ * Test if input is "safe" for naming db table, column.
+ * @param {Any} x Any
+ */
+export function isSafeName(x) {
+  if (isEmpty(x)) {
+    return false;
+  }
+  if (isNumeric(x)) {
+    return false;
+  }
+  return isString(x) && !regexUnsafeName.test(x);
+}
+
+/*
+ * isSafe companion : replace unsafe char by replacement string 
+ * -> for db names
+ * @param {String} x String to make "safe"
+ * @raturn {String} "safe" string
+ */
+export function makeSafeName(x, repl = "_") {
+  const reg = new RegExp(regexUnsafeName, ["g"]);
+  return x.replaceAll(reg, repl);
 }
 
 /**

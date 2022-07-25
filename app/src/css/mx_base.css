@@ -257,7 +257,7 @@ picture {
 }
 
 .mx-bar-filter .mx-btn-toggle-filter.bottom_tick.active:after {
-  content: '';
+  content: "";
   position: absolute;
   left: calc(50% - 5px);
   top: 100%;
@@ -302,7 +302,7 @@ picture {
   /*margin: 10px 10px 0px 10px;*/
 }
 .mx-views-filter-text-input:after {
-  content: '';
+  content: "";
   padding: 20px;
   border-bottom: 1px solid var(--mx_ui_border);
 }
@@ -337,10 +337,10 @@ picture {
 }
 
 .mx-north-arrow:before {
-  icon-font: url('../svg/arrow-north.svg');
+  icon-font: url("../svg/arrow-north.svg");
 }
 .mx-mountain:before {
-  icon-font: url('../svg/mountain.svg');
+  icon-font: url("../svg/mountain.svg");
 }
 
 /**
@@ -407,8 +407,8 @@ picture {
 }
 
 .mx #ss-connect-dialog a:after {
-  content: '\f021';
-  font-family: 'FontAwesome';
+  content: "\f021";
+  font-family: "FontAwesome";
   padding: 3px;
 }
 /**
@@ -616,9 +616,12 @@ picture {
   margin: 4px;
 }
 
-.btn-circle.disabled {
+.btn-circle.disabled,
+.btn.disabled,
+.btn.disabled-alt {
   cursor: not-allowed;
-  opacity:0.5;
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .btn-circle > i {
@@ -737,8 +740,8 @@ picture {
 }
 
 .mx-error-list-container .mx-error-item:before {
-  font-family: 'FontAwesome';
-  content: '\f06a';
+  font-family: "FontAwesome";
+  content: "\f06a";
   padding: 5px;
 }
 .mx-error-list-container .mx-warning-item {
@@ -747,8 +750,8 @@ picture {
 }
 
 .mx-error-list-container .mx-warning-item:before {
-  font-family: 'FontAwesome';
-  content: '\f071';
+  font-family: "FontAwesome";
+  content: "\f071";
   padding: 5px;
 }
 
@@ -940,8 +943,8 @@ picture {
   margin: 3px;
   margin-top: 8px;
   font-size: 0.95em;
-  content: '\F054';
-  font-family: 'FontAwesome';
+  content: "\F054";
+  font-family: "FontAwesome";
 }
 
 .fold-container .fold-switch:checked.fold-caret ~ .fold-label::after {
@@ -960,8 +963,6 @@ picture {
   max-height: 1000px;
   font-size: inherit;
 }
-
-
 
 /**
 * Packery default
@@ -1038,7 +1039,7 @@ code {
 * Multiline support
 * https://github.com/chinchang/hint.css/issues/24#issuecomment-311977579
 */
-[class*='hint--']:after {
+[class*="hint--"]:after {
   line-height: 20px;
   white-space: normal;
   max-width: 500px;

@@ -1184,6 +1184,94 @@
     "en": "Feature type"
   },
   {
+    "id": "btn_edit_undo",
+    "en": "Undo"
+  },
+  {
+    "id": "btn_edit_redo",
+    "en": "Redo"
+  },
+  {
+    "id": "btn_edit_add_column",
+    "en": "Add column"
+  },
+  {
+    "id": "btn_edit_remove_column",
+    "en": "Remove column"
+  },
+  {
+    "id": "btn_edit_autosave_label",
+    "en": "Auto save"
+  },
+  {
+    "id": "btn_edit_autosave_desc",
+    "en": "Automatically update the table and stream changes between other users, if any."
+  },
+  {
+    "id": "edit_table_modal_add_column_type_title",
+    "en": "Add a new column column : type "
+  },
+  {
+    "id": "edit_table_modal_add_column_name_title",
+    "en": "Add a new column : name"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_label",
+    "en": "Column name"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_template",
+    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_next",
+    "en": "Next"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_label",
+    "en": "Select data type"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_next",
+    "en": "Next"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_title",
+    "en": "Add a new column : confirm"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_text",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. "
+  },
+  {
+    "id": "btn_edit_table_modal_add_column_confirm",
+    "en": "Add the column"
+  },
+  {
+    "id": "edit_table_modal_remove_column_title",
+    "en": "Remove a column : selection"
+  },
+  {
+    "id": "edit_table_modal_remove_column_label",
+    "en": "Column name"
+  },
+  {
+    "id": "edit_table_modal_remove_column_next",
+    "en": "Next"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_title",
+    "en": "Remove a column : confirm"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_text",
+    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_column_confirm",
+    "en": "Remove the column"
+  },
+  {
     "id": "en",
     "en": "English"
   },

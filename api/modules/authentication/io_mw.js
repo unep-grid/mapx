@@ -32,6 +32,9 @@ export async function ioMwAuthenticate(socket, next) {
       socket._mx_user_roles = {};
     }
 
+    socket._id_user = idUser;
+    socket._id_project = idProject;
+
     next();
   } catch (e) {
     next(e);

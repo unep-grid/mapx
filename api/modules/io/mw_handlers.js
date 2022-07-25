@@ -17,7 +17,6 @@ export { ioMwHandlers };
 function ioMwHandlers(socket, next) {
   for (const h in handlers) {
     socket.on(h, (request) => {
-      console.log(h, "received");
       handlers[h](socket, request);
     });
   }

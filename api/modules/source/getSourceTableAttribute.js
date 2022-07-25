@@ -66,6 +66,6 @@ export async function getSourceAttributeTable(opt) {
 
   const attributesSelectDistinct = getDistinct(attributesSelect);
   const attributesSelectSql = toPgColumn(attributesSelectDistinct);
-  const query = `SELECT ${attributesSelectSql} FROM ${idSource} limit 1e6`;
+  const query = `SELECT ${attributesSelectSql} FROM ${idSource} ORDER BY gid LIMIT 1e6`;
   return pgRead.query(query);
 }

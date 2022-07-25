@@ -17,6 +17,7 @@ export async function getUserRoles(idUser, idProject) {
 
   const roles = {
     list: [],
+    group: [],
     admin: false,
     publisher: false,
     member: false,
@@ -48,18 +49,23 @@ export async function getUserRoles(idUser, idProject) {
 
   if (roles.root) {
     roles.list.push("root");
+    roles.group.push("roots");
   }
   if (roles.admin) {
     roles.list.push("admin");
+    roles.group.push("admins");
   }
   if (roles.publisher) {
     roles.list.push("publisher");
+    roles.group.push("publishers");
   }
   if (roles.member) {
     roles.list.push("member");
+    roles.group.push("members");
   }
   if (roles.guest) {
     roles.list.push("guest");
+    roles.group.push("guests");
   }
 
   return roles;

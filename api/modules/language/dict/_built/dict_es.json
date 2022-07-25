@@ -1480,6 +1480,116 @@
     "es": "Tipo de característica"
   },
   {
+    "id": "btn_edit_undo",
+    "en": "Undo",
+    "es": "Deshacer"
+  },
+  {
+    "id": "btn_edit_redo",
+    "en": "Redo",
+    "es": "Rehacer"
+  },
+  {
+    "id": "btn_edit_add_column",
+    "en": "Add column",
+    "es": "Añadir columna"
+  },
+  {
+    "id": "btn_edit_remove_column",
+    "en": "Remove column",
+    "es": "Quitar columna"
+  },
+  {
+    "id": "btn_edit_autosave_label",
+    "en": "Auto save",
+    "es": "Guardado automático"
+  },
+  {
+    "id": "btn_edit_autosave_desc",
+    "en": "Automatically update the table and stream changes between other users, if any.",
+    "es": "Actualice automáticamente la tabla y transmita los cambios entre otros usuarios, si los hay."
+  },
+  {
+    "id": "edit_table_modal_add_column_type_title",
+    "en": "Add a new column column : type ",
+    "es": "Agregar una nueva columna columna: tipo"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_title",
+    "en": "Add a new column : name",
+    "es": "Agregar una nueva columna: nombre"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_label",
+    "en": "Column name",
+    "es": "Nombre de la columna"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_template",
+    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
+    "es": "El nombre no puede comenzar con un número ni contener caracteres especiales como: \"';\\)('.\n\n - Longitud mínima : {{min_length}}\n - Longitud máxima : {{max_length}}\n - Caracteres especiales reemplazados: {{has_bad_chars}}\n - Nombre: {{column_name}}\n - Longitud correcta: {{correct_length}}\n - Está disponible: {{is_available}}"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_next",
+    "en": "Next",
+    "es": "próximo"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_label",
+    "en": "Select data type",
+    "es": "Seleccionar tipo de datos"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_next",
+    "en": "Next",
+    "es": "próximo"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_title",
+    "en": "Add a new column : confirm",
+    "es": "Agregar una nueva columna: confirmar"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_text",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
+    "es": "Agregue una nueva columna llamada<b> {{column_name}}</b> de tipo<b> {{column_type}}</b> ? El cambio se realizará en la base de datos y en todas las tablas interactivas. Esto no se puede deshacer, pero la herramienta 'Eliminar una columna' funcionará, si es necesario."
+  },
+  {
+    "id": "btn_edit_table_modal_add_column_confirm",
+    "en": "Add the column",
+    "es": "Agregar la columna"
+  },
+  {
+    "id": "edit_table_modal_remove_column_title",
+    "en": "Remove a column : selection",
+    "es": "Eliminar una columna: selección"
+  },
+  {
+    "id": "edit_table_modal_remove_column_label",
+    "en": "Column name",
+    "es": "Nombre de la columna"
+  },
+  {
+    "id": "edit_table_modal_remove_column_next",
+    "en": "Next",
+    "es": "próximo"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_title",
+    "en": "Remove a column : confirm",
+    "es": "Eliminar una columna: confirmar"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_text",
+    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "es": "Quitar una columna llamada<i> {{column_name}}</i> ? El cambio se realizará en la base de datos y en todas las tablas interactivas. Esto no se puede deshacer: los datos se pueden perder."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_column_confirm",
+    "en": "Remove the column",
+    "es": "quitar la columna"
+  },
+  {
     "id": "en",
     "en": "English",
     "es": "Inglés"

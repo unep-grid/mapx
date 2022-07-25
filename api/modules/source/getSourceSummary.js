@@ -1,30 +1,30 @@
-import crypto from 'crypto';
-import {isSourceId, isViewId} from '@fxi/mx_valid';
-import {redisGet, redisSet, pgRead} from '#mapx/db';
-import {getParamsValidator} from '#mapx/route_validation';
-import {parseTemplate, sendJSON, sendError} from '#mapx/helpers';
-import {templates} from '#mapx/template';
+import crypto from "crypto";
+import { isSourceId, isViewId } from "@fxi/mx_valid";
+import { redisGet, redisSet, pgRead } from "#mapx/db";
+import { getParamsValidator } from "#mapx/route_validation";
+import { parseTemplate, sendJSON, sendError } from "#mapx/helpers";
+import { templates } from "#mapx/template";
 
 import {
   getColumnsTypesSimple,
   getColumnsNames,
-  getSourceLastTimestamp
-} from '#mapx/db-utils';
+  getSourceLastTimestamp,
+} from "#mapx/db-utils";
 
 const validateParamsHandler = getParamsValidator({
   expected: [
-    'idView',
-    'timestamp',
-    'idSource',
-    'idAttr',
-    'useCache',
-    'binsCompute',
-    'binsMethod',
-    'binsNumber',
-    'maxRowsCount',
-    'stats',
-    'nullValue'
-  ]
+    "idView",
+    "timestamp",
+    "idSource",
+    "idAttr",
+    "useCache",
+    "binsCompute",
+    "binsMethod",
+    "binsNumber",
+    "maxRowsCount",
+    "stats",
+    "nullValue",
+  ],
 });
 
 export const mwGetSummary = [validateParamsHandler, getSummaryHandler];
@@ -41,11 +41,11 @@ async function getSummaryHandler(req, res) {
       binsMethod: req.query.binsMethod, // heads_tails, jenks, equal_interval, quantile
       maxRowsCount: req.query.maxRowsCount, // limit table length
       stats: req.query.stats, // which stat to computed ['base','time','attr', 'spatial']
-      nullValue: req.query.nullValue
+      nullValue: req.query.nullValue,
     });
 
     if (data) {
-      sendJSON(res, data, {end: true});
+      sendJSON(res, data, { end: true });
     }
   } catch (e) {
     sendError(res, e);
@@ -64,9 +64,9 @@ async function getSummaryHandler(req, res) {
  */
 export async function getSourceSummary(opt) {
   if (!isSourceId(opt.idSource) && !isViewId(opt.idView)) {
-    throw Error('Missing id of the source or the view');
+    throw Error("Missing id of the source or the view");
   }
-  if (!opt.idAttr || opt.idAttr === 'undefined') {
+  if (!opt.idAttr || opt.idAttr === "undefined") {
     opt.idAttr = null;
   }
   opt = await updateSourceFromView(opt);
@@ -76,7 +76,7 @@ export async function getSourceSummary(opt) {
   }
 
   const start = Date.now();
-  const {stats} = opt;
+  const { stats } = opt;
   const columns = await getColumnsNames(opt.idSource);
   const timestamp = await getSourceLastTimestamp(opt.idSource);
   const tableTypes = await getColumnsTypesSimple(opt.idSource, columns);
@@ -86,9 +86,9 @@ export async function getSourceSummary(opt) {
     : null;
 
   const hash = crypto
-    .createHash('md5')
+    .createHash("md5")
     .update(timestamp + opt.idAttr + opt.idSource + JSON.stringify(opt.stats))
-    .digest('hex');
+    .digest("hex");
 
   const cached = opt.useCache ? await redisGet(hash) : false;
 
@@ -98,43 +98,43 @@ export async function getSourceSummary(opt) {
     return cleanStatOutput(stats, data);
   }
 
-  opt.hasT0 = columns.indexOf('mx_t0') > -1;
-  opt.hasT1 = columns.indexOf('mx_t1') > -1;
-  opt.idAttrT0 = opt.hasT0 ? 'mx_t0' : 0;
-  opt.idAttrT1 = opt.hasT1 ? 'mx_t1' : 0;
+  opt.hasT0 = columns.indexOf("mx_t0") > -1;
+  opt.hasT1 = columns.indexOf("mx_t1") > -1;
+  opt.idAttrT0 = opt.hasT0 ? "mx_t0" : 0;
+  opt.idAttrT1 = opt.hasT1 ? "mx_t1" : 0;
   opt.timestamp = timestamp;
-  const hasGeom = columns.indexOf('geom') > -1;
+  const hasGeom = columns.indexOf("geom") > -1;
   const hasAttr = columns.indexOf(opt.idAttr) > -1;
-  const isCategorical = attrType === 'string';
+  const isCategorical = attrType === "string";
 
   const out = {
     id: opt.idSource,
     timestamp: opt.timestamp,
     attributes: columns,
-    attributes_types: tableTypes
+    attributes_types: tableTypes,
   };
-  if (stats.indexOf('base') > -1) {
-    Object.assign(out, await getOrCalc('getSourceSummary_base', opt));
+  if (stats.indexOf("base") > -1) {
+    Object.assign(out, await getOrCalc("getSourceSummary_base", opt));
   }
 
-  if (hasGeom && stats.indexOf('spatial') > -1) {
-    Object.assign(out, await getOrCalc('getSourceSummary_ext_sp', opt));
+  if (hasGeom && stats.indexOf("spatial") > -1) {
+    Object.assign(out, await getOrCalc("getSourceSummary_ext_sp", opt));
   }
 
-  if ((opt.hasT0 || opt.hasT1) && stats.indexOf('temporal') > -1) {
-    Object.assign(out, await getOrCalc('getSourceSummary_ext_time', opt));
+  if ((opt.hasT0 || opt.hasT1) && stats.indexOf("temporal") > -1) {
+    Object.assign(out, await getOrCalc("getSourceSummary_ext_time", opt));
   }
 
-  if (hasAttr && stats.indexOf('attributes') > -1) {
+  if (hasAttr && stats.indexOf("attributes") > -1) {
     if (isCategorical) {
       Object.assign(
         out,
-        await getOrCalc('getSourceSummary_attr_categorical', opt)
+        await getOrCalc("getSourceSummary_attr_categorical", opt)
       );
     } else {
       Object.assign(
         out,
-        await getOrCalc('getSourceSummary_attr_continuous', opt)
+        await getOrCalc("getSourceSummary_attr_continuous", opt)
       );
     }
   }
@@ -148,9 +148,9 @@ async function getOrCalc(idTemplate, opt) {
   const sql = parseTemplate(templates[idTemplate], opt);
 
   const hash = crypto
-    .createHash('md5')
+    .createHash("md5")
     .update(sql + opt.timestamp)
-    .digest('hex');
+    .digest("hex");
 
   const cached = opt.useCache ? await redisGet(hash) : false;
 
@@ -191,6 +191,20 @@ async function updateSourceFromView(opt) {
 }
 
 /**
+ * Get full mx_sources record for a source
+ */
+export async function getSourceEditors(idSource) {
+  const res = await pgRead.query(
+    "select editor, editors, readers from mx_sources where id=$1",
+    [idSource]
+  );
+  if (res.rowCount === 0) {
+    return {};
+  }
+  return res.rows[0];
+}
+
+/**
  * Remove item if they are not requested
  * @param {Array} Stats Group of stats to output
  * @param {Object} data Output summary
@@ -200,18 +214,18 @@ function cleanStatOutput(stats, data) {
   /**
    * Cleaning output to match requested stats
    */
-  if (!stats.includes('attributes')) {
+  if (!stats.includes("attributes")) {
     delete data.attributes;
     delete data.attributes_types;
     delete data.attribute_stat;
   }
-  if (!stats.includes('temporal')) {
+  if (!stats.includes("temporal")) {
     delete data.extent_time;
   }
-  if (!stats.includes('spatial')) {
+  if (!stats.includes("spatial")) {
     delete data.extent_sp;
   }
-  if (!stats.includes('base')) {
+  if (!stats.includes("base")) {
     delete data.row_count;
   }
   return data;

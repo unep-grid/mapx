@@ -1480,6 +1480,116 @@
     "ar": "نوع الميزة"
   },
   {
+    "id": "btn_edit_undo",
+    "en": "Undo",
+    "ar": "الغاء التحميل"
+  },
+  {
+    "id": "btn_edit_redo",
+    "en": "Redo",
+    "ar": "إعادة"
+  },
+  {
+    "id": "btn_edit_add_column",
+    "en": "Add column",
+    "ar": "أضف العمود"
+  },
+  {
+    "id": "btn_edit_remove_column",
+    "en": "Remove column",
+    "ar": "إزالة العمود"
+  },
+  {
+    "id": "btn_edit_autosave_label",
+    "en": "Auto save",
+    "ar": "حفظ تلقائي"
+  },
+  {
+    "id": "btn_edit_autosave_desc",
+    "en": "Automatically update the table and stream changes between other users, if any.",
+    "ar": "تحديث الجدول تلقائيًا ودفق التغييرات بين المستخدمين الآخرين ، إن وجدت."
+  },
+  {
+    "id": "edit_table_modal_add_column_type_title",
+    "en": "Add a new column column : type ",
+    "ar": "أضف عمودًا جديدًا: اكتب"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_title",
+    "en": "Add a new column : name",
+    "ar": "أضف عمودًا جديدًا: الاسم"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_label",
+    "en": "Column name",
+    "ar": "اسم العمود"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_template",
+    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
+    "ar": "لا يمكن أن يبدأ الاسم برقم أو أن يحتوي على أحرف خاصة مثل: \"'؛ \\) ('.\n\n - طول دقيقة : {{min_length}}\n - الحد الاقصى للطول : {{max_length}}\n - تم استبدال الأحرف الخاصة: {{has_bad_chars}}\n - اسم: {{column_name}}\n - الطول الصحيح: {{correct_length}}\n - متاح: {{is_available}}"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_next",
+    "en": "Next",
+    "ar": "التالي"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_label",
+    "en": "Select data type",
+    "ar": "حدد نوع البيانات"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_next",
+    "en": "Next",
+    "ar": "التالي"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_title",
+    "en": "Add a new column : confirm",
+    "ar": "أضف عمودًا جديدًا: قم بالتأكيد"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_text",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
+    "ar": "أضف عمودًا جديدًا باسم<b> {{column_name}}</b> من النوع<b> {{column_type}}</b> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا ، ولكن أداة \"إزالة عمود\" ستعمل ، إذا لزم الأمر."
+  },
+  {
+    "id": "btn_edit_table_modal_add_column_confirm",
+    "en": "Add the column",
+    "ar": "أضف العمود"
+  },
+  {
+    "id": "edit_table_modal_remove_column_title",
+    "en": "Remove a column : selection",
+    "ar": "إزالة عمود: التحديد"
+  },
+  {
+    "id": "edit_table_modal_remove_column_label",
+    "en": "Column name",
+    "ar": "اسم العمود"
+  },
+  {
+    "id": "edit_table_modal_remove_column_next",
+    "en": "Next",
+    "ar": "التالي"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_title",
+    "en": "Remove a column : confirm",
+    "ar": "إزالة عمود: قم بالتأكيد"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_text",
+    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "ar": "قم بإزالة عمود مسمى<i> {{column_name}}</i> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا: يمكن أن تفقد البيانات."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_column_confirm",
+    "en": "Remove the column",
+    "ar": "قم بإزالة العمود"
+  },
+  {
     "id": "en",
     "en": "English",
     "ar": "الإنجليزية "

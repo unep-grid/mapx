@@ -1480,6 +1480,116 @@
     "fa": "نوع ویژگی"
   },
   {
+    "id": "btn_edit_undo",
+    "en": "Undo",
+    "fa": "واگرد"
+  },
+  {
+    "id": "btn_edit_redo",
+    "en": "Redo",
+    "fa": "دوباره انجام دهید"
+  },
+  {
+    "id": "btn_edit_add_column",
+    "en": "Add column",
+    "fa": "اضافه کردن ستون"
+  },
+  {
+    "id": "btn_edit_remove_column",
+    "en": "Remove column",
+    "fa": "حذف ستون"
+  },
+  {
+    "id": "btn_edit_autosave_label",
+    "en": "Auto save",
+    "fa": "ذخیره خودکار"
+  },
+  {
+    "id": "btn_edit_autosave_desc",
+    "en": "Automatically update the table and stream changes between other users, if any.",
+    "fa": "به‌روزرسانی خودکار جدول و پخش جریانی تغییرات بین سایر کاربران، در صورت وجود."
+  },
+  {
+    "id": "edit_table_modal_add_column_type_title",
+    "en": "Add a new column column : type ",
+    "fa": "یک ستون ستون جدید اضافه کنید: تایپ کنید"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_title",
+    "en": "Add a new column : name",
+    "fa": "یک ستون جدید اضافه کنید: نام"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_label",
+    "en": "Column name",
+    "fa": "نام ستون"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_template",
+    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
+    "fa": "نام نمی تواند با یک عدد شروع شود یا شامل کاراکترهای خاصی مانند: \"';\\)(' باشد.\n\n - حداقل طول: {{min_length}}\n - بیشترین طول : {{max_length}}\n - کاراکترهای ویژه جایگزین شده: {{has_bad_chars}}\n - نام: {{column_name}}\n - طول صحیح: {{correct_length}}\n - موجود است: {{is_available}}"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_next",
+    "en": "Next",
+    "fa": "بعد"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_label",
+    "en": "Select data type",
+    "fa": "نوع داده را انتخاب کنید"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_next",
+    "en": "Next",
+    "fa": "بعد"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_title",
+    "en": "Add a new column : confirm",
+    "fa": "یک ستون جدید اضافه کنید: تایید کنید"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_text",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
+    "fa": "یک ستون جدید به نام اضافه کنید<b> {{column_name}}</b> از نوع<b> {{column_type}}</b> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این را نمی توان واگرد کرد، اما در صورت لزوم، ابزار \"حذف ستون\" کار خواهد کرد."
+  },
+  {
+    "id": "btn_edit_table_modal_add_column_confirm",
+    "en": "Add the column",
+    "fa": "ستون را اضافه کنید"
+  },
+  {
+    "id": "edit_table_modal_remove_column_title",
+    "en": "Remove a column : selection",
+    "fa": "حذف یک ستون: انتخاب"
+  },
+  {
+    "id": "edit_table_modal_remove_column_label",
+    "en": "Column name",
+    "fa": "نام ستون"
+  },
+  {
+    "id": "edit_table_modal_remove_column_next",
+    "en": "Next",
+    "fa": "بعد"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_title",
+    "en": "Remove a column : confirm",
+    "fa": "حذف یک ستون: تایید"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_text",
+    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "fa": "ستونی به نام را بردارید<i> {{column_name}}</i> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست: داده ها ممکن است از بین بروند."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_column_confirm",
+    "en": "Remove the column",
+    "fa": "ستون را بردارید"
+  },
+  {
     "id": "en",
     "en": "English",
     "fa": "انگلیسی"

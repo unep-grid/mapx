@@ -13,30 +13,26 @@
   --ht-ctx-background: var(--mx_ui_background);
   --ht-ctx-background-hover: var(--mx_ui_background_faded);
   --ht-scroll-track: var(--mx_ui_background_faded);
-  --ht-scroll-thumb: var(--mx_ui_background);
-  --ht-scroll-thumb-hover: var(--mx_ui_background_accent);
+  --ht-scroll-thumb: var(--mx_ui_text_faded);
+  --ht-scroll-thumb-hover: var(--mx_ui_text);
 }
 
 /**
 * Menu not in mx_handsontable, attached to body 
-*/ 
-.mx .htMenu:not(.htGhostTable) {
-  z-index: 2000;
-}
+*/
 .mx .htMenu:not(.htGhostTable) {
   z-index: 2010;
 }
-.mx .htMenu .htUISelectCaption {
+.mx .htMenu:not(.htGhostTable) .htUISelectCaption {
   background-color: var(--ht-table-header-background);
 }
-.mx .htMenu .htUISelectCaption:hover {
+.mx .htMenu:not(.htGhostTable) .htUISelectCaption:hover {
   background-color: var(--ht-table-header-highlight);
 }
 
-
 /*
 * Main wrapper 
-*/ 
+*/
 .mx_handsontable {
   border-top: thin solid var(--ht-table-border-color);
   border-bottom: thin solid var(--ht-table-border-color);
@@ -161,48 +157,31 @@
 }
 
 /* Context menu */
-.htContextMenu tr,
-.htDropdownMenu tr,
-.htFiltersConditionsMenu tr {
+.mx .htContextMenu tr,
+.mx .htDropdownMenu tr,
+.mx .htFiltersConditionsMenu tr {
   background-color: var(--ht-ctx-background);
 }
-.htContextMenu table tbody tr td,
-.htDropdownMenu table tbody tr td,
-.htFiltersConditionsMenu table tbody tr td {
+.mx .htContextMenu table tbody tr td,
+.mx .htDropdownMenu table tbody tr td,
+.mx .htFiltersConditionsMenu table tbody tr td {
   background-color: var(--ht-ctx-background);
 }
-.htContextMenu table tbody tr td.current,
-.htContextMenu table tbody tr td.zeroclipboard-is-hover,
-.htDropdownMenu table tbody tr td.current,
-.htDropdownMenu table tbody tr td.zeroclipboard-is-hover,
-.htFiltersConditionsMenu table tbody tr td.current,
-.htFiltersConditionsMenu table tbody tr td.zeroclipboard-is-hover {
+.mx .htContextMenu table tbody tr td.current,
+.mx .htContextMenu table tbody tr td.zeroclipboard-is-hover,
+.mx .htDropdownMenu table tbody tr td.current,
+.mx .htDropdownMenu table tbody tr td.zeroclipboard-is-hover,
+.mx .htFiltersConditionsMenu table tbody tr td.current,
+.mx .htFiltersConditionsMenu table tbody tr td.zeroclipboard-is-hover {
   background-color: var(--ht-ctx-background-hover);
 }
 
-.htContextMenu .handsontable table td.htCustomMenuRenderer,
-.htDropdownMenu .handsontable table td.htCustomMenuRenderer {
+.mx .htContextMenu .handsontable table td.htCustomMenuRenderer,
+.mx .htDropdownMenu .handsontable table td.htCustomMenuRenderer {
   background-color: var(--ht-ctx-background);
 }
 
-.handsontable .htUISelectCaption .handsontable .htUISelectCaption:hover {
+.mx .handsontable .htUISelectCaption .handsontable .htUISelectCaption:hover {
   background-color: var(--ht-ctx-background);
 }
 
-/* Scroll bar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--ht-scroll-track);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--ht-scroll-thumb);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--ht-scroll-thumb-hover);
-}

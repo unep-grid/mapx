@@ -269,7 +269,7 @@ export async function updateLanguageElements(o) {
  * @param {string} lang  Two letters language code
  * @return {Promise<String|Array>} If key is an array, array of item, else string.
  */
-export async function getDictItem(key, lang) {
+export async function getDictItem(key, lang, data) {
   lang = lang || getLanguageCurrent();
 
   if (isEmpty(key)) {

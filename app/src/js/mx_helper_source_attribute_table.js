@@ -2,7 +2,7 @@ import { getArrayDistinct } from "./array_stat/index.js";
 import { modalMarkdown } from "./modal_markdown/index.js";
 import { getDictItem, getLanguageCurrent } from "./language";
 import { getApiUrl } from "./api_routes";
-import { getHandsonLanguageCode, typeConverter } from "./handsontable/utils.js";
+import { getHandsonLanguageCode, typeConvert } from "./handsontable/utils.js";
 
 export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({}, opt);
@@ -131,13 +131,11 @@ export async function showSourceTableAttributeModal(opt) {
       null
     );
     return {
-      type: typeConverter(type),
+      type: typeConvert(type, "json", "input"),
       data: a,
       readOnly: true,
     };
   });
-
-  debugger;
 
   hot = new handsontable(elTable, {
     columns: columns,

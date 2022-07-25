@@ -1,42 +1,64 @@
-import { modalSimple } from "./../mx_helper_modal.js";
-import { el } from "./../el/src/index.js";
+import "./edit_table.less";
+import { modal, modalPrompt, modalConfirm } from "./../mx_helper_modal.js";
+import { el, elButtonFa, elSpanTranslate, elCheckbox } from "../el_mapx";
+import { cancelFrame, onNextFrame } from "./../animation_frame";
 import { moduleLoad } from "./../modules_loader_async";
-import { getDictItem } from "./../language";
+import { bindAll } from "./../bind_class_methods";
+import { getDictTemplate, getDictItem } from "./../language";
 import {
-  typeConverter,
+  typeConvert,
+  getTypes,
   getHandsonLanguageCode,
 } from "./../handsontable/utils.js";
+import { makeId, parseTemplate } from "./../mx_helper_misc.js";
 import {
   isSourceId,
   isNotEmpty,
   isEmpty,
   isString,
+  isStringRange,
+  isSafeName,
+  makeSafeName,
 } from "./../is_test/index.js";
-import { bindAll } from "./../bind_class_methods";
+
 const defaults = {
   id_table: null,
   ht_license: "non-commercial-and-evaluation",
+  id_column_main: "gid",
+  id_columns_reserved: ["gid", "_mx_valid"],
   routes: {
     server_joined: "/server/edit_table/joined",
+    server_error: "/server/edit_table/error",
     server_new_member: "/server/edit_table/new_member",
+    server_member_exit: "/server/edit_table/member_exit",
     server_full_table: "/server/edit_table/full_table",
     server_dispatch: "/server/edit_table/dispatch",
     client_edit_start: "/client/edit_table/start",
     client_edit_updates: "/client/edit_table/update",
+    client_exit: "/client/edit_table/exit",
   },
+  id_source_dispatch: "from_dispatch",
 };
 
 export class EditTableSessionClient {
   constructor(socket, config) {
     const et = this;
+    et._id = makeId();
     et._config = Object.assign({}, defaults, config);
     et._socket = socket;
     et._on_destroy = [];
+    et._users = [];
+    et._updates = [];
     bindAll(et);
+  }
+
+  get id() {
+    return this._id;
   }
 
   async init() {
     const et = this;
+    window._et = et;
     const r = et._config.routes;
     if (et._initialized) {
       return;
@@ -57,27 +79,41 @@ export class EditTableSessionClient {
      *   - sync event ID between server and client
      */
     et._socket.on(r.server_joined, et.onJoined);
+    et._socket.on(r.server_error, et.onServerError);
     et._socket.on(r.server_new_member, et.onNewMember);
+    et._socket.on(r.server_member_exit, et.onMemberExit);
     et._socket.on(r.server_full_table, et.initTable);
     et._socket.on(r.server_dispatch, et.onDispatch);
-    et._socket.emit(
-      r.client_edit_start,
-      et.message_formater({ id_table: et._id_table })
-    );
+    et._socket.on("disconnect", et.onDisconnect);
+    et.start();
     await et.build();
+  }
+
+  start(opt) {
+    const et = this;
+    const r = et._config.routes;
+    const def = { id_table: et._id_table, send_table: true };
+    opt = Object.assign({}, def, opt);
+    et._socket.emit(r.client_edit_start, et.message_formater(opt));
   }
 
   destroy() {
     const et = this;
+    const r = et._config.routes;
     if (et._destroyed) {
       return;
     }
     et._destroyed = true;
-    console.log("Edit table : destroy");
-    const r = et._config.routes;
+    et._socket.emit(
+      r.client_exit,
+      et.message_formater({ id_table: et._id_table })
+    );
     et._modal?.close();
+    et._ro?.disconnect();
     et._socket.off(r.server_joined, et.onJoined);
+    et._socket.off(r.server_error, et.onServerError);
     et._socket.off(r.server_new_member, et.onNewMember);
+    et._socket.off(r.server_member_exit, et.onMemberExit);
     et._socket.off(r.server_full_table, et.initTable);
     for (const cb of et._on_destroy) {
       cb();
@@ -86,20 +122,91 @@ export class EditTableSessionClient {
 
   async build() {
     const et = this;
+
+    et._el_button_close = elButtonFa("btn_close", {
+      icon: "times",
+      action: et.destroy,
+    });
+    et._el_button_save = elButtonFa("btn_save", {
+      icon: "floppy-o",
+      action: et.save,
+    });
+    et._el_button_undo = elButtonFa("btn_edit_undo", {
+      icon: "undo",
+      action: et.undo,
+    });
+    et._el_button_redo = elButtonFa("btn_edit_redo", {
+      icon: "repeat",
+      action: et.redo,
+    });
+    et._el_button_add_column = elButtonFa("btn_edit_add_column", {
+      icon: "plus-circle",
+      action: et.addColumnPrompt,
+    });
+    et._el_button_remove_column = elButtonFa("btn_edit_remove_column", {
+      icon: "minus-circle",
+      action: et.removeColumnPrompt,
+    });
+    et._el_checkbox_autosave = elCheckbox("btn_edit_autosave", {
+      action: et.updateAutoSave,
+      checked: true,
+    });
+
+    et._el_toolbar = el("div", { class: "edit-table--toolbar" }, [
+      et._el_checkbox_autosave,
+    ]);
+
+    et._el_updates_counter = el("span", {
+      class: "edit-table--updates-counter",
+      dataset: { count: 0 },
+    });
+    et._el_button_save.appendChild(et._el_updates_counter);
+
+    const elModalButtons = [
+      et._el_button_close,
+      et._el_button_save,
+      et._el_button_undo,
+      et._el_button_redo,
+      et._el_button_add_column,
+      et._el_button_remove_column,
+    ];
+
     et._el_table = el("div", {
-      style: {
-        width: "100%",
-        height: "350px",
-        minHeight: "350px",
-        minWidth: "100px",
-        overflow: "hidden",
-        backgroundColor: "var(--mx_ui_shadow)",
+      class: "edit-table--table",
+    });
+
+    et._el_table_wrapper = el(
+      "div",
+      {
+        class: "edit-table--table-wrapper",
+      },
+      et._el_table
+    );
+
+    et._el_overlay = el("div", {
+      class: "edit-table--overlay",
+      dataset: {
+        disconnected: "disconnected",
       },
     });
-    et._el_content = el("div", { class: "mx_handsontable" }, et._el_table);
-    et._modal = modalSimple({
+    et._el_content = el(
+      "div",
+      { class: ["mx_handsontable", "edit-table--container"] },
+      et._el_overlay,
+      et._el_table_wrapper,
+      et._el_toolbar
+    );
+    et._modal = modal({
+      id: `edit_table_modal_${et.id}`,
       title: "Edit table",
       content: et._el_content,
+      buttons: elModalButtons,
+      style: {
+        minWidth: "800px",
+      },
+      addSelectize: false,
+      noShinyBinding: true,
+      removeCloseButton: true,
       addBackground: false,
       onClose: () => {
         et.destroy();
@@ -107,28 +214,102 @@ export class EditTableSessionClient {
     });
   }
 
+  /**
+   * Update helpers
+   */
+  updateButtons() {
+    const et = this;
+    et.updateButtonSave();
+    et.updateUpdatesCounter();
+    et.updateButtonsUndoRedo();
+  }
+  updateUpdatesCounter() {
+    const et = this;
+    et._el_updates_counter.dataset.count = `${et._updates.length}`;
+  }
+  updateButtonsUndoRedo() {
+    const et = this;
+    const cld = "disabled-alt";
+    const hasRedo = et._ht.isRedoAvailable();
+    const hasUndo = et._ht.isUndoAvailable();
+    if (hasRedo) {
+      et._el_button_redo.classList.remove(cld);
+    } else {
+      et._el_button_redo.classList.add(cld);
+    }
+    if (hasUndo) {
+      et._el_button_undo.classList.remove(cld);
+    } else {
+      et._el_button_undo.classList.add(cld);
+    }
+  }
+  updateButtonSave() {
+    const et = this;
+    const hasAutoSave = et._auto_save;
+    const hasNoUpdates = et._updates.length === 0;
+    const disable = hasNoUpdates || hasAutoSave;
+    if (disable) {
+      et._el_button_save.classList.add("disabled-alt");
+    } else {
+      et._el_button_save.classList.remove("disabled-alt");
+    }
+  }
+  updateAutoSave() {
+    const et = this;
+    et._auto_save = et._el_checkbox_autosave.querySelector("input").checked;
+    et.updateButtonSave();
+    if (et._auto_save) {
+      et.save();
+    }
+  }
+  updateLayout() {
+    const et = this;
+    cancelFrame(et._update_to);
+    et._update_to = onNextFrame(() => {
+      const rectWrapper = et._el_table_wrapper.getBoundingClientRect();
+      et._el_table.style.height = `${rectWrapper.height}px`;
+      et._ht.render();
+    });
+  }
+
+  /**
+   * Initial table render
+   */
   async initTable(table) {
     const et = this;
+
+    if (isEmpty(table)) {
+      return;
+    }
 
     if (table.id_table !== et._id_table) {
       return;
     }
 
     const handsontable = await moduleLoad("handsontable");
+
+    if (et._ht instanceof handsontable) {
+      et._ht.destroy();
+    }
+
     const columns = table.types || [];
     const labels = table.types.map((t) => t.id);
 
     /**
      * Convert col format
      */
-    for (const col of columns) {
-      col.type = typeConverter(col.value);
-      col.data = col.id;
-      col.readOnly = co.id === "gid" ? true : false;
-      delete col.value;
-      delete col.id;
+    for (const column of columns) {
+      column.type = typeConvert(column.value, "json", "input");
+      column.data = column.id;
+      column.readOnly = column.id === et._config.id_column_main ? true : false;
+      delete column.value;
+      delete column.id;
     }
+    et._columns = columns;
 
+    /**
+     * New handsontable
+     */
     et._ht = new handsontable(et._el_table, {
       columns: columns,
       data: table.data,
@@ -143,9 +324,10 @@ export class EditTableSessionClient {
         "filter_action_bar",
       ],
       filters: true,
+      contextMenu: false,
       language: getHandsonLanguageCode(),
       afterFilter: null,
-      afterChange: et.onChange,
+      afterChange: et.afterChange,
       renderAllRows: false,
       height: function () {
         const r = et._el_table.getBoundingClientRect();
@@ -153,6 +335,41 @@ export class EditTableSessionClient {
       },
       disableVisualSelection: false,
     });
+
+    /**
+     * On modal resize, updateLayout
+     */
+    et._ro = new ResizeObserver(() => {
+      et.updateLayout();
+    });
+    et._ro.observe(et._modal);
+
+    /**
+     * Initial state of undo/redo buttons.
+     */
+    et.updateAutoSave();
+    et.updateButtons();
+  }
+
+  async onServerError(message) {
+    const et = this;
+    try {
+      console.error("server error", message);
+
+      const continueSession = await modalConfirm({
+        title: "Server error",
+        content:
+          "An error occured: read the logs. Continue or end the session ?",
+        confirm: "Continue",
+        cancel: "End the session",
+      });
+
+      if (!continueSession) {
+        et.destroy();
+      }
+    } catch (e) {
+      console.warn(e);
+    }
   }
 
   onJoined(message) {
@@ -173,6 +390,13 @@ export class EditTableSessionClient {
     }
     console.log("New member joined", message);
   }
+  onMemberExit(message) {
+    const et = this;
+    if (message.id_table !== et._id_table) {
+      return;
+    }
+    console.log("Member left", message);
+  }
 
   onDispatch(message) {
     const et = this;
@@ -180,19 +404,37 @@ export class EditTableSessionClient {
       return;
     }
     if (isNotEmpty(message.updates)) {
-      for (const update of message.updates) {
-        switch (update.type) {
-          case "update_cell":
-            {
-              const idRow = et._ht.getDataAtProp("gid").indexOf(update.gid);
-              et._ht.setDataAtRowProp(idRow, update.column, update.new_value);
-            }
-            break;
-          default:
-            console.log(message);
+      et._ht.batch(() => {
+        for (const update of message.updates) {
+          switch (update.type) {
+            case "update_cell":
+              et.updateCellValue(update, et._config.id_source_dispatch);
+              break;
+            case "add_column":
+              et.updateColumnAdd(update, et._config.id_source_dispatch);
+              break;
+            case "remove_column":
+              et.updateColumnRemove(update, et._config.id_source_dispatch);
+              break;
+            default:
+              console.log(message);
+          }
         }
-      }
+      });
     }
+  }
+
+  updateCellValue(update, source) {
+    const et = this;
+    const idRow = et._ht
+      .getDataAtProp(et._config.id_column_main)
+      .indexOf(update[et._config.id_column_main]);
+    et._ht.setDataAtRowProp(
+      idRow,
+      update.column_name,
+      update.value_new,
+      source
+    );
   }
 
   addDestroyCb(cb) {
@@ -200,31 +442,422 @@ export class EditTableSessionClient {
     et._on_destroy.push(cb);
   }
 
-  onChange(changes) {
+  undo() {
+    const et = this;
+    et._ht.undo();
+    et.updateButtons();
+  }
+
+  redo() {
+    const et = this;
+    et._ht.redo();
+    et.updateButtons();
+  }
+
+  updateColumnRemove(update, source) {
+    const et = this;
+
+    let n = et._columns.length;
+    let colRemoved;
+    while (n--) {
+      const col = et._columns[n];
+      if (col.data === update.column_name) {
+        colRemoved = et._columns.splice(n, 1);
+      }
+    }
+
+    if (!colRemoved) {
+      console.warn(`Column ${update.column_name} not removed`);
+      return;
+    }
+
+    et._ht.updateSettings({
+      columns: et._columns,
+      colHeaders: et._columns.map((c) => c.data),
+    });
+
+    if (source === et._config.id_source_dispatch) {
+      return;
+    }
+
+    et.emitUpdates([update]);
+  }
+
+  /*
+   * Interactive column remove
+   */
+  async removeColumnPrompt() {
+    const et = this;
+    const idSkip = et._config.id_columns_reserved;
+    const names = et._columns.reduce((a, c) => {
+      if (!idSkip.includes(c.data)) {
+        a.push(c.data);
+      }
+      return a;
+    }, []);
+
+    const optionColumnNames = names.map((t) => el("option", { value: t }, t));
+
+    const columnToRemove = await modalPrompt({
+      title: elSpanTranslate("edit_table_modal_remove_column_title"),
+      label: elSpanTranslate("edit_table_modal_remove_column_label"),
+      confirm: elSpanTranslate("edit_table_modal_remove_column_next"),
+      inputTag: "select",
+      inputOptions: {
+        type: "select",
+        value: getTypes("postgres")[0],
+        placeholder: "Column type",
+      },
+      inputChildren: optionColumnNames,
+    });
+
+    if (!columnToRemove) {
+      return;
+    }
+
+    /**
+     * Ask the user for confirmation
+     */
+
+    const confirmRemove = await modalPrompt({
+      title: elSpanTranslate("edit_table_modal_remove_column_confirm_title"),
+      label: getDictTemplate("edit_table_modal_remove_column_confirm_text", {
+        column_name: columnToRemove,
+      }),
+      confirm: elSpanTranslate("btn_edit_table_modal_remove_column_confirm"),
+      inputTag: "input",
+      inputOptions: {
+        type: "checkbox",
+        value: false,
+        class: [], // "form-control" produce glitches
+      },
+      onInput: async (accept, elBtnConfirm) => {
+        if (!accept) {
+          elBtnConfirm.setAttribute("disabled", "true");
+          elBtnConfirm.classList.add("disabled");
+        } else {
+          elBtnConfirm.removeAttribute("disabled");
+          elBtnConfirm.classList.remove("disabled");
+        }
+      },
+    });
+
+    /*const confirmRemove = await modalConfirm({*/
+    /*title: elSpanTranslate("edit_table_modal_remove_column_confirm_title"),*/
+    /*content: getDictTemplate("edit_table_modal_remove_column_confirm_text", {*/
+    /*column_name: columnToRemove,*/
+    /*}),*/
+    /*cancel: elSpanTranslate("btn_cancel"),*/
+    /*confirm: elSpanTranslate("btn_edit_table_modal_remove_column_confirm"),*/
+    /*});*/
+
+    if (!confirmRemove) {
+      return;
+    }
+
+    const update = {
+      type: "remove_column",
+      id_table: et._id_table,
+      column_name: columnToRemove,
+    };
+
+    et.updateColumnRemove(update);
+  }
+
+  /**
+   * Add column
+   */
+  updateColumnAdd(update, source) {
+    const et = this;
+    const isValid = et.isValidName(update.column_name);
+
+    if (!isValid) {
+      console.warn(`Invalid column name : ${update.column_name}`);
+      return;
+    }
+
+    const column = {
+      data: update.column_name,
+      type: typeConvert(update.column_type, "postgres", "input"),
+    };
+
+    /**
+     * Update column list and emit updates directly
+     */
+    et._columns.push(column);
+    et._ht.updateSettings({
+      columns: et._columns,
+      colHeaders: et._columns.map((c) => c.data),
+    });
+    if (source === et._config.id_source_dispatch) {
+      return;
+    }
+    et.emitUpdates([update]);
+  }
+
+  /*
+   * Interactive column add
+   */
+  async addColumnPrompt() {
+    const et = this;
+    const names = et._columns.map((c) => c.data);
+    let valid = false;
+
+    /**
+     * Ask the user for the new column name and validate
+     */
+    const columnName = await modalPrompt({
+      title: elSpanTranslate("edit_table_modal_add_column_name_title"),
+      label: elSpanTranslate("edit_table_modal_add_column_name_label"),
+      confirm: elSpanTranslate("edit_table_modal_add_column_name_next"),
+      inputOptions: {
+        type: "text",
+        value: `new_column_${makeId()}`,
+        placeholder: "Column name",
+      },
+      onInput: async (name, elBtnConfirm, elMessage) => {
+        const min_length = 3;
+        const max_length = 50;
+        const has_bad_chars = !et.isValidName(name);
+        const columnNameSafe = makeSafeName(name);
+        const validLength = isStringRange(
+          columnNameSafe,
+          min_length,
+          max_length
+        );
+        const validUnique = !names.includes(columnNameSafe);
+        valid = validUnique && validLength;
+        const txtTemplateName = await getDictItem(
+          "edit_table_modal_add_column_name_template"
+        );
+        const txtYes = await getDictItem("yes");
+        const txtNo = await getDictItem("no");
+
+        elMessage.innerText = parseTemplate(txtTemplateName, {
+          min_length,
+          max_length,
+          column_name: columnNameSafe,
+          has_bad_chars: has_bad_chars ? txtYes : txtNo,
+          is_available: validUnique ? txtYes : txtNo,
+          correct_length: validLength ? txtYes : txtNo,
+        });
+
+        if (valid) {
+          elBtnConfirm.disabled = false;
+          elBtnConfirm.classList.remove("disabled");
+        } else {
+          elBtnConfirm.disabled = true;
+          elBtnConfirm.classList.add("disabled");
+        }
+      },
+    });
+
+    if (columnName === false || !valid) {
+      return;
+    }
+    const columnNameSafe = makeSafeName(columnName);
+
+    /**
+     * Ask the user for a column type
+     */
+    const typeOptions = getTypes("postgres").map((t) =>
+      el("option", { value: t }, t)
+    );
+
+    const columnType = await modalPrompt({
+      title: elSpanTranslate("edit_table_modal_add_column_type_title"),
+      label: elSpanTranslate("edit_table_modal_add_column_type_label"),
+      confirm: elSpanTranslate("edit_table_modal_add_column_type_next"),
+      inputTag: "select",
+      inputOptions: {
+        type: "select",
+        value: getTypes("postgres")[0],
+        placeholder: "Column type",
+      },
+      inputChildren: typeOptions,
+    });
+
+    if (columnType === false) {
+      return;
+    }
+
+    /**
+     * Ask the user for confirmation
+     */
+    const confirmCreate = await modalConfirm({
+      title: elSpanTranslate("edit_table_modal_add_column_confirm_title"),
+      content: getDictTemplate("edit_table_modal_add_column_confirm_text", {
+        column_name: columnNameSafe,
+        column_type: columnType,
+      }),
+      cancel: elSpanTranslate("btn_cancel"),
+      confirm: elSpanTranslate("btn_edit_table_modal_add_column_confirm"),
+    });
+
+    if (!confirmCreate) {
+      return;
+    }
+
+    const update = {
+      type: "add_column",
+      id_table: et._id_table,
+      column_name: columnNameSafe,
+      column_type: columnType,
+    };
+
+    et.updateColumnAdd(update);
+  }
+
+  /*
+   * Handle logic for after cell update
+   */
+  afterChange(changes, source) {
+    const et = this;
     if (isEmpty(changes)) {
       return;
     }
-    const et = this;
-    const updates = [];
+    /**
+     * Ignore dispatch changes : only "edit".
+     */
+    if (source === et._config.id_source_dispatch) {
+      return;
+    }
     for (const change of changes) {
-      /* [row, prop, oldValue, newValue] */
+      /* change: [row, prop, oldValue, newValue] */
       if (change[2] === change[3]) {
+        /* no change */
         continue;
       }
+
       const idRow = et._ht.toPhysicalRow(change[0]);
       const row = et._ht.getSourceDataAtRow(idRow);
-      const gid = row?.gid;
+      const gid = row[et._config.id_column_main];
       const update = {
+        id_table: et._id_table,
         type: "update_cell",
-        column: change[1],
-        new_value: change[3],
+        column_name: change[1],
+        value_orig: change[2],
+        value_new: change[3],
         gid: gid,
       };
-      updates.push(update);
+      /**
+       * Update, delete or push
+       * Avoid duplication of update in the _udpates queue :
+       * - If a previous value is the original value : delete the upadate
+       * - If a previous value existe : update it
+       * - No previous update, push the update
+       */
+      let pushUpdate = true;
+      let updatePrevious;
+      let deletePrevious;
+      let deletePos;
+      let noChange;
+      let pos = 0;
+      for (const previousUpdate of et._updates) {
+        if (!pushUpdate || deletePrevious) {
+          continue;
+        }
+        updatePrevious =
+          previousUpdate.type === "update_cell" &&
+          previousUpdate.gid === update.gid &&
+          previousUpdate.column_name === update.column_name &&
+          previousUpdate.id_table === update.id_table;
+        if (updatePrevious) {
+          noChange = update.value_new === previousUpdate.value_orig;
+          if (noChange) {
+            deletePrevious = true;
+            deletePos = pos;
+            pushUpdate = false;
+          } else {
+            previousUpdate.value_new = update.value_new;
+            pushUpdate = false;
+          }
+        }
+        pos++;
+      }
+
+      if (deletePrevious) {
+        et._updates.splice(deletePos, 1);
+      }
+      if (pushUpdate) {
+        et._updates.push(update);
+      }
     }
-    et.emitUpdates(updates);
+    /**
+     * Sav
+     */
+    if (et._auto_save) {
+      et.save();
+    } else {
+      et.updateButtons();
+    }
   }
 
+  save() {
+    const et = this;
+    const updates = et._updates;
+    if (et._disconnected) {
+      console.warn("Can't save while disconnected");
+      return;
+    }
+    if (isEmpty(updates)) {
+      return;
+    }
+    et.emitUpdates(updates);
+    et.updateButtons();
+    et.clearUpdates();
+  }
+
+  clearUpdates() {
+    const et = this;
+    et._updates.length = 0;
+  }
+
+  onDisconnect() {
+    const et = this;
+    const hot = et._ht;
+    et._disconnected = true;
+    et._el_overlay.classList.add("disconnected");
+    hot.updateSettings({
+      readOnly: true,
+      contextMenu: false,
+      disableVisualSelection: true,
+      manualColumnResize: false,
+      manualRowResize: false,
+      comments: false,
+    });
+
+    et._el_button_undo.classList.add("disabled");
+    et._el_button_redo.classList.add("disabled");
+    et._el_button_save.classList.add("disabled");
+    et._el_button_add_column.classList.add("disabled");
+    et._el_button_remove_column.classList.add("disabled");
+
+    et._socket.io.once("reconnect", et.onReconnect);
+  }
+
+  onReconnect() {
+    const et = this;
+    const hot = et._ht;
+    et._disconnected = false;
+    et._el_overlay.classList.remove("disconnected");
+    hot.updateSettings({
+      readOnly: false,
+      contextMenu: true,
+      disableVisualSelection: false,
+      manualColumnResize: true,
+      manualRowResize: true,
+      comments: true,
+    });
+    et._el_button_undo.classList.remove("disabled");
+    et._el_button_redo.classList.remove("disabled");
+    et._el_button_save.classList.remove("disabled");
+    et._el_button_add_column.classList.remove("disabled");
+    et._el_button_remove_column.classList.remove("disabled");
+    et.start({
+      send_table: false,
+    });
+  }
   emitUpdates(updates) {
     const et = this;
     const r = et._config.routes;
@@ -252,6 +885,14 @@ export class EditTableSessionClient {
       id_session: et._id_session,
       ...data,
     };
+
     return m;
+  }
+
+  isValidName(name) {
+    const et = this;
+    const isSafe = isSafeName(name);
+    const isNotReserved = !et._config.id_columns_reserved.includes(name);
+    return isSafe && isNotReserved;
   }
 }

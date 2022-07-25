@@ -1480,6 +1480,116 @@
     "fr": "Type d'entité"
   },
   {
+    "id": "btn_edit_undo",
+    "en": "Undo",
+    "fr": "annuler"
+  },
+  {
+    "id": "btn_edit_redo",
+    "en": "Redo",
+    "fr": "Refaire"
+  },
+  {
+    "id": "btn_edit_add_column",
+    "en": "Add column",
+    "fr": "Ajouter une colonne"
+  },
+  {
+    "id": "btn_edit_remove_column",
+    "en": "Remove column",
+    "fr": "Supprimer la colonne"
+  },
+  {
+    "id": "btn_edit_autosave_label",
+    "en": "Auto save",
+    "fr": "Sauvegarde automatique"
+  },
+  {
+    "id": "btn_edit_autosave_desc",
+    "en": "Automatically update the table and stream changes between other users, if any.",
+    "fr": "Mettez automatiquement à jour la table et diffusez les modifications entre les autres utilisateurs, le cas échéant."
+  },
+  {
+    "id": "edit_table_modal_add_column_type_title",
+    "en": "Add a new column column : type ",
+    "fr": "Ajouter une nouvelle colonne colonne : type"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_title",
+    "en": "Add a new column : name",
+    "fr": "Ajouter une nouvelle colonne : nom"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_label",
+    "en": "Column name",
+    "fr": "Nom de colonne"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_template",
+    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
+    "fr": "Le nom ne peut pas commencer par un chiffre ou contenir des caractères spéciaux tels que : \" ;\\)('.\n\n - Longueur minimale : {{min_length}}\n - Longueur maximale : {{max_length}}\n - Caractères spéciaux remplacés : {{has_bad_chars}}\n - Nom: {{column_name}}\n - Longueur correcte : {{correct_length}}\n - Est disponible: {{is_available}}"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_next",
+    "en": "Next",
+    "fr": "Prochain"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_label",
+    "en": "Select data type",
+    "fr": "Sélectionnez le type de données"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_next",
+    "en": "Next",
+    "fr": "Prochain"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_title",
+    "en": "Add a new column : confirm",
+    "fr": "Ajouter une nouvelle colonne : valider"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_text",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
+    "fr": "Ajouter une nouvelle colonne nommée<b> {{column_name}}</b> de type<b> {{column_type}}</b> ? Le changement sera effectué dans la base de données et toutes les tables interactives. Cela ne peut pas être annulé, mais l'outil \"Supprimer une colonne\" fonctionnera, si nécessaire."
+  },
+  {
+    "id": "btn_edit_table_modal_add_column_confirm",
+    "en": "Add the column",
+    "fr": "Ajouter la colonne"
+  },
+  {
+    "id": "edit_table_modal_remove_column_title",
+    "en": "Remove a column : selection",
+    "fr": "Supprimer une colonne : sélection"
+  },
+  {
+    "id": "edit_table_modal_remove_column_label",
+    "en": "Column name",
+    "fr": "Nom de colonne"
+  },
+  {
+    "id": "edit_table_modal_remove_column_next",
+    "en": "Next",
+    "fr": "Prochain"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_title",
+    "en": "Remove a column : confirm",
+    "fr": "Supprimer une colonne : validez"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_text",
+    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "fr": "Supprimer une colonne nommée<i> {{column_name}}</i> ? Le changement sera effectué dans la base de données et toutes les tables interactives. Cette opération est irréversible : les données peuvent être perdues."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_column_confirm",
+    "en": "Remove the column",
+    "fr": "Supprimer la colonne"
+  },
+  {
     "id": "en",
     "en": "English",
     "fr": "Anglais"

@@ -1480,6 +1480,116 @@
     "bn": "বৈশিষ্ট্যের ধরন"
   },
   {
+    "id": "btn_edit_undo",
+    "en": "Undo",
+    "bn": "পূর্বাবস্থায় ফেরান"
+  },
+  {
+    "id": "btn_edit_redo",
+    "en": "Redo",
+    "bn": "আবার করুন"
+  },
+  {
+    "id": "btn_edit_add_column",
+    "en": "Add column",
+    "bn": "কলাম যোগ করুন"
+  },
+  {
+    "id": "btn_edit_remove_column",
+    "en": "Remove column",
+    "bn": "কলাম সরান"
+  },
+  {
+    "id": "btn_edit_autosave_label",
+    "en": "Auto save",
+    "bn": "স্বয়ংক্রিয় সংরক্ষণ"
+  },
+  {
+    "id": "btn_edit_autosave_desc",
+    "en": "Automatically update the table and stream changes between other users, if any.",
+    "bn": "স্বয়ংক্রিয়ভাবে টেবিল আপডেট করুন এবং অন্য ব্যবহারকারীদের মধ্যে পরিবর্তনগুলি, যদি থাকে।"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_title",
+    "en": "Add a new column column : type ",
+    "bn": "একটি নতুন কলাম কলাম যোগ করুন: টাইপ করুন"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_title",
+    "en": "Add a new column : name",
+    "bn": "একটি নতুন কলাম যোগ করুন: নাম"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_label",
+    "en": "Column name",
+    "bn": "কলামের নাম"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_template",
+    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
+    "bn": "নামটি একটি সংখ্যা দিয়ে শুরু হতে পারে না বা বিশেষ অক্ষর থাকতে পারে না যেমন: \"';\\)('।\n\n - সর্বনিম্ন দৈর্ঘ্য: {{min_length}}\n - সর্বোচ্চ দৈর্ঘ্য : {{max_length}}\n - প্রতিস্থাপিত বিশেষ অক্ষর: {{has_bad_chars}}\n - নাম: {{column_name}}\n - সঠিক দৈর্ঘ্য: {{correct_length}}\n - সহজলভ্য: {{is_available}}"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_next",
+    "en": "Next",
+    "bn": "পরবর্তী"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_label",
+    "en": "Select data type",
+    "bn": "ডেটা টাইপ নির্বাচন করুন"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_next",
+    "en": "Next",
+    "bn": "পরবর্তী"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_title",
+    "en": "Add a new column : confirm",
+    "bn": "একটি নতুন কলাম যোগ করুন: নিশ্চিত করুন"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_text",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
+    "bn": "নামে একটি নতুন কলাম যোগ করুন<b> {{column_name}}</b> ধরনের<b> {{column_type}}</b> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না, তবে প্রয়োজন হলে 'একটি কলাম সরান' টুলটি কাজ করবে।"
+  },
+  {
+    "id": "btn_edit_table_modal_add_column_confirm",
+    "en": "Add the column",
+    "bn": "কলাম যোগ করুন"
+  },
+  {
+    "id": "edit_table_modal_remove_column_title",
+    "en": "Remove a column : selection",
+    "bn": "একটি কলাম সরান: নির্বাচন"
+  },
+  {
+    "id": "edit_table_modal_remove_column_label",
+    "en": "Column name",
+    "bn": "কলামের নাম"
+  },
+  {
+    "id": "edit_table_modal_remove_column_next",
+    "en": "Next",
+    "bn": "পরবর্তী"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_title",
+    "en": "Remove a column : confirm",
+    "bn": "একটি কলাম সরান: নিশ্চিত করুন"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_text",
+    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "bn": "নামের একটি কলাম সরান<i> {{column_name}}</i> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না: ডেটা হারিয়ে যেতে পারে।"
+  },
+  {
+    "id": "btn_edit_table_modal_remove_column_confirm",
+    "en": "Remove the column",
+    "bn": "কলামটি সরান"
+  },
+  {
     "id": "en",
     "en": "English",
     "bn": "ইংরেজি "

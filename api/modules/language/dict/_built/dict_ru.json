@@ -1480,6 +1480,116 @@
     "ru": "Тип функции"
   },
   {
+    "id": "btn_edit_undo",
+    "en": "Undo",
+    "ru": "Отменить"
+  },
+  {
+    "id": "btn_edit_redo",
+    "en": "Redo",
+    "ru": "Повторить"
+  },
+  {
+    "id": "btn_edit_add_column",
+    "en": "Add column",
+    "ru": "Добавить столбец"
+  },
+  {
+    "id": "btn_edit_remove_column",
+    "en": "Remove column",
+    "ru": "Удалить столбец"
+  },
+  {
+    "id": "btn_edit_autosave_label",
+    "en": "Auto save",
+    "ru": "Автосохранение"
+  },
+  {
+    "id": "btn_edit_autosave_desc",
+    "en": "Automatically update the table and stream changes between other users, if any.",
+    "ru": "Автоматически обновлять таблицу и транслировать изменения между другими пользователями, если таковые имеются."
+  },
+  {
+    "id": "edit_table_modal_add_column_type_title",
+    "en": "Add a new column column : type ",
+    "ru": "Добавьте новый столбец столбца: введите"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_title",
+    "en": "Add a new column : name",
+    "ru": "Добавить новый столбец: имя"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_label",
+    "en": "Column name",
+    "ru": "Имя столбца"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_template",
+    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
+    "ru": "Имя не может начинаться с цифры или содержать специальные символы, такие как: \"';\\)('.\n\n - Минимальная длина: {{min_length}}\n - Максимальная длина : {{max_length}}\n - Заменены специальные символы: {{has_bad_chars}}\n - Имя: {{column_name}}\n - Правильная длина: {{correct_length}}\n - Доступен: {{is_available}}"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_next",
+    "en": "Next",
+    "ru": "Следующий"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_label",
+    "en": "Select data type",
+    "ru": "Выберите тип данных"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_next",
+    "en": "Next",
+    "ru": "Следующий"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_title",
+    "en": "Add a new column : confirm",
+    "ru": "Добавить новый столбец: подтвердить"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_text",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
+    "ru": "Добавьте новый столбец с именем<b> {{column_name}}</b> типа<b> {{column_type}}</b> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить, но при необходимости сработает инструмент «Удалить столбец»."
+  },
+  {
+    "id": "btn_edit_table_modal_add_column_confirm",
+    "en": "Add the column",
+    "ru": "Добавьте столбец"
+  },
+  {
+    "id": "edit_table_modal_remove_column_title",
+    "en": "Remove a column : selection",
+    "ru": "Удалить столбец: выбор"
+  },
+  {
+    "id": "edit_table_modal_remove_column_label",
+    "en": "Column name",
+    "ru": "Имя столбца"
+  },
+  {
+    "id": "edit_table_modal_remove_column_next",
+    "en": "Next",
+    "ru": "Следующий"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_title",
+    "en": "Remove a column : confirm",
+    "ru": "Удалить столбец: подтвердить"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_text",
+    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "ru": "Удалить столбец с именем<i> {{column_name}}</i> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить: данные могут быть потеряны."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_column_confirm",
+    "en": "Remove the column",
+    "ru": "Удалить столбец"
+  },
+  {
     "id": "en",
     "en": "English",
     "ru": "английский "

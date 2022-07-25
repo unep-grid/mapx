@@ -524,6 +524,7 @@ export function modalConfirm(opt) {
 export function modalPrompt(opt) {
   let elModal;
   const def = {
+    inputTag: "input",
     inputOptions: {
       type: "number",
       class: "form-control",
@@ -532,21 +533,33 @@ export function modalPrompt(opt) {
       value: 10,
       id: Math.random().toString(32),
     },
+    inputChildren: [],
   };
-  opt.inputOptions = Object.assign({}, def.inputOptions, opt.inputOptions);
-  return new Promise((resolve) => {
-    const elInput = el("input", opt.inputOptions);
 
-    const elContent = el(
-      "div",
-      { class: "form-group" },
-      el(
-        "label",
-        { for: opt.inputOptions.id },
-        opt.label || "Enter your value"
-      ),
-      elInput
+  opt.inputOptions = Object.assign({}, def.inputOptions, opt.inputOptions);
+  opt = Object.assign({}, def, opt);
+
+  return new Promise((resolve) => {
+    const isCheckbox = opt.inputOptions.type === "checkbox";
+    const elInput = el(opt.inputTag, opt.inputOptions, [...opt.inputChildren]);
+
+    const elLabel = el(
+      "label",
+      { for: opt.inputOptions.id },
+      el("div", opt.label || "Enter a value")
     );
+    const elInputGroup = el("div", { class: "form-group" }, [elLabel, elInput]);
+
+    if (isCheckbox) {
+      elInputGroup.className = "checkbox";
+      elLabel.prepend(elInput);
+
+      //elInput.classList.add("form-check-input");
+      //elLabel.classList.add("form-check-label");
+    }
+
+    const elMessage = el("small", { class: ["form-text", "text-muted"] });
+    const elContent = el("div", [elInputGroup, elMessage]);
     const elBtnCancel = el(
       "div",
       {
@@ -579,13 +592,16 @@ export function modalPrompt(opt) {
     );
 
     if (opt.onInput instanceof Function) {
-      elInput.addEventListener("input", () =>
-        opt.onInput(elInput.value, elBtnConfirm)
-      );
+      elInput.addEventListener("input", () => {
+        const value = isCheckbox ? elInput.checked : elInput.value;
+        opt.onInput(value, elBtnConfirm, elMessage);
+      });
+
       /**
        * Validate for default
        */
-      opt.onInput(elInput.value, elBtnConfirm);
+      const value = isCheckbox ? elInput.checked : elInput.value;
+      opt.onInput(value, elBtnConfirm, elMessage);
     }
 
     elModal = modal({

@@ -1480,6 +1480,116 @@
     "ps": "د فیچر ډول"
   },
   {
+    "id": "btn_edit_undo",
+    "en": "Undo",
+    "ps": "بیرته راګرځول"
+  },
+  {
+    "id": "btn_edit_redo",
+    "en": "Redo",
+    "ps": "بیا کول"
+  },
+  {
+    "id": "btn_edit_add_column",
+    "en": "Add column",
+    "ps": "کالم اضافه کړئ"
+  },
+  {
+    "id": "btn_edit_remove_column",
+    "en": "Remove column",
+    "ps": "کالم لرې کړئ"
+  },
+  {
+    "id": "btn_edit_autosave_label",
+    "en": "Auto save",
+    "ps": "په اتوماتيک ډول خوندي کول"
+  },
+  {
+    "id": "btn_edit_autosave_desc",
+    "en": "Automatically update the table and stream changes between other users, if any.",
+    "ps": "په اوتومات ډول جدول تازه کړئ او د نورو کاروونکو ترمینځ بدلونونه ، که کوم وي."
+  },
+  {
+    "id": "edit_table_modal_add_column_type_title",
+    "en": "Add a new column column : type ",
+    "ps": "د نوي کالم کالم اضافه کړئ: ډول"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_title",
+    "en": "Add a new column : name",
+    "ps": "یو نوی کالم اضافه کړئ: نوم"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_label",
+    "en": "Column name",
+    "ps": "د کالم نوم"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_template",
+    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
+    "ps": "نوم نشي کولی د شمیر سره پیل شي یا ځانګړي حروف ولري لکه: \"';\\)('.\n\n - دقیقه اوږدوالی: {{min_length}}\n - اعظمي اوږدوالی: {{max_length}}\n - بدل شوي ځانګړي حروف: {{has_bad_chars}}\n - نوم: {{column_name}}\n - سمه اوږدوالی: {{correct_length}}\n - شتون لری: {{is_available}}"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_next",
+    "en": "Next",
+    "ps": "بل"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_label",
+    "en": "Select data type",
+    "ps": "د معلوماتو ډول وټاکئ"
+  },
+  {
+    "id": "edit_table_modal_add_column_type_next",
+    "en": "Next",
+    "ps": "بل"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_title",
+    "en": "Add a new column : confirm",
+    "ps": "یو نوی کالم اضافه کړئ: تصدیق"
+  },
+  {
+    "id": "edit_table_modal_add_column_confirm_text",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
+    "ps": "په نوم یو نوی کالم اضافه کړئ<b> {{column_name}}</b> ډول<b> {{column_type}}</b> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي راوستلی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي."
+  },
+  {
+    "id": "btn_edit_table_modal_add_column_confirm",
+    "en": "Add the column",
+    "ps": "کالم اضافه کړئ"
+  },
+  {
+    "id": "edit_table_modal_remove_column_title",
+    "en": "Remove a column : selection",
+    "ps": "یو کالم لرې کړئ: انتخاب"
+  },
+  {
+    "id": "edit_table_modal_remove_column_label",
+    "en": "Column name",
+    "ps": "د کالم نوم"
+  },
+  {
+    "id": "edit_table_modal_remove_column_next",
+    "en": "Next",
+    "ps": "بل"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_title",
+    "en": "Remove a column : confirm",
+    "ps": "یو کالم لرې کړئ: تصدیق"
+  },
+  {
+    "id": "edit_table_modal_remove_column_confirm_text",
+    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "ps": "په نوم یو کالم لرې کړئ<i> {{column_name}}</i> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی: ډاټا ورک کیدی شي."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_column_confirm",
+    "en": "Remove the column",
+    "ps": "کالم لرې کړئ"
+  },
+  {
     "id": "en",
     "en": "English",
     "ps": "انګلیسي"
