@@ -1,3 +1,16 @@
+  - [1.9.44-alpha.0](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-alpha.0) 
+
+    - APP/API
+        - First version of the table edition tool:
+            - Full websocket implementation
+            - User Authentication 
+            - Display + interactive table edition 
+            - Add / remove columns 
+            - Multiusers
+            - Auto save (optional) 
+            - Prevent unwanted large edits
+            - Copy paste to/from spreadsheet
+
   - [1.9.43.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.43.2) 
 
     - API 
