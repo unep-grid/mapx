@@ -1480,6 +1480,11 @@
     "bn": "বৈশিষ্ট্যের ধরন"
   },
   {
+    "id": "edit_table_modal_title",
+    "en": "Edit table {{title}}",
+    "bn": "টেবিল সম্পাদনা করুন {{title}}"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "bn": "পূর্বাবস্থায় ফেরান"
@@ -1526,8 +1531,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
-    "bn": "নামটি একটি সংখ্যা দিয়ে শুরু হতে পারে না বা বিশেষ অক্ষর থাকতে পারে না যেমন: \"';\\)('।\n\n - সর্বনিম্ন দৈর্ঘ্য: {{min_length}}\n - সর্বোচ্চ দৈর্ঘ্য : {{max_length}}\n - প্রতিস্থাপিত বিশেষ অক্ষর: {{has_bad_chars}}\n - নাম: {{column_name}}\n - সঠিক দৈর্ঘ্য: {{correct_length}}\n - সহজলভ্য: {{is_available}}"
+    "en": "The new column name will be: <b>{{column_name}}</b><ul><li>The name can't start with a number or contain special characters such as: \"';\\)('</li><li>Min length : {{min_length}}</li><li>Max length : {{max_length}}</li><li>Replaced special characters: {{has_bad_chars}}</li><li>Correct length: {{correct_length}}</li><li>Is available: {{is_available}}</li></ul>",
+    "bn": "নতুন কলামের নাম হবে:<b> {{column_name}}</b><ul><li> নামটি একটি সংখ্যা দিয়ে শুরু হতে পারে না বা বিশেষ অক্ষর থাকতে পারে না যেমন: \"';\\)('</li><li> সর্বনিম্ন দৈর্ঘ্য: {{min_length}}</li><li> সর্বোচ্চ দৈর্ঘ্য : {{max_length}}</li><li> প্রতিস্থাপিত বিশেষ অক্ষর: {{has_bad_chars}}</li><li> সঠিক দৈর্ঘ্য: {{correct_length}}</li><li> সহজলভ্য: {{is_available}}</li></ul>"
   },
   {
     "id": "edit_table_modal_add_column_name_next",
@@ -1551,7 +1556,7 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
     "bn": "নামে একটি নতুন কলাম যোগ করুন<b> {{column_name}}</b> ধরনের<b> {{column_type}}</b> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না, তবে প্রয়োজন হলে 'একটি কলাম সরান' টুলটি কাজ করবে।"
   },
   {

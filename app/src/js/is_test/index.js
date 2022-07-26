@@ -490,14 +490,15 @@ export function isSafeName(x) {
 }
 
 /*
- * isSafe companion : replace unsafe char by replacement string 
+ * isSafe companion : replace unsafe char by replacement string
  * -> for db names
  * @param {String} x String to make "safe"
  * @raturn {String} "safe" string
  */
 export function makeSafeName(x, repl = "_") {
   const reg = new RegExp(regexUnsafeName, ["g"]);
-  return x.replaceAll(reg, repl);
+  const name = x.replaceAll(reg, repl);
+  return name.toLowerCase();
 }
 
 /**

@@ -1480,6 +1480,11 @@
     "ru": "Тип функции"
   },
   {
+    "id": "edit_table_modal_title",
+    "en": "Edit table {{title}}",
+    "ru": "Изменить таблицу {{title}}"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "ru": "Отменить"
@@ -1526,8 +1531,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
-    "ru": "Имя не может начинаться с цифры или содержать специальные символы, такие как: \"';\\)('.\n\n - Минимальная длина: {{min_length}}\n - Максимальная длина : {{max_length}}\n - Заменены специальные символы: {{has_bad_chars}}\n - Имя: {{column_name}}\n - Правильная длина: {{correct_length}}\n - Доступен: {{is_available}}"
+    "en": "The new column name will be: <b>{{column_name}}</b><ul><li>The name can't start with a number or contain special characters such as: \"';\\)('</li><li>Min length : {{min_length}}</li><li>Max length : {{max_length}}</li><li>Replaced special characters: {{has_bad_chars}}</li><li>Correct length: {{correct_length}}</li><li>Is available: {{is_available}}</li></ul>",
+    "ru": "Имя нового столбца будет:<b> {{column_name}}</b><ul><li> Имя не может начинаться с цифры или содержать специальные символы, например: \"';\\)('</li><li> Минимальная длина: {{min_length}}</li><li> Максимальная длина : {{max_length}}</li><li> Заменены специальные символы: {{has_bad_chars}}</li><li> Правильная длина: {{correct_length}}</li><li> Доступен: {{is_available}}</li></ul>"
   },
   {
     "id": "edit_table_modal_add_column_name_next",
@@ -1551,7 +1556,7 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
     "ru": "Добавьте новый столбец с именем<b> {{column_name}}</b> типа<b> {{column_type}}</b> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить, но при необходимости сработает инструмент «Удалить столбец»."
   },
   {

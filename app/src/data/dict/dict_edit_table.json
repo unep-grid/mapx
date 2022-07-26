@@ -1,5 +1,19 @@
 [
   {
+    "id": "edit_table_modal_title",
+    "en": "Edit table {{title}}",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "fr": "",
@@ -119,7 +133,7 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
+    "en": "The new column name will be: <b>{{column_name}}</b><ul><li>The name can't start with a number or contain special characters such as: \"';\\)('</li><li>Min length : {{min_length}}</li><li>Max length : {{max_length}}</li><li>Replaced special characters: {{has_bad_chars}}</li><li>Correct length: {{correct_length}}</li><li>Is available: {{is_available}}</li></ul>",
     "fr": "",
     "es": "",
     "ru": "",
@@ -184,7 +198,7 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
     "fr": "",
     "es": "",
     "ru": "",

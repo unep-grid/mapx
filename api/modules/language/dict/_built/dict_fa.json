@@ -1480,6 +1480,11 @@
     "fa": "نوع ویژگی"
   },
   {
+    "id": "edit_table_modal_title",
+    "en": "Edit table {{title}}",
+    "fa": "ویرایش جدول {{title}}"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "fa": "واگرد"
@@ -1526,8 +1531,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
-    "fa": "نام نمی تواند با یک عدد شروع شود یا شامل کاراکترهای خاصی مانند: \"';\\)(' باشد.\n\n - حداقل طول: {{min_length}}\n - بیشترین طول : {{max_length}}\n - کاراکترهای ویژه جایگزین شده: {{has_bad_chars}}\n - نام: {{column_name}}\n - طول صحیح: {{correct_length}}\n - موجود است: {{is_available}}"
+    "en": "The new column name will be: <b>{{column_name}}</b><ul><li>The name can't start with a number or contain special characters such as: \"';\\)('</li><li>Min length : {{min_length}}</li><li>Max length : {{max_length}}</li><li>Replaced special characters: {{has_bad_chars}}</li><li>Correct length: {{correct_length}}</li><li>Is available: {{is_available}}</li></ul>",
+    "fa": "نام ستون جدید این خواهد بود:<b> {{column_name}}</b><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> نام نمی تواند با یک عدد شروع شود یا شامل کاراکترهای خاصی مانند: \"';\\)('</li><li style=\";text-align:right;direction:rtl\"> حداقل طول: {{min_length}}</li><li style=\";text-align:right;direction:rtl\"> بیشترین طول : {{max_length}}</li><li style=\";text-align:right;direction:rtl\"> کاراکترهای ویژه جایگزین شده: {{has_bad_chars}}</li><li style=\";text-align:right;direction:rtl\"> طول صحیح: {{correct_length}}</li><li style=\";text-align:right;direction:rtl\"> موجود است: {{is_available}}</li></ul>"
   },
   {
     "id": "edit_table_modal_add_column_name_next",
@@ -1551,8 +1556,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
-    "fa": "یک ستون جدید به نام اضافه کنید<b> {{column_name}}</b> از نوع<b> {{column_type}}</b> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این را نمی توان واگرد کرد، اما در صورت لزوم، ابزار \"حذف ستون\" کار خواهد کرد."
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "fa": "یک ستون جدید به نام اضافه کنید<b> {{column_name}}</b> از نوع<b> {{column_type}}</b> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست، اما در صورت لزوم، ابزار \"حذف ستون\" کار خواهد کرد."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",

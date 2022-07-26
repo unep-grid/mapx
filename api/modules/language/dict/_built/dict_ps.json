@@ -1480,6 +1480,11 @@
     "ps": "د فیچر ډول"
   },
   {
+    "id": "edit_table_modal_title",
+    "en": "Edit table {{title}}",
+    "ps": "جدول تدوین کړئ {{title}}"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "ps": "بیرته راګرځول"
@@ -1526,8 +1531,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
-    "ps": "نوم نشي کولی د شمیر سره پیل شي یا ځانګړي حروف ولري لکه: \"';\\)('.\n\n - دقیقه اوږدوالی: {{min_length}}\n - اعظمي اوږدوالی: {{max_length}}\n - بدل شوي ځانګړي حروف: {{has_bad_chars}}\n - نوم: {{column_name}}\n - سمه اوږدوالی: {{correct_length}}\n - شتون لری: {{is_available}}"
+    "en": "The new column name will be: <b>{{column_name}}</b><ul><li>The name can't start with a number or contain special characters such as: \"';\\)('</li><li>Min length : {{min_length}}</li><li>Max length : {{max_length}}</li><li>Replaced special characters: {{has_bad_chars}}</li><li>Correct length: {{correct_length}}</li><li>Is available: {{is_available}}</li></ul>",
+    "ps": "د نوي کالم نوم به دا وي:<b> {{column_name}}</b><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> نوم نشي کولی د شمیر سره پیل شي یا ځانګړي حروف ولري لکه: \"'؛\\)('</li><li style=\";text-align:right;direction:rtl\"> دقیقه اوږدوالی: {{min_length}}</li><li style=\";text-align:right;direction:rtl\"> اعظمي اوږدوالی: {{max_length}}</li><li style=\";text-align:right;direction:rtl\"> ځای پرځای شوي ځانګړي حروف: {{has_bad_chars}}</li><li style=\";text-align:right;direction:rtl\"> سمه اوږدوالی: {{correct_length}}</li><li style=\";text-align:right;direction:rtl\"> شتون لری: {{is_available}}</li></ul>"
   },
   {
     "id": "edit_table_modal_add_column_name_next",
@@ -1551,8 +1556,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
-    "ps": "په نوم یو نوی کالم اضافه کړئ<b> {{column_name}}</b> ډول<b> {{column_type}}</b> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي راوستلی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي."
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "ps": "په نوم یو نوی کالم اضافه کړئ<b> {{column_name}}</b> ډول<b> {{column_type}}</b> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",

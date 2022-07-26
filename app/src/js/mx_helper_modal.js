@@ -553,12 +553,9 @@ export function modalPrompt(opt) {
     if (isCheckbox) {
       elInputGroup.className = "checkbox";
       elLabel.prepend(elInput);
-
-      //elInput.classList.add("form-check-input");
-      //elLabel.classList.add("form-check-label");
     }
 
-    const elMessage = el("small", { class: ["form-text", "text-muted"] });
+    const elMessage = el("small", { class: ["form-text"] });
     const elContent = el("div", [elInputGroup, elMessage]);
     const elBtnCancel = el(
       "div",

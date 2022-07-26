@@ -209,9 +209,10 @@ export class EditTableSessionClient {
       et._el_table_wrapper,
       et._el_toolbar
     );
+    et._el_title = el("span");
     et._modal = modal({
       id: `edit_table_modal_${et.id}`,
-      title: "Edit table",
+      title: et._el_title,
       content: et._el_content,
       buttons: elModalButtons,
       style: {
@@ -338,30 +339,42 @@ export class EditTableSessionClient {
       et._ht.destroy();
     }
 
-    const columns = table.types || [];
-    const labels = table.types.map((t) => t.id);
+    /**
+     * Set modal title
+     */
+    const title = table.title;
+    et._el_title.innerText = await getDictTemplate("edit_table_modal_title", {
+      title,
+    });
 
     /**
      * Convert col format
      */
+    const columns = table.types || [];
+    let cPos = 0;
     for (const column of columns) {
+      const readOnly = et._config.id_columns_reserved.includes(column.id)
+        ? true
+        : false;
       column.type = typeConvert(column.value, "json", "input");
       column.data = column.id;
-      column.readOnly = column.id === et._config.id_column_main ? true : false;
+      column.readOnly = readOnly;
+      column._pos = readOnly ? -1 : cPos++;
       delete column.value;
       delete column.id;
     }
-    et._columns = columns;
+    et._columns = columns.sort((a, b) => a._pos - b._pos);
+    et._columns_labels = et._columns.map((c) => c.data);
 
     /**
      * New handsontable
      */
     et._ht = new handsontable(et._el_table, {
-      columns: columns,
+      columns: et._columns,
       data: table.data,
       rowHeaders: true,
       columnSorting: true,
-      colHeaders: labels,
+      colHeaders: et._columns_labels,
       allowInvalid: false,
       allowInsertRow: false,
       maxRows: table.data.length,
@@ -693,7 +706,7 @@ export class EditTableSessionClient {
         const txtYes = await getDictItem("yes");
         const txtNo = await getDictItem("no");
 
-        elMessage.innerText = parseTemplate(txtTemplateName, {
+        elMessage.innerHTML = parseTemplate(txtTemplateName, {
           min_length,
           max_length,
           column_name: columnNameSafe,
@@ -916,9 +929,9 @@ export class EditTableSessionClient {
      */
     if (et._auto_save) {
       et.save();
-    } else {
-      et.updateButtons();
     }
+
+    et.updateButtons();
 
     et.perfEnd("afterChange");
   }
@@ -936,13 +949,14 @@ export class EditTableSessionClient {
     }
     et.emitUpdates(updates);
     et.updateButtons();
-    et.clearUpdates();
+    et.flushUpdates();
     et.perfEnd("save");
   }
 
-  clearUpdates() {
+  flushUpdates() {
     const et = this;
-    et._updates.length = 0;
+    //et._updates.length = 0;
+    et._updates = [];
   }
 
   onDisconnect() {

@@ -3848,6 +3848,19 @@
     "de": "Funktionstyp"
   },
   {
+    "id": "edit_table_modal_title",
+    "en": "Edit table {{title}}",
+    "fr": "Modifier le tableau {{title}}",
+    "es": "editar tabla {{title}}",
+    "ru": "Изменить таблицу {{title}}",
+    "zh": "编辑表格 {{title}}",
+    "ar": "تحرير الجدول {{title}}",
+    "fa": "ویرایش جدول {{title}}",
+    "ps": "جدول تدوین کړئ {{title}}",
+    "bn": "টেবিল সম্পাদনা করুন {{title}}",
+    "de": "Tabelle bearbeiten {{title}}"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "fr": "annuler",
@@ -3966,16 +3979,16 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
-    "fr": "Le nom ne peut pas commencer par un chiffre ou contenir des caractères spéciaux tels que : \" ;\\)('.\n\n - Longueur minimale : {{min_length}}\n - Longueur maximale : {{max_length}}\n - Caractères spéciaux remplacés : {{has_bad_chars}}\n - Nom: {{column_name}}\n - Longueur correcte : {{correct_length}}\n - Est disponible: {{is_available}}",
-    "es": "El nombre no puede comenzar con un número ni contener caracteres especiales como: \"';\\)('.\n\n - Longitud mínima : {{min_length}}\n - Longitud máxima : {{max_length}}\n - Caracteres especiales reemplazados: {{has_bad_chars}}\n - Nombre: {{column_name}}\n - Longitud correcta: {{correct_length}}\n - Está disponible: {{is_available}}",
-    "ru": "Имя не может начинаться с цифры или содержать специальные символы, такие как: \"';\\)('.\n\n - Минимальная длина: {{min_length}}\n - Максимальная длина : {{max_length}}\n - Заменены специальные символы: {{has_bad_chars}}\n - Имя: {{column_name}}\n - Правильная длина: {{correct_length}}\n - Доступен: {{is_available}}",
-    "zh": "名称不能以数字开头或包含特殊字符，例如：“';\\)('。\n\n - 最小长度： {{min_length}}\n - 最长长度 ： {{max_length}}\n - 替换特殊字符： {{has_bad_chars}}\n - 姓名： {{column_name}}\n - 正确长度： {{correct_length}}\n - 可用： {{is_available}}",
-    "ar": "لا يمكن أن يبدأ الاسم برقم أو أن يحتوي على أحرف خاصة مثل: \"'؛ \\) ('.\n\n - طول دقيقة : {{min_length}}\n - الحد الاقصى للطول : {{max_length}}\n - تم استبدال الأحرف الخاصة: {{has_bad_chars}}\n - اسم: {{column_name}}\n - الطول الصحيح: {{correct_length}}\n - متاح: {{is_available}}",
-    "fa": "نام نمی تواند با یک عدد شروع شود یا شامل کاراکترهای خاصی مانند: \"';\\)(' باشد.\n\n - حداقل طول: {{min_length}}\n - بیشترین طول : {{max_length}}\n - کاراکترهای ویژه جایگزین شده: {{has_bad_chars}}\n - نام: {{column_name}}\n - طول صحیح: {{correct_length}}\n - موجود است: {{is_available}}",
-    "ps": "نوم نشي کولی د شمیر سره پیل شي یا ځانګړي حروف ولري لکه: \"';\\)('.\n\n - دقیقه اوږدوالی: {{min_length}}\n - اعظمي اوږدوالی: {{max_length}}\n - بدل شوي ځانګړي حروف: {{has_bad_chars}}\n - نوم: {{column_name}}\n - سمه اوږدوالی: {{correct_length}}\n - شتون لری: {{is_available}}",
-    "bn": "নামটি একটি সংখ্যা দিয়ে শুরু হতে পারে না বা বিশেষ অক্ষর থাকতে পারে না যেমন: \"';\\)('।\n\n - সর্বনিম্ন দৈর্ঘ্য: {{min_length}}\n - সর্বোচ্চ দৈর্ঘ্য : {{max_length}}\n - প্রতিস্থাপিত বিশেষ অক্ষর: {{has_bad_chars}}\n - নাম: {{column_name}}\n - সঠিক দৈর্ঘ্য: {{correct_length}}\n - সহজলভ্য: {{is_available}}",
-    "de": "Der Name darf nicht mit einer Zahl beginnen oder Sonderzeichen enthalten wie: \"';\\)('.\n\n - Minimale Länge : {{min_length}}\n - Maximale Länge : {{max_length}}\n - Sonderzeichen ersetzt: {{has_bad_chars}}\n - Name: {{column_name}}\n - Richtige Länge: {{correct_length}}\n - Ist verfügbar: {{is_available}}"
+    "en": "The new column name will be: <b>{{column_name}}</b><ul><li>The name can't start with a number or contain special characters such as: \"';\\)('</li><li>Min length : {{min_length}}</li><li>Max length : {{max_length}}</li><li>Replaced special characters: {{has_bad_chars}}</li><li>Correct length: {{correct_length}}</li><li>Is available: {{is_available}}</li></ul>",
+    "fr": "Le nouveau nom de colonne sera :<b> {{column_name}}</b><ul><li> Le nom ne peut pas commencer par un chiffre ou contenir des caractères spéciaux tels que : \" ;\\)('</li><li> Longueur minimale : {{min_length}}</li><li> Longueur maximale : {{max_length}}</li><li> Caractères spéciaux remplacés : {{has_bad_chars}}</li><li> Longueur correcte : {{correct_length}}</li><li> Est disponible: {{is_available}}</li></ul>",
+    "es": "El nuevo nombre de la columna será:<b> {{column_name}}</b><ul><li> El nombre no puede comenzar con un número ni contener caracteres especiales como: \"';\\)('</li><li> Longitud mínima : {{min_length}}</li><li> Longitud máxima : {{max_length}}</li><li> Caracteres especiales reemplazados: {{has_bad_chars}}</li><li> Longitud correcta: {{correct_length}}</li><li> Está disponible: {{is_available}}</li></ul>",
+    "ru": "Имя нового столбца будет:<b> {{column_name}}</b><ul><li> Имя не может начинаться с цифры или содержать специальные символы, например: \"';\\)('</li><li> Минимальная длина: {{min_length}}</li><li> Максимальная длина : {{max_length}}</li><li> Заменены специальные символы: {{has_bad_chars}}</li><li> Правильная длина: {{correct_length}}</li><li> Доступен: {{is_available}}</li></ul>",
+    "zh": "新列名将是：<b> {{column_name}}</b><ul><li>名称不能以数字开头或包含特殊字符，例如：“';\\)('</li><li>最小长度： {{min_length}}</li><li>最长长度 ： {{max_length}}</li><li>替换特殊字符： {{has_bad_chars}}</li><li>正确长度： {{correct_length}}</li><li>可用： {{is_available}}</li></ul>",
+    "ar": "سيكون اسم العمود الجديد:<b> {{column_name}}</b><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> لا يمكن أن يبدأ الاسم برقم أو أن يحتوي على أحرف خاصة مثل: \"'؛ \\) ('</li><li style=\";text-align:right;direction:rtl\"> طول دقيقة : {{min_length}}</li><li style=\";text-align:right;direction:rtl\"> الحد الاقصى للطول : {{max_length}}</li><li style=\";text-align:right;direction:rtl\"> تم استبدال الأحرف الخاصة: {{has_bad_chars}}</li><li style=\";text-align:right;direction:rtl\"> الطول الصحيح: {{correct_length}}</li><li style=\";text-align:right;direction:rtl\"> متاح: {{is_available}}</li></ul>",
+    "fa": "نام ستون جدید این خواهد بود:<b> {{column_name}}</b><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> نام نمی تواند با یک عدد شروع شود یا شامل کاراکترهای خاصی مانند: \"';\\)('</li><li style=\";text-align:right;direction:rtl\"> حداقل طول: {{min_length}}</li><li style=\";text-align:right;direction:rtl\"> بیشترین طول : {{max_length}}</li><li style=\";text-align:right;direction:rtl\"> کاراکترهای ویژه جایگزین شده: {{has_bad_chars}}</li><li style=\";text-align:right;direction:rtl\"> طول صحیح: {{correct_length}}</li><li style=\";text-align:right;direction:rtl\"> موجود است: {{is_available}}</li></ul>",
+    "ps": "د نوي کالم نوم به دا وي:<b> {{column_name}}</b><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> نوم نشي کولی د شمیر سره پیل شي یا ځانګړي حروف ولري لکه: \"'؛\\)('</li><li style=\";text-align:right;direction:rtl\"> دقیقه اوږدوالی: {{min_length}}</li><li style=\";text-align:right;direction:rtl\"> اعظمي اوږدوالی: {{max_length}}</li><li style=\";text-align:right;direction:rtl\"> ځای پرځای شوي ځانګړي حروف: {{has_bad_chars}}</li><li style=\";text-align:right;direction:rtl\"> سمه اوږدوالی: {{correct_length}}</li><li style=\";text-align:right;direction:rtl\"> شتون لری: {{is_available}}</li></ul>",
+    "bn": "নতুন কলামের নাম হবে:<b> {{column_name}}</b><ul><li> নামটি একটি সংখ্যা দিয়ে শুরু হতে পারে না বা বিশেষ অক্ষর থাকতে পারে না যেমন: \"';\\)('</li><li> সর্বনিম্ন দৈর্ঘ্য: {{min_length}}</li><li> সর্বোচ্চ দৈর্ঘ্য : {{max_length}}</li><li> প্রতিস্থাপিত বিশেষ অক্ষর: {{has_bad_chars}}</li><li> সঠিক দৈর্ঘ্য: {{correct_length}}</li><li> সহজলভ্য: {{is_available}}</li></ul>",
+    "de": "Der neue Spaltenname lautet:<b> {{column_name}}</b><ul><li> Der Name darf nicht mit einer Zahl beginnen oder Sonderzeichen enthalten wie: \"';\\)('</li><li> Minimale Länge : {{min_length}}</li><li> Maximale Länge : {{max_length}}</li><li> Ersetzte Sonderzeichen: {{has_bad_chars}}</li><li> Richtige Länge: {{correct_length}}</li><li> Ist verfügbar: {{is_available}}</li></ul>"
   },
   {
     "id": "edit_table_modal_add_column_name_next",
@@ -4031,14 +4044,14 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
-    "fr": "Ajouter une nouvelle colonne nommée<b> {{column_name}}</b> de type<b> {{column_type}}</b> ? Le changement sera effectué dans la base de données et toutes les tables interactives. Cela ne peut pas être annulé, mais l'outil \"Supprimer une colonne\" fonctionnera, si nécessaire.",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "fr": "Ajouter une nouvelle colonne nommée<b> {{column_name}}</b> de type<b> {{column_type}}</b> ? Le changement sera effectué dans la base de données et toutes les tables interactives. Cette opération est irréversible, mais l'outil \"Supprimer une colonne\" fonctionnera, si nécessaire.",
     "es": "Agregue una nueva columna llamada<b> {{column_name}}</b> de tipo<b> {{column_type}}</b> ? El cambio se realizará en la base de datos y en todas las tablas interactivas. Esto no se puede deshacer, pero la herramienta 'Eliminar una columna' funcionará, si es necesario.",
     "ru": "Добавьте новый столбец с именем<b> {{column_name}}</b> типа<b> {{column_type}}</b> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить, но при необходимости сработает инструмент «Удалить столбец».",
     "zh": "添加一个名为的新列<b> {{column_name}}</b>类型<b> {{column_type}}</b>?更改将在数据库和所有交互式表中完成。这无法撤消，但如果需要，“删除列”工具将起作用。",
     "ar": "أضف عمودًا جديدًا باسم<b> {{column_name}}</b> من النوع<b> {{column_type}}</b> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا ، ولكن أداة \"إزالة عمود\" ستعمل ، إذا لزم الأمر.",
-    "fa": "یک ستون جدید به نام اضافه کنید<b> {{column_name}}</b> از نوع<b> {{column_type}}</b> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این را نمی توان واگرد کرد، اما در صورت لزوم، ابزار \"حذف ستون\" کار خواهد کرد.",
-    "ps": "په نوم یو نوی کالم اضافه کړئ<b> {{column_name}}</b> ډول<b> {{column_type}}</b> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي راوستلی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي.",
+    "fa": "یک ستون جدید به نام اضافه کنید<b> {{column_name}}</b> از نوع<b> {{column_type}}</b> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست، اما در صورت لزوم، ابزار \"حذف ستون\" کار خواهد کرد.",
+    "ps": "په نوم یو نوی کالم اضافه کړئ<b> {{column_name}}</b> ډول<b> {{column_type}}</b> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي.",
     "bn": "নামে একটি নতুন কলাম যোগ করুন<b> {{column_name}}</b> ধরনের<b> {{column_type}}</b> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না, তবে প্রয়োজন হলে 'একটি কলাম সরান' টুলটি কাজ করবে।",
     "de": "Fügen Sie eine neue Spalte mit dem Namen hinzu<b> {{column_name}}</b> des Typs<b> {{column_type}}</b> ? Die Änderung wird in der Datenbank und allen interaktiven Tabellen vorgenommen. Dies kann nicht rückgängig gemacht werden, aber das Werkzeug „Spalte entfernen“ funktioniert bei Bedarf."
   },

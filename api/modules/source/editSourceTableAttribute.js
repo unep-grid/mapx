@@ -1,4 +1,4 @@
-import { getColumnsTypesSimple } from "#mapx/db-utils";
+import { getColumnsTypesSimple, getLayerTitle } from "#mapx/db-utils";
 import { getSourceAttributeTable, getSourceEditors } from "#mapx/source";
 import { randomString } from "#mapx/helpers";
 import {
@@ -203,10 +203,12 @@ class EditTableSession {
     const data = pgRes.rows;
     const attributes = pgRes.fields.map((f) => f.name);
     const types = await getColumnsTypesSimple(et._id_table, attributes);
+    const title = await getLayerTitle(et._id_table);
 
     const table = {
       types,
       data,
+      title,
     };
 
     et.emit("/server/edit_table/full_table", et.message_formater(table));

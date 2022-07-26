@@ -1480,6 +1480,11 @@
     "zh": "特征类型"
   },
   {
+    "id": "edit_table_modal_title",
+    "en": "Edit table {{title}}",
+    "zh": "编辑表格 {{title}}"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "zh": "撤消"
@@ -1526,8 +1531,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The name can't start with a number or contain special characters such as: \"';\\)('.\n\n- Min length : {{min_length}}\n- Max length : {{max_length}} \n- Replaced special characters: {{has_bad_chars}}\n- Name: {{column_name}}\n- Correct length: {{correct_length}}\n - Is available: {{is_available}}",
-    "zh": "名称不能以数字开头或包含特殊字符，例如：“';\\)('。\n\n - 最小长度： {{min_length}}\n - 最长长度 ： {{max_length}}\n - 替换特殊字符： {{has_bad_chars}}\n - 姓名： {{column_name}}\n - 正确长度： {{correct_length}}\n - 可用： {{is_available}}"
+    "en": "The new column name will be: <b>{{column_name}}</b><ul><li>The name can't start with a number or contain special characters such as: \"';\\)('</li><li>Min length : {{min_length}}</li><li>Max length : {{max_length}}</li><li>Replaced special characters: {{has_bad_chars}}</li><li>Correct length: {{correct_length}}</li><li>Is available: {{is_available}}</li></ul>",
+    "zh": "新列名将是：<b> {{column_name}}</b><ul><li>名称不能以数字开头或包含特殊字符，例如：“';\\)('</li><li>最小长度： {{min_length}}</li><li>最长长度 ： {{max_length}}</li><li>替换特殊字符： {{has_bad_chars}}</li><li>正确长度： {{correct_length}}</li><li>可用： {{is_available}}</li></ul>"
   },
   {
     "id": "edit_table_modal_add_column_name_next",
@@ -1551,7 +1556,7 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undo, but the tool 'Remove a column' will work, if required. ",
+    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
     "zh": "添加一个名为的新列<b> {{column_name}}</b>类型<b> {{column_type}}</b>?更改将在数据库和所有交互式表中完成。这无法撤消，但如果需要，“删除列”工具将起作用。"
   },
   {
