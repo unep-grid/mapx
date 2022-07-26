@@ -26,11 +26,17 @@ export async function ioEditSource(socket, options) {
   }
 }
 
+const def = {
+  debug: true,
+};
+
 class EditTableSession {
   constructor(socket, config) {
     const et = this;
     et._socket = socket;
+    et._io = et._socket.server;
     et._config = config;
+    et._perf = {};
     et._tables = [];
     et._is_authenticated = socket._mx_user_authenticated || false;
     et._id_user = socket._id_user;
@@ -39,7 +45,22 @@ class EditTableSession {
     et.onUpdate = et.onUpdate.bind(et);
     et.onExit = et.onExit.bind(et);
   }
-
+  perf(label) {
+    if (!def.debug) {
+      return;
+    }
+    const et = this;
+    delete et._perf[label];
+    et._perf[label] = performance.now();
+  }
+  perfEnd(label) {
+    if (!def.debug) {
+      return;
+    }
+    const et = this;
+    const diff = performance.now() - et._perf[label];
+    console.log(`Perf ${label}: ${diff} [ms]`);
+  }
   async init() {
     const et = this;
 
@@ -71,16 +92,23 @@ class EditTableSession {
     et._socket.on("/client/edit_table/update", et.onUpdate);
     et._socket.on("/client/edit_table/exit", et.onExit);
 
+    /*
+     * Get list of current members
+     */
+    const members = await et.getMembers();
+
     /**
      * Signal join
      */
     et.emit("/server/edit_table/joined", {
       id_room: et._id_room,
       id_session: et._id_session,
+      members: members,
     });
     et.emitRoom("/server/edit_table/new_member", {
       id_socket: et._socket.id,
       roles: et._user_roles,
+      members: members,
     });
 
     if (et._config.send_table) {
@@ -95,22 +123,33 @@ class EditTableSession {
     const et = this;
     et.emit("/server/edit_table/error", { message: txt, id_room: et._id_room });
     console.error(txt, err);
-    et.destroy();
+    //et.destroy();
   }
 
-  destroy() {
+  async getMembers() {
+    const et = this;
+    const sockets = await et._io.in(et._id_room).fetchSockets();
+    const members = sockets.map((s) => s._id_user);
+    return members;
+  }
+
+  async destroy() {
     const et = this;
     if (et._destroyed) {
       return;
     }
     et._destroyed = true;
+    et._socket.leave(et._id_room);
+    const members = await et.getMembers();
+
     et.emitRoom("/server/edit_table/member_exit", {
       id_socket: et._socket.id,
       roles: et._user_roles,
+      members: members,
     });
+
     et._socket.off("/client/edit_table/update", et.onUpdate);
     et._socket.off("/client/edit_table/exit", et.onExit);
-    et._socket.leave(et._id_room);
   }
 
   dispatch(message) {
@@ -137,6 +176,7 @@ class EditTableSession {
 
   write(message) {
     const et = this;
+    et.perf("write");
     const updates = message?.updates;
     if (isEmpty(updates)) {
       return;
@@ -149,10 +189,13 @@ class EditTableSession {
     writePostgres(updates).catch((e) => {
       et.error("Update failed. Check logs", e);
     });
+
+    et.perfEnd("write");
   }
 
   async sendTable() {
     const et = this;
+    et.perf("sendTable");
     const pgRes = await getSourceAttributeTable({
       id: et._id_table,
       fullTable: true,
@@ -167,6 +210,8 @@ class EditTableSession {
     };
 
     et.emit("/server/edit_table/full_table", et.message_formater(table));
+
+    et.perfEnd("sendTable");
   }
 
   emit(type, data) {
@@ -239,6 +284,7 @@ class EditTableSession {
     }
 
     const m = {
+      id_user: et._id_user,
       id_table: et._id_table,
       id_room: et._id_room,
       id_session: et._id_session,

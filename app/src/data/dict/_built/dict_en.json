@@ -1272,6 +1272,26 @@
     "en": "Remove the column"
   },
   {
+    "id": "edit_table_users_stat",
+    "en": "Users currently editing this table: "
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_title",
+    "en": "Large number of change detected"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_content",
+    "en": "Large number of changes detected: {{count}}. Do you want to proceed anyway? Operations could be delayed"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_continue",
+    "en": "Yes, continue"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_undo",
+    "en": "No, undo last action"
+  },
+  {
     "id": "en",
     "en": "English"
   },

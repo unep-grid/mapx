@@ -1590,6 +1590,31 @@
     "zh": "删除列"
   },
   {
+    "id": "edit_table_users_stat",
+    "en": "Users currently editing this table: ",
+    "zh": "当前编辑此表的用户："
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_title",
+    "en": "Large number of change detected",
+    "zh": "检测到大量变化"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_content",
+    "en": "Large number of changes detected: {{count}}. Do you want to proceed anyway? Operations could be delayed",
+    "zh": "检测到大量更改： {{count}} .你还是要继续吗？操作可能会延迟"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_continue",
+    "en": "Yes, continue",
+    "zh": "是的，继续"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_undo",
+    "en": "No, undo last action",
+    "zh": "否，撤消上一个操作"
+  },
+  {
     "id": "en",
     "en": "English",
     "zh": "英语"

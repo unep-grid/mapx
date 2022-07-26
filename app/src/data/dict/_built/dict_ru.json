@@ -1590,6 +1590,31 @@
     "ru": "Удалить столбец"
   },
   {
+    "id": "edit_table_users_stat",
+    "en": "Users currently editing this table: ",
+    "ru": "Пользователи, которые сейчас редактируют эту таблицу:"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_title",
+    "en": "Large number of change detected",
+    "ru": "Обнаружено большое количество изменений"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_content",
+    "en": "Large number of changes detected: {{count}}. Do you want to proceed anyway? Operations could be delayed",
+    "ru": "Обнаружено большое количество изменений: {{count}} . Вы все равно хотите продолжить? Операции могут быть отложены"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_continue",
+    "en": "Yes, continue",
+    "ru": "Да, продолжить"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_undo",
+    "en": "No, undo last action",
+    "ru": "Нет, отменить последнее действие"
+  },
+  {
     "id": "en",
     "en": "English",
     "ru": "английский "

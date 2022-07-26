@@ -1,4 +1,5 @@
 import { geoserver } from "./geoserver/index.js";
+import { editTable } from "./source/edit_table_instances.js";
 
 $(document).on("shiny:connected", function () {
   const h = mx.helpers;
@@ -40,7 +41,7 @@ $(document).on("shiny:connected", function () {
   bind("mxUpdateCheckboxInput", h.updateCheckboxInput);
   bind("mxNotify", h.shinyNotify);
   bind("mxGeoserverRebuild", geoserver.rebuild);
-
+  bind("mxEditTable", editTable);
   /**
    * Mapx map and view related binding
    */

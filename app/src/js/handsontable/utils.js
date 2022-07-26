@@ -24,6 +24,11 @@ export function getHandsonLanguageCode() {
 /*);*/
 /*}*/
 
+
+/**
+* Type integer is not currently supported. 
+* TODO: support type integer, dates, etc.. 
+*/ 
 const types = [
   {
     postgres: "text",
@@ -36,12 +41,6 @@ const types = [
     input: "checkbox",
     javascript: "boolean",
     json: "boolean",
-  },
-  {
-    postgres: "integer",
-    input: "numeric",
-    javascript: "number",
-    json: "number",
   },
   {
     postgres: "numeric",

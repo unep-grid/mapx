@@ -5,6 +5,7 @@ import { cancelFrame, onNextFrame } from "./../animation_frame";
 import { moduleLoad } from "./../modules_loader_async";
 import { bindAll } from "./../bind_class_methods";
 import { getDictTemplate, getDictItem } from "./../language";
+import { getArrayDistinct } from "./../array_stat";
 import {
   typeConvert,
   getTypes,
@@ -26,6 +27,9 @@ const defaults = {
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
   id_columns_reserved: ["gid", "_mx_valid"],
+  max_changes: 1000,
+  max_columns: 80,
+  min_columns: 3,
   routes: {
     server_joined: "/server/edit_table/joined",
     server_error: "/server/edit_table/error",
@@ -47,9 +51,11 @@ export class EditTableSessionClient {
     et._config = Object.assign({}, defaults, config);
     et._socket = socket;
     et._on_destroy = [];
-    et._users = [];
+    et._members = [];
     et._updates = [];
+    et._users = [];
     bindAll(et);
+    et._perf = {};
   }
 
   get id() {
@@ -152,8 +158,15 @@ export class EditTableSessionClient {
       checked: true,
     });
 
+    et._el_users_stat = el("span");
+    et._el_users_stat_wrapper = el("small", [
+      elSpanTranslate("edit_table_users_stat"),
+      et._el_users_stat,
+    ]);
+
     et._el_toolbar = el("div", { class: "edit-table--toolbar" }, [
       et._el_checkbox_autosave,
+      et._el_users_stat_wrapper,
     ]);
 
     et._el_updates_counter = el("span", {
@@ -222,6 +235,18 @@ export class EditTableSessionClient {
     et.updateButtonSave();
     et.updateUpdatesCounter();
     et.updateButtonsUndoRedo();
+    et.updateButtonsAddRemoveColumn();
+  }
+  updateButtonsAddRemoveColumn() {
+    const et = this;
+    et.updateButtonRemoveColumn();
+    et.updateButtonAddColumn();
+  }
+
+  updateMembersStat() {
+    const et = this;
+    const members = getArrayDistinct(et._members);
+    et._el_users_stat.innerText = members.join(",");
   }
   updateUpdatesCounter() {
     const et = this;
@@ -241,6 +266,27 @@ export class EditTableSessionClient {
       et._el_button_undo.classList.remove(cld);
     } else {
       et._el_button_undo.classList.add(cld);
+    }
+  }
+  updateButtonRemoveColumn() {
+    const et = this;
+    const cld = "disabled-alt";
+    et._disable_remove_column = et._columns.length <= et._config.min_columns;
+    console.log(et._columns.length, et._config.min_columns);
+    if (et._disable_remove_column) {
+      et._el_button_remove_column.classList.add(cld);
+    } else {
+      et._el_button_remove_column.classList.remove(cld);
+    }
+  }
+  updateButtonAddColumn() {
+    const et = this;
+    const cld = "disabled-alt";
+    et._disable_add_column = et._columns.length > et._config.max_columns;
+    if (et._disable_add_column) {
+      et._el_button_add_column.classList.add(cld);
+    } else {
+      et._el_button_add_column.classList.remove(cld);
     }
   }
   updateButtonSave() {
@@ -316,6 +362,10 @@ export class EditTableSessionClient {
       rowHeaders: true,
       columnSorting: true,
       colHeaders: labels,
+      allowInvalid: false,
+      allowInsertRow: false,
+      maxRows: table.data.length,
+      mminows: table.data.length,
       licenseKey: et._config.ht_license,
       dropdownMenu: [
         "filter_by_condition",
@@ -372,30 +422,36 @@ export class EditTableSessionClient {
     }
   }
 
+  updateMembers(members) {
+    const et = this;
+    if (isEmpty(members)) {
+      console.warn("Update members: no members received");
+      return;
+    }
+    et._members.length = 0;
+    et._members.push(...members);
+    et.updateMembersStat();
+  }
+
   onJoined(message) {
     const et = this;
     if (et._id_session) {
       return;
     }
-    console.log("Joined", message);
     et._id_table = message.id_table;
     et._id_room = message.id_room;
     et._id_session = message.id_session;
+    et.updateMembers(message.members);
   }
 
   onNewMember(message) {
     const et = this;
-    if (message.id_table !== et._id_table) {
-      return;
-    }
-    console.log("New member joined", message);
+    et.updateMembers(message.members);
   }
+
   onMemberExit(message) {
     const et = this;
-    if (message.id_table !== et._id_table) {
-      return;
-    }
-    console.log("Member left", message);
+    et.updateMembers(message.members);
   }
 
   onDispatch(message) {
@@ -475,6 +531,8 @@ export class EditTableSessionClient {
       columns: et._columns,
       colHeaders: et._columns.map((c) => c.data),
     });
+
+    et.updateButtonsAddRemoveColumn();
 
     if (source === et._config.id_source_dispatch) {
       return;
@@ -589,6 +647,8 @@ export class EditTableSessionClient {
       columns: et._columns,
       colHeaders: et._columns.map((c) => c.data),
     });
+    et.updateButtonsAddRemoveColumn();
+
     if (source === et._config.id_source_dispatch) {
       return;
     }
@@ -708,24 +768,92 @@ export class EditTableSessionClient {
     et.updateColumnAdd(update);
   }
 
+  getColumnType(columnName) {
+    const et = this;
+    const type = et._columns.find((c) => c.data === columnName)?.type || "text";
+    return typeConvert(type, "input", "javascript");
+  }
+
+  validateChange(change) {
+    /* change: [row, prop, oldValue, newValue] */
+    const et = this;
+    const type = et.getColumnType(change[1]);
+
+    if (isEmpty(change[3])) {
+      change[3] = null;
+      return true;
+    }
+
+    return typeof change[3] === type;
+  }
+
   /*
    * Handle logic for after cell update
    */
-  afterChange(changes, source) {
+  async afterChange(changes, source) {
     const et = this;
+
+    /**
+     * In case of undo after large numnber of change,
+     * no values was sent. The undo will trigger 'afterChange',
+     * but there is no need to send the changes. Ignore that event.
+     */
+    if (et._ignore_next_changes) {
+      et._ignore_next_changes = false;
+      return;
+    }
+
     if (isEmpty(changes)) {
       return;
     }
+
+    /**
+     * Lots of changes detected : confirm
+     */
+    const nChanges = changes.length;
+    if (nChanges >= et._config.max_changes) {
+      const proceedLargeChanges = await modalConfirm({
+        title: elSpanTranslate("edit_table_modal_large_changes_number_title"),
+        content: getDictTemplate(
+          "edit_table_modal_large_changes_number_content",
+          {
+            count: nChanges,
+          }
+        ),
+        confirm: elSpanTranslate(
+          "btn_edit_table_modal_large_changes_number_continue"
+        ),
+        cancel: elSpanTranslate(
+          "btn_edit_table_modal_large_changes_number_undo"
+        ),
+      });
+
+      if (!proceedLargeChanges) {
+        et._ignore_next_changes = true;
+        et.undo();
+        return;
+      }
+    }
+
     /**
      * Ignore dispatch changes : only "edit".
      */
     if (source === et._config.id_source_dispatch) {
       return;
     }
+
+    et.perf("afterChange");
+
     for (const change of changes) {
       /* change: [row, prop, oldValue, newValue] */
+
       if (change[2] === change[3]) {
         /* no change */
+        continue;
+      }
+
+      if (!et.validateChange(change)) {
+        console.warn(`Invalid change: ${JSON.stringify(change)}`);
         continue;
       }
 
@@ -791,10 +919,13 @@ export class EditTableSessionClient {
     } else {
       et.updateButtons();
     }
+
+    et.perfEnd("afterChange");
   }
 
   save() {
     const et = this;
+    et.perf("save");
     const updates = et._updates;
     if (et._disconnected) {
       console.warn("Can't save while disconnected");
@@ -806,6 +937,7 @@ export class EditTableSessionClient {
     et.emitUpdates(updates);
     et.updateButtons();
     et.clearUpdates();
+    et.perfEnd("save");
   }
 
   clearUpdates() {
@@ -894,5 +1026,17 @@ export class EditTableSessionClient {
     const isSafe = isSafeName(name);
     const isNotReserved = !et._config.id_columns_reserved.includes(name);
     return isSafe && isNotReserved;
+  }
+
+  perf(label) {
+    const et = this;
+    delete et._perf[label];
+    et._perf[label] = performance.now();
+  }
+
+  perfEnd(label) {
+    const et = this;
+    const diff = performance.now() - et._perf[label];
+    console.log(`Perf ${label}: ${diff} [ms]`);
   }
 }

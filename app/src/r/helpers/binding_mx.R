@@ -1,5 +1,23 @@
 
 
+#' Edit source request
+#'
+#' @param recalcStyle Also recalc styles / save new view version
+#' @param session Shiny session object.
+#' @export
+mxEditTable <- function(
+  idTable = NULL,
+  session = shiny:::getDefaultReactiveDomain()
+) {
+  session$sendCustomMessage(
+    type = "mxEditTable",
+    list(
+      idTable = idTable
+    )
+  )
+}
+
+
 #' Update / Rebuild geoserver request
 #'
 #' @param recalcStyle Also recalc styles / save new view version

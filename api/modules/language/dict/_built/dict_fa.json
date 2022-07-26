@@ -1590,6 +1590,31 @@
     "fa": "ستون را بردارید"
   },
   {
+    "id": "edit_table_users_stat",
+    "en": "Users currently editing this table: ",
+    "fa": "کاربرانی که در حال ویرایش این جدول هستند:"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_title",
+    "en": "Large number of change detected",
+    "fa": "تعداد زیادی تغییر شناسایی شد"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_content",
+    "en": "Large number of changes detected: {{count}}. Do you want to proceed anyway? Operations could be delayed",
+    "fa": "تعداد زیادی از تغییرات شناسایی شده: {{count}} . آیا به هر حال می خواهید ادامه دهید؟ ممکن است عملیات به تعویق بیفتد"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_continue",
+    "en": "Yes, continue",
+    "fa": "بله ادامه بده"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_undo",
+    "en": "No, undo last action",
+    "fa": "نه، آخرین اقدام لغو شود"
+  },
+  {
     "id": "en",
     "en": "English",
     "fa": "انگلیسی"

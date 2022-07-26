@@ -285,5 +285,71 @@
     "ps": "",
     "bn": "",
     "de": ""
+  },
+  {
+    "id": "edit_table_users_stat",
+    "en": "Users currently editing this table: ",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+
+  {
+    "id": "edit_table_modal_large_changes_number_title",
+    "en": "Large number of change detected",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_content",
+    "en": "Large number of changes detected: {{count}}. Do you want to proceed anyway? Operations could be delayed",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_continue",
+    "en": "Yes, continue",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_undo",
+    "en": "No, undo last action",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
   }
 ]

@@ -1590,6 +1590,31 @@
     "ar": "قم بإزالة العمود"
   },
   {
+    "id": "edit_table_users_stat",
+    "en": "Users currently editing this table: ",
+    "ar": "يقوم المستخدمون حاليًا بتحرير هذا الجدول:"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_title",
+    "en": "Large number of change detected",
+    "ar": "تم الكشف عن عدد كبير من التغيير"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_content",
+    "en": "Large number of changes detected: {{count}}. Do you want to proceed anyway? Operations could be delayed",
+    "ar": "تم اكتشاف عدد كبير من التغييرات: {{count}} . هل تريد المتابعة على أي حال؟ يمكن أن تتأخر العمليات"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_continue",
+    "en": "Yes, continue",
+    "ar": "نعم ، استمر"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_undo",
+    "en": "No, undo last action",
+    "ar": "لا ، التراجع عن الإجراء الأخير"
+  },
+  {
     "id": "en",
     "en": "English",
     "ar": "الإنجليزية "

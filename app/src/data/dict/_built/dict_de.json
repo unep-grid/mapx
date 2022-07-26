@@ -1590,6 +1590,31 @@
     "de": "Entfernen Sie die Säule"
   },
   {
+    "id": "edit_table_users_stat",
+    "en": "Users currently editing this table: ",
+    "de": "Benutzer, die diese Tabelle derzeit bearbeiten:"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_title",
+    "en": "Large number of change detected",
+    "de": "Große Anzahl von Änderungen erkannt"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_content",
+    "en": "Large number of changes detected: {{count}}. Do you want to proceed anyway? Operations could be delayed",
+    "de": "Große Anzahl von Änderungen erkannt: {{count}} . Möchten Sie trotzdem fortfahren? Der Betrieb könnte sich verzögern"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_continue",
+    "en": "Yes, continue",
+    "de": "Ja, weiter"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_undo",
+    "en": "No, undo last action",
+    "de": "Nein, letzte Aktion rückgängig machen"
+  },
+  {
     "id": "en",
     "en": "English",
     "de": "Englisch "

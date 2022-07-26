@@ -1590,6 +1590,31 @@
     "fr": "Supprimer la colonne"
   },
   {
+    "id": "edit_table_users_stat",
+    "en": "Users currently editing this table: ",
+    "fr": "Utilisateurs qui modifient actuellement ce tableau :"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_title",
+    "en": "Large number of change detected",
+    "fr": "Grand nombre de changements détectés"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_content",
+    "en": "Large number of changes detected: {{count}}. Do you want to proceed anyway? Operations could be delayed",
+    "fr": "Grand nombre de changements détectés : {{count}} . Voulez-vous quand même continuer ? Les opérations pourraient être retardées"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_continue",
+    "en": "Yes, continue",
+    "fr": "Oui, continuer"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_undo",
+    "en": "No, undo last action",
+    "fr": "Non, annuler la dernière action"
+  },
+  {
     "id": "en",
     "en": "English",
     "fr": "Anglais"

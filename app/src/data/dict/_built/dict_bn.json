@@ -1590,6 +1590,31 @@
     "bn": "কলামটি সরান"
   },
   {
+    "id": "edit_table_users_stat",
+    "en": "Users currently editing this table: ",
+    "bn": "ব্যবহারকারীরা বর্তমানে এই টেবিলটি সম্পাদনা করছেন:"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_title",
+    "en": "Large number of change detected",
+    "bn": "বড় সংখ্যক পরিবর্তন শনাক্ত করা হয়েছে"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_content",
+    "en": "Large number of changes detected: {{count}}. Do you want to proceed anyway? Operations could be delayed",
+    "bn": "বিপুল সংখ্যক পরিবর্তন সনাক্ত করা হয়েছে: {{count}} . আপনি কি যাইহোক এগিয়ে যেতে চান? অপারেশন বিলম্বিত হতে পারে"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_continue",
+    "en": "Yes, continue",
+    "bn": "হ্যাঁ, চালিয়ে যান"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_undo",
+    "en": "No, undo last action",
+    "bn": "না, শেষ অ্যাকশন পূর্বাবস্থায় ফেরান"
+  },
+  {
     "id": "en",
     "en": "English",
     "bn": "ইংরেজি "

@@ -1590,6 +1590,31 @@
     "ps": "کالم لرې کړئ"
   },
   {
+    "id": "edit_table_users_stat",
+    "en": "Users currently editing this table: ",
+    "ps": "هغه کارونکي چې اوس مهال دا جدول تدوین کوي:"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_title",
+    "en": "Large number of change detected",
+    "ps": "د بدلون لوی شمیر وموندل شو"
+  },
+  {
+    "id": "edit_table_modal_large_changes_number_content",
+    "en": "Large number of changes detected: {{count}}. Do you want to proceed anyway? Operations could be delayed",
+    "ps": "د بدلونونو لوی شمیر کشف شوي: {{count}} . ایا تاسو غواړئ چې په هرصورت پرمخ ولاړ شئ؟ عملیات کیدای شي وځنډول شي"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_continue",
+    "en": "Yes, continue",
+    "ps": "هو، دوام ورکړئ"
+  },
+  {
+    "id": "btn_edit_table_modal_large_changes_number_undo",
+    "en": "No, undo last action",
+    "ps": "نه، وروستی کړنه بیرته راګرځول"
+  },
+  {
     "id": "en",
     "en": "English",
     "ps": "انګلیسي"
