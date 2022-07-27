@@ -175,6 +175,11 @@ export function modal(o) {
    */
   document.body.appendChild(elModal);
 
+  /*
+  * Initial pinned status
+  */ 
+  setPinned();
+
   if (o.addBackground) {
     elModal.classList.add("mx-modal-background");
   }
