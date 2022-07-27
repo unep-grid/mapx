@@ -266,7 +266,7 @@ export class EditTableSessionClient {
       const elMember = el(
         "li",
         el("span", member.email),
-        el("span", ` ( ${member.n_sessions})` )
+        el("span", ` ( ${member.n_sessions} )` )
       );
       elFrag.appendChild(elMember);
     }
@@ -403,8 +403,8 @@ export class EditTableSessionClient {
       allowInsertRow: false,
       maxRows: table.data.length,
       mminows: table.data.length,
-      colWidths: 80,
-      manualColumnResize: true,
+      //colWidths: 80,
+      //manualColumnResize: true,
       licenseKey: et._config.ht_license,
       dropdownMenu: [
         "filter_by_condition",
@@ -962,8 +962,8 @@ export class EditTableSessionClient {
       return;
     }
     et.emitUpdates(updates);
-    et.updateButtons();
     et.flushUpdates();
+    et.updateButtons();
     et.perfEnd("save");
   }
 
