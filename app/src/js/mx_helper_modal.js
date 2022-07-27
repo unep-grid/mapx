@@ -219,6 +219,7 @@ export function modal(o) {
         id: idModal,
         class: ["mx-modal-container", "mx-draggable"],
         style: style,
+        on: ["mouseenter", setPinned],
       },
       el(
         "div",
@@ -276,6 +277,17 @@ export function modal(o) {
       })
     );
     return elModal;
+  }
+
+  function setPinned() {
+    const elsModal = document.querySelectorAll(".mx-modal-container");
+    elsModal.forEach((elModalOther) => {
+      if (elModalOther === elModal) {
+        elModalOther.classList.add("pinned");
+      } else {
+        elModalOther.classList.remove("pinned");
+      }
+    });
   }
 
   function setTitle(newTitle) {

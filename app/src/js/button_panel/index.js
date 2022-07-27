@@ -47,6 +47,13 @@ class ButtonPanel extends EventSimple {
       group: "base",
       type: ["click", "tap"],
     });
+    panel.ls.addListener({
+      target: panel.elPanel,
+      bind: panel,
+      callback: panel.setPinned,
+      group: "base",
+      type: ["mouseenter"],
+    });
 
     panel.ls.addListener({
       target: panel.elHandles,
@@ -131,6 +138,22 @@ class ButtonPanel extends EventSimple {
         }
       }
     }
+  }
+
+  setPinned() {
+    const panel = this;
+    const elMain = panel.opt.elContainer.querySelector(`.button-panel--main`);
+    const elsPanel = elMain.querySelectorAll(`.button-panel--container`);
+    if (!elsPanel) {
+      return;
+    }
+    elsPanel.forEach((elPanelOther) => {
+      if (elPanelOther === panel.elContainer) {
+        elPanelOther.classList.add("pinned");
+      } else {
+        elPanelOther.classList.remove("pinned");
+      }
+    });
   }
 
   resetSize() {
