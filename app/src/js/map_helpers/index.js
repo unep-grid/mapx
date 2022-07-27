@@ -2409,8 +2409,7 @@ export async function makeTransparencySlider(o) {
     return;
   }
 
-  const module = await moduleLoad("nouislider");
-  const noUiSlider = module[0].default;
+  const noUiSlider = await moduleLoad("nouislider");
   const oldSlider = view._filters_tools.transparencySlider;
   if (oldSlider) {
     oldSlider.destroy();
@@ -2480,8 +2479,7 @@ export async function makeNumericSlider(o) {
       min: min,
       max: max,
     };
-    module = await moduleLoad("nouislider");
-    const noUiSlider = module[0].default;
+    const noUiSlider = await moduleLoad("nouislider");
 
     const slider = noUiSlider.create(el, {
       range: range,
@@ -2607,8 +2605,7 @@ export async function makeTimeSlider(o) {
       start.push(min);
       start.push(max);
 
-      const module = await moduleLoad("nouislider");
-      const noUiSlider = module[0].default;
+      const noUiSlider = await moduleLoad("nouislider");
 
       const slider = noUiSlider.create(el, {
         range: range,

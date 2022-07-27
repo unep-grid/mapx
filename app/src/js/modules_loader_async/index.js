@@ -141,10 +141,14 @@ async function loadD3Geo() {
 }
 
 async function loadNoUiSlider() {
-  return Promise.all([
+  const m = await Promise.all([
     import("nouislider"),
     import("nouislider/distribute/nouislider.css"),
+    import("../../css/mx_sliders.css")
   ]);
+  const nouislider = m[0].default;
+  nouislider[0] = { default: nouislider };
+  return nouislider;
 }
 
 async function loadPickolor() {

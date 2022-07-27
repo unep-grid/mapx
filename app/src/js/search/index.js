@@ -9,6 +9,7 @@ import { viewsListAddSingle } from "./../mx_helper_map_view_ui.js";
 import { el, elSpanTranslate, elButtonIcon } from "../el_mapx/index.js";
 import { prefGet, prefSet } from "./../user_pref";
 import { isDate } from "./../is_test/index.js";
+import { moduleLoad } from "./../modules_loader_async";
 import pDebounce from "p-debounce";
 
 import {
@@ -54,11 +55,7 @@ class Search extends EventSimple {
     /**
      * Dynamic import
      */
-    await import("./style.less");
-    await import("./style_flatpickr.less");
-    await import("/node_modules/nouislider/distribute/nouislider.css");
-
-    s._nouislider = (await import("nouislider")).default;
+    s._nouislider = await moduleLoad("nouislider");
     s._MeiliSearch = (await import("meilisearch")).MeiliSearch;
     s._flatpickr = (await import("flatpickr")).default;
     s._flatpickr_langs = await import("./flatpickr_locales");
@@ -67,6 +64,9 @@ class Search extends EventSimple {
       host: `${s.opt("protocol")}${s.opt("host")}:${s.opt("port")}`,
       apiKey: s.opt("key") || null,
     });
+    await import("./style.less");
+    await import("./style_flatpickr.less");
+
 
     /**
      * Build ui

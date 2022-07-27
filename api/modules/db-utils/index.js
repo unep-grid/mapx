@@ -267,7 +267,7 @@ async function getColumnsTypesSimple(idSource, idAttr) {
 /**
  * Get the latest timestamp from a source / layer / table
  * @param {String} idSource Id of the source
- * @return {numeric} timetamp
+ * @return {Number} timetamp
  */
 async function getSourceLastTimestamp(idSource) {
   if (!isSourceId(idSource)) {

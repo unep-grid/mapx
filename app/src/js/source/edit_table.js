@@ -55,7 +55,6 @@ export class EditTableSessionClient {
     et._on_destroy = [];
     et._members = [];
     et._updates = [];
-    et._users = [];
     bindAll(et);
     et._perf = {};
   }
@@ -184,7 +183,17 @@ export class EditTableSessionClient {
       et._el_users_stat,
     ]);
 
+    et._el_row_slider = el("div", {
+      class: "edit-table--row-slider",
+    });
+    et._el_row_slider_container = el(
+      "div",
+      { class: "mx-slider-container" },
+      et._el_row_slider
+    );
+
     et._el_toolbar = el("div", { class: "edit-table--toolbar" }, [
+      et._el_row_slider_container,
       et._el_checkbox_autosave,
       et._el_users_stat_wrapper,
     ]);
@@ -411,6 +420,7 @@ export class EditTableSessionClient {
     et._columns = columns.sort((a, b) => a._pos - b._pos);
     et._columns_labels = et._columns.map((c) => c.data);
 
+  
     /**
      * New handsontable
      */
@@ -853,7 +863,7 @@ export class EditTableSessionClient {
     return typeof change[3] === type;
   }
 
-  async validationPrompt(change) {
+  async confirmValidation(change) {
     const et = this;
     const isValid = et.validateChange(change);
     if (isValid) {
@@ -874,29 +884,7 @@ export class EditTableSessionClient {
     }
   }
 
-  /*
-   * Handle logic for after cell update
-   */
-  async afterChange(changes, source) {
-    const et = this;
-
-    /**
-     * In case of undo after large numnber of change,
-     * no values was sent. The undo will trigger 'afterChange',
-     * but there is no need to send the changes. Ignore that event.
-     */
-    if (et._ignore_next_changes) {
-      et._ignore_next_changes = false;
-      return;
-    }
-
-    if (isEmpty(changes)) {
-      return;
-    }
-
-    /**
-     * Lots of changes detected : confirm
-     */
+  async confirmLargeUpdate(changes) {
     const nChanges = changes.length;
     if (nChanges >= et._config.max_changes) {
       const proceedLargeChanges = await modalConfirm({
@@ -915,11 +903,40 @@ export class EditTableSessionClient {
         ),
       });
 
-      if (!proceedLargeChanges) {
-        et._ignore_next_changes = true;
-        et.undo();
-        return;
-      }
+      return proceedLargeChanges;
+    }
+    return true;
+  }
+
+  /*
+   * Handle logic for after cell update
+   */
+  async afterChange(changes, source) {
+    const et = this;
+
+    if (isEmpty(changes)) {
+      return;
+    }
+
+    /**
+     * In case of undo after large numnber of change,
+     * no values was sent. The undo will trigger 'afterChange',
+     * but there is no need to send the changes. Ignore that event.
+     */
+    if (et._ignore_next_changes) {
+      et._ignore_next_changes = false;
+      return;
+    }
+
+    /**
+     * Lots of changes detected : confirm
+     */
+    const confirmLargeUpdate = await et.confirmLargeUpdate(changes);
+
+    if (!confirmLargeUpdate) {
+      et._ignore_next_changes = true;
+      et.undo();
+      return;
     }
 
     /**
@@ -939,10 +956,10 @@ export class EditTableSessionClient {
         continue;
       }
 
-      const validAction = await et.validationPrompt(change);
+      const confirmValidation = await et.confirmValidation(change);
 
-      if (validAction !== true) {
-        switch (validAction) {
+      if (confirmValidation !== true) {
+        switch (confirmValidation) {
           case "undo":
             et.undo();
             break;
