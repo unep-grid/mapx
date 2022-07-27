@@ -1485,6 +1485,11 @@
     "es": "editar tabla {{title}}"
   },
   {
+    "id": "btn_edit_wiki",
+    "en": "Help",
+    "es": "Ayuda"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "es": "Deshacer"
@@ -1618,6 +1623,31 @@
     "id": "btn_edit_table_modal_large_changes_number_undo",
     "en": "No, undo last action",
     "es": "No, deshacer la última acción"
+  },
+  {
+    "id": "edit_table_modal_warning_title",
+    "en": "Edition warning",
+    "es": "Advertencia de edición"
+  },
+  {
+    "id": "edit_table_modal_warning_text",
+    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
+    "es": "<ul><li>El uso de esta herramienta puede hacer que los datos se alteren irreparablemente o incluso que se eliminen, como ocurre con los editores de hojas de cálculo de escritorio.</li><li> No ofrecemos servicios de recuperación de datos para fuentes de datos.</li><li> Siempre que se mantenga una sesión, cualquier operación en las celdas se puede deshacer/rehacer mediante métodos abreviados de teclado o los botones dedicados.</li><li> 'Eliminar columna' eliminará la columna y sus datos sin posibilidad de deshacerlo después del último panel de confirmación.</li><li> Antes de cualquier modificación, es posible obtener una copia de seguridad de los datos descargando la fuente de datos o copiando y pegando los datos en un editor de hojas de cálculo.</li><li> La plataforma actual, su desarrollador o los administradores del proyecto declinan toda responsabilidad.<ul></ul></li></ul>"
+  },
+  {
+    "id": "edit_table_modal_warning_ok_no_more",
+    "en": "I understand, don't remind me this",
+    "es": "Entiendo, no me lo recuerdes"
+  },
+  {
+    "id": "edit_table_modal_warning_ok",
+    "en": "I understand",
+    "es": "entiendo"
+  },
+  {
+    "id": "edit_table_modal_help",
+    "en": "Table editor help",
+    "es": "Ayuda del editor de tablas"
   },
   {
     "id": "en",

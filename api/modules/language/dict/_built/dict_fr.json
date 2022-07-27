@@ -1485,6 +1485,11 @@
     "fr": "Modifier le tableau {{title}}"
   },
   {
+    "id": "btn_edit_wiki",
+    "en": "Help",
+    "fr": "Aider"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "fr": "annuler"
@@ -1618,6 +1623,31 @@
     "id": "btn_edit_table_modal_large_changes_number_undo",
     "en": "No, undo last action",
     "fr": "Non, annuler la dernière action"
+  },
+  {
+    "id": "edit_table_modal_warning_title",
+    "en": "Edition warning",
+    "fr": "Avertissement d'édition"
+  },
+  {
+    "id": "edit_table_modal_warning_text",
+    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
+    "fr": "<ul><li>L'utilisation de cet outil peut entraîner la modification irrémédiable ou même la suppression de données, comme avec les éditeurs de feuilles de calcul de bureau.</li><li> Nous n'offrons pas de services de récupération de données pour les sources de données.</li><li> Tant qu'une session est maintenue, toute opération sur les cellules peut être annulée/refaite à l'aide des raccourcis clavier ou des boutons dédiés.</li><li> \"Supprimer la colonne\" supprimera la colonne et ses données sans possibilité de l'annuler après le dernier panneau de confirmation.</li><li> Avant toute modification, il est possible d'obtenir une sauvegarde des données en téléchargeant la source de données ou en copiant-collant les données dans un éditeur de tableur.</li><li> La plateforme actuelle, son développeur ou les administrateurs du projet déclinent toute responsabilité.<ul></ul></li></ul>"
+  },
+  {
+    "id": "edit_table_modal_warning_ok_no_more",
+    "en": "I understand, don't remind me this",
+    "fr": "Je comprends, ne me rappelle pas ça"
+  },
+  {
+    "id": "edit_table_modal_warning_ok",
+    "en": "I understand",
+    "fr": "je comprends"
+  },
+  {
+    "id": "edit_table_modal_help",
+    "en": "Table editor help",
+    "fr": "Aide de l'éditeur de tableau"
   },
   {
     "id": "en",

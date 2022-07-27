@@ -1485,6 +1485,11 @@
     "de": "Tabelle bearbeiten {{title}}"
   },
   {
+    "id": "btn_edit_wiki",
+    "en": "Help",
+    "de": "Hilfe"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "de": "Rückgängig machen"
@@ -1618,6 +1623,31 @@
     "id": "btn_edit_table_modal_large_changes_number_undo",
     "en": "No, undo last action",
     "de": "Nein, letzte Aktion rückgängig machen"
+  },
+  {
+    "id": "edit_table_modal_warning_title",
+    "en": "Edition warning",
+    "de": "Editionswarnung"
+  },
+  {
+    "id": "edit_table_modal_warning_text",
+    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
+    "de": "<ul><li>Die Verwendung dieses Tools kann dazu führen, dass Daten irreparabel verändert oder sogar gelöscht werden, wie bei Desktop-Tabellenkalkulationseditoren.</li><li> Wir bieten keine Datenwiederherstellungsdienste für Datenquellen an.</li><li> Solange eine Sitzung aufrechterhalten wird, kann jeder Vorgang an den Zellen mithilfe von Tastaturkürzeln oder den dedizierten Schaltflächen rückgängig gemacht/wiederholt werden.</li><li> „Spalte entfernen“ löscht die Spalte und ihre Daten, ohne dass dies nach dem letzten Bestätigungsfeld rückgängig gemacht werden kann.</li><li> Vor jeder Änderung ist es möglich, eine Sicherungskopie der Daten zu erhalten, indem Sie die Datenquelle herunterladen oder die Daten kopieren und in einen Tabelleneditor einfügen.</li><li> Die aktuelle Plattform, ihr Entwickler oder die Projektadministratoren lehnen jegliche Verantwortung ab.<ul></ul></li></ul>"
+  },
+  {
+    "id": "edit_table_modal_warning_ok_no_more",
+    "en": "I understand, don't remind me this",
+    "de": "Ich verstehe, erinnern Sie mich nicht daran"
+  },
+  {
+    "id": "edit_table_modal_warning_ok",
+    "en": "I understand",
+    "de": "Ich verstehe"
+  },
+  {
+    "id": "edit_table_modal_help",
+    "en": "Table editor help",
+    "de": "Hilfe zum Tabelleneditor"
   },
   {
     "id": "en",

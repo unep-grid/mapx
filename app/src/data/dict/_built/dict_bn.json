@@ -1485,6 +1485,11 @@
     "bn": "টেবিল সম্পাদনা করুন {{title}}"
   },
   {
+    "id": "btn_edit_wiki",
+    "en": "Help",
+    "bn": "সাহায্য"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "bn": "পূর্বাবস্থায় ফেরান"
@@ -1618,6 +1623,31 @@
     "id": "btn_edit_table_modal_large_changes_number_undo",
     "en": "No, undo last action",
     "bn": "না, শেষ অ্যাকশন পূর্বাবস্থায় ফেরান"
+  },
+  {
+    "id": "edit_table_modal_warning_title",
+    "en": "Edition warning",
+    "bn": "সংস্করণ সতর্কতা"
+  },
+  {
+    "id": "edit_table_modal_warning_text",
+    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
+    "bn": "<ul><li>এই টুলটি ব্যবহার করার ফলে ডেটা অপূরণীয়ভাবে পরিবর্তিত হতে পারে বা এমনকি মুছেও যেতে পারে, যেমন ডেস্কটপ স্প্রেডশীট সম্পাদকের সাথে।</li><li> আমরা ডেটা উত্সের জন্য ডেটা পুনরুদ্ধার পরিষেবা অফার করি না।</li><li> যতক্ষণ একটি সেশন রক্ষণাবেক্ষণ করা হয়, কোষের যেকোনো অপারেশন কীবোর্ড শর্টকাট বা ডেডিকেটেড বোতাম ব্যবহার করে পূর্বাবস্থায় ফেরানো/পুনরায় করা যেতে পারে।</li><li> 'কলাম সরান' শেষ নিশ্চিতকরণ প্যানেলের পরে এটিকে পূর্বাবস্থায় ফেরানোর কোনো সম্ভাবনা ছাড়াই কলাম এবং এর ডেটা মুছে ফেলবে।</li><li> কোনো পরিবর্তনের আগে, ডেটা উৎস ডাউনলোড করে বা স্প্রেডশীট এডিটরে ডেটা কপি করে পেস্ট করে ডেটার ব্যাকআপ নেওয়া সম্ভব।</li><li> বর্তমান প্ল্যাটফর্ম, এর বিকাশকারী বা প্রকল্প প্রশাসকরা সমস্ত দায়িত্ব অস্বীকার করে।<ul></ul></li></ul>"
+  },
+  {
+    "id": "edit_table_modal_warning_ok_no_more",
+    "en": "I understand, don't remind me this",
+    "bn": "আমি বুঝতে পারছি, আমাকে এটা মনে করিয়ে দেবেন না"
+  },
+  {
+    "id": "edit_table_modal_warning_ok",
+    "en": "I understand",
+    "bn": "আমি বুঝেছি"
+  },
+  {
+    "id": "edit_table_modal_help",
+    "en": "Table editor help",
+    "bn": "টেবিল সম্পাদক সাহায্য"
   },
   {
     "id": "en",

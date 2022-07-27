@@ -1485,6 +1485,11 @@
     "zh": "编辑表格 {{title}}"
   },
   {
+    "id": "btn_edit_wiki",
+    "en": "Help",
+    "zh": "帮助"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "zh": "撤消"
@@ -1618,6 +1623,31 @@
     "id": "btn_edit_table_modal_large_changes_number_undo",
     "en": "No, undo last action",
     "zh": "否，撤消上一个操作"
+  },
+  {
+    "id": "edit_table_modal_warning_title",
+    "en": "Edition warning",
+    "zh": "版本警告"
+  },
+  {
+    "id": "edit_table_modal_warning_text",
+    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
+    "zh": "<ul><li>与桌面电子表格编辑器一样，使用此工具可能会导致数据被不可挽回地更改甚至删除。</li><li>我们不提供数据源的数据恢复服务。</li><li>只要保持会话，就可以使用键盘快捷键或专用按钮撤消/重做对单元格的任何操作。</li><li> “删除列”将删除列及其数据，在最后一个确认面板之后无法撤消它。</li><li>在进行任何修改之前，可以通过下载数据源或将数据复制并粘贴到电子表格编辑器中来获取数据的备份。</li><li>当前平台、其开发者或项目管理员拒绝承担任何责任。<ul></ul></li></ul>"
+  },
+  {
+    "id": "edit_table_modal_warning_ok_no_more",
+    "en": "I understand, don't remind me this",
+    "zh": "我明白了，不要提醒我这个"
+  },
+  {
+    "id": "edit_table_modal_warning_ok",
+    "en": "I understand",
+    "zh": "我明白"
+  },
+  {
+    "id": "edit_table_modal_help",
+    "en": "Table editor help",
+    "zh": "表格编辑器帮助"
   },
   {
     "id": "en",

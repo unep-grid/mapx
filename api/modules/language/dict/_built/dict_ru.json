@@ -1485,6 +1485,11 @@
     "ru": "Изменить таблицу {{title}}"
   },
   {
+    "id": "btn_edit_wiki",
+    "en": "Help",
+    "ru": "Помощь"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "ru": "Отменить"
@@ -1618,6 +1623,31 @@
     "id": "btn_edit_table_modal_large_changes_number_undo",
     "en": "No, undo last action",
     "ru": "Нет, отменить последнее действие"
+  },
+  {
+    "id": "edit_table_modal_warning_title",
+    "en": "Edition warning",
+    "ru": "Предупреждение о выпуске"
+  },
+  {
+    "id": "edit_table_modal_warning_text",
+    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
+    "ru": "<ul><li>Использование этого инструмента может привести к непоправимому изменению или даже удалению данных, как в случае с настольными редакторами электронных таблиц.</li><li> Мы не предлагаем услуги по восстановлению данных для источников данных.</li><li> Пока сеанс поддерживается, любую операцию с ячейками можно отменить/повторить с помощью сочетаний клавиш или специальных кнопок.</li><li> «Удалить столбец» удалит столбец и его данные без возможности отмены после последней панели подтверждения.</li><li> Перед любой модификацией можно получить резервную копию данных, загрузив источник данных или скопировав и вставив данные в редактор электронных таблиц.</li><li> Текущая платформа, ее разработчик или администраторы проекта снимают с себя всякую ответственность.<ul></ul></li></ul>"
+  },
+  {
+    "id": "edit_table_modal_warning_ok_no_more",
+    "en": "I understand, don't remind me this",
+    "ru": "Я понимаю, не напоминай мне об этом"
+  },
+  {
+    "id": "edit_table_modal_warning_ok",
+    "en": "I understand",
+    "ru": "Я понимаю"
+  },
+  {
+    "id": "edit_table_modal_help",
+    "en": "Table editor help",
+    "ru": "Справка по редактору таблиц"
   },
   {
     "id": "en",

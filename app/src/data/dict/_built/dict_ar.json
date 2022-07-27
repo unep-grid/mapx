@@ -1485,6 +1485,11 @@
     "ar": "تحرير الجدول {{title}}"
   },
   {
+    "id": "btn_edit_wiki",
+    "en": "Help",
+    "ar": "مساعدة"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "ar": "الغاء التحميل"
@@ -1618,6 +1623,31 @@
     "id": "btn_edit_table_modal_large_changes_number_undo",
     "en": "No, undo last action",
     "ar": "لا ، التراجع عن الإجراء الأخير"
+  },
+  {
+    "id": "edit_table_modal_warning_title",
+    "en": "Edition warning",
+    "ar": "تحذير الطبعة"
+  },
+  {
+    "id": "edit_table_modal_warning_text",
+    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
+    "ar": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">قد يتسبب استخدام هذه الأداة في تغيير البيانات أو حتى حذفها بشكل لا يمكن إصلاحه ، كما هو الحال مع برامج تحرير جداول بيانات سطح المكتب.</li><li style=\";text-align:right;direction:rtl\"> لا نقدم خدمات استعادة البيانات لمصادر البيانات.</li><li style=\";text-align:right;direction:rtl\"> طالما يتم الاحتفاظ بالجلسة ، يمكن التراجع عن أي عملية على الخلايا / إعادة إجرائها باستخدام اختصارات لوحة المفاتيح أو الأزرار المخصصة.</li><li style=\";text-align:right;direction:rtl\"> ستؤدي \"إزالة العمود\" إلى حذف العمود وبياناته دون إمكانية التراجع عنه بعد لوحة التأكيد الأخيرة.</li><li style=\";text-align:right;direction:rtl\"> قبل أي تعديل ، من الممكن الحصول على نسخة احتياطية من البيانات عن طريق تنزيل مصدر البيانات أو عن طريق نسخ البيانات ولصقها في محرر جدول بيانات.</li><li style=\";text-align:right;direction:rtl\"> المنصة الحالية أو مطورها أو مديرو المشروع يرفضون كل المسؤولية.<ul style=\";text-align:right;direction:rtl\"></ul></li></ul>"
+  },
+  {
+    "id": "edit_table_modal_warning_ok_no_more",
+    "en": "I understand, don't remind me this",
+    "ar": "أنا أفهم ، لا تذكرني بهذا"
+  },
+  {
+    "id": "edit_table_modal_warning_ok",
+    "en": "I understand",
+    "ar": "أفهم"
+  },
+  {
+    "id": "edit_table_modal_help",
+    "en": "Table editor help",
+    "ar": "مساعدة محرر الجدول"
   },
   {
     "id": "en",

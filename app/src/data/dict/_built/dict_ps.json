@@ -1485,6 +1485,11 @@
     "ps": "جدول تدوین کړئ {{title}}"
   },
   {
+    "id": "btn_edit_wiki",
+    "en": "Help",
+    "ps": "مرسته"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "ps": "بیرته راګرځول"
@@ -1618,6 +1623,31 @@
     "id": "btn_edit_table_modal_large_changes_number_undo",
     "en": "No, undo last action",
     "ps": "نه، وروستی کړنه بیرته راګرځول"
+  },
+  {
+    "id": "edit_table_modal_warning_title",
+    "en": "Edition warning",
+    "ps": "نسخه خبرداری"
+  },
+  {
+    "id": "edit_table_modal_warning_text",
+    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
+    "ps": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">د دې وسیلې کارول ممکن د ډیټا د نه بدلیدو یا حتی حذف کیدو لامل شي ، لکه د ډیسټاپ سپریډ شیټ ایډیټرانو سره.</li><li style=\";text-align:right;direction:rtl\"> موږ د معلوماتو سرچینو لپاره د ډیټا ریکوری خدمات نه وړاندې کوو.</li><li style=\";text-align:right;direction:rtl\"> تر هغه وخته چې یوه ناسته ساتل کیږي، په حجرو کې هر ډول عملیات د کیبورډ شارټ کټونو یا وقف شوي بټونو په کارولو سره بیرته راګرځول کیدی شي.</li><li style=\";text-align:right;direction:rtl\"> 'کالم لیرې کړئ' به کالم او د هغې ډیټا حذف کړي پرته له دې چې د وروستي تایید پینل وروسته یې د بیرته راګرځولو امکان نلري.</li><li style=\";text-align:right;direction:rtl\"> د هر ډول تعدیل دمخه، دا ممکنه ده چې د معلوماتو سرچینې ډاونلوډ کولو یا د سپریڈ شیټ ایډیټر کې ډاټا کاپي او پیسټ کولو له لارې د معلوماتو بیک اپ ترلاسه کړئ.</li><li style=\";text-align:right;direction:rtl\"> اوسنی پلیټ فارم، د هغې پراختیا کونکي یا د پروژې مدیران ټول مسؤلیت ردوي.<ul style=\";text-align:right;direction:rtl\"></ul></li></ul>"
+  },
+  {
+    "id": "edit_table_modal_warning_ok_no_more",
+    "en": "I understand, don't remind me this",
+    "ps": "زه پوهیږم، ما ته دا یادونه مه کوئ"
+  },
+  {
+    "id": "edit_table_modal_warning_ok",
+    "en": "I understand",
+    "ps": "زه پوهیږم"
+  },
+  {
+    "id": "edit_table_modal_help",
+    "en": "Table editor help",
+    "ps": "د میز مدیر مرسته"
   },
   {
     "id": "en",

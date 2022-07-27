@@ -1485,6 +1485,11 @@
     "fa": "ویرایش جدول {{title}}"
   },
   {
+    "id": "btn_edit_wiki",
+    "en": "Help",
+    "fa": "کمک"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "fa": "واگرد"
@@ -1618,6 +1623,31 @@
     "id": "btn_edit_table_modal_large_changes_number_undo",
     "en": "No, undo last action",
     "fa": "نه، آخرین اقدام لغو شود"
+  },
+  {
+    "id": "edit_table_modal_warning_title",
+    "en": "Edition warning",
+    "fa": "هشدار نسخه"
+  },
+  {
+    "id": "edit_table_modal_warning_text",
+    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
+    "fa": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">استفاده از این ابزار ممکن است مانند ویرایشگرهای صفحه گسترده دسکتاپ باعث شود داده ها به طور جبران ناپذیری تغییر یا حتی حذف شوند.</li><li style=\";text-align:right;direction:rtl\"> ما خدمات بازیابی اطلاعات را برای منابع داده ارائه نمی دهیم.</li><li style=\";text-align:right;direction:rtl\"> تا زمانی که یک جلسه حفظ می شود، هر عملیات روی سلول ها را می توان با استفاده از میانبرهای صفحه کلید یا دکمه های اختصاصی لغو/دوباره کرد.</li><li style=\";text-align:right;direction:rtl\"> \"حذف ستون\" ستون و داده های آن را بدون امکان لغو پس از آخرین پانل تأیید حذف می کند.</li><li style=\";text-align:right;direction:rtl\"> قبل از هر گونه تغییر، می توان با دانلود منبع داده یا با کپی و چسباندن داده ها در ویرایشگر صفحه گسترده، یک نسخه پشتیبان از داده ها تهیه کرد.</li><li style=\";text-align:right;direction:rtl\"> پلت فرم فعلی، توسعه دهنده آن یا مدیران پروژه تمام مسئولیت ها را رد می کنند.<ul style=\";text-align:right;direction:rtl\"></ul></li></ul>"
+  },
+  {
+    "id": "edit_table_modal_warning_ok_no_more",
+    "en": "I understand, don't remind me this",
+    "fa": "فهمیدم، این را به من یادآوری نکن"
+  },
+  {
+    "id": "edit_table_modal_warning_ok",
+    "en": "I understand",
+    "fa": "من میفهمم"
+  },
+  {
+    "id": "edit_table_modal_help",
+    "en": "Table editor help",
+    "fa": "راهنمای ویرایشگر جدول"
   },
   {
     "id": "en",

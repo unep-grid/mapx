@@ -6,6 +6,8 @@ import { moduleLoad } from "./../modules_loader_async";
 import { bindAll } from "./../bind_class_methods";
 import { getDictTemplate, getDictItem } from "./../language";
 import { getArrayDistinct } from "./../array_stat";
+import { prefGet, prefSet } from "./../user_pref";
+import { modalMarkdown } from "./../modal_markdown/index.js";
 import {
   typeConvert,
   getTypes,
@@ -91,8 +93,22 @@ export class EditTableSessionClient {
     et._socket.on(r.server_full_table, et.initTable);
     et._socket.on(r.server_dispatch, et.onDispatch);
     et._socket.on("disconnect", et.onDisconnect);
+    await et.warning();
     et.start();
     await et.build();
+  }
+
+  async warning() {
+    const showWarning = await prefGet("pref_show_edit_table_warning");
+    if (showWarning === null || showWarning === true) {
+      const keepShowing = await modalConfirm({
+        title: getDictItem("edit_table_modal_warning_title"),
+        content: getDictItem("edit_table_modal_warning_text"),
+        cancel: getDictItem("edit_table_modal_warning_ok_no_more"),
+        confirm: getDictItem("edit_table_modal_warning_ok"),
+      });
+      await prefSet("pref_show_edit_table_warning", keepShowing);
+    }
   }
 
   start(opt) {
@@ -145,6 +161,10 @@ export class EditTableSessionClient {
       icon: "repeat",
       action: et.redo,
     });
+    et._el_button_wiki = elButtonFa("btn_edit_wiki", {
+      icon: "question-circle",
+      action: et.showModalHelp,
+    });
     et._el_button_add_column = elButtonFa("btn_edit_add_column", {
       icon: "plus-circle",
       action: et.addColumnPrompt,
@@ -182,6 +202,7 @@ export class EditTableSessionClient {
       et._el_button_redo,
       et._el_button_add_column,
       et._el_button_remove_column,
+      et._el_button_wiki,
     ];
 
     et._el_table = el("div", {
@@ -266,7 +287,7 @@ export class EditTableSessionClient {
       const elMember = el(
         "li",
         el("span", member.email),
-        el("span", ` ( ${member.n_sessions} )` )
+        el("span", ` ( ${member.n_sessions} )`)
       );
       elFrag.appendChild(elMember);
     }
@@ -1123,5 +1144,12 @@ export class EditTableSessionClient {
     const et = this;
     const diff = performance.now() - et._perf[label];
     console.log(`Perf ${label}: ${diff} [ms]`);
+  }
+
+  showModalHelp() {
+    return modalMarkdown({
+      title: getDictItem("edit_table_modal_help"),
+      wiki: "Attribute-table-edition",
+    });
   }
 }

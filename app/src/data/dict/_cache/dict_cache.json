@@ -3861,6 +3861,19 @@
     "de": "Tabelle bearbeiten {{title}}"
   },
   {
+    "id": "btn_edit_wiki",
+    "en": "Help",
+    "fr": "Aider",
+    "es": "Ayuda",
+    "ru": "Помощь",
+    "zh": "帮助",
+    "ar": "مساعدة",
+    "fa": "کمک",
+    "ps": "مرسته",
+    "bn": "সাহায্য",
+    "de": "Hilfe"
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "fr": "annuler",
@@ -4210,6 +4223,71 @@
     "ps": "نه، وروستی کړنه بیرته راګرځول",
     "bn": "না, শেষ অ্যাকশন পূর্বাবস্থায় ফেরান",
     "de": "Nein, letzte Aktion rückgängig machen"
+  },
+  {
+    "id": "edit_table_modal_warning_title",
+    "en": "Edition warning",
+    "fr": "Avertissement d'édition",
+    "es": "Advertencia de edición",
+    "ru": "Предупреждение о выпуске",
+    "zh": "版本警告",
+    "ar": "تحذير الطبعة",
+    "fa": "هشدار نسخه",
+    "ps": "نسخه خبرداری",
+    "bn": "সংস্করণ সতর্কতা",
+    "de": "Editionswarnung"
+  },
+  {
+    "id": "edit_table_modal_warning_text",
+    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
+    "fr": "<ul><li>L'utilisation de cet outil peut entraîner la modification irrémédiable ou même la suppression de données, comme avec les éditeurs de feuilles de calcul de bureau.</li><li> Nous n'offrons pas de services de récupération de données pour les sources de données.</li><li> Tant qu'une session est maintenue, toute opération sur les cellules peut être annulée/refaite à l'aide des raccourcis clavier ou des boutons dédiés.</li><li> \"Supprimer la colonne\" supprimera la colonne et ses données sans possibilité de l'annuler après le dernier panneau de confirmation.</li><li> Avant toute modification, il est possible d'obtenir une sauvegarde des données en téléchargeant la source de données ou en copiant-collant les données dans un éditeur de tableur.</li><li> La plateforme actuelle, son développeur ou les administrateurs du projet déclinent toute responsabilité.<ul></ul></li></ul>",
+    "es": "<ul><li>El uso de esta herramienta puede hacer que los datos se alteren irreparablemente o incluso que se eliminen, como ocurre con los editores de hojas de cálculo de escritorio.</li><li> No ofrecemos servicios de recuperación de datos para fuentes de datos.</li><li> Siempre que se mantenga una sesión, cualquier operación en las celdas se puede deshacer/rehacer mediante métodos abreviados de teclado o los botones dedicados.</li><li> 'Eliminar columna' eliminará la columna y sus datos sin posibilidad de deshacerlo después del último panel de confirmación.</li><li> Antes de cualquier modificación, es posible obtener una copia de seguridad de los datos descargando la fuente de datos o copiando y pegando los datos en un editor de hojas de cálculo.</li><li> La plataforma actual, su desarrollador o los administradores del proyecto declinan toda responsabilidad.<ul></ul></li></ul>",
+    "ru": "<ul><li>Использование этого инструмента может привести к непоправимому изменению или даже удалению данных, как в случае с настольными редакторами электронных таблиц.</li><li> Мы не предлагаем услуги по восстановлению данных для источников данных.</li><li> Пока сеанс поддерживается, любую операцию с ячейками можно отменить/повторить с помощью сочетаний клавиш или специальных кнопок.</li><li> «Удалить столбец» удалит столбец и его данные без возможности отмены после последней панели подтверждения.</li><li> Перед любой модификацией можно получить резервную копию данных, загрузив источник данных или скопировав и вставив данные в редактор электронных таблиц.</li><li> Текущая платформа, ее разработчик или администраторы проекта снимают с себя всякую ответственность.<ul></ul></li></ul>",
+    "zh": "<ul><li>与桌面电子表格编辑器一样，使用此工具可能会导致数据被不可挽回地更改甚至删除。</li><li>我们不提供数据源的数据恢复服务。</li><li>只要保持会话，就可以使用键盘快捷键或专用按钮撤消/重做对单元格的任何操作。</li><li> “删除列”将删除列及其数据，在最后一个确认面板之后无法撤消它。</li><li>在进行任何修改之前，可以通过下载数据源或将数据复制并粘贴到电子表格编辑器中来获取数据的备份。</li><li>当前平台、其开发者或项目管理员拒绝承担任何责任。<ul></ul></li></ul>",
+    "ar": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">قد يتسبب استخدام هذه الأداة في تغيير البيانات أو حتى حذفها بشكل لا يمكن إصلاحه ، كما هو الحال مع برامج تحرير جداول بيانات سطح المكتب.</li><li style=\";text-align:right;direction:rtl\"> لا نقدم خدمات استعادة البيانات لمصادر البيانات.</li><li style=\";text-align:right;direction:rtl\"> طالما يتم الاحتفاظ بالجلسة ، يمكن التراجع عن أي عملية على الخلايا / إعادة إجرائها باستخدام اختصارات لوحة المفاتيح أو الأزرار المخصصة.</li><li style=\";text-align:right;direction:rtl\"> ستؤدي \"إزالة العمود\" إلى حذف العمود وبياناته دون إمكانية التراجع عنه بعد لوحة التأكيد الأخيرة.</li><li style=\";text-align:right;direction:rtl\"> قبل أي تعديل ، من الممكن الحصول على نسخة احتياطية من البيانات عن طريق تنزيل مصدر البيانات أو عن طريق نسخ البيانات ولصقها في محرر جدول بيانات.</li><li style=\";text-align:right;direction:rtl\"> المنصة الحالية أو مطورها أو مديرو المشروع يرفضون كل المسؤولية.<ul style=\";text-align:right;direction:rtl\"></ul></li></ul>",
+    "fa": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">استفاده از این ابزار ممکن است مانند ویرایشگرهای صفحه گسترده دسکتاپ باعث شود داده ها به طور جبران ناپذیری تغییر یا حتی حذف شوند.</li><li style=\";text-align:right;direction:rtl\"> ما خدمات بازیابی اطلاعات را برای منابع داده ارائه نمی دهیم.</li><li style=\";text-align:right;direction:rtl\"> تا زمانی که یک جلسه حفظ می شود، هر عملیات روی سلول ها را می توان با استفاده از میانبرهای صفحه کلید یا دکمه های اختصاصی لغو/دوباره کرد.</li><li style=\";text-align:right;direction:rtl\"> \"حذف ستون\" ستون و داده های آن را بدون امکان لغو پس از آخرین پانل تأیید حذف می کند.</li><li style=\";text-align:right;direction:rtl\"> قبل از هر گونه تغییر، می توان با دانلود منبع داده یا با کپی و چسباندن داده ها در ویرایشگر صفحه گسترده، یک نسخه پشتیبان از داده ها تهیه کرد.</li><li style=\";text-align:right;direction:rtl\"> پلت فرم فعلی، توسعه دهنده آن یا مدیران پروژه تمام مسئولیت ها را رد می کنند.<ul style=\";text-align:right;direction:rtl\"></ul></li></ul>",
+    "ps": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">د دې وسیلې کارول ممکن د ډیټا د نه بدلیدو یا حتی حذف کیدو لامل شي ، لکه د ډیسټاپ سپریډ شیټ ایډیټرانو سره.</li><li style=\";text-align:right;direction:rtl\"> موږ د معلوماتو سرچینو لپاره د ډیټا ریکوری خدمات نه وړاندې کوو.</li><li style=\";text-align:right;direction:rtl\"> تر هغه وخته چې یوه ناسته ساتل کیږي، په حجرو کې هر ډول عملیات د کیبورډ شارټ کټونو یا وقف شوي بټونو په کارولو سره بیرته راګرځول کیدی شي.</li><li style=\";text-align:right;direction:rtl\"> 'کالم لیرې کړئ' به کالم او د هغې ډیټا حذف کړي پرته له دې چې د وروستي تایید پینل وروسته یې د بیرته راګرځولو امکان نلري.</li><li style=\";text-align:right;direction:rtl\"> د هر ډول تعدیل دمخه، دا ممکنه ده چې د معلوماتو سرچینې ډاونلوډ کولو یا د سپریڈ شیټ ایډیټر کې ډاټا کاپي او پیسټ کولو له لارې د معلوماتو بیک اپ ترلاسه کړئ.</li><li style=\";text-align:right;direction:rtl\"> اوسنی پلیټ فارم، د هغې پراختیا کونکي یا د پروژې مدیران ټول مسؤلیت ردوي.<ul style=\";text-align:right;direction:rtl\"></ul></li></ul>",
+    "bn": "<ul><li>এই টুলটি ব্যবহার করার ফলে ডেটা অপূরণীয়ভাবে পরিবর্তিত হতে পারে বা এমনকি মুছেও যেতে পারে, যেমন ডেস্কটপ স্প্রেডশীট সম্পাদকের সাথে।</li><li> আমরা ডেটা উত্সের জন্য ডেটা পুনরুদ্ধার পরিষেবা অফার করি না।</li><li> যতক্ষণ একটি সেশন রক্ষণাবেক্ষণ করা হয়, কোষের যেকোনো অপারেশন কীবোর্ড শর্টকাট বা ডেডিকেটেড বোতাম ব্যবহার করে পূর্বাবস্থায় ফেরানো/পুনরায় করা যেতে পারে।</li><li> 'কলাম সরান' শেষ নিশ্চিতকরণ প্যানেলের পরে এটিকে পূর্বাবস্থায় ফেরানোর কোনো সম্ভাবনা ছাড়াই কলাম এবং এর ডেটা মুছে ফেলবে।</li><li> কোনো পরিবর্তনের আগে, ডেটা উৎস ডাউনলোড করে বা স্প্রেডশীট এডিটরে ডেটা কপি করে পেস্ট করে ডেটার ব্যাকআপ নেওয়া সম্ভব।</li><li> বর্তমান প্ল্যাটফর্ম, এর বিকাশকারী বা প্রকল্প প্রশাসকরা সমস্ত দায়িত্ব অস্বীকার করে।<ul></ul></li></ul>",
+    "de": "<ul><li>Die Verwendung dieses Tools kann dazu führen, dass Daten irreparabel verändert oder sogar gelöscht werden, wie bei Desktop-Tabellenkalkulationseditoren.</li><li> Wir bieten keine Datenwiederherstellungsdienste für Datenquellen an.</li><li> Solange eine Sitzung aufrechterhalten wird, kann jeder Vorgang an den Zellen mithilfe von Tastaturkürzeln oder den dedizierten Schaltflächen rückgängig gemacht/wiederholt werden.</li><li> „Spalte entfernen“ löscht die Spalte und ihre Daten, ohne dass dies nach dem letzten Bestätigungsfeld rückgängig gemacht werden kann.</li><li> Vor jeder Änderung ist es möglich, eine Sicherungskopie der Daten zu erhalten, indem Sie die Datenquelle herunterladen oder die Daten kopieren und in einen Tabelleneditor einfügen.</li><li> Die aktuelle Plattform, ihr Entwickler oder die Projektadministratoren lehnen jegliche Verantwortung ab.<ul></ul></li></ul>"
+  },
+  {
+    "id": "edit_table_modal_warning_ok_no_more",
+    "en": "I understand, don't remind me this",
+    "fr": "Je comprends, ne me rappelle pas ça",
+    "es": "Entiendo, no me lo recuerdes",
+    "ru": "Я понимаю, не напоминай мне об этом",
+    "zh": "我明白了，不要提醒我这个",
+    "ar": "أنا أفهم ، لا تذكرني بهذا",
+    "fa": "فهمیدم، این را به من یادآوری نکن",
+    "ps": "زه پوهیږم، ما ته دا یادونه مه کوئ",
+    "bn": "আমি বুঝতে পারছি, আমাকে এটা মনে করিয়ে দেবেন না",
+    "de": "Ich verstehe, erinnern Sie mich nicht daran"
+  },
+  {
+    "id": "edit_table_modal_warning_ok",
+    "en": "I understand",
+    "fr": "je comprends",
+    "es": "entiendo",
+    "ru": "Я понимаю",
+    "zh": "我明白",
+    "ar": "أفهم",
+    "fa": "من میفهمم",
+    "ps": "زه پوهیږم",
+    "bn": "আমি বুঝেছি",
+    "de": "Ich verstehe"
+  },
+  {
+    "id": "edit_table_modal_help",
+    "en": "Table editor help",
+    "fr": "Aide de l'éditeur de tableau",
+    "es": "Ayuda del editor de tablas",
+    "ru": "Справка по редактору таблиц",
+    "zh": "表格编辑器帮助",
+    "ar": "مساعدة محرر الجدول",
+    "fa": "راهنمای ویرایشگر جدول",
+    "ps": "د میز مدیر مرسته",
+    "bn": "টেবিল সম্পাদক সাহায্য",
+    "de": "Hilfe zum Tabelleneditor"
   },
   {
     "id": "en",
