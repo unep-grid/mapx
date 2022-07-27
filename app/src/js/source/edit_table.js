@@ -158,7 +158,7 @@ export class EditTableSessionClient {
       checked: true,
     });
 
-    et._el_users_stat = el("span");
+    et._el_users_stat = el("ul");
     et._el_users_stat_wrapper = el("small", [
       elSpanTranslate("edit_table_users_stat"),
       et._el_users_stat,
@@ -199,7 +199,7 @@ export class EditTableSessionClient {
     et._el_overlay = el("div", {
       class: "edit-table--overlay",
       dataset: {
-        disconnected: "disconnected",
+        disconnected: "Attempting to reconnect...",
       },
     });
     et._el_content = el(
@@ -247,8 +247,32 @@ export class EditTableSessionClient {
   updateMembersStat() {
     const et = this;
     const members = getArrayDistinct(et._members);
-    et._el_users_stat.innerText = members.join(",");
+    const elFrag = new DocumentFragment();
+    const groups = {};
+
+    for (const member of members) {
+      if (groups[member.id]) {
+        groups[member.id].n_sessions += 1;
+      } else {
+        groups[member.id] = {
+          n_sessions: 1,
+          email: member.email,
+          id: member.id,
+        };
+      }
+    }
+
+    for (const member of Object.values(groups)) {
+      const elMember = el(
+        "li",
+        el("span", member.email),
+        el("span", ` ( ${member.n_sessions})` )
+      );
+      elFrag.appendChild(elMember);
+    }
+    et._el_users_stat.replaceChildren(elFrag);
   }
+
   updateUpdatesCounter() {
     const et = this;
     et._el_updates_counter.dataset.count = `${et._updates.length}`;
@@ -379,6 +403,8 @@ export class EditTableSessionClient {
       allowInsertRow: false,
       maxRows: table.data.length,
       mminows: table.data.length,
+      colWidths: 80,
+      manualColumnResize: true,
       licenseKey: et._config.ht_license,
       dropdownMenu: [
         "filter_by_condition",

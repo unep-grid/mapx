@@ -11,6 +11,7 @@ import {
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { pgWrite } from "#mapx/db";
+import { getUserEmail } from "#mapx/authentication";
 
 /**
  * Triggered by '/client/edit_table/start' in ..api/modules/io/mw_handlers.js
@@ -129,7 +130,14 @@ class EditTableSession {
   async getMembers() {
     const et = this;
     const sockets = await et._io.in(et._id_room).fetchSockets();
-    const members = sockets.map((s) => s._id_user);
+    const members = [];
+    for (const s of sockets) {
+      const member = {
+        id: s._id_user,
+        email: await getUserEmail(s._id_user),
+      };
+      members.push(member);
+    }
     return members;
   }
 

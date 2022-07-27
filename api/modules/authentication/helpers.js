@@ -103,16 +103,16 @@ export async function validateToken(userToken) {
 
 /**
  * Validate user
- * @param {Numeric} idUser User id
+ * @param {Number} idUser User id
  * @param {String} keyUser User key
  * @returns {Object} valid result
- * @returns {Numeric} valid.idUser User id
+ * @returns {Number} valid.idUser User id
  * @returns {String}  valid.email User email
  * @returns {Boolean} valid.isValid Is valid
  */
 export async function validateUser(idUser, keyUser) {
   idUser = idUser * 1 || null;
-  var sqlUser = templates.getCheckUserIdKey;
+  const sqlUser = templates.getCheckUserIdKey;
   const res = await pgWrite.query(sqlUser, [idUser * 1, keyUser]);
   const isValid = res.rowCount === 1 && res.rows[0].id === idUser;
   const email = isValid ? res.rows[0].email : null;
@@ -121,4 +121,16 @@ export async function validateUser(idUser, keyUser) {
     email: email,
     isValid: isValid,
   };
+}
+
+/**
+ * Get user email
+ * @param {Number} User id
+ * @return {String} Email
+ */
+export async function getUserEmail(idUser) {
+  idUser = idUser * 1 || null;
+  const sqlUser = templates.getUserEmail;
+  const res = await pgWrite.query(sqlUser, [idUser * 1]);
+  return res.rows[0]?.email;
 }
