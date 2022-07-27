@@ -375,7 +375,7 @@ export class EditTableSessionClient {
       rowHeaders: true,
       columnSorting: true,
       colHeaders: et._columns_labels,
-      allowInvalid: false,
+      allowInvalid: true,
       allowInsertRow: false,
       maxRows: table.data.length,
       mminows: table.data.length,
@@ -544,8 +544,8 @@ export class EditTableSessionClient {
       columns: et._columns,
       colHeaders: et._columns.map((c) => c.data),
     });
-
     et.updateButtonsAddRemoveColumn();
+    et._ht.render();
 
     if (source === et._config.id_source_dispatch) {
       return;
@@ -661,6 +661,7 @@ export class EditTableSessionClient {
       colHeaders: et._columns.map((c) => c.data),
     });
     et.updateButtonsAddRemoveColumn();
+    et._ht.render();
 
     if (source === et._config.id_source_dispatch) {
       return;
@@ -791,13 +792,39 @@ export class EditTableSessionClient {
     /* change: [row, prop, oldValue, newValue] */
     const et = this;
     const type = et.getColumnType(change[1]);
+    const value = change[3];
 
-    if (isEmpty(change[3])) {
+    if (isEmpty(value)) {
       change[3] = null;
       return true;
     }
 
+    if (type === "boolean") {
+      return ["false", "true", "FALSE", "TRUE", true, false].includes(value);
+    }
+
     return typeof change[3] === type;
+  }
+
+  async validationPrompt(change) {
+    const et = this;
+    const isValid = et.validateChange(change);
+    if (isValid) {
+      return true;
+    }
+
+    const type = et.getColumnType(change[1]);
+    const nextValue = await modalConfirm({
+      title: "Invalid value",
+      content: `Invalid value received. Make sure to use the correct type : ${type} `,
+      cancel: "Undo last change",
+      confirm: "Continue",
+    });
+    if (nextValue) {
+      return "continue";
+    } else {
+      return "undo";
+    }
   }
 
   /*
@@ -865,67 +892,28 @@ export class EditTableSessionClient {
         continue;
       }
 
-      if (!et.validateChange(change)) {
-        console.warn(`Invalid change: ${JSON.stringify(change)}`);
-        continue;
+      const validAction = await et.validationPrompt(change);
+
+      if (validAction !== true) {
+        switch (validAction) {
+          case "undo":
+            et.undo();
+            break;
+          case "continue":
+          default:
+            continue;
+        }
+        return;
       }
 
-      const idRow = et._ht.toPhysicalRow(change[0]);
-      const row = et._ht.getSourceDataAtRow(idRow);
-      const gid = row[et._config.id_column_main];
-      const update = {
-        id_table: et._id_table,
-        type: "update_cell",
-        column_name: change[1],
-        value_orig: change[2],
-        value_new: change[3],
-        gid: gid,
-      };
       /**
-       * Update, delete or push
-       * Avoid duplication of update in the _udpates queue :
-       * - If a previous value is the original value : delete the upadate
-       * - If a previous value existe : update it
-       * - No previous update, push the update
+       * Push, update or delete
        */
-      let pushUpdate = true;
-      let updatePrevious;
-      let deletePrevious;
-      let deletePos;
-      let noChange;
-      let pos = 0;
-      for (const previousUpdate of et._updates) {
-        if (!pushUpdate || deletePrevious) {
-          continue;
-        }
-        updatePrevious =
-          previousUpdate.type === "update_cell" &&
-          previousUpdate.gid === update.gid &&
-          previousUpdate.column_name === update.column_name &&
-          previousUpdate.id_table === update.id_table;
-        if (updatePrevious) {
-          noChange = update.value_new === previousUpdate.value_orig;
-          if (noChange) {
-            deletePrevious = true;
-            deletePos = pos;
-            pushUpdate = false;
-          } else {
-            previousUpdate.value_new = update.value_new;
-            pushUpdate = false;
-          }
-        }
-        pos++;
-      }
-
-      if (deletePrevious) {
-        et._updates.splice(deletePos, 1);
-      }
-      if (pushUpdate) {
-        et._updates.push(update);
-      }
+      et.pushUpdateOrDelete(change);
     }
+
     /**
-     * Sav
+     * Save
      */
     if (et._auto_save) {
       et.save();
@@ -957,6 +945,63 @@ export class EditTableSessionClient {
     const et = this;
     //et._updates.length = 0;
     et._updates = [];
+  }
+
+  pushUpdateOrDelete(change) {
+    const et = this;
+    const idRow = et._ht.toPhysicalRow(change[0]);
+    const row = et._ht.getSourceDataAtRow(idRow);
+    const gid = row[et._config.id_column_main];
+    const update = {
+      id_table: et._id_table,
+      type: "update_cell",
+      column_name: change[1],
+      value_orig: change[2],
+      value_new: change[3],
+      gid: gid,
+    };
+    /**
+     * Update, delete or push
+     * Avoid duplication of update in the _udpates queue :
+     * - If a previous value is the original value : delete the upadate
+     * - If a previous value existe : update it
+     * - No previous update, push the update
+     */
+    let pushUpdate = true;
+    let updatePrevious;
+    let deletePrevious;
+    let deletePos;
+    let noChange;
+    let pos = 0;
+    for (const previousUpdate of et._updates) {
+      if (!pushUpdate || deletePrevious) {
+        continue;
+      }
+      updatePrevious =
+        previousUpdate.type === "update_cell" &&
+        previousUpdate.gid === update.gid &&
+        previousUpdate.column_name === update.column_name &&
+        previousUpdate.id_table === update.id_table;
+      if (updatePrevious) {
+        noChange = update.value_new === previousUpdate.value_orig;
+        if (noChange) {
+          deletePrevious = true;
+          deletePos = pos;
+          pushUpdate = false;
+        } else {
+          previousUpdate.value_new = update.value_new;
+          pushUpdate = false;
+        }
+      }
+      pos++;
+    }
+
+    if (deletePrevious) {
+      et._updates.splice(deletePos, 1);
+    }
+    if (pushUpdate) {
+      et._updates.push(update);
+    }
   }
 
   onDisconnect() {
