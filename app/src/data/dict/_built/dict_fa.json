@@ -1650,6 +1650,31 @@
     "fa": "راهنمای ویرایشگر جدول"
   },
   {
+    "id": "edit_table_modal_changes_too_big_title",
+    "en": "Too much changes at once",
+    "fa": "یکباره تغییرات خیلی زیاد"
+  },
+  {
+    "id": "edit_table_modal_changes_too_big_content",
+    "en": "Last action did produce {{count}} changes. The maximum allowed changes at once is {{max_changes}}. Last edit was canceled.",
+    "fa": "آخرین اقدام تولید شد {{count}} تغییر می کند. حداکثر تغییرات مجاز به یکباره است {{max_changes}} . آخرین ویرایش لغو شد."
+  },
+  {
+    "id": "btn_edit_table_modal_changes_too_big_ok",
+    "en": "ok",
+    "fa": "خوب"
+  },
+  {
+    "id": "edit_table_modal_columns_name_issue_title",
+    "en": "Invalid column names",
+    "fa": "نام ستون نامعتبر است"
+  },
+  {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "fa": "برخی از ستون ها دارای نویسه های نامعتبر هستند و قابل ویرایش نیستند:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
+  },
+  {
     "id": "en",
     "en": "English",
     "fa": "انگلیسی"

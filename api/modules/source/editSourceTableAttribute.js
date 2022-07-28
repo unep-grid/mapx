@@ -194,11 +194,13 @@ class EditTableSession {
       et.error("Not allowed");
       return;
     }
-    writePostgres(updates).catch((e) => {
-      et.error("Update failed. Check logs", e);
-    });
-
-    et.perfEnd("write");
+    writePostgres(updates)
+      .then(() => {
+        et.perfEnd("write");
+      })
+      .catch((e) => {
+        et.error("Update failed. Check logs", e);
+      });
   }
 
   async sendTable() {
@@ -312,7 +314,7 @@ async function writePostgres(updates) {
   await client.query("BEGIN");
   try {
     for (const update of updates) {
-      const { id_table, column_name } = update;
+      const { id_table, column_name, column_name_new } = update;
 
       if (!isSourceId(id_table) || !isSafe(column_name)) {
         throw new Error("Invalid update table or collumn");
@@ -361,6 +363,22 @@ async function writePostgres(updates) {
             const qSql = parseTemplate(templates.updateTableRemoveColumn, {
               id_table,
               column_name,
+            });
+            const res = await client.query(qSql);
+            if (res.rowCount) {
+              throw new Error(
+                "Error during remove_column : rows affected is not null"
+              );
+            }
+          }
+          break;
+        case "rename_column":
+          {
+            /** ALTER TABLE products remove COLUMN description text; **/
+            const qSql = parseTemplate(templates.updateTableRenameColumn, {
+              id_table,
+              column_name,
+              column_name_new,
             });
             const res = await client.query(qSql);
             if (res.rowCount) {

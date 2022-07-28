@@ -1650,6 +1650,31 @@
     "de": "Hilfe zum Tabelleneditor"
   },
   {
+    "id": "edit_table_modal_changes_too_big_title",
+    "en": "Too much changes at once",
+    "de": "Es ändert sich zu viel auf einmal"
+  },
+  {
+    "id": "edit_table_modal_changes_too_big_content",
+    "en": "Last action did produce {{count}} changes. The maximum allowed changes at once is {{max_changes}}. Last edit was canceled.",
+    "de": "Letzte Aktion hat produziert {{count}} Änderungen. Die maximal erlaubte Änderung auf einmal ist {{max_changes}} . Letzte Bearbeitung wurde abgebrochen."
+  },
+  {
+    "id": "btn_edit_table_modal_changes_too_big_ok",
+    "en": "ok",
+    "de": "OK"
+  },
+  {
+    "id": "edit_table_modal_columns_name_issue_title",
+    "en": "Invalid column names",
+    "de": "Ungültige Spaltennamen"
+  },
+  {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "de": "Einige Spalten enthalten ungültige Zeichen und können nicht bearbeitet werden:<ul> {{columns}}</ul>"
+  },
+  {
     "id": "en",
     "en": "English",
     "de": "Englisch "

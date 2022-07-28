@@ -456,8 +456,8 @@ export function isStringRange(str, min, max) {
  * Regex.lastIndex is not reseted between calls,
  * https://medium.com/@nikjohn/regex-test-returns-alternating-results-bd9a1ae42cdd
  */
-const regexUnsafeName = /^[0-9\s]|[\\\;\:\(\)\'\"\*\+\{\}\s]/;
-const regexUnsafe = /[\\\;\:\(\)\'\"\*\+\{\}]/;
+const regexUnsafeName = /^[0-9\s]|[\\\;\:\.\(\)\'\"\*\+\{\}\s]/;
+const regexUnsafe = /[\\\;\:\.\(\)\'\"\*\+\{\}]/;
 
 /**
  * Test if input value is "safe".

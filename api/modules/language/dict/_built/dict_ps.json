@@ -1650,6 +1650,31 @@
     "ps": "د میز مدیر مرسته"
   },
   {
+    "id": "edit_table_modal_changes_too_big_title",
+    "en": "Too much changes at once",
+    "ps": "په یو وخت کې ډیر بدلونونه"
+  },
+  {
+    "id": "edit_table_modal_changes_too_big_content",
+    "en": "Last action did produce {{count}} changes. The maximum allowed changes at once is {{max_changes}}. Last edit was canceled.",
+    "ps": "وروستی عمل یې تولید کړ {{count}} بدلونونه په یوځل کې ترټولو زیات اجازه ورکړل شوي بدلونونه دي {{max_changes}} . وروستی تدوین لغوه شو."
+  },
+  {
+    "id": "btn_edit_table_modal_changes_too_big_ok",
+    "en": "ok",
+    "ps": "سمه ده"
+  },
+  {
+    "id": "edit_table_modal_columns_name_issue_title",
+    "en": "Invalid column names",
+    "ps": "د کالم نامناسب نومونه"
+  },
+  {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "ps": "ځینې کالمونه ناسم توري لري او نشي ترمیم کیدی:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
+  },
+  {
     "id": "en",
     "en": "English",
     "ps": "انګلیسي"

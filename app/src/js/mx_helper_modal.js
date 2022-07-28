@@ -473,6 +473,7 @@ export function modalDialog(opt) {
  * @param {String|Promise|Element} opt.title Title
  * @param {String|Promise|Element} opt.content Title
  * @param {String|Promise|Element} opt.cancel Cancel text
+ * @param {String|Promise|Element} opt.cancel Cancel text
  * @param {String|Promise|Element} opt.confirm Confirm text
  * @return {Promise} resolve to boolean
  */

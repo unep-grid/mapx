@@ -1320,6 +1320,26 @@
     "en": "Table editor help"
   },
   {
+    "id": "edit_table_modal_changes_too_big_title",
+    "en": "Too much changes at once"
+  },
+  {
+    "id": "edit_table_modal_changes_too_big_content",
+    "en": "Last action did produce {{count}} changes. The maximum allowed changes at once is {{max_changes}}. Last edit was canceled."
+  },
+  {
+    "id": "btn_edit_table_modal_changes_too_big_ok",
+    "en": "ok"
+  },
+  {
+    "id": "edit_table_modal_columns_name_issue_title",
+    "en": "Invalid column names"
+  },
+  {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>"
+  },
+  {
     "id": "en",
     "en": "English"
   },

@@ -1,5 +1,10 @@
 import "./edit_table.less";
-import { modal, modalPrompt, modalConfirm } from "./../mx_helper_modal.js";
+import {
+  modal,
+  modalPrompt,
+  modalConfirm,
+  modalDialog,
+} from "./../mx_helper_modal.js";
 import { el, elButtonFa, elSpanTranslate, elCheckbox } from "../el_mapx";
 import { cancelFrame, onNextFrame } from "./../animation_frame";
 import { moduleLoad } from "./../modules_loader_async";
@@ -29,7 +34,8 @@ const defaults = {
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
   id_columns_reserved: ["gid", "_mx_valid"],
-  max_changes: 1000,
+  max_changes: 1e4,
+  max_changes_warning: 1e3,
   max_columns: 80,
   min_columns: 3,
   routes: {
@@ -44,6 +50,7 @@ const defaults = {
     client_exit: "/client/edit_table/exit",
   },
   id_source_dispatch: "from_dispatch",
+  id_source_edit: "edit",
 };
 
 export class EditTableSessionClient {
@@ -55,6 +62,7 @@ export class EditTableSessionClient {
     et._on_destroy = [];
     et._members = [];
     et._updates = [];
+    et._updates_cell = [];
     bindAll(et);
     et._perf = {};
   }
@@ -252,6 +260,7 @@ export class EditTableSessionClient {
       noShinyBinding: true,
       removeCloseButton: true,
       addBackground: false,
+      noBtnGroup: true,
       onClose: () => {
         et.destroy();
       },
@@ -365,12 +374,53 @@ export class EditTableSessionClient {
   }
   updateLayout() {
     const et = this;
-    cancelFrame(et._update_to);
-    et._update_to = onNextFrame(() => {
+    clearTimeout(et._update_to);
+    et._update_to = setTimeout(() => {
+      const elButtons = _et._el_button_close.parentElement;
+      const elFooter = elButtons.parentElement;
+      const rectButtons = elButtons.getBoundingClientRect();
+      const rectFooter = elFooter.getBoundingClientRect();
       const rectWrapper = et._el_table_wrapper.getBoundingClientRect();
+      if (rectButtons.width >= rectFooter.width) {
+        elButtons.classList.add("mx-modal-foot-btns-collapsed");
+      } else {
+        elButtons.classList.remove("mx-modal-foot-btns-collapsed");
+      }
       et._el_table.style.height = `${rectWrapper.height}px`;
       et._ht.render();
-    });
+    }, 200);
+  }
+
+  isColumnBase(name) {
+    const et = this;
+    return et._config.id_columns_reserved.includes(name);
+  }
+
+  isReadOnly(name) {
+    const et = this;
+    return et.isColumnBase(name) || !isSafeName(name);
+  }
+
+  async columnNameIssueDialog() {
+    const et = this;
+    const columnsIssues = [];
+
+    for (const column of et._columns_labels) {
+      if (!isSafeName(column)) {
+        columnsIssues.push(column);
+      }
+    }
+    if (isNotEmpty(columnsIssues)) {
+      await modalDialog({
+        title: getDictItem("edit_table_modal_columns_name_issue_title"),
+        content: getDictTemplate(
+          "edit_table_modal_columns_name_issue_content",
+          {
+            columns: `<li>${columnsIssues.join("</li><li>")}</li>`,
+          }
+        ),
+      });
+    }
   }
 
   /**
@@ -405,22 +455,24 @@ export class EditTableSessionClient {
      * Convert col format
      */
     const columns = table.types || [];
+    const nColumns = columns.length;
     let cPos = 0;
     for (const column of columns) {
-      const readOnly = et._config.id_columns_reserved.includes(column.id)
-        ? true
-        : false;
+      const readOnly = et.isReadOnly(column.id);
+      /**
+       * Invalid name = not editable. See :
+       * https://github.com/handsontable/handsontable/issues/5439
+       */
+      const isInvalid = !isSafeName(column.id);
       column.type = typeConvert(column.value, "json", "input");
       column.data = column.id;
       column.readOnly = readOnly;
-      column._pos = readOnly ? -1 : cPos++;
+      column._pos = isInvalid ? nColumns + 1 : readOnly ? -1 : cPos++;
       delete column.value;
       delete column.id;
     }
     et._columns = columns.sort((a, b) => a._pos - b._pos);
     et._columns_labels = et._columns.map((c) => c.data);
-
-  
     /**
      * New handsontable
      */
@@ -455,6 +507,12 @@ export class EditTableSessionClient {
       },
       disableVisualSelection: false,
     });
+
+
+    /**
+     * Dialog for column name issue
+     */
+    await et.columnNameIssueDialog();
 
     /**
      * On modal resize, updateLayout
@@ -530,11 +588,14 @@ export class EditTableSessionClient {
       return;
     }
     if (isNotEmpty(message.updates)) {
+      et.perf("dispatch");
+      const cells = [];
+
       et._ht.batch(() => {
         for (const update of message.updates) {
           switch (update.type) {
             case "update_cell":
-              et.updateCellValue(update, et._config.id_source_dispatch);
+              et.updateCellsBatchAdd(update, cells);
               break;
             case "add_column":
               et.updateColumnAdd(update, et._config.id_source_dispatch);
@@ -546,15 +607,38 @@ export class EditTableSessionClient {
               console.log(message);
           }
         }
+        if (isNotEmpty(cells)) {
+          et.updateCellsBatchProcess(cells);
+        }
       });
+      et.perfEnd("dispatch");
     }
+  }
+
+  updateCellsBatchProcess(cells) {
+    const et = this;
+    try {
+      et._ht.setDataAtRowProp(cells, null, null, et._config.id_source_dispatch);
+      console.log(cells);
+    } catch (e) {
+      console.warn("updateCellsBatchProcess", e);
+    }
+  }
+
+  updateCellsBatchAdd(update, cells) {
+    // [[row, prop, value], ...].
+    const et = this;
+    const gid = update[et._config.id_column_main];
+    const gidRow = et._ht.getDataAtProp(et._config.id_column_main);
+    const idRow = gidRow.indexOf(gid);
+    cells.push([idRow, update.column_name, update.value_new]);
   }
 
   updateCellValue(update, source) {
     const et = this;
-    const idRow = et._ht
-      .getDataAtProp(et._config.id_column_main)
-      .indexOf(update[et._config.id_column_main]);
+    const gid = update[et._config.id_column_main];
+    const gidRow = et._ht.getDataAtProp(et._config.id_column_main);
+    const idRow = gidRow.indexOf(gid);
     et._ht.setDataAtRowProp(
       idRow,
       update.column_name,
@@ -865,10 +949,6 @@ export class EditTableSessionClient {
 
   async confirmValidation(change) {
     const et = this;
-    const isValid = et.validateChange(change);
-    if (isValid) {
-      return true;
-    }
 
     const type = et.getColumnType(change[1]);
     const nextValue = await modalConfirm({
@@ -886,37 +966,50 @@ export class EditTableSessionClient {
 
   async confirmLargeUpdate(changes) {
     const nChanges = changes.length;
-    if (nChanges >= et._config.max_changes) {
-      const proceedLargeChanges = await modalConfirm({
-        title: elSpanTranslate("edit_table_modal_large_changes_number_title"),
-        content: getDictTemplate(
-          "edit_table_modal_large_changes_number_content",
-          {
-            count: nChanges,
-          }
-        ),
-        confirm: elSpanTranslate(
-          "btn_edit_table_modal_large_changes_number_continue"
-        ),
-        cancel: elSpanTranslate(
-          "btn_edit_table_modal_large_changes_number_undo"
-        ),
-      });
+    const proceedLargeChanges = await modalConfirm({
+      title: elSpanTranslate("edit_table_modal_large_changes_number_title"),
+      content: getDictTemplate(
+        "edit_table_modal_large_changes_number_content",
+        {
+          count: nChanges,
+        }
+      ),
+      confirm: elSpanTranslate(
+        "btn_edit_table_modal_large_changes_number_continue"
+      ),
+      cancel: elSpanTranslate("btn_edit_table_modal_large_changes_number_undo"),
+    });
 
-      return proceedLargeChanges;
-    }
-    return true;
+    return proceedLargeChanges;
   }
 
+  async confirmChangesToBig(changes) {
+    const et = this;
+    const nChanges = changes.length;
+    await modalDialog({
+      title: elSpanTranslate("edit_table_modal_changes_too_big_title"),
+      content: getDictTemplate("edit_table_modal_changes_too_big_content", {
+        count: nChanges,
+        max_changes: et._config.max_changes,
+      }),
+      confirm: elSpanTranslate("btn_edit_table_modal_changes_too_big_ok"),
+      cancel: null,
+    });
+  }
   /*
    * Handle logic for after cell update
    */
   async afterChange(changes, source) {
     const et = this;
-
     if (isEmpty(changes)) {
       return;
     }
+
+    /**
+     * Check length : warning, stop, batch or not
+     */
+    const changesWarning = changes.length >= et._config.max_changes_warning;
+    const changesTooBig = changes.length >= et._config.max_changes;
 
     /**
      * In case of undo after large numnber of change,
@@ -929,21 +1022,33 @@ export class EditTableSessionClient {
     }
 
     /**
-     * Lots of changes detected : confirm
-     */
-    const confirmLargeUpdate = await et.confirmLargeUpdate(changes);
-
-    if (!confirmLargeUpdate) {
-      et._ignore_next_changes = true;
-      et.undo();
-      return;
-    }
-
-    /**
-     * Ignore dispatch changes : only "edit".
+     * Ignore dispatch changes, only "edit","Autofill.fill","..".
      */
     if (source === et._config.id_source_dispatch) {
       return;
+    }
+
+    if (changesTooBig) {
+      /**
+       * Too much changes detected : alert
+       */
+      et._ignore_next_changes = true;
+      et.undo();
+      await et.confirmChangesToBig(changes);
+      return;
+    }
+
+    if (changesWarning) {
+      /**
+       * Lots of changes detected : confirm
+       */
+      const confirmLargeUpdate = await et.confirmLargeUpdate(changes);
+
+      if (!confirmLargeUpdate) {
+        et._ignore_next_changes = true;
+        et.undo();
+        return;
+      }
     }
 
     et.perf("afterChange");
@@ -956,18 +1061,20 @@ export class EditTableSessionClient {
         continue;
       }
 
-      const confirmValidation = await et.confirmValidation(change);
+      const isNotValid = !et.validateChange(change);
 
-      if (confirmValidation !== true) {
+      if (isNotValid) {
+        const confirmValidation = await et.confirmValidation(change);
+
         switch (confirmValidation) {
           case "undo":
             et.undo();
-            break;
+            et._ignore_next_changes = true;
+            return;
           case "continue":
           default:
             continue;
         }
-        return;
       }
 
       /**
@@ -1042,7 +1149,7 @@ export class EditTableSessionClient {
         continue;
       }
       updatePrevious =
-        previousUpdate.type === "update_cell" &&
+        previousUpdate.type === update.type &&
         previousUpdate.gid === update.gid &&
         previousUpdate.column_name === update.column_name &&
         previousUpdate.id_table === update.id_table;

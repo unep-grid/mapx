@@ -229,9 +229,9 @@ export async function updateLanguageElements(o) {
   /**
    * Group all change to avoid many reflow;
    */
-  changes.forEach((c) => {
-    setValue(c[0], c[1], c[2]);
-  });
+  for (const change of changes) {
+    setValue(change[0], change[1], change[2]);
+  }
 
   /**
    * Helpers
@@ -240,26 +240,28 @@ export async function updateLanguageElements(o) {
     if (!label) {
       return;
     }
-    if (type === "title") {
-      el.setAttribute("title", label);
-      return;
+    if (label === "Supprimer la colonne") {
+      debugger;
     }
-    if (type === "tooltip") {
-      if (el.dataset.lang_split) {
-        label = splitnwords(label);
-      }
-      el.setAttribute("aria-label", label);
-      if (el.className.indexOf("hint--") === -1) {
-        el.className += " hint--left";
-      }
-      return;
+    switch (type) {
+      case "title":
+        el.setAttribute("title", label);
+        return;
+      case "tooltip":
+        if (el.dataset.lang_split) {
+          label = splitnwords(label);
+        }
+        el.setAttribute("aria-label", label);
+        if (el.className.indexOf("hint--") === -1) {
+          el.className += " hint--left";
+        }
+        return;
+      case "placeholder":
+        el.setAttribute("placeholder", label);
+        return;
+      default:
+        el.innerText = label;
     }
-
-    if (type === "placeholder") {
-      el.setAttribute("placeholder", label);
-      return;
-    }
-    el.innerText = label;
   }
 }
 

@@ -5,6 +5,6 @@ WITH sub AS (
    LIMIT  1
    )
 UPDATE "{{id_table}}" s
-SET {{column_name}} = $1 
+SET "{{column_name}}" = $1 
 FROM sub
 WHERE s.gid = sub.gid;

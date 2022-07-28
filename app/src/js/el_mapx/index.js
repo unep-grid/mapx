@@ -1,8 +1,12 @@
-import {el, svg} from './../el/src/index.js';
-import {getDictItem, getLanguageCurrent, getLanguagesAll} from './../language';
-import * as test from './../is_test_mapx/index.js';
-import {parseTemplate} from '../mx_helper_misc.js';
-export {el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate};
+import { el, svg } from "./../el/src/index.js";
+import {
+  getDictItem,
+  getLanguageCurrent,
+  getLanguagesAll,
+} from "./../language";
+import * as test from "./../is_test_mapx/index.js";
+import { parseTemplate } from "../mx_helper_misc.js";
+export { el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate };
 
 /**
  * MapX "components"
@@ -35,22 +39,22 @@ function elAuto(render, data, opt) {
   opt = opt || {};
 
   var def = {
-    render: 'auto',
+    render: "auto",
     tableHeadersSkip: false,
     tableHeadersClasses: [],
     tableHeadersLabels: [],
-    tableTitle: 'Table',
+    tableTitle: "Table",
     tableTitleAsLanguageKey: false,
-    tableClass: ['table'],
-    tableContainerHeaderClass: ['panel-heading'],
-    tableContainerClass: ['panel', 'panel-default'],
+    tableClass: ["table"],
+    tableContainerHeaderClass: ["panel-heading"],
+    tableContainerClass: ["panel", "panel-default"],
     booleanValues: [true, false],
-    stringStyle: {marginRight: '5px'},
-    numberStyle: {float: 'right'},
-    dateStyle: {float: 'right'},
-    langKeyPrefix: '',
+    stringStyle: { marginRight: "5px" },
+    numberStyle: { float: "right" },
+    dateStyle: { float: "right" },
+    langKeyPrefix: "",
     stringAsLanguageKey: false,
-    urlDefaultLabel: 'Link'
+    urlDefaultLabel: "Link",
   };
 
   /*
@@ -69,7 +73,7 @@ function elAuto(render, data, opt) {
     boolean: renderBoolean,
     array_auto: renderArrayAuto,
     array_table: renderArrayTable,
-    array_string: renderArrayString
+    array_string: renderArrayString,
   };
   var elRendered = (r[render || opt.render] || console.log)(data);
 
@@ -118,11 +122,11 @@ function elAuto(render, data, opt) {
   }
 
   function renderNumeric(x) {
-    return el('span', {style: opt.numberStyle}, x + '');
+    return el("span", { style: opt.numberStyle }, x + "");
   }
   function renderBoolean(x) {
     var str = x === true ? opt.booleanValues[0] : opt.booleanValues[1];
-    return renderString(str + '');
+    return renderString(str + "");
   }
   function renderStringLanguage(obj) {
     const lang = getLanguageCurrent();
@@ -132,63 +136,63 @@ function elAuto(render, data, opt) {
   }
   function renderStringLanguageArray(arr) {
     return el(
-      'ul',
+      "ul",
       {
         style: {
-          maxHeight: '200px',
-          overflow: 'auto'
-        }
+          maxHeight: "200px",
+          overflow: "auto",
+        },
       },
       arr.map((d) => {
-        return el('li', renderStringLanguage(d));
+        return el("li", renderStringLanguage(d));
       })
     );
   }
   function renderArrayElement(arr) {
     return el(
-      'ul',
+      "ul",
       {
         style: {
-          maxHeight: '200px',
-          overflow: 'auto'
-        }
+          maxHeight: "200px",
+          overflow: "auto",
+        },
       },
       arr.map((d) => {
-        return el('li', d);
+        return el("li", d);
       })
     );
   }
   function renderDate(date) {
-    var dateDefault = '0001-01-01';
+    var dateDefault = "0001-01-01";
     if (date === dateDefault) {
-      return renderString('-');
+      return renderString("-");
     }
 
-    return el('span', {style: opt.dateStyle}, new Date(date).toDateString());
+    return el("span", { style: opt.dateStyle }, new Date(date).toDateString());
   }
   function renderUrl(url, label) {
     label = label || opt.urlDefaultLabel;
 
     return el(
-      'a',
+      "a",
       {
-        target: '_blank',
-        href: url
+        target: "_blank",
+        href: url,
       },
       label
     );
   }
   function renderEmail(email) {
     return el(
-      'a',
+      "a",
       {
-        target: '_blank',
+        target: "_blank",
         href: `mailto:${email}`,
         style: {
-          maxWidth: '100%',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap'
-        }
+          maxWidth: "100%",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+        },
       },
       email
     );
@@ -200,43 +204,43 @@ function elAuto(render, data, opt) {
 
     str = asLanguageKey ? opt.langKeyPrefix + str : str;
     return el(
-      'span',
+      "span",
       {
         style: opt.stringStyle,
         dataset: asLanguageKey
           ? {
-              lang_key: str
+              lang_key: str,
             }
-          : {}
+          : {},
       },
-      str + ''
+      str + ""
     );
   }
   function renderArrayString(arr) {
-    return el('div', arr.map(renderString));
+    return el("div", arr.map(renderString));
   }
   function renderArrayAuto(arr) {
-    return el('div', arr.map(renderAuto));
+    return el("div", arr.map(renderAuto));
   }
   function renderArrayTable(array) {
     var hLabels = opt.tableHeadersLabels || [];
     var hClasses = opt.tableHeadersClasses || [];
-    var tTitle = opt.tableTitle || '';
+    var tTitle = opt.tableTitle || "";
     var hSkip = opt.tableHeadersSkip === true;
 
     var firstRow = array[0];
-    if (typeof firstRow === 'undefined') {
-      return el('table');
+    if (typeof firstRow === "undefined") {
+      return el("table");
     }
     var labels = Object.keys(array[0]);
     if (labels.length === 0) {
-      return el('table');
+      return el("table");
     }
 
     const elTable = el(
-      'table',
+      "table",
       {
-        class: opt.tableClass
+        class: opt.tableClass,
       },
       makeHeaders(),
       makeBody()
@@ -246,7 +250,7 @@ function elAuto(render, data, opt) {
       classHeader: opt.tableContainerHeaderClass,
       classContainer: opt.tableContainerClass,
       title: renderString(tTitle, opt.tableTitleAsLanguageKey),
-      content: elTable
+      content: elTable,
     });
 
     /**
@@ -255,19 +259,19 @@ function elAuto(render, data, opt) {
     function makeHeaders() {
       if (!hSkip) {
         return el(
-          'thead',
+          "thead",
           el(
-            'tr',
+            "tr",
             labels.map((l, i) => {
               l = hLabels[i] || l;
               return el(
-                'th',
+                "th",
                 {
                   class: hClasses[i],
-                  scope: 'col',
+                  scope: "col",
                   dataset: {
-                    lang_key: l
-                  }
+                    lang_key: l,
+                  },
                 },
                 l
               );
@@ -279,12 +283,12 @@ function elAuto(render, data, opt) {
 
     function makeBody() {
       return el(
-        'tbody',
+        "tbody",
         array.map((row) => {
           return el(
-            'tr',
+            "tr",
             labels.map((l) => {
-              return el('td', renderAuto(row[l]));
+              return el("td", renderAuto(row[l]));
             })
           );
         })
@@ -297,23 +301,23 @@ function elPanel(opt) {
   opt = Object.assign(
     {},
     {
-      classHeader: ['panel-heading'],
-      classContainer: ['panel', 'panel-default'],
+      classHeader: ["panel-heading"],
+      classContainer: ["panel", "panel-default"],
       content: null,
-      title: null
+      title: null,
     },
     opt
   );
 
   return el(
-    'div',
+    "div",
     {
-      class: opt.classContainer
+      class: opt.classContainer,
     },
     el(
-      'div',
+      "div",
       {
-        class: opt.classHeader
+        class: opt.classHeader,
       },
       opt.title
     ),
@@ -331,7 +335,7 @@ function elPanel(opt) {
  * @return {Element} span element with dataset-lang_key
  */
 function elSpanTranslate(key, opt) {
-  opt = Object.assign({}, {lang: null, data: null}, opt);
+  opt = Object.assign({}, { lang: null, data: null }, opt);
 
   const promText = getDictItem(key, opt.lang).then((t) => {
     if (opt.data) {
@@ -341,16 +345,19 @@ function elSpanTranslate(key, opt) {
   });
 
   const dataset = {
-    lang_key: key
+    lang_key: key,
+    lang_type: "text",
   };
+
   if (opt.data) {
     dataset.lang_data = JSON.stringify(opt.data);
   }
 
   return el(
-    'span',
+    "span",
     {
-      dataset
+      class: ["hint--bottom"],
+      dataset,
     },
     promText
   );
@@ -373,51 +380,49 @@ function elButtonIcon(key, opt) {
   opt = Object.assign(
     {},
     {
-      mode: 'text_icon',
+      mode: "text_icon",
       classes: [],
       icon: null,
       dataset: {},
       badgeContent: null,
       style: null,
       content: null,
-      config: null
+      config: null,
     },
     opt
   );
 
-  const addIcon = opt.mode === 'text_icon' || opt.mode === 'icon';
-  const addText = opt.mode === 'text_icon' || opt.mode === 'text';
+  const addIcon = opt.mode === "text_icon" || opt.mode === "icon";
+  const addText = opt.mode === "text_icon" || opt.mode === "text";
   const addBadge = !!opt.badgeContent;
   const addContent = !!opt.content;
 
-  if (addIcon && !addText) {
-    opt.dataset.lang_type = 'tooltip';
-    opt.classes.push('hint--bottom');
-    opt.dataset.lang_key = opt.key;
-  }
+  opt.dataset.lang_type = "tooltip";
+  opt.classes.push("hint--bottom");
+  opt.dataset.lang_key = key;
 
   const elBtn = el(
-    'button',
+    "button",
     {
-      type: 'button',
-      class: ['btn', 'btn-default', 'btn-icon', ...opt.classes],
+      type: "button",
+      class: ["btn", "btn-default", "btn-icon", ...opt.classes],
       dataset: opt.dataset,
       style: opt.style,
-      ...opt.config
+      ...opt.config,
     },
     [
-      addBadge ? el('span', {class: ['badge']}, `${opt.badgeContent}`) : false,
+      addBadge
+        ? el("span", { class: ["badge"] }, `${opt.badgeContent}`)
+        : false,
       addText ? elSpanTranslate(key) : false,
-      addIcon ? el('i', {class: ['fa', opt.icon]}) : false,
-      addContent ? opt.content : false
+      addIcon ? el("i", { class: ["fa", opt.icon] }) : false,
+      addContent ? opt.content : false,
     ]
   );
 
-  if (!addText) {
-    getDictItem(key).then((txt) => {
-      elBtn.setAttribute('aria-label', txt);
-    });
-  }
+  getDictItem(key).then((txt) => {
+    elBtn.setAttribute("aria-label", txt);
+  });
   return elBtn;
 }
 
@@ -432,17 +437,17 @@ export function elButtonFa(key, opt) {
   opt = Object.assign(
     {},
     {
-      icon: 'question',
-      action: () => {}
+      icon: "question",
+      action: () => {},
     },
     opt
   );
   return elButtonIcon(key, {
     icon: `fa-${opt.icon}`,
-    mode: 'text_icon',
+    mode: "text_icon",
     config: {
-      on: {click: opt.action}
-    }
+      on: { click: opt.action },
+    },
   });
 }
 
@@ -466,29 +471,29 @@ export function elCheckbox(key, opt) {
       checked: true,
       keyLabel: null,
       keyDesc: null,
-      dataset : ''
+      dataset: "",
     },
     opt
   );
 
-  return el('div', {class: 'checkbox'}, [
-    el('label', {for: opt.id}, [
-      el('input', {
+  return el("div", { class: "checkbox" }, [
+    el("label", { for: opt.id }, [
+      el("input", {
         name: key,
         id: opt.id,
-        type: 'checkbox',
+        type: "checkbox",
         checked: opt.checked,
-        value : true,
-        on: ['change', opt.action],
-        dataset: opt.dataset
+        value: true,
+        on: ["change", opt.action],
+        dataset: opt.dataset,
       }),
       elSpanTranslate(opt.keyLabel ? opt.keyLabel : `${key}_label`),
       el(
-        'div',
-        {class: ['text-muted', 'help-box']},
+        "div",
+        { class: ["text-muted", "help-box"] },
         elSpanTranslate(opt.keyDesc ? opt.keyDesc : `${key}_desc`)
-      )
-    ])
+      ),
+    ]),
   ]);
 }
 /**
@@ -510,28 +515,28 @@ export function elSelect(key, opt) {
       items: [],
       keyLabel: null,
       keyDesc: null,
-      dataset : ''
+      dataset: "",
     },
     opt
   );
 
-  return el('div', {class: 'form-group'}, [
+  return el("div", { class: "form-group" }, [
     el(
-      'label',
-      {for: opt.id},
+      "label",
+      { for: opt.id },
       elSpanTranslate(opt.keyLabel ? opt.keyLabel : `${key}_label`)
     ),
     el(
-      'select',
+      "select",
       {
-        on : ['change',opt.action],
+        on: ["change", opt.action],
         name: key,
         id: opt.id,
-        class: 'form-control',
-        dataset: opt.dataset
+        class: "form-control",
+        dataset: opt.dataset,
       },
       opt.items
-    )
+    ),
   ]);
 }
 
@@ -541,7 +546,7 @@ export function elSelect(key, opt) {
  * @param {Element} content Content
  */
 export function elDetails(key, content) {
-  return el('details', el('summary', elSpanTranslate(key)), content);
+  return el("details", el("summary", elSpanTranslate(key)), content);
 }
 
 /**
@@ -551,8 +556,8 @@ export function elDetails(key, content) {
  */
 export function elAlert(key, type, opt) {
   const elAlert = el(
-    'div',
-    {class: ['alert', `alert-${type}`], role: 'alert'},
+    "div",
+    { class: ["alert", `alert-${type}`], role: "alert" },
     elSpanTranslate(key, opt)
   );
   return elAlert;

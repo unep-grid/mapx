@@ -1650,6 +1650,31 @@
     "fr": "Aide de l'éditeur de tableau"
   },
   {
+    "id": "edit_table_modal_changes_too_big_title",
+    "en": "Too much changes at once",
+    "fr": "Trop de changements à la fois"
+  },
+  {
+    "id": "edit_table_modal_changes_too_big_content",
+    "en": "Last action did produce {{count}} changes. The maximum allowed changes at once is {{max_changes}}. Last edit was canceled.",
+    "fr": "La dernière action a produit {{count}} changements. Le maximum de modifications autorisées à la fois est {{max_changes}} . La dernière modification a été annulée."
+  },
+  {
+    "id": "btn_edit_table_modal_changes_too_big_ok",
+    "en": "ok",
+    "fr": "d'accord"
+  },
+  {
+    "id": "edit_table_modal_columns_name_issue_title",
+    "en": "Invalid column names",
+    "fr": "Noms de colonne non valides"
+  },
+  {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "fr": "Certaines colonnes contiennent des caractères non valides et ne peuvent pas être modifiées :<ul> {{columns}}</ul>"
+  },
+  {
     "id": "en",
     "en": "English",
     "fr": "Anglais"

@@ -1650,6 +1650,31 @@
     "ar": "مساعدة محرر الجدول"
   },
   {
+    "id": "edit_table_modal_changes_too_big_title",
+    "en": "Too much changes at once",
+    "ar": "الكثير من التغييرات دفعة واحدة"
+  },
+  {
+    "id": "edit_table_modal_changes_too_big_content",
+    "en": "Last action did produce {{count}} changes. The maximum allowed changes at once is {{max_changes}}. Last edit was canceled.",
+    "ar": "آخر عمل أنتج {{count}} التغييرات. الحد الأقصى للتغييرات المسموح بها مرة واحدة هو {{max_changes}} . تم إلغاء التعديل الأخير."
+  },
+  {
+    "id": "btn_edit_table_modal_changes_too_big_ok",
+    "en": "ok",
+    "ar": "موافق"
+  },
+  {
+    "id": "edit_table_modal_columns_name_issue_title",
+    "en": "Invalid column names",
+    "ar": "أسماء الأعمدة غير صالحة"
+  },
+  {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "ar": "تحتوي بعض الأعمدة على أحرف غير صالحة ولا يمكن تحريرها:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
+  },
+  {
     "id": "en",
     "en": "English",
     "ar": "الإنجليزية "
