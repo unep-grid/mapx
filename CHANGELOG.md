@@ -1,3 +1,19 @@
+  - [1.9.44-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-alpha.1) 
+
+    - APP/API
+        - Table editor 
+            - Lock all concurrent table if auto save is off. Should work on multinode servers.
+            - Column with invalid name on original table are loaded as read-only 
+            - Improved tools button for small screen / pannel resize. Can impact other tools. 
+            - Improved warning text
+            - Added help -> wiki 
+            - Added a list of user's email, with the count of the number of session per user, per table 
+            - Invalid value can be entered, but will not be propagated. 
+            - Boolean value : string true/false TRUE/FALSE -> checkbox 
+            - New column : always in lowercase 
+            - Added source title in the edition panel 
+            - Improved summary in the 'new column' tool
+           
   - [1.9.44-alpha.0](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-alpha.0) 
 
     - APP/API
