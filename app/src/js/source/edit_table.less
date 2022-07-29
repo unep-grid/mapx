@@ -22,7 +22,7 @@
     height: 100%;
     top: 0px;
     pointer-events: none;
-    &.disconnected {
+    &.disabled {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -30,17 +30,26 @@
       backdrop-filter: blur(1px);
       pointer-events: auto;
       &:after {
-        content: attr(data-disconnected);
+        content: attr(data-disabled);
         font-size: 1em;
-        color: var(--mx_ui_faded);
-        background: var(--mx_ui_background);
+        color: #000;
+        background-color: var(--mx_ui_message_warning);
         padding: 10px;
         border: 1px solid var(--mx_ui_border);
         border-radius: 3px;
         box-shadow: var(--mx_ui_box_shadow);
-        transform: rotate(-45deg);
-        width: 100%;
+        width: 300px;
         text-align: center;
+      }
+      &.disconnected {
+        &:after {
+          content: attr(data-disconnected);
+        }
+      }
+      &.locked {
+        &:after {
+          content: attr(data-locked);
+        }
       }
     }
   }

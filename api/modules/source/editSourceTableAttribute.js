@@ -10,7 +10,7 @@ import {
 } from "@fxi/mx_valid";
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
-import { pgWrite } from "#mapx/db";
+import { pgWrite, redisSetJSON, redisGetJSON } from "#mapx/db";
 import { getUserEmail } from "#mapx/authentication";
 
 /**
@@ -28,7 +28,7 @@ export async function ioEditSource(socket, options) {
 }
 
 const def = {
-  debug: true,
+  log_perf: false,
 };
 
 class EditTableSession {
@@ -46,8 +46,28 @@ class EditTableSession {
     et.onUpdate = et.onUpdate.bind(et);
     et.onExit = et.onExit.bind(et);
   }
+
+  async setState(key, value) {
+    const et = this;
+    try {
+      const id = `${et._id_table}:state:${key}`;
+      await redisSetJSON(id, value);
+    } catch (err) {
+      et.error("Set state error", err);
+    }
+  }
+  async getState(key) {
+    const et = this;
+    try {
+      const id = `${et._id_table}:state:${key}`;
+      return redisGetJSON(id);
+    } catch (err) {
+      et.error("Set state error", err);
+    }
+  }
+
   perf(label) {
-    if (!def.debug) {
+    if (!def.log_perf) {
       return;
     }
     const et = this;
@@ -55,7 +75,7 @@ class EditTableSession {
     et._perf[label] = performance.now();
   }
   perfEnd(label) {
-    if (!def.debug) {
+    if (!def.log_perf) {
       return;
     }
     const et = this;
@@ -124,7 +144,6 @@ class EditTableSession {
     const et = this;
     et.emit("/server/edit_table/error", { message: txt, id_room: et._id_room });
     console.error(txt, err);
-    //et.destroy();
   }
 
   async getMembers() {
@@ -162,7 +181,7 @@ class EditTableSession {
 
   dispatch(message) {
     const et = this;
-    et.emitRoom("/server/edit_table/dispatch", et.message_formater(message));
+    et.emitRoom("/server/edit_table/dispatch", message);
   }
 
   onExit(message) {
@@ -179,7 +198,27 @@ class EditTableSession {
       return;
     }
     et.dispatch(message);
-    et.write(message);
+    if (message.write_db) {
+      et.write(message);
+    }
+    if (message.update_state) {
+      et.updateState(message);
+    }
+  }
+
+  updateState(message) {
+    const et = this;
+    const updates = message?.updates;
+    if (isEmpty(updates)) {
+      return;
+    }
+    for (const update of updates) {
+      switch (update.type) {
+        case "lock_table":
+          et.setState("lock_table", !!update.lock);
+          break;
+      }
+    }
   }
 
   write(message) {
@@ -214,14 +253,16 @@ class EditTableSession {
     const attributes = pgRes.fields.map((f) => f.name);
     const types = await getColumnsTypesSimple(et._id_table, attributes);
     const title = await getLayerTitle(et._id_table);
+    const locked = await et.getState("lock_table");
 
     const table = {
       types,
       data,
       title,
+      locked,
     };
 
-    et.emit("/server/edit_table/full_table", et.message_formater(table));
+    et.emit("/server/edit_table/full_table", table);
 
     et.perfEnd("sendTable");
   }

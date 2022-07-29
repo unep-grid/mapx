@@ -30,6 +30,7 @@ import {
 } from "./../is_test/index.js";
 
 const defaults = {
+  log_perf: false,
   id_table: null,
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
@@ -62,7 +63,9 @@ export class EditTableSessionClient {
     et._on_destroy = [];
     et._members = [];
     et._updates = [];
-    et._updates_cell = [];
+    et._locked;
+    et._lock_table_concurrent = false;
+    et._lock_table_by_user_id = null;
     bindAll(et);
     et._perf = {};
   }
@@ -121,9 +124,9 @@ export class EditTableSessionClient {
   start(opt) {
     const et = this;
     const r = et._config.routes;
-    const def = { id_table: et._id_table, send_table: true };
+    const def = { send_table: true };
     opt = Object.assign({}, def, opt);
-    et._socket.emit(r.client_edit_start, et.message_formater(opt));
+    et.emit(r.client_edit_start, opt);
   }
 
   destroy() {
@@ -133,17 +136,19 @@ export class EditTableSessionClient {
       return;
     }
     et._destroyed = true;
-    et._socket.emit(
-      r.client_exit,
-      et.message_formater({ id_table: et._id_table })
-    );
+    et._lock_table_concurrent = false;
+    et._lock_table_by_user_id = null;
+    et.lockTableConcurrent(false);
+    et.emit(r.client_exit);
     et._modal?.close();
-    et._ro?.disconnect();
+    et._resize_observer?.disconnect();
     et._socket.off(r.server_joined, et.onJoined);
     et._socket.off(r.server_error, et.onServerError);
     et._socket.off(r.server_new_member, et.onNewMember);
     et._socket.off(r.server_member_exit, et.onMemberExit);
     et._socket.off(r.server_full_table, et.initTable);
+    et._socket.off(r.server_dispatch, et.onDispatch);
+    et._socket.off("disconnect", et.onDisconnect);
     for (const cb of et._on_destroy) {
       cb();
     }
@@ -237,7 +242,9 @@ export class EditTableSessionClient {
     et._el_overlay = el("div", {
       class: "edit-table--overlay",
       dataset: {
-        disconnected: "Attempting to reconnect...",
+        disconnected: "Disconnected, trying to reconnect",
+        disabled: "Disabled",
+        locked: "Locked",
       },
     });
     et._el_content = el(
@@ -316,6 +323,7 @@ export class EditTableSessionClient {
     const et = this;
     et._el_updates_counter.dataset.count = `${et._updates.length}`;
   }
+
   updateButtonsUndoRedo() {
     const et = this;
     const cld = "disabled-alt";
@@ -336,7 +344,6 @@ export class EditTableSessionClient {
     const et = this;
     const cld = "disabled-alt";
     et._disable_remove_column = et._columns.length <= et._config.min_columns;
-    console.log(et._columns.length, et._config.min_columns);
     if (et._disable_remove_column) {
       et._el_button_remove_column.classList.add(cld);
     } else {
@@ -370,6 +377,26 @@ export class EditTableSessionClient {
     et.updateButtonSave();
     if (et._auto_save) {
       et.save();
+    }
+    et.lockTableConcurrent(!et._auto_save);
+  }
+  lockTableConcurrent(lock) {
+    const et = this;
+    et._lock_table_concurrent = isNotEmpty(lock) ? lock : !et._auto_save;
+    const update = {
+      type: "lock_table",
+      lock: et._lock_table_concurrent,
+    };
+    et.emitUpdatesState([update]);
+  }
+  handlerUpdateLock(update, message) {
+    const et = this;
+    if (update.lock) {
+      et._lock_table_by_user_id = message.id_user;
+      et.lock();
+    } else {
+      et._lock_table_by_user_id = null;
+      et.unlock();
     }
   }
   updateLayout() {
@@ -508,7 +535,6 @@ export class EditTableSessionClient {
       disableVisualSelection: false,
     });
 
-
     /**
      * Dialog for column name issue
      */
@@ -517,10 +543,14 @@ export class EditTableSessionClient {
     /**
      * On modal resize, updateLayout
      */
-    et._ro = new ResizeObserver(() => {
+    et._resize_observer = new ResizeObserver(() => {
       et.updateLayout();
     });
-    et._ro.observe(et._modal);
+    et._resize_observer.observe(et._modal);
+
+    if (table.locked) {
+      et.lock();
+    }
 
     /**
      * Initial state of undo/redo buttons.
@@ -588,44 +618,49 @@ export class EditTableSessionClient {
       return;
     }
     if (isNotEmpty(message.updates)) {
-      et.perf("dispatch");
+      et.perf("dispatch_update");
       const cells = [];
 
       et._ht.batch(() => {
         for (const update of message.updates) {
           switch (update.type) {
+            case "lock_table":
+              et.handlerUpdateLock(update, message);
+              break;
             case "update_cell":
-              et.updateCellsBatchAdd(update, cells);
+              et.handlerUpdateCellsBatchAdd(update, cells);
               break;
             case "add_column":
-              et.updateColumnAdd(update, et._config.id_source_dispatch);
+              et.handlerUpdateColumnAdd(update, et._config.id_source_dispatch);
               break;
             case "remove_column":
-              et.updateColumnRemove(update, et._config.id_source_dispatch);
+              et.handlerUpdateColumnRemove(
+                update,
+                et._config.id_source_dispatch
+              );
               break;
             default:
-              console.log(message);
+              console.warn("unhandled update:", message);
           }
         }
         if (isNotEmpty(cells)) {
-          et.updateCellsBatchProcess(cells);
+          et.handlerCellsBatchProcess(cells);
         }
       });
-      et.perfEnd("dispatch");
+      et.perfEnd("dispatch_update");
     }
   }
 
-  updateCellsBatchProcess(cells) {
+  handlerCellsBatchProcess(cells) {
     const et = this;
     try {
       et._ht.setDataAtRowProp(cells, null, null, et._config.id_source_dispatch);
-      console.log(cells);
     } catch (e) {
-      console.warn("updateCellsBatchProcess", e);
+      console.warn("handlerCellsBatchProcess", e);
     }
   }
 
-  updateCellsBatchAdd(update, cells) {
+  handlerUpdateCellsBatchAdd(update, cells) {
     // [[row, prop, value], ...].
     const et = this;
     const gid = update[et._config.id_column_main];
@@ -664,7 +699,7 @@ export class EditTableSessionClient {
     et.updateButtons();
   }
 
-  updateColumnRemove(update, source) {
+  handlerUpdateColumnRemove(update, source) {
     const et = this;
 
     let n = et._columns.length;
@@ -692,7 +727,7 @@ export class EditTableSessionClient {
       return;
     }
 
-    et.emitUpdates([update]);
+    et.emitUpdatesDb([update]);
   }
 
   /*
@@ -773,13 +808,13 @@ export class EditTableSessionClient {
       column_name: columnToRemove,
     };
 
-    et.updateColumnRemove(update);
+    et.handlerUpdateColumnRemove(update);
   }
 
   /**
    * Add column
    */
-  updateColumnAdd(update, source) {
+  handlerUpdateColumnAdd(update, source) {
     const et = this;
     const isValid = et.isValidName(update.column_name);
 
@@ -807,7 +842,7 @@ export class EditTableSessionClient {
     if (source === et._config.id_source_dispatch) {
       return;
     }
-    et.emitUpdates([update]);
+    et.emitUpdatesDb([update]);
   }
 
   /*
@@ -920,7 +955,7 @@ export class EditTableSessionClient {
       column_type: columnType,
     };
 
-    et.updateColumnAdd(update);
+    et.handlerUpdateColumnAdd(update);
   }
 
   getColumnType(columnName) {
@@ -1103,10 +1138,14 @@ export class EditTableSessionClient {
       console.warn("Can't save while disconnected");
       return;
     }
+    if (et._lock_table_by_user_id) {
+      console.warn("Can't save while locked");
+      return;
+    }
     if (isEmpty(updates)) {
       return;
     }
-    et.emitUpdates(updates);
+    et.emitUpdatesDb(updates);
     et.flushUpdates();
     et.updateButtons();
     et.perfEnd("save");
@@ -1175,11 +1214,10 @@ export class EditTableSessionClient {
     }
   }
 
-  onDisconnect() {
+  disable() {
     const et = this;
     const hot = et._ht;
-    et._disconnected = true;
-    et._el_overlay.classList.add("disconnected");
+    et._el_overlay.classList.add("disabled");
     hot.updateSettings({
       readOnly: true,
       contextMenu: false,
@@ -1194,15 +1232,12 @@ export class EditTableSessionClient {
     et._el_button_save.classList.add("disabled");
     et._el_button_add_column.classList.add("disabled");
     et._el_button_remove_column.classList.add("disabled");
-
-    et._socket.io.once("reconnect", et.onReconnect);
   }
 
-  onReconnect() {
+  enable() {
     const et = this;
     const hot = et._ht;
-    et._disconnected = false;
-    et._el_overlay.classList.remove("disconnected");
+    et._el_overlay.classList.remove("disabled");
     hot.updateSettings({
       readOnly: false,
       contextMenu: true,
@@ -1216,20 +1251,73 @@ export class EditTableSessionClient {
     et._el_button_save.classList.remove("disabled");
     et._el_button_add_column.classList.remove("disabled");
     et._el_button_remove_column.classList.remove("disabled");
+  }
+
+  onDisconnect() {
+    const et = this;
+    et.disable();
+    et._disconnected = true;
+    et._el_overlay.classList.add("disconnected");
+    et._socket.io.once("reconnect", et.onReconnect);
+  }
+
+  onReconnect() {
+    const et = this;
+    et._disconnected = false;
+    et._el_overlay.classList.remove("disconnected");
+    et.enable();
     et.start({
       send_table: false,
     });
   }
-  emitUpdates(updates) {
+
+  get locked() {
     const et = this;
-    const r = et._config.routes;
-    const message = et.message_formater({
-      updates,
-    });
-    et._socket.emit(r.client_edit_updates, message);
+    return !!et._locked;
   }
 
-  message_formater(data) {
+  lock() {
+    const et = this;
+    et.disable();
+    et._locked = true;
+    et._el_overlay.classList.add("locked");
+  }
+
+  unlock() {
+    const et = this;
+    et._disconnected = false;
+    et._el_overlay.classList.remove("locked");
+    et._locked = false;
+    et.enable();
+  }
+
+  emit(type, message) {
+    const et = this;
+    const messageEmit = et.message_formater(message);
+    if (et.locked) {
+      return;
+    }
+    et._socket.emit(type, messageEmit);
+  }
+
+  emitUpdates(updates, opt) {
+    const et = this;
+    const r = et._config.routes;
+    if (et.locked) {
+      return;
+    }
+    et.emit(r.client_edit_updates, { updates, ...opt });
+  }
+  emitUpdatesDb(updates) {
+    const et = this;
+    et.emitUpdates(updates, { write_db: true });
+  }
+  emitUpdatesState(updates) {
+    const et = this;
+    et.emitUpdates(updates, { update_state: true });
+  }
+
+  message_formater(data, opt) {
     const et = this;
 
     if (isEmpty(data)) {
@@ -1242,10 +1330,12 @@ export class EditTableSessionClient {
     }
 
     const m = {
+      id_user: et._id_user,
       id_table: et._id_table,
       id_room: et._id_room,
       id_session: et._id_session,
       ...data,
+      ...opt,
     };
 
     return m;
@@ -1259,12 +1349,18 @@ export class EditTableSessionClient {
   }
 
   perf(label) {
+    if (!defaults.log_perf) {
+      return;
+    }
     const et = this;
     delete et._perf[label];
     et._perf[label] = performance.now();
   }
 
   perfEnd(label) {
+    if (!defaults.log_perf) {
+      return;
+    }
     const et = this;
     const diff = performance.now() - et._perf[label];
     console.log(`Perf ${label}: ${diff} [ms]`);
