@@ -1213,7 +1213,7 @@
   },
   {
     "id": "btn_edit_autosave_desc",
-    "en": "Automatically update the table and stream changes between other users, if any."
+    "en": "Automatically update the table and stream changes among other users as appropriate. If disabled, only you will be able to make changes to this table, and the table will be locked for others."
   },
   {
     "id": "edit_table_modal_add_column_type_title",

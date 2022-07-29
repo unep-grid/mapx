@@ -1516,8 +1516,8 @@
   },
   {
     "id": "btn_edit_autosave_desc",
-    "en": "Automatically update the table and stream changes between other users, if any.",
-    "ps": "په اوتومات ډول جدول تازه کړئ او د نورو کاروونکو ترمینځ بدلونونه ، که کوم وي."
+    "en": "Automatically update the table and stream changes among other users as appropriate. If disabled, only you will be able to make changes to this table, and the table will be locked for others.",
+    "ps": "په اوتومات ډول جدول تازه کړئ او د نورو کاروونکو ترمینځ بدلونونه لکه څنګه چې مناسب وي. که غیر فعال وي، یوازې تاسو به وکولی شئ په دې میز کې بدلونونه راولي، او میز به د نورو لپاره بند شي."
   },
   {
     "id": "edit_table_modal_add_column_type_title",

@@ -1516,8 +1516,8 @@
   },
   {
     "id": "btn_edit_autosave_desc",
-    "en": "Automatically update the table and stream changes between other users, if any.",
-    "de": "Aktualisieren Sie die Tabelle automatisch und streamen Sie Änderungen zwischen anderen Benutzern, falls vorhanden."
+    "en": "Automatically update the table and stream changes among other users as appropriate. If disabled, only you will be able to make changes to this table, and the table will be locked for others.",
+    "de": "Aktualisieren Sie die Tabelle automatisch und streamen Sie Änderungen gegebenenfalls unter anderen Benutzern. Wenn deaktiviert, können nur Sie Änderungen an dieser Tabelle vornehmen, und die Tabelle wird für andere gesperrt."
   },
   {
     "id": "edit_table_modal_add_column_type_title",

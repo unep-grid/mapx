@@ -1516,8 +1516,8 @@
   },
   {
     "id": "btn_edit_autosave_desc",
-    "en": "Automatically update the table and stream changes between other users, if any.",
-    "ru": "Автоматически обновлять таблицу и транслировать изменения между другими пользователями, если таковые имеются."
+    "en": "Automatically update the table and stream changes among other users as appropriate. If disabled, only you will be able to make changes to this table, and the table will be locked for others.",
+    "ru": "Автоматически обновлять таблицу и транслировать изменения другим пользователям по мере необходимости. Если отключено, только вы сможете вносить изменения в эту таблицу, а таблица будет заблокирована для других."
   },
   {
     "id": "edit_table_modal_add_column_type_title",

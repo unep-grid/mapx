@@ -1516,8 +1516,8 @@
   },
   {
     "id": "btn_edit_autosave_desc",
-    "en": "Automatically update the table and stream changes between other users, if any.",
-    "zh": "自动更新其他用户之间的表和流更改（如果有）。"
+    "en": "Automatically update the table and stream changes among other users as appropriate. If disabled, only you will be able to make changes to this table, and the table will be locked for others.",
+    "zh": "根据需要在其他用户之间自动更新表和流更改。如果禁用，则只有您可以对此表进行更改，并且该表将被其他人锁定。"
   },
   {
     "id": "edit_table_modal_add_column_type_title",

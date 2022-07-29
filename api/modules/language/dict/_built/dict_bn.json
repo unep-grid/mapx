@@ -1516,8 +1516,8 @@
   },
   {
     "id": "btn_edit_autosave_desc",
-    "en": "Automatically update the table and stream changes between other users, if any.",
-    "bn": "স্বয়ংক্রিয়ভাবে টেবিল আপডেট করুন এবং অন্য ব্যবহারকারীদের মধ্যে পরিবর্তনগুলি, যদি থাকে।"
+    "en": "Automatically update the table and stream changes among other users as appropriate. If disabled, only you will be able to make changes to this table, and the table will be locked for others.",
+    "bn": "স্বয়ংক্রিয়ভাবে টেবিল আপডেট করুন এবং অন্যান্য ব্যবহারকারীদের মধ্যে পরিবর্তনগুলি যথাযতভাবে স্ট্রিম করুন। অক্ষম থাকলে, শুধুমাত্র আপনি এই টেবিলে পরিবর্তন করতে সক্ষম হবেন, এবং অন্যদের জন্য টেবিলটি লক করা হবে।"
   },
   {
     "id": "edit_table_modal_add_column_type_title",

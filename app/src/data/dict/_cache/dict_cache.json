@@ -3940,16 +3940,16 @@
   },
   {
     "id": "btn_edit_autosave_desc",
-    "en": "Automatically update the table and stream changes between other users, if any.",
-    "fr": "Mettez automatiquement à jour la table et diffusez les modifications entre les autres utilisateurs, le cas échéant.",
-    "es": "Actualice automáticamente la tabla y transmita los cambios entre otros usuarios, si los hay.",
-    "ru": "Автоматически обновлять таблицу и транслировать изменения между другими пользователями, если таковые имеются.",
-    "zh": "自动更新其他用户之间的表和流更改（如果有）。",
-    "ar": "تحديث الجدول تلقائيًا ودفق التغييرات بين المستخدمين الآخرين ، إن وجدت.",
-    "fa": "به‌روزرسانی خودکار جدول و پخش جریانی تغییرات بین سایر کاربران، در صورت وجود.",
-    "ps": "په اوتومات ډول جدول تازه کړئ او د نورو کاروونکو ترمینځ بدلونونه ، که کوم وي.",
-    "bn": "স্বয়ংক্রিয়ভাবে টেবিল আপডেট করুন এবং অন্য ব্যবহারকারীদের মধ্যে পরিবর্তনগুলি, যদি থাকে।",
-    "de": "Aktualisieren Sie die Tabelle automatisch und streamen Sie Änderungen zwischen anderen Benutzern, falls vorhanden."
+    "en": "Automatically update the table and stream changes among other users as appropriate. If disabled, only you will be able to make changes to this table, and the table will be locked for others.",
+    "fr": "Mettez automatiquement à jour la table et diffusez les modifications parmi les autres utilisateurs, le cas échéant. S'il est désactivé, vous seul pourrez apporter des modifications à ce tableau, et le tableau sera verrouillé pour les autres.",
+    "es": "Actualice automáticamente la tabla y transmita los cambios entre otros usuarios según corresponda. Si está deshabilitado, solo usted podrá realizar cambios en esta tabla y la tabla se bloqueará para los demás.",
+    "ru": "Автоматически обновлять таблицу и транслировать изменения другим пользователям по мере необходимости. Если отключено, только вы сможете вносить изменения в эту таблицу, а таблица будет заблокирована для других.",
+    "zh": "根据需要在其他用户之间自动更新表和流更改。如果禁用，则只有您可以对此表进行更改，并且该表将被其他人锁定。",
+    "ar": "قم تلقائيًا بتحديث الجدول ودفق التغييرات بين المستخدمين الآخرين حسب الاقتضاء. إذا تم تعطيله ، فستتمكن أنت فقط من إجراء تغييرات على هذا الجدول ، وسيتم قفل الجدول للآخرين.",
+    "fa": "به‌طور خودکار جدول را به‌روزرسانی کنید و تغییرات را در میان سایر کاربران در صورت لزوم پخش کنید. اگر غیرفعال باشد، فقط شما می توانید تغییراتی در این جدول ایجاد کنید و جدول برای دیگران قفل می شود.",
+    "ps": "په اوتومات ډول جدول تازه کړئ او د نورو کاروونکو ترمینځ بدلونونه لکه څنګه چې مناسب وي. که غیر فعال وي، یوازې تاسو به وکولی شئ په دې میز کې بدلونونه راولي، او میز به د نورو لپاره بند شي.",
+    "bn": "স্বয়ংক্রিয়ভাবে টেবিল আপডেট করুন এবং অন্যান্য ব্যবহারকারীদের মধ্যে পরিবর্তনগুলি যথাযতভাবে স্ট্রিম করুন। অক্ষম থাকলে, শুধুমাত্র আপনি এই টেবিলে পরিবর্তন করতে সক্ষম হবেন, এবং অন্যদের জন্য টেবিলটি লক করা হবে।",
+    "de": "Aktualisieren Sie die Tabelle automatisch und streamen Sie Änderungen gegebenenfalls unter anderen Benutzern. Wenn deaktiviert, können nur Sie Änderungen an dieser Tabelle vornehmen, und die Tabelle wird für andere gesperrt."
   },
   {
     "id": "edit_table_modal_add_column_type_title",

@@ -1516,8 +1516,8 @@
   },
   {
     "id": "btn_edit_autosave_desc",
-    "en": "Automatically update the table and stream changes between other users, if any.",
-    "ar": "تحديث الجدول تلقائيًا ودفق التغييرات بين المستخدمين الآخرين ، إن وجدت."
+    "en": "Automatically update the table and stream changes among other users as appropriate. If disabled, only you will be able to make changes to this table, and the table will be locked for others.",
+    "ar": "قم تلقائيًا بتحديث الجدول ودفق التغييرات بين المستخدمين الآخرين حسب الاقتضاء. إذا تم تعطيله ، فستتمكن أنت فقط من إجراء تغييرات على هذا الجدول ، وسيتم قفل الجدول للآخرين."
   },
   {
     "id": "edit_table_modal_add_column_type_title",
