@@ -1,3 +1,10 @@
+  - [1.9.44-beta](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta) 
+    
+    - APP/API 
+        - Table editor :
+            - Added table size restriction in sources list in app + api service.
+            - Solved issues when selecting non-source table.
+  
   - [1.9.44-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-alpha.1) 
 
     - APP/API
