@@ -146,6 +146,15 @@
   border-bottom: 1px solid var(--ht-table-border-color);
 }
 
+.mx_handsontable
+  .ht_master:not(.innerBorderInlineStart):not(.emptyColumns)
+  ~ .handsontable
+  tbody
+  tr
+  th {
+  border-left: 1px solid var(--ht-table-border-color);
+}
+
 /* Selected cell */
 .mx_handsontable tr > td {
   background-color: var(--ht-cell-color);
@@ -184,4 +193,3 @@
 .mx .handsontable .htUISelectCaption .handsontable .htUISelectCaption:hover {
   background-color: var(--ht-ctx-background);
 }
-
