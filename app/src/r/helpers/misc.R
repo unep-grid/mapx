@@ -37,6 +37,24 @@ mxQueryTitleParser <- function(title = "", default = NULL) {
 }
 
 
+#' Is a source ok to be edited ?
+#'
+#' @param {Character} idSource  Source id 
+#' @return {Logical} 
+mxIsValidSourceEdit <- function(idSource) {
+  maxRows <- 1e5 # Should match client + api server
+  maxCols <- 200 # Shoudl match client + api server
+
+  if (!mxDbExistsTable(idSource)) {
+    return(FALSE)
+  }
+  dim <- mxDbGetLayerDimensions(idSource)
+  valid <- dim$nrow <= maxRows && dim$ncol <= maxCols
+  return(valid)
+}
+
+
+
 
 #' Add or update views from story steps to view dependencies
 #' @param {List} story list
@@ -367,7 +385,9 @@ isEmpty <- function(val = NULL, debug = FALSE) {
 }
 
 noDataCheck <- isEmpty
-isNotEmpty <- function(...){!isEmpty(...)}
+isNotEmpty <- function(...) {
+  !isEmpty(...)
+}
 
 #' Concatenate text
 #' @param x {string} left string or number
@@ -971,7 +991,6 @@ mxCatchHandler <- function(type = "error", cond = NULL, session = shiny::getDefa
       # outut user facing message
       #
       if (!noDataCheck(session)) {
-        browser()
         mxModal(
           id = randomString(),
           zIndex = 100000,
@@ -1860,7 +1879,7 @@ listToHtmlSimple <- function(listInput, lang = "en", dict = config$dict, useFold
         isEmpty(maxHeight),
         "",
         sprintf("max-height:%spx", maxHeight)
-    )
+      )
     )
     if (lL > 0) {
       for (i in 1:lL) {

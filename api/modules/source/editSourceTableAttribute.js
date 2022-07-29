@@ -1,5 +1,6 @@
 import {
   tableExists,
+  getTableDimension,
   getColumnsTypesSimple,
   getLayerTitle,
 } from "#mapx/db-utils";
@@ -33,6 +34,8 @@ export async function ioEditSource(socket, options) {
 
 const def = {
   log_perf: false,
+  max_rows: 1e5,
+  max_columns: 200,
 };
 
 class EditTableSession {
@@ -107,10 +110,31 @@ class EditTableSession {
       return;
     }
 
-    const tableExists = await tableExists(et._id_table);
+    const idValid = isSourceId(et._id_table);
 
-    if (!tableExists) {
+    if (!idValid) {
+      et.error(`Table ${et._id_table} is not a valid source`);
+      return;
+    }
+
+    const exists = await tableExists(et._id_table);
+
+    if (!exists) {
       et.error("Table not found");
+      return;
+    }
+
+    const dim = await getTableDimension(et._id_table);
+
+    if (dim.nrow > def.max_rows) {
+      et.error(`Full table: too much rows. ${dim.nrow} > ${def.max_rows} `);
+      return;
+    }
+
+    if (dim.ncol > def.max_columns) {
+      et.error(
+        `Full table: too much columns. ${dim.ncol} > ${def.max_columns} `
+      );
       return;
     }
 

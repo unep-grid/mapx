@@ -1,13 +1,13 @@
-import {pgRead, pgWrite} from '#mapx/db';
-import {settings} from '#root/settings';
-import {parseTemplate, toBoolean} from '#mapx/helpers';
-import {templates} from '#mapx/template';
-import {isArray, isSourceId, isNumeric, isProjectId} from '@fxi/mx_valid';
+import { pgRead, pgWrite } from "#mapx/db";
+import { settings } from "#root/settings";
+import { parseTemplate, toBoolean } from "#mapx/helpers";
+import { templates } from "#mapx/template";
+import { isArray, isSourceId, isNumeric, isProjectId } from "@fxi/mx_valid";
 
 /**
  * crypto key
  */
-const {key} = settings.db.crypto;
+const { key } = settings.db.crypto;
 
 /**
  * Test if a table exists
@@ -16,7 +16,7 @@ const {key} = settings.db.crypto;
  * @return {Promise<Boolean>} Table exists
  */
 async function tableExists(idTable, schema) {
-  schema = schema || 'public';
+  schema = schema || "public";
   const sqlExists = `
   SELECT EXISTS (
    SELECT 1
@@ -37,7 +37,7 @@ async function tableExists(idTable, schema) {
  * @return {Promise<Boolean>} Table exists and has value
  */
 async function tableHasValues(idTable, schema) {
-  schema = schema || 'public';
+  schema = schema || "public";
   const sqlFirstRow = `
    SELECT * FROM ${idTable} LIMIT 1
   `;
@@ -60,7 +60,7 @@ async function tableHasValues(idTable, schema) {
   const attributes = Object.keys(firstRow);
 
   for (const attr of attributes) {
-    const hasAttr = attr && !['gid', 'geom'].includes(attr);
+    const hasAttr = attr && !["gid", "geom"].includes(attr);
     if (hasAttr && firstRow[attr]) {
       return true;
     }
@@ -121,32 +121,32 @@ async function registerSource(
   idUser,
   idProject,
   title,
-  type = 'vector'
+  type = "vector"
 ) {
-  if (typeof idSource === 'object') {
+  if (typeof idSource === "object") {
     const options = idSource;
     idSource = options.idSource;
     idUser = options.idUser * 1;
     idProject = options.idProject;
     title = options.sourceTitle || options.layerTitle || options.title;
-    type = options.vector || 'vector';
+    type = options.vector || "vector";
   }
 
   /**
    * Validation
    */
   if (!isSourceId(idSource)) {
-    throw Error('Register source : idSource not valid');
+    throw Error("Register source : idSource not valid");
   }
   if (!isProjectId(idProject)) {
-    throw Error('Register source : idProject not valid');
+    throw Error("Register source : idProject not valid");
   }
   if (!isNumeric(idUser)) {
     // check instead of existing user...
-    throw Error('Register source : idUser not valid');
+    throw Error("Register source : idUser not valid");
   }
-  if (!['vector', 'raster', 'tabular'].includes(type)) {
-    throw Error('Register source : type not valid');
+  if (!["vector", "raster", "tabular"].includes(type)) {
+    throw Error("Register source : type not valid");
   }
 
   const sqlAddSource = `INSERT INTO mx_sources (
@@ -174,22 +174,22 @@ async function registerOrRemoveSource(
   idUser,
   idProject,
   title,
-  type = 'vector'
+  type = "vector"
 ) {
-  if (typeof idSource === 'object') {
+  if (typeof idSource === "object") {
     const options = idSource;
     idSource = options.idSource;
     idUser = options.idUser * 1;
     idProject = options.idProject;
     title = options.sourceTitle || options.layerTitle || options.title;
-    type = options.vector || 'vector';
+    type = options.vector || "vector";
   }
   const stats = {
     removed: false,
-    registered: false
+    registered: false,
   };
   const sqlCountRow = {
-    text: `SELECT count(*) n FROM ${idSource}`
+    text: `SELECT count(*) n FROM ${idSource}`,
   };
 
   const r = await pgRead.query(sqlCountRow);
@@ -215,10 +215,10 @@ async function registerOrRemoveSource(
 async function removeSource(idSource) {
   var sqlDelete = {
     text: `DELETE FROM mx_sources WHERE id = $1::text`,
-    values: [idSource]
+    values: [idSource],
   };
   var sqlDrop = {
-    text: `DROP TABLE IF EXISTS ${idSource}`
+    text: `DROP TABLE IF EXISTS ${idSource}`,
   };
   await pgWrite.query(sqlDrop);
   await pgWrite.query(sqlDelete);
@@ -235,10 +235,26 @@ async function getColumnsNames(idLayer) {
     text: `SELECT column_name AS names 
     FROM information_schema.columns 
     WHERE table_name=$1`,
-    values: [idLayer]
+    values: [idLayer],
   };
   const data = await pgRead.query(queryAttributes);
   return data.rows.map((a) => a.names);
+}
+
+/**
+ * Get table dimensions
+ * @param {String} id of the table
+ * @return{Object} { nrow : <n>, ncol :<n>}
+ */
+async function getTableDimension(idTable) {
+  const colNames = await getColumnsNames(idTable);
+  const ncol = colNames.length;
+  const resRows = await pgRead.query(`select count(*) from ${idTable}`);
+  const nrow = resRows.rows[0]?.count;
+  return {
+    nrow,
+    ncol,
+  };
 }
 
 /**
@@ -256,7 +272,7 @@ async function getColumnsTypesSimple(idSource, idAttr) {
 
   const opt = {
     idSource: idSource,
-    idAttributesString: cNamesTxt
+    idAttributesString: cNamesTxt,
   };
 
   const sqlSrcAttr = parseTemplate(templates.getColumnsTypesSimple, opt);
@@ -302,14 +318,14 @@ async function getSourceLastTimestamp(idSource) {
  * @param {String} id of the layer
  */
 async function getLayerTitle(idLayer, language) {
-  language = language || 'en';
+  language = language || "en";
   var queryAttributes = {
     text: `SELECT 
     data#>>'{"meta","text","title","${language}"}' AS title_lang,
     data#>>'{"meta","text","title","en"}' AS title_en
     FROM mx_sources
     WHERE id=$1`,
-    values: [idLayer]
+    values: [idLayer],
   };
   const res = await pgRead.query(queryAttributes);
   const [titles] = res.rows;
@@ -329,7 +345,7 @@ async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
   autoCorrect = toBoolean(autoCorrect, false);
   analyze = toBoolean(analyze, true);
 
-  var idValidColumn = '_mx_valid';
+  var idValidColumn = "_mx_valid";
 
   /**
    * Cache column creation
@@ -418,7 +434,7 @@ async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
    */
   var out = {
     nValid: 0,
-    nInvalid: 0
+    nInvalid: 0,
   };
 
   for (const row of res.rows) {
@@ -440,7 +456,7 @@ async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
     status: out,
     useCache: useCache,
     autoCorrect: autoCorrect,
-    analyze: analyze
+    analyze: analyze,
   };
 }
 
@@ -451,13 +467,13 @@ async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
  * @return {Promise<Object>} validation object
  */
 function areLayersValid(idsLayers, useCache, autoCorrect) {
-  if (!isArray(idsLayers)){
+  if (!isArray(idsLayers)) {
     idsLayers = [idsLayers];
   }
   const queries = [];
-  for(const id of idsLayers){
-    queries.push(isLayerValid(id, useCache, autoCorrect))
-  } 
+  for (const id of idsLayers) {
+    queries.push(isLayerValid(id, useCache, autoCorrect));
+  }
   return Promise.all(queries);
 }
 
@@ -478,5 +494,6 @@ export {
   encrypt,
   registerSource,
   registerOrRemoveSource,
-  analyzeSource
+  analyzeSource,
+  getTableDimension,
 };

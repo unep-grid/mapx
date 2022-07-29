@@ -6,7 +6,6 @@ import {
   modalDialog,
 } from "./../mx_helper_modal.js";
 import { el, elButtonFa, elSpanTranslate, elCheckbox } from "../el_mapx";
-import { cancelFrame, onNextFrame } from "./../animation_frame";
 import { moduleLoad } from "./../modules_loader_async";
 import { bindAll } from "./../bind_class_methods";
 import { getDictTemplate, getDictItem } from "./../language";
@@ -37,8 +36,9 @@ const defaults = {
   id_columns_reserved: ["gid", "_mx_valid"],
   max_changes: 1e4,
   max_changes_warning: 1e3,
-  max_columns: 80,
   min_columns: 3,
+  max_rows: 1e5, // should match server
+  max_columns: 200, // should match server
   routes: {
     server_joined: "/server/edit_table/joined",
     server_error: "/server/edit_table/error",
@@ -559,15 +559,16 @@ export class EditTableSessionClient {
     et.updateButtons();
   }
 
-  async onServerError(message) {
+  async onServerError(error) {
     const et = this;
     try {
-      console.error("server error", message);
+      console.error("server error", error);
 
       const continueSession = await modalConfirm({
         title: "Server error",
-        content:
-          "An error occured: read the logs. Continue or end the session ?",
+        content: `An error occured: ${
+          error?.message || "Unknown error"
+        }. Continue or end the session ?`,
         confirm: "Continue",
         cancel: "End the session",
       });

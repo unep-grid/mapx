@@ -4,8 +4,8 @@ import { ws } from "./../mx.js";
 const instances = new Map();
 
 export async function editTable(config) {
+  const { idTable } = config;
   try {
-    const { idTable } = config;
     const exists = instances.get(idTable) instanceof EditTableSessionClient;
     if (exists) {
       console.warn("Table already loaded");
@@ -22,7 +22,7 @@ export async function editTable(config) {
     await instance.init();
   } catch (e) {
     console.error(e);
-    const instanceToRemove = instances.set(idTable);
+    const instanceToRemove = instances.get(idTable);
     if (instanceToRemove) {
       instanceToRemove.destroy();
     }

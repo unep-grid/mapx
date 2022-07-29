@@ -1,5 +1,9 @@
 
 
+
+
+
+
 observeEvent(input$btnEditSourceTable, {
   mxCatch(title = "btn edit source table", {
     userRole <- getUserRole()
@@ -10,6 +14,8 @@ observeEvent(input$btnEditSourceTable, {
       return()
     } else {
       layers <- reactListEditSources()
+      layers <- layers[vapply(layers, mxIsValidSourceEdit, FALSE)]
+
       disabled <- NULL
       if (noDataCheck(layers)) {
         layers <- list("noLayer")
@@ -27,6 +33,8 @@ observeEvent(input$btnEditSourceTable, {
       } else {
         selectedLayer <- NULL
       }
+
+
 
       uiOut <- tagList(
         selectizeInput(
