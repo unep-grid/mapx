@@ -1,4 +1,8 @@
-import { getColumnsTypesSimple, getLayerTitle } from "#mapx/db-utils";
+import {
+  tableExists,
+  getColumnsTypesSimple,
+  getLayerTitle,
+} from "#mapx/db-utils";
 import { getSourceAttributeTable, getSourceEditors } from "#mapx/source";
 import { randomString } from "#mapx/helpers";
 import {
@@ -82,6 +86,7 @@ class EditTableSession {
     const diff = performance.now() - et._perf[label];
     console.log(`Perf ${label}: ${diff} [ms]`);
   }
+
   async init() {
     const et = this;
 
@@ -99,6 +104,13 @@ class EditTableSession {
 
     if (!allowed) {
       et.error("Not allowed");
+      return;
+    }
+
+    const tableExists = await tableExists(et._id_table);
+
+    if (!tableExists) {
+      et.error("Table not found");
       return;
     }
 
