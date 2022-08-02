@@ -1,5 +1,5 @@
 import { geoserver } from "./geoserver/index.js";
-import { editTable } from "./source/edit_table_instances.js";
+import { editTable } from "./source/index.js";
 
 $(document).on("shiny:connected", function () {
   const h = mx.helpers;

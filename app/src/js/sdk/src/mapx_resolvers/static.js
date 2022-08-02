@@ -8,7 +8,6 @@ import {
 } from "../../../language/index.js";
 import {
   getMap,
-  downloadViewVector,
   setImmersiveMode,
   getImmersiveMode,
   getViewsForJSON,
@@ -17,6 +16,7 @@ import {
   getViewLegendImage,
   getViewRemote,
   viewRemove,
+  downloadViewVector,
   downloadViewSourceExternal,
   downloadViewGeoJSON,
   getViewsTitleNormalized,
@@ -25,6 +25,7 @@ import {
   viewDelete,
   getBoundsArray,
 } from "../../../map_helpers/index.js";
+
 import {
   commonLocFitBbox,
   commonLocGetBbox,

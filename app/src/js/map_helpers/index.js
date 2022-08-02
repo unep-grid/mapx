@@ -124,9 +124,16 @@ import {
   isViewVtWithAttributeType,
 } from "./../is_test_mapx/index.js";
 
-import { downloadViewVector } from "./download.js";
+/**
+* Export downloadViewVector from here, to match pattern 
+*  map_helpers -> 
+*  downloadViewVector  
+*  downloadViewGeoJSON
+*  downloadViewSourceExternal
+* Definied is this file.
+*/ 
+export { downloadViewVector } from "./../source";
 
-export { downloadViewVector };
 
 /**
  * Convert point in  degrees to meter
