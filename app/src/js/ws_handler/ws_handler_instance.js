@@ -77,7 +77,8 @@ function getTests() {
     switch (id) {
       case "job_echo": {
         const value = { now: Date.now() };
-        const response = await ws.emitGet(getApiRoute("testJobEcho"), {
+        const routeEcho = getApiRoute("testJobEcho");
+        const response = await ws.emitGet(routeEcho, {
           now: value.now,
         });
         const pass = value.now === response?.output?.now;
@@ -86,8 +87,8 @@ function getTests() {
       case "job_sum": {
         const arrayNum = [1, 2, 3, 4, 5];
         const expected = arrayNum.reduce((a, c) => a + c, 0);
-        const route = getApiRoute("testJobSum");
-        const response = await ws.emitGet(route, {
+        const routeSum = getApiRoute("testJobSum");
+        const response = await ws.emitGet(routeSum, {
           arrayNum,
         });
 

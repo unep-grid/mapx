@@ -172,8 +172,8 @@ config[["api"]] <- list(
     #
     updateGeoserver = "/client/geoserver/update",
     downloadSource = "/client/source/download",
-    testJobSum = "/client/test/job/sum",
-    testJobEcho = "/client/test/job/echo"
+    testJobSum = "/client/test/get/job/sum",
+    testJobEcho = "/client/test/get/job/echo"
   )
 )
 
