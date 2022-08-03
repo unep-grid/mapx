@@ -23,6 +23,7 @@ export async function getUserRoles(idUser, idProject) {
     member: false,
     guest: false,
     root: false,
+    group_max: "guests",
   };
 
   /**
@@ -47,25 +48,25 @@ export async function getUserRoles(idUser, idProject) {
   roles.member = roles.publisher || pData.members.includes(idUser);
   roles.guest = !roles.member && pData.public;
 
-  if (roles.root) {
-    roles.list.push("root");
-    roles.group.push("roots");
-  }
-  if (roles.admin) {
-    roles.list.push("admin");
-    roles.group.push("admins");
-  }
-  if (roles.publisher) {
-    roles.list.push("publisher");
-    roles.group.push("publishers");
+  if (roles.guest) {
+    roles.list.push("guest");
+    roles.group.push("guests");
+    roles.group_max = "guests";
   }
   if (roles.member) {
     roles.list.push("member");
     roles.group.push("members");
+    roles.group_max = "members";
   }
-  if (roles.guest) {
-    roles.list.push("guest");
-    roles.group.push("guests");
+  if (roles.publisher) {
+    roles.list.push("publisher");
+    roles.group.push("publishers");
+    roles.group_max = "publishers";
+  }
+  if (roles.root || roles.admin) {
+    roles.list.push("admin");
+    roles.group.push("admins");
+    roles.group_max = "admins";
   }
 
   return roles;

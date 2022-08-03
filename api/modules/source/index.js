@@ -4,6 +4,7 @@ export { mwGetGeomValidate } from "./getSourceValidityGeom.js";
 export { getSourcesServicesProject } from "./getSourceServices.js";
 export { mwDownloadSource, ioDownloadSource } from "./download.js";
 export { ioEditSource } from "./editSourceTableAttribute.js";
+export { ioSourceListEdit } from "./getSourceList.js";
 export {
   mwGetAttributeTable,
   getSourceAttributeTable,

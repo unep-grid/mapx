@@ -66,7 +66,82 @@ mapx.once("ready", async () => {
     ],
   });
 
-  t.check("Check full websocket communication", {
+  t.check("Table editor", {
+    init: async () => {
+      return mapx.ask("get_sources_list_edit");
+    },
+    tests: [
+      {
+        name: "All sources id are valid ",
+        test: (res) => {
+          return res.list.reduce((a, c) => a && t.valid.isSourceId(c.id), true);
+        },
+      },
+      {
+        name: "Editor is running",
+        test: async (res) => {
+          const pos = Math.floor(Math.random() * (res.list.length - 1));
+          const idTable = res.list[pos]?.id;
+          res._id_table = idTable;
+          const state = await mapx.ask("table_editor_open", {
+            idTable: idTable,
+            testMode: true,
+          });
+          return state.initialized && state.built;
+        },
+      },
+      {
+        name: "Editor : add / remove column",
+        test: async (res) => {
+          res._column_add = "_mx_test_column";
+          const update = {
+            type: "add_column",
+            id_table: res._id_table,
+            column_name: res._column_add,
+            column_type: "boolean",
+          };
+          await mapx.ask("table_editor_exec", {
+            idTable: res._id_table,
+            method: "handlerUpdateColumnAdd",
+            value: update,
+          });
+          const columns = await mapx.ask("table_editor_exec", {
+            idTable: res._id_table,
+            method: "getColumns",
+          });
+          const colNames = columns.map((col) => col.data);
+          if (!colNames.includes(res._column_add)) {
+            return false;
+          }
+          update.type = "remove_column";
+          await mapx.ask("table_editor_exec", {
+            idTable: res._id_table,
+            method: "handlerUpdateColumnRemove",
+            value: update,
+          });
+          const columnsAfter = await mapx.ask("table_editor_exec", {
+            idTable: res._id_table,
+            method: "getColumns",
+          });
+          const colNamesAfter = columnsAfter.map((col) => col.data);
+          if (colNamesAfter.includes(res._column_add)) {
+            return false;
+          }
+          return true;
+        },
+      },
+      {
+        name: "Editor closed",
+        test: async (res) => {
+          const idTable = res._id_table;
+          const state = await mapx.ask("table_editor_close", { idTable });
+          return state.destroyed;
+        },
+      },
+    ],
+  });
+
+  t.check("Full websocket communication", {
     init: async () => {
       return Promise.all([
         mapx.ask("test_ws", "job_sum"),

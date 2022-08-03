@@ -13,6 +13,10 @@ import { getProjectViewsCollections } from "../../../mx_helper_map_view_ui.js";
 import { MapxResolversStatic } from "./static.js";
 import { isStringRange, isString } from "../../../is_test/index.js";
 import { settings } from "./../../../settings";
+import {
+  editTable,
+  editTableGet,
+} from "./../../../source/edit_table_instances.js";
 
 /**
  * MapX resolvers available in app only
@@ -523,6 +527,41 @@ class MapxResolversApp extends MapxResolversStatic {
     const v = getMapData().viewsList;
     v.moveTargetDown(opt.idView);
     return true;
+  }
+
+  /**
+   * Show table editor ( require log in
+   * @param {Object} opt Options
+   * @param {String} opt.idTable Id of the table to edit
+   * @return {Object} instance state
+   */
+  async table_editor_open(opt) {
+    const instance = await editTable(opt);
+    return instance?.state;
+  }
+
+  /**
+   * Close table editor
+   */
+  async table_editor_close(opt) {
+    const instance = await editTableGet(opt);
+    await instance.destroy();
+    return instance?.state;
+  }
+
+  /**
+   * Apply any command on Table Editor
+   * Initially for testing purposes. May cause data loss.
+   * @param {Object} opt Options
+   * @param {String} opt.idTable Id of the table to edit
+   * @param {String} opt.method Method name
+   * @param {Object} opt.value Method arguments
+   * @return {Any} res Result. If null, instance state
+   */
+  async table_editor_exec(opt) {
+    const instance = await editTableGet(opt);
+    const res = await instance[opt.method](opt.value);
+    return res || instance?.state;
   }
 
   /**

@@ -19,7 +19,7 @@ import { pgWrite, redisSetJSON, redisGetJSON } from "#mapx/db";
 import { getUserEmail } from "#mapx/authentication";
 
 /**
- * Triggered by '/client/edit_table/start' in ..api/modules/io/mw_handlers.js
+ * Triggered by '/client/source/edit/table' in ..api/modules/io/mw_handlers.js
  */
 export async function ioEditSource(socket, options) {
   try {
@@ -98,7 +98,7 @@ class EditTableSession {
      */
     et._id_session = randomString("mx_edit_table");
     et._id_table = et._config.id_table;
-    et._id_room = `room/edit_table/${et._id_table}`;
+    et._id_room = `room/source/edit/table/${et._id_table}`;
 
     /**
      * Authentication
@@ -146,8 +146,8 @@ class EditTableSession {
     /**
      * Listen for events
      */
-    et._socket.on("/client/edit_table/update", et.onUpdate);
-    et._socket.on("/client/edit_table/exit", et.onExit);
+    et._socket.on("/client/source/edit/table/update", et.onUpdate);
+    et._socket.on("/client/source/edit/table/exit", et.onExit);
 
     /*
      * Get list of current members
@@ -157,12 +157,12 @@ class EditTableSession {
     /**
      * Signal join
      */
-    et.emit("/server/edit_table/joined", {
+    et.emit("/server/source/edit/table/joined", {
       id_room: et._id_room,
       id_session: et._id_session,
       members: members,
     });
-    et.emitRoom("/server/edit_table/new_member", {
+    et.emitRoom("/server/source/edit/table/new_member", {
       id_socket: et._socket.id,
       roles: et._user_roles,
       members: members,
@@ -178,7 +178,7 @@ class EditTableSession {
 
   error(txt, err) {
     const et = this;
-    et.emit("/server/edit_table/error", { message: txt, id_room: et._id_room });
+    et.emit("/server/source/edit/table/error", { message: txt, id_room: et._id_room });
     console.error(txt, err);
   }
 
@@ -205,19 +205,19 @@ class EditTableSession {
     et._socket.leave(et._id_room);
     const members = await et.getMembers();
 
-    et.emitRoom("/server/edit_table/member_exit", {
+    et.emitRoom("/server/source/edit/table/member_exit", {
       id_socket: et._socket.id,
       roles: et._user_roles,
       members: members,
     });
 
-    et._socket.off("/client/edit_table/update", et.onUpdate);
-    et._socket.off("/client/edit_table/exit", et.onExit);
+    et._socket.off("/client/source/edit/table/update", et.onUpdate);
+    et._socket.off("/client/source/edit/table/exit", et.onExit);
   }
 
   dispatch(message) {
     const et = this;
-    et.emitRoom("/server/edit_table/dispatch", message);
+    et.emitRoom("/server/source/edit/table/dispatch", message);
   }
 
   onExit(message) {
@@ -298,7 +298,7 @@ class EditTableSession {
       locked,
     };
 
-    et.emit("/server/edit_table/full_table", table);
+    et.emit("/server/source/edit/table/full_table", table);
 
     et.perfEnd("sendTable");
   }

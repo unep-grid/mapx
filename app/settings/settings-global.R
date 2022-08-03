@@ -135,6 +135,8 @@ config[["validation"]] <- list(
 #
 # api configuration
 #
+routes_express <- as.list(fromJSON("./src/js/settings/routes_express.json"))
+routes_ws <- as.list(fromJSON("./src/js/settings/routes_ws.json"))
 config[["api"]] <- list(
   port = 3030,
   port_public = 8888,
@@ -142,39 +144,7 @@ config[["api"]] <- list(
   host_public = "locahost",
   protocol = "http:",
   upload_size_max = 200 * 1024^2, # 100MiB
-  routes = list(
-    #
-    # http
-    #
-    getApiSql = "/get/sql",
-    getSearchKey = "/get/search/key",
-    getIpInfo = "/get/ip",
-    getMirror = "/get/mirror",
-    getConfigMap = "/get/config/map",
-    getTile = "/get/tile/{x}/{y}/{z}.mvt",
-    getSourceMetadata = "/get/source/metadata/",
-    getSourceSummary = "/get/source/summary/",
-    getViewMetadata = "/get/view/metadata/",
-    getSourceOverlap = "/get/source/overlap/",
-    getSourceValidateGeom = "/get/source/validate/geom",
-    getSourceTableAttribute = "/get/source/table/attribute",
-    getView = "/get/view/item/",
-    getViewsListByProject = "/get/views/list/project/",
-    getViewsListGlobalPublic = "/get/views/list/global/public",
-    getProjectsListByUser = "/get/projects/list/user",
-    getSourceDownload = "/get/source/", # to replace by ws route
-    uploadImage = "/upload/image/",
-    uploadVector = "/upload/vector/",
-    postEmail = "/send/mail",
-    collectLogs = "/collect/logs/",
-    #
-    # ws
-    #
-    updateGeoserver = "/client/geoserver/update",
-    downloadSource = "/client/source/download",
-    testJobSum = "/client/test/get/job/sum",
-    testJobEcho = "/client/test/get/job/echo"
-  )
+  routes = c(routes_ws, routes_express)
 )
 
 #

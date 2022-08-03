@@ -15,7 +15,8 @@ async function loadStatic() {
     /**
      * Init static mode
      */
-    const resp = await fetch(getApiUrl("getConfigMap"));
+    const urlConfig = getApiUrl("getConfigMap"); 
+    const resp = await fetch(urlConfig);
     const config = resp.ok ? await resp.json() : {};
     settings.map.token = config.token;
     return initMapx({

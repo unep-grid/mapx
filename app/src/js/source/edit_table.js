@@ -29,6 +29,7 @@ import {
 } from "./../is_test/index.js";
 
 const defaults = {
+  test_mode: false,
   log_perf: false,
   id_table: null,
   ht_license: "non-commercial-and-evaluation",
@@ -40,15 +41,15 @@ const defaults = {
   max_rows: 1e5, // should match server
   max_columns: 200, // should match server
   routes: {
-    server_joined: "/server/edit_table/joined",
-    server_error: "/server/edit_table/error",
-    server_new_member: "/server/edit_table/new_member",
-    server_member_exit: "/server/edit_table/member_exit",
-    server_full_table: "/server/edit_table/full_table",
-    server_dispatch: "/server/edit_table/dispatch",
-    client_edit_start: "/client/edit_table/start",
-    client_edit_updates: "/client/edit_table/update",
-    client_exit: "/client/edit_table/exit",
+    server_joined: "/server/source/edit/table/joined",
+    server_error: "/server/source/edit/table/error",
+    server_new_member: "/server/source/edit/table/new_member",
+    server_member_exit: "/server/source/edit/table/member_exit",
+    server_full_table: "/server/source/edit/table/full_table",
+    server_dispatch: "/server/source/edit/table/dispatch",
+    client_edit_start: "/client/source/edit/table",
+    client_edit_updates: "/client/source/edit/table/update",
+    client_exit: "/client/source/edit/table/exit",
   },
   id_source_dispatch: "from_dispatch",
   id_source_edit: "edit",
@@ -60,7 +61,7 @@ export class EditTableSessionClient {
     et._id = makeId();
     et._config = Object.assign({}, defaults, config);
     et._socket = socket;
-    et._on_destroy = [];
+    et._on_cb = new Set();
     et._members = [];
     et._updates = [];
     et._locked;
@@ -72,6 +73,16 @@ export class EditTableSessionClient {
 
   get id() {
     return this._id;
+  }
+
+  get state() {
+    const et = this;
+    return {
+      initialized: et._initialized,
+      destroyed: et._destroyed,
+      built: et._built,
+      locked: et._locked,
+    };
   }
 
   async init() {
@@ -106,9 +117,15 @@ export class EditTableSessionClient {
     await et.warning();
     et.start();
     await et.build();
+    await et.once("table_ready", null, 2e4);
+    return true;
   }
 
   async warning() {
+    const et = this;
+    if (et._config.test_mode) {
+      return;
+    }
     const showWarning = await prefGet("pref_show_edit_table_warning");
     if (showWarning === null || showWarning === true) {
       const keepShowing = await modalConfirm({
@@ -129,34 +146,40 @@ export class EditTableSessionClient {
     et.emit(r.client_edit_start, opt);
   }
 
-  destroy() {
+  async destroy() {
     const et = this;
-    const r = et._config.routes;
-    if (et._destroyed) {
-      return;
-    }
-    et._destroyed = true;
-    et._lock_table_concurrent = false;
-    et._lock_table_by_user_id = null;
-    et.lockTableConcurrent(false);
-    et.emit(r.client_exit);
-    et._modal?.close();
-    et._resize_observer?.disconnect();
-    et._socket.off(r.server_joined, et.onJoined);
-    et._socket.off(r.server_error, et.onServerError);
-    et._socket.off(r.server_new_member, et.onNewMember);
-    et._socket.off(r.server_member_exit, et.onMemberExit);
-    et._socket.off(r.server_full_table, et.initTable);
-    et._socket.off(r.server_dispatch, et.onDispatch);
-    et._socket.off("disconnect", et.onDisconnect);
-    for (const cb of et._on_destroy) {
-      cb();
+    try {
+      const r = et._config.routes;
+      if (et._destroyed) {
+        return;
+      }
+      et._destroyed = true;
+      et._lock_table_concurrent = false;
+      et._lock_table_by_user_id = null;
+      et.lockTableConcurrent(false);
+      et.emit(r.client_exit);
+      et._modal?.close();
+      et._resize_observer?.disconnect();
+      et._socket.off(r.server_joined, et.onJoined);
+      et._socket.off(r.server_error, et.onServerError);
+      et._socket.off(r.server_new_member, et.onNewMember);
+      et._socket.off(r.server_member_exit, et.onMemberExit);
+      et._socket.off(r.server_full_table, et.initTable);
+      et._socket.off(r.server_dispatch, et.onDispatch);
+      et._socket.off("disconnect", et.onDisconnect);
+      await et.fire("destroy");
+    } catch (e) {
+      console.error(e);
     }
   }
 
   async build() {
     const et = this;
 
+    if (et._built) {
+      return;
+    }
+    et._built = true;
     et._el_button_close = elButtonFa("btn_close", {
       icon: "times",
       action: et.destroy,
@@ -272,6 +295,8 @@ export class EditTableSessionClient {
         et.destroy();
       },
     });
+
+    await et.fire("built");
   }
 
   /**
@@ -438,6 +463,10 @@ export class EditTableSessionClient {
       }
     }
     if (isNotEmpty(columnsIssues)) {
+      if (et._config.test_mode) {
+        console.warn("Invalid columns", columnsIssues);
+        return;
+      }
       await modalDialog({
         title: getDictItem("edit_table_modal_columns_name_issue_title"),
         content: getDictTemplate(
@@ -557,6 +586,11 @@ export class EditTableSessionClient {
      */
     et.updateAutoSave();
     et.updateButtons();
+
+    /**
+     * Fire on ready cb, if any
+     */
+    await et.fire("table_ready");
   }
 
   async onServerError(error) {
@@ -574,7 +608,7 @@ export class EditTableSessionClient {
       });
 
       if (!continueSession) {
-        et.destroy();
+        await et.destroy();
       }
     } catch (e) {
       console.warn(e);
@@ -685,7 +719,7 @@ export class EditTableSessionClient {
 
   addDestroyCb(cb) {
     const et = this;
-    et._on_destroy.push(cb);
+    et._on_cb.add({ once: true, cb: cb, type: "destroy", resolve: null });
   }
 
   undo() {
@@ -698,6 +732,10 @@ export class EditTableSessionClient {
     const et = this;
     et._ht.redo();
     et.updateButtons();
+  }
+
+  getColumns() {
+    return this._columns;
   }
 
   handlerUpdateColumnRemove(update, source) {
@@ -729,6 +767,7 @@ export class EditTableSessionClient {
     }
 
     et.emitUpdatesDb([update]);
+    return true;
   }
 
   /*
@@ -790,15 +829,6 @@ export class EditTableSessionClient {
       },
     });
 
-    /*const confirmRemove = await modalConfirm({*/
-    /*title: elSpanTranslate("edit_table_modal_remove_column_confirm_title"),*/
-    /*content: getDictTemplate("edit_table_modal_remove_column_confirm_text", {*/
-    /*column_name: columnToRemove,*/
-    /*}),*/
-    /*cancel: elSpanTranslate("btn_cancel"),*/
-    /*confirm: elSpanTranslate("btn_edit_table_modal_remove_column_confirm"),*/
-    /*});*/
-
     if (!confirmRemove) {
       return;
     }
@@ -844,6 +874,7 @@ export class EditTableSessionClient {
       return;
     }
     et.emitUpdatesDb([update]);
+    return true;
   }
 
   /*
@@ -956,7 +987,7 @@ export class EditTableSessionClient {
       column_type: columnType,
     };
 
-    et.handlerUpdateColumnAdd(update);
+    return et.handlerUpdateColumnAdd(update);
   }
 
   getColumnType(columnName) {
@@ -1021,6 +1052,9 @@ export class EditTableSessionClient {
 
   async confirmChangesToBig(changes) {
     const et = this;
+    if (et._config.test_mode) {
+      return true;
+    }
     const nChanges = changes.length;
     await modalDialog({
       title: elSpanTranslate("edit_table_modal_changes_too_big_title"),
@@ -1307,6 +1341,10 @@ export class EditTableSessionClient {
     if (et.locked) {
       return;
     }
+    if (et._config.test_mode) {
+      console.log("Test mode. Updates not emited:", updates);
+      return;
+    }
     et.emit(r.client_edit_updates, { updates, ...opt });
   }
   emitUpdatesDb(updates) {
@@ -1372,5 +1410,44 @@ export class EditTableSessionClient {
       title: getDictItem("edit_table_modal_help"),
       wiki: "Attribute-table-edition",
     });
+  }
+
+  /*
+   * Events : once handler
+   */
+  once(type, cb, timeout) {
+    const et = this;
+    return new Promise((resolve, reject) => {
+      const item = { once: true, cb: cb, type: type, resolve: resolve };
+      if (timeout) {
+        setTimeout(() => {
+          et._on_cb.delete(item);
+          reject(`Timeout for ${type}`);
+        }, timeout);
+      }
+      et._on_cb.add(item);
+    });
+  }
+
+  /*
+   * Events : fire handler
+   */
+  async fire(type, data) {
+    const et = this;
+    const res = [];
+    for (const item of et._on_cb) {
+      if (item.type === type) {
+        if (item.cb) {
+          res.push(await item.cb(data));
+        }
+        if (item.resolve) {
+          item.resolve(data);
+        }
+        if (item.once) {
+          et._on_cb.delete(item);
+        }
+      }
+    }
+    return res;
   }
 }

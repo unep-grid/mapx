@@ -1,0 +1,8 @@
+{
+  "updateGeoserver": "/client/geoserver/update",
+  "downloadSource": "/client/source/download",
+  "sourceGetList": "/client/source/get/list",
+  "sourceGetListEdit": "/client/source/get/list/edit",
+  "testJobSum": "/client/test/get/job/sum",
+  "testJobEcho": "/client/test/get/job/echo"
+}

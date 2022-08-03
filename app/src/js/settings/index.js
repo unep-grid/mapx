@@ -1,4 +1,8 @@
 import * as styleDefault from "./../../data/style/style_mapx.json";
+import * as routesExpress from "./routes_express.json";
+import * as routesWs from "./routes_ws.json";
+
+const routes = Object.assign({}, routesWs.default, routesExpress.default);
 
 const settings = {
   devicePixelRatio: 0, // updated by getPixelRatio()
@@ -43,40 +47,7 @@ const settings = {
     port_public: "443",
     protocol: "https:",
     upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
-    routes: {
-      /**
-       * http routes
-       */
-      getSearchKey: "/get/search/key",
-      getMirror: "/get/mirror",
-      getApiSql: "/get/sql",
-      getConfigMap: "/get/config/map",
-      getIpInfo: "/get/ip",
-      getTile: "/get/tile/{x}/{y}/{z}.mvt",
-      getSourceMetadata: "/get/source/metadata/",
-      getSourceSummary: "/get/source/summary/",
-      getViewMetadata: "/get/view/metadata/",
-      getSourceOverlap: "/get/source/overlap/",
-      getSourceValidateGeom: "/get/source/validate/geom",
-      getSourceTableAttribute: "/get/source/table/attribute",
-      getView: "/get/view/item/",
-      getViewsListByProject: "/get/views/list/project/",
-      getViewsListGlobalPublic: "/get/views/list/global/public",
-      getFileFormatsList: "/get/file/formats/list",
-      getEpsgCodesFull: "/get/epsg/codes/full",
-      downloadSourceCreate: "/get/source/",
-      getSourceDownload: "/get/source/",
-      uploadImage: "/upload/image/",
-      uploadVector: "/upload/vector/",
-      collectLogs: "/collect/logs/",
-      /*
-       * ws routes
-       */
-      updateGeoserver: "/client/geoserver/update",
-      downloadSource: "/client/source/download",
-      testJobSum: "/client/test/get/job/sum",
-      testJobEcho: "/client/test/get/job/echo",
-    },
+    routes: routes,
   },
   // see https://github.com/unep-grid/map-x-mgl/issues/472
   paramKeysPermanent: [
