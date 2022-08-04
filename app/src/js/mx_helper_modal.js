@@ -18,6 +18,7 @@ import {
   isArray,
   isBoolean,
 } from "./is_test/index.js";
+import { SelectAuto } from "./select_auto";
 /**
  * TODO:
  * - this helper should be converted to Class
@@ -176,8 +177,8 @@ export function modal(o) {
   document.body.appendChild(elModal);
 
   /*
-  * Initial pinned status
-  */ 
+   * Initial pinned status
+   */
   setPinned();
 
   if (o.addBackground) {
@@ -552,13 +553,21 @@ export function modalPrompt(opt) {
       id: Math.random().toString(32),
     },
     inputChildren: [],
+    selectAutoOptions: null,
   };
 
   opt.inputOptions = Object.assign({}, def.inputOptions, opt.inputOptions);
   opt = Object.assign({}, def, opt);
 
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
     const isCheckbox = opt.inputOptions.type === "checkbox";
+    const isSelectAuto = !!opt.selectAutoOptions;
+    let selectAuto;
+
+    if (isSelectAuto) {
+      opt.inputTag = "select";
+    }
+
     const elInput = el(opt.inputTag, opt.inputOptions, [...opt.inputChildren]);
 
     const elLabel = el(
@@ -572,6 +581,10 @@ export function modalPrompt(opt) {
       elInputGroup.className = "checkbox";
       elLabel.prepend(elInput);
     }
+    if (isSelectAuto) {
+      opt.selectAutoOptions.target = elInput;
+      selectAuto = new SelectAuto(opt.selectAutoOptions);
+    }
 
     const elMessage = el("small", { class: ["form-text"] });
     const elContent = el("div", [elInputGroup, elMessage]);
@@ -581,6 +594,9 @@ export function modalPrompt(opt) {
         class: "btn btn-default",
         on: {
           click: () => {
+            if (selectAuto instanceof SelectAuto) {
+              selectAuto.destroy();
+            }
             resolve(false);
             elModal.close();
           },
@@ -599,6 +615,9 @@ export function modalPrompt(opt) {
               return;
             }
             resolve(elInput.value);
+            if (selectAuto instanceof SelectAuto) {
+              selectAuto.destroy();
+            }
             elModal.close();
           },
         },

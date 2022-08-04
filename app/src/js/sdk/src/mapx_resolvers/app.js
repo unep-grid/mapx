@@ -13,7 +13,7 @@ import { getProjectViewsCollections } from "../../../mx_helper_map_view_ui.js";
 import { MapxResolversStatic } from "./static.js";
 import { isStringRange, isString } from "../../../is_test/index.js";
 import { settings } from "./../../../settings";
-import { getSourcesListEdit, editTable, editTableGet } from "./../../../source";
+import { wsGetSourcesListEdit, editTable, editTableGet } from "./../../../source";
 
 /**
  * MapX resolvers available in app only
@@ -572,7 +572,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Array} Rows
    */
   get_sources_list_edit() {
-    return getSourcesListEdit();
+    return wsGetSourcesListEdit();
   }
 
   /**

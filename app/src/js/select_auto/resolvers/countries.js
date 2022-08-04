@@ -1,5 +1,5 @@
-import {el, elSpanTranslate} from '../el_mapx';
-import {getLanguagesAll} from '../language';
+import {el, elSpanTranslate} from '../../el_mapx';
+import {getLanguagesAll} from '../../language';
 
 const langs = getLanguagesAll();
 
@@ -23,7 +23,7 @@ export const config = {
         return;
       }
       const {default: countries} = await import(
-        './../../data/dict/dict_countries.json'
+        './../../../data/dict/dict_countries.json'
       );
       callback(countries);
       tom.settings.load = null;

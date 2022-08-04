@@ -1184,6 +1184,14 @@
     "en": "Feature type"
   },
   {
+    "id": "edit_table_modal_select_title",
+    "en": "Select table"
+  },
+  {
+    "id": "edit_table_modal_select_label",
+    "en": "Select table to edit"
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit table {{title}}"
   },

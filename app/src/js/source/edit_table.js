@@ -65,6 +65,7 @@ export class EditTableSessionClient {
     et._members = [];
     et._updates = [];
     et._locked;
+    et._select_auto = [];
     et._lock_table_concurrent = false;
     et._lock_table_by_user_id = null;
     bindAll(et);
@@ -97,44 +98,62 @@ export class EditTableSessionClient {
    */
   async init() {
     const et = this;
-    window._et = et;
-    const r = et._config.routes;
-    if (et._initialized) {
-      return;
+    try {
+      const r = et._config.routes;
+      if (et._initialized) {
+        return;
+      }
+      et._initialized = true;
+      et._id_table = et._config?.id_table;
+
+      /**
+       * If empty id, display a dialog to select
+       */
+      if (isEmpty(et._id_table)) {
+        et._id_table = await et.dialogSelectTable();
+        if (!et._id_table) {
+          et.destroy();
+          return;
+        }
+      }
+
+      const valid = isSourceId(et._id_table);
+      if (!valid) {
+        throw new Error("Invalid table id");
+      }
+
+      /**
+       * ⚠️ ALL INSTANCE WILL LISTEN TO ALL action
+       *  -> test in callback and discard unmatched. e.g.
+       *     <msg>.id_table != this._id_table
+       *  Alternative :
+       *   - use name space
+       *   - distinct socket
+       *   - sync event ID between server and client
+       */
+      et._socket.on(r.server_joined, et.onJoined);
+      et._socket.on(r.server_error, et.onServerError);
+      et._socket.on(r.server_new_member, et.onNewMember);
+      et._socket.on(r.server_member_exit, et.onMemberExit);
+      et._socket.on(r.server_full_table, et.initTable);
+      et._socket.on(r.server_dispatch, et.onDispatch);
+      et._socket.on("disconnect", et.onDisconnect);
+      await et.dialogWarning();
+      et.start();
+      await et.build();
+      await et.once("table_ready", null, 2e4);
+      return true;
+    } catch (e) {
+      console.error(e);
+      et.destroy();
+      return false;
     }
-    et._initialized = true;
-    et._id_table = et._config?.id_table;
-    const valid = isSourceId(et._id_table);
-    if (!valid) {
-      throw new Error("Invalid table id");
-    }
-    /**
-     * ⚠️ ALL INSTANCE WILL LISTEN TO ALL action
-     *  -> test in callback and discard unmatched. e.g.
-     *     <msg>.id_table != this._id_table
-     *  Alternative :
-     *   - use name space
-     *   - distinct socket
-     *   - sync event ID between server and client
-     */
-    et._socket.on(r.server_joined, et.onJoined);
-    et._socket.on(r.server_error, et.onServerError);
-    et._socket.on(r.server_new_member, et.onNewMember);
-    et._socket.on(r.server_member_exit, et.onMemberExit);
-    et._socket.on(r.server_full_table, et.initTable);
-    et._socket.on(r.server_dispatch, et.onDispatch);
-    et._socket.on("disconnect", et.onDisconnect);
-    await et.warning();
-    et.start();
-    await et.build();
-    await et.once("table_ready", null, 2e4);
-    return true;
   }
 
   /**
    * Display a warning : editing will alter your data
    */
-  async warning() {
+  async dialogWarning() {
     const et = this;
     if (et._config.test_mode) {
       return;
@@ -222,15 +241,15 @@ export class EditTableSessionClient {
     });
     et._el_button_wiki = elButtonFa("btn_edit_wiki", {
       icon: "question-circle",
-      action: et.showModalHelp,
+      action: et.dialogHelp,
     });
     et._el_button_add_column = elButtonFa("btn_edit_add_column", {
       icon: "plus-circle",
-      action: et.addColumnPrompt,
+      action: et.dialogAddColumn,
     });
     et._el_button_remove_column = elButtonFa("btn_edit_remove_column", {
       icon: "minus-circle",
-      action: et.removeColumnPrompt,
+      action: et.dialogRemoveColumn,
     });
     et._el_checkbox_autosave = elCheckbox("btn_edit_autosave", {
       action: et.updateAutoSave,
@@ -497,7 +516,7 @@ export class EditTableSessionClient {
     const et = this;
     clearTimeout(et._update_to);
     et._update_to = setTimeout(() => {
-      const elButtons = _et._el_button_close.parentElement;
+      const elButtons = et._el_button_close.parentElement;
       const elFooter = elButtons.parentElement;
       const rectButtons = elButtons.getBoundingClientRect();
       const rectFooter = elFooter.getBoundingClientRect();
@@ -918,7 +937,7 @@ export class EditTableSessionClient {
   /*
    * Interactive column remove
    */
-  async removeColumnPrompt() {
+  async dialogRemoveColumn() {
     const et = this;
     const names = et._columns.reduce((a, c) => {
       const isNotReserved = !et.isColumnReserved(c.data);
@@ -1026,7 +1045,7 @@ export class EditTableSessionClient {
   /*
    * Interactive column add
    */
-  async addColumnPrompt() {
+  async dialogAddColumn() {
     const et = this;
     const names = et._columns.map((c) => c.data);
     let valid = false;
@@ -1640,13 +1659,26 @@ export class EditTableSessionClient {
   }
 
   /**
-   * Display a modal with the help from wiki
+   * Display a dialog with the help from wiki
    */
-  showModalHelp() {
+  dialogHelp() {
     return modalMarkdown({
       title: getDictItem("edit_table_modal_help"),
       wiki: "Attribute-table-edition",
     });
+  }
+  /**
+   * Display a dialog with source selection
+   */
+  async dialogSelectTable() {
+    const res = await modalPrompt({
+      title: getDictItem("edit_table_modal_select_title"),
+      label: getDictItem("edit_table_modal_select_label"),
+      selectAutoOptions: {
+        type: "sources_list_edit",
+      },
+    });
+    return res;
   }
 
   /*

@@ -1,5 +1,31 @@
 [
   {
+    "id": "edit_table_modal_select_title",
+    "en": "Select table",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+ {
+    "id": "edit_table_modal_select_label",
+    "en": "Select table to edit",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit table {{title}}",
     "fr": "",

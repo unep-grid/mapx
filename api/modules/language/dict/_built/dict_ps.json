@@ -1480,6 +1480,16 @@
     "ps": "د فیچر ډول"
   },
   {
+    "id": "edit_table_modal_select_title",
+    "en": "Select table",
+    "ps": "میز غوره کړئ"
+  },
+  {
+    "id": "edit_table_modal_select_label",
+    "en": "Select table to edit",
+    "ps": "د سمون لپاره جدول غوره کړئ"
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit table {{title}}",
     "ps": "جدول تدوین کړئ {{title}}"

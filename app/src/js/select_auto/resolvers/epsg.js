@@ -1,15 +1,14 @@
-import { getApiUrl } from "./../api_routes";
-import { el } from "../el_mapx";
-import { isEmpty } from "../is_test";
+import { getApiUrl } from "./../../api_routes";
+import { el } from "../../el_mapx";
+import { isEmpty } from "../../is_test";
 
-const defaultFormat = "GPKG";
+const defaultSrid = "4326";
 
 export const config = {
-  valueField: "driver",
-  searchField: ["driver", "name", "fileExt"],
+  valueField: "srid",
+  searchField: ["srid", "name", "region"],
   allowEmptyOption: false,
   options: null,
-  maxItems: 1,
   load: async function (_, callback) {
     const tom = this;
     try {
@@ -17,34 +16,35 @@ export const config = {
         callback();
         return;
       }
-
-      const url = getApiUrl("getFileFormatsList");
-      const fileFormatsResp = await fetch(url);
-      const fileFormats = await fileFormatsResp.json();
-      const formatsVector = fileFormats.filter((f) => {
-        return f.download && f.type === "vector";
-      });
-      callback(formatsVector);
+      const url = getApiUrl("getEpsgCodesFull");
+      const epsgCodeResp = await fetch(url);
+      const epsgCodes = await epsgCodeResp.json();
+      callback(epsgCodes);
       tom.settings.load = null;
     } catch (e) {
+      console.error(e);
       callback();
     }
   },
   create: false,
-  sortField: { field: "name" },
+  sortField: { field: "srid" },
   onInitialize: async function () {
     const tom = this;
     await tom.load();
   },
   onLoad: function () {
     const tom = this;
-    tom.setValue(defaultFormat);
+    tom.setValue(defaultSrid);
+  },
+  onChange: function () {
+    const tom = this;
+    tom.blur();
   },
   onBlur: function () {
     const tom = this;
     const v = tom.getValue();
     if (isEmpty(v)) {
-      tom.setValue(defaultFormat);
+      tom.setValue(defaultSrid);
     }
   },
   dropdownParent: "body",
@@ -53,12 +53,7 @@ export const config = {
       return el(
         "div",
         el("h4", escape(data.name)),
-        el(
-          "small",
-          `Driver: ${escape(data.driver)} | File extensions: ${escape(
-            data.fileExt
-          )}`
-        )
+        el("small", `EPSG:${escape(data.srid)} | ${escape(data.region)}`)
       );
     },
     item: (data, escape) => {
@@ -68,7 +63,7 @@ export const config = {
         el(
           "span",
           { class: ["text-muted", "space-around"] },
-          `${escape(data.driver)}`
+          `EPSG:${escape(data.srid)}`
         )
       );
     },

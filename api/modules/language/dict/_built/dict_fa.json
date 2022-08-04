@@ -1480,6 +1480,16 @@
     "fa": "نوع ویژگی"
   },
   {
+    "id": "edit_table_modal_select_title",
+    "en": "Select table",
+    "fa": "جدول را انتخاب کنید"
+  },
+  {
+    "id": "edit_table_modal_select_label",
+    "en": "Select table to edit",
+    "fa": "جدول را برای ویرایش انتخاب کنید"
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit table {{title}}",
     "fa": "ویرایش جدول {{title}}"

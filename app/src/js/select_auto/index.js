@@ -32,6 +32,11 @@ export class SelectAuto extends EventSimple {
     se.fire("init");
   }
 
+  get value() {
+    const se = this;
+    se._tom.getValue();
+  }
+
   destroy() {
     const se = this;
     if (se._destroyed) {
@@ -57,7 +62,7 @@ export class SelectAuto extends EventSimple {
        * se._tom.on("initialize", () => {
        *  resolve(true);
        * });
-       */ 
+       */
       setTimeout(() => {
         se._built = true;
         se.fire("built");
@@ -70,19 +75,22 @@ export class SelectAuto extends EventSimple {
     const out = {};
     switch (type) {
       case "epsg":
-        const epsg = await import("./epsg");
+        const epsg = await import("./resolvers/epsg.js");
         Object.assign(out, epsg.config);
         break;
       case "format_vector_download":
-        const format = await import("./file_format_vector_dl");
+        const format = await import("./resolvers/format_vector_download.js");
         Object.assign(out, format.config);
         break;
       case "countries":
-        const countries = await import("./countries");
+        const countries = await import("./resolvers/countries.js");
         Object.assign(out, countries.config);
         break;
+      case "sources_list_edit":
+        const sourcesEdit = await import("./resolvers/sources_list_edit.js");
+        Object.assign(out, sourcesEdit.config);
+        break;
     }
-
     return out;
   }
 }

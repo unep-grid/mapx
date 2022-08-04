@@ -1480,6 +1480,16 @@
     "bn": "বৈশিষ্ট্যের ধরন"
   },
   {
+    "id": "edit_table_modal_select_title",
+    "en": "Select table",
+    "bn": "টেবিল নির্বাচন করুন"
+  },
+  {
+    "id": "edit_table_modal_select_label",
+    "en": "Select table to edit",
+    "bn": "সম্পাদনা করতে টেবিল নির্বাচন করুন"
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit table {{title}}",
     "bn": "টেবিল সম্পাদনা করুন {{title}}"

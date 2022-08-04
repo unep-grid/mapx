@@ -13,40 +13,39 @@ observe({
 reactTableReadSources <- reactive({
   update <- reactData$updateSourceLayerList
   userRole <- getUserRole()
-  idUser <- .get(reactUser,c("data","id"))
+  idUser <- .get(reactUser, c("data", "id"))
   project <- reactData$project
   language <- reactData$language
 
   ## non reactif
   additionalLayers <- c()
-  userCanRead <- .get(userRole,c("read"))
+  userCanRead <- .get(userRole, c("read"))
 
-  views <- reactViewsCompact() 
+  views <- reactViewsCompact()
 
   #
-  # Extract all sources id set in views and add them in the layer list. 
+  # Extract all sources id set in views and add them in the layer list.
   #
-  if(!noDataCheck(views)){
+  if (!noDataCheck(views)) {
     #
     # Filter edit
     #
-    viewsEdit <- views[sapply(views,`[[`,"_edit")]
+    viewsEdit <- views[sapply(views, `[[`, "_edit")]
     #
     # Get ids
     #
-    viewsIds <- sapply(viewsEdit,.get,c("id"))
+    viewsIds <- sapply(viewsEdit, .get, c("id"))
 
     #
     # Get related source layer
     #
-    additionalLayers = mxDbGetLayerListByViews(viewsIds)
-
+    additionalLayers <- mxDbGetLayerListByViews(viewsIds)
   }
 
   #
   # Get layer table
   #
-  layers <-  mxDbGetSourceTable(
+  layers <- mxDbGetSourceTable(
     project = project,
     idUser = idUser,
     roleInProject = userRole,
@@ -56,22 +55,21 @@ reactTableReadSources <- reactive({
   )
 
   return(layers)
-
 })
 
 reactListReadSources <- reactive({
   layers <- reactTableReadSources()
-    layers <- mxGetSourceNamedList( layers )
+  layers <- mxGetSourceNamedList(layers)
   return(layers)
 })
 reactListReadSourcesVector <- reactive({
   layers <- reactTableReadSources()
-  layers <- layers[layers$type %in% c('vector'),]
+  layers <- layers[layers$type %in% c("vector"), ]
 
-  if(noDataCheck(layers)){
+  if (noDataCheck(layers)) {
     layers <- list("noLayer")
-  }else{
-    layers <- mxGetSourceNamedList( layers )
+  } else {
+    layers <- mxGetSourceNamedList(layers)
   }
   return(layers)
 })
@@ -80,17 +78,16 @@ reactListReadSourcesVector <- reactive({
 
 
 reactTableEditSources <- reactive({
-
   update <- reactData$updateSourceLayerList
   userRole <- getUserRole()
   isPublisher <- "publishers" %in% userRole$groups
   language <- reactData$language
   project <- reactData$project
   userData <- reactUser
-  idUser <- .get(userData,c("data","id"))
+  idUser <- .get(userData, c("data", "id"))
 
   tbl <- data.frame()
-  if( isPublisher ){
+  if (isPublisher) {
     tbl <- mxDbGetSourceTable(
       project = project,
       idUser = idUser,
@@ -103,16 +100,16 @@ reactTableEditSources <- reactive({
 })
 reactListEditSources <- reactive({
   layers <- reactTableEditSources()
-  layers <- mxGetSourceNamedList( layers )
+  layers <- mxGetSourceNamedList(layers)
   return(layers)
 })
 reactListEditSourcesVector <- reactive({
   layers <- reactTableEditSources()
-  layers <- layers[layers$type %in% c('vector'),]
-  if(noDataCheck(layers)){
+  layers <- layers[layers$type %in% c("vector"), ]
+  if (noDataCheck(layers)) {
     layers <- list("noLayer")
-  }else{
-    layers <- mxGetSourceNamedList( layers )
+  } else {
+    layers <- mxGetSourceNamedList(layers)
   }
   return(layers)
 })
@@ -127,7 +124,7 @@ reactTableViewsUsingSource <- reactive({
   # Values
   #
   idSource <- reactData$triggerSourceManage$idSource
-  language <- reactData$language  
+  language <- reactData$language
 
   #
   # Other triggers
@@ -138,8 +135,5 @@ reactTableViewsUsingSource <- reactive({
   #
   # Get views table
   #
-  mxDbGetViewsIdBySourceId(idSource,language=language)
+  mxDbGetViewsIdBySourceId(idSource, language = language)
 })
-
-
-

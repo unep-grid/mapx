@@ -3848,6 +3848,32 @@
     "de": "Funktionstyp"
   },
   {
+    "id": "edit_table_modal_select_title",
+    "en": "Select table",
+    "fr": "Sélectionnez le tableau",
+    "es": "Seleccionar tabla",
+    "ru": "Выбрать стол",
+    "zh": "选择表",
+    "ar": "حدد الجدول",
+    "fa": "جدول را انتخاب کنید",
+    "ps": "میز غوره کړئ",
+    "bn": "টেবিল নির্বাচন করুন",
+    "de": "Tisch auswählen"
+  },
+  {
+    "id": "edit_table_modal_select_label",
+    "en": "Select table to edit",
+    "fr": "Sélectionnez le tableau à modifier",
+    "es": "Seleccionar tabla para editar",
+    "ru": "Выберите таблицу для редактирования",
+    "zh": "选择要编辑的表",
+    "ar": "حدد الجدول لتحريره",
+    "fa": "جدول را برای ویرایش انتخاب کنید",
+    "ps": "د سمون لپاره جدول غوره کړئ",
+    "bn": "সম্পাদনা করতে টেবিল নির্বাচন করুন",
+    "de": "Tabelle zum Bearbeiten auswählen"
+  },
+  {
     "id": "edit_table_modal_title",
     "en": "Edit table {{title}}",
     "fr": "Modifier le tableau {{title}}",
