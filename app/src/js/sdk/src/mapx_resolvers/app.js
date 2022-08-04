@@ -7,7 +7,7 @@ import {
   getMapData,
   getViewsOrder,
 } from "../../../map_helpers/index.js";
-import { isView } from "./../../../is_test";
+import { isView, isFunction, isObject } from "./../../../is_test";
 import { viewToMetaModal } from "../../../mx_helper_map_view_metadata.js";
 import { getProjectViewsCollections } from "../../../mx_helper_map_view_ui.js";
 import { MapxResolversStatic } from "./static.js";
@@ -560,8 +560,15 @@ class MapxResolversApp extends MapxResolversStatic {
    */
   async table_editor_exec(opt) {
     const instance = await editTableGet(opt);
-    const res = await instance[opt.method](opt.value);
-    return res || instance?.state;
+    const method = instance[opt.method];
+    if (isObject(method)) {
+      return method;
+    }
+    if (isFunction(method)) {
+      const res = await method(opt.value);
+      return res || instance?.state;
+    }
+    throw new Error(`Table editor exec, invalid method: ${opt.method}`);
   }
 
   /**

@@ -91,6 +91,68 @@ mapx.once("ready", async () => {
         },
       },
       {
+        name: "Lock unlock enable disable",
+        test: async (res) => {
+          /**
+           * Lock
+           */
+          await mapx.ask("table_editor_exec", {
+            idTable: res._id_table,
+            method: "lock",
+          });
+          const s_1 = await mapx.ask("table_editor_exec", {
+            idTable: res._id_table,
+            method: "state",
+          });
+          if (!s_1.locked) {
+            return false;
+          }
+          /**
+           * Unlock
+           */
+          await mapx.ask("table_editor_exec", {
+            idTable: res._id_table,
+            method: "unlock",
+          });
+          const s_2 = await mapx.ask("table_editor_exec", {
+            idTable: res._id_table,
+            method: "state",
+          });
+          if (s_2.locked) {
+            return false;
+          }
+          /**
+           * Disable
+           */
+          await mapx.ask("table_editor_exec", {
+            idTable: res._id_table,
+            method: "disable",
+          });
+          const s_3 = await mapx.ask("table_editor_exec", {
+            idTable: res._id_table,
+            method: "state",
+          });
+          if (!s_3.disabled) {
+            return false;
+          }
+          /**
+           * Enable
+           */
+          await mapx.ask("table_editor_exec", {
+            idTable: res._id_table,
+            method: "enable",
+          });
+          const s_4 = await mapx.ask("table_editor_exec", {
+            idTable: res._id_table,
+            method: "state",
+          });
+          if (s_4.disabled) {
+            return false;
+          }
+          return true
+        },
+      },
+      {
         name: "Editor : add / remove column",
         test: async (res) => {
           res._column_add = "_mx_test_column";

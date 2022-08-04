@@ -34,7 +34,7 @@ const defaults = {
   id_table: null,
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
-  id_columns_reserved: ["gid", "_mx_valid"],
+  id_columns_reserved: ["gid", "_mx_valid", "geom"],
   max_changes: 1e4,
   max_changes_warning: 1e3,
   min_columns: 3,
@@ -71,20 +71,30 @@ export class EditTableSessionClient {
     et._perf = {};
   }
 
+  /**
+   * Instance id
+   */
   get id() {
     return this._id;
   }
 
+  /**
+   * Get generic state
+   */
   get state() {
     const et = this;
     return {
-      initialized: et._initialized,
-      destroyed: et._destroyed,
-      built: et._built,
-      locked: et._locked,
+      disabled: !!et._disabled,
+      initialized: !!et._initialized,
+      destroyed: !!et._destroyed,
+      built: !!et._built,
+      locked: !!et._locked,
     };
   }
 
+  /**
+   * Async initialisation
+   */
   async init() {
     const et = this;
     window._et = et;
@@ -121,6 +131,9 @@ export class EditTableSessionClient {
     return true;
   }
 
+  /**
+   * Display a warning : editing will alter your data
+   */
   async warning() {
     const et = this;
     if (et._config.test_mode) {
@@ -138,6 +151,11 @@ export class EditTableSessionClient {
     }
   }
 
+  /**
+   * Start edtion or restart during init or reconnection
+   * @param {Object} opt Options
+   * @param {Boolean} opt.send_table Resend full table
+   */
   start(opt) {
     const et = this;
     const r = et._config.routes;
@@ -146,6 +164,9 @@ export class EditTableSessionClient {
     et.emit(r.client_edit_start, opt);
   }
 
+  /**
+   * Destroy handler
+   */
   async destroy() {
     const et = this;
     try {
@@ -173,6 +194,9 @@ export class EditTableSessionClient {
     }
   }
 
+  /**
+   * Build UI
+   */
   async build() {
     const et = this;
 
@@ -300,7 +324,7 @@ export class EditTableSessionClient {
   }
 
   /**
-   * Update helpers
+   * Groupped button/count update
    */
   updateButtons() {
     const et = this;
@@ -309,12 +333,19 @@ export class EditTableSessionClient {
     et.updateButtonsUndoRedo();
     et.updateButtonsAddRemoveColumn();
   }
+
+  /**
+   * Groupped column add/remove update
+   */
   updateButtonsAddRemoveColumn() {
     const et = this;
     et.updateButtonRemoveColumn();
     et.updateButtonAddColumn();
   }
 
+  /**
+   * Update members state info
+   */
   updateMembersStat() {
     const et = this;
     const members = getArrayDistinct(et._members);
@@ -344,11 +375,17 @@ export class EditTableSessionClient {
     et._el_users_stat.replaceChildren(elFrag);
   }
 
+  /**
+   * Set pending update count in save button
+   */
   updateUpdatesCounter() {
     const et = this;
     et._el_updates_counter.dataset.count = `${et._updates.length}`;
   }
 
+  /**
+   * Toggle undo/redo button depending on available redo/undo in the table
+   */
   updateButtonsUndoRedo() {
     const et = this;
     const cld = "disabled-alt";
@@ -365,6 +402,10 @@ export class EditTableSessionClient {
       et._el_button_undo.classList.add(cld);
     }
   }
+
+  /**
+   * Toggle remove column button depending on current columns number
+   */
   updateButtonRemoveColumn() {
     const et = this;
     const cld = "disabled-alt";
@@ -375,6 +416,10 @@ export class EditTableSessionClient {
       et._el_button_remove_column.classList.remove(cld);
     }
   }
+
+  /**
+   * Toggle add column button depending on current columns number
+   */
   updateButtonAddColumn() {
     const et = this;
     const cld = "disabled-alt";
@@ -385,6 +430,10 @@ export class EditTableSessionClient {
       et._el_button_add_column.classList.remove(cld);
     }
   }
+
+  /**
+   * Toggle save button depending on auto_save and updates number
+   */
   updateButtonSave() {
     const et = this;
     const hasAutoSave = et._auto_save;
@@ -396,6 +445,10 @@ export class EditTableSessionClient {
       et._el_button_save.classList.remove("disabled-alt");
     }
   }
+
+  /**
+   * Update _auto_save state, based on checkbox, trigger lock to others
+   */
   updateAutoSave() {
     const et = this;
     et._auto_save = et._el_checkbox_autosave.querySelector("input").checked;
@@ -405,6 +458,11 @@ export class EditTableSessionClient {
     }
     et.lockTableConcurrent(!et._auto_save);
   }
+
+  /**
+   * Send lock event to other concurent user
+   * @param {Boolean} lock Enable/disable lock for other. If empty, use _auto_save state
+   */
   lockTableConcurrent(lock) {
     const et = this;
     et._lock_table_concurrent = isNotEmpty(lock) ? lock : !et._auto_save;
@@ -414,6 +472,12 @@ export class EditTableSessionClient {
     };
     et.emitUpdatesState([update]);
   }
+
+  /**
+   * Handler of lock update message
+   * @param {Object} update Update object
+   * @param {Object} message Container message
+   */
   handlerUpdateLock(update, message) {
     const et = this;
     if (update.lock) {
@@ -424,6 +488,11 @@ export class EditTableSessionClient {
       et.unlock();
     }
   }
+
+  /**
+   * Update table layout : minimize buttons, table resize,
+   * e.g. after container change
+   */
   updateLayout() {
     const et = this;
     clearTimeout(et._update_to);
@@ -443,16 +512,41 @@ export class EditTableSessionClient {
     }, 200);
   }
 
-  isColumnBase(name) {
+  /**
+   * Column name validation : columns used internally
+   * @param {String} name
+   * @return {Boolean}
+   */
+  isColumnReserved(name) {
     const et = this;
     return et._config.id_columns_reserved.includes(name);
   }
 
+  /**
+   * Column name validation : column not editable
+   * @param {String} name
+   * @return {Boolean}
+   */
   isReadOnly(name) {
     const et = this;
-    return et.isColumnBase(name) || !isSafeName(name);
+    return et.isColumnReserved(name) || !isSafeName(name);
   }
 
+  /**
+   * Column name validation : check is name is valaid
+   * @param {String} name
+   * @return {Boolean}
+   */
+  isValidName(name) {
+    const et = this;
+    const isSafe = isSafeName(name);
+    const isNotReserved = !et.isColumnReserved(name);
+    return isSafe && isNotReserved;
+  }
+
+  /**
+   * Display a dialog with illegal columns
+   */
   async columnNameIssueDialog() {
     const et = this;
     const columnsIssues = [];
@@ -593,6 +687,9 @@ export class EditTableSessionClient {
     await et.fire("table_ready");
   }
 
+  /**
+   * On server error, display a dialog
+   */
   async onServerError(error) {
     const et = this;
     try {
@@ -615,6 +712,9 @@ export class EditTableSessionClient {
     }
   }
 
+  /**
+   * Reset stored members info
+   */
   updateMembers(members) {
     const et = this;
     if (isEmpty(members)) {
@@ -626,6 +726,9 @@ export class EditTableSessionClient {
     et.updateMembersStat();
   }
 
+  /**
+   * Store info after joining a edition session
+   */
   onJoined(message) {
     const et = this;
     if (et._id_session) {
@@ -637,16 +740,27 @@ export class EditTableSessionClient {
     et.updateMembers(message.members);
   }
 
+  /*
+   * Handle when new memeber enter
+   * @param {Object} update message
+   */
   onNewMember(message) {
     const et = this;
     et.updateMembers(message.members);
   }
 
+  /*
+   * Handler when member exit
+   * @param {Object} update message
+   */
   onMemberExit(message) {
     const et = this;
     et.updateMembers(message.members);
   }
 
+  /**
+   * Handle dispatched message from others
+   */
   onDispatch(message) {
     const et = this;
     if (message.id_table !== et._id_table) {
@@ -686,6 +800,9 @@ export class EditTableSessionClient {
     }
   }
 
+  /**
+   * Handler update in batch : array of array
+   */
   handlerCellsBatchProcess(cells) {
     const et = this;
     try {
@@ -695,6 +812,11 @@ export class EditTableSessionClient {
     }
   }
 
+  /**
+   * Add an update to batch cells array
+   * @param {Object} update Update
+   * @param {Array} cells Batch cells, used by handlerCellsBatchProcess
+   */
   handlerUpdateCellsBatchAdd(update, cells) {
     // [[row, prop, value], ...].
     const et = this;
@@ -704,6 +826,11 @@ export class EditTableSessionClient {
     cells.push([idRow, update.column_name, update.value_new]);
   }
 
+  /**
+   * Update cell with a single value
+   * @param {Object} update Update
+   * @param {String} source Id of the source. e.g. id_source_dispatch
+   */
   updateCellValue(update, source) {
     const et = this;
     const gid = update[et._config.id_column_main];
@@ -717,27 +844,45 @@ export class EditTableSessionClient {
     );
   }
 
+  /**
+   * Add callback that will be used once after destroy event
+   * @param {Function} Callback
+   */
   addDestroyCb(cb) {
     const et = this;
     et._on_cb.add({ once: true, cb: cb, type: "destroy", resolve: null });
   }
 
+  /**
+   * Undo + update buttons
+   */
   undo() {
     const et = this;
     et._ht.undo();
     et.updateButtons();
   }
 
+  /**
+   * Redo + update buttons
+   */
   redo() {
     const et = this;
     et._ht.redo();
     et.updateButtons();
   }
 
+  /**
+   * Get a list of columns (handsontable style)
+   */
   getColumns() {
     return this._columns;
   }
 
+  /**
+   * Handle column removal from update
+   * @param {Object} update
+   * @param {String} source (edit, dispatch..)
+   */
   handlerUpdateColumnRemove(update, source) {
     const et = this;
 
@@ -775,9 +920,9 @@ export class EditTableSessionClient {
    */
   async removeColumnPrompt() {
     const et = this;
-    const idSkip = et._config.id_columns_reserved;
     const names = et._columns.reduce((a, c) => {
-      if (!idSkip.includes(c.data)) {
+      const isNotReserved = !et.isColumnReserved(c.data);
+      if (isNotReserved) {
         a.push(c.data);
       }
       return a;
@@ -805,7 +950,6 @@ export class EditTableSessionClient {
     /**
      * Ask the user for confirmation
      */
-
     const confirmRemove = await modalPrompt({
       title: elSpanTranslate("edit_table_modal_remove_column_confirm_title"),
       label: getDictTemplate("edit_table_modal_remove_column_confirm_text", {
@@ -843,7 +987,9 @@ export class EditTableSessionClient {
   }
 
   /**
-   * Add column
+   * Handle column addition from update
+   * @param {Object} update
+   * @param {String} source (edit, dispatch..)
    */
   handlerUpdateColumnAdd(update, source) {
     const et = this;
@@ -990,12 +1136,22 @@ export class EditTableSessionClient {
     return et.handlerUpdateColumnAdd(update);
   }
 
+  /**
+   * Get column javascript type
+   * @param {String} column name
+   * @return {String} type
+   */
   getColumnType(columnName) {
     const et = this;
     const type = et._columns.find((c) => c.data === columnName)?.type || "text";
     return typeConvert(type, "input", "javascript");
   }
 
+  /**
+   * Validate change
+   * @param {Array} change Handsontable change
+   * @return {Boolean} valid change
+   */
   validateChange(change) {
     /* change: [row, prop, oldValue, newValue] */
     const et = this;
@@ -1014,6 +1170,11 @@ export class EditTableSessionClient {
     return typeof change[3] === type;
   }
 
+  /**
+   * Display dialog when change is not valid
+   * @param {Array} change
+   * @return {Promise<String>} action continue / undo
+   */
   async confirmValidation(change) {
     const et = this;
 
@@ -1031,6 +1192,11 @@ export class EditTableSessionClient {
     }
   }
 
+  /**
+   * Display a dialog when large change is received
+   * @param {Array} changes Array of changes
+   * @return {Promise<Boolean>} continue
+   */
   async confirmLargeUpdate(changes) {
     const nChanges = changes.length;
     const proceedLargeChanges = await modalConfirm({
@@ -1050,6 +1216,11 @@ export class EditTableSessionClient {
     return proceedLargeChanges;
   }
 
+  /**
+   * Display a dialog when the the changes are too large
+   * @param {Array} changes Array of changes
+   * @return {Promise<Boolean>} continue
+   */
   async confirmChangesToBig(changes) {
     const et = this;
     if (et._config.test_mode) {
@@ -1066,8 +1237,11 @@ export class EditTableSessionClient {
       cancel: null,
     });
   }
+
   /*
    * Handle logic for after cell update
+   * @param {Array} changes Array of changes
+   * @param {String} source Change source : dispatch/undo/edit ...
    */
   async afterChange(changes, source) {
     const et = this;
@@ -1165,6 +1339,9 @@ export class EditTableSessionClient {
     et.perfEnd("afterChange");
   }
 
+  /**
+   * Save and dispatch changes
+   */
   save() {
     const et = this;
     et.perf("save");
@@ -1186,12 +1363,19 @@ export class EditTableSessionClient {
     et.perfEnd("save");
   }
 
+  /**
+   * Remove pending updates
+   */
   flushUpdates() {
     const et = this;
     //et._updates.length = 0;
     et._updates = [];
   }
 
+  /**
+   * Push update, or delete if equal original state
+   * @param {Object} change
+   */
   pushUpdateOrDelete(change) {
     const et = this;
     const idRow = et._ht.toPhysicalRow(change[0]);
@@ -1249,9 +1433,13 @@ export class EditTableSessionClient {
     }
   }
 
+  /**
+   * Disable the tool
+   */
   disable() {
     const et = this;
     const hot = et._ht;
+    et._disabled = true;
     et._el_overlay.classList.add("disabled");
     hot.updateSettings({
       readOnly: true,
@@ -1261,7 +1449,6 @@ export class EditTableSessionClient {
       manualRowResize: false,
       comments: false,
     });
-
     et._el_button_undo.classList.add("disabled");
     et._el_button_redo.classList.add("disabled");
     et._el_button_save.classList.add("disabled");
@@ -1269,9 +1456,13 @@ export class EditTableSessionClient {
     et._el_button_remove_column.classList.add("disabled");
   }
 
+  /**
+   * Enable the tool
+   */
   enable() {
     const et = this;
     const hot = et._ht;
+    et._disabled = false;
     et._el_overlay.classList.remove("disabled");
     hot.updateSettings({
       readOnly: false,
@@ -1288,6 +1479,9 @@ export class EditTableSessionClient {
     et._el_button_remove_column.classList.remove("disabled");
   }
 
+  /**
+   * Handle disconnection
+   */
   onDisconnect() {
     const et = this;
     et.disable();
@@ -1296,6 +1490,9 @@ export class EditTableSessionClient {
     et._socket.io.once("reconnect", et.onReconnect);
   }
 
+  /**
+   * Handle reconnection
+   */
   onReconnect() {
     const et = this;
     et._disconnected = false;
@@ -1306,11 +1503,17 @@ export class EditTableSessionClient {
     });
   }
 
+  /**
+   * Get locked state
+   */
   get locked() {
     const et = this;
     return !!et._locked;
   }
 
+  /**
+   * Lock the tool
+   */
   lock() {
     const et = this;
     et.disable();
@@ -1318,6 +1521,9 @@ export class EditTableSessionClient {
     et._el_overlay.classList.add("locked");
   }
 
+  /**
+   * Unlock the tool
+   */
   unlock() {
     const et = this;
     et._disconnected = false;
@@ -1326,6 +1532,11 @@ export class EditTableSessionClient {
     et.enable();
   }
 
+  /**
+   * ws emit wrapper : format message and emit
+   * @param {String} type Emit type
+   * @param {Object} message Message to emit, if not locked
+   */
   emit(type, message) {
     const et = this;
     const messageEmit = et.message_formater(message);
@@ -1335,6 +1546,11 @@ export class EditTableSessionClient {
     et._socket.emit(type, messageEmit);
   }
 
+  /**
+   * ws emit wrapper :  emit updates
+   * @param {Array} update Array of updates
+   * @param {Object} opt Options pased to emit message
+   */
   emitUpdates(updates, opt) {
     const et = this;
     const r = et._config.routes;
@@ -1347,15 +1563,31 @@ export class EditTableSessionClient {
     }
     et.emit(r.client_edit_updates, { updates, ...opt });
   }
+
+  /**
+   * emit update + write to db (if authentication match server side)
+   * @param {Array} updates
+   */
   emitUpdatesDb(updates) {
     const et = this;
     et.emitUpdates(updates, { write_db: true });
   }
+  /**
+   * emit state update (e.g. lock state change )
+   * @param {Array} updates
+   */
   emitUpdatesState(updates) {
     const et = this;
     et.emitUpdates(updates, { update_state: true });
   }
 
+  /**
+   * Format emit message : add/re add id for session, table, etc.
+   * @note : could be better handled by namespaces...
+   * @param {Object|String} data Message
+   * @param {Object} opt Options to merge
+   * @return {Object} Formated message
+   */
   message_formater(data, opt) {
     const et = this;
 
@@ -1380,13 +1612,11 @@ export class EditTableSessionClient {
     return m;
   }
 
-  isValidName(name) {
-    const et = this;
-    const isSafe = isSafeName(name);
-    const isNotReserved = !et._config.id_columns_reserved.includes(name);
-    return isSafe && isNotReserved;
-  }
-
+  /**
+   * Perf util: start. more tolerant than console.time
+   * @note -> transfer to its own module / use dedicated tool
+   * @param {String} label Label of the performance
+   */
   perf(label) {
     if (!defaults.log_perf) {
       return;
@@ -1396,6 +1626,10 @@ export class EditTableSessionClient {
     et._perf[label] = performance.now();
   }
 
+  /**
+   * Perf util: end .
+   * @param {String} label Label of the performance
+   */
   perfEnd(label) {
     if (!defaults.log_perf) {
       return;
@@ -1405,6 +1639,9 @@ export class EditTableSessionClient {
     console.log(`Perf ${label}: ${diff} [ms]`);
   }
 
+  /**
+   * Display a modal with the help from wiki
+   */
   showModalHelp() {
     return modalMarkdown({
       title: getDictItem("edit_table_modal_help"),
