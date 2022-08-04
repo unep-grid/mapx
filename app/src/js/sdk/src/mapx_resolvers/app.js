@@ -13,10 +13,7 @@ import { getProjectViewsCollections } from "../../../mx_helper_map_view_ui.js";
 import { MapxResolversStatic } from "./static.js";
 import { isStringRange, isString } from "../../../is_test/index.js";
 import { settings } from "./../../../settings";
-import {
-  editTable,
-  editTableGet,
-} from "./../../../source/edit_table_instances.js";
+import { getSourcesListEdit, editTable, editTableGet } from "./../../../source";
 
 /**
  * MapX resolvers available in app only
@@ -569,6 +566,13 @@ class MapxResolversApp extends MapxResolversStatic {
       return res || instance?.state;
     }
     throw new Error(`Table editor exec, invalid method: ${opt.method}`);
+  }
+  /**
+   * Get editable source list by current user
+   * @return {Array} Rows
+   */
+  get_sources_list_edit() {
+    return getSourcesListEdit();
   }
 
   /**

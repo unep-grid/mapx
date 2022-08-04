@@ -53,7 +53,6 @@ import { modalCloseAll } from "../../../mx_helper_modal.js";
 import { toggleSpotlight } from "../../../mx_helper_map_pixop.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
 import { theme } from "./../../../mx";
-import { getSourcesListEdit } from "./../../../source";
 
 /**
  * MapX resolvers available in static and app
@@ -297,15 +296,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_view_source_summary(opt) {
     return getViewSourceSummary(opt.idView, opt);
-  }
-
-  /**
-   * Get editable source list by current user
-   * @return {Array} Rows
-   */
-  get_sources_list_edit() {
-    return getSourcesListEdit();
-  }
+  } 
 
   /**
    * Get user ip info
