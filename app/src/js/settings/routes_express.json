@@ -16,6 +16,8 @@
   "getViewsListGlobalPublic": "/get/views/list/global/public",
   "getProjectsListByUser": "/get/projects/list/user",
   "getSourceDownload": "/get/source/",
+  "getFileFormatsList": "/get/file/formats/list",
+  "getEpsgCodesFull": "/get/epsg/codes/full",
   "uploadImage": "/upload/image/",
   "uploadVector": "/upload/vector/",
   "postEmail": "/send/mail",
