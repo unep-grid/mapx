@@ -1,36 +1,36 @@
-import {el} from '../../el/src/index.js';
-import {Box} from './box.js';
+import { Box } from "./box.js";
+import { el, elSpanTranslate as tt } from "../../el_mapx";
 
 class Toolbar extends Box {
   constructor(boxParent) {
     super(boxParent);
     const toolbar = this;
-    toolbar.title = 'toolbar';
+    toolbar.title = "toolbar";
     toolbar.init({
-      class: ['mc-toolbar'],
+      class: ["mc-toolbar"],
       boxContainer: boxParent,
       content: toolbar.buildEl(),
       draggable: false,
       resizable: false,
       onRemove: toolbar.onRemove.bind(toolbar),
-      onResize: toolbar.onResize.bind(toolbar)
+      onResize: toolbar.onResize.bind(toolbar),
     });
     toolbar.mc = boxParent;
 
     toolbar.lStore.addListener({
-      target : toolbar.el, 
-      type: 'change',
-      idGroup: 'toolbar_change',
+      target: toolbar.el,
+      type: "change",
+      idGroup: "toolbar_change",
       callback: changeCallback,
-      bind : toolbar
+      bind: toolbar,
     });
 
     toolbar.lStore.addListener({
-      target : toolbar.el, 
-      type: 'click',
-      idGroup: 'toolbar_click',
+      target: toolbar.el,
+      type: "click",
+      idGroup: "toolbar_click",
       callback: clickCallback,
-      bind : toolbar
+      bind: toolbar,
     });
   }
 
@@ -41,134 +41,125 @@ class Toolbar extends Box {
     const state = toolbar.state;
     const elUnitOptions = state.units.map((u) => {
       return state.unit === u
-        ? el('option', {selected: true}, u)
-        : el('option', u);
+        ? el("option", { selected: true }, u)
+        : el("option", u);
     });
     const elModesOptions = state.modes.map((u) => {
       return state.mode === u
-        ? el('option', {selected: true}, u)
-        : el('option', u);
+        ? el("option", { selected: true }, u)
+        : el("option", u);
     });
     const sizeStep = state.grid_snap_size * window.devicePixelRatio;
     return el(
-      'form',
+      "form",
       {
-        class: 'mc-toolbar-content'
+        class: "mc-toolbar-content",
       },
       [
         el(
-          'div',
+          "div",
           {
-            class: 'form-group'
+            class: "form-group",
           },
           [
-            el('label', 'Mode'),
+            el("label", tt("mc_label_mode")),
             el(
-              'select',
+              "select",
               {
-                class: 'form-control',
+                class: "form-control",
                 dataset: {
-                  mc_action: 'update_state',
-                  mc_event_type: 'change',
-                  mc_state_name: 'mode'
-                }
+                  mc_action: "update_state",
+                  mc_event_type: "change",
+                  mc_state_name: "mode",
+                },
               },
               elModesOptions
-            )
+            ),
           ],
-          el('span', {class: 'text-muted'}, 'Set map composer edition mode.')
+          el("span", { class: "text-muted" }, tt("mc_label_mode_desc"))
         ),
         el(
-          'div',
+          "div",
           {
-            class: 'form-group'
+            class: "form-group",
           },
           [
-            el('label', 'Unit'),
+            el("label", tt("mc_label_unit")),
             el(
-              'select',
+              "select",
               {
-                class: 'form-control',
+                class: "form-control",
                 dataset: {
-                  mc_action: 'update_state',
-                  mc_event_type: 'change',
-                  mc_state_name: 'unit'
-                }
+                  mc_action: "update_state",
+                  mc_event_type: "change",
+                  mc_state_name: "unit",
+                },
               },
               elUnitOptions
-            )
+            ),
           ],
-          el('span', {class: 'text-muted'}, 'Unit for all sizes.')
+          el("span", { class: "text-muted" }, tt("mc_label_unit_desc"))
         ),
         (toolbar.elFormDpi = el(
-          'div',
+          "div",
           {
-            class: 'form-group'
+            class: "form-group",
           },
-          el('label', 'Resolution (dpi)'),
-          (toolbar.elInputDpi = el('input', {
-            type: 'number',
-            class: 'form-control',
+          el("label", tt("mc_label_resolution")),
+          (toolbar.elInputDpi = el("input", {
+            type: "number",
+            class: "form-control",
             dataset: {
-              mc_action: 'update_state',
-              mc_event_type: 'change',
-              mc_state_name: 'dpi'
+              mc_action: "update_state",
+              mc_event_type: "change",
+              mc_state_name: "dpi",
             },
             step: 1,
             value: state.dpi,
             max: 300,
-            min: 72
+            min: 72,
           })),
-          el(
-            'span',
-            {class: 'text-muted'},
-            'Resolution for converting from pixels to millimeters and inches.'
-          )
+          el("span", { class: "text-muted" }, tt("mc_label_resolution_desc"))
         )),
-
         el(
-          'div',
+          "div",
           {
-            class: 'form-group'
+            class: "form-group",
           },
-          el('label', 'Width'),
-          (toolbar.elInputPageWidth = el('input', {
-            type: 'number',
-            class: 'form-control',
+          el("label", tt("mc_label_width")),
+          (toolbar.elInputPageWidth = el("input", {
+            type: "number",
+            class: "form-control",
             dataset: {
-              mc_action: 'update_state',
-              mc_event_type: 'change',
-              mc_state_name: 'page_width'
+              mc_action: "update_state",
+              mc_event_type: "change",
+              mc_state_name: "page_width",
             },
             step: sizeStep,
             max: sizeStep * 1000,
-            min: sizeStep
+            min: sizeStep,
           })),
-          el('span', {class: 'text-muted'}, 'Width of the page in current unit')
+          el("span", { class: "text-muted" }, tt("mc_label_width_desc"))
         ),
         el(
-          'div',
+          "div",
           {
-            class: 'form-group'
+            class: "form-group",
           },
-          el('label', 'Height'),
-          (toolbar.elInputPageHeight = el('input', {
-            type: 'number',
-            class: 'form-control',
+          el("label", tt("mc_label_height")),
+          (toolbar.elInputPageHeight = el("input", {
+            type: "number",
+            class: "form-control",
             dataset: {
-              mc_action: 'update_state',
-              mc_event_type: 'change',
-              mc_state_name: 'page_height'
+              mc_action: "update_state",
+              mc_event_type: "change",
+              mc_state_name: "page_height",
             },
             step: sizeStep,
             max: sizeStep * 1000,
-            min: sizeStep
+            min: sizeStep,
           })),
-          el(
-            'span',
-            {class: 'text-muted'},
-            'Height of the page in current unit'
-          )
+          el("span", { class: "text-muted" }, tt("mc_label_height_desc"))
         ),
         /** Scaling does not work with html2canvas, as the
         * css transform is not fully supported
@@ -194,48 +185,48 @@ class Toolbar extends Box {
         ),
         */
         el(
-          'div',
+          "div",
           {
-            class: 'form-group'
+            class: "form-group",
           },
-          el('label', 'Legend columns'),
-          el('input', {
-            type: 'number',
-            class: 'form-control',
+          el("label", tt("mc_label_legend_columns")),
+          el("input", {
+            type: "number",
+            class: "form-control",
             dataset: {
-              mc_action: 'update_state',
-              mc_event_type: 'change',
-              mc_state_name: 'legends_n_columns'
+              mc_action: "update_state",
+              mc_event_type: "change",
+              mc_state_name: "legends_n_columns",
             },
 
             value: 1,
             max: 10,
-            min: 1
+            min: 1,
           }),
           el(
-            'span',
-            {class: 'text-muted'},
-            'Set the number of column for legend items'
+            "span",
+            { class: "text-muted" },
+            tt("mc_label_legend_columns_desc")
           )
         ),
         el(
-          'button',
+          "button",
           {
-            type: 'button',
-            class: ['btn', 'btn-default'],
+            type: "button",
+            class: ["btn", "btn-default"],
             dataset: {
-              mc_action: 'export_page',
-              mc_event_type: 'click'
-            }
+              mc_action: "export_page",
+              mc_event_type: "click",
+            },
           },
-          'Export image'
-        )
+          tt("mc_button_export")
+        ),
       ]
     );
   }
 }
 
-export {Toolbar};
+export { Toolbar };
 
 function clickCallback(e) {
   const toolbar = this;
@@ -246,7 +237,7 @@ function clickCallback(e) {
   const elTarget = e.target;
   const d = elTarget.dataset;
   const idAction = d.mc_action;
-  if (idAction === 'export_page') {
+  if (idAction === "export_page") {
     mc.workspace.page.exportPng();
   }
 }
@@ -260,7 +251,7 @@ function changeCallback(e) {
   const elTarget = e.target;
   const d = elTarget.dataset;
   const idAction = d.mc_action;
-  if (idAction === 'update_state') {
+  if (idAction === "update_state") {
     const value = validateValue(e.target);
     const idState = d.mc_state_name;
     mc.setState(idState, value);
@@ -282,7 +273,7 @@ function validateValueNumber(el) {
 }
 
 function validateValueString(el) {
-  const value = el.value + '';
+  const value = el.value + "";
   el.value = value;
   return value;
 }
@@ -294,17 +285,17 @@ function validateValueCheckbox(el) {
 }
 
 function validateValue(el) {
-  if (el.type === 'checkbox') {
+  if (el.type === "checkbox") {
     return validateValueCheckbox(el);
   }
-  if (el.type === 'number') {
+  if (el.type === "number") {
     return validateValueNumber(el);
   }
-  if (el.type === 'select-one') {
+  if (el.type === "select-one") {
     return validateValueSelect(el);
   }
-  if (el.type === 'string') {
+  if (el.type === "string") {
     return validateValueString(el);
   }
-  return '';
+  return "";
 }

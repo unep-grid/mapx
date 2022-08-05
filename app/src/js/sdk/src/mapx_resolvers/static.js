@@ -25,7 +25,7 @@ import {
   viewDelete,
   getBoundsArray,
 } from "../../../map_helpers/index.js";
-
+import { mapComposerModalAuto } from "../../../map_composer";
 import {
   commonLocFitBbox,
   commonLocGetBbox,
@@ -48,7 +48,6 @@ import {
 import { getTableAttributeConfigFromView } from "../../../mx_helper_source_attribute_table.js";
 import { getApiUrl } from "../../../api_routes/index.js";
 import { viewsListAddSingle } from "../../../mx_helper_map_view_ui.js";
-import { mapComposerModalAuto } from "../../../mx_helper_map_composer.js";
 import { modalCloseAll } from "../../../mx_helper_modal.js";
 import { toggleSpotlight } from "../../../mx_helper_map_pixop.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
@@ -296,7 +295,7 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_view_source_summary(opt) {
     return getViewSourceSummary(opt.idView, opt);
-  } 
+  }
 
   /**
    * Get user ip info

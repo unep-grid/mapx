@@ -3391,8 +3391,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "de": "Opazität"
+    "en": "Transparency",
+    "de": "Transparenz"
   },
   {
     "id": "schema_style_rule",
@@ -6533,6 +6533,76 @@
     "id": "nc_button",
     "en": "Notifications",
     "de": "Benachrichtigungen "
+  },
+  {
+    "id": "mc_title",
+    "en": "Map Composer",
+    "de": "Kartenkomponist"
+  },
+  {
+    "id": "mc_label_mode",
+    "en": "Mode",
+    "de": "Modus"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Set map composer edition mode",
+    "de": "Einheit für alle Größen"
+  },
+  {
+    "id": "mc_label_unit",
+    "en": "Unit",
+    "de": "Einheit"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Unit for all sizes",
+    "de": ""
+  },
+  {
+    "id": "mc_label_resolution",
+    "en": "Resolution (dpi)",
+    "de": "Auflösung (dpi)"
+  },
+  {
+    "id": "mc_label_resolution_desc",
+    "en": "Resolution for converting between units",
+    "de": "Auflösung für die Umrechnung zwischen Einheiten"
+  },
+  {
+    "id": "mc_label_width",
+    "en": "Width",
+    "de": "Breite"
+  },
+  {
+    "id": "mc_label_width_desc",
+    "en": "Width of the page in current unit",
+    "de": "Breite der Seite in aktueller Einheit"
+  },
+  {
+    "id": "mc_label_height",
+    "en": "Height",
+    "de": "Höhe"
+  },
+  {
+    "id": "mc_label_height_desc",
+    "en": "Height of the page in current unit",
+    "de": "Höhe der Seite in der aktuellen Einheit"
+  },
+  {
+    "id": "mc_label_legend_columns",
+    "en": "Legend columns",
+    "de": "Legendenspalten"
+  },
+  {
+    "id": "mc_label_legend_columns_desc",
+    "en": "Set the number of columns for the legend",
+    "de": "Legen Sie die Anzahl der Spalten für die Legende fest"
+  },
+  {
+    "id": "mc_button_export",
+    "en": "Export png",
+    "de": "png exportieren"
   },
   {
     "id": "tool_mirror_enable",

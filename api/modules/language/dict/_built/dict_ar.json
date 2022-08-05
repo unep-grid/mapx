@@ -3391,8 +3391,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "ar": "العتامة"
+    "en": "Transparency",
+    "ar": "الشفافية"
   },
   {
     "id": "schema_style_rule",
@@ -6533,6 +6533,76 @@
     "id": "nc_button",
     "en": "Notifications",
     "ar": "إشعارات "
+  },
+  {
+    "id": "mc_title",
+    "en": "Map Composer",
+    "ar": "مؤلف الخرائط"
+  },
+  {
+    "id": "mc_label_mode",
+    "en": "Mode",
+    "ar": "الوضع"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Set map composer edition mode",
+    "ar": "وحدة لجميع المقاسات"
+  },
+  {
+    "id": "mc_label_unit",
+    "en": "Unit",
+    "ar": "وحدة"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Unit for all sizes",
+    "ar": ""
+  },
+  {
+    "id": "mc_label_resolution",
+    "en": "Resolution (dpi)",
+    "ar": "الدقة (نقطة في البوصة)"
+  },
+  {
+    "id": "mc_label_resolution_desc",
+    "en": "Resolution for converting between units",
+    "ar": "قرار للتحويل بين الوحدات"
+  },
+  {
+    "id": "mc_label_width",
+    "en": "Width",
+    "ar": "عرض"
+  },
+  {
+    "id": "mc_label_width_desc",
+    "en": "Width of the page in current unit",
+    "ar": "عرض الصفحة بالوحدة الحالية"
+  },
+  {
+    "id": "mc_label_height",
+    "en": "Height",
+    "ar": "ارتفاع"
+  },
+  {
+    "id": "mc_label_height_desc",
+    "en": "Height of the page in current unit",
+    "ar": "ارتفاع الصفحة بالوحدة الحالية"
+  },
+  {
+    "id": "mc_label_legend_columns",
+    "en": "Legend columns",
+    "ar": "أعمدة وسيلة الإيضاح"
+  },
+  {
+    "id": "mc_label_legend_columns_desc",
+    "en": "Set the number of columns for the legend",
+    "ar": "عيّن عدد أعمدة وسيلة الإيضاح"
+  },
+  {
+    "id": "mc_button_export",
+    "en": "Export png",
+    "ar": "تصدير png"
   },
   {
     "id": "tool_mirror_enable",

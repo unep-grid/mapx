@@ -3391,8 +3391,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "fa": "کدورت"
+    "en": "Transparency",
+    "fa": "شفافیت"
   },
   {
     "id": "schema_style_rule",
@@ -6533,6 +6533,76 @@
     "id": "nc_button",
     "en": "Notifications",
     "fa": "اطلاعیه "
+  },
+  {
+    "id": "mc_title",
+    "en": "Map Composer",
+    "fa": "Map Composer"
+  },
+  {
+    "id": "mc_label_mode",
+    "en": "Mode",
+    "fa": "حالت"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Set map composer edition mode",
+    "fa": "واحد برای همه سایزها"
+  },
+  {
+    "id": "mc_label_unit",
+    "en": "Unit",
+    "fa": "واحد"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Unit for all sizes",
+    "fa": ""
+  },
+  {
+    "id": "mc_label_resolution",
+    "en": "Resolution (dpi)",
+    "fa": "وضوح (dpi)"
+  },
+  {
+    "id": "mc_label_resolution_desc",
+    "en": "Resolution for converting between units",
+    "fa": "وضوح برای تبدیل بین واحدها"
+  },
+  {
+    "id": "mc_label_width",
+    "en": "Width",
+    "fa": "عرض"
+  },
+  {
+    "id": "mc_label_width_desc",
+    "en": "Width of the page in current unit",
+    "fa": "عرض صفحه در واحد فعلی"
+  },
+  {
+    "id": "mc_label_height",
+    "en": "Height",
+    "fa": "ارتفاع"
+  },
+  {
+    "id": "mc_label_height_desc",
+    "en": "Height of the page in current unit",
+    "fa": "ارتفاع صفحه در واحد فعلی"
+  },
+  {
+    "id": "mc_label_legend_columns",
+    "en": "Legend columns",
+    "fa": "ستون های افسانه"
+  },
+  {
+    "id": "mc_label_legend_columns_desc",
+    "en": "Set the number of columns for the legend",
+    "fa": "تعداد ستون ها را برای افسانه تنظیم کنید"
+  },
+  {
+    "id": "mc_button_export",
+    "en": "Export png",
+    "fa": "صادرات png"
   },
   {
     "id": "tool_mirror_enable",

@@ -3391,8 +3391,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "ru": "Непрозрачность"
+    "en": "Transparency",
+    "ru": "Прозрачность"
   },
   {
     "id": "schema_style_rule",
@@ -6533,6 +6533,76 @@
     "id": "nc_button",
     "en": "Notifications",
     "ru": "Уведомления "
+  },
+  {
+    "id": "mc_title",
+    "en": "Map Composer",
+    "ru": "Составитель карты"
+  },
+  {
+    "id": "mc_label_mode",
+    "en": "Mode",
+    "ru": "Режим"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Set map composer edition mode",
+    "ru": "Блок для всех размеров"
+  },
+  {
+    "id": "mc_label_unit",
+    "en": "Unit",
+    "ru": "Ед. изм"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Unit for all sizes",
+    "ru": ""
+  },
+  {
+    "id": "mc_label_resolution",
+    "en": "Resolution (dpi)",
+    "ru": "Разрешение (т/д)"
+  },
+  {
+    "id": "mc_label_resolution_desc",
+    "en": "Resolution for converting between units",
+    "ru": "Разрешение для преобразования между единицами измерения"
+  },
+  {
+    "id": "mc_label_width",
+    "en": "Width",
+    "ru": "Ширина"
+  },
+  {
+    "id": "mc_label_width_desc",
+    "en": "Width of the page in current unit",
+    "ru": "Ширина страницы в текущих единицах"
+  },
+  {
+    "id": "mc_label_height",
+    "en": "Height",
+    "ru": "Высота"
+  },
+  {
+    "id": "mc_label_height_desc",
+    "en": "Height of the page in current unit",
+    "ru": "Высота страницы в текущих единицах"
+  },
+  {
+    "id": "mc_label_legend_columns",
+    "en": "Legend columns",
+    "ru": "Столбцы легенды"
+  },
+  {
+    "id": "mc_label_legend_columns_desc",
+    "en": "Set the number of columns for the legend",
+    "ru": "Установите количество столбцов для легенды"
+  },
+  {
+    "id": "mc_button_export",
+    "en": "Export png",
+    "ru": "Экспорт png"
   },
   {
     "id": "tool_mirror_enable",

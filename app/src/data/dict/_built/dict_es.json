@@ -3391,8 +3391,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "es": "Opacidad"
+    "en": "Transparency",
+    "es": "Transparencia"
   },
   {
     "id": "schema_style_rule",
@@ -6533,6 +6533,76 @@
     "id": "nc_button",
     "en": "Notifications",
     "es": "Notificaciones "
+  },
+  {
+    "id": "mc_title",
+    "en": "Map Composer",
+    "es": "Creador de mapas"
+  },
+  {
+    "id": "mc_label_mode",
+    "en": "Mode",
+    "es": "Modo"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Set map composer edition mode",
+    "es": "Unidad para todos los tamaños"
+  },
+  {
+    "id": "mc_label_unit",
+    "en": "Unit",
+    "es": "Unidad"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Unit for all sizes",
+    "es": ""
+  },
+  {
+    "id": "mc_label_resolution",
+    "en": "Resolution (dpi)",
+    "es": "Resolución (ppp)"
+  },
+  {
+    "id": "mc_label_resolution_desc",
+    "en": "Resolution for converting between units",
+    "es": "Resolución para convertir entre unidades"
+  },
+  {
+    "id": "mc_label_width",
+    "en": "Width",
+    "es": "Ancho"
+  },
+  {
+    "id": "mc_label_width_desc",
+    "en": "Width of the page in current unit",
+    "es": "Ancho de la página en la unidad actual"
+  },
+  {
+    "id": "mc_label_height",
+    "en": "Height",
+    "es": "Altura"
+  },
+  {
+    "id": "mc_label_height_desc",
+    "en": "Height of the page in current unit",
+    "es": "Altura de la página en la unidad actual"
+  },
+  {
+    "id": "mc_label_legend_columns",
+    "en": "Legend columns",
+    "es": "Columnas de leyenda"
+  },
+  {
+    "id": "mc_label_legend_columns_desc",
+    "en": "Set the number of columns for the legend",
+    "es": "Establecer el número de columnas para la leyenda"
+  },
+  {
+    "id": "mc_button_export",
+    "en": "Export png",
+    "es": "Exportar png"
   },
   {
     "id": "tool_mirror_enable",

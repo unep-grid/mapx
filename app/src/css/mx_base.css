@@ -599,8 +599,8 @@ picture {
 .btn-icon > span {
   margin-right: 5px;
 }
-.btn-icon > span,
-.btn-icon > i {
+.btn > i,
+.btn > span {
   pointer-events: none;
 }
 

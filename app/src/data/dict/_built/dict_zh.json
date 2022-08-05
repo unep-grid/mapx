@@ -3391,8 +3391,8 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity",
-    "zh": "不透明度"
+    "en": "Transparency",
+    "zh": "透明度"
   },
   {
     "id": "schema_style_rule",
@@ -6533,6 +6533,76 @@
     "id": "nc_button",
     "en": "Notifications",
     "zh": "通知事项 "
+  },
+  {
+    "id": "mc_title",
+    "en": "Map Composer",
+    "zh": "地图编辑器"
+  },
+  {
+    "id": "mc_label_mode",
+    "en": "Mode",
+    "zh": "模式"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Set map composer edition mode",
+    "zh": "适用于所有尺寸的单元"
+  },
+  {
+    "id": "mc_label_unit",
+    "en": "Unit",
+    "zh": "单元"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Unit for all sizes",
+    "zh": ""
+  },
+  {
+    "id": "mc_label_resolution",
+    "en": "Resolution (dpi)",
+    "zh": "分辨率 (dpi)"
+  },
+  {
+    "id": "mc_label_resolution_desc",
+    "en": "Resolution for converting between units",
+    "zh": "单位之间转换的分辨率"
+  },
+  {
+    "id": "mc_label_width",
+    "en": "Width",
+    "zh": "宽度"
+  },
+  {
+    "id": "mc_label_width_desc",
+    "en": "Width of the page in current unit",
+    "zh": "当前单位的页面宽度"
+  },
+  {
+    "id": "mc_label_height",
+    "en": "Height",
+    "zh": "高度"
+  },
+  {
+    "id": "mc_label_height_desc",
+    "en": "Height of the page in current unit",
+    "zh": "当前单位的页面高度"
+  },
+  {
+    "id": "mc_label_legend_columns",
+    "en": "Legend columns",
+    "zh": "图例列"
+  },
+  {
+    "id": "mc_label_legend_columns_desc",
+    "en": "Set the number of columns for the legend",
+    "zh": "设置图例的列数"
+  },
+  {
+    "id": "mc_button_export",
+    "en": "Export png",
+    "zh": "导出png"
   },
   {
     "id": "tool_mirror_enable",

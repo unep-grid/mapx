@@ -1,6 +1,6 @@
 import { Button } from "./button.js";
 import screenfull from "screenfull";
-import { mapComposerModalAuto } from "./../mx_helper_map_composer.js";
+import { mapComposerModalAuto } from "./../map_composer";
 import {
   geolocateUser,
   getMap,

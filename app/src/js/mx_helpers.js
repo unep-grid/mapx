@@ -16,7 +16,6 @@ export * from './mx_helper_ui_color.js';
 export * from './mx_helper_draggable.js';
 export * from './mx_helper_map_dashboard.js';
 export * from './mx_helper_map_pixop.js';
-export * from './mx_helper_map_composer.js';
 export * from './mx_helper_map_dragdrop.js';
 export * from './mx_helper_map_view_badges.js';
 export * from './mx_helper_map_view_build.js';
@@ -43,6 +42,7 @@ export * from './mx_helper_issues.js';
 *  imported module available in mx.helpers:
 *  Access requested for widget code / cc code. 
 */
+export * from './map_composer/map_composer_instance.js';
 export * from './source/edit_table_instances.js';
 export * from './app_utils';
 export * from './mirror_util';

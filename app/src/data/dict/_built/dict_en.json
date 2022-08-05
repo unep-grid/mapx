@@ -2713,7 +2713,7 @@
   },
   {
     "id": "schema_style_opacity",
-    "en": "Opacity"
+    "en": "Transparency"
   },
   {
     "id": "schema_style_rule",
@@ -5226,6 +5226,62 @@
   {
     "id": "nc_button",
     "en": "Notifications"
+  },
+  {
+    "id": "mc_title",
+    "en": "Map Composer"
+  },
+  {
+    "id": "mc_label_mode",
+    "en": "Mode"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Set map composer edition mode"
+  },
+  {
+    "id": "mc_label_unit",
+    "en": "Unit"
+  },
+  {
+    "id": "mc_label_mode_desc",
+    "en": "Unit for all sizes"
+  },
+  {
+    "id": "mc_label_resolution",
+    "en": "Resolution (dpi)"
+  },
+  {
+    "id": "mc_label_resolution_desc",
+    "en": "Resolution for converting between units"
+  },
+  {
+    "id": "mc_label_width",
+    "en": "Width"
+  },
+  {
+    "id": "mc_label_width_desc",
+    "en": "Width of the page in current unit"
+  },
+  {
+    "id": "mc_label_height",
+    "en": "Height"
+  },
+  {
+    "id": "mc_label_height_desc",
+    "en": "Height of the page in current unit"
+  },
+  {
+    "id": "mc_label_legend_columns",
+    "en": "Legend columns"
+  },
+  {
+    "id": "mc_label_legend_columns_desc",
+    "en": "Set the number of columns for the legend"
+  },
+  {
+    "id": "mc_button_export",
+    "en": "Export png"
   },
   {
     "id": "tool_mirror_enable",

@@ -1,47 +1,317 @@
 [
-  {"name": "A10", "width": 26, "height": 37},
-  {"name": "A1", "width": 594, "height": 841},
-  {"name": "A0", "width": 841, "height": 1189},
-  {"name": "A3", "width": 297, "height": 420},
-  {"name": "A2", "width": 420, "height": 594},
-  {"name": "A5", "width": 148, "height": 210},
-  {"name": "A4", "width": 210, "height": 297},
-  {"name": "A7", "width": 74, "height": 105},
-  {"name": "A6", "width": 105, "height": 148},
-  {"name": "A9", "width": 37, "height": 52},
-  {"name": "A8", "width": 52, "height": 74},
-  {"name": "B10", "width": 44, "height": 31},
-  {"name": "B1+", "width": 1020, "height": 720},
-  {"name": "B4", "width": 353, "height": 250},
-  {"name": "B5", "width": 250, "height": 176},
-  {"name": "B6", "width": 176, "height": 125},
-  {"name": "B7", "width": 125, "height": 88},
-  {"name": "B0", "width": 1414, "height": 1000},
-  {"name": "B1", "width": 1000, "height": 707},
-  {"name": "B2", "width": 707, "height": 500},
-  {"name": "B3", "width": 500, "height": 353},
-  {"name": "B2+", "width": 720, "height": 520},
-  {"name": "B8", "width": 88, "height": 62},
-  {"name": "B9", "width": 62, "height": 44},
-  {"name": "C10", "width": 40, "height": 28},
-  {"name": "C9", "width": 57, "height": 40},
-  {"name": "C8", "width": 81, "height": 57},
-  {"name": "C3", "width": 458, "height": 324},
-  {"name": "C2", "width": 648, "height": 458},
-  {"name": "C1", "width": 917, "height": 648},
-  {"name": "C0", "width": 1297, "height": 917},
-  {"name": "C7", "width": 114, "height": 81},
-  {"name": "C6", "width": 162, "height": 114},
-  {"name": "C5", "width": 229, "height": 162},
-  {"name": "C4", "width": 324, "height": 229},
-  {"name": "Legal", "width": 216, "height": 356},
-  {"name": "Junior Legal", "width": 127, "height": 203},
-  {"name": "Letter", "width": 216, "height": 279},
-  {"name": "Tabloid", "width": 279, "height": 432},
-  {"name": "Ledger", "width": 432, "height": 279},
-  {"name": "ANSI C", "width": 432, "height": 559},
-  {"name": "ANSI A (letter)", "width": 216, "height": 279},
-  {"name": "ANSI B (ledger & tabloid)", "width": 279, "height": 432},
-  {"name": "ANSI E", "width": 864, "height": 1118},
-  {"name": "ANSI D", "width": 559, "height": 864}
+  {
+    "name": "A10",
+    "width": 26,
+    "height": 37,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "A1",
+    "width": 594,
+    "height": 841,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "A0",
+    "width": 841,
+    "height": 1189,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "A3",
+    "width": 297,
+    "height": 420,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "A2",
+    "width": 420,
+    "height": 594,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "A5",
+    "width": 148,
+    "height": 210,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "A4",
+    "width": 210,
+    "height": 297,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "A7",
+    "width": 74,
+    "height": 105,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "A6",
+    "width": 105,
+    "height": 148,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "A9",
+    "width": 37,
+    "height": 52,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "A8",
+    "width": 52,
+    "height": 74,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B10",
+    "width": 44,
+    "height": 31,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B1+",
+    "width": 1020,
+    "height": 720,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B4",
+    "width": 353,
+    "height": 250,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B5",
+    "width": 250,
+    "height": 176,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B6",
+    "width": 176,
+    "height": 125,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B7",
+    "width": 125,
+    "height": 88,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B0",
+    "width": 1414,
+    "height": 1000,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B1",
+    "width": 1000,
+    "height": 707,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B2",
+    "width": 707,
+    "height": 500,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B3",
+    "width": 500,
+    "height": 353,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B2+",
+    "width": 720,
+    "height": 520,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B8",
+    "width": 88,
+    "height": 62,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "B9",
+    "width": 62,
+    "height": 44,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "C10",
+    "width": 40,
+    "height": 28,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "C9",
+    "width": 57,
+    "height": 40,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "C8",
+    "width": 81,
+    "height": 57,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "C3",
+    "width": 458,
+    "height": 324,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "C2",
+    "width": 648,
+    "height": 458,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "C1",
+    "width": 917,
+    "height": 648,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "C0",
+    "width": 1297,
+    "height": 917,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "C7",
+    "width": 114,
+    "height": 81,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "C6",
+    "width": 162,
+    "height": 114,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "C5",
+    "width": 229,
+    "height": 162,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "C4",
+    "width": 324,
+    "height": 229,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "Legal",
+    "width": 216,
+    "height": 356,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "Junior Legal",
+    "width": 127,
+    "height": 203,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "Letter",
+    "width": 216,
+    "height": 279,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "Tabloid",
+    "width": 279,
+    "height": 432,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "Ledger",
+    "width": 432,
+    "height": 279,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "ANSI C",
+    "width": 432,
+    "height": 559,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "ANSI A (letter)",
+    "width": 216,
+    "height": 279,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "ANSI B (ledger & tabloid)",
+    "width": 279,
+    "height": 432,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "ANSI E",
+    "width": 864,
+    "height": 1118,
+    "unit": "mm",
+    "resolution": "300"
+  },
+  {
+    "name": "ANSI D",
+    "width": 559,
+    "height": 864,
+    "unit": "mm",
+    "resolution": "300"
+  }
 ]

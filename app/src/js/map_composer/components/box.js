@@ -57,7 +57,7 @@ class Box {
       callback: (e) => {
         if (e.currentTarget === box.el) {
           e.stopPropagation();
-          mc.setBoxLastFocus(box);
+          box.mc.setBoxLastFocus(box);
         }
       }
     });
@@ -241,6 +241,7 @@ class Box {
   }
 
   resetContentTransform(target) {
+    const box = this;
     const elTarget = target === 'content' ? box.elContent : box.el;
     box.transform[target] = {};
     elTarget.style.transform = '';
