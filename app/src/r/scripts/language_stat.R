@@ -1,5 +1,15 @@
 library(ggplot2)
 
+#
+# Graph R stat over time
+# Usage :
+#  - git : commit everything before starting
+#  - Working directory = project root
+#  - Launch R interactive session
+#  - source this file e.g. source('app/src/r/scripts/language_stat.R')
+# Using rscript produces a pdf at project root
+# - Rscript app/src/r/scripts/language_stat.R
+
 hasChanges <- length(system("git status -s", intern = T)) > 0
 if (hasChanges) {
   stop("Commit changes first")
