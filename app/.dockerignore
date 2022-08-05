@@ -5,6 +5,7 @@
 # Don't ignore that
 !settings/**
 !src/r/**
+!src/js/settings/**
 !src/data/**
 !src/templates/**
 !src/glyphs/dist/sprites/**
