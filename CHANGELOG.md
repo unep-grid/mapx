@@ -1,3 +1,16 @@
+  - [1.9.44-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.1) 
+    
+   - APP/API  
+        - Table editor:
+            - Added logic to handle editable sources list from api, removed R logic
+            - Faster source selection (ws, no R) + more info + line/column count + warning for issues 
+            - SDK bindings 
+            - Added tests for connection, locking, enabling, column add + remove, list source validation + more 
+            - Code cleaning
+   - Internal
+        - Removed config for geoserver 
+        - Added script to extract code stat (internal)
+
   - [1.9.44-beta](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta) 
     
     - APP/API 

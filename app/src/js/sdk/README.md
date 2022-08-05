@@ -172,6 +172,10 @@ MapX resolvers available in app only
     * [.move_view_before(opt)](#MapxResolversApp+move_view_before) ⇒ <code>Boolean</code>
     * [.move_view_up(opt)](#MapxResolversApp+move_view_up) ⇒ <code>Boolean</code>
     * [.move_view_down(opt)](#MapxResolversApp+move_view_down) ⇒ <code>Boolean</code>
+    * [.table_editor_open(opt)](#MapxResolversApp+table_editor_open) ⇒ <code>Object</code>
+    * [.table_editor_close()](#MapxResolversApp+table_editor_close)
+    * [.table_editor_exec(opt)](#MapxResolversApp+table_editor_exec) ⇒ <code>Any</code>
+    * [.get_sources_list_edit()](#MapxResolversApp+get_sources_list_edit) ⇒ <code>Array</code>
 
 <a name="MapxResolversApp+get_sdk_methods"></a>
 
@@ -533,6 +537,48 @@ Move view down
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>Sring</code> |  |
 
+<a name="MapxResolversApp+table_editor_open"></a>
+
+#### mapxResolversApp.table\_editor\_open(opt) ⇒ <code>Object</code>
+Show table editor ( require log in
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+**Returns**: <code>Object</code> - instance state  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idTable | <code>String</code> | Id of the table to edit |
+
+<a name="MapxResolversApp+table_editor_close"></a>
+
+#### mapxResolversApp.table\_editor\_close()
+Close table editor
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+<a name="MapxResolversApp+table_editor_exec"></a>
+
+#### mapxResolversApp.table\_editor\_exec(opt) ⇒ <code>Any</code>
+Apply any command on Table Editor
+Initially for testing purposes. May cause data loss.
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+**Returns**: <code>Any</code> - res Result. If null, instance state  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idTable | <code>String</code> | Id of the table to edit |
+| opt.method | <code>String</code> | Method name |
+| opt.value | <code>Object</code> | Method arguments |
+
+<a name="MapxResolversApp+get_sources_list_edit"></a>
+
+#### mapxResolversApp.get\_sources\_list\_edit() ⇒ <code>Array</code>
+Get editable source list by current user
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+**Returns**: <code>Array</code> - Rows  
 <a name="MapxResolversStatic"></a>
 
 ### MapxResolversStatic
