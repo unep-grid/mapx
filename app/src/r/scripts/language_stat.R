@@ -38,4 +38,5 @@ tryCatch(
 
 ggplot(tags, aes(date)) +
   geom_line(aes(y = n_server), colour = "red") +
-  geom_line(aes(y = n_helper)) 
+  geom_line(aes(y = n_helper)) +
+  theme_minimal() 
