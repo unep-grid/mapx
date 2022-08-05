@@ -1,6 +1,9 @@
 library(ggplot2)
 
-
+hasChanges <- length(system("git status -s", intern = T)) > 0
+if (hasChanges) {
+  stop("Commit changes first")
+}
 
 tagsStr <- system(
   'git tag --format "%(refname:short) %(creatordate:short)"',
@@ -39,4 +42,4 @@ tryCatch(
 ggplot(tags, aes(date)) +
   geom_line(aes(y = n_server), colour = "red") +
   geom_line(aes(y = n_helper)) +
-  theme_minimal() 
+  theme_minimal()
