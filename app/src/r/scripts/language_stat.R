@@ -1,5 +1,5 @@
 library(ggplot2)
-
+outfile <- "/tmp/language_stat.png"
 #
 # Graph R stat over time
 # Usage :
@@ -49,7 +49,20 @@ tryCatch(
   }
 )
 
-ggplot(tags, aes(date)) +
+#
+# Run this manually
+# TODO: produce a png and save it outside the project
+#
+g <- ggplot(tags, aes(date)) +
   geom_line(aes(y = n_server), colour = "red") +
   geom_line(aes(y = n_helper)) +
   theme_minimal()
+
+ggsave(
+  outfile,
+  plot = g,
+  width = 3000,
+  height = 1200,
+  units = "px"
+)
+print(sprintf("Plot saved at %s ", outfile))
