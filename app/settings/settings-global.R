@@ -184,28 +184,6 @@ config[["pg"]] <- list(
 )
 
 #
-# Geoserver
-#
-config[["geoserver"]] <- list(
-  url = "localhost:8080/geoserver",
-  urlPublic = "http://127.0.0.1:8080/geoserver",
-  user = "admin",
-  password = "1234",
-  dataDir = "/tmp/",
-  dataStore = list(
-    sep = "@"
-  ),
-  services = list(
-    names = c("WMS", "WFS", "WCS"),
-    groups = list(
-      "gs_ws_a" = c("WMS"),
-      "gs_ws_b" = c("WMS", "WFS", "WCS")
-    ),
-    groupSep = "@"
-  )
-)
-
-#
 # web resources : will be exposed to the client using shiny::addRessourcePath.
 # The key is used from the client as :
 # http://{location}:{port}/{prefix}/{resource.xxx}
@@ -231,8 +209,6 @@ config[["sprites_prefix"]] <- list(
 # Server and UI folder path
 #
 config[["srvPath"]] <- file.path("src", "r", "server")
-# config[["uiPath"]] = file.path("src","ui")
-# config[["uploadDirPath"]] = tempdir()
 
 #
 # Import dictionaries

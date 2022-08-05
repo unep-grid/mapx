@@ -34,11 +34,6 @@ usersCreateProject <- jsonlite::fromJSON(Sys.getenv("MAPX_PROJECT_CREATORS"))
 config[["project"]][["creation"]][["usersAllowed"]] <- usersCreateProject
 config[["root_mode"]][["members"]] <- usersRoot
 config[["map"]][["token"]] <- Sys.getenv("MAPX_MAPBOX_TOKEN")
-config[["geoserver"]][["url"]] <- Sys.getenv("GEOSERVER_URL")
-config[["geoserver"]][["urlPublic"]] <- Sys.getenv("GEOSERVER_URL_PUBLIC")
-config[["geoserver"]][["user"]] <- Sys.getenv("GEOSERVER_ADMIN_USERNAME")
-config[["geoserver"]][["password"]] <- Sys.getenv("GEOSERVER_ADMIN_PASSWORD")
-config[["geoserver"]][["dataDir"]] <- Sys.getenv("GEOSERVER_DATA_DIR")
 
 ## NOTE: see mx_helper_map_view_validation.js
 # config[["validation"]][["view"]][["rules"]] <- Sys.getenv("MAPX_VIEW_VALIDATION_RULES")
