@@ -6546,8 +6546,8 @@
   },
   {
     "id": "mc_label_mode_desc",
-    "en": "Set map composer edition mode",
-    "de": "Einheit für alle Größen"
+    "en": "Set edition mode",
+    "de": "Bearbeitungsmodus einstellen"
   },
   {
     "id": "mc_label_unit",
@@ -6555,9 +6555,9 @@
     "de": "Einheit"
   },
   {
-    "id": "mc_label_mode_desc",
+    "id": "mc_label_unit_desc",
     "en": "Unit for all sizes",
-    "de": ""
+    "de": "Einheit für alle Größen"
   },
   {
     "id": "mc_label_resolution",
@@ -6601,8 +6601,158 @@
   },
   {
     "id": "mc_button_export",
-    "en": "Export png",
-    "de": "png exportieren"
+    "en": "Export",
+    "de": "Export"
+  },
+  {
+    "id": "mc_button_export_desc",
+    "en": "Export page as an image in PNG format",
+    "de": "Seite als Bild im PNG-Format exportieren"
+  },
+  {
+    "id": "mc_button_toggle_landscape",
+    "en": "Portrait | Landscape",
+    "de": "Porträt | Landschaft"
+  },
+  {
+    "id": "mc_button_toggle_landscape_desc",
+    "en": "Inverse height and width",
+    "de": "Umgekehrte Höhe und Breite"
+  },
+  {
+    "id": "mc_label_predefined_dim",
+    "en": "Predefined dimensions",
+    "de": "Vordefinierte Abmessungen"
+  },
+  {
+    "id": "mc_label_predefined_dim_desc",
+    "en": "Choose a predefined dimension",
+    "de": "Wählen Sie eine vordefinierte Dimension aus"
+  },
+  {
+    "id": "mc_preset_group_default",
+    "en": "Default",
+    "de": "Standard"
+  },
+  {
+    "id": "mc_preset_group_social",
+    "en": "Web social platform images format",
+    "de": "Bildformat für soziale Webplattformen"
+  },
+  {
+    "id": "mc_preset_group_iso",
+    "en": "ISO paper sizes",
+    "de": "ISO-Papierformate"
+  },
+  {
+    "id": "mc_preset_group_iso_other",
+    "en": "ISO paper sizes - others",
+    "de": "ISO-Papierformate - andere"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - other",
+    "de": "ISO-Papierformate – Umschlag"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - envelope",
+    "de": ""
+  },
+  {
+    "id": "mc_preset_group_us",
+    "en": "US paper sizes",
+    "de": "US-Papierformate"
+  },
+  {
+    "id": "mc_preset_linkedin_shared_link",
+    "en": "LinkedIn - Shared Link",
+    "de": "LinkedIn – Geteilter Link"
+  },
+  {
+    "id": "mc_preset_linkedin_single_image",
+    "en": "LinkedIn - Single Image",
+    "de": "LinkedIn – Einzelbild"
+  },
+  {
+    "id": "mc_preset_linkedin_company_main",
+    "en": "LinkedIn - 'Company Life Tab', Main Image",
+    "de": "LinkedIn – Registerkarte „Unternehmensleben“, Hauptbild"
+  },
+  {
+    "id": "mc_preset_linkedin_company_photo",
+    "en": "LinkedIn - 'Company Life Tab', Photo",
+    "de": "LinkedIn – Registerkarte „Unternehmensleben“, Foto"
+  },
+  {
+    "id": "mc_preset_twitter_shared_link",
+    "en": "Twitter - Shared Link",
+    "de": "Twitter – Geteilter Link"
+  },
+  {
+    "id": "mc_preset_twitter_single_image",
+    "en": "Twitter - Single Image",
+    "de": "Twitter - Einzelbild"
+  },
+  {
+    "id": "mc_preset_twitter_two_images",
+    "en": "Twitter - Two Images",
+    "de": "Twitter - Zwei Bilder"
+  },
+  {
+    "id": "mc_preset_twitter_three_images",
+    "en": "Twitter - Three Images, 1st",
+    "de": "Twitter - Drei Bilder, 1"
+  },
+  {
+    "id": "mc_preset_twitter_three_images_2nd_3rd",
+    "en": "Twitter - Three Images, 2nd, 3rd",
+    "de": "Twitter - Drei Bilder, 2., 3"
+  },
+  {
+    "id": "mc_preset_twitter_four_images",
+    "en": "Twitter - Four images",
+    "de": "Twitter - Vier Bilder"
+  },
+  {
+    "id": "mc_preset_us_legal",
+    "en": "LEGAL",
+    "de": "RECHTLICH"
+  },
+  {
+    "id": "mc_preset_us_legal_junior",
+    "en": "LEGAL-JUNIOR",
+    "de": "LEGAL-JUNIOR"
+  },
+  {
+    "id": "mc_preset_us_ansi_a_letter",
+    "en": "ANSI A (letter)",
+    "de": "ANSI A (Buchstabe)"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_ledger",
+    "en": "ANSI B (ledger)",
+    "de": "ANSI B (Ledger)"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_tabloid",
+    "en": "ANSI B (tabloid)",
+    "de": "ANSI B (Tabloid)"
+  },
+  {
+    "id": "mc_preset_us_ansi_c",
+    "en": "ANSI C",
+    "de": "ANSI-C"
+  },
+  {
+    "id": "mc_preset_us_ansi_e",
+    "en": "ANSI E",
+    "de": "ANSI E"
+  },
+  {
+    "id": "mc_preset_us_ansi_d",
+    "en": "ANSI D",
+    "de": "ANSI D"
   },
   {
     "id": "tool_mirror_enable",

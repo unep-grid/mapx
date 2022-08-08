@@ -5,11 +5,17 @@ import { EditorToolbar } from "./components/text_editor.js";
 import { waitTimeoutAsync } from "../animation_frame/index.js";
 import { el } from "../el/src/index.js";
 import { unitConvert } from "./components/helpers";
+import preset from "./data/paper-sizes.json";
 import "./style/map_composer.less";
 const getDevicePixelRatio = Object.getOwnPropertyDescriptor(
   window,
   "devicePixelRatio"
 ).get;
+
+const presetFlat = Object.keys(preset).reduce((a, c) => {
+  a.push(...preset[c]);
+  return a;
+}, []);
 
 export class MapComposer {
   constructor(elContainer, state, options) {
@@ -112,9 +118,28 @@ export class MapComposer {
       case "legends_n_columns":
         mc.setLegendColumnCount(value);
         break;
+      case "predefined_dim":
+        await mc.setPredefinedDim(value);
+        break;
       default:
         console.warn(`setState not handled for ${id}`);
     }
+  }
+
+  async setPredefinedDim(id) {
+    const mc = this;
+    if (id === "--") {
+      return;
+    }
+    const item = presetFlat.find((p) => p.name === id);
+    if (!item) {
+      console.warn(`Preset ${id} not found`);
+      return;
+    }
+    await mc.setDpi(item.dpi);
+    await mc.setUnit(item.unit);
+    mc.setPageHeight(item.height);
+    mc.setPageWidth(item.width);
   }
 
   async setMode(mode) {
@@ -140,6 +165,14 @@ export class MapComposer {
     const mc = this;
     mc.setPageHeight();
     mc.setPageWidth();
+  }
+
+  inversePageHeightWidth() {
+    const mc = this;
+    const h = mc.state.page_height;
+    const w = mc.state.page_width;
+    mc.setPageWidth(h);
+    mc.setPageHeight(w);
   }
 
   setPageWidth(w) {
@@ -207,6 +240,8 @@ export class MapComposer {
     } else {
       mc.toolbar.elFormDpi.style.display = "block";
     }
+    mc.toolbar.elInputUnit.value = unit;
+
     mc.updatePageSizes();
     //mc.updatePageContentScale();
   }

@@ -6537,7 +6537,7 @@
   {
     "id": "mc_title",
     "en": "Map Composer",
-    "fr": "Compositeur de carte"
+    "fr": "Composeur de carte"
   },
   {
     "id": "mc_label_mode",
@@ -6546,8 +6546,8 @@
   },
   {
     "id": "mc_label_mode_desc",
-    "en": "Set map composer edition mode",
-    "fr": "Unité pour toutes les tailles"
+    "en": "Set edition mode",
+    "fr": "Définir le mode d'édition"
   },
   {
     "id": "mc_label_unit",
@@ -6555,9 +6555,9 @@
     "fr": "Unité"
   },
   {
-    "id": "mc_label_mode_desc",
+    "id": "mc_label_unit_desc",
     "en": "Unit for all sizes",
-    "fr": ""
+    "fr": "Unité pour toutes les tailles"
   },
   {
     "id": "mc_label_resolution",
@@ -6601,8 +6601,158 @@
   },
   {
     "id": "mc_button_export",
-    "en": "Export png",
-    "fr": "Exporter png"
+    "en": "Export",
+    "fr": "Exporter"
+  },
+  {
+    "id": "mc_button_export_desc",
+    "en": "Export page as an image in PNG format",
+    "fr": "Exporter la page en tant qu'image au format PNG"
+  },
+  {
+    "id": "mc_button_toggle_landscape",
+    "en": "Portrait | Landscape",
+    "fr": "Portrait | Paysage"
+  },
+  {
+    "id": "mc_button_toggle_landscape_desc",
+    "en": "Inverse height and width",
+    "fr": "Hauteur et largeur inversées"
+  },
+  {
+    "id": "mc_label_predefined_dim",
+    "en": "Predefined dimensions",
+    "fr": "Dimensions prédéfinies"
+  },
+  {
+    "id": "mc_label_predefined_dim_desc",
+    "en": "Choose a predefined dimension",
+    "fr": "Choisissez une dimension prédéfinie"
+  },
+  {
+    "id": "mc_preset_group_default",
+    "en": "Default",
+    "fr": "Défaut"
+  },
+  {
+    "id": "mc_preset_group_social",
+    "en": "Web social platform images format",
+    "fr": "Format des images de la plate-forme sociale Web"
+  },
+  {
+    "id": "mc_preset_group_iso",
+    "en": "ISO paper sizes",
+    "fr": "Formats de papier ISO"
+  },
+  {
+    "id": "mc_preset_group_iso_other",
+    "en": "ISO paper sizes - others",
+    "fr": "Formats de papier ISO - autres"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - other",
+    "fr": "Formats de papier ISO - enveloppe"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - envelope",
+    "fr": ""
+  },
+  {
+    "id": "mc_preset_group_us",
+    "en": "US paper sizes",
+    "fr": "Formats de papier américains"
+  },
+  {
+    "id": "mc_preset_linkedin_shared_link",
+    "en": "LinkedIn - Shared Link",
+    "fr": "LinkedIn - Lien partagé"
+  },
+  {
+    "id": "mc_preset_linkedin_single_image",
+    "en": "LinkedIn - Single Image",
+    "fr": "LinkedIn - Image unique"
+  },
+  {
+    "id": "mc_preset_linkedin_company_main",
+    "en": "LinkedIn - 'Company Life Tab', Main Image",
+    "fr": "LinkedIn - 'Onglet Vie de l'entreprise', image principale"
+  },
+  {
+    "id": "mc_preset_linkedin_company_photo",
+    "en": "LinkedIn - 'Company Life Tab', Photo",
+    "fr": "LinkedIn - 'Onglet Vie de l'entreprise', Photo"
+  },
+  {
+    "id": "mc_preset_twitter_shared_link",
+    "en": "Twitter - Shared Link",
+    "fr": "Twitter - Lien partagé"
+  },
+  {
+    "id": "mc_preset_twitter_single_image",
+    "en": "Twitter - Single Image",
+    "fr": "Twitter - Image unique"
+  },
+  {
+    "id": "mc_preset_twitter_two_images",
+    "en": "Twitter - Two Images",
+    "fr": "Twitter - Deux Images"
+  },
+  {
+    "id": "mc_preset_twitter_three_images",
+    "en": "Twitter - Three Images, 1st",
+    "fr": "Twitter - Trois images, 1ère"
+  },
+  {
+    "id": "mc_preset_twitter_three_images_2nd_3rd",
+    "en": "Twitter - Three Images, 2nd, 3rd",
+    "fr": "Twitter - Trois images, 2e, 3e"
+  },
+  {
+    "id": "mc_preset_twitter_four_images",
+    "en": "Twitter - Four images",
+    "fr": "Twitter - Quatre images"
+  },
+  {
+    "id": "mc_preset_us_legal",
+    "en": "LEGAL",
+    "fr": "JURIDIQUE"
+  },
+  {
+    "id": "mc_preset_us_legal_junior",
+    "en": "LEGAL-JUNIOR",
+    "fr": "JURIDIQUE-JUNIOR"
+  },
+  {
+    "id": "mc_preset_us_ansi_a_letter",
+    "en": "ANSI A (letter)",
+    "fr": "ANSI A (lettre)"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_ledger",
+    "en": "ANSI B (ledger)",
+    "fr": "ANSI B (grand livre)"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_tabloid",
+    "en": "ANSI B (tabloid)",
+    "fr": "ANSI B (tabloïd)"
+  },
+  {
+    "id": "mc_preset_us_ansi_c",
+    "en": "ANSI C",
+    "fr": "ANSI C"
+  },
+  {
+    "id": "mc_preset_us_ansi_e",
+    "en": "ANSI E",
+    "fr": "ANSI E"
+  },
+  {
+    "id": "mc_preset_us_ansi_d",
+    "en": "ANSI D",
+    "fr": "ANSI D"
   },
   {
     "id": "tool_mirror_enable",

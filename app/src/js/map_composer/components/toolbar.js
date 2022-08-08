@@ -1,21 +1,30 @@
 import { Box } from "./box.js";
 import { el, elSpanTranslate as tt } from "../../el_mapx";
+import { getDictItem } from "../../language";
+import presets from "./../data/paper-sizes.json";
 
 class Toolbar extends Box {
   constructor(boxParent) {
     super(boxParent);
     const toolbar = this;
+    toolbar.mc = boxParent;
+    toolbar.initToolbar();
+  }
+
+  onRemove() {}
+
+  initToolbar() {
+    const toolbar = this;
     toolbar.title = "toolbar";
     toolbar.init({
       class: ["mc-toolbar"],
-      boxContainer: boxParent,
+      boxContainer: toolbar.mc,
       content: toolbar.buildEl(),
       draggable: false,
       resizable: false,
       onRemove: toolbar.onRemove.bind(toolbar),
       onResize: toolbar.onResize.bind(toolbar),
     });
-    toolbar.mc = boxParent;
 
     toolbar.lStore.addListener({
       target: toolbar.el,
@@ -32,13 +41,50 @@ class Toolbar extends Box {
       callback: clickCallback,
       bind: toolbar,
     });
+    /**
+     * add options : async => translation.
+     * TODO: Regenerate when language change
+     */
+    toolbar.buildPresetOptions().catch(console.error);
   }
 
-  onRemove() {}
+  /**
+   * Build preset options : paper sizes
+   */
+  async buildPresetOptions() {
+    const toolbar = this;
+    /**
+     * Generate preset options
+     */
+    const elOptions = document.createDocumentFragment();
+    elOptions.appendChild(el("optgroup", "--"));
 
+    for (const presetGroup of Object.keys(presets)) {
+      const preset = presets[presetGroup];
+      const elPresetGroup = el("optgroup", {
+        label: await getDictItem(presetGroup),
+      });
+      for (const item of preset) {
+        elPresetGroup.appendChild(
+          el("option", { value: item.name }, await getDictItem(item.name))
+        );
+      }
+      elOptions.appendChild(elPresetGroup);
+    }
+    toolbar.elSelectPreset.innerHTML = "";
+    toolbar.elSelectPreset.appendChild(elOptions);
+  }
+
+  /**
+   * Build toolbox form / ui
+   */
   buildEl() {
     const toolbar = this;
     const state = toolbar.state;
+
+    /**
+     *  Set default  for units and mode
+     */
     const elUnitOptions = state.units.map((u) => {
       return state.unit === u
         ? el("option", { selected: true }, u)
@@ -46,9 +92,13 @@ class Toolbar extends Box {
     });
     const elModesOptions = state.modes.map((u) => {
       return state.mode === u
-        ? el("option", { selected: true }, u)
-        : el("option", u);
+        ? el("option", { selected: true, value: u }, u)
+        : el("option", { value: u }, u);
     });
+
+    /**
+     * Set snap size
+     */
     const sizeStep = state.grid_snap_size * window.devicePixelRatio;
     return el(
       "form",
@@ -62,21 +112,48 @@ class Toolbar extends Box {
             class: "form-group",
           },
           [
-            el("label", tt("mc_label_mode")),
-            el(
-              "select",
-              {
-                class: "form-control",
-                dataset: {
-                  mc_action: "update_state",
-                  mc_event_type: "change",
-                  mc_state_name: "mode",
-                },
+            el("label", tt("mc_label_predefined_dim")),
+            /*
+             * NOTE: generated later, as div/span with current
+             * translation system does not work in options
+             */
+            (toolbar.elSelectPreset = el("select", {
+              class: "form-control",
+              dataset: {
+                mc_action: "update_state",
+                mc_event_type: "change",
+                mc_state_name: "predefined_dim",
               },
-              elModesOptions
-            ),
+            })),
           ],
-          el("span", { class: "text-muted" }, tt("mc_label_mode_desc"))
+          el(
+            "span",
+            { class: "text-muted" },
+            tt("mc_label_predefined_dim_desc")
+          )
+        ),
+        el(
+          "div",
+          {
+            class: "form-group",
+          },
+          el(
+            "button",
+            {
+              type: "button",
+              class: ["btn", "btn-default"],
+              dataset: {
+                mc_action: "toggle_landscape",
+                mc_event_type: "click",
+              },
+            },
+            tt("mc_button_toggle_landscape")
+          ),
+          el(
+            "span",
+            { class: "text-muted" },
+            tt("mc_button_toggle_landscape_desc")
+          )
         ),
         el(
           "div",
@@ -85,7 +162,7 @@ class Toolbar extends Box {
           },
           [
             el("label", tt("mc_label_unit")),
-            el(
+            (toolbar.elInputUnit = el(
               "select",
               {
                 class: "form-control",
@@ -96,7 +173,7 @@ class Toolbar extends Box {
                 },
               },
               elUnitOptions
-            ),
+            )),
           ],
           el("span", { class: "text-muted" }, tt("mc_label_unit_desc"))
         ),
@@ -210,16 +287,45 @@ class Toolbar extends Box {
           )
         ),
         el(
-          "button",
+          "div",
           {
-            type: "button",
-            class: ["btn", "btn-default"],
-            dataset: {
-              mc_action: "export_page",
-              mc_event_type: "click",
-            },
+            class: "form-group",
           },
-          tt("mc_button_export")
+          [
+            el("label", tt("mc_label_mode")),
+            el(
+              "select",
+              {
+                class: "form-control",
+                dataset: {
+                  mc_action: "update_state",
+                  mc_event_type: "change",
+                  mc_state_name: "mode",
+                },
+              },
+              elModesOptions
+            ),
+          ],
+          el("span", { class: "text-muted" }, tt("mc_label_mode_desc"))
+        ),
+        el(
+          "div",
+          {
+            class: "form-group",
+          },
+          el(
+            "button",
+            {
+              type: "button",
+              class: ["btn", "btn-default"],
+              dataset: {
+                mc_action: "export_page",
+                mc_event_type: "click",
+              },
+            },
+            tt("mc_button_export")
+          ),
+          el("span", { class: "text-muted" }, tt("mc_button_export_desc"))
         ),
       ]
     );
@@ -237,8 +343,16 @@ function clickCallback(e) {
   const elTarget = e.target;
   const d = elTarget.dataset;
   const idAction = d.mc_action;
-  if (idAction === "export_page") {
-    mc.workspace.page.exportPng();
+
+  switch (idAction) {
+    case "export_page":
+      mc.workspace.page.exportPng();
+      break;
+    case "toggle_landscape":
+      mc.inversePageHeightWidth();
+      break;
+    default:
+      console.warn(`Click handler not found for ${idAction}`);
   }
 }
 

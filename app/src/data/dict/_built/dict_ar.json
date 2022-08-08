@@ -6546,8 +6546,8 @@
   },
   {
     "id": "mc_label_mode_desc",
-    "en": "Set map composer edition mode",
-    "ar": "وحدة لجميع المقاسات"
+    "en": "Set edition mode",
+    "ar": "ضبط وضع الإصدار"
   },
   {
     "id": "mc_label_unit",
@@ -6555,9 +6555,9 @@
     "ar": "وحدة"
   },
   {
-    "id": "mc_label_mode_desc",
+    "id": "mc_label_unit_desc",
     "en": "Unit for all sizes",
-    "ar": ""
+    "ar": "وحدة لجميع المقاسات"
   },
   {
     "id": "mc_label_resolution",
@@ -6601,8 +6601,158 @@
   },
   {
     "id": "mc_button_export",
-    "en": "Export png",
-    "ar": "تصدير png"
+    "en": "Export",
+    "ar": "يصدّر"
+  },
+  {
+    "id": "mc_button_export_desc",
+    "en": "Export page as an image in PNG format",
+    "ar": "تصدير الصفحة كصورة بتنسيق PNG"
+  },
+  {
+    "id": "mc_button_toggle_landscape",
+    "en": "Portrait | Landscape",
+    "ar": "عمودي | المناظر الطبيعيه"
+  },
+  {
+    "id": "mc_button_toggle_landscape_desc",
+    "en": "Inverse height and width",
+    "ar": "ارتفاع وعرض معكوس"
+  },
+  {
+    "id": "mc_label_predefined_dim",
+    "en": "Predefined dimensions",
+    "ar": "أبعاد محددة مسبقًا"
+  },
+  {
+    "id": "mc_label_predefined_dim_desc",
+    "en": "Choose a predefined dimension",
+    "ar": "اختر بُعدًا محددًا مسبقًا"
+  },
+  {
+    "id": "mc_preset_group_default",
+    "en": "Default",
+    "ar": "تقصير"
+  },
+  {
+    "id": "mc_preset_group_social",
+    "en": "Web social platform images format",
+    "ar": "تنسيق صور منصة الويب الاجتماعية"
+  },
+  {
+    "id": "mc_preset_group_iso",
+    "en": "ISO paper sizes",
+    "ar": "أحجام ورق ISO"
+  },
+  {
+    "id": "mc_preset_group_iso_other",
+    "en": "ISO paper sizes - others",
+    "ar": "أحجام ورق ISO - أخرى"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - other",
+    "ar": "مقاسات ورق ISO - مغلف"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - envelope",
+    "ar": ""
+  },
+  {
+    "id": "mc_preset_group_us",
+    "en": "US paper sizes",
+    "ar": "مقاسات الورق الأمريكية"
+  },
+  {
+    "id": "mc_preset_linkedin_shared_link",
+    "en": "LinkedIn - Shared Link",
+    "ar": "ينكدين - رابط مشترك"
+  },
+  {
+    "id": "mc_preset_linkedin_single_image",
+    "en": "LinkedIn - Single Image",
+    "ar": "ينكدين - صورة واحدة"
+  },
+  {
+    "id": "mc_preset_linkedin_company_main",
+    "en": "LinkedIn - 'Company Life Tab', Main Image",
+    "ar": "LinkedIn - علامة تبويب حياة الشركة ، الصورة الرئيسية"
+  },
+  {
+    "id": "mc_preset_linkedin_company_photo",
+    "en": "LinkedIn - 'Company Life Tab', Photo",
+    "ar": "ينكدين - \"Company Life Tab\" ، الصورة"
+  },
+  {
+    "id": "mc_preset_twitter_shared_link",
+    "en": "Twitter - Shared Link",
+    "ar": "تويتر - رابط مشترك"
+  },
+  {
+    "id": "mc_preset_twitter_single_image",
+    "en": "Twitter - Single Image",
+    "ar": "تويتر - صورة واحدة"
+  },
+  {
+    "id": "mc_preset_twitter_two_images",
+    "en": "Twitter - Two Images",
+    "ar": "تويتر - صورتان"
+  },
+  {
+    "id": "mc_preset_twitter_three_images",
+    "en": "Twitter - Three Images, 1st",
+    "ar": "تويتر - ثلاث صور ، 1"
+  },
+  {
+    "id": "mc_preset_twitter_three_images_2nd_3rd",
+    "en": "Twitter - Three Images, 2nd, 3rd",
+    "ar": "تويتر - ثلاث صور ، 2 ، 3"
+  },
+  {
+    "id": "mc_preset_twitter_four_images",
+    "en": "Twitter - Four images",
+    "ar": "تويتر - أربع صور"
+  },
+  {
+    "id": "mc_preset_us_legal",
+    "en": "LEGAL",
+    "ar": "قانوني"
+  },
+  {
+    "id": "mc_preset_us_legal_junior",
+    "en": "LEGAL-JUNIOR",
+    "ar": "LEGAL-JUNIOR"
+  },
+  {
+    "id": "mc_preset_us_ansi_a_letter",
+    "en": "ANSI A (letter)",
+    "ar": "ANSI A (رسالة)"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_ledger",
+    "en": "ANSI B (ledger)",
+    "ar": "ANSI B (دفتر الأستاذ)"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_tabloid",
+    "en": "ANSI B (tabloid)",
+    "ar": "ANSI B (التابلويد)"
+  },
+  {
+    "id": "mc_preset_us_ansi_c",
+    "en": "ANSI C",
+    "ar": "ANSI ج"
+  },
+  {
+    "id": "mc_preset_us_ansi_e",
+    "en": "ANSI E",
+    "ar": "ANSI E."
+  },
+  {
+    "id": "mc_preset_us_ansi_d",
+    "en": "ANSI D",
+    "ar": "ANSI د"
   },
   {
     "id": "tool_mirror_enable",

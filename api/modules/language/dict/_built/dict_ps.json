@@ -6546,8 +6546,8 @@
   },
   {
     "id": "mc_label_mode_desc",
-    "en": "Set map composer edition mode",
-    "ps": "د ټولو اندازو لپاره واحد"
+    "en": "Set edition mode",
+    "ps": "د نسخې حالت تنظیم کړئ"
   },
   {
     "id": "mc_label_unit",
@@ -6555,9 +6555,9 @@
     "ps": "واحد"
   },
   {
-    "id": "mc_label_mode_desc",
+    "id": "mc_label_unit_desc",
     "en": "Unit for all sizes",
-    "ps": ""
+    "ps": "د ټولو اندازو لپاره واحد"
   },
   {
     "id": "mc_label_resolution",
@@ -6601,8 +6601,158 @@
   },
   {
     "id": "mc_button_export",
-    "en": "Export png",
-    "ps": "png صادر کړئ"
+    "en": "Export",
+    "ps": "صادرول"
+  },
+  {
+    "id": "mc_button_export_desc",
+    "en": "Export page as an image in PNG format",
+    "ps": "د PNG بڼه کې د انځور په توګه صادرات پاڼه"
+  },
+  {
+    "id": "mc_button_toggle_landscape",
+    "en": "Portrait | Landscape",
+    "ps": "انځور | منظره"
+  },
+  {
+    "id": "mc_button_toggle_landscape_desc",
+    "en": "Inverse height and width",
+    "ps": "برعکس لوړوالی او عرض"
+  },
+  {
+    "id": "mc_label_predefined_dim",
+    "en": "Predefined dimensions",
+    "ps": "مخکې ټاکل شوي ابعاد"
+  },
+  {
+    "id": "mc_label_predefined_dim_desc",
+    "en": "Choose a predefined dimension",
+    "ps": "یو مخکینی ابعاد غوره کړئ"
+  },
+  {
+    "id": "mc_preset_group_default",
+    "en": "Default",
+    "ps": "ډیفالټ"
+  },
+  {
+    "id": "mc_preset_group_social",
+    "en": "Web social platform images format",
+    "ps": "د ویب ټولنیز پلیټ فارم انځورونو بڼه"
+  },
+  {
+    "id": "mc_preset_group_iso",
+    "en": "ISO paper sizes",
+    "ps": "د ISO کاغذ اندازه"
+  },
+  {
+    "id": "mc_preset_group_iso_other",
+    "en": "ISO paper sizes - others",
+    "ps": "د ISO کاغذ اندازه - نور"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - other",
+    "ps": "د ISO کاغذ اندازه - لفافه"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - envelope",
+    "ps": ""
+  },
+  {
+    "id": "mc_preset_group_us",
+    "en": "US paper sizes",
+    "ps": "د متحده ایالاتو د کاغذ اندازه"
+  },
+  {
+    "id": "mc_preset_linkedin_shared_link",
+    "en": "LinkedIn - Shared Link",
+    "ps": "LinkedIn - شریک شوی لینک"
+  },
+  {
+    "id": "mc_preset_linkedin_single_image",
+    "en": "LinkedIn - Single Image",
+    "ps": "LinkedIn - یو انځور"
+  },
+  {
+    "id": "mc_preset_linkedin_company_main",
+    "en": "LinkedIn - 'Company Life Tab', Main Image",
+    "ps": "LinkedIn - 'د شرکت ژوند ټب'، اصلي انځور"
+  },
+  {
+    "id": "mc_preset_linkedin_company_photo",
+    "en": "LinkedIn - 'Company Life Tab', Photo",
+    "ps": "LinkedIn - 'د شرکت ژوند ټب'، عکس"
+  },
+  {
+    "id": "mc_preset_twitter_shared_link",
+    "en": "Twitter - Shared Link",
+    "ps": "ټویټر - شریک شوی لینک"
+  },
+  {
+    "id": "mc_preset_twitter_single_image",
+    "en": "Twitter - Single Image",
+    "ps": "ټویټر - یو انځور"
+  },
+  {
+    "id": "mc_preset_twitter_two_images",
+    "en": "Twitter - Two Images",
+    "ps": "ټویټر - دوه انځورونه"
+  },
+  {
+    "id": "mc_preset_twitter_three_images",
+    "en": "Twitter - Three Images, 1st",
+    "ps": "ټویټر - درې انځورونه، لومړی"
+  },
+  {
+    "id": "mc_preset_twitter_three_images_2nd_3rd",
+    "en": "Twitter - Three Images, 2nd, 3rd",
+    "ps": "ټویټر - درې انځورونه، دوهم، دریم"
+  },
+  {
+    "id": "mc_preset_twitter_four_images",
+    "en": "Twitter - Four images",
+    "ps": "ټویټر - څلور انځورونه"
+  },
+  {
+    "id": "mc_preset_us_legal",
+    "en": "LEGAL",
+    "ps": "قانوني"
+  },
+  {
+    "id": "mc_preset_us_legal_junior",
+    "en": "LEGAL-JUNIOR",
+    "ps": "قانوني-جونیور"
+  },
+  {
+    "id": "mc_preset_us_ansi_a_letter",
+    "en": "ANSI A (letter)",
+    "ps": "ANSI A (خط)"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_ledger",
+    "en": "ANSI B (ledger)",
+    "ps": "ANSI B (لیجر)"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_tabloid",
+    "en": "ANSI B (tabloid)",
+    "ps": "ANSI B (تابلوید)"
+  },
+  {
+    "id": "mc_preset_us_ansi_c",
+    "en": "ANSI C",
+    "ps": "ANSI سي"
+  },
+  {
+    "id": "mc_preset_us_ansi_e",
+    "en": "ANSI E",
+    "ps": "ANSI E"
+  },
+  {
+    "id": "mc_preset_us_ansi_d",
+    "en": "ANSI D",
+    "ps": "ANSI د"
   },
   {
     "id": "tool_mirror_enable",

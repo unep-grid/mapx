@@ -5237,14 +5237,14 @@
   },
   {
     "id": "mc_label_mode_desc",
-    "en": "Set map composer edition mode"
+    "en": "Set edition mode"
   },
   {
     "id": "mc_label_unit",
     "en": "Unit"
   },
   {
-    "id": "mc_label_mode_desc",
+    "id": "mc_label_unit_desc",
     "en": "Unit for all sizes"
   },
   {
@@ -5281,7 +5281,127 @@
   },
   {
     "id": "mc_button_export",
-    "en": "Export png"
+    "en": "Export"
+  },
+  {
+    "id": "mc_button_export_desc",
+    "en": "Export page as an image in PNG format"
+  },
+  {
+    "id": "mc_button_toggle_landscape",
+    "en": "Portrait | Landscape"
+  },
+  {
+    "id": "mc_button_toggle_landscape_desc",
+    "en": "Inverse height and width"
+  },
+  {
+    "id": "mc_label_predefined_dim",
+    "en": "Predefined dimensions"
+  },
+  {
+    "id": "mc_label_predefined_dim_desc",
+    "en": "Choose a predefined dimension"
+  },
+  {
+    "id": "mc_preset_group_default",
+    "en": "Default"
+  },
+  {
+    "id": "mc_preset_group_social",
+    "en": "Web social platform images format"
+  },
+  {
+    "id": "mc_preset_group_iso",
+    "en": "ISO paper sizes"
+  },
+  {
+    "id": "mc_preset_group_iso_other",
+    "en": "ISO paper sizes - others"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - other"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - envelope"
+  },
+  {
+    "id": "mc_preset_group_us",
+    "en": "US paper sizes"
+  },
+  {
+    "id": "mc_preset_linkedin_shared_link",
+    "en": "LinkedIn - Shared Link"
+  },
+  {
+    "id": "mc_preset_linkedin_single_image",
+    "en": "LinkedIn - Single Image"
+  },
+  {
+    "id": "mc_preset_linkedin_company_main",
+    "en": "LinkedIn - 'Company Life Tab', Main Image"
+  },
+  {
+    "id": "mc_preset_linkedin_company_photo",
+    "en": "LinkedIn - 'Company Life Tab', Photo"
+  },
+  {
+    "id": "mc_preset_twitter_shared_link",
+    "en": "Twitter - Shared Link"
+  },
+  {
+    "id": "mc_preset_twitter_single_image",
+    "en": "Twitter - Single Image"
+  },
+  {
+    "id": "mc_preset_twitter_two_images",
+    "en": "Twitter - Two Images"
+  },
+  {
+    "id": "mc_preset_twitter_three_images",
+    "en": "Twitter - Three Images, 1st"
+  },
+  {
+    "id": "mc_preset_twitter_three_images_2nd_3rd",
+    "en": "Twitter - Three Images, 2nd, 3rd"
+  },
+  {
+    "id": "mc_preset_twitter_four_images",
+    "en": "Twitter - Four images"
+  },
+  {
+    "id": "mc_preset_us_legal",
+    "en": "LEGAL"
+  },
+  {
+    "id": "mc_preset_us_legal_junior",
+    "en": "LEGAL-JUNIOR"
+  },
+  {
+    "id": "mc_preset_us_ansi_a_letter",
+    "en": "ANSI A (letter)"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_ledger",
+    "en": "ANSI B (ledger)"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_tabloid",
+    "en": "ANSI B (tabloid)"
+  },
+  {
+    "id": "mc_preset_us_ansi_c",
+    "en": "ANSI C"
+  },
+  {
+    "id": "mc_preset_us_ansi_e",
+    "en": "ANSI E"
+  },
+  {
+    "id": "mc_preset_us_ansi_d",
+    "en": "ANSI D"
   },
   {
     "id": "tool_mirror_enable",

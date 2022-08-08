@@ -6546,8 +6546,8 @@
   },
   {
     "id": "mc_label_mode_desc",
-    "en": "Set map composer edition mode",
-    "zh": "适用于所有尺寸的单元"
+    "en": "Set edition mode",
+    "zh": "设置编辑模式"
   },
   {
     "id": "mc_label_unit",
@@ -6555,9 +6555,9 @@
     "zh": "单元"
   },
   {
-    "id": "mc_label_mode_desc",
+    "id": "mc_label_unit_desc",
     "en": "Unit for all sizes",
-    "zh": ""
+    "zh": "适用于所有尺寸的单元"
   },
   {
     "id": "mc_label_resolution",
@@ -6601,8 +6601,158 @@
   },
   {
     "id": "mc_button_export",
-    "en": "Export png",
-    "zh": "导出png"
+    "en": "Export",
+    "zh": "出口"
+  },
+  {
+    "id": "mc_button_export_desc",
+    "en": "Export page as an image in PNG format",
+    "zh": "将页面导出为 PNG 格式的图像"
+  },
+  {
+    "id": "mc_button_toggle_landscape",
+    "en": "Portrait | Landscape",
+    "zh": "肖像 |景观"
+  },
+  {
+    "id": "mc_button_toggle_landscape_desc",
+    "en": "Inverse height and width",
+    "zh": "反向高度和宽度"
+  },
+  {
+    "id": "mc_label_predefined_dim",
+    "en": "Predefined dimensions",
+    "zh": "预定义尺寸"
+  },
+  {
+    "id": "mc_label_predefined_dim_desc",
+    "en": "Choose a predefined dimension",
+    "zh": "选择一个预定义的维度"
+  },
+  {
+    "id": "mc_preset_group_default",
+    "en": "Default",
+    "zh": "默认"
+  },
+  {
+    "id": "mc_preset_group_social",
+    "en": "Web social platform images format",
+    "zh": "网络社交平台图片格式"
+  },
+  {
+    "id": "mc_preset_group_iso",
+    "en": "ISO paper sizes",
+    "zh": "ISO 纸张尺寸"
+  },
+  {
+    "id": "mc_preset_group_iso_other",
+    "en": "ISO paper sizes - others",
+    "zh": "ISO 纸张尺寸 - 其他"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - other",
+    "zh": "ISO 纸张尺寸 - 信封"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - envelope",
+    "zh": ""
+  },
+  {
+    "id": "mc_preset_group_us",
+    "en": "US paper sizes",
+    "zh": "美国纸张尺寸"
+  },
+  {
+    "id": "mc_preset_linkedin_shared_link",
+    "en": "LinkedIn - Shared Link",
+    "zh": "领英 - 共享链接"
+  },
+  {
+    "id": "mc_preset_linkedin_single_image",
+    "en": "LinkedIn - Single Image",
+    "zh": "LinkedIn - 单张图片"
+  },
+  {
+    "id": "mc_preset_linkedin_company_main",
+    "en": "LinkedIn - 'Company Life Tab', Main Image",
+    "zh": "领英 - “公司生活标签”，主图片"
+  },
+  {
+    "id": "mc_preset_linkedin_company_photo",
+    "en": "LinkedIn - 'Company Life Tab', Photo",
+    "zh": "LinkedIn - “公司生活标签”，照片"
+  },
+  {
+    "id": "mc_preset_twitter_shared_link",
+    "en": "Twitter - Shared Link",
+    "zh": "Twitter - 共享链接"
+  },
+  {
+    "id": "mc_preset_twitter_single_image",
+    "en": "Twitter - Single Image",
+    "zh": "Twitter - 单张图片"
+  },
+  {
+    "id": "mc_preset_twitter_two_images",
+    "en": "Twitter - Two Images",
+    "zh": "推特 - 两张图片"
+  },
+  {
+    "id": "mc_preset_twitter_three_images",
+    "en": "Twitter - Three Images, 1st",
+    "zh": "Twitter - 三张图片，第一张"
+  },
+  {
+    "id": "mc_preset_twitter_three_images_2nd_3rd",
+    "en": "Twitter - Three Images, 2nd, 3rd",
+    "zh": "Twitter - 三张图片，第二张，第三张"
+  },
+  {
+    "id": "mc_preset_twitter_four_images",
+    "en": "Twitter - Four images",
+    "zh": "Twitter - 四张图片"
+  },
+  {
+    "id": "mc_preset_us_legal",
+    "en": "LEGAL",
+    "zh": "合法的"
+  },
+  {
+    "id": "mc_preset_us_legal_junior",
+    "en": "LEGAL-JUNIOR",
+    "zh": "法律-初级"
+  },
+  {
+    "id": "mc_preset_us_ansi_a_letter",
+    "en": "ANSI A (letter)",
+    "zh": "ANSI A（字母）"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_ledger",
+    "en": "ANSI B (ledger)",
+    "zh": "ANSI B（分类帐）"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_tabloid",
+    "en": "ANSI B (tabloid)",
+    "zh": "ANSI B（小报）"
+  },
+  {
+    "id": "mc_preset_us_ansi_c",
+    "en": "ANSI C",
+    "zh": "ANSI C"
+  },
+  {
+    "id": "mc_preset_us_ansi_e",
+    "en": "ANSI E",
+    "zh": "ANSI E"
+  },
+  {
+    "id": "mc_preset_us_ansi_d",
+    "en": "ANSI D",
+    "zh": "ANSI D"
   },
   {
     "id": "tool_mirror_enable",

@@ -6546,8 +6546,8 @@
   },
   {
     "id": "mc_label_mode_desc",
-    "en": "Set map composer edition mode",
-    "fa": "واحد برای همه سایزها"
+    "en": "Set edition mode",
+    "fa": "حالت ویرایش را تنظیم کنید"
   },
   {
     "id": "mc_label_unit",
@@ -6555,9 +6555,9 @@
     "fa": "واحد"
   },
   {
-    "id": "mc_label_mode_desc",
+    "id": "mc_label_unit_desc",
     "en": "Unit for all sizes",
-    "fa": ""
+    "fa": "واحد برای تمام سایزها"
   },
   {
     "id": "mc_label_resolution",
@@ -6601,8 +6601,158 @@
   },
   {
     "id": "mc_button_export",
-    "en": "Export png",
-    "fa": "صادرات png"
+    "en": "Export",
+    "fa": "صادرات"
+  },
+  {
+    "id": "mc_button_export_desc",
+    "en": "Export page as an image in PNG format",
+    "fa": "صفحه را به عنوان تصویر در فرمت PNG صادر کنید"
+  },
+  {
+    "id": "mc_button_toggle_landscape",
+    "en": "Portrait | Landscape",
+    "fa": "پرتره | چشم انداز"
+  },
+  {
+    "id": "mc_button_toggle_landscape_desc",
+    "en": "Inverse height and width",
+    "fa": "ارتفاع و عرض معکوس"
+  },
+  {
+    "id": "mc_label_predefined_dim",
+    "en": "Predefined dimensions",
+    "fa": "ابعاد از پیش تعریف شده"
+  },
+  {
+    "id": "mc_label_predefined_dim_desc",
+    "en": "Choose a predefined dimension",
+    "fa": "یک بعد از پیش تعریف شده را انتخاب کنید"
+  },
+  {
+    "id": "mc_preset_group_default",
+    "en": "Default",
+    "fa": "پیش فرض"
+  },
+  {
+    "id": "mc_preset_group_social",
+    "en": "Web social platform images format",
+    "fa": "قالب تصاویر پلت فرم اجتماعی وب"
+  },
+  {
+    "id": "mc_preset_group_iso",
+    "en": "ISO paper sizes",
+    "fa": "اندازه کاغذ ISO"
+  },
+  {
+    "id": "mc_preset_group_iso_other",
+    "en": "ISO paper sizes - others",
+    "fa": "اندازه کاغذ ISO - سایرین"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - other",
+    "fa": "اندازه کاغذ ISO - پاکت نامه"
+  },
+  {
+    "id": "mc_preset_group_iso_envelope",
+    "en": "ISO paper sizes - envelope",
+    "fa": ""
+  },
+  {
+    "id": "mc_preset_group_us",
+    "en": "US paper sizes",
+    "fa": "اندازه های کاغذ ایالات متحده"
+  },
+  {
+    "id": "mc_preset_linkedin_shared_link",
+    "en": "LinkedIn - Shared Link",
+    "fa": "لینکدین - پیوند مشترک"
+  },
+  {
+    "id": "mc_preset_linkedin_single_image",
+    "en": "LinkedIn - Single Image",
+    "fa": "لینکدین - تک تصویر"
+  },
+  {
+    "id": "mc_preset_linkedin_company_main",
+    "en": "LinkedIn - 'Company Life Tab', Main Image",
+    "fa": "لینکدین - \"برگه زندگی شرکت\"، تصویر اصلی"
+  },
+  {
+    "id": "mc_preset_linkedin_company_photo",
+    "en": "LinkedIn - 'Company Life Tab', Photo",
+    "fa": "لینکدین - \"برگه زندگی شرکت\"، عکس"
+  },
+  {
+    "id": "mc_preset_twitter_shared_link",
+    "en": "Twitter - Shared Link",
+    "fa": "توییتر - پیوند مشترک"
+  },
+  {
+    "id": "mc_preset_twitter_single_image",
+    "en": "Twitter - Single Image",
+    "fa": "توییتر - تک تصویر"
+  },
+  {
+    "id": "mc_preset_twitter_two_images",
+    "en": "Twitter - Two Images",
+    "fa": "توییتر - دو تصویر"
+  },
+  {
+    "id": "mc_preset_twitter_three_images",
+    "en": "Twitter - Three Images, 1st",
+    "fa": "توییتر - سه تصویر، اول"
+  },
+  {
+    "id": "mc_preset_twitter_three_images_2nd_3rd",
+    "en": "Twitter - Three Images, 2nd, 3rd",
+    "fa": "توییتر - سه تصویر، دوم، سوم"
+  },
+  {
+    "id": "mc_preset_twitter_four_images",
+    "en": "Twitter - Four images",
+    "fa": "توییتر - چهار تصویر"
+  },
+  {
+    "id": "mc_preset_us_legal",
+    "en": "LEGAL",
+    "fa": "مجاز"
+  },
+  {
+    "id": "mc_preset_us_legal_junior",
+    "en": "LEGAL-JUNIOR",
+    "fa": "حقوقی-جونیور"
+  },
+  {
+    "id": "mc_preset_us_ansi_a_letter",
+    "en": "ANSI A (letter)",
+    "fa": "ANSI A (حرف)"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_ledger",
+    "en": "ANSI B (ledger)",
+    "fa": "ANSI B (دفتر کل)"
+  },
+  {
+    "id": "mc_preset_us_ansi_b_tabloid",
+    "en": "ANSI B (tabloid)",
+    "fa": "ANSI B (تابلوید)"
+  },
+  {
+    "id": "mc_preset_us_ansi_c",
+    "en": "ANSI C",
+    "fa": "ANSI C"
+  },
+  {
+    "id": "mc_preset_us_ansi_e",
+    "en": "ANSI E",
+    "fa": "ANSI E"
+  },
+  {
+    "id": "mc_preset_us_ansi_d",
+    "en": "ANSI D",
+    "fa": "ANSI D"
   },
   {
     "id": "tool_mirror_enable",
