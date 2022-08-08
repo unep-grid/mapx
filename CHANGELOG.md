@@ -1,3 +1,10 @@
+  - [1.9.44-beta.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.2) 
+
+   - APP
+        - Map Composer 
+            - Translation 
+            - Paper sizes preset 
+
   - [1.9.44-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.1) 
     
    - APP/API  
