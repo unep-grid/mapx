@@ -7300,6 +7300,81 @@
     "ru": "Настройки "
   },
   {
+    "id": "schema_story_class_image-cover",
+    "en": "Image covering",
+    "ru": "Покрытие изображения"
+  },
+  {
+    "id": "schema_story_class_card",
+    "en": "Card",
+    "ru": "Открытка"
+  },
+  {
+    "id": "schema_story_class_blur",
+    "en": "Blurry background",
+    "ru": "Размытый фон"
+  },
+  {
+    "id": "schema_story_class_shadow",
+    "en": "Shadow",
+    "ru": "Тень"
+  },
+  {
+    "id": "schema_story_class_text-center",
+    "en": "Text align center",
+    "ru": "Выравнивание текста по центру"
+  },
+  {
+    "id": "schema_story_class_text-left",
+    "en": "Text align left",
+    "ru": "Выровнять текст по левому краю"
+  },
+  {
+    "id": "schema_story_class_text-right",
+    "en": "Text align right",
+    "ru": "Выровнять текст по правому краю"
+  },
+  {
+    "id": "schema_story_class_titles-center",
+    "en": "Title align centered",
+    "ru": "Выравнивание заголовка по центру"
+  },
+  {
+    "id": "schema_story_class_half-vertical-center",
+    "en": "Half vertical + centered",
+    "ru": "Половина вертикали + по центру"
+  },
+  {
+    "id": "schema_story_class_half-horizontal-center",
+    "en": "Half horizontal + centered",
+    "ru": "Полугоризонтальный + по центру"
+  },
+  {
+    "id": "schema_story_class_half-right",
+    "en": "Right half-column",
+    "ru": "Правая полуколонна"
+  },
+  {
+    "id": "schema_story_class_half-left",
+    "en": "Left half-column",
+    "ru": "Левая полуколонка"
+  },
+  {
+    "id": "schema_story_class_half-top",
+    "en": "Top half-row",
+    "ru": "Верхний полуряд"
+  },
+  {
+    "id": "schema_story_class_half-bottom",
+    "en": "Bottom half-row ",
+    "ru": "Нижний полуряд"
+  },
+  {
+    "id": "schema_story_class_cube-face",
+    "en": "Face of a cube",
+    "ru": "Лицо куба"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "ru": "Искать в публичных представлениях во всех проектах ..."

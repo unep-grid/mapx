@@ -7300,6 +7300,81 @@
     "bn": "সেটিংস "
   },
   {
+    "id": "schema_story_class_image-cover",
+    "en": "Image covering",
+    "bn": "ছবি আবরণ"
+  },
+  {
+    "id": "schema_story_class_card",
+    "en": "Card",
+    "bn": "কার্ড"
+  },
+  {
+    "id": "schema_story_class_blur",
+    "en": "Blurry background",
+    "bn": "ঝাপসা পটভূমি"
+  },
+  {
+    "id": "schema_story_class_shadow",
+    "en": "Shadow",
+    "bn": "ছায়া"
+  },
+  {
+    "id": "schema_story_class_text-center",
+    "en": "Text align center",
+    "bn": "টেক্সট সারিবদ্ধ কেন্দ্র"
+  },
+  {
+    "id": "schema_story_class_text-left",
+    "en": "Text align left",
+    "bn": "টেক্সট বাম সারিবদ্ধ"
+  },
+  {
+    "id": "schema_story_class_text-right",
+    "en": "Text align right",
+    "bn": "টেক্সট ডানদিকে সারিবদ্ধ করুন"
+  },
+  {
+    "id": "schema_story_class_titles-center",
+    "en": "Title align centered",
+    "bn": "শিরোনাম কেন্দ্রিক সারিবদ্ধ"
+  },
+  {
+    "id": "schema_story_class_half-vertical-center",
+    "en": "Half vertical + centered",
+    "bn": "অর্ধেক উল্লম্ব + কেন্দ্রীভূত"
+  },
+  {
+    "id": "schema_story_class_half-horizontal-center",
+    "en": "Half horizontal + centered",
+    "bn": "অর্ধেক অনুভূমিক + কেন্দ্রীভূত"
+  },
+  {
+    "id": "schema_story_class_half-right",
+    "en": "Right half-column",
+    "bn": "ডান অর্ধ-কলাম"
+  },
+  {
+    "id": "schema_story_class_half-left",
+    "en": "Left half-column",
+    "bn": "বাম অর্ধ-কলাম"
+  },
+  {
+    "id": "schema_story_class_half-top",
+    "en": "Top half-row",
+    "bn": "উপরের অর্ধ-সারি"
+  },
+  {
+    "id": "schema_story_class_half-bottom",
+    "en": "Bottom half-row ",
+    "bn": "নীচের অর্ধ-সারি"
+  },
+  {
+    "id": "schema_story_class_cube-face",
+    "en": "Face of a cube",
+    "bn": "একটি ঘনক মুখ"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "bn": "সমস্ত প্রকল্পে সর্বজনীন দর্শন অনুসন্ধান করুন ..."

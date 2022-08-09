@@ -7300,6 +7300,81 @@
     "de": "die Einstellungen "
   },
   {
+    "id": "schema_story_class_image-cover",
+    "en": "Image covering",
+    "de": "Bildabdeckung"
+  },
+  {
+    "id": "schema_story_class_card",
+    "en": "Card",
+    "de": "Karte"
+  },
+  {
+    "id": "schema_story_class_blur",
+    "en": "Blurry background",
+    "de": "Verschwommener Hintergrund"
+  },
+  {
+    "id": "schema_story_class_shadow",
+    "en": "Shadow",
+    "de": "Schatten"
+  },
+  {
+    "id": "schema_story_class_text-center",
+    "en": "Text align center",
+    "de": "Text zentriert ausrichten"
+  },
+  {
+    "id": "schema_story_class_text-left",
+    "en": "Text align left",
+    "de": "Text linksbündig ausrichten"
+  },
+  {
+    "id": "schema_story_class_text-right",
+    "en": "Text align right",
+    "de": "Text rechts ausrichten"
+  },
+  {
+    "id": "schema_story_class_titles-center",
+    "en": "Title align centered",
+    "de": "Titel zentriert ausrichten"
+  },
+  {
+    "id": "schema_story_class_half-vertical-center",
+    "en": "Half vertical + centered",
+    "de": "Halb senkrecht + zentriert"
+  },
+  {
+    "id": "schema_story_class_half-horizontal-center",
+    "en": "Half horizontal + centered",
+    "de": "Halb horizontal + zentriert"
+  },
+  {
+    "id": "schema_story_class_half-right",
+    "en": "Right half-column",
+    "de": "Rechte Halbspalte"
+  },
+  {
+    "id": "schema_story_class_half-left",
+    "en": "Left half-column",
+    "de": "Linke Halbspalte"
+  },
+  {
+    "id": "schema_story_class_half-top",
+    "en": "Top half-row",
+    "de": "Obere Halbreihe"
+  },
+  {
+    "id": "schema_story_class_half-bottom",
+    "en": "Bottom half-row ",
+    "de": "Untere Halbreihe"
+  },
+  {
+    "id": "schema_story_class_cube-face",
+    "en": "Face of a cube",
+    "de": "Gesicht eines Würfels"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "de": "Suche nach öffentlichen Ansichten in allen Projekten ..."

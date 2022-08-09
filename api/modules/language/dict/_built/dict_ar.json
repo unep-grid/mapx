@@ -7300,6 +7300,81 @@
     "ar": "إعدادات "
   },
   {
+    "id": "schema_story_class_image-cover",
+    "en": "Image covering",
+    "ar": "تغطية الصورة"
+  },
+  {
+    "id": "schema_story_class_card",
+    "en": "Card",
+    "ar": "بطاقة"
+  },
+  {
+    "id": "schema_story_class_blur",
+    "en": "Blurry background",
+    "ar": "خلفية ضبابية"
+  },
+  {
+    "id": "schema_story_class_shadow",
+    "en": "Shadow",
+    "ar": "ظل"
+  },
+  {
+    "id": "schema_story_class_text-center",
+    "en": "Text align center",
+    "ar": "مركز محاذاة النص"
+  },
+  {
+    "id": "schema_story_class_text-left",
+    "en": "Text align left",
+    "ar": "محاذاة النص إلى اليسار"
+  },
+  {
+    "id": "schema_story_class_text-right",
+    "en": "Text align right",
+    "ar": "محاذاة النص إلى اليمين"
+  },
+  {
+    "id": "schema_story_class_titles-center",
+    "en": "Title align centered",
+    "ar": "محاذاة العنوان للوسط"
+  },
+  {
+    "id": "schema_story_class_half-vertical-center",
+    "en": "Half vertical + centered",
+    "ar": "نصف عمودي + توسيط"
+  },
+  {
+    "id": "schema_story_class_half-horizontal-center",
+    "en": "Half horizontal + centered",
+    "ar": "نصف أفقي + توسيط"
+  },
+  {
+    "id": "schema_story_class_half-right",
+    "en": "Right half-column",
+    "ar": "نصف العمود الأيمن"
+  },
+  {
+    "id": "schema_story_class_half-left",
+    "en": "Left half-column",
+    "ar": "النصف الأيسر من العمود"
+  },
+  {
+    "id": "schema_story_class_half-top",
+    "en": "Top half-row",
+    "ar": "أعلى نصف صف"
+  },
+  {
+    "id": "schema_story_class_half-bottom",
+    "en": "Bottom half-row ",
+    "ar": "نصف الصف السفلي"
+  },
+  {
+    "id": "schema_story_class_cube-face",
+    "en": "Face of a cube",
+    "ar": "وجه مكعب"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "ar": "بحث في وجهات النظر العامة في جميع المشاريع ..."

@@ -7300,6 +7300,81 @@
     "fa": "تنظیمات "
   },
   {
+    "id": "schema_story_class_image-cover",
+    "en": "Image covering",
+    "fa": "پوشش تصویر"
+  },
+  {
+    "id": "schema_story_class_card",
+    "en": "Card",
+    "fa": "کارت"
+  },
+  {
+    "id": "schema_story_class_blur",
+    "en": "Blurry background",
+    "fa": "پس زمینه تار"
+  },
+  {
+    "id": "schema_story_class_shadow",
+    "en": "Shadow",
+    "fa": "سایه"
+  },
+  {
+    "id": "schema_story_class_text-center",
+    "en": "Text align center",
+    "fa": "تراز کردن متن در مرکز"
+  },
+  {
+    "id": "schema_story_class_text-left",
+    "en": "Text align left",
+    "fa": "تراز کردن متن به چپ"
+  },
+  {
+    "id": "schema_story_class_text-right",
+    "en": "Text align right",
+    "fa": "تراز کردن متن به سمت راست"
+  },
+  {
+    "id": "schema_story_class_titles-center",
+    "en": "Title align centered",
+    "fa": "تراز عنوان در مرکز"
+  },
+  {
+    "id": "schema_story_class_half-vertical-center",
+    "en": "Half vertical + centered",
+    "fa": "نیمه عمودی + وسط"
+  },
+  {
+    "id": "schema_story_class_half-horizontal-center",
+    "en": "Half horizontal + centered",
+    "fa": "نیمه افقی + وسط"
+  },
+  {
+    "id": "schema_story_class_half-right",
+    "en": "Right half-column",
+    "fa": "نیم ستون سمت راست"
+  },
+  {
+    "id": "schema_story_class_half-left",
+    "en": "Left half-column",
+    "fa": "نیم ستون سمت چپ"
+  },
+  {
+    "id": "schema_story_class_half-top",
+    "en": "Top half-row",
+    "fa": "نیم ردیف بالا"
+  },
+  {
+    "id": "schema_story_class_half-bottom",
+    "en": "Bottom half-row ",
+    "fa": "نیم ردیف پایین"
+  },
+  {
+    "id": "schema_story_class_cube-face",
+    "en": "Face of a cube",
+    "fa": "صورت یک مکعب"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "fa": "مشاهده بازدیدهای عمومی در همه پروژه ها ..."

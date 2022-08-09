@@ -7300,6 +7300,81 @@
     "es": "Parámetros"
   },
   {
+    "id": "schema_story_class_image-cover",
+    "en": "Image covering",
+    "es": "Revestimiento de imagen"
+  },
+  {
+    "id": "schema_story_class_card",
+    "en": "Card",
+    "es": "Tarjeta"
+  },
+  {
+    "id": "schema_story_class_blur",
+    "en": "Blurry background",
+    "es": "fondo borroso"
+  },
+  {
+    "id": "schema_story_class_shadow",
+    "en": "Shadow",
+    "es": "Sombra"
+  },
+  {
+    "id": "schema_story_class_text-center",
+    "en": "Text align center",
+    "es": "Centro de alineación de texto"
+  },
+  {
+    "id": "schema_story_class_text-left",
+    "en": "Text align left",
+    "es": "Texto alineado a la izquierda"
+  },
+  {
+    "id": "schema_story_class_text-right",
+    "en": "Text align right",
+    "es": "Texto alineado a la derecha"
+  },
+  {
+    "id": "schema_story_class_titles-center",
+    "en": "Title align centered",
+    "es": "Título alineado centrado"
+  },
+  {
+    "id": "schema_story_class_half-vertical-center",
+    "en": "Half vertical + centered",
+    "es": "Medio vertical + centrado"
+  },
+  {
+    "id": "schema_story_class_half-horizontal-center",
+    "en": "Half horizontal + centered",
+    "es": "Mitad horizontal + centrado"
+  },
+  {
+    "id": "schema_story_class_half-right",
+    "en": "Right half-column",
+    "es": "Media columna derecha"
+  },
+  {
+    "id": "schema_story_class_half-left",
+    "en": "Left half-column",
+    "es": "Media columna izquierda"
+  },
+  {
+    "id": "schema_story_class_half-top",
+    "en": "Top half-row",
+    "es": "Media fila superior"
+  },
+  {
+    "id": "schema_story_class_half-bottom",
+    "en": "Bottom half-row ",
+    "es": "Media hilera inferior"
+  },
+  {
+    "id": "schema_story_class_cube-face",
+    "en": "Face of a cube",
+    "es": "cara de un cubo"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "es": "Buscar vistas públicas en todos los proyectos ..."

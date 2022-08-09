@@ -7300,6 +7300,81 @@
     "ps": "امستنې "
   },
   {
+    "id": "schema_story_class_image-cover",
+    "en": "Image covering",
+    "ps": "د انځور پوښښ"
+  },
+  {
+    "id": "schema_story_class_card",
+    "en": "Card",
+    "ps": "کارت"
+  },
+  {
+    "id": "schema_story_class_blur",
+    "en": "Blurry background",
+    "ps": "خړ پس منظر"
+  },
+  {
+    "id": "schema_story_class_shadow",
+    "en": "Shadow",
+    "ps": "سيوري"
+  },
+  {
+    "id": "schema_story_class_text-center",
+    "en": "Text align center",
+    "ps": "د متن ترتیب مرکز"
+  },
+  {
+    "id": "schema_story_class_text-left",
+    "en": "Text align left",
+    "ps": "متن کیڼ اړخ ته سیده کړه"
+  },
+  {
+    "id": "schema_story_class_text-right",
+    "en": "Text align right",
+    "ps": "متن ښي اړخ ته ولیکئ"
+  },
+  {
+    "id": "schema_story_class_titles-center",
+    "en": "Title align centered",
+    "ps": "سرلیک په مرکز کې ترتیب شوی"
+  },
+  {
+    "id": "schema_story_class_half-vertical-center",
+    "en": "Half vertical + centered",
+    "ps": "نیم عمودی + متمرکز"
+  },
+  {
+    "id": "schema_story_class_half-horizontal-center",
+    "en": "Half horizontal + centered",
+    "ps": "نیم افقی + متمرکز"
+  },
+  {
+    "id": "schema_story_class_half-right",
+    "en": "Right half-column",
+    "ps": "ښي نیم کالم"
+  },
+  {
+    "id": "schema_story_class_half-left",
+    "en": "Left half-column",
+    "ps": "کیڼ نیم کالم"
+  },
+  {
+    "id": "schema_story_class_half-top",
+    "en": "Top half-row",
+    "ps": "پورته نیم قطار"
+  },
+  {
+    "id": "schema_story_class_half-bottom",
+    "en": "Bottom half-row ",
+    "ps": "لاندې نیم قطار"
+  },
+  {
+    "id": "schema_story_class_cube-face",
+    "en": "Face of a cube",
+    "ps": "د کیوب مخ"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "ps": "په ټولو پروژو کې د عامه نظرونو لټون وکړئ ..."

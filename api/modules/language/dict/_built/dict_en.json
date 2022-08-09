@@ -5840,6 +5840,66 @@
     "en": "Settings"
   },
   {
+    "id": "schema_story_class_image-cover",
+    "en": "Image covering"
+  },
+  {
+    "id": "schema_story_class_card",
+    "en": "Card"
+  },
+  {
+    "id": "schema_story_class_blur",
+    "en": "Blurry background"
+  },
+  {
+    "id": "schema_story_class_shadow",
+    "en": "Shadow"
+  },
+  {
+    "id": "schema_story_class_text-center",
+    "en": "Text align center"
+  },
+  {
+    "id": "schema_story_class_text-left",
+    "en": "Text align left"
+  },
+  {
+    "id": "schema_story_class_text-right",
+    "en": "Text align right"
+  },
+  {
+    "id": "schema_story_class_titles-center",
+    "en": "Title align centered"
+  },
+  {
+    "id": "schema_story_class_half-vertical-center",
+    "en": "Half vertical + centered"
+  },
+  {
+    "id": "schema_story_class_half-horizontal-center",
+    "en": "Half horizontal + centered"
+  },
+  {
+    "id": "schema_story_class_half-right",
+    "en": "Right half-column"
+  },
+  {
+    "id": "schema_story_class_half-left",
+    "en": "Left half-column"
+  },
+  {
+    "id": "schema_story_class_half-top",
+    "en": "Top half-row"
+  },
+  {
+    "id": "schema_story_class_half-bottom",
+    "en": "Bottom half-row "
+  },
+  {
+    "id": "schema_story_class_cube-face",
+    "en": "Face of a cube"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ..."
   },

@@ -295,6 +295,33 @@ mxSchemaViewStory <- function(view, views, language) {
   #
   # Slide classes
   #
+
+
+  classes <- c(
+    "image-cover",
+    "card",
+    "blur",
+    "shadow",
+    "text-center",
+    "text-left",
+    "text-right",
+    "titles-center",
+    "half-vertical-center",
+    "half-horizontal-center",
+    "half-right",
+    "half-left",
+    "half-top",
+    "half-bottom",
+    "cube-face"
+  )
+  classesLabel <- as.character(sapply(
+    classes,
+    function(c) {
+      tt(sprintf("schema_story_class_%s", c))
+    }
+  ))
+  browser()
+
   slideClasses <- list(
     type = "array",
     format = "table",
@@ -311,22 +338,9 @@ mxSchemaViewStory <- function(view, views, language) {
           title = tt("schema_story_slide_classes_name"),
           type = "string",
           default = "card",
-          enum = c(
-            "image-cover",
-            "card",
-            "blur",
-            "shadow",
-            "text-center",
-            "text-left",
-            "text-right",
-            "titles-center",
-            "half-vertical-center",
-            "half-horizontal-center",
-            "half-right",
-            "half-left",
-            "half-top",
-            "half-bottom",
-            "cube-face"
+          enum = classes,
+          options = list(
+            enum_titles = as.list(classesLabel)
           )
         )
       )

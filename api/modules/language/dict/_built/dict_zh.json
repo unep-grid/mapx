@@ -7300,6 +7300,81 @@
     "zh": "设置"
   },
   {
+    "id": "schema_story_class_image-cover",
+    "en": "Image covering",
+    "zh": "图像覆盖"
+  },
+  {
+    "id": "schema_story_class_card",
+    "en": "Card",
+    "zh": "卡片"
+  },
+  {
+    "id": "schema_story_class_blur",
+    "en": "Blurry background",
+    "zh": "模糊的背景"
+  },
+  {
+    "id": "schema_story_class_shadow",
+    "en": "Shadow",
+    "zh": "阴影"
+  },
+  {
+    "id": "schema_story_class_text-center",
+    "en": "Text align center",
+    "zh": "文本居中对齐"
+  },
+  {
+    "id": "schema_story_class_text-left",
+    "en": "Text align left",
+    "zh": "文字左对齐"
+  },
+  {
+    "id": "schema_story_class_text-right",
+    "en": "Text align right",
+    "zh": "文本右对齐"
+  },
+  {
+    "id": "schema_story_class_titles-center",
+    "en": "Title align centered",
+    "zh": "标题居中对齐"
+  },
+  {
+    "id": "schema_story_class_half-vertical-center",
+    "en": "Half vertical + centered",
+    "zh": "半垂直+居中"
+  },
+  {
+    "id": "schema_story_class_half-horizontal-center",
+    "en": "Half horizontal + centered",
+    "zh": "半水平+居中"
+  },
+  {
+    "id": "schema_story_class_half-right",
+    "en": "Right half-column",
+    "zh": "右半栏"
+  },
+  {
+    "id": "schema_story_class_half-left",
+    "en": "Left half-column",
+    "zh": "左半栏"
+  },
+  {
+    "id": "schema_story_class_half-top",
+    "en": "Top half-row",
+    "zh": "上半排"
+  },
+  {
+    "id": "schema_story_class_half-bottom",
+    "en": "Bottom half-row ",
+    "zh": "下半排"
+  },
+  {
+    "id": "schema_story_class_cube-face",
+    "en": "Face of a cube",
+    "zh": "立方体的脸"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "zh": "在所有项目中搜索公众意见..."
