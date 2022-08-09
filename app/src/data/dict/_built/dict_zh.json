@@ -1685,6 +1685,41 @@
     "zh": "某些列包含无效字符且无法编辑：<ul> {{columns}}</ul>"
   },
   {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "zh": "某些列包含无效字符且无法编辑：<ul> {{columns}}</ul>"
+  },
+  {
+    "id": "edit_table_modal_attributes_title",
+    "en": "Attribute table",
+    "zh": "属性表"
+  },
+  {
+    "id": "btn_edit_table_modal_clear_filter",
+    "en": "Reset filters",
+    "zh": "重置过滤器"
+  },
+  {
+    "id": "btn_edit_table_modal_export_csv",
+    "en": "Export CSV",
+    "zh": "导出 CSV"
+  },
+  {
+    "id": "edit_table_modal_data_init",
+    "en": "Initializing, please wait...",
+    "zh": "正在初始化，请稍候..."
+  },
+  {
+    "id": "edit_table_modal_data_fetch",
+    "en": "Download data...",
+    "zh": "下载数据..."
+  },
+  {
+    "id": "edit_table_modal_data_ok_build",
+    "en": "Data downloaded, build table.",
+    "zh": "数据下载，建表。"
+  },
+  {
     "id": "en",
     "en": "English",
     "zh": "英语"
@@ -6238,11 +6273,6 @@
     "id": "button_expand",
     "en": "Expand",
     "zh": "展开"
-  },
-  {
-    "id": "tbl_attr_modal_title",
-    "en": "Attribute table",
-    "zh": "属性表"
   },
   {
     "id": "login_single_use_password_email_subject",

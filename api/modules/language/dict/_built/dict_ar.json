@@ -1685,6 +1685,41 @@
     "ar": "تحتوي بعض الأعمدة على أحرف غير صالحة ولا يمكن تحريرها:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
   },
   {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "ar": "تحتوي بعض الأعمدة على أحرف غير صالحة ولا يمكن تحريرها:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
+  },
+  {
+    "id": "edit_table_modal_attributes_title",
+    "en": "Attribute table",
+    "ar": "جدول السمات"
+  },
+  {
+    "id": "btn_edit_table_modal_clear_filter",
+    "en": "Reset filters",
+    "ar": "إعادة تعيين المرشحات"
+  },
+  {
+    "id": "btn_edit_table_modal_export_csv",
+    "en": "Export CSV",
+    "ar": "تصدير CSV"
+  },
+  {
+    "id": "edit_table_modal_data_init",
+    "en": "Initializing, please wait...",
+    "ar": "جاري التهيئة ، يرجى الانتظار ..."
+  },
+  {
+    "id": "edit_table_modal_data_fetch",
+    "en": "Download data...",
+    "ar": "تحميل البيانات..."
+  },
+  {
+    "id": "edit_table_modal_data_ok_build",
+    "en": "Data downloaded, build table.",
+    "ar": "تحميل البيانات ، بناء الجدول."
+  },
+  {
     "id": "en",
     "en": "English",
     "ar": "الإنجليزية "
@@ -6238,11 +6273,6 @@
     "id": "button_expand",
     "en": "Expand",
     "ar": "يوسع "
-  },
-  {
-    "id": "tbl_attr_modal_title",
-    "en": "Attribute table",
-    "ar": "جدول السمات "
   },
   {
     "id": "login_single_use_password_email_subject",

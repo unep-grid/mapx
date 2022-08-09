@@ -1685,6 +1685,41 @@
     "bn": "কিছু কলাম(গুলি) অবৈধ অক্ষর ধারণ করে এবং সম্পাদনা করা যাবে না:<ul> {{columns}}</ul>"
   },
   {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "bn": "কিছু কলাম(গুলি) অবৈধ অক্ষর ধারণ করে এবং সম্পাদনা করা যাবে না:<ul> {{columns}}</ul>"
+  },
+  {
+    "id": "edit_table_modal_attributes_title",
+    "en": "Attribute table",
+    "bn": "অ্যাট্রিবিউট টেবিল"
+  },
+  {
+    "id": "btn_edit_table_modal_clear_filter",
+    "en": "Reset filters",
+    "bn": "ফিল্টার রিসেট করুন"
+  },
+  {
+    "id": "btn_edit_table_modal_export_csv",
+    "en": "Export CSV",
+    "bn": "CSV রপ্তানি করুন"
+  },
+  {
+    "id": "edit_table_modal_data_init",
+    "en": "Initializing, please wait...",
+    "bn": "আরম্ভ করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন..."
+  },
+  {
+    "id": "edit_table_modal_data_fetch",
+    "en": "Download data...",
+    "bn": "ডেটা ডাউনলোড করুন..."
+  },
+  {
+    "id": "edit_table_modal_data_ok_build",
+    "en": "Data downloaded, build table.",
+    "bn": "ডেটা ডাউনলোড করা হয়েছে, টেবিল তৈরি করুন।"
+  },
+  {
     "id": "en",
     "en": "English",
     "bn": "ইংরেজি "
@@ -6238,11 +6273,6 @@
     "id": "button_expand",
     "en": "Expand",
     "bn": "বিস্তৃত করা "
-  },
-  {
-    "id": "tbl_attr_modal_title",
-    "en": "Attribute table",
-    "bn": "বৈশিষ্ট্য সারণী "
   },
   {
     "id": "login_single_use_password_email_subject",

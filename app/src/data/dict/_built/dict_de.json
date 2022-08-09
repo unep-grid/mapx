@@ -1685,6 +1685,41 @@
     "de": "Einige Spalten enthalten ungültige Zeichen und können nicht bearbeitet werden:<ul> {{columns}}</ul>"
   },
   {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "de": "Einige Spalten enthalten ungültige Zeichen und können nicht bearbeitet werden:<ul> {{columns}}</ul>"
+  },
+  {
+    "id": "edit_table_modal_attributes_title",
+    "en": "Attribute table",
+    "de": "Attributtabelle"
+  },
+  {
+    "id": "btn_edit_table_modal_clear_filter",
+    "en": "Reset filters",
+    "de": "Filter zurücksetzen"
+  },
+  {
+    "id": "btn_edit_table_modal_export_csv",
+    "en": "Export CSV",
+    "de": "CSV-Datei exportieren"
+  },
+  {
+    "id": "edit_table_modal_data_init",
+    "en": "Initializing, please wait...",
+    "de": "Initialisierung, bitte warten..."
+  },
+  {
+    "id": "edit_table_modal_data_fetch",
+    "en": "Download data...",
+    "de": "Daten herunterladen..."
+  },
+  {
+    "id": "edit_table_modal_data_ok_build",
+    "en": "Data downloaded, build table.",
+    "de": "Daten heruntergeladen, Tabelle erstellen."
+  },
+  {
     "id": "en",
     "en": "English",
     "de": "Englisch "
@@ -6238,11 +6273,6 @@
     "id": "button_expand",
     "en": "Expand",
     "de": "Erweitern "
-  },
-  {
-    "id": "tbl_attr_modal_title",
-    "en": "Attribute table",
-    "de": "Attributtabelle "
   },
   {
     "id": "login_single_use_password_email_subject",

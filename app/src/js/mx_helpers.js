@@ -30,7 +30,6 @@ export * from './mx_helper_canvas_star.js';
 export * from './mx_helper_canvas.js';
 export * from './mx_helper_jed.js';
 export * from './mx_helper_filter_views.js';
-export * from './mx_helper_source_attribute_table.js';
 export * from './mx_helper_source_summary.js';
 export * from './mx_helper_fetch_progress.js';
 export * from './mx_helper_root_mode.js';
@@ -44,6 +43,7 @@ export * from './mx_helper_issues.js';
 */
 export * from './map_composer/map_composer_instance.js';
 export * from './source/edit_table_instances.js';
+export * from './source/display_table.js';
 export * from './app_utils';
 export * from './mirror_util';
 export * from './language';

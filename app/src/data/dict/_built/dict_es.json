@@ -1685,6 +1685,41 @@
     "es": "Algunas columnas contienen caracteres no válidos y no se pueden editar:<ul> {{columns}}</ul>"
   },
   {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "es": "Algunas columnas contienen caracteres no válidos y no se pueden editar:<ul> {{columns}}</ul>"
+  },
+  {
+    "id": "edit_table_modal_attributes_title",
+    "en": "Attribute table",
+    "es": "Tabla de atributos"
+  },
+  {
+    "id": "btn_edit_table_modal_clear_filter",
+    "en": "Reset filters",
+    "es": "Restablecer filtros"
+  },
+  {
+    "id": "btn_edit_table_modal_export_csv",
+    "en": "Export CSV",
+    "es": "Exportar CSV"
+  },
+  {
+    "id": "edit_table_modal_data_init",
+    "en": "Initializing, please wait...",
+    "es": "Inicializando, por favor espere..."
+  },
+  {
+    "id": "edit_table_modal_data_fetch",
+    "en": "Download data...",
+    "es": "Descargar datos..."
+  },
+  {
+    "id": "edit_table_modal_data_ok_build",
+    "en": "Data downloaded, build table.",
+    "es": "Datos descargados, construir tabla."
+  },
+  {
     "id": "en",
     "en": "English",
     "es": "Inglés"
@@ -6238,11 +6273,6 @@
     "id": "button_expand",
     "en": "Expand",
     "es": "Desarrollar"
-  },
-  {
-    "id": "tbl_attr_modal_title",
-    "en": "Attribute table",
-    "es": "Tabla de atributos"
   },
   {
     "id": "login_single_use_password_email_subject",

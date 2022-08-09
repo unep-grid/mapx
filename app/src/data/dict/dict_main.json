@@ -11232,19 +11232,6 @@
     "de": ""
   },
   {
-    "id": "tbl_attr_modal_title",
-    "en": "Attribute table",
-    "fr": "Table attributaire",
-    "es": "Tabla de atributos",
-    "ru": "",
-    "zh": "属性表",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
     "id": "login_single_use_password_email_subject",
     "en": "Single use password request",
     "fr": "Demande de mot de passe à usage unique",

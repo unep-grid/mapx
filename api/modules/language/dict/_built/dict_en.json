@@ -1348,6 +1348,34 @@
     "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>"
   },
   {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>"
+  },
+  {
+    "id": "edit_table_modal_attributes_title",
+    "en": "Attribute table"
+  },
+  {
+    "id": "btn_edit_table_modal_clear_filter",
+    "en": "Reset filters"
+  },
+  {
+    "id": "btn_edit_table_modal_export_csv",
+    "en": "Export CSV"
+  },
+  {
+    "id": "edit_table_modal_data_init",
+    "en": "Initializing, please wait..."
+  },
+  {
+    "id": "edit_table_modal_data_fetch",
+    "en": "Download data..."
+  },
+  {
+    "id": "edit_table_modal_data_ok_build",
+    "en": "Data downloaded, build table."
+  },
+  {
     "id": "en",
     "en": "English"
   },
@@ -4990,10 +5018,6 @@
   {
     "id": "button_expand",
     "en": "Expand"
-  },
-  {
-    "id": "tbl_attr_modal_title",
-    "en": "Attribute table"
   },
   {
     "id": "login_single_use_password_email_subject",

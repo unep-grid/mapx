@@ -1685,6 +1685,41 @@
     "ps": "ځینې کالمونه ناسم توري لري او نشي ترمیم کیدی:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
   },
   {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "ps": "ځینې کالمونه ناسم توري لري او نشي ترمیم کیدی:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
+  },
+  {
+    "id": "edit_table_modal_attributes_title",
+    "en": "Attribute table",
+    "ps": "د خاصیت جدول"
+  },
+  {
+    "id": "btn_edit_table_modal_clear_filter",
+    "en": "Reset filters",
+    "ps": "فلټرونه بیا تنظیم کړئ"
+  },
+  {
+    "id": "btn_edit_table_modal_export_csv",
+    "en": "Export CSV",
+    "ps": "CSV صادر کړئ"
+  },
+  {
+    "id": "edit_table_modal_data_init",
+    "en": "Initializing, please wait...",
+    "ps": "پیل کول، مهرباني وکړئ انتظار وکړئ ..."
+  },
+  {
+    "id": "edit_table_modal_data_fetch",
+    "en": "Download data...",
+    "ps": "ډاټا ډاونلوډ کړئ ..."
+  },
+  {
+    "id": "edit_table_modal_data_ok_build",
+    "en": "Data downloaded, build table.",
+    "ps": "ډاټا ډاونلوډ شوی، میز جوړ کړئ."
+  },
+  {
     "id": "en",
     "en": "English",
     "ps": "انګلیسي"
@@ -6238,11 +6273,6 @@
     "id": "button_expand",
     "en": "Expand",
     "ps": "پراخول "
-  },
-  {
-    "id": "tbl_attr_modal_title",
-    "en": "Attribute table",
-    "ps": "د ځانتیا میز "
   },
   {
     "id": "login_single_use_password_email_subject",

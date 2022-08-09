@@ -1,6 +1,6 @@
 import { FlashItem } from "./icon_flash";
 import { getArrayDistinct } from "./array_stat/index.js";
-import { isEmpty } from "./is_test/index.js";
+import { isEmpty, isPromise, isString } from "./is_test/index.js";
 import copy from "fast-copy";
 import { settings } from "./settings";
 /**
@@ -1650,7 +1650,16 @@ export function progressScreen(o) {
     }
   } else {
     pBarIn.style.width = percent + "%";
-    pBarTxt.innerHTML = text;
+    if (isPromise(text)) {
+      text
+        .then((t) => {
+          pBarTxt.innerHTML = t;
+        })
+        .catch(console.warn);
+    }
+    if (isString(text)) {
+      pBarTxt.innerHTML = text;
+    }
   }
 
   lItems = lScreenContainer.getElementsByClassName("loading-item");

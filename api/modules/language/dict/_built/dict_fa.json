@@ -1685,6 +1685,41 @@
     "fa": "برخی از ستون ها دارای نویسه های نامعتبر هستند و قابل ویرایش نیستند:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
   },
   {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "fa": "برخی از ستون ها دارای نویسه های نامعتبر هستند و قابل ویرایش نیستند:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
+  },
+  {
+    "id": "edit_table_modal_attributes_title",
+    "en": "Attribute table",
+    "fa": "جدول صفات"
+  },
+  {
+    "id": "btn_edit_table_modal_clear_filter",
+    "en": "Reset filters",
+    "fa": "بازنشانی فیلترها"
+  },
+  {
+    "id": "btn_edit_table_modal_export_csv",
+    "en": "Export CSV",
+    "fa": "صادرات CSV"
+  },
+  {
+    "id": "edit_table_modal_data_init",
+    "en": "Initializing, please wait...",
+    "fa": "در حال راه اندازی، لطفاً صبر کنید..."
+  },
+  {
+    "id": "edit_table_modal_data_fetch",
+    "en": "Download data...",
+    "fa": "دانلود داده ها..."
+  },
+  {
+    "id": "edit_table_modal_data_ok_build",
+    "en": "Data downloaded, build table.",
+    "fa": "داده دانلود شد، جدول ساخت."
+  },
+  {
     "id": "en",
     "en": "English",
     "fa": "انگلیسی"
@@ -6238,11 +6273,6 @@
     "id": "button_expand",
     "en": "Expand",
     "fa": "بسط دادن "
-  },
-  {
-    "id": "tbl_attr_modal_title",
-    "en": "Attribute table",
-    "fa": "جدول صفات "
   },
   {
     "id": "login_single_use_password_email_subject",

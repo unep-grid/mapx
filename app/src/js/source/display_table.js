@@ -1,20 +1,32 @@
-import { getArrayDistinct } from "./array_stat/index.js";
-import { modalMarkdown } from "./modal_markdown/index.js";
-import { getDictItem, getLanguageCurrent } from "./language";
-import { getApiUrl } from "./api_routes";
-import { getHandsonLanguageCode, typeConvert } from "./handsontable/utils.js";
+import { getArrayDistinct } from "./../array_stat/index.js";
+import { modalMarkdown } from "./../modal_markdown/index.js";
+import { getDictItem, getLanguageCurrent } from "./../language";
+import { elSpanTranslate } from "./../el_mapx";
+import { getApiUrl } from "./../api_routes";
+import {
+  getHandsonLanguageCode,
+  typeConvert,
+} from "./../handsontable/utils.js";
+import { path, debounce, progressScreen } from "./../mx_helper_misc.js";
+import { objToParams } from "./../url_utils";
+import { fetchJsonProgress } from "./../mx_helper_fetch_progress";
+import { el } from "./../el/src/index.js";
+import { getViewSourceSummary } from "./../mx_helper_source_summary.js";
+import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata.js";
+import { moduleLoad } from "./../modules_loader_async";
+import { getView } from "./../map_helpers";
+import { isView, isArray, isFunction } from "./../is_test";
 
 export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({}, opt);
-  const h = mx.helpers;
   const host = getApiUrl("getSourceTableAttribute");
-  const params = h.objToParams({
+  const params = objToParams({
     id: opt.idSource,
     attributes: opt.attributes,
   });
   const url = `${host}?${params}`;
 
-  return h.fetchJsonProgress(url, {
+  return fetchJsonProgress(url, {
     onProgress: onProgressData,
     onError: onProgressError,
     onComplete: onProgressDataComplete,
@@ -27,7 +39,6 @@ export async function showSourceTableAttributeModal(opt) {
     return Promise.resolve(false);
   }
   const h = mx.helpers;
-  const el = h.el;
   const settings = {
     idSource: opt.idSource,
     attributes: opt.attributes,
@@ -38,17 +49,17 @@ export async function showSourceTableAttributeModal(opt) {
   let mutationObserver;
   let labels = opt.labels || null;
 
-  const summary = await h.getViewSourceSummary(opt.view.id, {
+  const summary = await getViewSourceSummary(opt.view.id, {
     stats: ["base", "attributes"],
   });
   onProgressStart();
 
-  const handsontable = await h.moduleLoad("handsontable");
-  const meta = await h.fetchSourceMetadata(settings.idSource);
-  const data = await h.fetchSourceTableAttribute(settings);
+  const handsontable = await moduleLoad("handsontable");
+  const meta = await fetchSourceMetadata(settings.idSource);
+  const data = await fetchSourceTableAttribute(settings);
 
   const services = meta._services || [];
-  const hasData = h.isArray(data) && data.length > 0;
+  const hasData = isArray(data) && data.length > 0;
   const license = "non-commercial-and-evaluation";
   const elContent = el("div", { class: "mx_handsontable" });
   const elTable = el("div", {
@@ -70,9 +81,8 @@ export async function showSourceTableAttributeModal(opt) {
       on: {
         click: handleDownload,
       },
-      title: allowDownload ? "Download" : "Download disabled",
     },
-    "Export CSV"
+    elSpanTranslate("btn_edit_table_modal_export_csv")
   );
   if (!allowDownload) {
     elButtonDownload.setAttribute("disabled", true);
@@ -87,7 +97,7 @@ export async function showSourceTableAttributeModal(opt) {
       },
       title: "Help",
     },
-    "Help"
+    elSpanTranslate("btn_help")
   );
 
   const elButtonClearFilter = el(
@@ -99,9 +109,20 @@ export async function showSourceTableAttributeModal(opt) {
         click: handleClearFilter,
       },
     },
-    "Clear filter"
+    elSpanTranslate("btn_edit_table_modal_clear_filter")
   );
-  const elTitle = el("div");
+  let elViewTitle;
+  const elTitle = el(
+    "div",
+    elSpanTranslate("edit_table_modal_attributes_title"),
+    (elViewTitle = el("span", {
+      style: {
+        marginLeft: "10px",
+        fontStyle: "italic",
+      },
+    }))
+  );
+
   const buttons = [elButtonHelp, elButtonClearFilter, elButtonDownload];
   if (!hasData) {
     elTable.innerText = "no data";
@@ -202,15 +223,10 @@ export async function showSourceTableAttributeModal(opt) {
 
   function addTitle() {
     let view = settings.view;
-    if (!h.isView(view)) {
+    if (!isView(view)) {
       return;
     }
-    let title = h.getViewTitle(view);
-    getDictItem("tbl_attr_modal_title")
-      .then((t) => {
-        elTitle.innerText = t + " – " + title;
-      })
-      .catch((e) => consol.warn(e));
+    elViewTitle.innerText = h.getViewTitle(view);
   }
 
   function tableRender() {
@@ -235,7 +251,7 @@ export async function showSourceTableAttributeModal(opt) {
       mutationObserver.disconnect();
     }
     let view = settings.view;
-    if (!h.isView(view)) {
+    if (!isView(view)) {
       return;
     }
     view._setFilter({
@@ -246,7 +262,7 @@ export async function showSourceTableAttributeModal(opt) {
 
   function handleViewFilter() {
     const view = settings.view;
-    if (!h.isView(view)) {
+    if (!isView(view)) {
       return;
     }
     const data = hot.getData();
@@ -264,28 +280,26 @@ export async function showSourceTableAttributeModal(opt) {
 }
 
 export function viewToTableAttributeModal(idView) {
-  let h = mx.helpers;
-  let view = h.getView(idView);
+  let view = getView(idView);
   let opt = getTableAttributeConfigFromView(view);
   return showSourceTableAttributeModal(opt);
 }
 
 export function getTableAttributeConfigFromView(view) {
-  let h = mx.helpers;
   let language = getLanguageCurrent();
 
   if (view.type !== "vt" || !view._meta) {
     console.warn("Only vt view with ._meta are supported");
     return null;
   }
-  let idSource = h.path(view, "data.source.layerInfo.name");
-  let attributes = h.path(view, "data.attribute.names") || [];
-  let attribute = h.path(view, "data.attribute.name");
-  attributes = h.isArray(attributes) ? attributes : [attributes];
+  let idSource = path(view, "data.source.layerInfo.name");
+  let attributes = path(view, "data.attribute.names") || [];
+  let attribute = path(view, "data.attribute.name");
+  attributes = isArray(attributes) ? attributes : [attributes];
   attributes = attributes.concat(attribute);
   attributes = attributes.concat(["gid"]);
   attributes = getArrayDistinct(attributes);
-  let labelsDict = h.path(view, "_meta.text.attributes_alias") || {};
+  let labelsDict = path(view, "_meta.text.attributes_alias") || {};
   let labels = attributes.map((a) => {
     return labelsDict[a] ? labelsDict[a][language] || labelsDict[a].en || a : a;
   });
@@ -306,10 +320,8 @@ function handleHelp() {
 }
 
 function listenMutationAttribute(el, cb) {
-  let h = mx.helpers;
-  cb = h.isFunction(cb) ? h.debounce(cb, 100) : console.log;
-
-  let observer = new MutationObserver((m) => {
+  cb = isFunction(cb) ? debounce(cb, 100) : console.log;
+  const observer = new MutationObserver((m) => {
     cb(m);
   });
 
@@ -319,35 +331,31 @@ function listenMutationAttribute(el, cb) {
   return observer;
 }
 function onProgressStart() {
-  let h = mx.helpers;
-  h.progressScreen({
+  progressScreen({
     percent: 1,
     id: "fetch_data",
-    text: "Init, please wait",
+    text: getDictItem("edit_table_modal_data_init"),
     enable: true,
   });
 }
 function onProgressData(data) {
-  let h = mx.helpers;
-  h.progressScreen({
+  progressScreen({
     percent: (data.loaded / data.total) * 100 - 1,
     id: "fetch_data",
-    text: "Fetching Data",
+    text: getDictItem("edit_table_modal_data_fetch"),
     enable: true,
   });
 }
 function onProgressDataComplete() {
-  let h = mx.helpers;
-  h.progressScreen({
-    text: "Data downloaded. Build table",
+  progressScreen({
+    text: getDictItem("edit_table_modal_data_ok_build"),
     enable: true,
     percent: 99,
     id: "fetch_data",
   });
 }
 function onProgressEnd() {
-  let h = mx.helpers;
-  h.progressScreen({
+  progressScreen({
     enable: false,
     percent: 100,
     id: "fetch_data",

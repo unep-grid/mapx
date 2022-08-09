@@ -1685,6 +1685,41 @@
     "ru": "Некоторые столбцы содержат недопустимые символы и не могут быть отредактированы:<ul> {{columns}}</ul>"
   },
   {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "ru": "Некоторые столбцы содержат недопустимые символы и не могут быть отредактированы:<ul> {{columns}}</ul>"
+  },
+  {
+    "id": "edit_table_modal_attributes_title",
+    "en": "Attribute table",
+    "ru": "Таблица атрибутов"
+  },
+  {
+    "id": "btn_edit_table_modal_clear_filter",
+    "en": "Reset filters",
+    "ru": "Сбросить фильтры"
+  },
+  {
+    "id": "btn_edit_table_modal_export_csv",
+    "en": "Export CSV",
+    "ru": "Экспорт CSV"
+  },
+  {
+    "id": "edit_table_modal_data_init",
+    "en": "Initializing, please wait...",
+    "ru": "Инициализация, подождите..."
+  },
+  {
+    "id": "edit_table_modal_data_fetch",
+    "en": "Download data...",
+    "ru": "Скачать данные..."
+  },
+  {
+    "id": "edit_table_modal_data_ok_build",
+    "en": "Data downloaded, build table.",
+    "ru": "Данные загружены, построена таблица."
+  },
+  {
     "id": "en",
     "en": "English",
     "ru": "английский "
@@ -6238,11 +6273,6 @@
     "id": "button_expand",
     "en": "Expand",
     "ru": "Расширять "
-  },
-  {
-    "id": "tbl_attr_modal_title",
-    "en": "Attribute table",
-    "ru": "Таблица атрибутов "
   },
   {
     "id": "login_single_use_password_email_subject",

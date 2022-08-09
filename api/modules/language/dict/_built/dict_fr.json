@@ -1685,6 +1685,41 @@
     "fr": "Certaines colonnes contiennent des caractères non valides et ne peuvent pas être modifiées :<ul> {{columns}}</ul>"
   },
   {
+    "id": "edit_table_modal_columns_name_issue_content",
+    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "fr": "Certaines colonnes contiennent des caractères non valides et ne peuvent pas être modifiées :<ul> {{columns}}</ul>"
+  },
+  {
+    "id": "edit_table_modal_attributes_title",
+    "en": "Attribute table",
+    "fr": "Table attributaire"
+  },
+  {
+    "id": "btn_edit_table_modal_clear_filter",
+    "en": "Reset filters",
+    "fr": "Réinitialiser les filtres"
+  },
+  {
+    "id": "btn_edit_table_modal_export_csv",
+    "en": "Export CSV",
+    "fr": "Exporter CSV"
+  },
+  {
+    "id": "edit_table_modal_data_init",
+    "en": "Initializing, please wait...",
+    "fr": "Initialisation, veuillez patienter..."
+  },
+  {
+    "id": "edit_table_modal_data_fetch",
+    "en": "Download data...",
+    "fr": "Télécharger les données..."
+  },
+  {
+    "id": "edit_table_modal_data_ok_build",
+    "en": "Data downloaded, build table.",
+    "fr": "Données téléchargées, table de construction."
+  },
+  {
     "id": "en",
     "en": "English",
     "fr": "Anglais"
@@ -6238,11 +6273,6 @@
     "id": "button_expand",
     "en": "Expand",
     "fr": "Développer"
-  },
-  {
-    "id": "tbl_attr_modal_title",
-    "en": "Attribute table",
-    "fr": "Table attributaire"
   },
   {
     "id": "login_single_use_password_email_subject",
