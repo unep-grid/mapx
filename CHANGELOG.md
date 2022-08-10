@@ -1,3 +1,11 @@
+  - [1.9.44-beta.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.4) 
+   
+   - APP 
+        - Table editor :
+            - Better dialog when entering invalid values 
+            - Added missing translations
+            - Avoid removing invalid columns -> rename column will be implemented
+
   - [1.9.44-beta.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.3) 
 
    - APP 
