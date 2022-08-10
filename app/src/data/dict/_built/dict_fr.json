@@ -2426,8 +2426,8 @@
   },
   {
     "id": "btn_opt_edit_config",
-    "en": "Configure this view",
-    "fr": "Configurer la vue"
+    "en": "Edit this view",
+    "fr": "Éditer la vue"
   },
   {
     "id": "btn_opt_edit_custom_code",

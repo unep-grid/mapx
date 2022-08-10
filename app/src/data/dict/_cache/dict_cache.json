@@ -6306,16 +6306,16 @@
   },
   {
     "id": "btn_opt_edit_config",
-    "en": "Configure this view",
-    "fr": "Configurer la vue",
-    "es": "Configurar la vista",
-    "ru": "Настроить это представление ",
-    "zh": "配置视图",
-    "ar": "تكوين هذا العرض ",
-    "fa": "تنظیم این نمایه",
-    "ps": "دا لید په لاره واچوئ",
-    "bn": "এই দৃশ্যটি কনফিগার করুন ",
-    "de": "Konfigurieren Sie diese Ansicht "
+    "en": "Edit this view",
+    "fr": "Éditer la vue",
+    "es": "Editar esta vista",
+    "ru": "Изменить это представление",
+    "zh": "编辑此视图",
+    "ar": "قم بتحرير طريقة العرض هذه",
+    "fa": "این نما را ویرایش کنید",
+    "ps": "دا نظر ترمیم کړئ",
+    "bn": "এই দৃশ্য সম্পাদনা করুন",
+    "de": "Bearbeiten Sie diese Ansicht"
   },
   {
     "id": "btn_opt_edit_custom_code",

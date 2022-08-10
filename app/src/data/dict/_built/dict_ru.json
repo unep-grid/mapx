@@ -2426,8 +2426,8 @@
   },
   {
     "id": "btn_opt_edit_config",
-    "en": "Configure this view",
-    "ru": "Настроить это представление "
+    "en": "Edit this view",
+    "ru": "Изменить это представление"
   },
   {
     "id": "btn_opt_edit_custom_code",

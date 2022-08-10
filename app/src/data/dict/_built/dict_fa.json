@@ -2426,8 +2426,8 @@
   },
   {
     "id": "btn_opt_edit_config",
-    "en": "Configure this view",
-    "fa": "تنظیم این نمایه"
+    "en": "Edit this view",
+    "fa": "این نما را ویرایش کنید"
   },
   {
     "id": "btn_opt_edit_custom_code",

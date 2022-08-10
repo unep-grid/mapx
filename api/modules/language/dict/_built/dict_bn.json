@@ -2426,8 +2426,8 @@
   },
   {
     "id": "btn_opt_edit_config",
-    "en": "Configure this view",
-    "bn": "এই দৃশ্যটি কনফিগার করুন "
+    "en": "Edit this view",
+    "bn": "এই দৃশ্য সম্পাদনা করুন"
   },
   {
     "id": "btn_opt_edit_custom_code",

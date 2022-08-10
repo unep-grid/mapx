@@ -2426,8 +2426,8 @@
   },
   {
     "id": "btn_opt_edit_config",
-    "en": "Configure this view",
-    "ar": "تكوين هذا العرض "
+    "en": "Edit this view",
+    "ar": "قم بتحرير طريقة العرض هذه"
   },
   {
     "id": "btn_opt_edit_custom_code",

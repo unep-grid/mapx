@@ -2426,8 +2426,8 @@
   },
   {
     "id": "btn_opt_edit_config",
-    "en": "Configure this view",
-    "ps": "دا لید په لاره واچوئ"
+    "en": "Edit this view",
+    "ps": "دا نظر ترمیم کړئ"
   },
   {
     "id": "btn_opt_edit_custom_code",

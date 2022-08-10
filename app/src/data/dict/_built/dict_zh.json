@@ -2426,8 +2426,8 @@
   },
   {
     "id": "btn_opt_edit_config",
-    "en": "Configure this view",
-    "zh": "配置视图"
+    "en": "Edit this view",
+    "zh": "编辑此视图"
   },
   {
     "id": "btn_opt_edit_custom_code",
