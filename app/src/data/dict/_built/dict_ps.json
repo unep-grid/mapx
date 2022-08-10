@@ -1705,11 +1705,6 @@
     "ps": "ځینې کالمونه ناسم توري لري او نشي ترمیم کیدی:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
   },
   {
-    "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
-    "ps": "ځینې کالمونه ناسم توري لري او نشي ترمیم کیدی:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
-  },
-  {
     "id": "edit_table_modal_attributes_title",
     "en": "Attribute table",
     "ps": "د خاصیت جدول"
@@ -6701,13 +6696,8 @@
   },
   {
     "id": "mc_preset_group_iso_envelope",
-    "en": "ISO paper sizes - other",
-    "ps": "د ISO کاغذ اندازه - لفافه"
-  },
-  {
-    "id": "mc_preset_group_iso_envelope",
     "en": "ISO paper sizes - envelope",
-    "ps": ""
+    "ps": "د ISO کاغذ اندازه - لفافه"
   },
   {
     "id": "mc_preset_group_us",

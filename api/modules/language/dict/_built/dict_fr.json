@@ -1705,11 +1705,6 @@
     "fr": "Certaines colonnes contiennent des caractères non valides et ne peuvent pas être modifiées :<ul> {{columns}}</ul>"
   },
   {
-    "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
-    "fr": "Certaines colonnes contiennent des caractères non valides et ne peuvent pas être modifiées :<ul> {{columns}}</ul>"
-  },
-  {
     "id": "edit_table_modal_attributes_title",
     "en": "Attribute table",
     "fr": "Table attributaire"
@@ -6701,13 +6696,8 @@
   },
   {
     "id": "mc_preset_group_iso_envelope",
-    "en": "ISO paper sizes - other",
-    "fr": "Formats de papier ISO - enveloppe"
-  },
-  {
-    "id": "mc_preset_group_iso_envelope",
     "en": "ISO paper sizes - envelope",
-    "fr": ""
+    "fr": "Formats de papier ISO - enveloppe"
   },
   {
     "id": "mc_preset_group_us",

@@ -1,16 +1,16 @@
-const fs = require('fs');
-const path = require('path');
-const util = require('util');
+const fs = require("fs");
+const path = require("path");
+const util = require("util");
 const readFile = util.promisify(fs.readFile);
 const readdir = util.promisify(fs.readdir);
 const writeFile = util.promisify(fs.writeFile);
 const exists = util.promisify(fs.exists);
-const {TranslationServiceClient} = require('@google-cloud/translate');
+const { TranslationServiceClient } = require("@google-cloud/translate");
 const translationClient = new TranslationServiceClient();
 const translationCred = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-const entities = require('entities');
-const {JSDOM} = require('jsdom');
-const dom = new JSDOM('');
+const entities = require("entities");
+const { JSDOM } = require("jsdom");
+const dom = new JSDOM("");
 const elBody = dom.window.document.body;
 
 /**
@@ -25,14 +25,14 @@ async function update(confFile) {
   const dict = [];
 
   const uDefault = {
-    dict_dir: '/tmp',
-    dict_dir_out: ['/tmp'],
-    dict_file_cache: '/tmp/cache.json',
+    dict_dir: "/tmp",
+    dict_dir_out: ["/tmp"],
+    dict_file_cache: "/tmp/cache.json",
     languages: [],
-    language_default: 'en'
+    language_default: "en",
   };
 
-  const uConfig = await readJSON('./', confFile);
+  const uConfig = await readJSON("./", confFile);
   const config = Object.assign({}, uDefault, uConfig);
   const files = await readdir(path.resolve(config.dict_dir));
   const cacheFile = path.resolve(config.dict_file_cache);
@@ -43,6 +43,21 @@ async function update(confFile) {
   for (let file of files) {
     if (file.match(/\.json$/)) {
       dict.push(...(await readJSON(config.dict_dir, file)));
+    }
+  }
+
+  /**
+   * Remove duplicate
+   */
+  const seen = [];
+  const items = [];
+  for (const row of dict) {
+    const id = row.id;
+    if (seen.includes(id)) {
+      console.warn(`⚠️ Duplicated key ${id}`);
+    } else {
+      seen.push(id);
+      items.push(row);
     }
   }
 
@@ -72,9 +87,9 @@ async function update(confFile) {
           from: config.language_default,
           to: language,
           str: [],
-          id: []
+          id: [],
         };
-        for (let item of dict) {
+        for (let item of items) {
           /**
            * Update if :
            * - no cache
@@ -100,13 +115,11 @@ async function update(confFile) {
         }
         if (job.id.length > 0) {
           console.log(
-            `Translate job sent ( ${job.id.length} items) for language ${
-              job.to
-            }`
+            `Translate job sent ( ${job.id.length} items) for language ${job.to}`
           );
           let res = await translate(job);
           for (let translated of res) {
-            let item = dict.find((c) => c.id === translated.id);
+            let item = items.find((c) => c.id === translated.id);
             item[language] = `${translated[language]}`;
           }
         }
@@ -118,7 +131,7 @@ async function update(confFile) {
    * Write cache
    */
   if (updateCache) {
-    await writeFile(cacheFile, JSON.stringify(dict, 0, 2));
+    await writeFile(cacheFile, JSON.stringify(items, 0, 2));
   }
 
   /**
@@ -136,17 +149,17 @@ async function update(confFile) {
    */
   for (let dir of config.dict_dir_out) {
     const file = path.resolve(dir, `dict_full.json`);
-    await writeFile(file, JSON.stringify(dict, 0, 2));
+    await writeFile(file, JSON.stringify(items, 0, 2));
   }
 
   /**
    * Build one dictionary file per language
    */
   for (let language of config.languages) {
-    const d = dict.map((d) => {
+    const d = items.map((d) => {
       const o = {
         id: d.id,
-        en: d.en
+        en: d.en,
       };
       if (language !== config.language_default) {
         o[language] = d[language];
@@ -163,7 +176,7 @@ async function update(confFile) {
 }
 
 async function readJSON(dir, file) {
-  let buffer = await readFile(path.resolve(dir || './', file || ''));
+  let buffer = await readFile(path.resolve(dir || "./", file || ""));
   let data = JSON.parse(buffer);
   return data;
 }
@@ -186,7 +199,7 @@ async function readJSON(dir, file) {
 
 async function translate(opt) {
   const maxItems = 500;
-  opt = Object.assign({}, {from: 'en', to: 'fr', str: ['hi'], id: [1]}, opt);
+  opt = Object.assign({}, { from: "en", to: "fr", str: ["hi"], id: [1] }, opt);
 
   if (!Array.isArray(opt.str)) {
     opt.str = [opt.str];
@@ -214,9 +227,9 @@ async function translate(opt) {
         const request = {
           parent: `projects/mxtranslate/locations/global`,
           contents: chunk,
-          mimeType: 'text/html',
+          mimeType: "text/html",
           sourceLanguageCode: opt.from,
-          targetLanguageCode: opt.to
+          targetLanguageCode: opt.to,
         };
 
         const [response] = await translationClient.translateText(request);
@@ -228,13 +241,13 @@ async function translate(opt) {
     }
 
     if (res.length !== opt.id.length) {
-      throw new Error('Results length do not match id list length');
+      throw new Error("Results length do not match id list length");
     }
 
     return res.map((r, i) => {
       return {
         id: opt.id[i],
-        [opt.to]: gTradUnescape(r)
+        [opt.to]: gTradUnescape(r),
       };
     });
   } catch (error) {
@@ -248,56 +261,55 @@ async function translate(opt) {
  * then, parsing the result and replacing back items.
  */
 function gTradEscape(str) {
-  try{
-  /**
-   * href issue : we protect {{ }} inside href.
-   */
-  elBody.innerHTML = str;
-  let elsA = elBody.querySelectorAll('a');
-  if (elsA.length > 0) {
-    for (let a of elsA) {
-      let href = a.getAttribute('href');
-      if (href) {
-        href = href.split('{{').join('_s_');
-        href = href.split('}}').join('_e_');
-        a.setAttribute('href', href);
+  try {
+    /**
+     * href issue : we protect {{ }} inside href.
+     */
+    elBody.innerHTML = str;
+    let elsA = elBody.querySelectorAll("a");
+    if (elsA.length > 0) {
+      for (let a of elsA) {
+        let href = a.getAttribute("href");
+        if (href) {
+          href = href.split("{{").join("_s_");
+          href = href.split("}}").join("_e_");
+          a.setAttribute("href", href);
+        }
       }
     }
-  }
-  str = elBody.innerHTML;
+    str = elBody.innerHTML;
 
-  /**
-   * Remplace other by void tags
-   */
-  //str = str.split('"').join('<meta type="escape_dbl_quote">');
-  str = str.split('\n').join('<meta type="escape_new_line">');
-  str = str.split('\\n').join('<meta type="escape_escaped_new_line">');
-  str = str.split('%s').join('<meta type="escape_sprintf">');
-  /**
-   * brackets by span tags.
-   */
-  str = str.split('{{').join('<span type="bracket" key="');
-  str = str.split('}}').join('"></span>');
-  elBody.innerHTML = str;
-  /**
-   * Re process <a href>... WHAT A MESS GOOGLE.
-   */
-  elsA = elBody.querySelectorAll('a');
-  if (elsA.length > 0) {
-    for (let a of elsA) {
-      let href = a.getAttribute('href');
-      if (href) {
-        href = href.split('_s_').join('{{');
-        href = href.split('_e_').join('}}');
+    /**
+     * Remplace other by void tags
+     */
+    //str = str.split('"').join('<meta type="escape_dbl_quote">');
+    str = str.split("\n").join('<meta type="escape_new_line">');
+    str = str.split("\\n").join('<meta type="escape_escaped_new_line">');
+    str = str.split("%s").join('<meta type="escape_sprintf">');
+    /**
+     * brackets by span tags.
+     */
+    str = str.split("{{").join('<span type="bracket" key="');
+    str = str.split("}}").join('"></span>');
+    elBody.innerHTML = str;
+    /**
+     * Re process <a href>... WHAT A MESS GOOGLE.
+     */
+    elsA = elBody.querySelectorAll("a");
+    if (elsA.length > 0) {
+      for (let a of elsA) {
+        let href = a.getAttribute("href");
+        if (href) {
+          href = href.split("_s_").join("{{");
+          href = href.split("_e_").join("}}");
+        }
+        a.setAttribute("href", href);
       }
-      a.setAttribute('href', href);
     }
-  }
 
-  str = elBody.innerHTML;
-
-  }catch(e){
-   console.error(e);
+    str = elBody.innerHTML;
+  } catch (e) {
+    console.error(e);
   }
   return str;
 }
@@ -315,7 +327,7 @@ function gTradUnescape(str) {
 
   try {
     for (let el of elsBracks) {
-      el.outerHTML = ` {{${el.getAttribute('key')}}}`;
+      el.outerHTML = ` {{${el.getAttribute("key")}}}`;
     }
 
     //for (let el of elsDblQuote) {
@@ -323,14 +335,14 @@ function gTradUnescape(str) {
     //}
 
     for (let el of elsNewLine) {
-      el.outerHTML = '\n';
+      el.outerHTML = "\n";
     }
     for (let el of elsEscNewLine) {
-      el.outerHTML = '\\n';
+      el.outerHTML = "\\n";
     }
 
     for (let el of elsEscSprintf) {
-      el.outerHTML = '%s';
+      el.outerHTML = "%s";
     }
 
     str = entities.decodeHTML(elBody.innerHTML);

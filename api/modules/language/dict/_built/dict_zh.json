@@ -1705,11 +1705,6 @@
     "zh": "某些列包含无效字符且无法编辑：<ul> {{columns}}</ul>"
   },
   {
-    "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
-    "zh": "某些列包含无效字符且无法编辑：<ul> {{columns}}</ul>"
-  },
-  {
     "id": "edit_table_modal_attributes_title",
     "en": "Attribute table",
     "zh": "属性表"
@@ -6701,13 +6696,8 @@
   },
   {
     "id": "mc_preset_group_iso_envelope",
-    "en": "ISO paper sizes - other",
-    "zh": "ISO 纸张尺寸 - 信封"
-  },
-  {
-    "id": "mc_preset_group_iso_envelope",
     "en": "ISO paper sizes - envelope",
-    "zh": ""
+    "zh": "ISO 纸张尺寸 - 信封"
   },
   {
     "id": "mc_preset_group_us",

@@ -587,19 +587,6 @@
     "de": ""
   },
   {
-    "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
     "id": "edit_table_modal_attributes_title",
     "en": "Attribute table",
     "fr": "Table attributaire",

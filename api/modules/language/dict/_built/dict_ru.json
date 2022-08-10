@@ -1705,11 +1705,6 @@
     "ru": "Некоторые столбцы содержат недопустимые символы и не могут быть отредактированы:<ul> {{columns}}</ul>"
   },
   {
-    "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
-    "ru": "Некоторые столбцы содержат недопустимые символы и не могут быть отредактированы:<ul> {{columns}}</ul>"
-  },
-  {
     "id": "edit_table_modal_attributes_title",
     "en": "Attribute table",
     "ru": "Таблица атрибутов"
@@ -6701,13 +6696,8 @@
   },
   {
     "id": "mc_preset_group_iso_envelope",
-    "en": "ISO paper sizes - other",
-    "ru": "Размеры бумаги ISO - конверт"
-  },
-  {
-    "id": "mc_preset_group_iso_envelope",
     "en": "ISO paper sizes - envelope",
-    "ru": ""
+    "ru": "Размеры бумаги ISO - конверт"
   },
   {
     "id": "mc_preset_group_us",

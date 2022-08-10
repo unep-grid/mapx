@@ -1364,10 +1364,6 @@
     "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>"
   },
   {
-    "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>"
-  },
-  {
     "id": "edit_table_modal_attributes_title",
     "en": "Attribute table"
   },
@@ -5358,10 +5354,6 @@
   {
     "id": "mc_preset_group_iso_other",
     "en": "ISO paper sizes - others"
-  },
-  {
-    "id": "mc_preset_group_iso_envelope",
-    "en": "ISO paper sizes - other"
   },
   {
     "id": "mc_preset_group_iso_envelope",

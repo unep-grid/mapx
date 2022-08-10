@@ -1705,11 +1705,6 @@
     "ar": "تحتوي بعض الأعمدة على أحرف غير صالحة ولا يمكن تحريرها:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
   },
   {
-    "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
-    "ar": "تحتوي بعض الأعمدة على أحرف غير صالحة ولا يمكن تحريرها:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
-  },
-  {
     "id": "edit_table_modal_attributes_title",
     "en": "Attribute table",
     "ar": "جدول السمات"
@@ -6701,13 +6696,8 @@
   },
   {
     "id": "mc_preset_group_iso_envelope",
-    "en": "ISO paper sizes - other",
-    "ar": "مقاسات ورق ISO - مغلف"
-  },
-  {
-    "id": "mc_preset_group_iso_envelope",
     "en": "ISO paper sizes - envelope",
-    "ar": ""
+    "ar": "مقاسات ورق ISO - مغلف"
   },
   {
     "id": "mc_preset_group_us",

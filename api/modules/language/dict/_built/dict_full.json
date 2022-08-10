@@ -4433,19 +4433,6 @@
     "de": "Einige Spalten enthalten ungültige Zeichen und können nicht bearbeitet werden:<ul> {{columns}}</ul>"
   },
   {
-    "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
-    "fr": "Certaines colonnes contiennent des caractères non valides et ne peuvent pas être modifiées :<ul> {{columns}}</ul>",
-    "es": "Algunas columnas contienen caracteres no válidos y no se pueden editar:<ul> {{columns}}</ul>",
-    "ru": "Некоторые столбцы содержат недопустимые символы и не могут быть отредактированы:<ul> {{columns}}</ul>",
-    "zh": "某些列包含无效字符且无法编辑：<ul> {{columns}}</ul>",
-    "ar": "تحتوي بعض الأعمدة على أحرف غير صالحة ولا يمكن تحريرها:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>",
-    "fa": "برخی از ستون ها دارای نویسه های نامعتبر هستند و قابل ویرایش نیستند:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>",
-    "ps": "ځینې کالمونه ناسم توري لري او نشي ترمیم کیدی:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>",
-    "bn": "কিছু কলাম(গুলি) অবৈধ অক্ষর ধারণ করে এবং সম্পাদনা করা যাবে না:<ul> {{columns}}</ul>",
-    "de": "Einige Spalten enthalten ungültige Zeichen und können nicht bearbeitet werden:<ul> {{columns}}</ul>"
-  },
-  {
     "id": "edit_table_modal_attributes_title",
     "en": "Attribute table",
     "fr": "Table attributaire",
@@ -17421,7 +17408,7 @@
   },
   {
     "id": "mc_preset_group_iso_envelope",
-    "en": "ISO paper sizes - other",
+    "en": "ISO paper sizes - envelope",
     "fr": "Formats de papier ISO - enveloppe",
     "es": "Tamaños de papel ISO - sobre",
     "ru": "Размеры бумаги ISO - конверт",
@@ -17431,19 +17418,6 @@
     "ps": "د ISO کاغذ اندازه - لفافه",
     "bn": "ISO কাগজের আকার - খাম",
     "de": "ISO-Papierformate – Umschlag"
-  },
-  {
-    "id": "mc_preset_group_iso_envelope",
-    "en": "ISO paper sizes - envelope",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
   },
   {
     "id": "mc_preset_group_us",

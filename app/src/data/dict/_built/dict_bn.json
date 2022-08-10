@@ -1705,11 +1705,6 @@
     "bn": "কিছু কলাম(গুলি) অবৈধ অক্ষর ধারণ করে এবং সম্পাদনা করা যাবে না:<ul> {{columns}}</ul>"
   },
   {
-    "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
-    "bn": "কিছু কলাম(গুলি) অবৈধ অক্ষর ধারণ করে এবং সম্পাদনা করা যাবে না:<ul> {{columns}}</ul>"
-  },
-  {
     "id": "edit_table_modal_attributes_title",
     "en": "Attribute table",
     "bn": "অ্যাট্রিবিউট টেবিল"
@@ -6701,13 +6696,8 @@
   },
   {
     "id": "mc_preset_group_iso_envelope",
-    "en": "ISO paper sizes - other",
-    "bn": "ISO কাগজের আকার - খাম"
-  },
-  {
-    "id": "mc_preset_group_iso_envelope",
     "en": "ISO paper sizes - envelope",
-    "bn": ""
+    "bn": "ISO কাগজের আকার - খাম"
   },
   {
     "id": "mc_preset_group_us",

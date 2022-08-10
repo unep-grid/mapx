@@ -1705,11 +1705,6 @@
     "fa": "برخی از ستون ها دارای نویسه های نامعتبر هستند و قابل ویرایش نیستند:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
   },
   {
-    "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
-    "fa": "برخی از ستون ها دارای نویسه های نامعتبر هستند و قابل ویرایش نیستند:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
-  },
-  {
     "id": "edit_table_modal_attributes_title",
     "en": "Attribute table",
     "fa": "جدول صفات"
@@ -6701,13 +6696,8 @@
   },
   {
     "id": "mc_preset_group_iso_envelope",
-    "en": "ISO paper sizes - other",
-    "fa": "اندازه کاغذ ISO - پاکت نامه"
-  },
-  {
-    "id": "mc_preset_group_iso_envelope",
     "en": "ISO paper sizes - envelope",
-    "fa": ""
+    "fa": "اندازه کاغذ ISO - پاکت نامه"
   },
   {
     "id": "mc_preset_group_us",
