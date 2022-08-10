@@ -1,3 +1,9 @@
+  - [1.9.44-beta.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.5) 
+   
+   - APP
+       -  Table editor 
+            - Patch issue when concurrent user deletes a column, then another one try to perform an 'undo' that targeted the removed collumn. Probably an unsupported case in handsontable.
+
   - [1.9.44-beta.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.4) 
    
    - APP 
