@@ -7,8 +7,11 @@ Simple validation tool for MapX specific values
 ## Constants
 
 <dl>
-<dt><a href="#regexSafe">regexSafe</a></dt>
-<dd><p>Test for special char : not allowed</p>
+<dt><a href="#regexUnsafeName">regexUnsafeName</a></dt>
+<dd><p>Test for special char : not allowed
+NOTES: if /g flag is set: inconsistant result:
+Regex.lastIndex is not reseted between calls,
+<a href="https://medium.com/@nikjohn/regex-test-returns-alternating-results-bd9a1ae42cdd">https://medium.com/@nikjohn/regex-test-returns-alternating-results-bd9a1ae42cdd</a></p>
 </dd>
 <dt><a href="#regexDataImg">regexDataImg</a></dt>
 <dd><p>Test if valide base64</p>
@@ -50,6 +53,24 @@ Simple validation tool for MapX specific values
 </dd>
 <dt><a href="#isViewLocal">isViewLocal(item)</a></dt>
 <dd><p>Test if it&#39;s a MapX view is local</p>
+</dd>
+<dt><a href="#isViewVtWithRules">isViewVtWithRules(item)</a></dt>
+<dd><p>Test if view vt has style rules</p>
+</dd>
+<dt><a href="#isViewVtWithAttributeType">isViewVtWithAttributeType(item, attribute)</a></dt>
+<dd><p>Test if view vt has specific attribute type r</p>
+</dd>
+<dt><a href="#isViewRtWithLegend">isViewRtWithLegend(item)</a></dt>
+<dd><p>Test if view rt has legend url</p>
+</dd>
+<dt><a href="#isViewDownloadable">isViewDownloadable(item)</a></dt>
+<dd><p>Test if view is downloadable</p>
+</dd>
+<dt><a href="#isViewRtWithTiles">isViewRtWithTiles(item)</a></dt>
+<dd><p>Test if view rt has tiles</p>
+</dd>
+<dt><a href="#isViewDashboard">isViewDashboard(item)</a></dt>
+<dd><p>Test if view  has dashbaord</p>
 </dd>
 <dt><a href="#isStory">isStory(item)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Test if story map</p>
@@ -126,9 +147,13 @@ Simple validation tool for MapX specific values
 <dt><a href="#isStringRange">isStringRange(str,, min, max)</a></dt>
 <dd><p>Test if entry is string and have the correct number of characters</p>
 </dd>
-<dt><a href="#isSafe">isSafe(Any)</a></dt>
-<dd><p>Test if input is &quot;safe&quot;
--&gt; avoid dangerous stuff for db : columns, values, .. when prepared queries are not possible. Not secure client side.</p>
+<dt><a href="#isSafe">isSafe(x)</a></dt>
+<dd><p>Test if input value is &quot;safe&quot;.
+Use server side
+-&gt; avoid unwanted stuff for db : columns, values, .. when prepared queries are not possible.</p>
+</dd>
+<dt><a href="#isSafeName">isSafeName(x)</a></dt>
+<dd><p>Test if input is &quot;safe&quot; for naming db table, column.</p>
 </dd>
 <dt><a href="#isValidType">isValidType(type, group)</a></dt>
 <dd><p>Quick type checker by group eg. image</p>
@@ -151,6 +176,9 @@ Simple validation tool for MapX specific values
 <dt><a href="#isEqual">isEqual(x, y)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Test for object equality</p>
 </dd>
+<dt><a href="#isUrl">isUrl(url)</a> ⇒ <code>Boolean</code></dt>
+<dd><p>Validate url</p>
+</dd>
 <dt><a href="#isUrlHttps">isUrlHttps(url)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Validate url with https</p>
 </dd>
@@ -165,10 +193,13 @@ Simple validation tool for MapX specific values
 </dd>
 </dl>
 
-<a name="regexSafe"></a>
+<a name="regexUnsafeName"></a>
 
-## regexSafe
+## regexUnsafeName
 Test for special char : not allowed
+NOTES: if /g flag is set: inconsistant result:
+Regex.lastIndex is not reseted between calls,
+https://medium.com/@nikjohn/regex-test-returns-alternating-results-bd9a1ae42cdd
 
 **Kind**: global constant  
 <a name="regexDataImg"></a>
@@ -290,6 +321,73 @@ Test if it's a MapX view is editable
 
 ## isViewLocal(item)
 Test if it's a MapX view is local
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>Object</code> | to test |
+
+<a name="isViewVtWithRules"></a>
+
+## isViewVtWithRules(item)
+Test if view vt has style rules
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>Object</code> | to test |
+
+<a name="isViewVtWithAttributeType"></a>
+
+## isViewVtWithAttributeType(item, attribute)
+Test if view vt has specific attribute type r
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>Object</code> | to test |
+| attribute | <code>String</code> | type e.g. string; |
+
+<a name="isViewRtWithLegend"></a>
+
+## isViewRtWithLegend(item)
+Test if view rt has legend url
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>Object</code> | to test |
+
+<a name="isViewDownloadable"></a>
+
+## isViewDownloadable(item)
+Test if view is downloadable
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>Object</code> | to test |
+
+<a name="isViewRtWithTiles"></a>
+
+## isViewRtWithTiles(item)
+Test if view rt has tiles
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>Object</code> | to test |
+
+<a name="isViewDashboard"></a>
+
+## isViewDashboard(item)
+Test if view  has dashbaord
 
 **Kind**: global function  
 
@@ -580,15 +678,27 @@ Test if entry is string and have the correct number of characters
 
 <a name="isSafe"></a>
 
-## isSafe(Any)
-Test if input is "safe"
--> avoid dangerous stuff for db : columns, values, .. when prepared queries are not possible. Not secure client side.
+## isSafe(x)
+Test if input value is "safe".
+Use server side
+-> avoid unwanted stuff for db : columns, values, .. when prepared queries are not possible.
 
 **Kind**: global function  
 
-| Param | Type |
-| --- | --- |
-| Any | <code>Any</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| x | <code>Any</code> | Any |
+
+<a name="isSafeName"></a>
+
+## isSafeName(x)
+Test if input is "safe" for naming db table, column.
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| x | <code>Any</code> | Any |
 
 <a name="isValidType"></a>
 
@@ -671,6 +781,20 @@ Test for object equality
 | --- | --- | --- |
 | x | <code>Object</code> | First object to compare |
 | y | <code>Object</code> | Second object to compare |
+
+<a name="isUrl"></a>
+
+## isUrl(url) ⇒ <code>Boolean</code>
+Validate url
+
+**Kind**: global function  
+**Note**: new version uses Url & tryCatch  
+**Note**: https://stackoverflow.com/questions/8667070/javascript-regular-expression-to-validate-url  
+**Note**: https://mathiasbynens.be/demo/url-regex  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| url | <code>String</code> | to test |
 
 <a name="isUrlHttps"></a>
 

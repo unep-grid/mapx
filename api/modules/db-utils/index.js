@@ -31,6 +31,32 @@ async function tableExists(idTable, schema) {
 }
 
 /**
+ * Test if a columm in a table exist 
+ *
+ * @param {String} idColumn id of the column
+ * @param {String} idTable id of the table
+ * @return {Promise<Boolean>} Table exists
+ */
+async function columnExists(idColumn, idTable) {
+  try {
+    const sql = `
+    SELECT EXISTS ( 
+    SELECT 1
+    FROM information_schema.columns 
+    WHERE table_name=$1 
+    AND column_name=$2;
+    )`;
+    const res = await pgRead.query(sql, [idTable, idColumn]);
+    const exists = res.rowCount > 0 && res.rows[0].exists;
+    return exists;
+  } catch (e) {
+    console.error(e);
+  }
+
+  return false;
+}
+
+/**
  * Test if a table exists, has rows, has attribute and a value
  *
  * @param {String} idTable id of the table
@@ -490,6 +516,7 @@ export {
   removeSource,
   tableHasValues,
   tableExists,
+  columnExists,
   decrypt,
   encrypt,
   registerSource,

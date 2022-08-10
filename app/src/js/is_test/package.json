@@ -1,6 +1,6 @@
 {
   "name": "@fxi/mx_valid",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Internal validation utilities for MapX",
   "type": "module",
   "source": "./index.js",

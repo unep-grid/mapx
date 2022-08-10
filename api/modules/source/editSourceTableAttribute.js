@@ -1,5 +1,6 @@
 import {
   tableExists,
+  columnExists,
   getTableDimension,
   getColumnsTypesSimple,
   getLayerTitle,
@@ -11,7 +12,7 @@ import {
   isNumeric,
   isString,
   isSourceId,
-  isSafe,
+  isSafeName,
 } from "@fxi/mx_valid";
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
@@ -178,7 +179,10 @@ class EditTableSession {
 
   error(txt, err) {
     const et = this;
-    et.emit("/server/source/edit/table/error", { message: txt, id_room: et._id_room });
+    et.emit("/server/source/edit/table/error", {
+      message: txt,
+      id_room: et._id_room,
+    });
     console.error(txt, err);
   }
 
@@ -393,9 +397,11 @@ async function writePostgres(updates) {
     for (const update of updates) {
       const { id_table, column_name, column_name_new } = update;
 
-      if (!isSourceId(id_table) || !isSafe(column_name)) {
-        throw new Error("Invalid update table or collumn");
+      if (!isSourceId(id_table) || !isSafeName(column_name)) {
+        throw new Error("Invalid update table or column");
       }
+      const colExists = await columnExists(column_name, id_table);
+
       switch (update.type) {
         case "update_cell":
           {
@@ -406,12 +412,18 @@ async function writePostgres(updates) {
               throw new Error("Invalid update_cell gid");
             }
 
+            if (!colExists) {
+              throw new Error(`Column does not exists :${column_name}`);
+            }
+
             const qSql = parseTemplate(templates.updateTableCellByGid, {
               id_table,
               gid,
               column_name,
             });
+
             const res = await client.query(qSql, [value_new]);
+
             if (res.rowCount != 1) {
               throw new Error("Error during update_cell : row affected =! 1");
             }
@@ -421,6 +433,11 @@ async function writePostgres(updates) {
           {
             /** ALTER TABLE products ADD COLUMN description text; **/
             const { column_type } = update;
+
+            if (colExists) {
+              throw new Error(`Column already exists :${column_name}`);
+            }
+
             const qSql = parseTemplate(templates.updateTableAddColumn, {
               id_table,
               column_name,
@@ -436,11 +453,16 @@ async function writePostgres(updates) {
           break;
         case "remove_column":
           {
+            if (!colExists) {
+              throw new Error(`Column does not exists :${column_name}`);
+            }
+
             /** ALTER TABLE products remove COLUMN description text; **/
             const qSql = parseTemplate(templates.updateTableRemoveColumn, {
               id_table,
               column_name,
             });
+
             const res = await client.query(qSql);
             if (res.rowCount) {
               throw new Error(
@@ -451,12 +473,23 @@ async function writePostgres(updates) {
           break;
         case "rename_column":
           {
+            if (!colExists) {
+              throw new Error(`Column does not exists :${column_name}`);
+            }
+
+            const colNewExists = await columnExists(column_name_new, id_table);
+
+            if (colNewExists) {
+              throw new Error(`Column already exists :${column_name}`);
+            }
+
             /** ALTER TABLE products remove COLUMN description text; **/
             const qSql = parseTemplate(templates.updateTableRenameColumn, {
               id_table,
               column_name,
               column_name_new,
             });
+
             const res = await client.query(qSql);
             if (res.rowCount) {
               throw new Error(

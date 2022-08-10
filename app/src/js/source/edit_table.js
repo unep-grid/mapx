@@ -1167,6 +1167,16 @@ export class EditTableSessionClient {
   }
 
   /**
+   * Check if a column exists
+   * @param {String} column name
+   * @return {Boolean} exists
+   */
+  columnExists(columnName) {
+    const et = this;
+    return !!et._columns.find((c) => c.data === columnName);
+  }
+
+  /**
    * Validate change
    * @param {Array} change Handsontable change
    * @return {Boolean} valid change
@@ -1174,6 +1184,13 @@ export class EditTableSessionClient {
   validateChange(change) {
     /* change: [row, prop, oldValue, newValue] */
     const et = this;
+
+    const exists = et.columnExists(change[1]);
+
+    if (!exists) {
+      return false;
+    }
+
     const type = et.getColumnType(change[1]);
     const value = change[3];
 
@@ -1197,6 +1214,13 @@ export class EditTableSessionClient {
   async confirmValidation(change) {
     const et = this;
     const type = et.getColumnType(change[1]);
+    const exists = et.columnExists(change[1]);
+
+    if (!exists) {
+      console.warn(`Column set for validation do not exist: ${change[1]}`);
+      return "continue";
+    }
+
     const nextValue = await modalConfirm({
       title: tt("edit_table_modal_value_invalid_title"),
       content: getDictTemplate("edit_table_modal_value_invalid", {
@@ -1590,6 +1614,7 @@ export class EditTableSessionClient {
     const et = this;
     et.emitUpdates(updates, { write_db: true });
   }
+
   /**
    * emit state update (e.g. lock state change )
    * @param {Array} updates
