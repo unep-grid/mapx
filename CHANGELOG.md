@@ -1,3 +1,8 @@
+  - [1.9.44-beta.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.3) 
+
+   - APP 
+        - Various translation from issue #775 
+
   - [1.9.44-beta.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.2) 
 
    - APP
