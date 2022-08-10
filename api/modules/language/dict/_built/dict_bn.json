@@ -1505,9 +1505,29 @@
     "bn": "পূর্বাবস্থায় ফেরান"
   },
   {
+    "id": "btn_edit_undo_last",
+    "en": "Undo last change",
+    "bn": "শেষ পরিবর্তন পূর্বাবস্থায় ফেরান"
+  },
+  {
     "id": "btn_edit_redo",
     "en": "Redo",
     "bn": "আবার করুন"
+  },
+  {
+    "id": "edit_table_modal_value_invalid_title",
+    "en": "Invalid value",
+    "bn": "অবৈধ মান"
+  },
+  {
+    "id": "edit_table_modal_value_invalid",
+    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
+    "bn": "অবৈধ মান প্রাপ্ত. সঠিক টাইপ ব্যবহার নিশ্চিত করুন: {{type}} .\n এই পরিবর্তন সংরক্ষণ করা হবে না."
+  },
+  {
+    "id": "edit_table_modal_value_invalid_continue",
+    "en": "Ignore and continue",
+    "bn": "উপেক্ষা করুন এবং চালিয়ে যান"
   },
   {
     "id": "btn_edit_add_column",
@@ -2021,13 +2041,13 @@
   },
   {
     "id": "btn_rebuild_geoserver",
-    "en": "Update geoserver : rebuild DB",
-    "bn": "জিওসার্ভার আপডেট করুন: ডিবি পুনর্নির্মাণ করুন"
+    "en": "Geoserver: rebuild DB",
+    "bn": "জিওসার্ভার: ডিবি পুনর্নির্মাণ করুন"
   },
   {
     "id": "btn_rebuild_geoserver_recalc_style",
-    "en": "Update geoserver : rebuild DB + recalc views style",
-    "bn": "জিওসার্ভার আপডেট করুন: ডিবি + রিকালক ভিউ স্টাইল পুনর্নির্মাণ করুন"
+    "en": "Geoserver : rebuild DB + style",
+    "bn": "জিওসার্ভার: ডিবি + স্টাইল পুনর্নির্মাণ করুন"
   },
   {
     "id": "btn_about",

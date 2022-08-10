@@ -1505,9 +1505,29 @@
     "ar": "الغاء التحميل"
   },
   {
+    "id": "btn_edit_undo_last",
+    "en": "Undo last change",
+    "ar": "التراجع عن التغيير الأخير"
+  },
+  {
     "id": "btn_edit_redo",
     "en": "Redo",
     "ar": "إعادة"
+  },
+  {
+    "id": "edit_table_modal_value_invalid_title",
+    "en": "Invalid value",
+    "ar": "قيمة غير صالحة"
+  },
+  {
+    "id": "edit_table_modal_value_invalid",
+    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
+    "ar": "تم استلام قيمة غير صحيحة. تأكد من استخدام النوع الصحيح: {{type}} .\n لن يتم حفظ هذا التغيير."
+  },
+  {
+    "id": "edit_table_modal_value_invalid_continue",
+    "en": "Ignore and continue",
+    "ar": "تجاهل واستمر"
   },
   {
     "id": "btn_edit_add_column",
@@ -2021,13 +2041,13 @@
   },
   {
     "id": "btn_rebuild_geoserver",
-    "en": "Update geoserver : rebuild DB",
-    "ar": "تحديث الخادم الجغرافي: إعادة بناء قاعدة البيانات"
+    "en": "Geoserver: rebuild DB",
+    "ar": "Geoserver: إعادة بناء DB"
   },
   {
     "id": "btn_rebuild_geoserver_recalc_style",
-    "en": "Update geoserver : rebuild DB + recalc views style",
-    "ar": "تحديث الخادم الجغرافي: إعادة بناء أسلوب عرض DB + إعادة حساب"
+    "en": "Geoserver : rebuild DB + style",
+    "ar": "Geoserver: إعادة بناء أسلوب DB +"
   },
   {
     "id": "btn_about",

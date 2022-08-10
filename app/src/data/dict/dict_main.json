@@ -170,7 +170,7 @@
   },
   {
     "id": "btn_rebuild_geoserver",
-    "en": "Update geoserver : rebuild DB",
+    "en": "Geoserver: rebuild DB",
     "fr": "",
     "es": "",
     "ru": "",
@@ -183,7 +183,7 @@
   },
   {
     "id": "btn_rebuild_geoserver_recalc_style",
-    "en": "Update geoserver : rebuild DB + recalc views style",
+    "en": "Geoserver : rebuild DB + style",
     "fr": "",
     "es": "",
     "ru": "",

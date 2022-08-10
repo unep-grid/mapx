@@ -1505,9 +1505,29 @@
     "fa": "واگرد"
   },
   {
+    "id": "btn_edit_undo_last",
+    "en": "Undo last change",
+    "fa": "لغو آخرین تغییر"
+  },
+  {
     "id": "btn_edit_redo",
     "en": "Redo",
     "fa": "دوباره انجام دهید"
+  },
+  {
+    "id": "edit_table_modal_value_invalid_title",
+    "en": "Invalid value",
+    "fa": "مقدار نامعتبر است"
+  },
+  {
+    "id": "edit_table_modal_value_invalid",
+    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
+    "fa": "مقدار نامعتبر دریافت شد. حتما از نوع صحیح استفاده کنید: {{type}} .\n این تغییر ذخیره نخواهد شد."
+  },
+  {
+    "id": "edit_table_modal_value_invalid_continue",
+    "en": "Ignore and continue",
+    "fa": "نادیده بگیرید و ادامه دهید"
   },
   {
     "id": "btn_edit_add_column",
@@ -2021,13 +2041,13 @@
   },
   {
     "id": "btn_rebuild_geoserver",
-    "en": "Update geoserver : rebuild DB",
-    "fa": "به روز رسانی geoserver: بازسازی DB"
+    "en": "Geoserver: rebuild DB",
+    "fa": "Geoserver: بازسازی DB"
   },
   {
     "id": "btn_rebuild_geoserver_recalc_style",
-    "en": "Update geoserver : rebuild DB + recalc views style",
-    "fa": "به روز رسانی geoserver: بازسازی DB + recalc style views"
+    "en": "Geoserver : rebuild DB + style",
+    "fa": "Geoserver: بازسازی DB + style"
   },
   {
     "id": "btn_about",

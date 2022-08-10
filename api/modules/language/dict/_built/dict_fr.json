@@ -1505,9 +1505,29 @@
     "fr": "annuler"
   },
   {
+    "id": "btn_edit_undo_last",
+    "en": "Undo last change",
+    "fr": "Annuler la dernière modification"
+  },
+  {
     "id": "btn_edit_redo",
     "en": "Redo",
     "fr": "Refaire"
+  },
+  {
+    "id": "edit_table_modal_value_invalid_title",
+    "en": "Invalid value",
+    "fr": "valeur invalide"
+  },
+  {
+    "id": "edit_table_modal_value_invalid",
+    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
+    "fr": "Valeur reçue invalide. Assurez-vous d'utiliser le bon type : {{type}} .\n Cette modification ne sera pas enregistrée."
+  },
+  {
+    "id": "edit_table_modal_value_invalid_continue",
+    "en": "Ignore and continue",
+    "fr": "Ignorer et continuer"
   },
   {
     "id": "btn_edit_add_column",
@@ -2021,13 +2041,13 @@
   },
   {
     "id": "btn_rebuild_geoserver",
-    "en": "Update geoserver : rebuild DB",
-    "fr": "Mettre à jour le géoserveur : reconstruire la base de données"
+    "en": "Geoserver: rebuild DB",
+    "fr": "Geoserver : reconstruire la base de données"
   },
   {
     "id": "btn_rebuild_geoserver_recalc_style",
-    "en": "Update geoserver : rebuild DB + recalc views style",
-    "fr": "Mettre à jour le géoserveur : reconstruire la BD + recalculer le style des vues"
+    "en": "Geoserver : rebuild DB + style",
+    "fr": "Geoserver : reconstruire la BD + style"
   },
   {
     "id": "btn_about",

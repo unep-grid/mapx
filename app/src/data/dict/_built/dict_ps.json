@@ -1505,9 +1505,29 @@
     "ps": "بیرته راګرځول"
   },
   {
+    "id": "btn_edit_undo_last",
+    "en": "Undo last change",
+    "ps": "وروستی بدلون بیرته راوستل"
+  },
+  {
     "id": "btn_edit_redo",
     "en": "Redo",
     "ps": "بیا کول"
+  },
+  {
+    "id": "edit_table_modal_value_invalid_title",
+    "en": "Invalid value",
+    "ps": "ناسم ارزښت"
+  },
+  {
+    "id": "edit_table_modal_value_invalid",
+    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
+    "ps": "ناسم ارزښت ترلاسه شوی. ډاډ ترلاسه کړئ چې سم ډول وکاروئ: {{type}} .\n دا بدلون به خوندي نشي."
+  },
+  {
+    "id": "edit_table_modal_value_invalid_continue",
+    "en": "Ignore and continue",
+    "ps": "سترګې پټې کړئ او دوام ورکړئ"
   },
   {
     "id": "btn_edit_add_column",
@@ -2021,13 +2041,13 @@
   },
   {
     "id": "btn_rebuild_geoserver",
-    "en": "Update geoserver : rebuild DB",
-    "ps": "جیوسرور تازه کړئ: د DB بیا جوړ کړئ"
+    "en": "Geoserver: rebuild DB",
+    "ps": "جیوسرور: د DB بیا جوړونه"
   },
   {
     "id": "btn_rebuild_geoserver_recalc_style",
-    "en": "Update geoserver : rebuild DB + recalc views style",
-    "ps": "جیوسرور تازه کړئ: د DB + recalc لیدونو سټایل بیا جوړ کړئ"
+    "en": "Geoserver : rebuild DB + style",
+    "ps": "جیوسرور: د DB + سټایل بیا جوړ کړئ"
   },
   {
     "id": "btn_about",

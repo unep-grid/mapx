@@ -1505,9 +1505,29 @@
     "es": "Deshacer"
   },
   {
+    "id": "btn_edit_undo_last",
+    "en": "Undo last change",
+    "es": "Deshacer último cambio"
+  },
+  {
     "id": "btn_edit_redo",
     "en": "Redo",
     "es": "Rehacer"
+  },
+  {
+    "id": "edit_table_modal_value_invalid_title",
+    "en": "Invalid value",
+    "es": "valor no válido"
+  },
+  {
+    "id": "edit_table_modal_value_invalid",
+    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
+    "es": "Valor no válido recibido. Asegúrese de utilizar el tipo correcto: {{type}} .\n Este cambio no se guardará."
+  },
+  {
+    "id": "edit_table_modal_value_invalid_continue",
+    "en": "Ignore and continue",
+    "es": "Ignorar y continuar"
   },
   {
     "id": "btn_edit_add_column",
@@ -2021,13 +2041,13 @@
   },
   {
     "id": "btn_rebuild_geoserver",
-    "en": "Update geoserver : rebuild DB",
-    "es": "Actualizar geoservidor: reconstruir DB"
+    "en": "Geoserver: rebuild DB",
+    "es": "Geoservidor: reconstruir DB"
   },
   {
     "id": "btn_rebuild_geoserver_recalc_style",
-    "en": "Update geoserver : rebuild DB + recalc views style",
-    "es": "Actualizar geoserver: reconstruir DB + recalc vistas estilo"
+    "en": "Geoserver : rebuild DB + style",
+    "es": "Geoserver: reconstruir DB + estilo"
   },
   {
     "id": "btn_about",

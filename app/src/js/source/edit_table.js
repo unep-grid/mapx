@@ -5,7 +5,7 @@ import {
   modalConfirm,
   modalDialog,
 } from "./../mx_helper_modal.js";
-import { el, elButtonFa, elSpanTranslate, elCheckbox } from "../el_mapx";
+import { el, elButtonFa, elSpanTranslate as tt, elCheckbox } from "../el_mapx";
 import { moduleLoad } from "./../modules_loader_async";
 import { bindAll } from "./../bind_class_methods";
 import { getDictTemplate, getDictItem } from "./../language";
@@ -258,7 +258,7 @@ export class EditTableSessionClient {
 
     et._el_users_stat = el("ul");
     et._el_users_stat_wrapper = el("small", [
-      elSpanTranslate("edit_table_users_stat"),
+      tt("edit_table_users_stat"),
       et._el_users_stat,
     ]);
 
@@ -940,8 +940,8 @@ export class EditTableSessionClient {
   async dialogRemoveColumn() {
     const et = this;
     const names = et._columns.reduce((a, c) => {
-      const isNotReserved = !et.isColumnReserved(c.data);
-      if (isNotReserved) {
+      const isValid = et.isValidName(c.data);
+      if (isValid) {
         a.push(c.data);
       }
       return a;
@@ -950,9 +950,9 @@ export class EditTableSessionClient {
     const optionColumnNames = names.map((t) => el("option", { value: t }, t));
 
     const columnToRemove = await modalPrompt({
-      title: elSpanTranslate("edit_table_modal_remove_column_title"),
-      label: elSpanTranslate("edit_table_modal_remove_column_label"),
-      confirm: elSpanTranslate("edit_table_modal_remove_column_next"),
+      title: tt("edit_table_modal_remove_column_title"),
+      label: tt("edit_table_modal_remove_column_label"),
+      confirm: tt("edit_table_modal_remove_column_next"),
       inputTag: "select",
       inputOptions: {
         type: "select",
@@ -970,11 +970,11 @@ export class EditTableSessionClient {
      * Ask the user for confirmation
      */
     const confirmRemove = await modalPrompt({
-      title: elSpanTranslate("edit_table_modal_remove_column_confirm_title"),
+      title: tt("edit_table_modal_remove_column_confirm_title"),
       label: getDictTemplate("edit_table_modal_remove_column_confirm_text", {
         column_name: columnToRemove,
       }),
-      confirm: elSpanTranslate("btn_edit_table_modal_remove_column_confirm"),
+      confirm: tt("btn_edit_table_modal_remove_column_confirm"),
       inputTag: "input",
       inputOptions: {
         type: "checkbox",
@@ -1054,9 +1054,9 @@ export class EditTableSessionClient {
      * Ask the user for the new column name and validate
      */
     const columnName = await modalPrompt({
-      title: elSpanTranslate("edit_table_modal_add_column_name_title"),
-      label: elSpanTranslate("edit_table_modal_add_column_name_label"),
-      confirm: elSpanTranslate("edit_table_modal_add_column_name_next"),
+      title: tt("edit_table_modal_add_column_name_title"),
+      label: tt("edit_table_modal_add_column_name_label"),
+      confirm: tt("edit_table_modal_add_column_name_next"),
       inputOptions: {
         type: "text",
         value: `new_column_${makeId()}`,
@@ -1112,9 +1112,9 @@ export class EditTableSessionClient {
     );
 
     const columnType = await modalPrompt({
-      title: elSpanTranslate("edit_table_modal_add_column_type_title"),
-      label: elSpanTranslate("edit_table_modal_add_column_type_label"),
-      confirm: elSpanTranslate("edit_table_modal_add_column_type_next"),
+      title: tt("edit_table_modal_add_column_type_title"),
+      label: tt("edit_table_modal_add_column_type_label"),
+      confirm: tt("edit_table_modal_add_column_type_next"),
       inputTag: "select",
       inputOptions: {
         type: "select",
@@ -1132,13 +1132,13 @@ export class EditTableSessionClient {
      * Ask the user for confirmation
      */
     const confirmCreate = await modalConfirm({
-      title: elSpanTranslate("edit_table_modal_add_column_confirm_title"),
+      title: tt("edit_table_modal_add_column_confirm_title"),
       content: getDictTemplate("edit_table_modal_add_column_confirm_text", {
         column_name: columnNameSafe,
         column_type: columnType,
       }),
-      cancel: elSpanTranslate("btn_cancel"),
-      confirm: elSpanTranslate("btn_edit_table_modal_add_column_confirm"),
+      cancel: tt("btn_cancel"),
+      confirm: tt("btn_edit_table_modal_add_column_confirm"),
     });
 
     if (!confirmCreate) {
@@ -1196,13 +1196,14 @@ export class EditTableSessionClient {
    */
   async confirmValidation(change) {
     const et = this;
-
     const type = et.getColumnType(change[1]);
     const nextValue = await modalConfirm({
-      title: "Invalid value",
-      content: `Invalid value received. Make sure to use the correct type : ${type} `,
-      cancel: "Undo last change",
-      confirm: "Continue",
+      title: tt("edit_table_modal_value_invalid_title"),
+      content: getDictTemplate("edit_table_modal_value_invalid", {
+        type: type,
+      }),
+      cancel: tt("btn_edit_undo_last"),
+      confirm: tt("edit_table_modal_value_invalid_continue"),
     });
     if (nextValue) {
       return "continue";
@@ -1219,17 +1220,15 @@ export class EditTableSessionClient {
   async confirmLargeUpdate(changes) {
     const nChanges = changes.length;
     const proceedLargeChanges = await modalConfirm({
-      title: elSpanTranslate("edit_table_modal_large_changes_number_title"),
+      title: tt("edit_table_modal_large_changes_number_title"),
       content: getDictTemplate(
         "edit_table_modal_large_changes_number_content",
         {
           count: nChanges,
         }
       ),
-      confirm: elSpanTranslate(
-        "btn_edit_table_modal_large_changes_number_continue"
-      ),
-      cancel: elSpanTranslate("btn_edit_table_modal_large_changes_number_undo"),
+      confirm: tt("btn_edit_table_modal_large_changes_number_continue"),
+      cancel: tt("btn_edit_table_modal_large_changes_number_undo"),
     });
 
     return proceedLargeChanges;
@@ -1247,12 +1246,12 @@ export class EditTableSessionClient {
     }
     const nChanges = changes.length;
     await modalDialog({
-      title: elSpanTranslate("edit_table_modal_changes_too_big_title"),
+      title: tt("edit_table_modal_changes_too_big_title"),
       content: getDictTemplate("edit_table_modal_changes_too_big_content", {
         count: nChanges,
         max_changes: et._config.max_changes,
       }),
-      confirm: elSpanTranslate("btn_edit_table_modal_changes_too_big_ok"),
+      confirm: tt("btn_edit_table_modal_changes_too_big_ok"),
       cancel: null,
     });
   }

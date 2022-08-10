@@ -1204,8 +1204,24 @@
     "en": "Undo"
   },
   {
+    "id": "btn_edit_undo_last",
+    "en": "Undo last change"
+  },
+  {
     "id": "btn_edit_redo",
     "en": "Redo"
+  },
+  {
+    "id": "edit_table_modal_value_invalid_title",
+    "en": "Invalid value"
+  },
+  {
+    "id": "edit_table_modal_value_invalid",
+    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved."
+  },
+  {
+    "id": "edit_table_modal_value_invalid_continue",
+    "en": "Ignore and continue"
   },
   {
     "id": "btn_edit_add_column",
@@ -1617,11 +1633,11 @@
   },
   {
     "id": "btn_rebuild_geoserver",
-    "en": "Update geoserver : rebuild DB"
+    "en": "Geoserver: rebuild DB"
   },
   {
     "id": "btn_rebuild_geoserver_recalc_style",
-    "en": "Update geoserver : rebuild DB + recalc views style"
+    "en": "Geoserver : rebuild DB + style"
   },
   {
     "id": "btn_about",

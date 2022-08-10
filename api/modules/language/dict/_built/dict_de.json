@@ -1505,9 +1505,29 @@
     "de": "Rückgängig machen"
   },
   {
+    "id": "btn_edit_undo_last",
+    "en": "Undo last change",
+    "de": "Letzte Änderung rückgängig machen"
+  },
+  {
     "id": "btn_edit_redo",
     "en": "Redo",
     "de": "Wiederholen"
+  },
+  {
+    "id": "edit_table_modal_value_invalid_title",
+    "en": "Invalid value",
+    "de": "Ungültiger Wert"
+  },
+  {
+    "id": "edit_table_modal_value_invalid",
+    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
+    "de": "Ungültiger Wert empfangen. Stellen Sie sicher, dass Sie den richtigen Typ verwenden: {{type}} .\n Diese Änderung wird nicht gespeichert."
+  },
+  {
+    "id": "edit_table_modal_value_invalid_continue",
+    "en": "Ignore and continue",
+    "de": "Ignorieren und fortfahren"
   },
   {
     "id": "btn_edit_add_column",
@@ -2021,13 +2041,13 @@
   },
   {
     "id": "btn_rebuild_geoserver",
-    "en": "Update geoserver : rebuild DB",
-    "de": "Geoserver aktualisieren: DB neu aufbauen"
+    "en": "Geoserver: rebuild DB",
+    "de": "Geoserver: Datenbank neu aufbauen"
   },
   {
     "id": "btn_rebuild_geoserver_recalc_style",
-    "en": "Update geoserver : rebuild DB + recalc views style",
-    "de": "Geoserver aktualisieren: DB neu erstellen + Ansichtsstil neu berechnen"
+    "en": "Geoserver : rebuild DB + style",
+    "de": "Geoserver: DB + Stil neu erstellen"
   },
   {
     "id": "btn_about",

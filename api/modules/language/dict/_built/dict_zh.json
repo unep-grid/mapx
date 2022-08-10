@@ -1505,9 +1505,29 @@
     "zh": "撤消"
   },
   {
+    "id": "btn_edit_undo_last",
+    "en": "Undo last change",
+    "zh": "撤消上次更改"
+  },
+  {
     "id": "btn_edit_redo",
     "en": "Redo",
     "zh": "重做"
+  },
+  {
+    "id": "edit_table_modal_value_invalid_title",
+    "en": "Invalid value",
+    "zh": "无效值"
+  },
+  {
+    "id": "edit_table_modal_value_invalid",
+    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
+    "zh": "收到无效值。确保使用正确的类型： {{type}} .\n不会保存此更改。"
+  },
+  {
+    "id": "edit_table_modal_value_invalid_continue",
+    "en": "Ignore and continue",
+    "zh": "忽略并继续"
   },
   {
     "id": "btn_edit_add_column",
@@ -2021,13 +2041,13 @@
   },
   {
     "id": "btn_rebuild_geoserver",
-    "en": "Update geoserver : rebuild DB",
-    "zh": "更新地理服务器：重建数据库"
+    "en": "Geoserver: rebuild DB",
+    "zh": "地理服务器：重建数据库"
   },
   {
     "id": "btn_rebuild_geoserver_recalc_style",
-    "en": "Update geoserver : rebuild DB + recalc views style",
-    "zh": "更新地理服务器：重建数据库 + 重新计算视图样式"
+    "en": "Geoserver : rebuild DB + style",
+    "zh": "地理服务器：重建 DB + 风格"
   },
   {
     "id": "btn_about",

@@ -1505,9 +1505,29 @@
     "ru": "Отменить"
   },
   {
+    "id": "btn_edit_undo_last",
+    "en": "Undo last change",
+    "ru": "Отменить последнее изменение"
+  },
+  {
     "id": "btn_edit_redo",
     "en": "Redo",
     "ru": "Повторить"
+  },
+  {
+    "id": "edit_table_modal_value_invalid_title",
+    "en": "Invalid value",
+    "ru": "Неверное значение"
+  },
+  {
+    "id": "edit_table_modal_value_invalid",
+    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
+    "ru": "Получено неверное значение. Убедитесь, что вы используете правильный тип: {{type}} .\n Это изменение не будет сохранено."
+  },
+  {
+    "id": "edit_table_modal_value_invalid_continue",
+    "en": "Ignore and continue",
+    "ru": "Игнорировать и продолжить"
   },
   {
     "id": "btn_edit_add_column",
@@ -2021,13 +2041,13 @@
   },
   {
     "id": "btn_rebuild_geoserver",
-    "en": "Update geoserver : rebuild DB",
-    "ru": "Обновить геосервер: перестроить БД"
+    "en": "Geoserver: rebuild DB",
+    "ru": "Геосервер: перестроить БД"
   },
   {
     "id": "btn_rebuild_geoserver_recalc_style",
-    "en": "Update geoserver : rebuild DB + recalc views style",
-    "ru": "Обновить геосервер: перестроить БД + пересчитать стиль представлений"
+    "en": "Geoserver : rebuild DB + style",
+    "ru": "Geoserver: перестроить БД + стиль"
   },
   {
     "id": "btn_about",
