@@ -44,7 +44,7 @@ async function columnExists(idColumn, idTable) {
     SELECT 1
     FROM information_schema.columns 
     WHERE table_name=$1 
-    AND column_name=$2;
+    AND column_name=$2
     )`;
     const res = await pgRead.query(sql, [idTable, idColumn]);
     const exists = res.rowCount > 0 && res.rows[0].exists;
