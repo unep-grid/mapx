@@ -46,7 +46,7 @@ export async function showSourceTableAttributeModal(opt) {
   };
 
   let hot;
-  let mutationObserver;
+  let resizeObserver;
   let labels = opt.labels || null;
 
   const summary = await getViewSourceSummary(opt.view.id, {
@@ -61,18 +61,17 @@ export async function showSourceTableAttributeModal(opt) {
   const services = meta._services || [];
   const hasData = isArray(data) && data.length > 0;
   const license = "non-commercial-and-evaluation";
-  const elContent = el("div", { class: "mx_handsontable" });
   const elTable = el("div", {
+    class : "mx_handsontable",
     style: {
       width: "100%",
-      height: "350px",
+      height: "350",
       minHeight: "350px",
       minWidth: "100px",
       overflow: "hidden",
       backgroundColor: "var(--mx_ui_shadow)",
     },
   });
-  elContent.appendChild(elTable);
   const allowDownload = services.indexOf("mx_download") > -1;
   const elButtonDownload = el(
     "button",
@@ -131,7 +130,7 @@ export async function showSourceTableAttributeModal(opt) {
 
   const elModal = h.modal({
     title: elTitle,
-    content: elContent,
+    content: elTable,
     onClose: destroy,
     buttons: buttons,
     addSelectize: false,
@@ -188,7 +187,8 @@ export async function showSourceTableAttributeModal(opt) {
   /**
    * If everything is fine, add a mutation observer to render the table
    */
-  mutationObserver = listenMutationAttribute(elModal, tableRender);
+  resizeObserver = new ResizeObserver(tableRender);
+  resizeObserver.observe(elModal);
 
   /**
    * Helpers
@@ -229,26 +229,32 @@ export async function showSourceTableAttributeModal(opt) {
     elViewTitle.innerText = h.getViewTitle(view);
   }
 
+  let _to_render_table = 0; 
   function tableRender() {
-    if (hot && hot.render) {
-      let elParent = elTable.parentElement;
-      let pStyle = getComputedStyle(elParent);
-      let pad =
-        parseFloat(pStyle.paddingTop) + parseFloat(pStyle.paddingBottom);
-      let height = elParent.getBoundingClientRect().height;
-      if (height > 350) {
-        elTable.style.height = height - pad + "px";
-        hot.render();
+    clearTimeout(_to_render_table);
+    _to_render_table = setTimeout(() => {
+      if (hot && hot.render) {
+        const elTableParent = elTable.parentElement;
+        // compute padding ..
+        let pStyle = getComputedStyle(elTableParent);
+        let pad =
+          parseFloat(pStyle.paddingTop) + parseFloat(pStyle.paddingBottom);
+        // and actual size
+        let height = elTableParent.getBoundingClientRect().height;
+        if (height > 350) {
+          elTable.style.height = height - pad + "px";
+          hot.render();
+        }
       }
-    }
+    },200)
   }
 
   function destroy() {
     if (hot) {
       hot.destroy();
     }
-    if (mutationObserver) {
-      mutationObserver.disconnect();
+    if (resizeObserver) {
+      resizeObserver.disconnect();
     }
     let view = settings.view;
     if (!isView(view)) {
