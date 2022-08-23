@@ -55,6 +55,7 @@ class Page extends Box {
       const page = this;
       const elPrint = page.el;
       await mc.setMode('print');
+      debugger;
       const canvas = await html2canvas(elPrint, {
         logging: false
       });

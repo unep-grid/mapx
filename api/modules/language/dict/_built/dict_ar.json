@@ -6655,6 +6655,16 @@
     "ar": "تصدير الصفحة كصورة بتنسيق PNG"
   },
   {
+    "id": "mc_button_fit_map_page",
+    "en": "Fit map to page",
+    "ar": "احتواء الخريطة على الصفحة"
+  },
+  {
+    "id": "mc_button_fit_map_page_desc",
+    "en": "Extend map(s) dimension to fit the page width and height",
+    "ar": "قم بتوسيع بُعد الخريطة (الخرائط) ليلائم عرض الصفحة وارتفاعها"
+  },
+  {
     "id": "mc_button_toggle_landscape",
     "en": "Portrait | Landscape",
     "ar": "عمودي | المناظر الطبيعيه"

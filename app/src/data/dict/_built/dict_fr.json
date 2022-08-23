@@ -6655,6 +6655,16 @@
     "fr": "Exporter la page en tant qu'image au format PNG"
   },
   {
+    "id": "mc_button_fit_map_page",
+    "en": "Fit map to page",
+    "fr": "Ajuster la carte à la page"
+  },
+  {
+    "id": "mc_button_fit_map_page_desc",
+    "en": "Extend map(s) dimension to fit the page width and height",
+    "fr": "Étendre la dimension de la ou des cartes pour s'adapter à la largeur et à la hauteur de la page"
+  },
+  {
     "id": "mc_button_toggle_landscape",
     "en": "Portrait | Landscape",
     "fr": "Portrait | Paysage"

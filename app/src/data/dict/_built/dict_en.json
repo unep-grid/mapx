@@ -5324,6 +5324,14 @@
     "en": "Export page as an image in PNG format"
   },
   {
+    "id": "mc_button_fit_map_page",
+    "en": "Fit map to page"
+  },
+  {
+    "id": "mc_button_fit_map_page_desc",
+    "en": "Extend map(s) dimension to fit the page width and height"
+  },
+  {
     "id": "mc_button_toggle_landscape",
     "en": "Portrait | Landscape"
   },

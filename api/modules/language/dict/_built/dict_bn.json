@@ -6655,6 +6655,16 @@
     "bn": "PNG বিন্যাসে একটি চিত্র হিসাবে পৃষ্ঠা রপ্তানি করুন"
   },
   {
+    "id": "mc_button_fit_map_page",
+    "en": "Fit map to page",
+    "bn": "পৃষ্ঠায় মানচিত্র ফিট করুন"
+  },
+  {
+    "id": "mc_button_fit_map_page_desc",
+    "en": "Extend map(s) dimension to fit the page width and height",
+    "bn": "পৃষ্ঠার প্রস্থ এবং উচ্চতা মানানসই মানচিত্র(গুলি) মাত্রা প্রসারিত করুন"
+  },
+  {
     "id": "mc_button_toggle_landscape",
     "en": "Portrait | Landscape",
     "bn": "প্রতিকৃতি | ল্যান্ডস্কেপ"

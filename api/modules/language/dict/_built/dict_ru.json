@@ -6655,6 +6655,16 @@
     "ru": "Экспорт страницы в виде изображения в формате PNG"
   },
   {
+    "id": "mc_button_fit_map_page",
+    "en": "Fit map to page",
+    "ru": "Вписать карту в страницу"
+  },
+  {
+    "id": "mc_button_fit_map_page_desc",
+    "en": "Extend map(s) dimension to fit the page width and height",
+    "ru": "Увеличьте размеры карт, чтобы они соответствовали ширине и высоте страницы."
+  },
+  {
     "id": "mc_button_toggle_landscape",
     "en": "Portrait | Landscape",
     "ru": "Портрет | Пейзаж"

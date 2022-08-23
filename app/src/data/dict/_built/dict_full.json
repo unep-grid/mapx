@@ -17303,6 +17303,32 @@
     "de": "Seite als Bild im PNG-Format exportieren"
   },
   {
+    "id": "mc_button_fit_map_page",
+    "en": "Fit map to page",
+    "fr": "Ajuster la carte à la page",
+    "es": "Ajustar mapa a página",
+    "ru": "Вписать карту в страницу",
+    "zh": "使地图适合页面",
+    "ar": "احتواء الخريطة على الصفحة",
+    "fa": "مطابقت نقشه با صفحه",
+    "ps": "نقشه د پاڼې سره سم کړئ",
+    "bn": "পৃষ্ঠায় মানচিত্র ফিট করুন",
+    "de": "Karte an Seite anpassen"
+  },
+  {
+    "id": "mc_button_fit_map_page_desc",
+    "en": "Extend map(s) dimension to fit the page width and height",
+    "fr": "Étendre la dimension de la ou des cartes pour s'adapter à la largeur et à la hauteur de la page",
+    "es": "Extienda la dimensión del mapa (s) para que se ajuste al ancho y alto de la página",
+    "ru": "Увеличьте размеры карт, чтобы они соответствовали ширине и высоте страницы.",
+    "zh": "扩展地图尺寸以适应页面宽度和高度",
+    "ar": "قم بتوسيع بُعد الخريطة (الخرائط) ليلائم عرض الصفحة وارتفاعها",
+    "fa": "ابعاد نقشه(ها) را برای تناسب با عرض و ارتفاع صفحه گسترش دهید",
+    "ps": "د نقشې (نقشې) ابعاد پراخ کړئ ترڅو د پاڼې پلنوالی او لوړوالی سره سمون ومومي",
+    "bn": "পৃষ্ঠার প্রস্থ এবং উচ্চতা মানানসই মানচিত্র(গুলি) মাত্রা প্রসারিত করুন",
+    "de": "Erweitern Sie die Kartenabmessungen, um sie an die Seitenbreite und -höhe anzupassen"
+  },
+  {
     "id": "mc_button_toggle_landscape",
     "en": "Portrait | Landscape",
     "fr": "Portrait | Paysage",

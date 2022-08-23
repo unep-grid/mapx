@@ -160,6 +160,45 @@ class Toolbar extends Box {
           {
             class: "form-group",
           },
+          el(
+            "button",
+            {
+              type: "button",
+              class: ["btn", "btn-default"],
+              dataset: {
+                mc_action: "fit_map_to_page",
+                mc_event_type: "click",
+              },
+            },
+            tt("mc_button_fit_map_page")
+          ),
+          el("span", { class: "text-muted" }, tt("mc_button_fit_map_page_desc"))
+        ),
+        el(
+          "div",
+          {
+            class: "form-group",
+          },
+          el(
+            "button",
+            {
+              type: "button",
+              class: ["btn", "btn-default"],
+              dataset: {
+                mc_action: "export_page",
+                mc_event_type: "click",
+              },
+            },
+            tt("mc_button_export")
+          ),
+          el("span", { class: "text-muted" }, tt("mc_button_export_desc"))
+        ),
+
+        el(
+          "div",
+          {
+            class: "form-group",
+          },
           [
             el("label", tt("mc_label_unit")),
             (toolbar.elInputUnit = el(
@@ -308,25 +347,6 @@ class Toolbar extends Box {
           ],
           el("span", { class: "text-muted" }, tt("mc_label_mode_desc"))
         ),
-        el(
-          "div",
-          {
-            class: "form-group",
-          },
-          el(
-            "button",
-            {
-              type: "button",
-              class: ["btn", "btn-default"],
-              dataset: {
-                mc_action: "export_page",
-                mc_event_type: "click",
-              },
-            },
-            tt("mc_button_export")
-          ),
-          el("span", { class: "text-muted" }, tt("mc_button_export_desc"))
-        ),
       ]
     );
   }
@@ -350,6 +370,9 @@ function clickCallback(e) {
       break;
     case "toggle_landscape":
       mc.inversePageHeightWidth();
+      break;
+    case "fit_map_to_page":
+      mc.fitMapToPage();
       break;
     default:
       console.warn(`Click handler not found for ${idAction}`);

@@ -6655,6 +6655,16 @@
     "ps": "د PNG بڼه کې د انځور په توګه صادرات پاڼه"
   },
   {
+    "id": "mc_button_fit_map_page",
+    "en": "Fit map to page",
+    "ps": "نقشه د پاڼې سره سم کړئ"
+  },
+  {
+    "id": "mc_button_fit_map_page_desc",
+    "en": "Extend map(s) dimension to fit the page width and height",
+    "ps": "د نقشې (نقشې) ابعاد پراخ کړئ ترڅو د پاڼې پلنوالی او لوړوالی سره سمون ومومي"
+  },
+  {
     "id": "mc_button_toggle_landscape",
     "en": "Portrait | Landscape",
     "ps": "انځور | منظره"

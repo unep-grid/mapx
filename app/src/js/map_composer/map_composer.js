@@ -167,6 +167,18 @@ export class MapComposer {
     mc.setPageWidth();
   }
 
+  fitMapToPage() {
+    const mc = this;
+    const h = mc.state.page_height;
+    const w = mc.state.page_width;
+    for (const item of mc.page.items) {
+      if (item.type === "map") {
+        item.setWidth(w);
+        item.setHeight(h);
+      }
+    }
+  }
+
   inversePageHeightWidth() {
     const mc = this;
     const h = mc.state.page_height;

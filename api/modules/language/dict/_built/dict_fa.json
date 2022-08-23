@@ -6655,6 +6655,16 @@
     "fa": "صفحه را به عنوان تصویر در فرمت PNG صادر کنید"
   },
   {
+    "id": "mc_button_fit_map_page",
+    "en": "Fit map to page",
+    "fa": "مطابقت نقشه با صفحه"
+  },
+  {
+    "id": "mc_button_fit_map_page_desc",
+    "en": "Extend map(s) dimension to fit the page width and height",
+    "fa": "ابعاد نقشه(ها) را برای تناسب با عرض و ارتفاع صفحه گسترش دهید"
+  },
+  {
     "id": "mc_button_toggle_landscape",
     "en": "Portrait | Landscape",
     "fa": "پرتره | چشم انداز"

@@ -6655,6 +6655,16 @@
     "zh": "将页面导出为 PNG 格式的图像"
   },
   {
+    "id": "mc_button_fit_map_page",
+    "en": "Fit map to page",
+    "zh": "使地图适合页面"
+  },
+  {
+    "id": "mc_button_fit_map_page_desc",
+    "en": "Extend map(s) dimension to fit the page width and height",
+    "zh": "扩展地图尺寸以适应页面宽度和高度"
+  },
+  {
     "id": "mc_button_toggle_landscape",
     "en": "Portrait | Landscape",
     "zh": "肖像 |景观"
