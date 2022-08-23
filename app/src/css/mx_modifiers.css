@@ -377,12 +377,12 @@ span.mx-badge-role {
 /**
 * Map composer
 */
-.mx .mc .mc-item,
-.mx .mc .mc-page,
-.mx .mc.mc-mode-layout .mc-item,
-.mx .mc .mx-legend-box {
-  background: var(--mx_ui_background);
-}
+/*.mx .mc .mc-item,*/
+/*.mx .mc .mc-page,*/
+/*.mx .mc.mc-mode-layout .mc-item,*/
+/*.mx .mc .mx-legend-box {*/
+  /*background: var(--mx_ui_background);*/
+/*}*/
 
 /**
 * Button Panel

@@ -69,7 +69,7 @@ export class MapComposer {
       mc.el.classList.add("mc");
     }
 
-    mc.elContent = el("div", { class: ["mc-content"] });
+    mc.elContent = el("div", { class: ["mc-content", "mc-theme-light"] });
     mc.el.appendChild(mc.elContent);
   }
 
@@ -175,6 +175,7 @@ export class MapComposer {
       if (item.type === "map") {
         item.setWidth(w);
         item.setHeight(h);
+        item.setTopLeftOrigin();
       }
     }
   }

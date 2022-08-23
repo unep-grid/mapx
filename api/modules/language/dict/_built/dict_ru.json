@@ -6645,6 +6645,36 @@
     "ru": "Установите количество столбцов для легенды"
   },
   {
+    "id": "mc_label_zoom",
+    "en": "Zoom",
+    "ru": "Увеличить"
+  },
+  {
+    "id": "mc_button_zoom_in",
+    "en": "More",
+    "ru": "Более"
+  },
+  {
+    "id": "mc_button_zoom_out",
+    "en": "Less",
+    "ru": "Меньше"
+  },
+  {
+    "id": "mc_button_zoom_fit_width",
+    "en": "Width",
+    "ru": "Ширина"
+  },
+  {
+    "id": "mc_button_zoom_fit_height",
+    "en": "Height",
+    "ru": "Высота"
+  },
+  {
+    "id": "mc_button_zoom_desc",
+    "en": "Zoom in / out : scale the page",
+    "ru": "Увеличение/уменьшение масштаба: масштабирование страницы"
+  },
+  {
     "id": "mc_button_export",
     "en": "Export",
     "ru": "Экспорт"

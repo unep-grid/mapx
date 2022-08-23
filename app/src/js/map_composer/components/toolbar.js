@@ -177,6 +177,76 @@ class Toolbar extends Box {
         el(
           "div",
           {
+            class: ["form-group"],
+            style: {
+              display: "flex",
+              flexDirection: "column",
+            },
+          },
+          el("label", tt("mc_label_zoom")),
+          el("div", { class: "btn-group" }, [
+            el(
+              "button",
+              {
+                type: "button",
+                class: ["btn", "btn-default"],
+                style: { width: "50%" },
+                dataset: {
+                  mc_action: "zoom_in",
+                  mc_event_type: "click",
+                },
+              },
+              tt("mc_button_zoom_in")
+            ),
+            el(
+              "button",
+              {
+                type: "button",
+                class: ["btn", "btn-default"],
+                style: { width: "50%" },
+                dataset: {
+                  mc_action: "zoom_out",
+                  mc_event_type: "click",
+                },
+              },
+              tt("mc_button_zoom_out")
+            ),
+          ]),
+          el("div", { class: "btn-group" }, [
+            el(
+              "button",
+              {
+                type: "button",
+                class: ["btn", "btn-default"],
+                style: { width: "50%" },
+                dataset: {
+                  mc_action: "zoom_fit_height",
+                  mc_event_type: "click",
+                },
+              },
+              tt("mc_button_zoom_fit_height")
+            ),
+            el(
+              "button",
+              {
+                type: "button",
+                class: ["btn", "btn-default"],
+
+                style: { width: "50%" },
+                dataset: {
+                  mc_action: "zoom_fit_width",
+                  mc_event_type: "click",
+                },
+              },
+              tt("mc_button_zoom_fit_width")
+            ),
+          ]),
+          el("span", { class: "text-muted" }, tt("mc_button_zoom_desc"))
+        ),
+
+        el(
+          "div",
+          {
             class: "form-group",
           },
           el(
@@ -373,6 +443,18 @@ function clickCallback(e) {
       break;
     case "fit_map_to_page":
       mc.fitMapToPage();
+      break;
+    case "zoom_in":
+      mc.workspace.page.zoomIn();
+      break;
+    case "zoom_out":
+      mc.workspace.page.zoomOut();
+      break;
+    case "zoom_fit_width":
+      mc.workspace.page.zoomFitWidth();
+      break;
+    case "zoom_fit_height":
+      mc.workspace.page.zoomFitHeight();
       break;
     default:
       console.warn(`Click handler not found for ${idAction}`);

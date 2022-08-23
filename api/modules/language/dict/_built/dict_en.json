@@ -5316,6 +5316,30 @@
     "en": "Set the number of columns for the legend"
   },
   {
+    "id": "mc_label_zoom",
+    "en": "Zoom"
+  },
+  {
+    "id": "mc_button_zoom_in",
+    "en": "More"
+  },
+  {
+    "id": "mc_button_zoom_out",
+    "en": "Less"
+  },
+  {
+    "id": "mc_button_zoom_fit_width",
+    "en": "Width"
+  },
+  {
+    "id": "mc_button_zoom_fit_height",
+    "en": "Height"
+  },
+  {
+    "id": "mc_button_zoom_desc",
+    "en": "Zoom in / out : scale the page"
+  },
+  {
     "id": "mc_button_export",
     "en": "Export"
   },

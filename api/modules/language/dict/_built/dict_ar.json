@@ -6645,6 +6645,36 @@
     "ar": "عيّن عدد أعمدة وسيلة الإيضاح"
   },
   {
+    "id": "mc_label_zoom",
+    "en": "Zoom",
+    "ar": "تكبير"
+  },
+  {
+    "id": "mc_button_zoom_in",
+    "en": "More",
+    "ar": "أكثر"
+  },
+  {
+    "id": "mc_button_zoom_out",
+    "en": "Less",
+    "ar": "أقل"
+  },
+  {
+    "id": "mc_button_zoom_fit_width",
+    "en": "Width",
+    "ar": "عرض"
+  },
+  {
+    "id": "mc_button_zoom_fit_height",
+    "en": "Height",
+    "ar": "ارتفاع"
+  },
+  {
+    "id": "mc_button_zoom_desc",
+    "en": "Zoom in / out : scale the page",
+    "ar": "تكبير / تصغير: مقياس الصفحة"
+  },
+  {
     "id": "mc_button_export",
     "en": "Export",
     "ar": "يصدّر"

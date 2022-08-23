@@ -1,7 +1,7 @@
-import {MessageFlash} from './message_flash.js';
-import {el} from '../../el/src/index.js';
-import {onNextFrame} from './helpers.js';
-import {ListenerStore} from './../../listener_store/index.js';
+import { MessageFlash } from "./message_flash.js";
+import { el } from "../../el/src/index.js";
+import { onNextFrame } from "./helpers.js";
+import { ListenerStore } from "./../../listener_store/index.js";
 
 class Box {
   constructor(boxParent) {
@@ -16,10 +16,10 @@ class Box {
     box.left = 0;
     box.top = 0;
     box.message = null;
-    box.title = 'box';
+    box.title = "box";
     box.transform = {
       content: {},
-      box: {}
+      box: {},
     };
     box.listeners = [];
     box.draggers = [];
@@ -28,6 +28,7 @@ class Box {
     box.resizable = false;
     box.draggable = false;
     box.removable = false;
+    box._scale = 1;
   }
 
   init(opt) {
@@ -35,7 +36,7 @@ class Box {
     const box = this;
     box.config = opt;
     box.id = Math.random().toString(32);
-    box.elContent = opt.content || el('div');
+    box.elContent = opt.content || el("div");
     box.el = box.createEl(opt.class);
     box.elContainer = opt.boxContainer.elContent;
     box.elContainer.appendChild(box.el);
@@ -47,19 +48,19 @@ class Box {
       top: true,
       left: true,
       bottom: true,
-      right: true
+      right: true,
     };
 
     box.lStore.addListener({
       target: box.el,
-      type: 'click',
-      idGroup: 'set_last_focus',
+      type: "click",
+      idGroup: "set_last_focus",
       callback: (e) => {
         if (e.currentTarget === box.el) {
           e.stopPropagation();
           box.mc.setBoxLastFocus(box);
         }
-      }
+      },
     });
 
     if (opt.width) {
@@ -72,10 +73,10 @@ class Box {
     if (opt.draggable || opt.resizable) {
       box.lStore.addListener({
         target: box.el,
-        type: 'mousedown',
-        idGroup: 'drag_resize',
+        type: "mousedown",
+        idGroup: "drag_resize",
         callback: dragResizeListener,
-        bind: box
+        bind: box,
       });
 
       if (opt.draggable) {
@@ -89,11 +90,11 @@ class Box {
           box.resizers.push(opt.onResize);
         }
         box.makeResizable({
-          boxBound: opt.boxBound || box.boxParent
+          boxBound: opt.boxBound || box.boxParent,
         });
       }
     }
-    box.setContentScale(1);
+    //box.setContentScale(1);
     box.setTextSize(12);
   }
 
@@ -123,8 +124,8 @@ class Box {
 
   createEl(classes) {
     const box = this;
-    const elBox = el('div', {
-      class: ['mc-box'].concat(classes || [])
+    const elBox = el("div", {
+      class: ["mc-box"].concat(classes || []),
     });
     elBox.box = box;
     return elBox;
@@ -148,48 +149,48 @@ class Box {
     const title = box.title;
     const base = {
       title: title,
-      class: ['mc-handle', 'mc-handle-' + type]
+      class: ["mc-handle", "mc-handle-" + type],
     };
     const conf = Object.assign({}, base, opt);
-    box.addEl(el('div', conf));
+    box.addEl(el("div", conf));
   }
 
   addHandleDrag() {
-    this.addHandle('drag', {
+    this.addHandle("drag", {
       dataset: {
-        mc_action: 'box_drag',
-        mc_event_type: 'mousedown'
-      }
+        mc_action: "box_drag",
+        mc_event_type: "mousedown",
+      },
     });
   }
 
   addHandleResize() {
     const box = this;
-    ['top', 'left', 'bottom', 'right'].forEach((d) => {
-      box.addHandle('resize-' + d, {
+    ["top", "left", "bottom", "right"].forEach((d) => {
+      box.addHandle("resize-" + d, {
         dataset: {
-          mc_action: 'box_resize',
+          mc_action: "box_resize",
           mc_resize_dir: d,
-          mc_event_type: 'mousedown'
-        }
+          mc_event_type: "mousedown",
+        },
       });
     });
   }
 
   addHandleRemove() {
-    this.addHandle('remove', {
+    this.addHandle("remove", {
       dataset: {
-        mc_action: 'box_remove',
-        mc_event_type: 'click'
-      }
+        mc_action: "box_remove",
+        mc_event_type: "click",
+      },
     });
   }
 
   addFocus() {
-    this.el.classList.add('mc-focus');
+    this.el.classList.add("mc-focus");
   }
   removeFocus() {
-    this.el.classList.remove('mc-focus');
+    this.el.classList.remove("mc-focus");
   }
 
   setSize(w, h) {
@@ -197,24 +198,24 @@ class Box {
     this.setHeight(h || this.height);
   }
 
-  _updateContentScale() {
-    const box = this;
-    if (!box.elContent) {
-      return;
-    }
-    const scale = box.contentScale;
-    if (scale === 1) {
-      box.elContent.style.width = '100%';
-      box.elContent.style.height = '100%';
-      box.setTransform('content', 'scale', 1);
-    } else {
-      const hP = (1 / scale) * 100;
-      const wP = hP;
-      box.elContent.style.width = wP + '%';
-      box.elContent.style.height = hP + '%';
-      box.setTransform('content', 'scale', scale);
-    }
-  }
+  /*_updateContentScale() {*/
+  /*const box = this;*/
+  /*if (!box.elContent) {*/
+  /*return;*/
+  /*}*/
+  /*const scale = box.contentScale;*/
+  /*if (scale === 1) {*/
+  /*box.elContent.style.width = "100%";*/
+  /*box.elContent.style.height = "100%";*/
+  /*box.setTransform("content", "scale", 1);*/
+  /*} else {*/
+  /*const hP = (1 / scale) * 100;*/
+  /*const wP = hP;*/
+  /*box.elContent.style.width = wP + "%";*/
+  /*box.elContent.style.height = hP + "%";*/
+  /*box.setTransform("content", "scale", scale);*/
+  /*}*/
+  /*}*/
 
   validateSize() {
     const box = this;
@@ -222,30 +223,32 @@ class Box {
     const max = mc.state.canvas_max_area;
     const area = (box.width / box.state.scale) * (box.height / box.state.scale);
     if (area >= max) {
-      mc.displayWarning('Your browser will not handle this kind of size');
+      mc.displayWarning("Your browser will not handle this kind of size");
     }
   }
 
   setTransform(target, type, ...args) {
     const box = this;
-    const elTarget = target === 'content' ? box.elContent : box.el;
-    const str = '(' + args.join(',') + ')';
+    const elTarget = target === "content" ? box.elContent : box.el;
+    const str = "(" + args.join(",") + ")";
     box.transform[target][type] = str;
-
     const out = Object.keys(box.transform[target])
       .map((k) => {
         return k + box.transform[target][k];
       })
-      .join('');
+      .join("");
     elTarget.style.transform = out;
+    if (type === "scale") {
+    }
   }
 
-  resetContentTransform(target) {
-    const box = this;
-    const elTarget = target === 'content' ? box.elContent : box.el;
-    box.transform[target] = {};
-    elTarget.style.transform = '';
-  }
+  /*resetContentTransform(target) {*/
+  /*const box = this;*/
+  /*const elTarget = target === "content" ? box.elContent : box.el;*/
+  /*box.setScale(1);*/
+  /*box.transform[target] = {};*/
+  /*elTarget.style.transform = "";*/
+  /*}*/
 
   calcRect() {
     return this.el.getBoundingClientRect();
@@ -261,7 +264,7 @@ class Box {
       left: rect.left - sLeft,
       right: rect.right - sLeft,
       width: rect.width,
-      height: rect.height
+      height: rect.height,
     };
   }
 
@@ -301,11 +304,11 @@ class Box {
 
     onNextFrame(() => {
       box.setTransform(
-        'box',
-        'translate3d',
-        newLeftSnap + 'px',
-        newTopSnap + 'px',
-        '0'
+        "box",
+        "translate3d",
+        newLeftSnap + "px",
+        newTopSnap + "px",
+        "0"
       );
       box.top = newTopSnap;
       box.left = newLeftSnap;
@@ -318,8 +321,15 @@ class Box {
       hitBottom: hitBottom,
       hitLeft: hitLeft,
       hitRight: hitRight,
-      hitSomething: hitRight || hitLeft || hitTop || hitBottom
+      hitSomething: hitRight || hitLeft || hitTop || hitBottom,
     };
+  }
+
+  setTopLeftOrigin() {
+    const box = this;
+    box.setTransform("box", "translate3d", 0 + "px", 0 + "px", "0");
+    box.top = 0;
+    box.left = 0;
   }
 
   snapToGrid(length) {
@@ -360,9 +370,9 @@ class Box {
     const wUnit = box.toLengthUnit(box.width);
     const hUnit = box.toLengthUnit(box.height);
     const wDisp =
-      unit === 'in' ? Math.round(wUnit * 100) / 100 : Math.round(wUnit);
+      unit === "in" ? Math.round(wUnit * 100) / 100 : Math.round(wUnit);
     const hDisp =
-      unit === 'in' ? Math.round(hUnit * 100) / 100 : Math.round(hUnit);
+      unit === "in" ? Math.round(hUnit * 100) / 100 : Math.round(hUnit);
     box.message.flash(`${wDisp} x ${hDisp}`);
   }
 
@@ -371,10 +381,10 @@ class Box {
     const state = box.state;
     const r = window.devicePixelRatio;
     length /= r;
-    if (state.unit === 'px') {
+    if (state.unit === "px") {
       return length;
     }
-    if (state.unit === 'mm') {
+    if (state.unit === "mm") {
       length /= 25.4;
     }
     return state.dpi * length;
@@ -384,11 +394,11 @@ class Box {
     const state = this.state;
     const r = window.devicePixelRatio;
     px *= r;
-    if (state.unit === 'px') {
+    if (state.unit === "px") {
       return px;
     }
     let out = px / state.dpi;
-    if (state.unit === 'mm') {
+    if (state.unit === "mm") {
       out *= 25.4;
     }
     return out;
@@ -397,13 +407,13 @@ class Box {
   get contentScale() {
     return this._content_scale;
   }
-  setContentScale(scale) {
-    const box = this;
-    box._content_scale = scale;
-    box._updateContentScale();
-    box.onResize();
-    box.validateSize();
-  }
+  /*setContentScale(scale) {*/
+  /*const box = this;*/
+  /*box._content_scale = scale;*/
+  /*box._updateContentScale();*/
+  /*box.onResize();*/
+  /*box.validateSize();*/
+  /*}*/
 
   get textSize() {
     return this._text_size;
@@ -413,7 +423,7 @@ class Box {
     const box = this;
     size = size < 5 ? 5 : size > 30 ? 30 : size ? size : 12;
     box._text_size = size;
-    box.elContent.style.fontSize = size + 'px';
+    box.elContent.style.fontSize = size + "px";
   }
 
   sizeTextMore() {
@@ -427,10 +437,46 @@ class Box {
     box.setTextSize(size);
   }
 
+  zoomIn() {
+    const box = this;
+    box.setScale(box.scale + (1 / 10) * box.scale);
+  }
+
+  zoomOut() {
+    const box = this;
+    box.setScale(box.scale - (1 / 10) * box.scale);
+  }
+  zoomFitHeight() {
+    const box = this;
+    const dH = box.rect.top - box.workspace.rect.top;
+    const h = box.rect.height / box.scale + dH * 2;
+    const scaleHeight = box.workspace.rect.height / h;
+    box.setScale(scaleHeight);
+  }
+  zoomFitWidth() {
+    const box = this;
+    const dW = box.rect.left - box.workspace.rect.left;
+    const w = box.rect.width / box.scale + dW * 2;
+    const scaleWidth = box.workspace.rect.width / w;
+    console.log(scaleWidth);
+    box.setScale(scaleWidth);
+  }
   setScale(scale) {
     const box = this;
     box._scale = scale;
-    box.setTransform('box', 'scale', scale);
+    box.el.style.setProperty(`--mc-box-scale`, box.scale);
+    box.setTransform("box", "scale", scale);
+  }
+  get scale() {
+    const box = this;
+    return box._scale;
+  }
+  getScaleParent() {
+    const box = this;
+    const scaleStack =
+      box.boxParent instanceof Box ? box.boxParent.getScaleParent() : 1;
+    const scale = box.scale * scaleStack;
+    return scale || 1;
   }
 
   makeDraggable() {
@@ -444,7 +490,7 @@ class Box {
   }
 }
 
-export {Box};
+export { Box };
 
 function dragResizeListener(e) {
   const box = this;
@@ -453,9 +499,9 @@ function dragResizeListener(e) {
   // read the property of the handle;
   const idAction = d.mc_action;
   const idType = d.mc_event_type;
-  const isDrag = idAction === 'box_drag';
-  const isResize = idAction === 'box_resize';
-  const isMouseDown = idType === 'mousedown';
+  const isDrag = idAction === "box_drag";
+  const isResize = idAction === "box_resize";
+  const isMouseDown = idType === "mousedown";
   const isDragResize = isDrag || isResize;
 
   if (isMouseDown && isDragResize) {
@@ -475,7 +521,8 @@ function dragResizeListener(e) {
     startDragResize({
       e: e,
       type: idAction,
-      box: box
+      box: box,
+      scale: box.getScaleParent(),
     });
   }
 }
@@ -483,7 +530,7 @@ function dragResizeListener(e) {
 function startDragResize(opt) {
   const box = opt.box;
   const e = opt.e;
-  const isDrag = opt.type === 'box_drag';
+  const isDrag = opt.type === "box_drag";
   const oX = box.left || 0;
   const oY = box.top || 0;
   const oW = box.width || 0;
@@ -494,75 +541,75 @@ function startDragResize(opt) {
 
   box.lStore.addListener({
     target: window,
-    type: 'mouseup',
-    idGroup: 'drag_resize_active',
+    type: "mouseup",
+    idGroup: "drag_resize_active",
     callback: cancel,
-    bind: box
+    bind: box,
   });
 
   box.lStore.addListener({
     target: window,
-    type: 'mousemove',
-    idGroup: 'drag_resize_active',
+    type: "mousemove",
+    idGroup: "drag_resize_active",
     callback: isDrag ? drag : resize,
-    bind: box
+    bind: box,
   });
 
   function drag(e) {
     e.stopPropagation();
     const box = this;
-    const dX = e.clientX - cX;
-    const dY = e.clientY - cY;
+    const dX = (e.clientX - cX) / opt.scale;
+    const dY = (e.clientY - cY) / opt.scale;
     box.setTopLeft({
       left: oX + dX,
       top: oY + dY,
-      inPx: true
+      inPx: true,
     });
   }
 
   function resize(e) {
     e.stopPropagation();
     const box = this;
-    const dX = e.clientX - cX;
-    const dY = e.clientY - cY;
+    const dX = (e.clientX - cX) / opt.scale;
+    const dY = (e.clientY - cY) / opt.scale;
     const drag = {};
-    if (rDir === 'left') {
+    if (rDir === "left") {
       Object.assign(
         drag,
         box.setTopLeft({
           left: oX + dX,
           top: oY,
-          inPx: true
+          inPx: true,
         })
       );
       if (!drag.hitLeft) {
         box.setWidth(oW - dX, true);
       }
     }
-    if (rDir === 'top') {
+    if (rDir === "top") {
       Object.assign(
         drag,
         box.setTopLeft({
           left: oX,
           top: oY + dY,
-          inPx: true
+          inPx: true,
         })
       );
       if (!drag.hitTop) {
         box.setHeight(oH - dY, true);
       }
     }
-    if (rDir === 'right') {
+    if (rDir === "right") {
       box.setWidth(oW + dX, true);
     }
-    if (rDir === 'bottom') {
+    if (rDir === "bottom") {
       box.setHeight(oH + dY, true);
     }
   }
 
   function cancel() {
     const box = this;
-    box.lStore.removeListenerByGroup('drag_resize_active');
+    box.lStore.removeListenerByGroup("drag_resize_active");
 
     if (box.isDragging()) {
       box.setDragingFlag(false);

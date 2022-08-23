@@ -6645,6 +6645,36 @@
     "ps": "د افسانې لپاره د کالمونو شمیر ترتیب کړئ"
   },
   {
+    "id": "mc_label_zoom",
+    "en": "Zoom",
+    "ps": "زوم"
+  },
+  {
+    "id": "mc_button_zoom_in",
+    "en": "More",
+    "ps": "نور"
+  },
+  {
+    "id": "mc_button_zoom_out",
+    "en": "Less",
+    "ps": "لږ"
+  },
+  {
+    "id": "mc_button_zoom_fit_width",
+    "en": "Width",
+    "ps": "عرض"
+  },
+  {
+    "id": "mc_button_zoom_fit_height",
+    "en": "Height",
+    "ps": "لوړوالی"
+  },
+  {
+    "id": "mc_button_zoom_desc",
+    "en": "Zoom in / out : scale the page",
+    "ps": "زوم ان/آؤټ: پاڼه اندازه کړئ"
+  },
+  {
     "id": "mc_button_export",
     "en": "Export",
     "ps": "صادرول"

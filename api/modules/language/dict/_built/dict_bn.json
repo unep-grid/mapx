@@ -6645,6 +6645,36 @@
     "bn": "কিংবদন্তির জন্য কলামের সংখ্যা সেট করুন"
   },
   {
+    "id": "mc_label_zoom",
+    "en": "Zoom",
+    "bn": "জুম"
+  },
+  {
+    "id": "mc_button_zoom_in",
+    "en": "More",
+    "bn": "আরও"
+  },
+  {
+    "id": "mc_button_zoom_out",
+    "en": "Less",
+    "bn": "কম"
+  },
+  {
+    "id": "mc_button_zoom_fit_width",
+    "en": "Width",
+    "bn": "প্রস্থ"
+  },
+  {
+    "id": "mc_button_zoom_fit_height",
+    "en": "Height",
+    "bn": "উচ্চতা"
+  },
+  {
+    "id": "mc_button_zoom_desc",
+    "en": "Zoom in / out : scale the page",
+    "bn": "জুম ইন/আউট করুন: পৃষ্ঠাটি স্কেল করুন"
+  },
+  {
     "id": "mc_button_export",
     "en": "Export",
     "bn": "রপ্তানি"

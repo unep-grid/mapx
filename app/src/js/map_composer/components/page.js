@@ -1,27 +1,27 @@
-import {el} from '../../el/src/index.js';
-import {Box} from './box.js';
-import {Item} from './item.js';
-import download from 'downloadjs';
-import html2canvas from 'html2canvas';
+import { el } from "../../el/src/index.js";
+import { Box } from "./box.js";
+import { Item } from "./item.js";
+import download from "downloadjs";
+import html2canvas from "html2canvas";
 
 class Page extends Box {
   constructor(boxParent) {
     super(boxParent);
     const page = this;
     const state = page.state;
-    page.title = 'page';
+    page.title = "page";
     page.init({
-      class: ['mc-page'],
+      class: ["mc-page"],
       content: page.buildEl(),
       boxContainer: boxParent,
       boxBound: boxParent,
-      boundEdges: {top: true, left: true, bottom: false, right: false},
+      boundEdges: { top: true, left: true, bottom: false, right: false },
       draggable: false,
       resizable: true,
       onRemove: page.onRemove.bind(page),
       onResize: page.onResize.bind(page),
       width: state.page_width,
-      height: state.page_height
+      height: state.page_height,
     });
     page.addItems();
     page.placeItems();
@@ -35,8 +35,8 @@ class Page extends Box {
     const h = Math.round(page.toLengthUnit(page.height));
     page.mc.toolbar.elInputPageWidth.value = w;
     page.mc.toolbar.elInputPageHeight.value = h;
-    mc.setState('page_width', w);
-    mc.setState('page_height', h);
+    mc.setState("page_width", w);
+    mc.setState("page_height", h);
   }
 
   onRemove() {
@@ -54,18 +54,21 @@ class Page extends Box {
     try {
       const page = this;
       const elPrint = page.el;
-      await mc.setMode('print');
+      const currentScale = mc.page.scale;
+      page.setScale(1);
+      await mc.setMode("print");
       debugger;
       const canvas = await html2canvas(elPrint, {
-        logging: false
+        logging: false,
       });
-      const data = canvas.toDataURL('image/png');
-      download(data, 'map-composer-export.png', 'image/png');
+      const data = canvas.toDataURL("image/png");
+      download(data, "map-composer-export.png", "image/png");
       await mc.setMode(curMode);
       await mc.setDpi(curDpi);
+      page.setScale(currentScale);
     } catch (e) {
       mc.displayWarning(
-        'Oups, something went wrong during the rendering, please read the console log.'
+        "Oups, something went wrong during the rendering, please read the console log."
       );
       console.error(e);
       await mc.setMode(curMode);
@@ -74,8 +77,8 @@ class Page extends Box {
   }
 
   buildEl() {
-    return el('div', {
-      class: 'mc-page-content'
+    return el("div", {
+      class: "mc-page-content",
     });
   }
 
@@ -95,7 +98,7 @@ class Page extends Box {
       i.setTopLeft({
         top: y,
         left: x,
-        inPx: true
+        inPx: true,
       });
       x += g;
       y += g;
@@ -103,4 +106,4 @@ class Page extends Box {
   }
 }
 
-export {Page};
+export { Page };
