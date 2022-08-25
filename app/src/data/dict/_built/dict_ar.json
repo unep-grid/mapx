@@ -6720,6 +6720,16 @@
     "ar": "تقصير"
   },
   {
+    "id": "mc_preset_group_screen",
+    "en": "Common screen sizes",
+    "ar": "أحجام الشاشات الشائعة"
+  },
+  {
+    "id": "mc_preset_manual",
+    "en": "Manual input",
+    "ar": "إدخال يدوي"
+  },
+  {
     "id": "mc_preset_group_social",
     "en": "Web social platform images format",
     "ar": "تنسيق صور منصة الويب الاجتماعية"
@@ -6833,6 +6843,46 @@
     "id": "mc_preset_us_ansi_d",
     "en": "ANSI D",
     "ar": "ANSI د"
+  },
+  {
+    "id": "mc_preset_screen_sxga",
+    "en": "Super-eXtended Graphics Array (SXGA)",
+    "ar": "Super-eXtended Graphics Array (SXGA)"
+  },
+  {
+    "id": "mc_preset_screen_hd",
+    "en": "High Definition (HD)",
+    "ar": "High Definition (HD)"
+  },
+  {
+    "id": "mc_preset_screen_hd+",
+    "en": "High Definition Plus (HD+)",
+    "ar": "High Definition Plus (HD+)"
+  },
+  {
+    "id": "mc_preset_screen_fhd",
+    "en": "Full High Definition (FHD)",
+    "ar": "Full High Definition (FHD)"
+  },
+  {
+    "id": "mc_preset_screen_wuxga",
+    "en": "Wide Ultra Extended Graphics Array (WUXGA)",
+    "ar": "Wide Ultra Extended Graphics Array (WUXGA)"
+  },
+  {
+    "id": "mc_preset_screen_qhd",
+    "en": "Quad High Definition (QHD)",
+    "ar": "Quad High Definition (QHD)"
+  },
+  {
+    "id": "mc_preset_screen_wqhd",
+    "en": "Wide Quad High Definition (WQHD)",
+    "ar": "Wide Quad High Definition (WQHD)"
+  },
+  {
+    "id": "mc_preset_screen_uhd",
+    "en": "Ultra High Definition (UHD)",
+    "ar": "Ultra High Definition (UHD)"
   },
   {
     "id": "tool_mirror_enable",

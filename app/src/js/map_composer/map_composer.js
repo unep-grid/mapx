@@ -128,7 +128,7 @@ export class MapComposer {
 
   async setPredefinedDim(id) {
     const mc = this;
-    if (id === "--") {
+    if (id === "mc_preset_manual") {
       return;
     }
     const item = presetFlat.find((p) => p.name === id);

@@ -132,6 +132,7 @@ export async function mapComposerModalAuto() {
         pitch: map.getPitch(),
         bearing: map.getBearing(),
         projection: map.getProjection(),
+        terrain: map.getTerrain(),
       });
     }
   }

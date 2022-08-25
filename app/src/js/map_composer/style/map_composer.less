@@ -7,9 +7,11 @@
   --mc-color-contrast-dark: #474747;
   --mc-color-contrast-medium: #ccc;
   --mc-color-contrast-light: #fff;
-  --mc-color-backround: #fff;
+  --mc-color-background: #fff;
   --mc-color-text: #000;
+  --mc-color-border: #ccc;
   --mc-box-scale: 1;
+  --mc-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.4);
   * {
     transform-origin: top left;
     touch-action: none;
@@ -27,7 +29,7 @@
     }
     &.mc-theme-light {
       .mc-item {
-        background-color: var(--mc-color-backround);
+        background-color: var(--mc-color-background);
         * {
           color: var(--mc-color-text);
         }
@@ -55,7 +57,7 @@
   }
   .mc-page {
     transform-origin: top left;
-    background: var(--mc-color-backround);
+    background: var(--mc-color-background);
     position: relative;
   }
   .mc-page-content {
@@ -73,6 +75,8 @@
       overflow: hidden;
       height: 100%;
       width: 100%;
+      border: 1px solid var(--mc-color-border);
+      border-radius: 4px;
       .mc-item-title {
         padding: 10px;
       }
@@ -172,21 +176,28 @@
     position: absolute;
     top: 0;
     pointer-events: none;
-    div {
-      color: var(--mc-color-contrast-light);
-      background-color: var(--mc-color-contrast-dark);
+    width: inherit;
+    .mc-flash-message {
       font-size: 5px;
-      padding: 5px;
       opacity: 0;
       max-width: 100%;
       overflow: hidden;
-      transition: all 0.3s ease-out;
+      transition: opacity 0.3s ease-out, font-size 0.3s ease-out;
+      &:after {
+        padding: 5px;
+        color: var(--mc-color-contrast-light);
+        background-color: var(--mc-color-contrast-dark);
+        content: attr(data-message);
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
     }
   }
   .mc-flash.active {
     z-index: 2;
-    div {
-      opacity: 0.8;
+    .mc-flash-message {
+      opacity: 1;
       font-size: 12px;
     }
   }
@@ -263,11 +274,7 @@
     outline: 1px dashed #474747;
     background-color: var(--mc-color-contrast-light);
   }
-  .mc-item {
-    outline: 1px solid rgba(0, 0, 0, 0.2);
-    outline-offset: -1px;
-    box-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.4);
-  }
+
   .mc-box {
     &:hover {
       > .mc-handle {
@@ -302,7 +309,7 @@
   .mc-page {
     overflow: hidden;
     transform: none !important;
-    box-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--mc-shadow);
   }
   .mc-flash {
     display: none;

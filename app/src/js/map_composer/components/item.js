@@ -1,7 +1,7 @@
-import mapboxgl from 'mapbox-gl';
-import {el} from '../../el/src/index.js';
-import {Box} from './box.js';
-import {MapNorthArrow} from './north_arrow.js';
+import mapboxgl from "mapbox-gl";
+import { el } from "../../el/src/index.js";
+import { Box } from "./box.js";
+import { MapNorthArrow } from "./north_arrow.js";
 
 class Item extends Box {
   constructor(boxParent, config) {
@@ -10,25 +10,25 @@ class Item extends Box {
     item.resizeAction = [];
     item.orig = config;
     item.type = config.type;
-    item.title = 'item-' + item.type;
+    item.title = "item-" + item.type;
     item.editable = config.editable === true;
 
     item.onRemove = item.onRemove.bind(item);
     item.onResize = item.onResize.bind(item);
 
     item.init({
-      class: 'mc-' + item.type,
+      class: "mc-" + item.type,
       content: item.buildEl(),
       boxContainer: item.boxParent,
       boxBound: item.boxParent.boxParent,
-      boundEdges: {top: true, left: true, bottom: false, right: false},
+      boundEdges: { top: true, left: true, bottom: false, right: false },
       draggable: true,
       resizable: true,
       removable: true,
       onRemove: item.onRemove,
       onResize: item.onResize,
       width: config.width || item.state.item_width,
-      height: config.height || item.state.item_height
+      height: config.height || item.state.item_height,
     });
   }
 
@@ -40,13 +40,13 @@ class Item extends Box {
     const item = this;
     const type = item.type;
     switch (type) {
-      case 'map':
+      case "map":
         return item.buildElMap();
-      case 'title':
-      case 'text':
+      case "title":
+      case "text":
         return item.buildElText();
-      case 'legend':
-      case 'element':
+      case "legend":
+      case "element":
         return item.buildElNode();
       default:
         console.error(`type ${type} not known`);
@@ -71,12 +71,12 @@ class Item extends Box {
   buildElNode() {
     const item = this;
     const elOut = el(
-      'div',
+      "div",
       {
         dataset: {
-          mc_editable: item.editable
+          mc_editable: item.editable,
         },
-        class: ['mc-item', 'mc-item-element']
+        class: ["mc-item", "mc-item-element"],
       },
       item.orig.element
     );
@@ -85,20 +85,20 @@ class Item extends Box {
 
   buildElText() {
     const item = this;
-    const text = el('span', item.orig.text).innerText; //quick html removal ?
+    const text = el("span", item.orig.text).innerText; //quick html removal ?
     const elOut = el(
-      'span',
+      "span",
       {
-        class: ['mc-item', 'mc-item-text']
+        class: ["mc-item", "mc-item-text"],
       },
       el(
-        'div',
+        "div",
         {
           dataset: {
-            mc_editable: item.editable
-          }
+            mc_editable: item.editable,
+          },
         },
-        el('p', text)
+        el("p", text)
       )
     );
     return elOut;
@@ -106,11 +106,11 @@ class Item extends Box {
 
   buildElMap() {
     const item = this;
-    const elOut = el('div', {
+    const elOut = el("div", {
       dataset: {
-        mc_editable: item.editable
+        mc_editable: item.editable,
       },
-      class: ['mc-item', 'mc-item-map']
+      class: ["mc-item", "mc-item-map"],
     });
 
     const mapOptions = Object.assign(
@@ -119,14 +119,21 @@ class Item extends Box {
         container: elOut,
         fadeDuration: 0,
         trackResize: false, // handled in mapcomposer
-        renderWorldCopies: false
+        renderWorldCopies: false,
       },
       item.orig.options
     );
 
     item.map = new mapboxgl.Map(mapOptions);
-    item.map.addControl(new mapboxgl.ScaleControl(), 'bottom-right');
-    item.map.addControl(new MapNorthArrow(), 'top-right');
+    item.map.addControl(new mapboxgl.ScaleControl(), "bottom-right");
+    item.map.addControl(new MapNorthArrow(), "top-right");
+
+    item.map.once("idle", () => {
+      if (mapOptions.terrain) {
+        item.map.setTerrain(mapOptions.terrain);
+      }
+    });
+
     item.resizeAction.push(() => {
       item.map.resize();
     });
@@ -134,4 +141,4 @@ class Item extends Box {
   }
 }
 
-export {Item};
+export { Item };

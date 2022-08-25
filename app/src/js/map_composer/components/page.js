@@ -57,7 +57,6 @@ class Page extends Box {
       const currentScale = mc.page.scale;
       page.setScale(1);
       await mc.setMode("print");
-      debugger;
       const canvas = await html2canvas(elPrint, {
         logging: false,
       });

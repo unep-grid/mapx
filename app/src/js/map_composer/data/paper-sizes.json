@@ -1,7 +1,7 @@
 {
   "mc_preset_group_default": [
     {
-      "name": "--"
+      "name": "mc_preset_manual"
     }
   ],
   "mc_preset_group_social": [
@@ -82,21 +82,21 @@
       "width": 148,
       "height": 210,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "A4",
       "width": 210,
       "height": 297,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "A3",
       "width": 297,
       "height": 420,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     }
   ],
   "mc_preset_group_iso_other": [
@@ -105,56 +105,59 @@
       "width": 841,
       "height": 1189,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 96,
+      "disabled": false
     },
     {
       "name": "A1",
       "width": 594,
       "height": 841,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 96,
+      "disabled": true
     },
     {
       "name": "A2",
       "width": 420,
       "height": 594,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 96,
+      "disabled": true
     },
     {
       "name": "A6",
       "width": 105,
       "height": 148,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "A7",
       "width": 74,
       "height": 105,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "A8",
       "width": 52,
       "height": 74,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "A9",
       "width": 37,
       "height": 52,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "A10",
       "width": 26,
       "height": 37,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     }
   ],
   "mc_preset_group_iso_envelope": [
@@ -163,21 +166,26 @@
       "width": 1414,
       "height": 1000,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300,
+      "disabled": true
     },
     {
       "name": "B1",
       "width": 1000,
       "height": 707,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300,
+
+      "disabled": true
     },
     {
       "name": "B1+",
       "width": 1020,
       "height": 720,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300,
+
+      "disabled": true
     },
 
     {
@@ -185,70 +193,74 @@
       "width": 707,
       "height": 500,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300,
+
+      "disabled": true
     },
     {
       "name": "B2+",
       "width": 720,
       "height": 520,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300,
+
+      "disabled": true
     },
     {
       "name": "B3",
       "width": 500,
       "height": 353,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "B4",
       "width": 353,
       "height": 250,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "B5",
       "width": 250,
       "height": 176,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "B6",
       "width": 176,
       "height": 125,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "B7",
       "width": 125,
       "height": 88,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "B8",
       "width": 88,
       "height": 62,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "B9",
       "width": 62,
       "height": 44,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "B10",
       "width": 44,
       "height": 31,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
 
     {
@@ -256,77 +268,83 @@
       "width": 1297,
       "height": 917,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300,
+
+      "disabled": true
     },
     {
       "name": "C1",
       "width": 917,
       "height": 648,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300,
+
+      "disabled": true
     },
     {
       "name": "C2",
       "width": 648,
       "height": 458,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300,
+
+      "disabled": true
     },
     {
       "name": "C3",
       "width": 458,
       "height": 324,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "C4",
       "width": 324,
       "height": 229,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "C5",
       "width": 229,
       "height": 162,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "C6",
       "width": 162,
       "height": 114,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "C7",
       "width": 114,
       "height": 81,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "C8",
       "width": 81,
       "height": 57,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "C9",
       "width": 57,
       "height": 40,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "C10",
       "width": 40,
       "height": 28,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     }
   ],
   "mc_preset_group_us": [
@@ -335,56 +353,114 @@
       "width": 216,
       "height": 356,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "mc_preset_us_legal_junior",
       "width": 127,
       "height": 203,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "mc_preset_us_ansi_a_letter",
       "width": 216,
       "height": 279,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "mc_preset_us_ansi_b_tabloid",
       "width": 279,
       "height": 432,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "mc_preset_us_ansi_b_ledger",
       "width": 432,
       "height": 279,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "mc_preset_us_ansi_c",
       "width": 432,
       "height": 559,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "mc_preset_us_ansi_d",
       "width": 559,
       "height": 864,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
     },
     {
       "name": "mc_preset_us_ansi_e",
       "width": 864,
       "height": 1118,
       "unit": "mm",
-      "dpi": "300"
+      "dpi": 300
+    }
+  ],
+  "mc_preset_group_screen": [
+    {
+      "name": "mc_preset_screen_sxga",
+      "width": 1280,
+      "height": 1024,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_screen_hd",
+      "width": 1366,
+      "height": 768,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_screen_hd+",
+      "width": 1600,
+      "height": 900,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_screen_fhd",
+      "width": 1920,
+      "height": 1080,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_screen_wuxga",
+      "width": 1920,
+      "height": 1200,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_screen_qhd",
+      "width": 2560,
+      "height": 1440,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_screen_wqhd",
+      "width": 3440,
+      "height": 1440,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_screen_uhd",
+      "width": 3840,
+      "height": 2160,
+      "unit": "px",
+      "dpi": 72
     }
   ]
 }

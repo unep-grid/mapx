@@ -57,7 +57,6 @@ class Toolbar extends Box {
      * Generate preset options
      */
     const elOptions = document.createDocumentFragment();
-    elOptions.appendChild(el("optgroup", "--"));
 
     for (const presetGroup of Object.keys(presets)) {
       const preset = presets[presetGroup];
@@ -65,6 +64,9 @@ class Toolbar extends Box {
         label: await getDictItem(presetGroup),
       });
       for (const item of preset) {
+        if (item.disabled) {
+          continue;
+        }
         elPresetGroup.appendChild(
           el("option", { value: item.name }, await getDictItem(item.name))
         );

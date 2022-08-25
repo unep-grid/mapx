@@ -6720,6 +6720,16 @@
     "de": "Standard"
   },
   {
+    "id": "mc_preset_group_screen",
+    "en": "Common screen sizes",
+    "de": "Gängige Bildschirmgrößen"
+  },
+  {
+    "id": "mc_preset_manual",
+    "en": "Manual input",
+    "de": "Manuelle Eingabe"
+  },
+  {
     "id": "mc_preset_group_social",
     "en": "Web social platform images format",
     "de": "Bildformat für soziale Webplattformen"
@@ -6833,6 +6843,46 @@
     "id": "mc_preset_us_ansi_d",
     "en": "ANSI D",
     "de": "ANSI D"
+  },
+  {
+    "id": "mc_preset_screen_sxga",
+    "en": "Super-eXtended Graphics Array (SXGA)",
+    "de": "Super-eXtended Graphics Array (SXGA)"
+  },
+  {
+    "id": "mc_preset_screen_hd",
+    "en": "High Definition (HD)",
+    "de": "High Definition (HD)"
+  },
+  {
+    "id": "mc_preset_screen_hd+",
+    "en": "High Definition Plus (HD+)",
+    "de": "High Definition Plus (HD+)"
+  },
+  {
+    "id": "mc_preset_screen_fhd",
+    "en": "Full High Definition (FHD)",
+    "de": "Full High Definition (FHD)"
+  },
+  {
+    "id": "mc_preset_screen_wuxga",
+    "en": "Wide Ultra Extended Graphics Array (WUXGA)",
+    "de": "Wide Ultra Extended Graphics Array (WUXGA)"
+  },
+  {
+    "id": "mc_preset_screen_qhd",
+    "en": "Quad High Definition (QHD)",
+    "de": "Quad High Definition (QHD)"
+  },
+  {
+    "id": "mc_preset_screen_wqhd",
+    "en": "Wide Quad High Definition (WQHD)",
+    "de": "Wide Quad High Definition (WQHD)"
+  },
+  {
+    "id": "mc_preset_screen_uhd",
+    "en": "Ultra High Definition (UHD)",
+    "de": "Ultra High Definition (UHD)"
   },
   {
     "id": "tool_mirror_enable",
