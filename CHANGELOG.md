@@ -1,7 +1,18 @@
+  - [1.9.44-beta.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.6) 
+   
+   - APP 
+       - Map Composer
+            - Improved sizes preset, added common screens sizes
+            - Lower resolutions for A0 to A2 to avoid issues with the image extracted from canvas (still not solved for large images )
+            - Added "fit map to page", "Increase/Decrease" zoom, and buttons to fit page to workspace by width or height.
+            - Various improvements
+       - Attributes viewer
+            - Solved resize issue. Changes in modal size should correctly resize the table.
+
   - [1.9.44-beta.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.5) 
    
    - APP
-       -  Table editor 
+       - Table editor 
             - Patch issue when concurrent user deletes a column, then another one try to perform an 'undo' that targeted the removed collumn. Probably an unsupported case in handsontable.
 
   - [1.9.44-beta.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.4) 
