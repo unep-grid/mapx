@@ -885,7 +885,7 @@ mapx.once("ready", async () => {
         name: "has map_composer panel",
         test: async () => {
           const pass = await mapx.ask("has_el_id", {
-            id: "mapcomposer",
+            id: "map_composer",
             timeout: 1500,
           });
           await mapx.ask("close_modal_all");

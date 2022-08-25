@@ -147,6 +147,7 @@ export async function mapComposerModalAuto() {
   });
 
   modal({
+    id : "map_composer",
     title: tt("mc_title"),
     buttons: [elBtnHelp],
     content: elContainer,
