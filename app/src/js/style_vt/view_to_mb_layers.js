@@ -189,16 +189,16 @@ export async function getViewMapboxLayers(v, opt) {
    * Make custom layer
    */
   if (useStyleCustom) {
-    const layerCustom = {
+    const defaultStyle = {
       id: `${idView}${sepLayer}${0}__custom`,
       source: idSource,
       "source-layer": idView,
-      type: styleCustom.type || "circle",
-      paint: styleCustom.paint || {},
-      filter: styleCustom.filter || [">=", ["get", "gid"], 0],
-      layout: styleCustom.layout || {},
-      minzoom: styleCustom.minzoom || zoomConfig.zoomMin,
-      maxzoom: styleCustom.maxzoom || zoomConfig.zoomMax,
+      type: "circle",
+      paint: {},
+      filter: [">=", ["get", "gid"], 0],
+      layout: {},
+      minzoom: zoomConfig.zoomMin,
+      maxzoom: zoomConfig.zoomMax,
       metadata: {
         position: 0,
         priority: 0,
@@ -207,6 +207,15 @@ export async function getViewMapboxLayers(v, opt) {
         custom: true,
       },
     };
+    const layerCustom = {
+      type: styleCustom.type,
+      paint: styleCustom.paint,
+      filter: styleCustom.filter,
+      layout: styleCustom.layout,
+      minzoom: styleCustom.minzoom,
+      maxzoom: styleCustom.maxzoom,
+    };
+    updateIfEmpty(layerCustom, defaultStyle);
     layers.push(layerCustom);
   }
 
