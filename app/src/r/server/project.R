@@ -382,6 +382,7 @@ observe({
       mapPos <- projectData$map_position
       mapProj <- projectData$map_projection
       theme <- projectData$theme
+      themeQuery <- query$theme
       language <- reactData$language
       hasNoClip <- noDataCheck(countryClip) || "WLD" %in% countryClip
 
@@ -419,7 +420,7 @@ observe({
         mapPos
       )
 
-      if (isNotEmpty(theme)) {
+      if (isEmpty(themeQuery) && isNotEmpty(theme)) {
         mglSetTheme(theme)
       }
 

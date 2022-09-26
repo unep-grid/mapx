@@ -48,6 +48,7 @@ class Theme extends EventSimple {
   }
   /**
    * Init
+   * see also init_themes.js
    */
   init() {
     const t = this;
@@ -124,9 +125,11 @@ class Theme extends EventSimple {
     const t = this;
     let { sound = false, save = false, save_url = false } = opt || {};
     const valid = t.isValidId(id);
+
+    console.log(id, opt);
     if (!valid) {
       id = t._opt.id_default;
-      // probably set in url or localStorage : overwrite that 
+      // probably set in url or localStorage : overwrite that
       save_url = true;
       save = true;
     }

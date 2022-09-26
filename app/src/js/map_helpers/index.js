@@ -125,15 +125,14 @@ import {
 } from "./../is_test_mapx/index.js";
 
 /**
-* Export downloadViewVector from here, to match pattern 
-*  map_helpers -> 
-*  downloadViewVector  
-*  downloadViewGeoJSON
-*  downloadViewSourceExternal
-* Definied is this file.
-*/ 
+ * Export downloadViewVector from here, to match pattern
+ *  map_helpers ->
+ *  downloadViewVector
+ *  downloadViewGeoJSON
+ *  downloadViewSourceExternal
+ * Definied is this file.
+ */
 export { downloadViewVector } from "./../source";
-
 
 /**
  * Convert point in  degrees to meter
@@ -332,7 +331,6 @@ export async function downloadViewSourceExternal(opt) {
     /**
      * Open a new windows, let the browser handle the dl or page load
      */
-
     const url = e.currentTarget.dataset?.url;
     window.open(url, "_blank");
     elModal.close();
@@ -999,9 +997,17 @@ export async function initMapx(o) {
 
   /**
    * Update theme, if required by init opt
+   * - If there is a query parameter value for this, it has already been set
+   *   in init_theme.js
+   * - Use the project theme if it's valid
+   * - Use theme default if none exists.
    */
-  if (theme.isValidId(o.idTheme)) {
-    theme.set(o.idTheme, { save_url: true });
+  const idThemeQuery = getQueryParameter("theme")[0];
+  if (isEmpty(idThemeQuery)) {
+    const idTheme = o.idTheme;
+    if (theme.isValidId(idTheme)) {
+      theme.set(idTheme, { save_url: true });
+    }
   }
 
   if (!settings.mode.static) {
@@ -4993,7 +4999,7 @@ export function setMapProjection(opt) {
 }
 
 /**
- * Set theme
+ * Set theme ( from shiny )
  * @param {Object} opt options
  * @param {String} opt.id Theme id
  */
