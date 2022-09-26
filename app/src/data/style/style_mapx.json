@@ -27,7 +27,7 @@
             }
           }
         },
-        "helsinki.3uq8x12k": {
+        "helsinki.5cphqvnp": {
           "layers": {
             "un_2020_labels_countries_point": {
               "iso3code": "string",
@@ -51,7 +51,7 @@
   "sources": {
     "mapbox_composite": {
       "type": "vector",
-      "url": "mapbox://mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v8,mapbox-public.bathymetry,helsinki.22p5op78,helsinki.6lefiu83"
+      "url": "mapbox://mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v8,mapbox-public.bathymetry,helsinki.5cphqvnp,helsinki.6lefiu83"
     },
     "mapbox_dem": {
       "type": "raster-dem",
