@@ -1,0 +1,41 @@
+[
+  {
+    "id": "un_map_disclaimer_asterisk_1",
+    "en": "Non-Self-Governing Territory",
+    "fr": "Territoires non autonomes",
+    "es": "Territorios No Autónomos",
+    "ru": "Несамоуправляющиеся территории",
+    "zh": "非自治领土",
+    "ar": " الأقاليم غير المتمتعة بالحكم الذاتي",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "un_map_disclaimer_asterisk_2",
+    "en": "Dotted line represents approximately the Line of Control in Jammu and Kashmir agreed upon by India and Pakistan. The final status of Jammu and Kashmir has not yet been agreed upon by the parties.",
+    "fr": "Les pointillés correspondent approximativement à la ligne de contrôle au Jammu-et-Cachemire convenue par l'Inde et le Pakistan. Les parties n’ont pas encore réglé la question du statut définitif du Jammu-et-Cachemire.",
+    "es": "La línea de puntos representa aproximadamente la Línea de Control en Jammu y Cachemira convenida por la India y el Pakistán. Las partes no han llegado todavia a un acuerdo sobre el estatuto definitivo de Jammu y Cachemira",
+    "ru": "Пунктирная линия приблизительно отражает «линию контроля» в Джамму и Кашмире, согласованную Индией и Пакистаном. Стороны еще не договорились об окончательном статусе Джамму и Кашмира.",
+    "zh": "虚线为印度和巴基斯坦商定的查谟和克什米尔的大致控制线。双方尚未商定查谟和克什米尔的最终地位。",
+    "ar": "يمثل الخط المتقطع خط المراقبة تقريبا في جامو وكشمير المتفق عليه بين الهند وباكستان. ولم يتفق الطرفان بعد على الوضع النهائي لجامو وكشمير.",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "un_map_disclaimer_asterisk_3",
+    "en": "A dispute exists between the Governments of Argentina and the United Kingdom of Great Britain and Northern Ireland concerning sovereignty over the Falkland Islands (Malvinas).",
+    "fr": "La souverainté sur les îles Falkland (Malvinas) fait l’objet d’un différend entre le Gouvernement de l’Argentine et le Gouvernement du Royaume-Uni de Grande-Bretagne et d’Irlande du Nord.",
+    "es": "Existe una disputa entre los Gobiernos de la Argentina y el Reino Unido de Gran Bretaña e Irlanda del Norte acerca de la soberanía sobre las Islas Malvinas (Falkland Islands).",
+    "ru": "Между правительствами Аргентины и Соединенного Королевства Великобритании и Северной Ирландии существует спор по поводу суверенитета над Фолклендскими (Мальвинскими) островами.",
+    "zh": "阿根廷政府和大不列颠及爱尔兰联合王国政府之间就福克兰(马尔维纳斯)群岛的主权问题存在着争议。",
+    "ar": "وجد نزاع بين حكومتي الأرجنتين والمملكة المتحدة لبريطانيا العظمى وأيرلندا الشمالية بشأن السيادة على جزر فوكلاند (مالفيناس).",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  }
+]

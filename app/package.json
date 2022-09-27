@@ -81,6 +81,7 @@
     "@mapbox/mapbox-gl-rtl-text": "^0.2.3",
     "@tmcw/togeojson": "^4.5.0",
     "@turf/turf": "^5.1.6",
+    "@types/mapbox-gl": "^2.7.5",
     "ace-builds": "^1.4.13",
     "bootstrap": "^3.4.1",
     "chroma-js": "^2.1.2",

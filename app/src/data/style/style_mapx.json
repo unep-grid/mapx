@@ -27,7 +27,7 @@
             }
           }
         },
-        "helsinki.5cphqvnp": {
+        "helsinki.42ysskas": {
           "layers": {
             "un_2020_labels_countries_point": {
               "iso3code": "string",
@@ -39,7 +39,8 @@
               "name_es": "string",
               "name_fr": "string",
               "name_ru": "string",
-              "name_zh": "string"
+              "name_zh": "string",
+              "mx_info_box": "string"
             }
           }
         }
@@ -51,7 +52,7 @@
   "sources": {
     "mapbox_composite": {
       "type": "vector",
-      "url": "mapbox://mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v8,mapbox-public.bathymetry,helsinki.5cphqvnp,helsinki.6lefiu83"
+      "url": "mapbox://mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v8,mapbox-public.bathymetry,helsinki.42ysskas,helsinki.6lefiu83"
     },
     "mapbox_dem": {
       "type": "raster-dem",
@@ -1861,6 +1862,7 @@
             35
           ]
         ],
+        "icon-size": ["interpolate", ["linear"], ["zoom"], 4, 0.8, 22, 2],
         "text-transform": [
           "match",
           ["get", "stscod"],
@@ -1868,8 +1870,6 @@
           "uppercase",
           "none"
         ],
-        "text-offset": [0, 0],
-        "text-radial-offset": 0,
         "text-allow-overlap": false,
         "text-field": ["get", "name_en"],
         "text-font": [
@@ -1883,24 +1883,39 @@
         ],
         "text-letter-spacing": 0.2,
         "text-padding": 10,
-        "text-variable-anchor": ["center"],
-        "visibility": "visible"
+        "text-anchor": "bottom",
+        "icon-anchor": "center",
+        "visibility": "visible",
+        "icon-image": "maki-information-11",
+        "icon-offset": [0,10],
+        "text-justify": "auto"
       },
       "paint": {
         "text-color": "rgba(47,47,47,0.8)",
         "text-halo-width": 2,
         "text-halo-color": "rgba(48,48,48,0)",
         "icon-color": "rgba(47,47,47,0.8)",
+        "icon-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          5,
+          ["case", ["has", "mx_info_box"], 1, 0],
+          8,
+          ["case", ["has", "mx_info_box"], 0.8, 0],
+          20,
+          ["case", ["has", "mx_info_box"], 0.4, 0]
+        ],
         "text-opacity": [
           "interpolate",
           ["linear"],
           ["zoom"],
           5,
-          0.9,
+          1,
           8,
-          0.5,
+          0.8,
           20,
-          0.1
+          0.4
         ]
       }
     }

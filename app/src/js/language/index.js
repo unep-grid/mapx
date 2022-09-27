@@ -267,7 +267,7 @@ export async function updateLanguageElements(o) {
 
 /**
  * Get value from the dictionary for a given key and language. Fallback to "def"
- * @param {string} keys Key to look for in the dictionnary
+ * @param {string} key Key to look for in the dictionnary
  * @param {string} lang  Two letters language code
  * @return {Promise<String|Array>} If key is an array, array of item, else string.
  */

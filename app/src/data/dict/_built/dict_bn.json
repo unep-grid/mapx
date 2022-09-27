@@ -6885,6 +6885,21 @@
     "bn": "Ultra High Definition (UHD)"
   },
   {
+    "id": "un_map_disclaimer_asterisk_1",
+    "en": "Non-Self-Governing Territory",
+    "bn": "অ-স্ব-শাসিত অঞ্চল"
+  },
+  {
+    "id": "un_map_disclaimer_asterisk_2",
+    "en": "Dotted line represents approximately the Line of Control in Jammu and Kashmir agreed upon by India and Pakistan. The final status of Jammu and Kashmir has not yet been agreed upon by the parties.",
+    "bn": "ডটেড লাইন জম্মু ও কাশ্মীরের প্রায় নিয়ন্ত্রণ রেখার প্রতিনিধিত্ব করে যা ভারত ও পাকিস্তানের দ্বারা সম্মত হয়েছে। জম্মু ও কাশ্মীরের চূড়ান্ত মর্যাদা নিয়ে দলগুলোর মধ্যে এখনো একমত হয়নি।"
+  },
+  {
+    "id": "un_map_disclaimer_asterisk_3",
+    "en": "A dispute exists between the Governments of Argentina and the United Kingdom of Great Britain and Northern Ireland concerning sovereignty over the Falkland Islands (Malvinas).",
+    "bn": "ফকল্যান্ড দ্বীপপুঞ্জের (মালভিনাস) সার্বভৌমত্ব নিয়ে আর্জেন্টিনা সরকার এবং গ্রেট ব্রিটেনের যুক্তরাজ্য এবং উত্তর আয়ারল্যান্ডের মধ্যে একটি বিরোধ বিদ্যমান।"
+  },
+  {
     "id": "tool_mirror_enable",
     "en": "Use URL mirroring.",
     "bn": "ইউআরএল মিররিং ব্যবহার করুন।"

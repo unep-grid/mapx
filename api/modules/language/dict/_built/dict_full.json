@@ -17901,6 +17901,45 @@
     "de": "Ultra High Definition (UHD)"
   },
   {
+    "id": "un_map_disclaimer_asterisk_1",
+    "en": "Non-Self-Governing Territory",
+    "fr": "Territoires non autonomes",
+    "es": "Territorios No Autónomos",
+    "ru": "Несамоуправляющиеся территории",
+    "zh": "非自治领土",
+    "ar": " الأقاليم غير المتمتعة بالحكم الذاتي",
+    "fa": "قلمرو غیر خودگردان",
+    "ps": "غیر د ځان حاکمیت ساحه",
+    "bn": "অ-স্ব-শাসিত অঞ্চল",
+    "de": "Gebiet ohne Selbstverwaltung"
+  },
+  {
+    "id": "un_map_disclaimer_asterisk_2",
+    "en": "Dotted line represents approximately the Line of Control in Jammu and Kashmir agreed upon by India and Pakistan. The final status of Jammu and Kashmir has not yet been agreed upon by the parties.",
+    "fr": "Les pointillés correspondent approximativement à la ligne de contrôle au Jammu-et-Cachemire convenue par l'Inde et le Pakistan. Les parties n’ont pas encore réglé la question du statut définitif du Jammu-et-Cachemire.",
+    "es": "La línea de puntos representa aproximadamente la Línea de Control en Jammu y Cachemira convenida por la India y el Pakistán. Las partes no han llegado todavia a un acuerdo sobre el estatuto definitivo de Jammu y Cachemira",
+    "ru": "Пунктирная линия приблизительно отражает «линию контроля» в Джамму и Кашмире, согласованную Индией и Пакистаном. Стороны еще не договорились об окончательном статусе Джамму и Кашмира.",
+    "zh": "虚线为印度和巴基斯坦商定的查谟和克什米尔的大致控制线。双方尚未商定查谟和克什米尔的最终地位。",
+    "ar": "يمثل الخط المتقطع خط المراقبة تقريبا في جامو وكشمير المتفق عليه بين الهند وباكستان. ولم يتفق الطرفان بعد على الوضع النهائي لجامو وكشمير.",
+    "fa": "خط نقطه چین تقریباً خط کنترل در جامو و کشمیر مورد توافق هند و پاکستان را نشان می دهد. وضعیت نهایی جامو و کشمیر هنوز مورد توافق طرفین قرار نگرفته است.",
+    "ps": "نقطه کرښه په جمو او کشمیر کې د کنټرول کرښې نمایندګي کوي چې د هند او پاکستان لخوا موافقه شوې. د جمو او کشمیر وروستی دریځ لا تر اوسه د اړخونو لخوا موافقه نه ده شوې.",
+    "bn": "ডটেড লাইন জম্মু ও কাশ্মীরের প্রায় নিয়ন্ত্রণ রেখার প্রতিনিধিত্ব করে যা ভারত ও পাকিস্তানের দ্বারা সম্মত হয়েছে। জম্মু ও কাশ্মীরের চূড়ান্ত মর্যাদা নিয়ে দলগুলোর মধ্যে এখনো একমত হয়নি।",
+    "de": "Die gepunktete Linie stellt ungefähr die von Indien und Pakistan vereinbarte Kontrolllinie in Jammu und Kaschmir dar. Der endgültige Status von Jammu und Kaschmir wurde von den Parteien noch nicht vereinbart."
+  },
+  {
+    "id": "un_map_disclaimer_asterisk_3",
+    "en": "A dispute exists between the Governments of Argentina and the United Kingdom of Great Britain and Northern Ireland concerning sovereignty over the Falkland Islands (Malvinas).",
+    "fr": "La souverainté sur les îles Falkland (Malvinas) fait l’objet d’un différend entre le Gouvernement de l’Argentine et le Gouvernement du Royaume-Uni de Grande-Bretagne et d’Irlande du Nord.",
+    "es": "Existe una disputa entre los Gobiernos de la Argentina y el Reino Unido de Gran Bretaña e Irlanda del Norte acerca de la soberanía sobre las Islas Malvinas (Falkland Islands).",
+    "ru": "Между правительствами Аргентины и Соединенного Королевства Великобритании и Северной Ирландии существует спор по поводу суверенитета над Фолклендскими (Мальвинскими) островами.",
+    "zh": "阿根廷政府和大不列颠及爱尔兰联合王国政府之间就福克兰(马尔维纳斯)群岛的主权问题存在着争议。",
+    "ar": "وجد نزاع بين حكومتي الأرجنتين والمملكة المتحدة لبريطانيا العظمى وأيرلندا الشمالية بشأن السيادة على جزر فوكلاند (مالفيناس).",
+    "fa": "اختلافی بین دولت های آرژانتین و پادشاهی متحده بریتانیای کبیر و ایرلند شمالی در مورد حاکمیت بر جزایر فالکلند (مالویناس) وجود دارد.",
+    "ps": "د ارجنټاین د حکومتونو او د انګلستان لوی بریتانیا او شمالي آیرلینډ ترمنځ د فاکلینډ ټاپوګانو (مالویناس) د حاکمیت په اړه شخړه شتون لري.",
+    "bn": "ফকল্যান্ড দ্বীপপুঞ্জের (মালভিনাস) সার্বভৌমত্ব নিয়ে আর্জেন্টিনা সরকার এবং গ্রেট ব্রিটেনের যুক্তরাজ্য এবং উত্তর আয়ারল্যান্ডের মধ্যে একটি বিরোধ বিদ্যমান।",
+    "de": "Zwischen den Regierungen Argentiniens und des Vereinigten Königreichs Großbritannien und Nordirland besteht ein Streit über die Souveränität über die Falklandinseln (Malvinas)."
+  },
+  {
     "id": "tool_mirror_enable",
     "en": "Use URL mirroring.",
     "fr": "Utilisez la mise en miroir d'URL.",

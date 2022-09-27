@@ -7,6 +7,7 @@ import { ButtonPanel } from "./../button_panel";
 import { RasterMiniMap } from "./../raster_mini_map";
 import { el, elSpanTranslate } from "./../el_mapx/index.js";
 import { MainPanel } from "./../panel_main";
+import { MapInfoBox } from "./../map_info_box";
 import { Search } from "./../search";
 import {
   MapxLogo,
@@ -1164,6 +1165,13 @@ export async function initMapx(o) {
   });
 
   /**
+  * Add infobox handler
+  * - if `mx_info_box` attribute exist when hovering the map,
+  *   this module will display an infobox 
+  */ 
+  mx.infobox = new MapInfoBox(map);
+
+  /**
    * Add controls
    */
   map.addControl(new MapControlLiveCoord(), "bottom-right");
@@ -1189,6 +1197,7 @@ export async function initMapx(o) {
 }
 
 export function initMapListener(map) {
+
   /**
    * Error handling
    */
@@ -1236,9 +1245,6 @@ export function initMapListener(map) {
     }
   });
 
-  /**
-   * Mouse move handling
-   */
   map.on("mousemove", (e) => {
     if (0) {
       /**
@@ -1265,6 +1271,9 @@ export function initMapListener(map) {
       id: map.id,
       prefix: "MX", // custom code could be MXCC ...
     });
+    /**
+     * Change cursor when hovering mapx layers : invite for click
+     */
     const features = map.queryRenderedFeatures(e.point, { layers: layers });
     map.getCanvas().style.cursor = features.length ? "pointer" : "";
   });
