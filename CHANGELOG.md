@@ -1,3 +1,12 @@
+  - [1.9.44-beta.7](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.7) 
+
+   - APP 
+      - New module : MapInfoBox, small utility to extract value from any property named `mx_info_box` while moving the cursor over maps layers, and display the value in a small box bellow the cursor. If available, a translation from the dictionary is displayed. 
+      - Style modification to include UN disclaimer text, shown via the MapInfoBox. 
+      - Updated the disclaimer itself ( avilable using the (i) button in the tools panel ).
+      - Limit number of highlighted layers to 5.
+      - Theme id from URL has a higher priority than the stored theme id.   
+
   - [1.9.44-beta.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.6) 
    
    - APP 
