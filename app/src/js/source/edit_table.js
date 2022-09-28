@@ -366,11 +366,30 @@ export class EditTableSessionClient {
   }
 
   /**
+   * Get current members
+   * @return {Array} array of members
+   */
+  getMembers() {
+    const et = this;
+    return getArrayDistinct(et._members);
+  }
+
+  /**
+   * Check if there is concurrent members
+   * @return {Boolean} has concurrent members
+   */
+  hasConcurrentMembers() {
+    const et = this;
+    const members = et.getMembers();
+    members.length > 0;
+  }
+
+  /**
    * Update members state info
    */
   updateMembersStat() {
     const et = this;
-    const members = getArrayDistinct(et._members);
+    const members = et.getMembers();
     const elFrag = new DocumentFragment();
     const groups = {};
 
@@ -609,6 +628,8 @@ export class EditTableSessionClient {
       return;
     }
 
+    const initLocked = table.locked && et.hasConcurrentMembers();
+
     const handsontable = await moduleLoad("handsontable");
 
     if (et._ht instanceof handsontable) {
@@ -693,7 +714,7 @@ export class EditTableSessionClient {
     });
     et._resize_observer.observe(et._modal);
 
-    if (table.locked) {
+    if (initLocked) {
       et.lock();
     }
 
@@ -909,15 +930,16 @@ export class EditTableSessionClient {
     const et = this;
 
     let n = et._columns.length;
-    let colRemoved;
+    let colRemoved = {}; // keep track for cleaning redo / updates
     while (n--) {
       const col = et._columns[n];
       if (col.data === update.column_name) {
-        colRemoved = et._columns.splice(n, 1);
+        colRemoved.column = et._columns.splice(n, 1);
+        colRemoved.pos = n;
       }
     }
 
-    if (!colRemoved) {
+    if (isEmpty(colRemoved)) {
       console.warn(`Column ${update.column_name} not removed`);
       return;
     }
@@ -926,7 +948,37 @@ export class EditTableSessionClient {
       columns: et._columns,
       colHeaders: et._columns.map((c) => c.data),
     });
-    et.updateButtonsAddRemoveColumn();
+
+    /**
+     * Remove update item that ref the removed column
+     */
+    let nU = et._updates.length;
+    while (nU--) {
+      const sUpdate = et._updates[nU];
+      if (sUpdate.column_name === update.column_name) {
+        et._updates.splice(nU, 1);
+      }
+    }
+
+    /**
+     * Remove doneAction from UndoRedo plugin
+     */
+    const ur = et._ht.getPlugin("UndoRedo");
+    const actions = ur.doneActions;
+    let nA = actions.length;
+    while (nA--) {
+      const a = actions[nA];
+      if (a.actionType === "change") {
+        const changes = a.changes;
+        for (const change of changes) {
+          if (change[1] === colRemoved.pos) {
+            actions.splice(nA, 1);
+          }
+        }
+      }
+    }
+
+    et.updateButtons();
     et._ht.render();
 
     if (source === et._config.id_source_dispatch) {
@@ -1561,6 +1613,7 @@ export class EditTableSessionClient {
    */
   lock() {
     const et = this;
+    console.trace("lock");
     et.disable();
     et._locked = true;
     et._el_overlay.classList.add("locked");

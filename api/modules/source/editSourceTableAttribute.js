@@ -407,25 +407,19 @@ async function writePostgres(updates) {
           {
             const { gid, value_new } = update;
             const valid = isNumeric(gid);
-
-            if (!valid) {
-              throw new Error("Invalid update_cell gid");
+            if(!colExists){
+              debugger;
             }
-
-            if (!colExists) {
-              throw new Error(`Column does not exists :${column_name}`);
-            }
-
-            const qSql = parseTemplate(templates.updateTableCellByGid, {
-              id_table,
-              gid,
-              column_name,
-            });
-
-            const res = await client.query(qSql, [value_new]);
-
-            if (res.rowCount != 1) {
-              throw new Error("Error during update_cell : row affected =! 1");
+            if (valid && colExists) {
+              const qSql = parseTemplate(templates.updateTableCellByGid, {
+                id_table,
+                gid,
+                column_name,
+              });
+              const res = await client.query(qSql, [value_new]);
+              if (res.rowCount != 1) {
+                throw new Error("Error during update_cell : row affected =! 1");
+              }
             }
           }
           break;
@@ -433,68 +427,57 @@ async function writePostgres(updates) {
           {
             /** ALTER TABLE products ADD COLUMN description text; **/
             const { column_type } = update;
-
-            if (colExists) {
-              throw new Error(`Column already exists :${column_name}`);
-            }
-
-            const qSql = parseTemplate(templates.updateTableAddColumn, {
-              id_table,
-              column_name,
-              column_type,
-            });
-            const res = await client.query(qSql);
-            if (res.rowCount) {
-              throw new Error(
-                "Error during add_column : rows affected is not null"
-              );
+            
+            if (!colExists) {
+              const qSql = parseTemplate(templates.updateTableAddColumn, {
+                id_table,
+                column_name,
+                column_type,
+              });
+              const res = await client.query(qSql);
+              if (res.rowCount) {
+                throw new Error(
+                  "Error during add_column : rows affected is not null"
+                );
+              }
             }
           }
           break;
         case "remove_column":
           {
-            if (!colExists) {
-              throw new Error(`Column does not exists :${column_name}`);
-            }
+            if (colExists) {
+              /** ALTER TABLE products remove COLUMN description text; **/
+              const qSql = parseTemplate(templates.updateTableRemoveColumn, {
+                id_table,
+                column_name,
+              });
 
-            /** ALTER TABLE products remove COLUMN description text; **/
-            const qSql = parseTemplate(templates.updateTableRemoveColumn, {
-              id_table,
-              column_name,
-            });
-
-            const res = await client.query(qSql);
-            if (res.rowCount) {
-              throw new Error(
-                "Error during remove_column : rows affected is not null"
-              );
+              const res = await client.query(qSql);
+              if (res.rowCount) {
+                throw new Error(
+                  "Error during remove_column : rows affected is not null"
+                );
+              }
             }
           }
           break;
         case "rename_column":
           {
-            if (!colExists) {
-              throw new Error(`Column does not exists :${column_name}`);
-            }
-
             const colNewExists = await columnExists(column_name_new, id_table);
+            if (colExists && !colNewExists) {
+              /** ALTER TABLE products remove COLUMN description text; **/
+              const qSql = parseTemplate(templates.updateTableRenameColumn, {
+                id_table,
+                column_name,
+                column_name_new,
+              });
 
-            if (colNewExists) {
-              throw new Error(`Column already exists :${column_name}`);
-            }
-
-            /** ALTER TABLE products remove COLUMN description text; **/
-            const qSql = parseTemplate(templates.updateTableRenameColumn, {
-              id_table,
-              column_name,
-              column_name_new,
-            });
-
-            const res = await client.query(qSql);
-            if (res.rowCount) {
-              throw new Error(
-                "Error during remove_column : rows affected is not null"
-              );
+              const res = await client.query(qSql);
+              if (res.rowCount) {
+                throw new Error(
+                  "Error during remove_column : rows affected is not null"
+                );
+              }
             }
           }
           break;

@@ -26,6 +26,7 @@ export async function editTable(config) {
     });
     instances.set(idTable, instance);
     await instance.init();
+    window._te = instance;
     return instance;
   } catch (e) {
     console.error(e);
