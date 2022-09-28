@@ -1693,6 +1693,7 @@ export class EditTableSessionClient {
   }
   /**
    * Display a dialog with source selection
+   * - built with tom select, in select_auto module 
    */
   async dialogSelectTable() {
     const res = await modalPrompt({

@@ -1,29 +1,29 @@
 /**
  * Get view
  */
-import {pgRead} from '#mapx/db';
-import {parseTemplate, sendJSON, sendError} from '#mapx/helpers';
-import {templates} from '#mapx/template';
-import {isViewId} from '@fxi/mx_valid';
+import { pgRead } from "#mapx/db";
+import { parseTemplate, sendJSON, sendError } from "#mapx/helpers";
+import { templates } from "#mapx/template";
+import { isViewId } from "@fxi/mx_valid";
 
-export {mwGet, mwGetMetadata, getViewMetadata};
+export { mwGet, mwGetMetadata, getViewMetadata };
 /**
  * Get full view data
  */
 async function mwGet(req, res) {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
 
     if (!isViewId(id)) {
-      throw Error('No valid id');
+      throw Error("No valid id");
     }
 
     const sql = parseTemplate(templates.getViewFull, {
-      idView: id
+      idView: id,
     });
 
     if (!sql) {
-      throw Error('Invalid query');
+      throw Error("Invalid query");
     }
 
     const result = await pgRead.query(sql);
@@ -42,9 +42,9 @@ async function mwGet(req, res) {
 async function mwGetMetadata(req, res) {
   try {
     const start = new Date();
-    const data = await getViewMetadata({id: req.params.id});
+    const data = await getViewMetadata({ id: req.params.id });
     data._timing = new Date() - start;
-    sendJSON(res, data, {end: true});
+    sendJSON(res, data, { end: true });
   } catch (e) {
     sendError(res, e);
   }
@@ -59,10 +59,10 @@ async function mwGetMetadata(req, res) {
 async function getViewMetadata(opt) {
   const id = opt.id.toUpperCase();
   if (!isViewId(id)) {
-    throw Error('No valid id');
+    throw Error("No valid id");
   }
   const sql = parseTemplate(templates.getViewMetadata, {
-    idView: id.toUpperCase()
+    idView: id.toUpperCase(),
   });
   const result = await pgRead.query(sql);
   if (result && result.rowCount > 0) {
