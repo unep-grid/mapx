@@ -332,7 +332,7 @@ export class EditTableSessionClient {
       addSelectize: false,
       noShinyBinding: true,
       removeCloseButton: true,
-      addBackground: false,
+      addBackground: true,
       noBtnGroup: true,
       onClose: () => {
         et.destroy();
