@@ -347,10 +347,13 @@ export class EditTableSessionClient {
    */
   updateButtons() {
     const et = this;
-    et.updateButtonSave();
-    et.updateUpdatesCounter();
-    et.updateButtonsUndoRedo();
-    et.updateButtonsAddRemoveColumn();
+    clearTimeout(et._id_to_buttons);
+    et._id_to_buttons = setTimeout((_) => {
+      et.updateButtonSave();
+      et.updateUpdatesCounter();
+      et.updateButtonsUndoRedo();
+      et.updateButtonsAddRemoveColumn();
+    }, 100);
   }
 
   /**
@@ -1693,7 +1696,7 @@ export class EditTableSessionClient {
   }
   /**
    * Display a dialog with source selection
-   * - built with tom select, in select_auto module 
+   * - built with tom select, in select_auto module
    */
   async dialogSelectTable() {
     const res = await modalPrompt({
