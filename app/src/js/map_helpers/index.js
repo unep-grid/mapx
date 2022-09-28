@@ -50,6 +50,7 @@ import {
   showSelectLanguage,
   showLogin,
   debounce,
+  updateTitle,
   childRemover,
   getClickHandlers,
   setClickHandler,
@@ -767,11 +768,17 @@ export async function updateUiSettings() {
   const langDef = getLanguageDefault();
   const lang = getLanguageCurrent();
   /**
+  * Update app title (project or default) 
+  */ 
+  updateTitle();
+
+  /**
    * User / login labels
    */
   const elBtnLogin = document.getElementById("btnShowLoginLabel");
   const sUser = path(mx, "settings.user", {});
   const sRole = path(mx, "settings.user.roles", {});
+
 
   if (sUser.guest) {
     elBtnLogin.innerText = await getDictItem("login_label");

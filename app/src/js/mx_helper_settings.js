@@ -1,13 +1,13 @@
 import { diff, clone } from "jsondiffpatch";
 import { settings } from "./settings";
 import { mergeDeep } from "./mx_helper_utils_json";
-
 /**
  * Update settings
  * @param {Options} o Option with key from settings. Overwrite settings values.
  */
 export function updateSettings(o) {
   const oldSettings = clone(settings);
+
   mergeDeep(settings, o);
 
   const delta = diff(oldSettings, settings);
@@ -20,6 +20,7 @@ export function updateSettings(o) {
       new_settings: settings,
     },
   });
+
   const userChange = diff(oldSettings.user, settings.user);
   if (userChange) {
     mx.events.fire({
@@ -43,4 +44,5 @@ export function updateSettings(o) {
       },
     });
   }
+
 }

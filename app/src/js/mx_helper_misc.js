@@ -1,6 +1,11 @@
 import { FlashItem } from "./icon_flash";
 import { getArrayDistinct } from "./array_stat/index.js";
-import { isEmpty, isPromise, isString } from "./is_test/index.js";
+import {
+  isLanguageObject,
+  isEmpty,
+  isPromise,
+  isString,
+} from "./is_test_mapx/index.js";
 import copy from "fast-copy";
 import { settings } from "./settings";
 /**
@@ -25,6 +30,19 @@ export function updateIfEmpty(target, source) {
     }
   }
   return target;
+}
+
+/**
+ * Update title based on settings
+ * @param {string|object} title Title (optional)
+ */
+export function updateTitle(title) {
+  const def = settings.title;
+  title = title || settings?.project?.title;
+  if (isLanguageObject(title)) {
+    title = title[settings.language] || title[settings.languages[0]];
+  }
+  document.title = title || def;
 }
 
 /**

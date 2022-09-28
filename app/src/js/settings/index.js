@@ -5,6 +5,7 @@ import * as routesWs from "./routes_ws.json";
 const routes = Object.assign({}, routesWs.default, routesExpress.default);
 
 const settings = {
+  title: "MapX",
   devicePixelRatio: 0, // updated by getPixelRatio()
   language: "en",
   languages: ["en", "fr", "es", "ar", "ru", "zh", "de", "bn", "fa", "ps"],
