@@ -1097,12 +1097,21 @@ export class EditTableSessionClient {
     return true;
   }
 
+  /**
+   * Test if column name exists
+   * @param {string} name Column name
+   */
+  columnNameExists(name) {
+    const et = this;
+    const names = et._columns.map((c) => c.data);
+    return names.includes(name);
+  }
+
   /*
    * Interactive column add
    */
   async dialogAddColumn() {
     const et = this;
-    const names = et._columns.map((c) => c.data);
     let valid = false;
 
     /**
@@ -1118,31 +1127,44 @@ export class EditTableSessionClient {
         placeholder: "Column name",
       },
       onInput: async (name, elBtnConfirm, elMessage) => {
-        const min_length = 3;
-        const max_length = 50;
-        const has_bad_chars = !et.isValidName(name);
-        const columnNameSafe = makeSafeName(name);
-        const validLength = isStringRange(
-          columnNameSafe,
-          min_length,
-          max_length
-        );
-        const validUnique = !names.includes(columnNameSafe);
-        valid = validUnique && validLength;
-        const txtTemplateName = await getDictItem(
-          "edit_table_modal_add_column_name_template"
-        );
-        const txtYes = await getDictItem("yes");
-        const txtNo = await getDictItem("no");
+        const minLength = 3;
+        const maxLength = 50;
+        const safeName = makeSafeName(name);
+        const validUnique = !et.columnNameExists(name);
+        const validName = et.isValidName(name);
+        const validLength = isStringRange(name, minLength, maxLength);
 
-        elMessage.innerHTML = parseTemplate(txtTemplateName, {
-          min_length,
-          max_length,
-          column_name: columnNameSafe,
-          has_bad_chars: has_bad_chars ? txtYes : txtNo,
-          is_available: validUnique ? txtYes : txtNo,
-          correct_length: validLength ? txtYes : txtNo,
-        });
+        while (elMessage.firstElementChild) {
+          elMessage.firstElementChild.remove();
+        }
+
+        valid = validName && validUnique && validLength;
+
+        if (!validLength) {
+          const elIssue = tt("edit_table_modal_add_column_name_issue_length", {
+            data: {
+              minLength,
+              maxLength,
+            },
+          });
+          elMessage.appendChild(elIssue);
+        }
+
+        if (!validName) {
+          const elIssue = tt(
+            "edit_table_modal_add_column_name_issue_invalid_characters"
+          );
+          elMessage.appendChild(elIssue);
+        }
+
+        if (valid) {
+          const elIssue = tt("edit_table_modal_add_column_name_template", {
+            data: {
+              column_name: safeName,
+            },
+          });
+          elMessage.appendChild(elIssue);
+        }
 
         if (valid) {
           elBtnConfirm.disabled = false;
@@ -1154,9 +1176,16 @@ export class EditTableSessionClient {
       },
     });
 
+    /**
+     * If prompt is canceled or if it's not valid, quit
+     */
     if (columnName === false || !valid) {
       return;
     }
+
+    /**
+     * Last sanitation
+     */
     const columnNameSafe = makeSafeName(columnName);
 
     /**

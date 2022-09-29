@@ -1566,8 +1566,23 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b><ul><li>The name can't start with a number or contain special characters such as: \"';\\)('</li><li>Min length : {{min_length}}</li><li>Max length : {{max_length}}</li><li>Replaced special characters: {{has_bad_chars}}</li><li>Correct length: {{correct_length}}</li><li>Is available: {{is_available}}</li></ul>",
-    "ps": "د نوي کالم نوم به دا وي:<b> {{column_name}}</b><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> نوم نشي کولی د شمیر سره پیل شي یا ځانګړي حروف ولري لکه: \"'؛\\)('</li><li style=\";text-align:right;direction:rtl\"> دقیقه اوږدوالی: {{min_length}}</li><li style=\";text-align:right;direction:rtl\"> اعظمي اوږدوالی: {{max_length}}</li><li style=\";text-align:right;direction:rtl\"> ځای پرځای شوي ځانګړي حروف: {{has_bad_chars}}</li><li style=\";text-align:right;direction:rtl\"> سمه اوږدوالی: {{correct_length}}</li><li style=\";text-align:right;direction:rtl\"> شتون لری: {{is_available}}</li></ul>"
+    "en": "The new column name will be: <b>{{column_name}}</b>",
+    "ps": "د نوي کالم نوم به دا وي:<b> {{column_name}}</b>"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_length",
+    "en": "Length should be more than {{minLength}} and less than {{maxLength}} characters",
+    "ps": "اوږدوالی باید د څخه ډیر وي {{minLength}} او لږ {{maxLength}} کرکټرونه"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_invalid_characters",
+    "en": "Name can't start with a number or contain spaces or special characters",
+    "ps": "نوم نشي کولی د شمیر سره پیل شي یا ځایونه یا ځانګړي حروف ولري"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_non_available",
+    "en": "Name unavailable",
+    "ps": "نوم شتون نلري"
   },
   {
     "id": "edit_table_modal_add_column_name_next",

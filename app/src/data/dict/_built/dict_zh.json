@@ -1566,8 +1566,23 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b><ul><li>The name can't start with a number or contain special characters such as: \"';\\)('</li><li>Min length : {{min_length}}</li><li>Max length : {{max_length}}</li><li>Replaced special characters: {{has_bad_chars}}</li><li>Correct length: {{correct_length}}</li><li>Is available: {{is_available}}</li></ul>",
-    "zh": "新列名将是：<b> {{column_name}}</b><ul><li>名称不能以数字开头或包含特殊字符，例如：“';\\)('</li><li>最小长度： {{min_length}}</li><li>最长长度 ： {{max_length}}</li><li>替换特殊字符： {{has_bad_chars}}</li><li>正确长度： {{correct_length}}</li><li>可用： {{is_available}}</li></ul>"
+    "en": "The new column name will be: <b>{{column_name}}</b>",
+    "zh": "新的列名称将是：<b> {{column_name}}</b>"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_length",
+    "en": "Length should be more than {{minLength}} and less than {{maxLength}} characters",
+    "zh": "长度应大于 {{minLength}}并且小于 {{maxLength}}人物"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_invalid_characters",
+    "en": "Name can't start with a number or contain spaces or special characters",
+    "zh": "名称不能以数字开头或包含空格或特殊字符"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_non_available",
+    "en": "Name unavailable",
+    "zh": "名称不可用"
   },
   {
     "id": "edit_table_modal_add_column_name_next",

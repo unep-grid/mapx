@@ -1566,8 +1566,23 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b><ul><li>The name can't start with a number or contain special characters such as: \"';\\)('</li><li>Min length : {{min_length}}</li><li>Max length : {{max_length}}</li><li>Replaced special characters: {{has_bad_chars}}</li><li>Correct length: {{correct_length}}</li><li>Is available: {{is_available}}</li></ul>",
-    "es": "El nuevo nombre de la columna será:<b> {{column_name}}</b><ul><li> El nombre no puede comenzar con un número ni contener caracteres especiales como: \"';\\)('</li><li> Longitud mínima : {{min_length}}</li><li> Longitud máxima : {{max_length}}</li><li> Caracteres especiales reemplazados: {{has_bad_chars}}</li><li> Longitud correcta: {{correct_length}}</li><li> Está disponible: {{is_available}}</li></ul>"
+    "en": "The new column name will be: <b>{{column_name}}</b>",
+    "es": "El nuevo nombre de la columna será:<b> {{column_name}}</b>"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_length",
+    "en": "Length should be more than {{minLength}} and less than {{maxLength}} characters",
+    "es": "La longitud debe ser mayor que {{minLength}} y menos que {{maxLength}} caracteres"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_invalid_characters",
+    "en": "Name can't start with a number or contain spaces or special characters",
+    "es": "El nombre no puede comenzar con un número ni contener espacios o caracteres especiales"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_non_available",
+    "en": "Name unavailable",
+    "es": "Nombre no disponible"
   },
   {
     "id": "edit_table_modal_add_column_name_next",

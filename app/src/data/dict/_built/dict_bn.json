@@ -1566,8 +1566,23 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b><ul><li>The name can't start with a number or contain special characters such as: \"';\\)('</li><li>Min length : {{min_length}}</li><li>Max length : {{max_length}}</li><li>Replaced special characters: {{has_bad_chars}}</li><li>Correct length: {{correct_length}}</li><li>Is available: {{is_available}}</li></ul>",
-    "bn": "নতুন কলামের নাম হবে:<b> {{column_name}}</b><ul><li> নামটি একটি সংখ্যা দিয়ে শুরু হতে পারে না বা বিশেষ অক্ষর থাকতে পারে না যেমন: \"';\\)('</li><li> সর্বনিম্ন দৈর্ঘ্য: {{min_length}}</li><li> সর্বোচ্চ দৈর্ঘ্য : {{max_length}}</li><li> প্রতিস্থাপিত বিশেষ অক্ষর: {{has_bad_chars}}</li><li> সঠিক দৈর্ঘ্য: {{correct_length}}</li><li> সহজলভ্য: {{is_available}}</li></ul>"
+    "en": "The new column name will be: <b>{{column_name}}</b>",
+    "bn": "নতুন কলামের নাম হবে:<b> {{column_name}}</b>"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_length",
+    "en": "Length should be more than {{minLength}} and less than {{maxLength}} characters",
+    "bn": "দৈর্ঘ্যের চেয়ে বেশি হওয়া উচিত {{minLength}} এবং এর চেয়ে কম {{maxLength}} চরিত্র"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_invalid_characters",
+    "en": "Name can't start with a number or contain spaces or special characters",
+    "bn": "নাম একটি সংখ্যা দিয়ে শুরু হতে পারে না বা স্পেস বা বিশেষ অক্ষর ধারণ করতে পারে না"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_non_available",
+    "en": "Name unavailable",
+    "bn": "নাম অনুপলব্ধ"
   },
   {
     "id": "edit_table_modal_add_column_name_next",

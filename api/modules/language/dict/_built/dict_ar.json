@@ -1566,8 +1566,23 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b><ul><li>The name can't start with a number or contain special characters such as: \"';\\)('</li><li>Min length : {{min_length}}</li><li>Max length : {{max_length}}</li><li>Replaced special characters: {{has_bad_chars}}</li><li>Correct length: {{correct_length}}</li><li>Is available: {{is_available}}</li></ul>",
-    "ar": "سيكون اسم العمود الجديد:<b> {{column_name}}</b><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> لا يمكن أن يبدأ الاسم برقم أو أن يحتوي على أحرف خاصة مثل: \"'؛ \\) ('</li><li style=\";text-align:right;direction:rtl\"> طول دقيقة : {{min_length}}</li><li style=\";text-align:right;direction:rtl\"> الحد الاقصى للطول : {{max_length}}</li><li style=\";text-align:right;direction:rtl\"> تم استبدال الأحرف الخاصة: {{has_bad_chars}}</li><li style=\";text-align:right;direction:rtl\"> الطول الصحيح: {{correct_length}}</li><li style=\";text-align:right;direction:rtl\"> متاح: {{is_available}}</li></ul>"
+    "en": "The new column name will be: <b>{{column_name}}</b>",
+    "ar": "سيكون اسم العمود الجديد:<b> {{column_name}}</b>"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_length",
+    "en": "Length should be more than {{minLength}} and less than {{maxLength}} characters",
+    "ar": "يجب أن يكون الطول أكثر من {{minLength}} وأقل من {{maxLength}} الشخصيات"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_invalid_characters",
+    "en": "Name can't start with a number or contain spaces or special characters",
+    "ar": "لا يمكن أن يبدأ الاسم برقم أو أن يحتوي على مسافات أو أحرف خاصة"
+  },
+  {
+    "id": "edit_table_modal_add_column_name_issue_non_available",
+    "en": "Name unavailable",
+    "ar": "الاسم غير متوفر"
   },
   {
     "id": "edit_table_modal_add_column_name_next",
