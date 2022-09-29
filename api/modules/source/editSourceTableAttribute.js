@@ -407,9 +407,6 @@ async function writePostgres(updates) {
           {
             const { gid, value_new } = update;
             const valid = isNumeric(gid);
-            if(!colExists){
-              debugger;
-            }
             if (valid && colExists) {
               const qSql = parseTemplate(templates.updateTableCellByGid, {
                 id_table,

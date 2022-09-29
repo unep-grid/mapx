@@ -316,6 +316,7 @@
   overflow: hidden;
 }
 .ts-dropdown [data-selectable] .highlight {
+  font-size: inherit;
   border-bottom: 1px solid var(--mx_ui_link);
   border-radius: 1px;
 }

@@ -67,13 +67,20 @@ function formater(data, escape) {
   const nRow = escape(data.nrow) + warnRow;
   const title = escape(data.title);
   const abstr = escape(data.abstract.substr(0, 100));
+  const date = escape(data.date_modified);
+  const dateUi = new Date(date).toLocaleDateString();
+
   return el(
     "div",
+    {
+      class: ["hint--bottom"],
+      "aria-label": abstr,
+    },
     el("span", title),
     el(
       "span",
       { class: ["text-muted", "space-around"] },
-      `[ ${nRow} x ${nCol} ] ${abstr}`
+      `[ ${nRow} x ${nCol} ] ${dateUi}`
     )
   );
 }
