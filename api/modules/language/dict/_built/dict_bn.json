@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_issue_invalid_characters",
-    "en": "Name can't start with a number or contain spaces or special characters",
-    "bn": "নাম একটি সংখ্যা দিয়ে শুরু হতে পারে না বা স্পেস বা বিশেষ অক্ষর ধারণ করতে পারে না"
+    "en": "Name can't start with a number, contain spaces or any special characters, or use reserved keywords",
+    "bn": "নাম একটি সংখ্যা দিয়ে শুরু হতে পারে না, স্পেস বা কোনো বিশেষ অক্ষর ধারণ করতে পারে না বা সংরক্ষিত কীওয়ার্ড ব্যবহার করতে পারে না"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_non_available",
@@ -1728,6 +1728,11 @@
     "id": "btn_edit_table_modal_clear_filter",
     "en": "Reset filters",
     "bn": "ফিল্টার রিসেট করুন"
+  },
+  {
+    "id": "btn_edit_table_modal_edit",
+    "en": "Edit",
+    "bn": "সম্পাদনা করুন"
   },
   {
     "id": "btn_edit_table_modal_export_csv",

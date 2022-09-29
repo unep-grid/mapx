@@ -247,9 +247,9 @@
     "bn": "",
     "de": ""
   },
- {
+  {
     "id": "edit_table_modal_add_column_name_issue_invalid_characters",
-    "en": "Name can't start with a number or contain spaces or special characters",
+    "en": "Name can't start with a number, contain spaces or any special characters, or use reserved keywords",
     "fr": "",
     "es": "",
     "ru": "",
@@ -641,6 +641,19 @@
   {
     "id": "btn_edit_table_modal_clear_filter",
     "en": "Reset filters",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_edit_table_modal_edit",
+    "en": "Edit",
     "fr": "",
     "es": "",
     "ru": "",

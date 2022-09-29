@@ -113,19 +113,23 @@ export async function getSourceSummary(opt) {
     attributes: columns,
     attributes_types: tableTypes,
   };
-  if (stats.indexOf("base") > -1) {
+  if (stats.includes("base")) {
     Object.assign(out, await getOrCalc("getSourceSummary_base", opt));
   }
 
-  if (hasGeom && stats.indexOf("spatial") > -1) {
+  if (stats.includes("roles")) {
+    Object.assign(out, { roles: await getSourceEditors(opt.idSource) }, opt);
+  }
+
+  if (hasGeom && stats.includes("spatial")) {
     Object.assign(out, await getOrCalc("getSourceSummary_ext_sp", opt));
   }
 
-  if ((opt.hasT0 || opt.hasT1) && stats.indexOf("temporal") > -1) {
+  if ((opt.hasT0 || opt.hasT1) && stats.includes("temporal")) {
     Object.assign(out, await getOrCalc("getSourceSummary_ext_time", opt));
   }
 
-  if (hasAttr && stats.indexOf("attributes") > -1) {
+  if (hasAttr && stats.includes("attributes")) {
     if (isCategorical) {
       Object.assign(
         out,

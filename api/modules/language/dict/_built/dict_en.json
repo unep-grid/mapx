@@ -1261,7 +1261,7 @@
   },
   {
     "id": "edit_table_modal_add_column_name_issue_invalid_characters",
-    "en": "Name can't start with a number or contain spaces or special characters"
+    "en": "Name can't start with a number, contain spaces or any special characters, or use reserved keywords"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_non_available",
@@ -1382,6 +1382,10 @@
   {
     "id": "btn_edit_table_modal_clear_filter",
     "en": "Reset filters"
+  },
+  {
+    "id": "btn_edit_table_modal_edit",
+    "en": "Edit"
   },
   {
     "id": "btn_edit_table_modal_export_csv",

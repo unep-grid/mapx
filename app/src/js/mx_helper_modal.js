@@ -586,7 +586,13 @@ export function modalPrompt(opt) {
       selectAuto = new SelectAuto(opt.selectAutoOptions);
     }
 
-    const elMessage = el("small", { class: ["form-text"] });
+    const elMessage = el("small", {
+      class: ["form-text"],
+      style: {
+        display: "flex",
+        flexDirection: "column",
+      },
+    });
     const elContent = el("div", [elInputGroup, elMessage]);
     const elBtnCancel = el(
       "div",

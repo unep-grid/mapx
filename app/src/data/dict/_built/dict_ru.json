@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_issue_invalid_characters",
-    "en": "Name can't start with a number or contain spaces or special characters",
-    "ru": "Имя не может начинаться с цифры или содержать пробелы или специальные символы."
+    "en": "Name can't start with a number, contain spaces or any special characters, or use reserved keywords",
+    "ru": "Имя не может начинаться с цифры, содержать пробелы или специальные символы, а также использовать зарезервированные ключевые слова."
   },
   {
     "id": "edit_table_modal_add_column_name_issue_non_available",
@@ -1728,6 +1728,11 @@
     "id": "btn_edit_table_modal_clear_filter",
     "en": "Reset filters",
     "ru": "Сбросить фильтры"
+  },
+  {
+    "id": "btn_edit_table_modal_edit",
+    "en": "Edit",
+    "ru": "Редактировать"
   },
   {
     "id": "btn_edit_table_modal_export_csv",

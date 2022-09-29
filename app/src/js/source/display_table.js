@@ -3,6 +3,10 @@ import { modalMarkdown } from "./../modal_markdown/index.js";
 import { getDictItem, getLanguageCurrent } from "./../language";
 import { elSpanTranslate } from "./../el_mapx";
 import { getApiUrl } from "./../api_routes";
+import { settings } from "./../settings";
+import { editTable } from "./../source/index";
+import { modalDialog } from "./../mx_helper_modal.js";
+
 import {
   getHandsonLanguageCode,
   typeConvert,
@@ -39,30 +43,45 @@ export async function showSourceTableAttributeModal(opt) {
     return Promise.resolve(false);
   }
   const h = mx.helpers;
-  const settings = {
+  const config = {
     idSource: opt.idSource,
     attributes: opt.attributes,
     view: opt.view,
   };
-
+  let destroyed = false;
   let hot;
   let resizeObserver;
   let labels = opt.labels || null;
 
   const summary = await getViewSourceSummary(opt.view.id, {
-    stats: ["base", "attributes"],
+    stats: ["base", "attributes", "roles"],
   });
+
+  /**
+   * Check roles for edit button
+   */
+  const idUser = settings?.user?.id;
+  const groups = settings?.user?.roles?.groups || [];
+  const editor = summary?.roles?.editor;
+  const editors = summary?.roles?.editors;
+  const addEdit =
+    editor === idUser ||
+    editors.some((role) => groups.includes(role) || role === idUser);
+
+  /**
+   * Start progress
+   */
   onProgressStart();
 
   const handsontable = await moduleLoad("handsontable");
-  const meta = await fetchSourceMetadata(settings.idSource);
-  const data = await fetchSourceTableAttribute(settings);
+  const meta = await fetchSourceMetadata(config.idSource);
+  const data = await fetchSourceTableAttribute(config);
 
   const services = meta._services || [];
   const hasData = isArray(data) && data.length > 0;
   const license = "non-commercial-and-evaluation";
   const elTable = el("div", {
-    class : "mx_handsontable",
+    class: "mx_handsontable",
     style: {
       width: "100%",
       height: "350",
@@ -110,6 +129,19 @@ export async function showSourceTableAttributeModal(opt) {
     },
     elSpanTranslate("btn_edit_table_modal_clear_filter")
   );
+
+  const elButtonEdit = el(
+    "button",
+    {
+      class: "btn btn-default",
+      disabled: !addEdit,
+      on: {
+        click: handleEdit,
+      },
+    },
+    elSpanTranslate("btn_edit_table_modal_edit")
+  );
+
   let elViewTitle;
   const elTitle = el(
     "div",
@@ -122,7 +154,13 @@ export async function showSourceTableAttributeModal(opt) {
     }))
   );
 
-  const buttons = [elButtonHelp, elButtonClearFilter, elButtonDownload];
+  const buttons = [
+    elButtonHelp,
+    elButtonClearFilter,
+    elButtonDownload,
+    elButtonEdit,
+  ];
+
   if (!hasData) {
     elTable.innerText = "no data";
     buttons.length = 0;
@@ -193,6 +231,34 @@ export async function showSourceTableAttributeModal(opt) {
   /**
    * Helpers
    */
+  async function handleEdit() {
+    try {
+      if (!addEdit) {
+        return;
+      }
+      const res = await editTable({
+        idTable: config.idSource,
+        destroyCb: restart,
+      });
+      if (res instanceof Error) {
+        await modalDialog({
+          content: res.message,
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function restart() {
+    try {
+      await destroy();
+      await showSourceTableAttributeModal(opt);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   function handleDownload() {
     if (!allowDownload) {
       return;
@@ -222,14 +288,14 @@ export async function showSourceTableAttributeModal(opt) {
   }
 
   function addTitle() {
-    let view = settings.view;
+    let view = config.view;
     if (!isView(view)) {
       return;
     }
     elViewTitle.innerText = h.getViewTitle(view);
   }
 
-  let _to_render_table = 0; 
+  let _to_render_table = 0;
   function tableRender() {
     clearTimeout(_to_render_table);
     _to_render_table = setTimeout(() => {
@@ -246,17 +312,21 @@ export async function showSourceTableAttributeModal(opt) {
           hot.render();
         }
       }
-    },200)
+    }, 200);
   }
 
-  function destroy() {
+  async function destroy() {
+    if (destroyed) {
+      return;
+    }
+    destroyed = true;
     if (hot) {
       hot.destroy();
     }
     if (resizeObserver) {
       resizeObserver.disconnect();
     }
-    let view = settings.view;
+    let view = config.view;
     if (!isView(view)) {
       return;
     }
@@ -264,15 +334,16 @@ export async function showSourceTableAttributeModal(opt) {
       type: "attribute_table",
       filter: [],
     });
+    elModal.close();
   }
 
   function handleViewFilter() {
-    const view = settings.view;
+    const view = config.view;
     if (!isView(view)) {
       return;
     }
     const data = hot.getData();
-    const attr = settings.attributes;
+    const attr = config.attributes;
     const posGid = attr.indexOf("gid");
     if (posGid > -1) {
       const ids = data.map((d) => d[posGid]);

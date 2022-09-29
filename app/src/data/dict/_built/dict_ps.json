@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_issue_invalid_characters",
-    "en": "Name can't start with a number or contain spaces or special characters",
-    "ps": "نوم نشي کولی د شمیر سره پیل شي یا ځایونه یا ځانګړي حروف ولري"
+    "en": "Name can't start with a number, contain spaces or any special characters, or use reserved keywords",
+    "ps": "نوم نشي کولی د شمیر سره پیل شي، ځایونه یا کوم ځانګړي حروف ولري، یا خوندي کلیدي کلمې وکاروئ"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_non_available",
@@ -1728,6 +1728,11 @@
     "id": "btn_edit_table_modal_clear_filter",
     "en": "Reset filters",
     "ps": "فلټرونه بیا تنظیم کړئ"
+  },
+  {
+    "id": "btn_edit_table_modal_edit",
+    "en": "Edit",
+    "ps": "سمون"
   },
   {
     "id": "btn_edit_table_modal_export_csv",

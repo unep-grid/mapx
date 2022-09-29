@@ -9,15 +9,15 @@ import {
   isSourceId,
   isDateString,
   isNumeric,
-  isBoolean
-} from '@fxi/mx_valid';
-import {isFormatValid} from '#mapx/file_formats';
-import {asArray} from '#mapx/helpers';
-import {settings} from '#root/settings';
+  isBoolean,
+} from "@fxi/mx_valid";
+import { isFormatValid } from "#mapx/file_formats";
+import { asArray } from "#mapx/helpers";
+import { settings } from "#root/settings";
 const def = settings.validation_defaults;
 let isValid = false;
 
-export {getRule};
+export { getRule };
 
 /**
  * NOTE: put this in .env or config file
@@ -39,21 +39,21 @@ const rules = [
      * Generic boolean
      */
     key: [
-      'useCache',
-      'binsCompute',
-      'publicOnly',
-      'isGuest',
-      'encrypt',
-      'allViews',
-      'overwriteStyle'
+      "useCache",
+      "binsCompute",
+      "publicOnly",
+      "isGuest",
+      "encrypt",
+      "allViews",
+      "overwriteStyle",
     ],
     test: (d) => {
       if (isString(d)) {
         switch (d) {
-          case 'true':
+          case "true":
             d = true;
             break;
-          case 'false':
+          case "false":
             d = false;
             break;
           default:
@@ -65,80 +65,80 @@ const rules = [
 
       return {
         valid: isValid,
-        value: d
+        value: d,
       };
-    }
+    },
   },
   /*
    * Date  / time
    */
   {
-    key: ['timestamp'],
+    key: ["timestamp"],
     test: (d) => {
       isValid = isDateString(d) || (isNumeric(d) && d > 0);
       return {
         valid: isValid,
-        value: isValid ? d * 1 : null
+        value: isValid ? d * 1 : null,
       };
-    }
+    },
   },
   {
-    key: ['validUntil'],
+    key: ["validUntil"],
     test: (d) => {
       const dNow = new Date();
       const dValid = new Date(d);
       isValid = dValid > dNow;
       return {
         valid: isValid,
-        value: isValid ? d * 1 : null
+        value: isValid ? d * 1 : null,
       };
-    }
+    },
   },
   /*
    * Numeric
    */
   {
-    key: ['maxRowsCount'],
+    key: ["maxRowsCount"],
     test: (d) => {
       isValid = isNumeric(d) && d > 0;
       return {
         valid: isValid,
-        value: isValid ? d * 1 : 1e4
+        value: isValid ? d * 1 : 1e4,
       };
-    }
+    },
   },
   {
-    key: ['binsNumber'],
+    key: ["binsNumber"],
     test: (d) => {
       isValid = isNumeric(d) && d > 0 && d <= 100; // see mx_helper_map_view_style.js
       return {
         valid: isValid,
-        value: isValid ? d * 1 : 5
+        value: isValid ? d * 1 : 5,
       };
-    }
+    },
   },
   {
-    key: ['maxByPage'],
+    key: ["maxByPage"],
     test: (d) => {
       isValid = isNumeric(d) && d > 0 && d <= 1000;
       return {
         valid: isValid,
-        value: isValid ? d * 1 : 20
+        value: isValid ? d * 1 : 20,
       };
-    }
+    },
   },
   {
-    key: ['pageNumber'],
+    key: ["pageNumber"],
     test: (d) => {
       isValid = isNumeric(d) && d >= 1; // see mx_helper_map_view_style.js
       return {
         valid: isValid,
-        value: isValid ? d * 1 : 1
+        value: isValid ? d * 1 : 1,
       };
-    }
+    },
   },
   {
-    key: ['nullValue'],
+    key: ["nullValue"],
     test: (d) => {
       isValid = isSafe(d);
       if (!isValid) {
@@ -146,313 +146,313 @@ const rules = [
       }
       return {
         valid: isValid,
-        value: d
+        value: d,
       };
-    }
+    },
   },
   {
-    key: ['srid', 'epsgCode'],
+    key: ["srid", "epsgCode"],
     test: (d) => {
       isValid = isNumeric(d) && d >= 0;
       return {
         valid: isValid,
-        value: isValid ? d * 1 : 4326
+        value: isValid ? d * 1 : 4326,
       };
-    }
+    },
   },
   /**
    * Stats
    */
   {
-    key: ['binsMethod'],
+    key: ["binsMethod"],
     test: (d) => {
-      const methods = ['equal_interval', 'heads_tails', 'jenks', 'quantile'];
+      const methods = ["equal_interval", "heads_tails", "jenks", "quantile"];
       const isValid = methods.indexOf(d) > -1;
       return {
         valid: isValid,
-        value: isValid ? d : methods[0]
+        value: isValid ? d : methods[0],
       };
-    }
+    },
   },
   {
-    key: ['stats'],
+    key: ["stats"],
     test: (d) => {
-      const methods = ['base', 'temporal', 'spatial', 'attributes'];
-      if (isString(d)) d = d.split(',');
+      const methods = ["base", "temporal", "spatial", "attributes", "roles"];
+      if (isString(d)) d = d.split(",");
       const isValid =
         isArray(d) &&
         d.reduce((a, c) => (!a ? a : methods.indexOf(c) > -1), true);
       return {
         valid: isValid,
-        value: isValid ? d : methods
+        value: isValid ? d : methods,
       };
-    }
+    },
   },
   /**
    * Various id : user, project, views...
    */
   {
-    key: ['idUser', 'user'],
+    key: ["idUser", "user"],
     test: (d) => {
       isValid = isNumeric(d);
       return {
         valid: isValid,
-        value: isValid ? d * 1 : idUserPublic
+        value: isValid ? d * 1 : idUserPublic,
       };
-    }
+    },
   },
   {
-    key: ['idProject', 'project', 'idProjectExclude', 'idProjectOption'],
+    key: ["idProject", "project", "idProjectExclude", "idProjectOption"],
     test: (d) => ({
       valid: isProjectId(d),
-      value: d
-    })
+      value: d,
+    }),
   },
   {
-    key: ['idProjects'],
+    key: ["idProjects"],
     test: (d) => {
       d = asArray(d);
       isValid = d.reduce((a, id) => a && isProjectId(id), true);
       return {
         valid: isValid,
-        value: d
+        value: d,
       };
-    }
+    },
   },
   {
-    key: ['iso3codes'],
+    key: ["iso3codes"],
     test: (d) => {
       d = asArray(d);
       isValid = d.reduce((a, id) => a && isStringRange(id, 3, 3), true);
       return {
         valid: isValid,
-        value: d
+        value: d,
       };
-    }
+    },
   },
   {
-    key: ['idSource'],
+    key: ["idSource"],
     test: (d) => {
       isValid = isSourceId(d) && !tableNotQueryable.includes(d);
       return {
         valid: isValid,
-        value: d
+        value: d,
       };
-    }
+    },
   },
   {
-    key: ['idViews', 'views'],
+    key: ["idViews", "views"],
     test: (d) => {
       d = asArray(d);
       isValid = d.reduce((a, x) => a && isViewId(x), true);
       return {
         valid: isValid,
-        value: isValid ? d : []
+        value: isValid ? d : [],
       };
-    }
+    },
   },
   {
-    key: ['idConcepts'],
+    key: ["idConcepts"],
     test: (d) => {
       d = asArray(d);
       isValid = d.reduce((a, x) => a && isStringRange(x, 1, 6), true);
       return {
         valid: isValid,
-        value: isValid ? d : []
+        value: isValid ? d : [],
       };
-    }
+    },
   },
   {
-    key: ['idView','view'],
+    key: ["idView", "view"],
     test: (d) => {
       isValid = isViewId(d);
       return {
         valid: isValid,
-        value: isValid ? d : null
+        value: isValid ? d : null,
       };
-    }
+    },
   },
   /**
    * Query by collection
    * TODO: collections : should check for special char
    */
   {
-    key: 'collections',
+    key: "collections",
     test: (d) => {
       d = asArray(d);
       isValid = d.reduce((a, x) => a && isStringRange(x, 1, 200), true);
       return {
         valid: isValid,
-        value: d
+        value: d,
       };
-    }
+    },
   },
   {
-    key: 'format',
+    key: "format",
     test: (d) => {
       isValid = isFormatValid(d);
       return {
         valid: isValid,
-        value: isValid ? d : null
+        value: isValid ? d : null,
       };
-    }
+    },
   },
   {
-    key: 'collectionsSelectOperator',
+    key: "collectionsSelectOperator",
     test: (d) => ({
       valid: true,
-      value: arrayOperators[d] || arrayOperators.OR
-    })
+      value: arrayOperators[d] || arrayOperators.OR,
+    }),
   },
   /**
    * Source attribute query
    */
   {
-    key: ['idAttr', 'attribute', 'column'],
+    key: ["idAttr", "attribute", "column"],
     test: (d) => {
       isValid = !tableAttrNotQueryable.includes(d);
       return {
         valid: isValid,
-        value: isValid ? d : null
+        value: isValid ? d : null,
       };
-    }
+    },
   },
   /**
    * Views by project : keys
    * TODO: selectKeysPublic not used ?
    */
   {
-    key: 'selectKeysPublic',
+    key: "selectKeysPublic",
     test: (d) => {
       d = asArray(d);
       isValid = d.reduce((a, x) => a && viewKeysPublic.indexOf(x) > -1, true);
       return {
         valid: isValid,
-        value: d.length === 0 ? [viewKeysPublic[0]] : d
+        value: d.length === 0 ? [viewKeysPublic[0]] : d,
       };
-    }
+    },
   },
   {
-    key: ['selectKeys', 'viewKeys'],
+    key: ["selectKeys", "viewKeys"],
     test: (d) => {
       d = asArray(d);
       isValid = d.reduce((a, x) => a && viewKeys.indexOf(x) > -1, true);
       return {
         valid: isValid,
-        value: d.length === 0 ? [viewKeys[0]] : d
+        value: d.length === 0 ? [viewKeys[0]] : d,
       };
-    }
+    },
   },
   /**
    * Array of view type
    */
   {
-    key: ['types', 'idTypes'],
+    key: ["types", "idTypes"],
     test: (d) => {
       d = asArray(d);
       isValid = d.reduce((a, x) => a && types.indexOf(x) > -1, true);
       return {
         valid: isValid,
-        value: d
+        value: d,
       };
-    }
+    },
   },
   /**
    * Roles
    */
   {
-    key: ['roleMax', 'filterViewsByRoleMax', 'role'],
+    key: ["roleMax", "filterViewsByRoleMax", "role"],
     test: (d) => ({
       valid: roles.indexOf(d) > -1,
-      value: d || roles[0]
-    })
+      value: d || roles[0],
+    }),
   },
   /*
    * Language with fallback
    */
   {
-    key: 'language',
+    key: "language",
     test: (d) => {
       d = d.toLowerCase();
       return {
         valid: languages.codes.indexOf(d) > -1,
-        value: d || languages.default
+        value: d || languages.default,
       };
-    }
+    },
   },
   /**
    * email / file fields (not safe for DB)
    */
   {
-    key: ['email', 'from', 'to'],
+    key: ["email", "from", "to"],
     test: (d) => ({
       valid: isEmail(d),
-      value: d
-    })
+      value: d,
+    }),
   },
 
   {
     key: [
-      'filename',
-      'title',
-      'subject',
-      'subtitle',
-      'subjectPrefix',
-      'content'
+      "filename",
+      "title",
+      "subject",
+      "subtitle",
+      "subjectPrefix",
+      "content",
     ],
     test: (d) => {
       const isValid = isStringRange(d, 1, 10000);
       return {
         valid: isValid,
-        value: d
+        value: d,
       };
-    }
+    },
   },
   /**
    * Search in db : avoid special char
    */
   {
     key: [
-      'titlePrefix',
-      'titleFuzzy',
-      'titleRegex',
-      'searchQuery',
-      'searchText',
-      'name',
-      'code'
+      "titlePrefix",
+      "titleFuzzy",
+      "titleRegex",
+      "searchQuery",
+      "searchText",
+      "name",
+      "code",
     ],
     test: (d) => {
       const notAllowed = /[_;'"]/;
       const isValid = !notAllowed.test(d) && isStringRange(d, 1, 200);
       return {
         valid: isValid,
-        value: d
+        value: d,
       };
-    }
+    },
   },
   /**
    * Token
    */
   {
-    key: ['idSocket', 'token'],
+    key: ["idSocket", "token"],
     test: (d) => ({
       valid: isStringRange(d, 1, 600),
-      value: d
-    })
+      value: d,
+    }),
   },
   /*
    * Search index
    */
   {
-    key: ['searchIndexName'],
+    key: ["searchIndexName"],
     test: (d) => {
       d = d || search.index;
       return {
         valid: search.indices.indexOf(d) > -1,
-        value: d
+        value: d,
       };
-    }
-  }
+    },
+  },
 ];
 
 function getRule(key) {

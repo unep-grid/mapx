@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_issue_invalid_characters",
-    "en": "Name can't start with a number or contain spaces or special characters",
-    "ar": "لا يمكن أن يبدأ الاسم برقم أو أن يحتوي على مسافات أو أحرف خاصة"
+    "en": "Name can't start with a number, contain spaces or any special characters, or use reserved keywords",
+    "ar": "لا يمكن أن يبدأ الاسم برقم ، أو أن يحتوي على مسافات أو أي أحرف خاصة ، أو يستخدم كلمات أساسية محجوزة"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_non_available",
@@ -1728,6 +1728,11 @@
     "id": "btn_edit_table_modal_clear_filter",
     "en": "Reset filters",
     "ar": "إعادة تعيين المرشحات"
+  },
+  {
+    "id": "btn_edit_table_modal_edit",
+    "en": "Edit",
+    "ar": "يحرر"
   },
   {
     "id": "btn_edit_table_modal_export_csv",

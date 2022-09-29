@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_issue_invalid_characters",
-    "en": "Name can't start with a number or contain spaces or special characters",
-    "de": "Der Name darf nicht mit einer Zahl beginnen oder Leerzeichen oder Sonderzeichen enthalten"
+    "en": "Name can't start with a number, contain spaces or any special characters, or use reserved keywords",
+    "de": "Der Name darf nicht mit einer Zahl beginnen, Leerzeichen oder Sonderzeichen enthalten oder reservierte Schlüsselwörter verwenden"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_non_available",
@@ -1728,6 +1728,11 @@
     "id": "btn_edit_table_modal_clear_filter",
     "en": "Reset filters",
     "de": "Filter zurücksetzen"
+  },
+  {
+    "id": "btn_edit_table_modal_edit",
+    "en": "Edit",
+    "de": "Bearbeiten"
   },
   {
     "id": "btn_edit_table_modal_export_csv",

@@ -17,7 +17,7 @@ import {
   getTypes,
   getHandsonLanguageCode,
 } from "./../handsontable/utils.js";
-import { makeId, parseTemplate } from "./../mx_helper_misc.js";
+import { makeId } from "./../mx_helper_misc.js";
 import {
   isSourceId,
   isNotEmpty,
@@ -144,9 +144,8 @@ export class EditTableSessionClient {
       await et.once("table_ready", null, 2e4);
       return true;
     } catch (e) {
-      console.error(e);
       et.destroy();
-      return false;
+      return e;
     }
   }
 
@@ -1153,6 +1152,13 @@ export class EditTableSessionClient {
         if (!validName) {
           const elIssue = tt(
             "edit_table_modal_add_column_name_issue_invalid_characters"
+          );
+          elMessage.appendChild(elIssue);
+        }
+
+        if (!validUnique) {
+          const elIssue = tt(
+            "edit_table_modal_add_column_name_issue_non_available"
           );
           elMessage.appendChild(elIssue);
         }
