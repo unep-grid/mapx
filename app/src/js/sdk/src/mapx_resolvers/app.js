@@ -139,10 +139,6 @@ class MapxResolversApp extends MapxResolversStatic {
         roles: ["publishers", "admins"],
         id: "btnUploadSourceApi",
       },
-      db_temporary_connect: {
-        roles: ["publishers", "admins"],
-        id: "btnShowDbInfoSelf",
-      },
       project_external_views: {
         roles: ["publishers", "admins"],
         id: "btnShowProjectExternalViews",

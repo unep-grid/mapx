@@ -125,7 +125,6 @@ server <- function(input, output, session) {
           #
           # Tools panel handler
           #
-          "tools_db_connect.R",
           "tools_app_config.R",
           "tools_project_main.R",
           "tools_project_new.R",
@@ -137,7 +136,6 @@ server <- function(input, output, session) {
           "tools_project_delete.R",
           "tools_project_join.R",
           "tools_project_invite.R",
-          "tools_query_maker.R",
           "tools_source_new.R",
           "tools_source_edit_metadata.R",
           "tools_source_manage.R",
