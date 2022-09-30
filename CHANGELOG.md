@@ -1,3 +1,25 @@
+  - [1.9.44-beta.8](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.8) 
+
+    - APP 
+      - Missing title in HTML : use the project name / translation as title or MapX as default + static.
+    - APP/API 
+      - Removed encrypted SQL query tool and temporary DB connections #856 
+      - Added button to edit a source from the attribute table visualisation tool. Related to #854
+      - Source editor, solved issue with column name validation when adding a column
+      - Source editor, multiple improvement from #854
+      - Include date in source list, abstract as tooltip
+      - Escape column name in sql update template (Case when name has a dot in it)
+      - Fixed font size issue in drop down selection (all tom-select impacted)
+      - #855 serverside + client side; 
+        - Update lock mecanism : don't lock if the current user is the only member
+        - Added blurry background in table editor modal;
+        - Changed order of the data types during column creation
+      - Solved issues with undo/redo : 
+        - Race condition where isRedoAvailable is not updated when requested. 
+        - Button redo didnt have the correct state. Added simple debounce.
+        - Handsontable : wrapper to remove deleted column from history ( hack ).
+      - List of table to edit : fixed a missing a role comparison
+
   - [1.9.44-beta.7](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.7) 
 
    - APP 
