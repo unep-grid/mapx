@@ -6,6 +6,11 @@ import { settings } from "#root/settings";
 /**
  * Get user roles
  * ⚠️  ONLY FOR AUTHENTICATED USERS ⚠️
+ * TODO: 
+ * - If role definition is updated during runtime, overwriting DB values:
+ *    - merge `list` and `group` 
+ *    - decide how to handle singluar vs plural. member vs members ( confusing )
+ * - If not, remove inheritance 
  * @param {Numeric} idUser User id
  * @param {Character} idProject Project id
  * @return {Object} list with keys like {list:roles,admin:boolean,...}
@@ -52,21 +57,22 @@ export async function getUserRoles(idUser, idProject) {
     roles.list.push("guest");
     roles.group.push("guests");
     roles.group_max = "guests";
-  }
-  if (roles.member) {
-    roles.list.push("member");
-    roles.group.push("members");
-    roles.group_max = "members";
-  }
-  if (roles.publisher) {
-    roles.list.push("publisher");
-    roles.group.push("publishers");
-    roles.group_max = "publishers";
-  }
-  if (roles.root || roles.admin) {
-    roles.list.push("admin");
-    roles.group.push("admins");
-    roles.group_max = "admins";
+  } else {
+    if (roles.member || roles.publisher || roles.admin) {
+      roles.list.push("member");
+      roles.group.push("members");
+      roles.group_max = "members";
+    }
+    if (roles.publisher || roles.admin) {
+      roles.list.push("publisher");
+      roles.group.push("publishers");
+      roles.group_max = "publishers";
+    }
+    if (roles.root || roles.admin) {
+      roles.list.push("admin");
+      roles.group.push("admins");
+      roles.group_max = "admins";
+    }
   }
 
   return roles;
