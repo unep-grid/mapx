@@ -1,3 +1,14 @@
+  - [1.9.44-beta.9](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.9) 
+
+   - APP 
+      - Source editor : 
+       - Bug fixes in dropdown menu for source selection 
+       - Issue with list : not complete ( SQL issue )
+       - Removed some tooltip in checkboxes and issues messages 
+      - MapComposer : 
+         - Modified dpi for some format 
+         - Removed console logs / warnings 
+    
   - [1.9.44-beta.8](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.8) 
 
     - APP 
