@@ -458,7 +458,6 @@ class Box {
     const dW = box.rect.left - box.workspace.rect.left;
     const w = box.rect.width / box.scale + dW * 2;
     const scaleWidth = box.workspace.rect.width / w;
-    console.log(scaleWidth);
     box.setScale(scaleWidth);
   }
   setScale(scale) {

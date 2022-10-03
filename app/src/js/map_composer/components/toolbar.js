@@ -459,7 +459,7 @@ function clickCallback(e) {
       mc.workspace.page.zoomFitHeight();
       break;
     default:
-      console.warn(`Click handler not found for ${idAction}`);
+      null;
   }
 }
 
