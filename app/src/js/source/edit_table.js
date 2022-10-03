@@ -5,7 +5,7 @@ import {
   modalConfirm,
   modalDialog,
 } from "./../mx_helper_modal.js";
-import { el, elButtonFa, elSpanTranslate as tt, elCheckbox } from "../el_mapx";
+import { el, elButtonFa, elSpanTranslate, elCheckbox } from "../el_mapx";
 import { moduleLoad } from "./../modules_loader_async";
 import { bindAll } from "./../bind_class_methods";
 import { getDictTemplate, getDictItem } from "./../language";
@@ -1835,4 +1835,9 @@ export class EditTableSessionClient {
     }
     return res;
   }
+}
+
+function tt(txt, opt) {
+  const optTt = Object.assign({}, { tooltip: false }, opt);
+  return elSpanTranslate(txt, optTt);
 }

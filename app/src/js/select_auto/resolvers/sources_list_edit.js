@@ -17,7 +17,8 @@ export const config = {
   preload: true,
   placeholder: "Select source...",
   sortField: [
-    { field: "date_modified", weight: 2 },
+    { field: "title", weight: 2 },
+    { field: "date_modified", weight: 1 },
     { field: "disabled", weight: 0.001 },
   ],
   dropdownParent: "body",

@@ -331,6 +331,7 @@
 .ts-dropdown [data-disabled] [data-selectable].option {
   cursor: inherit;
   opacity: 0.5;
+  width: 100%;
 }
 .ts-dropdown [data-selectable].option {
   opacity: 1;
