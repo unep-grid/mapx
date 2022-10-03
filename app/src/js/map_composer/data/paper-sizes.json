@@ -105,7 +105,7 @@
       "width": 841,
       "height": 1189,
       "unit": "mm",
-      "dpi": 96,
+      "dpi": 125,
       "disabled": false
     },
     {
@@ -113,7 +113,7 @@
       "width": 594,
       "height": 841,
       "unit": "mm",
-      "dpi": 96,
+      "dpi": 200,
       "disabled": false
     },
     {
@@ -121,7 +121,7 @@
       "width": 420,
       "height": 594,
       "unit": "mm",
-      "dpi": 96,
+      "dpi": 275,
       "disabled": false
     },
     {
@@ -388,21 +388,21 @@
       "width": 432,
       "height": 559,
       "unit": "mm",
-      "dpi": 300
+      "dpi": 275
     },
     {
       "name": "mc_preset_us_ansi_d",
       "width": 559,
       "height": 864,
       "unit": "mm",
-      "dpi": 300
+      "dpi": 200
     },
     {
       "name": "mc_preset_us_ansi_e",
       "width": 864,
       "height": 1118,
       "unit": "mm",
-      "dpi": 300
+      "dpi": 125
     }
   ],
   "mc_preset_group_screen": [
