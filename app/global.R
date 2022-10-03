@@ -30,7 +30,6 @@ tryCatch(
     mxSource("src/r/helpers/db.R")
     mxSource("src/r/helpers/db_pool.R")
     mxSource("src/r/helpers/db_projects.R")
-    mxSource("src/r/helpers/db_log.R")
     mxSource("src/r/helpers/db_views.R")
     mxSource("src/r/helpers/schema_source_meta.R")
     mxSource("src/r/helpers/schema_view_story.R")
