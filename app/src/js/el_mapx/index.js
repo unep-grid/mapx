@@ -330,12 +330,13 @@ function elPanel(opt) {
  * @param {String} keys Key to look for in the dictionnary
  * @param {Object} opt Options 
  * @param {String} opt.lang Two letter code language 
+ * @param {String} opt.tooltip Add tooltip (default:true) 
  * @param {Object} opt.data Data for templating
 
  * @return {Element} span element with dataset-lang_key
  */
 function elSpanTranslate(key, opt) {
-  opt = Object.assign({}, { lang: null, data: null }, opt);
+  opt = Object.assign({}, { lang: null, data: null, tooltip: true }, opt);
 
   const promText = getDictItem(key, opt.lang).then((t) => {
     if (opt.data) {
@@ -353,14 +354,13 @@ function elSpanTranslate(key, opt) {
     dataset.lang_data = JSON.stringify(opt.data);
   }
 
-  return el(
-    "span",
-    {
-      class: ["hint--bottom"],
-      dataset,
-    },
-    promText
-  );
+  const confEl = { dataset };
+
+  if (opt.tooltip) {
+    confEl.class = ["hint--bottom"];
+  }
+
+  return el("span", confEl, promText);
 }
 
 /**
@@ -459,6 +459,7 @@ export function elButtonFa(key, opt) {
  * @param {String} opt.dataset Additional custom data-
  * @param {String} opt.action Callback
  * @param {Boolean} opt.checked Checked at start
+ * @param {Boolean} opt.tooltip Add tooltip (false)
  * @param {Boolean} opt.keyLabel Optional translation key for label
  * @param {Boolean} opt.keyDesc Optional translation key for descriptiom
  */
@@ -469,6 +470,7 @@ export function elCheckbox(key, opt) {
       id: Math.random().toString(32),
       action: () => {},
       checked: true,
+      tooltip: false,
       keyLabel: null,
       keyDesc: null,
       dataset: "",
@@ -487,11 +489,15 @@ export function elCheckbox(key, opt) {
         on: ["change", opt.action],
         dataset: opt.dataset,
       }),
-      elSpanTranslate(opt.keyLabel ? opt.keyLabel : `${key}_label`),
+      elSpanTranslate(opt.keyLabel ? opt.keyLabel : `${key}_label`, {
+        tooltip: opt.tooltip,
+      }),
       el(
         "div",
         { class: ["text-muted", "help-box"] },
-        elSpanTranslate(opt.keyDesc ? opt.keyDesc : `${key}_desc`)
+        elSpanTranslate(opt.keyDesc ? opt.keyDesc : `${key}_desc`, {
+          tooltip: opt.tooltip,
+        })
       ),
     ]),
   ]);
