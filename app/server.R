@@ -106,6 +106,8 @@ server <- function(input, output, session) {
       #
       # Source reactive stuff needed for this session
       #
+
+
       mxSource(
         base = config$srvPath,
         env = environment(),
@@ -125,7 +127,6 @@ server <- function(input, output, session) {
           #
           # Tools panel handler
           #
-          "tools_app_config.R",
           "tools_project_main.R",
           "tools_project_new.R",
           "tools_project_views_state.R",
