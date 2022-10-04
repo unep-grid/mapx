@@ -380,7 +380,7 @@ export class EditTableSessionClient {
   hasConcurrentMembers() {
     const et = this;
     const members = et.getMembers();
-    members.length > 0;
+    return members.length > 0;
   }
 
   /**
@@ -712,6 +712,7 @@ export class EditTableSessionClient {
       et.updateLayout();
     });
     et._resize_observer.observe(et._modal);
+
 
     if (initLocked) {
       et.lock();
@@ -1392,6 +1393,7 @@ export class EditTableSessionClient {
    */
   async afterChange(changes, source) {
     const et = this;
+
     if (isEmpty(changes)) {
       return;
     }
@@ -1688,6 +1690,7 @@ export class EditTableSessionClient {
   emit(type, message) {
     const et = this;
     const messageEmit = et.message_formater(message);
+
     if (et.locked) {
       return;
     }

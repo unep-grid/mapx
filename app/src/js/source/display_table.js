@@ -196,7 +196,6 @@ export async function showSourceTableAttributeModal(opt) {
     };
   });
 
-  debugger;
   hot = new handsontable(elTable, {
     columns: columns,
     data: data,
