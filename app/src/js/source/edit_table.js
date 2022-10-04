@@ -805,6 +805,7 @@ export class EditTableSessionClient {
    */
   onDispatch(message) {
     const et = this;
+
     if (message.id_table !== et._id_table) {
       return;
     }
@@ -978,14 +979,12 @@ export class EditTableSessionClient {
     }
 
     et.updateButtons();
+
     /**
-     * TODO:
-     * handsontable remove validate formating after updateSettings.
-     * we re-validate here as a warkaround. But this should be removed
-     * if handsontable solve this.
+     * Render table
      */
-    et._ht.validateCells();
     et._ht.render();
+    et.validateTable();
 
     if (source === et._config.id_source_dispatch) {
       return;
@@ -1089,19 +1088,18 @@ export class EditTableSessionClient {
      * Update column list and emit updates directly
      */
     et._columns.push(column);
+    const headers = et._columns.map((c) => c.data);
     et._ht.updateSettings({
       columns: et._columns,
-      colHeaders: et._columns.map((c) => c.data),
+      colHeaders: headers,
     });
+
     et.updateButtonsAddRemoveColumn();
     /**
-     * TODO:
-     * handsontable remove validate formating after updateSettings.
-     * we re-validate here as a warkaround. But this should be removed
-     * if handsontable solve this.
+     * Render table
      */
-    et._ht.validateCells();
     et._ht.render();
+    et.validateTable();
 
     if (source === et._config.id_source_dispatch) {
       return;
@@ -1310,6 +1308,28 @@ export class EditTableSessionClient {
     return typeof change[3] === type;
   }
 
+  /**
+   * Validate table ( manually )
+   * TODO: this method should be removed: workaround handsontable issue
+   * - handsontable remove validate formating after updateSettings.
+   * we re-validate here as a warkaund
+   * - validateCells return an error. Try itterate on cols
+   * - still an error : added setTimeout(()): "solved"
+   */
+  validateTable() {
+    const et = this;
+    const cols = et.getColumns();
+    setTimeout(() => {
+      for (let i = 0; i < cols.length; i++) {
+        try {
+          et._ht.validateColumns([i]);
+        } catch (e) {
+          const col = cols[i];
+          console.warn("Issue with col validation", col, e);
+        }
+      }
+    }, 10);
+  }
   /**
    * Display dialog when change is not valid
    * @param {Array} change
