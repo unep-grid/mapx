@@ -380,7 +380,7 @@ export class EditTableSessionClient {
   hasConcurrentMembers() {
     const et = this;
     const members = et.getMembers();
-    return members.length > 0;
+    return members.length > 1;
   }
 
   /**
@@ -713,7 +713,6 @@ export class EditTableSessionClient {
     });
     et._resize_observer.observe(et._modal);
 
-
     if (initLocked) {
       et.lock();
     }
@@ -980,12 +979,12 @@ export class EditTableSessionClient {
 
     et.updateButtons();
     /**
-    * TODO: 
-    * handsontable remove validate formating after updateSettings.
-    * we re-validate here as a warkaround. But this should be removed
-    * if handsontable solve this.
-    */
-    et._ht.validateCells(); 
+     * TODO:
+     * handsontable remove validate formating after updateSettings.
+     * we re-validate here as a warkaround. But this should be removed
+     * if handsontable solve this.
+     */
+    et._ht.validateCells();
     et._ht.render();
 
     if (source === et._config.id_source_dispatch) {
@@ -1096,15 +1095,14 @@ export class EditTableSessionClient {
     });
     et.updateButtonsAddRemoveColumn();
     /**
-    * TODO: 
-    * handsontable remove validate formating after updateSettings.
-    * we re-validate here as a warkaround. But this should be removed
-    * if handsontable solve this.
-    */
-    et._ht.validateCells(); 
+     * TODO:
+     * handsontable remove validate formating after updateSettings.
+     * we re-validate here as a warkaround. But this should be removed
+     * if handsontable solve this.
+     */
+    et._ht.validateCells();
     et._ht.render();
 
-              
     if (source === et._config.id_source_dispatch) {
       return;
     }
@@ -1680,6 +1678,20 @@ export class EditTableSessionClient {
     et._el_overlay.classList.remove("locked");
     et._locked = false;
     et.enable();
+  }
+
+  /**
+   * Send lock event to other concurent user
+   * @param {Boolean} lock Enable/disable lock for other. If empty, use _auto_save state
+   */
+  lockTableConcurrent(lock) {
+    const et = this;
+    et._lock_table_concurrent = isNotEmpty(lock) ? lock : !et._auto_save;
+    const update = {
+      type: "lock_table",
+      lock: et._lock_table_concurrent,
+    };
+    et.emitUpdatesState([update]);
   }
 
   /**
