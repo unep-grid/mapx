@@ -37,48 +37,43 @@
 ### English
 
 1.  The boundaries and names shown and the designations used on this map do not imply official endorsement or acceptance by the United Nations.
-2.  Final boundary between the Republic of Sudan and the Republic of South Sudan has not yet been determined.
-3.  Final status of the Abyei area is not yet determined.
-4.  * Non-Self-Governing Territory
-5.  ** Dotted line represents approximately the Line of Control in Jammu and Kashmir agreed upon by India and Pakistan. The final status of Jammu and Kashmir has not yet been agreed upon by the parties.
-6.  *** A dispute exists between the Governments of Argentina and the United Kingdom of Great Britain and Northern Ireland concerning sovereignty over the Falkland Islands (Malvinas).
+2.  Dotted line represents approximately the Line of Control in Jammu and Kashmir agreed upon by India and Pakistan. The final status of Jammu and Kashmir has not yet been agreed upon by the parties.
+3.  Final boundary between the Republic of Sudan and the Republic of South Sudan has not yet been determined.
+4.  Final status of the Abyei area is not yet determined.
+5.  A dispute exists between the Governments of Argentina and the United Kingdom of Great Britain and Northern Ireland concerning sovereignty over the Falkland Islands (Malvinas).
 
 
 ### Español 
 
 1.  Los Límites y los nombres y las designaciones que figuran en este mapa no implican su apoyo o aceptación oficial por las Naciones Unidas.
-2.  Las fronteras definitivas entre la República del Sudán y la República de Sudán del Sur no se han determinado todavía.
-3.  Todavía no se ha determinado el estatuto definitive de la zona de Abyei.
-4. * Territorios No Autónomos
-5.  ** La línea de puntos representa aproximadamente la Línea de Control en Jammu y Cachemira convenida por la India y el Pakistán. Las partes no han llegado todavia a un acuerdo sobre el estatuto definitivo de Jammu y Cachemira.
-6.  *** Existe una disputa entre los Gobiernos de la Argentina y el Reino Unido de Gran Bretaña e Irlanda del Norte acerca de la soberanía sobre las Islas Malvinas (Falkland Islands).
+2.  La línea de puntos representa aproximadamente la Línea de Control en Jammu y Cachemira convenida por la India y el Pakistán. Las partes no han llegado todavia a un acuerdo sobre el estatuto definitivo de Jammu y Cachemira.
+3.  Las fronteras definitivas entre la República del Sudán y la República de Sudán del Sur no se han determinado todavía.
+4.  Todavía no se ha determinado el estatuto definitive de la zona de Abyei.
+5.  Existe una disputa entre los Gobiernos de la Argentina y el Reino Unido de Gran Bretaña e Irlanda del Norte acerca de la soberanía sobre las Islas Malvinas (Falkland Islands).
 
 ### Français
 
 1.  Les frontières et les noms indiqués et les désignations employées sur cette carte n'impliquent pas reconnaissance ou acceptation officielle par l'Organisation des Nations Unies.
-2.  Le tracé définitif de la frontière entre la République du Soudan et la République du Soudan du Sud n’a pas encore été défini.
-3.  Le statut définitif de la zone d’Abyei n’est pas encore déterminé.
-4. * Territoires non autonomes
-5.  ** Les pointillés correspondent approximativement à la ligne de contrôle au Jammu-et-Cachemire convenue par l'Inde et le Pakistan. Les parties n’ont pas encore réglé la question du statut définitif du Jammu-et-Cachemire.
-6.  *** La souverainté sur les îles Falkland (Malvinas) fait l’objet d’un différend entre le Gouvernement de l’Argentine et le Gouvernement du Royaume-Uni de Grande-Bretagne et d’Irlande du Nord.
+2.  Les pointillés correspondent approximativement à la ligne de contrôle au Jammu-et-Cachemire convenue par l'Inde et le Pakistan. Les parties n’ont pas encore réglé la question du statut définitif du Jammu-et-Cachemire.
+3.  Le tracé définitif de la frontière entre la République du Soudan et la République du Soudan du Sud n’a pas encore été défini.
+4.  Le statut définitif de la zone d’Abyei n’est pas encore déterminé.
+5.  La souverainté sur les îles Falkland (Malvinas) fait l’objet d’un différend entre le Gouvernement de l’Argentine et le Gouvernement du Royaume-Uni de Grande-Bretagne et d’Irlande du Nord.
 
 ### русский 
 
 1. Показанные границы и географические названия и используемые обозначения не подразумевают официального согласования или признания Организацией Объединенных Наций.
-2. Окончательная граница между Республикой Судан и Республикой Южный Судан до сих пор не определена.
-3. Окончательный статус Абьея до сих пор не определен.
-4. * Несамоуправляющиеся территории
-5. ** Пунктирная линия приблизительно отражает «линию контроля» в Джамму и Кашмире, согласованную Индией и Пакистаном. Стороны еще не договорились об окончательном статусе Джамму и Кашмира.
-6. *** Между правительствами Аргентины и Соединенного Королевства Великобритании и Северной Ирландии существует спор по поводу суверенитета над Фолклендскими (Мальвинскими) островами.
+2. Пунктирная линия приблизительно отражает «линию контроля» в Джамму и Кашмире, согласованную Индией и Пакистаном. Стороны еще не договорились об окончательном статусе Джамму и Кашмира.
+3. Окончательная граница между Республикой Судан и Республикой Южный Судан до сих пор не определена.
+4. Окончательный статус Абьея до сих пор не определен.
+5. Между правительствами Аргентины и Соединенного Королевства Великобритании и Северной Ирландии существует спор по поводу суверенитета над Фолклендскими (Мальвинскими) островами.
 
 ### 中国人
 
 1. 本地图所示边界和名称以及采用的说明性注记并不意味着它们已得到联合国的正式认可或接受
-2. 苏丹共和国和南苏丹共和国之间的最终边界尚未确定。
-3. 阿卜耶伊地区的最终地位尚未确定。
-4. * 非自治领土
-5. ** 虚线为印度和巴基斯坦商定的查谟和克什米尔的大致控制线。双方尚未商定查谟和克什米尔的最终地位。
-6. *** 阿根廷政府和大不列颠及爱尔兰联合王国政府之间就福克兰(马尔维纳斯)群岛的主权问题存在着争议。
+2. 虚线为印度和巴基斯坦商定的查谟和克什米尔的大致控制线。双方尚未商定查谟和克什米尔的最终地位。
+3. 苏丹共和国和南苏丹共和国之间的最终边界尚未确定。
+4. 阿卜耶伊地区的最终地位尚未确定。
+5. 阿根廷政府和大不列颠及爱尔兰联合王国政府之间就福克兰(马尔维纳斯)群岛的主权问题存在着争议。
 
 
 <div dir="RTL" lang="ar">
@@ -91,16 +86,15 @@
       إقرارا أو قبولا رسميا لها من طرف الأمم المتحدة.
     </li>
     <li>
-      لم تتقرر بعد الحدود النهائية بين جمهورية السودان وجمهورية جنوب السودان.
-    </li>
-    <li>لم يتقرر بعد الوضع النهائي لمنطقة أبيي.</li>
-    <li>* الأقاليم غير المتمتعة بالحكم الذاتي </li>
-    <li>
-      ** يمثل الخط المتقطع خط المراقبة تقريبا في جامو وكشمير المتفق عليه بين الهند 
+      يمثل الخط المتقطع خط المراقبة تقريبا في جامو وكشمير المتفق عليه بين الهند
 وباكستان. ولم يتفق الطرفان بعد على الوضع النهائي لجامو وكشمير.
     </li>
     <li>
-      *** وجد نزاع بين حكومتي الأرجنتين والمملكة المتحدة لبريطانيا العظمى وأيرلندا
+      لم تتقرر بعد الحدود النهائية بين جمهورية السودان وجمهورية جنوب السودان.
+    </li>
+    <li>لم يتقرر بعد الوضع النهائي لمنطقة أبيي.</li>
+    <li>
+      وجد نزاع بين حكومتي الأرجنتين والمملكة المتحدة لبريطانيا العظمى وأيرلندا
       الشمالية بشأن السيادة على جزر فوكلاند (مالفيناس).
     </li>
   </ol>
