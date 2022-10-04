@@ -768,8 +768,8 @@ export async function updateUiSettings() {
   const langDef = getLanguageDefault();
   const lang = getLanguageCurrent();
   /**
-  * Update app title (project or default) 
-  */ 
+   * Update app title (project or default)
+   */
   updateTitle();
 
   /**
@@ -778,7 +778,6 @@ export async function updateUiSettings() {
   const elBtnLogin = document.getElementById("btnShowLoginLabel");
   const sUser = path(mx, "settings.user", {});
   const sRole = path(mx, "settings.user.roles", {});
-
 
   if (sUser.guest) {
     elBtnLogin.innerText = await getDictItem("login_label");
@@ -1172,10 +1171,10 @@ export async function initMapx(o) {
   });
 
   /**
-  * Add infobox handler
-  * - if `mx_info_box` attribute exist when hovering the map,
-  *   this module will display an infobox 
-  */ 
+   * Add infobox handler
+   * - if `mx_info_box` attribute exist when hovering the map,
+   *   this module will display an infobox
+   */
   mx.infobox = new MapInfoBox(map);
 
   /**
@@ -1204,7 +1203,6 @@ export async function initMapx(o) {
 }
 
 export function initMapListener(map) {
-
   /**
    * Error handling
    */
@@ -4943,17 +4941,24 @@ export async function zoomToViewIdVisible(o) {
   }
 }
 
+/**
+ * Reload view
+ * @param {Object} o options
+ * @param {String} o.id  Map id (optional)
+ * @param {String | Object} o.idView  View id ( or view )
+ */
 export async function resetViewStyle(o) {
-  if (!o.idView) {
+  if (!isViewId(o.idView) && !isView(o.idView)) {
     return;
   }
+
   const view = getView(o.idView);
+
   updateLanguageElements({
     el: view._el,
   });
   await viewLayersAdd({
-    id: o.id,
-    idView: o.idView,
+    view: view,
   });
   await viewsLayersOrderUpdate(o);
 }

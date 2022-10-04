@@ -978,6 +978,13 @@ export class EditTableSessionClient {
     }
 
     et.updateButtons();
+    /**
+    * TODO: 
+    * handsontable remove validate formating after updateSettings.
+    * we re-validate here as a warkaround. But this should be removed
+    * if handsontable solve this.
+    */
+    et._ht.validateCells(); 
     et._ht.render();
 
     if (source === et._config.id_source_dispatch) {
@@ -1087,8 +1094,16 @@ export class EditTableSessionClient {
       colHeaders: et._columns.map((c) => c.data),
     });
     et.updateButtonsAddRemoveColumn();
+    /**
+    * TODO: 
+    * handsontable remove validate formating after updateSettings.
+    * we re-validate here as a warkaround. But this should be removed
+    * if handsontable solve this.
+    */
+    et._ht.validateCells(); 
     et._ht.render();
 
+              
     if (source === et._config.id_source_dispatch) {
       return;
     }

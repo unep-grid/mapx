@@ -18,7 +18,7 @@ import { el } from "./../el/src/index.js";
 import { getViewSourceSummary } from "./../mx_helper_source_summary.js";
 import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata.js";
 import { moduleLoad } from "./../modules_loader_async";
-import { getView } from "./../map_helpers";
+import { getView, resetViewStyle } from "./../map_helpers";
 import { isView, isArray, isFunction } from "./../is_test";
 
 export function fetchSourceTableAttribute(opt) {
@@ -47,6 +47,7 @@ export async function showSourceTableAttributeModal(opt) {
     idSource: opt.idSource,
     attributes: opt.attributes,
     view: opt.view,
+    labels: opt.labels,
   };
   let destroyed = false;
   let hot;
@@ -195,6 +196,7 @@ export async function showSourceTableAttributeModal(opt) {
     };
   });
 
+  debugger;
   hot = new handsontable(elTable, {
     columns: columns,
     data: data,
@@ -253,7 +255,13 @@ export async function showSourceTableAttributeModal(opt) {
   async function restart() {
     try {
       await destroy();
-      await showSourceTableAttributeModal(opt);
+      await showSourceTableAttributeModal({
+        idSource: opt.idSource,
+        view: opt.view,
+        attributes: opt.attributes,
+        labels: opt.labels,
+      });
+      await resetViewStyle({ idView: opt.view });
     } catch (e) {
       console.error(e);
     }
