@@ -320,7 +320,6 @@ mxSchemaViewStory <- function(view, views, language) {
       tt(sprintf("schema_story_class_%s", c))
     }
   ))
-  browser()
 
   slideClasses <- list(
     type = "array",

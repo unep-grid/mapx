@@ -3,6 +3,7 @@ import { getApiUrl } from "./../api_routes";
 import { sendData, path } from "./../mx_helper_misc.js";
 import { modal } from "./../mx_helper_modal.js";
 import { settings } from "./../settings";
+import { updateEditorLanguage } from "./editor_language.js";
 
 const customStyle = [
   /* Table classes from bootstrap */
@@ -172,6 +173,11 @@ export async function initEditing(state) {
       }
     });
   }
+
+  /**
+   * Set language
+   */
+  await updateEditorLanguage();
 }
 
 function contentToolsImageUploader(dialog) {
