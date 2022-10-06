@@ -1473,4 +1473,4 @@ Set map bounding box based on code (ISO 3166-1 alpha-3 (ex. AFG, COD) and UN M49
 * * *
 
 
-&copy; 2019-2021 unepgrid.ch
+&copy; 2019-present unepgrid.ch

@@ -847,4 +847,4 @@ Validate date object
 * * *
 
 
-&copy; 2019-2020 Fred Moser / unepgrid.ch
+&copy; 2019-present unepgrid.ch

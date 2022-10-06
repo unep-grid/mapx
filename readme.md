@@ -324,3 +324,7 @@ Procedure to follow if PostgreSQL passwords need to be updated for security reas
     ```sh
     docker compose up -d --force-recreate
     ```
+
+
+
+&copy; 2014-present unepgrid.ch
