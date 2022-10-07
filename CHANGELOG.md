@@ -1,10 +1,20 @@
+
+  - [1.9.45-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-alpha.1)
+
+    - API 
+      - Better geom validation + correction, when there is geometry outside the 180/-180  or 90/-90 range 
+      - Tiles generation using PostGIS native solution : should solve issue #859.
+      - Performance improvement when sending cached tiles
+    - APP 
+      - Geometries validation tool : minor changes before refactoring.
+
   - [1.9.44](https://github.com/unep-grid/map-x-mgl/tree/1.9.44) 
 
-  - App 
-    - Table editor : 
-      - Fixed some validation issues preventing changes add/remove column propagation with multiple users 
-      - Fixed bug with lock mechanism not properly enabled if a new user joined locked table edition
-    - Revert disclaimer change, as it has been solved in map info box feature
+    - App 
+      - Table editor : 
+        - Fixed some validation issues preventing changes add/remove column propagation with multiple users 
+        - Fixed bug with lock mechanism not properly enabled if a new user joined locked table edition
+      - Revert disclaimer change, as it has been solved in map info box feature
 
   - [1.9.44-beta.9](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.9) 
 
