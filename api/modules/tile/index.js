@@ -19,7 +19,7 @@ const gzip = util.promisify(zlib.gzip);
  */
 const validateParamsHandlerText = getParamsValidator({
   required: ["view"],
-  expected : ["timestamp"]
+  expected: ["timestamp"],
 });
 
 export const mwGet = [validateParamsHandlerText, handlerTile];
@@ -49,6 +49,12 @@ export async function handlerTile(req, res) {
      * mask (optional)
      */
     Object.assign(data, viewSrcConfig);
+    /**
+    * Dev flags
+    */ 
+    data.useCache = true;
+    data.postgisTiles = true;
+
     data.geom = "geom";
     data.zoom = req.params.z * 1;
     data.x = req.params.x * 1;
@@ -85,9 +91,11 @@ export async function handlerTile(req, res) {
 
 async function getTile(res, hash, data) {
   try {
-    const zTileB64 = await redisGet(hash);
-    if (zTileB64) {
-      return sendTileZip(res, Buffer(zTileB64, "base64"));
+    if (data.useCache) {
+      const zTileB64 = await redisGet(hash);
+      if (zTileB64) {
+        return sendTileZip(res, Buffer.from(zTileB64, "base64"));
+      }
     }
 
     return getTilePg(res, hash, data);
@@ -98,27 +106,49 @@ async function getTile(res, hash, data) {
 
 async function getTilePg(res, hash, data) {
   try {
-    let str = "";
-
-    if (data.mask && isString(data.mask)) {
+    let str;
+    let buffer;
+  //  const start = Date.now();
+    if (data.postgisTiles) {
+      str = templates.getMvt;
+    } else if (data.mask && isString(data.mask)) {
       str = templates.getGeojsonTileOverlap;
     } else {
       str = templates.getGeojsonTile;
     }
-
     const qs = parseTemplate(str, data);
     const out = await pgRead.query(qs);
 
     if (out.rowCount > 0) {
-      const geojson = rowsToGeoJSON(out.rows);
-      const buffer = geojsonToPbf(geojson, data);
+      if (data.postgisTiles) {
+        buffer = out.rows[0].mvt;
+      } else {
+        const geojson = rowsToGeoJSON(out.rows);
+        buffer = geojsonToPbf(geojson, data);
+      }
+
+      if (buffer.length === 0) {
+        return sendTileEmpty(res);
+      }
+
       const zBuffer = await gzip(buffer);
       sendTileZip(res, zBuffer);
-      redisSet(hash, zBuffer.toString("base64"));
+      if (data.useCache) {
+        redisSet(hash, zBuffer.toString("base64"));
+      }
+
+  //      console.log(
+  //        `Get PG tiles. asMVT : ${data.postgisTiles}. Time : ${
+  //          Date.now() - start
+  //        } ms`
+  //      );
+
+      return;
     } else {
-      sendTileEmpty(res);
+      return sendTileEmpty(res);
     }
   } catch (e) {
+    console.error(e);
     return sendTileError(res, e);
   }
 }

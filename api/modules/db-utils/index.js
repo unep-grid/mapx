@@ -1,9 +1,9 @@
 import { pgRead, pgWrite } from "#mapx/db";
 import { settings } from "#root/settings";
-import { parseTemplate, toBoolean } from "#mapx/helpers";
+import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { isArray, isSourceId, isNumeric, isProjectId } from "@fxi/mx_valid";
-
+import { isLayerValid, areLayersValid } from "./geom_validation.js";
 /**
  * crypto key
  */
@@ -31,7 +31,7 @@ async function tableExists(idTable, schema) {
 }
 
 /**
- * Test if a columm in a table exist 
+ * Test if a columm in a table exist
  *
  * @param {String} idColumn id of the column
  * @param {String} idTable id of the table
@@ -356,151 +356,6 @@ async function getLayerTitle(idLayer, language) {
   const res = await pgRead.query(queryAttributes);
   const [titles] = res.rows;
   return titles.title_lang || titles.title_en || idLayer;
-}
-
-/**
- * Check for layer geom validity
- * @param {String} idLayer id of the layer to check
- * @param {Boolean} useCache Use cache
- * @param {Boolean} autoCorrect Try an automatic correction
- * @param {Boolean} autoCorrect Try an automatic correction
- * @return {<Promise>Object} Geom validiy summary
- */
-async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
-  useCache = toBoolean(useCache, true);
-  autoCorrect = toBoolean(autoCorrect, false);
-  analyze = toBoolean(analyze, true);
-
-  var idValidColumn = "_mx_valid";
-
-  /**
-   * Cache column creation
-   */
-  var sqlNewColumn = `
-  ALTER TABLE ${idLayer} 
-  ADD COLUMN IF NOT EXISTS ${idValidColumn} BOOLEAN
-  DEFAULT null
-  `;
-
-  /*
-   * Validation query
-   */
-  var sqlValidate = `
-  UPDATE ${idLayer} 
-  SET ${idValidColumn} = ST_IsValid(geom)
-  WHERE ${idValidColumn} IS null
-  `;
-
-  /**
-   * Autocorrect query
-   */
-  var sqlAutoCorrect = `
-  UPDATE ${idLayer}
-  SET geom = 
-    CASE
-      WHEN GeometryType(geom) ~* 'POLYGON'
-      THEN ST_Multi(ST_Buffer(geom,0))
-      ELSE ST_MakeValid(geom)
-    END,
-    ${idValidColumn} = true 
-  WHERE 
-    NOT ${idValidColumn} 
-  `;
-
-  /*
-   * Set cache to true
-   */
-  var sqlDeleteColumn = `
-  ALTER TABLE ${idLayer}
-  DROP COLUMN IF EXISTS ${idValidColumn}
-  `;
-
-  /**
-   * Count valid query
-   */
-  var sqlValidityStatus = `
-  /*NO LOAD BALANCE*/
-  SELECT count(${idValidColumn}) as n, ${idValidColumn} as valid
-  FROM  ${idLayer}
-  GROUP BY ${idValidColumn}`;
-
-  const title = await getLayerTitle(idLayer);
-
-  /**
-   * ANALYZE first
-   */
-  if (analyze) {
-    await analyzeSource(idLayer);
-  }
-
-  /**
-   * Invalidate if not use cache
-   */
-  if (!useCache) {
-    await pgWrite.query(sqlDeleteColumn);
-  }
-  await pgWrite.query(sqlNewColumn);
-  /**
-   * Validate if null
-   */
-  await pgWrite.query(sqlValidate);
-
-  /**
-   * Autocrrect
-   */
-  if (autoCorrect) {
-    await pgWrite.query(sqlAutoCorrect);
-  }
-  /**
-   * Get summary
-   */
-  const res = await pgRead.query(sqlValidityStatus);
-  /**
-   * Default
-   */
-  var out = {
-    nValid: 0,
-    nInvalid: 0,
-  };
-
-  for (const row of res.rows) {
-    var n = row.n ? row.n * 1 || 0 : 0;
-    switch (row.valid) {
-      case true:
-        out.nValid = n;
-        break;
-      case false:
-        out.nInvalid = n;
-        break;
-    }
-  }
-
-  return {
-    id: idLayer,
-    valid: true,
-    title: title,
-    status: out,
-    useCache: useCache,
-    autoCorrect: autoCorrect,
-    analyze: analyze,
-  };
-}
-
-/**
- * Check for multiple layer geom validity
- * @param {Array} idsLayer Array of id of layer to check
- * @param {Boolean} force Force revalidation of previously wrong geom
- * @return {Promise<Object>} validation object
- */
-function areLayersValid(idsLayers, useCache, autoCorrect) {
-  if (!isArray(idsLayers)) {
-    idsLayers = [idsLayers];
-  }
-  const queries = [];
-  for (const id of idsLayers) {
-    queries.push(isLayerValid(id, useCache, autoCorrect));
-  }
-  return Promise.all(queries);
 }
 
 /**

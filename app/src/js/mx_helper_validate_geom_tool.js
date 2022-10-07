@@ -1,16 +1,17 @@
-import {settings} from './settings';
+import { settings } from "./settings";
+import { el } from "./el_mapx/index.js";
 
 export function getValidateSourceGeom(opt) {
-  if (settings.user.guest){
+  if (settings.user.guest) {
     return;
   }
 
   var h = mx.helpers;
   var elForm = document.getElementById(opt.idForm);
   var elButtonValidate = document.getElementById(opt.idButtonValidate);
-  var elListMessage = elForm.querySelector('#' + opt.idListMessage);
+  var elListMessage = elForm.querySelector("#" + opt.idListMessage);
 
-  var host = h.getApiUrl('getSourceValidateGeom');
+  var host = h.getApiUrl("getSourceValidateGeom");
   var query = {
     idSource: opt.idSource,
     idUser: settings.user.id,
@@ -18,11 +19,11 @@ export function getValidateSourceGeom(opt) {
     idProject: settings.project.id,
     useCache: opt.useCache || false,
     autoCorrect: opt.autoCorrect || false,
-    analyze : opt.analyze || true
+    analyze: opt.analyze || true,
   };
 
   var params = h.objToParams(query);
-  var url = host + '?' + params;
+  var url = host + "?" + params;
 
   enableButtons(false);
   elListMessage.innerHTML = "";
@@ -35,12 +36,12 @@ export function getValidateSourceGeom(opt) {
       onMessage: handleMessage,
       onSuccess: handleMessage,
       onError: handleMessage,
-      onTimeout: function(err) {
+      onTimeout: function (err) {
         console.log(err);
-        var elTimeout = h.el('li', 'Timeout reached, cancelled analysis.');
+        var elTimeout = el("li", "Timeout reached, cancelled analysis.");
         elListMessage.appendChild(elTimeout);
         enableButtons(true);
-      }
+      },
     });
   } catch (e) {
     enableButtons(true);
@@ -51,64 +52,62 @@ export function getValidateSourceGeom(opt) {
 
   function handleMessage(msg) {
     return h.handleRequestMessage(msg, messageStore, {
-      result: function(msg) {
-        var elMsg = h.el(
-          'li',
-          {class: ['mx-log-item', 'mx-log-white']},
-          h.el(
-            'ul',
-            h.el('li', h.el('b', msg.title || '')),
-            h.el('li', h.el('span', 'Valid: ' + msg.valid || false)),
-            h.el(
-              'li',
-              h.el(
-                'span',
-                'Count of valid geometries: ' + msg.status.nValid || false
+      result: function (msg) {
+        var elMsg = el(
+          "li",
+          { class: ["mx-log-item", "mx-log-white"] },
+          el(
+            "ul",
+            el("li", el("b", msg.title || "")),
+            el("li", el("span", "Valid: " + msg.valid || false)),
+            el(
+              "li",
+              el("span", "Count of valid geometries: " + msg.stat.valid || 0)
+            ),
+            el(
+              "li",
+              el(
+                "span",
+                "Count of invalid geometries: " + msg.stat.invalid || 0
               )
             ),
-            h.el(
-              'li',
-              h.el(
-                'span',
-                'Count of invalid geometries: ' + msg.status.nInvalid || false
-              )
+            el(
+              "li",
+              el("span", "Count of unknown validity: " + msg.stat.unknown || 0)
             ),
-            h.el('li', h.el('span', 'Cache enabled: ' + msg.useCache || false)),
-            h.el(
-              'li',
-              h.el('span', 'Automatic correction: ' + msg.autoCorrect || false)
+            el("li", el("span", "Cache enabled: " + msg.useCache || false)),
+            el(
+              "li",
+              el("span", "Automatic correction: " + msg.autoCorrect || false)
             ),
-            h.el(
-              'li',
-              h.el('span', 'Analyze ' + msg.analyze || false)
-            )
+            el("li", el("span", "Analyze " + msg.analyze || false))
           ),
-          h.el('hr')
+          el("hr")
         );
         elListMessage.appendChild(elMsg);
         enableButtons(true);
       },
-      error: function(msg) {
-        var elErr = h.el(
-          'li',
-          {class: ['mx-log-item', 'mx-log-red']},
+      error: function (msg) {
+        var elErr = el(
+          "li",
+          { class: ["mx-log-item", "mx-log-red"] },
           JSON.stringify(msg)
         );
         elListMessage.appendChild(elErr);
         enableButtons(true);
       },
-      message: function(msg) {
-        var elMsg = h.el('li', {class: ['mx-log-item', 'mx-log-blue']}, msg);
+      message: function (msg) {
+        var elMsg = el("li", { class: ["mx-log-item", "mx-log-blue"] }, msg);
         elListMessage.appendChild(elMsg);
-      }
+      },
     });
   }
 
   function enableButtons(enable) {
     if (enable) {
-      elButtonValidate.removeAttribute('disabled');
+      elButtonValidate.removeAttribute("disabled");
     } else {
-      elButtonValidate.setAttribute('disabled', 'disabled');
+      elButtonValidate.setAttribute("disabled", "disabled");
     }
   }
 }
