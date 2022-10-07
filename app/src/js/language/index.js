@@ -240,9 +240,6 @@ export async function updateLanguageElements(o) {
     if (!label) {
       return;
     }
-    if (label === "Supprimer la colonne") {
-      debugger;
-    }
     switch (type) {
       case "title":
         el.setAttribute("title", label);

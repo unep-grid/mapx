@@ -300,7 +300,6 @@ export function featuresToPopup(o) {
     const filter = filters[idV];
     const view = getView(idV);
     if (!view._setFilter) {
-      debugger;
       return;
     }
     view._setFilter({

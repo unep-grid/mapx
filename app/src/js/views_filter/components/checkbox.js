@@ -189,7 +189,6 @@ class Checkbox {
   }
   setLabelKey(key) {
     const cbx = this;
-    debugger;
     cbx._label_key = key;
     cbx.elLabelText.dataset.lang_key = cbx._label_key;
   }
