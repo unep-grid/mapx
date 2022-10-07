@@ -52,6 +52,6 @@ async function validateLayerHandler(req, res) {
       })
     );
 
-    res.status('403').end();
+    res.status(403).end();
   }
 }
