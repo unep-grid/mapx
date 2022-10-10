@@ -10,7 +10,7 @@ const def = {
 
 export const config = {
   valueField: "id",
-  searchField: ["id", "title", "abstract"],
+  searchField: ["id", "title", "abstract", "views"],
   allowEmptyOption: false,
   options: null,
   create: false,
@@ -69,6 +69,7 @@ function formater(data, escape) {
   const title = escape(data.title);
   const abstr = escape(data.abstract.substr(0, 100));
   const date = escape(data.date_modified);
+  const views = data?.views || [];
   const dateUi = new Date(date).toLocaleDateString();
 
   return el(
@@ -77,11 +78,19 @@ function formater(data, escape) {
       class: ["hint--bottom"],
       "aria-label": abstr,
     },
-    el("span", title),
     el(
-      "span",
-      { class: ["text-muted", "space-around"] },
-      `[ ${nRow} x ${nCol} ] ${dateUi}`
+      "div",
+      el("span", { style: { display: "block" } }, title),
+      el(
+        "span",
+        { class: ["text-muted", "space-around"] },
+        `${dateUi} ( ${nRow} x ${nCol} )`
+      )
+    ),
+    el(
+      "ul",
+      { class: "text-muted" },
+      views.map((v) => el("li", escape(v)))
     )
   );
 }

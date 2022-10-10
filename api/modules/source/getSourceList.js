@@ -21,6 +21,7 @@ async function ioSourceListEdit(socket, request) {
     const response = request;
     response.list = list;
     socket.emit("response", response);
+    throw new Error("test");
   } catch (e) {
     await socket.notifyInfoError({
       message: e.message,
@@ -40,7 +41,10 @@ async function getSourcesListEdit(options) {
   });
 
   /**
-   * Validation
+   * Add 
+   * - table dimension 
+   * - linked views
+   * 
    */
   for (const row of res.rows) {
     row.exists = await tableExists(row.id);
