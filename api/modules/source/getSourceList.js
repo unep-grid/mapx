@@ -21,7 +21,6 @@ async function ioSourceListEdit(socket, request) {
     const response = request;
     response.list = list;
     socket.emit("response", response);
-    throw new Error("test");
   } catch (e) {
     await socket.notifyInfoError({
       message: e.message,
