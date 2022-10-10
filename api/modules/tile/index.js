@@ -15,6 +15,12 @@ const isString = (a) => typeof a === "string";
 const gzip = util.promisify(zlib.gzip);
 
 /**
+* Dev flags 
+*/ 
+const USE_CACHE = true;
+const POSTGIS_TILES = true;
+
+/**
  * Get tile
  */
 const validateParamsHandlerText = getParamsValidator({
@@ -49,11 +55,7 @@ export async function handlerTile(req, res) {
      * mask (optional)
      */
     Object.assign(data, viewSrcConfig);
-    /**
-    * Dev flags
-    */ 
-    data.useCache = true;
-    data.postgisTiles = true;
+
 
     data.geom = "geom";
     data.zoom = req.params.z * 1;
@@ -91,7 +93,7 @@ export async function handlerTile(req, res) {
 
 async function getTile(res, hash, data) {
   try {
-    if (data.useCache) {
+    if (USE_CACHE) {
       const zTileB64 = await redisGet(hash);
       if (zTileB64) {
         return sendTileZip(res, Buffer.from(zTileB64, "base64"));
@@ -109,7 +111,7 @@ async function getTilePg(res, hash, data) {
     let str;
     let buffer;
   //  const start = Date.now();
-    if (data.postgisTiles) {
+    if (POSTGIS_TILES) {
       str = templates.getMvt;
     } else if (data.mask && isString(data.mask)) {
       str = templates.getGeojsonTileOverlap;
@@ -120,7 +122,7 @@ async function getTilePg(res, hash, data) {
     const out = await pgRead.query(qs);
 
     if (out.rowCount > 0) {
-      if (data.postgisTiles) {
+      if (POSTGIS_TILES) {
         buffer = out.rows[0].mvt;
       } else {
         const geojson = rowsToGeoJSON(out.rows);
@@ -133,15 +135,10 @@ async function getTilePg(res, hash, data) {
 
       const zBuffer = await gzip(buffer);
       sendTileZip(res, zBuffer);
-      if (data.useCache) {
+      if (USE_CACHE) {
         redisSet(hash, zBuffer.toString("base64"));
       }
 
-  //      console.log(
-  //        `Get PG tiles. asMVT : ${data.postgisTiles}. Time : ${
-  //          Date.now() - start
-  //        } ms`
-  //      );
 
       return;
     } else {
