@@ -1755,6 +1755,16 @@
     "ru": "Данные загружены, построена таблица."
   },
   {
+    "id": "geom_tools_modal_select_title",
+    "en": "Geometry tools : select source layer",
+    "ru": "Инструменты геометрии: выберите исходный слой"
+  },
+  {
+    "id": "geom_tools_modal_select_label",
+    "en": "Select source layer",
+    "ru": "Выберите исходный слой"
+  },
+  {
     "id": "en",
     "en": "English",
     "ru": "английский "

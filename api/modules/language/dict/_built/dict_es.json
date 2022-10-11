@@ -1755,6 +1755,16 @@
     "es": "Datos descargados, construir tabla."
   },
   {
+    "id": "geom_tools_modal_select_title",
+    "en": "Geometry tools : select source layer",
+    "es": "Herramientas de geometría: seleccione la capa de origen"
+  },
+  {
+    "id": "geom_tools_modal_select_label",
+    "en": "Select source layer",
+    "es": "Seleccionar capa de origen"
+  },
+  {
     "id": "en",
     "en": "English",
     "es": "Inglés"

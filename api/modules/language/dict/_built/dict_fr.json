@@ -1755,6 +1755,16 @@
     "fr": "Données téléchargées, table de construction."
   },
   {
+    "id": "geom_tools_modal_select_title",
+    "en": "Geometry tools : select source layer",
+    "fr": "Outils de géométrie : sélectionner le calque source"
+  },
+  {
+    "id": "geom_tools_modal_select_label",
+    "en": "Select source layer",
+    "fr": "Sélectionnez la couche source"
+  },
+  {
     "id": "en",
     "en": "English",
     "fr": "Anglais"

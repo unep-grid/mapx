@@ -1755,6 +1755,16 @@
     "de": "Daten heruntergeladen, Tabelle erstellen."
   },
   {
+    "id": "geom_tools_modal_select_title",
+    "en": "Geometry tools : select source layer",
+    "de": "Geometriewerkzeuge: Quellebene auswählen"
+  },
+  {
+    "id": "geom_tools_modal_select_label",
+    "en": "Select source layer",
+    "de": "Quellebene auswählen"
+  },
+  {
     "id": "en",
     "en": "English",
     "de": "Englisch "

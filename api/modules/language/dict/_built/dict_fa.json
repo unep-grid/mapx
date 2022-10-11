@@ -1755,6 +1755,16 @@
     "fa": "داده دانلود شد، جدول ساخت."
   },
   {
+    "id": "geom_tools_modal_select_title",
+    "en": "Geometry tools : select source layer",
+    "fa": "ابزار هندسه: لایه منبع را انتخاب کنید"
+  },
+  {
+    "id": "geom_tools_modal_select_label",
+    "en": "Select source layer",
+    "fa": "لایه منبع را انتخاب کنید"
+  },
+  {
     "id": "en",
     "en": "English",
     "fa": "انگلیسی"

@@ -1755,6 +1755,16 @@
     "zh": "数据下载，建表。"
   },
   {
+    "id": "geom_tools_modal_select_title",
+    "en": "Geometry tools : select source layer",
+    "zh": "几何工具：选择源层"
+  },
+  {
+    "id": "geom_tools_modal_select_label",
+    "en": "Select source layer",
+    "zh": "选择源层"
+  },
+  {
     "id": "en",
     "en": "English",
     "zh": "英语"

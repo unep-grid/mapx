@@ -4563,6 +4563,32 @@
     "de": "Daten heruntergeladen, Tabelle erstellen."
   },
   {
+    "id": "geom_tools_modal_select_title",
+    "en": "Geometry tools : select source layer",
+    "fr": "Outils de géométrie : sélectionner le calque source",
+    "es": "Herramientas de geometría: seleccione la capa de origen",
+    "ru": "Инструменты геометрии: выберите исходный слой",
+    "zh": "几何工具：选择源层",
+    "ar": "أدوات الهندسة: حدد طبقة المصدر",
+    "fa": "ابزار هندسه: لایه منبع را انتخاب کنید",
+    "ps": "د جیومیټري وسیلې: د سرچینې پرت غوره کړئ",
+    "bn": "জ্যামিতি সরঞ্জাম: উৎস স্তর নির্বাচন করুন",
+    "de": "Geometriewerkzeuge: Quellebene auswählen"
+  },
+  {
+    "id": "geom_tools_modal_select_label",
+    "en": "Select source layer",
+    "fr": "Sélectionnez la couche source",
+    "es": "Seleccionar capa de origen",
+    "ru": "Выберите исходный слой",
+    "zh": "选择源层",
+    "ar": "حدد طبقة المصدر",
+    "fa": "لایه منبع را انتخاب کنید",
+    "ps": "د سرچینې پرت غوره کړئ",
+    "bn": "উৎস স্তর নির্বাচন করুন",
+    "de": "Quellebene auswählen"
+  },
+  {
     "id": "en",
     "en": "English",
     "fr": "Anglais",

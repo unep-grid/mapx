@@ -1404,6 +1404,14 @@
     "en": "Data downloaded, build table."
   },
   {
+    "id": "geom_tools_modal_select_title",
+    "en": "Geometry tools : select source layer"
+  },
+  {
+    "id": "geom_tools_modal_select_label",
+    "en": "Select source layer"
+  },
+  {
     "id": "en",
     "en": "English"
   },

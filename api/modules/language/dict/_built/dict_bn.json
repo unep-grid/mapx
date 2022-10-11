@@ -1755,6 +1755,16 @@
     "bn": "ডেটা ডাউনলোড করা হয়েছে, টেবিল তৈরি করুন।"
   },
   {
+    "id": "geom_tools_modal_select_title",
+    "en": "Geometry tools : select source layer",
+    "bn": "জ্যামিতি সরঞ্জাম: উৎস স্তর নির্বাচন করুন"
+  },
+  {
+    "id": "geom_tools_modal_select_label",
+    "en": "Select source layer",
+    "bn": "উৎস স্তর নির্বাচন করুন"
+  },
+  {
     "id": "en",
     "en": "English",
     "bn": "ইংরেজি "

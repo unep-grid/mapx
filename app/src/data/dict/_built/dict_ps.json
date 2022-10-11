@@ -1755,6 +1755,16 @@
     "ps": "ډاټا ډاونلوډ شوی، میز جوړ کړئ."
   },
   {
+    "id": "geom_tools_modal_select_title",
+    "en": "Geometry tools : select source layer",
+    "ps": "د جیومیټري وسیلې: د سرچینې پرت غوره کړئ"
+  },
+  {
+    "id": "geom_tools_modal_select_label",
+    "en": "Select source layer",
+    "ps": "د سرچینې پرت غوره کړئ"
+  },
+  {
     "id": "en",
     "en": "English",
     "ps": "انګلیسي"
