@@ -364,6 +364,14 @@ function elSpanTranslate(key, opt) {
 }
 
 /**
+ * Shorcut for elSpanTranslate
+ */
+export function tt(txt, opt) {
+  const optTt = Object.assign({}, { tooltip: false }, opt);
+  return elSpanTranslate(txt, optTt);
+}
+
+/**
  * Create a standard button with icon
  * @param {String} key Translation key
  * @param {Object} opt options
