@@ -84,10 +84,24 @@ mapx.once("ready", async () => {
           const idTable = res.list[pos]?.id;
           res._id_table = idTable;
           const state = await mapx.ask("table_editor_open", {
-            idTable: idTable,
-            testMode: true,
+            id_table: idTable,
+            test_mode: true,
           });
+          res._state = state;
           return state.initialized && state.built;
+        },
+      },
+      {
+        name: "Second editor can't be added, previous one returned",
+        test: async (res) => {
+          const state = await mapx.ask("table_editor_open", {
+            id_table: res._id_table,
+            test_mode: true,
+          });
+          /*
+          * Id is unique and shoult match previous editor
+          */ 
+          return state.id === res._state.id ;
         },
       },
       {
@@ -97,11 +111,11 @@ mapx.once("ready", async () => {
            * Lock
            */
           await mapx.ask("table_editor_exec", {
-            idTable: res._id_table,
+            id_table: res._id_table,
             method: "lock",
           });
           const s_1 = await mapx.ask("table_editor_exec", {
-            idTable: res._id_table,
+            id_table: res._id_table,
             method: "state",
           });
           if (!s_1.locked) {
@@ -111,11 +125,11 @@ mapx.once("ready", async () => {
            * Unlock
            */
           await mapx.ask("table_editor_exec", {
-            idTable: res._id_table,
+            id_table: res._id_table,
             method: "unlock",
           });
           const s_2 = await mapx.ask("table_editor_exec", {
-            idTable: res._id_table,
+            id_table: res._id_table,
             method: "state",
           });
           if (s_2.locked) {
@@ -125,11 +139,11 @@ mapx.once("ready", async () => {
            * Disable
            */
           await mapx.ask("table_editor_exec", {
-            idTable: res._id_table,
+            id_table: res._id_table,
             method: "disable",
           });
           const s_3 = await mapx.ask("table_editor_exec", {
-            idTable: res._id_table,
+            id_table: res._id_table,
             method: "state",
           });
           if (!s_3.disabled) {
@@ -139,17 +153,17 @@ mapx.once("ready", async () => {
            * Enable
            */
           await mapx.ask("table_editor_exec", {
-            idTable: res._id_table,
+            id_table: res._id_table,
             method: "enable",
           });
           const s_4 = await mapx.ask("table_editor_exec", {
-            idTable: res._id_table,
+            id_table: res._id_table,
             method: "state",
           });
           if (s_4.disabled) {
             return false;
           }
-          return true
+          return true;
         },
       },
       {
@@ -163,12 +177,12 @@ mapx.once("ready", async () => {
             column_type: "boolean",
           };
           await mapx.ask("table_editor_exec", {
-            idTable: res._id_table,
+            id_table: res._id_table,
             method: "handlerUpdateColumnAdd",
             value: update,
           });
           const columns = await mapx.ask("table_editor_exec", {
-            idTable: res._id_table,
+            id_table: res._id_table,
             method: "getColumns",
           });
           const colNames = columns.map((col) => col.data);
@@ -177,7 +191,7 @@ mapx.once("ready", async () => {
           }
           update.type = "remove_column";
           await mapx.ask("table_editor_exec", {
-            idTable: res._id_table,
+            id_table: res._id_table,
             method: "handlerUpdateColumnRemove",
             value: update,
           });
@@ -195,8 +209,8 @@ mapx.once("ready", async () => {
       {
         name: "Editor closed",
         test: async (res) => {
-          const idTable = res._id_table;
-          const state = await mapx.ask("table_editor_close", { idTable });
+          const id_table = res._id_table;
+          const state = await mapx.ask("table_editor_close", { id_table });
           return state.destroyed;
         },
       },

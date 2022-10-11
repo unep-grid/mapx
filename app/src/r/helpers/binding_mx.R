@@ -2,7 +2,7 @@
 
 #' Edit source request
 #'
-#' @param recalcStyle Also recalc styles / save new view version
+#' @param idTable Id table 
 #' @param session Shiny session object.
 #' @export
 mxEditTable <- function(
@@ -12,7 +12,24 @@ mxEditTable <- function(
   session$sendCustomMessage(
     type = "mxEditTable",
     list(
-      idTable = idTable
+      id_table = idTable
+    )
+  )
+}
+
+#' Geometry tool request
+#'
+#' @param idTable Id table 
+#' @param session Shiny session object.
+#' @export
+mxGeomTools <- function(
+  idTable = NULL,
+  session = shiny:::getDefaultReactiveDomain()
+) {
+  session$sendCustomMessage(
+    type = "mxGeomTools",
+    list(
+      id_table = idTable
     )
   )
 }

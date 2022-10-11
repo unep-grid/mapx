@@ -5,7 +5,7 @@ import {
   modalConfirm,
   modalDialog,
 } from "./../mx_helper_modal.js";
-import { el, elButtonFa, elSpanTranslate, elCheckbox } from "../el_mapx";
+import { el, elButtonFa, elCheckbox, tt } from "../el_mapx";
 import { moduleLoad } from "./../modules_loader_async";
 import { bindAll } from "./../bind_class_methods";
 import { getDictTemplate, getDictItem } from "./../language";
@@ -21,6 +21,7 @@ import { makeId } from "./../mx_helper_misc.js";
 import {
   isSourceId,
   isNotEmpty,
+  isFunction,
   isEmpty,
   isString,
   isStringRange,
@@ -31,6 +32,9 @@ import {
 const defaults = {
   test_mode: false,
   log_perf: false,
+  debug: false,
+  destroy_cb: () => {},
+  
   id_table: null,
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
@@ -53,6 +57,7 @@ const defaults = {
   },
   id_source_dispatch: "from_dispatch",
   id_source_edit: "edit",
+  
 };
 
 export class EditTableSessionClient {
@@ -62,14 +67,8 @@ export class EditTableSessionClient {
     et._config = Object.assign({}, defaults, config);
     et._socket = socket;
     et._on_cb = new Set();
-    et._members = [];
-    et._updates = [];
-    et._locked;
-    et._select_auto = [];
-    et._lock_table_concurrent = false;
-    et._lock_table_by_user_id = null;
+    et._initialized = false;
     bindAll(et);
-    et._perf = {};
   }
 
   /**
@@ -85,6 +84,7 @@ export class EditTableSessionClient {
   get state() {
     const et = this;
     return {
+      id: et.id,
       disabled: !!et._disabled,
       initialized: !!et._initialized,
       destroyed: !!et._destroyed,
@@ -103,6 +103,13 @@ export class EditTableSessionClient {
       if (et._initialized) {
         return;
       }
+      et._members = [];
+      et._updates = [];
+      et._locked = false;
+      et._select_auto = [];
+      et._lock_table_concurrent = false;
+      et._lock_table_by_user_id = null;
+      et._perf = {};
       et._initialized = true;
       et._id_table = et._config?.id_table;
 
@@ -111,8 +118,8 @@ export class EditTableSessionClient {
        */
       if (isEmpty(et._id_table)) {
         et._id_table = await et.dialogSelectTable();
-        if (!et._id_table) {
-          et.destroy();
+        if (!isSourceId(et._id_table)) {
+          et.destroy("invalid id table");
           return;
         }
       }
@@ -123,7 +130,15 @@ export class EditTableSessionClient {
       }
 
       /**
-       * ⚠️ ALL INSTANCE WILL LISTEN TO ALL action
+       * ⚠️  If multiple instances, they WILL LISTEN TO ALL instances actions
+       *    to propagate changes between instances : table id as distinctive
+       *    value to route changes
+       *    e.g.
+       *       table a, user a -> updates
+       *       table a, user a -> handle update ( same tab )
+       *       table a, user a -> handle update ( other tab )
+       *       table a, user b -> handle updates
+       *
        *  -> test in callback and discard unmatched. e.g.
        *     <msg>.id_table != this._id_table
        *  Alternative :
@@ -142,9 +157,15 @@ export class EditTableSessionClient {
       et.start();
       await et.build();
       await et.once("table_ready", null, 2e4);
+
+      if (isFunction(et._config.on_destroy)) {
+        et.addDestroyCb(et._config.on_destroy);
+      }
+
       return true;
     } catch (e) {
-      et.destroy();
+      et.destroy("init issue");
+      console.warn(e);
       return e;
     }
   }
@@ -185,8 +206,11 @@ export class EditTableSessionClient {
   /**
    * Destroy handler
    */
-  async destroy() {
+  async destroy(msg) {
     const et = this;
+    if (et._config.debug) {
+      console.log("destroy requested:", msg);
+    }
     try {
       const r = et._config.routes;
       if (et._destroyed) {
@@ -334,7 +358,7 @@ export class EditTableSessionClient {
       addBackground: true,
       noBtnGroup: true,
       onClose: () => {
-        et.destroy();
+        et.destroy("modal close");
       },
     });
 
@@ -747,7 +771,7 @@ export class EditTableSessionClient {
       });
 
       if (!continueSession) {
-        await et.destroy();
+        await et.destroy("server error");
       }
     } catch (e) {
       console.warn(e);
@@ -1832,6 +1856,7 @@ export class EditTableSessionClient {
       wiki: "Attribute-table-edition",
     });
   }
+
   /**
    * Display a dialog with source selection
    * - built with tom select, in select_auto module
@@ -1885,9 +1910,4 @@ export class EditTableSessionClient {
     }
     return res;
   }
-}
-
-function tt(txt, opt) {
-  const optTt = Object.assign({}, { tooltip: false }, opt);
-  return elSpanTranslate(txt, optTt);
 }

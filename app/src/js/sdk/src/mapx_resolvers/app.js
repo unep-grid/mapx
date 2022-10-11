@@ -13,7 +13,8 @@ import { getProjectViewsCollections } from "../../../mx_helper_map_view_ui.js";
 import { MapxResolversStatic } from "./static.js";
 import { isStringRange, isString } from "../../../is_test/index.js";
 import { settings } from "./../../../settings";
-import { wsGetSourcesListEdit, editTable, editTableGet } from "./../../../source";
+import { wsGetSourcesListEdit } from "./../../../source";
+import { ws_tools } from "./../../../mx.js";
 
 /**
  * MapX resolvers available in app only
@@ -529,17 +530,20 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Object} instance state
    */
   async table_editor_open(opt) {
-    const instance = await editTable(opt);
-    return instance?.state;
+    const instance = await ws_tools.start("edit_table", opt);
+    return instance?.state || {};
   }
 
   /**
    * Close table editor
    */
-  async table_editor_close(opt) {
-    const instance = await editTableGet(opt);
+  async table_editor_close() {
+    const instance = ws_tools.get("edit_table");
+    if (!instance) {
+      throw new Error(`Table editor close: no table`);
+    }
     await instance.destroy();
-    return instance?.state;
+    return instance?.state || {};
   }
 
   /**
@@ -552,14 +556,17 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Any} res Result. If null, instance state
    */
   async table_editor_exec(opt) {
-    const instance = await editTableGet(opt);
+    const instance = ws_tools.get("edit_table");
+    if (!instance) {
+      throw new Error(`Table editor exec: no table`);
+    }
     const method = instance[opt.method];
     if (isObject(method)) {
       return method;
     }
     if (isFunction(method)) {
       const res = await method(opt.value);
-      return res || instance?.state;
+      return res || instance?.state || {};
     }
     throw new Error(`Table editor exec, invalid method: ${opt.method}`);
   }

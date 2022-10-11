@@ -93,7 +93,7 @@ class ResolversBase {
    */
   _map_resolve_when(type, cb, opt) {
     const map = getMap();
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       map.stop();
       map.once(type, () => {
         resolve(opt);

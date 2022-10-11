@@ -4,8 +4,9 @@ import { getDictItem, getLanguageCurrent } from "./../language";
 import { elSpanTranslate } from "./../el_mapx";
 import { getApiUrl } from "./../api_routes";
 import { settings } from "./../settings";
-import { editTable } from "./../source/index";
 import { modalDialog } from "./../mx_helper_modal.js";
+
+import { ws_tools } from "./../mx.js";
 
 import {
   getHandsonLanguageCode,
@@ -237,10 +238,13 @@ export async function showSourceTableAttributeModal(opt) {
       if (!addEdit) {
         return;
       }
+      const editTable = ws_tools.create("edit_table");
+
       const res = await editTable({
-        idTable: config.idSource,
-        destroyCb: restart,
+        id_table: config.idSource,
+        on_destroy: restart,
       });
+
       if (res instanceof Error) {
         await modalDialog({
           content: res.message,
