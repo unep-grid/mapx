@@ -1,4 +1,4 @@
-import "./edit_table.less";
+import { WsToolsBase } from "../ws_tools/base.js";
 import {
   modal,
   modalPrompt,
@@ -7,7 +7,6 @@ import {
 } from "./../mx_helper_modal.js";
 import { el, elButtonFa, elCheckbox, tt } from "../el_mapx";
 import { moduleLoad } from "./../modules_loader_async";
-import { bindAll } from "./../bind_class_methods";
 import { getDictTemplate, getDictItem } from "./../language";
 import { getArrayDistinct } from "./../array_stat";
 import { prefGet, prefSet } from "./../user_pref";
@@ -17,7 +16,6 @@ import {
   getTypes,
   getHandsonLanguageCode,
 } from "./../handsontable/utils.js";
-import { makeId } from "./../mx_helper_misc.js";
 import {
   isSourceId,
   isNotEmpty,
@@ -29,12 +27,8 @@ import {
   makeSafeName,
 } from "./../is_test/index.js";
 
+import "./edit_table.less";
 const defaults = {
-  test_mode: false,
-  log_perf: false,
-  debug: false,
-  destroy_cb: () => {},
-  
   id_table: null,
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
@@ -57,25 +51,13 @@ const defaults = {
   },
   id_source_dispatch: "from_dispatch",
   id_source_edit: "edit",
-  
 };
 
-export class EditTableSessionClient {
+export class EditTableSessionClient extends WsToolsBase {
   constructor(socket, config) {
+    super(socket);
     const et = this;
-    et._id = makeId();
-    et._config = Object.assign({}, defaults, config);
-    et._socket = socket;
-    et._on_cb = new Set();
-    et._initialized = false;
-    bindAll(et);
-  }
-
-  /**
-   * Instance id
-   */
-  get id() {
-    return this._id;
+    et._config = Object.assign(et._config, et._config, defaults, config);
   }
 
   /**
@@ -83,7 +65,8 @@ export class EditTableSessionClient {
    */
   get state() {
     const et = this;
-    return {
+
+    const state = {
       id: et.id,
       disabled: !!et._disabled,
       initialized: !!et._initialized,
@@ -91,6 +74,7 @@ export class EditTableSessionClient {
       built: !!et._built,
       locked: !!et._locked,
     };
+    return state;
   }
 
   /**
@@ -109,7 +93,6 @@ export class EditTableSessionClient {
       et._select_auto = [];
       et._lock_table_concurrent = false;
       et._lock_table_by_user_id = null;
-      et._perf = {};
       et._initialized = true;
       et._id_table = et._config?.id_table;
 
@@ -156,6 +139,7 @@ export class EditTableSessionClient {
       await et.dialogWarning();
       et.start();
       await et.build();
+      // Just use the timeout, no callback registered.
       await et.once("table_ready", null, 2e4);
 
       if (isFunction(et._config.on_destroy)) {
@@ -212,10 +196,10 @@ export class EditTableSessionClient {
       console.log("destroy requested:", msg);
     }
     try {
-      const r = et._config.routes;
       if (et._destroyed) {
         return;
       }
+      const r = et._config.routes;
       et._destroyed = true;
       et._lock_table_concurrent = false;
       et._lock_table_by_user_id = null;
@@ -909,15 +893,6 @@ export class EditTableSessionClient {
       update.value_new,
       source
     );
-  }
-
-  /**
-   * Add callback that will be used once after destroy event
-   * @param {Function} Callback
-   */
-  addDestroyCb(cb) {
-    const et = this;
-    et._on_cb.add({ once: true, cb: cb, type: "destroy", resolve: null });
   }
 
   /**
@@ -1821,33 +1796,6 @@ export class EditTableSessionClient {
   }
 
   /**
-   * Perf util: start. more tolerant than console.time
-   * @note -> transfer to its own module / use dedicated tool
-   * @param {String} label Label of the performance
-   */
-  perf(label) {
-    if (!defaults.log_perf) {
-      return;
-    }
-    const et = this;
-    delete et._perf[label];
-    et._perf[label] = performance.now();
-  }
-
-  /**
-   * Perf util: end .
-   * @param {String} label Label of the performance
-   */
-  perfEnd(label) {
-    if (!defaults.log_perf) {
-      return;
-    }
-    const et = this;
-    const diff = performance.now() - et._perf[label];
-    console.log(`Perf ${label}: ${diff} [ms]`);
-  }
-
-  /**
    * Display a dialog with the help from wiki
    */
   dialogHelp() {
@@ -1869,45 +1817,6 @@ export class EditTableSessionClient {
         type: "sources_list_edit",
       },
     });
-    return res;
-  }
-
-  /*
-   * Events : once handler
-   */
-  once(type, cb, timeout) {
-    const et = this;
-    return new Promise((resolve, reject) => {
-      const item = { once: true, cb: cb, type: type, resolve: resolve };
-      if (timeout) {
-        setTimeout(() => {
-          et._on_cb.delete(item);
-          reject(`Timeout for ${type}`);
-        }, timeout);
-      }
-      et._on_cb.add(item);
-    });
-  }
-
-  /*
-   * Events : fire handler
-   */
-  async fire(type, data) {
-    const et = this;
-    const res = [];
-    for (const item of et._on_cb) {
-      if (item.type === type) {
-        if (item.cb) {
-          res.push(await item.cb(data));
-        }
-        if (item.resolve) {
-          item.resolve(data);
-        }
-        if (item.once) {
-          et._on_cb.delete(item);
-        }
-      }
-    }
     return res;
   }
 }
