@@ -312,7 +312,7 @@ export async function getDictItem(key, lang, data) {
  * @param {String} key Dict key
  * @param {Object} data Object to use for remplacement
  * @param  {String} lang Two letters language
- * @return {String} Parsed template string
+ * @return {Promise<string>} Parsed template string
  */
 export async function getDictTemplate(key, data, lang) {
   const template = await getDictItem(key, lang);
