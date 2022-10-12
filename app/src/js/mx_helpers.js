@@ -42,7 +42,6 @@ export * from './mx_helper_issues.js';
 *  Access requested for widget code / cc code. 
 */
 export * from './map_composer/map_composer_instance.js';
-export * from './source/edit_table_instances.js';
 export * from './source/display_table.js';
 export * from './app_utils';
 export * from './mirror_util';
