@@ -7,6 +7,7 @@ SELECT
   pid,
   id,
   project,
+  type,
   date_modified,
   coalesce(
     NULLIF(data #>> '{meta,text,title,{{language}}}',''),
@@ -34,6 +35,8 @@ WHERE
     /* $3 user groups as stringified array e.g. '["admins","publishers"]' */
     OR editors ?| ARRAY(SELECT jsonb_array_elements_text($3::jsonb)) 
   )
+  AND 
+  type = ANY ($4)
 ORDER BY title ASC
 ),
 /**
@@ -68,7 +71,7 @@ views_agg as (
 grouped as (
   SELECT s.*, v.titles as views  
   FROM sources s 
-  JOIN  views_agg v 
+  LEFT OUTER JOIN views_agg v 
   ON s.id = v.id 
 )
 

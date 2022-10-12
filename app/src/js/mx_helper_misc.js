@@ -1008,6 +1008,22 @@ export function buttonToggle(r) {
     }
   }
 }
+
+/**
+ * Simple enable / disable button handler
+ * @param {Element} elBtn  Button element
+ * @param {Boolean} enable Enable or disable
+ */
+export function buttonEnable(elBtn, enable) {
+  const c = elBtn.classList;
+  if (enable) {
+    c.remove("disabled-with-events");
+    elBtn.removeAttribute("disabled");
+  } else {
+    c.add("disabled-with-events");
+    elBtn.setAttribute("disabled", true);
+  }
+}
 /**
  * Update element content
  * @param {object} o Object

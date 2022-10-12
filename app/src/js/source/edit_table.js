@@ -11,6 +11,8 @@ import { getDictTemplate, getDictItem } from "./../language";
 import { getArrayDistinct } from "./../array_stat";
 import { prefGet, prefSet } from "./../user_pref";
 import { modalMarkdown } from "./../modal_markdown/index.js";
+import { makeId, buttonEnable } from "../mx_helper_misc.js";
+
 import {
   typeConvert,
   getTypes,
@@ -39,12 +41,18 @@ const defaults = {
   max_rows: 1e5, // should match server
   max_columns: 200, // should match server
   routes: {
+    /**
+     * server to here
+     */
     server_joined: "/server/source/edit/table/joined",
     server_error: "/server/source/edit/table/error",
     server_new_member: "/server/source/edit/table/new_member",
     server_member_exit: "/server/source/edit/table/member_exit",
     server_full_table: "/server/source/edit/table/full_table",
     server_dispatch: "/server/source/edit/table/dispatch",
+    /**
+     * here to server
+     */
     client_edit_start: "/client/source/edit/table",
     client_edit_updates: "/client/source/edit/table/update",
     client_exit: "/client/source/edit/table/exit",
@@ -73,6 +81,7 @@ export class EditTableSessionClient extends WsToolsBase {
       destroyed: !!et._destroyed,
       built: !!et._built,
       locked: !!et._locked,
+      validation_geom: et._valdiation_geom,
     };
     return state;
   }
@@ -95,7 +104,8 @@ export class EditTableSessionClient extends WsToolsBase {
       et._lock_table_by_user_id = null;
       et._initialized = true;
       et._id_table = et._config?.id_table;
-
+      et._has_geom = false;
+      et._validation_geom = {};
       /**
        * If empty id, display a dialog to select
        */
@@ -137,11 +147,27 @@ export class EditTableSessionClient extends WsToolsBase {
       et._socket.on(r.server_dispatch, et.onDispatch);
       et._socket.on("disconnect", et.onDisconnect);
       await et.dialogWarning();
+
+      /**
+       * Request data from server
+       */
       et.start();
+
+      /**
+       * Build UI
+       */
       await et.build();
-      // Just use the timeout, no callback registered.
+
+      /*
+       * Produce an error if it takes more than x seconds
+       * to receive the event "table_ready"
+       */
       await et.once("table_ready", null, 2e4);
 
+      /**
+       * If a on_destroy callback is set in option, add it
+       * to others destroy callback
+       */
       if (isFunction(et._config.on_destroy)) {
         et.addDestroyCb(et._config.on_destroy);
       }
@@ -246,7 +272,7 @@ export class EditTableSessionClient extends WsToolsBase {
       icon: "repeat",
       action: et.redo,
     });
-    et._el_button_wiki = elButtonFa("btn_edit_wiki", {
+    et._el_button_wiki = elButtonFa("btn_help", {
       icon: "question-circle",
       action: et.dialogHelp,
     });
@@ -261,6 +287,18 @@ export class EditTableSessionClient extends WsToolsBase {
     et._el_checkbox_autosave = elCheckbox("btn_edit_autosave", {
       action: et.updateAutoSave,
       checked: true,
+    });
+
+    /**
+     * Geom
+     */
+    et._el_button_geom_validate = elButtonFa("btn_edit_geom_validate", {
+      icon: "check",
+      action: et.geomValidate,
+    });
+    et._el_button_geom_repair = elButtonFa("btn_edit_geom_repair", {
+      icon: "user-md",
+      action: et.geomFix,
     });
 
     et._el_users_stat = el("ul");
@@ -297,6 +335,8 @@ export class EditTableSessionClient extends WsToolsBase {
       et._el_button_redo,
       et._el_button_add_column,
       et._el_button_remove_column,
+      et._el_button_geom_validate,
+      et._el_button_geom_repair,
       et._el_button_wiki,
     ];
 
@@ -354,6 +394,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtons() {
     const et = this;
+    et.updateButtonsGeom();
     clearTimeout(et._id_to_buttons);
     et._id_to_buttons = setTimeout((_) => {
       et.updateButtonSave();
@@ -436,19 +477,20 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtonsUndoRedo() {
     const et = this;
-    const cld = "disabled-alt";
     const hasRedo = et._ht.isRedoAvailable();
     const hasUndo = et._ht.isUndoAvailable();
-    if (hasRedo) {
-      et._el_button_redo.classList.remove(cld);
-    } else {
-      et._el_button_redo.classList.add(cld);
-    }
-    if (hasUndo) {
-      et._el_button_undo.classList.remove(cld);
-    } else {
-      et._el_button_undo.classList.add(cld);
-    }
+    et._button_enable(et._el_button_redo, hasRedo);
+    et._button_enable(et._el_button_undo, hasUndo);
+  }
+
+  /**
+   * Update button geom tools
+   */
+  updateButtonsGeom() {
+    const et = this;
+    const hasGeom = et._has_geom;
+    et._button_enable(et._el_button_geom_repair, hasGeom);
+    et._button_enable(et._el_button_geom_validate, hasGeom);
   }
 
   /**
@@ -456,13 +498,8 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtonRemoveColumn() {
     const et = this;
-    const cld = "disabled-alt";
     et._disable_remove_column = et._columns.length <= et._config.min_columns;
-    if (et._disable_remove_column) {
-      et._el_button_remove_column.classList.add(cld);
-    } else {
-      et._el_button_remove_column.classList.remove(cld);
-    }
+    et._button_enable(et._el_button_remove_column, !et._disable_remove_column);
   }
 
   /**
@@ -470,13 +507,8 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtonAddColumn() {
     const et = this;
-    const cld = "disabled-alt";
     et._disable_add_column = et._columns.length > et._config.max_columns;
-    if (et._disable_add_column) {
-      et._el_button_add_column.classList.add(cld);
-    } else {
-      et._el_button_add_column.classList.remove(cld);
-    }
+    et._button_enable(et._el_button_add_column, !et._disable_add_column);
   }
 
   /**
@@ -487,11 +519,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const hasAutoSave = et._auto_save;
     const hasNoUpdates = et._updates.length === 0;
     const disable = hasNoUpdates || hasAutoSave;
-    if (disable) {
-      et._el_button_save.classList.add("disabled-alt");
-    } else {
-      et._el_button_save.classList.remove("disabled-alt");
-    }
+    et._button_enable(et._el_button_save, !disable);
   }
 
   /**
@@ -557,7 +585,7 @@ export class EditTableSessionClient extends WsToolsBase {
       }
       et._el_table.style.height = `${rectWrapper.height}px`;
       et._ht.render();
-    }, 200);
+    }, 300);
   }
 
   /**
@@ -650,6 +678,14 @@ export class EditTableSessionClient extends WsToolsBase {
     et._el_title.innerText = await getDictTemplate("edit_table_modal_title", {
       title,
     });
+
+    /**
+     * If table has geom,
+     */
+    if (table.hasGeom) {
+      et._has_geom = true;
+      et._validation_geom = table.validation;
+    }
 
     /**
      * Convert col format
@@ -1041,13 +1077,7 @@ export class EditTableSessionClient extends WsToolsBase {
         class: [], // "form-control" produce glitches
       },
       onInput: async (accept, elBtnConfirm) => {
-        if (!accept) {
-          elBtnConfirm.setAttribute("disabled", "true");
-          elBtnConfirm.classList.add("disabled");
-        } else {
-          elBtnConfirm.removeAttribute("disabled");
-          elBtnConfirm.classList.remove("disabled");
-        }
+        et._button_enable(elBtnConfirm, accept);
       },
     });
 
@@ -1183,13 +1213,7 @@ export class EditTableSessionClient extends WsToolsBase {
           elMessage.appendChild(elIssue);
         }
 
-        if (valid) {
-          elBtnConfirm.disabled = false;
-          elBtnConfirm.classList.remove("disabled");
-        } else {
-          elBtnConfirm.disabled = true;
-          elBtnConfirm.classList.add("disabled");
-        }
+        et._button_enable(elBtnConfirm, valid);
       },
     });
 
@@ -1452,7 +1476,11 @@ export class EditTableSessionClient extends WsToolsBase {
       /**
        * Lots of changes detected : confirm
        */
+      et.lockTableConcurrent(true);
+      et.lock();
       const confirmLargeUpdate = await et.confirmLargeUpdate(changes);
+      et.unlock();
+      et.lockTableConcurrent(!et._auto_save);
 
       if (!confirmLargeUpdate) {
         et._ignore_next_changes = true;
@@ -1615,11 +1643,7 @@ export class EditTableSessionClient extends WsToolsBase {
       manualRowResize: false,
       comments: false,
     });
-    et._el_button_undo.classList.add("disabled");
-    et._el_button_redo.classList.add("disabled");
-    et._el_button_save.classList.add("disabled");
-    et._el_button_add_column.classList.add("disabled");
-    et._el_button_remove_column.classList.add("disabled");
+    et.updateButtons();
   }
 
   /**
@@ -1638,11 +1662,7 @@ export class EditTableSessionClient extends WsToolsBase {
       manualRowResize: true,
       comments: true,
     });
-    et._el_button_undo.classList.remove("disabled");
-    et._el_button_redo.classList.remove("disabled");
-    et._el_button_save.classList.remove("disabled");
-    et._el_button_add_column.classList.remove("disabled");
-    et._el_button_remove_column.classList.remove("disabled");
+    et.updateButtons();
   }
 
   /**
@@ -1682,7 +1702,6 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   lock() {
     const et = this;
-    console.trace("lock");
     et.disable();
     et._locked = true;
     et._el_overlay.classList.add("locked");
@@ -1813,10 +1832,27 @@ export class EditTableSessionClient extends WsToolsBase {
     const res = await modalPrompt({
       title: getDictItem("edit_table_modal_select_title"),
       label: getDictItem("edit_table_modal_select_label"),
+      onInput: (value, elBtnConfirm) => {
+        if (isSourceId(value)) {
+          elBtnConfirm.classList.remove("disabled");
+        } else {
+          elBtnConfirm.classList.add("disabled");
+        }
+      },
       selectAutoOptions: {
         type: "sources_list_edit",
+        config: {
+          loaderData: {
+            types: ["tabular", "vector"],
+          },
+        },
       },
     });
     return res;
+  }
+
+  _button_enable(elBtn, enable) {
+    const et = this;
+    return buttonEnable(elBtn, et._disabled ? false : enable);
   }
 }

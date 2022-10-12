@@ -2,8 +2,13 @@ import { pgRead, pgWrite } from "#mapx/db";
 import { isArray } from "@fxi/mx_valid";
 import { toBoolean } from "#mapx/helpers";
 import { analyzeSource, getLayerTitle } from "./index.js";
+import { settings } from "#root/settings";
 
-const idValidColumn = "_mx_valid";
+const def = settings.validation_defaults;
+const idValidColumn = def.tables.layer_id_valid;
+const idGeomColumn = def.tables.layer_id_geom;
+const idGeomId = def.tables.layer_id_col;
+
 /**
  * Check for layer geom validity
  * @param {String} idLayer id of the layer to check
@@ -12,10 +17,17 @@ const idValidColumn = "_mx_valid";
  * @param {Boolean} autoCorrect Try an automatic correction
  * @return {<Promise>Object} Geom validiy summary
  */
-export async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
+export async function isLayerValid(
+  idLayer,
+  useCache,
+  autoCorrect,
+  analyze,
+  validate
+) {
   useCache = toBoolean(useCache, true);
   autoCorrect = toBoolean(autoCorrect, false);
   analyze = toBoolean(analyze, true);
+  validate = toBoolean(validate, true);
   const title = await getLayerTitle(idLayer);
 
   /**
@@ -42,18 +54,18 @@ export async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
    */
   const sqlValidateCache = `
   UPDATE ${idLayer} 
-  SET ${idValidColumn} = ST_IsValid(geom)
+  SET ${idValidColumn} = ST_IsValid(${idGeomColumn})
   AND ST_CoveredBy(
-    geom,
+    ${idGeomColumn},
     ST_MakeEnvelope(-180, -90, 180, 90, 4326)
   )
   WHERE ${idValidColumn} IS null
   `;
   const sqlValidate = `
   UPDATE ${idLayer} 
-  SET ${idValidColumn} = ST_IsValid(geom)
+  SET ${idValidColumn} = ST_IsValid(${idGeomColumn})
   AND ST_CoveredBy(
-    geom,
+    ${idGeomColumn},
     ST_MakeEnvelope(-180, -90, 180, 90, 4326)
   )`;
 
@@ -65,11 +77,11 @@ export async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
    */
   const sqlAutoCorrectGeom = `
   UPDATE ${idLayer}
-  SET geom = 
+  SET ${idGeomColumn} = 
     CASE
-      WHEN GeometryType(geom) ~* 'POLYGON'
-      THEN ST_Multi(ST_Buffer(geom,0))
-      ELSE ST_MakeValid(geom)
+      WHEN GeometryType(${idGeomColumn}) ~* 'POLYGON'
+      THEN ST_Multi(ST_Buffer(${idGeomColumn},0))
+      ELSE ST_MakeValid(${idGeomColumn})
     END
   WHERE 
     NOT ${idValidColumn} 
@@ -81,8 +93,8 @@ export async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
    */
   const sqlAutoCorrectWorld = `
   UPDATE ${idLayer} 
-  SET geom = ST_Multi(ST_Intersection(
-    geom,
+  SET ${idGeomColumn} = ST_Multi(ST_Intersection(
+    ${idGeomColumn},
     ST_MakeEnvelope(-180, -90, 180, 90, 4326)
   ))
   WHERE
@@ -112,20 +124,22 @@ export async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
    * - With cache : validate only if 'null'
    * - Without caceh : always validate
    */
-  if (!useCache) {
-    await pgWrite.query(sqlValidate);
-  } else {
-    await pgWrite.query(sqlValidateCache);
+  if (validate) {
+    if (!useCache) {
+      await pgWrite.query(sqlValidate);
+    } else {
+      await pgWrite.query(sqlValidateCache);
+    }
   }
 
   /**
    * Autocorrect:
-   * - Extent / world 
+   * - Extent / world
    * - revalidate ( if world correction removed invalidated geom )
    * - Geom
    * - revalidate
    */
-  if (autoCorrect) {
+  if (validate && autoCorrect) {
     //console.log("Start world correction");
     await pgWrite.query(sqlAutoCorrectWorld);
     //console.log("Re validate after world corrections");
@@ -143,9 +157,10 @@ export async function isLayerValid(idLayer, useCache, autoCorrect, analyze) {
 
   return {
     id: idLayer,
-    valid: true,
+    valid: stat.unknown > 0 || stat.invalid > 0,
     title: title,
     stat: stat,
+    validate: validate,
     useCache: useCache,
     autoCorrect: autoCorrect,
     analyze: analyze,
@@ -181,7 +196,7 @@ async function getStatValidation(idLayer) {
    * Count valid query
    */
   const sqlValidityStatus = `
-  SELECT count(${idValidColumn}) as n,
+  SELECT count(${idGeomId}) as n,
   CASE WHEN ${idValidColumn} IS NULL THEN
   'unknown'
   WHEN ${idValidColumn} THEN

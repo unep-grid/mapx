@@ -149,6 +149,9 @@ const settings_global = {
       default: "en",
     },
     tables: {
+      layer_id_valid : '_mx_valid',
+      layer_id_col : "gid",
+      layer_id_geom : "geom",
       attr_not_queryable: ["geom", "gid", "pid"],
       name_not_queryable: [
         "mx_users",

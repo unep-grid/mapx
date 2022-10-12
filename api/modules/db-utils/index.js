@@ -287,11 +287,11 @@ async function getTableDimension(idTable) {
  * Get simple (json) column type
  * @param {String} idSource Id of the source
  * @param {String} idAttr Id of the attribute
- * @return {String} type
+ * @return {Promise<arrayA} Array of types
  */
 async function getColumnsTypesSimple(idSource, idAttr) {
   if (!isSourceId(idSource) || !idAttr) {
-    return null;
+    return [];
   }
   const cNames = isArray(idAttr) ? idAttr : [idAttr];
   const cNamesTxt = `('${cNames.join(`','`)}')`;

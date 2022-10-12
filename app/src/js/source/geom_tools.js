@@ -56,9 +56,7 @@ export class GeometryTools {
     }
   }
 
-
   async build() {}
-
   async validate() {}
   async fix() {}
   async removeCache() {}
@@ -73,6 +71,11 @@ export class GeometryTools {
       label: tt("edit_table_modal_select_label"),
       selectAutoOptions: {
         type: "sources_list_edit",
+        config: {
+          loaderData: {
+            types: ["vector"],
+          },
+        },
       },
     });
     return res;
@@ -125,6 +128,4 @@ export class GeometryTools {
     }
     return res;
   }
-
-
 }

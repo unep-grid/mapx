@@ -624,6 +624,11 @@ picture {
   pointer-events: none;
 }
 
+.btn.disabled-with-events {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .btn-circle > i {
   position: relative;
   display: flex;

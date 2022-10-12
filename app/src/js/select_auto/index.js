@@ -5,19 +5,20 @@ import { EventSimple } from "../event_simple/index.js";
 const def = {
   target: null,
   type: "epsg",
+  config: {},
 };
 
 export class SelectAuto extends EventSimple {
   constructor(opt) {
     super();
     const se = this;
+    se._opt = Object.assign({}, def, opt);
+
     if (isElement(opt)) {
-      const target = opt.querySelector("select");
-      const type = target.dataset.type;
-      se._opt = { target, type };
-    } else {
-      se._opt = Object.assign({}, def, opt);
+      se._opt.target = opt.querySelector("select");
+      se._opt.type = target.dataset.type;
     }
+
     se.destroy = se.destroy.bind(se);
     se.init().catch(console.error);
   }
@@ -53,6 +54,8 @@ export class SelectAuto extends EventSimple {
     const se = this;
     const TomSelect = await moduleLoad("tom-select");
     const config = await se.loadConfig(se._opt.type);
+    Object.assign(config, se._opt.config);
+
     return new Promise((resolve) => {
       se._tom = new TomSelect(se._opt.target, config);
       /*
@@ -72,25 +75,27 @@ export class SelectAuto extends EventSimple {
   }
 
   async loadConfig(type) {
-    const out = {};
+    /**
+     * NOTE: tomselect 'load callback' could require direct refs to the config object
+     *    -> e.g. loaderData in sources_list_edit should be overwritable
+     *    -> if wrapped in with assign, the reference is lost
+     */
     switch (type) {
       case "epsg":
         const epsg = await import("./resolvers/epsg.js");
-        Object.assign(out, epsg.config);
-        break;
+        return epsg.config;
       case "format_vector_download":
         const format = await import("./resolvers/format_vector_download.js");
-        Object.assign(out, format.config);
-        break;
+        return format.config;
       case "countries":
         const countries = await import("./resolvers/countries.js");
-        Object.assign(out, countries.config);
-        break;
+        return countries.config;
       case "sources_list_edit":
         const sourcesEdit = await import("./resolvers/sources_list_edit.js");
-        Object.assign(out, sourcesEdit.config);
-        break;
+        return sourcesEdit.config;
+      default:
+        null;
     }
-    return out;
+    return {};
   }
 }

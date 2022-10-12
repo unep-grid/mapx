@@ -142,20 +142,18 @@ class WsHandler {
     if (isEmpty(type)) {
       throw new Error(`emitGet : missing route`);
     }
-    const request = {};
-    request.input = data;
-    request._id = makeId(10);
-    timeout = timeout || 1e3 * 60;
+    const request = { input: data, _id: makeId(10) };
+    const maxTime = timeout || 1e3 * 60;
 
     return new Promise((resolve, reject) => {
       ws._socket.on("response", handler);
       ws.emit(type, request);
 
-      if (timeout > 0) {
+      if (maxTime > 0) {
         setTimeout(() => {
           clear();
           reject(new Error(`Timeout ${timeout} [ms]`));
-        }, timeout);
+        }, maxTime);
       }
 
       function clear() {

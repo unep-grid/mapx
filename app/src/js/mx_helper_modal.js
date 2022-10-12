@@ -561,7 +561,7 @@ export function modalPrompt(opt) {
 
   return new Promise(async (resolve) => {
     const isCheckbox = opt.inputOptions.type === "checkbox";
-    const isSelectAuto = !!opt.selectAutoOptions;
+    const isSelectAuto = isObject(opt.selectAutoOptions);
     let selectAuto;
 
     if (isSelectAuto) {

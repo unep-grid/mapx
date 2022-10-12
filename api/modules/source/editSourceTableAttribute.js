@@ -4,6 +4,7 @@ import {
   getTableDimension,
   getColumnsTypesSimple,
   getLayerTitle,
+  isLayerValid,
 } from "#mapx/db-utils";
 import { getSourceAttributeTable, getSourceEditors } from "#mapx/source";
 import { randomString } from "#mapx/helpers";
@@ -37,6 +38,7 @@ const def = {
   log_perf: false,
   max_rows: 1e5,
   max_columns: 200,
+  col_geom: "geom",
 };
 
 class EditTableSession {
@@ -285,6 +287,15 @@ class EditTableSession {
   async sendTable() {
     const et = this;
     et.perf("sendTable");
+    const hasGeom = await columnExists(def.col_geom, et._id_table);
+    const validation = {};
+    if (hasGeom) {
+      Object.assign(
+        validation,
+        // id, useCache, autoCorrect, analyze, validate;
+        await isLayerValid(et._id_table, true, false, false, false)
+      );
+    }
     const pgRes = await getSourceAttributeTable({
       id: et._id_table,
       fullTable: true,
@@ -296,6 +307,8 @@ class EditTableSession {
     const locked = await et.getState("lock_table");
 
     const table = {
+      hasGeom,
+      validation,
       types,
       data,
       title,
@@ -424,7 +437,7 @@ async function writePostgres(updates) {
           {
             /** ALTER TABLE products ADD COLUMN description text; **/
             const { column_type } = update;
-            
+
             if (!colExists) {
               const qSql = parseTemplate(templates.updateTableAddColumn, {
                 id_table,

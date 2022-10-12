@@ -1,5 +1,4 @@
 import { el } from "../../el_mapx";
-import { getLanguageCurrent } from "../../language";
 import { wsGetSourcesListEdit } from "../../source";
 
 const def = {
@@ -10,7 +9,7 @@ const def = {
 
 export const config = {
   valueField: "id",
-  searchField: ["id", "title", "abstract", "views"],
+  searchField: ["id", "title", "abstract", "views", "type"],
   allowEmptyOption: false,
   options: null,
   create: false,
@@ -27,6 +26,10 @@ export const config = {
     const tom = this;
     tom.blur();
   },
+  loaderData: {
+    // select distinct type from mx_sources
+    types: ["vector", "raster", "tabular"],
+  },
   load: async function (_, callback) {
     const tom = this;
     try {
@@ -34,8 +37,8 @@ export const config = {
         callback();
         return;
       }
-      const language = getLanguageCurrent();
-      const res = await wsGetSourcesListEdit({ language });
+      const types = config.loaderData.types;
+      const res = await wsGetSourcesListEdit({ types: types });
       const data = res.list || [];
       for (const row of data) {
         if (!row.exists) {
@@ -66,6 +69,7 @@ function formater(data, escape) {
   const warnCol = data.ncol > def.max_cols ? ` ⚠️ ` : "";
   const nCol = escape(data.ncol) + warnCol;
   const nRow = escape(data.nrow) + warnRow;
+  const type = escape(data.type);
   const title = escape(data.title);
   const abstr = escape(data.abstract.substr(0, 100));
   const date = escape(data.date_modified);
@@ -84,7 +88,7 @@ function formater(data, escape) {
       el(
         "span",
         { class: ["text-muted", "space-around"] },
-        `${dateUi} ( ${nRow} x ${nCol} )`
+        `${dateUi} ${type} ${nRow} x ${nCol}`
       )
     ),
     el(
