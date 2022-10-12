@@ -1495,9 +1495,14 @@
     "ar": "تحرير الجدول {{title}}"
   },
   {
-    "id": "btn_edit_wiki",
-    "en": "Help",
-    "ar": "مساعدة"
+    "id": "btn_edit_geom_validate",
+    "en": "Validate the geometry",
+    "ar": "تحقق من صحة الهندسة"
+  },
+  {
+    "id": "btn_edit_geom_repair",
+    "en": "Repair the geometry",
+    "ar": "إصلاح الهندسة"
   },
   {
     "id": "btn_edit_undo",

@@ -1495,9 +1495,14 @@
     "fa": "ویرایش جدول {{title}}"
   },
   {
-    "id": "btn_edit_wiki",
-    "en": "Help",
-    "fa": "کمک"
+    "id": "btn_edit_geom_validate",
+    "en": "Validate the geometry",
+    "fa": "هندسه را تأیید کنید"
+  },
+  {
+    "id": "btn_edit_geom_repair",
+    "en": "Repair the geometry",
+    "fa": "هندسه را تعمیر کنید"
   },
   {
     "id": "btn_edit_undo",

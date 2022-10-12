@@ -1495,9 +1495,14 @@
     "de": "Tabelle bearbeiten {{title}}"
   },
   {
-    "id": "btn_edit_wiki",
-    "en": "Help",
-    "de": "Hilfe"
+    "id": "btn_edit_geom_validate",
+    "en": "Validate the geometry",
+    "de": "Validieren Sie die Geometrie"
+  },
+  {
+    "id": "btn_edit_geom_repair",
+    "en": "Repair the geometry",
+    "de": "Reparieren Sie die Geometrie"
   },
   {
     "id": "btn_edit_undo",

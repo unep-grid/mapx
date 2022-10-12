@@ -3887,17 +3887,30 @@
     "de": "Tabelle bearbeiten {{title}}"
   },
   {
-    "id": "btn_edit_wiki",
-    "en": "Help",
-    "fr": "Aider",
-    "es": "Ayuda",
-    "ru": "Помощь",
-    "zh": "帮助",
-    "ar": "مساعدة",
-    "fa": "کمک",
-    "ps": "مرسته",
-    "bn": "সাহায্য",
-    "de": "Hilfe"
+    "id": "btn_edit_geom_validate",
+    "en": "Validate the geometry",
+    "fr": "Valider la géométrie",
+    "es": "Validar la geometría",
+    "ru": "Проверка геометрии",
+    "zh": "验证几何",
+    "ar": "تحقق من صحة الهندسة",
+    "fa": "هندسه را تأیید کنید",
+    "ps": "جیومیټری تایید کړئ",
+    "bn": "জ্যামিতি যাচাই করুন",
+    "de": "Validieren Sie die Geometrie"
+  },
+  {
+    "id": "btn_edit_geom_repair",
+    "en": "Repair the geometry",
+    "fr": "Réparer la géométrie",
+    "es": "Reparar la geometría",
+    "ru": "Исправить геометрию",
+    "zh": "修复几何",
+    "ar": "إصلاح الهندسة",
+    "fa": "هندسه را تعمیر کنید",
+    "ps": "جیومیټری ترمیم کړئ",
+    "bn": "জ্যামিতি মেরামত করুন",
+    "de": "Reparieren Sie die Geometrie"
   },
   {
     "id": "btn_edit_undo",
@@ -4561,6 +4574,32 @@
     "ps": "ډاټا ډاونلوډ شوی، میز جوړ کړئ.",
     "bn": "ডেটা ডাউনলোড করা হয়েছে, টেবিল তৈরি করুন।",
     "de": "Daten heruntergeladen, Tabelle erstellen."
+  },
+  {
+    "id": "geom_tools_modal_select_title",
+    "en": "Geometry tools : select source layer",
+    "fr": "Outils de géométrie : sélectionner le calque source",
+    "es": "Herramientas de geometría: seleccione la capa de origen",
+    "ru": "Инструменты геометрии: выберите исходный слой",
+    "zh": "几何工具：选择源层",
+    "ar": "أدوات الهندسة: حدد طبقة المصدر",
+    "fa": "ابزار هندسه: لایه منبع را انتخاب کنید",
+    "ps": "د جیومیټري وسیلې: د سرچینې پرت غوره کړئ",
+    "bn": "জ্যামিতি সরঞ্জাম: উৎস স্তর নির্বাচন করুন",
+    "de": "Geometriewerkzeuge: Quellebene auswählen"
+  },
+  {
+    "id": "geom_tools_modal_select_label",
+    "en": "Select source layer",
+    "fr": "Sélectionnez la couche source",
+    "es": "Seleccionar capa de origen",
+    "ru": "Выберите исходный слой",
+    "zh": "选择源层",
+    "ar": "حدد طبقة المصدر",
+    "fa": "لایه منبع را انتخاب کنید",
+    "ps": "د سرچینې پرت غوره کړئ",
+    "bn": "উৎস স্তর নির্বাচন করুন",
+    "de": "Quellebene auswählen"
   },
   {
     "id": "en",
@@ -21084,32 +21123,6 @@
     "ps": "نقشه: د اوبو د بدن متن لنډیز ",
     "bn": "মানচিত্র: জলের দেহের পাঠ্য রূপরেখা ",
     "de": "Karte: Wasserkörpertextumriss "
-  },
-  {
-    "id": "geom_tools_modal_select_title",
-    "en": "Geometry tools : select source layer",
-    "fr": "Outils de géométrie : sélectionner le calque source",
-    "es": "Herramientas de geometría: seleccione la capa de origen",
-    "ru": "Инструменты геометрии: выберите исходный слой",
-    "zh": "几何工具：选择源层",
-    "ar": "أدوات الهندسة: حدد طبقة المصدر",
-    "fa": "ابزار هندسه: لایه منبع را انتخاب کنید",
-    "ps": "د جیومیټري وسیلې: د سرچینې پرت غوره کړئ",
-    "bn": "জ্যামিতি সরঞ্জাম: উৎস স্তর নির্বাচন করুন",
-    "de": "Geometriewerkzeuge: Quellebene auswählen"
-  },
-  {
-    "id": "geom_tools_modal_select_label",
-    "en": "Select source layer",
-    "fr": "Sélectionnez la couche source",
-    "es": "Seleccionar capa de origen",
-    "ru": "Выберите исходный слой",
-    "zh": "选择源层",
-    "ar": "حدد طبقة المصدر",
-    "fa": "لایه منبع را انتخاب کنید",
-    "ps": "د سرچینې پرت غوره کړئ",
-    "bn": "উৎস স্তর নির্বাচন করুন",
-    "de": "Quellebene auswählen"
   },
   {
     "id": "wms_select_reviewed_service",

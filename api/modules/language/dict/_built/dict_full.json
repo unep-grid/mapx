@@ -3887,17 +3887,30 @@
     "de": "Tabelle bearbeiten {{title}}"
   },
   {
-    "id": "btn_edit_wiki",
-    "en": "Help",
-    "fr": "Aider",
-    "es": "Ayuda",
-    "ru": "Помощь",
-    "zh": "帮助",
-    "ar": "مساعدة",
-    "fa": "کمک",
-    "ps": "مرسته",
-    "bn": "সাহায্য",
-    "de": "Hilfe"
+    "id": "btn_edit_geom_validate",
+    "en": "Validate the geometry",
+    "fr": "Valider la géométrie",
+    "es": "Validar la geometría",
+    "ru": "Проверка геометрии",
+    "zh": "验证几何",
+    "ar": "تحقق من صحة الهندسة",
+    "fa": "هندسه را تأیید کنید",
+    "ps": "جیومیټری تایید کړئ",
+    "bn": "জ্যামিতি যাচাই করুন",
+    "de": "Validieren Sie die Geometrie"
+  },
+  {
+    "id": "btn_edit_geom_repair",
+    "en": "Repair the geometry",
+    "fr": "Réparer la géométrie",
+    "es": "Reparar la geometría",
+    "ru": "Исправить геометрию",
+    "zh": "修复几何",
+    "ar": "إصلاح الهندسة",
+    "fa": "هندسه را تعمیر کنید",
+    "ps": "جیومیټری ترمیم کړئ",
+    "bn": "জ্যামিতি মেরামত করুন",
+    "de": "Reparieren Sie die Geometrie"
   },
   {
     "id": "btn_edit_undo",

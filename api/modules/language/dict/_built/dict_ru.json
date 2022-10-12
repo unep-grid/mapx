@@ -1495,9 +1495,14 @@
     "ru": "Изменить таблицу {{title}}"
   },
   {
-    "id": "btn_edit_wiki",
-    "en": "Help",
-    "ru": "Помощь"
+    "id": "btn_edit_geom_validate",
+    "en": "Validate the geometry",
+    "ru": "Проверка геометрии"
+  },
+  {
+    "id": "btn_edit_geom_repair",
+    "en": "Repair the geometry",
+    "ru": "Исправить геометрию"
   },
   {
     "id": "btn_edit_undo",

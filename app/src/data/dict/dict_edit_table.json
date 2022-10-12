@@ -39,8 +39,21 @@
     "de": ""
   },
   {
-    "id": "btn_edit_wiki",
-    "en": "Help",
+    "id": "btn_edit_geom_validate",
+    "en": "Validate the geometry",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_edit_geom_repair",
+    "en": "Repair the geometry",
     "fr": "",
     "es": "",
     "ru": "",
@@ -223,7 +236,7 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>", 
+    "en": "The new column name will be: <b>{{column_name}}</b>",
     "fr": "",
     "es": "",
     "ru": "",
@@ -260,7 +273,7 @@
     "bn": "",
     "de": ""
   },
- {
+  {
     "id": "edit_table_modal_add_column_name_issue_non_available",
     "en": "Name unavailable",
     "fr": "",

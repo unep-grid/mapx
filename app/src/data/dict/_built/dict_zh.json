@@ -1495,9 +1495,14 @@
     "zh": "编辑表格 {{title}}"
   },
   {
-    "id": "btn_edit_wiki",
-    "en": "Help",
-    "zh": "帮助"
+    "id": "btn_edit_geom_validate",
+    "en": "Validate the geometry",
+    "zh": "验证几何"
+  },
+  {
+    "id": "btn_edit_geom_repair",
+    "en": "Repair the geometry",
+    "zh": "修复几何"
   },
   {
     "id": "btn_edit_undo",
