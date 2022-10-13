@@ -39,8 +39,6 @@ const defaults = {
   id_columns_reserved: ["gid", "_mx_valid", "geom"],
   max_changes: 1e4,
   max_changes_warning: 1e3,
-  table_failed_timeout: 5 * 60e3,
-  //table_failed_timeout : 30e3,
   min_columns: 3,
   max_rows: 1e5, // should match server
   max_columns: 200, // should match server
@@ -54,12 +52,16 @@ const defaults = {
     server_member_exit: "/server/source/edit/table/member_exit",
     server_table_data: "/server/source/edit/table/data",
     server_dispatch: "/server/source/edit/table/dispatch",
+    server_geom_fix: "/server/source/edit/table/geom/fix",
+    server_geom_validate: "/server/source/edit/table/geom/validate",
     /**
      * here to server
      */
     client_edit_start: "/client/source/edit/table",
     client_edit_updates: "/client/source/edit/table/update",
     client_exit: "/client/source/edit/table/exit",
+    client_geom_fix: "/client/source/edit/table/geom/fix",
+    client_geom_validate: "/client/source/edit/table/geom/validate",
   },
   id_source_dispatch: "from_dispatch",
   id_source_edit: "edit",
@@ -164,12 +166,6 @@ export class EditTableSessionClient extends WsToolsBase {
        */
       await et.build();
 
-      /*
-       * Produce an error if it takes more than x seconds
-       * to receive the event "table_ready"
-       */
-      await et.once("table_ready", null, et._config.table_failed_timeout);
-
       /**
        * If a on_destroy callback is set in option, add it
        * to others destroy callback
@@ -178,11 +174,12 @@ export class EditTableSessionClient extends WsToolsBase {
         et.addDestroyCb(et._config.on_destroy);
       }
 
+      await et.once("table_ready", null);
+
       return true;
     } catch (e) {
       et.destroy("init issue");
-      console.warn(e);
-      return e;
+      throw new Error(e);
     }
   }
 
@@ -812,8 +809,8 @@ export class EditTableSessionClient extends WsToolsBase {
     /**
      * Fire on ready cb, if any
      */
-    await et.fire("table_ready");
     et._table_ready = true;
+    await et.fire("table_ready");
   }
 
   /**
@@ -1899,6 +1896,22 @@ export class EditTableSessionClient extends WsToolsBase {
     return res;
   }
 
+  /**
+   * Geometry tools
+   */
+  async geomValidate() {
+    const et = this;
+  }
+
+  async geomFix() {
+    const et = this;
+  }
+
+  /**
+   * Wrapper for buttonEnable : use default from table editor
+   * @param {Element} elBtn Button element
+   * @param {Boolean} enable Enable / Disable button
+   */
   _button_enable(elBtn, enable) {
     const et = this;
     return buttonEnable(elBtn, et._disabled ? false : enable);

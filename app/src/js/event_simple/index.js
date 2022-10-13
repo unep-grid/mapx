@@ -1,12 +1,21 @@
-import {isObject, isArray} from './../is_test/index.js';
+import { isObject, isArray } from "./../is_test/index.js";
 export class EventSimple {
   constructor() {
     const evt = this;
     evt.cb = [];
     evt.passthroughs = [];
   }
-  fire(type, data) {
+
+  /*
+   * Events : fire handler
+   *
+   * @param {String | Object} type Even type
+   * @param {Object} data Object to pass to the callback
+   * @return {Promise<array>} array of returned values
+   */
+  async fire(type, data) {
     const evt = this;
+    const res = [];
     if (isObject(type)) {
       data = type.data;
       type = type.type;
@@ -17,7 +26,7 @@ export class EventSimple {
     for (const c of evt.cb) {
       const t = isArray(c.type) ? c.type : [c.type];
       if (t.includes(type)) {
-        c.cb(data);
+        res.push(await c.cb(data));
         if (c.once) {
           evt._rm(c);
         }
@@ -28,12 +37,16 @@ export class EventSimple {
      * Pass all events
      */
     for (const p of evt.passthroughs) {
-      p.cb({
-        type: type,
-        data: data
-      });
+      res.push(
+        await p.cb({
+          type: type,
+          data: data,
+        })
+      );
     }
+    return res;
   }
+
   on(type, cb, group, once) {
     const evt = this;
     if (isObject(type)) {
@@ -48,7 +61,7 @@ export class EventSimple {
         type: type,
         cb: cb,
         once: once || false,
-        group: group || 'default'
+        group: group || "default",
       });
     }
   }
@@ -60,20 +73,20 @@ export class EventSimple {
     }
   }
   once(type, cb, group) {
-    return  new Promise(resolve=>{
+    return new Promise((resolve) => {
       const evt = this;
       if (isObject(type)) {
         cb = type.cb || type.callback || cb;
         group = type.idGroup || type.group || group;
         type = type.type;
       }
-      cb = cb || function(){};
-      const cbProm = function(d){
+      cb = cb || function () {};
+      const cbProm = function (d) {
         resolve(d);
-        return cb(d)
-      }
+        return cb(d);
+      };
       evt.on(type, cbProm, group, true);
-    })
+    });
   }
   off(type, cb, group, once) {
     const evt = this;
@@ -97,7 +110,7 @@ export class EventSimple {
   }
   destroy() {
     const evt = this;
-    evt.clearCallbacks(); 
+    evt.clearCallbacks();
   }
   clearCallbacks() {
     const evt = this;
@@ -118,7 +131,7 @@ export class EventSimple {
         c.type === type &&
         c.cb === cb &&
         (c.once === once || c.once === false) &&
-        (c.group === group || c.group === 'default');
+        (c.group === group || c.group === "default");
 
       if (found) {
         return c;
