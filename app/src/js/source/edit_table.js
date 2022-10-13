@@ -694,7 +694,6 @@ export class EditTableSessionClient extends WsToolsBase {
     }
 
     // Remove progress, replace data with the temporary one
-    et._radial_progress.destroy();
     table.data = et._init_data;
     delete et._init_data;
 
@@ -803,6 +802,13 @@ export class EditTableSessionClient extends WsToolsBase {
      */
     et.updateAutoSave();
     et.updateButtons();
+
+    /**
+     * Clear progress
+     */
+    if (et._radial_progress instanceof RadialProgress) {
+      et._radial_progress.destroy();
+    }
 
     /**
      * Fire on ready cb, if any
