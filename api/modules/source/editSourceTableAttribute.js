@@ -36,8 +36,11 @@ export async function ioEditSource(socket, options) {
 
 const def = {
   log_perf: false,
-  max_rows: 1e5,
+  max_rows: 1e6,
   max_columns: 200,
+  //threshold_chunk: 1e3,
+  threshold_chunk: 20,
+  size_chunk: 1e3,
   col_geom: "geom",
 };
 
@@ -301,21 +304,31 @@ class EditTableSession {
       fullTable: true,
     });
     const data = pgRes.rows;
+    const nRow = pgRes.rowCount;
     const attributes = pgRes.fields.map((f) => f.name);
     const types = await getColumnsTypesSimple(et._id_table, attributes);
     const title = await getLayerTitle(et._id_table);
     const locked = await et.getState("lock_table");
-
     const table = {
       hasGeom,
       validation,
       types,
-      data,
       title,
       locked,
     };
 
-    et.emit("/server/source/edit/table/full_table", table);
+    const iL = Math.ceil(nRow / def.size_chunk);
+    for (let i = 0; i < iL; i++) {
+      if (et._destroyed) {
+        return;
+      }
+      table.nParts = iL;
+      table.part = i + 1;
+      table.start = i === 0;
+      table.end = i === iL - 1;
+      table.data = data.splice(0, def.size_chunk);
+      et.emit("/server/source/edit/table/data", table);
+    }
 
     et.perfEnd("sendTable");
   }

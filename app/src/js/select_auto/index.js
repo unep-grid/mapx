@@ -16,7 +16,7 @@ export class SelectAuto extends EventSimple {
 
     if (isElement(opt)) {
       se._opt.target = opt.querySelector("select");
-      se._opt.type = target.dataset.type;
+      se._opt.type = se._opt.target.dataset.type;
     }
 
     se.destroy = se.destroy.bind(se);

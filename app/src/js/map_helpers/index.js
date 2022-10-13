@@ -1838,6 +1838,7 @@ export async function updateViewsList(opt) {
     nTot = 0,
     prog;
 
+  const progressColor = theme.getColorThemeItem('mx_ui_link');
   /*
    * See default used:
    * - app/src/r/server/view_update_client.R
@@ -1887,6 +1888,7 @@ export async function updateViewsList(opt) {
 
   /* Add all view from automatic fetch. */
   async function addAsyncAll() {
+
     const views = [];
     const state = [];
     /**
@@ -2020,7 +2022,7 @@ export async function updateViewsList(opt) {
       prog = new RadialProgress(elProgContainer, {
         radius: 30,
         stroke: 4,
-        strokeColor: "#f00",
+        strokeColor: progressColor,
       });
     }
 

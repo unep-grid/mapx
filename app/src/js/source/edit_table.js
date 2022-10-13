@@ -12,7 +12,8 @@ import { getArrayDistinct } from "./../array_stat";
 import { prefGet, prefSet } from "./../user_pref";
 import { modalMarkdown } from "./../modal_markdown/index.js";
 import { makeId, buttonEnable } from "../mx_helper_misc.js";
-
+import { RadialProgress } from "../radial_progress";
+import { theme } from "../mx.js";
 import {
   typeConvert,
   getTypes,
@@ -29,6 +30,7 @@ import {
   makeSafeName,
 } from "./../is_test/index.js";
 
+import "./edit_table.types.js";
 import "./edit_table.less";
 const defaults = {
   id_table: null,
@@ -37,6 +39,8 @@ const defaults = {
   id_columns_reserved: ["gid", "_mx_valid", "geom"],
   max_changes: 1e4,
   max_changes_warning: 1e3,
+  table_failed_timeout: 5 * 60e3,
+  //table_failed_timeout : 30e3,
   min_columns: 3,
   max_rows: 1e5, // should match server
   max_columns: 200, // should match server
@@ -48,7 +52,7 @@ const defaults = {
     server_error: "/server/source/edit/table/error",
     server_new_member: "/server/source/edit/table/new_member",
     server_member_exit: "/server/source/edit/table/member_exit",
-    server_full_table: "/server/source/edit/table/full_table",
+    server_table_data: "/server/source/edit/table/data",
     server_dispatch: "/server/source/edit/table/dispatch",
     /**
      * here to server
@@ -58,6 +62,7 @@ const defaults = {
     client_exit: "/client/source/edit/table/exit",
   },
   id_source_dispatch: "from_dispatch",
+  id_source_init: "from_init",
   id_source_edit: "edit",
 };
 
@@ -106,6 +111,8 @@ export class EditTableSessionClient extends WsToolsBase {
       et._id_table = et._config?.id_table;
       et._has_geom = false;
       et._validation_geom = {};
+      et._table_ready = false;
+      et._init_data = [];
       /**
        * If empty id, display a dialog to select
        */
@@ -143,7 +150,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et._socket.on(r.server_error, et.onServerError);
       et._socket.on(r.server_new_member, et.onNewMember);
       et._socket.on(r.server_member_exit, et.onMemberExit);
-      et._socket.on(r.server_full_table, et.initTable);
+      et._socket.on(r.server_table_data, et.initTable);
       et._socket.on(r.server_dispatch, et.onDispatch);
       et._socket.on("disconnect", et.onDisconnect);
       await et.dialogWarning();
@@ -162,7 +169,7 @@ export class EditTableSessionClient extends WsToolsBase {
        * Produce an error if it takes more than x seconds
        * to receive the event "table_ready"
        */
-      await et.once("table_ready", null, 2e4);
+      await et.once("table_ready", null, et._config.table_failed_timeout);
 
       /**
        * If a on_destroy callback is set in option, add it
@@ -237,7 +244,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et._socket.off(r.server_error, et.onServerError);
       et._socket.off(r.server_new_member, et.onNewMember);
       et._socket.off(r.server_member_exit, et.onMemberExit);
-      et._socket.off(r.server_full_table, et.initTable);
+      et._socket.off(r.server_table_data, et.initTable);
       et._socket.off(r.server_dispatch, et.onDispatch);
       et._socket.off("disconnect", et.onDisconnect);
       await et.fire("destroy");
@@ -651,6 +658,7 @@ export class EditTableSessionClient extends WsToolsBase {
 
   /**
    * Initial table render
+   * @param {EditTableData} table Table object
    */
   async initTable(table) {
     const et = this;
@@ -663,8 +671,37 @@ export class EditTableSessionClient extends WsToolsBase {
       return;
     }
 
-    const initLocked = table.locked && et.hasConcurrentMembers();
+    /**
+     * Show progress
+     */
 
+    if (table.start) {
+      et._init_data.length = 0;
+      const col = theme.getColorThemeItem("mx_ui_link");
+      et._radial_progress = new RadialProgress(et._el_table, {
+        radius: 30,
+        stroke: 4,
+        strokeColor: col,
+      });
+    }
+
+    const percent = (table.part / table.nParts) * 100;
+    et._radial_progress.update(percent);
+    et._init_data.push(...table.data);
+
+    if (!table.end) {
+      return;
+    }
+
+    // Remove progress, replace data with the temporary one
+    et._radial_progress.destroy();
+    table.data = et._init_data;
+    delete et._init_data;
+
+    /**
+     * Build handsontable object
+     */
+    const initLocked = table.locked && et.hasConcurrentMembers();
     const handsontable = await moduleLoad("handsontable");
 
     if (et._ht instanceof handsontable) {
@@ -771,6 +808,7 @@ export class EditTableSessionClient extends WsToolsBase {
      * Fire on ready cb, if any
      */
     await et.fire("table_ready");
+    et._table_ready = true;
   }
 
   /**
@@ -890,10 +928,15 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Handler update in batch : array of array
    */
-  handlerCellsBatchProcess(cells) {
+  handlerCellsBatchProcess(cells, idSource) {
     const et = this;
     try {
-      et._ht.setDataAtRowProp(cells, null, null, et._config.id_source_dispatch);
+      et._ht.setDataAtRowProp(
+        cells,
+        null,
+        null,
+        idSource || et._config.id_source_dispatch
+      );
     } catch (e) {
       console.warn("handlerCellsBatchProcess", e);
     }
@@ -1440,12 +1483,6 @@ export class EditTableSessionClient extends WsToolsBase {
     }
 
     /**
-     * Check length : warning, stop, batch or not
-     */
-    const changesWarning = changes.length >= et._config.max_changes_warning;
-    const changesTooBig = changes.length >= et._config.max_changes;
-
-    /**
      * In case of undo after large numnber of change,
      * no values was sent. The undo will trigger 'afterChange',
      * but there is no need to send the changes. Ignore that event.
@@ -1461,6 +1498,23 @@ export class EditTableSessionClient extends WsToolsBase {
     if (source === et._config.id_source_dispatch) {
       return;
     }
+
+    /**
+     * Ignore init changes
+     */
+    if (source === et._config.id_source_init) {
+      console.log("IGNORE INIT CHANGES");
+      return;
+    } else {
+      console.log("temp blocking");
+      return;
+    }
+
+    /**
+     * Check length : warning, stop, batch or not
+     */
+    const changesWarning = changes.length >= et._config.max_changes_warning;
+    const changesTooBig = changes.length >= et._config.max_changes;
 
     if (changesTooBig) {
       /**
