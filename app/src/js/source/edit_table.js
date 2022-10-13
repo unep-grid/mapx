@@ -62,7 +62,6 @@ const defaults = {
     client_exit: "/client/source/edit/table/exit",
   },
   id_source_dispatch: "from_dispatch",
-  id_source_init: "from_init",
   id_source_edit: "edit",
 };
 
@@ -1502,17 +1501,6 @@ export class EditTableSessionClient extends WsToolsBase {
      * Ignore dispatch changes, only "edit","Autofill.fill","..".
      */
     if (source === et._config.id_source_dispatch) {
-      return;
-    }
-
-    /**
-     * Ignore init changes
-     */
-    if (source === et._config.id_source_init) {
-      console.log("IGNORE INIT CHANGES");
-      return;
-    } else {
-      console.log("temp blocking");
       return;
     }
 
