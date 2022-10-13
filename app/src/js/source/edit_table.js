@@ -105,6 +105,8 @@ export class EditTableSessionClient extends WsToolsBase {
       et._members = [];
       et._updates = [];
       et._locked = false;
+      et._disabled = false;
+      et._in_progress = false;
       et._select_auto = [];
       et._lock_table_concurrent = false;
       et._lock_table_by_user_id = null;
@@ -293,17 +295,23 @@ export class EditTableSessionClient extends WsToolsBase {
     });
 
     /**
-     * Geom
+     * Geom validate
      */
     et._el_button_geom_validate = elButtonFa("btn_edit_geom_validate", {
       icon: "check",
       action: et.geomValidate,
     });
+
+    /**
+     * Geom fix
+     */
     et._el_button_geom_repair = elButtonFa("btn_edit_geom_repair", {
       icon: "user-md",
       action: et.geomFix,
     });
-
+    /**
+     * User stat
+     */
     et._el_users_stat = el("ul");
     et._el_users_stat_wrapper = el("small", [
       tt("edit_table_users_stat"),
@@ -363,10 +371,24 @@ export class EditTableSessionClient extends WsToolsBase {
         locked: "Locked",
       },
     });
+
+    et._el_progress = el("div", {
+      class: "edit-table--progress",
+    });
+    const col = theme.getColorThemeItem("mx_ui_link");
+    et._progress = new RadialProgress(et._el_progress, {
+      radius: 30,
+      stroke: 4,
+      strokeColor: col,
+    });
+
+    window._et = et;
+
     et._el_content = el(
       "div",
       { class: ["mx_handsontable", "edit-table--container"] },
       et._el_overlay,
+      et._el_progress,
       et._el_table_wrapper,
       et._el_toolbar
     );
@@ -397,6 +419,9 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtons() {
     const et = this;
+    if (!et._table_ready) {
+      return;
+    }
     et.updateButtonsGeom();
     clearTimeout(et._id_to_buttons);
     et._id_to_buttons = setTimeout((_) => {
@@ -571,6 +596,7 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Update table layout : minimize buttons, table resize,
    * e.g. after container change
+   * NOTE: too sketchy with requestAnimationFrame..
    */
   updateLayout() {
     const et = this;
@@ -653,6 +679,27 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
+   * Global progress management
+   */
+  setProgress(percent) {
+    const et = this;
+    et._progress.update(percent);
+    if (percent === 0) {
+      if (et._in_progress) {
+        et._in_progress = false;
+        et.updateButtons();
+      }
+      et._el_progress.classList.remove("active");
+    } else {
+      if (!et._in_progress) {
+        et._in_progress = true;
+        et.updateButtons();
+      }
+      et._el_progress.classList.add("active");
+    }
+  }
+
+  /**
    * Initial table render
    * @param {EditTableData} table Table object
    */
@@ -673,16 +720,10 @@ export class EditTableSessionClient extends WsToolsBase {
 
     if (table.start) {
       et._init_data.length = 0;
-      const col = theme.getColorThemeItem("mx_ui_link");
-      et._radial_progress = new RadialProgress(et._el_table, {
-        radius: 30,
-        stroke: 4,
-        strokeColor: col,
-      });
     }
 
     const percent = (table.part / table.nParts) * 100;
-    et._radial_progress.update(percent);
+    et.setProgress(percent);
     et._init_data.push(...table.data);
 
     if (!table.end) {
@@ -802,9 +843,7 @@ export class EditTableSessionClient extends WsToolsBase {
     /**
      * Clear progress
      */
-    if (et._radial_progress instanceof RadialProgress) {
-      et._radial_progress.destroy();
-    }
+    et.setProgress(0);
 
     /**
      * Fire on ready cb, if any
@@ -1899,12 +1938,27 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Geometry tools
    */
-  async geomValidate() {
+  async geomValidate(opt) {
     const et = this;
+    if (et.locked) {
+      return;
+    }
+    const r = et._config.routes;
+    const def = { use_cache: true };
+    opt = Object.assign({}, def, opt);
+    et.emit(r.client_geom_validate, opt);
   }
 
   async geomFix() {
     const et = this;
+    if (et.locked) {
+      return;
+    }
+    const r = et._config.routes;
+    const def = { use_cache: true };
+    opt = Object.assign({}, def, opt);
+    et.emit(r.client_geom_fix, opt);
+    et.on();
   }
 
   /**
@@ -1914,6 +1968,9 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   _button_enable(elBtn, enable) {
     const et = this;
-    return buttonEnable(elBtn, et._disabled ? false : enable);
+    return buttonEnable(
+      elBtn,
+      et._disabled || et._in_progress ? false : enable
+    );
   }
 }

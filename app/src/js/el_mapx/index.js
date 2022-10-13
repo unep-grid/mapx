@@ -423,7 +423,13 @@ function elButtonIcon(key, opt) {
         ? el("span", { class: ["badge"] }, `${opt.badgeContent}`)
         : false,
       addText ? elSpanTranslate(key) : false,
-      addIcon ? el("i", { class: ["fa", opt.icon] }) : false,
+      addIcon
+        ? el(
+            "div",
+            { class: "btn-icon-wrapper" },
+            el("i", { class: ["fa", opt.icon] })
+          )
+        : false,
       addContent ? opt.content : false,
     ]
   );

@@ -7,4 +7,7 @@
   position: absolute !important;
   z-index: 100;
   background: none !important;
+  pointer-events: none;
+  top: 0;
+  left: 0;
 }

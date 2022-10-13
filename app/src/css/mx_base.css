@@ -603,7 +603,12 @@ picture {
 .btn > span {
   pointer-events: none;
 }
-
+.btn-icon-wrapper {
+  height: 100%;
+  width: 100%;
+  display: inline;
+  position: relative;
+}
 .btn-circle {
   position: relative;
   border-radius: 50%;
