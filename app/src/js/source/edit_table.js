@@ -33,6 +33,7 @@ import {
 import "./edit_table.types.js";
 import "./edit_table.less";
 const defaults = {
+  log_perf: false,//def from ws_tools
   id_table: null,
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
@@ -382,8 +383,6 @@ export class EditTableSessionClient extends WsToolsBase {
       strokeColor: col,
     });
 
-    window._et = et;
-
     et._el_content = el(
       "div",
       { class: ["mx_handsontable", "edit-table--container"] },
@@ -419,17 +418,20 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtons() {
     const et = this;
-    if (!et._table_ready) {
-      return;
-    }
-    et.updateButtonsGeom();
+
     clearTimeout(et._id_to_buttons);
     et._id_to_buttons = setTimeout((_) => {
+      if (!et._table_ready) {
+        return;
+      }
+      et.perf("update_buttons");
+      et.updateButtonsGeom();
       et.updateButtonSave();
       et.updateUpdatesCounter();
       et.updateButtonsUndoRedo();
       et.updateButtonsAddRemoveColumn();
-    }, 100);
+      et.perfEnd("update_buttons");
+    }, 200);
   }
 
   /**
