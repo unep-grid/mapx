@@ -1481,18 +1481,18 @@
   },
   {
     "id": "edit_table_modal_select_title",
-    "en": "Select table",
-    "ar": "حدد الجدول"
+    "en": "Select source",
+    "ar": "اختر مصدر"
   },
   {
     "id": "edit_table_modal_select_label",
-    "en": "Select table to edit",
-    "ar": "حدد الجدول لتحريره"
+    "en": "Select source to edit",
+    "ar": "حدد المصدر لتحريره"
   },
   {
     "id": "edit_table_modal_title",
-    "en": "Edit table {{title}}",
-    "ar": "تحرير الجدول {{title}}"
+    "en": "Edit source {{title}}",
+    "ar": "تحرير المصدر {{title}}"
   },
   {
     "id": "btn_edit_geom_validate",
@@ -2351,8 +2351,8 @@
   },
   {
     "id": "btn_edit_source_attributes_table",
-    "en": "Edit source attributes table",
-    "ar": "تحرير جدول سمات المصدر"
+    "en": "Edit vector source",
+    "ar": "تحرير مصدر المتجه"
   },
   {
     "id": "btn_finish",
@@ -3733,36 +3733,6 @@
     "id": "source_services",
     "en": "Services",
     "ar": "خدمات "
-  },
-  {
-    "id": "source_validate_title",
-    "en": "Geometry validation tool",
-    "ar": "أداة التحقق من صحة الهندسة "
-  },
-  {
-    "id": "source_validate_geom_show_expert_options",
-    "en": "Show expert options",
-    "ar": "عرض خيارات الخبراء "
-  },
-  {
-    "id": "source_validate_geom_analyze",
-    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
-    "ar": "نفذ \"ANALYZE\" على هذه الطبقة ، والتي ستحدث إحصائيات PostgreSQL"
-  },
-  {
-    "id": "source_validate_geom_use_cache",
-    "en": "Use cached results – if any – instead of recalculate",
-    "ar": "استخدم النتائج المخزنة مؤقتًا - إن وجدت - بدلاً من إعادة الحساب "
-  },
-  {
-    "id": "source_validate_geom_auto_correct",
-    "en": "Try an automatic correction ( experimental )",
-    "ar": "جرب التصحيح التلقائي (تجريبي) "
-  },
-  {
-    "id": "source_validate_geom_auto_correct_info",
-    "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
-    "ar": "تحذير ، هذا يمكن أن يغير الهندسة. بالنسبة للمضلعات (المتعددة) ، يستخدم التصحيح التلقائي مخزنًا مؤقتًا من 0 حول كل معلم. بالنسبة للأنواع الأخرى ، يتم استخدام ST_MakeValid. "
   },
   {
     "id": "download_select_format_vector",

@@ -1481,18 +1481,18 @@
   },
   {
     "id": "edit_table_modal_select_title",
-    "en": "Select table",
-    "zh": "选择表"
+    "en": "Select source",
+    "zh": "选择来源"
   },
   {
     "id": "edit_table_modal_select_label",
-    "en": "Select table to edit",
-    "zh": "选择要编辑的表"
+    "en": "Select source to edit",
+    "zh": "选择要编辑的来源"
   },
   {
     "id": "edit_table_modal_title",
-    "en": "Edit table {{title}}",
-    "zh": "编辑表格 {{title}}"
+    "en": "Edit source {{title}}",
+    "zh": "编辑源 {{title}}"
   },
   {
     "id": "btn_edit_geom_validate",
@@ -2351,8 +2351,8 @@
   },
   {
     "id": "btn_edit_source_attributes_table",
-    "en": "Edit source attributes table",
-    "zh": "编辑源属性表"
+    "en": "Edit vector source",
+    "zh": "编辑矢量源"
   },
   {
     "id": "btn_finish",
@@ -3733,36 +3733,6 @@
     "id": "source_services",
     "en": "Services",
     "zh": "服务"
-  },
-  {
-    "id": "source_validate_title",
-    "en": "Geometry validation tool",
-    "zh": "几何验证工具"
-  },
-  {
-    "id": "source_validate_geom_show_expert_options",
-    "en": "Show expert options",
-    "zh": "显示专家选项"
-  },
-  {
-    "id": "source_validate_geom_analyze",
-    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
-    "zh": "在这一层上执行“ANALYZE”，这将更新 PostgreSQL 统计信息"
-  },
-  {
-    "id": "source_validate_geom_use_cache",
-    "en": "Use cached results – if any – instead of recalculate",
-    "zh": "使用缓存结果（如有）而不是重新计算"
-  },
-  {
-    "id": "source_validate_geom_auto_correct",
-    "en": "Try an automatic correction ( experimental )",
-    "zh": "尝试自动更正（实验版）"
-  },
-  {
-    "id": "source_validate_geom_auto_correct_info",
-    "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
-    "zh": "警告，这可能会改变几何形状。对于（多个）多边形，自动更正会在每个要素周围使用大小为0的缓冲。对于其他类型，将使用ST_MakeValid。"
   },
   {
     "id": "download_select_format_vector",

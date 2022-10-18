@@ -1481,18 +1481,18 @@
   },
   {
     "id": "edit_table_modal_select_title",
-    "en": "Select table",
-    "fa": "جدول را انتخاب کنید"
+    "en": "Select source",
+    "fa": "منبع را انتخاب کنید"
   },
   {
     "id": "edit_table_modal_select_label",
-    "en": "Select table to edit",
-    "fa": "جدول را برای ویرایش انتخاب کنید"
+    "en": "Select source to edit",
+    "fa": "منبع را برای ویرایش انتخاب کنید"
   },
   {
     "id": "edit_table_modal_title",
-    "en": "Edit table {{title}}",
-    "fa": "ویرایش جدول {{title}}"
+    "en": "Edit source {{title}}",
+    "fa": "ویرایش منبع {{title}}"
   },
   {
     "id": "btn_edit_geom_validate",
@@ -2351,8 +2351,8 @@
   },
   {
     "id": "btn_edit_source_attributes_table",
-    "en": "Edit source attributes table",
-    "fa": "جدول ویژگی های منبع را ویرایش کنید"
+    "en": "Edit vector source",
+    "fa": "ویرایش منبع برداری"
   },
   {
     "id": "btn_finish",
@@ -3733,36 +3733,6 @@
     "id": "source_services",
     "en": "Services",
     "fa": "خدمات "
-  },
-  {
-    "id": "source_validate_title",
-    "en": "Geometry validation tool",
-    "fa": "ابزار اعتبارسنجی هندسه "
-  },
-  {
-    "id": "source_validate_geom_show_expert_options",
-    "en": "Show expert options",
-    "fa": "گزینه های متخصص را نشان دهید "
-  },
-  {
-    "id": "source_validate_geom_analyze",
-    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
-    "fa": "\"ANALYZE\" را در این لایه انجام دهید، که آمار PostgreSQL را به روز می کند"
-  },
-  {
-    "id": "source_validate_geom_use_cache",
-    "en": "Use cached results – if any – instead of recalculate",
-    "fa": "به جای محاسبه مجدد ، از نتایج ذخیره شده - در صورت وجود - استفاده کنید "
-  },
-  {
-    "id": "source_validate_geom_auto_correct",
-    "en": "Try an automatic correction ( experimental )",
-    "fa": "تصحیح خودکار (آزمایشی) را امتحان کنید "
-  },
-  {
-    "id": "source_validate_geom_auto_correct_info",
-    "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
-    "fa": "هشدار ، این می تواند هندسه را تغییر دهد. برای چند ضلعی ها (چند) ، تصحیح خودکار از یک بافر 0 در اطراف هر ویژگی استفاده می کند. برای انواع دیگر ، از ST_MakeValid استفاده می شود. "
   },
   {
     "id": "download_select_format_vector",

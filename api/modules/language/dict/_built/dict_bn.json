@@ -1481,18 +1481,18 @@
   },
   {
     "id": "edit_table_modal_select_title",
-    "en": "Select table",
-    "bn": "টেবিল নির্বাচন করুন"
+    "en": "Select source",
+    "bn": "উৎস নির্বাচন করুন"
   },
   {
     "id": "edit_table_modal_select_label",
-    "en": "Select table to edit",
-    "bn": "সম্পাদনা করতে টেবিল নির্বাচন করুন"
+    "en": "Select source to edit",
+    "bn": "সম্পাদনা করতে উৎস নির্বাচন করুন"
   },
   {
     "id": "edit_table_modal_title",
-    "en": "Edit table {{title}}",
-    "bn": "টেবিল সম্পাদনা করুন {{title}}"
+    "en": "Edit source {{title}}",
+    "bn": "উৎস সম্পাদনা করুন {{title}}"
   },
   {
     "id": "btn_edit_geom_validate",
@@ -2351,8 +2351,8 @@
   },
   {
     "id": "btn_edit_source_attributes_table",
-    "en": "Edit source attributes table",
-    "bn": "উত্স বৈশিষ্ট্য টেবিল সম্পাদনা করুন"
+    "en": "Edit vector source",
+    "bn": "ভেক্টর উৎস সম্পাদনা করুন"
   },
   {
     "id": "btn_finish",
@@ -3733,36 +3733,6 @@
     "id": "source_services",
     "en": "Services",
     "bn": "সেবা "
-  },
-  {
-    "id": "source_validate_title",
-    "en": "Geometry validation tool",
-    "bn": "জ্যামিতি বৈধতা সরঞ্জাম "
-  },
-  {
-    "id": "source_validate_geom_show_expert_options",
-    "en": "Show expert options",
-    "bn": "বিশেষজ্ঞের বিকল্পগুলি দেখান "
-  },
-  {
-    "id": "source_validate_geom_analyze",
-    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
-    "bn": "এই স্তরে 'ANALYZE' সম্পাদন করুন, যা PostgreSQL পরিসংখ্যান আপডেট করবে"
-  },
-  {
-    "id": "source_validate_geom_use_cache",
-    "en": "Use cached results – if any – instead of recalculate",
-    "bn": "পুনরায় গণনার পরিবর্তে ক্যাশেড ফলাফলগুলি - যদি থাকে তবে - ব্যবহার করুন "
-  },
-  {
-    "id": "source_validate_geom_auto_correct",
-    "en": "Try an automatic correction ( experimental )",
-    "bn": "একটি স্বয়ংক্রিয় সংশোধন চেষ্টা করুন (পরীক্ষামূলক) "
-  },
-  {
-    "id": "source_validate_geom_auto_correct_info",
-    "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
-    "bn": "সতর্কতা, এটি জ্যামিতির পরিবর্তন করতে পারে। (বহু) বহুভুজগুলির জন্য, স্বয়ংক্রিয় সংশোধন প্রতিটি বৈশিষ্ট্যের চারপাশে 0 এর একটি বাফার ব্যবহার করে। অন্যান্য ধরণের জন্য, এসT_ মেকভালিড ব্যবহার করা হয়। "
   },
   {
     "id": "download_select_format_vector",

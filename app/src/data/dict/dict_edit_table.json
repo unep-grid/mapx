@@ -1,7 +1,7 @@
 [
   {
     "id": "edit_table_modal_select_title",
-    "en": "Select table",
+    "en": "Select source",
     "fr": "",
     "es": "",
     "ru": "",
@@ -14,7 +14,7 @@
   },
   {
     "id": "edit_table_modal_select_label",
-    "en": "Select table to edit",
+    "en": "Select source to edit",
     "fr": "",
     "es": "",
     "ru": "",
@@ -27,7 +27,7 @@
   },
   {
     "id": "edit_table_modal_title",
-    "en": "Edit table {{title}}",
+    "en": "Edit source {{title}}",
     "fr": "",
     "es": "",
     "ru": "",

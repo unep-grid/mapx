@@ -1481,18 +1481,18 @@
   },
   {
     "id": "edit_table_modal_select_title",
-    "en": "Select table",
-    "fr": "Sélectionnez le tableau"
+    "en": "Select source",
+    "fr": "Sélectionner la source"
   },
   {
     "id": "edit_table_modal_select_label",
-    "en": "Select table to edit",
-    "fr": "Sélectionnez le tableau à modifier"
+    "en": "Select source to edit",
+    "fr": "Sélectionnez la source à modifier"
   },
   {
     "id": "edit_table_modal_title",
-    "en": "Edit table {{title}}",
-    "fr": "Modifier le tableau {{title}}"
+    "en": "Edit source {{title}}",
+    "fr": "Modifier la source {{title}}"
   },
   {
     "id": "btn_edit_geom_validate",
@@ -2351,8 +2351,8 @@
   },
   {
     "id": "btn_edit_source_attributes_table",
-    "en": "Edit source attributes table",
-    "fr": "Éditer la table attributaire d'une source"
+    "en": "Edit vector source",
+    "fr": "Éditer une source vectorielle"
   },
   {
     "id": "btn_finish",
@@ -3733,36 +3733,6 @@
     "id": "source_services",
     "en": "Services",
     "fr": "Services"
-  },
-  {
-    "id": "source_validate_title",
-    "en": "Geometry validation tool",
-    "fr": "Outil de validation des géometries"
-  },
-  {
-    "id": "source_validate_geom_show_expert_options",
-    "en": "Show expert options",
-    "fr": "Afficher les options pour experts"
-  },
-  {
-    "id": "source_validate_geom_analyze",
-    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
-    "fr": "Effectuez « ANALYSE » sur cette couche, ce qui mettra à jour les statistiques de PostgreSQL"
-  },
-  {
-    "id": "source_validate_geom_use_cache",
-    "en": "Use cached results – if any – instead of recalculate",
-    "fr": "Utiliser les résultat en cache – si existant – au lieu de recalculer"
-  },
-  {
-    "id": "source_validate_geom_auto_correct",
-    "en": "Try an automatic correction ( experimental )",
-    "fr": "Tenter une correction automatique ( expérimental )"
-  },
-  {
-    "id": "source_validate_geom_auto_correct_info",
-    "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
-    "fr": "Attention, l'outil de correction automatique peu altérer les geométries. Pour les polygones, il construit un buffer de 0 autour de chaque objet. Pour les autres types, ST_MakeValid est utilisé."
   },
   {
     "id": "download_select_format_vector",

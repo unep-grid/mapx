@@ -1481,18 +1481,18 @@
   },
   {
     "id": "edit_table_modal_select_title",
-    "en": "Select table",
-    "ru": "Выбрать стол"
+    "en": "Select source",
+    "ru": "Выберите источник"
   },
   {
     "id": "edit_table_modal_select_label",
-    "en": "Select table to edit",
-    "ru": "Выберите таблицу для редактирования"
+    "en": "Select source to edit",
+    "ru": "Выберите источник для редактирования"
   },
   {
     "id": "edit_table_modal_title",
-    "en": "Edit table {{title}}",
-    "ru": "Изменить таблицу {{title}}"
+    "en": "Edit source {{title}}",
+    "ru": "Изменить источник {{title}}"
   },
   {
     "id": "btn_edit_geom_validate",
@@ -2351,8 +2351,8 @@
   },
   {
     "id": "btn_edit_source_attributes_table",
-    "en": "Edit source attributes table",
-    "ru": "Изменить таблицу исходных атрибутов"
+    "en": "Edit vector source",
+    "ru": "Редактировать векторный источник"
   },
   {
     "id": "btn_finish",
@@ -3733,36 +3733,6 @@
     "id": "source_services",
     "en": "Services",
     "ru": "Услуги "
-  },
-  {
-    "id": "source_validate_title",
-    "en": "Geometry validation tool",
-    "ru": "Инструмент проверки геометрии "
-  },
-  {
-    "id": "source_validate_geom_show_expert_options",
-    "en": "Show expert options",
-    "ru": "Показать параметры эксперта "
-  },
-  {
-    "id": "source_validate_geom_analyze",
-    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
-    "ru": "Выполните ANALYZE на этом слое, чтобы обновить статистику PostgreSQL."
-  },
-  {
-    "id": "source_validate_geom_use_cache",
-    "en": "Use cached results – if any – instead of recalculate",
-    "ru": "Использовать кешированные результаты - если они есть - вместо пересчета "
-  },
-  {
-    "id": "source_validate_geom_auto_correct",
-    "en": "Try an automatic correction ( experimental )",
-    "ru": "Попробуйте автоматическую коррекцию (экспериментальную) "
-  },
-  {
-    "id": "source_validate_geom_auto_correct_info",
-    "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
-    "ru": "Предупреждение, это может изменить геометрию. Для (мульти) полигонов автоматическая коррекция использует буфер 0 вокруг каждого объекта. Для других типов используется ST_MakeValid. "
   },
   {
     "id": "download_select_format_vector",

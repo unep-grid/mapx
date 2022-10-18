@@ -1481,18 +1481,18 @@
   },
   {
     "id": "edit_table_modal_select_title",
-    "en": "Select table",
-    "es": "Seleccionar tabla"
+    "en": "Select source",
+    "es": "Seleccionar fuente"
   },
   {
     "id": "edit_table_modal_select_label",
-    "en": "Select table to edit",
-    "es": "Seleccionar tabla para editar"
+    "en": "Select source to edit",
+    "es": "Seleccionar fuente para editar"
   },
   {
     "id": "edit_table_modal_title",
-    "en": "Edit table {{title}}",
-    "es": "editar tabla {{title}}"
+    "en": "Edit source {{title}}",
+    "es": "Editar fuente {{title}}"
   },
   {
     "id": "btn_edit_geom_validate",
@@ -2351,8 +2351,8 @@
   },
   {
     "id": "btn_edit_source_attributes_table",
-    "en": "Edit source attributes table",
-    "es": "Editar la tabla de atributos de una fuente"
+    "en": "Edit vector source",
+    "es": "Editar vector fuente"
   },
   {
     "id": "btn_finish",
@@ -3733,36 +3733,6 @@
     "id": "source_services",
     "en": "Services",
     "es": "Servicios"
-  },
-  {
-    "id": "source_validate_title",
-    "en": "Geometry validation tool",
-    "es": "Herramienta de validación de geometrías"
-  },
-  {
-    "id": "source_validate_geom_show_expert_options",
-    "en": "Show expert options",
-    "es": "Mostrar opciones avanzadas"
-  },
-  {
-    "id": "source_validate_geom_analyze",
-    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
-    "es": "Realice 'ANALYZE` en esta capa, que actualizará las estadísticas de PostgreSQL"
-  },
-  {
-    "id": "source_validate_geom_use_cache",
-    "en": "Use cached results – if any – instead of recalculate",
-    "es": "Utilizar resultados en caché, si hay, en lugar recalcular"
-  },
-  {
-    "id": "source_validate_geom_auto_correct",
-    "en": "Try an automatic correction ( experimental )",
-    "es": "Intentar una corrección automática (experimental)"
-  },
-  {
-    "id": "source_validate_geom_auto_correct_info",
-    "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
-    "es": "Advertencia, esto podría alterar la geometría. Para (multi) polígonos, la corrección automática utiliza un búfer de 0 alrededor de cada objeto. Para otros tipos, se utiliza ST_MakeValid"
   },
   {
     "id": "download_select_format_vector",

@@ -1481,18 +1481,18 @@
   },
   {
     "id": "edit_table_modal_select_title",
-    "en": "Select table",
-    "ps": "میز غوره کړئ"
+    "en": "Select source",
+    "ps": "سرچینه وټاکئ"
   },
   {
     "id": "edit_table_modal_select_label",
-    "en": "Select table to edit",
-    "ps": "د سمون لپاره جدول غوره کړئ"
+    "en": "Select source to edit",
+    "ps": "د ترمیم لپاره سرچینه وټاکئ"
   },
   {
     "id": "edit_table_modal_title",
-    "en": "Edit table {{title}}",
-    "ps": "جدول تدوین کړئ {{title}}"
+    "en": "Edit source {{title}}",
+    "ps": "سرچینه ترمیم کړئ {{title}}"
   },
   {
     "id": "btn_edit_geom_validate",
@@ -2351,8 +2351,8 @@
   },
   {
     "id": "btn_edit_source_attributes_table",
-    "en": "Edit source attributes table",
-    "ps": "د سرچینې ځانګړتیاو جدول ایډیټ کړئ"
+    "en": "Edit vector source",
+    "ps": "د ویکتور سرچینه ایډیټ کړئ"
   },
   {
     "id": "btn_finish",
@@ -3733,36 +3733,6 @@
     "id": "source_services",
     "en": "Services",
     "ps": "خدمتونه "
-  },
-  {
-    "id": "source_validate_title",
-    "en": "Geometry validation tool",
-    "ps": "د جیومیټری تایید کولو وسیله "
-  },
-  {
-    "id": "source_validate_geom_show_expert_options",
-    "en": "Show expert options",
-    "ps": "د ماهر اختیارونه وښایاست "
-  },
-  {
-    "id": "source_validate_geom_analyze",
-    "en": "Perform 'ANALYZE` on this layer, which will update PostgreSQL stats",
-    "ps": "په دې پرت کې 'ANALYZE' ترسره کړئ، کوم چې به د PostgreSQL احصایې تازه کړي"
-  },
-  {
-    "id": "source_validate_geom_use_cache",
-    "en": "Use cached results – if any – instead of recalculate",
-    "ps": "د محاسبې پرځای زیرمه شوي پایلې - که کوم دي - وکاروئ "
-  },
-  {
-    "id": "source_validate_geom_auto_correct",
-    "en": "Try an automatic correction ( experimental )",
-    "ps": "د اتوماتیک سمون هڅه وکړئ (تجربوي) "
-  },
-  {
-    "id": "source_validate_geom_auto_correct_info",
-    "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
-    "ps": "خبرداری ، دا ممکن جیومیٹری بدل کړي. د (څو) ګgو ګو ،و لپاره ، اتوماتیک سمون د هرې ب aroundې په شاوخوا کې د 0 بفر کاروي. د نورو ډولونو لپاره ، ST_MakeValid کارول شوی. "
   },
   {
     "id": "download_select_format_vector",
