@@ -551,6 +551,10 @@ export function modalPrompt(opt) {
       max: 1000,
       value: 10,
       id: Math.random().toString(32),
+      checkboxValues: {
+        true: true,
+        false: false,
+      },
     },
     inputChildren: [],
     selectAutoOptions: null,
@@ -575,11 +579,24 @@ export function modalPrompt(opt) {
       { for: opt.inputOptions.id },
       el("div", opt.label || "Enter a value")
     );
+
     const elInputGroup = el("div", { class: "form-group" }, [elLabel, elInput]);
+
+    if (opt.desc) {
+      const elDesc = el(
+        "div",
+        { class: ["text-muted", "help-box"], for: opt.inputOptions.id },
+        opt.desc
+      );
+      elInputGroup.appendChild(elDesc);
+    }
 
     if (isCheckbox) {
       elInputGroup.className = "checkbox";
       elLabel.prepend(elInput);
+      if (opt.inputOptions.value) {
+        elInput.setAttribute("checked", true);
+      }
     }
     if (isSelectAuto) {
       opt.selectAutoOptions.target = elInput;
@@ -617,10 +634,14 @@ export function modalPrompt(opt) {
         class: "btn btn-default",
         on: {
           click: () => {
-            if (elBtnConfirm.disabled) {
+            const disabled = elBtnConfirm.getAttribute("disabled") === "true";
+            if (disabled) {
               return;
             }
-            resolve(elInput.value);
+            const value = isCheckbox
+              ? opt.inputOptions.checkboxValues[elInput.checked]
+              : elInput.value;
+            resolve(value);
             if (selectAuto instanceof SelectAuto) {
               selectAuto.destroy();
             }
@@ -633,7 +654,9 @@ export function modalPrompt(opt) {
 
     if (opt.onInput instanceof Function) {
       elInput.addEventListener("input", () => {
-        const value = isCheckbox ? elInput.checked : elInput.value;
+        const value = isCheckbox
+          ? opt.inputOptions.checkboxValues[elInput.checked]
+          : elInput.value;
         opt.onInput(value, elBtnConfirm, elMessage);
       });
 

@@ -1,7 +1,12 @@
-var settings = {
-  radius: 100,
-  stroke: 2,
-  strokeColor: 'rgba(53,53,53,0.5)'
+const settings = {
+  radius: 30,
+  stroke: 5,
+  strokeColor: "red",
+  trackColor: "rgba(200,200,200,0.6)",
+  fontHeight: 20,
+  fontFamily: "sans-serif",
+  addTrack: false,
+  addText: false,
 };
 
-export {settings};
+export { settings };

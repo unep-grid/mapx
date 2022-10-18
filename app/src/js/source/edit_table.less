@@ -24,9 +24,10 @@
     top: 0px;
     pointer-events: none;
     &.active {
-      backdrop-filter: blur(1px);
+      backdrop-filter: blur(2px);// lisibility of progress text
       z-index: 800;
       pointer-events: auto;
+      background: var(--mx_ui_background_transparent);
     }
   }
   .edit-table--overlay {

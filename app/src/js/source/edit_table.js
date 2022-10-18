@@ -33,7 +33,7 @@ import {
 import "./edit_table.types.js";
 import "./edit_table.less";
 const defaults = {
-  log_perf: false,//def from ws_tools
+  log_perf: false, //def from ws_tools
   id_table: null,
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
@@ -53,15 +53,13 @@ const defaults = {
     server_member_exit: "/server/source/edit/table/member_exit",
     server_table_data: "/server/source/edit/table/data",
     server_dispatch: "/server/source/edit/table/dispatch",
-    server_geom_fix: "/server/source/edit/table/geom/fix",
-    server_geom_validate: "/server/source/edit/table/geom/validate",
+    server_progress: "/server/source/edit/table/progress",
     /**
      * here to server
      */
     client_edit_start: "/client/source/edit/table",
     client_edit_updates: "/client/source/edit/table/update",
     client_exit: "/client/source/edit/table/exit",
-    client_geom_fix: "/client/source/edit/table/geom/fix",
     client_geom_validate: "/client/source/edit/table/geom/validate",
   },
   id_source_dispatch: "from_dispatch",
@@ -156,6 +154,8 @@ export class EditTableSessionClient extends WsToolsBase {
       et._socket.on(r.server_member_exit, et.onMemberExit);
       et._socket.on(r.server_table_data, et.initTable);
       et._socket.on(r.server_dispatch, et.onDispatch);
+      et._socket.on(r.server_progress, et.onProgress);
+
       et._socket.on("disconnect", et.onDisconnect);
       await et.dialogWarning();
 
@@ -245,6 +245,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et._socket.off(r.server_member_exit, et.onMemberExit);
       et._socket.off(r.server_table_data, et.initTable);
       et._socket.off(r.server_dispatch, et.onDispatch);
+      et._socket.off(r.server_progress, et.onProgress);
       et._socket.off("disconnect", et.onDisconnect);
       await et.fire("destroy");
     } catch (e) {
@@ -308,7 +309,7 @@ export class EditTableSessionClient extends WsToolsBase {
      */
     et._el_button_geom_repair = elButtonFa("btn_edit_geom_repair", {
       icon: "user-md",
-      action: et.geomFix,
+      action: et.geomRepair,
     });
     /**
      * User stat
@@ -378,10 +379,13 @@ export class EditTableSessionClient extends WsToolsBase {
     });
     const col = theme.getColorThemeItem("mx_ui_link");
     et._progress = new RadialProgress(et._el_progress, {
-      radius: 30,
+      radius: 60,
       stroke: 4,
       strokeColor: col,
+      addTrack: true,
+      addText: true,
     });
+    window._et = et;
 
     et._el_content = el(
       "div",
@@ -683,10 +687,13 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Global progress management
    */
-  setProgress(percent) {
+  setProgress(percent, text) {
     const et = this;
-    et._progress.update(percent);
+    text = text || "";
+    et._progress.update(percent, text);
+
     if (percent === 0) {
+      et._progress.clear();
       if (et._in_progress) {
         et._in_progress = false;
         et.updateButtons();
@@ -699,6 +706,14 @@ export class EditTableSessionClient extends WsToolsBase {
       }
       et._el_progress.classList.add("active");
     }
+  }
+  /**
+   * Progress from server
+   */
+  onProgress(message) {
+    const et = this;
+    const percent = Math.ceil(message.percent * 100);
+    et.setProgress(percent);
   }
 
   /**
@@ -923,6 +938,31 @@ export class EditTableSessionClient extends WsToolsBase {
   onMemberExit(message) {
     const et = this;
     et.updateMembers(message.members);
+  }
+
+  /**
+   * Long process on server
+   */
+  omProgress(message) {
+    const et = this;
+
+    if (message.id_table !== et._id_table) {
+      return;
+    }
+
+    if (message.percent) {
+      et.setProgress(message.percent);
+    }
+
+    switch (message.type) {
+      case "validate":
+        if (message?.data?.mx_valid) {
+          // update table
+        }
+        break;
+      default:
+        null;
+    }
   }
 
   /**
@@ -1152,8 +1192,10 @@ export class EditTableSessionClient extends WsToolsBase {
      */
     const confirmRemove = await modalPrompt({
       title: tt("edit_table_modal_remove_column_confirm_title"),
-      label: getDictTemplate("edit_table_modal_remove_column_confirm_text", {
-        column_name: columnToRemove,
+      label: tt("edit_table_modal_remove_column_confirm_text", {
+        data: {
+          column_name: columnToRemove,
+        },
       }),
       confirm: tt("btn_edit_table_modal_remove_column_confirm"),
       inputTag: "input",
@@ -1946,21 +1988,44 @@ export class EditTableSessionClient extends WsToolsBase {
       return;
     }
     const r = et._config.routes;
-    const def = { use_cache: true };
+    const choice = await et.dialogUseCache();
+    if (!choice) {
+      return;
+    }
+    const def = { use_cache: choice === "cache", autoCorrect: false };
     opt = Object.assign({}, def, opt);
     et.emit(r.client_geom_validate, opt);
   }
 
-  async geomFix() {
+  async geomRepair(opt) {
     const et = this;
     if (et.locked) {
       return;
     }
-    const r = et._config.routes;
-    const def = { use_cache: true };
+    const useCache = await et.dialogUseCache();
+    const def = { use_cache: useCache, autoCorrect: true };
     opt = Object.assign({}, def, opt);
-    et.emit(r.client_geom_fix, opt);
-    et.on();
+    await et.geomValidate(opt);
+  }
+
+  async dialogUseCache() {
+    const choice = await modalPrompt({
+      title: tt("edit_table_modal_validate_use_cache_title"),
+      label: tt("edit_table_modal_validate_use_cache_label"),
+      desc: tt("edit_table_modal_validate_use_cache_desc"),
+      confirm: tt("btn_validate_use_cache_continue"),
+      inputTag: "input",
+      inputOptions: {
+        type: "checkbox",
+        value: true,
+        class: [], // "form-control" produce glitches
+        checkboxValues: {
+          true: "cache",
+          false: "no_cache",
+        },
+      },
+    });
+    return choice;
   }
 
   /**

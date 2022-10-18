@@ -1,5 +1,5 @@
 import { pgRead, pgWrite } from "#mapx/db";
-import { isArray } from "@fxi/mx_valid";
+import { isArray, isFunction, isObject } from "@fxi/mx_valid";
 import { toBoolean } from "#mapx/helpers";
 import { analyzeSource, getLayerTitle } from "./index.js";
 import { settings } from "#root/settings";
@@ -11,7 +11,7 @@ const idGeomId = def.tables.layer_id_col;
 
 /**
  * Check for layer geom validity
- * @param {String} idLayer id of the layer to check
+ * @param {String | Object} idLayer id of the layer to check OR config object
  * @param {Boolean} useCache Use cache
  * @param {Boolean} autoCorrect Try an automatic correction
  * @param {Boolean} autoCorrect Try an automatic correction
@@ -22,14 +22,28 @@ export async function isLayerValid(
   useCache,
   autoCorrect,
   analyze,
-  validate
+  validate,
+  onProgress
 ) {
+  /**
+   * Allow config object as first argument
+   */
+  if (isObject(idLayer)) {
+    const opt = idLayer;
+    idLayer = opt.idLayer;
+    useCache = opt.useCache;
+    analyze = opt.analyze;
+    validate = opt.validate;
+    autoCorrect = opt.autoCorrect;
+    onProgress = opt.onProgress;
+  }
+
   useCache = toBoolean(useCache, true);
   autoCorrect = toBoolean(autoCorrect, false);
   analyze = toBoolean(analyze, true);
   validate = toBoolean(validate, true);
   const title = await getLayerTitle(idLayer);
-
+  const withProgress = isFunction(onProgress);
   /**
    * Add validation column (cache)
    */
@@ -119,16 +133,23 @@ export async function isLayerValid(
    */
   await pgWrite.query(sqlNewColumn);
 
+  /*
+   * Using with progress, loop over gid.
+   * TODO: check if there is a better way..
+   */
+  const gids = withProgress ? await getGids(idLayer) : [];
+
   /**
    * Validate
    * - With cache : validate only if 'null'
    * - Without caceh : always validate
    */
-  if (validate) {
-    if (!useCache) {
-      await pgWrite.query(sqlValidate);
+  if (validate && !autoCorrect) {
+    const sqlV = useCache ? sqlValidateCache : sqlValidate;
+    if (withProgress) {
+      await _req_prog("validate", sqlV, gids, onProgress);
     } else {
-      await pgWrite.query(sqlValidateCache);
+      await pgWrite.query(sqlV);
     }
   }
 
@@ -140,14 +161,17 @@ export async function isLayerValid(
    * - revalidate
    */
   if (validate && autoCorrect) {
-    //console.log("Start world correction");
-    await pgWrite.query(sqlAutoCorrectWorld);
-    //console.log("Re validate after world corrections");
-    await pgWrite.query(sqlValidate);
-    //console.log("Start geom correction");
-    await pgWrite.query(sqlAutoCorrectGeom);
-    //console.log("Re validate after geom corrections");
-    await pgWrite.query(sqlValidate);
+    if (withProgress) {
+      await _req_prog("fix_world", sqlAutoCorrectWorld, gids, onProgress);
+      await _req_prog("validate", sqlValidate, gids, onProgress);
+      await _req_prog("fix_geom", sqlAutoCorrectGeom, gids, onProgress);
+      await _req_prog("validate", sqlValidate, gids, onProgress);
+    } else {
+      await pgWrite.query(sqlAutoCorrectWorld);
+      await pgWrite.query(sqlValidate);
+      await pgWrite.query(sqlAutoCorrectGeom);
+      await pgWrite.query(sqlValidate);
+    }
   }
 
   /**
@@ -225,4 +249,44 @@ async function getStatValidation(idLayer) {
   }
 
   return out;
+}
+
+async function getGids(idLayer) {
+  const sql = `SELECT ${idGeomId} from ${idLayer}`;
+
+  const res = await pgRead.query(sql);
+  const gids = res.rows.map((r) => r.gid);
+  return gids;
+}
+
+/**
+ * Loop over gids list
+ * TODO: find a less idiotic approach
+ * @param {Srring} label Label for onProgress data
+ * @param {String} sql Sql string
+ * @param {Array} gids Array of gids
+ * @param {Function} onProgress callback
+ */
+async function _req_prog(label, sql, gids, onProgress) {
+  let sqlGid = "";
+  let p = 0;
+  const gidsCopy = [...gids];
+  let iL = gidsCopy.length;
+  const chunkSize = 50;
+  if (iL <= chunkSize) {
+    onProgress({ percent: 0.5 , label: label });
+    await pgWrite.query(sqlGid);
+  } else {
+    const groupsL = Math.ceil(iL / chunkSize);
+
+    for (let i = 0; i < groupsL; i++) {
+      p = i / groupsL;
+      onProgress({ percent: p, label: label });
+      const gidGroup = gidsCopy.splice(0, chunkSize);
+
+      const gidTxt = gidGroup.join(","),
+        sqlGid = `${sql} AND ${idGeomId} in (${gidTxt})`;
+      await pgWrite.query(sqlGid);
+    }
+  }
 }

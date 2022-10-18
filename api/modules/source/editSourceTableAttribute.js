@@ -53,11 +53,26 @@ class EditTableSession {
     et._perf = {};
     et._tables = [];
     et._is_authenticated = socket._mx_user_authenticated || false;
+    et._is_busy = false;
     et._id_user = socket._id_user;
     et._id_project = socket._id_project;
     et._user_roles = socket._mx_user_roles || {};
     et.onUpdate = et.onUpdate.bind(et);
     et.onExit = et.onExit.bind(et);
+    et.onValidate = et.onValidate.bind(et);
+    et.progress = et.progress.bind(et);
+  }
+
+  /**
+   * Set busy flag
+   */
+  setBusy(busy) {
+    const et = this;
+    et._busy = busy;
+  }
+  get busy() {
+    const et = this;
+    return !!et._busy;
   }
 
   async setState(key, value) {
@@ -154,6 +169,7 @@ class EditTableSession {
      */
     et._socket.on("/client/source/edit/table/update", et.onUpdate);
     et._socket.on("/client/source/edit/table/exit", et.onExit);
+    et._socket.on("/client/source/edit/table/geom/validate", et.onValidate);
 
     /*
      * Get list of current members
@@ -222,6 +238,7 @@ class EditTableSession {
 
     et._socket.off("/client/source/edit/table/update", et.onUpdate);
     et._socket.off("/client/source/edit/table/exit", et.onExit);
+    et._socket.off("/client/source/edit/table/geom/validate", et.onValidate);
   }
 
   dispatch(message) {
@@ -235,6 +252,34 @@ class EditTableSession {
       return;
     }
     et.destroy();
+  }
+
+  async onValidate(message) {
+    const et = this;
+    try {
+      if (et.busy) {
+        return;
+      }
+      et.setBusy(true);
+      await isLayerValid({
+        idLayer: et._id_table,
+        useCache: message.use_cache,
+        autoCorrect: message.autoCorrect,
+        analyze: message.analyze,
+        validate: message.validate,
+        onProgress: et.progress,
+      });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      et.progress({ percent: 0 });
+      et.setBusy(false);
+    }
+  }
+
+  progress(messageProgress) {
+    const et = this;
+    et.emitAll("/server/source/edit/table/progress", messageProgress);
   }
 
   onUpdate(message) {
@@ -334,19 +379,19 @@ class EditTableSession {
   }
 
   emit(type, data) {
-    /**
-     * This could be huge.. Compress ?
-     */
     const et = this;
     et._socket.emit(type, et.message_formater(data));
   }
 
   emitRoom(type, data) {
-    /**
-     * This should be small : updates, test message...
-     */
     const et = this;
     et._socket.to(et._id_room).emit(type, et.message_formater(data));
+  }
+
+  emitAll(type, data) {
+    const et = this;
+    et.emit(type, data);
+    et.emitRoom(type, data);
   }
 
   /**

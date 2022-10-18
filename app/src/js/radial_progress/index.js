@@ -1,7 +1,8 @@
-import {el} from './../el/src/index.js';
-import {settings} from './settings.js';
-import {onNextFrame} from './../animation_frame/index.js';
-import './style.css';
+import { el } from "./../el/src/index.js";
+import { settings } from "./settings.js";
+import { onNextFrame, cancelFrame } from "./../animation_frame/index.js";
+import { isEmpty } from "./../is_test/index.js";
+import "./style.css";
 /**
  * Build a simple radial progress svg element
  * @param {String|Element} selector  : the container selector or element to insert the progress radial
@@ -25,23 +26,23 @@ class RadialProgress {
 
   destroy() {
     let rp = this;
-    if(rp.elTarget && rp.el){
+    if (rp.elTarget && rp.el) {
       rp.el.remove();
     }
   }
 
   build() {
     let rp = this;
-    rp.elCanvas = el('canvas', {
+    rp.elCanvas = el("canvas", {
       style: {
-        width: rp.opt.radius * 2 + 'px',
-        height: rp.opt.radius * 2 + 'px'
-      }
+        width: rp.opt.radius * 2 + "px",
+        height: rp.opt.radius * 2 + rp.opt.fontHeight * 2 + "px",
+      },
     });
     rp.el = el(
-      'div',
+      "div",
       {
-        class: 'radial-progress'
+        class: "radial-progress",
       },
       rp.elCanvas
     );
@@ -49,27 +50,66 @@ class RadialProgress {
     window.rp = rp;
   }
 
+  circle(percent, color) {
+    const rp = this;
+    rp.ctx.strokeStyle = color || rp.opt.strokeColor;
+    rp.ctx.beginPath();
+    rp.ctx.arc(
+      rp.opt.radius,
+      rp.opt.radius,
+      rp.opt.radius - rp.opt.stroke,
+      0,
+      (percent / 100) * 2 * Math.PI
+    );
+    rp.ctx.stroke();
+  }
+
+  text(text) {
+    const rp = this;
+    text = isEmpty(text) ? `${Math.ceil(rp._p)}%` : text;
+    rp.ctx.fillStyle = rp.opt.strokeColor;
+    rp.ctx.fillText(
+      text,
+      rp.opt.radius,
+      rp.opt.radius + 0.5 * rp.opt.fontHeight,
+      rp.opt.radius * 2
+    );
+  }
+
   updateContext() {
     let rp = this;
     let dpr = window.devicePixelRatio || 1;
     let rect = rp.elCanvas.getBoundingClientRect();
-    rp.elCanvas.width = rect.width * dpr;
-    rp.elCanvas.height = rect.height * dpr;
-    let ctx = rp.elCanvas.getContext('2d');
-    ctx.scale(dpr, dpr);
-    rp.ctx = ctx;
+    rp.elCanvas.width = dpr * rect.width;
+    rp.elCanvas.height = dpr * rect.height;
+    rp.ctx = rp.elCanvas.getContext("2d");
+    rp.ctx.scale(dpr, dpr);
     rp.ctx.lineWidth = rp.opt.stroke;
     rp.ctx.strokeStyle = rp.opt.strokeColor;
+    rp.ctx.fillStyle = rp.opt.trackColor;
+    rp.ctx.textAlign = "center";
+    rp.ctx.font = `bold ${rp.opt.fontHeight}px ${rp.opt.fontFamily}`;
+    rp.ctx.lineCap = "round";
   }
 
-  update(percent) {
-    let rp = this;
-    onNextFrame(() => {
+  update(percent, text) {
+    const rp = this;
+    percent = Math.ceil(percent);
+    cancelFrame(rp._fid);
+    rp._fid = onNextFrame(() => {
+      rp._p = percent;
       rp.updateContext();
-      rp.clear();
-      rp.ctx.beginPath();
-      rp.ctx.arc(rp.opt.radius,rp.opt.radius, rp.opt.radius - rp.opt.stroke, 0, (percent / 100) * 2 * Math.PI);
-      rp.ctx.stroke();
+      rp.clear(percent);
+      if (percent === 0) {
+        return;
+      }
+      if (rp.opt.addTrack) {
+        rp.circle(100, rp.opt.trackColor);
+      }
+      rp.circle(percent);
+      if (rp.opt.addText) {
+        rp.text(text);
+      }
     });
   }
 
@@ -78,4 +118,4 @@ class RadialProgress {
     rp.ctx.clearRect(0, 0, rp.elCanvas.width, rp.elCanvas.height);
   }
 }
-export {RadialProgress};
+export { RadialProgress };
