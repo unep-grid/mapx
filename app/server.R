@@ -142,7 +142,6 @@ server <- function(input, output, session) {
           "tools_source_manage.R",
           "tools_source_edit_table.R",
           "tools_source_overlap.R",
-          "tools_source_validate_geom.R",
           #
           # Views creation
           #

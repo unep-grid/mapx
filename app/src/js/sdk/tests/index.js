@@ -1034,30 +1034,6 @@ mapx.once("ready", async () => {
     ],
   });
 
-  t.check("Tools - validate source geom", {
-    init: async () => {
-      await stopIfGuest();
-      return mapx.ask("show_modal_tool", {
-        tool: "source_validate_geom",
-      });
-    },
-    tests: [
-      {
-        name: "has modal",
-        test: async (ok) => {
-          if (!ok) {
-            return false;
-          }
-          const hasModalEl = await mapx.ask("has_el_id", {
-            id: "validateSourceGeom",
-            timeout: 2000,
-          });
-          await mapx.ask("close_modal_all");
-          return hasModalEl;
-        },
-      },
-    ],
-  });
   /**
    * Run tests
    */ t.run({

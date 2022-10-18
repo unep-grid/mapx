@@ -36,12 +36,6 @@ observe({
           d("title_tools_sources", language)
         ),
         actionButton(
-          label = d("btn_source_validate_geom", language),
-          inputId = "btnValidateSourceGeom",
-          class = "btn btn-default",
-          `data-lang_key` = "btn_source_validate_geom"
-        ),
-        actionButton(
           label = d("btn_source_overlap_utilities", language),
           inputId = "btnAnalysisOverlap",
           class = "btn btn-default",

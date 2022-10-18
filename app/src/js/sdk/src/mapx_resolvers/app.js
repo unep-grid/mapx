@@ -120,10 +120,6 @@ class MapxResolversApp extends MapxResolversStatic {
         roles: ["publishers", "admins"],
         id: "btnAddView",
       },
-      source_validate_geom: {
-        roles: ["publishers", "admins"],
-        id: "btnValidateSourceGeom",
-      },
       source_overlap_utilities: {
         roles: ["publishers", "admins"],
         id: "btnAnalysisOverlap",
