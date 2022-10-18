@@ -1760,6 +1760,26 @@
     "ps": "ډاټا ډاونلوډ شوی، میز جوړ کړئ."
   },
   {
+    "id": "btn_validate_use_cache_continue",
+    "en": "Continue",
+    "ps": "ادامه ورکړئ"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_label",
+    "en": "Keep previous validity state",
+    "ps": "د اعتبار پخوانی حالت وساتئ"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_desc",
+    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
+    "ps": "که چیرې دا اختیار فعال شي، یوازې نوي جیومیټري یا جیومیټري چې د غلط په توګه نښه شوي وي تحلیل شي."
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_title",
+    "en": "Check validity option",
+    "ps": "د اعتبار اختیار چیک کړئ"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ps": "د جیومیټري وسیلې: د سرچینې پرت غوره کړئ"

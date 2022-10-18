@@ -1760,6 +1760,26 @@
     "de": "Daten heruntergeladen, Tabelle erstellen."
   },
   {
+    "id": "btn_validate_use_cache_continue",
+    "en": "Continue",
+    "de": "Fortsetzen"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_label",
+    "en": "Keep previous validity state",
+    "de": "Vorherigen Gültigkeitszustand beibehalten"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_desc",
+    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
+    "de": "Ist diese Option aktiviert, werden nur neue oder als ungültig markierte Geometrien analysiert."
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_title",
+    "en": "Check validity option",
+    "de": "Gültigkeitsoption prüfen"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "de": "Geometriewerkzeuge: Quellebene auswählen"

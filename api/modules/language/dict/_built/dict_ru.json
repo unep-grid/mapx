@@ -1760,6 +1760,26 @@
     "ru": "Данные загружены, построена таблица."
   },
   {
+    "id": "btn_validate_use_cache_continue",
+    "en": "Continue",
+    "ru": "Продолжать"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_label",
+    "en": "Keep previous validity state",
+    "ru": "Сохранить предыдущее состояние действия"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_desc",
+    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
+    "ru": "Если эта опция активирована, будут проанализированы только новые геометрии или геометрии, помеченные как недействительные."
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_title",
+    "en": "Check validity option",
+    "ru": "Вариант проверки действительности"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ru": "Инструменты геометрии: выберите исходный слой"

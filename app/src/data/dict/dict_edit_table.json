@@ -728,5 +728,57 @@
     "ps": "",
     "bn": "",
     "de": ""
+  },
+  {
+    "id": "btn_validate_use_cache_continue",
+    "en": "Continue",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_label",
+    "en": "Keep previous validity state",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+ {
+    "id": "edit_table_modal_validate_use_cache_desc",
+    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_title",
+    "en": "Check validity option",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
   }
 ]

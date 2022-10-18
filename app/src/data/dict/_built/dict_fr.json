@@ -1760,6 +1760,26 @@
     "fr": "Données téléchargées, table de construction."
   },
   {
+    "id": "btn_validate_use_cache_continue",
+    "en": "Continue",
+    "fr": "Continuer"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_label",
+    "en": "Keep previous validity state",
+    "fr": "Conserver l'état de validité précédent"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_desc",
+    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
+    "fr": "Si cette option est activée, seules les nouvelles géométries ou les géométries marquées comme invalides seront analysées."
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_title",
+    "en": "Check validity option",
+    "fr": "Vérifier l'option de validité"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fr": "Outils de géométrie : sélectionner le calque source"

@@ -1760,6 +1760,26 @@
     "bn": "ডেটা ডাউনলোড করা হয়েছে, টেবিল তৈরি করুন।"
   },
   {
+    "id": "btn_validate_use_cache_continue",
+    "en": "Continue",
+    "bn": "চালিয়ে যান"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_label",
+    "en": "Keep previous validity state",
+    "bn": "আগের বৈধতার অবস্থা রাখুন"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_desc",
+    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
+    "bn": "যদি এই বিকল্পটি সক্রিয় করা হয়, শুধুমাত্র নতুন জ্যামিতি বা অবৈধ হিসাবে চিহ্নিত জ্যামিতি বিশ্লেষণ করা হবে।"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_title",
+    "en": "Check validity option",
+    "bn": "বৈধতা বিকল্প চেক করুন"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "bn": "জ্যামিতি সরঞ্জাম: উৎস স্তর নির্বাচন করুন"

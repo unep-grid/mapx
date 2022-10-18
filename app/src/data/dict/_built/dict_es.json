@@ -1760,6 +1760,26 @@
     "es": "Datos descargados, construir tabla."
   },
   {
+    "id": "btn_validate_use_cache_continue",
+    "en": "Continue",
+    "es": "Continuar"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_label",
+    "en": "Keep previous validity state",
+    "es": "Mantener el estado de validez anterior"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_desc",
+    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
+    "es": "Si esta opción está activada, solo se analizarán las geometrías nuevas o marcadas como no válidas."
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_title",
+    "en": "Check validity option",
+    "es": "Consulta la opción de validez"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "es": "Herramientas de geometría: seleccione la capa de origen"

@@ -1760,6 +1760,26 @@
     "ar": "تحميل البيانات ، بناء الجدول."
   },
   {
+    "id": "btn_validate_use_cache_continue",
+    "en": "Continue",
+    "ar": "يكمل"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_label",
+    "en": "Keep previous validity state",
+    "ar": "احتفظ بحالة الصلاحية السابقة"
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_desc",
+    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
+    "ar": "إذا تم تنشيط هذا الخيار ، فلن يتم تحليل سوى الأشكال الهندسية أو الأشكال الهندسية الجديدة التي تم تمييزها على أنها غير صالحة."
+  },
+  {
+    "id": "edit_table_modal_validate_use_cache_title",
+    "en": "Check validity option",
+    "ar": "تحقق من خيار الصلاحية"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ar": "أدوات الهندسة: حدد طبقة المصدر"
