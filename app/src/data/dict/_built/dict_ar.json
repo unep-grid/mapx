@@ -1505,6 +1505,11 @@
     "ar": "إصلاح الهندسة"
   },
   {
+    "id": "btn_edit_menu_tools",
+    "en": "Tools...",
+    "ar": "أدوات..."
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "ar": "الغاء التحميل"

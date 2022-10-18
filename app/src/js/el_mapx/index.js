@@ -6,6 +6,7 @@ import {
 } from "./../language";
 import * as test from "./../is_test_mapx/index.js";
 import { parseTemplate } from "../mx_helper_misc.js";
+
 export { el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate };
 
 /**
@@ -446,6 +447,7 @@ function elButtonIcon(key, opt) {
  * @param {Object} opt Options
  * @param {String} opt.icon Font awesome icon name e.g. fa-lock => 'lock'
  * @param {Function} opt.action Callback when clicked
+ * @return {Element}
  */
 export function elButtonFa(key, opt) {
   opt = Object.assign(
@@ -464,6 +466,8 @@ export function elButtonFa(key, opt) {
     },
   });
 }
+
+
 
 /**
  * Standard checkbox

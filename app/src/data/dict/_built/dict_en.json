@@ -1204,6 +1204,10 @@
     "en": "Repair the geometry"
   },
   {
+    "id": "btn_edit_menu_tools",
+    "en": "Tools..."
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo"
   },

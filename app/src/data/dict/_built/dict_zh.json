@@ -1505,6 +1505,11 @@
     "zh": "修复几何"
   },
   {
+    "id": "btn_edit_menu_tools",
+    "en": "Tools...",
+    "zh": "工具..."
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "zh": "撤消"

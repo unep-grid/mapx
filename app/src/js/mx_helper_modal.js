@@ -244,9 +244,11 @@ export function modal(o) {
           ],
           on: [
             "click",
-            () => {
-              elCollapse.classList.toggle("fa-minus-square");
+            (e) => {
+              e.stopPropagation();
+              e.preventDefault();
               elModal.classList.toggle("mx-modal-collapsed");
+              elCollapse.classList.toggle("fa-minus-square");
             },
           ],
         }))

@@ -1505,6 +1505,11 @@
     "fa": "هندسه را تعمیر کنید"
   },
   {
+    "id": "btn_edit_menu_tools",
+    "en": "Tools...",
+    "fa": "ابزار..."
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "fa": "واگرد"

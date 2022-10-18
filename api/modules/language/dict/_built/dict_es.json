@@ -1505,6 +1505,11 @@
     "es": "Reparar la geometría"
   },
   {
+    "id": "btn_edit_menu_tools",
+    "en": "Tools...",
+    "es": "Instrumentos..."
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "es": "Deshacer"

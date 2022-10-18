@@ -14,6 +14,7 @@ import { modalMarkdown } from "./../modal_markdown/index.js";
 import { makeId, buttonEnable } from "../mx_helper_misc.js";
 import { RadialProgress } from "../radial_progress";
 import { theme } from "../mx.js";
+import { Popup } from "../popup";
 import {
   typeConvert,
   getTypes,
@@ -103,6 +104,7 @@ export class EditTableSessionClient extends WsToolsBase {
       }
       et._members = [];
       et._updates = [];
+      et._popups = [];
       et._locked = false;
       et._disabled = false;
       et._in_progress = false;
@@ -161,6 +163,7 @@ export class EditTableSessionClient extends WsToolsBase {
 
       /**
        * Request data from server
+       * -> detached ! Build UI in the meantime
        */
       et.start();
 
@@ -238,6 +241,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et.lockTableConcurrent(false);
       et.emit(r.client_exit);
       et._modal?.close();
+      et._popups.forEach((p) => p.destroy());
       et._resize_observer?.disconnect();
       et._socket.off(r.server_joined, et.onJoined);
       et._socket.off(r.server_error, et.onServerError);
@@ -297,20 +301,31 @@ export class EditTableSessionClient extends WsToolsBase {
     });
 
     /**
-     * Geom validate
+     * Geom
      */
     et._el_button_geom_validate = elButtonFa("btn_edit_geom_validate", {
       icon: "check",
       action: et.geomValidate,
     });
 
-    /**
-     * Geom fix
-     */
     et._el_button_geom_repair = elButtonFa("btn_edit_geom_repair", {
       icon: "user-md",
       action: et.geomRepair,
     });
+
+    /**
+     * Toolbox
+     */
+    et._el_menu_tools = et._button_dropdown("btn_edit_menu_tools", {
+      position: "top",
+      content: [
+        et._el_button_add_column,
+        et._el_button_remove_column,
+        et._el_button_geom_validate,
+        et._el_button_geom_repair,
+      ],
+    });
+
     /**
      * User stat
      */
@@ -346,10 +361,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et._el_button_save,
       et._el_button_undo,
       et._el_button_redo,
-      et._el_button_add_column,
-      et._el_button_remove_column,
-      et._el_button_geom_validate,
-      et._el_button_geom_repair,
+      et._el_menu_tools,
       et._el_button_wiki,
     ];
 
@@ -606,20 +618,13 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateLayout() {
     const et = this;
+    console.time("update_layout");
     clearTimeout(et._update_to);
     et._update_to = setTimeout(() => {
-      const elButtons = et._el_button_close.parentElement;
-      const elFooter = elButtons.parentElement;
-      const rectButtons = elButtons.getBoundingClientRect();
-      const rectFooter = elFooter.getBoundingClientRect();
       const rectWrapper = et._el_table_wrapper.getBoundingClientRect();
-      if (rectButtons.width >= rectFooter.width) {
-        elButtons.classList.add("mx-modal-foot-btns-collapsed");
-      } else {
-        elButtons.classList.remove("mx-modal-foot-btns-collapsed");
-      }
-      et._el_table.style.height = `${rectWrapper.height}px`;
+      et._el_table.style.height = `${rectWrapper.height || 100}px`;
       et._ht.render();
+      console.timeEnd("update_layout");
     }, 300);
   }
 
@@ -810,8 +815,9 @@ export class EditTableSessionClient extends WsToolsBase {
       colHeaders: et._columns_labels,
       allowInvalid: true,
       allowInsertRow: false,
+      renderAllRows: false,
       maxRows: table.data.length,
-      mminows: table.data.length,
+      //mminows: table.data.length,
       //colWidths: 80,
       //manualColumnResize: true,
       licenseKey: et._config.ht_license,
@@ -826,7 +832,6 @@ export class EditTableSessionClient extends WsToolsBase {
       language: getHandsonLanguageCode(),
       afterFilter: null,
       afterChange: et.afterChange,
-      renderAllRows: false,
       height: function () {
         const r = et._el_table.getBoundingClientRect();
         return r.height - 30;
@@ -842,10 +847,11 @@ export class EditTableSessionClient extends WsToolsBase {
     /**
      * On modal resize, updateLayout
      */
-    et._resize_observer = new ResizeObserver(() => {
+    et._resize_observer = new ResizeObserver((e) => {
+      console.log(e)
       et.updateLayout();
     });
-    et._resize_observer.observe(et._modal);
+    et._resize_observer.observe(et._el_table);
 
     if (initLocked) {
       et.lock();
@@ -2039,5 +2045,31 @@ export class EditTableSessionClient extends WsToolsBase {
       elBtn,
       et._disabled || et._in_progress ? false : enable
     );
+  }
+
+  /**
+   * Simple button with drop down / popup wrapper
+   * @param {String} key Translation key
+   * @param {Object} opt Options ( passed to elButtonFa too)
+   * @param {String} opt.position Drop down position : top, right, left, bottom
+   * @param {Array} opt.content Drop down content
+   * @return {Element}
+   */
+  _button_dropdown(key, opt) {
+    const et = this;
+    opt.action = toggleMenu;
+    opt.icon = "cogs";
+    const elBtn = elButtonFa(key, opt);
+    let popup;
+
+    function toggleMenu() {
+      if (!popup) {
+        popup = new Popup({ position: "top", elAnchor: elBtn, ...opt });
+        et._popups.push(popup);
+      }
+      popup.toggle();
+    }
+
+    return elBtn;
   }
 }

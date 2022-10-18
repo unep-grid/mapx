@@ -594,7 +594,8 @@ picture {
  *
  */
 .btn-icon {
-  margin-left: 5px;
+  display: flex;
+  justify-content: space-between;
 }
 .btn-icon > span {
   margin-right: 5px;
@@ -605,7 +606,6 @@ picture {
 }
 .btn-icon-wrapper {
   height: 100%;
-  width: 100%;
   display: inline;
   position: relative;
 }

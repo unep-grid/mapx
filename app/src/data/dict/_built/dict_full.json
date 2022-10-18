@@ -3913,6 +3913,19 @@
     "de": "Reparieren Sie die Geometrie"
   },
   {
+    "id": "btn_edit_menu_tools",
+    "en": "Tools...",
+    "fr": "Outils...",
+    "es": "Instrumentos...",
+    "ru": "Инструменты...",
+    "zh": "工具...",
+    "ar": "أدوات...",
+    "fa": "ابزار...",
+    "ps": "وسایل...",
+    "bn": "টুল...",
+    "de": "Werkzeug..."
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "fr": "annuler",

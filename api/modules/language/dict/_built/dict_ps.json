@@ -1505,6 +1505,11 @@
     "ps": "جیومیټری ترمیم کړئ"
   },
   {
+    "id": "btn_edit_menu_tools",
+    "en": "Tools...",
+    "ps": "وسایل..."
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "ps": "بیرته راګرځول"

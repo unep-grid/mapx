@@ -65,6 +65,19 @@
     "de": ""
   },
   {
+    "id": "btn_edit_menu_tools",
+    "en": "Tools...",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "fr": "",
@@ -755,7 +768,7 @@
     "bn": "",
     "de": ""
   },
- {
+  {
     "id": "edit_table_modal_validate_use_cache_desc",
     "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
     "fr": "",

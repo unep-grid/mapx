@@ -1505,6 +1505,11 @@
     "fr": "Réparer la géométrie"
   },
   {
+    "id": "btn_edit_menu_tools",
+    "en": "Tools...",
+    "fr": "Outils..."
+  },
+  {
     "id": "btn_edit_undo",
     "en": "Undo",
     "fr": "annuler"
