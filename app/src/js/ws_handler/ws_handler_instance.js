@@ -105,12 +105,14 @@ function getTests() {
  * Authentication result 
  * -> For now, used for dev only.
  * -> Will be usefull for set roles in settings
+ * @param  {Object} auth  Authentication object 
+ * @param  {Boolean} auth.authenticated Authenticated 
+ * @param  {Object} auth.roles Roles 
  */
-function handleAuthentication(auth) {
+function handleAuthentication() {
   if (isProd()) {
     return;
   }
-  console.info("Authentication ws:", auth);
 }
 
 /**

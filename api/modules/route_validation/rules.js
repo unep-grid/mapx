@@ -40,16 +40,21 @@ const rules = [
      */
     key: [
       "useCache",
+      "skipCache",
       "binsCompute",
       "publicOnly",
       "isGuest",
       "encrypt",
       "allViews",
       "overwriteStyle",
+      "usePostgisTiles",
     ],
     test: (d) => {
       if (isString(d)) {
         switch (d) {
+          case "null":
+            d = false;
+            break;
           case "true":
             d = true;
             break;

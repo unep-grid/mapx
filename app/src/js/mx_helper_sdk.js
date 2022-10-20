@@ -17,8 +17,8 @@ window.addEventListener("load", () => {
       } else {
         resolvers = new MapxResolversApp();
       }
-      const sdkToken = getQueryParameter("sdkToken")[0];
 
+      const sdkToken = getQueryParameter("sdkToken")[0];
       window.mxsdkworker = new Worker({
         resolvers: resolvers,
         events: mx.events,

@@ -58,6 +58,7 @@ const settings = {
     "style",
     "theme",
     "colors",
+    "sdkToken",
   ],
   // ⚠️ also defined in app/settings/settings-global.R
   links: {

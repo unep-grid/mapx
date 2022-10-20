@@ -16,7 +16,7 @@ main as(
 ),
 overlap as (
   SELECT {{attributes_pg}},
-  CASE WHEN GeometryType(m.{{geom}}) != $$POINT$$
+  CASE WHEN {{isPointGeom}} 
     THEN
     CASE 
       WHEN ST_CoveredBy(
@@ -39,8 +39,14 @@ ELSE
 ),
 simple as (
   SELECT {{attributes_pg}},
-  ST_simplify(overlap.{{geom}},(50/(512*(({{zoom}}+1)^2)))) geom
-  FROM overlap
+  CASE 
+WHEN {{isPointGeom}}
+  -- no effect on single point 
+  THEN ST_RemoveRepeatedPoints(overlap.{{geom}})
+ELSE 
+  ST_simplify(overlap.{{geom}},(50/(512*(({{zoom}}+1)^2))))
+END geom
+FROM overlap
 )
 
 

@@ -1,7 +1,13 @@
 WITH features_simple as (
   SELECT
   CASE WHEN {{zoom}} > 10 THEN {{geom}}
-  ELSE ST_simplify({{geom}},(50/(512*(({{zoom}}+1)^2))))
+  ELSE 
+    CASE WHEN {{isPointGeom}}
+      -- no effect on single point 
+      THEN ST_RemoveRepeatedPoints({{geom}})
+    ELSE 
+      ST_simplify({{geom}},(50/(512*(({{zoom}}+1)^2))))
+  END
   END geom,
   {{attributes_pg}}
   FROM
@@ -18,7 +24,7 @@ WITH features_simple as (
 features_mvt as (
   SELECT
   ST_AsMVTGeom (
-    ST_Transform(ST_MakeValid({{geom}}), 3857),
+    ST_Transform({{geom}}, 3857),
     ST_TileEnvelope({{zoom}}, {{x}}, {{y}})
   ) as geom,
   {{attributes_pg}}

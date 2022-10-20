@@ -15,11 +15,11 @@
   transition: opacity ease-in-out 0.3s, filter ease-in-out 0.3s;
 }
 
-@media (max-width: 800px), (max-height: 800px) {
-  .mx-view-badges {
-    display: none;
-  }
-}
+/*@media (max-width: 800px), (max-height: 800px) {*/
+/*.mx-view-badges {*/
+/*display: none;*/
+/*}*/
+/*}*/
 
 .mx-view-tgl-content:hover .mx-view-badges {
   opacity: 1;
@@ -37,7 +37,7 @@
   border-bottom: 1px solid #ccc;
   border-top: 1px solid #ccc;
   flex: 1 1 auto;
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
   min-height: 0px;
 }
@@ -194,8 +194,7 @@
   opacity: 1;
   max-height: 1000px;
   font-size: inherit;
-  transition: max-height ease-in-out 0.5s 0s, height ease-in-out 0.3s 0s,
-    opacity ease-in-out 0.3s 0.3s;
+  transition: opacity ease-in-out 0.3s 0.3s;
 }
 
 .li-global-dragging .mx-view-tgl-more-container {
@@ -214,7 +213,7 @@
   overflow: hidden;
   max-height: 0px;
   opacity: 0;
-  transition: max-height ease-in-out 0.3s 0.3s, opacity ease-in-out 0.3s;
+  transition: opacity ease-in-out 0.3s 0.3s;
 }
 
 .mx-view-tgl-more {

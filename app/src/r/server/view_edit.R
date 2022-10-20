@@ -268,6 +268,10 @@ observe({
                 srcAvailable <- reactListReadSourcesVector()
                 srcSet <- .get(viewData, c("data", "source", "layerInfo", "name"))
                 srcSetMask <- .get(viewData, c("data", "source", "layerInfo", "maskName"))
+
+                usePostgisTiles <- .get(viewData, c("data", "tiles", "usePostgis"))
+
+
                 srcAvailableMask <- srcAvailable[!srcAvailable %in% srcSet]
                 hasSource <- srcSet %in% srcAvailable
                 reactData$sourceLayerFromView <- list(
@@ -327,14 +331,20 @@ observe({
                     )
                   ),
                   # uiOutput("uiViewEditVtMain"),
-
-
+                  #
+                  # Force using postgis to generate tiles
+                  #
+                  checkboxInput(
+                    inputId = "checkUsePostgisTiles",
+                    label = ddesc("view_use_postgis_tiles", language),
+                    value = usePostgisTiles
+                  ),
                   #
                   # mask / overlap layer
                   #
                   checkboxInput(
                     inputId = "checkAddMaskLayer",
-                    label = d("view_add_overlap_layer", language),
+                    label = ddesc("view_add_overlap_layer", language),
                     value = !noDataCheck(srcSetMask)
                   ),
                   conditionalPanel(
@@ -999,8 +1009,7 @@ observeEvent(input$btnViewSave, {
       sourceData <- reactLayerSummary()
       sourceDataMask <- reactLayerMaskSummary()
       additionalAttributes <- input$selectSourceLayerOtherVariables
-      isPublishable <- "public" %in% readers
-
+      usePostgisTiles <- input$checkUsePostgisTiles
       #
       # Update view data
       #
@@ -1008,7 +1017,8 @@ observeEvent(input$btnViewSave, {
         view,
         sourceData,
         sourceDataMask,
-        additionalAttributes
+        additionalAttributes,
+        usePostgisTiles
       )
     }
     #

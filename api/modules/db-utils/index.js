@@ -57,6 +57,20 @@ async function columnExists(idColumn, idTable) {
 }
 
 /**
+ * Test if the first geometry of a layer is (multi)point geometry
+ * @param {String} idLayer Layer id
+ * @param {String} schema Schema
+ * @return {Promise<boolean>} true if point like
+ */
+async function isPointLikeGeom(idLayer, schema) {
+  schema = schema || "public";
+  const sqlPointLike = `
+  SELECT ST_GeometryType(geom) like '%Point' as ispoint from ${schema}.${idLayer}`;
+  const res = await pgRead.query(sqlPointLike);
+  return res.rowCount > 0 && res.rows[0].ispoint;
+}
+
+/**
  * Test if a table exists, has rows, has attribute and a value
  *
  * @param {String} idTable id of the table
@@ -372,6 +386,7 @@ export {
   tableHasValues,
   tableExists,
   columnExists,
+  isPointLikeGeom,
   decrypt,
   encrypt,
   registerSource,

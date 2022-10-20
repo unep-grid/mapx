@@ -3,29 +3,23 @@
  */
 import { redisGet, redisSet, pgRead } from "#mapx/db";
 import { parseTemplate, attrToPgCol, asArray } from "#mapx/helpers";
+import { isSourceId } from "@fxi/mx_valid";
 import { templates } from "#mapx/template";
-import { getSourceLastTimestamp } from "#mapx/db-utils";
+import { getSourceLastTimestamp, isPointLikeGeom } from "#mapx/db-utils";
 import { getParamsValidator } from "#mapx/route_validation";
 import crypto from "crypto";
 import util from "util";
 import zlib from "zlib";
 import geojsonvt from "geojson-vt";
 import vtpbf from "vt-pbf";
-const isString = (a) => typeof a === "string";
 const gzip = util.promisify(zlib.gzip);
-
-/**
-* Dev flags 
-*/ 
-const USE_CACHE = true;
-const POSTGIS_TILES = true;
 
 /**
  * Get tile
  */
 const validateParamsHandlerText = getParamsValidator({
   required: ["view"],
-  expected: ["timestamp"],
+  expected: ["timestamp", "skipCache", "usePostgisTiles"],
 });
 
 export const mwGet = [validateParamsHandlerText, handlerTile];
@@ -56,12 +50,14 @@ export async function handlerTile(req, res) {
      */
     Object.assign(data, viewSrcConfig);
 
-
     data.geom = "geom";
+    data.useMask = isSourceId(data?.mask);
+    data.usePostgisTiles = req.query.usePostgisTiles && !data.useMask;
+    data.useCache = !req.query.skipCache;
+    data.view = req.query.view;
     data.zoom = req.params.z * 1;
     data.x = req.params.x * 1;
     data.y = req.params.y * 1;
-    data.view = req.query.view;
     data.attributes = asArray(data.attributes);
     data.attributes_pg = attrToPgCol([
       data.attribute,
@@ -69,14 +65,14 @@ export async function handlerTile(req, res) {
       "gid",
     ]);
 
-    if (!data.layer || data.layer === Object) {
+    if (!isSourceId(data?.layer)) {
       sendTileEmpty(res);
       return;
     }
 
     data.sourceTimestamp = await getSourceLastTimestamp(data.layer);
 
-    if (data.mask) {
+    if (data.useMask) {
       data.maskTimestamp = await getSourceLastTimestamp(data.mask);
     }
 
@@ -84,6 +80,7 @@ export async function handlerTile(req, res) {
       .createHash("md5")
       .update(JSON.stringify(data))
       .digest("hex");
+
 
     return getTile(res, hash, data);
   } catch (e) {
@@ -93,13 +90,12 @@ export async function handlerTile(req, res) {
 
 async function getTile(res, hash, data) {
   try {
-    if (USE_CACHE) {
+    if (data.useCache) {
       const zTileB64 = await redisGet(hash);
       if (zTileB64) {
         return sendTileZip(res, Buffer.from(zTileB64, "base64"));
       }
     }
-
     return getTilePg(res, hash, data);
   } catch (e) {
     return sendTileError(res, e);
@@ -110,19 +106,29 @@ async function getTilePg(res, hash, data) {
   try {
     let str;
     let buffer;
-  //  const start = Date.now();
-    if (POSTGIS_TILES) {
+    const useAsMvt = data.usePostgisTiles;
+    const useMask = data.useMask;
+    // Geometry test could be included in request, as CTE block. 
+    // - per object based test – outside a deticated CTE – is probably expensive
+    // - isPointLikeGeom only works if there is only one type of geom per layer
+    data.isPointGeom = await isPointLikeGeom(data.layer);
+   
+    if (useAsMvt) {
       str = templates.getMvt;
-    } else if (data.mask && isString(data.mask)) {
-      str = templates.getGeojsonTileOverlap;
     } else {
-      str = templates.getGeojsonTile;
+      if (useMask) {
+        str = templates.getGeojsonTileOverlap;
+      } else {
+        str = templates.getGeojsonTile;
+      }
     }
+
+
     const qs = parseTemplate(str, data);
     const out = await pgRead.query(qs);
 
     if (out.rowCount > 0) {
-      if (POSTGIS_TILES) {
+      if (useAsMvt) {
         buffer = out.rows[0].mvt;
       } else {
         const geojson = rowsToGeoJSON(out.rows);
@@ -135,10 +141,9 @@ async function getTilePg(res, hash, data) {
 
       const zBuffer = await gzip(buffer);
       sendTileZip(res, zBuffer);
-      if (USE_CACHE) {
+      if (data.useCache) {
         redisSet(hash, zBuffer.toString("base64"));
       }
-
 
       return;
     } else {

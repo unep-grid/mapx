@@ -1,14 +1,11 @@
-import {getRule} from './rules.js';
-import {stop} from '#mapx/helpers';
+import { getRule } from "./rules.js";
+import { stop } from "#mapx/helpers";
 const settings = {
   required: [],
-  expected: []
+  expected: [],
 };
 
-export  {
-  getParamsValidator,
-  paramsValidator
-};
+export { getParamsValidator, paramsValidator };
 
 /**
  * Validate object according to rules
@@ -24,14 +21,14 @@ export  {
 function paramsValidator(obj, opt) {
   opt = {
     ...settings,
-    ...opt
+    ...opt,
   };
   opt.expected = Array.from(new Set(opt.expected.concat(opt.required)));
   const out = {
     unexpected: [],
     missing: [],
     invalid: [],
-    ok: false
+    ok: false,
   };
 
   /**
@@ -58,12 +55,12 @@ function paramsValidator(obj, opt) {
 
     if (rule?.test) {
       // at least validated empty string (required by validator);
-      try{
-        result = rule.test(value || '');
+      try {
+        result = rule.test(value || "", k);
         if (!result.valid && isRequired) {
           out.invalid.push(k);
         }
-      }catch {
+      } catch {
         out.invalid.push(k);
       }
       /**
@@ -95,9 +92,9 @@ function getParamsValidator(opt) {
        * Input can be an object, a query or a body if used with body-parser or express-json;
        */
       const body =
-        typeof req.body === 'object'
+        typeof req.body === "object"
           ? req.body
-          : typeof req.query === 'object'
+          : typeof req.query === "object"
           ? req.query
           : req;
 
@@ -107,18 +104,15 @@ function getParamsValidator(opt) {
         return stop(`Missing parameter:  ${JSON.stringify(result.missing)}`);
       }
 
-
-      if (result.unexpected.length > 0 ) {
-        return stop(`Unexpected parameter:  ${JSON.stringify(result.unexpected)}`);
-      }
-      
-
-      if (result.invalid.length > 0) {
+      if (result.unexpected.length > 0) {
         return stop(
-          `Invalid parameter: ${JSON.stringify(result.invalid)}`
+          `Unexpected parameter:  ${JSON.stringify(result.unexpected)}`
         );
       }
 
+      if (result.invalid.length > 0) {
+        return stop(`Invalid parameter: ${JSON.stringify(result.invalid)}`);
+      }
 
       if (next) {
         next();
@@ -126,8 +120,8 @@ function getParamsValidator(opt) {
     } catch (e) {
       if (res) {
         res.send({
-          type: 'error',
-          message: e.message
+          type: "error",
+          message: e.message,
         });
       }
     }

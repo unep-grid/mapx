@@ -1406,13 +1406,6 @@ export async function initMapxApp(opt) {
     useQueryFilters: opt.useQueryFilters,
   });
 
-  /**
-   * Fire ready event
-   */
-  events.fire({
-    type: "mapx_ready",
-  });
-
   /*
    * If shiny, trigger read event
    */
@@ -1453,6 +1446,13 @@ export async function initMapxApp(opt) {
    * getQueryParameterInit
    */
   cleanTemporaryQueryParameters();
+
+  /**
+   * Fire ready event
+   */
+  events.fire({
+    type: "mapx_ready",
+  });
 }
 
 /**
@@ -1691,6 +1691,7 @@ export async function addSourceFromView(o) {
   const projectView = p(o.view, "project");
   const projectsView = p(o.view, "data.projects", []);
   const useMirror = p(o.view, "data.source.useMirror");
+  const usePostgisTiles = p(o.view, "data.tiles.usePostgis");
   const isEditable = isViewEditable(o.view);
   const isLocationOk =
     o.noLocationCheck ||
@@ -1707,20 +1708,18 @@ export async function addSourceFromView(o) {
   const idSource = o.view.id + "-SRC";
 
   if (isVt) {
-    /**
-     * When adding source, we request the timestamp via ['base'] stat,
-     * without cache to be sure to have the latest value.
-     */
-    const summary = await getViewSourceSummary(o.view, {
-      stats: ["base"],
-      useCache: false,
-    });
-    const baseUrl = getApiUrl("getTile");
-    const srcTimestamp = p(summary, "timestamp", null);
-    let url = `${baseUrl}?view=${o.view.id}`;
-    if (srcTimestamp) {
-      url = `${url}&timestamp=${srcTimestamp}`;
-    }
+    const urlBase = getApiUrl("getTile");
+    const useServerCache = true;
+    // NOTE: Can't use URL() : contains {x}/{y}/{z} = escaped.
+    const url =
+      `${urlBase}?view=${o.view.id}&` +
+      // Server cache invalidation
+      `skipCache=${!useServerCache}&` +
+      // By defautl, geojson-vt is used alternative: postgis asmvt  
+      `usePostgisTiles=${!!usePostgisTiles}&` +
+      // Browser cache invalidation using view timestamp
+      `timestamp=${o.view.date_modified}`;
+
     o.view.data.source.tiles = [url, url];
     o.view.data.source.promoteId = "gid";
   }
@@ -1838,7 +1837,7 @@ export async function updateViewsList(opt) {
     nTot = 0,
     prog;
 
-  const progressColor = theme.getColorThemeItem('mx_ui_link');
+  const progressColor = theme.getColorThemeItem("mx_ui_link");
   /*
    * See default used:
    * - app/src/r/server/view_update_client.R
@@ -1888,7 +1887,6 @@ export async function updateViewsList(opt) {
 
   /* Add all view from automatic fetch. */
   async function addAsyncAll() {
-
     const views = [];
     const state = [];
     /**
@@ -2704,8 +2702,6 @@ export async function makeTimeSlider(o) {
             );
           }
           filter.push(filterAll);
-
-          console.log(filter);
 
           view._setFilter({
             filter: filter,

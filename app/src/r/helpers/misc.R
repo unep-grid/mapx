@@ -513,6 +513,7 @@ mxDictTranslateTagDesc <- function(id, language = NULL) {
     )
   )
 }
+ddesc <- mxDictTranslateTagDesc
 
 
 #' Get dictionnary entry by key for a given language (translate)
@@ -2122,7 +2123,7 @@ mxCreateEncryptedUrlAction <- function(id, value, session = shiny::getDefaultRea
 #' @param {list} additionalAttributes List of additional attributes
 #' @return view list updated
 #' @export
-mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, additionalAttributes = NULL) {
+mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, additionalAttributes = NULL, usePostgisTiles = FALSE) {
   #
   # update meta data
   #
@@ -2168,6 +2169,11 @@ mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, ad
     )
 
     #
+    # Update tiles method
+    #
+    viewData <- .set(viewData, c("tiles","usePostgis"), usePostgisTiles)
+
+    #
     # Update view data
     #
     viewData <- .set(viewData, c("attribute"), attributesInfo)
@@ -2177,7 +2183,6 @@ mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, ad
     #
     # set style default
     #
-    geomType <- .get(sourceData, c("geomType"))
     style <- .get(viewData, c("style"))
 
     if (noDataCheck(style)) {

@@ -2,8 +2,8 @@ import { isObject, isArray } from "./../is_test/index.js";
 export class EventSimple {
   constructor() {
     const evt = this;
-    evt.cb = [];
-    evt.passthroughs = [];
+    evt._cbs = [];
+    evt._passthroughs = [];
   }
 
   /*
@@ -20,10 +20,16 @@ export class EventSimple {
       data = type.data;
       type = type.type;
     }
+ 
     /**
      * Match type
+     * NOTE: using while, as classes based on EventSimple can
+     * request 'destroy' cb, which can be registered before
+     * other "on destroy" cb.
      */
-    for (const c of evt.cb) {
+    let cL = evt._cbs.length;
+    while (cL--) {
+      const c = evt._cbs[cL];
       const t = isArray(c.type) ? c.type : [c.type];
       if (t.includes(type)) {
         res.push(await c.cb(data));
@@ -36,7 +42,7 @@ export class EventSimple {
     /**
      * Pass all events
      */
-    for (const p of evt.passthroughs) {
+    for (const p of evt._passthroughs) {
       res.push(
         await p.cb({
           type: type,
@@ -57,7 +63,7 @@ export class EventSimple {
     }
     const exists = !!evt._find(type, cb, group, once);
     if (!exists) {
-      evt.cb.push({
+      evt._cbs.push({
         type: type,
         cb: cb,
         once: once || false,
@@ -69,7 +75,7 @@ export class EventSimple {
     const evt = this;
     opt = Object.assign({}, opt);
     if (opt.cb) {
-      evt.passthroughs.push(opt);
+      evt._passthroughs.push(opt);
     }
   }
   once(type, cb, group) {
@@ -114,19 +120,19 @@ export class EventSimple {
   }
   clearCallbacks() {
     const evt = this;
-    evt.passthroughs.length = 0;
-    evt.cb.length = 0;
+    evt._passthroughs.length = 0;
+    evt._cbs.length = 0;
   }
   _rm(item) {
     const evt = this;
-    const id = evt.cb.indexOf(item);
+    const id = evt._cbs.indexOf(item);
     if (id > -1) {
-      evt.cb.splice(id, 1);
+      evt._cbs.splice(id, 1);
     }
   }
   _find(type, cb, group, once) {
     const evt = this;
-    for (const c of evt.cb) {
+    for (const c of evt._cbs) {
       const found =
         c.type === type &&
         c.cb === cb &&
@@ -142,7 +148,7 @@ export class EventSimple {
   _find_group(group) {
     const found = [];
     const evt = this;
-    for (const c of evt.cb) {
+    for (const c of evt._cbs) {
       const f = c.group === group;
       if (f) {
         found.push(c);

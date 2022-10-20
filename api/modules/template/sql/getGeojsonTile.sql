@@ -5,9 +5,15 @@ tileExtent as (
   SELECT
   {{attributes_pg}},
   CASE WHEN {{zoom}} > 10 THEN layer.{{geom}}
-       ELSE ST_simplify(layer.{{geom}},(50/(512*(({{zoom}}+1)^2))))
-      END geom
-  FROM
+  ELSE
+    CASE WHEN {{isPointGeom}}
+      -- no effect on single point 
+      THEN ST_RemoveRepeatedPoints(layer.{{geom}})
+    ELSE 
+      ST_simplify(layer.{{geom}},(50/(512*(({{zoom}}+1)^2))))
+    END 
+    END geom
+    FROM
   {{layer}} layer,
   bboxLatLong bbox
   WHERE
