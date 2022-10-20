@@ -1,8 +1,9 @@
-import {el} from './../el/src/index.js';
-import {ListenerStore} from './../listener_store/index.js';
-import {path, any, setClickHandler} from './../mx_helper_misc.js';
-import {getLayersPropertiesAtPoint} from './../map_helpers/index.js';
-import {isEmpty} from './../is_test/index.js';
+import { el } from "./../el/src/index.js";
+import { ListenerStore } from "./../listener_store/index.js";
+import { path, any, setClickHandler } from "./../mx_helper_misc.js";
+import { getLayersPropertiesAtPoint } from "./../map_helpers/index.js";
+import { isEmpty } from "./../is_test/index.js";
+
 /**
  * Widget method
  */
@@ -10,19 +11,19 @@ import {isEmpty} from './../is_test/index.js';
 const defaults = {
   conf: {
     disabled: false,
-    source: 'none',
-    width: 'x50',
-    height: 'y50',
+    source: "none",
+    width: "x50",
+    height: "y50",
     addColorBackground: false,
-    colorBackground: '#000000',
+    colorBackground: "#000000",
     sourceIgnoreEmpty: true,
     script:
-      'return { async onAdd:console.log, async onRemove:console.log, async onData:console.log}'
+      "return { async onAdd:console.log, async onRemove:console.log, async onData:console.log}",
   },
-  language: 'en',
+  language: "en",
   map: null,
   view: null,
-  dashboard: null
+  dashboard: null,
 };
 
 class Widget {
@@ -73,29 +74,29 @@ class Widget {
       for (const r in register) {
         widget[r] = register[r];
       }
-      widget.modules = path(widget.opt, 'dashboard.modules', {});
+      widget.modules = path(widget.opt, "dashboard.modules", {});
       widget.add();
     } catch (e) {
-      console.error(e);
+      widget.warn("code evaluation issue. Removing widget.", e);
       widget.destroy();
     }
   }
 
   isDisabled() {
     const widget = this;
-    return path(widget, 'opt.conf.disabled', false);
+    return path(widget, "opt.conf.disabled", false);
   }
 
   /**
    * Update widget data using attributes
    */
   async updateDataFromAttribute() {
+    const widget = this;
     try {
-      const widget = this;
-      var d = path(widget.opt, 'view.data.attribute.table', []);
+      const d = path(widget.opt, "view.data.attribute.table", []);
       await widget.setData(d);
     } catch (e) {
-      console.error('Error update data from attribute', e);
+      widget.warn("error with data from attribute", e);
     }
   }
 
@@ -103,12 +104,12 @@ class Widget {
    * Update widget data after a click
    */
   async updateDataFromLayerAtMousePosition(e) {
+    const widget = this;
     try {
-      const widget = this;
       const data = await widget.getWidgetDataFromLinkedView(e);
       await widget.setData(data);
     } catch (e) {
-      console.error('Error update data at mouse position', e);
+      widget.warn("error with data at mouse position", e);
     }
   }
 
@@ -116,12 +117,12 @@ class Widget {
    * Update widget data after any map rendering
    */
   async updateDataFromLayerOnRender() {
+    const widget = this;
     try {
-      const widget = this;
       const data = widget.getWidgetDataFromLinkedView();
       await widget.setData(data);
     } catch (e) {
-      console.error('Error update data at layer render', e);
+      widget.warn("error with data on layer render", e);
     }
   }
 
@@ -130,8 +131,8 @@ class Widget {
    */
   getWidgetDataFromLinkedView(e) {
     const widget = this;
-    const idView = path(widget.opt, 'view.id', widget.id);
-    const viewType = path(widget.opt, 'view.type', null);
+    const idView = path(widget.opt, "view.id", widget.id);
+    const viewType = path(widget.opt, "view.type", null);
 
     if (!viewType || !idView) {
       return [];
@@ -140,7 +141,7 @@ class Widget {
       map: widget.opt.map,
       type: viewType,
       point: e ? e.point : null,
-      idView: idView
+      idView: idView,
     });
     return items[idView] || [];
   }
@@ -152,41 +153,41 @@ class Widget {
     const widget = this;
     const map = widget.opt.map;
     switch (widget.opt.conf.source) {
-      case 'none':
+      case "none":
         break;
-      case 'viewFreqTable':
+      case "viewFreqTable":
         await widget.updateDataFromAttribute();
         break;
-      case 'layerChange':
+      case "layerChange":
         widget.ls.addListener({
           target: map,
           bind: widget,
-          group: 'base',
-          type: 'render',
+          group: "base",
+          type: "render",
           debounce: true,
           debounceTime: 300,
-          callback: widget.updateDataFromLayerOnRender
+          callback: widget.updateDataFromLayerOnRender,
         });
         break;
-      case 'layerClick':
+      case "layerClick":
         widget.handleClick(true);
         widget.ls.addListener({
           target: map,
           bind: widget,
-          group: 'base',
-          type: 'click',
+          group: "base",
+          type: "click",
           debounce: false,
-          callback: widget.updateDataFromLayerAtMousePosition
+          callback: widget.updateDataFromLayerAtMousePosition,
         });
         break;
-      case 'layerOver':
+      case "layerOver":
         widget.ls.addListener({
           target: map,
           bind: widget,
-          group: 'base',
-          type: 'mousemove',
+          group: "base",
+          type: "mousemove",
           debounce: true,
-          callback: widget.updateDataFromLayerAtMousePosition
+          callback: widget.updateDataFromLayerAtMousePosition,
         });
     }
   }
@@ -200,13 +201,13 @@ class Widget {
   set width(width) {
     const w = this;
     w._width = sizeWithGutter(toDim(width));
-    w.el.style.width = w.width + 'px';
+    w.el.style.width = w.width + "px";
   }
 
   set height(height) {
     const w = this;
     w._height = sizeWithGutter(toDim(height));
-    this.el.style.height = w.height + 'px';
+    this.el.style.height = w.height + "px";
   }
 
   get width() {
@@ -220,31 +221,33 @@ class Widget {
   build() {
     const widget = this;
     const conf = widget.opt.conf;
-    const title = path(widget, 'opt.view._title', '');
+    const title = path(widget, "opt.view._title", "");
 
     widget.el = el(
-      'div',
+      "div",
       {
-        class: ['noselect', 'widget']
+        class: ["noselect", "widget"],
       },
       el(
-        'div',
+        "div",
         {
-          class: ['btn-widget-group'],
-          title: title
+          class: ["btn-widget-group"],
+          title: title,
         },
-        (widget.elButtonClose = el('button', {
-          class: ['btn-circle', 'btn-widget', 'fa', 'fa-times']
+        (widget.elButtonClose = el("button", {
+          class: ["btn-circle", "btn-widget", "fa", "fa-times"],
         })),
-        el('button', {
-          class: ['btn-circle', 'btn-widget', 'fa', 'fa-arrows', 'handle']
+        el("button", {
+          class: ["btn-circle", "btn-widget", "fa", "fa-arrows", "handle"],
         })
       ),
-      (widget.elContent = el('div', {
-        class: ['widget--content', 'shadow'],
+      (widget.elContent = el("div", {
+        class: ["widget--content", "shadow"],
         style: {
-          backgroundColor: conf.addColorBackground ? conf.colorBackground : null
-        }
+          backgroundColor: conf.addColorBackground
+            ? conf.colorBackground
+            : null,
+        },
       }))
     );
   }
@@ -256,8 +259,8 @@ class Widget {
       target: widget.elButtonClose,
       bind: widget,
       callback: widget.destroy,
-      group: 'base',
-      type: 'click'
+      group: "base",
+      type: "click",
     });
 
     /**
@@ -270,22 +273,22 @@ class Widget {
         return widget.setUpdateDataMethod();
       })
       .catch((e) => {
-        console.error(e);
+        widget.warn("adding widget failed. Will be removed", e);
         widget.destroy();
       });
   }
 
   get grid() {
-    return path(this.opt, 'grid', {});
+    return path(this.opt, "grid", {});
   }
   get dashboard() {
-    return path(this.opt, 'dashboard', {});
+    return path(this.opt, "dashboard", {});
   }
   get map() {
-    return path(this.opt, 'map', {});
+    return path(this.opt, "map", {});
   }
   get view() {
-    return path(this.opt, 'view', {});
+    return path(this.opt, "view", {});
   }
   destroy(skipOnRemove) {
     const widget = this;
@@ -354,8 +357,8 @@ class Widget {
      * Update global click handling
      */
     setClickHandler({
-      type: 'dashboard',
-      enable: dashboardHandleClick
+      type: "dashboard",
+      enable: dashboardHandleClick,
     });
   }
 
@@ -380,17 +383,17 @@ class Widget {
   }
 
   strToObj(str) {
+    const w = this;
     try {
-      const w = this;
       const r = new Function(str)();
       for (const f in r) {
         const rBinded = r[f].bind(w);
-        const skipIfOnRemove = f === 'onRemove';
+        const skipIfOnRemove = f === "onRemove";
         r[f] = w.tryCatched(rBinded, skipIfOnRemove);
       }
       return r;
     } catch (e) {
-      console.warn(`strToObj failed. Script = ${str}`);
+      w.warn(`strToObj failed. Script = ${str}. Throwing error further down`);
       // pass error further.
       throw e;
     }
@@ -398,18 +401,22 @@ class Widget {
 
   tryCatched(fun, skipDestroy) {
     const widget = this;
-    return async function(...args) {
+    return async function (...args) {
       try {
         return fun(...args);
       } catch (e) {
-        console.error(e);
+        widget.warn("code error. Widget will be removed.", e);
         widget.destroy(skipDestroy);
       }
     };
   }
+
+  warn(message, e) {
+    console.warn("WIDGET ISSUE: ", message, e);
+  }
 }
 
-export {Widget};
+export { Widget };
 
 /*
  * Set dim + adding gutter size
@@ -438,7 +445,7 @@ function toDim(dim) {
     y1: 150,
     y2: 300,
     y3: 450,
-    y4: 600
+    y4: 600,
   };
   return dim * 1 ? dim : oldClasses[dim] || 100;
 }
