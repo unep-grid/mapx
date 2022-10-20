@@ -1,8 +1,8 @@
-import {Events} from './events.js';
-import settings from './settings.json';
-import {MessageFrameCom, RequestFrameCom} from './messages.js';
-import {parse, stringify} from './helpers.js';
-import {version} from '../package.json';
+import { Events } from "./events.js";
+import settings from "./settings.json";
+import { MessageFrameCom, RequestFrameCom } from "./messages.js";
+import { parse, stringify } from "./helpers.js";
+import { version } from "../package.json";
 
 /**
  * Class to create a manager to build an iframe and post message to a worker inside
@@ -54,29 +54,29 @@ class FrameManager extends Events {
 
     if (fm._destroyed) {
       fm._message({
-        level: 'warning',
-        key: 'warn_destroyed'
+        level: "warning",
+        key: "warn_destroyed",
       });
       return;
     }
 
     if (fm._init_done) {
       fm._message({
-        level: 'warning',
-        key: 'warn_already_init'
+        level: "warning",
+        key: "warn_already_init",
       });
       return;
     }
 
     fm.opt = Object.assign({}, settings, opt);
 
-    if (typeof fm.opt.url === 'object') {
+    if (typeof fm.opt.url === "object") {
       fm.opt.url = Object.assign({}, settings.url, fm.opt.url);
     }
 
     fm._sdkToken = Math.random().toString(32);
-    
-    fm._emitter = 'manager';
+
+    fm._emitter = "manager";
     fm._url = null;
     fm._req = [];
     fm._reqId = 0;
@@ -84,14 +84,14 @@ class FrameManager extends Events {
     fm._build();
     fm.setUrl();
     fm.setParams();
-    fm.setParam('sdkToken',fm._sdkToken);
-    fm.render();
+    fm.setParam("sdkToken", fm._sdkToken);
     fm._initListener();
     fm._init_done = true;
     fm._destroyed = false;
     if (fm.opt.verbose) {
       fm.setVerbose(true);
     }
+    fm.render();
   }
 
   /**
@@ -101,14 +101,14 @@ class FrameManager extends Events {
   destroy() {
     const fm = this;
     const destroyWorker = new RequestFrameCom({
-      idRequest: 'destroy'
+      idRequest: "destroy",
     });
     fm._post(destroyWorker);
     fm._removeListener();
     fm._iframe.remove();
     fm._init_done = false;
     fm._destroyed = true;
-    fm.fire('destroyed');
+    fm.fire("destroyed");
   }
   /**
    * Build iframe and set its properties
@@ -117,11 +117,12 @@ class FrameManager extends Events {
 
   _build() {
     const fm = this;
+
     if (fm._init_done) {
       return;
     }
-    fm._iframe = document.createElement('iframe');
-    fm._iframe.classList.add('framecom');
+    fm._iframe = document.createElement("iframe");
+    fm._iframe.classList.add("framecom");
     for (let s in fm.opt.style) {
       fm._iframe.style[s] = fm.opt.style[s];
     }
@@ -144,7 +145,7 @@ class FrameManager extends Events {
    */
   set width(w) {
     const fm = this;
-    w = isFinite(w) ? w + 'px' : w || fm.rect.width + 'px';
+    w = isFinite(w) ? w + "px" : w || fm.rect.width + "px";
     fm._iframe.style.width = w;
   }
   get width() {
@@ -157,7 +158,7 @@ class FrameManager extends Events {
    */
   set height(h) {
     const fm = this;
-    h = isFinite(h) ? h + 'px' : h || fm.rect.height + 'px';
+    h = isFinite(h) ? h + "px" : h || fm.rect.height + "px";
     fm._iframe.style.height = h;
   }
   get height() {
@@ -172,12 +173,12 @@ class FrameManager extends Events {
   setUrl(url) {
     const fm = this;
     url = url ? url : fm.opt.url;
-    if (typeof url === 'object') {
+    if (typeof url === "object") {
       url = `${url.protocol}://${url.host}:${url.port}`;
     }
     fm._url = new URL(url);
     if (fm.opt.static) {
-      fm._url.pathname = '/static.html';
+      fm._url.pathname = "/static.html";
     }
   }
   /**
@@ -204,7 +205,7 @@ class FrameManager extends Events {
   setLang(lang) {
     this.opt.lang = lang;
   }
-  
+
   /**
    * Render the iframe : set the selected url
    * @private
@@ -228,7 +229,7 @@ class FrameManager extends Events {
       fm.setParam(i, fm.opt.params[i]);
     }
   }
-  
+
   /**
    * Set single url param by key value
    * @param {String} key Key of the param
@@ -249,7 +250,7 @@ class FrameManager extends Events {
    */
   _post(request) {
     const fm = this;
-    fm._iframe.contentWindow.postMessage(stringify(request), '*');
+    fm._iframe.contentWindow.postMessage(stringify(request), "*");
   }
 
   /**
@@ -258,8 +259,8 @@ class FrameManager extends Events {
    * @private
    */
   _message(opt) {
-    opt.lang = this.opt.lang || 'en';
-    this.fire('message', new MessageFrameCom(opt));
+    opt.lang = this.opt.lang || "en";
+    this.fire("message", new MessageFrameCom(opt));
   }
 
   /**
@@ -271,7 +272,7 @@ class FrameManager extends Events {
     if (fm._msg_handler) {
       return;
     }
-    window.addEventListener('message', fm._handleMessageWorker);
+    window.addEventListener("message", fm._handleMessageWorker);
   }
 
   /**
@@ -280,7 +281,7 @@ class FrameManager extends Events {
    */
   _removeListener() {
     const fm = this;
-    window.removeEventListener('message', fm._handleMessageWorker);
+    window.removeEventListener("message", fm._handleMessageWorker);
   }
 
   /**
@@ -294,38 +295,38 @@ class FrameManager extends Events {
     try {
       const message = Object.assign({}, parse(msg.data));
 
-      if(message.sdkToken !== fm._sdkToken){
+      if (message.sdkToken !== fm._sdkToken) {
         return;
       }
       /**
        * Handle event
        */
-      if (message.type === 'event') {
+      if (message.type === "event") {
         const type = message.value.type;
         const data = message.value.data;
         if (type) {
           fm.fire(type, data);
         }
         fm._message({
-          level: 'log',
-          key: 'log_event',
+          level: "log",
+          key: "log_event",
           vars: {
-            event: type
+            event: type,
           },
-          emitter: 'worker'
+          emitter: "worker",
         });
       }
       /**
        * Redirect message to manager
        */
-      if (message.type === 'message') {
-        Object.assign(message, {emitter: 'worker'});
+      if (message.type === "message") {
+        Object.assign(message, { emitter: "worker" });
         return fm._message(message);
       }
       /**
        * Remove request from pool
        */
-      if (message.type === 'response' && isFinite(message.idRequest)) {
+      if (message.type === "response" && isFinite(message.idRequest)) {
         const req = fm._getAndRemoveRequestById(message.idRequest);
         if (message.success) {
           req.onResponse(message.value);
@@ -334,37 +335,37 @@ class FrameManager extends Events {
       /**
        * Handle state
        */
-      if (message.type === 'state') {
+      if (message.type === "state") {
         fm.fire(message.state);
         if (message.version !== fm.version) {
           fm._message({
-            level: 'error',
-            key: 'err_version_mismatch',
+            level: "error",
+            key: "err_version_mismatch",
             vars: {
               versionManager: fm.version,
-              versionWorker: message.version
+              versionWorker: message.version,
             },
-            emitter: 'worker'
+            emitter: "worker",
           });
         }
         fm._message({
-          level: 'log',
-          key: 'log_state',
+          level: "log",
+          key: "log_state",
           vars: {
-            state: message.state
+            state: message.state,
           },
-          emitter: 'worker'
+          emitter: "worker",
         });
         return;
       }
     } catch (e) {
       fm._message({
-        level: 'error',
-        key: 'err_handle_message_worker',
+        level: "error",
+        key: "err_handle_message_worker",
         vars: {
-          msg: msg.data
+          msg: msg.data,
         },
-        detail: e
+        detail: e,
       });
     }
   }
@@ -372,7 +373,6 @@ class FrameManager extends Events {
    * Enable or disable verbose mode
    * @param {Boolean} Enable verbose mode
    */
-
   setVerbose(enable) {
     const fm = this;
     const ignore =
@@ -384,11 +384,11 @@ class FrameManager extends Events {
     fm._mode_verbose = !!enable;
 
     if (enable) {
-      fm.on('message', fm._handle_verbose);
+      fm.on("message", fm._handle_verbose);
       return;
     }
 
-    fm.off('message', fm._handle_verbose);
+    fm.off("message", fm._handle_verbose);
   }
   /**
     const id = request.id;
@@ -406,19 +406,19 @@ class FrameManager extends Events {
       const req = new RequestFrameCom({
         idRequest: fm._reqId++,
         idResolver: idResolver,
-        value: data
+        value: data,
       });
       /**
        * Reject if to many request
        */
       if (nR > mR) {
         fm._message({
-          level: 'warning',
-          key: 'warn_to_much_request',
+          level: "warning",
+          key: "warn_to_much_request",
           vars: {
             nR: nR,
-            mR: mR
-          }
+            mR: mR,
+          },
         });
         reject(`too_many_request ${nR}. Max= ${mR}`);
       }
@@ -429,9 +429,9 @@ class FrameManager extends Events {
       fm._req.push(req);
     }).finally(() => {
       fm._message({
-        level: 'log',
-        key: 'log_req_queue_counter',
-        vars: {counter: fm._req.length}
+        level: "log",
+        key: "log_req_queue_counter",
+        vars: { counter: fm._req.length },
       });
     });
   }
@@ -457,21 +457,21 @@ class FrameManager extends Events {
   }
   _handle_verbose(message) {
     switch (message.level) {
-      case 'log':
-        console.info(`%c 🤓 ${message.text}`, 'color: #76bbf7');
+      case "log":
+        console.info(`%c 🤓 ${message.text}`, "color: #76bbf7");
         break;
-      case 'message':
-        console.info(`%c 😎 ${message.text}`, 'color: #70e497');
+      case "message":
+        console.info(`%c 😎 ${message.text}`, "color: #70e497");
         break;
-      case 'warning':
-        console.info(`%c 🥴 ${message.text}`, 'color: #d09c23');
+      case "warning":
+        console.info(`%c 🥴 ${message.text}`, "color: #d09c23");
         break;
-      case 'error':
-        console.info(`%c 🤬 ${message.text}`, 'color: #F00');
+      case "error":
+        console.info(`%c 🤬 ${message.text}`, "color: #F00");
         break;
       default:
         console.log(message.text);
     }
   }
 }
-export {FrameManager};
+export { FrameManager };

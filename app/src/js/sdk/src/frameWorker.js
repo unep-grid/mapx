@@ -1,19 +1,19 @@
-import {Events} from './events.js';
-import {parse, stringify} from './helpers.js';
-import {isObject} from '../../is_test/index.js';
-import {version} from '../package.json';
-import {EventSimple} from '../../event_simple/index.js';
+import { Events } from "./events.js";
+import { parse, stringify } from "./helpers.js";
+import { isObject } from "../../is_test/index.js";
+import { version } from "../package.json";
+import { EventSimple } from "../../event_simple/index.js";
 
 import {
   MessageFrameCom,
   ResponseFrameCom,
   StateFrameCom,
-  EventFrameCom
-} from './messages.js';
+  EventFrameCom,
+} from "./messages.js";
 
 const settingsWorker = {
   resolvers: {},
-  events: null
+  events: null,
 };
 
 /**
@@ -37,7 +37,7 @@ class FrameWorker extends Events {
     if (!opt.sdkToken) {
       opt.sdkToken = Math.random().toString(32);
       console.warn(
-        'Missing sdkToken : multiple SDK instances on the same page not supported.'
+        "Missing sdkToken : multiple SDK instances on the same page not supported."
       );
     }
     fw.handleMessageManager = fw.handleMessageManager.bind(fw);
@@ -50,13 +50,13 @@ class FrameWorker extends Events {
    */
   init() {
     const fw = this;
-    fw._emitter = 'worker';
+    fw._emitter = "worker";
     fw._sdkToken = fw.opt.sdkToken;
 
     if (fw._init) {
       fw.postMessage({
-        level: 'warning',
-        key: 'warn_worker_already_init'
+        level: "warning",
+        key: "warn_worker_already_init",
       });
       return;
     }
@@ -65,21 +65,21 @@ class FrameWorker extends Events {
 
     fw.opt.resolvers._bind(fw);
     fw.postState({
-      state: 'ready',
-      version: fw.version
+      state: "ready",
+      version: fw.version,
     });
 
     fw.postMessage({
-      level: 'log',
-      key: 'log_worker_ready'
+      level: "log",
+      key: "log_worker_ready",
     });
 
     if (fw.opt.events instanceof EventSimple) {
       fw._events = fw.opt.events;
       fw._events.addPassthrough({
         cb: (d) => {
-          fw.postEvent({value: d});
-        }
+          fw.postEvent({ value: d });
+        },
       });
     }
   }
@@ -114,7 +114,7 @@ class FrameWorker extends Events {
   _post(data) {
     const fw = this;
     data.sdkToken = fw._sdkToken;
-    window.parent.postMessage(stringify(data), '*');
+    window.parent.postMessage(stringify(data), "*");
   }
 
   postMessage(opt) {
@@ -141,14 +141,14 @@ class FrameWorker extends Events {
    */
   initListener() {
     const fw = this;
-    window.addEventListener('message', fw.handleMessageManager, false);
+    window.addEventListener("message", fw.handleMessageManager, false);
   }
   /**
    * Remove message listener
    */
   removeListener() {
     const fw = this;
-    window.removeEventListener('message', fw.handleMessageManager);
+    window.removeEventListener("message", fw.handleMessageManager);
     if (fw._events) {
       fw._events.destroy();
     }
@@ -170,18 +170,18 @@ class FrameWorker extends Events {
        * Execute the resolver and get result
        */
       const res = await new Promise((resolve, reject) => {
-        if (idRequest === 'destroy') {
+        if (idRequest === "destroy") {
           fw.destroy();
           resolve(null);
         } else if (!resolver) {
           reject(
             new MessageFrameCom({
-              level: 'error',
-              key: 'err_resolver_not_found',
+              level: "error",
+              key: "err_resolver_not_found",
               vars: {
                 idRequest: idRequest,
-                idResolver: idResolver
-              }
+                idResolver: idResolver,
+              },
             })
           );
         }
@@ -200,7 +200,7 @@ class FrameWorker extends Events {
       fw.postResponse({
         idRequest: idRequest,
         value: res,
-        success: true
+        success: true,
       });
     } catch (e) {
       /**
@@ -208,7 +208,7 @@ class FrameWorker extends Events {
        */
       fw.postResponse({
         idRequest: idRequest,
-        success: false
+        success: false,
       });
 
       /**
@@ -223,18 +223,18 @@ class FrameWorker extends Events {
          */
         const m = isObject(e) ? e.message : e;
         fw.postMessage({
-          level: 'error',
-          key: 'err_resolver_failed',
+          level: "error",
+          key: "err_resolver_failed",
           vars: {
             idRequest: idRequest,
             idResolver: idResolver,
-            msg: m
+            msg: m,
           },
-          data: e
+          data: e,
         });
       }
     }
   }
 }
 
-export {FrameWorker};
+export { FrameWorker };

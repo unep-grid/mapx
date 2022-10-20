@@ -9,13 +9,14 @@ const mapx = new mxsdk.Manager({
     port: 8880,
     protocol: 'http'
   },
-  static: true,
+  //static: true,
+  static : false,
   verbose: true,
   params: {
     zoomToViews: true,
     closePanels: true,
     //views: ['MX-CRPXN-W8IAC-XWFLU'],
-    views: ['MX-8C1KB-SE08V-JUMOH'],
+    //views: ['MX-8C1KB-SE08V-JUMOH'],
     language: 'en'
   }
 });
