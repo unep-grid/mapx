@@ -4010,9 +4010,24 @@
     "es": "Permitir la descarga de la fuente de datos"
   },
   {
+    "id": "view_use_postgis_tiles",
+    "en": "Use native PostGIS tiles generator",
+    "es": "Utilice el generador de teselas de PostGIS nativo"
+  },
+  {
+    "id": "view_use_postgis_tiles_desc",
+    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
+    "es": "Experimental. Si está habilitado, se producen teselas de PostGIS. Esto podría corregir geometrías no válidas en el mapa. Esta opción no tiene efecto si se establece una máscara."
+  },
+  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "es": "Añadir una máscara"
+  },
+  {
+    "id": "view_add_overlap_layer_desc",
+    "en": "This will produce an intersection between the two layers set, useful to observe overlapping features.",
+    "es": "Esto producirá una intersección entre el conjunto de dos capas, útil para observar las características superpuestas."
   },
   {
     "id": "view_component",

@@ -4010,9 +4010,24 @@
     "bn": "উত্সটি ডাউনলোডের অনুমতি দিন "
   },
   {
+    "id": "view_use_postgis_tiles",
+    "en": "Use native PostGIS tiles generator",
+    "bn": "স্থানীয় পোস্টজিআইএস টাইলস জেনারেটর ব্যবহার করুন"
+  },
+  {
+    "id": "view_use_postgis_tiles_desc",
+    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
+    "bn": "পরীক্ষামূলক। সক্ষম হলে, পোস্টজিআইএস টাইলস তৈরি করা হয়। এটি মানচিত্রে অবৈধ জ্যামিতি ঠিক করতে পারে। একটি মাস্ক সেট করা থাকলে এই বিকল্পটি কোন প্রভাব নয়।"
+  },
+  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "bn": "একটি মুখোশ যোগ করুন"
+  },
+  {
+    "id": "view_add_overlap_layer_desc",
+    "en": "This will produce an intersection between the two layers set, useful to observe overlapping features.",
+    "bn": "এটি দুটি স্তরের সেটের মধ্যে একটি ছেদ তৈরি করবে, ওভারল্যাপিং বৈশিষ্ট্যগুলি পর্যবেক্ষণ করার জন্য দরকারী।"
   },
   {
     "id": "view_component",

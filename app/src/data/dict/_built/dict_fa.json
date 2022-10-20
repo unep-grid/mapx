@@ -4010,9 +4010,24 @@
     "fa": "بارگیری منبع را مجاز کنید "
   },
   {
+    "id": "view_use_postgis_tiles",
+    "en": "Use native PostGIS tiles generator",
+    "fa": "از مولد کاشی PostGIS بومی استفاده کنید"
+  },
+  {
+    "id": "view_use_postgis_tiles_desc",
+    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
+    "fa": "تجربی. اگر فعال باشد، کاشی های PostGIS تولید می شوند. این ممکن است هندسه های نامعتبر روی نقشه را برطرف کند. اگر یک ماسک تنظیم شده باشد، این گزینه هیچ اثری ندارد."
+  },
+  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "fa": "افزودن نقاب"
+  },
+  {
+    "id": "view_add_overlap_layer_desc",
+    "en": "This will produce an intersection between the two layers set, useful to observe overlapping features.",
+    "fa": "این یک تقاطع بین مجموعه دو لایه ایجاد می کند که برای مشاهده ویژگی های همپوشانی مفید است."
   },
   {
     "id": "view_component",

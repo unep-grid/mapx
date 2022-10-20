@@ -4010,9 +4010,24 @@
     "ar": "السماح بتحميل المصدر "
   },
   {
+    "id": "view_use_postgis_tiles",
+    "en": "Use native PostGIS tiles generator",
+    "ar": "استخدم منشئ مربعات PostGIS الأصلي"
+  },
+  {
+    "id": "view_use_postgis_tiles_desc",
+    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
+    "ar": "تجريبي. في حالة التمكين ، يتم إنتاج مربعات PostGIS. قد يؤدي هذا إلى إصلاح الأشكال الهندسية غير الصالحة على الخريطة. هذا الخيار ليس له تأثير إذا تم تعيين القناع."
+  },
+  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "ar": "أضف قناعًا"
+  },
+  {
+    "id": "view_add_overlap_layer_desc",
+    "en": "This will produce an intersection between the two layers set, useful to observe overlapping features.",
+    "ar": "سينتج عن ذلك تقاطع بين مجموعة الطبقتين ، مما يفيد في ملاحظة الميزات المتداخلة."
   },
   {
     "id": "view_component",

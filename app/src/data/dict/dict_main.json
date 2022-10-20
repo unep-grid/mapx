@@ -5148,6 +5148,32 @@
     "de": ""
   },
   {
+    "id": "view_use_postgis_tiles",
+    "en": "Use native PostGIS tiles generator",
+    "fr": "Utiliser les tuiles native PostGIS",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "view_use_postgis_tiles_desc",
+    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
+    "fr": "Expérimental. Si activé, les tuiles PostGIS sont produites. Cela pourrait résoudre les problèmes de géométries invalides sur la carte. Cette option n'a pas d'effet si un masque est utilisé.",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "fr": "Ajouter un masque",
@@ -5157,6 +5183,20 @@
     "ar": "",
     "fa": "افزودن نقاب",
     "ps": "د ماسک زیاتول",
+    "bn": "",
+    "de": ""
+  },
+{
+    "id": "view_add_overlap_layer_desc",
+    "en": "This will produce an intersection between the two layers set, useful to observe overlapping features.",
+    "fr": "Cela produira une intersection entre les deux couches définies, utile pour observer les entités qui se chevauchent.",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
     "bn": "",
     "de": ""
   },

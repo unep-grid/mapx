@@ -4010,9 +4010,24 @@
     "de": "Download der Quelle zulassen "
   },
   {
+    "id": "view_use_postgis_tiles",
+    "en": "Use native PostGIS tiles generator",
+    "de": "Verwenden Sie den nativen PostGIS-Kachelgenerator"
+  },
+  {
+    "id": "view_use_postgis_tiles_desc",
+    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
+    "de": "Experimental. Wenn aktiviert, werden PostGIS-Kacheln erstellt. Dadurch werden möglicherweise ungültige Geometrien auf der Karte behoben. Diese Option hat keine Wirkung, wenn eine Maske gesetzt ist."
+  },
+  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "de": "Maske hinzufügen"
+  },
+  {
+    "id": "view_add_overlap_layer_desc",
+    "en": "This will produce an intersection between the two layers set, useful to observe overlapping features.",
+    "de": "Dadurch entsteht ein Schnittpunkt zwischen den beiden Layer-Sets, was nützlich ist, um überlappende Features zu beobachten."
   },
   {
     "id": "view_component",

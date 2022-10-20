@@ -4010,9 +4010,24 @@
     "ps": "د سرچینې ډاونلوډ ته اجازه ورکړئ "
   },
   {
+    "id": "view_use_postgis_tiles",
+    "en": "Use native PostGIS tiles generator",
+    "ps": "د اصلي پوسټGIS ټایلونو جنریټر وکاروئ"
+  },
+  {
+    "id": "view_use_postgis_tiles_desc",
+    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
+    "ps": "تجربوي. که فعال شي، د PostGIS ټایلونه تولیدیږي. دا ممکن په نقشه کې غلط جیومیټري حل کړي. دا اختیار هیڅ اغیزه نلري که چیرې ماسک تنظیم شوی وي."
+  },
+  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "ps": "د ماسک زیاتول"
+  },
+  {
+    "id": "view_add_overlap_layer_desc",
+    "en": "This will produce an intersection between the two layers set, useful to observe overlapping features.",
+    "ps": "دا به د دوه پرتونو سیټ تر مینځ یو تقاطع رامینځته کړي ، چې د پراخیدو ځانګړتیاو لیدو لپاره ګټور وي."
   },
   {
     "id": "view_component",

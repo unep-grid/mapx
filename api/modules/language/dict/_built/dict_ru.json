@@ -4010,9 +4010,24 @@
     "ru": "Разрешить загрузку источника "
   },
   {
+    "id": "view_use_postgis_tiles",
+    "en": "Use native PostGIS tiles generator",
+    "ru": "Используйте собственный генератор тайлов PostGIS"
+  },
+  {
+    "id": "view_use_postgis_tiles_desc",
+    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
+    "ru": "Экспериментальный. Если включено, создаются листы PostGIS. Это может исправить неверную геометрию на карте. Этот параметр не действует, если установлена маска."
+  },
+  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "ru": "Добавить маску"
+  },
+  {
+    "id": "view_add_overlap_layer_desc",
+    "en": "This will produce an intersection between the two layers set, useful to observe overlapping features.",
+    "ru": "Это создаст пересечение между двумя наборами слоев, что полезно для наблюдения за перекрывающимися объектами."
   },
   {
     "id": "view_component",
