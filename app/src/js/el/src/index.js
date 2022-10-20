@@ -174,7 +174,7 @@ function cleanListeners() {
     }
     const id = l.target.dataset.el_id_listener;
     /**
-     * use query select instead of contains : contains seems to fail in some browser
+     * ⚠️  using query select instead of contains : contains seems to fail in some browser
      */
     const s = document.body.querySelector(`[data-el_id_listener="${id}"]`);
     if (!s) {

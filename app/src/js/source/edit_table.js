@@ -2060,13 +2060,10 @@ export class EditTableSessionClient extends WsToolsBase {
     opt.action = toggleMenu;
     opt.icon = "cogs";
     const elBtn = elButtonFa(key, opt);
-    let popup;
+    const popup = new Popup({ position: "top", elAnchor: elBtn, ...opt });
+    et._popups.push(popup);
 
     function toggleMenu() {
-      if (!popup) {
-        popup = new Popup({ position: "top", elAnchor: elBtn, ...opt });
-        et._popups.push(popup);
-      }
       popup.toggle();
     }
 
