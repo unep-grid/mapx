@@ -1,3 +1,12 @@
+  - [1.9.45-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.1) 
+
+    - APP 
+      - Table editor :
+        - Improved progress 
+        - Drop down toolbox with geom validation and repair 
+        - Improved integration with the "display table" module 
+      - Tiles :
+        - Added an option in view editor to select Postgis as the tile builder : can solve issue with some geometries not correctly rendered, but the performance is slightly impacted 
 
   - [1.9.45-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-alpha.1)
 
