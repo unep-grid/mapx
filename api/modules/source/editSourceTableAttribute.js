@@ -35,9 +35,10 @@ export async function ioEditSource(socket, options) {
 }
 
 const def = {
+  start_percent: 0.001, //initial progress value ( 0 remove it )
   log_perf: false,
   max_rows: 1e6,
-  max_columns: 200,
+  max_columns: 1000, // should match client
   //threshold_chunk: 1e3,
   threshold_chunk: 20,
   size_chunk: 1e3,
@@ -61,6 +62,7 @@ class EditTableSession {
     et.onExit = et.onExit.bind(et);
     et.onValidate = et.onValidate.bind(et);
     et.progress = et.progress.bind(et);
+    et.progressAll = et.progressAll.bind(et);
   }
 
   /**
@@ -261,25 +263,39 @@ class EditTableSession {
         return;
       }
       et.setBusy(true);
-      await isLayerValid({
+      et.progressAll({ init: true });
+      const out = await isLayerValid({
         idLayer: et._id_table,
         useCache: message.use_cache,
         autoCorrect: message.autoCorrect,
         analyze: message.analyze,
         validate: message.validate,
-        onProgress: et.progress,
+        onProgress: et.progressAll,
       });
+      et.emitAll("/server/source/edit/table/geom/result", out);
     } catch (e) {
       console.error(e);
     } finally {
-      et.progress({ percent: 0 });
+      et.progressAll({ percent: 0 });
       et.setBusy(false);
     }
   }
 
-  progress(messageProgress) {
+  progress(messageProgress, all) {
     const et = this;
-    et.emitAll("/server/source/edit/table/progress", messageProgress);
+
+    if (messageProgress?.init) {
+      messageProgress = { percent: def.start_percent };
+    }
+    if (all) {
+      et.emitAll("/server/source/edit/table/progress", messageProgress);
+    } else {
+      et.emit("/server/source/edit/table/progress", messageProgress);
+    }
+  }
+  progressAll(messageProgress) {
+    const et = this;
+    return et.progress(messageProgress, true);
   }
 
   onUpdate(message) {
@@ -335,59 +351,76 @@ class EditTableSession {
   async sendTable() {
     const et = this;
     et.perf("sendTable");
-    const hasGeom = await columnExists(def.col_geom, et._id_table);
-    const validation = {};
-    if (hasGeom) {
-      Object.assign(
-        validation,
-        // id, useCache, autoCorrect, analyze, validate;
-        await isLayerValid(et._id_table, true, false, false, false)
-      );
-    }
-    const pgRes = await getSourceAttributeTable({
-      id: et._id_table,
-      fullTable: true,
-    });
-    const data = pgRes.rows;
-    const nRow = pgRes.rowCount;
-    const attributes = pgRes.fields.map((f) => f.name);
-    const types = await getColumnsTypesSimple(et._id_table, attributes);
-    const title = await getLayerTitle(et._id_table);
-    const locked = await et.getState("lock_table");
-    const table = {
-      hasGeom,
-      validation,
-      types,
-      title,
-      locked,
-    };
-
-    const iL = Math.ceil(nRow / def.size_chunk);
-    for (let i = 0; i < iL; i++) {
-      if (et._destroyed) {
-        return;
+    try {
+      et.progress({ init: true });
+      const hasGeom = await columnExists(def.col_geom, et._id_table);
+      const validation = {};
+      if (hasGeom) {
+        Object.assign(
+          validation,
+          // id, useCache, autoCorrect, analyze, validate;
+          await isLayerValid(et._id_table, true, false, false, false)
+        );
       }
-      table.nParts = iL;
-      table.part = i + 1;
-      table.start = i === 0;
-      table.end = i === iL - 1;
-      table.data = data.splice(0, def.size_chunk);
-      et.emit("/server/source/edit/table/data", table);
-    }
+      const pgRes = await getSourceAttributeTable({
+        id: et._id_table,
+        fullTable: true,
+      });
+      const data = pgRes.rows;
+      const nRow = pgRes.rowCount;
+      const attributes = pgRes.fields.map((f) => f.name);
+      const types = await getColumnsTypesSimple(et._id_table, attributes);
+      const title = await getLayerTitle(et._id_table);
+      const locked = await et.getState("lock_table");
+      const table = {
+        hasGeom,
+        validation,
+        types,
+        title,
+        locked,
+      };
 
-    et.perfEnd("sendTable");
+      const iL = Math.ceil(nRow / def.size_chunk);
+      for (let i = 0; i < iL; i++) {
+        if (et._destroyed) {
+          return;
+        }
+        table.nParts = iL;
+        table.part = i + 1;
+        table.start = i === 0;
+        table.end = i === iL - 1;
+        table.data = data.splice(0, def.size_chunk);
+        et.progress({ percent: i / iL });
+        et.emit("/server/source/edit/table/data", table);
+      }
+
+      et.perfEnd("sendTable");
+    } catch (e) {
+      console.error(e);
+    } finally {
+      et.progress({ percent: 0 });
+    }
   }
 
+  /**
+   * Emit to user
+   */
   emit(type, data) {
     const et = this;
     et._socket.emit(type, et.message_formater(data));
   }
 
+  /**
+   * Emot to other
+   */
   emitRoom(type, data) {
     const et = this;
     et._socket.to(et._id_room).emit(type, et.message_formater(data));
   }
 
+  /**
+   * Emit to all
+   */
   emitAll(type, data) {
     const et = this;
     et.emit(type, data);

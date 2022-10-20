@@ -11,6 +11,7 @@ const idGeomId = def.tables.layer_id_col;
 
 /**
  * Check for layer geom validity
+ * TODO: USE sql package
  * @param {String | Object} idLayer id of the layer to check OR config object
  * @param {Boolean} useCache Use cache
  * @param {Boolean} autoCorrect Try an automatic correction
@@ -65,23 +66,18 @@ export async function isLayerValid(
    * Validation query
    * - cache version : only validate feature not already validated
    * - normal version : all feature (re) validated
+   * ⚠️  as _req_prog add AND clause, WHERE should be set
    */
-  const sqlValidateCache = `
-  UPDATE ${idLayer} 
-  SET ${idValidColumn} = ST_IsValid(${idGeomColumn})
-  AND ST_CoveredBy(
-    ${idGeomColumn},
-    ST_MakeEnvelope(-180, -90, 180, 90, 4326)
-  )
-  WHERE ${idValidColumn} IS null
-  `;
+
   const sqlValidate = `
   UPDATE ${idLayer} 
   SET ${idValidColumn} = ST_IsValid(${idGeomColumn})
   AND ST_CoveredBy(
     ${idGeomColumn},
     ST_MakeEnvelope(-180, -90, 180, 90, 4326)
-  )`;
+  ) 
+  WHERE true`;
+  const sqlValidateCache = `${sqlValidate} AND ${idValidColumn} IS null`;
 
   /**
    * Autocorrect geom
@@ -230,6 +226,9 @@ async function getStatValidation(idLayer) {
   FROM ${idLayer}
   GROUP BY ${idValidColumn}`;
 
+  const sqlValidValues = `
+   SELECT ${idGeomId}, ${idValidColumn} from ${idLayer}`;
+
   /**
    * Get summary ex.
    * [
@@ -238,22 +237,24 @@ async function getStatValidation(idLayer) {
    *  {status: "invalid", n:5  }
    * ]
    */
-  const res = await pgRead.query(sqlValidityStatus);
+  const resStatus = await pgRead.query(sqlValidityStatus);
+  const resValues = await pgRead.query(sqlValidValues);
   /**
    * Default
    */
   for (let i = 0; i < values.length; i++) {
     const v = values[i];
-    const d = res.rows.find((r) => r.status === v) || {};
+    const d = resStatus.rows.find((r) => r.status === v) || {};
     out[v] = d?.n || 0;
   }
+
+  out.values = resValues.rows;
 
   return out;
 }
 
 async function getGids(idLayer) {
   const sql = `SELECT ${idGeomId} from ${idLayer}`;
-
   const res = await pgRead.query(sql);
   const gids = res.rows.map((r) => r.gid);
   return gids;
@@ -274,7 +275,7 @@ async function _req_prog(label, sql, gids, onProgress) {
   let iL = gidsCopy.length;
   const chunkSize = 50;
   if (iL <= chunkSize) {
-    onProgress({ percent: 0.5 , label: label });
+    onProgress({ percent: 0.5, label: label });
     await pgWrite.query(sqlGid);
   } else {
     const groupsL = Math.ceil(iL / chunkSize);
@@ -283,9 +284,8 @@ async function _req_prog(label, sql, gids, onProgress) {
       p = i / groupsL;
       onProgress({ percent: p, label: label });
       const gidGroup = gidsCopy.splice(0, chunkSize);
-
-      const gidTxt = gidGroup.join(","),
-        sqlGid = `${sql} AND ${idGeomId} in (${gidTxt})`;
+      const gidTxt = gidGroup.join(",");
+      const sqlGid = `${sql} AND ${idGeomId} in (${gidTxt})`;
       await pgWrite.query(sqlGid);
     }
   }

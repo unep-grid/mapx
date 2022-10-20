@@ -38,12 +38,13 @@ const defaults = {
   id_table: null,
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
+  id_column_valid: "_mx_valid",
   id_columns_reserved: ["gid", "_mx_valid", "geom"],
   max_changes: 1e4,
   max_changes_warning: 1e3,
   min_columns: 3,
   max_rows: 1e5, // should match server
-  max_columns: 200, // should match server
+  max_columns: 1000, // should match server
   routes: {
     /**
      * server to here
@@ -55,6 +56,7 @@ const defaults = {
     server_table_data: "/server/source/edit/table/data",
     server_dispatch: "/server/source/edit/table/dispatch",
     server_progress: "/server/source/edit/table/progress",
+    server_geom_validate_result: "/server/source/edit/table/geom/result",
     /**
      * here to server
      */
@@ -157,6 +159,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et._socket.on(r.server_table_data, et.initTable);
       et._socket.on(r.server_dispatch, et.onDispatch);
       et._socket.on(r.server_progress, et.onProgress);
+      et._socket.on(r.server_geom_validate_result, et.onGeomValidateResult);
 
       et._socket.on("disconnect", et.onDisconnect);
       await et.dialogWarning();
@@ -250,6 +253,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et._socket.off(r.server_table_data, et.initTable);
       et._socket.off(r.server_dispatch, et.onDispatch);
       et._socket.off(r.server_progress, et.onProgress);
+      et._socket.off(r.server_geom_validate_result, et.onGeomValidateResult);
       et._socket.off("disconnect", et.onDisconnect);
       await et.fire("destroy");
     } catch (e) {
@@ -305,12 +309,12 @@ export class EditTableSessionClient extends WsToolsBase {
      */
     et._el_button_geom_validate = elButtonFa("btn_edit_geom_validate", {
       icon: "check",
-      action: et.geomValidate,
+      action: et.dialogGeomValidate,
     });
 
     et._el_button_geom_repair = elButtonFa("btn_edit_geom_repair", {
       icon: "user-md",
-      action: et.geomRepair,
+      action: et.dialogGeomRepair,
     });
 
     /**
@@ -744,8 +748,6 @@ export class EditTableSessionClient extends WsToolsBase {
       et._init_data.length = 0;
     }
 
-    const percent = (table.part / table.nParts) * 100;
-    et.setProgress(percent);
     et._init_data.push(...table.data);
 
     if (!table.end) {
@@ -1988,7 +1990,7 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Geometry tools
    */
-  async geomValidate(opt) {
+  async dialogGeomValidate() {
     const et = this;
     if (et.locked) {
       return;
@@ -1998,20 +2000,44 @@ export class EditTableSessionClient extends WsToolsBase {
     if (!choice) {
       return;
     }
-    const def = { use_cache: choice === "cache", autoCorrect: false };
-    opt = Object.assign({}, def, opt);
+    const opt = { use_cache: choice === "cache", autoCorrect: false };
     et.emit(r.client_geom_validate, opt);
   }
 
-  async geomRepair(opt) {
+  async dialogGeomRepair() {
     const et = this;
     if (et.locked) {
       return;
     }
-    const useCache = await et.dialogUseCache();
-    const def = { use_cache: useCache, autoCorrect: true };
-    opt = Object.assign({}, def, opt);
-    await et.geomValidate(opt);
+    const r = et._config.routes;
+    const choice = await et.dialogUseCache();
+    if (!choice) {
+      return;
+    }
+    const opt = { use_cache: choice === "cache", autoCorrect: true };
+    et.emit(r.client_geom_validate, opt);
+  }
+
+  async onGeomValidateResult(data) {
+    const et = this;
+    try {
+      const validValues = data?.stat?.values;
+      const gidRow = et._ht.getDataAtProp(et._config.id_column_main);
+      /**
+       * Format cell as [2307, '_mx_valid', true]
+       */
+      const cells = validValues.map((v) => {
+        const idRow = gidRow.indexOf(v.gid);
+        return [
+          idRow,
+          et._config.id_column_valid,
+          v[et._config.id_column_valid],
+        ];
+      });
+      et.handlerCellsBatchProcess(cells);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async dialogUseCache() {

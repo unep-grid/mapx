@@ -81,7 +81,6 @@ export async function handlerTile(req, res) {
       .update(JSON.stringify(data))
       .digest("hex");
 
-
     return getTile(res, hash, data);
   } catch (e) {
     return sendTileError(res, e);
@@ -108,11 +107,11 @@ async function getTilePg(res, hash, data) {
     let buffer;
     const useAsMvt = data.usePostgisTiles;
     const useMask = data.useMask;
-    // Geometry test could be included in request, as CTE block. 
+    // Geometry test could be included in request, as CTE block.
     // - per object based test – outside a deticated CTE – is probably expensive
     // - isPointLikeGeom only works if there is only one type of geom per layer
     data.isPointGeom = await isPointLikeGeom(data.layer);
-   
+
     if (useAsMvt) {
       str = templates.getMvt;
     } else {
@@ -122,7 +121,6 @@ async function getTilePg(res, hash, data) {
         str = templates.getGeojsonTile;
       }
     }
-
 
     const qs = parseTemplate(str, data);
     const out = await pgRead.query(qs);
@@ -135,7 +133,7 @@ async function getTilePg(res, hash, data) {
         buffer = geojsonToPbf(geojson, data);
       }
 
-      if (buffer.length === 0) {
+      if (buffer?.length === 0) {
         return sendTileEmpty(res);
       }
 

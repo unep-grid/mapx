@@ -440,7 +440,9 @@ export function modalDialog(opt) {
       {
         class: "btn btn-default",
         on: {
-          click: () => {
+          click: (e) => {
+            e.stopPropagation();
+            e.preventDefault();
             resolve(true);
             elModal.close();
           },
@@ -490,7 +492,9 @@ export function modalConfirm(opt) {
       {
         class: "btn btn-default",
         on: {
-          click: () => {
+          click: (e) => {
+            e.stopPropagation();
+            e.preventDefault();
             resolve(false);
             elModal.close();
           },
@@ -504,7 +508,9 @@ export function modalConfirm(opt) {
       {
         class: "btn btn-default",
         on: {
-          click: () => {
+          click: (e) => {
+            e.stopPropagation();
+            e.preventDefault();
             resolve(true);
             elModal.close();
           },
@@ -549,9 +555,9 @@ export function modalPrompt(opt) {
     inputOptions: {
       type: "number",
       class: "form-control",
-      min: 0,
-      max: 1000,
-      value: 10,
+      //min: 0,
+      //max: 1000,
+      //value: 10,
       id: Math.random().toString(32),
       checkboxValues: {
         true: true,
@@ -590,7 +596,7 @@ export function modalPrompt(opt) {
         { class: ["text-muted", "help-box"], for: opt.inputOptions.id },
         opt.desc
       );
-      elInputGroup.appendChild(elDesc);
+      elLabel.appendChild(elDesc);
     }
 
     if (isCheckbox) {
@@ -618,7 +624,9 @@ export function modalPrompt(opt) {
       {
         class: "btn btn-default",
         on: {
-          click: () => {
+          click: (e) => {
+            e.stopPropagation();
+            e.preventDefault();
             if (selectAuto instanceof SelectAuto) {
               selectAuto.destroy();
             }
@@ -635,19 +643,26 @@ export function modalPrompt(opt) {
       {
         class: "btn btn-default",
         on: {
-          click: () => {
+          click: (e) => {
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            e.preventDefault();
+
             const disabled = elBtnConfirm.getAttribute("disabled") === "true";
             if (disabled) {
               return;
             }
+
             const value = isCheckbox
               ? opt.inputOptions.checkboxValues[elInput.checked]
               : elInput.value;
+
+
             resolve(value);
+            elModal.close();
             if (selectAuto instanceof SelectAuto) {
               selectAuto.destroy();
             }
-            elModal.close();
           },
         },
       },
@@ -655,7 +670,7 @@ export function modalPrompt(opt) {
     );
 
     if (opt.onInput instanceof Function) {
-      elInput.addEventListener("input", () => {
+      elInput.addEventListener("input", (e) => {
         const value = isCheckbox
           ? opt.inputOptions.checkboxValues[elInput.checked]
           : elInput.value;

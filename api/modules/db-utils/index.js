@@ -9,6 +9,9 @@ import { isLayerValid, areLayersValid } from "./geom_validation.js";
  */
 const { key } = settings.db.crypto;
 
+const gid = settings.validation_defaults.tables.layer_id_col;
+const geom = settings.validation_defaults.tables.layer_id_geom;
+
 /**
  * Test if a table exists
  *
@@ -65,7 +68,7 @@ async function columnExists(idColumn, idTable) {
 async function isPointLikeGeom(idLayer, schema) {
   schema = schema || "public";
   const sqlPointLike = `
-  SELECT ST_GeometryType(geom) like '%Point' as ispoint from ${schema}.${idLayer}`;
+  SELECT ST_GeometryType(${geom}) like '%Point' as ispoint from ${schema}.${idLayer}`;
   const res = await pgRead.query(sqlPointLike);
   return res.rowCount > 0 && res.rows[0].ispoint;
 }
@@ -100,7 +103,7 @@ async function tableHasValues(idTable, schema) {
   const attributes = Object.keys(firstRow);
 
   for (const attr of attributes) {
-    const hasAttr = attr && !["gid", "geom"].includes(attr);
+    const hasAttr = attr && ![gid, geom].includes(attr);
     if (hasAttr && firstRow[attr]) {
       return true;
     }
@@ -282,14 +285,14 @@ async function getColumnsNames(idLayer) {
 }
 
 /**
- * Get table dimensions
+ * Get layer dimensions (gid expected)
  * @param {String} id of the table
  * @return{Object} { nrow : <n>, ncol :<n>}
  */
 async function getTableDimension(idTable) {
   const colNames = await getColumnsNames(idTable);
   const ncol = colNames.length;
-  const resRows = await pgRead.query(`select count(*) from ${idTable}`);
+  const resRows = await pgRead.query(`SELECT count(${gid}) FROM ${idTable}`);
   const nrow = resRows.rows[0]?.count;
   return {
     nrow,
