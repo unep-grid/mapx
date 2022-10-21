@@ -127,6 +127,11 @@ import {
 } from "./../is_test_mapx/index.js";
 
 /**
+ * Storage
+ */
+const viewsActive = new Set();
+
+/**
  * Export downloadViewVector from here, to match pattern
  *  map_helpers ->
  *  downloadViewVector
@@ -1715,7 +1720,7 @@ export async function addSourceFromView(o) {
       `${urlBase}?view=${o.view.id}&` +
       // Server cache invalidation
       `skipCache=${!useServerCache}&` +
-      // By defautl, geojson-vt is used alternative: postgis asmvt  
+      // By defautl, geojson-vt is used alternative: postgis asmvt
       `usePostgisTiles=${!!usePostgisTiles}&` +
       // Browser cache invalidation using view timestamp
       `timestamp=${o.view.date_modified}`;
@@ -2373,7 +2378,7 @@ export function updateViewParams(o) {
 export function getViewsOrder() {
   const viewContainer = document.querySelector(".mx-views-list");
   if (!viewContainer) {
-    return null;
+    return [];
   }
   const els = viewContainer.querySelectorAll(".mx-view-item");
   const res = [];
@@ -2812,6 +2817,8 @@ export async function viewLayersRemove(o) {
 
   await viewModulesRemove(view);
 
+  viewsActive.delete(view.id);
+
   events.fire({
     type: "view_removed",
     data: {
@@ -2938,6 +2945,14 @@ export function getViewsOpen() {
     }
   }
   return open;
+}
+
+/**
+ * Get list of active views ( no specific order )
+ * @return {Array} Array of views array
+ */
+export function getViewsActive() {
+  return Array.from(viewsActive);
 }
 
 /**
@@ -3422,6 +3437,8 @@ export async function viewLayersAdd(o) {
    * View aded fully : send event
    */
   view._added_at = Date.now();
+
+  viewsActive.add(view.id);
 
   events.fire({
     type: "view_added",

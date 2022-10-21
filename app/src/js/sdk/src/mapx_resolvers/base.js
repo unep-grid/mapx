@@ -15,6 +15,7 @@ class ResolversBase {
   constructor(opt) {
     const rslv = this;
     rslv.opt = Object.assign({}, opt);
+    rslv._views = new Set();
   }
   /**
    * Bind worker
@@ -115,7 +116,7 @@ class ResolversBase {
    * @return view
    * @ignore
    */
-   _get_random_view(opt) {
+  _get_random_view(opt) {
     opt = Object.assign({}, { type: ["vt", "rt"] }, opt);
     const view = getViewRandom(opt);
     if (!isView(view)) {

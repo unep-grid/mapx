@@ -13,6 +13,7 @@ import {
   getViewsForJSON,
   getViewsLayersVisibles,
   getView,
+  getViewsBounds,
   getViewLegendImage,
   getViewRemote,
   viewRemove,
@@ -560,15 +561,21 @@ class MapxResolversStatic extends ResolversBase {
    * Add a view
    * @param {Object} opt Options
    * @param {String} opt.idView Target view id
+   * @param {Boolean} opt.zoomToView Fly to view extends
    * @return {Promise<Boolean>} done
    */
   async view_add(opt) {
     const rslv = this;
-    opt = Object.assign({}, { idView: null }, opt);
+    opt = Object.assign({}, { idView: null, zoomToView: false }, opt);
     const view = getView(opt.idView) || (await getViewRemote(opt.idView));
     const valid = isView(view);
     if (valid) {
       await viewsListAddSingle(view);
+      if (opt.zoomToView) {
+        const map = getMap();
+        const bounds = await getViewsBounds(opt.idView);
+        map.fitBounds(bounds);
+      }
       return true;
     } else {
       return rslv._err("err_view_invalid");

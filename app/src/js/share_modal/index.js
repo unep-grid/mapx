@@ -15,6 +15,7 @@ import {
   getViews,
   getViewsLayersVisibles,
   getViewsOpen,
+  getViewsActive,
   getMapPos,
 } from "../map_helpers/index.js";
 import {
@@ -192,6 +193,9 @@ export class ShareModal extends EventSimple {
         break;
       case "share_views_select_method_map_list_open":
         state.views.push(...(getViewsOpen() || []));
+        break;
+      case "share_views_select_method_map_list_active":
+        state.views.push(...(getViewsActive() || []));
         break;
       case "share_views_select_method_current_url":
         const p = getQueryParametersAsObject();
@@ -406,6 +410,7 @@ export class ShareModal extends EventSimple {
     const text = "Shared from MapX";
     const title = "MapX";
     // replace values in template, if avaialble.
+    // email of the sender can't be set
     const txt = parseTemplate(
       linkItem.template,
       {

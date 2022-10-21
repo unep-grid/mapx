@@ -1,11 +1,15 @@
 [
   {
-    "id" : "share_views_select_method_preselect",
-    "mode" : ["preselect"]
+    "id": "share_views_select_method_preselect",
+    "mode": ["preselect"]
   },
   {
     "id": "share_views_select_method_map_list_open",
     "mode": ["app"]
+  },
+  {
+    "id": "share_views_select_method_map_list_active",
+    "mode": ["static"]
   },
   {
     "id": "share_views_select_method_story_itself",
@@ -17,8 +21,10 @@
   },
   {
     "id": "share_views_select_method_current_url",
-    "mode": ["static"]
+    "mode": [],
+    "comment":"disabled"
   },
+
   {
     "id": "share_views_select_method_map_layer",
     "mode": [],

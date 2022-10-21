@@ -9,7 +9,7 @@
   {
     "id": "soc_link_mail",
     "label": "Email",
-    "template": "mailto:{{email}}?subject={{title}}&body={{text}} %0D {{url}}",
+    "template": "mailto:{{emailDest}}?subject={{title}}&body={{text}} %0D {{url}}",
     "disable_copy": true
   },
   {
