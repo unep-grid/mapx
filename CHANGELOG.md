@@ -1,3 +1,7 @@
+  - [1.9.45-beta.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.2) 
+    - APP
+      - Sharing manager: added an option to share views activated, manually or using the SDK. Should work when static mode is used from the SDK. Should solve #860
+    
   - [1.9.45-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.1) 
 
     - APP 

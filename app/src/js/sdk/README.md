@@ -1132,6 +1132,7 @@ Add a view
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
+| opt.zoomToView | <code>Boolean</code> | Fly to view extends |
 
 <a name="MapxResolversStatic+view_remove"></a>
 
