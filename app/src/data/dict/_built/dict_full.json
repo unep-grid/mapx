@@ -20502,6 +20502,19 @@
   },
   {
     "id": "share_views_select_method_map_list_open",
+    "en": "All open views",
+    "fr": "Toutes les vues ouvertes",
+    "es": "Todas las vistas abiertas",
+    "ru": "Все открытые представления",
+    "zh": "所有打开的视图",
+    "ar": "جميع وجهات النظر مفتوحة",
+    "fa": "همه نماهای باز",
+    "ps": "ټول خلاص لید",
+    "bn": "সব খোলা দৃশ্য",
+    "de": "Alle offenen Ansichten"
+  },
+  {
+    "id": "share_views_select_method_map_list_active",
     "en": "All active views",
     "fr": "Toutes les vues actives",
     "es": "Todas las vistas activas",

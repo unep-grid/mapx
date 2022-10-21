@@ -7886,6 +7886,11 @@
   },
   {
     "id": "share_views_select_method_map_list_open",
+    "en": "All open views",
+    "zh": "所有打开的视图"
+  },
+  {
+    "id": "share_views_select_method_map_list_active",
     "en": "All active views",
     "zh": "所有活动视图"
   },

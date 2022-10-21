@@ -7886,6 +7886,11 @@
   },
   {
     "id": "share_views_select_method_map_list_open",
+    "en": "All open views",
+    "ar": "جميع وجهات النظر مفتوحة"
+  },
+  {
+    "id": "share_views_select_method_map_list_active",
     "en": "All active views",
     "ar": "جميع وجهات النظر النشطة"
   },

@@ -300,6 +300,19 @@
   },
   {
     "id": "share_views_select_method_map_list_open",
+    "en": "All open views",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "share_views_select_method_map_list_active",
     "en": "All active views",
     "fr": "",
     "es": "",
@@ -389,5 +402,4 @@
     "bn": "",
     "de": ""
   }
-
 ]
