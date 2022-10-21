@@ -1,3 +1,4 @@
+import os from "os";
 import { pgRead, pgWrite } from "#mapx/db";
 import { isArray, isFunction, isObject } from "@fxi/mx_valid";
 import { toBoolean } from "#mapx/helpers";
@@ -8,6 +9,7 @@ const def = settings.validation_defaults;
 const idValidColumn = def.tables.layer_id_valid;
 const idGeomColumn = def.tables.layer_id_geom;
 const idGeomId = def.tables.layer_id_col;
+const maxLat = "85.051129";
 
 /**
  * Check for layer geom validity
@@ -74,7 +76,7 @@ export async function isLayerValid(
   SET ${idValidColumn} = ST_IsValid(${idGeomColumn})
   AND ST_CoveredBy(
     ${idGeomColumn},
-    ST_MakeEnvelope(-180, -90, 180, 90, 4326)
+    ST_MakeEnvelope(-180, -${maxLat}, 180, ${maxLat}, 4326)
   ) 
   WHERE true`;
   const sqlValidateCache = `${sqlValidate} AND ${idValidColumn} IS null`;
@@ -85,7 +87,7 @@ export async function isLayerValid(
    * - Postgis (https://postgis.net/docs/ST_MakeValid.html)
    * - Buffer + convert o multi for polygon ( faster, predictible )
    */
-  const sqlAutoCorrectGeom = `
+  const sqlFixGeom = `
   UPDATE ${idLayer}
   SET ${idGeomColumn} = 
     CASE
@@ -101,11 +103,11 @@ export async function isLayerValid(
    * Autocorrect extent
    * - Crop geom outside "world"
    */
-  const sqlAutoCorrectWorld = `
+  const sqlFixWorld = `
   UPDATE ${idLayer} 
   SET ${idGeomColumn} = ST_Multi(ST_Intersection(
     ${idGeomColumn},
-    ST_MakeEnvelope(-180, -90, 180, 90, 4326)
+    ST_MakeEnvelope(-180, -${maxLat}, 180, ${maxLat}, 4326)
   ))
   WHERE
     NOT ${idValidColumn}`;
@@ -158,14 +160,16 @@ export async function isLayerValid(
    */
   if (validate && autoCorrect) {
     if (withProgress) {
-      await _req_prog("fix_world", sqlAutoCorrectWorld, gids, onProgress);
-      await _req_prog("validate", sqlValidate, gids, onProgress);
-      await _req_prog("fix_geom", sqlAutoCorrectGeom, gids, onProgress);
-      await _req_prog("validate", sqlValidate, gids, onProgress);
+      await _req_prog("validate", sqlValidate, gids, onProgress, 1, 20);
+      await _req_prog("fix_world", sqlFixWorld, gids, onProgress, 21, 40);
+      await _req_prog("validate", sqlValidate, gids, onProgress, 41, 60);
+      await _req_prog("fix_geom", sqlFixGeom, gids, onProgress, 61, 80);
+      await _req_prog("validate", sqlValidate, gids, onProgress, 81, 100);
     } else {
-      await pgWrite.query(sqlAutoCorrectWorld);
       await pgWrite.query(sqlValidate);
-      await pgWrite.query(sqlAutoCorrectGeom);
+      await pgWrite.query(sqlFixWorld);
+      await pgWrite.query(sqlValidate);
+      await pgWrite.query(sqlFixGeom);
       await pgWrite.query(sqlValidate);
     }
   }
@@ -266,14 +270,19 @@ async function getGids(idLayer) {
  * @param {Srring} label Label for onProgress data
  * @param {String} sql Sql string
  * @param {Array} gids Array of gids
+ * @param {Number} pStart Progress start at (on 100)
+ * @param {Number} pEnd Progress end at (on 100)
  * @param {Function} onProgress callback
  */
-async function _req_prog(label, sql, gids, onProgress) {
+async function _req_prog(label, sql, gids, onProgress, pStart, pEnd) {
   let sqlGid = "";
   let p = 0;
+  pStart = pStart / 100 || 0;
+  pEnd = pEnd / 100 || 1;
+
   const gidsCopy = [...gids];
   let iL = gidsCopy.length;
-  const chunkSize = 50;
+  const chunkSize = os.cpus().length;
   if (iL <= chunkSize) {
     onProgress({ percent: 0.5, label: label });
     await pgWrite.query(sqlGid);
@@ -281,7 +290,7 @@ async function _req_prog(label, sql, gids, onProgress) {
     const groupsL = Math.ceil(iL / chunkSize);
 
     for (let i = 0; i < groupsL; i++) {
-      p = i / groupsL;
+      p = (pEnd - pStart) * ((i + 1) / groupsL) + pStart;
       onProgress({ percent: p, label: label });
       const gidGroup = gidsCopy.splice(0, chunkSize);
       const gidTxt = gidGroup.join(",");
