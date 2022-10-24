@@ -1765,24 +1765,24 @@
     "fr": "Données téléchargées, table de construction."
   },
   {
-    "id": "btn_validate_use_cache_continue",
-    "en": "Continue",
-    "fr": "Continuer"
+    "id": "edit_table_modal_validate_title",
+    "en": "Validate geometries",
+    "fr": "Valider les géométries"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_label",
-    "en": "Keep previous validity state",
-    "fr": "Conserver l'état de validité précédent"
+    "id": "edit_table_modal_validate_desc",
+    "en": "This tool will revalidate all geometries and mark invalid ones as such.",
+    "fr": "Cet outil revalidera toutes les géométries et marquera celles qui sont invalides comme telles."
   },
   {
-    "id": "edit_table_modal_validate_use_cache_desc",
-    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
-    "fr": "Si cette option est activée, seules les nouvelles géométries ou les géométries marquées comme invalides seront analysées."
+    "id": "edit_table_modal_repair_title",
+    "en": "Repair invalid geometries",
+    "fr": "Réparer les géométries invalides"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_title",
-    "en": "Check validity option",
-    "fr": "Vérifier l'option de validité"
+    "id": "edit_table_modal_repair_desc",
+    "en": "This tool repair invalid geometries reported by the validation tool. Invalid geometries are geometries that contain for example self-intersecting polygons. Please read the wiki for more information.",
+    "fr": "Cet outil va corriger les géométries invalides rapportée par l'outil de validation. Les géométries invalides sont des géométries qui contiennent par exemple des polygones auto-sécants. Veuillez consulter le wiki pour plus d'informations."
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2168,6 +2168,11 @@
     "id": "btn_cancel",
     "en": "Cancel",
     "fr": "Annuler"
+  },
+  {
+    "id": "btn_continue",
+    "en": "Continue",
+    "fr": "Continuer"
   },
   {
     "id": "btn_copy",

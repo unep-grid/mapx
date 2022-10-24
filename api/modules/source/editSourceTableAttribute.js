@@ -275,6 +275,7 @@ class EditTableSession {
       et.emitAll("/server/source/edit/table/geom/result", out);
     } catch (e) {
       console.error(e);
+      et.error("Validation failed. Check logs", e);
     } finally {
       et.progressAll({ percent: 0 });
       et.setBusy(false);

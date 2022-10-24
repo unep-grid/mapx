@@ -1412,20 +1412,20 @@
     "en": "Data downloaded, build table."
   },
   {
-    "id": "btn_validate_use_cache_continue",
-    "en": "Continue"
+    "id": "edit_table_modal_validate_title",
+    "en": "Validate geometries"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_label",
-    "en": "Keep previous validity state"
+    "id": "edit_table_modal_validate_desc",
+    "en": "This tool will revalidate all geometries and mark invalid ones as such."
   },
   {
-    "id": "edit_table_modal_validate_use_cache_desc",
-    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed."
+    "id": "edit_table_modal_repair_title",
+    "en": "Repair invalid geometries"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_title",
-    "en": "Check validity option"
+    "id": "edit_table_modal_repair_desc",
+    "en": "This tool repair invalid geometries reported by the validation tool. Invalid geometries are geometries that contain for example self-intersecting polygons. Please read the wiki for more information."
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -1734,6 +1734,10 @@
   {
     "id": "btn_cancel",
     "en": "Cancel"
+  },
+  {
+    "id": "btn_continue",
+    "en": "Continue"
   },
   {
     "id": "btn_copy",

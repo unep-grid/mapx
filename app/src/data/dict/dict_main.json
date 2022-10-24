@@ -364,6 +364,19 @@
     "de": "Abbrechen"
   },
   {
+    "id": "btn_continue",
+    "en": "Continue",
+    "fr": "Continuer",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "btn_copy",
     "en": "Copy",
     "fr": "Copier",

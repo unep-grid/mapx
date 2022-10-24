@@ -1765,24 +1765,24 @@
     "ar": "تحميل البيانات ، بناء الجدول."
   },
   {
-    "id": "btn_validate_use_cache_continue",
-    "en": "Continue",
-    "ar": "يكمل"
+    "id": "edit_table_modal_validate_title",
+    "en": "Validate geometries",
+    "ar": "تحقق من صحة الأشكال الهندسية"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_label",
-    "en": "Keep previous validity state",
-    "ar": "احتفظ بحالة الصلاحية السابقة"
+    "id": "edit_table_modal_validate_desc",
+    "en": "This tool will revalidate all geometries and mark invalid ones as such.",
+    "ar": "ستعيد هذه الأداة التحقق من جميع الأشكال الهندسية وتمييز الأشكال غير الصالحة على هذا النحو."
   },
   {
-    "id": "edit_table_modal_validate_use_cache_desc",
-    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
-    "ar": "إذا تم تنشيط هذا الخيار ، فلن يتم تحليل سوى الأشكال الهندسية أو الأشكال الهندسية الجديدة التي تم تمييزها على أنها غير صالحة."
+    "id": "edit_table_modal_repair_title",
+    "en": "Repair invalid geometries",
+    "ar": "إصلاح الأشكال الهندسية غير الصالحة"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_title",
-    "en": "Check validity option",
-    "ar": "تحقق من خيار الصلاحية"
+    "id": "edit_table_modal_repair_desc",
+    "en": "This tool repair invalid geometries reported by the validation tool. Invalid geometries are geometries that contain for example self-intersecting polygons. Please read the wiki for more information.",
+    "ar": "تقوم هذه الأداة بإصلاح الأشكال الهندسية غير الصالحة التي تم الإبلاغ عنها بواسطة أداة التحقق من الصحة. الأشكال الهندسية غير الصالحة هي أشكال هندسية تحتوي على سبيل المثال على مضلعات ذاتية التقاطع. يرجى قراءة الويكي لمزيد من المعلومات."
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2168,6 +2168,11 @@
     "id": "btn_cancel",
     "en": "Cancel",
     "ar": "يلغي "
+  },
+  {
+    "id": "btn_continue",
+    "en": "Continue",
+    "ar": "يكمل"
   },
   {
     "id": "btn_copy",

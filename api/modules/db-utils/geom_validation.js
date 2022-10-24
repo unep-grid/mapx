@@ -74,10 +74,6 @@ export async function isLayerValid(
   const sqlValidate = `
   UPDATE ${idLayer} 
   SET ${idValidColumn} = ST_IsValid(${idGeomColumn})
-  AND ST_CoveredBy(
-    ${idGeomColumn},
-    ST_MakeEnvelope(-180, -${maxLat}, 180, ${maxLat}, 4326)
-  ) 
   WHERE true`;
   const sqlValidateCache = `${sqlValidate} AND ${idValidColumn} IS null`;
 
@@ -89,28 +85,10 @@ export async function isLayerValid(
    */
   const sqlFixGeom = `
   UPDATE ${idLayer}
-  SET ${idGeomColumn} = 
-    CASE
-      WHEN GeometryType(${idGeomColumn}) ~* 'POLYGON'
-      THEN ST_Multi(ST_Buffer(${idGeomColumn},0))
-      ELSE ST_MakeValid(${idGeomColumn})
-    END
+  SET ${idGeomColumn} = ST_MakeValid(${idGeomColumn})
   WHERE 
     NOT ${idValidColumn} 
   `;
-
-  /**
-   * Autocorrect extent
-   * - Crop geom outside "world"
-   */
-  const sqlFixWorld = `
-  UPDATE ${idLayer} 
-  SET ${idGeomColumn} = ST_Multi(ST_Intersection(
-    ${idGeomColumn},
-    ST_MakeEnvelope(-180, -${maxLat}, 180, ${maxLat}, 4326)
-  ))
-  WHERE
-    NOT ${idValidColumn}`;
 
   /**
    * ANALYZE first
@@ -152,24 +130,22 @@ export async function isLayerValid(
   }
 
   /**
-   * Autocorrect:
+   * Autocorrect steps :
+   * - Validation
+   * - Geom validation
+   * - revalidate 
    * - Extent / world
-   * - revalidate ( if world correction removed invalidated geom )
-   * - Geom
    * - revalidate
    */
   if (validate && autoCorrect) {
     if (withProgress) {
-      await _req_prog("validate", sqlValidate, gids, onProgress, 1, 20);
-      await _req_prog("fix_world", sqlFixWorld, gids, onProgress, 21, 40);
-      await _req_prog("validate", sqlValidate, gids, onProgress, 41, 60);
-      await _req_prog("fix_geom", sqlFixGeom, gids, onProgress, 61, 80);
-      await _req_prog("validate", sqlValidate, gids, onProgress, 81, 100);
+      await _req_prog("validate", sqlValidate, gids, onProgress, 1, 33);
+      await _req_prog("fix_geom", sqlFixGeom, gids, onProgress, 34, 66);
+      await _req_prog("validate", sqlValidate, gids, onProgress, 67, 100);
     } else {
       await pgWrite.query(sqlValidate);
-      await pgWrite.query(sqlFixWorld);
-      await pgWrite.query(sqlValidate);
       await pgWrite.query(sqlFixGeom);
+      await pgWrite.query(sqlValidate);
       await pgWrite.query(sqlValidate);
     }
   }

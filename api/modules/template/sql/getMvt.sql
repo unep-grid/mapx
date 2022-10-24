@@ -1,4 +1,14 @@
-WITH features_simple as (
+WITH 
+web_mercator as (
+  SELECT ST_MakeEnvelope(
+    -180,
+    -85.051129,
+    180,
+    85.051129,
+    4326
+  ) geom 
+),
+features_simple as (
   SELECT
   CASE WHEN {{zoom}} > 10 THEN {{geom}}
   ELSE 
@@ -13,13 +23,29 @@ WITH features_simple as (
   FROM
   {{layer}}
   WHERE
-  ST_Intersects(
-    {{geom}},
+    {{geom}}
+    @
     ST_Transform(
       ST_TileEnvelope({{zoom}}, {{x}}, {{y}}),
       4326
+     )
+),
+features_clip as (
+  SELECT 
+  CASE WHEN 
+    f.{{geom}} @ m.geom
+  THEN
+    f.geom
+  ELSE 
+    ST_Multi(
+      ST_Intersection(
+        f.{{geom}},
+        m.geom
     )
   )
+  END geom,
+  {{attributes_pg}} 
+  FROM {{layer}} f, web_mercator m
 ),
 features_mvt as (
   SELECT
@@ -28,7 +54,7 @@ features_mvt as (
     ST_TileEnvelope({{zoom}}, {{x}}, {{y}})
   ) as geom,
   {{attributes_pg}}
-  FROM features_simple
+  FROM features_clip
 )
 
 SELECT ST_AsMVT(

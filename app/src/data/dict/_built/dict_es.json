@@ -1765,24 +1765,24 @@
     "es": "Datos descargados, construir tabla."
   },
   {
-    "id": "btn_validate_use_cache_continue",
-    "en": "Continue",
-    "es": "Continuar"
+    "id": "edit_table_modal_validate_title",
+    "en": "Validate geometries",
+    "es": "Validar geometrías"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_label",
-    "en": "Keep previous validity state",
-    "es": "Mantener el estado de validez anterior"
+    "id": "edit_table_modal_validate_desc",
+    "en": "This tool will revalidate all geometries and mark invalid ones as such.",
+    "es": "Esta herramienta revalidará todas las geometrías y marcará las no válidas como tales."
   },
   {
-    "id": "edit_table_modal_validate_use_cache_desc",
-    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
-    "es": "Si esta opción está activada, solo se analizarán las geometrías nuevas o marcadas como no válidas."
+    "id": "edit_table_modal_repair_title",
+    "en": "Repair invalid geometries",
+    "es": "Reparar geometrías no válidas"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_title",
-    "en": "Check validity option",
-    "es": "Consulta la opción de validez"
+    "id": "edit_table_modal_repair_desc",
+    "en": "This tool repair invalid geometries reported by the validation tool. Invalid geometries are geometries that contain for example self-intersecting polygons. Please read the wiki for more information.",
+    "es": "Esta herramienta repara geometrías no válidas informadas por la herramienta de validación. Las geometrías no válidas son geometrías que contienen, por ejemplo, polígonos que se intersecan a sí mismos. Por favor, lea la wiki para obtener más información."
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2168,6 +2168,11 @@
     "id": "btn_cancel",
     "en": "Cancel",
     "es": "Cancelar"
+  },
+  {
+    "id": "btn_continue",
+    "en": "Continue",
+    "es": "Continuar"
   },
   {
     "id": "btn_copy",

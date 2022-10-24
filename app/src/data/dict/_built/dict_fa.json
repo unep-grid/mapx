@@ -1765,24 +1765,24 @@
     "fa": "داده دانلود شد، جدول ساخت."
   },
   {
-    "id": "btn_validate_use_cache_continue",
-    "en": "Continue",
-    "fa": "ادامه هید"
+    "id": "edit_table_modal_validate_title",
+    "en": "Validate geometries",
+    "fa": "اعتبار هندسی ها"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_label",
-    "en": "Keep previous validity state",
-    "fa": "وضعیت اعتبار قبلی را حفظ کنید"
+    "id": "edit_table_modal_validate_desc",
+    "en": "This tool will revalidate all geometries and mark invalid ones as such.",
+    "fa": "این ابزار تمام هندسه ها را مجدداً تأیید می کند و موارد نامعتبر را به عنوان چنین علامت گذاری می کند."
   },
   {
-    "id": "edit_table_modal_validate_use_cache_desc",
-    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
-    "fa": "اگر این گزینه فعال شود، فقط هندسه های جدید یا هندسه هایی که به عنوان نامعتبر علامت گذاری شده اند، تجزیه و تحلیل خواهند شد."
+    "id": "edit_table_modal_repair_title",
+    "en": "Repair invalid geometries",
+    "fa": "هندسه های نامعتبر را تعمیر کنید"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_title",
-    "en": "Check validity option",
-    "fa": "گزینه اعتبار را بررسی کنید"
+    "id": "edit_table_modal_repair_desc",
+    "en": "This tool repair invalid geometries reported by the validation tool. Invalid geometries are geometries that contain for example self-intersecting polygons. Please read the wiki for more information.",
+    "fa": "این ابزار هندسه های نامعتبر گزارش شده توسط ابزار اعتبار سنجی را تعمیر می کند. هندسه های نامعتبر هندسه هایی هستند که به عنوان مثال حاوی چندضلعی های خود متقاطع هستند. لطفا برای اطلاعات بیشتر ویکی را بخوانید."
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2168,6 +2168,11 @@
     "id": "btn_cancel",
     "en": "Cancel",
     "fa": "لغو "
+  },
+  {
+    "id": "btn_continue",
+    "en": "Continue",
+    "fa": "ادامه هید"
   },
   {
     "id": "btn_copy",

@@ -743,8 +743,8 @@
     "de": ""
   },
   {
-    "id": "btn_validate_use_cache_continue",
-    "en": "Continue",
+    "id": "edit_table_modal_validate_title",
+    "en": "Validate geometries",
     "fr": "",
     "es": "",
     "ru": "",
@@ -756,8 +756,8 @@
     "de": ""
   },
   {
-    "id": "edit_table_modal_validate_use_cache_label",
-    "en": "Keep previous validity state",
+    "id": "edit_table_modal_validate_desc",
+    "en": "This tool will revalidate all geometries and mark invalid ones as such.",
     "fr": "",
     "es": "",
     "ru": "",
@@ -769,8 +769,8 @@
     "de": ""
   },
   {
-    "id": "edit_table_modal_validate_use_cache_desc",
-    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
+    "id": "edit_table_modal_repair_title",
+    "en": "Repair invalid geometries",
     "fr": "",
     "es": "",
     "ru": "",
@@ -782,9 +782,9 @@
     "de": ""
   },
   {
-    "id": "edit_table_modal_validate_use_cache_title",
-    "en": "Check validity option",
-    "fr": "",
+    "id": "edit_table_modal_repair_desc",
+    "en": "This tool repair invalid geometries reported by the validation tool. Invalid geometries are geometries that contain for example self-intersecting polygons. Please read the wiki for more information.",
+    "fr": "Cet outil va corriger les géométries invalides rapportée par l'outil de validation. Les géométries invalides sont des géométries qui contiennent par exemple des polygones auto-sécants. Veuillez consulter le wiki pour plus d'informations.",
     "es": "",
     "ru": "",
     "zh": "",

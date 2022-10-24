@@ -1765,24 +1765,24 @@
     "zh": "数据下载，建表。"
   },
   {
-    "id": "btn_validate_use_cache_continue",
-    "en": "Continue",
-    "zh": "继续"
+    "id": "edit_table_modal_validate_title",
+    "en": "Validate geometries",
+    "zh": "验证几何"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_label",
-    "en": "Keep previous validity state",
-    "zh": "保持之前的有效性状态"
+    "id": "edit_table_modal_validate_desc",
+    "en": "This tool will revalidate all geometries and mark invalid ones as such.",
+    "zh": "该工具将重新验证所有几何图形并标记无效几何图形。"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_desc",
-    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
-    "zh": "如果激活此选项，则只会分析新几何图形或标记为无效的几何图形。"
+    "id": "edit_table_modal_repair_title",
+    "en": "Repair invalid geometries",
+    "zh": "修复无效的几何图形"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_title",
-    "en": "Check validity option",
-    "zh": "检查有效性选项"
+    "id": "edit_table_modal_repair_desc",
+    "en": "This tool repair invalid geometries reported by the validation tool. Invalid geometries are geometries that contain for example self-intersecting polygons. Please read the wiki for more information.",
+    "zh": "此工具修复验证工具报告的无效几何。无效几何是包含例如自相交多边形的几何。请阅读 wiki 了解更多信息。"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2168,6 +2168,11 @@
     "id": "btn_cancel",
     "en": "Cancel",
     "zh": "取消"
+  },
+  {
+    "id": "btn_continue",
+    "en": "Continue",
+    "zh": "继续"
   },
   {
     "id": "btn_copy",

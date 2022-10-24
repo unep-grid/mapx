@@ -891,7 +891,7 @@ export class EditTableSessionClient extends WsToolsBase {
           error?.message || "Unknown error"
         }. Continue or end the session ?`,
         confirm: "Continue",
-        cancel: "End the session",
+        cancel: "Exit tool",
       });
 
       if (!continueSession) {
@@ -1996,11 +1996,17 @@ export class EditTableSessionClient extends WsToolsBase {
       return;
     }
     const r = et._config.routes;
-    const choice = await et.dialogUseCache();
-    if (!choice) {
+    const ok = await modalConfirm({
+      title: getDictItem("edit_table_modal_validate_title"),
+      content: getDictItem("edit_table_modal_validate_desc"),
+      cancel: getDictItem("btn_cancel"),
+      confirm: getDictItem("btn_continue"),
+    });
+
+    if (!ok) {
       return;
     }
-    const opt = { use_cache: choice === "cache", autoCorrect: false };
+    const opt = { use_cache: false, autoCorrect: false };
     et.emit(r.client_geom_validate, opt);
   }
 
@@ -2010,11 +2016,19 @@ export class EditTableSessionClient extends WsToolsBase {
       return;
     }
     const r = et._config.routes;
-    const choice = await et.dialogUseCache();
-    if (!choice) {
+
+    const ok = await modalConfirm({
+      title: getDictItem("edit_table_modal_repair_title"),
+      content: getDictItem("edit_table_modal_repair_desc"),
+      cancel: getDictItem("btn_cancel"),
+      confirm: getDictItem("btn_continue"),
+    });
+
+    if (!ok) {
       return;
     }
-    const opt = { use_cache: choice === "cache", autoCorrect: true };
+
+    const opt = { use_cache: true, autoCorrect: true };
     et.emit(r.client_geom_validate, opt);
   }
 
@@ -2039,27 +2053,6 @@ export class EditTableSessionClient extends WsToolsBase {
       console.error(e);
     }
   }
-
-  async dialogUseCache() {
-    const choice = await modalPrompt({
-      title: tt("edit_table_modal_validate_use_cache_title"),
-      label: tt("edit_table_modal_validate_use_cache_label"),
-      desc: tt("edit_table_modal_validate_use_cache_desc"),
-      confirm: tt("btn_validate_use_cache_continue"),
-      inputTag: "input",
-      inputOptions: {
-        type: "checkbox",
-        value: true,
-        class: [], // "form-control" produce glitches
-        checkboxValues: {
-          true: "cache",
-          false: "no_cache",
-        },
-      },
-    });
-    return choice;
-  }
-
   /**
    * Wrapper for buttonEnable : use default from table editor
    * @param {Element} elBtn Button element

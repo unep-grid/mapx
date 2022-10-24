@@ -1765,24 +1765,24 @@
     "de": "Daten heruntergeladen, Tabelle erstellen."
   },
   {
-    "id": "btn_validate_use_cache_continue",
-    "en": "Continue",
-    "de": "Fortsetzen"
+    "id": "edit_table_modal_validate_title",
+    "en": "Validate geometries",
+    "de": "Geometrien validieren"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_label",
-    "en": "Keep previous validity state",
-    "de": "Vorherigen Gültigkeitszustand beibehalten"
+    "id": "edit_table_modal_validate_desc",
+    "en": "This tool will revalidate all geometries and mark invalid ones as such.",
+    "de": "Dieses Tool validiert alle Geometrien erneut und markiert ungültige als solche."
   },
   {
-    "id": "edit_table_modal_validate_use_cache_desc",
-    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
-    "de": "Ist diese Option aktiviert, werden nur neue oder als ungültig markierte Geometrien analysiert."
+    "id": "edit_table_modal_repair_title",
+    "en": "Repair invalid geometries",
+    "de": "Ungültige Geometrien reparieren"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_title",
-    "en": "Check validity option",
-    "de": "Gültigkeitsoption prüfen"
+    "id": "edit_table_modal_repair_desc",
+    "en": "This tool repair invalid geometries reported by the validation tool. Invalid geometries are geometries that contain for example self-intersecting polygons. Please read the wiki for more information.",
+    "de": "Dieses Tool repariert ungültige Geometrien, die vom Validierungstool gemeldet wurden. Ungültige Geometrien sind Geometrien, die beispielsweise sich selbst schneidende Polygone enthalten. Bitte lesen Sie das Wiki für weitere Informationen."
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2168,6 +2168,11 @@
     "id": "btn_cancel",
     "en": "Cancel",
     "de": "Abbrechen"
+  },
+  {
+    "id": "btn_continue",
+    "en": "Continue",
+    "de": "Fortsetzen"
   },
   {
     "id": "btn_copy",

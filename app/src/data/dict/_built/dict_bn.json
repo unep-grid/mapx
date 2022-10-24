@@ -1765,24 +1765,24 @@
     "bn": "ডেটা ডাউনলোড করা হয়েছে, টেবিল তৈরি করুন।"
   },
   {
-    "id": "btn_validate_use_cache_continue",
-    "en": "Continue",
-    "bn": "চালিয়ে যান"
+    "id": "edit_table_modal_validate_title",
+    "en": "Validate geometries",
+    "bn": "জ্যামিতি যাচাই করুন"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_label",
-    "en": "Keep previous validity state",
-    "bn": "আগের বৈধতার অবস্থা রাখুন"
+    "id": "edit_table_modal_validate_desc",
+    "en": "This tool will revalidate all geometries and mark invalid ones as such.",
+    "bn": "এই টুলটি সমস্ত জ্যামিতিকে পুনঃপ্রমাণ করবে এবং অবৈধকে চিহ্নিত করবে।"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_desc",
-    "en": "If this option is activated, only new geometries or geometries marked as invalid will be analysed.",
-    "bn": "যদি এই বিকল্পটি সক্রিয় করা হয়, শুধুমাত্র নতুন জ্যামিতি বা অবৈধ হিসাবে চিহ্নিত জ্যামিতি বিশ্লেষণ করা হবে।"
+    "id": "edit_table_modal_repair_title",
+    "en": "Repair invalid geometries",
+    "bn": "অবৈধ জ্যামিতি মেরামত"
   },
   {
-    "id": "edit_table_modal_validate_use_cache_title",
-    "en": "Check validity option",
-    "bn": "বৈধতা বিকল্প চেক করুন"
+    "id": "edit_table_modal_repair_desc",
+    "en": "This tool repair invalid geometries reported by the validation tool. Invalid geometries are geometries that contain for example self-intersecting polygons. Please read the wiki for more information.",
+    "bn": "এই টুলটি বৈধকরণ টুল দ্বারা রিপোর্ট করা অবৈধ জ্যামিতি মেরামত করে। অকার্যকর জ্যামিতি হল জ্যামিতি যেখানে উদাহরণ স্ব-ছেদ করা বহুভুজ থাকে। আরও তথ্যের জন্য অনুগ্রহ করে উইকি পড়ুন।"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2168,6 +2168,11 @@
     "id": "btn_cancel",
     "en": "Cancel",
     "bn": "বাতিল "
+  },
+  {
+    "id": "btn_continue",
+    "en": "Continue",
+    "bn": "চালিয়ে যান"
   },
   {
     "id": "btn_copy",
