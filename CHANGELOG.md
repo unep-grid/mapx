@@ -1,4 +1,13 @@
+  - [1.9.45-beta.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.3) 
+    
+    - APP 
+      - Solve issue during layers creation : null received, but not expected by mapbox-gl
+    - APP/API 
+      - Postgis tiles option set in source configuraiton instead of view editor 
+      - Improved postgis tiles performance ( still experimental and slower than default method )
+
   - [1.9.45-beta.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.2) 
+
     - APP
       - Sharing manager: added an option to share views activated, manually or using the SDK. Should work when static mode is used from the SDK. Should solve #860
     
