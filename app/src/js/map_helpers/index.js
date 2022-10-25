@@ -1485,7 +1485,9 @@ export async function handleClickEvent(e, idMap) {
   if (retrieveAttributes) {
     /*
      * Extract attributes, return an object with idView
-     * as key and prmises as value
+     * as key and promises as value
+     * e.g. {MX-OTXV7-C2HI3-Z7XLJ: Promise}
+     *
      */
     const layersAttributes = await getLayersPropertiesAtPoint({
       map: map,
@@ -1493,6 +1495,7 @@ export async function handleClickEvent(e, idMap) {
       type: ["vt", "gj", "cc", "rt"],
       asObject: true,
     });
+
     if (isEmpty(layersAttributes)) {
       return;
     }
@@ -1532,7 +1535,7 @@ export async function handleClickEvent(e, idMap) {
       });
 
       /**
-       * NOTE: see mx_helper_map_features_popup.js
+       * NOTE: see features_popup.js
        */
       featuresToPopup({
         layersAttributes: layersAttributes,
@@ -1710,7 +1713,6 @@ export async function addSourceFromView(o) {
      */
     o.view._edit = false;
   }
-
 
   if (isVt) {
     const urlBase = getApiUrl("getTile");
@@ -4523,7 +4525,7 @@ export function getLayersPropertiesAtPoint(opt) {
   const excludeProp = ["mx_t0", "mx_t1", "gid"];
   //const excludeProp = [];
   let idViews = [];
-  let type = opt.type || "vt" || "rt" || "gj";
+  let type = opt.type || "vt" || "rt" || "gj" || "cc";
   type = isArray(type) ? type : [type];
   /**
    * Use id from idView as array OR get all mapx displayed base layer
@@ -4539,6 +4541,8 @@ export function getLayersPropertiesAtPoint(opt) {
     return items;
   }
 
+  const sources = getMap().getStyle()?.sources;
+
   /**
    * Fetch view data for one or many views
    * and fetch properties
@@ -4551,10 +4555,21 @@ export function getLayersPropertiesAtPoint(opt) {
         console.warn("Not a view:", view, " opt:", opt);
         return;
       }
-      if (view.type === "rt") {
-        items[view.id] = fetchRasterProp(view);
-      } else {
-        items[view.id] = fetchVectorProp(view);
+      const idView = view.id;
+      for (const id in sources) {
+        const reg = new RegExp(`^${idView}`);
+
+        if (reg.test(id)) {
+          const type = sources[id].type;
+          switch (type) {
+            case "raster":
+              items[idView] = fetchRasterProp(view, sources[id]);
+              break;
+            case "vector":
+              items[view.id] = fetchVectorProp(view);
+              break;
+          }
+        }
       }
     });
 
@@ -4563,20 +4578,31 @@ export function getLayersPropertiesAtPoint(opt) {
   /**
    * Fetch properties on raster WMS layer
    */
-  function fetchRasterProp(view) {
-    const url = path(view, "data.source.tiles", [])[0].split("?");
-    const useMirror = path(view, "data.source.useMirror", false);
-    const endpoint = url[0];
-    const urlFull = `${endpoint}?${url[1]}`;
-    const params = getQueryParametersAsObject(urlFull, { lowerCase: true });
+  async function fetchRasterProp(view, source) {
     const out = modeObject ? {} : [];
-    /**
-     * Check if this is a WMS valid param object
-     */
-    const isWms = isUrlValidWms(urlFull, { layers: true, styles: true });
+    try {
+      const tiles = view?.data?.source?.tiles || source?.tiles || [];
+      const url = tiles[0];
 
-    if (isWms) {
-      return wmsQuery({
+      if (!isUrl(url)) {
+        return out;
+      }
+
+      const params = getQueryParametersAsObject(url, { lowerCase: true });
+      const useMirror = view?.data?.source?.useMirror || false;
+      const parts = url.split("?");
+      const endpoint = parts[0];
+
+      /**
+       * Check if this is a WMS valid param object
+       */
+      const isWms = isUrlValidWms(url, { layers: true, styles: true });
+
+      if (!isWms) {
+        return out;
+      }
+
+      const res = await wmsQuery({
         point: opt.point,
         layers: params.layers,
         styles: params.styles,
@@ -4588,12 +4614,17 @@ export function getLayersPropertiesAtPoint(opt) {
             /**
              * timestamp : Used to invalidate getCapabilities cache
              */
-            timestamp: path(view, "date_modified", null),
+            timestamp: view?.date_modified,
           },
         },
       });
-    } else {
-      return Promise.resolve(out);
+      if (!isEmpty(res)) {
+        return res;
+      }
+      return out;
+    } catch (e) {
+      console.warn(e);
+      return out;
     }
   }
 

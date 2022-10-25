@@ -198,8 +198,9 @@ export function featuresToPopup(o) {
              */
             elValue = el("div");
             if (isArray(value)) {
-              value.forEach((v) => {
-                elValue.appendChild(
+              elFrag = document.createDocumentFragment();
+              for (const v of value) {
+                elFrag.appendChild(
                   el(
                     "span",
                     {
@@ -208,7 +209,8 @@ export function featuresToPopup(o) {
                     v
                   )
                 );
-              });
+              }
+              elValue.appendChild(elFrag);
             } else {
               elValue = el("span", {
                 class: "mx-prop-static",
