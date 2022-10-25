@@ -1,3 +1,8 @@
+  - [1.9.45-beta.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.4) 
+
+    - APP
+      - Updated dependencies
+
   - [1.9.45-beta.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.3) 
     
     - APP 
