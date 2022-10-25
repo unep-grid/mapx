@@ -848,7 +848,6 @@ export class EditTableSessionClient extends WsToolsBase {
      * On modal resize, updateLayout
      */
     et._resize_observer = new ResizeObserver((e) => {
-      console.log(e);
       et.updateLayout();
     });
     et._resize_observer.observe(et._el_table);
