@@ -10439,32 +10439,6 @@
     "de": "Download der Quelle zulassen "
   },
   {
-    "id": "view_use_postgis_tiles",
-    "en": "Use native PostGIS tiles generator",
-    "fr": "Utiliser les tuiles native PostGIS",
-    "es": "Utilice el generador de teselas de PostGIS nativo",
-    "ru": "Используйте собственный генератор тайлов PostGIS",
-    "zh": "使用本机 PostGIS 切片生成器",
-    "ar": "استخدم منشئ مربعات PostGIS الأصلي",
-    "fa": "از مولد کاشی PostGIS بومی استفاده کنید",
-    "ps": "د اصلي پوسټGIS ټایلونو جنریټر وکاروئ",
-    "bn": "স্থানীয় পোস্টজিআইএস টাইলস জেনারেটর ব্যবহার করুন",
-    "de": "Verwenden Sie den nativen PostGIS-Kachelgenerator"
-  },
-  {
-    "id": "view_use_postgis_tiles_desc",
-    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
-    "fr": "Expérimental. Si activé, les tuiles PostGIS sont produites. Cela pourrait résoudre les problèmes de géométries invalides sur la carte. Cette option n'a pas d'effet si un masque est utilisé.",
-    "es": "Experimental. Si está habilitado, se producen teselas de PostGIS. Esto podría corregir geometrías no válidas en el mapa. Esta opción no tiene efecto si se establece una máscara.",
-    "ru": "Экспериментальный. Если включено, создаются листы PostGIS. Это может исправить неверную геометрию на карте. Этот параметр не действует, если установлена маска.",
-    "zh": "实验性的。如果启用，则会生成 PostGIS 切片。这可能会修复地图上的无效几何图形。如果设置了掩码，则此选项无效。",
-    "ar": "تجريبي. في حالة التمكين ، يتم إنتاج مربعات PostGIS. قد يؤدي هذا إلى إصلاح الأشكال الهندسية غير الصالحة على الخريطة. هذا الخيار ليس له تأثير إذا تم تعيين القناع.",
-    "fa": "تجربی. اگر فعال باشد، کاشی های PostGIS تولید می شوند. این ممکن است هندسه های نامعتبر روی نقشه را برطرف کند. اگر یک ماسک تنظیم شده باشد، این گزینه هیچ اثری ندارد.",
-    "ps": "تجربوي. که فعال شي، د PostGIS ټایلونه تولیدیږي. دا ممکن په نقشه کې غلط جیومیټري حل کړي. دا اختیار هیڅ اغیزه نلري که چیرې ماسک تنظیم شوی وي.",
-    "bn": "পরীক্ষামূলক। সক্ষম হলে, পোস্টজিআইএস টাইলস তৈরি করা হয়। এটি মানচিত্রে অবৈধ জ্যামিতি ঠিক করতে পারে। একটি মাস্ক সেট করা থাকলে এই বিকল্পটি কোন প্রভাব নয়।",
-    "de": "Experimental. Wenn aktiviert, werden PostGIS-Kacheln erstellt. Dadurch werden möglicherweise ungültige Geometrien auf der Karte behoben. Diese Option hat keine Wirkung, wenn eine Maske gesetzt ist."
-  },
-  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "fr": "Ajouter un masque",
@@ -11347,6 +11321,19 @@
     "ps": "اجازه راکړئ دا سرچینه ډاونلوډ شي ",
     "bn": "এই উত্সটি ডাউনলোড করার অনুমতি দিন ",
     "de": "Lassen Sie diese Quelle herunterladen "
+  },
+  {
+    "id": "mx_postgis_tiler",
+    "en": "Use native PostGIS tiles generator",
+    "fr": "Utiliser les tuiles native PostGIS",
+    "es": "Utilice el generador de teselas de PostGIS nativo",
+    "ru": "Используйте собственный генератор тайлов PostGIS",
+    "zh": "使用本机 PostGIS 切片生成器",
+    "ar": "استخدم منشئ مربعات PostGIS الأصلي",
+    "fa": "از مولد کاشی PostGIS بومی استفاده کنید",
+    "ps": "د اصلي پوسټGIS ټایلونو جنریټر وکاروئ",
+    "bn": "স্থানীয় পোস্টজিআইএস টাইলস জেনারেটর ব্যবহার করুন",
+    "de": "Verwenden Sie den nativen PostGIS-Kachelgenerator"
   },
   {
     "id": "gs_ws_b",

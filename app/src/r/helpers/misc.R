@@ -2123,7 +2123,7 @@ mxCreateEncryptedUrlAction <- function(id, value, session = shiny::getDefaultRea
 #' @param {list} additionalAttributes List of additional attributes
 #' @return view list updated
 #' @export
-mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, additionalAttributes = NULL, usePostgisTiles = FALSE) {
+mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, additionalAttributes = NULL) {
   #
   # update meta data
   #
@@ -2167,11 +2167,6 @@ mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, ad
     geomInfo <- list(
       type = .get(sourceData, c("geomType"))
     )
-
-    #
-    # Update tiles method
-    #
-    viewData <- .set(viewData, c("tiles","usePostgis"), usePostgisTiles)
 
     #
     # Update view data

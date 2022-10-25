@@ -105,7 +105,7 @@ observeEvent(reactData$triggerSourceManage, {
       sourceReadTarget <- c("publishers", "admins")
       sourceEditTarget <- c("publishers", "admins")
       if (type == "vector") {
-        sourceEditServices <- c("mx_download", "gs_ws_b")
+        sourceEditServices <- c("mx_download", "gs_ws_b", "mx_postgis_tiler")
       } else {
         sourceEditServices <- c("mx_download")
       }

@@ -7,12 +7,11 @@ import os from "os";
 const outDefault = {
   country: "",
   country_name: "",
-  ip_node : os.networkInterfaces().eth0[0].address
+  ip_node: os.networkInterfaces().eth0[0].address,
 };
 
-function getGeoIP(req, res, next) {
-  sendJSON(res, req.ipGeo);
-  next();
+function getGeoIP(req, res) {
+  sendJSON(res, req.ipGeo, { end: true });
 }
 
 async function setGeoIP(req, _, next) {
@@ -30,7 +29,7 @@ async function setGeoIP(req, _, next) {
     // error "stream is not readable", probably calling this mw before it's ready.
     next();
   } catch (e) {
-    console.error('setGeoIp:',e);
+    console.error("setGeoIp:", e);
   }
 }
 
@@ -73,7 +72,7 @@ async function getGeoInfo(ip) {
       }
     }
   } catch (e) {
-    console.error('getGeoInfo:',e);
+    console.error("getGeoInfo:", e);
   }
   return out;
 }

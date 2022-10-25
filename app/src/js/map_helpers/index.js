@@ -1692,11 +1692,12 @@ export async function addSourceFromView(o) {
   if (!validType || !hasSource) {
     return;
   }
+
+  const idSource = `${o.view.id}-SRC`;
   const project = p(mx, "settings.project.id");
   const projectView = p(o.view, "project");
   const projectsView = p(o.view, "data.projects", []);
   const useMirror = p(o.view, "data.source.useMirror");
-  const usePostgisTiles = p(o.view, "data.tiles.usePostgis");
   const isEditable = isViewEditable(o.view);
   const isLocationOk =
     o.noLocationCheck ||
@@ -1710,11 +1711,11 @@ export async function addSourceFromView(o) {
     o.view._edit = false;
   }
 
-  const idSource = o.view.id + "-SRC";
 
   if (isVt) {
     const urlBase = getApiUrl("getTile");
     const useServerCache = true;
+    const usePostgisTiles = false; // set in mx_sources -> services ->'mx_postgis_tiler'
     // NOTE: Can't use URL() : contains {x}/{y}/{z} = escaped.
     const url =
       `${urlBase}?view=${o.view.id}&` +

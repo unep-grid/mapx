@@ -104,6 +104,7 @@ export async function getViewMapboxLayers(v, opt) {
     if (isNumeric) {
       if (isEmpty(nullValue)) {
         f.push([op, ["get", attr], ""]);
+        f.push([op, ["get", attr], null]);
       } else {
         f.push([op, ["get", attr], nullValue * 1]);
       }
@@ -112,6 +113,7 @@ export async function getViewMapboxLayers(v, opt) {
         f.push([op, ["get", attr], nullValue]);
       } else {
         f.push([op, ["get", attr], ""]);
+        f.push([op, ["get", attr], null]);
       }
     }
   }

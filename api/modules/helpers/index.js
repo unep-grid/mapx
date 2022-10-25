@@ -43,22 +43,26 @@ function toRes(obj) {
  * @param {Object} opt.etag If set, add custom etag
  */
 function sendJSON(res, data, opt) {
-  opt = {
-    end: true,
-    ...opt,
-  };
-  opt.end = opt.end || false;
-  data = JSON.stringify(data || "");
-  res.setHeader("Mapx-Content-Length", data.length || 0);
-  res.setHeader("Content-Type", "application/json");
-  res.setHeader("Cache-Control", "max-age=0, s-maxage=0");
-  if (opt.etag) {
-    res.setHeader("Etag", opt.etag);
-  }
-  if (opt.end) {
-    res.send(data);
-  } else {
-    res.write(data);
+  try {
+    opt = {
+      end: true,
+      ...opt,
+    };
+    opt.end = opt.end || false;
+    data = JSON.stringify(data || "");
+    res.setHeader("Mapx-Content-Length", data.length || 0);
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Cache-Control", "max-age=0, s-maxage=0");
+    if (opt.etag) {
+      res.setHeader("Etag", opt.etag);
+    }
+    if (opt.end) {
+      res.send(data);
+    } else {
+      res.write(data);
+    }
+  } catch (e) {
+    sendError(res, e);
   }
 }
 
@@ -70,7 +74,6 @@ function sendJSON(res, data, opt) {
  * @return null
  */
 function sendError(res, error, code) {
-  
   if (!code) {
     code = 500;
   }
@@ -118,13 +121,13 @@ function toBoolean(value, def) {
 
 /**
  * Random string composer for views id, source id, or any uniq identifier.
- * 
+ *
  * @param {String} prefix E.g. => mx_ in mx_123_124
- * @param {Number} nRep Number of groups. E.g. 4 => 123_123_123_123 
- * @param {nChar} nChar Number of characters per group : E.g. 2 => 12_12_12 
- * @param {Boolean} toUpper To uppercase 
+ * @param {Number} nRep Number of groups. E.g. 4 => 123_123_123_123
+ * @param {nChar} nChar Number of characters per group : E.g. 2 => 12_12_12
+ * @param {Boolean} toUpper To uppercase
  * @param {Boolean} toLower To lowercase
- * @return {String} identifier 
+ * @return {String} identifier
  */
 function randomString(prefix, nRep, nChar, toLower, toUpper) {
   nRep = nRep || 4;
@@ -134,9 +137,10 @@ function randomString(prefix, nRep, nChar, toLower, toUpper) {
   toUpper = toUpper || false;
   const out = [prefix];
   const sep = "_";
-  const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const chars =
+    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const n = chars.length - 1;
-  
+
   for (let i = 0; i < nRep; i++) {
     out.push(sep);
     for (let j = 0; j < nChar; j++) {

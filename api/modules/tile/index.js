@@ -6,6 +6,7 @@ import { parseTemplate, attrToPgCol, asArray } from "#mapx/helpers";
 import { isSourceId } from "@fxi/mx_valid";
 import { templates } from "#mapx/template";
 import { getSourceLastTimestamp, isPointLikeGeom } from "#mapx/db-utils";
+import { sourceHasService } from "#mapx/source";
 import { getParamsValidator } from "#mapx/route_validation";
 import crypto from "crypto";
 import util from "util";
@@ -33,6 +34,7 @@ export async function handlerTile(req, res) {
       templates.getViewSourceAndAttributes,
       data
     );
+
     const resultView = await pgRead.query(sqlViewInfo);
 
     if (resultView.rowCount !== 1) {
@@ -70,6 +72,12 @@ export async function handlerTile(req, res) {
       return;
     }
 
+    const usePostgisTiles = await sourceHasService(
+      data.layer,
+      "mx_postgis_tiler"
+    );
+
+    data.usePostgisTiles = data.usePostgisTiles || usePostgisTiles;
     data.sourceTimestamp = await getSourceLastTimestamp(data.layer);
 
     if (data.useMask) {

@@ -258,7 +258,7 @@ async function _req_prog(label, sql, gids, onProgress, pStart, pEnd) {
 
   const gidsCopy = [...gids];
   let iL = gidsCopy.length;
-  const chunkSize = os.cpus().length;
+  const chunkSize = os.cpus().length * 10;
   if (iL <= chunkSize) {
     onProgress({ percent: 0.5, label: label });
     await pgWrite.query(sqlGid);

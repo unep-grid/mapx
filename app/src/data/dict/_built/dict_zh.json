@@ -4015,16 +4015,6 @@
     "zh": "允许下载此源"
   },
   {
-    "id": "view_use_postgis_tiles",
-    "en": "Use native PostGIS tiles generator",
-    "zh": "使用本机 PostGIS 切片生成器"
-  },
-  {
-    "id": "view_use_postgis_tiles_desc",
-    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
-    "zh": "实验性的。如果启用，则会生成 PostGIS 切片。这可能会修复地图上的无效几何图形。如果设置了掩码，则此选项无效。"
-  },
-  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "zh": "添加蒙版"
@@ -4363,6 +4353,11 @@
     "id": "mx_download",
     "en": "Allow this source to be downloaded",
     "zh": "允许下载此源"
+  },
+  {
+    "id": "mx_postgis_tiler",
+    "en": "Use native PostGIS tiles generator",
+    "zh": "使用本机 PostGIS 切片生成器"
   },
   {
     "id": "gs_ws_b",

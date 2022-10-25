@@ -4015,16 +4015,6 @@
     "bn": "উত্সটি ডাউনলোডের অনুমতি দিন "
   },
   {
-    "id": "view_use_postgis_tiles",
-    "en": "Use native PostGIS tiles generator",
-    "bn": "স্থানীয় পোস্টজিআইএস টাইলস জেনারেটর ব্যবহার করুন"
-  },
-  {
-    "id": "view_use_postgis_tiles_desc",
-    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
-    "bn": "পরীক্ষামূলক। সক্ষম হলে, পোস্টজিআইএস টাইলস তৈরি করা হয়। এটি মানচিত্রে অবৈধ জ্যামিতি ঠিক করতে পারে। একটি মাস্ক সেট করা থাকলে এই বিকল্পটি কোন প্রভাব নয়।"
-  },
-  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "bn": "একটি মুখোশ যোগ করুন"
@@ -4363,6 +4353,11 @@
     "id": "mx_download",
     "en": "Allow this source to be downloaded",
     "bn": "এই উত্সটি ডাউনলোড করার অনুমতি দিন "
+  },
+  {
+    "id": "mx_postgis_tiler",
+    "en": "Use native PostGIS tiles generator",
+    "bn": "স্থানীয় পোস্টজিআইএস টাইলস জেনারেটর ব্যবহার করুন"
   },
   {
     "id": "gs_ws_b",

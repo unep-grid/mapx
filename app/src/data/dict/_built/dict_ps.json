@@ -4015,16 +4015,6 @@
     "ps": "د سرچینې ډاونلوډ ته اجازه ورکړئ "
   },
   {
-    "id": "view_use_postgis_tiles",
-    "en": "Use native PostGIS tiles generator",
-    "ps": "د اصلي پوسټGIS ټایلونو جنریټر وکاروئ"
-  },
-  {
-    "id": "view_use_postgis_tiles_desc",
-    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
-    "ps": "تجربوي. که فعال شي، د PostGIS ټایلونه تولیدیږي. دا ممکن په نقشه کې غلط جیومیټري حل کړي. دا اختیار هیڅ اغیزه نلري که چیرې ماسک تنظیم شوی وي."
-  },
-  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "ps": "د ماسک زیاتول"
@@ -4363,6 +4353,11 @@
     "id": "mx_download",
     "en": "Allow this source to be downloaded",
     "ps": "اجازه راکړئ دا سرچینه ډاونلوډ شي "
+  },
+  {
+    "id": "mx_postgis_tiler",
+    "en": "Use native PostGIS tiles generator",
+    "ps": "د اصلي پوسټGIS ټایلونو جنریټر وکاروئ"
   },
   {
     "id": "gs_ws_b",

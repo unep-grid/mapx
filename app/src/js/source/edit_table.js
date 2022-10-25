@@ -622,13 +622,11 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateLayout() {
     const et = this;
-    console.time("update_layout");
     clearTimeout(et._update_to);
     et._update_to = setTimeout(() => {
       const rectWrapper = et._el_table_wrapper.getBoundingClientRect();
       et._el_table.style.height = `${rectWrapper.height || 100}px`;
       et._ht.render();
-      console.timeEnd("update_layout");
     }, 300);
   }
 

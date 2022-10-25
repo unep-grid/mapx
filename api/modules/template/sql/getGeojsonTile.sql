@@ -17,7 +17,8 @@ tileExtent as (
   {{layer}} layer,
   bboxLatLong bbox
   WHERE
-  bbox.{{geom}} && layer.{{geom}} AND
+  bbox.{{geom}} && layer.{{geom}}
+   AND
   ST_Intersects(
     bbox.{{geom}},
     layer.{{geom}}

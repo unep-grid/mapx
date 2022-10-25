@@ -4015,16 +4015,6 @@
     "fa": "بارگیری منبع را مجاز کنید "
   },
   {
-    "id": "view_use_postgis_tiles",
-    "en": "Use native PostGIS tiles generator",
-    "fa": "از مولد کاشی PostGIS بومی استفاده کنید"
-  },
-  {
-    "id": "view_use_postgis_tiles_desc",
-    "en": "Experimental. If enabled, PostGIS tiles are produced. This might fix invalid geometries on the map. This option as no effect if a mask is set.",
-    "fa": "تجربی. اگر فعال باشد، کاشی های PostGIS تولید می شوند. این ممکن است هندسه های نامعتبر روی نقشه را برطرف کند. اگر یک ماسک تنظیم شده باشد، این گزینه هیچ اثری ندارد."
-  },
-  {
     "id": "view_add_overlap_layer",
     "en": "Add a mask",
     "fa": "افزودن نقاب"
@@ -4363,6 +4353,11 @@
     "id": "mx_download",
     "en": "Allow this source to be downloaded",
     "fa": "اجازه دهید این منبع بارگیری شود "
+  },
+  {
+    "id": "mx_postgis_tiler",
+    "en": "Use native PostGIS tiles generator",
+    "fa": "از مولد کاشی PostGIS بومی استفاده کنید"
   },
   {
     "id": "gs_ws_b",
