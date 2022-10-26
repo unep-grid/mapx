@@ -854,6 +854,14 @@ export class EditTableSessionClient extends WsToolsBase {
       contextMenu: false,
       language: getHandsonLanguageCode(),
       afterFilter: null,
+      afterGetColHeader: (pos, element) => {
+        if (pos >= 0) {
+          const type = et.getColumnTypeById(pos);
+          element.classList.add(`edit-table--header`);
+          element.classList.add(`edit-table--header-${type}`);
+          element.title = type;
+        }
+      },
       afterChange: et.afterChange,
       height: function () {
         const r = et._el_table.getBoundingClientRect();
@@ -870,7 +878,7 @@ export class EditTableSessionClient extends WsToolsBase {
     /**
      * On modal resize, updateLayout
      */
-    et._resize_observer = new ResizeObserver((e) => {
+    et._resize_observer = new ResizeObserver((_) => {
       et.updateLayout();
     });
     et._resize_observer.observe(et._el_table);
@@ -1448,6 +1456,18 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
+   * Get column javascript type using column position
+   * @param {Integer} column id / position
+   * @return {String} type
+   */
+
+  getColumnTypeById(columnId) {
+    const et = this;
+    const type = et._columns[columnId]?.type || "text";
+    return typeConvert(type, "input", "javascript");
+  }
+
+  /**
    * Check if a column exists
    * @param {String} column name
    * @return {Boolean} exists
@@ -1709,7 +1729,6 @@ export class EditTableSessionClient extends WsToolsBase {
          */
         et.pushUpdateOrDelete(change);
       }
-
     }
 
     /**

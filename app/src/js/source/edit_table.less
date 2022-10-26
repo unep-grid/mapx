@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   .edit-table--table-wrapper {
     width: 100%;
     height: 100%;
@@ -15,6 +16,27 @@
       min-width: 100px;
       overflow: hidden;
       position: relative;
+      tr {
+        th {
+          position: relative;
+          &.edit-table--header:after {
+            content: "";
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+          &.edit-table--header-number:after {
+            border-bottom: 2px solid var(--mx_ui_type_number);
+          }
+          &.edit-table--header-boolean:after {
+            border-bottom: 2px solid var(--mx_ui_type_boolean);
+          }
+          &.edit-table--header-string:after {
+            border-bottom: 2px solid var(--mx_ui_type_string);
+          }
+        }
+      }
     }
   }
   .edit-table--progress {
@@ -24,7 +46,7 @@
     top: 0px;
     pointer-events: none;
     &.active {
-      backdrop-filter: blur(2px);// lisibility of progress text
+      backdrop-filter: blur(2px); // lisibility of progress text
       z-index: 800;
       pointer-events: auto;
       background: var(--mx_ui_background_transparent);

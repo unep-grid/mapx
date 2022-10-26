@@ -56,10 +56,15 @@
   /**
   * Messages 
   */
-  --mx_ui_message_success:#2ebf64;
-  --mx_ui_message_info:var(--mx_ui_link);
-  --mx_ui_message_warning:#f1d742;
-  --mx_ui_message_danger:#f17642;
+  --mx_ui_message_success: #2ebf64;
+  --mx_ui_message_info: var(--mx_ui_link);
+  --mx_ui_message_warning: #f1d742;
+  --mx_ui_message_danger: #f17642;
 
-
+  /**
+  * Types 
+  */
+  --mx_ui_type_string: #fff50059;
+  --mx_ui_type_number: #00ffff59;
+  --mx_ui_type_boolean: #95ff0059;
 }
