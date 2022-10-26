@@ -1,4 +1,14 @@
-  - [1.9.45-beta.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.5) 
+  
+- [1.9.45-beta.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.6) 
+
+    - API :
+	    - View list: set _use_postgis_tiler in returned view object, changed tile builder, changed sql + view source loader (app)
+    - APP 
+        - Table editor 
+        -  Should fix case when the user choses to ignore warning about invalid type with auto-save disabled, and later press 'undo' : invalid  previous change should not be added to the update stack
+        - Added color code by type in column header + title (tooltip)
+
+- [1.9.45-beta.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.5) 
 
     - APP 
       - Handle WMS request when clicking in the map with a custom code view using a WMS raster source registered with the view id
