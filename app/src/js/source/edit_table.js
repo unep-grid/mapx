@@ -1091,7 +1091,6 @@ export class EditTableSessionClient extends WsToolsBase {
   undo() {
     const et = this;
     et._ht.undo();
-
     et.updateButtons();
   }
 
@@ -1467,13 +1466,7 @@ export class EditTableSessionClient extends WsToolsBase {
     /* change: [row, prop, oldValue, newValue] */
     const et = this;
 
-    const exists = et.columnExists(change[1]);
-
-    if (!exists) {
-      return false;
-    }
-
-    const type = et.getColumnType(change[1]);
+    const column = change[1];
     const value = change[3];
 
     if (isEmpty(value)) {
@@ -1481,11 +1474,49 @@ export class EditTableSessionClient extends WsToolsBase {
       return true;
     }
 
+    return et._validate_col_val(column, value);
+  }
+
+  /**
+   * Validate old value of an handsontable change
+   * @param {Array} Handsontable change
+   * @return {Boolean} valid old value
+   */
+  validateOldValue(change) {
+    /* change: [row, prop, oldValue, newValue] */
+    const et = this;
+
+    const column = change[1];
+    const value = change[2];
+
+    if (isEmpty(value)) {
+      change[2] = null;
+      return true;
+    }
+
+    return et._validate_col_val(column, value);
+  }
+
+  /**
+   * Internal method for validate value, given column
+   * @return {Boolean} valid
+   */
+  _validate_col_val(column, value) {
+    const et = this;
+
+    const exists = et.columnExists(column);
+
+    if (!exists) {
+      return false;
+    }
+
+    const type = et.getColumnType(column);
+
     if (type === "boolean") {
       return ["false", "true", "FALSE", "TRUE", true, false].includes(value);
     }
 
-    return typeof change[3] === type;
+    return typeof value === type;
   }
 
   /**
@@ -1661,21 +1692,24 @@ export class EditTableSessionClient extends WsToolsBase {
       if (isNotValid) {
         const confirmValidation = await et.confirmValidation(change);
 
-        switch (confirmValidation) {
-          case "undo":
-            et.undo();
-            et._ignore_next_changes = true;
-            return;
-          case "continue":
-          default:
-            continue;
+        if (confirmValidation === "undo") {
+          et._ignore_next_changes = true;
+          et.undo();
+          return;
+        } else {
+          continue;
         }
       }
 
-      /**
-       * Push, update or delete
-       */
-      et.pushUpdateOrDelete(change);
+      const isValidOld = et.validateOldValue(change);
+
+      if (isValidOld) {
+        /**
+         * Push, update or delete
+         */
+        et.pushUpdateOrDelete(change);
+      }
+
     }
 
     /**
