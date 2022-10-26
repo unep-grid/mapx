@@ -793,5 +793,31 @@
     "ps": "",
     "bn": "",
     "de": ""
+  },
+  {
+    "id": "edit_table_modal_quit_ignore_changes_title",
+    "en": "Unsaved changes",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "edit_table_modal_quit_ignore_changes",
+    "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
   }
 ]

@@ -230,6 +230,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async destroy(msg) {
     const et = this;
+
     if (et._config.debug) {
       console.log("destroy requested:", msg);
     }
@@ -237,6 +238,23 @@ export class EditTableSessionClient extends WsToolsBase {
       if (et._destroyed) {
         return;
       }
+
+      if (et._updates.length > 1) {
+        const quit = await modalConfirm({
+          title: tt("edit_table_modal_quit_ignore_changes_title"),
+          content: tt("edit_table_modal_quit_ignore_changes", {
+            data: {
+              count: et._updates.length,
+            },
+          }),
+          confirm: tt("btn_confirm"),
+          cancel: tt("btn_cancel"),
+        });
+        if (!quit) {
+          return false;
+        }
+      }
+
       const r = et._config.routes;
       et._destroyed = true;
       et._lock_table_concurrent = false;
@@ -438,20 +456,25 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtons() {
     const et = this;
+    if (!et._table_ready) {
+      setTimeout(et._update_buttons_now, 200);
+    } else {
+      et._update_buttons_now();
+    }
+  }
 
-    clearTimeout(et._id_to_buttons);
-    et._id_to_buttons = setTimeout((_) => {
-      if (!et._table_ready) {
-        return;
-      }
-      et.perf("update_buttons");
-      et.updateButtonsGeom();
-      et.updateButtonSave();
-      et.updateUpdatesCounter();
-      et.updateButtonsUndoRedo();
-      et.updateButtonsAddRemoveColumn();
-      et.perfEnd("update_buttons");
-    }, 200);
+  _update_buttons_now() {
+    const et = this;
+    if (!et._table_ready) {
+      return;
+    }
+    et.perf("update_buttons");
+    et.updateButtonsGeom();
+    et.updateButtonSave();
+    et.updateUpdatesCounter();
+    et.updateButtonsUndoRedo();
+    et.updateButtonsAddRemoveColumn();
+    et.perfEnd("update_buttons");
   }
 
   /**
@@ -1068,6 +1091,7 @@ export class EditTableSessionClient extends WsToolsBase {
   undo() {
     const et = this;
     et._ht.undo();
+
     et.updateButtons();
   }
 
@@ -1712,8 +1736,8 @@ export class EditTableSessionClient extends WsToolsBase {
       id_table: et._id_table,
       type: "update_cell",
       column_name: change[1],
-      value_orig: change[2],
-      value_new: change[3],
+      value_orig: change[2] || null,
+      value_new: change[3] || null,
       gid: gid,
     };
     /**
@@ -1892,7 +1916,7 @@ export class EditTableSessionClient extends WsToolsBase {
       return;
     }
     if (et._config.test_mode) {
-      console.log("Test mode. Updates not emited:", updates);
+      console.warn("Test mode. Updates not emited:", updates);
       return;
     }
     et.emit(r.client_edit_updates, { updates, ...opt });

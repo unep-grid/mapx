@@ -1785,6 +1785,16 @@
     "es": "Esta herramienta repara geometrías no válidas informadas por la herramienta de validación. Las geometrías no válidas son geometrías que contienen, por ejemplo, polígonos que se intersecan a sí mismos. Por favor, lea la wiki para obtener más información."
   },
   {
+    "id": "edit_table_modal_quit_ignore_changes_title",
+    "en": "Unsaved changes",
+    "es": "Cambios no guardados"
+  },
+  {
+    "id": "edit_table_modal_quit_ignore_changes",
+    "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
+    "es": "Esta mesa tiene {{count}} cambios no guardados. ¿Está seguro de que desea salir y descartar esos cambios?"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "es": "Herramientas de geometría: seleccione la capa de origen"

@@ -1785,6 +1785,16 @@
     "ar": "تقوم هذه الأداة بإصلاح الأشكال الهندسية غير الصالحة التي تم الإبلاغ عنها بواسطة أداة التحقق من الصحة. الأشكال الهندسية غير الصالحة هي أشكال هندسية تحتوي على سبيل المثال على مضلعات ذاتية التقاطع. يرجى قراءة الويكي لمزيد من المعلومات."
   },
   {
+    "id": "edit_table_modal_quit_ignore_changes_title",
+    "en": "Unsaved changes",
+    "ar": "التغييرات غير المحفوظة"
+  },
+  {
+    "id": "edit_table_modal_quit_ignore_changes",
+    "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
+    "ar": "يحتوي هذا الجدول {{count}} التغييرات غير المحفوظة. هل أنت متأكد أنك تريد إنهاء وتجاهل هذه التغييرات؟"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ar": "أدوات الهندسة: حدد طبقة المصدر"

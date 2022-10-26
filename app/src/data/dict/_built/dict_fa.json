@@ -1785,6 +1785,16 @@
     "fa": "این ابزار هندسه های نامعتبر گزارش شده توسط ابزار اعتبار سنجی را تعمیر می کند. هندسه های نامعتبر هندسه هایی هستند که به عنوان مثال حاوی چندضلعی های خود متقاطع هستند. لطفا برای اطلاعات بیشتر ویکی را بخوانید."
   },
   {
+    "id": "edit_table_modal_quit_ignore_changes_title",
+    "en": "Unsaved changes",
+    "fa": "تغییرات ذخیره نشده"
+  },
+  {
+    "id": "edit_table_modal_quit_ignore_changes",
+    "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
+    "fa": "این جدول دارد {{count}} تغییرات ذخیره نشده آیا مطمئنید که می خواهید آن تغییرات را ترک کرده و نادیده بگیرید؟"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fa": "ابزار هندسه: لایه منبع را انتخاب کنید"

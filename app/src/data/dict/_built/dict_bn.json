@@ -1785,6 +1785,16 @@
     "bn": "এই টুলটি বৈধকরণ টুল দ্বারা রিপোর্ট করা অবৈধ জ্যামিতি মেরামত করে। অকার্যকর জ্যামিতি হল জ্যামিতি যেখানে উদাহরণ স্ব-ছেদ করা বহুভুজ থাকে। আরও তথ্যের জন্য অনুগ্রহ করে উইকি পড়ুন।"
   },
   {
+    "id": "edit_table_modal_quit_ignore_changes_title",
+    "en": "Unsaved changes",
+    "bn": "অসংরক্ষিত পরিবর্তন"
+  },
+  {
+    "id": "edit_table_modal_quit_ignore_changes",
+    "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
+    "bn": "এই টেবিল আছে {{count}} অসংরক্ষিত পরিবর্তন আপনি কি এই পরিবর্তনগুলি প্রস্থান এবং বাতিল করার বিষয়ে নিশ্চিত?"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "bn": "জ্যামিতি সরঞ্জাম: উৎস স্তর নির্বাচন করুন"

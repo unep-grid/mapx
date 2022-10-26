@@ -1785,6 +1785,16 @@
     "fr": "Cet outil va corriger les géométries invalides rapportée par l'outil de validation. Les géométries invalides sont des géométries qui contiennent par exemple des polygones auto-sécants. Veuillez consulter le wiki pour plus d'informations."
   },
   {
+    "id": "edit_table_modal_quit_ignore_changes_title",
+    "en": "Unsaved changes",
+    "fr": "Modifications non enregistrées"
+  },
+  {
+    "id": "edit_table_modal_quit_ignore_changes",
+    "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
+    "fr": "Ce tableau a {{count}} modifications non enregistrées. Voulez-vous vraiment quitter et annuler ces modifications ?"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fr": "Outils de géométrie : sélectionner le calque source"

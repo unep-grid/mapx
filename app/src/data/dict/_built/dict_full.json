@@ -4641,6 +4641,32 @@
     "de": "Dieses Tool repariert ungültige Geometrien, die vom Validierungstool gemeldet wurden. Ungültige Geometrien sind Geometrien, die beispielsweise sich selbst schneidende Polygone enthalten. Bitte lesen Sie das Wiki für weitere Informationen."
   },
   {
+    "id": "edit_table_modal_quit_ignore_changes_title",
+    "en": "Unsaved changes",
+    "fr": "Modifications non enregistrées",
+    "es": "Cambios no guardados",
+    "ru": "Несохраненные изменения",
+    "zh": "未保存的更改",
+    "ar": "التغييرات غير المحفوظة",
+    "fa": "تغییرات ذخیره نشده",
+    "ps": "نه خوندي شوي بدلونونه",
+    "bn": "অসংরক্ষিত পরিবর্তন",
+    "de": "Nicht gespeicherte Änderungen"
+  },
+  {
+    "id": "edit_table_modal_quit_ignore_changes",
+    "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
+    "fr": "Ce tableau a {{count}} modifications non enregistrées. Voulez-vous vraiment quitter et annuler ces modifications ?",
+    "es": "Esta mesa tiene {{count}} cambios no guardados. ¿Está seguro de que desea salir y descartar esos cambios?",
+    "ru": "Эта таблица имеет {{count}} несохраненные изменения. Вы уверены, что хотите выйти и отменить эти изменения?",
+    "zh": "这个表有 {{count}}未保存的更改。您确定要退出并放弃这些更改吗？",
+    "ar": "يحتوي هذا الجدول {{count}} التغييرات غير المحفوظة. هل أنت متأكد أنك تريد إنهاء وتجاهل هذه التغييرات؟",
+    "fa": "این جدول دارد {{count}} تغییرات ذخیره نشده آیا مطمئنید که می خواهید آن تغییرات را ترک کرده و نادیده بگیرید؟",
+    "ps": "دا جدول لري {{count}} نه خوندي شوي بدلونونه ایا تاسو ډاډه یاست چې دا بدلونونه پریږدئ او رد کړئ؟",
+    "bn": "এই টেবিল আছে {{count}} অসংরক্ষিত পরিবর্তন আপনি কি এই পরিবর্তনগুলি প্রস্থান এবং বাতিল করার বিষয়ে নিশ্চিত?",
+    "de": "Dieser Tisch hat {{count}} nicht gespeicherte Änderungen. Möchten Sie diese Änderungen wirklich beenden und verwerfen?"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fr": "Outils de géométrie : sélectionner le calque source",

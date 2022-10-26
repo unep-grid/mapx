@@ -1785,6 +1785,16 @@
     "zh": "此工具修复验证工具报告的无效几何。无效几何是包含例如自相交多边形的几何。请阅读 wiki 了解更多信息。"
   },
   {
+    "id": "edit_table_modal_quit_ignore_changes_title",
+    "en": "Unsaved changes",
+    "zh": "未保存的更改"
+  },
+  {
+    "id": "edit_table_modal_quit_ignore_changes",
+    "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
+    "zh": "这个表有 {{count}}未保存的更改。您确定要退出并放弃这些更改吗？"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "zh": "几何工具：选择源层"

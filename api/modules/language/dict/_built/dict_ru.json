@@ -1785,6 +1785,16 @@
     "ru": "Этот инструмент исправляет неверную геометрию, обнаруженную инструментом проверки. Недопустимая геометрия — это геометрия, содержащая, например, самопересекающиеся многоугольники. Пожалуйста, прочитайте вики для получения дополнительной информации."
   },
   {
+    "id": "edit_table_modal_quit_ignore_changes_title",
+    "en": "Unsaved changes",
+    "ru": "Несохраненные изменения"
+  },
+  {
+    "id": "edit_table_modal_quit_ignore_changes",
+    "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
+    "ru": "Эта таблица имеет {{count}} несохраненные изменения. Вы уверены, что хотите выйти и отменить эти изменения?"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ru": "Инструменты геометрии: выберите исходный слой"
