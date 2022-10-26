@@ -962,7 +962,6 @@ observeEvent(input$btnViewSave, {
 
     view[[c("editor")]] <- editor
     view[[c("data", "projects")]] <- projects
-    # view[[c("project")]] <- project
 
     if (noDataCheck(editors)) editors <- c(as.character(editor))
     if (!isTRUE(as.character(editor) %in% editors)) editors <- c(editors, as.character(editor))
@@ -1006,7 +1005,7 @@ observeEvent(input$btnViewSave, {
         view,
         sourceData,
         sourceDataMask,
-        additionalAttributes,
+        additionalAttributes
       )
     }
     #
