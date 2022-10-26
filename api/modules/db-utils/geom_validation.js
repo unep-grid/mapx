@@ -251,20 +251,18 @@ async function getGids(idLayer) {
  * @param {Function} onProgress callback
  */
 async function _req_prog(label, sql, gids, onProgress, pStart, pEnd) {
-  let sqlGid = "";
   let p = 0;
   pStart = pStart / 100 || 0;
   pEnd = pEnd / 100 || 1;
 
   const gidsCopy = [...gids];
-  let iL = gidsCopy.length;
+  const iL = gidsCopy.length;
   const chunkSize = os.cpus().length * 10;
   if (iL <= chunkSize) {
     onProgress({ percent: 0.5, label: label });
-    await pgWrite.query(sqlGid);
+    await pgWrite.query(sql);
   } else {
     const groupsL = Math.ceil(iL / chunkSize);
-
     for (let i = 0; i < groupsL; i++) {
       p = (pEnd - pStart) * ((i + 1) / groupsL) + pStart;
       onProgress({ percent: p, label: label });
