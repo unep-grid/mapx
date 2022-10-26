@@ -1,3 +1,15 @@
+  - [1.9.45-beta.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.5) 
+
+    - APP 
+      - Handle WMS request when clicking in the map with a custom code view using a WMS raster source registered with the view id
+      - Solved issue introduced in the previous update, producing an error when saving a view configuration
+      - Table editor :
+        - Removed delay for buttons state, when the table is ready
+        - Solved issue when creating new column without autosave enabled, then modifying a value and pressing undo : the count was not correct. 
+        - Added a warning panel when exiting the tool with unsaved changes
+    - API 
+      - Geometries validation : fixed issue when geometry count < chunks threshold, could have produced false negatives results
+
   - [1.9.45-beta.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.4) 
 
     - APP
