@@ -1716,8 +1716,11 @@ export async function addSourceFromView(o) {
 
   if (isVt) {
     const urlBase = getApiUrl("getTile");
-    const useServerCache = true;
-    const usePostgisTiles = false; // set in mx_sources -> services ->'mx_postgis_tiler'
+    const useServerCache = settings.tiles.vector.useCache;
+    // Per source settings: set in mx_sources -> services ->'mx_postgis_tiler'
+    const usePostgisTiles = isEmpty(settings.tiles.vector.usePostgisTiles)
+      ? o.view._use_postgis_tiler
+      : settings.tiles.vector.usePostgisTiles; 
     // NOTE: Can't use URL() : contains {x}/{y}/{z} = escaped.
     const url =
       `${urlBase}?view=${o.view.id}&` +

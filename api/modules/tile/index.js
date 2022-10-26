@@ -72,12 +72,7 @@ export async function handlerTile(req, res) {
       return;
     }
 
-    const usePostgisTiles = await sourceHasService(
-      data.layer,
-      "mx_postgis_tiler"
-    );
-
-    data.usePostgisTiles = data.usePostgisTiles || usePostgisTiles;
+    data.usePostgisTiles = !!data.usePostgisTiles;
     data.sourceTimestamp = await getSourceLastTimestamp(data.layer);
 
     if (data.useMask) {

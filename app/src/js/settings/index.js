@@ -41,6 +41,12 @@ const settings = {
     template:
       "https://cdn.jsdelivr.net/gh/unep-grid/map-x-mgl@{{version}}/{{path}}",
   },
+  tiles: {
+    vector: {
+      useCache: true,
+      usePostgisTiles: null,
+    },
+  },
   api: {
     host: "api",
     port: "3333",

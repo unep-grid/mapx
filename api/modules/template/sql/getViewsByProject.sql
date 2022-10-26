@@ -164,6 +164,7 @@ v_meta AS (
   v.*,
   null as _id_source,
   coalesce(data #> '{source,meta,origin,source,urls}', '[]'::jsonb ) @> '[{"is_download_link":true}]' as _has_download,
+  null as _use_postgis_tiler,
   coalesce( v.data #> '{source,meta}','{}'::jsonb ) AS _meta
   FROM v_all v
   WHERE 
@@ -173,6 +174,7 @@ v_meta AS (
   v.*,
   s.id as _id_source,
   coalesce( s.services, '[]'::jsonb ) @> '"mx_download"' _has_download,
+  coalesce( s.services, '[]'::jsonb ) @> '"mx_postgis_tiler"' _use_postgis_tiler,
   coalesce( s.data #> '{meta}', '{}'::jsonb ) AS _meta
   FROM v_all v LEFT OUTER JOIN mx_sources s
   ON v.data #>> '{source,layerInfo,name}' = s.id
