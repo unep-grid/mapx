@@ -1,4 +1,4 @@
-import { ws, nc, events, listeners, theme } from "./../mx.js";
+import { mg, ws, nc, events, listeners, theme, mapboxgl } from "./../mx.js";
 import { settings } from "./../settings";
 import { featuresToPopup } from "./features_to_popup.js";
 import { RadialProgress } from "./../radial_progress";
@@ -987,7 +987,7 @@ export async function initMapx(o) {
   /*
    * Create map object
    */
-  const map = new mx.mapboxgl.Map(mapOptions);
+  const map = new mapboxgl.Map(mapOptions);
   const elCanvas = map.getCanvas();
   elCanvas.setAttribute("tabindex", "-1");
 
@@ -1001,6 +1001,12 @@ export async function initMapx(o) {
    * Wait for map to be loaded
    */
   await map.once("load");
+
+  /**
+  * TESTING 
+  */ 
+  mg.init(map); 
+
 
   /**
    * Link theme to map
@@ -1720,7 +1726,7 @@ export async function addSourceFromView(o) {
     // Per source settings: set in mx_sources -> services ->'mx_postgis_tiler'
     const usePostgisTiles = isEmpty(settings.tiles.vector.usePostgisTiles)
       ? o.view._use_postgis_tiler
-      : settings.tiles.vector.usePostgisTiles; 
+      : settings.tiles.vector.usePostgisTiles;
     // NOTE: Can't use URL() : contains {x}/{y}/{z} = escaped.
     const url =
       `${urlBase}?view=${o.view.id}&` +

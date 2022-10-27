@@ -10,7 +10,9 @@ import { WsHandlerMapx } from "./ws_handler/ws_handler_instance.js";
 import { NotifCenterMapx } from "./notif_center/nc_instance.js";
 import { HighlighterMapx } from "./features_highlight/highlighter_instance";
 import { WsToolsInstances } from "./ws_tools";
+import { Magnifier } from "./magnifier/index.js";
 import { theme } from "./init_theme";
+
 
 const templates = {
   viewListLegend: require("../dot/view_list_legend_vt.dot.html"),
@@ -32,6 +34,7 @@ const data = {
 const initQueryParams = {}; // set in init_common.js
 const listeners = new ListenerStore();
 const events = new EventSimple();
+const mg = new Magnifier();
 const hinthack = new HintHack();
 const ws = new WsHandlerMapx();
 const nc = new NotifCenterMapx();
@@ -56,6 +59,7 @@ export {
   ws,
   ws_tools,
   nc,
+  mg,
   highlighter,
   initQueryParams,
   templates,
