@@ -1152,32 +1152,16 @@ export class EditTableSessionClient extends WsToolsBase {
     /**
      * Remove update item that ref the removed column
      */
-    let nU = et._updates.length;
-    while (nU--) {
-      const sUpdate = et._updates[nU];
-      if (sUpdate.column_name === update.column_name) {
-        et._updates.splice(nU, 1);
-      }
-    }
+    et.clearUpdateRefColName(update.column_name);
 
     /**
-     * Remove doneAction from UndoRedo plugin
+     * Same for undo/redo
      */
-    const ur = et._ht.getPlugin("UndoRedo");
-    const actions = ur.doneActions;
-    let nA = actions.length;
-    while (nA--) {
-      const a = actions[nA];
-      if (a.actionType === "change") {
-        const changes = a.changes;
-        for (const change of changes) {
-          if (change[1] === colRemoved.pos) {
-            actions.splice(nA, 1);
-          }
-        }
-      }
-    }
+    et.clearUndoRedoRefCol(colRemoved.pos);
 
+    /**
+     * Update buttons state
+     */
     et.updateButtons();
 
     /**
@@ -2164,5 +2148,51 @@ export class EditTableSessionClient extends WsToolsBase {
     }
 
     return elBtn;
+  }
+
+  /**
+   * Remove ref to column name from updates
+   * e.g. after column removed
+   * @param {String} name Column name
+   */
+  clearUpdateRefColName(name) {
+    const et = this;
+    let nU = et._updates.length;
+    while (nU--) {
+      const sUpdate = et._updates[nU];
+      if (sUpdate.column_name === name) {
+        et._updates.splice(nU, 1);
+      }
+    }
+  }
+  /**
+   * Remove ref to column name from unduRedo
+   * e.g. after column remove
+   * @param {Number} pos Column last position
+   */
+  clearUndoRedoRefCol(pos) {
+    const et = this;
+    const ur = et._ht.getPlugin("UndoRedo");
+    const actions = ur.doneActions;
+    const undoneActions = ur.undoneActions;
+    et._clear_undo_ref_col(actions, pos);
+    et._clear_undo_ref_col(undoneActions, pos);
+  }
+  /**
+   * Helper for clearUndoRedoRefCol
+   */
+  _clear_undo_ref_col(actions, pos) {
+    let nA = actions.length;
+    while (nA--) {
+      const a = actions[nA];
+      if (a.actionType === "change") {
+        const changes = a.changes;
+        for (const change of changes) {
+          if (change[1] === pos) {
+            actions.splice(nA, 1);
+          }
+        }
+      }
+    }
   }
 }
