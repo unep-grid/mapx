@@ -1148,7 +1148,6 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   handlerUpdateColumnRemove(update, source) {
     const et = this;
-
     let n = et._columns.length;
     let colRemoved = {}; // keep track for cleaning redo / updates
     while (n--) {
@@ -1164,6 +1163,17 @@ export class EditTableSessionClient extends WsToolsBase {
       return;
     }
 
+    /**
+     * ⚠️ Column removal using alter('remove_col',) is not
+     * supported using data object as source !
+     * - Error: cannot remove column with object data source or columns option specified
+     * Strategy : whole manual process
+     * Here is how this should be done, by the book for array as source :
+     * - use the context menu OR manually, find the index of the column starting from end
+     * const id = nColumns - 1 - colRemoved.pos;
+     * - Alter table
+     * et._ht.alter("remove_col", id);
+     */
     et._ht.updateSettings({
       columns: et._columns,
       colHeaders: et._columns.map((c) => c.data),
@@ -1178,6 +1188,14 @@ export class EditTableSessionClient extends WsToolsBase {
      * Same for undo/redo
      */
     et.clearUndoRedoRefCol(colRemoved.pos);
+
+    const data = et._ht.getSourceData();
+    for(const row of data){
+      delete row[update.column_name];
+    }
+
+    et._ht.updateData(data,'column_remove_handler');
+
 
     /**
      * Update buttons state
