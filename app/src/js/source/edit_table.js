@@ -453,11 +453,13 @@ export class EditTableSessionClient extends WsToolsBase {
 
   /**
    * Groupped button/count update
+   * @param {Number} timeout Add tiemout before update. Solve cases when the hook do not fire at the right time : adding a small delay could solve issues;
    */
-  updateButtons() {
+  updateButtons(timeout) {
     const et = this;
-    if (!et._table_ready) {
-      setTimeout(et._update_buttons_now, 200);
+    timeout = isEmpty(timeout) ? null : timeout;
+    if (!et._table_ready || timeout) {
+      setTimeout(et._update_buttons_now, timeout);
     } else {
       et._update_buttons_now();
     }
@@ -866,6 +868,7 @@ export class EditTableSessionClient extends WsToolsBase {
         }
       },
       afterChange: et.afterChange,
+      afterLoadData: et.afterLoadData,
       height: function () {
         const r = et._el_table.getBoundingClientRect();
         return r.height - 30;
@@ -874,9 +877,16 @@ export class EditTableSessionClient extends WsToolsBase {
     });
 
     /**
-     * Dialog for column name issue
+     * Add hooks
      */
-    await et.columnNameIssueDialog();
+    et._ht.addHook("afterUndo", () => {
+      // isRedoAvailable is not ready after undo, add delay
+      et.updateButtons(20);
+    });
+    et._ht.addHook("afterRedo", () => {
+      // isUndoAvailable is not ready after redo, add delay
+      et.updateButtons(20);
+    });
 
     /**
      * On modal resize, updateLayout
@@ -889,23 +899,35 @@ export class EditTableSessionClient extends WsToolsBase {
     if (initLocked) {
       et.lock();
     }
+  }
 
-    /**
-     * Initial state of undo/redo buttons.
-     */
-    et.updateAutoSave();
-    et.updateButtons();
+  async afterLoadData() {
+    const et = this;
+    try {
+      /**
+       * Dialog for column name issue
+       */
+      await et.columnNameIssueDialog();
 
-    /**
-     * Clear progress
-     */
-    et.setProgress(0);
+      /**
+       * Initial state of undo/redo buttons.
+       */
+      et.updateAutoSave();
+      et.updateButtons();
 
-    /**
-     * Fire on ready cb, if any
-     */
-    et._table_ready = true;
-    await et.fire("table_ready");
+      /**
+       * Clear progress
+       */
+      et.setProgress(0);
+
+      /**
+       * Fire on ready cb, if any
+       */
+      et._table_ready = true;
+      await et.fire("table_ready");
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   /**
@@ -1102,7 +1124,6 @@ export class EditTableSessionClient extends WsToolsBase {
   undo() {
     const et = this;
     et._ht.undo();
-    et.updateButtons();
   }
 
   /**
@@ -1111,7 +1132,6 @@ export class EditTableSessionClient extends WsToolsBase {
   redo() {
     const et = this;
     et._ht.redo();
-    et.updateButtons();
   }
 
   /**
@@ -1804,6 +1824,7 @@ export class EditTableSessionClient extends WsToolsBase {
         previousUpdate.id_table === update.id_table;
       if (updatePrevious) {
         noChange = update.value_new === previousUpdate.value_orig;
+        console.log(noChange);
         if (noChange) {
           deletePrevious = true;
           deletePos = pos;
