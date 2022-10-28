@@ -159,6 +159,7 @@ async function addSourceHandler(req, res) {
         })
       );
       const layerTest = await isLayerValid(idSource, false);
+      
       isValid = layerTest.valid;
       if (!isValid) {
         res.write(

@@ -162,7 +162,7 @@ export async function isLayerValid(
 
   return {
     id: idLayer,
-    valid: stat.unknown > 0 || stat.invalid > 0,
+    valid: stat.unknown === 0 && stat.invalid === 0,
     title: title,
     stat: stat,
     validate: validate,
