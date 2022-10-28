@@ -82,6 +82,9 @@ export async function isLayerValid(
    *
    * - Postgis (https://postgis.net/docs/ST_MakeValid.html)
    * - Buffer + convert o multi for polygon ( faster, predictible )
+   * Know issues :
+   *  - buffer can drop invalid polygons
+   *  - makevalid can reduce the geometry dimensions ( poly -> lines -> points )
    */
   const sqlFixGeom =
     `UPDATE ${idLayer}
