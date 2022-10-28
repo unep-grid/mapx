@@ -83,11 +83,16 @@ export async function isLayerValid(
    * - Postgis (https://postgis.net/docs/ST_MakeValid.html)
    * - Buffer + convert o multi for polygon ( faster, predictible )
    */
-  const sqlFixGeom = `
-  UPDATE ${idLayer}
-  SET ${idGeomColumn} = ST_MakeValid(${idGeomColumn})
-  WHERE 
-    NOT ${idValidColumn} 
+  const sqlFixGeom =
+    `UPDATE ${idLayer}
+  SET geom =
+    CASE
+      WHEN GeometryType(${idGeomColumn}) ~* 'POLYGON'
+      THEN ST_Multi(ST_Buffer(${idGeomColumn},0))
+      ELSE ST_MakeValid(${idGeomColumn})
+    END
+  WHERE
+    NOT ${idValidColumn}
   `;
 
   /**
