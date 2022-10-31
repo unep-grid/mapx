@@ -19,6 +19,7 @@ let redisGetJSON;
 let redisSetJSON;
 let pgCustom;
 let pgRead;
+let pgReadLong;
 let pgWrite;
 let pgAdmin;
 let meili;
@@ -58,13 +59,32 @@ try {
     database: s.db.name,
     password: s.db.read.password,
     port: s.db.port,
-    statement_timeout: s.db.timeout,
+    statement_timeout: s.db.timeoutShort,
     max: s.db.poolMax,
     application_name: "mx_api_read",
   });
 
   pgRead.on("error", (err) => {
     console.error("Unexpected error on postgres client read", err);
+    process.exit(-1);
+  });
+
+  /**
+   * Set long read pool
+   */
+  pgReadLong = new Pool({
+    host: s.db.host,
+    user: s.db.read.user,
+    database: s.db.name,
+    password: s.db.read.password,
+    port: s.db.port,
+    statement_timeout: s.db.timeoutLong,
+    max: s.db.poolMax,
+    application_name: "mx_api_read_long",
+  });
+
+  pgReadLong.on("error", (err) => {
+    console.error("Unexpected error on postgres client read (long)", err);
     process.exit(-1);
   });
 
@@ -78,7 +98,7 @@ try {
     database: s.db.name,
     password: s.db.custom.password,
     port: s.db.port,
-    statement_timeout: s.db.timeout,
+    statement_timeout: s.db.timeoutShort,
     max: s.db.poolMax,
     application_name: "mx_api_custom",
   });
@@ -97,7 +117,7 @@ try {
     database: s.db.name,
     password: s.db.admin.password,
     port: s.db.port,
-    statement_timeout: s.db.timeout,
+    statement_timeout: s.db.timeoutShort,
     max: s.db.poolMax,
     application_name: "mx_api_admin",
   });
@@ -168,6 +188,7 @@ export {
   redisGetJSON,
   pgCustom,
   pgRead,
+  pgReadLong,
   pgWrite,
   pgAdmin,
   meili,

@@ -69,7 +69,8 @@ const settings_global = {
     port: 5432,
     host: "localhost",
     schema: "public",
-    timeout: 1000 * 60 * 5, // 5 minutes
+    timeoutLong: 1000 * 60 * 5, // 5 minutes
+    timeoutShort : 1000 * 20, // 20 seconds
     poolMin: 1,
     poolMax: 1,
     admin: {

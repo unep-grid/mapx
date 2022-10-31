@@ -49,7 +49,8 @@ const settings = Object.assign({}, settings_global, {
     port: env.POSTGRES_PORT,
     host: env.POSTGRES_HOST,
     schema: env.POSTGRES_SCHEMA_MAIN,
-    timeout: 1000 * 60 * 5, // 5 minutes
+    timeoutLong: 1000 * 60 * 5, // 5 minutes
+    timeoutShort : 1000 * 20, // 20 seconds
     poolMin: env.POSTGRES_POOL_MIN,
     poolMax: env.POSTGRES_POOL_MAX,
     admin: {

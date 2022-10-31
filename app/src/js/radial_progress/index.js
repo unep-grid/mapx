@@ -36,7 +36,7 @@ class RadialProgress {
     rp.elCanvas = el("canvas", {
       style: {
         width: rp.opt.radius * 2 + "px",
-        height: rp.opt.radius * 2 + rp.opt.fontHeight * 2 + "px",
+        height: rp.opt.radius * 2 + "px",
       },
     });
     rp.el = el(

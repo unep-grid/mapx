@@ -2502,6 +2502,7 @@ export async function makeNumericSlider(o) {
     oldSlider.destroy();
   }
 
+
   const summary = await getViewSourceSummary(view);
 
   let min = path(summary, "attribute_stat.min", 0);
@@ -4692,6 +4693,7 @@ export async function makeSearchBox(o) {
   const attr = path(view, "data.attribute.name");
 
   const summary = await getViewSourceSummary(view);
+  
   const choices = summaryToChoices(summary);
 
   const searchBox = $(el)

@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { isSourceId, isViewId } from "@fxi/mx_valid";
-import { redisGet, redisSet, pgRead } from "#mapx/db";
+import { redisGet, redisSet, pgRead, pgReadLong } from "#mapx/db";
 import { getParamsValidator } from "#mapx/route_validation";
 import { parseTemplate, sendJSON, sendError } from "#mapx/helpers";
 import { templates } from "#mapx/template";
@@ -159,7 +159,7 @@ async function getOrCalc(idTemplate, opt) {
   const cached = opt.useCache ? await redisGet(hash) : false;
 
   if (!cached) {
-    const data = await pgRead.query(sql);
+    const data = await pgReadLong.query(sql);
     const newstat = data.rows[0].res;
     setTimeout(() => {
       // Save after return
