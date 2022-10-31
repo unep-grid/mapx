@@ -600,8 +600,9 @@ picture {
 .btn-icon > span {
   margin-right: 5px;
 }
-.btn > i,
-.btn > span {
+.btn i,
+.btn span,
+.btn .btn-icon-wrapper {
   pointer-events: none;
 }
 .btn-icon-wrapper {
