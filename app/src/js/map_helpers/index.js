@@ -1720,7 +1720,7 @@ export async function addSourceFromView(o) {
     // Per source settings: set in mx_sources -> services ->'mx_postgis_tiler'
     const usePostgisTiles = isEmpty(settings.tiles.vector.usePostgisTiles)
       ? o.view._use_postgis_tiler
-      : settings.tiles.vector.usePostgisTiles; 
+      : settings.tiles.vector.usePostgisTiles;
     // NOTE: Can't use URL() : contains {x}/{y}/{z} = escaped.
     const url =
       `${urlBase}?view=${o.view.id}&` +
@@ -2501,7 +2501,6 @@ export async function makeNumericSlider(o) {
   if (oldSlider) {
     oldSlider.destroy();
   }
-
 
   const summary = await getViewSourceSummary(view);
 
@@ -4001,14 +4000,7 @@ async function viewLayersAddRt(o) {
         path: "data.title",
         defaultValue: "[ missing title ]",
       });
-
-    const imgModal = el("img", {
-      src: img.src,
-      alt: "Legend",
-      onerror: handleImgError,
-    });
-
-    /* Add in modal */
+    const imgModal = img.cloneNode();
     modal({
       title: title,
       id: "legend-raster-" + view.id,
@@ -4019,12 +4011,15 @@ async function viewLayersAddRt(o) {
 
   /*  Add image to image box */
   function handleLoad() {
+    const dpr = window.devicePixelRatio;
+    img.style.width = img.naturalWidth / dpr + "px";
+    img.style.height = img.naturalHeight / dpr + "px";
     elLegendImageBox.appendChild(img);
   }
   /* error callback */
   function handleImgError() {
-    this.onerror = null;
-    this.src = legendB64Default;
+    img.onerror = null;
+    img.src = legendB64Default;
   }
 }
 
@@ -4693,7 +4688,7 @@ export async function makeSearchBox(o) {
   const attr = path(view, "data.attribute.name");
 
   const summary = await getViewSourceSummary(view);
-  
+
   const choices = summaryToChoices(summary);
 
   const searchBox = $(el)

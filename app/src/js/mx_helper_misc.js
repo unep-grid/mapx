@@ -2029,50 +2029,57 @@ export function handleRequestMessage(msg, msgs, on) {
  *
  *
  */
-export function urlToImageBase64(url) {
+export async function urlToImageBase64(url) {
   const h = mx.helpers;
-  const def = "";
-  if (h.isBase64img(url)) {
-    return Promise.resolve(url);
+  let out = "";
+
+  try {
+    if (h.isBase64img(url)) {
+      return url;
+    }
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`URL ${url}: status ${res.status}`);
+    }
+    const blob = await res.blob();
+    const validType = h.isValidType(blob.type, "image");
+    if (!validType) {
+      throw new Error(`No valid image type ${blob.type}`);
+    }
+    img.src = URL.createObjectURL(blob);
+    await waitImg(img);
+    out = convertToBase64(img);
+  } catch (e) {
+    console.warn("base64 converter issue:", e);
+  } finally {
+    return out;
   }
-  const img = new Image();
-  img.crossOrigin = "Anonymous";
-  return fetch(url)
-    .then(function (response) {
-      if (response.ok) {
-        return response.blob();
-      } else {
-        throw new Error(`No valid response for url ${url}`);
-      }
-    })
-    .then(function (blob) {
-      const validType = h.isValidType(blob.type, "image");
-      if (!validType) {
-        throw new Error(`No valid image type ${blob.type}`);
-      }
-      img.src = URL.createObjectURL(blob);
-      return new Promise((resolve) => {
-        img.onload = () => {
-          const b64 = convertToBase64(img);
-          resolve(b64);
-        };
-      });
-    })
-    .catch((e) => {
-      console.warn(`urlToImageBase64 failed: , ${e.message}`);
-      return def;
-    });
 
   /**
    * Helpers
    */
-  function convertToBase64(img) {
-    const elCanvas = h.el("canvas", {
-      width: img.naturalWidth,
-      height: img.naturalHeight,
-    });
+  async function convertToBase64(img) {
+    const dpr = window.devicePixelRatio;
+    const elCanvas = h.el("canvas");
+    const width = img.width;
+    const height = img.height;
+    elCanvas.width = width * dpr;
+    elCanvas.height = height * dpr;
+    elCanvas.style.width = width + "px";
+    elCanvas.style.height = height + "px";
     const ctx = elCanvas.getContext("2d");
+    ctx.scale(dpr, dpr);
     ctx.drawImage(img, 0, 0);
     return elCanvas.toDataURL("image/png");
+  }
+
+  function waitImg(img) {
+    return new Promise((resolve) => {
+      img.onload = () => {
+        resolve(true);
+      };
+    });
   }
 }
