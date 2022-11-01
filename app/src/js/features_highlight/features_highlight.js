@@ -385,6 +385,7 @@ class Highlighter {
           },
         };
     }
+
     if (idSourceLayer) {
       layer["source-layer"] = idSourceLayer;
     }

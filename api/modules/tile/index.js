@@ -53,6 +53,14 @@ export async function handlerTile(req, res) {
     Object.assign(data, viewSrcConfig);
 
     data.geom = "geom";
+    /*
+    * TODO: to be solved 
+    * buffer = PostGIS as_mvtgeom buffer + buffer for cropping tile
+    * 0 : all tiles rendered, but tiles boundaries visibles
+    * > 0 : inconsistant behaviour : some tiles missing 
+    * 256 : no tiles boundaries visible. Good, but tiles missing
+    */ 
+    data.buffer = 0; 
     data.useMask = isSourceId(data?.mask);
     data.usePostgisTiles = req.query.usePostgisTiles && !data.useMask;
     data.useCache = !req.query.skipCache;
@@ -126,6 +134,7 @@ async function getTilePg(res, hash, data) {
     }
 
     const qs = parseTemplate(str, data);
+
     const out = await pgRead.query(qs);
 
     if (out.rowCount > 0) {
