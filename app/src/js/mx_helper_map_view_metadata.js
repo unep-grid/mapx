@@ -545,8 +545,9 @@ export async function metaSourceToUi(meta) {
   });
 
   const urlHomepage = p("origin.homepage.url", "");
-  const urlSources = p("origin.source.urls", []).map((d) => d.url);
-  const urlAnnexes = p("annex.references", []).map((d) => d.url);
+  const urlLabel = p("origin.homepage.label", "");
+  const urlObjSources = p("origin.source.urls", []);
+  const urlObjAnnexes = p("annex.references", []);
   const hasHomepage = h.isUrl(urlHomepage);
 
   const elHomepage = hasHomepage
@@ -556,46 +557,46 @@ export async function metaSourceToUi(meta) {
           target: "_blank",
           href: urlHomepage,
         },
-        "Link"
+        urlLabel ? urlLabel : new URL(urlHomepage).hostname
       )
     : el("span");
 
   const elSourceUrl = el(
     "ul",
-    urlSources.map((url) => {
-      if (!h.isUrl(url)) {
+    urlObjSources.map((src) => {
+      if (!h.isUrl(src.url)) {
         return;
       }
-      let hostname = new URL(url).hostname;
+      const hostname = new URL(src.url).hostname;
       return el(
         "li",
         el(
           "a",
           {
             target: "_blank",
-            href: url,
+            href: src.url,
           },
-          hostname
+          src.label ? src.label : hostname
         )
       );
     })
   );
   const elAnnexesUrl = el(
     "ul",
-    urlAnnexes.map((url) => {
-      if (!h.isUrl(url)) {
+    urlObjAnnexes.map((src) => {
+      if (!h.isUrl(src.url)) {
         return;
       }
-      let hostname = new URL(url).hostname;
+      const hostname = new URL(src.url).hostname;
       return el(
         "li",
         el(
           "a",
           {
             target: "_blank",
-            href: url,
+            href: src.url,
           },
-          hostname
+          src.label ? src.label : hostname
         )
       );
     })
