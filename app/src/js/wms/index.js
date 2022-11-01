@@ -8,6 +8,7 @@ export {
   wmsGetLayers,
   urlTile,
   urlLegend,
+  pointToBbox,
 };
 
 /**
@@ -146,19 +147,11 @@ export async function wmsQuery(opt) {
    */
   const cap = await wmsGetCapabilities(urlBase, opt.optGetCapabilities);
 
-  /*
-   * Build a bounding box
+  /**
+   * Build bbox
    */
-  const xMax = point.x + 5;
-  const xMin = point.x - 5;
-  const yMax = point.y + 5;
-  const yMin = point.y - 5;
-  const sw = map.unproject([xMax, yMin]);
-  const ne = map.unproject([xMin, yMax]);
-  const minLat = Math.min(sw.lat, ne.lat);
-  const minLng = Math.min(sw.lng, ne.lng);
-  const maxLat = Math.max(sw.lat, ne.lat);
-  const maxLng = Math.max(sw.lng, ne.lng);
+  const bbox = await pointToBbox(map, point, 4326);
+
   /*
    * Build query string
    */
@@ -173,14 +166,14 @@ export async function wmsQuery(opt) {
     layers: layers,
     styles: styles,
     info_format: "application/json",
-    exceptions: "application/vnd.ogc.se_xml",
+    exception: "application/vnd.ogc.se_xml",
     feature_count: 10,
     x: 5,
     y: 5,
     width: 9,
     height: 9,
     srs: "EPSG:4326",
-    bbox: minLng + "," + minLat + "," + maxLng + "," + maxLat,
+    bbox: bbox.join(","),
   };
   /**
    * Update formats using capabilities
@@ -307,4 +300,38 @@ function urlLegend(opt) {
   });
 
   return opt.url + "?" + query;
+}
+
+/*
+ * Build a bounding box
+ *
+ * @return [minLng,minLat,maxLng,maxLat],
+ */
+async function pointToBbox(map, point, srid) {
+  const out = [];
+  const xMax = point.x + 5;
+  const xMin = point.x - 5;
+  const yMax = point.y + 5;
+  const yMin = point.y - 5;
+  const sw = map.unproject([xMax, yMin]);
+  const ne = map.unproject([xMin, yMax]);
+  const minLat = Math.min(sw.lat, ne.lat);
+  const minLng = Math.min(sw.lng, ne.lng);
+  const maxLat = Math.max(sw.lat, ne.lat);
+  const maxLng = Math.max(sw.lng, ne.lng);
+  if (srid && srid !== 4326) {
+    const proj4 = (await import("proj4")).default;
+    // default proj
+    const p4326 =
+      "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees";
+    const p3857 =
+      "+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs +type=crs";
+    const sw = proj4(p4326, p3857, [minLng, minLat]);
+    const ne = proj4(p4326, p3857, [maxLng, maxLat]);
+    out.push(...sw);
+    out.push(...ne);
+  } else {
+    out.push(...[minLng, minLat, maxLng, maxLat]);
+  }
+  return out;
 }
