@@ -1,3 +1,11 @@
+  
+  - [1.9.45-rc.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-rc.2) 
+
+    - APP
+  	    - Source metadata : add label to source url data link
+      	- Minor improvement for raster legend quality
+       	- Add helper, available from widgets, to extract bounding box from point + reprojection if required. 
+
   - [1.9.45-rc.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-rc.1) 
 
     - API 
