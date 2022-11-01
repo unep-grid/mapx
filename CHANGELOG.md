@@ -1,5 +1,18 @@
-  
-- [1.9.45-beta.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.6) 
+  - [1.9.45-rc.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-rc.1) 
+
+    - API 
+        - Postgis tiles : partial fix on tiles boundaries visible. Internal parameter to set the tile buffer : solve the issue on features highlight that shows tiles boundaries, but produce inconsistant result ( some times missing ). Kept the parameter, but set to 0. 
+        - Postgres : added connection pool for short / long request. A timeout will cancel requests that are taking more than the expected time.
+        - Fix issue with tile overlap feature.
+        - Geometry correction : re-use buffer 0, has makevalid could produce unexpected results.
+    - APP 
+        - Countries selection : fixed preload issue.
+        - Fix button with icon preventing click ( e.g. reset search params ) 
+        - Table editor : solve issue occuring when removing a column. Internal data representation was not updated. If a column with the same name was added, old data kept showing up. 
+        - Table editor solve race condition issues ( events not fired at the right time by handsontable, fixed here by a timeout )
+        - Fixed swtch user 
+           
+  - [1.9.45-beta.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.6) 
 
     - API :
 	    - View list: set _use_postgis_tiler in returned view object, changed tile builder, changed sql + view source loader (app)
@@ -8,7 +21,7 @@
         -  Should fix case when the user choses to ignore warning about invalid type with auto-save disabled, and later press 'undo' : invalid  previous change should not be added to the update stack
         - Added color code by type in column header + title (tooltip)
 
-- [1.9.45-beta.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.5) 
+  - [1.9.45-beta.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.5) 
 
     - APP 
       - Handle WMS request when clicking in the map with a custom code view using a WMS raster source registered with the view id
