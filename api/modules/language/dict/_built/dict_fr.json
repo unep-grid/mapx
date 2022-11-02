@@ -1525,19 +1525,19 @@
     "fr": "Refaire"
   },
   {
-    "id": "edit_table_modal_value_invalid_title",
-    "en": "Invalid value",
-    "fr": "valeur invalide"
+    "id": "edit_table_modal_values_invalid_title",
+    "en": "Invalid values",
+    "fr": "Valeurs invalides"
   },
   {
-    "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value(s) entered. Make sure to use the correct type : {{type}}.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
-    "fr": "Valeur(s) invalide(s) entrée(s). Assurez-vous d'utiliser le bon type : {{type}} .\n Seules les cellules valides seront enregistrées. Les cellules surlignées en rouge doivent être corrigées manuellement ou les modifications ne seront pas effectives."
+    "id": "edit_table_modal_values_invalid",
+    "en": "{{amount}} invalid value(s) entered. Make sure to use the correct type.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
+    "fr": " {{amount}}valeur(s) invalide(s) saisie(s). Assurez-vous d'utiliser le bon type.\n Seules les cellules valides seront enregistrées. Les cellules surlignées en rouge doivent être corrigées manuellement ou les modifications ne seront pas effectives."
   },
   {
-    "id": "edit_table_modal_value_invalid_continue",
-    "en": "Ignore and continue",
-    "fr": "Ignorer et continuer"
+    "id": "edit_table_modal_values_invalid_ok",
+    "en": "Ok",
+    "fr": "D'accord"
   },
   {
     "id": "btn_edit_add_column",
@@ -1726,7 +1726,7 @@
   },
   {
     "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "en": "Some column(s) contain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
     "fr": "Certaines colonnes contiennent des caractères non valides et ne peuvent pas être modifiées :<ul> {{columns}}</ul>"
   },
   {

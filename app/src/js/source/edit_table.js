@@ -1601,33 +1601,19 @@ export class EditTableSessionClient extends WsToolsBase {
     }, 10);
   }
   /**
-   * Display dialog when change is not valid
-   * @param {Array} change
+   * Display info when change is not valid
+   * @param {Array} changes
    * @return {Promise<String>} action continue / undo
    */
-  async confirmValidation(change) {
-    const et = this;
-    const type = et.getColumnType(change[1]);
-    const exists = et.columnExists(change[1]);
-
-    if (!exists) {
-      console.warn(`Column set for validation do not exist: ${change[1]}`);
-      return "continue";
-    }
-
-    const nextValue = await modalConfirm({
-      title: tt("edit_table_modal_value_invalid_title"),
-      content: getDictTemplate("edit_table_modal_value_invalid", {
-        type: type,
+  async infoValidation(changes) {
+    const n = changes.length;
+    await modalDialog({
+      title: tt("edit_table_modal_values_invalid_title"),
+      content: getDictTemplate("edit_table_modal_values_invalid", {
+        amount: n,
       }),
-      cancel: tt("btn_edit_undo_last"),
-      confirm: tt("edit_table_modal_value_invalid_continue"),
+      close: tt("edit_table_modal_values_invalid_ok"),
     });
-    if (nextValue) {
-      return "continue";
-    } else {
-      return "undo";
-    }
   }
 
   /**
@@ -1636,6 +1622,9 @@ export class EditTableSessionClient extends WsToolsBase {
    * @return {Promise<Boolean>} continue
    */
   async confirmLargeUpdate(changes) {
+    const et = this;
+    et.lockTableConcurrent(true);
+    et.lock();
     const nChanges = changes.length;
     const proceedLargeChanges = await modalConfirm({
       title: tt("edit_table_modal_large_changes_number_title"),
@@ -1648,7 +1637,8 @@ export class EditTableSessionClient extends WsToolsBase {
       confirm: tt("btn_edit_table_modal_large_changes_number_continue"),
       cancel: tt("btn_edit_table_modal_large_changes_number_undo"),
     });
-
+    et.unlock();
+    et.lockTableConcurrent(!et._auto_save);
     return proceedLargeChanges;
   }
 
@@ -1669,8 +1659,7 @@ export class EditTableSessionClient extends WsToolsBase {
         count: nChanges,
         max_changes: et._config.max_changes,
       }),
-      confirm: tt("btn_edit_table_modal_changes_too_big_ok"),
-      cancel: null,
+      close: tt("btn_edit_table_modal_changes_too_big_ok"),
     });
   }
 
@@ -1723,12 +1712,7 @@ export class EditTableSessionClient extends WsToolsBase {
       /**
        * Lots of changes detected : confirm
        */
-      et.lockTableConcurrent(true);
-      et.lock();
       const confirmLargeUpdate = await et.confirmLargeUpdate(changes);
-      et.unlock();
-      et.lockTableConcurrent(!et._auto_save);
-
       if (!confirmLargeUpdate) {
         et._ignore_next_changes = true;
         et.undo();
@@ -1738,7 +1722,8 @@ export class EditTableSessionClient extends WsToolsBase {
 
     et.perf("afterChange");
 
-    let confirmValidation;
+    const invalids = [];
+
     for (const change of changes) {
       /* change: [row, prop, oldValue, newValue] */
 
@@ -1748,37 +1733,28 @@ export class EditTableSessionClient extends WsToolsBase {
       }
 
       const isValid = et.validateChange(change);
+      const isValidOld = et.validateOldValue(change);
 
+      /**
+       * keep track of invalid changes
+       */
       if (!isValid) {
-        /**
-         * Enter confirm phase if value is not valid AND
-         * confirm is not already set on "continue"
-         */
-        const requestConfirm =
-          isEmpty(confirmValidation) || confirmValidation !== "continue";
-        if (requestConfirm) {
-          confirmValidation = await et.confirmValidation(change);
-        }
-        /**
-         * If "undo", undo + exit the function now.
-         */
-        if (confirmValidation === "undo") {
-          et._ignore_next_changes = true;
-          et.undo();
-          return;
-        } else {
-          continue;
-        }
+        invalids.push(change);
+        continue;
+      }
+      if (!isValidOld) {
+        continue;
       }
 
-      const isValidOld = et.validateOldValue(change);
       /**
        * Push, update or delete
        * only if all value are valid
        */
-      if (isValid && isValidOld) {
-        et.pushUpdateOrDelete(change);
-      }
+      et.pushUpdateOrDelete(change);
+    }
+
+    if (!isEmpty(invalids)) {
+      await et.infoValidation(invalids);
     }
 
     /**

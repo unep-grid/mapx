@@ -1525,19 +1525,19 @@
     "bn": "আবার করুন"
   },
   {
-    "id": "edit_table_modal_value_invalid_title",
-    "en": "Invalid value",
+    "id": "edit_table_modal_values_invalid_title",
+    "en": "Invalid values",
     "bn": "অবৈধ মান"
   },
   {
-    "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value(s) entered. Make sure to use the correct type : {{type}}.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
-    "bn": "অবৈধ মান(গুলি) প্রবেশ করানো হয়েছে৷ সঠিক টাইপ ব্যবহার নিশ্চিত করুন: {{type}} .\n শুধুমাত্র বৈধ কক্ষ সংরক্ষণ করা হবে. লাল রঙে হাইলাইট করা ঘরগুলি ম্যানুয়ালি সংশোধন করা উচিত নয়তো পরিবর্তনগুলি কার্যকর হবে না৷"
+    "id": "edit_table_modal_values_invalid",
+    "en": "{{amount}} invalid value(s) entered. Make sure to use the correct type.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
+    "bn": " {{amount}}অবৈধ মান(গুলি) প্রবেশ করানো হয়েছে৷ সঠিক টাইপ ব্যবহার নিশ্চিত করুন.\n শুধুমাত্র বৈধ কক্ষ সংরক্ষণ করা হবে. লাল রঙে হাইলাইট করা ঘরগুলি ম্যানুয়ালি সংশোধন করা উচিত নয়তো পরিবর্তনগুলি কার্যকর হবে না৷"
   },
   {
-    "id": "edit_table_modal_value_invalid_continue",
-    "en": "Ignore and continue",
-    "bn": "উপেক্ষা করুন এবং চালিয়ে যান"
+    "id": "edit_table_modal_values_invalid_ok",
+    "en": "Ok",
+    "bn": "ঠিক আছে"
   },
   {
     "id": "btn_edit_add_column",
@@ -1726,7 +1726,7 @@
   },
   {
     "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "en": "Some column(s) contain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
     "bn": "কিছু কলাম(গুলি) অবৈধ অক্ষর ধারণ করে এবং সম্পাদনা করা যাবে না:<ul> {{columns}}</ul>"
   },
   {

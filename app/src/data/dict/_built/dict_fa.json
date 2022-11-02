@@ -1525,19 +1525,19 @@
     "fa": "دوباره انجام دهید"
   },
   {
-    "id": "edit_table_modal_value_invalid_title",
-    "en": "Invalid value",
-    "fa": "مقدار نامعتبر است"
+    "id": "edit_table_modal_values_invalid_title",
+    "en": "Invalid values",
+    "fa": "مقادیر نامعتبر"
   },
   {
-    "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value(s) entered. Make sure to use the correct type : {{type}}.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
-    "fa": "مقدار(های) نامعتبر وارد شده است. حتما از نوع صحیح استفاده کنید: {{type}} .\n فقط سلول های معتبر ذخیره خواهند شد. سلول هایی که با رنگ قرمز مشخص شده اند باید به صورت دستی اصلاح شوند وگرنه تغییرات موثر نخواهد بود."
+    "id": "edit_table_modal_values_invalid",
+    "en": "{{amount}} invalid value(s) entered. Make sure to use the correct type.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
+    "fa": " {{amount}}مقدار(های) نامعتبر وارد شده است. حتما از نوع صحیح استفاده کنید\n فقط سلول های معتبر ذخیره خواهند شد. سلول هایی که با رنگ قرمز مشخص شده اند باید به صورت دستی اصلاح شوند وگرنه تغییرات موثر نخواهد بود."
   },
   {
-    "id": "edit_table_modal_value_invalid_continue",
-    "en": "Ignore and continue",
-    "fa": "نادیده بگیرید و ادامه دهید"
+    "id": "edit_table_modal_values_invalid_ok",
+    "en": "Ok",
+    "fa": "خوب"
   },
   {
     "id": "btn_edit_add_column",
@@ -1726,8 +1726,8 @@
   },
   {
     "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
-    "fa": "برخی از ستون ها دارای نویسه های نامعتبر هستند و قابل ویرایش نیستند:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
+    "en": "Some column(s) contain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "fa": "برخی از ستون ها حاوی نویسه های نامعتبر هستند و قابل ویرایش نیستند:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
   },
   {
     "id": "edit_table_modal_attributes_title",

@@ -1525,19 +1525,19 @@
     "de": "Wiederholen"
   },
   {
-    "id": "edit_table_modal_value_invalid_title",
-    "en": "Invalid value",
-    "de": "Ungültiger Wert"
+    "id": "edit_table_modal_values_invalid_title",
+    "en": "Invalid values",
+    "de": "Ungültige Werte"
   },
   {
-    "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value(s) entered. Make sure to use the correct type : {{type}}.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
-    "de": "Ungültige(r) Wert(e) eingegeben. Stellen Sie sicher, dass Sie den richtigen Typ verwenden: {{type}} .\n Nur gültige Zellen werden gespeichert. Die rot hervorgehobenen Zellen sollten manuell korrigiert werden, da die Änderungen sonst nicht wirksam werden."
+    "id": "edit_table_modal_values_invalid",
+    "en": "{{amount}} invalid value(s) entered. Make sure to use the correct type.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
+    "de": " {{amount}}ungültige(r) Wert(e) eingegeben. Stellen Sie sicher, dass Sie den richtigen Typ verwenden.\n Nur gültige Zellen werden gespeichert. Die rot hervorgehobenen Zellen sollten manuell korrigiert werden, da die Änderungen sonst nicht wirksam werden."
   },
   {
-    "id": "edit_table_modal_value_invalid_continue",
-    "en": "Ignore and continue",
-    "de": "Ignorieren und fortfahren"
+    "id": "edit_table_modal_values_invalid_ok",
+    "en": "Ok",
+    "de": "OK"
   },
   {
     "id": "btn_edit_add_column",
@@ -1726,7 +1726,7 @@
   },
   {
     "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "en": "Some column(s) contain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
     "de": "Einige Spalten enthalten ungültige Zeichen und können nicht bearbeitet werden:<ul> {{columns}}</ul>"
   },
   {
