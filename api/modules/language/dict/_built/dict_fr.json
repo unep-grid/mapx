@@ -1531,8 +1531,8 @@
   },
   {
     "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
-    "fr": "Valeur reçue invalide. Assurez-vous d'utiliser le bon type : {{type}} .\n Cette modification ne sera pas enregistrée."
+    "en": "Invalid value(s) entered. Make sure to use the correct type : {{type}}.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
+    "fr": "Valeur(s) invalide(s) entrée(s). Assurez-vous d'utiliser le bon type : {{type}} .\n Seules les cellules valides seront enregistrées. Les cellules surlignées en rouge doivent être corrigées manuellement ou les modifications ne seront pas effectives."
   },
   {
     "id": "edit_table_modal_value_invalid_continue",

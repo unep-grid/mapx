@@ -1531,8 +1531,8 @@
   },
   {
     "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
-    "ps": "ناسم ارزښت ترلاسه شوی. ډاډ ترلاسه کړئ چې سم ډول وکاروئ: {{type}} .\n دا بدلون به خوندي نشي."
+    "en": "Invalid value(s) entered. Make sure to use the correct type : {{type}}.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
+    "ps": "غلط ارزښت داخل شوی. ډاډ ترلاسه کړئ چې سم ډول وکاروئ: {{type}} .\n یوازې معتبر حجرې به خوندي شي. هغه حجرې چې په سور کې روښانه شوي باید په لاسي ډول سم شي یا بدلونونه به اغیزمن نه وي."
   },
   {
     "id": "edit_table_modal_value_invalid_continue",

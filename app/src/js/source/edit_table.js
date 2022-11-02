@@ -641,6 +641,33 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
+   * Column formater
+   * @param {Integer} pos column index
+   * @param {Element} element Element header
+   */
+  formatColumns(pos, element) {
+    const et = this;
+    const DEV_TO_BE_VALIDATED = false;
+    if (DEV_TO_BE_VALIDATED) {
+      if (pos >= 0) {
+        const type = et.getColumnTypeById(pos);
+        element.classList.add(`edit-table--header`);
+        element.classList.add(`edit-table--header-${type}`);
+        element.title = type;
+      }
+    }
+  }
+
+  /**
+   * Set instance height based on table el;
+   */
+  updateHeight() {
+    const et = this;
+    const r = et._el_table.getBoundingClientRect();
+    return r.height - 30;
+  }
+
+  /**
    * Update table layout : minimize buttons, table resize,
    * e.g. after container change
    * NOTE: too sketchy with requestAnimationFrame..
@@ -856,23 +883,10 @@ export class EditTableSessionClient extends WsToolsBase {
       contextMenu: false,
       language: getHandsonLanguageCode(),
       afterFilter: null,
-      afterGetColHeader: (pos, element) => {
-        const DEV_TO_BE_VALIDATED = false;
-        if (DEV_TO_BE_VALIDATED) {
-          if (pos >= 0) {
-            const type = et.getColumnTypeById(pos);
-            element.classList.add(`edit-table--header`);
-            element.classList.add(`edit-table--header-${type}`);
-            element.title = type;
-          }
-        }
-      },
+      afterGetColHeader: et.formatColumns,
       afterChange: et.afterChange,
       afterLoadData: et.afterLoadData,
-      height: function () {
-        const r = et._el_table.getBoundingClientRect();
-        return r.height - 30;
-      },
+      height: et.updateHeight,
       disableVisualSelection: false,
     });
 
@@ -1063,6 +1077,7 @@ export class EditTableSessionClient extends WsToolsBase {
         }
         if (isNotEmpty(cells)) {
           et.handlerCellsBatchProcess(cells);
+          et.updateButtons();
         }
       });
       et.perfEnd("dispatch_update");
@@ -1190,12 +1205,11 @@ export class EditTableSessionClient extends WsToolsBase {
     et.clearUndoRedoRefCol(colRemoved.pos);
 
     const data = et._ht.getSourceData();
-    for(const row of data){
+    for (const row of data) {
       delete row[update.column_name];
     }
 
-    et._ht.updateData(data,'column_remove_handler');
-
+    et._ht.updateData(data, "column_remove_handler");
 
     /**
      * Update buttons state

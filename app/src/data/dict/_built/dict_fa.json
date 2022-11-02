@@ -1531,8 +1531,8 @@
   },
   {
     "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
-    "fa": "مقدار نامعتبر دریافت شد. حتما از نوع صحیح استفاده کنید: {{type}} .\n این تغییر ذخیره نخواهد شد."
+    "en": "Invalid value(s) entered. Make sure to use the correct type : {{type}}.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
+    "fa": "مقدار(های) نامعتبر وارد شده است. حتما از نوع صحیح استفاده کنید: {{type}} .\n فقط سلول های معتبر ذخیره خواهند شد. سلول هایی که با رنگ قرمز مشخص شده اند باید به صورت دستی اصلاح شوند وگرنه تغییرات موثر نخواهد بود."
   },
   {
     "id": "edit_table_modal_value_invalid_continue",

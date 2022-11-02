@@ -3979,16 +3979,16 @@
   },
   {
     "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
-    "fr": "Valeur reçue invalide. Assurez-vous d'utiliser le bon type : {{type}} .\n Cette modification ne sera pas enregistrée.",
-    "es": "Valor no válido recibido. Asegúrese de utilizar el tipo correcto: {{type}} .\n Este cambio no se guardará.",
-    "ru": "Получено неверное значение. Убедитесь, что вы используете правильный тип: {{type}} .\n Это изменение не будет сохранено.",
-    "zh": "收到无效值。确保使用正确的类型： {{type}} .\n不会保存此更改。",
-    "ar": "تم استلام قيمة غير صحيحة. تأكد من استخدام النوع الصحيح: {{type}} .\n لن يتم حفظ هذا التغيير.",
-    "fa": "مقدار نامعتبر دریافت شد. حتما از نوع صحیح استفاده کنید: {{type}} .\n این تغییر ذخیره نخواهد شد.",
-    "ps": "ناسم ارزښت ترلاسه شوی. ډاډ ترلاسه کړئ چې سم ډول وکاروئ: {{type}} .\n دا بدلون به خوندي نشي.",
-    "bn": "অবৈধ মান প্রাপ্ত. সঠিক টাইপ ব্যবহার নিশ্চিত করুন: {{type}} .\n এই পরিবর্তন সংরক্ষণ করা হবে না.",
-    "de": "Ungültiger Wert empfangen. Stellen Sie sicher, dass Sie den richtigen Typ verwenden: {{type}} .\n Diese Änderung wird nicht gespeichert."
+    "en": "Invalid value(s) entered. Make sure to use the correct type : {{type}}.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
+    "fr": "Valeur(s) invalide(s) entrée(s). Assurez-vous d'utiliser le bon type : {{type}} .\n Seules les cellules valides seront enregistrées. Les cellules surlignées en rouge doivent être corrigées manuellement ou les modifications ne seront pas effectives.",
+    "es": "Se ingresaron valores no válidos. Asegúrese de utilizar el tipo correcto: {{type}} .\n Solo se guardarán las celdas válidas. Las celdas resaltadas en rojo deben corregirse manualmente o los cambios no serán efectivos.",
+    "ru": "Введены недопустимые значения. Убедитесь, что вы используете правильный тип: {{type}} .\n Будут сохранены только действительные ячейки. Ячейки, выделенные красным цветом, следует исправить вручную, иначе изменения не вступят в силу.",
+    "zh": "输入的值无效。确保使用正确的类型： {{type}} .\n只有有效的单元格将被保存。以红色突出显示的单元格应手动更正，否则更改将无效。",
+    "ar": "تم إدخال قيمة (قيم) غير صالحة. تأكد من استخدام النوع الصحيح: {{type}} .\n سيتم حفظ الخلايا الصالحة فقط. يجب تصحيح الخلايا المميزة باللون الأحمر يدويًا وإلا فلن تكون التغييرات فعالة.",
+    "fa": "مقدار(های) نامعتبر وارد شده است. حتما از نوع صحیح استفاده کنید: {{type}} .\n فقط سلول های معتبر ذخیره خواهند شد. سلول هایی که با رنگ قرمز مشخص شده اند باید به صورت دستی اصلاح شوند وگرنه تغییرات موثر نخواهد بود.",
+    "ps": "غلط ارزښت داخل شوی. ډاډ ترلاسه کړئ چې سم ډول وکاروئ: {{type}} .\n یوازې معتبر حجرې به خوندي شي. هغه حجرې چې په سور کې روښانه شوي باید په لاسي ډول سم شي یا بدلونونه به اغیزمن نه وي.",
+    "bn": "অবৈধ মান(গুলি) প্রবেশ করানো হয়েছে৷ সঠিক টাইপ ব্যবহার নিশ্চিত করুন: {{type}} .\n শুধুমাত্র বৈধ কক্ষ সংরক্ষণ করা হবে. লাল রঙে হাইলাইট করা ঘরগুলি ম্যানুয়ালি সংশোধন করা উচিত নয়তো পরিবর্তনগুলি কার্যকর হবে না৷",
+    "de": "Ungültige(r) Wert(e) eingegeben. Stellen Sie sicher, dass Sie den richtigen Typ verwenden: {{type}} .\n Nur gültige Zellen werden gespeichert. Die rot hervorgehobenen Zellen sollten manuell korrigiert werden, da die Änderungen sonst nicht wirksam werden."
   },
   {
     "id": "edit_table_modal_value_invalid_continue",

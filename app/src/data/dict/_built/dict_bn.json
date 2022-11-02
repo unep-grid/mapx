@@ -1531,8 +1531,8 @@
   },
   {
     "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
-    "bn": "অবৈধ মান প্রাপ্ত. সঠিক টাইপ ব্যবহার নিশ্চিত করুন: {{type}} .\n এই পরিবর্তন সংরক্ষণ করা হবে না."
+    "en": "Invalid value(s) entered. Make sure to use the correct type : {{type}}.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
+    "bn": "অবৈধ মান(গুলি) প্রবেশ করানো হয়েছে৷ সঠিক টাইপ ব্যবহার নিশ্চিত করুন: {{type}} .\n শুধুমাত্র বৈধ কক্ষ সংরক্ষণ করা হবে. লাল রঙে হাইলাইট করা ঘরগুলি ম্যানুয়ালি সংশোধন করা উচিত নয়তো পরিবর্তনগুলি কার্যকর হবে না৷"
   },
   {
     "id": "edit_table_modal_value_invalid_continue",
