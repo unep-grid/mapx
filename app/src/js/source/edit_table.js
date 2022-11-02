@@ -1738,6 +1738,7 @@ export class EditTableSessionClient extends WsToolsBase {
 
     et.perf("afterChange");
 
+    let confirmValidation;
     for (const change of changes) {
       /* change: [row, prop, oldValue, newValue] */
 
@@ -1746,11 +1747,21 @@ export class EditTableSessionClient extends WsToolsBase {
         continue;
       }
 
-      const isNotValid = !et.validateChange(change);
+      const isValid = et.validateChange(change);
 
-      if (isNotValid) {
-        const confirmValidation = await et.confirmValidation(change);
-
+      if (!isValid) {
+        /**
+         * Enter confirm phase if value is not valid AND
+         * confirm is not already set on "continue"
+         */
+        const requestConfirm =
+          isEmpty(confirmValidation) || confirmValidation !== "continue";
+        if (requestConfirm) {
+          confirmValidation = await et.confirmValidation(change);
+        }
+        /**
+         * If "undo", undo + exit the function now.
+         */
         if (confirmValidation === "undo") {
           et._ignore_next_changes = true;
           et.undo();
@@ -1761,11 +1772,11 @@ export class EditTableSessionClient extends WsToolsBase {
       }
 
       const isValidOld = et.validateOldValue(change);
-
-      if (isValidOld) {
-        /**
-         * Push, update or delete
-         */
+      /**
+       * Push, update or delete
+       * only if all value are valid
+       */
+      if (isValid && isValidOld) {
         et.pushUpdateOrDelete(change);
       }
     }
