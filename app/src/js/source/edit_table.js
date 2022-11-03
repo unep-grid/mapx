@@ -1648,6 +1648,7 @@ export class EditTableSessionClient extends WsToolsBase {
     if (et._config.test_mode) {
       return true;
     }
+    et.setReadOnly(true);
     await modalDialog({
       title: tt("edit_table_modal_values_invalid_title"),
       content: getDictTemplate("edit_table_modal_values_invalid", {
@@ -1655,6 +1656,7 @@ export class EditTableSessionClient extends WsToolsBase {
       }),
       close: tt("edit_table_modal_values_invalid_ok"),
     });
+    et.setReadOnly(false);
   }
 
   /**
@@ -1885,22 +1887,31 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
+   * Set readonly
+   */
+  setReadOnly(readOnly) {
+    const et = this;
+    const ro = !!readOnly;
+    et._ht.deselectCell();
+    et._ht.updateSettings({
+      readOnly: ro,
+      contextMenu: !ro,
+      disableVisualSelection: ro,
+      manualColumnResize: !ro,
+      manualRowResize: !ro,
+      comments: !ro,
+    });
+    et.updateButtons();
+  }
+
+  /**
    * Disable the tool
    */
   disable() {
     const et = this;
-    const hot = et._ht;
     et._disabled = true;
     et._el_overlay.classList.add("disabled");
-    hot.updateSettings({
-      readOnly: true,
-      contextMenu: false,
-      disableVisualSelection: true,
-      manualColumnResize: false,
-      manualRowResize: false,
-      comments: false,
-    });
-    et.updateButtons();
+    et.setReadOnly(true);
   }
 
   /**
@@ -1908,18 +1919,9 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   enable() {
     const et = this;
-    const hot = et._ht;
     et._disabled = false;
     et._el_overlay.classList.remove("disabled");
-    hot.updateSettings({
-      readOnly: false,
-      contextMenu: true,
-      disableVisualSelection: false,
-      manualColumnResize: true,
-      manualRowResize: true,
-      comments: true,
-    });
-    et.updateButtons();
+    et.setReadOnly(false);
   }
 
   /**

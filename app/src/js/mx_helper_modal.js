@@ -43,6 +43,7 @@ import { SelectAuto } from "./select_auto";
 export function modal(o) {
   o = o || {};
   const id = o.id || makeId();
+  document.activeElement?.blur();
 
   let elTitle,
     elCollapse,
