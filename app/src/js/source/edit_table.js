@@ -916,14 +916,14 @@ export class EditTableSessionClient extends WsToolsBase {
     /**
      * Add hooks
      */
-    /*    et._ht.addHook("afterUndo", () => {*/
-    /*// isRedoAvailable is not ready after undo, add delay*/
-    /*et.updateButtons(20);*/
-    /*});*/
-    /*et._ht.addHook("afterRedo", () => {*/
-    /*// isUndoAvailable is not ready after redo, add delay*/
-    /*et.updateButtons(20);*/
-    /*});*/
+    et._ht.addHook("afterUndo", () => {
+      // isRedoAvailable is not ready after undo, add delay
+      et.updateButtons(20);
+    });
+    et._ht.addHook("afterRedo", () => {
+      // isUndoAvailable is not ready after redo, add delay
+      et.updateButtons(20);
+    });
 
     /**
      * On modal resize, updateLayout
