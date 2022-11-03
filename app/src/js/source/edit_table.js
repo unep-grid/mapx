@@ -238,13 +238,13 @@ export class EditTableSessionClient extends WsToolsBase {
       if (et._destroyed) {
         return;
       }
-
-      if (et._updates.length > 1) {
+      const nInvalid = et.countUpdateValid();
+      if (nInvalid > 1) {
         const quit = await modalConfirm({
           title: tt("edit_table_modal_quit_ignore_changes_title"),
           content: tt("edit_table_modal_quit_ignore_changes", {
             data: {
-              count: et._updates.length,
+              count: nInvalid,
             },
           }),
           confirm: tt("btn_confirm"),
@@ -473,7 +473,6 @@ export class EditTableSessionClient extends WsToolsBase {
     et.perf("update_buttons");
     et.updateButtonsGeom();
     et.updateButtonSave();
-    et.updateUpdatesCounter();
     et.updateButtonsUndoRedo();
     et.updateButtonsAddRemoveColumn();
     et.perfEnd("update_buttons");
@@ -540,14 +539,6 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
-   * Set pending update count in save button
-   */
-  updateUpdatesCounter() {
-    const et = this;
-    et._el_updates_counter.dataset.count = `${et._updates.length}`;
-  }
-
-  /**
    * Toggle undo/redo button depending on available redo/undo in the table
    */
   updateButtonsUndoRedo() {
@@ -586,14 +577,32 @@ export class EditTableSessionClient extends WsToolsBase {
     et._button_enable(et._el_button_add_column, !et._disable_add_column);
   }
 
+  countUpdateValid() {
+    const et = this;
+    return et._updates.reduce((a, c) => {
+      c.valid ? a++ : a;
+      return a;
+    }, 0);
+  }
+
+  countUpdateInvalid() {
+    const et = this;
+    return et._updates.reduce((a, c) => {
+      !c.valid ? a++ : a;
+      return a;
+    }, 0);
+  }
+
   /**
    * Toggle save button depending on auto_save and updates number
    */
   updateButtonSave() {
     const et = this;
     const hasAutoSave = et._auto_save;
-    const hasNoUpdates = et._updates.length === 0;
+    const n = et.countUpdateValid();
+    const hasNoUpdates = n === 0;
     const disable = hasNoUpdates || hasAutoSave;
+    et._el_updates_counter.dataset.count = n;
     et._button_enable(et._el_button_save, !disable);
   }
 
@@ -1602,11 +1611,10 @@ export class EditTableSessionClient extends WsToolsBase {
   }
   /**
    * Display info when change is not valid
-   * @param {Array} changes
+   * @param {Number} n Number of invalid
    * @return {Promise<String>} action continue / undo
    */
-  async infoValidation(changes) {
-    const n = changes.length;
+  async infoValidation(n) {
     await modalDialog({
       title: tt("edit_table_modal_values_invalid_title"),
       content: getDictTemplate("edit_table_modal_values_invalid", {
@@ -1722,7 +1730,7 @@ export class EditTableSessionClient extends WsToolsBase {
 
     et.perf("afterChange");
 
-    const invalids = [];
+    let invalids = 0;
 
     for (const change of changes) {
       /* change: [row, prop, oldValue, newValue] */
@@ -1733,27 +1741,22 @@ export class EditTableSessionClient extends WsToolsBase {
       }
 
       const isValid = et.validateChange(change);
-      const isValidOld = et.validateOldValue(change);
 
       /**
        * keep track of invalid changes
        */
       if (!isValid) {
-        invalids.push(change);
-        continue;
-      }
-      if (!isValidOld) {
-        continue;
+        invalids++;
       }
 
       /**
        * Push, update or delete
        * only if all value are valid
        */
-      et.pushUpdateOrDelete(change);
+      et.pushUpdateOrDelete(change, isValid);
     }
 
-    if (!isEmpty(invalids)) {
+    if (invalids > 0) {
       await et.infoValidation(invalids);
     }
 
@@ -1775,7 +1778,7 @@ export class EditTableSessionClient extends WsToolsBase {
   save() {
     const et = this;
     et.perf("save");
-    const updates = et._updates;
+    const updates = et._updates.filter((u) => u.valid);
     if (et._disconnected) {
       console.warn("Can't save while disconnected");
       return;
@@ -1798,15 +1801,15 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   flushUpdates() {
     const et = this;
-    //et._updates.length = 0;
     et._updates = [];
   }
 
   /**
    * Push update, or delete if equal original state
    * @param {Object} change
+   * @param {Boolean} isValid
    */
-  pushUpdateOrDelete(change) {
+  pushUpdateOrDelete(change, isValid) {
     const et = this;
     const idRow = et._ht.toPhysicalRow(change[0]);
     const row = et._ht.getSourceDataAtRow(idRow);
@@ -1815,53 +1818,35 @@ export class EditTableSessionClient extends WsToolsBase {
       id_table: et._id_table,
       type: "update_cell",
       column_name: change[1],
-      value_orig: change[2] || null,
-      value_new: change[3] || null,
+      value_orig: isEmpty(change[2]) ? null : change[2],
+      value_new: isEmpty(change[3]) ? null : change[3],
+      valid: isValid,
       gid: gid,
     };
-    /**
-     * Update, delete or push
-     * Avoid duplication of update in the _udpates queue :
-     * - If a previous value is the original value : delete the upadate
-     * - If a previous value existe : update it
-     * - No previous update, push the update
-     */
-    let pushUpdate = true;
-    let updatePrevious;
-    let deletePrevious;
-    let deletePos;
-    let noChange;
-    let pos = 0;
-    for (const previousUpdate of et._updates) {
-      if (!pushUpdate || deletePrevious) {
-        continue;
-      }
-      updatePrevious =
-        previousUpdate.type === update.type &&
-        previousUpdate.gid === update.gid &&
-        previousUpdate.column_name === update.column_name &&
-        previousUpdate.id_table === update.id_table;
-      if (updatePrevious) {
-        noChange = update.value_new === previousUpdate.value_orig;
-        console.log(noChange);
-        if (noChange) {
-          deletePrevious = true;
-          deletePos = pos;
-          pushUpdate = false;
-        } else {
-          previousUpdate.value_new = update.value_new;
-          pushUpdate = false;
-        }
-      }
-      pos++;
+
+    if (update.value_new === update.value_orig) {
+      return;
     }
 
-    if (deletePrevious) {
-      et._updates.splice(deletePos, 1);
+    for (let i = 0, iL = et._updates.length; i < iL; i++) {
+      const pUpdate = et._updates[i];
+      const isSameCell =
+        pUpdate.gid === update.gid &&
+        pUpdate.column_name === update.column_name &&
+        pUpdate.id_table === update.id_table;
+      if (isSameCell) {
+        const noChange = pUpdate.value_orig === update.value_new;
+        if (noChange) {
+          et._updates.splice(i, 1);
+        } else {
+          pUpdate.valid = isValid;
+          pUpdate.value_new = update.value_new;
+        }
+        return;
+      }
     }
-    if (pushUpdate) {
-      et._updates.push(update);
-    }
+
+    et._updates.push(update);
   }
 
   /**
