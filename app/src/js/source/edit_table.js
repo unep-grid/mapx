@@ -185,6 +185,11 @@ export class EditTableSessionClient extends WsToolsBase {
 
       await et.once("table_ready", null);
 
+      /**
+       * Register cb
+       */
+      et.on("after_change_done", et.updateButtons);
+
       return true;
     } catch (e) {
       et.destroy("init issue");
@@ -240,18 +245,20 @@ export class EditTableSessionClient extends WsToolsBase {
       }
       const nInvalid = et.countUpdateValid();
       if (nInvalid > 1) {
-        const quit = await modalConfirm({
-          title: tt("edit_table_modal_quit_ignore_changes_title"),
-          content: tt("edit_table_modal_quit_ignore_changes", {
-            data: {
-              count: nInvalid,
-            },
-          }),
-          confirm: tt("btn_confirm"),
-          cancel: tt("btn_cancel"),
-        });
-        if (!quit) {
-          return false;
+        if (!et._config.test_mode) {
+          const quit = await modalConfirm({
+            title: tt("edit_table_modal_quit_ignore_changes_title"),
+            content: tt("edit_table_modal_quit_ignore_changes", {
+              data: {
+                count: nInvalid,
+              },
+            }),
+            confirm: tt("btn_confirm"),
+            cancel: tt("btn_cancel"),
+          });
+          if (!quit) {
+            return false;
+          }
         }
       }
 
@@ -470,12 +477,10 @@ export class EditTableSessionClient extends WsToolsBase {
     if (!et._table_ready) {
       return;
     }
-    et.perf("update_buttons");
     et.updateButtonsGeom();
     et.updateButtonSave();
     et.updateButtonsUndoRedo();
     et.updateButtonsAddRemoveColumn();
-    et.perfEnd("update_buttons");
   }
 
   /**
@@ -607,6 +612,17 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
+   * Set autosave mode
+   * @param {Boolean} enable Enable autosave mode;
+   * @return {Boolean} enabled
+   */
+  setAutoSave(enable) {
+    const et = this;
+    et._el_checkbox_autosave.querySelector("input").checked = !!enable;
+    return et.updateAutoSave();
+  }
+
+  /**
    * Update _auto_save state, based on checkbox, trigger lock to others
    */
   updateAutoSave() {
@@ -617,6 +633,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et.save();
     }
     et.lockTableConcurrent(!et._auto_save);
+    return et._auto_save;
   }
 
   /**
@@ -869,6 +886,7 @@ export class EditTableSessionClient extends WsToolsBase {
      * New handsontable
      */
     et._ht = new handsontable(et._el_table, {
+      licenseKey: et._config.ht_license,
       columns: et._columns,
       data: table.data,
       rowHeaders: true,
@@ -878,10 +896,6 @@ export class EditTableSessionClient extends WsToolsBase {
       allowInsertRow: false,
       renderAllRows: false,
       maxRows: table.data.length,
-      //mminows: table.data.length,
-      //colWidths: 80,
-      //manualColumnResize: true,
-      licenseKey: et._config.ht_license,
       dropdownMenu: [
         "filter_by_condition",
         "filter_operators",
@@ -902,14 +916,14 @@ export class EditTableSessionClient extends WsToolsBase {
     /**
      * Add hooks
      */
-    et._ht.addHook("afterUndo", () => {
-      // isRedoAvailable is not ready after undo, add delay
-      et.updateButtons(20);
-    });
-    et._ht.addHook("afterRedo", () => {
-      // isUndoAvailable is not ready after redo, add delay
-      et.updateButtons(20);
-    });
+    /*    et._ht.addHook("afterUndo", () => {*/
+    /*// isRedoAvailable is not ready after undo, add delay*/
+    /*et.updateButtons(20);*/
+    /*});*/
+    /*et._ht.addHook("afterRedo", () => {*/
+    /*// isUndoAvailable is not ready after redo, add delay*/
+    /*et.updateButtons(20);*/
+    /*});*/
 
     /**
      * On modal resize, updateLayout
@@ -922,6 +936,19 @@ export class EditTableSessionClient extends WsToolsBase {
     if (initLocked) {
       et.lock();
     }
+  }
+
+  /**
+   * Get table dimension
+   */
+  getTableDimension() {
+    const et = this;
+    const cols = et._ht.getColHeader().length;
+    const rows = et._ht.getRowHeader().length;
+    return {
+      cols,
+      rows,
+    };
   }
 
   async afterLoadData() {
@@ -961,17 +988,19 @@ export class EditTableSessionClient extends WsToolsBase {
     try {
       console.error("server error", error);
 
-      const continueSession = await modalConfirm({
-        title: "Server error",
-        content: `An error occured: ${
-          error?.message || "Unknown error"
-        }. Continue or end the session ?`,
-        confirm: "Continue",
-        cancel: "Exit tool",
-      });
+      if (!et._config.test_mode) {
+        const continueSession = await modalConfirm({
+          title: "Server error",
+          content: `An error occured: ${
+            error?.message || "Unknown error"
+          }. Continue or end the session ?`,
+          confirm: "Continue",
+          cancel: "Exit tool",
+        });
 
-      if (!continueSession) {
-        await et.destroy("server error");
+        if (!continueSession) {
+          await et.destroy("server error");
+        }
       }
     } catch (e) {
       console.warn(e);
@@ -1059,7 +1088,6 @@ export class EditTableSessionClient extends WsToolsBase {
       return;
     }
     if (isNotEmpty(message.updates)) {
-      et.perf("dispatch_update");
       const cells = [];
 
       et._ht.batch(() => {
@@ -1085,11 +1113,9 @@ export class EditTableSessionClient extends WsToolsBase {
           }
         }
         if (isNotEmpty(cells)) {
-          et.handlerCellsBatchProcess(cells);
-          et.updateButtons();
+          et.handlerCellsBatchProcess(cells, et._config.id_source_dispatch);
         }
       });
-      et.perfEnd("dispatch_update");
     }
   }
 
@@ -1098,16 +1124,18 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   handlerCellsBatchProcess(cells, idSource) {
     const et = this;
-    try {
-      et._ht.setDataAtRowProp(
-        cells,
-        null,
-        null,
-        idSource || et._config.id_source_dispatch
-      );
-    } catch (e) {
-      console.warn("handlerCellsBatchProcess", e);
-    }
+    return new Promise((resolve, reject) => {
+      try {
+        // [[row, prop, value],...]
+        et._ht.setDataAtRowProp(cells, null, null, idSource);
+        et.once("after_change_done", () => {
+          resolve(true);
+        });
+      } catch (e) {
+        console.warn("handlerCellsBatchProcess", e);
+        reject(false);
+      }
+    });
   }
 
   /**
@@ -1468,6 +1496,7 @@ export class EditTableSessionClient extends WsToolsBase {
     /**
      * Ask the user for confirmation
      */
+
     const confirmCreate = await modalConfirm({
       title: tt("edit_table_modal_add_column_confirm_title"),
       content: getDictTemplate("edit_table_modal_add_column_confirm_text", {
@@ -1615,6 +1644,10 @@ export class EditTableSessionClient extends WsToolsBase {
    * @return {Promise<String>} action continue / undo
    */
   async infoValidation(n) {
+    const et = this;
+    if (et._config.test_mode) {
+      return true;
+    }
     await modalDialog({
       title: tt("edit_table_modal_values_invalid_title"),
       content: getDictTemplate("edit_table_modal_values_invalid", {
@@ -1631,6 +1664,9 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async confirmLargeUpdate(changes) {
     const et = this;
+    if (et._config.test_mode) {
+      return true;
+    }
     et.lockTableConcurrent(true);
     et.lock();
     const nChanges = changes.length;
@@ -1677,99 +1713,100 @@ export class EditTableSessionClient extends WsToolsBase {
    * @param {String} source Change source : dispatch/undo/edit ...
    */
   async afterChange(changes, source) {
+    /* changes: [[row, prop, oldValue, newValue]] */
     const et = this;
 
-    if (isEmpty(changes)) {
-      return;
-    }
-
-    /**
-     * In case of undo after large numnber of change,
-     * no values was sent. The undo will trigger 'afterChange',
-     * but there is no need to send the changes. Ignore that event.
-     */
-    if (et._ignore_next_changes) {
-      et._ignore_next_changes = false;
-      return;
-    }
-
-    /**
-     * Ignore dispatch changes, only "edit","Autofill.fill","..".
-     */
-    if (source === et._config.id_source_dispatch) {
-      return;
-    }
-
-    /**
-     * Check length : warning, stop, batch or not
-     */
-    const changesWarning = changes.length >= et._config.max_changes_warning;
-    const changesTooBig = changes.length >= et._config.max_changes;
-
-    if (changesTooBig) {
-      /**
-       * Too much changes detected : alert
-       */
-      et._ignore_next_changes = true;
-      et.undo();
-      await et.confirmChangesToBig(changes);
-      return;
-    }
-
-    if (changesWarning) {
-      /**
-       * Lots of changes detected : confirm
-       */
-      const confirmLargeUpdate = await et.confirmLargeUpdate(changes);
-      if (!confirmLargeUpdate) {
-        et._ignore_next_changes = true;
-        et.undo();
+    try {
+      if (isEmpty(changes)) {
         return;
       }
-    }
-
-    et.perf("afterChange");
-
-    let invalids = 0;
-
-    for (const change of changes) {
-      /* change: [row, prop, oldValue, newValue] */
-
-      if (change[2] === change[3]) {
-        /* no change */
-        continue;
-      }
-
-      const isValid = et.validateChange(change);
 
       /**
-       * keep track of invalid changes
+       * In case of undo after large numnber of change,
+       * no values was sent. The undo will trigger 'afterChange',
+       * but there is no need to send the changes. Ignore that event.
        */
-      if (!isValid) {
-        invalids++;
+      if (et._ignore_next_changes) {
+        et._ignore_next_changes = false;
+        return;
       }
 
       /**
-       * Push, update or delete
-       * only if all value are valid
+       * Ignore dispatch changes, only "edit","Autofill.fill","..".
        */
-      et.pushUpdateOrDelete(change, isValid);
+      if (source === et._config.id_source_dispatch) {
+        return;
+      }
+
+      /**
+       * Check length : warning, stop, batch or not
+       */
+      const changesWarning = changes.length >= et._config.max_changes_warning;
+      const changesTooBig = changes.length >= et._config.max_changes;
+
+      if (changesTooBig) {
+        /**
+         * Too much changes detected : alert
+         */
+        et._ignore_next_changes = true;
+        et.undo();
+        await et.confirmChangesToBig(changes);
+        return;
+      }
+
+      if (changesWarning) {
+        /**
+         * Lots of changes detected : confirm
+         */
+        const confirmLargeUpdate = await et.confirmLargeUpdate(changes);
+        if (!confirmLargeUpdate) {
+          et._ignore_next_changes = true;
+          et.undo();
+          return;
+        }
+      }
+
+      let invalids = 0;
+
+      for (const change of changes) {
+        /* change: [row, prop, oldValue, newValue] */
+
+        if (change[2] === change[3]) {
+          /* no change */
+          continue;
+        }
+
+        const isValid = et.validateChange(change);
+
+        /**
+         * keep track of invalid changes
+         */
+        if (!isValid) {
+          invalids++;
+        }
+
+        /**
+         * Push, update or delete
+         * only if all value are valid
+         */
+        et.pushUpdateOrDelete(change, isValid);
+      }
+
+      if (invalids > 0) {
+        await et.infoValidation(invalids);
+      }
+
+      /**
+       * Save
+       */
+      if (et._auto_save) {
+        et.save();
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      et.fire("after_change_done");
     }
-
-    if (invalids > 0) {
-      await et.infoValidation(invalids);
-    }
-
-    /**
-     * Save
-     */
-    if (et._auto_save) {
-      et.save();
-    }
-
-    et.updateButtons();
-
-    et.perfEnd("afterChange");
   }
 
   /**
@@ -1777,7 +1814,6 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   save() {
     const et = this;
-    et.perf("save");
     const updates = et._updates.filter((u) => u.valid);
     if (et._disconnected) {
       console.warn("Can't save while disconnected");
@@ -1793,7 +1829,6 @@ export class EditTableSessionClient extends WsToolsBase {
     et.emitUpdatesDb(updates);
     et.flushUpdates();
     et.updateButtons();
-    et.perfEnd("save");
   }
 
   /**

@@ -11,7 +11,7 @@ import { isView, isFunction, isObject } from "./../../../is_test";
 import { viewToMetaModal } from "../../../mx_helper_map_view_metadata.js";
 import { getProjectViewsCollections } from "../../../mx_helper_map_view_ui.js";
 import { MapxResolversStatic } from "./static.js";
-import { isStringRange, isString } from "../../../is_test/index.js";
+import { isStringRange, isString, isEmpty } from "../../../is_test/index.js";
 import { settings } from "./../../../settings";
 import { wsGetSourcesListEdit } from "./../../../source";
 import { ws_tools } from "./../../../mx.js";
@@ -562,7 +562,8 @@ class MapxResolversApp extends MapxResolversStatic {
     }
     if (isFunction(method)) {
       const res = await method(opt.value);
-      return res || instance?.state || {};
+      const out = isEmpty(res) ? instance?.state || {} : res;
+      return out;
     }
     throw new Error(`Table editor exec, invalid method: ${opt.method}`);
   }

@@ -80,7 +80,8 @@ mapx.once("ready", async () => {
       {
         name: "Editor is running",
         test: async (res) => {
-          const pos = Math.floor(Math.random() * (res.list.length - 1));
+          const sourcesSelect = res.list.filter((s) => s.nrow > 10);
+          const pos = Math.floor(Math.random() * (sourcesSelect.length - 1));
           const idTable = res.list[pos]?.id;
           res._id_table = idTable;
           const state = await mapx.ask("table_editor_open", {
@@ -99,9 +100,9 @@ mapx.once("ready", async () => {
             test_mode: true,
           });
           /*
-          * Id is unique and shoult match previous editor
-          */ 
-          return state.id === res._state.id ;
+           * Id is unique and shoult match previous editor
+           */
+          return state.id === res._state.id;
         },
       },
       {
@@ -167,14 +168,14 @@ mapx.once("ready", async () => {
         },
       },
       {
-        name: "Editor : add / remove column",
+        name: "Editor : add column",
         test: async (res) => {
           res._column_add = "_mx_test_column";
           const update = {
             type: "add_column",
             id_table: res._id_table,
             column_name: res._column_add,
-            column_type: "boolean",
+            column_type: "numeric",
           };
           await mapx.ask("table_editor_exec", {
             id_table: res._id_table,
@@ -189,7 +190,91 @@ mapx.once("ready", async () => {
           if (!colNames.includes(res._column_add)) {
             return false;
           }
-          update.type = "remove_column";
+
+          return true;
+        },
+      },
+      {
+        name: "Editor : handle invalid values",
+        test: async (res) => {
+          const cellsError = [];
+          const cellsGood = [];
+
+          const enabled = await mapx.ask("table_editor_exec", {
+            id_table: res._id_table,
+            method: "setAutoSave",
+            value: false,
+          });
+          if (enabled) {
+            return false;
+          }
+
+          const dim = await mapx.ask("table_editor_exec", {
+            id_table: res._id_table,
+            method: "getTableDimension",
+          });
+
+          const nCells = dim.rows > 100 ? 100 : dim.rows;
+
+          for (let i = 0; i < nCells; i++) {
+            cellsError.push([i, res._column_add, "bad_" + i]);
+            cellsGood.push([i, res._column_add, i]);
+          }
+
+          const res_batch_error_ok = await mapx.ask("table_editor_exec", {
+            id_table: res._id_table,
+            method: "handlerCellsBatchProcess",
+            value: cellsError,
+          });
+
+          if (!res_batch_error_ok) {
+            return false;
+          }
+
+          const res_count_invalid = await mapx.ask("table_editor_exec", {
+            id_table: res._id_table,
+            method: "countUpdateInvalid",
+            value: null,
+          });
+
+          if(res_count_invalid !== cellsError.length){
+            return false;
+          }
+          
+          const res_batch_good_ok = await mapx.ask("table_editor_exec", {
+            id_table: res._id_table,
+            method: "handlerCellsBatchProcess",
+            value: cellsGood,
+          });
+    
+
+          if(!res_batch_good_ok){
+             return false;
+          }
+
+          const res_count_valid = await mapx.ask("table_editor_exec", {
+            id_table: res._id_table,
+            method: "countUpdateValid",
+            value: null,
+          });
+
+          if(res_count_valid != cellsGood.length){
+            return false; 
+          }
+
+          return true ;
+        },
+      },
+      {
+        name: "Editor : remove column",
+        test: async (res) => {
+          const update = {
+            type: "remove_column",
+            id_table: res._id_table,
+            column_name: res._column_add,
+            column_type: "boolean",
+          };
+
           await mapx.ask("table_editor_exec", {
             id_table: res._id_table,
             method: "handlerUpdateColumnRemove",
@@ -206,6 +291,7 @@ mapx.once("ready", async () => {
           return true;
         },
       },
+
       {
         name: "Editor closed",
         test: async (res) => {
