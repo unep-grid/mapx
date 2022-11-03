@@ -1,3 +1,13 @@
+  - [1.9.45](https://github.com/unep-grid/map-x-mgl/tree/1.9.45) 
+
+    - APP 
+        - Table editor:
+            - Added e2e tests: update values + invalid handling
+            - Fix issue with update count when alterning bad/good types + solved issue with value 0 that could have been replaced by null
+            - Only one validation dialog (no choice) after changes with errors, let the user click the undo button directly.
+            - In case of bad type during validation, don't ask multiple time for confirmation
+            - Update buttons after succesfull dispatch cells update
+            - Template text change when entering value with the wrong type
   
   - [1.9.45-rc.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-rc.2) 
 
