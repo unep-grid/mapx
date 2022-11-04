@@ -27,7 +27,7 @@
 }
 
 .mx-view-badges i {
-  font-size: 10px;
+  font-size: 0.9em;
   color: #ccc;
   margin: 3px;
 }
@@ -159,8 +159,9 @@
   margin: 5px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-direction: row;
+  flex-wrap: wrap;
   padding: 10px;
   cursor: pointer;
 }
@@ -176,12 +177,12 @@
 }
 
 .mx-view-tgl-title {
-  font-weight: 400;
+  font-weight: initial;
   font-size: 1em;
-  margin: 0 20px 0 20px;
-  cursor: -webkit-grab;
+  padding: 10px;
   cursor: grab;
-  flex-grow: 1;
+  flex: 1;
+  min-width: 300px;
 }
 
 .mx-view-tgl-input {

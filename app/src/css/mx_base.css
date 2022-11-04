@@ -900,6 +900,10 @@ picture {
 
 .check-toggle {
   display: flex;
+  align-items: center;
+}
+.check-toggle input {
+  margin: unset;
 }
 
 .check-toggle > * {
