@@ -1,7 +1,7 @@
 WITH
 rows_count as (
   SELECT
-  COUNT(*) 
+  COUNT(gid) 
   FROM "{{idSource}}"
 )
 
