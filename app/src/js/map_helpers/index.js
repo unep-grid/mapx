@@ -4134,7 +4134,8 @@ function setVtLegend(options) {
   /**
    * Copy rules
    */
-  const rulesLegend = clone(rules);
+  view._style_rules = clone(rules);
+
 
   /*
    * Add legend using template
@@ -4163,7 +4164,7 @@ function setVtLegend(options) {
     /**
      * el
      */
-    const elLegendContent = buildLegendVt(view, rulesLegend);
+    const elLegendContent = buildLegendVt(view);
     elLegend.appendChild(elLegendContent);
     /*
      * dot

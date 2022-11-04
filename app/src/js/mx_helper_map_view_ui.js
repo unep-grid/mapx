@@ -345,7 +345,7 @@ export async function viewsListRenderNew(o) {
     }
 
     if (isItem) {
-      return el.querySelector("label");
+      return el.querySelector(".mx-view-tgl-content");
     }
     return el;
   }

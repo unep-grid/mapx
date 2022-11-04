@@ -7,8 +7,9 @@ import { getSpriteImage } from "./../map_helpers/index.js";
 import { el } from "./../el/src/index.js";
 
 export function buildLegendVt(view, rules) {
+
   if (!isArray(rules)) {
-    rules = path(view, "data.style.rules", []);
+    rules = view?._style_rules || view?.data?.style?.rules || [];
   }
 
   const titleLegend = getLabelFromObjectPath({
@@ -139,9 +140,9 @@ export function buildLegendVt(view, rules) {
       "div",
       {
         class: "mx-legend-box",
-        dataset: {
-          rules: JSON.stringify(rules),
-        },
+        /*dataset: {*/
+          /*rules: JSON.stringify(rules),*/
+        /*},*/
       },
       el(
         "table",

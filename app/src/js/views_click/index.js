@@ -254,7 +254,7 @@ async function handleViewClick(event) {
           const idView = dataset.view_action_target;
           const view = getView(idView);
           const filter = ["any"];
-          const rules = JSON.parse(path(legendBox.dataset,'rules', '[]'));
+          const rules = view._style_rules;
           for (const li of legendInputs) {
             if (li.checked) {
               const index = li.dataset.view_action_index * 1;
