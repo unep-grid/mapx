@@ -8150,6 +8150,31 @@
     "de": "Karte: Wasserkörpertextumriss "
   },
   {
+    "id": "upl_title",
+    "en": "Upload",
+    "de": "Hochladen"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "de": "Hochladen nicht erlaubt"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "de": "Raumbezugssystem (EPSG-Code) zuordnen. Standard ist 4326."
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "de": "Datei ablegen ( *.gpkg, *.zip, *.geojson ) oder zum Durchsuchen klicken..."
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "de": "Titel ( {{language}} )"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "de": "Wählen Sie eine Dienstvoreinstellung"

@@ -8150,6 +8150,31 @@
     "fa": "نقشه: طرح متن متن متناسب با آب "
   },
   {
+    "id": "upl_title",
+    "en": "Upload",
+    "fa": "بارگذاری"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "fa": "آپلود مجاز نیست"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "fa": "اختصاص سیستم مرجع مکانی (کد EPSG). پیش فرض 4326 است."
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "fa": "فایل (*.gpkg، *.zip، *.geojson) را رها کنید یا برای مرور کلیک کنید..."
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "fa": "عنوان ( {{language}} )"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "fa": "یک سرویس از پیش تنظیم شده را انتخاب کنید"

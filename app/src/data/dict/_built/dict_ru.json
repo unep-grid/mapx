@@ -8150,6 +8150,31 @@
     "ru": "Карта: контур текста водоема "
   },
   {
+    "id": "upl_title",
+    "en": "Upload",
+    "ru": "Загрузить"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "ru": "Загрузка запрещена"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "ru": "Назначить систему пространственной привязки ( код EPSG ). По умолчанию 4326."
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "ru": "Перетащите файл ( *.gpkg, *.zip, *.geojson ) или нажмите, чтобы просмотреть..."
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "ru": "Заголовок ( {{language}} )"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "ru": "Выберите предустановку услуги"

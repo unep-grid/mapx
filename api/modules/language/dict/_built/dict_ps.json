@@ -8150,6 +8150,31 @@
     "ps": "نقشه: د اوبو د بدن متن لنډیز "
   },
   {
+    "id": "upl_title",
+    "en": "Upload",
+    "ps": "پورته کول"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "ps": "د پورته کولو اجازه نشته"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "ps": "د ځایی حوالې سیسټم وټاکئ (EPSG کوډ). ډیفالټ 4326 دی."
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "ps": "فایل (*.gpkg، *.zip، *.geojson) ډراپ کړئ یا د لټون کولو لپاره کلیک وکړئ..."
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "ps": "عنوان ( {{language}} )"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "ps": "د خدماتو وړاندې کولو غوره کړئ"

@@ -8150,6 +8150,31 @@
     "es": "Mapa: borde del texto cuerop de agua"
   },
   {
+    "id": "upl_title",
+    "en": "Upload",
+    "es": "Subir"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "es": "Carga no permitida"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "es": "Asignar sistema de referencia espacial (código EPSG). El valor predeterminado es 4326."
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "es": "Suelte el archivo (*.gpkg, *.zip, *.geojson) o haga clic para buscar..."
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "es": "Título ( {{language}} )"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "es": "Seleccionar un servicio preestablecido"

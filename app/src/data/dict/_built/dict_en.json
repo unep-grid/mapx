@@ -6520,6 +6520,26 @@
     "en": "Map: water body text outline"
   },
   {
+    "id": "upl_title",
+    "en": "Upload"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326."
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse..."
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset"
   },

@@ -8150,6 +8150,31 @@
     "bn": "মানচিত্র: জলের দেহের পাঠ্য রূপরেখা "
   },
   {
+    "id": "upl_title",
+    "en": "Upload",
+    "bn": "আপলোড করুন"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "bn": "আপলোড অনুমোদিত নয়"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "bn": "স্থানিক রেফারেন্স সিস্টেম বরাদ্দ করুন (EPSG কোড)। ডিফল্ট হল 4326।"
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "bn": "ফাইল ড্রপ করুন ( *.gpkg, *.zip, *.geojson ) অথবা ব্রাউজ করতে ক্লিক করুন..."
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "bn": "শিরোনাম ( {{language}} )"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "bn": "একটি পরিষেবা প্রিসেট নির্বাচন করুন"

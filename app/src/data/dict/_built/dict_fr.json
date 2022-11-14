@@ -8150,6 +8150,31 @@
     "fr": "Carte : bordure texte plan d'eau"
   },
   {
+    "id": "upl_title",
+    "en": "Upload",
+    "fr": "Télécharger"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "fr": "Téléchargement non autorisé"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "fr": "Attribuer un système de référence spatiale ( code EPSG ). La valeur par défaut est 4326."
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "fr": "Déposez le fichier ( *.gpkg, *.zip, *.geojson ) ou cliquez pour parcourir..."
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "fr": "Titre ( {{language}} )"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "fr": "Sélectionnez un service prédéfini"

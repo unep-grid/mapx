@@ -9,7 +9,7 @@ import { FlashItem } from "../icon_flash";
 import { isSourceDownloadable } from "../mx_helpers";
 import { fetchSourceMetadata } from "../mx_helper_map_view_metadata";
 import { EventSimple } from "../event_simple";
-import { ws } from "../mx.js";
+import { ws, nc } from "../mx.js";
 //import {settings} from './../settings';
 
 const options = {
@@ -95,7 +95,7 @@ export class DownloadSourceModal extends EventSimple {
       if (formIsValid) {
         const route = getApiRoute("downloadSource");
         ws.emit(route, opt);
-        mx.nc.panel.open();
+        nc.panel.open();
         md.close();
         new FlashItem("bell");
         return true;
