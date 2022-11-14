@@ -1697,7 +1697,8 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(153,153,153,0.4)"
+        "fill-color": "rgba(153,153,153,0.4)",
+        "fill-outline-color": "rgba(0,0,0,0)"
       }
     },
     {
@@ -1887,7 +1888,7 @@
         "icon-anchor": "center",
         "visibility": "visible",
         "icon-image": "maki-information-11",
-        "icon-offset": [0,10],
+        "icon-offset": [0, 10],
         "text-justify": "auto"
       },
       "paint": {
