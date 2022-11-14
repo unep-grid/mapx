@@ -182,7 +182,7 @@
   padding: 10px;
   cursor: grab;
   flex: 1;
-  min-width: 300px;
+  min-width: 200px;
 }
 
 .mx-view-tgl-input {
