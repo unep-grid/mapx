@@ -1,3 +1,11 @@
+  - [1.9.45.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.45.1) 
+
+    - APP 
+        - Countries polygons used to highlight a particular zone / country were also hidding UN border style
+        - View list : improved layout for small screen + increased meta buttons sizes 
+    - API    
+        - Bug with column named 'variable' not properly escaped in source summary function
+
   - [1.9.45](https://github.com/unep-grid/map-x-mgl/tree/1.9.45) 
 
     - APP 
