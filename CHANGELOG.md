@@ -1,3 +1,8 @@
+  - [1.9.45.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.45.2) 
+    
+    - APP
+        - Fixed issue with panel resize buttons not visible. Issue #864. 
+
   - [1.9.45.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.45.1) 
 
     - APP 
