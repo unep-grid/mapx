@@ -1,8 +1,7 @@
-import { el, elSpanTranslate } from "./../el_mapx";
-const st = elSpanTranslate;
+import { el, elSpanTranslate as st } from "./../el_mapx";
 
-export function buildForm(md) {
-  const opt = md._opt;
+export function buildForm(upl) {
+  const opt = upl._opt;
 
   const elMsgContainer = el("div");
 
@@ -11,106 +10,71 @@ export function buildForm(md) {
     {
       class: "form-group",
     },
-    el("label", { for: "dl_epsg_code" }, st("dl_select_epsg_code")),
+    el("label", { for: "upl_epsg_code" }, st("upl_select_epsg_code")),
     el("select", {
-      id: "dl_epsg_code",
+      id: "upl_epsg_code",
       name: "epsgCode",
       dataset: { type: "epsg" },
     })
   );
 
-  const elFormCountries = el(
+  const elFormTitle = el(
     "div",
     {
       class: "form-group",
     },
-    el(
-      "label",
-      {
-        for: "dl_iso3codes",
-      },
-      st("dl_select_clip_countries")
-    ),
-    el("select", {
-      id: "dl_iso3codes",
-      name: "iso3codes",
-      dataset: { type: "countries" },
-    })
-  );
-
-  const elFormFormat = el(
-    "div",
-    {
-      class: "form-group",
-    },
-    el(
-      "label",
-      {
-        for: "dl_format",
-      },
-      st("dl_select_file_format")
-    ),
-    el("select", {
-      id: "dl_format",
-      name: "format",
-      dataset: { type: "format_vector_download" },
-    })
-  );
-
-  const elFormFilename = el(
-    "div",
-    {
-      class: "form-group",
-    },
-    el("label", { for: "dl_filename" }, st("dl_filename")),
-    el(
-      "input",
-      {
-        class: "form-control",
-        name: "filename",
-        id: "dl_filename",
-        type: "text",
-      },
-      opt.filename
-    )
-  );
-
-  const elFormEmail = el(
-    "div",
-    { class: "form-group" },
-    el("label", { for: "dl_email" }, st("dl_email")),
+    el("label", { for: "upl_title" }, st("upl_title")),
     el(
       "input",
       {
         on: [
           "input",
           () => {
-            md.update("email");
+            console.log("validation");
           },
         ],
         class: "form-control",
-        type: "email",
-        name: "email",
-        id: "dl_email",
-        //disabled: isEmail(opt.email) ? true : null
+        name: "title",
+        id: "upl_title",
+        type: "text",
       },
-      opt.email
+      opt.title
     )
+  );
+
+  const elInputFile = el("input", {
+    on: {
+      change: upl.handleFormFileInput,
+    },
+    class: "upl--hidden",
+    type: "file",
+  });
+
+  const elFormFileDragDrop = el(
+    "div",
+    {
+      class: ["form-group", "upl--form-drag-drop"],
+      on: {
+        dragenter: upl.handleDragEnter,
+        drop: upl.handleDrop,
+        click: upl.handleClick,
+      },
+    },
+    st("upl_browse_or_drop")
   );
 
   const elForm = el(
     "form",
     { name: "dl_form", id: "dl_modal", on: ["change", md.update] },
-    [elFormFormat, elFormEpsg, elFormCountries, elFormEmail, elFormFilename]
+    [elFormTitle, elFormEpsg, elFormFileDragDrop, elMsgContainer, elInputFile]
   );
 
   return {
     elForm,
-    elFormFormat,
     elFormEpsg,
-    elFormCountries,
-    elFormEmail,
-    elFormFilename,
+    elFormTitle,
+    elFormFileDragDrop,
+    elInputFile,
     elMsgContainer,
   };
 }

@@ -1,4 +1,18 @@
 [
+{
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+
   {
     "id": "upl_title",
     "en": "Upload",
