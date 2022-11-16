@@ -73,6 +73,7 @@ class ButtonPanel extends EventSimple {
       group: "base",
       type: "resize",
     });
+
     panel.restoreSize();
     panel.on("resize", panel.saveSize.bind(panel));
     panel.on("resize-auto", panel.saveSize.bind(panel));
@@ -179,6 +180,82 @@ class ButtonPanel extends EventSimple {
       panel.elMain = elMain;
     }
 
+    /**
+     * Flag to indicate.. an event
+     */
+    panel.elBtnFlag = el("span", {
+      class: ["button-panel--btn-flag", "button-panel--hidden"],
+    });
+
+    /**
+     * The button
+     */
+    panel.elBtnPanel = el(
+      "div",
+      {
+        class: [
+          "button-panel--btn",
+          `button-panel--${panel.opt.position}`,
+          "hint",
+          `hint--${panel.opt.tooltip_position}`,
+          "button-panel--shadow",
+        ],
+        dataset: {
+          lang_key: panel.opt.button_lang_key,
+          lang_type: "tooltip",
+          button_panel_action: "toggle",
+        },
+      },
+      el("span", {
+        class: ["button-panel--btn-icon", ...panel.opt.button_classes],
+      }),
+      panel.elBtnFlag
+    );
+
+    /**
+     * Where the content will appear
+     */
+    panel.elPanelContent = el("div", {
+      class: [
+        "button-panel--item-content",
+        "button-panel--shadow",
+        ...panel.opt.item_content_classes,
+      ],
+    });
+
+    /**
+     * Handles / Buttons
+     */
+    panel.elHandles = el(
+      "div",
+      {
+        class: "button-panel--item-handles",
+      },
+      panel._el_handles("top-left"),
+      panel._el_handles("top-right"),
+      panel._el_handles("bottom-right"),
+      panel._el_handles("bottom-left")
+    );
+
+    /**
+     * Panel
+     */
+    panel.elPanel = el(
+      "div",
+      {
+        class: [
+          "button-panel--item",
+          panel.opt.panelFull ? "button-panel--item-full" : null,
+        ],
+        style: panel.opt.panel_style,
+      },
+      panel.elPanelContent,
+      panel.elHandles
+    );
+
+    /**
+     * Panel and button
+     */
     panel.elContainer = el(
       "div",
       {
@@ -189,67 +266,10 @@ class ButtonPanel extends EventSimple {
         ],
         style: panel.opt.container_style,
       },
-      (panel.elBtnPanel = el(
-        "div",
-        {
-          class: [
-            "button-panel--btn",
-            `button-panel--${panel.opt.position}`,
-            "hint",
-            `hint--${panel.opt.tooltip_position}`,
-            "button-panel--shadow",
-          ],
-          dataset: {
-            lang_key: panel.opt.button_lang_key,
-            lang_type: "tooltip",
-            button_panel_action: "toggle",
-          },
-        },
-        el("span", {
-          class: ["button-panel--btn-icon", ...panel.opt.button_classes],
-        }),
-        (panel.elBtnFlag = el("span", {
-          class: ["button-panel--btn-flag", "button-panel--hidden"],
-        }))
-      )),
-      (panel.elPanel = el(
-        "div",
-        {
-          class: [
-            "button-panel--item",
-            panel.opt.panelFull ? "button-panel--item-full" : null,
-          ],
-          style: panel.opt.panel_style,
-        },
-        /**
-         * Where the content will appear
-         */
-        (panel.elPanelContent = el("div", {
-          class: [
-            "button-panel--item-content",
-            "button-panel--shadow",
-            ...panel.opt.item_content_classes,
-          ],
-        })),
-        /**
-         * Handles / Buttons
-         */
-        (panel.elHandles = el(
-          "div",
-          {
-            class: "button-panel--item-handles",
-          },
-
-          /**
-           * Top Left
-           */
-          panel._el_handles("top-left"),
-          panel._el_handles("top-right"),
-          panel._el_handles("bottom-right"),
-          panel._el_handles("bottom-left")
-        ))
-      ))
+      panel.elBtnPanel,
+      panel.elPanel
     );
+
     panel.elMain.appendChild(panel.elContainer);
   }
 
@@ -261,40 +281,49 @@ class ButtonPanel extends EventSimple {
 
   _el_handles(pos) {
     const panel = this;
+    /**
+     *  Prevent buttons next to the main button location
+     *  -> top=top => no.
+     */
     if (pos === panel.opt.position) {
       return; // no handles near the button
     }
     const handles = panel.opt.handles;
-    const addResize = handles.indexOf("resize") > -1;
-    const addFree = handles.indexOf("free") > -1;
+    const addResize = handles.includes("resize");
+    const addFree = handles.includes("free");
+
     const p = pos.split("-");
     const loc = p[0]; // top, bottom
     const side = p[1]; // left right
     const op = `${loc === "top" ? "bottom" : "top"}-${
       side === "left" ? "right" : "left"
     }`;
+    const cl = ["button-panel--item-handles-group", `button-panel--${pos}`];
+
+    const elHandles = el("div", {
+      class: cl,
+    });
+
     const elResizes = addResize ? panel._el_resize_btns(op) : null;
     const elFree = addFree ? panel._el_resize(pos) : null;
-    const cl = ["button-panel--item-handles-group", `button-panel--${pos}`];
+
     if (loc === "top") {
-      return el(
-        "div",
-        {
-          class: cl,
-        },
-        elFree,
-        elResizes
-      );
-    } else {
-      return el(
-        "div",
-        {
-          class: cl,
-        },
-        elResizes,
-        elFree
-      );
+      if (elFree) {
+        elHandles.appendChild(elFree);
+      }
+      if (elResizes) {
+        elHandles.appendChild(elResizes);
+      }
+      return elHandles;
     }
+
+    if (elResizes) {
+      elHandles.appendChild(elResizes);
+    }
+    if (elFree) {
+      elHandles.appendChild(elFree);
+    }
+    return elHandles;
   }
 
   _el_resize(pos) {
