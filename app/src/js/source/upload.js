@@ -12,8 +12,15 @@ const options = {
 };
 
 export class UploadSourceModal extends EventSimple {
+  constructor(opt) {
+    const upl = this;
+
+    upl._opt = Object.assign({}, options, opt);
+  }
+
   async build() {
     const upl = this;
+
     upl._form = {
       elMsgContainer,
       elForm,
