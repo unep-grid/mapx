@@ -1,3 +1,8 @@
+  - [1.9.45.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.45.3) 
+
+    - APP 
+        - Added animations option in story map when using fit bounds method
+
   - [1.9.45.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.45.2) 
     
     - APP
