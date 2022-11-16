@@ -1678,9 +1678,10 @@ export async function storyPlayStep(stepNum) {
         console.error(`Missing position ${p} to fitbounds`);
       }
     }
-    map.fitBounds([pos.w, pos.s, pos.e, pos.n]);
-    map.once("moveend", () => {
-      map.easeTo({ pitch: 0.0 });
+    map.fitBounds([pos.w, pos.s, pos.e, pos.n], {
+      duration: anim.duration,
+      pitch: pos.pitch,
+      easing: easing,
     });
   } else {
     map[anim.method]({
