@@ -440,7 +440,7 @@ export function getLanguageItem(obj, language) {
  */
 export async function updateLanguageViewsList(o) {
   o = Object.assign({}, o);
-  const lang = o.lang || getLanguageDefault();
+  const lang = o.lang || getLanguageCurrent() || getLanguageDefault();
   const views = getViews();
   const isModeStatic = path(mx, "settings.mode.static") === true;
 
