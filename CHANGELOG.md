@@ -1,3 +1,8 @@
+  - [1.9.45.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.45.4) 
+   
+    - APP
+        - Dynamic language change : missing language during views list update. Fallback to english prevented to switch back to another language.
+
   - [1.9.45.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.45.3) 
 
     - APP 
