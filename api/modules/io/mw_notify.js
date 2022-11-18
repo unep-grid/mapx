@@ -16,7 +16,8 @@ function ioMwNotify(socket, next) {
  */
 function mwNotify(_, res, next) {
   let id = 0;
-  const hasEmit = !!res.mx_emit;
+  const hasEmitWs = !!res.mx_emit_ws;
+  const hasEmitHttp = !!res.mx_emit_http;
 
   /**
    * Notify: progress, message, warning...
@@ -48,8 +49,12 @@ function mwNotify(_, res, next) {
       ...def,
       ...opt,
     };
-    if (hasEmit) {
-      return res.mx_emit("notify", out);
+
+    if (hasEmitWs) {
+      return res.mx_emit_ws("notify", out);
+    }
+    if (hasEmitHttp) {
+      return res.mx_emit_http("notify", out);
     }
     console.log(`[ notify ${out.type} ${out.level} ]`, out.message);
   };

@@ -25,7 +25,7 @@ import {
   ioConnect,
   ioMwEmit,
   ioMwNotify,
-  ioMwHandlers,
+  ioMwRoutes,
   mwEmit,
   mwNotify,
 } from "#mapx/io";
@@ -63,10 +63,10 @@ const io = new SocketServer(server, settings.socket_io);
 const ioRedisAdapter = ioCreateAdapter();
 io.adapter(ioRedisAdapter);
 io.use(ioMwAuthenticate);
-io.use(ioMwEmit);
-io.use(ioMwNotify);
-io.use(ioMwHandlers);
-io.on("connection", ioConnect);
+io.use(ioMwEmit); // Add emit wrapper  
+io.use(ioMwNotify); // Add notify system  
+io.use(ioMwRoutes); // Add listener on routes
+io.on("connection", ioConnect); // emit 'authentication', with roles  
 
 /*
  * Express routes

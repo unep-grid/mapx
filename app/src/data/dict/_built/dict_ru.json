@@ -8150,6 +8150,11 @@
     "ru": "Карта: контур текста водоема "
   },
   {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "ru": "MapX не рекомендует шейп-файлы, так как не существует способов указать набор символов, что может вызвать проблемы при отображении и анализе."
+  },
+  {
     "id": "upl_title",
     "en": "Upload",
     "ru": "Загрузить"
@@ -8168,6 +8173,11 @@
     "id": "upl_browse_or_drop",
     "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
     "ru": "Перетащите файл ( *.gpkg, *.zip, *.geojson ) или нажмите, чтобы просмотреть..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})",
+    "ru": "Заголовок ( {{language}} )"
   },
   {
     "id": "upl_meta_title",

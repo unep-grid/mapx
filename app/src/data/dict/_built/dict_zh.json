@@ -8150,6 +8150,11 @@
     "zh": "地图：水体文本边框"
   },
   {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "zh": "MapX 不推荐 Shapefile，因为没有指定字符集的方法，这会在显示和分析过程中产生问题"
+  },
+  {
     "id": "upl_title",
     "en": "Upload",
     "zh": "上传"
@@ -8168,6 +8173,11 @@
     "id": "upl_browse_or_drop",
     "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
     "zh": "拖放文件（*.gpkg、*.zip、*.geojson）或点击浏览..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})",
+    "zh": "标题 （ {{language}} )"
   },
   {
     "id": "upl_meta_title",

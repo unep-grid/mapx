@@ -3,7 +3,7 @@ import { ioDownloadSource, ioEditSource, ioSourceListEdit } from "#mapx/source";
 import { ioEcho } from "./mw_echo.js";
 import { ioGetTestJobSum, ioGetTestJobEcho } from "./test_job.js";
 
-const handlers = {
+const routes = {
   "/client/geoserver/update": ioUpdateGeoserver,
   "/client/source/download": ioDownloadSource,
   "/client/test/get/job/sum": ioGetTestJobSum,
@@ -13,12 +13,10 @@ const handlers = {
   echo: ioEcho,
 };
 
-export { ioMwHandlers };
-
-function ioMwHandlers(socket, next) {
-  for (const h in handlers) {
-    socket.on(h, (request) => {
-      handlers[h](socket, request);
+export function ioMwRoutes(socket, next) {
+  for (const route in routes) {
+    socket.on(route, (request) => {
+      routes[route](socket, request);
     });
   }
   next();

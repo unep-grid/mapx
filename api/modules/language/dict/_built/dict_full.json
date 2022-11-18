@@ -21190,6 +21190,19 @@
     "de": "Karte: Wasserkörpertextumriss "
   },
   {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "fr": "MapX ne recommande pas les fichiers de formes, car il n'existe aucune méthode pour spécifier le jeu de caractères, ce qui peut entraîner des problèmes lors de l'affichage et de l'analyse.",
+    "es": "MapX no recomienda Shapefiles, ya que no hay métodos para especificar el conjunto de caracteres, lo que puede producir problemas durante la visualización y el análisis.",
+    "ru": "MapX не рекомендует шейп-файлы, так как не существует способов указать набор символов, что может вызвать проблемы при отображении и анализе.",
+    "zh": "MapX 不推荐 Shapefile，因为没有指定字符集的方法，这会在显示和分析过程中产生问题",
+    "ar": "لا توصي MapX بملفات Shapefiles ، حيث لا توجد طرق لتحديد مجموعة الأحرف ، والتي يمكن أن تنتج مشكلات أثناء العرض والتحليل",
+    "fa": "MapX Shapefiles را توصیه نمی کند، زیرا هیچ روشی برای تعیین مجموعه کاراکترها وجود ندارد، که می تواند مشکلاتی را در حین نمایش و تجزیه و تحلیل ایجاد کند.",
+    "ps": "MapX د شکل فایلونو سپارښتنه نه کوي، ځکه چې د کرکټرونو ټاکلو لپاره هیڅ میتود شتون نلري، کوم چې کولی شي د ښودلو او تحلیل په جریان کې ستونزې رامینځته کړي.",
+    "bn": "MapX Shapefiles সুপারিশ করে না, কারণ অক্ষর সেট নির্দিষ্ট করার কোনো পদ্ধতি নেই, যা প্রদর্শন এবং বিশ্লেষণের সময় সমস্যা তৈরি করতে পারে",
+    "de": "MapX empfiehlt Shapefiles nicht, da es keine Methoden zum Angeben des Zeichensatzes gibt, was zu Problemen bei der Anzeige und Analyse führen kann"
+  },
+  {
     "id": "upl_title",
     "en": "Upload",
     "fr": "Télécharger",
@@ -21240,6 +21253,19 @@
     "ps": "فایل (*.gpkg، *.zip، *.geojson) ډراپ کړئ یا د لټون کولو لپاره کلیک وکړئ...",
     "bn": "ফাইল ড্রপ করুন ( *.gpkg, *.zip, *.geojson ) অথবা ব্রাউজ করতে ক্লিক করুন...",
     "de": "Datei ablegen ( *.gpkg, *.zip, *.geojson ) oder zum Durchsuchen klicken..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})",
+    "fr": "Titre ( {{language}} )",
+    "es": "Título ( {{language}} )",
+    "ru": "Заголовок ( {{language}} )",
+    "zh": "标题 （ {{language}} )",
+    "ar": "عنوان ( {{language}} )",
+    "fa": "عنوان ( {{language}} )",
+    "ps": "عنوان ( {{language}} )",
+    "bn": "শিরোনাম ( {{language}} )",
+    "de": "Titel ( {{language}} )"
   },
   {
     "id": "upl_meta_title",

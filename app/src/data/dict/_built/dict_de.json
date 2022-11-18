@@ -8150,6 +8150,11 @@
     "de": "Karte: Wasserkörpertextumriss "
   },
   {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "de": "MapX empfiehlt Shapefiles nicht, da es keine Methoden zum Angeben des Zeichensatzes gibt, was zu Problemen bei der Anzeige und Analyse führen kann"
+  },
+  {
     "id": "upl_title",
     "en": "Upload",
     "de": "Hochladen"
@@ -8168,6 +8173,11 @@
     "id": "upl_browse_or_drop",
     "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
     "de": "Datei ablegen ( *.gpkg, *.zip, *.geojson ) oder zum Durchsuchen klicken..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})",
+    "de": "Titel ( {{language}} )"
   },
   {
     "id": "upl_meta_title",

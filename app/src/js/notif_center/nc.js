@@ -148,6 +148,7 @@ export class NotifCenter {
     });
 
     notifs.sort((a, b) => a.timestamp - b.timestamp);
+    
     notifs.forEach((notif) => {
       nc.notify(notif, { save: false, scroll: false });
     });

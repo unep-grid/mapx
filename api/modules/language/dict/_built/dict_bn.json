@@ -8150,6 +8150,11 @@
     "bn": "মানচিত্র: জলের দেহের পাঠ্য রূপরেখা "
   },
   {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "bn": "MapX Shapefiles সুপারিশ করে না, কারণ অক্ষর সেট নির্দিষ্ট করার কোনো পদ্ধতি নেই, যা প্রদর্শন এবং বিশ্লেষণের সময় সমস্যা তৈরি করতে পারে"
+  },
+  {
     "id": "upl_title",
     "en": "Upload",
     "bn": "আপলোড করুন"
@@ -8168,6 +8173,11 @@
     "id": "upl_browse_or_drop",
     "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
     "bn": "ফাইল ড্রপ করুন ( *.gpkg, *.zip, *.geojson ) অথবা ব্রাউজ করতে ক্লিক করুন..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})",
+    "bn": "শিরোনাম ( {{language}} )"
   },
   {
     "id": "upl_meta_title",

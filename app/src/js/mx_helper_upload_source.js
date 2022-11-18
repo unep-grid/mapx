@@ -1,6 +1,7 @@
 import { el, elSpanTranslate } from "./el_mapx";
-import { modal } from "./mx_helper_modal.js";
-import { getDictItem, updateLanguageElements } from "./language";
+import { modal, modalDialog } from "./mx_helper_modal.js";
+import { updateLanguageElements } from "./language";
+import { elSpanTranslate as tt } from "./el_mapx";
 import { getApiUrl } from "./api_routes";
 import { isString } from "./is_test";
 import {
@@ -9,7 +10,6 @@ import {
   getSizeOf,
   formatByteSize,
   path,
-  parseTemplate,
   makeId,
 } from "./mx_helper_misc.js";
 import { settings } from "./settings";
@@ -186,18 +186,17 @@ export async function isUploadFileSizeValid(file, opt) {
   }
 
   const size = await getSizeOf(file, false);
-
   const sizeOk = size <= sizeMax;
   if (!sizeOk) {
     if (opt.showModal) {
-      const elMessage = el("span");
-      const msg = await getDictItem("api_upload_file_max_size_exceeded");
       const sizeHuman = formatByteSize(sizeMax);
-      elMessage.innerText = parseTemplate(msg, { size: sizeHuman });
-      const modal = modal({
+      await modalDialog({
         title: elSpanTranslate("api_upload_file_max_size_exceeded_title"),
         id: "modal_max_size_exceeded",
-        content: elMessage,
+        content: tt("api_upload_file_max_size_exceeded", {
+          tooltip: false,
+          data: { size: sizeHuman },
+        }),
       });
     }
   }
@@ -249,6 +248,10 @@ export async function uploadSource(o) {
       type: "application/json",
     });
   }
+
+  const data = await o.file.arrayBuffer();
+
+  debugger;
 
   /*
    * create upload form

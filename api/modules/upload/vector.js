@@ -57,6 +57,17 @@ export const mwUpload = [
  * Convert data
  */
 export async function convertOgrHandler(req, res, next) {
+
+
+  await res.notifyInfoMessage({
+    idGroup: 'a',
+    message: "test",
+  });
+
+
+  return;
+
+
   const hasBody = typeof req.body === "object" && req.file;
 
   if (!hasBody) {

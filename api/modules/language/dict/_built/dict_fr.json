@@ -8150,6 +8150,11 @@
     "fr": "Carte : bordure texte plan d'eau"
   },
   {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "fr": "MapX ne recommande pas les fichiers de formes, car il n'existe aucune méthode pour spécifier le jeu de caractères, ce qui peut entraîner des problèmes lors de l'affichage et de l'analyse."
+  },
+  {
     "id": "upl_title",
     "en": "Upload",
     "fr": "Télécharger"
@@ -8168,6 +8173,11 @@
     "id": "upl_browse_or_drop",
     "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
     "fr": "Déposez le fichier ( *.gpkg, *.zip, *.geojson ) ou cliquez pour parcourir..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})",
+    "fr": "Titre ( {{language}} )"
   },
   {
     "id": "upl_meta_title",

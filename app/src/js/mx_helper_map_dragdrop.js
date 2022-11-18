@@ -135,14 +135,13 @@ function handleFileParser(f) {
     /**
      * Test for size
      */
-
-    let isSizeValid = isUploadFileSizeValid(f, { showModal: true });
+    const isSizeValid = await isUploadFileSizeValid(f, { showModal: true });
     if (!isSizeValid) {
       progressScreen({
         enable: false,
         id: f.name,
       });
-      return;
+      return false;
     }
 
     const view = await spatialDataToView({

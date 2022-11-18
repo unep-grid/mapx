@@ -39,8 +39,10 @@ function toRes(obj) {
  * @param {Object} res Result object
  * @param {Object} data Data stringifiable to JSON
  * @param {Object} opt
- * @param {Object} opt.end If true, send, else continue writing
- * @param {Object} opt.etag If set, add custom etag
+ * @param {Boolean} opt.toRes If true, add '\t\n' for message delimiter (see toRes)
+ * @param {Boolean} opt.end If true, send, else continue writing
+ * @param {String} opt.etag If set, add custom etag
+ * @param {Function} opt.write_cb Function for the write function, if not 'end'.
  */
 function sendJSON(res, data, opt) {
   try {
@@ -49,17 +51,20 @@ function sendJSON(res, data, opt) {
       ...opt,
     };
     opt.end = opt.end || false;
-    data = JSON.stringify(data || "");
+    data = isString(data) ? data : JSON.stringify(data || "");
     res.setHeader("Mapx-Content-Length", data.length || 0);
     res.setHeader("Content-Type", "application/json");
     res.setHeader("Cache-Control", "max-age=0, s-maxage=0");
     if (opt.etag) {
       res.setHeader("Etag", opt.etag);
     }
+    if (opt.toRes) {
+      data = data + "\t\n";
+    }
     if (opt.end) {
       res.send(data);
     } else {
-      res.write(data);
+      res.write(data, "utf8", opt.write_cb);
     }
   } catch (e) {
     sendError(res, e);
