@@ -35,5 +35,9 @@ config[["project"]][["creation"]][["usersAllowed"]] <- usersCreateProject
 config[["root_mode"]][["members"]] <- usersRoot
 config[["map"]][["token"]] <- Sys.getenv("MAPX_MAPBOX_TOKEN")
 
+config[["mode"]] <- Sys.getenv("MAPX_MODE")
+
+
+
 ## NOTE: see mx_helper_map_view_validation.js
 # config[["validation"]][["view"]][["rules"]] <- Sys.getenv("MAPX_VIEW_VALIDATION_RULES")

@@ -3,7 +3,9 @@
 #  SERVER FUNCTION
 #
 server <- function(input, output, session) {
-  if ("MAINTENANCE" %in% .get(config, c("mode"))) {
+  isMaintenance <- .get(config, c("mode")) == "MAINTENANCE"
+
+  if (isMaintenance) {
     #
     # Set maintenance mode, ignore everything else
     #
