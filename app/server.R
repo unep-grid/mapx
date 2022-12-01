@@ -3,7 +3,7 @@
 #  SERVER FUNCTION
 #
 server <- function(input, output, session) {
-  isMaintenance <- .get(config, c("mode")) == "MAINTENANCE"
+  isMaintenance <- isTRUE(.get(config, c("mode")) == "MAINTENANCE")
 
   if (isMaintenance) {
     #
