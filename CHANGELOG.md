@@ -1,3 +1,14 @@
+  - [1.10.0-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.1) 
+   
+    - APP / API
+        - Refactoring :
+            - New upload tool
+                - Only cover geospatial layers for now, e.g. drag-n-dropped files on the map.
+                - Automatic view creation at the end - more options will follow, e.g. to opt-out. 
+            - Table editor: 
+                - Types support : OGR automatically set attributes type during uplaod. All types used in all layers/tables are also supported in table editor.  
+                - Value validation + sanitation : posgresql is used to test and cast any changes in cells, if required. No more regex testing.  
+
   - [1.9.45.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.45.4) 
    
     - APP
