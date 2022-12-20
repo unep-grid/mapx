@@ -1530,11 +1530,6 @@
     "bn": "অবৈধ মান"
   },
   {
-    "id": "edit_table_modal_values_invalid",
-    "en": "{{amount}} invalid value(s) entered. Make sure to use the correct type.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
-    "bn": " {{amount}}অবৈধ মান(গুলি) প্রবেশ করানো হয়েছে৷ সঠিক টাইপ ব্যবহার নিশ্চিত করুন.\n শুধুমাত্র বৈধ কক্ষ সংরক্ষণ করা হবে. লাল রঙে হাইলাইট করা ঘরগুলি ম্যানুয়ালি সংশোধন করা উচিত নয়তো পরিবর্তনগুলি কার্যকর হবে না৷"
-  },
-  {
     "id": "edit_table_modal_values_invalid_ok",
     "en": "Ok",
     "bn": "ঠিক আছে"
@@ -1686,8 +1681,8 @@
   },
   {
     "id": "edit_table_modal_warning_text",
-    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
-    "bn": "<ul><li>এই টুলটি ব্যবহার করার ফলে ডেটা অপূরণীয়ভাবে পরিবর্তিত হতে পারে বা এমনকি মুছেও যেতে পারে, যেমন ডেস্কটপ স্প্রেডশীট সম্পাদকের সাথে।</li><li> আমরা ডেটা উত্সের জন্য ডেটা পুনরুদ্ধার পরিষেবা অফার করি না।</li><li> যতক্ষণ একটি সেশন রক্ষণাবেক্ষণ করা হয়, কোষের যেকোনো অপারেশন কীবোর্ড শর্টকাট বা ডেডিকেটেড বোতাম ব্যবহার করে পূর্বাবস্থায় ফেরানো/পুনরায় করা যেতে পারে।</li><li> 'কলাম সরান' শেষ নিশ্চিতকরণ প্যানেলের পরে এটিকে পূর্বাবস্থায় ফেরানোর কোনো সম্ভাবনা ছাড়াই কলাম এবং এর ডেটা মুছে ফেলবে।</li><li> কোনো পরিবর্তনের আগে, ডেটা উৎস ডাউনলোড করে বা স্প্রেডশীট এডিটরে ডেটা কপি করে পেস্ট করে ডেটার ব্যাকআপ নেওয়া সম্ভব।</li><li> বর্তমান প্ল্যাটফর্ম, এর বিকাশকারী বা প্রকল্প প্রশাসকরা সমস্ত দায়িত্ব অস্বীকার করে।<ul></ul></li></ul>"
+    "en": "<ul><li>Using this tool may pose a risk of permanently altering or deleting data, similar to desktop spreadsheet editors.</li><li>It is possible to undo or redo any changes made to cells during a session using keyboard shortcuts or dedicated buttons.</li><li>The &#39;Remove column&#39; action will permanently delete the column and its data, and cannot be undone after the final confirmation panel.</li><li>Invalid cells, indicated by a red color, will not be saved.</li><li>A backup system has not yet been implemented. To safeguard your data, you can use the download tool in the toolbox to export the entire layer or table as a precautionary measure.</li><li>There may be incremental backup at the database level, but not at the layer or table level.</li><li>The developers of the current platform and project administrators do not accept any responsibility for any potential losses or damages.</li></ul>",
+    "bn": "<ul><li>এই টুল ব্যবহার করে ডেস্কটপ স্প্রেডশীট এডিটরগুলির মতো স্থায়ীভাবে ডেটা পরিবর্তন বা মুছে ফেলার ঝুঁকি তৈরি করতে পারে।</li><li> কীবোর্ড শর্টকাট বা ডেডিকেটেড বোতাম ব্যবহার করে একটি সেশন চলাকালীন কক্ষে করা যেকোনো পরিবর্তন পূর্বাবস্থায় ফেরানো বা পুনরায় করা সম্ভব।</li><li> 'কলাম সরান' ক্রিয়াটি স্থায়ীভাবে কলাম এবং এর ডেটা মুছে ফেলবে এবং চূড়ান্ত নিশ্চিতকরণ প্যানেলের পরে পূর্বাবস্থায় ফেরানো যাবে না।</li><li> একটি লাল রঙ দ্বারা নির্দেশিত অবৈধ কক্ষগুলি সংরক্ষণ করা হবে না৷</li><li> একটি ব্যাকআপ সিস্টেম এখনও কার্যকর করা হয়নি. আপনার ডেটা সুরক্ষিত রাখতে, আপনি সতর্কতামূলক ব্যবস্থা হিসাবে সমগ্র স্তর বা টেবিল রপ্তানি করতে টুলবক্সে ডাউনলোড টুল ব্যবহার করতে পারেন।</li><li> ডাটাবেস স্তরে ক্রমবর্ধমান ব্যাকআপ থাকতে পারে, তবে স্তর বা টেবিল স্তরে নয়।</li><li> বর্তমান প্ল্যাটফর্মের ডেভেলপার এবং প্রকল্প প্রশাসকরা কোনো সম্ভাব্য ক্ষতি বা ক্ষতির জন্য কোনো দায় স্বীকার করেন না।</li></ul>"
   },
   {
     "id": "edit_table_modal_warning_ok_no_more",
@@ -6995,6 +6990,11 @@
     "bn": "কাঁচা তথ্য আমাদের সার্ভার থেকে পড়া হবে. যাইহোক, আমরা এটি কোন ভাবেই সংরক্ষণ করি না বা ব্যবহার করি না। সবকিছু সহজভাবে প্রতিফলিত হয়. অপব্যবহার প্রতিরোধ করার জন্য IP ঠিকানাগুলি মেমরিতে সংরক্ষণ করা হয়।"
   },
   {
+    "id": "nc_label_merge",
+    "en": "Details...",
+    "bn": "বিস্তারিত..."
+  },
+  {
     "id": "pk_panel_options",
     "en": "Display options",
     "bn": "প্রদর্শনের বিকল্পগুলি "
@@ -8160,6 +8160,21 @@
     "bn": "আপলোড করুন"
   },
   {
+    "id": "upl_title_layer_name",
+    "en": "Title of the source ({{language}})",
+    "bn": "উৎসের শিরোনাম ( {{language}} )"
+  },
+  {
+    "id": "upl_name_placeholder",
+    "en": "Source title...",
+    "bn": "উৎস শিরোনাম..."
+  },
+  {
+    "id": "upl_upload_btn",
+    "en": "Upload",
+    "bn": "আপলোড করুন"
+  },
+  {
     "id": "upl_title_not_allowed",
     "en": "Upload not allowed",
     "bn": "আপলোড অনুমোদিত নয়"
@@ -8183,6 +8198,46 @@
     "id": "upl_meta_title",
     "en": "Title ({{language}})",
     "bn": "শিরোনাম ( {{language}} )"
+  },
+  {
+    "id": "upl_file_upload_progress",
+    "en": "Uploading '{{filename}}'...",
+    "bn": "আপলোড করা হচ্ছে' {{filename}} '..."
+  },
+  {
+    "id": "upl_api_save_validation",
+    "en": "Geometry validation: This may take a while.",
+    "bn": "জ্যামিতি যাচাইকরণ: এটি কিছু সময় নিতে পারে।"
+  },
+  {
+    "id": "upl_api_save_validation_geom_count",
+    "en": "There are {{count}} invalid geometries.",
+    "bn": "সেখানে {{count}} অবৈধ জ্যামিতি"
+  },
+  {
+    "id": "upl_api_save_failed_title",
+    "en": "Upload of '{{filename}}' failed.",
+    "bn": "'এর আপলোড {{filename}} ' ব্যর্থ হয়েছে."
+  },
+  {
+    "id": "upl_api_save_failed",
+    "en": "Upload of <samp>{{filename}}</samp> failed. Source removed: <samp>{{sourceRemoved}}</samp>. View removed : {{viewRemoved}}. Message : <samp> {{error}}</samp> ",
+    "bn": "আপলোড<samp> {{filename}}</samp> ব্যর্থ হয়েছে. উত্স সরানো হয়েছে:<samp> {{sourceRemoved}}</samp> . সরানো হয়েছে দেখুন: {{viewRemoved}} . বার্তা:<samp> {{error}}</samp>"
+  },
+  {
+    "id": "upl_api_save_success_title",
+    "en": "Upload of '{{filename}}' done.",
+    "bn": "'এর আপলোড {{filename}} ' সম্পন্ন."
+  },
+  {
+    "id": "upl_api_save_success",
+    "en": "Upload of <samp>{{filename}}</samp> done. New source created: {{title}} – <samp>{{idSource}}</samp>. ",
+    "bn": "আপলোড<samp> {{filename}}</samp> সম্পন্ন. নতুন উৎস তৈরি করা হয়েছে: {{title}} -<samp> {{idSource}}</samp> ."
+  },
+  {
+    "id": "upl_api_import_db",
+    "en": "Importation in database",
+    "bn": "ডাটাবেসে আমদানি"
   },
   {
     "id": "wms_select_reviewed_service",

@@ -9,26 +9,32 @@ attr_null_value as (
     '{{nullValue}}'
    END as val
 ),
+attr_table_text AS (
+  SELECT
+  "{{idAttr}}"::TEXT as value
+  FROM
+  {{idSource}}
+),
 attr_table_raw as (
   SELECT
-  "{{idAttr}}" as value,
+  value,
   count(*) as count FROM
-  {{idSource}} s, attr_null_value n
+  attr_table_text s, attr_null_value n
   WHERE NOT
   (
-    s."{{idAttr}}" IS NULL OR
-    s."{{idAttr}}" = '' OR
-    s."{{idAttr}}" ~ '^\s+$' OR
+    s.value IS NULL OR
+    s.value = '' OR
+    s.value ~ '^\s+$' OR
     CASE WHEN n.val IS NULL 
       --- NOT false = true 
       THEN false
       -- convert to float the nullValue
       ELSE
-        s."{{idAttr}}" = n.val 
+        s.value = n.val 
     END
   )
   GROUP BY
-  "{{idAttr}}"
+  s.value
   ORDER BY count desc
 ),
 attr_table as (

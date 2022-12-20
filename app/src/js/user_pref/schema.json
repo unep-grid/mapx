@@ -11,6 +11,11 @@
       "type": "boolean",
       "default": true,
       "enum": [true, false]
+    },
+    "pref_show_edit_table_warning_2": {
+      "type": "boolean",
+      "default": true,
+      "enum": [true, false]
     }
   }
 }

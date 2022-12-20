@@ -1,8 +1,15 @@
-import { pgRead, pgWrite } from "#mapx/db";
+import { pgTest, pgRead, pgWrite } from "#mapx/db";
 import { settings } from "#root/settings";
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
-import { isArray, isSourceId, isNumeric, isProjectId } from "@fxi/mx_valid";
+import {
+  isEmpty,
+  isNotEmpty,
+  isArray,
+  isSourceId,
+  isNumeric,
+  isProjectId,
+} from "@fxi/mx_valid";
 import { isLayerValid, areLayersValid } from "./geom_validation.js";
 /**
  * crypto key
@@ -11,6 +18,90 @@ const { key } = settings.db.crypto;
 
 const gid = settings.validation_defaults.tables.layer_id_col;
 const geom = settings.validation_defaults.tables.layer_id_geom;
+
+/**
+ * Types, should matches "app/src/js/handsontable/types.js"
+ */
+const pgTypesData = [
+  "jsonb",
+  "boolean",
+  "bigint",
+  "double precision",
+  "integer",
+  "numeric",
+  "real",
+  "smallint",
+  "text",
+  "date",
+  "character varying",
+  "time with time zone",
+  "time without time zone",
+  "timestamp with time zone",
+  "timestamp without time zone",
+];
+
+/**
+ * Check if type is know
+ * @param {String} type Type name
+ * @return {Boolean} ok
+ */
+function isTypeValid(type) {
+  return pgTypesData.includes(type);
+}
+
+/**
+ * Check if type and value are valid
+ * @param {String} type Type name
+ * @return {Promise<Boolean>} ok
+ */
+async function sanitize(value, type) {
+  /**
+   * Avoid injection, validate type first
+   */
+  const tok = isTypeValid(type);
+  if (!tok) {
+    throw new Error("Type not registered: " + type);
+  }
+  const r = await pgTest.query(
+    `SELECT mx_try_cast($1,cast(NULL as ${type}))::text casted`,
+    [value]
+  );
+  const v = r.rows[0].casted;
+  return v;
+}
+
+async function sanitizeUpdate(update) {
+  update.value_sanitized = await sanitize(update.value_new, update.column_type);
+  return update;
+}
+
+/**
+ * Check if updates are valid
+ * Updates are formated as :
+ *
+ * {
+ *   row_id:<integer>,
+ *   column_name:<string>,
+ *   column_type:<string>,
+ *   value_new:<any>
+ * }
+ *
+ * @param {Array} updates Array of update  * @return {Boolean} ok
+ * @return {Array} Array of updates, with new update.value_sanitized
+ */
+async function sanitizeUpdates(updates) {
+  try {
+    const tasks = [];
+    for (const update of updates) {
+      tasks.push(sanitizeUpdate(update));
+    }
+    const out = await Promise.all(tasks);
+    return out;
+  } catch (err) {
+    console.error(err);
+    return updates;
+  }
+}
 
 /**
  * Test if a table exists
@@ -256,11 +347,11 @@ async function registerOrRemoveSource(
  * @return {Promise<Boolean>} Removed
  */
 async function removeSource(idSource) {
-  var sqlDelete = {
+  const sqlDelete = {
     text: `DELETE FROM mx_sources WHERE id = $1::text`,
     values: [idSource],
   };
-  var sqlDrop = {
+  const sqlDrop = {
     text: `DROP TABLE IF EXISTS ${idSource}`,
   };
   await pgWrite.query(sqlDrop);
@@ -269,6 +360,19 @@ async function removeSource(idSource) {
   return !sourceExists;
 }
 
+/**
+ * Remove view
+ * @param {String} idView Id  of the view to remove
+ * @return {Promise<Boolean>} Removed
+ */
+async function removeView(idView) {
+  const sqlDelete = {
+    text: `DELETE FROM mx_views WHERE id = $1::text`,
+    values: [idView],
+  };
+  await pgWrite.query(sqlDelete);
+  return true;
+}
 /**
  * Get layer columns names
  * @param {String} id of the layer
@@ -376,16 +480,35 @@ async function getLayerTitle(idLayer, language) {
 }
 
 /**
+ * Get layer/table column name used for styling in views
+ */
+async function getLayerViewsStyleColumns(idLayer) {
+  const sql = `
+  SELECT DISTINCT data#>>'{attribute,name}' column_name
+  FROM mx_views_latest 
+  WHERE data #>> '{source,layerInfo,name}' = $1`;
+  const res = await pgRead.query(sql, [idLayer]);
+  if (res.rowCount === 0) {
+    return [];
+  }
+  const names = res.rows.map((row) => row.column_name);
+  return names;
+}
+
+/**
  * Exports
  */
 export {
+  getLayerViewsStyleColumns,
   getColumnsNames,
   getColumnsTypesSimple,
   getSourceLastTimestamp,
   getLayerTitle,
   isLayerValid,
+  sanitizeUpdates,
   areLayersValid,
   removeSource,
+  removeView,
   tableHasValues,
   tableExists,
   columnExists,

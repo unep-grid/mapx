@@ -1530,11 +1530,6 @@
     "de": "Ungültige Werte"
   },
   {
-    "id": "edit_table_modal_values_invalid",
-    "en": "{{amount}} invalid value(s) entered. Make sure to use the correct type.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
-    "de": " {{amount}}ungültige(r) Wert(e) eingegeben. Stellen Sie sicher, dass Sie den richtigen Typ verwenden.\n Nur gültige Zellen werden gespeichert. Die rot hervorgehobenen Zellen sollten manuell korrigiert werden, da die Änderungen sonst nicht wirksam werden."
-  },
-  {
     "id": "edit_table_modal_values_invalid_ok",
     "en": "Ok",
     "de": "OK"
@@ -1686,8 +1681,8 @@
   },
   {
     "id": "edit_table_modal_warning_text",
-    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
-    "de": "<ul><li>Die Verwendung dieses Tools kann dazu führen, dass Daten irreparabel verändert oder sogar gelöscht werden, wie bei Desktop-Tabellenkalkulationseditoren.</li><li> Wir bieten keine Datenwiederherstellungsdienste für Datenquellen an.</li><li> Solange eine Sitzung aufrechterhalten wird, kann jeder Vorgang an den Zellen mithilfe von Tastaturkürzeln oder den dedizierten Schaltflächen rückgängig gemacht/wiederholt werden.</li><li> „Spalte entfernen“ löscht die Spalte und ihre Daten, ohne dass dies nach dem letzten Bestätigungsfeld rückgängig gemacht werden kann.</li><li> Vor jeder Änderung ist es möglich, eine Sicherungskopie der Daten zu erhalten, indem Sie die Datenquelle herunterladen oder die Daten kopieren und in einen Tabelleneditor einfügen.</li><li> Die aktuelle Plattform, ihr Entwickler oder die Projektadministratoren lehnen jegliche Verantwortung ab.<ul></ul></li></ul>"
+    "en": "<ul><li>Using this tool may pose a risk of permanently altering or deleting data, similar to desktop spreadsheet editors.</li><li>It is possible to undo or redo any changes made to cells during a session using keyboard shortcuts or dedicated buttons.</li><li>The &#39;Remove column&#39; action will permanently delete the column and its data, and cannot be undone after the final confirmation panel.</li><li>Invalid cells, indicated by a red color, will not be saved.</li><li>A backup system has not yet been implemented. To safeguard your data, you can use the download tool in the toolbox to export the entire layer or table as a precautionary measure.</li><li>There may be incremental backup at the database level, but not at the layer or table level.</li><li>The developers of the current platform and project administrators do not accept any responsibility for any potential losses or damages.</li></ul>",
+    "de": "<ul><li>Die Verwendung dieses Tools kann das Risiko bergen, Daten dauerhaft zu ändern oder zu löschen, ähnlich wie bei Desktop-Tabellenkalkulationsprogrammen.</li><li> Es ist möglich, alle während einer Sitzung an Zellen vorgenommenen Änderungen mithilfe von Tastenkombinationen oder speziellen Schaltflächen rückgängig zu machen oder wiederherzustellen.</li><li> Die Aktion „Spalte entfernen“ löscht die Spalte und ihre Daten dauerhaft und kann nach dem abschließenden Bestätigungsfenster nicht rückgängig gemacht werden.</li><li> Ungültige Zellen, gekennzeichnet durch eine rote Farbe, werden nicht gespeichert.</li><li> Ein Backup-System ist noch nicht implementiert. Um Ihre Daten zu schützen, können Sie mit dem Download-Tool in der Toolbox vorsorglich den gesamten Layer oder die Tabelle exportieren.</li><li> Es kann eine inkrementelle Sicherung auf Datenbankebene geben, jedoch nicht auf Schicht- oder Tabellenebene.</li><li> Die Entwickler der aktuellen Plattform und Projektadministratoren übernehmen keine Verantwortung für mögliche Verluste oder Schäden.</li></ul>"
   },
   {
     "id": "edit_table_modal_warning_ok_no_more",
@@ -6995,6 +6990,11 @@
     "de": "Die Rohdaten werden von unserem Server gelesen. Wir speichern oder verwenden sie jedoch in keiner Weise. Alles wird einfach reflektiert. IP-Adressen werden im Speicher gespeichert, um Missbrauch zu verhindern."
   },
   {
+    "id": "nc_label_merge",
+    "en": "Details...",
+    "de": "Einzelheiten..."
+  },
+  {
     "id": "pk_panel_options",
     "en": "Display options",
     "de": "Anzeigeoptionen "
@@ -8160,6 +8160,21 @@
     "de": "Hochladen"
   },
   {
+    "id": "upl_title_layer_name",
+    "en": "Title of the source ({{language}})",
+    "de": "Titel der Quelle ( {{language}} )"
+  },
+  {
+    "id": "upl_name_placeholder",
+    "en": "Source title...",
+    "de": "Titel der Quelle..."
+  },
+  {
+    "id": "upl_upload_btn",
+    "en": "Upload",
+    "de": "Hochladen"
+  },
+  {
     "id": "upl_title_not_allowed",
     "en": "Upload not allowed",
     "de": "Hochladen nicht erlaubt"
@@ -8183,6 +8198,46 @@
     "id": "upl_meta_title",
     "en": "Title ({{language}})",
     "de": "Titel ( {{language}} )"
+  },
+  {
+    "id": "upl_file_upload_progress",
+    "en": "Uploading '{{filename}}'...",
+    "de": "Hochladen ' {{filename}} '..."
+  },
+  {
+    "id": "upl_api_save_validation",
+    "en": "Geometry validation: This may take a while.",
+    "de": "Geometrievalidierung: Dies kann eine Weile dauern."
+  },
+  {
+    "id": "upl_api_save_validation_geom_count",
+    "en": "There are {{count}} invalid geometries.",
+    "de": "Es gibt {{count}} ungültige Geometrien."
+  },
+  {
+    "id": "upl_api_save_failed_title",
+    "en": "Upload of '{{filename}}' failed.",
+    "de": "Hochladen von ' {{filename}} ' gescheitert."
+  },
+  {
+    "id": "upl_api_save_failed",
+    "en": "Upload of <samp>{{filename}}</samp> failed. Source removed: <samp>{{sourceRemoved}}</samp>. View removed : {{viewRemoved}}. Message : <samp> {{error}}</samp> ",
+    "de": "Hochladen von<samp> {{filename}}</samp> gescheitert. Quelle entfernt:<samp> {{sourceRemoved}}</samp> . Ansicht entfernt : {{viewRemoved}} . Nachricht :<samp> {{error}}</samp>"
+  },
+  {
+    "id": "upl_api_save_success_title",
+    "en": "Upload of '{{filename}}' done.",
+    "de": "Hochladen von ' {{filename}} ' erledigt."
+  },
+  {
+    "id": "upl_api_save_success",
+    "en": "Upload of <samp>{{filename}}</samp> done. New source created: {{title}} – <samp>{{idSource}}</samp>. ",
+    "de": "Hochladen von<samp> {{filename}}</samp> erledigt. Neue Quelle erstellt: {{title}} –<samp> {{idSource}}</samp> ."
+  },
+  {
+    "id": "upl_api_import_db",
+    "en": "Importation in database",
+    "de": "Import in Datenbank"
   },
   {
     "id": "wms_select_reviewed_service",

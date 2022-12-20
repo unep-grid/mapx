@@ -1,10 +1,12 @@
 import {
   tableExists,
   columnExists,
-  getTableDimension,
   getColumnsTypesSimple,
   getLayerTitle,
+  getLayerViewsStyleColumns,
+  getTableDimension,
   isLayerValid,
+  sanitizeUpdates,
 } from "#mapx/db-utils";
 import { getSourceAttributeTable, getSourceEditors } from "#mapx/source";
 import { randomString } from "#mapx/helpers";
@@ -18,15 +20,16 @@ import {
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { pgWrite, redisSetJSON, redisGetJSON } from "#mapx/db";
-import { getUserEmail } from "#mapx/authentication";
+const regDatePg = new RegExp("^date|^timestamp");
 
 /**
- * Triggered by '/client/source/edit/table' in ..api/modules/io/mw_handlers.js
+ * Triggered by '/client/source/edit/table' in ..api/modules/io/mw_routes.js
  */
-export async function ioEditSource(socket, options) {
+export async function ioEditSource(socket, options, callback) {
   try {
     const et = new EditTableSession(socket, options);
     await et.init();
+    callback(true);
   } catch (e) {
     await socket.notifyInfoError({
       message: e.message,
@@ -37,7 +40,7 @@ export async function ioEditSource(socket, options) {
 const def = {
   start_percent: 0.001, //initial progress value ( 0 remove it )
   log_perf: false,
-  max_rows: 1e6,
+  max_rows: 1e5,
   max_columns: 1000, // should match client
   //threshold_chunk: 1e3,
   threshold_chunk: 20,
@@ -45,22 +48,48 @@ const def = {
   col_geom: "geom",
 };
 
+const routes = {
+  /**
+   * from here server
+   */
+  server_joined: "/server/source/edit/table/joined",
+  server_error: "/server/source/edit/table/error",
+  server_new_member: "/server/source/edit/table/new_member",
+  server_member_exit: "/server/source/edit/table/member_exit",
+  server_table_data: "/server/source/edit/table/data",
+  server_dispatch: "/server/source/edit/table/dispatch",
+  server_progress: "/server/source/edit/table/progress",
+  //server_geom_validate_result: "/server/source/edit/table/geom/result",
+  /**
+   * from client
+   */
+  client_edit_start: "/client/source/edit/table", //⚠️  duplicated in ..api/modules/io/mw_routes.js
+  client_edit_updates: "/client/source/edit/table/update",
+  client_exit: "/client/source/edit/table/exit",
+  client_geom_validate: "/client/source/edit/table/geom/validate",
+  client_value_validate: "/client/source/edit/table/value/validate",
+  client_changes_sanitize: "/client/source/edit/table/changes/sanitize",
+};
+
 class EditTableSession {
   constructor(socket, config) {
     const et = this;
+    const session = socket.session;
     et._socket = socket;
     et._io = et._socket.server;
     et._config = config;
     et._perf = {};
     et._tables = [];
-    et._is_authenticated = socket._mx_user_authenticated || false;
+    et._is_authenticated = session.user_authenticated || false;
     et._is_busy = false;
-    et._id_user = socket._id_user;
-    et._id_project = socket._id_project;
-    et._user_roles = socket._mx_user_roles || {};
+    et._id_user = session.user_id;
+    et._id_project = session.project_id;
+    et._user_roles = session.user_roles;
     et.onUpdate = et.onUpdate.bind(et);
     et.onExit = et.onExit.bind(et);
     et.onValidate = et.onValidate.bind(et);
+    //et.onValidateValue = et.onValidateValue.bind(et);
+    et.onSanitize = et.onSanitize.bind(et);
     et.progress = et.progress.bind(et);
     et.progressAll = et.progressAll.bind(et);
   }
@@ -169,10 +198,10 @@ class EditTableSession {
     /**
      * Listen for events
      */
-    et._socket.on("/client/source/edit/table/update", et.onUpdate);
-    et._socket.on("/client/source/edit/table/exit", et.onExit);
-    et._socket.on("/client/source/edit/table/geom/validate", et.onValidate);
-
+    et._socket.on(routes.client_exit, et.onExit);
+    et._socket.on(routes.client_edit_updates, et.onUpdate);
+    et._socket.on(routes.client_geom_validate, et.onValidate);
+    et._socket.on(routes.client_changes_sanitize, et.onSanitize);
     /*
      * Get list of current members
      */
@@ -181,12 +210,12 @@ class EditTableSession {
     /**
      * Signal join
      */
-    et.emit("/server/source/edit/table/joined", {
+    et.emit(routes.server_joined, {
       id_room: et._id_room,
       id_session: et._id_session,
       members: members,
     });
-    et.emitRoom("/server/source/edit/table/new_member", {
+    et.emitRoom(routes.server_new_member, {
       id_socket: et._socket.id,
       roles: et._user_roles,
       members: members,
@@ -202,7 +231,7 @@ class EditTableSession {
 
   error(txt, err) {
     const et = this;
-    et.emit("/server/source/edit/table/error", {
+    et.emit(routes.server_error, {
       message: txt,
       id_room: et._id_room,
     });
@@ -215,8 +244,8 @@ class EditTableSession {
     const members = [];
     for (const s of sockets) {
       const member = {
-        id: s._id_user,
-        email: await getUserEmail(s._id_user),
+        id: s.session.user_id,
+        email: s.session.user_email,
       };
       members.push(member);
     }
@@ -232,31 +261,33 @@ class EditTableSession {
     et._socket.leave(et._id_room);
     const members = await et.getMembers();
 
-    et.emitRoom("/server/source/edit/table/member_exit", {
+    et.emitRoom(routes.server_member_exit, {
       id_socket: et._socket.id,
       roles: et._user_roles,
       members: members,
     });
 
-    et._socket.off("/client/source/edit/table/update", et.onUpdate);
-    et._socket.off("/client/source/edit/table/exit", et.onExit);
-    et._socket.off("/client/source/edit/table/geom/validate", et.onValidate);
+    et._socket.off(routes.client_exit, et.onExit);
+    et._socket.off(routes.client_edit_updates, et.onUpdate);
+    et._socket.off(routes.client_geom_validate, et.onValidate);
+    et._socket.off(routes.client_changes_sanitize, et.onSanitize);
   }
 
   dispatch(message) {
     const et = this;
-    et.emitRoom("/server/source/edit/table/dispatch", message);
+    et.emitRoom(routes.server_dispatch, message);
   }
 
-  onExit(message) {
+  onExit(message, callback) {
     const et = this;
     if (message.id_session !== et._id_session) {
       return;
     }
     et.destroy();
+    callback(true);
   }
 
-  async onValidate(message) {
+  async onValidate(message, callback) {
     const et = this;
     try {
       if (et.busy) {
@@ -272,13 +303,25 @@ class EditTableSession {
         validate: message.validate,
         onProgress: et.progressAll,
       });
-      et.emitAll("/server/source/edit/table/geom/result", out);
+      et.emitAll(routes.server_geom_validate_result, out);
     } catch (e) {
       console.error(e);
       et.error("Validation failed. Check logs", e);
     } finally {
       et.progressAll({ percent: 0 });
       et.setBusy(false);
+      callback(true);
+    }
+  }
+
+  async onSanitize(message, callback) {
+    const et = this;
+    try {
+      const updates = await sanitizeUpdates(message.updates);
+      callback(updates);
+    } catch (e) {
+      et.error("Sanitize failed. Check logs", e);
+      callback(false);
     }
   }
 
@@ -289,17 +332,27 @@ class EditTableSession {
       messageProgress = { percent: def.start_percent };
     }
     if (all) {
-      et.emitAll("/server/source/edit/table/progress", messageProgress);
+      et.emitAll(routes.server_progress, messageProgress);
     } else {
-      et.emit("/server/source/edit/table/progress", messageProgress);
+      et.emit(routes.server_progress, messageProgress);
     }
   }
+
   progressAll(messageProgress) {
     const et = this;
     return et.progress(messageProgress, true);
   }
 
-  onUpdate(message) {
+  onProgress(message, callback) {
+    const et = this;
+    if (message.id_table !== et._id_table) {
+      return;
+    }
+    et.progressAll(message);
+    callback(true);
+  }
+
+  onUpdate(message, callback) {
     const et = this;
     if (message.id_table !== et._id_table) {
       return;
@@ -311,10 +364,14 @@ class EditTableSession {
     if (message.update_state) {
       et.updateState(message);
     }
+    callback(true);
   }
 
   updateState(message) {
     const et = this;
+    if (message.id_table !== et._id_table) {
+      return;
+    }
     const updates = message?.updates;
     if (isEmpty(updates)) {
       return;
@@ -366,14 +423,18 @@ class EditTableSession {
       const pgRes = await getSourceAttributeTable({
         id: et._id_table,
         fullTable: true,
+        dateAsString: true,
+        jsonAsString: true,
       });
       const data = pgRes.rows;
       const nRow = pgRes.rowCount;
       const attributes = pgRes.fields.map((f) => f.name);
       const types = await getColumnsTypesSimple(et._id_table, attributes);
       const title = await getLayerTitle(et._id_table);
+      const colStyle = await getLayerViewsStyleColumns(et._id_table);
       const locked = await et.getState("lock_table");
       const table = {
+        colStyle,
         hasGeom,
         validation,
         types,
@@ -391,8 +452,8 @@ class EditTableSession {
         table.start = i === 0;
         table.end = i === iL - 1;
         table.data = data.splice(0, def.size_chunk);
-        et.progress({ percent: i / iL });
-        et.emit("/server/source/edit/table/data", table);
+        et.progress({ percent: table.part / table.nParts });
+        et.emit(routes.server_table_data, table);
       }
 
       et.perfEnd("sendTable");
@@ -510,14 +571,29 @@ async function writePostgres(updates) {
       switch (update.type) {
         case "update_cell":
           {
-            const { gid, value_new } = update;
+            const { gid, column_type } = update;
+            let { value_new } = update;
             const valid = isNumeric(gid);
+            const isDate = regDatePg.test(column_type);
+
             if (valid && colExists) {
               const qSql = parseTemplate(templates.updateTableCellByGid, {
                 id_table,
                 gid,
                 column_name,
               });
+
+              if (isDate) {
+                /**
+                 * Date time conversion
+                 * - if its empty -> null
+                 * - if it's a date -> use a proper date instance
+                 * - if target type require a timestamp and value dont have one
+                 *   the timezone of te server will be used ⚠️
+                 */
+                value_new = isEmpty(value_new) ? null : new Date(value_new);
+              }
+
               const res = await client.query(qSql, [value_new]);
               if (res.rowCount != 1) {
                 throw new Error("Error during update_cell : row affected =! 1");

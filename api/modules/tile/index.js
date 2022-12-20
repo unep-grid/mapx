@@ -54,13 +54,13 @@ export async function handlerTile(req, res) {
 
     data.geom = "geom";
     /*
-    * TODO: to be solved 
-    * buffer = PostGIS as_mvtgeom buffer + buffer for cropping tile
-    * 0 : all tiles rendered, but tiles boundaries visibles
-    * > 0 : inconsistant behaviour : some tiles missing 
-    * 256 : no tiles boundaries visible. Good, but tiles missing
-    */ 
-    data.buffer = 0; 
+     * TODO: to be solved
+     * buffer = PostGIS as_mvtgeom buffer + buffer for cropping tile
+     * 0 : all tiles rendered, but tiles boundaries visibles
+     * > 0 : inconsistant behaviour : some tiles missing
+     * 256 : no tiles boundaries visible. Good, but tiles missing
+     */
+    data.buffer = 0;
     data.useMask = isSourceId(data?.mask);
     data.usePostgisTiles = req.query.usePostgisTiles && !data.useMask;
     data.useCache = !req.query.skipCache;
@@ -141,6 +141,11 @@ async function getTilePg(res, hash, data) {
       if (useAsMvt) {
         buffer = out.rows[0].mvt;
       } else {
+        /**
+         * TODO: create a featureCollection inside postgres directly
+         * - convert null -> ''
+         * - convert date -> number (see rowsToGeoJSON)
+         */
         const geojson = rowsToGeoJSON(out.rows);
         buffer = geojsonToPbf(geojson, data);
       }
@@ -179,14 +184,25 @@ function sendTileError(res, err) {
   res.status(500).send(err.message);
 }
 
+/**
+ * Create features from rows
+ *
+ * TODO: this could be done in postgres
+ * @param {Array} Array of rows with at least one 'geom' key
+ * @return {Object} Geojson object
+ *
+ */
 function rowsToGeoJSON(rows) {
   const features = rows.map((r) => {
     var properties = {};
     for (var attribute in r) {
       if (attribute !== "geom") {
-        if (r[attribute] instanceof Date) {
-          r[attribute] *= 1;
-        }
+        /**
+         * - Date serialized as ISO string
+         * - null should be converted to empty string, event for number:
+         *   mapbox vector style issue...
+         * - update the prop
+         */
         if (r[attribute] === null) {
           r[attribute] = "";
         }

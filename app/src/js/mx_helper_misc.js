@@ -5,6 +5,7 @@ import {
   isEmpty,
   isPromise,
   isString,
+  isObject,
 } from "./is_test_mapx/index.js";
 import copy from "fast-copy";
 import { settings } from "./settings";
@@ -84,7 +85,7 @@ export function path(obj, path, def) {
     path = path.split(".");
   }
   for (let i = 0, iL = path.length; i < iL; i++) {
-    if (!obj || !h.isObject(obj)) {
+    if (!obj || !isObject(obj)) {
       return out(def);
     }
     obj = obj[path[i]];
@@ -439,10 +440,12 @@ export function domToText(dom) {
  *
  */
 export function mergeDeep(target, source) {
-  let output = Object.assign({}, target);
-  if (mx.helpers.isObject(target) && mx.helpers.isObject(source)) {
-    Object.keys(source).forEach((key) => {
-      if (mx.helpers.isObject(source[key])) {
+  const output = Object.assign({}, target);
+  const valid = isObject(source) && isObject(target);
+
+  if (valid) {
+    for (const key in source) {
+      if (isObject(source[key])) {
         if (!(key in target)) {
           Object.assign(output, { [key]: source[key] });
         } else {
@@ -451,7 +454,7 @@ export function mergeDeep(target, source) {
       } else {
         Object.assign(output, { [key]: source[key] });
       }
-    });
+    }
   }
   return output;
 }

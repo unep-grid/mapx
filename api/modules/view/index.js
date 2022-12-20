@@ -1,3 +1,4 @@
+import { ioAddViewVt } from "./new.js";
 import { mwGet, mwGetMetadata, getViewMetadata } from "./getView.js";
 import { mwGetListPublic, getViewsPublic } from "./getViewsPublic.js";
 import { getViewsGeoserver } from "./getViewsGeoserver.js";
@@ -8,8 +9,8 @@ import {
   getProjectViewsStates,
 } from "./getViewsByProject.js";
 
-
 export {
+  ioAddViewVt,
   /**
    * middleware
    */

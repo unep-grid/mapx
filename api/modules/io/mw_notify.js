@@ -81,47 +81,52 @@ function mwNotify(_, res, next) {
   res.notifyBrowser = (opt) => {
     opt.type = "browser";
     opt.level = "message";
+    console.log("NOTIFY", opt);
     return res.notify(opt);
   };
+
+  /*
+   * Notification for type info
+   */
+  res.notifyInfo = (opt) => {
+    opt.type = "info";
+    return res.notify(opt);
+  };
+
   /**
    * Notification info with level 'verbose'
    */
   res.notifyInfoVerbose = (opt) => {
-    opt.type = "info";
     opt.level = "verbose";
-    return res.notify(opt);
+    return res.notifyInfo(opt);
   };
   /**
    * Notification info with level 'message'
    */
   res.notifyInfoMessage = (opt) => {
-    opt.type = "info";
     opt.level = "message";
-    return res.notify(opt);
+    return res.notifyInfo(opt);
   };
   /**
    * Notification info with level 'warning'
    */
   res.notifyInfoWarning = (opt) => {
-    opt.type = "info";
     opt.level = "warning";
-    return res.notify(opt);
+    return res.notifyInfo(opt);
   };
   /**
    * Notification info with level 'message'
    */
   res.notifyInfoSuccess = (opt) => {
-    opt.type = "info";
     opt.level = "success";
-    return res.notify(opt);
+    return res.notifyInfo(opt);
   };
   /**
    * Notification info with level 'error'
    */
   res.notifyInfoError = (opt) => {
-    opt.type = "info";
     opt.level = "error";
-    return res.notify(opt);
+    return res.notifyInfo(opt);
   };
 
   next();

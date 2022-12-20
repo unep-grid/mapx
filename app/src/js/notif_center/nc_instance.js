@@ -1,7 +1,6 @@
 import { NotifCenter } from "./../notif_center";
 export { NotifCenterMapx };
 import { settings } from "./../settings";
-import { theme } from "./../init_theme";
 import { bindAll } from "../bind_class_methods";
 
 /**
@@ -16,25 +15,15 @@ class NotifCenterMapx extends NotifCenter {
     super({
       config: {
         id: () => settings.user.id,
-        on: {
-          add: (nc) => {
-            theme.on("mode_changed", (opt) => {
-              nc.setMode(opt);
-            });
-          },
-          remove: (nc) => {
-            theme.off("mode_changed", (opt) => {
-              nc.setMode(opt);
-            });
-          },
-        },
-      },
-      ui: {
-        mode: theme.mode(),
       },
       panel: {
         id: "notif_center",
         elContainer: document.body,
+        button_lang_key: "nc_button",
+        button_classes: ["fa", "fa-bell"],
+        tooltip_position: "bottom-left",
+        position: "bottom-left",
+        container_classes : ['button-panel--pinned-always'],
         container_style: {
           width: "470px", // same as MainPanel
           height: "40%",

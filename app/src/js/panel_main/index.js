@@ -1,9 +1,9 @@
-import {ButtonPanel} from './../button_panel';
-import {el} from './../el/src/index.js';
-import {bindAll} from './../bind_class_methods/index.js';
-import './less/mx_panel.less';
-import {EventSimple} from './../event_simple';
-import {modalChangelog} from './../changelog';
+import { ButtonPanel } from "./../button_panel";
+import { el } from "./../el/src/index.js";
+import { bindAll } from "./../bind_class_methods/index.js";
+import "./less/mx_panel.less";
+import { EventSimple } from "./../event_simple";
+import { modalChangelog } from "./../changelog";
 
 /**
  * This is a partial implementation of the main MapX panel
@@ -15,22 +15,22 @@ import {modalChangelog} from './../changelog';
  */
 const settings = {
   mapx: {
-    version: ''
+    version: "",
   },
   panel: {
     elContainer: document.body,
-    position: 'top-left',
-    title_text: 'Hello',
-    button_text: 'click me',
-    button_classes: ['fa', 'fa-list-ul'],
+    position: "top-left",
+    title_text: "Hello",
+    button_text: "click me",
+    button_classes: ["fa", "fa-list-ul"],
     container_style: {
-      width: '480px',
-      maxHeight: '90%',
-      maxWidth: '90%',
-      minWidth: '200px',
-      minHeight: '80%'
-    }
-  }
+      width: "480px",
+      maxHeight: "90%",
+      maxWidth: "90%",
+      minWidth: "200px",
+      minHeight: "80%",
+    },
+  },
 };
 
 class MainPanel extends EventSimple {
@@ -47,24 +47,24 @@ class MainPanel extends EventSimple {
 
   init() {
     const mp = this;
-    if(mp._init){
+    if (mp._init) {
       return;
     }
     mp._init = true;
 
     const hasShiny = !!window.Shiny;
     const htmlImport = [
-      require('./html/headers.html'),
-      require('./html/tabs.html'),
-      require('./html/tools.html'),
-      require('./html/views.html'),
-      require('./html/search.html')
-    ].join('');
+      require("./html/headers.html"),
+      require("./html/tabs.html"),
+      require("./html/tools.html"),
+      require("./html/views.html"),
+      require("./html/search.html"),
+    ].join("");
 
     mp.elContent = el(
-      'div',
+      "div",
       {
-        class: ['mx-panel']
+        class: ["mx-panel"],
       },
       htmlImport
     );
@@ -75,14 +75,14 @@ class MainPanel extends EventSimple {
       Shiny.bindAll(mp.elContent);
     }
     if (mp.opt.mapx.version) {
-      const elVersion = mp.elContent.querySelector('.mx-version');
+      const elVersion = mp.elContent.querySelector(".mx-version");
       if (elVersion) {
         elVersion.innerText = mp.opt.mapx.version;
-        elVersion.addEventListener('click',modalChangelog);
+        elVersion.addEventListener("click", modalChangelog);
       }
     }
-    mp.elTabs = mp.elContent.querySelector('.mx-tab--tabs');
-    mp.elTabs.addEventListener('click', mp.handleTabClick);
+    mp.elTabs = mp.elContent.querySelector(".mx-tab--tabs");
+    mp.elTabs.addEventListener("click", mp.handleTabClick);
   }
   handleTabClick(e) {
     const mp = this;
@@ -94,22 +94,22 @@ class MainPanel extends EventSimple {
   }
   tabActivate(id) {
     const mp = this;
-    const elPanels = mp.elContent.querySelectorAll('.mx-tab--panel');
-    const elTabs = mp.elContent.querySelectorAll('.mx-tab--tab');
+    const elPanels = mp.elContent.querySelectorAll(".mx-tab--panel");
+    const elTabs = mp.elContent.querySelectorAll(".mx-tab--tab");
     const elPanel = mp.elContent.querySelector(`[data-panel=${id}]`);
     const elTab = mp.elContent.querySelector(`[data-tab=${id}]`);
 
     if (elTab) {
-      const isActive = elTab.classList.contains('active');
+      const isActive = elTab.classList.contains("active");
       if (isActive) {
         return;
       }
-      elPanels.forEach((el) => el.classList.remove('active'));
-      elTabs.forEach((el) => el.classList.remove('active'));
-      elTab.classList.add('active');
-      elPanel.classList.add('active');
-      mp.fire('tab_change', id);
+      elPanels.forEach((el) => el.classList.remove("active"));
+      elTabs.forEach((el) => el.classList.remove("active"));
+      elTab.classList.add("active");
+      elPanel.classList.add("active");
+      mp.fire("tab_change", id);
     }
   }
 }
-export {MainPanel};
+export { MainPanel };

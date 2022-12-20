@@ -39,7 +39,6 @@ function mwEmit(_, res, next) {
 function emitHttp(res, msg) {
   return new Promise((resolve) => {
     try {
-      console.log("emit http", msg);
       sendJSON(res, msg, {
         toRes: true,
         end: false,
@@ -56,7 +55,6 @@ function emitHttp(res, msg) {
 
 async function emitSocket(socket, type, msg) {
   try {
-    console.log("emit ws", type, msg);
     socket.emit(type, msg);
     // async delay to match http version...
     await asyncDelay(1);

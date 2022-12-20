@@ -198,14 +198,24 @@ mapx.once("ready", async () => {
         name: "Editor : handle invalid values",
         test: async (res) => {
           const cellsError = [];
-          const cellsGood = [];
-
+          const cellsValid = [];
           const enabled = await mapx.ask("table_editor_exec", {
             id_table: res._id_table,
             method: "setAutoSave",
             value: false,
           });
+
           if (enabled) {
+            return false;
+          }
+
+          const column_id = await mapx.ask("table_editor_exec", {
+            id_table: res._id_table,
+            method: "getColumnId",
+            value: res._column_add,
+          });
+
+          if (t.valid.isEmpty(column_id)) {
             return false;
           }
 
@@ -217,52 +227,37 @@ mapx.once("ready", async () => {
           const nCells = dim.rows > 100 ? 100 : dim.rows;
 
           for (let i = 0; i < nCells; i++) {
-            cellsError.push([i, res._column_add, "bad_" + i]);
-            cellsGood.push([i, res._column_add, i]);
+            cellsError.push([i, column_id, "bad_" + i]);
+            cellsValid.push([i, column_id, i]);
           }
 
-          const res_batch_error_ok = await mapx.ask("table_editor_exec", {
+          const sanStatErrors = await mapx.ask("table_editor_exec", {
             id_table: res._id_table,
-            method: "handlerCellsBatchProcess",
-            value: cellsError,
+            method: "setCellsWaitSanitize",
+            value: {
+              cells: cellsError,
+              source: "testing",
+            },
           });
 
-          if (!res_batch_error_ok) {
+          if (sanStatErrors.nError !== nCells) {
             return false;
           }
 
-          const res_count_invalid = await mapx.ask("table_editor_exec", {
+          const sanStatValid = await mapx.ask("table_editor_exec", {
             id_table: res._id_table,
-            method: "countUpdateInvalid",
-            value: null,
+            method: "setCellsWaitSanitize",
+            value: {
+              cells: cellsValid,
+              source: "testing",
+            },
           });
 
-          if(res_count_invalid !== cellsError.length){
+          if (sanStatValid.nValid !== nCells) {
             return false;
           }
-          
-          const res_batch_good_ok = await mapx.ask("table_editor_exec", {
-            id_table: res._id_table,
-            method: "handlerCellsBatchProcess",
-            value: cellsGood,
-          });
-    
 
-          if(!res_batch_good_ok){
-             return false;
-          }
-
-          const res_count_valid = await mapx.ask("table_editor_exec", {
-            id_table: res._id_table,
-            method: "countUpdateValid",
-            value: null,
-          });
-
-          if(res_count_valid != cellsGood.length){
-            return false; 
-          }
-
-          return true ;
+          return true;
         },
       },
       {

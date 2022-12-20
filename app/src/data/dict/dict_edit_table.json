@@ -130,19 +130,6 @@
     "de": ""
   },
   {
-    "id": "edit_table_modal_values_invalid",
-    "en": "{{amount}} invalid value(s) entered. Make sure to use the correct type.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
     "id": "edit_table_modal_values_invalid_ok",
     "en": "Ok",
     "fr": "",
@@ -536,7 +523,7 @@
   },
   {
     "id": "edit_table_modal_warning_text",
-    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
+    "en": "<ul><li>Using this tool may pose a risk of permanently altering or deleting data, similar to desktop spreadsheet editors.</li><li>It is possible to undo or redo any changes made to cells during a session using keyboard shortcuts or dedicated buttons.</li><li>The &#39;Remove column&#39; action will permanently delete the column and its data, and cannot be undone after the final confirmation panel.</li><li>Invalid cells, indicated by a red color, will not be saved.</li><li>A backup system has not yet been implemented. To safeguard your data, you can use the download tool in the toolbox to export the entire layer or table as a precautionary measure.</li><li>There may be incremental backup at the database level, but not at the layer or table level.</li><li>The developers of the current platform and project administrators do not accept any responsibility for any potential losses or damages.</li></ul>",
     "fr": "",
     "es": "",
     "ru": "",

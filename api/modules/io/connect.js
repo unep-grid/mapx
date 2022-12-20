@@ -7,8 +7,10 @@ export { ioConnect };
  * @return {Promise} done
  */
 async function ioConnect(socket) {
+  const session = socket?.session;
+
   socket.emit("authentication", {
-    authenticated: socket._mx_user_authenticated,
-    roles: socket._mx_user_roles,
+    authenticated: session?.user_authenticated,
+    roles: session?.user_roles,
   });
 }

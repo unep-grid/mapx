@@ -1,6 +1,11 @@
 import { WsHandler } from "./../ws_handler";
 import { getViewMapboxStyle, mapboxToSld } from "./../style_vt/index.js";
-import { getLoginInfo, getViewRemote } from "./../map_helpers/index.js";
+import {
+  getLoginInfo,
+  getViewRemote,
+  triggerUpdateSourcesList,
+} from "./../map_helpers/index.js";
+import { viewsListAddSingle } from "./../mx_helper_map_view_ui.js";
 import { isNotEmpty } from "../is_test/index.js";
 import { getApiUrl, getApiRoute } from "./../api_routes";
 import { bindAll } from "../bind_class_methods";
@@ -53,7 +58,12 @@ function getHandlers() {
         case "job_echo":
           job_test_echo(job, result);
           break;
-
+        case "view_add":
+          await job_add_view(job, result);
+          break;
+        case "source_added":
+          triggerUpdateSourcesList();
+          break;
         case "job_sum":
           job_test_sum(job, result);
           break;
@@ -102,12 +112,12 @@ function getTests() {
 }
 
 /*
- * Authentication result 
+ * Authentication result
  * -> For now, used for dev only.
  * -> Will be usefull for set roles in settings
- * @param  {Object} auth  Authentication object 
- * @param  {Boolean} auth.authenticated Authenticated 
- * @param  {Object} auth.roles Roles 
+ * @param  {Object} auth  Authentication object
+ * @param  {Boolean} auth.authenticated Authenticated
+ * @param  {Object} auth.roles Roles
  */
 function handleAuthentication() {
   if (isProd()) {
@@ -136,6 +146,18 @@ function job_test_sum(job, result) {
   /* data is an array of number, we want the sum */
   const arrayNum = job?.input?.arrayNum || [];
   result.output.sum = arrayNum.reduce((a, c) => a + c, 0);
+  return result;
+}
+
+/**
+ * Inject view from server
+ */
+async function job_add_view(job, result) {
+  try {
+    await viewsListAddSingle(job.input.view);
+  } catch (e) {
+    result.error = `Error processing add view ${job.input?.view?.id}. ${e.message}`;
+  }
   return result;
 }
 

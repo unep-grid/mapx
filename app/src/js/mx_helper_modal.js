@@ -177,6 +177,15 @@ export function modal(o) {
    */
   document.body.appendChild(elModal);
 
+  /**
+   * Add focus
+   */
+  const elFirstButton = elButtons.firstElementChild;
+
+  if (elFirstButton) {
+    elFirstButton.focus();
+  }
+
   /*
    * Initial pinned status
    */
@@ -437,9 +446,10 @@ export function modalDialog(opt) {
   opt = Object.assign({}, def, opt);
   return new Promise((resolve) => {
     const elBtnClose = el(
-      "div",
+      "button",
       {
         class: "btn btn-default",
+        type: "button",
         on: {
           click: (e) => {
             e.stopPropagation();
@@ -489,9 +499,10 @@ export function modalConfirm(opt) {
     const elContent = el("div", opt.content);
 
     const elBtnCancel = el(
-      "div",
+      "button",
       {
         class: "btn btn-default",
+        type: "button",
         on: {
           click: (e) => {
             e.stopPropagation();
@@ -505,9 +516,10 @@ export function modalConfirm(opt) {
     );
 
     const elBtnConfirm = el(
-      "div",
+      "button",
       {
         class: "btn btn-default",
+        type: "button",
         on: {
           click: (e) => {
             e.stopPropagation();
@@ -621,9 +633,10 @@ export function modalPrompt(opt) {
     });
     const elContent = el("div", [elInputGroup, elMessage]);
     const elBtnCancel = el(
-      "div",
+      "button",
       {
         class: "btn btn-default",
+        type: "button",
         on: {
           click: (e) => {
             e.stopPropagation();
@@ -640,9 +653,10 @@ export function modalPrompt(opt) {
     );
 
     const elBtnConfirm = el(
-      "div",
+      "button",
       {
         class: "btn btn-default",
+        type: "button",
         on: {
           click: (e) => {
             e.stopImmediatePropagation();
@@ -657,7 +671,6 @@ export function modalPrompt(opt) {
             const value = isCheckbox
               ? opt.inputOptions.checkboxValues[elInput.checked]
               : elInput.value;
-
 
             resolve(value);
             elModal.close();

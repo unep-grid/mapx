@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { isSourceId, isViewId } from "@fxi/mx_valid";
+import { isJson, isNotEmpty, isSourceId, isViewId } from "@fxi/mx_valid";
 import { redisGet, redisSet, pgRead, pgReadLong } from "#mapx/db";
 import { getParamsValidator } from "#mapx/route_validation";
 import { parseTemplate, sendJSON, sendError } from "#mapx/helpers";
@@ -11,6 +11,14 @@ import {
   getSourceLastTimestamp,
 } from "#mapx/db-utils";
 
+const typesContinuous = [
+  "double precision",
+  "integer",
+  "numeric",
+  "real",
+  "smallint",
+];
+
 const validateParamsHandler = getParamsValidator({
   expected: [
     "idView",
@@ -18,7 +26,6 @@ const validateParamsHandler = getParamsValidator({
     "idSource",
     "idAttr",
     "useCache",
-    "binsCompute",
     "binsMethod",
     "binsNumber",
     "maxRowsCount",
@@ -36,7 +43,6 @@ async function getSummaryHandler(req, res) {
       idView: req.query.idView,
       idAttr: req.query.idAttr,
       useCache: req.query.useCache,
-      binsCompute: req.query.binsCompute,
       binsNumber: req.query.binsNumber,
       binsMethod: req.query.binsMethod, // heads_tails, jenks, equal_interval, quantile
       maxRowsCount: req.query.maxRowsCount, // limit table length
@@ -48,104 +54,165 @@ async function getSummaryHandler(req, res) {
       sendJSON(res, data, { end: true });
     }
   } catch (e) {
-    sendError(res, e);
+    console.error(e);
+    sendError(res, e.message || e);
   }
 }
 
 /**
  * Helper to get source stats from db
  * @param {Object} opt options
+ * @param {Array} opt.stats Array of stats to retrieve. e.g. ['geom','base']
  * @param {String} opt.idSource Id of the source
  * @param {String} opt.idView Id of the view
  * @param {String} opt.idAttr Id of the attribute (optional)
+ * @param {String} opt.idAttrT0  Id of the to attribute (optional)
+ * @param {String} opt.idAttrT1 Id of the attribute (optional)
  * @param {String} opt.format format (disabled now. Will be mapx-json or iso-xml)
  * @param {String} opt.nullValue Value to express nulls
  * @return {Object} metadata object
  */
 export async function getSourceSummary(opt) {
-  if (!isSourceId(opt.idSource) && !isViewId(opt.idView)) {
-    throw Error("Missing id of the source or the view");
-  }
-  if (!opt.idAttr || opt.idAttr === "undefined") {
-    opt.idAttr = null;
-  }
-  opt = await updateSourceFromView(opt);
+  try {
+    const valid = isSourceId(opt.idSource) || isViewId(opt.idView);
 
-  if (!isSourceId(opt.idSource)) {
-    return {};
-  }
-
-  const start = Date.now();
-  const { stats } = opt;
-  const columns = await getColumnsNames(opt.idSource);
-  const timestamp = await getSourceLastTimestamp(opt.idSource);
-  const tableTypes = await getColumnsTypesSimple(opt.idSource, columns);
-
-  const attrType = opt.idAttr
-    ? tableTypes.filter((r) => r.id === opt.idAttr)[0].value
-    : null;
-
-  const hash = crypto
-    .createHash("md5")
-    .update(timestamp + opt.idAttr + opt.idSource + JSON.stringify(opt.stats))
-    .digest("hex");
-
-  const cached = opt.useCache ? await redisGet(hash) : false;
-
-  if (cached) {
-    const data = JSON.parse(cached);
-    data.timing = Date.now() - start;
-    return cleanStatOutput(stats, data);
-  }
-
-  opt.hasT0 = columns.indexOf("mx_t0") > -1;
-  opt.hasT1 = columns.indexOf("mx_t1") > -1;
-  opt.idAttrT0 = opt.hasT0 ? "mx_t0" : 0;
-  opt.idAttrT1 = opt.hasT1 ? "mx_t1" : 0;
-  opt.timestamp = timestamp;
-  const hasGeom = columns.indexOf("geom") > -1;
-  const hasAttr = columns.indexOf(opt.idAttr) > -1;
-  const isCategorical = attrType === "string";
-
-  const out = {
-    id: opt.idSource,
-    timestamp: opt.timestamp,
-    attributes: columns,
-    attributes_types: tableTypes,
-  };
-  if (stats.includes("base")) {
-    Object.assign(out, await getOrCalc("getSourceSummary_base", opt));
-  }
-
-  if (stats.includes("roles")) {
-    Object.assign(out, { roles: await getSourceEditors(opt.idSource) }, opt);
-  }
-
-  if (hasGeom && stats.includes("spatial")) {
-    Object.assign(out, await getOrCalc("getSourceSummary_ext_sp", opt));
-  }
-
-  if ((opt.hasT0 || opt.hasT1) && stats.includes("temporal")) {
-    Object.assign(out, await getOrCalc("getSourceSummary_ext_time", opt));
-  }
-
-  if (hasAttr && stats.includes("attributes")) {
-    if (isCategorical) {
-      Object.assign(
-        out,
-        await getOrCalc("getSourceSummary_attr_categorical", opt)
-      );
-    } else {
-      Object.assign(
-        out,
-        await getOrCalc("getSourceSummary_attr_continuous", opt)
-      );
+    if (!valid) {
+      throw Error("Missing id of the source or the view");
     }
+
+    if (!opt.idAttr || opt.idAttr === "undefined") {
+      opt.idAttr = null;
+    }
+
+    opt = await updateSourceFromView(opt);
+
+    if (!isSourceId(opt.idSource)) {
+      return {};
+    }
+
+    if (!opt.maxRowsCount) {
+      // default set in getParamsValidator but no default for dircect call.
+      opt.maxRowsCount = 1e6;
+    }
+
+    const start = Date.now();
+    const { stats } = opt;
+
+    const columns = await getColumnsNames(opt.idSource);
+    const timestamp = await getSourceLastTimestamp(opt.idSource);
+    const tableTypes = await getColumnsTypesSimple(opt.idSource, columns);
+
+    const attrType = opt.idAttr
+      ? tableTypes.filter((r) => r.column_name === opt.idAttr)[0].column_type
+      : null;
+
+    /**
+     * Handle cache request
+     */
+    const hash = crypto
+      .createHash("md5")
+      .update(timestamp + opt.idAttr + opt.idSource + JSON.stringify(opt.stats))
+      .digest("hex");
+
+    if (opt.useCache) {
+      /**
+       *TODO: hide this mess in a module
+       */
+      const strData = await redisGet(hash);
+      if (isJson(strData)) {
+        const data = JSON.parse(strData);
+        if (isNotEmpty(data)) {
+          data._timing = Date.now() - start;
+          cleanStatOutput(stats, data);
+          return data;
+        }
+      }
+    }
+
+    /**
+     * Handle new request
+     * TODO: default are handler in validateParamsHandler, but not
+     * here. Default should not be set in the params handler...
+     */
+    opt.timestamp = timestamp;
+    opt.hasT0 = columns.includes("mx_t0");
+    opt.hasT1 = columns.includes("mx_t1");
+    opt.idAttrT0 = opt.hasT0 ? opt.idAttrT0 || "mx_t0" : 0;
+    opt.idAttrT1 = opt.hasT1 ? opt.idAttrT1 || "mx_t1" : 0;
+    opt.binsNumber = opt.binsNumber || 5;
+    opt.binsMethod = opt.binsMethod || "jenks";
+    const hasGeom = columns.includes("geom");
+    const hasAttr = columns.includes(opt.idAttr);
+    /**
+     * TODO: categorical value can be stored as numeric (number)..
+     */
+    const isContinous = typesContinuous.includes(attrType);
+
+    const out = {
+      id: opt.idSource,
+      timestamp: opt.timestamp,
+      attributes: columns,
+      attributes_types: tableTypes,
+    };
+
+    for (const id_stat of stats) {
+      switch (id_stat) {
+        case "base":
+          Object.assign(out, await getOrCalc("getSourceSummary_base", opt));
+          break;
+        case "roles":
+          Object.assign(
+            out,
+            { roles: await getSourceEditors(opt.idSource) },
+            opt
+          );
+          break;
+        case "spatial":
+          if (!hasGeom) {
+            break;
+          }
+          Object.assign(out, await getOrCalc("getSourceSummary_ext_sp", opt));
+          break;
+        case "geom":
+          if (!hasGeom) {
+            break;
+          }
+          Object.assign(out, await getOrCalc("getSourceSummary_geom", opt));
+          break;
+        case "temporal":
+          if (!opt.hasT0 && !opt.hasT1) {
+            break;
+          }
+          Object.assign(out, await getOrCalc("getSourceSummary_ext_time", opt));
+          break;
+        case "attributes":
+          if (!hasAttr) {
+            break;
+          }
+
+          if (isContinous) {
+            Object.assign(
+              out,
+              await getOrCalc("getSourceSummary_attr_continuous", opt)
+            );
+
+            break;
+          }
+
+          Object.assign(
+            out,
+            await getOrCalc("getSourceSummary_attr_categorical", opt)
+          );
+          break;
+      }
+    }
+
+    out._timing = Date.now() - start;
+    cleanStatOutput(stats, out);
+    return out;
+  } catch (e) {
+    throw new Error(e.message);
   }
-
-  out._timing = Date.now() - start;
-
-  return cleanStatOutput(stats, out);
 }
 
 async function getOrCalc(idTemplate, opt) {
@@ -156,19 +223,27 @@ async function getOrCalc(idTemplate, opt) {
     .update(sql + opt.timestamp)
     .digest("hex");
 
-  const cached = opt.useCache ? await redisGet(hash) : false;
-
-  if (!cached) {
-    const data = await pgReadLong.query(sql);
-    const newstat = data.rows[0].res;
-    setTimeout(() => {
-      // Save after return
-      redisSet(hash, JSON.stringify(newstat));
-    }, 0);
-    return newstat;
-  } else {
-    return JSON.parse(cached);
+  if (opt.useCache) {
+    const data = await redisGet(hash);
+    if (isNotEmpty(data) && isJson(data)) {
+      return JSON.parse(data);
+    }
   }
+
+  const data = await pgReadLong.query(sql);
+  const newstat = data.rows[0].res;
+
+  /*
+   * Set in redis, after return
+   */
+  setTimeout(async () => {
+    try {
+      await redisSet(hash, JSON.stringify(newstat));
+    } catch (e) {
+      console.error(e);
+    }
+  }, 0);
+  return newstat;
 }
 
 /**
@@ -232,5 +307,6 @@ function cleanStatOutput(stats, data) {
   if (!stats.includes("base")) {
     delete data.row_count;
   }
+
   return data;
 }

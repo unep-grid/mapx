@@ -57,8 +57,10 @@ export function isObject(item) {
  */
 export function isView(item) {
   return (
+    isViewId(item?.id) &&
+    isProjectId(item?.project) &&
     isObject(item) &&
-    isString(item.type) &&
+    isString(item?.type) &&
     !!item.type.match(/^(vt|rt|cc||sm||gj)$/)
   );
 }
@@ -370,7 +372,7 @@ export function isArrayOfObject(item) {
  * Test if entry is JSON
  * @param {String} String to test
  */
-export function isJson(str) {
+export function isJSON(str) {
   try {
     JSON.parse(str);
   } catch (e) {
@@ -378,6 +380,7 @@ export function isJson(str) {
   }
   return true;
 }
+export const isJson = isJSON ;
 
 /**
  * Test if stringifiable
@@ -424,6 +427,15 @@ export function isTrue(b) {
 }
 export function isFalse(b) {
   return b === false;
+}
+
+/**
+ * Test for a loose boolean type, e.g. from csv...
+ * @param {Boolean} b boolean to test
+ * @return {Boolean}
+ */
+export function isBooleanCoercible(value) {
+  return ["false", "true", "FALSE", "TRUE", true, false].includes(value);
 }
 
 /**
@@ -713,7 +725,7 @@ export function isUrlValidWms(url, opt) {
  * Validate date string
  * @param {String|Number} date to validate
  */
-export function isDateString(date) {
+export function isDateStringRegex(date) {
   return (
     isString(date) &&
     (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date) ||
@@ -721,6 +733,23 @@ export function isDateString(date) {
         date
       ))
   );
+}
+
+/**
+ * Validate date string
+ * @param {String|Number} date to validate
+ */
+export function isDateString(item) {
+  try {
+    if (!isString(item)) {
+      return false;
+    }
+    const date = new Date(item);
+    const isDate = !isNaN(date.getTime());
+    return isDate;
+  } catch (_) {
+    return false;
+  }
 }
 
 /**

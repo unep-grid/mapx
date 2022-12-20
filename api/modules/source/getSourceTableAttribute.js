@@ -1,5 +1,9 @@
 import { pgRead } from "#mapx/db";
-import { getColumnsNames, tableExists } from "#mapx/db-utils";
+import {
+  getColumnsTypesSimple,
+  getColumnsNames,
+  tableExists,
+} from "#mapx/db-utils";
 import { getDistinct, toPgColumn, sendJSON, sendError } from "#mapx/helpers";
 import { isEmpty, isString, isSourceId } from "@fxi/mx_valid";
 export const mwGetAttributeTable = [getSourceAttributeTableHandler];
@@ -21,6 +25,8 @@ async function getSourceAttributeTableHandler(req, res) {
  * @param {Object} opt Options
  * @param {String} opt.id Id of the source / table / layer
  * @param {Boolean} opt.fullTable returns all atributes
+ * @param {Boolean} opt.dateAsString coerce date as string
+ * @param {Boolean} opt.jsonAsString coerce date as string
  * @param {Array} opt.attributes List of atributes to fetch
  * @return {Object} pg.Result or empty object
  */
@@ -29,6 +35,8 @@ export async function getSourceAttributeTable(opt) {
   const attributesToIgnore = ["geom"];
   const idSource = opt.id;
   const fullTable = opt.fullTable || false;
+  const dateAsString = opt.dateAsString || false;
+  const jsonAsString = opt.jsonAsString || false;
   let attributes = opt.attributes || [];
 
   if (isString(attributes)) {
@@ -64,8 +72,49 @@ export async function getSourceAttributeTable(opt) {
     return {};
   }
 
+  /**
+   * node-postgres convert date and json as object. Not always wanted
+   * see https://node-postgres.com/features/types#strings-by-default
+   */
+  const attributesAsText = [];
+  if (dateAsString || jsonAsString) {
+    const colMap = new Map();
+    const columns = await getColumnsTypesSimple(idSource, attributesSelect);
+
+    for (const c of columns) {
+      colMap.set(c.column_name, c.column_type);
+    }
+
+    for (const a of attributesSelect) {
+      const type = colMap.get(a);
+
+      switch (type) {
+        case "json":
+        case "jsonb":
+          if (jsonAsString) {
+            attributesAsText.push(a);
+          }
+          break;
+        case "time":
+        case "date":
+        case "time with time zone":
+        case "time without time zone":
+        case "timestamp with time zone":
+        case "timestamp without time zone":
+          if (dateAsString) {
+            attributesAsText.push(a);
+          }
+          break;
+      }
+    }
+  }
+
   const attributesSelectDistinct = getDistinct(attributesSelect);
-  const attributesSelectSql = toPgColumn(attributesSelectDistinct);
+  const attributesSelectSql = toPgColumn(attributesSelectDistinct, {
+    castText: attributesAsText,
+  });
+  
+
   const query = `SELECT ${attributesSelectSql} FROM ${idSource} ORDER BY gid LIMIT 1e6`;
   return pgRead.query(query);
 }

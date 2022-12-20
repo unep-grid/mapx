@@ -409,6 +409,19 @@ export async function getLoginInfo() {
 }
 
 /**
+ * Wrapper to trigger layers list update (.e.g. after upload)
+ * @returns
+ */
+export function triggerUpdateSourcesList() {
+  const hasShiny = window.Shiny;
+  if (hasShiny) {
+    Shiny.onInputChange("mx_client_update_source_list", {
+      date: new Date() * 1,
+    });
+  }
+}
+
+/**
  * Set the project manually
  * @param {String} idProject project to load
  * @param {Object} opt Options
@@ -4135,7 +4148,6 @@ function setVtLegend(options) {
    * Copy rules
    */
   view._style_rules = clone(rules);
-
 
   /*
    * Add legend using template

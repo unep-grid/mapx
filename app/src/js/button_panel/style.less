@@ -16,8 +16,11 @@
     min-width: 0px;
     max-width: calc(100vw - 30px);
     max-height: calc(100vh - 30px);
-    &.pinned {
+    &.button-panel--pinned {
       z-index: 1001;
+    }
+    &.button-panel--pinned-always {
+      z-index: 1002;
     }
     &.button-panel--top-right,
     &.button-panel--bottom-right {
@@ -42,7 +45,7 @@
       user-select: none;
     }
     &.active {
-      &:hover,
+      /*&:hover,*/
       &.button-panel--container-resize {
         z-index: 1500;
         .button-panel--item-handles {

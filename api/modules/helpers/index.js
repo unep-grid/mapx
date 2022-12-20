@@ -1,4 +1,4 @@
-import { isArray, isString, isEmpty } from "@fxi/mx_valid";
+import { isArray, isString, isEmpty, isNotEmpty } from "@fxi/mx_valid";
 import path from "path";
 import fs from "fs";
 import zlib from "zlib";
@@ -7,9 +7,24 @@ import { readFile } from "fs/promises";
 
 /**
  * Conversion of array of column names to pg columns
+ * @param {Array} array of attibutes string
+ * @param {Object} opt options
+ * @param {Array} opt.castText Optional list  of attributes to cast as text
+ * @return {String} String usable in posgres query
  */
-function toPgColumn(arr) {
-  return '"' + arr.join('","') + '"';
+function toPgColumn(arr, opt) {
+  if (isEmpty(opt?.castText)) {
+    return `"${arr.join('","')}"`;
+  }
+  const ct = opt.castText;
+  const inner = arr.map((a) => {
+    if (ct.includes(a)) {
+      return `"${a}"::text`;
+    } else {
+      return `"${a}"`;
+    }
+  });
+  return `${inner.join(",")}`;
 }
 
 /**
@@ -26,6 +41,14 @@ function getDistinct(arr) {
   }
   return out;
 }
+
+/**
+ * Clone raw
+ */
+function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 /**
  * Send string for result message
  * @param {Object} obj object to be converted in string for messages
@@ -132,22 +155,23 @@ function toBoolean(value, def) {
  * @param {nChar} nChar Number of characters per group : E.g. 2 => 12_12_12
  * @param {Boolean} toUpper To uppercase
  * @param {Boolean} toLower To lowercase
+ * @param {String} separator Separator. Default = '_'
  * @return {String} identifier
  */
-function randomString(prefix, nRep, nChar, toLower, toUpper) {
+function randomString(prefix, nRep, nChar, toLower, toUpper, sep) {
   nRep = nRep || 4;
   nChar = nChar || 5;
   prefix = prefix || "mx";
   toLower = toLower || false;
   toUpper = toUpper || false;
   const out = [prefix];
-  const sep = "_";
+  const sep_s = sep || "_";
   const chars =
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const n = chars.length - 1;
 
   for (let i = 0; i < nRep; i++) {
-    out.push(sep);
+    out.push(sep_s);
     for (let j = 0; j < nChar; j++) {
       out.push(chars[Math.round(Math.random() * n)]);
     }
@@ -483,6 +507,7 @@ function timeStep(start) {
  * Exports
  */
 export {
+  clone,
   toPgColumn,
   attrToPgCol,
   arrayToPgArray,

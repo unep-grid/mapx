@@ -15,6 +15,8 @@ const settings_global = {
     port_public: "8880",
   },
   socket_io: {
+    maxHttpBufferSize: 1e6 * 10, // 10 MB
+    pingTimeout: 1e3 * 60 * 2, // 2 min
     keys: {
       redis_main: "api_io::",
       redis_job: "api_io_job::",
@@ -70,7 +72,7 @@ const settings_global = {
     host: "localhost",
     schema: "public",
     timeoutLong: 1000 * 60 * 5, // 5 minutes
-    timeoutShort : 1000 * 20, // 20 seconds
+    timeoutShort: 1000 * 20, // 20 seconds
     poolMin: 1,
     poolMax: 1,
     admin: {
@@ -150,9 +152,9 @@ const settings_global = {
       default: "en",
     },
     tables: {
-      layer_id_valid : '_mx_valid',
-      layer_id_col : "gid",
-      layer_id_geom : "geom",
+      layer_id_valid: "_mx_valid",
+      layer_id_col: "gid",
+      layer_id_geom: "geom",
       attr_not_queryable: ["geom", "gid", "pid"],
       name_not_queryable: [
         "mx_users",

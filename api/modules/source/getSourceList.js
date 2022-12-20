@@ -6,8 +6,14 @@ import { parseTemplate } from "#mapx/helpers";
 export { ioSourceListEdit };
 
 async function ioSourceListEdit(socket, request) {
+  const session = socket.session;
+
   try {
-    if (!socket._mx_user_authenticated || !socket._mx_user_roles.publisher) {
+    if (!session) {
+      throw new Error("No session");
+    }
+
+    if (!session.user_authenticated || !session.user_roles.publisher) {
       throw new Error("Unautorized");
     }
 
@@ -17,9 +23,9 @@ async function ioSourceListEdit(socket, request) {
 
     // can't be changed by options
     const auth = {
-      idUser: socket._id_user,
-      idProject: socket._id_project,
-      groups: socket._mx_user_roles.group,
+      idUser: socket.session.user_id,
+      idProject: socket.session.project_id,
+      groups: socket.session.user_roles.group,
     };
 
     Object.assign(options, request.input, auth);

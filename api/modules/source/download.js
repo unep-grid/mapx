@@ -73,7 +73,8 @@ export async function ioDownloadSource(socket, options) {
  */
 async function extractFromPostgres(res, config) {
   const idGroup = randomString("download_source");
-  const idProgress = randomString("progress");
+  const idProgressConversion = randomString("progress");
+  const idProgressCompression = randomString("progress");
 
   let isShapefile = false;
   let {
@@ -132,7 +133,7 @@ async function extractFromPostgres(res, config) {
 
   await res.notifyInfoMessage({
     idGroup: idGroup,
-    message: t(language, "get_source_email_dl_link", {
+    message: t("get_source_email_dl_link", language, {
       email: email,
       url: dataUrl,
       title: title,
@@ -146,7 +147,7 @@ async function extractFromPostgres(res, config) {
 
   await res.notifyInfoVerbose({
     idGroup: idGroup,
-    message: t(language, "get_source_meta_extracted"),
+    message: t("get_source_meta_extracted", language),
   });
 
   /**
@@ -182,7 +183,7 @@ async function extractFromPostgres(res, config) {
 
   await res.notifyInfoMessage({
     idGroup: idGroup,
-    message: t(language, "get_source_extraction_wait", {
+    message: t("get_source_extraction_wait", language, {
       format: format,
     }),
   });
@@ -224,7 +225,7 @@ async function extractFromPostgres(res, config) {
       maxError: maxMergeMessage,
     });
   } catch (e) {
-    const msg = t(language, "get_source_conversion_error", {
+    const msg = t("get_source_conversion_error", language, {
       error: e,
     });
     throw Error(msg);
@@ -233,7 +234,7 @@ async function extractFromPostgres(res, config) {
   /**
    * Add files
    */
-  const txtTimeStamp = t(language, "get_source_file_timestamp", {
+  const txtTimeStamp = t("get_source_file_timestamp", language, {
     date: String(Date()),
   });
   await writeFile(`${folderPath}/info.txt`, txtTimeStamp);
@@ -245,6 +246,7 @@ async function extractFromPostgres(res, config) {
   /**
    * Archive data
    */
+
   try {
     await archiverProgress({
       zipPath: folderPathZip,
@@ -257,41 +259,34 @@ async function extractFromPostgres(res, config) {
       onProgress: (percent) => {
         res.notifyProgress({
           idGroup: idGroup,
-          idProgress: idProgress,
+          idMerge: idProgressCompression,
           type: "progress",
-          message: t(language, "get_source_zip_progress"),
+          message: t("get_source_zip_progress", language),
           value: percent,
         });
       },
       onWarning: (err) => {
         res.notifyInfoWarning({
           idGroup: idGroup,
-          message: t(language, "get_source_zip_warning", {
+          message: t("get_source_zip_warning", language, {
             err: err,
           }),
         });
       },
     });
   } catch (e) {
-    const err = t(language, "get_source_zip_error", {
+    const err = t("get_source_zip_error", language, {
       err: e,
     });
     throw Error(err);
   }
 
   /**
-   * Send messages
+   * Send success messages
    */
-  await res.notifyProgress({
-    idGroup: idGroup,
-    idProgress: idProgress,
-    message: t(language, "get_source_zip_progress"),
-    value: 100,
-  });
-
   await res.notifyInfoSuccess({
     idGroup: idGroup,
-    message: t(language, "get_source_conversion_done_link", {
+    message: t("get_source_conversion_done_link", language, {
       url: dataUrl,
       format: format,
       title: title,
@@ -307,7 +302,7 @@ async function extractFromPostgres(res, config) {
     await sendMailAuto({
       to: email,
       subject: "Export success",
-      content: t(language, "get_source_conversion_done_email", {
+      content: t("get_source_conversion_done_email", language, {
         url: dataUrl,
         title: title,
       }),
@@ -330,8 +325,8 @@ async function extractFromPostgres(res, config) {
     if (useFakeProg) {
       res.notifyProgress({
         idGroup: idGroup,
-        idProgress: idProgress,
-        message: t(language, "get_source_conversion_progress"),
+        idMerge: idProgressConversion,
+        message: t("get_source_conversion_progress", language),
         value: fakeProg++,
       });
     } else {
@@ -341,8 +336,8 @@ async function extractFromPostgres(res, config) {
       for (let i = 0, iL = progs.length; i < iL; i++) {
         res.notifyProgress({
           idGroup: idGroup,
-          idProgress: idProgress,
-          message: t(language, "get_source_conversion_progress"),
+          idMerge: idProgressConversion,
+          message: t("get_source_conversion_progress", language),
           value: progs[i],
         });
       }
@@ -351,7 +346,7 @@ async function extractFromPostgres(res, config) {
     if (!isProg && text.length > 5) {
       res.notifyInfoVerbose({
         idGroup: idGroup,
-        message: t(language, "get_source_conversion_stdout", {
+        message: t("get_source_conversion_stdout", language, {
           stdout: text,
         }),
       });
@@ -363,7 +358,7 @@ async function extractFromPostgres(res, config) {
   function ogrStderr(data) {
     res.notifyInfoWarning({
       idGroup: idGroup,
-      message: t(language, "get_source_conversion_stderr", {
+      message: t("get_source_conversion_stderr", language, {
         stderr: data.toString("utf8"),
       }),
     });
@@ -376,7 +371,7 @@ async function getSqlClip(idSource, iso3codes, attrPg, language) {
 
   if (!test.valid) {
     throw new Error(
-      t(language, "get_source_invalid_geom", {
+      t("get_source_invalid_geom", language, {
         idLayer: test.id,
         title: test.title,
       })

@@ -57,6 +57,7 @@ mxSchemaViewStyle <- function(
   variableName <- .get(data, c("attribute", "name"))
   variableNames <- .get(data, c("attribute", "names"))
   layerName <- .get(data, c("source", "layerInfo", "name"))
+  
   srcSummary <- mxApiGetSourceSummary(
     idSource = layerName,
     idAttr = variableName

@@ -42,7 +42,8 @@ export { ioUpdateGeoserver, mwUpdateGeoserver, updateGeoserver };
  * Update handler
  */
 async function ioUpdateGeoserver(socket, options) {
-  const allowed = socket?._mx_user_roles?.root;
+  const session = socket?.session;
+  const allowed = session?.user_roles.root;
   if (!allowed) {
     await socket.notifyInfoError({
       message: "Geoserver rebuild : not allowed",

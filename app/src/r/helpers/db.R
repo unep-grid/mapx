@@ -729,6 +729,21 @@ mxDbExistsTable <- function(table) {
 }
 
 
+#' Convert list of columns namme no sql colulmns array
+#'
+#'
+mxToPgColumn <- function(cols = NULL) {
+  strIn <- paste0(cols, collapse = '","')
+  strOut <- sprintf('("%s")', strIn)
+  return(strOut)
+}
+
+mxToPgArray <- function(items = NULL) {
+  strIn <- paste0(items, collapse = "','")
+  strOut <- sprintf("('%s')", strIn)
+  return(strOut)
+}
+
 
 #' List existing column from postgresql table
 #'
@@ -736,18 +751,36 @@ mxDbExistsTable <- function(table) {
 #'
 #' @param table {character} table name
 #' @param avoid {vector} notIn names to remove
+#' @param avoid {vector} notTypes names to remove
+#' @return {character} List  of columns name
 #' @export
-mxDbGetTableColumnsNames <- function(table, notIn = NULL) {
-  query <- sprintf(
-    "select column_name as res from information_schema.columns where table_schema='public' and table_name='%s'",
-    table
-  )
-  res <- mxDbGetQuery(query)$res
+mxDbGetTableColumnsNames <- function(table, notIn = NULL, notType = NULL) {
+  qNotIn <- ""
+  qNotType <- ""
 
-  if (!is.null(notIn)) {
-    res <- res[!res %in% notIn]
+  if (isNotEmpty(notIn)) {
+    qNotIn <- sprintf(
+      "AND column_name NOT IN %s",
+      mxToPgArray(notIn)
+    )
   }
 
+  if (isNotEmpty(notType)) {
+    qNotType <- sprintf(
+      "AND data_type NOT IN %s",
+      mxToPgArray(notType)
+    )
+  }
+
+  query <- sprintf("
+    SELECT  column_name as res
+    FROM information_schema.columns
+    WHERE table_schema='public'
+    AND table_name='%1$s'
+    %2$s %3$s
+    ", table, qNotIn, qNotType)
+
+  res <- mxDbGetQuery(query)$res
 
   return(res)
 }
@@ -1251,6 +1284,8 @@ mxDbConfigSet <- function(key, value) {
   return(mxDbKeyValue(key, value, "set", .get(config, c("pg", "tables", "config"))))
 }
 
+
+# TODO: replace this with api source summary 'geom'.
 #' Get layer geom types
 #' @param table {character} Layer name
 #' @param geomColumn {character} Geometry column name
@@ -1616,7 +1651,8 @@ mxDbGetOverlapsCount <- function(layerA, layerB, geom = "geom") {
 #' Get layer dimensions
 #'
 mxDbGetLayerDimensions <- function(idLayer) {
-  nrow <- mxDbGetQuery(sprintf("
+  nrow <- mxDbGetQuery(sprintf(
+    "
     SELECT count(*)
     FROM %1$s",
     idLayer
@@ -1743,8 +1779,8 @@ mxDbGetEmailList <- function(munged = F) {
 
 
 #' Return alist of of table names present in the sql query
-#' 
-#' NOTE: only used in the "query maker" tool, but interesting approach. 
+#'
+#' NOTE: only used in the "query maker" tool, but interesting approach.
 #'
 #' @param {String} sql string
 #' @return {Character} list of tables or empty in case of errors

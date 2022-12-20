@@ -192,6 +192,7 @@ span.mx-badge-role {
 
 .mx .selectize-control.multi .selectize-input > .active {
   background-color: var(--mx_ui_background_contrast);
+  color: var(--mx_ui_text);
 }
 .mx .selectize-control.multi .selectize-input > div {
   border: 1px solid var(--mx_ui_border);
@@ -311,7 +312,7 @@ span.mx-badge-role {
 
 /**
 * Step bullet
-*/ 
+*/
 .mx-story-step-bullet,
 .mx-story-btn-legend {
   background: var(--mx_ui_background);
@@ -381,7 +382,7 @@ span.mx-badge-role {
 /*.mx .mc .mc-page,*/
 /*.mx .mc.mc-mode-layout .mc-item,*/
 /*.mx .mc .mx-legend-box {*/
-  /*background: var(--mx_ui_background);*/
+/*background: var(--mx_ui_background);*/
 /*}*/
 
 /**

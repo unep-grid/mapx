@@ -150,9 +150,9 @@ class ButtonPanel extends EventSimple {
     }
     elsPanel.forEach((elPanelOther) => {
       if (elPanelOther === panel.elContainer) {
-        elPanelOther.classList.add("pinned");
+        elPanelOther.classList.add("button-panel--pinned");
       } else {
-        elPanelOther.classList.remove("pinned");
+        elPanelOther.classList.remove("button-panel--pinned");
       }
     });
   }

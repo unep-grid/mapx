@@ -1,9 +1,11 @@
 import { el, elSpanTranslate } from "./el_mapx";
-import { modal, modalDialog } from "./mx_helper_modal.js";
+import { modal, modalDialog, modalPrompt } from "./mx_helper_modal.js";
 import { updateLanguageElements } from "./language";
 import { elSpanTranslate as tt } from "./el_mapx";
-import { getApiUrl } from "./api_routes";
+import { getApiRoute, getApiUrl } from "./api_routes";
 import { isString } from "./is_test";
+import { ws, nc, data } from "./mx.js";
+import { getDictItem } from "./language";
 import {
   handleRequestMessage,
   sendData,
@@ -64,108 +66,38 @@ export function triggerUploadForm(opt) {
   }
 }
 
-export function uploadGeoJSONModal(idView) {
-  mx.data.geojson.getItem(idView).then(function (item) {
+export async function uploadGeoJSONModal(idView) {
+  try {
+    const item = await data.geojson.getItem(idView);
     const geojson = path(item, "view.data.source.data");
-    const title = path(item, "view.data.title.en");
-    let hasIssue = false;
-    if (!title) {
-      title = idView;
-    }
+
     if (!geojson) {
       return;
     }
+    const language = settings.language;
 
-    const elBtnUpload = el("buton", {
-      class: "btn btn-default",
-      on: ["click", upload],
-      dataset: {
-        lang_key: "btn_upload",
+    const title = await modalPrompt({
+      title: tt("upl_title"),
+      label: tt("upl_title_layer_name", { data: { language } }),
+      confirm: tt("upl_upload_btn"),
+      inputOptions: {
+        type: "text",
+        value: path(item, "view.data.title.en", idView),
+        placeholder: await getDictItem("upl_name_placeholder"),
       },
     });
 
-    const elInput = el("input", {
-      class: "form-control",
-      id: "txtInputSourceTitle",
-      type: "text",
-      placeholder: "Source title",
-      value: title,
-      on: ["input", validateTitle],
-    });
-
-    const elWarning = el("span");
-    const elProgress = el("div");
-
-    const elLabel = el("label", {
-      dataset: {
-        lang_key: "src_upload_add",
-      },
-      for: "txtInputSourceTitle",
-    });
-
-    const elFormGroup = el(
-      "div",
-      {
-        class: "form-group",
-      },
-      elLabel,
-      elInput,
-      elWarning,
-      elProgress
-    );
-
-    const elFormUpload = el("div", elFormGroup);
-
-    const elModal = modal({
-      title: el("div", {
-        dataset: {
-          lang_key: "src_upload_add",
-        },
-      }),
-      content: elFormUpload,
-      buttons: [elBtnUpload],
-      addBackground: true,
-    });
-
-    updateLanguageElements({
-      el: elModal,
-    });
-
-    function upload() {
-      if (hasIssue) {
-        return;
-      }
-      elBtnUpload.setAttribute("disabled", true);
-      elBtnUpload.remove();
-      uploadSource({
-        title: elInput.value || title || idView,
-        geojson: geojson,
-        selectorProgressContainer: elProgress,
-      });
+    if (!title) {
+      return;
     }
 
-    function validateTitle() {
-      const title = elInput.value.trim();
-      const v = settings.validation.input.nchar;
-      hasIssue = false;
-      if (title.length < v.sourceTitle.min) {
-        hasIssue = true;
-        elWarning.innerText = "Title too short";
-      }
-      if (title.length > v.sourceTitle.max) {
-        hasIssue = true;
-        elWarning.innerText = "Title too long";
-      }
-      if (hasIssue) {
-        elFormGroup.classList.add("has-error");
-        elBtnUpload.setAttribute("disabled", true);
-      } else {
-        elBtnUpload.removeAttribute("disabled");
-        elFormGroup.classList.remove("has-error");
-        elWarning.innerText = "";
-      }
-    }
-  });
+    return uploadSource({
+      title: title,
+      geojson: geojson,
+    });
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 /**
@@ -187,18 +119,21 @@ export async function isUploadFileSizeValid(file, opt) {
 
   const size = await getSizeOf(file, false);
   const sizeOk = size <= sizeMax;
-  if (!sizeOk) {
-    if (opt.showModal) {
-      const sizeHuman = formatByteSize(sizeMax);
-      await modalDialog({
-        title: elSpanTranslate("api_upload_file_max_size_exceeded_title"),
-        id: "modal_max_size_exceeded",
-        content: tt("api_upload_file_max_size_exceeded", {
-          tooltip: false,
-          data: { size: sizeHuman },
-        }),
-      });
-    }
+
+  if (sizeOk) {
+    return true;
+  }
+
+  if (opt.showModal) {
+    const sizeHuman = formatByteSize(sizeMax);
+    await modalDialog({
+      title: elSpanTranslate("api_upload_file_max_size_exceeded_title"),
+      id: "modal_max_size_exceeded",
+      content: tt("api_upload_file_max_size_exceeded", {
+        tooltip: false,
+        data: { size: sizeHuman },
+      }),
+    });
   }
   return sizeOk;
 }
@@ -249,10 +184,13 @@ export async function uploadSource(o) {
     });
   }
 
-  const data = await o.file.arrayBuffer();
+  nc.panel.open();
+  const route = getApiRoute("uploadSource");
+  await uploader(o.file, route, { title: o.title });
 
-  debugger;
-
+  if (1 === 1) {
+    return;
+  }
   /*
    * create upload form
    */
@@ -413,5 +351,46 @@ export async function uploadSource(o) {
         }
       },
     });
+  }
+}
+
+async function uploader(file, route, config) {
+  const data = await file.arrayBuffer();
+
+  //const x = await new Blob([a, b]).arrayBuffer();
+
+  let start, end;
+  const idRequest = makeId(10);
+  const n = data.byteLength;
+  const sChunk = 1e6;
+  const nChunk = Math.ceil(n / sChunk);
+  let id = 0;
+
+  for (let i = 0; i < nChunk; i++) {
+    start = i * sChunk;
+    end = (i + 1) * sChunk;
+
+    const message = Object.assign(
+      {},
+      {
+        idRequest: idRequest,
+        id: id++,
+        from: start,
+        to: end,
+        on: n,
+        last: i === nChunk - 1,
+        first: i === 0,
+        data: data.slice(start, end),
+        title: config.title,
+        canceled: false,
+        filename: file.name,
+        mimetype: file.type,
+        sourceSrs: 4326,
+        language: settings.language,
+      },
+      config
+    );
+
+    ws.emit(route, message);
   }
 }

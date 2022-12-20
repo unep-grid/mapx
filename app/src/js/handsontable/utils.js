@@ -1,4 +1,5 @@
 import { getLanguageCurrent } from "./../language";
+import { pgTypesData } from "./types.js";
 
 export function getHandsonLanguageCode() {
   let lang = getLanguageCurrent();
@@ -12,64 +13,52 @@ export function getHandsonLanguageCode() {
   return languages[lang] || "en-US";
 }
 
-/*export function typeConverter(type) {*/
-/*const def = "text";*/
-/*return (*/
-/*{*/
-/*boolean: "checkbox",*/
-/*number: "numeric",*/
-/*string: "text",*/
-/*date: "date",*/
-/*}[type] || def*/
-/*);*/
-/*}*/
-
-/**
- * Type integer is not currently supported.
- * TODO: support type integer, dates, etc..
+/*
+ * NOTE: PG supported types
+ * with tt as (select id as table_name from mx_sources) select distinct data_type from information_schema.columns cc, tt where cc.table_name = tt.table_name;
  */
-const types = [
-  {
-    postgres: "text",
-    input: "text",
-    javascript: "string",
-    json: "string",
-  },
-  {
-    postgres: "numeric",
-    input: "numeric",
-    javascript: "number",
-    json: "number",
-  },
-  {
-    postgres: "boolean",
-    input: "checkbox",
-    javascript: "boolean",
-    json: "boolean",
-  },
-];
+const pgTypes = Object.keys(pgTypesData);
 
 /**
  * Convert cell type
- * @param {String} type Cell type
- * @param {String} from From : postgres, input, javascript, json
- * @param {String} to From : postgres, input, javascript, json
+ * @param {String} pg_type pg type
+ * @param {String} format 'json','handsontable','postgres'. Default: postgres
  * @return {String} type
  */
-export function typeConvert(type, from, to) {
-  for (const t of types) {
-    if (t[from] === type) {
-      return t[to];
-    }
+export function typeConvert(pg_type, format) {
+  if (!isPgType(pg_type)) {
+    throw new Error(`typeConvert, unexpected pg type : ${pg_type}`);
   }
-  return "text";
+  switch (format) {
+    case "json":
+    case "handsontable":
+    case "mx_handsontable":
+      return pgTypesData[pg_type][format];
+    case "postgres":
+      return pg_type;
+    default:
+      return pg_type;
+  }
 }
 
 /**
- * Get list of types
- * @param {String} from from : postgres, json, ...
+ * Get list of supported pg types
  * @return {Array}
  */
-export function getTypes(from) {
-  return types.map((t) => t[from]);
+export function getPgTypes() {
+  return pgTypes;
+}
+
+/**
+ * Validate pg type
+ * @param {String} type Item to test
+ * @return {Boolean}
+ */
+export function isPgType(type) {
+  return pgTypes.includes(type);
+}
+
+const regDatePg = new RegExp("^date|^timestamp");
+export function isPgTypeDate(type) {
+  return regDatePg.test(type);
 }

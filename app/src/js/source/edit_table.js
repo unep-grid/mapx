@@ -16,8 +16,10 @@ import { RadialProgress } from "../radial_progress";
 import { theme } from "../mx.js";
 import { Popup } from "../popup";
 import {
+  isPgType,
+  isPgTypeDate,
   typeConvert,
-  getTypes,
+  getPgTypes,
   getHandsonLanguageCode,
 } from "./../handsontable/utils.js";
 import {
@@ -25,6 +27,7 @@ import {
   isNotEmpty,
   isFunction,
   isEmpty,
+  isNumeric,
   isString,
   isStringRange,
   isSafeName,
@@ -33,18 +36,25 @@ import {
 
 import "./edit_table.types.js";
 import "./edit_table.less";
+import { onNextFrame, waitFrameAsync } from "../animation_frame";
+
+/* import { jpeg2000 } from "modernizr";*/
 const defaults = {
+  debug: false,
   log_perf: false, //def from ws_tools
   id_table: null,
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
   id_column_valid: "_mx_valid",
   id_columns_reserved: ["gid", "_mx_valid", "geom"],
-  max_changes: 1e4,
-  max_changes_warning: 1e3,
+  id_columns_style: [],
+  max_changes: 1e5, //max one column at max rows
   min_columns: 3,
   max_rows: 1e5, // should match server
-  max_columns: 1000, // should match server
+  max_changes_large: 1e3,
+  max_columns: 1e3, // should match server
+  timeout_emit: 1e3 * 10, // 10s round trip
+  timeout_sanizing: 1e3 * 60,
   routes: {
     /**
      * server to here
@@ -64,9 +74,14 @@ const defaults = {
     client_edit_updates: "/client/source/edit/table/update",
     client_exit: "/client/source/edit/table/exit",
     client_geom_validate: "/client/source/edit/table/geom/validate",
+    client_value_validate: "/client/source/edit/table/value/validate",
+    client_changes_sanitize: "/client/source/edit/table/changes/sanitize",
   },
+  id_source_dialog: "from_dialog",
   id_source_dispatch: "from_dispatch",
-  id_source_edit: "edit",
+  id_source_geom: "from_geom",
+  id_source_sanitize_ok: "from_sanitize_ok",
+  id_source_sanitize_error: "from_sanitize_error",
 };
 
 export class EditTableSessionClient extends WsToolsBase {
@@ -74,6 +89,10 @@ export class EditTableSessionClient extends WsToolsBase {
     super(socket);
     const et = this;
     et._config = Object.assign(et._config, et._config, defaults, config);
+    /**
+     * cb bind
+     */
+    //et._validate_text_date = et._validate_text_date.bind(et);
   }
 
   /**
@@ -104,8 +123,12 @@ export class EditTableSessionClient extends WsToolsBase {
       if (et._initialized) {
         return;
       }
+      et._updates = new Map();
+      et._validation_cache = new Map();
+      et._dispatch_queue = new Set();
+      et._batch_cells = [];
       et._members = [];
-      et._updates = [];
+      et._columns = [];
       et._popups = [];
       et._locked = false;
       et._disabled = false;
@@ -163,17 +186,16 @@ export class EditTableSessionClient extends WsToolsBase {
 
       et._socket.on("disconnect", et.onDisconnect);
       await et.dialogWarning();
+      /**
+       * Build UI
+       */
+      await et.build();
 
       /**
        * Request data from server
        * -> detached ! Build UI in the meantime
        */
-      et.start();
-
-      /**
-       * Build UI
-       */
-      await et.build();
+      await et.start();
 
       /**
        * If a on_destroy callback is set in option, add it
@@ -188,7 +210,10 @@ export class EditTableSessionClient extends WsToolsBase {
       /**
        * Register cb
        */
-      et.on("after_change_done", et.updateButtons);
+      et.on("after_change_done", () => {
+        // wrapper -> after_change_done gives (data).
+        et.updateButtons();
+      });
 
       return true;
     } catch (e) {
@@ -205,7 +230,7 @@ export class EditTableSessionClient extends WsToolsBase {
     if (et._config.test_mode) {
       return;
     }
-    const showWarning = await prefGet("pref_show_edit_table_warning");
+    const showWarning = await prefGet("pref_show_edit_table_warning_2");
     if (showWarning === null || showWarning === true) {
       const keepShowing = await modalConfirm({
         title: getDictItem("edit_table_modal_warning_title"),
@@ -213,7 +238,7 @@ export class EditTableSessionClient extends WsToolsBase {
         cancel: getDictItem("edit_table_modal_warning_ok_no_more"),
         confirm: getDictItem("edit_table_modal_warning_ok"),
       });
-      await prefSet("pref_show_edit_table_warning", keepShowing);
+      await prefSet("pref_show_edit_table_warning_2", keepShowing);
     }
   }
 
@@ -222,35 +247,41 @@ export class EditTableSessionClient extends WsToolsBase {
    * @param {Object} opt Options
    * @param {Boolean} opt.send_table Resend full table
    */
-  start(opt) {
+  async start(opt) {
     const et = this;
     const r = et._config.routes;
     const def = { send_table: true };
     opt = Object.assign({}, def, opt);
-    et.emit(r.client_edit_start, opt);
+    await et.emit(r.client_edit_start, opt);
   }
 
   /**
    * Destroy handler
+   * Quit  process :
+   * - If unsaved change, ask for confirmation
+   * - Unlock concurent table, if not autosave
+   * - Emit quit event
+   * - Remove listeners
+   * - Fire destroy
    */
-  async destroy(msg) {
+  async destroy() {
     const et = this;
-
-    if (et._config.debug) {
-      console.log("destroy requested:", msg);
-    }
     try {
       if (et._destroyed) {
         return;
       }
-      const nInvalid = et.countUpdateValid();
-      if (nInvalid > 1) {
-        if (!et._config.test_mode) {
+      /**
+       * Prevent quit with unsaved changes
+       */
+      const nValid = et.countUpdateValid();
+      if (nValid > 0) {
+        const skip = et._config.test_mode;
+        if (!skip) {
           const quit = await modalConfirm({
             title: tt("edit_table_modal_quit_ignore_changes_title"),
             content: tt("edit_table_modal_quit_ignore_changes", {
               data: {
-                count: nInvalid,
+                count: nValid,
               },
             }),
             confirm: tt("btn_confirm"),
@@ -266,8 +297,14 @@ export class EditTableSessionClient extends WsToolsBase {
       et._destroyed = true;
       et._lock_table_concurrent = false;
       et._lock_table_by_user_id = null;
-      et.lockTableConcurrent(false);
-      et.emit(r.client_exit);
+      if (!et._auto_save) {
+        et.lockTableConcurrent(false).catch((e) => {
+          console.error(e);
+        });
+      }
+      et.emit(r.client_exit).catch((e) => {
+        console.error(e);
+      });
       et._modal?.close();
       et._popups.forEach((p) => p.destroy());
       et._resize_observer?.disconnect();
@@ -280,7 +317,9 @@ export class EditTableSessionClient extends WsToolsBase {
       et._socket.off(r.server_progress, et.onProgress);
       et._socket.off(r.server_geom_validate_result, et.onGeomValidateResult);
       et._socket.off("disconnect", et.onDisconnect);
-      await et.fire("destroy");
+      et.fire("destroy").catch((e) => {
+        console.error(e);
+      });
     } catch (e) {
       console.error(e);
     }
@@ -458,13 +497,112 @@ export class EditTableSessionClient extends WsToolsBase {
     await et.fire("built");
   }
 
+  initColumns(updates) {
+    const et = this;
+    et._columns = [];
+    et.addColumns(updates);
+  }
+
+  addColumns(updates) {
+    const et = this;
+    const nColumns = et._columns.length + updates.length;
+
+    let cPos = 0;
+    for (const update of updates) {
+      /**
+       * Invalid name = not editable. See :
+       * https://github.com/handsontable/handsontable/issues/5439
+       */
+      const column = et._column(update.column_name, update.column_type);
+      column._pos = column._invalid
+        ? nColumns + 1
+        : column.readOnly
+        ? -1
+        : cPos++;
+
+      et._columns.push(column);
+    }
+
+    et._columns.sort((a, b) => a._pos - b._pos);
+    et.updateColumnLabels();
+  }
+
+  updateColumnLabels() {
+    const et = this;
+    et._columns_labels = et._columns.map((c) => c.data);
+  }
+
+  addColumnStrict(update) {
+    const et = this;
+
+    const isValid =
+      et.isValidName(update.column_name) && isPgType(update.column_type);
+
+    if (!isValid) {
+      console.warn(
+        `Invalid column. Name: ${update.column_name} Type: ${update.column_type}`
+      );
+      return false;
+    }
+    et.addColumns([update]);
+    return true;
+  }
+
+  updateTableColumns() {
+    const et = this;
+    et._ht.updateSettings({
+      columns: et.getColumns(),
+      colHeaders: et.getColumnLabels(),
+    });
+    et._ht.render();
+  }
+
+  get column_index() {
+    const et = this;
+    return et._config.id_column_main;
+  }
+
+  setColumns(columns) {
+    const et = this;
+    et._columns.length = 0;
+    et._columns.push(...columns);
+  }
+
+  getColumns() {
+    const et = this;
+    return et._columns;
+  }
+
+  getColumnLabels() {
+    const et = this;
+    return et._columns_labels;
+  }
+
+  _column(name, pg_type) {
+    const et = this;
+    const column = {};
+    const isInvalid = !isSafeName(name);
+    const readOnly = et.isReadOnly(name);
+    const isOkType = isPgType(pg_type);
+    if (!isOkType) {
+      throw new Error(`Wrong type in column creator : ${pg_type}`);
+    }
+    column._pos = 0;
+    column.data = name;
+    column.readOnly = readOnly || isInvalid;
+    column._invalid = isInvalid;
+    column._pg_type = pg_type;
+    column.type = typeConvert(pg_type, "mx_handsontable");
+    return column;
+  }
+
   /**
    * Groupped button/count update
    * @param {Number} timeout Add tiemout before update. Solve cases when the hook do not fire at the right time : adding a small delay could solve issues;
    */
   updateButtons(timeout) {
     const et = this;
-    timeout = isEmpty(timeout) ? null : timeout;
+    timeout = isNumeric(timeout) ? timeout : 0;
     if (!et._table_ready || timeout) {
       setTimeout(et._update_buttons_now, timeout);
     } else {
@@ -569,7 +707,8 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtonRemoveColumn() {
     const et = this;
-    et._disable_remove_column = et._columns.length <= et._config.min_columns;
+    const columns = et.getColumns();
+    et._disable_remove_column = columns.length <= et._config.min_columns;
     et._button_enable(et._el_button_remove_column, !et._disable_remove_column);
   }
 
@@ -578,24 +717,9 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtonAddColumn() {
     const et = this;
-    et._disable_add_column = et._columns.length > et._config.max_columns;
+    const columns = et.getColumns();
+    et._disable_add_column = columns.length > et._config.max_columns;
     et._button_enable(et._el_button_add_column, !et._disable_add_column);
-  }
-
-  countUpdateValid() {
-    const et = this;
-    return et._updates.reduce((a, c) => {
-      c.valid ? a++ : a;
-      return a;
-    }, 0);
-  }
-
-  countUpdateInvalid() {
-    const et = this;
-    return et._updates.reduce((a, c) => {
-      !c.valid ? a++ : a;
-      return a;
-    }, 0);
   }
 
   /**
@@ -616,7 +740,7 @@ export class EditTableSessionClient extends WsToolsBase {
    * @param {Boolean} enable Enable autosave mode;
    * @return {Boolean} enabled
    */
-  setAutoSave(enable) {
+  async setAutoSave(enable) {
     const et = this;
     et._el_checkbox_autosave.querySelector("input").checked = !!enable;
     return et.updateAutoSave();
@@ -625,29 +749,19 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Update _auto_save state, based on checkbox, trigger lock to others
    */
-  updateAutoSave() {
+  async updateAutoSave() {
     const et = this;
-    et._auto_save = et._el_checkbox_autosave.querySelector("input").checked;
-    et.updateButtonSave();
-    if (et._auto_save) {
-      et.save();
+    try {
+      et._auto_save = et._el_checkbox_autosave.querySelector("input").checked;
+      et.updateButtonSave();
+      if (et._auto_save) {
+        et.save();
+      }
+      await et.lockTableConcurrent(!et._auto_save);
+    } catch (e) {
+      console.error(e);
     }
-    et.lockTableConcurrent(!et._auto_save);
     return et._auto_save;
-  }
-
-  /**
-   * Send lock event to other concurent user
-   * @param {Boolean} lock Enable/disable lock for other. If empty, use _auto_save state
-   */
-  lockTableConcurrent(lock) {
-    const et = this;
-    et._lock_table_concurrent = isNotEmpty(lock) ? lock : !et._auto_save;
-    const update = {
-      type: "lock_table",
-      lock: et._lock_table_concurrent,
-    };
-    et.emitUpdatesState([update]);
   }
 
   /**
@@ -673,6 +787,9 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   formatColumns(pos, element) {
     const et = this;
+    /**
+     * TODO : if dev is requested, uncomment this
+     */
     const DEV_TO_BE_VALIDATED = false;
     if (DEV_TO_BE_VALIDATED) {
       if (pos >= 0) {
@@ -717,6 +834,25 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     return et._config.id_columns_reserved.includes(name);
   }
+  /**
+   * Column name validation : columns used in style
+   * @param {String} name
+   * @return {Boolean}
+   */
+  isColumnStyle(name) {
+    const et = this;
+    return et._config.id_columns_style.includes(name);
+  }
+  /**
+   *  Check if this is a date column
+   * @param {String} name Column name
+   * @return {Boolean} is a date column
+   */
+  isColumnDate(name) {
+    const et = this;
+    const type = et.getColumnType(name, "postgres");
+    return isPgTypeDate(type);
+  }
 
   /**
    * Column name validation : column not editable
@@ -729,15 +865,16 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
-   * Column name validation : check is name is valaid
+   * Column name validation : check is name is valid
    * @param {String} name
    * @return {Boolean}
    */
   isValidName(name) {
     const et = this;
     const isSafe = isSafeName(name);
+    const isNotStyle = !et.isColumnStyle(name);
     const isNotReserved = !et.isColumnReserved(name);
-    return isSafe && isNotReserved;
+    return isSafe && isNotReserved && isNotStyle;
   }
 
   /**
@@ -746,10 +883,11 @@ export class EditTableSessionClient extends WsToolsBase {
   async columnNameIssueDialog() {
     const et = this;
     const columnsIssues = [];
+    const labels = et.getColumnLabels();
 
-    for (const column of et._columns_labels) {
-      if (!isSafeName(column)) {
-        columnsIssues.push(column);
+    for (const label of labels) {
+      if (!isSafeName(label)) {
+        columnsIssues.push(label);
       }
     }
     if (isNotEmpty(columnsIssues)) {
@@ -775,34 +913,59 @@ export class EditTableSessionClient extends WsToolsBase {
   setProgress(percent, text) {
     const et = this;
     text = text || "";
-    et._progress.update(percent, text);
+    onNextFrame(() => {
+      et._progress.update(percent, text);
 
-    if (percent === 0) {
-      et._progress.clear();
-      if (et._in_progress) {
-        et._in_progress = false;
-        et.updateButtons();
+      if (percent === 0) {
+        et._progress.clear();
+        if (et._in_progress) {
+          et._in_progress = false;
+          et.updateButtons();
+        }
+        et._el_progress.classList.remove("active");
+      } else {
+        if (!et._in_progress) {
+          et._in_progress = true;
+          et.updateButtons();
+        }
+        et._el_progress.classList.add("active");
       }
-      et._el_progress.classList.remove("active");
-    } else {
-      if (!et._in_progress) {
-        et._in_progress = true;
-        et.updateButtons();
-      }
-      et._el_progress.classList.add("active");
+    });
+  }
+
+  setProgressMessage(message, from, to) {
+    const et = this;
+    if (message?.nParts > 1) {
+      const p = message.part / message.nParts;
+      const pl = et.lerp(from || 0, to || 100, p);
+      et.setProgress(pl);
     }
   }
+
+  lerp(a, b, n) {
+    return (1 - n) * a + n * b;
+  }
+
   /**
    * Progress from server
    */
   onProgress(message) {
     const et = this;
-    const percent = Math.ceil(message.percent * 100);
-    et.setProgress(percent);
+    try {
+      if (message.id_table !== et._id_table) {
+        return;
+      }
+
+      const percent = Math.ceil(message.percent * 100);
+      et.setProgress(percent);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   /**
    * Initial table render
+   * ⚠️  called multiple times until table.end
    * @param {EditTableData} table Table object
    */
   async initTable(table) {
@@ -845,6 +1008,11 @@ export class EditTableSessionClient extends WsToolsBase {
     }
 
     /**
+     * Custom types
+     */
+    et._register_custom_types(handsontable);
+
+    /**
      * Set modal title
      */
     const title = table.title;
@@ -860,38 +1028,25 @@ export class EditTableSessionClient extends WsToolsBase {
       et._validation_geom = table.validation;
     }
 
-    /**
-     * Convert col format
-     */
-    const columns = table.types || [];
-    const nColumns = columns.length;
-    let cPos = 0;
-    for (const column of columns) {
-      const readOnly = et.isReadOnly(column.id);
-      /**
-       * Invalid name = not editable. See :
-       * https://github.com/handsontable/handsontable/issues/5439
-       */
-      const isInvalid = !isSafeName(column.id);
-      column.type = typeConvert(column.value, "json", "input");
-      column.data = column.id;
-      column.readOnly = readOnly;
-      column._pos = isInvalid ? nColumns + 1 : readOnly ? -1 : cPos++;
-      delete column.value;
-      delete column.id;
+    if (isNotEmpty(table.colStyle)) {
+      et._config.id_columns_style.push(...table.colStyle);
     }
-    et._columns = columns.sort((a, b) => a._pos - b._pos);
-    et._columns_labels = et._columns.map((c) => c.data);
+
+    /**
+     * Init columns
+     */
+    et.initColumns(table.types);
+
     /**
      * New handsontable
      */
     et._ht = new handsontable(et._el_table, {
       licenseKey: et._config.ht_license,
-      columns: et._columns,
+      columns: et.getColumns(),
       data: table.data,
       rowHeaders: true,
       columnSorting: true,
-      colHeaders: et._columns_labels,
+      colHeaders: et.getColumnLabels(),
       allowInvalid: true,
       allowInsertRow: false,
       renderAllRows: false,
@@ -906,6 +1061,9 @@ export class EditTableSessionClient extends WsToolsBase {
       contextMenu: false,
       language: getHandsonLanguageCode(),
       afterFilter: null,
+      beforeOnCellContextMenu: et._cancel_context_menu,
+      beforeChange: et.beforeChange,
+      //beforeValidate: et.beforeValidate,
       afterGetColHeader: et.formatColumns,
       afterChange: et.afterChange,
       afterLoadData: et.afterLoadData,
@@ -962,7 +1120,7 @@ export class EditTableSessionClient extends WsToolsBase {
       /**
        * Initial state of undo/redo buttons.
        */
-      et.updateAutoSave();
+      await et.updateAutoSave();
       et.updateButtons();
 
       /**
@@ -1054,120 +1212,178 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
-   * Long process on server
+   * Handle dispatched message from others
+   * Can't be blocking
    */
-  omProgress(message) {
+  onDispatch(message) {
     const et = this;
+    try {
+      if (message.id_table !== et._id_table) {
+        return;
+      }
 
-    if (message.id_table !== et._id_table) {
-      return;
+      et._log_dispatch("received", message);
+      et.setProgressMessage(message, 1, 50);
+      et.addDispached(message);
+
+      if (message.end) {
+        et.processDispached();
+      }
+    } catch (e) {
+      console.error(e);
     }
+  }
 
-    if (message.percent) {
-      et.setProgress(message.percent);
-    }
+  async processDispached() {
+    const et = this;
+    try {
+      const idDispatch = `${et._config.id_source_dispatch}@${makeId()}`;
+      const dispached = et.flushDispachedArray();
+      for (const message of dispached) {
+        et.setProgressMessage(message, 51, 100);
+        // wait for progress animation
+        await waitFrameAsync();
+        et._log_dispatch("process", message);
 
-    switch (message.type) {
-      case "validate":
-        if (message?.data?.mx_valid) {
-          // update table
+        if (isNotEmpty(message.updates)) {
+          for (const update of message.updates) {
+            switch (update.type) {
+              case "lock_table":
+                et.handlerUpdateLock(update, message);
+                break;
+              case "update_cell":
+                et.handlerUpdateCellsCollect(update, message);
+                break;
+              case "add_column":
+                et.handlerUpdateColumnAdd(update, idDispatch);
+                break;
+              case "remove_column":
+                et.handlerUpdateColumnRemove(update, idDispatch);
+                break;
+              default:
+                console.warn("unhandled update:", message);
+            }
+          }
         }
-        break;
-      default:
-        null;
+
+        const processCells = message.end && et.countBatchCells() > 0;
+
+        if (processCells) {
+          await et.handlerCellsBatchProcess(idDispatch);
+        }
+
+        if (message.end) {
+          et.setProgress(0);
+        }
+      }
+    } catch (e) {
+      et.setProgress(0);
+      console.error(e);
     }
   }
 
   /**
-   * Handle dispatched message from others
+   * Batch cells operations
    */
-  onDispatch(message) {
+  cleanBatchCells() {
     const et = this;
-
-    if (message.id_table !== et._id_table) {
-      return;
-    }
-    if (isNotEmpty(message.updates)) {
-      const cells = [];
-
-      et._ht.batch(() => {
-        for (const update of message.updates) {
-          switch (update.type) {
-            case "lock_table":
-              et.handlerUpdateLock(update, message);
-              break;
-            case "update_cell":
-              et.handlerUpdateCellsBatchAdd(update, cells);
-              break;
-            case "add_column":
-              et.handlerUpdateColumnAdd(update, et._config.id_source_dispatch);
-              break;
-            case "remove_column":
-              et.handlerUpdateColumnRemove(
-                update,
-                et._config.id_source_dispatch
-              );
-              break;
-            default:
-              console.warn("unhandled update:", message);
-          }
-        }
-        if (isNotEmpty(cells)) {
-          et.handlerCellsBatchProcess(cells, et._config.id_source_dispatch);
-        }
-      });
-    }
+    et._batch_cells.length = 0;
+  }
+  countBatchCells() {
+    const et = this;
+    return et._batch_cells.length;
+  }
+  flushBatchCells() {
+    const et = this;
+    const cells = [...et._batch_cells];
+    et.cleanBatchCells();
+    return cells;
+  }
+  addBatchCell(cell) {
+    const et = this;
+    et._batch_cells.push(cell);
+  }
+  addBatchCells(cells) {
+    const et = this;
+    et._batch_cells.push(...cells);
   }
 
   /**
    * Handler update in batch : array of array
+   * @return {Promise<Boolean>}
    */
-  handlerCellsBatchProcess(cells, idSource) {
+  handlerCellsBatchProcess(source) {
     const et = this;
     return new Promise((resolve, reject) => {
       try {
-        // [[row, prop, value],...]
-        et._ht.setDataAtRowProp(cells, null, null, idSource);
-        et.once("after_change_done", () => {
-          resolve(true);
-        });
+        const validSource = et.isFromValidSource(source);
+
+        /**
+         * Espect known source
+         */
+        if (!validSource) {
+          console.warn(`Cells not processed, invalid source id ${source}`);
+          return resolve(false);
+        }
+
+        // copy cells, empty queue;
+        const cells = et.flushBatchCells();
+
+        if (isEmpty(cells)) {
+          console.warn("Batch cells handler requested, but no cells found");
+          return resolve(false);
+        }
+
+        et.on("after_change_done", cbChange);
+
+        et.setCells({ cells: cells, source: source });
+
+        function cbChange(data) {
+          if (data.source === source) {
+            et.off("after_change_done", cbChange);
+            return resolve(true);
+          }
+        }
       } catch (e) {
         console.warn("handlerCellsBatchProcess", e);
-        reject(false);
+        return reject(false);
       }
     });
   }
 
   /**
-   * Add an update to batch cells array
-   * @param {Object} update Update
-   * @param {Array} cells Batch cells, used by handlerCellsBatchProcess
+   * Wrapper for set data at cell
+   * @param {Object} config Configuration
+   * @param {Array} config.cells Array of cells [[id_row,id_col,value],]
+   * @param {String} config.source Data source id
    */
-  handlerUpdateCellsBatchAdd(update, cells) {
-    // [[row, prop, value], ...].
+  setCells(config) {
     const et = this;
-    const gid = update[et._config.id_column_main];
-    const gidRow = et._ht.getDataAtProp(et._config.id_column_main);
-    const idRow = gidRow.indexOf(gid);
-    cells.push([idRow, update.column_name, update.value_new]);
+    et._ht.setDataAtCell(config.cells, null, null, config.source);
   }
 
   /**
-   * Update cell with a single value
-   * @param {Object} update Update
-   * @param {String} source Id of the source. e.g. id_source_dispatch
+   * Same as setCells, but wait for sanitized
+   * @return {Promise<object>} Wait for sanitized stats
    */
-  updateCellValue(update, source) {
+  setCellsWaitSanitize(config) {
     const et = this;
-    const gid = update[et._config.id_column_main];
-    const gidRow = et._ht.getDataAtProp(et._config.id_column_main);
-    const idRow = gidRow.indexOf(gid);
-    et._ht.setDataAtRowProp(
-      idRow,
-      update.column_name,
-      update.value_new,
-      source
-    );
+    return new Promise((resolve) => {
+      et.once("sanitized", resolve);
+      et.setCells(config);
+    });
+  }
+
+  /**
+   * Add an update to batch cells array
+   * -> udpate to  [[idRow, idCol, value],...]
+   * @param {Object} update Update
+   */
+  async handlerUpdateCellsCollect(update) {
+    const et = this;
+    const idRow = update.row_id;
+    const idCol = et.getColumnId(update.column_name);
+    et.addBatchCell([idRow, idCol, update.value_new]);
   }
 
   /**
@@ -1198,73 +1414,118 @@ export class EditTableSessionClient extends WsToolsBase {
    * @param {Object} update
    * @param {String} source (edit, dispatch..)
    */
-  handlerUpdateColumnRemove(update, source) {
+  async handlerUpdateColumnRemove(update, source) {
     const et = this;
-    let n = et._columns.length;
-    let colRemoved = {}; // keep track for cleaning redo / updates
-    while (n--) {
-      const col = et._columns[n];
-      if (col.data === update.column_name) {
-        colRemoved.column = et._columns.splice(n, 1);
-        colRemoved.pos = n;
+    try {
+      const columns = et.getColumns();
+      let n = columns.length;
+      let colRemoved = {}; // keep track for cleaning redo / updates
+      while (n--) {
+        const col = columns[n];
+        if (col.data === update.column_name) {
+          /**
+           * Splice / remove
+           * Keep position
+           */
+          colRemoved.column = columns.splice(n, 1);
+          colRemoved.pos = n;
+          continue;
+        }
       }
+
+      if (isEmpty(colRemoved)) {
+        console.warn(`Column ${update.column_name} not removed`);
+        return;
+      }
+
+      /**
+       * Update columns label
+       */
+      et.updateColumnLabels();
+
+      /**
+       * ⚠️ Column removal using alter('remove_col',) is not
+       * supported using data object as source !
+       * - Error: cannot remove column with object data source or columns option specified
+       * Strategy : whole manual process
+       * Here is how this should be done, by the book for array as source :
+       * - use the context menu OR manually, find the index of the column starting from end
+       * const id = nColumns - 1 - colRemoved.pos;
+       * - Alter table
+       * et._ht.alter("remove_col", id);
+       */
+      et._ht.updateSettings({
+        columns: et.getColumns(),
+        colHeaders: et.getColumnLabels(),
+      });
+
+      /**
+       * Remove update item that ref the removed column
+       */
+      et.clearUpdateRefColName(update.column_name);
+
+      /**
+       * Same for undo/redo
+       */
+      et.clearUndoRedoRefCol(colRemoved.pos);
+
+      const data = et._ht.getSourceData();
+      for (const row of data) {
+        delete row[update.column_name];
+      }
+
+      et._ht.updateData(data, "column_remove_handler");
+
+      /**
+       * Update buttons state
+       */
+      et.updateButtons();
+
+      /**
+       * Render table
+       */
+      et._ht.render();
+
+      if (et.isFromDispatch(source)) {
+        return;
+      }
+
+      await et.emitUpdatesDb([update]);
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
     }
+  }
 
-    if (isEmpty(colRemoved)) {
-      console.warn(`Column ${update.column_name} not removed`);
-      return;
-    }
-
-    /**
-     * ⚠️ Column removal using alter('remove_col',) is not
-     * supported using data object as source !
-     * - Error: cannot remove column with object data source or columns option specified
-     * Strategy : whole manual process
-     * Here is how this should be done, by the book for array as source :
-     * - use the context menu OR manually, find the index of the column starting from end
-     * const id = nColumns - 1 - colRemoved.pos;
-     * - Alter table
-     * et._ht.alter("remove_col", id);
-     */
-    et._ht.updateSettings({
-      columns: et._columns,
-      colHeaders: et._columns.map((c) => c.data),
-    });
-
-    /**
-     * Remove update item that ref the removed column
-     */
-    et.clearUpdateRefColName(update.column_name);
-
-    /**
-     * Same for undo/redo
-     */
-    et.clearUndoRedoRefCol(colRemoved.pos);
-
-    const data = et._ht.getSourceData();
-    for (const row of data) {
-      delete row[update.column_name];
-    }
-
-    et._ht.updateData(data, "column_remove_handler");
-
-    /**
-     * Update buttons state
-     */
-    et.updateButtons();
-
-    /**
-     * Render table
-     */
-    et._ht.render();
-    et.validateTable();
-
-    if (source === et._config.id_source_dispatch) {
-      return;
-    }
-
-    et.emitUpdatesDb([update]);
-    return true;
+  /**
+   * Test if id source is from dispatch
+   */
+  isFromDispatch(id) {
+    const et = this;
+    id = id || "";
+    return id.split("@")[0] === et._config.id_source_dispatch;
+  }
+  isFromGeom(id) {
+    const et = this;
+    id = id || "";
+    return id.split("@")[0] === et._config.id_source_geom;
+  }
+  isFromSanitize(id) {
+    const et = this;
+    return et.isFromSanitizeError(id) || et.isFromSanitizeOk(id);
+  }
+  isFromSanitizeError(id) {
+    const et = this;
+    return id === et._config.id_source_sanitize_error;
+  }
+  isFromSanitizeOk(id) {
+    const et = this;
+    return id === et._config.id_source_sanitize_ok;
+  }
+  isFromValidSource(id) {
+    const et = this;
+    return et.isFromDispatch(id) || et.isFromGeom(id) || et.isFromSanitize(id);
   }
 
   /*
@@ -1272,15 +1533,17 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async dialogRemoveColumn() {
     const et = this;
-    const names = et._columns.reduce((a, c) => {
-      const isValid = et.isValidName(c.data);
-      if (isValid) {
-        a.push(c.data);
-      }
-      return a;
-    }, []);
+    const names = et.getColumnLabels();
+    const optionColumnNames = [];
+    const source = et._config.id_source_dialog;
 
-    const optionColumnNames = names.map((t) => el("option", { value: t }, t));
+    for (const name of names) {
+      const isValid = et.isValidName(name);
+      if (isValid) {
+        const elOption = el("option", { value: name }, name);
+        optionColumnNames.push(elOption);
+      }
+    }
 
     const columnToRemove = await modalPrompt({
       title: tt("edit_table_modal_remove_column_title"),
@@ -1289,8 +1552,8 @@ export class EditTableSessionClient extends WsToolsBase {
       inputTag: "select",
       inputOptions: {
         type: "select",
-        value: getTypes("postgres")[0],
-        placeholder: "Column type",
+        placeholder: "Column name",
+        value: names[0],
       },
       inputChildren: optionColumnNames,
     });
@@ -1331,7 +1594,7 @@ export class EditTableSessionClient extends WsToolsBase {
       column_name: columnToRemove,
     };
 
-    et.handlerUpdateColumnRemove(update);
+    et.handlerUpdateColumnRemove(update, source);
   }
 
   /**
@@ -1339,42 +1602,30 @@ export class EditTableSessionClient extends WsToolsBase {
    * @param {Object} update
    * @param {String} source (edit, dispatch..)
    */
-  handlerUpdateColumnAdd(update, source) {
+  async handlerUpdateColumnAdd(update, source) {
     const et = this;
-    const isValid = et.isValidName(update.column_name);
+    try {
+      const done = et.addColumnStrict(update);
 
-    if (!isValid) {
-      console.warn(`Invalid column name : ${update.column_name}`);
-      return;
+      if (!done) {
+        return;
+      }
+      et.updateTableColumns();
+      et.updateButtonsAddRemoveColumn();
+
+      if (et.isFromDispatch(source)) {
+        /**
+         * Dispatched event : don't re-dispatch
+         */
+        return;
+      }
+
+      await et.emitUpdatesDb([update]);
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
     }
-
-    const column = {
-      data: update.column_name,
-      type: typeConvert(update.column_type, "postgres", "input"),
-    };
-
-    /**
-     * Update column list and emit updates directly
-     */
-    et._columns.push(column);
-    const headers = et._columns.map((c) => c.data);
-    et._ht.updateSettings({
-      columns: et._columns,
-      colHeaders: headers,
-    });
-
-    et.updateButtonsAddRemoveColumn();
-    /**
-     * Render table
-     */
-    et._ht.render();
-    et.validateTable();
-
-    if (source === et._config.id_source_dispatch) {
-      return;
-    }
-    et.emitUpdatesDb([update]);
-    return true;
   }
 
   /**
@@ -1392,6 +1643,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async dialogAddColumn() {
     const et = this;
+    const source = et._config.id_source_dialog;
     let valid = false;
 
     /**
@@ -1472,9 +1724,12 @@ export class EditTableSessionClient extends WsToolsBase {
     /**
      * Ask the user for a column type
      */
-    const typeOptions = getTypes("postgres").map((t) =>
-      el("option", { value: t }, t)
-    );
+    const types = getPgTypes();
+    const typeOptions = [];
+    for (const type of types) {
+      const elOption = el("option", { value: type }, type);
+      typeOptions.push(elOption);
+    }
 
     const columnType = await modalPrompt({
       title: tt("edit_table_modal_add_column_type_title"),
@@ -1483,7 +1738,7 @@ export class EditTableSessionClient extends WsToolsBase {
       inputTag: "select",
       inputOptions: {
         type: "select",
-        value: getTypes("postgres")[0],
+        value: types[0],
         placeholder: "Column type",
       },
       inputChildren: typeOptions,
@@ -1492,11 +1747,15 @@ export class EditTableSessionClient extends WsToolsBase {
     if (columnType === false) {
       return;
     }
+    const isValidColumnType = isPgType(columnType);
+
+    if (!isValidColumnType) {
+      throw new Error(`Invalid column type: ${columnType}`);
+    }
 
     /**
      * Ask the user for confirmation
      */
-
     const confirmCreate = await modalConfirm({
       title: tt("edit_table_modal_add_column_confirm_title"),
       content: getDictTemplate("edit_table_modal_add_column_confirm_text", {
@@ -1518,30 +1777,47 @@ export class EditTableSessionClient extends WsToolsBase {
       column_type: columnType,
     };
 
-    return et.handlerUpdateColumnAdd(update);
+    return et.handlerUpdateColumnAdd(update, source);
   }
 
   /**
-   * Get column javascript type
-   * @param {String} column name
+   * Get column pg type
+   * @param {String} columnName Column name
+   * @param {String} mode mode : postgres, json, input. Default = 'json'
    * @return {String} type
    */
-  getColumnType(columnName) {
+  getColumnType(columnName, mode) {
     const et = this;
-    const type = et._columns.find((c) => c.data === columnName)?.type || "text";
-    return typeConvert(type, "input", "javascript");
+    mode = mode || "json";
+    const type = et._columns.find((c) => c.data === columnName)?._pg_type;
+    return typeConvert(type, mode);
   }
 
   /**
-   * Get column javascript type using column position
+   * Get column json type using column position
    * @param {Integer} column id / position
    * @return {String} type
    */
-
   getColumnTypeById(columnId) {
     const et = this;
-    const type = et._columns[columnId]?.type || "text";
-    return typeConvert(type, "input", "javascript");
+    const type = et._columns[columnId]?._pg_type;
+    return typeConvert(type, "json");
+  }
+
+  /**
+   * Get column id
+   * @param {String} columnName Column name
+   * @return {Integer} column id
+   */
+  getColumnId(columnName) {
+    const et = this;
+    for (let i = 0; i < et._columns.length; i++) {
+      const col = et._columns[i];
+      if (col.data === columnName) {
+        return i;
+      }
+    }
+    throw new Error(`Column ${columnName} not found`);
   }
 
   /**
@@ -1554,90 +1830,6 @@ export class EditTableSessionClient extends WsToolsBase {
     return !!et._columns.find((c) => c.data === columnName);
   }
 
-  /**
-   * Validate change
-   * @param {Array} change Handsontable change
-   * @return {Boolean} valid change
-   */
-  validateChange(change) {
-    /* change: [row, prop, oldValue, newValue] */
-    const et = this;
-
-    const column = change[1];
-    const value = change[3];
-
-    if (isEmpty(value)) {
-      change[3] = null;
-      return true;
-    }
-
-    return et._validate_col_val(column, value);
-  }
-
-  /**
-   * Validate old value of an handsontable change
-   * @param {Array} Handsontable change
-   * @return {Boolean} valid old value
-   */
-  validateOldValue(change) {
-    /* change: [row, prop, oldValue, newValue] */
-    const et = this;
-
-    const column = change[1];
-    const value = change[2];
-
-    if (isEmpty(value)) {
-      change[2] = null;
-      return true;
-    }
-
-    return et._validate_col_val(column, value);
-  }
-
-  /**
-   * Internal method for validate value, given column
-   * @return {Boolean} valid
-   */
-  _validate_col_val(column, value) {
-    const et = this;
-
-    const exists = et.columnExists(column);
-
-    if (!exists) {
-      return false;
-    }
-
-    const type = et.getColumnType(column);
-
-    if (type === "boolean") {
-      return ["false", "true", "FALSE", "TRUE", true, false].includes(value);
-    }
-
-    return typeof value === type;
-  }
-
-  /**
-   * Validate table ( manually )
-   * TODO: this method should be removed: workaround handsontable issue
-   * - handsontable remove validate formating after updateSettings.
-   * we re-validate here as a warkaund
-   * - validateCells return an error. Try itterate on cols
-   * - still an error : added setTimeout(()): "solved"
-   */
-  validateTable() {
-    const et = this;
-    const cols = et.getColumns();
-    setTimeout(() => {
-      for (let i = 0; i < cols.length; i++) {
-        try {
-          et._ht.validateColumns([i]);
-        } catch (e) {
-          const col = cols[i];
-          console.warn("Issue with col validation", col, e);
-        }
-      }
-    }, 10);
-  }
   /**
    * Display info when change is not valid
    * @param {Number} n Number of invalid
@@ -1655,6 +1847,9 @@ export class EditTableSessionClient extends WsToolsBase {
         amount: n,
       }),
       close: tt("edit_table_modal_values_invalid_ok"),
+      style: {
+        opacity: "0.92",
+      },
     });
     et.setReadOnly(false);
   }
@@ -1669,8 +1864,7 @@ export class EditTableSessionClient extends WsToolsBase {
     if (et._config.test_mode) {
       return true;
     }
-    et.lockTableConcurrent(true);
-    et.lock();
+    await et.lockAll();
     const nChanges = changes.length;
     const proceedLargeChanges = await modalConfirm({
       title: tt("edit_table_modal_large_changes_number_title"),
@@ -1683,8 +1877,7 @@ export class EditTableSessionClient extends WsToolsBase {
       confirm: tt("btn_edit_table_modal_large_changes_number_continue"),
       cancel: tt("btn_edit_table_modal_large_changes_number_undo"),
     });
-    et.unlock();
-    et.lockTableConcurrent(!et._auto_save);
+    await et.unlockAll();
     return proceedLargeChanges;
   }
 
@@ -1693,7 +1886,7 @@ export class EditTableSessionClient extends WsToolsBase {
    * @param {Array} changes Array of changes
    * @return {Promise<Boolean>} continue
    */
-  async confirmChangesToBig(changes) {
+  async dialogChangesToBig(changes) {
     const et = this;
     if (et._config.test_mode) {
       return true;
@@ -1714,7 +1907,7 @@ export class EditTableSessionClient extends WsToolsBase {
    * @param {Array} changes Array of changes
    * @param {String} source Change source : dispatch/undo/edit ...
    */
-  async afterChange(changes, source) {
+  afterChange(changes, source) {
     /* changes: [[row, prop, oldValue, newValue]] */
     const et = this;
 
@@ -1736,39 +1929,15 @@ export class EditTableSessionClient extends WsToolsBase {
       /**
        * Ignore dispatch changes, only "edit","Autofill.fill","..".
        */
-      if (source === et._config.id_source_dispatch) {
+      if (et.isFromDispatch(source)) {
         return;
       }
-
       /**
-       * Check length : warning, stop, batch or not
+       * Ignore cells with errors
        */
-      const changesWarning = changes.length >= et._config.max_changes_warning;
-      const changesTooBig = changes.length >= et._config.max_changes;
-
-      if (changesTooBig) {
-        /**
-         * Too much changes detected : alert
-         */
-        et._ignore_next_changes = true;
-        et.undo();
-        await et.confirmChangesToBig(changes);
+      if (et.isFromSanitizeError(source)) {
         return;
       }
-
-      if (changesWarning) {
-        /**
-         * Lots of changes detected : confirm
-         */
-        const confirmLargeUpdate = await et.confirmLargeUpdate(changes);
-        if (!confirmLargeUpdate) {
-          et._ignore_next_changes = true;
-          et.undo();
-          return;
-        }
-      }
-
-      let invalids = 0;
 
       for (const change of changes) {
         /* change: [row, prop, oldValue, newValue] */
@@ -1777,25 +1946,7 @@ export class EditTableSessionClient extends WsToolsBase {
           /* no change */
           continue;
         }
-
-        const isValid = et.validateChange(change);
-
-        /**
-         * keep track of invalid changes
-         */
-        if (!isValid) {
-          invalids++;
-        }
-
-        /**
-         * Push, update or delete
-         * only if all value are valid
-         */
-        et.pushUpdateOrDelete(change, isValid);
-      }
-
-      if (invalids > 0) {
-        await et.infoValidation(invalids);
+        et.addChangeToUpdates(change, true);
       }
 
       /**
@@ -1807,16 +1958,16 @@ export class EditTableSessionClient extends WsToolsBase {
     } catch (e) {
       console.error(e);
     } finally {
-      et.fire("after_change_done");
+      et.fire("after_change_done", { source });
     }
   }
 
   /**
    * Save and dispatch changes
    */
-  save() {
+  async save() {
     const et = this;
-    const updates = et._updates.filter((u) => u.valid);
+    const updates = et.getUpdatesArray();
     if (et._disconnected) {
       console.warn("Can't save while disconnected");
       return;
@@ -1828,62 +1979,102 @@ export class EditTableSessionClient extends WsToolsBase {
     if (isEmpty(updates)) {
       return;
     }
-    et.emitUpdatesDb(updates);
-    et.flushUpdates();
+    await et.emitUpdatesDb(updates);
+    et.clearUpdates();
     et.updateButtons();
   }
 
   /**
-   * Remove pending updates
-   */
-  flushUpdates() {
-    const et = this;
-    et._updates = [];
-  }
-
-  /**
    * Push update, or delete if equal original state
+   * TODO: isValid is always valid : remote validation, and if
+   *       not valid = not added to updates
    * @param {Object} change
    * @param {Boolean} isValid
    */
-  pushUpdateOrDelete(change, isValid) {
+  addChangeToUpdates(change, isValid) {
     const et = this;
     const idRow = et._ht.toPhysicalRow(change[0]);
     const row = et._ht.getSourceDataAtRow(idRow);
-    const gid = row[et._config.id_column_main];
+    const gid = row[et.column_index];
+    const columnName = change[1];
+    const columnType = et.getColumnType(columnName, "postgres");
+    const isEmptyOrig = isEmpty(change[2]);
+    const isEmptyNew = isEmpty(change[3]);
+
+    const valOrig = change[2];
+    const valNew = change[3];
+
     const update = {
       id_table: et._id_table,
       type: "update_cell",
-      column_name: change[1],
-      value_orig: isEmpty(change[2]) ? null : change[2],
-      value_new: isEmpty(change[3]) ? null : change[3],
+      column_name: columnName,
+      column_type: columnType,
+      value_orig: isEmptyOrig ? null : valOrig,
+      value_new: isEmptyNew ? null : valNew,
       valid: isValid,
       gid: gid,
+      row_id: idRow,
     };
 
     if (update.value_new === update.value_orig) {
       return;
     }
 
-    for (let i = 0, iL = et._updates.length; i < iL; i++) {
-      const pUpdate = et._updates[i];
-      const isSameCell =
-        pUpdate.gid === update.gid &&
-        pUpdate.column_name === update.column_name &&
-        pUpdate.id_table === update.id_table;
-      if (isSameCell) {
-        const noChange = pUpdate.value_orig === update.value_new;
-        if (noChange) {
-          et._updates.splice(i, 1);
-        } else {
-          pUpdate.valid = isValid;
-          pUpdate.value_new = update.value_new;
-        }
+    const id = `${update.id_table}_${update.gid}_${update.column_name}`;
+    const previous = et._updates.get(id);
+    if (previous) {
+      const noChange = previous.value_orig === update.value_new;
+      if (noChange) {
+        et._updates.delete(id);
         return;
       }
     }
+    et._updates.set(id, update);
+  }
+  /**
+   * Update management
+   */
+  clearUpdates() {
+    const et = this;
+    et._updates.clear();
+  }
+  getUpdates() {
+    const et = this;
+    return et._updates.values();
+  }
+  getUpdatesArray() {
+    const et = this;
+    return Array.from(et.getUpdates());
+  }
+  countUpdateValid() {
+    const et = this;
+    return et._updates.size;
+  }
 
-    et._updates.push(update);
+  /**
+   * Dispatch management
+   */
+  clearDispatched() {
+    const et = this;
+    et._dispatch_queue.clear();
+  }
+  getDispached() {
+    const et = this;
+    return et._dispatch_queue.values();
+  }
+  getDispachedArray() {
+    const et = this;
+    return Array.from(et.getDispached());
+  }
+  addDispached(message) {
+    const et = this;
+    et._dispatch_queue.add(message);
+  }
+  flushDispachedArray() {
+    const et = this;
+    const out = et.getDispachedArray();
+    et.clearDispatched();
+    return out;
   }
 
   /**
@@ -1938,14 +2129,18 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Handle reconnection
    */
-  onReconnect() {
+  async onReconnect() {
     const et = this;
-    et._disconnected = false;
-    et._el_overlay.classList.remove("disconnected");
-    et.enable();
-    et.start({
-      send_table: false,
-    });
+    try {
+      et._disconnected = false;
+      et._el_overlay.classList.remove("disconnected");
+      et.enable();
+      await et.start({
+        send_table: false,
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   /**
@@ -1981,14 +2176,26 @@ export class EditTableSessionClient extends WsToolsBase {
    * Send lock event to other concurent user
    * @param {Boolean} lock Enable/disable lock for other. If empty, use _auto_save state
    */
-  lockTableConcurrent(lock) {
+  async lockTableConcurrent(lock) {
     const et = this;
     et._lock_table_concurrent = isNotEmpty(lock) ? lock : !et._auto_save;
     const update = {
       type: "lock_table",
       lock: et._lock_table_concurrent,
     };
-    et.emitUpdatesState([update]);
+    await et.emitUpdatesState([update]);
+  }
+
+  async lockAll() {
+    const et = this;
+    await et.lockTableConcurrent(true);
+    et.lock();
+  }
+
+  async unlockAll() {
+    const et = this;
+    await et.lockTableConcurrent(!et._auto_save);
+    et.unlock();
   }
 
   /**
@@ -1996,14 +2203,44 @@ export class EditTableSessionClient extends WsToolsBase {
    * @param {String} type Emit type
    * @param {Object} message Message to emit, if not locked
    */
-  emit(type, message) {
+  emit(type, message, timeout) {
     const et = this;
-    const messageEmit = et.message_formater(message);
+    const to = isEmpty(timeout) ? et._config.timeout_emit : timeout;
+    return new Promise((resolve, reject) => {
+      if (et.locked) {
+        return false;
+      }
+      const messageEmit = et.message_formater(message);
+      et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  }
 
-    if (et.locked) {
-      return;
-    }
-    et._socket.emit(type, messageEmit);
+  /**
+   * ws emit wrapper : format message and emit
+   * @param {String} type Emit type
+   * @param {Object} message Message to emit, if not locked
+   */
+  async emitGet(type, message, timeout) {
+    const et = this;
+    const to = isEmpty(timeout) ? et._config.timeout_emit : timeout;
+    return new Promise((resolve) => {
+      const messageEmit = et.message_formater(message);
+      et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
+        if (err) {
+          console.error(err);
+          resolve(false);
+        } else {
+          resolve(res);
+        }
+      });
+    });
   }
 
   /**
@@ -2011,7 +2248,7 @@ export class EditTableSessionClient extends WsToolsBase {
    * @param {Array} update Array of updates
    * @param {Object} opt Options pased to emit message
    */
-  emitUpdates(updates, opt) {
+  async emitUpdates(updates, opt) {
     const et = this;
     const r = et._config.routes;
     if (et.locked) {
@@ -2021,25 +2258,46 @@ export class EditTableSessionClient extends WsToolsBase {
       console.warn("Test mode. Updates not emited:", updates);
       return;
     }
-    et.emit(r.client_edit_updates, { updates, ...opt });
+
+    const n = updates.length;
+    const max = et._config.max_changes_large;
+    const nChunk = Math.ceil(n / max);
+
+    try {
+      for (let iChunk = 0; iChunk < nChunk; iChunk++) {
+        const chunk = updates.splice(0, max);
+        await et.emit(r.client_edit_updates, {
+          nParts: nChunk,
+          part: iChunk + 1,
+          start: iChunk === 0,
+          end: iChunk === nChunk - 1,
+          updates: chunk,
+          ...opt,
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+    return true;
   }
 
   /**
    * emit update + write to db (if authentication match server side)
    * @param {Array} updates
    */
-  emitUpdatesDb(updates) {
+  async emitUpdatesDb(updates) {
     const et = this;
-    et.emitUpdates(updates, { write_db: true });
+    await et.emitUpdates(updates, { write_db: true });
   }
 
   /**
    * emit state update (e.g. lock state change )
    * @param {Array} updates
    */
-  emitUpdatesState(updates) {
+  async emitUpdatesState(updates) {
     const et = this;
-    et.emitUpdates(updates, { update_state: true });
+    await et.emitUpdates(updates, { update_state: true });
   }
 
   /**
@@ -2130,7 +2388,7 @@ export class EditTableSessionClient extends WsToolsBase {
       return;
     }
     const opt = { use_cache: false, autoCorrect: false };
-    et.emit(r.client_geom_validate, opt);
+    await et.emit(r.client_geom_validate, opt);
   }
 
   async dialogGeomRepair() {
@@ -2152,28 +2410,32 @@ export class EditTableSessionClient extends WsToolsBase {
     }
 
     const opt = { use_cache: true, autoCorrect: true };
-    et.emit(r.client_geom_validate, opt);
+    await et.emit(r.client_geom_validate, opt);
   }
 
   async onGeomValidateResult(data) {
     const et = this;
     try {
       const validValues = data?.stat?.values;
-      const gidRow = et._ht.getDataAtProp(et._config.id_column_main);
+      //const gidRow = et._ht.getDataAtProp(et.column_index);
+      const idBatch = `${et._config.id_source_geom}@${makeId()}`;
+
       /**
        * Format cell as [2307, '_mx_valid', true]
        */
+      const idCol = et.getColumnId(et._config.id_column_valid);
       const cells = validValues.map((v) => {
-        const idRow = gidRow.indexOf(v.gid);
-        return [
-          idRow,
-          et._config.id_column_valid,
-          v[et._config.id_column_valid],
-        ];
+        //const idRow = gidRow.indexOf(v.gid);
+        const idRow = v.row;
+        const val = v[et._config.id_column_valid];
+        return [idRow, idCol, val];
       });
-      et.handlerCellsBatchProcess(cells);
+      et.addBatchCells(...cells);
+      const res = await et.handlerCellsBatchProcess(idBatch);
+      return res;
     } catch (e) {
       console.error(e);
+      return false;
     }
   }
   /**
@@ -2219,13 +2481,11 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   clearUpdateRefColName(name) {
     const et = this;
-    let nU = et._updates.length;
-    while (nU--) {
-      const sUpdate = et._updates[nU];
-      if (sUpdate.column_name === name) {
-        et._updates.splice(nU, 1);
+    et._updates.forEach((update, key) => {
+      if (update.column_name === name) {
+        et._updates.delete(key);
       }
-    }
+    });
   }
   /**
    * Remove ref to column name from unduRedo
@@ -2255,6 +2515,234 @@ export class EditTableSessionClient extends WsToolsBase {
           }
         }
       }
+    }
+  }
+
+  /**
+   * Sanitize
+   */
+  async sanitize(changes) {
+    const et = this;
+    const stat = {};
+    try {
+      /*
+       * Check changes length
+       */
+      const changesTooLarge = changes.length > et._config.max_changes;
+      const changesLarge = changes.length > et._config.max_changes_large;
+
+      if (changesTooLarge) {
+        await et.dialogChangesToBig(changes);
+        return false;
+      }
+      if (changesLarge) {
+        const confirmChanges = await et.confirmLargeUpdate(changes);
+        if (!confirmChanges) {
+          return false;
+        }
+      }
+
+      /**
+       * Convert changes to updates
+       */
+      const updates = changes.map((change) => {
+        // 0 row, 1 prop, (2 old), 3 new, 4 type
+        const type = et.getColumnType(change[1], "postgres");
+        // jsonb should be parsed OR stringified after mx_try_cast, which return objects
+        const value = change[3];
+        //[type === "jsonb" ? JSON.parse(change[3]) : change[3];
+
+        return {
+          row_id: change[0],
+          column_name: change[1],
+          column_type: type,
+          value_new: value,
+        };
+      });
+
+      /*
+       * Sanitize by chunk
+       */
+      const n = updates.length;
+      const max = et._config.max_changes_large;
+      const nChunk = Math.ceil(n / max);
+      const progThreshold = n > 100;
+      const sanitized = [];
+
+      if (progThreshold) {
+        await et.lockTableConcurrent(true);
+      }
+
+      for (let iChunk = 0; iChunk < nChunk; iChunk++) {
+        const chunk = updates.splice(0, max);
+        const percent = ((iChunk + 1) / nChunk) * 100;
+        if (progThreshold) {
+          et.setProgress(percent);
+        }
+
+        const sanitizedChunk = await et.emitGet(
+          et._config.routes.client_changes_sanitize,
+          {
+            updates: chunk,
+          },
+          et._config.timeout_sanizing
+        );
+        sanitized.push(...sanitizedChunk);
+      }
+
+      /**
+       * Apply sanitized values
+       */
+      const cellsSanitized = [];
+      const cellsError = [];
+      et._ht.batch(() => {
+        /**
+         * Sanitized updates
+         *     -> cells with error
+         *     -> cells valid
+         */
+        for (const update of sanitized) {
+          const id_col = et.getColumnId(update.column_name);
+
+          const invalid =
+            isEmpty(update.value_sanitized) && isNotEmpty(update.value_new);
+
+          if (invalid) {
+            update.value_sanitized = update.value_new;
+          }
+
+          const cell = [update.row_id, id_col, update.value_sanitized];
+
+          if (invalid) {
+            cellsError.push(cell);
+          } else {
+            cellsSanitized.push(cell);
+          }
+
+          et._ht.setCellMeta(update.row_id, id_col, "valid", !invalid);
+        }
+
+        /**
+         * Update cell in table
+         * valid   -> source ok = dispatch and/or save
+         * invalid -> source error = do nothing
+         */
+        et.setCells({
+          cells: cellsSanitized,
+          source: et._config.id_source_sanitize_ok,
+        });
+        et.setCells({
+          cells: cellsError,
+          source: et._config.id_source_sanitize_error,
+        });
+
+        stat.nValid = cellsSanitized.length;
+        stat.nError = cellsError.length;
+      });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      await et.lockTableConcurrent();
+      et.setProgress(0);
+      et.fire("sanitized", stat);
+    }
+  }
+
+  /**
+   * before validation
+   */
+  beforeChange(changes, source) {
+    const et = this;
+    const skip =
+      et.isFromSanitize(source) ||
+      et.isFromDispatch(source) ||
+      et.isFromGeom(source);
+
+    if (skip) {
+      return;
+    }
+
+    /*
+     * Intercept: validate + sanitize;
+     */
+    et.sanitize(changes);
+
+    return false;
+  }
+
+  /**
+   * Cancel context menu
+   */
+  _cancel_context_menu(e) {
+    /*
+     * Disable context menu
+     */
+    e.stopImmediatePropagation();
+  }
+
+  _register_custom_types(handsontable) {
+    /**
+     * Override editor and renderer
+     * according to postgres types
+     */
+
+    const te = handsontable.editors.TextEditor;
+    const tr = handsontable.renderers.TextRenderer;
+
+    const ne = handsontable.editors.NumericEditor;
+    const nr = handsontable.renderers.NumericRenderer;
+
+    const be = handsontable.editors.CheckboxEditor;
+    const br = handsontable.renderers.CheckboxRenderer;
+
+    const types = {
+      mx_jsonb: {
+        editor: te,
+        renderer: tr,
+        validator: null,
+        className: null,
+      },
+      mx_string: {
+        editor: te,
+        renderer: tr,
+        validator: null,
+        className: null,
+      },
+      mx_number: {
+        editor: ne,
+        renderer: nr,
+        validator: null,
+        className: "htRight, htNumeric",
+      },
+      mx_boolean: {
+        editor: be,
+        renderer: br,
+        validator: null,
+        className: null,
+      },
+    };
+
+    for (const type of Object.keys(types)) {
+      const c = types[type];
+      handsontable.cellTypes.registerCellType(type, {
+        editor: c.editor,
+        renderer: c.renderer,
+        validator: c.validator,
+        className: c.className,
+        allowInvalid: true,
+      });
+    }
+  }
+
+  /**
+   * Debug dispatch helper
+   */
+  _log_dispatch(label, message) {
+    const et = this;
+    if (et._config.debug) {
+      console.log(
+        `dispatch, ${label}: ${message?.part}/${message?.nParts} updates:${message?.updates?.length} type : ${message?.updates[0]?.type} `
+      );
     }
   }
 }

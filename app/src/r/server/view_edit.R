@@ -329,7 +329,7 @@ observe({
                     )
                   ),
                   # uiOutput("uiViewEditVtMain"),
-                #
+                  #
                   # mask / overlap layer
                   #
                   checkboxInput(
@@ -844,13 +844,15 @@ observe({
     #
     if (isVectorTile) {
       layer <- input$selectSourceLayerMain
+      variable <- input$selectSourceLayerMainVariable
+      gtype <- input$selectSourceLayerMainGeom
       errors <- c(
-        noDataCheck(layer),
+        isEmpty(layer),
+        isEmpty(variable),
+        isEmpty(gtype),
         !layer %in% reactListReadSourcesVector()
       )
     }
-
-
 
     #
     # Other input check
@@ -896,6 +898,8 @@ observe({
     )
 
     disabled <- any(sapply(errors, isTRUE))
+
+
 
     mxToggleButton(
       id = "btnViewSave",
@@ -1098,7 +1102,7 @@ observe({
   update <- input$viewTitleSchema_init
   isolate({
     viewData <- reactData$viewDataEdited
-    mxDebugMsg("Layer properties update")
+    
     if (noDataCheck(viewData)) {
       return()
     }
@@ -1112,9 +1116,20 @@ observe({
 
     geomTypes <- mxSetNameGeomType(geomTypesDf, language)
 
+    variablesMain <- mxDbGetTableColumnsNames(
+      table = layerMain,
+      notIn = c("geom", "gid", "_mx_valid"),
+      notType = c(
+        "date",
+        "time with time zone",
+        "time without time zone",
+        "timestamp with time zone",
+        "timestamp without time zone"
+      )
+    )
     variables <- mxDbGetTableColumnsNames(
       table = layerMain,
-      notIn = c("geom", "gid", "_mx_valid")
+      notIn = c("geom", "gid", "_mx_valid"),
     )
 
     geomType <- .get(viewData, c("data", "geometry", "type"))
@@ -1126,10 +1141,10 @@ observe({
     } else {
       geomTypeSelected <- geomTypes[[1]]
     }
-    if (isTRUE(variableName %in% variables)) {
+    if (isTRUE(variableName %in% variablesMain)) {
       variableMainSelected <- variableName
     } else {
-      variableMainSelected <- variables[[1]]
+      variableMainSelected <- variablesMain[[1]]
     }
     if (isTRUE(all(variableNames %in% variables))) {
       variablesOtherSelected <- variableNames
@@ -1142,7 +1157,7 @@ observe({
       selected = geomTypeSelected
     )
     updateSelectizeInput(session, "selectSourceLayerMainVariable",
-      choices = variables,
+      choices = variablesMain,
       selected = variableMainSelected
     )
     updateSelectizeInput(session, "selectSourceLayerOtherVariables",

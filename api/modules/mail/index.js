@@ -7,6 +7,7 @@ import { paramsValidator } from "#mapx/route_validation";
 import { parseTemplate } from "#mapx/helpers";
 import { decrypt } from "#mapx/db-utils";
 import { isEmail, isString, isArrayOf } from "@fxi/mx_valid";
+const { emailAdmin } = settings.mail.config;
 
 export const mwSend = [
   bodyParser.urlencoded({ extended: false }),
@@ -180,3 +181,4 @@ export async function sendMailAuto(config) {
   c.text = htmlToText(body);
   return sendMail(c);
 }
+ 

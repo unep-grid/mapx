@@ -369,7 +369,7 @@ class Theme extends EventSimple {
           if (isRange) {
             config.min = 0;
             config.max = 1;
-            config.step = 0.1;
+            config.step = 0.01;
           } else {
             config.style = { maxWidth: "60px" };
           }
@@ -417,7 +417,7 @@ class Theme extends EventSimple {
     if (!elContainer instanceof Element) {
       return;
     }
-    elContainer.addEventListener("change", t.updateFromInput);
+    elContainer.addEventListener("input", t.updateFromInput);
     t._elInputsContainer = elContainer;
     t.buildInputs();
   }

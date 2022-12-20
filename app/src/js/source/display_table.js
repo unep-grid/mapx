@@ -4,23 +4,22 @@ import { getDictItem, getLanguageCurrent } from "./../language";
 import { elSpanTranslate } from "./../el_mapx";
 import { getApiUrl } from "./../api_routes";
 import { settings } from "./../settings";
-import { modalDialog } from "./../mx_helper_modal.js";
-
+import { modal } from "./../mx_helper_modal";
 import { ws_tools } from "./../mx.js";
 
 import {
   getHandsonLanguageCode,
   typeConvert,
 } from "./../handsontable/utils.js";
-import { path, debounce, progressScreen } from "./../mx_helper_misc.js";
+import { path, progressScreen } from "./../mx_helper_misc.js";
 import { objToParams } from "./../url_utils";
 import { fetchJsonProgress } from "./../mx_helper_fetch_progress";
 import { el } from "./../el/src/index.js";
 import { getViewSourceSummary } from "./../mx_helper_source_summary.js";
 import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata.js";
 import { moduleLoad } from "./../modules_loader_async";
-import { getView, resetViewStyle } from "./../map_helpers";
-import { isView, isArray, isFunction } from "./../is_test";
+import { getView, resetViewStyle, getViewTitle } from "./../map_helpers";
+import { isSourceId, isView, isArray } from "./../is_test";
 
 export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({}, opt);
@@ -39,197 +38,208 @@ export function fetchSourceTableAttribute(opt) {
 }
 
 export async function showSourceTableAttributeModal(opt) {
-  opt = Object.assign({}, opt);
-  if (!opt.idSource) {
-    return Promise.resolve(false);
-  }
-  const h = mx.helpers;
-  const config = {
-    idSource: opt.idSource,
-    attributes: opt.attributes,
-    view: opt.view,
-    labels: opt.labels,
-  };
+  const config = Object.assign({}, { labels: null }, opt);
   let destroyed = false;
   let hot;
   let resizeObserver;
-  let labels = opt.labels || null;
-
-  const summary = await getViewSourceSummary(opt.view.id, {
-    stats: ["base", "attributes", "roles"],
-  });
-
-  /**
-   * Check roles for edit button
-   */
-  const idUser = settings?.user?.id;
-  const groups = settings?.user?.roles?.groups || [];
-  const editor = summary?.roles?.editor;
-  const editors = summary?.roles?.editors;
-  const addEdit =
-    editor === idUser ||
-    editors.some((role) => groups.includes(role) || role === idUser);
-
-  /**
-   * Start progress
-   */
-  onProgressStart();
-
-  const handsontable = await moduleLoad("handsontable");
-  const meta = await fetchSourceMetadata(config.idSource);
-  const data = await fetchSourceTableAttribute(config);
-
-  const services = meta._services || [];
-  const hasData = isArray(data) && data.length > 0;
-  const license = "non-commercial-and-evaluation";
-  const elTable = el("div", {
-    class: "mx_handsontable",
-    style: {
-      width: "100%",
-      height: "350",
-      minHeight: "350px",
-      minWidth: "100px",
-      overflow: "hidden",
-      backgroundColor: "var(--mx_ui_shadow)",
-    },
-  });
-  const allowDownload = services.indexOf("mx_download") > -1;
-  const elButtonDownload = el(
-    "button",
-    {
-      class: "btn btn-default",
-      on: {
-        click: handleDownload,
-      },
-    },
-    elSpanTranslate("btn_edit_table_modal_export_csv")
-  );
-  if (!allowDownload) {
-    elButtonDownload.setAttribute("disabled", true);
-  }
-
-  const elButtonHelp = el(
-    "button",
-    {
-      class: "btn btn-default",
-      on: {
-        click: handleHelp,
-      },
-      title: "Help",
-    },
-    elSpanTranslate("btn_help")
-  );
-
-  const elButtonClearFilter = el(
-    "button",
-    {
-      class: "btn btn-default",
-      disabled: true,
-      on: {
-        click: handleClearFilter,
-      },
-    },
-    elSpanTranslate("btn_edit_table_modal_clear_filter")
-  );
-
-  const elButtonEdit = el(
-    "button",
-    {
-      class: "btn btn-default",
-      disabled: !addEdit,
-      on: {
-        click: handleEdit,
-      },
-    },
-    elSpanTranslate("btn_edit_table_modal_edit")
-  );
-
+  let labels = config.labels || null;
   let elViewTitle;
-  const elTitle = el(
-    "div",
-    elSpanTranslate("edit_table_modal_attributes_title"),
-    (elViewTitle = el("span", {
+  let elTable;
+  let elModal;
+  let addEdit;
+  const validSource = isSourceId(config.idSource);
+
+  if (!validSource) {
+    return false;
+  }
+
+  try {
+    const summary = await getViewSourceSummary(config.view.id, {
+      stats: ["base", "attributes", "roles"],
+      useCache: false,
+    });
+
+    /**
+     * Check roles for edit button
+     */
+    const idUser = settings?.user?.id;
+    const groups = settings?.user?.roles?.groups || [];
+    const editor = summary?.roles?.editor;
+    const editors = summary?.roles?.editors;
+    addEdit =
+      editor === idUser ||
+      editors.some((role) => groups.includes(role) || role === idUser);
+
+    /**
+     * Start progress
+     */
+    onProgressStart();
+
+    const handsontable = await moduleLoad("handsontable");
+    const meta = await fetchSourceMetadata(config.idSource);
+    const data = await fetchSourceTableAttribute(config);
+    const services = meta._services || [];
+    const hasData = isArray(data) && data.length > 0;
+    const license = "non-commercial-and-evaluation";
+    elTable = el("div", {
+      class: "mx_handsontable",
       style: {
-        marginLeft: "10px",
-        fontStyle: "italic",
+        width: "100%",
+        height: "350",
+        minHeight: "350px",
+        minWidth: "100px",
+        overflow: "hidden",
+        backgroundColor: "var(--mx_ui_shadow)",
       },
-    }))
-  );
-
-  const buttons = [
-    elButtonHelp,
-    elButtonClearFilter,
-    elButtonDownload,
-    elButtonEdit,
-  ];
-
-  if (!hasData) {
-    elTable.innerText = "no data";
-    buttons.length = 0;
-  }
-
-  const elModal = h.modal({
-    title: elTitle,
-    content: elTable,
-    onClose: destroy,
-    buttons: buttons,
-    addSelectize: false,
-    noShinyBinding: true,
-  });
-
-  if (!hasData) {
-    onProgressEnd();
-    return;
-  }
-
-  /*
-   * Set columns type
-   */
-  const columns = opt.attributes.map((a) => {
-    let type = summary.attributes_types.reduce(
-      (v, t) => (v ? v : t.id === a ? t.value : v),
-      null
+    });
+    const allowDownload = services.indexOf("mx_download") > -1;
+    const elButtonDownload = el(
+      "button",
+      {
+        class: "btn btn-default",
+        on: {
+          click: handleDownload,
+        },
+      },
+      elSpanTranslate("btn_edit_table_modal_export_csv")
     );
-    return {
-      type: typeConvert(type, "json", "input"),
-      data: a,
-      readOnly: true,
-    };
-  });
+    if (!allowDownload) {
+      elButtonDownload.setAttribute("disabled", true);
+    }
 
-  hot = new handsontable(elTable, {
-    columns: columns,
-    data: data,
-    rowHeaders: true,
-    columnSorting: true,
-    colHeaders: labels,
-    licenseKey: license,
-    dropdownMenu: [
-      "filter_by_condition",
-      "filter_operators",
-      "filter_by_condition2",
-      "filter_action_bar",
-    ],
-    filters: true,
-    language: getHandsonLanguageCode(),
-    afterFilter: handleViewFilter,
-    renderAllRows: false,
-    height: function () {
-      const r = elTable.getBoundingClientRect();
-      return r.height - 30;
-    },
-    disableVisualSelection: !allowDownload,
-  });
+    const elButtonHelp = el(
+      "button",
+      {
+        class: "btn btn-default",
+        on: {
+          click: handleHelp,
+        },
+        title: "Help",
+      },
+      elSpanTranslate("btn_help")
+    );
 
-  addTitle();
-  onProgressEnd();
+    const elButtonClearFilter = el(
+      "button",
+      {
+        class: "btn btn-default",
+        disabled: true,
+        on: {
+          click: handleClearFilter,
+        },
+      },
+      elSpanTranslate("btn_edit_table_modal_clear_filter")
+    );
 
-  /**
-   * If everything is fine, add a mutation observer to render the table
-   */
-  resizeObserver = new ResizeObserver(tableRender);
-  resizeObserver.observe(elModal);
+    const elButtonEdit = el(
+      "button",
+      {
+        class: "btn btn-default",
+        disabled: !addEdit,
+        on: {
+          click: handleEdit,
+        },
+      },
+      elSpanTranslate("btn_edit_table_modal_edit")
+    );
 
+    const elTitle = el(
+      "div",
+      elSpanTranslate("edit_table_modal_attributes_title"),
+      (elViewTitle = el("span", {
+        style: {
+          marginLeft: "10px",
+          fontStyle: "italic",
+        },
+      }))
+    );
+
+    const buttons = [
+      elButtonHelp,
+      elButtonClearFilter,
+      elButtonDownload,
+      elButtonEdit,
+    ];
+
+    if (!hasData) {
+      elTable.innerText = "no data";
+      buttons.length = 0;
+    }
+
+    elModal = modal({
+      title: elTitle,
+      content: elTable,
+      onClose: destroy,
+      buttons: buttons,
+      addSelectize: false,
+      noShinyBinding: true,
+    });
+
+    if (!hasData) {
+      onProgressEnd();
+      return;
+    }
+
+    /*
+     * Set columns type
+     */
+    const columns = config.attributes.map((name) => {
+      const out = { type: null };
+      for (const type of summary.attributes_types) {
+        if (out.type) {
+          continue;
+        }
+        if (type.column_name == name) {
+          out.type = type.column_type;
+        }
+      }
+      return {
+        type: typeConvert(out.type || "text", "handsontable"),
+        data: name,
+        readOnly: true,
+      };
+    });
+
+    hot = new handsontable(elTable, {
+      columns: columns,
+      data: data,
+      rowHeaders: true,
+      columnSorting: true,
+      colHeaders: labels,
+      licenseKey: license,
+      dropdownMenu: [
+        "filter_by_condition",
+        "filter_operators",
+        "filter_by_condition2",
+        "filter_action_bar",
+      ],
+      filters: true,
+      language: getHandsonLanguageCode(),
+      afterFilter: handleViewFilter,
+      renderAllRows: false,
+      height: function () {
+        const r = elTable.getBoundingClientRect();
+        return r.height - 30;
+      },
+      disableVisualSelection: !allowDownload,
+    });
+
+    addTitle();
+    onProgressEnd();
+
+    /**
+     * If everything is fine, add a mutation observer to render the table
+     */
+    resizeObserver = new ResizeObserver(tableRender);
+    resizeObserver.observe(elModal);
+  } catch (e) {
+    console.error(e);
+    progressScreen({
+      percent: 0,
+      id: "fetch_data",
+      enable: false,
+    });
+  }
   /**
    * Helpers
    */
@@ -251,12 +261,12 @@ export async function showSourceTableAttributeModal(opt) {
     try {
       await destroy();
       await showSourceTableAttributeModal({
-        idSource: opt.idSource,
-        view: opt.view,
-        attributes: opt.attributes,
-        labels: opt.labels,
+        idSource: config.idSource,
+        view: config.view,
+        attributes: config.attributes,
+        labels: config.labels,
       });
-      await resetViewStyle({ idView: opt.view });
+      await resetViewStyle({ idView: config.view });
     } catch (e) {
       console.error(e);
     }
@@ -295,7 +305,7 @@ export async function showSourceTableAttributeModal(opt) {
     if (!isView(view)) {
       return;
     }
-    elViewTitle.innerText = h.getViewTitle(view);
+    elViewTitle.innerText = getViewTitle(view);
   }
 
   let _to_render_table = 0;
@@ -399,17 +409,6 @@ function handleHelp() {
   });
 }
 
-function listenMutationAttribute(el, cb) {
-  cb = isFunction(cb) ? debounce(cb, 100) : console.log;
-  const observer = new MutationObserver((m) => {
-    cb(m);
-  });
-
-  observer.observe(el, {
-    attributes: true,
-  });
-  return observer;
-}
 function onProgressStart() {
   progressScreen({
     percent: 1,

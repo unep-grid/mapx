@@ -4,15 +4,14 @@ import express from "express";
 import { Server as SocketServer } from "socket.io";
 import query from "#mapx/query";
 import project from "#mapx/project";
-import upload from "#mapx/upload";
 import mirror from "#mapx/mirror";
 import mail from "#mapx/mail";
 import ip from "#mapx/ip";
 import tile from "#mapx/tile";
 import log from "#mapx/log";
+import * as upload from "#mapx/upload";
 import * as view from "#mapx/view";
 import * as source from "#mapx/source";
-//import { mwGeoserverRebuild } from "#mapx/geoserver";
 import { mwSetHeaders, mwGetConfigMap } from "#mapx/helpers";
 import { mwGemetSearchText, mwGemetSearchConcept } from "#mapx/gemet";
 import { mwGetSearchKey } from "#mapx/search";
@@ -63,10 +62,10 @@ const io = new SocketServer(server, settings.socket_io);
 const ioRedisAdapter = ioCreateAdapter();
 io.adapter(ioRedisAdapter);
 io.use(ioMwAuthenticate);
-io.use(ioMwEmit); // Add emit wrapper  
-io.use(ioMwNotify); // Add notify system  
+io.use(ioMwEmit); // Add emit wrapper
+io.use(ioMwNotify); // Add notify system
 io.use(ioMwRoutes); // Add listener on routes
-io.on("connection", ioConnect); // emit 'authentication', with roles  
+io.on("connection", ioConnect); // emit 'authentication', with roles
 
 /*
  * Express routes
@@ -83,7 +82,6 @@ app.get("/get/mirror/", mirror.mwGet);
 app.get("/get/config/map", mwGetConfigMap);
 app.get("/get/epsg/codes/full", mwGetEpsgCodesFull);
 app.get("/get/file/formats/list", mwGetFormatsList);
-//app.get("/get/source/", source.mwGet);
 app.get("/get/source/metadata/:id", source.mwGetMetadata);
 app.get("/get/source/summary/", source.mwGetSummary);
 app.get("/get/source/table/attribute/", source.mwGetAttributeTable);
@@ -97,10 +95,8 @@ app.get("/get/bbox/", mwGetBbox);
 app.get("/get/projects/list/user/", project.mwGetListByUser);
 app.get("/get/project/search", project.mwProjectSearchText);
 //app.get("/get/io/test/job", mwIoFetchTest);
-//app.get("/get/geoserver/rebuild", mwGeoserverRebuild);
 
 app.post("/upload/image/", upload.mwImage);
-app.post("/upload/vector/", upload.mwVector);
 app.post("/send/mail/", mail.mwSend);
 app.post("/collect/logs/", log.mwCollect);
 

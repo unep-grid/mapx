@@ -1530,11 +1530,6 @@
     "fa": "مقادیر نامعتبر"
   },
   {
-    "id": "edit_table_modal_values_invalid",
-    "en": "{{amount}} invalid value(s) entered. Make sure to use the correct type.\nOnly valid cells will be saved. The cells highlighted in red should be manually corrected or the changes will not be effective.",
-    "fa": " {{amount}}مقدار(های) نامعتبر وارد شده است. حتما از نوع صحیح استفاده کنید\n فقط سلول های معتبر ذخیره خواهند شد. سلول هایی که با رنگ قرمز مشخص شده اند باید به صورت دستی اصلاح شوند وگرنه تغییرات موثر نخواهد بود."
-  },
-  {
     "id": "edit_table_modal_values_invalid_ok",
     "en": "Ok",
     "fa": "خوب"
@@ -1686,8 +1681,8 @@
   },
   {
     "id": "edit_table_modal_warning_text",
-    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
-    "fa": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">استفاده از این ابزار ممکن است مانند ویرایشگرهای صفحه گسترده دسکتاپ باعث شود داده ها به طور جبران ناپذیری تغییر یا حتی حذف شوند.</li><li style=\";text-align:right;direction:rtl\"> ما خدمات بازیابی اطلاعات را برای منابع داده ارائه نمی دهیم.</li><li style=\";text-align:right;direction:rtl\"> تا زمانی که یک جلسه حفظ می شود، هر عملیات روی سلول ها را می توان با استفاده از میانبرهای صفحه کلید یا دکمه های اختصاصی لغو/دوباره کرد.</li><li style=\";text-align:right;direction:rtl\"> \"حذف ستون\" ستون و داده های آن را بدون امکان لغو پس از آخرین پانل تأیید حذف می کند.</li><li style=\";text-align:right;direction:rtl\"> قبل از هر گونه تغییر، می توان با دانلود منبع داده یا با کپی و چسباندن داده ها در ویرایشگر صفحه گسترده، یک نسخه پشتیبان از داده ها تهیه کرد.</li><li style=\";text-align:right;direction:rtl\"> پلت فرم فعلی، توسعه دهنده آن یا مدیران پروژه تمام مسئولیت ها را رد می کنند.<ul style=\";text-align:right;direction:rtl\"></ul></li></ul>"
+    "en": "<ul><li>Using this tool may pose a risk of permanently altering or deleting data, similar to desktop spreadsheet editors.</li><li>It is possible to undo or redo any changes made to cells during a session using keyboard shortcuts or dedicated buttons.</li><li>The &#39;Remove column&#39; action will permanently delete the column and its data, and cannot be undone after the final confirmation panel.</li><li>Invalid cells, indicated by a red color, will not be saved.</li><li>A backup system has not yet been implemented. To safeguard your data, you can use the download tool in the toolbox to export the entire layer or table as a precautionary measure.</li><li>There may be incremental backup at the database level, but not at the layer or table level.</li><li>The developers of the current platform and project administrators do not accept any responsibility for any potential losses or damages.</li></ul>",
+    "fa": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">استفاده از این ابزار ممکن است مانند ویرایشگرهای صفحه گسترده دسکتاپ، خطر تغییر یا حذف دائمی داده ها را به همراه داشته باشد.</li><li style=\";text-align:right;direction:rtl\"> با استفاده از میانبرهای صفحه‌کلید یا دکمه‌های اختصاصی، می‌توان هر تغییری را که در سلول‌ها در طول جلسه ایجاد شده است، لغو یا دوباره انجام داد.</li><li style=\";text-align:right;direction:rtl\"> عمل \"حذف ستون\" ستون و داده های آن را برای همیشه حذف می کند و پس از پانل تایید نهایی قابل بازگشت نیست.</li><li style=\";text-align:right;direction:rtl\"> سلول های نامعتبر که با رنگ قرمز مشخص شده اند ذخیره نمی شوند.</li><li style=\";text-align:right;direction:rtl\"> یک سیستم پشتیبان هنوز پیاده سازی نشده است. برای محافظت از داده‌های خود، می‌توانید از ابزار دانلود در جعبه ابزار برای صادرات کل لایه یا جدول به عنوان یک اقدام احتیاطی استفاده کنید.</li><li style=\";text-align:right;direction:rtl\"> ممکن است پشتیبان گیری افزایشی در سطح پایگاه داده وجود داشته باشد، اما نه در سطح لایه یا جدول.</li><li style=\";text-align:right;direction:rtl\"> توسعه دهندگان پلتفرم فعلی و مدیران پروژه هیچ گونه مسئولیتی در قبال ضرر و زیان احتمالی نمی پذیرند.</li></ul>"
   },
   {
     "id": "edit_table_modal_warning_ok_no_more",
@@ -6995,6 +6990,11 @@
     "fa": "داده های خام از سرور ما خوانده می شود. با این حال، ما آن را به هیچ وجه ذخیره یا استفاده نمی کنیم. همه چیز به سادگی منعکس می شود. آدرس های IP در حافظه ذخیره می شوند تا از سوء استفاده جلوگیری شود."
   },
   {
+    "id": "nc_label_merge",
+    "en": "Details...",
+    "fa": "جزئیات..."
+  },
+  {
     "id": "pk_panel_options",
     "en": "Display options",
     "fa": "گزینه های نمایش "
@@ -8160,6 +8160,21 @@
     "fa": "بارگذاری"
   },
   {
+    "id": "upl_title_layer_name",
+    "en": "Title of the source ({{language}})",
+    "fa": "عنوان منبع ( {{language}} )"
+  },
+  {
+    "id": "upl_name_placeholder",
+    "en": "Source title...",
+    "fa": "عنوان منبع ..."
+  },
+  {
+    "id": "upl_upload_btn",
+    "en": "Upload",
+    "fa": "بارگذاری"
+  },
+  {
     "id": "upl_title_not_allowed",
     "en": "Upload not allowed",
     "fa": "آپلود مجاز نیست"
@@ -8183,6 +8198,46 @@
     "id": "upl_meta_title",
     "en": "Title ({{language}})",
     "fa": "عنوان ( {{language}} )"
+  },
+  {
+    "id": "upl_file_upload_progress",
+    "en": "Uploading '{{filename}}'...",
+    "fa": "در حال آپلود {{filename}} '..."
+  },
+  {
+    "id": "upl_api_save_validation",
+    "en": "Geometry validation: This may take a while.",
+    "fa": "اعتبارسنجی هندسه: ممکن است مدتی طول بکشد."
+  },
+  {
+    "id": "upl_api_save_validation_geom_count",
+    "en": "There are {{count}} invalid geometries.",
+    "fa": "وجود دارد {{count}} هندسه های نامعتبر"
+  },
+  {
+    "id": "upl_api_save_failed_title",
+    "en": "Upload of '{{filename}}' failed.",
+    "fa": "آپلود از ' {{filename}} ' ناموفق."
+  },
+  {
+    "id": "upl_api_save_failed",
+    "en": "Upload of <samp>{{filename}}</samp> failed. Source removed: <samp>{{sourceRemoved}}</samp>. View removed : {{viewRemoved}}. Message : <samp> {{error}}</samp> ",
+    "fa": "آپلود از<samp> {{filename}}</samp> ناموفق. منبع حذف شد:<samp> {{sourceRemoved}}</samp> . نمایش حذف شد: {{viewRemoved}} . پیام:<samp> {{error}}</samp>"
+  },
+  {
+    "id": "upl_api_save_success_title",
+    "en": "Upload of '{{filename}}' done.",
+    "fa": "آپلود از ' {{filename}} ' انجام شده."
+  },
+  {
+    "id": "upl_api_save_success",
+    "en": "Upload of <samp>{{filename}}</samp> done. New source created: {{title}} – <samp>{{idSource}}</samp>. ",
+    "fa": "آپلود از<samp> {{filename}}</samp> انجام شده. منبع جدید ایجاد شد: {{title}} –<samp> {{idSource}}</samp> ."
+  },
+  {
+    "id": "upl_api_import_db",
+    "en": "Importation in database",
+    "fa": "واردات در پایگاه داده"
   },
   {
     "id": "wms_select_reviewed_service",

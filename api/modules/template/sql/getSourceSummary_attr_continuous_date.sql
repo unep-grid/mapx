@@ -9,18 +9,24 @@ attr_null_value as (
     NULL 
    END as _value
 ),
+attr_date_convert as (
+  SELECT 
+  extract(epoch from "{{idAttr}}")::NUMERIC as _attr
+  FROM
+  "{{idSource}}"
+),
 attr_no_null as (
   SELECT
-  "{{idAttr}}" as _attr
-  FROM "{{idSource}}" s, attr_null_value n
+  _attr
+  FROM attr_date_convert s, attr_null_value n
   WHERE NOT (
-    "{{idAttr}}" IS NULL OR
+    _attr IS NULL OR
     CASE WHEN n._value IS NULL 
       --- NOT false = true 
       THEN false
       -- convert to float the nullValue
     ELSE
-      "{{idAttr}}" = n._value::NUMERIC 
+      _attr = n._value::NUMERIC
 END
 )
 ),
@@ -34,13 +40,8 @@ attr_min AS (
   MIN(_attr)::NUMERIC
   FROM attr_no_null
 ),
-attr_m AS (
-  SELECT
-  MIN(_attr)::NUMERIC
-  FROM attr_no_null
-),
 attr_array AS (
-  SELECT array_agg(_attr::NUMERIC) AS agg
+  SELECT array_agg(_attr) AS agg
   FROM attr_no_null
 ),
 attr_distinct AS (

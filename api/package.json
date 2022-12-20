@@ -29,6 +29,7 @@
     "express-rate-limit": "^6.3.0",
     "geojson-vt": "^3.2.1",
     "geoserver-node-client": "^1.0.0",
+    "get-folder-size": "^4.0.0",
     "html-to-text": "^8.1.0",
     "martinez-polygon-clipping": "^0.7.1",
     "md5-file": "^5.0.0",

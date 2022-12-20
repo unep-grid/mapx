@@ -19,6 +19,7 @@ let redisGetJSON;
 let redisSetJSON;
 let pgCustom;
 let pgRead;
+let pgTest;
 let pgReadLong;
 let pgWrite;
 let pgAdmin;
@@ -68,6 +69,22 @@ try {
     console.error("Unexpected error on postgres client read", err);
     process.exit(-1);
   });
+
+  pgTest = new Pool({
+    host: s.db.host,
+    user: s.db.read.user,
+    database: s.db.name,
+    password: s.db.read.password,
+    port: s.db.port,
+    statement_timeout: s.db.timeoutShort,
+    max: s.db.poolMax,
+    application_name: "mx_api_test",
+  });
+
+  pgTest.on("error", (err) => {
+    console.error("Unexpected error on postgres client test", err);
+  });
+
 
   /**
    * Set long read pool
@@ -187,6 +204,7 @@ export {
   redisSetJSON,
   redisGetJSON,
   pgCustom,
+  pgTest,
   pgRead,
   pgReadLong,
   pgWrite,
