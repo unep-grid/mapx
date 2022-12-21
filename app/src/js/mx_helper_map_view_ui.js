@@ -7,6 +7,7 @@ import { isView, isArray, isViewOpen, isObject } from "./is_test_mapx";
 import { path, itemFlashSave } from "./mx_helper_misc.js";
 import { getQueryParameterInit } from "./url_utils";
 import { getDictItem, updateLanguageElements } from "./language";
+import { updateViewsBadges } from "./mx_helper_map_view_badges.js";
 import { setViewBadges } from "./mx_helper_map_view_badges.js";
 import { el } from "./el/src/index.js";
 import {
@@ -185,6 +186,7 @@ export async function viewsListAddSingle(view, options) {
     });
   } else {
     await mData.viewsList.addItem(options);
+    await updateViewsBadges({ views: [view] });
     mData.viewsFilter.update();
   }
 

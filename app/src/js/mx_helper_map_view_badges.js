@@ -28,7 +28,7 @@ export async function updateViewsBadges(opt) {
         /**
          * Only local view
          */
-        if ((view.type = "vt")) {
+        if ((view.type === "vt")) {
           /**
            * Update view meta from remote for vt
            */
