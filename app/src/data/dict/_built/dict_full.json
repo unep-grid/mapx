@@ -7670,6 +7670,19 @@
     "de": "Keine Quellenebene gefunden "
   },
   {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "fr": "Type de vue manquant",
+    "es": "Falta el tipo de vista",
+    "ru": "Отсутствует тип просмотра",
+    "zh": "缺少视图类型",
+    "ar": "نوع العرض مفقود",
+    "fa": "نوع نمای وجود ندارد",
+    "ps": "د لید ډول ورک شوی",
+    "bn": "অনুপস্থিত ভিউ টাইপ",
+    "de": "Ansichtstyp fehlt"
+  },
+  {
     "id": "error_title_exists",
     "en": "This title already exists",
     "fr": "Ce titre est déjà pris",

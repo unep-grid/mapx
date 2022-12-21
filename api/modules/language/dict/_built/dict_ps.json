@@ -2950,6 +2950,11 @@
     "ps": "د سرچینې لایه و نه موندل شوه"
   },
   {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "ps": "د لید ډول ورک شوی"
+  },
+  {
     "id": "error_title_exists",
     "en": "This title already exists",
     "ps": "عنوان له مخکې شتون لري"

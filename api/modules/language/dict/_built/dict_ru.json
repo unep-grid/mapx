@@ -2950,6 +2950,11 @@
     "ru": "Исходный слой не найден "
   },
   {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "ru": "Отсутствует тип просмотра"
+  },
+  {
     "id": "error_title_exists",
     "en": "This title already exists",
     "ru": "Это название уже существует "

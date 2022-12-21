@@ -2950,6 +2950,11 @@
     "es": "No hay capa de fuente de datos"
   },
   {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "es": "Falta el tipo de vista"
+  },
+  {
     "id": "error_title_exists",
     "en": "This title already exists",
     "es": "Este título ya existe"

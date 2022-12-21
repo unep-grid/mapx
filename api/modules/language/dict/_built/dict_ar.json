@@ -2950,6 +2950,11 @@
     "ar": "لم يتم العثور على طبقة مصدر "
   },
   {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "ar": "نوع العرض مفقود"
+  },
+  {
     "id": "error_title_exists",
     "en": "This title already exists",
     "ar": "هذا العنوان موجود بالفعل "

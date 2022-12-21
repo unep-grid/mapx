@@ -2950,6 +2950,11 @@
     "fr": "Pas de couche source trouvée"
   },
   {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "fr": "Type de vue manquant"
+  },
+  {
     "id": "error_title_exists",
     "en": "This title already exists",
     "fr": "Ce titre est déjà pris"

@@ -2360,6 +2360,10 @@
     "en": "No source layer found"
   },
   {
+    "id": "error_type_missing",
+    "en": "Missing view type"
+  },
+  {
     "id": "error_title_exists",
     "en": "This title already exists"
   },

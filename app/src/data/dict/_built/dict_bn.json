@@ -2950,6 +2950,11 @@
     "bn": "কোনও উত্স স্তর পাওয়া যায় নি "
   },
   {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "bn": "অনুপস্থিত ভিউ টাইপ"
+  },
+  {
     "id": "error_title_exists",
     "en": "This title already exists",
     "bn": "এই শিরোনাম ইতিমধ্যে বিদ্যমান "

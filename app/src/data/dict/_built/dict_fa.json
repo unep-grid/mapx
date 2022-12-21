@@ -2950,6 +2950,11 @@
     "fa": "منبع لایه مرتبط پیدا نشد"
   },
   {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "fa": "نوع نمای وجود ندارد"
+  },
+  {
     "id": "error_title_exists",
     "en": "This title already exists",
     "fa": " عنوان از قبل موجود میباشد"

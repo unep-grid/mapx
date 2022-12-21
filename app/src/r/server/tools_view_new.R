@@ -58,43 +58,53 @@ observeEvent(input$btnAddView, {
 })
 
 
-observeEvent(input$txtViewTitle, {
-  title <- trimws(subPunct(input$txtViewTitle, " "))
-  project <- reactData$project
-  language <- reactData$language
-  idView <- reactData$viewAddId
-  v <- .get(config, c("validation", "input", "nchar"))
-  errors <- logical(0)
-  warning <- logical(0)
+observe({
+  mxCatch("tools_view_new.R", {
+    title <- trimws(subPunct(input$txtViewTitle, " "))
+    viewType <- input$selectViewType
+    isolate({
+      if (!isTRUE(reactData$mapIsReady)) {
+        return()
+      }
+      typeChoices <- config[[c("views", "type")]]
+      project <- reactData$project
+      language <- reactData$language
+      idView <- reactData$viewAddId
+      v <- .get(config, c("validation", "input", "nchar"))
+      errors <- logical(0)
+      warning <- logical(0)
 
-  errors["error_title_short"] <- noDataCheck(title) || nchar(title) < v$viewTitle$min
-  errors["error_title_long"] <- nchar(title) > v$viewTitle$max
-  errors["error_title_bad"] <- mxProfanityChecker(title)
-  errors["error_title_exists"] <- mxDbViewTitleExists(
-    title = title,
-    project = project,
-    languages = config[["languages"]][["list"]]
-  )
+      errors["error_type_missing"] <- isEmpty(viewType) || ! viewType %in% typeChoices 
+      errors["error_title_short"] <- isEmpty(title) || nchar(title) < v$viewTitle$min
+      errors["error_title_long"] <- isNotEmpty(title) && nchar(title) > v$viewTitle$max
+      errors["error_title_bad"] <- mxProfanityChecker(title)
+      errors["error_title_exists"] <- mxDbViewTitleExists(
+        title = title,
+        project = project,
+        languages = config[["languages"]][["list"]]
+      )
 
-  errors <- errors[errors]
-  hasError <- length(errors) > 0
+      errors <- errors[errors]
+      hasError <- length(errors) > 0
 
-  mxUiHide(
-    id = "btnAddViewConfirm",
-    hide = FALSE,
-    disable = hasError
-  )
+      mxUiHide(
+        id = "btnAddViewConfirm",
+        hide = FALSE,
+        disable = hasError
+      )
 
-  output$uiViewTitleValidation <- renderUI(
-    mxErrorsToUi(
-      errors = errors,
-      warning = warning,
-      language = language
-    )
-  )
+      output$uiViewTitleValidation <- renderUI(
+        mxErrorsToUi(
+          errors = errors,
+          warning = warning,
+          language = language
+        )
+      )
 
-  reactData$viewAddHasError <- hasError
-  reactData$viewAddTitle <- title
+      reactData$viewAddHasError <- hasError
+      reactData$viewAddTitle <- title
+    })
+  })
 })
 
 

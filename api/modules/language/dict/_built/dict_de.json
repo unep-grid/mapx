@@ -2950,6 +2950,11 @@
     "de": "Keine Quellenebene gefunden "
   },
   {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "de": "Ansichtstyp fehlt"
+  },
+  {
     "id": "error_title_exists",
     "en": "This title already exists",
     "de": "Dieser Titel existiert bereits "

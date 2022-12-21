@@ -2950,6 +2950,11 @@
     "zh": "没有找到源图层"
   },
   {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "zh": "缺少视图类型"
+  },
+  {
     "id": "error_title_exists",
     "en": "This title already exists",
     "zh": "标题已经存在"
