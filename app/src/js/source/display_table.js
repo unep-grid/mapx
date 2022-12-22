@@ -47,6 +47,7 @@ export async function showSourceTableAttributeModal(opt) {
   let elTable;
   let elModal;
   let addEdit;
+  let allowDownload = false;
   const validSource = isSourceId(config.idSource);
 
   if (!validSource) {
@@ -81,6 +82,7 @@ export async function showSourceTableAttributeModal(opt) {
     const services = meta._services || [];
     const hasData = isArray(data) && data.length > 0;
     const license = "non-commercial-and-evaluation";
+    allowDownload = services.indexOf("mx_download") > -1;
     elTable = el("div", {
       class: "mx_handsontable",
       style: {
@@ -92,7 +94,6 @@ export async function showSourceTableAttributeModal(opt) {
         backgroundColor: "var(--mx_ui_shadow)",
       },
     });
-    const allowDownload = services.indexOf("mx_download") > -1;
     const elButtonDownload = el(
       "button",
       {
@@ -272,24 +273,36 @@ export async function showSourceTableAttributeModal(opt) {
     }
   }
 
-  function handleDownload() {
-    if (!allowDownload) {
-      return;
-    }
-    let exportPlugin = hot.getPlugin("exportFile");
+  async function handleDownload() {
+    try {
+      if (!allowDownload) {
+        return;
+      }
+      const stringify = await moduleLoad("json-to-csv");
+      const download = await moduleLoad("downloadjs");
+      const data = hot.getData();
+      const headers = hot.getColHeader();
 
-    exportPlugin.downloadFile("csv", {
-      bom: false,
-      columnDelimiter: ",",
-      columnHeaders: true,
-      exportHiddenColumns: false,
-      exportHiddenRows: false,
-      fileExtension: "csv",
-      filename: "mx_attribute_table",
-      mimeType: "text/csv",
-      rowDelimiter: "\r\n",
-      rowHeaders: false,
-    });
+      const csv = await new Promise((resolve, reject) => {
+        stringify(
+          data,
+          {
+            header: true,
+            columns: headers,
+          },
+          (err, data) => {
+            if (err) {
+              return reject(err);
+            }
+            return resolve(data);
+          }
+        );
+      });
+
+      download(csv, "mx_attributes.csv");
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   function handleClearFilter() {

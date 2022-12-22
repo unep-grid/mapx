@@ -2,6 +2,7 @@ import { isArray, isString, isFunction } from "./../is_test/index.js";
 
 const modules = {
   csvjson: loadCsvJSON,
+  'json-to-csv': loadCsvStringify,
   topojson: loadTopoJSON,
   d3: loadD3,
   "d3-geo": loadD3Geo,
@@ -136,6 +137,11 @@ async function loadCsvJSON() {
   return import("csvjson");
 }
 
+async function loadCsvStringify() {
+  const m = await import("csv-stringify");
+  return m.default;
+}
+
 async function loadD3Geo() {
   return import("d3-geo");
 }
@@ -144,7 +150,7 @@ async function loadNoUiSlider() {
   const m = await Promise.all([
     import("nouislider"),
     import("nouislider/distribute/nouislider.css"),
-    import("../../css/mx_sliders.css")
+    import("../../css/mx_sliders.css"),
   ]);
   const nouislider = m[0].default;
   nouislider[0] = { default: nouislider };
@@ -252,13 +258,13 @@ async function loadJsonEditor() {
 
 async function loadHandsontable() {
   const m = await Promise.all([
-    import('handsontable'),
-    import('handsontable/dist/handsontable.css'),
-    import('handsontable/languages/de-DE.js'),
-    import('handsontable/languages/es-MX.js'),
-    import('handsontable/languages/fr-FR.js'),
-    import('handsontable/languages/ru-RU.js'),
-    import('handsontable/languages/zh-CN.js')
+    import("handsontable"),
+    import("handsontable/dist/handsontable.css"),
+    import("handsontable/languages/de-DE.js"),
+    import("handsontable/languages/es-MX.js"),
+    import("handsontable/languages/fr-FR.js"),
+    import("handsontable/languages/ru-RU.js"),
+    import("handsontable/languages/zh-CN.js"),
   ]);
   return m[0].default;
 }
