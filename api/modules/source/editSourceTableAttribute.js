@@ -303,14 +303,14 @@ class EditTableSession {
         validate: message.validate,
         onProgress: et.progressAll,
       });
-      et.emitAll(routes.server_geom_validate_result, out);
+      callback(out);
     } catch (e) {
       console.error(e);
       et.error("Validation failed. Check logs", e);
+      callback(false);
     } finally {
       et.progressAll({ percent: 0 });
       et.setBusy(false);
-      callback(true);
     }
   }
 

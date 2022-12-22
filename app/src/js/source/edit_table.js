@@ -55,6 +55,7 @@ const defaults = {
   max_columns: 1e3, // should match server
   timeout_emit: 1e3 * 10, // 10s round trip
   timeout_sanizing: 1e3 * 60,
+  timeout_geom_valid: 1e3 * 120,
   routes: {
     /**
      * server to here
@@ -182,7 +183,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et._socket.on(r.server_table_data, et.initTable);
       et._socket.on(r.server_dispatch, et.onDispatch);
       et._socket.on(r.server_progress, et.onProgress);
-      et._socket.on(r.server_geom_validate_result, et.onGeomValidateResult);
+      //et._socket.on(r.server_geom_validate_result, et.onGeomValidateResult);
 
       et._socket.on("disconnect", et.onDisconnect);
       await et.dialogWarning();
@@ -315,7 +316,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et._socket.off(r.server_table_data, et.initTable);
       et._socket.off(r.server_dispatch, et.onDispatch);
       et._socket.off(r.server_progress, et.onProgress);
-      et._socket.off(r.server_geom_validate_result, et.onGeomValidateResult);
+      //et._socket.off(r.server_geom_validate_result, et.onGeomValidateResult);
       et._socket.off("disconnect", et.onDisconnect);
       et.fire("destroy").catch((e) => {
         console.error(e);
@@ -2388,10 +2389,22 @@ export class EditTableSessionClient extends WsToolsBase {
     if (!ok) {
       return;
     }
-    const opt = { use_cache: false, autoCorrect: false };
-    await et.emit(r.client_geom_validate, opt);
+    const data = await et.emitGet(
+      r.client_geom_validate,
+      {
+        use_cache: false,
+        autoCorrect: false,
+      },
+      et._config.timeout_geom_valid
+    );
+
+    const res = await et.onGeomValidateResult(data);
+    return res;
   }
 
+  /**
+   * Dialog GEOM repair
+   */
   async dialogGeomRepair() {
     const et = this;
     if (et.locked) {
@@ -2411,29 +2424,38 @@ export class EditTableSessionClient extends WsToolsBase {
     }
 
     const opt = { use_cache: true, autoCorrect: true };
-    await et.emit(r.client_geom_validate, opt);
+    const data = await et.emitGet(
+      r.client_geom_validate,
+      opt,
+      et._config.timeout_geom_valid
+    );
+    const res = et.onGeomValidateResult(data);
+    return res;
   }
 
+  /**
+   * Geom validate
+   */
   async onGeomValidateResult(data) {
     const et = this;
     try {
       const validValues = data?.stat?.values;
-      //const gidRow = et._ht.getDataAtProp(et.column_index);
+      const gidRows = et._ht.getDataAtProp(et.column_index);
       const idBatch = `${et._config.id_source_geom}@${makeId()}`;
 
       /**
        * Format cell as [2307, '_mx_valid', true]
        */
       const idCol = et.getColumnId(et._config.id_column_valid);
+
       const cells = validValues.map((v) => {
-        //const idRow = gidRow.indexOf(v.gid);
-        const idRow = v.row;
+        const idRow = gidRows.indexOf(v.gid);
         const val = v[et._config.id_column_valid];
         return [idRow, idCol, val];
       });
-      et.addBatchCells(...cells);
-      const res = await et.handlerCellsBatchProcess(idBatch);
-      return res;
+      et.addBatchCells(cells);
+      await et.handlerCellsBatchProcess(idBatch);
+      return true;
     } catch (e) {
       console.error(e);
       return false;
@@ -2670,7 +2692,7 @@ export class EditTableSessionClient extends WsToolsBase {
     /*
      * Intercept: validate + sanitize;
      * handsontable 6.2.2 changes should be cloned before
-     * sanitazing : the array "changes" is emptied by handsontable 
+     * sanitazing : the array "changes" is emptied by handsontable
      */
     et.sanitize([...changes]);
 
