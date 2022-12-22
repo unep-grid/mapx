@@ -1,7 +1,17 @@
+  
   - [1.10.0-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.2) 
 
     - APP / API 
         - Rollback evaluation version of handsontable, use the latest MIT version.
+        - Solved issue : during geom validation of large batch, timeout was reached. Converted to emitGet (emit + callback), as it's more suitable in this case / longer timeout
+        - CSS set content-visibility:auto globally for li,tr : should improve rendering time for large table, lists e.g. legends; Set content-visibility for views items in the views UI.
+        - Handsontable v6 issue : Missing export file exporter: wrapped new method to export json -> csv 
+        - Handsontable v6 issue : Missing undo / redo plugin, but avilable as method. Seems ok.
+        - Handsontable : downgrade to 6.2.2 ( license issues ) + adapted code
+        
+    - APP 
+        - Fixed bug : during new view creation, it was possible to enter an empty value in the type of view to create and create an invalid view, impossible to remove
+        - Fixed bug when uploading a layer : during view creation, missing view attribute ._meta prevented to use the table viewer
 
   - [1.10.0-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.1) 
    
