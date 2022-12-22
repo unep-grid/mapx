@@ -104,6 +104,16 @@ picture {
   object-fit: contain;
 }
 
+
+/**
+* Global content-visibility
+* perf improvement
+*/ 
+li, tr {
+  content-visibility: auto;
+}
+
+
 .mx-inline-progress-container {
   width: 100%;
   height: 10px;
