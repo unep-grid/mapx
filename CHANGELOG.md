@@ -1,3 +1,8 @@
+  - [1.10.0-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.2) 
+
+    - APP / API 
+        - Rollback evaluation version of handsontable, use the latest MIT version.
+
   - [1.10.0-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.1) 
    
     - APP / API
