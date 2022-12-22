@@ -1474,7 +1474,9 @@ export class EditTableSessionClient extends WsToolsBase {
         delete row[update.column_name];
       }
 
-      et._ht.updateData(data, "column_remove_handler");
+      et._ht.loadData(data);
+      // not available in 6.2.2
+      //et._ht.updateData(data, "column_remove_handler");
 
       /**
        * Update buttons state
@@ -1856,16 +1858,16 @@ export class EditTableSessionClient extends WsToolsBase {
 
   /**
    * Display a dialog when large change is received
-   * @param {Array} changes Array of changes
+   * @param {Number} nChanges Number of changes
    * @return {Promise<Boolean>} continue
    */
-  async confirmLargeUpdate(changes) {
+  async confirmLargeUpdate(nChanges) {
     const et = this;
+
     if (et._config.test_mode) {
       return true;
     }
     await et.lockAll();
-    const nChanges = changes.length;
     const proceedLargeChanges = await modalConfirm({
       title: tt("edit_table_modal_large_changes_number_title"),
       content: getDictTemplate(
@@ -1883,15 +1885,14 @@ export class EditTableSessionClient extends WsToolsBase {
 
   /**
    * Display a dialog when the the changes are too large
-   * @param {Array} changes Array of changes
+   * @param {Number} nChanges Number of changes
    * @return {Promise<Boolean>} continue
    */
-  async dialogChangesToBig(changes) {
+  async dialogChangesToBig(nChanges) {
     const et = this;
     if (et._config.test_mode) {
       return true;
     }
-    const nChanges = changes.length;
     await modalDialog({
       title: tt("edit_table_modal_changes_too_big_title"),
       content: getDictTemplate("edit_table_modal_changes_too_big_content", {
@@ -2494,7 +2495,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   clearUndoRedoRefCol(pos) {
     const et = this;
-    const ur = et._ht.getPlugin("UndoRedo");
+    const ur = et._ht.getPlugin("UndoRedo") || et._ht.undoRedo;
     const actions = ur.doneActions;
     const undoneActions = ur.undoneActions;
     et._clear_undo_ref_col(actions, pos);
@@ -2528,15 +2529,16 @@ export class EditTableSessionClient extends WsToolsBase {
       /*
        * Check changes length
        */
-      const changesTooLarge = changes.length > et._config.max_changes;
-      const changesLarge = changes.length > et._config.max_changes_large;
+      const nChanges = changes.length;
+      const changesTooLarge = nChanges > et._config.max_changes;
+      const changesLarge = nChanges > et._config.max_changes_large;
 
       if (changesTooLarge) {
-        await et.dialogChangesToBig(changes);
+        await et.dialogChangesToBig(nChanges);
         return false;
       }
       if (changesLarge) {
-        const confirmChanges = await et.confirmLargeUpdate(changes);
+        const confirmChanges = await et.confirmLargeUpdate(nChanges);
         if (!confirmChanges) {
           return false;
         }
@@ -2595,50 +2597,53 @@ export class EditTableSessionClient extends WsToolsBase {
        */
       const cellsSanitized = [];
       const cellsError = [];
-      et._ht.batch(() => {
-        /**
-         * Sanitized updates
-         *     -> cells with error
-         *     -> cells valid
-         */
-        for (const update of sanitized) {
-          const id_col = et.getColumnId(update.column_name);
+      /**
+       * Removed ht.batch -> not available in 6.2
+       */
+      //et._ht.batch(() => {
+      /**
+       * Sanitized updates
+       *     -> cells with error
+       *     -> cells valid
+       */
+      for (const update of sanitized) {
+        const id_col = et.getColumnId(update.column_name);
 
-          const invalid =
-            isEmpty(update.value_sanitized) && isNotEmpty(update.value_new);
+        const invalid =
+          isEmpty(update.value_sanitized) && isNotEmpty(update.value_new);
 
-          if (invalid) {
-            update.value_sanitized = update.value_new;
-          }
-
-          const cell = [update.row_id, id_col, update.value_sanitized];
-
-          if (invalid) {
-            cellsError.push(cell);
-          } else {
-            cellsSanitized.push(cell);
-          }
-
-          et._ht.setCellMeta(update.row_id, id_col, "valid", !invalid);
+        if (invalid) {
+          update.value_sanitized = update.value_new;
         }
 
-        /**
-         * Update cell in table
-         * valid   -> source ok = dispatch and/or save
-         * invalid -> source error = do nothing
-         */
-        et.setCells({
-          cells: cellsSanitized,
-          source: et._config.id_source_sanitize_ok,
-        });
-        et.setCells({
-          cells: cellsError,
-          source: et._config.id_source_sanitize_error,
-        });
+        const cell = [update.row_id, id_col, update.value_sanitized];
 
-        stat.nValid = cellsSanitized.length;
-        stat.nError = cellsError.length;
+        if (invalid) {
+          cellsError.push(cell);
+        } else {
+          cellsSanitized.push(cell);
+        }
+
+        et._ht.setCellMeta(update.row_id, id_col, "valid", !invalid);
+      }
+
+      /**
+       * Update cell in table
+       * valid   -> source ok = dispatch and/or save
+       * invalid -> source error = do nothing
+       */
+      et.setCells({
+        cells: cellsSanitized,
+        source: et._config.id_source_sanitize_ok,
       });
+      et.setCells({
+        cells: cellsError,
+        source: et._config.id_source_sanitize_error,
+      });
+
+      stat.nValid = cellsSanitized.length;
+      stat.nError = cellsError.length;
+      //});
     } catch (e) {
       console.error(e);
     } finally {
@@ -2664,8 +2669,10 @@ export class EditTableSessionClient extends WsToolsBase {
 
     /*
      * Intercept: validate + sanitize;
+     * handsontable 6.2.2 changes should be cloned before
+     * sanitazing : the array "changes" is emptied by handsontable 
      */
-    et.sanitize(changes);
+    et.sanitize([...changes]);
 
     return false;
   }
