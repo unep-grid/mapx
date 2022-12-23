@@ -1,48 +1,48 @@
-import {Widget} from './widget.js';
-import {ButtonPanel} from './../button_panel';
-import {modulesLoad} from './../modules_loader_async';
-import {all} from './../mx_helper_misc.js';
-import {el} from './../el/src/index.js';
-import Muuri from 'muuri';
-import './style.less';
-import {waitFrameAsync} from '../animation_frame/index.js';
-import {EventSimple} from '../event_simple';
+import { Widget } from "./widget.js";
+import { ButtonPanel } from "./../button_panel";
+import { modulesLoad } from "./../modules_loader_async";
+import { all } from "./../mx_helper_misc.js";
+import { el } from "./../el/src/index.js";
+import Muuri from "muuri";
+import "./style.less";
+import { waitFrameAsync } from "../animation_frame/index.js";
+import { EventSimple } from "../event_simple";
 const defaults = {
   dashboard: {
     widgets: [],
-    modules: ['highcharts'],
-    language: 'en',
+    modules: ["highcharts"],
+    language: "en",
     marginFitWidth: 20,
     marginFitHeight: 50,
-    layout: 'fit'
+    layout: "fit",
   },
   grid: {
     dragEnabled: true,
-    dragHandle: '.handle',
+    dragHandle: ".handle",
     dragSortPredicate: {
-      action: 'move',
-      threshold: 10
+      action: "move",
+      threshold: 10,
     },
     layout: {
       horizontal: true,
       fillGaps: true,
       alignRight: true,
       alignBottom: true,
-      rounding: true
-    }
+      rounding: true,
+    },
   },
   panel: {
     panelFull: true,
     elContainer: document.body,
-    title_text: '',
-    title_lang_key: '',
-    button_text: '',
-    button_lang_key: 'button_dashboard_panel',
-    button_classes: ['fa', 'fa-pie-chart'],
-    tooltip_position: 'top-left',
-    container_classes: ['button-panel--container-no-full-height'],
-    position: 'bottom-right'
-  }
+    title_text: "",
+    title_lang_key: "",
+    button_text: "",
+    button_lang_key: "button_dashboard_panel",
+    button_classes: ["fa", "fa-pie-chart"],
+    tooltip_position: "top-left",
+    container_classes: ["button-panel--container-no-full-height"],
+    position: "bottom-right",
+  },
 };
 
 class Dashboard extends EventSimple {
@@ -65,23 +65,23 @@ class Dashboard extends EventSimple {
     d.modules = {};
     d.widgets = [];
     //d.cb = [];
-    d.elDashboard = el('div', {class: 'dashboard'});
+    d.elDashboard = el("div", { class: "dashboard" });
 
     /*
      * Panel
      */
     d.panel = new ButtonPanel(d.opt.panel);
     if (d.panel.isSmallHeight()) {
-      d.panel.height = '50vh';
+      d.panel.height = "50vh";
     }
     d.panel.elPanelContent.appendChild(d.elDashboard);
-    d.panel.on('resize', () => {
+    d.panel.on("resize", () => {
       d.updateGridLayout();
     });
-    d.panel.on('open', () => {
+    d.panel.on("open", () => {
       d.show();
     });
-    d.panel.on('close', () => {
+    d.panel.on("close", () => {
       d.hide();
     });
 
@@ -89,11 +89,11 @@ class Dashboard extends EventSimple {
      * If the dashboard panel is automatically resizing,
      * fit to widgets
      */
-    d.panel.on('resize-auto', (type) => {
-      if (type === 'half-width') {
+    d.panel.on("resize-auto", (type) => {
+      if (type === "half-width") {
         d.fitPanelToWidgetsWidth();
       }
-      if (type === 'half-height') {
+      if (type === "half-height") {
         d.fitPanelToWidgetsHeight();
       }
     });
@@ -107,7 +107,7 @@ class Dashboard extends EventSimple {
      * Init event
      */
 
-    d.fire('init');
+    d.fire("init");
   }
 
   isVisible() {
@@ -127,7 +127,7 @@ class Dashboard extends EventSimple {
       d.panel.open();
       d.grid.show(d.grid.getItems());
       d.updateGridLayout();
-      d.fire('show');
+      d.fire("show");
     }
   }
 
@@ -137,31 +137,31 @@ class Dashboard extends EventSimple {
       d._open = false;
       d.panel.close();
       d.grid.hide(d.grid.getItems());
-      d.fire('hide');
+      d.fire("hide");
     }
   }
 
   toggle() {
     const d = this;
     d.panel.toggle();
-    d.fire('toggle');
+    d.fire("toggle");
   }
 
   updatePanelLayout() {
     const d = this;
     const layout = d.opt.dashboard.layout;
     switch (layout) {
-      case 'fit':
+      case "fit":
         d.fitPanelToWidgets();
         break;
-      case 'vertical':
-        d.panel.resizeAuto('half-width');
+      case "vertical":
+        d.panel.resizeAuto("half-width");
         break;
-      case 'horizontal':
-        d.panel.resizeAuto('half-height');
+      case "horizontal":
+        d.panel.resizeAuto("half-height");
         break;
-      case 'full':
-        d.panel.resizeAuto('full');
+      case "full":
+        d.panel.resizeAuto("full");
         break;
       default:
         d.fitPanelToWidgets();
@@ -212,34 +212,34 @@ class Dashboard extends EventSimple {
     return this._destroyed;
   }
 
-  destroy() {
+  async destroy() {
     const d = this;
     if (d.isDestroyed()) {
       return;
     }
     d._destroyed = true;
-    d.removeWidgets();
-    d.clearCallbacks();  
+    await d.removeWidgets();
+    d.clearCallbacks(); // from EventSimple
     d.panel.destroy();
     d.grid.destroy();
-    d.fire('destroy');
+    d.fire("destroy");
   }
 
-  removeWidgets() {
+  async removeWidgets() {
     const d = this;
     while (d.widgets.length) {
       const id = d.widgets.length - 1;
-      d.widgets[id].destroy();
+      await d.widgets[id].destroy();
       d.widgets.pop();
     }
     d.updateGridLayout();
   }
 
-  removeWidget(widget) {
+  async removeWidget(widget) {
     const d = this;
     const pos = d.widgets.indexOf(widget);
     if (pos > -1) {
-      d.widgets[pos].destroy();
+      await d.widgets[pos].destroy();
       d.widgets.splice(pos, 1);
     }
     d.updateGridLayout();
@@ -254,29 +254,32 @@ class Dashboard extends EventSimple {
     return all(disabled);
   }
 
-  autoDestroy() {
+  async autoDestroy() {
     const d = this;
     const allDisabled = d.allWidgetsDisabled();
     const destroy = d.widgets.length === 0 || allDisabled;
     if (destroy) {
-      d.destroy();
+      await d.destroy();
     }
   }
 
   async addWidgetsAsync(conf) {
     const d = this;
     const widgets = [];
-    d.opt.dashboard.modules.push(...(conf.modules || []));
-    const modules = await modulesLoad(d.opt.dashboard.modules);
     /**
      * Store modules
      */
-    d.opt.dashboard.modules.forEach((n, i) => {
-      d.modules[n] = modules[i];
-    });
+    let idM = 0;
+    const modulesNames = conf.modules || [];
+    d.opt.dashboard.modules.push(...modulesNames);
+    const modules = await modulesLoad(modulesNames);
+    for (const name of modulesNames) {
+      d.modules[name] = modules[idM++];
+    }
     /**
      * Build widgets
      */
+    const promWidgets = [];
     for (const cw of conf.widgets) {
       if (!cw.disabled) {
         const widget = new Widget({
@@ -285,14 +288,15 @@ class Dashboard extends EventSimple {
           dashboard: d,
           modules: d.modules,
           view: conf.view,
-          map: conf.map
+          map: conf.map,
         });
         d.widgets.push(widget);
         widget._id = conf.view.id;
         widgets.push(widget);
-        await widget.init();
+        promWidgets.push(widget.init());
       }
     }
+    await Promise.all(promWidgets);
 
     /**
      * Layout update
@@ -313,4 +317,4 @@ class Dashboard extends EventSimple {
   }
 }
 
-export {Dashboard};
+export { Dashboard };

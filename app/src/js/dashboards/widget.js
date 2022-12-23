@@ -78,7 +78,7 @@ class Widget {
       widget.add();
     } catch (e) {
       widget.warn("code evaluation issue. Removing widget.", e);
-      widget.destroy();
+      await widget.destroy();
     }
   }
 
@@ -252,30 +252,28 @@ class Widget {
     );
   }
 
-  add() {
+  async add() {
     const widget = this;
-    widget.grid.add(widget.el);
-    widget.ls.addListener({
-      target: widget.elButtonClose,
-      bind: widget,
-      callback: widget.destroy,
-      group: "base",
-      type: "click",
-    });
-
-    /**
-     * Do not wait, use promise + catch,
-     * as wait would block all other widgets to render
-     */
-    widget
-      .onAdd(widget)
-      .then(() => {
-        return widget.setUpdateDataMethod();
-      })
-      .catch((e) => {
-        widget.warn("adding widget failed. Will be removed", e);
-        widget.destroy();
+    try {
+      widget.grid.add(widget.el);
+      widget.ls.addListener({
+        target: widget.elButtonClose,
+        bind: widget,
+        callback: widget.destroy,
+        group: "base",
+        type: "click",
       });
+
+      /**
+       * Do not wait, use promise + catch,
+       * as wait would block all other widgets to render
+       */
+      await widget.onAdd(widget);
+      await widget.setUpdateDataMethod();
+    } catch (e) {
+      widget.warn("adding widget failed. Will be removed", e);
+      widget.destroy();
+    }
   }
 
   get grid() {
@@ -290,60 +288,63 @@ class Widget {
   get view() {
     return path(this.opt, "view", {});
   }
-  destroy(skipOnRemove) {
+  async destroy(skipOnRemove) {
     const widget = this;
-    const dashboard = widget.dashboard;
-    //const grid = widget.grid;
-    if (widget._destroyed) {
-      return;
-    }
-    widget._destroyed = true;
-    if (widget._init) {
-      /**
-       * Remove from grid
-       */
-      widget.grid.remove(widget.el);
-
-      /**
-       * Remove all listeners
-       */
-      widget.ls.destroy();
-
-      /**
-       * Remove elements
-       */
-      while (widget.el.firstElementChild) {
-        widget.el.firstElementChild.remove();
+    try {
+      const dashboard = widget.dashboard;
+      if (widget._destroyed) {
+        return;
       }
-      widget.el.remove();
-
-      /*
-       * Exec widget on remove
-       */
-      if (!skipOnRemove) {
-        /*
-         * Case normal remove
+      widget._destroyed = true;
+      if (widget._init) {
+        /**
+         * Remove from grid
          */
-        widget.onRemove(widget);
+        widget.grid.remove(widget.el);
+
+        /**
+         * Remove all listeners
+         */
+        widget.ls.destroy();
+
+        /**
+         * Remove elements
+         */
+        while (widget.el.firstElementChild) {
+          widget.el.firstElementChild.remove();
+        }
+        widget.el.remove();
+
+        /**
+         * Remove timers if any
+         */
+        if (widget.timer) {
+          window.clearInterval(widget.timer);
+          window.clearTimeout(widget.timer);
+        }
+        /**
+         * Don't intercept click
+         */
+        widget.handleClick(false);
+
+        /*
+         * Exec widget on remove
+         */
+        if (!skipOnRemove) {
+          /*
+           * Case normal remove
+           */
+          await widget.onRemove(widget);
+        }
       }
 
       /**
-       * Remove timers if any
+       * Remove from dashboard config
        */
-      if (widget.timer) {
-        window.clearInterval(widget.timer);
-        window.clearTimeout(widget.timer);
-      }
-      /**
-       * Don't intercept click
-       */
-      widget.handleClick(false);
+      dashboard.removeWidget(widget);
+    } catch (e) {
+      widget.warn("Issue when destroying widget", e);
     }
-
-    /**
-     * Remove from dashboard config
-     */
-    dashboard.removeWidget(widget);
   }
 
   handleClick(enable) {

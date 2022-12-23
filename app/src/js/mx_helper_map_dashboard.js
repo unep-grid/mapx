@@ -138,13 +138,13 @@ function viewHasWidget(idView) {
  * @param {String} idView View id
  * @return null
  */
-function viewRmWidgets(idView) {
+async function viewRmWidgets(idView) {
   const h = mx.helpers;
   const hasWidgets = viewHasWidget(idView);
   const view = h.getView(idView);
   if (hasWidgets) {
     for (const widget of view._widgets) {
-      widget.destroy();
+      await widget.destroy();
     }
   }
 }
@@ -162,7 +162,7 @@ async function viewAddWidgetsAsync(idView) {
   }
   const view = h.getView(idView);
   const map = h.getMap();
-  viewRmWidgets(idView);
+  await viewRmWidgets(idView);
   await viewCreateDashboardAsync(idView);
   const d = getInstance();
   view._widgets = await d.addWidgetsAsync({

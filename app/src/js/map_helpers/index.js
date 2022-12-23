@@ -104,6 +104,7 @@ import {
   isViewId,
   isViewRt,
   isViewVt,
+  isHTML,
   isElement,
   isNumeric,
   isString,
@@ -3449,7 +3450,7 @@ export async function viewLayersAdd(o) {
    */
   if (!isStory) {
     await dh.viewAutoDashboardAsync(view);
-    dh.autoDestroy();
+    await dh.autoDestroy();
   }
 
   /**
@@ -3472,29 +3473,29 @@ export async function viewLayersAdd(o) {
   /**
    * handler based on view type
    */
-  function handleLayer(viewType) {
-    /* Switch on view type*/
-    const types = {
-      rt: function () {
-        return viewLayersAddRt({
+  async function handleLayer(viewType) {
+    let res;
+    switch (viewType) {
+      case "rt":
+        res = await viewLayersAddRt({
           view: view,
           map: m.map,
           before: idLayerBefore,
           elLegendContainer: o.elLegendContainer,
           addTitle: o.addTitle,
         });
-      },
-      cc: function () {
-        return viewLayersAddCc({
+        break;
+      case "cc":
+        res = await viewLayersAddCc({
           view: view,
           map: m.map,
           before: idLayerBefore,
           elLegendContainer: o.elLegendContainer,
           addTitle: o.addTitle,
         });
-      },
-      vt: function () {
-        return viewLayersAddVt({
+        break;
+      case "vt":
+        res = await viewLayersAddVt({
           view: view,
           map: m.map,
           debug: o.debug,
@@ -3502,22 +3503,22 @@ export async function viewLayersAdd(o) {
           elLegendContainer: o.elLegendContainer,
           addTitle: o.addTitle,
         });
-      },
-      gj: function () {
-        return viewLayersAddGj({
+        break;
+      case "gj":
+        res = await viewLayersAddGj({
           view: view,
           map: m.map,
           before: idLayerBefore,
           elLegendContainer: o.elLegendContainer,
           addTitle: o.addTitle,
         });
-      },
-      sm: function () {
-        return Promise.resolve(true);
-      },
-    };
-
-    return types[viewType]();
+      case "sm":
+        res = true;
+        break;
+      default:
+        res = false;
+    }
+    return res;
   }
 }
 
@@ -3763,6 +3764,9 @@ async function viewLayersAddCc(o) {
   const idSource = idView + "-SRC";
   const idListener = "listener_cc_" + view.id;
 
+  if (view._onRemoveCustomView) {
+    await view._onRemoveCustomView();
+  }
   let cc;
 
   const elLegend = elLegendBuild(view, {
@@ -3786,6 +3790,9 @@ async function viewLayersAddCc(o) {
     return console.warn("Invalid custom code  view");
   }
 
+  /**
+   * Config
+   */
   const opt = {
     _init: false,
     _closed: false,
@@ -3795,14 +3802,21 @@ async function viewLayersAddCc(o) {
     idSource: idSource,
     idLegend: elLegend.id,
     elLegend: elLegend,
+    clear: clear,
+    addSource: addSource,
+    setLegend: setLegend,
+    addLayer: addLayer,
+    isClosed: isClosed,
+    isInit: isInit,
   };
-  opt.onInit = tryCatched(cc.onInit.bind());
+
+  opt.onInit = cc.onInit.bind(opt);
   opt.onClose = cc.onClose.bind(opt);
 
-  removeLayersByPrefix({
-    prefix: opt.idView,
-    id: settings.map.id,
-  });
+  /**
+   * Preventive  clearing
+   */
+  clear();
 
   /**
    * Avoid event to propagate
@@ -3814,29 +3828,33 @@ async function viewLayersAddCc(o) {
     callback: catchEvent,
   });
 
-  if (opt.map.getSource(opt.idSource)) {
-    opt.map.removeSource(opt.idSource);
-  }
-
-  view._onRemoveCustomView = function () {
-    listeners.removeListenerByGroup(idListener);
-
-    if (!opt._init || opt._closed) {
-      return;
-    }
+  /**
+   * "destroy" usable by MapX
+   */
+  view._onRemoveCustomView = async function () {
     try {
-      opt.onClose(opt);
+      if (opt.isClosed()) {
+        return;
+      }
+      if (!opt.isInit()) {
+        console.warn("CC view : requested remove, but not yet initialized");
+      }
+      await opt.onClose(opt);
+      clear();
     } catch (e) {
       console.error(e);
+    } finally {
+      delete view._onRemoveCustomView; // remove itself
+      opt._closed = true;
     }
-    opt._closed = true;
   };
 
   /**
    * Init custom map
+   * clear, in case it's not done in custom script and previous version still
+   * there.
    */
-
-  opt.onInit(opt);
+  await opt.onInit(opt);
   opt._init = true;
   /**
    * Helpers
@@ -3844,15 +3862,53 @@ async function viewLayersAddCc(o) {
   function catchEvent(e) {
     e.stopPropagation();
   }
-  function tryCatched(fun) {
-    return function (...args) {
-      try {
-        return fun(...args);
-      } catch (e) {
-        opt.onClose(opt);
-        console.error(e);
-      }
-    };
+
+  function clear() {
+    listeners.removeListenerByGroup(idListener);
+    removeLayers();
+    removeSource();
+  }
+
+  function removeSource() {
+    if (opt.map.getSource(opt.idSource)) {
+      opt.map.removeSource(opt.idSource);
+    }
+  }
+
+  function removeLayers() {
+    removeLayersByPrefix({
+      prefix: opt.idView,
+      id: settings.map.id,
+    });
+  }
+
+  function addSource(source) {
+    removeLayers();
+    removeSource();
+    map.addSource(opt.idSource, source);
+  }
+
+  function addLayer(layer) {
+    removeLayers();
+    map.addLayer(layer, mx.settings.layerBefore);
+  }
+
+  function setLegend(legend) {
+    if (isHTML(legend) || isString(legend)) {
+      legend = el("div", legend);
+    }
+    while (opt.elLegend.firstElementChild) {
+      opt.elLegend.firstElementChild.remove();
+    }
+    opt.elLegend.appendChild(legend);
+    return legend;
+  }
+
+  function isClosed() {
+    return !!opt._closed;
+  }
+  function isInit() {
+    return !!opt._init;
   }
 }
 
@@ -4319,7 +4375,8 @@ export async function viewModulesRemove(view) {
   delete view._filters_tools;
 
   if (isFunction(view._onRemoveCustomView)) {
-    view._onRemoveCustomView();
+    await view._onRemoveCustomView();
+    console.log("remove cc module");
   }
 
   if (isElement(view._elLegend)) {
@@ -4328,8 +4385,8 @@ export async function viewModulesRemove(view) {
   }
 
   if (dh.viewHasWidget(view)) {
-    dh.viewRmWidgets(view);
-    dh.autoDestroy();
+    await dh.viewRmWidgets(view);
+    await dh.autoDestroy();
   }
 
   if (view._miniMap) {

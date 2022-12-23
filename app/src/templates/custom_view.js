@@ -1,82 +1,114 @@
 /**
- * Custom method for custom view in MapX
- * Parameters for onInit and onClose function ;
- * @param {Object} o Options
- * @param {Object} o.view Map-x view object
- * @param {Object} o.map mapbox-gl map object
- * @param {String} o.idView If of the view
- * @param {String} o.idSource Id of the source
- * @param {Element} o.elLegend Element containing the legend
- *
+ * Custom method for custom view available in onClose / onInit callback
+ * @param {Object} cc Custom Code View
+ * @param {Object} cc.view Map-x view object
+ * @param {Object} cc.map mapbox-gl map instance
+ * @param {String} cc.idView Id of the view
+ * @param {String} cc.idSource Id of the source ( Suggested ID )
+ * @param {Element} cc.elLegend Element containing the legend. Prefer cc.setLegend(...);
+ * @param {Function} cc.isClosed() Test if the view has been closed, e.g. during initialisation, to prevent rendering after the view is closed.
+ * @param {Function} cc.isInit() Test if the view has been initialized;
+ * @param {Function} cc.addSources(source) Add source objects to the
+ * @param {Function} cc.addLayer(layer) Add layer object
+ * @param {Function} cc.setLegend(<Element> || <HTML>) Set legend content
  */
 return {
-  onClose: function(o) {
-    console.log("Custom view closed");
+  onClose: async function (cc) {
     /**
-     * Remove source
+     * Clean
      */
-    o.onRemove();
-
+    await cc._clean_local();
   },
-  onInit: function(o) {
-    console.log("Custom view added");
+  onInit: async function (cc) {
     /**
-     * Set custom source
+     * Ref to a local clean function ( that does nothing )
+     * NOTE: Internal function removes already expected source and
+     *       layers, based on
+     *       - cc.idView
+     *       - cc.idSource
      */
-    o.source = {
-      "type": "geojson",
-      "data": {
-        "type": "Feature",
-        "geometry": {
-          "type": "Point",
-          "coordinates": [6.111354, 46.213232]
-        },
-        "properties": {
-          "title": "Map-x Home"
-        }
-      }
+    cc._clean_local = cleanLocal;
+
+    /**
+     * Set text in the legend box
+     */
+    cc.setLegend("<span>Please wait...</span>");
+
+    /**
+     * Simulate remote data fetch ...
+     */
+    const geojson = await fetchGeoJSON();
+
+    /**
+     * View has been closed during fetch, cancel
+     */
+    if (cc.isClosed()) {
+      console.warn("View has been closed during fetch, cancel");
+      return;
+    }
+
+    /**
+     * Update legend text
+     */
+    cc.setLegend("<span>Hello MapX</span>");
+
+    /**
+     * Source creation
+     */
+    const source = {
+      type: "geojson",
+      data: geojson,
     };
+
+    cc.addSource(source);
 
     /**
      * Set custom layer
      */
-    o.layer = {
-      "id": o.idView,
-      "type": "circle",
-      "source": o.idSource,
-      "paint": {
+    const layer = {
+      id: cc.idView,
+      type: "circle",
+      source: cc.idSource,
+      paint: {
         "circle-radius": 6,
-        "circle-color": "#B42222"
+        "circle-color": "#B42222",
       },
-      "filter": ["==", "$type", "Point"],
+      filter: ["==", "$type", "Point"],
     };
 
-    /**
-     * Set custom legend
-     */
-    o.elLegend.innerText = "hello mapx";
+    cc.addLayer(layer);
 
     /**
-     * Set layer and source
+     * HELPERS
      */
-    o.map.addSource(o.idSource, o.source);
-    o.map.addLayer(o.layer, mx.settings.layerBefore);
+
+    /*
+     *  Clean up script
+     *  NOTE: Layers and source are automatically removed when provided id are used
+     */
+    function cleanLocal() {
+      console.log("Removed");
+    }
 
     /**
-     * Remove added layers
+     * Fake Data fetch
      */
-    o.onRemove = function() {
-      var layer = o.map.getLayer(o.idView);
-      var source = o.map.getSource(o.idSource);
-      if (layer) {
-        o.map.removeLayer(o.idView);
-      }
-      if (source) {
-        o.map.removeSource(o.idSource);
-      }
-    };
-
-  }
+    function fetchGeoJSON() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const data = {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [6.111354, 46.213232],
+            },
+            properties: {
+              title: "Map-x Home",
+            },
+          };
+          return resolve(data);
+        }, 1000);
+      });
+    }
+  },
 };
-
-
