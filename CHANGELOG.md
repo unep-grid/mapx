@@ -1,3 +1,9 @@
+  - [1.10.0-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.3) 
+
+    - APP
+        - Dashboards / Widgets ( issue #877 ) 
+            - Automatic credits / attributions links at the bottom of the dashboad panel, created when loading a package using predefined list ( `widget.modules...` )
+            - Manual credits text/html from the widget editor
   
   - [1.10.0-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.2) 
 
