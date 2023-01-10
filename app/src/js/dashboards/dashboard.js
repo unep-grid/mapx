@@ -2,7 +2,7 @@ import { Widget } from "./widget.js";
 import { ButtonPanel } from "./../button_panel";
 import { modulesLoad } from "./../modules_loader_async";
 import { all } from "./../mx_helper_misc.js";
-import { el } from "./../el/src/index.js";
+import { el, elAuto, elSpanTranslate } from "./../el_mapx";
 import Muuri from "muuri";
 import "./style.less";
 import { waitFrameAsync } from "../animation_frame/index.js";
@@ -50,7 +50,7 @@ class Dashboard extends EventSimple {
     super();
     const d = this;
     d.opt = {};
-    for (var k in defaults) {
+    for (const k in defaults) {
       d.opt[k] = Object.assign({}, defaults[k], opt[k]);
     }
     d.init();
@@ -64,7 +64,6 @@ class Dashboard extends EventSimple {
     d._open = false;
     d.modules = {};
     d.widgets = [];
-    //d.cb = [];
     d.elDashboard = el("div", { class: "dashboard" });
 
     /*
@@ -243,6 +242,8 @@ class Dashboard extends EventSimple {
       d.widgets.splice(pos, 1);
     }
     d.updateGridLayout();
+    d.updateAttributions();
+    d.autoDestroy();
   }
 
   allWidgetsDisabled() {
@@ -256,10 +257,84 @@ class Dashboard extends EventSimple {
 
   async autoDestroy() {
     const d = this;
+    if (d.isDestroyed()) {
+      return;
+    }
     const allDisabled = d.allWidgetsDisabled();
     const destroy = d.widgets.length === 0 || allDisabled;
     if (destroy) {
       await d.destroy();
+    }
+  }
+
+  /**
+   * Clear atributions
+   */
+  clearAttributions() {
+    const d = this;
+    while (d.panel.elFooter.firstElementChild) {
+      d.panel.elFooter.firstElementChild.remove();
+    }
+  }
+
+  /**
+   *  Add attributions text in panel footer
+   */
+  updateAttributions() {
+    const d = this;
+    d.clearAttributions();
+
+    /**
+     * Global attributions from module load / packages
+     * -> avoid duplicates
+     */
+    const attributions = {};
+
+    for (const w of d.widgets) {
+      for (const a of w.opt.attributions) {
+        attributions[a.name] = a;
+      }
+    }
+
+    let first = true;
+    for (const a of Object.values(attributions)) {
+      if (first) {
+        first = false;
+        const elAttributionLabel = elSpanTranslate(
+          "view_dashboard_attribution_made_with"
+        );
+        d.panel.elFooter.appendChild(elAttributionLabel);
+      }
+      const elAttribution = el(
+        "span",
+        { class: "button-panel--item-footer-attribution" },
+        elAuto("url", a.homepage, {
+          urlDefaultLabel: a.name,
+          urlDefaultTitle: a.description,
+        })
+      );
+      d.panel.elFooter.appendChild(elAttribution);
+    }
+
+    /*
+     * User set attribution, in widget
+     * -> can be html
+     */
+    const widgetAttributions = [];
+
+    for (const w of d.widgets) {
+      if (w.opt.conf.attribution) {
+        widgetAttributions.push(w.opt.conf.attribution);
+      }
+    }
+
+    for (const html of widgetAttributions) {
+      const elAttribution = el(
+        "span",
+        { class: "button-panel--item-footer-attribution" },
+        html
+      );
+      d.panel.elFooter.appendChild(elAttribution);
     }
   }
 
@@ -273,9 +348,18 @@ class Dashboard extends EventSimple {
     const modulesNames = conf.modules || [];
     d.opt.dashboard.modules.push(...modulesNames);
     const modules = await modulesLoad(modulesNames);
+    const attributions = [];
     for (const name of modulesNames) {
-      d.modules[name] = modules[idM++];
+      const module = modules[idM++];
+      d.modules[name] = module;
+      /**
+       * Add credits / attributions
+       */
+      if (module._attrib_info) {
+        attributions.push(module._attrib_info);
+      }
     }
+
     /**
      * Build widgets
      */
@@ -289,6 +373,7 @@ class Dashboard extends EventSimple {
           modules: d.modules,
           view: conf.view,
           map: conf.map,
+          attributions: attributions,
         });
         d.widgets.push(widget);
         widget._id = conf.view.id;
@@ -302,6 +387,7 @@ class Dashboard extends EventSimple {
      * Layout update
      */
     await waitFrameAsync();
+    d.updateAttributions();
     d.updatePanelLayout();
     d.updateGridLayout();
 

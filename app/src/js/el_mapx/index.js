@@ -34,12 +34,13 @@ export { el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate };
  * @param {String} opt.langKeyPrefix Language prefix for translation ['open','close'] + prefix 'btn_' -> 'btn_open', 'btn_close'
  * @param {Boolean} opt.stringAsLanguageKey Use string as language key
  * @param {String} opt.urlDefaultLabel Defaut label for links. e.g. "[ link ]"
+ * @param {String} opt.urlDefaultTitle Defaut title for links. e.g. "[ homepage ]"
  */
 
 function elAuto(render, data, opt) {
   opt = opt || {};
 
-  var def = {
+  const def = {
     render: "auto",
     tableHeadersSkip: false,
     tableHeadersClasses: [],
@@ -56,6 +57,7 @@ function elAuto(render, data, opt) {
     langKeyPrefix: "",
     stringAsLanguageKey: false,
     urlDefaultLabel: "Link",
+    urlDefaultTitle: "",
   };
 
   /*
@@ -72,6 +74,7 @@ function elAuto(render, data, opt) {
     string: renderString,
     date: renderDate,
     boolean: renderBoolean,
+    url: renderUrl,
     array_auto: renderArrayAuto,
     array_table: renderArrayTable,
     array_string: renderArrayString,
@@ -171,14 +174,17 @@ function elAuto(render, data, opt) {
 
     return el("span", { style: opt.dateStyle }, new Date(date).toDateString());
   }
-  function renderUrl(url, label) {
+  function renderUrl(url, label, title) {
     label = label || opt.urlDefaultLabel;
+    title = title || opt.urlDefaultTitle;
 
     return el(
       "a",
       {
         target: "_blank",
         href: url,
+        "aria-label": title,
+        class: ["hint--left"],
       },
       label
     );
@@ -466,8 +472,6 @@ export function elButtonFa(key, opt) {
     },
   });
 }
-
-
 
 /**
  * Standard checkbox

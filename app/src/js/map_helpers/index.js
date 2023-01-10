@@ -37,7 +37,7 @@ import {
   viewsListAddSingle,
 } from "./../mx_helper_map_view_ui.js";
 import { initLog } from "./../mx_helper_log.js";
-import { dashboardHelper } from "./../mx_helper_map_dashboard.js";
+import { dashboardHelper } from "./../dashboards/dashboard_instances.js";
 import {
   date,
   updateIfEmpty,

@@ -4230,6 +4230,11 @@
     "ps": "ویجټونه "
   },
   {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "ps": "Credits: "
+  },
+  {
     "id": "view_delete_confirm",
     "en": "Click on the confirm button to delete this view, its history and all translations.",
     "ps": "ددې لیدنې، د هغې د تاریخچې او ټولو ژباړو د پاکولو لپاره د تائید تڼۍ کیکاږئ "

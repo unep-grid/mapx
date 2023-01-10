@@ -10998,6 +10998,19 @@
     "de": "Widgets "
   },
   {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "fr": "Crédits: ",
+    "es": "Credits: ",
+    "ru": "Credits: ",
+    "zh": "Credits: ",
+    "ar": "Credits: ",
+    "fa": "Credits: ",
+    "ps": "Credits: ",
+    "bn": "Credits: ",
+    "de": "Credits: "
+  },
+  {
     "id": "view_delete_confirm",
     "en": "Click on the confirm button to delete this view, its history and all translations.",
     "fr": "Cliquer sur le button de confirmation pour supprimer cette vue, ainsi que son historique et toutes les traductions.",

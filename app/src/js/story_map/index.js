@@ -20,7 +20,7 @@ import {
   scrollFromTo,
   cssTransform,
 } from "./../mx_helper_misc.js";
-import { dashboardHelper } from "./../mx_helper_map_dashboard.js";
+import { dashboardHelper } from "./../dashboards/dashboard_instances.js";
 import { getArrayDiff } from "./../array_stat/index.js";
 import { createCanvas } from "./../mx_helper_canvas.js";
 import {

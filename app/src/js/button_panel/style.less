@@ -126,6 +126,33 @@
           flex-direction: column;
         }
       }
+      .button-panel--item-footer {
+        position: absolute;
+        margin-left: 10px;
+        margin-bottom: 5px;
+        bottom: 0;
+        font-size: 0.7rem;
+        max-height: 2em;
+        opacity: 0.8;
+        width: 100%;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        background: var(--mx_ui_background_transparent);
+        .button-panel--item-footer-attribution {
+          &:not(:last-child):after {
+            content: ", ";
+          }
+          a {
+            margin-left: 0.3em;
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+      }
       .button-panel--item-content-transparent-background {
         background: var(--mx_ui_background_transparent);
       }
@@ -164,12 +191,12 @@
             opacity: 1;
             margin: 30px;
             .button-panel--item-handle {
-              /** Add a surface around button to handle fast mvt**/
+              /** Add a surface around button to handle fast move **/
               &::after {
                 content: "";
                 position: absolute;
-                width: 100px;
-                height: 100px;
+                width: 50px;
+                height: 50px;
                 /*border: 1px solid red;*/
                 border-radius: 50%;
                 /** same as handle diameter */

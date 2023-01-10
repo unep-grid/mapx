@@ -4230,6 +4230,11 @@
     "zh": "小组件"
   },
   {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "zh": "Credits: "
+  },
+  {
     "id": "view_delete_confirm",
     "en": "Click on the confirm button to delete this view, its history and all translations.",
     "zh": "单击确认按钮以删除此视图，包括历史记录和所有翻译。"

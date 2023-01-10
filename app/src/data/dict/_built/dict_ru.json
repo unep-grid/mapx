@@ -4230,6 +4230,11 @@
     "ru": "Виджеты "
   },
   {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "ru": "Credits: "
+  },
+  {
     "id": "view_delete_confirm",
     "en": "Click on the confirm button to delete this view, its history and all translations.",
     "ru": "Нажмите кнопку подтверждения, чтобы удалить это представление, его историю и все переводы. "

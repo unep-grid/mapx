@@ -10998,6 +10998,19 @@
     "de": "Widgets "
   },
   {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Made with: ",
+    "fr": "Fait avec: ",
+    "es": "Hecho con:",
+    "ru": "Сделано с:",
+    "zh": "用：",
+    "ar": "مصنوع من:",
+    "fa": "ساخته شده با:",
+    "ps": "سره جوړ شوی:",
+    "bn": "দিয়ে তৈরি:",
+    "de": "Gemacht mit:"
+  },
+  {
     "id": "view_delete_confirm",
     "en": "Click on the confirm button to delete this view, its history and all translations.",
     "fr": "Cliquer sur le button de confirmation pour supprimer cette vue, ainsi que son historique et toutes les traductions.",

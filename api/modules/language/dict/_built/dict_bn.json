@@ -4230,6 +4230,11 @@
     "bn": "উইজেট "
   },
   {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "bn": "Credits: "
+  },
+  {
     "id": "view_delete_confirm",
     "en": "Click on the confirm button to delete this view, its history and all translations.",
     "bn": "এই দৃশ্যটি, এর ইতিহাস এবং সমস্ত অনুবাদ মুছতে কনফার্ম বাটনে ক্লিক করুন। "

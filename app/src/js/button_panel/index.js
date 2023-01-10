@@ -5,7 +5,11 @@ import { isNumeric } from "../is_test/index.js";
 import { shake } from "../elshake";
 import "./style.less";
 
-window._button_panels = [];
+/**
+* Keeps track of all panels
+*/ 
+const _button_panels = [];
+window._button_panels  = _button_panels
 
 class ButtonPanel extends EventSimple {
   constructor(opt) {
@@ -238,6 +242,15 @@ class ButtonPanel extends EventSimple {
     );
 
     /**
+     * Footer 
+     */
+    panel.elFooter = el(
+      "div",
+      {
+        class: "button-panel--item-footer",
+      },
+    );
+    /**
      * Panel
      */
     panel.elPanel = el(
@@ -250,7 +263,9 @@ class ButtonPanel extends EventSimple {
         style: panel.opt.panel_style,
       },
       panel.elPanelContent,
+      panel.elFooter,
       panel.elHandles
+      
     );
 
     /**

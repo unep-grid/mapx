@@ -34,7 +34,7 @@ import {
   commonLocGetTableCodes,
 } from "../../../commonloc/index.js";
 import { isArray, isMap, isView } from "./../../../is_test";
-import { dashboardHelper } from "../../../mx_helper_map_dashboard.js";
+import { dashboardHelper } from "./../../../dashboards/dashboard_instances.js";
 import {
   fetchSourceMetadata,
   fetchViewMetadata,

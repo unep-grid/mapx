@@ -17,6 +17,7 @@ const defaults = {
     addColorBackground: false,
     colorBackground: "#000000",
     sourceIgnoreEmpty: true,
+    atribution: "",
     script:
       "return { async onAdd:console.log, async onRemove:console.log, async onData:console.log}",
   },
@@ -24,6 +25,7 @@ const defaults = {
   map: null,
   view: null,
   dashboard: null,
+  attributions: [],
 };
 
 class Widget {
@@ -296,46 +298,47 @@ class Widget {
         return;
       }
       widget._destroyed = true;
-      if (widget._init) {
-        /**
-         * Remove from grid
-         */
-        widget.grid.remove(widget.el);
+      if (!widget._init) {
+        return;
+      }
+      /**
+       * Remove from grid
+       */
+      widget.grid.remove(widget.el);
 
-        /**
-         * Remove all listeners
-         */
-        widget.ls.destroy();
+      /**
+       * Remove all listeners
+       */
+      widget.ls.destroy();
 
-        /**
-         * Remove elements
-         */
-        while (widget.el.firstElementChild) {
-          widget.el.firstElementChild.remove();
-        }
-        widget.el.remove();
+      /**
+       * Remove elements
+       */
+      while (widget.el.firstElementChild) {
+        widget.el.firstElementChild.remove();
+      }
+      widget.el.remove();
 
-        /**
-         * Remove timers if any
-         */
-        if (widget.timer) {
-          window.clearInterval(widget.timer);
-          window.clearTimeout(widget.timer);
-        }
-        /**
-         * Don't intercept click
-         */
-        widget.handleClick(false);
+      /**
+       * Remove timers if any
+       */
+      if (widget.timer) {
+        window.clearInterval(widget.timer);
+        window.clearTimeout(widget.timer);
+      }
+      /**
+       * Don't intercept click
+       */
+      widget.handleClick(false);
 
+      /*
+       * Exec widget on remove
+       */
+      if (!skipOnRemove) {
         /*
-         * Exec widget on remove
+         * Case normal remove
          */
-        if (!skipOnRemove) {
-          /*
-           * Case normal remove
-           */
-          await widget.onRemove(widget);
-        }
+        await widget.onRemove(widget);
       }
 
       /**

@@ -1,5 +1,11 @@
+import { getView, getMap } from "./../map_helpers";
+import { path } from "./../mx_helper_misc.js";
+import { storyMapLock, isStoryPlaying } from "../story_map";
+import { getDictItem } from "../language";
+import { isString, isEmpty, isView, isArray } from "./../is_test";
+
 const store = {
-  dashboard: null
+  dashboard: null,
 };
 
 const dashboardHelper = {
@@ -12,9 +18,9 @@ const dashboardHelper = {
   viewRmWidgets,
   viewAddWidgetsAsync,
   viewCreateDashboardAsync,
-  viewAutoDashboardAsync
+  viewAutoDashboardAsync,
 };
-export {dashboardHelper};
+export { dashboardHelper };
 
 /**
  * Check if has instance
@@ -78,7 +84,7 @@ async function viewAutoDashboardAsync(idView) {
     const isActive = d.isActive();
     if (!isActive) {
       d.shakeButton({
-        type: 'look_at_me'
+        type: "look_at_me",
       });
     }
   }
@@ -90,16 +96,15 @@ async function viewAutoDashboardAsync(idView) {
  * @return {Object} config object
  */
 function viewConfigGet(idView) {
-  const h = mx.helpers;
-  const view = h.getView(idView);
+  const view = getView(idView);
 
-  if (!h.isView(view)) {
+  if (!isView(view)) {
     return;
   }
 
-  const config = h.path(view, 'data.dashboard', {});
+  const config = path(view, "data.dashboard", {});
 
-  if (h.isEmpty(config)) {
+  if (isEmpty(config)) {
     return;
   }
 
@@ -110,9 +115,9 @@ function viewConfigGet(idView) {
   /*
    * Modules should array of string. In older version, single string was an option
    */
-  config.modules = h.isArray(config.modules)
+  config.modules = isArray(config.modules)
     ? config.modules
-    : h.isString(config.modules)
+    : isString(config.modules)
     ? [config.modules]
     : [];
 
@@ -125,12 +130,11 @@ function viewConfigGet(idView) {
  * @return {Boolean} has widgets
  */
 function viewHasWidget(idView) {
-  const h = mx.helpers;
-  const view = h.getView(idView);
-  if (!h.isView(view)) {
+  const view = getView(idView);
+  if (!isView(view)) {
     return false;
   }
-  return h.isArray(view._widgets) && view._widgets.length > 0;
+  return isArray(view._widgets) && view._widgets.length > 0;
 }
 
 /**
@@ -139,13 +143,13 @@ function viewHasWidget(idView) {
  * @return null
  */
 async function viewRmWidgets(idView) {
-  const h = mx.helpers;
   const hasWidgets = viewHasWidget(idView);
-  const view = h.getView(idView);
-  if (hasWidgets) {
-    for (const widget of view._widgets) {
-      await widget.destroy();
-    }
+  if (!hasWidgets) {
+    return;
+  }
+  const view = getView(idView);
+  for (const widget of view._widgets) {
+    await widget.destroy();
   }
 }
 
@@ -155,13 +159,12 @@ async function viewRmWidgets(idView) {
  * @return {Promise<Array||Boolean>} array of widget or false
  */
 async function viewAddWidgetsAsync(idView) {
-  const h = mx.helpers;
   const config = viewConfigGet(idView);
   if (!config) {
     return false;
   }
-  const view = h.getView(idView);
-  const map = h.getMap();
+  const view = getView(idView);
+  const map = getMap();
   await viewRmWidgets(idView);
   await viewCreateDashboardAsync(idView);
   const d = getInstance();
@@ -169,7 +172,7 @@ async function viewAddWidgetsAsync(idView) {
     widgets: config.widgets,
     modules: config.modules,
     view: view,
-    map: map
+    map: map,
   });
   return view._widgets;
 }
@@ -180,7 +183,6 @@ async function viewAddWidgetsAsync(idView) {
  * @return {Promise<Boolean>} created
  */
 async function viewCreateDashboardAsync(idView) {
-  const h = mx.helpers;
   const d = getInstance();
   if (d) {
     return false;
@@ -189,13 +191,13 @@ async function viewCreateDashboardAsync(idView) {
   if (!config) {
     return;
   }
-  const Dashboard = await h.moduleLoad('dashboard');
+  const { Dashboard } = await import("./dashboard.js");
   /**
    * Create a new dashboard, save it in mx object
    */
   store.dashboard = new Dashboard({
     dashboard: {
-      layout: config.layout
+      layout: config.layout,
     },
     grid: {
       dragEnabled: true,
@@ -204,32 +206,32 @@ async function viewCreateDashboardAsync(idView) {
         fillGaps: true,
         alignRight: false,
         alignBottom: false,
-        rounding: true
-      }
+        rounding: true,
+      },
     },
     panel: {
       elContainer: document.body,
-      title_text: h.getDictItem('Dashboard'),
-      title_lang_key: 'dashboard',
-      button_text: 'dashboard',
-      button_lang_key: 'button_dashboard_panel',
-      button_classes: ['fa', 'fa-pie-chart'],
-      position: 'bottom-right',
+      title_text: getDictItem("Dashboard"),
+      title_lang_key: "dashboard",
+      button_text: "dashboard",
+      button_lang_key: "button_dashboard_panel",
+      button_classes: ["fa", "fa-pie-chart"],
+      position: "bottom-right",
       container_style: {
-        minWidth: '100px',
-        minHeight: '100px'
-      }
-    }
+        minWidth: "100px",
+        minHeight: "100px",
+      },
+    },
   });
 
   /**
    * If a story is playing and the dashboard
    * is shown, unlock the story
    */
-  store.dashboard.on('show', () => {
-    const hasStory = h.isStoryPlaying();
+  store.dashboard.on("show", () => {
+    const hasStory = isStoryPlaying();
     if (hasStory) {
-      h.storyMapLock('unlock');
+      storyMapLock("unlock");
     }
   });
 
@@ -237,20 +239,19 @@ async function viewCreateDashboardAsync(idView) {
    * If a story is playing and the dashboard
    * is closed or destroy, lock the story
    */
-  store.dashboard.on('hide', () => {
-    const hasStory = h.isStoryPlaying();
+  store.dashboard.on("hide", () => {
+    const hasStory = isStoryPlaying();
     if (hasStory) {
-      h.storyMapLock('lock');
+      storyMapLock("lock");
     }
   });
 
-  store.dashboard.on('destroy', () => {
-    const hasStory = h.isStoryPlaying();
+  store.dashboard.on("destroy", () => {
+    const hasStory = isStoryPlaying();
     if (hasStory) {
-      h.storyMapLock('lock');
+      storyMapLock("lock");
     }
   });
-
 
   return true;
 }

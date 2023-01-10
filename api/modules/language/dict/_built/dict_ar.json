@@ -4230,6 +4230,11 @@
     "ar": "الحاجيات "
   },
   {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "ar": "Credits: "
+  },
+  {
     "id": "view_delete_confirm",
     "en": "Click on the confirm button to delete this view, its history and all translations.",
     "ar": "انقر فوق زر التأكيد لحذف هذا العرض وتاريخه وجميع الترجمات. "

@@ -14,7 +14,6 @@ export * from './mx_helper_validate_geom_tool.js';
 export * from './mx_helper_map_draw.js';
 export * from './mx_helper_ui_color.js';
 export * from './mx_helper_draggable.js';
-export * from './mx_helper_map_dashboard.js';
 export * from './mx_helper_map_pixop.js';
 export * from './mx_helper_map_dragdrop.js';
 export * from './mx_helper_map_view_badges.js';

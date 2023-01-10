@@ -4230,6 +4230,11 @@
     "de": "Widgets "
   },
   {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "de": "Credits: "
+  },
+  {
     "id": "view_delete_confirm",
     "en": "Click on the confirm button to delete this view, its history and all translations.",
     "de": "Klicken Sie auf die Schaltfläche Bestätigen, um diese Ansicht, ihren Verlauf und alle Übersetzungen zu löschen. "
