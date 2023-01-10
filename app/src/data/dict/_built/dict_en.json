@@ -3264,6 +3264,10 @@
     "en": "Your script"
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard"
   },

@@ -4080,6 +4080,11 @@
     "ar": "السيناريو الخاص بك "
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "ar": "تحييد / الاعتمادات. الشكل : HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "ar": "تعطيل لوحة القيادة هذه"

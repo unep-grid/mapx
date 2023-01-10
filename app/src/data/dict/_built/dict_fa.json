@@ -4080,6 +4080,11 @@
     "fa": "فیلمنامه شما "
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "fa": "شایستگی/اعتبارات. فرمت : HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "fa": "این داشبورد را غیرفعال کنید"

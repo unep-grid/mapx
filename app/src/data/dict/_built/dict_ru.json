@@ -4080,6 +4080,11 @@
     "ru": "Ваш сценарий "
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "ru": "Атрибуция / кредиты. Формат: HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "ru": "Отключить эту панель"

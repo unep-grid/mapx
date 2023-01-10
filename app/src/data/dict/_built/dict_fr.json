@@ -4080,6 +4080,11 @@
     "fr": "Votre script"
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "fr": "Attribution / crédits. Format : HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "fr": "Désactiver ce tableau de bord"

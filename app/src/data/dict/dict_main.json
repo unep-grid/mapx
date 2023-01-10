@@ -5318,6 +5318,19 @@
     "de": ""
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "fr": "Attribution / crédits. Format : HTML",
+    "es": "Atribución / créditos. Formato : HTML",
+    "ru": "Атрибуция / кредиты. Формат: HTML",
+    "zh": "归因/贡献。格式：HTML",
+    "ar": "تحييد / الاعتمادات. الشكل : HTML",
+    "fa": "شایستگی/اعتبارات. فرمت : HTML",
+    "ps": "شایستی/اعتبارونه. فورمت : HTML",
+    "bn": "স্বাক্ষর/ক্রেডিট. ফর্ম্যাট : HTML",
+    "de": "Quellenangaben / Credits. Format: HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "fr": "",

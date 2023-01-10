@@ -4080,6 +4080,11 @@
     "de": "Dein Skript "
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "de": "Quellenangaben / Credits. Format: HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "de": "Dieses Dashboard deaktivieren"

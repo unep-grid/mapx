@@ -4080,6 +4080,11 @@
     "bn": "আপনার লিপি "
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "bn": "স্বাক্ষর/ক্রেডিট. ফর্ম্যাট : HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "bn": "এই ড্যাশবোর্ড নিষ্ক্রিয় করুন"

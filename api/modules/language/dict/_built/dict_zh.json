@@ -4080,6 +4080,11 @@
     "zh": "你的脚本"
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "zh": "归因/贡献。格式：HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "zh": "禁用此仪表板"

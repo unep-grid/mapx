@@ -4080,6 +4080,11 @@
     "ps": "ستاسو سکریپټ "
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "ps": "شایستی/اعتبارونه. فورمت : HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "ps": "دا ډشبورډ غیر فعال کړئ"
