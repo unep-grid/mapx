@@ -1,6 +1,29 @@
 import { colorToHex } from "./../color_utils";
 import { getView, getMap, getViewTitle } from "../map_helpers/index.js";
 import { getViewMapboxLayers } from "./view_to_mb_layers";
+import { mapboxToSld } from "./mbstyle_to_sld";
+import { isViewVtWithStyleCustom } from "./../is_test/index.js";
+
+/**
+ * Create sld style from view's layers
+ * @param {String|object} idView Id of the view or view
+ * @return {Promise<String>} Style string
+ */
+export async function getViewSldStyle(idView) {
+  const view = getView(idView);
+  if (isViewVtWithStyleCustom(view)) {
+    return null;
+  }
+  const styleMapboxForSld = await getViewMapboxStyle(view, {
+    useLabelAsId: true,
+    addMetadata: true,
+    simplifyExpression: true,
+  });
+  const styleSld = await mapboxToSld(styleMapboxForSld, {
+    fixFilters: true,
+  });
+  return styleSld;
+}
 
 /**
  * Create mapbox style from view's layers

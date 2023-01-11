@@ -2,7 +2,7 @@ import { fetchSourceMetadata } from "./mx_helpers.js";
 import { path } from "./mx_helper_misc.js";
 import { modal } from "./mx_helper_modal.js";
 import { getView, getViews } from "./map_helpers";
-import { isArray } from "./is_test";
+import { isArray, isSourceId } from "./is_test";
 import { settings } from "./settings";
 import { getDictItem, updateLanguageElements } from "./language";
 import { el } from "./el/src/index.js";
@@ -28,12 +28,14 @@ export async function updateViewsBadges(opt) {
         /**
          * Only local view
          */
-        if ((view.type === "vt")) {
+        if (view.type === "vt") {
           /**
            * Update view meta from remote for vt
            */
           const idSource = path(view, "data.source.layerInfo.name");
-          view._meta = await fetchSourceMetadata(idSource);
+          if (isSourceId(idSource)) {
+            view._meta = await fetchSourceMetadata(idSource);
+          }
         }
         await setViewBadges(view);
       }

@@ -1,5 +1,5 @@
 import { WsHandler } from "./../ws_handler";
-import { getViewMapboxStyle, mapboxToSld } from "./../style_vt/index.js";
+import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt/index.js";
 import {
   getLoginInfo,
   getViewRemote,
@@ -170,16 +170,14 @@ async function job_add_view(job, result) {
 async function job_style_convert(job, result) {
   try {
     const view = await getViewRemote(job.input.idView);
-    const rules = view?.data?.style?.rules || [];
+    const style = view?.data?.style || {};
+    const rules = style?.rules || [];
     const hasRules = isNotEmpty(rules);
+
     if (hasRules) {
-      const mapboxStyle = await getViewMapboxStyle(view, {
-        useLabelAsId: true,
-        addMetadata: true,
-        simplifyExpression: true,
-      });
-      result.output.mapbox = mapboxStyle;
-      result.output.sld = await mapboxToSld(mapboxStyle);
+      // should match jedHooksApply in jed helper
+      result.output.mapbox = await getViewMapboxStyle(view);
+      result.output.sld = await getViewSldStyle(view);
     }
   } catch (e) {
     result.error = `Error processing style for view ${job.input.idView}, ${e.message}`;

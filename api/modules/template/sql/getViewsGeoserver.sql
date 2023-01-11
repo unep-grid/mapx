@@ -25,9 +25,6 @@ views_geoserver AS (
     v.type = 'vt'
     AND v.readers @> '["public"]'
     AND v.data #>> '{source,layerInfo,name}' = s.id_source
-    AND (
-      NOT v.data #> '{style}' ? 'custom' 
-      OR NOT ((v.data #>> '{style,custom,json}')::jsonb -> 'enable')::boolean)
 ),
 view_geoserver_extent_raw AS (
   SELECT

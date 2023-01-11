@@ -3,10 +3,11 @@ import { el, elSelect, elButtonFa } from "./../el_mapx/index.js";
 import { moduleLoad } from "./../modules_loader_async/index.js";
 import * as template_maplibre_simple from "./templates/maplibre_gl_app.html";
 import { getDictItem } from "../language/index.js";
-import { getViewMapboxStyle, mapboxToSld } from "./../style_vt";
+import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt";
 import { parseTemplate } from "./../mx_helper_misc";
 import { FlashItem } from "../icon_flash/index.js";
-import { getViewsBounds } from "../map_helpers/index.js";
+import { getViewsBounds, getView } from "../map_helpers/index.js";
+import { isViewVtWithStyleCustom } from "../is_test/index.js";
 
 export class ModalCodeIntegration {
   constructor(idView, config) {
@@ -153,7 +154,10 @@ export class ModalCodeIntegration {
   }
 
   get templates() {
-    return [
+    const mci = this;
+    const view = getView(mci._config.idView);
+    const isCustom = isViewVtWithStyleCustom(view);
+    const base = [
       {
         id: "template_maplibre_simple_app",
         key: "code_integration_template_maplibre_simple_app",
@@ -166,11 +170,14 @@ export class ModalCodeIntegration {
         id: "template_mapbox_style",
         key: "code_integration_template_mapbox_style",
       },
-      {
+    ];
+    if (!isCustom) {
+      base.push({
         id: "template_sld_layers",
         key: "code_integration_template_sld_layers",
-      },
-    ];
+      });
+    }
+    return base;
   }
 
   async getTemplateData(id) {
@@ -180,13 +187,7 @@ export class ModalCodeIntegration {
       language: "html",
     };
 
-    const sldMode = id === "template_sld_layers";
-
-    const style = await getViewMapboxStyle(mci._config.idView, {
-      useLabelAsId: sldMode,
-      addMetadata: sldMode,
-      simplifyExpression: sldMode,
-    });
+    const style = await getViewMapboxStyle(mci._config.idView);
 
     switch (id) {
       case "template_maplibre_simple_app":
@@ -210,7 +211,8 @@ export class ModalCodeIntegration {
         out.language = "json";
         break;
       case "template_sld_layers":
-        out.str = await mapboxToSld(style);
+        const styleSld = await getViewSldStyle(mci._config.idView);
+        out.str = styleSld;
         out.language = "html";
     }
 

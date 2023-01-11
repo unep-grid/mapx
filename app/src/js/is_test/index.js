@@ -147,6 +147,13 @@ export function isViewVtWithRules(item) {
 }
 
 /**
+ * Test if view vt has custom style
+ * @param {Object} item to test
+ */
+export function isViewVtWithStyleCustom(item) {
+  return isViewVt(item) && !!JSON.parse(item?.data?.style?.custom?.json)?.enable;
+}
+/**
  * Test if view vt has specific attribute type r
  * @param {Object} item to test
  * @param {String} attribute type e.g. string;
@@ -380,7 +387,7 @@ export function isJSON(str) {
   }
   return true;
 }
-export const isJson = isJSON ;
+export const isJson = isJSON;
 
 /**
  * Test if stringifiable

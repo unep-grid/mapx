@@ -97,7 +97,6 @@ async function rebuildHandler(socket, options) {
       await socket.notifyInfoError({
         message: "Geoserver rebuild already runnning",
       });
-      // throw new Error("test");
       return;
     }
 
@@ -276,8 +275,9 @@ async function createLayer(socket, layer, overwriteStyle, idGroup, idProgress) {
     layer.bbox_source
   );
 
-  const recalc =
-    overwriteStyle && (isEmpty(layer.style_mapbox) || isEmpty(layer.style_sld));
+  const hasNoStyle = isEmpty(layer.style_mapbox) || isEmpty(layer.style_sld);
+
+  const recalc = overwriteStyle && hasNoStyle;
 
   if (recalc) {
     const { output } = await ioSendJobClient(socket, "style_from_view", {
