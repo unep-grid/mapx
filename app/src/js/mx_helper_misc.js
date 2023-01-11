@@ -5,6 +5,7 @@ import {
   isEmpty,
   isPromise,
   isString,
+  isArray,
   isObject,
 } from "./is_test_mapx/index.js";
 import copy from "fast-copy";
@@ -440,23 +441,22 @@ export function domToText(dom) {
  *
  */
 export function mergeDeep(target, source) {
-  const output = Object.assign({}, target);
-  const valid = isObject(source) && isObject(target);
+  if (!isObject(target) || !isObject(source)) {
+    return source;
+  }
+  for (const key in source) {
+    const targetValue = target[key];
+    const sourceValue = source[key];
 
-  if (valid) {
-    for (const key in source) {
-      if (isObject(source[key])) {
-        if (!(key in target)) {
-          Object.assign(output, { [key]: source[key] });
-        } else {
-          output[key] = mergeDeep(target[key], source[key]);
-        }
-      } else {
-        Object.assign(output, { [key]: source[key] });
-      }
+    if (isArray(targetValue) && isArray(sourceValue)) {
+      target[key] = targetValue.concat(sourceValue);
+    } else if (isObject(targetValue) && isObject(sourceValue)) {
+      target[key] = mergeDeep(Object.assign({}, targetValue), sourceValue);
+    } else {
+      target[key] = sourceValue;
     }
   }
-  return output;
+  return target;
 }
 
 /**

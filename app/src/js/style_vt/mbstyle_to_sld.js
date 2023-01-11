@@ -34,6 +34,7 @@ export async function mapboxToSld(style, opt) {
       const errors = gstyle.errors.reduce((a, c) => a + ", " + c, "");
       throw new Error(`Style had errors: ${errors}`);
     }
+    
     if (opt.fixFilters) {
       geostylerFixFilters(gstyle, {
         fixNumeric: fixNumeric,
