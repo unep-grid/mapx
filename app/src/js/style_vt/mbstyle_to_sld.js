@@ -20,6 +20,7 @@ export async function mapboxToSld(style, opt) {
         fixFilters: true,
         fixImageCdn: true,
         fixIconSize: true,
+        ignoreConversionErrors : true
       },
       opt
     );
@@ -28,8 +29,10 @@ export async function mapboxToSld(style, opt) {
     const mapbox = new MapboxStyleParser();
     const sld = new SldStyleParser();
 
-    mapbox.ignoreConversionErrors = true;
+    mapbox.ignoreConversionErrors = opt.ignoreConversionErrors;
+
     const gstyle = await mapbox.readStyle(style, {});
+
     if (isArray(gstyle?.errors) && gstyle.errors.length > 0) {
       const errors = gstyle.errors.reduce((a, c) => a + ", " + c, "");
       throw new Error(`Style had errors: ${errors}`);

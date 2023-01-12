@@ -430,6 +430,7 @@ export async function getViewMapboxLayers(v, opt) {
     const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== "none";
     const layerNull = _build_layer({
       priority: 1,
+      position: style.reverseLayer ? nRules : -1,
       geomType: geomType === "point" && hasSprite ? "symbol" : geomType,
       hexColor: ruleNulls.color,
       opacity: ruleNulls.opacity,
