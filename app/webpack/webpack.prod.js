@@ -39,6 +39,7 @@ module.exports = merge(common, {
       clientsClaim: true,
       exclude: [/\.DS_Store/, /.*\.swp$/, /^fontstack/, /^sprites/],
       importScripts: ["sw_listen_skip_waiting_install.js"],
+      maximumFileSizeToCacheInBytes : 10_000_000, //10MB
       runtimeCaching: [
         {
           urlPattern: /^https:\/\/api\.mapbox\.com\//,
