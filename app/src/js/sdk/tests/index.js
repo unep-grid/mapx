@@ -843,7 +843,7 @@ mapx.once("ready", async () => {
     },
     tests: [
       {
-        name: "Dashboard is added and removed properly",
+        name: "Dashboard is added then, removed properly",
         test: async (view) => {
           let visible = false;
           let removed = false;

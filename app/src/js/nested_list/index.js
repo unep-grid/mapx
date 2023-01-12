@@ -1,11 +1,11 @@
-import {settings} from './data/settings.js';
-import {el} from './../el/src/index.js';
-import {Item} from './components/item.js';
-import {Group} from './components/group.js';
-import {ContextMenu} from './components/contextMenu.js';
-import {ListenerStore} from '../listener_store/index.js';
+import { settings } from "./data/settings.js";
+import { el } from "./../el/src/index.js";
+import { Item } from "./components/item.js";
+import { Group } from "./components/group.js";
+import { ContextMenu } from "./components/contextMenu.js";
+import { ListenerStore } from "../listener_store/index.js";
 
-import './style/nested_list.less';
+import "./style/nested_list.less";
 
 class NestedList {
   constructor(elRoot, opt) {
@@ -40,7 +40,7 @@ class NestedList {
     li.startListening();
   }
   initState() {
-    this.setState({render: true});
+    this.setState({ render: true });
   }
   initHistory() {
     this.setHistory();
@@ -54,26 +54,26 @@ class NestedList {
       target: li.elRoot,
       bind: li,
       callback: handleContextClick,
-      group: 'base',
-      type: ['dblclick', 'contextmenu']
+      group: "base",
+      type: ["dblclick", "contextmenu"],
     });
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
       callback: handleMouseDown,
-      group: 'base',
-      type: 'mousedown'
+      group: "base",
+      type: "mousedown",
     });
   }
   stopListening() {
-    this.listenerStore.removeListenerByGroup('base');
+    this.listenerStore.removeListenerByGroup("base");
   }
   destroy() {
     const li = this;
     li.listenerStore.destroy();
     li.clearHistory();
     li.clearAllItems();
-    return li.fireAsync('destroy');
+    return li.fireAsync("destroy");
   }
   /**
    * Get/set options
@@ -184,7 +184,7 @@ class NestedList {
     li.opt.eventsCallback.push({
       id: id,
       action: action instanceof Function ? action : () => {},
-      once: !!once
+      once: !!once,
     });
   }
 
@@ -197,7 +197,7 @@ class NestedList {
    * Sorting and ordering
    */
   filterById(ids, opt) {
-    opt = Object.assign({}, {flatMode: false}, opt);
+    opt = Object.assign({}, { flatMode: false }, opt);
 
     const li = this;
     if (li.isModeEmpty()) {
@@ -228,12 +228,12 @@ class NestedList {
         }
       }
     });
-    return li.fire('filter_end', ids);
+    return li.fire("filter_end", ids);
   }
 
   getStateForSorting(elTarget, opt) {
     const li = this;
-    const def = {mode: 'text', ids: [], recursive: true};
+    const def = { mode: "text", ids: [], recursive: true };
     opt = Object.assign({}, def, opt);
     let elGroup = li.isGroup(elTarget) ? elTarget : li.getGroup(elTarget);
     let els = li.getChildrenTarget(elGroup, true);
@@ -246,23 +246,23 @@ class NestedList {
         id: el.id,
         el: el,
         value: 0,
-        isGroup: li.isGroup(el)
+        isGroup: li.isGroup(el),
       };
       if (item.isGroup && opt.recursive) {
         item.children = li.getStateForSorting(el, opt);
       }
-      if (opt.mode === 'text') {
+      if (opt.mode === "text") {
         item.value = item.isGroup ? li.getGroupTitle(el) : li.getItemText(el);
         item.value = item.value.toLowerCase().trim();
       }
-      if (opt.mode === 'date') {
+      if (opt.mode === "date") {
         item.value = item.isGroup ? li.getGroupDate(el) : li.getItemDate(el);
         if (Number.isFinite(item.value * 1)) {
           item.value = item.value * 1;
         }
         item.value = new Date(item.value || 0);
       }
-      if (opt.mode === 'ids') {
+      if (opt.mode === "ids") {
         item.value = opt.ids.indexOf(item.id);
       }
       data.push(item);
@@ -284,7 +284,7 @@ class NestedList {
    */
   sortGroup(elTarget, opt) {
     const li = this;
-    const def = {asc: true, mode: 'text', ids: [], recursive: true};
+    const def = { asc: true, mode: "text", ids: [], recursive: true };
     opt = Object.assign({}, def, opt);
     const data = li.getStateForSorting(elTarget, opt);
 
@@ -305,7 +305,7 @@ class NestedList {
     li.setModeAnimate(false);
     move(data);
     li.setModeAnimate(true);
-    return li.fire('state_order');
+    return li.fire("state_order");
 
     /**
      * Helpers
@@ -373,7 +373,7 @@ class NestedList {
     if (!el) {
       return;
     }
-    if (typeof el === 'string') {
+    if (typeof el === "string") {
       el = li.elRoot.querySelector(`#${el}`);
     }
     if (li.isTarget(el)) {
@@ -390,7 +390,7 @@ class NestedList {
     if (!li.isGroup(el)) {
       el = li.getGroup(el);
     }
-    let pref = direct ? ':scope > ' : '';
+    let pref = direct ? ":scope > " : "";
     let els = el.querySelectorAll(
       `${pref}.${li.opt.class.draggable}, ${pref}.${li.opt.class.group}`
     );
@@ -431,16 +431,16 @@ class NestedList {
   getItemContent(el) {
     const li = this;
     if (li.isItem(el)) {
-      return el.querySelector('.' + li.opt.class.itemContent);
+      return el.querySelector("." + li.opt.class.itemContent);
     }
   }
   getItemText(el) {
     const li = this;
-    return li.fire('get_item_text_by_id', el.id)[0] || el.innerText;
+    return li.fire("get_item_text_by_id", el.id)[0] || el.innerText;
   }
   getItemDate(el) {
     const li = this;
-    return li.fire('get_item_date_by_id', el.id)[0] || Date.now();
+    return li.fire("get_item_date_by_id", el.id)[0] || Date.now();
   }
   getGroup(el) {
     const li = this;
@@ -461,7 +461,7 @@ class NestedList {
     const li = this;
     let elGrp = li.getGroup(el);
     if (elGrp === li.elRoot) {
-      return 'root';
+      return "root";
     } else {
       return elGrp.id;
     }
@@ -470,7 +470,7 @@ class NestedList {
     const li = this;
     let titleObject = {};
     if (li.isGroup(el)) {
-      titleObject = JSON.parse(el.dataset.li_title || '{}');
+      titleObject = JSON.parse(el.dataset.li_title || "{}");
       titleObject = li.validateGroupTitleObject(titleObject);
     }
     return titleObject;
@@ -478,7 +478,7 @@ class NestedList {
   getGroupTitle(el) {
     const li = this;
     if (li.isGroup(el)) {
-      return el.querySelector('.' + li.opt.class.groupTitle).innerText;
+      return el.querySelector("." + li.opt.class.groupTitle).innerText;
     }
   }
   getGroupDate(el) {
@@ -490,7 +490,7 @@ class NestedList {
   getGroupLabel(el) {
     const li = this;
     if (li.isGroup(el)) {
-      return el.querySelector('.' + li.opt.class.groupLabel);
+      return el.querySelector("." + li.opt.class.groupLabel);
     }
   }
   getGroupColor(el) {
@@ -610,7 +610,7 @@ class NestedList {
       li.removeContent(elGroupLabel);
       elGroupLabel.appendChild(label);
     } else {
-      elGroupLabel.innerText = label || '';
+      elGroupLabel.innerText = label || "";
     }
   }
   setModeSkipSave(skip) {
@@ -649,10 +649,10 @@ class NestedList {
 
   setModeFlat(enable, opt) {
     const li = this;
-    if(li.isModeFlatPermanent()){
-        return;
+    if (li.isModeFlatPermanent()) {
+      return;
     }
-    opt = Object.assign({},{permanent:false},opt);
+    opt = Object.assign({}, { permanent: false }, opt);
     enable = enable === true;
     let el = li.elRoot;
     let els = li.getChildrenTarget(el);
@@ -662,7 +662,7 @@ class NestedList {
       }
     });
     li._is_mode_flat = enable;
-    if(opt.permanent){
+    if (opt.permanent) {
       li._is_mode_flat_permanent = enable;
     }
   }
@@ -679,10 +679,10 @@ class NestedList {
     if (!isGroup) {
       return;
     }
-    let elTitle = el.querySelector('.' + li.opt.class.groupTitle);
+    let elTitle = el.querySelector("." + li.opt.class.groupTitle);
     let titleObject = li.getGroupTitleObject(el);
     let oldTitle = titleObject[lang];
-    title = title || oldTitle || li.d('group_new_title');
+    title = title || oldTitle || li.d("group_new_title");
     titleObject[lang] = title;
     elTitle.innerText = title;
     el.dataset.li_title = JSON.stringify(titleObject);
@@ -715,10 +715,10 @@ class NestedList {
       let s = {
         id: el.id,
         group: li.getGroupId(el),
-        type: isGroup ? 'group' : 'item'
+        type: isGroup ? "group" : "item",
       };
       if (isGroup) {
-        s.title = JSON.parse(el.dataset.li_title) || {en: el.id};
+        s.title = JSON.parse(el.dataset.li_title) || { en: el.id };
         s.color = el.dataset.li_color || li.opt.colorDefault;
         s.date = el.dataset.li_date || Date.now();
         s.collapsed = li.isGroupCollapsed(el);
@@ -737,11 +737,11 @@ class NestedList {
   getStateHash(i) {
     let hash = i
       .map((s) =>
-        [s.id, s.group, s.type, s.title ? JSON.stringify(s.title) : ''].join(
-          ':'
+        [s.id, s.group, s.type, s.title ? JSON.stringify(s.title) : ""].join(
+          ":"
         )
       )
-      .join(':');
+      .join(":");
     return hash;
   }
   areStateDifferent(a, b) {
@@ -769,10 +769,10 @@ class NestedList {
     if (li.isModeFrozen()) {
       return;
     }
-    let key = li.getStorageKey('state');
+    let key = li.getStorageKey("state");
     if (state && window.localStorage) {
       window.localStorage.setItem(key, JSON.stringify(state));
-      return li.fire('state_save_local', state);
+      return li.fire("state_save_local", state);
     }
   }
 
@@ -780,7 +780,7 @@ class NestedList {
    * Metadata management
    */
   setItemMeta(key, value) {
-    return {key, value};
+    return { key, value };
   }
 
   /**
@@ -788,7 +788,7 @@ class NestedList {
    */
   setHistoryStored(history) {
     const li = this;
-    let key = li.getStorageKey('history');
+    let key = li.getStorageKey("history");
     let isValid = li.isArray(history);
     if (isValid && window.localStorage) {
       let historyClone = li.cloneObject(history);
@@ -802,7 +802,7 @@ class NestedList {
     }
   }
   getStorageKey(type) {
-    return this.id + '_' + this.opt.localStorageKeys[type || 'state'];
+    return this.id + "_" + this.opt.localStorageKeys[type || "state"];
   }
   getHistory() {
     return this.history;
@@ -812,7 +812,7 @@ class NestedList {
   }
   getHistoryStored() {
     const li = this;
-    let key = li.getStorageKey('history');
+    let key = li.getStorageKey("history");
     let history = [];
     if (window.localStorage) {
       let historyStored = JSON.parse(window.localStorage.getItem(key));
@@ -824,7 +824,7 @@ class NestedList {
   }
   getStateStored() {
     const li = this;
-    let key = li.getStorageKey('state');
+    let key = li.getStorageKey("state");
     if (window.localStorage) {
       return JSON.parse(window.localStorage.getItem(key));
     }
@@ -833,7 +833,7 @@ class NestedList {
   addUndoStep() {
     const li = this;
     let hasDiff = true;
-    let state = li.getState({keepItemContent: true});
+    let state = li.getState({ keepItemContent: true });
     let lastState;
     if (li.hasHistory()) {
       lastState = li.getPreviousState();
@@ -864,7 +864,7 @@ class NestedList {
       render: false,
       state: last,
       useStateStored: false,
-      debug: true
+      debug: true,
     });
   }
 
@@ -876,7 +876,7 @@ class NestedList {
     let idEmpty = li.opt.idEmptyItem;
     let ignore = (enable && li.isModeEmpty()) || (!enable && !li.isModeEmpty());
     let nItems = li.getChildrenCount();
-    let elLabel = el('div', li.opt.emptyLabel);
+    let elLabel = el("div", li.opt.emptyLabel);
 
     if (ignore) {
       return;
@@ -889,9 +889,9 @@ class NestedList {
 
       li.addItem({
         id: idEmpty,
-        type: 'item',
+        type: "item",
         el: elLabel,
-        empty: true
+        empty: true,
       });
     } else {
       li.removeItemById(idEmpty);
@@ -908,8 +908,8 @@ class NestedList {
    */
   refreshState() {
     const li = this;
-    let state = li.getState({keepItemContent: true});
-    li.setState({render: false, state: state, useStateStored: false});
+    let state = li.getState({ keepItemContent: true });
+    li.setState({ render: false, state: state, useStateStored: false });
   }
   resetState() {
     const li = this;
@@ -920,8 +920,8 @@ class NestedList {
     li.addUndoStep();
     li.clearAllItems();
     li.setStateStored([]);
-    li.setState({render: true, state: state, useStateStored: false});
-    return li.fireAsync('state_reset', state);
+    li.setState({ render: true, state: state, useStateStored: false });
+    return li.fireAsync("state_reset", state);
   }
   setState(opt) {
     const li = this;
@@ -936,9 +936,9 @@ class NestedList {
     /**
      * Sanitize
      */
-    let state = li.fire('state_sanitize', {
+    let state = li.fire("state_sanitize", {
       orig: stateOrig,
-      stored: stateStored
+      stored: stateStored,
     })[0];
 
     /*
@@ -956,7 +956,7 @@ class NestedList {
        * Render state item
        */
       state.forEach((s) => {
-        if (s.type === 'group') {
+        if (s.type === "group") {
           li.addGroup(s);
         } else {
           s.render = opt.render;
@@ -965,7 +965,7 @@ class NestedList {
         }
       });
     }
-    li.fire('state_change', state);
+    li.fire("state_change", state);
     li.setModeAnimate(true);
   }
   getStateOrig() {
@@ -986,7 +986,7 @@ class NestedList {
     const li = this;
     var el = li.getItemById(attr.id);
     var elContent = li.getItemContent(el, li.opt.class.itemContent);
-    return li.fireAsync('render_item_content', {el: elContent, data: attr});
+    return li.fireAsync("render_item_content", { el: elContent, data: attr });
   }
 
   addItem(attr) {
@@ -1018,7 +1018,9 @@ class NestedList {
       li.moveTargetTop(elItem);
     }
     if (attr.render) {
-      return li.fireAsync('render_item_content', {el: elContent, data: attr});
+      return li.fireAsync("render_item_content", { el: elContent, data: attr });
+    } else {
+      return true;
     }
   }
 
@@ -1045,13 +1047,13 @@ class NestedList {
 
   removeItemById(id) {
     const li = this;
-    let elItem = li.elRoot.querySelector('#' + id);
+    let elItem = li.elRoot.querySelector("#" + id);
     li.removeElement(elItem);
   }
 
   removeGroupById(id) {
     const li = this;
-    let elGroup = li.elRoot.querySelector('#' + id);
+    let elGroup = li.elRoot.querySelector("#" + id);
     li.removeGroup(elGroup);
   }
   removeGroup(elGroup) {
@@ -1074,7 +1076,7 @@ class NestedList {
   setDragInit(elTarget) {
     const li = this;
     li.drag.el = elTarget;
-    li.drag.el.setAttribute('draggable', true);
+    li.drag.el.setAttribute("draggable", true);
   }
   setDragStart() {
     const li = this;
@@ -1119,11 +1121,11 @@ class NestedList {
 
     if (hasDrag) {
       li.drag.el.classList.remove(li.opt.class.dragged);
-      li.drag.el.setAttribute('draggable', false);
+      li.drag.el.setAttribute("draggable", false);
       li.drag = {};
     }
     document.body.classList.remove(li.opt.class.globalDragging);
-    li.listenerStore.removeListenerByGroup('item_dragging');
+    li.listenerStore.removeListenerByGroup("item_dragging");
   }
 
   setBusy(busy) {
@@ -1140,7 +1142,7 @@ class NestedList {
     return el(...opt);
   }
   log(...msg) {
-    if (this.opt.mode.indexOf('debug') > -1) {
+    if (this.opt.mode.indexOf("debug") > -1) {
       console.log(...msg);
     }
   }
@@ -1217,7 +1219,7 @@ class NestedList {
   }
 
   asBoolean(item) {
-    return typeof item !== 'undefined' && (item === 'true' || item === true);
+    return typeof item !== "undefined" && (item === "true" || item === true);
   }
   isElement(el) {
     return el && el instanceof Element;
@@ -1231,18 +1233,14 @@ class NestedList {
   randomId(prefix) {
     const li = this;
     return (
-      (prefix || li.opt.prefix) +
-      '_' +
-      Math.random()
-        .toString(32)
-        .substr(2, 9)
+      (prefix || li.opt.prefix) + "_" + Math.random().toString(32).substr(2, 9)
     );
   }
   isArray(item) {
     return !!item && Array.isArray(item);
   }
   isObject(item) {
-    return !!item && typeof item === 'object' && !Array.isArray(item);
+    return !!item && typeof item === "object" && !Array.isArray(item);
   }
   isDraggable(el) {
     return (
@@ -1289,14 +1287,14 @@ class NestedList {
     if (!li.isElement(elTest) || !li.isElement(elOther)) {
       return {
         dY: Infinity,
-        dX: Infinity
+        dX: Infinity,
       };
     }
     let rA = elTest.getBoundingClientRect();
     let rB = elOther.getBoundingClientRect();
     return {
       dY: Math.abs(rA.top + rA.height / 2 - (rB.top + rB.height / 2)),
-      dX: Math.abs(rA.left + rA.width / 2 - (rB.left + rB.width / 2))
+      dX: Math.abs(rA.left + rA.width / 2 - (rB.left + rB.width / 2)),
     };
   }
   isSameElement(elTarget, elDrop) {
@@ -1314,7 +1312,7 @@ class NestedList {
     let hasTitleDefault = title[langDefault];
     if (!hasTitleDefault) {
       if (!hasTitle) {
-        title[langDefault] = li.d('group_new_title');
+        title[langDefault] = li.d("group_new_title");
       } else {
         title[langDefault] = title[lang];
       }
@@ -1330,9 +1328,9 @@ class NestedList {
   animateMove(elsMove, cbMove) {
     const li = this;
     const enable = li.isModeAnimate();
-    const duration = li.getOption('animeDuration');
-    const maxDist = li.getOption('animeMaxDist');
-    const relaxDuration = li.getOption('animeDragRelaxDuration');
+    const duration = li.getOption("animeDuration");
+    const maxDist = li.getOption("animeMaxDist");
+    const relaxDuration = li.getOption("animeDragRelaxDuration");
     const els = elsMove instanceof Array ? elsMove : [elsMove];
     if (els.length === 0) {
       return;
@@ -1362,7 +1360,7 @@ class NestedList {
     }
     function start() {
       els.forEach((elItem) => {
-        elItem.style.transition = 'transform 0ms';
+        elItem.style.transition = "transform 0ms";
         set(elItem);
       });
     }
@@ -1380,22 +1378,22 @@ class NestedList {
     }
     function anim(elItem) {
       var durationFinal = elItem.dataset.dist > maxDist ? 0 : duration;
-      elItem.style.transition = 'transform ' + durationFinal + 'ms ease-in-out';
-      elItem.style.transform = 'translateY(0px)';
+      elItem.style.transition = "transform " + durationFinal + "ms ease-in-out";
+      elItem.style.transform = "translateY(0px)";
       setTimeout(() => {
         clean(elItem);
       }, durationFinal);
     }
     function clean(elItem) {
-      elItem.style.transition = '';
-      elItem.style.transform = '';
+      elItem.style.transition = "";
+      elItem.style.transform = "";
       done.push(elItem);
       end();
     }
     function end() {
       if (done.length === els.length) {
         setTimeout(() => {
-          li.fireAsync('state_order');
+          li.fireAsync("state_order");
           li.setBusy(false);
         }, relaxDuration);
       }
@@ -1407,7 +1405,7 @@ class NestedList {
   }
 }
 
-export {NestedList};
+export { NestedList };
 
 /**
  * Click in context menu event listener
@@ -1436,9 +1434,9 @@ function handleMouseClick(evt) {
   const idType = elTarget.dataset.li_event_type;
   const isValid =
     !li.drag.el &&
-    idType === 'click' &&
+    idType === "click" &&
     idAction &&
-    idAction === 'li_group_toggle' &&
+    idAction === "li_group_toggle" &&
     li.isTarget(elTarget);
   if (isValid) {
     evt.stopPropagation();
@@ -1467,8 +1465,8 @@ function handleMouseDown(evt) {
       target: evt.target,
       bind: li,
       callback: handleMouseClick,
-      group: 'base',
-      type: 'mouseup'
+      group: "base",
+      type: "mouseup",
     });
   } else {
     /**
@@ -1485,16 +1483,16 @@ function handleMouseDown(evt) {
       target: elTarget,
       bind: li,
       callback: handleDragStart,
-      group: 'item_dragging',
-      type: ['dragstart']
+      group: "item_dragging",
+      type: ["dragstart"],
     });
 
     li.listenerStore.addListenerOnce({
       target: window,
       bind: li,
       callback: handleDragEnd,
-      group: 'item_dragging',
-      type: ['dragend']
+      group: "item_dragging",
+      type: ["dragend"],
     });
 
     /*
@@ -1504,26 +1502,26 @@ function handleMouseDown(evt) {
       target: li.elRoot,
       bind: li,
       callback: handleDragEnter,
-      group: 'item_dragging',
-      type: ['dragenter']
+      group: "item_dragging",
+      type: ["dragenter"],
     });
 
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
-      group: 'item_dragging',
+      group: "item_dragging",
       callback: handleDragOver,
       throttle: true,
       throttleTime: 200,
-      type: ['dragover']
+      type: ["dragover"],
     });
 
     li.listenerStore.addListener({
       target: elTarget,
       bind: li,
       callback: handleDrop,
-      group: 'item_dragging',
-      type: ['drop']
+      group: "item_dragging",
+      type: ["drop"],
     });
   }
 }
@@ -1534,13 +1532,13 @@ function handleMouseDown(evt) {
 function handleDragStart(evt) {
   const li = this;
 
-  li.fire('sort_start', evt);
+  li.fire("sort_start", evt);
   /**
    * Build drag image, set ui dragging mode and set
    * datatransfer data
    */
-  const elDragImage = li.fire('set_drag_image', li.drag.el)[0];
-  const dragText = li.fire('set_drag_text', li.drag.el)[0];
+  const elDragImage = li.fire("set_drag_image", li.drag.el)[0];
+  const dragText = li.fire("set_drag_text", li.drag.el)[0];
   const rectImage = elDragImage.getBoundingClientRect();
   const dragOffsetTop = evt.clientY - rectImage.top;
   const dragOffsetLeft = evt.clientX - rectImage.left;
@@ -1552,15 +1550,15 @@ function handleDragStart(evt) {
   /**
    * NOTE: text/plain make chrome very, very slow.
    */
-  evt.dataTransfer.setData('application/json', dragText || li.drag.el.id);
-  evt.dataTransfer.effectAllowed = 'all';
+  evt.dataTransfer.setData("application/json", dragText || li.drag.el.id);
+  evt.dataTransfer.effectAllowed = "all";
   li.elNext = li.drag.el.nextSibling;
 }
 /**
  * Handle drag enter
  */
 function handleDragEnter(evt) {
-  evt.dataTransfer.dropEffect = 'move';
+  evt.dataTransfer.dropEffect = "move";
   evt.preventDefault();
 }
 
@@ -1578,13 +1576,13 @@ function handleDrop(evt) {
  */
 function handleDragEnd(evt) {
   const li = this;
-  const elNoImg = el('img');
+  const elNoImg = el("img");
   evt.dataTransfer.setDragImage(elNoImg, 0, 0);
 
   if (!li.isModeEmpty()) {
-    li.fire('sort_end', evt);
+    li.fire("sort_end", evt);
     if (li.elNext !== li.drag.el.nextSibling) {
-      li.fire('sort_done', evt);
+      li.fire("sort_done", evt);
     }
     li.setDragClean();
   }

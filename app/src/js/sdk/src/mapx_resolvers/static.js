@@ -569,17 +569,16 @@ class MapxResolversStatic extends ResolversBase {
     opt = Object.assign({}, { idView: null, zoomToView: false }, opt);
     const view = getView(opt.idView) || (await getViewRemote(opt.idView));
     const valid = isView(view);
-    if (valid) {
-      await viewsListAddSingle(view);
-      if (opt.zoomToView) {
-        const map = getMap();
-        const bounds = await getViewsBounds(opt.idView);
-        map.fitBounds(bounds);
-      }
-      return true;
-    } else {
+    if (!valid) {
       return rslv._err("err_view_invalid");
     }
+    await viewsListAddSingle(view);
+    if (opt.zoomToView) {
+      const map = getMap();
+      const bounds = await getViewsBounds(opt.idView);
+      map.fitBounds(bounds);
+    }
+    return true;
   }
 
   /**
