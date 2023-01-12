@@ -173,6 +173,7 @@ async function loadHandsontable() {
     import("handsontable/languages/ru-RU.js"),
     import("handsontable/languages/zh-CN.js"),
   ]);
+  import("../handsontable/style.css");
   return m[0].default;
 }
 
