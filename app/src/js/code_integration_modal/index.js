@@ -112,7 +112,7 @@ export class ModalCodeIntegration {
 
   updateLayout(mut) {
     const mci = this;
-    if (mci.editor && mut.attributeName === "style") {
+    if (mci.editor && mut.type === "attributes") {
       clearTimeout(mci._updating_layout_to);
       mci._updating_layout_to = setTimeout(() => {
         mci.editor.layout();
