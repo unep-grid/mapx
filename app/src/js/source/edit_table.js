@@ -212,8 +212,7 @@ export class EditTableSessionClient extends WsToolsBase {
        * Register cb
        */
       et.on("after_change_done", () => {
-        // wrapper -> after_change_done gives (data).
-        et.updateButtons();
+        et.updateButtons(50);
       });
 
       return true;
