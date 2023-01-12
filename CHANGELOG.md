@@ -1,3 +1,13 @@
+  - [1.10.0-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.4) 
+    
+    - APP 
+        - Fix issue with code integration panel : editor layout was not updated properly after a modal window resize 
+        - #871 : geoserver publication should handle custom style, null values and correctly save legend labels in SLD rules in 
+            a) code integration
+            b) view style save
+            c) update style from server side 
+        - Handsontable : rewrite stylesheet to match MapX themes.        
+
   - [1.10.0-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.3) 
 
     - APP
