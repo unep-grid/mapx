@@ -1,19 +1,11 @@
 import { el, elSpanTranslate } from "./el_mapx";
-import { modal, modalDialog, modalPrompt } from "./mx_helper_modal.js";
-import { updateLanguageElements } from "./language";
+import { modalDialog, modalPrompt } from "./mx_helper_modal.js";
 import { elSpanTranslate as tt } from "./el_mapx";
-import { getApiRoute, getApiUrl } from "./api_routes";
+import { getApiRoute } from "./api_routes";
 import { isString } from "./is_test";
 import { ws, nc, data } from "./mx.js";
 import { getDictItem } from "./language";
-import {
-  handleRequestMessage,
-  sendData,
-  getSizeOf,
-  formatByteSize,
-  path,
-  makeId,
-} from "./mx_helper_misc.js";
+import { getSizeOf, formatByteSize, path, makeId } from "./mx_helper_misc.js";
 import { settings } from "./settings";
 
 export function triggerUploadForm(opt) {
@@ -25,7 +17,7 @@ export function triggerUploadForm(opt) {
   const elEmail = elForm.querySelector("#txtEmailSourceUpload");
   const elButton = document.getElementById("btnSourceUpload");
   const elEpsgCode = elForm.querySelector("#epsgTextInput");
-
+  const elModal = document.getElementById("modalSourceUpload");
   /*
    * Create fake input
    */
@@ -49,7 +41,7 @@ export function triggerUploadForm(opt) {
     elTitle.setAttribute("disabled", true);
     elButton.setAttribute("disabled", true);
     elEpsgCode.setAttribute("disabled", true);
-
+    elModal.close();
     /**
      * Get values
      */
@@ -153,7 +145,6 @@ export async function isUploadFileSizeValid(file, opt) {
  */
 export async function uploadSource(o) {
   const isSizeValid = await isUploadFileSizeValid(o.file || o.geojson);
-  let uploadDone = false;
 
   /*
    * Server will validate token of the user,
@@ -166,10 +157,9 @@ export async function uploadSource(o) {
     return;
   }
 
-  /**
-   ** rebuilding formdata, as append seems to add value in UI...
-   **/
-  const host = getApiUrl("uploadVector");
+  /*
+   * rebuilding formdata, as append seems to add value in UI...
+   */
 
   if (o.geojson) {
     o.geojson = isString(o.geojson) ? o.geojson : JSON.stringify(o.geojson);
@@ -187,171 +177,6 @@ export async function uploadSource(o) {
   nc.panel.open();
   const route = getApiRoute("uploadSource");
   await uploader(o.file, route, { title: o.title });
-
-  if (1 === 1) {
-    return;
-  }
-  /*
-   * create upload form
-   */
-  const form = new FormData();
-  form.append("title", o.title);
-  form.append("vector", o.file || o.geojson);
-  form.append("token", o.token || settings.user.token);
-  form.append("idUser", o.idUser || settings.user.id);
-  form.append("email", o.email || settings.user.email);
-  form.append("project", o.idProject || settings.project.id);
-  form.append("sourceSrs", o.sourceSrs || "");
-
-  /**
-   * Create ui
-   */
-  const elOutput =
-    o.selectorProgressContainer instanceof Node
-      ? o.selectorProgressContainer
-      : document.querySelector(o.selectorProgressContainer);
-
-  /* log messages */
-  let elProgressBar, elProgressMessage;
-
-  const elProgressContainer = el(
-    "div",
-    /**
-     * Progress bar
-     */
-    el("label", {
-      dataset: { lang_key: "api_progress_title" },
-    }),
-    el(
-      "div",
-      {
-        class: "mx-inline-progress-container",
-      },
-      (elProgressBar = el("div", {
-        class: "mx-inline-progress-bar",
-      }))
-    ),
-    /**
-     * Message box
-     */
-    el("label", { dataset: { lang_key: "api_log_title" } }),
-    el(
-      "div",
-      {
-        class: ["form-control", "mx-logs"],
-      },
-      (elProgressMessage = el("ul"))
-    )
-  );
-
-  elOutput.appendChild(elProgressContainer);
-  updateTranslation();
-
-  sendData({
-    maxWait: 1e3 * 60 * 60,
-    url: host,
-    data: form,
-    onProgress: function (progress) {
-      cleanMsg(progress);
-    },
-    onMessage: function (data) {
-      cleanMsg(data);
-    },
-    onSuccess: function (data) {
-      cleanMsg(data);
-    },
-    onError: function (er) {
-      cleanMsg(er);
-    },
-  });
-
-  function updateTranslation() {
-    updateLanguageElements({ el: elProgressContainer });
-  }
-
-  function updateLayerList() {
-    Shiny.onInputChange("mx_client_update_source_list", {
-      date: new Date() * 1,
-    });
-  }
-
-  const messageStore = {};
-
-  function cleanMsg(msg) {
-    return handleRequestMessage(msg, messageStore, {
-      end: function () {
-        const li = el("li", {
-          dataset: {
-            lang_key: "api_upload_ready",
-          },
-          class: ["mx-log-item", "mx-log-green"],
-        });
-        elProgressMessage.appendChild(li);
-        updateLayerList();
-        updateTranslation();
-      },
-      error: function (msg) {
-        const li = el(
-          "li",
-          {
-            class: ["mx-log-item", "mx-log-red"],
-          },
-          msg
-        );
-        elProgressMessage.appendChild(li);
-      },
-      message: function (msg) {
-        const li = el(
-          "li",
-          {
-            class: ["mx-log-item", "mx-log-blue"],
-          },
-          msg
-        );
-        elProgressMessage.appendChild(li);
-      },
-      warning: function (msg) {
-        const li = el(
-          "li",
-          {
-            class: ["mx-log-item", "mx-log-orange"],
-          },
-          msg
-        );
-        elProgressMessage.appendChild(li);
-      },
-      progress: function (progress) {
-        elProgressBar.style.width = progress + "%";
-        if (progress >= 99.9 && !uploadDone) {
-          uploadDone = true;
-          const li = el(
-            "li",
-            {
-              class: ["mx-log-item", "mx-log-white"],
-              dataset: {
-                lang_key: "api_upload_done_wait_db",
-              },
-            },
-            msg
-          );
-          elProgressMessage.appendChild(li);
-          updateTranslation();
-        }
-      },
-      default: function (msg) {
-        if (msg && msg.length > 3) {
-          const li = el(
-            "li",
-            {
-              class: ["mx-log-item", "mx-log-gray"],
-            },
-            msg
-          );
-          elProgressMessage.appendChild(li);
-        }
-      },
-    });
-  }
 }
 
 async function uploader(file, route, config) {

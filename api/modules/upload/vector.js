@@ -292,6 +292,13 @@ async function ioAddSource(socket, config) {
     },
   });
 
+  await socket.notifyProgress({
+    idGroup: idRequest,
+    idMerge: "geom_validation",
+    message: t("upl_api_save_validation"),
+    value: 100,
+  });
+
   const isValid = validationResult.valid;
 
   await socket.notifyInfo({
@@ -303,9 +310,9 @@ async function ioAddSource(socket, config) {
   });
 
   /**
-   * Trigger source_added 
+   * Trigger source_added
    * TODO: this will be removed after shiny transition over
-   * e.g. : trigger update source list in shiny app 
+   * e.g. : trigger update source list in shiny app
    *        ws -> handler -> shiny -> update view list
    */
   await ioSendJobClient(socket, "source_added", {
