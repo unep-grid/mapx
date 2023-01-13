@@ -7541,19 +7541,6 @@
     "de": ""
   },
   {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "fr": "Supprimer les données en cache",

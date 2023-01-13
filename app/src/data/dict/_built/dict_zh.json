@@ -4935,11 +4935,6 @@
     "zh": "现在重启"
   },
   {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "zh": "之后"
-  },
-  {
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "zh": "清除缓存数据"

@@ -30,6 +30,7 @@ export async function modalChangelog(remote) {
   modal({
     title: 'Changelog',
     content: elContainer,
+    addBackground: true,
     onClose: () => {
       textFilter.destroy();
     }

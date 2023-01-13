@@ -4935,11 +4935,6 @@
     "de": "Jetzt neustarten"
   },
   {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "de": "Später"
-  },
-  {
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "de": "Zwischengespeicherte Daten löschen "

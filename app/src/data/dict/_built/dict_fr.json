@@ -4935,11 +4935,6 @@
     "fr": "Redémarrer maintenant"
   },
   {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "fr": "Plus tard"
-  },
-  {
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "fr": "Supprimer les données en cache"

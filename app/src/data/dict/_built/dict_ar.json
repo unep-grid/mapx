@@ -4935,11 +4935,6 @@
     "ar": "اعد البدء الان"
   },
   {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "ar": "في وقت لاحق"
-  },
-  {
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "ar": "مسح البيانات المخزنة مؤقتًا "

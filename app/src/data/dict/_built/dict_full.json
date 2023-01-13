@@ -12831,19 +12831,6 @@
     "de": "Jetzt neustarten"
   },
   {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "fr": "Plus tard",
-    "es": "Más tarde",
-    "ru": "Потом",
-    "zh": "之后",
-    "ar": "في وقت لاحق",
-    "fa": "بعد",
-    "ps": "وروسته",
-    "bn": "পরে",
-    "de": "Später"
-  },
-  {
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "fr": "Supprimer les données en cache",

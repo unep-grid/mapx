@@ -4935,11 +4935,6 @@
     "bn": "এখন আবার চালু করুন"
   },
   {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "bn": "পরে"
-  },
-  {
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "bn": "ক্যাশেড ডেটা সাফ করুন "

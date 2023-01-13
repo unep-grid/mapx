@@ -4935,11 +4935,6 @@
     "ps": "اوس بیا پیل کړئ"
   },
   {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "ps": "وروسته"
-  },
-  {
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "ps": "ساتل شوي ډاټا پاک کړئ "

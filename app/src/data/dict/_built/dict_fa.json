@@ -4935,11 +4935,6 @@
     "fa": "اکنون دوباره راه اندازی کنید"
   },
   {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "fa": "بعد"
-  },
-  {
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "fa": "پاک کردن داده های ذخیره شده "

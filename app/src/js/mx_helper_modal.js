@@ -435,6 +435,7 @@ export function modalGetAll(opt) {
  * @param {String|Promise|Element} opt.title Title
  * @param {String|Promise|Element} opt.content Title
  * @param {String|Promise|Element} opt.close Close button text
+ * @param {Function} opt.onClose Optional cb
  * @param {Array} opt.buttons Additional buttons
  * @return {Promise} resolve to boolean
  */
@@ -477,7 +478,6 @@ export function modalDialog(opt) {
         if (isFunction(opt.onClose)) {
           opt.onClose();
         }
-        resolve();
       },
     });
   });

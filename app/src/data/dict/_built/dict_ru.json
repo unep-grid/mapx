@@ -4935,11 +4935,6 @@
     "ru": "Перезагрузить сейчас"
   },
   {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "ru": "Потом"
-  },
-  {
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "ru": "Очистить кешированные данные "

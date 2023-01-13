@@ -3948,10 +3948,6 @@
     "en": "Restart now"
   },
   {
-    "id": "update_app_button_later",
-    "en": "Later"
-  },
-  {
     "id": "btn_clear_cache",
     "en": "Clear cached data"
   },
