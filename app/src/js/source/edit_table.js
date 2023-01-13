@@ -506,15 +506,17 @@ export class EditTableSessionClient extends WsToolsBase {
   addColumns(updates) {
     const et = this;
     const nColumns = et._columns.length + updates.length;
+    const singleCol =  updates.length === 1;
 
     let cPos = 0;
+
     for (const update of updates) {
       /**
        * Invalid name = not editable. See :
        * https://github.com/handsontable/handsontable/issues/5439
        */
       const column = et._column(update.column_name, update.column_type);
-      column._pos = column._invalid
+      column._pos = singleCol ? nColumns : column._invalid
         ? nColumns + 1
         : column.readOnly
         ? -1
