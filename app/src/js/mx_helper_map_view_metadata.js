@@ -644,13 +644,14 @@ export async function metaSourceToUi(meta) {
           },
           el("span", c.name + (c.function ? " ( " + c.function + " ) " : ""))
         ),
+        el("br"),
         el(
           "span",
           {
             class: "text-muted",
           },
           c.address
-        )
+        ),
       );
     })
   );
