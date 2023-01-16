@@ -104,15 +104,20 @@ picture {
   object-fit: contain;
 }
 
-
 /**
 * Global content-visibility
 * perf improvement
-*/ 
-li, tr {
+* see https://css-tricks.com/more-on-content-visibility/
+* -> story steps 
+* -> view ui list item 
+* -> table rows
+*/
+.mx-story-step,
+.li-item,
+tr {
   content-visibility: auto;
+  contain-intrinsic-size: 1px 1vh;
 }
-
 
 .mx-inline-progress-container {
   width: 100%;
