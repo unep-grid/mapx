@@ -111,13 +111,17 @@ picture {
 * -> story steps 
 * -> view ui list item 
 * -> table rows
+* NOTE: not yet ready. Bad UX on chrome windows. Visual
+* scrollbar glitch. Uncomment to apply 
 */
+/*
 .mx-story-step,
 .li-item,
 tr {
   content-visibility: auto;
   contain-intrinsic-size: 1px 1vh;
 }
+*/
 
 .mx-inline-progress-container {
   width: 100%;
