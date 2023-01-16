@@ -1,6 +1,23 @@
+  - [1.10.0-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.5) 
+    
+    - APP 
+        - View metadata panel : 
+            - Performance issue with gemet keywords. Don't wait, update later.
+            - Metadata : missing source id in some cases  
+
   - [1.10.0-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.4) 
     
     - APP 
+        - Notif center : notif container padding 10px
+        - View list scrollbar : 
+            - Removed content-visibility performance boost, poor UX on chrome windows
+        - Table editor 
+            - Adding a single colonne, e.g. using add column tool, should put the column at the end of the table
+            - Timeout issue after change done with, buttons not updated, e.g. undo not available
+        - View Metadata, contact list: address on a new line, removed empty div, producing a shift in the contacts bullet list
+        - Upload form : removed unused form, during upload, finilize validation progress for small dataset
+        - "Update app" panel : remove 'restart later' button + avoid letting the user show the 'read logs' and click back to the restart panel
+        - Web workers : try to solve the 'blank' page after redeploy
         - Fix issue with code integration panel : editor layout was not updated properly after a modal window resize 
         - #871 : geoserver publication should handle custom style, null values and correctly save legend labels in SLD rules in 
             a) code integration
