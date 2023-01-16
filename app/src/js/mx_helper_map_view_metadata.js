@@ -1,8 +1,26 @@
 import { getGemetConcept, getGemetConceptLink } from "./gemet_util/index.js";
-import { el, elAuto } from "./el_mapx";
+import { el, elAuto, elPanel, elSpanTranslate } from "./el_mapx";
 import { getApiUrl } from "./api_routes";
-import { isSourceId } from "./is_test/index.js";
 import { theme } from "./mx";
+import { getView, getViewRemote } from "./map_helpers";
+import { modal } from "./mx_helper_modal.js";
+import { path, makeId, objectToArray } from "./mx_helper_misc.js";
+import { moduleLoad } from "./modules_loader_async";
+import {
+  getLanguageItem,
+  getDictItem,
+  getLabelFromObjectPath,
+  updateLanguageElements,
+} from "./language";
+import {
+  isLanguageObject,
+  isUrl,
+  isEmpty,
+  isSourceId,
+  isViewId,
+  isView,
+  isNotEmpty,
+} from "./is_test_mapx";
 
 /**
  * Get source metadata
@@ -26,8 +44,8 @@ export async function fetchSourceMetadata(idSource) {
  * @param {String} id Name/Id of the view
  */
 export async function fetchViewMetadata(id) {
-  if (!id) {
-    return console.warn("fetchViewMetadata : missing id");
+  if (!isViewId(id)) {
+    return console.warn("fetchViewMetadata : invalid id");
   }
   const urlViewMeta = getApiUrl("getViewMetadata");
   const date = performance.now();
@@ -38,32 +56,52 @@ export async function fetchViewMetadata(id) {
 }
 
 /**
- * Display view metadata in a modal panel
+ * Get view source metadata
  * @param {Object} view
+ * @return {Object} metadata
+ */
+async function getViewSourceMeta(view) {
+  const meta = view?.data?.source?.meta || false;
+
+  if (meta) {
+    return meta;
+  }
+
+  const idSource = view?.data?.source?.layerInfo?.name || false;
+  if (isSourceId(idSource)) {
+    const metaRemote = await fetchSourceMetadata(idSource);
+    metaRemote._id_source = idSource;
+    return metaRemote;
+  }
+
+  return {};
+}
+
+/**
+ * Display view metadata in a modal panel
+ * @param {Object|String} view View or view id
  */
 export async function viewToMetaModal(view) {
-  const h = mx.helpers;
-  const id = h.isView(view) ? view.id : view;
-  view = (await h.getView(id)) || (await h.getViewRemote(id));
+  view = getView(view) || (await getViewRemote(view));
 
-  if (!h.isView(view)) {
-    return h.modal({
+  if (!isView(view)) {
+    return modal({
       content: "View not found",
     });
   }
 
-  const meta = {};
-  const metaRasterLink = h.path(view, "data.source.urlMetadata");
-  const hasSourceMeta =
-    ["rt", "vt", "cc"].includes(view.type) &&
-    (view._meta || h.path(view, "data.source.meta", false));
-
+  const idView = view?.id;
+  const meta = await getViewSourceMeta(view);
+  const metaRasterLink = path(view, "data.source.urlMetadata");
   const elContent = el("div");
   const elTitleModal = el("span", {
     dataset: { lang_key: "meta_view_modal_title" },
   });
 
-  const elModal = h.modal({
+  /*
+   * Display modal now, append later
+   */
+  const elModal = modal({
     title: elTitleModal,
     content: elContent,
     addBackground: true,
@@ -72,12 +110,12 @@ export async function viewToMetaModal(view) {
     },
   });
 
-  const data = await fetchViewMetadata(id);
+  const data = await fetchViewMetadata(idView);
 
   if (data.meta) {
     Object.assign(meta, data.meta);
   }
-  meta.id = id;
+  meta.id = idView;
 
   const elViewMeta = await metaViewToUi(meta, elModal);
 
@@ -94,10 +132,8 @@ export async function viewToMetaModal(view) {
     }
   }
 
-  if (hasSourceMeta) {
-    const sourceMeta = view._meta || h.path(view, "data.source.meta");
-    sourceMeta._id_source = view._id_source;
-    const elSourceMeta = await metaSourceToUi(sourceMeta);
+  if (isNotEmpty(meta)) {
+    const elSourceMeta = metaSourceToUi(meta);
     if (elSourceMeta) {
       elContent.appendChild(elSourceMeta);
     }
@@ -107,18 +143,18 @@ export async function viewToMetaModal(view) {
    */
   const elFirst = elContent.firstElementChild;
   const elsHeader = elContent.querySelectorAll(".panel-heading");
-  const idMenu = h.makeId();
-  const elMenu = h.el("div", { class: "list-group", id: idMenu });
+  const idMenu = makeId();
+  const elMenu = el("div", { class: "list-group", id: idMenu });
   elContent.insertBefore(elMenu, elFirst);
   for (const elHeader of elsHeader) {
-    const idItem = h.makeId();
+    const idItem = makeId();
     elHeader.id = idItem;
-    const elBack = h.el("a", {
+    const elBack = el("a", {
       class: ["fa", "fa-chevron-up"],
       href: `#${idMenu}`,
     });
     const elText = elHeader.querySelector("span");
-    const elItem = h.el("a", {
+    const elItem = el("a", {
       class: "list-group-item",
       href: `#${idItem}`,
       dataset: elText.dataset,
@@ -131,21 +167,19 @@ export async function viewToMetaModal(view) {
    * Update language element
    */
 
-  h.updateLanguageElements({
+  updateLanguageElements({
     el: elModal,
   });
 }
 
 export function metaSourceRasterToUi(rasterMeta) {
-  const h = mx.helpers;
-
   rasterMeta = rasterMeta || {};
 
-  if (!h.isUrl(rasterMeta.url)) {
+  if (!isUrl(rasterMeta.url)) {
     return el("div");
   }
 
-  rasterMeta = h.objectToArray(
+  rasterMeta = objectToArray(
     {
       meta_view_raster_meta: rasterMeta.url,
     },
@@ -163,7 +197,6 @@ export function metaSourceRasterToUi(rasterMeta) {
 }
 
 async function metaViewToUi(meta, elModal) {
-  const h = mx.helpers;
   const prefixKey = "meta_view_";
   const keys = [
     "title",
@@ -180,10 +213,10 @@ async function metaViewToUi(meta, elModal) {
     "stat_n_add_by_guests",
     "stat_n_add_by_users",
   ];
-  const txtDistinct = await h.getDictItem(
+  const txtDistinct = await getDictItem(
     "meta_view_stat_n_add_by_users_distinct"
   );
-  const tblSummaryFull = h.objectToArray(meta, true);
+  const tblSummaryFull = objectToArray(meta, true);
   const tblSummary = tblSummaryFull
     .filter((row) => keys.includes(row.key))
     .sort((a, b) => {
@@ -210,13 +243,13 @@ async function metaViewToUi(meta, elModal) {
         sp.set("project", meta.project);
         sp.set("viewsOpen", meta.id);
         sp.set("viewsListFilterActivated", true);
-        row.value = h.el(
+        row.value = el(
           "a",
           {
             href: linkProj,
             target: "_blank",
           },
-          h.getLanguageItem(row.value)
+          getLanguageItem(row.value)
         );
       }
 
@@ -229,14 +262,14 @@ async function metaViewToUi(meta, elModal) {
         linkView.searchParams.set("views", meta.id);
         linkView.searchParams.set("zoomToViews", true);
 
-        row.value = h.el(
+        row.value = el(
           "a",
           {
             href: linkView,
             target: "_blank",
           },
-          h.isLanguageObject(row.value) //-> titles...
-            ? h.getLanguageItem(row.value)
+          isLanguageObject(row.value) //-> titles...
+            ? getLanguageItem(row.value)
             : row.value
         );
       }
@@ -250,11 +283,11 @@ async function metaViewToUi(meta, elModal) {
           const isPublic = !!projectData.public;
           const linkProj = new URL(window.location.origin);
           const sp = linkProj.searchParams;
-          const title = h.getLanguageItem(projectData.title);
+          const title = getLanguageItem(projectData.title);
           sp.set("project", projectData.id);
           sp.set("viewsOpen", meta.id);
           sp.set("viewsListFilterActivated", true);
-          const elLink = h.el(
+          const elLink = el(
             "a",
             {
               href: linkProj,
@@ -265,8 +298,8 @@ async function metaViewToUi(meta, elModal) {
                 justifyContent: "space-between",
               },
             },
-            h.el("span", title),
-            isPublic ? null : h.el("i", { class: ["fa", "fa-lock"] })
+            el("span", title),
+            isPublic ? null : el("i", { class: ["fa", "fa-lock"] })
           );
           elProjects.push(elLink);
         }
@@ -286,7 +319,7 @@ async function metaViewToUi(meta, elModal) {
    * to find the size.. Create the container now,
    * render later :
    */
-  const elPlot = h.el("div", {
+  const elPlot = el("div", {
     class: ["panel", "panel-default"],
     style: {
       width: "100%",
@@ -296,24 +329,13 @@ async function metaViewToUi(meta, elModal) {
       overflow: "visible",
     },
   });
-  const elPlotPanel = h.elPanel({
-    title: h.elSpanTranslate("meta_view_stat_n_add_by_country"),
+  const elPlotPanel = elPanel({
+    title: elSpanTranslate("meta_view_stat_n_add_by_country"),
     content: elPlot,
   });
   setTimeout(() => {
     metaCountByCountryToPlot(meta.stat_n_add_by_country, elPlot, elModal);
   }, 100);
-
-  /*elAuto('array_table', meta.stat_n_add_by_country, {*/
-  /*tableHeadersClasses: ['col-sm-9', 'col-sm-3'],*/
-  /*tableTitleAsLanguageKey: true,*/
-  /*tableHeadersLabels: [*/
-  /*'meta_view_stat_n_add_by_country_col_code',*/
-  /*'meta_view_stat_n_add_by_country_col_name',*/
-  /*'meta_view_stat_n_add_by_country_col_count'*/
-  /*],*/
-  /*tableTitle: 'meta_view_table_n_add_by_country'*/
-  /*}),*/
 
   return el(
     "div",
@@ -367,13 +389,12 @@ function randomTable(n) {
  * @return {Object} Highcharts instance
  */
 async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
-  const h = mx.helpers;
   try {
-    if (h.isEmpty(table)) {
+    if (isEmpty(table)) {
       return;
     }
 
-    const highcharts = await h.moduleLoad("highcharts");
+    const highcharts = await moduleLoad("highcharts");
     /**
      * Reads per country, first 20
      */
@@ -400,12 +421,12 @@ async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
       const merged = data.splice(20, data.length);
       const sum = merged.reduce((a, d) => a + d.y, 0);
       data.push({
-        name: await h.getDictItem("meta_view_stat_others_countries"),
+        name: await getDictItem("meta_view_stat_others_countries"),
         y: sum,
       });
     }
 
-    const txtReads = await h.getDictItem("meta_view_stat_activations");
+    const txtReads = await getDictItem("meta_view_stat_activations");
     const colors = theme.colors();
 
     const chart = highcharts.chart(elPlot, {
@@ -420,7 +441,7 @@ async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
         plotShadow: false,
       },
       title: {
-        text: await h.getDictItem("meta_view_stat_n_add_by_country_last_year"),
+        text: await getDictItem("meta_view_stat_n_add_by_country_last_year"),
       },
       xAxis: {
         categories: data.map((d) => d.name),
@@ -431,7 +452,7 @@ async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
       yAxis: {
         type: "logarithmic",
         title: {
-          text: await h.getDictItem("meta_view_stat_n_add_by_country_axis"),
+          text: await getDictItem("meta_view_stat_n_add_by_country_axis"),
         },
       },
       legend: {
@@ -444,7 +465,7 @@ async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
       },
       series: [
         {
-          name: await h.getDictItem("meta_view_stat_n_add_by_country"),
+          name: await getDictItem("meta_view_stat_n_add_by_country"),
           data: data,
         },
       ],
@@ -478,14 +499,16 @@ async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
      * Handle mutation from modal here
      */
     if (elModal) {
-      let idT = 0;
-      elModal.addMutationObserver(() => {
-        clearTimeout(idT);
-        idT = setTimeout(() => {
-          const w = elPlot.getBoundingClientRect().width;
-          chart.setSize(w);
-        }, 50);
-      });
+      elModal.addMutationObserver(updateChart);
+    }
+
+    let idT = 0;
+    function updateChart() {
+      clearTimeout(idT);
+      idT = setTimeout(() => {
+        const w = elPlot.getBoundingClientRect().width;
+        chart.setSize(w);
+      }, 50);
     }
 
     function chartHeight() {
@@ -499,16 +522,15 @@ async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
 /**
  * Vector source meta data to UI
  */
-export async function metaSourceToUi(meta) {
-  const h = mx.helpers;
-  const glfo = h.getLabelFromObjectPath;
-  const oToA = h.objectToArray;
+export function metaSourceToUi(meta) {
+  const glfo = getLabelFromObjectPath;
+  const oToA = objectToArray;
 
   /**
    * Path to meta object
    */
   const p = function (p, d) {
-    return h.path(meta, p, d);
+    return path(meta, p, d);
   };
   /**
    * Label from object path
@@ -548,7 +570,7 @@ export async function metaSourceToUi(meta) {
   const urlLabel = p("origin.homepage.label", "");
   const urlObjSources = p("origin.source.urls", []);
   const urlObjAnnexes = p("annex.references", []);
-  const hasHomepage = h.isUrl(urlHomepage);
+  const hasHomepage = isUrl(urlHomepage);
 
   const elHomepage = hasHomepage
     ? el(
@@ -564,7 +586,7 @@ export async function metaSourceToUi(meta) {
   const elSourceUrl = el(
     "ul",
     urlObjSources.map((src) => {
-      if (!h.isUrl(src.url)) {
+      if (!isUrl(src.url)) {
         return;
       }
       const hostname = new URL(src.url).hostname;
@@ -584,7 +606,7 @@ export async function metaSourceToUi(meta) {
   const elAnnexesUrl = el(
     "ul",
     urlObjAnnexes.map((src) => {
-      if (!h.isUrl(src.url)) {
+      if (!isUrl(src.url)) {
         return;
       }
       const hostname = new URL(src.url).hostname;
@@ -616,13 +638,12 @@ export async function metaSourceToUi(meta) {
 
   const elKeywordsM49 = el(
     "ul",
-    p("text.keywords.keys_m49", []).map((k) => el("li", h.getDictItem(k)))
+    p("text.keywords.keys_m49", []).map((k) => el("li", getDictItem(k)))
   );
 
-  const elKeywordsGemet = el(
-    "ul",
-    await gemetLi(p("text.keywords.keys_gemet", []))
-  );
+  const elKeywordsGemet = el("ul");
+
+  gemetLiUpdate(p("text.keywords.keys_gemet", []), elKeywordsGemet);
 
   const elLanguages = elAuto(
     "array_string",
@@ -651,7 +672,7 @@ export async function metaSourceToUi(meta) {
             class: "text-muted",
           },
           c.address
-        ),
+        )
       );
     })
   );
@@ -718,26 +739,35 @@ export async function metaSourceToUi(meta) {
  * Given a list of gemet concept id, produce an array of '<li>', with a link to the
  * gemet oncept
  * @param {Array} ids Array of concept id
- * @return {Promise<Array>} Array of '<li>'
+ * @return {Promise<DocumentFragment>} Array of '<li>'
  */
+async function gemetLiUpdate(ids, elTarget) {
+  const elFragmentTarget = document.createDocumentFragment();
+  try {
+    if (ids.length === 0) {
+      return elFragmentTarget;
+    }
 
-async function gemetLi(ids) {
-  if (ids.length === 0) {
-    return null;
+    const concepts = await getGemetConcept(ids);
+
+    for (const k of concepts) {
+      const elKey = el(
+        "li",
+        el(
+          "a",
+          {
+            target: "_blank",
+            href: getGemetConceptLink(k.concept),
+          },
+          k.label
+        )
+      );
+      elFragmentTarget.appendChild(elKey);
+    }
+
+    elTarget.appendChild(elFragmentTarget);
+    return elFragmentTarget;
+  } catch (e) {
+    console.error("List gemet keyword builder", e);
   }
-  const concepts = await getGemetConcept(ids);
-  const lis = concepts.map((k) => {
-    return el(
-      "li",
-      el(
-        "a",
-        {
-          target: "_blank",
-          href: getGemetConceptLink(k.concept),
-        },
-        k.label
-      )
-    );
-  });
-  return lis;
 }
