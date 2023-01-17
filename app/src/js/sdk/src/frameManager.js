@@ -36,7 +36,6 @@ class FrameManager extends Events {
    * @param {Object} opt.style Style css object
    * @param {Element} opt.container Element that will hold the worker iframe
    */
-
   constructor(opt) {
     super();
     const fm = this;
@@ -48,7 +47,6 @@ class FrameManager extends Events {
    * Init manager
    * @private
    */
-
   _init(opt) {
     const fm = this;
 
@@ -97,7 +95,6 @@ class FrameManager extends Events {
   /**
    * Destroy manager
    */
-
   destroy() {
     const fm = this;
     const destroyWorker = new RequestFrameCom({
@@ -110,11 +107,11 @@ class FrameManager extends Events {
     fm._destroyed = true;
     fm.fire("destroyed");
   }
+
   /**
    * Build iframe and set its properties
    * @private
    */
-
   _build() {
     const fm = this;
 
@@ -131,14 +128,15 @@ class FrameManager extends Events {
     }
     fm.opt.container.appendChild(fm._iframe);
   }
+
   /**
    * Get bounding client rect of the iframe
    */
-
   get rect() {
     const fm = this;
     return fm._iframe.getBoundingClientRect();
   }
+
   /**
    * Set iframe width
    * @param {number|string} w Width in px
@@ -148,10 +146,15 @@ class FrameManager extends Events {
     w = isFinite(w) ? w + "px" : w || fm.rect.width + "px";
     fm._iframe.style.width = w;
   }
+
+  /**
+  * Get current iframe width 
+  */ 
   get width() {
     const fm = this;
     return fm.rect.width;
   }
+
   /**
    * Set iframe height
    * @param {number|string} h height in px
@@ -161,19 +164,35 @@ class FrameManager extends Events {
     h = isFinite(h) ? h + "px" : h || fm.rect.height + "px";
     fm._iframe.style.height = h;
   }
+
+  /**
+  * Get current iframe height
+  */ 
   get height() {
     const fm = this;
     return fm.rect.height;
   }
+
   /**
    * Set url
    * @param {String|Url|Object} Url to use when rendering
    */
-
   setUrl(url) {
     const fm = this;
     url = url ? url : fm.opt.url;
     if (typeof url === "object") {
+      if (!url.host) {
+        throw new Error("Missing host");
+      }
+
+      if (!url.port && url.protocol === "https") {
+        url.port = "443";
+      }
+
+      if (!url.protocol) {
+        url.protocol = "https";
+      }
+
       url = `${url.protocol}://${url.host}:${url.port}`;
     }
     fm._url = new URL(url);
@@ -181,27 +200,27 @@ class FrameManager extends Events {
       fm._url.pathname = "/static.html";
     }
   }
+
   /**
    * get url
    * @return url object
    */
-
   get url() {
     const fm = this;
     return fm._url;
   }
+
   /**
    * Get version
    */
-
   get version() {
     return version;
   }
+
   /**
    * Set message languages
    * @param {String} Two letter string language. e.g. 'en', 'fr'
    */
-
   setLang(lang) {
     this.opt.lang = lang;
   }
@@ -289,7 +308,6 @@ class FrameManager extends Events {
    * @param {MessageFrameCom} worker message
    * @private
    */
-
   _handleMessageWorker(msg) {
     const fm = this;
     try {
@@ -369,6 +387,7 @@ class FrameManager extends Events {
       });
     }
   }
+
   /**
    * Enable or disable verbose mode
    * @param {Boolean} Enable verbose mode
@@ -390,6 +409,7 @@ class FrameManager extends Events {
 
     fm.off("message", fm._handle_verbose);
   }
+
   /**
     const id = request.id;
    * Ask / request method to the worker
@@ -397,7 +417,6 @@ class FrameManager extends Events {
    * @param {String} data Optional data to send to the resolver
    * @return {Promise} Promise that resolve to the resolver result
    */
-
   ask(idResolver, data) {
     const fm = this;
     const nR = fm._req.length;
@@ -435,6 +454,7 @@ class FrameManager extends Events {
       });
     });
   }
+
   /**
    * Retrieve request by id and remove it
    * @param {Number} id Id of the request
@@ -455,6 +475,11 @@ class FrameManager extends Events {
     }
     return {};
   }
+
+  /**
+  * If verbose mode is requested, display some basic message in the console 
+  * @param {Object} message Message  
+  */ 
   _handle_verbose(message) {
     switch (message.level) {
       case "log":
