@@ -1,3 +1,14 @@
+  - [1.10.0-alpha.6](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.6) 
+
+    - APP
+        - Add zoomMin and zoomMax to URL parameters.
+        - Name conflict in getViewRemote
+
+    - SDK
+        - Using URL object, set default. If no protocol, use 'https'. If protocol is 'https' and there is no port, use 443. Issue #865
+        - Updated example1 : use async
+        - Readme : added information about supported search parameters / query strings, available as `params` object #875 
+
   - [1.10.0-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.5) 
     
     - APP 
