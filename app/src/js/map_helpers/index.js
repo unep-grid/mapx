@@ -1009,7 +1009,6 @@ export async function initMapx(o) {
     pitch: mp.p || mp.pitch || 0,
     center: mp.center || [mp.lng || 0, mp.lat || 0],
   };
-  debugger;
   /*
    * Create map object
    */
