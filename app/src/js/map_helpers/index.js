@@ -1802,9 +1802,9 @@ export async function addSourceFromView(o) {
  */
 export async function getViewRemote(idView) {
   const apiUrlViews = getApiUrl("getView");
-  const isView = isView(idView);
- 
-  if (isView) {
+  const isViewValid = isView(idView);
+
+  if (isViewValid) {
     return idView;
   }
 
