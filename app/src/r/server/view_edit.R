@@ -20,6 +20,7 @@ observe({
         language <- reactData$language
         project <- reactData$project
         token <- reactUser$token
+        isDev <- mxIsUserDev(idUser)
 
         if (viewAction[["action"]] == "btn_upload_geojson") {
 
@@ -482,6 +483,10 @@ observe({
               if (viewType != "cc") {
                 return()
               }
+              if (!isDev) {
+                return()
+              }
+
 
               btnList <- list(
                 actionButton(
@@ -899,8 +904,6 @@ observe({
 
     disabled <- any(sapply(errors, isTRUE))
 
-
-
     mxToggleButton(
       id = "btnViewSave",
       disable = disabled
@@ -1102,7 +1105,7 @@ observe({
   update <- input$viewTitleSchema_init
   isolate({
     viewData <- reactData$viewDataEdited
-    
+
     if (noDataCheck(viewData)) {
       return()
     }

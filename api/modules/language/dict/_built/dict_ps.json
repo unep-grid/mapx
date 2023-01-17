@@ -2510,6 +2510,11 @@
     "ps": "د کښته کولو اجازه نشته. نور معلومات په میټاډاټا کې."
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "ps": "د عمل اجازه نشته: د پراختیا کونکي امتیاز غوښتنه کوي"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "ps": "دا نظر ترمیم کړئ"

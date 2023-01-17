@@ -1,5 +1,5 @@
-import {getLabelFromObjectPath} from '../language';
-import {el} from '../el/src/index.js';
+import { getLabelFromObjectPath } from "../language";
+import { el } from "../el/src/index.js";
 
 class ViewBase {
   constructor(view, enable) {
@@ -36,54 +36,54 @@ class ViewBase {
     const view = vb.view;
     const title = getLabelFromObjectPath({
       obj: view,
-      path: 'data.title'
+      path: "data.title",
     });
 
-    const elButton = el('div', {class: 'mx-view-tgl-btn'});
+    const elButton = el("div", { class: "mx-view-tgl-btn" });
 
     const elTitle = el(
-      'span',
-      {class: ['mx-view-tgl-title', 'li-drag-handle']},
+      "span",
+      { class: ["mx-view-tgl-title", "li-drag-handle"] },
       title
     );
 
-    const elBadges = el('div', {
-      id: 'view_badges_' + view.id,
-      class: 'mx-view-badges'
+    const elBadges = el("div", {
+      id: "view_badges_" + view.id,
+      class: "mx-view-badges",
     });
 
     const elClasses = el(
-      'span',
+      "span",
       {
-        class: 'mx-view-item-classes'
+        class: "mx-view-item-classes",
       },
       view.data.classes,
       view.type
     );
-    const elIndex = el('span', {
-      class: 'mx-view-item-index'
+    const elIndex = el("span", {
+      class: "mx-view-item-index",
     });
     const elToggleMore = el(
-      'div',
+      "div",
       {
-        class: 'mx-view-tgl-more-container'
+        class: "mx-view-tgl-more-container",
       },
-      el('div', {
-        class: 'mx-view-tgl-more',
+      el("div", {
+        class: "mx-view-tgl-more",
         dataset: {
-          view_options_for: view.id
-        }
+          view_options_for: view.id,
+        },
       })
     );
 
-    const elInput = el('input', {
-      id: 'check_view_enable_' + view.id,
-      class: 'mx-view-tgl-input',
-      type: 'checkbox',
+    const elInput = el("input", {
+      id: "check_view_enable_" + view.id,
+      class: "mx-view-tgl-input",
+      type: "checkbox",
       dataset: {
-        view_action_key: 'btn_toggle_view',
-        view_action_target: view.id
-      }
+        view_action_key: "btn_toggle_view",
+        view_action_target: view.id,
+      },
     });
 
     if (enable) {
@@ -91,10 +91,10 @@ class ViewBase {
     }
 
     const elLabel = el(
-      'label',
+      "label",
       {
-        class: ['mx-view-tgl-content'],
-        for: 'check_view_enable_' + view.id
+        class: ["mx-view-tgl-content"],
+        for: "check_view_enable_" + view.id,
       },
       elButton,
       elTitle,
@@ -104,14 +104,14 @@ class ViewBase {
     );
 
     const elView = el(
-      'div',
+      "div",
       {
         dataset: {
           view_id: view.id,
           view_date_modified: view.date_modified,
-          view_title: title
+          view_title: title,
         },
-        class: ['mx-view-item', 'mx-view-item-' + view.type, 'noselect']
+        class: ["mx-view-item", "mx-view-item-" + view.type, "noselect"],
       },
       elInput,
       elLabel,
@@ -125,4 +125,4 @@ class ViewBase {
   }
 }
 
-export {ViewBase};
+export { ViewBase };

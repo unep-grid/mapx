@@ -650,7 +650,8 @@ tr {
   pointer-events: none;
 }
 
-.btn.disabled-with-events {
+.btn.disabled-with-events,
+.btn-circle.disabled-with-events {
   cursor: not-allowed;
   opacity: 0.5;
 }

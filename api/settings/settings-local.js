@@ -5,6 +5,7 @@ const settings = Object.assign({}, settings_global, {
   mapx: {
     users: {
       root: env.MAPX_ROOT_MODE_MEMBERS,
+      dev: env.MAPX_DEV_MEMBERS,
       project_creator: env.MAPX_PROJECT_CREATORS,
     },
   },
@@ -30,7 +31,7 @@ const settings = Object.assign({}, settings_global, {
     host: env.REDIS_HOST,
   },
   geoip: {
-    url_download : env.MAXMIND_URL_DOWNLOAD 
+    url_download: env.MAXMIND_URL_DOWNLOAD,
   },
   meili: {
     master_key: env.MEILI_MASTER_KEY,
@@ -50,7 +51,7 @@ const settings = Object.assign({}, settings_global, {
     host: env.POSTGRES_HOST,
     schema: env.POSTGRES_SCHEMA_MAIN,
     timeoutLong: 1000 * 60 * 5, // 5 minutes
-    timeoutShort : 1000 * 20, // 20 seconds
+    timeoutShort: 1000 * 20, // 20 seconds
     poolMin: env.POSTGRES_POOL_MIN,
     poolMax: env.POSTGRES_POOL_MAX,
     admin: {

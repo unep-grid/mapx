@@ -389,6 +389,16 @@ config[["root_mode"]] <- list(
 )
 
 #
+# Dev members
+#
+config[["dev"]] <- list(
+  #
+  # Members of the root group
+  #
+  members = c(1)
+)
+
+#
 # countries configuration
 #
 config[["countries"]] <- list()
@@ -437,6 +447,14 @@ config[["views"]] <- list()
 # Views type
 #
 config[[c("views", "type")]] <- list(
+  "vt", # vector tiles
+  "rt", # raster tiles
+  "sm" # story map
+)
+#
+# View type dev 
+#
+config[[c("views", "type_dev")]] <- list(
   "vt", # vector tiles
   "rt", # raster tiles
   "sm", # story map

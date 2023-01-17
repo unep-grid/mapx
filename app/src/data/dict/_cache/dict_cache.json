@@ -6526,6 +6526,19 @@
     "de": "Herunterladen nicht erlaubt. Weitere Informationen in den Metadaten."
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "fr": "Action non autorisée : demande le privilège de développeur",
+    "es": "Acción no permitida: solicita privilegio de desarrollador",
+    "ru": "Действие не разрешено: запрашивает права разработчика",
+    "zh": "不允许的操作：请求开发者权限",
+    "ar": "الإجراء غير مسموح به: يطلب امتياز المطور",
+    "fa": "اقدام مجاز نیست: درخواست امتیاز توسعه دهنده",
+    "ps": "د عمل اجازه نشته: د پراختیا کونکي امتیاز غوښتنه کوي",
+    "bn": "অ্যাকশন অনুমোদিত নয়: বিকাশকারীর বিশেষাধিকারের জন্য অনুরোধ করে",
+    "de": "Aktion nicht erlaubt: Fordert Entwicklerrechte an"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "fr": "Éditer la vue",
@@ -10608,6 +10621,19 @@
     "de": "Dein Skript "
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "fr": "Attribution / crédits. Format : HTML",
+    "es": "Atribución / créditos. Formato : HTML",
+    "ru": "Атрибуция / кредиты. Формат: HTML",
+    "zh": "归因/贡献。格式：HTML",
+    "ar": "تحييد / الاعتمادات. الشكل : HTML",
+    "fa": "شایستگی/اعتبارات. فرمت : HTML",
+    "ps": "شایستی/اعتبارونه. فورمت : HTML",
+    "bn": "স্বাক্ষর/ক্রেডিট. ফর্ম্যাট : HTML",
+    "de": "Quellenangaben / Credits. Format: HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "fr": "Désactiver ce tableau de bord",
@@ -10999,16 +11025,16 @@
   },
   {
     "id": "view_dashboard_attribution_made_with",
-    "en": "Made with: ",
-    "fr": "Fait avec: ",
-    "es": "Hecho con:",
-    "ru": "Сделано с:",
-    "zh": "用：",
-    "ar": "مصنوع من:",
-    "fa": "ساخته شده با:",
-    "ps": "سره جوړ شوی:",
-    "bn": "দিয়ে তৈরি:",
-    "de": "Gemacht mit:"
+    "en": "Credits: ",
+    "fr": "Crédits: ",
+    "es": "Credits: ",
+    "ru": "Credits: ",
+    "zh": "Credits: ",
+    "ar": "Credits: ",
+    "fa": "Credits: ",
+    "ps": "Credits: ",
+    "bn": "Credits: ",
+    "de": "Credits: "
   },
   {
     "id": "view_delete_confirm",
@@ -12816,19 +12842,6 @@
     "ps": "اوس بیا پیل کړئ",
     "bn": "এখন আবার চালু করুন",
     "de": "Jetzt neustarten"
-  },
-  {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "fr": "Plus tard",
-    "es": "Más tarde",
-    "ru": "Потом",
-    "zh": "之后",
-    "ar": "في وقت لاحق",
-    "fa": "بعد",
-    "ps": "وروسته",
-    "bn": "পরে",
-    "de": "Später"
   },
   {
     "id": "btn_clear_cache",

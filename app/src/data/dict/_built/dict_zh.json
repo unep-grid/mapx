@@ -2510,6 +2510,11 @@
     "zh": "不允许下载。元数据中的更多信息。"
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "zh": "不允许的操作：请求开发者权限"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "zh": "编辑此视图"

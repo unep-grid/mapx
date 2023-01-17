@@ -6526,6 +6526,19 @@
     "de": "Herunterladen nicht erlaubt. Weitere Informationen in den Metadaten."
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "fr": "Action non autorisée : demande le privilège de développeur",
+    "es": "Acción no permitida: solicita privilegio de desarrollador",
+    "ru": "Действие не разрешено: запрашивает права разработчика",
+    "zh": "不允许的操作：请求开发者权限",
+    "ar": "الإجراء غير مسموح به: يطلب امتياز المطور",
+    "fa": "اقدام مجاز نیست: درخواست امتیاز توسعه دهنده",
+    "ps": "د عمل اجازه نشته: د پراختیا کونکي امتیاز غوښتنه کوي",
+    "bn": "অ্যাকশন অনুমোদিত নয়: বিকাশকারীর বিশেষাধিকারের জন্য অনুরোধ করে",
+    "de": "Aktion nicht erlaubt: Fordert Entwicklerrechte an"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "fr": "Éditer la vue",

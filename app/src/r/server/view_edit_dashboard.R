@@ -337,7 +337,12 @@ observeEvent(input$dashboardEdit_values, {
       mglUpdateView(view)
     },
     "save" = {
-      if (view[["_edit"]] && view[["type"]] %in% c("vt", "rt", "cc")) {
+      isDev <- mxIsUserDev(editor)
+      isEditable <- isDev &&
+        view[["_edit"]] &&
+        view[["type"]] %in% c("vt", "rt", "cc")
+
+      if (isEditable) {
         view[["_edit"]] <- NULL
 
         view <- .set(view, c("date_modified"), time)

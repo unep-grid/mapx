@@ -2510,6 +2510,11 @@
     "es": "Descarga no permitida. Más info en metadatos."
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "es": "Acción no permitida: solicita privilegio de desarrollador"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "es": "Editar esta vista"
