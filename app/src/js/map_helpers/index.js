@@ -966,6 +966,8 @@ export async function initMapx(o) {
   const queryZoom = getQueryParameter(["z", "zoom"])[0];
   const queryPitch = getQueryParameter(["p", "pitch"])[0];
   const queryBearing = getQueryParameter(["b", "bearing"])[0];
+  const queryMinZoom = getQueryParameter(["zmin", "zoomMin"])[0];
+  const queryMaxZoom = getQueryParameter(["zmax", "zoomMax"])[0];
 
   if (queryLat) {
     mp.center = null;
@@ -984,6 +986,13 @@ export async function initMapx(o) {
   if (queryBearing) {
     mp.b = queryBearing * 1 || 0;
   }
+  if (queryMaxZoom) {
+    mp.zmax = queryMaxZoom * 1 || 22;
+  }
+  if (queryMinZoom) {
+    mp.zmin = queryMinZoom * 1 || 0;
+  }
+
   /* map options */
   const mapOptions = {
     container: o.id, // container id
@@ -993,11 +1002,14 @@ export async function initMapx(o) {
     preserveDrawingBuffer: false,
     attributionControl: false,
     crossSourceCollisions: true,
-    zoom: mp.z || mp.zoom || 0,
+    zoom: mp.z || mp.zoom || 1,
+    minZoom: mp.zmin || mp.zoomMax || null,
+    maxZoom: mp.zmax || mp.zoomMin || null,
     bearing: mp.b || mp.bearing || 0,
     pitch: mp.p || mp.pitch || 0,
     center: mp.center || [mp.lng || 0, mp.lat || 0],
   };
+  debugger;
   /*
    * Create map object
    */

@@ -2,11 +2,15 @@ const elContainer = document.getElementById("mapx");
 const elResults = document.getElementById("results");
 const mapx = new mxsdk.Manager({
   container: elContainer,
-  url: "http://dev.mapx.localhost:8880",
+  url: { protocol: "http", host: "dev.mapx.localhost", port: 8880 },
   style: {
     minHeight: "800px",
     minWidth: "800px",
     width: "100%",
+  },
+  params: {
+    zoomMin: 0,
+    zoomMax: 22,
   },
 });
 
