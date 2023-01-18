@@ -1,3 +1,13 @@
+  - [1.10.0-alpha.8](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.8) 
+
+    -APP/API
+        -  SLD creation. Solved issue with 
+            - paint expression,
+            - view with sld already as style._sld,
+    - APP
+        - Custom style view testing: handle case when no style object exists
+        - Date testing : only support YYYY/MM/DD... and YYYY-MM-DD as date string
+
   - [1.10.0-alpha.6](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.6) 
 
     - APP
