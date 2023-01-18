@@ -9,7 +9,7 @@ import { settings } from "#root/settings";
 import { getProjectsIdAll } from "#mapx/project";
 import { getViewsGeoserver } from "#mapx/view";
 import { timeStep, randomString } from "#mapx/helpers";
-import { isEmpty, isNotEmpty } from "@fxi/mx_valid";
+import { isNotEmpty } from "@fxi/mx_valid";
 import { setViewStyleAlt } from "#mapx/view";
 import { geoserver as grc } from "#mapx/db";
 import { ioSendJobClient } from "#mapx/io";
@@ -24,6 +24,8 @@ const db = settings.db;
 const ns = "http://geoserver";
 const state_key = "geoserver_update_state";
 const state = { running: false, success: false };
+/* Reset state at start */
+redisSetJSON(state_key, state);
 
 const mwUpdateGeoserver = [
   validateParamsHandler,
@@ -31,6 +33,7 @@ const mwUpdateGeoserver = [
   validateRoleSuperUserHandler,
   mwUpdateGeoserverHandler,
 ];
+
 
 /**
  * Exports : io + mw
