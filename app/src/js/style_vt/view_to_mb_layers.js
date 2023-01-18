@@ -103,8 +103,7 @@ export async function getViewMapboxLayers(v, opt) {
     const f = op === "==" ? filterIncludeNull : filterExcludeNull;
     if (isNumeric) {
       if (isEmpty(nullValue)) {
-        f.push([op, ["get", attr], ""]);
-        f.push([op, ["get", attr], null]);
+        f.push(["any", [op, ["get", attr], ""], [op, ["get", attr], null]]);
       } else {
         f.push([op, ["get", attr], nullValue * 1]);
       }
@@ -112,8 +111,7 @@ export async function getViewMapboxLayers(v, opt) {
       if (isNotEmpty(nullValue) || nullValue === false) {
         f.push([op, ["get", attr], nullValue]);
       } else {
-        f.push([op, ["get", attr], ""]);
-        f.push([op, ["get", attr], null]);
+        f.push(["any", [op, ["get", attr], ""], [op, ["get", attr], null]]);
       }
     }
   }
