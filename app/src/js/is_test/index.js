@@ -151,7 +151,9 @@ export function isViewVtWithRules(item) {
  * @param {Object} item to test
  */
 export function isViewVtWithStyleCustom(item) {
-  return isViewVt(item) && !!JSON.parse(item?.data?.style?.custom?.json)?.enable;
+  return (
+    isViewVt(item) && !!JSON.parse(item?.data?.style?.custom?.json)?.enable
+  );
 }
 /**
  * Test if view vt has specific attribute type r
@@ -730,16 +732,13 @@ export function isUrlValidWms(url, opt) {
 
 /**
  * Validate date string
- * @param {String|Number} date to validate
+ * @param {Number} date to validate
  */
 export function isDateStringRegex(date) {
-  return (
-    isString(date) &&
-    (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date) ||
-      /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d)/.test(
-        date
-      ))
-  );
+  // start with a YYYY-MM-DD or YYYY/MM/DD date,
+  // YYYY-MM-DD:12:12:12 is valid
+  const regDate = /^\d{4}[-\/]\d{2}[-\/]\d{2}/;
+  return isString(date) && regDate.test(date);
 }
 
 /**
@@ -748,7 +747,7 @@ export function isDateStringRegex(date) {
  */
 export function isDateString(item) {
   try {
-    if (!isString(item)) {
+    if (!isDateStringRegex(item)) {
       return false;
     }
     const date = new Date(item);
