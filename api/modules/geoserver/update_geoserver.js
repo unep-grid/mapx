@@ -86,43 +86,53 @@ async function updateGeoserver() {
  * Take care of state
  */
 async function rebuildHandler(socket, options) {
+  const stateGlobal = state;
+  /**
+   * Quit early if already running
+   */
   try {
-    /**
-     * ⚠️   state is not shared between servers. Use redis ?
-     */
     const stateSaved = await redisGetJSON(state_key);
-    Object.assign(state, stateSaved);
+    Object.assign(stateGlobal, stateSaved);
 
-    if (state.running) {
+    if (stateGlobal.running) {
       await socket.notifyInfoError({
         message: "Geoserver rebuild already runnning",
       });
       return;
     }
+  } catch (e) {
+    console.error(e);
+  }
 
+  /**
+   * Launch process
+   * - save state = running 
+   * - rebuild 
+   * - error => notify 
+   * - finally => save state = not running
+   */
+  try {
     const ok = await grc.about.exists();
 
     if (!ok) {
       throw new Error("Geoserver not available");
     }
 
-    state.running = true;
-    await redisSetJSON(state_key, state);
+    stateGlobal.running = true;
+    await redisSetJSON(state_key, stateGlobal);
     await rebuild(socket, options);
-    state.running = false;
-    state.success = true;
-    await redisSetJSON(state_key, state);
-    return state;
+    stateGlobal.success = true;
   } catch (e) {
-    state.running = false;
-    state.success = false;
-    await redisSetJSON(state_key, state);
+    stateGlobal.success = false;
     await socket.notifyInfoError({
       message: e.message || e,
       data: e.stack,
     });
-    return state;
+  } finally {
+    stateGlobal.running = false;
+    await redisSetJSON(state_key, stateGlobal);
   }
+  return stateGlobal;
 }
 
 /**
@@ -133,7 +143,7 @@ async function rebuild(socket, options) {
   const idGroup = randomString("update_geoserver");
   const idProgress = randomString("progress");
 
-  const overwriteStyle = !!options.overwriteStyle;
+  const clientStyle = !!options.overwriteStyle && !!socket?.connected;
 
   const out = {
     ok: false,
@@ -216,7 +226,7 @@ async function rebuild(socket, options) {
   const layers = await getViewsGeoserver();
   for (const layer of layers) {
     prom_layers.push(
-      createLayer(socket, layer, overwriteStyle, idGroup, idProgress)
+      createLayer(socket, layer, clientStyle, idGroup, idProgress)
     );
   }
   const resLayers = await Promise.all(prom_layers);
@@ -257,7 +267,7 @@ async function rebuild(socket, options) {
 /**
  * Helpers
  */
-async function createLayer(socket, layer, overwriteStyle, idGroup, idProgress) {
+async function createLayer(socket, layer, clientStyle, idGroup, idProgress) {
   const ws = layer.id_project;
   const ds = `PG_${ws}`;
   const idStyle = layer.id;
@@ -275,11 +285,19 @@ async function createLayer(socket, layer, overwriteStyle, idGroup, idProgress) {
     layer.bbox_source
   );
 
-  const hasNoStyle = isEmpty(layer.style_mapbox) || isEmpty(layer.style_sld);
+  //const hasNoStyle = isEmpty(layer.style_mapbox) || isEmpty(layer.style_sld);
+  const hasCustomStyle = !!layer.style_custom;
+  const requestStyle = clientStyle && !hasCustomStyle;
 
-  const recalc = overwriteStyle && hasNoStyle;
+  if (hasCustomStyle) {
+    /**
+     * Case style_sld has been previously defined:
+     * if there is a custom style, we dont want that.
+     */
+    delete layer.style_sld;
+  }
 
-  if (recalc) {
+  if (requestStyle) {
     const { output } = await ioSendJobClient(socket, "style_from_view", {
       idView: layer.id,
     });

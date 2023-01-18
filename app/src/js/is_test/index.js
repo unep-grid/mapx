@@ -152,7 +152,8 @@ export function isViewVtWithRules(item) {
  */
 export function isViewVtWithStyleCustom(item) {
   return (
-    isViewVt(item) && !!JSON.parse(item?.data?.style?.custom?.json)?.enable
+    isViewVt(item) &&
+    !!JSON.parse(item?.data?.style?.custom?.json || "{}")?.enable
   );
 }
 /**

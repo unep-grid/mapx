@@ -17,7 +17,8 @@ views_geoserver AS (
     s.id_source,
     v.project id_project,
     v.data #> '{style,_sld}' style_sld,
-    v.data #> '{style,_mapbox}' style_mapbox
+    v.data #> '{style,_mapbox}' style_mapbox,
+    (v.data #>> '{style,custom,json}')::jsonb #>> '{enable}' = 'true' style_custom
   FROM
     mx_views_latest v,
     src_enabled s
@@ -42,6 +43,7 @@ views_geoserver_extent AS (
     id_project,
     style_sld,
     style_mapbox,
+    style_custom,
     json_build_object(
       'miny',
       ST_Ymin(_extent),

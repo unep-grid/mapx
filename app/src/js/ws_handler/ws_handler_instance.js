@@ -156,6 +156,7 @@ async function job_add_view(job, result) {
   try {
     await viewsListAddSingle(job.input.view);
   } catch (e) {
+    console.error(e);
     result.error = `Error processing add view ${job.input?.view?.id}. ${e.message}`;
   }
   return result;
@@ -180,6 +181,7 @@ async function job_style_convert(job, result) {
       result.output.sld = await getViewSldStyle(view);
     }
   } catch (e) {
+    console.error(e);
     result.error = `Error processing style for view ${job.input.idView}, ${e.message}`;
   }
   return result;
