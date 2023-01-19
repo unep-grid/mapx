@@ -19,7 +19,7 @@ import { getViewSourceSummary } from "./../mx_helper_source_summary.js";
 import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata.js";
 import { moduleLoad } from "./../modules_loader_async";
 import { getView, resetViewStyle, getViewTitle } from "./../map_helpers";
-import { isSourceId, isView, isArray } from "./../is_test";
+import { isSourceId, isView, isArray, makeSafeName } from "./../is_test";
 
 export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({}, opt);
@@ -49,6 +49,7 @@ export async function showSourceTableAttributeModal(opt) {
   let addEdit;
   let allowDownload = false;
   const validSource = isSourceId(config.idSource);
+  const filename = `${makeSafeName(config.title || config.view.id)}.csv`;
 
   if (!validSource) {
     return false;
@@ -289,6 +290,7 @@ export async function showSourceTableAttributeModal(opt) {
           {
             header: true,
             columns: headers,
+            encoding: "utf8",
           },
           (err, data) => {
             if (err) {
@@ -299,7 +301,7 @@ export async function showSourceTableAttributeModal(opt) {
         );
       });
 
-      download(csv, "mx_attributes.csv");
+      download(csv, filename || "mx_attributes.csv");
     } catch (e) {
       console.error(e);
     }
@@ -382,32 +384,40 @@ export async function showSourceTableAttributeModal(opt) {
   }
 }
 
-export function viewToTableAttributeModal(idView) {
+export async function viewToTableAttributeModal(idView) {
   let view = getView(idView);
-  let opt = getTableAttributeConfigFromView(view);
+  let opt = await getTableAttributeConfigFromView(view);
   return showSourceTableAttributeModal(opt);
 }
 
-export function getTableAttributeConfigFromView(view) {
-  let language = getLanguageCurrent();
+export async function getTableAttributeConfigFromView(view) {
+  const language = getLanguageCurrent();
 
-  if (view.type !== "vt" || !view._meta) {
-    console.warn("Only vt view with ._meta are supported");
+  if (view.type !== "vt") {
+    console.warn("Only vt view are supported");
     return null;
   }
-  let idSource = path(view, "data.source.layerInfo.name");
+
+  const idSource = path(view, "data.source.layerInfo.name");
+  const attribute = path(view, "data.attribute.name");
   let attributes = path(view, "data.attribute.names") || [];
-  let attribute = path(view, "data.attribute.name");
   attributes = isArray(attributes) ? attributes : [attributes];
   attributes = attributes.concat(attribute);
   attributes = attributes.concat(["gid"]);
   attributes = getArrayDistinct(attributes);
-  let labelsDict = path(view, "_meta.text.attributes_alias") || {};
+
+  if (!view._meta) {
+    view._meta = await fetchSourceMetadata(idSource);
+  }
+
+  const title = getViewTitle(view);
+  const labelsDict = path(view, "_meta.text.attributes_alias") || {};
   let labels = attributes.map((a) => {
     return labelsDict[a] ? labelsDict[a][language] || labelsDict[a].en || a : a;
   });
 
   return {
+    title: title,
     view: view,
     idSource: idSource,
     labels: labels,
