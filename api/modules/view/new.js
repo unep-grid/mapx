@@ -3,7 +3,6 @@ import { isView, isViewId, isProjectId } from "@fxi/mx_valid";
 import { pgWrite } from "#mapx/db";
 import { ioSendJobClient } from "#mapx/io";
 import { getSourceSummary } from "#mapx/source";
-import { standardDeviation } from "#mapx/stat";
 import {
   getColumnsNames,
   getColumnsTypesSimple,
