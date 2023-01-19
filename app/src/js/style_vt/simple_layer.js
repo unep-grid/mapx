@@ -182,7 +182,7 @@ export function makeSimpleLayer(opt) {
         type: "fill",
         paint: {
           "fill-color": colA,
-          "fill-outline-color": "rgba(0,0,0,0)",
+          "fill-outline-color": "rgba(0,0,0,0.4)",
         },
       });
       break;
