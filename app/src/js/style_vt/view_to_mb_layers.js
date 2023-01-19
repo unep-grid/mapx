@@ -18,10 +18,15 @@ import { getView, sortLayers } from "../map_helpers/index.js";
  * @param {Object} opt Options
  * @param {Boolean} opt.useLabelAsId Set id based on rule's label (e.g. for sld)
  * @param {Boolean} opt.simplifyExpression Simplify expressions (e.g. for SLD)
+ * @param {Boolean} opt.mapxOrder Order to add layers sequentially - instead of appending all at once
  * @return {Promise<Array>} Array of mapbox layers
  */
 export async function getViewMapboxLayers(v, opt) {
-  const { useLabelAsId = false, simplifyExpression = false } = opt || {};
+  const {
+    useLabelAsId = false,
+    simplifyExpression = false,
+    mapxOrder = true,
+  } = opt || {};
 
   const view = getView(v);
   const idView = view.id;
@@ -37,6 +42,9 @@ export async function getViewMapboxLayers(v, opt) {
   const geomType = p(viewData, "geometry.type", "point");
   const source = p(viewData, "source", {});
   const idSourceLayer = p(source, "layerInfo.name");
+  const reverseLayerOrder = mapxOrder
+    ? style.reverseLayer
+    : !style.reverseLayer;
 
   const out = {
     layers: [],
@@ -325,7 +333,7 @@ export async function getViewMapboxLayers(v, opt) {
        * Set logic for rules
        */
       const nRules = rules.length - 1;
-      const position = style.reverseLayer ? nRules - i : i;
+      const position = reverseLayerOrder ? nRules - i : i;
       const isLast = i === nRules;
       const isFirst = i === 0;
 
@@ -428,7 +436,8 @@ export async function getViewMapboxLayers(v, opt) {
     const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== "none";
     const layerNull = _build_layer({
       priority: 1,
-      position: style.reverseLayer ? nRules : -1,
+      //position: reverseLayerOrder ? nRules : -1,
+      position: -1,
       geomType: geomType === "point" && hasSprite ? "symbol" : geomType,
       hexColor: ruleNulls.color,
       opacity: ruleNulls.opacity,

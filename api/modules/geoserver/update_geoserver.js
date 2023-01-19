@@ -292,13 +292,6 @@ async function createLayer(socket, layer, clientStyle, idGroup, idProgress) {
   const hasCustomStyle = !!layer.style_custom;
   const requestStyle = clientStyle && !hasCustomStyle;
 
-  if (hasCustomStyle) {
-    /**
-     * Case style_sld has been previously defined:
-     * if there is a custom style, we dont want that.
-     */
-    delete layer.style_sld;
-  }
 
   if (requestStyle) {
     const { output } = await ioSendJobClient(socket, "style_from_view", {
@@ -310,6 +303,14 @@ async function createLayer(socket, layer, clientStyle, idGroup, idProgress) {
       layer.style_sld = output.sld;
       await setViewStyleAlt(layer.id, output);
     }
+  }
+
+  if (hasCustomStyle) {
+    /**
+     * Case style_sld has been previously defined:
+     * if there is a custom style, we dont want that.
+     */
+    delete layer.style_sld;
   }
 
   const styleToPublish = layer.style_sld;

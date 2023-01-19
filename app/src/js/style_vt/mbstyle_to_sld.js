@@ -1,4 +1,4 @@
-import { isUrl, isArray, isEmpty } from "./../is_test/index.js";
+import { isUrl, isArray, isEmpty, isNotEmpty } from "./../is_test/index.js";
 import { parseTemplate } from "./../mx_helper_misc.js";
 import { settings } from "./../settings/index.js";
 import { getVersion } from "./../mx_helper_app_utils.js";
@@ -20,7 +20,7 @@ export async function mapboxToSld(style, opt) {
         fixFilters: true,
         fixImageCdn: true,
         fixIconSize: true,
-        ignoreConversionErrors : true
+        ignoreConversionErrors: true,
       },
       opt
     );
@@ -33,11 +33,11 @@ export async function mapboxToSld(style, opt) {
 
     const gstyle = await mapbox.readStyle(style, {});
 
-    if (isArray(gstyle?.errors) && gstyle.errors.length > 0) {
-      const errors = gstyle.errors.reduce((a, c) => a + ", " + c, "");
+    if (isArray(gstyle?.errors) && isNotEmpty(gstyle.errors)) {
+      const errors = gstyle.errors.join(",");
       throw new Error(`Style had errors: ${errors}`);
     }
-    
+
     if (opt.fixFilters) {
       geostylerFixFilters(gstyle, {
         fixNumeric: fixNumeric,
