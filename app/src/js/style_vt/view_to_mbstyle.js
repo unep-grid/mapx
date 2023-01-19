@@ -7,6 +7,7 @@ import { isViewVtWithStyleCustom, isString } from "./../is_test/index.js";
 /**
  * Create sld style from view's layers
  * @param {String|object} idView Id of the view or view
+ * @param {Boolean} opt.mapxOrder Mapx order = order reversed to be sequentially added
  * @return {Promise<String>} Style string
  */
 export async function getViewSldStyle(idView) {
@@ -18,10 +19,13 @@ export async function getViewSldStyle(idView) {
     useLabelAsId: true,
     addMetadata: true,
     simplifyExpression: true,
+    mapxOrder: false,
   });
+
   const styleSld = await mapboxToSld(styleMapboxForSld, {
     fixFilters: true,
   });
+
   return styleSld;
 }
 
@@ -32,6 +36,7 @@ export async function getViewSldStyle(idView) {
  * @param {Boolean} opt.useLabelAsId Set id based on rule's label (e.g. for sld)
  * @param {Boolean} opt.simplifyExpression Simplify expressions (e.g. for SLD)
  * @param {Boolean} opt.addMetadata Add metadata (types...)
+ * @param {Boolean} opt.mapxOrder Mapx order = order reversed to be sequentially added
  * @return {Promise<Object>} Style object
  */
 export async function getViewMapboxStyle(idView, opt) {
@@ -39,6 +44,7 @@ export async function getViewMapboxStyle(idView, opt) {
     useLabelAsId = false,
     addMetadata = false,
     simplifyExpression = false,
+    mapxOrder = false,
   } = opt || {};
 
   /**
@@ -51,6 +57,7 @@ export async function getViewMapboxStyle(idView, opt) {
     useLabelAsId,
     addMetadata,
     simplifyExpression,
+    mapxOrder,
   });
   const map = getMap();
   const style = map.getStyle();
@@ -101,10 +108,11 @@ export async function getViewMapboxStyle(idView, opt) {
 
     style.layers.push(layer);
   }
+
   /**
    * If used directly in mapbox style,
    * all layers should be reversed. If used in mapx,
-   * They will be added sequentially, at a given point, but
+   * they will be added sequentially, at a given point, but
    * not directly. reverse option in sortLayers is not usefull
    * here, as it take in account position AND priority.
    */
