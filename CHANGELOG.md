@@ -1,6 +1,24 @@
+  - [1.10.0-alpha.9](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.9) 
+
+    - APP 
+        - Display table: 
+            - View attributes table download: use view title as filename;
+            - If no view._meta available, fetch metadata
+        - VT style : 
+            - Added a very small transparent border for polygones features. This should be configurable in style, but not yet done.
+        - Dashboard
+            - Hack : if modules were used and not properly loaded using the checkboxes, added an helper to read the script and list all modules and load them + show a warning. This is temporary until all concerned dashboard are cleaned
+        - Panel dashboard : 
+            - improved footer, better visibility. Set footer div as an option
+        - Geoserver : 
+            - Set geoserver legend the same as the order of the mapx layers ( no impact on visual order in generated wms images, see #882 )
+            - Issue with missing value : null or empty string were ignored
+    - API 
+        - Reset geoserver update state : in case of failure that skips the finally statement, at least the service restart would reset the stored state in redis.
+
   - [1.10.0-alpha.8](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.8) 
 
-    -APP/API
+    - APP/API
         -  SLD creation. Solved issue with 
             - paint expression,
             - view with sld already as style._sld,
