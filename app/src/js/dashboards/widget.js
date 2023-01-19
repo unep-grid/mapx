@@ -72,7 +72,6 @@ class Widget {
       /**
        * Copy cb as widget method
        */
-
       for (const r in register) {
         widget[r] = register[r];
       }
@@ -391,9 +390,9 @@ class Widget {
     try {
       const r = new Function(str)();
       for (const f in r) {
-        const rBinded = r[f].bind(w);
+        const rBind = r[f].bind(w);
         const skipIfOnRemove = f === "onRemove";
-        r[f] = w.tryCatched(rBinded, skipIfOnRemove);
+        r[f] = w.tryCatched(rBind, skipIfOnRemove);
       }
       return r;
     } catch (e) {

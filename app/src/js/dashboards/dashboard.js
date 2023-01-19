@@ -7,10 +7,11 @@ import Muuri from "muuri";
 import "./style.less";
 import { waitFrameAsync } from "../animation_frame/index.js";
 import { EventSimple } from "../event_simple";
+import { isNotEmpty } from "../is_test";
 const defaults = {
   dashboard: {
     widgets: [],
-    modules: ["highcharts"],
+    modules: [],
     language: "en",
     marginFitWidth: 20,
     marginFitHeight: 50,
@@ -108,6 +109,105 @@ class Dashboard extends EventSimple {
      */
 
     d.fire("init");
+  }
+
+  /**
+   * Process widgets configuration
+   * @param {Object} conf Configuration
+   * @param {Array} conf.widgets Widgets data
+   * @param {Array} conf.modules Modules name , e.g. ["d3"]
+   * @param {Object} conf.vie  View object
+   * @param {Object} conf.map mapbox gl map instance
+   * @return {Array} array of widgets
+   */
+  async addWidgetsAsync(conf) {
+    const d = this;
+    const widgets = [];
+    /**
+     * Store modules
+     */
+    let idM = 0;
+
+    conf = Object.assign({}, { modules: [] }, conf);
+
+    const modulesNames = new Set(conf.modules);
+
+    /**
+     * TODO: remove this hack after v 1.10.0 is in prod
+     * Fix missing modules
+     * NOTE: some dashboards have been coded using `modules.highcharts`, without
+     * using the checkbox select to list modules to load, due to a glitch were
+     * some modules where automatically loaded. e.g. highcharts;
+     */
+    const reg = /(?<=modules\.)\w+/g;
+    for (const cw of conf.widgets) {
+      const script = cw.script;
+      if (isNotEmpty(script)) {
+        const modulesFound = script.match(reg) || [];
+        for (const module of modulesFound) {
+          if (!conf.modules.includes(module)) {
+            console.warn(
+              `Module ${module} apparently used, but not registered`
+            );
+          }
+          modulesNames.add(module);
+        }
+      }
+    }
+
+    /**
+     * Register and load modules
+     */
+    d.opt.dashboard.modules = Array.from(modulesNames);
+    const modules = await modulesLoad(d.opt.dashboard.modules);
+    const attributions = [];
+
+    for (const name of modulesNames) {
+      const module = modules[idM++];
+      d.modules[name] = module;
+      /**
+       * Add credits / attributions
+       */
+      if (module._attrib_info) {
+        attributions.push(module._attrib_info);
+      }
+    }
+
+    /**
+     * Build widgets
+     */
+    const promWidgets = [];
+    for (const cw of conf.widgets) {
+      if (!cw.disabled) {
+        const widget = new Widget({
+          conf: cw,
+          grid: d.grid,
+          dashboard: d,
+          modules: d.modules,
+          view: conf.view,
+          map: conf.map,
+          attributions: attributions,
+        });
+        d.widgets.push(widget);
+        widget._id = conf.view.id;
+        widgets.push(widget);
+        promWidgets.push(widget.init());
+      }
+    }
+    await Promise.all(promWidgets);
+
+    /**
+     * Layout update
+     */
+    await waitFrameAsync();
+    d.updateAttributions();
+    d.updatePanelLayout();
+    d.updateGridLayout();
+
+    /**
+     * Return only added widgets
+     */
+    return widgets;
   }
 
   isVisible() {
@@ -337,65 +437,6 @@ class Dashboard extends EventSimple {
       );
       d.panel.elFooter.appendChild(elAttribution);
     }
-  }
-
-  async addWidgetsAsync(conf) {
-    const d = this;
-    const widgets = [];
-    /**
-     * Store modules
-     */
-    let idM = 0;
-    const modulesNames = conf.modules || [];
-    d.opt.dashboard.modules.push(...modulesNames);
-    const modules = await modulesLoad(modulesNames);
-    const attributions = [];
-    for (const name of modulesNames) {
-      const module = modules[idM++];
-      d.modules[name] = module;
-      /**
-       * Add credits / attributions
-       */
-      if (module._attrib_info) {
-        attributions.push(module._attrib_info);
-      }
-    }
-
-    /**
-     * Build widgets
-     */
-    const promWidgets = [];
-    for (const cw of conf.widgets) {
-      if (!cw.disabled) {
-        const widget = new Widget({
-          conf: cw,
-          grid: d.grid,
-          dashboard: d,
-          modules: d.modules,
-          view: conf.view,
-          map: conf.map,
-          attributions: attributions,
-        });
-        d.widgets.push(widget);
-        widget._id = conf.view.id;
-        widgets.push(widget);
-        promWidgets.push(widget.init());
-      }
-    }
-    await Promise.all(promWidgets);
-
-    /**
-     * Layout update
-     */
-    await waitFrameAsync();
-    d.updateAttributions();
-    d.updatePanelLayout();
-    d.updateGridLayout();
-
-    /**
-     * Return only added widgets
-     */
-    return widgets;
   }
 
   shakeButton(opt) {
