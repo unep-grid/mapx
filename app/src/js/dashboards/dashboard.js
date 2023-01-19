@@ -42,6 +42,7 @@ const defaults = {
     tooltip_position: "top-left",
     container_classes: ["button-panel--container-no-full-height"],
     position: "bottom-right",
+    add_footer: true,
   },
 };
 

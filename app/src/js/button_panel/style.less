@@ -128,19 +128,18 @@
       }
       .button-panel--item-footer {
         position: absolute;
-        margin-left: 10px;
-        margin-bottom: 5px;
+        left: 0;
+        right: 0;
         bottom: 0;
         font-size: 0.7rem;
-        max-height: 2em;
-        opacity: 0.8;
-        width: 100%;
-        max-width: 100%;
+        padding: 10px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        background: var(--mx_ui_background);
+        box-shadow: var(--mx_ui_box_shadow);
+        border-radius: 0px 0px 10px 10px;
 
-        background: var(--mx_ui_background_transparent);
         .button-panel--item-footer-attribution {
           &:not(:last-child):after {
             content: ", ";

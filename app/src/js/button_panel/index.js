@@ -6,10 +6,10 @@ import { shake } from "../elshake";
 import "./style.less";
 
 /**
-* Keeps track of all panels
-*/ 
+ * Keeps track of all panels
+ */
 const _button_panels = [];
-window._button_panels  = _button_panels
+window._button_panels = _button_panels;
 
 class ButtonPanel extends EventSimple {
   constructor(opt) {
@@ -28,6 +28,7 @@ class ButtonPanel extends EventSimple {
       item_content_classes: [],
       panel_style: {},
       add: true,
+      add_footer : false,
       handles: ["free", "resize"],
       animateDurationMs: 350,
     };
@@ -242,14 +243,13 @@ class ButtonPanel extends EventSimple {
     );
 
     /**
-     * Footer 
+     * Footer
      */
-    panel.elFooter = el(
-      "div",
-      {
+    if (panel.opt.add_footer) {
+      panel.elFooter = el("div", {
         class: "button-panel--item-footer",
-      },
-    );
+      });
+    }
     /**
      * Panel
      */
@@ -265,7 +265,6 @@ class ButtonPanel extends EventSimple {
       panel.elPanelContent,
       panel.elFooter,
       panel.elHandles
-      
     );
 
     /**
