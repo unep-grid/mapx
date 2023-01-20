@@ -12,6 +12,22 @@ import { getLabelFromObjectPath, getDictItem } from "../language";
 import { getViewSourceSummary } from "./../mx_helper_source_summary.js";
 import { getView, sortLayers } from "../map_helpers/index.js";
 
+const def = {
+  zoomConfig: {
+    zoomMax: 22,
+    zoomMin: 0,
+    sizeFactorZoomMax: 0,
+    sizeFactorZoomMin: 0,
+    sizeFactorZoomExponent: 1,
+  },
+  polygonBorderConfig: {
+    enable: false,
+    opacity: 0.5,
+    color: "#000",
+    enableAutoColor: false,
+  },
+};
+
 /**
  * Create mapbox layers from mapx's style
  * @param {Object|String} v View or view's id
@@ -34,7 +50,6 @@ export async function getViewMapboxLayers(v, opt) {
   const viewData = p(view, "data");
   const attr = p(viewData, "attribute.name", null);
   const style = p(viewData, "style", {});
-  const zConfig = p(style, "zoomConfig", {});
   const showSymbolLabel = p(style, "showSymbolLabel", false);
   const includeUpper = p(style, "includeUpperBoundInInterval", false);
   const hideNulls = p(style, "hideNulls", false);
@@ -42,6 +57,9 @@ export async function getViewMapboxLayers(v, opt) {
   const geomType = p(viewData, "geometry.type", "point");
   const source = p(viewData, "source", {});
   const idSourceLayer = p(source, "layerInfo.name");
+  const zoomConfig = p(style, "zoomConfig", {});
+  const polygonBorderConfig = p(style, "polygonBorderConfig", {});
+
   const reverseLayerOrder = mapxOrder
     ? style.reverseLayer
     : !style.reverseLayer;
@@ -51,6 +69,12 @@ export async function getViewMapboxLayers(v, opt) {
     rules: [],
     config: {},
   };
+
+  /**
+   * set defaults
+   */
+  updateIfEmpty(zoomConfig, def.zoomConfig);
+  updateIfEmpty(polygonBorderConfig, def.polygonBorderConfig);
 
   /**
    * No PostGIS layer id -> nothing to do
@@ -123,18 +147,6 @@ export async function getViewMapboxLayers(v, opt) {
       }
     }
   }
-
-  /**
-   * Set zoom default
-   */
-  const zDef = {
-    zoomMax: 22,
-    zoomMin: 0,
-    sizeFactorZoomMax: 0,
-    sizeFactorZoomMin: 0,
-    sizeFactorZoomExponent: 1,
-  };
-  const zoomConfig = Object.assign(zDef, zConfig);
 
   /**
    * Clean rules
@@ -493,6 +505,10 @@ export async function getViewMapboxLayers(v, opt) {
         zoomMin: zoomConfig.zoomMin,
         useLabelAsId: useLabelAsId,
         simplifyExpression: simplifyExpression,
+        useOutline: polygonBorderConfig.enable,
+        outlineColor: polygonBorderConfig.color,
+        useOutlineAuto: polygonBorderConfig.enableAutoColor,
+        outlineOpacity: polygonBorderConfig.opacity,
       },
       opt
     );

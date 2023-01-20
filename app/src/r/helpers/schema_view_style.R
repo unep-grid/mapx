@@ -9,6 +9,8 @@ mxSchemaViewStyle <- function(
   jsonPaintExample <- .get(conf, c("templates", "text", "custom_paint_example"))
   geomType <- .get(viewData, c("data", "geometry", "type"))
   isPoint <- geomType == "point"
+  isLine <- geomType == "line"
+  isPolygon <- geomType == "polygon"
 
   if (noDataCheck(view)) {
     return()
@@ -57,7 +59,7 @@ mxSchemaViewStyle <- function(
   variableName <- .get(data, c("attribute", "name"))
   variableNames <- .get(data, c("attribute", "names"))
   layerName <- .get(data, c("source", "layerInfo", "name"))
-  
+
   srcSummary <- mxApiGetSourceSummary(
     idSource = layerName,
     idAttr = variableName
@@ -172,7 +174,8 @@ mxSchemaViewStyle <- function(
     color = list(
       title = tt("schema_style_color"),
       type = "string",
-      format = "color-picker",
+      #format = "color-picker",
+      format = "color",
       default = "#f1f3d7"
     )
   )
@@ -428,6 +431,65 @@ mxSchemaViewStyle <- function(
     )
   )
 
+  #
+  # Polygon border config
+  #
+  polygonBorderOpacity <- list(
+    opacity = list(
+      title = tt("schema_style_polygon_border_opacity"),
+      description = tt("schema_style_polygon_border_opacity_desc"),
+      type = "number",
+      default = 0.5,
+      min = 0,
+      max = 1
+    )
+  )
+
+  polygonBorderEnable <- list(
+    enable = list(
+      title = tt("schema_style_polygon_border_enable"),
+      description = tt("schema_style_polygon_border_enable_desc"),
+      type = "boolean",
+      format = "checkbox"
+    )
+  )
+
+  polygonBorderEnableAuto <- list(
+    enableAutoColor = list(
+      title = tt("schema_style_polygon_border_enable_auto_color"),
+      description = tt("schema_style_polygon_border_enable_auto_color_desc"),
+      type = "boolean",
+      format = "checkbox"
+    )
+  )
+
+  polygonBorderColor <- list(
+    color = list(
+      title = tt("schema_style_color"),
+      type = "string",
+      #format = "color-picker",
+      format = "color",
+      default = "#000"
+    )
+  )
+
+  polygonBorderConfig <- list(
+    polygonBorderConfig = list(
+      propertyOrder = 6,
+      title = tt("schema_style_config_polygon_border"),
+      options = list(
+        collapsed = TRUE
+      ),
+      properties = c(
+        polygonBorderEnable,
+        polygonBorderOpacity,
+        polygonBorderColor,
+        polygonBorderEnableAuto
+      )
+    )
+  )
+
+
 
   #
   # set paint
@@ -451,7 +513,6 @@ mxSchemaViewStyle <- function(
 
   custom <- list(
     custom = list(
-      type = "object",
       propertyOrder = 8,
       title = tt("custom_style"),
       options = list(
@@ -495,8 +556,8 @@ mxSchemaViewStyle <- function(
     nulls,
     rules,
     if (isPoint) zoomConfig,
+    if (isPolygon) polygonBorderConfig,
     if (isContinuous) includeUpperBoundInInterval,
-    # if(isContinuous) excludeMinMax,
     reverseLayer,
     showSymbolLabel,
     hideNulls,

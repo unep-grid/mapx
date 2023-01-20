@@ -2032,42 +2032,6 @@
     "en": "Set the style of this view"
   },
   {
-    "id": "schema_style_title_legend",
-    "en": "Legend title"
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval"
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order"
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack"
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label"
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?"
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend"
-  },
-  {
     "id": "btn_opt_meta",
     "en": "Display metadata"
   },
@@ -2776,20 +2740,12 @@
     "en": "Add this MapX user directly"
   },
   {
-    "id": "schema_class",
-    "en": "Class"
+    "id": "schema_metadata",
+    "en": "Meta data"
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values"
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color"
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description"
+    "id": "schema_method",
+    "en": "Method"
   },
   {
     "id": "schema_item",
@@ -2800,104 +2756,8 @@
     "en": "Key"
   },
   {
-    "id": "schema_style_label",
-    "en": "Label"
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule"
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data"
-  },
-  {
-    "id": "schema_method",
-    "en": "Method"
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule"
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules"
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size"
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings"
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max"
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min"
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent"
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation."
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max"
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min"
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol"
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min."
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max."
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data"
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data"
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value"
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set."
+    "id": "schema_class",
+    "en": "Class"
   },
   {
     "id": "self",
@@ -6070,6 +5930,174 @@
   {
     "id": "schema_story_class_cube-face",
     "en": "Face of a cube"
+  },
+  {
+    "id": "schema_style_title_legend",
+    "en": "Legend title"
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval"
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order"
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack"
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label"
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?"
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values"
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color"
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description"
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label"
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule"
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule"
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules"
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size"
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings"
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max"
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation."
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max"
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min"
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min."
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max."
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data"
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data"
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set."
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule."
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color"
   },
   {
     "id": "search_placeholder",

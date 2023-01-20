@@ -5,6 +5,39 @@ import { getSpriteImage } from "./../map_helpers/index.js";
 import chroma from "chroma-js";
 
 /**
+ * Will be stored as layer.meta
+ */
+const def = {
+  id: null,
+  label: null,
+  idSuffix: "",
+  priority: 0,
+  idSourceLayer: null,
+  idView: null,
+  idAfter: null,
+  geomType: null,
+  type: null,
+  label: null,
+  hexColor: null,
+  filter: ["all"],
+  size: null,
+  sprite: null,
+  sizeFactorZoomMax: 0,
+  sizeFactorZoomMin: 0,
+  sizeFactorZoomExponent: 1,
+  zoomMin: 0,
+  zoomMax: 22,
+  opacity: 0.5,
+  showSymbolLabel: null,
+  useLabelAsId: null,
+  simplifyExpression: null,
+  useOutline: null,
+  outlineColor: null,
+  useOutlineAuto: null,
+  outlineOpacity: null,
+};
+
+/**
  * Create a simple layer
  * @param {object} opt Options
  * @param {string} opt.id Id of the layer
@@ -24,39 +57,13 @@ import chroma from "chroma-js";
  * @param {array} opt.filter
  * @param {Number} opt.size
  * @param {string} opt.sprite
+ * @param {Boolean} opt.useOutline Add outline to polygons
+ * @param {String} opt.outlineColor Polygon outline
+ * @param {Boolean} opt.useOutlineAuto Use automatic color for outline
+ * @param {Nmber} opt.outlineOpacity Polygon outline opacity
  * @return {Object} Layer
  */
 export function makeSimpleLayer(opt) {
-  /**
-   * Will be stored as layer.meta
-   */
-
-  const def = {
-    id: null,
-    label: null,
-    idSuffix: "",
-    priority: 0,
-    idSourceLayer: null,
-    idView: null,
-    idAfter: null,
-    geomType: null,
-    type: null,
-    label: null,
-    hexColor: null,
-    filter: ["all"],
-    size: null,
-    sprite: null,
-    sizeFactorZoomMax: 0,
-    sizeFactorZoomMin: 0,
-    sizeFactorZoomExponent: 1,
-    zoomMin: 0,
-    zoomMax: 22,
-    opacity: 0.5,
-    showSymbolLabel: null,
-    useLabelAsId: null,
-    simplifyExpression: null,
-  };
-
   updateIfEmpty(opt, def);
 
   const validId = opt.id || (opt.useLabelAsId && opt.label);
@@ -98,7 +105,46 @@ export function makeSimpleLayer(opt) {
     opt.hexColor = chroma.random().hex();
   }
   const colA = chroma(opt.hexColor).alpha(opt.opacity).css();
-  const colB = chroma(opt.hexColor).alpha(opt.opacity).darken(1).css();
+  let colB;
+
+  if (opt.geomType !== "polygon") {
+    /**
+     * Set alternative color
+     */
+    colB = chroma(opt.hexColor).alpha(opt.opacity).darken(1).css();
+  } else {
+    /**
+     * Set polygon outline color
+     */
+    if (!opt.useOutline) {
+      colB = "rgba(0,0,0,0)";
+    } else {
+      if (!opt.useOutlineAuto) {
+        /**
+         * Use user defined color
+         */
+        colB = chroma(opt.outlineColor).alpha(opt.outlineOpacity).css();
+      } else {
+        /**
+         * Attempt to find the best suited color
+         */
+        const colDark = chroma(colA).darken(1).alpha(opt.outlineOpacity).css();
+        const colClear = chroma(colA)
+          .brighten(1)
+          .alpha(opt.outlineOpacity)
+          .css();
+        const contrastDark = chroma.contrast(colA, colDark);
+        const contrastClear = chroma.contrast(colA, colClear);
+        if (contrastDark > contrastClear) {
+          console.log("darken")
+          colB = colDark;
+        } else {
+          console.log("brighten")
+          colB = colClear;
+        }
+      }
+    }
+  }
 
   /**
    * Base layer
@@ -182,7 +228,7 @@ export function makeSimpleLayer(opt) {
         type: "fill",
         paint: {
           "fill-color": colA,
-          "fill-outline-color": "rgba(0,0,0,0.4)",
+          "fill-outline-color": colB,
         },
       });
       break;

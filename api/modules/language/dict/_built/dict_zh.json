@@ -2540,51 +2540,6 @@
     "zh": "设置视图样式"
   },
   {
-    "id": "schema_style_title_legend",
-    "en": "Legend title",
-    "zh": "图例标题"
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval",
-    "zh": "区间包含上限"
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "zh": "如果选中，间隔将包括上限。如果未定义，则最后一个界限将是最大值。如果样式是使用自动样式构建的，则应选中此选项"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order",
-    "zh": "反向显示图层顺序"
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "zh": "如果勾选，则图层堆栈将颠倒：顶部规则将会堆栈底部绘制一个图层"
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label",
-    "zh": "显示符号的标签"
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?",
-    "zh": "使用符号表示点数据时，是否在其周围添加标签？"
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend",
-    "zh": "不在地图或图例中显示缺失值"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
-    "zh": "如果选中，具有缺失值（或定义为此类值的值）的要素将不会显示在地图上的图层或图例中"
-  },
-  {
     "id": "btn_opt_meta",
     "en": "Display metadata",
     "zh": "显示元数据"
@@ -3470,24 +3425,14 @@
     "zh": "直接添加此MapX用户 "
   },
   {
-    "id": "schema_class",
-    "en": "Class",
-    "zh": "类"
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "zh": "元数据"
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values",
-    "zh": "缺少值"
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color",
-    "zh": "颜色"
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description",
-    "zh": "描述"
+    "id": "schema_method",
+    "en": "Method",
+    "zh": "方法"
   },
   {
     "id": "schema_item",
@@ -3500,129 +3445,9 @@
     "zh": "主键"
   },
   {
-    "id": "schema_style_label",
-    "en": "Label",
-    "zh": "标签"
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule",
-    "zh": "最后规则"
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data",
-    "zh": "元数据"
-  },
-  {
-    "id": "schema_method",
-    "en": "Method",
-    "zh": "方法"
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency",
-    "zh": "透明度"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule",
-    "zh": "规则"
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules",
-    "zh": "规则"
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size",
-    "zh": "尺寸"
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings",
-    "zh": "缩放设置"
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max",
-    "zh": "最大缩放时尺寸的系数"
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min",
-    "zh": "最小缩放时尺寸的系数"
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent",
-    "zh": "尺寸的指数插值"
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "zh": "尺寸的指数插值函数。1表示线性插值。"
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max",
-    "zh": "最大缩放"
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min",
-    "zh": "最小缩放"
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "zh": "符号"
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "zh": "如果大于0，则线和点尺寸的系数为缩放最小值。"
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "zh": "如果大于0，则线和点尺寸的系数为缩放最大值。"
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data",
-    "zh": "最小缩放以显示数据"
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data",
-    "zh": "最大缩放以显示数据"
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value",
-    "zh": "值"
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From",
-    "zh": "从"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To",
-    "zh": "到"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds",
-    "zh": "忽略下限/上限的最小/最大统计信息"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
-    "zh": "忽略绝对下限/上限的源统计信息中的最小值/最大值。这些值将取自规则集。"
+    "id": "schema_class",
+    "en": "Class",
+    "zh": "类"
   },
   {
     "id": "self",
@@ -7588,6 +7413,216 @@
     "id": "schema_story_class_cube-face",
     "en": "Face of a cube",
     "zh": "立方体的脸"
+  },
+  {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "zh": "图例标题"
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "zh": "区间包含上限"
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "zh": "如果选中，间隔将包括上限。如果未定义，则最后一个界限将是最大值。如果样式是使用自动样式构建的，则应选中此选项"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "zh": "反向显示图层顺序"
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "zh": "如果勾选，则图层堆栈将颠倒：顶部规则将会堆栈底部绘制一个图层"
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "zh": "显示符号的标签"
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "zh": "使用符号表示点数据时，是否在其周围添加标签？"
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend",
+    "zh": "不在地图或图例中显示缺失值"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "zh": "如果选中，具有缺失值（或定义为此类值的值）的要素将不会显示在地图上的图层或图例中"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "zh": "缺少值"
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "zh": "颜色"
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "zh": "描述"
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "zh": "标签"
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "zh": "最后规则"
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency",
+    "zh": "透明度"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "zh": "规则"
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "zh": "规则"
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "zh": "尺寸"
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "zh": "缩放设置"
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "zh": "最大缩放时尺寸的系数"
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "zh": "最小缩放时尺寸的系数"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "zh": "尺寸的指数插值"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "zh": "尺寸的指数插值函数。1表示线性插值。"
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "zh": "最大缩放"
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "zh": "最小缩放"
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "zh": "符号"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "zh": "如果大于0，则线和点尺寸的系数为缩放最小值。"
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "zh": "如果大于0，则线和点尺寸的系数为缩放最大值。"
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "zh": "最小缩放以显示数据"
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "zh": "最大缩放以显示数据"
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "zh": "值"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "zh": "从"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "zh": "到"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "zh": "忽略下限/上限的最小/最大统计信息"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "zh": "忽略绝对下限/上限的源统计信息中的最小值/最大值。这些值将取自规则集。"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency",
+    "zh": "透明度"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque",
+    "zh": "线条透明度。 0 = 透明，1 = 不透明"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline",
+    "zh": "启用多边形轮廓"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary.",
+    "zh": "勾勒出多边形以强调其边界。"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color.",
+    "zh": "自动颜色。"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule.",
+    "zh": "根据每条规则的颜色自动分配合适的颜色。"
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color",
+    "zh": "多边形轮廓颜色"
   },
   {
     "id": "search_placeholder",
