@@ -1,3 +1,10 @@
+  - [1.10.0-alpha.10](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.10) 
+    
+    - APP
+        - Style manager
+            - Use native color picker 
+            - Added basic system for styling polygon outline 
+
   - [1.10.0-alpha.9](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.9) 
 
     - APP 
