@@ -2535,51 +2535,6 @@
     "bn": "এই দৃশ্যের স্টাইলটি সেট করুন "
   },
   {
-    "id": "schema_style_title_legend",
-    "en": "Legend title",
-    "bn": "কিংবদন্তি শিরোনাম "
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval",
-    "bn": "অন্তর অন্তর উপরের আবদ্ধ অন্তর্ভুক্ত "
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "bn": "যদি চেক করা হয়, ব্যবধানগুলি উপরের সীমা অন্তর্ভুক্ত করবে। যদি এটি সংজ্ঞায়িত করা না হয়, শেষ সীমা সর্বোচ্চ মান হবে। যদি স্টাইলটি অটো-স্টাইল ব্যবহার করে তৈরি করা হয় তবে এই বিকল্পটি পরীক্ষা করা উচিত"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order",
-    "bn": "বিপরীত প্রদর্শিত স্তর ক্রম "
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "bn": "যদি চেক করা থাকে তবে স্তর স্ট্যাকটি বিপরীত হবে: উপরের নিয়মটি স্ট্যাকের নীচে একটি স্তর আঁকবে "
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label",
-    "bn": "লেবেল সহ প্রতীক দেখান "
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?",
-    "bn": "যদি পয়েন্ট ডেটা সহ প্রতীক ব্যবহার করা হয়, তবে ম্যাপএক্সের চারপাশে লেবেল যুক্ত করা উচিত? "
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend",
-    "bn": "মানচিত্রে বা কিংবদন্তীতে অনুপস্থিত মান প্রদর্শন করবেন না"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
-    "bn": "যদি চেক করা হয়, একটি অনুপস্থিত মান সহ বৈশিষ্ট্যগুলি - বা এর মতো সংজ্ঞায়িত মান - মানচিত্রে বা কিংবদন্তীতে একটি স্তরে প্রদর্শিত হবে না"
-  },
-  {
     "id": "btn_opt_meta",
     "en": "Display metadata",
     "bn": "মেটাডেটা প্রদর্শন করুন "
@@ -3465,24 +3420,14 @@
     "bn": "এই ম্যাপএক্স ব্যবহারকারীকে সরাসরি যুক্ত করুন "
   },
   {
-    "id": "schema_class",
-    "en": "Class",
-    "bn": "ক্লাস "
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "bn": "মেটা ডেটা "
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values",
-    "bn": "অনুপস্থিত মানের "
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color",
-    "bn": "রঙ "
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description",
-    "bn": "বর্ণনা "
+    "id": "schema_method",
+    "en": "Method",
+    "bn": "পদ্ধতি "
   },
   {
     "id": "schema_item",
@@ -3495,129 +3440,9 @@
     "bn": "মূল "
   },
   {
-    "id": "schema_style_label",
-    "en": "Label",
-    "bn": "লেবেল "
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule",
-    "bn": "শেষ নিয়ম "
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data",
-    "bn": "মেটা ডেটা "
-  },
-  {
-    "id": "schema_method",
-    "en": "Method",
-    "bn": "পদ্ধতি "
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency",
-    "bn": "স্বচ্ছতা"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule",
-    "bn": "নিয়ম "
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules",
-    "bn": "বিধি "
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size",
-    "bn": "আকার "
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings",
-    "bn": "জুম সেটিংস "
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max",
-    "bn": "জুম সর্বাধিক আকারের সহগ "
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min",
-    "bn": "জুম মিনিটে আকারের সহগ "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent",
-    "bn": "আকার প্রবর্তন ঘনিষ্ঠ "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "bn": "আকার ইন্টারপোলেশন এক্সপোনেন্ট ফাংশন। 1 এর মান একটি লিনিয়ার ইন্টারপোলেশন দেয়। "
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max",
-    "bn": "জুম সর্বাধিক "
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min",
-    "bn": "জুম মিনিট "
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "bn": "প্রতীক "
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "bn": "যদি 0 এর বেশি হয় তবে জুম মিনিটে লাইন এবং পয়েন্টগুলির জন্য আকারের গুণফল। "
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "bn": "যদি 0 এর চেয়ে বেশি হয় তবে লাইন এবং জুম সর্বাধিক পয়েন্টের জন্য আকারের সহগ। "
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data",
-    "bn": "ডেটা দেখানোর জন্য সর্বনিম্ন জুম "
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data",
-    "bn": "ডেটা প্রদর্শন করতে সর্বোচ্চ জুম "
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value",
-    "bn": "মান "
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From",
-    "bn": "থেকে"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To",
-    "bn": "প্রতি"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds",
-    "bn": "নিম্ন / উপরের সীমার জন্য সর্বনিম্ন / সর্বোচ্চ পরিসংখ্যান উপেক্ষা করুন"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
-    "bn": "পরম নিম্ন / উচ্চ সীমার জন্য উৎস পরিসংখ্যান থেকে সর্বনিম্ন / সর্বোচ্চ উপেক্ষা করুন। সেই মানগুলি নির্ধারিত নিয়ম থেকে নেওয়া হবে।"
+    "id": "schema_class",
+    "en": "Class",
+    "bn": "ক্লাস "
   },
   {
     "id": "self",
@@ -7583,6 +7408,216 @@
     "id": "schema_story_class_cube-face",
     "en": "Face of a cube",
     "bn": "একটি ঘনক মুখ"
+  },
+  {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "bn": "কিংবদন্তি শিরোনাম "
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "bn": "অন্তর অন্তর উপরের আবদ্ধ অন্তর্ভুক্ত "
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "bn": "যদি চেক করা হয়, ব্যবধানগুলি উপরের সীমা অন্তর্ভুক্ত করবে। যদি এটি সংজ্ঞায়িত করা না হয়, শেষ সীমা সর্বোচ্চ মান হবে। যদি স্টাইলটি অটো-স্টাইল ব্যবহার করে তৈরি করা হয় তবে এই বিকল্পটি পরীক্ষা করা উচিত"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "bn": "বিপরীত প্রদর্শিত স্তর ক্রম "
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "bn": "যদি চেক করা থাকে তবে স্তর স্ট্যাকটি বিপরীত হবে: উপরের নিয়মটি স্ট্যাকের নীচে একটি স্তর আঁকবে "
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "bn": "লেবেল সহ প্রতীক দেখান "
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "bn": "যদি পয়েন্ট ডেটা সহ প্রতীক ব্যবহার করা হয়, তবে ম্যাপএক্সের চারপাশে লেবেল যুক্ত করা উচিত? "
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend",
+    "bn": "মানচিত্রে বা কিংবদন্তীতে অনুপস্থিত মান প্রদর্শন করবেন না"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "bn": "যদি চেক করা হয়, একটি অনুপস্থিত মান সহ বৈশিষ্ট্যগুলি - বা এর মতো সংজ্ঞায়িত মান - মানচিত্রে বা কিংবদন্তীতে একটি স্তরে প্রদর্শিত হবে না"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "bn": "অনুপস্থিত মানের "
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "bn": "রঙ "
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "bn": "বর্ণনা "
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "bn": "লেবেল "
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "bn": "শেষ নিয়ম "
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency",
+    "bn": "স্বচ্ছতা"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "bn": "নিয়ম "
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "bn": "বিধি "
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "bn": "আকার "
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "bn": "জুম সেটিংস "
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "bn": "জুম সর্বাধিক আকারের সহগ "
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "bn": "জুম মিনিটে আকারের সহগ "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "bn": "আকার প্রবর্তন ঘনিষ্ঠ "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "bn": "আকার ইন্টারপোলেশন এক্সপোনেন্ট ফাংশন। 1 এর মান একটি লিনিয়ার ইন্টারপোলেশন দেয়। "
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "bn": "জুম সর্বাধিক "
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "bn": "জুম মিনিট "
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "bn": "প্রতীক "
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "bn": "যদি 0 এর বেশি হয় তবে জুম মিনিটে লাইন এবং পয়েন্টগুলির জন্য আকারের গুণফল। "
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "bn": "যদি 0 এর চেয়ে বেশি হয় তবে লাইন এবং জুম সর্বাধিক পয়েন্টের জন্য আকারের সহগ। "
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "bn": "ডেটা দেখানোর জন্য সর্বনিম্ন জুম "
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "bn": "ডেটা প্রদর্শন করতে সর্বোচ্চ জুম "
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "bn": "মান "
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "bn": "থেকে"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "bn": "প্রতি"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "bn": "নিম্ন / উপরের সীমার জন্য সর্বনিম্ন / সর্বোচ্চ পরিসংখ্যান উপেক্ষা করুন"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "bn": "পরম নিম্ন / উচ্চ সীমার জন্য উৎস পরিসংখ্যান থেকে সর্বনিম্ন / সর্বোচ্চ উপেক্ষা করুন। সেই মানগুলি নির্ধারিত নিয়ম থেকে নেওয়া হবে।"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency",
+    "bn": "স্বচ্ছতা"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque",
+    "bn": "লাইনের স্বচ্ছতা। 0 = স্বচ্ছ, 1 = অস্বচ্ছ"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline",
+    "bn": "বহুভুজ রূপরেখা সক্ষম করুন"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary.",
+    "bn": "বহুভুজের সীমারেখার উপর জোর দিতে তার রূপরেখা।"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color.",
+    "bn": "স্বয়ংক্রিয় রঙ।"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule.",
+    "bn": "স্বয়ংক্রিয়ভাবে প্রতিটি নিয়মের রঙ অনুযায়ী একটি উপযুক্ত রঙ বরাদ্দ করুন।"
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color",
+    "bn": "বহুভুজ রূপরেখার রঙ"
   },
   {
     "id": "search_placeholder",

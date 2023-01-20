@@ -2535,51 +2535,6 @@
     "ru": "Установите стиль этого вида "
   },
   {
-    "id": "schema_style_title_legend",
-    "en": "Legend title",
-    "ru": "Название легенды "
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval",
-    "ru": "Включить верхнюю границу в интервал "
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "ru": "Если этот флажок установлен, интервалы будут включать верхний предел. Если он не определен, последняя граница будет максимальным значением. Если стиль создается с использованием автоматического стиля, этот параметр должен быть отмечен"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order",
-    "ru": "Обратный порядок отображения слоев "
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "ru": "Если этот флажок установлен, стек слоев будет перевернут: верхнее правило будет рисовать слой внизу стопки. "
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label",
-    "ru": "Показать символ с меткой "
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?",
-    "ru": "При использовании символов с точечными данными должен ли MapX добавлять вокруг них надписи? "
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend",
-    "ru": "Не отображать отсутствующие значения на карте или в легенде"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
-    "ru": "Если этот флажок установлен, объекты с отсутствующим значением или значением, определенным как таковое, не будут отображаться в слое на карте или в легенде."
-  },
-  {
     "id": "btn_opt_meta",
     "en": "Display metadata",
     "ru": "Показать метаданные "
@@ -3465,24 +3420,14 @@
     "ru": "Добавить этого пользователя MapX напрямую "
   },
   {
-    "id": "schema_class",
-    "en": "Class",
-    "ru": "Учебный класс "
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "ru": "Метаданные "
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values",
-    "ru": "Отсутствующие значения "
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color",
-    "ru": "Цвет "
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description",
-    "ru": "Описание "
+    "id": "schema_method",
+    "en": "Method",
+    "ru": "Метод "
   },
   {
     "id": "schema_item",
@@ -3495,129 +3440,9 @@
     "ru": "Ключ "
   },
   {
-    "id": "schema_style_label",
-    "en": "Label",
-    "ru": "Этикетка "
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule",
-    "ru": "Последнее правило "
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data",
-    "ru": "Метаданные "
-  },
-  {
-    "id": "schema_method",
-    "en": "Method",
-    "ru": "Метод "
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency",
-    "ru": "Прозрачность"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule",
-    "ru": "Правило "
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules",
-    "ru": "Правила "
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size",
-    "ru": "Размер "
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings",
-    "ru": "Настройки масштабирования "
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max",
-    "ru": "Коэффициент размера при максимальном увеличении "
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min",
-    "ru": "Коэффициент размера при увеличении мин. "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent",
-    "ru": "Показатель интерполяции размера "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "ru": "Функция экспоненты интерполяции размера. Значение 1 дает линейную интерполяцию. "
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max",
-    "ru": "Максимальное увеличение "
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min",
-    "ru": "Масштаб мин. "
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "ru": "Símbolo"
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "ru": "Если больше 0, коэффициент размера для линий и точек при увеличении мин. "
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "ru": "Если больше 0, коэффициент размера для линий и точек при увеличении макс. "
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data",
-    "ru": "Минимальный масштаб для отображения данных "
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data",
-    "ru": "Максимальный масштаб для отображения данных "
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value",
-    "ru": "Ценить "
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From",
-    "ru": "Из"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To",
-    "ru": "К"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds",
-    "ru": "Игнорировать минимальную / максимальную статистику для нижней / верхней границы"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
-    "ru": "Игнорировать мин. / Макс. Из исходной статистики для абсолютных нижних / верхних границ. Эти значения будут взяты из набора правил."
+    "id": "schema_class",
+    "en": "Class",
+    "ru": "Учебный класс "
   },
   {
     "id": "self",
@@ -7583,6 +7408,216 @@
     "id": "schema_story_class_cube-face",
     "en": "Face of a cube",
     "ru": "Лицо куба"
+  },
+  {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "ru": "Название легенды "
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "ru": "Включить верхнюю границу в интервал "
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "ru": "Если этот флажок установлен, интервалы будут включать верхний предел. Если он не определен, последняя граница будет максимальным значением. Если стиль создается с использованием автоматического стиля, этот параметр должен быть отмечен"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "ru": "Обратный порядок отображения слоев "
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "ru": "Если этот флажок установлен, стек слоев будет перевернут: верхнее правило будет рисовать слой внизу стопки. "
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "ru": "Показать символ с меткой "
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "ru": "При использовании символов с точечными данными должен ли MapX добавлять вокруг них надписи? "
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend",
+    "ru": "Не отображать отсутствующие значения на карте или в легенде"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "ru": "Если этот флажок установлен, объекты с отсутствующим значением или значением, определенным как таковое, не будут отображаться в слое на карте или в легенде."
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "ru": "Отсутствующие значения "
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "ru": "Цвет "
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "ru": "Описание "
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "ru": "Этикетка "
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "ru": "Последнее правило "
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency",
+    "ru": "Прозрачность"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "ru": "Правило "
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "ru": "Правила "
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "ru": "Размер "
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "ru": "Настройки масштабирования "
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "ru": "Коэффициент размера при максимальном увеличении "
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "ru": "Коэффициент размера при увеличении мин. "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "ru": "Показатель интерполяции размера "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "ru": "Функция экспоненты интерполяции размера. Значение 1 дает линейную интерполяцию. "
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "ru": "Максимальное увеличение "
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "ru": "Масштаб мин. "
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "ru": "Símbolo"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "ru": "Если больше 0, коэффициент размера для линий и точек при увеличении мин. "
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "ru": "Если больше 0, коэффициент размера для линий и точек при увеличении макс. "
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "ru": "Минимальный масштаб для отображения данных "
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "ru": "Максимальный масштаб для отображения данных "
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "ru": "Ценить "
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "ru": "Из"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "ru": "К"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "ru": "Игнорировать минимальную / максимальную статистику для нижней / верхней границы"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "ru": "Игнорировать мин. / Макс. Из исходной статистики для абсолютных нижних / верхних границ. Эти значения будут взяты из набора правил."
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency",
+    "ru": "Прозрачность"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque",
+    "ru": "Прозрачность линии. 0 = прозрачный, 1 = непрозрачный"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline",
+    "ru": "Включить контур многоугольника"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary.",
+    "ru": "Обведите многоугольник, чтобы подчеркнуть его границу."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color.",
+    "ru": "Авто цвет."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule.",
+    "ru": "Автоматически назначать подходящий цвет в соответствии с цветом каждого правила."
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color",
+    "ru": "Цвет контура многоугольника"
   },
   {
     "id": "search_placeholder",

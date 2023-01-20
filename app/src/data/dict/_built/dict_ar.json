@@ -2535,51 +2535,6 @@
     "ar": "اضبط أسلوب هذا العرض "
   },
   {
-    "id": "schema_style_title_legend",
-    "en": "Legend title",
-    "ar": "عنوان وسيلة الإيضاح "
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval",
-    "ar": "تضمين الحد الأعلى في الفاصل الزمني "
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "ar": "إذا تم تحديده ، فستتضمن الفواصل الزمنية الحد الأعلى. إذا لم يتم تعريفه ، فسيكون الحد الأخير هو الحد الأقصى للقيمة. إذا تم إنشاء النمط باستخدام النمط التلقائي ، فيجب تحديد هذا الخيار"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order",
-    "ar": "عكس ترتيب الطبقات المعروضة "
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "ar": "إذا تم تحديده ، سيتم عكس مكدس الطبقة: سترسم القاعدة العليا طبقة في أسفل الحزمة "
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label",
-    "ar": "إظهار الرمز مع التسمية "
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?",
-    "ar": "في حالة استخدام الرموز مع بيانات النقاط ، هل يجب على MapX إضافة ملصقات حولها؟ "
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend",
-    "ar": "لا تعرض القيم المفقودة على الخريطة أو في وسيلة الإيضاح"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
-    "ar": "إذا تم تحديده ، فلن يتم عرض المعالم ذات القيمة المفقودة - أو القيمة المحددة على هذا النحو - في طبقة على الخريطة أو في وسيلة الإيضاح"
-  },
-  {
     "id": "btn_opt_meta",
     "en": "Display metadata",
     "ar": "عرض البيانات الوصفية "
@@ -3465,24 +3420,14 @@
     "ar": "أضف مستخدم MapX هذا مباشرة "
   },
   {
-    "id": "schema_class",
-    "en": "Class",
-    "ar": "فصل "
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "ar": "البيانات الوصفية "
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values",
-    "ar": "قيم مفقودة "
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color",
-    "ar": "اللون "
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description",
-    "ar": "وصف "
+    "id": "schema_method",
+    "en": "Method",
+    "ar": "طريقة "
   },
   {
     "id": "schema_item",
@@ -3495,129 +3440,9 @@
     "ar": "مفتاح "
   },
   {
-    "id": "schema_style_label",
-    "en": "Label",
-    "ar": "ملصق "
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule",
-    "ar": "آخر حكم "
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data",
-    "ar": "البيانات الوصفية "
-  },
-  {
-    "id": "schema_method",
-    "en": "Method",
-    "ar": "طريقة "
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency",
-    "ar": "الشفافية"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule",
-    "ar": "القاعدة "
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules",
-    "ar": "قواعد "
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size",
-    "ar": "مقاس "
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings",
-    "ar": "إعدادات التكبير "
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max",
-    "ar": "معامل الحجم عند التكبير كحد أقصى "
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min",
-    "ar": "معامل الحجم عند التكبير دقيقة "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent",
-    "ar": "حجم الاستيفاء الأس "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "ar": "حجم دالة الأس الاستيفاء. تعطي القيمة 1 استيفاءً خطيًا. "
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max",
-    "ar": "تكبير ماكس "
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min",
-    "ar": "تكبير دقيقة "
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "ar": "رمز "
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "ar": "إذا كان أكبر من 0 ، معامل حجم الخطوط والنقاط عند التكبير دقيقة. "
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "ar": "إذا كان أكبر من 0 ، فإن معامل حجم الخطوط والنقاط عند التكبير كحد أقصى. "
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data",
-    "ar": "الحد الأدنى للتكبير لإظهار البيانات "
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data",
-    "ar": "أقصى تكبير لعرض البيانات "
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value",
-    "ar": "قيمة "
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From",
-    "ar": "من عند"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To",
-    "ar": "إلى"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds",
-    "ar": "تجاهل إحصائيات الحد الأدنى / الأقصى للحدود الدنيا / العليا"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
-    "ar": "تجاهل الحد الأدنى / الحد الأقصى من إحصائيات المصدر للحدود الدنيا / العلوية المطلقة. سيتم أخذ هذه القيم من مجموعة القواعد."
+    "id": "schema_class",
+    "en": "Class",
+    "ar": "فصل "
   },
   {
     "id": "self",
@@ -7583,6 +7408,216 @@
     "id": "schema_story_class_cube-face",
     "en": "Face of a cube",
     "ar": "وجه مكعب"
+  },
+  {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "ar": "عنوان وسيلة الإيضاح "
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "ar": "تضمين الحد الأعلى في الفاصل الزمني "
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "ar": "إذا تم تحديده ، فستتضمن الفواصل الزمنية الحد الأعلى. إذا لم يتم تعريفه ، فسيكون الحد الأخير هو الحد الأقصى للقيمة. إذا تم إنشاء النمط باستخدام النمط التلقائي ، فيجب تحديد هذا الخيار"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "ar": "عكس ترتيب الطبقات المعروضة "
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "ar": "إذا تم تحديده ، سيتم عكس مكدس الطبقة: سترسم القاعدة العليا طبقة في أسفل الحزمة "
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "ar": "إظهار الرمز مع التسمية "
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "ar": "في حالة استخدام الرموز مع بيانات النقاط ، هل يجب على MapX إضافة ملصقات حولها؟ "
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend",
+    "ar": "لا تعرض القيم المفقودة على الخريطة أو في وسيلة الإيضاح"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "ar": "إذا تم تحديده ، فلن يتم عرض المعالم ذات القيمة المفقودة - أو القيمة المحددة على هذا النحو - في طبقة على الخريطة أو في وسيلة الإيضاح"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "ar": "قيم مفقودة "
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "ar": "اللون "
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "ar": "وصف "
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "ar": "ملصق "
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "ar": "آخر حكم "
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency",
+    "ar": "الشفافية"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "ar": "القاعدة "
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "ar": "قواعد "
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "ar": "مقاس "
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "ar": "إعدادات التكبير "
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "ar": "معامل الحجم عند التكبير كحد أقصى "
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "ar": "معامل الحجم عند التكبير دقيقة "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "ar": "حجم الاستيفاء الأس "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "ar": "حجم دالة الأس الاستيفاء. تعطي القيمة 1 استيفاءً خطيًا. "
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "ar": "تكبير ماكس "
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "ar": "تكبير دقيقة "
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "ar": "رمز "
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "ar": "إذا كان أكبر من 0 ، معامل حجم الخطوط والنقاط عند التكبير دقيقة. "
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "ar": "إذا كان أكبر من 0 ، فإن معامل حجم الخطوط والنقاط عند التكبير كحد أقصى. "
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "ar": "الحد الأدنى للتكبير لإظهار البيانات "
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "ar": "أقصى تكبير لعرض البيانات "
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "ar": "قيمة "
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "ar": "من عند"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "ar": "إلى"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "ar": "تجاهل إحصائيات الحد الأدنى / الأقصى للحدود الدنيا / العليا"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "ar": "تجاهل الحد الأدنى / الحد الأقصى من إحصائيات المصدر للحدود الدنيا / العلوية المطلقة. سيتم أخذ هذه القيم من مجموعة القواعد."
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency",
+    "ar": "الشفافية"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque",
+    "ar": "شفافية الخط. 0 = شفاف ، 1 = معتم"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline",
+    "ar": "تمكين مخطط المضلع"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary.",
+    "ar": "حدد الخطوط العريضة للمضلع للتأكيد على حدوده."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color.",
+    "ar": "لون تلقائي."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule.",
+    "ar": "قم بتعيين لون مناسب تلقائيًا وفقًا للون كل قاعدة."
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color",
+    "ar": "لون مخطط مضلع"
   },
   {
     "id": "search_placeholder",

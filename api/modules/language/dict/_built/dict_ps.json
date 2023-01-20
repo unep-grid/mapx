@@ -2535,51 +2535,6 @@
     "ps": "ددې لیدنې شکل تنظیم کړئ"
   },
   {
-    "id": "schema_style_title_legend",
-    "en": "Legend title",
-    "ps": "د لقب سرلیک "
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval",
-    "ps": "په وقفه کې د پورتنۍ حد شامل کړئ "
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "ps": "که چک شوی ، وقفو کې به لوړ حد شامل وي. که دا تعریف شوی نه وي ، وروستی حد به اعظمي ارزښت وي. که سټایل د آټو سټایل په کارولو سره جوړ شوی وي ، دا اختیار باید چیک شي"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order",
-    "ps": "بيرته ښودل شوي پوړونو ترتيب "
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "ps": "که چک شوی وي ، د پرت پوړ به وګرځول شي: پورته قاعده به د زېرمې په سطح کې یو پرت راوباسي "
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label",
-    "ps": "نښان د لیبل سره وښایاست "
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?",
-    "ps": "که د ټکي معلوماتو سره سمبولونه وکاروئ ، نو میپ ایکس باید د دې شاوخوا شاوخوا لیبلونه اضافه کړي؟ "
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend",
-    "ps": "په نقشه یا افسانه کې ورک شوي ارزښتونه مه ښکاره کوئ"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
-    "ps": "که چک شوی وي ، د ورک شوي ارزښت سره ب featuresې - یا یو ارزښت چې ورته ورته تعریف شوی - به په نقشه یا لیجنډ کې په یوه پرت کې ونه ښودل شي"
-  },
-  {
     "id": "btn_opt_meta",
     "en": "Display metadata",
     "ps": "میتا ډیټا ښکاره کړئ"
@@ -3465,24 +3420,14 @@
     "ps": "د دې میپ ایکس کارن په مستقیم ډول اضافه کړئ "
   },
   {
-    "id": "schema_class",
-    "en": "Class",
-    "ps": "صنف"
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "ps": "میټا ډيټآ"
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values",
-    "ps": "ورک شوي ارزښتونه "
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color",
-    "ps": "رنګ"
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description",
-    "ps": "تفصیل"
+    "id": "schema_method",
+    "en": "Method",
+    "ps": "میتود"
   },
   {
     "id": "schema_item",
@@ -3495,129 +3440,9 @@
     "ps": "کلۍ"
   },
   {
-    "id": "schema_style_label",
-    "en": "Label",
-    "ps": "نښه"
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule",
-    "ps": "وروستی قانون"
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data",
-    "ps": "میټا ډيټآ"
-  },
-  {
-    "id": "schema_method",
-    "en": "Method",
-    "ps": "میتود"
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency",
-    "ps": "روڼتیا"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule",
-    "ps": "قانون"
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules",
-    "ps": "قوانین"
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size",
-    "ps": "اندازه"
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings",
-    "ps": "د زوم تنظیمات "
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max",
-    "ps": "په زوم اعظمي د اندازې کوفيفي "
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min",
-    "ps": "په زوم منټ کې د اندازې کوفيئیر "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent",
-    "ps": "د اندازې جریان توکی "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "ps": "د اندازې انډول کیښودونکی فعالیت. د 1 ارزښت یو خطي انګیرنه ورکوي. "
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max",
-    "ps": "زوم اعظمي "
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min",
-    "ps": "زوم منټ "
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "ps": "سمبول"
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "ps": "که له 0 څخه ډیر وي ، د زوم منټ کې د کرښو او نقطو لپاره د اندازې کوفیفین. "
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "ps": "که له 0 څخه ډیر وي ، د زوم په کچه د لینونو او ټکو لپاره د اندازې کوفیفین. "
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data",
-    "ps": "د معلوماتو ښودلو لپاره لږترلږه زوم "
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data",
-    "ps": "د ډیټا ښودلو لپاره اعظمي زوم "
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value",
-    "ps": "ارزښت"
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From",
-    "ps": "له"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To",
-    "ps": "ته"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds",
-    "ps": "د ټیټ / لوړ حدونو لپاره دقیق / اعظمي احصایې له پامه وغورځوئ"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
-    "ps": "د مطلق ټیټ / پورتني حدونو لپاره د سرچینې احصایو څخه دقیق / اعظمي له پامه غورځول. دا ارزښتونه به د ټاکل شوي مقرراتو څخه اخیستل کیږي."
+    "id": "schema_class",
+    "en": "Class",
+    "ps": "صنف"
   },
   {
     "id": "self",
@@ -7583,6 +7408,216 @@
     "id": "schema_story_class_cube-face",
     "en": "Face of a cube",
     "ps": "د کیوب مخ"
+  },
+  {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "ps": "د لقب سرلیک "
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "ps": "په وقفه کې د پورتنۍ حد شامل کړئ "
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "ps": "که چک شوی ، وقفو کې به لوړ حد شامل وي. که دا تعریف شوی نه وي ، وروستی حد به اعظمي ارزښت وي. که سټایل د آټو سټایل په کارولو سره جوړ شوی وي ، دا اختیار باید چیک شي"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "ps": "بيرته ښودل شوي پوړونو ترتيب "
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "ps": "که چک شوی وي ، د پرت پوړ به وګرځول شي: پورته قاعده به د زېرمې په سطح کې یو پرت راوباسي "
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "ps": "نښان د لیبل سره وښایاست "
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "ps": "که د ټکي معلوماتو سره سمبولونه وکاروئ ، نو میپ ایکس باید د دې شاوخوا شاوخوا لیبلونه اضافه کړي؟ "
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend",
+    "ps": "په نقشه یا افسانه کې ورک شوي ارزښتونه مه ښکاره کوئ"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "ps": "که چک شوی وي ، د ورک شوي ارزښت سره ب featuresې - یا یو ارزښت چې ورته ورته تعریف شوی - به په نقشه یا لیجنډ کې په یوه پرت کې ونه ښودل شي"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "ps": "ورک شوي ارزښتونه "
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "ps": "رنګ"
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "ps": "تفصیل"
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "ps": "نښه"
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "ps": "وروستی قانون"
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency",
+    "ps": "روڼتیا"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "ps": "قانون"
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "ps": "قوانین"
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "ps": "اندازه"
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "ps": "د زوم تنظیمات "
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "ps": "په زوم اعظمي د اندازې کوفيفي "
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "ps": "په زوم منټ کې د اندازې کوفيئیر "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "ps": "د اندازې جریان توکی "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "ps": "د اندازې انډول کیښودونکی فعالیت. د 1 ارزښت یو خطي انګیرنه ورکوي. "
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "ps": "زوم اعظمي "
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "ps": "زوم منټ "
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "ps": "سمبول"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "ps": "که له 0 څخه ډیر وي ، د زوم منټ کې د کرښو او نقطو لپاره د اندازې کوفیفین. "
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "ps": "که له 0 څخه ډیر وي ، د زوم په کچه د لینونو او ټکو لپاره د اندازې کوفیفین. "
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "ps": "د معلوماتو ښودلو لپاره لږترلږه زوم "
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "ps": "د ډیټا ښودلو لپاره اعظمي زوم "
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "ps": "ارزښت"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "ps": "له"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "ps": "ته"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "ps": "د ټیټ / لوړ حدونو لپاره دقیق / اعظمي احصایې له پامه وغورځوئ"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "ps": "د مطلق ټیټ / پورتني حدونو لپاره د سرچینې احصایو څخه دقیق / اعظمي له پامه غورځول. دا ارزښتونه به د ټاکل شوي مقرراتو څخه اخیستل کیږي."
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency",
+    "ps": "روڼتیا"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque",
+    "ps": "د کرښې روڼتیا. 0 = شفاف، 1 = ناپاک"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline",
+    "ps": "د پولیګون خاکه فعاله کړئ"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary.",
+    "ps": "د پولیګون په نښه کولو لپاره د هغې په حد ټینګار وکړئ."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color.",
+    "ps": "اتومات رنګ."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule.",
+    "ps": "په اتوماتيک ډول د هرې قاعدې رنګ سره سم مناسب رنګ ورکړئ."
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color",
+    "ps": "د پولیګون خاکه رنګ"
   },
   {
     "id": "search_placeholder",

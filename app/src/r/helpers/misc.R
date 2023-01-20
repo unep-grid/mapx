@@ -276,7 +276,7 @@ mxSchemaMultiLingualInput <- function(
   list(
     propertyOrder = propOrder,
     title = paste(titlePrefix, d(keyTitle, lang = language, dict = dict, web = F)),
-    type = "object",
+    #type = "object",
     options = list(collapsed = collapsed),
     properties = prop
   )

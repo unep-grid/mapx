@@ -2535,51 +2535,6 @@
     "es": "Configurar el estilo de la vista"
   },
   {
-    "id": "schema_style_title_legend",
-    "en": "Legend title",
-    "es": "Título de la leyenda"
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval",
-    "es": "Incluir límite superior en el intervalo "
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "es": "Si está marcado, los intervalos incluirán el límite superior. Si no está definido, el último límite será el valor máximo. Si el estilo se construye usando el estilo automático, esta opción debe estar marcada"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order",
-    "es": "Invertir el orden de las capas mostradas"
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "es": "Si marcado, la pila de capas se invertirá: la regla superior dibujará una capa en la parte inferior de la pila"
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label",
-    "es": "Mostrar símbolo con etiqueta "
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?",
-    "es": "Si usa símbolos con datos de puntos, ¿MapX debería agregar etiquetas a su alrededor? "
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend",
-    "es": "No muestre los valores faltantes en el mapa o en la leyenda"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
-    "es": "Si está marcada, las entidades con un valor faltante, o un valor definido como tal, no se mostrarán en una capa en el mapa o en la leyenda."
-  },
-  {
     "id": "btn_opt_meta",
     "en": "Display metadata",
     "es": "Mostrar metadatos"
@@ -3465,24 +3420,14 @@
     "es": "Agregar este usuario de MapX directamente "
   },
   {
-    "id": "schema_class",
-    "en": "Class",
-    "es": "Clase"
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "es": "Metadatos"
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values",
-    "es": "Valores faltantes"
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color",
-    "es": "Color"
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description",
-    "es": "Descripción"
+    "id": "schema_method",
+    "en": "Method",
+    "es": "Método"
   },
   {
     "id": "schema_item",
@@ -3495,129 +3440,9 @@
     "es": "Llave"
   },
   {
-    "id": "schema_style_label",
-    "en": "Label",
-    "es": "Etiqueta"
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule",
-    "es": "Última regla"
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data",
-    "es": "Metadatos"
-  },
-  {
-    "id": "schema_method",
-    "en": "Method",
-    "es": "Método"
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency",
-    "es": "Transparencia"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule",
-    "es": "Regla"
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules",
-    "es": "Reglas"
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size",
-    "es": "Tamaño"
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings",
-    "es": "Configuración de zoom"
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max",
-    "es": "Coeficiente del tamaño del zoom máximo"
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min",
-    "es": "Coeficiente del tamaño del zoom mínimo"
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent",
-    "es": "Exponente de interpolación de tamaño"
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "es": "Función de exponente de interpolación de tamaño. Un valor de 1 da una interpolación lineal."
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max",
-    "es": "Zoom máximo"
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min",
-    "es": "Zoom mínimo"
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "es": "Símbolo"
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "es": "Si mayor que 0, el coeficiente del tamaño de las líneas y puntos en zoom mínimo"
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "es": "Si mayor que 0, el coeficiente del tamaño de las líneas y puntos en zoom máximo"
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data",
-    "es": "Zoom mínimo para mostrar los datos"
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data",
-    "es": "Zoom máximo para mostrar los datos"
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value",
-    "es": "Valor"
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From",
-    "es": "De"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To",
-    "es": "Para"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds",
-    "es": "Ignorar las estadísticas mínimas / máximas para los límites inferior / superior"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
-    "es": "Ignore el mínimo / máximo de las estadísticas de origen para los límites inferiores / superiores absolutos. Estos valores se tomarán del conjunto de reglas."
+    "id": "schema_class",
+    "en": "Class",
+    "es": "Clase"
   },
   {
     "id": "self",
@@ -7583,6 +7408,216 @@
     "id": "schema_story_class_cube-face",
     "en": "Face of a cube",
     "es": "cara de un cubo"
+  },
+  {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "es": "Título de la leyenda"
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "es": "Incluir límite superior en el intervalo "
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "es": "Si está marcado, los intervalos incluirán el límite superior. Si no está definido, el último límite será el valor máximo. Si el estilo se construye usando el estilo automático, esta opción debe estar marcada"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "es": "Invertir el orden de las capas mostradas"
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "es": "Si marcado, la pila de capas se invertirá: la regla superior dibujará una capa en la parte inferior de la pila"
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "es": "Mostrar símbolo con etiqueta "
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "es": "Si usa símbolos con datos de puntos, ¿MapX debería agregar etiquetas a su alrededor? "
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend",
+    "es": "No muestre los valores faltantes en el mapa o en la leyenda"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "es": "Si está marcada, las entidades con un valor faltante, o un valor definido como tal, no se mostrarán en una capa en el mapa o en la leyenda."
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "es": "Valores faltantes"
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "es": "Color"
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "es": "Descripción"
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "es": "Etiqueta"
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "es": "Última regla"
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency",
+    "es": "Transparencia"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "es": "Regla"
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "es": "Reglas"
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "es": "Tamaño"
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "es": "Configuración de zoom"
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "es": "Coeficiente del tamaño del zoom máximo"
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "es": "Coeficiente del tamaño del zoom mínimo"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "es": "Exponente de interpolación de tamaño"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "es": "Función de exponente de interpolación de tamaño. Un valor de 1 da una interpolación lineal."
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "es": "Zoom máximo"
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "es": "Zoom mínimo"
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "es": "Símbolo"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "es": "Si mayor que 0, el coeficiente del tamaño de las líneas y puntos en zoom mínimo"
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "es": "Si mayor que 0, el coeficiente del tamaño de las líneas y puntos en zoom máximo"
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "es": "Zoom mínimo para mostrar los datos"
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "es": "Zoom máximo para mostrar los datos"
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "es": "Valor"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "es": "De"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "es": "Para"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "es": "Ignorar las estadísticas mínimas / máximas para los límites inferior / superior"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "es": "Ignore el mínimo / máximo de las estadísticas de origen para los límites inferiores / superiores absolutos. Estos valores se tomarán del conjunto de reglas."
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency",
+    "es": "Transparencia"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque",
+    "es": "Transparencia de línea. 0 = transparente, 1 = opaco"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline",
+    "es": "Habilitar contorno de polígono"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary.",
+    "es": "Delinea el polígono para enfatizar su límite."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color.",
+    "es": "color automático."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule.",
+    "es": "Asigna automáticamente un color adecuado según el color de cada regla."
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color",
+    "es": "Color del contorno del polígono"
   },
   {
     "id": "search_placeholder",
