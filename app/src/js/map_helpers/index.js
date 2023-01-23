@@ -9,6 +9,7 @@ import { el, elSpanTranslate } from "./../el_mapx/index.js";
 import { MainPanel } from "./../panel_main";
 import { MapInfoBox } from "./../map_info_box";
 import { Search } from "./../search";
+import { downloadJSON } from "../download/index.js";
 import {
   MapxLogo,
   MapControlLiveCoord,
@@ -194,9 +195,7 @@ export async function downloadViewGeoJSON(opt) {
     filename = `${view.id}.geojson`;
   }
   if (opt.mode === "file") {
-    const download = await moduleLoad("downloadjs");
-    const data = JSON.stringify(geojson);
-    await download(data, filename);
+    await downloadJSON(geojson, filename);
   }
   if (opt.mode === "data") {
     opt.data = geojson;

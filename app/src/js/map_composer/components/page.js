@@ -1,7 +1,7 @@
 import { el } from "../../el/src/index.js";
 import { Box } from "./box.js";
 import { Item } from "./item.js";
-import download from "downloadjs";
+import { downloadCanvas } from "./../../download";
 import html2canvas from "html2canvas";
 
 class Page extends Box {
@@ -60,8 +60,7 @@ class Page extends Box {
       const canvas = await html2canvas(elPrint, {
         logging: false,
       });
-      const data = canvas.toDataURL("image/png");
-      download(data, "map-composer-export.png", "image/png");
+      await downloadCanvas(canvas, "map-composer-export.png", "image/png");
       await mc.setMode(curMode);
       await mc.setDpi(curDpi);
       page.setScale(currentScale);
