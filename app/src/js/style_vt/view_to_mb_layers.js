@@ -87,7 +87,7 @@ export async function getViewMapboxLayers(v, opt) {
    * Init null value
    */
   let nullValue = "";
-  if (isNotEmpty(ruleNulls.value)) {
+  if (!hideNulls && isNotEmpty(ruleNulls.value)) {
     nullValue = ruleNulls.value;
   }
 
@@ -132,18 +132,19 @@ export async function getViewMapboxLayers(v, opt) {
   const filterExcludeNull = [];
 
   for (const op of ["==", "!="]) {
+    const filterNullDefault = [
+      "any",
+      [op, ["get", attr], ""],
+      [op, ["get", attr], null],
+    ];
     const f = op === "==" ? filterIncludeNull : filterExcludeNull;
-    if (isNumeric) {
-      if (isEmpty(nullValue)) {
-        f.push(["any", [op, ["get", attr], ""], [op, ["get", attr], null]]);
-      } else {
-        f.push([op, ["get", attr], nullValue * 1]);
-      }
+    if (isEmpty(nullValue) || nullValue === false) {
+      f.push(filterNullDefault);
     } else {
-      if (isNotEmpty(nullValue) || nullValue === false) {
-        f.push([op, ["get", attr], nullValue]);
+      if (isNumeric) {
+        f.push([op, ["get", attr], nullValue * 1]);
       } else {
-        f.push(["any", [op, ["get", attr], ""], [op, ["get", attr], null]]);
+        f.push([op, ["get", attr], nullValue]);
       }
     }
   }
@@ -268,12 +269,10 @@ export async function getViewMapboxLayers(v, opt) {
 
     const filter = ["all"];
 
-    if (isNumeric) {
-      /*
-       * If null value, eg. 0 is included : [=>-10,==0 ,<10]
-       */
-      filter.push(...filterExcludeNull);
-    }
+    /**
+     * Exclude null
+     */
+    filter.push(...filterExcludeNull);
 
     if (hasSymbol) {
       /**
@@ -335,12 +334,11 @@ export async function getViewMapboxLayers(v, opt) {
     rules.forEach((rule, i) => {
       const filter = ["all"];
 
-      if (isNumeric) {
-        /*
-         * If null value, eg. 0 is included : [>=-10,==0,<10]
-         */
-        filter.push(...filterExcludeNull);
-      }
+      /**
+       * Exclude null
+       */
+      filter.push(...filterExcludeNull);
+
       /*
        * Set logic for rules
        */
