@@ -136,10 +136,8 @@ export function makeSimpleLayer(opt) {
         const contrastDark = chroma.contrast(colA, colDark);
         const contrastClear = chroma.contrast(colA, colClear);
         if (contrastDark > contrastClear) {
-          console.log("darken")
           colB = colDark;
         } else {
-          console.log("brighten")
           colB = colClear;
         }
       }
