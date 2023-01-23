@@ -2,7 +2,6 @@ import { isArray, isString, isFunction } from "./../is_test/index.js";
 
 const modules = {
   csvjson: loadCsvJSON,
-  "json-to-csv": loadCsvStringify,
   topojson: loadTopoJSON,
   d3: loadD3,
   "d3-geo": loadD3Geo,
@@ -13,7 +12,6 @@ const modules = {
   selectize: loadSelectize,
   pickolor: loadPickolor,
   nouislider: loadNoUiSlider,
-  downloadjs: loadDownloadjs,
   "wms-capabilities": loadWmsCapabilities,
   "mx-drag-drop-worker": loadDragDropWorker,
   handsontable: loadHandsontable,
@@ -99,10 +97,7 @@ async function loadTurfBbox() {
   const m = await import("@turf/bbox");
   return m.default;
 }
-async function loadDownloadjs() {
-  const m = await import("downloadjs");
-  return m.default;
-}
+
 
 async function loadAceEditor() {
   await import("ace-builds");
@@ -121,11 +116,6 @@ async function loadWmsCapabilities() {
 
 async function loadCsvJSON() {
   return import("csvjson");
-}
-
-async function loadCsvStringify() {
-  const m = await import("csv-stringify");
-  return m.default;
 }
 
 async function loadPickolor() {

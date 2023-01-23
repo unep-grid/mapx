@@ -20,6 +20,7 @@ import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata.js";
 import { moduleLoad } from "./../modules_loader_async";
 import { getView, resetViewStyle, getViewTitle } from "./../map_helpers";
 import { isSourceId, isView, isArray, makeSafeName } from "./../is_test";
+import { downloadCSV } from "../download/index.js";
 
 export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({}, opt);
@@ -279,29 +280,9 @@ export async function showSourceTableAttributeModal(opt) {
       if (!allowDownload) {
         return;
       }
-      const stringify = await moduleLoad("json-to-csv");
-      const download = await moduleLoad("downloadjs");
-      const data = hot.getData();
+      const data = hot.getSourceData();
       const headers = hot.getColHeader();
-
-      const csv = await new Promise((resolve, reject) => {
-        stringify(
-          data,
-          {
-            header: true,
-            columns: headers,
-            encoding: "utf8",
-          },
-          (err, data) => {
-            if (err) {
-              return reject(err);
-            }
-            return resolve(data);
-          }
-        );
-      });
-
-      download(csv, filename || "mx_attributes.csv");
+      await downloadCSV(data, filename || "mx_attributes.csv", headers);
     } catch (e) {
       console.error(e);
     }
