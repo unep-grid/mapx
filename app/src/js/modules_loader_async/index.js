@@ -2,6 +2,8 @@ import { isArray, isString, isFunction } from "./../is_test/index.js";
 
 const modules = {
   csvjson: loadCsvJSON,
+  "csv-stringify": loadCsvStringify,
+  "csv-parse": loadCsvParse,
   topojson: loadTopoJSON,
   d3: loadD3,
   "d3-geo": loadD3Geo,
@@ -98,7 +100,6 @@ async function loadTurfBbox() {
   return m.default;
 }
 
-
 async function loadAceEditor() {
   await import("ace-builds");
   await import("ace-builds/webpack-resolver.js");
@@ -115,7 +116,19 @@ async function loadWmsCapabilities() {
 }
 
 async function loadCsvJSON() {
+  /**
+   * TODO: deprecation warning ?
+   * use csv-stringify and
+   * csv-parse instead
+   */
   return import("csvjson");
+}
+
+async function loadCsvStringify() {
+  return import("csv-stringify");
+}
+async function loadCsvParse() {
+  return import("csv-parse");
 }
 
 async function loadPickolor() {

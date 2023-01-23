@@ -1,15 +1,20 @@
-self.onmessage = function (e) {
-  let csv = "";
-  const data = e.data?.table;
-  const keys = e.data?.keys || Object.keys(data[0]);
+import { stringify } from "csv";
 
-  csv += keys.join(",") + "\n";
-  for (let i = 0; i < data.length; i++) {
-    let rowString = "";
-    for (let j = 0; j < keys.length; j++) {
-      rowString += data[i][keys[j]] + ",";
+self.onmessage = function (e) {
+  const table = e.data?.table;
+  const headers = e.data?.headers;
+
+  stringify(
+    table,
+    {
+      header: true,
+      columns: headers,
+    },
+    (err, csv) => {
+      if (err) {
+        throw new Error(err);
+      }
+      self.postMessage(csv);
     }
-    csv += rowString.slice(0, -1) + "\n";
-  }
-  self.postMessage(csv);
+  );
 };

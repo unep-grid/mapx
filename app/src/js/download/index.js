@@ -1,5 +1,5 @@
 import { el } from "./../el/src/index.js";
-import { isEmpty, isJSON, isTable } from "./../is_test/index.js";
+import { isEmpty, isJSON, isString } from "./../is_test/index.js";
 
 /**
  * Download JSON data
@@ -15,12 +15,12 @@ export async function downloadJSON(data, filename) {
 
 /**
  * Download CSV
- * @param {String|Array} data CSV string or array of object (table)
+ * @param {String|Array} data CSV string or nested array
  * @param {String} filename File name
  * @return {Promise<Boolean>}
  */
 export async function downloadCSV(data, filename, headers) {
-  const text = isTable(data) ? await tableToCsv(data, headers) : data;
+  const text = isString(data) ? data : await tableToCsv(data, headers);
   const blob = new Blob([text], { type: "text/csv" });
   return downloadBlob(blob, filename);
 }
@@ -93,10 +93,13 @@ export function downloadBlob(blob, filename) {
 }
 
 async function tableToCsv(table, headers) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const CSVWorker = require("./array_to_csv.mxworker.js");
     const worker = new CSVWorker();
     worker.onmessage = (e) => {
+      if (isEmpty(e.data)) {
+        return reject("tableToCsv : empty");
+      }
       resolve(e.data);
     };
     worker.postMessage({
