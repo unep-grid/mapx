@@ -280,7 +280,7 @@ export async function showSourceTableAttributeModal(opt) {
       if (!allowDownload) {
         return;
       }
-      const data = hot.getSourceData();
+      const data = hot.getData();
       const headers = hot.getColHeader();
       await downloadCSV(data, filename || "mx_attributes.csv", headers);
     } catch (e) {
