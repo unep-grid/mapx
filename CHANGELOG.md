@@ -1,3 +1,12 @@
+  - [1.10.0-alpha.11](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.11) 
+
+    - APP
+        - Replaced downloadjs module by modern modules : impacts download geojson, csv, canvas (mapcomposer), etc..
+        - Use csv stringifier again + update version
+        - Style : Should solve duplication of layers ( null + rules, if null value redifined in rules )
+    - API
+        - Fixed download links not working in Firefox (in dictionnary/templates)
+
   - [1.10.0-alpha.10](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.10) 
     
     - APP
