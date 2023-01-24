@@ -57,8 +57,10 @@ export async function handlerTile(req, res) {
      * TODO: to be solved
      * buffer = PostGIS as_mvtgeom buffer + buffer for cropping tile
      * 0 : all tiles rendered, but tiles boundaries visibles
-     * > 0 : inconsistant behaviour : some tiles missing
-     * 256 : no tiles boundaries visible. Good, but tiles missing
+     * > 0 : inconsistant behaviour : some tiles missing:
+     *  - 1, 64, 256 : 
+     *      - error : geometry exceeds allowed extent, reduce your vector tile buffer size
+     *      - no tiles boundaries visible. Good, but tiles missing
      */
     data.buffer = 0;
     data.useMask = isSourceId(data?.mask);
