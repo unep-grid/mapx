@@ -95,7 +95,7 @@ export async function ioAddViewVt(socket, config, view_options) {
      *  a) category with 3 - 10 distinct values
      *  b) any numeric type (number), assumed to be continous
      *  c) first category
-     *  e.g.
+     *  e.g. result -> console.table(table):
      * < ┌─────────┬──────────────────┬────────────────────────────┬───────┐
      * < │ (index) │   column_name    │        column_type         │ score │
      * < ├─────────┼──────────────────┼────────────────────────────┼───────┤
@@ -145,7 +145,7 @@ export async function ioAddViewVt(socket, config, view_options) {
         } else {
           // Estimate how much each bins, based on quantiles, are different
           // the idea is to set a high score if the diff vary greatly
-          // TODO: maybe create a test of Normality, Shapiro or such, to 
+          // TODO: maybe create a test of Normality, Shapiro or such, to
           // get an idaa of a normal distribution, in SQL directly.
           // here, things should go fast
           const dMax = Math.max(...stat.table.map((row) => row.diff));
@@ -164,11 +164,13 @@ export async function ioAddViewVt(socket, config, view_options) {
      * Use the higher score
      */
     table.sort((a, b) => b.score - a.score);
-    console.table(table);
 
     view.data.attribute.name = table[0].column_name;
     view.data.attribute.type = table[0].column_type;
 
+    /**
+    * Use the first type of geometry found, default to point 
+    */ 
     view.data.geometry = stats?.geom_type_table[0] || { type: "point" };
 
     /*

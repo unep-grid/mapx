@@ -32,10 +32,13 @@ echo 'OPT '$OPT
 echo 'LCO '$LCO
 echo 'NLT '$NLT
 
+
+
 PG_USE_COPY=YES \
   ogr2ogr \
   -progress \
   -skipfailures \
+  -unsetFid \
   $OPT \
   -f PGDump \
   /vsistdout/ \
