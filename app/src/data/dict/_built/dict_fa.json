@@ -6191,8 +6191,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "fa": "خوش آمدی!<br> برای کسب اطلاعات فنی ، می توانید <a href=\"{{linkKnowledgeBase}}\">پایگاه دانش</a> ما را مطالعه کنید. اگر در مورد این وب سایت پیشنهادی دارید ، یا اگر می خواهید یک اشکال را گزارش دهید ، از <a href=\"{{linkIssue}}\">ردیاب مشکل ما دیدن کنید</a><br> با تشکر ! "
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "fa": "خوش آمدی!<br> برای اطلاعات فنی، می توانید <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">پایگاه دانش</a> ما را بخوانید. اگر پیشنهادی در مورد این وب‌سایت دارید، یا اگر می‌خواهید یک اشکال را گزارش کنید، از <a href=\"{{linkIssue}}\" target=\"_blank\">ردیاب مشکل</a> ما دیدن کنید<br> با تشکر !"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6296,8 +6296,8 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "fa": "یک ایمیل به ارسال می شود<a href=\"mailto:={{email}}\"> {{email}}</a> . در پایان مراحل <a href=\"{{url}}\">لینک</a> بارگیری فعال خواهد شد "
+    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
+    "fa": "یک ایمیل به<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . <a download=\"\" href=\"{{url}}\" target=\"_blank\">لینک</a> دانلود در پایان مراحل فعال خواهد شد"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6326,8 +6326,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
-    "fa": "تبدیل با استفاده از فرمت انجام می شود {{format}} . لینک دانلود:<a href=\"{{url}}\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "fa": "تبدیل با استفاده از فرمت انجام می شود {{format}} . لینک دانلود:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6341,8 +6341,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "fa": "داده های درخواستی با استفاده از این پیوند بارگیری می شوند:<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "fa": "داده های درخواستی با استفاده از این لینک آماده دانلود هستند:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_zip_progress",

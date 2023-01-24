@@ -6191,8 +6191,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "ps": "ښه راغلاست!<br> د تخنیکي معلوماتو لپاره ، تاسو ممکن زموږ د <a href=\"{{linkKnowledgeBase}}\">پوهې اساس</a> ولولئ. که تاسو د دې ویب پا aboutې په اړه وړاندیز لرئ ، یا که تاسو غواړئ یو غلط راپور ورکړئ ، نو زموږ د <a href=\"{{linkIssue}}\">مسلې تعقیب کونکي ته مراجعه وکړئ</a><br> مننه ! "
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "ps": "ښه راغلاست!<br> د تخنیکي معلوماتو لپاره، تاسو کولی شئ زموږ د <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">پوهې بنسټ</a> ولولئ. که تاسو د دې ویب پاڼې په اړه وړاندیز لرئ، یا که تاسو غواړئ د بګ راپور ورکړئ، زموږ د <a href=\"{{linkIssue}}\" target=\"_blank\">مسلې تعقیب کونکي</a> څخه لیدنه وکړئ<br> مننه !"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6296,8 +6296,8 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "ps": "بریښنالیک ته به لیږل کیږي<a href=\"mailto:={{email}}\"> {{email}}</a> . د ډاونلوډ <a href=\"{{url}}\">لینک</a> به د پروسې په پای کې فعال شي "
+    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
+    "ps": "یو بریښنالیک به لیږل کیږي<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . د ډاونلوډ <a download=\"\" href=\"{{url}}\" target=\"_blank\">لینک</a> به د پروسې په پای کې فعال شي"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6326,8 +6326,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
-    "ps": "تبادله د شکل په کارولو سره ترسره کیږي {{format}} . د کښته کولو لینک:<a href=\"{{url}}\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "ps": "تبادله د شکل په کارولو سره ترسره کیږي {{format}} . د کښته کولو لینک:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6341,8 +6341,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "ps": "غوښتل شوي معلومات د دې لینک په کارولو سره ډاونلوډ ته چمتو دي:<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "ps": "غوښتل شوي معلومات د دې لینک په کارولو سره ډاونلوډ کولو لپاره چمتو دي:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_zip_progress",
