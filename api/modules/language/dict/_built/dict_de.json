@@ -6186,8 +6186,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "de": "Herzlich willkommen!<br> Technische Informationen finden Sie in unserer <a href=\"{{linkKnowledgeBase}}\">Knowledge Base</a> . Wenn Sie Vorschläge zu dieser Website haben oder einen Fehler melden möchten, besuchen Sie unseren <a href=\"{{linkIssue}}\">Issue-Tracker</a><br> Vielen Dank ! "
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "de": "Herzlich willkommen!<br> Für technische Informationen können Sie unsere <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">Knowledge Base</a> lesen. Wenn Sie Vorschläge zu dieser Website haben oder einen Fehler melden möchten, besuchen Sie unseren <a href=\"{{linkIssue}}\" target=\"_blank\">Problem-Tracker</a><br> Vielen Dank !"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6291,8 +6291,8 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "de": "Eine E-Mail wird an gesendet<a href=\"mailto:={{email}}\"> {{email}}</a> . Der Download- <a href=\"{{url}}\">Link</a> wird am Ende des Vorgangs aktiviert "
+    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
+    "de": "Es wird eine E-Mail an gesendet<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . Der Download- <a download=\"\" href=\"{{url}}\" target=\"_blank\">Link</a> wird am Ende des Vorgangs aktiviert"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6321,8 +6321,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
-    "de": "Konvertierung erfolgt mit Format {{format}} . Download-Link:<a href=\"{{url}}\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "de": "Konvertierung erfolgt mit Format {{format}} . Download-Link:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6336,8 +6336,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "de": "Die angeforderten Daten können über diesen Link heruntergeladen werden:<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "de": "Die angeforderten Daten können unter diesem Link heruntergeladen werden:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_zip_progress",

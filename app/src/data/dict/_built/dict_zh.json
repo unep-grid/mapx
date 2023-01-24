@@ -6186,8 +6186,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "zh": "欢迎！<br>有关技术信息，您可以阅读我们的<a href=\"{{linkKnowledgeBase}}\">知识库</a>。如果您对本网站有建议，或者想要报告错误，请访问我们的<a href=\"{{linkIssue}}\">问题跟踪器</a><br>谢谢 ！ "
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "zh": "欢迎！<br>有关技术信息，您可以阅读我们的<a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">知识库</a>。如果您对本网站有任何建议，或者想报告错误，请访问我们的<a href=\"{{linkIssue}}\" target=\"_blank\">问题跟踪器</a><br>谢谢 ！"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6291,8 +6291,8 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "zh": "电子邮件将发送至<a href=\"mailto:={{email}}\"> {{email}}</a>。下载<a href=\"{{url}}\">链接</a>将在流程结束时激活 "
+    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
+    "zh": "一封电子邮件将发送至<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a>.下载<a download=\"\" href=\"{{url}}\" target=\"_blank\">链接</a>将在过程结束时激活"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6321,8 +6321,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
-    "zh": "使用格式完成转换 {{format}}.下载链接：<a href=\"{{url}}\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "zh": "使用格式完成转换 {{format}}.下载链接：<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6336,8 +6336,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "zh": "可以使用此链接下载所需的数据：<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "zh": "已准备好使用此链接下载请求的数据：<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_zip_progress",
