@@ -9,6 +9,7 @@ WITH
       END geom_type
     FROM
       "{{idSource}}"
+    WHERE ST_GeometryType (geom) is not NULL
   ),
   gtable as (
     SELECT

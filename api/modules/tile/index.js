@@ -58,7 +58,7 @@ export async function handlerTile(req, res) {
      * buffer = PostGIS as_mvtgeom buffer + buffer for cropping tile
      * 0 : all tiles rendered, but tiles boundaries visibles
      * > 0 : inconsistant behaviour : some tiles missing:
-     *  - 1, 64, 256 : 
+     *  - 1, 64, 256 :
      *      - error : geometry exceeds allowed extent, reduce your vector tile buffer size
      *      - no tiles boundaries visible. Good, but tiles missing
      */
@@ -195,9 +195,12 @@ function sendTileError(res, err) {
  *
  */
 function rowsToGeoJSON(rows) {
-  const features = rows.map((r) => {
-    var properties = {};
-    for (var attribute in r) {
+  const features = [];
+
+  for (const row of rows) {
+    const properties = {};
+
+    for (const attribute in row) {
       if (attribute !== "geom") {
         /**
          * - Date serialized as ISO string
@@ -205,18 +208,18 @@ function rowsToGeoJSON(rows) {
          *   mapbox vector style issue...
          * - update the prop
          */
-        if (r[attribute] === null) {
-          r[attribute] = "";
+        if (row[attribute] === null) {
+          row[attribute] = "";
         }
-        properties[attribute] = r[attribute];
+        properties[attribute] = row[attribute];
       }
     }
-    return {
+    features.push({
       type: "Feature",
-      geometry: JSON.parse(r.geom),
+      geometry: JSON.parse(row.geom),
       properties: properties,
-    };
-  });
+    });
+  }
 
   return {
     type: "FeatureCollection",
