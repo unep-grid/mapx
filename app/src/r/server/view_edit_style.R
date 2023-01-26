@@ -52,6 +52,24 @@ observeEvent(input$styleEdit_init, {
         as.POSIXct(view$date_modified, format = "%Y-%m-%d%tT%T", tz = "UTC")
       )
 
+      #
+      # Handle issue with hex color + alpha
+      # -> probably an issue with the color picker allowed hex + alpha value.
+      # -> not wanted
+      #
+      if (isNotEmpty(style$rules)) {
+        style$rules <- lapply(style$rules, function(rule) {
+          rule$color <- substr(rule$color, 1, 7)
+          return(rule)
+        })
+      }
+      if (isNotEmpty(style$nulls)) {
+        style$nulls <- lapply(style$nulls, function(rule) {
+          rule$color <- substr(rule$color, 1, 7)
+          return(rule)
+        })
+      }
+
       jedSchema(
         id = "styleEdit",
         schema = schema,
@@ -139,7 +157,7 @@ observeEvent(input$styleEdit_values, {
     if (!isEmpty(values$`_style_mapbox`)) {
       view <- .set(view, c("data", "style", "_mapbox"), values$`_style_mapbox`)
     }
-    
+
     switch(idEvent,
       "preview" = {
         mglUpdateView(view)
