@@ -126,6 +126,12 @@ export async function getViewMapboxLayers(v, opt) {
   }
 
   /**
+   * Ref geom
+   */
+  const isPoint = geomType === "point";
+  const isPolygon = geomType === "polygon";
+
+  /**
    * Updte filterNull ( after type is determined )
    */
   const filterIncludeNull = [];
@@ -252,8 +258,10 @@ export async function getViewMapboxLayers(v, opt) {
     const ruleDefault = {
       label_en: label,
       value: "all",
-      color: layerDefault?.metadata?.hexColor,
+      color: layerDefault?.metadata?.color,
       size: layerDefault?.metadata?.size,
+      color_border: isPolygon ? layerDefault?.metadata?.colorSecondary : null,
+      add_border: isPolygon ? layerDefault?.metadata?.useOutline : null,
     };
     rules.push(ruleDefault);
     layers.push(layerDefault);
@@ -264,8 +272,8 @@ export async function getViewMapboxLayers(v, opt) {
    */
   if (useStyleAll) {
     const hasSprite = ruleAll.sprite && ruleAll.sprite !== "none";
-    const hasSymbol = hasSprite && geomType === "point";
-    const hasPattern = hasSprite && geomType === "polygon";
+    const hasSymbol = hasSprite && isPoint;
+    const hasPattern = hasSprite && isPolygon;
 
     const filter = ["all"];
 
@@ -281,14 +289,13 @@ export async function getViewMapboxLayers(v, opt) {
       const layerSprite = _build_layer({
         priority: 0,
         geomType: "symbol",
-        hexColor: ruleAll.color,
+        color: ruleAll.color,
         sprite: ruleAll.sprite,
         opacity: ruleAll.opacity,
         size: ruleAll.size,
         filter: filter,
         rule: ruleAll,
       });
-
       layers.push(layerSprite);
     } else {
       /**
@@ -298,7 +305,7 @@ export async function getViewMapboxLayers(v, opt) {
         geomType: geomType,
         type: isNumeric ? "number" : "string",
         priority: 1,
-        hexColor: ruleAll.color,
+        color: ruleAll.color,
         sprite: ruleAll.sprite,
         opacity: ruleAll.opacity,
         size: ruleAll.size,
@@ -306,13 +313,18 @@ export async function getViewMapboxLayers(v, opt) {
         rule: ruleAll,
       });
 
+      ruleAll.color_border = isPolygon
+        ? layerAll?.metadata?.colorSecondary
+        : null;
+      ruleAll.add_border = isPolygon ? layerAll?.metadata?.useOutline : null;
+
       layers.push(layerAll);
 
       if (hasPattern) {
         const layerPattern = _build_layer({
           priority: 0,
           geomType: "pattern",
-          hexColor: ruleAll.color,
+          color: ruleAll.color,
           sprite: ruleAll.sprite,
           opacity: ruleAll.opacity,
           size: ruleAll.size,
@@ -361,8 +373,8 @@ export async function getViewMapboxLayers(v, opt) {
        *  Symbols and pattern check
        */
       const hasSprite = rule.sprite && rule.sprite !== "none";
-      const hasSymbol = hasSprite && geomType === "point";
-      const hasPattern = hasSprite && geomType === "polygon";
+      const hasSymbol = hasSprite && isPoint;
+      const hasPattern = hasSprite && isPolygon;
 
       if (isNumeric && !sameFromTo) {
         /**
@@ -389,7 +401,7 @@ export async function getViewMapboxLayers(v, opt) {
           position: position,
           priority: 1,
           geomType: geomType,
-          hexColor: rule.color,
+          color: rule.color,
           opacity: rule.opacity,
           size: rule.size,
           sprite: rule.sprite,
@@ -398,12 +410,18 @@ export async function getViewMapboxLayers(v, opt) {
         });
         layers.push(layerMain);
 
+        rule.color_border = isPolygon
+          ? layerMain?.metadata?.colorSecondary
+          : null;
+
+        rule.add_border = isPolygon ? layerMain?.metadata?.useOutline : null;
+
         if (hasPattern) {
           const layerPattern = _build_layer({
             position: position,
             priority: 0,
             geomType: "pattern",
-            hexColor: rule.color,
+            color: rule.color,
             opacity: rule.opacity,
             sprite: rule.sprite,
             filter: filter,
@@ -418,7 +436,7 @@ export async function getViewMapboxLayers(v, opt) {
         const layerSprite = _build_layer({
           position: position,
           geomType: "symbol",
-          hexColor: rule.color,
+          color: rule.color,
           opacity: rule.opacity,
           size: rule.size,
           sprite: rule.sprite,
@@ -448,8 +466,8 @@ export async function getViewMapboxLayers(v, opt) {
       priority: 1,
       //position: reverseLayerOrder ? nRules : -1,
       position: -1,
-      geomType: geomType === "point" && hasSprite ? "symbol" : geomType,
-      hexColor: ruleNulls.color,
+      geomType: isPoint && hasSprite ? "symbol" : geomType,
+      color: ruleNulls.color,
       opacity: ruleNulls.opacity,
       size: ruleNulls.size,
       sprite: hasSprite ? ruleNulls.sprite : null,
@@ -457,6 +475,10 @@ export async function getViewMapboxLayers(v, opt) {
       rule: ruleNulls,
     });
     ruleNulls.filter = filter;
+    ruleNulls.color_border = isPolygon
+      ? layerNull?.metadata?.colorSecondary
+      : null;
+    ruleNulls.add_border = isPolygon ? layerNull?.metadata?.useOutline : null;
     // Hack to reference null in makeNumericSlider
     view._null_filter = filter;
     layers.push(layerNull);
@@ -504,7 +526,7 @@ export async function getViewMapboxLayers(v, opt) {
         useLabelAsId: useLabelAsId,
         simplifyExpression: simplifyExpression,
         useOutline: polygonBorderConfig.enable,
-        outlineColor: polygonBorderConfig.color,
+        colorSecondary: polygonBorderConfig.color,
         useOutlineAuto: polygonBorderConfig.enableAutoColor,
         outlineOpacity: polygonBorderConfig.opacity,
       },
