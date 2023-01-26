@@ -1,3 +1,11 @@
+  - [1.10.0-alpha.12](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.12) 
+
+    - APP
+        - Style editor:
+            - Legends improvement: if a border/outline is set for polygons, the legends are also updated
+            - Issue with some colors saved as hex + alpha, instead of hex
+        - Should solve issue with uploaded source with null geometry type
+
   - [1.10.0-alpha.11](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.11) 
 
     - APP
