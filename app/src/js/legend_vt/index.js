@@ -7,7 +7,6 @@ import { getSpriteImage } from "./../map_helpers/index.js";
 import { el } from "./../el/src/index.js";
 
 export function buildLegendVt(view, rules) {
-
   if (!isArray(rules)) {
     rules = view?._style_rules || view?.data?.style?.rules || [];
   }
@@ -37,6 +36,7 @@ export function buildLegendVt(view, rules) {
     const inputId = makeId();
     const colStyle = {};
     const hasSprite = isNotEmpty(rule.sprite) && rule.sprite !== "none";
+    const hasBorder = rule.add_border && isNotEmpty(rule.color_border);
     const color = chroma(rule.color).alpha(rule.opacity).css();
     const spriteImage = hasSprite
       ? getSpriteImage(rule.sprite, { color: isPoint ? color : null })
@@ -50,6 +50,9 @@ export function buildLegendVt(view, rules) {
     }
     if (isPolygon) {
       colStyle.backgroundColor = color;
+      if (hasBorder) {
+        colStyle.border = `0.5px solid ${rule.color_border || "transparent"}`;
+      }
     }
     if (isPoint) {
       if (!hasSprite) {
@@ -83,17 +86,26 @@ export function buildLegendVt(view, rules) {
           {
             class: "mx-legend-vt-td",
           },
-          el("div", { class: "mx-legend-vt-rule-color-wrapper" }, [
-            isPolygon && hasSprite
-              ? el("div", {
-                  class: "mx-legend-vt-rule-background",
-                  style: {
-                    backgroundImage: `url(${spriteImage.url()})`,
-                  },
-                })
-              : null,
-            el("div", { class: "mx-legend-vt-rule-color", style: colStyle }),
-          ])
+          el(
+            "div",
+            {
+              class: [
+                "mx-legend-vt-rule-color-wrapper",
+                hasBorder ? "mx-legend-vt-rule-color-border" : null,
+              ],
+            },
+            [
+              isPolygon && hasSprite
+                ? el("div", {
+                    class: "mx-legend-vt-rule-background",
+                    style: {
+                      backgroundImage: `url(${spriteImage.url()})`,
+                    },
+                  })
+                : null,
+              el("div", { class: "mx-legend-vt-rule-color", style: colStyle }),
+            ]
+          )
         ),
         el(
           "td",
@@ -141,7 +153,7 @@ export function buildLegendVt(view, rules) {
       {
         class: "mx-legend-box",
         /*dataset: {*/
-          /*rules: JSON.stringify(rules),*/
+        /*rules: JSON.stringify(rules),*/
         /*},*/
       },
       el(

@@ -18,7 +18,8 @@ const def = {
   geomType: null,
   type: null,
   label: null,
-  hexColor: null,
+  color: null,
+  colorSecondary: null,
   filter: ["all"],
   size: null,
   sprite: null,
@@ -53,12 +54,12 @@ const def = {
  * @param {Boolean} opt.useLabelAsId Ignore id and use label as layer id
  * @param {Boolean} opt.simplifyExpression Simplify expression
  * @param {String} opt.label Label text or expression
- * @param {string} opt.hexColor Hex color. If not provided, random color will be generated
+ * @param {string} opt.color Hex color. If not provided, random color will be generated
+ * @param {String} opt.colorSecondary Polygon outline
  * @param {array} opt.filter
  * @param {Number} opt.size
  * @param {string} opt.sprite
  * @param {Boolean} opt.useOutline Add outline to polygons
- * @param {String} opt.outlineColor Polygon outline
  * @param {Boolean} opt.useOutlineAuto Use automatic color for outline
  * @param {Nmber} opt.outlineOpacity Polygon outline opacity
  * @return {Object} Layer
@@ -75,8 +76,9 @@ export function makeSimpleLayer(opt) {
 
   /**
    * Size / Zoom factor
+   * TODO: merge this with setStyle() helper
+   * and make sure sprite is correctly sized
    */
-
   if (isEmpty(opt.size)) {
     switch (opt.geomType) {
       case "point":
@@ -89,6 +91,10 @@ export function makeSimpleLayer(opt) {
         opt.size = 2;
     }
   }
+
+  /**
+   * Set sprite
+   */
   if (opt.sprite === "none") {
     opt.sprite = null;
   }
@@ -101,44 +107,51 @@ export function makeSimpleLayer(opt) {
    * Color
    */
 
-  if (!opt.hexColor) {
-    opt.hexColor = chroma.random().hex();
+  if (!opt.color) {
+    opt.color = chroma.random().hex();
   }
-  const colA = chroma(opt.hexColor).alpha(opt.opacity).css();
-  let colB;
 
-  if (opt.geomType !== "polygon") {
-    /**
-     * Set alternative color
-     */
-    colB = chroma(opt.hexColor).alpha(opt.opacity).darken(1).css();
-  } else {
+  opt.color = chroma(opt.color).alpha(opt.opacity).css();
+
+  if (!opt.colorSecondary) {
+    opt.colorSecondary = chroma(opt.color).alpha(opt.opacity).darken(1).css();
+  }
+
+  /**
+   * Set alternative color
+   */
+  if (opt.geomType === "polygon") {
     /**
      * Set polygon outline color
      */
     if (!opt.useOutline) {
-      colB = "rgba(0,0,0,0)";
+      opt.colorSecondary = "rgba(0,0,0,0)";
     } else {
       if (!opt.useOutlineAuto) {
         /**
          * Use user defined color
          */
-        colB = chroma(opt.outlineColor).alpha(opt.outlineOpacity).css();
+        opt.colorSecondary = chroma(opt.colorSecondary)
+          .alpha(opt.outlineOpacity)
+          .css();
       } else {
         /**
          * Attempt to find the best suited color
          */
-        const colDark = chroma(colA).darken(1).alpha(opt.outlineOpacity).css();
-        const colClear = chroma(colA)
+        const colDark = chroma(opt.color)
+          .darken(1)
+          .alpha(opt.outlineOpacity)
+          .css();
+        const colClear = chroma(opt.color)
           .brighten(1)
           .alpha(opt.outlineOpacity)
           .css();
-        const contrastDark = chroma.contrast(colA, colDark);
-        const contrastClear = chroma.contrast(colA, colClear);
+        const contrastDark = chroma.contrast(opt.color, colDark);
+        const contrastClear = chroma.contrast(opt.color, colClear);
         if (contrastDark > contrastClear) {
-          colB = colDark;
+          opt.colorSecondary = colDark;
         } else {
-          colB = colClear;
+          opt.colorSecondary = colClear;
         }
       }
     }
@@ -183,7 +196,7 @@ export function makeSimpleLayer(opt) {
         type: "symbol",
         layout: {
           "icon-image": opt.sprite,
-          "icon-size": size(),
+          "icon-size": size(opt),
           "icon-allow-overlap": true,
           "icon-ignore-placement": false,
           "icon-optional": true,
@@ -202,8 +215,8 @@ export function makeSimpleLayer(opt) {
         paint: {
           "icon-opacity": opt.opacity || 1,
           "icon-halo-width": 0,
-          "icon-halo-color": colB,
-          "icon-color": colA,
+          "icon-halo-color": opt.colorSecondary,
+          "icon-color": opt.color,
           "text-color": "#000",
           "text-halo-color": "#FFF",
           "text-halo-blur": 0.2,
@@ -216,8 +229,8 @@ export function makeSimpleLayer(opt) {
       Object.assign(layer, {
         type: "circle",
         paint: {
-          "circle-color": colA,
-          "circle-radius": size(0.5),
+          "circle-color": opt.color,
+          "circle-radius": size(opt, 0.5),
         },
       });
       break;
@@ -225,8 +238,8 @@ export function makeSimpleLayer(opt) {
       Object.assign(layer, {
         type: "fill",
         paint: {
-          "fill-color": colA,
-          "fill-outline-color": colB,
+          "fill-color": opt.color,
+          "fill-outline-color": opt.colorSecondary,
         },
       });
       break;
@@ -243,8 +256,8 @@ export function makeSimpleLayer(opt) {
       Object.assign(layer, {
         type: "line",
         paint: {
-          "line-color": colA,
-          "line-width": size(),
+          "line-color": opt.color,
+          "line-width": size(opt),
         },
         layout: {
           "line-cap": "round",
@@ -257,23 +270,27 @@ export function makeSimpleLayer(opt) {
   }
 
   return layer;
+}
 
-  function size(baseFactor) {
-    const b = baseFactor || 1;
-    const size = opt.size;
-    const hasZoomFactor =
-      opt.sizeFactorZoomMax !== 0 || opt.sizeFactorZoomMin !== 0;
-    if (!hasZoomFactor || opt.simplifyExpression) {
-      return size * b;
-    }
-    return [
-      "interpolate",
-      ["exponential", opt.sizeFactorZoomExponent],
-      ["zoom"],
-      opt.zoomMin,
-      opt.sizeFactorZoomMin * opt.size * b,
-      opt.zoomMax,
-      opt.sizeFactorZoomMax * opt.size * b,
-    ];
+function size(opt, baseFactor) {
+  const b = baseFactor || 1;
+  const size = opt.size;
+  const hasZoomFactor =
+    opt.sizeFactorZoomMax !== 0 || opt.sizeFactorZoomMin !== 0;
+  if (!hasZoomFactor || opt.simplifyExpression) {
+    /**
+     * NOTE: altering opt will alter returned simple_layer output
+     */
+    opt.size = size * b;
+    return opt.size;
   }
+  return [
+    "interpolate",
+    ["exponential", opt.sizeFactorZoomExponent],
+    ["zoom"],
+    opt.zoomMin,
+    opt.sizeFactorZoomMin * opt.size * b,
+    opt.zoomMax,
+    opt.sizeFactorZoomMax * opt.size * b,
+  ];
 }

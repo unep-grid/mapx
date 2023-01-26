@@ -76,12 +76,15 @@
 }
 
 .mx-legend-vt-rule-color-wrapper {
-    position: relative;
-    max-height: 100px;
-    max-width: 100px;
-    overflow: hidden;
+  position: relative;
+  max-height: 100px;
+  max-width: 100px;
+  overflow: hidden;
 }
 
+.mx-legend-vt-rule-color-wrapper.mx-legend-vt-rule-color-border {
+  margin: 2px;
+}
 .mx-legend-vt-rule-background {
   background-size: inherit;
   width: 100%;
@@ -138,7 +141,6 @@
   padding: 0px;
   user-select: none;
 }
-
 
 /**
 * For legend in button panel without wrapper
