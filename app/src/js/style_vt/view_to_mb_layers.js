@@ -136,10 +136,16 @@ export async function getViewMapboxLayers(v, opt) {
    * Updte filterNull ( after type is determined )
    */
   const hasAttr = ["has", attr];
-  const filterIncludeNull = ["any", ["!", hasAttr]];
+  const filterIncludeNull = [];
   const filterExcludeNull = ["all", hasAttr];
 
+  if (!hasNullValue) {
+    filterIncludeNull.push(...["all", ["!", hasAttr]]);
+  }
+
   if (hasNullValue) {
+    filterIncludeNull.push(...["all", hasAttr]);
+
     if (isNumeric) {
       filterIncludeNull.push(["==", ["get", attr], nullValue * 1]);
       filterExcludeNull.push(["!=", ["get", attr], nullValue * 1]);
@@ -343,7 +349,7 @@ export async function getViewMapboxLayers(v, opt) {
       /**
        * Exclude null
        */
-      filter.push(...filterExcludeNull);
+      filter.push(filterExcludeNull);
 
       /*
        * Set logic for rules
@@ -500,6 +506,8 @@ export async function getViewMapboxLayers(v, opt) {
   }
 
   sortLayers(layers);
+
+  //console.log(layers.map(l=>l.filter));
 
   return {
     layers,

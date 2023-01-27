@@ -572,7 +572,6 @@ tr {
 */
 .mx-scroll-styled {
   overflow: auto;
-  scroll-behavior: smooth;
 }
 
 ::-webkit-scrollbar {

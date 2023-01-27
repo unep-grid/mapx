@@ -2595,9 +2595,13 @@ export async function makeNumericSlider(o) {
         }
 
         const filter = [
-          "any",
-          ["!=", ["typeof", ["get", k]], "number"],
-          ["all", ["<=", ["get", k], n[1] * 1], [">=", ["get", k], n[0] * 1]],
+          "all",
+          ["has", k],
+          [
+            "any",
+            ["!=", ["typeof", ["get", k]], "number"],
+            ["all", ["<=", ["get", k], n[1] * 1], [">=", ["get", k], n[0] * 1]],
+          ],
         ];
 
         if (isArray(view._null_filter)) {
@@ -3029,7 +3033,7 @@ export function viewSetFilter(o) {
    * Add filter to filter type e.g. {legend:["all"],...} -> {legend:["all",["==","value","a"],...}
    * ... or reset to default null
    */
-  filterView[type] = hasFilter ? filter : null;
+  filterView[type] = hasFilter ? filter : ["all"];
 
   /**
    * Filter object to filter array
@@ -3044,11 +3048,10 @@ export function viewSetFilter(o) {
   /**
    * Apply filters to each layer, in top of base filters
    */
-
   for (let layer of layers) {
-    let filterOrig = path(layer, "metadata.filter", null);
+    let filterOrig = path(layer, "metadata.filter", []);
     let filterFinal = [];
-    if (!filterOrig) {
+    if (isEmpty(filterOrig)) {
       filterFinal.push("all", ...filterNew);
     } else {
       filterFinal.push(...filterOrig, ...filterNew);

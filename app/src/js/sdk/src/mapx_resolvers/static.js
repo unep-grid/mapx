@@ -396,14 +396,14 @@ class MapxResolversStatic extends ResolversBase {
    * Get view table attribute config
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
-   * @return {Object}
+   * @return {Promise<Object>} view attribute config
    */
-  get_view_table_attribute_config(opt) {
+  async get_view_table_attribute_config(opt) {
     opt = Object.assign({}, { idView: null }, opt);
     const out = {};
     if (opt.idView) {
       const view = getView(opt.idView);
-      const config = getTableAttributeConfigFromView(view);
+      const config = await getTableAttributeConfigFromView(view);
       for (const key of ["attributes", "idSource", "labels"]) {
         out[key] = config[key];
       }
@@ -415,12 +415,12 @@ class MapxResolversStatic extends ResolversBase {
    * Get view table attribute url
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
-   * @return {String}
+   * @return {Promise<String>}
    */
-  get_view_table_attribute_url(opt) {
+  async get_view_table_attribute_url(opt) {
     const rslv = this;
     opt = Object.assign({}, { idView: null }, opt);
-    const config = rslv.get_view_table_attribute_config(opt);
+    const config = await rslv.get_view_table_attribute_config(opt);
     const url = new URL(getApiUrl("getSourceTableAttribute"));
     if (config) {
       url.searchParams.set("id", config.idSource);
@@ -438,7 +438,7 @@ class MapxResolversStatic extends ResolversBase {
   async get_view_table_attribute(opt) {
     opt = Object.assign({}, { idView: null }, opt);
     const rslv = this;
-    const url = rslv.get_view_table_attribute_url(opt);
+    const url = await rslv.get_view_table_attribute_url(opt);
     if (url) {
       const response = await fetch(url);
       if (response.ok) {
