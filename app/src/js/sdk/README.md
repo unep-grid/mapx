@@ -624,8 +624,8 @@ MapX resolvers available in static and app
     * [.get_views_id_open()](#MapxResolversStatic+get_views_id_open) ⇒ <code>Array</code>
     * [.get_view_meta_vt_attribute(opt)](#MapxResolversStatic+get_view_meta_vt_attribute) ⇒ <code>Object</code>
     * [.get_view_meta(opt, view)](#MapxResolversStatic+get_view_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
-    * [.get_view_table_attribute_config(opt)](#MapxResolversStatic+get_view_table_attribute_config) ⇒ <code>Object</code>
-    * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>String</code>
+    * [.get_view_table_attribute_config(opt)](#MapxResolversStatic+get_view_table_attribute_config) ⇒ <code>Promise.&lt;Object&gt;</code>
+    * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Object</code>
     * [.get_view_legend_image(opt)](#MapxResolversStatic+get_view_legend_image) ⇒ <code>String</code>
     * [.set_view_layer_filter_text(opt)](#MapxResolversStatic+set_view_layer_filter_text) ⇒ <code>Boolean</code>
@@ -974,10 +974,11 @@ Get view metadata
 
 <a name="MapxResolversStatic+get_view_table_attribute_config"></a>
 
-#### mapxResolversStatic.get\_view\_table\_attribute\_config(opt) ⇒ <code>Object</code>
+#### mapxResolversStatic.get\_view\_table\_attribute\_config(opt) ⇒ <code>Promise.&lt;Object&gt;</code>
 Get view table attribute config
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Promise.&lt;Object&gt;</code> - view attribute config  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -986,7 +987,7 @@ Get view table attribute config
 
 <a name="MapxResolversStatic+get_view_table_attribute_url"></a>
 
-#### mapxResolversStatic.get\_view\_table\_attribute\_url(opt) ⇒ <code>String</code>
+#### mapxResolversStatic.get\_view\_table\_attribute\_url(opt) ⇒ <code>Promise.&lt;String&gt;</code>
 Get view table attribute url
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  

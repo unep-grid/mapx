@@ -1,3 +1,13 @@
+  - [1.10.0-beta](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-beta) 
+
+    - APP
+        - Rebase 1.10.0-alpha.7 (breaking change, new dev members feature )
+        - Style editor :
+            - fixed missing patterns in null layers; Solved issue with null value : has nulls is not handled in mapbox gl, removing the property from the tile builder and testing for [has,<attribute>] was the only solution.
+            - Fix issues with missing value; 
+        - Re-enable scroll in view metadata menu;
+        - SDK: Fix missing async code in tests
+
   - [1.10.0-alpha.12](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.12) 
 
     - APP
