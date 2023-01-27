@@ -90,6 +90,7 @@ export async function getViewMapboxLayers(v, opt) {
   if (!hideNulls && isNotEmpty(ruleNulls.value)) {
     nullValue = ruleNulls.value;
   }
+  const hasNullValue = !hideNulls && isNotEmpty(nullValue);
 
   /**
    * Fetch source stat.
@@ -134,24 +135,17 @@ export async function getViewMapboxLayers(v, opt) {
   /**
    * Updte filterNull ( after type is determined )
    */
-  const filterIncludeNull = [];
-  const filterExcludeNull = [];
+  const hasAttr = ["has", attr];
+  const filterIncludeNull = ["any", ["!", hasAttr]];
+  const filterExcludeNull = ["all", hasAttr];
 
-  for (const op of ["==", "!="]) {
-    const filterNullDefault = [
-      "any",
-      [op, ["get", attr], ""],
-      [op, ["get", attr], null],
-    ];
-    const f = op === "==" ? filterIncludeNull : filterExcludeNull;
-    if (isEmpty(nullValue) || nullValue === false) {
-      f.push(filterNullDefault);
+  if (hasNullValue) {
+    if (isNumeric) {
+      filterIncludeNull.push(["==", ["get", attr], nullValue * 1]);
+      filterExcludeNull.push(["!=", ["get", attr], nullValue * 1]);
     } else {
-      if (isNumeric) {
-        f.push([op, ["get", attr], nullValue * 1]);
-      } else {
-        f.push([op, ["get", attr], nullValue]);
-      }
+      filterIncludeNull.push(["==", ["get", attr], nullValue]);
+      filterExcludeNull.push(["!=", ["get", attr], nullValue]);
     }
   }
 
@@ -280,7 +274,7 @@ export async function getViewMapboxLayers(v, opt) {
     /**
      * Exclude null
      */
-    filter.push(...filterExcludeNull);
+    filter.push(filterExcludeNull);
 
     if (hasSymbol) {
       /**
@@ -453,8 +447,6 @@ export async function getViewMapboxLayers(v, opt) {
    * Handle layer for null values
    */
   if (useStyleNull) {
-    const filter = ["all", ...filterIncludeNull];
-
     updateIfEmpty(ruleNulls, {
       color: "#A9A9A9",
       size: 2,
@@ -462,10 +454,13 @@ export async function getViewMapboxLayers(v, opt) {
     });
 
     const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== "none";
+    const hasPattern = isPolygon && hasSprite;
+    const position = -1;
+    const filter = filterIncludeNull;
+
     const layerNull = _build_layer({
       priority: 1,
-      //position: reverseLayerOrder ? nRules : -1,
-      position: -1,
+      position: position,
       geomType: isPoint && hasSprite ? "symbol" : geomType,
       color: ruleNulls.color,
       opacity: ruleNulls.opacity,
@@ -474,6 +469,7 @@ export async function getViewMapboxLayers(v, opt) {
       filter: filter,
       rule: ruleNulls,
     });
+
     ruleNulls.filter = filter;
     ruleNulls.color_border = isPolygon
       ? layerNull?.metadata?.colorSecondary
@@ -483,6 +479,24 @@ export async function getViewMapboxLayers(v, opt) {
     view._null_filter = filter;
     layers.push(layerNull);
     rules.push(ruleNulls);
+
+    /**
+     * Pattern for null
+     */
+
+    if (hasPattern) {
+      const layerPattern = _build_layer({
+        position: position,
+        priority: 0,
+        geomType: "pattern",
+        color: ruleNulls.color,
+        opacity: ruleNulls.opacity,
+        sprite: ruleNulls.sprite,
+        filter: filter,
+        rule: ruleNulls,
+      });
+      layers.push(layerPattern);
+    }
   }
 
   sortLayers(layers);

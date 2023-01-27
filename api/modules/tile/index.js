@@ -3,10 +3,9 @@
  */
 import { redisGet, redisSet, pgRead } from "#mapx/db";
 import { parseTemplate, attrToPgCol, asArray } from "#mapx/helpers";
-import { isSourceId } from "@fxi/mx_valid";
+import { isSourceId, isNotEmpty } from "@fxi/mx_valid";
 import { templates } from "#mapx/template";
 import { getSourceLastTimestamp, isPointLikeGeom } from "#mapx/db-utils";
-import { sourceHasService } from "#mapx/source";
 import { getParamsValidator } from "#mapx/route_validation";
 import crypto from "crypto";
 import util from "util";
@@ -204,14 +203,14 @@ function rowsToGeoJSON(rows) {
       if (attribute !== "geom") {
         /**
          * - Date serialized as ISO string
-         * - null should be converted to empty string, event for number:
-         *   mapbox vector style issue...
+         * - null/empty value should be null. Not supported by 
+         *   mapbox-gl: remove property + use ["has",<field>] to test 
+         *   for nulls. Use isNotEmpty to be flexible and avoid !!0 issue. 
          * - update the prop
          */
-        if (row[attribute] === null) {
-          row[attribute] = "";
+        if(isNotEmpty(row[attribute])){
+          properties[attribute] = row[attribute];
         }
-        properties[attribute] = row[attribute];
       }
     }
     features.push({
