@@ -4,7 +4,7 @@
 observeEvent(input$btnRebuildGeoserver, {
   userRole <- getUserRole()
   idUser <- .get(reactUser$data, c("id"))
-  isRoot <- idUser %in% .get(config, c("root_mode", "members"))
+  isRoot <- mxIsUserRoot(idUser)
   ready <- isMapReady()
 
   if (!isRoot || !ready) {
@@ -17,7 +17,7 @@ observeEvent(input$btnRebuildGeoserver, {
 observeEvent(input$btnRebuildGeoserverRecalcStyle, {
   userRole <- getUserRole()
   idUser <- .get(reactUser$data, c("id"))
-  isRoot <- idUser %in% .get(config, c("root_mode", "members"))
+  isRoot <- mxIsUserRoot(idUser)
   ready <- isMapReady()
 
   if (!isRoot || !ready) {

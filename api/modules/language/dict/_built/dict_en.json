@@ -2008,6 +2008,10 @@
     "en": "Downloading not allowed. More info in metadata."
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege "
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view"
   },

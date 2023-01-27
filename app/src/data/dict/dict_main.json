@@ -1235,6 +1235,19 @@
     "de": ""
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "fr": "Action non autorisée : demande le privilège de développeur",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "fr": "Éditer la vue",

@@ -5,10 +5,14 @@ observeEvent(input$btnAddView, {
   userRole <- getUserRole()
   isPublisher <- !isGuest && "publishers" %in% userRole$groups
 
+
   if (!isPublisher) {
     return()
   }
 
+  userData <- reactUser$data
+  idUser <- userData$id
+  isDev <- mxIsUserDev(idUser)
   language <- reactData$language
 
   idView <- randomString(
@@ -20,8 +24,11 @@ observeEvent(input$btnAddView, {
     sep = "-"
   )
 
-
-  typeChoices <- config[[c("views", "type")]]
+  if(isDev){
+    typeChoices <- config[[c("views", "type_dev")]]
+  }else{
+    typeChoices <- config[[c("views", "type")]]
+  }
 
   names(typeChoices) <- d(unlist(typeChoices), language)
 

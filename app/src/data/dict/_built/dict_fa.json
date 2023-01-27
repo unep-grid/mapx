@@ -2510,6 +2510,11 @@
     "fa": "دانلود مجاز نیست اطلاعات بیشتر در فراداده"
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "fa": "اقدام مجاز نیست: درخواست امتیاز توسعه دهنده"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "fa": "این نما را ویرایش کنید"

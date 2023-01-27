@@ -50,6 +50,11 @@
         - Custom style view testing: handle case when no style object exists
         - Date testing : only support YYYY/MM/DD... and YYYY-MM-DD as date string
 
+  - [1.10.0-alpha.7](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.7) 
+    
+    - APP
+        - Breaking change: new environment variable : `MAPX_DEV_MEMBERS=[1]`Only publishers approved by the instance owners, in this list, will be allowed to edit custom code view and dashboards or create custom code view. This is temporary until the issue #878 is resolved.
+
   - [1.10.0-alpha.6](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.6) 
 
     - APP

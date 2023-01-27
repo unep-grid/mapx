@@ -2510,6 +2510,11 @@
     "bn": "ডাউনলোড করা অনুমোদিত নয়। মেটাডেটা আরো তথ্য."
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "bn": "অ্যাকশন অনুমোদিত নয়: বিকাশকারীর বিশেষাধিকারের জন্য অনুরোধ করে"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "bn": "এই দৃশ্য সম্পাদনা করুন"

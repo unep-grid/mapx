@@ -11,10 +11,10 @@ observeEvent(input$switchUser, {
 
   id_user <- .get(reactUser$data, c("id"))
   email_user <- .get(reactUser$data, c("email"))
-  root_members <- .get(config, c("root_mode", "members"))
+  is_root <- mxIsUserRoot(id_user)
 
   mxCatch("Swich user mode", {
-    if (id_user %in% root_members) {
+    if (is_root) {
       emails <- mxDbGetEmailListFromId(c(data$id, id_user), asNamedList = TRUE)
 
       #
@@ -85,7 +85,7 @@ observeEvent(input$btnSwitchUser, {
   isValidToken <- hasToken && identical(token_root_input, token_root)
   isValidCheckPrivacy <- isTRUE(input$checkSwitchUserPrivacyConfirm)
   isValidId <- id_user_target %in% mxDbGetEmailList()
-  isAuthorised <- id_user %in% .get(config, c("root_mode", "members"))
+  isAuthorised <- mxIsUserRoot(id_user)
 
   reactData$rootToken <- NULL
 
