@@ -18,15 +18,15 @@ observeEvent(input$btnAddView, {
   idView <- randomString(
     prefix = "MX-",
     splitIn = 3,
-    addLETTERS = T,
-    addLetters = F,
+    addLETTERS = TRUE,
+    addLetters = FALSE,
     splitSep = "-",
     sep = "-"
   )
 
-  if(isDev){
+  if (isDev) {
     typeChoices <- config[[c("views", "type_dev")]]
-  }else{
+  } else {
     typeChoices <- config[[c("views", "type")]]
   }
 
@@ -73,7 +73,16 @@ observe({
       if (!isTRUE(reactData$mapIsReady)) {
         return()
       }
-      typeChoices <- config[[c("views", "type")]]
+      userData <- reactUser$data
+      idUser <- userData$id
+      isDev <- mxIsUserDev(idUser)
+
+      if (isDev) {
+        typeChoices <- config[[c("views", "type_dev")]]
+      } else {
+        typeChoices <- config[[c("views", "type")]]
+      }
+
       project <- reactData$project
       language <- reactData$language
       idView <- reactData$viewAddId
@@ -81,7 +90,7 @@ observe({
       errors <- logical(0)
       warning <- logical(0)
 
-      errors["error_type_missing"] <- isEmpty(viewType) || ! viewType %in% typeChoices 
+      errors["error_type_missing"] <- isEmpty(viewType) || !viewType %in% typeChoices
       errors["error_title_short"] <- isEmpty(title) || nchar(title) < v$viewTitle$min
       errors["error_title_long"] <- isNotEmpty(title) && nchar(title) > v$viewTitle$max
       errors["error_title_bad"] <- mxProfanityChecker(title)
@@ -93,6 +102,10 @@ observe({
 
       errors <- errors[errors]
       hasError <- length(errors) > 0
+
+      if (hasError) {
+        browser()
+      }
 
       mxUiHide(
         id = "btnAddViewConfirm",
