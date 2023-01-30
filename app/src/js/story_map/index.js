@@ -375,7 +375,11 @@ export async function storyStop() {
   const map = getMap();
   try {
     map.stop(false);
-    window.stop();
+    if (/Firefox/.test(navigator.userAgent)) {
+      window.history.back();
+    } else {
+      window.stop();
+    }
   } catch (e) {
     console.warn(e);
   }
