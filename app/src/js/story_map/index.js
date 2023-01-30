@@ -375,17 +375,33 @@ export async function storyStop() {
   const map = getMap();
   try {
     map.stop(false);
-    if (/Firefox/.test(navigator.userAgent)) {
-      window.history.back();
-    } else {
-      window.stop();
-    }
+    await cancelAll();
   } catch (e) {
     console.warn(e);
   }
   const mapBusy = !map.isStyleLoaded();
   if (mapBusy) {
     await map.once("idle");
+  }
+}
+
+async function cancelAll() {
+  if (/Firefox/.test(navigator.userAgent)) {
+    /**
+     * Firefox breaks Shiny websocket when using window.stop.. "
+     * -> window.history.back() works, but until the history reach a state
+     *    where it's no more in the current app..
+     * -> creating a temporary param create a new history entry.
+     *    Then, going back should cancel ongoing scripts/fetch 
+     */
+    const url = new URL(window.location);
+    const now = Date.now();
+    url.searchParams.set("cancel", now);
+    window.history.pushState({}, "", url);
+    await waitTimeoutAsync(100);
+    window.history.back();
+  } else {
+    window.stop();
   }
 }
 
