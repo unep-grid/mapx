@@ -210,6 +210,7 @@ export class PixOp {
     if (!worker) {
       px._worker = new PixopWorker();
 
+      console.log("init canvas worker");
       px._worker.postMessage(
         {
           type: "init",
@@ -226,6 +227,7 @@ export class PixOp {
         }
 
         if (data.type === "result") {
+
           if (data.calcArea) {
             const area = data.points.reduce(
               (a, coord) => a + px.getPixelAreaAtPoint(coord),
@@ -238,6 +240,7 @@ export class PixOp {
           px.result.nPixelFound = data.nPixelFound;
           px.config.onRendered(px);
           px._rendering = false;
+          px.config.onProgress(0);
         }
       });
     }

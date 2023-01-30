@@ -8,6 +8,9 @@ import {
   isArray,
   isObject,
 } from "./is_test_mapx/index.js";
+
+import { UAParser } from "ua-parser-js";
+
 import copy from "fast-copy";
 import { settings } from "./settings";
 /**
@@ -1892,10 +1895,12 @@ export function injectHead(items) {
 }
 
 export function getBrowserData() {
+  const userAgentData = new UAParser().getResult();
+  const lang =  navigator.language; 
   return {
-    language: navigator.language.substr(0, 2),
+    language: lang.substring(0,2),
     cookies: mx.helpers.readCookie(),
-    userAgent: navigator.userAgent,
+    userAgent: userAgentData,
     timeZone: new Date().toString().replace(/.*[(](.*)[)].*/, "$1"),
     hasLocalStorage: !!window.sessionStorage,
     hasSessionStorage: !!window.sessionStorage,
