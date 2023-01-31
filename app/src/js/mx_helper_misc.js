@@ -1082,9 +1082,9 @@ export function updateCheckboxInput(o) {
  * Show select source edit modal
  */
 export async function showSelectSourceEdit(opt) {
-  const idSource = await modalSelectSource();
+  const idSource = await modalSelectSource({ disable_large: false });
   if (isSourceId(idSource)) {
-    Shiny.onInputChange(opt.id, idSource);
+    Shiny.onInputChange(opt.id, { idSource: idSource, update: Date.now() });
   }
 }
 

@@ -2,7 +2,7 @@
 
 #' Edit source request
 #'
-#' @param idTable Id table 
+#' @param idTable Id table
 #' @param session Shiny session object.
 #' @export
 mxEditTable <- function(
@@ -17,9 +17,30 @@ mxEditTable <- function(
   )
 }
 
+#' Edit source select list modal
+#'
+#' @param session Shiny session object.
+#' @export
+mxShowSelectSourceEdit <- function(
+  id = NULL,
+  update = runif(1),
+  session = shiny:::getDefaultReactiveDomain()
+  ) {
+  session$sendCustomMessage(
+    type = "mxShowSelectSourceEdit",
+    list(
+      update = update,
+      id = id
+    )
+  )
+}
+
+
+
+
 #' Geometry tool request
 #'
-#' @param idTable Id table 
+#' @param idTable Id table
 #' @param session Shiny session object.
 #' @export
 mxGeomTools <- function(

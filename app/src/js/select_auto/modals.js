@@ -2,7 +2,17 @@ import { modalPrompt } from "./../mx_helper_modal.js";
 import { getDictItem } from "./../language";
 import { isSourceId } from "./../is_test/index.js";
 
-export async function modalSelectSource() {
+const def = {
+  loaderData: {
+    types: ["tabular", "vector"],
+  },
+  disable_large: false,
+  disable_missing: true,
+};
+
+export async function modalSelectSource(opt) {
+  const config = Object.assign({}, def, opt);
+
   const res = await modalPrompt({
     title: getDictItem("edit_table_modal_select_title"),
     label: getDictItem("edit_table_modal_select_label"),
@@ -15,11 +25,7 @@ export async function modalSelectSource() {
     },
     selectAutoOptions: {
       type: "sources_list_edit",
-      config: {
-        loaderData: {
-          types: ["tabular", "vector"],
-        },
-      },
+      config: config,
     },
   });
   return res;

@@ -15,7 +15,7 @@ $(document).on("shiny:connected", function () {
    * General bindings
    */
 
-  //bind("mxUpdateLanguage", h.updateLanguage);
+  bind("mxShowSelectSourceEdit", h.showSelectSourceEdit);
   bind("mxSetCookie", h.writeCookie);
   bind("mxModal", h.modal);
   bind("mxSetElementAttribute", h.setElementAttribute);
@@ -36,7 +36,6 @@ $(document).on("shiny:connected", function () {
   bind("mxUpdateSelectizeItems", h.updateSelectizeItems);
   bind("mxInitSelectizeAll", h.initSelectizeAll);
   bind("mxFlashIcon", h.itemFlash);
-  //bind('mxUpdateSettingsUser', h.updateSettingsUser );
   bind("mxUpdateSettings", h.updateSettings);
   bind("mxUpdateCheckboxInput", h.updateCheckboxInput);
   bind("mxNotify", h.shinyNotify);
