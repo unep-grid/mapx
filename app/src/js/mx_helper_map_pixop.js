@@ -3,14 +3,15 @@ import { RadialProgress } from "./radial_progress/index.js";
 import { UAParser } from "ua-parser-js";
 import { events } from "./mx.js";
 
+const uaparser = new UAParser();
+const isNotBlink = uaparser.getEngine().name !== "Blink";
+
 let prog;
 
 window.addEventListener(
   "load",
   () => {
     events.once("mapx_ready", () => {
-      const uaparser = new UAParser();
-      const isNotBlink = uaparser.getEngine().name !== "Blink";
       const elPixopTools = document.getElementById("highlight_tools_box");
       if (elPixopTools && isNotBlink) {
         elPixopTools.classList.add("disabled");

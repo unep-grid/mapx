@@ -7,6 +7,7 @@ import { modal } from "./../mx_helper_modal.js";
 import { settings as settingsMapx } from "./../settings";
 import { settings as storySettings } from "./settings.js";
 import { theme } from "./../mx";
+import { UAParser } from "ua-parser-js";
 import {
   onNextFrame,
   cancelFrame,
@@ -57,6 +58,8 @@ const viewsAdditional = []; // will be in state
 const story = {};
 const state = {};
 window._sm = { story, state };
+const uaparser = new UAParser();
+const isGecko = uaparser.getEngine().name === "Gecko";
 
 /**
  * Read and evaluate story map
@@ -385,24 +388,19 @@ export async function storyStop() {
   }
 }
 
+/**
+ * Cancel all DOM processes and network requests
+ * -> does not block async code and timeouts
+ * -> see https://jsfiddle.net/fxi/u6ftLg9h/ 
+ */
 async function cancelAll() {
-  if (/Firefox/.test(navigator.userAgent)) {
+  if (isGecko) {
     /**
      * Firefox breaks Shiny websocket when using window.stop.. "
-     * -> window.history.back() works, but until the history reach a state
-     *    where it's no more in the current app..
-     * -> creating a temporary param create a new history entry.
-     *    Then, going back should cancel ongoing scripts/fetch 
      */
-    const url = new URL(window.location);
-    const now = Date.now();
-    url.searchParams.set("cancel", now);
-    window.history.pushState({}, "", url);
-    await waitTimeoutAsync(100);
-    window.history.back();
-  } else {
-    window.stop();
+    return;
   }
+  window.stop();
 }
 
 async function cleanState() {
