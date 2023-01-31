@@ -103,10 +103,6 @@ observe({
       errors <- errors[errors]
       hasError <- length(errors) > 0
 
-      if (hasError) {
-        browser()
-      }
-
       mxUiHide(
         id = "btnAddViewConfirm",
         hide = FALSE,
