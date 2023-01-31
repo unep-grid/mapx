@@ -1,3 +1,14 @@
+  - [1.10.0-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-beta.1) 
+
+    - APP
+        - Added better source selector for metadata and settings edition. See #881
+        - Missing support for geojson for fetching source property e.g. click
+        - Table editor : fixed an error occuring  when the user closed the tool after selecting a source
+        - Cancel network function in story map : do not use window.stop with firefox, it breaks shiny websocket connection and the session is disconnected.
+        - Non-blink browsers (safari, firefox) don't handle offscreen canvas as expected, or not at all. Disable PixOp / Spotlight usage on those browser. See also issue #344
+        - Added flags support through css. e.g. `<span class='fi fi-ch fis'></span>`
+        - Fixed in "New view" type 'cc' : missing validation for dev
+
   - [1.10.0-beta](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-beta) 
 
     - APP
