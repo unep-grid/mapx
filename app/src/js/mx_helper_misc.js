@@ -13,6 +13,9 @@ import { UAParser } from "ua-parser-js";
 
 import copy from "fast-copy";
 import { settings } from "./settings";
+import { modalSelectSource } from "./select_auto/modals";
+import { isSourceId } from "./is_test";
+
 /**
  * Fill mising value of target with source object
  * NOTE: Similar to Object.assign, with handling of  "empty" values for each types ('',{},[],null,undefined, ...)
@@ -1076,6 +1079,16 @@ export function updateCheckboxInput(o) {
 }
 
 /**
+ * Show select source edit modal
+ */
+export async function showSelectSourceEdit(opt) {
+  const idSource = await modalSelectSource();
+  if (isSourceId(idSource)) {
+    Shiny.onInputChange(opt.id, idSource);
+  }
+}
+
+/**
  * btn control helper
  */
 
@@ -1896,9 +1909,9 @@ export function injectHead(items) {
 
 export function getBrowserData() {
   const userAgentData = new UAParser().getResult();
-  const lang =  navigator.language; 
+  const lang = navigator.language;
   return {
-    language: lang.substring(0,2),
+    language: lang.substring(0, 2),
     cookies: mx.helpers.readCookie(),
     userAgent: userAgentData,
     timeZone: new Date().toString().replace(/.*[(](.*)[)].*/, "$1"),

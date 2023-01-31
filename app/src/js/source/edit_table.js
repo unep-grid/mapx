@@ -5,6 +5,7 @@ import {
   modalConfirm,
   modalDialog,
 } from "./../mx_helper_modal.js";
+import { modalSelectSource } from "../select_auto";
 import { el, elButtonFa, elCheckbox, tt } from "../el_mapx";
 import { moduleLoad } from "./../modules_loader_async";
 import { getDictTemplate, getDictItem } from "./../language";
@@ -2355,25 +2356,27 @@ export class EditTableSessionClient extends WsToolsBase {
    * - built with tom select, in select_auto module
    */
   async dialogSelectTable() {
-    const res = await modalPrompt({
-      title: getDictItem("edit_table_modal_select_title"),
-      label: getDictItem("edit_table_modal_select_label"),
-      onInput: (value, elBtnConfirm) => {
-        if (isSourceId(value)) {
-          elBtnConfirm.classList.remove("disabled");
-        } else {
-          elBtnConfirm.classList.add("disabled");
-        }
-      },
-      selectAutoOptions: {
-        type: "sources_list_edit",
-        config: {
-          loaderData: {
-            types: ["tabular", "vector"],
-          },
-        },
-      },
-    });
+    const res = await modalSelectSource();
+
+   /* modalPrompt({*/
+      /*title: getDictItem("edit_table_modal_select_title"),*/
+      /*label: getDictItem("edit_table_modal_select_label"),*/
+      /*onInput: (value, elBtnConfirm) => {*/
+        /*if (isSourceId(value)) {*/
+          /*elBtnConfirm.classList.remove("disabled");*/
+        /*} else {*/
+          /*elBtnConfirm.classList.add("disabled");*/
+        /*}*/
+      /*},*/
+      /*selectAutoOptions: {*/
+        /*type: "sources_list_edit",*/
+        /*config: {*/
+          /*loaderData: {*/
+            /*types: ["tabular", "vector"],*/
+          /*},*/
+        /*},*/
+      /*},*/
+    /*});*/
     return res;
   }
 
