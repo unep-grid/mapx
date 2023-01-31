@@ -1506,68 +1506,6 @@ export async function handleClickEvent(e, idMap) {
     return;
   }
 
-  if (retrieveAttributes) {
-    /*
-     * Extract attributes, return an object with idView
-     * as key and promises as value
-     * e.g. {MX-OTXV7-C2HI3-Z7XLJ: Promise}
-     *
-     */
-    const layersAttributes = await getLayersPropertiesAtPoint({
-      map: map,
-      point: e.point,
-      type: ["vt", "gj", "cc", "rt"],
-      asObject: true,
-    });
-
-    if (isEmpty(layersAttributes)) {
-      return;
-    }
-
-    /**
-     * Dispatch to event
-     */
-    await attributesToEvent(layersAttributes, e);
-
-    if (addPopup) {
-      /**
-       * Click event : make a popup with attributes
-       */
-      const popup = new mx.mapboxgl.Popup()
-        .setLngLat(map.unproject(e.point))
-        .addTo(map);
-
-      events.once({
-        type: [
-          "view_remove",
-          "view_add",
-          "story_step",
-          "story_lock",
-          "story_close",
-        ],
-        idGroup: "click_popup",
-        callback: () => {
-          popup.remove();
-        },
-      });
-
-      /**
-       * Remove highlighter too
-       */
-      popup.on("close", () => {
-        mx.highlighter.clean();
-      });
-
-      /**
-       * NOTE: see features_popup.js
-       */
-      featuresToPopup({
-        layersAttributes: layersAttributes,
-        popup: popup,
-      });
-    }
-  }
-
   if (addHighlight) {
     /**
      * Update highlighter after displaying popup:
@@ -1577,6 +1515,69 @@ export async function handleClickEvent(e, idMap) {
      */
     onNextFrame(() => {
       mx.highlighter.update(e);
+    });
+  }
+
+  if (!retrieveAttributes) {
+    return;
+  }
+  /*
+   * Extract attributes, return an object with idView
+   * as key and promises as value
+   * e.g. {MX-OTXV7-C2HI3-Z7XLJ: Promise}
+   *
+   */
+  const layersAttributes = await getLayersPropertiesAtPoint({
+    map: map,
+    point: e.point,
+    type: ["vt", "gj", "cc", "rt"],
+    asObject: true,
+  });
+
+  if (isEmpty(layersAttributes)) {
+    return;
+  }
+
+  /**
+   * Dispatch to event
+   */
+  await attributesToEvent(layersAttributes, e);
+
+  if (addPopup) {
+    /**
+     * Click event : make a popup with attributes
+     */
+    const popup = new mx.mapboxgl.Popup()
+      .setLngLat(map.unproject(e.point))
+      .addTo(map);
+
+    events.once({
+      type: [
+        "view_remove",
+        "view_add",
+        "story_step",
+        "story_lock",
+        "story_close",
+      ],
+      idGroup: "click_popup",
+      callback: () => {
+        popup.remove();
+      },
+    });
+
+    /**
+     * Remove highlighter too
+     */
+    popup.on("close", () => {
+      mx.highlighter.clean();
+    });
+
+    /**
+     * NOTE: see features_popup.js
+     */
+    featuresToPopup({
+      layersAttributes: layersAttributes,
+      popup: popup,
     });
   }
 }
@@ -4654,6 +4655,7 @@ export function getLayersPropertiesAtPoint(opt) {
               items[idView] = fetchRasterProp(view, sources[id]);
               break;
             case "vector":
+            case "geojson":
               items[view.id] = fetchVectorProp(view);
               break;
           }
