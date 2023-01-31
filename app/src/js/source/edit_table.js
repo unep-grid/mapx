@@ -506,7 +506,7 @@ export class EditTableSessionClient extends WsToolsBase {
   addColumns(updates) {
     const et = this;
     const nColumns = et._columns.length + updates.length;
-    const singleCol =  updates.length === 1;
+    const singleCol = updates.length === 1;
 
     let cPos = 0;
 
@@ -516,7 +516,9 @@ export class EditTableSessionClient extends WsToolsBase {
        * https://github.com/handsontable/handsontable/issues/5439
        */
       const column = et._column(update.column_name, update.column_type);
-      column._pos = singleCol ? nColumns : column._invalid
+      column._pos = singleCol
+        ? nColumns
+        : column._invalid
         ? nColumns + 1
         : column.readOnly
         ? -1
@@ -2209,7 +2211,11 @@ export class EditTableSessionClient extends WsToolsBase {
   emit(type, message, timeout) {
     const et = this;
     const to = isEmpty(timeout) ? et._config.timeout_emit : timeout;
+
     return new Promise((resolve, reject) => {
+      if (!et.state.built) {
+        return false;
+      }
       if (et.locked) {
         return false;
       }
