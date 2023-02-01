@@ -663,7 +663,10 @@ export function metaSourceToUi(meta) {
           {
             href: "mailto:" + c.email,
           },
-          el("span", c.name + (c.function ? " ( " + c.function + " ) " : ""))
+          el(
+            "span",
+            (c.name || c.email) + (c.function ? " ( " + c.function + " ) " : "")
+          )
         ),
         el("br"),
         el(
