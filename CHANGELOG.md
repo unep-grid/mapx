@@ -1,3 +1,17 @@
+  - [1.10.0-rc.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-rc.1) 
+
+
+    - APP 
+        - Geostyler don't recognize 'has' expression. It's use in mapbox-gl to define null attribute. Convert to `["==",<attr>,null]`
+        - View VT style 
+            - issue with missing value_to -> use next value as upper bound
+        - View metadata : source email with empty name -> default to email
+        - Table editor :
+            - Updated timeout to 60 second for the `emit` round trip : less timeouts.
+            - Shortcut from table viewer : disable edit button if view is shared
+            - Added postgres ARRAY type
+        - Update dictionnary item 
+
   - [1.10.0-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-beta.1) 
 
     - APP
