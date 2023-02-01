@@ -4361,8 +4361,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "zh": "允许非成员申请成为此项目的成员。"
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "zh": "允许非成员请求成为该项目的成员（仅当公开时）"
   },
   {
     "id": "project_state_key",

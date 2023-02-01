@@ -4361,8 +4361,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "bn": "অ-সদস্যদের এই প্রকল্পে সদস্যতার জন্য অনুরোধ করার অনুমতি দিন। "
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "bn": "অ-সদস্যদের এই প্রকল্পে সদস্যতার অনুরোধ করার অনুমতি দিন (শুধুমাত্র যদি সর্বজনীন)"
   },
   {
     "id": "project_state_key",

@@ -4361,8 +4361,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "es": "Permitir a los no miembros solicitar una membresía para este proyecto."
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "es": "Permitir que los no miembros soliciten una membresía para este proyecto (solo si es público)"
   },
   {
     "id": "project_state_key",

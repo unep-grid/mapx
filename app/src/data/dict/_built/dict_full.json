@@ -11337,16 +11337,16 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "fr": "Autoriser les personnes non membres à faire une demande d'adhésion.",
-    "es": "Permitir a los no miembros solicitar una membresía para este proyecto.",
-    "ru": "Разрешить лицам, не являющимся участниками, запрашивать членство в этом проекте. ",
-    "zh": "允许非成员申请成为此项目的成员。",
-    "ar": "السماح لغير الأعضاء بطلب عضوية في هذا المشروع. ",
-    "fa": "به غیرعضوها اجازه دهید عضویت در این پروژه را درخواست کنند. ",
-    "ps": "غیر غړو ته اجازه ورکړئ چې پدې پروژه کې د غړیتوب غوښتنه وکړي. ",
-    "bn": "অ-সদস্যদের এই প্রকল্পে সদস্যতার জন্য অনুরোধ করার অনুমতি দিন। ",
-    "de": "Erlauben Sie Nichtmitgliedern, eine Mitgliedschaft in diesem Projekt anzufordern. "
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "fr": "Autoriser les non-membres à demander une adhésion à ce projet (uniquement si public)",
+    "es": "Permitir que los no miembros soliciten una membresía para este proyecto (solo si es público)",
+    "ru": "Разрешить лицам, не являющимся членами, запрашивать членство в этом проекте (только если он общедоступный)",
+    "zh": "允许非成员请求成为该项目的成员（仅当公开时）",
+    "ar": "السماح لغير الأعضاء بطلب عضوية في هذا المشروع (فقط إذا كان عامًا)",
+    "fa": "به غیر اعضا اجازه درخواست عضویت در این پروژه را بدهید (فقط در صورت عمومی)",
+    "ps": "غیر غړو ته اجازه ورکړئ چې پدې پروژې کې د غړیتوب غوښتنه وکړي (یوازې که عامه)",
+    "bn": "অ-সদস্যদের এই প্রকল্পে সদস্যতার অনুরোধ করার অনুমতি দিন (শুধুমাত্র যদি সর্বজনীন)",
+    "de": "Nichtmitgliedern erlauben, eine Mitgliedschaft in diesem Projekt zu beantragen (nur wenn öffentlich)"
   },
   {
     "id": "project_state_key",

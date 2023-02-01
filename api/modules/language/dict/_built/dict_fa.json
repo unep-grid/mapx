@@ -4361,8 +4361,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "fa": "به غیرعضوها اجازه دهید عضویت در این پروژه را درخواست کنند. "
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "fa": "به غیر اعضا اجازه درخواست عضویت در این پروژه را بدهید (فقط در صورت عمومی)"
   },
   {
     "id": "project_state_key",

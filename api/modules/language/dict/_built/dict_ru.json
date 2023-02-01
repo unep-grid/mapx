@@ -4361,8 +4361,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "ru": "Разрешить лицам, не являющимся участниками, запрашивать членство в этом проекте. "
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "ru": "Разрешить лицам, не являющимся членами, запрашивать членство в этом проекте (только если он общедоступный)"
   },
   {
     "id": "project_state_key",

@@ -4361,8 +4361,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "ps": "غیر غړو ته اجازه ورکړئ چې پدې پروژه کې د غړیتوب غوښتنه وکړي. "
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "ps": "غیر غړو ته اجازه ورکړئ چې پدې پروژې کې د غړیتوب غوښتنه وکړي (یوازې که عامه)"
   },
   {
     "id": "project_state_key",

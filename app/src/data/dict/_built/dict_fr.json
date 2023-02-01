@@ -4361,8 +4361,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "fr": "Autoriser les personnes non membres à faire une demande d'adhésion."
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "fr": "Autoriser les non-membres à demander une adhésion à ce projet (uniquement si public)"
   },
   {
     "id": "project_state_key",

@@ -3489,7 +3489,7 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project."
+    "en": "Allow non-members to request a membership to this project ( only if public )"
   },
   {
     "id": "project_state_key",
