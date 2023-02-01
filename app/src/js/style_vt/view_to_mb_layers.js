@@ -367,7 +367,11 @@ export async function getViewMapboxLayers(v, opt) {
       rule.value_to = p(rule, "value_to", nextValue);
 
       const fromValue = rule.value;
-      const toValue = isNumeric ? rule.value_to : null;
+      const toValue = isNumeric
+        ? isEmpty(rule.value_to)
+          ? nextValue
+          : rule.value_to
+        : null;
       const sameFromTo = isNumeric && toValue === fromValue;
       /**
        *  Symbols and pattern check
