@@ -363,13 +363,18 @@ export async function getViewMapboxLayers(v, opt) {
       /**
        * If no value_to, use next value, or use max, or null (non numeric)
        */
-      const nextValue = p(nextRule, "value", rulesValues.max);
-      rule.value_to = p(rule, "value_to", nextValue);
+      let nextValue = nextRule?.value;
+      if (isEmpty(nextValue)) {
+        nextValue = rulesValues.max;
+      }
+      if (isEmpty(rule.value_to)) {
+        rule.value_to = nextValue;
+      }
 
       const fromValue = rule.value;
       const toValue = isNumeric
         ? isEmpty(rule.value_to)
-          ? nextValue
+          ? rule.value_from
           : rule.value_to
         : null;
       const sameFromTo = isNumeric && toValue === fromValue;
