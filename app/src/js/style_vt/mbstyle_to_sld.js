@@ -215,9 +215,9 @@ function spriteToCdnLink(str, params) {
  * @param {Boolean} opt.fixNumeric All rules apply to numeric attribute
  */
 function geostylerFixFilters(gstyle, opt) {
-  const opKeep = [">", ">=", "<", "<=", "=="];
+  const opKeep = [">", ">=", "<", "<=", "==", "!"];
   const opCombi = ["&&", "||"];
-  const opExpr = ["get"];
+  const opExpr = ["get", "has"];
 
   const isNum = opt.fixNumeric;
 
@@ -229,6 +229,7 @@ function geostylerFixFilters(gstyle, opt) {
       /**
        * Handle combination operator
        */
+
       if (opCombi.includes(filter)) {
         filter_fix.push(filter);
         continue;
@@ -246,10 +247,20 @@ function geostylerFixFilters(gstyle, opt) {
            * ["==",["get","x"],"y"]
            *
            * ⚠️  should have been handled previously via
-           * 'simplifyExpression', but if used directly
+           * 'simplifyExpression' (makeSimpleLayer),
+           *  but if used directly...
            */
           if (isArray(filter[1])) {
-            if (opExpr.includes(filter[1][0])) {
+            if (filter[1][0] === "has" && filter[0] === "!") {
+              /**
+               * ["!",["has",<attr>]]
+               * ->
+               * ["==",<attr>,null]
+               */
+              const filterNull = ["==", filter[1][1], null];
+              filter.length = 0;
+              filter.push(...filterNull);
+            } else if (opExpr.includes(filter[1][0])) {
               filter[1] = filter[1][1];
             }
           }
