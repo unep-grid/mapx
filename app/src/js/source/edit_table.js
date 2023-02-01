@@ -54,7 +54,7 @@ const defaults = {
   max_rows: 1e5, // should match server
   max_changes_large: 1e3,
   max_columns: 1e3, // should match server
-  timeout_emit: 1e3 * 10, // 10s round trip
+  timeout_emit: 1e3 * 60, // 10s round trip
   timeout_sanizing: 1e3 * 60,
   timeout_geom_valid: 1e3 * 120,
   routes: {
