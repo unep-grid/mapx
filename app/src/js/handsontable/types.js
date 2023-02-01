@@ -22,6 +22,11 @@ const pgTypesData = {
     handsontable: "numeric",
     mx_handsontable: "mx_number",
   },
+  "ARRAY": {
+    json: "string",
+    handsontable: "text",
+    mx_handsontable: "mx_string",
+  },
   "double precision": {
     json: "number",
     handsontable: "numeric",
