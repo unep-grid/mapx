@@ -69,10 +69,13 @@ export async function showSourceTableAttributeModal(opt) {
     const groups = settings?.user?.roles?.groups || [];
     const editor = summary?.roles?.editor;
     const editors = summary?.roles?.editors;
-    addEdit =
-      editor === idUser ||
-      editors.some((role) => groups.includes(role) || role === idUser);
+    const isProject = config?.view?.project === settings?.project?.id;
+    const isEditor = editor === idUser;
+    const isAllowed = editors.some(
+      (role) => groups.includes(role) || role === idUser
+    );
 
+    addEdit = isProject && (isEditor || isAllowed);
     /**
      * Start progress
      */
