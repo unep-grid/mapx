@@ -465,80 +465,9 @@ config[[c("views", "type_dev")]] <- list(
 # Data configuration
 #
 config[["data"]] <- list()
-
 #
 # File format meta
-#
-# https://en.wikipedia.org/wiki/GIS_file_formats
-# http://www.w3schools.com/tags/att_input_accept.asp
-# ⚠️  Redefined in src/js/settings/index.js:
-# To be removed when upload/download fully migrated
-config[[c("data", "format")]] <- list(
-  list(
-    name = "ESRI Shapefile",
-    type = "vector",
-    driver = "ESRI Shapefile",
-    fileExt = c(".shp", ".shx", ".dbf", ".prj"),
-    multiple = TRUE
-  ),
-  list(
-    name = "GeoJSON",
-    type = "vector",
-    fileExt = c(".geojson", ".json"),
-    driver = "GeoJSON",
-    multiple = FALSE
-  ),
-  list(
-    name = "GML",
-    driver = "GML",
-    type = "vector",
-    fileExt = c(".kml"),
-    multiple = FALSE
-  ),
-  list(
-    name = "GPX",
-    driver = "GPX",
-    type = "vector",
-    fileExt = c(".gpx"),
-    multiple = FALSE
-  ),
-  list(
-    name = "GPKG",
-    driver = "GPKG",
-    type = "vector",
-    fileExt = c(".gpkg"),
-    multiple = FALSE
-  ),
-  list(
-    name = "KML",
-    driver = "KML",
-    type = "vector",
-    fileExt = c(".kml"),
-    multiple = FALSE
-  ),
-  list(
-    name = "SQLite",
-    driver = "SQLite",
-    type = "vector",
-    fileExt = c(".sqlite"),
-    multiple = FALSE
-  ),
-  list(
-    name = "DXF",
-    driver = "DXF",
-    type = "vector",
-    fileExt = c(".dxf"),
-    multiple = FALSE
-  ),
-  list(
-    name = "CSV",
-    driver = "CSV",
-    type = "vector",
-    fileExt = c(".csv"),
-    multiple = FALSE
-  )
-)
-
+# ⚠️  moved to  api/modules/file_formats/
 
 #
 # Email configuration

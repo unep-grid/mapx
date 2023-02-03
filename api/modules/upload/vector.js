@@ -56,10 +56,30 @@ export const mwUpload = [
 
 /**
  * io upload middleware
+ * @param {Socket | Request} socket or request object
+ * @param {Object} config Config Object.e.g. :
+ * {
+ *  idRequest: "CS7SSIMEdo",
+ *  id: 0,
+ *  from: 0,
+ *  to: 100,
+ *  on: 1000,
+ *  last: false,
+ *  first: true,
+ *  title: "test_1000.geojson",
+ *  canceled: false,
+ *  filename: "test_1000.geojson",
+ *  mimetype: "application/json",
+ *  sourceSrs: 4326,
+ *  language: "en",
+ *  data :[...] (ArrayBuffer)
+ * };
  */
 export async function ioUploadSource(socket, config) {
   try {
-    // Test for role
+    /*
+    * Test for role
+    */
     const session = socket.session;
     if (!session.user_roles.publisher) {
       return;

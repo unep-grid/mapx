@@ -1,5 +1,5 @@
 import { el, elSpanTranslate } from "./../el_mapx/index.js";
-import { isIconFont, isCanvas } from "./../is_test_mapx";
+import { isIconFont, isCanvas, isEmpty } from "./../is_test_mapx";
 import { path } from "./../mx_helper_misc.js";
 import { modal, modalConfirm } from "./../mx_helper_modal.js";
 import { FlashCircle } from "./../icon_flash";
@@ -8,7 +8,8 @@ import { storyRead } from "./../story_map/index.js";
 import { viewToTableAttributeModal } from "./../source/display_table.js";
 import { viewToMetaModal } from "./../mx_helper_map_view_metadata.js";
 import { getDictItem, getLanguageCurrent } from "./../language";
-import { uploadGeoJSONModal } from "./../mx_helper_upload_source.js";
+//import { uploadGeoJSONModal } from "./../mx_helper_upload_source.js";
+import { Uploader } from "./../uploader";
 import { modalMirror } from "./../mirror_util";
 import { ShareModal } from "./../share_modal/index.js";
 import { ModalCodeIntegration } from "../code_integration_modal/index.js";
@@ -25,6 +26,8 @@ import {
   zoomToViewIdVisible,
   zoomToViewId,
 } from "./../map_helpers/index.js";
+
+import { data } from "./../mx.js";
 
 export { handleViewClick };
 
@@ -180,9 +183,16 @@ async function handleViewClick(event) {
       {
         comment: "target is the upload geojson button",
         test: dataset.view_action_key === "btn_upload_geojson",
-        action: function () {
+        action: async function () {
           const idView = dataset.view_action_target;
-          uploadGeoJSONModal(idView);
+          const item = await data.geojson.getItem(idView);
+          const geojson = item?.view?.data?.source?.data;
+          const noGeojson = isEmpty(geojson);
+          if (noGeojson) {
+            return;
+          }
+          new Uploader({ geojson });
+          //uploadGeoJSONModal(idView);
         },
       },
       {
