@@ -1,3 +1,5 @@
+  - [1.10.0](https://github.com/unep-grid/map-x-mgl/tree/1.10.0) 
+
   - [1.10.0-rc.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-rc.1) 
 
 
