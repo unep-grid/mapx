@@ -60,7 +60,7 @@ async function exportHandler(req, res, next) {
 
 export async function ioDownloadSource(socket, options) {
   try {
-    return extractFromPostgres(socket, options);
+    await extractFromPostgres(socket, options);
   } catch (e) {
     await socket.notifyInfoError({
       message: e.message,
