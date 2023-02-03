@@ -1,3 +1,8 @@
+  - [1.10.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.1) 
+
+    - API 
+        - Fix an uncatched error during download affecting layers with some invalid geometries, when a country clip was set as download option.
+
   - [1.10.0](https://github.com/unep-grid/map-x-mgl/tree/1.10.0) 
 
   - [1.10.0-rc.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-rc.1) 
