@@ -5,7 +5,7 @@ WITH
       CASE
         WHEN lower(ST_GeometryType (geom)) like '%point' THEN 'point'
         WHEN lower(ST_GeometryType (geom)) like '%polygon' THEN 'polygon'
-        WHEN lower(ST_GeometryType (geom)) like '%line' THEN 'line'
+        WHEN lower(ST_GeometryType (geom)) like '%linestring' THEN 'line'
       END geom_type
     FROM
       "{{idSource}}"
