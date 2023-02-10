@@ -480,6 +480,7 @@ export function elButtonFa(key, opt) {
  * @param {String} opt.id Element id
  * @param {String} opt.dataset Additional custom data-
  * @param {String} opt.action Callback
+ * @param {String} opt.name Form name item, if not equal to key
  * @param {Boolean} opt.checked Checked at start
  * @param {Boolean} opt.tooltip Add tooltip (false)
  * @param {Boolean} opt.keyLabel Optional translation key for label
@@ -503,7 +504,7 @@ export function elCheckbox(key, opt) {
   return el("div", { class: "checkbox" }, [
     el("label", { for: opt.id }, [
       el("input", {
-        name: key,
+        name: opt.name || key,
         id: opt.id,
         type: "checkbox",
         checked: opt.checked,

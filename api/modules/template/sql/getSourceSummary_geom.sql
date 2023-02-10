@@ -19,6 +19,9 @@ WITH
       gtype
     GROUP BY
       geom_type
+    ORDER BY 
+      geom_count 
+    DESC
   ),
   gtable_json as (
     SELECT

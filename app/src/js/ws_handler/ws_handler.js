@@ -123,14 +123,16 @@ class WsHandler {
    * Generic emit wrapper
    * @param {String} type emit route/type
    * @param {Object} data
+   * @param {Function} callback Acknowledge function
    */
-  emit(type, data) {
+  emit(type, data, callback) {
     const ws = this;
-    return ws._socket.emit(type, data);
+    return ws._socket.emit(type, data, callback);
   }
 
   /**
    * Emit and get result
+   * ⚠️  Use acknowledgements callback in emit instead ⚠️
    * @param {String} type Route/Identifier for the request handler.
    *                 eg. "ws/get/project/layers/list"
    * @param {Object} data

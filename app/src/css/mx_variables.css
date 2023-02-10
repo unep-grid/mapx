@@ -38,6 +38,7 @@
   * Shadow
   */
   --mx_ui_box_shadow: 0px 0px 14px 0px var(--mx_ui_shadow);
+  --mx_ui_box_shadow_inset: inset 0 0 14px 3px var(--mx_ui_shadow);
 
   /**
   * Views colors

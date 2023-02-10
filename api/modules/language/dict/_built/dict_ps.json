@@ -8290,6 +8290,56 @@
     "ps": "په ډیټابیس کې واردول"
   },
   {
+    "id": "up_settings",
+    "en": "Settings",
+    "ps": "ترتیبات"
+  },
+  {
+    "id": "up_select_epsg_code",
+    "en": "EPSG code",
+    "ps": "د EPSG کوډ"
+  },
+  {
+    "id": "up_check_enable_wms_label",
+    "en": "Enable WMS services",
+    "ps": "د WMS خدمتونه فعال کړئ"
+  },
+  {
+    "id": "up_check_enable_wms_desc",
+    "en": "In a public project, if public views are created using this source, enabling WMS service will automatically create a WMS layer and SLD, available for anyone.",
+    "ps": "په یوه عامه پروژه کې، که د دې سرچینې په کارولو سره عامه نظرونه رامینځته شي، د WMS خدمت فعالول به په اوتومات ډول د WMS پرت او SLD رامینځته کړي چې د هرچا لپاره شتون لري."
+  },
+  {
+    "id": "up_check_create_view_label",
+    "en": "Automatically create a view",
+    "ps": "په اتوماتيک ډول یو لید جوړ کړئ"
+  },
+  {
+    "id": "up_check_create_view_desc",
+    "en": "Create a basic view at the end of the process and add it to the project",
+    "ps": "د پروسې په پای کې یو بنسټیز لید جوړ کړئ او په پروژه کې یې اضافه کړئ"
+  },
+  {
+    "id": "up_check_allow_download_label",
+    "en": "Allow this source to be downloaded",
+    "ps": "اجازه راکړئ چې دا سرچینه ډاونلوډ شي"
+  },
+  {
+    "id": "up_check_allow_download_desc",
+    "en": "This source license allows for redistribution, enabling the download feature will make the data and metadata available for download by anyone",
+    "ps": "د دې سرچینې جواز بیا توزیع ته اجازه ورکوي، د ډاونلوډ ځانګړتیا فعالول به ډاټا او میټاډاټا د هرچا لخوا د ډاونلوډ لپاره شتون ولري"
+  },
+  {
+    "id": "up_check_assign_epsg_label",
+    "en": "Assign the SRS bellow",
+    "ps": "لاندې SRS وټاکئ"
+  },
+  {
+    "id": "up_check_assign_epsg_desc",
+    "en": "The converter will automatically retrieve the SRS information from the uploaded dataset. However, if you prefer to use a different SRS, simply check this checkbox and select the desired EPSG code from the options below.",
+    "ps": "کنورټر به په اتوماتيک ډول د اپلوډ شوي ډیټا سیټ څخه د SRS معلومات بیرته ترلاسه کړي. په هرصورت، که تاسو غوره کوئ چې یو بل SRS وکاروئ، په ساده ډول دا چیک باکس وګورئ او د لاندې اختیارونو څخه د مطلوب EPSG کوډ غوره کړئ."
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "ps": "د خدماتو وړاندې کولو غوره کړئ"

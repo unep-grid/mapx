@@ -49,7 +49,7 @@ export async function ioAddViewVt(socket, config, view_options) {
   try {
     const session = socket.session;
     if (!session.user_roles.publisher) {
-      return;
+      return false;
     }
     const view_base = clone(view_template_vt);
     const view = Object.assign({}, view_base, view_options);
@@ -61,6 +61,15 @@ export async function ioAddViewVt(socket, config, view_options) {
     view.data.source.layerInfo.name = config.idSource;
     view.data.title[config.language || "en"] = config.title;
     view.data.abstract[config.language || "en"] = config.filename;
+
+    /**
+     * Auto creation config
+     */
+    const { enable_download, create_view } = config;
+
+    if (!create_view) {
+      return false;
+    }
 
     /**
      * Test if layer exists and set default attribute
@@ -169,8 +178,8 @@ export async function ioAddViewVt(socket, config, view_options) {
     view.data.attribute.type = table[0].column_type;
 
     /**
-    * Use the first type of geometry found, default to point 
-    */ 
+     * Use the first type of geometry found, default to point
+     */
     view.data.geometry = stats?.geom_type_table[0] || { type: "point" };
 
     /*
@@ -210,8 +219,13 @@ export async function ioAddViewVt(socket, config, view_options) {
 
     /**
      * Add view to the client
+     * - set flag edit 
+     * - set flag downlaod if required
      */
     view._edit = true;
+    if (enable_download) {
+      view._has_download = true;
+    }
     await ioSendJobClient(socket, "view_add", {
       view: view,
     });

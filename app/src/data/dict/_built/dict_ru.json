@@ -8290,6 +8290,56 @@
     "ru": "Импорт в базу данных"
   },
   {
+    "id": "up_settings",
+    "en": "Settings",
+    "ru": "Настройки"
+  },
+  {
+    "id": "up_select_epsg_code",
+    "en": "EPSG code",
+    "ru": "Код EPSG"
+  },
+  {
+    "id": "up_check_enable_wms_label",
+    "en": "Enable WMS services",
+    "ru": "Включить WMS-сервисы"
+  },
+  {
+    "id": "up_check_enable_wms_desc",
+    "en": "In a public project, if public views are created using this source, enabling WMS service will automatically create a WMS layer and SLD, available for anyone.",
+    "ru": "В общедоступном проекте, если общедоступные представления создаются с использованием этого источника, включение службы WMS автоматически создаст слой WMS и SLD, доступные для всех."
+  },
+  {
+    "id": "up_check_create_view_label",
+    "en": "Automatically create a view",
+    "ru": "Автоматически создавать представление"
+  },
+  {
+    "id": "up_check_create_view_desc",
+    "en": "Create a basic view at the end of the process and add it to the project",
+    "ru": "Создайте базовый вид в конце процесса и добавьте его в проект"
+  },
+  {
+    "id": "up_check_allow_download_label",
+    "en": "Allow this source to be downloaded",
+    "ru": "Разрешить загрузку этого источника"
+  },
+  {
+    "id": "up_check_allow_download_desc",
+    "en": "This source license allows for redistribution, enabling the download feature will make the data and metadata available for download by anyone",
+    "ru": "Эта исходная лицензия допускает повторное распространение, включение функции загрузки сделает данные и метаданные доступными для загрузки любым пользователем."
+  },
+  {
+    "id": "up_check_assign_epsg_label",
+    "en": "Assign the SRS bellow",
+    "ru": "Назначьте SRS ниже"
+  },
+  {
+    "id": "up_check_assign_epsg_desc",
+    "en": "The converter will automatically retrieve the SRS information from the uploaded dataset. However, if you prefer to use a different SRS, simply check this checkbox and select the desired EPSG code from the options below.",
+    "ru": "Преобразователь автоматически извлечет информацию SRS из загруженного набора данных. Однако, если вы предпочитаете использовать другой SRS, просто установите этот флажок и выберите нужный код EPSG из вариантов ниже."
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "ru": "Выберите предустановку услуги"

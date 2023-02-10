@@ -143,7 +143,7 @@ config[["api"]] <- list(
   host = "localhost",
   host_public = "locahost",
   protocol = "http:",
-  upload_size_max = 200 * 1024^2, # 100MiB
+  upload_size_max = 200 * 1024^2, # 200MiB
   routes = c(routes_ws, routes_express)
 )
 

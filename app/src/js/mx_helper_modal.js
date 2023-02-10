@@ -34,6 +34,7 @@ import { SelectAuto } from "./select_auto";
  * @param {Boolean} o.noShinyBinding  By default, the modal panel will try to bind automatically input elements. In some case, this is not wanted. Default : false
  * @param {String} o.styleString Style string to apply to modal window. Default : empty
  * @param {Object} o.style Style object to apply to modal window. Default : empty
+ * @param {Boolean} o.close Close related modal
  * @param {Object} o.styleContent Style object to apply to content of the modal window. Default : empty
  * @param {String|Element} o.content Body content of the modal. Default  : undefined
  * @param {Function} o.onClose On close callback

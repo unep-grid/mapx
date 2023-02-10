@@ -9,7 +9,7 @@ const def = {
 };
 
 export class SelectAuto extends EventSimple {
-  constructor(opt) {
+  constructor(opt, config) {
     super();
     const se = this;
     se._opt = Object.assign({}, def, opt);
@@ -17,6 +17,10 @@ export class SelectAuto extends EventSimple {
     if (isElement(opt)) {
       se._opt.target = opt.querySelector("select");
       se._opt.type = se._opt.target.dataset.type;
+    }
+
+    if (config) {
+      Object.assign(se._opt.config, config);
     }
 
     se.destroy = se.destroy.bind(se);
@@ -48,6 +52,16 @@ export class SelectAuto extends EventSimple {
       se._tom.destroy();
     }
     se.fire("destroyed");
+  }
+
+  enable() {
+    const se = this;
+    se?._tom.enable();
+  }
+
+  disable() {
+    const se = this;
+    se?._tom.disable();
   }
 
   async build() {

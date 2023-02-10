@@ -8290,6 +8290,56 @@
     "de": "Import in Datenbank"
   },
   {
+    "id": "up_settings",
+    "en": "Settings",
+    "de": "Einstellungen"
+  },
+  {
+    "id": "up_select_epsg_code",
+    "en": "EPSG code",
+    "de": "EPSG-Code"
+  },
+  {
+    "id": "up_check_enable_wms_label",
+    "en": "Enable WMS services",
+    "de": "WMS-Dienste aktivieren"
+  },
+  {
+    "id": "up_check_enable_wms_desc",
+    "en": "In a public project, if public views are created using this source, enabling WMS service will automatically create a WMS layer and SLD, available for anyone.",
+    "de": "Wenn in einem öffentlichen Projekt öffentliche Ansichten mit dieser Quelle erstellt werden, werden durch Aktivieren des WMS-Dienstes automatisch ein WMS-Layer und ein SLD erstellt, die für alle verfügbar sind."
+  },
+  {
+    "id": "up_check_create_view_label",
+    "en": "Automatically create a view",
+    "de": "Erstellen Sie automatisch eine Ansicht"
+  },
+  {
+    "id": "up_check_create_view_desc",
+    "en": "Create a basic view at the end of the process and add it to the project",
+    "de": "Erstellen Sie am Ende des Prozesses eine Basisansicht und fügen Sie sie dem Projekt hinzu"
+  },
+  {
+    "id": "up_check_allow_download_label",
+    "en": "Allow this source to be downloaded",
+    "de": "Lassen Sie zu, dass diese Quelle heruntergeladen wird"
+  },
+  {
+    "id": "up_check_allow_download_desc",
+    "en": "This source license allows for redistribution, enabling the download feature will make the data and metadata available for download by anyone",
+    "de": "Diese Quelllizenz ermöglicht die Weiterverteilung, die Aktivierung der Download-Funktion macht die Daten und Metadaten für jedermann zum Download verfügbar"
+  },
+  {
+    "id": "up_check_assign_epsg_label",
+    "en": "Assign the SRS bellow",
+    "de": "Weisen Sie das SRS unten zu"
+  },
+  {
+    "id": "up_check_assign_epsg_desc",
+    "en": "The converter will automatically retrieve the SRS information from the uploaded dataset. However, if you prefer to use a different SRS, simply check this checkbox and select the desired EPSG code from the options below.",
+    "de": "Der Konverter ruft die SRS-Informationen automatisch aus dem hochgeladenen Datensatz ab. Wenn Sie jedoch lieber einen anderen SRS verwenden möchten, aktivieren Sie einfach dieses Kontrollkästchen und wählen Sie den gewünschten EPSG-Code aus den folgenden Optionen aus."
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "de": "Wählen Sie eine Dienstvoreinstellung"

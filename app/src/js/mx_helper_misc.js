@@ -17,6 +17,19 @@ import { modalSelectSource } from "./select_auto/modals";
 import { isSourceId } from "./is_test";
 
 /**
+ * Convert formData to object
+ * @param {FormData} formData Form data
+ * @return {Object}
+ */
+export function formDataToObject(formData) {
+  let obj = {};
+  for (let [key, value] of formData.entries()) {
+    obj[key] = value;
+  }
+  return obj;
+}
+
+/**
  * Fill mising value of target with source object
  * NOTE: Similar to Object.assign, with handling of  "empty" values for each types ('',{},[],null,undefined, ...)
  * @param {Object} target Target object to update

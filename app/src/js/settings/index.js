@@ -47,13 +47,14 @@ const settings = {
       usePostgisTiles: null,
     },
   },
+  // overwritten by settings-global.R
   api: {
     host: "api",
     port: "3333",
     host_public: "api.mapx.org",
     port_public: "443",
     protocol: "https:",
-    upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
+    upload_size_max: Math.pow(1024, 2) * 200, //100 MiB
     routes: routes,
   },
   // see https://github.com/unep-grid/map-x-mgl/issues/472

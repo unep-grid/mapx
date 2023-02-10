@@ -255,7 +255,9 @@ async function registerSource(
   idUser,
   idProject,
   title,
-  type = "vector"
+  type = "vector",
+  enable_download,
+  enable_wms
 ) {
   if (typeof idSource === "object") {
     const options = idSource;
@@ -283,8 +285,25 @@ async function registerSource(
     throw Error("Register source : type not valid");
   }
 
+  /**
+   * Services
+   */
+  const services = [];
+
+  if (enable_wms) {
+    services.push("gs_ws_b");
+  }
+  if (enable_download) {
+    services.push("mx_download");
+  }
+
+  const strServices = JSON.stringify(services);
+
+  /**
+   * Insert
+   */
   const sqlAddSource = `INSERT INTO mx_sources (
-    id, editor, readers, editors, date_modified, type, project, data
+    id, editor, readers, editors, date_modified, type, project, data, services
   ) VALUES (
     $1::text,
     $2::integer,
@@ -293,9 +312,16 @@ async function registerSource(
     now(),
     $3::text,
     $4::text,
-    '{"meta":{"text":{"title":{"en":"${title}"}}}}' 
+    '{"meta":{"text":{"title":{"en":"${title}"}}}}',
+    $5::jsonb
   )`;
-  await pgWrite.query(sqlAddSource, [idSource, idUser, type, idProject]);
+  await pgWrite.query(sqlAddSource, [
+    idSource,
+    idUser,
+    type,
+    idProject,
+    strServices,
+  ]);
   return true;
 }
 
@@ -308,7 +334,9 @@ async function registerOrRemoveSource(
   idUser,
   idProject,
   title,
-  type = "vector"
+  type = "vector",
+  enable_download = null,
+  enable_wms = false
 ) {
   if (typeof idSource === "object") {
     const options = idSource;
@@ -334,7 +362,16 @@ async function registerOrRemoveSource(
   }
 
   if (!stats.removed) {
-    await registerSource(idSource, idUser, idProject, title, type);
+    await registerSource(
+      idSource,
+      idUser,
+      idProject,
+      title,
+      type,
+      enable_download,
+      enable_wms
+    );
+
     stats.registered = true;
   }
 

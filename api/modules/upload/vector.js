@@ -57,41 +57,44 @@ export const mwUpload = [
 /**
  * io upload middleware
  * @param {Socket | Request} socket or request object
- * @param {Object} config Config Object.e.g. :
- * {
- *  idRequest: "CS7SSIMEdo",
- *  id: 0,
- *  from: 0,
- *  to: 100,
- *  on: 1000,
- *  last: false,
- *  first: true,
- *  title: "test_1000.geojson",
- *  canceled: false,
- *  filename: "test_1000.geojson",
- *  mimetype: "application/json",
- *  sourceSrs: 4326,
- *  language: "en",
- *  data :[...] (ArrayBuffer)
- * };
+ * @param {Object} chunk
+ * @property {string} chunk.chunk.id_request - The unique identifier for the request.
+ * @property {boolean} chunk.first - A flag indicating if it's the first request.
+ * @property {boolean} chunk.last - A flag indicating if it's the last request.
+ * @property {number} chunk.start - The start index of the data.
+ * @property {number} chunk.end chunk.- The end index of the data.
+ * @property {number} chunk.on chunk.- A number representing some state.
+ * @property {Array} chunk.data chunk.- An array of data.
+ * @property {number} chunk.id_file - The unique identifier for the file.
+ * @property {number} chunk.n_files - The total number of files.
+ * @property {boolean} chunk.canceled - A flag indicating if the request was canceled.
+ * @property {string} chunk.filename - The filename.
+ * @property {string} chunk.mimetype - The MIME type of the file.
+ * @property {string} chunk.driver - The Driver to use
+ * @property {string} chunk.title - The title of the file.
+ * @property {boolean} chunk.create_view - A flag indicating if a view should be created.
+ * @property {boolean} chunk.enable_download - A flag indicating if download is enabled.
+ * @property {boolean} chunk.enable_wms - A flag indicating if WMS is enabled.
+ * @property {boolean} chunk.assign_srs - A flag indicating if the SRS should be assigned.
+ * @property {number} chunk.source_srs - The source SRS identifier.
  */
-export async function ioUploadSource(socket, config) {
+export async function ioUploadSource(socket, chunk, callback) {
   try {
     /*
-    * Test for role
-    */
+     * Test for role
+     */
     const session = socket.session;
     if (!session.user_roles.publisher) {
       return;
     }
     // Handle chunked data
-    config.file = await chunkWriter(socket, config);
-    if (config.file) {
+    const config = await chunkWriter(socket, chunk);
+    if (config) {
       await save(socket, config);
     }
-    return true;
+    return callback({ status: "ok" });
   } catch (e) {
-    return false;
+    return callback({ status: "error", message: e?.message || e });
   }
 }
 
@@ -148,7 +151,7 @@ async function handleSuccess(socket, config) {
     });
 
     socket.notifyInfoSuccess({
-      idGroup: config.idRequest,
+      idGroup: config.id_request,
       message: msg,
     });
 
@@ -186,7 +189,7 @@ async function handleFailure(socket, config, e) {
     });
 
     socket.notifyInfoError({
-      idGroup: config.idRequest,
+      idGroup: config.id_request,
       message: msg,
     });
 
@@ -204,8 +207,9 @@ async function handleFailure(socket, config, e) {
  * Convert data
  */
 export async function ioConvertOgr(res, config) {
-  const { sourceSrs, file, idRequest, idSource } = config;
+  const { source_srs, file, id_request, idSource } = config;
 
+  // handle both multer file // chunk writer file
   const filename = file?.name || file?.originalname;
   const mimetype = file?.type || file?.mimetype;
   const filepath = file?.path;
@@ -225,16 +229,16 @@ export async function ioConvertOgr(res, config) {
     idSource: idSource,
     filename: filename,
     filepath: filepath,
-    sourceSrs: sourceSrs,
+    sourceSrs: source_srs,
     onMessage: async (message) => {
       await res.notifyInfoMessage({
-        idGroup: idRequest,
+        idGroup: id_request,
         message: message,
       });
     },
     onVerbose: async (message) => {
       await res.notifyInfoVerbose({
-        idGroup: idRequest,
+        idGroup: id_request,
         idMerge: "verbose_message",
         message: message,
       });
@@ -242,14 +246,14 @@ export async function ioConvertOgr(res, config) {
     onProgress: async (value) => {
       await res.notifyProgress({
         idMerge: "postgres_write",
-        idGroup: idRequest,
+        idGroup: id_request,
         message: t("upl_import_db"),
         value: value,
       });
     },
     onWarning: async (message) => {
       await res.notifyInfoWarning({
-        idGroup: idRequest,
+        idGroup: id_request,
         message: message,
       });
     },
@@ -260,7 +264,7 @@ export async function ioConvertOgr(res, config) {
  * Handler for adding reccord in source table
  */
 async function ioAddSource(socket, config) {
-  const { title, idSource, idRequest } = config;
+  const { title, idSource, id_request, enable_wms, enable_download } = config;
   const idProject = socket?.session?.project_id || config.idProject;
   const idUser = (socket?.session?.user_id || config.idUser) * 1;
 
@@ -280,7 +284,9 @@ async function ioAddSource(socket, config) {
     idUser,
     idProject,
     title,
-    sourceType
+    sourceType,
+    enable_download,
+    enable_wms
   );
 
   if (!reg.registered) {
@@ -304,7 +310,7 @@ async function ioAddSource(socket, config) {
     validate: true,
     onProgress: async (data) => {
       await socket.notifyProgress({
-        idGroup: idRequest,
+        idGroup: id_request,
         idMerge: "geom_validation",
         message: t("upl_api_save_validation"),
         value: data.percent * 100,
@@ -313,7 +319,7 @@ async function ioAddSource(socket, config) {
   });
 
   await socket.notifyProgress({
-    idGroup: idRequest,
+    idGroup: id_request,
     idMerge: "geom_validation",
     message: t("upl_api_save_validation"),
     value: 100,
@@ -323,7 +329,7 @@ async function ioAddSource(socket, config) {
 
   await socket.notifyInfo({
     type: isValid ? "info" : "warning",
-    idGroup: idRequest,
+    idGroup: id_request,
     message: t("upl_api_save_validation_geom_count", config.language, {
       count: validationResult.stat.invalid,
     }),
@@ -421,7 +427,7 @@ export async function fileToPostgres(config) {
       new URL("./sh/import_vector.sh", import.meta.url).pathname,
       filepathfull,
       idSource,
-      sourceSrs,
+      sourceSrs || '',
       isCsv ? "yes" : "no",
     ];
 

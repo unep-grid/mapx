@@ -29,6 +29,9 @@ import {
   mwNotify,
 } from "#mapx/io";
 
+import events from 'events';
+events.EventEmitter.defaultMaxListeners = 100;
+
 /**
  * If port argument is set, use this instead
  * e.g. node inspect index.js port=3333
