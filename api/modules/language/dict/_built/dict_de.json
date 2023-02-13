@@ -8340,6 +8340,11 @@
     "de": "Der Konverter ruft die SRS-Informationen automatisch aus dem hochgeladenen Datensatz ab. Wenn Sie jedoch lieber einen anderen SRS verwenden möchten, aktivieren Sie einfach dieses Kontrollkästchen und wählen Sie den gewünschten EPSG-Code aus den folgenden Optionen aus."
   },
   {
+    "id": "up_drop_or_click",
+    "en": "Drop files or click to select..",
+    "de": "Dateien ablegen oder zur Auswahl klicken.."
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "de": "Wählen Sie eine Dienstvoreinstellung"

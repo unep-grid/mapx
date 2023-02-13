@@ -8340,6 +8340,11 @@
     "es": "El convertidor recuperará automáticamente la información SRS del conjunto de datos cargado. Sin embargo, si prefiere usar un SRS diferente, simplemente marque esta casilla de verificación y seleccione el código EPSG deseado de las opciones a continuación."
   },
   {
+    "id": "up_drop_or_click",
+    "en": "Drop files or click to select..",
+    "es": "Suelte los archivos o haga clic para seleccionar.."
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "es": "Seleccionar un servicio preestablecido"

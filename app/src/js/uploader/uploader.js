@@ -7,6 +7,7 @@ import { bindAll } from "../bind_class_methods";
 import { fileFormatsVectorUpload } from "./utils";
 import { Item } from "./item.js";
 import { shake } from "./../elshake";
+import { getDictItem as t } from "./../language";
 
 const config = {
   max_items: 4,
@@ -80,6 +81,11 @@ export class Uploader {
         drop: up.handleDropZoneDragDrop,
       },
       class: "uploader",
+      message: "Drop files or click to select...",
+    });
+
+    t("up_drop_or_click").then((txt) => {
+      up._el_container.setAttribute("message", txt);
     });
 
     up._el_button_upload = el(
@@ -262,24 +268,8 @@ export class Uploader {
       if (!hasFiles) {
         return;
       }
-      let countIssue = 0;
       up._prevent(e);
-
-      const files = [...e.dataTransfer.files];
-
-      for (const file of files) {
-        const item = new Item(file, up);
-        if (!item.valid) {
-          countIssue++;
-          continue;
-        }
-        item.register();
-      }
-
-      if (countIssue >= files.length) {
-        shake(up._el_container);
-      }
-
+      up.filesToItems(e.dataTransfer.files);
       up._el_container.classList.remove("uploader--drag-over");
     } catch (e) {
       console.error(e);
@@ -292,7 +282,39 @@ export class Uploader {
       return;
     }
     up._prevent(e);
-    console.log(e);
+    const elFile = el("input", {
+      type: "file",
+      style: {
+        display: "none",
+      },
+      multiple: true,
+      on: [
+        "change",
+        (e) => {
+          up.filesToItems(e.target.files);
+        },
+      ],
+    });
+    document.body.appendChild(elFile);
+    elFile.click();
+  }
+
+  filesToItems(filesList) {
+    const up = this;
+    let countIssue = 0;
+    const files = [...filesList];
+    for (const file of files) {
+      const item = new Item(file, up);
+      if (!item.valid) {
+        countIssue++;
+        continue;
+      }
+      item.register();
+    }
+
+    if (countIssue >= files.length) {
+      shake(up._el_container);
+    }
   }
 
   eventHasFiles(e) {

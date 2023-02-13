@@ -8340,6 +8340,11 @@
     "zh": "转换器将自动从上传的数据集中检索 SRS 信息。但是，如果您更喜欢使用不同的 SRS，只需选中此复选框并从下面的选项中选择所需的 EPSG 代码。"
   },
   {
+    "id": "up_drop_or_click",
+    "en": "Drop files or click to select..",
+    "zh": "拖放文件或单击以选择.."
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "zh": "选择服务预设"

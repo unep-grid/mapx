@@ -21684,6 +21684,19 @@
     "de": "Der Konverter ruft die SRS-Informationen automatisch aus dem hochgeladenen Datensatz ab. Wenn Sie jedoch lieber einen anderen SRS verwenden möchten, aktivieren Sie einfach dieses Kontrollkästchen und wählen Sie den gewünschten EPSG-Code aus den folgenden Optionen aus."
   },
   {
+    "id": "up_drop_or_click",
+    "en": "Drop files or click to select..",
+    "fr": "Déposez des fichiers ou cliquez pour sélectionner.",
+    "es": "Suelte los archivos o haga clic para seleccionar..",
+    "ru": "Перетащите файлы или нажмите, чтобы выбрать..",
+    "zh": "拖放文件或单击以选择..",
+    "ar": "أسقط الملفات أو انقر للتحديد ..",
+    "fa": "فایل ها را رها کنید یا برای انتخاب کلیک کنید..",
+    "ps": "فایلونه پریږدئ یا د انتخاب کولو لپاره کلیک وکړئ..",
+    "bn": "ফাইল বাদ দিন বা নির্বাচন করতে ক্লিক করুন..",
+    "de": "Dateien ablegen oder zur Auswahl klicken.."
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "fr": "Sélectionnez un service prédéfini",

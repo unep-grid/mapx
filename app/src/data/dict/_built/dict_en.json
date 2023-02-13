@@ -6672,6 +6672,10 @@
     "en": "The converter will automatically retrieve the SRS information from the uploaded dataset. However, if you prefer to use a different SRS, simply check this checkbox and select the desired EPSG code from the options below."
   },
   {
+    "id": "up_drop_or_click",
+    "en": "Drop files or click to select.."
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset"
   },
