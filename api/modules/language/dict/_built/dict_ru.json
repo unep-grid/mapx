@@ -8290,6 +8290,26 @@
     "ru": "Импорт в базу данных"
   },
   {
+    "id": "up_button_close",
+    "en": "Close",
+    "ru": "Закрывать"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "ru": "Добавить файлы..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "ru": "Загрузить"
+  },
+  {
+    "id": "up_button_clear",
+    "en": "Reset",
+    "ru": "Перезагрузить"
+  },
+  {
     "id": "up_settings",
     "en": "Settings",
     "ru": "Настройки"
@@ -8356,8 +8376,8 @@
   },
   {
     "id": "up_issue_missing_dependency",
-    "en": "Missing dependency : {{ext}}",
-    "ru": "Отсутствует зависимость: {{ext}}"
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "ru": "Отсутствует зависимость: {{ext}} . Пожалуйста, перетащите недостающий файл сюда."
   },
   {
     "id": "up_issue_invalid_items",

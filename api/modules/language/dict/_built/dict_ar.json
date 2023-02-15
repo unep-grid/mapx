@@ -8290,6 +8290,26 @@
     "ar": "الاستيراد في قاعدة البيانات"
   },
   {
+    "id": "up_button_close",
+    "en": "Close",
+    "ar": "يغلق"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "ar": "إضافة ملفات..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "ar": "رفع"
+  },
+  {
+    "id": "up_button_clear",
+    "en": "Reset",
+    "ar": "إعادة ضبط"
+  },
+  {
     "id": "up_settings",
     "en": "Settings",
     "ar": "إعدادات"
@@ -8356,8 +8376,8 @@
   },
   {
     "id": "up_issue_missing_dependency",
-    "en": "Missing dependency : {{ext}}",
-    "ar": "تبعية مفقودة: {{ext}}"
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "ar": "تبعية مفقودة: {{ext}} . الرجاء سحب وإسقاط الملف المفقود هنا."
   },
   {
     "id": "up_issue_invalid_items",

@@ -8290,6 +8290,26 @@
     "ps": "په ډیټابیس کې واردول"
   },
   {
+    "id": "up_button_close",
+    "en": "Close",
+    "ps": "تړل"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "ps": "فایلونه زیات کړئ..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "ps": "پورته کول"
+  },
+  {
+    "id": "up_button_clear",
+    "en": "Reset",
+    "ps": "بیا تنظیم کړئ"
+  },
+  {
     "id": "up_settings",
     "en": "Settings",
     "ps": "ترتیبات"
@@ -8356,8 +8376,8 @@
   },
   {
     "id": "up_issue_missing_dependency",
-    "en": "Missing dependency : {{ext}}",
-    "ps": "د انحصار نشتوالی: {{ext}}"
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "ps": "د انحصار نشتوالی: {{ext}} . مهرباني وکړئ ورک شوی فایل دلته کش کړئ او پریږدئ."
   },
   {
     "id": "up_issue_invalid_items",

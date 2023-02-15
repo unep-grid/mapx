@@ -8290,6 +8290,26 @@
     "es": "Importación en base de datos"
   },
   {
+    "id": "up_button_close",
+    "en": "Close",
+    "es": "Cerca"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "es": "Agregar archivos..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "es": "Subir"
+  },
+  {
+    "id": "up_button_clear",
+    "en": "Reset",
+    "es": "Reiniciar"
+  },
+  {
     "id": "up_settings",
     "en": "Settings",
     "es": "Ajustes"
@@ -8356,8 +8376,8 @@
   },
   {
     "id": "up_issue_missing_dependency",
-    "en": "Missing dependency : {{ext}}",
-    "es": "Dependencia faltante: {{ext}}"
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "es": "Dependencia faltante: {{ext}} . Arrastre y suelte el archivo faltante aquí."
   },
   {
     "id": "up_issue_invalid_items",

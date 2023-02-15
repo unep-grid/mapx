@@ -6632,6 +6632,22 @@
     "en": "Importation in database"
   },
   {
+    "id": "up_button_close",
+    "en": "Close"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload"
+  },
+  {
+    "id": "up_button_clear",
+    "en": "Reset"
+  },
+  {
     "id": "up_settings",
     "en": "Settings"
   },
@@ -6685,7 +6701,7 @@
   },
   {
     "id": "up_issue_missing_dependency",
-    "en": "Missing dependency : {{ext}}"
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here."
   },
   {
     "id": "up_issue_invalid_items",

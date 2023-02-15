@@ -8290,6 +8290,26 @@
     "bn": "ডাটাবেসে আমদানি"
   },
   {
+    "id": "up_button_close",
+    "en": "Close",
+    "bn": "বন্ধ"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "bn": "ফাইল যোগ করুন..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "bn": "আপলোড করুন"
+  },
+  {
+    "id": "up_button_clear",
+    "en": "Reset",
+    "bn": "রিসেট"
+  },
+  {
     "id": "up_settings",
     "en": "Settings",
     "bn": "সেটিংস"
@@ -8356,8 +8376,8 @@
   },
   {
     "id": "up_issue_missing_dependency",
-    "en": "Missing dependency : {{ext}}",
-    "bn": "অনুপস্থিত নির্ভরতা: {{ext}}"
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "bn": "অনুপস্থিত নির্ভরতা: {{ext}} . অনুপস্থিত ফাইল এখানে টেনে আনুন এবং ড্রপ করুন."
   },
   {
     "id": "up_issue_invalid_items",

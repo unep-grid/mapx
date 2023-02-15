@@ -8290,6 +8290,26 @@
     "zh": "在数据库中导入"
   },
   {
+    "id": "up_button_close",
+    "en": "Close",
+    "zh": "关闭"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "zh": "添加文件..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "zh": "上传"
+  },
+  {
+    "id": "up_button_clear",
+    "en": "Reset",
+    "zh": "重置"
+  },
+  {
     "id": "up_settings",
     "en": "Settings",
     "zh": "设置"
@@ -8356,8 +8376,8 @@
   },
   {
     "id": "up_issue_missing_dependency",
-    "en": "Missing dependency : {{ext}}",
-    "zh": "缺少依赖项： {{ext}}"
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "zh": "缺少依赖项： {{ext}} .请将丢失的文件拖放到此处。"
   },
   {
     "id": "up_issue_invalid_items",

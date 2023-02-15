@@ -8290,6 +8290,26 @@
     "fa": "واردات در پایگاه داده"
   },
   {
+    "id": "up_button_close",
+    "en": "Close",
+    "fa": "بستن"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "fa": "افزودن فایل ..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "fa": "بارگذاری"
+  },
+  {
+    "id": "up_button_clear",
+    "en": "Reset",
+    "fa": "بازنشانی کنید"
+  },
+  {
     "id": "up_settings",
     "en": "Settings",
     "fa": "تنظیمات"
@@ -8356,8 +8376,8 @@
   },
   {
     "id": "up_issue_missing_dependency",
-    "en": "Missing dependency : {{ext}}",
-    "fa": "وابستگی از دست رفته: {{ext}}"
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "fa": "وابستگی از دست رفته: {{ext}} . لطفاً فایل گم شده را اینجا بکشید و رها کنید."
   },
   {
     "id": "up_issue_invalid_items",

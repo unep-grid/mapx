@@ -1,4 +1,56 @@
-[
+[ 
+  {
+    "id": "up_button_close",
+    "en": "Close",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "up_button_clear",
+    "en": "Reset",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
   {
     "id": "up_settings",
     "en": "Settings",
@@ -170,7 +222,7 @@
   },
   {
     "id": "up_issue_missing_dependency",
-    "en": "Missing dependency : {{ext}}",
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
     "fr": "",
     "es": "",
     "ru": "",
