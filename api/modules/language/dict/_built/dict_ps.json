@@ -8345,6 +8345,46 @@
     "ps": "فایلونه پریږدئ یا د انتخاب کولو لپاره کلیک وکړئ.."
   },
   {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "ps": "مسلې"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "ps": "ورک شوي فایلونه"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}",
+    "ps": "د انحصار نشتوالی: {{ext}}"
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid items",
+    "ps": "ناسم توکي"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "ps": "شکل نه دی ملاتړ شوی"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "ps": "لوی ته فایل کړئ"
+  },
+  {
+    "id": "up_issue_too_many_title",
+    "en": "Too many items",
+    "ps": "ډیر شیان"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many items: maximum {{n}}",
+    "ps": "ډیری توکي: اعظمي {{n}}"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "ps": "د خدماتو وړاندې کولو غوره کړئ"

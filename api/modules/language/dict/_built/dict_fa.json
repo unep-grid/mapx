@@ -8345,6 +8345,46 @@
     "fa": "فایل ها را رها کنید یا برای انتخاب کلیک کنید.."
   },
   {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "fa": "مسائل"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "fa": "فایل های از دست رفته"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}",
+    "fa": "وابستگی از دست رفته: {{ext}}"
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid items",
+    "fa": "موارد نامعتبر"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "fa": "قالب پشتیبانی نمی شود"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "fa": "فایل به بزرگ"
+  },
+  {
+    "id": "up_issue_too_many_title",
+    "en": "Too many items",
+    "fa": "موارد بسیار زیاد"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many items: maximum {{n}}",
+    "fa": "موارد بسیار زیاد: حداکثر {{n}}"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "fa": "یک سرویس از پیش تنظیم شده را انتخاب کنید"

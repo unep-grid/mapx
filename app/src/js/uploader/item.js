@@ -3,16 +3,17 @@ import {
   getExtension,
   formatByteSize,
   makeId,
+  prevent,
 } from "./../mx_helper_misc.js";
-import { el, elCheckbox, elSpanTranslate, elDetails } from "./../el_mapx";
+import { el, elCheckbox, elSpanTranslate as tt, elDetails } from "./../el_mapx";
 import { isArray, isEmpty } from "../is_test";
 import { bindAll } from "../bind_class_methods";
 import { SelectAuto } from "../select_auto";
 import { getApiRoute } from "./../api_routes";
 import { settings as mx_settings } from "./../settings";
 import { ws, nc } from "./../mx.js";
-
-const st = elSpanTranslate;
+import { Issue } from "./issue.js";
+import { shake } from "./../elshake";
 
 const defSettings = {
   title: null,
@@ -24,69 +25,189 @@ const defSettings = {
   language: "en",
 };
 
+/**
+ * Represents an item that is being uploaded.
+ * @class
+ */
 export class Item {
+  /**
+   * Constructs a new Item object.
+   * @param {File} file - The file to be uploaded.
+   * @param {Uploader} up - The uploader object that manages this item.
+   */
   constructor(file, up) {
     const it = this;
-    bindAll(it);
     it._up = up;
     Object.assign(it, {
-      _valid: false,
-      _files: [],
+      _format: null,
+      _format_valid: false,
       _key: null,
       _multiple: false,
       _driver: null,
-      _exts: [],
+      _exts: new Set(),
+      _files: new Set(),
+      _issues: new Set(),
     });
+    bindAll(it);
     const name = file.name;
     const ext = getExtension(name);
     const key = name.substring(0, name.lastIndexOf(ext));
     for (const format of up._formats) {
-      if (it.valid) {
+      if (it._format_valid) {
         continue;
       }
-      const valid = format.fileExt.includes(ext) && format.upload;
-      if (valid) {
-        it._files.push(file);
-        it._valid = true;
+      const format_valid = format.fileExt.includes(ext) && format.upload;
+      if (format_valid) {
+        it._format = format;
+        it._files.add(file);
+        it._format_valid = true;
         it._key = key;
         it._multiple = format.multiple;
         it._driver = format.driver;
-        it._exts.push(ext);
+        it._exts.add(ext);
         it._ext = ext;
       }
     }
   }
 
+  /**
+   * Set the item counter;
+   * @param {number} value
+   */
+  set counter(value) {
+    const it = this;
+    it._el_item.setAttribute("counter", value);
+  }
+
+  /**
+   * Gets the size of the file(s) being uploaded.
+   * @type {number}
+   */
   get size() {
     return this.files.reduce((a, file) => {
       return a + file.size;
     }, 0);
   }
 
+  /**
+   * Gets the uploader object that manages this item.
+   * @type {Uploader}
+   */
   get up() {
     return this._up;
   }
-  get valid() {
-    return this._valid && this.size < mx_settings.api.upload_size_max;
+
+  /**
+   * Return an array of issues text, if any
+   * @type {Array}
+   */
+  get issues() {
+    return Array.from(this._issues || []);
   }
+
+  /**
+   * Return format config
+   * @type {Object}
+   */
+  get format() {
+    return this._format;
+  }
+
+  /**
+   * Return if file is supported
+   * @type {Boolean}
+   */
+  get supported() {
+    const it = this;
+    return it._format_valid;
+  }
+
+  /**
+   * Gets whether the item is valid for upload.
+   * @type {boolean}
+   */
+  get valid() {
+    const it = this;
+    it._issues.clear();
+
+    if (!it._format_valid) {
+      it._issues.add(new Issue("error", "up_issue_format_not_supported"));
+    }
+
+    if (isEmpty(it.files)) {
+      it._issues.add(new Issue("error", "up_issue_missing_files"));
+    }
+
+    if (it.size > mx_settings.api.upload_size_max) {
+      it._issues.add(new Issue("error", "up_issue_file_too_big"));
+    }
+
+    if (it.multiple) {
+      const f = it.format;
+      const allExts = f.fileExt.reduce((a, e) => {
+        return a && it.exts.includes(e);
+      }, true);
+      if (!allExts) {
+        const missing = f.fileExt.filter((f) => !it.exts.includes(f));
+        it._issues.add(
+          new Issue("error", "up_issue_missing_dependency", { ext: missing })
+        );
+      }
+    }
+    return it._issues.size === 0;
+  }
+
+  /**
+   * Gets the key of the item.
+   * @type {string}
+   */
+
   get key() {
     return this._key;
   }
+
+  /**
+   * Gets whether the item allows multiple files to be uploaded.
+   * @type {boolean}
+   */
   get multiple() {
     return this._multiple;
   }
+
+  /**
+   * Gets the driver to be used to upload the item.
+   * @type {string}
+   */
   get driver() {
     return this._driver;
   }
+
+  /**
+   * Gets the extensions of the files being uploaded.
+   * @type {Array.<string>}
+   */
   get exts() {
-    return this._exts;
+    return Array.from(this._exts || []);
   }
+  /**
+   * Gets the extension of the file being uploaded.
+   * @type {string}
+   */
   get ext() {
     return this._ext;
   }
+
+  /**
+   * Gets the files being uploaded.
+   * @type {Array.<File>}
+   */
   get files() {
-    return this._files || [];
+    return Array.from(this._files || []);
   }
+
+  /**
+   * Registers the item for upload.
+   */
   register() {
     const it = this;
     const up = it.up;
@@ -122,28 +243,61 @@ export class Item {
     it.add();
   }
 
+  /**
+   * Adds the item to the uploader's list of items to be uploaded.
+   */
   add() {
     const it = this;
     const up = it.up;
-    up.add(it);
+    up.addItem(it);
     it.buildItem();
     it.buildFiles(it.files);
-    console.log("add");
+    it.validate();
+    it.up.update();
   }
 
+  /**
+   * Merges this item with another item, for when multiple files are being uploaded.
+   * @param {Item} item - The item to merge with.
+   */
   merge(item) {
     const it = this;
-    it._files.push(...item.files);
-    it._exts.push(...item.exts);
+    it._files.add(...item.files);
+    it._exts.add(...item.exts);
     it.buildFiles(item.files);
-    console.log("merge");
+    it.validate();
+    it.up.update();
   }
 
-  cancel() {
+  /**
+   * Validate item and set classes
+   */
+  validate() {
     const it = this;
+    if (!it.valid) {
+      it._el_item.classList.add("uploader--item-error");
+      //it._el_button_upload.setAttribute("disabled", true);
+    } else {
+      it._el_item.classList.remove("uploader--item-error");
+      //it._el_button_upload.removeAttribute("disabled");
+    }
+    it.buildIssues();
+  }
+
+  /**
+   * Cancels the upload of the item.
+   * @param {Event} e - event, if any;
+   */
+  cancel(e) {
+    const it = this;
+    prevent(e);
     it.remove(true);
   }
 
+  /**
+   * Removes the item from the uploader's list of items to be uploaded.
+   * @param {boolean} canceled - Whether the upload was canceled.
+   */
   remove(canceled) {
     const it = this;
     const up = it.up;
@@ -154,14 +308,14 @@ export class Item {
 
     setTimeout(() => {
       it._el_item.remove();
-      const pos = up._items.indexOf(it);
-      if (pos > -1) {
-        up._items.splice(pos, 1);
-        up.update();
-      }
+      up.removeItem(it);
     }, 500);
   }
 
+  /**
+   * Gets the settings for the item's upload.
+   * @type {Object}
+   */
   get settings() {
     const it = this;
     const data = new FormData(it._el_form);
@@ -191,6 +345,10 @@ export class Item {
     return settings;
   }
 
+  /**
+   * Builds the HTML for the item's files and their configuration settings.
+   * @param {Array.<File>} files - The files to be uploaded.
+   */
   buildFiles(files) {
     const it = this;
     if (!isArray(files)) {
@@ -203,22 +361,47 @@ export class Item {
         el("span", { class: "text-muted" }, file.name),
         el("span", { class: "text-muted" }, formatByteSize(file.size))
       );
-      it._el_group.appendChild(elFile);
+      it._el_group_files.appendChild(elFile);
     }
     it.updateSize();
   }
 
-  updateSize() {
-    const size = this.size;
-    this._el_size.innerText = formatByteSize(size);
-    const tooBig = size > mx_settings.api.upload_size_max;
-    if (tooBig) {
-      this._el_size.classList.add("uploader--size-danger");
-    } else {
-      this._el_size.classList.remove("uploader--size-danger");
+  buildIssues() {
+    const it = this;
+    while (it._el_issues.firstElementChild) {
+      it._el_issues.firstElementChild.remove();
+    }
+    for (const issue of it.issues) {
+      const elIssue = el(
+        "li",
+        {
+          class: `uploader__issue_${issue.level}`,
+        },
+        tt(issue.type, { data: issue.data })
+      );
+      it._el_issues.appendChild(elIssue);
     }
   }
 
+  /**
+   * Updates the size of the files being uploaded.
+   */
+  updateSize() {
+    const it = this;
+    const size = it.size;
+    it._el_size.innerText = formatByteSize(size);
+    const tooBig = size > mx_settings.api.upload_size_max;
+    if (tooBig) {
+      it._el_size.classList.add("uploader--size-danger");
+    } else {
+      it._el_size.classList.remove("uploader--size-danger");
+    }
+  }
+
+  /**
+   * Builds the HTML for the item's files and their configuration settings.
+   * @param {Array.<File>} files - The files to be uploaded.
+   */
   buildItem() {
     const it = this;
 
@@ -229,7 +412,7 @@ export class Item {
       "button",
       {
         type: "button",
-        class: ["uploader--item-button", "uploader--item-button-left"],
+        class: ["uploader--item-button", "uploader--item-button-remove"],
         on: ["click", it.cancel],
       },
       el("i", { class: ["fa", "fa-times"] })
@@ -239,11 +422,18 @@ export class Item {
       "button",
       {
         type: "button",
-        class: ["uploader--item-button", "uploader--item-button-right"],
+        class: ["uploader--item-button", "uploader--item-button-send"],
         on: ["click", it.upload],
       },
       el("i", { class: ["fa", "fa-paper-plane-o"] })
     );
+
+    /**
+     * Issues
+     */
+    it._el_issues = el("ul", {
+      class: "uploader__issues",
+    });
 
     /**
      * Config form
@@ -253,7 +443,7 @@ export class Item {
       {
         class: "form-group",
       },
-      el("label", { for: `up_epsg_code_${it.key}` }, st("up_select_epsg_code")),
+      el("label", { for: `up_epsg_code_${it.key}` }, tt("up_select_epsg_code")),
       el("select", {
         id: `up_epsg_code_${it.key}`,
         name: "source_srs",
@@ -309,8 +499,24 @@ export class Item {
       )
     );
 
+    /**
+     * Size & files
+     */
+    it._el_size = el("span", formatByteSize(it.size));
+    it._el_group_size = el(
+      "div",
+      { class: "uploader--group" },
+      el("div", { class: "uploader--size" }, el("span", "Total"), it._el_size)
+    );
+    it._el_group_files = el("div", { class: "uploader--group" });
+
+    /**
+     * Main form
+     */
     it._el_form = el("form", [
       elTitle,
+      it._el_group_files,
+      it._el_group_size,
       elDetails(
         "up_settings",
         el("div", [
@@ -321,36 +527,28 @@ export class Item {
           elEpsg,
         ])
       ),
+      it._el_issues,
     ]);
+    it._el_form_wrapper = el("div", { class: "uploader--form" }, it._el_form);
 
     /**
-     * Size
+     * Item
      */
-    it._el_size = el("span", formatByteSize(it.size));
-    it._el_group_size = el(
-      "div",
-      { class: "uploader--group" },
-      el("div", { class: "uploader--size" }, el("span", "Total"), it._el_size)
-    );
-
-    /**
-     * Group of files
-     */
-
-    it._el_group = el("div", { class: "uploader--group" });
-    it._el_config = el("div", { class: "uploader--form" }, it._el_form);
     it._el_item = el("div", { class: "uploader--item" }, [
       elButtonRemove,
       elButtonSend,
-      it._el_config,
-      it._el_group,
-      it._el_group_size,
+      it._el_form_wrapper,
     ]);
     it.up._el_container.appendChild(it._el_item);
   }
 
-  async upload() {
+  /**
+   * Uploads the item.
+   * @param {Event} e - event, if any;
+   */
+  async upload(e) {
     const it = this;
+    prevent(e);
     const files = it.files;
     const settings = it.settings;
     const nFiles = files.length;
@@ -358,13 +556,11 @@ export class Item {
     const sChunk = 1e6;
     const chunks = [];
 
-    if (nFiles === 0) {
+    if (!it.valid) {
+      shake(it._el_item);
       return;
     }
 
-    if (!it.valid) {
-      return;
-    }
     it.remove();
     up.disable();
 
@@ -430,6 +626,10 @@ export class Item {
     up.enable();
   }
 
+  /**
+   * Emits a chunk of the item being uploaded.
+   * @param {Object} chunk - The chunk of the item to be uploaded.
+   */
   async _emit_chunk(chunk) {
     const route = getApiRoute("uploadSource");
 
@@ -439,12 +639,10 @@ export class Item {
     }
 
     return new Promise((resolve, reject) => {
-      console.log("emit");
       ws.emit(route, chunk, (res) => {
         if (res.status === "error") {
           return reject(res.message);
         }
-        console.log("emit-ok");
         resolve(res);
       });
     });

@@ -8345,6 +8345,46 @@
     "es": "Suelte los archivos o haga clic para seleccionar.."
   },
   {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "es": "Asuntos"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "es": "Archivos perdidos"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}",
+    "es": "Dependencia faltante: {{ext}}"
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid items",
+    "es": "Artículos no válidos"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "es": "Formato no compatible"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "es": "archivo a grande"
+  },
+  {
+    "id": "up_issue_too_many_title",
+    "en": "Too many items",
+    "es": "Demasiados articulos"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many items: maximum {{n}}",
+    "es": "Demasiados artículos: máximo {{n}}"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "es": "Seleccionar un servicio preestablecido"

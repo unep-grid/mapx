@@ -31,7 +31,7 @@
     "name": "ESRI Shapefile",
     "type": "vector",
     "driver": "ESRI Shapefile",
-    "fileExt": [".shp", ".shx", ".dbf", ".prj"],
+    "fileExt": [".shp", ".dbf", ".prj"],
     "multiple": true,
     "upload": true,
     "download": true

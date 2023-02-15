@@ -8345,6 +8345,46 @@
     "zh": "拖放文件或单击以选择.."
   },
   {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "zh": "问题"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "zh": "丢失的文件"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}",
+    "zh": "缺少依赖项： {{ext}}"
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid items",
+    "zh": "无效项目"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "zh": "不支持的格式"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "zh": "档案要大"
+  },
+  {
+    "id": "up_issue_too_many_title",
+    "en": "Too many items",
+    "zh": "过多的物品"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many items: maximum {{n}}",
+    "zh": "项目太多：最多 {{n}}"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "zh": "选择服务预设"

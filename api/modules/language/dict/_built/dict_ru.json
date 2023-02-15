@@ -8345,6 +8345,46 @@
     "ru": "Перетащите файлы или нажмите, чтобы выбрать.."
   },
   {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "ru": "Проблемы"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "ru": "Отсутствующие файлы"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}",
+    "ru": "Отсутствует зависимость: {{ext}}"
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid items",
+    "ru": "Недопустимые элементы"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "ru": "Формат не поддерживается"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "ru": "Файл в большой"
+  },
+  {
+    "id": "up_issue_too_many_title",
+    "en": "Too many items",
+    "ru": "Слишком много предметов"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many items: maximum {{n}}",
+    "ru": "Слишком много элементов: максимум {{n}}"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "ru": "Выберите предустановку услуги"

@@ -1,19 +1,30 @@
 import { isNotEmpty, isEmpty } from "./../is_test";
-import { modalSimple } from "./../mx_helper_modal.js";
-import { el } from "./../el_mapx";
-import "./style.less";
+import { modalDialog, modalSimple } from "./../mx_helper_modal.js";
+import { tt, el } from "./../el_mapx";
+import { prevent } from "./../mx_helper_misc.js";
 import { bindAll } from "../bind_class_methods";
 //import { ws, nc, data } from "./mx.js";
 import { fileFormatsVectorUpload } from "./utils";
 import { Item } from "./item.js";
 import { shake } from "./../elshake";
 import { getDictItem as t } from "./../language";
+import { waitTimeoutAsync } from "../animation_frame";
+import { isArray } from "../is_test";
+import { settings as mx_settings } from "./../settings";
+import "./style.less";
 
 const config = {
-  max_items: 4,
+  max_items: 20,
+  max_size: mx_settings.api.upload_size_max,
+  msg_duration: 3000,
 };
 
 export class Uploader {
+
+  /**
+   * Creates an instance of Uploader.
+   * @param {Object} config - Configuration for the Uploader
+   */
   constructor(config) {
     const up = this;
     bindAll(up);
@@ -22,13 +33,20 @@ export class Uploader {
     window.up = up;
   }
 
+  /**
+   * Initialize the Uploader instance
+   * @param {Object} config - Configuration for the Uploader
+   * @returns {Promise<void>} Promise that resolves when the initialization is complete
+   */
   async init(config) {
     const up = this;
     up._disabled = false;
+    up._busy_msg = false;
+    up._ready = false; // ready when ui is built;
     up._formats = [];
     up._items = [];
     up._issues = [];
-
+    up._id_counter = 0;
     /**
      * Update supported format;
      * e.x.
@@ -51,14 +69,20 @@ export class Uploader {
      */
     up.build();
     up.update();
-
     /**
      * Add item if not empty;
      */
     if (isNotEmpty(config)) {
-      up.add(config);
+      up.addItem(config);
     }
+
+    up._ready = true;
   }
+
+  /**
+   * Destroy the Uploader instance
+   * @returns {void}
+   */
   destroy() {
     const up = this;
     if (up._destroy) {
@@ -69,6 +93,54 @@ export class Uploader {
     up._modal.close();
   }
 
+  /**
+   * Display a message to the user
+   * @param {string|Array} id - ID of the message to display or an array of IDs to check for the first available message
+   * @param {string} [str] - Additional string to append to the message
+   * @returns {Promise<void>} Promise that resolves when the message is finished displaying
+   */
+  async message(id, str) {
+    const up = this;
+    if (isArray(id)) {
+      id = id[0];
+    }
+    const hasMsg = isNotEmpty(id);
+    const idDefault = "up_drop_or_click";
+    if (up._is_msg || !up._ready) {
+      return;
+    }
+    try {
+      up.disable();
+      up._busy_msg = true;
+      up._el_container.classList.add("uploader--message");
+      let msg = await t(idDefault);
+      if (hasMsg) {
+        let msgAlt = await t(id);
+        if (str) {
+          msgAlt += `: ${str}`;
+        }
+        up._el_container.setAttribute("message", msgAlt);
+        await waitTimeoutAsync(config.msg_duration);
+        up._el_container.setAttribute("message", msg);
+      } else {
+        if (str) {
+          msg += `: ${str}`;
+        }
+        up._el_container.setAttribute("message", msg);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      up._busy_msg = false;
+      up._el_container.classList.remove("uploader--message");
+      up.enable();
+    }
+  }
+
+  /**
+   * Build the Uploader UI
+   * @returns {void}
+   */
   build() {
     const up = this;
 
@@ -84,9 +156,7 @@ export class Uploader {
       message: "Drop files or click to select...",
     });
 
-    t("up_drop_or_click").then((txt) => {
-      up._el_container.setAttribute("message", txt);
-    });
+    up.message();
 
     up._el_button_upload = el(
       "button",
@@ -127,73 +197,115 @@ export class Uploader {
     });
   }
 
+  /**
+   * Update
+   * @returns {void}
+   */
   update() {
     const up = this;
-    up.validate();
     up.updateUI();
+    up.updateCounters();
   }
 
+  /**
+   * Disable the Uploader UI
+   * @returns {void}
+   */
   disable() {
     const up = this;
     up._disabled = true;
     up.updateUI();
   }
 
+  /**
+   * Enable the Uploader UI
+   * @returns {void}
+   */
   enable() {
     const up = this;
     up._disabled = false;
     up.updateUI();
   }
 
+  /**
+   * Check if the Uploader is disabled
+   * @returns {boolean} - True if the Uploader is disabled, false otherwise
+   */
   get disabled() {
     return !!this._disabled;
   }
 
+  /**
+   * Check if all the items in the Uploader are valid
+   * @returns {boolean} - True if all items in the Uploader are valid, false otherwise
+   */
   get valid() {
-    return !!this._valid;
+    const up = this;
+    const hasNoItems = isEmpty(up._items);
+    const hasItems = !hasNoItems;
+    const allValid =
+      hasItems &&
+      up._items.reduce((valid, item) => {
+        return valid && item.valid;
+      }, true);
+    return hasItems && allValid;
   }
 
-  add(it) {
+  /**
+   * Add an item to the Uploader
+   * @param {Object} it - Item to add
+   * @returns {void}
+   */
+  addItem(it) {
     const up = this;
     up._items.push(it);
     up.update();
   }
 
-  validate() {
+  /**
+   * Remove an item from the Uploader
+   * @param {Object} it - Item to remove
+   * @returns {void}
+   */
+  removeItem(it) {
     const up = this;
-    const hasNoItems = isEmpty(up._items);
-    const hasItems = !!hasNoItems;
-    const hasTooMany = hasItems && up._items.length > config.max_items;
-    const hasInvalid =
-      hasItems &&
-      up._items.reduce((a, item) => {
-        return a && item.valid;
-      }, true);
-    up._issues.length = 0;
-
-    if (hasNoItems) {
-      up._issues.push("up_warn_missing_items");
+    const pos = up._items.indexOf(it);
+    if (pos > -1) {
+      up._items.splice(pos, 1);
+      up.update();
     }
-
-    if (hasInvalid) {
-      up._issues.push("up_warn_invalid_items");
-    }
-    if (hasTooMany) {
-      up._issues.push("up_warn_too_many_items");
-    }
-    up._valid = up._issues.length === 0;
-    return up._valid;
   }
 
+  /**
+   * Update the Uploader UI
+   * @returns {void}
+   */
   updateUI() {
     const up = this;
     up.updateButtonUpload();
     up.updateButtonClose();
-    up.updateIssues();
   }
 
-  updateIssues() {}
+  /**
+   * Update the Uploader counters
+   * @returns {void}
+   */
+  updateCounters() {
+    const up = this;
+    clearTimeout(up._id_counter);
+    up._id_counter = setTimeout(_up_counter, 100);
+    function _up_counter() {
+      let i = up._items.length;
+      while (i--) {
+        up._items[i].counter = i + 1;
+      }
+    }
+  }
 
+  /**
+   * Update upload button
+   * @returns {void}
+   */
   updateButtonUpload() {
     const up = this;
     if (up.disabled || !up.valid) {
@@ -203,6 +315,10 @@ export class Uploader {
     }
   }
 
+  /**
+   * Update close button
+   * @returns {void}
+   */
   updateButtonClose() {
     const up = this;
     if (up.disabled) {
@@ -212,6 +328,10 @@ export class Uploader {
     }
   }
 
+  /**
+   * Clear all items from the Uploader
+   * @returns {void}
+   */
   clear() {
     const up = this;
     const items = [...up._items];
@@ -229,6 +349,10 @@ export class Uploader {
     up.update();
   }
 
+  /**
+   * Upload all items in the Uploader
+   * @returns {Promise<void>} Promise that resolves when all items are uploaded
+   */
   async upload() {
     const up = this;
     try {
@@ -244,23 +368,48 @@ export class Uploader {
   }
 
   /**
-   * Required for drop event :
-   *  - does nothing
+   * Handle dragover events
+   * @param {Event} e - The dragover event
+   * @returns {void}
    */
   handleDropZoneDragOver(e) {
-    const up = this;
-    up._prevent(e);
+    prevent(e);
   }
+
+  /**
+   * Handle dragenter events
+   * @param {Event} e - The dragenter event
+   * @returns {void}
+   */
   handleDropZoneDragEnter(e) {
     const up = this;
-    up._prevent(e);
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+    prevent(e);
     up._el_container.classList.add("uploader--drag-over");
   }
+
+  /**
+   * Handle dragleave
+   * Handle dragleave events
+   * @param {Event} e - The dragleave event
+   * @returns {void}
+   */
   handleDropZoneDragLeave(e) {
     const up = this;
-    up._prevent(e);
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+    prevent(e);
     up._el_container.classList.remove("uploader--drag-over");
   }
+
+  /**
+   * Handle drop events
+   * @param {Event} e - The drop event
+   * @returns {Promise<void>} Promise that resolves when the dropped files are processed
+   */
   async handleDropZoneDragDrop(e) {
     const up = this;
     try {
@@ -268,20 +417,25 @@ export class Uploader {
       if (!hasFiles) {
         return;
       }
-      up._prevent(e);
-      up.filesToItems(e.dataTransfer.files);
+      prevent(e);
+      await up.filesToItems(e.dataTransfer.files);
       up._el_container.classList.remove("uploader--drag-over");
     } catch (e) {
       console.error(e);
     }
   }
 
+  /**
+   * Handle click events
+   * @param {Event} e - The click event
+   * @returns {void}
+   */
   handleDropZoneClick(e) {
     const up = this;
     if (up._items.length) {
       return;
     }
-    up._prevent(e);
+    prevent(e);
     const elFile = el("input", {
       type: "file",
       style: {
@@ -290,8 +444,8 @@ export class Uploader {
       multiple: true,
       on: [
         "change",
-        (e) => {
-          up.filesToItems(e.target.files);
+        async (e) => {
+          await up.filesToItems(e.target.files);
         },
       ],
     });
@@ -299,28 +453,48 @@ export class Uploader {
     elFile.click();
   }
 
-  filesToItems(filesList) {
+  /**
+   * Convert File objects to Item objects and add them to the Uploader
+   * @param {FileList} filesList - A list of File objects
+   * @returns {Promise<void>} Promise that resolves when all the files are processed
+   */
+  async filesToItems(filesList) {
     const up = this;
-    let countIssue = 0;
     const files = [...filesList];
+    const nNext = files.length + up._items.length;
+    if (nNext > config.max_items) {
+      await modalDialog({
+        title: t("up_issue_too_many_title"),
+        content: tt("up_issue_too_many", { data: { n: config.max_items } }),
+      });
+      return;
+    }
+
     for (const file of files) {
       const item = new Item(file, up);
-      if (!item.valid) {
-        countIssue++;
+      if (!item.supported) {
+        shake(up._el_container);
+        await up.message("up_issue_format_not_supported", file.name);
         continue;
       }
       item.register();
     }
-
-    if (countIssue >= files.length) {
-      shake(up._el_container);
-    }
   }
 
+  /**
+   * Check if the event has files
+   * @param {Event} e - The event to check
+   * @returns {boolean} - True if the event has files, false otherwise
+   */
   eventHasFiles(e) {
     return e?.dataTransfer?.files?.length > 0;
   }
 
+  /**
+   * Prevent event default behavior and propagation
+   * @param {Event} e - The event to prevent
+   * @returns {void}
+   */
   _prevent(e) {
     e.preventDefault();
     e.stopPropagation();

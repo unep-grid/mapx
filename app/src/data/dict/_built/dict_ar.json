@@ -8345,6 +8345,46 @@
     "ar": "أسقط الملفات أو انقر للتحديد .."
   },
   {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "ar": "مشاكل"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "ar": "الملفات المفقودة"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}",
+    "ar": "تبعية مفقودة: {{ext}}"
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid items",
+    "ar": "عناصر غير صالحة"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "ar": "التنسيق غير مدعوم"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "ar": "ملف كبير"
+  },
+  {
+    "id": "up_issue_too_many_title",
+    "en": "Too many items",
+    "ar": "عناصر كثيرة جدا"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many items: maximum {{n}}",
+    "ar": "عناصر كثيرة جدًا: الحد الأقصى {{n}}"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "ar": "حدد خدمة الضبط المسبق"

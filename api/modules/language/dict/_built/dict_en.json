@@ -6676,6 +6676,38 @@
     "en": "Drop files or click to select.."
   },
   {
+    "id": "up_title_issue",
+    "en": "Issues"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}"
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid items"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big"
+  },
+  {
+    "id": "up_issue_too_many_title",
+    "en": "Too many items"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many items: maximum {{n}}"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset"
   },

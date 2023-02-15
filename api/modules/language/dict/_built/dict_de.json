@@ -8345,6 +8345,46 @@
     "de": "Dateien ablegen oder zur Auswahl klicken.."
   },
   {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "de": "Themen"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "de": "Fehlende Dateien"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}",
+    "de": "Fehlende Abhängigkeit: {{ext}}"
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid items",
+    "de": "Ungültige Artikel"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "de": "Format nicht unterstützt"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "de": "Datei zu groß"
+  },
+  {
+    "id": "up_issue_too_many_title",
+    "en": "Too many items",
+    "de": "Zu viele Dinge"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many items: maximum {{n}}",
+    "de": "Zu viele Artikel: maximal {{n}}"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "de": "Wählen Sie eine Dienstvoreinstellung"

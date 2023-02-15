@@ -190,6 +190,10 @@ span.mx-badge-role {
   background-color: var(--mx_ui_background_accent);
 }
 
+.mx .btn-warning {
+  border-color: var(--mx_ui_message_warning);
+}
+
 .mx .selectize-control.multi .selectize-input > .active {
   background-color: var(--mx_ui_background_contrast);
   color: var(--mx_ui_text);

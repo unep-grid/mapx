@@ -8345,6 +8345,46 @@
     "fr": "Déposez des fichiers ou cliquez pour sélectionner."
   },
   {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "fr": "Questions"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "fr": "Fichiers manquants"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}",
+    "fr": "Dépendance manquante : {{ext}}"
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid items",
+    "fr": "Éléments non valides"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "fr": "Format non pris en charge"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "fr": "Fichier trop gros"
+  },
+  {
+    "id": "up_issue_too_many_title",
+    "en": "Too many items",
+    "fr": "Trop d'éléments"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many items: maximum {{n}}",
+    "fr": "Trop d'éléments : maximum {{n}}"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "fr": "Sélectionnez un service prédéfini"

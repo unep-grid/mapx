@@ -17,6 +17,18 @@ import { modalSelectSource } from "./select_auto/modals";
 import { isSourceId } from "./is_test";
 
 /**
+ * Generic prevent function
+ * @param {Event} e - event, if any;
+ *
+ */
+export function prevent(e) {
+  if (e instanceof Event) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+}
+
+/**
  * Convert formData to object
  * @param {FormData} formData Form data
  * @return {Object}

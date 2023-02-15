@@ -8345,6 +8345,46 @@
     "bn": "ফাইল বাদ দিন বা নির্বাচন করতে ক্লিক করুন.."
   },
   {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "bn": "ইস্যু"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "bn": "অনুপস্থিত ফাইল"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}",
+    "bn": "অনুপস্থিত নির্ভরতা: {{ext}}"
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid items",
+    "bn": "অবৈধ আইটেম"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "bn": "বিন্যাস সমর্থিত নয়"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "bn": "বড় ফাইল"
+  },
+  {
+    "id": "up_issue_too_many_title",
+    "en": "Too many items",
+    "bn": "অনেক আইটেম"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many items: maximum {{n}}",
+    "bn": "অনেকগুলি আইটেম: সর্বাধিক {{n}}"
+  },
+  {
     "id": "wms_select_reviewed_service",
     "en": "Select a service preset",
     "bn": "একটি পরিষেবা প্রিসেট নির্বাচন করুন"

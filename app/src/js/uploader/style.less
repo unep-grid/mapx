@@ -27,11 +27,28 @@
   overflow-y: auto;
   overflow-x: hidden;
   border-radius: 10px;
+  display: flex;
+  flex-direction: column-reverse;
   > * {
     user-select: none;
   }
+  &:not(:empty):after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-left: 1px solid var(--mx_ui_border);
+    border-right: 1px solid var(--mx_ui_border);
+    pointer-events: none;
+  }
+  &:empty {
+    cursor: pointer;
+  }
   &:empty:after,
-  &.uploader--drag-over:after {
+  &.uploader--drag-over:after,
+  &.uploader--message:after {
     content: attr(message);
     position: absolute;
     top: 0;
@@ -45,8 +62,22 @@
     border-radius: 10px;
     border: 2px dashed var(--mx_ui_border);
     backdrop-filter: blur(3px);
+    z-index: 1;
+  }
+  .uploader--item:before {
+    content: attr(counter);
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    opacity: 0.5;
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: var(--mx_ui_text_faded);
+    border-radius: 5px;
+    padding: 5px;
   }
   .uploader--item {
+    order: attr(counter);
     border: 1px solid var(--mx_ui_border);
     padding: 15px;
     margin: 5px;
@@ -55,11 +86,15 @@
     position: relative;
     background: var(--mx_ui_background_accent);
     max-height: 800px;
+
     &.uploader--item-remove-canceled {
       animation: destroy-canceled 1s;
     }
     &.uploader--item-remove-sent {
       animation: destroy-sent 1s;
+    }
+    &.uploader--item-error {
+      border-color: var(--mx_ui_message_danger);
     }
     .uploader--item-button {
       height: 30px;
@@ -78,14 +113,18 @@
       &:hover {
         scale: 1.2;
       }
-      &.uploader--item-button-left {
+      &.uploader--item-button-remove {
         left: -15px;
       }
-      &.uploader--item-button-right {
+      &.uploader--item-button-send {
         right: -15px;
       }
     }
     .uploader--form {
+      summary,
+      summary span {
+        color: var(--mx_ui_text_faded);
+      }
     }
     .uploader--group {
       display: flex;
@@ -98,10 +137,29 @@
         justify-content: space-between;
       }
       .uploader--size {
-        border-top: 1px solid var(--mx_ui_border);
         .uploader--size-danger {
           color: var(--mx_ui_message_danger);
         }
+      }
+    }
+  }
+  .uploader__issues {
+    &:not(:empty) {
+      border: 1px solid var(--mx_ui_message_danger);
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 0.8em;
+      list-style-type: none;
+      li {
+      }
+      .uploader__issue_info * {
+        color: var(--mx_ui_message_info);
+      }
+      .uploader__issue_warning * {
+        color: var(--mx_ui_message_warning);
+      }
+      .uploader__issue_error * {
+        color: var(--mx_ui_message_danger);
       }
     }
   }
