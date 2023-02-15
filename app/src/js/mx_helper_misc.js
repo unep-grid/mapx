@@ -4,6 +4,7 @@ import {
   isLanguageObject,
   isEmpty,
   isPromise,
+  isElement,
   isString,
   isArray,
   isObject,
@@ -29,16 +30,41 @@ export function prevent(e) {
 }
 
 /**
- * Convert formData to object
- * @param {FormData} formData Form data
+ * Convert form values to object, using default object key and value
+ * @param {Element} elForm Form data
  * @return {Object}
  */
-export function formDataToObject(formData) {
-  let obj = {};
-  for (let [key, value] of formData.entries()) {
-    obj[key] = value;
+export function updateObjectWithForm(data, elForm, useClone = true) {
+  if (useClone) {
+    data = copy(data);
   }
-  return obj;
+  if (!isElement(elForm)) {
+    return data;
+  }
+  for (const key in data) {
+    const elInput = elForm.querySelector(`[name=${key}]`);
+    if (!elInput) {
+      console.warn(
+        `Form parsing issue : expected key ${key} not found in form names`
+      );
+      continue;
+    }
+    const type = typeof data[key];
+
+    switch (type) {
+      case "boolean":
+        data[key] = !!elInput.checked;
+        break;
+      case "number":
+        data[key] = elInput.value * 1;
+        break;
+      case "string":
+      default:
+        data[key] = elInput.value;
+    }
+  }
+
+  return data;
 }
 
 /**

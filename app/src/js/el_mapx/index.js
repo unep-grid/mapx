@@ -508,7 +508,7 @@ export function elCheckbox(key, opt) {
         id: opt.id,
         type: "checkbox",
         checked: opt.checked,
-        value: true,
+        value: "true", // will be used in form data. If not set, "on" will be returned.
         on: ["change", opt.action],
         dataset: opt.dataset,
       }),

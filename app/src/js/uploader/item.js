@@ -1,5 +1,5 @@
 import {
-  formDataToObject,
+  updateObjectWithForm,
   getExtension,
   formatByteSize,
   makeId,
@@ -319,8 +319,9 @@ export class Item {
    */
   get settings() {
     const it = this;
-    const data = new FormData(it._el_form);
-    const settings = Object.assign({}, defSettings, formDataToObject(data));
+    const settings = updateObjectWithForm(defSettings, it._el_form);
+
+    console.log(JSON.stringify(settings, 0, 2));
 
     for (const key of Object.keys(settings)) {
       const val = settings[key];
@@ -472,12 +473,25 @@ export class Item {
     });
     const elCheckAssignEpsg = elCheckbox("up_check_assign_epsg", {
       checked: false,
+      name: "assign_srs",
       action: (e) => {
         if (e.target.checked) {
           selectEpsg.enable();
         } else {
           selectEpsg.disable();
         }
+      },
+    });
+
+    /**
+     * Language : not visible, but required by the default object
+     * TODO: enable this as a select drop down
+     */
+    const elLanguage = el("input", {
+      name: "language",
+      value: mx_settings.language,
+      style: {
+        display: "none",
       },
     });
 
@@ -516,6 +530,7 @@ export class Item {
      */
     it._el_form = el("form", [
       elTitle,
+      elLanguage,
       it._el_group_files,
       it._el_group_size,
       elDetails(
