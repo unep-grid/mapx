@@ -49,7 +49,7 @@ export class Item {
       _issues: new Set(),
     });
     bindAll(it);
-    const name = file.name;
+    const name = file.name.toLowerCase();
     const ext = getExtension(name);
     const key = name.substring(0, name.lastIndexOf(ext));
     for (const format of up._formats) {
