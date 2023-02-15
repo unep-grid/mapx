@@ -12,10 +12,27 @@ mxEditTable <- function(
   session$sendCustomMessage(
     type = "mxEditTable",
     list(
+      update = runif(1),
       id_table = idTable
     )
   )
 }
+
+#' Open the uploader
+#'
+#' @param session Shiny session object.
+#' @export
+mxUploader <- function(
+  session = shiny:::getDefaultReactiveDomain()
+) {
+  session$sendCustomMessage(
+    type = "mxUploader",
+    list(
+      update = runif(1)
+    )
+  )
+}
+
 
 #' Edit source select list modal
 #'
@@ -25,7 +42,7 @@ mxShowSelectSourceEdit <- function(
   id = NULL,
   update = runif(1),
   session = shiny:::getDefaultReactiveDomain()
-  ) {
+) {
   session$sendCustomMessage(
     type = "mxShowSelectSourceEdit",
     list(

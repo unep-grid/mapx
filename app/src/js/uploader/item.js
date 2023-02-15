@@ -221,6 +221,7 @@ export class Item {
     for (const item of up._items) {
       const keyExists = item.key === it.key;
       const extExists = item.exts.includes(it.ext);
+      const sameDriver = item.driver === it.driver;
       /**
        * Dont allow same key twice, unless multifile
        */
@@ -231,7 +232,7 @@ export class Item {
       /**
        * Merge if key exists and multifile
        */
-      if (keyExists && isMultiFile) {
+      if (keyExists && isMultiFile && sameDriver) {
         item.merge(it);
         return;
       }

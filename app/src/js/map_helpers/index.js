@@ -1,4 +1,3 @@
-import { Uploader } from "./../uploader";
 import { ws, nc, events, listeners, theme } from "./../mx.js";
 import { settings } from "./../settings";
 import { featuresToPopup } from "./features_to_popup.js";
@@ -1220,11 +1219,6 @@ export async function initMapx(o) {
   initLog();
   initListenerGlobal();
   initMapListener(map);
-
-  /**
-   * Dev uploader
-   */
-  new Uploader();
 
   /**
    * Load mapx app or static

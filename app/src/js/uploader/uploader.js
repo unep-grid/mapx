@@ -3,7 +3,6 @@ import { modalDialog, modalSimple } from "./../mx_helper_modal.js";
 import { tt, el } from "./../el_mapx";
 import { prevent } from "./../mx_helper_misc.js";
 import { bindAll } from "../bind_class_methods";
-//import { ws, nc, data } from "./mx.js";
 import { fileFormatsVectorUpload } from "./utils";
 import { Item } from "./item.js";
 import { shake } from "./../elshake";
@@ -20,14 +19,12 @@ const config = {
 };
 
 export class Uploader {
-
   /**
    * Creates an instance of Uploader.
    * @param {Object} config - Configuration for the Uploader
    */
   constructor(config) {
     const up = this;
-    bindAll(up);
     up.init(config).catch(console.error);
     // debug
     window.up = up;
@@ -40,6 +37,10 @@ export class Uploader {
    */
   async init(config) {
     const up = this;
+    if (up._init) {
+      return;
+    }
+    up._init = true;
     up._disabled = false;
     up._busy_msg = false;
     up._ready = false; // ready when ui is built;
@@ -47,6 +48,9 @@ export class Uploader {
     up._items = [];
     up._issues = [];
     up._id_counter = 0;
+    up._destroy_cb = [];
+
+    bindAll(up);
     /**
      * Update supported format;
      * e.x.
@@ -68,15 +72,27 @@ export class Uploader {
      * Build initial UI
      */
     up.build();
-    up.update();
+    
     /**
      * Add item if not empty;
      */
-    if (isNotEmpty(config)) {
-      up.addItem(config);
+    if (isNotEmpty(config?.file)) {
+      await up.filesToItems(config.file);
+    } else {
+      up.message("up_drop_or_click");
     }
 
     up._ready = true;
+    up.update();
+  }
+
+  /**
+   * Add destroy cb
+   * @param {Function} cb
+   * @returns {void}
+   */
+  addDestroyCb(cb) {
+    this._destroy_cb.push(cb);
   }
 
   /**
@@ -87,6 +103,9 @@ export class Uploader {
     const up = this;
     if (up._destroy) {
       return;
+    }
+    for (const cb of up._destroy_cb) {
+      cb();
     }
     up._destroy = true;
     up.clear();
@@ -106,7 +125,7 @@ export class Uploader {
     }
     const hasMsg = isNotEmpty(id);
     const idDefault = "up_drop_or_click";
-    if (up._is_msg || !up._ready) {
+    if (up._busy_msg) {
       return;
     }
     try {
@@ -153,10 +172,8 @@ export class Uploader {
         drop: up.handleDropZoneDragDrop,
       },
       class: "uploader",
-      message: "Drop files or click to select...",
+      message: "",
     });
-
-    up.message();
 
     up._el_button_upload = el(
       "button",
@@ -164,7 +181,15 @@ export class Uploader {
         class: ["btn", "btn-default", "disabled"],
         on: ["click", up.upload],
       },
-      "Upload"
+      tt("up_button_upload")
+    );
+    up._el_button_add = el(
+      "button",
+      {
+        class: ["btn", "btn-default", "disabled"],
+        on: ["click", up.handleDropZoneClick],
+      },
+      tt("up_button_add_files")
     );
     up._el_button_clear = el(
       "button",
@@ -172,7 +197,7 @@ export class Uploader {
         class: ["btn", "btn-default"],
         on: ["click", up.clear],
       },
-      "Clear"
+      tt("up_button_clear")
     );
 
     up._el_button_close = el(
@@ -181,7 +206,7 @@ export class Uploader {
         class: ["btn", "btn-default", "disabled"],
         on: ["click", up.destroy],
       },
-      "Close"
+      tt("up_button_close")
     );
 
     up._modal = modalSimple({
@@ -236,6 +261,14 @@ export class Uploader {
   }
 
   /**
+   * Get ready state
+   * @returns {Boolean}
+   */
+  get ready() {
+    return !!this._ready;
+  }
+
+  /**
    * Check if all the items in the Uploader are valid
    * @returns {boolean} - True if all items in the Uploader are valid, false otherwise
    */
@@ -282,6 +315,10 @@ export class Uploader {
    */
   updateUI() {
     const up = this;
+    if (!up.ready) {
+      return;
+    }
+
     up.updateButtonUpload();
     up.updateButtonClose();
   }
@@ -298,6 +335,7 @@ export class Uploader {
       let i = up._items.length;
       while (i--) {
         up._items[i].counter = i + 1;
+        up._items[i]._el_item.style.order = i;
       }
     }
   }
@@ -347,6 +385,7 @@ export class Uploader {
 
     up._items.length = 0;
     up.update();
+    up.message("up_drop_or_click");
   }
 
   /**
@@ -432,7 +471,7 @@ export class Uploader {
    */
   handleDropZoneClick(e) {
     const up = this;
-    if (up._items.length) {
+    if (e.target !== e.currentTarget) {
       return;
     }
     prevent(e);
@@ -460,6 +499,9 @@ export class Uploader {
    */
   async filesToItems(filesList) {
     const up = this;
+    if (filesList instanceof File) {
+      filesList = [filesList];
+    }
     const files = [...filesList];
     const nNext = files.length + up._items.length;
     if (nNext > config.max_items) {

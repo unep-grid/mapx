@@ -42,6 +42,7 @@ $(document).on("shiny:connected", function () {
   bind("mxGeoserverRebuild", geoserver.rebuild);
   bind("mxEditTable", ws_tools.getCb("edit_table"));
   bind("mxGeomTools", ws_tools.getCb("geometry_tools"));
+  bind("mxUploader", ws_tools.getCb("uploader"));
   /**
    * Mapx map and view related binding
    */

@@ -25,6 +25,7 @@ import {
   viewDelete,
   zoomToViewIdVisible,
   zoomToViewId,
+  getViewTitle,
 } from "./../map_helpers/index.js";
 
 import { data } from "./../mx.js";
@@ -191,8 +192,15 @@ async function handleViewClick(event) {
           if (noGeojson) {
             return;
           }
-          new Uploader({ geojson });
-          //uploadGeoJSONModal(idView);
+          let filename = getViewTitle(idView);
+
+          if (!/\.geojson$/.test(filename)) {
+            filename = `${filename}.geojson`;
+          }
+          const strGeoJSON = JSON.stringify(geojson);
+          const blob = new Blob([strGeoJSON], { type: "application/json" });
+          const file = new File([blob], filename, { type: "application/json" });
+          new Uploader({ file });
         },
       },
       {
