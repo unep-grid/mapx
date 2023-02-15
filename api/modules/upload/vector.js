@@ -207,7 +207,7 @@ async function handleFailure(socket, config, e) {
  * Convert data
  */
 export async function ioConvertOgr(res, config) {
-  const { source_srs, file, id_request, idSource } = config;
+  const { assign_srs, source_srs, file, id_request, idSource } = config;
 
   // handle both multer file // chunk writer file
   const filename = file?.name || file?.originalname;
@@ -229,7 +229,7 @@ export async function ioConvertOgr(res, config) {
     idSource: idSource,
     filename: filename,
     filepath: filepath,
-    sourceSrs: source_srs,
+    sourceSrs: assign_srs ? source_srs : "",
     onMessage: async (message) => {
       await res.notifyInfoMessage({
         idGroup: id_request,
@@ -427,7 +427,7 @@ export async function fileToPostgres(config) {
       new URL("./sh/import_vector.sh", import.meta.url).pathname,
       filepathfull,
       idSource,
-      sourceSrs || '',
+      sourceSrs || "",
       isCsv ? "yes" : "no",
     ];
 

@@ -4,15 +4,9 @@ LAYER_FILE=$1
 LAYER_NAME=$2
 SRC_SRS=$3
 CSV_MODE=$4
-SRS_DEF=4326
 OPT=""
 LCO=""
 NLT=""
-
-if [ -z "$SRC_SRS" ]
-then
-  SRC_SRS=$SRS_DEF
-fi
 
 
 if [ "$CSV_MODE" == "yes" ]
@@ -20,7 +14,10 @@ then
   OPT=$OPT' -oo AUTODETECT_TYPE=YES'
 else
   OPT=$OPT' -t_srs EPSG:4326'
-  OPT=$OPT' -s_srs EPSG:'$SRC_SRS''
+  if [ -n "$SRC_SRS" ]
+  then
+    OPT=$OPT' -s_srs EPSG:'$SRC_SRS''
+  fi 
   OPT=$OPT' -geomfield geom'
   OPT=$OPT' -makevalid'
   LCO=' -lco GEOMETRY_NAME=geom'
