@@ -1,5 +1,5 @@
 import { isNotEmpty, isEmpty } from "./../is_test";
-import { modalDialog, modalSimple } from "./../mx_helper_modal.js";
+import { modalSimple } from "./../mx_helper_modal.js";
 import { tt, el } from "./../el_mapx";
 import { prevent } from "./../mx_helper_misc.js";
 import { bindAll } from "../bind_class_methods";
@@ -72,14 +72,17 @@ export class Uploader {
      * Build initial UI
      */
     up.build();
-    
+
+    /**
+     * Initial message
+     */
+    await up.message("up_drop_or_click", { wait: 0 });
+
     /**
      * Add item if not empty;
      */
     if (isNotEmpty(config?.file)) {
       await up.filesToItems(config.file);
-    } else {
-      up.message("up_drop_or_click");
     }
 
     up._ready = true;
@@ -115,10 +118,21 @@ export class Uploader {
   /**
    * Display a message to the user
    * @param {string|Array} id - ID of the message to display or an array of IDs to check for the first available message
-   * @param {string} [str] - Additional string to append to the message
+   * @pram {Object} opt Options
+   * @param {string} opt.str - Additional string to append to the message
+   * @param {number} opt.wait - Message wait duration
    * @returns {Promise<void>} Promise that resolves when the message is finished displaying
    */
-  async message(id, str) {
+  async message(id, opt) {
+    opt = Object.assign(
+      {},
+      {
+        wait: config.msg_duration,
+        str: "",
+      },
+      opt
+    );
+
     const up = this;
     if (isArray(id)) {
       id = id[0];
@@ -135,15 +149,15 @@ export class Uploader {
       let msg = await t(idDefault);
       if (hasMsg) {
         let msgAlt = await t(id);
-        if (str) {
-          msgAlt += `: ${str}`;
+        if (opt.str) {
+          msgAlt += `: ${opt.str}`;
         }
         up._el_container.setAttribute("message", msgAlt);
-        await waitTimeoutAsync(config.msg_duration);
+        await waitTimeoutAsync(opt.wait);
         up._el_container.setAttribute("message", msg);
       } else {
-        if (str) {
-          msg += `: ${str}`;
+        if (opt.str) {
+          msg += `: ${opt.str}`;
         }
         up._el_container.setAttribute("message", msg);
       }
@@ -216,8 +230,8 @@ export class Uploader {
       onClose: up.destroy,
       removeCloseButton: true,
       style: {
-        minHeight: "400px",
         minWidth: "500px",
+        resize: "none",
       },
     });
   }
@@ -385,7 +399,7 @@ export class Uploader {
 
     up._items.length = 0;
     up.update();
-    up.message("up_drop_or_click");
+    up.message("up_drop_or_click", { wait: 0 });
   }
 
   /**
@@ -505,10 +519,7 @@ export class Uploader {
     const files = [...filesList];
     const nNext = files.length + up._items.length;
     if (nNext > config.max_items) {
-      await modalDialog({
-        title: t("up_issue_too_many_title"),
-        content: tt("up_issue_too_many", { data: { n: config.max_items } }),
-      });
+      await up.message("up_issue_too_many", { str: config.max_items });
       return;
     }
 
@@ -516,7 +527,7 @@ export class Uploader {
       const item = new Item(file, up);
       if (!item.supported) {
         shake(up._el_container);
-        await up.message("up_issue_format_not_supported", file.name);
+        await up.message("up_issue_format_not_supported", { str: file.name });
         continue;
       }
       item.register();

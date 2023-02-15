@@ -321,8 +321,6 @@ export class Item {
     const it = this;
     const settings = updateObjectWithForm(defSettings, it._el_form);
 
-    console.log(JSON.stringify(settings, 0, 2));
-
     for (const key of Object.keys(settings)) {
       const val = settings[key];
 
