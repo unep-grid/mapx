@@ -8395,14 +8395,9 @@
     "fa": "فایل به بزرگ"
   },
   {
-    "id": "up_issue_too_many_title",
-    "en": "Too many items",
-    "fa": "موارد بسیار زیاد"
-  },
-  {
     "id": "up_issue_too_many",
-    "en": "Too many items: maximum {{n}}",
-    "fa": "موارد بسیار زیاد: حداکثر {{n}}"
+    "en": "Too many items. Max:",
+    "fa": "موارد بسیار زیاد حداکثر:"
   },
   {
     "id": "wms_select_reviewed_service",

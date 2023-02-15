@@ -8395,14 +8395,9 @@
     "ar": "ملف كبير"
   },
   {
-    "id": "up_issue_too_many_title",
-    "en": "Too many items",
-    "ar": "عناصر كثيرة جدا"
-  },
-  {
     "id": "up_issue_too_many",
-    "en": "Too many items: maximum {{n}}",
-    "ar": "عناصر كثيرة جدًا: الحد الأقصى {{n}}"
+    "en": "Too many items. Max:",
+    "ar": "عناصر كثيرة جدا. الأعلى:"
   },
   {
     "id": "wms_select_reviewed_service",

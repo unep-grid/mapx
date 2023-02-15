@@ -8395,14 +8395,9 @@
     "fr": "Fichier trop gros"
   },
   {
-    "id": "up_issue_too_many_title",
-    "en": "Too many items",
-    "fr": "Trop d'éléments"
-  },
-  {
     "id": "up_issue_too_many",
-    "en": "Too many items: maximum {{n}}",
-    "fr": "Trop d'éléments : maximum {{n}}"
+    "en": "Too many items. Max:",
+    "fr": "Trop d'éléments. Max :"
   },
   {
     "id": "wms_select_reviewed_service",

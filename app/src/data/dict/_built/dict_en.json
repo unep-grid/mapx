@@ -6716,12 +6716,8 @@
     "en": "File to big"
   },
   {
-    "id": "up_issue_too_many_title",
-    "en": "Too many items"
-  },
-  {
     "id": "up_issue_too_many",
-    "en": "Too many items: maximum {{n}}"
+    "en": "Too many items. Max:"
   },
   {
     "id": "wms_select_reviewed_service",

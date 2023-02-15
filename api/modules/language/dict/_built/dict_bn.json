@@ -8395,14 +8395,9 @@
     "bn": "বড় ফাইল"
   },
   {
-    "id": "up_issue_too_many_title",
-    "en": "Too many items",
-    "bn": "অনেক আইটেম"
-  },
-  {
     "id": "up_issue_too_many",
-    "en": "Too many items: maximum {{n}}",
-    "bn": "অনেকগুলি আইটেম: সর্বাধিক {{n}}"
+    "en": "Too many items. Max:",
+    "bn": "অনেক আইটেম. সর্বোচ্চ:"
   },
   {
     "id": "wms_select_reviewed_service",

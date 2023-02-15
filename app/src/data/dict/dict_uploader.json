@@ -273,21 +273,8 @@
     "de": ""
   },
   {
-    "id": "up_issue_too_many_title",
-    "en": "Too many items",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
     "id": "up_issue_too_many",
-    "en": "Too many items: maximum {{n}}",
+    "en": "Too many items. Max:",
     "fr": "",
     "es": "",
     "ru": "",
@@ -297,5 +284,5 @@
     "ps": "",
     "bn": "",
     "de": ""
-  }
+  } 
 ]

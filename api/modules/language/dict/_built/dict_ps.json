@@ -8395,14 +8395,9 @@
     "ps": "لوی ته فایل کړئ"
   },
   {
-    "id": "up_issue_too_many_title",
-    "en": "Too many items",
-    "ps": "ډیر شیان"
-  },
-  {
     "id": "up_issue_too_many",
-    "en": "Too many items: maximum {{n}}",
-    "ps": "ډیری توکي: اعظمي {{n}}"
+    "en": "Too many items. Max:",
+    "ps": "ډیر شیان. اعظمي:"
   },
   {
     "id": "wms_select_reviewed_service",

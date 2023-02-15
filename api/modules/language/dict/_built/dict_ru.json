@@ -8395,14 +8395,9 @@
     "ru": "Файл в большой"
   },
   {
-    "id": "up_issue_too_many_title",
-    "en": "Too many items",
-    "ru": "Слишком много предметов"
-  },
-  {
     "id": "up_issue_too_many",
-    "en": "Too many items: maximum {{n}}",
-    "ru": "Слишком много элементов: максимум {{n}}"
+    "en": "Too many items. Max:",
+    "ru": "Слишком много предметов. Макс:"
   },
   {
     "id": "wms_select_reviewed_service",

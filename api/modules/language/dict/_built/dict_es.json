@@ -8395,14 +8395,9 @@
     "es": "archivo a grande"
   },
   {
-    "id": "up_issue_too_many_title",
-    "en": "Too many items",
-    "es": "Demasiados articulos"
-  },
-  {
     "id": "up_issue_too_many",
-    "en": "Too many items: maximum {{n}}",
-    "es": "Demasiados artículos: máximo {{n}}"
+    "en": "Too many items. Max:",
+    "es": "Demasiados articulos. máx.:"
   },
   {
     "id": "wms_select_reviewed_service",

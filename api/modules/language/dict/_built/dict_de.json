@@ -8395,14 +8395,9 @@
     "de": "Datei zu groß"
   },
   {
-    "id": "up_issue_too_many_title",
-    "en": "Too many items",
-    "de": "Zu viele Dinge"
-  },
-  {
     "id": "up_issue_too_many",
-    "en": "Too many items: maximum {{n}}",
-    "de": "Zu viele Artikel: maximal {{n}}"
+    "en": "Too many items. Max:",
+    "de": "Zu viele Dinge. Maximal:"
   },
   {
     "id": "wms_select_reviewed_service",

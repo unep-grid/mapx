@@ -8395,14 +8395,9 @@
     "zh": "档案要大"
   },
   {
-    "id": "up_issue_too_many_title",
-    "en": "Too many items",
-    "zh": "过多的物品"
-  },
-  {
     "id": "up_issue_too_many",
-    "en": "Too many items: maximum {{n}}",
-    "zh": "项目太多：最多 {{n}}"
+    "en": "Too many items. Max:",
+    "zh": "过多的物品。最大限度："
   },
   {
     "id": "wms_select_reviewed_service",
