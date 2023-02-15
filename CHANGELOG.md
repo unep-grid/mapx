@@ -1,3 +1,11 @@
+  - [1.10.2-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.1) 
+
+    - APP 
+        - New uploader #880 
+ 
+    - API
+        - Fix issue #888 : line geom detection        
+
   - [1.10.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.1) 
 
     - API 
