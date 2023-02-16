@@ -1440,6 +1440,18 @@
     "en": "Select source layer"
   },
   {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings"
+  },
+  {
     "id": "en",
     "en": "English"
   },

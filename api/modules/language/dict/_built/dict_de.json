@@ -1800,6 +1800,21 @@
     "de": "Quellebene auswählen"
   },
   {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "de": "Als externe Ansicht importieren"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "de": "Externe Ansicht importieren"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "de": "Externe Ansicht importieren ? Diese Ansicht ist in den Projekteinstellungen als externe Ansicht verfügbar"
+  },
+  {
     "id": "en",
     "en": "English",
     "de": "Englisch "

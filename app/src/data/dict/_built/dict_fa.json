@@ -1800,6 +1800,21 @@
     "fa": "لایه منبع را انتخاب کنید"
   },
   {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "fa": "وارد کردن به عنوان نمای خارجی"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "fa": "نمای خارجی را وارد کنید"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "fa": "نمای خارجی را وارد کنید؟ این نمای به عنوان نمای خارجی در تنظیمات پروژه در دسترس خواهد بود"
+  },
+  {
     "id": "en",
     "en": "English",
     "fa": "انگلیسی"

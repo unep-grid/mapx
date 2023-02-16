@@ -1800,6 +1800,21 @@
     "es": "Seleccionar capa de origen"
   },
   {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "es": "Importar como vista externa"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "es": "Importar vista externa"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "es": "¿Importar vista externa? Esta vista estará disponible como vista externa en la configuración del proyecto"
+  },
+  {
     "id": "en",
     "en": "English",
     "es": "Inglés"

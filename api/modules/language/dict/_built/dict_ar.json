@@ -1800,6 +1800,21 @@
     "ar": "حدد طبقة المصدر"
   },
   {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "ar": "استيراد كعرض خارجي"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "ar": "استيراد عرض خارجي"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "ar": "استيراد عرض خارجي؟ سيكون هذا العرض متاحًا كعرض خارجي في إعدادات المشروع"
+  },
+  {
     "id": "en",
     "en": "English",
     "ar": "الإنجليزية "

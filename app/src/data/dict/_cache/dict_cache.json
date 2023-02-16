@@ -4680,6 +4680,45 @@
     "de": "Quellebene auswählen"
   },
   {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "fr": "Importer en tant que vue externe",
+    "es": "Importar como vista externa",
+    "ru": "Импортировать как внешний вид",
+    "zh": "导入为外部视图",
+    "ar": "استيراد كعرض خارجي",
+    "fa": "وارد کردن به عنوان نمای خارجی",
+    "ps": "د بهرني لید په توګه وارد کړئ",
+    "bn": "বাহ্যিক দৃশ্য হিসাবে আমদানি করুন",
+    "de": "Als externe Ansicht importieren"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "fr": "Importer une vue externe",
+    "es": "Importar vista externa",
+    "ru": "Импортировать внешний вид",
+    "zh": "导入外部视图",
+    "ar": "استيراد عرض خارجي",
+    "fa": "نمای خارجی را وارد کنید",
+    "ps": "بهرنۍ لید وارد کړئ",
+    "bn": "বাহ্যিক দৃশ্য আমদানি করুন",
+    "de": "Externe Ansicht importieren"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "fr": "Importer la vue externe ? Cette vue sera disponible en tant que vue externe dans les paramètres du projet",
+    "es": "¿Importar vista externa? Esta vista estará disponible como vista externa en la configuración del proyecto",
+    "ru": "Импортировать внешний вид? Это представление будет доступно как внешнее в настройках проекта.",
+    "zh": "导入外部视图 ?此视图将作为项目设置中的外部视图提供",
+    "ar": "استيراد عرض خارجي؟ سيكون هذا العرض متاحًا كعرض خارجي في إعدادات المشروع",
+    "fa": "نمای خارجی را وارد کنید؟ این نمای به عنوان نمای خارجی در تنظیمات پروژه در دسترس خواهد بود",
+    "ps": "بهرنۍ لید وارد کړئ؟ دا لید به د پروژې په ترتیباتو کې د بهرني لید په توګه شتون ولري",
+    "bn": "বাহ্যিক দৃশ্য আমদানি করবেন? এই ভিউটি প্রজেক্টের সেটিংসে ভিউ এক্সটার্নাল হিসেবে পাওয়া যাবে",
+    "de": "Externe Ansicht importieren ? Diese Ansicht ist in den Projekteinstellungen als externe Ansicht verfügbar"
+  },
+  {
     "id": "en",
     "en": "English",
     "fr": "Anglais",

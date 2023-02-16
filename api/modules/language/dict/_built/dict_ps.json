@@ -1800,6 +1800,21 @@
     "ps": "د سرچینې پرت غوره کړئ"
   },
   {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "ps": "د بهرني لید په توګه وارد کړئ"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "ps": "بهرنۍ لید وارد کړئ"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "ps": "بهرنۍ لید وارد کړئ؟ دا لید به د پروژې په ترتیباتو کې د بهرني لید په توګه شتون ولري"
+  },
+  {
     "id": "en",
     "en": "English",
     "ps": "انګلیسي"

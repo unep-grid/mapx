@@ -1800,6 +1800,21 @@
     "ru": "Выберите исходный слой"
   },
   {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "ru": "Импортировать как внешний вид"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "ru": "Импортировать внешний вид"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "ru": "Импортировать внешний вид? Это представление будет доступно как внешнее в настройках проекта."
+  },
+  {
     "id": "en",
     "en": "English",
     "ru": "английский "

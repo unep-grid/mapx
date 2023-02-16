@@ -1800,6 +1800,21 @@
     "zh": "选择源层"
   },
   {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "zh": "导入为外部视图"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "zh": "导入外部视图"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "zh": "导入外部视图 ?此视图将作为项目设置中的外部视图提供"
+  },
+  {
     "id": "en",
     "en": "English",
     "zh": "英语"

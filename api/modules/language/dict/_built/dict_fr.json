@@ -1800,6 +1800,21 @@
     "fr": "Sélectionnez la couche source"
   },
   {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "fr": "Importer en tant que vue externe"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "fr": "Importer une vue externe"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "fr": "Importer la vue externe ? Cette vue sera disponible en tant que vue externe dans les paramètres du projet"
+  },
+  {
     "id": "en",
     "en": "English",
     "fr": "Anglais"
