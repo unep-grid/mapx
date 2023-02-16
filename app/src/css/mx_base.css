@@ -317,8 +317,7 @@ tr {
   flex-grow: 1;
   width: 100%;
   border: 1px solid var(--mx_ui_border);
-  border-radius: 10px;
-  /*margin: 10px 10px 0px 10px;*/
+  border-radius: 5px;
 }
 .mx-views-filter-text-input:after {
   content: "";

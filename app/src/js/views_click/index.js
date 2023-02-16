@@ -1,8 +1,8 @@
 import { el, elSpanTranslate } from "./../el_mapx/index.js";
 import { isIconFont, isCanvas, isEmpty } from "./../is_test_mapx";
-import { path } from "./../mx_helper_misc.js";
+import { makeId, path } from "./../mx_helper_misc.js";
 import { modal, modalConfirm } from "./../mx_helper_modal.js";
-import { FlashCircle } from "./../icon_flash";
+import { FlashCircle, FlashItem } from "./../icon_flash";
 import { displayMetadataIssuesModal } from "./../mx_helper_map_view_badges.js";
 import { storyRead } from "./../story_map/index.js";
 import { viewToTableAttributeModal } from "./../source/display_table.js";
@@ -28,7 +28,9 @@ import {
   getViewTitle,
 } from "./../map_helpers/index.js";
 
-import { data } from "./../mx.js";
+import { ws, data } from "./../mx.js";
+import { settings } from "./../settings";
+import { viewsListAddSingle } from "../mx_helper_map_view_ui.js";
 
 export { handleViewClick };
 
@@ -38,7 +40,7 @@ async function handleViewClick(event) {
       return;
     }
 
-    const idMap = path(mx, "settings.map.id");
+    const idMap = settings?.map?.id;
     var elTarget = event.target;
     var t;
 
@@ -144,7 +146,29 @@ async function handleViewClick(event) {
         },
       },
       {
-        comment: "target is the remove linked view button",
+        comment: "target is the pin linked view button",
+        test: dataset.view_action_key === "btn_opt_pin_linked",
+        action: async () => {
+          const view = await ws.emitAsync(
+            "/client/view/pin",
+            {
+              id_view: dataset.view_action_target,
+              id_project: settings.project.id,
+              id_request: makeId(10),
+            },
+            60e3
+          );
+          await viewDelete(dataset.view_action_target);
+          await viewsListAddSingle(view, {
+            moveTop: true,
+            render: true,
+            open: true,
+          });
+          new FlashItem("floppy-o");
+        },
+      },
+      {
+        comment: "target is the remove linked view",
         test: dataset.view_action_key === "btn_opt_remove_linked",
         action: async () => {
           const resp = await modalConfirm({

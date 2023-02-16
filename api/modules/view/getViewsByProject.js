@@ -3,6 +3,9 @@ import { parseTemplate, sendJSON, sendError } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { validateTokenHandler } from "#mapx/authentication";
 import { getParamsValidator } from "#mapx/route_validation";
+import { settings } from "#root/settings";
+const def_validation = settings.validation_defaults;
+const arrayOperators = def_validation.db.array_operators;
 
 const validateParamsHandler = getParamsValidator({
   required: ["idUser", "idProject", "token"],
@@ -59,7 +62,19 @@ async function getViewsHandler(req, res) {
  * @return {Promise<array>} List of views
  */
 async function getViews(opt) {
-  opt = opt || {};
+  /**
+  * TODO: improve default
+  */ 
+  const def = {
+    types: [],
+    idViews: [],
+    collections: [],
+    allViews: true,
+    collectionsSelectOperator: arrayOperators.OR,
+  };
+
+  opt = Object.assign({}, def, opt);
+
   const views = [];
   /**
    * Set variable to alter the template :

@@ -153,7 +153,7 @@ export function modal(o) {
 
   if (isNotEmpty(o.buttons)) {
     o.buttons = isArray(o.buttons) ? o.buttons : [o.buttons];
-    for (const button of o.buttons) {
+    for (let button of o.buttons) {
       if (isHTML(button)) {
         button = textToDom(button);
       }
@@ -165,7 +165,7 @@ export function modal(o) {
   
   if (isNotEmpty(o.buttonsAlt)) {
     o.buttonsAlt = isArray(o.buttonsAlt) ? o.buttonsAlt : [o.buttonsAlt];
-    for (const button of o.buttonsAlt) {
+    for (let button of o.buttonsAlt) {
       if (isHTML(button)) {
         button = textToDom(button);
       }

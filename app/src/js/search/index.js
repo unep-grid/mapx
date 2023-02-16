@@ -67,7 +67,6 @@ class Search extends EventSimple {
     await import("./style.less");
     await import("./style_flatpickr.less");
 
-
     /**
      * Build ui
      */
@@ -650,12 +649,20 @@ class Search extends EventSimple {
       dataset: { action: "show_help" },
     });
 
+    const elButtons = el(
+      "div",
+      {
+        class: "btn-group",
+      },
+      [s._elBtnHelp, s._elBtnClear, s._elBtnToggleFilters]
+    );
+
     s._elInputContainer = el(
       "div",
       {
         class: "search--input-container",
       },
-      [s._elInput, s._elBtnHelp, s._elBtnClear, s._elBtnToggleFilters]
+      [s._elInput, elButtons]
     );
     return s._elInputContainer;
   }

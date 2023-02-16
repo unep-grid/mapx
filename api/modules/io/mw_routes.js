@@ -3,6 +3,7 @@ import { ioEcho } from "./mw_echo.js";
 import { ioGetTestJobSum, ioGetTestJobEcho } from "./test_job.js";
 import { ioUploadSource } from "#mapx/upload";
 import { ioDownloadSource, ioEditSource, ioSourceListEdit } from "#mapx/source";
+import { ioViewPin} from "#mapx/view";
 
 const routes = {
   "/client/geoserver/update": ioUpdateGeoserver,
@@ -12,6 +13,7 @@ const routes = {
   "/client/test/get/job/echo": ioGetTestJobEcho,
   "/client/source/edit/table": ioEditSource,
   "/client/source/get/list/edit": ioSourceListEdit,
+  "/client/view/pin": ioViewPin,
   echo: ioEcho,
 };
 

@@ -8,6 +8,7 @@ import { makeId } from "../mx_helpers.js";
 const def = {
   url: "",
   onError: console.log,
+  timeout: 1e3 * 60,
   auth: {
     idUser: null,
     idProject: null,
@@ -131,8 +132,27 @@ class WsHandler {
   }
 
   /**
+   * Emit with promisified cb
+   */
+  emitAsync(type, data, timeout) {
+    const ws = this;
+    return new Promise((resolve, reject) => {
+      const maxTime = timeout || ws._opt.timeout;
+      if (maxTime > 0) {
+        setTimeout(() => {
+          return reject("timeout");
+        }, maxTime);
+      }
+      ws._socket.emit(type, data, (response) => {
+        return resolve(response);
+      });
+    });
+  }
+
+  /**
    * Emit and get result
    * ⚠️  Use acknowledgements callback in emit instead ⚠️
+   * -> or emitAsync
    * @param {String} type Route/Identifier for the request handler.
    *                 eg. "ws/get/project/layers/list"
    * @param {Object} data
@@ -145,7 +165,7 @@ class WsHandler {
       throw new Error(`emitGet : missing route`);
     }
     const request = { input: data, _id: makeId(10) };
-    const maxTime = timeout || 1e3 * 60;
+    const maxTime = timeout || ws._opt.timeout;
 
     return new Promise((resolve, reject) => {
       ws._socket.on("response", handler);
