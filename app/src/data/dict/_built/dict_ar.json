@@ -8305,9 +8305,29 @@
     "ar": "رفع"
   },
   {
-    "id": "up_button_clear",
+    "id": "up_button_reset",
     "en": "Reset",
     "ar": "إعادة ضبط"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "ar": "تأكيد إعادة التعيين"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "ar": "تأكيد الإزالة {{n}} عناصر ؟"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "ar": "تأكيد الرفع"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "ar": "تأكيد الرفع {{n}} العناصر ، ليصبح المجموع {{size}} ؟"
   },
   {
     "id": "up_settings",
@@ -8381,8 +8401,8 @@
   },
   {
     "id": "up_issue_invalid_items",
-    "en": "Invalid items",
-    "ar": "عناصر غير صالحة"
+    "en": "Invalid element",
+    "ar": "عنصر غير صالح"
   },
   {
     "id": "up_issue_format_not_supported",
@@ -8396,8 +8416,8 @@
   },
   {
     "id": "up_issue_too_many",
-    "en": "Too many items. Max:",
-    "ar": "عناصر كثيرة جدا. الأعلى:"
+    "en": "Too many elements. Max:",
+    "ar": "عناصر كثيرة جدًا. الأعلى:"
   },
   {
     "id": "wms_select_reviewed_service",

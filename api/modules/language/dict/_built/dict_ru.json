@@ -8305,9 +8305,29 @@
     "ru": "Загрузить"
   },
   {
-    "id": "up_button_clear",
+    "id": "up_button_reset",
     "en": "Reset",
     "ru": "Перезагрузить"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "ru": "Подтвердить сброс"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "ru": "Подтвердить удаление {{n}} элементы?"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "ru": "Подтвердить загрузку"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "ru": "Подтвердить загрузку {{n}} элементов, всего {{size}} ?"
   },
   {
     "id": "up_settings",
@@ -8381,8 +8401,8 @@
   },
   {
     "id": "up_issue_invalid_items",
-    "en": "Invalid items",
-    "ru": "Недопустимые элементы"
+    "en": "Invalid element",
+    "ru": "Недопустимый элемент"
   },
   {
     "id": "up_issue_format_not_supported",
@@ -8396,8 +8416,8 @@
   },
   {
     "id": "up_issue_too_many",
-    "en": "Too many items. Max:",
-    "ru": "Слишком много предметов. Макс:"
+    "en": "Too many elements. Max:",
+    "ru": "Слишком много элементов. Макс:"
   },
   {
     "id": "wms_select_reviewed_service",

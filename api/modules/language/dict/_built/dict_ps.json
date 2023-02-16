@@ -8305,9 +8305,29 @@
     "ps": "پورته کول"
   },
   {
-    "id": "up_button_clear",
+    "id": "up_button_reset",
     "en": "Reset",
     "ps": "بیا تنظیم کړئ"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "ps": "بیا تنظیم کول تایید کړئ"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "ps": "لرې کول تایید کړئ {{n}} عناصر؟"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "ps": "اپلوډ تایید کړئ"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "ps": "پورته کول تایید کړئ {{n}} عناصر، د ټولیز لپاره {{size}} ؟"
   },
   {
     "id": "up_settings",
@@ -8381,8 +8401,8 @@
   },
   {
     "id": "up_issue_invalid_items",
-    "en": "Invalid items",
-    "ps": "ناسم توکي"
+    "en": "Invalid element",
+    "ps": "ناسم عنصر"
   },
   {
     "id": "up_issue_format_not_supported",
@@ -8396,8 +8416,8 @@
   },
   {
     "id": "up_issue_too_many",
-    "en": "Too many items. Max:",
-    "ps": "ډیر شیان. اعظمي:"
+    "en": "Too many elements. Max:",
+    "ps": "ډیر عناصر. اعظمي:"
   },
   {
     "id": "wms_select_reviewed_service",

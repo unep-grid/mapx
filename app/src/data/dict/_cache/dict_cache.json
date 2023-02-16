@@ -21593,7 +21593,7 @@
     "de": "Hochladen"
   },
   {
-    "id": "up_button_clear",
+    "id": "up_button_reset",
     "en": "Reset",
     "fr": "Réinitialiser",
     "es": "Reiniciar",
@@ -21604,6 +21604,58 @@
     "ps": "بیا تنظیم کړئ",
     "bn": "রিসেট",
     "de": "Zurücksetzen"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "fr": "Confirmer la réinitialisation",
+    "es": "Confirmar reinicio",
+    "ru": "Подтвердить сброс",
+    "zh": "确认重置",
+    "ar": "تأكيد إعادة التعيين",
+    "fa": "تنظیم مجدد را تأیید کنید",
+    "ps": "بیا تنظیم کول تایید کړئ",
+    "bn": "রিসেট নিশ্চিত করুন",
+    "de": "Zurücksetzen bestätigen"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "fr": "Confirmer la suppression {{n}} éléments ?",
+    "es": "Confirmar eliminación {{n}} elementos?",
+    "ru": "Подтвердить удаление {{n}} элементы?",
+    "zh": "确认移除 {{n}}元素？",
+    "ar": "تأكيد الإزالة {{n}} عناصر ؟",
+    "fa": "حذف را تایید کنید {{n}} عناصر ؟",
+    "ps": "لرې کول تایید کړئ {{n}} عناصر؟",
+    "bn": "অপসারণ নিশ্চিত করুন {{n}} উপাদান?",
+    "de": "Entfernen bestätigen {{n}} Elemente?"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "fr": "Confirmer le téléchargement",
+    "es": "Confirmar carga",
+    "ru": "Подтвердить загрузку",
+    "zh": "确认上传",
+    "ar": "تأكيد الرفع",
+    "fa": "تایید آپلود",
+    "ps": "اپلوډ تایید کړئ",
+    "bn": "আপলোড নিশ্চিত করুন",
+    "de": "Hochladen bestätigen"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "fr": "Confirmer le téléchargement {{n}} éléments, pour un total de {{size}} ?",
+    "es": "Confirmar carga {{n}} elementos, por un total de {{size}} ?",
+    "ru": "Подтвердить загрузку {{n}} элементов, всего {{size}} ?",
+    "zh": "确认上传 {{n}}元素，总共有 {{size}}？",
+    "ar": "تأكيد الرفع {{n}} العناصر ، ليصبح المجموع {{size}} ؟",
+    "fa": "آپلود را تایید کنید {{n}} عناصر، در مجموع {{size}} ?",
+    "ps": "پورته کول تایید کړئ {{n}} عناصر، د ټولیز لپاره {{size}} ؟",
+    "bn": "আপলোড নিশ্চিত করুন {{n}} উপাদান, মোট জন্য {{size}} ?",
+    "de": "Hochladen bestätigen {{n}} Elemente, für insgesamt {{size}} ?"
   },
   {
     "id": "up_settings",
@@ -21789,16 +21841,16 @@
   },
   {
     "id": "up_issue_invalid_items",
-    "en": "Invalid items",
-    "fr": "Éléments non valides",
-    "es": "Artículos no válidos",
-    "ru": "Недопустимые элементы",
-    "zh": "无效项目",
-    "ar": "عناصر غير صالحة",
-    "fa": "موارد نامعتبر",
-    "ps": "ناسم توکي",
-    "bn": "অবৈধ আইটেম",
-    "de": "Ungültige Artikel"
+    "en": "Invalid element",
+    "fr": "Élément invalide",
+    "es": "Elemento inválido",
+    "ru": "Недопустимый элемент",
+    "zh": "无效元素",
+    "ar": "عنصر غير صالح",
+    "fa": "عنصر نامعتبر",
+    "ps": "ناسم عنصر",
+    "bn": "অবৈধ উপাদান",
+    "de": "Ungültiges Element"
   },
   {
     "id": "up_issue_format_not_supported",
@@ -21828,16 +21880,16 @@
   },
   {
     "id": "up_issue_too_many",
-    "en": "Too many items. Max:",
+    "en": "Too many elements. Max:",
     "fr": "Trop d'éléments. Max :",
-    "es": "Demasiados articulos. máx.:",
-    "ru": "Слишком много предметов. Макс:",
-    "zh": "过多的物品。最大限度：",
-    "ar": "عناصر كثيرة جدا. الأعلى:",
-    "fa": "موارد بسیار زیاد حداکثر:",
-    "ps": "ډیر شیان. اعظمي:",
-    "bn": "অনেক আইটেম. সর্বোচ্চ:",
-    "de": "Zu viele Dinge. Maximal:"
+    "es": "Demasiados elementos. máx.:",
+    "ru": "Слишком много элементов. Макс:",
+    "zh": "元素太多。最大限度：",
+    "ar": "عناصر كثيرة جدًا. الأعلى:",
+    "fa": "عناصر بسیار زیاد حداکثر:",
+    "ps": "ډیر عناصر. اعظمي:",
+    "bn": "অনেক উপাদান। সর্বোচ্চ:",
+    "de": "Zu viele Elemente. Maximal:"
   },
   {
     "id": "wms_select_reviewed_service",

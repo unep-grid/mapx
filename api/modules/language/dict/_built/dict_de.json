@@ -8305,9 +8305,29 @@
     "de": "Hochladen"
   },
   {
-    "id": "up_button_clear",
+    "id": "up_button_reset",
     "en": "Reset",
     "de": "Zurücksetzen"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "de": "Zurücksetzen bestätigen"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "de": "Entfernen bestätigen {{n}} Elemente?"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "de": "Hochladen bestätigen"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "de": "Hochladen bestätigen {{n}} Elemente, für insgesamt {{size}} ?"
   },
   {
     "id": "up_settings",
@@ -8381,8 +8401,8 @@
   },
   {
     "id": "up_issue_invalid_items",
-    "en": "Invalid items",
-    "de": "Ungültige Artikel"
+    "en": "Invalid element",
+    "de": "Ungültiges Element"
   },
   {
     "id": "up_issue_format_not_supported",
@@ -8396,8 +8416,8 @@
   },
   {
     "id": "up_issue_too_many",
-    "en": "Too many items. Max:",
-    "de": "Zu viele Dinge. Maximal:"
+    "en": "Too many elements. Max:",
+    "de": "Zu viele Elemente. Maximal:"
   },
   {
     "id": "wms_select_reviewed_service",

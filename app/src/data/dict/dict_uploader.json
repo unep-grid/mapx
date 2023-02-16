@@ -1,4 +1,4 @@
-[ 
+[
   {
     "id": "up_button_close",
     "en": "Close",
@@ -39,8 +39,60 @@
     "de": ""
   },
   {
-    "id": "up_button_clear",
+    "id": "up_button_reset",
     "en": "Reset",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
     "fr": "",
     "es": "",
     "ru": "",
@@ -235,7 +287,7 @@
   },
   {
     "id": "up_issue_invalid_items",
-    "en": "Invalid items",
+    "en": "Invalid element",
     "fr": "",
     "es": "",
     "ru": "",
@@ -274,7 +326,7 @@
   },
   {
     "id": "up_issue_too_many",
-    "en": "Too many items. Max:",
+    "en": "Too many elements. Max:",
     "fr": "",
     "es": "",
     "ru": "",
@@ -284,5 +336,5 @@
     "ps": "",
     "bn": "",
     "de": ""
-  } 
+  }
 ]

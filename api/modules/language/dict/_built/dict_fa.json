@@ -8305,9 +8305,29 @@
     "fa": "بارگذاری"
   },
   {
-    "id": "up_button_clear",
+    "id": "up_button_reset",
     "en": "Reset",
     "fa": "بازنشانی کنید"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "fa": "تنظیم مجدد را تأیید کنید"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "fa": "حذف را تایید کنید {{n}} عناصر ؟"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "fa": "تایید آپلود"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "fa": "آپلود را تایید کنید {{n}} عناصر، در مجموع {{size}} ?"
   },
   {
     "id": "up_settings",
@@ -8381,8 +8401,8 @@
   },
   {
     "id": "up_issue_invalid_items",
-    "en": "Invalid items",
-    "fa": "موارد نامعتبر"
+    "en": "Invalid element",
+    "fa": "عنصر نامعتبر"
   },
   {
     "id": "up_issue_format_not_supported",
@@ -8396,8 +8416,8 @@
   },
   {
     "id": "up_issue_too_many",
-    "en": "Too many items. Max:",
-    "fa": "موارد بسیار زیاد حداکثر:"
+    "en": "Too many elements. Max:",
+    "fa": "عناصر بسیار زیاد حداکثر:"
   },
   {
     "id": "wms_select_reviewed_service",

@@ -8305,9 +8305,29 @@
     "bn": "আপলোড করুন"
   },
   {
-    "id": "up_button_clear",
+    "id": "up_button_reset",
     "en": "Reset",
     "bn": "রিসেট"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "bn": "রিসেট নিশ্চিত করুন"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "bn": "অপসারণ নিশ্চিত করুন {{n}} উপাদান?"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "bn": "আপলোড নিশ্চিত করুন"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "bn": "আপলোড নিশ্চিত করুন {{n}} উপাদান, মোট জন্য {{size}} ?"
   },
   {
     "id": "up_settings",
@@ -8381,8 +8401,8 @@
   },
   {
     "id": "up_issue_invalid_items",
-    "en": "Invalid items",
-    "bn": "অবৈধ আইটেম"
+    "en": "Invalid element",
+    "bn": "অবৈধ উপাদান"
   },
   {
     "id": "up_issue_format_not_supported",
@@ -8396,8 +8416,8 @@
   },
   {
     "id": "up_issue_too_many",
-    "en": "Too many items. Max:",
-    "bn": "অনেক আইটেম. সর্বোচ্চ:"
+    "en": "Too many elements. Max:",
+    "bn": "অনেক উপাদান। সর্বোচ্চ:"
   },
   {
     "id": "wms_select_reviewed_service",

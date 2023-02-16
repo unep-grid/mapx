@@ -8305,9 +8305,29 @@
     "fr": "Télécharger"
   },
   {
-    "id": "up_button_clear",
+    "id": "up_button_reset",
     "en": "Reset",
     "fr": "Réinitialiser"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "fr": "Confirmer la réinitialisation"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "fr": "Confirmer la suppression {{n}} éléments ?"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "fr": "Confirmer le téléchargement"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "fr": "Confirmer le téléchargement {{n}} éléments, pour un total de {{size}} ?"
   },
   {
     "id": "up_settings",
@@ -8381,8 +8401,8 @@
   },
   {
     "id": "up_issue_invalid_items",
-    "en": "Invalid items",
-    "fr": "Éléments non valides"
+    "en": "Invalid element",
+    "fr": "Élément invalide"
   },
   {
     "id": "up_issue_format_not_supported",
@@ -8396,7 +8416,7 @@
   },
   {
     "id": "up_issue_too_many",
-    "en": "Too many items. Max:",
+    "en": "Too many elements. Max:",
     "fr": "Trop d'éléments. Max :"
   },
   {

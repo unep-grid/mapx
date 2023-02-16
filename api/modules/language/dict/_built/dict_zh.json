@@ -8305,9 +8305,29 @@
     "zh": "上传"
   },
   {
-    "id": "up_button_clear",
+    "id": "up_button_reset",
     "en": "Reset",
     "zh": "重置"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "zh": "确认重置"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "zh": "确认移除 {{n}}元素？"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "zh": "确认上传"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "zh": "确认上传 {{n}}元素，总共有 {{size}}？"
   },
   {
     "id": "up_settings",
@@ -8381,8 +8401,8 @@
   },
   {
     "id": "up_issue_invalid_items",
-    "en": "Invalid items",
-    "zh": "无效项目"
+    "en": "Invalid element",
+    "zh": "无效元素"
   },
   {
     "id": "up_issue_format_not_supported",
@@ -8396,8 +8416,8 @@
   },
   {
     "id": "up_issue_too_many",
-    "en": "Too many items. Max:",
-    "zh": "过多的物品。最大限度："
+    "en": "Too many elements. Max:",
+    "zh": "元素太多。最大限度："
   },
   {
     "id": "wms_select_reviewed_service",

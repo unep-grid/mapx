@@ -6644,8 +6644,24 @@
     "en": "Upload"
   },
   {
-    "id": "up_button_clear",
+    "id": "up_button_reset",
     "en": "Reset"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?"
   },
   {
     "id": "up_settings",
@@ -6705,7 +6721,7 @@
   },
   {
     "id": "up_issue_invalid_items",
-    "en": "Invalid items"
+    "en": "Invalid element"
   },
   {
     "id": "up_issue_format_not_supported",
@@ -6717,7 +6733,7 @@
   },
   {
     "id": "up_issue_too_many",
-    "en": "Too many items. Max:"
+    "en": "Too many elements. Max:"
   },
   {
     "id": "wms_select_reviewed_service",
