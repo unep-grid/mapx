@@ -1,3 +1,23 @@
+  - [1.10.2-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.2) 
+
+    - APP 
+        - Uploader : 
+            - Added button to choose files directly
+            - Better arrangement of buttons
+            - Improved animation
+            - Added confirmation before items deletion or upload, if more than one element
+            - Removed dialog message, use internal messaging
+            - Improve message displaying when uploading geojson directy from view list
+            - Removed modal resize - conflicted with scrolllbar
+            - Complete rewrite of the form parser, using a default object as a basic schema and fetch value from the form + warn if something went wrong
+            - Error's style border, only on the left
+            - Items align top
+            - Handle case when file ext is in capital ex. test.CPG
+        -  Misc : added promise based file selector
+    - API 
+        - Uploader manager : 
+            - Fixed issue with missing SRS, in assignation mode
+
   - [1.10.2-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.1) 
 
     - APP 
