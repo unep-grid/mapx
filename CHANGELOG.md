@@ -1,3 +1,9 @@
+  - [1.10.2-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.3) 
+
+    - APP 
+        - Import view from the search tool (#873) 
+        - Issue with a loop inside modal (previous commit : arrangement of buttons )
+
   - [1.10.2-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.2) 
 
     - APP 
