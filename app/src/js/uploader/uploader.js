@@ -1,7 +1,7 @@
 import { isNotEmpty, isEmpty } from "./../is_test";
-import { modalSimple } from "./../mx_helper_modal.js";
+import { modalConfirm, modalSimple } from "./../mx_helper_modal.js";
 import { tt, el } from "./../el_mapx";
-import { prevent } from "./../mx_helper_misc.js";
+import { fileSelector, formatByteSize, prevent } from "./../mx_helper_misc.js";
 import { bindAll } from "../bind_class_methods";
 import { fileFormatsVectorUpload } from "./utils";
 import { Item } from "./item.js";
@@ -11,6 +11,7 @@ import { waitTimeoutAsync } from "../animation_frame";
 import { isArray } from "../is_test";
 import { settings as mx_settings } from "./../settings";
 import "./style.less";
+import { isBoolean } from "../is_test";
 
 const config = {
   max_items: 20,
@@ -100,19 +101,23 @@ export class Uploader {
 
   /**
    * Destroy the Uploader instance
-   * @returns {void}
+   * @returns {Promise<boolean>}
    */
-  destroy() {
+  async destroy() {
     const up = this;
     if (up._destroy) {
+      return;
+    }
+    const cleared = await up.reset();
+    if (!cleared) {
       return;
     }
     for (const cb of up._destroy_cb) {
       cb();
     }
     up._destroy = true;
-    up.clear();
     up._modal.close();
+    return true;
   }
 
   /**
@@ -201,17 +206,17 @@ export class Uploader {
       "button",
       {
         class: ["btn", "btn-default", "disabled"],
-        on: ["click", up.handleDropZoneClick],
+        on: ["click", up.handleButtonAddFile],
       },
       tt("up_button_add_files")
     );
-    up._el_button_clear = el(
+    up._el_button_reset = el(
       "button",
       {
         class: ["btn", "btn-default"],
-        on: ["click", up.clear],
+        on: ["click", up.reset],
       },
-      tt("up_button_clear")
+      tt("up_button_reset")
     );
 
     up._el_button_close = el(
@@ -226,7 +231,8 @@ export class Uploader {
     up._modal = modalSimple({
       title: "Upload",
       content: up._el_container,
-      buttons: [up._el_button_close, up._el_button_upload, up._el_button_clear],
+      buttons: [up._el_button_close, up._el_button_add],
+      buttonsAlt: [up._el_button_reset, up._el_button_upload],
       onClose: up.destroy,
       removeCloseButton: true,
       style: {
@@ -299,6 +305,57 @@ export class Uploader {
   }
 
   /**
+   * Uploader items count
+   * @return {number} number of items
+   */
+  get count() {
+    const up = this;
+    return up._items.length;
+  }
+
+  /**
+   * Get size
+   * @returns {number} sum of all item size
+   */
+  get size() {
+    const up = this;
+    let sum = 0;
+
+    for (const item of up.items) {
+      sum += item.size;
+    }
+
+    return sum;
+  }
+
+  /**
+   * Uploader items as an array
+   * @return {Array} array of items
+   */
+  get items() {
+    const up = this;
+    return [...up._items];
+  }
+
+  /**
+   * Check if the uploader is full
+   * @returns  {boolean} - True if the uploader is full
+   */
+  get full() {
+    const up = this;
+    return up.count >= config.max_items;
+  }
+
+  /**
+   * Check if the uploader is empty
+   * @returns  {boolean} - True if the uploader is empty
+   */
+  get empty() {
+    const up = this;
+    return up.count === 0;
+  }
+
+  /**
    * Add an item to the Uploader
    * @param {Object} it - Item to add
    * @returns {void}
@@ -335,6 +392,8 @@ export class Uploader {
 
     up.updateButtonUpload();
     up.updateButtonClose();
+    up.updateButtonAddFiles();
+    up.updateButtonReset();
   }
 
   /**
@@ -346,11 +405,24 @@ export class Uploader {
     clearTimeout(up._id_counter);
     up._id_counter = setTimeout(_up_counter, 100);
     function _up_counter() {
-      let i = up._items.length;
+      let i = up.count;
       while (i--) {
         up._items[i].counter = i + 1;
         up._items[i]._el_item.style.order = i;
       }
+    }
+  }
+
+  /**
+   * Update upload button
+   * @returns {void}
+   */
+  updateButtonReset() {
+    const up = this;
+    if (up.empty) {
+      up._el_button_reset.classList.add("disabled");
+    } else {
+      up._el_button_reset.classList.remove("disabled");
     }
   }
 
@@ -364,6 +436,19 @@ export class Uploader {
       up._el_button_upload.classList.add("disabled");
     } else {
       up._el_button_upload.classList.remove("disabled");
+    }
+  }
+
+  /**
+   * Update add file button
+   * @returns {void}
+   */
+  updateButtonAddFiles() {
+    const up = this;
+    if (up.disabled || up.full) {
+      up._el_button_add.classList.add("disabled");
+    } else {
+      up._el_button_add.classList.remove("disabled");
     }
   }
 
@@ -382,15 +467,29 @@ export class Uploader {
 
   /**
    * Clear all items from the Uploader
-   * @returns {void}
+   * @param {boolean} force skip confirmation step
+   * @returns {Promise<boolean>} cleared
    */
-  clear() {
+  async reset(force) {
     const up = this;
-    const items = [...up._items];
 
-    if (items.length === 0) {
-      shake(up._el_container);
-      return;
+    if (up.empty) {
+      return true;
+    }
+
+    const items = up.items;
+
+    // can be event through the button
+    force = isBoolean(force) && force === true;
+
+    if (!force && up.count > 1) {
+      const ok = await modalConfirm({
+        title: t("up_confirm_reset_title"),
+        content: tt("up_confirm_reset", { data: { n: up.count } }),
+      });
+      if (!ok) {
+        return false;
+      }
     }
 
     for (const item of items) {
@@ -400,6 +499,7 @@ export class Uploader {
     up._items.length = 0;
     up.update();
     up.message("up_drop_or_click", { wait: 0 });
+    return true;
   }
 
   /**
@@ -409,11 +509,23 @@ export class Uploader {
   async upload() {
     const up = this;
     try {
+      if (up.count > 1) {
+        const ok = await modalConfirm({
+          title: t("up_confirm_upload_title"),
+          content: tt("up_confirm_upload", {
+            data: { n: up.count, size: formatByteSize(up.size) },
+          }),
+        });
+        if (!ok) {
+          return false;
+        }
+      }
+
       const items = [...up._items];
       for (const item of items) {
         await item.upload();
       }
-      up.clear();
+      await up.reset(true);
       up.update();
     } catch (e) {
       console.error(e);
@@ -479,7 +591,7 @@ export class Uploader {
   }
 
   /**
-   * Handle click events
+   * Handle click events on drop zone
    * @param {Event} e - The click event
    * @returns {void}
    */
@@ -488,22 +600,34 @@ export class Uploader {
     if (e.target !== e.currentTarget) {
       return;
     }
+    if (!up.empty) {
+      return;
+    }
     prevent(e);
-    const elFile = el("input", {
-      type: "file",
-      style: {
-        display: "none",
-      },
-      multiple: true,
-      on: [
-        "change",
-        async (e) => {
-          await up.filesToItems(e.target.files);
-        },
-      ],
-    });
-    document.body.appendChild(elFile);
-    elFile.click();
+    up.fileChooser();
+  }
+
+  /**
+   * Handle add file  click
+   * @param {Event} e - The click event
+   * @returns {void}
+   */
+  handleButtonAddFile(e) {
+    const up = this;
+    prevent(e);
+    up.fileChooser();
+  }
+
+  /**
+   * File chooser
+   * -> trigger filesToItems after change
+   * @returns {Promise[]}
+   */
+  async fileChooser() {
+    const up = this;
+    const files = await fileSelector();
+    await up.filesToItems(files);
+    return true;
   }
 
   /**
@@ -513,11 +637,17 @@ export class Uploader {
    */
   async filesToItems(filesList) {
     const up = this;
+
+    if (up.full) {
+      console.warn("Max items reached");
+      return;
+    }
+
     if (filesList instanceof File) {
       filesList = [filesList];
     }
     const files = [...filesList];
-    const nNext = files.length + up._items.length;
+    const nNext = files.length + up.count;
     if (nNext > config.max_items) {
       await up.message("up_issue_too_many", { str: config.max_items });
       return;

@@ -16,6 +16,48 @@ import copy from "fast-copy";
 import { settings } from "./settings";
 import { modalSelectSource } from "./select_auto/modals";
 import { isSourceId } from "./is_test";
+import { el } from "./el_mapx";
+
+/**
+ * File selector hack
+ * -> file input "cancel" event do not exists.
+ * -> use focus on window to get the info that the dialog is gone
+ * -> out array will be empty in case of cancel, but amall delay is added
+ * @returns {Promise<array>} array of files selected
+ */
+export function fileSelector() {
+  const out = [];
+  return new Promise((resolve) => {
+    const elFile = el("input", {
+      type: "file",
+      style: {
+        display: "none",
+      },
+      multiple: true,
+      on: {
+        change: (e) => {
+          out.push(...e.target.files);
+          resolve(out);
+        },
+      },
+    });
+    document.body.appendChild(elFile);
+    elFile.click();
+
+    window.addEventListener("focus", clear, { once: true });
+
+    function clear() {
+      /**
+       * Focus event is sent before change event on file input
+       * wait a bit before resolving  in case of cancel only 
+       */
+      setTimeout(() => {
+        elFile.remove();
+        resolve(out);
+      }, 4e3);
+    }
+  });
+}
 
 /**
  * Generic prevent function

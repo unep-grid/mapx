@@ -2,20 +2,24 @@
   0% {
     translate: 0%;
     opacity: 1;
+    max-height: 500px;
   }
   100% {
     translate: -150%;
     opacity: 0;
+    max-height: 10px;
   }
 }
 @keyframes destroy-sent {
   0% {
     translate: 0%;
     opacity: 1;
+    max-height: 500px;
   }
   100% {
     translate: 150%;
     opacity: 0;
+    max-height: 10px;
   }
 }
 .uploader {
@@ -30,7 +34,6 @@
   display: flex;
   flex-direction: column-reverse;
   justify-content: flex-end;
-  cursor: pointer;
   min-height: 400px;
   > * {
     user-select: none;
@@ -45,6 +48,9 @@
     border-left: 1px solid var(--mx_ui_border);
     border-right: 1px solid var(--mx_ui_border);
     pointer-events: none;
+  }
+  &:empty {
+    cursor: pointer;
   }
   &:empty:after,
   &.uploader--drag-over:after,
@@ -77,6 +83,8 @@
     padding: 5px;
   }
   .uploader--item {
+    display: flex;
+    flex-direction: column;
     order: 1;
     border: 1px solid var(--mx_ui_border);
     padding: 15px;
@@ -86,7 +94,8 @@
     position: relative;
     background: var(--mx_ui_background_accent);
     max-height: 800px;
-    cursor :default,
+    cursor: default;
+    transition: max-height 1s ease-in-out;
     &.uploader--item-remove-canceled {
       animation: destroy-canceled 1s;
     }

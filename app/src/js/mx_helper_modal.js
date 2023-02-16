@@ -17,6 +17,7 @@ import {
   isHTML,
   isArray,
   isBoolean,
+  isNotEmpty,
 } from "./is_test/index.js";
 import { SelectAuto } from "./select_auto";
 /**
@@ -39,6 +40,7 @@ import { SelectAuto } from "./select_auto";
  * @param {String|Element} o.content Body content of the modal. Default  : undefined
  * @param {Function} o.onClose On close callback
  * @param {Array.<String>|Array.<Element>} o.buttons Array of buttons to in footer.
+ * @param {Array.<String>|Array.<Element>} o.buttonsAlt Array of buttons to in footer, on the right.
  *
  */
 export function modal(o) {
@@ -51,6 +53,7 @@ export function modal(o) {
     elBody,
     elContent,
     elButtons,
+    elButtonsAlt,
     elButtonClose,
     elJedContainers,
     /**
@@ -148,16 +151,28 @@ export function modal(o) {
     elButtons.appendChild(elButtonClose);
   }
 
-  if (o.buttons) {
+  if (isNotEmpty(o.buttons)) {
     o.buttons = isArray(o.buttons) ? o.buttons : [o.buttons];
-    o.buttons.forEach(function (b) {
-      if (isHTML(b)) {
-        b = textToDom(b);
+    for (const button of o.buttons) {
+      if (isHTML(button)) {
+        button = textToDom(button);
       }
-      if (isElement(b)) {
-        elButtons.appendChild(b);
+      if (isElement(button)) {
+        elButtons.appendChild(button);
       }
-    });
+    }
+  }
+  
+  if (isNotEmpty(o.buttonsAlt)) {
+    o.buttonsAlt = isArray(o.buttonsAlt) ? o.buttonsAlt : [o.buttonsAlt];
+    for (const button of o.buttonsAlt) {
+      if (isHTML(button)) {
+        button = textToDom(button);
+      }
+      if (isElement(button)) {
+        elButtonsAlt.appendChild(button);
+      }
+    }
   }
 
   if (o.content) {
@@ -288,7 +303,10 @@ export function modal(o) {
         el("div", {
           id: idModal + "_txt",
           class: ["shiny-text-output", "mx-modal-foot-text"],
-        })
+        }),
+        (elButtonsAlt = el("div", {
+          class: ["btn-group", "mx-modal-foot-btns"],
+        }))
       ),
       el("div", {
         id: idModal + "_validation",
