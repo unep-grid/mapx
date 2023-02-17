@@ -21828,16 +21828,16 @@
   },
   {
     "id": "up_drop_or_click",
-    "en": "Drop files or click to select..",
-    "fr": "Déposez des fichiers ou cliquez pour sélectionner.",
-    "es": "Suelte los archivos o haga clic para seleccionar..",
-    "ru": "Перетащите файлы или нажмите, чтобы выбрать..",
-    "zh": "拖放文件或单击以选择..",
-    "ar": "أسقط الملفات أو انقر للتحديد ..",
-    "fa": "فایل ها را رها کنید یا برای انتخاب کلیک کنید..",
-    "ps": "فایلونه پریږدئ یا د انتخاب کولو لپاره کلیک وکړئ..",
-    "bn": "ফাইল বাদ দিন বা নির্বাচন করতে ক্লিক করুন..",
-    "de": "Dateien ablegen oder zur Auswahl klicken.."
+    "en": "Drop files or click to select…",
+    "fr": "Déposez des fichiers ou cliquez pour sélectionner…",
+    "es": "Suelte los archivos o haga clic para seleccionar...",
+    "ru": "Перетащите файлы или нажмите, чтобы выбрать…",
+    "zh": "拖放文件或单击以选择...",
+    "ar": "إفلات الملفات أو النقر للتحديد ...",
+    "fa": "فایل ها را رها کنید یا برای انتخاب کلیک کنید…",
+    "ps": "فایلونه پریږدئ یا د انتخاب کولو لپاره کلیک وکړئ…",
+    "bn": "ফাইল বাদ দিন বা নির্বাচন করতে ক্লিক করুন...",
+    "de": "Dateien ablegen oder zur Auswahl klicken…"
   },
   {
     "id": "up_title_issue",
