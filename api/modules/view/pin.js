@@ -1,4 +1,4 @@
-import { pgWrite } from "#mapx/db";
+import { pgWrite, pgRead } from "#mapx/db";
 import { isViewId, isProjectId } from "@fxi/mx_valid";
 import { getView } from "#mapx/view";
 export async function ioViewPin(socket, config, cb) {
@@ -22,9 +22,7 @@ export async function ioViewPin(socket, config, cb) {
       throw new Error("invalid project");
     }
 
-    const client = await pgWrite.connect();
-
-    const res = await client.query(`
+    const res = await pgRead.query(`
        SELECT views_external 
        FROM mx_projects 
        WHERE id ='${config.id_project}'
@@ -33,15 +31,18 @@ export async function ioViewPin(socket, config, cb) {
     viewsExternal.add(config.id_view);
     const viewsExternalStr = JSON.stringify([...viewsExternal]);
 
-    await client.query(`
+    await pgWrite.query(`
        UPDATE mx_projects 
        SET views_external = '${viewsExternalStr}'
       `);
 
     const view = await getView(config.id_view);
 
+    console.log(`Pin done for ${view.id}`)
+
     cb(view);
   } catch (e) {
+    cb(false);
     socket.notifyInfoError({
       idGroup: config.id_request,
       message: e?.message || e,

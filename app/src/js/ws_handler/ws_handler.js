@@ -140,7 +140,7 @@ class WsHandler {
       const maxTime = timeout || ws._opt.timeout;
       if (maxTime > 0) {
         setTimeout(() => {
-          return reject("timeout");
+          return reject(`emitAsync timeout ${maxTime} on ${type}`);
         }, maxTime);
       }
       ws._socket.emit(type, data, (response) => {
@@ -152,7 +152,7 @@ class WsHandler {
   /**
    * Emit and get result
    * ⚠️  Use acknowledgements callback in emit instead ⚠️
-   * -> or emitAsync
+   * -> implemented in emitAsync
    * @param {String} type Route/Identifier for the request handler.
    *                 eg. "ws/get/project/layers/list"
    * @param {Object} data
