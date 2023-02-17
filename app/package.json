@@ -1,6 +1,6 @@
 {
   "name": "mapx",
-  "version": "1.10.2-alpha.3",
+  "version": "1.10.2-alpha.4",
   "description": "",
   "main": "./src/js/mx.js",
   "browserslist": "last 2 years",

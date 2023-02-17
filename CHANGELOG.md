@@ -1,3 +1,10 @@
+  - [1.10.2-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.4) 
+
+    - APP
+        - Dictionnary typo : use elipsis in "drag-n-drop" uploader message 
+    - API
+        - Critical Bug: The view pin handler was not properly releasing the PG client, causing a depletion of all PG clients.
+
   - [1.10.2-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.3) 
 
     - APP 
