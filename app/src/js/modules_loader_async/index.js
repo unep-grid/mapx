@@ -159,9 +159,10 @@ async function loadJsonEditor() {
     import("./../mx_extend_jed_position.js"),
     import("./../mx_extend_jed_array_confirm_delete"),
     import("./../mx_extend_jed_ace.js"),
+    import("./../mx_extend_jed_monaco.js"),
     import("./../mx_extend_jed_validation.js"),
     import("./../mx_extend_jed_table_source_stat_style.js"),
-    import("./../mx_extend_jed_color_picker.js"),
+    //import("./../mx_extend_jed_color_picker.js"),
     import("./../mx_extend_jed_selectize.js"),
   ]);
 }

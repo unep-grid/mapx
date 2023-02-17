@@ -206,7 +206,7 @@ observeEvent(input$dashboardEdit_init, {
                   title = t("view_dashboard_script"),
                   options = list(
                     language = "javascript",
-                    editor = "ace"
+                    editor = "monaco"
                   ),
                   type = "string",
                   format = "textarea",
