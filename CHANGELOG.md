@@ -1,3 +1,8 @@
+  - [1.10.2-alpha.7](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.7) 
+
+    - APP
+        - Replaced ace editor by monaco
+         
   - [1.10.2-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.4) 
 
     - APP
