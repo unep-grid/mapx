@@ -22,7 +22,6 @@ const modules = {
   packery: loadPackery,
   draggabilly: loadDraggabilly,
   "size-of": loadSizeOf,
-  "js-beautify": loadJsBeautify,
   html2canvas: loadHtmlToCanvas,
   "chroma-js": loadChromaJs,
   "radio-group": loadRadioGroup,
@@ -74,11 +73,6 @@ async function loadRadioGroup() {
 async function loadButtonPanel() {
   const m = await import("./../button_panel");
   return m.ButtonPanel;
-}
-
-async function loadJsBeautify() {
-  const m = await import("js-beautify");
-  return m.default;
 }
 
 async function loadSizeOf() {
