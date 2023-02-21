@@ -1,4 +1,4 @@
-import { modal } from "./mx_helper_modal.js";
+import { modalSimple } from "./mx_helper_modal.js";
 import { moduleLoad } from "./modules_loader_async";
 import { textToDom } from "./mx_helper_misc.js";
 import { el, elSpanTranslate, elButtonFa } from "./el_mapx/index.js";
@@ -188,10 +188,10 @@ import { isEmpty } from "./is_test/index.js";
           const elBtnHelp = elButtonFa("btn_editor_tool_help", {
             icon: "question",
             action: () => {
-              modal({
-                id: elSpanTranslate("btn_editor_tool_help_title"),
-                title: "Map-x help",
+              modalSimple({
+                title: elSpanTranslate("btn_editor_tool_help_title"),
                 content: elHelp,
+                addBackground: true,
               });
             },
           });

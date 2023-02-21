@@ -125,8 +125,11 @@ export class ModalCodeIntegration {
     const idTemplate = mci.formdata.get("code_integration_select_template");
     const tData = await mci.getTemplateData(idTemplate);
     const model = mci.editor.getModel();
-    mci._monaco.editor.setModelLanguage(model, tData.language);
-    model.setValue(tData.str);
+    await mci._monaco.editor.setModelLanguage(model, tData.language);
+    await model.setValue(tData.str);
+    if (tData.language !== "json") {
+      await mci.editor.getAction("editor.action.formatDocument").run();
+    }
   }
 
   copy() {
@@ -198,8 +201,7 @@ export class ModalCodeIntegration {
           version: "1.15.2",
           bounds: JSON.stringify(bounds || [-180, 90, 180, -90]),
         });
-        const beautify = await moduleLoad("js-beautify");
-        out.str = beautify.html(out.str);
+        out.str = out.str;
         out.language = "html";
         break;
       case "template_mapbox_layers":
