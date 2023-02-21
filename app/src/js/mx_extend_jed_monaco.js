@@ -77,7 +77,10 @@ import { isEmpty } from "./is_test/index.js";
       },
       afterInputReady: async function () {
         const editor = this;
-        const mode = editor.options.language;
+        const mode =
+          editor.options.language === "javascript"
+            ? "typescript"
+            : editor.options.language;
 
         if (isEmpty(window.jed.monacoEditors)) {
           window.jed.monacoEditors = [];
@@ -89,13 +92,21 @@ import { isEmpty } from "./is_test/index.js";
           return;
         }
 
-        const addBeautify =
-          ["json", "javascript"].includes(mode) && !editor.options.readonly;
+        const addTools =
+          ["json", "javascript", "typescript"].includes(mode) &&
+          !editor.options.readonly;
 
         /**
          * Add layout
          */
-        editor._el_tool_container = el("div");
+        editor._el_tool_container = el("div", {
+          class: "btn-group",
+          style: {
+            width: "100%",
+            paddingBottom: "2px",
+            display: "flex",
+          },
+        });
         editor._el_monaco_container = el("div", {
           style: {
             width: "100%",
@@ -159,12 +170,11 @@ import { isEmpty } from "./is_test/index.js";
         /**
          * Add beautify button
          */
-
-        if (addBeautify) {
-          const elBtnTidy = elButtonFa("btn_editor_tool_tidy", {
+        if (addTools) {
+          const elBtnTidy = elButtonFa("btn_editor_tool_format", {
             icon: "magic",
-            action: () => {
-              editor._monaco_editor
+            action: async () => {
+              await editor._monaco_editor
                 .getAction("editor.action.formatDocument")
                 .run();
             },

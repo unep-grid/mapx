@@ -1,11 +1,8 @@
-/*jshint esversion: 6 */
 const path = require("path");
 const IconFontPlugin = require("icon-font-loader").Plugin;
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const WebpackPwaManifest = require("webpack-pwa-manifest");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
-const { ESBuildMinifyPlugin } = require("esbuild-loader");
-
 /**
  * To remove in dev
  */
@@ -69,7 +66,7 @@ module.exports = {
     /* new MonacoWebpackPlugin({*/
     /*}),*/
     new MonacoWebpackPlugin({
-      publicPath: "/",
+      publicPath: "",
       filename: "[name].worker.js",
       /// see app/node_modules/monaco-editor/esm/vs/language/ for a list ,
       languages: ["typescript", "html", "json"],
@@ -116,6 +113,7 @@ module.exports = {
         test: /\.js$/,
         loader: "esbuild-loader",
         options: {
+          loader: "js",
           target: "es2015",
         },
       },
