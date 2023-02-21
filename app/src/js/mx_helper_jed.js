@@ -42,7 +42,7 @@ export async function jedInit(o) {
     window.jed = jed = {
       editors: {},
       helper: {},
-      aceEditors: [],
+      monacoEditors: [],
       extend: {
         position: {},
         texteditor: {},
@@ -85,7 +85,6 @@ export async function jedInit(o) {
     draftDbTimeStamp = opt_final.draftAutoSaveDbTimestamp;
   }
 
-  JSONEditor.plugins.ace.theme = "github";
   JSONEditor.plugins.selectize.enable = !opt_final.disableSelectize;
 
   /**

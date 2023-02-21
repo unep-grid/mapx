@@ -22,7 +22,6 @@ const modules = {
   packery: loadPackery,
   draggabilly: loadDraggabilly,
   "size-of": loadSizeOf,
-  ace: loadAceEditor,
   "js-beautify": loadJsBeautify,
   html2canvas: loadHtmlToCanvas,
   "chroma-js": loadChromaJs,
@@ -100,10 +99,6 @@ async function loadTurfBbox() {
   return m.default;
 }
 
-async function loadAceEditor() {
-  await import("ace-builds");
-  await import("ace-builds/webpack-resolver.js");
-}
 
 async function loadDragDropWorker() {
   const m = await import("./../mx_helper_map_dragdrop.mxworker.js");
@@ -158,11 +153,9 @@ async function loadJsonEditor() {
     import("./../mx_extend_jed_number_na.js"),
     import("./../mx_extend_jed_position.js"),
     import("./../mx_extend_jed_array_confirm_delete"),
-    import("./../mx_extend_jed_ace.js"),
     import("./../mx_extend_jed_monaco.js"),
     import("./../mx_extend_jed_validation.js"),
     import("./../mx_extend_jed_table_source_stat_style.js"),
-    //import("./../mx_extend_jed_color_picker.js"),
     import("./../mx_extend_jed_selectize.js"),
   ]);
 }

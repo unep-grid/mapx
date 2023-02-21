@@ -174,7 +174,7 @@ mxSchemaViewStyle <- function(
     color = list(
       title = tt("schema_style_color"),
       type = "string",
-      #format = "color-picker",
+      # format = "color-picker",
       format = "color",
       default = "#f1f3d7"
     )
@@ -467,7 +467,7 @@ mxSchemaViewStyle <- function(
     color = list(
       title = tt("schema_style_color"),
       type = "string",
-      #format = "color-picker",
+      # format = "color-picker",
       format = "color",
       default = "#000"
     )
@@ -524,7 +524,7 @@ mxSchemaViewStyle <- function(
             title = tt("custom_style_edit"),
             options = list(
               language = "javascript",
-              editor = "ace",
+              editor = "monaco",
               htmlHelp = htmlHelp
             ),
             type = "string",

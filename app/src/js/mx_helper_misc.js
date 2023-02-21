@@ -1316,8 +1316,6 @@ timer.prototype.stop = function () {
  */
 export function getSizeOf(obj, humanReadable) {
   const h = mx.helpers;
-  var bytes = 0;
-  var seenObjects = [];
   humanReadable = humanReadable === undefined ? true : humanReadable;
 
   return h

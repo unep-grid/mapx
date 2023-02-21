@@ -92,9 +92,7 @@ import { isEmpty } from "./is_test/index.js";
           return;
         }
 
-        const addTools =
-          ["json", "javascript", "typescript"].includes(mode) &&
-          !editor.options.readonly;
+        const addTools = !editor.options.readonly;
 
         /**
          * Add layout
@@ -110,7 +108,7 @@ import { isEmpty } from "./is_test/index.js";
         editor._el_monaco_container = el("div", {
           style: {
             width: "100%",
-            height: "500px",
+            height: "80vh",
             position: "relative",
             resize: "vertical",
           },
