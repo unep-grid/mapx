@@ -19,7 +19,6 @@ export * from "./el_mapx";
 export * from "./is_test/index.js";
 export * from "./is_test_mapx";
 export * from "./user_pref";
-export * from "./mapboxgl_json_editor";
 export * from "./commonloc";
 export * from "./load_test";
 export * from "./wms";
