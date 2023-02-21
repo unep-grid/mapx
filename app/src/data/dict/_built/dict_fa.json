@@ -6850,6 +6850,16 @@
     "fa": "قالب"
   },
   {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "fa": "راهنما"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "fa": "راهنما"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "fa": "جزئیات..."

@@ -6850,6 +6850,16 @@
     "de": "Format"
   },
   {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "de": "Hilfe"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "de": "Hilfe"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "de": "Einzelheiten..."

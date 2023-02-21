@@ -6850,6 +6850,16 @@
     "ar": "شكل"
   },
   {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "ar": "مساعدة"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "ar": "مساعدة"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "ar": "تفاصيل..."

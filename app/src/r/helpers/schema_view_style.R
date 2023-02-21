@@ -7,6 +7,7 @@ mxSchemaViewStyle <- function(
   view <- viewData
   jsonPaint <- .get(conf, c("templates", "text", "custom_paint"))
   jsonPaintExample <- .get(conf, c("templates", "text", "custom_paint_example"))
+
   geomType <- .get(viewData, c("data", "geometry", "type"))
   isPoint <- geomType == "point"
   isLine <- geomType == "line"
@@ -507,7 +508,7 @@ mxSchemaViewStyle <- function(
           paste(variableNames, collapse = "; ")
         )
       ),
-      mxFold(content = tags$code(jsonPaintExample), labelText = "Example")
+      mxFold(content = tags$pre(jsonPaintExample), labelText = "Example")
     )
   )
 
@@ -523,7 +524,7 @@ mxSchemaViewStyle <- function(
           list(
             title = tt("custom_style_edit"),
             options = list(
-              language = "javascript",
+              language = "json",
               editor = "monaco",
               htmlHelp = htmlHelp
             ),

@@ -6850,6 +6850,16 @@
     "bn": "বিন্যাস"
   },
   {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "bn": "সাহায্য"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "bn": "সাহায্য"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "bn": "বিস্তারিত..."

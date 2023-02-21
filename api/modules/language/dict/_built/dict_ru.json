@@ -6850,6 +6850,16 @@
     "ru": "Формат"
   },
   {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "ru": "Помощь"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "ru": "Помощь"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "ru": "Подробности..."

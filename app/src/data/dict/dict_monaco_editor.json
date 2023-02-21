@@ -11,5 +11,31 @@
     "ps": "",
     "bn": "",
     "de": ""
-  } 
+  },
+  {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "fr": "Aide",
+    "es": "Ayuda",
+    "ru": "Помощь",
+    "zh": "帮助",
+    "ar": "مساعدة",
+    "fa": "راهنما",
+    "ps": "راهنمایی",
+    "bn": "সাহায্য",
+    "de": "Hilfe"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "fr": "Aide",
+    "es": "Ayuda",
+    "ru": "Помощь",
+    "zh": "帮助",
+    "ar": "مساعدة",
+    "fa": "راهنما",
+    "ps": "راهنمایی",
+    "bn": "সাহায্য",
+    "de": "Hilfe"
+  }
 ]

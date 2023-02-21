@@ -5480,6 +5480,14 @@
     "en": "Format"
   },
   {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details..."
   },
