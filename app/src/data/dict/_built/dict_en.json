@@ -5476,6 +5476,10 @@
     "en": "The raw data will be read from our server. However, we do not store or use it in any way. Everything is simply reflected. IP addresses are stored in memory to prevent abuse."
   },
   {
+    "id": "btn_editor_tool_format",
+    "en": "Format"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details..."
   },

@@ -17797,6 +17797,19 @@
     "de": "Die Rohdaten werden von unserem Server gelesen. Wir speichern oder verwenden sie jedoch in keiner Weise. Alles wird einfach reflektiert. IP-Adressen werden im Speicher gespeichert, um Missbrauch zu verhindern."
   },
   {
+    "id": "btn_editor_tool_format",
+    "en": "Format",
+    "fr": "Format",
+    "es": "Formato",
+    "ru": "Формат",
+    "zh": "格式",
+    "ar": "شكل",
+    "fa": "قالب",
+    "ps": "بڼه",
+    "bn": "বিন্যাস",
+    "de": "Format"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "fr": "Détails...",

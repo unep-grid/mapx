@@ -6845,6 +6845,11 @@
     "es": "Los datos brutos se leerán desde nuestro servidor. Sin embargo, no lo almacenamos ni lo usamos de ninguna manera. Todo se refleja simplemente. Las direcciones IP se almacenan en la memoria para evitar abusos."
   },
   {
+    "id": "btn_editor_tool_format",
+    "en": "Format",
+    "es": "Formato"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "es": "Detalles..."

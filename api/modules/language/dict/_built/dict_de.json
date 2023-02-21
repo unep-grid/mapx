@@ -6845,6 +6845,11 @@
     "de": "Die Rohdaten werden von unserem Server gelesen. Wir speichern oder verwenden sie jedoch in keiner Weise. Alles wird einfach reflektiert. IP-Adressen werden im Speicher gespeichert, um Missbrauch zu verhindern."
   },
   {
+    "id": "btn_editor_tool_format",
+    "en": "Format",
+    "de": "Format"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "de": "Einzelheiten..."

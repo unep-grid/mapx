@@ -6845,6 +6845,11 @@
     "fr": "Les données brutes seront lues à partir de notre serveur. Cependant, nous ne les stockons ni ne les utilisons de quelque manière que ce soit. Tout est simplement réfléchi. Les adresses IP sont stockées en mémoire pour éviter les abus."
   },
   {
+    "id": "btn_editor_tool_format",
+    "en": "Format",
+    "fr": "Format"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "fr": "Détails..."
