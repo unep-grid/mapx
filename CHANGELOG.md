@@ -1,3 +1,14 @@
+  - [1.10.2-alpha.8](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.8) 
+    
+    - APP
+        - Added option to have half-right, half-left button for large modals
+        - Code editor in schema editor:
+            - added fullscreen mode 
+            - set word wrap, ruler at 80 characters, and two spaces per tab
+            - 
+        - Update list of external view when the tool is requested 
+        - Source visualizer : removed reset filter button 
+
   - [1.10.2-alpha.7](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.7) 
 
     - APP
