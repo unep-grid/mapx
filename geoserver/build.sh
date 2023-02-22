@@ -8,7 +8,7 @@
 set -e
 source ./../sh/build_docker_multiarch.sh 
 
-GEOSERVER_VERSION=2.20.4
+GEOSERVER_VERSION=2.22.2
 NAME="geoserver"
 REPO="fredmoser"
 TAG="${REPO}/${NAME}:${GEOSERVER_VERSION}"

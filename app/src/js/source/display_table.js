@@ -125,18 +125,20 @@ export async function showSourceTableAttributeModal(opt) {
       elSpanTranslate("btn_help")
     );
 
-    const elButtonClearFilter = el(
-      "button",
-      {
-        class: "btn btn-default",
-        disabled: true,
-        on: {
-          click: handleClearFilter,
-        },
-      },
-      elSpanTranslate("btn_edit_table_modal_clear_filter")
-    );
-
+    /**
+     * Filter no more supported since the downgrade to v < 7.*
+     *   const elButtonClearFilter = el(
+     *      "button",
+     *      {
+     *        class: "btn btn-default",
+     *        disabled: true,
+     *        on: {
+     *          click: handleClearFilter,
+     *        },
+     *      },
+     *      elSpanTranslate("btn_edit_table_modal_clear_filter")
+     *    );
+     */
     const elButtonEdit = el(
       "button",
       {
@@ -162,7 +164,7 @@ export async function showSourceTableAttributeModal(opt) {
 
     const buttons = [
       elButtonHelp,
-      elButtonClearFilter,
+      //elButtonClearFilter,
       elButtonDownload,
       elButtonEdit,
     ];
@@ -291,13 +293,16 @@ export async function showSourceTableAttributeModal(opt) {
     }
   }
 
-  function handleClearFilter() {
-    let filterPlugin = hot.getPlugin("filters");
-    filterPlugin.clearConditions();
-    filterPlugin.filter();
-    hot.render();
-    elButtonClearFilter.setAttribute("disabled", true);
-  }
+  /**
+   * Filter no more supported since the downgrade to v < 7.*
+   *  function handleClearFilter() {
+   *   let filterPlugin = hot.getPlugin("filters");
+   *   filterPlugin.clearConditions();
+   *   filterPlugin.filter();
+   *   hot.render();
+   *   elButtonClearFilter.setAttribute("disabled", true);
+   * }
+   */
 
   function addTitle() {
     let view = config.view;
