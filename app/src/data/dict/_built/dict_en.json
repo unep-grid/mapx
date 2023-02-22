@@ -5488,6 +5488,10 @@
     "en": "Help"
   },
   {
+    "id": "btn_editor_tool_fullscreen",
+    "en": "Fullscreen"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details..."
   },

@@ -37,5 +37,18 @@
     "ps": "راهنمایی",
     "bn": "সাহায্য",
     "de": "Hilfe"
+  },
+  {
+    "id": "btn_editor_tool_fullscreen",
+    "en": "Fullscreen",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
   }
 ]

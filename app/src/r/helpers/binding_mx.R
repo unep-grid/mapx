@@ -395,6 +395,7 @@ mxInitSelectizeAll <- function(id, session = shiny:::getDefaultReactiveDomain())
 #' @param minWidth {String} Optional min width of the modal window. String. Eg. "500px"
 #' @param addBackground {logical} Add a background
 #' @param addSelectize {logical} Add selectize
+#' @param addBtnMove {logical} Add move buttons
 #' @param removeCloseButton {logical} Remove close button
 #' @param textCloseButton {character|shiny.tag} Text of the default close button
 #' @param session {shiny.session} Default session object
@@ -411,6 +412,7 @@ mxModal <- function(
   minWidth = NULL,
   addSelectize = NULL,
   addBackground = T,
+  addBtnMove = FALSE,
   removeCloseButton = F,
   textCloseButton = "ok",
   session = shiny::getDefaultReactiveDomain()) {
@@ -436,6 +438,7 @@ mxModal <- function(
       addBackground = as.logical(addBackground),
       addSelectize = as.logical(addSelectize),
       removeCloseButton = as.logical(removeCloseButton),
+      addBtnMove = as.logical(addBtnMove),
       close = as.logical(close)
     )
   )

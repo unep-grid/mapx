@@ -6860,6 +6860,11 @@
     "ps": "راهنمایی"
   },
   {
+    "id": "btn_editor_tool_fullscreen",
+    "en": "Fullscreen",
+    "ps": "مکمله صفحه"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "ps": "جزیات..."

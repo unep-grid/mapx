@@ -6860,6 +6860,11 @@
     "fa": "راهنما"
   },
   {
+    "id": "btn_editor_tool_fullscreen",
+    "en": "Fullscreen",
+    "fa": "تمام صفحه"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "fa": "جزئیات..."

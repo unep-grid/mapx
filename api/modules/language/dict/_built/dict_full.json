@@ -17836,6 +17836,19 @@
     "de": "Hilfe"
   },
   {
+    "id": "btn_editor_tool_fullscreen",
+    "en": "Fullscreen",
+    "fr": "Plein écran",
+    "es": "Pantalla completa",
+    "ru": "Полноэкранный",
+    "zh": "全屏",
+    "ar": "تكبير الشاشة",
+    "fa": "تمام صفحه",
+    "ps": "مکمله صفحه",
+    "bn": "পূর্ণ পর্দা",
+    "de": "Ganzer Bildschirm"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "fr": "Détails...",

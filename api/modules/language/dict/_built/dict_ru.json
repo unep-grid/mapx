@@ -6860,6 +6860,11 @@
     "ru": "Помощь"
   },
   {
+    "id": "btn_editor_tool_fullscreen",
+    "en": "Fullscreen",
+    "ru": "Полноэкранный"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "ru": "Подробности..."

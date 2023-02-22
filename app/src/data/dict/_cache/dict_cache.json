@@ -17797,32 +17797,6 @@
     "de": "Die Rohdaten werden von unserem Server gelesen. Wir speichern oder verwenden sie jedoch in keiner Weise. Alles wird einfach reflektiert. IP-Adressen werden im Speicher gespeichert, um Missbrauch zu verhindern."
   },
   {
-    "id": "btn_editor_tool_fold_all",
-    "en": "Fold",
-    "fr": "Pli",
-    "es": "Doblar",
-    "ru": "Складывать",
-    "zh": "折叠",
-    "ar": "يطوى",
-    "fa": "تا کردن",
-    "ps": "فولډ",
-    "bn": "ভাঁজ",
-    "de": "Falten"
-  },
-  {
-    "id": "btn_editor_tool_unfold_all",
-    "en": "Unfold",
-    "fr": "Se dérouler",
-    "es": "Desplegar",
-    "ru": "Развернуть",
-    "zh": "展开",
-    "ar": "تتكشف",
-    "fa": "باز کردن",
-    "ps": "ښکاره کول",
-    "bn": "উন্মোচন",
-    "de": "Entfalten"
-  },
-  {
     "id": "btn_editor_tool_format",
     "en": "Format",
     "fr": "Format",
@@ -17834,6 +17808,45 @@
     "ps": "بڼه",
     "bn": "বিন্যাস",
     "de": "Format"
+  },
+  {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "fr": "Aide",
+    "es": "Ayuda",
+    "ru": "Помощь",
+    "zh": "帮助",
+    "ar": "مساعدة",
+    "fa": "راهنما",
+    "ps": "راهنمایی",
+    "bn": "সাহায্য",
+    "de": "Hilfe"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "fr": "Aide",
+    "es": "Ayuda",
+    "ru": "Помощь",
+    "zh": "帮助",
+    "ar": "مساعدة",
+    "fa": "راهنما",
+    "ps": "راهنمایی",
+    "bn": "সাহায্য",
+    "de": "Hilfe"
+  },
+  {
+    "id": "btn_editor_tool_fullscreen",
+    "en": "Fullscreen",
+    "fr": "Plein écran",
+    "es": "Pantalla completa",
+    "ru": "Полноэкранный",
+    "zh": "全屏",
+    "ar": "تكبير الشاشة",
+    "fa": "تمام صفحه",
+    "ps": "مکمله صفحه",
+    "bn": "পূর্ণ পর্দা",
+    "de": "Ganzer Bildschirm"
   },
   {
     "id": "nc_label_merge",

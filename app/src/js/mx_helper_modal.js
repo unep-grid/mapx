@@ -1,6 +1,6 @@
 import { el } from "./el/src/index.js";
 import { ObserveMutationAttribute } from "./mutations_observer/index.js";
-import { makeId, textToDom } from "./mx_helper_misc.js";
+import { moveEl, makeId, textToDom } from "./mx_helper_misc.js";
 import { getDictItem } from "./language";
 import { draggable } from "./mx_helper_draggable.js";
 import {
@@ -37,6 +37,7 @@ import { SelectAuto } from "./select_auto";
  * @param {Object} o.style Style object to apply to modal window. Default : empty
  * @param {Boolean} o.close Close related modal
  * @param {Object} o.styleContent Style object to apply to content of the modal window. Default : empty
+ * @param {Boolean} o.addBtnMove Add top button to move the modal
  * @param {String|Element} o.content Body content of the modal. Default  : undefined
  * @param {Function} o.onClose On close callback
  * @param {Array.<String>|Array.<Element>} o.buttons Array of buttons to in footer.
@@ -49,7 +50,6 @@ export function modal(o) {
   document.activeElement?.blur();
 
   let elTitle,
-    elCollapse,
     elBody,
     elContent,
     elButtons,
@@ -162,7 +162,7 @@ export function modal(o) {
       }
     }
   }
-  
+
   if (isNotEmpty(o.buttonsAlt)) {
     o.buttonsAlt = isArray(o.buttonsAlt) ? o.buttonsAlt : [o.buttonsAlt];
     for (let button of o.buttonsAlt) {
@@ -245,6 +245,85 @@ export function modal(o) {
    * Helpers
    */
   function buildModal(idModal, style, styleContent) {
+    const elBtnCollapse = el("i", {
+      class: [
+        "mx-modal-top-btn-control",
+        "fa",
+        "fa-square-o",
+        "fa-minus-square",
+      ],
+      on: [
+        "click",
+        (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          elModal.classList.toggle("mx-modal-collapsed");
+          e.target.classList.toggle("fa-minus-square");
+          e.target.classList.toggle("fa-plus-square");
+        },
+      ],
+    });
+
+    const elBtnHalfLeft = el("i", {
+      class: [
+        "mx-modal-top-btn-control",
+        "mx-modal-top-btn-control-large",
+        "fa",
+        "fa-square",
+        "fa-caret-square-o-left",
+      ],
+      on: [
+        "click",
+        (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          const isCollapsed = elModal.classList.contains("mx-modal-collapsed");
+          if (isCollapsed) {
+            elBtnCollapse.classList.add("fa-minus-square");
+            elBtnCollapse.classList.remove("fa-plus-square");
+            elModal.classList.remove("mx-modal-collapsed");
+          }
+          moveEl(elModal, {
+            left: 0,
+            right: "auto",
+            margin: 0,
+            top: 0,
+            width: "50%",
+            height: "100%",
+          });
+        },
+      ],
+    });
+    const elBtnHalfRight = el("i", {
+      class: [
+        "mx-modal-top-btn-control",
+        "mx-modal-top-btn-control-large",
+        "fa",
+        "fa-square",
+        "fa-caret-square-o-right",
+      ],
+      on: [
+        "click",
+        (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          const isCollapsed = elModal.classList.contains("mx-modal-collapsed");
+          if (isCollapsed) {
+            elBtnCollapse.classList.add("fa-minus-square");
+            elBtnCollapse.classList.remove("fa-plus-square");
+            elModal.classList.remove("mx-modal-collapsed");
+          }
+          moveEl(elModal, {
+            right: 0,
+            left: "auto",
+            margin: 0,
+            top: 0,
+            width: "50%",
+            height: "100%",
+          });
+        },
+      ],
+    });
     const elModal = el(
       "div",
       {
@@ -261,23 +340,17 @@ export function modal(o) {
         (elTitle = el("div", {
           class: ["mx-modal-drag-enable", "mx-modal-title"],
         })),
-        (elCollapse = el("i", {
-          class: [
-            "mx-modal-top-btn-control",
-            "fa",
-            "fa-square-o",
-            "fa-minus-square",
-          ],
-          on: [
-            "click",
-            (e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              elModal.classList.toggle("mx-modal-collapsed");
-              elCollapse.classList.toggle("fa-minus-square");
-            },
-          ],
-        }))
+        el(
+          "div",
+          {
+            class: ["mx-modal-top-btns"],
+          },
+          [
+            elBtnCollapse,
+            o.addBtnMove ? elBtnHalfLeft : null,
+            o.addBtnMove ? elBtnHalfRight : null,
+          ]
+        )
       ),
       el("div", {
         class: ["mx-modal-head"],

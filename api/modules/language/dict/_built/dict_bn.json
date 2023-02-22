@@ -6860,6 +6860,11 @@
     "bn": "সাহায্য"
   },
   {
+    "id": "btn_editor_tool_fullscreen",
+    "en": "Fullscreen",
+    "bn": "পূর্ণ পর্দা"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "bn": "বিস্তারিত..."

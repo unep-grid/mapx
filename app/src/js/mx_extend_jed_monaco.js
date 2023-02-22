@@ -4,6 +4,8 @@ import { textToDom } from "./mx_helper_misc.js";
 import { el, elSpanTranslate, elButtonFa } from "./el_mapx/index.js";
 import { theme } from "./mx.js";
 import { isEmpty } from "./is_test/index.js";
+import screenfull from "screenfull";
+
 (function () {
   "use strict";
 
@@ -138,7 +140,11 @@ import { isEmpty } from "./is_test/index.js";
             theme: theme.isDarkMode() ? "vs-dark" : "vs-light",
             readOnly: editor.options.readOnly === true,
             automaticLayout: true,
+            detectIndentation: false,
             tabSize: 2,
+            indentSize: 2,
+            autoIndent: true,
+            formatOnPaste: true,
             wordWrap: "on",
             rulers: [80],
           }
@@ -181,6 +187,13 @@ import { isEmpty } from "./is_test/index.js";
             },
           });
           editor._el_tool_container.appendChild(elBtnTidy);
+          const elBtnFullSceen = elButtonFa("btn_editor_tool_fullscreen", {
+            icon: "expand",
+            action: async () => {
+              screenfull.request(editor._el_monaco_container);
+            },
+          });
+          editor._el_tool_container.appendChild(elBtnFullSceen);
         }
 
         /**

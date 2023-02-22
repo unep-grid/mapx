@@ -87,6 +87,10 @@
   height: 90px !important;
 }
 
+.mx-modal-top-btns {
+  display: flex;
+}
+
 .mx-modal-top {
   background: #ccc;
   display: flex;

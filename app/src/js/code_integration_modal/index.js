@@ -95,7 +95,7 @@ export class ModalCodeIntegration {
       removeCloseButton: true,
       buttons: buttons,
       style: {
-        minHeight: "500px",
+        height: "500px",
       },
       onMutation: mci.updateLayout,
     });

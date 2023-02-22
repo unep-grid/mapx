@@ -6860,6 +6860,11 @@
     "es": "Ayuda"
   },
   {
+    "id": "btn_editor_tool_fullscreen",
+    "en": "Fullscreen",
+    "es": "Pantalla completa"
+  },
+  {
     "id": "nc_label_merge",
     "en": "Details...",
     "es": "Detalles..."

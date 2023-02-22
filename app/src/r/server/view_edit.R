@@ -154,7 +154,9 @@ observe({
                 title = sprintf(d("view_delete_modal_title", language), viewTitle),
                 content = uiOut,
                 textCloseButton = d("btn_close", language),
-                buttons = btnList
+                buttons = btnList,
+                addBackground = TRUE,
+                addBtnMove = TRUE
               )
             },
             "btn_opt_edit_config" = {
@@ -456,7 +458,8 @@ observe({
                 content = uiOut,
                 buttons = btnList,
                 addBackground = FALSE,
-                textCloseButton = d("btn_close", language)
+                textCloseButton = d("btn_close", language),
+                addBtnMove = TRUE
               )
 
               if (viewType == "rt") {
@@ -503,6 +506,7 @@ observe({
                 id = "modalViewEdit",
                 title = sprintf(d("view_edit_custom_code_modal_title", language), viewTitle),
                 addBackground = FALSE,
+                addBtnMove = TRUE,
                 content = tagList(
                   jedOutput(id = "customCodeEdit")
                 ),
@@ -537,6 +541,7 @@ observe({
                 id = "modalViewEdit",
                 title = sprintf(d("view_edit_dashboard_modal_title", language), viewTitle),
                 addBackground = FALSE,
+                addBtnMove = TRUE,
                 content = tagList(
                   uiOutput("txtValidSchema"),
                   jedOutput(id = "dashboardEdit")
@@ -581,6 +586,7 @@ observe({
                 id = "modalViewEdit",
                 title = sprintf(d("view_edit_story_modal_title", language), viewTitle),
                 addBackground = FALSE,
+                addBtnMove = TRUE,
                 content = tagList(
                   uiOutput("txtValidSchema"),
                   jedOutput(id = "storyEdit"),
@@ -614,6 +620,7 @@ observe({
                 id = "modalViewEdit",
                 title = sprintf(d("view_edit_style_modal_title", language), viewTitle),
                 addBackground = FALSE,
+                addBtnMove = TRUE,
                 content = tagList(
                   uiOutput("txtValidSchema"),
                   jedOutput(id = "styleEdit")

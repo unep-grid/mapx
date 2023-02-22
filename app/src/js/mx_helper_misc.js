@@ -19,6 +19,36 @@ import { isSourceId } from "./is_test";
 import { el } from "./el_mapx";
 
 /**
+ * Moves the given element to a new position by applying the specified CSS styles.
+ * @param {HTMLElement} el - The element to be moved.
+ * @param {Object} style - The CSS styles to be applied to the element.
+ * @param {number} [duration=200] - The duration of the animation in milliseconds.
+ * @returns {void}
+ */
+export function moveEl(el, style, duration = 300) {
+  const oldStyle = getComputedStyle(el);
+  if (el._move_el) {
+    return;
+  }
+  el._move_el = true;
+  for (const key in style) {
+    const v = oldStyle[key];
+    el.style[key] = v;
+  }
+
+  el.style.transition = `all ${duration}ms cubic-bezier(0.68, -0.6, 0.32, 1.6)`;
+
+  for (const key in style) {
+    el.style[key] = style[key];
+  }
+
+  setTimeout(() => {
+    el.style.transition = "";
+    delete el._move_el;
+  }, duration);
+}
+
+/**
  * File selector hack
  * -> file input "cancel" event do not exists.
  * -> use focus on window to get the info that the dialog is gone
@@ -49,7 +79,7 @@ export function fileSelector() {
     function clear() {
       /**
        * Focus event is sent before change event on file input
-       * wait a bit before resolving  in case of cancel only 
+       * wait a bit before resolving  in case of cancel only
        */
       setTimeout(() => {
         elFile.remove();
