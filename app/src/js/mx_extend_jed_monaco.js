@@ -138,6 +138,9 @@ import { isEmpty } from "./is_test/index.js";
             theme: theme.isDarkMode() ? "vs-dark" : "vs-light",
             readOnly: editor.options.readOnly === true,
             automaticLayout: true,
+            tabSize: 2,
+            wordWrap: "on",
+            rulers: [80],
           }
         );
 
