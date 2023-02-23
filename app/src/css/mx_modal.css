@@ -112,8 +112,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
+  line-height: 0px; /*trying to center the - sign vertically*/
   border-radius: 50%;
   border: 1px solid var(--mx_ui_border);
   background-color: var(--mx_ui_background_contrast);
