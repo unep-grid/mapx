@@ -249,8 +249,7 @@ export function modal(o) {
       class: [
         "mx-modal-top-btn-control",
         "fa",
-        "fa-square-o",
-        "fa-minus-square",
+        "fa-minus",
       ],
       on: [
         "click",
@@ -258,8 +257,8 @@ export function modal(o) {
           e.stopPropagation();
           e.preventDefault();
           elModal.classList.toggle("mx-modal-collapsed");
-          e.target.classList.toggle("fa-minus-square");
-          e.target.classList.toggle("fa-plus-square");
+          e.target.classList.toggle("fa-minus");
+          e.target.classList.toggle("fa-plus");
         },
       ],
     });
@@ -270,7 +269,7 @@ export function modal(o) {
         "mx-modal-top-btn-control-large",
         "fa",
         "fa-square",
-        "fa-caret-square-o-left",
+        "fa-caret-left",
       ],
       on: [
         "click",
@@ -279,8 +278,8 @@ export function modal(o) {
           e.preventDefault();
           const isCollapsed = elModal.classList.contains("mx-modal-collapsed");
           if (isCollapsed) {
-            elBtnCollapse.classList.add("fa-minus-square");
-            elBtnCollapse.classList.remove("fa-plus-square");
+            elBtnCollapse.classList.add("fa-minus");
+            elBtnCollapse.classList.remove("fa-plus");
             elModal.classList.remove("mx-modal-collapsed");
           }
           moveEl(elModal, {
@@ -300,7 +299,7 @@ export function modal(o) {
         "mx-modal-top-btn-control-large",
         "fa",
         "fa-square",
-        "fa-caret-square-o-right",
+        "fa-caret-right",
       ],
       on: [
         "click",

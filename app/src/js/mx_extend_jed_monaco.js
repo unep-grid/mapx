@@ -4,7 +4,6 @@ import { textToDom } from "./mx_helper_misc.js";
 import { el, elSpanTranslate, elButtonFa } from "./el_mapx/index.js";
 import { theme } from "./mx.js";
 import { isEmpty } from "./is_test/index.js";
-import screenfull from "screenfull";
 
 (function () {
   "use strict";
@@ -97,7 +96,9 @@ import screenfull from "screenfull";
         const addTools = !editor.options.readonly;
 
         /**
-         * Add layout
+         * wrapper
+         *  - tools
+         *  - container
          */
         editor._el_tool_container = el("div", {
           class: "btn-group",
@@ -116,8 +117,18 @@ import screenfull from "screenfull";
           },
         });
 
+        editor._el_monaco_wrapper = el(
+          "div",
+          {
+            width: "100%",
+            height: "100%",
+            position: "relative",
+          },
+          [editor._el_tool_container, editor._el_monaco_container]
+        );
+
         editor.input.parentNode.insertBefore(
-          editor._el_monaco_container,
+          editor._el_monaco_wrapper,
           editor.input
         );
         editor.input.style.display = "none";
@@ -175,7 +186,7 @@ import screenfull from "screenfull";
         editors.push(editor._monaco_editor);
 
         /**
-         * Add beautify button
+         * Add tools
          */
         if (addTools) {
           const elBtnTidy = elButtonFa("btn_editor_tool_format", {
@@ -187,13 +198,30 @@ import screenfull from "screenfull";
             },
           });
           editor._el_tool_container.appendChild(elBtnTidy);
-          const elBtnFullSceen = elButtonFa("btn_editor_tool_fullscreen", {
+          const elBtnExpand = elButtonFa("btn_editor_tool_expand_editor", {
             icon: "expand",
             action: async () => {
-              screenfull.request(editor._el_monaco_container);
+              const elIcon = elBtnExpand.querySelector(".fa");
+              const elTarget = editor.jsoneditor.element.parentElement;
+              const elTargetContainer = elTarget.parentElement;
+              const elWrapper = editor._el_monaco_wrapper;
+              const isExpanded = elIcon.classList.contains("fa-compress");
+              elIcon.classList.toggle("fa-compress");
+              elIcon.classList.toggle("fa-expand");
+              if (isExpanded) {
+                elTarget.style.display = "block";
+                editor.input.parentNode.insertBefore(
+                  editor._el_monaco_wrapper,
+                  editor.input
+                );
+                editor._el_monaco_wrapper.scrollIntoView(true);
+              } else {
+                elTarget.style.display = "none";
+                elTargetContainer.appendChild(elWrapper);
+              }
             },
           });
-          editor._el_tool_container.appendChild(elBtnFullSceen);
+          editor._el_tool_container.appendChild(elBtnExpand);
         }
 
         /**
@@ -213,14 +241,6 @@ import screenfull from "screenfull";
           });
           editor._el_tool_container.appendChild(elBtnHelp);
         }
-
-        /**
-         * Insert toolbar before input
-         */
-        editor.input.parentNode.insertBefore(
-          editor._el_tool_container,
-          editor._el_monaco_container
-        );
       },
       disable: function () {
         const editor = this;

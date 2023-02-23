@@ -17836,17 +17836,17 @@
     "de": "Hilfe"
   },
   {
-    "id": "btn_editor_tool_fullscreen",
-    "en": "Fullscreen",
-    "fr": "Plein écran",
-    "es": "Pantalla completa",
-    "ru": "Полноэкранный",
-    "zh": "全屏",
-    "ar": "تكبير الشاشة",
-    "fa": "تمام صفحه",
-    "ps": "مکمله صفحه",
-    "bn": "পূর্ণ পর্দা",
-    "de": "Ganzer Bildschirm"
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "fr": "Agrandir/Réduire",
+    "es": "Expandir/Minimizar",
+    "ru": "Развернуть/Свернуть",
+    "zh": "展开/最小化",
+    "ar": "توسيع/تصغير",
+    "fa": "بزرگ کردن/کوچک کردن",
+    "ps": "په‌رته‌کاندن/کچک کول",
+    "bn": "বাড়ান/সংকোচন",
+    "de": "Erweitern/Minimieren"
   },
   {
     "id": "nc_label_merge",

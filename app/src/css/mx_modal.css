@@ -87,21 +87,42 @@
   height: 90px !important;
 }
 
-.mx-modal-top-btns {
-  display: flex;
-}
-
 .mx-modal-top {
+  position: relative;
   background: #ccc;
   display: flex;
   flex-direction: row;
   font-weight: bold;
   font-size: 1.1em;
 }
+
+.mx-modal-top-btns {
+  display: flex;
+  position: absolute;
+  right: 0;
+  padding: 5px;
+}
 .mx-modal-top-btn-control {
+  display: flex;
+  align-items: center;
   cursor: pointer;
   padding: 2px;
 }
+.mx-modal-top-btns > .mx-modal-top-btn-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--mx_ui_border);
+  background-color: var(--mx_ui_background_contrast);
+  margin-left: 3px;
+}
+.mx-modal-top-btns > .mx-modal-top-btn-control:hover {
+  background-color: var(--mx_ui_background);
+}
+
 .mx-modal-foot-btns {
   display: flex;
 }

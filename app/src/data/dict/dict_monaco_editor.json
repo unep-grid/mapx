@@ -39,16 +39,16 @@
     "de": "Hilfe"
   },
   {
-    "id": "btn_editor_tool_fullscreen",
-    "en": "Fullscreen",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "fr": "Agrandir/Réduire",
+    "es": "Expandir/Minimizar",
+    "ru": "Развернуть/Свернуть",
+    "zh": "展开/最小化",
+    "ar": "توسيع/تصغير",
+    "fa": "بزرگ کردن/کوچک کردن",
+    "ps": "په‌رته‌کاندن/کچک کول",
+    "bn": "বাড়ান/সংকোচন",
+    "de": "Erweitern/Minimieren"
   }
 ]

@@ -6860,9 +6860,9 @@
     "es": "Ayuda"
   },
   {
-    "id": "btn_editor_tool_fullscreen",
-    "en": "Fullscreen",
-    "es": "Pantalla completa"
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "es": "Expandir/Minimizar"
   },
   {
     "id": "nc_label_merge",

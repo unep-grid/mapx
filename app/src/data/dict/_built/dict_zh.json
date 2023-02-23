@@ -6860,9 +6860,9 @@
     "zh": "帮助"
   },
   {
-    "id": "btn_editor_tool_fullscreen",
-    "en": "Fullscreen",
-    "zh": "全屏"
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "zh": "展开/最小化"
   },
   {
     "id": "nc_label_merge",

@@ -6860,9 +6860,9 @@
     "ar": "مساعدة"
   },
   {
-    "id": "btn_editor_tool_fullscreen",
-    "en": "Fullscreen",
-    "ar": "تكبير الشاشة"
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "ar": "توسيع/تصغير"
   },
   {
     "id": "nc_label_merge",

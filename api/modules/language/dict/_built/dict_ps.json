@@ -6860,9 +6860,9 @@
     "ps": "راهنمایی"
   },
   {
-    "id": "btn_editor_tool_fullscreen",
-    "en": "Fullscreen",
-    "ps": "مکمله صفحه"
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "ps": "په‌رته‌کاندن/کچک کول"
   },
   {
     "id": "nc_label_merge",
