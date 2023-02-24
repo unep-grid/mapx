@@ -1145,7 +1145,7 @@ export async function initMapx(o) {
       button_lang_key: "btn_panel_controls",
       tooltip_position: "bottom-left",
       handles: ["free"],
-      container_classes: ["button-panel--container-no-full-width"],
+      container_classes: ["button-panel--container-no-full-width","button-panel--pinned-always"],
       item_content_classes: [
         "button-panel--item-content-transparent-background",
       ],

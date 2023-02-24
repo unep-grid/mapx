@@ -77,6 +77,10 @@ async function viewAutoDashboardAsync(idView) {
     if (!config.panel_init_close) {
       const d = getInstance();
       d.show();
+      const panelControl = d.panel.getOtherPanel("controls_panel");
+      if (panelControl) {
+        panelControl.close();
+      }
     }
   }
   if (widgets && widgets.length > 0) {

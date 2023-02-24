@@ -28,7 +28,7 @@ class ButtonPanel extends EventSimple {
       item_content_classes: [],
       panel_style: {},
       add: true,
-      add_footer : false,
+      add_footer: false,
       handles: ["free", "resize"],
       animateDurationMs: 350,
     };
@@ -664,6 +664,12 @@ class ButtonPanel extends EventSimple {
       }
     }
   }
+
+  getOtherPanel(id) {
+    const panel = _button_panels.find((p) => p?.opt.id === id);
+    return panel;
+  }
+
   close(skipFire) {
     const panel = this;
     if (panel.isActive()) {
