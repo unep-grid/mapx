@@ -89,12 +89,15 @@ export async function ioUploadSource(socket, chunk, callback) {
     }
     // Handle chunked data
     const config = await chunkWriter(socket, chunk);
+
+    callback({ status: "uploaded" });
+
     if (config) {
       await save(socket, config);
     }
-    return callback({ status: "ok" });
+    //callback({ status: "ok" });
   } catch (e) {
-    return callback({ status: "error", message: e?.message || e });
+    callback({ status: "error", message: e?.message || e });
   }
 }
 

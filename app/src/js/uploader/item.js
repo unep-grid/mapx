@@ -634,6 +634,7 @@ export class Item {
       for (const chunk of chunks) {
         await it._emit_chunk(chunk);
       }
+      console.log("emit finished");
     } catch (e) {
       console.error(e);
     }
@@ -643,6 +644,7 @@ export class Item {
   /**
    * Emits a chunk of the item being uploaded.
    * @param {Object} chunk - The chunk of the item to be uploaded.
+   * @returns {Object} response
    */
   async _emit_chunk(chunk) {
     const route = getApiRoute("uploadSource");
@@ -651,14 +653,16 @@ export class Item {
       nc.panel.height = 200;
       nc.panel.open();
     }
+    const res = await ws.emitAsync(route, chunk, 10e3);
 
-    return new Promise((resolve, reject) => {
-      ws.emit(route, chunk, (res) => {
-        if (res.status === "error") {
-          return reject(res.message);
-        }
-        resolve(res);
-      });
-    });
+    if (res.status === "uploaded") {
+      return true;
+    }
+
+    if (res.status === "error") {
+      throw new Error(res.message);
+    }
+
+    return res;
   }
 }
