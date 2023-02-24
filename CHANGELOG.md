@@ -1,3 +1,20 @@
+  - [1.10.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.2) 
+
+    - APP
+        - Base map style change, un_4 boundary : Improved dotted lines
+        - Moved imported view control buttons to the right
+        - Uploader improvement: re-enable all buttons as soon as all chunks are sent, instead of full uploaded process done.
+        - Hide controls when showing dashboard; controls always on top when activated
+        - Tom select dropdown menu: max 600px, longer list (.e.g source list, EPGS codes)
+        - Modal:
+            - Improved top buttons accessibility; 
+        - Monaco editor in schema editor:
+            - Removed fullscreen option, and added a 'expand/minimize' that should work in all view with code edition
+    - API 
+        - New view 
+            - Issue with error reporting 
+            - Use pg pool 
+
   - [1.10.2-alpha.8](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.8) 
     
     - APP
