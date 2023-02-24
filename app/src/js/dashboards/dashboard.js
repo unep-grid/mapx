@@ -42,10 +42,12 @@ const defaults = {
     button_classes: ["fa", "fa-pie-chart"],
     tooltip_position: "top-left",
     container_classes: ["button-panel--container-no-full-height"],
+    on_open_close_others : ["controls_panel"],
     position: "bottom-right",
     add_footer: true,
   },
 };
+
 
 class Dashboard extends EventSimple {
   constructor(opt) {
