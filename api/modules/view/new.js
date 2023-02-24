@@ -135,7 +135,7 @@ export async function ioAddViewVt(socket, config, view_options) {
           row.score += 2;
         }
         // Distinct values ↗
-        const nDistinct = stat.table.length;
+        const nDistinct = stat?.table?.length || 0;
         // Prop of values not null ↗
         const nGoodValues =
           (5 * stat.table_row_count) / stat.table_row_count_all;
