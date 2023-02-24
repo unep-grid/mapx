@@ -1,5 +1,5 @@
-import { clone } from "#mapx/helpers";
-import { isView, isViewId, isProjectId } from "@fxi/mx_valid";
+import { escapeLiteral, clone } from "#mapx/helpers";
+import { isEmpty, isView, isViewId, isProjectId } from "@fxi/mx_valid";
 import { pgWrite } from "#mapx/db";
 import { ioSendJobClient } from "#mapx/io";
 import { getSourceSummary } from "#mapx/source";
@@ -44,8 +44,6 @@ const view_template_vt = {
  * @return {Promise<boolean>}
  */
 export async function ioAddViewVt(socket, config, view_options) {
-  const client = await pgWrite.connect();
-  let success;
   try {
     const session = socket.session;
     if (!session.user_roles.publisher) {
@@ -89,7 +87,7 @@ export async function ioAddViewVt(socket, config, view_options) {
     const ignore = ["gid", "geom", "_mx_valid"];
     const available = attr.filter((a) => !ignore.includes(a));
 
-    if (attr.length === 0) {
+    if (isEmpty(attr)) {
       throw new Error(
         `No attribute usable for view in source ${config.idSource} `
       );
@@ -119,53 +117,49 @@ export async function ioAddViewVt(socket, config, view_options) {
      * < └─────────┴──────────────────┴────────────────────────────┴───────┘
      */
     for (const row of table) {
-      try {
-        row.score = 0;
+      row.score = 0;
 
-        const summary = await getSourceSummary({
-          idSource: config.idSource,
-          idAttr: row.column_name,
-          stats: ["attributes"],
-          binsMethod: "quantile",
-          binsNumber: 5,
-        });
-        const isCategorical = summary.attribute_stat.type === "categorical";
-        const isBoolean = row.column_type === "boolean";
-        const stat = summary.attribute_stat;
+      const summary = await getSourceSummary({
+        idSource: config.idSource,
+        idAttr: row.column_name,
+        stats: ["attributes"],
+        binsMethod: "quantile",
+        binsNumber: 5,
+      });
+      const isCategorical = summary.attribute_stat.type === "categorical";
+      const isBoolean = row.column_type === "boolean";
+      const stat = summary.attribute_stat;
 
-        if (isCategorical) {
-          if (!isBoolean) {
-            row.score += 2;
-          }
-          // Distinct values ↗
-          const nDistinct = stat.table.length;
-          // Prop of values not null ↗
-          const nGoodValues =
-            (5 * stat.table_row_count) / stat.table_row_count_all;
-          // Diversity ↗
-          const diversity = 1 - nDistinct / dim.nrow;
-          // But not extremely diverse ↗
-          const notExtremDiversity = 2 * (nDistinct < dim.nrow);
-          // Balanced number of classes ↗
-          const inRangeClasses = 2 * (nDistinct >= 4 && nDistinct <= 12);
-          // Score construction
-          row.score +=
-            inRangeClasses + nGoodValues + diversity + notExtremDiversity;
-        } else {
-          // Estimate how much each bins, based on quantiles, are different
-          // the idea is to set a high score if the diff vary greatly
-          // TODO: maybe create a test of Normality, Shapiro or such, to
-          // get an idaa of a normal distribution, in SQL directly.
-          // here, things should go fast
-          const dMax = Math.max(...stat.table.map((row) => row.diff));
-          const dMin = Math.min(...stat.table.map((row) => row.diff));
-          const dScore = (dMax - dMin) / dMax;
-          if (isFinite(dScore)) {
-            row.score += 2 * dScore;
-          }
+      if (isCategorical) {
+        if (!isBoolean) {
+          row.score += 2;
         }
-      } catch (e) {
-        console.error(e);
+        // Distinct values ↗
+        const nDistinct = stat.table.length;
+        // Prop of values not null ↗
+        const nGoodValues =
+          (5 * stat.table_row_count) / stat.table_row_count_all;
+        // Diversity ↗
+        const diversity = 1 - nDistinct / dim.nrow;
+        // But not extremely diverse ↗
+        const notExtremDiversity = 2 * (nDistinct < dim.nrow);
+        // Balanced number of classes ↗
+        const inRangeClasses = 2 * (nDistinct >= 4 && nDistinct <= 12);
+        // Score construction
+        row.score +=
+          inRangeClasses + nGoodValues + diversity + notExtremDiversity;
+      } else {
+        // Estimate how much each bins, based on quantiles, are different
+        // the idea is to set a high score if the diff vary greatly
+        // TODO: maybe create a test of Normality, Shapiro or such, to
+        // get an idaa of a normal distribution, in SQL directly.
+        // here, things should go fast
+        const dMax = Math.max(...stat.table.map((row) => row.diff));
+        const dMin = Math.min(...stat.table.map((row) => row.diff));
+        const dScore = (dMax - dMin) / dMax;
+        if (isFinite(dScore)) {
+          row.score += 2 * dScore;
+        }
       }
     }
 
@@ -190,6 +184,9 @@ export async function ioAddViewVt(socket, config, view_options) {
     const valid =
       isViewId(view.id) && isView(view) && isProjectId(view.project);
 
+    if (!valid) {
+      throw new Error("Invalid view");
+    }
     /**
      * Escape convert and save
      * - editor field can't be escaped (integer)
@@ -198,7 +195,7 @@ export async function ioAddViewVt(socket, config, view_options) {
      * - view  must be cloned, as original view is required in SendJob
      */
     const viewDb = clone(view);
-    const e = client.escapeLiteral;
+    const e = escapeLiteral;
     viewDb.id = e(view.id);
     viewDb.editor = view.editor * 1;
     viewDb.type = e(view.type);
@@ -208,18 +205,14 @@ export async function ioAddViewVt(socket, config, view_options) {
     viewDb.readers = e(JSON.stringify(view.readers));
     viewDb.editors = e(JSON.stringify(view.editors));
 
-    if (!valid) {
-      throw new Error("Invalid view");
-    }
-
     const keys = Object.keys(viewDb).join(",");
     const values = Object.values(viewDb).join(",");
     const sql = `INSERT INTO mx_views (${keys}) VALUES (${values})`;
-    await client.query(sql);
+    await pgWrite.query(sql);
 
     /**
      * Add view to the client
-     * - set flag edit 
+     * - set flag edit
      * - set flag downlaod if required
      */
     view._edit = true;
@@ -229,12 +222,9 @@ export async function ioAddViewVt(socket, config, view_options) {
     await ioSendJobClient(socket, "view_add", {
       view: view,
     });
-    success = true;
   } catch (e) {
-    success = false;
-    console.error(e);
-  } finally {
-    client.release();
+    throw new Error(e);
   }
-  return success;
+
+  return true;
 }

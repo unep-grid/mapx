@@ -50,6 +50,35 @@ function clone(obj) {
 }
 
 /**
+ * Escape literals
+ * Ported from PostgreSQL 9.2.4 source code in src/interfaces/libpq/fe-exec.c
+ */
+function escapeLiteral(str) {
+  let hasBackslash = false;
+  let escaped = "'";
+
+  for (let i = 0; i < str.length; i++) {
+    const c = str[i];
+    if (c === "'") {
+      escaped += c + c;
+    } else if (c === "\\") {
+      escaped += c + c;
+      hasBackslash = true;
+    } else {
+      escaped += c;
+    }
+  }
+
+  escaped += "'";
+
+  if (hasBackslash === true) {
+    escaped = " E" + escaped;
+  }
+
+  return escaped;
+}
+
+/**
  * Send string for result message
  * @param {Object} obj object to be converted in string for messages
  */
@@ -533,6 +562,7 @@ export {
   readJSON,
   prettyJson,
   timeStep,
+  escapeLiteral,
   /**
    * Middleware
    */
