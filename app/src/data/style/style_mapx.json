@@ -146,12 +146,13 @@
       "filter": ["==", ["get", "type"], 4],
       "layout": {
         "line-join": "bevel",
-        "visibility": "visible"
+        "visibility": "visible",
+        "line-cap": "round"
       },
       "paint": {
-        "line-color": "rgba(38,38,38,0.3)",
-        "line-dasharray": [0.5, 1.5],
-        "line-width": ["interpolate", ["linear"], ["zoom"], 0, 0.5, 22, 2],
+        "line-color": "rgba(38,38,38,0.7)",
+        "line-dasharray": [0, 4],
+        "line-width": ["interpolate", ["linear"], ["zoom"], 0, 1, 22, 2],
         "line-opacity": ["interpolate", ["linear"], ["zoom"], 0, 0.9, 6, 1]
       }
     },
