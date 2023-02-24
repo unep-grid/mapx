@@ -634,7 +634,6 @@ export class Item {
       for (const chunk of chunks) {
         await it._emit_chunk(chunk);
       }
-      console.log("emit finished");
     } catch (e) {
       console.error(e);
     }
