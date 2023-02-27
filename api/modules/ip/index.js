@@ -68,7 +68,13 @@ async function getGeoInfo(ip) {
       out.source = "db";
     }
 
-    await redisSet(rkey, JSON.stringify(out));
+    const noCountry = isEmpty(out.country);
+
+    await redisSet(rkey, JSON.stringify(out), {
+      // set expiration date: one day or one month
+      EX: noCountry ? 60 * 60 * 24 : 60 * 60 * 24 * 31,
+    });
+
   } catch (e) {
     console.error("getGeoInfo:", e);
   }
