@@ -71,8 +71,8 @@ async function getGeoInfo(ip) {
     const noCountry = isEmpty(out.country);
 
     await redisSet(rkey, JSON.stringify(out), {
-      // set expiration date: one day or one month
-      EX: noCountry ? 60 * 60 * 24 : 60 * 60 * 24 * 31,
+      // set expiration date: one day or no limit
+      EX: noCountry ? 60 * 60 * 24 : 0,
     });
 
   } catch (e) {
