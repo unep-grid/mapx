@@ -1,20 +1,22 @@
-export { mwGetMetadata, getSourceMetadata } from "./getSourceMetadata.js";
-export { mwGetOverlap } from "./getSourceOverlap.js";
-export { mwGetGeomValidate } from "./getSourceValidityGeom.js";
+export { mwGetMetadata, getSourceMetadata } from "./metadata/index.js";
+export { mwGetOverlap } from "./overlap/index.js";
+export { mwGetGeomValidate } from "./validate_geom/index.js";
 export {
   getSourcesServicesProject,
   getSourceServices,
   sourceHasService,
-} from "./getSourceServices.js";
-export { mwDownloadSource, ioDownloadSource } from "./download.js";
-export { ioEditSource } from "./editSourceTableAttribute.js";
-export { ioSourceListEdit } from "./getSourceList.js";
+} from "./services/index.js";
+export { mwDownloadSource, ioDownloadSource } from "./download/index.js";
 export {
+  ioEditSource,
   mwGetAttributeTable,
   getSourceAttributeTable,
-} from "./getSourceTableAttribute.js";
+} from "./attribute_table/index.js";
+
+export { ioSourceListEdit } from "./list/index.js";
+
 export {
   mwGetSummary,
   getSourceSummary,
   getSourceEditors,
-} from "./getSourceSummary.js";
+} from "./summary/index.js";
