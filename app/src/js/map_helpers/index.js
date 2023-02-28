@@ -1145,7 +1145,10 @@ export async function initMapx(o) {
       button_lang_key: "btn_panel_controls",
       tooltip_position: "bottom-left",
       handles: ["free"],
-      container_classes: ["button-panel--container-no-full-width","button-panel--pinned-always"],
+      container_classes: [
+        "button-panel--container-no-full-width",
+        "button-panel--pinned-always",
+      ],
       item_content_classes: [
         "button-panel--item-content-transparent-background",
       ],
@@ -2597,16 +2600,27 @@ export async function makeNumericSlider(o) {
         }
 
         const filter = [
-          "all",
-          ["has", k],
+          "any",
           [
-            "any",
-            ["!=", ["typeof", ["get", k]], "number"],
-            ["all", ["<=", ["get", k], n[1] * 1], [">=", ["get", k], n[0] * 1]],
+            "all",
+            ["has", k],
+            [
+              "any",
+              ["!=", ["typeof", ["get", k]], "number"],
+              [
+                "all",
+                ["<=", ["get", k], n[1] * 1],
+                [">=", ["get", k], n[0] * 1],
+              ],
+            ],
           ],
         ];
 
         if (isArray(view._null_filter)) {
+          /**
+          * Values should be filtered except for null values,
+          * always visible when using the slider filter
+          */ 
           filter.push(view._null_filter);
         }
 
