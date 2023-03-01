@@ -1,3 +1,11 @@
+  - [1.10.4-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.1) 
+
+    - APP
+        - Should solve issue with failing postgres connection not making the app quit (+reload with docker); 
+        - workaround warning about /home/app not existing 
+    - API
+        - source module structure refactoring
+
   - [1.10.3](https://github.com/unep-grid/map-x-mgl/tree/1.10.3) 
 
     - APP
