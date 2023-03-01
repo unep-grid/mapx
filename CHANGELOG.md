@@ -1,3 +1,13 @@
+  - [1.10.3](https://github.com/unep-grid/map-x-mgl/tree/1.10.3) 
+
+    - APP
+        - Fix issue with numeric slider : filter rule conflict
+        - Quick fix panel dashbboard in story map not hiding controls panel : centralise behaviour as an option for all panels
+    - API
+        - Geolocation :
+            - Set expiration to unlimited if a country is found
+            - Should solve issue with stream unreadable 
+
   - [1.10.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.2) 
 
     - APP

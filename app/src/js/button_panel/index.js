@@ -26,6 +26,7 @@ class ButtonPanel extends EventSimple {
       container_style: { height: "0px", width: "0px" },
       container_classes: [],
       item_content_classes: [],
+      on_open_close_others: [],
       panel_style: {},
       add: true,
       add_footer: false,
@@ -652,10 +653,20 @@ class ButtonPanel extends EventSimple {
 
   open(skipFire) {
     const panel = this;
+
     if (!panel.isActive()) {
       if (panel.exclusiveMode) {
         _button_panels.forEach((p) => p.close());
       }
+
+      const closeOthers = panel.opt.on_open_close_others;
+      for (const id of closeOthers) {
+        const panelControl = panel.getOtherPanel(id);
+        if (panelControl) {
+          panelControl.close();
+        }
+      }
+
       panel.hideFlag();
       panel.elContainer.classList.add("active");
       panel.hintHandles();

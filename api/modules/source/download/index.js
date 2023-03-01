@@ -10,7 +10,7 @@ import { getColumnsNames, isLayerValid, getLayerTitle } from "#mapx/db-utils";
 import { sendMailAuto } from "#mapx/mail";
 import { templates } from "#mapx/template";
 import { t } from "#mapx/language";
-import { getSourceMetadata } from "./getSourceMetadata.js";
+import { getSourceMetadata } from "#mapx/source";
 import { getParamsValidator } from "#mapx/route_validation";
 import { getFormatExt } from "#mapx/file_formats";
 import slugify from "slugify";
