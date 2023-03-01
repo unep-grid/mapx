@@ -38,6 +38,7 @@ export async function mwSendMail(req, res) {
         conf = dat.msg;
       }
     }
+
     /**
      * Validate
      */
@@ -181,4 +182,3 @@ export async function sendMailAuto(config) {
   c.text = htmlToText(body);
   return sendMail(c);
 }
- 
