@@ -125,7 +125,7 @@ export function buildLegendVt(view, rules) {
             {
               class: "mx-legend-vt-rule-label",
               for: inputId,
-              title: label,
+              title: `${label}`,
             },
             el("span", { class: "mx-legend-vt-rule-label-text" }, label)
           )
