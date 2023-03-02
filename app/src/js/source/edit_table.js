@@ -1056,6 +1056,9 @@ export class EditTableSessionClient extends WsToolsBase {
       allowInsertRow: false,
       renderAllRows: false,
       maxRows: table.data.length,
+      copyPaste: {
+        rowsLimit: table.data.length,
+      },
       dropdownMenu: [
         "filter_by_condition",
         "filter_operators",
