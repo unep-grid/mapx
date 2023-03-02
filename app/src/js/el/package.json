@@ -1,6 +1,6 @@
 {
   "name": "@fxi/el",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "./dist/el.cjs",
   "module": "./dist/el.module.js",
   "unpkg": "./dist/el.umd.js",
@@ -19,7 +19,7 @@
     "dev": "microbundle watch -o dist",
     "serve": "live-server example --mount=/dist:dist",
     "build": "microbundle -o dist",
-    "prod": "npm build && npm publish"
+    "prod": "npm run build && npm publish"
   },
   "keywords": [
     "el",
