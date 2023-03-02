@@ -1,3 +1,11 @@
+  - [1.10.4-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.2) 
+
+    - API
+        - Added bigint and int8 as 'continuous' type (#892) : solves stats + auto style
+    - APP 
+        - Fixes #893, no limit to the number of rows that can be copyied
+        - Code sharing tool: add a 'base map' output, to be used with mapbox studio. Use current theme and produce valid mapbox theme, with information on fonts used, if not available in mapbox studio
+
   - [1.10.4-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.1) 
 
     - APP
