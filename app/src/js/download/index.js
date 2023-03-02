@@ -26,6 +26,17 @@ export async function downloadCSV(data, filename, headers) {
 }
 
 /**
+ * Download HTML
+ * @param {String} data String string or nested array
+ * @param {String} filename File name
+ * @return {Promise<Boolean>}
+ */
+export async function downloadHTML(data, filename) {
+  const blob = new Blob([data], { type: "text/html" });
+  return downloadBlob(blob, filename);
+}
+
+/**
  * Download canvas
  * @param {HTMLCanvasElement} canvas
  * @param {String} filename File name

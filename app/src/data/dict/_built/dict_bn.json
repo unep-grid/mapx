@@ -25,6 +25,11 @@
     "bn": "ম্যাপবক্স শৈলী (সম্পূর্ণ)"
   },
   {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "bn": "ম্যাপবক্স শৈলী (শুধুমাত্র ভিত্তি মানচিত্র, স্টুডিওতে ব্যবহারযোগ্য)"
+  },
+  {
     "id": "code_integration_template_mapbox_layers",
     "en": "Mapbox style (layers only)",
     "bn": "ম্যাপবক্স শৈলী (শুধুমাত্র স্তর)"

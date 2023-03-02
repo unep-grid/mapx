@@ -25,6 +25,11 @@
     "ar": "نمط Mapbox (ممتلئ)"
   },
   {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "ar": "نمط Mapbox (الخريطة الأساسية فقط ، يمكن استخدامها في الاستوديو)"
+  },
+  {
     "id": "code_integration_template_mapbox_layers",
     "en": "Mapbox style (layers only)",
     "ar": "نمط Mapbox (الطبقات فقط)"

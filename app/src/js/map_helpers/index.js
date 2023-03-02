@@ -144,6 +144,55 @@ const viewsActive = new Set();
 export { downloadViewVector } from "./../source";
 
 /**
+ * Export style basemap
+ * @returns {Object} Mapbox style with MapX basemap
+ */
+export function getStyleBaseMap() {
+  const map = getMap();
+  const style = clone(map.getStyle());
+  const themeData = theme.get();
+  const styleOut = {};
+  style.name = themeData.id;
+  style.sprite = settings.links.mapboxSprites;
+  style.glyphs = settings.links.mapboxGlyphs;
+
+  /**
+   * Clear metadata
+   */
+  delete style.metadata;
+
+  styleOut.metadata = {
+    fonts: {
+      source: settings.links.mapFonts,
+    },
+  };
+
+  /**
+   * Remove mapx layers
+   */
+  const layers = [];
+  for (const layer of style.layers) {
+    if (layer.id.match(/^(?!MX-)/)) {
+      layers.push(layer);
+    }
+  }
+  style.layers = layers;
+
+  /**
+   * Remove mapx sources
+   */
+  for (const idSource in style.sources) {
+    if (idSource.match(/^MX-/)) {
+      delete style.sources[idSource];
+    }
+  }
+
+  Object.assign(styleOut, style);
+
+  return styleOut;
+}
+
+/**
  * Convert point in  degrees to meter
  * @lngLat {PointLike} lngLat
  * @return {PointLike} reprojected point
@@ -2618,9 +2667,9 @@ export async function makeNumericSlider(o) {
 
         if (isArray(view._null_filter)) {
           /**
-          * Values should be filtered except for null values,
-          * always visible when using the slider filter
-          */ 
+           * Values should be filtered except for null values,
+           * always visible when using the slider filter
+           */
           filter.push(view._null_filter);
         }
 

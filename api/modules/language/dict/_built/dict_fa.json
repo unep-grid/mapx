@@ -25,6 +25,11 @@
     "fa": "سبک نقشه باکس (کامل)"
   },
   {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "fa": "سبک Mapbox (فقط نقشه پایه، قابل استفاده در استودیو)"
+  },
+  {
     "id": "code_integration_template_mapbox_layers",
     "en": "Mapbox style (layers only)",
     "fa": "سبک Mapbox (فقط لایه‌ها)"

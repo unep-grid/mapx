@@ -65,6 +65,19 @@
     "de": "Mapbox-Stil (vollständig)"
   },
   {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "fr": "Style Mapbox (carte de base uniquement, utilisable dans Studio)",
+    "es": "Estilo Mapbox (solo mapa base, utilizable en Studio)",
+    "ru": "Стиль Mapbox (только базовая карта, которую можно использовать в Studio)",
+    "zh": "Mapbox 样式（仅底图，可在 Studio 中使用）",
+    "ar": "نمط Mapbox (الخريطة الأساسية فقط ، يمكن استخدامها في الاستوديو)",
+    "fa": "سبک Mapbox (فقط نقشه پایه، قابل استفاده در استودیو)",
+    "ps": "د نقشه بکس سټایل (یوازې اساسی نقشه، په سټوډیو کې د کارولو وړ)",
+    "bn": "ম্যাপবক্স শৈলী (শুধুমাত্র ভিত্তি মানচিত্র, স্টুডিওতে ব্যবহারযোগ্য)",
+    "de": "Mapbox-Stil (nur Basiskarte, verwendbar in Studio)"
+  },
+  {
     "id": "code_integration_template_mapbox_layers",
     "en": "Mapbox style (layers only)",
     "fr": "Style Mapbox (couches uniquement)",

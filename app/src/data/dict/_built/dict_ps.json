@@ -25,6 +25,11 @@
     "ps": "د نقشه بکس سټایل (بشپړ)"
   },
   {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "ps": "د نقشه بکس سټایل (یوازې اساسی نقشه، په سټوډیو کې د کارولو وړ)"
+  },
+  {
     "id": "code_integration_template_mapbox_layers",
     "en": "Mapbox style (layers only)",
     "ps": "د نقشه بکس سټایل (یوازې پرتونه)"

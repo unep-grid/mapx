@@ -25,6 +25,11 @@
     "zh": "Mapbox 样式（完整）"
   },
   {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "zh": "Mapbox 样式（仅底图，可在 Studio 中使用）"
+  },
+  {
     "id": "code_integration_template_mapbox_layers",
     "en": "Mapbox style (layers only)",
     "zh": "Mapbox 样式（仅限图层）"

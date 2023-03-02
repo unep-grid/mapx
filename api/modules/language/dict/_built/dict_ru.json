@@ -25,6 +25,11 @@
     "ru": "Стиль Mapbox (полный)"
   },
   {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "ru": "Стиль Mapbox (только базовая карта, которую можно использовать в Studio)"
+  },
+  {
     "id": "code_integration_template_mapbox_layers",
     "en": "Mapbox style (layers only)",
     "ru": "Стиль Mapbox (только слои)"

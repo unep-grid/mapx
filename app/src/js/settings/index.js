@@ -69,8 +69,12 @@ const settings = {
   ],
   // ⚠️ also defined in app/settings/settings-global.R
   links: {
+    mapboxGlyphs: "mapbox://sprites/mapbox/bright-v8",
+    mapboxSprites: "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
     repositoryIssues: "https://github.com/unep-grid/map-x-mgl/issues",
     appKnowlegdeBase: "https://www.mapx.org/knowledge-base/",
+    mapFonts:
+      "https://github.com/unep-grid/map-x-mgl/tree/main/app/src/glyphs/source/ttf",
   },
   mode: {
     static: false,

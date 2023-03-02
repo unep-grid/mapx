@@ -25,6 +25,11 @@
     "es": "Estilo Mapbox (completo)"
   },
   {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "es": "Estilo Mapbox (solo mapa base, utilizable en Studio)"
+  },
+  {
     "id": "code_integration_template_mapbox_layers",
     "en": "Mapbox style (layers only)",
     "es": "Estilo Mapbox (solo capas)"

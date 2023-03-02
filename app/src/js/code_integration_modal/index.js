@@ -4,10 +4,16 @@ import { moduleLoad } from "./../modules_loader_async/index.js";
 import * as template_maplibre_simple from "./templates/maplibre_gl_app.html";
 import { getDictItem } from "../language/index.js";
 import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt";
+
 import { parseTemplate } from "./../mx_helper_misc";
 import { FlashItem } from "../icon_flash/index.js";
-import { getViewsBounds, getView } from "../map_helpers/index.js";
+import {
+  getViewsBounds,
+  getView,
+  getStyleBaseMap,
+} from "../map_helpers/index.js";
 import { isViewVtWithStyleCustom } from "../is_test/index.js";
+import { downloadHTML, downloadJSON } from "../download/index.js";
 
 export class ModalCodeIntegration {
   constructor(idView, config) {
@@ -21,6 +27,7 @@ export class ModalCodeIntegration {
     mci.updateLayout = mci.updateLayout.bind(mci);
     mci.destroy = mci.destroy.bind(mci);
     mci.copy = mci.copy.bind(mci);
+    mci.download = mci.download.bind(mci);
   }
   async init() {
     const mci = this;
@@ -81,12 +88,16 @@ export class ModalCodeIntegration {
       icon: "clipboard",
       action: mci.copy,
     });
+    const elButtonDownload = elButtonFa("btn_download", {
+      icon: "download",
+      action: mci.download,
+    });
     const elButtonClose = elButtonFa("btn_close", {
       icon: "times",
       action: mci.destroy,
     });
 
-    const buttons = [elButtonClose, elButtonCopy];
+    const buttons = [elButtonClose, elButtonCopy, elButtonDownload];
 
     mci._modal = modalSimple({
       title: "code share",
@@ -120,14 +131,26 @@ export class ModalCodeIntegration {
     }
   }
 
-  async updateCode() {
+  get idTemplate() {
     const mci = this;
     const idTemplate = mci.formdata.get("code_integration_select_template");
+    return idTemplate;
+  }
+
+  async getData() {
+    const mci = this;
+    const idTemplate = mci.idTemplate;
     const tData = await mci.getTemplateData(idTemplate);
+    return tData;
+  }
+
+  async updateCode() {
+    const mci = this;
+    const data = await mci.getData();
     const model = mci.editor.getModel();
-    await mci._monaco.editor.setModelLanguage(model, tData.language);
-    await model.setValue(tData.str);
-    if (tData.language !== "json") {
+    await mci._monaco.editor.setModelLanguage(model, data.language);
+    await model.setValue(data.str);
+    if (data.language !== "json") {
       await mci.editor.getAction("editor.action.formatDocument").run();
     }
   }
@@ -136,6 +159,25 @@ export class ModalCodeIntegration {
     const mci = this;
     navigator.clipboard.writeText(mci.code);
     new FlashItem("clipboard");
+  }
+
+  async download() {
+    const mci = this;
+    const data = await mci.getData();
+    let done;
+    switch (data.language) {
+      case "json":
+        done = await downloadJSON(data.str, "mapx.json");
+        break;
+      case "html":
+        done = await downloadHTML(dats.str, "index.html");
+        break;
+      default:
+        null;
+    }
+    if (done) {
+      new FlashItem("download");
+    }
   }
 
   get formdata() {
@@ -172,6 +214,10 @@ export class ModalCodeIntegration {
       {
         id: "template_mapbox_style",
         key: "code_integration_template_mapbox_style",
+      },
+      {
+        id: "template_mapbox_style_basemap",
+        key: "code_integration_template_mapbox_style_basemap",
       },
     ];
     if (!isCustom) {
@@ -210,6 +256,11 @@ export class ModalCodeIntegration {
         break;
       case "template_mapbox_style":
         out.str = JSON.stringify(style, 0, 2);
+        out.language = "json";
+        break;
+      case "template_mapbox_style_basemap":
+        const styleBaseMap = getStyleBaseMap();
+        out.str = JSON.stringify(styleBaseMap, 0, 2);
         out.language = "json";
         break;
       case "template_sld_layers":
