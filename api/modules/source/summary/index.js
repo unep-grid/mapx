@@ -17,6 +17,8 @@ const typesContinuous = [
   "numeric",
   "real",
   "smallint",
+  "int8",
+  "bigint",
 ];
 
 const validateParamsHandler = getParamsValidator({
