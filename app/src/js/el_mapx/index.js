@@ -482,6 +482,7 @@ export function elButtonFa(key, opt) {
  * @param {String} opt.action Callback
  * @param {String} opt.name Form name item, if not equal to key
  * @param {Boolean} opt.checked Checked at start
+ * @param {Boolean} opt.checked Disabled at start
  * @param {Boolean} opt.tooltip Add tooltip (false)
  * @param {Boolean} opt.keyLabel Optional translation key for label
  * @param {Boolean} opt.keyDesc Optional translation key for descriptiom
@@ -493,6 +494,7 @@ export function elCheckbox(key, opt) {
       id: Math.random().toString(32),
       action: () => {},
       checked: true,
+      disabled : false,
       tooltip: false,
       keyLabel: null,
       keyDesc: null,
@@ -508,6 +510,7 @@ export function elCheckbox(key, opt) {
         id: opt.id,
         type: "checkbox",
         checked: opt.checked,
+        disabled: opt.disabled,
         value: "true", // will be used in form data. If not set, "on" will be returned.
         on: ["change", opt.action],
         dataset: opt.dataset,

@@ -7,7 +7,8 @@
     "fileExt": [".gpkg"],
     "multiple": false,
     "upload": true,
-    "download": true
+    "download": true,
+    "spatial": true
   },
   {
     "name": "CSV",
@@ -16,7 +17,8 @@
     "fileExt": [".csv"],
     "multiple": false,
     "upload": true,
-    "download": false
+    "download": false,
+    "spatial": false
   },
   {
     "name": "Postgres SQL dump",
@@ -25,7 +27,8 @@
     "fileExt": [".sql"],
     "multiple": false,
     "upload": false,
-    "download": true
+    "download": true,
+    "spatial": false
   },
   {
     "name": "ESRI Shapefile",
@@ -34,7 +37,8 @@
     "fileExt": [".shp", ".dbf", ".prj", ".shx", ".cpg"],
     "multiple": true,
     "upload": true,
-    "download": true
+    "download": true,
+    "spatial": true
   },
   {
     "name": "GeoJSON",
@@ -43,7 +47,8 @@
     "driver": "GeoJSON",
     "multiple": false,
     "upload": true,
-    "download": true
+    "download": true,
+    "spatial": true
   },
   {
     "name": "TopoJSON",
@@ -52,7 +57,8 @@
     "driver": "TopoJSON",
     "multiple": false,
     "upload": true,
-    "download": false
+    "download": false,
+    "spatial": true
   },
   {
     "name": "Geography Markup Language (GML)",
@@ -61,7 +67,8 @@
     "fileExt": [".gml", ".xml"],
     "multiple": false,
     "upload": true,
-    "download": true
+    "download": true,
+    "spatial": true
   },
   {
     "name": "GPX",
@@ -70,7 +77,8 @@
     "fileExt": [".gpx"],
     "multiple": false,
     "upload": true,
-    "download": true
+    "download": true,
+    "spatial": true
   },
   {
     "name": "Keyhole Markup Language (KML)",
@@ -79,7 +87,8 @@
     "fileExt": [".kml"],
     "multiple": false,
     "upload": true,
-    "download": true
+    "download": true,
+    "spatial": true
   },
   {
     "name": "SQLite",
@@ -88,7 +97,8 @@
     "fileExt": [".sqlite", ".db"],
     "multiple": false,
     "upload": true,
-    "download": true
+    "download": true,
+    "spatial": false
   },
   {
     "name": "DXF",
@@ -97,6 +107,7 @@
     "fileExt": [".dxf"],
     "multiple": false,
     "upload": true,
-    "download": true
+    "download": true,
+    "spatial": false
   }
 ]

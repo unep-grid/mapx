@@ -459,8 +459,10 @@ export class Item {
 
     const elCheckCreateView = elCheckbox("up_check_create_view", {
       name: "create_view",
-      checked: defSettings.create_view,
+      checked: it._format.spatial ? defSettings.create_view : false,
+      disabled: !it._format.spatial,
     });
+
     const elCheckAllowDownlaod = elCheckbox("up_check_allow_download", {
       name: "enable_download",
       checked: defSettings.enable_download,
