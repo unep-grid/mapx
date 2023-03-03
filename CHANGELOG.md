@@ -1,3 +1,9 @@
+  - [1.10.4-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.3) 
+
+    - APP 
+        - Uploader : Disabling auto view creation for non-spatial upload ( e.g. csv )
+        - Updated version of el : added case when content is numeric
+
   - [1.10.4-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.2) 
 
     - API
