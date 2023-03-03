@@ -156,7 +156,7 @@ import { isEmpty } from "./is_test/index.js";
             indentSize: 2,
             autoIndent: true,
             formatOnPaste: true,
-            wordWrap: "on",
+            wordWrap: "off",
             rulers: [80],
           }
         );

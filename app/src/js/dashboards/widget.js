@@ -28,6 +28,37 @@ const defaults = {
   attributions: [],
 };
 
+
+/**
+ * A widget class that provides a customizable UI element for displaying and manipulating data.
+ * @class
+ * @property {Object} opt - Widget options.
+ * @property {Object} opt.conf - Widget configuration.
+ * @property {boolean} opt.conf.disabled - Flag indicating whether the widget is disabled.
+ * @property {string} opt.conf.source - The source of data for the widget.
+ * @property {string} opt.conf.width - The width of the widget.
+ * @property {string} opt.conf.height - The height of the widget.
+ * @property {boolean} opt.conf.addColorBackground - Flag indicating whether to add a color background to the widget.
+ * @property {string} opt.conf.colorBackground - The color of the background to add to the widget.
+ * @property {boolean} opt.conf.sourceIgnoreEmpty - Flag indicating whether to ignore empty data from the data source.
+ * @property {string} opt.conf.atribution - The attribution string for the widget.
+ * @property {string} opt.conf.script - The script for the widget.
+ * @property {string} opt.language - The language used for the widget.
+ * @property {Object} opt.map - The map object associated with the widget.
+ * @property {Object} opt.view - The view object associated with the widget.
+ * @property {Object} opt.dashboard - The dashboard object associated with the widget.
+ * @property {Array} opt.attributions - An array of attributions for the widget.
+ * @property {string} id - The ID of the widget.
+ * @property {ListenerStore} ls - A listener store for the widget.
+ * @property {HTMLElement} el - The HTML element for the widget.
+ * @property {HTMLElement} elButtonClose - The close button element for the widget.
+ * @property {HTMLElement} elContent - The content element for the widget.
+ * @property {Object} config - The configuration object for the widget (retro compatibility).
+ * @property {Object} modules - The modules object for the widget.
+ * @property {Array} data - The current data array for the widget 
+ * @property {boolean} destroyed - Flag indicating whether the widget is destroyed.
+ * @property {boolean} initialized - Flag indicating whether the widget is initialized.
+ */
 class Widget {
   constructor(opt) {
     const widget = this;
@@ -37,10 +68,10 @@ class Widget {
 
   async init() {
     const widget = this;
-    if (widget._init) {
+    if (widget.initialized) {
       return;
     }
-    if (widget.isDisabled()) {
+    if (widget.disabled) {
       return;
     }
     /**
@@ -51,7 +82,7 @@ class Widget {
 
     widget._init = true;
 
-    widget.ls = new ListenerStore();
+    widget._ls = new ListenerStore();
     widget.id = Math.random().toString(32);
     /**
      * Build and set size
@@ -83,7 +114,7 @@ class Widget {
     }
   }
 
-  isDisabled() {
+  get disabled() {
     const widget = this;
     return path(widget, "opt.conf.disabled", false);
   }
@@ -280,6 +311,9 @@ class Widget {
   get grid() {
     return path(this.opt, "grid", {});
   }
+  get ls() {
+    return this._ls;
+  }
   get dashboard() {
     return path(this.opt, "dashboard", {});
   }
@@ -289,15 +323,24 @@ class Widget {
   get view() {
     return path(this.opt, "view", {});
   }
+
+  get destroyed() {
+    return this._destroyed;
+  }
+
+  get initialized() {
+    return this._init;
+  }
+
   async destroy(skipOnRemove) {
     const widget = this;
     try {
       const dashboard = widget.dashboard;
-      if (widget._destroyed) {
+      if (widget.destroyed) {
         return;
       }
       widget._destroyed = true;
-      if (!widget._init) {
+      if (!widget.initialized) {
         return;
       }
       /**
