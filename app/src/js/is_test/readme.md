@@ -57,6 +57,9 @@ Regex.lastIndex is not reseted between calls,
 <dt><a href="#isViewVtWithRules">isViewVtWithRules(item)</a></dt>
 <dd><p>Test if view vt has style rules</p>
 </dd>
+<dt><a href="#isViewVtWithStyleCustom">isViewVtWithStyleCustom(item)</a></dt>
+<dd><p>Test if view vt has custom style</p>
+</dd>
 <dt><a href="#isViewVtWithAttributeType">isViewVtWithAttributeType(item, attribute)</a></dt>
 <dd><p>Test if view vt has specific attribute type r</p>
 </dd>
@@ -126,7 +129,7 @@ Regex.lastIndex is not reseted between calls,
 <dt><a href="#isTable">isTable(item)</a></dt>
 <dd><p>Test if entry is an table (array of object)</p>
 </dd>
-<dt><a href="#isJson">isJson(String)</a></dt>
+<dt><a href="#isJSON">isJSON(String)</a></dt>
 <dd><p>Test if entry is JSON</p>
 </dd>
 <dt><a href="#isStringifiable">isStringifiable(item)</a> ⇒ <code>Boolean</code></dt>
@@ -140,6 +143,9 @@ Regex.lastIndex is not reseted between calls,
 </dd>
 <dt><a href="#isBoolean">isBoolean(b)</a></dt>
 <dd><p>Test if entry is boolean</p>
+</dd>
+<dt><a href="#isBooleanCoercible">isBooleanCoercible(b)</a> ⇒ <code>Boolean</code></dt>
+<dd><p>Test for a loose boolean type, e.g. from csv...</p>
 </dd>
 <dt><a href="#isMap">isMap(map)</a></dt>
 <dd><p>Test if is map</p>
@@ -184,6 +190,9 @@ Use server side
 </dd>
 <dt><a href="#isUrlValidWms">isUrlValidWms(url, opt)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Check if it&#39;s expected url for wms end point.</p>
+</dd>
+<dt><a href="#isDateStringRegex">isDateStringRegex(date)</a></dt>
+<dd><p>Validate date string</p>
 </dd>
 <dt><a href="#isDateString">isDateString(date)</a></dt>
 <dd><p>Validate date string</p>
@@ -332,6 +341,17 @@ Test if it's a MapX view is local
 
 ## isViewVtWithRules(item)
 Test if view vt has style rules
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>Object</code> | to test |
+
+<a name="isViewVtWithStyleCustom"></a>
+
+## isViewVtWithStyleCustom(item)
+Test if view vt has custom style
 
 **Kind**: global function  
 
@@ -597,9 +617,9 @@ Test if entry is an table (array of object)
 | --- | --- | --- |
 | item | <code>Array</code> | array |
 
-<a name="isJson"></a>
+<a name="isJSON"></a>
 
-## isJson(String)
+## isJSON(String)
 Test if entry is JSON
 
 **Kind**: global function  
@@ -645,6 +665,17 @@ Test if entry is numeric
 
 ## isBoolean(b)
 Test if entry is boolean
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| b | <code>Boolean</code> | boolean to test |
+
+<a name="isBooleanCoercible"></a>
+
+## isBooleanCoercible(b) ⇒ <code>Boolean</code>
+Test for a loose boolean type, e.g. from csv...
 
 **Kind**: global function  
 
@@ -820,6 +851,17 @@ Check if it's expected url for wms end point.
 | url | <code>String</code> | to test |
 | opt | <code>Object</code> | options |
 | opt.layers | <code>Boolean</code> | Should the url contains layers param ? |
+
+<a name="isDateStringRegex"></a>
+
+## isDateStringRegex(date)
+Validate date string
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| date | <code>Number</code> | to validate |
 
 <a name="isDateString"></a>
 
