@@ -353,7 +353,7 @@ class Dashboard extends EventSimple {
     const d = this;
     const disabled = [];
     for (const w of d.widgets) {
-      disabled.push(w.isDisabled());
+      disabled.push(w.disabled);
     }
     return all(disabled);
   }

@@ -28,7 +28,6 @@ const defaults = {
   attributions: [],
 };
 
-
 /**
  * A widget class that provides a customizable UI element for displaying and manipulating data.
  * @class
@@ -55,7 +54,7 @@ const defaults = {
  * @property {HTMLElement} elContent - The content element for the widget.
  * @property {Object} config - The configuration object for the widget (retro compatibility).
  * @property {Object} modules - The modules object for the widget.
- * @property {Array} data - The current data array for the widget 
+ * @property {Array} data - The current data array for the widget
  * @property {boolean} destroyed - Flag indicating whether the widget is destroyed.
  * @property {boolean} initialized - Flag indicating whether the widget is initialized.
  */
@@ -431,7 +430,23 @@ class Widget {
   strToObj(str) {
     const w = this;
     try {
-      const r = new Function(str)();
+      /**
+       * Remove comments
+       */
+      let strToEval = str.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "");
+      /**
+       * Test if script start with function
+       */
+      const hasFunction = /function handler/.test(strToEval);
+
+      if (hasFunction) {
+        strToEval = strToEval.substring(
+          strToEval.indexOf("{") + 1,
+          strToEval.lastIndexOf("}")
+        );
+      }
+
+      const r = new Function(strToEval)();
       for (const f in r) {
         const rBind = r[f].bind(w);
         const skipIfOnRemove = f === "onRemove";
