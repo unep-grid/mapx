@@ -1,3 +1,9 @@
+  - [1.10.4-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.4) 
+
+    - APP
+        - Modified template for widgets and added method to check of widget has been destroyed `widget.destroyed` or initialized `widget.initialized` 
+        - Monaco editor : removed text wrapping, has the layout was not optimal in narrow forms
+
   - [1.10.4-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.3) 
 
     - APP 
