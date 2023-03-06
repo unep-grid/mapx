@@ -37,7 +37,7 @@ module.exports = merge(common, {
       mode: "production",
       skipWaiting: false,
       clientsClaim: true,
-      exclude: [/\.DS_Store/, /.*\.swp$/, /^fontstack/, /^sprites/],
+      exclude: [/\.DS_Store/, /.*\.swp$/, /^fontstack/, /^sprites/, /^CHANGELOG/],
       importScripts: ["sw_listen_skip_waiting_install.js"],
       maximumFileSizeToCacheInBytes : 10_000_000, //10MB
       runtimeCaching: [
