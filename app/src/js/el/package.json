@@ -11,7 +11,7 @@
   "amdName": "El",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/unep-grid/map-x-mgl"
+    "url": "git+https://github.com/unep-grid/mapx"
   },
   "description": "Quick DOM elements creation in js.",
   "scripts": {
@@ -37,9 +37,9 @@
   },
   "files":["dist","src"],
   "bugs": {
-    "url": "https://github.com/unep-grid/map-x-mgl"
+    "url": "https://github.com/unep-grid/mapx"
   },
-  "homepage": "https://github.com/unep-grid/map-x-mgl/tree/master/app/src/js/el",
+  "homepage": "https://github.com/unep-grid/mapx/tree/master/app/src/js/el",
   "directories": {
     "lib": "lib"
   }
