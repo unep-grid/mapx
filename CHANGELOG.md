@@ -1,3 +1,8 @@
+  - [1.10.4-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.5) 
+    
+    - APP 
+        - Reworked templates for widgets and custom code: added support for handler function, and not only function body. Should be backward compatible.
+
   - [1.10.4-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.4) 
 
     - APP
