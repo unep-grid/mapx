@@ -38,8 +38,7 @@ const settings = {
     protocol: "http://",
   },
   cdn: {
-    template:
-      "https://cdn.jsdelivr.net/gh/unep-grid/map-x-mgl@{{version}}/{{path}}",
+    template: "https://cdn.jsdelivr.net/gh/unep-grid/mapx@{{version}}/{{path}}",
   },
   tiles: {
     vector: {
@@ -57,7 +56,7 @@ const settings = {
     upload_size_max: Math.pow(1024, 2) * 200, //100 MiB
     routes: routes,
   },
-  // see https://github.com/unep-grid/map-x-mgl/issues/472
+  // see https://github.com/unep-grid/mapx/issues/472
   paramKeysPermanent: [
     "project",
     "language",
@@ -71,10 +70,12 @@ const settings = {
   links: {
     mapboxGlyphs: "mapbox://sprites/mapbox/bright-v8",
     mapboxSprites: "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
-    repositoryIssues: "https://github.com/unep-grid/map-x-mgl/issues",
+    repositoryIssues: "https://github.com/unep-grid/mapx/issues",
     appKnowlegdeBase: "https://www.mapx.org/knowledge-base/",
+    wiki: "https://github.com/unep-grid/mapx/wiki/",
+    wikiRaw: "https://raw.githubusercontent.com/wiki/unep-grid/mapx/",
     mapFonts:
-      "https://github.com/unep-grid/map-x-mgl/tree/main/app/src/glyphs/source/ttf",
+      "https://github.com/unep-grid/mapx/tree/main/app/src/glyphs/source/ttf",
   },
   mode: {
     static: false,

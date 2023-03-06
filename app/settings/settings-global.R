@@ -25,14 +25,14 @@ config[["brand"]] <- list(
 # ⚠️  also defined in app/src/js/mx_settings_global.json
 config[["links"]] <- list(
   mainProjectPage = "https://mapx.org",
-  repositoryIssues = "https://github.com/unep-grid/map-x-mgl/issues",
-  repositoryWiki = "https://github.com/unep-grid/map-x-mgl/wiki",
-  repositoryWikiMapComposer = "https://github.com/unep-grid/map-x-mgl/wiki/Map-composer",
-  repositoryWikiDrawTool = "https://github.com/unep-grid/map-x-mgl/wiki/Draw-tool",
-  repositoryWikiSharingManager = "https://github.com/unep-grid/map-x-mgl/wiki/Sharing-Manager",
-  repositoryWikiAttributeTable = "https://github.com/unep-grid/map-x-mgl/wiki/Attribute-table",
-  repositoryWikiSearchToolUI = "https://github.com/unep-grid/map-x-mgl/wiki/Search-tool-UI",
-  repositoryWikiTableEditor = "https://github.com/unep-grid/map-x-mgl/wiki/Attribute-table-edition",
+  repositoryIssues = "https://github.com/unep-grid/mapx/issues",
+  repositoryWiki = "https://github.com/unep-grid/mapx/wiki",
+  repositoryWikiMapComposer = "https://github.com/unep-grid/mapx/wiki/Map-composer",
+  repositoryWikiDrawTool = "https://github.com/unep-grid/mapx/wiki/Draw-tool",
+  repositoryWikiSharingManager = "https://github.com/unep-grid/mapx/wiki/Sharing-Manager",
+  repositoryWikiAttributeTable = "https://github.com/unep-grid/mapx/wiki/Attribute-table",
+  repositoryWikiSearchToolUI = "https://github.com/unep-grid/mapx/wiki/Search-tool-UI",
+  repositoryWikiTableEditor = "https://github.com/unep-grid/mapx/wiki/Attribute-table-edition",
   appKnowlegdeBase = "https://www.mapx.org/knowledge-base/"
 )
 

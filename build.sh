@@ -6,7 +6,7 @@ set -e
 #
 
 DRY="true" 
-REPO="https://github.com/unep-grid/map-x-mgl"
+REPO="https://github.com/unep-grid/mapx"
 BRANCH=$(git branch --show-current)
 REMOTE="github"
 DOCKER_REPO_APP="fredmoser/mapx_app"

@@ -16,7 +16,7 @@ class FrameManager extends Events {
    * @param {Boolean} opt.static Use static mode instead of app mode. App mode have more features.
    * @param {Boolean} opt.verbose Console log messages
    * @param {String|Object} opt.url Url of the worker or object describing url
-   * @param {Object} opt.params Search query parameters (full dscription at https://github.com/unep-grid/map-x-mgl/wiki/URL-parameters )
+   * @param {Object} opt.params Search query parameters (full dscription at https://github.com/unep-grid/mapx/wiki/URL-parameters )
    * @param {Boolean} opt.params.closePanels Close all panels
    * @param {Boolean} opt.params.showProjectsListByTitle (app mode) Show project list by title
    * @param {Boolean} opt.params.showProjectsListByRole (app mode) Show project list by role
