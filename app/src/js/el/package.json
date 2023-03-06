@@ -1,6 +1,6 @@
 {
   "name": "@fxi/el",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "main": "./dist/el.cjs",
   "module": "./dist/el.module.js",
   "unpkg": "./dist/el.umd.js",
