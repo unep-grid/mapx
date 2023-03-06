@@ -1,3 +1,8 @@
+  - [1.10.4-alpha.6](https://github.com/unep-grid/mapx/tree/1.10.4-alpha.6) 
+
+    - APP/API
+        - Updated repo url, republished public modules, updated doc
+
   - [1.10.4-alpha.5](https://github.com/unep-grid/mapx/tree/1.10.4-alpha.5) 
     
     - APP 

@@ -41,7 +41,7 @@ const mapx = new mxsdk.Manager({
 
 Mapx has a set of valid search parameters in its query string. The SDK will use the `params` object to build the querry string.
 
-Current supported parameters are [defined in the wiki](https://github.com/unep-grid/map-x-mgl/wiki/URL-parameters).
+Current supported parameters are [defined in the wiki](https://github.com/unep-grid/mapx/wiki/URL-parameters).
 
 
 ## Methods and events
@@ -124,7 +124,7 @@ Further usage resources:
 - [Starter project example](https://git.unepgrid.ch/drikc/mapx-sdk-starter-project)
 - [Prototype presentation (1-Jul-2020)](https://unepgrid.ch/storage/app/media/platforms/mapx-sdk-prototype-presentation-20200701.html)
 - [Package at npm registry](https://www.npmjs.com/package/@fxi/mxsdk)
-- [SDK Recipies](https://github.com/unep-grid/map-x-mgl/wiki/SDK---Recipes)
+- [Wiki example](https://github.com/unep-grid/mapx/wiki/SDK-usage-examples)
 
 ## Documentation
 
