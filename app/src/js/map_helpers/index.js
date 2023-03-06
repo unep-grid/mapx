@@ -3861,7 +3861,24 @@ async function viewLayersAddCc(o) {
   });
 
   try {
-    cc = new Function(methods)();
+    /**
+     * Remove comments
+     */
+    let strToEval = methods.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "");
+
+    /**
+     * Test if script start with function
+     */
+    const hasFunction = /function handler/.test(strToEval);
+
+    if (hasFunction) {
+      strToEval = strToEval.substring(
+        strToEval.indexOf("{") + 1,
+        strToEval.lastIndexOf("}")
+      );
+    }
+
+    cc = new Function(strToEval)();
   } catch (e) {
     throw new Error("Failed to parse cc view", e.message);
   }
