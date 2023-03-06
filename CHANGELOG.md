@@ -1,21 +1,21 @@
-  - [1.10.4-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.5) 
+  - [1.10.4-alpha.5](https://github.com/unep-grid/mapx/tree/1.10.4-alpha.5) 
     
     - APP 
         - Reworked templates for widgets and custom code: added support for handler function, and not only function body. Should be backward compatible.
 
-  - [1.10.4-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.4) 
+  - [1.10.4-alpha.4](https://github.com/unep-grid/mapx/tree/1.10.4-alpha.4) 
 
     - APP
         - Modified template for widgets and added method to check of widget has been destroyed `widget.destroyed` or initialized `widget.initialized` 
         - Monaco editor : removed text wrapping, has the layout was not optimal in narrow forms
 
-  - [1.10.4-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.3) 
+  - [1.10.4-alpha.3](https://github.com/unep-grid/mapx/tree/1.10.4-alpha.3) 
 
     - APP 
         - Uploader : Disabling auto view creation for non-spatial upload ( e.g. csv )
         - Updated version of el : added case when content is numeric
 
-  - [1.10.4-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.2) 
+  - [1.10.4-alpha.2](https://github.com/unep-grid/mapx/tree/1.10.4-alpha.2) 
 
     - API
         - Added bigint and int8 as 'continuous' type (#892) : solves stats + auto style
@@ -23,7 +23,7 @@
         - Fixes #893, no limit to the number of rows that can be copyied
         - Code sharing tool: add a 'base map' output, to be used with mapbox studio. Use current theme and produce valid mapbox theme, with information on fonts used, if not available in mapbox studio
 
-  - [1.10.4-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.4-alpha.1) 
+  - [1.10.4-alpha.1](https://github.com/unep-grid/mapx/tree/1.10.4-alpha.1) 
 
     - APP
         - Should solve issue with failing postgres connection not making the app quit (+reload with docker); 
@@ -31,7 +31,7 @@
     - API
         - source module structure refactoring
 
-  - [1.10.3](https://github.com/unep-grid/map-x-mgl/tree/1.10.3) 
+  - [1.10.3](https://github.com/unep-grid/mapx/tree/1.10.3) 
 
     - APP
         - Fix issue with numeric slider : filter rule conflict
@@ -41,7 +41,7 @@
             - Set expiration to unlimited if a country is found
             - Should solve issue with stream unreadable 
 
-  - [1.10.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.2) 
+  - [1.10.2](https://github.com/unep-grid/mapx/tree/1.10.2) 
 
     - APP
         - Base map style change, un_4 boundary : Improved dotted lines
@@ -58,7 +58,7 @@
             - Issue with error reporting 
             - Use pg pool 
 
-  - [1.10.2-alpha.8](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.8) 
+  - [1.10.2-alpha.8](https://github.com/unep-grid/mapx/tree/1.10.2-alpha.8) 
     
     - APP
         - Added option to have half-right, half-left button for large modals
@@ -69,25 +69,25 @@
         - Update list of external view when the tool is requested 
         - Source visualizer : removed reset filter button 
 
-  - [1.10.2-alpha.7](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.7) 
+  - [1.10.2-alpha.7](https://github.com/unep-grid/mapx/tree/1.10.2-alpha.7) 
 
     - APP
         - Replaced ace editor by monaco
          
-  - [1.10.2-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.4) 
+  - [1.10.2-alpha.4](https://github.com/unep-grid/mapx/tree/1.10.2-alpha.4) 
 
     - APP
         - Dictionnary typo : use elipsis in "drag-n-drop" uploader message 
     - API
         - Critical Bug: The view pin handler was not properly releasing the PG client, causing a depletion of all PG clients.
 
-  - [1.10.2-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.3) 
+  - [1.10.2-alpha.3](https://github.com/unep-grid/mapx/tree/1.10.2-alpha.3) 
 
     - APP 
         - Import view from the search tool (#873) 
         - Issue with a loop inside modal (previous commit : arrangement of buttons )
 
-  - [1.10.2-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.2) 
+  - [1.10.2-alpha.2](https://github.com/unep-grid/mapx/tree/1.10.2-alpha.2) 
 
     - APP 
         - Uploader : 
@@ -107,7 +107,7 @@
         - Uploader manager : 
             - Fixed issue with missing SRS, in assignation mode
 
-  - [1.10.2-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.2-alpha.1) 
+  - [1.10.2-alpha.1](https://github.com/unep-grid/mapx/tree/1.10.2-alpha.1) 
 
     - APP 
         - New uploader #880 
@@ -115,14 +115,14 @@
     - API
         - Fix issue #888 : line geom detection        
 
-  - [1.10.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.1) 
+  - [1.10.1](https://github.com/unep-grid/mapx/tree/1.10.1) 
 
     - API 
         - Fix an uncatched error during download affecting layers with some invalid geometries, when a country clip was set as download option.
 
-  - [1.10.0](https://github.com/unep-grid/map-x-mgl/tree/1.10.0) 
+  - [1.10.0](https://github.com/unep-grid/mapx/tree/1.10.0) 
 
-  - [1.10.0-rc.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-rc.1) 
+  - [1.10.0-rc.1](https://github.com/unep-grid/mapx/tree/1.10.0-rc.1) 
 
 
     - APP 
@@ -136,7 +136,7 @@
             - Added postgres ARRAY type
         - Update dictionnary item 
 
-  - [1.10.0-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-beta.1) 
+  - [1.10.0-beta.1](https://github.com/unep-grid/mapx/tree/1.10.0-beta.1) 
 
     - APP
         - Added better source selector for metadata and settings edition. See #881
@@ -147,7 +147,7 @@
         - Added flags support through css. e.g. `<span class='fi fi-ch fis'></span>`
         - Fixed in "New view" type 'cc' : missing validation for dev
 
-  - [1.10.0-beta](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-beta) 
+  - [1.10.0-beta](https://github.com/unep-grid/mapx/tree/1.10.0-beta) 
 
     - APP
         - Rebase 1.10.0-alpha.7 (breaking change, new dev members feature )
@@ -157,7 +157,7 @@
         - Re-enable scroll in view metadata menu;
         - SDK: Fix missing async code in tests
 
-  - [1.10.0-alpha.12](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.12) 
+  - [1.10.0-alpha.12](https://github.com/unep-grid/mapx/tree/1.10.0-alpha.12) 
 
     - APP
         - Style editor:
@@ -165,7 +165,7 @@
             - Issue with some colors saved as hex + alpha, instead of hex
         - Should solve issue with uploaded source with null geometry type
 
-  - [1.10.0-alpha.11](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.11) 
+  - [1.10.0-alpha.11](https://github.com/unep-grid/mapx/tree/1.10.0-alpha.11) 
 
     - APP
         - Replaced downloadjs module by modern modules : impacts download geojson, csv, canvas (mapcomposer), etc..
@@ -174,14 +174,14 @@
     - API
         - Fixed download links not working in Firefox (in dictionnary/templates)
 
-  - [1.10.0-alpha.10](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.10) 
+  - [1.10.0-alpha.10](https://github.com/unep-grid/mapx/tree/1.10.0-alpha.10) 
     
     - APP
         - Style manager
             - Use native color picker 
             - Added basic system for styling polygon outline 
 
-  - [1.10.0-alpha.9](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.9) 
+  - [1.10.0-alpha.9](https://github.com/unep-grid/mapx/tree/1.10.0-alpha.9) 
 
     - APP 
         - Display table: 
@@ -199,7 +199,7 @@
     - API 
         - Reset geoserver update state : in case of failure that skips the finally statement, at least the service restart would reset the stored state in redis.
 
-  - [1.10.0-alpha.8](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.8) 
+  - [1.10.0-alpha.8](https://github.com/unep-grid/mapx/tree/1.10.0-alpha.8) 
 
     - APP/API
         -  SLD creation. Solved issue with 
@@ -209,12 +209,12 @@
         - Custom style view testing: handle case when no style object exists
         - Date testing : only support YYYY/MM/DD... and YYYY-MM-DD as date string
 
-  - [1.10.0-alpha.7](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.7) 
+  - [1.10.0-alpha.7](https://github.com/unep-grid/mapx/tree/1.10.0-alpha.7) 
     
     - APP
         - Breaking change: new environment variable : `MAPX_DEV_MEMBERS=[1]`Only publishers approved by the instance owners, in this list, will be allowed to edit custom code view and dashboards or create custom code view. This is temporary until the issue #878 is resolved.
 
-  - [1.10.0-alpha.6](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.6) 
+  - [1.10.0-alpha.6](https://github.com/unep-grid/mapx/tree/1.10.0-alpha.6) 
 
     - APP
         - Add zoomMin and zoomMax to URL parameters.
@@ -225,14 +225,14 @@
         - Updated example1 : use async
         - Readme : added information about supported search parameters / query strings, available as `params` object #875 
 
-  - [1.10.0-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.5) 
+  - [1.10.0-alpha.5](https://github.com/unep-grid/mapx/tree/1.10.0-alpha.5) 
     
     - APP 
         - View metadata panel : 
             - Performance issue with gemet keywords. Don't wait, update later.
             - Metadata : missing source id in some cases  
 
-  - [1.10.0-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.4) 
+  - [1.10.0-alpha.4](https://github.com/unep-grid/mapx/tree/1.10.0-alpha.4) 
     
     - APP 
         - Notif center : notif container padding 10px
@@ -252,14 +252,14 @@
             c) update style from server side 
         - Handsontable : rewrite stylesheet to match MapX themes.        
 
-  - [1.10.0-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.3) 
+  - [1.10.0-alpha.3](https://github.com/unep-grid/mapx/tree/1.10.0-alpha.3) 
 
     - APP
         - Dashboards / Widgets ( issue #877 ) 
             - Automatic credits / attributions links at the bottom of the dashboad panel, created when loading a package using predefined list ( `widget.modules...` )
             - Manual credits text/html from the widget editor
   
-  - [1.10.0-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.2) 
+  - [1.10.0-alpha.2](https://github.com/unep-grid/mapx/tree/1.10.0-alpha.2) 
 
     - APP / API 
         - Rollback evaluation version of handsontable, use the latest MIT version.
@@ -273,7 +273,7 @@
         - Fixed bug : during new view creation, it was possible to enter an empty value in the type of view to create and create an invalid view, impossible to remove
         - Fixed bug when uploading a layer : during view creation, missing view attribute ._meta prevented to use the table viewer
 
-  - [1.10.0-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.10.0-alpha.1) 
+  - [1.10.0-alpha.1](https://github.com/unep-grid/mapx/tree/1.10.0-alpha.1) 
    
     - APP / API
         - Refactoring :
@@ -284,22 +284,22 @@
                 - Types support : OGR automatically set attributes type during uplaod. All types used in all layers/tables are also supported in table editor.  
                 - Value validation + sanitation : posgresql is used to test and cast any changes in cells, if required. No more regex testing.  
 
-  - [1.9.45.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.45.4) 
+  - [1.9.45.4](https://github.com/unep-grid/mapx/tree/1.9.45.4) 
    
     - APP
         - Dynamic language change : missing language during views list update. Fallback to english prevented to switch back to another language.
 
-  - [1.9.45.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.45.3) 
+  - [1.9.45.3](https://github.com/unep-grid/mapx/tree/1.9.45.3) 
 
     - APP 
         - Added animations option in story map when using fit bounds method
 
-  - [1.9.45.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.45.2) 
+  - [1.9.45.2](https://github.com/unep-grid/mapx/tree/1.9.45.2) 
     
     - APP
         - Fixed issue with panel resize buttons not visible. Issue #864. 
 
-  - [1.9.45.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.45.1) 
+  - [1.9.45.1](https://github.com/unep-grid/mapx/tree/1.9.45.1) 
 
     - APP 
         - Countries polygons used to highlight a particular zone / country were also hidding UN border style
@@ -307,7 +307,7 @@
     - API    
         - Bug with column named 'variable' not properly escaped in source summary function
 
-  - [1.9.45](https://github.com/unep-grid/map-x-mgl/tree/1.9.45) 
+  - [1.9.45](https://github.com/unep-grid/mapx/tree/1.9.45) 
 
     - APP 
         - Table editor:
@@ -318,14 +318,14 @@
             - Update buttons after succesfull dispatch cells update
             - Template text change when entering value with the wrong type
   
-  - [1.9.45-rc.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-rc.2) 
+  - [1.9.45-rc.2](https://github.com/unep-grid/mapx/tree/1.9.45-rc.2) 
 
     - APP
   	    - Source metadata : add label to source url data link
       	- Minor improvement for raster legend quality
        	- Add helper, available from widgets, to extract bounding box from point + reprojection if required. 
 
-  - [1.9.45-rc.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-rc.1) 
+  - [1.9.45-rc.1](https://github.com/unep-grid/mapx/tree/1.9.45-rc.1) 
 
     - API 
         - Postgis tiles : partial fix on tiles boundaries visible. Internal parameter to set the tile buffer : solve the issue on features highlight that shows tiles boundaries, but produce inconsistant result ( some times missing ). Kept the parameter, but set to 0. 
@@ -339,7 +339,7 @@
         - Table editor solve race condition issues ( events not fired at the right time by handsontable, fixed here by a timeout )
         - Fixed swtch user 
            
-  - [1.9.45-beta.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.6) 
+  - [1.9.45-beta.6](https://github.com/unep-grid/mapx/tree/1.9.45-beta.6) 
 
     - API :
 	    - View list: set _use_postgis_tiler in returned view object, changed tile builder, changed sql + view source loader (app)
@@ -348,7 +348,7 @@
         -  Should fix case when the user choses to ignore warning about invalid type with auto-save disabled, and later press 'undo' : invalid  previous change should not be added to the update stack
         - Added color code by type in column header + title (tooltip)
 
-  - [1.9.45-beta.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.5) 
+  - [1.9.45-beta.5](https://github.com/unep-grid/mapx/tree/1.9.45-beta.5) 
 
     - APP 
       - Handle WMS request when clicking in the map with a custom code view using a WMS raster source registered with the view id
@@ -360,12 +360,12 @@
     - API 
       - Geometries validation : fixed issue when geometry count < chunks threshold, could have produced false negatives results
 
-  - [1.9.45-beta.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.4) 
+  - [1.9.45-beta.4](https://github.com/unep-grid/mapx/tree/1.9.45-beta.4) 
 
     - APP
       - Updated dependencies
 
-  - [1.9.45-beta.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.3) 
+  - [1.9.45-beta.3](https://github.com/unep-grid/mapx/tree/1.9.45-beta.3) 
     
     - APP 
       - Solve issue during layers creation : null received, but not expected by mapbox-gl
@@ -373,12 +373,12 @@
       - Postgis tiles option set in source configuraiton instead of view editor 
       - Improved postgis tiles performance ( still experimental and slower than default method )
 
-  - [1.9.45-beta.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.2) 
+  - [1.9.45-beta.2](https://github.com/unep-grid/mapx/tree/1.9.45-beta.2) 
 
     - APP
       - Sharing manager: added an option to share views activated, manually or using the SDK. Should work when static mode is used from the SDK. Should solve #860
     
-  - [1.9.45-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-beta.1) 
+  - [1.9.45-beta.1](https://github.com/unep-grid/mapx/tree/1.9.45-beta.1) 
 
     - APP 
       - Table editor :
@@ -388,7 +388,7 @@
       - Tiles :
         - Added an option in view editor to select Postgis as the tile builder : can solve issue with some geometries not correctly rendered, but the performance is slightly impacted 
 
-  - [1.9.45-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.45-alpha.1)
+  - [1.9.45-alpha.1](https://github.com/unep-grid/mapx/tree/1.9.45-alpha.1)
 
     - API 
       - Better geom validation + correction, when there is geometry outside the 180/-180  or 90/-90 range 
@@ -397,7 +397,7 @@
     - APP 
       - Geometries validation tool : minor changes before refactoring.
 
-  - [1.9.44](https://github.com/unep-grid/map-x-mgl/tree/1.9.44) 
+  - [1.9.44](https://github.com/unep-grid/mapx/tree/1.9.44) 
 
     - App 
       - Table editor : 
@@ -405,7 +405,7 @@
         - Fixed bug with lock mechanism not properly enabled if a new user joined locked table edition
       - Revert disclaimer change, as it has been solved in map info box feature
 
-  - [1.9.44-beta.9](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.9) 
+  - [1.9.44-beta.9](https://github.com/unep-grid/mapx/tree/1.9.44-beta.9) 
 
    - APP 
       - Source editor : 
@@ -416,7 +416,7 @@
          - Modified dpi for some format 
          - Removed console logs / warnings 
     
-  - [1.9.44-beta.8](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.8) 
+  - [1.9.44-beta.8](https://github.com/unep-grid/mapx/tree/1.9.44-beta.8) 
 
     - APP 
       - Missing title in HTML : use the project name / translation as title or MapX as default + static.
@@ -438,7 +438,7 @@
         - Handsontable : wrapper to remove deleted column from history ( hack ).
       - List of table to edit : fixed a missing a role comparison
 
-  - [1.9.44-beta.7](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.7) 
+  - [1.9.44-beta.7](https://github.com/unep-grid/mapx/tree/1.9.44-beta.7) 
 
    - APP 
       - New module : MapInfoBox, small utility to extract value from any property named `mx_info_box` while moving the cursor over maps layers, and display the value in a small box bellow the cursor. If available, a translation from the dictionary is displayed. 
@@ -447,7 +447,7 @@
       - Limit number of highlighted layers to 5.
       - Theme id from URL has a higher priority than the stored theme id.   
 
-  - [1.9.44-beta.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.6) 
+  - [1.9.44-beta.6](https://github.com/unep-grid/mapx/tree/1.9.44-beta.6) 
    
    - APP 
        - Map Composer
@@ -458,13 +458,13 @@
        - Attributes viewer
             - Solved resize issue. Changes in modal size should correctly resize the table.
 
-  - [1.9.44-beta.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.5) 
+  - [1.9.44-beta.5](https://github.com/unep-grid/mapx/tree/1.9.44-beta.5) 
    
    - APP
        - Table editor 
             - Patch issue when concurrent user deletes a column, then another one try to perform an 'undo' that targeted the removed collumn. Probably an unsupported case in handsontable.
 
-  - [1.9.44-beta.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.4) 
+  - [1.9.44-beta.4](https://github.com/unep-grid/mapx/tree/1.9.44-beta.4) 
    
    - APP 
         - Table editor :
@@ -472,19 +472,19 @@
             - Added missing translations
             - Avoid removing invalid columns -> rename column will be implemented
 
-  - [1.9.44-beta.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.3) 
+  - [1.9.44-beta.3](https://github.com/unep-grid/mapx/tree/1.9.44-beta.3) 
 
    - APP 
         - Various translation from issue #775 
 
-  - [1.9.44-beta.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.2) 
+  - [1.9.44-beta.2](https://github.com/unep-grid/mapx/tree/1.9.44-beta.2) 
 
    - APP
         - Map Composer 
             - Translation 
             - Paper sizes preset 
 
-  - [1.9.44-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta.1) 
+  - [1.9.44-beta.1](https://github.com/unep-grid/mapx/tree/1.9.44-beta.1) 
     
    - APP/API  
         - Table editor:
@@ -497,14 +497,14 @@
         - Removed config for geoserver 
         - Added script to extract code stat (internal)
 
-  - [1.9.44-beta](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-beta) 
+  - [1.9.44-beta](https://github.com/unep-grid/mapx/tree/1.9.44-beta) 
     
     - APP/API 
         - Table editor :
             - Added table size restriction in sources list in app + api service.
             - Solved issues when selecting non-source table.
   
-  - [1.9.44-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-alpha.1) 
+  - [1.9.44-alpha.1](https://github.com/unep-grid/mapx/tree/1.9.44-alpha.1) 
 
     - APP/API
         - Table editor 
@@ -520,7 +520,7 @@
             - Added source title in the edition panel 
             - Improved summary in the 'new column' tool
            
-  - [1.9.44-alpha.0](https://github.com/unep-grid/map-x-mgl/tree/1.9.44-alpha.0) 
+  - [1.9.44-alpha.0](https://github.com/unep-grid/mapx/tree/1.9.44-alpha.0) 
 
     - APP/API
         - First version of the table edition tool:
@@ -533,37 +533,37 @@
             - Prevent unwanted large edits
             - Copy paste to/from spreadsheet
 
-  - [1.9.43.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.43.2) 
+  - [1.9.43.2](https://github.com/unep-grid/mapx/tree/1.9.43.2) 
 
     - API 
         - Geoserver views selection: views filtering improvement  
 
-  - [1.9.43.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.43.1) 
+  - [1.9.43.1](https://github.com/unep-grid/mapx/tree/1.9.43.1) 
 
     - APP/API 
         - Custom style can't be converted to SLD : ignore views that have custom style, are public, during the geoserver update. 
 
-  - [1.9.43](https://github.com/unep-grid/map-x-mgl/tree/1.9.43) 
+  - [1.9.43](https://github.com/unep-grid/mapx/tree/1.9.43) 
     
     - API
         - Geoserver publishing : missing public project constraint
     - APP
         - Improved theme/projection labels in UI
 
-  - [1.9.43-beta.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.43-beta.2) 
+  - [1.9.43-beta.2](https://github.com/unep-grid/mapx/tree/1.9.43-beta.2) 
     
     - APP
         - StoryMap : added projection selection at story root level – without projection parameters for now.
         - Themes : renamed themes ( breaking > 1.9.42 )   
 
-  - [1.9.43-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.43-beta.1) 
+  - [1.9.43-beta.1](https://github.com/unep-grid/mapx/tree/1.9.43-beta.1) 
 
     - APP
         - PixOp : refactoring -> class + exported worker as file 
         - StoryMap : added theme selection
         - Fixed various themes bugs 
   
-  - [1.9.43-beta.0](https://github.com/unep-grid/map-x-mgl/tree/1.9.43-beta.0) 
+  - [1.9.43-beta.0](https://github.com/unep-grid/mapx/tree/1.9.43-beta.0) 
 
     - APP
         - Fixed issue with geoserver not being updated when the service was deployed on multiple servers
@@ -577,7 +577,7 @@
     - Internal 
         - Removed babel, using esbuild within webpack 
 
-  - [1.9.42](https://github.com/unep-grid/map-x-mgl/tree/1.9.42) 
+  - [1.9.42](https://github.com/unep-grid/mapx/tree/1.9.42) 
  
     - API
         - socket.io, Use Redis client adapter to solve issue in swarm mode
@@ -585,14 +585,14 @@
     - APP
         - Login function : typo email guest
  
-  - [1.9.41](https://github.com/unep-grid/map-x-mgl/tree/1.9.41) 
+  - [1.9.41](https://github.com/unep-grid/mapx/tree/1.9.41) 
 
     - API
         - Fixed simultaneous geoserver update
     -APP
         - Fixed SLD conversion for empty string : force null value instead to avoid missing literal tag
 
-  - [1.9.40](https://github.com/unep-grid/map-x-mgl/tree/1.9.40) 
+  - [1.9.40](https://github.com/unep-grid/mapx/tree/1.9.40) 
 
     - APP
         - SLD conversion: add an option to simplify expression in in layer creation
@@ -613,7 +613,7 @@
     - API
         - Mail: explicit error message in logs
 
-  - [1.9.40-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-beta.1) 
+  - [1.9.40-beta.1](https://github.com/unep-grid/mapx/tree/1.9.40-beta.1) 
 
     - APP
         - SLD multiple issues: 
@@ -642,7 +642,7 @@
     - Geoserver 
         - Start script : add geoserver contacts + set proxy url in global.xml
 
-  - [1.9.40-alpha.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.6) 
+  - [1.9.40-alpha.6](https://github.com/unep-grid/mapx/tree/1.9.40-alpha.6) 
 
      -APP         
         - Hide collections 
@@ -651,13 +651,13 @@
         - Docker images fix gid/uid 
         - Added volume in geoserver Dockerfile
 
-  - [1.9.40-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.5) 
+  - [1.9.40-alpha.5](https://github.com/unep-grid/mapx/tree/1.9.40-alpha.5) 
 
      - APP/API 
         - Fixed built script / Docker files 
         - Fixed SQL for search index update
      
-  - [1.9.40-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.4) 
+  - [1.9.40-alpha.4](https://github.com/unep-grid/mapx/tree/1.9.40-alpha.4) 
 
      - APP/API 
         - Major refactoring : migration of geoserver helpers to nodejs
@@ -666,19 +666,19 @@
         - New download module, independent from app service
         - Many small changes
 
-  - [1.9.40-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.2) 
+  - [1.9.40-alpha.2](https://github.com/unep-grid/mapx/tree/1.9.40-alpha.2) 
       
       - APP/API
         - API refactoring : conversion to ESM 
         - Updated dependencies
         - Merged hot fixes from 1.9.39.1 
       
-  - [1.9.40-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.40-alpha.1) 
+  - [1.9.40-alpha.1](https://github.com/unep-grid/mapx/tree/1.9.40-alpha.1) 
 
       - APP 
         - Maintenance : fixed some security issues + code cleaning
 
-  - [1.9.39](https://github.com/unep-grid/map-x-mgl/tree/1.9.39) 
+  - [1.9.39](https://github.com/unep-grid/mapx/tree/1.9.39) 
 
       - APP 
         - Disclaimer available from static mode
@@ -691,13 +691,13 @@
           - Fixed a bug that prevented update after manual change in textarea.
           - Improved translation 
 
-  - [1.9.39-beta.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-beta.2) 
+  - [1.9.39-beta.2](https://github.com/unep-grid/mapx/tree/1.9.39-beta.2) 
       
       - SDK
         - In static mode, `get_sdk_methods` has been fixed.
         - In static mode, adding a view using `view_add` should also create the view's title block in the legend panel (#803)
 
-  - [1.9.39-beta.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-beta.1) 
+  - [1.9.39-beta.1](https://github.com/unep-grid/mapx/tree/1.9.39-beta.1) 
       
       - APP 
         - Search tool, style : fixed keyword no more underlined, Capitalzed keyword in facet view; minor changes
@@ -722,7 +722,7 @@
         - Probe
 	  - Upgrade deps 
 
-  - [1.9.39-alpha.8](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.8) 
+  - [1.9.39-alpha.8](https://github.com/unep-grid/mapx/tree/1.9.39-alpha.8) 
       
       - APP
           - MapComposer
@@ -735,13 +735,13 @@
             - frameworker : Unexpected constructor name in passthrough event manager only in built package. No mapx/map event were reported back to the sdk manager
 
 
-  - [1.9.39.alpha.7](https://github.com/unep-grid/map-x-mgl/tree/1.9.39.alpha.7) 
+  - [1.9.39.alpha.7](https://github.com/unep-grid/mapx/tree/1.9.39.alpha.7) 
 
       - App
           - CommonLoc : allow multiple code as input : the extent of extents will be computed #786
           - Updated SDK build dependencies 
 
-  - [1.9.39-alpha.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.6) 
+  - [1.9.39-alpha.6](https://github.com/unep-grid/mapx/tree/1.9.39-alpha.6) 
 
       - App
           - Sharing manager :
@@ -757,13 +757,13 @@
           - Search tool : clickable tags should only capitalize the first letter
           - Fixed a bug were pressing tab in login/user profile form shifted the UI
 
-  - [1.9.39-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.5) 
+  - [1.9.39-alpha.5](https://github.com/unep-grid/mapx/tree/1.9.39-alpha.5) 
 
       - App
           - Major refactoring of the sharing manager ( requires additional improvement ).
           - Updated mapbox gl to 2.7.0: main change improvement of transparency on line features.
 
-  - [1.9.39-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.4) 
+  - [1.9.39-alpha.4](https://github.com/unep-grid/mapx/tree/1.9.39-alpha.4) 
 
       - App 
           - Fixed a bug in story map where the views of a step were not correcty updated after a preview 
@@ -772,7 +772,7 @@
       - GeoServer
           - Added documentation about the current interaction between MapX and GeoServer
 
-  - [1.9.39-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.3) 
+  - [1.9.39-alpha.3](https://github.com/unep-grid/mapx/tree/1.9.39-alpha.3) 
 
       - APP
           - New sharing manager available in story, static and app mode. Feature available as control button:
@@ -781,7 +781,7 @@
             - Auto update according to context and driven by events : view added / removed, story step, story open / close
             - Will replace all others sharing system, now independent.
 
-  - [1.9.39-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.2) 
+  - [1.9.39-alpha.2](https://github.com/unep-grid/mapx/tree/1.9.39-alpha.2) 
 
       - APP
           - Story Map :
@@ -794,19 +794,19 @@
             - Editor: added webp support during upload ( better compression ) and set new limit to 2400px ( auto cropped );
           - RasterMiniMap in legends : test new script order for improving performance at creation time
 
-  - [1.9.39-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.39-alpha.1) 
+  - [1.9.39-alpha.1](https://github.com/unep-grid/mapx/tree/1.9.39-alpha.1) 
 
       - APP  
           - Story image uploader : solved rotate + crop issue ( #783 )
 
-  - [1.9.38](https://github.com/unep-grid/map-x-mgl/tree/1.9.38) 
+  - [1.9.38](https://github.com/unep-grid/mapx/tree/1.9.38) 
 
       - APP 
           - Fix some securtiy issue `npm audit fix`
           - Client view fetch typo: project => idProject, should solve #785
           - Search tool: larger vertical space in button groups to avoid scrollbars
 
-  - [1.9.37](https://github.com/unep-grid/map-x-mgl/tree/1.9.37) 
+  - [1.9.37](https://github.com/unep-grid/mapx/tree/1.9.37) 
 
       - APP/SDK 
           - Removed e-resize in legend; fix issues with rendering legend symbols
@@ -817,7 +817,7 @@
       - Internal
           - Build script, missing -e in echo: new line returned as text. Fixed changelog too
 
-  - [1.9.36](https://github.com/unep-grid/map-x-mgl/tree/1.9.36)
+  - [1.9.36](https://github.com/unep-grid/mapx/tree/1.9.36)
       
       - APP 
           - Added support for setting project's map projection ( experimental )
@@ -825,35 +825,35 @@
           - Replaced geol hatched patterns by generated patterns
           - Symbols anchor is set to bottom : if the map is tilted and rotated, they rotate along their Y axis and keep their initial positions. 
            
-  - [1.9.35](https://github.com/unep-grid/map-x-mgl/tree/1.9.35)
+  - [1.9.35](https://github.com/unep-grid/mapx/tree/1.9.35)
 
       - APP
           - Clean version + changelog 
 
-  - [1.9.35-rc.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.35-rc.2) 
+  - [1.9.35-rc.2](https://github.com/unep-grid/mapx/tree/1.9.35-rc.2) 
       
       - APP 
           - Replaced the markdown parser
 
-  - [1.9.35-rc.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.35-rc.1)
+  - [1.9.35-rc.1](https://github.com/unep-grid/mapx/tree/1.9.35-rc.1)
 
       - APP
           - Missing key in dictionnary for ANALYZE tool  
           - Reorganisation of cache cleaning function : impacts service workers too 
 
-  - [1.9.35-alpha.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.5)
+  - [1.9.35-alpha.5](https://github.com/unep-grid/mapx/tree/1.9.35-alpha.5)
     
       - APP
           - Added access to a searchable code changelog : click on the version number in the tool tab and during the service worker regirstration.
 
-  - [1.9.35-alpha.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.4)
+  - [1.9.35-alpha.4](https://github.com/unep-grid/mapx/tree/1.9.35-alpha.4)
     
       - APP/API
           - Added analyze helper to solve issue when creating new layer from the overlap tool
           - Added option in ‘validate geometry tool’ to also analyze geom;
           - Improved zoom to view : if the extent is saved in cache and not valid, it’s retrieved from the server in an alternative step.
 
-  - [1.9.35-alpha.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.3)
+  - [1.9.35-alpha.3](https://github.com/unep-grid/mapx/tree/1.9.35-alpha.3)
     
       - APP
           - Improved vector views with no style defined or when no nulls rule defined (\#772, \#773)
@@ -866,17 +866,17 @@
       - API
           - Source metadata json layout in downloaded folder (\#763)
 
-  - [1.8.35-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.2)
+  - [1.8.35-alpha.2](https://github.com/unep-grid/mapx/tree/1.9.35-alpha.2)
     
       - APP/API
           - Handling apostrophes in project’s title and fields of the email sender
 
-  - [1.9.35-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.35-alpha.1)
+  - [1.9.35-alpha.1](https://github.com/unep-grid/mapx/tree/1.9.35-alpha.1)
     
       - APP
           - Should solve issue \#672, race condition during login process: views list requested before setting the project.
 
-  - [1.9.34](https://github.com/unep-grid/map-x-mgl/tree/1.9.34)
+  - [1.9.34](https://github.com/unep-grid/mapx/tree/1.9.34)
     
       - APP/API
           - Removed duplicated dict key, not allowed in `mx_languages` table
@@ -885,7 +885,7 @@
           - Attributes to popup : improved async support
           - SDK : solved an issue with custom code view with missing legend in static mode when no views were added from query
 
-  - [1.9.33](https://github.com/unep-grid/map-x-mgl/tree/1.9.33)
+  - [1.9.33](https://github.com/unep-grid/mapx/tree/1.9.33)
     
       - APP
           - Dashboard:
@@ -896,19 +896,19 @@
               - Do not use keyboard handler for the navigate the map
               - Fix issue with keybaord events not working
 
-  - [1.9.32](https://github.com/unep-grid/map-x-mgl/tree/1.9.32)
+  - [1.9.32](https://github.com/unep-grid/mapx/tree/1.9.32)
     
       - SDK
           - Fixed bug with passthrough events : mapx events not transmited to the SDK manager
 
-  - [1.9.31](https://github.com/unep-grid/map-x-mgl/tree/1.9.31)
+  - [1.9.31](https://github.com/unep-grid/mapx/tree/1.9.31)
     
       - APP
           - Improved event manager
       - SDK
           - Updated dependencies
 
-  - [1.9.31-alpha.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.31-alpha.2)
+  - [1.9.31-alpha.2](https://github.com/unep-grid/mapx/tree/1.9.31-alpha.2)
     
       - APP
           - Story map code refactoring.
@@ -919,14 +919,14 @@
       - API
           - Get all public views : cut request duration by half.
 
-  - [1.9.31-alpha.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.31-alpha.1)
+  - [1.9.31-alpha.1](https://github.com/unep-grid/mapx/tree/1.9.31-alpha.1)
     
       - APP
           - Story map reader + editor partial refactoring: generalized async support + reworked logic. Required to fine tune async dashboard manipuation. Could be unstable in this version
           - Improved logic for controling dashbaord + legends display in story map
           - Removed dashboard / view interaction from map helpers: use dedicated module instead + fragmented long function in multiple utilities.
 
-  - [1.9.31-alpha.0](https://github.com/unep-grid/map-x-mgl/tree/1.9.31-alpha.0)
+  - [1.9.31-alpha.0](https://github.com/unep-grid/mapx/tree/1.9.31-alpha.0)
     
       - APP
           - Added option to enable / disable widget and dashboard + modified UX accordingly
@@ -937,12 +937,12 @@
       - API
           - Fix bug with email sending (double quote not valid in subject)
 
-  - [1.9.30](https://github.com/unep-grid/map-x-mgl/tree/1.9.30)
+  - [1.9.30](https://github.com/unep-grid/mapx/tree/1.9.30)
     
       - API
       - Added mirror api rate limits in env file
 
-  - [1.9.29](https://github.com/unep-grid/map-x-mgl/tree/1.9.29)
+  - [1.9.29](https://github.com/unep-grid/mapx/tree/1.9.29)
     
       - APP
       - Revision of view metadata panel (\#762) :
@@ -957,7 +957,7 @@
       - API
           - Changed mirror api rate limit to 2000
 
-  - [1.9.28](https://github.com/unep-grid/map-x-mgl/tree/1.9.28)
+  - [1.9.28](https://github.com/unep-grid/mapx/tree/1.9.28)
     
       - APP
           - Solves bug with translated labels (typo) + edge case when dict had duplicated key
@@ -966,12 +966,12 @@
           - Tiles size is used now during WMS url creation. If the value change after the url is built, it does not change it.
           - Misc wording in translation
 
-  - [1.9.27](https://github.com/unep-grid/map-x-mgl/tree/1.9.27)
+  - [1.9.27](https://github.com/unep-grid/mapx/tree/1.9.27)
     
       - APP/API
           - Minor refactoring of WMS configurator and mirror API. Improved error message handling during configuration. Improved labels, description and translations. Impacts also share manager UI and globally error handling.
 
-  - [1.9.26](https://github.com/unep-grid/map-x-mgl/tree/1.9.26)
+  - [1.9.26](https://github.com/unep-grid/mapx/tree/1.9.26)
     
       - APP/API
       - Improved mirror api :
@@ -980,24 +980,24 @@
           - Support for templating. e.g. {x}/{y}/{z}
           - Added rate limite ( 1000req per 15min, default wait );
 
-  - [1.9.25](https://github.com/unep-grid/map-x-mgl/tree/1.9.25)
+  - [1.9.25](https://github.com/unep-grid/mapx/tree/1.9.25)
     
       - APP
           - Added menu in view’s metadata panel to quickly access sections and scroll back
 
-  - [1.9.24](https://github.com/unep-grid/map-x-mgl/tree/1.9.24)
+  - [1.9.24](https://github.com/unep-grid/mapx/tree/1.9.24)
     
       - APP/API :
           - Improved geo matching by ip: instead of relying on large amount of data stored in memory and external library, periodically fetch raw data and update a table in mapx’ db. For dev, this requires a free maxmind token + env variable modification, see `mapx.dev.EXAMPLE.env`.
           - Refactoring ip related query : view’s stat, get/ip route, etc..
           - Replaced view’s activation per country table by a pie chart.
 
-  - [1.9.23](https://github.com/unep-grid/map-x-mgl/tree/1.9.23)
+  - [1.9.23](https://github.com/unep-grid/mapx/tree/1.9.23)
     
       - APP/API: view metadata improvement. Added activation stats by user/country/distinct users + experimental support for static mode.
       - APP: test rendering vt legend with el : potential improvement, but not consistant. See comments.
 
-  - [1.9.22](https://github.com/unep-grid/map-x-mgl/tree/1.9.22)
+  - [1.9.22](https://github.com/unep-grid/mapx/tree/1.9.22)
     
       - APP: Fix \#748 ( Mini bug style configuration )
       - APP: modal. Media query breakpoint at 640px for small screen mode
@@ -1007,7 +1007,7 @@
       - API
           - Public project search -\> use regex instead of similarity + better validation + add additional item by id ex. `/get/project/search?titleRegex=^UN.*$&language=en&maxByPage=20&idProjects=MX-5Z8-45E-K4I-SKH-75H`
 
-  - [1.9.21](https://github.com/unep-grid/map-x-mgl/tree/1.9.21)
+  - [1.9.21](https://github.com/unep-grid/mapx/tree/1.9.21)
     
       - APP
           - Fixed a bug with the custom SQL query tool
@@ -1015,13 +1015,13 @@
           - New route to search public project by title or description: `get/project/search?searchText=<similarity expression>`
           - View search : added `projects_id` ( all projects’ id where the view is visible ) as filtering/faceting key
 
-  - [1.9.20](https://github.com/unep-grid/map-x-mgl/tree/1.9.20)
+  - [1.9.20](https://github.com/unep-grid/mapx/tree/1.9.20)
     
       - APP
           - Fixed security issue: in admin mode, project’s invitation text field was not properly validated.
           - \#488: partial revert change: legend title should alway be visible
 
-  - [1.9.19](https://github.com/unep-grid/map-x-mgl/tree/1.9.19)
+  - [1.9.19](https://github.com/unep-grid/mapx/tree/1.9.19)
     
       - APP
           - Fixed issues
@@ -1029,21 +1029,21 @@
               - \#488 Improved legend title in static map / story mode
               - \#749 Story Map Editor: fixed editing content that overlapped the tools button
 
-  - [1.9.18](https://github.com/unep-grid/map-x-mgl/tree/1.9.18)
+  - [1.9.18](https://github.com/unep-grid/mapx/tree/1.9.18)
     
       - APP
           - Updated sharing text / warning
       - APP/API
           - Refactor how views are filtered using URL query parameters: should handle properly case when loading private projects and displaying login box as fallback, then properly show initial query filters after login.
 
-  - [1.9.17](https://github.com/unep-grid/map-x-mgl/tree/1.9.17)
+  - [1.9.17](https://github.com/unep-grid/mapx/tree/1.9.17)
     
       - APP:
           - Serice Workers: error when registering: waiting for an event already fired
           - Auto style, only set ‘include upper bound’ option if editor exists;
           - Table class ( e.g. view’s metadata ): break words to avoid glitch with long url visible in text
 
-  - [1.9.16](https://github.com/unep-grid/map-x-mgl/tree/1.9.16)
+  - [1.9.16](https://github.com/unep-grid/mapx/tree/1.9.16)
     
       - APP:
           - Better UX when
@@ -1053,50 +1053,50 @@
           - Vector views style : if the auto style is used, the upper bound option must be checked. It’s done automatically when the style is applied.
       - API : bbox route returns status 200 and a message if no extent found
 
-  - [1.9.15](https://github.com/unep-grid/map-x-mgl/tree/1.9.15)
+  - [1.9.15](https://github.com/unep-grid/mapx/tree/1.9.15)
     
       - APP
           - Style editor : if numeric variable is identical in from / to bounds, it uses now the === operator.
           - Default circle size when no radius is defined, set to 10.
 
-  - [1.9.14](https://github.com/unep-grid/map-x-mgl/tree/1.9.14)
+  - [1.9.14](https://github.com/unep-grid/mapx/tree/1.9.14)
     
       - APP :
           - Added a basic helper to ‘fill’ options object with defaults, with a priority for default over item with undefined or null values. This solves an issue in vt layer creation with some rules used for null value, where opacity was undefined, instead of the expected ‘1’ value returned by the schema.
 
-  - [1.9.13](https://github.com/unep-grid/map-x-mgl/tree/1.9.13)
+  - [1.9.13](https://github.com/unep-grid/mapx/tree/1.9.13)
     
       - APP:
           - Various fixes and improvement for new style upper/lower bounds selection
 
-  - [1.9.12](https://github.com/unep-grid/map-x-mgl/tree/1.9.12)
+  - [1.9.12](https://github.com/unep-grid/mapx/tree/1.9.12)
     
       - SDK:
           - Fixed a backward compatibility issue : if the sdkToken is not set when starting the manager, the more recent worker did not start. Now, a warning is shown, but the worker starts.
       - APP
           - (Preliminary version) Numeric style have now a lower and upper bound for each rule, with a fallback to the previous system if the upper bound is not set.
 
-  - [1.9.11](https://github.com/unep-grid/map-x-mgl/tree/1.9.11)
+  - [1.9.11](https://github.com/unep-grid/mapx/tree/1.9.11)
     
       - APP:
           - Metadata editor : update description text \#714
           - Draw tool: update wiki link \#733
       - SDK: issue with ‘map\_fly\_to’: result not parsable (circular ref). Now, the method returns its options when moveend event occurs
 
-  - [1.9.10](https://github.com/unep-grid/map-x-mgl/tree/1.9.10)
+  - [1.9.10](https://github.com/unep-grid/mapx/tree/1.9.10)
     
       - SDK:
           - Fixed undefined ‘rslv’ \#741
       - APP
           - Style manager : Fixed duplicated style if ‘missing value’ value was also included within rules bounds, partial \#629;
 
-  - [1.9.6](https://github.com/unep-grid/map-x-mgl/tree/1.9.6)
+  - [1.9.6](https://github.com/unep-grid/mapx/tree/1.9.6)
     
       - SDK:
           - Fixed an issue when multiple instances were launched on the same page
           - Added an example with 3 instances on the same page
 
-  - [1.9.5](https://github.com/unep-grid/map-x-mgl/tree/1.9.5)
+  - [1.9.5](https://github.com/unep-grid/mapx/tree/1.9.5)
     
       - APP
           - Accent: new firefox/chrome introduced accent-color: added to thèmes options + modified style sheet. This brings a more custom look to radio/checkbox input.
@@ -1110,7 +1110,7 @@
           - Add support for custom null values in stats : impacts vt style creator, auto-style, and all stat/source summary server side. Null values can be defined and will not be counted in reports. Such value will overwrite default null values, like empty string, null, etc.
           - Uploading a vector layer with an empty attributes table should not be possible ( \#114 )
 
-  - [1.9.4](https://github.com/unep-grid/map-x-mgl/tree/1.9.4)
+  - [1.9.4](https://github.com/unep-grid/mapx/tree/1.9.4)
     
       - SDK:
           - Integration of static mode;
@@ -1123,7 +1123,7 @@
           - Added example for ‘common location’ methods;
           - Fix issue with wrong `mx_countries` table when requesting bbox
 
-  - [1.9.3](https://github.com/unep-grid/map-x-mgl/tree/1.9.3)
+  - [1.9.3](https://github.com/unep-grid/mapx/tree/1.9.3)
     
       - SDK
           - integration of ‘common locations’ methods, tests and documentation;
@@ -1136,7 +1136,7 @@
       - API/APP
           - Add common location tools : find bbox and map fit bounds based on iso3 code, m49 code or name + language. API and client side version. API version handle re-projection too.
 
-  - [1.9.2](https://github.com/unep-grid/map-x-mgl/tree/1.9.2)
+  - [1.9.2](https://github.com/unep-grid/mapx/tree/1.9.2)
     
       - URL for downloading rasters has been moved to metadata, the download button has been modified accordingly ( \#658 )
       - View’s metadata includes abstract and title, useful in static mode (\#666)
@@ -1147,27 +1147,27 @@
       - Search tool : changed layout for the filter panel to reduce layout shifts, e.g. reordering facets produced a lot of shifts, and the panel itself when toggled shifted/obstructed results list
       - Panels: changed orientation of handles to avoid obstructing scrollbar in some case
 
-  - [1.9.1](https://github.com/unep-grid/map-x-mgl/tree/1.9.1)
+  - [1.9.1](https://github.com/unep-grid/mapx/tree/1.9.1)
     
       - APP
           - Search tool :
               - Issue \#711 reported bad behavior of the pagination. This is linked to the search tool used in backend : it does not report exact number of hits, which break the pagiation system, especially when combining filters and page offset.
               - Initial search and subsequent fast search update, e.g. using the time slider, produced a large amount of requests. An async debounce has been added to prevent this.
 
-  - [1.9.0](https://github.com/unep-grid/map-x-mgl/tree/1.9.0)
+  - [1.9.0](https://github.com/unep-grid/mapx/tree/1.9.0)
     
       - APP
           - 1.9 serie release
       - PG init
           - Updated pg init varibles names
 
-  - [1.8.41-rc2](https://github.com/unep-grid/map-x-mgl/tree/1.8.41-rc2)
+  - [1.8.41-rc2](https://github.com/unep-grid/mapx/tree/1.8.41-rc2)
     
       - API
           - Routines: set primary key instead of using default (first column with ‘id’
           - Upload csv/layer. Fix issue where temporary file were not cleaned
 
-  - [1.8.40-rc1](https://github.com/unep-grid/map-x-mgl/tree/1.8.40-rc1)
+  - [1.8.40-rc1](https://github.com/unep-grid/mapx/tree/1.8.40-rc1)
     
       - APP
           - SDK resolver : typo mx.themes -\> mx.theme
@@ -1180,18 +1180,18 @@
           - MapX db init : fixed role issue + added timestamp setting as init step
           - Updated migration script file names: order was not ok using file name
 
-  - [1.8.39-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.39-beta)
+  - [1.8.39-beta](https://github.com/unep-grid/mapx/tree/1.8.39-beta)
     
       - APP/Routines
       - Reset search index in routines index update to avoid missing view
       - In case of missing view when requesting view’s metadata in search tool, display a message
 
-  - [1.8.38-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.38-beta)
+  - [1.8.38-beta](https://github.com/unep-grid/mapx/tree/1.8.38-beta)
     
       - APP/API
           - Support for non spatial CSV as source -\> useful for custom sql queries or encrypted queries
 
-  - [1.8.37-rc1](https://github.com/unep-grid/map-x-mgl/tree/1.8.37-rc1)
+  - [1.8.37-rc1](https://github.com/unep-grid/mapx/tree/1.8.37-rc1)
     
       - APP
           - Fix bug when having no view in project triggered an error in reactViewsCompactVector list ( used in source overlap tool )
@@ -1201,7 +1201,7 @@
           - Static mode : added button in legend’s view title to open the metadata panel
           - Story maps : ignore invalid view id in views list evaluation. Those views id’s probably have been added manually.
 
-  - [1.8.36-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.36-beta)
+  - [1.8.36-beta](https://github.com/unep-grid/mapx/tree/1.8.36-beta)
     
       - APP/API
           - Should solve issue with geometry validation tool not updated as a reactive select input not triggered
@@ -1219,7 +1219,7 @@
           - Fixed style issue with drop down filter menu in vector attribute table: bad zIndex of handsontable, as it’s not relative to table’s container
           - Attribute table : issue with mouse hover patched this to solve highlight issue
 
-  - [1.8.35-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.35-beta)
+  - [1.8.35-beta](https://github.com/unep-grid/mapx/tree/1.8.35-beta)
     
       - APP
           - Search tool :
@@ -1229,26 +1229,26 @@
           - Dev style editor : do not try to diff at reset
           - Added modal panel to get search API key and configuration -\> tools tab
 
-  - [1.8.34-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.34-beta)
+  - [1.8.34-beta](https://github.com/unep-grid/mapx/tree/1.8.34-beta)
     
       - APP
           - Integration of new UN layer for countries borders, countries names, and other official UN sub-national borders when available; Tweaked style : added an attribute ‘group\_size’ to deterministically set country label style according to country size (countries classified on a scale from 0 to 100, based on geographic area)
           - To facilitate map style development: Added a minimal style editor mapbox-gl-js (json) to quickly test the style tweaks. Available using `mx.helpers.showDevStyleEditor`
 
-  - [1.8.33-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.33-beta)
+  - [1.8.33-beta](https://github.com/unep-grid/mapx/tree/1.8.33-beta)
     
       - APP
           - Search tool :
               - Button “Clear search” has now an “undo” icon, and triggers reset year filters too. It’s disabled if no text, year or facet filters are set.
               - Red flag/badge is now visible if year filters are set, too.
 
-  - [1.8.32-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.32-alpha)
+  - [1.8.32-alpha](https://github.com/unep-grid/mapx/tree/1.8.32-alpha)
     
       - APP
           - Added basic user preference storage ( not yet available in UI )
           - Reworked temporary view management : store preference; added “unlink” button to remove temporary view; text changes
 
-  - [1.8.31-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.31-alpha)
+  - [1.8.31-alpha](https://github.com/unep-grid/mapx/tree/1.8.31-alpha)
     
       - API/APP
           - Improved handling of view not linked, added using drag-drop or search tool
@@ -1256,7 +1256,7 @@
           - Fixed issue with local cache, that was hanging sometimes
           - Various minor changes in UI, e.g. views badges colors
 
-  - [1.8.30-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.30-alpha)
+  - [1.8.30-alpha](https://github.com/unep-grid/mapx/tree/1.8.30-alpha)
     
       - API
           - Faster vector source bounding box. E.g. used in vector views -\> Zoom to extent. This issue penalized some features such as views settings or static viewer.
@@ -1264,7 +1264,7 @@
           - Fixed bug where sprites/pattern were not shown in legends,
           - Bug correction / improvement: partial refactoring of the construction of vector layers. Should be faster, while rendering the order correctly, especially when using overlay patterns using sprite.
 
-  - [1.8.29-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.29-alpha)
+  - [1.8.29-alpha](https://github.com/unep-grid/mapx/tree/1.8.29-alpha)
     
       - APP
           - Solves missing sprites in legends;
@@ -1278,12 +1278,12 @@
           - Gemet search + dropdown :
               - Avoid displaying full description of gemet dropdown: use tooltip instead, but keep the same heading.
 
-  - [1.8.28-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.28-alpha)
+  - [1.8.28-alpha](https://github.com/unep-grid/mapx/tree/1.8.28-alpha)
     
       - API :
           - Missing ‘create extension pg\_trgm’ in migration script
 
-  - [1.8.27-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.27-alpha)
+  - [1.8.27-alpha](https://github.com/unep-grid/mapx/tree/1.8.27-alpha)
     
       - APP / API
           - GEMET
@@ -1293,14 +1293,14 @@
               - Adapted metadata visualizer,
               - Integration of multilingual GEMET keywords in the search tool
 
-  - [1.8.26-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.26-alpha)
+  - [1.8.26-alpha](https://github.com/unep-grid/mapx/tree/1.8.26-alpha)
     
       - APP
           - GEMET
               - Integration of gemet keywords translation in view metadata visualizer. With link to concepts.
               - Integration of gemet concepts search in the source metadata editor
 
-  - [1.8.25-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.25-alpha)
+  - [1.8.25-alpha](https://github.com/unep-grid/mapx/tree/1.8.25-alpha)
     
       - APP
           - Search tool: Minor update.
@@ -1308,26 +1308,26 @@
               - Source data date start and end do no use date range anymore;
               - Range year selection have a title;
 
-  - [1.8.24-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.24-alpha)
+  - [1.8.24-alpha](https://github.com/unep-grid/mapx/tree/1.8.24-alpha)
     
       - APP
           - Search tool : added range slider to filter view by generic years
       - API
           - Search indexes include many new fields for filtering by years + optimisation
 
-  - [1.8.23-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.23-alpha)
+  - [1.8.23-alpha](https://github.com/unep-grid/mapx/tree/1.8.23-alpha)
     
       - APP
           - Search tools :
               - Better performance
-              - Solved 8/12 issues reported in [663](https://github.com/unep-grid/map-x-mgl/issues/663#issuecomment-843229152)
+              - Solved 8/12 issues reported in [663](https://github.com/unep-grid/mapx/issues/663#issuecomment-843229152)
 
-  - [1.8.22-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.22-alpha)
+  - [1.8.22-alpha](https://github.com/unep-grid/mapx/tree/1.8.22-alpha)
     
       - APP
       - Search tool : the list of results is visually simpler. Border, shadow and unnecessary styles have been replaced by a better position of elements.
 
-  - [1.8.21-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.21-alpha)
+  - [1.8.21-alpha](https://github.com/unep-grid/mapx/tree/1.8.21-alpha)
     
       - APP
           - Search tool improved look and performance, less space wasted + added search stats line;
@@ -1338,36 +1338,36 @@
           - Solved issue with immersive mode set/get and panels show/hide open/close. Should solve \#670
           - Added JSON export to tests
 
-  - [1.8.20-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.20-alpha)
+  - [1.8.20-alpha](https://github.com/unep-grid/mapx/tree/1.8.20-alpha)
     
       - APP
       - Solved an issue with EPGS code searching
       - API
       - Solved an issue with missing server-side translation
 
-  - [1.8.19-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.19-alpha)
+  - [1.8.19-alpha](https://github.com/unep-grid/mapx/tree/1.8.19-alpha)
     
       - Merged search feature in master
 
-  - [1.8.18-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.18-alpha)
+  - [1.8.18-alpha](https://github.com/unep-grid/mapx/tree/1.8.18-alpha)
     
       - APP/API
       - Added prototype for instant search on MapX public catalog
 
-  - [1.8.17](https://github.com/unep-grid/map-x-mgl/tree/1.8.17)
+  - [1.8.17](https://github.com/unep-grid/mapx/tree/1.8.17)
     
       - APP
       - Fixed project changes when swiping the projet list with touch devices
       - Tooltip removal for touch device in previous revision was not effective, as only the dynamic tooltip placement was affected, the style was still visible.
 
-  - [1.8.16](https://github.com/unep-grid/map-x-mgl/tree/1.8.16)
+  - [1.8.16](https://github.com/unep-grid/mapx/tree/1.8.16)
     
       - APP
       - Fixed a visual issue in mobile devices, where the lower part of a full height element was hidden behind the browser navigation bars.
       - Removed tooltips for touch device + added listener to properly cancel tooltip when the pointer leaves a tooltiped element
       - Attempt to mitigate fragile websocket connection, enable ‘allow reconnection’.
 
-  - [1.8.15](https://github.com/unep-grid/map-x-mgl/tree/1.8.15)
+  - [1.8.15](https://github.com/unep-grid/mapx/tree/1.8.15)
     
       - APP
           - Solved issue when creating new raster view: layers were added even when no sources or tiles were configured, which produced errors messages in the console.
@@ -1378,19 +1378,19 @@
           - Views list: removed view badges for small screens as there is not enough space.
           - Improved main panel layout upper buttons (title, language, user).
 
-  - [1.8.14](https://github.com/unep-grid/map-x-mgl/tree/1.8.14)
+  - [1.8.14](https://github.com/unep-grid/mapx/tree/1.8.14)
     
       - APP
           - Added SQL patch to improve fetching the latest version of views
           - Minor improvement in sources management tools, that could improve MapX loading time
 
-  - [1.8.13](https://github.com/unep-grid/map-x-mgl/tree/1.8.13)
+  - [1.8.13](https://github.com/unep-grid/mapx/tree/1.8.13)
     
       - APP
       - Fixed issues with auto-resize control panel feature: in horizontal layout the calculation was wrong and sometimes the panel button overlapped with the control buttons
       - Auto translated application texts have no more asterisk in suffix. Instead, a better explanation is written in the language selection panel
 
-  - [1.8.12](https://github.com/unep-grid/map-x-mgl/tree/1.8.12)
+  - [1.8.12](https://github.com/unep-grid/mapx/tree/1.8.12)
     
       - APP
           - Controls panel : auto-resize. Not perfect, but cover most cases.
@@ -1399,7 +1399,7 @@
           - Modals, new modal type: async prompt. Let the user enter value. Used in draw tool \> polygon \> circle \> radius
           - Widget container in dashboard did not react to touchmove event, when widget size was larger than the dashboad size.
 
-  - [1.8.11-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.11-beta)
+  - [1.8.11-beta](https://github.com/unep-grid/mapx/tree/1.8.11-beta)
     
       - APP + API
           - Refactoring of the lateral controls toolbar.
@@ -1414,12 +1414,12 @@
           - Download : solved a bug when the download layer did not have proper title in other languages than English.
           - Many minor changes
 
-  - [1.8.10-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.10-beta)
+  - [1.8.10-beta](https://github.com/unep-grid/mapx/tree/1.8.10-beta)
     
       - APP + API
           - Changed .gitignore to allow \_built and \_cache being committed
 
-  - [1.8.9-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.9-beta)
+  - [1.8.9-beta](https://github.com/unep-grid/mapx/tree/1.8.9-beta)
     
       - APP
           - Issue \#657 should be solved : views’ functionalities not properly removed after project or role change.
@@ -1429,17 +1429,17 @@
           - Missing MapX app related text is automatically translated when building internal dictionary. Original dictionaries are not modified. Descriptions, abstracts, and any sensitive or contextual non-MapX text is not translated automatically. If a text has been translated, an asterisk is shown. A message describing this is also shown during language change. This has been done to mitigate the growing issue regarding the lack of contributions for our translation system for technical terms and templates. Contributions are welcome \!
           - Reorganization of dictionaries in the project.
 
-  - [1.8.8-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.8-beta)
+  - [1.8.8-beta](https://github.com/unep-grid/mapx/tree/1.8.8-beta)
     
       - API
           - Added migration step for making sure postgres ‘track\_commit\_timestamp’ is set.
 
-  - [1.8.7-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.7-beta)
+  - [1.8.7-beta](https://github.com/unep-grid/mapx/tree/1.8.7-beta)
     
       - APP
           - Using Mapbox satellite base map for “aerial theme”.
 
-  - [1.8.6-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.6-beta)
+  - [1.8.6-beta](https://github.com/unep-grid/mapx/tree/1.8.6-beta)
     
       - APP
           - SDK : updated function to open/close views/settings panel
@@ -1448,35 +1448,35 @@
           - New module for forward only, transactional SQL migration patching. With lock support.
           - Translation table available and automatically updated in DB
 
-  - [1.8.5-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.5-beta)
+  - [1.8.5-beta](https://github.com/unep-grid/mapx/tree/1.8.5-beta)
     
       - Improvement
           - Issue \#635:
               - Better handling when a user access a private project whithout being logged in. The default project is shown, with all views.
               - If requested views are not available, a message is shown, and all views are displayed.
 
-  - [1.8.4-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.4-beta)
+  - [1.8.4-beta](https://github.com/unep-grid/mapx/tree/1.8.4-beta)
     
       - Bug fixes
           - Stability and improvement from previous 1.8.\* changes
 
-  - [1.8.3-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.3-beta)
+  - [1.8.3-beta](https://github.com/unep-grid/mapx/tree/1.8.3-beta)
     
       - New feature
           - APP
               - Added for M49 official geographic keywords in the source metadata editor. This will be improved in the future.
 
-  - [1.8.2-beta](https://github.com/unep-grid/map-x-mgl/tree/1.8.2-beta)
+  - [1.8.2-beta](https://github.com/unep-grid/mapx/tree/1.8.2-beta)
     
       - Bug fixes
           - Stability and improvement from previous 1.8.\* changes
 
-  - [1.8.1-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.1-alpha)
+  - [1.8.1-alpha](https://github.com/unep-grid/mapx/tree/1.8.1-alpha)
     
       - Bug fixes
           - Internal checklist
 
-  - [1.8.0-alpha](https://github.com/unep-grid/map-x-mgl/tree/1.8.0-alpha) **NOTE: preview version, not tested**
+  - [1.8.0-alpha](https://github.com/unep-grid/mapx/tree/1.8.0-alpha) **NOTE: preview version, not tested**
     
       - Improvement
           - App:
@@ -1494,28 +1494,28 @@
                   - A lot of migration from promises chain to async/await.
                   - Websocket with authentication (now used only for upload progress). Backward compatible with HTTP partial write.
 
-  - [1.7.11](https://github.com/unep-grid/map-x-mgl/tree/1.7.11)
+  - [1.7.11](https://github.com/unep-grid/mapx/tree/1.7.11)
     
       - Improvement
           - App : changed country label + style to better match UN clear map
           - SDK : Better testing + allow passing function as text through messaging system
 
-  - [1.7.10](https://github.com/unep-grid/map-x-mgl/tree/1.7.10)
+  - [1.7.10](https://github.com/unep-grid/mapx/tree/1.7.10)
     
       - Bug fix
       - When editing and previewing large story maps, fixes an issue with legends not being rendered, which blocked subsequent operations.
 
-  - [1.7.9](https://github.com/unep-grid/map-x-mgl/tree/1.7.9)
+  - [1.7.9](https://github.com/unep-grid/mapx/tree/1.7.9)
     
       - Bug fix
       - Linkage between download source and manage source reactive object was not set properly. Table of view did not appear, and validation was not performed
 
-  - [1.7.8](https://github.com/unep-grid/map-x-mgl/tree/1.7.8)
+  - [1.7.8](https://github.com/unep-grid/mapx/tree/1.7.8)
     
       - Bug fix
           - Tools source manage : typo. Produced an error and the app crashed when a source was edited.
 
-  - [1.7.7](https://github.com/unep-grid/map-x-mgl/tree/1.7.7)
+  - [1.7.7](https://github.com/unep-grid/mapx/tree/1.7.7)
     
       - Bug fix
           - URL query string parameter “theme” e.g ?theme=smartgray ?theme=nolabdark did not work
@@ -1525,14 +1525,14 @@
           - Removed unused file
           - Set `el` package to version 0.1.5, removed babel config, as microbundle has some sensible defaults.
 
-  - [1.7.6-beta](https://github.com/unep-grid/map-x-mgl/tree/1.7.6-beta)
+  - [1.7.6-beta](https://github.com/unep-grid/mapx/tree/1.7.6-beta)
     
       - Bug fix
           - Fix bug where requested theme color item did not return in static mode
           - Fix missing string `filterActivated` in sharing url
           - Fix issue with highlight not displayed in dashboard mode w/o popup
 
-  - [1.7.5-beta](https://github.com/unep-grid/map-x-mgl/tree/1.7.5-beta)
+  - [1.7.5-beta](https://github.com/unep-grid/mapx/tree/1.7.5-beta)
     
       - Improvement
           - Language : support for Chinese. Thanks Tuo Wang and Jingyi Jiang \!
@@ -1550,7 +1550,7 @@
       - Internal
           - Removed most of the method to convert colors and use chroma-js instead to improve robustness with edge cases.
 
-  - [1.7.4-beta](https://github.com/unep-grid/map-x-mgl/tree/1.7.4-beta)
+  - [1.7.4-beta](https://github.com/unep-grid/mapx/tree/1.7.4-beta)
     
       - New feature
           - APP:
@@ -1572,7 +1572,7 @@
                   - Added tags to base image instead of latest
                   - Set higher memory limit for node : 4GB
 
-  - [1.7.3-beta](https://github.com/unep-grid/map-x-mgl/tree/1.7.3-beta)
+  - [1.7.3-beta](https://github.com/unep-grid/mapx/tree/1.7.3-beta)
     
       - Bug fixes
           - APP
@@ -1592,7 +1592,7 @@
           - Partial rewrite of main dot templates: more flexibility to partial view UI loading.
           - Filter tools are now generated only on demand. They need cached response of summary. Should be invalidated if the source or the view change.
 
-  - [1.7.2](https://github.com/unep-grid/map-x-mgl/tree/1.7.2)
+  - [1.7.2](https://github.com/unep-grid/mapx/tree/1.7.2)
     
       - Improvement
           - APP/API
@@ -1601,19 +1601,19 @@
               - Rewrote mapx specific wrappers around library pool functions.
               - Using onStop shiny function to launch cleaning steps should guarantee that no pool remains un-closed, and therefore avoiding memory leaks. Previous approach was made using the .Last command which is fired at the end of the R session. Maybe a combination of the two approaches could even be better.
 
-  - [1.7.1](https://github.com/unep-grid/map-x-mgl/tree/1.7.1)
+  - [1.7.1](https://github.com/unep-grid/mapx/tree/1.7.1)
     
       - Bug fixes
           - APP/API
           - Bug generated by previous fix : can’t ignore empty string in numeric variables
 
-  - [1.7.0](https://github.com/unep-grid/map-x-mgl/tree/1.7.0)
+  - [1.7.0](https://github.com/unep-grid/mapx/tree/1.7.0)
     
       - Bug fixes
           - APP/API
               - In style form and summary stat, changed the limit of distinct values for categorical variables in list and table to 1e4 instead of 100; Removed nulls and empty strings from lists as they will be managed by the ‘missing values’ section
 
-  - [1.6.115-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.115-beta)
+  - [1.6.115-beta](https://github.com/unep-grid/mapx/tree/1.6.115-beta)
     
       - Bug fixes
           - APP:
@@ -1623,7 +1623,7 @@
               - Removed abstract from wms list, set abstract content as (native) tooltip
               - Solved issue where null values where filtered out after numeric slider update
 
-  - [1.6.114-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.114-beta)
+  - [1.6.114-beta](https://github.com/unep-grid/mapx/tree/1.6.114-beta)
     
       - Bug fixes
           - APP/API
@@ -1634,12 +1634,12 @@
           - API
               - Set default ‘simple type’ to ‘string’ -\> if unexpected type, display as string
 
-  - [1.6.113-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.113-beta)
+  - [1.6.113-beta](https://github.com/unep-grid/mapx/tree/1.6.113-beta)
     
       - Bug fixes
           - SDK : polyfill for .contains method seems fail. Replaced with querySelector. Updated module list in app and sdk
 
-  - [1.6.112-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.112-beta)
+  - [1.6.112-beta](https://github.com/unep-grid/mapx/tree/1.6.112-beta)
     
       - Bug fixes
           - APP :
@@ -1656,7 +1656,7 @@
           - SDK
               - Better README.md
 
-  - [1.6.111-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.111-beta)
+  - [1.6.111-beta](https://github.com/unep-grid/mapx/tree/1.6.111-beta)
     
       - New features
         
@@ -1689,7 +1689,7 @@
         
           - Ignore module dist folder
 
-  - [1.6.110-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.110-beta)
+  - [1.6.110-beta](https://github.com/unep-grid/mapx/tree/1.6.110-beta)
     
       - Bug fixes
           - API
@@ -1698,7 +1698,7 @@
           - View ‘auto style’: Added a validation to test for duplicated rules. Could occurs when using quantile and a skewed distribution.
           - Service worker : precache list included .DS\_Store file, but ignored by git and dockerfile. Produced 404 errors. Solved by modifying the regex in the webpack prod file.
 
-  - [1.6.109-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.109-beta)
+  - [1.6.109-beta](https://github.com/unep-grid/mapx/tree/1.6.109-beta)
     
       - Improvement
           - APP
@@ -1710,7 +1710,7 @@
                   - Total count did not match class count.
                   - Default and validation in APP did not match validation in server resulting in a number of class by default in UI, if it was not valid server side.
 
-  - [1.6.108-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.108-beta)
+  - [1.6.108-beta](https://github.com/unep-grid/mapx/tree/1.6.108-beta)
     
       - New feature
           - APP
@@ -1719,7 +1719,7 @@
       - Internal
           - APP: eslint step before any build, reorganising dot files.
 
-  - [1.6.107-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.107-beta)
+  - [1.6.107-beta](https://github.com/unep-grid/mapx/tree/1.6.107-beta)
     
       - New feature
           - APP : new method to ease fetching data through MapX mirror.
@@ -1731,17 +1731,17 @@
           - APP: Solved internal bug occuring when a new view without sources was saved.
           - APP, error manager : Error message not correctly displayed when extracting promise error message.
 
-  - [1.6.106-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.106-beta)
+  - [1.6.106-beta](https://github.com/unep-grid/mapx/tree/1.6.106-beta)
     
       - New features
           - API: Source summary can now return automatic binning for a continuous variable. Method implemented : jenks, equal\_interval, heads\_tails, quantile. e.g. `idSource=<id of the source >&idAttr=<variable name>&binsMethod=<jenks | equal_interval | heads_tails | quantile>&binsNumber=< integer >0 & <= 100>`
 
-  - [1.6.105-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.105-beta)
+  - [1.6.105-beta](https://github.com/unep-grid/mapx/tree/1.6.105-beta)
     
       - Internal
           - API : remove token based restriction on route `/get/mirror` as it prevented usage from static site.
 
-  - [1.6.104-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.104-beta)
+  - [1.6.104-beta](https://github.com/unep-grid/mapx/tree/1.6.104-beta)
     
       - Improvement
           - APP, SDK : Added a test to control that the worker code match the manager version. An error is reported within the messaging system if there is a mismatch. e.g. `mapx.on('message', (m)=>m.level=='error'?console.error(m.text):console.log('not an error'))`
@@ -1751,7 +1751,7 @@
           - APP, ViewsFilter : all toggles are now called checkboxes.
           - APP, SDK : ( PR \#564 ) tests can be launched by group, via a parameter in the URL.
 
-  - [1.6.103-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.103-beta)
+  - [1.6.103-beta](https://github.com/unep-grid/mapx/tree/1.6.103-beta)
     
       - New feature
           - SDK : Set/Get views filter. The view list can be managed from new method in the SDK. See issue \#576 for details.
@@ -1760,7 +1760,7 @@
     
       - Note: Changelog will be completed at that point. See commit messages for details.
 
-  - [1.6.4-beta](https://github.com/unep-grid/map-x-mgl/tree/1.6.4-beta)
+  - [1.6.4-beta](https://github.com/unep-grid/mapx/tree/1.6.4-beta)
     
       - New feature
           - New view integrated filter system : search using text with basic regex parsing, tags, activated views. Tags order reacts to language change. Two mode are available: union and intersection. Views count is more accurate and match all kinds of filters.
@@ -1784,7 +1784,7 @@
               - We do not use connection pool : pooling should be done by a sensible pooling system, like pg\_pool.
               - Instead of using OGR to transfer spatial data to the DB, a first step with “PGDump” is made, then the result is piped through psql.
 
-  - [1.5.54](https://github.com/unep-grid/map-x-mgl/tree/1.5.54)
+  - [1.5.54](https://github.com/unep-grid/mapx/tree/1.5.54)
     
       - Improvement
           - APP
@@ -1792,7 +1792,7 @@
           - APP/API
               - Added text version of html email messages
 
-  - [1.5.53](https://github.com/unep-grid/map-x-mgl/tree/1.5.53)
+  - [1.5.53](https://github.com/unep-grid/mapx/tree/1.5.53)
     
       - New feature
           - APP
@@ -1801,7 +1801,7 @@
           - APP
               - Login messages for single use passwords or tokens are sent using an html template instead of raw text.
 
-  - [1.5.52](https://github.com/unep-grid/map-x-mgl/tree/1.5.52)
+  - [1.5.52](https://github.com/unep-grid/mapx/tree/1.5.52)
     
       - Improvement
           - APP
@@ -1810,19 +1810,19 @@
           - APP
               - Fixes a bug where a guest user could see the join buttons
 
-  - [1.5.51](https://github.com/unep-grid/map-x-mgl/tree/1.5.51)
+  - [1.5.51](https://github.com/unep-grid/mapx/tree/1.5.51)
     
       - Improvement
           - APP
               - Cleaned configuration files
               - Added email configuration for setting default emails : bot, admin, guest.
 
-  - [1.5.50](https://github.com/unep-grid/map-x-mgl/tree/1.5.50)
+  - [1.5.50](https://github.com/unep-grid/mapx/tree/1.5.50)
     
       - Improvement
           - APP Added logic to remove service worker and cache if there is not enough storage space in the browser. See issue \#441.
 
-  - [1.5.48](https://github.com/unep-grid/map-x-mgl/tree/1.5.48)
+  - [1.5.48](https://github.com/unep-grid/mapx/tree/1.5.48)
     
       - Improvement
           - API
@@ -1840,7 +1840,7 @@
           - App
               - Solve issue where validation message did not work : login window, new view name, new project name, etc..
 
-  - [1.5.47](https://github.com/unep-grid/map-x-mgl/tree/1.5.47)
+  - [1.5.47](https://github.com/unep-grid/mapx/tree/1.5.47)
     
       - Improvement
         
@@ -1850,31 +1850,31 @@
               - Share manager : add auto start option for story map
               - Dashboard : add an option to ignore or not events that return no data or an empty array. Added callback arguments in widgets; Solved issues with dashboard modal window title;
 
-  - [1.5.46](https://github.com/unep-grid/map-x-mgl/tree/1.5.46)
+  - [1.5.46](https://github.com/unep-grid/mapx/tree/1.5.46)
     
       - Improvement
           - APP
               - Map Composer : removed dependencies on medium-editor and interactjs use custom ones; Added new features to set page size, units and other settings.
 
-  - [1.5.45](https://github.com/unep-grid/map-x-mgl/tree/1.5.45)
+  - [1.5.45](https://github.com/unep-grid/mapx/tree/1.5.45)
     
       - New feature
           - APP
               - Each view based on a vector source have now a button to display the full attribute table of the source. There is a filtering system by attribute that will also filter the displayed elements on the map. The table can be exported as CSV.
 
-  - [1.5.44](https://github.com/unep-grid/map-x-mgl/tree/1.5.44)
+  - [1.5.44](https://github.com/unep-grid/mapx/tree/1.5.44)
     
       - New feature
           - APP
               - Map composer - early version. A module to compose a map based on currently visible views
 
-  - [1.5.43](https://github.com/unep-grid/map-x-mgl/tree/1.5.43)
+  - [1.5.43](https://github.com/unep-grid/mapx/tree/1.5.43)
     
       - Bug fixes
           - APP
               - Solved issue with secondary attributes that were unselected during view edit.
 
-  - [1.5.42](https://github.com/unep-grid/map-x-mgl/tree/1.5.42)
+  - [1.5.42](https://github.com/unep-grid/mapx/tree/1.5.42)
     
       - Improvement
           - APP
@@ -1885,7 +1885,7 @@
               - Added support for languages in recovery system
               - Minor translation changes. See \#327.
 
-  - [1.5.41](https://github.com/unep-grid/map-x-mgl/tree/1.5.41)
+  - [1.5.41](https://github.com/unep-grid/mapx/tree/1.5.41)
     
       - Improvement
           - APP
@@ -1909,7 +1909,7 @@
           - APP
               - Removed loop optimisation. Loop optimizer have some issue when used in expression : the for loop was rebuilt outside scope;
 
-  - [1.5.40.2](https://github.com/unep-grid/map-x-mgl/tree/1.5.40.2)
+  - [1.5.40.2](https://github.com/unep-grid/mapx/tree/1.5.40.2)
     
       - Improvement
           - APP/API
@@ -1921,7 +1921,7 @@
           - API
           - Issue with geometry validation: auto-correction / validation did not work due to typos and logic Separate json and xml utilities
 
-  - [1.5.40.1](https://github.com/unep-grid/map-x-mgl/tree/1.5.40.1)
+  - [1.5.40.1](https://github.com/unep-grid/mapx/tree/1.5.40.1)
     
       - Bug fixes
           - API
@@ -1931,7 +1931,7 @@
               - Draw tool. `mapbox-gl-draw`
               - Geojson view creation using resulting draw
 
-  - [1.5.40](https://github.com/unep-grid/map-x-mgl/tree/1.5.40)
+  - [1.5.40](https://github.com/unep-grid/mapx/tree/1.5.40)
     
       - Improvement
           - APP
@@ -1941,7 +1941,7 @@
               - Raster views and custom code views have a dashboard functionality
               - The click event in dashboard is usable for querying raster sources.
 
-  - [1.5.30](https://github.com/unep-grid/map-x-mgl/tree/bbb37f)
+  - [1.5.30](https://github.com/unep-grid/mapx/tree/bbb37f)
     
       - Improvement
           - API/APP
@@ -1954,7 +1954,7 @@
               - Version in tools panel solved : index.html was not re-build when webpack build prod version
       - Bug fixes - Broken uploader
 
-  - [1.5.29](https://github.com/unep-grid/map-x-mgl/tree/ce3d0d54c1)
+  - [1.5.29](https://github.com/unep-grid/mapx/tree/ce3d0d54c1)
     
       - Iprovement
           - APP
@@ -1966,7 +1966,7 @@
           - API
               - Implemented precise area calculation of overlap between countries and selected layers.
 
-  - [1.5.27](https://github.com/unep-grid/map-x-mgl/tree/5515f88ef71)
+  - [1.5.27](https://github.com/unep-grid/mapx/tree/5515f88ef71)
     
       - Improvement
           - APP
@@ -1982,7 +1982,7 @@
           - API
               - Method to get source metadata : “/get/souce/metadata:id”
 
-  - [1.5.26](https://github.com/unep-grid/map-x-mgl/tree/11f89e4fea966169df9089d5c2ca15b301a575c5)
+  - [1.5.26](https://github.com/unep-grid/mapx/tree/11f89e4fea966169df9089d5c2ca15b301a575c5)
     
       - Improvement
           - APP
@@ -1990,7 +1990,7 @@
           - API
               - Added new numeric parser to avoid bug in tiles where numeric was converted to string. This is related to style on numeric columns not correctly handled.
 
-  - [1.5.25](https://github.com/unep-grid/map-x-mgl/tree/bba8abc110f67d7654a509099cc85a3f683b244e)
+  - [1.5.25](https://github.com/unep-grid/mapx/tree/bba8abc110f67d7654a509099cc85a3f683b244e)
     
       - Improvement
           - APP
@@ -1998,7 +1998,7 @@
               - Upgrade build system to Webpack 4
               - Solve issues with translation rendering in metadata viewer
 
-  - [1.5.24](https://github.com/unep-grid/map-x-mgl/tree/20067870e8cbaf11af66ddfba39f2612c439236c)
+  - [1.5.24](https://github.com/unep-grid/mapx/tree/20067870e8cbaf11af66ddfba39f2612c439236c)
     
       - Improvement
           - APP : Testing session reconnection
@@ -2007,14 +2007,14 @@
           - APP : Overlap function in PixOp had issue with lines: the first coordinate of each line could have been omited.
           - APP : Changed the regular expression that “validate” email to a more strict one.
 
-  - [1.5.23](https://github.com/unep-grid/map-x-mgl/tree/144d2a37bd30955c4ad8a3b5081db25b18625d97)
+  - [1.5.23](https://github.com/unep-grid/mapx/tree/144d2a37bd30955c4ad8a3b5081db25b18625d97)
     
       - Improvement
           - APP : save and update query parameters: project, language, lat, lng, zoom.
       - Bug fixing
       - APP : Overlaps using pixop, numbers of layers to take in account did not unterstood “All layers”. Should be ok
 
-  - [1.5.22](https://github.com/unep-grid/map-x-mgl/tree/9557502329e34b821f6c4df0e9aaf3bb1f12edaa)
+  - [1.5.22](https://github.com/unep-grid/mapx/tree/9557502329e34b821f6c4df0e9aaf3bb1f12edaa)
     
       - Improvement
           - APP/API Let the user provide a projection system for download
@@ -2022,13 +2022,13 @@
           - APP/API : new environment variable to store tokens and allowed user id as creator
           - APP : Add public view from public project in story maps available views
 
-  - [1.5.21](https://github.com/unep-grid/map-x-mgl/tree/8ebeae87833c8447041669db0a45c6d77625319f)
+  - [1.5.21](https://github.com/unep-grid/mapx/tree/8ebeae87833c8447041669db0a45c6d77625319f)
     
       - Improvement
           - API : Set pre-simplification only for zoom \> 10 in postgres.
           - APP : Added new environment variables for handling mapbox token and allowed project creators
 
-  - [1.5.20](https://github.com/unep-grid/map-x-mgl/tree/61b5592bdf2de9afb14a4bf1cf1713571e0ca0b1)
+  - [1.5.20](https://github.com/unep-grid/mapx/tree/61b5592bdf2de9afb14a4bf1cf1713571e0ca0b1)
     
       - Improvement
           - Added an experimental tool to highlight potential overlaps between vector layers
@@ -2036,12 +2036,12 @@
           - Story map bullets werent removed due to a DOM issue
           - Confidentiality issue : a publisher with edit access to a story map editor was able to list and use views from a private projects to which she had no access. This could still occurs if the view is purposely shared or imported as public view to another non-private project.
 
-  - [1.5.19](https://github.com/unep-grid/map-x-mgl/tree/bc81b623ce09bc1359857c5e9cce00f8a1c24854)
+  - [1.5.19](https://github.com/unep-grid/mapx/tree/bc81b623ce09bc1359857c5e9cce00f8a1c24854)
     
       - Improvement
           - Added support for quering wms based raster source layer
 
-  - [1.5.18](https://github.com/unep-grid/map-x-mgl/tree/caaee2e9be52711da3c0805da215140653661d59)
+  - [1.5.18](https://github.com/unep-grid/mapx/tree/caaee2e9be52711da3c0805da215140653661d59)
     
       - Improvement
           - Added support for download sources as CSV \#212
@@ -2051,13 +2051,13 @@
       - Rollback
           - Remove privilege to create new project for everyone. Only selected user can create new project.
 
-  - [1.5.17](https://github.com/unep-grid/map-x-mgl/tree/d02a7ce3c3985fe8629efb324014871881b70c9a)
+  - [1.5.17](https://github.com/unep-grid/mapx/tree/d02a7ce3c3985fe8629efb324014871881b70c9a)
     
       - Improvement
           - Add current view count in filters by category
           - Style minor change in filter by labels and filter by attributes
 
-  - [1.5.16](https://github.com/unep-grid/map-x-mgl/tree/7362a8457e76cea32dca9fb1367edfe78660736f)
+  - [1.5.16](https://github.com/unep-grid/mapx/tree/7362a8457e76cea32dca9fb1367edfe78660736f)
     
       - Improvement
           - Modal Added four preset button for modal panel, added an option to resize panel horizontally.
@@ -2065,93 +2065,93 @@
       - Bug fixing
           - Dashboard modules could be ignored after a view edition. In case of only one module, the script automatically converted the value in a JSON string, and the dashboard was expecting an array. The `module` key in the `view.data.dashboard` can now be a string or an array. Or empty.
 
-  - [1.5.15](https://github.com/unep-grid/map-x-mgl/tree/3c8d973fbb55a7c5d4fb57fb32b3eda2700c24ad)
+  - [1.5.15](https://github.com/unep-grid/mapx/tree/3c8d973fbb55a7c5d4fb57fb32b3eda2700c24ad)
     
       - Added translation support in filter views list by tags
       - Filter views by tags : use `AND` operator between filter types and `OR` within filter types.
 
-  - [1.5.14](https://github.com/unep-grid/map-x-mgl/tree/c1e7616df923d9860264d79cc461dfa5b6d657d5)
+  - [1.5.14](https://github.com/unep-grid/mapx/tree/c1e7616df923d9860264d79cc461dfa5b6d657d5)
     
       - Removed bug where (empty) private project could be seen when pressing a shared view’s “home” button
       - Added support for spanish. Thanks <span class="citation" data-cites="GianlucaGygax">@GianlucaGygax</span> \!
       - Updated service workers strategy. Using no-cache in traefik should solve issue where old cache were kept.
       - Modification on entry files for webpack to enable a viewer only mode for the app.
 
-  - [1.5.13](https://github.com/unep-grid/map-x-mgl/tree/775e37f9d58f6f51df94bf890a19753f64d43e95)
+  - [1.5.13](https://github.com/unep-grid/mapx/tree/775e37f9d58f6f51df94bf890a19753f64d43e95)
     
       - Removed a bug where a dashboard was not removed if no source layer where used
       - Use pointer events instead of mouse event
       - Added a ‘minimize’ button in modal windows
       - Removed resize corner in modal windows – ( it’s not widely used and it produced a bug with flexbox )
 
-  - [1.5.12](https://github.com/unep-grid/map-x-mgl/tree/0e8c7feae41290071b2fb728cd1ad369974868c0)
+  - [1.5.12](https://github.com/unep-grid/mapx/tree/0e8c7feae41290071b2fb728cd1ad369974868c0)
     
       - Solved an issue in view button when a zoom was applied in the browser: the nested circle was not well aligned producing a weird effect. Using SVG, the problem as been solved.
       - Update dependencies, see `app/package.json`
       - Changed the service worker generator to `workbox-webpack-plugin`
       - Solved \#277 where removal of a project did not remove releated views that does not had sources (raster, story, etc).
 
-  - [1.5.11](https://github.com/unep-grid/map-x-mgl/tree/d509c639fc1be78e81405a978a63db1ff5b1d190)
+  - [1.5.11](https://github.com/unep-grid/mapx/tree/d509c639fc1be78e81405a978a63db1ff5b1d190)
     
       - Solved \#276
       - Solved \#274
       - Added a function to unregister service worker
 
-  - [1.5.10](https://github.com/unep-grid/map-x-mgl/tree/4c36b899fd5887b21536703eed61ba4c22ebc07f)
+  - [1.5.10](https://github.com/unep-grid/mapx/tree/4c36b899fd5887b21536703eed61ba4c22ebc07f)
     
       - New radial progress svg constructor
       - Direct local storage for views object, in addition to browser cache and service worker cache. Faster.
       - Bug fixes : label too long in map data properties query popup. Display the full thing on hover.
       - Code cleaning
 
-  - [1.5.9](https://github.com/unep-grid/map-x-mgl/tree/d60a48cb841753e2578473a521b8d757cec6d5ff)
+  - [1.5.9](https://github.com/unep-grid/mapx/tree/d60a48cb841753e2578473a521b8d757cec6d5ff)
     
       - Improvement of road style : added more than 30 layers extracted and modified from style “Lè Shine” (https://frama.link/leshine),
       - Integrated simplified colors setting for roads, road border and building in style editor.
 
-  - [1.5.8](https://github.com/unep-grid/map-x-mgl/tree/36fdfebac77231db028b358dd173e4ab9fd4ed7a)
+  - [1.5.8](https://github.com/unep-grid/mapx/tree/36fdfebac77231db028b358dd173e4ab9fd4ed7a)
     
       - Solved \#272 : the built date was wrong in the encrypted mail validation.
 
-  - [1.5.7](https://github.com/unep-grid/map-x-mgl/tree/dfc4013b8b69f572794bc3d691eec366289809af)
+  - [1.5.7](https://github.com/unep-grid/mapx/tree/dfc4013b8b69f572794bc3d691eec366289809af)
     
       - Add service worker to cache assets and tiles,
       - Migrate language dict file to JSON, instead of csv, to be able to merge pull requests more easily,
       - Minor changes.
 
-  - [1.5.6](https://github.com/unep-grid/map-x-mgl/tree/50b05b59d95b46ea3835b15d6ced9fc161d50455)
+  - [1.5.6](https://github.com/unep-grid/mapx/tree/50b05b59d95b46ea3835b15d6ced9fc161d50455)
     
       - Updated version of R,
       - Added api upload for geojson stored client side,
       - Minor changes.
 
-  - [1.5.5](https://github.com/unep-grid/map-x-mgl/tree/032f969f49e167aeb8af70dcc899a6fb8f34b169)
+  - [1.5.5](https://github.com/unep-grid/mapx/tree/032f969f49e167aeb8af70dcc899a6fb8f34b169)
     
       - Added query parameter support to filter max role for view fetching : `?filterViewsByRoleMax=public` will show all public views only,
       - Added styling option for map labels : outline color.
 
-  - [1.5.4](https://github.com/unep-grid/map-x-mgl/tree/62f76547809f342ad8c8a3b9c5f7a5ceba02c3ec)
+  - [1.5.4](https://github.com/unep-grid/mapx/tree/62f76547809f342ad8c8a3b9c5f7a5ceba02c3ec)
     
       - Faster and more accurate view count without analyzing sequentially every project. It should counts shared views, external views, private views, public views and targeted views for every project of the current user.
 
-  - [1.5.3](https://github.com/unep-grid/map-x-mgl/tree/05bd71f1c4bffa9b07e588a160770cb1c539cb84)
+  - [1.5.3](https://github.com/unep-grid/mapx/tree/05bd71f1c4bffa9b07e588a160770cb1c539cb84)
     
       - Added a new sharing option : any view can be imported as external, non-modifiable view in a project where the user is at least a publisher,
       - Removed www/ files from git repo : those are built with webpack, not useful to have them around.
 
-  - [1.5.2](https://github.com/unep-grid/map-x-mgl/tree/34674b85a3c1d0b34979b40a5fbca8febc0783bd)
+  - [1.5.2](https://github.com/unep-grid/mapx/tree/34674b85a3c1d0b34979b40a5fbca8febc0783bd)
     
       - Fixed story map view selection \#255,
       - Fixed raster legend size : let the user click to expand the image into a modal,
       - Fixed legend label alignment,
       - Fixed long abstract \#253.
 
-  - [1.5.1](https://github.com/unep-grid/map-x-mgl/tree/81596c1b7c6ff64740662067ae41080fccf78788)
+  - [1.5.1](https://github.com/unep-grid/mapx/tree/81596c1b7c6ff64740662067ae41080fccf78788)
     
       - Solved bug where user was not able to authenticate when uploading an image,
       - Better legend and description of view content, using multi-column layout.
 
-  - [1.5.0](https://github.com/unep-grid/map-x-mgl/tree/2e8249a3142d5f9be01dfd0e5afd4b414ab336f4)
+  - [1.5.0](https://github.com/unep-grid/mapx/tree/2e8249a3142d5f9be01dfd0e5afd4b414ab336f4)
     
       - Refactoring,
       - Manage by project. It’s now possible to manage your data by project, in addition to collections and classes,
