@@ -1,10 +1,11 @@
 import { Sql } from "sql-ts";
-import bodyParser from "body-parser";
+//import bodyParser from "body-parser";
 import Ajv from "ajv";
 import { pgWrite } from "#mapx/db";
 import { mwSet } from "#mapx/ip";
 import { apiLogs } from "#mapx/schema";
-
+import { isEmpty, isArray } from "@fxi/mx_valid";
+import express from "express";
 const sql = new Sql("postgres");
 const v = new Ajv();
 const check = v.compile(apiLogs);
@@ -30,7 +31,7 @@ const tblLogs = sql.define({
 /**
  * Middleware stack
  */
-export const mwCollect = [mwSet, bodyParser.json(), mwCollectHelper];
+export const mwCollect = [mwSet, express.json(), mwCollectHelper];
 export default { mwCollect };
 
 /**
@@ -39,7 +40,7 @@ export default { mwCollect };
 async function mwCollectHelper(req, res) {
   try {
     const ipGeo = req?._ip_geo || {};
-    const isValid = validateLogs(req.body.logs);
+    const isValid = validateLogs(req?.body?.logs);
     if (isValid) {
       await saveLogs(req.body.logs, ipGeo);
       res.end();
@@ -56,8 +57,10 @@ async function mwCollectHelper(req, res) {
  * Validate each logs (ajv does not validate object in array);
  */
 function validateLogs(logs) {
-  let result = logs.reduce((a, log) => (!a ? a : check(log)), true);
-  return result;
+  if (isEmpty(logs) || !isArray(logs)) {
+    return false;
+  }
+  return logs.reduce((a, log) => (!a ? a : check(log)), true);
 }
 /**
  * Save in DB

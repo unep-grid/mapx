@@ -61,27 +61,30 @@ export function getLanguageDefault() {
  * @param {String} Language code
  */
 export async function updateLanguage(language) {
+  const currentLanguage = getLanguageCurrent();
   const validLang = isStringRange(language, 2, 2);
 
   if (!validLang) {
-    language = getLanguageCurrent();
+    language = currentLanguage;
   }
-  const lang = setLanguageCurrent(language);
+  const newLanguage = setLanguageCurrent(language);
 
   /**
-   * Fire language_change
+   * Fire language_change if required
    */
-  mx.events.fire({
-    type: "language_change",
-    data: {
-      new_language: lang,
-    },
-  });
+  if (currentLanguage !== newLanguage) {
+    mx.events.fire({
+      type: "language_change",
+      data: {
+        new_language: newLanguage,
+      },
+    });
+  }
 
   /*
    * Set language for the document
    */
-  document.querySelector("html").setAttribute("lang", lang);
+  document.querySelector("html").setAttribute("lang", newLanguage);
 
   /**
    * Update lang of interface

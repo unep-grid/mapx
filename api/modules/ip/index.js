@@ -2,7 +2,6 @@ import { isJson, isEmpty } from "@fxi/mx_valid";
 import { pgRead, redisGet, redisSet } from "#mapx/db";
 import { sendJSON } from "#mapx/helpers";
 import { updateGeoIpTable } from "./update.js";
-
 const outDefault = {
   country: "",
   country_name: "",
@@ -24,7 +23,7 @@ async function setGeoIP(req, _, next) {
       ...outDefault,
       ...ipGeo,
     };
-
+    //await wait(10);
     next();
   } catch (e) {
     console.error("setGeoIp:", e);
@@ -74,7 +73,6 @@ async function getGeoInfo(ip) {
       // set expiration date: one day or no limit
       EX: noCountry ? 60 * 60 * 24 : 0,
     });
-
   } catch (e) {
     console.error("getGeoInfo:", e);
   }

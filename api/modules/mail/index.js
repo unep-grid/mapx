@@ -1,4 +1,4 @@
-import bodyParser from "body-parser";
+import express from "express";
 import { htmlToText } from "html-to-text";
 import nodemailer from "nodemailer";
 import { templates } from "#mapx/template";
@@ -9,8 +9,8 @@ import { decrypt } from "#mapx/db_utils";
 import { isEmail, isString, isArrayOf } from "@fxi/mx_valid";
 
 export const mwSend = [
-  bodyParser.urlencoded({ extended: false }),
-  bodyParser.json(),
+  express.urlencoded({ extended: false }),
+  express.json(),
   mwSendMail,
 ];
 
