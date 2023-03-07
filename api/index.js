@@ -19,17 +19,23 @@ import { mwGetBbox } from "#mapx/bbox";
 import { mwGetFormatsList } from "#mapx/file_formats";
 import { mwGetEpsgCodesFull } from "#mapx/epsg";
 import { ioMwAuthenticate } from "#mapx/authentication";
+import { ioUpdateGeoserver } from "#mapx/geoserver";
+import { ioEcho } from "#mapx/io";
+import { ioGetTestJobSum, ioGetTestJobEcho } from "#mapx/io";
+import { ioUploadSource } from "#mapx/upload";
+import { ioDownloadSource, ioEditSource, ioSourceListEdit } from "#mapx/source";
+import { ioViewPin } from "#mapx/view";
 import {
   ioCreateAdapter,
   ioConnect,
   ioMwEmit,
   ioMwNotify,
-  ioMwRoutes,
   mwEmit,
   mwNotify,
+  use,
 } from "#mapx/io";
 
-import events from 'events';
+import events from "events";
 events.EventEmitter.defaultMaxListeners = 100;
 
 /**
@@ -67,8 +73,25 @@ io.adapter(ioRedisAdapter);
 io.use(ioMwAuthenticate);
 io.use(ioMwEmit); // Add emit wrapper
 io.use(ioMwNotify); // Add notify system
-io.use(ioMwRoutes); // Add listener on routes
 io.on("connection", ioConnect); // emit 'authentication', with roles
+
+
+/**
+ * Socket io routes / event id
+ * -> some event are handled in modules, ex. 
+ */
+io.use((socket, next) => {
+  socket.on("/client/geoserver/update", use(ioUpdateGeoserver));
+  socket.on("/client/source/download", use(ioDownloadSource));
+  socket.on("/client/source/upload", use(ioUploadSource));
+  socket.on("/client/test/get/job/sum", use(ioGetTestJobSum));
+  socket.on("/client/test/get/job/echo", use(ioGetTestJobEcho));
+  socket.on("/client/source/edit/table", use(ioEditSource));
+  socket.on("/client/source/get/list/edit", use(ioSourceListEdit));
+  socket.on("/client/view/pin", use(ioViewPin));
+  socket.on("echo", use(ioEcho));
+  next();
+});
 
 /*
  * Express routes
