@@ -1,6 +1,5 @@
 import multer from "multer";
 import { ioAddViewVt } from "#mapx/view/";
-import { ioSendJobClient } from "#mapx/io";
 import { access, unlink } from "fs/promises";
 import { constants } from "fs";
 import { spawn } from "child_process";
@@ -339,12 +338,12 @@ async function ioAddSource(socket, config) {
   });
 
   /**
-   * Trigger source_added
+   * Trigger source reload in shiny
    * TODO: this will be removed after shiny transition over
    * e.g. : trigger update source list in shiny app
    *        ws -> handler -> shiny -> update view list
    */
-  await ioSendJobClient(socket, "source_added", {
+  await socket.mx_emit_ws_response("/server/source/added", {
     idSource,
   });
 

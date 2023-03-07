@@ -304,16 +304,13 @@ mapx.once("ready", async () => {
 
   t.check("Full websocket communication", {
     init: async () => {
-      return Promise.all([
-        mapx.ask("test_ws", "job_sum"),
-        mapx.ask("test_ws", "job_echo"),
-      ]);
+      return mapx.ask("tests_ws");
     },
     tests: [
       {
         name: "All tests should be true ",
         test: (res) => {
-          return res.reduce((a, c) => a && c, true);
+          return res === true;
         },
       },
     ],

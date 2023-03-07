@@ -52,7 +52,7 @@ import { viewsListAddSingle } from "../../../mx_helper_map_view_ui.js";
 import { modalCloseAll } from "../../../mx_helper_modal.js";
 import { toggleSpotlight } from "../../../mx_helper_map_pixop.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
-import { theme } from "./../../../mx";
+import { theme, ws } from "./../../../mx";
 
 /**
  * MapX resolvers available in static and app
@@ -92,8 +92,8 @@ class MapxResolversStatic extends ResolversBase {
   /**
    * End to end ws com testing
    */
-  async test_ws(id) {
-    return await mx.ws.test(id);
+  async tests_ws() {
+    return await ws.tests();
   }
 
   /**

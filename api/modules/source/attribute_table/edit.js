@@ -23,7 +23,7 @@ import { pgWrite, redisSetJSON, redisGetJSON } from "#mapx/db";
 const regDatePg = new RegExp("^date|^timestamp");
 
 /**
- * Triggered by '/client/source/edit/table' in ..api/modules/io/mw_routes.js
+ * Triggered by '/client/source/edit/table' in ..api/index.js
  */
 export async function ioEditSource(socket, options, callback) {
   try {
@@ -48,7 +48,15 @@ const def = {
   col_geom: "geom",
 };
 
-const routes = {
+export const routes = {
+  /**
+   * from client
+   */
+  client_edit_updates: "/client/source/edit/table/update",
+  client_exit: "/client/source/edit/table/exit",
+  client_geom_validate: "/client/source/edit/table/geom/validate",
+  client_value_validate: "/client/source/edit/table/value/validate",
+  client_changes_sanitize: "/client/source/edit/table/changes/sanitize",
   /**
    * from here server
    */
@@ -59,16 +67,6 @@ const routes = {
   server_table_data: "/server/source/edit/table/data",
   server_dispatch: "/server/source/edit/table/dispatch",
   server_progress: "/server/source/edit/table/progress",
-  //server_geom_validate_result: "/server/source/edit/table/geom/result",
-  /**
-   * from client
-   */
-  client_edit_start: "/client/source/edit/table", //⚠️  duplicated in ..api/modules/io/mw_routes.js
-  client_edit_updates: "/client/source/edit/table/update",
-  client_exit: "/client/source/edit/table/exit",
-  client_geom_validate: "/client/source/edit/table/geom/validate",
-  client_value_validate: "/client/source/edit/table/value/validate",
-  client_changes_sanitize: "/client/source/edit/table/changes/sanitize",
 };
 
 class EditTableSession {

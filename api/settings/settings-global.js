@@ -17,6 +17,7 @@ const settings_global = {
   socket_io: {
     maxHttpBufferSize: 1e6 * 10, // 10 MB
     pingTimeout: 1e3 * 60 * 2, // 2 min
+    emitTimeout: 1e3 * 60, // 1min
     keys: {
       redis_main: "api_io::",
       redis_job: "api_io_job::",

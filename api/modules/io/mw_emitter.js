@@ -1,4 +1,5 @@
 import { sendJSON, asyncDelay } from "#mapx/helpers";
+import { settings } from "#root/settings";
 
 export { ioMwEmit, mwEmit };
 
@@ -11,12 +12,17 @@ function ioMwEmit(socket, next) {
     return;
   }
   /**
-   * Generic to emit
+   * Generic emit
    */
   socket.mx_emit_ws = async (type, msg) => {
     return emitSocket(socket, type, msg);
   };
-
+  /**
+   * Emit and expect response
+   */
+  socket.mx_emit_ws_response = async (type, msg, timeout) => {
+    return emitSocketResponse(socket, type, msg, timeout);
+  };
   next();
 }
 
@@ -63,4 +69,18 @@ async function emitSocket(socket, type, msg) {
     console.trace("Error in mx_emit (ws) :", e);
     return false;
   }
+}
+
+async function emitSocketResponse(socket, type, data, timeout) {
+  return new Promise((resolve, reject) => {
+    const maxTime = timeout || settings.socket_io.emitTimeout;
+    if (maxTime > 0) {
+      setTimeout(() => {
+        return reject(`emitSocketReponse timeout ${maxTime} on ${type}`);
+      }, maxTime);
+    }
+    socket.emit(type, data, (response) => {
+      return resolve(response);
+    });
+  });
 }

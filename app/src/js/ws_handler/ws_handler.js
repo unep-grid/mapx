@@ -117,7 +117,19 @@ class WsHandler {
    */
   async test(id) {
     const ws = this;
-    return ws._opt.tests(id, ws);
+    return ws._opt.tests[id](id, ws);
+  }
+
+  /**
+   * Run all tests at once < 10ms
+   * @return {Promise<boolean>}
+   */
+  async tests() {
+    const ws = this;
+    const ids = Object.keys(ws._opt.tests);
+    const res = await Promise.all(ids.map((id) => ws.test(id)));
+    const pass = res.reduce((a, c) => a && c, true);
+    return pass;
   }
 
   /**

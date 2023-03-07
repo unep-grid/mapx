@@ -51,7 +51,7 @@ function mwNotify(_, res, next) {
     };
 
     if (hasEmitWs) {
-      return res.mx_emit_ws("notify", out);
+      return res.mx_emit_ws("/server/notify", out);
     }
     if (hasEmitHttp) {
       return res.mx_emit_http("notify", out);

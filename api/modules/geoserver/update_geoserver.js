@@ -12,7 +12,6 @@ import { timeStep, randomString } from "#mapx/helpers";
 import { isNotEmpty } from "@fxi/mx_valid";
 import { setViewStyleAlt } from "#mapx/view";
 import { geoserver as grc } from "#mapx/db";
-import { ioSendJobClient } from "#mapx/io";
 import { mwNotify } from "#mapx/io";
 
 const validateParamsHandler = getParamsValidator({
@@ -33,7 +32,6 @@ const mwUpdateGeoserver = [
   validateRoleSuperUserHandler,
   mwUpdateGeoserverHandler,
 ];
-
 
 /**
  * Exports : io + mw
@@ -109,9 +107,9 @@ async function rebuildHandler(socket, options) {
 
   /**
    * Launch process
-   * - save state = running 
-   * - rebuild 
-   * - error => notify 
+   * - save state = running
+   * - rebuild
+   * - error => notify
    * - finally => save state = not running
    */
   try {
@@ -288,20 +286,21 @@ async function createLayer(socket, layer, clientStyle, idGroup, idProgress) {
     layer.bbox_source
   );
 
-  //const hasNoStyle = isEmpty(layer.style_mapbox) || isEmpty(layer.style_sld);
   const hasCustomStyle = !!layer.style_custom;
   const requestStyle = clientStyle && !hasCustomStyle;
 
-
   if (requestStyle) {
-    const { output } = await ioSendJobClient(socket, "style_from_view", {
-      idView: layer.id,
-    });
-    const valid = isNotEmpty(output?.mapbox) && isNotEmpty(output?.sld);
+    const { result } = await socket.mx_emit_ws_response(
+      "/server/view/style/get",
+      {
+        idView: layer.id,
+      }
+    );
+    const valid = isNotEmpty(result?.mapbox) && isNotEmpty(result?.sld);
     if (valid) {
-      layer.style_mapbox = output.mapbox;
-      layer.style_sld = output.sld;
-      await setViewStyleAlt(layer.id, output);
+      layer.style_mapbox = result.mapbox;
+      layer.style_sld = result.sld;
+      await setViewStyleAlt(layer.id, result);
     }
   }
 

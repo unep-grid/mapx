@@ -1,7 +1,6 @@
 import { escapeLiteral, clone } from "#mapx/helpers";
 import { isEmpty, isView, isViewId, isProjectId } from "@fxi/mx_valid";
 import { pgWrite } from "#mapx/db";
-import { ioSendJobClient } from "#mapx/io";
 import { getSourceSummary } from "#mapx/source";
 import {
   getColumnsNames,
@@ -219,9 +218,12 @@ export async function ioAddViewVt(socket, config, view_options) {
     if (enable_download) {
       view._has_download = true;
     }
-    await ioSendJobClient(socket, "view_add", {
+    const result = await socket.mx_emit_ws_response("/server/view/add", {
       view: view,
     });
+    if (result.error) {
+      throw new Error(result.error);
+    }
   } catch (e) {
     throw new Error(e);
   }
