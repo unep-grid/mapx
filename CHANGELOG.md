@@ -1,3 +1,15 @@
+  - [1.10.4-alpha.7](https://github.com/unep-grid/mapx/tree/1.10.4-alpha.7) 
+
+    - APP/API 
+        - Partial refactoring of websocket methods, api side:
+            - Exposed routes / id in api entry point
+            - Removed async job system and use native callback, both side.
+            - Rewrote ws testing
+        - Log collection : removed `language_change` event login when no changes done
+    - API    
+        - Removed dependecy on `body-parser`
+        - Renamed modules with a dash in name, for consistancy
+        
   - [1.10.4-alpha.6](https://github.com/unep-grid/mapx/tree/1.10.4-alpha.6) 
 
     - APP/API
