@@ -21,7 +21,7 @@ const options = {
  * @param {String} mimetype Original mimetype
  * @return {Object} config
  */
-export async function chunkWriter(socket, chunk) {
+export async function ioChunkWriter(socket, chunk) {
   if (!chunk.canceled) {
     chunk.outDir = path.join(options.tmp, chunk.id_request);
     chunk.filename = slugify(chunk.filename, "_");

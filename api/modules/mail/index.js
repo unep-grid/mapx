@@ -5,9 +5,8 @@ import { templates } from "#mapx/template";
 import { settings } from "#root/settings";
 import { paramsValidator } from "#mapx/route_validation";
 import { parseTemplate } from "#mapx/helpers";
-import { decrypt } from "#mapx/db-utils";
+import { decrypt } from "#mapx/db_utils";
 import { isEmail, isString, isArrayOf } from "@fxi/mx_valid";
-const { emailAdmin } = settings.mail.config;
 
 export const mwSend = [
   bodyParser.urlencoded({ extended: false }),

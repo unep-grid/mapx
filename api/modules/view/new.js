@@ -8,7 +8,7 @@ import {
   getColumnsTypesSimple,
   tableExists,
   getTableDimension,
-} from "#mapx/db-utils";
+} from "#mapx/db_utils";
 /**
  * View template.
  *

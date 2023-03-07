@@ -1,5 +1,5 @@
 import { pgRead } from "#mapx/db";
-import { getTableDimension, tableExists } from "#mapx/db-utils";
+import { getTableDimension, tableExists } from "#mapx/db_utils";
 import { templates } from "#mapx/template";
 import { parseTemplate } from "#mapx/helpers";
 

@@ -6,7 +6,7 @@ import { settings } from "#root/settings";
 import { archiverProgress } from "#mapx/archiver_progress";
 import { validateTokenHandler } from "#mapx/authentication";
 import { asyncSpawn } from "#mapx/async_spawn";
-import { getColumnsNames, isLayerValid, getLayerTitle } from "#mapx/db-utils";
+import { getColumnsNames, isLayerValid, getLayerTitle } from "#mapx/db_utils";
 import { sendMailAuto } from "#mapx/mail";
 import { templates } from "#mapx/template";
 import { t } from "#mapx/language";

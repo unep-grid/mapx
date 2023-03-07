@@ -15,7 +15,7 @@ import {
   getColumnsNames,
   areLayersValid,
   analyzeSource,
-} from "#mapx/db-utils";
+} from "#mapx/db_utils";
 
 /**
  * Upload's middleware

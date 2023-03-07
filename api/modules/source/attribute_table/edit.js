@@ -7,7 +7,7 @@ import {
   getTableDimension,
   isLayerValid,
   sanitizeUpdates,
-} from "#mapx/db-utils";
+} from "#mapx/db_utils";
 import { getSourceAttributeTable, getSourceEditors } from "#mapx/source";
 import { randomString } from "#mapx/helpers";
 import {

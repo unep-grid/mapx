@@ -2,7 +2,7 @@ import { Sql } from "sql-ts";
 const sql = new Sql("postgres");
 
 import { pgRead } from "#mapx/db";
-import { project } from "#mapx/db-models";
+import { project } from "#mapx/db_models";
 import { validateTokenHandler } from "#mapx/authentication";
 import { getParamsValidator } from "#mapx/route_validation";
 import { mwProjectSearchText } from "./search.js";

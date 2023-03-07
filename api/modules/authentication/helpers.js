@@ -1,6 +1,6 @@
 import { pgWrite } from "#mapx/db";
 import { templates } from "#mapx/template";
-import { decrypt } from "#mapx/db-utils";
+import { decrypt } from "#mapx/db_utils";
 import { settings } from "#root/settings";
 
 /**

@@ -5,7 +5,7 @@ import { redisGet, redisSet, pgRead } from "#mapx/db";
 import { parseTemplate, attrToPgCol, asArray } from "#mapx/helpers";
 import { isSourceId, isNotEmpty } from "@fxi/mx_valid";
 import { templates } from "#mapx/template";
-import { getSourceLastTimestamp, isPointLikeGeom } from "#mapx/db-utils";
+import { getSourceLastTimestamp, isPointLikeGeom } from "#mapx/db_utils";
 import { getParamsValidator } from "#mapx/route_validation";
 import crypto from "crypto";
 import util from "util";

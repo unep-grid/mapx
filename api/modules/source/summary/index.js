@@ -9,7 +9,7 @@ import {
   getColumnsTypesSimple,
   getColumnsNames,
   getSourceLastTimestamp,
-} from "#mapx/db-utils";
+} from "#mapx/db_utils";
 
 const typesContinuous = [
   "double precision",

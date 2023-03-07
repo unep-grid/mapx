@@ -4,7 +4,7 @@ import { ioSendJobClient } from "#mapx/io";
 import { access, unlink } from "fs/promises";
 import { constants } from "fs";
 import { spawn } from "child_process";
-import { chunkWriter } from "#mapx/io_file_chunks";
+import { ioChunkWriter } from "#mapx/chunks";
 import { sendMailAuto } from "#mapx/mail";
 import { handleErrorText } from "#mapx/error";
 import { settings } from "#root/settings";
@@ -17,7 +17,7 @@ import {
   isLayerValid,
   tableHasValues,
   registerOrRemoveSource,
-} from "#mapx/db-utils";
+} from "#mapx/db_utils";
 import {
   validateTokenHandler,
   validateRoleHandlerFor,
@@ -88,7 +88,7 @@ export async function ioUploadSource(socket, chunk, callback) {
       return;
     }
     // Handle chunked data
-    const config = await chunkWriter(socket, chunk);
+    const config = await ioChunkWriter(socket, chunk);
 
     callback({ status: "uploaded" });
 

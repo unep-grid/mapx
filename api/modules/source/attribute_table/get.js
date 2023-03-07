@@ -3,7 +3,7 @@ import {
   getColumnsTypesSimple,
   getColumnsNames,
   tableExists,
-} from "#mapx/db-utils";
+} from "#mapx/db_utils";
 import { getDistinct, toPgColumn, sendJSON, sendError } from "#mapx/helpers";
 import { isEmpty, isString, isSourceId } from "@fxi/mx_valid";
 export const mwGetAttributeTable = [getSourceAttributeTableHandler];
