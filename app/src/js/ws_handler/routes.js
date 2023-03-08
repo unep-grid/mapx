@@ -7,7 +7,7 @@ import { isNotEmpty } from "../is_test/index.js";
 import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt/index.js";
 import { isProd } from "./../app_utils";
 import { nc } from "./../mx.js";
-
+import { clone } from "./../mx_helper_misc.js";
 /**
  * Create list of handlers
  *
@@ -23,8 +23,9 @@ export const routes = {
   "/server/test/sum": handlerSum,
 };
 
-async function handlerSourceAdded() {
+async function handlerSourceAdded(data, cb) {
   triggerUpdateSourcesList();
+  cb(data);
 }
 
 async function handlerError(message) {
@@ -53,7 +54,8 @@ function handlerAuthentication(auth, cb) {
  */
 async function handlerViewAdd(message, cb) {
   try {
-    await viewsListAddSingle(message.view);
+    const view = clone(message.view);
+    await viewsListAddSingle(view);
   } catch (e) {
     console.error(e);
     message.error = `Error processing view add: ${e.message}`;
