@@ -120,6 +120,7 @@ class Dashboard extends EventSimple {
    * @param {Array} conf.modules Modules name , e.g. ["d3"]
    * @param {Object} conf.vie  View object
    * @param {Object} conf.map mapbox gl map instance
+   * @param {Object} conf.view view instance
    * @return {Array} array of widgets
    */
   async addWidgetsAsync(conf) {
