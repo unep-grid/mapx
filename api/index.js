@@ -120,7 +120,6 @@ app.get("/get/gemet/concept", mwGemetSearchConcept);
 app.get("/get/bbox/", mwGetBbox);
 app.get("/get/projects/list/user/", project.mwGetListByUser);
 app.get("/get/project/search", project.mwProjectSearchText);
-//app.get("/get/io/test/job", mwIoFetchTest);
 
 app.post("/upload/image/", upload.mwImage);
 app.post("/send/mail/", mail.mwSend);
