@@ -44,13 +44,15 @@ class Theme extends EventSimple {
     bindAll(t);
     t._opt = Object.assign({}, global, opt);
     t._inputs = [];
-    t.init();
+    t.init().catch((e) => {
+      console.warn(e);
+    });
   }
   /**
    * Init
    * see also init_themes.js
    */
-  init() {
+  async init() {
     const t = this;
     if (!global.elStyle) {
       global.elStyle = el("style");
@@ -60,11 +62,12 @@ class Theme extends EventSimple {
       t.on(k, t._opt.on[k]);
     }
     const id_saved = localStorage.getItem("theme@id");
-    t.set(t._opt.id || id_saved || t._opt.id_default, {
+    const ok = await t.set(t._opt.id || id_saved || t._opt.id_default, {
       sound: false,
       save: false,
       save_url: false,
     });
+    return ok;
   }
 
   /**
@@ -121,41 +124,52 @@ class Theme extends EventSimple {
     return t._opt.themes;
   }
 
-  set(id, opt) {
+  async set(id, opt) {
     const t = this;
-    let { sound = false, save = false, save_url = false } = opt || {};
-    const valid = t.isValidId(id);
-
-    if (!valid) {
-      id = t._opt.id_default;
-      // probably set in url or localStorage : overwrite that
-      save_url = true;
-      save = true;
+    let ok = false;
+    if (t._is_setting) {
+      console.warn("Theme : can't set theme, probably to fast");
+      return;
     }
-    const theme = t.get(id);
+    try {
+      t._is_setting = true;
+      let { sound = false, save = false, save_url = false } = opt || {};
+      const valid = t.isValidId(id);
 
-    if (theme.colors) {
-      t._id = theme.id;
-      t._theme = theme;
-      t.setColors(theme.colors);
-      t.buildInputs();
-
-      if (save) {
-        localStorage.setItem("theme@id", id);
+      if (!valid) {
+        id = t._opt.id_default;
+        // probably set in url or localStorage : overwrite that
+        save_url = true;
+        save = true;
       }
+      const theme = t.get(id);
 
-      if (sound && theme.sound) {
-        t.sound(theme.sound);
+      if (theme.colors) {
+        t._id = theme.id;
+        t._theme = theme;
+        t.setColors(theme.colors);
+        t.buildInputs();
+
+        if (save) {
+          localStorage.setItem("theme@id", id);
+        }
+
+        if (sound && theme.sound) {
+          await t.sound(theme.sound);
+        }
+
+        if (save_url) {
+          t.setThemeUrl(id);
+        }
+        ok = true;
+        t.fire("mode_changed", t.mode());
       }
-
-      if (save_url) {
-        t.setThemeUrl(id);
-      }
-
-      t.fire("mode_changed", t.mode());
-      return true;
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      t._is_setting = false;
+      return ok;
     }
-    return false;
   }
 
   setThemeUrl(id) {
@@ -219,7 +233,7 @@ class Theme extends EventSimple {
     return t.mode() === "dark";
   }
 
-  next(opt) {
+  async next(opt) {
     const t = this;
     const ids = t.ids();
     const id = t.id();
@@ -227,10 +241,11 @@ class Theme extends EventSimple {
     const pos = ids.indexOf(id);
     const useFirst = pos + 1 > last;
     const id_new = ids[useFirst ? 0 : pos + 1];
-    return t.set(id_new, opt);
+    const ok = await t.set(id_new, opt);
+    return ok;
   }
 
-  previous(opt) {
+  async previous(opt) {
     const t = this;
     const ids = t.ids();
     const id = t.id();
@@ -238,7 +253,8 @@ class Theme extends EventSimple {
     const pos = ids.indexOf(id);
     const useLast = pos - 1 < 0;
     const id_new = ids[useLast ? last : pos - 1];
-    return t.set(id_new, opt);
+    const ok = await t.set(id_new, opt);
+    return ok;
   }
 
   setColors(colors) {
@@ -475,10 +491,21 @@ class Theme extends EventSimple {
   /**
    * Sound
    */
-  sound(id) {
-    const t = this;
-    t._elAudio = t._elAudio || el("audio");
-    t._elAudio.setAttribute("src", t._opt.sounds[id]), t._elAudio.play();
+  async sound(id) {
+    try {
+      const t = this;
+      if (t._playing) {
+        return;
+      }
+      t._playing = true;
+      t._elAudio = t._elAudio || el("audio");
+      t._elAudio.setAttribute("src", t._opt.sounds[id]);
+      await t._elAudio.play();
+      t._playing = false;
+    } catch (e) {
+      debugger;
+      console.warn(e);
+    }
   }
 }
 
