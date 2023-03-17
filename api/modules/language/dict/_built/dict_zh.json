@@ -6955,6 +6955,66 @@
     "zh": "使用默认调色板"
   },
   {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "zh": "加载新项目？"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "zh": "加载项目 {{name}}？"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "zh": "创建新项目"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "zh": "项目名称（英文）"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "zh": "创造"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "zh": "项目名称（英文）"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "zh": "名称有效"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "zh": "不允许创建"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "zh": "不允许"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "zh": "名称无效"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "zh": "名称字符串不在范围内：最少 3 个，最多 50 个字符"
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "zh": "名字不可用"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "zh": "主题"

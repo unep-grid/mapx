@@ -6955,6 +6955,66 @@
     "ru": "Использовать палитру по умолчанию "
   },
   {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "ru": "Загрузить новый проект?"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "ru": "Загрузить проект {{name}} ?"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "ru": "Создать новый проект"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "ru": "Название проекта (англ.)"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "ru": "Создавать"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "ru": "Название проекта (англ.)"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "ru": "Имя допустимо"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "ru": "Создание запрещено"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "ru": "Не допускается"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "ru": "Неверное имя"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "ru": "Строка имени вне допустимого диапазона: не менее 3, не более 50 символов."
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "ru": "Имя не доступно"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "ru": "Тема"

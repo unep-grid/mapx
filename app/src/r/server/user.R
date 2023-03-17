@@ -12,24 +12,21 @@ observe(
       return()
     }
 
-    isGuest <- isGuestUser()
-    isRoot <- mxIsUserRoot(idUser)
-    isDev <- mxIsUserDev(idUser)
-
-    userEmail <- ifelse(isGuest, "", userData$email)
     token <- reactUser$token
     roles <- getUserRole()
+    userEmail <- ifelse(roles$guest, "", userData$email)
 
 
     mxUpdateSettings(list(
       user = list(
         roles = roles,
         id = idUser,
-        guest = isGuest,
-        root = isRoot,
-        dev = isDev,
         email = userEmail,
-        token = token
+        token = token,
+        # Alias
+        guest = roles$guest,
+        root = roles$root,
+        developer = roles$developer
       )
     ))
 

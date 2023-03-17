@@ -6955,6 +6955,66 @@
     "es": "Utilizar la paleta predeterminada"
   },
   {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "es": "¿Cargar nuevo proyecto?"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "es": "Cargar proyecto {{name}} ?"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "es": "Crear nuevo proyecto"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "es": "Nombre del proyecto (inglés)"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "es": "Crear"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "es": "Nombre del proyecto (inglés)"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "es": "Nombre válido"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "es": "Creación no permitida"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "es": "No permitido"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "es": "Nombre inválido"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "es": "La cadena de nombre no está en el rango: mínimo 3, máximo 50 caracteres"
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "es": "nombre no disponible"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "es": "Tema"

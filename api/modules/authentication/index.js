@@ -6,4 +6,10 @@ export {
 
 export { ioMwAuthenticate } from "./io_mw.js";
 
-export { getUserEmail } from "./helpers.js";
+export {
+  getUserEmail,
+  isRoot,
+  isAdmin,
+  isMember,
+  isPublisher,
+} from "./helpers.js";

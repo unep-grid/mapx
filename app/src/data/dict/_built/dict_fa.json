@@ -6955,6 +6955,66 @@
     "fa": "از پالت پیش فرض استفاده کنید "
   },
   {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "fa": "پروژه جدید بارگیری شود؟"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "fa": "بارگذاری پروژه {{name}} ?"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "fa": "پروژه جدید ایجاد کنید"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "fa": "نام پروژه (انگلیسی)"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "fa": "ايجاد كردن"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "fa": "نام پروژه (انگلیسی)"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "fa": "نام معتبر است"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "fa": "ایجاد مجاز نیست"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "fa": "مجاز نیست"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "fa": "نام نامعتبر"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "fa": "رشته نام در محدوده نیست: حداقل 3، حداکثر 50 کاراکتر"
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "fa": "نام در دسترس نیست"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "fa": "موضوع"

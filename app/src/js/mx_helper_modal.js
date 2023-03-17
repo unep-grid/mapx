@@ -9,6 +9,7 @@ import {
   initSelectizeAll,
 } from "./mx_helper_selectize.js";
 import {
+  isEmpty,
   isPromise,
   isObject,
   isString,
@@ -246,11 +247,7 @@ export function modal(o) {
    */
   function buildModal(idModal, style, styleContent) {
     const elBtnCollapse = el("i", {
-      class: [
-        "mx-modal-top-btn-control",
-        "fa",
-        "fa-minus",
-      ],
+      class: ["mx-modal-top-btn-control", "fa", "fa-minus"],
       on: [
         "click",
         (e) => {
@@ -675,7 +672,7 @@ export function modalPrompt(opt) {
   opt.inputOptions = Object.assign({}, def.inputOptions, opt.inputOptions);
   opt = Object.assign({}, def, opt);
 
-  return new Promise(async (resolve) => {
+  return new Promise((resolve) => {
     const isCheckbox = opt.inputOptions.type === "checkbox";
     const isSelectAuto = isObject(opt.selectAutoOptions);
     let selectAuto;
@@ -775,18 +772,35 @@ export function modalPrompt(opt) {
     );
 
     if (opt.onInput instanceof Function) {
-      elInput.addEventListener("input", (e) => {
+      elInput.addEventListener("input", (_) => {
         const value = isCheckbox
           ? opt.inputOptions.checkboxValues[elInput.checked]
           : elInput.value;
-        opt.onInput(value, elBtnConfirm, elMessage);
+        handlerInput(value, elBtnConfirm, elMessage);
       });
 
       /**
        * Validate for default
        */
       const value = isCheckbox ? elInput.checked : elInput.value;
-      opt.onInput(value, elBtnConfirm, elMessage);
+      handlerInput(value, elBtnConfirm, elMessage);
+
+      /**
+       * If onInput returnn boolean, consider as a value to 
+       * enable/disable confirm btn
+       */
+      function handlerInput(value, elBtnConfirm, elMessage) {
+        const valid = opt.onInput(value, elBtnConfirm, elMessage);
+        if (!isEmpty(valid) && isBoolean(valid)) {
+          if (valid) {
+            elBtnConfirm.addAttribute("disabled");
+            elBtnConfirm.classList.add("disabled");
+          } else {
+            elBtnConfirm.removeAttribute("disabled");
+            elBtnConfirm.classList.remove("disabled");
+          }
+        }
+      }
     }
 
     elModal = modal({

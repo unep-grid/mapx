@@ -1,6 +1,6 @@
-import { escapeLiteral, clone } from "#mapx/helpers";
+import { clone } from "#mapx/helpers";
 import { isEmpty, isView, isViewId, isProjectId } from "@fxi/mx_valid";
-import { pgWrite } from "#mapx/db";
+import { insertRow } from "#mapx/db_utils";
 import { getSourceSummary } from "#mapx/source";
 import {
   getColumnsNames,
@@ -186,28 +186,8 @@ export async function ioAddViewVt(socket, config, view_options) {
     if (!valid) {
       throw new Error("Invalid view");
     }
-    /**
-     * Escape convert and save
-     * - editor field can't be escaped (integer)
-     * - json data, date, strings.. must be escaped
-     * TODO: this could be automated / auto sanitized
-     * - view  must be cloned, as original view is required in SendJob
-     */
-    const viewDb = clone(view);
-    const e = escapeLiteral;
-    viewDb.id = e(view.id);
-    viewDb.editor = view.editor * 1;
-    viewDb.type = e(view.type);
-    viewDb.date_modified = e(view.date_modified);
-    viewDb.project = e(view.project);
-    viewDb.data = e(JSON.stringify(view.data));
-    viewDb.readers = e(JSON.stringify(view.readers));
-    viewDb.editors = e(JSON.stringify(view.editors));
 
-    const keys = Object.keys(viewDb).join(",");
-    const values = Object.values(viewDb).join(",");
-    const sql = `INSERT INTO mx_views (${keys}) VALUES (${values})`;
-    await pgWrite.query(sql);
+    await insertRow(view, "mx_views");
 
     /**
      * Add view to the client

@@ -3,14 +3,14 @@ import { settings } from "#root/settings";
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import {
-  isEmpty,
-  isNotEmpty,
   isArray,
   isSourceId,
   isNumeric,
   isProjectId,
 } from "@fxi/mx_valid";
 import { isLayerValid, areLayersValid } from "./geom_validation.js";
+import { insertRow } from "./insert.js";
+
 /**
  * crypto key
  */
@@ -536,6 +536,7 @@ async function getLayerViewsStyleColumns(idLayer) {
  * Exports
  */
 export {
+  insertRow,
   getLayerViewsStyleColumns,
   getColumnsNames,
   getColumnsTypesSimple,

@@ -6955,6 +6955,66 @@
     "ps": "د تلواله پیلیټ وکاروه "
   },
   {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "ps": "نوې پروژه پورته کړئ؟"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "ps": "پروژه بار کړئ {{name}} ؟"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "ps": "نوې پروژه جوړه کړئ"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "ps": "د پروژې نوم (انګلیسي)"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "ps": "جوړ کړئ"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "ps": "د پروژې نوم (انګلیسي)"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "ps": "نوم معتبر دی"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "ps": "د جوړولو اجازه نشته"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "ps": "اجازه نه ورکول کیږي"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "ps": "ناسم نوم"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "ps": "د نوم تار په حد کې نه دی: لږ تر لږه 3، اعظمي 50 حروف"
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "ps": "نوم نشته"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "ps": "موضوع"

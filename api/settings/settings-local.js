@@ -145,6 +145,12 @@ const settings = Object.assign({}, settings_global, {
       subjectPrefix: "[ MapX ]",
     },
   },
+  project: {
+    name: {
+      min: 3,
+      max: 50,
+    },
+  },
 });
 
 export { settings };

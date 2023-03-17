@@ -3,7 +3,7 @@ import http from "http";
 import express from "express";
 import { Server as SocketServer } from "socket.io";
 import query from "#mapx/query";
-import project from "#mapx/project";
+import * as project from "#mapx/project";
 import mirror from "#mapx/mirror";
 import mail from "#mapx/mail";
 import ip from "#mapx/ip";
@@ -25,6 +25,7 @@ import { ioTestSum, ioTestEcho } from "#mapx/io";
 import { ioUploadSource } from "#mapx/upload";
 import { ioDownloadSource, ioEditSource, ioSourceListEdit } from "#mapx/source";
 import { ioViewPin } from "#mapx/view";
+import { ioProjectNameValidate, ioProjectCreate } from "#mapx/project";
 import {
   ioCreateAdapter,
   ioConnect,
@@ -89,6 +90,8 @@ io.use((socket, next) => {
   socket.on("/client/source/edit/table", use(ioEditSource));
   socket.on("/client/source/get/list/edit", use(ioSourceListEdit));
   socket.on("/client/view/pin", use(ioViewPin));
+  socket.on("/client/project/validate/name", use(ioProjectNameValidate));
+  socket.on("/client/project/create", use(ioProjectCreate));
   socket.on("echo", use(ioEcho));
   next();
 });

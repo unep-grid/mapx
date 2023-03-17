@@ -11,6 +11,7 @@ import { NotifCenterMapx } from "./notif_center/nc_instance.js";
 import { HighlighterMapx } from "./features_highlight/highlighter_instance";
 import { WsToolsInstances } from "./ws_tools";
 import { theme } from "./init_theme";
+import { ProjectManager } from "./project/index.js";
 
 const templates = {
   viewListLegend: require("../dot/view_list_legend_vt.dot.html"),
@@ -33,6 +34,7 @@ const initQueryParams = {}; // set in init_common.js
 const listeners = new ListenerStore();
 const events = new EventSimple();
 const hinthack = new HintHack();
+const project = new ProjectManager();
 const ws = new WsHandlerMapx();
 const nc = new NotifCenterMapx();
 const highlighter = new HighlighterMapx();
@@ -46,6 +48,7 @@ const extend = {
 const info = {};
 export {
   mapboxgl,
+  project,
   localforage,
   selectize,
   helpers,

@@ -6955,6 +6955,66 @@
     "ar": "استخدم اللوحة الافتراضية "
   },
   {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "ar": "تحميل مشروع جديد؟"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "ar": "تحميل المشروع {{name}} ؟"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "ar": "إنشاء مشروع جديد"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "ar": "اسم المشروع (انجليزي)"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "ar": "يخلق"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "ar": "اسم المشروع (انجليزي)"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "ar": "الاسم صالح"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "ar": "الخلق غير مسموح به"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "ar": "غير مسموح"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "ar": "اسم غير صحيح"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "ar": "سلسلة الاسم ليست في النطاق: الحد الأدنى 3 ، الحد الأقصى 50 حرفًا"
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "ar": "الاسم غير متوفر"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "ar": "سمة"

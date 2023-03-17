@@ -1,9 +1,7 @@
 import { geoserver } from "./geoserver/index.js";
-import { ws_tools } from "./mx.js";
+import { ws_tools, helpers as h } from "./mx.js";
 
 $(document).on("shiny:connected", function () {
-  const h = mx.helpers;
-
   /**
    * Set init query parameters
    */
@@ -43,6 +41,7 @@ $(document).on("shiny:connected", function () {
   bind("mxEditTable", ws_tools.getCb("edit_table"));
   bind("mxGeomTools", ws_tools.getCb("geometry_tools"));
   bind("mxUploader", ws_tools.getCb("uploader"));
+  bind("mxProjectAdd", mx.project.create);
   /**
    * Mapx map and view related binding
    */

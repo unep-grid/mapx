@@ -6955,6 +6955,66 @@
     "bn": "ডিফল্ট প্যালেট ব্যবহার করুন "
   },
   {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "bn": "নতুন প্রকল্প লোড?"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "bn": "লোড প্রকল্প {{name}} ?"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "bn": "নতুন প্রকল্প তৈরি করুন"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "bn": "প্রকল্পের নাম (ইংরেজি)"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "bn": "সৃষ্টি"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "bn": "প্রকল্পের নাম (ইংরেজি)"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "bn": "নাম বৈধ"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "bn": "সৃষ্টির অনুমতি নেই"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "bn": "অনুমতি নেই"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "bn": "অবৈধ নাম"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "bn": "নামের স্ট্রিং ব্যাপ্তির মধ্যে নেই : সর্বনিম্ন 3, সর্বোচ্চ 50টি অক্ষর৷"
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "bn": "নাম উপলব্ধ নেই"
+  },
+  {
     "id": "schema_story_theme",
     "en": "Theme",
     "bn": "থিম"

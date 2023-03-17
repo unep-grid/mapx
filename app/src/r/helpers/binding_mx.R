@@ -1,5 +1,23 @@
 
 
+#' Create new project
+#'
+#' @param session Shiny session object.
+#' @export
+mxProjectAdd <- function(
+  session = shiny:::getDefaultReactiveDomain()
+) {
+  session$sendCustomMessage(
+    type = "mxProjectAdd",
+    list(
+      update = runif(1)
+    )
+  )
+}
+
+
+
+
 #' Edit source request
 #'
 #' @param idTable Id table
