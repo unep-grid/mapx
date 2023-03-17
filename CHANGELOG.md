@@ -1,3 +1,12 @@
+  - [1.10.4-beta.1](https://github.com/unep-grid/mapx/tree/1.10.4-beta.1) 
+
+    - APP 
+        - Transfert of project creation shiny-> nodejs
+        - Switch between themes did not wait properly the end of 'play()' (click sound) 
+        - Use cb in ws echo test (internal)
+        - Added view param in widget config
+        - Workaround : 'is_binary' test from socket.io tried to perform a test on a view -> infinite recursion. Use cloned data instead.
+
   - [1.10.4-alpha.7](https://github.com/unep-grid/mapx/tree/1.10.4-alpha.7) 
 
     - APP/API 
