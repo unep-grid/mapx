@@ -14,7 +14,7 @@ const isRtWms = h.isViewWms(view) ;
 const isDownloadable = h.isViewDownloadable(view); 
 const isVtWithAttr = isVt && h.path(view,'data.attribute.name') ;
 const isRtCcWithDownload = (isRt || isCc) && h.hasDownloadUrlItemsFromViewMeta(view);
-const uIsDev = h.path(mx,'settings.user.dev');
+const uIsDev = h.path(mx,'settings.user.roles.developer');
 const uIsPublisher = h.path(mx,'settings.user.roles.publisher');
 const uIsAdmin = h.path(mx,'settings.user.roles.admin');
 }}
