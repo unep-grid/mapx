@@ -3844,6 +3844,11 @@ async function viewLayersAddCc(o) {
   const map = o.map;
   const methods = path(view, "data.methods");
 
+  if (isEmpty(methods)) {
+    console.warn("Custom code view not initialized, skipping");
+    return false;
+  }
+
   const idView = view.id;
   const idSource = idView + "-SRC";
   const idListener = "listener_cc_" + view.id;
@@ -3957,6 +3962,7 @@ async function viewLayersAddCc(o) {
    */
   await opt.onInit(opt);
   opt._init = true;
+  return true;
   /**
    * Helpers
    */
