@@ -8217,7 +8217,22 @@
   {
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)",
-    "fr": "Carte : bathymétrie (haut)"
+    "fr": "Carte: bathymétrie (haut)"
+  },
+  {
+    "id": "mx_map_bathymetry_labels",
+    "en": "Map: bathymetry labels",
+    "fr": "Carte : étiquettes de bathymétrie"
+  },
+  {
+    "id": "mx_map_bathymetry_labels_outline",
+    "en": "Map: bathymetry labels outline",
+    "fr": "Carte : contour des étiquettes de bathymétrie"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "fr": "Carte : lignes de bathymétrie"
   },
   {
     "id": "mx_map_road",

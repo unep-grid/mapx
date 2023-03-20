@@ -8220,6 +8220,21 @@
     "de": "Karte: Bathymetrie (hoch) "
   },
   {
+    "id": "mx_map_bathymetry_labels",
+    "en": "Map: bathymetry labels",
+    "de": "Karte: Bathymetrie-Etiketten"
+  },
+  {
+    "id": "mx_map_bathymetry_labels_outline",
+    "en": "Map: bathymetry labels outline",
+    "de": "Karte: Umriss der Bathymetrie-Etiketten"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "de": "Karte: bathymetrische Linien"
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road",
     "de": "Karte: Straße "

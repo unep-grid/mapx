@@ -8220,6 +8220,21 @@
     "fa": "نقشه: متقارن (بالا) "
   },
   {
+    "id": "mx_map_bathymetry_labels",
+    "en": "Map: bathymetry labels",
+    "fa": "نقشه: برچسب های حمام سنجی"
+  },
+  {
+    "id": "mx_map_bathymetry_labels_outline",
+    "en": "Map: bathymetry labels outline",
+    "fa": "نقشه: طرح کلی برچسب های حمام سنجی"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "fa": "نقشه: خطوط حمام سنجی"
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road",
     "fa": "نقشه: جاده "

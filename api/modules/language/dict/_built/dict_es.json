@@ -8220,6 +8220,21 @@
     "es": "Mapa: batimetría (alta)"
   },
   {
+    "id": "mx_map_bathymetry_labels",
+    "en": "Map: bathymetry labels",
+    "es": "Mapa: etiquetas batimétricas"
+  },
+  {
+    "id": "mx_map_bathymetry_labels_outline",
+    "en": "Map: bathymetry labels outline",
+    "es": "Mapa: esquema de las etiquetas batimétricas"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "es": "Mapa: líneas batimétricas"
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road",
     "es": "Mapa: rutas"

@@ -111,6 +111,19 @@
       "visibility": "visible",
       "color": "rgba(20,20,20,0.4)"
     },
+
+    "mx_map_bathymetry_lines": {
+      "visibility": "none",
+      "color": "rgb(222,222,222)"
+    },
+    "mx_map_bathymetry_labels": {
+      "visibility": "none",
+      "color": "rgba(255,255,255,0.63)"
+    },
+    "mx_map_bathymetry_labels_outline": {
+      "visibility": "none",
+      "color": "rgba(18,17,17,0.13)"
+    },
     "mx_map_road": {
       "visibility": "none",
       "color": "rgb(255,255,255)"

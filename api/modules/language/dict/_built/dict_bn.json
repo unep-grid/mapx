@@ -8220,6 +8220,21 @@
     "bn": "মানচিত্র: বাথমেট্রি (উচ্চ) "
   },
   {
+    "id": "mx_map_bathymetry_labels",
+    "en": "Map: bathymetry labels",
+    "bn": "মানচিত্র: bathymetry লেবেল"
+  },
+  {
+    "id": "mx_map_bathymetry_labels_outline",
+    "en": "Map: bathymetry labels outline",
+    "bn": "মানচিত্র: bathymetry লেবেল রূপরেখা"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "bn": "মানচিত্র: bathymetry লাইন"
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road",
     "bn": "মানচিত্র: রাস্তা "

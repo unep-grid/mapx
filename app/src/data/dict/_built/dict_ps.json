@@ -8220,6 +8220,21 @@
     "ps": "نقشه: حمامونه (لوړ) "
   },
   {
+    "id": "mx_map_bathymetry_labels",
+    "en": "Map: bathymetry labels",
+    "ps": "نقشه: د تشناب لیبل"
+  },
+  {
+    "id": "mx_map_bathymetry_labels_outline",
+    "en": "Map: bathymetry labels outline",
+    "ps": "نقشه: د تشناب لیبلونو خاکه"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "ps": "نقشه: د حمام لینونه"
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road",
     "ps": "نقشه: سړک "

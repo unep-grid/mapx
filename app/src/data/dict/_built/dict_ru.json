@@ -8220,6 +8220,21 @@
     "ru": "Карта: батиметрия (высокая) "
   },
   {
+    "id": "mx_map_bathymetry_labels",
+    "en": "Map: bathymetry labels",
+    "ru": "Карта: батиметрические метки"
+  },
+  {
+    "id": "mx_map_bathymetry_labels_outline",
+    "en": "Map: bathymetry labels outline",
+    "ru": "Карта: контур батиметрических меток"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "ru": "Карта: батиметрические линии"
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road",
     "ru": "Карта: дорога "

@@ -8220,6 +8220,21 @@
     "ar": "الخريطة: قياس الأعماق (مرتفع) "
   },
   {
+    "id": "mx_map_bathymetry_labels",
+    "en": "Map: bathymetry labels",
+    "ar": "الخريطة: تسميات قياس الأعماق"
+  },
+  {
+    "id": "mx_map_bathymetry_labels_outline",
+    "en": "Map: bathymetry labels outline",
+    "ar": "الخريطة: مخطط تسميات قياس الأعماق"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "ar": "الخريطة: خطوط قياس الأعماق"
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road",
     "ar": "الخريطة: الطريق "

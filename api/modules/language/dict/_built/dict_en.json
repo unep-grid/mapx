@@ -6576,6 +6576,18 @@
     "en": "Map: bathymetry (high)"
   },
   {
+    "id": "mx_map_bathymetry_labels",
+    "en": "Map: bathymetry labels"
+  },
+  {
+    "id": "mx_map_bathymetry_labels_outline",
+    "en": "Map: bathymetry labels outline"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines"
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road"
   },

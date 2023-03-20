@@ -8220,6 +8220,21 @@
     "zh": "地图：测深（高）"
   },
   {
+    "id": "mx_map_bathymetry_labels",
+    "en": "Map: bathymetry labels",
+    "zh": "地图：测深标签"
+  },
+  {
+    "id": "mx_map_bathymetry_labels_outline",
+    "en": "Map: bathymetry labels outline",
+    "zh": "地图：测深标签轮廓"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "zh": "地图：测深线"
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road",
     "zh": "地图：道路"
