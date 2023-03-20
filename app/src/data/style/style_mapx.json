@@ -286,6 +286,56 @@
       }
     },
     {
+      "id": "bathymetry-lines",
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "water-depth",
+      "minzoom": 0,
+      "filter": ["all", ["==", ["geometry-type"], "Polygon"]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": [
+          "interpolate",
+          ["cubic-bezier", 0, 0.5, 1, 0.5],
+          ["get", "depth"],
+          200,
+          "rgba(100,100,100,0.4)",
+          9000,
+          "rgba(20,20,20,0.4)"
+        ],
+        "line-width": 1,
+        "line-dasharray": [2, 4]
+      }
+    },
+    {
+      "id": "bathymetry-labels",
+      "type": "symbol",
+      "source": "mapbox_composite",
+      "source-layer": "water-depth",
+      "minzoom": 0,
+      "filter": ["all", ["==", ["geometry-type"], "Polygon"]],
+      "layout": {
+        "visibility": "visible",
+        "text-field": ["to-string", ["get", "depth"]],
+        "text-font": ["Arial Regular"],
+        "text-size": 12,
+        "symbol-placement": "line",
+        "text-padding": 2,
+        "text-max-angle": 30,
+        "symbol-spacing": 500,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false
+      },
+      "paint": {
+        "text-color": "rgba(0,0,0,0.8)",
+        "text-halo-color": "rgba(255,255,255,0.8)",
+        "text-halo-width": 1,
+        "text-halo-blur": 1
+      }
+    },
+    {
       "id": "building",
       "type": "fill",
       "source": "mapbox_composite",
