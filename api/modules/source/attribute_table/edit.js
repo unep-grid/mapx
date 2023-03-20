@@ -3,7 +3,7 @@ import {
   columnExists,
   getColumnsTypesSimple,
   getLayerTitle,
-  getLayerViewsStyleColumns,
+  getLayerViewsAttributes,
   getTableDimension,
   isLayerValid,
   sanitizeUpdates,
@@ -429,10 +429,10 @@ class EditTableSession {
       const attributes = pgRes.fields.map((f) => f.name);
       const types = await getColumnsTypesSimple(et._id_table, attributes);
       const title = await getLayerTitle(et._id_table);
-      const colStyle = await getLayerViewsStyleColumns(et._id_table);
+      const attributesViews = await getLayerViewsAttributes(et._id_table);
       const locked = await et.getState("lock_table");
       const table = {
-        colStyle,
+        attributesViews,
         hasGeom,
         validation,
         types,

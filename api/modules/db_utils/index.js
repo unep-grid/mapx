@@ -2,12 +2,7 @@ import { pgTest, pgRead, pgWrite } from "#mapx/db";
 import { settings } from "#root/settings";
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
-import {
-  isArray,
-  isSourceId,
-  isNumeric,
-  isProjectId,
-} from "@fxi/mx_valid";
+import { isArray, isSourceId, isNumeric, isProjectId } from "@fxi/mx_valid";
 import { isLayerValid, areLayersValid } from "./geom_validation.js";
 import { insertRow } from "./insert.js";
 
@@ -519,10 +514,14 @@ async function getLayerTitle(idLayer, language) {
 /**
  * Get layer/table column name used for styling in views
  */
-async function getLayerViewsStyleColumns(idLayer) {
+async function getLayerViewsAttributes(idLayer) {
   const sql = `
-  SELECT DISTINCT data#>>'{attribute,name}' column_name
-  FROM mx_views_latest 
+  SELECT DISTINCT
+  jsonb_array_elements(
+    data #> '{attribute,names}' || 
+    jsonb_build_array(data #> '{attribute,name}') 
+  ) column_name
+  FROM mx_views_latest
   WHERE data #>> '{source,layerInfo,name}' = $1`;
   const res = await pgRead.query(sql, [idLayer]);
   if (res.rowCount === 0) {
@@ -537,7 +536,7 @@ async function getLayerViewsStyleColumns(idLayer) {
  */
 export {
   insertRow,
-  getLayerViewsStyleColumns,
+  getLayerViewsAttributes,
   getColumnsNames,
   getColumnsTypesSimple,
   getSourceLastTimestamp,

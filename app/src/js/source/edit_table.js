@@ -48,7 +48,7 @@ const defaults = {
   id_column_main: "gid",
   id_column_valid: "_mx_valid",
   id_columns_reserved: ["gid", "_mx_valid", "geom"],
-  id_columns_style: [],
+  id_columns_views: [],
   max_changes: 1e5, //max one column at max rows
   min_columns: 3,
   max_rows: 1e5, // should match server
@@ -840,13 +840,13 @@ export class EditTableSessionClient extends WsToolsBase {
     return et._config.id_columns_reserved.includes(name);
   }
   /**
-   * Column name validation : columns used in style
+   * Column name validation : columns used in style and secondary attributes
    * @param {String} name
    * @return {Boolean}
    */
-  isColumnStyle(name) {
+  isColumnViews(name) {
     const et = this;
-    return et._config.id_columns_style.includes(name);
+    return et._config.id_columns_views.includes(name);
   }
   /**
    *  Check if this is a date column
@@ -877,7 +877,7 @@ export class EditTableSessionClient extends WsToolsBase {
   isValidName(name) {
     const et = this;
     const isSafe = isSafeName(name);
-    const isNotStyle = !et.isColumnStyle(name);
+    const isNotStyle = !et.isColumnViews(name);
     const isNotReserved = !et.isColumnReserved(name);
     return isSafe && isNotReserved && isNotStyle;
   }
@@ -1033,8 +1033,8 @@ export class EditTableSessionClient extends WsToolsBase {
       et._validation_geom = table.validation;
     }
 
-    if (isNotEmpty(table.colStyle)) {
-      et._config.id_columns_style.push(...table.colStyle);
+    if (isNotEmpty(table.attributesViews)) {
+      et._config.id_columns_views.push(...table.attributesViews);
     }
 
     /**
