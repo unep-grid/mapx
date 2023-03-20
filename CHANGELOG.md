@@ -1,3 +1,11 @@
+  - [1.10.4-beta.2](https://github.com/unep-grid/mapx/tree/1.10.4-beta.2) 
+    
+    - APP
+        - Theme toggle issue : wait until the map layers are fully loaded before allowing the user update the style again
+        - Ignore cc view added with empty script/method
+        - Reading user roles from client : user.dev does not exists -> using user.roles.developer instead ( impacts dashboards, custom code view )
+        - Attributes table edition : don't allow suppression of column if used anywhere in a view, included in secondary attributes
+
   - [1.10.4-beta.1](https://github.com/unep-grid/mapx/tree/1.10.4-beta.1) 
 
     - APP 
