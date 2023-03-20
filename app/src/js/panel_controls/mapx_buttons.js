@@ -16,6 +16,9 @@ import {
 import { modalMarkdown } from "../modal_markdown/index.js";
 import { settings } from "./../settings";
 import { UAParser } from "ua-parser-js";
+import { shake } from "../elshake/index.js";
+import { theme } from "./../mx.js";
+
 const uaparser = new UAParser();
 const isNotBlink = uaparser.getEngine().name !== "Blink";
 
@@ -189,10 +192,18 @@ function toggleFullScreen() {
   }
 }
 
-function toggleTheme() {
-  const elIcon = this.elButton.querySelector(".fa");
+async function toggleTheme() {
+  const ctrls = this;
+  if (ctrls._theme_loading) {
+    shake(ctrls.elButton);
+    return;
+  }
+  ctrls._theme_loading = true;
+  const elIcon = ctrls.elButton.querySelector(".fa");
   elIcon.classList.toggle("fa-rotate-180");
-  mx.theme.next({ sound: true, save: true, save_url: true });
+  const done = await theme.next({ sound: true, save: true, save_url: true });
+  ctrls._theme_loading = false;
+  return done;
 }
 
 /**

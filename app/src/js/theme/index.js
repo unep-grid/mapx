@@ -128,8 +128,8 @@ class Theme extends EventSimple {
     const t = this;
     let ok = false;
     if (t._is_setting) {
-      console.warn("Theme : can't set theme, probably to fast");
-      return;
+      console.warn("Theme : can't set theme, probably too fast");
+      return ok;
     }
     try {
       t._is_setting = true;
@@ -147,20 +147,22 @@ class Theme extends EventSimple {
       if (theme.colors) {
         t._id = theme.id;
         t._theme = theme;
-        t.setColors(theme.colors);
-        t.buildInputs();
-
-        if (save) {
-          localStorage.setItem("theme@id", id);
-        }
 
         if (sound && theme.sound) {
           await t.sound(theme.sound);
         }
 
+        if (save) {
+          localStorage.setItem("theme@id", id);
+        }
+
         if (save_url) {
           t.setThemeUrl(id);
         }
+
+        await t.setColors(theme.colors);
+        t.buildInputs();
+
         ok = true;
         t.fire("mode_changed", t.mode());
       }
@@ -257,7 +259,7 @@ class Theme extends EventSimple {
     return ok;
   }
 
-  setColors(colors) {
+  async setColors(colors) {
     const t = this;
     const default_theme = t.theme();
     const new_colors = Object.assign(
@@ -268,8 +270,8 @@ class Theme extends EventSimple {
     const validColors = t.validateColors(new_colors);
     if (validColors) {
       t._colors = new_colors;
-      t.updateCss();
-      t.updateMap();
+      await t.updateCss();
+      await t.updateMap();
       t.fire("set_colors", new_colors);
     }
   }
@@ -282,32 +284,30 @@ class Theme extends EventSimple {
     }
   }
 
-  updateCss() {
+  async updateCss() {
     const t = this;
     global.elStyle.textContent = css_resolver(t._colors);
+    return true;
   }
 
-  linkMap(map) {
+  async linkMap(map) {
     const t = this;
     t._map = map;
-    t.updateMap();
+    await t.updateMap();
   }
 
-  updateMap() {
+  async updateMap() {
     const t = this;
     const map = t._map;
     if (!map) {
       return;
     }
-    const isMapStyleLoaded = map.isStyleLoaded();
-    const skipWaitMapLoad = t._map_skip_wait_load;
+    /*    const isMapStyleLoaded = map.isStyleLoaded();*/
 
-    if (!isMapStyleLoaded && !skipWaitMapLoad) {
-      map.once("load", t._updateMap.bind(t));
-      return;
-    }
-
-    t._map_skip_wait_load = true;
+    /*if (!isMapStyleLoaded) {*/
+    /*await map.once("load", t.updateMap.bind(t));*/
+    /*return false;*/
+    /*}*/
 
     const layers = layer_resolver(t._colors);
 
@@ -334,12 +334,19 @@ class Theme extends EventSimple {
         }
       }
     }
+
+    await map.once("idle");
+    return true;
   }
 
-  updateFromInput() {
-    const t = this;
-    const colors = t.getColorsFromInputs();
-    t.setColors(colors);
+  async updateFromInput() {
+    try {
+      const t = this;
+      const colors = t.getColorsFromInputs();
+      await t.setColors(colors);
+    } catch (e) {
+      console.warn("Update from input", e);
+    }
   }
 
   buildInputGroup(cid) {
