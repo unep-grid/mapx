@@ -1,3 +1,8 @@
+  - [1.10.5-alpha.1](https://github.com/unep-grid/mapx/tree/1.10.5-alpha.1) 
+
+    - APP
+        - Experimental bathymetry style for "water" themes : better contrast, bathymetry lines, bathymetry labels, colors/opacity configuration using the themes tools 
+
   - [1.10.4](https://github.com/unep-grid/mapx/tree/1.10.4) 
 
   - [1.10.4-beta.2](https://github.com/unep-grid/mapx/tree/1.10.4-beta.2) 
