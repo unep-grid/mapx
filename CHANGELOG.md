@@ -1,3 +1,5 @@
+  - [1.10.4](https://github.com/unep-grid/mapx/tree/1.10.4) 
+
   - [1.10.4-beta.2](https://github.com/unep-grid/mapx/tree/1.10.4-beta.2) 
     
     - APP
