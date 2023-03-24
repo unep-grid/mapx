@@ -1,3 +1,15 @@
+  - [1.10.5-alpha.2](https://github.com/unep-grid/mapx/tree/1.10.5-alpha.2) 
+    
+    - APP + SDK
+        - Added support for setting/getting map max bounds :
+            - Project config
+            - CommonLoc
+            - URL
+            - Sharing tool
+            - Story maps 
+            - Schemas
+            - SDK static + app
+
   - [1.10.5-alpha.1](https://github.com/unep-grid/mapx/tree/1.10.5-alpha.1) 
 
     - APP

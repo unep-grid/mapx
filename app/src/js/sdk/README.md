@@ -658,6 +658,9 @@ MapX resolvers available in static and app
     * [.map_get_zoom()](#MapxResolversStatic+map_get_zoom) ⇒ <code>Float</code>
     * [.map_get_center()](#MapxResolversStatic+map_get_center) ⇒ <code>Object</code>
     * [.map_get_bounds_array()](#MapxResolversStatic+map_get_bounds_array) ⇒ <code>Array</code>
+    * [.map_set_bounds_array(opt)](#MapxResolversStatic+map_set_bounds_array)
+    * [.map_get_max_bounds_array()](#MapxResolversStatic+map_get_max_bounds_array) ⇒ <code>Array</code> \| <code>null</code>
+    * [.map_set_max_bounds_array(opt)](#MapxResolversStatic+map_set_max_bounds_array) ⇒ <code>boolean</code>
     * [.map(opt)](#MapxResolversStatic+map) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>
     * [.map_wait_idle()](#MapxResolversStatic+map_wait_idle) ⇒ <code>Boolean</code>
     * [.common_loc_get_list_codes()](#MapxResolversStatic+common_loc_get_list_codes) ⇒ <code>Array</code>
@@ -1384,6 +1387,38 @@ Get current map bounds as array
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Array</code> - Bounds [west, south, east, north]  
+<a name="MapxResolversStatic+map_set_bounds_array"></a>
+
+#### mapxResolversStatic.map\_set\_bounds\_array(opt)
+Set current map bounds
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.bounds | <code>array</code> | [west, south, east, north] |
+
+<a name="MapxResolversStatic+map_get_max_bounds_array"></a>
+
+#### mapxResolversStatic.map\_get\_max\_bounds\_array() ⇒ <code>Array</code> \| <code>null</code>
+Get current max bounds / world
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Array</code> \| <code>null</code> - bounds [west, south, east, north] or null  
+<a name="MapxResolversStatic+map_set_max_bounds_array"></a>
+
+#### mapxResolversStatic.map\_set\_max\_bounds\_array(opt) ⇒ <code>boolean</code>
+Set current max bounds / world
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>boolean</code> - done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.bounds | <code>array</code> | [west, south, east, north] If empty or null = reset |
+
 <a name="MapxResolversStatic+map"></a>
 
 #### mapxResolversStatic.map(opt) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>
