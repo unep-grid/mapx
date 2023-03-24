@@ -1,4 +1,4 @@
-import { ws, nc, events, listeners, theme } from "./../mx.js";
+import { ws, nc, events, listeners, theme, mapboxgl, maps } from "./../mx.js";
 import { settings } from "./../settings";
 import { featuresToPopup } from "./features_to_popup.js";
 import { RadialProgress } from "./../radial_progress";
@@ -6,6 +6,7 @@ import { handleViewClick } from "./../views_click";
 import { ButtonPanel } from "./../button_panel";
 import { RasterMiniMap } from "./../raster_mini_map";
 import { el, elSpanTranslate } from "./../el_mapx/index.js";
+import { shake } from "./../elshake/index.js";
 import { MainPanel } from "./../panel_main";
 import { MapInfoBox } from "./../map_info_box";
 import { Search } from "./../search";
@@ -63,6 +64,7 @@ import {
   modalGetAll,
   modalCloseAll,
   modalConfirm,
+  modalDialog,
 } from "./../mx_helper_modal.js";
 import { errorHandler } from "./../error_handler/index.js";
 import { waitTimeoutAsync } from "./../animation_frame";
@@ -126,7 +128,9 @@ import {
   isViewDownloadable,
   isViewRtWithLegend,
   isViewVtWithAttributeType,
+  isBoundsInsideBounds,
 } from "./../is_test_mapx/index.js";
+import { FlashItem } from "../icon_flash/index.js";
 
 /**
  * Storage
@@ -567,9 +571,8 @@ export function requestProjectMembership(idProject) {
  */
 export function isModeLocked() {
   let modeLocked =
-    getQueryParameterInit("noViews")[0] === "true" ||
-    getQueryParameterInit("modeLocked")[0] === "true";
-
+    getQueryParameterInit("noViews")[0] ||
+    getQueryParameterInit("modeLocked")[0];
   return !!modeLocked;
 }
 
@@ -928,8 +931,6 @@ export function updateBtnFilterActivated() {
  * @param {Number} o.mapPosition.bearing Bearing
  * @param {Number} o.mapPosition.lng Longitude center
  * @param {Number} o.mapPosition.lat Latitude center
- * @param {Object} o.mapPosition.bounds Mapbox bounds object
- * @param {Boolean} o.mapPosition.fitToBounds fit map to bounds
  * @param {Object} o.colorScheme Color sheme object
  * @param {String} o.idTheme Id of the theme to use
  * @param {Boolean} o.useQueryFilters Use query filters for fetch views
@@ -942,12 +943,12 @@ export async function initMapx(o) {
   /**
    * Set mapbox gl token
    */
-  mx.mapboxgl.accessToken = o.token || settings.map.token;
+  mapboxgl.accessToken = o.token || settings.map.token;
 
   /**
    * MapX map data : views, config, etc..
    */
-  mx.maps[o.id] = Object.assign(
+  maps[o.id] = Object.assign(
     {
       map: {},
       views: [],
@@ -958,7 +959,10 @@ export async function initMapx(o) {
   /**
    * Set mode
    */
-  if (!o.modeStatic && getQueryParameter("storyAutoStart")[0] === "true") {
+  const storyAutoStart =
+    !o.modeStatic && getQueryParameter("storyAutoStart")[0];
+
+  if (storyAutoStart) {
     /**
      * Temporary hack : force redirect here. URL rewrite in Traefik does
      * not allow lookaround : it's not possible to have non trivial redirect.
@@ -973,7 +977,8 @@ export async function initMapx(o) {
   /**
    * Update closed panel setting
    */
-  if (getQueryParameter("closePanels")[0] === "true") {
+  const closePanel = getQueryParameter("closePanels")[0];
+  if (closePanel) {
     settings.initClosedPanels = true;
   }
 
@@ -999,7 +1004,7 @@ export async function initMapx(o) {
   /*
    * test if mapbox gl is supported
    */
-  if (!mx.mapboxgl.supported()) {
+  if (!mapboxgl.supported()) {
     alert(
       "This website will not work with your browser. Please upgrade it or use a compatible one."
     );
@@ -1016,29 +1021,38 @@ export async function initMapx(o) {
   const queryBearing = getQueryParameter(["b", "bearing"])[0];
   const queryMinZoom = getQueryParameter(["zmin", "zoomMin"])[0];
   const queryMaxZoom = getQueryParameter(["zmax", "zoomMax"])[0];
+  const queryMaxBounds = getQueryParameter(["useMaxBounds"]);
 
-  if (queryLat) {
+  if (isNotEmpty(queryLat)) {
     mp.center = null;
     mp.lat = queryLat * 1 || 0;
   }
-  if (queryLng) {
+  if (isNotEmpty(queryLng)) {
     mp.center = null;
     mp.lng = queryLng * 1 || 0;
   }
-  if (queryZoom) {
+  if (isNotEmpty(queryZoom)) {
     mp.z = queryZoom * 1 || 0;
   }
-  if (queryPitch) {
+  if (isNotEmpty(queryPitch)) {
     mp.p = queryPitch * 1 || 0;
   }
-  if (queryBearing) {
+  if (isNotEmpty(queryBearing)) {
     mp.b = queryBearing * 1 || 0;
   }
-  if (queryMaxZoom) {
+  if (isNotEmpty(queryMaxZoom)) {
     mp.zmax = queryMaxZoom * 1 || 22;
   }
-  if (queryMinZoom) {
+  if (isNotEmpty(queryMinZoom)) {
     mp.zmin = queryMinZoom * 1 || 0;
+  }
+
+  if (isNotEmpty(queryMaxBounds) || mp.useMaxBounds) {
+    const bounds = [];
+    for (const k of ["w", "s", "e", "n"]) {
+      bounds.push((getQueryParameter(k)[0] || mp[k] || 0) * 1);
+    }
+    mp.maxBounds = bounds;
   }
 
   /* map options */
@@ -1047,6 +1061,8 @@ export async function initMapx(o) {
     style: settings.style, // mx default style
     maxZoom: settings.map.maxZoom,
     minZoom: settings.map.minZoom,
+    bounds: mp.bounds || null,
+    maxBounds: mp.maxBounds || null,
     preserveDrawingBuffer: false,
     attributionControl: false,
     crossSourceCollisions: true,
@@ -1060,9 +1076,7 @@ export async function initMapx(o) {
   /*
    * Create map object
    */
-  const map = new mx.mapboxgl.Map(mapOptions);
-  const elCanvas = map.getCanvas();
-  elCanvas.setAttribute("tabindex", "-1");
+  const map = new mapboxgl.Map(mapOptions);
 
   // Multiple maps were originally planned, never happened.
   // -> many function have an option for getting the map by id, but
@@ -1221,8 +1235,8 @@ export async function initMapx(o) {
    * Initial mode terrain 3d / Sat
    */
   const ctrls = mx.panel_tools.controls;
-  const enable3d = getQueryParameter("t3d")[0] === "true";
-  const enableSat = getQueryParameter("sat")[0] === "true";
+  const enable3d = getQueryParameter("t3d")[0];
+  const enableSat = getQueryParameter("sat")[0];
   if (enable3d) {
     ctrls.getButton("btn_3d_terrain").action("enable");
   }
@@ -1369,7 +1383,7 @@ export function initMapListener(map) {
 export async function initMapxStatic(o) {
   const map = getMap();
   const mapData = getMapData();
-  const zoomToViews = getQueryParameter("zoomToViews")[0] === "true";
+  const zoomToViews = getQueryParameter("zoomToViews")[0];
   const language = getQueryParameter("language")[0] || getLanguageDefault();
   /**
    * NOTE: all views are
@@ -1437,16 +1451,7 @@ export async function initMapxStatic(o) {
   /**
    * If there is view, render all
    */
-
   if (mapData.views && mapData.views.length) {
-    /**
-     * Extract all views bounds
-     */
-    if (zoomToViews) {
-      const bounds = await getViewsBounds(mapData.views);
-      map.fitBounds(bounds);
-    }
-
     /**
      * Display views
      */
@@ -1457,14 +1462,24 @@ export async function initMapxStatic(o) {
         addTitle: true,
       });
     }
+
     await viewsLayersOrderUpdate({
       order: idViews.reverse(),
     });
+
+    /**
+     * Extract all views bounds
+     */
+    if (zoomToViews) {
+      const bounds = await getViewsBounds(mapData.views);
+      fitMaxBounds(bounds);
+    }
   }
 
   events.fire({
     type: "mapx_ready",
   });
+
   return;
 }
 
@@ -1600,7 +1615,7 @@ export async function handleClickEvent(e, idMap) {
     /**
      * Click event : make a popup with attributes
      */
-    const popup = new mx.mapboxgl.Popup()
+    const popup = new mapboxgl.Popup()
       .setLngLat(map.unproject(e.point))
       .addTo(map);
 
@@ -5004,11 +5019,9 @@ export function addLayer(o) {
  * @param {String} o.idView view id
  */
 export async function zoomToViewId(o) {
+  const timeout = 3 * 1000;
+  let cancelByTimeout = false;
   try {
-    const map = getMap();
-    const timeout = 3 * 1000;
-    let cancelByTimeout = false;
-
     if (isViewId(o)) {
       o = {
         idView: o,
@@ -5033,6 +5046,11 @@ export async function zoomToViewId(o) {
       );
     }
 
+    return res;
+
+    /**
+     * Helpers
+     */
     async function zoom() {
       const conf = {
         sum: await getViewSourceSummary(view, { useCache: true }),
@@ -5055,17 +5073,19 @@ export async function zoomToViewId(o) {
         }
       }
 
-      const llb = new mx.mapboxgl.LngLatBounds(
-        [conf.extent.lng1, conf.extent.lat1],
-        [conf.extent.lng2, conf.extent.lat2]
+      const llb = new mapboxgl.LngLatBounds(
+        [conf.extent.lng1, conf.extent.lat2],
+        [conf.extent.lng2, conf.extent.lat1]
       );
 
-      map.fitBounds(llb);
-      return true;
+      const done = fitMaxBounds(llb);
+
+      return done;
     }
 
     function cancel() {
       cancelByTimeout = true;
+      return "timeout";
     }
   } catch (e) {
     throw new Error(e);
@@ -5089,6 +5109,8 @@ export async function getViewsBounds(views) {
 
   let summaries = await Promise.all(views.map(getViewSourceSummary));
   let extents = summaries.map((s) => s.extent_sp);
+
+  debugger;
 
   let extent = extents.reduce(
     (a, ext) => {
@@ -5118,7 +5140,7 @@ export async function getViewsBounds(views) {
     [extent.lng2, extent.lat2],
   ];
 
-  /*return new mx.mapboxgl.LngLatBounds(*/
+  /*  return new mapboxgl.LngLatBounds(*/
   /*[extent.lng1, extent.lat1],*/
   /*[extent.lng2, extent.lat2]*/
   /*);*/
@@ -5155,15 +5177,17 @@ export async function zoomToViewIdVisible(o) {
     geomTemp.features.push(x);
   });
 
+  let done;
   if (geomTemp.features.length > 0) {
     const bbx = bbox(geomTemp);
     const sw = new mx.mapboxgl.LngLat(bbx[0], bbx[1]);
     const ne = new mx.mapboxgl.LngLat(bbx[2], bbx[3]);
     const llb = new mx.mapboxgl.LngLatBounds(sw, ne);
-    map.fitBounds(llb);
+    done = fitMaxBounds(llb);
   } else {
-    zoomToViewId(o);
+    done = zoomToViewId(o);
   }
+  return done;
 }
 
 /**
@@ -5189,35 +5213,146 @@ export async function resetViewStyle(o) {
 }
 
 /**
- * Fly to location and zoom
- * @param {object} o options
- * @param {string} o.id map id
- * @param {boolean} o.jump
- * @param {number} o.param Parameters to use
+ * Fly to a specified location and zoom level on a map.
+ *
+ * @param {object} opt - The options for the function.
+ * @param {string} opt.id - The map ID.
+ * @param {number} [opt.duration=2000] - Optional duration for the animation, in milliseconds. Defaults to 2000ms.
+ * @param {object} opt.param - The parameters for the function.
+ * @param {number} [opt.param.w=0] - West coordinate of the bounding box.
+ * @param {number} [opt.param.s=0] - South coordinate of the bounding box.
+ * @param {number} [opt.param.e=0] - East coordinate of the bounding box.
+ * @param {number} [opt.param.n=0] - North coordinate of the bounding box.
+ * @param {number} [opt.param.lng=0] - Longitude of the center of the map.
+ * @param {number} [opt.param.lat=0] - Latitude of the center of the map.
+ * @param {number} [opt.param.zoom=1] - Zoom level for the map. Defaults to 1.
+ * @param {boolean} [opt.param.useMaxBounds=false] - Whether to apply the maximum bounds after flying to the location. Defaults to false.
+ * @param {boolean} [opt.param.fitToBounds=false] - Whether to fit the map to the specified bounds. Defaults to false.
+ * @param {boolean} [opt.param.jump=false] - Whether to jump to the location without animation. Defaults to false.
  */
-export function flyTo(o) {
-  const map = getMap(o.id);
+export function setMapPos(opt) {
+  const map = getMap(opt.id);
+  const p = opt.param;
+  const duration = p.jump ? 0 : isNotEmpty(p.duration) ? o.duration : 1000;
+  const bounds = new mapboxgl.LngLatBounds([
+    [p.w || 0, p.s || 0],
+    [p.e || 0, p.n || 0],
+  ]);
 
-  if (map) {
-    const p = o.param;
+  const center = new mapboxgl.LngLat(p.lng || 0, p.lat || 0);
 
-    if (!o.fromQuery && p.fitToBounds === true && !p.jump) {
-      map.fitBounds([p.w || 0, p.s || 0, p.e || 0, p.n || 0]);
-    } else {
-      const opt = {
-        center: [p.lng || 0, p.lat || 0],
-        zoom: p.zoom || 0,
-        jump: p.jump || false,
-        duration: o.duration || 3000,
-      };
+  map.setMaxBounds(null);
 
-      if (opt.jump) {
-        map.jumpTo(opt);
-      } else {
-        map.flyTo(opt);
-      }
-    }
+  if (p.useMaxBounds) {
+    /**
+     * Don't let the user zoom before the animation is done
+     */
+    map.scrollZoom.disable();
+
+    /**
+     * Ignore fitToBounds settings :
+     * -> if false, setMaxBounds could
+     *    create a small gaps in animation
+     */
+    p.fitToBounds = true;
+
+    /**
+     * a) timeout vs event
+     *   -> could use once('idle') but
+     *      could sometimes, there is some inertia
+     *   -> setTimeout make it clear
+     * b) use bounds vs getBounds
+     *   -> using "bounds" produced a small gap in
+     *      animation. Saved in a screen size, rendered in another
+     *   -> getBounds() make sure it will not
+     *   -> but if zoom is set by something else during this
+     *      "duration" -> inaccurate bounds...
+     */
+    setTimeout(() => {
+      map.setMaxBounds(map.getBounds());
+      map.scrollZoom.enable();
+    }, duration);
   }
+
+  if (p.fitToBounds) {
+    map.fitBounds(bounds, {
+      duration,
+    });
+  } else {
+    map.flyTo({
+      center: center,
+      zoom: p.zoom || 1,
+      duration: duration,
+    });
+  }
+}
+
+/**
+ * Fit bounds if not overlaping max bounds
+ * @param {LngLatBounds} bounds
+ * @param {Object} opt Options MaboxGL animation options
+ * @return {boolean} Fitted
+ */
+export function fitMaxBounds(bounds, opt) {
+  const map = getMap();
+  const validBBounds = bounds instanceof mapboxgl.LngLatBounds;
+  if (!validBBounds) {
+    bounds = new mapboxgl.LngLatBounds(bounds);
+  }
+  let valid = true;
+  const maxBounds = map.getMaxBounds();
+  const currentBounds = map.getBounds();
+
+  if (maxBounds) {
+    valid = isBoundsInsideBounds(bounds, maxBounds);
+  }
+
+  if (valid) {
+    map.fitBounds(bounds, opt);
+  } else {
+    const outer = isBoundsInsideBounds(currentBounds, bounds);
+    const angle = outer ? 0 : boundsAngleRelation(currentBounds, bounds);
+    new FlashItem({ icon: outer ? "arrows-alt" : "arrow-up", angle: angle });
+
+    //map.fitBounds(maxBounds);//glitchy
+    const elMap = map.getContainer();
+    shake(elMap);
+  }
+  return valid;
+}
+
+/**
+ * Calculates the angle in degrees between the centroids of two LngLatBounds.
+ * @param {mapboxgl.LngLatBounds} bounds1 - First LngLatBounds.
+ * @param {mapboxgl.LngLatBounds} bounds2 - Second LngLatBounds.
+ * @returns {number} Angle in degrees between the centroids of the bounds.
+ */
+export function boundsAngleRelation(bounds1, bounds2) {
+  if (
+    !(bounds1 instanceof mapboxgl.LngLatBounds) ||
+    !(bounds2 instanceof mapboxgl.LngLatBounds)
+  ) {
+    throw new Error(
+      "Invalid input: both arguments must be LngLatBounds instances."
+    );
+  }
+
+  const centroid1 = bounds1.getCenter();
+  const centroid2 = bounds2.getCenter();
+
+  const deltaY = centroid2.lat - centroid1.lat;
+  const deltaX = centroid2.lng - centroid1.lng;
+  let angle = (Math.atan2(deltaY, deltaX) * 180) / Math.PI;
+
+  // Adjust angle for compass directions
+  angle = 90 - angle;
+
+  // Normalize the angle to the range [0, 360)
+  if (angle < 0) {
+    angle += 360;
+  }
+
+  return angle;
 }
 
 /**
@@ -5408,7 +5543,7 @@ export function getViewLegend(id, opt) {
 /**
  * Get a map object by id
  * @param {String|Object} idMap Id of the map or the map itself.
- * @return {Object} map
+ * @return {MapboxMap} map
  */
 export function getMap(idMap) {
   idMap = idMap || settings.map.id;
@@ -5615,6 +5750,15 @@ export function getMapPos(o) {
     theme: idTheme,
   };
   return out;
+}
+
+/**
+ * Reset max bounds
+ * @return {void}
+ */
+export function resetMaxBounds() {
+  const map = getMap();
+  map.setMaxBounds(null);
 }
 
 /**

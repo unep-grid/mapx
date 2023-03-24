@@ -4590,9 +4590,14 @@
     "ps": "د نقشې لومړنی موقعیت "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "ps": "د نقشې اوسني پیرامیټرې وکاروئ "
+    "ps": "د اوسني نقشې پیرامیټونه وکاروئ"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "ps": "د نقشې اعظمي حدونه تنظیم کړئ"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4628,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "ps": "عرض البلد جنوبي (البرز، لامبر کونک)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "ps": "د استعمالونو مخ سره د نقشه پوهستلو محدودول"
   },
   {
     "id": "map_fit_to_bounds",
@@ -7981,13 +7991,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "ps": "د لومړني نقشې موقعیت تنظیم کړئ"
+    "en": "Set initial map extent",
+    "ps": "د لومړني نقشې حد تنظیم کړئ"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "ps": "د نقشې اوسنی حد، ټیټ او بییرنګ به وکارول شي. په دې توګه د پروژې ډیفالټ بیا لیکل کیږي."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "ps": "د نقشې پیننګ اوسنۍ حد ته محدود کړئ"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "ps": "نقشه به د هغې اوسني حد پورې محدوده وي. د 'Mercator' پرته د نورو اټکلونو لپاره، یوازې مرکز به په حدودو کې وساتل شي."
   },
   {
     "id": "share_filter_activated_label",

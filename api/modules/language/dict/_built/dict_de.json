@@ -4590,9 +4590,14 @@
     "de": "Anfängliche Kartenposition "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "de": "Verwenden Sie die aktuellen Kartenparameter "
+    "de": "Aktuelle Kartenparameter verwenden"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "de": "Maximale Kartengrenzen zurücksetzen"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4628,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "de": "Breitengrad Süd (Albers, Lamber Conic )"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "de": "Grenzen verwenden, um das Verschieben der Karte zu begrenzen"
   },
   {
     "id": "map_fit_to_bounds",
@@ -7981,13 +7991,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "de": "Legen Sie die anfängliche Kartenposition fest"
+    "en": "Set initial map extent",
+    "de": "Legen Sie die anfängliche Kartenausdehnung fest"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "de": "Die aktuelle Ausdehnung, Neigung und Peilung der Karte werden verwendet. Projektvorgaben werden damit überschrieben."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "de": "Beschränken Sie das Kartenschwenken auf die aktuelle Ausdehnung"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "de": "Die Karte wird auf ihre aktuelle Ausdehnung beschränkt. Bei anderen Projektionen als 'Mercator' wird nur die Mitte in Grenzen gehalten."
   },
   {
     "id": "share_filter_activated_label",

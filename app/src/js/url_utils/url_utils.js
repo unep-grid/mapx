@@ -1,6 +1,6 @@
 import { initQueryParams } from "./../mx.js";
 import { settings } from "./../settings";
-
+import { asBoolean } from "./../mx_helper_misc.js";
 import {
   isArray,
   isString,
@@ -9,10 +9,11 @@ import {
   isNumeric,
   isArrayOfString,
   isArrayOfNumber,
+  isBooleanCoercible,
 } from "./../is_test";
 
 /**
- * Set url init param 
+ * Set url init param
  * @param {Object} param Object to use as default. If empty, get current query parameters
  * @param {Object} opt Options
  * @param {Boolean} opt.reset Reset current init params ?
@@ -91,9 +92,11 @@ export function getQueryViewsInit() {
 export function getQueryInit() {
   const qViews = getQueryViewsInit();
   const config = {
-    isFlatMode: getQueryParameterInit("viewsListFlatMode", false)[0] === "true",
-    isFilterActivated:
-      getQueryParameterInit("viewsListFilterActivated", false)[0] === "true",
+    isFlatMode: getQueryParameterInit("viewsListFlatMode", false)[0],
+    isFilterActivated: getQueryParameterInit(
+      "viewsListFilterActivated",
+      false
+    )[0],
   };
   Object.assign(config, qViews);
   return config;
@@ -125,9 +128,12 @@ export function getQueryParameter(name) {
   if (isArray(name)) {
     return getQueryParameter_array(name);
   } else {
-    var url = new URL(window.location.href);
-    var p = url.searchParams.get(name);
-    return asArray(p);
+    const url = new URL(window.location.href);
+    let value = url.searchParams.get(name);
+    if (isBooleanCoercible(value)) {
+      value = asBoolean(value);
+    }
+    return asArray(value);
   }
 }
 
@@ -149,6 +155,9 @@ export function getQueryParametersAsObject(urlString, opt) {
   opt = Object.assign({}, { lowerCase: false }, opt);
   const url = new URL(urlString || window.location.href);
   url.searchParams.forEach((v, k) => {
+    if (isBooleanCoercible(v)) {
+      v = asBoolean(v);
+    }
     /**
      * Note: check why lowercase was set
      * Answer : to lower case is more predictable, e.g. in checking for presence/absence of a parameter

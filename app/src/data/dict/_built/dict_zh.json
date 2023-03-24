@@ -4590,9 +4590,14 @@
     "zh": "初始化地图位置"
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
     "zh": "使用当前地图参数"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "zh": "重置最大地图边界"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4628,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "zh": "南纬 (Albers, Lamber Conic )"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "zh": "使用范围限制地图平移"
   },
   {
     "id": "map_fit_to_bounds",
@@ -7981,13 +7991,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "zh": "设置初始地图位置"
+    "en": "Set initial map extent",
+    "zh": "设置初始地图范围"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "zh": "将使用地图的当前范围、倾斜度和方位。项目默认值因此被覆盖。"
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "zh": "将地图平移限制在当前范围内"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "zh": "地图将被限制在其当前范围内。对于“墨卡托”以外的投影，只有中心会保持在范围内。"
   },
   {
     "id": "share_filter_activated_label",

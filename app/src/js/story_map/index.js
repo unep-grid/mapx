@@ -391,7 +391,7 @@ export async function storyStop() {
 /**
  * Cancel all DOM processes and network requests
  * -> does not block async code and timeouts
- * -> see https://jsfiddle.net/fxi/u6ftLg9h/ 
+ * -> see https://jsfiddle.net/fxi/u6ftLg9h/
  */
 async function cancelAll() {
   if (isGecko) {
@@ -1263,6 +1263,12 @@ async function initState() {
      */
     const position = getMapPos();
     const oldViews = getViewsLayersVisibles();
+    const maxBounds = map.getMaxBounds();
+
+    /**
+     * Release max bounds / bbox;
+     */
+    map.setMaxBounds();
 
     /**
      * Theme
@@ -1296,6 +1302,7 @@ async function initState() {
       projection,
       oldViews,
       position,
+      maxBounds,
       hasAerial,
       has3d,
     });
@@ -1321,6 +1328,8 @@ async function appStateRestore() {
     pitch: pos.p,
     center: [pos.lng, pos.lat],
   });
+
+  map.setMaxBounds(state.maxBounds);
 
   theme.set(idTheme, { sound: false, save: false, save_url: true });
 

@@ -25,6 +25,7 @@ import {
   getViewJson,
   viewDelete,
   getBoundsArray,
+  fitMaxBounds,
 } from "../../../map_helpers/index.js";
 import { mapComposerModalAuto } from "../../../map_composer";
 import {
@@ -572,11 +573,12 @@ class MapxResolversStatic extends ResolversBase {
     if (!valid) {
       return rslv._err("err_view_invalid");
     }
+
     await viewsListAddSingle(view);
     if (opt.zoomToView) {
-      const map = getMap();
       const bounds = await getViewsBounds(opt.idView);
-      map.fitBounds(bounds);
+      const ok = fitMaxBounds(bounds);
+      return ok;
     }
     return true;
   }
@@ -865,6 +867,46 @@ class MapxResolversStatic extends ResolversBase {
    */
   map_get_bounds_array() {
     return getBoundsArray();
+  }
+
+  /**
+   * Set current map bounds
+   * @param {Object} opt Options
+   * @param {array} opt.bounds [west, south, east, north]
+   */
+  map_set_bounds_array(opt) {
+    return fitMaxBounds(opt.bounds);
+  }
+
+  /**
+   * Get current max bounds / world
+   * @return {Array|null} bounds [west, south, east, north] or null
+   */
+  map_get_max_bounds_array() {
+    const map = getMap();
+    const maxBounds = map.getMaxBounds();
+    if (!maxBounds) {
+      return null;
+    }
+    return [
+      maxBounds.getWest(),
+      maxBounds.getSouth(),
+      maxBounds.getEast(),
+      maxBounds.getNorth(),
+    ];
+  }
+
+  /**
+   * Set current max bounds / world
+   * @param {Object} opt Options
+   * @param {array} opt.bounds [west, south, east, north] If empty or null = reset
+   * @return {boolean} done
+   */
+  map_set_max_bounds_array(opt) {
+    opt = Object.assign({}, { bounds: null }, opt);
+    const map = getMap();
+    map.setMaxBounds(opt.bounds);
+    return true;
   }
 
   /**

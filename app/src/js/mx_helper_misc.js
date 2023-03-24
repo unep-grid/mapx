@@ -8,6 +8,7 @@ import {
   isString,
   isArray,
   isObject,
+  isBoolean,
 } from "./is_test_mapx/index.js";
 
 import { UAParser } from "ua-parser-js";
@@ -17,6 +18,25 @@ import { settings } from "./settings";
 import { modalSelectSource } from "./select_auto/modals";
 import { isSourceId } from "./is_test";
 import { el } from "./el_mapx";
+
+/**
+ * Coerse value to boolean, e.g. from url query string;
+ * @param {String|Boolean} value Value coercible to boolean.
+ * @return {Boolean}
+ */
+export function asBoolean(value) {
+  if (isBoolean(value)) {
+    return value;
+  }
+
+  if (value === "false" || value === "FALSE") {
+    return false;
+  }
+  if (value === "true" || value === "TRUE") {
+    return true;
+  }
+  throw new Error("Value can't be coerced to boolean");
+}
 
 /**
  * Moves the given element to a new position by applying the specified CSS styles.

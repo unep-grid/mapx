@@ -3672,8 +3672,12 @@
     "en": "Initial map position"
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds"
   },
   {
     "id": "project_map_proj_set",
@@ -3698,6 +3702,10 @@
   {
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning"
   },
   {
     "id": "map_fit_to_bounds",
@@ -6385,11 +6393,19 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position"
+    "en": "Set initial map extent"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds."
   },
   {
     "id": "share_filter_activated_label",

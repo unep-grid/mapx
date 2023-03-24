@@ -262,10 +262,10 @@ mglInit <- function(config, session = shiny::getDefaultReactiveDomain()) {
 #' @param mapPosition List of options for destination position parameters
 #' @param {Reactive} session Shiny session
 #' @export
-mglFlyTo <- function(id = NULL, mapPosition, session = shiny::getDefaultReactiveDomain()) {
+mglSetMapPos <- function(id = NULL, mapPosition, session = shiny::getDefaultReactiveDomain()) {
   stopifnot(!noDataCheck(id))
 
-  session$sendCustomMessage("mglFlyTo", list(
+  session$sendCustomMessage("mglSetMapPos", list(
     id = id,
     param = mapPosition
   ))

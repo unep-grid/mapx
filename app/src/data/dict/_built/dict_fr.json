@@ -4590,9 +4590,14 @@
     "fr": "Position initiale de la carte"
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
     "fr": "Utiliser les paramètres actuels de la carte"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "fr": "Réinitialiser les limites maximales de la carte"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4628,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "fr": "Latitude Sud (Albers, Lamber Conic)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "fr": "Utiliser l'étendue pour limiter le défilement de la carte"
   },
   {
     "id": "map_fit_to_bounds",
@@ -7981,13 +7991,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "fr": "Définir la position initiale de la carte"
+    "en": "Set initial map extent",
+    "fr": "Définir l'étendue initiale de la carte"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "fr": "L'étendue, l'inclinaison et le relèvement actuels de la carte seront utilisés. Les valeurs par défaut du projet sont ainsi écrasées."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "fr": "Limiter le panoramique de la carte à l'étendue actuelle"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "fr": "La carte sera limitée à son étendue actuelle. Pour les projections autres que 'Mercator', seul le centre sera maintenu dans les limites."
   },
   {
     "id": "share_filter_activated_label",

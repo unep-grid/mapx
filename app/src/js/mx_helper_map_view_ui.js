@@ -3,7 +3,7 @@ import { ViewsFilter } from "./views_filter/index.js";
 import { ViewBase } from "./views_builder/view_base.js";
 import { getArrayDistinct } from "./array_stat/index.js";
 import { settings } from "./settings";
-import { isView, isArray, isViewOpen, isObject } from "./is_test_mapx";
+import { isTrue, isView, isArray, isViewOpen, isObject } from "./is_test_mapx";
 import { path, itemFlashSave } from "./mx_helper_misc.js";
 import { getQueryParameterInit } from "./url_utils";
 import { getDictItem, updateLanguageElements } from "./language";
@@ -241,7 +241,7 @@ export async function viewsListRenderNew(o) {
   const views = o.views;
   const hasState = o.state && isArray(o.state) && o.state.length > 0;
   const state = hasState ? o.state : viewsToNestedListState(views);
-  const noViewsMode = getQueryParameterInit("noViews")[0] === "true";
+  const noViewsMode = isTrue(getQueryParameterInit("noViews")[0]);
 
   if (mData.viewsFilter instanceof ViewsFilter) {
     await mData.viewsFilter.destroy();
@@ -460,7 +460,7 @@ export function setViewsListEmpty(enable) {
 }
 
 function getEmptyLabel() {
-  const noViewForced = getQueryParameterInit("noViews")[0] === "true";
+  const noViewForced = isTrue(getQueryParameterInit("noViews")[0]);
   const noViewKey = noViewForced ? "noView" : "noViewOrig";
   let elTitle;
   const elItem = el(

@@ -11934,17 +11934,30 @@
     "de": "Anfängliche Kartenposition "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
     "fr": "Utiliser les paramètres actuels de la carte",
     "es": "Utilizar los parámetros actuales del mapa",
-    "ru": "Использовать текущие параметры карты ",
+    "ru": "Использовать текущие параметры карты",
     "zh": "使用当前地图参数",
-    "ar": "استخدم معلمات الخريطة الحالية ",
-    "fa": "از پارامترهای نقشه فعلی استفاده کنید ",
-    "ps": "د نقشې اوسني پیرامیټرې وکاروئ ",
-    "bn": "বর্তমান মানচিত্রের পরামিতিগুলি ব্যবহার করুন ",
-    "de": "Verwenden Sie die aktuellen Kartenparameter "
+    "ar": "استخدم معلمات الخريطة الحالية",
+    "fa": "از پارامترهای نقشه فعلی استفاده کنید",
+    "ps": "د اوسني نقشې پیرامیټونه وکاروئ",
+    "bn": "বর্তমান মানচিত্র পরামিতি ব্যবহার করুন",
+    "de": "Aktuelle Kartenparameter verwenden"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "fr": "Réinitialiser les limites maximales de la carte",
+    "es": "Restablecer los límites máximos del mapa",
+    "ru": "Сбросить максимальные границы карты",
+    "zh": "重置最大地图边界",
+    "ar": "إعادة تعيين حدود الخريطة القصوى",
+    "fa": "حداکثر محدوده نقشه را بازنشانی کنید",
+    "ps": "د نقشې اعظمي حدونه تنظیم کړئ",
+    "bn": "সর্বোচ্চ মানচিত্র সীমানা রিসেট করুন",
+    "de": "Maximale Kartengrenzen zurücksetzen"
   },
   {
     "id": "project_map_proj_set",
@@ -12023,6 +12036,19 @@
     "ps": "عرض البلد جنوبي (البرز، لامبر کونک)",
     "bn": "অক্ষাংশ দক্ষিণ (আলবার্স, ল্যাম্বার কনিক)",
     "de": "Breitengrad Süd (Albers, Lamber Conic )"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "fr": "Utiliser l'étendue pour limiter le défilement de la carte",
+    "es": "Usar la extensión para limitar el desplazamiento del mapa",
+    "ru": "Использовать ограничение для ограничения перемещения карты",
+    "zh": "使用范围限制地图平移",
+    "ar": "استخدام النطاق لتقييد تحريك الخريطة",
+    "fa": "استفاده از محدوده برای محدود کردن جستجوی نقشه",
+    "ps": "د استعمالونو مخ سره د نقشه پوهستلو محدودول",
+    "bn": "মানদন্ড ব্যবহার করে মানচিত্র প্যানিং সীমিত করুন",
+    "de": "Grenzen verwenden, um das Verschieben der Karte zu begrenzen"
   },
   {
     "id": "map_fit_to_bounds",
@@ -20749,16 +20775,16 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "fr": "Définir la position initiale de la carte",
-    "es": "Establecer la posición inicial del mapa",
-    "ru": "Установить начальное положение карты",
-    "zh": "设置初始地图位置",
-    "ar": "تعيين موقع الخريطة الأولي",
-    "fa": "موقعیت اولیه نقشه را تنظیم کنید",
-    "ps": "د لومړني نقشې موقعیت تنظیم کړئ",
-    "bn": "প্রাথমিক মানচিত্রের অবস্থান সেট করুন",
-    "de": "Legen Sie die anfängliche Kartenposition fest"
+    "en": "Set initial map extent",
+    "fr": "Définir l'étendue initiale de la carte",
+    "es": "Establecer la extensión del mapa inicial",
+    "ru": "Установить начальный экстент карты",
+    "zh": "设置初始地图范围",
+    "ar": "تعيين مدى الخريطة الأولية",
+    "fa": "وسعت نقشه اولیه را تنظیم کنید",
+    "ps": "د لومړني نقشې حد تنظیم کړئ",
+    "bn": "প্রারম্ভিক মানচিত্র ব্যাপ্তি সেট করুন",
+    "de": "Legen Sie die anfängliche Kartenausdehnung fest"
   },
   {
     "id": "share_map_pos_desc",
@@ -20772,6 +20798,32 @@
     "ps": "د نقشې اوسنی حد، ټیټ او بییرنګ به وکارول شي. په دې توګه د پروژې ډیفالټ بیا لیکل کیږي.",
     "bn": "মানচিত্রের বর্তমান ব্যাপ্তি, কাত এবং বিয়ারিং ব্যবহার করা হবে। প্রকল্প ডিফল্ট এইভাবে ওভাররাইট করা হয়.",
     "de": "Die aktuelle Ausdehnung, Neigung und Peilung der Karte werden verwendet. Projektvorgaben werden damit überschrieben."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "fr": "Limiter le panoramique de la carte à l'étendue actuelle",
+    "es": "Limite la panorámica del mapa a la extensión actual",
+    "ru": "Ограничить панорамирование карты текущим экстентом",
+    "zh": "将地图平移限制在当前范围内",
+    "ar": "الحد من تحريك الخريطة إلى المدى الحالي",
+    "fa": "حرکت نقشه را به میزان فعلی محدود کنید",
+    "ps": "د نقشې پیننګ اوسنۍ حد ته محدود کړئ",
+    "bn": "মানচিত্র প্যানিংকে বর্তমান মাত্রায় সীমাবদ্ধ করুন",
+    "de": "Beschränken Sie das Kartenschwenken auf die aktuelle Ausdehnung"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "fr": "La carte sera limitée à son étendue actuelle. Pour les projections autres que 'Mercator', seul le centre sera maintenu dans les limites.",
+    "es": "El mapa se limitará a su extensión actual. Para proyecciones que no sean 'Mercator', solo el centro se mantendrá dentro de los límites.",
+    "ru": "Карта будет ограничена своим текущим экстентом. Для проекций, отличных от «Меркатора», только центр будет оставаться в пределах границ.",
+    "zh": "地图将被限制在其当前范围内。对于“墨卡托”以外的投影，只有中心会保持在范围内。",
+    "ar": "سيتم تقييد الخريطة إلى مداها الحالي. بالنسبة إلى الإسقاطات بخلاف \"Mercator\" ، سيتم الاحتفاظ بالمركز فقط ضمن الحدود.",
+    "fa": "نقشه به وسعت فعلی محدود خواهد شد. برای پیش بینی های غیر از \"Mercator\"، فقط مرکز در محدوده نگه داشته می شود.",
+    "ps": "نقشه به د هغې اوسني حد پورې محدوده وي. د 'Mercator' پرته د نورو اټکلونو لپاره، یوازې مرکز به په حدودو کې وساتل شي.",
+    "bn": "মানচিত্রটি তার বর্তমান মাত্রায় সীমাবদ্ধ থাকবে। 'Mercator' ছাড়া অন্য অনুমানগুলির জন্য, শুধুমাত্র কেন্দ্রকে সীমার মধ্যে রাখা হবে।",
+    "de": "Die Karte wird auf ihre aktuelle Ausdehnung beschränkt. Bei anderen Projektionen als 'Mercator' wird nur die Mitte in Grenzen gehalten."
   },
   {
     "id": "share_filter_activated_label",

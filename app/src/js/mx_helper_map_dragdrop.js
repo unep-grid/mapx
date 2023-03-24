@@ -13,6 +13,7 @@ import {
   getViewJson,
   getMap,
   isModeLocked,
+  fitMaxBounds,
 } from "./map_helpers/";
 
 // default proj
@@ -235,7 +236,7 @@ export async function spatialDataToView(opt) {
           new mx.mapboxgl.LngLat(m.extent[0], m.extent[1]),
           new mx.mapboxgl.LngLat(m.extent[2], m.extent[3])
         );
-        c.map.fitBounds(a);
+        fitMaxBounds(a);
       }
 
       // If layer is valid and returned

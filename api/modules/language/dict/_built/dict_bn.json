@@ -4590,9 +4590,14 @@
     "bn": "প্রাথমিক মানচিত্রের অবস্থান "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "bn": "বর্তমান মানচিত্রের পরামিতিগুলি ব্যবহার করুন "
+    "bn": "বর্তমান মানচিত্র পরামিতি ব্যবহার করুন"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "bn": "সর্বোচ্চ মানচিত্র সীমানা রিসেট করুন"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4628,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "bn": "অক্ষাংশ দক্ষিণ (আলবার্স, ল্যাম্বার কনিক)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "bn": "মানদন্ড ব্যবহার করে মানচিত্র প্যানিং সীমিত করুন"
   },
   {
     "id": "map_fit_to_bounds",
@@ -7981,13 +7991,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "bn": "প্রাথমিক মানচিত্রের অবস্থান সেট করুন"
+    "en": "Set initial map extent",
+    "bn": "প্রারম্ভিক মানচিত্র ব্যাপ্তি সেট করুন"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "bn": "মানচিত্রের বর্তমান ব্যাপ্তি, কাত এবং বিয়ারিং ব্যবহার করা হবে। প্রকল্প ডিফল্ট এইভাবে ওভাররাইট করা হয়."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "bn": "মানচিত্র প্যানিংকে বর্তমান মাত্রায় সীমাবদ্ধ করুন"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "bn": "মানচিত্রটি তার বর্তমান মাত্রায় সীমাবদ্ধ থাকবে। 'Mercator' ছাড়া অন্য অনুমানগুলির জন্য, শুধুমাত্র কেন্দ্রকে সীমার মধ্যে রাখা হবে।"
   },
   {
     "id": "share_filter_activated_label",

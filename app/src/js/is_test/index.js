@@ -455,6 +455,46 @@ export function isBooleanCoercible(value) {
 export function isMap(map) {
   return isObject(map) && isCanvas(map._canvas);
 }
+
+/**
+ * Checks if a LngLat coordinate is inside the given LngLatBounds object.
+ *
+ * @param {mapboxgl.LngLat} lngLat - The LngLat coordinate to check.
+ * @param {mapboxgl.LngLatBounds} bounds - The LngLatBounds object to check against.
+ * @returns {boolean} - Returns true if the LngLat coordinate is inside the LngLatBounds, otherwise false.
+ */
+export function isLngLatInsideBounds(lngLat, bounds) {
+  return (
+    lngLat.lng >= bounds.getWest() &&
+    lngLat.lng <= bounds.getEast() &&
+    lngLat.lat >= bounds.getSouth() &&
+    lngLat.lat <= bounds.getNorth()
+  );
+}
+
+/**
+ * Checks if a LngLatBounds object is inside another LngLatBounds
+ *
+ * @param {mapboxgl.LngLatBounds} bounds_test - The LngLatBounds object to check.
+ * @param {mapboxgl.LngLatBounds} bounds - The LngLatBounds object to compare t.
+ * @returns {boolean} - Returns true if the LngLatBounds object is inside the current bounds of getMaxBounds, otherwise false.
+ */
+export function isBoundsInsideBounds(bounds_test, bounds) {
+  // Get the four corner coordinates of the input bounds
+  const sw = bounds_test.getSouthWest();
+  const se = bounds_test.getSouthEast();
+  const nw = bounds_test.getNorthWest();
+  const ne = bounds_test.getNorthEast();
+
+  // Check if all corner coordinates are inside the maxBounds
+  return (
+    isLngLatInsideBounds(sw, bounds) &&
+    isLngLatInsideBounds(se, bounds) &&
+    isLngLatInsideBounds(nw, bounds) &&
+    isLngLatInsideBounds(ne, bounds)
+  );
+}
+
 /**
  * Test if entry is string and have the correct number of characters
  * @param {String} str, character to test

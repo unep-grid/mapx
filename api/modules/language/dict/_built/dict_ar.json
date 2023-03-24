@@ -4590,9 +4590,14 @@
     "ar": "موقع الخريطة الأولي "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "ar": "استخدم معلمات الخريطة الحالية "
+    "ar": "استخدم معلمات الخريطة الحالية"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "ar": "إعادة تعيين حدود الخريطة القصوى"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4628,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "ar": "خط العرض الجنوبي (ألبرز ، لامبر كونيك)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "ar": "استخدام النطاق لتقييد تحريك الخريطة"
   },
   {
     "id": "map_fit_to_bounds",
@@ -7981,13 +7991,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "ar": "تعيين موقع الخريطة الأولي"
+    "en": "Set initial map extent",
+    "ar": "تعيين مدى الخريطة الأولية"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "ar": "سيتم استخدام المدى الحالي وإمالة واتجاه الخريطة. وبالتالي يتم الكتابة فوق افتراضات المشروع."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "ar": "الحد من تحريك الخريطة إلى المدى الحالي"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "ar": "سيتم تقييد الخريطة إلى مداها الحالي. بالنسبة إلى الإسقاطات بخلاف \"Mercator\" ، سيتم الاحتفاظ بالمركز فقط ضمن الحدود."
   },
   {
     "id": "share_filter_activated_label",

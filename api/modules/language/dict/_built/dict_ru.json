@@ -4590,9 +4590,14 @@
     "ru": "Исходное положение на карте "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "ru": "Использовать текущие параметры карты "
+    "ru": "Использовать текущие параметры карты"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "ru": "Сбросить максимальные границы карты"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4628,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "ru": "Южная широта (Альберс, Ламбер Коник)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "ru": "Использовать ограничение для ограничения перемещения карты"
   },
   {
     "id": "map_fit_to_bounds",
@@ -7981,13 +7991,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "ru": "Установить начальное положение карты"
+    "en": "Set initial map extent",
+    "ru": "Установить начальный экстент карты"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "ru": "Будут использоваться текущий экстент, наклон и азимут карты. Таким образом, значения проекта по умолчанию перезаписываются."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "ru": "Ограничить панорамирование карты текущим экстентом"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "ru": "Карта будет ограничена своим текущим экстентом. Для проекций, отличных от «Меркатора», только центр будет оставаться в пределах границ."
   },
   {
     "id": "share_filter_activated_label",

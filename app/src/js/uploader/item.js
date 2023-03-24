@@ -4,9 +4,10 @@ import {
   formatByteSize,
   makeId,
   prevent,
+  asBoolean,
 } from "./../mx_helper_misc.js";
 import { el, elCheckbox, elSpanTranslate as tt, elDetails } from "./../el_mapx";
-import { isArray, isEmpty } from "../is_test";
+import { isArray, isEmpty, isBooleanCoercible } from "../is_test";
 import { bindAll } from "../bind_class_methods";
 import { SelectAuto } from "../select_auto";
 import { getApiRoute } from "./../api_routes";
@@ -323,12 +324,8 @@ export class Item {
 
     for (const key of Object.keys(settings)) {
       const val = settings[key];
-
-      if (val === "true") {
-        settings[key] = true;
-      }
-      if (val === "false") {
-        settings[key] = false;
+      if (isBooleanCoercible(val)) {
+        settings[key] = asBoolean(val);
       }
       if (key === "title" && isEmpty(val)) {
         settings[key] = it.key;

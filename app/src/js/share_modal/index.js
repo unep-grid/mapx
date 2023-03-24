@@ -73,6 +73,7 @@ export class ShareModal extends EventSimple {
       modeCurrent: "static",
       shareString: "",
       mapPosItems: ["p", "b", "z", "lat", "lng", "t3d", "sat", "theme"],
+      mapPosItemsBounds: ["p", "b", "n", "s", "e", "w", "t3d", "sat", "theme"],
       prevent: new Set(),
       views: [],
       /** note : unchecked checkbox are not included in formData.-
@@ -85,6 +86,7 @@ export class ShareModal extends EventSimple {
         share_views_select: null,
         share_views_zoom: null,
         share_map_pos: null,
+        share_map_pos_max: null,
         share_mode_static: null,
         share_category_hide: null,
         share_filter_activated: null,
@@ -312,6 +314,7 @@ export class ShareModal extends EventSimple {
     const f = state.form;
     const hasViews = state.views.length > 0;
     const linkStatic = f.share_mode_static;
+    const noMapPosition = !f.share_map_pos;
     const targetStory = sm.hasTargetStory();
     sm.allowBtnOpen(!state.prevent.has("open"));
     sm.allowBtnCopy(!state.prevent.has("copy"));
@@ -321,6 +324,7 @@ export class ShareModal extends EventSimple {
       sm._el_checkbox_zoom,
       targetStory || !hasViews || !linkStatic
     );
+    sm.setClassDisable(sm._el_checkbox_map_pos_max, noMapPosition);
   }
 
   /**
@@ -377,7 +381,14 @@ export class ShareModal extends EventSimple {
      */
     let pos;
     if (f.share_map_pos && !targetStory) {
-      for (const i of state.mapPosItems) {
+      if (f.share_map_pos_max) {
+        url.searchParams.set("useMaxBounds", true);
+      }
+      const items = f.share_map_pos_max
+        ? state.mapPosItemsBounds
+        : state.mapPosItems;
+
+      for (const i of items) {
         if (!pos) {
           pos = getMapPos();
         }
@@ -648,6 +659,9 @@ export class ShareModal extends EventSimple {
     sm._el_checkbox_static = elCheckbox("share_mode_static", { checked: true });
     sm._el_checkbox_zoom = elCheckbox("share_views_zoom", { checked: true });
     sm._el_checkbox_map_pos = elCheckbox("share_map_pos", { checked: true });
+    sm._el_checkbox_map_pos_max = elCheckbox("share_map_pos_max", {
+      checked: false,
+    });
 
     /**
      * Settings
@@ -660,6 +674,7 @@ export class ShareModal extends EventSimple {
         [
           sm._el_checkbox_static,
           sm._el_checkbox_map_pos,
+          sm._el_checkbox_map_pos_max,
           sm._el_checkbox_zoom,
           sm._el_checkbox_category_hide,
         ]

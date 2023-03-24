@@ -4590,9 +4590,14 @@
     "fa": "موقعیت اولیه نقشه "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "fa": "از پارامترهای نقشه فعلی استفاده کنید "
+    "fa": "از پارامترهای نقشه فعلی استفاده کنید"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "fa": "حداکثر محدوده نقشه را بازنشانی کنید"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4628,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "fa": "Latitude South (Albers، Lamber Conic)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "fa": "استفاده از محدوده برای محدود کردن جستجوی نقشه"
   },
   {
     "id": "map_fit_to_bounds",
@@ -7981,13 +7991,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "fa": "موقعیت اولیه نقشه را تنظیم کنید"
+    "en": "Set initial map extent",
+    "fa": "وسعت نقشه اولیه را تنظیم کنید"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "fa": "وسعت فعلی، شیب و باربری نقشه استفاده خواهد شد. بنابراین پیش فرض های پروژه بازنویسی می شوند."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "fa": "حرکت نقشه را به میزان فعلی محدود کنید"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "fa": "نقشه به وسعت فعلی محدود خواهد شد. برای پیش بینی های غیر از \"Mercator\"، فقط مرکز در محدوده نگه داشته می شود."
   },
   {
     "id": "share_filter_activated_label",
