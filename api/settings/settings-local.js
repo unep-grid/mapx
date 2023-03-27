@@ -1,5 +1,14 @@
+import { mkdir } from "fs/promises";
 import { settings_global } from "./settings-global.js";
 const env = process.env;
+
+
+try {
+  await mkdir(env.MAPX_PATH_DOWNLOAD, { recursive: true });
+  await mkdir(env.MAPX_PATH_USERDATA, { recursive: true });
+} catch (e) {
+  throw new Error(`Could not create user/download directory`);
+}
 
 const settings = Object.assign({}, settings_global, {
   mapx: {
