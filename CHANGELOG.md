@@ -1,3 +1,18 @@
+  - [1.11.0-alpha.1](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.1)
+
+    - APP
+        - Major refactoring : font management system in the theme builder.
+            - Font synchronization tool :
+                - Read local fonts
+                - Upload fonts to Mapbox services
+                - Delete remote fonts if required
+                - Update pre-generated @font-face from google fonts API
+            - Glyphs not used anymore, using glyphs from Mapbox services
+            - Import / Export styles
+            - Style Schema validation : invalid style not allowed
+            - Removed ref to proprietary fonts ( licensing issues ).
+        - Solved many issues with `aria` system to get a 100 in all LightHouse load testing.
+
   - [1.10.5-alpha.2](https://github.com/unep-grid/mapx/tree/1.10.5-alpha.2) 
     
     - APP + SDK
