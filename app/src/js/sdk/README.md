@@ -609,6 +609,7 @@ MapX resolvers available in static and app
     * [.get_themes_id()](#MapxResolversStatic+get_themes_id) ⇒ <code>Array</code>
     * [.get_themes()](#MapxResolversStatic+get_themes) ⇒ <code>Object</code>
     * [.get_theme_id()](#MapxResolversStatic+get_theme_id) ⇒ <code>string</code>
+    * [.add_theme(opt)](#MapxResolversStatic+add_theme) ⇒ <code>Boolean</code>
     * [.has_el_id(opt)](#MapxResolversStatic+has_el_id)
     * [.set_dashboard_visibility(opt)](#MapxResolversStatic+set_dashboard_visibility) ⇒ <code>Boolean</code>
     * [.is_dashboard_visible()](#MapxResolversStatic+is_dashboard_visible) ⇒ <code>Boolean</code>
@@ -825,6 +826,19 @@ Get current theme id
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>string</code> - Theme id  
+<a name="MapxResolversStatic+add_theme"></a>
+
+#### mapxResolversStatic.add\_theme(opt) ⇒ <code>Boolean</code>
+Add a custom theme into mapx and use it.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Boolean</code> - done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.theme | <code>String</code> | Valid theme (full). |
+
 <a name="MapxResolversStatic+has_el_id"></a>
 
 #### mapxResolversStatic.has\_el\_id(opt)

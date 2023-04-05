@@ -1,3 +1,8 @@
+  - [1.11.0-alpha.2](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.2) 
+    
+    - SDK
+        - Added method to add custom theme
+
   - [1.11.0-alpha.1](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.1)
 
     - APP
