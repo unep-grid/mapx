@@ -149,17 +149,38 @@ class Theme extends EventSimple {
     return t._opt.themes;
   }
 
-  async addTheme(theme) {
+  /**
+   * Add new theme
+   * @param {Object} theme - Theme
+   * @param {Object} opt - Options passed to `set`
+   * @return {Boolean} the set value
+   */
+  async addTheme(theme, opt) {
     const t = this;
     const ok = await validate(theme);
-    if (ok) {
-      t._opt.themes.push(theme);
-      await t.set(theme.id);
-    } else {
+    const ids = t.ids();
+    if (!ok) {
       throw new Error("Invalid theme");
     }
+    if (ids.includes(theme.id)) {
+      const pos = ids.indexOf(theme.id);
+      t._opt.themes.splice(pos, 1);
+    }
+    t._opt.themes.push(theme);
+    return await t.set(theme.id, opt);
   }
 
+  /**
+   * Set the theme with the provided ID and options.
+   * @async
+   * @param {string} id - The theme ID to set.
+   * @param {Object} [opt] - Optional settings for the theme.
+   * @param {boolean} [opt.sound=false] - Whether to play the theme sound.
+   * @param {boolean} [opt.save=false] - Whether to save the theme ID to localStorage.
+   * @param {boolean} [opt.save_url=false] - Whether to save the theme ID in the URL.
+   * @returns {Promise<boolean>} Returns true if the theme was successfully set, otherwise false.
+   * @throws {Error} If there is an error while setting the theme.
+   */
   async set(id, opt) {
     const t = this;
     let ok = false;

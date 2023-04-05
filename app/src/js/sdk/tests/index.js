@@ -70,6 +70,25 @@ mapx.once("ready", async () => {
     ],
   });
 
+  t.check("Set theme", {
+    init: async () => {
+      const res = {};
+      res.themes = await mapx.ask("get_themes");
+      return res;
+    },
+    tests: [
+      {
+        name: "add theme",
+        test: async (res) => {
+          const out = await mapx.ask("add_theme", {
+            theme: res.themes[0],
+          });
+          return out;
+        },
+      },
+    ],
+  });
+
   t.check("Set max bounds", {
     init: async () => {
       const res = {};
@@ -1175,7 +1194,15 @@ mapx.once("ready", async () => {
    */ t.run({
     finally: () => {
       console.log("Tests finished");
-      console.log(t._results);
+      const resTable = t._results.map((r) => {
+        return {
+          title: r.title,
+          message: r.message,
+          n_tests: r.tests.length,
+          passes: r.tests.reduce((a, c) => a && c.success, true),
+        };
+      });
+      console.table(resTable);
     },
   });
 });

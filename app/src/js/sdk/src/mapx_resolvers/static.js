@@ -235,6 +235,18 @@ class MapxResolversStatic extends ResolversBase {
   get_theme_id() {
     return theme.id();
   }
+
+  /**
+   * Add a custom theme into mapx and use it.
+   * @param {Object} opt Options
+   * @param {String} opt.theme Valid theme (full).
+   * @return {Boolean} done
+   */
+  add_theme(opt) {
+    opt = Object.assign({}, opt);
+    return theme.addTheme(opt.theme, { save_url: true });
+  }
+
   /**
    * Check if element is visible, by id
    * @param {Object} opt Options
