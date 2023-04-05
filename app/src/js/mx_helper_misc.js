@@ -73,9 +73,13 @@ export function moveEl(el, style, duration = 300) {
  * -> file input "cancel" event do not exists.
  * -> use focus on window to get the info that the dialog is gone
  * -> out array will be empty in case of cancel, but amall delay is added
+ * @param {Object} opt options
+ * @parm {boolean} opt.multiple Multiple file allowed
  * @returns {Promise<array>} array of files selected
  */
-export function fileSelector() {
+export function fileSelector(opt) {
+  const conf = Object.assign({}, { multiple: true }, opt);
+
   const out = [];
   return new Promise((resolve) => {
     const elFile = el("input", {
@@ -83,7 +87,7 @@ export function fileSelector() {
       style: {
         display: "none",
       },
-      multiple: true,
+      multiple: conf.multiple,
       on: {
         change: (e) => {
           out.push(...e.target.files);
@@ -105,6 +109,41 @@ export function fileSelector() {
         elFile.remove();
         resolve(out);
       }, 4e3);
+    }
+  });
+}
+
+/**
+ * File select + parse json, same option as fileSelector
+ * @return {Promise<array>}
+ */
+export async function fileSelectorJSON(opt) {
+  const files = await fileSelector(opt);
+  const out = [];
+
+  for (const file of files) {
+    const text = await textFileLoader(file);
+    const data = JSON.parse(text);
+    out.push(data);
+  }
+  return out;
+}
+
+/**
+ * Helper to read the file as text
+ * @param {File} file to read
+ * @return {Promise<string>} result
+ */
+function textFileLoader(file) {
+  return new Promise((resolve, reject) => {
+    try {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        resolve(reader.result);
+      });
+      reader.readAsText(file);
+    } catch (e) {
+      reject(e);
     }
   });
 }

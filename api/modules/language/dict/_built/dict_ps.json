@@ -8225,6 +8225,11 @@
     "ps": "نقشه: د هیواد سیوري "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "ps": "نقشه: د ځمکې عمومي لیبلونه"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "ps": "نقشه: اوبه "
@@ -8240,12 +8245,12 @@
     "ps": "نقشه: حمامونه (لوړ) "
   },
   {
-    "id": "mx_map_bathymetry_labels",
+    "id": "mx_map_text_bathymetry",
     "en": "Map: bathymetry labels",
     "ps": "نقشه: د تشناب لیبل"
   },
   {
-    "id": "mx_map_bathymetry_labels_outline",
+    "id": "mx_map_text_bathymetry_outline",
     "en": "Map: bathymetry labels outline",
     "ps": "نقشه: د تشناب لیبلونو خاکه"
   },
@@ -8315,6 +8320,51 @@
     "ps": "نقشه: د متن متن وټاکئ "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "ps": "نقشه: د ملګرو ملتونو لیبل 0 0 (انټارکټیکا)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 0 1 – ایالت"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "ps": "نقشه: د ملګرو ملتونو لیبل 0 2 - اشغال شوې سیمه"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 0 3 - غیر ځان اداره کولو سیمه"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "ps": "نقشه: د ملګرو ملتونو لیبل 0 4 – سیمه"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 0 5 – ځانګړې سیمه یا ولایت"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 0 99 - حاکمیت بې ثباته شوی"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 1 1 - اداري واحد (فرعي ملي کچه 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 1 2 - اداري واحد (فرعي ملي کچه 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "ps": "نقشه: د سړک متن "
@@ -8333,6 +8383,61 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "ps": "نقشه: د اوبو د بدن متن لنډیز "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "ps": "د فونټ کورنۍ"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "ps": "فونټ"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "ps": "شفافیت"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "ps": "رنګ"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "ps": "د لیدلو وړ"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "ps": "نوم"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "ps": "تفصیل"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "ps": "لیکوال"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "ps": "بل"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "ps": "صادرول"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "ps": "واردول"
   },
   {
     "id": "upl_shapefile_warning",

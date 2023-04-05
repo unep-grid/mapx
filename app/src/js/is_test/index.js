@@ -7,6 +7,8 @@ export function isEmpty(item) {
     return true;
   } else if (isString(item)) {
     return isEqual(item, "");
+  } else if (isElement(item)) {
+    return isEqual(item.childElementCount, 0);
   } else if (isObject(item)) {
     return isEqual(item, {});
   } else if (isArray(item)) {

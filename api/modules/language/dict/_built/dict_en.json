@@ -6580,6 +6580,10 @@
     "en": "Map: country shadow"
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water"
   },
@@ -6592,11 +6596,11 @@
     "en": "Map: bathymetry (high)"
   },
   {
-    "id": "mx_map_bathymetry_labels",
+    "id": "mx_map_text_bathymetry",
     "en": "Map: bathymetry labels"
   },
   {
-    "id": "mx_map_bathymetry_labels_outline",
+    "id": "mx_map_text_bathymetry_outline",
     "en": "Map: bathymetry labels outline"
   },
   {
@@ -6652,6 +6656,42 @@
     "en": "Map: place text outline"
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text"
   },
@@ -6666,6 +6706,50 @@
   {
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline"
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import"
   },
   {
     "id": "upl_shapefile_warning",

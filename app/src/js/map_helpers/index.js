@@ -64,7 +64,6 @@ import {
   modalGetAll,
   modalCloseAll,
   modalConfirm,
-  modalDialog,
 } from "./../mx_helper_modal.js";
 import { errorHandler } from "./../error_handler/index.js";
 import { waitTimeoutAsync } from "./../animation_frame";
@@ -166,9 +165,9 @@ export function getStyleBaseMap() {
   delete style.metadata;
 
   styleOut.metadata = {
-    fonts: {
-      source: settings.links.mapFonts,
-    },
+    //fonts: {
+    //source: settings.links.mapFonts,
+    //},
   };
 
   /**
@@ -989,7 +988,7 @@ export async function initMapx(o) {
    * Update  sprites path
    */
   settings.style.sprite = getAppPathUrl("sprites");
-  settings.style.glyphs = getAppPathUrl("fontstack");
+  //settings.style.glyphs = getAppPathUrl("fontstack");
 
   /**
    * WS connect + authentication
@@ -1072,6 +1071,7 @@ export async function initMapx(o) {
     bearing: mp.b || mp.bearing || 0,
     pitch: mp.p || mp.pitch || 0,
     center: mp.center || [mp.lng || 0, mp.lat || 0],
+    localIdeographFontFamily: "'Noto Sans', 'Noto Sans SC', sans-serif",
   };
   /*
    * Create map object
@@ -1140,10 +1140,16 @@ export async function initMapx(o) {
     /**
      * Build theme config inputs only when settings tab is displayed
      */
-    mx.panel_main.on("tab_change", (id) => {
-      if (id === "tools") {
-        const elInputs = document.getElementById("mxInputThemeColors");
-        theme.linkInputs(elInputs);
+    mx.panel_main.on("tab_change", async (id) => {
+      try {
+        if (id === "tools") {
+          const elInputs = document.getElementById("mxInputThemeColors");
+          if (isElement(elInputs) && isEmpty(elInputs)) {
+            await theme.linkInputs(elInputs);
+          }
+        }
+      } catch (e) {
+        console.error(e);
       }
     });
 

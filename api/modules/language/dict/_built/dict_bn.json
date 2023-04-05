@@ -8225,6 +8225,11 @@
     "bn": "মানচিত্র: দেশের ছায়া "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "bn": "মানচিত্র: জেনেরিক ল্যান্ড লেবেল রূপরেখা"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "bn": "মানচিত্র: জল "
@@ -8240,12 +8245,12 @@
     "bn": "মানচিত্র: বাথমেট্রি (উচ্চ) "
   },
   {
-    "id": "mx_map_bathymetry_labels",
+    "id": "mx_map_text_bathymetry",
     "en": "Map: bathymetry labels",
     "bn": "মানচিত্র: bathymetry লেবেল"
   },
   {
-    "id": "mx_map_bathymetry_labels_outline",
+    "id": "mx_map_text_bathymetry_outline",
     "en": "Map: bathymetry labels outline",
     "bn": "মানচিত্র: bathymetry লেবেল রূপরেখা"
   },
@@ -8315,6 +8320,51 @@
     "bn": "মানচিত্র: পাঠ্য রূপরেখা রাখুন "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 0 (অ্যান্টার্কটিকা)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 1 – রাজ্য"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 2 – অধিকৃত অঞ্চল"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 3 – অ-স্ব-শাসিত অঞ্চল"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "bn": "মানচিত্র: জাতিসংঘ লেবেল 0 4 – অঞ্চল"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "bn": "মানচিত্র: জাতিসংঘ লেবেল 0 5 – বিশেষ অঞ্চল বা প্রদেশ"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 99 - সার্বভৌমত্ব অস্থির"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "bn": "মানচিত্র: জাতিসংঘ লেবেল 1 1 - প্রশাসনিক ইউনিট (উপজাতীয় স্তর 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "bn": "মানচিত্র: জাতিসংঘ লেবেল 1 2 - প্রশাসনিক ইউনিট (উপজাতীয় স্তর 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "bn": "মানচিত্র: রাস্তার পাঠ্য "
@@ -8333,6 +8383,61 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "bn": "মানচিত্র: জলের দেহের পাঠ্য রূপরেখা "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "bn": "ফন্ট পরিবার"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "bn": "হরফ"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "bn": "অস্বচ্ছতা"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "bn": "রঙ"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "bn": "দৃশ্যমান"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "bn": "নাম"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "bn": "বর্ণনা"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "bn": "লেখক"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "bn": "পরবর্তী"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "bn": "রপ্তানি"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "bn": "আমদানি"
   },
   {
     "id": "upl_shapefile_warning",

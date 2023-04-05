@@ -1,0 +1,21 @@
+{
+  "name": "svg_to_sprite",
+  "version": "0.0.1",
+  "description": "Automate sprite creation from svg",
+  "type": "module",
+  "scripts": {
+    "build": "node index.js"
+  },
+  "engines": {
+    "npm": ">=7.0.0"
+  },
+  "keywords": [
+    "sprite"
+  ],
+  "author": "unepgrid.ch",
+  "license": "MIT",
+  "devDependencies": {
+    "@mapbox/spritezero": "^8.0.0",
+    "webfont": "^11.2.26"
+  }
+}

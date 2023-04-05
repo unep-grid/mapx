@@ -1,38 +1,35 @@
 import chroma from "chroma-js";
+import { loadFontFace } from "./fonts";
+import style from "./../../data/style/style_mapx.json";
+import { isNotEmpty } from "../is_test";
 
-export function css_resolver(c) {
+export async function css_resolver(c) {
+  const family = await font(c.mx_ui_text);
   return `
   * {
-  --mx_ui_text: ${v(c.mx_ui_text)};
-  --mx_ui_text_faded: ${v(c.mx_ui_text_faded)};
-  --mx_ui_hidden: ${v(c.mx_ui_hidden)};
-  --mx_ui_border: ${v(c.mx_ui_border)};
-  --mx_ui_background: ${v(c.mx_ui_background)};
-  --mx_ui_background_faded: ${v(c.mx_ui_background_faded)};
-  --mx_ui_background_contrast: ${v(c.mx_ui_background_contrast)};
-  --mx_ui_background_accent: ${v(c.mx_ui_background_accent)};
-  --mx_ui_background_transparent: ${v(c.mx_ui_background_transparent)};
-  --mx_ui_shadow: ${v(c.mx_ui_shadow)};
-  --mx_ui_link: ${v(c.mx_ui_link)};
-  --mx_ui_input_accent: ${v(c.mx_ui_input_accent)};
+  --mx_ui_text: ${color(c.mx_ui_text)};
+  --mx_ui_font_text: ${family};
+  --mx_ui_text_faded: ${color(c.mx_ui_text_faded)};
+  --mx_ui_hidden: ${color(c.mx_ui_hidden)};
+  --mx_ui_border: ${color(c.mx_ui_border)};
+  --mx_ui_background: ${color(c.mx_ui_background)};
+  --mx_ui_background_faded: ${color(c.mx_ui_background_faded)};
+  --mx_ui_background_contrast: ${color(c.mx_ui_background_contrast)};
+  --mx_ui_background_accent: ${color(c.mx_ui_background_accent)};
+  --mx_ui_background_transparent: ${color(c.mx_ui_background_transparent)};
+  --mx_ui_shadow: ${color(c.mx_ui_shadow)};
+  --mx_ui_link: ${color(c.mx_ui_link)};
+  --mx_ui_input_accent: ${color(c.mx_ui_input_accent)};
   border-color: var(--mx_ui_border);
   color: var(--mx_ui_text);
 }`;
 }
 
-function v(col) {
-  const hide = !col.visibility || col.visibility !== "visible";
-  const isStringCol = typeof col === "string";
-  const color = isStringCol ? col : col.color;
-  const chromaColor = chroma(color);
-  if (hide) {
-    return chromaColor.alpha(0).css();
-  }
-  const alpha = isStringCol || !col.alpha ? chromaColor.alpha() : col.alpha;
-  return chromaColor.alpha(alpha).css();
-}
-
 export function layer_resolver(c) {
+  /**
+   * id = layers in main style
+   * -> layout, paint = parameters to edit
+   */
   return [
     {
       id: ["background"],
@@ -102,16 +99,13 @@ export function layer_resolver(c) {
       },
     },
     {
-      id: ["bathymetry-labels"],
+      id: ["bathymetry-label"],
       layout: {
-        visibility: allVisible([
-          c.mx_map_bathymetry_labels.visibility,
-          c.mx_map_bathymetry_labels_outline.visibility,
-        ]),
+        visibility: c.mx_map_text_bathymetry.visibility,
+        "text-font": fontFallback(c.mx_map_text_bathymetry.font),
       },
       paint: {
-        "text-color": c.mx_map_bathymetry_labels.color,
-        "text-halo-color": c.mx_map_bathymetry_labels_outline.color,
+        "text-color": c.mx_map_text_bathymetry.color,
       },
     },
     {
@@ -192,114 +186,155 @@ export function layer_resolver(c) {
         visibility: c.mx_map_building.visibility,
       },
       paint: {
-        "fill-color": c.mx_map_building.color,
+        "fill-extrusion-color": c.mx_map_building.color,
       },
     },
+    /**
+     * BOUNDARIES
+     */
+    ...[1, 2, 3, 4, 8, 9, 6].map((i) => {
+      return {
+        id: [`boundary_un_${i}`],
+        layout: {
+          visibility: c[`mx_map_boundary_un_${i}`].visibility,
+        },
+        paint: {
+          "line-color": c[`mx_map_boundary_un_${i}`].color,
+        },
+      };
+    }),
     {
-      id: ["boundary_un_1"],
+      id: ["place-label-capital", "place-label-city"],
       layout: {
-        visibility: c.mx_map_boundary_un_1.visibility,
-      },
-      paint: {
-        "line-color": c.mx_map_boundary_un_1.color,
-      },
-    },
-    {
-      id: ["boundary_un_2"],
-      layout: {
-        visibility: c.mx_map_boundary_un_1.visibility,
-      },
-      paint: {
-        "line-color": c.mx_map_boundary_un_2.color,
-      },
-    },
-    {
-      id: ["boundary_un_3"],
-      layout: {
-        visibility: c.mx_map_boundary_un_3.visibility,
-      },
-      paint: {
-        "line-color": c.mx_map_boundary_un_3.color,
-      },
-    },
-    {
-      id: ["boundary_un_4"],
-      layout: {
-        visibility: c.mx_map_boundary_un_4.visibility,
-      },
-      paint: {
-        "line-color": c.mx_map_boundary_un_4.color,
-      },
-    },
-    {
-      id: ["boundary_un_8"],
-      layout: {
-        visibility: c.mx_map_boundary_un_8.visibility,
-      },
-      paint: {
-        "line-color": c.mx_map_boundary_un_8.color,
-      },
-    },
-    {
-      id: ["boundary_un_9"],
-      layout: {
-        visibility: c.mx_map_boundary_un_9.visibility,
-      },
-      paint: {
-        "line-color": c.mx_map_boundary_un_9.color,
-      },
-    },
-    {
-      id: ["boundary_un_6"],
-      layout: {
-        visibility: c.mx_map_boundary_un_6.visibility,
-      },
-      paint: {
-        "line-color": c.mx_map_boundary_un_6.color,
-      },
-    },
-    {
-      id: ["place-label-capital", "place-label-city", "country-label"],
-      layout: {
-        visibility: allVisible([
-          c.mx_map_text_place.visibility,
-          c.mx_map_text_place_outline.visibility,
-        ]),
+        visibility: c.mx_map_text_place.visibility,
+        "text-font": fontFallback(c.mx_map_text_place.font),
       },
       paint: {
         "text-color": c.mx_map_text_place.color,
-        "text-halo-color": c.mx_map_text_place_outline.color,
         "icon-color": c.mx_map_text_place.color,
       },
     },
+    /**
+     * LABEL SUB COUNTRY LEVEL 1
+     */
+    ...[1].map((i) => {
+      return {
+        id: [`country_un_1_label_${i}`],
+        layout: {
+          visibility: c[`mx_map_text_country_1_${i}`].visibility,
+          "text-font": fontFallback(c[`mx_map_text_country_1_${i}`].font),
+        },
+        paint: {
+          "text-color": c[`mx_map_text_country_1_${i}`].color,
+          "icon-color": c[`mx_map_text_country_1_${i}`].color,
+        },
+      };
+    }),
+    /**
+     * LABEL COUNTRY LEVEL 0
+     */
+    ...[0, 1, 2, 3, 4, 5, 99].map((i) => {
+      return {
+        id: [`country_un_0_label_${i}`],
+        layout: {
+          visibility: c[`mx_map_text_country_0_${i}`].visibility,
+          "text-font": fontFallback(c[`mx_map_text_country_0_${i}`].font),
+        },
+        paint: {
+          "text-color": c[`mx_map_text_country_0_${i}`].color,
+          "icon-color": c[`mx_map_text_country_0_${i}`].color,
+        },
+      };
+    }),
     {
-      id: ["water-label-point", "water-label-line"],
+      id: ["water-label-line", "water-label-point"],
       layout: {
-        visibility: allVisible([
-          c.mx_map_text_water.visibility,
-          c.mx_map_text_water_outline.visibility,
-        ]),
+        visibility: c.mx_map_text_water.visibility,
+        "text-font": fontFallback(c.mx_map_text_water.font),
       },
       paint: {
         "text-color": c.mx_map_text_water.color,
-        "text-halo-color": c.mx_map_text_water_outline.color,
         "icon-color": c.mx_map_text_water.color,
       },
     },
     {
       id: ["road-label"],
       layout: {
-        visibility: allVisible([
-          c.mx_map_text_road.visibility,
-          c.mx_map_text_road_outline.visibility,
-        ]),
+        visibility: c.mx_map_text_road.visibility,
+        "text-font": fontFallback(c.mx_map_text_road.font),
       },
       paint: {
         "text-color": c.mx_map_text_road.color,
-        "text-halo-color": c.mx_map_text_road_outline.color,
+      },
+    },
+    /**
+     * OUTLINES
+     * - Water
+     * - Land
+     * - Bathymetry
+     */
+    {
+      id: ["water-label-line", "water-label-point"],
+      paint: {
+        "text-halo-color": c.mx_map_text_water_outline.color,
+      },
+    },
+    {
+      id: ["bathymetry-label"],
+      paint: {
+        "text-halo-color": c.mx_map_text_bathymetry_outline.color,
+      },
+    },
+    {
+      id: [
+        "road-label",
+        "place-label-capital",
+        "place-label-city",
+        "country_un_0_label_0",
+        "country_un_0_label_1",
+        "country_un_0_label_2",
+        "country_un_0_label_3",
+        "country_un_0_label_4",
+        "country_un_0_label_5",
+        "country_un_0_label_99",
+        "country_un_1_label_1",
+      ],
+      paint: {
+        "text-halo-color": c.mx_map_text_land_outline.color,
       },
     },
   ];
+}
+
+async function font(col) {
+  if (col.font) {
+    await loadFontFace(col.font);
+  }
+  return col.font || "system-ui";
+}
+
+function color(col) {
+  const hide = !col.visibility || col.visibility !== "visible";
+  const isStringCol = typeof col === "string";
+  const color = isStringCol ? col : col.color;
+  const chromaColor = chroma(color);
+  if (hide) {
+    return chromaColor.alpha(0).css();
+  }
+  const alpha = isStringCol || !col.alpha ? chromaColor.alpha() : col.alpha;
+  return chromaColor.alpha(alpha).css();
+}
+
+function fontFallback(id) {
+  const def = [
+    "Noto Sans Regular",
+    "Noto Sans Arabic Regular",
+    "Noto Sans Bengali Regular",
+  ];
+  if (id) {
+    def.unshift(id);
+  }
+  return def;
 }
 
 function allVisible(arr) {

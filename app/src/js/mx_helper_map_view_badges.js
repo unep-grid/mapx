@@ -240,10 +240,11 @@ function createViewBadge(opt) {
     opt.dataset
   );
   return el(
-    "span",
+    "button",
     {
-      class: opt.tooltipClasses || "hint--bottom-right",
+      class: ["mx-btn", ...(opt.tooltipClasses || ["hint--bottom-right"])],
       dataset: opt.dataset,
+      role: "button",
     },
     el("i", {
       class: opt.iconClasses || ["fa", "fa-check-circle"],

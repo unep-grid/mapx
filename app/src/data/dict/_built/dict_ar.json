@@ -8225,6 +8225,11 @@
     "ar": "الخريطة: بلد الظل "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "ar": "الخريطة: مخطط الملصقات الأرضية العامة"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "ar": "الخريطة: المياه "
@@ -8240,12 +8245,12 @@
     "ar": "الخريطة: قياس الأعماق (مرتفع) "
   },
   {
-    "id": "mx_map_bathymetry_labels",
+    "id": "mx_map_text_bathymetry",
     "en": "Map: bathymetry labels",
     "ar": "الخريطة: تسميات قياس الأعماق"
   },
   {
-    "id": "mx_map_bathymetry_labels_outline",
+    "id": "mx_map_text_bathymetry_outline",
     "en": "Map: bathymetry labels outline",
     "ar": "الخريطة: مخطط تسميات قياس الأعماق"
   },
@@ -8315,6 +8320,51 @@
     "ar": "الخريطة: مكان مخطط النص "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 0 (أنتاركتيكا)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 1 - الولاية"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 2 - الأراضي المحتلة"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 3 - إقليم غير متمتع بالحكم الذاتي"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 4 - الإقليم"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 5 - منطقة أو مقاطعة خاصة"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 99 - عدم تسوية السيادة"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "ar": "الخريطة: تسميات الأمم المتحدة 1 1 - الوحدة الإدارية (المستوى دون الوطني 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "ar": "الخريطة: تسميات الأمم المتحدة 1 2 - الوحدة الإدارية (المستوى دون الوطني 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "ar": "الخريطة: نص الطريق "
@@ -8333,6 +8383,61 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "ar": "الخريطة: مخطط نص الجسم المائي "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "ar": "خط العائلة"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "ar": "الخط"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "ar": "التعتيم"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "ar": "لون"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "ar": "مرئي"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "ar": "اسم"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "ar": "وصف"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "ar": "مؤلف"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "ar": "التالي"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "ar": "يصدّر"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "ar": "يستورد"
   },
   {
     "id": "upl_shapefile_warning",

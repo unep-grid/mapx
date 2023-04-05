@@ -87,10 +87,10 @@ mxSchemaViewStyle <- function(
   #
   # sprite settings
   #
-  jsonSpritePath <- file.path("src/glyphs/dist/sprites/sprite.json")
+  jsonSpritePath <- file.path("src/sprites/dist/sprites/sprite.json")
 
   # stop if the path is not found
-  if (!file.exists(jsonSpritePath)) stop("json path is not found")
+  if (!file.exists(jsonSpritePath)) stop("sprites path is not found")
 
   # fetch sprite name
   sprites <- sort(names(jsonlite::fromJSON(jsonSpritePath)))

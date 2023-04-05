@@ -4,21 +4,21 @@
 html,
 body.mx {
   font-size: var(--mx_ui_font_size_base);
+  font-family: var(--mx_ui_font_text), Helvetica, Arial, system-ui, sans-serif;
 }
 
 input {
   accent-color: var(--mx_ui_input_accent);
 }
 
+* {
+  border-color: var(--mx_ui_border);
+  color: var(--mx_ui_text);
+}
+
 /**
 * Input
 */
-
-/*.mx select {*/
-/*appearance: none;*/
-/*padding: 5px;*/
-/*background: var(--mx_ui_background);*/
-/*}*/
 
 .mx input {
   background: var(--mx_ui_background);
@@ -47,7 +47,6 @@ input {
 /*
 * Badge and icons
 */
-
 .mx-readers-grp i {
   color: var(--mx_ui_text_faded);
 }

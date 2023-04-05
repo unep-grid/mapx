@@ -9,7 +9,7 @@ import {
   initSelectizeAll,
 } from "./mx_helper_selectize.js";
 import {
-  isEmpty,
+  isNotEmpty,
   isPromise,
   isObject,
   isString,
@@ -18,7 +18,6 @@ import {
   isHTML,
   isArray,
   isBoolean,
-  isNotEmpty,
 } from "./is_test/index.js";
 import { SelectAuto } from "./select_auto";
 /**
@@ -646,7 +645,7 @@ export function modalConfirm(opt) {
  * @param {String|Promise|Element} opt.label Input label
  * @param {String|Promise|Element} opt.cancel Cancel text
  * @param {String|Promise|Element} opt.confirm Confirm text
- * @param {Function} opt.onInput Callback on input with (value, elBtnConfirm) as args
+ * @param {Function} opt.onInput Callback on input with (value, elBtnConfirm, elMessage, elInput) as args
  * @return {Promise} resolve to input type
  */
 export function modalPrompt(opt) {
@@ -771,38 +770,20 @@ export function modalPrompt(opt) {
       opt.confirm || getDictItem("btn_confirm")
     );
 
-    if (opt.onInput instanceof Function) {
-      elInput.addEventListener("input", (_) => {
-        const value = isCheckbox
-          ? opt.inputOptions.checkboxValues[elInput.checked]
-          : elInput.value;
-        handlerInput(value, elBtnConfirm, elMessage);
-      });
+    if (isFunction(opt.onInput)) {
+      elInput.addEventListener("input", handlerInputWrapper);
 
       /**
        * Validate for default
        */
       const value = isCheckbox ? elInput.checked : elInput.value;
-      handlerInput(value, elBtnConfirm, elMessage);
-
-      /**
-       * If onInput returnn boolean, consider as a value to 
-       * enable/disable confirm btn
-       */
-      function handlerInput(value, elBtnConfirm, elMessage) {
-        const valid = opt.onInput(value, elBtnConfirm, elMessage);
-        if (!isEmpty(valid) && isBoolean(valid)) {
-          if (valid) {
-            elBtnConfirm.addAttribute("disabled");
-            elBtnConfirm.classList.add("disabled");
-          } else {
-            elBtnConfirm.removeAttribute("disabled");
-            elBtnConfirm.classList.remove("disabled");
-          }
-        }
-      }
+      handlerInput(value);
     }
 
+    /**
+     * elModal is referenced in the handler of the "close" button,
+     * TODO: Refactor this to avoid such aberations
+     */
     elModal = modal({
       noShinyBinding: true,
       addSelectize: false,
@@ -815,8 +796,49 @@ export function modalPrompt(opt) {
         if (isFunction(opt.onClose)) {
           opt.onClose();
         }
+        if (isFunction(opt.onInput)) {
+          elInput.removeEventListener("input", handlerInputWrapper);
+        }
         resolve();
       },
     });
+
+    /**
+     * Helpers
+     */
+
+    /**
+     * On input wrapper.
+     * TODO: merge this with the test in onInput handler
+     */
+    function handlerInputWrapper(_) {
+      const value = isCheckbox
+        ? opt.inputOptions.checkboxValues[elInput.checked]
+        : elInput.value;
+      handlerInput(value);
+    }
+
+    /**
+     * If onInput returnn boolean, consider as a value to
+     * enable/disable confirm btn
+     */
+    function handlerInput(value) {
+      elMessage.innerText = "";
+      const valid = opt.onInput(value, elBtnConfirm, elMessage, elInput);
+      /**
+       * Case validation returns boolean
+       */
+      if (isNotEmpty(valid) && isBoolean(valid)) {
+        if (!valid) {
+          console.log("disable");
+          elBtnConfirm.setAttribute("disabled", "disabled");
+          elBtnConfirm.classList.add("disabled");
+        } else {
+          console.log("enable");
+          elBtnConfirm.removeAttribute("disabled");
+          elBtnConfirm.classList.remove("disabled");
+        }
+      }
+    }
   });
 }

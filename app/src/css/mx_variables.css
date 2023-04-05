@@ -19,8 +19,11 @@
   --mx_ui_link: #12b0f8;
   --mx_ui_input_accent: #12b0f8;
 
-  border-color: var(--mx_ui_border);
-  color: var(--mx_ui_text);
+  /**
+  * Font family 
+  */ 
+  --mx_ui_font_text: system-ui;
+
   /**
   * font size
   */

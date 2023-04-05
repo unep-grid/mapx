@@ -8225,6 +8225,11 @@
     "ru": "Карта: тень страны "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "ru": "Карта: общий план меток земель"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "ru": "Карта: вода "
@@ -8240,12 +8245,12 @@
     "ru": "Карта: батиметрия (высокая) "
   },
   {
-    "id": "mx_map_bathymetry_labels",
+    "id": "mx_map_text_bathymetry",
     "en": "Map: bathymetry labels",
     "ru": "Карта: батиметрические метки"
   },
   {
-    "id": "mx_map_bathymetry_labels_outline",
+    "id": "mx_map_text_bathymetry_outline",
     "en": "Map: bathymetry labels outline",
     "ru": "Карта: контур батиметрических меток"
   },
@@ -8315,6 +8320,51 @@
     "ru": "Карта: разместить контур текста "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "ru": "Карта: этикетки ООН 0 0 (Антарктида)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "ru": "Карта: этикетки ООН 0 1 – Государство"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "ru": "Карта: этикетки ООН 0 2 – оккупированная территория"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "ru": "Карта: маркировка ООН 0 3 – несамоуправляющаяся территория"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "ru": "Карта: Метки ООН 0 4 – Территория"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "ru": "Карта: Метки ООН 0 5 – Особый регион или провинция"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "ru": "Карта: этикетки ООН 0 99 — суверенитет не установлен"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "ru": "Карта: Метки ООН 1 1 – Административная единица (субнациональный уровень 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "ru": "Карта: Метки ООН 1 2 – Административная единица (субнациональный уровень 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "ru": "Карта: текст дороги "
@@ -8333,6 +8383,61 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "ru": "Карта: контур текста водоема "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "ru": "Семейство шрифтов"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "ru": "Шрифт"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "ru": "Непрозрачность"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "ru": "Цвет"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "ru": "Видимый"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "ru": "Имя"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "ru": "Описание"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "ru": "Автор"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "ru": "Следующий"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "ru": "Экспорт"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "ru": "Импортировать"
   },
   {
     "id": "upl_shapefile_warning",

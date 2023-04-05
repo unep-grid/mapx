@@ -1,30 +1,55 @@
 import { EventSimple } from "./../event_simple";
 import { el } from "./../el/src/index.js";
-import { getDictItem } from "./../language";
+import { elButtonFa, elSelect, tt } from "./../el_mapx";
 import chroma from "chroma-js";
-import "./style.css";
 import { layer_resolver, css_resolver } from "./mapx_style_resolver.js";
 import { bindAll } from "../bind_class_methods";
-import { isJson } from "../is_test";
+import { isJson, isEmpty } from "../is_test";
 import { onNextFrame } from "../animation_frame/index.js";
-import * as classic_light from "./themes/classic_light.json";
-import * as classic_dark from "./themes/classic_dark.json";
-import * as water_dark from "./themes/water_dark.json";
-import * as water_light from "./themes/water_light.json";
+import { modalPrompt } from "../mx_helper_modal";
+import { isElement, makeSafeName, isStringRange } from "../is_test";
+import { settings } from "../settings";
+import { downloadJSON } from "../download";
+import { TextFilter } from "../text_filter_simple";
+import { default as classic_light } from "./themes/classic_light.json";
+import { default as classic_dark } from "./themes/classic_dark.json";
+import { default as water_dark } from "./themes/water_dark.json";
+import { default as water_light } from "./themes/water_light.json";
 import switchOn from "./sound/switch-on.mp3";
 import switchOff from "./sound/switch-off.mp3";
 import waterDrops from "./sound/water-drops.mp3";
+import { fileSelectorJSON } from "../mx_helper_misc";
+import { isNotEmpty } from "../is_test";
+import { fontFamilies, fonts } from "./fonts.js";
+import { validate } from "./validator.js";
 
+import "./style.less";
+
+/**
+ * Set globals
+ */
 const global = {
   elStyle: null,
   elInputsContainer: null,
   map: null,
-  themes: [
-    classic_light.default,
-    classic_dark.default,
-    water_light.default,
-    water_dark.default,
-  ],
+  themes: [classic_light, classic_dark, water_light, water_dark],
+  fonts_enabled: {
+    css: ["mx_ui_text"],
+    map: [
+      "mx_map_text_place",
+      "mx_map_text_road",
+      "mx_map_text_water",
+      "mx_map_text_bathymetry",
+      "mx_map_text_country_0_0",
+      "mx_map_text_country_0_1",
+      "mx_map_text_country_0_2",
+      "mx_map_text_country_0_3",
+      "mx_map_text_country_0_4",
+      "mx_map_text_country_0_5",
+      "mx_map_text_country_0_99",
+      "mx_map_text_country_1_1",
+    ],
+  },
   id: "classic_light",
   id_default: "classic_light",
   colors: null,
@@ -124,9 +149,21 @@ class Theme extends EventSimple {
     return t._opt.themes;
   }
 
+  async addTheme(theme) {
+    const t = this;
+    const ok = await validate(theme);
+    if (ok) {
+      t._opt.themes.push(theme);
+      await t.set(theme.id);
+    } else {
+      throw new Error("Invalid theme");
+    }
+  }
+
   async set(id, opt) {
     const t = this;
     let ok = false;
+
     if (t._is_setting) {
       console.warn("Theme : can't set theme, probably too fast");
       return ok;
@@ -144,28 +181,27 @@ class Theme extends EventSimple {
       }
       const theme = t.get(id);
 
-      if (theme.colors) {
-        t._id = theme.id;
-        t._theme = theme;
+      t._id = theme.id;
+      t._theme = theme;
 
-        if (sound && theme.sound) {
-          await t.sound(theme.sound);
-        }
-
-        if (save) {
-          localStorage.setItem("theme@id", id);
-        }
-
-        if (save_url) {
-          t.setThemeUrl(id);
-        }
-
-        await t.setColors(theme.colors);
-        t.buildInputs();
-
-        ok = true;
-        t.fire("mode_changed", t.mode());
+      if (sound && theme.sound) {
+        await t.sound(theme.sound);
       }
+
+      if (save) {
+        localStorage.setItem("theme@id", id);
+      }
+
+      if (save_url) {
+        t.setThemeUrl(id);
+      }
+
+      await t.setColors(theme.colors);
+
+      await t.buildInputs();
+
+      ok = true;
+      t.fire("mode_changed", t.mode());
     } catch (e) {
       console.warn(e);
     } finally {
@@ -181,9 +217,9 @@ class Theme extends EventSimple {
     history.replaceState(null, null, url);
   }
 
-  sanitizeColors(colors) {
+  async sanitizeColors(colors) {
     const t = this;
-    const isValidInputColors = t.validateColors(colors);
+    const isValidInputColors = await t.validateColors(colors);
 
     /* case valid */
     if (isValidInputColors) {
@@ -193,7 +229,7 @@ class Theme extends EventSimple {
     /* case json text */
     if (!isValidInputColors && isJson(colors)) {
       const colors_json = JSON.stringify(colors);
-      if (t.validateColors(colors_json)) {
+      if (await t.validateColors(colors_json)) {
         return colors_json;
       }
     }
@@ -201,14 +237,14 @@ class Theme extends EventSimple {
     /* case encoded json text */
     if (!isValidInputColors && isBase64Json(colors)) {
       const colors_b64 = b64ToJson(colors);
-      if (t.validateColors(colors_b64)) {
+      if (await t.validateColors(colors_b64)) {
         return colors_b64;
       }
     }
     return null;
   }
 
-  validateColors(colors) {
+  async validateColors(colors) {
     const t = this;
     const start = performance.now();
     try {
@@ -218,7 +254,7 @@ class Theme extends EventSimple {
           return a && chroma.valid(colors[cid].color || colors[cid]);
         }, true) &&
         layer_resolver(colors) &&
-        css_resolver(colors) &&
+        (await css_resolver(colors)) &&
         true;
       if (t._opt.debug) {
         console.log(`Validated in ${performance.now() - start} [ms]`);
@@ -267,7 +303,7 @@ class Theme extends EventSimple {
       default_theme.colors,
       colors || t._opt.colors
     );
-    const validColors = t.validateColors(new_colors);
+    const validColors = await t.validateColors(new_colors);
     if (validColors) {
       t._colors = new_colors;
       await t.updateCss();
@@ -286,7 +322,7 @@ class Theme extends EventSimple {
 
   async updateCss() {
     const t = this;
-    global.elStyle.textContent = css_resolver(t._colors);
+    global.elStyle.textContent = await css_resolver(t._colors);
     return true;
   }
 
@@ -353,85 +389,158 @@ class Theme extends EventSimple {
     const t = this;
     const colors = t._colors;
     const inputType = ["checkbox", "color", "range"];
-    const color = chroma(colors[cid].color);
-    const visible = colors[cid].visibility === "visible";
+    const conf = colors[cid];
+    const color = chroma(conf.color);
+    const visible = conf.visibility === "visible";
+    const isTextMap = t._opt.fonts_enabled.map.includes(cid);
+    const isTextCss = t._opt.fonts_enabled.css.includes(cid);
+
+    const elLabel = el(
+      "label",
+      {
+        class: ["mx-theme--color-label", "hint--right"],
+        dataset: { lang_key: cid },
+        "aria-label": cid,
+      },
+      tt(cid)
+    );
+
+    /**
+     * Color, checkbox, range
+     */
+    const elInputTable = el(
+      "table",
+      {
+        class: ["mx-theme--items"],
+      },
+      inputType.map((type) => {
+        const id = `${cid}_inputs_${type}`;
+        const isRange = type === "range";
+        const isCheck = type === "checkbox";
+
+        /**
+         * input
+         */
+        const config = {
+          id: id,
+          type: type,
+          dataset: {
+            action: "update",
+            param: isRange ? "alpha" : isCheck ? "visibility" : "hex",
+            id: cid,
+          },
+        };
+
+        if (isRange) {
+          config.min = 0;
+          config.max = 1;
+          config.step = 0.01;
+        } else {
+          config.style = { maxWidth: "60px" };
+        }
+
+        const elInput = el("input", config);
+
+        elInput.value = isRange
+          ? color.alpha()
+          : isCheck
+          ? true
+          : color.hex("rgb");
+
+        if (isCheck) {
+          elInput.checked = visible;
+        }
+
+        t._inputs.push(elInput);
+
+        /**
+         * Label
+         */
+        const elLabel = el(
+          "div",
+          {
+            for: id,
+            "aria-label": cid,
+          },
+          tt(`mx_theme_input_${type}`)
+        );
+
+        /**
+         * Column
+         */
+        const elRow = el(
+          "tr",
+          {
+            id: `${cid}_inputs_wrap_${type}`,
+          },
+          el("td", elLabel),
+          el("td", elInput)
+        );
+
+        return elRow;
+      })
+    );
+
+    /**
+     * Font selector
+     */
+    if (isTextCss) {
+      const elFontFamilies = fontFamilies.map((n) => {
+        const elOption = el("option", n);
+        if (n === conf.font) {
+          elOption.setAttribute("selected", "selected");
+        }
+        return elOption;
+      });
+
+      const elSelectFont = elSelect(`${cid}_font`, {
+        keyLabel: "mx_theme_input_font_family",
+        items: elFontFamilies,
+        asRow: true,
+        value: conf.font,
+      });
+      const elInput = elSelectFont.querySelector("select");
+      elInputTable.appendChild(elSelectFont);
+      elInput.dataset.param = "font";
+      elInput.dataset.id = cid;
+      t._inputs.push(elInput);
+    }
+
+    if (isTextMap) {
+      const elFonts = fonts.map((n) => {
+        const elOption = el("option", n);
+        if (n === conf.font) {
+          elOption.setAttribute("selected", "selected");
+        }
+        return elOption;
+      });
+
+      const elSelectFontMap = elSelect(`${cid}_font`, {
+        keyLabel: "mx_theme_input_font",
+        items: elFonts,
+        asRow: true,
+        value: conf.font,
+      });
+
+      const elInput = elSelectFontMap.querySelector("select");
+      elInput.dataset.param = "font";
+      elInput.dataset.id = cid;
+      elInputTable.appendChild(elSelectFontMap);
+      t._inputs.push(elInput);
+    }
 
     return el(
       "div",
       {
         id: cid,
-        class: ["mx-theme--color-container"],
+        class: ["mx-theme--inputs"],
       },
-      el(
-        "span",
-        {
-          class: ["mx-theme--color-label", "hint--right"],
-          dataset: { lang_key: cid },
-          "aria-label": cid,
-        },
-        getDictItem(cid)
-      ),
-      el(
-        "div",
-        {
-          class: ["mx-theme--colors-input"],
-        },
-        inputType.map((type) => {
-          const isRange = type === "range";
-          const isCheck = type === "checkbox";
-          const id = `${cid}_inputs_${type}`;
-          const config = {
-            id: id,
-            type: type,
-            dataset: {
-              action: "update",
-              param: isRange ? "alpha" : isCheck ? "visibility" : "hex",
-              id: cid,
-            },
-          };
-          if (isRange) {
-            config.min = 0;
-            config.max = 1;
-            config.step = 0.01;
-          } else {
-            config.style = { maxWidth: "60px" };
-          }
-          const elInput = el("input", config);
-          const elLabel = el(
-            "label",
-            {
-              for: id,
-              "aria-label": cid,
-              class: "mx-theme--colors-input-wrap",
-            },
-            `${type} input for ${id}`
-          );
-          const elWrap = el(
-            "div",
-            {
-              id: `${cid}_inputs_wrap_${type}`,
-            },
-            elInput,
-            elLabel
-          );
-
-          elInput.value = isRange
-            ? color.alpha()
-            : isCheck
-            ? true
-            : color.hex("rgb");
-
-          if (isCheck) {
-            elInput.checked = visible;
-          }
-          t._inputs.push(elInput);
-          return elWrap;
-        })
-      )
+      elLabel,
+      elInputTable
     );
   }
 
-  linkInputs(elInputsContainer) {
+  async linkInputs(elInputsContainer) {
     const t = this;
     const elContainer = elInputsContainer || t._opt.elInputsContainer;
     if (t._elInputsContainer) {
@@ -440,39 +549,201 @@ class Theme extends EventSimple {
     if (!elContainer instanceof Element) {
       return;
     }
-    elContainer.addEventListener("input", t.updateFromInput);
-    t._elInputsContainer = elContainer;
-    t.buildInputs();
+    t._elContainer = elContainer;
+    t._elContainer.addEventListener("input", t.updateFromInput);
+    t.buildManager();
+    await t.buildInputs();
+    t.buildSearchTool();
   }
 
-  buildInputs() {
+  buildManager() {
     const t = this;
-    const colors = t._colors;
-    const elContainer = t._elInputsContainer;
-    const elFrag = new DocumentFragment();
-    if (!(elContainer instanceof Element)) {
-      return;
-    }
-    elContainer.replaceChildren();
-    for (const cid in colors) {
-      const elInputGrp = t.buildInputGroup(cid);
-      elFrag.appendChild(elInputGrp);
-    }
-    /**
-     * Replacing input is not a priority. In case
-     * of theme change, a lot of update is happening
-     * at the same time. Building input in the next
-     * frame improve performance. That and using
-     * fragment require 10ms instead of 28ms.
-     */
-    onNextFrame(() => {
-      elContainer.replaceChildren(elFrag);
+    t._elContainer.classList.add("mx-theme--manager");
+    t._elInputsContainer = el("div");
+    const elBtnExport = elButtonFa("mx_theme_export_button", {
+      icon: "cloud-download",
+      action: t.exportThemeDownload,
+    });
+    const elBtnImport = elButtonFa("mx_theme_import_button", {
+      icon: "cloud-upload",
+      action: t.importTheme,
+    });
+    const elInputFilter = el("input", {
+      type: "text",
+      class: ["form-control", "mx-theme--manager-filter"],
+      placeholder: "Filter items...",
+    });
+    t._elInputFilter = elInputFilter;
+
+    const elGroup = el("div", { class: "mx-theme--manager-bar" }, [
+      el("div", { class: ["btn-group", "mx-theme--manager-buttons"] }, [
+        elBtnExport,
+        elBtnImport,
+      ]),
+      elInputFilter,
+    ]);
+
+    const elTools = el("div", { class: "well" }, elGroup);
+    t._elContainer.appendChild(elTools);
+    t._elContainer.appendChild(t._elInputsContainer);
+  }
+
+  async buildInputs() {
+    return new Promise((resolve, reject) => {
+      try {
+        const t = this;
+        const colors = t._colors;
+        const elContainer = t._elInputsContainer;
+        const elFrag = new DocumentFragment();
+        if (!isElement(elContainer)) {
+          return resolve(false);
+        }
+        elContainer.replaceChildren();
+
+        for (const cid in colors) {
+          const elInputGrp = t.buildInputGroup(cid);
+          elFrag.appendChild(elInputGrp);
+        }
+        /**
+         * Replacing input is not a priority. In case
+         * of theme change, a lot of update is happening
+         * at the same time. Building input in the next
+         * frame improve performance. That and using
+         * fragment require 10ms instead of 28ms.
+         */
+        onNextFrame(() => {
+          elContainer.replaceChildren(elFrag);
+          return resolve(true);
+        });
+      } catch (e) {
+        reject(e);
+      }
     });
   }
+
+  buildSearchTool() {
+    const t = this;
+    const valid =
+      isElement(t._elInputsContainer) && isNotEmpty(t._elInputsContainer);
+
+    if (!valid) {
+      return;
+    }
+    /**
+     * Filter helper
+     */
+    t._filter = new TextFilter({
+      selector: ".mx-theme--inputs",
+      elInput: t._elInputFilter,
+      elContent: t._elInputsContainer,
+      timeout: 10,
+    });
+  }
+
+  async importTheme() {
+    const t = this;
+    try {
+      const data = await fileSelectorJSON({ multiple: false });
+
+      if (isEmpty(data)) {
+        return;
+      }
+      await t.addTheme(data[0]);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async exportThemeDownload() {
+    try {
+      const t = this;
+      const theme = await t.exportStyle();
+      await downloadJSON(theme, `mx_theme_${makeSafeName(theme.id)}.json`);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async exportStyle() {
+    try {
+      const t = this;
+      const config = {};
+      const theme = t.get();
+
+      const colors = t.getColorsFromInputs();
+
+      if (isNotEmpty(colors)) {
+        theme.colors = colors;
+      }
+
+      const isValid = await validate(theme);
+
+      if (!isValid) {
+        throw new Error(`Theme not valid`);
+      }
+
+      for (const item of ["id", "description", "author"]) {
+        let value;
+        switch (item) {
+          case "id":
+            value = theme.id;
+            break;
+          case "description":
+            value = theme?.description?.en;
+            break;
+          case "author":
+            value = settings?.user?.email || "Guest";
+            break;
+          default:
+            value = "na";
+        }
+
+        const res = await modalPrompt({
+          label: tt(`mx_theme_export_${item}`),
+          confirm: tt("mx_theme_export_next"),
+          inputOptions: {
+            type: "text",
+            value: value,
+          },
+          onInput: (value, _, elMsg, elInput) => {
+            const max = item === "id" ? 20 : 100;
+            const min = 3;
+            const valid = isStringRange(value, min, max);
+            if (valid && item === "id") {
+              elInput.value = makeSafeName(value);
+            }
+            if (!valid) {
+              elMsg.innerText = `Not in range min: ${min} max: ${max}`;
+            }
+            console.log(valid);
+            return valid;
+          },
+        });
+
+        if (!res) {
+          return;
+        }
+
+        if (item === "description") {
+          config[item] = { en: res };
+        } else {
+          config[item] = res;
+        }
+      }
+
+      const out = Object.assign({}, theme, config);
+      return out;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   getColorsFromInputs() {
+    /**
+     * NOTE: this could have been a form ?
+     */
     const t = this;
     const out = {};
-
     for (const input of t._inputs) {
       const cid = input.dataset.id;
       const isCheck = input.type === "checkbox";
@@ -484,13 +755,20 @@ class Theme extends EventSimple {
       out[cid][param] = value;
     }
 
+    /**
+     * Build color
+     */
     for (const cid in out) {
       const hex = out[cid].hex;
       const alpha = out[cid].alpha * 1;
+      const font = out[cid].font;
       out[cid] = {
         visibility: out[cid].visibility === true ? "visible" : "none",
         color: chroma(hex).alpha(alpha).css(),
       };
+      if (font) {
+        out[cid].font = font;
+      }
     }
     return out;
   }
@@ -510,7 +788,6 @@ class Theme extends EventSimple {
       await t._elAudio.play();
       t._playing = false;
     } catch (e) {
-      debugger;
       console.warn(e);
     }
   }

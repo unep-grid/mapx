@@ -8225,6 +8225,11 @@
     "de": "Karte: Landschatten "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "de": "Karte: Umriss der allgemeinen Landetiketten"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "de": "Karte: Wasser "
@@ -8240,12 +8245,12 @@
     "de": "Karte: Bathymetrie (hoch) "
   },
   {
-    "id": "mx_map_bathymetry_labels",
+    "id": "mx_map_text_bathymetry",
     "en": "Map: bathymetry labels",
     "de": "Karte: Bathymetrie-Etiketten"
   },
   {
-    "id": "mx_map_bathymetry_labels_outline",
+    "id": "mx_map_text_bathymetry_outline",
     "en": "Map: bathymetry labels outline",
     "de": "Karte: Umriss der Bathymetrie-Etiketten"
   },
@@ -8315,6 +8320,51 @@
     "de": "Karte: Textumriss platzieren "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "de": "Karte: UN-Etiketten 0 0 (Antarktis)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "de": "Karte: UN-Etiketten 0 1 – Staat"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "de": "Karte: UN-Etiketten 0 2 – Besetztes Gebiet"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "de": "Karte: UN-Etiketten 0 3 – Gebiet ohne Selbstverwaltung"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "de": "Karte: UN-Etiketten 0 4 – Territorium"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "de": "Karte: UN-Etiketten 0 5 – Spezielle Region oder Provinz"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "de": "Karte: UN-Etiketten 0 99 – Souveränität ungeklärt"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "de": "Karte: UN Labels 1 1 – Verwaltungseinheit (subnationale Ebene 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "de": "Karte: UN Labels 1 2 – Verwaltungseinheit (subnationale Ebene 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "de": "Karte: Straßentext "
@@ -8333,6 +8383,61 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "de": "Karte: Wasserkörpertextumriss "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "de": "Schriftfamilie"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "de": "Schriftart"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "de": "Opazität"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "de": "Farbe"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "de": "Sichtbar"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "de": "Name"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "de": "Beschreibung"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "de": "Autor"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "de": "Nächste"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "de": "Export"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "de": "Importieren"
   },
   {
     "id": "upl_shapefile_warning",

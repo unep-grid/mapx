@@ -1,0 +1,41 @@
+.mx-theme--manager {
+  max-width: 500px;
+  .mx-theme--manager-bar {
+    display: flex;
+    .mx-theme--manager-filter {
+      border-radius: 0 3px 3px 0;
+      width: 20px;
+      flex-grow: 1;
+    }
+    .mx-theme--manager-buttons > .btn:last-of-type {
+      border-radius: 3px 0 0 3px;
+      border-right: none;
+    }
+  }
+  .mx-theme--inputs {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--mx_ui_border);
+    border-radius: 4px;
+    background: white !important;
+    * {
+      color: black !important;
+      background: white !important;
+    }
+    .mx-theme--items {
+      width: 100%;
+      tr {
+        line-height: 3em;
+        td:first-of-type {
+          width: 100px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        td:last-of-type {
+          text-align: left;
+        }
+      }
+    }
+  }
+}

@@ -39,7 +39,9 @@ class ViewBase {
       path: "data.title",
     });
 
-    const elButton = el("div", { class: "mx-view-tgl-btn" });
+    const elButton = el("div", {
+      class: "mx-view-tgl-btn",
+    });
 
     const elTitle = el(
       "span",
@@ -80,6 +82,8 @@ class ViewBase {
       id: "check_view_enable_" + view.id,
       class: "mx-view-tgl-input",
       type: "checkbox",
+      role: "button",
+      "aria-label": `Open view ${title}`,
       dataset: {
         view_action_key: "btn_toggle_view",
         view_action_target: view.id,

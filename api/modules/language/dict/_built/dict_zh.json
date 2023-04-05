@@ -8225,6 +8225,11 @@
     "zh": "地图：国家/地区阴影"
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "zh": "地图：通用土地标签大纲"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "zh": "地图：水"
@@ -8240,12 +8245,12 @@
     "zh": "地图：测深（高）"
   },
   {
-    "id": "mx_map_bathymetry_labels",
+    "id": "mx_map_text_bathymetry",
     "en": "Map: bathymetry labels",
     "zh": "地图：测深标签"
   },
   {
-    "id": "mx_map_bathymetry_labels_outline",
+    "id": "mx_map_text_bathymetry_outline",
     "en": "Map: bathymetry labels outline",
     "zh": "地图：测深标签轮廓"
   },
@@ -8315,6 +8320,51 @@
     "zh": "地图：放置文本边框"
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "zh": "地图：联合国标签 0 0（南极洲）"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "zh": "地图：联合国标签 0 1 – 州"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "zh": "地图：联合国标签 0 2 – 占领区"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "zh": "地图：联合国标签 0 3 – 非自治领土"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "zh": "地图：联合国标签 0 4 – 领土"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "zh": "地图：联合国标签 0 5 – 特殊地区或省份"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "zh": "地图：联合国标签 0 99 – 主权悬而未决"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "zh": "地图：联合国标签 1 1 – 行政单位（次国家级 01）"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "zh": "地图：联合国标签 1 2 – 行政单位（次国家级 01）"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "zh": "地图：道路文本"
@@ -8333,6 +8383,61 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "zh": "地图：水体文本边框"
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "zh": "字体系列"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "zh": "字体"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "zh": "不透明度"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "zh": "颜色"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "zh": "可见的"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "zh": "姓名"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "zh": "描述"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "zh": "作者"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "zh": "下一个"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "zh": "出口"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "zh": "进口"
   },
   {
     "id": "upl_shapefile_warning",
