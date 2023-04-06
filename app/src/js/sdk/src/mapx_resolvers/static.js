@@ -26,6 +26,7 @@ import {
   viewDelete,
   getBoundsArray,
   fitMaxBounds,
+  validateBounds,
 } from "../../../map_helpers/index.js";
 import { mapComposerModalAuto } from "../../../map_composer";
 import {
@@ -917,6 +918,9 @@ class MapxResolversStatic extends ResolversBase {
   map_set_max_bounds_array(opt) {
     opt = Object.assign({}, { bounds: null }, opt);
     const map = getMap();
+    if (opt.bounds) {
+      opt.bounds = validateBounds(opt.bounds);
+    }
     map.setMaxBounds(opt.bounds);
     return true;
   }

@@ -96,20 +96,47 @@ mapx.once("ready", async () => {
       res.boundsOrig = await mapx.ask("map_get_bounds_array");
       // sri lanka
       res.boundsTest = [77.9602, 5.7703, 83.169, 9.8485];
+      res.boundsTestWrong = [83.169, 9.8485, 77.9602, 5.7703];
       return res;
     },
     tests: [
       {
         name: "Set max bounds",
         test: async (res) => {
-          await mapx.ask("map_set_max_bounds_array", {
+          const done = await mapx.ask("map_set_max_bounds_array", {
             bounds: res.boundsTest,
           });
-          return true;
+          return done;
         },
       },
       {
         name: "Get max bounds",
+        test: async (res) => {
+          const bounds = await mapx.ask("map_get_max_bounds_array");
+
+          if (bounds.length !== res.boundsTest.length) {
+            return false;
+          }
+
+          for (let i = 0; i < bounds.length; i++) {
+            if (bounds[i] !== res.boundsTest[i]) {
+              return false;
+            }
+          }
+          return true;
+        },
+      },
+      {
+        name: "Set max wrong bounds",
+        test: async (res) => {
+          const done = await mapx.ask("map_set_max_bounds_array", {
+            bounds: res.boundsTestWrong,
+          });
+          return done;
+        },
+      },
+      {
+        name: "Get max bounds bis",
         test: async (res) => {
           const bounds = await mapx.ask("map_get_max_bounds_array");
 

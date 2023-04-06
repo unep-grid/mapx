@@ -1049,9 +1049,12 @@ export async function initMapx(o) {
   if (isNotEmpty(queryMaxBounds) || mp.useMaxBounds) {
     const bounds = [];
     for (const k of ["w", "s", "e", "n"]) {
-      bounds.push((getQueryParameter(k)[0] || mp[k] || 0) * 1);
+      const v = (getQueryParameter(k)[0] || mp[k] || 0) * 1;
+      bounds.push(v);
     }
-    mp.maxBounds = bounds;
+    const vbounds = validateBounds(bounds);
+    debugger;
+    mp.maxBounds = vbounds;
   }
 
   /* map options */
@@ -1757,6 +1760,7 @@ export function geolocateUser() {
     });
   }
 }
+
 /**
  * Reset project : remove view, dashboards, etc
  * NOTE: Shiny require at least one argument. Not used, but, needed.
@@ -5116,8 +5120,6 @@ export async function getViewsBounds(views) {
   let summaries = await Promise.all(views.map(getViewSourceSummary));
   let extents = summaries.map((s) => s.extent_sp);
 
-  debugger;
-
   let extent = extents.reduce(
     (a, ext) => {
       if (ext) {
@@ -5303,6 +5305,7 @@ export function fitMaxBounds(bounds, opt) {
   const map = getMap();
   const validBBounds = bounds instanceof mapboxgl.LngLatBounds;
   if (!validBBounds) {
+    bounds = validateBounds(bounds);
     bounds = new mapboxgl.LngLatBounds(bounds);
   }
   let valid = true;
@@ -5325,6 +5328,63 @@ export function fitMaxBounds(bounds, opt) {
     shake(elMap);
   }
   return valid;
+}
+
+/**
+ * Validates and corrects a bounds array, ensuring it meets the specified constraints.
+ *
+ * @param {number[]} bounds - An array of bounding box coordinates in the format [west, south, east, north].
+ * @returns {number[]} The corrected bounds array, with values adjusted to meet the specified constraints.
+ * @throws {Error} If the input bounds array does not have exactly 4 elements.
+ */
+export function validateBounds(bounds) {
+  // Define the maximum and minimum limits for longitude and latitude
+  const maxLongitude = 180;
+  const minLongitude = -180;
+  const maxLatitude = 90;
+  const minLatitude = -90;
+
+  // Define the minimum difference between coordinates
+  const minDelta = 0.5;
+
+  // Ensure the bounds array has exactly 4 elements
+  if (bounds.length !== 4) {
+    throw new Error("Bounds array should have exactly 4 elements.");
+  }
+
+  // Extract the coordinates from the input bounds array
+  let [west, south, east, north] = bounds;
+
+  // Check if west and east are within the limits and ensure west < east
+  if (west <= east) {
+    west = Math.max(minLongitude, west);
+    east = Math.min(maxLongitude, east);
+
+    if (east - west < minDelta) {
+      east = Math.min(maxLongitude, west + minDelta);
+    }
+  } else {
+    // Swap west and east values if west > east
+    [west, east] = [Math.max(minLongitude, east), Math.min(maxLongitude, west)];
+  }
+
+  // Check if north and south are within the limits and ensure north > south
+  if (north >= south) {
+    north = Math.min(maxLatitude, north);
+    south = Math.max(minLatitude, south);
+
+    if (north - south < minDelta) {
+      north = Math.min(maxLatitude, south + minDelta);
+    }
+  } else {
+    // Swap north and south values if north < south
+    [north, south] = [
+      Math.min(maxLatitude, south),
+      Math.max(minLatitude, north),
+    ];
+  }
+
+  return [west, south, east, north];
 }
 
 /**
