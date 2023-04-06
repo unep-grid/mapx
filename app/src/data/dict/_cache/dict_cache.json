@@ -16315,17 +16315,17 @@
     "de": "Quantil "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
     "fr": "Seuils 'Head/tail'",
-    "es": "Roturas de cabeza / cola ",
-    "ru": "Голова / хвост ломается ",
+    "es": "Roturas de cabeza/cola",
+    "ru": "Перерывы головы/хвоста",
     "zh": "首尾分割",
-    "ar": "فواصل الرأس / الذيل ",
-    "fa": "شکستگی سر / دم ",
-    "ps": "د سر / لکۍ وقفې ",
-    "bn": "মাথা / লেজ বিরতি ",
-    "de": "Kopf / Schwanz bricht "
+    "ar": "فواصل الرأس / الذيل",
+    "fa": "سر/دم می شکند",
+    "ps": "د سر / لکۍ ماتول",
+    "bn": "মাথা/লেজ ভাঙ্গা",
+    "de": "Head/Tail Breaks"
   },
   {
     "id": "equal_interval",

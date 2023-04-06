@@ -6275,9 +6275,9 @@
     "de": "Quantil "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
-    "de": "Kopf / Schwanz bricht "
+    "de": "Head/Tail Breaks"
   },
   {
     "id": "equal_interval",

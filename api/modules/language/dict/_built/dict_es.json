@@ -6275,9 +6275,9 @@
     "es": "Cuantil "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
-    "es": "Roturas de cabeza / cola "
+    "es": "Roturas de cabeza/cola"
   },
   {
     "id": "equal_interval",

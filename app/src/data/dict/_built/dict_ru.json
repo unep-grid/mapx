@@ -6275,9 +6275,9 @@
     "ru": "Квантиль "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
-    "ru": "Голова / хвост ломается "
+    "ru": "Перерывы головы/хвоста"
   },
   {
     "id": "equal_interval",

@@ -85,7 +85,7 @@ export async function vtStyleBuilder(opt) {
     );
     const elBinsOptions = [
       'jenks',
-      'head_tails',
+      'heads_tails',
       'quantile',
       'equal_interval'
     ].map((m) => {
