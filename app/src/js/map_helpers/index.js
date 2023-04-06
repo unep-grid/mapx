@@ -1053,7 +1053,6 @@ export async function initMapx(o) {
       bounds.push(v);
     }
     const vbounds = validateBounds(bounds);
-    debugger;
     mp.maxBounds = vbounds;
   }
 
@@ -5290,6 +5289,8 @@ export function setMapPos(opt) {
     map.flyTo({
       center: center,
       zoom: p.zoom || 1,
+      bearing: p.bearing || 0,
+      pitch: p.pitch || 0,
       duration: duration,
     });
   }

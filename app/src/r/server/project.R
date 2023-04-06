@@ -437,6 +437,7 @@ observe({
     }
 
     if (posChange) {
+
       mglSetMapPos(
         id = idMap,
         mapPos
