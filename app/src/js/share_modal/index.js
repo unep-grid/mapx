@@ -6,7 +6,7 @@ import {
   getStoryId,
   getViewsStep,
 } from "../story_map/index.js";
-import { isArrayOfViewsId } from "../is_test/index.js";
+import { isNotEmpty, isArrayOfViewsId, isBoolean } from "../is_test/index.js";
 import { parseTemplate } from "../mx_helper_misc.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { getQueryParametersAsObject } from "../url_utils";
@@ -53,7 +53,6 @@ export class ShareModal extends EventSimple {
     if (window._share_modal) {
       window._share_modal.reset();
       return;
-      //window._share_modal.close();
     }
     window._share_modal = sm;
     sm._init_state(opt);
@@ -89,8 +88,6 @@ export class ShareModal extends EventSimple {
         share_map_pos_max: null,
         share_mode_static: null,
         share_category_hide: null,
-        share_filter_activated: null,
-        //share_views_open: null
       },
     };
     Object.assign(sm._state.opt, opt);
@@ -126,14 +123,29 @@ export class ShareModal extends EventSimple {
     clearTimeout(sm._update_timeout);
     sm._update_timeout = setTimeout(() => {
       sm._state.prevent.clear();
-      sm._update_state_form();
-      sm._update_views();
+
+      for (let i = 0; i < 3; i++) {
+        /*
+         * 3 passes to solve interdependencies
+         *
+         * - list of views depend on form's "views selection"
+         * - form depend on option visibility
+         * - options visibility depends on form and list of views
+         *  
+         */
+        sm._update_views();
+        sm._update_state_form();
+        sm._update_options_visibility();
+      }
+
+      sm._update_messages();
+      sm._update_buttons();
+
       sm._update_url();
       sm._update_template();
-      sm.validate();
-      sm._update_options_visibility();
+
       sm.fire("updated");
-    }, 10);
+    }, 50);
   }
 
   /**
@@ -161,9 +173,17 @@ export class ShareModal extends EventSimple {
    */
   _update_state_form() {
     const sm = this;
-    const formData = new FormData(sm._el_form);
-    for (const k in sm._state.form) {
-      sm._state.form[k] = formData.get(k) || false;
+    const elForm = sm._el_form;
+    for (const key in sm._state.form) {
+      const elInput = elForm.querySelector(`[name=${key}]`);
+      const isEnabled = !elInput.disabled;
+      const isCheckbox = elInput.type === "checkbox";
+      const value = isEnabled
+        ? isCheckbox
+          ? elInput.checked
+          : elInput.value
+        : null;
+      sm._state.form[key] = value;
     }
   }
 
@@ -224,20 +244,19 @@ export class ShareModal extends EventSimple {
     const sm = this;
     const f = sm._state.form;
     const idViews = sm._state.views;
-    const useStatic = !!f.share_mode_static;
     const modeTargetStory =
       f.share_views_select === "share_views_select_method_story_itself";
     const storyInViews = getViews({ idView: idViews }).reduce(
       (a, c) => a || c.type === "sm",
       false
     );
-    return modeTargetStory || (useStatic && storyInViews);
+    return modeTargetStory || storyInViews;
   }
 
   /**
    * Validate message
    */
-  validate() {
+  _update_messages() {
     const sm = this;
     const state = sm._state;
     const msgs = [];
@@ -261,7 +280,7 @@ export class ShareModal extends EventSimple {
         key: "share_msg_views_count_multiple",
         data: langData,
       });
-      if (targetStory) {
+      if (targetStory && useStatic) {
         msgs.push({
           type: "warning",
           key: "share_msg_multiple_views_story_static",
@@ -289,6 +308,7 @@ export class ShareModal extends EventSimple {
       }
     }
     sm._validate_messages(msgs);
+
     return msgs;
   }
 
@@ -308,23 +328,32 @@ export class ShareModal extends EventSimple {
     }
   }
 
+  _update_buttons() {
+    const sm = this;
+    const state = sm._state;
+    sm.allowBtnOpen(!state.prevent.has("open"));
+    sm.allowBtnCopy(!state.prevent.has("copy"));
+  }
+
   _update_options_visibility() {
     const sm = this;
     const state = sm._state;
     const f = state.form;
     const hasViews = state.views.length > 0;
-    const linkStatic = f.share_mode_static;
+    const modeStatic = f.share_mode_static;
     const noMapPosition = !f.share_map_pos;
     const targetStory = sm.hasTargetStory();
-    sm.allowBtnOpen(!state.prevent.has("open"));
-    sm.allowBtnCopy(!state.prevent.has("copy"));
-    sm.setClassDisable(sm._el_checkbox_category_hide, linkStatic);
-    sm.setClassDisable(sm._el_checkbox_map_pos, targetStory);
+
+    sm.setClassDisable(sm._el_checkbox_category_hide, modeStatic);
+    sm.setClassDisable(sm._el_checkbox_map_pos, modeStatic && targetStory);
+    sm.setClassDisable(
+      sm._el_checkbox_map_pos_max,
+      noMapPosition || targetStory
+    );
     sm.setClassDisable(
       sm._el_checkbox_zoom,
-      targetStory || !hasViews || !linkStatic
+      targetStory || !hasViews || !modeStatic
     );
-    sm.setClassDisable(sm._el_checkbox_map_pos_max, noMapPosition);
   }
 
   /**
@@ -337,18 +366,19 @@ export class ShareModal extends EventSimple {
     const url = new URL(window.origin);
     const hasViews = state.views.length > 0;
     const f = state.form;
-    const targetStory =
-      f.share_views_select === "share_views_select_method_story_itself";
+    const targetStory = sm.hasTargetStory();
+    const modeStatic = f.share_mode_static;
+    const modeApp = !modeStatic;
 
     /**
      * Update base searchParams ( views, project )
+     *  for (const p in state.params) {
+     *    const val = state.params[p];
+     *    if (val) {
+     *      url.searchParams.set(p, val);
+     *    }
+     *  }
      */
-    for (const p in state.params) {
-      const val = state.params[p];
-      if (val) {
-        url.searchParams.set(p, val);
-      }
-    }
 
     /**
      * Mode Static
@@ -360,16 +390,27 @@ export class ShareModal extends EventSimple {
      */
     const lang = getLanguageCurrent();
     url.searchParams.set("language", lang);
-    if (f.share_mode_static) {
+
+    /* mode static */
+    if (modeStatic) {
       if (hasViews) {
         url.searchParams.set("views", state.views);
         if (!targetStory) {
-          url.searchParams.set("zoomToViews", !!f.share_views_zoom);
+          if (isBoolean(f.share_views_zoom)) {
+            url.searchParams.set("zoomToViews", f.share_views_zoom);
+          }
         }
       }
-    } else {
-      url.searchParams.set("project", settings.project.id);
-      url.searchParams.set("viewsListFlatMode", f.share_category_hide);
+    }
+
+    /* mode app */
+    if (modeApp) {
+      if (isNotEmpty(settings.project.id)) {
+        url.searchParams.set("project", settings.project.id);
+      }
+      if (isBoolean(f.share_category_hide)) {
+        url.searchParams.set("viewsListFlatMode", f.share_category_hide);
+      }
       if (hasViews) {
         url.searchParams.set("viewsOpen", state.views);
         url.searchParams.set("viewsListFilterActivated", true);
@@ -380,7 +421,11 @@ export class ShareModal extends EventSimple {
      * Map position
      */
     let pos;
-    if (f.share_map_pos && !targetStory) {
+    const storyMode = targetStory && modeStatic;
+    const hasPos = isBoolean(f.share_map_pos) && f.share_map_pos;
+    const enablePos = !storyMode && hasPos;
+
+    if (enablePos) {
       if (f.share_map_pos_max) {
         url.searchParams.set("useMaxBounds", true);
       }
@@ -398,7 +443,6 @@ export class ShareModal extends EventSimple {
     /**
      * Update url
      */
-
     this.url = url;
   }
 
@@ -417,11 +461,13 @@ export class ShareModal extends EventSimple {
     const disableLink = linkItem.disable_link;
     const disableEncode = !!linkItem.disable_encode;
     const disableCopy = linkItem.disable_copy;
-    // TODO: convert those as input.
+    /* TODO: convert those as input.*/
     const text = "Shared from MapX";
     const title = "MapX";
-    // replace values in template, if avaialble.
-    // email of the sender can't be set
+    /*
+     * replace values in template, if avaialble.
+     *  email of the sender can't be set
+     */
     const txt = parseTemplate(
       linkItem.template,
       {
@@ -434,7 +480,9 @@ export class ShareModal extends EventSimple {
       }
     );
 
-    // Set share string in state and form
+    /*
+     * Set share string in state and form
+     */
     state.shareString = txt;
     sm._el_input.value = txt;
     if (disableLink || disableLinkApp) {
@@ -461,22 +509,19 @@ export class ShareModal extends EventSimple {
   /**
    * Disable/enable buttons / el
    */
-  setAttrDisable(target, disable) {
-    if (disable) {
-      target.setAttribute("disabled", true);
-    } else {
-      target.removeAttribute("disabled");
-    }
-  }
   allowBtnOpen(enable) {
     const sm = this;
-    sm.setAttrDisable(sm._el_button_open, !enable);
+    sm._el_button_open.disabled = !enable;
   }
+
   allowBtnCopy(enable) {
     const sm = this;
-    sm.setAttrDisable(sm._el_button_copy, !enable);
+    sm._el_button_copy.disabled = !enable;
   }
+
   setClassDisable(target, disable) {
+    const elInput = target.querySelector("input");
+    elInput.disabled = !!disable;
     if (disable) {
       target.classList.add("share--disabled");
     } else {
@@ -651,11 +696,11 @@ export class ShareModal extends EventSimple {
     /**
      * Checkboxes
      */
-    // mode app
+    /* mode app */
     sm._el_checkbox_category_hide = elCheckbox("share_category_hide", {
       checked: false,
     });
-    // all modes
+    /* all mode */
     sm._el_checkbox_static = elCheckbox("share_mode_static", { checked: true });
     sm._el_checkbox_zoom = elCheckbox("share_views_zoom", { checked: true });
     sm._el_checkbox_map_pos = elCheckbox("share_map_pos", { checked: true });
@@ -704,6 +749,8 @@ export class ShareModal extends EventSimple {
     }
 
     sm._el_content.appendChild(sm._el_form);
+
+    sm._update_state_form();
     sm.fire("built");
   }
 }
