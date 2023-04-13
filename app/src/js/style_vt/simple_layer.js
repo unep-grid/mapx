@@ -205,7 +205,7 @@ export function makeSimpleLayer(opt) {
           "text-variable-anchor": opt.showSymbolLabel
             ? ["bottom-left", "bottom-right"]
             : [],
-          "text-font": ["Arial"],
+          "text-font": ["Noto Sans Medium"],
           "text-size": opt.simplifyExpression
             ? 10
             : ["interpolate", ["linear"], ["zoom"], 1, 10, 18, 20],
