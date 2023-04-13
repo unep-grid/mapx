@@ -792,17 +792,11 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   formatColumns(pos, element) {
     const et = this;
-    /**
-     * TODO : if dev is requested, uncomment this
-     */
-    const DEV_TO_BE_VALIDATED = false;
-    if (DEV_TO_BE_VALIDATED) {
-      if (pos >= 0) {
-        const type = et.getColumnTypeById(pos);
-        element.classList.add(`edit-table--header`);
-        element.classList.add(`edit-table--header-${type}`);
-        element.title = type;
-      }
+    if (pos >= 0) {
+      const type = et.getColumnTypeById(pos);
+      element.classList.add(`edit-table--header`);
+      element.classList.add(`edit-table--header-${type}`);
+      element.title = type;
     }
   }
 
