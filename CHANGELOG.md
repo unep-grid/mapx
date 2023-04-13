@@ -1,3 +1,14 @@
+  - [1.11.0-alpha.3](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.3) 
+
+    - APP
+        - Improvement #899 share module
+            - Max bounds sdk/url/share module : more resilient with east/west north/south inversion
+            - Refactor update link : use pub/sub logic instead of linear resolver, which was causing inconsistant result
+            - Added async throttle for update : it should be smoother
+            - Pitch and bearing should be updated after a project change
+        - Improved testing
+        - #900 should be fixed : typo during heads/tails request
+        
   - [1.11.0-alpha.2](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.2) 
     
     - SDK

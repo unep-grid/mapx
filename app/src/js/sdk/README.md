@@ -605,6 +605,7 @@ MapX resolvers available in static and app
     * [.show_modal_share(opt)](#MapxResolversStatic+show_modal_share) ⇒ <code>Boolean</code>
     * [.close_modal_share()](#MapxResolversStatic+close_modal_share) ⇒ <code>Boolean</code>
     * [.get_modal_share_string()](#MapxResolversStatic+get_modal_share_string) ⇒ <code>String</code>
+    * [.get_modal_share_tests()](#MapxResolversStatic+get_modal_share_tests) ⇒ <code>array</code>
     * [.set_theme(opt)](#MapxResolversStatic+set_theme) ⇒ <code>Boolean</code>
     * [.get_themes_id()](#MapxResolversStatic+get_themes_id) ⇒ <code>Array</code>
     * [.get_themes()](#MapxResolversStatic+get_themes) ⇒ <code>Object</code>
@@ -790,6 +791,13 @@ Get sharing string
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>String</code> - Sharing string ( code / url )  
+<a name="MapxResolversStatic+get_modal_share_tests"></a>
+
+#### mapxResolversStatic.get\_modal\_share\_tests() ⇒ <code>array</code>
+Modal Share Tests Suite
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>array</code> - array of tests  
 <a name="MapxResolversStatic+set_theme"></a>
 
 #### mapxResolversStatic.set\_theme(opt) ⇒ <code>Boolean</code>
