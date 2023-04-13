@@ -52,7 +52,7 @@ function waitFrameAsync() {
  * Wait async
  * @param {Number} t ms to wait
  * @param {Function} cb Optional callback
- * @return {Promise}
+ * @return {Promise<boolean>}
  */
 function waitTimeoutAsync(t, cb) {
   return new Promise((r) => {
@@ -60,7 +60,7 @@ function waitTimeoutAsync(t, cb) {
       if (cb instanceof Function) {
         cb(t);
       }
-      r();
+      r(true);
     }, t || 1);
   });
 }

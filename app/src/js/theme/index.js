@@ -176,6 +176,7 @@ class Theme extends EventSimple {
    * @param {string} id - The theme ID to set.
    * @param {Object} [opt] - Optional settings for the theme.
    * @param {boolean} [opt.sound=false] - Whether to play the theme sound.
+   * @param {boolean} [opt.force=false] - Whether force settting.
    * @param {boolean} [opt.save=false] - Whether to save the theme ID to localStorage.
    * @param {boolean} [opt.save_url=false] - Whether to save the theme ID in the URL.
    * @returns {Promise<boolean>} Returns true if the theme was successfully set, otherwise false.
@@ -185,7 +186,7 @@ class Theme extends EventSimple {
     const t = this;
     let ok = false;
 
-    if (t._is_setting) {
+    if (!opt.force && t._is_setting) {
       console.warn("Theme : can't set theme, probably too fast");
       return ok;
     }

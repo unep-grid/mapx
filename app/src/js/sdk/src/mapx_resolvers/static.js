@@ -161,12 +161,14 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} Done
    */
   async show_modal_share(opt) {
+    const rslv = this;
     opt = Object.assign({ idView: [] }, opt);
     const idViews = isArray(opt.idView) ? opt.idView : [opt.idView];
     const sm = new ShareModal({
       views: idViews,
     });
     await sm.once("updated");
+    rslv._sm = sm;
   }
 
   /**
@@ -174,15 +176,16 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} Done
    */
   async close_modal_share() {
-    const sm = window._share_modal;
-    if (sm) {
-      const promClosed = sm.once("closed");
-      sm.close();
-      await promClosed;
-      return true;
-    } else {
-      return false;
+    const rslv = this;
+    const sm = rslv._sm;
+    if (!sm instanceof ShareModal) {
+      throw new Error("No share modal found");
     }
+    const promClosed = sm.once("closed");
+    sm.close();
+    await promClosed;
+    delete rslv._sm;
+    return true;
   }
 
   /**
@@ -190,10 +193,26 @@ class MapxResolversStatic extends ResolversBase {
    * @return {String} Sharing string ( code / url )
    */
   get_modal_share_string() {
-    if (!window._share_modal) {
+    const rslv = this;
+    const sm = rslv._sm;
+    if (!sm instanceof ShareModal) {
       throw new Error("No share modal found");
     }
-    return window._share_modal.getShareString();
+    return sm.getShareCode();
+  }
+
+  /**
+   * Modal Share Tests Suite
+   * @return {array} array of tests
+   */
+  async get_modal_share_tests() {
+    const rslv = this;
+    const sm = rslv._sm;
+    if (!sm instanceof ShareModal) {
+      throw new Error("No share modal found");
+    }
+    const ok = await sm.tests();
+    return ok;
   }
 
   /**

@@ -2503,43 +2503,6 @@ export function getViewsOrder() {
 }
 
 /**
- * Get JSON representation of a view ( same as the one dowloaded );
- * @param {String} idView Id of the view;
- * @param {Object} opt Options
- * @param {Boolean} opt.asString As string
- * @return {String} JSON string with view data (or cleaned view object);
- */
-export function getViewJson(idView, opt) {
-  opt = Object.assign({}, { asString: true }, opt);
-  const view = getView(idView);
-  const keys = [
-    "id",
-    "editor",
-    "target",
-    "date_modified",
-    "data",
-    "type",
-    "pid",
-    "project",
-    "readers",
-    "editors",
-    "_edit",
-  ];
-  const out = {};
-  keys.forEach((k) => {
-    let value = view[k];
-    if (value) {
-      out[k] = value;
-    }
-  });
-  if (opt.asString) {
-    return JSON.stringify(out);
-  } else {
-    return out;
-  }
-}
-
-/**
  * Create and listen to transparency sliders
 @param {Object} o Options
 @param {Object} o.view View data
@@ -5237,62 +5200,71 @@ export async function resetViewStyle(o) {
  * @param {boolean} [opt.param.fitToBounds=false] - Whether to fit the map to the specified bounds. Defaults to false.
  * @param {boolean} [opt.param.jump=false] - Whether to jump to the location without animation. Defaults to false.
  */
-export function setMapPos(opt) {
-  const map = getMap(opt.id);
-  const p = opt.param;
-  const duration = p.jump ? 0 : isNotEmpty(p.duration) ? o.duration : 1000;
-  const bounds = new mapboxgl.LngLatBounds([
-    [p.w || 0, p.s || 0],
-    [p.e || 0, p.n || 0],
-  ]);
+export async function setMapPos(opt) {
+  try {
+    const map = getMap(opt.id);
+    const p = opt.param;
+    const duration = p.jump ? 0 : isNotEmpty(p.duration) ? o.duration : 1000;
+    const bounds = new mapboxgl.LngLatBounds([
+      [p.w || 0, p.s || 0],
+      [p.e || 0, p.n || 0],
+    ]);
 
-  const center = new mapboxgl.LngLat(p.lng || 0, p.lat || 0);
+    const center = new mapboxgl.LngLat(p.lng || 0, p.lat || 0);
 
-  map.setMaxBounds(null);
+    map.setMaxBounds(null);
 
-  if (p.useMaxBounds) {
-    /**
-     * Don't let the user zoom before the animation is done
-     */
-    map.scrollZoom.disable();
+    if (p.useMaxBounds) {
+      /**
+       * Don't let the user zoom before the animation is done
+       */
+      map.scrollZoom.disable();
 
-    /**
-     * Ignore fitToBounds settings :
-     * -> if false, setMaxBounds could
-     *    create a small gaps in animation
-     */
-    p.fitToBounds = true;
+      /**
+       * Ignore fitToBounds settings :
+       * -> if false, setMaxBounds could
+       *    create a small gaps in animation
+       */
+      p.fitToBounds = true;
 
-    /**
-     * a) timeout vs event
-     *   -> could use once('idle') but
-     *      could sometimes, there is some inertia
-     *   -> setTimeout make it clear
-     * b) use bounds vs getBounds
-     *   -> using "bounds" produced a small gap in
-     *      animation. Saved in a screen size, rendered in another
-     *   -> getBounds() make sure it will not
-     *   -> but if zoom is set by something else during this
-     *      "duration" -> inaccurate bounds...
-     */
-    setTimeout(() => {
-      map.setMaxBounds(map.getBounds());
-      map.scrollZoom.enable();
-    }, duration);
-  }
+      /**
+       * a) timeout vs event
+       *   -> could use once('idle') but
+       *      could sometimes, there is some inertia
+       *   -> setTimeout make it clear
+       * b) use bounds vs getBounds
+       *   -> using "bounds" produced a small gap in
+       *      animation. Saved in a screen size, rendered in another
+       *   -> getBounds() make sure it will not
+       *   -> but if zoom is set by something else during this
+       *      "duration" -> inaccurate bounds...
+       */
+      setTimeout(() => {
+        map.setMaxBounds(map.getBounds());
+        map.scrollZoom.enable();
+      }, duration);
+    }
 
-  if (p.fitToBounds) {
-    map.fitBounds(bounds, {
-      duration,
-    });
-  } else {
-    map.flyTo({
-      center: center,
-      zoom: p.zoom || 1,
-      bearing: p.bearing || 0,
-      pitch: p.pitch || 0,
-      duration: duration,
-    });
+    if (p.fitToBounds) {
+      map.fitBounds(bounds, {
+        duration,
+      });
+    } else {
+      map.flyTo({
+        center: center,
+        zoom: p.zoom || p.z || 1,
+        bearing: p.bearing || p.b || 0,
+        pitch: p.pitch || p.p || 0,
+        duration: duration,
+      });
+    }
+
+    if (p.theme) {
+      await theme.set(p.theme, { force: true });
+    }
+    return true;
+  } catch (e) {
+    console.error(e);
   }
 }
 
@@ -5830,26 +5802,39 @@ export function resetMaxBounds() {
 
 /**
  * Create views array or object with id as key, or single view if idView is provided in options
- * @param {Object | String} o options || id of the map
+ * @param {Object | Array} o options || id of the map
  * @param {String} o.id map id
  * @param {String|Array} o.idView Optional. Filter view(s) to return. Default = all.
  * @return {Array} array of views
  */
 export function getViews(o) {
-  o = o || {};
-  const d = getMapData(o.id);
+  const isAV = isArrayOfViewsId(o);
+  const opt = Object.assign({}, isAV ? { idView: o } : o);
+  const d = getMapData(opt.id);
   const views = d.views || [];
-
-  if (o.idView) {
-    o.idView = isArray(o.idView) ? o.idView : [o.idView];
-    return views.filter((v) => o.idView.indexOf(v.id) > -1);
+  if (opt.idView) {
+    opt.idView = isArray(opt.idView) ? opt.idView : [opt.idView];
+    return opt.idView.map(id => views.find(v=>v.id===id))
   } else {
     return views;
   }
 }
-export function getViewsForJSON() {
-  const views = getViews();
-  const f = [
+export function getViewsForJSON(o) {
+  const views = getViews(o);
+  return views.map((view) => getViewJson(view, { asString: false }));
+}
+
+/**
+ * Get JSON representation of a view ( same as the one dowloaded );
+ * @param {String} idView Id of the view;
+ * @param {Object} opt Options
+ * @param {Boolean} opt.asString As string
+ * @return {String} JSON string with view data (or cleaned view object);
+ */
+export function getViewJson(idView, opt) {
+  opt = Object.assign({}, { asString: true }, opt);
+  const view = getView(idView);
+  const keys = [
     "id",
     "editor",
     "target",
@@ -5862,14 +5847,23 @@ export function getViewsForJSON() {
     "editors",
     "_edit",
   ];
+  const out = {};
 
-  const viewsClean = views.map((v) => {
-    return f.reduce((a, k) => {
-      a[k] = v[k];
-      return a;
-    }, {});
-  });
-  return viewsClean;
+  for (const key of keys) {
+    out[key] = view[key];
+    if (key === "data" && isObject(out[key]?.style)) {
+      delete out[key]?.style._sld;
+      delete out[key]?.style._mapbox;
+      delete out[key]?.attribute?.table;
+      delete out[key]?.attribute?.sample;
+    }
+  }
+
+  if (opt.asString) {
+    return JSON.stringify(out);
+  }
+
+  return out;
 }
 
 /**

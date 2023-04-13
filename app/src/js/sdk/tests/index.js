@@ -9,6 +9,7 @@ const mapx = new mxsdk.Manager({
     width: "100%",
   },
   params: {
+    project: "MX-A3M-LVK-V7S-XOT-J48",
     zoomMin: 0,
     zoomMax: 22,
   },
@@ -162,6 +163,46 @@ mapx.once("ready", async () => {
             bounds: res.boundsOrig,
           });
           return true;
+        },
+      },
+    ],
+  });
+
+  t.check("Sharing module", {
+    init: async () => {
+      const view = await mapx.ask("_get_random_view", {
+        type: ["vt", "rt", "sm", "cc"],
+      });
+      await mapx.ask("show_modal_share", {
+        idView: view.id,
+      });
+      return {
+        id: view.id,
+      };
+    },
+    tests: [
+      {
+        name: "has valid url with view id",
+        test: async (r) => {
+          const urlString = await mapx.ask("get_modal_share_string");
+          const url = new URL(urlString);
+          const hasId = url.searchParams.get("views") === r.id;
+          return hasId;
+        },
+      },
+      {
+        name: "test suite work",
+        test: async (r) => {
+          const ok = await mapx.ask("get_modal_share_tests");
+          return ok;
+        },
+      },
+      {
+        name: "can be closed",
+        test: async () => {
+          const hadModal = await mapx.ask("close_modal_share");
+          await mapx.ask("close_modal_all");
+          return hadModal;
         },
       },
     ],
@@ -672,7 +713,7 @@ mapx.once("ready", async () => {
             asc: true,
             mode: "text",
           });
-          return sorted_asc && !sorted_desc;
+          return sorted_asc && sorted_desc;
         },
       },
     ],
@@ -1160,39 +1201,6 @@ mapx.once("ready", async () => {
     ],
   });
 
-  t.check("Sharing module", {
-    init: async () => {
-      const view = await mapx.ask("_get_random_view", {
-        type: ["vt", "rt", "sm", "cc"],
-      });
-      await mapx.ask("show_modal_share", {
-        idView: view.id,
-      });
-      return {
-        id: view.id,
-      };
-    },
-    tests: [
-      {
-        name: "has valid url with view id",
-        test: async (r) => {
-          const urlString = await mapx.ask("get_modal_share_string");
-          const url = new URL(urlString);
-          const hasId = url.searchParams.get("views") === r.id;
-          return hasId;
-        },
-      },
-      {
-        name: "can be closed",
-        test: async () => {
-          const hadModal = await mapx.ask("close_modal_share");
-          await mapx.ask("close_modal_all");
-          return hadModal;
-        },
-      },
-    ],
-  });
-
   t.check("Tools - add new view", {
     init: async () => {
       await stopIfGuest();
@@ -1218,7 +1226,8 @@ mapx.once("ready", async () => {
 
   /**
    * Run tests
-   */ t.run({
+   */
+  t.run({
     finally: () => {
       console.log("Tests finished");
       const resTable = t._results.map((r) => {

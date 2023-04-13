@@ -59,9 +59,9 @@ export function isObject(item) {
  */
 export function isView(item) {
   return (
+    isObject(item) &&
     isViewId(item?.id) &&
     isProjectId(item?.project) &&
-    isObject(item) &&
     isString(item?.type) &&
     !!item.type.match(/^(vt|rt|cc||sm||gj)$/)
   );
@@ -256,13 +256,58 @@ export function isArrayOfViewsId(arr) {
  * @param {Array} arr Array to test
  * @param {Boolean} desc Descendent ?
  */
-export function isSorted(arr, desc) {
-  return (
-    isArray(arr) &&
-    arr.every((val, i, arr) =>
-      !i || desc ? val < arr[i + 1] : val >= arr[i - 1]
-    )
-  );
+export function isSortedArray(arr, desc) {
+  if (!isArray(arr)) {
+    return false;
+  }
+
+  let sorted = true;
+
+  for (let i = 0; i < arr.length; i++) {
+    if (sorted) {
+      const a = arr[i];
+      const b = arr[i + 1];
+      if (isNotEmpty(b)) {
+        sorted = isAgteB(a, b, !desc);
+      }
+    }
+  }
+
+  return sorted;
+}
+
+/**
+ * Compare value an return
+ * @param {Any} a A value
+ * @param {Any} b B value
+ * @return {boolean}
+ */
+export function isAgteB(a, b, asc = true) {
+  if (a === b) {
+    return true;
+  }
+  if (isNumeric(a) && isNumeric(b)) {
+    return asc ? a < b : b > a;
+  } else {
+    a = String(a);
+    b = String(b);
+    return asc ? a.localeCompare(b) < 0 : b.localeCompare(a) > 0;
+  }
+}
+/**
+ * Compare a to b ( for sorting )
+ * @param {Any} a A value
+ * @param {Any} b B value
+ * @return {Number} 1,-1 or 0
+ */
+export function isAgtB(a, b, asc = true) {
+  if (isNumeric(a) && isNumeric(b)) {
+    return asc ? a - b : b - a;
+  } else {
+    a = String(a);
+    b = String(b);
+    return asc ? a.localeCompare(b) : b.localeCompare(a);
+  }
 }
 
 /**

@@ -1,22 +1,43 @@
 import { modal } from "../mx_helper_modal.js";
 import { EventSimple } from "../event_simple/index.js";
-import { getDictItem, getLanguageCurrent } from "./../language";
+import {
+  getDictItem,
+  getLanguageCurrent,
+  updateLanguage,
+} from "./../language/index.js";
+import { waitFrameAsync } from "./../animation_frame/index.js";
 import {
   isStoryPlaying,
   getStoryId,
   getViewsStep,
 } from "../story_map/index.js";
-import { isNotEmpty, isArrayOfViewsId, isBoolean } from "../is_test/index.js";
+import { getArrayDistinct } from "../array_stat/index.js";
+import { viewsListAddSingle } from "../mx_helper_map_view_ui.js";
+import {
+  isNotEmpty,
+  isArrayOfViewsId,
+  isBoolean,
+  isEqual,
+  isEqualSearch,
+  isTrue,
+} from "../is_test/index.js";
 import { parseTemplate } from "../mx_helper_misc.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { getQueryParametersAsObject } from "../url_utils";
 import { modalMarkdown } from "../modal_markdown";
+import { Throttle } from "./throttle.js";
+
 import {
+  getView,
   getViews,
+  getViewsForJSON,
   getViewsLayersVisibles,
   getViewsOpen,
   getViewsActive,
   getMapPos,
+  setMapPos,
+  viewRemove,
+  viewsCloseAll,
 } from "../map_helpers/index.js";
 import {
   el,
@@ -31,24 +52,30 @@ import "./style.less";
 import socialLinks from "./social_link.json";
 import shareMode from "./share_mode.json";
 import { settings } from "./../settings";
-
+import { bindAll } from "../bind_class_methods/index.js";
 const t = elSpanTranslate;
+
+const def = {
+  views: [],
+  throttle: 50,
+};
 
 export class ShareModal extends EventSimple {
   constructor(opt) {
     super();
     const sm = this;
-    sm.openLink = sm.openLink.bind(sm);
-    sm.close = sm.close.bind(sm);
-    sm.copy = sm.copy.bind(sm);
-    sm.update = sm.update.bind(sm);
-    sm.init(opt);
+    bindAll(sm);
+    opt = Object.assign({}, def, opt);
+    sm._throttle_update = new Throttle(50);
+    sm.init(opt).catch((err) => {
+      console.error(err);
+    });
   }
 
   /**
    * Initialize modal
    */
-  init(opt) {
+  async init(opt) {
     const sm = this;
     if (window._share_modal) {
       window._share_modal.reset();
@@ -58,7 +85,12 @@ export class ShareModal extends EventSimple {
     sm._init_state(opt);
     sm._validate_opt();
     sm._init_modal();
-    sm.reset();
+
+    sm.on("share_code_updated", sm._update_state_form);
+    sm.on("state_form_updated", sm._update_state_views);
+    sm.on("state_views_updated", sm._update_options_visibility);
+    sm.on("options_visibility_changed", sm._update_state_form);
+    await sm.reset();
     sm.fire("init");
   }
 
@@ -93,10 +125,30 @@ export class ShareModal extends EventSimple {
     Object.assign(sm._state.opt, opt);
   }
 
-  reset() {
+  async setForm(stateForm) {
+    const sm = this;
+    const elForm = sm._el_form;
+    const form = Object.assign({}, stateForm);
+    for (const key in form) {
+      const elInput = elForm.querySelector(`[name=${key}]`);
+      if (!elInput) {
+        continue;
+      }
+      const value = form[key];
+      const isCheckbox = elInput.type === "checkbox";
+      if (isCheckbox) {
+        elInput.checked = !!value;
+      } else {
+        elInput.value = value;
+      }
+    }
+    await sm.update();
+  }
+
+  async reset() {
     const sm = this;
     sm.build();
-    sm.update();
+    await sm.update();
     sm.fire("reset");
   }
 
@@ -117,35 +169,30 @@ export class ShareModal extends EventSimple {
 
   /**
    * Update
+   * @return {Promise<boolean>} done
    */
   update() {
     const sm = this;
-    clearTimeout(sm._update_timeout);
-    sm._update_timeout = setTimeout(() => {
+    return sm._throttle_update.exec(sm._update);
+  }
+
+  _update() {
+    const sm = this;
+    return new Promise((resolve) => {
       sm._state.prevent.clear();
-
-      for (let i = 0; i < 3; i++) {
-        /*
-         * 3 passes to solve interdependencies
-         *
-         * - list of views depend on form's "views selection"
-         * - form depend on option visibility
-         * - options visibility depends on form and list of views
-         *  
-         */
-        sm._update_views();
-        sm._update_state_form();
-        sm._update_options_visibility();
-      }
-
+      /* linked updates */
+      sm._update_state_form();
+      sm._update_state_views();
+      sm._update_options_visibility();
+      /* result update */
       sm._update_messages();
       sm._update_buttons();
-
       sm._update_url();
       sm._update_template();
 
       sm.fire("updated");
-    }, 50);
+      resolve(true);
+    });
   }
 
   /**
@@ -174,6 +221,7 @@ export class ShareModal extends EventSimple {
   _update_state_form() {
     const sm = this;
     const elForm = sm._el_form;
+    const form = Object.assign({}, sm._state.form);
     for (const key in sm._state.form) {
       const elInput = elForm.querySelector(`[name=${key}]`);
       const isEnabled = !elInput.disabled;
@@ -183,8 +231,15 @@ export class ShareModal extends EventSimple {
           ? elInput.checked
           : elInput.value
         : null;
-      sm._state.form[key] = value;
+      form[key] = value;
     }
+
+    if (isEqual(form, sm._state.form)) {
+      return sm._state.form;
+    }
+
+    Object.assign(sm._state.form, form);
+    sm.fire("state_form_updated");
   }
 
   /**
@@ -198,32 +253,33 @@ export class ShareModal extends EventSimple {
   /**
    * Update views list
    */
-  _update_views() {
+  _update_state_views() {
     const sm = this;
     const state = sm._state;
     const sMode = state.form.share_views_select;
-    state.views.length = 0;
+    const views = [];
     switch (sMode) {
       case "share_views_select_method_preselect":
-        state.views.push(...sm._get_views_opt());
+        views.push(...sm._get_views_opt());
         break;
       case "share_views_select_method_story_step":
-        state.views.push(...(getViewsStep() || []));
+        views.push(...(getViewsStep() || []));
         break;
       case "share_views_select_method_story_itself":
-        state.views.push(getStoryId());
-        break;
-      case "share_views_select_method_map_list_open":
-        state.views.push(...(getViewsOpen() || []));
+        views.push(getStoryId());
         break;
       case "share_views_select_method_map_list_active":
-        state.views.push(...(getViewsActive() || []));
+        views.push(...(getViewsActive() || []));
         break;
       case "share_views_select_method_current_url":
         const p = getQueryParametersAsObject();
         const vFilter = p.views || p.idViews || [];
         vFilter.push(...(p.viewsOpen || p.idViewsOpen || []));
-        state.views.push(...vFilter);
+        views.push(...vFilter);
+        break;
+      case "share_views_select_method_map_list_open":
+      default:
+        views.push(...(getViewsOpen() || []));
         break;
       /**
        * Disabled handler
@@ -231,9 +287,18 @@ export class ShareModal extends EventSimple {
       case "share_views_select_method_all":
         break;
       case "share_views_select_method_map_layer":
-        state.views.push(...(getViewsLayersVisibles(true) || []));
+        views.push(...(getViewsLayersVisibles(true) || []));
         break;
     }
+
+    const viewsOut = getArrayDistinct(views);
+
+    if (isEqual(viewsOut, state.views)) {
+      return views;
+    }
+    state.views.length = 0;
+    state.views.push(...viewsOut);
+    sm.fire("state_views_updated");
     return state.views;
   }
 
@@ -246,7 +311,7 @@ export class ShareModal extends EventSimple {
     const idViews = sm._state.views;
     const modeTargetStory =
       f.share_views_select === "share_views_select_method_story_itself";
-    const storyInViews = getViews({ idView: idViews }).reduce(
+    const storyInViews = getViews(idViews).reduce(
       (a, c) => a || c.type === "sm",
       false
     );
@@ -343,17 +408,21 @@ export class ShareModal extends EventSimple {
     const modeStatic = f.share_mode_static;
     const noMapPosition = !f.share_map_pos;
     const targetStory = sm.hasTargetStory();
-
-    sm.setClassDisable(sm._el_checkbox_category_hide, modeStatic);
-    sm.setClassDisable(sm._el_checkbox_map_pos, modeStatic && targetStory);
-    sm.setClassDisable(
-      sm._el_checkbox_map_pos_max,
-      noMapPosition || targetStory
-    );
-    sm.setClassDisable(
-      sm._el_checkbox_zoom,
-      targetStory || !hasViews || !modeStatic
-    );
+    const out = [
+      sm.setClassDisable(sm._el_checkbox_category_hide, modeStatic),
+      sm.setClassDisable(sm._el_checkbox_map_pos, modeStatic && targetStory),
+      sm.setClassDisable(
+        sm._el_checkbox_map_pos_max,
+        noMapPosition || targetStory
+      ),
+      sm.setClassDisable(
+        sm._el_checkbox_zoom,
+        targetStory || !hasViews || !modeStatic
+      ),
+    ];
+    if (out.some(isTrue)) {
+      sm.fire("options_visibility_changed");
+    }
   }
 
   /**
@@ -485,6 +554,7 @@ export class ShareModal extends EventSimple {
      */
     state.shareString = txt;
     sm._el_input.value = txt;
+    sm.fire("share_code_updated");
     if (disableLink || disableLinkApp) {
       state.prevent.add("open");
     }
@@ -497,9 +567,9 @@ export class ShareModal extends EventSimple {
   /**
    * get share string
    */
-  getShareString() {
+  getShareCode() {
     const sm = this;
-    return sm._state.shareString;
+    return sm._state.form.share_code;
   }
 
   /**
@@ -521,12 +591,14 @@ export class ShareModal extends EventSimple {
 
   setClassDisable(target, disable) {
     const elInput = target.querySelector("input");
+    const change = disable !== elInput.disabled;
     elInput.disabled = !!disable;
     if (disable) {
       target.classList.add("share--disabled");
     } else {
       target.classList.remove("share--disabled");
     }
+    return change;
   }
 
   /**
@@ -565,7 +637,7 @@ export class ShareModal extends EventSimple {
   copy() {
     const sm = this;
     const elTemp = el("input", { type: "text" });
-    elTemp.value = sm._state.shareString;
+    elTemp.value = sm.getShareCode();
     elTemp.select();
     navigator.clipboard.writeText(elTemp.value);
     new FlashItem("clipboard");
@@ -752,5 +824,98 @@ export class ShareModal extends EventSimple {
 
     sm._update_state_form();
     sm.fire("built");
+  }
+
+  async tests() {
+    const sm = this;
+    const state = sm._state;
+    const { default: tests } = await import("./tests.json");
+    const results = [];
+    const langCurrent = getLanguageCurrent();
+    let i = 0;
+    for (const test of tests) {
+      /**
+       * Clear open views
+       */
+      await viewsCloseAll();
+      const idViewsAdded = new Set();
+
+      /**
+       * Set language
+       */
+      const param = new URLSearchParams(test.search);
+      const lang = param.get("language");
+
+      if (lang) {
+        await updateLanguage(lang);
+      }
+
+      /**
+       * Add views if not in project, keep order
+       */
+      let n = test.views.length;
+      while (n--) {
+        const view = test.views[n];
+        const hasView = !!getView(view);
+        if (!hasView) {
+          idViewsAdded.add(view.id);
+        }
+        const res = await viewsListAddSingle(view, { moveTop: true });
+        if (!res) {
+          console.error("View not added:", view?.id);
+          continue;
+        }
+      }
+      /**
+       * Set map setting (lat,lng,..theme,...3d,..sat);
+       */
+      await setMapPos({ param: test.pos });
+      await waitFrameAsync();
+      await sm.setForm(test.form);
+
+      /**
+       * Compare result
+       */
+      const search = sm.url.search;
+      test.passed = isEqual(search, test.search);
+      if (!test.passed) {
+        debugger;
+        console.table({ search: search, test: test.search });
+      }
+      /**
+       * Close and remove views
+       */
+      await viewsCloseAll();
+      if (idViewsAdded.length) {
+        for (const view of idViewsAdded) {
+          await viewRemove(view);
+        }
+        console.log("remove view");
+      }
+      await updateLanguage(langCurrent);
+      /**
+       * Store results
+       */
+      results.push(test);
+    }
+
+    console.log(
+      `${tests.length} tests passed : ${results.reduce(
+        (a, r) => a && r.passed,
+        true
+      )}`
+    );
+    return results.reduce((a, r) => a && r.passed, true);
+  }
+
+  createTest() {
+    const sm = this;
+    const views = getViewsForJSON(sm._state.views);
+    return {
+      pos: Object.assign({ jump: true }, getMapPos()),
+      views: views,
+      form: sm._state.form,
+      search: sm.url.search,
+    };
   }
 }
