@@ -31,18 +31,6 @@
       }
     },
     {
-      "id": "terrain_sky",
-      "type": "sky",
-      "layout": {
-        "visibility": "none"
-      },
-      "paint": {
-        "sky-type": "atmosphere",
-        "sky-atmosphere-sun": [0, 0],
-        "sky-atmosphere-sun-intensity": 5
-      }
-    },
-    {
       "id": "boundary_un_1",
       "type": "line",
       "source": "mapbox_composite",

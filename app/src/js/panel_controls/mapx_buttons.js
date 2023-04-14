@@ -100,18 +100,30 @@ export function generateButtons() {
       action: function (cmd) {
         const btn = this;
         const map = getMap();
-        cmd = typeof cmd === "string" ? cmd : "toggle";
-        const enabled = toggleLayer({
-          id: "map_main",
-          idLayer: "terrain_sky",
-          elButton: btn.elButton,
-          action: cmd,
-        });
+        let classop = "toggle";
+
+        switch (cmd) {
+          case "hide":
+            classop = "remove";
+            break;
+          case "show":
+            classop = "add";
+            break;
+          default:
+            classop = "toggle";
+        }
+        btn.elButton.classList[classop]("active");
+        const enabled = btn.elButton.classList.contains("active");
         const curPitch = map.getPitch();
         const storyPlaying = isStoryPlaying();
         if (!storyPlaying) {
           map.flyTo({ pitch: enabled ? (curPitch > 0 ? curPitch : 60) : 0 });
         }
+
+        map.setTerrain(
+          enabled ? { source: "mapbox_dem", exaggeration: 1 } : null
+        );
+
         return enabled;
       },
     }),
@@ -232,7 +244,8 @@ function toggleLayer(opt) {
   const reqToggle = opt.action === "toggle";
   const toShow = reqToggle ? !isVisible : reqShow || !reqHide;
 
-  if (isAerial || isTerrain) {
+  //if (isAerial || isTerrain) {
+  if (isAerial) {
     /**
      * Special case : aerial and terrain mode should not have
      * hillshading or bathymetry.
@@ -241,7 +254,14 @@ function toggleLayer(opt) {
     altLayers.push(...getLayerNamesByPrefix({ prefix: "bathymetry" }));
   }
 
-  map.setLayoutProperty(opt.idLayer, "visibility", toShow ? "visible" : "none");
+  //if (isAerial || isTerrain) { // sky layer Deprecated since 2.9
+  if (isAerial) {
+    map.setLayoutProperty(
+      opt.idLayer,
+      "visibility",
+      toShow ? "visible" : "none"
+    );
+  }
 
   for (let id of altLayers) {
     map.setLayoutProperty(id, "visibility", toShow ? "none" : "visible");

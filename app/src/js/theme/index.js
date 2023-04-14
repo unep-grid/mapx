@@ -366,7 +366,7 @@ class Theme extends EventSimple {
     /*await map.once("load", t.updateMap.bind(t));*/
     /*return false;*/
     /*}*/
-
+    const isDark = t.isDarkMode();
     const layers = layer_resolver(t._colors);
 
     for (const grp of layers) {
@@ -391,6 +391,50 @@ class Theme extends EventSimple {
           }
         }
       }
+    }
+
+    if (isDark) {
+      map.setFog({
+        "horizon-blend": ["interpolate", ["linear"], ["zoom"], 4, 0.1, 7, 0.3],
+        color: [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          "rgba(255, 255, 255, 0.1)",
+          7,
+          "rgba(255, 255, 255, 0.8)",
+        ],
+        "high-color": "rgba(255,255,255,0.1)",
+        "space-color": "#111",
+        "star-intensity": 0.1,
+      });
+    } else {
+      map.setFog({
+        "horizon-blend": ["interpolate", ["linear"], ["zoom"], 4, 0.1, 7, 0.3],
+        color: [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          0,
+          "rgba(17, 176, 248, 0.3)",
+          4,
+          "rgba(255, 255, 255, 0.3)",
+          7,
+          "rgba(255, 255, 255, 0.8)",
+        ],
+        "high-color": "rgba(255,255,255,0.1)",
+        "space-color": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          "#111",
+          7,
+          "rgba(17,176,248,0.9)",
+        ],
+        "star-intensity": ["interpolate", ["linear"], ["zoom"], 4, 0.1, 7, 0],
+      });
     }
 
     await map.once("idle");
