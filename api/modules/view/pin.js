@@ -31,14 +31,33 @@ export async function ioViewPin(socket, config, cb) {
     viewsExternal.add(config.id_view);
     const viewsExternalStr = JSON.stringify([...viewsExternal]);
 
-    await pgWrite.query(`
+    const client = await pgWrite.connect();
+    try {
+      await client.query("BEGIN");
+
+      const result = await client.query(`
        UPDATE mx_projects 
        SET views_external = '${viewsExternalStr}'
+       WHERE id ='${config.id_project}'
       `);
 
-    const view = await getView(config.id_view);
+      if (result.rowCount !== 1) {
+        throw new Error(
+          `Expected 1 row to be inserted, but got ${result.rowCount} rows.`
+        );
+      }
+    } catch (err) {
+      client.query("ROLLBACK");
+      throw err;
+    } finally {
+      client.release();
+    }
 
-    console.log(`Pin done for ${view.id}`)
+    /**
+     * Done, returning view
+     */
+    const view = await getView(config.id_view);
+    console.log(`Pin done for ${view.id}`);
 
     cb(view);
   } catch (e) {
