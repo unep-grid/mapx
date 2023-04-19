@@ -1,3 +1,8 @@
+  - [1.10.4-patch.1](https://github.com/unep-grid/mapx/tree/1.10.4-patch.1) 
+
+    - API
+        - Major bug impacting all projects imported views after "view" pin fix in '1.10.2-alpha.4' 
+        
   - [1.10.4](https://github.com/unep-grid/mapx/tree/1.10.4) 
 
   - [1.10.4-beta.2](https://github.com/unep-grid/mapx/tree/1.10.4-beta.2) 
