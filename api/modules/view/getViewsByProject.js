@@ -59,7 +59,20 @@ async function getViewsHandler(req, res) {
  * @return {Promise<array>} List of views
  */
 async function getViews(opt) {
-  opt = opt || {};
+  const def = {
+    idProject: null,
+    idUser: null,
+    types: [],
+    idViews: [],
+    collections: [],
+    collectionsSelectOperator: "?|",
+    language: "en",
+    roleMax: "admin",
+    allViews: false,
+    selectKeys: ["*"],
+  };
+
+  const config = Object.assign({}, def, opt);
   const views = [];
   /**
    * Set variable to alter the template :
@@ -67,22 +80,23 @@ async function getViews(opt) {
    * sql, use a conditional block in sql template and
    * set boolean beforehand, here.
    */
-  opt.hasFilterTypes = opt.types.length > 0;
-  opt.hasFilterViews = opt.idViews.length > 0 && !opt.allViews;
-  opt.hasFilterCollections = opt.collections.length > 0;
+  config.hasFilterTypes = config.types.length > 0;
+  config.hasFilterViews = config.idViews.length > 0 && !config.allViews;
+  config.hasFilterCollections = config.collections.length > 0;
   /**
    * Convert array to sql code for the template
    */
-  opt.sqlTypesFilter = opt.types.map((type) => `'${type}'`).join(",");
-  opt.sqlViewsFilter = opt.idViews.map((id) => `'${id}'`).join(",");
-  opt.sqlCollectionsFilter = opt.collections.map((col) => `'${col}'`).join(",");
-  opt.sqlCollectionsSelectOperator = opt.collectionsSelectOperator;
+  config.sqlTypesFilter = config.types.map((type) => `'${type}'`).join(",");
+  config.sqlViewsFilter = config.idViews.map((id) => `'${id}'`).join(",");
+  config.sqlCollectionsFilter = config.collections
+    .map((col) => `'${col}'`)
+    .join(",");
+  config.sqlCollectionsSelectOperator = config.collectionsSelectOperator;
 
   /**
    * Parse sql template
    */
-  const sql = parseTemplate(templates.getViewsByProject, opt);
-
+  const sql = parseTemplate(templates.getViewsByProject, config);
   /**
    * Query
    */

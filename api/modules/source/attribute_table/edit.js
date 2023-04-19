@@ -7,6 +7,7 @@ import {
   getTableDimension,
   isLayerValid,
   sanitizeUpdates,
+  updateSourceAttribute,
 } from "#mapx/db_utils";
 import { getSourceAttributeTable, getSourceEditors } from "#mapx/source";
 import { randomString } from "#mapx/helpers";
@@ -20,6 +21,12 @@ import {
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { pgWrite, redisSetJSON, redisGetJSON } from "#mapx/db";
+import {
+  ioUpdateDbViewsAltStyleBySource,
+  ioUpdateClientViewsBySource,
+  getViewsTableBySource,
+} from "#mapx/view";
+
 const regDatePg = new RegExp("^date|^timestamp");
 
 /**
@@ -57,6 +64,7 @@ export const routes = {
   client_geom_validate: "/client/source/edit/table/geom/validate",
   client_value_validate: "/client/source/edit/table/value/validate",
   client_changes_sanitize: "/client/source/edit/table/changes/sanitize",
+  client_get: "/client/get",
   /**
    * from here server
    */
@@ -86,8 +94,8 @@ class EditTableSession {
     et.onUpdate = et.onUpdate.bind(et);
     et.onExit = et.onExit.bind(et);
     et.onValidate = et.onValidate.bind(et);
-    //et.onValidateValue = et.onValidateValue.bind(et);
     et.onSanitize = et.onSanitize.bind(et);
+    et.onGet = et.onGet.bind(et);
     et.progress = et.progress.bind(et);
     et.progressAll = et.progressAll.bind(et);
   }
@@ -200,6 +208,8 @@ class EditTableSession {
     et._socket.on(routes.client_edit_updates, et.onUpdate);
     et._socket.on(routes.client_geom_validate, et.onValidate);
     et._socket.on(routes.client_changes_sanitize, et.onSanitize);
+    et._socket.on(routes.client_get, et.onGet);
+
     /*
      * Get list of current members
      */
@@ -269,6 +279,7 @@ class EditTableSession {
     et._socket.off(routes.client_edit_updates, et.onUpdate);
     et._socket.off(routes.client_geom_validate, et.onValidate);
     et._socket.off(routes.client_changes_sanitize, et.onSanitize);
+    et._socket.off(routes.client_get, et.onGet);
   }
 
   dispatch(message) {
@@ -309,6 +320,24 @@ class EditTableSession {
     } finally {
       et.progressAll({ percent: 0 });
       et.setBusy(false);
+    }
+  }
+
+  async onGet(message, callback) {
+    const et = this;
+    switch (message.type) {
+      case "columns_used":
+        {
+          const data = await getLayerViewsAttributes(et._id_table);
+          callback(data);
+        }
+        break;
+      case "table_views":
+        {
+          const data = await getViewsTableBySource(et._id_table);
+          callback(data);
+        }
+        break;
     }
   }
 
@@ -395,7 +424,7 @@ class EditTableSession {
       et.error("Not allowed");
       return;
     }
-    writePostgres(updates)
+    et.writePostgres(updates)
       .then(() => {
         et.perfEnd("write");
       })
@@ -429,10 +458,11 @@ class EditTableSession {
       const attributes = pgRes.fields.map((f) => f.name);
       const types = await getColumnsTypesSimple(et._id_table, attributes);
       const title = await getLayerTitle(et._id_table);
-      const attributesViews = await getLayerViewsAttributes(et._id_table);
+      //const attributesViews = await getLayerViewsAttributes(et._id_table);
+      //const tableViews =  await get
       const locked = await et.getState("lock_table");
       const table = {
-        attributesViews,
+        //attributesViews,
         hasGeom,
         validation,
         types,
@@ -549,128 +579,154 @@ class EditTableSession {
     };
     return m;
   }
-}
 
-async function writePostgres(updates) {
-  if (isEmpty(updates)) {
-    return;
-  }
-  const client = await pgWrite.connect();
-  await client.query("BEGIN");
-  try {
-    for (const update of updates) {
-      const { id_table, column_name, column_name_new } = update;
+  async writePostgres(updates) {
+    const et = this;
 
-      if (!isSourceId(id_table) || !isSafeName(column_name)) {
-        throw new Error("Invalid update table or column");
-      }
-      const colExists = await columnExists(column_name, id_table);
+    if (isEmpty(updates)) {
+      return;
+    }
+    const postScripts = new Map();
+    const socket = et._socket;
+    const client = await pgWrite.connect();
+    await client.query("BEGIN");
+    try {
+      for (const update of updates) {
+        const { id_table, column_name, column_name_new } = update;
 
-      switch (update.type) {
-        case "update_cell":
-          {
-            const { gid, column_type } = update;
-            let { value_new } = update;
-            const valid = isNumeric(gid);
-            const isDate = regDatePg.test(column_type);
+        if (!isSourceId(id_table) || !isSafeName(column_name)) {
+          throw new Error("Invalid update table or column");
+        }
+        const colExists = await columnExists(column_name, id_table);
 
-            if (valid && colExists) {
-              const qSql = parseTemplate(templates.updateTableCellByGid, {
-                id_table,
-                gid,
-                column_name,
-              });
+        switch (update.type) {
+          case "update_cell":
+            {
+              const { gid, column_type } = update;
+              let { value_new } = update;
+              const valid = isNumeric(gid);
+              const isDate = regDatePg.test(column_type);
 
-              if (isDate) {
-                /**
-                 * Date time conversion
-                 * - if its empty -> null
-                 * - if it's a date -> use a proper date instance
-                 * - if target type require a timestamp and value dont have one
-                 *   the timezone of te server will be used ⚠️
-                 */
-                value_new = isEmpty(value_new) ? null : new Date(value_new);
-              }
+              if (valid && colExists) {
+                const qSql = parseTemplate(templates.updateTableCellByGid, {
+                  id_table,
+                  gid,
+                  column_name,
+                });
 
-              const res = await client.query(qSql, [value_new]);
-              if (res.rowCount != 1) {
-                throw new Error("Error during update_cell : row affected =! 1");
-              }
-            }
-          }
-          break;
-        case "add_column":
-          {
-            /** ALTER TABLE products ADD COLUMN description text; **/
-            const { column_type } = update;
+                if (isDate) {
+                  /**
+                   * Date time conversion
+                   * - if its empty -> null
+                   * - if it's a date -> use a proper date instance
+                   * - if target type require a timestamp and value dont have one
+                   *   the timezone of te server will be used ⚠️
+                   */
+                  value_new = isEmpty(value_new) ? null : new Date(value_new);
+                }
 
-            if (!colExists) {
-              const qSql = parseTemplate(templates.updateTableAddColumn, {
-                id_table,
-                column_name,
-                column_type,
-              });
-              const res = await client.query(qSql);
-              if (res.rowCount) {
-                throw new Error(
-                  "Error during add_column : rows affected is not null"
-                );
+                const res = await client.query(qSql, [value_new]);
+                if (res.rowCount != 1) {
+                  throw new Error(
+                    "Error during update_cell : row affected =! 1"
+                  );
+                }
               }
             }
-          }
-          break;
-        case "remove_column":
-          {
-            if (colExists) {
-              /** ALTER TABLE products remove COLUMN description text; **/
-              const qSql = parseTemplate(templates.updateTableRemoveColumn, {
-                id_table,
-                column_name,
-              });
+            break;
+          case "add_column":
+            {
+              /** ALTER TABLE products ADD COLUMN description text; **/
+              const { column_type } = update;
 
-              const res = await client.query(qSql);
-              if (res.rowCount) {
-                throw new Error(
-                  "Error during remove_column : rows affected is not null"
-                );
+              if (!colExists) {
+                const qSql = parseTemplate(templates.updateTableAddColumn, {
+                  id_table,
+                  column_name,
+                  column_type,
+                });
+                const res = await client.query(qSql);
+                if (res.rowCount) {
+                  throw new Error(
+                    "Error during add_column : rows affected is not null"
+                  );
+                }
               }
             }
-          }
-          break;
-        case "rename_column":
-          {
-            const colNewExists = await columnExists(column_name_new, id_table);
-            if (colExists && !colNewExists) {
-              /** ALTER TABLE products remove COLUMN description text; **/
-              const qSql = parseTemplate(templates.updateTableRenameColumn, {
+            break;
+          case "remove_column":
+            {
+              if (colExists) {
+                const qSql = parseTemplate(templates.updateTableRemoveColumn, {
+                  id_table,
+                  column_name,
+                });
+
+                const res = await client.query(qSql);
+                if (res.rowCount) {
+                  throw new Error(
+                    "Error during remove_column : rows affected is not null"
+                  );
+                }
+              }
+            }
+            break;
+          case "rename_column":
+            {
+              await updateSourceAttribute(
                 id_table,
                 column_name,
                 column_name_new,
+                client
+              );
+
+              /**
+               * Script that require to be launched after the commit
+               * -> impacts client views
+               * -> client views can require source summary
+               * -> attribute requested in summary must exists
+               * -> exists only after commit
+               */
+              const hash = `${column_name_new}@${id_table}`;
+              postScripts.set(hash, async () => {
+                await ioUpdateClientViewsBySource(socket, {
+                  idSource: id_table,
+                });
+                return await ioUpdateDbViewsAltStyleBySource(socket, {
+                  idSource: id_table,
+                });
               });
-
-              const res = await client.query(qSql);
-              if (res.rowCount) {
-                throw new Error(
-                  "Error during remove_column : rows affected is not null"
-                );
-              }
             }
-          }
-          break;
+            break;
 
-        default:
-          throw new Error(`Error during write: unknow method: ${update.type}`);
+          default:
+            throw new Error(
+              `Error during write: unknow method: ${update.type}`
+            );
+        }
+      }
+
+      /**
+       * Update done. Commit.
+       */
+      await client.query("COMMIT");
+    } catch (e) {
+      await client.query("ROLLBACK");
+      throw e;
+    } finally {
+      client.release();
+    }
+    /**
+     * Handling postScripts
+     */
+    if (postScripts.size > 0) {
+      for (const [k, cb] of postScripts) {
+        console.log(`Apply post script for ${k}`);
+        const ok = await cb(k);
+        if (!ok) {
+          throw new Error("Post scripts failed ");
+        }
       }
     }
-
-    /**
-     * Update done. Commit.
-     */
-    await client.query("COMMIT");
-  } catch (e) {
-    await client.query("ROLLBACK");
-    throw e;
-  } finally {
-    client.release();
   }
 }

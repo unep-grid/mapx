@@ -1566,8 +1566,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "ru": "Добавить новый столбец: имя"
+    "en": "Name of the column",
+    "ru": "Имя столбца"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "ru": "Имя нового столбца будет:<b> {{column_name}}</b>"
+    "en": "The column name will be: <b>{{column_name}}</b>",
+    "ru": "Имя столбца будет:<b> {{column_name}}</b>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1793,6 +1793,56 @@
     "id": "edit_table_modal_quit_ignore_changes",
     "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
     "ru": "Эта таблица имеет {{count}} несохраненные изменения. Вы уверены, что хотите выйти и отменить эти изменения?"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "ru": "в использовании"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "ru": "сдержанный"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "ru": "не безопасно"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename Column",
+    "ru": "Переименовать столбец"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "ru": "Выберите столбец, который вы хотите переименовать:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_next",
+    "en": "Next",
+    "ru": "Следующий"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "ru": "Подтверждение"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
+    "ru": "Вы уверены, что хотите переименовать столбец {{column_name}} к {{column_name_new}} ?"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename Column",
+    "ru": "Переименовать столбец"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename Column",
+    "ru": "Переименовать столбец"
   },
   {
     "id": "geom_tools_modal_select_title",

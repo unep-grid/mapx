@@ -1566,8 +1566,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "de": "Fügen Sie eine neue Spalte hinzu: Name"
+    "en": "Name of the column",
+    "de": "Name der Spalte"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "de": "Der neue Spaltenname lautet:<b> {{column_name}}</b>"
+    "en": "The column name will be: <b>{{column_name}}</b>",
+    "de": "Der Spaltenname lautet:<b> {{column_name}}</b>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1793,6 +1793,56 @@
     "id": "edit_table_modal_quit_ignore_changes",
     "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
     "de": "Dieser Tisch hat {{count}} nicht gespeicherte Änderungen. Möchten Sie diese Änderungen wirklich beenden und verwerfen?"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "de": "in Benutzung"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "de": "reserviert"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "de": "nicht sicher"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename Column",
+    "de": "Spalte umbenennen"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "de": "Wählen Sie die Spalte aus, die Sie umbenennen möchten:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_next",
+    "en": "Next",
+    "de": "Nächste"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "de": "Bestätigung"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
+    "de": "Möchten Sie die Spalte wirklich umbenennen? {{column_name}} Zu {{column_name_new}} ?"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename Column",
+    "de": "Spalte umbenennen"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename Column",
+    "de": "Spalte umbenennen"
   },
   {
     "id": "geom_tools_modal_select_title",

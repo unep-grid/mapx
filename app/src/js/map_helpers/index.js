@@ -2491,15 +2491,15 @@ export function updateViewParams(o) {
  */
 export function getViewsOrder() {
   const viewContainer = document.querySelector(".mx-views-list");
+  const out = new Set();
   if (!viewContainer) {
     return [];
   }
   const els = viewContainer.querySelectorAll(".mx-view-item");
-  const res = [];
-  for (let el of els) {
-    res.push(el.dataset.view_id);
+  for (const el of els) {
+    out.add(el.dataset.view_id);
   }
-  return res;
+  return Array.from(out);
 }
 
 /**
@@ -5173,13 +5173,18 @@ export async function resetViewStyle(o) {
 
   const view = getView(o.idView);
 
+  const isOpen = isViewOpen(view);
+
   updateLanguageElements({
     el: view._el,
   });
-  await viewLayersAdd({
-    view: view,
-  });
-  await viewsLayersOrderUpdate(o);
+
+  if (isOpen) {
+    await viewLayersAdd({
+      view: view,
+    });
+    await viewsLayersOrderUpdate(o);
+  }
 }
 
 /**
@@ -5801,9 +5806,40 @@ export function resetMaxBounds() {
 }
 
 /**
+ * Replace and reload views
+ * @param {Object} views
+ * @return {<Promise>boolean} replaced
+ */
+export async function viewsReplace(views) {
+  try {
+    if (!isArrayOfViews(views)) {
+      console.error("viewsReplace: expecting an array of views");
+      return false;
+    }
+    const d = getMapData();
+    const viewsAll = d.views || [];
+    for (const view of views) {
+      const idView = view.id;
+      const idViews = viewsAll.map((v) => v.id);
+      const pos = idViews.indexOf(idView);
+      if (pos === -1) {
+        throw new Error(`View not found ${idView}`);
+      }
+      const oldView = viewsAll[pos];
+      Object.assign(oldView, view);
+      await resetViewStyle({ idView: view.id });
+    }
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+}
+
+/**
  * Create views array or object with id as key, or single view if idView is provided in options
- * @param {Object | Array} o options || id of the map
- * @param {String} o.id map id
+ * @param {Object | Array} o options || array of views id
+ * @param {String} o.id map id ( if null default map )
  * @param {String|Array} o.idView Optional. Filter view(s) to return. Default = all.
  * @return {Array} array of views
  */
@@ -5814,7 +5850,7 @@ export function getViews(o) {
   const views = d.views || [];
   if (opt.idView) {
     opt.idView = isArray(opt.idView) ? opt.idView : [opt.idView];
-    return opt.idView.map(id => views.find(v=>v.id===id))
+    return opt.idView.map((id) => views.find((v) => v.id === id));
   } else {
     return views;
   }

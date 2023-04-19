@@ -1,9 +1,10 @@
 import {
   getViewRemote,
   triggerUpdateSourcesList,
+  viewsReplace,
 } from "./../map_helpers/index.js";
 import { viewsListAddSingle } from "./../mx_helper_map_view_ui.js";
-import { isNotEmpty } from "../is_test/index.js";
+import { isNotEmpty, isArrayOfViews } from "../is_test/index.js";
 import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt/index.js";
 import { isProd } from "./../app_utils";
 import { nc } from "./../mx.js";
@@ -19,6 +20,7 @@ export const routes = {
   "/server/view/add": handlerViewAdd,
   "/server/source/added": handlerSourceAdded,
   "/server/view/style/get": handlerViewStyleGet,
+  "/server/views/replace": handleViewsReplace,
   "/server/test/echo": handlerEcho,
   "/server/test/sum": handlerSum,
 };
@@ -60,6 +62,23 @@ async function handlerViewAdd(message, cb) {
     console.error(e);
     message.error = `Error processing view add: ${e.message}`;
   }
+  cb(message);
+}
+
+/**
+ * Replace views from server
+ * @param {Object} message
+ * @param {Object} message.view  View to replace
+ * @param {Function} cb Callback for the server
+ * @return {void}
+ */
+async function handleViewsReplace(message, cb) {
+  const { views } = message;
+  if (!isArrayOfViews(views)) {
+    console.error("Views replace should provide valid views ")
+    return cb({ ok: false });
+  }
+  message.ok = await viewsReplace(views);
   cb(message);
 }
 

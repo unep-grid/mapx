@@ -1566,8 +1566,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "fa": "یک ستون جدید اضافه کنید: نام"
+    "en": "Name of the column",
+    "fa": "نام ستون"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "fa": "نام ستون جدید این خواهد بود:<b> {{column_name}}</b>"
+    "en": "The column name will be: <b>{{column_name}}</b>",
+    "fa": "نام ستون خواهد بود:<b> {{column_name}}</b>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1793,6 +1793,56 @@
     "id": "edit_table_modal_quit_ignore_changes",
     "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
     "fa": "این جدول دارد {{count}} تغییرات ذخیره نشده آیا مطمئنید که می خواهید آن تغییرات را ترک کرده و نادیده بگیرید؟"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "fa": "در حال استفاده"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "fa": "رزرو شده است"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "fa": "امن نیست"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename Column",
+    "fa": "تغییر نام ستون"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "fa": "ستون مورد نظر برای تغییر نام را انتخاب کنید:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_next",
+    "en": "Next",
+    "fa": "بعد"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "fa": "تائیدیه"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
+    "fa": "آیا مطمئن هستید که می خواهید نام ستون را تغییر دهید؟ {{column_name}} به {{column_name_new}} ?"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename Column",
+    "fa": "تغییر نام ستون"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename Column",
+    "fa": "تغییر نام ستون"
   },
   {
     "id": "geom_tools_modal_select_title",

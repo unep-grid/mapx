@@ -4,7 +4,7 @@
 import { pgRead } from "#mapx/db";
 import { parseTemplate, sendJSON, sendError } from "#mapx/helpers";
 import { templates } from "#mapx/template";
-import { isEmpty, isViewId } from "@fxi/mx_valid";
+import { isEmpty, isViewId, isSourceId } from "@fxi/mx_valid";
 export { mwGet, mwGetMetadata, getViewMetadata };
 /**
  * Get full view data
@@ -27,6 +27,26 @@ async function mwGet(req, res) {
   } catch (e) {
     return sendError(res, e);
   }
+}
+
+export async function getViewsIdBySource(idSource) {
+  if (!isSourceId(idSource)) {
+    throw Error("No valid");
+  }
+  const sql = templates.getViewsIdBySource;
+  const { rows } = await pgRead.query(sql, [idSource]);
+  return rows.map((r) => r.id);
+}
+
+export async function getViewsTableBySource(idSource) {
+  if (!isSourceId(idSource)) {
+    throw Error("No valid");
+  }
+  const sql = templates.getViewsTableBySource;
+
+  const { rows } = await pgRead.query(sql, [idSource]);
+
+  return rows;
 }
 
 export async function getView(idView) {

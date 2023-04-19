@@ -1566,8 +1566,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "ps": "یو نوی کالم اضافه کړئ: نوم"
+    "en": "Name of the column",
+    "ps": "د کالم نوم"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "ps": "د نوي کالم نوم به دا وي:<b> {{column_name}}</b>"
+    "en": "The column name will be: <b>{{column_name}}</b>",
+    "ps": "د کالم نوم به دا وي:<b> {{column_name}}</b>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1793,6 +1793,56 @@
     "id": "edit_table_modal_quit_ignore_changes",
     "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
     "ps": "دا جدول لري {{count}} نه خوندي شوي بدلونونه ایا تاسو ډاډه یاست چې دا بدلونونه پریږدئ او رد کړئ؟"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "ps": "په استعمال کې"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "ps": "ساتل شوی"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "ps": "خوندي نه"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename Column",
+    "ps": "د کالم نوم بدل کړئ"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "ps": "هغه کالم غوره کړئ چې تاسو یې نوم بدلول غواړئ:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_next",
+    "en": "Next",
+    "ps": "بل"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "ps": "تایید"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
+    "ps": "ایا تاسو ډاډه یاست چې تاسو غواړئ د کالم نوم بدل کړئ {{column_name}} ته {{column_name_new}} ؟"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename Column",
+    "ps": "د کالم نوم بدل کړئ"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename Column",
+    "ps": "د کالم نوم بدل کړئ"
   },
   {
     "id": "geom_tools_modal_select_title",

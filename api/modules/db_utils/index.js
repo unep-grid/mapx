@@ -124,10 +124,12 @@ async function tableExists(idTable, schema) {
  *
  * @param {String} idColumn id of the column
  * @param {String} idTable id of the table
+ * @param {pg.Client} pgClient - The node-postgres client.
  * @return {Promise<Boolean>} Table exists
  */
-async function columnExists(idColumn, idTable) {
+async function columnExists(idColumn, idTable, client) {
   try {
+    const pgClient = client || pgRead;
     const sql = `
     SELECT EXISTS ( 
     SELECT 1
@@ -135,7 +137,7 @@ async function columnExists(idColumn, idTable) {
     WHERE table_name=$1 
     AND column_name=$2
     )`;
-    const res = await pgRead.query(sql, [idTable, idColumn]);
+    const res = await pgClient.query(sql, [idTable, idColumn]);
     const exists = res.rowCount > 0 && res.rows[0].exists;
     return exists;
   } catch (e) {
@@ -513,6 +515,10 @@ async function getLayerTitle(idLayer, language) {
 
 /**
  * Get layer/table column name used for styling in views
+ * NOTE: not including attributes used in cc, custom style and widgets 
+ * i.e -> atributes a,b,c are used in source xy by at least one view
+ * @param {string} idLayer Id of the layer 
+ * @return {array} array of attribute used
  */
 async function getLayerViewsAttributes(idLayer) {
   const sql = `
@@ -529,6 +535,76 @@ async function getLayerViewsAttributes(idLayer) {
   }
   const names = res.rows.map((row) => row.column_name);
   return names;
+}
+
+/**
+ * Updates source attribute, metadata and views related fields
+ * @async
+ * @param {string} idSource - The ID of the source.
+ * @param {string} oldName - The old name to search for and replace in the JSONB object.
+ * @param {string} newName - The new name to replace the old name with in the JSONB object.
+ * @param {pg.Client} pgClient - The node-postgres client instance to use for database operations.
+ * @throws {Error} If an error occurs during the update operation.
+ */
+async function updateSourceAttribute(idSource, oldName, newName, pgClient) {
+  try {
+    /**
+     * Use existing client in case of rallback
+     */
+    pgClient = pgClient || pgWrite;
+
+    if (oldName === newName) {
+      console.log("Old and new names are the same, no update needed.");
+      return;
+    }
+
+    const oldExists = await columnExists(oldName, idSource, pgClient);
+    const newExists = await columnExists(newName, idSource, pgClient);
+
+    if (!oldExists) {
+      throw new Error(
+        `Table "${idSource}" does not exist or does not have a column ${oldName}`
+      );
+    }
+
+    if (newExists) {
+      throw new Error(`Table "${idSource}" already have a column ${newName}`);
+    }
+
+    /**
+     * Update source layer
+     * ( using template literral, as new/old name should be valid
+     */
+    await pgClient.query(
+      `ALTER TABLE ${idSource} 
+      RENAME COLUMN ${oldName} 
+      TO ${newName}`
+    );
+    /**
+     * Update views
+     */
+    const queryUpdateViews = templates.updateViewSourceAttributes;
+    await pgClient.query(queryUpdateViews, [idSource, oldName, newName]);
+    /**
+     * Update meta
+     */
+    const queryUpdateMeta = templates.updateMetaSourceAttributes;
+    await pgClient.query(queryUpdateMeta, [idSource, oldName, newName]);
+
+    /**
+     * Test
+     * NOTE: to remove in prod
+     */
+    const newCreated = await columnExists(newName, idSource, pgClient);
+    if (!newCreated) {
+      throw new Error(
+        `Update failed in table "${idSource}": new column ${newName} not found`
+      );
+    }
+  } catch (error) {
+    console.error("Error updating source attributes", error);
+    throw new Error(error);
+  }
 }
 
 /**
@@ -556,4 +632,5 @@ export {
   registerOrRemoveSource,
   analyzeSource,
   getTableDimension,
+  updateSourceAttribute,
 };

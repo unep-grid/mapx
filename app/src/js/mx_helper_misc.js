@@ -624,6 +624,7 @@ export function domToText(dom) {
 
 /**
  * Performs a deep merge of objects and returns new object. Does not modify
+ * TODO: replace with deltaMerge ? (mx_helper_utils_json/utils_json)
  * objects (immutable) and merges arrays via concatenation.
  * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
  *

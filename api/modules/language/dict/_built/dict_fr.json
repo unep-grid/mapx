@@ -1566,8 +1566,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "fr": "Ajouter une nouvelle colonne : nom"
+    "en": "Name of the column",
+    "fr": "Nom de la colonne"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "fr": "Le nouveau nom de colonne sera :<b> {{column_name}}</b>"
+    "en": "The column name will be: <b>{{column_name}}</b>",
+    "fr": "Le nom de la colonne sera :<b> {{column_name}}</b>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1793,6 +1793,56 @@
     "id": "edit_table_modal_quit_ignore_changes",
     "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
     "fr": "Ce tableau a {{count}} modifications non enregistrées. Voulez-vous vraiment quitter et annuler ces modifications ?"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "fr": "utilisé"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "fr": "réservé"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "fr": "pas sécurisé"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename Column",
+    "fr": "Renommer la colonne"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "fr": "Choisissez la colonne que vous souhaitez renommer :"
+  },
+  {
+    "id": "edit_table_modal_rename_column_next",
+    "en": "Next",
+    "fr": "Suivant"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "fr": "Confirmation"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
+    "fr": "Êtes-vous sûr de vouloir renommer la colonne {{column_name}} pour {{column_name_new}} ?"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename Column",
+    "fr": "Renommer la colonne"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename Column",
+    "fr": "Renommer la colonne"
   },
   {
     "id": "geom_tools_modal_select_title",

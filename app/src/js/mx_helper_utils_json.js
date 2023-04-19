@@ -1,4 +1,4 @@
-import { create, formatters } from "jsondiffpatch";
+import { create, formatters, diff, patch } from "jsondiffpatch";
 import "jsondiffpatch/dist/formatters-styles/html.css";
 
 export async function jsonPreview(json, options) {
@@ -30,4 +30,9 @@ export async function jsonDiff(a, b, opt) {
     return formatters.html.format(delta, a);
   }
   return delta;
+}
+
+export function deltaMerge(a, b) {
+  const delta = diff(a, b);
+  patch(a, delta);
 }

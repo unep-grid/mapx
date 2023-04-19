@@ -879,7 +879,6 @@ export class ShareModal extends EventSimple {
       const search = sm.url.search;
       test.passed = isEqual(search, test.search);
       if (!test.passed) {
-        debugger;
         console.table({ search: search, test: test.search });
       }
       /**

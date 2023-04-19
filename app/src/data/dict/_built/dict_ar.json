@@ -1566,8 +1566,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "ar": "أضف عمودًا جديدًا: الاسم"
+    "en": "Name of the column",
+    "ar": "اسم العمود"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "ar": "سيكون اسم العمود الجديد:<b> {{column_name}}</b>"
+    "en": "The column name will be: <b>{{column_name}}</b>",
+    "ar": "سيكون اسم العمود:<b> {{column_name}}</b>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1793,6 +1793,56 @@
     "id": "edit_table_modal_quit_ignore_changes",
     "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
     "ar": "يحتوي هذا الجدول {{count}} التغييرات غير المحفوظة. هل أنت متأكد أنك تريد إنهاء وتجاهل هذه التغييرات؟"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "ar": "في الاستخدام"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "ar": "محجوز"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "ar": "غير آمن"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename Column",
+    "ar": "إعادة تسمية العمود"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "ar": "اختر العمود الذي تريد إعادة تسميته:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_next",
+    "en": "Next",
+    "ar": "التالي"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "ar": "تأكيد"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
+    "ar": "هل أنت متأكد أنك تريد إعادة تسمية العمود {{column_name}} ل {{column_name_new}} ؟"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename Column",
+    "ar": "إعادة تسمية العمود"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename Column",
+    "ar": "إعادة تسمية العمود"
   },
   {
     "id": "geom_tools_modal_select_title",
