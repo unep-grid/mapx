@@ -33,6 +33,7 @@ export async function ioViewPin(socket, config, cb) {
 
     const client = await pgWrite.connect();
     try {
+      
       await client.query("BEGIN");
 
       const result = await client.query(`
@@ -46,6 +47,9 @@ export async function ioViewPin(socket, config, cb) {
           `Expected 1 row to be inserted, but got ${result.rowCount} rows.`
         );
       }
+
+      client.query("COMMIT");
+
     } catch (err) {
       client.query("ROLLBACK");
       throw err;
