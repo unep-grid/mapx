@@ -15,6 +15,7 @@ import {
 } from "./../map_helpers/index.js";
 import { getArrayDistinct } from "../array_stat";
 import { settings } from "./../settings";
+import { buildLegendVt } from "../legend_vt";
 
 /**
  * Set current language ( for updating ui/views, use updateLanguage )
@@ -462,7 +463,9 @@ export async function updateLanguageViewsList(o) {
        * Regenerate vt legend
        */
       if (elLegendVt) {
-        elLegendVt.innerHTML = mx.templates.viewListLegend(view);
+        const elRules = buildLegendVt(view);
+        elLegendVt.innerHTML = "";
+        elLegendVt.appendChild(elRules);
       }
 
       /**

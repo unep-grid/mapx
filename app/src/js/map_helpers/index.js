@@ -4309,29 +4309,8 @@ function setVtLegend(options) {
     addTitle: addTitle,
   });
   if (isElement(elLegend)) {
-    /**
-     * viewLayersAddVt rendering time :
-     * el + ecoregion2017
-     * 606 ms
-     * 534 ms
-     * 504 ms
-     * 403 ms
-     *
-     * dot + ecoregion2017
-     * 517 ms
-     * 725 ms
-     * 928 ms
-     * 660 ms
-     */
-    /**
-     * el
-     */
     const elLegendContent = buildLegendVt(view);
     elLegend.appendChild(elLegendContent);
-    /*
-     * dot
-     */
-    //elLegend.innerHTML = mx.templates.viewListLegend(view);
   }
 }
 
