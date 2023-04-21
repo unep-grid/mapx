@@ -14,7 +14,7 @@ updated_name AS (
        '{attribute,name}',
        (
          CASE
-           WHEN data #>> '{attribute,name}' = $2
+           WHEN data #>> '{attribute,name}' = $2::text
            THEN to_jsonb($3::text)
            ELSE data #> '{attribute,name}'
            END

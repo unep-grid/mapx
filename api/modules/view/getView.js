@@ -42,6 +42,7 @@ export async function getViewsTableBySource(idSource) {
   if (!isSourceId(idSource)) {
     throw Error("No valid");
   }
+
   const sql = templates.getViewsTableBySource;
 
   const { rows } = await pgRead.query(sql, [idSource]);
@@ -50,6 +51,11 @@ export async function getViewsTableBySource(idSource) {
 }
 
 export async function getView(idView) {
+  
+  if (!isViewId(idView)) {
+    throw Error("Invalid view");
+  }
+
   const sql = parseTemplate(templates.getViewFull, {
     idView: idView,
   });

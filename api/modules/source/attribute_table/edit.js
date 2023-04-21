@@ -8,6 +8,8 @@ import {
   isLayerValid,
   sanitizeUpdates,
   updateSourceAttribute,
+  renameTableColumn,
+  duplicateTableColumn,
 } from "#mapx/db_utils";
 import { getSourceAttributeTable, getSourceEditors } from "#mapx/source";
 import { randomString } from "#mapx/helpers";
@@ -429,7 +431,8 @@ class EditTableSession {
         et.perfEnd("write");
       })
       .catch((e) => {
-        et.error("Update failed. Check logs", e);
+        et.error("Update failed. Check logs", e.message);
+        console.error(e);
       });
   }
 
@@ -580,29 +583,54 @@ class EditTableSession {
     return m;
   }
 
+  async updateViewsClient(idTable) {
+    const et = this;
+    if (!isSourceId(idTable)) {
+      return;
+    }
+    const socket = et._socket;
+    /**
+     * Update views
+     */
+    await ioUpdateClientViewsBySource(socket, {
+      idSource: idTable,
+    });
+    /**
+     * Update SLD + save
+     */
+    return await ioUpdateDbViewsAltStyleBySource(socket, {
+      idSource: idTable,
+    });
+  }
+
   async writePostgres(updates) {
     const et = this;
-
     if (isEmpty(updates)) {
       return;
     }
     const postScripts = new Map();
-    const socket = et._socket;
     const client = await pgWrite.connect();
     await client.query("BEGIN");
+
     try {
       for (const update of updates) {
         const { id_table, column_name, column_name_new } = update;
 
-        if (!isSourceId(id_table) || !isSafeName(column_name)) {
+        if (!isSourceId(id_table)) {
           throw new Error("Invalid update table or column");
         }
+
         const colExists = await columnExists(column_name, id_table);
 
         switch (update.type) {
           case "update_cell":
             {
               const { gid, column_type } = update;
+
+              if (!isSafeName(column_name)) {
+                throw new Error("Invalid update column");
+              }
+
               let { value_new } = update;
               const valid = isNumeric(gid);
               const isDate = regDatePg.test(column_type);
@@ -639,6 +667,10 @@ class EditTableSession {
               /** ALTER TABLE products ADD COLUMN description text; **/
               const { column_type } = update;
 
+              if (!isSafeName(column_name)) {
+                throw new Error("Invalid update column");
+              }
+
               if (!colExists) {
                 const qSql = parseTemplate(templates.updateTableAddColumn, {
                   id_table,
@@ -671,30 +703,48 @@ class EditTableSession {
               }
             }
             break;
-          case "rename_column":
+          case "duplicate_column":
             {
-              await updateSourceAttribute(
+              const { rename_attribute } = update;
+
+              await duplicateTableColumn(
                 id_table,
                 column_name,
                 column_name_new,
                 client
               );
 
-              /**
-               * Script that require to be launched after the commit
-               * -> impacts client views
-               * -> client views can require source summary
-               * -> attribute requested in summary must exists
-               * -> exists only after commit
-               */
-              const hash = `${column_name_new}@${id_table}`;
-              postScripts.set(hash, async () => {
-                await ioUpdateClientViewsBySource(socket, {
-                  idSource: id_table,
+              if (rename_attribute) {
+                await updateSourceAttribute(
+                  id_table,
+                  column_name,
+                  column_name_new,
+                  client
+                );
+
+                postScripts.set(`${id_table}_update_views`, async () => {
+                  return await et.updateViewsClient(id_table);
                 });
-                return await ioUpdateDbViewsAltStyleBySource(socket, {
-                  idSource: id_table,
-                });
+              }
+            }
+            break;
+          case "rename_column":
+            {
+              await renameTableColumn(
+                id_table,
+                column_name,
+                column_name_new,
+                client
+              );
+
+              await updateSourceAttribute(
+                id_table,
+                column_name,
+                column_name_new,
+                client
+              );
+              postScripts.set(`${id_table}_update_views`, async () => {
+                return await et.updateViewsClient(id_table);
               });
             }
             break;
@@ -716,16 +766,17 @@ class EditTableSession {
     } finally {
       client.release();
     }
+
     /**
-     * Handling postScripts
+     * Script that require to be launched after the commit
+     * -> impacts client views
+     * -> client views can require source summary
+     * -> attribute requested in summary must exists
+     * -> exists only after commit
      */
-    if (postScripts.size > 0) {
-      for (const [k, cb] of postScripts) {
-        console.log(`Apply post script for ${k}`);
-        const ok = await cb(k);
-        if (!ok) {
-          throw new Error("Post scripts failed ");
-        }
+    if (postScripts.size) {
+      for (const [key, script] of postScripts.entries()) {
+        await script(key);
       }
     }
   }

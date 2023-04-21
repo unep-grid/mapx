@@ -462,6 +462,30 @@ async function getColumnsTypesSimple(idSource, idAttr) {
 }
 
 /**
+ * Get column type
+ * @async
+ * @param {string} idAttr
+ * @param {string} idTable
+ * @returns {Promise<string>} type
+ */
+async function getColumnDataType(columnName, tableName) {
+  const result = await pgRead.query(
+    `
+    SELECT column_name, data_type
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE table_name = $1 AND column_name = $2;
+  `,
+    [tableName, columnName]
+  );
+
+  if (result.rowCount === 0) {
+    throw new Error(`Column "${columnName}" not found in table "${tableName}"`);
+  }
+
+  return result.rows[0].data_type;
+}
+
+/**
  * Get the latest timestamp from a source / layer / table
  * @param {String} idSource Id of the source
  * @return {Number} timetamp
@@ -515,9 +539,9 @@ async function getLayerTitle(idLayer, language) {
 
 /**
  * Get layer/table column name used for styling in views
- * NOTE: not including attributes used in cc, custom style and widgets 
+ * NOTE: not including attributes used in cc, custom style and widgets
  * i.e -> atributes a,b,c are used in source xy by at least one view
- * @param {string} idLayer Id of the layer 
+ * @param {string} idLayer Id of the layer
  * @return {array} array of attribute used
  */
 async function getLayerViewsAttributes(idLayer) {
@@ -538,7 +562,6 @@ async function getLayerViewsAttributes(idLayer) {
 }
 
 /**
- * Updates source attribute, metadata and views related fields
  * @async
  * @param {string} idSource - The ID of the source.
  * @param {string} oldName - The old name to search for and replace in the JSONB object.
@@ -546,7 +569,7 @@ async function getLayerViewsAttributes(idLayer) {
  * @param {pg.Client} pgClient - The node-postgres client instance to use for database operations.
  * @throws {Error} If an error occurs during the update operation.
  */
-async function updateSourceAttribute(idSource, oldName, newName, pgClient) {
+async function renameTableColumn(idSource, oldName, newName, pgClient) {
   try {
     /**
      * Use existing client in case of rallback
@@ -577,9 +600,30 @@ async function updateSourceAttribute(idSource, oldName, newName, pgClient) {
      */
     await pgClient.query(
       `ALTER TABLE ${idSource} 
-      RENAME COLUMN ${oldName} 
-      TO ${newName}`
+      RENAME COLUMN "${oldName}" 
+      TO "${newName}"`
     );
+  } catch (error) {
+    console.error("Error renaming source column", error);
+    throw new Error(error);
+  }
+}
+
+/**
+ * Updates source attribute, metadata and views related fields
+ * @async
+ * @param {string} idSource - The ID of the source.
+ * @param {string} oldName - The old name to search for and replace in the JSONB object.
+ * @param {string} newName - The new name to replace the old name with in the JSONB object.
+ * @param {pg.Client} pgClient - The node-postgres client instance to use for database operations.
+ * @throws {Error} If an error occurs during the update operation.
+ */
+async function updateSourceAttribute(idSource, oldName, newName, pgClient) {
+  try {
+    /*
+     * Use connectionn in case of transaction
+     */
+    pgClient = pgClient || pgWrite;
     /**
      * Update views
      */
@@ -590,19 +634,55 @@ async function updateSourceAttribute(idSource, oldName, newName, pgClient) {
      */
     const queryUpdateMeta = templates.updateMetaSourceAttributes;
     await pgClient.query(queryUpdateMeta, [idSource, oldName, newName]);
-
-    /**
-     * Test
-     * NOTE: to remove in prod
-     */
-    const newCreated = await columnExists(newName, idSource, pgClient);
-    if (!newCreated) {
-      throw new Error(
-        `Update failed in table "${idSource}": new column ${newName} not found`
-      );
-    }
   } catch (error) {
     console.error("Error updating source attributes", error);
+    throw new Error(error);
+  }
+}
+
+/**
+ * Duplicate a postgres column
+ * Transaction is handled upstream
+ * @async
+ * @param {string} idColumn
+ * @param {string} idColumnNew
+ * @param {pg.Client} postgres
+ * @return {Promise<boolean>} done
+ */
+async function duplicateTableColumn(idSource, sourceName, destName, pgClient) {
+  try {
+    if (sourceName === destName) {
+      throw new Error(
+        "Source and destination names are the same, duplicate impossible"
+      );
+    }
+
+    const sourceExists = await columnExists(sourceName, idSource, pgClient);
+    const destExists = await columnExists(destName, idSource, pgClient);
+
+    if (!sourceExists) {
+      throw new Error(
+        `Table "${idSource}" does not exist or does not have a column ${sourceName}`
+      );
+    }
+
+    if (destExists) {
+      throw new Error(`Table "${idSource}" already have a column ${destName}`);
+    }
+
+    /**
+     * Update source layer
+     * ( using template literral, as new/old name should be valid
+     */
+    const sourceColumnType = await getColumnDataType(sourceName, idSource);
+
+    await pgClient.query(`
+    ALTER TABLE "${idSource}" 
+    ADD COLUMN "${destName}" ${sourceColumnType};
+    UPDATE "${idSource}" SET "${destName}" = "${sourceName}";
+    `);
+  } catch (error) {
+    console.error("Error duplicating source attributes", error);
     throw new Error(error);
   }
 }
@@ -632,5 +712,7 @@ export {
   registerOrRemoveSource,
   analyzeSource,
   getTableDimension,
+  renameTableColumn,
   updateSourceAttribute,
+  duplicateTableColumn,
 };

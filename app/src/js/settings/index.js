@@ -80,6 +80,7 @@ const settings = {
     app: false,
   },
   paths: {
+    static: "/static.html",
     sprites: "sprites/sprite",
     fontstack: "fontstack/{fontstack}/{range}.pbf",
     svg: "sprites/svg/",

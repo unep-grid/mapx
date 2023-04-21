@@ -3594,6 +3594,32 @@ export async function viewLayersAdd(o) {
 }
 
 /**
+ * Get link to view, current mode/location
+ * @param {String} idView View id
+ * @param {Boolean} useStatic
+ * @return {URL} url to the view
+ */
+export function viewLink(idView, opt) {
+  const def = {
+    useStatic: true,
+    project: null,
+  };
+  opt = Object.assign({}, def, opt);
+
+  const urlView = new URL(window.location);
+  urlView.search = "";
+  if (opt.useStatic) {
+    urlView.pathname = settings.paths.static;
+    urlView.searchParams.append("views", idView);
+  } else if (opt.project) {
+    urlView.searchParams.append("project", opt.project);
+    urlView.searchParams.append("viewsOpen", idView);
+  }
+  urlView.searchParams.append("zoomToViews", true);
+  return urlView;
+}
+
+/**
  * Get a legend object
  *
  * ⚠️  This was done to handle legends in legend container outside view element,
@@ -5787,7 +5813,7 @@ export function resetMaxBounds() {
 /**
  * Replace and reload views
  * @param {Object} views
- * @return {<Promise>boolean} replaced
+ * @return {Promise<boolean>} replaced
  */
 export async function viewsReplace(views) {
   try {

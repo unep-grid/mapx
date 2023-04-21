@@ -19,7 +19,7 @@ views_with_dashboard as (
   (
     data #>> '{source,layerInfo,name}' = $1
     OR
-    data #>> '{dashboard,widgets}' ~~ $1
+    data #>> '{dashboard,widgets}' ~ $1
   )
 ),
 views_with_custom_code as (
@@ -27,7 +27,7 @@ views_with_custom_code as (
   FROM mx_views_latest
   WHERE
   type = 'cc' AND
-  data #>> '{methods}' ~~ $1
+  data #>> '{methods}' ~ $1
 ),
 views_with_custom_style as (
   SELECT 'custom_style' as type, id, project, data #> '{title,en}' as title
@@ -38,13 +38,27 @@ views_with_custom_style as (
   data #>> '{source,layerInfo,name}' = $1
   AND
   (data #>> '{style,custom,json}')::jsonb ->> 'enable' = 'true'
+),
+views_all  as (
+  SELECT * FROM views_with_layer
+  UNION
+  SELECT * FROM views_with_dashboard
+  UNION
+  SELECT * FROM views_with_custom_code
+  UNION 
+  SELECT * FROM views_with_custom_style
+),
+views_project as (
+  SELECT 
+  v.type,
+  v.id,
+  v.project, 
+  v.title, 
+  p.title #> '{en}' as project_name
+  FROM views_all v, mx_projects p
+  WHERE 
+  v.project = p.id
 )
+SELECT * from views_project;
 
-SELECT * FROM views_with_layer
-UNION
-SELECT * FROM views_with_dashboard
-UNION
-SELECT * FROM views_with_custom_code
-UNION 
-SELECT * FROM views_with_custom_style
 

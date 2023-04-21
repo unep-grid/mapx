@@ -75,7 +75,7 @@ async function handlerViewAdd(message, cb) {
 async function handleViewsReplace(message, cb) {
   const { views } = message;
   if (!isArrayOfViews(views)) {
-    console.error("Views replace should provide valid views ")
+    console.error("Views replace should provide valid views ");
     return cb({ ok: false });
   }
   message.ok = await viewsReplace(views);
@@ -94,17 +94,23 @@ async function handlerViewStyleGet(message, cb) {
     const style = view?.data?.style || {};
     const rules = style?.rules || [];
     const hasRules = isNotEmpty(rules);
-
+    const { default: sld } = await import("../../sld/empty.sld");
+    const result = {
+      sld: sld,
+      mapbox: {},
+    };
     if (hasRules) {
       /*
        * TODO: check why this comment was there :
        * - should match jedHooksApply in jed helper
        */
-      message.result = {
+      Object.assign(result, {
         sld: await getViewSldStyle(view),
         mapbox: await getViewMapboxStyle(view),
-      };
+      });
     }
+
+    message.result = result;
   } catch (e) {
     console.error(e);
     message.error = `Error processing style for view ${e.message}`;

@@ -20,6 +20,7 @@ import {
   viewRemove,
   getViewsOpen,
   hasViewLocal,
+  viewLink,
 } from "./../map_helpers/index.js";
 import {
   isView,
@@ -834,12 +835,8 @@ class Search extends EventSimple {
           {
             s.vFeedback(e);
             const idView = ds.id_view;
-            const urlStatic = new URL(window.location);
-            urlStatic.search = "";
-            urlStatic.pathname = s.opt("link_pathname");
-            urlStatic.searchParams.append("views", idView);
-            urlStatic.searchParams.append("zoomToViews", true);
-            window.open(urlStatic, "_newtab");
+            const link = viewLink(idView, { useStatic: true });
+            window.open(link, "_newtab");
           }
           break;
         case "search_view_toggle":

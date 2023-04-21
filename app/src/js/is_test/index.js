@@ -63,6 +63,7 @@ export function isView(item) {
     isViewId(item?.id) &&
     isProjectId(item?.project) &&
     isString(item?.type) &&
+    isNotEmpty(item?.data) &&
     !!item.type.match(/^(vt|rt|cc||sm||gj)$/)
   );
 }

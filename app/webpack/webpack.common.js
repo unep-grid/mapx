@@ -155,7 +155,7 @@ module.exports = {
         loader: "file-loader",
       },
       {
-        test: /\.md$/,
+        test: /\.md$|\.sld$/,
         use: [
           {
             //loader: 'file-loader'

@@ -80,7 +80,9 @@ export async function ioUpdateDbViewsAltStyleBySource(socket, options, client) {
   for (const id of idViews) {
     const res = await ioUpdateDbViewAltStyle(socket, { idView: id }, client);
     if (!res.valid) {
-      throw new Error(`Alt style failed for view ${id}`);
+      await socket.notifyInfoError({
+        message: `Alt style failed for view ${id}`,
+      });
     }
   }
 

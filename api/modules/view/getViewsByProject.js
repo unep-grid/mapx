@@ -3,6 +3,7 @@ import { parseTemplate, sendJSON, sendError } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { validateTokenHandler } from "#mapx/authentication";
 import { getParamsValidator } from "#mapx/route_validation";
+import { isEmpty } from "@fxi/mx_valid";
 
 const validateParamsHandler = getParamsValidator({
   required: ["idUser", "idProject", "token"],
@@ -101,6 +102,13 @@ async function getViews(opt) {
    * Query
    */
   const result = await pgRead.query(sql);
+
+  /**
+   * Debug
+   */
+  if (isEmpty(result?.rows)) {
+    console.log("empty views list:config", config);
+  }
 
   views.push(...result.rows);
 
