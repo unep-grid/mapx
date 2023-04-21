@@ -1845,6 +1845,41 @@
     "zh": "重命名列"
   },
   {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "zh": "代码中的现有引用"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "Column names cannot be altered, as certain views may contain references to this table outside primary and secondary attributes. To designate a new name, please use the 'Duplicate Column' utility or modify existing references in the code associated in these views:",
+    "zh": "不能更改列名，因为某些视图可能包含在主要和次要属性之外对此表的引用。要指定新名称，请使用“复制列”实用程序或修改这些视图中关联代码中的现有引用："
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "zh": "取消"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "zh": "仪表板"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "zh": "自定义代码"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "zh": "自定义样式"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "zh": "源层"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "zh": "几何工具：选择源层"
@@ -2278,6 +2313,11 @@
     "id": "btn_close",
     "en": "Close",
     "zh": "关闭"
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "zh": "复制..."
   },
   {
     "id": "btn_download",

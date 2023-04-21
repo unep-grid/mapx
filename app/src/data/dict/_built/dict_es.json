@@ -1845,6 +1845,41 @@
     "es": "Cambiar nombre de columna"
   },
   {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "es": "Referencias existentes en el código"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "Column names cannot be altered, as certain views may contain references to this table outside primary and secondary attributes. To designate a new name, please use the 'Duplicate Column' utility or modify existing references in the code associated in these views:",
+    "es": "Los nombres de las columnas no se pueden modificar, ya que ciertas vistas pueden contener referencias a esta tabla fuera de los atributos primarios y secundarios. Para designar un nuevo nombre, utilice la utilidad 'Duplicar columna' o modifique las referencias existentes en el código asociado en estas vistas:"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "es": "Cancelar"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "es": "Panel"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "es": "Código personalizado"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "es": "Estilo personalizado"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "es": "Capa de origen"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "es": "Herramientas de geometría: seleccione la capa de origen"
@@ -2278,6 +2313,11 @@
     "id": "btn_close",
     "en": "Close",
     "es": "Cerrar"
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "es": "Duplicar..."
   },
   {
     "id": "btn_download",

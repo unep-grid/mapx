@@ -1845,6 +1845,41 @@
     "ru": "Переименовать столбец"
   },
   {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "ru": "Существующие ссылки в коде"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "Column names cannot be altered, as certain views may contain references to this table outside primary and secondary attributes. To designate a new name, please use the 'Duplicate Column' utility or modify existing references in the code associated in these views:",
+    "ru": "Имена столбцов нельзя изменить, так как некоторые представления могут содержать ссылки на эту таблицу за пределами первичных и вторичных атрибутов. Чтобы назначить новое имя, используйте утилиту «Дублировать столбец» или измените существующие ссылки в коде, связанном с этими представлениями:"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "ru": "Отмена"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "ru": "Панель приборов"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "ru": "Пользовательский код"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "ru": "Пользовательский стиль"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "ru": "Исходный слой"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ru": "Инструменты геометрии: выберите исходный слой"
@@ -2278,6 +2313,11 @@
     "id": "btn_close",
     "en": "Close",
     "ru": "Закрывать "
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "ru": "Дублировать..."
   },
   {
     "id": "btn_download",

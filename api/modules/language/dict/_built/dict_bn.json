@@ -1845,6 +1845,41 @@
     "bn": "কলাম পুনঃনামকরণ করুন"
   },
   {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "bn": "কোডে বিদ্যমান রেফারেন্স"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "Column names cannot be altered, as certain views may contain references to this table outside primary and secondary attributes. To designate a new name, please use the 'Duplicate Column' utility or modify existing references in the code associated in these views:",
+    "bn": "কলামের নাম পরিবর্তন করা যাবে না, কারণ নির্দিষ্ট কিছু দৃশ্যে প্রাথমিক এবং মাধ্যমিক বৈশিষ্ট্যের বাইরে এই টেবিলের উল্লেখ থাকতে পারে। একটি নতুন নাম মনোনীত করতে, অনুগ্রহ করে 'ডুপ্লিকেট কলাম' ইউটিলিটি ব্যবহার করুন বা এই দৃশ্যগুলির সাথে যুক্ত কোডে বিদ্যমান রেফারেন্সগুলি সংশোধন করুন:"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "bn": "বাতিল করুন"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "bn": "ড্যাশবোর্ড"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "bn": "প্রচলিত সংকেত"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "bn": "কাস্টম শৈলী"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "bn": "উৎস স্তর"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "bn": "জ্যামিতি সরঞ্জাম: উৎস স্তর নির্বাচন করুন"
@@ -2278,6 +2313,11 @@
     "id": "btn_close",
     "en": "Close",
     "bn": "বন্ধ "
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "bn": "ডুপ্লিকেট..."
   },
   {
     "id": "btn_download",

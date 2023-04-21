@@ -1845,6 +1845,41 @@
     "fr": "Renommer la colonne"
   },
   {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "fr": "Références existantes dans le code"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "Column names cannot be altered, as certain views may contain references to this table outside primary and secondary attributes. To designate a new name, please use the 'Duplicate Column' utility or modify existing references in the code associated in these views:",
+    "fr": "Les noms de colonne ne peuvent pas être modifiés, car certaines vues peuvent contenir des références à cette table en dehors des attributs primaires et secondaires. Pour désigner un nouveau nom, veuillez utiliser l'utilitaire 'Duplicate Column' ou modifier les références existantes dans le code associé à ces vues :"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "fr": "Annuler"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "fr": "Tableau de bord"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "fr": "Code personnalisé"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "fr": "Style personnalisé"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "fr": "Couche source"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fr": "Outils de géométrie : sélectionner le calque source"
@@ -2278,6 +2313,11 @@
     "id": "btn_close",
     "en": "Close",
     "fr": "Fermer"
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "fr": "Dupliquer..."
   },
   {
     "id": "btn_download",

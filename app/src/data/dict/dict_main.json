@@ -455,6 +455,19 @@
     "de": "Schliessen"
   },
   {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "fr": "Dupliquer...",
+    "es": "Duplicar...",
+    "ru": "Дублировать...",
+    "zh": "复制...",
+    "ar": "تكرار...",
+    "fa": "تکرار...",
+    "ps": "نقل کول...",
+    "bn": "ডুপ্লিকেট...",
+    "de": "Duplizieren..."
+  },
+  {
     "id": "btn_download",
     "en": "Download",
     "fr": "Télécharger",
