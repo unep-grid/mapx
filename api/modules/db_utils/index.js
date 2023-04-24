@@ -629,6 +629,7 @@ async function updateSourceAttribute(idSource, oldName, newName, pgClient) {
      */
     const queryUpdateViews = templates.updateViewSourceAttributes;
     await pgClient.query(queryUpdateViews, [idSource, oldName, newName]);
+
     /**
      * Update meta
      */

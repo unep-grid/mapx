@@ -103,13 +103,6 @@ async function getViews(opt) {
    */
   const result = await pgRead.query(sql);
 
-  /**
-   * Debug
-   */
-  if (isEmpty(result?.rows)) {
-    console.log("empty views list:config", config);
-  }
-
   views.push(...result.rows);
 
   return views;
