@@ -79,6 +79,15 @@ mapx.once("ready", async () => {
     },
     tests: [
       {
+        name: "theme wait",
+        test: () => {
+          return new Promise((resolve) => {
+            setTimeout(() => resolve(true), 1000);
+          });
+        },
+      },
+
+      {
         name: "add theme",
         test: async (res) => {
           const out = await mapx.ask("add_theme", {
