@@ -1,3 +1,11 @@
+  - [1.11.0-alpha.4](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.4) 
+
+    - APP / API
+        - Table editor 
+            - Implementation of a rename / duplicate column tool 
+            - Locking mecanism : lock concurrent clients when any column altering tool is used by an editor  
+        - Pin view, merge change from hot fix, already in prod: Missing transaction + major bug where many view could have been shared at once
+        
   - [1.11.0-alpha.3](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.3) 
 
     - APP
