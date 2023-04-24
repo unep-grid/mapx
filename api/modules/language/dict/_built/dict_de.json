@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The column name will be: <b>{{column_name}}</b>",
-    "de": "Der Spaltenname lautet:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "de": "Der Spaltenname lautet:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "de": "Name nicht verfügbar"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "de": "Nächste"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "de": "Datentyp auswählen"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "de": "Nächste"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "de": "Fügen Sie eine neue Spalte mit dem Namen hinzu<b> {{column_name}}</b> des Typs<b> {{column_type}}</b> ? Die Änderung wird in der Datenbank und allen interaktiven Tabellen vorgenommen. Dies kann nicht rückgängig gemacht werden, aber das Werkzeug „Spalte entfernen“ funktioniert bei Bedarf."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "de": "Fügen Sie eine neue Spalte mit dem Namen hinzu<code> {{column_name}}</code> des Typs<code> {{column_type}}</code> ? Die Änderung wird in der Datenbank und allen interaktiven Tabellen vorgenommen. Dies kann nicht rückgängig gemacht werden, aber das Werkzeug „Spalte entfernen“ funktioniert bei Bedarf."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "de": "Spaltenname"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "de": "Nächste"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "de": "Spalte entfernen : bestätigen"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "de": "Entfernen Sie eine Spalte mit dem Namen<i> {{column_name}}</i> ? Die Änderung wird in der Datenbank und allen interaktiven Tabellen vorgenommen. Dies kann nicht rückgängig gemacht werden: Daten können verloren gehen."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "de": "Entfernen Sie eine Spalte mit dem Namen<code> {{column_name}}</code> ? Die Änderung wird in der Datenbank und allen interaktiven Tabellen vorgenommen. Dies kann nicht rückgängig gemacht werden: Daten können verloren gehen."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1820,19 +1805,14 @@
     "de": "Wählen Sie die Spalte aus, die Sie umbenennen möchten:"
   },
   {
-    "id": "edit_table_modal_rename_column_next",
-    "en": "Next",
-    "de": "Nächste"
-  },
-  {
     "id": "edit_table_modal_rename_column_confirm_title",
     "en": "Confirmation",
     "de": "Bestätigung"
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
-    "de": "Möchten Sie die Spalte wirklich umbenennen? {{column_name}} Zu {{column_name_new}} ?"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "de": "Möchten Sie die Spalte wirklich umbenennen?<code> {{column_name}}</code> Zu<code> {{column_name_new}}</code> ?"
   },
   {
     "id": "btn_edit_rename_column",
@@ -1878,6 +1858,36 @@
     "id": "edit_table_view_with_layer",
     "en": "Source layer",
     "de": "Quellschicht"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "de": "Spalte duplizieren"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "de": "Spalte duplizieren"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "de": "Zu duplizierende Spalte"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "de": "Zu duplizierende Spalte: Bestätigen"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "de": "Duplizieren Sie die benannte Spalte<code> {{column_name}}</code> zu einer neuen Spalte namens<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "de": "Duplizieren Sie die Spalte"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2280,6 +2290,16 @@
     "de": "Abbrechen"
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "de": "Nächste..."
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "de": "Bestätigen "
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "de": "Fortsetzen"
@@ -2348,11 +2368,6 @@
     "id": "btn_join_current_project",
     "en": "Join current project ( %s )",
     "de": "Aktuelles Projekt beitreten (%s ) "
-  },
-  {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "de": "Bestätigen "
   },
   {
     "id": "btn_country",

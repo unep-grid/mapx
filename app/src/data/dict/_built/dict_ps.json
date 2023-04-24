@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The column name will be: <b>{{column_name}}</b>",
-    "ps": "د کالم نوم به دا وي:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "ps": "د کالم نوم به دا وي:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "ps": "نوم شتون نلري"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "ps": "بل"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "ps": "د معلوماتو ډول وټاکئ"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "ps": "بل"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "ps": "په نوم یو نوی کالم اضافه کړئ<b> {{column_name}}</b> ډول<b> {{column_type}}</b> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "ps": "په نوم یو نوی کالم اضافه کړئ<code> {{column_name}}</code> د ډول<code> {{column_type}}</code> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "ps": "د کالم نوم"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "ps": "بل"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "ps": "یو کالم لرې کړئ: تصدیق"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "ps": "په نوم یو کالم لرې کړئ<i> {{column_name}}</i> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی: ډاټا ورک کیدی شي."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "ps": "په نوم یو کالم لرې کړئ<code> {{column_name}}</code> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی: ډاټا ورک کیدی شي."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1820,19 +1805,14 @@
     "ps": "هغه کالم غوره کړئ چې تاسو یې نوم بدلول غواړئ:"
   },
   {
-    "id": "edit_table_modal_rename_column_next",
-    "en": "Next",
-    "ps": "بل"
-  },
-  {
     "id": "edit_table_modal_rename_column_confirm_title",
     "en": "Confirmation",
     "ps": "تایید"
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
-    "ps": "ایا تاسو ډاډه یاست چې تاسو غواړئ د کالم نوم بدل کړئ {{column_name}} ته {{column_name_new}} ؟"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "ps": "ایا تاسو ډاډه یاست چې تاسو غواړئ د کالم نوم بدل کړئ<code> {{column_name}}</code> ته<code> {{column_name_new}}</code> ؟"
   },
   {
     "id": "btn_edit_rename_column",
@@ -1878,6 +1858,36 @@
     "id": "edit_table_view_with_layer",
     "en": "Source layer",
     "ps": "د سرچینې طبقه"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "ps": "دوه اړخیز کالم"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "ps": "دوه اړخیز کالم"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "ps": "د نقل کولو کالم"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "ps": "د نقل کولو کالم: تصدیق"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "ps": "د نوم کالم نقل کړئ<code> {{column_name}}</code> په نوم نوي کالم ته<code> {{column_name_new}}</code> ؟"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "ps": "کالم نقل کړئ"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2280,6 +2290,16 @@
     "ps": "لغوه کړی"
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "ps": "بل..."
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "ps": "تائید"
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "ps": "ادامه ورکړئ"
@@ -2348,11 +2368,6 @@
     "id": "btn_join_current_project",
     "en": "Join current project ( %s )",
     "ps": "اوسنۍ پروژې کې ګډون کول (%s ) "
-  },
-  {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "ps": "تائید"
   },
   {
     "id": "btn_country",

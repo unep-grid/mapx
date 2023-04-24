@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The column name will be: <b>{{column_name}}</b>",
-    "bn": "কলামের নাম হবে:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "bn": "কলামের নাম হবে:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "bn": "নাম অনুপলব্ধ"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "bn": "পরবর্তী"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "bn": "ডেটা টাইপ নির্বাচন করুন"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "bn": "পরবর্তী"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "bn": "নামে একটি নতুন কলাম যোগ করুন<b> {{column_name}}</b> ধরনের<b> {{column_type}}</b> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না, তবে প্রয়োজন হলে 'একটি কলাম সরান' টুলটি কাজ করবে।"
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "bn": "নামে একটি নতুন কলাম যোগ করুন<code> {{column_name}}</code> ধরনের<code> {{column_type}}</code> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না, তবে প্রয়োজন হলে 'একটি কলাম সরান' টুলটি কাজ করবে।"
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "bn": "কলামের নাম"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "bn": "পরবর্তী"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "bn": "একটি কলাম সরান: নিশ্চিত করুন"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "bn": "নামের একটি কলাম সরান<i> {{column_name}}</i> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না: ডেটা হারিয়ে যেতে পারে।"
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "bn": "নামের একটি কলাম সরান<code> {{column_name}}</code> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না: ডেটা হারিয়ে যেতে পারে।"
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1820,19 +1805,14 @@
     "bn": "আপনি যে কলামটির নাম পরিবর্তন করতে চান তা চয়ন করুন:"
   },
   {
-    "id": "edit_table_modal_rename_column_next",
-    "en": "Next",
-    "bn": "পরবর্তী"
-  },
-  {
     "id": "edit_table_modal_rename_column_confirm_title",
     "en": "Confirmation",
     "bn": "নিশ্চিতকরণ"
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
-    "bn": "আপনি কি নিশ্চিত যে আপনি কলামটির নাম পরিবর্তন করতে চান৷ {{column_name}} প্রতি {{column_name_new}} ?"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "bn": "আপনি কি নিশ্চিত যে আপনি কলামটির নাম পরিবর্তন করতে চান৷<code> {{column_name}}</code> প্রতি<code> {{column_name_new}}</code> ?"
   },
   {
     "id": "btn_edit_rename_column",
@@ -1878,6 +1858,36 @@
     "id": "edit_table_view_with_layer",
     "en": "Source layer",
     "bn": "উৎস স্তর"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "bn": "সদৃশ কলাম"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "bn": "সদৃশ কলাম"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "bn": "নকল করতে কলাম"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "bn": "নকল করতে কলাম: নিশ্চিত করুন"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "bn": "নামের কলামটি নকল করুন<code> {{column_name}}</code> নামের একটি নতুন কলামে<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "bn": "কলামটি নকল করুন"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2280,6 +2290,16 @@
     "bn": "বাতিল "
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "bn": "পরবর্তী..."
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "bn": "কনফার্ম "
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "bn": "চালিয়ে যান"
@@ -2348,11 +2368,6 @@
     "id": "btn_join_current_project",
     "en": "Join current project ( %s )",
     "bn": "বর্তমান প্রকল্পে যোগদান করুন (%s ) "
-  },
-  {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "bn": "কনফার্ম "
   },
   {
     "id": "btn_country",

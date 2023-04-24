@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The column name will be: <b>{{column_name}}</b>",
-    "es": "El nombre de la columna será:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "es": "El nombre de la columna será:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "es": "Nombre no disponible"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "es": "próximo"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "es": "Seleccionar tipo de datos"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "es": "próximo"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "es": "Agregue una nueva columna llamada<b> {{column_name}}</b> de tipo<b> {{column_type}}</b> ? El cambio se realizará en la base de datos y en todas las tablas interactivas. Esto no se puede deshacer, pero la herramienta 'Eliminar una columna' funcionará, si es necesario."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "es": "Agregue una nueva columna llamada<code> {{column_name}}</code> de tipo<code> {{column_type}}</code> ? El cambio se realizará en la base de datos y en todas las tablas interactivas. Esto no se puede deshacer, pero la herramienta 'Eliminar una columna' funcionará, si es necesario."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "es": "Nombre de la columna"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "es": "próximo"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "es": "Eliminar una columna: confirmar"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "es": "Quitar una columna llamada<i> {{column_name}}</i> ? El cambio se realizará en la base de datos y en todas las tablas interactivas. Esto no se puede deshacer: los datos se pueden perder."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "es": "Quitar una columna llamada<code> {{column_name}}</code> ? El cambio se realizará en la base de datos y en todas las tablas interactivas. Esto no se puede deshacer: los datos se pueden perder."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1820,19 +1805,14 @@
     "es": "Elija la columna a la que desea cambiar el nombre:"
   },
   {
-    "id": "edit_table_modal_rename_column_next",
-    "en": "Next",
-    "es": "Próximo"
-  },
-  {
     "id": "edit_table_modal_rename_column_confirm_title",
     "en": "Confirmation",
     "es": "Confirmación"
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
-    "es": "¿Estás seguro de que quieres cambiar el nombre de la columna? {{column_name}} a {{column_name_new}} ?"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "es": "¿Estás seguro de que quieres cambiar el nombre de la columna?<code> {{column_name}}</code> a<code> {{column_name_new}}</code> ?"
   },
   {
     "id": "btn_edit_rename_column",
@@ -1878,6 +1858,36 @@
     "id": "edit_table_view_with_layer",
     "en": "Source layer",
     "es": "Capa de origen"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "es": "Columna duplicada"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "es": "Columna duplicada"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "es": "Columna a duplicar"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "es": "Columna a duplicar: confirmar"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "es": "Duplicar la columna nombrada<code> {{column_name}}</code> a una nueva columna llamada<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "es": "Duplicar la columna"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2280,6 +2290,16 @@
     "es": "Cancelar"
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "es": "Próximo..."
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "es": "Confirmar"
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "es": "Continuar"
@@ -2348,11 +2368,6 @@
     "id": "btn_join_current_project",
     "en": "Join current project ( %s )",
     "es": "Unirse al proyecto actual ( %s )"
-  },
-  {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "es": "Confirmar"
   },
   {
     "id": "btn_country",

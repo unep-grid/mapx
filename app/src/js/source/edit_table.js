@@ -345,15 +345,15 @@ export class EditTableSessionClient extends WsToolsBase {
     });
     et._el_button_save = elButtonFa("btn_save", {
       icon: "floppy-o",
-      action: et.save,
+      action: et._l(et.save),
     });
     et._el_button_undo = elButtonFa("btn_edit_undo", {
       icon: "undo",
-      action: et.undo,
+      action: et._l(et.undo),
     });
     et._el_button_redo = elButtonFa("btn_edit_redo", {
       icon: "repeat",
-      action: et.redo,
+      action: et._l(et.redo),
     });
     et._el_button_wiki = elButtonFa("btn_help", {
       icon: "question-circle",
@@ -361,19 +361,19 @@ export class EditTableSessionClient extends WsToolsBase {
     });
     et._el_button_add_column = elButtonFa("btn_edit_add_column", {
       icon: "plus-circle",
-      action: et.dialogAddColumn,
+      action: et._l(et.dialogAddColumn),
     });
     et._el_button_remove_column = elButtonFa("btn_edit_remove_column", {
       icon: "minus-circle",
-      action: et.dialogRemoveColumn,
+      action: et._l(et.dialogRemoveColumn),
     });
     et._el_button_rename_column = elButtonFa("btn_edit_rename_column", {
       icon: "pencil",
-      action: et.dialogRenameColumn,
+      action: et._l(et.dialogRenameColumn),
     });
     et._el_button_duplicate_column = elButtonFa("btn_edit_duplicate_column", {
       icon: "copy",
-      action: et.dialogDuplicateColumn,
+      action: et._l(et.dialogDuplicateColumn),
     });
     et._el_checkbox_autosave = elCheckbox("btn_edit_autosave", {
       action: et.updateAutoSave,
@@ -385,12 +385,12 @@ export class EditTableSessionClient extends WsToolsBase {
      */
     et._el_button_geom_validate = elButtonFa("btn_edit_geom_validate", {
       icon: "check",
-      action: et.dialogGeomValidate,
+      action: et._l(et.dialogGeomValidate),
     });
 
     et._el_button_geom_repair = elButtonFa("btn_edit_geom_repair", {
       icon: "user-md",
-      action: et.dialogGeomRepair,
+      action: et._l(et.dialogGeomRepair),
     });
 
     /**
@@ -705,6 +705,7 @@ export class EditTableSessionClient extends WsToolsBase {
     et.updateButtonSave();
     et.updateButtonsUndoRedo();
     et.updateButtonsAddRemoveColumn();
+    et.updateButtonRenameColumn();
   }
 
   /**
@@ -798,6 +799,12 @@ export class EditTableSessionClient extends WsToolsBase {
     et._button_enable(et._el_button_remove_column, !et._disable_remove_column);
   }
 
+  updateButtonRenameColumn() {
+    const et = this;
+    /* always true, unless _button_enable use _disabled flag*/
+    et._button_enable(et._el_button_rename_column, true);
+  }
+
   /**
    * Toggle add column button depending on current columns number
    */
@@ -806,6 +813,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const columns = et.getColumns();
     et._disable_add_column = columns.length > et._config.max_columns;
     et._button_enable(et._el_button_add_column, !et._disable_add_column);
+    et._button_enable(et._el_button_duplicate_column, !et._disable_add_column);
   }
 
   /**
@@ -1782,7 +1790,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const columnToRemove = await modalPrompt({
       title: tt("edit_table_modal_remove_column_title"),
       label: tt("edit_table_modal_remove_column_label"),
-      confirm: tt("edit_table_modal_remove_column_next"),
+      confirm: tt("btn_next"),
       inputTag: "select",
       inputOptions: {
         type: "select",
@@ -1846,7 +1854,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const columnToDuplicate = await modalPrompt({
       title: tt("edit_table_modal_duplicate_column_title"),
       label: tt("edit_table_modal_duplicate_column_label"),
-      confirm: tt("edit_table_modal_duplicate_column_next"),
+      confirm: tt("btn_next"),
       inputTag: "select",
       inputOptions: {
         type: "select",
@@ -1881,8 +1889,8 @@ export class EditTableSessionClient extends WsToolsBase {
       content: getDictTemplate(
         "edit_table_modal_duplicate_column_confirm_text",
         {
-          column_name: columnNewName,
-          column_type: columnToDuplicate,
+          column_name: columnToDuplicate,
+          column_name_new: columnNewName,
         }
       ),
       cancel: tt("btn_cancel"),
@@ -1929,21 +1937,20 @@ export class EditTableSessionClient extends WsToolsBase {
         },
       });
 
-      await modalDialog({
+      return modalDialog({
         id: idModal,
         title: tt("edit_table_modal_has_code_title"),
         content: el("div", [el("p", tt("edit_table_modal_has_code")), elTable]),
         close: tt("edit_table_modal_has_code_close"),
         buttons: [elButtonDuplicate],
       });
-      return;
     }
 
     const options = await et.getColumnsNamesOptions(checks);
     const columnToRename = await modalPrompt({
       title: tt("edit_table_modal_rename_column_title"),
       label: tt("edit_table_modal_rename_column_label"),
-      confirm: tt("edit_table_modal_rename_column_next"),
+      confirm: tt("btn_next"),
       inputTag: "select",
       inputOptions: {
         type: "select",
@@ -2108,7 +2115,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const columnName = await modalPrompt({
       title: tt("edit_table_modal_add_column_name_title"),
       label: tt("edit_table_modal_add_column_name_label"),
-      confirm: tt("edit_table_modal_add_column_name_next"),
+      confirm: tt("btn_next"),
       inputOptions: {
         type: "text",
         value: name || `new_column_${makeId()}`,
@@ -2207,7 +2214,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const columnType = await modalPrompt({
       title: tt("edit_table_modal_add_column_type_title"),
       label: tt("edit_table_modal_add_column_type_label"),
-      confirm: tt("edit_table_modal_add_column_type_next"),
+      confirm: tt("btn_next"),
       inputTag: "select",
       inputOptions: {
         type: "select",
@@ -2441,11 +2448,9 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     const updates = et.getUpdatesArray();
     if (et._disconnected) {
-      console.warn("Can't save while disconnected");
       return;
     }
     if (et._lock_table_by_user_id) {
-      console.warn("Can't save while locked");
       return;
     }
     if (isEmpty(updates)) {
@@ -2668,6 +2673,31 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     await et.lockTableConcurrent(!et._auto_save);
     et.unlock();
+  }
+
+  /**
+   * Lock all wrapper ( for dialogs )
+   * @param {Function} cb
+   * @returns
+   */
+  _l(cb) {
+    const et = this;
+    return async function () {
+      let res;
+      if (et.locked) {
+        console.warn("locked");
+        return;
+      }
+      try {
+        await et.lockTableConcurrent(true);
+        res = await cb();
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await et.lockTableConcurrent();
+      }
+      return res;
+    };
   }
 
   /**

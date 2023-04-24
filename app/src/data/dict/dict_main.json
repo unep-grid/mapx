@@ -364,6 +364,32 @@
     "de": "Abbrechen"
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "fr": "Suivant..",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "fr": "Confirmer",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "fr": "Continuer",

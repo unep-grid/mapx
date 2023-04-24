@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The column name will be: <b>{{column_name}}</b>",
-    "ru": "Имя столбца будет:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "ru": "Имя столбца будет:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "ru": "Имя недоступно"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "ru": "Следующий"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "ru": "Выберите тип данных"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "ru": "Следующий"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "ru": "Добавьте новый столбец с именем<b> {{column_name}}</b> типа<b> {{column_type}}</b> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить, но при необходимости сработает инструмент «Удалить столбец»."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "ru": "Добавьте новый столбец с именем<code> {{column_name}}</code> типа<code> {{column_type}}</code> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить, но при необходимости сработает инструмент «Удалить столбец»."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "ru": "Имя столбца"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "ru": "Следующий"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "ru": "Удалить столбец: подтвердить"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "ru": "Удалить столбец с именем<i> {{column_name}}</i> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить: данные могут быть потеряны."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "ru": "Удалить столбец с именем<code> {{column_name}}</code> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить: данные могут быть потеряны."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1820,19 +1805,14 @@
     "ru": "Выберите столбец, который вы хотите переименовать:"
   },
   {
-    "id": "edit_table_modal_rename_column_next",
-    "en": "Next",
-    "ru": "Следующий"
-  },
-  {
     "id": "edit_table_modal_rename_column_confirm_title",
     "en": "Confirmation",
     "ru": "Подтверждение"
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
-    "ru": "Вы уверены, что хотите переименовать столбец {{column_name}} к {{column_name_new}} ?"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "ru": "Вы уверены, что хотите переименовать столбец<code> {{column_name}}</code> к<code> {{column_name_new}}</code> ?"
   },
   {
     "id": "btn_edit_rename_column",
@@ -1878,6 +1858,36 @@
     "id": "edit_table_view_with_layer",
     "en": "Source layer",
     "ru": "Исходный слой"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "ru": "Дублировать столбец"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "ru": "Дублировать столбец"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "ru": "Столбец для дублирования"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "ru": "Столбец для дублирования: подтвердить"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "ru": "Дублируйте столбец с именем<code> {{column_name}}</code> в новый столбец с именем<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "ru": "Дублировать столбец"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2280,6 +2290,16 @@
     "ru": "Отмена "
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "ru": "Следующий..."
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "ru": "Подтверждать "
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "ru": "Продолжать"
@@ -2348,11 +2368,6 @@
     "id": "btn_join_current_project",
     "en": "Join current project ( %s )",
     "ru": "Присоединиться к текущему проекту (%s ) "
-  },
-  {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "ru": "Подтверждать "
   },
   {
     "id": "btn_country",

@@ -4096,16 +4096,16 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The column name will be: <b>{{column_name}}</b>",
-    "fr": "Le nom de la colonne sera :<b> {{column_name}}</b>",
-    "es": "El nombre de la columna será:<b> {{column_name}}</b>",
-    "ru": "Имя столбца будет:<b> {{column_name}}</b>",
-    "zh": "列名将是：<b> {{column_name}}</b>",
-    "ar": "سيكون اسم العمود:<b> {{column_name}}</b>",
-    "fa": "نام ستون خواهد بود:<b> {{column_name}}</b>",
-    "ps": "د کالم نوم به دا وي:<b> {{column_name}}</b>",
-    "bn": "কলামের নাম হবে:<b> {{column_name}}</b>",
-    "de": "Der Spaltenname lautet:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "fr": "Le nom de la colonne sera :<code> {{column_name}}</code>",
+    "es": "El nombre de la columna será:<code> {{column_name}}</code>",
+    "ru": "Имя столбца будет:<code> {{column_name}}</code>",
+    "zh": "列名将是：<code> {{column_name}}</code>",
+    "ar": "سيكون اسم العمود:<code> {{column_name}}</code>",
+    "fa": "نام ستون خواهد بود:<code> {{column_name}}</code>",
+    "ps": "د کالم نوم به دا وي:<code> {{column_name}}</code>",
+    "bn": "কলামের নাম হবে:<code> {{column_name}}</code>",
+    "de": "Der Spaltenname lautet:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -4147,19 +4147,6 @@
     "de": "Name nicht verfügbar"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "fr": "Prochain",
-    "es": "próximo",
-    "ru": "Следующий",
-    "zh": "下一个",
-    "ar": "التالي",
-    "fa": "بعد",
-    "ps": "بل",
-    "bn": "পরবর্তী",
-    "de": "Nächste"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "fr": "Sélectionnez le type de données",
@@ -4171,19 +4158,6 @@
     "ps": "د معلوماتو ډول وټاکئ",
     "bn": "ডেটা টাইপ নির্বাচন করুন",
     "de": "Datentyp auswählen"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "fr": "Prochain",
-    "es": "próximo",
-    "ru": "Следующий",
-    "zh": "下一个",
-    "ar": "التالي",
-    "fa": "بعد",
-    "ps": "بل",
-    "bn": "পরবর্তী",
-    "de": "Nächste"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -4200,16 +4174,16 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "fr": "Ajouter une nouvelle colonne nommée<b> {{column_name}}</b> de type<b> {{column_type}}</b> ? Le changement sera effectué dans la base de données et toutes les tables interactives. Cette opération est irréversible, mais l'outil \"Supprimer une colonne\" fonctionnera, si nécessaire.",
-    "es": "Agregue una nueva columna llamada<b> {{column_name}}</b> de tipo<b> {{column_type}}</b> ? El cambio se realizará en la base de datos y en todas las tablas interactivas. Esto no se puede deshacer, pero la herramienta 'Eliminar una columna' funcionará, si es necesario.",
-    "ru": "Добавьте новый столбец с именем<b> {{column_name}}</b> типа<b> {{column_type}}</b> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить, но при необходимости сработает инструмент «Удалить столбец».",
-    "zh": "添加一个名为的新列<b> {{column_name}}</b>类型<b> {{column_type}}</b>?更改将在数据库和所有交互式表中完成。这无法撤消，但如果需要，“删除列”工具将起作用。",
-    "ar": "أضف عمودًا جديدًا باسم<b> {{column_name}}</b> من النوع<b> {{column_type}}</b> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا ، ولكن أداة \"إزالة عمود\" ستعمل ، إذا لزم الأمر.",
-    "fa": "یک ستون جدید به نام اضافه کنید<b> {{column_name}}</b> از نوع<b> {{column_type}}</b> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست، اما در صورت لزوم، ابزار \"حذف ستون\" کار خواهد کرد.",
-    "ps": "په نوم یو نوی کالم اضافه کړئ<b> {{column_name}}</b> ډول<b> {{column_type}}</b> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي.",
-    "bn": "নামে একটি নতুন কলাম যোগ করুন<b> {{column_name}}</b> ধরনের<b> {{column_type}}</b> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না, তবে প্রয়োজন হলে 'একটি কলাম সরান' টুলটি কাজ করবে।",
-    "de": "Fügen Sie eine neue Spalte mit dem Namen hinzu<b> {{column_name}}</b> des Typs<b> {{column_type}}</b> ? Die Änderung wird in der Datenbank und allen interaktiven Tabellen vorgenommen. Dies kann nicht rückgängig gemacht werden, aber das Werkzeug „Spalte entfernen“ funktioniert bei Bedarf."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "fr": "Ajouter une nouvelle colonne nommée<code> {{column_name}}</code> de type<code> {{column_type}}</code> ? Le changement sera fait dans la base de données et toutes les tables interactives. Cette opération est irréversible, mais l'outil \"Supprimer une colonne\" fonctionnera, si nécessaire.",
+    "es": "Agregue una nueva columna llamada<code> {{column_name}}</code> de tipo<code> {{column_type}}</code> ? El cambio se realizará en la base de datos y en todas las tablas interactivas. Esto no se puede deshacer, pero la herramienta 'Eliminar una columna' funcionará, si es necesario.",
+    "ru": "Добавьте новый столбец с именем<code> {{column_name}}</code> типа<code> {{column_type}}</code> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить, но при необходимости сработает инструмент «Удалить столбец».",
+    "zh": "添加一个名为的新列<code> {{column_name}}</code>类型<code> {{column_type}}</code>？更改将在数据库和所有交互式表中完成。此操作无法撤消，但如果需要，“删除列”工具将起作用。",
+    "ar": "أضف عمودًا جديدًا باسم<code> {{column_name}}</code> من النوع<code> {{column_type}}</code> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا ، ولكن أداة \"إزالة عمود\" ستعمل ، إذا لزم الأمر.",
+    "fa": "یک ستون جدید به نام اضافه کنید<code> {{column_name}}</code> از نوع<code> {{column_type}}</code> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست، اما در صورت نیاز، ابزار \"حذف ستون\" کار خواهد کرد.",
+    "ps": "په نوم یو نوی کالم اضافه کړئ<code> {{column_name}}</code> د ډول<code> {{column_type}}</code> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي.",
+    "bn": "নামে একটি নতুন কলাম যোগ করুন<code> {{column_name}}</code> ধরনের<code> {{column_type}}</code> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না, তবে প্রয়োজন হলে 'একটি কলাম সরান' টুলটি কাজ করবে।",
+    "de": "Fügen Sie eine neue Spalte mit dem Namen hinzu<code> {{column_name}}</code> des Typs<code> {{column_type}}</code> ? Die Änderung wird in der Datenbank und allen interaktiven Tabellen vorgenommen. Dies kann nicht rückgängig gemacht werden, aber das Werkzeug „Spalte entfernen“ funktioniert bei Bedarf."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -4251,19 +4225,6 @@
     "de": "Spaltenname"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "fr": "Prochain",
-    "es": "próximo",
-    "ru": "Следующий",
-    "zh": "下一个",
-    "ar": "التالي",
-    "fa": "بعد",
-    "ps": "بل",
-    "bn": "পরবর্তী",
-    "de": "Nächste"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "fr": "Supprimer une colonne : validez",
@@ -4278,16 +4239,16 @@
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "fr": "Supprimer une colonne nommée<i> {{column_name}}</i> ? Le changement sera effectué dans la base de données et toutes les tables interactives. Cette opération est irréversible : les données peuvent être perdues.",
-    "es": "Quitar una columna llamada<i> {{column_name}}</i> ? El cambio se realizará en la base de datos y en todas las tablas interactivas. Esto no se puede deshacer: los datos se pueden perder.",
-    "ru": "Удалить столбец с именем<i> {{column_name}}</i> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить: данные могут быть потеряны.",
-    "zh": "删除名为<i> {{column_name}}</i>?更改将在数据库和所有交互式表中完成。这是无法撤消的：数据可能会丢失。",
-    "ar": "قم بإزالة عمود مسمى<i> {{column_name}}</i> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا: يمكن أن تفقد البيانات.",
-    "fa": "ستونی به نام را بردارید<i> {{column_name}}</i> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست: داده ها ممکن است از بین بروند.",
-    "ps": "په نوم یو کالم لرې کړئ<i> {{column_name}}</i> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی: ډاټا ورک کیدی شي.",
-    "bn": "নামের একটি কলাম সরান<i> {{column_name}}</i> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না: ডেটা হারিয়ে যেতে পারে।",
-    "de": "Entfernen Sie eine Spalte mit dem Namen<i> {{column_name}}</i> ? Die Änderung wird in der Datenbank und allen interaktiven Tabellen vorgenommen. Dies kann nicht rückgängig gemacht werden: Daten können verloren gehen."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "fr": "Supprimer une colonne nommée<code> {{column_name}}</code> ? Le changement sera fait dans la base de données et toutes les tables interactives. Cette opération est irréversible : les données peuvent être perdues.",
+    "es": "Quitar una columna llamada<code> {{column_name}}</code> ? El cambio se realizará en la base de datos y en todas las tablas interactivas. Esto no se puede deshacer: los datos se pueden perder.",
+    "ru": "Удалить столбец с именем<code> {{column_name}}</code> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить: данные могут быть потеряны.",
+    "zh": "删除名为的列<code> {{column_name}}</code>？更改将在数据库和所有交互式表中完成。这无法撤消：数据可能会丢失。",
+    "ar": "قم بإزالة عمود مسمى<code> {{column_name}}</code> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا: يمكن أن تفقد البيانات.",
+    "fa": "ستونی به نام را حذف کنید<code> {{column_name}}</code> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست: داده ها ممکن است از بین بروند.",
+    "ps": "په نوم یو کالم لرې کړئ<code> {{column_name}}</code> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی: ډاټا ورک کیدی شي.",
+    "bn": "নামের একটি কলাম সরান<code> {{column_name}}</code> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না: ডেটা হারিয়ে যেতে পারে।",
+    "de": "Entfernen Sie eine Spalte mit dem Namen<code> {{column_name}}</code> ? Die Änderung wird in der Datenbank und allen interaktiven Tabellen vorgenommen. Dies kann nicht rückgängig gemacht werden: Daten können verloren gehen."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -4732,19 +4693,6 @@
     "de": "Wählen Sie die Spalte aus, die Sie umbenennen möchten:"
   },
   {
-    "id": "edit_table_modal_rename_column_next",
-    "en": "Next",
-    "fr": "Suivant",
-    "es": "Próximo",
-    "ru": "Следующий",
-    "zh": "下一个",
-    "ar": "التالي",
-    "fa": "بعد",
-    "ps": "بل",
-    "bn": "পরবর্তী",
-    "de": "Nächste"
-  },
-  {
     "id": "edit_table_modal_rename_column_confirm_title",
     "en": "Confirmation",
     "fr": "Confirmation",
@@ -4759,16 +4707,16 @@
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
-    "fr": "Êtes-vous sûr de vouloir renommer la colonne {{column_name}} pour {{column_name_new}} ?",
-    "es": "¿Estás seguro de que quieres cambiar el nombre de la columna? {{column_name}} a {{column_name_new}} ?",
-    "ru": "Вы уверены, что хотите переименовать столбец {{column_name}} к {{column_name_new}} ?",
-    "zh": "您确定要重命名该列吗 {{column_name}}到 {{column_name_new}}？",
-    "ar": "هل أنت متأكد أنك تريد إعادة تسمية العمود {{column_name}} ل {{column_name_new}} ؟",
-    "fa": "آیا مطمئن هستید که می خواهید نام ستون را تغییر دهید؟ {{column_name}} به {{column_name_new}} ?",
-    "ps": "ایا تاسو ډاډه یاست چې تاسو غواړئ د کالم نوم بدل کړئ {{column_name}} ته {{column_name_new}} ؟",
-    "bn": "আপনি কি নিশ্চিত যে আপনি কলামটির নাম পরিবর্তন করতে চান৷ {{column_name}} প্রতি {{column_name_new}} ?",
-    "de": "Möchten Sie die Spalte wirklich umbenennen? {{column_name}} Zu {{column_name_new}} ?"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "fr": "Êtes-vous sûr de vouloir renommer la colonne<code> {{column_name}}</code> pour<code> {{column_name_new}}</code> ?",
+    "es": "¿Estás seguro de que quieres cambiar el nombre de la columna?<code> {{column_name}}</code> a<code> {{column_name_new}}</code> ?",
+    "ru": "Вы уверены, что хотите переименовать столбец<code> {{column_name}}</code> к<code> {{column_name_new}}</code> ?",
+    "zh": "您确定要重命名该列吗<code> {{column_name}}</code>到<code> {{column_name_new}}</code>？",
+    "ar": "هل أنت متأكد أنك تريد إعادة تسمية العمود<code> {{column_name}}</code> ل<code> {{column_name_new}}</code> ؟",
+    "fa": "آیا مطمئن هستید که می خواهید نام ستون را تغییر دهید؟<code> {{column_name}}</code> به<code> {{column_name_new}}</code> ?",
+    "ps": "ایا تاسو ډاډه یاست چې تاسو غواړئ د کالم نوم بدل کړئ<code> {{column_name}}</code> ته<code> {{column_name_new}}</code> ؟",
+    "bn": "আপনি কি নিশ্চিত যে আপনি কলামটির নাম পরিবর্তন করতে চান৷<code> {{column_name}}</code> প্রতি<code> {{column_name_new}}</code> ?",
+    "de": "Möchten Sie die Spalte wirklich umbenennen?<code> {{column_name}}</code> Zu<code> {{column_name_new}}</code> ?"
   },
   {
     "id": "btn_edit_rename_column",
@@ -4886,6 +4834,84 @@
     "ps": "د سرچینې طبقه",
     "bn": "উৎস স্তর",
     "de": "Quellschicht"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "fr": "Colonne dupliquée",
+    "es": "Columna duplicada",
+    "ru": "Дублировать столбец",
+    "zh": "重复列",
+    "ar": "عمود مكرر",
+    "fa": "ستون تکراری",
+    "ps": "دوه اړخیز کالم",
+    "bn": "সদৃশ কলাম",
+    "de": "Spalte duplizieren"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "fr": "Colonne dupliquée",
+    "es": "Columna duplicada",
+    "ru": "Дублировать столбец",
+    "zh": "重复列",
+    "ar": "عمود مكرر",
+    "fa": "ستون تکراری",
+    "ps": "دوه اړخیز کالم",
+    "bn": "সদৃশ কলাম",
+    "de": "Spalte duplizieren"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "fr": "Colonne à dupliquer",
+    "es": "Columna a duplicar",
+    "ru": "Столбец для дублирования",
+    "zh": "要复制的列",
+    "ar": "العمود المراد نسخه",
+    "fa": "ستون برای تکرار",
+    "ps": "د نقل کولو کالم",
+    "bn": "নকল করতে কলাম",
+    "de": "Zu duplizierende Spalte"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "fr": "Colonne à dupliquer : valider",
+    "es": "Columna a duplicar: confirmar",
+    "ru": "Столбец для дублирования: подтвердить",
+    "zh": "要复制的列：确认",
+    "ar": "العمود المراد نسخه: التأكيد",
+    "fa": "ستون برای تکرار: تایید",
+    "ps": "د نقل کولو کالم: تصدیق",
+    "bn": "নকল করতে কলাম: নিশ্চিত করুন",
+    "de": "Zu duplizierende Spalte: Bestätigen"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "fr": "Dupliquer la colonne nommée<code> {{column_name}}</code> à une nouvelle colonne nommée<code> {{column_name_new}}</code> ?",
+    "es": "Duplicar la columna nombrada<code> {{column_name}}</code> a una nueva columna llamada<code> {{column_name_new}}</code> ?",
+    "ru": "Дублируйте столбец с именем<code> {{column_name}}</code> в новый столбец с именем<code> {{column_name_new}}</code> ?",
+    "zh": "复制名为的列<code> {{column_name}}</code>到一个名为的新列<code> {{column_name_new}}</code>？",
+    "ar": "كرر العمود المسمى<code> {{column_name}}</code> إلى عمود جديد اسمه<code> {{column_name_new}}</code> ؟",
+    "fa": "ستون نامگذاری شده را کپی کنید<code> {{column_name}}</code> به ستون جدیدی به نام<code> {{column_name_new}}</code> ?",
+    "ps": "د نوم کالم نقل کړئ<code> {{column_name}}</code> په نوم نوي کالم ته<code> {{column_name_new}}</code> ؟",
+    "bn": "নামের কলামটি নকল করুন<code> {{column_name}}</code> নামের একটি নতুন কলামে<code> {{column_name_new}}</code> ?",
+    "de": "Duplizieren Sie die benannte Spalte<code> {{column_name}}</code> zu einer neuen Spalte namens<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "fr": "Dupliquer la colonne",
+    "es": "Duplicar la columna",
+    "ru": "Дублировать столбец",
+    "zh": "复制列",
+    "ar": "كرر العمود",
+    "fa": "ستون را کپی کنید",
+    "ps": "کالم نقل کړئ",
+    "bn": "কলামটি নকল করুন",
+    "de": "Duplizieren Sie die Spalte"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -5928,6 +5954,32 @@
     "de": "Abbrechen"
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "fr": "Suivant..",
+    "es": "Próximo...",
+    "ru": "Следующий...",
+    "zh": "下一个...",
+    "ar": "التالي...",
+    "fa": "بعد...",
+    "ps": "بل...",
+    "bn": "পরবর্তী...",
+    "de": "Nächste..."
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "fr": "Confirmer",
+    "es": "Confirmar",
+    "ru": "Подтверждать ",
+    "zh": "确认",
+    "ar": "يتأكد ",
+    "fa": "تایید",
+    "ps": "تائید",
+    "bn": "কনফার্ম ",
+    "de": "Bestätigen "
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "fr": "Continuer",
@@ -6108,19 +6160,6 @@
     "ps": "اوسنۍ پروژې کې ګډون کول (%s ) ",
     "bn": "বর্তমান প্রকল্পে যোগদান করুন (%s ) ",
     "de": "Aktuelles Projekt beitreten (%s ) "
-  },
-  {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "fr": "Confirmer",
-    "es": "Confirmar",
-    "ru": "Подтверждать ",
-    "zh": "确认",
-    "ar": "يتأكد ",
-    "fa": "تایید",
-    "ps": "تائید",
-    "bn": "কনফার্ম ",
-    "de": "Bestätigen "
   },
   {
     "id": "btn_country",

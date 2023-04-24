@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The column name will be: <b>{{column_name}}</b>",
-    "fa": "نام ستون خواهد بود:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "fa": "نام ستون خواهد بود:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "fa": "نام در دسترس نیست"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "fa": "بعد"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "fa": "نوع داده را انتخاب کنید"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "fa": "بعد"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "fa": "یک ستون جدید به نام اضافه کنید<b> {{column_name}}</b> از نوع<b> {{column_type}}</b> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست، اما در صورت لزوم، ابزار \"حذف ستون\" کار خواهد کرد."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "fa": "یک ستون جدید به نام اضافه کنید<code> {{column_name}}</code> از نوع<code> {{column_type}}</code> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست، اما در صورت نیاز، ابزار \"حذف ستون\" کار خواهد کرد."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "fa": "نام ستون"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "fa": "بعد"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "fa": "حذف یک ستون: تایید"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "fa": "ستونی به نام را بردارید<i> {{column_name}}</i> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست: داده ها ممکن است از بین بروند."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "fa": "ستونی به نام را حذف کنید<code> {{column_name}}</code> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست: داده ها ممکن است از بین بروند."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1820,19 +1805,14 @@
     "fa": "ستون مورد نظر برای تغییر نام را انتخاب کنید:"
   },
   {
-    "id": "edit_table_modal_rename_column_next",
-    "en": "Next",
-    "fa": "بعد"
-  },
-  {
     "id": "edit_table_modal_rename_column_confirm_title",
     "en": "Confirmation",
     "fa": "تائیدیه"
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
-    "fa": "آیا مطمئن هستید که می خواهید نام ستون را تغییر دهید؟ {{column_name}} به {{column_name_new}} ?"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "fa": "آیا مطمئن هستید که می خواهید نام ستون را تغییر دهید؟<code> {{column_name}}</code> به<code> {{column_name_new}}</code> ?"
   },
   {
     "id": "btn_edit_rename_column",
@@ -1878,6 +1858,36 @@
     "id": "edit_table_view_with_layer",
     "en": "Source layer",
     "fa": "لایه منبع"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "fa": "ستون تکراری"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "fa": "ستون تکراری"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "fa": "ستون برای تکرار"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "fa": "ستون برای تکرار: تایید"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "fa": "ستون نامگذاری شده را کپی کنید<code> {{column_name}}</code> به ستون جدیدی به نام<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "fa": "ستون را کپی کنید"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2280,6 +2290,16 @@
     "fa": "لغو "
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "fa": "بعد..."
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "fa": "تایید"
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "fa": "ادامه هید"
@@ -2348,11 +2368,6 @@
     "id": "btn_join_current_project",
     "en": "Join current project ( %s )",
     "fa": "به پروژه فعلی بپیوندید (%s ) "
-  },
-  {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "fa": "تایید"
   },
   {
     "id": "btn_country",

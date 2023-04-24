@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The column name will be: <b>{{column_name}}</b>",
-    "ar": "سيكون اسم العمود:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "ar": "سيكون اسم العمود:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "ar": "الاسم غير متوفر"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "ar": "التالي"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "ar": "حدد نوع البيانات"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "ar": "التالي"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "ar": "أضف عمودًا جديدًا باسم<b> {{column_name}}</b> من النوع<b> {{column_type}}</b> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا ، ولكن أداة \"إزالة عمود\" ستعمل ، إذا لزم الأمر."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "ar": "أضف عمودًا جديدًا باسم<code> {{column_name}}</code> من النوع<code> {{column_type}}</code> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا ، ولكن أداة \"إزالة عمود\" ستعمل ، إذا لزم الأمر."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "ar": "اسم العمود"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "ar": "التالي"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "ar": "إزالة عمود: قم بالتأكيد"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "ar": "قم بإزالة عمود مسمى<i> {{column_name}}</i> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا: يمكن أن تفقد البيانات."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "ar": "قم بإزالة عمود مسمى<code> {{column_name}}</code> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا: يمكن أن تفقد البيانات."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1820,19 +1805,14 @@
     "ar": "اختر العمود الذي تريد إعادة تسميته:"
   },
   {
-    "id": "edit_table_modal_rename_column_next",
-    "en": "Next",
-    "ar": "التالي"
-  },
-  {
     "id": "edit_table_modal_rename_column_confirm_title",
     "en": "Confirmation",
     "ar": "تأكيد"
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
-    "ar": "هل أنت متأكد أنك تريد إعادة تسمية العمود {{column_name}} ل {{column_name_new}} ؟"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "ar": "هل أنت متأكد أنك تريد إعادة تسمية العمود<code> {{column_name}}</code> ل<code> {{column_name_new}}</code> ؟"
   },
   {
     "id": "btn_edit_rename_column",
@@ -1878,6 +1858,36 @@
     "id": "edit_table_view_with_layer",
     "en": "Source layer",
     "ar": "طبقة المصدر"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "ar": "عمود مكرر"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "ar": "عمود مكرر"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "ar": "العمود المراد نسخه"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "ar": "العمود المراد نسخه: التأكيد"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "ar": "كرر العمود المسمى<code> {{column_name}}</code> إلى عمود جديد اسمه<code> {{column_name_new}}</code> ؟"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "ar": "كرر العمود"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2280,6 +2290,16 @@
     "ar": "يلغي "
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "ar": "التالي..."
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "ar": "يتأكد "
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "ar": "يكمل"
@@ -2348,11 +2368,6 @@
     "id": "btn_join_current_project",
     "en": "Join current project ( %s )",
     "ar": "انضم إلى المشروع الحالي (%s ) "
-  },
-  {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "ar": "يتأكد "
   },
   {
     "id": "btn_country",

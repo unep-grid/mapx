@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The column name will be: <b>{{column_name}}</b>",
-    "zh": "列名将是：<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "zh": "列名将是：<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "zh": "名称不可用"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "zh": "下一个"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "zh": "选择数据类型"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "zh": "下一个"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "zh": "添加一个名为的新列<b> {{column_name}}</b>类型<b> {{column_type}}</b>?更改将在数据库和所有交互式表中完成。这无法撤消，但如果需要，“删除列”工具将起作用。"
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "zh": "添加一个名为的新列<code> {{column_name}}</code>类型<code> {{column_type}}</code>？更改将在数据库和所有交互式表中完成。此操作无法撤消，但如果需要，“删除列”工具将起作用。"
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "zh": "列名"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "zh": "下一个"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "zh": "删除列：确认"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "zh": "删除名为<i> {{column_name}}</i>?更改将在数据库和所有交互式表中完成。这是无法撤消的：数据可能会丢失。"
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "zh": "删除名为的列<code> {{column_name}}</code>？更改将在数据库和所有交互式表中完成。这无法撤消：数据可能会丢失。"
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1820,19 +1805,14 @@
     "zh": "选择要重命名的列："
   },
   {
-    "id": "edit_table_modal_rename_column_next",
-    "en": "Next",
-    "zh": "下一个"
-  },
-  {
     "id": "edit_table_modal_rename_column_confirm_title",
     "en": "Confirmation",
     "zh": "确认"
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column {{column_name}} to {{column_name_new}}?",
-    "zh": "您确定要重命名该列吗 {{column_name}}到 {{column_name_new}}？"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "zh": "您确定要重命名该列吗<code> {{column_name}}</code>到<code> {{column_name_new}}</code>？"
   },
   {
     "id": "btn_edit_rename_column",
@@ -1878,6 +1858,36 @@
     "id": "edit_table_view_with_layer",
     "en": "Source layer",
     "zh": "源层"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "zh": "重复列"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "zh": "重复列"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "zh": "要复制的列"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "zh": "要复制的列：确认"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "zh": "复制名为的列<code> {{column_name}}</code>到一个名为的新列<code> {{column_name_new}}</code>？"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "zh": "复制列"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2280,6 +2290,16 @@
     "zh": "取消"
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "zh": "下一个..."
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "zh": "确认"
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "zh": "继续"
@@ -2348,11 +2368,6 @@
     "id": "btn_join_current_project",
     "en": "Join current project ( %s )",
     "zh": "加入当前项目 ( %s )"
-  },
-  {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "zh": "确认"
   },
   {
     "id": "btn_country",
