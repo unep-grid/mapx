@@ -63,7 +63,7 @@ SELECT json_build_object(
     'type', 'categorical',
     'attribute', '{{idAttr}}',
     'nullValue', n.val,
-    'table', to_json(atj.json),
+    'table', coalesce(to_json(atj.json),'[]'::json),
     'table_row_count_all', to_json(tcr.count), 
     'table_row_count', to_json(tc.count)
   )
