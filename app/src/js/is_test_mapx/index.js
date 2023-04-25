@@ -1,11 +1,10 @@
-import {getLanguagesAll} from '../language/index.js';
-import * as test from './../is_test/index.js';
-import {getView} from './../map_helpers/index.js';
-export * from './../is_test/index.js';
+import { getLanguagesAll } from "../language/index.js";
+import { isObject, isArrayOf, isView } from "./../is_test/index.js";
+import { getView } from "./../map_helpers/index.js";
+export * from "./../is_test/index.js";
 /**
  * MapX specific method to extend 'is_test'
  */
-
 
 /**
  * Test if item is an language object, e.g. as defined in json schema
@@ -13,8 +12,8 @@ export * from './../is_test/index.js';
  * @return {Boolean}
  */
 export function isLanguageObject(item) {
-  const isObject = test.isObject(item);
-  if (!isObject) {
+  const isObjectItem = isObject(item);
+  if (!isObjectItem) {
     return false;
   }
   const keys = Object.keys(item);
@@ -24,9 +23,9 @@ export function isLanguageObject(item) {
    */
   let valid = false;
   for (let k of keys) {
-    if(!isLanguageId(k)){
+    if (!isLanguageId(k)) {
       return false;
-    }else{
+    } else {
       valid = true;
     }
   }
@@ -34,16 +33,14 @@ export function isLanguageObject(item) {
 }
 
 /**
-* Test if language code os supported
-* @param {String} id Two letter language id
-* @return {Boolean}
-*/ 
-export function isLanguageId(id){
+ * Test if language code os supported
+ * @param {String} id Two letter language id
+ * @return {Boolean}
+ */
+export function isLanguageId(id) {
   const languages = getLanguagesAll();
-  return languages.includes(id)
+  return languages.includes(id);
 }
-
-
 
 /**
  * Test if item is an language object array, e.g. as defined in json schema
@@ -51,7 +48,7 @@ export function isLanguageId(id){
  * @return {Boolean}
  */
 export function isLanguageObjectArray(arr) {
-  return test.isArrayOf(arr, isLanguageObject);
+  return isArrayOf(arr, isLanguageObject);
 }
 
 /**
@@ -61,7 +58,5 @@ export function isLanguageObjectArray(arr) {
  */
 export function isViewOpen(view) {
   view = getView(view);
-  return test.isView(view) && view._open === true;
+  return isView(view) && view._open === true;
 }
-
-

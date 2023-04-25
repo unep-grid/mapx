@@ -11,6 +11,7 @@ import { MainPanel } from "./../panel_main";
 import { MapInfoBox } from "./../map_info_box";
 import { Search } from "./../search";
 import { downloadJSON } from "../download/index.js";
+import { ViewBase } from "../views_builder/view_base.js";
 import {
   MapxLogo,
   MapControlLiveCoord,
@@ -894,7 +895,7 @@ export function updateBtnFilterActivated() {
    * Check displayed views element
    */
   const hasViewsActivated = views.reduce((a, v) => {
-    if (!v._vb) {
+    if (!v._vb instanceof ViewBase) {
       return a || false;
     }
     let elView = v._vb.getEl();
@@ -2935,7 +2936,7 @@ function _viewUiOpen(view) {
   if (!isView(view)) {
     return;
   }
-  if (view._vb) {
+  if (view._vb instanceof ViewBase) {
     view._vb.open();
   }
   view._open = true;
@@ -2957,7 +2958,7 @@ async function _viewUiClose(view) {
   if (!isView(view)) {
     return;
   }
-  if (view._vb) {
+  if (view._vb instanceof ViewBase) {
     view._vb.close();
   }
   view._open = false;

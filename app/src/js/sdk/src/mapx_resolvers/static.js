@@ -6,6 +6,7 @@ import {
   getLanguagesAll,
   updateLanguage,
 } from "../../../language/index.js";
+import { ViewBase } from "../../../views_builder/view_base.js";
 import {
   getMap,
   setImmersiveMode,
@@ -17,13 +18,14 @@ import {
   getViewLegendImage,
   getViewRemote,
   viewRemove,
+  viewAdd,
+  viewDelete,
   downloadViewVector,
   downloadViewSourceExternal,
   downloadViewGeoJSON,
   getViewsTitleNormalized,
   getGeoJSONRandomPoints,
   getViewJson,
-  viewDelete,
   getBoundsArray,
   fitMaxBounds,
   validateBounds,
@@ -605,8 +607,12 @@ class MapxResolversStatic extends ResolversBase {
     if (!valid) {
       return rslv._err("err_view_invalid");
     }
+    if (view._vb instanceof ViewBase) {
+      await viewAdd(opt.idView);
+    } else {
+      await viewsListAddSingle(view, { open: true });
+    }
 
-    await viewsListAddSingle(view);
     if (opt.zoomToView) {
       const bounds = await getViewsBounds(opt.idView);
       const ok = fitMaxBounds(bounds);

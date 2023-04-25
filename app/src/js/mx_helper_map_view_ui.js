@@ -5,7 +5,6 @@ import { getArrayDistinct } from "./array_stat/index.js";
 import { settings } from "./settings";
 import {
   isTrue,
-  isEmpty,
   isView,
   isArray,
   isViewOpen,

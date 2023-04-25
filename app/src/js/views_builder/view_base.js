@@ -1,5 +1,6 @@
 import { getLabelFromObjectPath } from "../language";
 import { el } from "../el/src/index.js";
+import { viewsCheckedUpdate } from "../map_helpers";
 
 class ViewBase {
   constructor(view, enable) {
@@ -17,11 +18,13 @@ class ViewBase {
   open() {
     if (!this.isOpen()) {
       this.elInput.checked = true;
+      viewsCheckedUpdate();
     }
   }
   close() {
     if (this.isOpen()) {
       this.elInput.checked = false;
+      viewsCheckedUpdate();
     }
   }
   destroy() {
