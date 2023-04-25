@@ -25,7 +25,6 @@ import { templates } from "#mapx/template";
 import { pgWrite, redisSetJSON, redisGetJSON } from "#mapx/db";
 import {
   ioUpdateDbViewsAltStyleBySource,
-  ioUpdateClientViewsBySource,
   getViewsTableBySource,
 } from "#mapx/view";
 
@@ -57,7 +56,7 @@ const def = {
   col_geom: "geom",
 };
 
-export const routes = {
+export const events = {
   /**
    * from client
    */
@@ -77,6 +76,11 @@ export const routes = {
   server_table_data: "/server/source/edit/table/data",
   server_dispatch: "/server/source/edit/table/dispatch",
   server_progress: "/server/source/edit/table/progress",
+  /**
+   *
+   * server broaddcast / spread
+   */
+  server_spread_views_update: "/server/spread/views/update",
 };
 
 class EditTableSession {
@@ -206,11 +210,11 @@ class EditTableSession {
     /**
      * Listen for events
      */
-    et._socket.on(routes.client_exit, et.onExit);
-    et._socket.on(routes.client_edit_updates, et.onUpdate);
-    et._socket.on(routes.client_geom_validate, et.onValidate);
-    et._socket.on(routes.client_changes_sanitize, et.onSanitize);
-    et._socket.on(routes.client_get, et.onGet);
+    et._socket.on(events.client_exit, et.onExit);
+    et._socket.on(events.client_edit_updates, et.onUpdate);
+    et._socket.on(events.client_geom_validate, et.onValidate);
+    et._socket.on(events.client_changes_sanitize, et.onSanitize);
+    et._socket.on(events.client_get, et.onGet);
 
     /*
      * Get list of current members
@@ -220,12 +224,12 @@ class EditTableSession {
     /**
      * Signal join
      */
-    et.emit(routes.server_joined, {
+    et.emit(events.server_joined, {
       id_room: et._id_room,
       id_session: et._id_session,
       members: members,
     });
-    et.emitRoom(routes.server_new_member, {
+    et.emitRoom(events.server_new_member, {
       id_socket: et._socket.id,
       roles: et._user_roles,
       members: members,
@@ -241,7 +245,7 @@ class EditTableSession {
 
   error(txt, err) {
     const et = this;
-    et.emit(routes.server_error, {
+    et.emit(events.server_error, {
       message: txt,
       id_room: et._id_room,
     });
@@ -271,22 +275,22 @@ class EditTableSession {
     et._socket.leave(et._id_room);
     const members = await et.getMembers();
 
-    et.emitRoom(routes.server_member_exit, {
+    et.emitRoom(events.server_member_exit, {
       id_socket: et._socket.id,
       roles: et._user_roles,
       members: members,
     });
 
-    et._socket.off(routes.client_exit, et.onExit);
-    et._socket.off(routes.client_edit_updates, et.onUpdate);
-    et._socket.off(routes.client_geom_validate, et.onValidate);
-    et._socket.off(routes.client_changes_sanitize, et.onSanitize);
-    et._socket.off(routes.client_get, et.onGet);
+    et._socket.off(events.client_exit, et.onExit);
+    et._socket.off(events.client_edit_updates, et.onUpdate);
+    et._socket.off(events.client_geom_validate, et.onValidate);
+    et._socket.off(events.client_changes_sanitize, et.onSanitize);
+    et._socket.off(events.client_get, et.onGet);
   }
 
   dispatch(message) {
     const et = this;
-    et.emitRoom(routes.server_dispatch, message);
+    et.emitRoom(events.server_dispatch, message);
   }
 
   onExit(message, callback) {
@@ -361,9 +365,9 @@ class EditTableSession {
       messageProgress = { percent: def.start_percent };
     }
     if (all) {
-      et.emitAll(routes.server_progress, messageProgress);
+      et.emitAll(events.server_progress, messageProgress);
     } else {
-      et.emit(routes.server_progress, messageProgress);
+      et.emit(events.server_progress, messageProgress);
     }
   }
 
@@ -461,11 +465,9 @@ class EditTableSession {
       const attributes = pgRes.fields.map((f) => f.name);
       const types = await getColumnsTypesSimple(et._id_table, attributes);
       const title = await getLayerTitle(et._id_table);
-      //const attributesViews = await getLayerViewsAttributes(et._id_table);
-      //const tableViews =  await get
       const locked = await et.getState("lock_table");
+
       const table = {
-        //attributesViews,
         hasGeom,
         validation,
         types,
@@ -484,7 +486,7 @@ class EditTableSession {
         table.end = i === iL - 1;
         table.data = data.splice(0, def.size_chunk);
         et.progress({ percent: table.part / table.nParts });
-        et.emit(routes.server_table_data, table);
+        et.emit(events.server_table_data, table);
       }
 
       et.perfEnd("sendTable");
@@ -504,7 +506,7 @@ class EditTableSession {
   }
 
   /**
-   * Emot to other
+   * Emit to other
    */
   emitRoom(type, data) {
     const et = this;
@@ -512,12 +514,23 @@ class EditTableSession {
   }
 
   /**
-   * Emit to all
+   * Emit to concurent table user
    */
   emitAll(type, data) {
     const et = this;
     et.emit(type, data);
     et.emitRoom(type, data);
+  }
+
+  /**
+   * Emit to every client, even static, including sender
+   * -> not limited to table editor session
+   * -> coupled with wsHanders
+   */
+  emitSpread(type, data) {
+    const et = this;
+    et._socket.mx_emit_ws_broadcast(type, data);
+    et._socket.mx_emit_ws(type, data);
   }
 
   /**
@@ -583,24 +596,20 @@ class EditTableSession {
     return m;
   }
 
-  async updateViewsClient(idTable) {
+  async updateAltStyleClient(idTable) {
     const et = this;
+    const socket = et._socket;
     if (!isSourceId(idTable)) {
       return;
     }
-    const socket = et._socket;
-    /**
-     * Update views
-     */
-    await ioUpdateClientViewsBySource(socket, {
-      idSource: idTable,
-    });
     /**
      * Update SLD + save
      */
-    return await ioUpdateDbViewsAltStyleBySource(socket, {
+    await ioUpdateDbViewsAltStyleBySource(socket, {
       idSource: idTable,
     });
+
+    return true;
   }
 
   async writePostgres(updates) {
@@ -715,15 +724,18 @@ class EditTableSession {
               );
 
               if (rename_attribute) {
-                await updateSourceAttribute(
+                const views = await updateSourceAttribute(
                   id_table,
                   column_name,
                   column_name_new,
                   client
                 );
+                et.emitSpread(events.server_spread_views_update, {
+                  views,
+                });
 
                 postScripts.set(`${id_table}_update_views`, async () => {
-                  return await et.updateViewsClient(id_table);
+                  return await et.updateAltStyleClient(id_table);
                 });
               }
             }
@@ -737,14 +749,16 @@ class EditTableSession {
                 client
               );
 
-              await updateSourceAttribute(
+              const views = await updateSourceAttribute(
                 id_table,
                 column_name,
                 column_name_new,
                 client
               );
+              et.emitSpread(events.server_spread_views_update, { views });
+
               postScripts.set(`${id_table}_update_views`, async () => {
-                return await et.updateViewsClient(id_table);
+                return await et.updateAltStyleClient(id_table);
               });
             }
             break;
@@ -768,11 +782,8 @@ class EditTableSession {
     }
 
     /**
-     * Script that require to be launched after the commit
-     * -> impacts client views
-     * -> client views can require source summary
-     * -> attribute requested in summary must exists
-     * -> exists only after commit
+     * Scripts that require to be launched after the commit
+     * ( i.e. require updated views, source, meta )
      */
     if (postScripts.size) {
       for (const [key, script] of postScripts.entries()) {

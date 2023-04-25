@@ -58,7 +58,7 @@ const defaults = {
   timeout_emit: 1e3 * 60, // 10s round trip
   timeout_sanizing: 1e3 * 60,
   timeout_geom_valid: 1e3 * 120,
-  routes: {
+  events: {
     /**
      * server to here
      */
@@ -123,7 +123,7 @@ export class EditTableSessionClient extends WsToolsBase {
   async init() {
     const et = this;
     try {
-      const r = et._config.routes;
+      const e = et._config.events;
       if (et._initialized) {
         return;
       }
@@ -180,14 +180,13 @@ export class EditTableSessionClient extends WsToolsBase {
        *   - distinct socket
        *   - sync event ID between server and client
        */
-      et._socket.on(r.server_joined, et.onJoined);
-      et._socket.on(r.server_error, et.onServerError);
-      et._socket.on(r.server_new_member, et.onNewMember);
-      et._socket.on(r.server_member_exit, et.onMemberExit);
-      et._socket.on(r.server_table_data, et.initTable);
-      et._socket.on(r.server_dispatch, et.onDispatch);
-      et._socket.on(r.server_progress, et.onProgress);
-      //et._socket.on(r.server_geom_validate_result, et.onGeomValidateResult);
+      et._socket.on(e.server_joined, et.onJoined);
+      et._socket.on(e.server_error, et.onServerError);
+      et._socket.on(e.server_new_member, et.onNewMember);
+      et._socket.on(e.server_member_exit, et.onMemberExit);
+      et._socket.on(e.server_table_data, et.initTable);
+      et._socket.on(e.server_dispatch, et.onDispatch);
+      et._socket.on(e.server_progress, et.onProgress);
 
       et._socket.on("disconnect", et.onDisconnect);
       await et.dialogWarning();
@@ -253,10 +252,10 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async start(opt) {
     const et = this;
-    const r = et._config.routes;
+    const e = et._config.events;
     const def = { send_table: true };
     opt = Object.assign({}, def, opt);
-    await et.emit(r.client_edit_start, opt);
+    await et.emit(e.client_edit_start, opt);
   }
 
   /**
@@ -270,6 +269,8 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async destroy() {
     const et = this;
+    const e = et._config.events;
+
     try {
       if (et._destroyed) {
         return;
@@ -297,7 +298,6 @@ export class EditTableSessionClient extends WsToolsBase {
         }
       }
 
-      const r = et._config.routes;
       et._destroyed = true;
       et._lock_table_concurrent = false;
       et._lock_table_by_user_id = null;
@@ -306,20 +306,20 @@ export class EditTableSessionClient extends WsToolsBase {
           console.error(e);
         });
       }
-      et.emit(r.client_exit).catch((e) => {
+      et.emit(e.client_exit).catch((e) => {
         console.error(e);
       });
       et._modal?.close();
       et._popups.forEach((p) => p.destroy());
       et._resize_observer?.disconnect();
-      et._socket.off(r.server_joined, et.onJoined);
-      et._socket.off(r.server_error, et.onServerError);
-      et._socket.off(r.server_new_member, et.onNewMember);
-      et._socket.off(r.server_member_exit, et.onMemberExit);
-      et._socket.off(r.server_table_data, et.initTable);
-      et._socket.off(r.server_dispatch, et.onDispatch);
-      et._socket.off(r.server_progress, et.onProgress);
-      //et._socket.off(r.server_geom_validate_result, et.onGeomValidateResult);
+      et._socket.off(e.server_joined, et.onJoined);
+      et._socket.off(e.server_error, et.onServerError);
+      et._socket.off(e.server_new_member, et.onNewMember);
+      et._socket.off(e.server_member_exit, et.onMemberExit);
+      et._socket.off(e.server_table_data, et.initTable);
+      et._socket.off(e.server_dispatch, et.onDispatch);
+      et._socket.off(e.server_progress, et.onProgress);
+      //et._socket.off(e.server_geom_validate_result, et.onGeomValidateResult);
       et._socket.off("disconnect", et.onDisconnect);
       et.fire("destroy").catch((e) => {
         console.error(e);
@@ -2750,7 +2750,7 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
-   * Get data from specific routes, cache result
+   * Get data from specific events, cache result
    */
   async get(type) {
     const et = this;
@@ -2773,7 +2773,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async emitUpdates(updates, opt) {
     const et = this;
-    const r = et._config.routes;
+    const e = et._config.events;
     if (et.locked) {
       return;
     }
@@ -2789,7 +2789,7 @@ export class EditTableSessionClient extends WsToolsBase {
     try {
       for (let iChunk = 0; iChunk < nChunk; iChunk++) {
         const chunk = updates.splice(0, max);
-        await et.emit(r.client_edit_updates, {
+        await et.emit(e.client_edit_updates, {
           nParts: nChunk,
           part: iChunk + 1,
           start: iChunk === 0,
@@ -2884,7 +2884,7 @@ export class EditTableSessionClient extends WsToolsBase {
     if (et.locked) {
       return;
     }
-    const r = et._config.routes;
+    const e = et._config.events;
     const ok = await modalConfirm({
       title: getDictItem("edit_table_modal_validate_title"),
       content: getDictItem("edit_table_modal_validate_desc"),
@@ -2896,7 +2896,7 @@ export class EditTableSessionClient extends WsToolsBase {
       return;
     }
     const data = await et.emitGet(
-      r.client_geom_validate,
+      e.client_geom_validate,
       {
         use_cache: false,
         autoCorrect: false,
@@ -2916,7 +2916,7 @@ export class EditTableSessionClient extends WsToolsBase {
     if (et.locked) {
       return;
     }
-    const r = et._config.routes;
+    const r = et._config.events;
 
     const ok = await modalConfirm({
       title: getDictItem("edit_table_modal_repair_title"),
@@ -2931,7 +2931,7 @@ export class EditTableSessionClient extends WsToolsBase {
 
     const opt = { use_cache: true, autoCorrect: true };
     const data = await et.emitGet(
-      r.client_geom_validate,
+      e.client_geom_validate,
       opt,
       et._config.timeout_geom_valid
     );
@@ -3111,7 +3111,7 @@ export class EditTableSessionClient extends WsToolsBase {
         }
 
         const sanitizedChunk = await et.emitGet(
-          et._config.routes.client_changes_sanitize,
+          et._config.events.client_changes_sanitize,
           {
             updates: chunk,
           },

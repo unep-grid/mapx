@@ -4,7 +4,7 @@ import {
   viewsReplace,
 } from "./../map_helpers/index.js";
 import { viewsListAddSingle } from "./../mx_helper_map_view_ui.js";
-import { isNotEmpty, isArrayOfViews } from "../is_test/index.js";
+import { isNotEmpty, isArrayOfViews, isFunction } from "../is_test/index.js";
 import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt/index.js";
 import { isProd } from "./../app_utils";
 import { nc } from "./../mx.js";
@@ -13,16 +13,17 @@ import { clone } from "./../mx_helper_misc.js";
  * Create list of handlers
  *
  */
-export const routes = {
+export const eventsHandlers = {
   "/server/authentication": handlerAuthentication,
   "/server/error": handlerError,
   "/server/notify": handlerNotify,
   "/server/view/add": handlerViewAdd,
   "/server/source/added": handlerSourceAdded,
   "/server/view/style/get": handlerViewStyleGet,
-  "/server/views/replace": handleViewsReplace,
+  //"/server/views/replace": handleViewsReplace,
   "/server/test/echo": handlerEcho,
   "/server/test/sum": handlerSum,
+  "/server/spread/views/update": handleViewsReplace,
 };
 
 async function handlerSourceAdded(data, cb) {
@@ -79,7 +80,9 @@ async function handleViewsReplace(message, cb) {
     return cb({ ok: false });
   }
   message.ok = await viewsReplace(views);
-  cb(message);
+  if (isFunction(cb)) {
+    cb(message);
+  }
 }
 
 /*

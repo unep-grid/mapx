@@ -2,7 +2,7 @@ import { WsHandler } from "./../ws_handler";
 import { getLoginInfo } from "./../map_helpers/index.js";
 import { getApiUrl } from "./../api_routes";
 import { bindAll } from "../bind_class_methods";
-import { routes, tests } from "./routes.js";
+import { eventsHandlers, tests } from "./events.js";
 
 /**
  * Create a configured instance of WsHandler
@@ -16,7 +16,7 @@ export class WsHandlerMapx extends WsHandler {
     super({
       url: getApiUrl,
       auth: getLoginInfo, // evaluated for each connect
-      handlers: routes,
+      handlers: eventsHandlers,
       tests: tests,
     });
     bindAll(this);

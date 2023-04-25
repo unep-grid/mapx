@@ -981,7 +981,7 @@ export async function initMapx(o) {
     settings.initClosedPanels = true;
   }
 
-  settings.mode.static = o.modeStatic || settings.mode.storyAutoStart;
+  settings.mode.static = !!o.modeStatic || settings.mode.storyAutoStart;
   settings.mode.app = !settings.mode.static;
 
   /**
@@ -1389,7 +1389,6 @@ export function initMapListener(map) {
 }
 
 export async function initMapxStatic(o) {
-  const map = getMap();
   const mapData = getMapData();
   const zoomToViews = getQueryParameter("zoomToViews")[0];
   const language = getQueryParameter("language")[0] || getLanguageDefault();
@@ -3469,6 +3468,7 @@ export async function viewLayersAdd(o) {
 
   /**
    * Fire view add event
+   * -> view_added when done
    */
   events.fire({
     type: "view_add",
@@ -5178,7 +5178,7 @@ export async function resetViewStyle(o) {
 
   const view = getView(o.idView);
 
-  const isOpen = isViewOpen(view);
+  const isOpen = isViewOpen(view) || settings.mode.static;
 
   updateLanguageElements({
     el: view._el,
@@ -5330,6 +5330,10 @@ export function validateBounds(bounds) {
   // Define the minimum difference between coordinates
   const minDelta = 0.5;
 
+  // array of array -> flatten
+  if (isArrayOf(bounds, isArray)) {
+    bounds = bounds.flat();
+  }
   // Ensure the bounds array has exactly 4 elements
   if (bounds.length !== 4) {
     throw new Error("Bounds array should have exactly 4 elements.");
@@ -5828,7 +5832,7 @@ export async function viewsReplace(views) {
       const idViews = viewsAll.map((v) => v.id);
       const pos = idViews.indexOf(idView);
       if (pos === -1) {
-        throw new Error(`View not found ${idView}`);
+        continue;
       }
       const oldView = viewsAll[pos];
       Object.assign(oldView, view);

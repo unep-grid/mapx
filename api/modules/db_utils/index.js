@@ -616,6 +616,7 @@ async function renameTableColumn(idSource, oldName, newName, pgClient) {
  * @param {string} oldName - The old name to search for and replace in the JSONB object.
  * @param {string} newName - The new name to replace the old name with in the JSONB object.
  * @param {pg.Client} pgClient - The node-postgres client instance to use for database operations.
+ * @return {Promise<array>} Array of affected views
  * @throws {Error} If an error occurs during the update operation.
  */
 async function updateSourceAttribute(idSource, oldName, newName, pgClient) {
@@ -628,13 +629,22 @@ async function updateSourceAttribute(idSource, oldName, newName, pgClient) {
      * Update views
      */
     const queryUpdateViews = templates.updateViewSourceAttributes;
-    await pgClient.query(queryUpdateViews, [idSource, oldName, newName]);
-
+    const { rows: views } = await pgClient.query(queryUpdateViews, [
+      idSource,
+      oldName,
+      newName,
+    ]);
     /**
      * Update meta
      */
     const queryUpdateMeta = templates.updateMetaSourceAttributes;
     await pgClient.query(queryUpdateMeta, [idSource, oldName, newName]);
+
+    /**
+     * Return affected views
+     */
+    return views;
+
   } catch (error) {
     console.error("Error updating source attributes", error);
     throw new Error(error);

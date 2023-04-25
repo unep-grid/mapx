@@ -15,10 +15,6 @@ import {
   ioUpdateDbViewAltStyle,
   ioUpdateDbViewsAltStyleBySource,
 } from "./setViewStyleAlt.js";
-import {
-  ioUpdateClientViews,
-  ioUpdateClientViewsBySource,
-} from "./replaceClientViews.js";
 
 import {
   mwGetListByProject,
@@ -27,8 +23,6 @@ import {
 } from "./getViewsByProject.js";
 
 export {
-  ioUpdateClientViews,
-  ioUpdateClientViewsBySource,
   ioAddViewVt,
   ioViewPin,
   ioUpdateDbViewAltStyle,

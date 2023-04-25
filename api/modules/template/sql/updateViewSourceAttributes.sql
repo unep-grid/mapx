@@ -68,3 +68,4 @@ updated_views AS (
 INSERT INTO mx_views
 SELECT *
 FROM updated_views
+RETURNING *
