@@ -4914,6 +4914,45 @@
     "de": "Duplizieren Sie die Spalte"
   },
   {
+    "id": "btn_stat_attribute",
+    "en": "Statistics...",
+    "fr": "Statistiques...",
+    "es": "Estadísticas...",
+    "ru": "Статистика...",
+    "zh": "统计数据...",
+    "ar": "إحصائيات...",
+    "fa": "آمار...",
+    "ps": "احصایې...",
+    "bn": "পরিসংখ্যান...",
+    "de": "Statistiken..."
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "fr": "Attribut pour les statistiques",
+    "es": "Atributo para estadísticas",
+    "ru": "Атрибут для статистики",
+    "zh": "统计属性",
+    "ar": "السمة للإحصاءات",
+    "fa": "ویژگی برای آمار",
+    "ps": "د احصایې لپاره خاصیت",
+    "bn": "পরিসংখ্যান জন্য বৈশিষ্ট্য",
+    "de": "Attribut für Statistiken"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "fr": "Sélectionnez un attribut",
+    "es": "Seleccione un atributo",
+    "ru": "Выберите атрибут",
+    "zh": "选择一个属性",
+    "ar": "حدد سمة",
+    "fa": "یک ویژگی را انتخاب کنید",
+    "ps": "یو خاصیت وټاکئ",
+    "bn": "একটি বৈশিষ্ট্য নির্বাচন করুন",
+    "de": "Wählen Sie ein Attribut aus"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fr": "Outils de géométrie : sélectionner le calque source",
@@ -17171,6 +17210,19 @@
     "ps": "خبرتیاوې ",
     "bn": "বিজ্ঞপ্তি ",
     "de": "Benachrichtigungen "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "fr": "Valeurs manquantes : {{nullCount}}",
+    "es": "Valores faltantes: {{nullCount}}",
+    "ru": "Отсутствующие значения: {{nullCount}}",
+    "zh": "缺失值： {{nullCount}}",
+    "ar": "قيم مفقودة: {{nullCount}}",
+    "fa": "ارزش از دست رفته: {{nullCount}}",
+    "ps": "ورک شوي ارزښتونه: {{nullCount}}",
+    "bn": "অনুপস্থিত মানের: {{nullCount}}",
+    "de": "Fehlende Werte: {{nullCount}}"
   },
   {
     "id": "mc_title",

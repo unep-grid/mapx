@@ -1890,6 +1890,21 @@
     "es": "Duplicar la columna"
   },
   {
+    "id": "btn_stat_attribute",
+    "en": "Statistics...",
+    "es": "Estadísticas..."
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "es": "Atributo para estadísticas"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "es": "Seleccione un atributo"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "es": "Herramientas de geometría: seleccione la capa de origen"
@@ -6603,6 +6618,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "es": "Notificaciones "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "es": "Valores faltantes: {{nullCount}}"
   },
   {
     "id": "mc_title",

@@ -18,6 +18,7 @@ import { RadialProgress } from "../radial_progress";
 import { theme } from "../mx.js";
 import { Popup } from "../popup";
 import { viewLink, getView } from "../map_helpers/index.js";
+import { getSourceVtSummaryUI } from "../mx_helper_source_summary";
 import {
   isPgType,
   isPgTypeDate,
@@ -41,7 +42,6 @@ import "./edit_table.types.js";
 import "./edit_table.less";
 import { onNextFrame, waitFrameAsync } from "../animation_frame";
 
-/* import { jpeg2000 } from "modernizr";*/
 const defaults = {
   debug: false,
   log_perf: false, //def from ws_tools
@@ -375,6 +375,10 @@ export class EditTableSessionClient extends WsToolsBase {
       icon: "copy",
       action: et._l(et.dialogDuplicateColumn),
     });
+    et._el_button_stat = elButtonFa("btn_stat_attribute", {
+      icon: "bar-chart",
+      action: et.dialogStat,
+    });
     et._el_checkbox_autosave = elCheckbox("btn_edit_autosave", {
       action: et.updateAutoSave,
       checked: true,
@@ -405,6 +409,7 @@ export class EditTableSessionClient extends WsToolsBase {
         et._el_button_duplicate_column,
         et._el_button_geom_validate,
         et._el_button_geom_repair,
+        et._el_button_stat,
       ],
     });
 
@@ -1775,6 +1780,36 @@ export class EditTableSessionClient extends WsToolsBase {
   isFromValidSource(id) {
     const et = this;
     return et.isFromDispatch(id) || et.isFromGeom(id) || et.isFromSanitize(id);
+  }
+
+  /**
+   * Show basic attribute stat
+   */
+  async dialogStat() {
+    const et = this;
+    const names = et.getColumnLabels();
+    //const checks = ["is_not_reserved", "is_safe"];
+    const checks = ["is_not_reserved"];
+    const options = await et.getColumnsNamesOptions(checks);
+
+    const column = await modalPrompt({
+      title: tt("edit_table_modal_stat_column_title"),
+      label: tt("edit_table_modal_stat_column_label"),
+      confirm: tt("btn_next"),
+      inputTag: "select",
+      inputOptions: {
+        type: "select",
+        placeholder: "Attribute name",
+        value: names[0],
+      },
+      onInput: async (name, elBtnConfirm) => {
+        const ok = await et.isValidName(name, checks);
+        et._button_enable(elBtnConfirm, ok);
+      },
+      inputChildren: options,
+    });
+
+    await getSourceVtSummaryUI({ idSource: et._id_table, idAttr: column });
   }
 
   /*

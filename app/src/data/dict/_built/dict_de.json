@@ -1890,6 +1890,21 @@
     "de": "Duplizieren Sie die Spalte"
   },
   {
+    "id": "btn_stat_attribute",
+    "en": "Statistics...",
+    "de": "Statistiken..."
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "de": "Attribut für Statistiken"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "de": "Wählen Sie ein Attribut aus"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "de": "Geometriewerkzeuge: Quellebene auswählen"
@@ -6603,6 +6618,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "de": "Benachrichtigungen "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "de": "Fehlende Werte: {{nullCount}}"
   },
   {
     "id": "mc_title",

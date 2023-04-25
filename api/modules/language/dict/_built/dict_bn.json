@@ -1890,6 +1890,21 @@
     "bn": "কলামটি নকল করুন"
   },
   {
+    "id": "btn_stat_attribute",
+    "en": "Statistics...",
+    "bn": "পরিসংখ্যান..."
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "bn": "পরিসংখ্যান জন্য বৈশিষ্ট্য"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "bn": "একটি বৈশিষ্ট্য নির্বাচন করুন"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "bn": "জ্যামিতি সরঞ্জাম: উৎস স্তর নির্বাচন করুন"
@@ -6603,6 +6618,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "bn": "বিজ্ঞপ্তি "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "bn": "অনুপস্থিত মানের: {{nullCount}}"
   },
   {
     "id": "mc_title",

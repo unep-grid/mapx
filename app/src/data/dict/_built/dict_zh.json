@@ -1890,6 +1890,21 @@
     "zh": "复制列"
   },
   {
+    "id": "btn_stat_attribute",
+    "en": "Statistics...",
+    "zh": "统计数据..."
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "zh": "统计属性"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "zh": "选择一个属性"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "zh": "几何工具：选择源层"
@@ -6603,6 +6618,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "zh": "通知事项 "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "zh": "缺失值： {{nullCount}}"
   },
   {
     "id": "mc_title",

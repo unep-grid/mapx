@@ -11598,5 +11598,18 @@
     "ps": "",
     "bn": "",
     "de": ""
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
   }
 ]

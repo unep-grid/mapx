@@ -424,7 +424,7 @@ export function parseTemplate(template, data, opt) {
     opt
   );
   return template.replace(/{{([^{}]+)}}/g, (_, key) => {
-    let txt = data[key] || "";
+    let txt = isEmpty(data[key]) ? "" : data[key];
     if (opt.encodeURIComponent) {
       txt = encodeURIComponent(txt);
     }

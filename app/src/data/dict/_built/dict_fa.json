@@ -1890,6 +1890,21 @@
     "fa": "ستون را کپی کنید"
   },
   {
+    "id": "btn_stat_attribute",
+    "en": "Statistics...",
+    "fa": "آمار..."
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "fa": "ویژگی برای آمار"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "fa": "یک ویژگی را انتخاب کنید"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fa": "ابزار هندسه: لایه منبع را انتخاب کنید"
@@ -6603,6 +6618,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "fa": "اطلاعیه "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "fa": "ارزش از دست رفته: {{nullCount}}"
   },
   {
     "id": "mc_title",

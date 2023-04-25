@@ -1512,6 +1512,18 @@
     "en": "Duplicate the column"
   },
   {
+    "id": "btn_stat_attribute",
+    "en": "Statistics..."
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer"
   },
@@ -5282,6 +5294,10 @@
   {
     "id": "nc_button",
     "en": "Notifications"
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}"
   },
   {
     "id": "mc_title",

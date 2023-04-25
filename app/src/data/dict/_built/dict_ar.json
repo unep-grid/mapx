@@ -1890,6 +1890,21 @@
     "ar": "كرر العمود"
   },
   {
+    "id": "btn_stat_attribute",
+    "en": "Statistics...",
+    "ar": "إحصائيات..."
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "ar": "السمة للإحصاءات"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "ar": "حدد سمة"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ar": "أدوات الهندسة: حدد طبقة المصدر"
@@ -6603,6 +6618,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "ar": "إشعارات "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "ar": "قيم مفقودة: {{nullCount}}"
   },
   {
     "id": "mc_title",

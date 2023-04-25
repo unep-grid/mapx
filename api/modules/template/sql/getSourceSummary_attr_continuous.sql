@@ -24,6 +24,18 @@ attr_no_null as (
 END
 )
 ),
+attr_no_null_count AS (
+  SELECT count(*) count
+  FROM attr_no_null
+),
+table_count AS (
+  SELECT count(*) count
+  FROM "{{idSource}}"
+),
+attr_null_count AS (
+  SELECT (a.count - s.count) as count 
+  FROM table_count a, attr_no_null_count s
+),
 attr_max AS (
   SELECT
   MAX(_attr)::NUMERIC 
@@ -147,6 +159,7 @@ SELECT json_build_object(
     'attribute', '{{idAttr}}',
     'type', 'continuous',
     'nullValue', n._value,
+    'nullCount',nc.count,
     'min', amin.min,
     'max', amax.max,
     'bins', b.bins,
@@ -161,5 +174,6 @@ attr_max amax,
 bins b,
 bins_valid v,
 freqtable_json ft,
-attr_null_value n
+attr_null_value n,
+attr_null_count nc
 

@@ -48,6 +48,9 @@ attr_table_raw_count as (
 attr_table_count as (
   SELECT count(*) from attr_table
 ),
+attr_table_full_count as (
+  SELECT count(*) from  {{idSource}}
+),
 attr_table_json as (
   SELECT json_agg(
     json_build_object(
@@ -63,6 +66,7 @@ SELECT json_build_object(
     'type', 'categorical',
     'attribute', '{{idAttr}}',
     'nullValue', n.val,
+    'nullCount', to_json(tcf.count - tcr.count),
     'table', coalesce(to_json(atj.json),'[]'::json),
     'table_row_count_all', to_json(tcr.count), 
     'table_row_count', to_json(tc.count)
@@ -71,5 +75,6 @@ SELECT json_build_object(
 FROM
 attr_table_json as atj, 
 attr_table_count as tc,
+attr_table_full_count as tcf,
 attr_table_raw_count as tcr,
 attr_null_value n;

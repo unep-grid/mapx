@@ -1890,6 +1890,21 @@
     "ps": "کالم نقل کړئ"
   },
   {
+    "id": "btn_stat_attribute",
+    "en": "Statistics...",
+    "ps": "احصایې..."
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "ps": "د احصایې لپاره خاصیت"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "ps": "یو خاصیت وټاکئ"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ps": "د جیومیټري وسیلې: د سرچینې پرت غوره کړئ"
@@ -6603,6 +6618,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "ps": "خبرتیاوې "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "ps": "ورک شوي ارزښتونه: {{nullCount}}"
   },
   {
     "id": "mc_title",

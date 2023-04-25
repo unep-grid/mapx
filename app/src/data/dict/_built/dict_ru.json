@@ -1890,6 +1890,21 @@
     "ru": "Дублировать столбец"
   },
   {
+    "id": "btn_stat_attribute",
+    "en": "Statistics...",
+    "ru": "Статистика..."
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "ru": "Атрибут для статистики"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "ru": "Выберите атрибут"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ru": "Инструменты геометрии: выберите исходный слой"
@@ -6603,6 +6618,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "ru": "Уведомления "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "ru": "Отсутствующие значения: {{nullCount}}"
   },
   {
     "id": "mc_title",
