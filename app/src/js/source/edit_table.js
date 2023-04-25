@@ -1872,9 +1872,7 @@ export class EditTableSessionClient extends WsToolsBase {
       return;
     }
 
-    const columnNewName = await et.dialogNewColumn(
-      `${columnToDuplicate}_${makeId()}`
-    );
+    const columnNewName = await et.dialogNewColumn(columnToDuplicate);
     const { valid } = await et.validateNewName(columnNewName);
 
     if (!valid || !columnNewName) {
@@ -1971,9 +1969,7 @@ export class EditTableSessionClient extends WsToolsBase {
     /**
      * Ask the user for the new column name
      */
-    const columnNewName = await et.dialogNewColumn(
-      `${columnToRename}_${makeId()}`
-    );
+    const columnNewName = await et.dialogNewColumn(columnToRename);
     const { valid } = await et.validateNewName(columnNewName);
 
     if (!valid || !columnNewName) {
@@ -2112,6 +2108,15 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async dialogNewColumn(name) {
     const et = this;
+
+    if (isNotEmpty(name) && !isSafeName(name)) {
+      name = `s${name}`;
+    }
+
+    if (isNotEmpty(name) && et.columnNameExists(name)) {
+      name = `${name}_${makeId()}`;
+    }
+
     const columnName = await modalPrompt({
       title: tt("edit_table_modal_add_column_name_title"),
       label: tt("edit_table_modal_add_column_name_label"),
