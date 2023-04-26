@@ -978,7 +978,7 @@
   },
   {
     "id": "btn_edit_duplicate_column",
-    "en": "Duplicate column",
+    "en": "Duplicate a column",
     "fr": "",
     "es": "",
     "ru": "",
@@ -992,7 +992,7 @@
 
   {
     "id": "edit_table_modal_duplicate_column_title",
-    "en": "Duplicate column",
+    "en": "Duplicate a column",
     "fr": "",
     "es": "",
     "ru": "",
@@ -1057,7 +1057,7 @@
   },
   {
     "id": "btn_stat_attribute",
-    "en": "Statistics...",
+    "en": "Statistics",
     "fr": "",
     "es": "",
     "ru": "",

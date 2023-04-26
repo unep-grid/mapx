@@ -194,7 +194,6 @@ export async function getSourceVtSummaryUI(opt) {
     tableTitle: titleTable,
   });
 
-
   if (isNotEmpty(aStat.nullCount)) {
     const elNull = el(
       "div",
@@ -208,6 +207,7 @@ export async function getSourceVtSummaryUI(opt) {
   modal({
     title: title,
     content: elContainer,
+    addBackground: true,
   });
 }
 

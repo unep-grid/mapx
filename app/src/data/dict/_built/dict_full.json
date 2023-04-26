@@ -4837,29 +4837,29 @@
   },
   {
     "id": "btn_edit_duplicate_column",
-    "en": "Duplicate column",
-    "fr": "Colonne dupliquée",
-    "es": "Columna duplicada",
+    "en": "Duplicate a column",
+    "fr": "Dupliquer une colonne",
+    "es": "Duplicar una columna",
     "ru": "Дублировать столбец",
-    "zh": "重复列",
-    "ar": "عمود مكرر",
-    "fa": "ستون تکراری",
-    "ps": "دوه اړخیز کالم",
-    "bn": "সদৃশ কলাম",
-    "de": "Spalte duplizieren"
+    "zh": "复制一列",
+    "ar": "قم بتكرار عمود",
+    "fa": "یک ستون را کپی کنید",
+    "ps": "یو کالم نقل کړئ",
+    "bn": "একটি কলাম নকল করুন",
+    "de": "Eine Spalte duplizieren"
   },
   {
     "id": "edit_table_modal_duplicate_column_title",
-    "en": "Duplicate column",
-    "fr": "Colonne dupliquée",
-    "es": "Columna duplicada",
+    "en": "Duplicate a column",
+    "fr": "Dupliquer une colonne",
+    "es": "Duplicar una columna",
     "ru": "Дублировать столбец",
-    "zh": "重复列",
-    "ar": "عمود مكرر",
-    "fa": "ستون تکراری",
-    "ps": "دوه اړخیز کالم",
-    "bn": "সদৃশ কলাম",
-    "de": "Spalte duplizieren"
+    "zh": "复制一列",
+    "ar": "قم بتكرار عمود",
+    "fa": "یک ستون را کپی کنید",
+    "ps": "یو کالم نقل کړئ",
+    "bn": "একটি কলাম নকল করুন",
+    "de": "Eine Spalte duplizieren"
   },
   {
     "id": "edit_table_modal_duplicate_column_label",
@@ -4915,16 +4915,16 @@
   },
   {
     "id": "btn_stat_attribute",
-    "en": "Statistics...",
-    "fr": "Statistiques...",
-    "es": "Estadísticas...",
-    "ru": "Статистика...",
-    "zh": "统计数据...",
-    "ar": "إحصائيات...",
-    "fa": "آمار...",
-    "ps": "احصایې...",
-    "bn": "পরিসংখ্যান...",
-    "de": "Statistiken..."
+    "en": "Statistics",
+    "fr": "Statistiques",
+    "es": "Estadísticas",
+    "ru": "Статистика",
+    "zh": "统计数据",
+    "ar": "إحصائيات",
+    "fa": "آمار",
+    "ps": "احصایې",
+    "bn": "পরিসংখ্যান",
+    "de": "Statistiken"
   },
   {
     "id": "edit_table_modal_stat_column_title",
@@ -6006,19 +6006,6 @@
     "de": "Nächste..."
   },
   {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "fr": "Confirmer",
-    "es": "Confirmar",
-    "ru": "Подтверждать ",
-    "zh": "确认",
-    "ar": "يتأكد ",
-    "fa": "تایید",
-    "ps": "تائید",
-    "bn": "কনফার্ম ",
-    "de": "Bestätigen "
-  },
-  {
     "id": "btn_continue",
     "en": "Continue",
     "fr": "Continuer",
@@ -6199,6 +6186,19 @@
     "ps": "اوسنۍ پروژې کې ګډون کول (%s ) ",
     "bn": "বর্তমান প্রকল্পে যোগদান করুন (%s ) ",
     "de": "Aktuelles Projekt beitreten (%s ) "
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "fr": "Confirmer",
+    "es": "Confirmar",
+    "ru": "Подтверждать ",
+    "zh": "确认",
+    "ar": "يتأكد ",
+    "fa": "تایید",
+    "ps": "تائید",
+    "bn": "কনফার্ম ",
+    "de": "Bestätigen "
   },
   {
     "id": "btn_country",

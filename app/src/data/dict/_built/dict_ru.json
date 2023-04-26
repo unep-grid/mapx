@@ -1861,12 +1861,12 @@
   },
   {
     "id": "btn_edit_duplicate_column",
-    "en": "Duplicate column",
+    "en": "Duplicate a column",
     "ru": "Дублировать столбец"
   },
   {
     "id": "edit_table_modal_duplicate_column_title",
-    "en": "Duplicate column",
+    "en": "Duplicate a column",
     "ru": "Дублировать столбец"
   },
   {
@@ -1891,8 +1891,8 @@
   },
   {
     "id": "btn_stat_attribute",
-    "en": "Statistics...",
-    "ru": "Статистика..."
+    "en": "Statistics",
+    "ru": "Статистика"
   },
   {
     "id": "edit_table_modal_stat_column_title",
@@ -2310,11 +2310,6 @@
     "ru": "Следующий..."
   },
   {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "ru": "Подтверждать "
-  },
-  {
     "id": "btn_continue",
     "en": "Continue",
     "ru": "Продолжать"
@@ -2383,6 +2378,11 @@
     "id": "btn_join_current_project",
     "en": "Join current project ( %s )",
     "ru": "Присоединиться к текущему проекту (%s ) "
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "ru": "Подтверждать "
   },
   {
     "id": "btn_country",

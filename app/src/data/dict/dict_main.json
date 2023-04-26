@@ -376,19 +376,7 @@
     "bn": "",
     "de": ""
   },
-  {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "fr": "Confirmer",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
+
   {
     "id": "btn_continue",
     "en": "Continue",

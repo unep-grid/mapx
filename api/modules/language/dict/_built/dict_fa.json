@@ -1861,13 +1861,13 @@
   },
   {
     "id": "btn_edit_duplicate_column",
-    "en": "Duplicate column",
-    "fa": "ستون تکراری"
+    "en": "Duplicate a column",
+    "fa": "یک ستون را کپی کنید"
   },
   {
     "id": "edit_table_modal_duplicate_column_title",
-    "en": "Duplicate column",
-    "fa": "ستون تکراری"
+    "en": "Duplicate a column",
+    "fa": "یک ستون را کپی کنید"
   },
   {
     "id": "edit_table_modal_duplicate_column_label",
@@ -1891,8 +1891,8 @@
   },
   {
     "id": "btn_stat_attribute",
-    "en": "Statistics...",
-    "fa": "آمار..."
+    "en": "Statistics",
+    "fa": "آمار"
   },
   {
     "id": "edit_table_modal_stat_column_title",
@@ -2310,11 +2310,6 @@
     "fa": "بعد..."
   },
   {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "fa": "تایید"
-  },
-  {
     "id": "btn_continue",
     "en": "Continue",
     "fa": "ادامه هید"
@@ -2383,6 +2378,11 @@
     "id": "btn_join_current_project",
     "en": "Join current project ( %s )",
     "fa": "به پروژه فعلی بپیوندید (%s ) "
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "fa": "تایید"
   },
   {
     "id": "btn_country",

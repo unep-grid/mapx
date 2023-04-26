@@ -1861,13 +1861,13 @@
   },
   {
     "id": "btn_edit_duplicate_column",
-    "en": "Duplicate column",
-    "es": "Columna duplicada"
+    "en": "Duplicate a column",
+    "es": "Duplicar una columna"
   },
   {
     "id": "edit_table_modal_duplicate_column_title",
-    "en": "Duplicate column",
-    "es": "Columna duplicada"
+    "en": "Duplicate a column",
+    "es": "Duplicar una columna"
   },
   {
     "id": "edit_table_modal_duplicate_column_label",
@@ -1891,8 +1891,8 @@
   },
   {
     "id": "btn_stat_attribute",
-    "en": "Statistics...",
-    "es": "Estadísticas..."
+    "en": "Statistics",
+    "es": "Estadísticas"
   },
   {
     "id": "edit_table_modal_stat_column_title",
@@ -2310,11 +2310,6 @@
     "es": "Próximo..."
   },
   {
-    "id": "btn_confirm",
-    "en": "Confirm",
-    "es": "Confirmar"
-  },
-  {
     "id": "btn_continue",
     "en": "Continue",
     "es": "Continuar"
@@ -2383,6 +2378,11 @@
     "id": "btn_join_current_project",
     "en": "Join current project ( %s )",
     "es": "Unirse al proyecto actual ( %s )"
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "es": "Confirmar"
   },
   {
     "id": "btn_country",
