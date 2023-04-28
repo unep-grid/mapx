@@ -468,7 +468,7 @@ class MapxResolversStatic extends ResolversBase {
    * Get view table attribute
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
-   * @return {Array[Object]}
+   * @return {Array.<Object>}
    */
   async get_view_table_attribute(opt) {
     opt = Object.assign({}, { idView: null }, opt);
