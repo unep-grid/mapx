@@ -1,3 +1,20 @@
+  - [1.11.0-alpha.5](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.5) 
+
+
+    - APP / API 
+        - Table editor 
+            - Major improvement : dispatch + update views after structural change. i.e. if a change affects a view that is currently read in a story map in static mode, it will be reloaded, to avoid missing/renamed attribute to be requested in a style, tiles, during statistic operation or edition.
+            - Re-order visual column -> impacts table viewer too
+            - Retrieve + statistics, incl. nulls in a table
+            - Style improvement
+            - Improve validation
+    - APP
+        - Added timeout in theme switch to prevent an edge case.
+    - API
+        - Fix an issue in source summary where all values are NA, or has no rows.
+    - SDK
+        - Fix #904 : duplication of view when adding a view
+
   - [1.11.0-alpha.4](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.4) 
 
     - APP / API
