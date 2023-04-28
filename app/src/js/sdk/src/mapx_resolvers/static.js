@@ -468,7 +468,7 @@ class MapxResolversStatic extends ResolversBase {
    * Get view table attribute
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
-   * @return {Object}
+   * @return {Array[Object]}
    */
   async get_view_table_attribute(opt) {
     opt = Object.assign({}, { idView: null }, opt);
@@ -477,7 +477,8 @@ class MapxResolversStatic extends ResolversBase {
     if (url) {
       const response = await fetch(url);
       if (response.ok) {
-        return response.json();
+        const { data } = await response.json();
+        return data;
       }
     }
     return null;
