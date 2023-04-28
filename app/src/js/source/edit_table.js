@@ -36,6 +36,8 @@ import {
   isStringRange,
   isSafeName,
   makeSafeName,
+  isArray,
+  isEqual,
 } from "./../is_test/index.js";
 
 import "./edit_table.types.js";
@@ -143,6 +145,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et._lock_table_by_user_id = null;
       et._initialized = true;
       et._id_table = et._config?.id_table;
+      et._id_user = settings.user.id;
       et._has_geom = false;
       et._validation_geom = {};
       et._table_ready = false;
@@ -379,6 +382,10 @@ export class EditTableSessionClient extends WsToolsBase {
       icon: "bar-chart",
       action: et.dialogStat,
     });
+    et._el_button_colums_order = elButtonFa("btn_edit_columns_order", {
+      icon: "sort",
+      action: et._l(et.dialogColumnOrder),
+    });
     et._el_checkbox_autosave = elCheckbox("btn_edit_autosave", {
       action: et.updateAutoSave,
       checked: true,
@@ -410,6 +417,7 @@ export class EditTableSessionClient extends WsToolsBase {
         et._el_button_geom_validate,
         et._el_button_geom_repair,
         et._el_button_stat,
+        et._el_button_colums_order,
       ],
     });
 
@@ -453,6 +461,7 @@ export class EditTableSessionClient extends WsToolsBase {
     ];
 
     et._el_table = el("div", {
+      id: `ht_${et._id_table}`,
       class: "edit-table--table",
     });
 
@@ -516,17 +525,17 @@ export class EditTableSessionClient extends WsToolsBase {
     await et.fire("built");
   }
 
-  _init_columns(updates) {
+  _init_columns(table) {
     const et = this;
+    const columns = table.types;
     et._columns = [];
-    et._add_columns(updates);
+    et._add_columns(columns, table.columnsOrder);
   }
 
-  _add_columns(updates) {
+  _add_columns(updates, order) {
     const et = this;
     const nColumns = et._columns.length + updates.length;
     const singleCol = updates.length === 1;
-
     let cPos = 0;
 
     for (const update of updates) {
@@ -542,7 +551,9 @@ export class EditTableSessionClient extends WsToolsBase {
         : column.readOnly
         ? -1
         : cPos++;
-
+      if (isArray(order) && order.includes(column.data)) {
+        column._pos = order.indexOf(column.data);
+      }
       et._columns.push(column);
     }
 
@@ -633,8 +644,8 @@ export class EditTableSessionClient extends WsToolsBase {
 
   /**
    * Get an array of columns as option
-   * @param {array} checks in is_safe, is_not_used, is_not_reserved
-   * @return {array<options>}
+   * @param {Array} checks in is_safe, is_not_used, is_not_reserved
+   * @return {Array<options>}
    */
   async getColumnsNamesOptions(checks) {
     const et = this;
@@ -868,7 +879,7 @@ export class EditTableSessionClient extends WsToolsBase {
    * @param {Object} update Update object
    * @param {Object} message Container message
    */
-  handlerUpdateLock(update, message) {
+  async handlerUpdateLock(update, message) {
     const et = this;
     if (update.lock) {
       et._lock_table_by_user_id = message.id_user;
@@ -1271,22 +1282,23 @@ export class EditTableSessionClient extends WsToolsBase {
     /**
      * Init columns
      */
-    et._init_columns(table.types);
+    et._init_columns(table);
 
     /**
-     * New handsontable
+     * Set additional visual order for manual move
      */
     et._ht = new handsontable(et._el_table, {
       licenseKey: et._config.ht_license,
       columns: et.getColumns(),
       data: table.data,
       rowHeaders: true,
-      columnSorting: true,
+      persistentState: false,
       colHeaders: et.getColumnLabels(),
       allowInvalid: true,
       allowInsertRow: false,
       renderAllRows: false,
       maxRows: table.data.length,
+
       copyPaste: {
         rowsLimit: table.data.length,
       },
@@ -1308,17 +1320,18 @@ export class EditTableSessionClient extends WsToolsBase {
       afterLoadData: et.afterLoadData,
       height: et.updateHeight,
       disableVisualSelection: false,
+      comment: false,
     });
 
     /**
      * Add hooks
      */
     et._ht.addHook("afterUndo", () => {
-      // isRedoAvailable is not ready after undo, add delay
+      // BUG: isRedoAvailable is not ready after undo, add delay
       et.updateButtons(20);
     });
     et._ht.addHook("afterRedo", () => {
-      // isUndoAvailable is not ready after redo, add delay
+      // BUG isUndoAvailable is not ready after redo, add delay
       et.updateButtons(20);
     });
 
@@ -1332,6 +1345,102 @@ export class EditTableSessionClient extends WsToolsBase {
 
     if (initLocked) {
       et.lock();
+    }
+  }
+
+  async dialogColumnOrder() {
+    const { default: Muuri } = await import("muuri");
+    const et = this;
+    const source = et._config.id_source_dialog;
+    const columns = et.getColumns();
+    const orderBefore = et.getColumnLabels();
+
+    const elCols = el(
+      "div",
+      {
+        class: "edit-table--murri-grid",
+      },
+      columns.map((c) => {
+        return el(
+          "div",
+          { class: "edit-table--muuri-item", value: c.data },
+          el(
+            "div",
+            { class: "edit-table--muuri-item-content" },
+            el("span", c.data)
+          )
+        );
+      })
+    );
+
+    let grid;
+
+    const orderAfter = await modalConfirm({
+      title: tt("edit_table_modal_order_columns_title"),
+      content: elCols,
+      cbInit: () => {
+        grid = new Muuri(elCols, {
+          containerClass: "edit-table--murri-grid",
+          itemClass: "edit-table--murri-item",
+          dragEnabled: true,
+        });
+      },
+      cbData: () => {
+        const order = grid
+          .getItems()
+          .map((item) => item._element.getAttribute("value"));
+        return order;
+      },
+    });
+
+    if (!orderAfter) {
+      return;
+    }
+
+    const update = {
+      type: "order_columns",
+      id_table: et._id_table,
+      columns_order: orderAfter,
+    };
+
+    if (isEqual(orderBefore, orderAfter)) {
+      return;
+    }
+
+    et.handlerUpdateColumnsOrder(update, source);
+  }
+
+  /**
+   * Handler of move column / visual order
+   * -> only for dispatch
+   * @param {Object} update Update object
+   * @param {String} source (edit, dispatch..)
+   */
+  async handlerUpdateColumnsOrder(update, source) {
+    const et = this;
+    try {
+      const order = update.columns_order;
+      const columns = et.getColumns();
+
+      for (const column of columns) {
+        if (isArray(order) && order.includes(column.data)) {
+          column._pos = order.indexOf(column.data);
+        }
+      }
+
+      et._columns.sort((a, b) => a._pos - b._pos);
+      et.updateTableColumns();
+
+      if (et.isFromDispatch(source)) {
+        return;
+      }
+
+      await et.emitUpdatesDb([update]);
+
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
     }
   }
 
@@ -1488,22 +1597,26 @@ export class EditTableSessionClient extends WsToolsBase {
           for (const update of message.updates) {
             switch (update.type) {
               case "lock_table":
-                et.handlerUpdateLock(update, message);
+                await et.handlerUpdateLock(update, message);
                 break;
               case "update_cell":
-                et.handlerUpdateCellsCollect(update, message);
+                await et.handlerUpdateCellsCollect(update, message);
                 break;
               case "add_column":
-                et.handlerUpdateColumnAdd(update, idDispatch);
+                await et.handlerUpdateColumnAdd(update, idDispatch);
                 break;
               case "rename_column":
-                et.handlerUpdateColumnRename(update, idDispatch);
+                await et.handlerUpdateColumnRename(update, idDispatch);
                 break;
               case "duplicate_column":
-                et.handlerUpdateColumnDuplicate(update, idDispatch);
+                await et.handlerUpdateColumnDuplicate(update, idDispatch);
                 break;
               case "remove_column":
-                et.handlerUpdateColumnRemove(update, idDispatch);
+                await et.handlerUpdateColumnRemove(update, idDispatch);
+                break;
+              case "order_columns":
+                debugger;
+                await et.handlerUpdateColumnsOrder(update, idDispatch);
                 break;
               default:
                 console.warn("unhandled update:", message);
@@ -1694,10 +1807,7 @@ export class EditTableSessionClient extends WsToolsBase {
        * - Alter table
        * et._ht.alter("remove_col", id);
        */
-      et._ht.updateSettings({
-        columns: et.getColumns(),
-        colHeaders: et.getColumnLabels(),
-      });
+      et.updateTableColumns();
 
       /**
        * Remove update item that ref the removed column
@@ -2045,7 +2155,7 @@ export class EditTableSessionClient extends WsToolsBase {
       column_name_new: columnNewName,
     };
 
-    et.handlerUpdateColumnRename(update, source);
+    await et.handlerUpdateColumnRename(update, source);
   }
 
   /**
@@ -2066,6 +2176,7 @@ export class EditTableSessionClient extends WsToolsBase {
          */
         return;
       }
+
       await et.emitUpdatesDb([update]);
       return true;
     } catch (e) {
@@ -2089,6 +2200,7 @@ export class EditTableSessionClient extends WsToolsBase {
          */
         return;
       }
+
       await et.emitUpdatesDb([update]);
       return true;
     } catch (e) {
@@ -2134,7 +2246,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   columnNameExists(name) {
     const et = this;
-    const names = et._columns.map((c) => c.data);
+    const names = et.getColumns().map((c) => c.data);
     return names.includes(name);
   }
 
@@ -2309,7 +2421,7 @@ export class EditTableSessionClient extends WsToolsBase {
   getColumnType(columnName, mode) {
     const et = this;
     mode = mode || "json";
-    const type = et._columns.find((c) => c.data === columnName)?._pg_type;
+    const type = et.getColumns().find((c) => c.data === columnName)?._pg_type;
     return typeConvert(type, mode);
   }
 
@@ -2603,11 +2715,7 @@ export class EditTableSessionClient extends WsToolsBase {
     et._ht.deselectCell();
     et._ht.updateSettings({
       readOnly: ro,
-      contextMenu: !ro,
       disableVisualSelection: ro,
-      manualColumnResize: !ro,
-      manualRowResize: !ro,
-      comments: !ro,
     });
     et.updateButtons();
   }
@@ -2745,27 +2853,37 @@ export class EditTableSessionClient extends WsToolsBase {
    * @param {String} type Emit type
    * @param {Object} message Message to emit, if not locked
    */
-  emit(type, message, timeout) {
+  async emit(type, message, timeout) {
     const et = this;
     const to = isEmpty(timeout) ? et._config.timeout_emit : timeout;
-
-    return new Promise((resolve, reject) => {
-      if (!et.state.built) {
-        return false;
-      }
-      if (et.locked) {
-        return false;
-      }
-      const messageEmit = et.message_formater(message);
-      et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          resolve(res);
+    const res = await new Promise((resolve, reject) => {
+      try {
+        if (!et.state.built || et.locked) {
+          return resolve(false);
         }
-      });
+
+        const messageEmit = et.message_formater(message);
+
+        // Avoid sending emit if disconnected
+        /*   if (_et._socket.disconnected) {*/
+        /*console.warn("Disconnected message not sent", messageEmit);*/
+        /*return resolve(false);*/
+        /*}*/
+
+        et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
+          if (err) {
+            console.error(err, messageEmit);
+            return reject(err);
+          } else {
+            return resolve(res);
+          }
+        });
+      } catch (e) {
+        return reject(e);
+      }
     });
+
+    return res;
   }
 
   /**
@@ -2778,12 +2896,16 @@ export class EditTableSessionClient extends WsToolsBase {
     const to = isEmpty(timeout) ? et._config.timeout_emit : timeout;
     return new Promise((resolve) => {
       const messageEmit = et.message_formater(message);
+      /*   if (_et._socket.disconnected) {*/
+      /*console.warn("Disconnected message not sent", messageEmit);*/
+      /*return resolve(false);*/
+      /*}*/
       et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
         if (err) {
           console.error(err);
-          resolve(false);
+          return resolve(false);
         } else {
-          resolve(res);
+          return resolve(res);
         }
       });
     });
@@ -2956,7 +3078,6 @@ export class EditTableSessionClient extends WsToolsBase {
     if (et.locked) {
       return;
     }
-    const r = et._config.events;
 
     const ok = await modalConfirm({
       title: getDictItem("edit_table_modal_repair_title"),

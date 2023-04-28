@@ -1905,6 +1905,31 @@
     "fr": "Sélectionnez un attribut"
   },
   {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "fr": "Ordre des colonnes modifié"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "fr": "L'ordre des colonnes a été modifié par un autre utilisateur."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "fr": "d'accord"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "fr": "Définir l'ordre des colonnes"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "fr": "Définir l'ordre des colonnes"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fr": "Outils de géométrie : sélectionner le calque source"

@@ -573,12 +573,14 @@ export function modalDialog(opt) {
 /**
  * Simple async confirm modal : confirm / cancel
  * @param {Object} opt Options
+ * @param {Function} opt.cbData If set, cb to set the returning value. arg: elModal, elContent
+ * @param {Function} opt.cbInit If set, cb after init. arg:  elModal,elContent
  * @param {String|Promise|Element} opt.title Title
  * @param {String|Promise|Element} opt.content Title
  * @param {String|Promise|Element} opt.cancel Cancel text
  * @param {String|Promise|Element} opt.cancel Cancel text
  * @param {String|Promise|Element} opt.confirm Confirm text
- * @return {Promise} resolve to boolean
+ * @return {Promise<boolean|any>} resolve to boolean or any, if cbData is set
  */
 export function modalConfirm(opt) {
   let elModal;
@@ -608,10 +610,15 @@ export function modalConfirm(opt) {
         class: "btn btn-default",
         type: "button",
         on: {
-          click: (e) => {
+          click: async (e) => {
             e.stopPropagation();
             e.preventDefault();
-            resolve(true);
+            if (opt.cbData) {
+              const data = await opt.cbData(elModal, elContent);
+              resolve(data);
+            } else {
+              resolve(true);
+            }
             elModal.close();
           },
         },
@@ -634,6 +641,10 @@ export function modalConfirm(opt) {
         resolve();
       },
     });
+
+    if (opt.cbInit) {
+      opt.cbInit(elModal, elContent);
+    }
   });
 }
 

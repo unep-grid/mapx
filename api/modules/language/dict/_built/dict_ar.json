@@ -1905,6 +1905,31 @@
     "ar": "حدد سمة"
   },
   {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "ar": "تم تعديل ترتيب الأعمدة"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "ar": "تم تعديل ترتيب الأعمدة بواسطة مستخدم آخر."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "ar": "نعم"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "ar": "تعيين ترتيب الأعمدة"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "ar": "تعيين ترتيب الأعمدة"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ar": "أدوات الهندسة: حدد طبقة المصدر"

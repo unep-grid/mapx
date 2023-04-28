@@ -1905,6 +1905,31 @@
     "ps": "یو خاصیت وټاکئ"
   },
   {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "ps": "د کالمونو ترتیب بدل شوی"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "ps": "د کالم ترتیب د بل کارونکي لخوا بدل شوی."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "ps": "سمه ده"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "ps": "د کالمونو ترتیب ترتیب کړئ"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "ps": "د کالمونو ترتیب ترتیب کړئ"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ps": "د جیومیټري وسیلې: د سرچینې پرت غوره کړئ"

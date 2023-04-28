@@ -83,7 +83,9 @@ export async function showSourceTableAttributeModal(opt) {
 
     const handsontable = await moduleLoad("handsontable");
     const meta = await fetchSourceMetadata(config.idSource);
-    const data = await fetchSourceTableAttribute(config);
+    const table = await fetchSourceTableAttribute(config);
+    const data = table.data;
+
     const services = meta._services || [];
     const hasData = isArray(data) && data.length > 0;
     const license = "non-commercial-and-evaluation";
@@ -191,7 +193,7 @@ export async function showSourceTableAttributeModal(opt) {
     /*
      * Set columns type
      */
-    const columns = config.attributes.map((name) => {
+    const columns = config.attributes.map((name, i) => {
       const out = { type: null };
       for (const type of summary.attributes_types) {
         if (out.type) {
@@ -205,15 +207,32 @@ export async function showSourceTableAttributeModal(opt) {
         type: typeConvert(out.type || "text", "handsontable"),
         data: name,
         readOnly: true,
+        _label: labels[i],
       };
     });
 
+    /**
+     * Set columns order
+     */
+    const order = table.columnsOrder;
+    for (const column of columns) {
+      if (isArray(order) && order.includes(column.data)) {
+        column._pos = order.indexOf(column.data);
+      }
+    }
+    columns.sort((a, b) => a._pos - b._pos);
+    const labelsOrdered = columns.map((c) => c._label);
+
+    debugger;
+    /**
+     * Init handsontable
+     */
     hot = new handsontable(elTable, {
       columns: columns,
       data: data,
       rowHeaders: true,
-      columnSorting: true,
-      colHeaders: labels,
+      //columnSorting: true,
+      colHeaders: labelsOrdered,
       licenseKey: license,
       dropdownMenu: [
         "filter_by_condition",
@@ -401,7 +420,7 @@ export async function getTableAttributeConfigFromView(view) {
 
   const title = getViewTitle(view);
   const labelsDict = path(view, "_meta.text.attributes_alias") || {};
-  let labels = attributes.map((a) => {
+  const labels = attributes.map((a) => {
     return labelsDict[a] ? labelsDict[a][language] || labelsDict[a].en || a : a;
   });
 

@@ -1905,6 +1905,31 @@
     "es": "Seleccione un atributo"
   },
   {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "es": "Orden de las columnas modificado"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "es": "El orden de las columnas ha sido modificado por otro usuario."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "es": "OK"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "es": "Establecer el orden de las columnas"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "es": "Establecer el orden de las columnas"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "es": "Herramientas de geometría: seleccione la capa de origen"

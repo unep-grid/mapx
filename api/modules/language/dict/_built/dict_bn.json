@@ -1905,6 +1905,31 @@
     "bn": "একটি বৈশিষ্ট্য নির্বাচন করুন"
   },
   {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "bn": "কলামের ক্রম সংশোধন করা হয়েছে"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "bn": "কলামের ক্রম অন্য ব্যবহারকারী দ্বারা সংশোধন করা হয়েছে।"
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "bn": "ঠিক আছে"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "bn": "কলামের ক্রম সেট করুন"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "bn": "কলামের ক্রম সেট করুন"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "bn": "জ্যামিতি সরঞ্জাম: উৎস স্তর নির্বাচন করুন"

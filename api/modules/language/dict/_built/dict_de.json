@@ -1905,6 +1905,31 @@
     "de": "Wählen Sie ein Attribut aus"
   },
   {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "de": "Spaltenreihenfolge geändert"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "de": "Die Spaltenreihenfolge wurde von einem anderen Benutzer geändert."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "de": "OK"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "de": "Spaltenreihenfolge festlegen"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "de": "Spaltenreihenfolge festlegen"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "de": "Geometriewerkzeuge: Quellebene auswählen"

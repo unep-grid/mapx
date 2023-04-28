@@ -1,6 +1,7 @@
 import {
   tableExists,
   columnExists,
+  columnsExist,
   getColumnsTypesSimple,
   getLayerTitle,
   getLayerViewsAttributes,
@@ -10,6 +11,8 @@ import {
   updateSourceAttribute,
   renameTableColumn,
   duplicateTableColumn,
+  setMxSourceData,
+  getMxSourceData,
 } from "#mapx/db_utils";
 import { getSourceAttributeTable, getSourceEditors } from "#mapx/source";
 import { randomString } from "#mapx/helpers";
@@ -385,17 +388,24 @@ class EditTableSession {
     callback(true);
   }
 
-  onUpdate(message, callback) {
+  async onUpdate(message, callback) {
     const et = this;
-    if (message.id_table !== et._id_table) {
-      return;
-    }
-    et.dispatch(message);
-    if (message.write_db) {
-      et.write(message);
-    }
-    if (message.update_state) {
-      et.updateState(message);
+    try {
+      if (message.id_table !== et._id_table) {
+        callback(false);
+        return;
+      }
+      if (message.write_db) {
+        await et.write(message);
+      }
+      if (message.update_state) {
+        et.updateState(message);
+      }
+
+      et.dispatch(message);
+    } catch (e) {
+      console.warn(e.message);
+      callback(false);
     }
     callback(true);
   }
@@ -418,7 +428,7 @@ class EditTableSession {
     }
   }
 
-  write(message) {
+  async write(message) {
     const et = this;
     et.perf("write");
     const updates = message?.updates;
@@ -430,14 +440,8 @@ class EditTableSession {
       et.error("Not allowed");
       return;
     }
-    et.writePostgres(updates)
-      .then(() => {
-        et.perfEnd("write");
-      })
-      .catch((e) => {
-        et.error("Update failed. Check logs", e.message);
-        console.error(e);
-      });
+    await et.writePostgres(updates);
+    et.perfEnd("write");
   }
 
   async sendTable() {
@@ -466,8 +470,15 @@ class EditTableSession {
       const types = await getColumnsTypesSimple(et._id_table, attributes);
       const title = await getLayerTitle(et._id_table);
       const locked = await et.getState("lock_table");
+      const columnsOrderSaved = await getMxSourceData(et._id_table, [
+        "settings",
+        "editor",
+        "columns_order",
+      ]);
+      const columnsOrder = !columnsOrderSaved ? false : columnsOrderSaved;
 
       const table = {
+        columnsOrder,
         hasGeom,
         validation,
         types,
@@ -629,9 +640,30 @@ class EditTableSession {
           throw new Error("Invalid update table or column");
         }
 
-        const colExists = await columnExists(column_name, id_table);
-
         switch (update.type) {
+          case "order_columns":
+            {
+              const { columns_order } = update;
+
+              const colsExist = await columnsExist(
+                columns_order,
+                id_table,
+                client
+              );
+
+              if (!colsExist) {
+                console.warn("Invalid columns", columns_order);
+                return;
+              }
+
+              await setMxSourceData(
+                id_table,
+                ["settings", "editor", "columns_order"],
+                columns_order
+              );
+
+            }
+            break;
           case "update_cell":
             {
               const { gid, column_type } = update;
@@ -643,6 +675,7 @@ class EditTableSession {
               let { value_new } = update;
               const valid = isNumeric(gid);
               const isDate = regDatePg.test(column_type);
+              const colExists = await columnExists(column_name, id_table);
 
               if (valid && colExists) {
                 const qSql = parseTemplate(templates.updateTableCellByGid, {
@@ -675,6 +708,7 @@ class EditTableSession {
             {
               /** ALTER TABLE products ADD COLUMN description text; **/
               const { column_type } = update;
+              const colExists = await columnExists(column_name, id_table);
 
               if (!isSafeName(column_name)) {
                 throw new Error("Invalid update column");
@@ -697,6 +731,7 @@ class EditTableSession {
             break;
           case "remove_column":
             {
+              const colExists = await columnExists(column_name, id_table);
               if (colExists) {
                 const qSql = parseTemplate(templates.updateTableRemoveColumn, {
                   id_table,
@@ -730,13 +765,16 @@ class EditTableSession {
                   column_name_new,
                   client
                 );
-                et.emitSpread(events.server_spread_views_update, {
-                  views,
-                });
-
-                postScripts.set(`${id_table}_update_views`, async () => {
-                  return await et.updateAltStyleClient(id_table);
-                });
+                postScripts.set(
+                  `${id_table}_update_views_duplicate_column`,
+                  async () => {
+                    et.emitSpread(events.server_spread_views_update, {
+                      views,
+                    });
+                    await et.updateAltStyleClient(id_table);
+                    return;
+                  }
+                );
               }
             }
             break;
@@ -755,11 +793,15 @@ class EditTableSession {
                 column_name_new,
                 client
               );
-              et.emitSpread(events.server_spread_views_update, { views });
 
-              postScripts.set(`${id_table}_update_views`, async () => {
-                return await et.updateAltStyleClient(id_table);
-              });
+              postScripts.set(
+                `${id_table}_update_views_rename_rename`,
+                async () => {
+                  et.emitSpread(events.server_spread_views_update, { views });
+                  await et.updateAltStyleClient(id_table);
+                  return;
+                }
+              );
             }
             break;
 

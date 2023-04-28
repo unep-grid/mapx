@@ -146,6 +146,16 @@ async function columnExists(idColumn, idTable, client) {
 
   return false;
 }
+/**
+ * Use columnExists on multiple columns
+ */
+async function columnsExist(idColumns, idTable, client) {
+  let ok = true;
+  for (const col of idColumns) {
+    ok = ok && (await columnExists(col, idTable, client));
+  }
+  return ok;
+}
 
 /**
  * Test if the first geometry of a layer is (multi)point geometry
@@ -320,6 +330,59 @@ async function registerSource(
     strServices,
   ]);
   return true;
+}
+
+
+/**
+* Set mx_source data values, and create recursive keys if needed 
+* @param {string} idSource source id 
+* @param {array} path array i.e ["settings","editor","columns_order"] 
+* @param {array|object} value value stringifiable 
+* @return {Promise<array>} rows affected
+*/ 
+export async function setMxSourceData(idSource, path, value) {
+  const client = await pgWrite.connect();
+  await client.query("BEGIN");
+  const out = [];
+  try {
+    const pathArray = path.map((item) => `'${item}'`).join(",");
+    const valueString = JSON.stringify(value);
+    const qsql = parseTemplate(templates.setMxSourceData, {
+      path: pathArray,
+      value: valueString,
+      idSource,
+    });
+    const res = await client.query(qsql);
+
+    if (res.rowCount !== 1) {
+      throw new Error("Row count not 1");
+    }
+
+    out.push(...res.rows);
+
+    client.query("COMMIT");
+  } catch (e) {
+    client.query("ROLLBACK");
+    throw new Error("setSourceData failed");
+  } finally {
+    client.release();
+  }
+  return out;
+}
+/**
+* Sget mx_source data values
+* @param {string} idSource source id 
+* @param {array} path array i.e ["settings","editor","columns_order"] 
+* @return {Promise<array|object>} value stored
+*/ 
+export async function getMxSourceData(idSource, path) {
+  const pathJSON = path.map((item) => `"${item}"`).join(",");
+  const res = await pgRead.query(`
+SELECT data #> '{${pathJSON}}' as value 
+FROM mx_sources
+WHERE id = '${idSource}'
+LIMIT 1`);
+  return res.rows?.[0]?.value;
 }
 
 /**
@@ -644,7 +707,6 @@ async function updateSourceAttribute(idSource, oldName, newName, pgClient) {
      * Return affected views
      */
     return views;
-
   } catch (error) {
     console.error("Error updating source attributes", error);
     throw new Error(error);
@@ -716,6 +778,7 @@ export {
   tableHasValues,
   tableExists,
   columnExists,
+  columnsExist,
   isPointLikeGeom,
   decrypt,
   encrypt,
