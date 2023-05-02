@@ -1,3 +1,8 @@
+  - [1.11.0-alpha.6](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.6) 
+    
+    - APP / API
+        - Vector source statistic : fixed issue with count of null
+
   - [1.11.0-alpha.5](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.5) 
 
 
