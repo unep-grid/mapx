@@ -194,9 +194,13 @@ export async function getSourceVtSummaryUI(opt) {
     tableTitle: titleTable,
   });
 
+
   if (isNotEmpty(aStat.nullCount)) {
     const elNull = el(
       "div",
+      {
+        class: "well",
+      },
       elSpanTranslate("null_count", { data: { nullCount: aStat.nullCount } })
     );
     elContainer.appendChild(elNull);

@@ -230,7 +230,7 @@ export async function showSourceTableAttributeModal(opt) {
       columns: columns,
       data: data,
       rowHeaders: true,
-      //columnSorting: true,
+      columnSorting: true,
       colHeaders: labelsOrdered,
       licenseKey: license,
       dropdownMenu: [
@@ -239,7 +239,7 @@ export async function showSourceTableAttributeModal(opt) {
         "filter_by_condition2",
         "filter_action_bar",
       ],
-      filters: true,
+      filters: false,
       language: getHandsonLanguageCode(),
       afterFilter: handleViewFilter,
       renderAllRows: false,

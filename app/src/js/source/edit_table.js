@@ -1294,6 +1294,7 @@ export class EditTableSessionClient extends WsToolsBase {
       rowHeaders: true,
       persistentState: false,
       colHeaders: et.getColumnLabels(),
+      columnSorting : true,
       allowInvalid: true,
       allowInsertRow: false,
       renderAllRows: false,
