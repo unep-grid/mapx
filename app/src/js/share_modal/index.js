@@ -408,13 +408,12 @@ export class ShareModal extends EventSimple {
     const modeStatic = f.share_mode_static;
     const noMapPosition = !f.share_map_pos;
     const targetStory = sm.hasTargetStory();
+    const disableMaxPos = (modeStatic && noMapPosition) || targetStory;
+
     const out = [
       sm.setClassDisable(sm._el_checkbox_category_hide, modeStatic),
       sm.setClassDisable(sm._el_checkbox_map_pos, modeStatic && targetStory),
-      sm.setClassDisable(
-        sm._el_checkbox_map_pos_max,
-        noMapPosition || targetStory
-      ),
+      sm.setClassDisable(sm._el_checkbox_map_pos_max, disableMaxPos),
       sm.setClassDisable(
         sm._el_checkbox_zoom,
         targetStory || !hasViews || !modeStatic
@@ -493,11 +492,15 @@ export class ShareModal extends EventSimple {
     const storyMode = targetStory && modeStatic;
     const hasPos = isBoolean(f.share_map_pos) && f.share_map_pos;
     const enablePos = !storyMode && hasPos;
+    const enableMaxPos = !modeStatic || (!storyMode && hasPos);
 
-    if (enablePos) {
+    if (enableMaxPos) {
       if (f.share_map_pos_max) {
         url.searchParams.set("useMaxBounds", true);
       }
+    }
+
+    if (enablePos) {
       const items = f.share_map_pos_max
         ? state.mapPosItemsBounds
         : state.mapPosItems;
