@@ -1615,7 +1615,6 @@ export class EditTableSessionClient extends WsToolsBase {
                 await et.handlerUpdateColumnRemove(update, idDispatch);
                 break;
               case "order_columns":
-                debugger;
                 await et.handlerUpdateColumnsOrder(update, idDispatch);
                 break;
               default:

@@ -223,7 +223,6 @@ export async function showSourceTableAttributeModal(opt) {
     columns.sort((a, b) => a._pos - b._pos);
     const labelsOrdered = columns.map((c) => c._label);
 
-    debugger;
     /**
      * Init handsontable
      */
