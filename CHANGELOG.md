@@ -1,3 +1,8 @@
+  - [1.11.0-alpha.8](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.8) 
+
+    - API
+        - Major change : should handle #901, but impacts all stats, tiles. Using mx_sources to store table/source date_modified after an update from the table editor.
+
   - [1.11.0-alpha.6](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.6) 
     
     - APP / API
