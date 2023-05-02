@@ -13,6 +13,7 @@ import {
   duplicateTableColumn,
   setMxSourceData,
   getMxSourceData,
+  updateMxSourceTimestamp,
 } from "#mapx/db_utils";
 import { getSourceAttributeTable, getSourceEditors } from "#mapx/source";
 import { randomString } from "#mapx/helpers";
@@ -661,7 +662,6 @@ class EditTableSession {
                 ["settings", "editor", "columns_order"],
                 columns_order
               );
-
             }
             break;
           case "update_cell":
@@ -810,6 +810,11 @@ class EditTableSession {
               `Error during write: unknow method: ${update.type}`
             );
         }
+
+        /**
+         * Update table date_modifed
+         */
+        await updateMxSourceTimestamp(id_table);
       }
 
       /**

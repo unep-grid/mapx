@@ -332,14 +332,52 @@ async function registerSource(
   return true;
 }
 
+/**
+ * Updates the date_modified column of the mx_sources table for the specified source ID.
+ *
+ * @param {string} idSource - The ID of the source in the mx_sources table.
+ * @returns {Promise<boolean>} - Returns true if the update is successful, false otherwise.
+ * @throws {Error} - Throws an error if there's an issue with the database operation.
+ */
+export async function updateMxSourceTimestamp(idSource) {
+  if (!isSourceId(idSource)) {
+    return false;
+  }
+
+  const client = await pgWrite.connect();
+  try {
+    await client.query("BEGIN");
+
+    const updateMxSourcesQuery = `
+      UPDATE mx_sources
+      SET date_modified = NOW()
+      WHERE id = $1
+    `;
+    const result = await client.query(updateMxSourcesQuery, [idSource]);
+
+    if (result.rowCount !== 1) {
+      throw new Error("Rows affected is not equal to 1");
+    }
+
+    await client.query("COMMIT");
+  } catch (error) {
+    console.error("Error updating mx_sources:", error);
+    await client.query("ROLLBACK");
+    return false;
+  } finally {
+    client.release();
+  }
+
+  return true;
+}
 
 /**
-* Set mx_source data values, and create recursive keys if needed 
-* @param {string} idSource source id 
-* @param {array} path array i.e ["settings","editor","columns_order"] 
-* @param {array|object} value value stringifiable 
-* @return {Promise<array>} rows affected
-*/ 
+ * Set mx_source data values, and create recursive keys if needed
+ * @param {string} idSource source id
+ * @param {array} path array i.e ["settings","editor","columns_order"]
+ * @param {array|object} value value stringifiable
+ * @return {Promise<array>} rows affected
+ */
 export async function setMxSourceData(idSource, path, value) {
   const client = await pgWrite.connect();
   await client.query("BEGIN");
@@ -370,11 +408,11 @@ export async function setMxSourceData(idSource, path, value) {
   return out;
 }
 /**
-* Sget mx_source data values
-* @param {string} idSource source id 
-* @param {array} path array i.e ["settings","editor","columns_order"] 
-* @return {Promise<array|object>} value stored
-*/ 
+ * Sget mx_source data values
+ * @param {string} idSource source id
+ * @param {array} path array i.e ["settings","editor","columns_order"]
+ * @return {Promise<array|object>} value stored
+ */
 export async function getMxSourceData(idSource, path) {
   const pathJSON = path.map((item) => `"${item}"`).join(",");
   const res = await pgRead.query(`
@@ -557,6 +595,32 @@ async function getSourceLastTimestamp(idSource) {
   if (!isSourceId(idSource)) {
     return null;
   }
+  
+  const q = `
+    SELECT date_modified 
+    FROM mx_sources 
+    WHERE id = $1 
+  `;
+  const data = await pgRead.query(q, [idSource]);
+  const [row] = data.rows;
+
+
+  if (!row) {
+    return 0;
+  }
+
+  return row.date_modified;
+}
+
+/**
+ * Get the latest timestamp from a source / layer / table
+ * @param {String} idSource Id of the source
+ * @return {Number} timetamp
+ */
+export async function getSourceLastTimestamp_orig(idSource) {
+  if (!isSourceId(idSource)) {
+    return null;
+  }
   const q = `WITH maxTimestampData as (
             SELECT pg_xact_commit_timestamp(xmin) as t 
             FROM ${idSource}
@@ -581,6 +645,7 @@ async function getSourceLastTimestamp(idSource) {
     return row.timestamp;
   }
 }
+
 /**
  * Get layer title
  * @param {String} id of the layer
