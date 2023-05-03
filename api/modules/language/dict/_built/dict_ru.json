@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "Column names cannot be altered, as certain views may contain references to this table outside primary and secondary attributes. To designate a new name, please use the 'Duplicate Column' utility or modify existing references in the code associated in these views:",
-    "ru": "Имена столбцов нельзя изменить, так как некоторые представления могут содержать ссылки на эту таблицу за пределами первичных и вторичных атрибутов. Чтобы назначить новое имя, используйте утилиту «Дублировать столбец» или измените существующие ссылки в коде, связанном с этими представлениями:"
+    "en": "Column names of this source cannot be altered as some code uses its content (i.e., custom code view, dashboard and/or custom style).<br>Modify existing references in the code associated to the views listed below to unlock the <i>Rename column</i> tool. <br> Alternatively, use <i>Duplicate column</i> to make a copy of the column (which keeps the initial name) then rename it. By doing so, all the code depending on the column will remain functional.",
+    "ru": "Имена столбцов этого источника нельзя изменить, так как некоторый код использует его содержимое (например, пользовательское представление кода, панель мониторинга и/или пользовательский стиль).<br> Измените существующие ссылки в коде, связанном с представлениями, перечисленными ниже, чтобы разблокировать инструмент <i>«Переименовать столбец»</i> .<br> В качестве альтернативы используйте <i>Дублировать столбец</i> , чтобы создать копию столбца (с сохранением исходного имени), а затем переименовать его. При этом весь код, зависящий от столбца, останется функциональным."
   },
   {
     "id": "edit_table_modal_has_code_close",
@@ -1861,12 +1861,17 @@
   },
   {
     "id": "btn_edit_duplicate_column",
-    "en": "Duplicate a column",
+    "en": "Duplicate column",
     "ru": "Дублировать столбец"
   },
   {
+    "id": "btn_edit_duplicate_rename_column",
+    "en": "Duplicate column and rename",
+    "ru": "Дублировать столбец и переименовать"
+  },
+  {
     "id": "edit_table_modal_duplicate_column_title",
-    "en": "Duplicate a column",
+    "en": "Duplicate column",
     "ru": "Дублировать столбец"
   },
   {

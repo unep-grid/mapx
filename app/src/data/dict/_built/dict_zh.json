@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "Column names cannot be altered, as certain views may contain references to this table outside primary and secondary attributes. To designate a new name, please use the 'Duplicate Column' utility or modify existing references in the code associated in these views:",
-    "zh": "不能更改列名，因为某些视图可能包含在主要和次要属性之外对此表的引用。要指定新名称，请使用“复制列”实用程序或修改这些视图中关联代码中的现有引用："
+    "en": "Column names of this source cannot be altered as some code uses its content (i.e., custom code view, dashboard and/or custom style).<br>Modify existing references in the code associated to the views listed below to unlock the <i>Rename column</i> tool. <br> Alternatively, use <i>Duplicate column</i> to make a copy of the column (which keeps the initial name) then rename it. By doing so, all the code depending on the column will remain functional.",
+    "zh": "由于某些代码使用其内容（即自定义代码视图、仪表板和/或自定义样式），因此无法更改此源的列名。<br>修改与下面列出的视图关联的代码中的现有引用以解锁<i>重命名列</i>工具。<br>或者，使用<i>Duplicate column</i>复制该列（保留初始名称），然后重命名。通过这样做，所有依赖于该列的代码将保持功能。"
   },
   {
     "id": "edit_table_modal_has_code_close",
@@ -1861,13 +1861,18 @@
   },
   {
     "id": "btn_edit_duplicate_column",
-    "en": "Duplicate a column",
-    "zh": "复制一列"
+    "en": "Duplicate column",
+    "zh": "重复列"
+  },
+  {
+    "id": "btn_edit_duplicate_rename_column",
+    "en": "Duplicate column and rename",
+    "zh": "复制列并重命名"
   },
   {
     "id": "edit_table_modal_duplicate_column_title",
-    "en": "Duplicate a column",
-    "zh": "复制一列"
+    "en": "Duplicate column",
+    "zh": "重复列"
   },
   {
     "id": "edit_table_modal_duplicate_column_label",

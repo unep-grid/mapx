@@ -86,7 +86,6 @@ async function showSourceTableAttributeModal(opt) {
     const table = await fetchSourceTableAttribute(config);
     const data = table.data;
 
-    debugger;
 
     const services = meta._services || [];
     const hasData = isArray(data) && data.length > 0;

@@ -645,7 +645,7 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Get an array of columns as option
    * @param {Array} checks in is_safe, is_not_used, is_not_reserved
-   * @return {Array<options>}
+   * @return {Promise<array>}
    */
   async getColumnsNamesOptions(checks) {
     const et = this;
@@ -2069,7 +2069,7 @@ export class EditTableSessionClient extends WsToolsBase {
     if (hasCode) {
       const elTable = await et.getTableViewsCodeTable();
       const idModal = makeId();
-      const elButtonDuplicate = elButtonFa("btn_duplicate", {
+      const elButtonDuplicate = elButtonFa("btn_edit_duplicate_rename_column", {
         icon: "copy",
         action: () => {
           const elModal = document.getElementById(idModal);
