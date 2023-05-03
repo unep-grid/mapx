@@ -18,7 +18,7 @@ import { el } from "./../el/src/index.js";
 import { getViewSourceSummary } from "./../mx_helper_source_summary.js";
 import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata.js";
 import { moduleLoad } from "./../modules_loader_async";
-import { getView, resetViewStyle, getViewTitle } from "./../map_helpers";
+import { getView, getViewTitle } from "./../map_helpers";
 import { isSourceId, isView, isArray, makeSafeName } from "./../is_test";
 import { downloadCSV } from "../download/index.js";
 
@@ -38,7 +38,7 @@ export function fetchSourceTableAttribute(opt) {
   });
 }
 
-export async function showSourceTableAttributeModal(opt) {
+async function showSourceTableAttributeModal(opt) {
   const config = Object.assign({}, { labels: null }, opt);
   let destroyed = false;
   let hot;
@@ -85,6 +85,8 @@ export async function showSourceTableAttributeModal(opt) {
     const meta = await fetchSourceMetadata(config.idSource);
     const table = await fetchSourceTableAttribute(config);
     const data = table.data;
+
+    debugger;
 
     const services = meta._services || [];
     const hasData = isArray(data) && data.length > 0;
@@ -286,13 +288,7 @@ export async function showSourceTableAttributeModal(opt) {
   async function restart() {
     try {
       await destroy();
-      await showSourceTableAttributeModal({
-        idSource: config.idSource,
-        view: config.view,
-        attributes: config.attributes,
-        labels: config.labels,
-      });
-      await resetViewStyle({ idView: config.view });
+      await viewToTableAttributeModal(config.view);
     } catch (e) {
       console.error(e);
     }
