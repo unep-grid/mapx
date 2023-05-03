@@ -6,6 +6,7 @@ import {
   modalConfirm,
   modalDialog,
 } from "./../mx_helper_modal.js";
+import { ObserveMutationAttribute } from "../mutations_observer";
 import { modalSelectSource } from "../select_auto";
 import { el, elButtonFa, elCheckbox, tt } from "../el_mapx";
 import { moduleLoad } from "./../modules_loader_async";
@@ -1294,7 +1295,7 @@ export class EditTableSessionClient extends WsToolsBase {
       rowHeaders: true,
       persistentState: false,
       colHeaders: et.getColumnLabels(),
-      columnSorting : true,
+      columnSorting: true,
       allowInvalid: true,
       allowInsertRow: false,
       renderAllRows: false,
@@ -1355,6 +1356,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const source = et._config.id_source_dialog;
     const columns = et.getColumns();
     const orderBefore = et.getColumnLabels();
+    let grid;
 
     const elCols = el(
       "div",
@@ -1374,7 +1376,18 @@ export class EditTableSessionClient extends WsToolsBase {
       })
     );
 
-    let grid;
+    const ro = new ResizeObserver(() => {
+      if (!grid instanceof Muuri) {
+        return;
+      }
+      clearTimeout(grid._id_ro);
+      grid._id_ro = setTimeout(() => {
+        grid.refreshItems().layout();
+        console.log("layout");
+      }, 200);
+    });
+
+    ro.observe(elCols);
 
     const orderAfter = await modalConfirm({
       title: tt("edit_table_modal_order_columns_title"),
@@ -1393,6 +1406,8 @@ export class EditTableSessionClient extends WsToolsBase {
         return order;
       },
     });
+
+    ro.disconnect();
 
     if (!orderAfter) {
       return;
