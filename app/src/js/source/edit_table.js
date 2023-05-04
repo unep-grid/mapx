@@ -6,7 +6,6 @@ import {
   modalConfirm,
   modalDialog,
 } from "./../mx_helper_modal.js";
-import { ObserveMutationAttribute } from "../mutations_observer";
 import { modalSelectSource } from "../select_auto";
 import { el, elButtonFa, elCheckbox, tt } from "../el_mapx";
 import { moduleLoad } from "./../modules_loader_async";
@@ -43,11 +42,7 @@ import {
 
 import "./edit_table.types.js";
 import "./edit_table.less";
-import {
-  onNextFrame,
-  waitFrameAsync,
-  waitTimeoutAsync,
-} from "../animation_frame";
+import { onNextFrame, waitFrameAsync } from "../animation_frame";
 
 const defaults = {
   debug: false,
@@ -602,6 +597,10 @@ export class EditTableSessionClient extends WsToolsBase {
       return;
     }
 
+    if (!opt.duplicate) {
+      et.clearRef(oldColumnName);
+    }
+
     if (opt.duplicate) {
       const newColumn = clone(columns[posData]);
       newColumn.data = newColumnName;
@@ -622,12 +621,7 @@ export class EditTableSessionClient extends WsToolsBase {
       }
     }
 
-    if (opt.duplicate) {
-      // test
-      await et.updateData(data, "column_rename_handler");
-    } else {
-      et.updateTableColumns();
-    }
+    await et.updateData(data, "column_rename_handler");
   }
 
   updateTableColumns() {
@@ -1903,7 +1897,7 @@ export class EditTableSessionClient extends WsToolsBase {
      * ht clear undo redo and add insert : we don't want that
      * - clear redo ( inserts... )
      * - re-add previous undo / redo
-     * ⚠️  in case of collumn remove, clear 
+     * ⚠️  in case of collumn remove, clear
      *    redo / undo should be done before updateData
      */
     et._ht.undoRedo.clear();
@@ -2240,6 +2234,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     try {
       await et._rename_column(update.column_name, update.column_name_new);
+
       if (et.isFromDispatch(source)) {
         /**
          * Dispatched event : don't re-dispatch
@@ -3236,6 +3231,26 @@ export class EditTableSessionClient extends WsToolsBase {
     et._clear_undo_ref_col(actions, pos);
     et._clear_undo_ref_col(undoneActions, pos);
   }
+  /**
+   * Remove ref to column name from unduRedo
+   * e.g. after column remove
+   * @param {Number} pos Column last position
+   */
+  clearUndoRedoRefColName(name) {
+    const et = this;
+    const pos = et.getColumnId(name);
+    return et.clearUndoRedoRefCol(pos);
+  }
+
+  /**
+   * Remove all undo/redo/update by column name
+   * @param {string} name Column name
+   */
+  clearRef(name) {
+    const et = this;
+    et.clearUpdateRefColName(name);
+    et.clearUndoRedoRefCol(name);
+  }
 
   /**
    * Helper for clearUndoRedoRefCol
@@ -3259,7 +3274,7 @@ export class EditTableSessionClient extends WsToolsBase {
    * Remove all insert
    * not used
    */
-   _clear_undo_redo_insert() {
+  _clear_undo_redo_insert() {
     const et = this;
     const ur = et._ht.getPlugin("UndoRedo") || et._ht.undoRedo;
     const actions = ur.doneActions;
