@@ -43,7 +43,11 @@ import {
 
 import "./edit_table.types.js";
 import "./edit_table.less";
-import { onNextFrame, waitFrameAsync } from "../animation_frame";
+import {
+  onNextFrame,
+  waitFrameAsync,
+  waitTimeoutAsync,
+} from "../animation_frame";
 
 const defaults = {
   debug: false,
@@ -576,7 +580,14 @@ export class EditTableSessionClient extends WsToolsBase {
     return true;
   }
 
-  _rename_column(oldColumnName, newColumnName, opt) {
+  /**
+   * Helper to rename / duplicate column
+   * @param {string} oldColumnName Old column name
+   * @param {string} newColumnName New column name
+   * @param {object} opt options
+   * @return {Promise}
+   */
+  async _rename_column(oldColumnName, newColumnName, opt) {
     const et = this;
     opt = Object.assign({}, { duplicate: false }, opt);
     const columns = et.getColumns();
@@ -610,7 +621,13 @@ export class EditTableSessionClient extends WsToolsBase {
         }
       }
     }
-    et.updateData(data, "column_rename_handler");
+
+    if (opt.duplicate) {
+      // test
+      await et.updateData(data, "column_rename_handler");
+    } else {
+      et.updateTableColumns();
+    }
   }
 
   updateTableColumns() {
@@ -620,6 +637,7 @@ export class EditTableSessionClient extends WsToolsBase {
       colHeaders: et.getColumnLabels(),
     });
     et._ht.render();
+    et.updateButtonsAddRemoveColumn();
   }
 
   get column_index() {
@@ -1319,7 +1337,7 @@ export class EditTableSessionClient extends WsToolsBase {
       //beforeValidate: et.beforeValidate,
       afterGetColHeader: et.formatColumns,
       afterChange: et.afterChange,
-      afterLoadData: et.afterLoadData,
+      afterLoadData: et.afterLoadData, //also reload/updateData
       height: et.updateHeight,
       disableVisualSelection: false,
       comment: false,
@@ -1800,8 +1818,9 @@ export class EditTableSessionClient extends WsToolsBase {
            * Splice / remove
            * Keep position
            */
-          colRemoved.column = columns.splice(n, 1);
+          colRemoved.column = columns.splice(n, 1)[0];
           colRemoved.pos = n;
+          colRemoved.name = colRemoved.column.data;
           continue;
         }
       }
@@ -1810,6 +1829,11 @@ export class EditTableSessionClient extends WsToolsBase {
         console.warn(`Column ${update.column_name} not removed`);
         return false;
       }
+      /**
+       * Remove refs : undo/redo/updates
+       */
+      et.clearUpdateRefColName(colRemoved.name);
+      et.clearUndoRedoRefCol(colRemoved.pos);
 
       /**
        * ⚠️ Column removal using alter('remove_col',) is not
@@ -1824,22 +1848,12 @@ export class EditTableSessionClient extends WsToolsBase {
        */
       et.updateTableColumns();
 
-      /**
-       * Remove update item that ref the removed column
-       */
-      et.clearUpdateRefColName(update.column_name);
-
-      /**
-       * Same for undo/redo
-       */
-      et.clearUndoRedoRefCol(colRemoved.pos);
-
       const data = et._ht.getSourceData();
       for (const row of data) {
         delete row[update.column_name];
       }
 
-      et.updateData(data, "column_remove_handler");
+      await et.updateData(data, "column_remove_handler");
 
       /**
        * Update buttons state
@@ -1865,18 +1879,37 @@ export class EditTableSessionClient extends WsToolsBase {
 
   /**
    * Update data wrapper
+   * @return {Promise<boolean>} done
    */
-  updateData(data, id) {
+  async updateData(data, id) {
     const et = this;
     // avoid load / update data on a sorted table
     et.clearSort();
+
+    // load data remove done action
+    const oldDone = clone(et._ht.undoRedo.doneActions);
+    const oldUndone = clone(et._ht.undoRedo.undoneActions);
+
     if (et._ht.updateData) {
       // not available in 6.2.2
       et._ht.updateData(data, id || "column_remove_handler");
     } else {
       et._ht.loadData(data);
     }
+    await et.once("table_ready", null);
+
     et.updateTableColumns();
+    /**
+     * ht clear undo redo and add insert : we don't want that
+     * - clear redo ( inserts... )
+     * - re-add previous undo / redo
+     * ⚠️  in case of collumn remove, clear 
+     *    redo / undo should be done before updateData
+     */
+    et._ht.undoRedo.clear();
+    et._ht.undoRedo.doneActions.push(...oldDone);
+    et._ht.undoRedo.undoneActions.push(...oldUndone);
+    et.updateButtonsUndoRedo();
   }
 
   /**
@@ -2002,7 +2035,7 @@ export class EditTableSessionClient extends WsToolsBase {
       column_name: columnToRemove,
     };
 
-    et.handlerUpdateColumnRemove(update, source);
+    await et.handlerUpdateColumnRemove(update, source);
   }
 
   async dialogDuplicateColumn() {
@@ -2180,10 +2213,9 @@ export class EditTableSessionClient extends WsToolsBase {
   async handlerUpdateColumnDuplicate(update, source) {
     const et = this;
     try {
-      et._rename_column(update.column_name, update.column_name_new, {
+      await et._rename_column(update.column_name, update.column_name_new, {
         duplicate: true,
       });
-      et.updateButtonsAddRemoveColumn();
       if (et.isFromDispatch(source)) {
         /**
          * Dispatched event : don't re-dispatch
@@ -2207,7 +2239,7 @@ export class EditTableSessionClient extends WsToolsBase {
   async handlerUpdateColumnRename(update, source) {
     const et = this;
     try {
-      et._rename_column(update.column_name, update.column_name_new);
+      await et._rename_column(update.column_name, update.column_name_new);
       if (et.isFromDispatch(source)) {
         /**
          * Dispatched event : don't re-dispatch
@@ -2237,7 +2269,6 @@ export class EditTableSessionClient extends WsToolsBase {
         return;
       }
       et.updateTableColumns();
-      et.updateButtonsAddRemoveColumn();
 
       if (et.isFromDispatch(source)) {
         /**
@@ -3185,12 +3216,13 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   clearUpdateRefColName(name) {
     const et = this;
-    et._updates.forEach((update, key) => {
+    for (const [key, update] of et._updates) {
       if (update.column_name === name) {
         et._updates.delete(key);
       }
-    });
+    }
   }
+
   /**
    * Remove ref to column name from unduRedo
    * e.g. after column remove
@@ -3219,6 +3251,23 @@ export class EditTableSessionClient extends WsToolsBase {
             actions.splice(nA, 1);
           }
         }
+      }
+    }
+  }
+
+  /**
+   * Remove all insert
+   * not used
+   */
+   _clear_undo_redo_insert() {
+    const et = this;
+    const ur = et._ht.getPlugin("UndoRedo") || et._ht.undoRedo;
+    const actions = ur.doneActions;
+    let nA = actions.length;
+    while (nA--) {
+      const action = actions[nA];
+      if (action.actionType === "insert_row") {
+        actions.splice(nA, 1);
       }
     }
   }
