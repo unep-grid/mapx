@@ -1,3 +1,13 @@
+  - [1.11.0-beta.1](https://github.com/unep-grid/mapx/tree/1.11.0-beta.1) 
+    
+    - API/APP
+        - Table editor : 
+            - removed action "duplicate + rename", kept only "duplicate"
+            - rewording
+        - Table viewer :
+            - Reload all config, not only data: in case of column changes, it should be displayed correctly
+        - Theme : fixed an issue whith an empty options object during import.
+
   - [1.11.0-alpha.8](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.8) 
 
     - API
