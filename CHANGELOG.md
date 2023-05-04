@@ -1,3 +1,8 @@
+  - [1.11.0-beta.2](https://github.com/unep-grid/mapx/tree/1.11.0-beta.2) 
+
+    - APP
+        - Table editor : fixed issue with handson table removing undo/redos after data reload and adding "inserts". Workaround to ignore insert and preserve undo/redos. Removing relevent undo/redo is done when required in the module i.e. removing a column.
+
   - [1.11.0-beta.1](https://github.com/unep-grid/mapx/tree/1.11.0-beta.1) 
     
     - API/APP
