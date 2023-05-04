@@ -749,33 +749,12 @@ class EditTableSession {
             break;
           case "duplicate_column":
             {
-              const { rename_attribute } = update;
-
               await duplicateTableColumn(
                 id_table,
                 column_name,
                 column_name_new,
                 client
               );
-
-              if (rename_attribute) {
-                const views = await updateSourceAttribute(
-                  id_table,
-                  column_name,
-                  column_name_new,
-                  client
-                );
-                postScripts.set(
-                  `${id_table}_update_views_duplicate_column`,
-                  async () => {
-                    et.emitSpread(events.server_spread_views_update, {
-                      views,
-                    });
-                    await et.updateAltStyleClient(id_table);
-                    return;
-                  }
-                );
-              }
             }
             break;
           case "rename_column":

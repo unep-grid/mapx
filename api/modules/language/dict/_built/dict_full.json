@@ -4668,7 +4668,7 @@
   },
   {
     "id": "edit_table_modal_rename_column_title",
-    "en": "Rename Column",
+    "en": "Rename column",
     "fr": "Renommer la colonne",
     "es": "Cambiar nombre de columna",
     "ru": "Переименовать столбец",
@@ -4720,7 +4720,7 @@
   },
   {
     "id": "btn_edit_rename_column",
-    "en": "Rename Column",
+    "en": "Rename column",
     "fr": "Renommer la colonne",
     "es": "Cambiar nombre de columna",
     "ru": "Переименовать столбец",
@@ -4733,7 +4733,7 @@
   },
   {
     "id": "btn_edit_table_modal_rename_column_confirm",
-    "en": "Rename Column",
+    "en": "Rename column",
     "fr": "Renommer la colonne",
     "es": "Cambiar nombre de columna",
     "ru": "Переименовать столбец",
@@ -4847,19 +4847,6 @@
     "ps": "دوه اړخیز کالم",
     "bn": "সদৃশ কলাম",
     "de": "Spalte duplizieren"
-  },
-  {
-    "id": "btn_edit_duplicate_rename_column",
-    "en": "Duplicate column and rename",
-    "fr": "Dupliquer la colonne et renommer",
-    "es": "Duplicar columna y renombrar",
-    "ru": "Дублировать столбец и переименовать",
-    "zh": "复制列并重命名",
-    "ar": "العمود المكرر وإعادة التسمية",
-    "fa": "ستون تکراری و تغییر نام",
-    "ps": "کالم نقل کړئ او نوم یې بدل کړئ",
-    "bn": "নকল কলাম এবং পুনঃনামকরণ",
-    "de": "Spalte duplizieren und umbenennen"
   },
   {
     "id": "edit_table_modal_duplicate_column_title",

@@ -1796,7 +1796,7 @@
   },
   {
     "id": "edit_table_modal_rename_column_title",
-    "en": "Rename Column",
+    "en": "Rename column",
     "bn": "কলাম পুনঃনামকরণ করুন"
   },
   {
@@ -1816,12 +1816,12 @@
   },
   {
     "id": "btn_edit_rename_column",
-    "en": "Rename Column",
+    "en": "Rename column",
     "bn": "কলাম পুনঃনামকরণ করুন"
   },
   {
     "id": "btn_edit_table_modal_rename_column_confirm",
-    "en": "Rename Column",
+    "en": "Rename column",
     "bn": "কলাম পুনঃনামকরণ করুন"
   },
   {
@@ -1863,11 +1863,6 @@
     "id": "btn_edit_duplicate_column",
     "en": "Duplicate column",
     "bn": "সদৃশ কলাম"
-  },
-  {
-    "id": "btn_edit_duplicate_rename_column",
-    "en": "Duplicate column and rename",
-    "bn": "নকল কলাম এবং পুনঃনামকরণ"
   },
   {
     "id": "edit_table_modal_duplicate_column_title",

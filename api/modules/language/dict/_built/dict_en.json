@@ -1437,7 +1437,7 @@
   },
   {
     "id": "edit_table_modal_rename_column_title",
-    "en": "Rename Column"
+    "en": "Rename column"
   },
   {
     "id": "edit_table_modal_rename_column_label",
@@ -1453,11 +1453,11 @@
   },
   {
     "id": "btn_edit_rename_column",
-    "en": "Rename Column"
+    "en": "Rename column"
   },
   {
     "id": "btn_edit_table_modal_rename_column_confirm",
-    "en": "Rename Column"
+    "en": "Rename column"
   },
   {
     "id": "edit_table_modal_has_code_title",
@@ -1490,10 +1490,6 @@
   {
     "id": "btn_edit_duplicate_column",
     "en": "Duplicate column"
-  },
-  {
-    "id": "btn_edit_duplicate_rename_column",
-    "en": "Duplicate column and rename"
   },
   {
     "id": "edit_table_modal_duplicate_column_title",

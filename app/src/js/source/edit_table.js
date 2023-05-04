@@ -1868,6 +1868,8 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateData(data, id) {
     const et = this;
+    // avoid load / update data on a sorted table
+    et.clearSort();
     if (et._ht.updateData) {
       // not available in 6.2.2
       et._ht.updateData(data, id || "column_remove_handler");
@@ -2003,9 +2005,8 @@ export class EditTableSessionClient extends WsToolsBase {
     et.handlerUpdateColumnRemove(update, source);
   }
 
-  async dialogDuplicateColumn(opt) {
+  async dialogDuplicateColumn() {
     const et = this;
-    opt = Object.assign({}, { rename_attribute: false }, opt);
     const checks = ["is_not_reserved"];
     const options = await et.getColumnsNamesOptions(checks);
     const names = et.getColumnLabels();
@@ -2064,7 +2065,6 @@ export class EditTableSessionClient extends WsToolsBase {
       id_table: et._id_table,
       column_name_new: columnNewName,
       column_name: columnToDuplicate,
-      rename_attribute: !!opt.rename_attribute,
     };
 
     return et.handlerUpdateColumnDuplicate(update, source);
@@ -2077,21 +2077,20 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     const names = et.getColumnLabels();
     const source = et._config.id_source_dialog;
-    //const checks = ["is_not_reserved", "is_safe"];
     const checks = ["is_not_reserved"];
     const hasCode = await et.hasSourceViewsCode();
 
     if (hasCode) {
       const elTable = await et.getTableViewsCodeTable();
       const idModal = makeId();
-      const elButtonDuplicate = elButtonFa("btn_edit_duplicate_rename_column", {
+      const elButtonDuplicate = elButtonFa("btn_edit_duplicate_column", {
         icon: "copy",
-        action: () => {
+        action: async () => {
           const elModal = document.getElementById(idModal);
           if (elModal) {
             elModal.close();
           }
-          et.dialogDuplicateColumn({ rename_attribute: true });
+          await et.dialogDuplicateColumn();
         },
       });
 
@@ -3205,6 +3204,7 @@ export class EditTableSessionClient extends WsToolsBase {
     et._clear_undo_ref_col(actions, pos);
     et._clear_undo_ref_col(undoneActions, pos);
   }
+
   /**
    * Helper for clearUndoRedoRefCol
    */
@@ -3221,6 +3221,15 @@ export class EditTableSessionClient extends WsToolsBase {
         }
       }
     }
+  }
+
+  /**
+   * Clear sort ( important before any load )
+   */
+  clearSort() {
+    const et = this;
+    const cs = et._ht.getPlugin("ColumnSorting");
+    cs.clearSort();
   }
 
   /**

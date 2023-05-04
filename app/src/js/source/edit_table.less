@@ -26,6 +26,9 @@
             top: 0;
             left: 0;
           }
+          /**
+          * json type
+          */ 
           &.edit-table--header-number:after {
             border-bottom: 2px solid var(--mx_ui_type_number);
           }
@@ -34,6 +37,9 @@
           }
           &.edit-table--header-string:after {
             border-bottom: 2px solid var(--mx_ui_type_string);
+          }
+          &.edit-table--header-object:after {
+            border-bottom: 2px solid var(--mx_ui_type_object);
           }
         }
       }
