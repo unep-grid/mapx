@@ -153,10 +153,11 @@ class Theme extends EventSimple {
    * Add new theme
    * @param {Object} theme - Theme
    * @param {Object} opt - Options passed to `set`
-   * @return {Boolean} the set value
+   * @return {Promise<Boolean>} the set value
    */
   async addTheme(theme, opt) {
     const t = this;
+    opt = Object.assign({}, opt);
     const ok = await validate(theme);
     const ids = t.ids();
     if (!ok) {
@@ -710,7 +711,6 @@ class Theme extends EventSimple {
     const t = this;
     try {
       const data = await fileSelectorJSON({ multiple: false });
-
       if (isEmpty(data)) {
         return;
       }
