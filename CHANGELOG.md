@@ -1,3 +1,9 @@
+  - [1.11.0-rc.1](https://github.com/unep-grid/mapx/tree/1.11.0-rc.1) 
+
+    - APP
+        - Table editor : fixed an issue in manual save mode. Table structure should not be altered until all pending changes have been rolled back or sent
+        - Minor dictionnary changes
+
   - [1.11.0-beta.2](https://github.com/unep-grid/mapx/tree/1.11.0-beta.2) 
 
     - APP
