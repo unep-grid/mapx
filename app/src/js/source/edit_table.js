@@ -1849,8 +1849,7 @@ export class EditTableSessionClient extends WsToolsBase {
       /**
        * Remove refs : undo/redo/updates
        */
-      et.clearUpdateRefColName(colRemoved.name);
-      et.clearUndoRedoRefCol(colRemoved.pos);
+      et.clearRef(colRemoved.name);
 
       /**
        * ⚠️ Column removal using alter('remove_col',) is not
@@ -3254,25 +3253,15 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Remove ref to column name from unduRedo
    * e.g. after column remove
-   * @param {Number} pos Column last position
+   * @param {String} name Column name
    */
-  clearUndoRedoRefCol(pos) {
+  clearUndoRedoRefColName(name) {
     const et = this;
     const ur = et._ht.getPlugin("UndoRedo") || et._ht.undoRedo;
     const actions = ur.doneActions;
     const undoneActions = ur.undoneActions;
-    et._clear_undo_ref_col(actions, pos);
-    et._clear_undo_ref_col(undoneActions, pos);
-  }
-  /**
-   * Remove ref to column name from unduRedo
-   * e.g. after column remove
-   * @param {Number} pos Column last position
-   */
-  clearUndoRedoRefColName(name) {
-    const et = this;
-    const pos = et.getColumnId(name);
-    return et.clearUndoRedoRefCol(pos);
+    et._clear_undo_ref_col(actions, name);
+    et._clear_undo_ref_col(undoneActions, name);
   }
 
   /**
@@ -3282,20 +3271,20 @@ export class EditTableSessionClient extends WsToolsBase {
   clearRef(name) {
     const et = this;
     et.clearUpdateRefColName(name);
-    et.clearUndoRedoRefCol(name);
+    et.clearUndoRedoRefColName(name);
   }
 
   /**
    * Helper for clearUndoRedoRefCol
    */
-  _clear_undo_ref_col(actions, pos) {
+  _clear_undo_ref_col(actions, name) {
     let nA = actions.length;
     while (nA--) {
       const a = actions[nA];
       if (a.actionType === "change") {
         const changes = a.changes;
         for (const change of changes) {
-          if (change[1] === pos) {
+          if (change[1] === name) {
             actions.splice(nA, 1);
           }
         }
