@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "Column names of this source cannot be altered as some code uses its content (i.e., custom code view, dashboard and/or custom style).<br>Modify existing references in the code associated to the views listed below to unlock the <i>Rename column</i> tool. <br> Alternatively, use <i>Duplicate column</i> to make a copy of the column (which keeps the initial name) then rename it. By doing so, all the code depending on the column will remain functional.",
-    "ru": "Имена столбцов этого источника нельзя изменить, так как некоторый код использует его содержимое (например, пользовательское представление кода, панель мониторинга и/или пользовательский стиль).<br> Измените существующие ссылки в коде, связанном с представлениями, перечисленными ниже, чтобы разблокировать инструмент <i>«Переименовать столбец»</i> .<br> В качестве альтернативы используйте <i>Дублировать столбец</i> , чтобы создать копию столбца (с сохранением исходного имени), а затем переименовать его. При этом весь код, зависящий от столбца, останется функциональным."
+    "en": "Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead. For more details, click the 'help' button. Here is the list of dependent views:",
+    "ru": "Переименование столбцов запрещено, так как на эту таблицу есть ссылки в пользовательском коде, информационных панелях или пользовательских стилях. При необходимости рассмотрите возможность создания дубликата столбца. Для получения более подробной информации нажмите кнопку «Помощь». Вот список зависимых представлений:"
   },
   {
     "id": "edit_table_modal_has_code_close",

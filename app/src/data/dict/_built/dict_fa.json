@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "Column names of this source cannot be altered as some code uses its content (i.e., custom code view, dashboard and/or custom style).<br>Modify existing references in the code associated to the views listed below to unlock the <i>Rename column</i> tool. <br> Alternatively, use <i>Duplicate column</i> to make a copy of the column (which keeps the initial name) then rename it. By doing so, all the code depending on the column will remain functional.",
-    "fa": "نام ستون‌های این منبع را نمی‌توان تغییر داد زیرا برخی از کدها از محتوای آن استفاده می‌کنند (یعنی نمای کد سفارشی، داشبورد و/یا سبک سفارشی).<br> برای باز کردن <i>قفل ابزار ستون تغییر نام</i> ، مراجع موجود در کد مرتبط با نماهای فهرست شده در زیر را تغییر دهید.<br> از طرف دیگر، از <i>ستون Duplicate</i> برای ایجاد یک کپی از ستون (که نام اولیه را حفظ می کند) استفاده کنید و سپس نام آن را تغییر دهید. با انجام این کار، تمام کدهای بسته به ستون، کاربردی باقی می مانند."
+    "en": "Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead. For more details, click the 'help' button. Here is the list of dependent views:",
+    "fa": "تغییر نام ستون مجاز نیست زیرا این جدول به کد سفارشی، داشبورد یا سبک های سفارشی ارجاع داده شده است. در صورت لزوم، به جای آن یک ستون تکراری ایجاد کنید. برای جزئیات بیشتر، روی دکمه \"راهنما\" کلیک کنید. در اینجا لیست نماهای وابسته آمده است:"
   },
   {
     "id": "edit_table_modal_has_code_close",

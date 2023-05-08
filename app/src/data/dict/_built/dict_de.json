@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "Column names of this source cannot be altered as some code uses its content (i.e., custom code view, dashboard and/or custom style).<br>Modify existing references in the code associated to the views listed below to unlock the <i>Rename column</i> tool. <br> Alternatively, use <i>Duplicate column</i> to make a copy of the column (which keeps the initial name) then rename it. By doing so, all the code depending on the column will remain functional.",
-    "de": "Spaltennamen dieser Quelle können nicht geändert werden, da einige Codes ihren Inhalt verwenden (z. B. benutzerdefinierte Codeansicht, Dashboard und/oder benutzerdefinierter Stil).<br> Ändern Sie vorhandene Verweise im Code, der den unten aufgeführten Ansichten zugeordnet ist, um das Tool <i>Spalte umbenennen</i> zu entsperren.<br> Verwenden Sie alternativ <i>Spalte duplizieren</i> , um eine Kopie der Spalte zu erstellen (die den ursprünglichen Namen beibehält), und benennen Sie sie dann um. Dadurch bleibt der gesamte Code in Abhängigkeit von der Spalte funktionsfähig."
+    "en": "Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead. For more details, click the 'help' button. Here is the list of dependent views:",
+    "de": "Das Umbenennen von Spalten ist nicht zulässig, da auf diese Tabelle in benutzerdefiniertem Code, Dashboards oder benutzerdefinierten Stilen verwiesen wird. Ziehen Sie bei Bedarf in Betracht, stattdessen eine doppelte Spalte zu erstellen. Für weitere Details klicken Sie auf die Schaltfläche „Hilfe“. Hier ist die Liste der abhängigen Ansichten:"
   },
   {
     "id": "edit_table_modal_has_code_close",

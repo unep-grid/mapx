@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "Column names of this source cannot be altered as some code uses its content (i.e., custom code view, dashboard and/or custom style).<br>Modify existing references in the code associated to the views listed below to unlock the <i>Rename column</i> tool. <br> Alternatively, use <i>Duplicate column</i> to make a copy of the column (which keeps the initial name) then rename it. By doing so, all the code depending on the column will remain functional.",
-    "zh": "由于某些代码使用其内容（即自定义代码视图、仪表板和/或自定义样式），因此无法更改此源的列名。<br>修改与下面列出的视图关联的代码中的现有引用以解锁<i>重命名列</i>工具。<br>或者，使用<i>Duplicate column</i>复制该列（保留初始名称），然后重命名。通过这样做，所有依赖于该列的代码将保持功能。"
+    "en": "Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead. For more details, click the 'help' button. Here is the list of dependent views:",
+    "zh": "不允许重命名列，因为在自定义代码、仪表板或自定义样式中引用了此表。如果需要，请考虑创建一个重复的列。有关详细信息，请单击“帮助”按钮。以下是相关视图的列表："
   },
   {
     "id": "edit_table_modal_has_code_close",

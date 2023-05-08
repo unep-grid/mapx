@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "Column names of this source cannot be altered as some code uses its content (i.e., custom code view, dashboard and/or custom style).<br>Modify existing references in the code associated to the views listed below to unlock the <i>Rename column</i> tool. <br> Alternatively, use <i>Duplicate column</i> to make a copy of the column (which keeps the initial name) then rename it. By doing so, all the code depending on the column will remain functional.",
-    "bn": "এই উৎসের কলামের নাম পরিবর্তন করা যাবে না কারণ কিছু কোড এর বিষয়বস্তু ব্যবহার করে (যেমন, কাস্টম কোড ভিউ, ড্যাশবোর্ড এবং/অথবা কাস্টম শৈলী)।<br> <i>পুনঃনামকরণ কলাম</i> টুলটি আনলক করতে নীচে তালিকাভুক্ত দর্শনের সাথে যুক্ত কোডে বিদ্যমান রেফারেন্স পরিবর্তন করুন।<br> বিকল্পভাবে, কলামের একটি অনুলিপি তৈরি করতে <i>ডুপ্লিকেট কলাম</i> ব্যবহার করুন (যা প্রাথমিক নাম রাখে) তারপর এটির নাম পরিবর্তন করুন। এটি করার মাধ্যমে, কলামের উপর নির্ভর করে সমস্ত কোড কার্যকরী থাকবে।"
+    "en": "Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead. For more details, click the 'help' button. Here is the list of dependent views:",
+    "bn": "কলাম পুনঃনামকরণ অনুমোদিত নয় যেহেতু এই টেবিলটি কাস্টম কোড, ড্যাশবোর্ড বা কাস্টম শৈলীতে উল্লেখ করা হয়েছে৷ প্রয়োজনে, পরিবর্তে একটি ডুপ্লিকেট কলাম তৈরি করার কথা বিবেচনা করুন। আরো বিস্তারিত জানার জন্য, 'সহায়তা' বোতামে ক্লিক করুন। এখানে নির্ভরশীল দৃষ্টিভঙ্গির তালিকা রয়েছে:"
   },
   {
     "id": "edit_table_modal_has_code_close",

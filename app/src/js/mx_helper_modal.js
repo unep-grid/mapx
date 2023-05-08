@@ -37,6 +37,7 @@ import { SelectAuto } from "./select_auto";
  * @param {Object} o.style Style object to apply to modal window. Default : empty
  * @param {Boolean} o.close Close related modal
  * @param {Object} o.styleContent Style object to apply to content of the modal window. Default : empty
+ * @param {String} o.idScrollTo Scroll to id in the body
  * @param {Boolean} o.addBtnMove Add top button to move the modal
  * @param {String|Element} o.content Body content of the modal. Default  : undefined
  * @param {Function} o.onClose On close callback
@@ -235,6 +236,13 @@ export function modal(o) {
       closeSelectizeGroupById(id);
     },
   });
+
+  if (isString(o.idScrollTo)) {
+    const elScrollTo = elModal.querySelector(`#${o.idScrollTo}`);
+    if (elScrollTo) {
+      elScrollTo.scrollIntoView(true);
+    }
+  }
 
   /**
    * Return final element

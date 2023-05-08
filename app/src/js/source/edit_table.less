@@ -64,7 +64,7 @@
     height: 100%;
     top: 0px;
     pointer-events: none;
-    &.disabled {
+    &.edit-table--disabled {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -83,12 +83,12 @@
         width: 300px;
         text-align: center;
       }
-      &.disconnected {
+      &.edit-table--disconnected {
         &:after {
           content: attr(data-disconnected);
         }
       }
-      &.locked {
+      &.edit-table--locked {
         &:after {
           content: attr(data-locked);
         }

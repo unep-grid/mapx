@@ -2121,12 +2121,17 @@ export class EditTableSessionClient extends WsToolsBase {
         },
       });
 
+      const elButtonHelpRename = elButtonFa("btn_help", {
+        icon: "question-circle",
+        action: () => et.dialogHelp("rename-column"),
+      });
+
       return modalDialog({
         id: idModal,
         title: tt("edit_table_modal_has_code_title"),
         content: el("div", [el("p", tt("edit_table_modal_has_code")), elTable]),
         close: tt("edit_table_modal_has_code_close"),
-        buttons: [elButtonDuplicate],
+        buttons: [elButtonDuplicate, elButtonHelpRename],
       });
     }
 
@@ -2766,7 +2771,7 @@ export class EditTableSessionClient extends WsToolsBase {
   disable() {
     const et = this;
     et._disabled = true;
-    et._el_overlay.classList.add("disabled");
+    et._el_overlay.classList.add("edit-table--disabled");
     et.setReadOnly(true);
   }
 
@@ -2776,7 +2781,7 @@ export class EditTableSessionClient extends WsToolsBase {
   enable() {
     const et = this;
     et._disabled = false;
-    et._el_overlay.classList.remove("disabled");
+    et._el_overlay.classList.remove("edit-table--disabled");
     et.setReadOnly(false);
   }
 
@@ -2787,7 +2792,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     et.disable();
     et._disconnected = true;
-    et._el_overlay.classList.add("disconnected");
+    et._el_overlay.classList.add("edit-table--disconnected");
     et._socket.io.once("reconnect", et.onReconnect);
   }
 
@@ -2798,7 +2803,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     try {
       et._disconnected = false;
-      et._el_overlay.classList.remove("disconnected");
+      et._el_overlay.classList.remove("edit-table--disconnected");
       et.enable();
       await et.start({
         send_table: false,
@@ -2823,7 +2828,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     et.disable();
     et._locked = true;
-    et._el_overlay.classList.add("locked");
+    et._el_overlay.classList.add("edit-table--locked");
   }
 
   /**
@@ -2832,7 +2837,7 @@ export class EditTableSessionClient extends WsToolsBase {
   unlock() {
     const et = this;
     et._disconnected = false;
-    et._el_overlay.classList.remove("locked");
+    et._el_overlay.classList.remove("edit-table--locked");
     et._locked = false;
     et.enable();
   }
@@ -3059,10 +3064,11 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Display a dialog with the help from wiki
    */
-  dialogHelp() {
+  dialogHelp(id) {
     return modalMarkdown({
       title: getDictItem("edit_table_modal_help"),
       wiki: "Attribute-table-edition",
+      idScrollTo: id,
     });
   }
 
