@@ -229,6 +229,29 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
+   * Ask if changed should be discarded
+   */
+  async dialogUnsavedChangesDiscard() {
+    const et = this;
+    const skip = et._config.test_mode;
+    const nPending = et.countUpdateValid();
+    if (nPending === 0 || skip) {
+      return true;
+    }
+    const discard = await modalConfirm({
+      title: tt("edit_table_modal_quit_ignore_changes_title"),
+      content: tt("edit_table_modal_quit_ignore_changes", {
+        data: {
+          count: nPending,
+        },
+      }),
+      confirm: tt("btn_confirm"),
+      cancel: tt("btn_cancel"),
+    });
+    return !!discard;
+  }
+
+  /**
    * Display a warning : editing will alter your data
    */
   async dialogWarning() {
@@ -281,24 +304,9 @@ export class EditTableSessionClient extends WsToolsBase {
       /**
        * Prevent quit with unsaved changes
        */
-      const nValid = et.countUpdateValid();
-      if (nValid > 0) {
-        const skip = et._config.test_mode;
-        if (!skip) {
-          const quit = await modalConfirm({
-            title: tt("edit_table_modal_quit_ignore_changes_title"),
-            content: tt("edit_table_modal_quit_ignore_changes", {
-              data: {
-                count: nValid,
-              },
-            }),
-            confirm: tt("btn_confirm"),
-            cancel: tt("btn_cancel"),
-          });
-          if (!quit) {
-            return false;
-          }
-        }
+      const discard = await et.dialogUnsavedChangesDiscard();
+      if (!discard) {
+        return;
       }
 
       et._destroyed = true;
@@ -322,7 +330,6 @@ export class EditTableSessionClient extends WsToolsBase {
       et._socket.off(e.server_table_data, et.initTable);
       et._socket.off(e.server_dispatch, et.onDispatch);
       et._socket.off(e.server_progress, et.onProgress);
-      //et._socket.off(e.server_geom_validate_result, et.onGeomValidateResult);
       et._socket.off("disconnect", et.onDisconnect);
       et.fire("destroy").catch((e) => {
         console.error(e);
@@ -735,6 +742,8 @@ export class EditTableSessionClient extends WsToolsBase {
     et.updateButtonsUndoRedo();
     et.updateButtonsAddRemoveColumn();
     et.updateButtonRenameColumn();
+    et.updateButtonOrderColumns();
+    et.updateButtonStatColumn();
   }
 
   /**
@@ -813,7 +822,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtonsGeom() {
     const et = this;
-    const hasGeom = et._has_geom;
+    const hasGeom = et._has_geom && !et.unsaved;
     et._button_enable(et._el_button_geom_repair, hasGeom);
     et._button_enable(et._el_button_geom_validate, hasGeom);
   }
@@ -824,14 +833,27 @@ export class EditTableSessionClient extends WsToolsBase {
   updateButtonRemoveColumn() {
     const et = this;
     const columns = et.getColumns();
-    et._disable_remove_column = columns.length <= et._config.min_columns;
+    et._disable_remove_column =
+      et.unsaved || columns.length <= et._config.min_columns;
     et._button_enable(et._el_button_remove_column, !et._disable_remove_column);
+  }
+
+  updateButtonOrderColumns() {
+    const et = this;
+    /* always true if no pending update, unless _button_enable use _disabled flag*/
+    et._button_enable(et._el_button_colums_order, !et.unsaved);
+  }
+
+  updateButtonStatColumn() {
+    const et = this;
+    /* always true if no pending upadte, unless _button_enable use _disabled flag*/
+    et._button_enable(et._el_button_stat, !et.unsaved);
   }
 
   updateButtonRenameColumn() {
     const et = this;
-    /* always true, unless _button_enable use _disabled flag*/
-    et._button_enable(et._el_button_rename_column, true);
+    /* always true if no pending upadte, unless _button_enable use _disabled flag*/
+    et._button_enable(et._el_button_rename_column, !et.unsaved);
   }
 
   /**
@@ -840,7 +862,8 @@ export class EditTableSessionClient extends WsToolsBase {
   updateButtonAddColumn() {
     const et = this;
     const columns = et.getColumns();
-    et._disable_add_column = columns.length > et._config.max_columns;
+    et._disable_add_column =
+      et.unsaved || columns.length > et._config.max_columns;
     et._button_enable(et._el_button_add_column, !et._disable_add_column);
     et._button_enable(et._el_button_duplicate_column, !et._disable_add_column);
   }
@@ -2722,7 +2745,11 @@ export class EditTableSessionClient extends WsToolsBase {
   }
   countUpdateValid() {
     const et = this;
-    return et._updates.size;
+    return !et._updates ? 0 : et._updates.size;
+  }
+  get unsaved() {
+    const et = this;
+    return et.countUpdateValid() > 0;
   }
 
   /**
