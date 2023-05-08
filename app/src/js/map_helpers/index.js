@@ -4343,7 +4343,6 @@ function setVtLegend(options) {
 
 /**
  * Add mutiple layers at once
- * TODO: convert MapX layers to datadriven layers.
  * @param {Array} layers Array of layers
  * @param {String} idBefore Id of the layer to insert before
  */
@@ -4525,23 +4524,21 @@ export function viewsModulesRemove(views) {
  * @param {Element} o.elLegendContainer Legend container
  * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
+ * @return {Promise<boolean>} added
  */
-export function viewLayersAddGj(opt) {
-  return new Promise((resolve) => {
-    const layer = path(opt.view, "data.layer");
+export async function viewLayersAddGj(opt) {
+  const layer = path(opt.view, "data.layer");
 
-    if (!layer.metadata) {
-      layer.metadata = {
-        priority: 0,
-        position: 0,
-        idView: opt.view.id,
-        filter: [],
-      };
-    }
-
-    opt.map.addLayer(layer, opt.before);
-    resolve(true);
-  });
+  if (!layer.metadata) {
+    layer.metadata = {
+      priority: 0,
+      position: 0,
+      idView: opt.view.id,
+      filter: [],
+    };
+  }
+  await addLayers([layer], opt.before);
+  return true;
 }
 
 /**

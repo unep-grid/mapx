@@ -1,19 +1,22 @@
-import {el} from './../el/src/index.js';
-import {elSpanTranslate} from './../el_mapx/index.js';
-import {modal, modalConfirm, modalPrompt} from './../mx_helper_modal.js';
-import {modalMarkdown} from './../modal_markdown/index.js';
-import {Button} from './../panel_controls/button.js';
-import {ControlsPanel} from './../panel_controls/index.js';
-import {getDictItem} from './../language';
-import {bindAll} from './../bind_class_methods/index.js';
-import {spatialDataToView} from './../mx_helper_map_dragdrop.js';
-import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
-import {EventSimple} from '../event_simple';
+import { el } from "./../el/src/index.js";
+import { elSpanTranslate } from "./../el_mapx/index.js";
+import { modal, modalConfirm, modalPrompt } from "./../mx_helper_modal.js";
+import { modalMarkdown } from "./../modal_markdown/index.js";
+import { Button } from "./../panel_controls/button.js";
+import { ControlsPanel } from "./../panel_controls/index.js";
+import { getDictItem } from "./../language";
+import { bindAll } from "./../bind_class_methods/index.js";
+import { spatialDataToView } from "./../mx_helper_map_dragdrop.js";
+import { viewsListAddSingle } from "./../mx_helper_map_view_ui.js";
+import { EventSimple } from "../event_simple";
 
-import './style.less';
+import "./style.less";
 
 const def = {
-  url_help: null
+  url_help: null,
+};
+const store = {
+  instance: null,
 };
 
 class MapxDraw extends EventSimple {
@@ -40,14 +43,14 @@ class MapxDraw extends EventSimple {
 
     if (!md._panel_tools instanceof ControlsPanel) {
       throw new Error(
-        'MapxDraw require a ControlsPanel to be provided in options {panel_tools:<ControlsPanel>}'
+        "MapxDraw require a ControlsPanel to be provided in options {panel_tools:<ControlsPanel>}"
       );
     }
 
-    if (window.mapx_draw instanceof MapxDraw) {
-      window.mapx_draw.destroy();
+    if (store.instance instanceof MapxDraw) {
+      store.instance.destroy();
     }
-    window.mapx_draw = md;
+    store.instance = md;
 
     /**
      * Binds all method at once
@@ -63,10 +66,10 @@ class MapxDraw extends EventSimple {
      * Add the main toggle button
      */
     md._btn_toggle = md.addButton({
-      key: 'draw_btn_toggle',
-      classesIcon: 'mx-draw--btn-edit',
-      classesButton: ['btn-ctrl--item-no-mobile'],
-      action: md.toggle
+      key: "draw_btn_toggle",
+      classesIcon: "mx-draw--btn-edit",
+      classesButton: ["btn-ctrl--item-no-mobile"],
+      action: md.toggle,
     });
   }
 
@@ -77,7 +80,7 @@ class MapxDraw extends EventSimple {
     if (md._modal_config) {
       md._modal_config.close();
     }
-    md.fire('destroy');
+    md.fire("destroy");
   }
 
   async toggle() {
@@ -87,7 +90,7 @@ class MapxDraw extends EventSimple {
     } else {
       await md.enable();
     }
-    md.fire('toggle');
+    md.fire("toggle");
   }
 
   async enable() {
@@ -97,8 +100,8 @@ class MapxDraw extends EventSimple {
       return;
     }
     if (!md._draw) {
-      const moduleDraw = await import('@mapbox/mapbox-gl-draw');
-      const moduleDrawCircle = await import('mapbox-gl-draw-circle');
+      const moduleDraw = await import("@mapbox/mapbox-gl-draw");
+      const moduleDrawCircle = await import("mapbox-gl-draw-circle");
       const MapboxDraw = moduleDraw.default;
 
       md._draw = new MapboxDraw({
@@ -119,8 +122,8 @@ class MapxDraw extends EventSimple {
            * Select circle handling
            */
           direct_select: moduleDrawCircle.DirectMode,
-          simple_select: moduleDrawCircle.SimpleSelectMode
-        }
+          simple_select: moduleDrawCircle.SimpleSelectMode,
+        },
       });
       md._map.addControl(md._draw);
     }
@@ -138,9 +141,9 @@ class MapxDraw extends EventSimple {
     }
     md.opt = Object.assign({}, md.opt, conf);
     md.initButtonsType();
-    elBtn.classList.add('active');
+    elBtn.classList.add("active");
     md._enabled = true;
-    md.fire('enable');
+    md.fire("enable");
   }
 
   async disable() {
@@ -156,8 +159,8 @@ class MapxDraw extends EventSimple {
     }
     md.discard();
     md.clearButtonsType();
-    elBtn.classList.remove('active');
-    md.fire('disable');
+    elBtn.classList.remove("active");
+    md.fire("disable");
     md._enabled = false;
   }
 
@@ -166,10 +169,10 @@ class MapxDraw extends EventSimple {
     const hasData = md.hasData();
     if (hasData) {
       const discard = await modalConfirm({
-        title: elSpanTranslate('draw_discard_change_title'),
-        content: elSpanTranslate('draw_discard_change'),
-        cancel: elSpanTranslate('draw_discard_change_btn_cancel'),
-        confirm: elSpanTranslate('draw_discard_change_btn_confirm')
+        title: elSpanTranslate("draw_discard_change_title"),
+        content: elSpanTranslate("draw_discard_change"),
+        cancel: elSpanTranslate("draw_discard_change_btn_cancel"),
+        confirm: elSpanTranslate("draw_discard_change_btn_confirm"),
       });
       return discard;
     }
@@ -193,7 +196,7 @@ class MapxDraw extends EventSimple {
 
   addButton(opt) {
     const md = this;
-    opt = Object.assign({}, {classesButton: ['mx-draw--btn']}, opt);
+    opt = Object.assign({}, { classesButton: ["mx-draw--btn"] }, opt);
     const btn = new Button(opt);
     md._buttons.push(btn);
     md._panel_tools.controls.register(btn);
@@ -209,11 +212,11 @@ class MapxDraw extends EventSimple {
     const md = this;
     let isEmpty = true;
     switch (method) {
-      case 'get_all':
+      case "get_all":
         let data = md._draw.getAll();
         isEmpty = !data || data.features.length === 0;
         break;
-      case 'get_selected_ids':
+      case "get_selected_ids":
         isEmpty = md._draw.getSelectedIds().length === 0;
         break;
     }
@@ -246,92 +249,92 @@ class MapxDraw extends EventSimple {
     const md = this;
     md.clearButtonsType();
     switch (md.opt.type) {
-      case 'point':
+      case "point":
         md.addButton({
-          key: 'draw_btn_mode_point',
-          classesIcon: 'mx-draw--btn-point',
+          key: "draw_btn_mode_point",
+          classesIcon: "mx-draw--btn-point",
           action: () => {
-            md._draw.changeMode('draw_point');
-          }
+            md._draw.changeMode("draw_point");
+          },
         });
         break;
-      case 'line':
+      case "line":
         md.addButton({
-          key: 'draw_btn_mode_line',
-          classesIcon: 'mx-draw--btn-line',
+          key: "draw_btn_mode_line",
+          classesIcon: "mx-draw--btn-line",
           action: () => {
-            md._draw.changeMode('draw_line_string');
-          }
+            md._draw.changeMode("draw_line_string");
+          },
         });
         break;
-      case 'polygon':
+      case "polygon":
         md.addButton({
-          key: 'draw_btn_mode_polygon',
-          classesIcon: 'mx-draw--btn-polygon',
+          key: "draw_btn_mode_polygon",
+          classesIcon: "mx-draw--btn-polygon",
           action: () => {
-            md._draw.changeMode('draw_polygon');
-          }
+            md._draw.changeMode("draw_polygon");
+          },
         });
         md.addButton({
-          key: 'draw_btn_mode_circle',
-          classesIcon: 'mx-draw--btn-circle',
+          key: "draw_btn_mode_circle",
+          classesIcon: "mx-draw--btn-circle",
           action: async () => {
-            const idStorage = 'mx_draw_circle_radius';
+            const idStorage = "mx_draw_circle_radius";
             const previousRadius = localStorage.getItem(idStorage);
             const radius = await modalPrompt({
-              title: elSpanTranslate('draw_mode_circle_radius_prompt_title'),
-              label: elSpanTranslate('draw_mode_circle_radius_prompt_label'),
+              title: elSpanTranslate("draw_mode_circle_radius_prompt_title"),
+              label: elSpanTranslate("draw_mode_circle_radius_prompt_label"),
               inputOptions: {
                 value: previousRadius * 1,
-                type: 'numeric'
-              }
+                type: "numeric",
+              },
             });
-            md._draw.changeMode('draw_circle', {
-              initialRadiusInKm: radius || 10
+            md._draw.changeMode("draw_circle", {
+              initialRadiusInKm: radius || 10,
             });
             localStorage.setItem(idStorage, radius || 10);
-          }
+          },
         });
         break;
       default:
         null;
     }
     md.addButton({
-      key: 'draw_btn_combine',
-      classesIcon: 'mx-draw--btn-combine',
+      key: "draw_btn_combine",
+      classesIcon: "mx-draw--btn-combine",
       action: () => {
-        md.noActionIfEmpty('get_selected_ids', 'draw_btn_combine', async () => {
+        md.noActionIfEmpty("get_selected_ids", "draw_btn_combine", async () => {
           md._draw.combineFeatures();
         });
-      }
+      },
     });
     md.addButton({
-      key: 'draw_btn_uncombine',
-      classesIcon: 'mx-draw--btn-uncombine',
+      key: "draw_btn_uncombine",
+      classesIcon: "mx-draw--btn-uncombine",
       action: () => {
         md.noActionIfEmpty(
-          'get_selected_ids',
-          'draw_btn_uncombine',
+          "get_selected_ids",
+          "draw_btn_uncombine",
           async () => {
             md._draw.uncombineFeatures();
           }
         );
-      }
+      },
     });
     md.addButton({
-      key: 'draw_btn_trash',
-      classesIcon: 'mx-draw--btn-trash',
-      action: md.trashSelected
+      key: "draw_btn_trash",
+      classesIcon: "mx-draw--btn-trash",
+      action: md.trashSelected,
     });
     md.addButton({
-      key: 'draw_btn_save',
-      classesIcon: 'mx-draw--btn-save',
-      action: md.createView
+      key: "draw_btn_save",
+      classesIcon: "mx-draw--btn-save",
+      action: md.createView,
     });
     md.addButton({
-      key: 'draw_btn_help',
-      classesIcon: 'mx-draw--btn-help',
-      action: md.showModalHelp
+      key: "draw_btn_help",
+      classesIcon: "mx-draw--btn-help",
+      action: md.showModalHelp,
     });
   }
 
@@ -345,7 +348,7 @@ class MapxDraw extends EventSimple {
     let i = md._buttons.length;
     while (i--) {
       const btn = md._buttons[i];
-      if (btn.opt.key !== 'draw_btn_toggle') {
+      if (btn.opt.key !== "draw_btn_toggle") {
         btn.destroy();
         md._buttons.splice(i, 1);
       }
@@ -354,8 +357,8 @@ class MapxDraw extends EventSimple {
 
   showModalHelp() {
     return modalMarkdown({
-      title: getDictItem('draw_help_title'),
-      wiki: 'Draw-tool'
+      title: getDictItem("draw_help_title"),
+      wiki: "Draw-tool",
     });
   }
 
@@ -364,67 +367,67 @@ class MapxDraw extends EventSimple {
     const md = this;
     return new Promise((resolve) => {
       const elForm = el(
-        'form',
-        el('div', {class: 'form-group'}, [
-          el('label', elSpanTranslate('draw_feature_type')),
+        "form",
+        el("div", { class: "form-group" }, [
+          el("label", elSpanTranslate("draw_feature_type")),
           (elType = el(
-            'select',
-            {class: 'form-control'},
-            el('option', {value: 'point'}, elSpanTranslate('draw_point')),
-            el('option', {value: 'line'}, elSpanTranslate('draw_line')),
-            el('option', {value: 'polygon'}, elSpanTranslate('draw_polygon'))
-          ))
+            "select",
+            { class: "form-control" },
+            el("option", { value: "point" }, elSpanTranslate("draw_point")),
+            el("option", { value: "line" }, elSpanTranslate("draw_line")),
+            el("option", { value: "polygon" }, elSpanTranslate("draw_polygon"))
+          )),
         ]),
-        el('div', {class: 'form-group'}, [
+        el("div", { class: "form-group" }, [
           el(
-            'label',
-            {class: 'control-label'},
-            elSpanTranslate('draw_layer_name')
+            "label",
+            { class: "control-label" },
+            elSpanTranslate("draw_layer_name")
           ),
-          (elTitle = el('input', {
-            class: 'form-control',
-            type: 'text',
-            value: md._default_title()
-          }))
+          (elTitle = el("input", {
+            class: "form-control",
+            type: "text",
+            value: md._default_title(),
+          })),
         ])
       );
 
       const elBtnSubmit = el(
-        'div',
+        "div",
         {
-          class: 'btn btn-default',
+          class: "btn btn-default",
           on: {
             click: () => {
               resolve({
                 type: elType.value,
-                title: elTitle.value
+                title: elTitle.value,
               });
               if (md._modal_config) {
                 md._modal_config.close();
               }
-            }
-          }
+            },
+          },
         },
-        elSpanTranslate('draw_config_submit')
+        elSpanTranslate("draw_config_submit")
       );
       md._modal_config = modal({
         noShinyBinding: true,
         addSelectize: false,
-        title: elSpanTranslate('draw_config_title'),
+        title: elSpanTranslate("draw_config_title"),
         content: elForm,
         buttons: [elBtnSubmit],
         addBackground: true,
-        onClose: resolve
+        onClose: resolve,
       });
     });
   }
 
   async trashSelected() {
     const md = this;
-    md.noActionIfEmpty('get_selected_ids', 'draw_btn_trash', async () => {
+    md.noActionIfEmpty("get_selected_ids", "draw_btn_trash", async () => {
       const confirmed = await modalConfirm({
-        title: elSpanTranslate('draw_trash_confirm_title'),
-        content: elSpanTranslate('draw_trash_confirm_content')
+        title: elSpanTranslate("draw_trash_confirm_title"),
+        content: elSpanTranslate("draw_trash_confirm_content"),
       });
       if (confirmed) {
         md._draw.trash();
@@ -434,26 +437,27 @@ class MapxDraw extends EventSimple {
 
   async createView() {
     const md = this;
-    await md.noActionIfEmpty('get_all', 'draw_btn_save', async () => {
+    await md.noActionIfEmpty("get_all", "draw_btn_save", async () => {
+      
       const data = md.getData();
 
       const view = await spatialDataToView({
         title: md.opt.title,
         fileName: md.opt.title,
-        fileType: 'geojson',
+        fileType: "geojson",
         data: data,
-        save: true
+        save: true,
       });
 
       await viewsListAddSingle(view, {
-        open: true
+        open: true,
       });
 
       const quit = await modalConfirm({
-        title: elSpanTranslate('draw_saved_quit_title'),
-        content: elSpanTranslate('draw_saved_quit'),
-        confirm: elSpanTranslate('draw_saved_quit_confirm'),
-        cancel: elSpanTranslate('draw_saved_quit_stay')
+        title: elSpanTranslate("draw_saved_quit_title"),
+        content: elSpanTranslate("draw_saved_quit"),
+        confirm: elSpanTranslate("draw_saved_quit_confirm"),
+        cancel: elSpanTranslate("draw_saved_quit_stay"),
       });
 
       if (quit) {
@@ -467,4 +471,4 @@ class MapxDraw extends EventSimple {
     return `Untitled ${new Date().toLocaleString()}`;
   }
 }
-export {MapxDraw};
+export { MapxDraw };
