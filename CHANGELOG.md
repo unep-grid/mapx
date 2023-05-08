@@ -1,3 +1,14 @@
+  - [1.11.0-rc.2](https://github.com/unep-grid/mapx/tree/1.11.0-rc.2) 
+
+    - APP
+        - Table editor 
+            - Actions in undo/redo stored the column position. After a colum removal, undo/redo related to this column were removed. But something changed and the name of the column were stored in the action object. Updated helpers accordingly
+            - Bug in pending updates storage, original value overwritten by intermediate previous value
+        - Drawing tool + Drag Drop
+            -  Added margin if bouding box to small; 
+            - Avoid duplicate layer / remove layer if already exist
+        - Fixed glitch with 'filter activated list' test
+
   - [1.11.0-rc.1](https://github.com/unep-grid/mapx/tree/1.11.0-rc.1) 
 
     - APP
