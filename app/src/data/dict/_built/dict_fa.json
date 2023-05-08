@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead. For more details, click the 'help' button. Here is the list of dependent views:",
-    "fa": "تغییر نام ستون مجاز نیست زیرا این جدول به کد سفارشی، داشبورد یا سبک های سفارشی ارجاع داده شده است. در صورت لزوم، به جای آن یک ستون تکراری ایجاد کنید. برای جزئیات بیشتر، روی دکمه \"راهنما\" کلیک کنید. در اینجا لیست نماهای وابسته آمده است:"
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead.</p><p>For more details, click the 'help' button.</p><p>Here is the list of dependent views:</p>",
+    "fa": "<p style=\";text-align:right;direction:rtl\">تغییر نام ستون مجاز نیست زیرا این جدول به کد سفارشی، داشبورد یا سبک های سفارشی ارجاع داده شده است. در صورت لزوم، به جای آن یک ستون تکراری ایجاد کنید.</p><p style=\";text-align:right;direction:rtl\"> برای جزئیات بیشتر، روی دکمه \"راهنما\" کلیک کنید.</p><p style=\";text-align:right;direction:rtl\"> در اینجا لیست نماهای وابسته آمده است:</p>"
   },
   {
     "id": "edit_table_modal_has_code_close",

@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead. For more details, click the 'help' button. Here is the list of dependent views:",
-    "zh": "不允许重命名列，因为在自定义代码、仪表板或自定义样式中引用了此表。如果需要，请考虑创建一个重复的列。有关详细信息，请单击“帮助”按钮。以下是相关视图的列表："
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead.</p><p>For more details, click the 'help' button.</p><p>Here is the list of dependent views:</p>",
+    "zh": "<p>不允许重命名列，因为在自定义代码、仪表板或自定义样式中引用了此表。如果需要，请考虑创建一个重复的列。</p><p>有关详细信息，请单击“帮助”按钮。</p><p>以下是相关视图的列表：</p>"
   },
   {
     "id": "edit_table_modal_has_code_close",
