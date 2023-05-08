@@ -2696,7 +2696,8 @@ export class EditTableSessionClient extends WsToolsBase {
     const columnType = et.getColumnType(columnName, "postgres");
     const isEmptyOrig = isEmpty(change[2]);
     const isEmptyNew = isEmpty(change[3]);
-
+    const id = `${et._id_table}_${gid}_${columnName}`;
+    const previous = et._updates.get(id);
     const valOrig = change[2];
     const valNew = change[3];
 
@@ -2705,19 +2706,13 @@ export class EditTableSessionClient extends WsToolsBase {
       type: "update_cell",
       column_name: columnName,
       column_type: columnType,
-      value_orig: isEmptyOrig ? null : valOrig,
+      value_orig: previous ? previous.value_orig : isEmptyOrig ? null : valOrig,
       value_new: isEmptyNew ? null : valNew,
       valid: isValid,
       gid: gid,
       row_id: idRow,
     };
 
-    if (update.value_new === update.value_orig) {
-      return;
-    }
-
-    const id = `${update.id_table}_${update.gid}_${update.column_name}`;
-    const previous = et._updates.get(id);
     if (previous) {
       const noChange = previous.value_orig === update.value_new;
       if (noChange) {
