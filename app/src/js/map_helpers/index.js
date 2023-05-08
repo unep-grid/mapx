@@ -886,36 +886,35 @@ export async function updateUiSettings() {
 }
 
 /**
- * Check if there is view activated and disable button if needed
+ * Update btn filter activated
  */
 export function updateBtnFilterActivated() {
-  const views = getViews();
   const elFilterActivated = document.getElementById("btnFilterChecked");
-  /**
-   * Check displayed views element
-   */
-  const hasViewsActivated = views.reduce((a, v) => {
-    if (!v._vb instanceof ViewBase) {
-      return a || false;
-    }
-    let elView = v._vb.getEl();
-    let isOpen = v._vb.isOpen();
-    let style = window.getComputedStyle(elView);
-    let isVisible = style.display !== "none";
-
-    return a || (isOpen && isVisible);
-  }, false);
-
-  /**
-   * Set elFilter disabled class
-   */
+  const enable = hasViewsActivated();
   const isActivated = elFilterActivated.classList.contains("active");
-  if (isActivated || hasViewsActivated) {
+  if (isActivated || enable) {
     elFilterActivated.classList.remove("disabled");
   } else {
     elFilterActivated.classList.add("disabled");
   }
 }
+
+/**
+ * Check if there are some view item enable and visible
+ * @return {Boolean} has activated view items
+ */
+export function hasViewsActivated() {
+  const views = getViews();
+  for (const view of views) {
+    if (view._vb instanceof ViewBase) {
+      if (view._vb.isActive()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 /**
  * Initial mgl and mapboxgl
  * @param {Object} o options

@@ -15,6 +15,15 @@ class ViewBase {
   isOpen() {
     return this.elInput.checked === true;
   }
+
+  isActive() {
+    this.el;
+    const isOpen = this.isOpen();
+    const style = window.getComputedStyle(this.el);
+    const isVisible = !!style && style.display !== "none";
+    return isOpen && isVisible;
+  }
+
   open() {
     if (!this.isOpen()) {
       this.elInput.checked = true;
