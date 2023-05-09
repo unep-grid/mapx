@@ -222,7 +222,8 @@ observeEvent(input$jedSourceMetadata_values, {
           views <- mxDbGetViewsIdBySourceId(idSource, language = language)
 
           mglUpdateViewsBadges(list(
-            views = as.list(views$id)
+            views = as.list(views$id),
+            meta = meta
           ))
         }
       })
