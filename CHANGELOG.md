@@ -1,3 +1,16 @@
+  - [1.11.0-rc.3](https://github.com/unep-grid/mapx/tree/1.11.0-rc.3) 
+
+    - APP 
+        - View badges 
+            - Badges not updated after source metadata changed : assign new metadata to source's views during badges update
+        - Table editor :
+            - Handsontable registers undo/redo even if no change are done. Added a function to clear all actions that does not produce a change.
+            - Repair geom, missing ref to events list
+        - Code integration 
+            - Export to SLD: typo preventing export
+    - Docker 
+        - Updated postgres in docker-compose : issue with some requests. Solved by 13-3.3
+
   - [1.11.0-rc.2](https://github.com/unep-grid/mapx/tree/1.11.0-rc.2) 
 
     - APP
