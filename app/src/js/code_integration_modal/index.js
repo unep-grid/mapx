@@ -165,12 +165,15 @@ export class ModalCodeIntegration {
     const mci = this;
     const data = await mci.getData();
     let done;
-    switch (data.language) {
+    switch (data.format || data.language) {
       case "json":
         done = await downloadJSON(data.str, "mapx.json");
         break;
       case "html":
         done = await downloadHTML(data.str, "index.html");
+        break;
+      case "sld":
+        done = await downloadHTML(data.str, "style.sld");
         break;
       default:
         null;
@@ -267,6 +270,7 @@ export class ModalCodeIntegration {
         const styleSld = await getViewSldStyle(mci._config.idView);
         out.str = styleSld;
         out.language = "html";
+        out.format = "sld";
     }
 
     return out;
