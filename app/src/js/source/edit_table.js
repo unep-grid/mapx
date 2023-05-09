@@ -3124,6 +3124,7 @@ export class EditTableSessionClient extends WsToolsBase {
     if (!ok) {
       return;
     }
+    
     const data = await et.emitGet(
       e.client_geom_validate,
       {
@@ -3146,6 +3147,7 @@ export class EditTableSessionClient extends WsToolsBase {
       return;
     }
 
+    const e = et._config.events;
     const ok = await modalConfirm({
       title: getDictItem("edit_table_modal_repair_title"),
       content: getDictItem("edit_table_modal_repair_desc"),
