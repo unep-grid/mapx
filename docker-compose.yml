@@ -202,7 +202,7 @@ services:
     deploy:
       replicas: 1
   pg:
-    image: ghcr.io/baosystems/postgis:13-3.2
+    image: ghcr.io/baosystems/postgis:13-3.3
     restart: on-failure
     env_file: mapx.dev.env
     ports:

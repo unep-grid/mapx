@@ -64,7 +64,7 @@ count_no_null as (
   SELECT count(*) from attr_without_null
 ),
 count_null as (
-  SELECT cf.count - cnn.count AS count 
+  SELECT (cf.count - cnn.count) AS "count" 
   FROM
   count_full cf,
   count_no_null cnn
