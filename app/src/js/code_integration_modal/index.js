@@ -170,7 +170,7 @@ export class ModalCodeIntegration {
         done = await downloadJSON(data.str, "mapx.json");
         break;
       case "html":
-        done = await downloadHTML(dats.str, "index.html");
+        done = await downloadHTML(data.str, "index.html");
         break;
       default:
         null;
