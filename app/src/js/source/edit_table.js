@@ -811,6 +811,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtonsUndoRedo() {
     const et = this;
+    et.clearUndoRedoNoChange();
     const hasRedo = et._ht.isRedoAvailable();
     const hasUndo = et._ht.isUndoAvailable();
     et._button_enable(et._el_button_redo, hasRedo);
@@ -3124,7 +3125,7 @@ export class EditTableSessionClient extends WsToolsBase {
     if (!ok) {
       return;
     }
-    
+
     const data = await et.emitGet(
       e.client_geom_validate,
       {
@@ -3248,6 +3249,19 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
+   * Remove ref to change
+   * -> change that are not real change should be removed
+   */
+  clearUndoRedoNoChange() {
+    const et = this;
+    const ur = et._ht.getPlugin("UndoRedo") || et._ht.undoRedo;
+    const actions = ur.doneActions;
+    const undoneActions = ur.undoneActions;
+    et._clear_undo_redo_no_change(actions);
+    et._clear_undo_redo_no_change(undoneActions);
+  }
+
+  /**
    * Remove ref to column name from unduRedo
    * e.g. after column remove
    * @param {String} name Column name
@@ -3282,6 +3296,24 @@ export class EditTableSessionClient extends WsToolsBase {
         const changes = a.changes;
         for (const change of changes) {
           if (change[1] === name) {
+            actions.splice(nA, 1);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Helper for clearUndoNoChange
+   */
+  _clear_undo_redo_no_change(actions) {
+    let nA = actions.length;
+    while (nA--) {
+      const a = actions[nA];
+      if (a.actionType === "change") {
+        const changes = a.changes;
+        for (const change of changes) {
+          if (change[2] === change[3]) {
             actions.splice(nA, 1);
           }
         }
