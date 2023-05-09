@@ -90,7 +90,6 @@ export async function storyRead(opt) {
     await handleMissingImages();
     await initLegendPanel();
     await initAdaptiveLayout();
-    //await appStateSave();
     await start();
   } catch (e) {
     errorHandler(e);
@@ -528,9 +527,10 @@ async function start() {
   if (state.initScroll) {
     state.elStory.scrollTop = state.initScroll;
   }
-  if (state.stepUpdate) {
+  if (isNotEmpty(state.stepUpdate)) {
     state.stepActive = null;
     await storyGoTo(state.stepUpdate);
+    await storyPlayStep(state.stepUpdate);
   }
   /**
    * Render
@@ -1423,21 +1423,6 @@ function resetMapStyle() {
 }
 
 /**
- * Initial scroll position
- */
-
-/*async function initStoryScroll() {*/
-/*const state = getState();*/
-/*if (state.initScroll) {*/
-/*state.elStory.scrollTop = state.initScroll;*/
-/*state.initScroll = null;*/
-/*await waitTimeoutAsync(10);*/
-/*await storyUpdateSlides();*/
-/*await updateBullets();*/
-/*}*/
-/*}*/
-
-/**
  * Build story ui
  */
 async function build() {
@@ -1649,9 +1634,11 @@ export function storySetTransform(o) {
 }
 
 export async function storyPlayStep(stepNum) {
+ 
   if (!isStoryPlaying()) {
     return;
   }
+
   const story = getStory();
   const state = getState();
   const settings = getSettings();
