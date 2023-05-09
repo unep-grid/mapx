@@ -2641,8 +2641,11 @@ export class EditTableSessionClient extends WsToolsBase {
       for (const change of changes) {
         /* change: [row, prop, oldValue, newValue] */
 
-        if (change[2] === change[3]) {
-          /* no change */
+        /* no change = continue
+         * -> using "==" as ht seems to override type
+         * i.e. 1 == "1" where "1" comes from changes, even for numeric columns
+         */
+        if (change[2] == change[3]) {
           continue;
         }
         et.addChangeToUpdates(change, true);
@@ -3313,7 +3316,8 @@ export class EditTableSessionClient extends WsToolsBase {
       if (a.actionType === "change") {
         const changes = a.changes;
         for (const change of changes) {
-          if (change[2] === change[3]) {
+          /* loose comparison "==" as handsontable overrides types */
+          if (change[2] == change[3]) {
             actions.splice(nA, 1);
           }
         }
