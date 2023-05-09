@@ -990,7 +990,6 @@ export async function storyGoTo(to, useTimeout, funStop) {
   let nextStep;
   let previousStep;
   let destStep;
-
   const maxStep = steps.length - 1;
 
   switch (to) {
@@ -1634,7 +1633,6 @@ export function storySetTransform(o) {
 }
 
 export async function storyPlayStep(stepNum) {
- 
   if (!isStoryPlaying()) {
     return;
   }
@@ -1648,12 +1646,15 @@ export async function storyPlayStep(stepNum) {
   if (steps.length === 0) {
     return;
   }
+  const step = steps[stepNum] || {};
+  if (isEmpty(step)) {
+    return;
+  }
   map.stop();
   mx.events.fire("story_step");
   /**
    * retrieve step information
    */
-  const step = steps[stepNum];
   state.currentStep = stepNum;
   state.stepActive = stepNum;
   state.step = step;

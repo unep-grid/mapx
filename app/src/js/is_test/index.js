@@ -206,7 +206,9 @@ export function isViewDashboard(item) {
  * @return {Boolean}
  */
 export function isStory(item) {
-  return isViewType(item, "sm") && !!item?.data?.story;
+  return (
+    isViewType(item, "sm") && !!(item?.data?.story?.steps || []).length > 0
+  );
 }
 
 /**
