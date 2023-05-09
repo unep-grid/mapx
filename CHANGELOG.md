@@ -1,3 +1,13 @@
+  - [1.11.0-rc.4](https://github.com/unep-grid/mapx/tree/1.11.0-rc.4) 
+
+    - APP
+        - Story Map : 
+            - Editor should handle cases when no slides are editable - removed slides or never set; 
+            - Avoid reading a story with no steps
+            - Should solve issue with step not reloaded after update in edit mode
+        - Table editor : handsontable seems to overwrite types, and comparison for actual change check was not working. e.g. 1 === '1' was considered as a change. Unsing '==' for now + added comments
+        - Code integration : download sld use editor language html and download format sld
+
   - [1.11.0-rc.3](https://github.com/unep-grid/mapx/tree/1.11.0-rc.3) 
 
     - APP 
