@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "<p>Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead.</p><p>For more details, click the 'help' button.</p><p>Here is the list of dependent views:</p>",
-    "es": "<p>No se permite cambiar el nombre de la columna, ya que se hace referencia a esta tabla en código personalizado, tableros o estilos personalizados. Si es necesario, considere crear una columna duplicada en su lugar.</p><p> Para más detalles, haga clic en el botón 'ayuda'.</p><p> Aquí está la lista de vistas dependientes:</p>"
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "es": "<p>No se permite el cambio de nombre de columna, ya que se hace referencia a esta tabla en vistas de código personalizadas, tableros y/o estilos personalizados. Si es necesario, considere duplicar la columna en su lugar.<br><br> Para más detalles, haga clic en el botón 'Ayuda'.<br><br> Aquí está la lista de vistas dependientes:</p>"
   },
   {
     "id": "edit_table_modal_has_code_close",

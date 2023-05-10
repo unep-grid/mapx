@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "<p>Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead.</p><p>For more details, click the 'help' button.</p><p>Here is the list of dependent views:</p>",
-    "ar": "<p style=\";text-align:right;direction:rtl\">لا يُسمح بإعادة تسمية العمود نظرًا لأن هذا الجدول يُشار إليه في رمز مخصص أو لوحات معلومات أو أنماط مخصصة. إذا لزم الأمر ، فجرّب إنشاء عمود مكرر بدلاً من ذلك.</p><p style=\";text-align:right;direction:rtl\"> لمزيد من التفاصيل ، انقر فوق الزر \"تعليمات\".</p><p style=\";text-align:right;direction:rtl\"> فيما يلي قائمة وجهات النظر التابعة:</p>"
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "ar": "<p style=\";text-align:right;direction:rtl\">لا يُسمح بإعادة تسمية العمود لأن هذا الجدول يُشار إليه في طرق عرض التعليمات البرمجية المخصصة و / أو لوحات المعلومات و / أو الأنماط المخصصة. إذا لزم الأمر ، فكر في تكرار العمود بدلاً من ذلك.<br><br> لمزيد من التفاصيل ، انقر فوق الزر \"تعليمات\".<br><br> فيما يلي قائمة وجهات النظر التابعة:</p>"
   },
   {
     "id": "edit_table_modal_has_code_close",

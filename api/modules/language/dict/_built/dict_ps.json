@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "<p>Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead.</p><p>For more details, click the 'help' button.</p><p>Here is the list of dependent views:</p>",
-    "ps": "<p style=\";text-align:right;direction:rtl\">د کالم نوم بدلولو ته اجازه نشته ځکه چې دا جدول په دودیز کوډ، ډشبورډونو، یا دودیز سټایلونو کې حواله شوی. که اړتیا وي، په ځای یې د نقل کولو کالم جوړ کړئ.</p><p style=\";text-align:right;direction:rtl\"> د نورو جزیاتو لپاره، د 'مرستې' تڼۍ کلیک وکړئ.</p><p style=\";text-align:right;direction:rtl\"> دلته د انحصاري لیدونو لیست دی:</p>"
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "ps": "<p style=\";text-align:right;direction:rtl\">د کالم نوم بدلولو اجازه نشته ځکه چې دا جدول د دودیز کوډ لیدونو، ډشبورډونو، او / یا دودیز سټایلونو کې حواله شوی. که اړتیا وي، د دې پرځای د کالم نقل کول په پام کې ونیسئ.<br><br> د نورو جزیاتو لپاره، د 'مرستې' تڼۍ کلیک وکړئ.<br><br> دلته د انحصاري لیدونو لیست دی:</p>"
   },
   {
     "id": "edit_table_modal_has_code_close",

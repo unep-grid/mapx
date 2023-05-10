@@ -1831,8 +1831,8 @@
   },
   {
     "id": "edit_table_modal_has_code",
-    "en": "<p>Column renaming is not allowed since this table is referenced in custom code, dashboards, or custom styles. If required, consider create a duplicate column instead.</p><p>For more details, click the 'help' button.</p><p>Here is the list of dependent views:</p>",
-    "bn": "<p>কলাম পুনঃনামকরণ অনুমোদিত নয় যেহেতু এই টেবিলটি কাস্টম কোড, ড্যাশবোর্ড বা কাস্টম শৈলীতে উল্লেখ করা হয়েছে৷ প্রয়োজনে, পরিবর্তে একটি ডুপ্লিকেট কলাম তৈরি করার কথা বিবেচনা করুন।</p><p> আরো বিস্তারিত জানার জন্য, 'সহায়তা' বোতামে ক্লিক করুন।</p><p> এখানে নির্ভরশীল দৃষ্টিভঙ্গির তালিকা রয়েছে:</p>"
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "bn": "<p>কলাম পুনঃনামকরণ অনুমোদিত নয় যেহেতু এই টেবিলটি কাস্টম কোড ভিউ, ড্যাশবোর্ড এবং/অথবা কাস্টম শৈলীতে উল্লেখ করা হয়েছে। প্রয়োজনে, পরিবর্তে কলামটি নকল করার কথা বিবেচনা করুন।<br><br> আরও বিস্তারিত জানার জন্য, 'সহায়তা' বোতামে ক্লিক করুন।<br><br> এখানে নির্ভরশীল দৃষ্টিভঙ্গির তালিকা রয়েছে:</p>"
   },
   {
     "id": "edit_table_modal_has_code_close",
