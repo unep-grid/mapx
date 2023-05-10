@@ -1,3 +1,12 @@
+  - [1.11.0](https://github.com/unep-grid/mapx/tree/1.11.0) 
+
+    - APP
+        - Table Editor : 
+            - Updated warning message during rename
+            - Added typeless comparison during duplicate updates/changes removal : handsontable returns sometimes the wrong type, and comparison is done with the original value, which is always the correct type. Probably something to be solved upstream, before the type issue. Impacts the display of the "save" button in manual save mode, when all numeric undo are applied and the original value is displayed. 
+        - Map Composer : 
+            - Should solve issue with text selection not working in Firefox
+
   - [1.11.0-rc.4](https://github.com/unep-grid/mapx/tree/1.11.0-rc.4) 
 
     - APP
