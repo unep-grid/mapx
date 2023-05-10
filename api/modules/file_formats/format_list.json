@@ -64,7 +64,7 @@
     "name": "Geography Markup Language (GML)",
     "driver": "GML",
     "type": "vector",
-    "fileExt": [".gml", ".xml"],
+    "fileExt": [".gml"],
     "multiple": false,
     "upload": true,
     "download": true,

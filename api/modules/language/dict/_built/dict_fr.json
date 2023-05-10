@@ -1566,8 +1566,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "fr": "Ajouter une nouvelle colonne : nom"
+    "en": "Name of the column",
+    "fr": "Nom de la colonne"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "fr": "Le nouveau nom de colonne sera :<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "fr": "Le nom de la colonne sera :<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "fr": "Nom indisponible"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "fr": "Prochain"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "fr": "Sélectionnez le type de données"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "fr": "Prochain"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "fr": "Ajouter une nouvelle colonne nommée<b> {{column_name}}</b> de type<b> {{column_type}}</b> ? Le changement sera effectué dans la base de données et toutes les tables interactives. Cette opération est irréversible, mais l'outil \"Supprimer une colonne\" fonctionnera, si nécessaire."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "fr": "Ajouter une nouvelle colonne nommée<code> {{column_name}}</code> de type<code> {{column_type}}</code> ? Le changement sera fait dans la base de données et toutes les tables interactives. Cette opération est irréversible, mais l'outil \"Supprimer une colonne\" fonctionnera, si nécessaire."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "fr": "Nom de colonne"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "fr": "Prochain"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "fr": "Supprimer une colonne : validez"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "fr": "Supprimer une colonne nommée<i> {{column_name}}</i> ? Le changement sera effectué dans la base de données et toutes les tables interactives. Cette opération est irréversible : les données peuvent être perdues."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "fr": "Supprimer une colonne nommée<code> {{column_name}}</code> ? Le changement sera fait dans la base de données et toutes les tables interactives. Cette opération est irréversible : les données peuvent être perdues."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1793,6 +1778,156 @@
     "id": "edit_table_modal_quit_ignore_changes",
     "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
     "fr": "Ce tableau a {{count}} modifications non enregistrées. Voulez-vous vraiment quitter et annuler ces modifications ?"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "fr": "utilisé"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "fr": "réservé"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "fr": "pas sécurisé"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename column",
+    "fr": "Renommer la colonne"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "fr": "Choisissez la colonne que vous souhaitez renommer :"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "fr": "Confirmation"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "fr": "Êtes-vous sûr de vouloir renommer la colonne<code> {{column_name}}</code> pour<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename column",
+    "fr": "Renommer la colonne"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename column",
+    "fr": "Renommer la colonne"
+  },
+  {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "fr": "Références existantes dans le code"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "fr": "<p>Le changement de nom de colonne n'est pas autorisé car ce tableau est référencé dans les vues de code personnalisées, les tableaux de bord et/ou les styles personnalisés. Si nécessaire, envisagez plutôt de dupliquer la colonne.<br><br> Pour plus de détails, cliquez sur le bouton 'Aide'.<br><br> Voici la liste des vues dépendantes :</p>"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "fr": "Annuler"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "fr": "Tableau de bord"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "fr": "Code personnalisé"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "fr": "Style personnalisé"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "fr": "Couche source"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "fr": "Colonne dupliquée"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "fr": "Colonne dupliquée"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "fr": "Colonne à dupliquer"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "fr": "Colonne à dupliquer : valider"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "fr": "Dupliquer la colonne nommée<code> {{column_name}}</code> à une nouvelle colonne nommée<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "fr": "Dupliquer la colonne"
+  },
+  {
+    "id": "btn_stat_attribute",
+    "en": "Statistics",
+    "fr": "Statistiques"
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "fr": "Attribut pour les statistiques"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "fr": "Sélectionnez un attribut"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "fr": "Ordre des colonnes modifié"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "fr": "L'ordre des colonnes a été modifié par un autre utilisateur."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "fr": "d'accord"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "fr": "Définir l'ordre des colonnes"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "fr": "Définir l'ordre des colonnes"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2195,6 +2330,11 @@
     "fr": "Annuler"
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "fr": "Suivant.."
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "fr": "Continuer"
@@ -2228,6 +2368,11 @@
     "id": "btn_close",
     "en": "Close",
     "fr": "Fermer"
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "fr": "Dupliquer..."
   },
   {
     "id": "btn_download",
@@ -4590,9 +4735,14 @@
     "fr": "Position initiale de la carte"
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
     "fr": "Utiliser les paramètres actuels de la carte"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "fr": "Réinitialiser les limites maximales de la carte"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4773,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "fr": "Latitude Sud (Albers, Lamber Conic)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "fr": "Utiliser l'étendue pour limiter le défilement de la carte"
   },
   {
     "id": "map_fit_to_bounds",
@@ -6265,7 +6420,7 @@
     "fr": "Quantile"
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
     "fr": "Seuils 'Head/tail'"
   },
@@ -6488,6 +6643,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "fr": "Notifications"
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "fr": "Valeurs manquantes : {{nullCount}}"
   },
   {
     "id": "mc_title",
@@ -7981,13 +8141,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "fr": "Définir la position initiale de la carte"
+    "en": "Set initial map extent",
+    "fr": "Définir l'étendue initiale de la carte"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "fr": "L'étendue, l'inclinaison et le relèvement actuels de la carte seront utilisés. Les valeurs par défaut du projet sont ainsi écrasées."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "fr": "Limiter le panoramique de la carte à l'étendue actuelle"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "fr": "La carte sera limitée à son étendue actuelle. Pour les projections autres que 'Mercator', seul le centre sera maintenu dans les limites."
   },
   {
     "id": "share_filter_activated_label",
@@ -8205,6 +8375,11 @@
     "fr": "Carte : Ombrage des pays"
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "fr": "Carte : contour générique des étiquettes foncières"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "fr": "Carte : cours d'eau"
@@ -8217,7 +8392,22 @@
   {
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)",
-    "fr": "Carte : bathymétrie (haut)"
+    "fr": "Carte: bathymétrie (haut)"
+  },
+  {
+    "id": "mx_map_text_bathymetry",
+    "en": "Map: bathymetry labels",
+    "fr": "Carte : étiquettes de bathymétrie"
+  },
+  {
+    "id": "mx_map_text_bathymetry_outline",
+    "en": "Map: bathymetry labels outline",
+    "fr": "Carte : contour des étiquettes de bathymétrie"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "fr": "Carte : lignes de bathymétrie"
   },
   {
     "id": "mx_map_road",
@@ -8280,6 +8470,51 @@
     "fr": "Carte : texte lieu bordure"
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "fr": "Carte : Étiquettes UN 0 0 (Antarctique)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "fr": "Carte : Étiquettes ONU 0 1 – État"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "fr": "Carte : Étiquettes ONU 0 2 – Territoire occupé"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "fr": "Carte : Étiquettes ONU 0 3 – Territoire non autonome"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "fr": "Carte : Étiquettes ONU 0 4 – Territoire"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "fr": "Carte : Étiquettes ONU 0 5 – Région ou province spéciale"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "fr": "Carte : Étiquettes ONU 0 99 – Souveraineté incertaine"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "fr": "Carte : Étiquettes ONU 1 1 – Unité administrative (niveau infranational 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "fr": "Carte : Étiquettes ONU 1 2 – Unité administrative (niveau infranational 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "fr": "Carte : texte routes"
@@ -8298,6 +8533,61 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "fr": "Carte : bordure texte plan d'eau"
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "fr": "Famille de polices"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "fr": "Police de caractère"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "fr": "Opacité"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "fr": "Couleur"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "fr": "Visible"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "fr": "Nom"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "fr": "Description"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "fr": "Auteur"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "fr": "Suivant"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "fr": "Exporter"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "fr": "Importer"
   },
   {
     "id": "upl_shapefile_warning",

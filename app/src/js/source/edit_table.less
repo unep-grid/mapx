@@ -26,6 +26,9 @@
             top: 0;
             left: 0;
           }
+          /**
+          * json type
+          */ 
           &.edit-table--header-number:after {
             border-bottom: 2px solid var(--mx_ui_type_number);
           }
@@ -34,6 +37,9 @@
           }
           &.edit-table--header-string:after {
             border-bottom: 2px solid var(--mx_ui_type_string);
+          }
+          &.edit-table--header-object:after {
+            border-bottom: 2px solid var(--mx_ui_type_object);
           }
         }
       }
@@ -58,7 +64,7 @@
     height: 100%;
     top: 0px;
     pointer-events: none;
-    &.disabled {
+    &.edit-table--disabled {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -77,25 +83,65 @@
         width: 300px;
         text-align: center;
       }
-      &.disconnected {
+      &.edit-table--disconnected {
         &:after {
           content: attr(data-disconnected);
         }
       }
-      &.locked {
+      &.edit-table--locked {
         &:after {
           content: attr(data-locked);
         }
       }
     }
   }
+
+  .edit-table--updates-counter {
+    display: inline;
+    margin-left: 5px;
+    &:after {
+      content: attr(data-count);
+      color: var(--mx_ui_text_faded);
+    }
+  }
 }
 
-.edit-table--updates-counter {
-  display: inline;
-  margin-left: 5px;
-  &:after {
-    content: attr(data-count);
-    color: var(--mx_ui_text_faded);
+/**
+* Modal column order
+*/
+.edit-table--murri-grid {
+  position: relative;
+  .edit-table--murri-item {
+    display: block;
+    position: absolute;
+    padding: 15px;
+    height: 35px;
+    margin: 5px;
+    z-index: 1;
+    background: var(--mx_ui_background_contrast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--mx_ui_box_shadow);
+    border-radius: 4px;
+    border: 1px solid var(--mx_ui_border);
+    &:hover {
+      cursor: grab;
+    }
+    &.muuri-item-dragging {
+      z-index: 3;
+      cursor: grabbing;
+    }
+    &.muuri-item-releasing {
+      z-index: 2;
+    }
+    &.muuri-item-hidden {
+      z-index: 0;
+    }
+    .edit-table--murri-item-content {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
   }
 }

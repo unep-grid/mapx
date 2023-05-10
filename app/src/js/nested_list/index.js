@@ -4,6 +4,7 @@ import { Item } from "./components/item.js";
 import { Group } from "./components/group.js";
 import { ContextMenu } from "./components/contextMenu.js";
 import { ListenerStore } from "../listener_store/index.js";
+import { isSortedArray, isAgtB } from "../is_test/index.js";
 
 import "./style/nested_list.less";
 
@@ -325,20 +326,16 @@ class NestedList {
       }
     }
     function isSorted(arr) {
-      let res = true;
-      let previous;
-      for (let item of arr) {
-        if (item.children) {
-          res = res && isSorted(item.children);
-        }
-        if (previous) {
-          if (opt.asc) {
-            res = res && item.value > previous.value;
-          } else {
-            res = res && item.value <= previous.value;
+      let res = isSortedArray(
+        arr.map((item) => item.value),
+        opt.asc
+      );
+      if (res) {
+        for (const item of arr) {
+          if (item.children) {
+            res = res && isSorted(item.children);
           }
         }
-        previous = item;
       }
       return res;
     }
@@ -347,21 +344,9 @@ class NestedList {
         if (a.children) {
           sort(a.children);
         }
-        if (lt(a.value, b.value)) {
-          return -1;
-        }
-        if (gt(a.value, b.value)) {
-          return 1;
-        }
-        return 0;
+        return isAgtB(a.value, b.value, opt.asc);
       });
       return arr;
-    }
-    function gt(a, b) {
-      return opt.asc ? a > b : a < b;
-    }
-    function lt(a, b) {
-      return opt.asc ? a < b : a > b;
     }
   }
 

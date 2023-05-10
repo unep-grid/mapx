@@ -18,7 +18,7 @@ import { el } from "./../el/src/index.js";
 import { getViewSourceSummary } from "./../mx_helper_source_summary.js";
 import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata.js";
 import { moduleLoad } from "./../modules_loader_async";
-import { getView, resetViewStyle, getViewTitle } from "./../map_helpers";
+import { getView, getViewTitle } from "./../map_helpers";
 import { isSourceId, isView, isArray, makeSafeName } from "./../is_test";
 import { downloadCSV } from "../download/index.js";
 
@@ -38,7 +38,7 @@ export function fetchSourceTableAttribute(opt) {
   });
 }
 
-export async function showSourceTableAttributeModal(opt) {
+async function showSourceTableAttributeModal(opt) {
   const config = Object.assign({}, { labels: null }, opt);
   let destroyed = false;
   let hot;
@@ -83,7 +83,10 @@ export async function showSourceTableAttributeModal(opt) {
 
     const handsontable = await moduleLoad("handsontable");
     const meta = await fetchSourceMetadata(config.idSource);
-    const data = await fetchSourceTableAttribute(config);
+    const table = await fetchSourceTableAttribute(config);
+    const data = table.data;
+
+
     const services = meta._services || [];
     const hasData = isArray(data) && data.length > 0;
     const license = "non-commercial-and-evaluation";
@@ -191,7 +194,7 @@ export async function showSourceTableAttributeModal(opt) {
     /*
      * Set columns type
      */
-    const columns = config.attributes.map((name) => {
+    const columns = config.attributes.map((name, i) => {
       const out = { type: null };
       for (const type of summary.attributes_types) {
         if (out.type) {
@@ -205,15 +208,31 @@ export async function showSourceTableAttributeModal(opt) {
         type: typeConvert(out.type || "text", "handsontable"),
         data: name,
         readOnly: true,
+        _label: labels[i],
       };
     });
 
+    /**
+     * Set columns order
+     */
+    const order = table.columnsOrder;
+    for (const column of columns) {
+      if (isArray(order) && order.includes(column.data)) {
+        column._pos = order.indexOf(column.data);
+      }
+    }
+    columns.sort((a, b) => a._pos - b._pos);
+    const labelsOrdered = columns.map((c) => c._label);
+
+    /**
+     * Init handsontable
+     */
     hot = new handsontable(elTable, {
       columns: columns,
       data: data,
       rowHeaders: true,
       columnSorting: true,
-      colHeaders: labels,
+      colHeaders: labelsOrdered,
       licenseKey: license,
       dropdownMenu: [
         "filter_by_condition",
@@ -221,7 +240,7 @@ export async function showSourceTableAttributeModal(opt) {
         "filter_by_condition2",
         "filter_action_bar",
       ],
-      filters: true,
+      filters: false,
       language: getHandsonLanguageCode(),
       afterFilter: handleViewFilter,
       renderAllRows: false,
@@ -268,13 +287,7 @@ export async function showSourceTableAttributeModal(opt) {
   async function restart() {
     try {
       await destroy();
-      await showSourceTableAttributeModal({
-        idSource: config.idSource,
-        view: config.view,
-        attributes: config.attributes,
-        labels: config.labels,
-      });
-      await resetViewStyle({ idView: config.view });
+      await viewToTableAttributeModal(config.view);
     } catch (e) {
       console.error(e);
     }
@@ -401,7 +414,7 @@ export async function getTableAttributeConfigFromView(view) {
 
   const title = getViewTitle(view);
   const labelsDict = path(view, "_meta.text.attributes_alias") || {};
-  let labels = attributes.map((a) => {
+  const labels = attributes.map((a) => {
     return labelsDict[a] ? labelsDict[a][language] || labelsDict[a].en || a : a;
   });
 

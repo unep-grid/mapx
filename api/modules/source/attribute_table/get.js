@@ -3,6 +3,7 @@ import {
   getColumnsTypesSimple,
   getColumnsNames,
   tableExists,
+  getMxSourceData,
 } from "#mapx/db_utils";
 import { getDistinct, toPgColumn, sendJSON, sendError } from "#mapx/helpers";
 import { isEmpty, isString, isSourceId } from "@fxi/mx_valid";
@@ -14,7 +15,21 @@ async function getSourceAttributeTableHandler(req, res) {
       id: req.query.id,
       attributes: req.query.attributes,
     });
-    sendJSON(res, data.rows, { end: true });
+    const columnsOrderSaved = await getMxSourceData(req.query.id, [
+      "settings",
+      "editor",
+      "columns_order",
+    ]);
+    const columnsOrder = !columnsOrderSaved
+      ? false
+      : columnsOrderSaved.filter((c) => req.query.attributes.includes(c));
+
+    const table = {
+      columnsOrder,
+      data: data.rows,
+    };
+
+    sendJSON(res, table, { end: true });
   } catch (e) {
     sendError(res, e);
   }
@@ -113,7 +128,6 @@ export async function getSourceAttributeTable(opt) {
   const attributesSelectSql = toPgColumn(attributesSelectDistinct, {
     castText: attributesAsText,
   });
-  
 
   const query = `SELECT ${attributesSelectSql} FROM ${idSource} ORDER BY gid LIMIT 1e6`;
   return pgRead.query(query);

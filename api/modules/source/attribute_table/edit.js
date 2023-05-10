@@ -1,12 +1,19 @@
 import {
   tableExists,
   columnExists,
+  columnsExist,
   getColumnsTypesSimple,
   getLayerTitle,
   getLayerViewsAttributes,
   getTableDimension,
   isLayerValid,
   sanitizeUpdates,
+  updateSourceAttribute,
+  renameTableColumn,
+  duplicateTableColumn,
+  setMxSourceData,
+  getMxSourceData,
+  updateMxSourceTimestamp,
 } from "#mapx/db_utils";
 import { getSourceAttributeTable, getSourceEditors } from "#mapx/source";
 import { randomString } from "#mapx/helpers";
@@ -20,6 +27,11 @@ import {
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { pgWrite, redisSetJSON, redisGetJSON } from "#mapx/db";
+import {
+  ioUpdateDbViewsAltStyleBySource,
+  getViewsTableBySource,
+} from "#mapx/view";
+
 const regDatePg = new RegExp("^date|^timestamp");
 
 /**
@@ -48,7 +60,7 @@ const def = {
   col_geom: "geom",
 };
 
-export const routes = {
+export const events = {
   /**
    * from client
    */
@@ -57,6 +69,7 @@ export const routes = {
   client_geom_validate: "/client/source/edit/table/geom/validate",
   client_value_validate: "/client/source/edit/table/value/validate",
   client_changes_sanitize: "/client/source/edit/table/changes/sanitize",
+  client_get: "/client/get",
   /**
    * from here server
    */
@@ -67,6 +80,11 @@ export const routes = {
   server_table_data: "/server/source/edit/table/data",
   server_dispatch: "/server/source/edit/table/dispatch",
   server_progress: "/server/source/edit/table/progress",
+  /**
+   *
+   * server broaddcast / spread
+   */
+  server_spread_views_update: "/server/spread/views/update",
 };
 
 class EditTableSession {
@@ -86,8 +104,8 @@ class EditTableSession {
     et.onUpdate = et.onUpdate.bind(et);
     et.onExit = et.onExit.bind(et);
     et.onValidate = et.onValidate.bind(et);
-    //et.onValidateValue = et.onValidateValue.bind(et);
     et.onSanitize = et.onSanitize.bind(et);
+    et.onGet = et.onGet.bind(et);
     et.progress = et.progress.bind(et);
     et.progressAll = et.progressAll.bind(et);
   }
@@ -196,10 +214,12 @@ class EditTableSession {
     /**
      * Listen for events
      */
-    et._socket.on(routes.client_exit, et.onExit);
-    et._socket.on(routes.client_edit_updates, et.onUpdate);
-    et._socket.on(routes.client_geom_validate, et.onValidate);
-    et._socket.on(routes.client_changes_sanitize, et.onSanitize);
+    et._socket.on(events.client_exit, et.onExit);
+    et._socket.on(events.client_edit_updates, et.onUpdate);
+    et._socket.on(events.client_geom_validate, et.onValidate);
+    et._socket.on(events.client_changes_sanitize, et.onSanitize);
+    et._socket.on(events.client_get, et.onGet);
+
     /*
      * Get list of current members
      */
@@ -208,12 +228,12 @@ class EditTableSession {
     /**
      * Signal join
      */
-    et.emit(routes.server_joined, {
+    et.emit(events.server_joined, {
       id_room: et._id_room,
       id_session: et._id_session,
       members: members,
     });
-    et.emitRoom(routes.server_new_member, {
+    et.emitRoom(events.server_new_member, {
       id_socket: et._socket.id,
       roles: et._user_roles,
       members: members,
@@ -229,7 +249,7 @@ class EditTableSession {
 
   error(txt, err) {
     const et = this;
-    et.emit(routes.server_error, {
+    et.emit(events.server_error, {
       message: txt,
       id_room: et._id_room,
     });
@@ -259,21 +279,22 @@ class EditTableSession {
     et._socket.leave(et._id_room);
     const members = await et.getMembers();
 
-    et.emitRoom(routes.server_member_exit, {
+    et.emitRoom(events.server_member_exit, {
       id_socket: et._socket.id,
       roles: et._user_roles,
       members: members,
     });
 
-    et._socket.off(routes.client_exit, et.onExit);
-    et._socket.off(routes.client_edit_updates, et.onUpdate);
-    et._socket.off(routes.client_geom_validate, et.onValidate);
-    et._socket.off(routes.client_changes_sanitize, et.onSanitize);
+    et._socket.off(events.client_exit, et.onExit);
+    et._socket.off(events.client_edit_updates, et.onUpdate);
+    et._socket.off(events.client_geom_validate, et.onValidate);
+    et._socket.off(events.client_changes_sanitize, et.onSanitize);
+    et._socket.off(events.client_get, et.onGet);
   }
 
   dispatch(message) {
     const et = this;
-    et.emitRoom(routes.server_dispatch, message);
+    et.emitRoom(events.server_dispatch, message);
   }
 
   onExit(message, callback) {
@@ -312,6 +333,24 @@ class EditTableSession {
     }
   }
 
+  async onGet(message, callback) {
+    const et = this;
+    switch (message.type) {
+      case "columns_used":
+        {
+          const data = await getLayerViewsAttributes(et._id_table);
+          callback(data);
+        }
+        break;
+      case "table_views":
+        {
+          const data = await getViewsTableBySource(et._id_table);
+          callback(data);
+        }
+        break;
+    }
+  }
+
   async onSanitize(message, callback) {
     const et = this;
     try {
@@ -330,9 +369,9 @@ class EditTableSession {
       messageProgress = { percent: def.start_percent };
     }
     if (all) {
-      et.emitAll(routes.server_progress, messageProgress);
+      et.emitAll(events.server_progress, messageProgress);
     } else {
-      et.emit(routes.server_progress, messageProgress);
+      et.emit(events.server_progress, messageProgress);
     }
   }
 
@@ -350,17 +389,24 @@ class EditTableSession {
     callback(true);
   }
 
-  onUpdate(message, callback) {
+  async onUpdate(message, callback) {
     const et = this;
-    if (message.id_table !== et._id_table) {
-      return;
-    }
-    et.dispatch(message);
-    if (message.write_db) {
-      et.write(message);
-    }
-    if (message.update_state) {
-      et.updateState(message);
+    try {
+      if (message.id_table !== et._id_table) {
+        callback(false);
+        return;
+      }
+      if (message.write_db) {
+        await et.write(message);
+      }
+      if (message.update_state) {
+        et.updateState(message);
+      }
+
+      et.dispatch(message);
+    } catch (e) {
+      console.warn(e.message);
+      callback(false);
     }
     callback(true);
   }
@@ -383,7 +429,7 @@ class EditTableSession {
     }
   }
 
-  write(message) {
+  async write(message) {
     const et = this;
     et.perf("write");
     const updates = message?.updates;
@@ -395,13 +441,8 @@ class EditTableSession {
       et.error("Not allowed");
       return;
     }
-    writePostgres(updates)
-      .then(() => {
-        et.perfEnd("write");
-      })
-      .catch((e) => {
-        et.error("Update failed. Check logs", e);
-      });
+    await et.writePostgres(updates);
+    et.perfEnd("write");
   }
 
   async sendTable() {
@@ -429,10 +470,16 @@ class EditTableSession {
       const attributes = pgRes.fields.map((f) => f.name);
       const types = await getColumnsTypesSimple(et._id_table, attributes);
       const title = await getLayerTitle(et._id_table);
-      const attributesViews = await getLayerViewsAttributes(et._id_table);
       const locked = await et.getState("lock_table");
+      const columnsOrderSaved = await getMxSourceData(et._id_table, [
+        "settings",
+        "editor",
+        "columns_order",
+      ]);
+      const columnsOrder = !columnsOrderSaved ? false : columnsOrderSaved;
+
       const table = {
-        attributesViews,
+        columnsOrder,
         hasGeom,
         validation,
         types,
@@ -451,7 +498,7 @@ class EditTableSession {
         table.end = i === iL - 1;
         table.data = data.splice(0, def.size_chunk);
         et.progress({ percent: table.part / table.nParts });
-        et.emit(routes.server_table_data, table);
+        et.emit(events.server_table_data, table);
       }
 
       et.perfEnd("sendTable");
@@ -471,7 +518,7 @@ class EditTableSession {
   }
 
   /**
-   * Emot to other
+   * Emit to other
    */
   emitRoom(type, data) {
     const et = this;
@@ -479,12 +526,23 @@ class EditTableSession {
   }
 
   /**
-   * Emit to all
+   * Emit to concurent table user
    */
   emitAll(type, data) {
     const et = this;
     et.emit(type, data);
     et.emitRoom(type, data);
+  }
+
+  /**
+   * Emit to every client, even static, including sender
+   * -> not limited to table editor session
+   * -> coupled with wsHanders
+   */
+  emitSpread(type, data) {
+    const et = this;
+    et._socket.mx_emit_ws_broadcast(type, data);
+    et._socket.mx_emit_ws(type, data);
   }
 
   /**
@@ -549,128 +607,214 @@ class EditTableSession {
     };
     return m;
   }
-}
 
-async function writePostgres(updates) {
-  if (isEmpty(updates)) {
-    return;
+  async updateAltStyleClient(idTable) {
+    const et = this;
+    const socket = et._socket;
+    if (!isSourceId(idTable)) {
+      return;
+    }
+    /**
+     * Update SLD + save
+     */
+    await ioUpdateDbViewsAltStyleBySource(socket, {
+      idSource: idTable,
+    });
+
+    return true;
   }
-  const client = await pgWrite.connect();
-  await client.query("BEGIN");
-  try {
-    for (const update of updates) {
-      const { id_table, column_name, column_name_new } = update;
 
-      if (!isSourceId(id_table) || !isSafeName(column_name)) {
-        throw new Error("Invalid update table or column");
-      }
-      const colExists = await columnExists(column_name, id_table);
+  async writePostgres(updates) {
+    const et = this;
+    if (isEmpty(updates)) {
+      return;
+    }
+    const postScripts = new Map();
+    const client = await pgWrite.connect();
+    await client.query("BEGIN");
 
-      switch (update.type) {
-        case "update_cell":
-          {
-            const { gid, column_type } = update;
-            let { value_new } = update;
-            const valid = isNumeric(gid);
-            const isDate = regDatePg.test(column_type);
+    try {
+      for (const update of updates) {
+        const { id_table, column_name, column_name_new } = update;
 
-            if (valid && colExists) {
-              const qSql = parseTemplate(templates.updateTableCellByGid, {
+        if (!isSourceId(id_table)) {
+          throw new Error("Invalid update table or column");
+        }
+
+        switch (update.type) {
+          case "order_columns":
+            {
+              const { columns_order } = update;
+
+              const colsExist = await columnsExist(
+                columns_order,
                 id_table,
-                gid,
-                column_name,
-              });
+                client
+              );
 
-              if (isDate) {
-                /**
-                 * Date time conversion
-                 * - if its empty -> null
-                 * - if it's a date -> use a proper date instance
-                 * - if target type require a timestamp and value dont have one
-                 *   the timezone of te server will be used ⚠️
-                 */
-                value_new = isEmpty(value_new) ? null : new Date(value_new);
+              if (!colsExist) {
+                console.warn("Invalid columns", columns_order);
+                return;
               }
 
-              const res = await client.query(qSql, [value_new]);
-              if (res.rowCount != 1) {
-                throw new Error("Error during update_cell : row affected =! 1");
+              await setMxSourceData(
+                id_table,
+                ["settings", "editor", "columns_order"],
+                columns_order
+              );
+            }
+            break;
+          case "update_cell":
+            {
+              const { gid, column_type } = update;
+
+              if (!isSafeName(column_name)) {
+                throw new Error("Invalid update column");
+              }
+
+              let { value_new } = update;
+              const valid = isNumeric(gid);
+              const isDate = regDatePg.test(column_type);
+              const colExists = await columnExists(column_name, id_table);
+
+              if (valid && colExists) {
+                const qSql = parseTemplate(templates.updateTableCellByGid, {
+                  id_table,
+                  gid,
+                  column_name,
+                });
+
+                if (isDate) {
+                  /**
+                   * Date time conversion
+                   * - if its empty -> null
+                   * - if it's a date -> use a proper date instance
+                   * - if target type require a timestamp and value dont have one
+                   *   the timezone of te server will be used ⚠️
+                   */
+                  value_new = isEmpty(value_new) ? null : new Date(value_new);
+                }
+
+                const res = await client.query(qSql, [value_new]);
+                if (res.rowCount != 1) {
+                  throw new Error(
+                    "Error during update_cell : row affected =! 1"
+                  );
+                }
               }
             }
-          }
-          break;
-        case "add_column":
-          {
-            /** ALTER TABLE products ADD COLUMN description text; **/
-            const { column_type } = update;
+            break;
+          case "add_column":
+            {
+              /** ALTER TABLE products ADD COLUMN description text; **/
+              const { column_type } = update;
+              const colExists = await columnExists(column_name, id_table);
 
-            if (!colExists) {
-              const qSql = parseTemplate(templates.updateTableAddColumn, {
-                id_table,
-                column_name,
-                column_type,
-              });
-              const res = await client.query(qSql);
-              if (res.rowCount) {
-                throw new Error(
-                  "Error during add_column : rows affected is not null"
-                );
+              if (!isSafeName(column_name)) {
+                throw new Error("Invalid update column");
+              }
+
+              if (!colExists) {
+                const qSql = parseTemplate(templates.updateTableAddColumn, {
+                  id_table,
+                  column_name,
+                  column_type,
+                });
+                const res = await client.query(qSql);
+                if (res.rowCount) {
+                  throw new Error(
+                    "Error during add_column : rows affected is not null"
+                  );
+                }
               }
             }
-          }
-          break;
-        case "remove_column":
-          {
-            if (colExists) {
-              /** ALTER TABLE products remove COLUMN description text; **/
-              const qSql = parseTemplate(templates.updateTableRemoveColumn, {
-                id_table,
-                column_name,
-              });
+            break;
+          case "remove_column":
+            {
+              const colExists = await columnExists(column_name, id_table);
+              if (colExists) {
+                const qSql = parseTemplate(templates.updateTableRemoveColumn, {
+                  id_table,
+                  column_name,
+                });
 
-              const res = await client.query(qSql);
-              if (res.rowCount) {
-                throw new Error(
-                  "Error during remove_column : rows affected is not null"
-                );
+                const res = await client.query(qSql);
+                if (res.rowCount) {
+                  throw new Error(
+                    "Error during remove_column : rows affected is not null"
+                  );
+                }
               }
             }
-          }
-          break;
-        case "rename_column":
-          {
-            const colNewExists = await columnExists(column_name_new, id_table);
-            if (colExists && !colNewExists) {
-              /** ALTER TABLE products remove COLUMN description text; **/
-              const qSql = parseTemplate(templates.updateTableRenameColumn, {
+            break;
+          case "duplicate_column":
+            {
+              await duplicateTableColumn(
                 id_table,
                 column_name,
                 column_name_new,
-              });
-
-              const res = await client.query(qSql);
-              if (res.rowCount) {
-                throw new Error(
-                  "Error during remove_column : rows affected is not null"
-                );
-              }
+                client
+              );
             }
-          }
-          break;
+            break;
+          case "rename_column":
+            {
+              await renameTableColumn(
+                id_table,
+                column_name,
+                column_name_new,
+                client
+              );
 
-        default:
-          throw new Error(`Error during write: unknow method: ${update.type}`);
+              const views = await updateSourceAttribute(
+                id_table,
+                column_name,
+                column_name_new,
+                client
+              );
+
+              postScripts.set(
+                `${id_table}_update_views_rename_rename`,
+                async () => {
+                  et.emitSpread(events.server_spread_views_update, { views });
+                  await et.updateAltStyleClient(id_table);
+                  return;
+                }
+              );
+            }
+            break;
+
+          default:
+            throw new Error(
+              `Error during write: unknow method: ${update.type}`
+            );
+        }
+
+        /**
+         * Update table date_modifed
+         */
+        await updateMxSourceTimestamp(id_table);
       }
+
+      /**
+       * Update done. Commit.
+       */
+      await client.query("COMMIT");
+    } catch (e) {
+      await client.query("ROLLBACK");
+      throw e;
+    } finally {
+      client.release();
     }
 
     /**
-     * Update done. Commit.
+     * Scripts that require to be launched after the commit
+     * ( i.e. require updated views, source, meta )
      */
-    await client.query("COMMIT");
-  } catch (e) {
-    await client.query("ROLLBACK");
-    throw e;
-  } finally {
-    client.release();
+    if (postScripts.size) {
+      for (const [key, script] of postScripts.entries()) {
+        await script(key);
+      }
+    }
   }
 }

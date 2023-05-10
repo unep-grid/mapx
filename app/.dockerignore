@@ -8,7 +8,7 @@
 !src/js/settings/**
 !src/data/**
 !src/templates/**
-!src/glyphs/dist/sprites/**
+!src/sprites/dist/sprites/**
 !www/**
 !global.R
 !server.R

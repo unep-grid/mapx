@@ -160,7 +160,7 @@ function spriteToCdnLink(str, params) {
   if (!name) {
     return;
   }
-  const path = `app/src/glyphs/dist/svg/${name}.svg`;
+  const path = `app/src/sprites/dist/svg/${name}.svg`;
   const cdnTemplate = settings.cdn.template;
   const urlImage = new URL(parseTemplate(cdnTemplate, { version, path }));
   if (params) {

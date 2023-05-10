@@ -14,7 +14,6 @@ import { theme } from "./init_theme";
 import { ProjectManager } from "./project/index.js";
 
 const templates = {
-  viewListLegend: require("../dot/view_list_legend_vt.dot.html"),
   viewListOptions: require("../dot/view_list_options.dot.html"),
   viewListControls: require("../dot/view_list_controls.dot.html"),
   viewListFilters: require("../dot/view_list_filters.dot.html"),

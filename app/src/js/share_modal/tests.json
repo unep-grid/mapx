@@ -1,0 +1,882 @@
+[
+  {
+    "pos": {
+      "jump": true,
+      "n": 48.86,
+      "s": 26.362,
+      "e": 74.393,
+      "w": 47.087,
+      "lat": 33.876,
+      "lng": 66.15,
+      "b": -20.788,
+      "p": 49.927,
+      "z": 5.728,
+      "sat": false,
+      "t3d": false,
+      "theme": "classic_dark"
+    },
+    "views": [
+      {
+        "id": "MX-T7PXA-39GK2-QIH5T",
+        "editor": 1,
+        "target": [],
+        "date_modified": "2023-01-27T15:24:36.000Z",
+        "data": {
+          "style": {
+            "nulls": [
+              {
+                "size": 1,
+                "color": "#ff1a1a",
+                "value": "",
+                "sprite": null,
+                "opacity": 0.7,
+                "label_ar": "",
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "Missing values",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": "",
+                "filter": ["all", ["!", ["has", "status"]]],
+                "color_border": null,
+                "add_border": null
+              }
+            ],
+            "rules": [
+              {
+                "size": 1,
+                "color": "#eb0e98",
+                "value": "Not Resourced",
+                "sprite": "none",
+                "opacity": 0.7,
+                "label_ar": "",
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "Not Resourced",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": ""
+              },
+              {
+                "size": 1,
+                "color": "#53b043",
+                "value": "Identified Not Resourced",
+                "sprite": "none",
+                "opacity": 0.7,
+                "label_ar": "",
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "Identified Not Resourced",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": ""
+              },
+              {
+                "size": 1,
+                "color": "#f06d46",
+                "value": "Completed",
+                "sprite": "none",
+                "opacity": 0.7,
+                "label_ar": "",
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "Completed",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": ""
+              },
+              {
+                "size": 1,
+                "color": "#b295c7",
+                "value": "Identified",
+                "sprite": "none",
+                "opacity": 0.7,
+                "label_ar": "",
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "Identified",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": ""
+              },
+              {
+                "size": 1,
+                "color": "#b15928",
+                "value": "Under Construction",
+                "sprite": "none",
+                "opacity": 0.7,
+                "label_ar": "",
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "Under Construction",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": ""
+              }
+            ],
+            "custom": {
+              "json": "{\n  \"enable\":false,\n  \"paint\":{},\n  \"layout\":{},\n  \"filter\":[],\n  \"minzoom\":0,\n  \"maxzoom\":22,\n  \"type\":\"circle\"\n}\n"
+            },
+            "hideNulls": false,
+            "titleLegend": {
+              "ar": "",
+              "bn": "",
+              "de": "",
+              "en": "Legend",
+              "es": "",
+              "fa": "",
+              "fr": "",
+              "ps": "",
+              "ru": "",
+              "zh": ""
+            },
+            "reverseLayer": false
+          },
+          "tiles": {
+            "usePostgis": true
+          },
+          "title": {
+            "ar": "",
+            "bn": "",
+            "de": "",
+            "en": "Test road",
+            "es": "",
+            "fa": "",
+            "fr": "",
+            "ps": "",
+            "ru": "",
+            "zh": ""
+          },
+          "source": {
+            "type": "vector",
+            "layerInfo": {
+              "name": "mx_vector_ogvcd_9ihjm_woilb_utj3b",
+              "maskName": {}
+            },
+            "attribution": "<a href=\"https://mapx.org\">AFG_Road_Network</a>",
+            "tiles": [
+              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-T7PXA-39GK2-QIH5T&skipCache=false&usePostgisTiles=false&timestamp=2023-01-27T15:24:36.000Z",
+              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-T7PXA-39GK2-QIH5T&skipCache=false&usePostgisTiles=false&timestamp=2023-01-27T15:24:36.000Z"
+            ],
+            "promoteId": "gid"
+          },
+          "abstract": {
+            "ar": "",
+            "bn": "",
+            "de": "",
+            "en": "test super",
+            "es": "",
+            "fa": "",
+            "fr": "",
+            "ps": "",
+            "ru": "",
+            "zh": ""
+          },
+          "geometry": {
+            "type": "line"
+          },
+          "projects": [],
+          "attribute": {
+            "name": "status",
+            "type": "string",
+            "names": ["status", "objectid"],
+            "table": [
+              {
+                "value": "Not Resourced",
+                "count": 6370
+              },
+              {
+                "value": "Identified Not Resourced",
+                "count": 621
+              },
+              {
+                "value": "Completed",
+                "count": 408
+              },
+              {
+                "value": "Identified",
+                "count": 138
+              },
+              {
+                "value": "Under Construction",
+                "count": 136
+              }
+            ]
+          },
+          "dashboard": {
+            "layout": "fit",
+            "modules": [],
+            "widgets": [
+              {
+                "width": "250",
+                "height": "250",
+                "script": "/** \n * Add functions to handle dashboard events\n * onAdd = Action to exectute when the widget is added to the DOM\n * onRemove = Action to execute when the widget is removed\n * onData = Action to execute when data is updated. Data is available with this.data \n */\nreturn {\n  onAdd : function(widget) {\n    console.log(widget);\n  },\n  onRemove : function(widget) {\n    console.log(widget);\n  },\n  onData : function(widget,data) {\n    console.log(data);\n  }\n};",
+                "source": "viewFreqTable",
+                "disabled": false,
+                "colorBackground": "#000000",
+                "sourceIgnoreEmpty": true,
+                "addColorBackground": false
+              }
+            ],
+            "disabled": false,
+            "panel_init_close": false
+          },
+          "collections": []
+        },
+        "type": "vt",
+        "pid": 73254,
+        "project": "MX-A3M-LVK-V7S-XOT-J48",
+        "readers": ["self"],
+        "editors": ["self", "1"],
+        "_edit": true
+      }
+    ],
+    "form": {
+      "share_code": "http://dev.mapx.localhost:8880/static.html?language=en&views=MX-T7PXA-39GK2-QIH5T&zoomToViews=true&p=49.927&b=-20.788&z=5.728&lat=33.876&lng=66.15&t3d=false&sat=false&theme=classic_dark",
+      "share_template": "soc_link_url",
+      "share_views_select": "share_views_select_method_map_list_open",
+      "share_views_zoom": true,
+      "share_map_pos": true,
+      "share_map_pos_max": false,
+      "share_mode_static": true,
+      "share_category_hide": null
+    },
+    "search": "?language=en&views=MX-T7PXA-39GK2-QIH5T&zoomToViews=true&p=49.927&b=-20.788&z=5.728&lat=33.876&lng=66.15&t3d=false&sat=false&theme=classic_dark"
+  },
+  {
+    "pos": {
+      "jump": true,
+      "n": 48.86,
+      "s": 26.362,
+      "e": 74.393,
+      "w": 47.087,
+      "lat": 33.876,
+      "lng": 66.15,
+      "b": -20.788,
+      "p": 49.927,
+      "z": 5.728,
+      "sat": false,
+      "t3d": false,
+      "theme": "classic_dark"
+    },
+    "views": [
+      {
+        "id": "MX-3Q41Y-AH46I-1QGD9",
+        "editor": 1,
+        "target": [],
+        "date_modified": "2023-03-07T17:36:11.748Z",
+        "data": {
+          "style": {
+            "nulls": [
+              {
+                "size": 40,
+                "color": "#c6f606ff",
+                "value": "",
+                "sprite": "maki-marker-11",
+                "opacity": 0.7,
+                "label_ar": "",
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "No data",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": "",
+                "filter": ["all", ["!", ["has", "amount"]]],
+                "color_border": null,
+                "add_border": null
+              }
+            ],
+            "rules": [
+              {
+                "size": 40,
+                "color": "#fff7fb",
+                "value": 0,
+                "sprite": "maki-marker-11",
+                "opacity": 0.7,
+                "label_ar": "",
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "0 - 0",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": "",
+                "value_to": 0
+              },
+              {
+                "size": 40,
+                "color": "#023858",
+                "value": 0,
+                "sprite": "maki-marker-11",
+                "opacity": 0.7,
+                "label_ar": "",
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "0 - 10.12",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": "",
+                "value_to": 10.12
+              }
+            ],
+            "custom": {
+              "json": "{\n  \"enable\":false,\n  \"paint\":{},\n  \"layout\":{},\n  \"filter\":[],\n  \"minzoom\":0,\n  \"maxzoom\":22,\n  \"type\":\"circle\"\n}\n"
+            },
+            "hideNulls": false,
+            "zoomConfig": {
+              "zoomMax": 22,
+              "zoomMin": 0,
+              "sizeFactorZoomMax": 0,
+              "sizeFactorZoomMin": 0,
+              "sizeFactorZoomExponent": 1
+            },
+            "titleLegend": {
+              "ar": "",
+              "bn": "",
+              "de": "",
+              "en": "Legend",
+              "es": "",
+              "fa": "",
+              "fr": "",
+              "ps": "",
+              "ru": "",
+              "zh": ""
+            },
+            "reverseLayer": false,
+            "showSymbolLabel": true,
+            "includeUpperBoundInInterval": true
+          },
+          "title": {
+            "ar": "",
+            "bn": "",
+            "de": "",
+            "en": "iceland numeric test",
+            "es": "",
+            "fa": "",
+            "fr": "",
+            "ps": "",
+            "ru": "",
+            "zh": ""
+          },
+          "source": {
+            "type": "vector",
+            "layerInfo": {
+              "name": "mx_vector_2r63w_aailg_s7xbb_mfprt",
+              "maskName": {}
+            },
+            "attribution": "<a>iceland_test_numeric</a>",
+            "tiles": [
+              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-3Q41Y-AH46I-1QGD9&skipCache=false&usePostgisTiles=false&timestamp=2023-03-07T17:36:11.748Z",
+              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-3Q41Y-AH46I-1QGD9&skipCache=false&usePostgisTiles=false&timestamp=2023-03-07T17:36:11.748Z"
+            ],
+            "promoteId": "gid"
+          },
+          "abstract": {
+            "ar": "",
+            "bn": "",
+            "de": "",
+            "en": "test",
+            "es": "",
+            "fa": "",
+            "fr": "",
+            "ps": "",
+            "ru": "",
+            "zh": ""
+          },
+          "geometry": {
+            "type": "point"
+          },
+          "projects": [],
+          "attribute": {
+            "name": "amount",
+            "type": "number",
+            "names": ["amount", "id"],
+            "max": 30,
+            "min": 10,
+            "table": [
+              {
+                "from": 10,
+                "to": 10,
+                "diff": 0,
+                "count": 1
+              },
+              {
+                "from": 10,
+                "to": 20,
+                "diff": 10,
+                "count": 1
+              },
+              {
+                "from": 20,
+                "to": 30,
+                "diff": 10,
+                "count": 1
+              }
+            ]
+          },
+          "collections": []
+        },
+        "type": "vt",
+        "pid": 74129,
+        "project": "MX-QNN-G0C-I6F-GZB-MPA",
+        "readers": ["self", "public"],
+        "editors": ["self", "1"],
+        "_edit": false
+      },
+      {
+        "id": "MX-4R5B5-COSEK-BSFVK",
+        "editor": 1,
+        "target": [],
+        "date_modified": "2021-09-01T14:21:00.000Z",
+        "data": {
+          "style": {
+            "nulls": [
+              {
+                "size": 7,
+                "color": "#000",
+                "value": "",
+                "sprite": null,
+                "opacity": 0.7,
+                "label_ar": "",
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "Missing values",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": "",
+                "filter": ["all", ["!", ["has", "objectuid"]]],
+                "color_border": null,
+                "add_border": null
+              }
+            ],
+            "rules": [
+              {
+                "size": 4,
+                "color": "#2881f5ff",
+                "value": "all",
+                "sprite": "none",
+                "opacity": 0.1,
+                "label_ar": "",
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "haha",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": ""
+              }
+            ],
+            "custom": {
+              "json": "{\n  \"enable\":false,\n  \"paint\":{},\n  \"layout\":{},\n  \"filter\":[],\n  \"minzoom\":0,\n  \"maxzoom\":22,\n  \"type\":\"circle\"\n}\n"
+            },
+            "hideNulls": false,
+            "zoomConfig": {
+              "zoomMax": 22,
+              "zoomMin": 0,
+              "sizeFactorZoomMax": 0,
+              "sizeFactorZoomMin": 0,
+              "sizeFactorZoomExponent": 1
+            },
+            "titleLegend": {
+              "ar": "",
+              "bn": "",
+              "de": "",
+              "en": "Legend",
+              "es": "",
+              "fa": "",
+              "fr": "",
+              "ps": "",
+              "ru": "",
+              "zh": ""
+            },
+            "reverseLayer": false,
+            "showSymbolLabel": false
+          },
+          "title": {
+            "ar": "",
+            "bn": "",
+            "de": "",
+            "en": "MX 4R5B5 COSEK BSFVK",
+            "es": "",
+            "fa": "",
+            "fr": "",
+            "ps": "",
+            "ru": "",
+            "zh": ""
+          },
+          "source": {
+            "type": "vector",
+            "layerInfo": {
+              "name": "mx_afg_vector_53h3f_war7f_nuvt1",
+              "maskName": {}
+            },
+            "attribution": "<a href=\"http://www.mineaction.org/programmes/afghanistan\">Active mine threat (UNMACCA)</a>",
+            "tiles": [
+              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-4R5B5-COSEK-BSFVK&skipCache=false&usePostgisTiles=false&timestamp=2021-09-01T14:21:00.000Z",
+              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-4R5B5-COSEK-BSFVK&skipCache=false&usePostgisTiles=false&timestamp=2021-09-01T14:21:00.000Z"
+            ],
+            "promoteId": "gid"
+          },
+          "abstract": {
+            "ar": "",
+            "bn": "",
+            "de": "",
+            "en": "etw",
+            "es": "",
+            "fa": "",
+            "fr": "",
+            "ps": "",
+            "ru": "",
+            "zh": ""
+          },
+          "geometry": {
+            "type": "point"
+          },
+          "projects": [],
+          "attribute": {
+            "name": "objectuid",
+            "type": "string",
+            "names": ["objectuid", "featureid"],
+            "table":[] 
+          },
+          "collections": []
+        },
+        "type": "vt",
+        "pid": 68974,
+        "project": "MX-A3M-LVK-V7S-XOT-J48",
+        "readers": ["self"],
+        "editors": ["self", "1"],
+        "_edit": true
+      },
+      {
+        "id": "MX-80R2H-8B9LN-0A3A1",
+        "editor": 1335,
+        "target": [],
+        "date_modified": "2020-01-23T16:32:28.000Z",
+        "data": {
+          "style": {
+            "nulls": [
+              {
+                "size": 1,
+                "color": "#000",
+                "value": "",
+                "sprite": "none",
+                "opacity": 1,
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": ""
+              }
+            ],
+            "rules": [
+              {
+                "size": 1,
+                "color": "#ffcc00",
+                "value": "all",
+                "sprite": "none",
+                "opacity": 0.3,
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": ""
+              }
+            ],
+            "custom": {
+              "json": "{\n  \"enable\":false,\n  \"paint\":{},\n  \"layout\":{},\n  \"filter\":[],\n  \"minzoom\":0,\n  \"maxzoom\":22,\n  \"type\":\"circle\"\n}\n"
+            },
+            "hideNulls": true,
+            "zoomConfig": {
+              "zoomMax": 22,
+              "zoomMin": 1,
+              "sizeFactorZoomMax": 0,
+              "sizeFactorZoomMin": 0,
+              "sizeFactorZoomExponent": 1
+            },
+            "titleLegend": {
+              "bn": "",
+              "de": "",
+              "en": "Legend",
+              "es": "",
+              "fa": "",
+              "fr": "",
+              "ps": "",
+              "ru": "",
+              "zh": ""
+            },
+            "reverseLayer": false
+          },
+          "title": {
+            "bn": "",
+            "de": "",
+            "en": "Ethnic groups",
+            "es": "",
+            "fa": "",
+            "fr": "",
+            "ps": "",
+            "ru": "",
+            "zh": ""
+          },
+          "period": {
+            "extent": {},
+            "density": {}
+          },
+          "source": {
+            "type": "vector",
+            "layerInfo": {
+              "name": "mx_vector_wtzeh_wsdtn_edgzs_qrthu",
+              "maskName": {}
+            },
+            "attribution": "<a>UNEP_AFG Ethnic_groups</a>",
+            "tiles": [
+              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-80R2H-8B9LN-0A3A1&skipCache=false&usePostgisTiles=false&timestamp=2020-01-23T16:32:28.000Z",
+              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-80R2H-8B9LN-0A3A1&skipCache=false&usePostgisTiles=false&timestamp=2020-01-23T16:32:28.000Z"
+            ],
+            "promoteId": "gid"
+          },
+          "abstract": {
+            "bn": "",
+            "de": "",
+            "en": "Summary:\nPresense and distribution of ethnics in Afghanistan.\nDescription\nPresence and extension of major ethnic groups in Afghanistan based on UNHCR.",
+            "es": "",
+            "fa": "",
+            "fr": "",
+            "ps": "",
+            "ru": "",
+            "zh": ""
+          },
+          "geometry": {
+            "type": "polygon",
+            "extent": {
+              "lat1": 29.3771,
+              "lat2": 38.4907,
+              "lng1": 60.4719,
+              "lng2": 74.8896
+            },
+            "centroid": {
+              "lat": 33.834,
+              "lng": 66.0401
+            }
+          },
+          "projects": [],
+          "attribute": {
+            "name": "ethnic_gro",
+            "rows": 128,
+            "type": "string",
+            "names": ["ethnic_gro", "shape_length", "shape_area"],
+            "nulls": 0,
+            "sample": [
+              "Arab",
+              "Baluchi",
+              "Baluchi/Brahui",
+              "Baluchi/Persian",
+              "Brahui",
+              "Chahar Aimak - Firuzkuhi",
+              "Chahar Aimak - Hazara-Aimak",
+              "Chahar Aimak - Jamshidi",
+              "Chahar Aimak - Taimani",
+              "Chahar Aimak - Taimuri"
+            ],
+            "distincts": 34,
+            "table": [
+              {
+                "value": "Tajik",
+                "count": 14
+              },
+              {
+                "value": "Uninhabited",
+                "count": 12
+              },
+              {
+                "value": "Pashtun/Tajik",
+                "count": 10
+              },
+              {
+                "value": "Sparsely Populated",
+                "count": 8
+              },
+              {
+                "value": "Turkmen",
+                "count": 8
+              },
+              {
+                "value": "Tajik/Uzbek",
+                "count": 7
+              },
+              {
+                "value": "Hazara",
+                "count": 7
+              },
+              {
+                "value": "Uzbek",
+                "count": 7
+              },
+              {
+                "value": "Pashtun",
+                "count": 6
+              },
+              {
+                "value": "Chahar Aimak - Taimuri",
+                "count": 5
+              },
+              {
+                "value": "Mongol/Punjabi/Afshari/Kizilbash/Kazakh/Karakalpak/Jewish/Jats",
+                "count": 5
+              },
+              {
+                "value": "Arab",
+                "count": 4
+              },
+              {
+                "value": "Uzbek/Hazara",
+                "count": 4
+              },
+              {
+                "value": "Mountain Tajik",
+                "count": 4
+              },
+              {
+                "value": "Pashai",
+                "count": 2
+              },
+              {
+                "value": "Nuristani",
+                "count": 2
+              },
+              {
+                "value": "Gujari, Jati, Nari",
+                "count": 2
+              },
+              {
+                "value": "Persian",
+                "count": 2
+              },
+              {
+                "value": "Brahui",
+                "count": 2
+              },
+              {
+                "value": "Pashtun/Uzbek",
+                "count": 2
+              },
+              {
+                "value": "Parachi",
+                "count": 2
+              },
+              {
+                "value": "Baluchi/Persian",
+                "count": 1
+              },
+              {
+                "value": "Pashtun/Hazara",
+                "count": 1
+              },
+              {
+                "value": "Ormuri",
+                "count": 1
+              },
+              {
+                "value": "Chahar Aimak - Firuzkuhi",
+                "count": 1
+              },
+              {
+                "value": "Tajik/Hazara",
+                "count": 1
+              },
+              {
+                "value": "Chahar Aimak - Taimani",
+                "count": 1
+              },
+              {
+                "value": "Baluchi",
+                "count": 1
+              },
+              {
+                "value": "Tirahi",
+                "count": 1
+              },
+              {
+                "value": "Baluchi/Brahui",
+                "count": 1
+              },
+              {
+                "value": "Chahar Aimak - Jamshidi",
+                "count": 1
+              },
+              {
+                "value": "Tajik/Persian",
+                "count": 1
+              },
+              {
+                "value": "Kirghiz",
+                "count": 1
+              },
+              {
+                "value": "Chahar Aimak - Hazara-Aimak",
+                "count": 1
+              }
+            ]
+          },
+          "collections": "Social Economic"
+        },
+        "type": "vt",
+        "pid": 67590,
+        "project": "MX-A3M-LVK-V7S-XOT-J48",
+        "readers": ["self", "public"],
+        "editors": ["self", "1335", "publishers"],
+        "_edit": true
+      }
+    ],
+    "form": {
+      "share_code": "http://dev.mapx.localhost:8880/static.html?language=en&views=MX-4R5B5-COSEK-BSFVK%2CMX-3Q41Y-AH46I-1QGD9%2CMX-80R2H-8B9LN-0A3A1&zoomToViews=true&p=49.927&b=-20.788&z=5.728&lat=33.876&lng=66.15&t3d=false&sat=false&theme=classic_dark",
+      "share_template": "soc_link_url",
+      "share_views_select": "share_views_select_method_map_list_open",
+      "share_views_zoom": true,
+      "share_map_pos": true,
+      "share_map_pos_max": false,
+      "share_mode_static": true,
+      "share_category_hide": null
+    },
+    "search":"?language=en&views=MX-3Q41Y-AH46I-1QGD9%2CMX-4R5B5-COSEK-BSFVK%2CMX-80R2H-8B9LN-0A3A1&zoomToViews=true&p=49.927&b=-20.788&z=5.728&lat=33.876&lng=66.15&t3d=false&sat=false&theme=classic_dark"
+  }
+]

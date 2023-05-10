@@ -124,10 +124,12 @@ async function tableExists(idTable, schema) {
  *
  * @param {String} idColumn id of the column
  * @param {String} idTable id of the table
+ * @param {pg.Client} pgClient - The node-postgres client.
  * @return {Promise<Boolean>} Table exists
  */
-async function columnExists(idColumn, idTable) {
+async function columnExists(idColumn, idTable, client) {
   try {
+    const pgClient = client || pgRead;
     const sql = `
     SELECT EXISTS ( 
     SELECT 1
@@ -135,7 +137,7 @@ async function columnExists(idColumn, idTable) {
     WHERE table_name=$1 
     AND column_name=$2
     )`;
-    const res = await pgRead.query(sql, [idTable, idColumn]);
+    const res = await pgClient.query(sql, [idTable, idColumn]);
     const exists = res.rowCount > 0 && res.rows[0].exists;
     return exists;
   } catch (e) {
@@ -143,6 +145,16 @@ async function columnExists(idColumn, idTable) {
   }
 
   return false;
+}
+/**
+ * Use columnExists on multiple columns
+ */
+async function columnsExist(idColumns, idTable, client) {
+  let ok = true;
+  for (const col of idColumns) {
+    ok = ok && (await columnExists(col, idTable, client));
+  }
+  return ok;
 }
 
 /**
@@ -321,6 +333,97 @@ async function registerSource(
 }
 
 /**
+ * Updates the date_modified column of the mx_sources table for the specified source ID.
+ *
+ * @param {string} idSource - The ID of the source in the mx_sources table.
+ * @returns {Promise<boolean>} - Returns true if the update is successful, false otherwise.
+ * @throws {Error} - Throws an error if there's an issue with the database operation.
+ */
+export async function updateMxSourceTimestamp(idSource) {
+  if (!isSourceId(idSource)) {
+    return false;
+  }
+
+  const client = await pgWrite.connect();
+  try {
+    await client.query("BEGIN");
+
+    const updateMxSourcesQuery = `
+      UPDATE mx_sources
+      SET date_modified = NOW()
+      WHERE id = $1
+    `;
+    const result = await client.query(updateMxSourcesQuery, [idSource]);
+
+    if (result.rowCount !== 1) {
+      throw new Error("Rows affected is not equal to 1");
+    }
+
+    await client.query("COMMIT");
+  } catch (error) {
+    console.error("Error updating mx_sources:", error);
+    await client.query("ROLLBACK");
+    return false;
+  } finally {
+    client.release();
+  }
+
+  return true;
+}
+
+/**
+ * Set mx_source data values, and create recursive keys if needed
+ * @param {string} idSource source id
+ * @param {array} path array i.e ["settings","editor","columns_order"]
+ * @param {array|object} value value stringifiable
+ * @return {Promise<array>} rows affected
+ */
+export async function setMxSourceData(idSource, path, value) {
+  const client = await pgWrite.connect();
+  await client.query("BEGIN");
+  const out = [];
+  try {
+    const pathArray = path.map((item) => `'${item}'`).join(",");
+    const valueString = JSON.stringify(value);
+    const qsql = parseTemplate(templates.setMxSourceData, {
+      path: pathArray,
+      value: valueString,
+      idSource,
+    });
+    const res = await client.query(qsql);
+
+    if (res.rowCount !== 1) {
+      throw new Error("Row count not 1");
+    }
+
+    out.push(...res.rows);
+
+    client.query("COMMIT");
+  } catch (e) {
+    client.query("ROLLBACK");
+    throw new Error("setSourceData failed");
+  } finally {
+    client.release();
+  }
+  return out;
+}
+/**
+ * Sget mx_source data values
+ * @param {string} idSource source id
+ * @param {array} path array i.e ["settings","editor","columns_order"]
+ * @return {Promise<array|object>} value stored
+ */
+export async function getMxSourceData(idSource, path) {
+  const pathJSON = path.map((item) => `"${item}"`).join(",");
+  const res = await pgRead.query(`
+SELECT data #> '{${pathJSON}}' as value 
+FROM mx_sources
+WHERE id = '${idSource}'
+LIMIT 1`);
+  return res.rows?.[0]?.value;
+}
+
+/**
  * Test empty table : if no records, remove table, else register it as source
  * @param {String|Object} idSource id of the layer to add, or object with idSource, idUser, idProject, title.
  */
@@ -460,11 +563,61 @@ async function getColumnsTypesSimple(idSource, idAttr) {
 }
 
 /**
+ * Get column type
+ * @async
+ * @param {string} idAttr
+ * @param {string} idTable
+ * @returns {Promise<string>} type
+ */
+async function getColumnDataType(columnName, tableName) {
+  const result = await pgRead.query(
+    `
+    SELECT column_name, data_type
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE table_name = $1 AND column_name = $2;
+  `,
+    [tableName, columnName]
+  );
+
+  if (result.rowCount === 0) {
+    throw new Error(`Column "${columnName}" not found in table "${tableName}"`);
+  }
+
+  return result.rows[0].data_type;
+}
+
+/**
  * Get the latest timestamp from a source / layer / table
  * @param {String} idSource Id of the source
  * @return {Number} timetamp
  */
 async function getSourceLastTimestamp(idSource) {
+  if (!isSourceId(idSource)) {
+    return null;
+  }
+  
+  const q = `
+    SELECT date_modified 
+    FROM mx_sources 
+    WHERE id = $1 
+  `;
+  const data = await pgRead.query(q, [idSource]);
+  const [row] = data.rows;
+
+
+  if (!row) {
+    return 0;
+  }
+
+  return row.date_modified;
+}
+
+/**
+ * Get the latest timestamp from a source / layer / table
+ * @param {String} idSource Id of the source
+ * @return {Number} timetamp
+ */
+export async function getSourceLastTimestamp_orig(idSource) {
   if (!isSourceId(idSource)) {
     return null;
   }
@@ -492,6 +645,7 @@ async function getSourceLastTimestamp(idSource) {
     return row.timestamp;
   }
 }
+
 /**
  * Get layer title
  * @param {String} id of the layer
@@ -513,6 +667,10 @@ async function getLayerTitle(idLayer, language) {
 
 /**
  * Get layer/table column name used for styling in views
+ * NOTE: not including attributes used in cc, custom style and widgets
+ * i.e -> atributes a,b,c are used in source xy by at least one view
+ * @param {string} idLayer Id of the layer
+ * @return {array} array of attribute used
  */
 async function getLayerViewsAttributes(idLayer) {
   const sql = `
@@ -529,6 +687,142 @@ async function getLayerViewsAttributes(idLayer) {
   }
   const names = res.rows.map((row) => row.column_name);
   return names;
+}
+
+/**
+ * @async
+ * @param {string} idSource - The ID of the source.
+ * @param {string} oldName - The old name to search for and replace in the JSONB object.
+ * @param {string} newName - The new name to replace the old name with in the JSONB object.
+ * @param {pg.Client} pgClient - The node-postgres client instance to use for database operations.
+ * @throws {Error} If an error occurs during the update operation.
+ */
+async function renameTableColumn(idSource, oldName, newName, pgClient) {
+  try {
+    /**
+     * Use existing client in case of rallback
+     */
+    pgClient = pgClient || pgWrite;
+
+    if (oldName === newName) {
+      console.log("Old and new names are the same, no update needed.");
+      return;
+    }
+
+    const oldExists = await columnExists(oldName, idSource, pgClient);
+    const newExists = await columnExists(newName, idSource, pgClient);
+
+    if (!oldExists) {
+      throw new Error(
+        `Table "${idSource}" does not exist or does not have a column ${oldName}`
+      );
+    }
+
+    if (newExists) {
+      throw new Error(`Table "${idSource}" already have a column ${newName}`);
+    }
+
+    /**
+     * Update source layer
+     * ( using template literral, as new/old name should be valid
+     */
+    await pgClient.query(
+      `ALTER TABLE ${idSource} 
+      RENAME COLUMN "${oldName}" 
+      TO "${newName}"`
+    );
+  } catch (error) {
+    console.error("Error renaming source column", error);
+    throw new Error(error);
+  }
+}
+
+/**
+ * Updates source attribute, metadata and views related fields
+ * @async
+ * @param {string} idSource - The ID of the source.
+ * @param {string} oldName - The old name to search for and replace in the JSONB object.
+ * @param {string} newName - The new name to replace the old name with in the JSONB object.
+ * @param {pg.Client} pgClient - The node-postgres client instance to use for database operations.
+ * @return {Promise<array>} Array of affected views
+ * @throws {Error} If an error occurs during the update operation.
+ */
+async function updateSourceAttribute(idSource, oldName, newName, pgClient) {
+  try {
+    /*
+     * Use connectionn in case of transaction
+     */
+    pgClient = pgClient || pgWrite;
+    /**
+     * Update views
+     */
+    const queryUpdateViews = templates.updateViewSourceAttributes;
+    const { rows: views } = await pgClient.query(queryUpdateViews, [
+      idSource,
+      oldName,
+      newName,
+    ]);
+    /**
+     * Update meta
+     */
+    const queryUpdateMeta = templates.updateMetaSourceAttributes;
+    await pgClient.query(queryUpdateMeta, [idSource, oldName, newName]);
+
+    /**
+     * Return affected views
+     */
+    return views;
+  } catch (error) {
+    console.error("Error updating source attributes", error);
+    throw new Error(error);
+  }
+}
+
+/**
+ * Duplicate a postgres column
+ * Transaction is handled upstream
+ * @async
+ * @param {string} idColumn
+ * @param {string} idColumnNew
+ * @param {pg.Client} postgres
+ * @return {Promise<boolean>} done
+ */
+async function duplicateTableColumn(idSource, sourceName, destName, pgClient) {
+  try {
+    if (sourceName === destName) {
+      throw new Error(
+        "Source and destination names are the same, duplicate impossible"
+      );
+    }
+
+    const sourceExists = await columnExists(sourceName, idSource, pgClient);
+    const destExists = await columnExists(destName, idSource, pgClient);
+
+    if (!sourceExists) {
+      throw new Error(
+        `Table "${idSource}" does not exist or does not have a column ${sourceName}`
+      );
+    }
+
+    if (destExists) {
+      throw new Error(`Table "${idSource}" already have a column ${destName}`);
+    }
+
+    /**
+     * Update source layer
+     * ( using template literral, as new/old name should be valid
+     */
+    const sourceColumnType = await getColumnDataType(sourceName, idSource);
+
+    await pgClient.query(`
+    ALTER TABLE "${idSource}" 
+    ADD COLUMN "${destName}" ${sourceColumnType};
+    UPDATE "${idSource}" SET "${destName}" = "${sourceName}";
+    `);
+  } catch (error) {
+    console.error("Error duplicating source attributes", error);
+    throw new Error(error);
+  }
 }
 
 /**
@@ -549,6 +843,7 @@ export {
   tableHasValues,
   tableExists,
   columnExists,
+  columnsExist,
   isPointLikeGeom,
   decrypt,
   encrypt,
@@ -556,4 +851,7 @@ export {
   registerOrRemoveSource,
   analyzeSource,
   getTableDimension,
+  renameTableColumn,
+  updateSourceAttribute,
+  duplicateTableColumn,
 };

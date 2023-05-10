@@ -605,10 +605,12 @@ MapX resolvers available in static and app
     * [.show_modal_share(opt)](#MapxResolversStatic+show_modal_share) ⇒ <code>Boolean</code>
     * [.close_modal_share()](#MapxResolversStatic+close_modal_share) ⇒ <code>Boolean</code>
     * [.get_modal_share_string()](#MapxResolversStatic+get_modal_share_string) ⇒ <code>String</code>
+    * [.get_modal_share_tests()](#MapxResolversStatic+get_modal_share_tests) ⇒ <code>array</code>
     * [.set_theme(opt)](#MapxResolversStatic+set_theme) ⇒ <code>Boolean</code>
     * [.get_themes_id()](#MapxResolversStatic+get_themes_id) ⇒ <code>Array</code>
     * [.get_themes()](#MapxResolversStatic+get_themes) ⇒ <code>Object</code>
     * [.get_theme_id()](#MapxResolversStatic+get_theme_id) ⇒ <code>string</code>
+    * [.add_theme(opt)](#MapxResolversStatic+add_theme) ⇒ <code>Boolean</code>
     * [.has_el_id(opt)](#MapxResolversStatic+has_el_id)
     * [.set_dashboard_visibility(opt)](#MapxResolversStatic+set_dashboard_visibility) ⇒ <code>Boolean</code>
     * [.is_dashboard_visible()](#MapxResolversStatic+is_dashboard_visible) ⇒ <code>Boolean</code>
@@ -626,7 +628,7 @@ MapX resolvers available in static and app
     * [.get_view_meta(opt, view)](#MapxResolversStatic+get_view_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.get_view_table_attribute_config(opt)](#MapxResolversStatic+get_view_table_attribute_config) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>Promise.&lt;String&gt;</code>
-    * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Object</code>
+    * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Array.&lt;Object&gt;</code>
     * [.get_view_legend_image(opt)](#MapxResolversStatic+get_view_legend_image) ⇒ <code>String</code>
     * [.set_view_layer_filter_text(opt)](#MapxResolversStatic+set_view_layer_filter_text) ⇒ <code>Boolean</code>
     * [.get_view_layer_filter_text(opt)](#MapxResolversStatic+get_view_layer_filter_text) ⇒ <code>Boolean</code>
@@ -658,6 +660,9 @@ MapX resolvers available in static and app
     * [.map_get_zoom()](#MapxResolversStatic+map_get_zoom) ⇒ <code>Float</code>
     * [.map_get_center()](#MapxResolversStatic+map_get_center) ⇒ <code>Object</code>
     * [.map_get_bounds_array()](#MapxResolversStatic+map_get_bounds_array) ⇒ <code>Array</code>
+    * [.map_set_bounds_array(opt)](#MapxResolversStatic+map_set_bounds_array)
+    * [.map_get_max_bounds_array()](#MapxResolversStatic+map_get_max_bounds_array) ⇒ <code>Array</code> \| <code>null</code>
+    * [.map_set_max_bounds_array(opt)](#MapxResolversStatic+map_set_max_bounds_array) ⇒ <code>boolean</code>
     * [.map(opt)](#MapxResolversStatic+map) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>
     * [.map_wait_idle()](#MapxResolversStatic+map_wait_idle) ⇒ <code>Boolean</code>
     * [.common_loc_get_list_codes()](#MapxResolversStatic+common_loc_get_list_codes) ⇒ <code>Array</code>
@@ -786,6 +791,13 @@ Get sharing string
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>String</code> - Sharing string ( code / url )  
+<a name="MapxResolversStatic+get_modal_share_tests"></a>
+
+#### mapxResolversStatic.get\_modal\_share\_tests() ⇒ <code>array</code>
+Modal Share Tests Suite
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>array</code> - array of tests  
 <a name="MapxResolversStatic+set_theme"></a>
 
 #### mapxResolversStatic.set\_theme(opt) ⇒ <code>Boolean</code>
@@ -822,6 +834,19 @@ Get current theme id
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>string</code> - Theme id  
+<a name="MapxResolversStatic+add_theme"></a>
+
+#### mapxResolversStatic.add\_theme(opt) ⇒ <code>Boolean</code>
+Add a custom theme into mapx and use it.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Boolean</code> - done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.theme | <code>String</code> | Valid theme (full). |
+
 <a name="MapxResolversStatic+has_el_id"></a>
 
 #### mapxResolversStatic.has\_el\_id(opt)
@@ -999,7 +1024,7 @@ Get view table attribute url
 
 <a name="MapxResolversStatic+get_view_table_attribute"></a>
 
-#### mapxResolversStatic.get\_view\_table\_attribute(opt) ⇒ <code>Object</code>
+#### mapxResolversStatic.get\_view\_table\_attribute(opt) ⇒ <code>Array.&lt;Object&gt;</code>
 Get view table attribute
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
@@ -1384,6 +1409,38 @@ Get current map bounds as array
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Array</code> - Bounds [west, south, east, north]  
+<a name="MapxResolversStatic+map_set_bounds_array"></a>
+
+#### mapxResolversStatic.map\_set\_bounds\_array(opt)
+Set current map bounds
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.bounds | <code>array</code> | [west, south, east, north] |
+
+<a name="MapxResolversStatic+map_get_max_bounds_array"></a>
+
+#### mapxResolversStatic.map\_get\_max\_bounds\_array() ⇒ <code>Array</code> \| <code>null</code>
+Get current max bounds / world
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Array</code> \| <code>null</code> - bounds [west, south, east, north] or null  
+<a name="MapxResolversStatic+map_set_max_bounds_array"></a>
+
+#### mapxResolversStatic.map\_set\_max\_bounds\_array(opt) ⇒ <code>boolean</code>
+Set current max bounds / world
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>boolean</code> - done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.bounds | <code>array</code> | [west, south, east, north] If empty or null = reset |
+
 <a name="MapxResolversStatic+map"></a>
 
 #### mapxResolversStatic.map(opt) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>

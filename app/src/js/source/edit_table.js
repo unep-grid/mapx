@@ -1,3 +1,4 @@
+import { settings } from "../settings";
 import { WsToolsBase } from "../ws_tools/base.js";
 import {
   modal,
@@ -12,10 +13,12 @@ import { getDictTemplate, getDictItem } from "./../language";
 import { getArrayDistinct } from "./../array_stat";
 import { prefGet, prefSet } from "./../user_pref";
 import { modalMarkdown } from "./../modal_markdown/index.js";
-import { makeId, buttonEnable } from "../mx_helper_misc.js";
+import { clone, makeId, buttonEnable } from "../mx_helper_misc.js";
 import { RadialProgress } from "../radial_progress";
 import { theme } from "../mx.js";
 import { Popup } from "../popup";
+import { viewLink, getView } from "../map_helpers/index.js";
+import { getSourceVtSummaryUI } from "../mx_helper_source_summary";
 import {
   isPgType,
   isPgTypeDate,
@@ -33,13 +36,15 @@ import {
   isStringRange,
   isSafeName,
   makeSafeName,
+  isArray,
+  isEqual,
+  isEqualNoType,
 } from "./../is_test/index.js";
 
 import "./edit_table.types.js";
 import "./edit_table.less";
 import { onNextFrame, waitFrameAsync } from "../animation_frame";
 
-/* import { jpeg2000 } from "modernizr";*/
 const defaults = {
   debug: false,
   log_perf: false, //def from ws_tools
@@ -48,7 +53,6 @@ const defaults = {
   id_column_main: "gid",
   id_column_valid: "_mx_valid",
   id_columns_reserved: ["gid", "_mx_valid", "geom"],
-  id_columns_views: [],
   max_changes: 1e5, //max one column at max rows
   min_columns: 3,
   max_rows: 1e5, // should match server
@@ -57,7 +61,7 @@ const defaults = {
   timeout_emit: 1e3 * 60, // 10s round trip
   timeout_sanizing: 1e3 * 60,
   timeout_geom_valid: 1e3 * 120,
-  routes: {
+  events: {
     /**
      * server to here
      */
@@ -72,6 +76,7 @@ const defaults = {
     /**
      * here to server
      */
+    client_get: "/client/get",
     client_edit_start: "/client/source/edit/table",
     client_edit_updates: "/client/source/edit/table/update",
     client_exit: "/client/source/edit/table/exit",
@@ -121,12 +126,13 @@ export class EditTableSessionClient extends WsToolsBase {
   async init() {
     const et = this;
     try {
-      const r = et._config.routes;
+      const e = et._config.events;
       if (et._initialized) {
         return;
       }
       et._updates = new Map();
       et._validation_cache = new Map();
+      et._get_cache = new Map();
       et._dispatch_queue = new Set();
       et._batch_cells = [];
       et._members = [];
@@ -140,6 +146,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et._lock_table_by_user_id = null;
       et._initialized = true;
       et._id_table = et._config?.id_table;
+      et._id_user = settings.user.id;
       et._has_geom = false;
       et._validation_geom = {};
       et._table_ready = false;
@@ -177,14 +184,13 @@ export class EditTableSessionClient extends WsToolsBase {
        *   - distinct socket
        *   - sync event ID between server and client
        */
-      et._socket.on(r.server_joined, et.onJoined);
-      et._socket.on(r.server_error, et.onServerError);
-      et._socket.on(r.server_new_member, et.onNewMember);
-      et._socket.on(r.server_member_exit, et.onMemberExit);
-      et._socket.on(r.server_table_data, et.initTable);
-      et._socket.on(r.server_dispatch, et.onDispatch);
-      et._socket.on(r.server_progress, et.onProgress);
-      //et._socket.on(r.server_geom_validate_result, et.onGeomValidateResult);
+      et._socket.on(e.server_joined, et.onJoined);
+      et._socket.on(e.server_error, et.onServerError);
+      et._socket.on(e.server_new_member, et.onNewMember);
+      et._socket.on(e.server_member_exit, et.onMemberExit);
+      et._socket.on(e.server_table_data, et.initTable);
+      et._socket.on(e.server_dispatch, et.onDispatch);
+      et._socket.on(e.server_progress, et.onProgress);
 
       et._socket.on("disconnect", et.onDisconnect);
       await et.dialogWarning();
@@ -224,6 +230,29 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
+   * Ask if changed should be discarded
+   */
+  async dialogUnsavedChangesDiscard() {
+    const et = this;
+    const skip = et._config.test_mode;
+    const nPending = et.countUpdateValid();
+    if (nPending === 0 || skip) {
+      return true;
+    }
+    const discard = await modalConfirm({
+      title: tt("edit_table_modal_quit_ignore_changes_title"),
+      content: tt("edit_table_modal_quit_ignore_changes", {
+        data: {
+          count: nPending,
+        },
+      }),
+      confirm: tt("btn_confirm"),
+      cancel: tt("btn_cancel"),
+    });
+    return !!discard;
+  }
+
+  /**
    * Display a warning : editing will alter your data
    */
   async dialogWarning() {
@@ -250,10 +279,10 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async start(opt) {
     const et = this;
-    const r = et._config.routes;
+    const e = et._config.events;
     const def = { send_table: true };
     opt = Object.assign({}, def, opt);
-    await et.emit(r.client_edit_start, opt);
+    await et.emit(e.client_edit_start, opt);
   }
 
   /**
@@ -267,6 +296,8 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async destroy() {
     const et = this;
+    const e = et._config.events;
+
     try {
       if (et._destroyed) {
         return;
@@ -274,27 +305,11 @@ export class EditTableSessionClient extends WsToolsBase {
       /**
        * Prevent quit with unsaved changes
        */
-      const nValid = et.countUpdateValid();
-      if (nValid > 0) {
-        const skip = et._config.test_mode;
-        if (!skip) {
-          const quit = await modalConfirm({
-            title: tt("edit_table_modal_quit_ignore_changes_title"),
-            content: tt("edit_table_modal_quit_ignore_changes", {
-              data: {
-                count: nValid,
-              },
-            }),
-            confirm: tt("btn_confirm"),
-            cancel: tt("btn_cancel"),
-          });
-          if (!quit) {
-            return false;
-          }
-        }
+      const discard = await et.dialogUnsavedChangesDiscard();
+      if (!discard) {
+        return;
       }
 
-      const r = et._config.routes;
       et._destroyed = true;
       et._lock_table_concurrent = false;
       et._lock_table_by_user_id = null;
@@ -303,20 +318,19 @@ export class EditTableSessionClient extends WsToolsBase {
           console.error(e);
         });
       }
-      et.emit(r.client_exit).catch((e) => {
+      et.emit(e.client_exit).catch((e) => {
         console.error(e);
       });
       et._modal?.close();
       et._popups.forEach((p) => p.destroy());
       et._resize_observer?.disconnect();
-      et._socket.off(r.server_joined, et.onJoined);
-      et._socket.off(r.server_error, et.onServerError);
-      et._socket.off(r.server_new_member, et.onNewMember);
-      et._socket.off(r.server_member_exit, et.onMemberExit);
-      et._socket.off(r.server_table_data, et.initTable);
-      et._socket.off(r.server_dispatch, et.onDispatch);
-      et._socket.off(r.server_progress, et.onProgress);
-      //et._socket.off(r.server_geom_validate_result, et.onGeomValidateResult);
+      et._socket.off(e.server_joined, et.onJoined);
+      et._socket.off(e.server_error, et.onServerError);
+      et._socket.off(e.server_new_member, et.onNewMember);
+      et._socket.off(e.server_member_exit, et.onMemberExit);
+      et._socket.off(e.server_table_data, et.initTable);
+      et._socket.off(e.server_dispatch, et.onDispatch);
+      et._socket.off(e.server_progress, et.onProgress);
       et._socket.off("disconnect", et.onDisconnect);
       et.fire("destroy").catch((e) => {
         console.error(e);
@@ -342,15 +356,15 @@ export class EditTableSessionClient extends WsToolsBase {
     });
     et._el_button_save = elButtonFa("btn_save", {
       icon: "floppy-o",
-      action: et.save,
+      action: et._l(et.save),
     });
     et._el_button_undo = elButtonFa("btn_edit_undo", {
       icon: "undo",
-      action: et.undo,
+      action: et._l(et.undo),
     });
     et._el_button_redo = elButtonFa("btn_edit_redo", {
       icon: "repeat",
-      action: et.redo,
+      action: et._l(et.redo),
     });
     et._el_button_wiki = elButtonFa("btn_help", {
       icon: "question-circle",
@@ -358,11 +372,27 @@ export class EditTableSessionClient extends WsToolsBase {
     });
     et._el_button_add_column = elButtonFa("btn_edit_add_column", {
       icon: "plus-circle",
-      action: et.dialogAddColumn,
+      action: et._l(et.dialogAddColumn),
     });
     et._el_button_remove_column = elButtonFa("btn_edit_remove_column", {
       icon: "minus-circle",
-      action: et.dialogRemoveColumn,
+      action: et._l(et.dialogRemoveColumn),
+    });
+    et._el_button_rename_column = elButtonFa("btn_edit_rename_column", {
+      icon: "pencil",
+      action: et._l(et.dialogRenameColumn),
+    });
+    et._el_button_duplicate_column = elButtonFa("btn_edit_duplicate_column", {
+      icon: "copy",
+      action: et._l(et.dialogDuplicateColumn),
+    });
+    et._el_button_stat = elButtonFa("btn_stat_attribute", {
+      icon: "bar-chart",
+      action: et.dialogStat,
+    });
+    et._el_button_colums_order = elButtonFa("btn_edit_columns_order", {
+      icon: "sort",
+      action: et._l(et.dialogColumnOrder),
     });
     et._el_checkbox_autosave = elCheckbox("btn_edit_autosave", {
       action: et.updateAutoSave,
@@ -374,12 +404,12 @@ export class EditTableSessionClient extends WsToolsBase {
      */
     et._el_button_geom_validate = elButtonFa("btn_edit_geom_validate", {
       icon: "check",
-      action: et.dialogGeomValidate,
+      action: et._l(et.dialogGeomValidate),
     });
 
     et._el_button_geom_repair = elButtonFa("btn_edit_geom_repair", {
       icon: "user-md",
-      action: et.dialogGeomRepair,
+      action: et._l(et.dialogGeomRepair),
     });
 
     /**
@@ -390,8 +420,12 @@ export class EditTableSessionClient extends WsToolsBase {
       content: [
         et._el_button_add_column,
         et._el_button_remove_column,
+        et._el_button_rename_column,
+        et._el_button_duplicate_column,
         et._el_button_geom_validate,
         et._el_button_geom_repair,
+        et._el_button_stat,
+        et._el_button_colums_order,
       ],
     });
 
@@ -435,6 +469,7 @@ export class EditTableSessionClient extends WsToolsBase {
     ];
 
     et._el_table = el("div", {
+      id: `ht_${et._id_table}`,
       class: "edit-table--table",
     });
 
@@ -498,17 +533,17 @@ export class EditTableSessionClient extends WsToolsBase {
     await et.fire("built");
   }
 
-  initColumns(updates) {
+  _init_columns(table) {
     const et = this;
+    const columns = table.types;
     et._columns = [];
-    et.addColumns(updates);
+    et._add_columns(columns, table.columnsOrder);
   }
 
-  addColumns(updates) {
+  _add_columns(updates, order) {
     const et = this;
     const nColumns = et._columns.length + updates.length;
     const singleCol = updates.length === 1;
-
     let cPos = 0;
 
     for (const update of updates) {
@@ -516,7 +551,7 @@ export class EditTableSessionClient extends WsToolsBase {
        * Invalid name = not editable. See :
        * https://github.com/handsontable/handsontable/issues/5439
        */
-      const column = et._column(update.column_name, update.column_type);
+      const column = et._column_create(update.column_name, update.column_type);
       column._pos = singleCol
         ? nColumns
         : column._invalid
@@ -524,24 +559,19 @@ export class EditTableSessionClient extends WsToolsBase {
         : column.readOnly
         ? -1
         : cPos++;
-
+      if (isArray(order) && order.includes(column.data)) {
+        column._pos = order.indexOf(column.data);
+      }
       et._columns.push(column);
     }
 
     et._columns.sort((a, b) => a._pos - b._pos);
-    et.updateColumnLabels();
   }
 
-  updateColumnLabels() {
+  async _add_column_strict(update) {
     const et = this;
-    et._columns_labels = et._columns.map((c) => c.data);
-  }
-
-  addColumnStrict(update) {
-    const et = this;
-
-    const isValid =
-      et.isValidName(update.column_name) && isPgType(update.column_type);
+    const isValidName = await et.isValidName(update.column_name);
+    const isValid = isValidName && isPgType(update.column_type);
 
     if (!isValid) {
       console.warn(
@@ -549,8 +579,57 @@ export class EditTableSessionClient extends WsToolsBase {
       );
       return false;
     }
-    et.addColumns([update]);
+    et._add_columns([update]);
     return true;
+  }
+
+  /**
+   * Helper to rename / duplicate column
+   * @param {string} oldColumnName Old column name
+   * @param {string} newColumnName New column name
+   * @param {object} opt options
+   * @return {Promise}
+   */
+  async _rename_column(oldColumnName, newColumnName, opt) {
+    const et = this;
+    opt = Object.assign({}, { duplicate: false }, opt);
+    const columns = et.getColumns();
+    const labels = et.getColumnLabels();
+    const posData = columns.findIndex(
+      (column) => column.data === oldColumnName
+    );
+    const posLabel = labels.indexOf(oldColumnName);
+
+    if (posLabel === -1) {
+      console.warn(`_rename_column: unknown column ${oldColumnName}`);
+      return;
+    }
+
+    if (!opt.duplicate) {
+      et.clearRef(oldColumnName);
+    }
+
+    if (opt.duplicate) {
+      const newColumn = clone(columns[posData]);
+      newColumn.data = newColumnName;
+      columns.push(newColumn);
+      et._column_set_readonly(newColumn);
+    } else {
+      columns[posData].data = newColumnName;
+      et._column_set_readonly(columns[posData]);
+    }
+
+    const data = et._ht.getSourceData();
+    for (const row of data) {
+      if (row.hasOwnProperty(oldColumnName)) {
+        row[newColumnName] = clone(row[oldColumnName]);
+        if (!opt.duplicate) {
+          delete row[oldColumnName];
+        }
+      }
+    }
+
+    await et.updateData(data, "column_rename_handler");
   }
 
   updateTableColumns() {
@@ -560,6 +639,7 @@ export class EditTableSessionClient extends WsToolsBase {
       colHeaders: et.getColumnLabels(),
     });
     et._ht.render();
+    et.updateButtonsAddRemoveColumn();
   }
 
   get column_index() {
@@ -580,24 +660,62 @@ export class EditTableSessionClient extends WsToolsBase {
 
   getColumnLabels() {
     const et = this;
-    return et._columns_labels;
+    return et._columns.map((c) => c.data);
   }
 
-  _column(name, pg_type) {
+  /**
+   * Get an array of columns as option
+   * @param {Array} checks in is_safe, is_not_used, is_not_reserved
+   * @return {Promise<array>}
+   */
+  async getColumnsNamesOptions(checks) {
+    const et = this;
+    const names = et.getColumnLabels();
+    const optionColumnNames = [];
+
+    for (const name of names) {
+      const isValid = await et.isValidName(name, checks);
+      const elOption = el("option", { value: name }, name);
+      if (!isValid) {
+        elOption.disabled = true;
+        const reasons = await et.validateName(name);
+        const issues = [];
+        for (const k in reasons) {
+          const v = reasons[k];
+          if (!v) {
+            issues.push(await getDictItem(`edit_table_modal_issue_name_${k}`));
+          }
+        }
+        elOption.label = `${name} (${issues.join(",")})`;
+      }
+      optionColumnNames.push(elOption);
+    }
+    return optionColumnNames;
+  }
+
+  _column_create(name, pg_type) {
     const et = this;
     const column = {};
-    const isInvalid = !isSafeName(name);
-    const readOnly = et.isReadOnly(name);
     const isOkType = isPgType(pg_type);
     if (!isOkType) {
       throw new Error(`Wrong type in column creator : ${pg_type}`);
     }
+    column._pg_type = pg_type;
     column._pos = 0;
     column.data = name;
-    column.readOnly = readOnly || isInvalid;
-    column._invalid = isInvalid;
-    column._pg_type = pg_type;
     column.type = typeConvert(pg_type, "mx_handsontable");
+    et._column_set_readonly(column);
+    return column;
+  }
+
+  _column_set_readonly(column) {
+    const et = this;
+    if (isEmpty(column)) {
+      return;
+    }
+    const name = column.data;
+    column._invalid = !isSafeName(name);
+    column.readOnly = et.isReadOnly(name) || column._invalid;
     return column;
   }
 
@@ -624,6 +742,9 @@ export class EditTableSessionClient extends WsToolsBase {
     et.updateButtonSave();
     et.updateButtonsUndoRedo();
     et.updateButtonsAddRemoveColumn();
+    et.updateButtonRenameColumn();
+    et.updateButtonOrderColumns();
+    et.updateButtonStatColumn();
   }
 
   /**
@@ -691,6 +812,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtonsUndoRedo() {
     const et = this;
+    et.clearUndoRedoNoChange();
     const hasRedo = et._ht.isRedoAvailable();
     const hasUndo = et._ht.isUndoAvailable();
     et._button_enable(et._el_button_redo, hasRedo);
@@ -702,7 +824,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   updateButtonsGeom() {
     const et = this;
-    const hasGeom = et._has_geom;
+    const hasGeom = et._has_geom && !et.unsaved;
     et._button_enable(et._el_button_geom_repair, hasGeom);
     et._button_enable(et._el_button_geom_validate, hasGeom);
   }
@@ -713,8 +835,27 @@ export class EditTableSessionClient extends WsToolsBase {
   updateButtonRemoveColumn() {
     const et = this;
     const columns = et.getColumns();
-    et._disable_remove_column = columns.length <= et._config.min_columns;
+    et._disable_remove_column =
+      et.unsaved || columns.length <= et._config.min_columns;
     et._button_enable(et._el_button_remove_column, !et._disable_remove_column);
+  }
+
+  updateButtonOrderColumns() {
+    const et = this;
+    /* always true if no pending update, unless _button_enable use _disabled flag*/
+    et._button_enable(et._el_button_colums_order, !et.unsaved);
+  }
+
+  updateButtonStatColumn() {
+    const et = this;
+    /* always true if no pending upadte, unless _button_enable use _disabled flag*/
+    et._button_enable(et._el_button_stat, !et.unsaved);
+  }
+
+  updateButtonRenameColumn() {
+    const et = this;
+    /* always true if no pending upadte, unless _button_enable use _disabled flag*/
+    et._button_enable(et._el_button_rename_column, !et.unsaved);
   }
 
   /**
@@ -723,8 +864,10 @@ export class EditTableSessionClient extends WsToolsBase {
   updateButtonAddColumn() {
     const et = this;
     const columns = et.getColumns();
-    et._disable_add_column = columns.length > et._config.max_columns;
+    et._disable_add_column =
+      et.unsaved || columns.length > et._config.max_columns;
     et._button_enable(et._el_button_add_column, !et._disable_add_column);
+    et._button_enable(et._el_button_duplicate_column, !et._disable_add_column);
   }
 
   /**
@@ -774,7 +917,7 @@ export class EditTableSessionClient extends WsToolsBase {
    * @param {Object} update Update object
    * @param {Object} message Container message
    */
-  handlerUpdateLock(update, message) {
+  async handlerUpdateLock(update, message) {
     const et = this;
     if (update.lock) {
       et._lock_table_by_user_id = message.id_user;
@@ -792,17 +935,11 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   formatColumns(pos, element) {
     const et = this;
-    /**
-     * TODO : if dev is requested, uncomment this
-     */
-    const DEV_TO_BE_VALIDATED = false;
-    if (DEV_TO_BE_VALIDATED) {
-      if (pos >= 0) {
-        const type = et.getColumnTypeById(pos);
-        element.classList.add(`edit-table--header`);
-        element.classList.add(`edit-table--header-${type}`);
-        element.title = type;
-      }
+    if (pos >= 0) {
+      const type = et.getColumnTypeById(pos);
+      element.classList.add(`edit-table--header`);
+      element.classList.add(`edit-table--header-${type}`);
+      element.title = type;
     }
   }
 
@@ -842,11 +979,12 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Column name validation : columns used in style and secondary attributes
    * @param {String} name
-   * @return {Boolean}
+   * @return {Promise<Boolean>}
    */
-  isColumnViews(name) {
+  async isColumnUsedInViews(name) {
     const et = this;
-    return et._config.id_columns_views.includes(name);
+    const columns = await et.get("columns_used");
+    return columns.includes(name);
   }
   /**
    *  Check if this is a date column
@@ -857,6 +995,105 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     const type = et.getColumnType(name, "postgres");
     return isPgTypeDate(type);
+  }
+
+  /**
+   * Test if source is referenced in dashboard, custom code / style
+   * -> In such case remove/rename should be disabled
+   * @return {Promise<Boolean>}
+   */
+  async hasSourceViewsCode() {
+    const et = this;
+    return et.hasSourceViews(["dashboard", "custom_style", "custom_code"]);
+  }
+
+  /**
+   * Test if source is referenced as layer, dashboard, cc and cs
+   */
+  async hasSourceViews(types) {
+    const et = this;
+    const s = await et.getTableViewsFilter(types);
+    return s.length > 0;
+  }
+
+  /**
+   * Get views table with dependencies : layer, dash, cc, cs
+   */
+  async getTableViews() {
+    const et = this;
+    const tableViews = await et.get("table_views");
+    return tableViews;
+  }
+
+  /**
+   * Get views table with dependencies +filter by type
+   */
+  async getTableViewsFilter(types) {
+    const et = this;
+    types = types || ["layer", "dashboard", "custom_style", "custom_code"];
+    const table = await et.getTableViews();
+    return table.filter((t) => types.includes(t.type));
+  }
+
+  async getTableViewsCode() {
+    const et = this;
+    const table = await et.getTableViewsFilter([
+      "custom_code",
+      "custom_style",
+      "dashboard",
+    ]);
+    return table;
+  }
+
+  async getTableViewsCodeTable() {
+    /**
+     * views table
+     */
+    const et = this;
+    const tableData = await et.getTableViewsCode();
+    const currentProject = settings.project.id;
+
+    const elTable = el("table", { class: ["table"] });
+    const elThead = el("thead");
+    const elTbody = el("tbody");
+
+    const headers = ["Title", "Project", "Type"];
+    const elTrHead = el(
+      "tr",
+      headers.map((header) => el("th", header))
+    );
+    elThead.appendChild(elTrHead);
+    elTable.appendChild(elThead);
+
+    for (const row of tableData) {
+      const view = getView(row.id);
+      const addLink = row.project === currentProject && view?._edit;
+      const elTitle = el("span", row.title);
+      const elView = addLink
+        ? el(
+            "a",
+            {
+              href: viewLink(row.id, {
+                useStatic: false,
+                project: row.project,
+              }),
+              target: "_blank",
+            },
+            elTitle
+          )
+        : elTitle;
+
+      const elTr = el("tr", [
+        el("td", elView),
+        el("td", row.project_name),
+        el("td", tt(`edit_table_view_with_${row.type}`)),
+      ]);
+
+      elTbody.appendChild(elTr);
+    }
+
+    elTable.appendChild(elTbody);
+    return elTable;
   }
 
   /**
@@ -872,14 +1109,61 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Column name validation : check is name is valid
    * @param {String} name
-   * @return {Boolean}
+   * @param {array} checks List of checks : is_safe,is_not_used, is_not_reserved
+   * @return {Promise<Boolean>}
    */
-  isValidName(name) {
+  async isValidName(name, checks) {
+    const et = this;
+    checks = isEmpty(checks)
+      ? ["is_safe", "is_not_used", "is_not_reserved"]
+      : checks;
+    const valid = await et.validateName(name);
+    const ok = checks.reduce((a, c) => a && valid[c], true);
+    return ok;
+  }
+  /**
+   * Column name validation : check is name is valid
+   * @param {String} name
+   * @return {Promise<Boolean>}
+   */
+  async validateName(name) {
     const et = this;
     const isSafe = isSafeName(name);
-    const isNotStyle = !et.isColumnViews(name);
+    const isAttribute = await et.isColumnUsedInViews(name);
+    const isNotAttribute = !isAttribute;
     const isNotReserved = !et.isColumnReserved(name);
-    return isSafe && isNotReserved && isNotStyle;
+    return {
+      is_safe: isSafe,
+      is_not_used: isNotAttribute,
+      is_not_reserved: isNotReserved,
+    };
+  }
+
+  /**
+   * Column new name validation : check is new name is valid
+   * @param {String} name
+   * @return {Promise<Boolean>}
+   */
+  async validateNewName(name) {
+    const et = this;
+    const minLength = 3;
+    const maxLength = 50;
+    const validUnique = !et.columnNameExists(name);
+    const validName = await et.isValidName(name, [
+      "is_safe",
+      "is_not_reserved",
+    ]);
+    const validLength = isStringRange(name, minLength, maxLength);
+    const valid = validName && validUnique && validLength;
+
+    return {
+      valid,
+      validUnique,
+      validLength,
+      validName,
+      minLength,
+      maxLength,
+    };
   }
 
   /**
@@ -1033,29 +1317,27 @@ export class EditTableSessionClient extends WsToolsBase {
       et._validation_geom = table.validation;
     }
 
-    if (isNotEmpty(table.attributesViews)) {
-      et._config.id_columns_views.push(...table.attributesViews);
-    }
-
     /**
      * Init columns
      */
-    et.initColumns(table.types);
+    et._init_columns(table);
 
     /**
-     * New handsontable
+     * Set additional visual order for manual move
      */
     et._ht = new handsontable(et._el_table, {
       licenseKey: et._config.ht_license,
       columns: et.getColumns(),
       data: table.data,
       rowHeaders: true,
-      columnSorting: true,
+      persistentState: false,
       colHeaders: et.getColumnLabels(),
+      columnSorting: true,
       allowInvalid: true,
       allowInsertRow: false,
       renderAllRows: false,
       maxRows: table.data.length,
+
       copyPaste: {
         rowsLimit: table.data.length,
       },
@@ -1074,20 +1356,21 @@ export class EditTableSessionClient extends WsToolsBase {
       //beforeValidate: et.beforeValidate,
       afterGetColHeader: et.formatColumns,
       afterChange: et.afterChange,
-      afterLoadData: et.afterLoadData,
+      afterLoadData: et.afterLoadData, //also reload/updateData
       height: et.updateHeight,
       disableVisualSelection: false,
+      comment: false,
     });
 
     /**
      * Add hooks
      */
     et._ht.addHook("afterUndo", () => {
-      // isRedoAvailable is not ready after undo, add delay
+      // BUG: isRedoAvailable is not ready after undo, add delay
       et.updateButtons(20);
     });
     et._ht.addHook("afterRedo", () => {
-      // isUndoAvailable is not ready after redo, add delay
+      // BUG isUndoAvailable is not ready after redo, add delay
       et.updateButtons(20);
     });
 
@@ -1101,6 +1384,116 @@ export class EditTableSessionClient extends WsToolsBase {
 
     if (initLocked) {
       et.lock();
+    }
+  }
+
+  async dialogColumnOrder() {
+    const { default: Muuri } = await import("muuri");
+    const et = this;
+    const source = et._config.id_source_dialog;
+    const columns = et.getColumns();
+    const orderBefore = et.getColumnLabels();
+    let grid;
+
+    const elCols = el(
+      "div",
+      {
+        class: "edit-table--murri-grid",
+      },
+      columns.map((c) => {
+        return el(
+          "div",
+          { class: "edit-table--muuri-item", value: c.data },
+          el(
+            "div",
+            { class: "edit-table--muuri-item-content" },
+            el("span", c.data)
+          )
+        );
+      })
+    );
+
+    const ro = new ResizeObserver(() => {
+      if (!grid instanceof Muuri) {
+        return;
+      }
+      clearTimeout(grid._id_ro);
+      grid._id_ro = setTimeout(() => {
+        grid.refreshItems().layout();
+        console.log("layout");
+      }, 200);
+    });
+
+    ro.observe(elCols);
+
+    const orderAfter = await modalConfirm({
+      title: tt("edit_table_modal_order_columns_title"),
+      content: elCols,
+      cbInit: () => {
+        grid = new Muuri(elCols, {
+          containerClass: "edit-table--murri-grid",
+          itemClass: "edit-table--murri-item",
+          dragEnabled: true,
+        });
+      },
+      cbData: () => {
+        const order = grid
+          .getItems()
+          .map((item) => item._element.getAttribute("value"));
+        return order;
+      },
+    });
+
+    ro.disconnect();
+
+    if (!orderAfter) {
+      return;
+    }
+
+    const update = {
+      type: "order_columns",
+      id_table: et._id_table,
+      columns_order: orderAfter,
+    };
+
+    if (isEqual(orderBefore, orderAfter)) {
+      return;
+    }
+
+    et.handlerUpdateColumnsOrder(update, source);
+  }
+
+  /**
+   * Handler of move column / visual order
+   * -> only for dispatch
+   * @param {Object} update Update object
+   * @param {String} source (edit, dispatch..)
+   */
+  async handlerUpdateColumnsOrder(update, source) {
+    const et = this;
+    try {
+      const order = update.columns_order;
+      const columns = et.getColumns();
+
+      for (const column of columns) {
+        if (isArray(order) && order.includes(column.data)) {
+          column._pos = order.indexOf(column.data);
+        }
+      }
+
+      et._columns.sort((a, b) => a._pos - b._pos);
+      et.updateTableColumns();
+
+      if (et.isFromDispatch(source)) {
+        return;
+      }
+
+      await et.emitUpdatesDb([update]);
+
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
     }
   }
 
@@ -1257,16 +1650,25 @@ export class EditTableSessionClient extends WsToolsBase {
           for (const update of message.updates) {
             switch (update.type) {
               case "lock_table":
-                et.handlerUpdateLock(update, message);
+                await et.handlerUpdateLock(update, message);
                 break;
               case "update_cell":
-                et.handlerUpdateCellsCollect(update, message);
+                await et.handlerUpdateCellsCollect(update, message);
                 break;
               case "add_column":
-                et.handlerUpdateColumnAdd(update, idDispatch);
+                await et.handlerUpdateColumnAdd(update, idDispatch);
+                break;
+              case "rename_column":
+                await et.handlerUpdateColumnRename(update, idDispatch);
+                break;
+              case "duplicate_column":
+                await et.handlerUpdateColumnDuplicate(update, idDispatch);
                 break;
               case "remove_column":
-                et.handlerUpdateColumnRemove(update, idDispatch);
+                await et.handlerUpdateColumnRemove(update, idDispatch);
+                break;
+              case "order_columns":
+                await et.handlerUpdateColumnsOrder(update, idDispatch);
                 break;
               default:
                 console.warn("unhandled update:", message);
@@ -1435,21 +1837,21 @@ export class EditTableSessionClient extends WsToolsBase {
            * Splice / remove
            * Keep position
            */
-          colRemoved.column = columns.splice(n, 1);
+          colRemoved.column = columns.splice(n, 1)[0];
           colRemoved.pos = n;
+          colRemoved.name = colRemoved.column.data;
           continue;
         }
       }
 
       if (isEmpty(colRemoved)) {
         console.warn(`Column ${update.column_name} not removed`);
-        return;
+        return false;
       }
-
       /**
-       * Update columns label
+       * Remove refs : undo/redo/updates
        */
-      et.updateColumnLabels();
+      et.clearRef(colRemoved.name);
 
       /**
        * ⚠️ Column removal using alter('remove_col',) is not
@@ -1462,29 +1864,14 @@ export class EditTableSessionClient extends WsToolsBase {
        * - Alter table
        * et._ht.alter("remove_col", id);
        */
-      et._ht.updateSettings({
-        columns: et.getColumns(),
-        colHeaders: et.getColumnLabels(),
-      });
-
-      /**
-       * Remove update item that ref the removed column
-       */
-      et.clearUpdateRefColName(update.column_name);
-
-      /**
-       * Same for undo/redo
-       */
-      et.clearUndoRedoRefCol(colRemoved.pos);
+      et.updateTableColumns();
 
       const data = et._ht.getSourceData();
       for (const row of data) {
         delete row[update.column_name];
       }
 
-      et._ht.loadData(data);
-      // not available in 6.2.2
-      //et._ht.updateData(data, "column_remove_handler");
+      await et.updateData(data, "column_remove_handler");
 
       /**
        * Update buttons state
@@ -1506,6 +1893,41 @@ export class EditTableSessionClient extends WsToolsBase {
       console.error(e);
       return false;
     }
+  }
+
+  /**
+   * Update data wrapper
+   * @return {Promise<boolean>} done
+   */
+  async updateData(data, id) {
+    const et = this;
+    // avoid load / update data on a sorted table
+    et.clearSort();
+
+    // load data remove done action
+    const oldDone = clone(et._ht.undoRedo.doneActions);
+    const oldUndone = clone(et._ht.undoRedo.undoneActions);
+
+    if (et._ht.updateData) {
+      // not available in 6.2.2
+      et._ht.updateData(data, id || "column_remove_handler");
+    } else {
+      et._ht.loadData(data);
+    }
+    await et.once("table_ready", null);
+
+    et.updateTableColumns();
+    /**
+     * ht clear undo redo and add insert : we don't want that
+     * - clear redo ( inserts... )
+     * - re-add previous undo / redo
+     * ⚠️  in case of collumn remove, clear
+     *    redo / undo should be done before updateData
+     */
+    et._ht.undoRedo.clear();
+    et._ht.undoRedo.doneActions.push(...oldDone);
+    et._ht.undoRedo.undoneActions.push(...oldUndone);
+    et.updateButtonsUndoRedo();
   }
 
   /**
@@ -1538,34 +1960,61 @@ export class EditTableSessionClient extends WsToolsBase {
     return et.isFromDispatch(id) || et.isFromGeom(id) || et.isFromSanitize(id);
   }
 
+  /**
+   * Show basic attribute stat
+   */
+  async dialogStat() {
+    const et = this;
+    const names = et.getColumnLabels();
+    //const checks = ["is_not_reserved", "is_safe"];
+    const checks = ["is_not_reserved"];
+    const options = await et.getColumnsNamesOptions(checks);
+
+    const column = await modalPrompt({
+      title: tt("edit_table_modal_stat_column_title"),
+      label: tt("edit_table_modal_stat_column_label"),
+      confirm: tt("btn_next"),
+      inputTag: "select",
+      inputOptions: {
+        type: "select",
+        placeholder: "Attribute name",
+        value: names[0],
+      },
+      onInput: async (name, elBtnConfirm) => {
+        const ok = await et.isValidName(name, checks);
+        et._button_enable(elBtnConfirm, ok);
+      },
+      inputChildren: options,
+    });
+
+    await getSourceVtSummaryUI({ idSource: et._id_table, idAttr: column });
+  }
+
   /*
    * Interactive column remove
    */
   async dialogRemoveColumn() {
     const et = this;
     const names = et.getColumnLabels();
-    const optionColumnNames = [];
+    const checks = ["is_not_reserved", "is_safe", "is_not_used"];
+    const options = await et.getColumnsNamesOptions(checks);
     const source = et._config.id_source_dialog;
-
-    for (const name of names) {
-      const isValid = et.isValidName(name);
-      if (isValid) {
-        const elOption = el("option", { value: name }, name);
-        optionColumnNames.push(elOption);
-      }
-    }
 
     const columnToRemove = await modalPrompt({
       title: tt("edit_table_modal_remove_column_title"),
       label: tt("edit_table_modal_remove_column_label"),
-      confirm: tt("edit_table_modal_remove_column_next"),
+      confirm: tt("btn_next"),
       inputTag: "select",
       inputOptions: {
         type: "select",
         placeholder: "Column name",
         value: names[0],
       },
-      inputChildren: optionColumnNames,
+      onInput: async (name, elBtnConfirm) => {
+        const ok = await et.isValidName(name, checks);
+        et._button_enable(elBtnConfirm, ok);
+      },
+      inputChildren: options,
     });
 
     if (!columnToRemove) {
@@ -1604,7 +2053,230 @@ export class EditTableSessionClient extends WsToolsBase {
       column_name: columnToRemove,
     };
 
-    et.handlerUpdateColumnRemove(update, source);
+    await et.handlerUpdateColumnRemove(update, source);
+  }
+
+  async dialogDuplicateColumn() {
+    const et = this;
+    const checks = ["is_not_reserved"];
+    const options = await et.getColumnsNamesOptions(checks);
+    const names = et.getColumnLabels();
+    const source = et._config.id_source_dialog;
+
+    const columnToDuplicate = await modalPrompt({
+      title: tt("edit_table_modal_duplicate_column_title"),
+      label: tt("edit_table_modal_duplicate_column_label"),
+      confirm: tt("btn_next"),
+      inputTag: "select",
+      inputOptions: {
+        type: "select",
+        placeholder: "Column name",
+        value: names[0],
+      },
+      onInput: async (name, elBtnConfirm) => {
+        const ok = await et.isValidName(name, checks);
+        et._button_enable(elBtnConfirm, ok);
+      },
+      inputChildren: options,
+    });
+
+    if (!columnToDuplicate) {
+      return;
+    }
+
+    const columnNewName = await et.dialogNewColumn(columnToDuplicate);
+    const { valid } = await et.validateNewName(columnNewName);
+
+    if (!valid || !columnNewName) {
+      return;
+    }
+
+    /**
+     * Ask the user for confirmation
+     */
+    const confirmDuplicate = await modalConfirm({
+      title: tt("edit_table_modal_duplicate_column_confirm_title"),
+      content: getDictTemplate(
+        "edit_table_modal_duplicate_column_confirm_text",
+        {
+          column_name: columnToDuplicate,
+          column_name_new: columnNewName,
+        }
+      ),
+      cancel: tt("btn_cancel"),
+      confirm: tt("btn_edit_table_modal_duplicate_column_confirm"),
+    });
+
+    if (!confirmDuplicate) {
+      return;
+    }
+
+    const update = {
+      type: "duplicate_column",
+      id_table: et._id_table,
+      column_name_new: columnNewName,
+      column_name: columnToDuplicate,
+    };
+
+    return et.handlerUpdateColumnDuplicate(update, source);
+  }
+
+  /*
+   * Interactive column rename
+   */
+  async dialogRenameColumn() {
+    const et = this;
+    const names = et.getColumnLabels();
+    const source = et._config.id_source_dialog;
+    const checks = ["is_not_reserved"];
+    const hasCode = await et.hasSourceViewsCode();
+
+    if (hasCode) {
+      const elTable = await et.getTableViewsCodeTable();
+      const idModal = makeId();
+      const elButtonDuplicate = elButtonFa("btn_edit_duplicate_column", {
+        icon: "copy",
+        action: async () => {
+          const elModal = document.getElementById(idModal);
+          if (elModal) {
+            elModal.close();
+          }
+          await et.dialogDuplicateColumn();
+        },
+      });
+
+      const elButtonHelpRename = elButtonFa("btn_help", {
+        icon: "question-circle",
+        action: () => et.dialogHelp("rename-column"),
+      });
+
+      return modalDialog({
+        id: idModal,
+        title: tt("edit_table_modal_has_code_title"),
+        content: el("div", [el("p", tt("edit_table_modal_has_code")), elTable]),
+        close: tt("edit_table_modal_has_code_close"),
+        buttons: [elButtonDuplicate, elButtonHelpRename],
+      });
+    }
+
+    const options = await et.getColumnsNamesOptions(checks);
+    const columnToRename = await modalPrompt({
+      title: tt("edit_table_modal_rename_column_title"),
+      label: tt("edit_table_modal_rename_column_label"),
+      confirm: tt("btn_next"),
+      inputTag: "select",
+      inputOptions: {
+        type: "select",
+        placeholder: "Column name",
+        value: names[0],
+      },
+      onInput: async (name, elBtnConfirm) => {
+        const ok = await et.isValidName(name, checks);
+        et._button_enable(elBtnConfirm, ok);
+      },
+      inputChildren: options,
+    });
+
+    if (!columnToRename) {
+      return;
+    }
+
+    /**
+     * Ask the user for the new column name
+     */
+    const columnNewName = await et.dialogNewColumn(columnToRename);
+    const { valid } = await et.validateNewName(columnNewName);
+
+    if (!valid || !columnNewName) {
+      return;
+    }
+
+    /**
+     * Ask the user for confirmation
+     */
+    const confirmRename = await modalPrompt({
+      title: tt("edit_table_modal_rename_column_confirm_title"),
+      label: tt("edit_table_modal_rename_column_confirm_text", {
+        data: {
+          column_name: columnToRename,
+          column_name_new: columnNewName,
+        },
+      }),
+      confirm: tt("btn_edit_table_modal_rename_column_confirm"),
+      inputTag: "input",
+      inputOptions: {
+        type: "checkbox",
+        value: false,
+        class: [], // "form-control" produce glitches
+      },
+      onInput: async (accept, elBtnConfirm) => {
+        et._button_enable(elBtnConfirm, accept);
+      },
+    });
+
+    if (!confirmRename) {
+      return;
+    }
+
+    const update = {
+      type: "rename_column",
+      id_table: et._id_table,
+      column_name: columnToRename,
+      column_name_new: columnNewName,
+    };
+
+    await et.handlerUpdateColumnRename(update, source);
+  }
+
+  /**
+   * Handle column duplicate from update
+   * @param {Object} update
+   * @param {String} source (edit, dispatch..)
+   */
+  async handlerUpdateColumnDuplicate(update, source) {
+    const et = this;
+    try {
+      await et._rename_column(update.column_name, update.column_name_new, {
+        duplicate: true,
+      });
+      if (et.isFromDispatch(source)) {
+        /**
+         * Dispatched event : don't re-dispatch
+         */
+        return;
+      }
+
+      await et.emitUpdatesDb([update]);
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  }
+
+  /**
+   * Handle column rename from update
+   * @param {Object} update
+   * @param {String} source (edit, dispatch..)
+   */
+  async handlerUpdateColumnRename(update, source) {
+    const et = this;
+    try {
+      await et._rename_column(update.column_name, update.column_name_new);
+
+      if (et.isFromDispatch(source)) {
+        /**
+         * Dispatched event : don't re-dispatch
+         */
+        return;
+      }
+
+      await et.emitUpdatesDb([update]);
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }
 
   /**
@@ -1615,13 +2287,12 @@ export class EditTableSessionClient extends WsToolsBase {
   async handlerUpdateColumnAdd(update, source) {
     const et = this;
     try {
-      const done = et.addColumnStrict(update);
+      const done = await et._add_column_strict(update);
 
       if (!done) {
         return;
       }
       et.updateTableColumns();
-      et.updateButtonsAddRemoveColumn();
 
       if (et.isFromDispatch(source)) {
         /**
@@ -1644,43 +2315,48 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   columnNameExists(name) {
     const et = this;
-    const names = et._columns.map((c) => c.data);
+    const names = et.getColumns().map((c) => c.data);
     return names.includes(name);
   }
 
-  /*
-   * Interactive column add
+  /**
+   * Dialogs for a new column
    */
-  async dialogAddColumn() {
+  async dialogNewColumn(name) {
     const et = this;
-    const source = et._config.id_source_dialog;
-    let valid = false;
 
-    /**
-     * Ask the user for the new column name and validate
-     */
+    if (isNotEmpty(name) && !isSafeName(name)) {
+      name = `s${name}`;
+    }
+
+    if (isNotEmpty(name) && et.columnNameExists(name)) {
+      name = `${name}_${makeId()}`;
+    }
+
     const columnName = await modalPrompt({
       title: tt("edit_table_modal_add_column_name_title"),
       label: tt("edit_table_modal_add_column_name_label"),
-      confirm: tt("edit_table_modal_add_column_name_next"),
+      confirm: tt("btn_next"),
       inputOptions: {
         type: "text",
-        value: `new_column_${makeId()}`,
+        value: name || `new_column_${makeId()}`,
         placeholder: "Column name",
       },
       onInput: async (name, elBtnConfirm, elMessage) => {
-        const minLength = 3;
-        const maxLength = 50;
         const safeName = makeSafeName(name);
-        const validUnique = !et.columnNameExists(name);
-        const validName = et.isValidName(name);
-        const validLength = isStringRange(name, minLength, maxLength);
+
+        const {
+          valid,
+          validUnique,
+          validLength,
+          validName,
+          minLength,
+          maxLength,
+        } = await et.validateNewName(name);
 
         while (elMessage.firstElementChild) {
           elMessage.firstElementChild.remove();
         }
-
-        valid = validName && validUnique && validLength;
 
         if (!validLength) {
           const elIssue = tt("edit_table_modal_add_column_name_issue_length", {
@@ -1718,6 +2394,21 @@ export class EditTableSessionClient extends WsToolsBase {
         et._button_enable(elBtnConfirm, valid);
       },
     });
+    return columnName;
+  }
+
+  /*
+   * Interactive column add
+   */
+  async dialogAddColumn() {
+    const et = this;
+    const source = et._config.id_source_dialog;
+
+    /**
+     * Ask the user for the new column name and validate
+     */
+    const columnName = await et.dialogNewColumn();
+    const { valid } = await et.validateNewName(columnName);
 
     /**
      * If prompt is canceled or if it's not valid, quit
@@ -1744,7 +2435,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const columnType = await modalPrompt({
       title: tt("edit_table_modal_add_column_type_title"),
       label: tt("edit_table_modal_add_column_type_label"),
-      confirm: tt("edit_table_modal_add_column_type_next"),
+      confirm: tt("btn_next"),
       inputTag: "select",
       inputOptions: {
         type: "select",
@@ -1799,7 +2490,7 @@ export class EditTableSessionClient extends WsToolsBase {
   getColumnType(columnName, mode) {
     const et = this;
     mode = mode || "json";
-    const type = et._columns.find((c) => c.data === columnName)?._pg_type;
+    const type = et.getColumns().find((c) => c.data === columnName)?._pg_type;
     return typeConvert(type, mode);
   }
 
@@ -1951,8 +2642,9 @@ export class EditTableSessionClient extends WsToolsBase {
       for (const change of changes) {
         /* change: [row, prop, oldValue, newValue] */
 
-        if (change[2] === change[3]) {
-          /* no change */
+        /* no change = continue
+         */
+        if (isEqualNoType(change[2], change[3])) {
           continue;
         }
         et.addChangeToUpdates(change, true);
@@ -1978,11 +2670,9 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     const updates = et.getUpdatesArray();
     if (et._disconnected) {
-      console.warn("Can't save while disconnected");
       return;
     }
     if (et._lock_table_by_user_id) {
-      console.warn("Can't save while locked");
       return;
     }
     if (isEmpty(updates)) {
@@ -2009,7 +2699,8 @@ export class EditTableSessionClient extends WsToolsBase {
     const columnType = et.getColumnType(columnName, "postgres");
     const isEmptyOrig = isEmpty(change[2]);
     const isEmptyNew = isEmpty(change[3]);
-
+    const id = `${et._id_table}_${gid}_${columnName}`;
+    const previous = et._updates.get(id);
     const valOrig = change[2];
     const valNew = change[3];
 
@@ -2018,21 +2709,15 @@ export class EditTableSessionClient extends WsToolsBase {
       type: "update_cell",
       column_name: columnName,
       column_type: columnType,
-      value_orig: isEmptyOrig ? null : valOrig,
+      value_orig: previous ? previous.value_orig : isEmptyOrig ? null : valOrig,
       value_new: isEmptyNew ? null : valNew,
       valid: isValid,
       gid: gid,
       row_id: idRow,
     };
 
-    if (update.value_new === update.value_orig) {
-      return;
-    }
-
-    const id = `${update.id_table}_${update.gid}_${update.column_name}`;
-    const previous = et._updates.get(id);
     if (previous) {
-      const noChange = previous.value_orig === update.value_new;
+      const noChange = isEqualNoType(previous.value_orig, update.value_new);
       if (noChange) {
         et._updates.delete(id);
         return;
@@ -2057,7 +2742,11 @@ export class EditTableSessionClient extends WsToolsBase {
   }
   countUpdateValid() {
     const et = this;
-    return et._updates.size;
+    return !et._updates ? 0 : et._updates.size;
+  }
+  get unsaved() {
+    const et = this;
+    return et.countUpdateValid() > 0;
   }
 
   /**
@@ -2095,11 +2784,7 @@ export class EditTableSessionClient extends WsToolsBase {
     et._ht.deselectCell();
     et._ht.updateSettings({
       readOnly: ro,
-      contextMenu: !ro,
       disableVisualSelection: ro,
-      manualColumnResize: !ro,
-      manualRowResize: !ro,
-      comments: !ro,
     });
     et.updateButtons();
   }
@@ -2110,7 +2795,7 @@ export class EditTableSessionClient extends WsToolsBase {
   disable() {
     const et = this;
     et._disabled = true;
-    et._el_overlay.classList.add("disabled");
+    et._el_overlay.classList.add("edit-table--disabled");
     et.setReadOnly(true);
   }
 
@@ -2120,7 +2805,7 @@ export class EditTableSessionClient extends WsToolsBase {
   enable() {
     const et = this;
     et._disabled = false;
-    et._el_overlay.classList.remove("disabled");
+    et._el_overlay.classList.remove("edit-table--disabled");
     et.setReadOnly(false);
   }
 
@@ -2131,7 +2816,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     et.disable();
     et._disconnected = true;
-    et._el_overlay.classList.add("disconnected");
+    et._el_overlay.classList.add("edit-table--disconnected");
     et._socket.io.once("reconnect", et.onReconnect);
   }
 
@@ -2142,7 +2827,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     try {
       et._disconnected = false;
-      et._el_overlay.classList.remove("disconnected");
+      et._el_overlay.classList.remove("edit-table--disconnected");
       et.enable();
       await et.start({
         send_table: false,
@@ -2167,7 +2852,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     et.disable();
     et._locked = true;
-    et._el_overlay.classList.add("locked");
+    et._el_overlay.classList.add("edit-table--locked");
   }
 
   /**
@@ -2176,7 +2861,7 @@ export class EditTableSessionClient extends WsToolsBase {
   unlock() {
     const et = this;
     et._disconnected = false;
-    et._el_overlay.classList.remove("locked");
+    et._el_overlay.classList.remove("edit-table--locked");
     et._locked = false;
     et.enable();
   }
@@ -2208,31 +2893,66 @@ export class EditTableSessionClient extends WsToolsBase {
   }
 
   /**
+   * Lock all wrapper ( for dialogs )
+   * @param {Function} cb
+   * @returns
+   */
+  _l(cb) {
+    const et = this;
+    return async function () {
+      let res;
+      if (et.locked) {
+        console.warn("locked");
+        return;
+      }
+      try {
+        await et.lockTableConcurrent(true);
+        res = await cb();
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await et.lockTableConcurrent();
+      }
+      return res;
+    };
+  }
+
+  /**
    * ws emit wrapper : format message and emit
    * @param {String} type Emit type
    * @param {Object} message Message to emit, if not locked
    */
-  emit(type, message, timeout) {
+  async emit(type, message, timeout) {
     const et = this;
     const to = isEmpty(timeout) ? et._config.timeout_emit : timeout;
-
-    return new Promise((resolve, reject) => {
-      if (!et.state.built) {
-        return false;
-      }
-      if (et.locked) {
-        return false;
-      }
-      const messageEmit = et.message_formater(message);
-      et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          resolve(res);
+    const res = await new Promise((resolve, reject) => {
+      try {
+        if (!et.state.built || et.locked) {
+          return resolve(false);
         }
-      });
+
+        const messageEmit = et.message_formater(message);
+
+        // Avoid sending emit if disconnected
+        /*   if (_et._socket.disconnected) {*/
+        /*console.warn("Disconnected message not sent", messageEmit);*/
+        /*return resolve(false);*/
+        /*}*/
+
+        et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
+          if (err) {
+            console.error(err, messageEmit);
+            return reject(err);
+          } else {
+            return resolve(res);
+          }
+        });
+      } catch (e) {
+        return reject(e);
+      }
     });
+
+    return res;
   }
 
   /**
@@ -2245,15 +2965,36 @@ export class EditTableSessionClient extends WsToolsBase {
     const to = isEmpty(timeout) ? et._config.timeout_emit : timeout;
     return new Promise((resolve) => {
       const messageEmit = et.message_formater(message);
+      /*   if (_et._socket.disconnected) {*/
+      /*console.warn("Disconnected message not sent", messageEmit);*/
+      /*return resolve(false);*/
+      /*}*/
       et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
         if (err) {
           console.error(err);
-          resolve(false);
+          return resolve(false);
         } else {
-          resolve(res);
+          return resolve(res);
         }
       });
     });
+  }
+
+  /**
+   * Get data from specific events, cache result
+   */
+  async get(type) {
+    const et = this;
+    const cached = et._get_cache.get(type);
+    if (cached) {
+      return cached;
+    }
+    const data = et.emitGet("/client/get", { type });
+    et._get_cache.set(type, data);
+    setTimeout(() => {
+      et._get_cache.delete(type);
+    }, 10 * 1000);
+    return data;
   }
 
   /**
@@ -2263,7 +3004,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async emitUpdates(updates, opt) {
     const et = this;
-    const r = et._config.routes;
+    const e = et._config.events;
     if (et.locked) {
       return;
     }
@@ -2279,7 +3020,7 @@ export class EditTableSessionClient extends WsToolsBase {
     try {
       for (let iChunk = 0; iChunk < nChunk; iChunk++) {
         const chunk = updates.splice(0, max);
-        await et.emit(r.client_edit_updates, {
+        await et.emit(e.client_edit_updates, {
           nParts: nChunk,
           part: iChunk + 1,
           start: iChunk === 0,
@@ -2347,10 +3088,11 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Display a dialog with the help from wiki
    */
-  dialogHelp() {
+  dialogHelp(id) {
     return modalMarkdown({
       title: getDictItem("edit_table_modal_help"),
       wiki: "Attribute-table-edition",
+      idScrollTo: id,
     });
   }
 
@@ -2374,7 +3116,7 @@ export class EditTableSessionClient extends WsToolsBase {
     if (et.locked) {
       return;
     }
-    const r = et._config.routes;
+    const e = et._config.events;
     const ok = await modalConfirm({
       title: getDictItem("edit_table_modal_validate_title"),
       content: getDictItem("edit_table_modal_validate_desc"),
@@ -2385,8 +3127,9 @@ export class EditTableSessionClient extends WsToolsBase {
     if (!ok) {
       return;
     }
+
     const data = await et.emitGet(
-      r.client_geom_validate,
+      e.client_geom_validate,
       {
         use_cache: false,
         autoCorrect: false,
@@ -2406,8 +3149,8 @@ export class EditTableSessionClient extends WsToolsBase {
     if (et.locked) {
       return;
     }
-    const r = et._config.routes;
 
+    const e = et._config.events;
     const ok = await modalConfirm({
       title: getDictItem("edit_table_modal_repair_title"),
       content: getDictItem("edit_table_modal_repair_desc"),
@@ -2421,7 +3164,7 @@ export class EditTableSessionClient extends WsToolsBase {
 
     const opt = { use_cache: true, autoCorrect: true };
     const data = await et.emitGet(
-      r.client_geom_validate,
+      e.client_geom_validate,
       opt,
       et._config.timeout_geom_valid
     );
@@ -2500,41 +3243,110 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   clearUpdateRefColName(name) {
     const et = this;
-    et._updates.forEach((update, key) => {
+    for (const [key, update] of et._updates) {
       if (update.column_name === name) {
         et._updates.delete(key);
       }
-    });
+    }
   }
+
   /**
-   * Remove ref to column name from unduRedo
-   * e.g. after column remove
-   * @param {Number} pos Column last position
+   * Remove ref to change
+   * -> change that are not real change should be removed
    */
-  clearUndoRedoRefCol(pos) {
+  clearUndoRedoNoChange() {
     const et = this;
     const ur = et._ht.getPlugin("UndoRedo") || et._ht.undoRedo;
     const actions = ur.doneActions;
     const undoneActions = ur.undoneActions;
-    et._clear_undo_ref_col(actions, pos);
-    et._clear_undo_ref_col(undoneActions, pos);
+    et._clear_undo_redo_no_change(actions);
+    et._clear_undo_redo_no_change(undoneActions);
   }
+
+  /**
+   * Remove ref to column name from unduRedo
+   * e.g. after column remove
+   * @param {String} name Column name
+   */
+  clearUndoRedoRefColName(name) {
+    const et = this;
+    const ur = et._ht.getPlugin("UndoRedo") || et._ht.undoRedo;
+    const actions = ur.doneActions;
+    const undoneActions = ur.undoneActions;
+    et._clear_undo_ref_col(actions, name);
+    et._clear_undo_ref_col(undoneActions, name);
+  }
+
+  /**
+   * Remove all undo/redo/update by column name
+   * @param {string} name Column name
+   */
+  clearRef(name) {
+    const et = this;
+    et.clearUpdateRefColName(name);
+    et.clearUndoRedoRefColName(name);
+  }
+
   /**
    * Helper for clearUndoRedoRefCol
    */
-  _clear_undo_ref_col(actions, pos) {
+  _clear_undo_ref_col(actions, name) {
     let nA = actions.length;
     while (nA--) {
       const a = actions[nA];
       if (a.actionType === "change") {
         const changes = a.changes;
         for (const change of changes) {
-          if (change[1] === pos) {
+          if (change[1] === name) {
             actions.splice(nA, 1);
           }
         }
       }
     }
+  }
+
+  /**
+   * Helper for clearUndoNoChange
+   */
+  _clear_undo_redo_no_change(actions) {
+    let nA = actions.length;
+    while (nA--) {
+      const a = actions[nA];
+      if (a.actionType === "change") {
+        const changes = a.changes;
+        for (const change of changes) {
+          if (isEqualNoType(change[2], change[3])) {
+            actions.splice(nA, 1);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Remove all insert
+   * not used
+   */
+  _clear_undo_redo_insert() {
+    const et = this;
+    const ur = et._ht.getPlugin("UndoRedo") || et._ht.undoRedo;
+    const actions = ur.doneActions;
+    let nA = actions.length;
+    while (nA--) {
+      const action = actions[nA];
+      if (action.actionType === "insert_row") {
+        actions.splice(nA, 1);
+      }
+    }
+  }
+
+  /**
+   * Clear sort ( important before any load )
+   */
+  clearSort() {
+    const et = this;
+    const cs = et._ht.getPlugin("ColumnSorting");
+    cs.clearSort();
   }
 
   /**
@@ -2601,7 +3413,7 @@ export class EditTableSessionClient extends WsToolsBase {
         }
 
         const sanitizedChunk = await et.emitGet(
-          et._config.routes.client_changes_sanitize,
+          et._config.events.client_changes_sanitize,
           {
             updates: chunk,
           },

@@ -135,7 +135,7 @@ cd ./app/src/js/ws_handler/
 npm install
 ```
 
-Optionally, if you want to develop submodules as `el`, `mx_valid` or rebuilding `glyphs`: 
+Optionally, if you want to develop submodules as `el`, `mx_valid` or rebuilding `sprites`: 
 
 ```sh 
 cd ./app/src/js/el/
@@ -144,7 +144,8 @@ npm install
 cd ./app/src/js/is_test/
 npm install
 
-cd ./app/glyphs/
+# Note: could requires specific version of node
+cd ./app/sprites/
 npm install 
 ```
 

@@ -1,13 +1,13 @@
 import { getArrayDistinct, getArrayDiff } from "./array_stat/index.js";
 import { getApiUrl } from "./api_routes";
 import { updateIfEmpty } from "./mx_helper_misc.js";
-import { isString, isEmpty, isArrayOfViewsId } from "./is_test";
+import { isTrue, isEmpty, isArrayOfViewsId } from "./is_test";
 import { fetchJsonProgress } from "./mx_helper_fetch_progress.js";
 import { modal, modalConfirm } from "./mx_helper_modal.js";
 import { getQueryViewsInit } from "./url_utils";
 import { getDictItem, getLanguageCurrent } from "./language";
 import { getViewsRemote } from "./map_helpers/index.js";
-import { settings} from "./settings";
+import { settings } from "./settings";
 
 let start;
 export async function fetchViews(o) {
@@ -55,10 +55,7 @@ export async function fetchViews(o) {
 
   start = performance.now();
 
-  const isModeNoViews =
-    opt.noViews === true || isString(opt.noViews)
-      ? opt.noViews.toLowerCase() === "true"
-      : false;
+  const isModeNoViews = isTrue(opt.noView);
 
   if (isModeNoViews) {
     /**

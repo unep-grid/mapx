@@ -7,6 +7,8 @@ export function isEmpty(item) {
     return true;
   } else if (isString(item)) {
     return isEqual(item, "");
+  } else if (isElement(item)) {
+    return isEqual(item.childElementCount, 0);
   } else if (isObject(item)) {
     return isEqual(item, {});
   } else if (isArray(item)) {
@@ -57,10 +59,11 @@ export function isObject(item) {
  */
 export function isView(item) {
   return (
+    isObject(item) &&
     isViewId(item?.id) &&
     isProjectId(item?.project) &&
-    isObject(item) &&
     isString(item?.type) &&
+    isNotEmpty(item?.data) &&
     !!item.type.match(/^(vt|rt|cc||sm||gj)$/)
   );
 }
@@ -203,7 +206,9 @@ export function isViewDashboard(item) {
  * @return {Boolean}
  */
 export function isStory(item) {
-  return isViewType(item, "sm") && !!item?.data?.story;
+  return (
+    isViewType(item, "sm") && !!(item?.data?.story?.steps || []).length > 0
+  );
 }
 
 /**
@@ -254,13 +259,58 @@ export function isArrayOfViewsId(arr) {
  * @param {Array} arr Array to test
  * @param {Boolean} desc Descendent ?
  */
-export function isSorted(arr, desc) {
-  return (
-    isArray(arr) &&
-    arr.every((val, i, arr) =>
-      !i || desc ? val < arr[i + 1] : val >= arr[i - 1]
-    )
-  );
+export function isSortedArray(arr, desc) {
+  if (!isArray(arr)) {
+    return false;
+  }
+
+  let sorted = true;
+
+  for (let i = 0; i < arr.length; i++) {
+    if (sorted) {
+      const a = arr[i];
+      const b = arr[i + 1];
+      if (isNotEmpty(b)) {
+        sorted = isAgteB(a, b, !desc);
+      }
+    }
+  }
+
+  return sorted;
+}
+
+/**
+ * Compare value an return
+ * @param {Any} a A value
+ * @param {Any} b B value
+ * @return {boolean}
+ */
+export function isAgteB(a, b, asc = true) {
+  if (a === b) {
+    return true;
+  }
+  if (isNumeric(a) && isNumeric(b)) {
+    return asc ? a < b : b > a;
+  } else {
+    a = String(a);
+    b = String(b);
+    return asc ? a.localeCompare(b) < 0 : b.localeCompare(a) > 0;
+  }
+}
+/**
+ * Compare a to b ( for sorting )
+ * @param {Any} a A value
+ * @param {Any} b B value
+ * @return {Number} 1,-1 or 0
+ */
+export function isAgtB(a, b, asc = true) {
+  if (isNumeric(a) && isNumeric(b)) {
+    return asc ? a - b : b - a;
+  } else {
+    a = String(a);
+    b = String(b);
+    return asc ? a.localeCompare(b) : b.localeCompare(a);
+  }
 }
 
 /**
@@ -455,6 +505,46 @@ export function isBooleanCoercible(value) {
 export function isMap(map) {
   return isObject(map) && isCanvas(map._canvas);
 }
+
+/**
+ * Checks if a LngLat coordinate is inside the given LngLatBounds object.
+ *
+ * @param {mapboxgl.LngLat} lngLat - The LngLat coordinate to check.
+ * @param {mapboxgl.LngLatBounds} bounds - The LngLatBounds object to check against.
+ * @returns {boolean} - Returns true if the LngLat coordinate is inside the LngLatBounds, otherwise false.
+ */
+export function isLngLatInsideBounds(lngLat, bounds) {
+  return (
+    lngLat.lng >= bounds.getWest() &&
+    lngLat.lng <= bounds.getEast() &&
+    lngLat.lat >= bounds.getSouth() &&
+    lngLat.lat <= bounds.getNorth()
+  );
+}
+
+/**
+ * Checks if a LngLatBounds object is inside another LngLatBounds
+ *
+ * @param {mapboxgl.LngLatBounds} bounds_test - The LngLatBounds object to check.
+ * @param {mapboxgl.LngLatBounds} bounds - The LngLatBounds object to compare t.
+ * @returns {boolean} - Returns true if the LngLatBounds object is inside the current bounds of getMaxBounds, otherwise false.
+ */
+export function isBoundsInsideBounds(bounds_test, bounds) {
+  // Get the four corner coordinates of the input bounds
+  const sw = bounds_test.getSouthWest();
+  const se = bounds_test.getSouthEast();
+  const nw = bounds_test.getNorthWest();
+  const ne = bounds_test.getNorthEast();
+
+  // Check if all corner coordinates are inside the maxBounds
+  return (
+    isLngLatInsideBounds(sw, bounds) &&
+    isLngLatInsideBounds(se, bounds) &&
+    isLngLatInsideBounds(nw, bounds) &&
+    isLngLatInsideBounds(ne, bounds)
+  );
+}
+
 /**
  * Test if entry is string and have the correct number of characters
  * @param {String} str, character to test
@@ -667,6 +757,39 @@ export function isEqual(x, y) {
     })
   );
 }
+
+/**
+ * Compares two values for equivalence, ignoring types and leading/trailing whitespace.
+ *
+ * @param {*} a - The first value to compare.
+ * @param {*} b - The second value to compare.
+ * @returns {boolean} - Returns true if the normalized forms of the two values are equivalent, false otherwise.
+ */
+export function isEqualNoType(a, b) {
+    // Convert both values to strings, trim whitespace, and convert to numbers if possible
+    const normalizedA = normalizeValue(a);
+    const normalizedB = normalizeValue(b);
+
+    // Check for equivalence
+    return normalizedA === normalizedB;
+}
+
+/**
+ * Normalizes a value by converting it to a string, trimming whitespace,
+ * and converting it to a number if it represents a valid number.
+ *
+ * @param {*} value - The value to normalize.
+ * @returns {string|number} - The normalized value.
+ */
+export function normalizeValue(value) {
+    // Convert to string and trim whitespace
+    let strValue = String(value).trim();
+
+    // Attempt to convert to a number, return the original string if this is not possible
+    let numValue = Number(strValue);
+    return Number.isNaN(numValue) ? strValue : numValue;
+}
+
 
 /**
  * Validate url

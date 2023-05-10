@@ -15,16 +15,21 @@ import {
  * Update metadata and views badges
  * @param {Object} opt Config
  * @param {Array} opt.views List of views or views id to update. By default, all
+ * @param {Object} opt.meta New metadata object to assign to all listed views
  */
 export async function updateViewsBadges(opt) {
-  opt = Object.assign({}, { views: getViews() }, opt);
+  opt = Object.assign({}, { views: getViews(), meta: null }, opt);
   try {
     if (!isArray(opt.views)) {
       throw new Error("Views must by array of views or view id");
     }
     for (let v of opt.views) {
       const view = getView(v);
+
       if (isView(view)) {
+        if (opt.meta) {
+          view._meta = opt.meta;
+        }
         await setViewBadges(view);
       }
     }
@@ -240,10 +245,11 @@ function createViewBadge(opt) {
     opt.dataset
   );
   return el(
-    "span",
+    "button",
     {
-      class: opt.tooltipClasses || "hint--bottom-right",
+      class: ["mx-btn", ...(opt.tooltipClasses || ["hint--bottom-right"])],
       dataset: opt.dataset,
+      role: "button",
     },
     el("i", {
       class: opt.iconClasses || ["fa", "fa-check-circle"],

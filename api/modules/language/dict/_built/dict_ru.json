@@ -1566,8 +1566,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "ru": "Добавить новый столбец: имя"
+    "en": "Name of the column",
+    "ru": "Имя столбца"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "ru": "Имя нового столбца будет:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "ru": "Имя столбца будет:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "ru": "Имя недоступно"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "ru": "Следующий"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "ru": "Выберите тип данных"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "ru": "Следующий"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "ru": "Добавьте новый столбец с именем<b> {{column_name}}</b> типа<b> {{column_type}}</b> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить, но при необходимости сработает инструмент «Удалить столбец»."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "ru": "Добавьте новый столбец с именем<code> {{column_name}}</code> типа<code> {{column_type}}</code> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить, но при необходимости сработает инструмент «Удалить столбец»."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "ru": "Имя столбца"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "ru": "Следующий"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "ru": "Удалить столбец: подтвердить"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "ru": "Удалить столбец с именем<i> {{column_name}}</i> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить: данные могут быть потеряны."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "ru": "Удалить столбец с именем<code> {{column_name}}</code> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить: данные могут быть потеряны."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1793,6 +1778,156 @@
     "id": "edit_table_modal_quit_ignore_changes",
     "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
     "ru": "Эта таблица имеет {{count}} несохраненные изменения. Вы уверены, что хотите выйти и отменить эти изменения?"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "ru": "в использовании"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "ru": "сдержанный"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "ru": "не безопасно"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename column",
+    "ru": "Переименовать столбец"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "ru": "Выберите столбец, который вы хотите переименовать:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "ru": "Подтверждение"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "ru": "Вы уверены, что хотите переименовать столбец<code> {{column_name}}</code> к<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename column",
+    "ru": "Переименовать столбец"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename column",
+    "ru": "Переименовать столбец"
+  },
+  {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "ru": "Существующие ссылки в коде"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "ru": "<p>Переименование столбцов не допускается, поскольку на эту таблицу ссылаются в пользовательских представлениях кода, информационных панелях и/или пользовательских стилях. При необходимости рассмотрите возможность дублирования столбца.<br><br> Для получения более подробной информации нажмите кнопку «Помощь».<br><br> Вот список зависимых представлений:</p>"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "ru": "Отмена"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "ru": "Панель приборов"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "ru": "Пользовательский код"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "ru": "Пользовательский стиль"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "ru": "Исходный слой"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "ru": "Дублировать столбец"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "ru": "Дублировать столбец"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "ru": "Столбец для дублирования"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "ru": "Столбец для дублирования: подтвердить"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "ru": "Дублируйте столбец с именем<code> {{column_name}}</code> в новый столбец с именем<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "ru": "Дублировать столбец"
+  },
+  {
+    "id": "btn_stat_attribute",
+    "en": "Statistics",
+    "ru": "Статистика"
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "ru": "Атрибут для статистики"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "ru": "Выберите атрибут"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "ru": "Порядок столбцов изменен"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "ru": "Порядок столбцов изменен другим пользователем."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "ru": "хорошо"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "ru": "Установить порядок столбцов"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "ru": "Установить порядок столбцов"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2195,6 +2330,11 @@
     "ru": "Отмена "
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "ru": "Следующий..."
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "ru": "Продолжать"
@@ -2228,6 +2368,11 @@
     "id": "btn_close",
     "en": "Close",
     "ru": "Закрывать "
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "ru": "Дублировать..."
   },
   {
     "id": "btn_download",
@@ -4590,9 +4735,14 @@
     "ru": "Исходное положение на карте "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "ru": "Использовать текущие параметры карты "
+    "ru": "Использовать текущие параметры карты"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "ru": "Сбросить максимальные границы карты"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4773,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "ru": "Южная широта (Альберс, Ламбер Коник)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "ru": "Использовать ограничение для ограничения перемещения карты"
   },
   {
     "id": "map_fit_to_bounds",
@@ -6265,9 +6420,9 @@
     "ru": "Квантиль "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
-    "ru": "Голова / хвост ломается "
+    "ru": "Перерывы головы/хвоста"
   },
   {
     "id": "equal_interval",
@@ -6488,6 +6643,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "ru": "Уведомления "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "ru": "Отсутствующие значения: {{nullCount}}"
   },
   {
     "id": "mc_title",
@@ -7981,13 +8141,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "ru": "Установить начальное положение карты"
+    "en": "Set initial map extent",
+    "ru": "Установить начальный экстент карты"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "ru": "Будут использоваться текущий экстент, наклон и азимут карты. Таким образом, значения проекта по умолчанию перезаписываются."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "ru": "Ограничить панорамирование карты текущим экстентом"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "ru": "Карта будет ограничена своим текущим экстентом. Для проекций, отличных от «Меркатора», только центр будет оставаться в пределах границ."
   },
   {
     "id": "share_filter_activated_label",
@@ -8205,6 +8375,11 @@
     "ru": "Карта: тень страны "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "ru": "Карта: общий план меток земель"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "ru": "Карта: вода "
@@ -8218,6 +8393,21 @@
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)",
     "ru": "Карта: батиметрия (высокая) "
+  },
+  {
+    "id": "mx_map_text_bathymetry",
+    "en": "Map: bathymetry labels",
+    "ru": "Карта: батиметрические метки"
+  },
+  {
+    "id": "mx_map_text_bathymetry_outline",
+    "en": "Map: bathymetry labels outline",
+    "ru": "Карта: контур батиметрических меток"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "ru": "Карта: батиметрические линии"
   },
   {
     "id": "mx_map_road",
@@ -8280,6 +8470,51 @@
     "ru": "Карта: разместить контур текста "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "ru": "Карта: этикетки ООН 0 0 (Антарктида)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "ru": "Карта: этикетки ООН 0 1 – Государство"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "ru": "Карта: этикетки ООН 0 2 – оккупированная территория"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "ru": "Карта: маркировка ООН 0 3 – несамоуправляющаяся территория"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "ru": "Карта: Метки ООН 0 4 – Территория"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "ru": "Карта: Метки ООН 0 5 – Особый регион или провинция"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "ru": "Карта: этикетки ООН 0 99 — суверенитет не установлен"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "ru": "Карта: Метки ООН 1 1 – Административная единица (субнациональный уровень 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "ru": "Карта: Метки ООН 1 2 – Административная единица (субнациональный уровень 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "ru": "Карта: текст дороги "
@@ -8298,6 +8533,61 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "ru": "Карта: контур текста водоема "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "ru": "Семейство шрифтов"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "ru": "Шрифт"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "ru": "Непрозрачность"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "ru": "Цвет"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "ru": "Видимый"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "ru": "Имя"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "ru": "Описание"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "ru": "Автор"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "ru": "Следующий"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "ru": "Экспорт"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "ru": "Импортировать"
   },
   {
     "id": "upl_shapefile_warning",

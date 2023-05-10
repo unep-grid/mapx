@@ -1,5 +1,5 @@
 const path = require("path");
-const IconFontPlugin = require("icon-font-loader").Plugin;
+const { Plugin: IconFontPlugin } = require("icon-font-loader");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const WebpackPwaManifest = require("webpack-pwa-manifest");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
@@ -53,13 +53,18 @@ module.exports = {
         },
       ],
     }),
+    /*
+     * Build a font using SVGs
+     * -> use `icon-font: url("../svg/arrow-north.svg")`
+     * -> produces 'mx-icons-font.tff/eot/woff in www/'
+     * -> inject `@font-face{font-family:"mx-icons-font", ... }`
+     */
     new IconFontPlugin({
       fontName: "mx-icons-font",
     }),
     new CopyWebpackPlugin([
-      { from: "./src/glyphs/dist/sprites/", to: "sprites/" },
-      { from: "./src/glyphs/dist/svg/", to: "sprites/svg/" },
-      { from: "./src/glyphs/dist/fontstack", to: "fontstack/" },
+      { from: "./src/sprites/dist/sprites/", to: "sprites/" },
+      { from: "./src/sprites/dist/svg/", to: "sprites/svg/" },
       { from: "./src/favicons", to: "." },
       { from: "./src/js/sdk/dist/", to: "sdk/", ignore: [".DS_Store"] },
     ]),
@@ -150,7 +155,7 @@ module.exports = {
         loader: "file-loader",
       },
       {
-        test: /\.md$/,
+        test: /\.md$|\.sld$/,
         use: [
           {
             //loader: 'file-loader'

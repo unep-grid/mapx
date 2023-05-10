@@ -13,6 +13,7 @@ import {
   getViewJson,
   getMap,
   isModeLocked,
+  fitMaxBounds,
 } from "./map_helpers/";
 
 // default proj
@@ -231,11 +232,21 @@ export async function spatialDataToView(opt) {
           m.extent[3] = 85;
         }
 
+        if (m.extent[2] - m.extent[0] < 2) {
+          m.extent[2] += 1;
+          m.extent[0] -= 1;
+        }
+
+        if (m.extent[3] - m.extent[1] < 2) {
+          m.extent[3] += 1;
+          m.extent[1] -= 1;
+        }
+
         const a = new mx.mapboxgl.LngLatBounds(
           new mx.mapboxgl.LngLat(m.extent[0], m.extent[1]),
           new mx.mapboxgl.LngLat(m.extent[2], m.extent[3])
         );
-        c.map.fitBounds(a);
+        fitMaxBounds(a);
       }
 
       // If layer is valid and returned
@@ -290,8 +301,8 @@ export async function spatialDataToView(opt) {
           });
         }
 
-        resolve(c.view);
         c.worker.terminate();
+        return resolve(c.view);
       }
     };
   });

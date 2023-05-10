@@ -9,7 +9,7 @@ import {
   initSelectizeAll,
 } from "./mx_helper_selectize.js";
 import {
-  isEmpty,
+  isNotEmpty,
   isPromise,
   isObject,
   isString,
@@ -18,7 +18,6 @@ import {
   isHTML,
   isArray,
   isBoolean,
-  isNotEmpty,
 } from "./is_test/index.js";
 import { SelectAuto } from "./select_auto";
 /**
@@ -38,6 +37,7 @@ import { SelectAuto } from "./select_auto";
  * @param {Object} o.style Style object to apply to modal window. Default : empty
  * @param {Boolean} o.close Close related modal
  * @param {Object} o.styleContent Style object to apply to content of the modal window. Default : empty
+ * @param {String} o.idScrollTo Scroll to id in the body
  * @param {Boolean} o.addBtnMove Add top button to move the modal
  * @param {String|Element} o.content Body content of the modal. Default  : undefined
  * @param {Function} o.onClose On close callback
@@ -236,6 +236,13 @@ export function modal(o) {
       closeSelectizeGroupById(id);
     },
   });
+
+  if (isString(o.idScrollTo)) {
+    const elScrollTo = elModal.querySelector(`#${o.idScrollTo}`);
+    if (elScrollTo) {
+      elScrollTo.scrollIntoView(true);
+    }
+  }
 
   /**
    * Return final element
@@ -574,12 +581,14 @@ export function modalDialog(opt) {
 /**
  * Simple async confirm modal : confirm / cancel
  * @param {Object} opt Options
+ * @param {Function} opt.cbData If set, cb to set the returning value. arg: elModal, elContent
+ * @param {Function} opt.cbInit If set, cb after init. arg:  elModal,elContent
  * @param {String|Promise|Element} opt.title Title
  * @param {String|Promise|Element} opt.content Title
  * @param {String|Promise|Element} opt.cancel Cancel text
  * @param {String|Promise|Element} opt.cancel Cancel text
  * @param {String|Promise|Element} opt.confirm Confirm text
- * @return {Promise} resolve to boolean
+ * @return {Promise<boolean|any>} resolve to boolean or any, if cbData is set
  */
 export function modalConfirm(opt) {
   let elModal;
@@ -609,10 +618,15 @@ export function modalConfirm(opt) {
         class: "btn btn-default",
         type: "button",
         on: {
-          click: (e) => {
+          click: async (e) => {
             e.stopPropagation();
             e.preventDefault();
-            resolve(true);
+            if (opt.cbData) {
+              const data = await opt.cbData(elModal, elContent);
+              resolve(data);
+            } else {
+              resolve(true);
+            }
             elModal.close();
           },
         },
@@ -635,6 +649,10 @@ export function modalConfirm(opt) {
         resolve();
       },
     });
+
+    if (opt.cbInit) {
+      opt.cbInit(elModal, elContent);
+    }
   });
 }
 
@@ -646,7 +664,7 @@ export function modalConfirm(opt) {
  * @param {String|Promise|Element} opt.label Input label
  * @param {String|Promise|Element} opt.cancel Cancel text
  * @param {String|Promise|Element} opt.confirm Confirm text
- * @param {Function} opt.onInput Callback on input with (value, elBtnConfirm) as args
+ * @param {Function} opt.onInput Callback on input with (value, elBtnConfirm, elMessage, elInput) as args
  * @return {Promise} resolve to input type
  */
 export function modalPrompt(opt) {
@@ -771,38 +789,20 @@ export function modalPrompt(opt) {
       opt.confirm || getDictItem("btn_confirm")
     );
 
-    if (opt.onInput instanceof Function) {
-      elInput.addEventListener("input", (_) => {
-        const value = isCheckbox
-          ? opt.inputOptions.checkboxValues[elInput.checked]
-          : elInput.value;
-        handlerInput(value, elBtnConfirm, elMessage);
-      });
+    if (isFunction(opt.onInput)) {
+      elInput.addEventListener("input", handlerInputWrapper);
 
       /**
        * Validate for default
        */
       const value = isCheckbox ? elInput.checked : elInput.value;
-      handlerInput(value, elBtnConfirm, elMessage);
-
-      /**
-       * If onInput returnn boolean, consider as a value to 
-       * enable/disable confirm btn
-       */
-      function handlerInput(value, elBtnConfirm, elMessage) {
-        const valid = opt.onInput(value, elBtnConfirm, elMessage);
-        if (!isEmpty(valid) && isBoolean(valid)) {
-          if (valid) {
-            elBtnConfirm.addAttribute("disabled");
-            elBtnConfirm.classList.add("disabled");
-          } else {
-            elBtnConfirm.removeAttribute("disabled");
-            elBtnConfirm.classList.remove("disabled");
-          }
-        }
-      }
+      handlerInput(value);
     }
 
+    /**
+     * elModal is referenced in the handler of the "close" button,
+     * TODO: Refactor this to avoid such aberations
+     */
     elModal = modal({
       noShinyBinding: true,
       addSelectize: false,
@@ -815,8 +815,49 @@ export function modalPrompt(opt) {
         if (isFunction(opt.onClose)) {
           opt.onClose();
         }
+        if (isFunction(opt.onInput)) {
+          elInput.removeEventListener("input", handlerInputWrapper);
+        }
         resolve();
       },
     });
+
+    /**
+     * Helpers
+     */
+
+    /**
+     * On input wrapper.
+     * TODO: merge this with the test in onInput handler
+     */
+    function handlerInputWrapper(_) {
+      const value = isCheckbox
+        ? opt.inputOptions.checkboxValues[elInput.checked]
+        : elInput.value;
+      handlerInput(value);
+    }
+
+    /**
+     * If onInput returnn boolean, consider as a value to
+     * enable/disable confirm btn
+     */
+    function handlerInput(value) {
+      elMessage.innerText = "";
+      const valid = opt.onInput(value, elBtnConfirm, elMessage, elInput);
+      /**
+       * Case validation returns boolean
+       */
+      if (isNotEmpty(valid) && isBoolean(valid)) {
+        if (!valid) {
+          console.log("disable");
+          elBtnConfirm.setAttribute("disabled", "disabled");
+          elBtnConfirm.classList.add("disabled");
+        } else {
+          console.log("enable");
+          elBtnConfirm.removeAttribute("disabled");
+          elBtnConfirm.classList.remove("disabled");
+        }
+      }
+    }
   });
 }

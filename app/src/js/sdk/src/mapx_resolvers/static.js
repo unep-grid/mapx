@@ -6,6 +6,7 @@ import {
   getLanguagesAll,
   updateLanguage,
 } from "../../../language/index.js";
+import { ViewBase } from "../../../views_builder/view_base.js";
 import {
   getMap,
   setImmersiveMode,
@@ -17,14 +18,17 @@ import {
   getViewLegendImage,
   getViewRemote,
   viewRemove,
+  viewAdd,
+  viewDelete,
   downloadViewVector,
   downloadViewSourceExternal,
   downloadViewGeoJSON,
   getViewsTitleNormalized,
   getGeoJSONRandomPoints,
   getViewJson,
-  viewDelete,
   getBoundsArray,
+  fitMaxBounds,
+  validateBounds,
 } from "../../../map_helpers/index.js";
 import { mapComposerModalAuto } from "../../../map_composer";
 import {
@@ -159,12 +163,14 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} Done
    */
   async show_modal_share(opt) {
+    const rslv = this;
     opt = Object.assign({ idView: [] }, opt);
     const idViews = isArray(opt.idView) ? opt.idView : [opt.idView];
     const sm = new ShareModal({
       views: idViews,
     });
     await sm.once("updated");
+    rslv._sm = sm;
   }
 
   /**
@@ -172,15 +178,16 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} Done
    */
   async close_modal_share() {
-    const sm = window._share_modal;
-    if (sm) {
-      const promClosed = sm.once("closed");
-      sm.close();
-      await promClosed;
-      return true;
-    } else {
-      return false;
+    const rslv = this;
+    const sm = rslv._sm;
+    if (!sm instanceof ShareModal) {
+      throw new Error("No share modal found");
     }
+    const promClosed = sm.once("closed");
+    sm.close();
+    await promClosed;
+    delete rslv._sm;
+    return true;
   }
 
   /**
@@ -188,10 +195,26 @@ class MapxResolversStatic extends ResolversBase {
    * @return {String} Sharing string ( code / url )
    */
   get_modal_share_string() {
-    if (!window._share_modal) {
+    const rslv = this;
+    const sm = rslv._sm;
+    if (!sm instanceof ShareModal) {
       throw new Error("No share modal found");
     }
-    return window._share_modal.getShareString();
+    return sm.getShareCode();
+  }
+
+  /**
+   * Modal Share Tests Suite
+   * @return {array} array of tests
+   */
+  async get_modal_share_tests() {
+    const rslv = this;
+    const sm = rslv._sm;
+    if (!sm instanceof ShareModal) {
+      throw new Error("No share modal found");
+    }
+    const ok = await sm.tests();
+    return ok;
   }
 
   /**
@@ -234,6 +257,18 @@ class MapxResolversStatic extends ResolversBase {
   get_theme_id() {
     return theme.id();
   }
+
+  /**
+   * Add a custom theme into mapx and use it.
+   * @param {Object} opt Options
+   * @param {String} opt.theme Valid theme (full).
+   * @return {Boolean} done
+   */
+  add_theme(opt) {
+    opt = Object.assign({}, opt);
+    return theme.addTheme(opt.theme, { save_url: true });
+  }
+
   /**
    * Check if element is visible, by id
    * @param {Object} opt Options
@@ -433,7 +468,7 @@ class MapxResolversStatic extends ResolversBase {
    * Get view table attribute
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
-   * @return {Object}
+   * @return {Array.<Object>}
    */
   async get_view_table_attribute(opt) {
     opt = Object.assign({}, { idView: null }, opt);
@@ -442,7 +477,8 @@ class MapxResolversStatic extends ResolversBase {
     if (url) {
       const response = await fetch(url);
       if (response.ok) {
-        return response.json();
+        const { data } = await response.json();
+        return data;
       }
     }
     return null;
@@ -572,11 +608,16 @@ class MapxResolversStatic extends ResolversBase {
     if (!valid) {
       return rslv._err("err_view_invalid");
     }
-    await viewsListAddSingle(view);
+    if (view._vb instanceof ViewBase) {
+      await viewAdd(opt.idView);
+    } else {
+      await viewsListAddSingle(view, { open: true });
+    }
+
     if (opt.zoomToView) {
-      const map = getMap();
       const bounds = await getViewsBounds(opt.idView);
-      map.fitBounds(bounds);
+      const ok = fitMaxBounds(bounds);
+      return ok;
     }
     return true;
   }
@@ -865,6 +906,49 @@ class MapxResolversStatic extends ResolversBase {
    */
   map_get_bounds_array() {
     return getBoundsArray();
+  }
+
+  /**
+   * Set current map bounds
+   * @param {Object} opt Options
+   * @param {array} opt.bounds [west, south, east, north]
+   */
+  map_set_bounds_array(opt) {
+    return fitMaxBounds(opt.bounds);
+  }
+
+  /**
+   * Get current max bounds / world
+   * @return {Array|null} bounds [west, south, east, north] or null
+   */
+  map_get_max_bounds_array() {
+    const map = getMap();
+    const maxBounds = map.getMaxBounds();
+    if (!maxBounds) {
+      return null;
+    }
+    return [
+      maxBounds.getWest(),
+      maxBounds.getSouth(),
+      maxBounds.getEast(),
+      maxBounds.getNorth(),
+    ];
+  }
+
+  /**
+   * Set current max bounds / world
+   * @param {Object} opt Options
+   * @param {array} opt.bounds [west, south, east, north] If empty or null = reset
+   * @return {boolean} done
+   */
+  map_set_max_bounds_array(opt) {
+    opt = Object.assign({}, { bounds: null }, opt);
+    const map = getMap();
+    if (opt.bounds) {
+      opt.bounds = validateBounds(opt.bounds);
+    }
+    map.setMaxBounds(opt.bounds);
+    return true;
   }
 
   /**

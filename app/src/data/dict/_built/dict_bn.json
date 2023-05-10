@@ -1566,8 +1566,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "bn": "একটি নতুন কলাম যোগ করুন: নাম"
+    "en": "Name of the column",
+    "bn": "কলামের নাম"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "bn": "নতুন কলামের নাম হবে:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "bn": "কলামের নাম হবে:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "bn": "নাম অনুপলব্ধ"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "bn": "পরবর্তী"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "bn": "ডেটা টাইপ নির্বাচন করুন"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "bn": "পরবর্তী"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "bn": "নামে একটি নতুন কলাম যোগ করুন<b> {{column_name}}</b> ধরনের<b> {{column_type}}</b> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না, তবে প্রয়োজন হলে 'একটি কলাম সরান' টুলটি কাজ করবে।"
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "bn": "নামে একটি নতুন কলাম যোগ করুন<code> {{column_name}}</code> ধরনের<code> {{column_type}}</code> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না, তবে প্রয়োজন হলে 'একটি কলাম সরান' টুলটি কাজ করবে।"
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "bn": "কলামের নাম"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "bn": "পরবর্তী"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "bn": "একটি কলাম সরান: নিশ্চিত করুন"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "bn": "নামের একটি কলাম সরান<i> {{column_name}}</i> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না: ডেটা হারিয়ে যেতে পারে।"
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "bn": "নামের একটি কলাম সরান<code> {{column_name}}</code> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না: ডেটা হারিয়ে যেতে পারে।"
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1793,6 +1778,156 @@
     "id": "edit_table_modal_quit_ignore_changes",
     "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
     "bn": "এই টেবিল আছে {{count}} অসংরক্ষিত পরিবর্তন আপনি কি এই পরিবর্তনগুলি প্রস্থান এবং বাতিল করার বিষয়ে নিশ্চিত?"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "bn": "ব্যাবহৃত হচ্ছে"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "bn": "সংরক্ষিত"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "bn": "নিরাপদ না"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename column",
+    "bn": "কলাম পুনঃনামকরণ করুন"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "bn": "আপনি যে কলামটির নাম পরিবর্তন করতে চান তা চয়ন করুন:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "bn": "নিশ্চিতকরণ"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "bn": "আপনি কি নিশ্চিত যে আপনি কলামটির নাম পরিবর্তন করতে চান৷<code> {{column_name}}</code> প্রতি<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename column",
+    "bn": "কলাম পুনঃনামকরণ করুন"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename column",
+    "bn": "কলাম পুনঃনামকরণ করুন"
+  },
+  {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "bn": "কোডে বিদ্যমান রেফারেন্স"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "bn": "<p>কলাম পুনঃনামকরণ অনুমোদিত নয় যেহেতু এই টেবিলটি কাস্টম কোড ভিউ, ড্যাশবোর্ড এবং/অথবা কাস্টম শৈলীতে উল্লেখ করা হয়েছে। প্রয়োজনে, পরিবর্তে কলামটি নকল করার কথা বিবেচনা করুন।<br><br> আরও বিস্তারিত জানার জন্য, 'সহায়তা' বোতামে ক্লিক করুন।<br><br> এখানে নির্ভরশীল দৃষ্টিভঙ্গির তালিকা রয়েছে:</p>"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "bn": "বাতিল করুন"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "bn": "ড্যাশবোর্ড"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "bn": "প্রচলিত সংকেত"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "bn": "কাস্টম শৈলী"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "bn": "উৎস স্তর"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "bn": "সদৃশ কলাম"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "bn": "সদৃশ কলাম"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "bn": "নকল করতে কলাম"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "bn": "নকল করতে কলাম: নিশ্চিত করুন"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "bn": "নামের কলামটি নকল করুন<code> {{column_name}}</code> নামের একটি নতুন কলামে<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "bn": "কলামটি নকল করুন"
+  },
+  {
+    "id": "btn_stat_attribute",
+    "en": "Statistics",
+    "bn": "পরিসংখ্যান"
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "bn": "পরিসংখ্যান জন্য বৈশিষ্ট্য"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "bn": "একটি বৈশিষ্ট্য নির্বাচন করুন"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "bn": "কলামের ক্রম সংশোধন করা হয়েছে"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "bn": "কলামের ক্রম অন্য ব্যবহারকারী দ্বারা সংশোধন করা হয়েছে।"
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "bn": "ঠিক আছে"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "bn": "কলামের ক্রম সেট করুন"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "bn": "কলামের ক্রম সেট করুন"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2195,6 +2330,11 @@
     "bn": "বাতিল "
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "bn": "পরবর্তী..."
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "bn": "চালিয়ে যান"
@@ -2228,6 +2368,11 @@
     "id": "btn_close",
     "en": "Close",
     "bn": "বন্ধ "
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "bn": "ডুপ্লিকেট..."
   },
   {
     "id": "btn_download",
@@ -4590,9 +4735,14 @@
     "bn": "প্রাথমিক মানচিত্রের অবস্থান "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "bn": "বর্তমান মানচিত্রের পরামিতিগুলি ব্যবহার করুন "
+    "bn": "বর্তমান মানচিত্র পরামিতি ব্যবহার করুন"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "bn": "সর্বোচ্চ মানচিত্র সীমানা রিসেট করুন"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4773,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "bn": "অক্ষাংশ দক্ষিণ (আলবার্স, ল্যাম্বার কনিক)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "bn": "মানদন্ড ব্যবহার করে মানচিত্র প্যানিং সীমিত করুন"
   },
   {
     "id": "map_fit_to_bounds",
@@ -6265,9 +6420,9 @@
     "bn": "কোয়ান্টাইল "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
-    "bn": "মাথা / লেজ বিরতি "
+    "bn": "মাথা/লেজ ভাঙ্গা"
   },
   {
     "id": "equal_interval",
@@ -6488,6 +6643,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "bn": "বিজ্ঞপ্তি "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "bn": "অনুপস্থিত মানের: {{nullCount}}"
   },
   {
     "id": "mc_title",
@@ -7981,13 +8141,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "bn": "প্রাথমিক মানচিত্রের অবস্থান সেট করুন"
+    "en": "Set initial map extent",
+    "bn": "প্রারম্ভিক মানচিত্র ব্যাপ্তি সেট করুন"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "bn": "মানচিত্রের বর্তমান ব্যাপ্তি, কাত এবং বিয়ারিং ব্যবহার করা হবে। প্রকল্প ডিফল্ট এইভাবে ওভাররাইট করা হয়."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "bn": "মানচিত্র প্যানিংকে বর্তমান মাত্রায় সীমাবদ্ধ করুন"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "bn": "মানচিত্রটি তার বর্তমান মাত্রায় সীমাবদ্ধ থাকবে। 'Mercator' ছাড়া অন্য অনুমানগুলির জন্য, শুধুমাত্র কেন্দ্রকে সীমার মধ্যে রাখা হবে।"
   },
   {
     "id": "share_filter_activated_label",
@@ -8205,6 +8375,11 @@
     "bn": "মানচিত্র: দেশের ছায়া "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "bn": "মানচিত্র: জেনেরিক ল্যান্ড লেবেল রূপরেখা"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "bn": "মানচিত্র: জল "
@@ -8218,6 +8393,21 @@
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)",
     "bn": "মানচিত্র: বাথমেট্রি (উচ্চ) "
+  },
+  {
+    "id": "mx_map_text_bathymetry",
+    "en": "Map: bathymetry labels",
+    "bn": "মানচিত্র: bathymetry লেবেল"
+  },
+  {
+    "id": "mx_map_text_bathymetry_outline",
+    "en": "Map: bathymetry labels outline",
+    "bn": "মানচিত্র: bathymetry লেবেল রূপরেখা"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "bn": "মানচিত্র: bathymetry লাইন"
   },
   {
     "id": "mx_map_road",
@@ -8280,6 +8470,51 @@
     "bn": "মানচিত্র: পাঠ্য রূপরেখা রাখুন "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 0 (অ্যান্টার্কটিকা)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 1 – রাজ্য"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 2 – অধিকৃত অঞ্চল"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 3 – অ-স্ব-শাসিত অঞ্চল"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "bn": "মানচিত্র: জাতিসংঘ লেবেল 0 4 – অঞ্চল"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "bn": "মানচিত্র: জাতিসংঘ লেবেল 0 5 – বিশেষ অঞ্চল বা প্রদেশ"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 99 - সার্বভৌমত্ব অস্থির"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "bn": "মানচিত্র: জাতিসংঘ লেবেল 1 1 - প্রশাসনিক ইউনিট (উপজাতীয় স্তর 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "bn": "মানচিত্র: জাতিসংঘ লেবেল 1 2 - প্রশাসনিক ইউনিট (উপজাতীয় স্তর 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "bn": "মানচিত্র: রাস্তার পাঠ্য "
@@ -8298,6 +8533,61 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "bn": "মানচিত্র: জলের দেহের পাঠ্য রূপরেখা "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "bn": "ফন্ট পরিবার"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "bn": "হরফ"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "bn": "অস্বচ্ছতা"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "bn": "রঙ"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "bn": "দৃশ্যমান"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "bn": "নাম"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "bn": "বর্ণনা"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "bn": "লেখক"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "bn": "পরবর্তী"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "bn": "রপ্তানি"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "bn": "আমদানি"
   },
   {
     "id": "upl_shapefile_warning",

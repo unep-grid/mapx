@@ -90,7 +90,6 @@ export async function storyRead(opt) {
     await handleMissingImages();
     await initLegendPanel();
     await initAdaptiveLayout();
-    //await appStateSave();
     await start();
   } catch (e) {
     errorHandler(e);
@@ -391,7 +390,7 @@ export async function storyStop() {
 /**
  * Cancel all DOM processes and network requests
  * -> does not block async code and timeouts
- * -> see https://jsfiddle.net/fxi/u6ftLg9h/ 
+ * -> see https://jsfiddle.net/fxi/u6ftLg9h/
  */
 async function cancelAll() {
   if (isGecko) {
@@ -528,9 +527,10 @@ async function start() {
   if (state.initScroll) {
     state.elStory.scrollTop = state.initScroll;
   }
-  if (state.stepUpdate) {
+  if (isNotEmpty(state.stepUpdate)) {
     state.stepActive = null;
     await storyGoTo(state.stepUpdate);
+    await storyPlayStep(state.stepUpdate);
   }
   /**
    * Render
@@ -990,7 +990,6 @@ export async function storyGoTo(to, useTimeout, funStop) {
   let nextStep;
   let previousStep;
   let destStep;
-
   const maxStep = steps.length - 1;
 
   switch (to) {
@@ -1263,6 +1262,12 @@ async function initState() {
      */
     const position = getMapPos();
     const oldViews = getViewsLayersVisibles();
+    const maxBounds = map.getMaxBounds();
+
+    /**
+     * Release max bounds / bbox;
+     */
+    map.setMaxBounds();
 
     /**
      * Theme
@@ -1296,6 +1301,7 @@ async function initState() {
       projection,
       oldViews,
       position,
+      maxBounds,
       hasAerial,
       has3d,
     });
@@ -1321,6 +1327,8 @@ async function appStateRestore() {
     pitch: pos.p,
     center: [pos.lng, pos.lat],
   });
+
+  map.setMaxBounds(state.maxBounds);
 
   theme.set(idTheme, { sound: false, save: false, save_url: true });
 
@@ -1412,21 +1420,6 @@ function resetMapStyle() {
   }
   map.resize();
 }
-
-/**
- * Initial scroll position
- */
-
-/*async function initStoryScroll() {*/
-/*const state = getState();*/
-/*if (state.initScroll) {*/
-/*state.elStory.scrollTop = state.initScroll;*/
-/*state.initScroll = null;*/
-/*await waitTimeoutAsync(10);*/
-/*await storyUpdateSlides();*/
-/*await updateBullets();*/
-/*}*/
-/*}*/
 
 /**
  * Build story ui
@@ -1643,6 +1636,7 @@ export async function storyPlayStep(stepNum) {
   if (!isStoryPlaying()) {
     return;
   }
+
   const story = getStory();
   const state = getState();
   const settings = getSettings();
@@ -1652,12 +1646,15 @@ export async function storyPlayStep(stepNum) {
   if (steps.length === 0) {
     return;
   }
+  const step = steps[stepNum] || {};
+  if (isEmpty(step)) {
+    return;
+  }
   map.stop();
   mx.events.fire("story_step");
   /**
    * retrieve step information
    */
-  const step = steps[stepNum];
   state.currentStep = stepNum;
   state.stepActive = stepNum;
   state.step = step;

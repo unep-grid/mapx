@@ -16,7 +16,6 @@ export * from "./animation_frame";
 export * from "./array_stat";
 export * from "./color_utils";
 export * from "./el_mapx";
-export * from "./is_test/index.js";
 export * from "./is_test_mapx";
 export * from "./user_pref";
 export * from "./commonloc";

@@ -1566,8 +1566,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "ar": "أضف عمودًا جديدًا: الاسم"
+    "en": "Name of the column",
+    "ar": "اسم العمود"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "ar": "سيكون اسم العمود الجديد:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "ar": "سيكون اسم العمود:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "ar": "الاسم غير متوفر"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "ar": "التالي"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "ar": "حدد نوع البيانات"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "ar": "التالي"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "ar": "أضف عمودًا جديدًا باسم<b> {{column_name}}</b> من النوع<b> {{column_type}}</b> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا ، ولكن أداة \"إزالة عمود\" ستعمل ، إذا لزم الأمر."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "ar": "أضف عمودًا جديدًا باسم<code> {{column_name}}</code> من النوع<code> {{column_type}}</code> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا ، ولكن أداة \"إزالة عمود\" ستعمل ، إذا لزم الأمر."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "ar": "اسم العمود"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "ar": "التالي"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "ar": "إزالة عمود: قم بالتأكيد"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "ar": "قم بإزالة عمود مسمى<i> {{column_name}}</i> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا: يمكن أن تفقد البيانات."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "ar": "قم بإزالة عمود مسمى<code> {{column_name}}</code> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا: يمكن أن تفقد البيانات."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1793,6 +1778,156 @@
     "id": "edit_table_modal_quit_ignore_changes",
     "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
     "ar": "يحتوي هذا الجدول {{count}} التغييرات غير المحفوظة. هل أنت متأكد أنك تريد إنهاء وتجاهل هذه التغييرات؟"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "ar": "في الاستخدام"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "ar": "محجوز"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "ar": "غير آمن"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename column",
+    "ar": "إعادة تسمية العمود"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "ar": "اختر العمود الذي تريد إعادة تسميته:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "ar": "تأكيد"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "ar": "هل أنت متأكد أنك تريد إعادة تسمية العمود<code> {{column_name}}</code> ل<code> {{column_name_new}}</code> ؟"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename column",
+    "ar": "إعادة تسمية العمود"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename column",
+    "ar": "إعادة تسمية العمود"
+  },
+  {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "ar": "المراجع الموجودة في التعليمات البرمجية"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "ar": "<p style=\";text-align:right;direction:rtl\">لا يُسمح بإعادة تسمية العمود لأن هذا الجدول يُشار إليه في طرق عرض التعليمات البرمجية المخصصة و / أو لوحات المعلومات و / أو الأنماط المخصصة. إذا لزم الأمر ، فكر في تكرار العمود بدلاً من ذلك.<br><br> لمزيد من التفاصيل ، انقر فوق الزر \"تعليمات\".<br><br> فيما يلي قائمة وجهات النظر التابعة:</p>"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "ar": "يلغي"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "ar": "لوحة القيادة"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "ar": "التعليمات البرمجية المخصصة"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "ar": "نمط مخصص"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "ar": "طبقة المصدر"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "ar": "عمود مكرر"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "ar": "عمود مكرر"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "ar": "العمود المراد نسخه"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "ar": "العمود المراد نسخه: التأكيد"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "ar": "كرر العمود المسمى<code> {{column_name}}</code> إلى عمود جديد اسمه<code> {{column_name_new}}</code> ؟"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "ar": "كرر العمود"
+  },
+  {
+    "id": "btn_stat_attribute",
+    "en": "Statistics",
+    "ar": "إحصائيات"
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "ar": "السمة للإحصاءات"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "ar": "حدد سمة"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "ar": "تم تعديل ترتيب الأعمدة"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "ar": "تم تعديل ترتيب الأعمدة بواسطة مستخدم آخر."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "ar": "نعم"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "ar": "تعيين ترتيب الأعمدة"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "ar": "تعيين ترتيب الأعمدة"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2195,6 +2330,11 @@
     "ar": "يلغي "
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "ar": "التالي..."
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "ar": "يكمل"
@@ -2228,6 +2368,11 @@
     "id": "btn_close",
     "en": "Close",
     "ar": "اغلاق"
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "ar": "تكرار..."
   },
   {
     "id": "btn_download",
@@ -4590,9 +4735,14 @@
     "ar": "موقع الخريطة الأولي "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "ar": "استخدم معلمات الخريطة الحالية "
+    "ar": "استخدم معلمات الخريطة الحالية"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "ar": "إعادة تعيين حدود الخريطة القصوى"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4773,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "ar": "خط العرض الجنوبي (ألبرز ، لامبر كونيك)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "ar": "استخدام النطاق لتقييد تحريك الخريطة"
   },
   {
     "id": "map_fit_to_bounds",
@@ -6265,9 +6420,9 @@
     "ar": "كمي "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
-    "ar": "فواصل الرأس / الذيل "
+    "ar": "فواصل الرأس / الذيل"
   },
   {
     "id": "equal_interval",
@@ -6488,6 +6643,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "ar": "إشعارات "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "ar": "قيم مفقودة: {{nullCount}}"
   },
   {
     "id": "mc_title",
@@ -7981,13 +8141,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "ar": "تعيين موقع الخريطة الأولي"
+    "en": "Set initial map extent",
+    "ar": "تعيين مدى الخريطة الأولية"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "ar": "سيتم استخدام المدى الحالي وإمالة واتجاه الخريطة. وبالتالي يتم الكتابة فوق افتراضات المشروع."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "ar": "الحد من تحريك الخريطة إلى المدى الحالي"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "ar": "سيتم تقييد الخريطة إلى مداها الحالي. بالنسبة إلى الإسقاطات بخلاف \"Mercator\" ، سيتم الاحتفاظ بالمركز فقط ضمن الحدود."
   },
   {
     "id": "share_filter_activated_label",
@@ -8205,6 +8375,11 @@
     "ar": "الخريطة: بلد الظل "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "ar": "الخريطة: مخطط الملصقات الأرضية العامة"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "ar": "الخريطة: المياه "
@@ -8218,6 +8393,21 @@
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)",
     "ar": "الخريطة: قياس الأعماق (مرتفع) "
+  },
+  {
+    "id": "mx_map_text_bathymetry",
+    "en": "Map: bathymetry labels",
+    "ar": "الخريطة: تسميات قياس الأعماق"
+  },
+  {
+    "id": "mx_map_text_bathymetry_outline",
+    "en": "Map: bathymetry labels outline",
+    "ar": "الخريطة: مخطط تسميات قياس الأعماق"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "ar": "الخريطة: خطوط قياس الأعماق"
   },
   {
     "id": "mx_map_road",
@@ -8280,6 +8470,51 @@
     "ar": "الخريطة: مكان مخطط النص "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 0 (أنتاركتيكا)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 1 - الولاية"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 2 - الأراضي المحتلة"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 3 - إقليم غير متمتع بالحكم الذاتي"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 4 - الإقليم"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 5 - منطقة أو مقاطعة خاصة"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 99 - عدم تسوية السيادة"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "ar": "الخريطة: تسميات الأمم المتحدة 1 1 - الوحدة الإدارية (المستوى دون الوطني 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "ar": "الخريطة: تسميات الأمم المتحدة 1 2 - الوحدة الإدارية (المستوى دون الوطني 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "ar": "الخريطة: نص الطريق "
@@ -8298,6 +8533,61 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "ar": "الخريطة: مخطط نص الجسم المائي "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "ar": "خط العائلة"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "ar": "الخط"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "ar": "التعتيم"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "ar": "لون"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "ar": "مرئي"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "ar": "اسم"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "ar": "وصف"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "ar": "مؤلف"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "ar": "التالي"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "ar": "يصدّر"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "ar": "يستورد"
   },
   {
     "id": "upl_shapefile_warning",

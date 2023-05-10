@@ -9,6 +9,7 @@ const mapx = new mxsdk.Manager({
     width: "100%",
   },
   params: {
+    project: "MX-A3M-LVK-V7S-XOT-J48",
     zoomMin: 0,
     zoomMax: 22,
   },
@@ -65,6 +66,152 @@ mapx.once("ready", async () => {
         name: "test if array of string",
         test: (methods) => {
           return t.valid.isArrayOfString(methods);
+        },
+      },
+    ],
+  });
+
+  t.check("Set theme", {
+    init: async () => {
+      const res = {};
+      res.themes = await mapx.ask("get_themes");
+      return res;
+    },
+    tests: [
+      {
+        name: "theme wait",
+        test: () => {
+          return new Promise((resolve) => {
+            setTimeout(() => resolve(true), 1000);
+          });
+        },
+      },
+
+      {
+        name: "add theme",
+        test: async (res) => {
+          const out = await mapx.ask("add_theme", {
+            theme: res.themes[0],
+          });
+          return out;
+        },
+      },
+    ],
+  });
+
+  t.check("Set max bounds", {
+    init: async () => {
+      const res = {};
+      res.boundsMax = await mapx.ask("map_get_max_bounds_array");
+      res.boundsOrig = await mapx.ask("map_get_bounds_array");
+      // sri lanka
+      res.boundsTest = [77.9602, 5.7703, 83.169, 9.8485];
+      res.boundsTestWrong = [83.169, 9.8485, 77.9602, 5.7703];
+      return res;
+    },
+    tests: [
+      {
+        name: "Set max bounds",
+        test: async (res) => {
+          const done = await mapx.ask("map_set_max_bounds_array", {
+            bounds: res.boundsTest,
+          });
+          return done;
+        },
+      },
+      {
+        name: "Get max bounds",
+        test: async (res) => {
+          const bounds = await mapx.ask("map_get_max_bounds_array");
+
+          if (bounds.length !== res.boundsTest.length) {
+            return false;
+          }
+
+          for (let i = 0; i < bounds.length; i++) {
+            if (bounds[i] !== res.boundsTest[i]) {
+              return false;
+            }
+          }
+          return true;
+        },
+      },
+      {
+        name: "Set max wrong bounds",
+        test: async (res) => {
+          const done = await mapx.ask("map_set_max_bounds_array", {
+            bounds: res.boundsTestWrong,
+          });
+          return done;
+        },
+      },
+      {
+        name: "Get max bounds bis",
+        test: async (res) => {
+          const bounds = await mapx.ask("map_get_max_bounds_array");
+
+          if (bounds.length !== res.boundsTest.length) {
+            return false;
+          }
+
+          for (let i = 0; i < bounds.length; i++) {
+            if (bounds[i] !== res.boundsTest[i]) {
+              return false;
+            }
+          }
+          return true;
+        },
+      },
+      {
+        name: "Reset bounds",
+        test: async (res) => {
+          await mapx.ask("map_set_max_bounds_array", {
+            bounds: res.boundsMax,
+          });
+          await mapx.ask("map_set_bounds_array", {
+            bounds: res.boundsOrig,
+          });
+          return true;
+        },
+      },
+    ],
+  });
+
+  t.check("Sharing module", {
+    init: async () => {
+      const view = await mapx.ask("_get_random_view", {
+        type: ["vt", "rt", "sm", "cc"],
+      });
+      await mapx.ask("show_modal_share", {
+        idView: view.id,
+      });
+      return {
+        id: view.id,
+      };
+    },
+    tests: [
+      {
+        name: "has valid url with view id",
+        test: async (r) => {
+          const urlString = await mapx.ask("get_modal_share_string");
+          const url = new URL(urlString);
+          const hasId = url.searchParams.get("views") === r.id;
+          return hasId;
+        },
+      },
+      {
+        name: "test suite work",
+        test: async (r) => {
+          const ok = await mapx.ask("get_modal_share_tests");
+          return ok;
+        },
+      },
+      {
+        name: "can be closed",
+        test: async () => {
+          const hadModal = await mapx.ask("close_modal_share");
+          await mapx.ask("close_modal_all");
+          return hadModal;
         },
       },
     ],
@@ -388,6 +535,7 @@ mapx.once("ready", async () => {
           const now = performance.now();
           const n = 20;
           const l = codes.length;
+          const bounds = await mapx.ask("map_get_bounds_array");
           await mapx.ask("map_wait_idle");
           for (let i = 0; i < n; i++) {
             if (performance.now() - now > item.timeout) {
@@ -412,7 +560,8 @@ mapx.once("ready", async () => {
              *                 s
              * NOTE: mapbox do not allow south < -86 and north > 86, which
              * means.. validation could fail with
-             */ const included =
+             */
+            const included =
               bbx[0] >= Math.floor(bbxA[0]) && // w
               (bbx[1] >= Math.floor(bbxA[1]) || bbx[1] >= -90) && // s
               bbx[2] <= Math.ceil(bbxA[2]) && // e
@@ -421,6 +570,7 @@ mapx.once("ready", async () => {
               return false;
             }
           }
+          await mapx.ask("map_set_bounds_array", { bounds });
           return true;
         },
       },
@@ -572,7 +722,7 @@ mapx.once("ready", async () => {
             asc: true,
             mode: "text",
           });
-          return sorted_asc && !sorted_desc;
+          return sorted_asc && sorted_desc;
         },
       },
     ],
@@ -1060,39 +1210,6 @@ mapx.once("ready", async () => {
     ],
   });
 
-  t.check("Sharing module", {
-    init: async () => {
-      const view = await mapx.ask("_get_random_view", {
-        type: ["vt", "rt", "sm", "cc"],
-      });
-      await mapx.ask("show_modal_share", {
-        idView: view.id,
-      });
-      return {
-        id: view.id,
-      };
-    },
-    tests: [
-      {
-        name: "has valid url with view id",
-        test: async (r) => {
-          const urlString = await mapx.ask("get_modal_share_string");
-          const url = new URL(urlString);
-          const hasId = url.searchParams.get("views") === r.id;
-          return hasId;
-        },
-      },
-      {
-        name: "can be closed",
-        test: async () => {
-          const hadModal = await mapx.ask("close_modal_share");
-          await mapx.ask("close_modal_all");
-          return hadModal;
-        },
-      },
-    ],
-  });
-
   t.check("Tools - add new view", {
     init: async () => {
       await stopIfGuest();
@@ -1118,10 +1235,19 @@ mapx.once("ready", async () => {
 
   /**
    * Run tests
-   */ t.run({
+   */
+  t.run({
     finally: () => {
       console.log("Tests finished");
-      console.log(t._results);
+      const resTable = t._results.map((r) => {
+        return {
+          title: r.title,
+          message: r.message,
+          n_tests: r.tests.length,
+          passes: r.tests.reduce((a, c) => a && c.success, true),
+        };
+      });
+      console.table(resTable);
     },
   });
 });

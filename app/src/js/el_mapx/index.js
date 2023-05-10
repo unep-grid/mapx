@@ -6,6 +6,7 @@ import {
 } from "./../language";
 import * as test from "./../is_test_mapx/index.js";
 import { parseTemplate } from "../mx_helper_misc.js";
+import { isNotEmpty } from "./../is_test_mapx/index.js";
 
 export { el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate };
 
@@ -494,7 +495,7 @@ export function elCheckbox(key, opt) {
       id: Math.random().toString(32),
       action: () => {},
       checked: true,
-      disabled : false,
+      disabled: false,
       tooltip: false,
       keyLabel: null,
       keyDesc: null,
@@ -506,7 +507,7 @@ export function elCheckbox(key, opt) {
   return el("div", { class: "checkbox" }, [
     el("label", { for: opt.id }, [
       el("input", {
-        name: opt.name || key,
+        name: opt.name || key,
         id: opt.id,
         type: "checkbox",
         checked: opt.checked,
@@ -535,8 +536,9 @@ export function elCheckbox(key, opt) {
  * @param {String} opt.id Element id
  * @param {String} opt.dataset Additional custom data-
  * @param {String} opt.action Callback
- * @param {Boolean} opt.keyLabel Optional translation key for label
- * @param {Boolean} opt.keyDesc Optional translation key for descriptiom
+ * @param {String} opt.keyLabel Optional translation key for label
+ * @param {String} opt.keyDesc Optional translation key for descriptiom
+ * @param {Boolean} opt.asRow return result as table row ( tr<td, td> )
  */
 export function elSelect(key, opt) {
   opt = Object.assign(
@@ -548,28 +550,43 @@ export function elSelect(key, opt) {
       keyLabel: null,
       keyDesc: null,
       dataset: "",
+      asRow: false,
     },
     opt
   );
 
-  return el("div", { class: "form-group" }, [
-    el(
-      "label",
-      { for: opt.id },
-      elSpanTranslate(opt.keyLabel ? opt.keyLabel : `${key}_label`)
-    ),
-    el(
-      "select",
-      {
-        on: ["change", opt.action],
-        name: key,
-        id: opt.id,
-        class: "form-control",
-        dataset: opt.dataset,
-      },
-      opt.items
-    ),
-  ]);
+  if (isNotEmpty(opt.item)) {
+    opt.item[0].selected = true;
+  }
+
+  const elOut = opt.asRow ? el("tr") : el("div", { class: "form-group" });
+
+  const elSelectInput = el(
+    "select",
+    {
+      on: ["change", opt.action],
+      name: key,
+      id: opt.id,
+      class: "form-control",
+      dataset: opt.dataset,
+    },
+    opt.items
+  );
+
+  const elLabelText = elSpanTranslate(
+    opt.keyLabel ? opt.keyLabel : `${key}_label`
+  );
+
+  const elLabel = opt.asRow
+    ? el("td", elLabelText)
+    : el("label", { for: opt.id }, elLabelText);
+
+  const elInput = opt.asRow ? el("td", elSelectInput) : elSelectInput;
+
+  elOut.appendChild(elLabel);
+  elOut.appendChild(elInput);
+
+  return elOut;
 }
 
 /**

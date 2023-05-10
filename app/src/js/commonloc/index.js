@@ -1,8 +1,12 @@
-import commonloc from './locations.json';
-import {isString} from './../is_test/index.js';
-import {getDictItem, getDictItemId} from './../language';
-import {getMap, getBoundsArray} from './../map_helpers/index.js';
-import {getArrayDiff} from './../array_stat';
+import commonloc from "./locations.json";
+import { isString } from "./../is_test/index.js";
+import { getDictItem, getDictItemId } from "./../language";
+import {
+  getMap,
+  getBoundsArray,
+  fitMaxBounds,
+} from "./../map_helpers/index.js";
+import { getArrayDiff } from "./../array_stat";
 /**
  * FitBounds with name/code resolver for iso3,m49 and text
  * @param {Object} o options
@@ -14,7 +18,7 @@ import {getArrayDiff} from './../array_stat';
  * @return {Promise<Array>} Array of geographic bounds [west, south, east, north]
  */
 export async function commonLocFitBbox(o) {
-  o = Object.assign({}, {param: {animate: true}}, o);
+  o = Object.assign({}, { param: { animate: true } }, o);
   const map = getMap();
   const bbox = await commonLocGetBbox(o);
   if (bbox) {
@@ -23,8 +27,11 @@ export async function commonLocFitBbox(o) {
     if (!hasDiff) {
       return bbox;
     }
-    map.fitBounds(bbox, o.param);
-    await map.once('moveend');
+    const done = fitMaxBounds(bbox, o.param);
+
+    if (done) {
+      await map.once("moveend");
+    }
     return bbox;
   }
 }
@@ -37,7 +44,7 @@ export async function commonLocFitBbox(o) {
  * @return {Promise<Array>} Array of geographic bounds [west, south, east, north]
  */
 export async function commonLocGetBbox(o) {
-  o = Object.assign({}, {code: ['WLD'], name: null, language: null}, o);
+  o = Object.assign({}, { code: ["WLD"], name: null, language: null }, o);
 
   if (o.name) {
     o.code = [];
@@ -62,7 +69,7 @@ export async function commonLocGetBbox(o) {
       return;
     }
     /*
-     *          ~  wsen ~ 
+     *          ~  wsen ~
      *  see https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatlike
      *
      *               n (3)
@@ -106,7 +113,7 @@ export async function commonLocGetTableCodes(opt) {
   for (const c of codes) {
     const item = {
       code: c,
-      name: await getDictItem(c, opt.language)
+      name: await getDictItem(c, opt.language),
     };
     out.push(item);
   }

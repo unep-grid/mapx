@@ -447,7 +447,8 @@ class MapxResolversApp extends MapxResolversStatic {
   is_views_list_sorted(opt) {
     const v = getMapData().viewsList;
     opt = Object.assign({}, { check: true }, opt);
-    return v.sortGroup(null, opt);
+    const res = v.sortGroup(null, opt);
+    return res;
   }
 
   /**

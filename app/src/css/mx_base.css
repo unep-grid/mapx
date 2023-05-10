@@ -233,15 +233,9 @@ tr {
   }
 }
 
-.mx-bar-filter > button {
-  border: none;
-  background: none;
-}
-
 .mx-bar-filter .mx-btn-toggle-filter {
   border-radius: 15px;
   padding: 5px;
-  cursor: pointer;
 }
 
 .mx-bar-filter .mx-btn-toggle-filter:focus {
@@ -369,7 +363,7 @@ tr {
   flex-direction: column;
 }
 
-.mx-tools-group .btn {
+.mx-tools-group > .btn {
   margin: 3px;
   text-align: left;
 }
@@ -536,6 +530,20 @@ tr {
 
 .mx .mapboxgl-ctrl-logo {
   opacity: 0.4;
+}
+
+/**
+* Reset button style
+*
+*/
+.mx-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
 /**
@@ -1088,4 +1096,5 @@ code {
 
 .mx-version {
   cursor: pointer;
+  color: var(--mx_ui_link);
 }

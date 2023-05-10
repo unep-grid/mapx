@@ -54,12 +54,12 @@ observe({
       # check current project
       project_react <- reactData$project
 
-      if (!noDataCheck(project_ui) && (project_ui != project_react)) {
+      if (isNotEmpty(project_ui) && (project_ui != project_react)) {
         project_query <- NULL
       }
 
       # Project requested can be an iso3 code or mapx project id or custom alias.
-      if (!noDataCheck(project_query)) {
+      if (isNotEmpty(project_query)) {
 
         # case project requested is an iso3code. e.g. COD, USA, etc
         if (nchar(project_query) == 3) project_query <- mxDbGetProjectIdByOldId(project_query)
@@ -71,17 +71,17 @@ observe({
         project_query <- mxDbProjectCheck(project_query)
       }
 
-      if (!noDataCheck(project_query)) {
+      if (isNotEmpty(project_query)) {
         # priority to query
         project_out <- project_query
       } else {
 
         # if there is no already defined project but there is something from the db, use the later
-        if (noDataCheck(project_react) && !noDataCheck(project_db)) {
+        if (isEmpty(project_react) && isNotEmpty(project_db)) {
           project_out <- project_db
 
           # if the change comes from the ui, apply
-        } else if (!noDataCheck(project_ui)) {
+        } else if (isNotEmpty(project_ui)) {
           mxModal(id = "uiSelectProject", close = T)
           project_out <- project_ui
         } else {
@@ -93,7 +93,7 @@ observe({
       #
       # Check roles, change project, set roles, log action
       #
-      if (!noDataCheck(project_out)) {
+      if (isNotEmpty(project_out)) {
         project_out <- toupper(project_out)
 
         #
@@ -102,7 +102,7 @@ observe({
         roles <- mxDbGetProjectUserRoles(id_user, project_out)
 
 
-        if (noDataCheck(roles$groups)) project_out <- project_def
+        if (isEmpty(roles$groups)) project_out <- project_def
 
 
         noAccess <- isTRUE(project_query != project_out)
@@ -179,9 +179,9 @@ observe({
     isGuest <- isGuestUser()
     idProjectPrevious <- reactData$projectPrevious
 
-    isNotComplete <- noDataCheck(idUser) ||
-      noDataCheck(ipUser) ||
-      noDataCheck(idProject)
+    isNotComplete <- isEmpty(idUser) ||
+      isEmpty(ipUser) ||
+      isEmpty(idProject)
 
     if (isNotComplete) {
       return()
@@ -196,14 +196,18 @@ observe({
 # Trigger -> user not logged in -> show login panel -> retry show project list
 #
 observeEvent(reactData$mapIsReady, {
-  if (reactData$mapIsReady) {
-    byTitle <- !noDataCheck(query$showProjectsListByTitle)
-    byRole <- !noDataCheck(query$showProjectsListByRole)
-    if (byRole || byTitle) {
-      reactChainCallback("showProjectsList",
-        type = "show_projects_query",
-      )
-    }
+  if (!reactData$mapIsReady) {
+    return()
+  }
+
+  byTitle <- isNotEmpty(query$showProjectsListByTitle)
+  byRole <- isNotEmpty(query$showProjectsListByRole)
+
+  if (byRole || byTitle) {
+    mxDebugMsg("Trigger show project list")
+    reactChainCallback("showProjectsList",
+      type = "show_projects_query",
+    )
   }
 })
 
@@ -275,7 +279,7 @@ observeEvent(reactChain$showProjectsList, {
     token = reactUser$token
   )
 
-  if (noDataCheck(projects)) {
+  if (isEmpty(projects)) {
     return()
   }
 
@@ -370,74 +374,75 @@ observe({
   # data
   idMap <- .get(config, c("map", "id"))
   project <- reactData$project
-  hasProject <- !noDataCheck(project)
+  hasProject <- isNotEmpty(project)
   hasMap <- isTRUE(reactData$mapIsReady)
-  update <- reactData$updateProject
+  update <- reactData$updateProject #-> when config saved
+  skip <- !hasMap || !hasProject
 
+  if (skip) {
+    return()
+  }
 
   isolate({
-    if (hasMap && hasProject) {
-      projectData <- mxDbGetProjectData(project)
-      countryClip <- projectData$countries
-      mapPos <- projectData$map_position
-      mapProj <- projectData$map_projection
-      theme <- projectData$theme
-      themeQuery <- query$theme
-      language <- reactData$language
-      hasNoClip <- noDataCheck(countryClip) || "WLD" %in% countryClip
+    projectData <- mxDbGetProjectData(project)
+    countryClip <- projectData$countries
+    mapPos <- projectData$map_position
+    mapProj <- projectData$map_projection
+    theme <- projectData$theme
+    themeQuery <- query$theme
+    language <- reactData$language
+    hasNoClip <- isEmpty(countryClip) || "WLD" %in% countryClip
+    posChange <- !identical(reactData$mapPos, mapPos)
 
-      mglSetHighlightedCountries(
+    if (isEmpty(mapPos)) {
+      mapPos <- list()
+    }
+    if (isEmpty(mapPos$zoom)) {
+      mapPos$zoom <- mapPos$z
+      mapPos$z <- NULL
+    }
+
+    #
+    # Set highlight
+    #
+    mglSetHighlightedCountries(
+      id = idMap,
+      idLayer = "country-code",
+      countries = as.list(countryClip)
+    )
+
+    #
+    # Updaet theme
+    #
+    if (isEmpty(themeQuery) && isNotEmpty(theme)) {
+      mglSetTheme(theme)
+    }
+
+
+    #
+    # Update map projection
+    #
+    if (isEmpty(mapProj)) {
+      mglSetMapProjection(
         id = idMap,
-        idLayer = "country-code",
-        countries = as.list(countryClip)
+        name = config$projections$default
       )
+    } else {
+      mglSetMapProjection(
+        id = idMap,
+        name = mapProj$name,
+        center = list(mapProj$center_lng, mapProj$center_lat),
+        parallels = list(mapProj$parallels_lat_0, mapProj$parallels_lat_1)
+      )
+    }
 
-      if (noDataCheck(mapPos)) {
-        mapPos <- list()
-      }
-      if (noDataCheck(mapPos$zoom)) {
-        mapPos$zoom <- mapPos$z
-        mapPos$z <- NULL
-      }
+    if (posChange) {
 
-      #
-      # Read map position from query
-      #
-      if (!noDataCheck(query$lat) && !noDataCheck(query$lng) && !noDataCheck(query$zoom)) {
-        mapPos$lat <- as.numeric(query$lat)
-        mapPos$lng <- as.numeric(query$lng)
-        mapPos$zoom <- as.numeric(query$zoom)
-        mapPos$fromQuery <- TRUE
-        query$lat <<- NULL
-        query$lng <<- NULL
-        query$zoom <<- NULL
-      }
-
-      mapPos$jump <- TRUE
-
-      mglFlyTo(
+      mglSetMapPos(
         id = idMap,
         mapPos
       )
-
-      if (isEmpty(themeQuery) && isNotEmpty(theme)) {
-        mglSetTheme(theme)
-      }
-
-
-      if (isEmpty(mapProj)) {
-        mglSetMapProjection(
-          id = idMap,
-          name = config$projections$default
-        )
-      } else {
-        mglSetMapProjection(
-          id = idMap,
-          name = mapProj$name,
-          center = list(mapProj$center_lng, mapProj$center_lat),
-          parallels = list(mapProj$parallels_lat_0, mapProj$parallels_lat_1)
-        )
-      }
+      reactData$mapPos <- mapPos
     }
   })
 })

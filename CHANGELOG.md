@@ -1,8 +1,150 @@
-  - [1.10.4-patch.1](https://github.com/unep-grid/mapx/tree/1.10.4-patch.1) 
+  - [1.11.0](https://github.com/unep-grid/mapx/tree/1.11.0) 
+
+    - APP
+        - Table Editor : 
+            - Updated warning message during rename
+            - Added typeless comparison during duplicate updates/changes removal : handsontable returns sometimes the wrong type, and comparison is done with the original value, which is always the correct type. Probably something to be solved upstream, before the type issue. Impacts the display of the "save" button in manual save mode, when all numeric undo are applied and the original value is displayed. 
+        - Map Composer : 
+            - Should solve issue with text selection not working in Firefox
+
+  - [1.11.0-rc.4](https://github.com/unep-grid/mapx/tree/1.11.0-rc.4) 
+
+    - APP
+        - Story Map : 
+            - Editor should handle cases when no slides are editable - removed slides or never set; 
+            - Avoid reading a story with no steps
+            - Should solve issue with step not reloaded after update in edit mode
+        - Table editor : handsontable seems to overwrite types, and comparison for actual change check was not working. e.g. 1 === '1' was considered as a change. Unsing '==' for now + added comments
+        - Code integration : download sld use editor language html and download format sld
+
+  - [1.11.0-rc.3](https://github.com/unep-grid/mapx/tree/1.11.0-rc.3) 
+
+    - APP 
+        - View badges 
+            - Badges not updated after source metadata changed : assign new metadata to source's views during badges update
+        - Table editor :
+            - Handsontable registers undo/redo even if no change are done. Added a function to clear all actions that does not produce a change.
+            - Repair geom, missing ref to events list
+        - Code integration 
+            - Export to SLD: typo preventing export
+    - Docker 
+        - Updated postgres in docker-compose : issue with some requests. Solved by 13-3.3
+
+  - [1.11.0-rc.2](https://github.com/unep-grid/mapx/tree/1.11.0-rc.2) 
+
+    - APP
+        - Table editor 
+            - Actions in undo/redo stored the column position. After a colum removal, undo/redo related to this column were removed. But something changed and the name of the column were stored in the action object. Updated helpers accordingly
+            - Bug in pending updates storage, original value overwritten by intermediate previous value
+        - Drawing tool + Drag Drop
+            -  Added margin if bouding box to small; 
+            - Avoid duplicate layer / remove layer if already exist
+        - Fixed glitch with 'filter activated list' test
+
+  - [1.11.0-rc.1](https://github.com/unep-grid/mapx/tree/1.11.0-rc.1) 
+
+    - APP
+        - Table editor : fixed an issue in manual save mode. Table structure should not be altered until all pending changes have been rolled back or sent
+        - Minor dictionnary changes
+
+  - [1.11.0-beta.2](https://github.com/unep-grid/mapx/tree/1.11.0-beta.2) 
+
+    - APP
+        - Table editor : fixed issue with handson table removing undo/redos after data reload and adding "inserts". Workaround to ignore insert and preserve undo/redos. Removing relevent undo/redo is done when required in the module i.e. removing a column.
+
+  - [1.11.0-beta.1](https://github.com/unep-grid/mapx/tree/1.11.0-beta.1) 
+    
+    - API/APP
+        - Table editor : 
+            - removed action "duplicate + rename", kept only "duplicate"
+            - rewording
+        - Table viewer :
+            - Reload all config, not only data: in case of column changes, it should be displayed correctly
+        - Theme : fixed an issue whith an empty options object during import.
+
+  - [1.11.0-alpha.8](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.8) 
 
     - API
-        - Major bug impacting all projects imported views after "view" pin fix in '1.10.2-alpha.4' 
+        - Major change : should handle #901, but impacts all stats, tiles. Using mx_sources to store table/source date_modified after an update from the table editor.
+
+  - [1.11.0-alpha.6](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.6) 
+    
+    - APP / API
+        - Vector source statistic : fixed issue with count of null
+
+  - [1.11.0-alpha.5](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.5) 
+
+
+    - APP / API 
+        - Table editor 
+            - Major improvement : dispatch + update views after structural change. i.e. if a change affects a view that is currently read in a story map in static mode, it will be reloaded, to avoid missing/renamed attribute to be requested in a style, tiles, during statistic operation or edition.
+            - Re-order visual column -> impacts table viewer too
+            - Retrieve + statistics, incl. nulls in a table
+            - Style improvement
+            - Improve validation
+    - APP
+        - Added timeout in theme switch to prevent an edge case.
+    - API
+        - Fix an issue in source summary where all values are NA, or has no rows.
+    - SDK
+        - Fix #904 : duplication of view when adding a view
+
+  - [1.11.0-alpha.4](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.4) 
+
+    - APP / API
+        - Table editor 
+            - Implementation of a rename / duplicate column tool 
+            - Locking mecanism : lock concurrent clients when any column altering tool is used by an editor  
+        - Pin view, merge change from hot fix, already in prod: Missing transaction + major bug where many view could have been shared at once
         
+  - [1.11.0-alpha.3](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.3) 
+
+    - APP
+        - Improvement #899 share module
+            - Max bounds sdk/url/share module : more resilient with east/west north/south inversion
+            - Refactor update link : use pub/sub logic instead of linear resolver, which was causing inconsistant result
+            - Added async throttle for update : it should be smoother
+            - Pitch and bearing should be updated after a project change
+        - Improved testing
+        - #900 should be fixed : typo during heads/tails request
+        
+  - [1.11.0-alpha.2](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.2) 
+    
+    - SDK
+        - Added method to add custom theme
+
+  - [1.11.0-alpha.1](https://github.com/unep-grid/mapx/tree/1.11.0-alpha.1)
+
+    - APP
+        - Major refactoring : font management system in the theme builder.
+            - Font synchronization tool :
+                - Read local fonts
+                - Upload fonts to Mapbox services
+                - Delete remote fonts if required
+                - Update pre-generated @font-face from google fonts API
+            - Glyphs not used anymore, using glyphs from Mapbox services
+            - Import / Export styles
+            - Style Schema validation : invalid style not allowed
+            - Removed ref to proprietary fonts ( licensing issues ).
+        - Solved many issues with `aria` system to get a 100 in all LightHouse load testing.
+
+  - [1.10.5-alpha.2](https://github.com/unep-grid/mapx/tree/1.10.5-alpha.2) 
+    
+    - APP + SDK
+        - Added support for setting/getting map max bounds :
+            - Project config
+            - CommonLoc
+            - URL
+            - Sharing tool
+            - Story maps 
+            - Schemas
+            - SDK static + app
+
+  - [1.10.5-alpha.1](https://github.com/unep-grid/mapx/tree/1.10.5-alpha.1) 
+
+    - APP
+        - Experimental bathymetry style for "water" themes : better contrast, bathymetry lines, bathymetry labels, colors/opacity configuration using the themes tools 
+
   - [1.10.4](https://github.com/unep-grid/mapx/tree/1.10.4) 
 
   - [1.10.4-beta.2](https://github.com/unep-grid/mapx/tree/1.10.4-beta.2) 

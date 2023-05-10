@@ -1,0 +1,422 @@
+{
+  "Alegreya": [
+    "Alegreya Medium",
+    "Alegreya Regular",
+    "Alegreya Bold",
+    "Alegreya ExtraBold",
+    "Alegreya Black",
+    "Alegreya Italic",
+    "Alegreya Medium Italic",
+    "Alegreya Bold Italic",
+    "Alegreya ExtraBold Italic",
+    "Alegreya Black Italic"
+  ],
+  "Alegreya SC": [
+    "Alegreya SC Medium",
+    "Alegreya SC Regular",
+    "Alegreya SC Bold",
+    "Alegreya SC ExtraBold",
+    "Alegreya SC Black",
+    "Alegreya SC Italic",
+    "Alegreya SC Medium Italic",
+    "Alegreya SC Bold Italic",
+    "Alegreya SC ExtraBold Italic",
+    "Alegreya SC Black Italic"
+  ],
+  "Asap": [
+    "Asap Medium",
+    "Asap Regular",
+    "Asap SemiBold",
+    "Asap Bold",
+    "Asap Italic",
+    "Asap Medium Italic",
+    "Asap SemiBold Italic",
+    "Asap Bold Italic"
+  ],
+  "Caveat": [
+    "Caveat Regular",
+    "Caveat Bold"
+  ],
+  "Courgette": [
+    "Courgette Regular"
+  ],
+  "Droid Serif": [
+    "Droid Serif Regular",
+    "Droid Serif Bold",
+    "Droid Serif Italic",
+    "Droid Serif Bold Italic"
+  ],
+  "EB Garamond": [
+    "EB Garamond Medium",
+    "EB Garamond Regular",
+    "EB Garamond SemiBold",
+    "EB Garamond Bold",
+    "EB Garamond ExtraBold",
+    "EB Garamond Italic",
+    "EB Garamond Medium Italic",
+    "EB Garamond SemiBold Italic",
+    "EB Garamond Bold Italic",
+    "EB Garamond ExtraBold Italic"
+  ],
+  "Faustina": [
+    "Faustina Medium",
+    "Faustina Regular",
+    "Faustina SemiBold",
+    "Faustina Bold",
+    "Faustina Italic",
+    "Faustina Medium Italic",
+    "Faustina SemiBold Italic",
+    "Faustina Bold Italic"
+  ],
+  "Frank Ruhl Libre": [
+    "Frank Ruhl Libre Medium",
+    "Frank Ruhl Libre Regular",
+    "Frank Ruhl Libre Bold",
+    "Frank Ruhl Libre Black",
+    "Frank Ruhl Libre Light"
+  ],
+  "Heebo": [
+    "Heebo Medium",
+    "Heebo Regular",
+    "Heebo Bold",
+    "Heebo ExtraBold",
+    "Heebo Black",
+    "Heebo Light",
+    "Heebo Thin"
+  ],
+  "Knewave": [
+    "Knewave Regular"
+  ],
+  "Lato": [
+    "Lato Regular",
+    "Lato Bold",
+    "Lato Black",
+    "Lato Light",
+    "Lato Hairline",
+    "Lato Italic",
+    "Lato Bold Italic",
+    "Lato Black Italic",
+    "Lato Light Italic",
+    "Lato Hairline Italic"
+  ],
+  "League Gothic": [
+    "League Gothic Regular",
+    "League Gothic Condensed Regular",
+    "League Gothic Italic",
+    "League Gothic Condensed Italic"
+  ],
+  "League Spartan": [
+    "League Spartan Bold"
+  ],
+  "Merriweather": [
+    "Merriweather Regular",
+    "Merriweather Bold",
+    "Merriweather Black",
+    "Merriweather Light",
+    "Merriweather Italic",
+    "Merriweather Bold Italic",
+    "Merriweather Black Italic",
+    "Merriweather Light Italic"
+  ],
+  "Montserrat": [
+    "Montserrat Medium",
+    "Montserrat Regular",
+    "Montserrat SemiBold",
+    "Montserrat Bold",
+    "Montserrat ExtraBold",
+    "Montserrat Black",
+    "Montserrat Light",
+    "Montserrat Thin",
+    "Montserrat ExtraLight",
+    "Montserrat Medium Italic",
+    "Montserrat Italic",
+    "Montserrat SemiBold Italic",
+    "Montserrat Bold Italic",
+    "Montserrat ExtraBold Italic",
+    "Montserrat Black Italic",
+    "Montserrat Light Italic",
+    "Montserrat Thin Italic",
+    "Montserrat ExtraLight Italic"
+  ],
+  "Noto Naskh Arabic": [
+    "Noto Naskh Arabic Regular",
+    "Noto Naskh Arabic Bold"
+  ],
+  "Noto Sans Arabic": [
+    "Noto Sans Arabic SemiCondensed",
+    "Noto Sans Arabic SemiCondensed Medium",
+    "Noto Sans Arabic SemiCondensed SemiBold",
+    "Noto Sans Arabic SemiCondensed Bold",
+    "Noto Sans Arabic SemiCondensed ExtraBold",
+    "Noto Sans Arabic SemiCondensed Black",
+    "Noto Sans Arabic SemiCondensed Light",
+    "Noto Sans Arabic SemiCondensed Thin",
+    "Noto Sans Arabic SemiCondensed ExtraLight"
+  ],
+  "Noto Sans CJK JP": [
+    "Noto Sans CJK JP Medium",
+    "Noto Sans CJK JP Regular",
+    "Noto Sans CJK JP Bold"
+  ],
+  "Noto Sans Hebrew": [
+    "Noto Sans Hebrew SemiCondensed",
+    "Noto Sans Hebrew SemiCondensed Medium",
+    "Noto Sans Hebrew SemiCondensed SemiBold",
+    "Noto Sans Hebrew SemiCondensed Bold",
+    "Noto Sans Hebrew SemiCondensed ExtraBold",
+    "Noto Sans Hebrew SemiCondensed Black",
+    "Noto Sans Hebrew SemiCondensed Light",
+    "Noto Sans Hebrew SemiCondensed Thin",
+    "Noto Sans Hebrew SemiCondensed ExtraLight"
+  ],
+  "Noto Sans": [
+    "Noto Sans SemiCondensed",
+    "Noto Sans SemiCondensed Medium",
+    "Noto Sans SemiCondensed SemiBold",
+    "Noto Sans SemiCondensed Bold",
+    "Noto Sans SemiCondensed ExtraBold",
+    "Noto Sans SemiCondensed Black",
+    "Noto Sans SemiCondensed Light",
+    "Noto Sans SemiCondensed Thin",
+    "Noto Sans SemiCondensed ExtraLight",
+    "Noto Sans SemiCondensed Italic",
+    "Noto Sans SemiCondensed Medium Italic",
+    "Noto Sans SemiCondensed SemiBold Italic",
+    "Noto Sans SemiCondensed Bold Italic",
+    "Noto Sans SemiCondensed ExtraBold Italic",
+    "Noto Sans SemiCondensed Black Italic",
+    "Noto Sans SemiCondensed Light Italic",
+    "Noto Sans SemiCondensed Thin Italic",
+    "Noto Sans SemiCondensed ExtraLight Italic"
+  ],
+  "Old Standard TT": [
+    "Old Standard TT Regular",
+    "Old Standard TT Bold",
+    "Old Standard TT Italic"
+  ],
+  "Open Sans": [
+    "Open Sans Regular",
+    "Open Sans SemiBold",
+    "Open Sans Bold",
+    "Open Sans ExtraBold",
+    "Open Sans Light",
+    "Open Sans Condensed Bold",
+    "Open Sans Italic",
+    "Open Sans SemiBold Italic",
+    "Open Sans Condensed Light",
+    "Open Sans Bold Italic",
+    "Open Sans ExtraBold Italic",
+    "Open Sans Light Italic",
+    "Open Sans Condensed Light Italic"
+  ],
+  "Orbitron": [
+    "Orbitron Medium",
+    "Orbitron Regular",
+    "Orbitron Bold",
+    "Orbitron Black"
+  ],
+  "Oswald": [
+    "Oswald Medium",
+    "Oswald Regular",
+    "Oswald SemiBold",
+    "Oswald Bold",
+    "Oswald Light",
+    "Oswald ExtraLight"
+  ],
+  "Overpass": [
+    "Overpass Regular",
+    "Overpass SemiBold",
+    "Overpass Bold",
+    "Overpass ExtraBold",
+    "Overpass Black",
+    "Overpass Light",
+    "Overpass Thin",
+    "Overpass ExtraLight",
+    "Overpass Italic",
+    "Overpass SemiBold Italic",
+    "Overpass Bold Italic",
+    "Overpass ExtraBold Italic",
+    "Overpass Black Italic",
+    "Overpass Light Italic",
+    "Overpass Thin Italic",
+    "Overpass ExtraLight Italic"
+  ],
+  "Overpass Mono": [
+    "Overpass Mono Regular",
+    "Overpass Mono SemiBold",
+    "Overpass Mono Bold",
+    "Overpass Mono Light"
+  ],
+  "PT Sans": [
+    "PT Sans Regular",
+    "PT Sans Bold",
+    "PT Sans Caption Regular",
+    "PT Sans Caption Bold",
+    "PT Sans Narrow Regular",
+    "PT Sans Italic",
+    "PT Sans Narrow Bold",
+    "PT Sans Bold Italic"
+  ],
+  "PT Serif": [
+    "PT Serif Regular",
+    "PT Serif Bold",
+    "PT Serif Italic",
+    "PT Serif Bold Italic"
+  ],
+  "Playfair Display": [
+    "Playfair Display Regular",
+    "Playfair Display Bold",
+    "Playfair Display Black",
+    "Playfair Display Italic",
+    "Playfair Display Bold Italic",
+    "Playfair Display Black Italic"
+  ],
+  "Playfair Display SC": [
+    "Playfair Display SC Regular",
+    "Playfair Display SC Bold",
+    "Playfair Display SC Black",
+    "Playfair Display SC Italic",
+    "Playfair Display SC Bold Italic",
+    "Playfair Display SC Black Italic"
+  ],
+  "Press Start 2P": [
+    "Press Start 2P Regular"
+  ],
+  "Quintessential": [
+    "Quintessential Regular"
+  ],
+  "Raleway": [
+    "Raleway Medium",
+    "Raleway Regular",
+    "Raleway SemiBold",
+    "Raleway Bold",
+    "Raleway ExtraBold",
+    "Raleway Black",
+    "Raleway Light",
+    "Raleway Thin",
+    "Raleway ExtraLight",
+    "Raleway Medium Italic",
+    "Raleway Italic",
+    "Raleway SemiBold Italic",
+    "Raleway Bold Italic",
+    "Raleway ExtraBold Italic",
+    "Raleway Black Italic",
+    "Raleway Light Italic",
+    "Raleway Thin Italic",
+    "Raleway ExtraLight Italic"
+  ],
+  "Roboto": [
+    "Roboto Medium",
+    "Roboto Regular",
+    "Roboto Bold",
+    "Roboto Condensed Regular",
+    "Roboto Black",
+    "Roboto Light",
+    "Roboto Condensed Bold",
+    "Roboto Thin",
+    "Roboto Italic",
+    "Roboto Medium Italic",
+    "Roboto Condensed Light",
+    "Roboto Bold Italic",
+    "Roboto Condensed Italic",
+    "Roboto Black Italic",
+    "Roboto Light Italic",
+    "Roboto Condensed Bold Italic",
+    "Roboto Thin Italic",
+    "Roboto Condensed Light Italic"
+  ],
+  "Roboto Mono": [
+    "Roboto Mono Medium",
+    "Roboto Mono Regular",
+    "Roboto Mono Bold",
+    "Roboto Mono Light",
+    "Roboto Mono Thin",
+    "Roboto Mono Italic",
+    "Roboto Mono Medium Italic",
+    "Roboto Mono Bold Italic",
+    "Roboto Mono Light Italic",
+    "Roboto Mono Thin Italic"
+  ],
+  "Roboto Slab": [
+    "Roboto Slab Regular",
+    "Roboto Slab Bold",
+    "Roboto Slab Light",
+    "Roboto Slab Thin"
+  ],
+  "Rubik": [
+    "Rubik Medium",
+    "Rubik Regular",
+    "Rubik Bold",
+    "Rubik Black",
+    "Rubik Light",
+    "Rubik Italic",
+    "Rubik Medium Italic",
+    "Rubik Bold Italic",
+    "Rubik Black Italic",
+    "Rubik Light Italic"
+  ],
+  "Sniglet": [
+    "Sniglet Regular",
+    "Sniglet ExtraBold"
+  ],
+  "Source Code Pro": [
+    "Source Code Pro Medium",
+    "Source Code Pro Regular",
+    "Source Code Pro Semibold",
+    "Source Code Pro Bold",
+    "Source Code Pro Black",
+    "Source Code Pro Light",
+    "Source Code Pro ExtraLight"
+  ],
+  "Source Sans Pro": [
+    "Source Sans Pro Regular",
+    "Source Sans Pro SemiBold",
+    "Source Sans Pro Bold",
+    "Source Sans Pro Black",
+    "Source Sans Pro Light",
+    "Source Sans Pro ExtraLight",
+    "Source Sans Pro Italic",
+    "Source Sans Pro SemiBold Italic",
+    "Source Sans Pro Bold Italic",
+    "Source Sans Pro Black Italic",
+    "Source Sans Pro Light Italic",
+    "Source Sans Pro ExtraLight Italic"
+  ],
+  "Source Serif Pro": [
+    "Source Serif Pro Regular",
+    "Source Serif Pro Semibold",
+    "Source Serif Pro Bold"
+  ],
+  "Spectral": [
+    "Spectral Medium",
+    "Spectral Regular",
+    "Spectral SemiBold",
+    "Spectral Bold",
+    "Spectral ExtraBold",
+    "Spectral Light",
+    "Spectral ExtraLight",
+    "Spectral Italic",
+    "Spectral Medium Italic",
+    "Spectral SemiBold Italic",
+    "Spectral Bold Italic",
+    "Spectral ExtraBold Italic",
+    "Spectral Light Italic",
+    "Spectral ExtraLight Italic"
+  ],
+  "Ubuntu": [
+    "Ubuntu Medium",
+    "Ubuntu Regular",
+    "Ubuntu Bold",
+    "Ubuntu Light",
+    "Ubuntu Italic",
+    "Ubuntu Medium Italic",
+    "Ubuntu Bold Italic",
+    "Ubuntu Light Italic"
+  ],
+  "Ubuntu Mono": [
+    "Ubuntu Mono Regular",
+    "Ubuntu Mono Bold",
+    "Ubuntu Mono Italic",
+    "Ubuntu Mono Bold Italic"
+  ]
+}

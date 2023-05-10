@@ -68,20 +68,19 @@ const settings = {
   ],
   // ⚠️ also defined in app/settings/settings-global.R
   links: {
-    mapboxGlyphs: "mapbox://sprites/mapbox/bright-v8",
-    mapboxSprites: "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
+    mapboxSprites: "mapbox://sprites/mapbox/bright-v8",
+    mapboxGlyphs: "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
     repositoryIssues: "https://github.com/unep-grid/mapx/issues",
     appKnowlegdeBase: "https://www.mapx.org/knowledge-base/",
     wiki: "https://github.com/unep-grid/mapx/wiki/",
     wikiRaw: "https://raw.githubusercontent.com/wiki/unep-grid/mapx/",
-    mapFonts:
-      "https://github.com/unep-grid/mapx/tree/main/app/src/glyphs/source/ttf",
   },
   mode: {
     static: false,
     app: false,
   },
   paths: {
+    static: "/static.html",
     sprites: "sprites/sprite",
     fontstack: "fontstack/{fontstack}/{range}.pbf",
     svg: "sprites/svg/",

@@ -1,0 +1,15 @@
+{
+  "name": "fontsync",
+  "version": "0.0.1",
+  "description": "Sync local fonts with mapbox fonts, using fonts api",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "unepgrid.ch",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.3.4"
+  }
+}

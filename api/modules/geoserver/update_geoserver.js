@@ -10,7 +10,7 @@ import { getProjectsIdAll } from "#mapx/project";
 import { getViewsGeoserver } from "#mapx/view";
 import { timeStep, randomString } from "#mapx/helpers";
 import { isNotEmpty } from "@fxi/mx_valid";
-import { setViewStyleAlt } from "#mapx/view";
+import { ioUpdateDbViewAltStyle } from "#mapx/view";
 import { geoserver as grc } from "#mapx/db";
 import { mwNotify } from "#mapx/io";
 
@@ -290,17 +290,10 @@ async function createLayer(socket, layer, clientStyle, idGroup, idProgress) {
   const requestStyle = clientStyle && !hasCustomStyle;
 
   if (requestStyle) {
-    const { result } = await socket.mx_emit_ws_response(
-      "/server/view/style/get",
-      {
-        idView: layer.id,
-      }
-    );
-    const valid = isNotEmpty(result?.mapbox) && isNotEmpty(result?.sld);
-    if (valid) {
+    const result = await ioUpdateDbViewAltStyle(socket, { idView: layer.id });
+    if (result.valid) {
       layer.style_mapbox = result.mapbox;
       layer.style_sld = result.sld;
-      await setViewStyleAlt(layer.id, result);
     }
   }
 

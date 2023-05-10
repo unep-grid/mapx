@@ -1566,8 +1566,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "ps": "یو نوی کالم اضافه کړئ: نوم"
+    "en": "Name of the column",
+    "ps": "د کالم نوم"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1576,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "ps": "د نوي کالم نوم به دا وي:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "ps": "د کالم نوم به دا وي:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1595,9 @@
     "ps": "نوم شتون نلري"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "ps": "بل"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "ps": "د معلوماتو ډول وټاکئ"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "ps": "بل"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1606,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "ps": "په نوم یو نوی کالم اضافه کړئ<b> {{column_name}}</b> ډول<b> {{column_type}}</b> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "ps": "په نوم یو نوی کالم اضافه کړئ<code> {{column_name}}</code> د ډول<code> {{column_type}}</code> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1625,14 @@
     "ps": "د کالم نوم"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "ps": "بل"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "ps": "یو کالم لرې کړئ: تصدیق"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "ps": "په نوم یو کالم لرې کړئ<i> {{column_name}}</i> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی: ډاټا ورک کیدی شي."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "ps": "په نوم یو کالم لرې کړئ<code> {{column_name}}</code> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی: ډاټا ورک کیدی شي."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1793,6 +1778,156 @@
     "id": "edit_table_modal_quit_ignore_changes",
     "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?",
     "ps": "دا جدول لري {{count}} نه خوندي شوي بدلونونه ایا تاسو ډاډه یاست چې دا بدلونونه پریږدئ او رد کړئ؟"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "ps": "په استعمال کې"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "ps": "ساتل شوی"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "ps": "خوندي نه"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename column",
+    "ps": "د کالم نوم بدل کړئ"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "ps": "هغه کالم غوره کړئ چې تاسو یې نوم بدلول غواړئ:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "ps": "تایید"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "ps": "ایا تاسو ډاډه یاست چې تاسو غواړئ د کالم نوم بدل کړئ<code> {{column_name}}</code> ته<code> {{column_name_new}}</code> ؟"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename column",
+    "ps": "د کالم نوم بدل کړئ"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename column",
+    "ps": "د کالم نوم بدل کړئ"
+  },
+  {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "ps": "په کوډ کې موجودې حوالې"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "ps": "<p style=\";text-align:right;direction:rtl\">د کالم نوم بدلولو اجازه نشته ځکه چې دا جدول د دودیز کوډ لیدونو، ډشبورډونو، او / یا دودیز سټایلونو کې حواله شوی. که اړتیا وي، د دې پرځای د کالم نقل کول په پام کې ونیسئ.<br><br> د نورو جزیاتو لپاره، د 'مرستې' تڼۍ کلیک وکړئ.<br><br> دلته د انحصاري لیدونو لیست دی:</p>"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "ps": "لغوه کړئ"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "ps": "ډشبورډ"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "ps": "دودیز کوډ"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "ps": "دودیز سټایل"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "ps": "د سرچینې طبقه"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "ps": "دوه اړخیز کالم"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "ps": "دوه اړخیز کالم"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "ps": "د نقل کولو کالم"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "ps": "د نقل کولو کالم: تصدیق"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "ps": "د نوم کالم نقل کړئ<code> {{column_name}}</code> په نوم نوي کالم ته<code> {{column_name_new}}</code> ؟"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "ps": "کالم نقل کړئ"
+  },
+  {
+    "id": "btn_stat_attribute",
+    "en": "Statistics",
+    "ps": "احصایې"
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "ps": "د احصایې لپاره خاصیت"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "ps": "یو خاصیت وټاکئ"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "ps": "د کالمونو ترتیب بدل شوی"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "ps": "د کالم ترتیب د بل کارونکي لخوا بدل شوی."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "ps": "سمه ده"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "ps": "د کالمونو ترتیب ترتیب کړئ"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "ps": "د کالمونو ترتیب ترتیب کړئ"
   },
   {
     "id": "geom_tools_modal_select_title",
@@ -2195,6 +2330,11 @@
     "ps": "لغوه کړی"
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "ps": "بل..."
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "ps": "ادامه ورکړئ"
@@ -2228,6 +2368,11 @@
     "id": "btn_close",
     "en": "Close",
     "ps": "وتړئ"
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "ps": "نقل کول..."
   },
   {
     "id": "btn_download",
@@ -4590,9 +4735,14 @@
     "ps": "د نقشې لومړنی موقعیت "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "ps": "د نقشې اوسني پیرامیټرې وکاروئ "
+    "ps": "د اوسني نقشې پیرامیټونه وکاروئ"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "ps": "د نقشې اعظمي حدونه تنظیم کړئ"
   },
   {
     "id": "project_map_proj_set",
@@ -4623,6 +4773,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "ps": "عرض البلد جنوبي (البرز، لامبر کونک)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "ps": "د استعمالونو مخ سره د نقشه پوهستلو محدودول"
   },
   {
     "id": "map_fit_to_bounds",
@@ -6265,9 +6420,9 @@
     "ps": "مقدار "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
-    "ps": "د سر / لکۍ وقفې "
+    "ps": "د سر / لکۍ ماتول"
   },
   {
     "id": "equal_interval",
@@ -6488,6 +6643,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "ps": "خبرتیاوې "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "ps": "ورک شوي ارزښتونه: {{nullCount}}"
   },
   {
     "id": "mc_title",
@@ -7981,13 +8141,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "ps": "د لومړني نقشې موقعیت تنظیم کړئ"
+    "en": "Set initial map extent",
+    "ps": "د لومړني نقشې حد تنظیم کړئ"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "ps": "د نقشې اوسنی حد، ټیټ او بییرنګ به وکارول شي. په دې توګه د پروژې ډیفالټ بیا لیکل کیږي."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "ps": "د نقشې پیننګ اوسنۍ حد ته محدود کړئ"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "ps": "نقشه به د هغې اوسني حد پورې محدوده وي. د 'Mercator' پرته د نورو اټکلونو لپاره، یوازې مرکز به په حدودو کې وساتل شي."
   },
   {
     "id": "share_filter_activated_label",
@@ -8205,6 +8375,11 @@
     "ps": "نقشه: د هیواد سیوري "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "ps": "نقشه: د ځمکې عمومي لیبلونه"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "ps": "نقشه: اوبه "
@@ -8218,6 +8393,21 @@
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)",
     "ps": "نقشه: حمامونه (لوړ) "
+  },
+  {
+    "id": "mx_map_text_bathymetry",
+    "en": "Map: bathymetry labels",
+    "ps": "نقشه: د تشناب لیبل"
+  },
+  {
+    "id": "mx_map_text_bathymetry_outline",
+    "en": "Map: bathymetry labels outline",
+    "ps": "نقشه: د تشناب لیبلونو خاکه"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "ps": "نقشه: د حمام لینونه"
   },
   {
     "id": "mx_map_road",
@@ -8280,6 +8470,51 @@
     "ps": "نقشه: د متن متن وټاکئ "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "ps": "نقشه: د ملګرو ملتونو لیبل 0 0 (انټارکټیکا)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 0 1 – ایالت"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "ps": "نقشه: د ملګرو ملتونو لیبل 0 2 - اشغال شوې سیمه"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 0 3 - غیر ځان اداره کولو سیمه"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "ps": "نقشه: د ملګرو ملتونو لیبل 0 4 – سیمه"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 0 5 – ځانګړې سیمه یا ولایت"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 0 99 - حاکمیت بې ثباته شوی"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 1 1 - اداري واحد (فرعي ملي کچه 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 1 2 - اداري واحد (فرعي ملي کچه 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "ps": "نقشه: د سړک متن "
@@ -8298,6 +8533,61 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "ps": "نقشه: د اوبو د بدن متن لنډیز "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "ps": "د فونټ کورنۍ"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "ps": "فونټ"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "ps": "شفافیت"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "ps": "رنګ"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "ps": "د لیدلو وړ"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "ps": "نوم"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "ps": "تفصیل"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "ps": "لیکوال"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "ps": "بل"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "ps": "صادرول"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "ps": "واردول"
   },
   {
     "id": "upl_shapefile_warning",

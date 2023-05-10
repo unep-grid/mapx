@@ -206,6 +206,7 @@ class ButtonPanel extends EventSimple {
           `hint--${panel.opt.tooltip_position}`,
           "button-panel--shadow",
         ],
+        role:"button",
         dataset: {
           lang_key: panel.opt.button_lang_key,
           lang_type: "tooltip",

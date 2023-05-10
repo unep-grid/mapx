@@ -1,4 +1,4 @@
-import { ws, nc, events, listeners, theme } from "./../mx.js";
+import { ws, nc, events, listeners, theme, mapboxgl, maps } from "./../mx.js";
 import { settings } from "./../settings";
 import { featuresToPopup } from "./features_to_popup.js";
 import { RadialProgress } from "./../radial_progress";
@@ -6,10 +6,12 @@ import { handleViewClick } from "./../views_click";
 import { ButtonPanel } from "./../button_panel";
 import { RasterMiniMap } from "./../raster_mini_map";
 import { el, elSpanTranslate } from "./../el_mapx/index.js";
+import { shake } from "./../elshake/index.js";
 import { MainPanel } from "./../panel_main";
 import { MapInfoBox } from "./../map_info_box";
 import { Search } from "./../search";
 import { downloadJSON } from "../download/index.js";
+import { ViewBase } from "../views_builder/view_base.js";
 import {
   MapxLogo,
   MapControlLiveCoord,
@@ -126,7 +128,9 @@ import {
   isViewDownloadable,
   isViewRtWithLegend,
   isViewVtWithAttributeType,
+  isBoundsInsideBounds,
 } from "./../is_test_mapx/index.js";
+import { FlashItem } from "../icon_flash/index.js";
 
 /**
  * Storage
@@ -162,9 +166,9 @@ export function getStyleBaseMap() {
   delete style.metadata;
 
   styleOut.metadata = {
-    fonts: {
-      source: settings.links.mapFonts,
-    },
+    //fonts: {
+    //source: settings.links.mapFonts,
+    //},
   };
 
   /**
@@ -567,9 +571,8 @@ export function requestProjectMembership(idProject) {
  */
 export function isModeLocked() {
   let modeLocked =
-    getQueryParameterInit("noViews")[0] === "true" ||
-    getQueryParameterInit("modeLocked")[0] === "true";
-
+    getQueryParameterInit("noViews")[0] ||
+    getQueryParameterInit("modeLocked")[0];
   return !!modeLocked;
 }
 
@@ -883,36 +886,35 @@ export async function updateUiSettings() {
 }
 
 /**
- * Check if there is view activated and disable button if needed
+ * Update btn filter activated
  */
 export function updateBtnFilterActivated() {
-  const views = getViews();
   const elFilterActivated = document.getElementById("btnFilterChecked");
-  /**
-   * Check displayed views element
-   */
-  const hasViewsActivated = views.reduce((a, v) => {
-    if (!v._vb) {
-      return a || false;
-    }
-    let elView = v._vb.getEl();
-    let isOpen = v._vb.isOpen();
-    let style = window.getComputedStyle(elView);
-    let isVisible = style.display !== "none";
-
-    return a || (isOpen && isVisible);
-  }, false);
-
-  /**
-   * Set elFilter disabled class
-   */
+  const enable = hasViewsActivated();
   const isActivated = elFilterActivated.classList.contains("active");
-  if (isActivated || hasViewsActivated) {
+  if (isActivated || enable) {
     elFilterActivated.classList.remove("disabled");
   } else {
     elFilterActivated.classList.add("disabled");
   }
 }
+
+/**
+ * Check if there are some view item enable and visible
+ * @return {Boolean} has activated view items
+ */
+export function hasViewsActivated() {
+  const views = getViews();
+  for (const view of views) {
+    if (view._vb instanceof ViewBase) {
+      if (view._vb.isActive()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 /**
  * Initial mgl and mapboxgl
  * @param {Object} o options
@@ -928,8 +930,6 @@ export function updateBtnFilterActivated() {
  * @param {Number} o.mapPosition.bearing Bearing
  * @param {Number} o.mapPosition.lng Longitude center
  * @param {Number} o.mapPosition.lat Latitude center
- * @param {Object} o.mapPosition.bounds Mapbox bounds object
- * @param {Boolean} o.mapPosition.fitToBounds fit map to bounds
  * @param {Object} o.colorScheme Color sheme object
  * @param {String} o.idTheme Id of the theme to use
  * @param {Boolean} o.useQueryFilters Use query filters for fetch views
@@ -942,12 +942,12 @@ export async function initMapx(o) {
   /**
    * Set mapbox gl token
    */
-  mx.mapboxgl.accessToken = o.token || settings.map.token;
+  mapboxgl.accessToken = o.token || settings.map.token;
 
   /**
    * MapX map data : views, config, etc..
    */
-  mx.maps[o.id] = Object.assign(
+  maps[o.id] = Object.assign(
     {
       map: {},
       views: [],
@@ -958,7 +958,10 @@ export async function initMapx(o) {
   /**
    * Set mode
    */
-  if (!o.modeStatic && getQueryParameter("storyAutoStart")[0] === "true") {
+  const storyAutoStart =
+    !o.modeStatic && getQueryParameter("storyAutoStart")[0];
+
+  if (storyAutoStart) {
     /**
      * Temporary hack : force redirect here. URL rewrite in Traefik does
      * not allow lookaround : it's not possible to have non trivial redirect.
@@ -973,18 +976,19 @@ export async function initMapx(o) {
   /**
    * Update closed panel setting
    */
-  if (getQueryParameter("closePanels")[0] === "true") {
+  const closePanel = getQueryParameter("closePanels")[0];
+  if (closePanel) {
     settings.initClosedPanels = true;
   }
 
-  settings.mode.static = o.modeStatic || settings.mode.storyAutoStart;
+  settings.mode.static = !!o.modeStatic || settings.mode.storyAutoStart;
   settings.mode.app = !settings.mode.static;
 
   /**
    * Update  sprites path
    */
   settings.style.sprite = getAppPathUrl("sprites");
-  settings.style.glyphs = getAppPathUrl("fontstack");
+  //settings.style.glyphs = getAppPathUrl("fontstack");
 
   /**
    * WS connect + authentication
@@ -999,7 +1003,7 @@ export async function initMapx(o) {
   /*
    * test if mapbox gl is supported
    */
-  if (!mx.mapboxgl.supported()) {
+  if (!mapboxgl.supported()) {
     alert(
       "This website will not work with your browser. Please upgrade it or use a compatible one."
     );
@@ -1016,29 +1020,40 @@ export async function initMapx(o) {
   const queryBearing = getQueryParameter(["b", "bearing"])[0];
   const queryMinZoom = getQueryParameter(["zmin", "zoomMin"])[0];
   const queryMaxZoom = getQueryParameter(["zmax", "zoomMax"])[0];
+  const queryMaxBounds = getQueryParameter(["useMaxBounds"]);
 
-  if (queryLat) {
+  if (isNotEmpty(queryLat)) {
     mp.center = null;
     mp.lat = queryLat * 1 || 0;
   }
-  if (queryLng) {
+  if (isNotEmpty(queryLng)) {
     mp.center = null;
     mp.lng = queryLng * 1 || 0;
   }
-  if (queryZoom) {
+  if (isNotEmpty(queryZoom)) {
     mp.z = queryZoom * 1 || 0;
   }
-  if (queryPitch) {
+  if (isNotEmpty(queryPitch)) {
     mp.p = queryPitch * 1 || 0;
   }
-  if (queryBearing) {
+  if (isNotEmpty(queryBearing)) {
     mp.b = queryBearing * 1 || 0;
   }
-  if (queryMaxZoom) {
+  if (isNotEmpty(queryMaxZoom)) {
     mp.zmax = queryMaxZoom * 1 || 22;
   }
-  if (queryMinZoom) {
+  if (isNotEmpty(queryMinZoom)) {
     mp.zmin = queryMinZoom * 1 || 0;
+  }
+
+  if (isNotEmpty(queryMaxBounds) || mp.useMaxBounds) {
+    const bounds = [];
+    for (const k of ["w", "s", "e", "n"]) {
+      const v = (getQueryParameter(k)[0] || mp[k] || 0) * 1;
+      bounds.push(v);
+    }
+    const vbounds = validateBounds(bounds);
+    mp.maxBounds = vbounds;
   }
 
   /* map options */
@@ -1047,6 +1062,8 @@ export async function initMapx(o) {
     style: settings.style, // mx default style
     maxZoom: settings.map.maxZoom,
     minZoom: settings.map.minZoom,
+    bounds: mp.bounds || null,
+    maxBounds: mp.maxBounds || null,
     preserveDrawingBuffer: false,
     attributionControl: false,
     crossSourceCollisions: true,
@@ -1056,13 +1073,12 @@ export async function initMapx(o) {
     bearing: mp.b || mp.bearing || 0,
     pitch: mp.p || mp.pitch || 0,
     center: mp.center || [mp.lng || 0, mp.lat || 0],
+    localIdeographFontFamily: "'Noto Sans', 'Noto Sans SC', sans-serif",
   };
   /*
    * Create map object
    */
-  const map = new mx.mapboxgl.Map(mapOptions);
-  const elCanvas = map.getCanvas();
-  elCanvas.setAttribute("tabindex", "-1");
+  const map = new mapboxgl.Map(mapOptions);
 
   // Multiple maps were originally planned, never happened.
   // -> many function have an option for getting the map by id, but
@@ -1126,10 +1142,16 @@ export async function initMapx(o) {
     /**
      * Build theme config inputs only when settings tab is displayed
      */
-    mx.panel_main.on("tab_change", (id) => {
-      if (id === "tools") {
-        const elInputs = document.getElementById("mxInputThemeColors");
-        theme.linkInputs(elInputs);
+    mx.panel_main.on("tab_change", async (id) => {
+      try {
+        if (id === "tools") {
+          const elInputs = document.getElementById("mxInputThemeColors");
+          if (isElement(elInputs) && isEmpty(elInputs)) {
+            await theme.linkInputs(elInputs);
+          }
+        }
+      } catch (e) {
+        console.error(e);
       }
     });
 
@@ -1221,8 +1243,8 @@ export async function initMapx(o) {
    * Initial mode terrain 3d / Sat
    */
   const ctrls = mx.panel_tools.controls;
-  const enable3d = getQueryParameter("t3d")[0] === "true";
-  const enableSat = getQueryParameter("sat")[0] === "true";
+  const enable3d = getQueryParameter("t3d")[0];
+  const enableSat = getQueryParameter("sat")[0];
   if (enable3d) {
     ctrls.getButton("btn_3d_terrain").action("enable");
   }
@@ -1367,9 +1389,8 @@ export function initMapListener(map) {
 }
 
 export async function initMapxStatic(o) {
-  const map = getMap();
   const mapData = getMapData();
-  const zoomToViews = getQueryParameter("zoomToViews")[0] === "true";
+  const zoomToViews = getQueryParameter("zoomToViews")[0];
   const language = getQueryParameter("language")[0] || getLanguageDefault();
   /**
    * NOTE: all views are
@@ -1437,16 +1458,7 @@ export async function initMapxStatic(o) {
   /**
    * If there is view, render all
    */
-
   if (mapData.views && mapData.views.length) {
-    /**
-     * Extract all views bounds
-     */
-    if (zoomToViews) {
-      const bounds = await getViewsBounds(mapData.views);
-      map.fitBounds(bounds);
-    }
-
     /**
      * Display views
      */
@@ -1457,14 +1469,24 @@ export async function initMapxStatic(o) {
         addTitle: true,
       });
     }
+
     await viewsLayersOrderUpdate({
       order: idViews.reverse(),
     });
+
+    /**
+     * Extract all views bounds
+     */
+    if (zoomToViews) {
+      const bounds = await getViewsBounds(mapData.views);
+      fitMaxBounds(bounds);
+    }
   }
 
   events.fire({
     type: "mapx_ready",
   });
+
   return;
 }
 
@@ -1600,7 +1622,7 @@ export async function handleClickEvent(e, idMap) {
     /**
      * Click event : make a popup with attributes
      */
-    const popup = new mx.mapboxgl.Popup()
+    const popup = new mapboxgl.Popup()
       .setLngLat(map.unproject(e.point))
       .addTo(map);
 
@@ -1736,6 +1758,7 @@ export function geolocateUser() {
     });
   }
 }
+
 /**
  * Reset project : remove view, dashboards, etc
  * NOTE: Shiny require at least one argument. Not used, but, needed.
@@ -2467,52 +2490,15 @@ export function updateViewParams(o) {
  */
 export function getViewsOrder() {
   const viewContainer = document.querySelector(".mx-views-list");
+  const out = new Set();
   if (!viewContainer) {
     return [];
   }
   const els = viewContainer.querySelectorAll(".mx-view-item");
-  const res = [];
-  for (let el of els) {
-    res.push(el.dataset.view_id);
+  for (const el of els) {
+    out.add(el.dataset.view_id);
   }
-  return res;
-}
-
-/**
- * Get JSON representation of a view ( same as the one dowloaded );
- * @param {String} idView Id of the view;
- * @param {Object} opt Options
- * @param {Boolean} opt.asString As string
- * @return {String} JSON string with view data (or cleaned view object);
- */
-export function getViewJson(idView, opt) {
-  opt = Object.assign({}, { asString: true }, opt);
-  const view = getView(idView);
-  const keys = [
-    "id",
-    "editor",
-    "target",
-    "date_modified",
-    "data",
-    "type",
-    "pid",
-    "project",
-    "readers",
-    "editors",
-    "_edit",
-  ];
-  const out = {};
-  keys.forEach((k) => {
-    let value = view[k];
-    if (value) {
-      out[k] = value;
-    }
-  });
-  if (opt.asString) {
-    return JSON.stringify(out);
-  } else {
-    return out;
-  }
+  return Array.from(out);
 }
 
 /**
@@ -2949,7 +2935,7 @@ function _viewUiOpen(view) {
   if (!isView(view)) {
     return;
   }
-  if (view._vb) {
+  if (view._vb instanceof ViewBase) {
     view._vb.open();
   }
   view._open = true;
@@ -2971,7 +2957,7 @@ async function _viewUiClose(view) {
   if (!isView(view)) {
     return;
   }
-  if (view._vb) {
+  if (view._vb instanceof ViewBase) {
     view._vb.close();
   }
   view._open = false;
@@ -3482,6 +3468,7 @@ export async function viewLayersAdd(o) {
 
   /**
    * Fire view add event
+   * -> view_added when done
    */
   events.fire({
     type: "view_add",
@@ -3604,6 +3591,32 @@ export async function viewLayersAdd(o) {
     }
     return res;
   }
+}
+
+/**
+ * Get link to view, current mode/location
+ * @param {String} idView View id
+ * @param {Boolean} useStatic
+ * @return {URL} url to the view
+ */
+export function viewLink(idView, opt) {
+  const def = {
+    useStatic: true,
+    project: null,
+  };
+  opt = Object.assign({}, def, opt);
+
+  const urlView = new URL(window.location);
+  urlView.search = "";
+  if (opt.useStatic) {
+    urlView.pathname = settings.paths.static;
+    urlView.searchParams.append("views", idView);
+  } else if (opt.project) {
+    urlView.searchParams.append("project", opt.project);
+    urlView.searchParams.append("viewsOpen", idView);
+  }
+  urlView.searchParams.append("zoomToViews", true);
+  return urlView;
 }
 
 /**
@@ -4322,35 +4335,13 @@ function setVtLegend(options) {
     addTitle: addTitle,
   });
   if (isElement(elLegend)) {
-    /**
-     * viewLayersAddVt rendering time :
-     * el + ecoregion2017
-     * 606 ms
-     * 534 ms
-     * 504 ms
-     * 403 ms
-     *
-     * dot + ecoregion2017
-     * 517 ms
-     * 725 ms
-     * 928 ms
-     * 660 ms
-     */
-    /**
-     * el
-     */
     const elLegendContent = buildLegendVt(view);
     elLegend.appendChild(elLegendContent);
-    /*
-     * dot
-     */
-    //elLegend.innerHTML = mx.templates.viewListLegend(view);
   }
 }
 
 /**
  * Add mutiple layers at once
- * TODO: convert MapX layers to datadriven layers.
  * @param {Array} layers Array of layers
  * @param {String} idBefore Id of the layer to insert before
  */
@@ -4532,23 +4523,21 @@ export function viewsModulesRemove(views) {
  * @param {Element} o.elLegendContainer Legend container
  * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
+ * @return {Promise<boolean>} added
  */
-export function viewLayersAddGj(opt) {
-  return new Promise((resolve) => {
-    const layer = path(opt.view, "data.layer");
+export async function viewLayersAddGj(opt) {
+  const layer = path(opt.view, "data.layer");
 
-    if (!layer.metadata) {
-      layer.metadata = {
-        priority: 0,
-        position: 0,
-        idView: opt.view.id,
-        filter: [],
-      };
-    }
-
-    opt.map.addLayer(layer, opt.before);
-    resolve(true);
-  });
+  if (!layer.metadata) {
+    layer.metadata = {
+      priority: 0,
+      position: 0,
+      idView: opt.view.id,
+      filter: [],
+    };
+  }
+  await addLayers([layer], opt.before);
+  return true;
 }
 
 /**
@@ -5004,11 +4993,9 @@ export function addLayer(o) {
  * @param {String} o.idView view id
  */
 export async function zoomToViewId(o) {
+  const timeout = 3 * 1000;
+  let cancelByTimeout = false;
   try {
-    const map = getMap();
-    const timeout = 3 * 1000;
-    let cancelByTimeout = false;
-
     if (isViewId(o)) {
       o = {
         idView: o,
@@ -5033,6 +5020,11 @@ export async function zoomToViewId(o) {
       );
     }
 
+    return res;
+
+    /**
+     * Helpers
+     */
     async function zoom() {
       const conf = {
         sum: await getViewSourceSummary(view, { useCache: true }),
@@ -5055,17 +5047,19 @@ export async function zoomToViewId(o) {
         }
       }
 
-      const llb = new mx.mapboxgl.LngLatBounds(
-        [conf.extent.lng1, conf.extent.lat1],
-        [conf.extent.lng2, conf.extent.lat2]
+      const llb = new mapboxgl.LngLatBounds(
+        [conf.extent.lng1, conf.extent.lat2],
+        [conf.extent.lng2, conf.extent.lat1]
       );
 
-      map.fitBounds(llb);
-      return true;
+      const done = fitMaxBounds(llb);
+
+      return done;
     }
 
     function cancel() {
       cancelByTimeout = true;
+      return "timeout";
     }
   } catch (e) {
     throw new Error(e);
@@ -5118,7 +5112,7 @@ export async function getViewsBounds(views) {
     [extent.lng2, extent.lat2],
   ];
 
-  /*return new mx.mapboxgl.LngLatBounds(*/
+  /*  return new mapboxgl.LngLatBounds(*/
   /*[extent.lng1, extent.lat1],*/
   /*[extent.lng2, extent.lat2]*/
   /*);*/
@@ -5155,15 +5149,17 @@ export async function zoomToViewIdVisible(o) {
     geomTemp.features.push(x);
   });
 
+  let done;
   if (geomTemp.features.length > 0) {
     const bbx = bbox(geomTemp);
     const sw = new mx.mapboxgl.LngLat(bbx[0], bbx[1]);
     const ne = new mx.mapboxgl.LngLat(bbx[2], bbx[3]);
     const llb = new mx.mapboxgl.LngLatBounds(sw, ne);
-    map.fitBounds(llb);
+    done = fitMaxBounds(llb);
   } else {
-    zoomToViewId(o);
+    done = zoomToViewId(o);
   }
+  return done;
 }
 
 /**
@@ -5179,45 +5175,234 @@ export async function resetViewStyle(o) {
 
   const view = getView(o.idView);
 
+  const isOpen = isViewOpen(view) || settings.mode.static;
+
   updateLanguageElements({
     el: view._el,
   });
-  await viewLayersAdd({
-    view: view,
-  });
-  await viewsLayersOrderUpdate(o);
+
+  if (isOpen) {
+    await viewLayersAdd({
+      view: view,
+    });
+    await viewsLayersOrderUpdate(o);
+  }
 }
 
 /**
- * Fly to location and zoom
- * @param {object} o options
- * @param {string} o.id map id
- * @param {boolean} o.jump
- * @param {number} o.param Parameters to use
+ * Fly to a specified location and zoom level on a map.
+ *
+ * @param {object} opt - The options for the function.
+ * @param {string} opt.id - The map ID.
+ * @param {number} [opt.duration=2000] - Optional duration for the animation, in milliseconds. Defaults to 2000ms.
+ * @param {object} opt.param - The parameters for the function.
+ * @param {number} [opt.param.w=0] - West coordinate of the bounding box.
+ * @param {number} [opt.param.s=0] - South coordinate of the bounding box.
+ * @param {number} [opt.param.e=0] - East coordinate of the bounding box.
+ * @param {number} [opt.param.n=0] - North coordinate of the bounding box.
+ * @param {number} [opt.param.lng=0] - Longitude of the center of the map.
+ * @param {number} [opt.param.lat=0] - Latitude of the center of the map.
+ * @param {number} [opt.param.zoom=1] - Zoom level for the map. Defaults to 1.
+ * @param {boolean} [opt.param.useMaxBounds=false] - Whether to apply the maximum bounds after flying to the location. Defaults to false.
+ * @param {boolean} [opt.param.fitToBounds=false] - Whether to fit the map to the specified bounds. Defaults to false.
+ * @param {boolean} [opt.param.jump=false] - Whether to jump to the location without animation. Defaults to false.
  */
-export function flyTo(o) {
-  const map = getMap(o.id);
+export async function setMapPos(opt) {
+  try {
+    const map = getMap(opt.id);
+    const p = opt.param;
+    const duration = p.jump ? 0 : isNotEmpty(p.duration) ? o.duration : 1000;
+    const bounds = new mapboxgl.LngLatBounds([
+      [p.w || 0, p.s || 0],
+      [p.e || 0, p.n || 0],
+    ]);
 
-  if (map) {
-    const p = o.param;
+    const center = new mapboxgl.LngLat(p.lng || 0, p.lat || 0);
 
-    if (!o.fromQuery && p.fitToBounds === true && !p.jump) {
-      map.fitBounds([p.w || 0, p.s || 0, p.e || 0, p.n || 0]);
-    } else {
-      const opt = {
-        center: [p.lng || 0, p.lat || 0],
-        zoom: p.zoom || 0,
-        jump: p.jump || false,
-        duration: o.duration || 3000,
-      };
+    map.setMaxBounds(null);
 
-      if (opt.jump) {
-        map.jumpTo(opt);
-      } else {
-        map.flyTo(opt);
-      }
+    if (p.useMaxBounds) {
+      /**
+       * Don't let the user zoom before the animation is done
+       */
+      map.scrollZoom.disable();
+
+      /**
+       * Ignore fitToBounds settings :
+       * -> if false, setMaxBounds could
+       *    create a small gaps in animation
+       */
+      p.fitToBounds = true;
+
+      /**
+       * a) timeout vs event
+       *   -> could use once('idle') but
+       *      could sometimes, there is some inertia
+       *   -> setTimeout make it clear
+       * b) use bounds vs getBounds
+       *   -> using "bounds" produced a small gap in
+       *      animation. Saved in a screen size, rendered in another
+       *   -> getBounds() make sure it will not
+       *   -> but if zoom is set by something else during this
+       *      "duration" -> inaccurate bounds...
+       */
+      setTimeout(() => {
+        map.setMaxBounds(map.getBounds());
+        map.scrollZoom.enable();
+      }, duration);
     }
+
+    if (p.fitToBounds) {
+      map.fitBounds(bounds, {
+        duration,
+      });
+    } else {
+      map.flyTo({
+        center: center,
+        zoom: p.zoom || p.z || 1,
+        bearing: p.bearing || p.b || 0,
+        pitch: p.pitch || p.p || 0,
+        duration: duration,
+      });
+    }
+
+    if (p.theme) {
+      await theme.set(p.theme, { force: true });
+    }
+    return true;
+  } catch (e) {
+    console.error(e);
   }
+}
+
+/**
+ * Fit bounds if not overlaping max bounds
+ * @param {LngLatBounds} bounds
+ * @param {Object} opt Options MaboxGL animation options
+ * @return {boolean} Fitted
+ */
+export function fitMaxBounds(bounds, opt) {
+  const map = getMap();
+  const validBBounds = bounds instanceof mapboxgl.LngLatBounds;
+  if (!validBBounds) {
+    bounds = validateBounds(bounds);
+    bounds = new mapboxgl.LngLatBounds(bounds);
+  }
+  let valid = true;
+  const maxBounds = map.getMaxBounds();
+  const currentBounds = map.getBounds();
+
+  if (maxBounds) {
+    valid = isBoundsInsideBounds(bounds, maxBounds);
+  }
+
+  if (valid) {
+    map.fitBounds(bounds, opt);
+  } else {
+    const outer = isBoundsInsideBounds(currentBounds, bounds);
+    const angle = outer ? 0 : boundsAngleRelation(currentBounds, bounds);
+    new FlashItem({ icon: outer ? "arrows-alt" : "arrow-up", angle: angle });
+
+    //map.fitBounds(maxBounds);//glitchy
+    const elMap = map.getContainer();
+    shake(elMap);
+  }
+  return valid;
+}
+
+/**
+ * Validates and corrects a bounds array, ensuring it meets the specified constraints.
+ *
+ * @param {number[]} bounds - An array of bounding box coordinates in the format [west, south, east, north].
+ * @returns {number[]} The corrected bounds array, with values adjusted to meet the specified constraints.
+ * @throws {Error} If the input bounds array does not have exactly 4 elements.
+ */
+export function validateBounds(bounds) {
+  // Define the maximum and minimum limits for longitude and latitude
+  const maxLongitude = 180;
+  const minLongitude = -180;
+  const maxLatitude = 90;
+  const minLatitude = -90;
+
+  // Define the minimum difference between coordinates
+  const minDelta = 0.5;
+
+  // array of array -> flatten
+  if (isArrayOf(bounds, isArray)) {
+    bounds = bounds.flat();
+  }
+  // Ensure the bounds array has exactly 4 elements
+  if (bounds.length !== 4) {
+    throw new Error("Bounds array should have exactly 4 elements.");
+  }
+
+  // Extract the coordinates from the input bounds array
+  let [west, south, east, north] = bounds;
+
+  // Check if west and east are within the limits and ensure west < east
+  if (west <= east) {
+    west = Math.max(minLongitude, west);
+    east = Math.min(maxLongitude, east);
+
+    if (east - west < minDelta) {
+      east = Math.min(maxLongitude, west + minDelta);
+    }
+  } else {
+    // Swap west and east values if west > east
+    [west, east] = [Math.max(minLongitude, east), Math.min(maxLongitude, west)];
+  }
+
+  // Check if north and south are within the limits and ensure north > south
+  if (north >= south) {
+    north = Math.min(maxLatitude, north);
+    south = Math.max(minLatitude, south);
+
+    if (north - south < minDelta) {
+      north = Math.min(maxLatitude, south + minDelta);
+    }
+  } else {
+    // Swap north and south values if north < south
+    [north, south] = [
+      Math.min(maxLatitude, south),
+      Math.max(minLatitude, north),
+    ];
+  }
+
+  return [west, south, east, north];
+}
+
+/**
+ * Calculates the angle in degrees between the centroids of two LngLatBounds.
+ * @param {mapboxgl.LngLatBounds} bounds1 - First LngLatBounds.
+ * @param {mapboxgl.LngLatBounds} bounds2 - Second LngLatBounds.
+ * @returns {number} Angle in degrees between the centroids of the bounds.
+ */
+export function boundsAngleRelation(bounds1, bounds2) {
+  if (
+    !(bounds1 instanceof mapboxgl.LngLatBounds) ||
+    !(bounds2 instanceof mapboxgl.LngLatBounds)
+  ) {
+    throw new Error(
+      "Invalid input: both arguments must be LngLatBounds instances."
+    );
+  }
+
+  const centroid1 = bounds1.getCenter();
+  const centroid2 = bounds2.getCenter();
+
+  const deltaY = centroid2.lat - centroid1.lat;
+  const deltaX = centroid2.lng - centroid1.lng;
+  let angle = (Math.atan2(deltaY, deltaX) * 180) / Math.PI;
+
+  // Adjust angle for compass directions
+  angle = 90 - angle;
+
+  // Normalize the angle to the range [0, 360)
+  if (angle < 0) {
+    angle += 360;
+  }
+
+  return angle;
 }
 
 /**
@@ -5408,7 +5593,7 @@ export function getViewLegend(id, opt) {
 /**
  * Get a map object by id
  * @param {String|Object} idMap Id of the map or the map itself.
- * @return {Object} map
+ * @return {MapboxMap} map
  */
 export function getMap(idMap) {
   idMap = idMap || settings.map.id;
@@ -5618,27 +5803,80 @@ export function getMapPos(o) {
 }
 
 /**
+ * Reset max bounds
+ * @return {void}
+ */
+export function resetMaxBounds() {
+  const map = getMap();
+  map.setMaxBounds(null);
+}
+
+/**
+ * Replace and reload views
+ * @param {Object} views
+ * @return {Promise<boolean>} replaced
+ */
+export async function viewsReplace(views) {
+  try {
+    if (!isArrayOfViews(views)) {
+      console.error("viewsReplace: expecting an array of views");
+      return false;
+    }
+    const d = getMapData();
+    const viewsAll = d.views || [];
+    for (const view of views) {
+      const idView = view.id;
+      const idViews = viewsAll.map((v) => v.id);
+      const pos = idViews.indexOf(idView);
+      if (pos === -1) {
+        continue;
+      }
+      const oldView = viewsAll[pos];
+      Object.assign(oldView, view);
+      await resetViewStyle({ idView: view.id });
+    }
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+}
+
+/**
  * Create views array or object with id as key, or single view if idView is provided in options
- * @param {Object | String} o options || id of the map
- * @param {String} o.id map id
+ * @param {Object | Array} o options || array of views id
+ * @param {String} o.id map id ( if null default map )
  * @param {String|Array} o.idView Optional. Filter view(s) to return. Default = all.
  * @return {Array} array of views
  */
 export function getViews(o) {
-  o = o || {};
-  const d = getMapData(o.id);
+  const isAV = isArrayOfViewsId(o);
+  const opt = Object.assign({}, isAV ? { idView: o } : o);
+  const d = getMapData(opt.id);
   const views = d.views || [];
-
-  if (o.idView) {
-    o.idView = isArray(o.idView) ? o.idView : [o.idView];
-    return views.filter((v) => o.idView.indexOf(v.id) > -1);
+  if (opt.idView) {
+    opt.idView = isArray(opt.idView) ? opt.idView : [opt.idView];
+    return opt.idView.map((id) => views.find((v) => v.id === id));
   } else {
     return views;
   }
 }
-export function getViewsForJSON() {
-  const views = getViews();
-  const f = [
+export function getViewsForJSON(o) {
+  const views = getViews(o);
+  return views.map((view) => getViewJson(view, { asString: false }));
+}
+
+/**
+ * Get JSON representation of a view ( same as the one dowloaded );
+ * @param {String} idView Id of the view;
+ * @param {Object} opt Options
+ * @param {Boolean} opt.asString As string
+ * @return {String} JSON string with view data (or cleaned view object);
+ */
+export function getViewJson(idView, opt) {
+  opt = Object.assign({}, { asString: true }, opt);
+  const view = getView(idView);
+  const keys = [
     "id",
     "editor",
     "target",
@@ -5651,14 +5889,23 @@ export function getViewsForJSON() {
     "editors",
     "_edit",
   ];
+  const out = {};
 
-  const viewsClean = views.map((v) => {
-    return f.reduce((a, k) => {
-      a[k] = v[k];
-      return a;
-    }, {});
-  });
-  return viewsClean;
+  for (const key of keys) {
+    out[key] = view[key];
+    if (key === "data" && isObject(out[key]?.style)) {
+      delete out[key]?.style._sld;
+      delete out[key]?.style._mapbox;
+      delete out[key]?.attribute?.table;
+      delete out[key]?.attribute?.sample;
+    }
+  }
+
+  if (opt.asString) {
+    return JSON.stringify(out);
+  }
+
+  return out;
 }
 
 /**

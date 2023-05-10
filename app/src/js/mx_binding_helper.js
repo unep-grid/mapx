@@ -50,7 +50,7 @@ $(document).on("shiny:connected", function () {
   bind("mglSetFilter", h.setFilter);
   bind("mglSetHighlightedCountries", h.setHighlightedCountries);
   bind("mglAddLayer", h.addLayer);
-  bind("mglFlyTo", h.flyTo);
+  bind("mglSetMapPos", h.setMapPos);
   bind("mglSetMapProjection", h.setMapProjection);
   bind("mglSetTheme", h.setTheme);
   bind("mglSyncAllMaps", h.syncAll);

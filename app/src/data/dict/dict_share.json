@@ -131,7 +131,7 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
+    "en": "Set initial map extent",
     "fr": "",
     "es": "",
     "ru": "",
@@ -155,6 +155,33 @@
     "bn": "",
     "de": ""
   },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+
   {
     "id": "share_filter_activated_label",
     "en": "Filter activated views",

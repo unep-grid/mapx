@@ -12,12 +12,21 @@ export async function changeLogHtml() {
 }
 
 export async function modalChangelog() {
-  const elLog = await changeLogHtml();
+  const htmlLog = await changeLogHtml();
+  const elContent = el("div", htmlLog);
   const elContainer = el("div");
+  const elInput = el("input", {
+    type: "text",
+    class: ["form-control"],
+    placeholder: "Search",
+  });
+
   const textFilter = new TextFilter({
-    elContent: elLog,
+    elInput: elInput,
+    elContent: elContent,
     elContainer: elContainer,
   });
+
   modalSimple({
     title: "Changelog",
     content: elContainer,
