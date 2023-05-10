@@ -38,6 +38,7 @@ import {
   makeSafeName,
   isArray,
   isEqual,
+  isEqualNoType,
 } from "./../is_test/index.js";
 
 import "./edit_table.types.js";
@@ -2642,10 +2643,8 @@ export class EditTableSessionClient extends WsToolsBase {
         /* change: [row, prop, oldValue, newValue] */
 
         /* no change = continue
-         * -> using "==" as ht seems to override type
-         * i.e. 1 == "1" where "1" comes from changes, even for numeric columns
          */
-        if (change[2] == change[3]) {
+        if (isEqualNoType(change[2], change[3])) {
           continue;
         }
         et.addChangeToUpdates(change, true);
@@ -2718,7 +2717,7 @@ export class EditTableSessionClient extends WsToolsBase {
     };
 
     if (previous) {
-      const noChange = previous.value_orig === update.value_new;
+      const noChange = isEqualNoType(previous.value_orig, update.value_new);
       if (noChange) {
         et._updates.delete(id);
         return;
@@ -3316,8 +3315,7 @@ export class EditTableSessionClient extends WsToolsBase {
       if (a.actionType === "change") {
         const changes = a.changes;
         for (const change of changes) {
-          /* loose comparison "==" as handsontable overrides types */
-          if (change[2] == change[3]) {
+          if (isEqualNoType(change[2], change[3])) {
             actions.splice(nA, 1);
           }
         }

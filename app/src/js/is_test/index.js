@@ -759,6 +759,39 @@ export function isEqual(x, y) {
 }
 
 /**
+ * Compares two values for equivalence, ignoring types and leading/trailing whitespace.
+ *
+ * @param {*} a - The first value to compare.
+ * @param {*} b - The second value to compare.
+ * @returns {boolean} - Returns true if the normalized forms of the two values are equivalent, false otherwise.
+ */
+export function isEqualNoType(a, b) {
+    // Convert both values to strings, trim whitespace, and convert to numbers if possible
+    const normalizedA = normalizeValue(a);
+    const normalizedB = normalizeValue(b);
+
+    // Check for equivalence
+    return normalizedA === normalizedB;
+}
+
+/**
+ * Normalizes a value by converting it to a string, trimming whitespace,
+ * and converting it to a number if it represents a valid number.
+ *
+ * @param {*} value - The value to normalize.
+ * @returns {string|number} - The normalized value.
+ */
+export function normalizeValue(value) {
+    // Convert to string and trim whitespace
+    let strValue = String(value).trim();
+
+    // Attempt to convert to a number, return the original string if this is not possible
+    let numValue = Number(strValue);
+    return Number.isNaN(numValue) ? strValue : numValue;
+}
+
+
+/**
  * Validate url
  * @param {String} url to test
  * @note new version uses Url & tryCatch
