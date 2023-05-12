@@ -1,5 +1,6 @@
-import chroma from "chroma-js";
-import { isEmpty } from "./../is_test/index";
+import { cancelFrame, onNextFrame } from "../animation_frame";
+import { bindAll } from "../bind_class_methods";
+import { isArrayOfObject, isNotEmpty } from "./../is_test/index";
 const def = {
   map: null,
   use_animation: false,
@@ -7,7 +8,7 @@ const def = {
   event_type: "click", // click, mousemove. Does not work yet with mousemove
   transition_duration: 200,
   transition_delay: 0,
-  animation_duration: 700, // 0 unlimited
+  animation_duration: 1400, // 0 unlimited
   animation_on: "line-width", // only option now
   highlight_offset: 2, // greater that 2 is too much for lines
   highlight_blur: 0.2,
@@ -15,18 +16,26 @@ const def = {
   highlight_color: "#F0F",
   highlight_opacity: 0.9,
   highlight_feature_opacity: 0.5,
+  highlight_radius: 20,
   supported_types: ["circle", "symbol", "fill", "line"],
   regex_layer_id: /^MX/,
-  max_features_render: 5,
+  max_layers_render: 10,
 };
 
 class Highlighter {
   constructor(opt) {
     const hl = this;
     /**
+     * Bind
+     */
+    bindAll(hl);
+
+    /**
      * local store
      */
-    hl._features = [];
+    hl._layers = new Map();
+    hl._items = new Map();
+
     /**
      * Set options
      */
@@ -64,7 +73,7 @@ class Highlighter {
 
     hl.map = map;
     if (hl.opt.register_listener === true) {
-      hl._listener = hl.update.bind(hl);
+      hl._listener = hl.update;
       hl.map.on(hl.opt.event_type, hl._listener);
     }
   }
@@ -72,9 +81,9 @@ class Highlighter {
   /**
    * Event handler
    */
-  update(e) {
+  update(config) {
     const hl = this;
-    hl.updateFeatures(e);
+    hl.updateItems(config);
     hl.render();
   }
 
@@ -86,14 +95,10 @@ class Highlighter {
    */
   clean() {
     const hl = this;
-    while (hl._features.length) {
-      const f = hl._features.pop();
-      if (isEmpty(f.id)) {
-        return;
-      }
-      hl.disableState(f);
-      hl.removeHighlightLayer(f);
+    for (const layer of hl._layers.values()) {
+      hl.removeHighlightLayer(layer);
     }
+    hl._layers.clear();
   }
 
   /**
@@ -103,62 +108,43 @@ class Highlighter {
    */
   render() {
     const hl = this;
-    const max = hl.opt.max_features_render;
-    let i = 0;
-    for (const f of hl._features) {
-      if (i++ >= max || isEmpty(f.id)) {
-        return;
+    const max = hl.opt.max_layers_render;
+    const animate = hl.opt.use_animation;
+    cancelFrame(hl._id_render);
+    hl._id_render = onNextFrame(() => {
+      hl.updateLayers();
+      let i = 0;
+      for (const layer of hl._layers.values()) {
+        if (i++ >= max) {
+          return;
+        }
+        hl.addHighlightLayer(layer);
       }
-      hl.addHighlightLayer(f);
-      hl.enableState(f);
-    }
-  }
-
-  /**
-   * Remove highlight :
-   * - Remove layer if exists
-   * - reset feature state
-   * - Stop animation
-   */
-  disableState(f) {
-    const hl = this;
-    hl.map.setFeatureState(f, {
-      highlight: false,
+      if (animate) {
+        hl.animate();
+      }
     });
   }
 
   /**
-   * Add highlight
-   * - Clean previous highlight
-   * - Update layer to use feature state conditional expression
-   * - Set feature state
+   * Add layer
    */
-  enableState(f) {
+  addHighlightLayer(layer) {
     const hl = this;
-    //hl.updateLayerStyle(f);
-    hl.map.setFeatureState(f, {
-      highlight: true,
-    });
+    hl.removeHighlightLayer(layer);
+    hl.map.addLayer(layer);
   }
 
   /**
-   * Add highlight layer
-   * - Remove previous layer
-   * - Add layer
-   * - start animation
+   * Animate
    */
-  addHighlightLayer(f) {
+  animate() {
     const hl = this;
-    f._layer_hl = hl.buildHighlightLayer(f);
-    hl.removeHighlightLayer(f);
-    /**
-     * Even if we remove the layer in removeHighlightLayer, just before,
-     * it could still be there, somehow. TODO: check why.
-     */
-    hl.map.addLayer(f._layer_hl);
-    if (hl.opt.use_animation) {
-      f._animation = new Animate(hl, f._layer_hl);
-      f._animation.start();
+    for (const layer of hl._layers.values()) {
+      if (!layer._animation) {
+        layer._animation = new Animate(hl, layer);
+      }
+      layer._animation.start();
     }
   }
 
@@ -167,30 +153,179 @@ class Highlighter {
    * - Remove layer
    * - start animation
    */
-  removeHighlightLayer(f) {
+  removeHighlightLayer(layer) {
     const hl = this;
-    if (!f._layer_hl) {
+    if (!hl.map.getLayer(layer.id)) {
       return;
     }
-    const l = hl.map.getLayer(f._layer_hl.id);
-    if (l) {
-      hl.map.removeLayer(l.id);
+    if (layer._animation instanceof Animate) {
+      layer._animation.stop();
     }
-    if (f._animate instanceof Animate) {
-      f._animate.stop();
-    }
+    hl.map.removeLayer(layer.id);
   }
 
   /**
-   * Add feature from click event location
    */
-  updateFeatures(e) {
+  updateItems(config) {
     const hl = this;
     hl.clean();
-    const rF = hl.map
-      .queryRenderedFeatures(e.point)
-      .filter(hl.isSupportedFeature.bind(hl));
-    hl._features.push(...rF);
+    config = Object.assign(
+      {},
+      {
+        viewsFilter: [], // [{id:'<id_view>',gids:[...<gid>]},...]
+      },
+      config
+    );
+
+    const items = hl.map
+      .queryRenderedFeatures(config?.point)
+      .filter((f) => hl._match_feature(f, config))
+      .map((f) => hl._features_to_item(f))
+      .reduce((a, i) => hl._features_aggregate(a, i), new Map());
+
+    hl._items.clear();
+
+    for (const [id, item] of items) {
+      hl._items.set(id, item);
+    }
+  }
+
+  updateLayers() {
+    const hl = this;
+    const items = hl._items;
+    hl._layers.clear();
+    for (const [id, item] of items) {
+      item.filter = [
+        "match",
+        ["get", "gid"],
+        [...Array.from(item.gids)],
+        true,
+        false,
+      ];
+      hl._layers.set(id, hl._item_to_layer(item));
+    }
+  }
+
+  _match_feature(feature, config) {
+    const hl = this;
+    config = config || {};
+    let select = true;
+
+    if (isNotEmpty(config.viewsFilter)) {
+      if (!isArrayOfObject(config.viewsFilter)) {
+        throw new Error("Array of object {id:<id>,gids:[...]} expected");
+      }
+      select = false;
+      for (const filter of config.viewsFilter) {
+        const gids = filter.gids || [];
+        if (
+          !select &&
+          filter.id === feature.sourceLayer &&
+          gids.includes(feature?.properties?.gid)
+        ) {
+          select = true;
+        }
+      }
+    }
+    const ok = hl.isSupportedFeature(feature);
+    return ok && select;
+  }
+
+  _features_to_item(feature) {
+    return {
+      sourceLayer: feature.sourceLayer,
+      source: feature.source,
+      type: feature.layer.type,
+      gid: feature?.properties?.gid,
+    };
+  }
+
+  _features_aggregate(acc, item) {
+    if (!acc.has(item.source)) {
+      acc.set(item.source, {
+        type: item.type,
+        gids: new Set([item.gid]),
+        //ids: new Set([item.id]),
+        source: item.source,
+        sourceLayer: item.sourceLayer,
+      });
+    } else {
+      acc.get(item.source).gids.add(item.gid);
+      //acc.get(item.source).ids.add(item.ids);
+    }
+    return acc;
+  }
+
+  /**
+   * Build highlight layer:
+   */
+  _item_to_layer(item) {
+    const hl = this;
+    const idSource = item.source;
+    const idSourceLayer = item.sourceLayer;
+    const idLayer = `@hl-@${idSource}`;
+    const type = item.type;
+    const filter = item.filter;
+
+    const layer = {
+      id: idLayer,
+      source: idSource,
+      filter: filter,
+    };
+
+    if (idSourceLayer) {
+      layer["source-layer"] = idSourceLayer;
+    }
+
+    switch (type) {
+      case "fill":
+        Object.assign(layer, {
+          type: "line",
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-offset": 0, // -hl.opt.highlight_offset, result not good on complex polygon
+            "line-width": hl.opt.highlight_width,
+            "line-color": hl.opt.highlight_color,
+            "line-blur": hl.opt.highlight_blur,
+            "line-opacity": hl.opt.highlight_opacity,
+          },
+        });
+        break;
+      case "line":
+        Object.assign(layer, {
+          type: "line",
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-gap-width": hl.opt.highlight_offset,
+            "line-width": hl.opt.highlight_width,
+            "line-color": hl.opt.highlight_color,
+            "line-blur": hl.opt.highlight_blur,
+            "line-opacity": hl.opt.highlight_opacity,
+          },
+        });
+        break;
+      default:
+        let radius = hl.opt.highlight_radius + hl.opt.highlight_offset / 2;
+        Object.assign(layer, {
+          type: "circle",
+          paint: {
+            "circle-color": "rgba(0,0,0,0)",
+            "circle-stroke-color": hl.opt.highlight_color,
+            "circle-stroke-opacity": hl.opt.highlight_opacity,
+            "circle-stroke-width": hl.opt.highlight_width,
+            "circle-blur": hl.opt.highlight_blur / radius,
+            "circle-radius": radius,
+            "circle-opacity": hl.opt.highlight_opacity,
+          },
+        });
+    }
+    return layer;
   }
 
   /**
@@ -215,10 +350,8 @@ class Highlighter {
     const hl = this;
     const paint = f.layer.paint;
     const types = hl.opt.supported_types;
-    const supported =
-      types.indexOf(f.layer.type) > -1 &&
-      paint instanceof Object &&
-      paint[`${f.layer.type}-color`];
+    const supported = types.includes(f.layer.type) && paint instanceof Object;
+    //paint[`${f.layer.type}-color`];
     return supported;
   }
 
@@ -230,167 +363,6 @@ class Highlighter {
       opt.on,
       opt.off,
     ];
-  }
-
-  /**
-   * If needed, update layer style with required feature-stat opacity
-   */
-  updateLayerStyle(f) {
-    const hl = this;
-    const type = f.layer.type;
-    const idLayer = f.layer.id;
-    const idFeature = f.id;
-
-    /**
-     * Update conditional style if it's a feature with an id, set an opacity effect
-     * when the feature is highlighted.
-     *
-     * Caveat :
-     *     - feature must have and id
-     *     - feature color can't be an expression : string color only
-     */
-    if (idFeature) {
-      /**
-       * {type}-opacity can't be used : it's reserved for opacity slider
-       *
-       *  -- fill
-       *  fill-color <-
-       *  fill-outline-color
-       *
-       *  -- line
-       *  line-color <-
-       *
-       *  -- symbol
-       *  icon-color <-
-       *  icon-halo-color
-       *
-       *  text-color
-       *
-       *
-       *  -- circle
-       *
-       *  circle-color <-
-       *  circle-stroke-color
-       */
-
-      const propertyColor = {
-        fill: "fill-color",
-        line: "line-color",
-        symbol: "icon-color",
-        circle: "circle-color",
-      }[type];
-
-      const colorRaw = hl.map.getPaintProperty(idLayer, `${propertyColor}`);
-      const colorOrig = getChromaColor(colorRaw);
-
-      if (colorOrig) {
-        const colorExpr = hl.toFeatureStateConditional({
-          on: colorOrig.alpha(hl.opt.highlight_feature_opacity).css(),
-          off: colorOrig.css(),
-        });
-        hl.map.setPaintProperty(idLayer, `${propertyColor}`, colorExpr);
-      }
-    }
-  }
-
-  /**
-   * Build highlight layer:
-   * !!TODO: As some style property can't be set, e.g. fill-outline-width, we need to
-   * add a new line layer only for this. For now, adding one layer per feature, but
-   * we could group by feature with the same source and geometry.
-   */
-  buildHighlightLayer(f) {
-    const hl = this;
-    const idSource = f.layer.source;
-    const idSourceLayer = f.layer["source-layer"];
-    const idLayer = `@hl-@${f.id}-${f.layer.id}`;
-    const type = f.layer.type;
-    let layer = null;
-    const opacityExpr = hl.toFeatureStateConditional({
-      on: hl.opt.highlight_opacity,
-      off: 0,
-    });
-
-    /**
-     * This highlight layer display all features : we have to filter only the current feature.
-     * Should have worked with ['id'] as https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/#id
-     * workaround -> using properties -> gid. Works with vector/geojson point, line, polygons
-     */
-    const gid = f?.properties?.gid;
-    const filter =
-      gid !== null
-        ? ["==", ["get", "gid"], f.id]
-        : f.id !== null
-        ? ["==", ["id"], f.id]
-        : [];
-
-    switch (type) {
-      case "fill":
-        layer = {
-          id: idLayer,
-          type: "line",
-          source: idSource,
-          filter: filter,
-          layout: {
-            "line-cap": "round",
-            "line-join": "round",
-          },
-          paint: {
-            "line-offset": 0, // -hl.opt.highlight_offset, result not good on complex polygon
-            "line-width": hl.opt.highlight_width,
-            "line-color": hl.opt.highlight_color,
-            "line-blur": hl.opt.highlight_blur,
-            "line-opacity": opacityExpr,
-          },
-        };
-        break;
-      case "line":
-        layer = {
-          id: idLayer,
-          type: "line",
-          source: idSource,
-          filter: filter,
-          layout: {
-            "line-cap": "round",
-            "line-join": "round",
-          },
-          paint: {
-            "line-gap-width": hl.opt.highlight_offset,
-            "line-width": hl.opt.highlight_width,
-            "line-color": hl.opt.highlight_color,
-            "line-blur": hl.opt.highlight_blur,
-            "line-opacity": opacityExpr,
-          },
-        };
-        break;
-      default:
-        let radius =
-          (f.layer.paint["circle-radius"] || 1) + hl.opt.highlight_offset / 2;
-        if (radius < 17) {
-          radius = 17;
-        }
-        layer = {
-          filter: filter,
-          id: idLayer,
-          type: "circle",
-          source: idSource,
-          paint: {
-            "circle-color": "rgba(0,0,0,0)",
-            "circle-stroke-color": hl.opt.highlight_color,
-            "circle-stroke-opacity": hl.opt.highlight_opacity,
-            "circle-stroke-width": hl.opt.highlight_width,
-            "circle-blur": hl.opt.highlight_blur / radius,
-            "circle-radius": radius,
-            "circle-opacity": opacityExpr,
-          },
-        };
-    }
-
-    if (idSourceLayer) {
-      layer["source-layer"] = idSourceLayer;
-    }
-
-    return layer;
   }
 }
 
@@ -440,8 +412,8 @@ class Animate {
     if (anim._idInterval) {
       return;
     }
-    anim._idInterval = window.setInterval(
-      anim.animate.bind(anim),
+    anim._idInterval = setInterval(
+      () => anim.animate(),
       anim._opt.transition_duration
     );
   }
@@ -517,18 +489,3 @@ class Animate {
 }
 
 export { Highlighter };
-
-/**
- * Helpers
- */
-
-/* test if it's a valid color */
-function getChromaColor(color) {
-  if (color instanceof Array) {
-    return;
-  }
-  const isValid = chroma.valid(color);
-  if (isValid) {
-    return chroma(color);
-  }
-}
