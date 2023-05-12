@@ -1,3 +1,8 @@
+  - [1.12.0-alpha.1](https://github.com/unep-grid/mapx/tree/1.12.0-alpha.1) 
+    
+    - APP 
+        - Highlighter : refactoring. Using only one layer per source + option to select gid based on one or more views. Much faster + more reliable.
+
   - [1.11.0](https://github.com/unep-grid/mapx/tree/1.11.0) 
 
     - APP
