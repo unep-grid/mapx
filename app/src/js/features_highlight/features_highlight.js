@@ -2,10 +2,10 @@ import { cancelFrame, onNextFrame } from "../animation_frame";
 import { bindAll } from "../bind_class_methods";
 import { isArrayOfObject, isNotEmpty } from "./../is_test/index";
 const def = {
-  map: null,
-  use_animation: false,
-  register_listener: false, // If trhe highligther will be triggered by event "event_type"
-  event_type: "click", // click, mousemove. Does not work yet with mousemove
+  map: null, // Mapbox gl instance
+  use_animation: false, // Enable animation
+  register_listener: false, // If true highligther will be triggered by event "event_type". "false" set as default as highligther is triggered during popup handling
+  event_type: "mousemove", // click, mousemove. Does not work yet with mousemove
   transition_duration: 200,
   transition_delay: 0,
   animation_duration: 1400, // 0 unlimited
@@ -165,6 +165,10 @@ class Highlighter {
   }
 
   /**
+   * Recreate items configuration
+   * @param {Object} config Optional configuration to filter items
+   * @param {Array} config.filters Array highlight filters based on source layer id and gid attributes. i.e  [{id:'<sourceLayer>',values:[...<value>],attribute:'<attribute>'},...]
+   * return {void}
    */
   updateItems(config) {
     const hl = this;
@@ -172,7 +176,7 @@ class Highlighter {
     config = Object.assign(
       {},
       {
-        viewsFilter: [], // [{id:'<id_view>',gids:[...<gid>]},...]
+        filters: [],
       },
       config
     );
@@ -211,17 +215,21 @@ class Highlighter {
     config = config || {};
     let select = true;
 
-    if (isNotEmpty(config.viewsFilter)) {
-      if (!isArrayOfObject(config.viewsFilter)) {
-        throw new Error("Array of object {id:<id>,gids:[...]} expected");
+    if (isNotEmpty(config.filters)) {
+      if (!isArrayOfObject(config.filters)) {
+        throw new Error(
+          "Array of object {id:<id>,values:[...],attribute:'<attr>'} expected"
+        );
       }
       select = false;
-      for (const filter of config.viewsFilter) {
-        const gids = filter.gids || [];
+      for (const filter of config.filters) {
+        const values = filter.values || [];
+        const value =
+          feature.properties[filter.attribute] || feature.properties?.gid;
         if (
           !select &&
           filter.id === feature.sourceLayer &&
-          gids.includes(feature?.properties?.gid)
+          values.includes(value)
         ) {
           select = true;
         }
@@ -231,6 +239,9 @@ class Highlighter {
     return ok && select;
   }
 
+  /**
+   * Feature to item, keeps track of gid
+   */
   _features_to_item(feature) {
     return {
       sourceLayer: feature.sourceLayer,
@@ -245,13 +256,11 @@ class Highlighter {
       acc.set(item.source, {
         type: item.type,
         gids: new Set([item.gid]),
-        //ids: new Set([item.id]),
         source: item.source,
         sourceLayer: item.sourceLayer,
       });
     } else {
       acc.get(item.source).gids.add(item.gid);
-      //acc.get(item.source).ids.add(item.ids);
     }
     return acc;
   }
