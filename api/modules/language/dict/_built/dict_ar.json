@@ -2936,48 +2936,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
-    "ar": "قم بتمييز ميزات المتجه "
+    "en": "Spotlight vector features",
+    "ar": "ميزات ناقل أضواء كاشفة"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
-    "ar": "تسليط الضوء على تكوين الأداة "
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "ar": "تكوين أداة Spotlight"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
-    "ar": "حدد وضع التمييز "
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "ar": "حدد وضع تسليط الضوء"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "ar": "قم بتمييز مكان تداخل جميع الميزات "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "ar": "تسليط الضوء حيث تتداخل جميع الميزات"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "ar": "قم بتمييز أي ميزة مرئية "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "ar": "سلط الضوء على أي ميزة مرئية"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "ar": "ظلل مكان تداخل ميزتين "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "ar": "تسليط الضوء حيث تتداخل ميزتان"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "ar": "قم بتمييز مكان تداخل الميزات الثلاث "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "ar": "تسليط الضوء حيث تتداخل ثلاث ميزات"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "ar": "ظلل حيث تتداخل أربع ميزات "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "ar": "تسليط الضوء حيث تتداخل أربع ميزات"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "ar": "ظلل مكان تداخل خمس ميزات "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "ar": "تسليط الضوء حيث تتداخل خمس ميزات"
   },
   {
     "id": "label_check_instant_overlap",

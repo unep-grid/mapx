@@ -2349,39 +2349,39 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features"
+    "en": "Spotlight vector features"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration"
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode"
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap"
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature"
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap"
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap"
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap"
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap"
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap"
   },
   {
     "id": "label_check_instant_overlap",

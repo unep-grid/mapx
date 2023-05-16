@@ -1,6 +1,8 @@
 import { getLayerNamesByPrefix } from "./../mx_helpers.js";
 import { el } from "./../el/src/index.js";
 import PixopWorker from "./pixop.mxworker.js";
+import { cancelFrame, onNextFrame } from "../animation_frame/index.js";
+import { isArray } from "../is_test/index.js";
 
 export class PixOp {
   constructor(config) {
@@ -58,33 +60,35 @@ export class PixOp {
   render(opt) {
     const px = this;
     opt = opt || {};
+    cancelFrame(px._id_frame);
+    px._id_frame = onNextFrame(() => {
+      if (px.isDestroyed()) {
+        throw new Error("PixOp is destroyed");
+      }
 
-    if (px.isDestroyed()) {
-      throw new Error("PixOp is destroyed");
-    }
+      if (px._rendering) {
+        console.log("already rendering");
+        px.config.onProgress(0);
+        px.resetWorker();
+      }
 
-    if (px._rendering) {
-      console.log("already rendering");
-      px.config.onProgress(0);
-      px.resetWorker();
-    }
+      render();
 
-    render();
+      function render() {
+        px._timing("render", "start", true);
+        px._rendering = true;
+        px.config.onRender(px);
 
-    function render() {
-      px._timing("render", "start", true);
-      px._rendering = true;
-      px.config.onRender(px);
+        px.reset()
+          .updateRenderOptions(opt)
+          .updateMapParams()
+          .updateFeatures()
+          .layersToPixelsStore()
+          .renderWorker();
 
-      px.reset()
-        .updateRenderOptions(opt)
-        .updateMapParams()
-        .updateFeatures()
-        .layersToPixelsStore()
-        .renderWorker();
-
-      px._timing("render", "stop");
-    }
+        px._timing("render", "stop");
+      }
+    });
   }
 
   getDefault(type) {
@@ -115,8 +119,8 @@ export class PixOp {
           lineJoin: "round",
           fillColor: "#F00",
           strokeColor: "#F00",
-          circleRadius: 100, //meter
-          spotlightBuffer: 50,
+          circleRadius: 100, // meter radius for point -> area
+          spotlightBuffer: 10, // pixel used to draw spotlight
         },
       },
       /**
@@ -147,6 +151,7 @@ export class PixOp {
       id: "MX_GC_" + Math.random().toString(36),
       layer_prefix: "MX-",
       layer_group_separator: "@",
+      max_features: 1e5,
     };
 
     configDefault.id_layer = configDefault.id + "_canvas";
@@ -227,7 +232,6 @@ export class PixOp {
         }
 
         if (data.type === "result") {
-
           if (data.calcArea) {
             const area = data.points.reduce(
               (a, coord) => a + px.getPixelAreaAtPoint(coord),
@@ -310,19 +314,16 @@ export class PixOp {
     return px;
   }
 
-   async renderWorker() {
+  async renderWorker() {
     const px = this;
     const opt = px.opt;
-
     const radius = opt.canvas.spotlightRadius || 10;
     const buffer = px.getCircle(radius);
-
+    const imgCircleBuffer = await buffer.convertToBlob();
     const nLayers = px.data.pixels.length;
     const nLayersOverlap = opt.overlap.nLayersOverlap * 1 || nLayers; // 0 means all
     const calcArea = opt.overlap.calcArea === true;
     const threshold = opt.overlap.threshold;
-
-    const imgCircleBuffer = await buffer.convertToBlob();
 
     px._worker.postMessage({
       type: "render",
@@ -336,7 +337,7 @@ export class PixOp {
     });
 
     return px;
-  };
+  }
 
   reset() {
     const px = this;
@@ -481,21 +482,24 @@ export class PixOp {
         prefix: l,
       });
 
-      featuresQuery = map.queryRenderedFeatures({
-        layers: layersNames,
-      });
+      featuresQuery = map
+        .queryRenderedFeatures({
+          layers: layersNames,
+        })
+        .map(function (feature) {
+          return {
+            type: feature.type,
+            geometry: feature.geometry,
+            properties: { id: l },
+          };
+        });
 
-      /**
-       * Replace properties by layer id
-       */
-      featuresQuery = featuresQuery.map(function (feature) {
-        return {
-          type: feature.type,
-          geometry: feature.geometry,
-          properties: { id: l },
-        };
-      });
-
+      if (featuresQuery.length >= config.max_features) {
+        console.warn(
+          `Pixop, max number of features reached ${featuresQuery.length}/${config.max_features}`
+        );
+        featuresQuery = featuresQuery.slice(0, config.max_features);
+      }
       /**
        * Store result
        */
@@ -533,6 +537,7 @@ export class PixOp {
     var isPoly = false;
     var isLine = false;
     var isPoint = false;
+    var drawFirstPoint = false;
 
     /**
      * Render the coordinates of each layer geometry
@@ -543,31 +548,36 @@ export class PixOp {
         isPoly = type === "Polygon" || type === "MultiPolygon";
         isPoint = type === "Point" || type === "MultiPoint";
         isLine = type === "LineString" || type === "MultiLineString";
+        drawFirstPoint = opt.overlap.calcArea === false;
       },
       onCoord: function (coord, type, first, last) {
         point = px.coordToPoint(coord[0], coord[1]);
-        if (point) {
-          if (isPoint) {
-            radius =
-              opt.canvas.circleRadius / px.getPixelSizeMeterAtLat(coord[1]);
-            circle = px.getCircle(radius);
-            ctx.drawImage(circle, point.x - radius, point.y - radius);
-          } else {
-            if (first) {
-              ctx.beginPath();
-              ctx.moveTo(point.x, point.y);
-            } else {
-              ctx.lineTo(point.x, point.y);
-              if (last) {
-                if (isLine) {
-                  ctx.stroke();
-                }
-                if (isPoly) {
-                  ctx.closePath();
-                  ctx.fill();
-                }
-              }
-            }
+        if (!point) {
+          return;
+        }
+        if (isPoint || (first && drawFirstPoint)) {
+          radius =
+            opt.canvas.circleRadius / px.getPixelSizeMeterAtLat(coord[1]);
+          circle = px.getCircle(radius);
+          ctx.drawImage(circle, point.x - radius, point.y - radius);
+        }
+        if (isPoint) {
+          return;
+        }
+
+        if (first) {
+          ctx.beginPath();
+          ctx.moveTo(point.x, point.y);
+          return;
+        }
+        ctx.lineTo(point.x, point.y);
+        if (last) {
+          if (isLine) {
+            ctx.stroke();
+          }
+          if (isPoly) {
+            ctx.closePath();
+            ctx.fill();
           }
         }
       },
@@ -582,15 +592,22 @@ export class PixOp {
     const opt = px.opt;
     const map = px.map;
     const valid = isFinite(lng) && isFinite(lat);
-    var point;
-    if (valid) {
-      point = map.project([lng, lat]);
-      if (opt.canvas.dpr !== 1) {
-        point.x = point.x * opt.canvas.dpr;
-        point.y = point.y * opt.canvas.dpr;
-      }
+    if (!valid) {
+      return;
     }
-    return point;
+    const point = map.project([lng, lat]);
+    if (opt.canvas.dpr !== 1) {
+      point.x = point.x * opt.canvas.dpr;
+      point.y = point.y * opt.canvas.dpr;
+    }
+
+    const x = Math.ceil(point.x);
+    const y = Math.ceil(point.y);
+
+    return {
+      x,
+      y,
+    };
   }
 
   pointToCoord(x, y) {
@@ -737,6 +754,35 @@ export class PixOp {
     /**
      * Helper
      */
+  }
+
+  onEachCoord(coords, type, cb) {
+    const px = this;
+    px._type = type;
+    px._cb = cb;
+    px._traverse_coords(coords, 0, 0);
+  }
+
+  _traverse_coords(coords, index, length) {
+    const px = this;
+    if (isArray(coords[0])) {
+      let i = 0;
+      const l = coords.length;
+      for (const coord of coords) {
+        px._traverse_coords(coord, i, l);
+        i++;
+      }
+      return;
+    }
+    px._invoke_callback(coords, index, length);
+  }
+
+  _invoke_callback(coords, index, length) {
+    const px = this;
+    const isFirst = index === 0;
+    const isLast = index === length - 1;
+
+    px._cb(coords, px._type, isFirst, isLast);
   }
 
   onEachCoord(coords, type, cb) {

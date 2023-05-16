@@ -151,5 +151,6 @@ async function handleMessages(m) {
       nPixelFound: countAll,
       timing: performance.now() - start,
     });
+
   }
 }

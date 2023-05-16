@@ -2936,48 +2936,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
+    "en": "Spotlight vector features",
     "es": "Destacar objetos vectoriales"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
     "es": "Destacar la configuración de herramientas"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
     "es": "Seleccionar modo resaltado"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "es": "Resalte donde se superponen todas las características "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "es": "Spotlight donde todas las funciones se superponen"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "es": "Resalta cualquier característica visible "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "es": "Destacar cualquier característica visible"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "es": "Resalte donde se superponen dos características "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "es": "Destacar donde dos características se superponen"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "es": "Resalte donde se superponen tres características "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "es": "Spotlight donde se superponen tres características"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "es": "Resalte donde se superponen cuatro características "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "es": "Spotlight donde se superponen cuatro características"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "es": "Resalte donde se superponen cinco características "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "es": "Spotlight donde se superponen cinco características"
   },
   {
     "id": "label_check_instant_overlap",

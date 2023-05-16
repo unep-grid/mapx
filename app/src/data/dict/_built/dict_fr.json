@@ -2936,48 +2936,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
+    "en": "Spotlight vector features",
     "fr": "Mise en évidence des objets vectoriels"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
     "fr": "Configuration de l'outil de mise en évidence"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
     "fr": "Mode de mise en évidence"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "fr": "Mettez en surbrillance où toutes les fonctionnalités se chevauchent "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "fr": "Spotlight où toutes les fonctionnalités se chevauchent"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "fr": "Mettez en surbrillance toute caractéristique visible "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "fr": "Mettez en lumière toute caractéristique visible"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "fr": "Mettez en surbrillance où deux entités se chevauchent "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "fr": "Spotlight où deux fonctionnalités se chevauchent"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "fr": "Mettez en surbrillance où trois éléments se chevauchent "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "fr": "Spotlight où trois fonctionnalités se chevauchent"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "fr": "Mettez en surbrillance où quatre entités se chevauchent "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "fr": "Spotlight où quatre fonctionnalités se chevauchent"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "fr": "Mettez en surbrillance où cinq entités se chevauchent "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "fr": "Spotlight où cinq fonctionnalités se chevauchent"
   },
   {
     "id": "label_check_instant_overlap",

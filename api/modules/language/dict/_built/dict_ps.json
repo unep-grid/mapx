@@ -2936,48 +2936,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
-    "ps": "د ویکتور ب Highه روښانه کړئ "
+    "en": "Spotlight vector features",
+    "ps": "د سپټ لائټ ویکتور ځانګړتیاوې"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
-    "ps": "د وسیلې ترتیب لوړ کړئ "
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "ps": "د سپټ لائټ وسیلې ترتیب"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
-    "ps": "د روښانه کولو اکر غوره کړئ "
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "ps": "د سپټ لائټ حالت غوره کړئ"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "ps": "روښانه کړئ چیرې چې ټولې ب featuresې پراخیږي "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "ps": "سپټ لائټ چیرې چې ټولې ځانګړتیاوې یو ځای کیږي"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "ps": "هره څرګندیدونکې ب featureه روښانه کړئ "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "ps": "هر لیدلی خصوصیت په نښه کړئ"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "ps": "روښانه کړئ چیرې چې دوه ب featuresې پراخه کیږي "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "ps": "سپټ لائټ چیرې چې دوه ځانګړتیاوې یوځای کیږي"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "ps": "روښانه کړئ چیرې چې درې ب featuresې پراخه کیږي "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "ps": "سپټ لائټ چیرې چې درې ځانګړتیاوې یوځای کیږي"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "ps": "روښانه کړئ چیرې چې څلور ب featuresې پراخه کیږي "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "ps": "سپټ لائټ چیرې چې څلور ځانګړتیاوې یوځای کیږي"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "ps": "روښانه کړئ چیرې چې پنځه ب featuresې پراخیږي "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "ps": "سپټ لائټ چیرې چې پنځه ځانګړتیاوې یوځای کیږي"
   },
   {
     "id": "label_check_instant_overlap",

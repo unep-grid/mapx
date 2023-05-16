@@ -1,24 +1,24 @@
-import {PixOp} from './pixop.js';
-import {onNextFrame, cancelFrame} from './../animation_frame/index.js';
+import { PixOp } from "./pixop.js";
+import { onNextFrame, cancelFrame } from "./../animation_frame/index.js";
 
 const opt_default = {
   enabled: false,
   nLayersOverlap: 1,
   calcArea: false,
   map: null,
-  onRendered: function(d) {
+  onRendered: function (d) {
     console.log(d);
   },
-  onRender: function(d){
+  onRender: function (d) {
     console.log(d);
   },
-  onCalcArea: function(d) {
+  onCalcArea: function (d) {
     console.log(d);
   },
-  onProgress: function() {
+  onProgress: function () {
     console.log(d);
   },
-  idFrame: 0
+  idFrame: 0,
 };
 
 class Spotlight {
@@ -37,7 +37,7 @@ class Spotlight {
       onCalcArea: sl.state.onCalcArea,
       onRendered: sl.state.onRendered,
       onRender: sl.state.onRender,
-      onProgress : sl.state.onProgress
+      onProgress: sl.state.onProgress,
     });
   }
 
@@ -60,30 +60,30 @@ class Spotlight {
   getResolution() {
     return this.pixop.getResolution();
   }
-  
+
   render() {
     const sl = this;
     cancelFrame(sl.state.idFrame);
     sl.state.idFrame = onNextFrame(() => {
       sl.pixop.render({
-        mode: 'spotlight',
+        mode: "spotlight",
         debug: false,
         overlap: {
           nLayersOverlap: sl.state.nLayersOverlap() || 0,
           calcArea: sl.state.calcArea(),
-          threshold: 127
+          threshold: 127,
         },
         canvas: {
           scale: window.devicePixelRatio === 2 ? 1 : 2,
           add: true,
-          cicleRadius: 1000,
-          bufferSpotlight: 10
-        }
+          spotlightRadius: 70, // Size of the rendered spotlight
+          lineWidth: 35,
+        },
       });
     });
     this.state.rendered = true;
   }
-  
+
   clear() {
     this.pixop.clear();
     this.state.rendered = false;
@@ -98,4 +98,4 @@ class Spotlight {
     }
   }
 }
-export {Spotlight};
+export { Spotlight };

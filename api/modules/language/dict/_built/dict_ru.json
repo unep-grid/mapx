@@ -2936,48 +2936,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
-    "ru": "Выделите векторные особенности "
+    "en": "Spotlight vector features",
+    "ru": "Выделять векторные объекты"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
-    "ru": "Выделить конфигурацию инструмента "
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "ru": "Конфигурация инструмента Spotlight"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
-    "ru": "Выберите режим выделения "
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "ru": "Выберите режим прожектора"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "ru": "Выделите, где все функции пересекаются "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "ru": "В центре внимания, где все функции перекрываются"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "ru": "Выделите любую видимую функцию "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "ru": "Выделите любую видимую особенность"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "ru": "Выделите, где перекрываются две функции "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "ru": "В центре внимания, где две функции пересекаются"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "ru": "Выделите, где пересекаются три функции "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "ru": "В центре внимания, где три функции пересекаются"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "ru": "Выделите, где пересекаются четыре функции "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "ru": "В центре внимания, где пересекаются четыре функции"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "ru": "Выделите места пересечения пяти функций "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "ru": "В центре внимания, где пять функций пересекаются"
   },
   {
     "id": "label_check_instant_overlap",

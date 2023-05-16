@@ -2936,48 +2936,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
-    "bn": "ভেক্টর বৈশিষ্ট্য হাইলাইট করুন "
+    "en": "Spotlight vector features",
+    "bn": "স্পটলাইট ভেক্টর বৈশিষ্ট্য"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
-    "bn": "হাইলাইট সরঞ্জাম কনফিগারেশন "
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "bn": "স্পটলাইট টুল কনফিগারেশন"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
-    "bn": "হাইলাইট মোড নির্বাচন করুন "
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "bn": "স্পটলাইট মোড নির্বাচন করুন"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "bn": "হাইলাইট করুন যেখানে সমস্ত বৈশিষ্ট্য ওভারল্যাপ হয় "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "bn": "স্পটলাইট যেখানে সমস্ত বৈশিষ্ট্য ওভারল্যাপ"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "bn": "যে কোনও দৃশ্যমান বৈশিষ্ট্য হাইলাইট করুন "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "bn": "কোন দৃশ্যমান বৈশিষ্ট্য স্পটলাইট"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "bn": "হাইলাইট করুন যেখানে দুটি বৈশিষ্ট্য ওভারল্যাপ হয় "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "bn": "স্পটলাইট যেখানে দুটি বৈশিষ্ট্য ওভারল্যাপ"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "bn": "হাইলাইট করুন যেখানে তিনটি বৈশিষ্ট্য ওভারল্যাপ হয় "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "bn": "স্পটলাইট যেখানে তিনটি বৈশিষ্ট্য ওভারল্যাপ"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "bn": "হাইলাইট করুন যেখানে চারটি বৈশিষ্ট্য ওভারল্যাপ হয় "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "bn": "স্পটলাইট যেখানে চারটি বৈশিষ্ট্য ওভারল্যাপ"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "bn": "হাইলাইট করুন যেখানে পাঁচটি বৈশিষ্ট্য ওভারল্যাপ করে "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "bn": "স্পটলাইট যেখানে পাঁচটি বৈশিষ্ট্য ওভারল্যাপ"
   },
   {
     "id": "label_check_instant_overlap",

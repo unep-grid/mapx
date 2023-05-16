@@ -2936,48 +2936,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
-    "de": "Markieren Sie Vektormerkmale "
+    "en": "Spotlight vector features",
+    "de": "Spotlight-Vektorfunktionen"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
-    "de": "Markieren Sie die Werkzeugkonfiguration "
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "de": "Konfiguration des Spotlight-Tools"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
-    "de": "Wählen Sie den Markierungsmodus "
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "de": "Wählen Sie den Spotlight-Modus"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "de": "Markieren Sie, wo sich alle Funktionen überschneiden "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "de": "Spotlight, bei dem sich alle Funktionen überschneiden"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "de": "Markieren Sie alle sichtbaren Merkmale "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "de": "Heben Sie jedes sichtbare Merkmal hervor"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "de": "Markieren Sie, wo sich zwei Features überschneiden "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "de": "Spotlight, wo sich zwei Features überschneiden"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "de": "Markieren Sie, wo sich drei Features überschneiden "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "de": "Spotlight, bei dem sich drei Funktionen überschneiden"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "de": "Markieren Sie, wo sich vier Features überlappen "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "de": "Spotlight, bei dem sich vier Funktionen überschneiden"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "de": "Markieren Sie, wo sich fünf Features überlappen "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "de": "Spotlight, bei dem sich fünf Funktionen überschneiden"
   },
   {
     "id": "label_check_instant_overlap",

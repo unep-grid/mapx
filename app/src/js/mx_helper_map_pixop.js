@@ -12,7 +12,7 @@ window.addEventListener(
   "load",
   () => {
     events.once("mapx_ready", () => {
-      const elPixopTools = document.getElementById("highlight_tools_box");
+      const elPixopTools = document.getElementById("spotlight_tools_box");
       if (elPixopTools && isNotBlink) {
         elPixopTools.classList.add("disabled");
       }
@@ -122,7 +122,7 @@ export function toggleSpotlight(opt) {
         prog.update(0);
       }
       mx.events.fire({
-        type: "highlight_progress",
+        type: "spotlight_progress",
         data: {
           progress: p,
         },
@@ -187,7 +187,7 @@ export function toggleSpotlight(opt) {
   }
 
   mx.events.fire({
-    type: "highlight_update",
+    type: "spotlight_update",
     data: opt,
   });
 

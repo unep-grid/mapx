@@ -2936,48 +2936,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
+    "en": "Spotlight vector features",
     "zh": "突出显示矢量要素"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
     "zh": "突出显示工具配置"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
     "zh": "选择突出显示模式"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "zh": "突出显示所有功能重叠的地方 "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "zh": "所有功能重叠的聚光灯"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "zh": "突出显示任何可见功能 "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "zh": "聚焦任何可见的特征"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "zh": "突出显示两个要素重叠的地方 "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "zh": "聚焦两个特征重叠的地方"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "zh": "突出显示三个功能重叠的地方 "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "zh": "聚焦三个特征重叠的地方"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "zh": "突出显示四个要素重叠的地方 "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "zh": "四个功能重叠的聚光灯"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "zh": "突出显示五个功能重叠的地方 "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "zh": "聚焦五个特征重叠的地方"
   },
   {
     "id": "label_check_instant_overlap",
