@@ -109,8 +109,8 @@ MapX events:
 - view_filtered
 - view_add
 - view_added
-- highlight_progress
-- highlight_update
+- spotlight_progress
+- spotlight_update
 - settings_change
 - settings_user_change
 - story_step

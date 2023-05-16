@@ -1,3 +1,11 @@
+  - [1.12.0-alpha.2](https://github.com/unep-grid/mapx/tree/1.12.0-alpha.2) 
+    
+    - APP
+        - Spotlight:
+            - Renamed remaining "highlight with pixop" to "spotlight". 
+            - Fixed an issue where small polygons or line fragments were not found at low zoom level. Should work at least up to zoom 1.
+            - Increased spotlight size
+
   - [1.12.0-alpha.1](https://github.com/unep-grid/mapx/tree/1.12.0-alpha.1) 
     
     - APP 
