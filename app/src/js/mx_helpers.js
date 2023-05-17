@@ -54,7 +54,6 @@ export * from "./mx_helper_map_view_build.js";
 export * from "./mx_helper_map_view_fetch.js";
 export * from "./mx_helper_map_project_fetch.js";
 export * from "./mx_helper_map_view_click.js";
-export * from "./mx_helper_map_view_style.js";
 export * from "./mx_helper_map_view_ui.js";
 export * from "./mx_helper_metadata_validation.js";
 export * from "./mx_helper_map_view_metadata.js";

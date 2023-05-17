@@ -1,4 +1,4 @@
-import {el} from './../el/src/index.js';
+import { el } from "./../el/src/index.js";
 
 /**
  * Example:
@@ -27,12 +27,12 @@ import {el} from './../el/src/index.js';
 const settings = {
   items: [],
   builder: (item) => {
-    return el('div', item.content);
+    return el("div", item.content);
   },
   onUpdate: (value) => {
     console.log(value);
   },
-  configForm: {}
+  configForm: {},
 };
 
 class RadioGroup {
@@ -50,49 +50,49 @@ class RadioGroup {
     }
     const group = Math.random().toString(32);
     qs.el = el(
-      'form',
+      "form",
       qs.opt.configForm,
       qs.opt.items.map((it, i) => {
         const id = `${group}_${i}`;
         let elInput;
         const elItem = el(
-          'div',
+          "div",
           {
-            style: {display: 'flex', alignItems: 'baseline'}
+            style: { display: "flex", alignItems: "baseline" },
           },
-          (elInput = el('input', {
+          (elInput = el("input", {
             id: id,
-            type: 'radio',
+            type: "radio",
             name: group,
-            value: it.value
+            value: it.value,
           })),
           el(
-            'label',
+            "label",
             {
               style: {
-                width: '100%',
-                display: 'block'
+                width: "100%",
+                display: "block",
               },
-              for: id
+              for: id,
             },
             qs.opt.builder(it)
           )
         );
         if (i === 0) {
-          elInput.setAttribute('checked', true);
+          elInput.setAttribute("checked", true);
         }
 
         return elItem;
       })
     );
     qs._listener = qs.update.bind(qs);
-    qs.el.addEventListener('change', qs._listener);
+    qs.el.addEventListener("change", qs._listener);
     qs._built = true;
   }
 
   destroy() {
     const qs = this;
-    qs.el.removeEventListener('change', qs._listener);
+    qs.el.removeEventListener("change", qs._listener);
     qs.el.remove();
   }
 
@@ -106,4 +106,4 @@ class RadioGroup {
   }
 }
 
-export {RadioGroup};
+export { RadioGroup };
