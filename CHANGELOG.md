@@ -1,3 +1,12 @@
+  - [1.12.1-alpha.1](https://github.com/unep-grid/mapx/tree/1.12.1-alpha.1) 
+
+    - APP
+        - Auto Style
+            - Added translation system
+            - Full refactor as a class
+            - Improved performance
+            - Added new mode : set size. Single color, size interpolation in a given range, row id ( row value also possible not exposed )
+
   - [1.12.0](https://github.com/unep-grid/mapx/tree/1.12.0) 
 
     - APP
