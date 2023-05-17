@@ -45,16 +45,8 @@ const defaults = {
  */
 export async function initEditing(state) {
   const ContentTools = await loadContentTools();
-  const ea = ContentTools.EditorApp.getCls();
-  /**
-   * Remove previous
-   */
-  if (state.ct_editor instanceof ea) {
-    state.ct_editor.unmount();
-    state.ct_editor.destroy();
-  }
 
-  state.ct_editor = new ea();
+  state.ct_editor = ContentTools.EditorApp.get();
 
   /**
    * Add custom button logic
