@@ -1,3 +1,8 @@
+  - [1.12.0](https://github.com/unep-grid/mapx/tree/1.12.0) 
+
+    - APP
+        - Fix issue with non-working tools box in editor
+
   - [1.12.0-alpha.2](https://github.com/unep-grid/mapx/tree/1.12.0-alpha.2) 
     
     - APP
