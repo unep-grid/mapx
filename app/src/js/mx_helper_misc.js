@@ -20,6 +20,26 @@ import { isSourceId } from "./is_test";
 import { el } from "./el_mapx";
 
 /**
+ * Performs a linear interpolation between minVal and maxVal, based on the normalized value of v
+ * (clamped between fromScale and toScale).
+ *
+ * @param {number} fromScale - The minimum value of the scale.
+ * @param {number} toScale - The maximum value of the scale
+ * @param {number} minVal - The minimum value.
+ * @param {number} maxVal - The maximum value .
+ * @param {number} v - The value to interpolate.
+ * @returns {number} The interpolated value.
+ */
+export function lerp(fromScale, toScale, minVal, maxVal, v) {
+  if (fromScale === toScale) {
+    return fromScale;
+  }
+  const clampedV = Math.max(minVal, Math.min(maxVal, v));
+  const normalizedV = (clampedV - minVal) / (maxVal - minVal);
+  return fromScale + normalizedV * (toScale - fromScale);
+}
+
+/**
  * Coerse value to boolean, e.g. from url query string;
  * @param {String|Boolean} value Value coercible to boolean.
  * @return {Boolean}

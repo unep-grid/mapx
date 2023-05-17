@@ -1,5 +1,95 @@
 [
   {
+    "id": "auto_style_start",
+    "en": "Auto style...",
+    "bn": "অটো স্টাইল..."
+  },
+  {
+    "id": "auto_style_select_mode_label",
+    "en": "Select mode",
+    "bn": "মোড নির্বাচন করুন"
+  },
+  {
+    "id": "auto_style_select_bins_label",
+    "en": "Select binning method",
+    "bn": "বিনিং পদ্ধতি নির্বাচন করুন"
+  },
+  {
+    "id": "auto_style_bins_number_label",
+    "en": "Number of bins",
+    "bn": "বিনের সংখ্যা"
+  },
+  {
+    "id": "auto_style_bins_number_desc",
+    "en": "Number of bins used during the statistical analysis",
+    "bn": "পরিসংখ্যানগত বিশ্লেষণের সময় ব্যবহৃত বিনের সংখ্যা"
+  },
+  {
+    "id": "auto_style_check_reverse_color_label",
+    "en": "Reverse color palette",
+    "bn": "বিপরীত রঙের প্যালেট"
+  },
+  {
+    "id": "auto_style_check_reverse_color_desc",
+    "en": "Inverse colors order in palettes",
+    "bn": "প্যালেটে বিপরীত রঙের ক্রম"
+  },
+  {
+    "id": "auto_style_check_preserve_label_label",
+    "en": "Preserve current labels",
+    "bn": "বর্তমান লেবেল সংরক্ষণ করুন"
+  },
+  {
+    "id": "auto_style_check_preserve_label_desc",
+    "en": "Preserve labels already defined in current rules",
+    "bn": "বর্তমান নিয়মে ইতিমধ্যে সংজ্ঞায়িত লেবেলগুলি সংরক্ষণ করুন৷"
+  },
+  {
+    "id": "auto_style_button_update",
+    "en": "Update rules",
+    "bn": "আপডেট নিয়ম"
+  },
+  {
+    "id": "auto_style_title_table_continuous",
+    "en": "Table. Method : {{method}}. Number of bins: {{bins}}",
+    "bn": "টেবিল। পদ্ধতি: {{method}} . বিনের সংখ্যা: {{bins}}"
+  },
+  {
+    "id": "auto_style_title_table_categorical",
+    "en": "Table. Number of rows = {{count}}",
+    "bn": "টেবিল। সারির সংখ্যা = {{count}}"
+  },
+  {
+    "id": "auto_style_color_label",
+    "en": "Color",
+    "bn": "রঙ"
+  },
+  {
+    "id": "auto_style_color_desc",
+    "en": "Choose color for all classes",
+    "bn": "সব শ্রেণীর জন্য রং নির্বাচন করুন"
+  },
+  {
+    "id": "auto_style_sizes_min_label",
+    "en": "Start size",
+    "bn": "শুরু আকার"
+  },
+  {
+    "id": "auto_style_sizes_min_desc",
+    "en": "Size of the first item in the table",
+    "bn": "টেবিলের প্রথম আইটেমের আকার"
+  },
+  {
+    "id": "auto_style_sizes_max_label",
+    "en": "End size",
+    "bn": "শেষ আকার"
+  },
+  {
+    "id": "auto_style_sizes_max_desc",
+    "en": "Size of the last item in the table",
+    "bn": "টেবিলের শেষ আইটেমের আকার"
+  },
+  {
     "id": "btn_opt_code_integration",
     "en": "Code template / boilerplate / other format",
     "bn": "কোড টেমপ্লেট / বয়লারপ্লেট / অন্যান্য বিন্যাস"

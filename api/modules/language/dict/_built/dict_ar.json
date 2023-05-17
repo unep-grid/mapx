@@ -1,5 +1,95 @@
 [
   {
+    "id": "auto_style_start",
+    "en": "Auto style...",
+    "ar": "نمط تلقائي ..."
+  },
+  {
+    "id": "auto_style_select_mode_label",
+    "en": "Select mode",
+    "ar": "حدد الوضع"
+  },
+  {
+    "id": "auto_style_select_bins_label",
+    "en": "Select binning method",
+    "ar": "حدد طريقة binning"
+  },
+  {
+    "id": "auto_style_bins_number_label",
+    "en": "Number of bins",
+    "ar": "عدد الصناديق"
+  },
+  {
+    "id": "auto_style_bins_number_desc",
+    "en": "Number of bins used during the statistical analysis",
+    "ar": "عدد الحاويات المستخدمة أثناء التحليل الإحصائي"
+  },
+  {
+    "id": "auto_style_check_reverse_color_label",
+    "en": "Reverse color palette",
+    "ar": "لوحة ألوان عكسية"
+  },
+  {
+    "id": "auto_style_check_reverse_color_desc",
+    "en": "Inverse colors order in palettes",
+    "ar": "ترتيب الألوان المعكوسة في لوحات"
+  },
+  {
+    "id": "auto_style_check_preserve_label_label",
+    "en": "Preserve current labels",
+    "ar": "الحفاظ على التسميات الحالية"
+  },
+  {
+    "id": "auto_style_check_preserve_label_desc",
+    "en": "Preserve labels already defined in current rules",
+    "ar": "الاحتفاظ بالتسميات المحددة بالفعل في القواعد الحالية"
+  },
+  {
+    "id": "auto_style_button_update",
+    "en": "Update rules",
+    "ar": "تحديث القواعد"
+  },
+  {
+    "id": "auto_style_title_table_continuous",
+    "en": "Table. Method : {{method}}. Number of bins: {{bins}}",
+    "ar": "طاولة. طريقة : {{method}} . عدد الصناديق: {{bins}}"
+  },
+  {
+    "id": "auto_style_title_table_categorical",
+    "en": "Table. Number of rows = {{count}}",
+    "ar": "طاولة. عدد الصفوف = {{count}}"
+  },
+  {
+    "id": "auto_style_color_label",
+    "en": "Color",
+    "ar": "لون"
+  },
+  {
+    "id": "auto_style_color_desc",
+    "en": "Choose color for all classes",
+    "ar": "اختر اللون لجميع الفئات"
+  },
+  {
+    "id": "auto_style_sizes_min_label",
+    "en": "Start size",
+    "ar": "حجم البداية"
+  },
+  {
+    "id": "auto_style_sizes_min_desc",
+    "en": "Size of the first item in the table",
+    "ar": "حجم العنصر الأول في الجدول"
+  },
+  {
+    "id": "auto_style_sizes_max_label",
+    "en": "End size",
+    "ar": "حجم النهاية"
+  },
+  {
+    "id": "auto_style_sizes_max_desc",
+    "en": "Size of the last item in the table",
+    "ar": "حجم العنصر الأخير في الجدول"
+  },
+  {
     "id": "btn_opt_code_integration",
     "en": "Code template / boilerplate / other format",
     "ar": "قالب الكود / المعياري / تنسيق آخر"

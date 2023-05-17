@@ -1,5 +1,95 @@
 [
   {
+    "id": "auto_style_start",
+    "en": "Auto style...",
+    "fa": "سبک خودکار ..."
+  },
+  {
+    "id": "auto_style_select_mode_label",
+    "en": "Select mode",
+    "fa": "حالت را انتخاب کنید"
+  },
+  {
+    "id": "auto_style_select_bins_label",
+    "en": "Select binning method",
+    "fa": "روش binning را انتخاب کنید"
+  },
+  {
+    "id": "auto_style_bins_number_label",
+    "en": "Number of bins",
+    "fa": "تعداد سطل ها"
+  },
+  {
+    "id": "auto_style_bins_number_desc",
+    "en": "Number of bins used during the statistical analysis",
+    "fa": "تعداد سطل های استفاده شده در طول تجزیه و تحلیل آماری"
+  },
+  {
+    "id": "auto_style_check_reverse_color_label",
+    "en": "Reverse color palette",
+    "fa": "پالت رنگ معکوس"
+  },
+  {
+    "id": "auto_style_check_reverse_color_desc",
+    "en": "Inverse colors order in palettes",
+    "fa": "ترتیب معکوس رنگ ها در پالت ها"
+  },
+  {
+    "id": "auto_style_check_preserve_label_label",
+    "en": "Preserve current labels",
+    "fa": "برچسب های فعلی را حفظ کنید"
+  },
+  {
+    "id": "auto_style_check_preserve_label_desc",
+    "en": "Preserve labels already defined in current rules",
+    "fa": "برچسب هایی را که قبلاً در قوانین فعلی تعریف شده اند حفظ کنید"
+  },
+  {
+    "id": "auto_style_button_update",
+    "en": "Update rules",
+    "fa": "قوانین را به روز کنید"
+  },
+  {
+    "id": "auto_style_title_table_continuous",
+    "en": "Table. Method : {{method}}. Number of bins: {{bins}}",
+    "fa": "جدول. روش : {{method}} . تعداد سطل زباله: {{bins}}"
+  },
+  {
+    "id": "auto_style_title_table_categorical",
+    "en": "Table. Number of rows = {{count}}",
+    "fa": "جدول. تعداد ردیف = {{count}}"
+  },
+  {
+    "id": "auto_style_color_label",
+    "en": "Color",
+    "fa": "رنگ"
+  },
+  {
+    "id": "auto_style_color_desc",
+    "en": "Choose color for all classes",
+    "fa": "رنگ را برای همه کلاس ها انتخاب کنید"
+  },
+  {
+    "id": "auto_style_sizes_min_label",
+    "en": "Start size",
+    "fa": "اندازه شروع"
+  },
+  {
+    "id": "auto_style_sizes_min_desc",
+    "en": "Size of the first item in the table",
+    "fa": "اندازه اولین مورد در جدول"
+  },
+  {
+    "id": "auto_style_sizes_max_label",
+    "en": "End size",
+    "fa": "اندازه نهایی"
+  },
+  {
+    "id": "auto_style_sizes_max_desc",
+    "en": "Size of the last item in the table",
+    "fa": "اندازه آخرین مورد در جدول"
+  },
+  {
     "id": "btn_opt_code_integration",
     "en": "Code template / boilerplate / other format",
     "fa": "قالب کد / دیگ بخار / قالب دیگر"

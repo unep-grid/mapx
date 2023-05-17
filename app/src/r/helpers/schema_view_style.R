@@ -290,6 +290,7 @@ mxSchemaViewStyle <- function(
         type = "object",
         title = tt("schema_style_rule"),
         options = list(
+          geomType = geomType,
           idView = idView
         ),
         properties = c(

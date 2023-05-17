@@ -11,7 +11,7 @@ import {
   elSpanTranslate,
 } from "../el_mapx/index.js";
 import { getDictItem } from "../language";
-import { itemFlashSave } from "../mx_helper_misc";
+import { itemFlashSave, lerp } from "../mx_helper_misc";
 import { modal } from "../mx_helper_modal.js";
 import { RadioGroup } from "../radio_group/index.js";
 import chroma from "chroma-js";
@@ -29,8 +29,9 @@ const stateDefault = {
   palette: "purd",
   type: null,
   mode: "colors", // sizes
-  color: "#fff",
-  sizeMax: 10,
+  allowModeSizes: false,
+  color: "#00ff00",
+  sizeMax: 40,
   sizeMin: 10,
 };
 
@@ -83,9 +84,7 @@ export class AutoStyle {
     }
 
     as.build();
-
     await as.setMode();
-    await as.update();
   }
   close() {
     if (as._closed) {
@@ -102,7 +101,7 @@ export class AutoStyle {
     const as = this;
     const state = as._state;
     const summary = await getViewSourceSummary(state.idView, {
-      useCache: false,
+      useCache: true,
       nullValue: state.nullValue,
       stats: ["base", "attributes"],
       binsNumber: state.binsNumber,
@@ -111,18 +110,29 @@ export class AutoStyle {
     const aStat = summary.attribute_stat;
     as._data = aStat;
 
-    /**
-     * Scale palette and set colors
-     */
+    const table = aStat.table;
+    const mode = state.mode;
     const palette = chroma.brewer[state.palette].map((c) => c); // clone
     if (state.reversePalette === true) {
       palette.reverse();
     }
     const colors = chroma.scale(palette).colors(aStat.table.length);
+    const min = 0;
+    const max = table.length - 1;
 
-    let i;
-    for (const row of aStat.table) {
-      row.color = colors[i++];
+    const minSize = state.sizeMin;
+    const maxSize = state.sizeMax;
+
+    for (let i = 0, iL = aStat.table.length; i < iL; i++) {
+      const row = aStat.table[i];
+      if (mode === "colors") {
+        row.color = colors[i];
+      }
+      if (mode === "sizes") {
+        const ll = lerp;
+        row.size = ll(minSize, maxSize, min, max, i);
+        row.color = state.color;
+      }
       /**
        * Round value for display
        * Create preview
@@ -132,15 +142,26 @@ export class AutoStyle {
           row[k] = Math.round(row[k] * 1000) / 1000;
         }
         if (k === "color") {
-          row.preview = el("div", {
-            style: {
-              backgroundColor: row[k],
-              width: "20px",
-              height: "20px",
-              border: "1px solid ccc",
-              borderRadius: "5px",
+          row.preview = el(
+            "div",
+            {
+              style: {
+                maxHeight: "100px",
+                maxWidth: "100px",
+                overflow: "hidden",
+                display: "flex",
+              },
             },
-          });
+            el("span", {
+              style: {
+                backgroundColor: row[k],
+                width: row.size ? `${row.size}px` : "20px",
+                height: row.size ? `${row.size}px` : "20px",
+                border: "1px solid ccc",
+                borderRadius: "5px",
+              },
+            })
+          );
         }
       }
     }
@@ -150,24 +171,33 @@ export class AutoStyle {
   updateElTable() {
     const as = this;
     const aStat = as._data;
-
+    const state = as._state;
     const count = aStat.table.reduce((c, r) => {
       return c + r.count;
     }, 0);
 
-    let titleTable = "";
+    let elTitleTable = "";
 
-    if (aStat.type === "continuous") {
-      titleTable = `${titleTable} ( Method : ${aStat.binsMethod}, number of bins : ${aStat.binsNumber}, count ${count} )`;
+    if (state.type === "continuous") {
+      elTitleTable = elSpanTranslate("auto_style_title_table_continuous", {
+        data: {
+          method: state.binsMethod,
+          bins: state.binsNumber,
+        },
+      });
     } else {
-      titleTable = `${titleTable} ( count: ${count} ) `;
+      elTitleTable = elSpanTranslate("auto_style_title_table_categorical", {
+        data: {
+          count: count,
+        },
+      });
     }
 
     /**
      * Build / Update table
      */
     const elTable = elAuto("array_table", aStat.table, {
-      tableTitle: titleTable,
+      tableTitle: elTitleTable,
       tableContainerHeaderClass: ["panel-heading", "panel-heading-light"],
     });
     as._elTableContainer.innerHTML = "";
@@ -178,6 +208,7 @@ export class AutoStyle {
     const as = this;
     as.buildModeSelect();
     as.buildBinsSelect();
+    as.buildBins();
     as.buildSizesInputs();
     as.buildRadioGroup();
     as.buildPaletteReverse();
@@ -218,26 +249,29 @@ export class AutoStyle {
     const as = this;
     as._elSizeMin = elInput("auto_style_sizes_min", {
       type: "number",
-      value: 10,
+      value: as._state.sizeMin,
       class: "auto_style__input_sizes",
       action: async (e) => {
         as._state.sizeMin = Number(e.target.value);
+        await as.update();
       },
     });
     as._elSizeMax = elInput("auto_style_sizes_max", {
       type: "number",
-      value: 10,
+      value: as._state.sizeMax,
       class: "auto_style__input_sizes",
       action: async (e) => {
         as._state.sizeMax = Number(e.target.value);
+        await as.update();
       },
     });
     as._elColor = elInput("auto_style_color", {
       type: "color",
-      value: "#0f0",
+      value: chroma(as._state.color).hex(),
       class: "auto_style__input_sizes",
       action: async (e) => {
-        as._state.color = chroma(e.target.value).css();
+        as._state.color = chroma(e.target.value).hex();
+        await as.update();
       },
     });
     as._elsInputs.push(as._elSizeMin, as._elSizeMax, as._elColor);
@@ -250,17 +284,17 @@ export class AutoStyle {
     as._elNBins = elInput("auto_style_bins_number", {
       type: "number",
       value: state.binsNumber,
-      class: "auto_style__input_sizes",
+      //class: "auto_style__input_sizes",
       action: async (e) => {
         const value = Number(e.target.value);
         // see  api/utils/checkRouteParams_rules.js
         if (value < 1 || value > 100) {
           elValidNum.innerText = "Value must be >= 1 and <= 100";
-          as._elNbins.classList.add("has-error");
+          as._elNBins.classList.add("has-error");
           return;
         } else {
           elValidNum.innertext = "";
-          as._elNbins.classList.remove("has-error");
+          as._elNBins.classList.remove("has-error");
         }
         state.binsNumber = value;
         await as.update();
@@ -276,7 +310,8 @@ export class AutoStyle {
   buildModeOptions() {
     const as = this;
     const state = as._state;
-    return ["colors", "sizes"].map((m) => {
+    const modes = state.allowModeSizes ? ["colors", "sizes"] : ["colors"];
+    return modes.map((m) => {
       const label = getDictItem(m);
       const elOpt = el("option", { value: m }, label);
       if (m === state.mode) {

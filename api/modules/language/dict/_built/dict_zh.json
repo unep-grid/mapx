@@ -1,5 +1,95 @@
 [
   {
+    "id": "auto_style_start",
+    "en": "Auto style...",
+    "zh": "汽车风格..."
+  },
+  {
+    "id": "auto_style_select_mode_label",
+    "en": "Select mode",
+    "zh": "选择模式"
+  },
+  {
+    "id": "auto_style_select_bins_label",
+    "en": "Select binning method",
+    "zh": "选择装箱方法"
+  },
+  {
+    "id": "auto_style_bins_number_label",
+    "en": "Number of bins",
+    "zh": "箱数"
+  },
+  {
+    "id": "auto_style_bins_number_desc",
+    "en": "Number of bins used during the statistical analysis",
+    "zh": "统计分析期间使用的箱数"
+  },
+  {
+    "id": "auto_style_check_reverse_color_label",
+    "en": "Reverse color palette",
+    "zh": "反转调色板"
+  },
+  {
+    "id": "auto_style_check_reverse_color_desc",
+    "en": "Inverse colors order in palettes",
+    "zh": "调色板中的反色顺序"
+  },
+  {
+    "id": "auto_style_check_preserve_label_label",
+    "en": "Preserve current labels",
+    "zh": "保留当前标签"
+  },
+  {
+    "id": "auto_style_check_preserve_label_desc",
+    "en": "Preserve labels already defined in current rules",
+    "zh": "保留已在当前规则中定义的标签"
+  },
+  {
+    "id": "auto_style_button_update",
+    "en": "Update rules",
+    "zh": "更新规则"
+  },
+  {
+    "id": "auto_style_title_table_continuous",
+    "en": "Table. Method : {{method}}. Number of bins: {{bins}}",
+    "zh": "桌子。方法 ： {{method}} .箱数： {{bins}}"
+  },
+  {
+    "id": "auto_style_title_table_categorical",
+    "en": "Table. Number of rows = {{count}}",
+    "zh": "桌子。行数 = {{count}}"
+  },
+  {
+    "id": "auto_style_color_label",
+    "en": "Color",
+    "zh": "颜色"
+  },
+  {
+    "id": "auto_style_color_desc",
+    "en": "Choose color for all classes",
+    "zh": "为所有类别选择颜色"
+  },
+  {
+    "id": "auto_style_sizes_min_label",
+    "en": "Start size",
+    "zh": "起始尺码"
+  },
+  {
+    "id": "auto_style_sizes_min_desc",
+    "en": "Size of the first item in the table",
+    "zh": "表中第一项的大小"
+  },
+  {
+    "id": "auto_style_sizes_max_label",
+    "en": "End size",
+    "zh": "末端尺寸"
+  },
+  {
+    "id": "auto_style_sizes_max_desc",
+    "en": "Size of the last item in the table",
+    "zh": "表中最后一项的大小"
+  },
+  {
     "id": "btn_opt_code_integration",
     "en": "Code template / boilerplate / other format",
     "zh": "代码模板/样板/其他格式"

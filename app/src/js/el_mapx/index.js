@@ -6,7 +6,7 @@ import {
 } from "./../language";
 import * as test from "./../is_test_mapx/index.js";
 import { parseTemplate } from "../mx_helper_misc.js";
-import { isNotEmpty } from "./../is_test_mapx/index.js";
+import { isElement, isNotEmpty } from "./../is_test_mapx/index.js";
 
 export { el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate };
 
@@ -206,6 +206,10 @@ function elAuto(render, data, opt) {
     );
   }
   function renderString(str, asLanguageKey) {
+    if (isElement(str)) {
+      return str;
+    }
+
     asLanguageKey = test.isBoolean(asLanguageKey)
       ? asLanguageKey
       : opt.stringAsLanguageKey;
@@ -408,14 +412,34 @@ function elButtonIcon(key, opt) {
     opt
   );
 
-  const addIcon = opt.mode === "text_icon" || opt.mode === "icon";
-  const addText = opt.mode === "text_icon" || opt.mode === "text";
+  const addIcon =
+    opt.mode === "icon_text" || opt.mode === "text_icon" || opt.mode === "icon";
+  const addText =
+    opt.mode === "icon_text" || opt.mode === "text_icon" || opt.mode === "text";
+
   const addBadge = !!opt.badgeContent;
   const addContent = !!opt.content;
 
   opt.dataset.lang_type = "tooltip";
   opt.classes.push("hint--bottom");
   opt.dataset.lang_key = key;
+
+  const content = [
+    addBadge ? el("span", { class: ["badge"] }, `${opt.badgeContent}`) : false,
+    addText ? elSpanTranslate(key) : false,
+    addIcon
+      ? el(
+          "div",
+          { class: "btn-icon-wrapper" },
+          el("i", { class: ["fa", opt.icon] })
+        )
+      : false,
+    addContent ? opt.content : false,
+  ];
+
+  if (opt.mode === "icon_text") {
+    content.reverse();
+  }
 
   const elBtn = el(
     "button",
@@ -426,20 +450,7 @@ function elButtonIcon(key, opt) {
       style: opt.style,
       ...opt.config,
     },
-    [
-      addBadge
-        ? el("span", { class: ["badge"] }, `${opt.badgeContent}`)
-        : false,
-      addText ? elSpanTranslate(key) : false,
-      addIcon
-        ? el(
-            "div",
-            { class: "btn-icon-wrapper" },
-            el("i", { class: ["fa", opt.icon] })
-          )
-        : false,
-      addContent ? opt.content : false,
-    ]
+    content
   );
 
   getDictItem(key).then((txt) => {
@@ -453,6 +464,7 @@ function elButtonIcon(key, opt) {
  * @param {String} key Translation key
  * @param {Object} opt Options
  * @param {String} opt.icon Font awesome icon name e.g. fa-lock => 'lock'
+ * @param {String} opt.mode Mode "text_icon" "icon_text"
  * @param {Function} opt.action Callback when clicked
  * @return {Element}
  */
@@ -467,7 +479,7 @@ export function elButtonFa(key, opt) {
   );
   return elButtonIcon(key, {
     icon: `fa-${opt.icon}`,
-    mode: "text_icon",
+    mode: opt.mode,
     config: {
       on: { click: opt.action },
     },

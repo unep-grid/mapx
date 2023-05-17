@@ -1,5 +1,95 @@
 [
   {
+    "id": "auto_style_start",
+    "en": "Auto style...",
+    "ps": "اتومات سټایل ..."
+  },
+  {
+    "id": "auto_style_select_mode_label",
+    "en": "Select mode",
+    "ps": "حالت غوره کړئ"
+  },
+  {
+    "id": "auto_style_select_bins_label",
+    "en": "Select binning method",
+    "ps": "د بننګ طریقه غوره کړئ"
+  },
+  {
+    "id": "auto_style_bins_number_label",
+    "en": "Number of bins",
+    "ps": "د کڅوړو شمیر"
+  },
+  {
+    "id": "auto_style_bins_number_desc",
+    "en": "Number of bins used during the statistical analysis",
+    "ps": "د احصایوي تحلیل په جریان کې د کارول شویو کڅوړو شمیر"
+  },
+  {
+    "id": "auto_style_check_reverse_color_label",
+    "en": "Reverse color palette",
+    "ps": "د رنګ پیلټ برعکس"
+  },
+  {
+    "id": "auto_style_check_reverse_color_desc",
+    "en": "Inverse colors order in palettes",
+    "ps": "برعکس رنګونه په پیلټونو کې ترتیب کوي"
+  },
+  {
+    "id": "auto_style_check_preserve_label_label",
+    "en": "Preserve current labels",
+    "ps": "اوسني لیبلونه وساتئ"
+  },
+  {
+    "id": "auto_style_check_preserve_label_desc",
+    "en": "Preserve labels already defined in current rules",
+    "ps": "لیبلونه وساتئ چې دمخه په اوسني مقرراتو کې تعریف شوي"
+  },
+  {
+    "id": "auto_style_button_update",
+    "en": "Update rules",
+    "ps": "د قواعدو تازه کول"
+  },
+  {
+    "id": "auto_style_title_table_continuous",
+    "en": "Table. Method : {{method}}. Number of bins: {{bins}}",
+    "ps": "میز. طریقه: {{method}} . د کڅوړو شمیر: {{bins}}"
+  },
+  {
+    "id": "auto_style_title_table_categorical",
+    "en": "Table. Number of rows = {{count}}",
+    "ps": "میز. د قطارونو شمیر = {{count}}"
+  },
+  {
+    "id": "auto_style_color_label",
+    "en": "Color",
+    "ps": "رنګ"
+  },
+  {
+    "id": "auto_style_color_desc",
+    "en": "Choose color for all classes",
+    "ps": "د ټولو ټولګیو لپاره رنګ غوره کړئ"
+  },
+  {
+    "id": "auto_style_sizes_min_label",
+    "en": "Start size",
+    "ps": "د پیل اندازه"
+  },
+  {
+    "id": "auto_style_sizes_min_desc",
+    "en": "Size of the first item in the table",
+    "ps": "په جدول کې د لومړي توکي اندازه"
+  },
+  {
+    "id": "auto_style_sizes_max_label",
+    "en": "End size",
+    "ps": "د پای اندازه"
+  },
+  {
+    "id": "auto_style_sizes_max_desc",
+    "en": "Size of the last item in the table",
+    "ps": "په جدول کې د وروستي توکي اندازه"
+  },
+  {
     "id": "btn_opt_code_integration",
     "en": "Code template / boilerplate / other format",
     "ps": "د کوډ ټیمپلیټ / بویلر پلیټ / نور شکل"
