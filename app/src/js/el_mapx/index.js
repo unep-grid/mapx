@@ -412,8 +412,7 @@ function elButtonIcon(key, opt) {
     opt
   );
 
-  const addIcon =
-    opt.mode === "icon_text" || opt.mode === "text_icon" || opt.mode === "icon";
+  const addIcon = isNotEmpty(opt.icon);
   const addText =
     opt.mode === "icon_text" || opt.mode === "text_icon" || opt.mode === "text";
 
@@ -464,7 +463,7 @@ function elButtonIcon(key, opt) {
  * @param {String} key Translation key
  * @param {Object} opt Options
  * @param {String} opt.icon Font awesome icon name e.g. fa-lock => 'lock'
- * @param {String} opt.mode Mode "text_icon" "icon_text"
+ * @param {String} opt.mode Mode "text_icon"(default)"icon_text"
  * @param {Function} opt.action Callback when clicked
  * @return {Element}
  */
@@ -474,6 +473,7 @@ export function elButtonFa(key, opt) {
     {
       icon: "question",
       action: () => {},
+      mode: "text_icon",
     },
     opt
   );
@@ -485,62 +485,6 @@ export function elButtonFa(key, opt) {
     },
   });
 }
-
-/**
- * Standard checkbox
- * @param {String} key Unique key : used form name + translation
- * @param {Object} opt Options
- * @param {String} opt.id Element id
- * @param {String} opt.dataset Additional custom data-
- * @param {String} opt.action Callback
- * @param {String} opt.name Form name item, if not equal to key
- * @param {Boolean} opt.checked Checked at start
- * @param {Boolean} opt.checked Disabled at start
- * @param {Boolean} opt.tooltip Add tooltip (false)
- * @param {Boolean} opt.keyLabel Optional translation key for label
- * @param {Boolean} opt.keyDesc Optional translation key for descriptiom
- */
-/*export function elCheckbox(key, opt) {*/
-/*opt = Object.assign(*/
-/*{},*/
-/*{*/
-/*id: Math.random().toString(32),*/
-/*action: () => {},*/
-/*checked: true,*/
-/*disabled: false,*/
-/*tooltip: false,*/
-/*keyLabel: null,*/
-/*keyDesc: null,*/
-/*dataset: "",*/
-/*},*/
-/*opt*/
-/*);*/
-
-/*return el("div", { class: "checkbox" }, [*/
-/*el("label", { for: opt.id }, [*/
-/*el("input", {*/
-/*name: opt.name || key,*/
-/*id: opt.id,*/
-/*type: "checkbox",*/
-/*checked: opt.checked,*/
-/*disabled: opt.disabled,*/
-/*value: "true", // will be used in form data. If not set, "on" will be returned.*/
-/*on: ["change", opt.action],*/
-/*dataset: opt.dataset,*/
-/*}),*/
-/*elSpanTranslate(opt.keyLabel ? opt.keyLabel : `${key}_label`, {*/
-/*tooltip: opt.tooltip,*/
-/*}),*/
-/*el(*/
-/*"div",*/
-/*{ class: ["text-muted", "help-box"] },*/
-/*elSpanTranslate(opt.keyDesc ? opt.keyDesc : `${key}_desc`, {*/
-/*tooltip: opt.tooltip,*/
-/*})*/
-/*),*/
-/*]),*/
-/*]);*/
-/*}*/
 
 /**
  * Generic input element
