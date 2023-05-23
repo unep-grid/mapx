@@ -15,12 +15,6 @@
   transition: opacity ease-in-out 0.3s, filter ease-in-out 0.3s;
 }
 
-/*@media (max-width: 800px), (max-height: 800px) {*/
-/*.mx-view-badges {*/
-/*display: none;*/
-/*}*/
-/*}*/
-
 .mx-view-tgl-content:hover .mx-view-badges {
   opacity: 1;
   filter: none;

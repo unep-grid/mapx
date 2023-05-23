@@ -304,7 +304,9 @@ export function isAgteB(a, b, asc = true) {
  * @return {Number} 1,-1 or 0
  */
 export function isAgtB(a, b, asc = true) {
-  if (isNumeric(a) && isNumeric(b)) {
+  if (isDate(a) && isDate(b)) {
+    return asc ? a.getTime() - b.getTime() : b.getTime() - a.getTime();
+  } else if (isNumeric(a) && isNumeric(b)) {
     return asc ? a - b : b - a;
   } else {
     a = String(a);
@@ -766,12 +768,12 @@ export function isEqual(x, y) {
  * @returns {boolean} - Returns true if the normalized forms of the two values are equivalent, false otherwise.
  */
 export function isEqualNoType(a, b) {
-    // Convert both values to strings, trim whitespace, and convert to numbers if possible
-    const normalizedA = normalizeValue(a);
-    const normalizedB = normalizeValue(b);
+  // Convert both values to strings, trim whitespace, and convert to numbers if possible
+  const normalizedA = normalizeValue(a);
+  const normalizedB = normalizeValue(b);
 
-    // Check for equivalence
-    return normalizedA === normalizedB;
+  // Check for equivalence
+  return normalizedA === normalizedB;
 }
 
 /**
@@ -782,14 +784,13 @@ export function isEqualNoType(a, b) {
  * @returns {string|number} - The normalized value.
  */
 export function normalizeValue(value) {
-    // Convert to string and trim whitespace
-    let strValue = String(value).trim();
+  // Convert to string and trim whitespace
+  let strValue = String(value).trim();
 
-    // Attempt to convert to a number, return the original string if this is not possible
-    let numValue = Number(strValue);
-    return Number.isNaN(numValue) ? strValue : numValue;
+  // Attempt to convert to a number, return the original string if this is not possible
+  let numValue = Number(strValue);
+  return Number.isNaN(numValue) ? strValue : numValue;
 }
-
 
 /**
  * Validate url

@@ -425,7 +425,8 @@ class NestedList {
   }
   getItemDate(el) {
     const li = this;
-    return li.fire("get_item_date_by_id", el.id)[0] || Date.now();
+    const d = li.fire("get_item_date_by_id", el.id)[0] || Date.now();
+    return d;
   }
   getGroup(el) {
     const li = this;
