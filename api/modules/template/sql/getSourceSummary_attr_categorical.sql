@@ -41,7 +41,7 @@ attr_freq_table as (
   attr_without_null
   GROUP BY
   value
-  ORDER BY count desc
+  ORDER BY count desc, value asc
 ),
 attr_freq_table_limited as (
   SELECT * 
