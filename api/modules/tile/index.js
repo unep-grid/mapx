@@ -3,9 +3,9 @@
  */
 import { redisGet, redisSet, pgRead } from "#mapx/db";
 import { parseTemplate, attrToPgCol, asArray } from "#mapx/helpers";
-import { isSourceId, isNotEmpty } from "@fxi/mx_valid";
+import { isSourceId, isEmpty, isBoolean } from "@fxi/mx_valid";
 import { templates } from "#mapx/template";
-import { getSourceLastTimestamp, isPointLikeGeom } from "#mapx/db_utils";
+import { getSourceLastTimestamp } from "#mapx/db_utils";
 import { getParamsValidator } from "#mapx/route_validation";
 import crypto from "crypto";
 import util from "util";
@@ -44,10 +44,10 @@ export async function handlerTile(req, res) {
 
     /*
      * viewSrcAttr attributes:
-     * layer
-     * attribute
-     * attributes
-     * mask (optional)
+     * layer : layer / source id
+     * attribute : attribute for styling
+     * attributes : other attributes to include
+     * mask (optional) : secondary source to use as mask
      */
     Object.assign(data, viewSrcConfig);
 
@@ -119,10 +119,6 @@ async function getTilePg(res, hash, data) {
     let buffer;
     const useAsMvt = data.usePostgisTiles;
     const useMask = data.useMask;
-    // Geometry test could be included in request, as CTE block.
-    // - per object based test – outside a deticated CTE – is probably expensive
-    // - isPointLikeGeom only works if there is only one type of geom per layer
-    data.isPointGeom = await isPointLikeGeom(data.layer);
 
     if (useAsMvt) {
       str = templates.getMvt;
@@ -142,13 +138,7 @@ async function getTilePg(res, hash, data) {
       if (useAsMvt) {
         buffer = out.rows[0].mvt;
       } else {
-        /**
-         * TODO: create a featureCollection inside postgres directly
-         * - convert null -> ''
-         * - convert date -> number (see rowsToGeoJSON)
-         */
-        const geojson = rowsToGeoJSON(out.rows);
-        buffer = geojsonToPbf(geojson, data);
+        buffer = geojsonToPbf(out.rows[0].geojson, data);
       }
 
       if (buffer?.length === 0) {
@@ -186,47 +176,43 @@ function sendTileError(res, err) {
 }
 
 /**
- * Create features from rows
- *
- * TODO: this could be done in postgres
- * @param {Array} Array of rows with at least one 'geom' key
- * @return {Object} Geojson object
- *
+ * Sanitize geojson :
+ * - remove nulls / empty value : test using ["has",<field>]
+ * - convert boolean to text
+ * @param {Object} geojson GeoJSON data
  */
-function rowsToGeoJSON(rows) {
-  const features = [];
-
-  for (const row of rows) {
-    const properties = {};
-
-    for (const attribute in row) {
-      if (attribute !== "geom") {
-        /**
-         * - Date serialized as ISO string
-         * - null/empty value should be null. Not supported by 
-         *   mapbox-gl: remove property + use ["has",<field>] to test 
-         *   for nulls. Use isNotEmpty to be flexible and avoid !!0 issue. 
-         * - update the prop
-         */
-        if(isNotEmpty(row[attribute])){
-          properties[attribute] = row[attribute];
-        }
+function geojsonSanitize(geojson) {
+  if (isEmpty(geojson.features)) {
+    geojson.features = [];
+    return geojson;
+  }
+  for (const feature of geojson.features || []) {
+    for (const id in feature.properties) {
+      const value = feature.properties[id];
+      if (isEmpty(value)) {
+        delete feature.properties[id];
+        continue;
+      }
+      if (isBoolean(value)) {
+        feature.properties[id] = `${feature.properties[id]}`;
+        continue;
       }
     }
-    features.push({
-      type: "Feature",
-      geometry: JSON.parse(row.geom),
-      properties: properties,
-    });
   }
-
-  return {
-    type: "FeatureCollection",
-    features: features,
-  };
+  return geojson;
 }
 
+/**
+ * Conversion of the geojson to pbf
+ * @param {Object} geojson GeoJSON data
+ * @return {Buffer} buffer
+ */
 function geojsonToPbf(geojson, data) {
+  if (isEmpty(geojson)) {
+    return null;
+  }
+
+  geojsonSanitize(geojson);
   const pbfOptions = {};
   const tileIndex = geojsonvt(geojson, {
     maxZoom: data.zoom + 1,

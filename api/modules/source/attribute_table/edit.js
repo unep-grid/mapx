@@ -682,6 +682,7 @@ class EditTableSession {
                   id_table,
                   gid,
                   column_name,
+                  column_type,
                 });
 
                 if (isDate) {

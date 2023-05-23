@@ -1,6 +1,11 @@
 WITH bbox AS (
   SELECT TileBBox({{zoom}},{{x}}, {{y}}, 4326) as {{geom}}
 ),
+geomType as (
+  SELECT ST_GeometryType({{geom}}) like '%Point' as isPoint 
+  FROM {{layer}} 
+  LIMIT 1
+),
 mask as(
   SELECT ST_Buffer(ST_Collect(k.{{geom}}),0) geom
   FROM {{mask}} k, bbox b
@@ -16,7 +21,7 @@ main as(
 ),
 overlap as (
   SELECT {{attributes_pg}},
-  CASE WHEN {{isPointGeom}}
+  CASE WHEN g.isPoint
     THEN
     /**  intersects => all points **/ 
     m.{{geom}} 
@@ -38,16 +43,26 @@ overlap as (
         )
     END 
 END as {{geom}}
-FROM main m, mask k
+FROM main m, mask k, geomType g
 WHERE ST_Intersects(m.geom,k.geom)
 ),
 simple as (
   SELECT {{attributes_pg}},
   ST_simplify(overlap.{{geom}},(50/(512*(({{zoom}}+1)^2)))) geom
   FROM overlap
+),
+geojson AS (
+  SELECT
+  json_build_object(
+    'type', 'Feature',
+    'geometry', ST_AsGeoJSON(geom)::json,
+    'properties', to_jsonb(simple.*) - 'geom'
+  ) AS feature
+  FROM simple
 )
 
-
-SELECT {{attributes_pg}}, 
-ST_AsGeoJSON({{geom}}) geom 
-FROM simple
+SELECT json_build_object(
+  'type', 'FeatureCollection',
+  'features', json_agg(geojson.feature)
+) AS geojson
+FROM geojson;

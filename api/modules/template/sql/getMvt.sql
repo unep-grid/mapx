@@ -1,4 +1,9 @@
 WITH
+geomType as (
+  SELECT ST_GeometryType({{geom}}) like '%Point' as isPoint 
+  FROM {{layer}} 
+  LIMIT 1
+),
 /** world bbox as 4326 **/ 
 world as (
   SELECT ST_MakeEnvelope(
@@ -76,7 +81,7 @@ features_simple AS (
   SELECT
   CASE WHEN {{zoom}} > 10 THEN geom
   ELSE
-    CASE WHEN {{isPointGeom}}
+    CASE WHEN g.isPoint
       -- no effect on single point
       THEN ST_RemoveRepeatedPoints(geom)
     ELSE
@@ -84,7 +89,9 @@ features_simple AS (
 END
 END geom,
 {{attributes_pg}}
-FROM features_clip 
+FROM 
+features_clip,
+geomType g
  ),
 /* Convert geom to mvt geom buffer must be integer  */
 features_mvt as (
