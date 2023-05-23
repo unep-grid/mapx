@@ -21,8 +21,8 @@
   },
   {
     "id": "auto_style_bins_number_desc",
-    "en": "Number of bins used during the statistical analysis",
-    "ar": "عدد الحاويات المستخدمة أثناء التحليل الإحصائي"
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "ar": "عدد الحاويات المستخدمة أثناء التحليل الإحصائي. الحد الأدنى 2 ، الحد الأقصى 100"
   },
   {
     "id": "auto_style_check_reverse_color_label",
@@ -88,6 +88,26 @@
     "id": "auto_style_sizes_max_desc",
     "en": "Size of the last item in the table",
     "ar": "حجم العنصر الأخير في الجدول"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "ar": "التعتيم"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "ar": "اضبط مكون ألفا (عتامة) للون ، حيث 0 = شفاف بالكامل و 1 معتم بالكامل"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "ar": "حجم العناصر"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "ar": "تعيين الحجم لجميع الفئات"
   },
   {
     "id": "btn_opt_code_integration",

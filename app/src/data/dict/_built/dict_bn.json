@@ -21,8 +21,8 @@
   },
   {
     "id": "auto_style_bins_number_desc",
-    "en": "Number of bins used during the statistical analysis",
-    "bn": "পরিসংখ্যানগত বিশ্লেষণের সময় ব্যবহৃত বিনের সংখ্যা"
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "bn": "পরিসংখ্যানগত বিশ্লেষণের সময় ব্যবহৃত বিনের সংখ্যা। সর্বনিম্ন 2, সর্বোচ্চ 100"
   },
   {
     "id": "auto_style_check_reverse_color_label",
@@ -88,6 +88,26 @@
     "id": "auto_style_sizes_max_desc",
     "en": "Size of the last item in the table",
     "bn": "টেবিলের শেষ আইটেমের আকার"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "bn": "অস্বচ্ছতা"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "bn": "রঙের আলফা উপাদান (অস্বচ্ছতা) সেট করুন, যেখানে 0 = সম্পূর্ণ স্বচ্ছ এবং 1, সম্পূর্ণ অস্বচ্ছ"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "bn": "আইটেম আকার"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "bn": "সমস্ত শ্রেণীর জন্য আকার সেট করুন"
   },
   {
     "id": "btn_opt_code_integration",

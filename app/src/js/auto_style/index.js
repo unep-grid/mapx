@@ -28,11 +28,14 @@ const stateDefault = {
   mergeLabelByRow: false,
   palette: "purd",
   type: null,
+  geomType: "point",
   mode: "colors", // sizes
   allowModeSizes: false,
   color: "#00ff00",
   sizeMax: 40,
   sizeMin: 10,
+  size: 10,
+  opacity: 0.7,
 };
 
 export class AutoStyle {
@@ -110,6 +113,7 @@ export class AutoStyle {
     const aStat = summary.attribute_stat;
     as._data = aStat;
 
+    const opacity = state.opacity;
     const table = aStat.table;
     const mode = state.mode;
     const palette = chroma.brewer[state.palette].map((c) => c); // clone
@@ -122,15 +126,24 @@ export class AutoStyle {
 
     const minSize = state.sizeMin;
     const maxSize = state.sizeMax;
+    const size = state.size;
 
     for (let i = 0, iL = aStat.table.length; i < iL; i++) {
       const row = aStat.table[i];
+
+      row.opacity = opacity;
+
       if (mode === "colors") {
         row.color = colors[i];
+        if (state.allowModeSizes) {
+          row.size = size;
+        }
       }
       if (mode === "sizes") {
         const ll = lerp;
-        row.size = ll(minSize, maxSize, min, max, i);
+        if (state.allowModeSizes) {
+          row.size = ll(minSize, maxSize, min, max, i);
+        }
         row.color = state.color;
       }
       /**
@@ -142,6 +155,24 @@ export class AutoStyle {
           row[k] = Math.round(row[k] * 1000) / 1000;
         }
         if (k === "color") {
+          const dim = {};
+          switch (state.geomType) {
+            case "line":
+              dim.width = `100%`;
+              dim.height = `${row.size}px`;
+              dim.radius = `0px`;
+              break;
+            case "point":
+              dim.height = `${row.size}px`;
+              dim.width = `${row.size}px`;
+              dim.radius = `50%`;
+              break;
+            default:
+              dim.height = `20px`;
+              dim.width = `20px`;
+              dim.radius = `0px`;
+          }
+
           row.preview = el(
             "div",
             {
@@ -150,15 +181,16 @@ export class AutoStyle {
                 maxWidth: "100px",
                 overflow: "hidden",
                 display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               },
             },
             el("span", {
               style: {
-                backgroundColor: row[k],
-                width: row.size ? `${row.size}px` : "20px",
-                height: row.size ? `${row.size}px` : "20px",
-                border: "1px solid ccc",
-                borderRadius: "5px",
+                backgroundColor: chroma(row[k]).alpha(opacity),
+                width: dim.width,
+                height: dim.height,
+                borderRadius: dim.radius,
               },
             })
           );
@@ -210,7 +242,8 @@ export class AutoStyle {
     as.buildBinsSelect();
     as.buildBins();
     as.buildSizesInputs();
-    as.buildRadioGroup();
+    as.buildOpacityInput();
+    as.buildPalettes();
     as.buildPaletteReverse();
     as.buildElCheckMergeLabelByRow();
     as.buildLayout();
@@ -225,6 +258,11 @@ export class AutoStyle {
     as._elsParts.push(as._elTableContainer);
     as.buildButtonDone();
     as._elContent = el("div", { class: "auto_style" }, as._elsParts);
+
+    if (!state.allowModeSizes) {
+      as._elContent.classList.add(`auto_style__no_sizes`);
+    }
+
     /**
      * Modal
      */
@@ -240,6 +278,29 @@ export class AutoStyle {
   }
 
   /**
+   * Opacity
+   */
+  buildOpacityInput() {
+    const as = this;
+    as._elOpacity = elInput("auto_style_opacity", {
+      type: "range",
+      value: as._state.opacity,
+      attributes: {
+        min: 0,
+        max: 1,
+        step: 0.05,
+      },
+      class: "auto_style__input_opacity",
+      action: async (e) => {
+        as._state.opacity = Number(e.target.value);
+        await as.update();
+      },
+    });
+
+    as._elsInputs.push(as._elOpacity);
+  }
+
+  /**
    * Input mode "sizes" :
    * - min
    * - max
@@ -247,12 +308,31 @@ export class AutoStyle {
    */
   buildSizesInputs() {
     const as = this;
+    as._elSize = elInput("auto_style_size", {
+      type: "number",
+      value: as._state.size,
+      class: "auto_style__input_size",
+      action: async (e) => {
+        let value = Math.abs(Math.ceil(Number(e.target.value)));
+        if (!isNumeric(value)) {
+          value = as._state.size;
+        }
+        as._state.size = value;
+        e.target.value = value;
+        await as.update();
+      },
+    });
     as._elSizeMin = elInput("auto_style_sizes_min", {
       type: "number",
       value: as._state.sizeMin,
       class: "auto_style__input_sizes",
       action: async (e) => {
-        as._state.sizeMin = Number(e.target.value);
+        let value = Math.abs(Math.ceil(Number(e.target.value)));
+        if (!isNumeric(value)) {
+          value = as._state.sizeMin;
+        }
+        as._state.sizeMin = value;
+        e.target.value = value;
         await as.update();
       },
     });
@@ -261,10 +341,16 @@ export class AutoStyle {
       value: as._state.sizeMax,
       class: "auto_style__input_sizes",
       action: async (e) => {
-        as._state.sizeMax = Number(e.target.value);
+        let value = Math.abs(Math.ceil(Number(e.target.value)));
+        if (!isNumeric(value)) {
+          value = as._state.sizeMax;
+        }
+        as._state.sizeMax = value;
+        e.target.value = value;
         await as.update();
       },
     });
+
     as._elColor = elInput("auto_style_color", {
       type: "color",
       value: chroma(as._state.color).hex(),
@@ -274,7 +360,7 @@ export class AutoStyle {
         await as.update();
       },
     });
-    as._elsInputs.push(as._elSizeMin, as._elSizeMax, as._elColor);
+    as._elsInputs.push(as._elSize, as._elSizeMin, as._elSizeMax, as._elColor);
   }
 
   buildBins() {
@@ -284,18 +370,19 @@ export class AutoStyle {
     as._elNBins = elInput("auto_style_bins_number", {
       type: "number",
       value: state.binsNumber,
-      //class: "auto_style__input_sizes",
       action: async (e) => {
-        const value = Number(e.target.value);
+        const value = Math.abs(Math.ceil(Number(e.target.value)));
         // see  api/utils/checkRouteParams_rules.js
-        if (value < 1 || value > 100) {
-          elValidNum.innerText = "Value must be >= 1 and <= 100";
-          as._elNBins.classList.add("has-error");
+        const valid = value > 1 && value < 100;
+
+        if (!valid) {
+          e.target.value = as._state.binsNumber;
+          //no change
           return;
         } else {
-          elValidNum.innertext = "";
-          as._elNBins.classList.remove("has-error");
+          e.target.value = value; // 2.4 -> 2
         }
+
         state.binsNumber = value;
         await as.update();
       },
@@ -373,6 +460,7 @@ export class AutoStyle {
     const elBinsOptions = as.buildBinsOptions();
     as._elBinsSelect = elSelect("auto_style_select_bins", {
       items: elBinsOptions,
+      value: state.binsMethod,
       action: async (e) => {
         state.binsMethod = e.target.value;
         await as.update();
@@ -383,7 +471,7 @@ export class AutoStyle {
     }
   }
 
-  buildPalettes() {
+  getPalettes() {
     return Object.keys(chroma.brewer).map((k) => {
       return {
         value: k,
@@ -396,12 +484,13 @@ export class AutoStyle {
     });
   }
 
-  buildRadioGroup() {
+  buildPalettes() {
     const as = this;
     const state = as._state;
-    const palettes = as.buildPalettes();
+    const palettes = as.getPalettes();
     as._rgPalette = new RadioGroup({
       items: palettes,
+      value: state.palette,
       onUpdate: async (palette) => {
         state.palette = palette;
         await as.update();
@@ -449,37 +538,38 @@ export class AutoStyle {
     const state = as._state;
     const rgPalette = as._rgPalette;
     as._elCheckPaletteReverse = elCheckbox("auto_style_check_reverse_color", {
-      checked: false,
+      checked: state.reversePalette,
       class: ["auto_style__input_colors"],
       action: async (e) => {
-        state.reversePalette = e.target.checked === true;
-        /**
-         * Update UI
-         */
-        const elsPalettes = rgPalette.el.querySelectorAll(
-          ".auto_style_palettes"
-        );
-        if (elsPalettes.length) {
-          for (const elPalette of elsPalettes) {
-            elPalette.style.flexDirection =
-              e.target.checked === true ? "row-reverse" : "row";
-          }
-        }
-        /**
-         * Update table
-         */
+        await update(e);
         await as.update();
       },
     });
-
+    // initial palette order
+    update();
     as._elsInputs.push(as._elCheckPaletteReverse);
+
+    // update flex direction
+    async function update(e) {
+      if (e instanceof Event) {
+        state.reversePalette = !!e.target?.checked === true;
+      }
+      const elsPalettes = rgPalette.el.querySelectorAll(".auto_style_palettes");
+      if (elsPalettes.length) {
+        for (const elPalette of elsPalettes) {
+          elPalette.style.flexDirection = state.reversePalette
+            ? "row-reverse"
+            : "row";
+        }
+      }
+    }
   }
 
   buildElCheckMergeLabelByRow() {
     const as = this;
     const state = as._state;
     as._elCheckMergeLabelByRow = elCheckbox("auto_style_check_preserve_label", {
-      checked: false,
+      checked: state.mergeLabelByRow,
       action: (e) => {
         state.mergeLabelByRow = e.target.checked === true;
       },

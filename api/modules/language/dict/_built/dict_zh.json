@@ -21,8 +21,8 @@
   },
   {
     "id": "auto_style_bins_number_desc",
-    "en": "Number of bins used during the statistical analysis",
-    "zh": "统计分析期间使用的箱数"
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "zh": "统计分析期间使用的箱数。最少 2 个，最多 100 个"
   },
   {
     "id": "auto_style_check_reverse_color_label",
@@ -88,6 +88,26 @@
     "id": "auto_style_sizes_max_desc",
     "en": "Size of the last item in the table",
     "zh": "表中最后一项的大小"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "zh": "不透明度"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "zh": "设置颜色的 alpha 分量（不透明度），其中 0 = 完全透明，1 表示完全不透明"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "zh": "物品尺寸"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "zh": "为所有类设置大小"
   },
   {
     "id": "btn_opt_code_integration",

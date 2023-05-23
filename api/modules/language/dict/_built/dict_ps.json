@@ -21,8 +21,8 @@
   },
   {
     "id": "auto_style_bins_number_desc",
-    "en": "Number of bins used during the statistical analysis",
-    "ps": "د احصایوي تحلیل په جریان کې د کارول شویو کڅوړو شمیر"
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "ps": "د احصایوي تحلیل په جریان کې د کارول شویو کڅوړو شمیر. لږترلږه 2، اعظمي 100"
   },
   {
     "id": "auto_style_check_reverse_color_label",
@@ -88,6 +88,26 @@
     "id": "auto_style_sizes_max_desc",
     "en": "Size of the last item in the table",
     "ps": "په جدول کې د وروستي توکي اندازه"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "ps": "شفافیت"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "ps": "د رنګ الفا اجزا (د شفافیت) تنظیم کړئ، چیرې چې 0 = بشپړ شفاف او 1، په بشپړه توګه ناپاک"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "ps": "د توکو اندازه"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "ps": "د ټولو ټولګیو لپاره اندازه تنظیم کړئ"
   },
   {
     "id": "btn_opt_code_integration",

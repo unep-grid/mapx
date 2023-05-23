@@ -21,8 +21,8 @@
   },
   {
     "id": "auto_style_bins_number_desc",
-    "en": "Number of bins used during the statistical analysis",
-    "de": "Anzahl der während der statistischen Analyse verwendeten Bins"
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "de": "Anzahl der während der statistischen Analyse verwendeten Bins. Min. 2, max. 100"
   },
   {
     "id": "auto_style_check_reverse_color_label",
@@ -88,6 +88,26 @@
     "id": "auto_style_sizes_max_desc",
     "en": "Size of the last item in the table",
     "de": "Größe des letzten Elements in der Tabelle"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "de": "Opazität"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "de": "Legen Sie die Alpha-Komponente (Deckkraft) der Farbe fest, wobei 0 = vollständig transparent und 1 = vollständig undurchsichtig ist"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "de": "Artikelgröße"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "de": "Legen Sie die Größe für alle Klassen fest"
   },
   {
     "id": "btn_opt_code_integration",

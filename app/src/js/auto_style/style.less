@@ -3,8 +3,19 @@
     .auto_style__input_colors {
       display: none;
     }
+    .auto_style__input_size {
+      display: none;
+    }
   }
   &.auto_style__mode_colors {
+    .auto_style__input_sizes {
+      display: none;
+    }
+  }
+  &.auto_style__no_sizes {
+    .auto_style__input_size {
+      display: none;
+    }
     .auto_style__input_sizes {
       display: none;
     }
@@ -15,5 +26,7 @@
     border: 1px solid var(--mx_ui_border);
     padding: 10px;
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
   }
 }

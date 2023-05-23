@@ -2,6 +2,9 @@ import { path } from "./mx_helper_misc.js";
 import { AutoStyle } from "./auto_style/index.js";
 import { elButtonFa } from "./el_mapx/index.js";
 import { settings } from "./settings";
+import localforage from "localforage";
+const dbAutoStyle = localforage.createInstance("auto_style");
+
 (function () {
   "use strict";
 
@@ -42,75 +45,85 @@ import { settings } from "./settings";
             const schema = editor.getItemSchema();
             const style = editor.parent.getValue();
             const idView = path(schema, "options.idView");
+            const idState = `auto_style@${idView}`;
             const geomType = path(schema, "options.geomType", "point");
+            const oldState = await dbAutoStyle.getItem(idState);
             const nullValue = style?.nulls[0]?.value || null;
             const editorUpperBound =
               editor.parent.getChildEditors().includeUpperBoundInInterval;
+            const initState = {
+              idView: idView,
+              nullValue: nullValue,
+              allowModeSizes: ["point", "line"].includes(geomType),
+              geomType: geomType,
+            };
 
+            const state = Object.assign({}, initState, oldState);
             const as = new AutoStyle();
 
-            await as.init(
-              {
-                idView: idView,
-                nullValue: nullValue,
-                allowModeSizes: ["point", "line"].includes(geomType),
-              },
-              update
-            );
+            await as.init(state, update);
 
             /**
              * CB called when clostin autostyle
              */
-            function update(data, state) {
-              if (editorUpperBound) {
-                editorUpperBound.setValue(true);
-              }
-              const table = data.table;
-              const { mergeLabelByRow, type, mode } = state;
-              const origRules = editor.getValue();
-              const modeNumeric = type === "continuous";
-              const rules = table.map((r, i) => {
-                let newRule = {
-                  value: modeNumeric ? r.from : r.value,
-                  color: r.color,
-                };
-                if (modeNumeric) {
-                  newRule.value_to = r.to;
+            async function update(data, state) {
+              try {
+                if (editorUpperBound) {
+                  editorUpperBound.setValue(true);
                 }
-                if (mode === "sizes") {
-                  newRule.size = r.size;
-                }
-
-                /**
-                 * Preserve label by merge
-                 */
-                if (mergeLabelByRow === true) {
-                  const ruleToMerge = origRules[i];
-                  if (ruleToMerge) {
-                    /**
-                     * Copy previous settings
-                     */
-                    newRule = Object.assign({}, ruleToMerge, newRule);
+                const table = data.table;
+                const { mergeLabelByRow, type } = state;
+                const origRules = editor.getValue();
+                const modeNumeric = type === "continuous";
+                const rules = table.map((r, i) => {
+                  let newRule = {
+                    value: modeNumeric ? r.from : r.value,
+                    color: r.color,
+                    opacity: Math.round(r.opacity * 10) / 10,
+                    size: r.size,
+                  };
+                  if (modeNumeric) {
+                    newRule.value_to = r.to;
                   }
-                } else {
+
                   /**
-                   * Create label (other parameters will be defaults)
+                   * Preserve label by merge
                    */
-                  for (const language of languages) {
-                    if (modeNumeric) {
-                      newRule[`label_${language}`] = `${r.from} - ${r.to}`;
-                    } else {
-                      newRule[`label_${language}`] = `${r.value}`;
+                  if (mergeLabelByRow === true) {
+                    const ruleToMerge = origRules[i];
+                    if (ruleToMerge) {
+                      /**
+                       * Copy previous settings
+                       */
+                      newRule = Object.assign({}, ruleToMerge, newRule);
+                    }
+                  } else {
+                    /**
+                     * Create label (other parameters will be defaults)
+                     */
+                    for (const language of languages) {
+                      if (modeNumeric) {
+                        newRule[`label_${language}`] = `${r.from} - ${r.to}`;
+                      } else {
+                        newRule[`label_${language}`] = `${r.value}`;
+                      }
                     }
                   }
-                }
 
-                return newRule;
-              });
+                  return newRule;
+                });
 
-              editor.setValue(rules);
+                editor.setValue(rules);
 
-              editor.onChange(true);
+                editor.onChange(true);
+
+                /**
+                 * Save state for future ref
+                 */
+                await dbAutoStyle.setItem(idState, Object.assign({}, state));
+              } catch (e) {
+                console.error(e);
+              }
             }
           } catch (e) {
             console.error(e);

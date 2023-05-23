@@ -21,8 +21,8 @@
   },
   {
     "id": "auto_style_bins_number_desc",
-    "en": "Number of bins used during the statistical analysis",
-    "fr": "Nombre de bacs utilisés lors de l'analyse statistique"
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "fr": "Nombre de bacs utilisés lors de l'analyse statistique. Min 2, max 100"
   },
   {
     "id": "auto_style_check_reverse_color_label",
@@ -88,6 +88,26 @@
     "id": "auto_style_sizes_max_desc",
     "en": "Size of the last item in the table",
     "fr": "Taille du dernier élément du tableau"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "fr": "Opacité"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "fr": "Définissez la composante alpha (opacité) de la couleur, où 0 = totalement transparent et 1, totalement opaque"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "fr": "Taille des éléments"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "fr": "Définisser la taille pour toutes les classes"
   },
   {
     "id": "btn_opt_code_integration",

@@ -21,8 +21,8 @@
   },
   {
     "id": "auto_style_bins_number_desc",
-    "en": "Number of bins used during the statistical analysis",
-    "ru": "Количество бинов, использованных во время статистического анализа"
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "ru": "Количество бинов, используемых во время статистического анализа. Мин. 2, макс. 100"
   },
   {
     "id": "auto_style_check_reverse_color_label",
@@ -88,6 +88,26 @@
     "id": "auto_style_sizes_max_desc",
     "en": "Size of the last item in the table",
     "ru": "Размер последнего элемента в таблице"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "ru": "Непрозрачность"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "ru": "Установите альфа-компонент (непрозрачность) цвета, где 0 = полностью прозрачный и 1, полностью непрозрачный"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "ru": "Размер предметов"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "ru": "Установить размер для всех классов"
   },
   {
     "id": "btn_opt_code_integration",

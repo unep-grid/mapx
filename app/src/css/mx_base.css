@@ -702,6 +702,9 @@ tr {
   min-width: 50px;
   padding: 4px;
 }
+.mx input[type="range"].form-control {
+  padding: 0px;
+}
 
 .mx .mx-diff-item {
   background-color: var(--mx_ui_background_faded);

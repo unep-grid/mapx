@@ -1,3 +1,4 @@
+import { isEmpty } from "../is_test/index.js";
 import { el } from "./../el/src/index.js";
 
 /**
@@ -32,6 +33,7 @@ const settings = {
   onUpdate: (value) => {
     console.log(value);
   },
+  value: null,
   configForm: {},
 };
 
@@ -78,8 +80,13 @@ class RadioGroup {
             qs.opt.builder(it)
           )
         );
-        if (i === 0) {
+        const selected = isEmpty(qs.opt.value)
+          ? i === 0
+          : qs.opt.value === it.value;
+
+        if (selected) {
           elInput.setAttribute("checked", true);
+          elItem.style.order = -1;
         }
 
         return elItem;

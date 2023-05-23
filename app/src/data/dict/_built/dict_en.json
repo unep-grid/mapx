@@ -17,7 +17,7 @@
   },
   {
     "id": "auto_style_bins_number_desc",
-    "en": "Number of bins used during the statistical analysis"
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100"
   },
   {
     "id": "auto_style_check_reverse_color_label",
@@ -70,6 +70,22 @@
   {
     "id": "auto_style_sizes_max_desc",
     "en": "Size of the last item in the table"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes"
   },
   {
     "id": "btn_opt_code_integration",

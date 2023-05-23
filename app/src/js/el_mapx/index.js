@@ -500,6 +500,7 @@ export function elButtonFa(key, opt) {
  * @param {Boolean} opt.tooltip Add tooltip (false)
  * @param {Boolean} opt.keyLabel Optional translation key for label
  * @param {Boolean} opt.keyDesc Optional translation key for description
+ * @param {Object} opt.attributes Optional attributes
  * @param {String} opt.type Input type (text, number, checkbox, etc.)
  */
 export function elInput(key, opt) {
@@ -516,19 +517,25 @@ export function elInput(key, opt) {
       dataset: "",
       type: "text",
       class: null,
+      attributes: {},
     },
     opt
   );
 
-  const inputOptions = {
-    name: opt.name || key,
-    id: opt.id,
-    type: opt.type,
-    disabled: opt.disabled,
-    value: opt.value,
-    on: ["change", opt.action],
-    dataset: opt.dataset,
-  };
+  const inputOptions = Object.assign(
+    {},
+    {
+      name: opt.name || key,
+      id: opt.id,
+      type: opt.type,
+      disabled: opt.disabled,
+      value: opt.value,
+      on: ["change", opt.action],
+      dataset: opt.dataset,
+    },
+    opt.attributes
+  );
+
 
   if (opt.type === "checkbox") {
     inputOptions.checked = opt.checked;

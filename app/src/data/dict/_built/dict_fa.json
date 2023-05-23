@@ -21,8 +21,8 @@
   },
   {
     "id": "auto_style_bins_number_desc",
-    "en": "Number of bins used during the statistical analysis",
-    "fa": "تعداد سطل های استفاده شده در طول تجزیه و تحلیل آماری"
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "fa": "تعداد سطل های استفاده شده در طول تجزیه و تحلیل آماری. حداقل 2، حداکثر 100"
   },
   {
     "id": "auto_style_check_reverse_color_label",
@@ -88,6 +88,26 @@
     "id": "auto_style_sizes_max_desc",
     "en": "Size of the last item in the table",
     "fa": "اندازه آخرین مورد در جدول"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "fa": "کدورت"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "fa": "مولفه آلفا (مادر بودن) رنگ را تنظیم کنید، جایی که 0 = کاملاً شفاف و 1، کاملاً مات است."
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "fa": "اندازه اقلام"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "fa": "اندازه را برای همه کلاس ها تنظیم کنید"
   },
   {
     "id": "btn_opt_code_integration",
