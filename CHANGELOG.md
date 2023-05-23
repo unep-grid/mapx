@@ -1,3 +1,16 @@
+  - [1.12.1-alpha.2](https://github.com/unep-grid/mapx/tree/1.12.1-alpha.2) 
+
+    - APP
+        - Auto Style
+            - Support for boolean
+            - Support for geom type : improved preview item
+            - State saved locally : improved updating
+            - Fixed issues with integer inputs : set limits and type checking
+            - Support for opacity
+            - Support for global size in colors mode
+        - Buttons 
+            - Fixed issue with buttons with icons not render properly
+
   - [1.12.1-alpha.1](https://github.com/unep-grid/mapx/tree/1.12.1-alpha.1) 
 
     - APP
