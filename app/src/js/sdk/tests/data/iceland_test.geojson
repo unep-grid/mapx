@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "iceland_test",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id_4": "a", "amount": 30.0, "test": null, "num": 3.0, "num_5": 6.0, "num_test": 4.0, "to_remove_17": "4", "to_remove_17_dup": "4", "num_6": 6.0, "boolean": false }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -18.504484173595074, 65.229537934958927 ] ] } },
+{ "type": "Feature", "properties": { "id_4": "b", "amount": 20.0, "test": null, "num": 2.0, "num_5": 5.0, "num_test": 4.0, "to_remove_17": "2", "to_remove_17_dup": "2", "num_6": 5.0, "boolean": true }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -18.747471443001235, 65.29123978332224 ] ] } },
+{ "type": "Feature", "properties": { "id_4": "c", "amount": 10.0, "test": "a", "num": 1.0, "num_5": 4.0, "num_test": 3.0, "to_remove_17": "1", "to_remove_17_dup": "1", "num_6": 4.0, "boolean": true }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -19.066437940952909, 65.200983174594569 ] ] } }
+]
+}

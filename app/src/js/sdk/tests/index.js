@@ -71,6 +71,101 @@ mapx.once("ready", async () => {
     ],
   });
 
+  t.check("highlighter", {
+    init: async () => {
+      const res = {};
+      const resp = await fetch("data/iceland_test.geojson");
+      const gj = await resp.json();
+      const view = await mapx.ask("view_geojson_create", { data: gj });
+      res.boundsOrig = await mapx.ask("map_get_bounds_array");
+      await mapx.ask("map_jump_to", {
+        center: [-18.785, 65.267],
+        zoom: 6,
+      });
+      res.view = view;
+      return res;
+    },
+    tests: [
+      {
+        name: "position wait",
+        test: () => {
+          // map_jump_to return after move_end
+          // the view is there, but queryRenderedFeatures returns nothing
+          return new Promise((resolve) => {
+            setTimeout(() => resolve(true), 1000);
+          });
+        },
+      },
+      {
+        name: "filter all",
+        test: async (res) => {
+          const count = await mapx.ask("set_highlighter", {
+            filters: [
+              {
+                id: res.view.id,
+                attribute: "amount",
+                values: [20],
+                operator: ">",
+              },
+              {
+                id: res.view.id,
+                attribute: "id_4",
+                values: ["a"],
+              },
+            ],
+            mode: "all",
+          });
+          return count === 1;
+        },
+      },
+      {
+        name: "filter none",
+        test: async (res) => {
+          const count = await mapx.ask("set_highlighter", {
+            filters: [
+              {
+                id: res.view.id,
+                attribute: "amount",
+                values: [100],
+                operator: ">",
+              },
+              {
+                id: res.view.id,
+                attribute: "id_4",
+                values: ["a","b"],
+              },
+            ],
+            mode: "any",
+          });
+          return count === 2;
+        },
+      },
+      {
+        name: "filter update",
+        test: async () => {
+          const count = await mapx.ask("update_highlighter");
+          return count === 2;
+        },
+      },
+      {
+        name: "filter reset",
+        test: async () => {
+          const count = await mapx.ask("reset_highlighter");
+          return count === 0;
+        },
+      },
+      {
+        name: "Reset bounds",
+        test: async (res) => {
+          await mapx.ask("map_set_bounds_array", {
+            bounds: res.boundsOrig,
+          });
+          return true;
+        },
+      },
+    ],
+  });
+
   t.check("Set theme", {
     init: async () => {
       const res = {};
@@ -86,7 +181,6 @@ mapx.once("ready", async () => {
           });
         },
       },
-
       {
         name: "add theme",
         test: async (res) => {

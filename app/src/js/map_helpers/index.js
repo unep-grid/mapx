@@ -1,4 +1,13 @@
-import { ws, nc, events, listeners, theme, mapboxgl, maps } from "./../mx.js";
+import {
+  ws,
+  nc,
+  events,
+  listeners,
+  theme,
+  mapboxgl,
+  maps,
+  highlighter,
+} from "./../mx.js";
 import { settings } from "./../settings";
 import { featuresToPopup } from "./features_to_popup.js";
 import { RadialProgress } from "./../radial_progress";
@@ -1333,18 +1342,25 @@ export function initMapListener(map) {
   /**
    * Highlight on event
    */
-  mx.highlighter.init(map);
+  highlighter.init(map);
 
   events.on({
-    type: ["view_add", "view_remove", "story_step", "story_close"],
-    idGroup: "highlight_clear",
+    type: [
+      "view_add",
+      "view_remove",
+      "story_step",
+      "story_close",
+      "view_panel_click",
+    ],
+    idGroup: "highlight_reset",
     callback: () => {
-      mx.highlighter.clean();
+      highlighter.reset();
     },
   });
 
+
   theme.on("set_colors", (colors) => {
-    mx.highlighter.setOptions({
+    highlighter.setOptions({
       highlight_color: colors.mx_map_feature_highlight.color,
     });
     if (window.jed && jed.aceEditors) {
@@ -1589,7 +1605,7 @@ export async function handleClickEvent(e, idMap) {
      * onNextFrame seems to do the job by delaying the upadte to the next animation frame.
      */
     onNextFrame(() => {
-      mx.highlighter.update(e);
+      highlighter.set({ point: e.point });
     });
   }
 
@@ -1644,7 +1660,7 @@ export async function handleClickEvent(e, idMap) {
      * Remove highlighter too
      */
     popup.on("close", () => {
-      mx.highlighter.clean();
+      highlighter.reset();
     });
 
     /**

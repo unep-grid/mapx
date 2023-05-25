@@ -1,6 +1,11 @@
 import { cancelFrame, onNextFrame } from "../animation_frame";
 import { bindAll } from "../bind_class_methods";
-import { isArrayOfObject, isNotEmpty } from "./../is_test/index";
+import {
+  isArrayOfObject,
+  isEmpty,
+  isNotEmpty,
+  isString,
+} from "./../is_test/index";
 const def = {
   map: null, // Mapbox gl instance
   use_animation: false, // Enable animation
@@ -18,7 +23,7 @@ const def = {
   highlight_feature_opacity: 0.5,
   highlight_radius: 20,
   supported_types: ["circle", "symbol", "fill", "line"],
-  regex_layer_id: /^MX/,
+  regex_layer_id: /^MX-/,
   max_layers_render: 10,
 };
 
@@ -35,6 +40,7 @@ class Highlighter {
      */
     hl._layers = new Map();
     hl._items = new Map();
+    hl._config = {};
 
     /**
      * Set options
@@ -48,7 +54,7 @@ class Highlighter {
   setOptions(opt) {
     const hl = this;
     Object.assign(hl.opt, opt);
-    hl.render();
+    hl._render();
   }
 
   /**
@@ -59,7 +65,7 @@ class Highlighter {
     if (hl._listener) {
       hl.map.off(hl.opt.event_type, hl._listener);
     }
-    hl.clean();
+    hl._clear();
   }
 
   /**
@@ -79,26 +85,84 @@ class Highlighter {
   }
 
   /**
-   * Event handler
+   * Set hl config
+   *
+   * @param {Object} config - Configuration options for the highlighter.
+   * @param {(PointLike | Array<PointLike>)?} config.point Location to query
+   * @param {Array.<Object>} config.filters - Array of filter objects to be applied.
+   * @param {String} config.filters[].id - Identifier of the view to which the filter applies.
+   * @param {Array} config.filters[].values - Array of values that will determine the filtering behaviour.
+   * @param {String} config.filters[].attribute - Attribute on which the filter values will be applied.
+   * @returns {number} Number of matched feature
+   * @example
+   * hl.set({all:true})
+   * hl.set({filters:[{id:'MX-123', values:["a","b","c"], attribute:"name"}]})
+   * hl.set({filters:[{id:'MX-123', values:["a","b","c"], attribute:"name"}]})
+   * hl.set({filters:[{id:'MX-456', values:[10], attribute:"count", operator:">"}]})
+   * hl.set({
+   *   mode : "any" 
+   *   filters:[
+   *   { 
+   *     id:'MX-456',
+   *     values:[10],
+   *     attribute:"count",
+   *     operator:">"
+   *   },
+   *   { 
+   *     id:'MX-456',
+   *     values:["a","b","c"],
+   *     attribute:"group"
+   *   }
+   * ]})
    */
-  update(config) {
+  set(config) {
     const hl = this;
-    hl.updateItems(config);
-    hl.render();
+    if (isEmpty(config)) {
+      console.error("Missing config. Use 'update' to re-use previous config");
+      return;
+    }
+    hl.reset("set");
+    Object.assign(hl._config, config);
+    return hl.update({ animate: true });
   }
 
   /**
-   * Clean : for each feature :
-   * - Remove from list
-   * - Disable state
-   * - Clean highlight layer
+   * Reset config and clear
    */
-  clean() {
+  reset() {
+    const hl = this;
+    hl._config = {};
+    hl._clear();
+    return hl.count();
+  }
+
+  /**
+   * Update
+   * @returns {number} Number of matched features
+   */
+  update(renderOptions) {
+    const hl = this;
+    hl._update_items();
+    hl._update_layers();
+    hl._render(renderOptions);
+    return hl.count();
+  }
+
+  /**
+   * Clear
+   */
+  _clear() {
     const hl = this;
     for (const layer of hl._layers.values()) {
       hl.removeHighlightLayer(layer);
     }
     hl._layers.clear();
+    hl._items.clear();
+  }
+  clean() {
+    console.warn("Deprecated, use clear() instead");
+    const hl = this;
+    return hl._clear();
   }
 
   /**
@@ -106,13 +170,13 @@ class Highlighter {
    * - Enable state
    * - Add highlight layer
    */
-  render() {
+  _render(renderOptions) {
     const hl = this;
+    const opt = Object.assign({}, { animate: false }, renderOptions);
     const max = hl.opt.max_layers_render;
-    const animate = hl.opt.use_animation;
+    const animate = opt.animate && hl.opt.use_animation;
     cancelFrame(hl._id_render);
     hl._id_render = onNextFrame(() => {
-      hl.updateLayers();
       let i = 0;
       for (const layer of hl._layers.values()) {
         if (i++ >= max) {
@@ -166,20 +230,25 @@ class Highlighter {
 
   /**
    * Recreate items configuration
-   * @param {Object} config Optional configuration to filter items
-   * @param {Array} config.filters Array highlight filters based on source layer id and gid attributes. i.e  [{id:'<sourceLayer>',values:[...<value>],attribute:'<attribute>'},...]
    * return {void}
    */
-  updateItems(config) {
+  _update_items() {
     const hl = this;
-    hl.clean();
-    config = Object.assign(
+    const config = Object.assign(
       {},
       {
+        point: null,
         filters: [],
+        all: false,
       },
-      config
+      hl._config
     );
+
+    hl._items.clear();
+
+    if (isEmpty(config.point) && isEmpty(config.filters) && !config.all) {
+      return;
+    }
 
     const items = hl.map
       .queryRenderedFeatures(config?.point)
@@ -187,14 +256,24 @@ class Highlighter {
       .map((f) => hl._features_to_item(f))
       .reduce((a, i) => hl._features_aggregate(a, i), new Map());
 
-    hl._items.clear();
-
     for (const [id, item] of items) {
       hl._items.set(id, item);
     }
   }
 
-  updateLayers() {
+  /**
+   * Count matched feeatures
+   */
+  count() {
+    const hl = this;
+    let count = 0;
+    for (const [_, item] of hl._items) {
+      count += item.gids.size;
+    }
+    return count;
+  }
+
+  _update_layers() {
     const hl = this;
     const items = hl._items;
     hl._layers.clear();
@@ -211,31 +290,61 @@ class Highlighter {
   }
 
   _match_feature(feature, config) {
-    const hl = this;
     config = config || {};
-    let select = true;
-
-    if (isNotEmpty(config.filters)) {
-      if (!isArrayOfObject(config.filters)) {
-        throw new Error(
-          "Array of object {id:<id>,values:[...],attribute:'<attr>'} expected"
-        );
-      }
-      select = false;
-      for (const filter of config.filters) {
-        const values = filter.values || [];
-        const value =
-          feature.properties[filter.attribute] || feature.properties?.gid;
-        if (
-          !select &&
-          filter.id === feature.sourceLayer &&
-          values.includes(value)
-        ) {
-          select = true;
-        }
-      }
-    }
+    const hl = this;
+    const modeAny = config.mode === "any"; //"all";
     const ok = hl.isSupportedFeature(feature);
+   
+    if (!ok) {
+      return false;
+    }
+
+    if (isEmpty(config.filters)) {
+      return ok;
+    }
+
+    if (!isArrayOfObject(config.filters)) {
+      throw new Error(
+        "Array of object {id:<id>,values:[...],attribute:'<attr>'} expected"
+      );
+    }
+
+    const selects = [];
+    for (const filter of config.filters) {
+      const values = filter.values || [];
+      const operator = filter.operator || "==";
+      const value = isNotEmpty(feature.properties[filter.attribute])
+        ? feature.properties[filter.attribute]
+        : feature.properties?.gid;
+
+      if (filter.id !== feature?.layer?.id) {
+        continue;
+      }
+
+      const select = values.reduce((acc, currentValue) => {
+        switch (operator) {
+          case ">":
+            return acc || value > currentValue;
+          case "<":
+            return acc || value < currentValue;
+          case ">=":
+            return acc || value >= currentValue;
+          case "<=":
+            return acc || value <= currentValue;
+          case "==":
+            return acc || value == currentValue;
+          default:
+            throw new Error(`Invalid operator ${operator}`);
+        }
+      }, false);
+
+      selects.push(select);
+    }
+
+    const select =
+      selects.length > 0 && modeAny
+        ? selects.includes(true)
+        : !selects.includes(false);
     return ok && select;
   }
 
@@ -346,9 +455,8 @@ class Highlighter {
   }
   isValidIdLayer(idLayer) {
     const hl = this;
-    return (
-      typeof idLayer === "string" && !!idLayer.match(hl.opt.regex_layer_id)
-    );
+    const valid = isString(idLayer) && !!idLayer.match(hl.opt.regex_layer_id);
+    return valid;
   }
   isSupportedFeature(f) {
     const hl = this;

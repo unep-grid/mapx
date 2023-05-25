@@ -56,7 +56,7 @@ import { viewsListAddSingle } from "../../../mx_helper_map_view_ui.js";
 import { modalCloseAll } from "../../../mx_helper_modal.js";
 import { toggleSpotlight } from "../../../mx_helper_map_pixop.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
-import { theme, ws } from "./../../../mx";
+import { highlighter, theme, ws } from "./../../../mx";
 
 /**
  * MapX resolvers available in static and app
@@ -727,15 +727,70 @@ class MapxResolversStatic extends ResolversBase {
   }
 
   /**
-   * Highlight vector feature : Enable, disable, toggle
+   * Spotlight vector feature : Enable, disable, toggle
    * @param {Object} opt Options
-   * @param {Boolean} opt.enable Enable or disable. If not set, toggle highglight
-   * @param {Number} opt.nLayers Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is highlighted. If 0 = only part where all displayed layers are overlapping are highligthed
+   * @param {Boolean} opt.enable Enable or disable. If not set, toggle spotlight
+   * @param {Number} opt.nLayers Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is spotlighted. If 0 = only part where all displayed layers are overlapping are spotligthed
    * @param {Boolean} opt.calcArea Estimate area covered by visible feature and display result in MapX interface
    * @return {Object} options realised {enable:<false/true>,calcArea:<true/false>,nLayers:<n>}
    */
-  set_vector_highlight(opt) {
+  set_vector_spotlight(opt) {
     return toggleSpotlight(opt);
+  }
+  set_vector_highlight(opt) {
+    console.warn("Deprecated. Use set_vector_spotlight instead");
+    return toggleSpotlight(opt);
+  }
+
+  /**
+   * Set the highlighter with the provided options.
+   *
+   * @param {Object} opt - Configuration options for the highlighter.
+   * @param {(PointLike | Array<PointLike>)?} config.point Location to query
+   * @param {Array.<Object>} opt.filters - Array of filter objects to be applied.
+   * @param {String} opt.filters[].id - Identifier of the view to which the filter applies.
+   * @param {Array} opt.filters[].values - Array of values that will determine the filtering behaviour.
+   * @param {String} opt.filters[].attribute - Attribute on which the filter values will be applied.
+   * @param {String} opt.filters[].operator - Operator used for the comparison. Default "==".
+   * @returns {number} Feature count
+   * @example
+   * set_highlighter({all:true})
+   * set_highlighter({filters:[{id:'MX-123', values:["a","b","c"], attribute:"name"}]})
+   * set_highlighter({filters:[{id:'MX-456', values:[10], attribute:"count", operator:">"}]})
+   * set_highlighter({
+   *   mode : "any" 
+   *   filters:[
+   *   { 
+   *     id:'MX-456',
+   *     values:[10],
+   *     attribute:"count",
+   *     operator:">"
+   *   },
+   *   { 
+   *     id:'MX-456',
+   *     values:["a","b","c"],
+   *     attribute:"group"
+   *   }
+   * ]})
+   */
+  set_highlighter(opt) {
+    return highlighter.set(opt);
+  }
+
+  /**
+   * Update highlighter using previous configuration i.e refresh features
+   * @returns {number} Feature count
+   */
+  update_highlighter() {
+    return highlighter.update();
+  }
+
+  /**
+   * Clear all highlighted features and reset config
+   * @returns {number} Feature count
+   */
+  reset_highlighter() {
+    return highlighter.reset();
   }
 
   /**
