@@ -105,7 +105,7 @@ export async function getSourceSummary(opt) {
     const tableTypes = await getColumnsTypesSimple(opt.idSource, columns);
 
     const attrType = opt.idAttr
-      ? tableTypes.filter((r) => r.column_name === opt.idAttr)[0].column_type
+      ? tableTypes.filter((r) => r.column_name === opt.idAttr)[0]?.column_type
       : null;
 
     /**
