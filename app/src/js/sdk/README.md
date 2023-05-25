@@ -1298,30 +1298,38 @@ Set the highlighter with the provided options.
 | config.point | <code>PointLike</code> \| <code>Array.&lt;PointLike&gt;</code> | Location to query |
 | opt.filters | <code>Array.&lt;Object&gt;</code> | Array of filter objects to be applied. |
 | opt.filters[].id | <code>String</code> | Identifier of the view to which the filter applies. |
-| opt.filters[].values | <code>Array</code> | Array of values that will determine the filtering behaviour. |
-| opt.filters[].attribute | <code>String</code> | Attribute on which the filter values will be applied. |
-| opt.filters[].operator | <code>String</code> | Operator used for the comparison. Default "==". |
+| opt.filters[].filter | <code>Array</code> | MapboxGl filter expression |
 
 **Example**  
 ```js
-set_highlighter({all:true})
-set_highlighter({filters:[{id:'MX-123', values:["a","b","c"], attribute:"name"}]})
-set_highlighter({filters:[{id:'MX-456', values:[10], attribute:"count", operator:">"}]})
-set_highlighter({
-  mode : "any" 
-  filters:[
-  { 
-    id:'MX-456',
-    values:[10],
-    attribute:"count",
-    operator:">"
-  },
-  { 
-    id:'MX-456',
-    values:["a","b","c"],
-    attribute:"group"
-  }
-]})
+mapx.ask('set_highlighter',{
+  all: true,
+});
+
+mapx.ask('set_highlighter',{
+  filters: [
+    { id: "MX-TC0O1-34A9Y-RYDJG", filter: ["<", ["get", "year"], 2000] },
+  ],
+});
+
+mapx.ask('set_highlighter',{
+  filters: [
+    { id: "MX-TC0O1-34A9Y-RYDJG", filter: [">=", ["get", "fatalities"], 7000] },
+  ],
+});
+
+mapx.ask('set_highlighter',{
+  filters: [
+    {
+      id: "MX-TC0O1-34A9Y-RYDJG",
+      filter: [
+        "in",
+        ["get", "country"],
+        ["literal", ["Nigeria", "Gabon", "Angola"]],
+      ],
+    },
+  ],
+});
 ```
 <a name="MapxResolversStatic+update_highlighter"></a>
 

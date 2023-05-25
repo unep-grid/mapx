@@ -1,3 +1,9 @@
+  - [1.12.1-alpha.4](https://github.com/unep-grid/mapx/tree/1.12.1-alpha.4) 
+
+    - APP / SDK
+        - Highlighter 
+            - Removed custom filtering system / operators to use mapbox expression instead.
+
   - [1.12.1-alpha.3](https://github.com/unep-grid/mapx/tree/1.12.1-alpha.3) 
     
     - APP
