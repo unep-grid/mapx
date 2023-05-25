@@ -649,7 +649,10 @@ MapX resolvers available in static and app
     * [.close_modal_all()](#MapxResolversStatic+close_modal_all) ⇒ <code>Boolean</code>
     * [.toggle_draw_mode()](#MapxResolversStatic+toggle_draw_mode)
     * [.get_views_title(opt)](#MapxResolversStatic+get_views_title) ⇒ <code>Array</code>
-    * [.set_vector_highlight(opt)](#MapxResolversStatic+set_vector_highlight) ⇒ <code>Object</code>
+    * [.set_vector_spotlight(opt)](#MapxResolversStatic+set_vector_spotlight) ⇒ <code>Object</code>
+    * [.set_highlighter(opt)](#MapxResolversStatic+set_highlighter) ⇒ <code>number</code>
+    * [.update_highlighter()](#MapxResolversStatic+update_highlighter) ⇒ <code>number</code>
+    * [.reset_highlighter()](#MapxResolversStatic+reset_highlighter) ⇒ <code>number</code>
     * [.view_geojson_create(opt)](#MapxResolversStatic+view_geojson_create) ⇒ <code>Object</code>
     * [.view_geojson_set_style(opt)](#MapxResolversStatic+view_geojson_set_style) ⇒ <code>Boolean</code>
     * [.view_geojson_delete(opt)](#MapxResolversStatic+view_geojson_delete) ⇒ <code>Boolean</code>
@@ -1266,10 +1269,10 @@ Get list of views title
 | opt.views | <code>Array</code> | List of views or views id |
 | opt.lang | <code>String</code> | Language code |
 
-<a name="MapxResolversStatic+set_vector_highlight"></a>
+<a name="MapxResolversStatic+set_vector_spotlight"></a>
 
-#### mapxResolversStatic.set\_vector\_highlight(opt) ⇒ <code>Object</code>
-Highlight vector feature : Enable, disable, toggle
+#### mapxResolversStatic.set\_vector\_spotlight(opt) ⇒ <code>Object</code>
+Spotlight vector feature : Enable, disable, toggle
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Object</code> - options realised {enable:<false/true>,calcArea:<true/false>,nLayers:<n>}  
@@ -1277,10 +1280,63 @@ Highlight vector feature : Enable, disable, toggle
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
-| opt.enable | <code>Boolean</code> | Enable or disable. If not set, toggle highglight |
-| opt.nLayers | <code>Number</code> | Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is highlighted. If 0 = only part where all displayed layers are overlapping are highligthed |
+| opt.enable | <code>Boolean</code> | Enable or disable. If not set, toggle spotlight |
+| opt.nLayers | <code>Number</code> | Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is spotlighted. If 0 = only part where all displayed layers are overlapping are spotligthed |
 | opt.calcArea | <code>Boolean</code> | Estimate area covered by visible feature and display result in MapX interface |
 
+<a name="MapxResolversStatic+set_highlighter"></a>
+
+#### mapxResolversStatic.set\_highlighter(opt) ⇒ <code>number</code>
+Set the highlighter with the provided options.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>number</code> - Feature count  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Configuration options for the highlighter. |
+| config.point | <code>PointLike</code> \| <code>Array.&lt;PointLike&gt;</code> | Location to query |
+| opt.filters | <code>Array.&lt;Object&gt;</code> | Array of filter objects to be applied. |
+| opt.filters[].id | <code>String</code> | Identifier of the view to which the filter applies. |
+| opt.filters[].values | <code>Array</code> | Array of values that will determine the filtering behaviour. |
+| opt.filters[].attribute | <code>String</code> | Attribute on which the filter values will be applied. |
+| opt.filters[].operator | <code>String</code> | Operator used for the comparison. Default "==". |
+
+**Example**  
+```js
+set_highlighter({all:true})
+set_highlighter({filters:[{id:'MX-123', values:["a","b","c"], attribute:"name"}]})
+set_highlighter({filters:[{id:'MX-456', values:[10], attribute:"count", operator:">"}]})
+set_highlighter({
+  mode : "any" 
+  filters:[
+  { 
+    id:'MX-456',
+    values:[10],
+    attribute:"count",
+    operator:">"
+  },
+  { 
+    id:'MX-456',
+    values:["a","b","c"],
+    attribute:"group"
+  }
+]})
+```
+<a name="MapxResolversStatic+update_highlighter"></a>
+
+#### mapxResolversStatic.update\_highlighter() ⇒ <code>number</code>
+Update highlighter using previous configuration i.e refresh features
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>number</code> - Feature count  
+<a name="MapxResolversStatic+reset_highlighter"></a>
+
+#### mapxResolversStatic.reset\_highlighter() ⇒ <code>number</code>
+Clear all highlighted features and reset config
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>number</code> - Feature count  
 <a name="MapxResolversStatic+view_geojson_create"></a>
 
 #### mapxResolversStatic.view\_geojson\_create(opt) ⇒ <code>Object</code>

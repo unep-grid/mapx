@@ -1,3 +1,16 @@
+  - [1.12.1-alpha.3](https://github.com/unep-grid/mapx/tree/1.12.1-alpha.3) 
+    
+    - APP
+        - Highlighter 
+            - New workflow : set / update / reset 
+            - Method to filter using operators : 
+                - all/any filters
+                - <,>,>=,<= ... for numeric value
+            - Improved performance : non matching feature's source skipped early
+            - Fixed issue with geojson features not selected
+    - SDK
+        - Added method + tests for highlighter management
+  
   - [1.12.1-alpha.2](https://github.com/unep-grid/mapx/tree/1.12.1-alpha.2) 
 
     - APP
