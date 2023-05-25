@@ -749,29 +749,38 @@ class MapxResolversStatic extends ResolversBase {
    * @param {(PointLike | Array<PointLike>)?} config.point Location to query
    * @param {Array.<Object>} opt.filters - Array of filter objects to be applied.
    * @param {String} opt.filters[].id - Identifier of the view to which the filter applies.
-   * @param {Array} opt.filters[].values - Array of values that will determine the filtering behaviour.
-   * @param {String} opt.filters[].attribute - Attribute on which the filter values will be applied.
-   * @param {String} opt.filters[].operator - Operator used for the comparison. Default "==".
+   * @param {Array} opt.filters[].filter - MapboxGl filter expression 
    * @returns {number} Feature count
    * @example
-   * set_highlighter({all:true})
-   * set_highlighter({filters:[{id:'MX-123', values:["a","b","c"], attribute:"name"}]})
-   * set_highlighter({filters:[{id:'MX-456', values:[10], attribute:"count", operator:">"}]})
-   * set_highlighter({
-   *   mode : "any" 
-   *   filters:[
-   *   { 
-   *     id:'MX-456',
-   *     values:[10],
-   *     attribute:"count",
-   *     operator:">"
-   *   },
-   *   { 
-   *     id:'MX-456',
-   *     values:["a","b","c"],
-   *     attribute:"group"
-   *   }
-   * ]})
+   * mapx.ask('set_highlighter',{
+   *   all: true,
+   * });
+   * 
+   * mapx.ask('set_highlighter',{
+   *   filters: [
+   *     { id: "MX-TC0O1-34A9Y-RYDJG", filter: ["<", ["get", "year"], 2000] },
+   *   ],
+   * });
+   * 
+   * mapx.ask('set_highlighter',{
+   *   filters: [
+   *     { id: "MX-TC0O1-34A9Y-RYDJG", filter: [">=", ["get", "fatalities"], 7000] },
+   *   ],
+   * });
+   * 
+   * mapx.ask('set_highlighter',{
+   *   filters: [
+   *     {
+   *       id: "MX-TC0O1-34A9Y-RYDJG",
+   *       filter: [
+   *         "in",
+   *         ["get", "country"],
+   *         ["literal", ["Nigeria", "Gabon", "Angola"]],
+   *       ],
+   *     },
+   *   ],
+   * });
+
    */
   set_highlighter(opt) {
     return highlighter.set(opt);

@@ -97,54 +97,56 @@ mapx.once("ready", async () => {
         },
       },
       {
-        name: "filter all",
-        test: async (res) => {
-          const count = await mapx.ask("set_highlighter", {
-            filters: [
-              {
-                id: res.view.id,
-                attribute: "amount",
-                values: [20],
-                operator: ">",
-              },
-              {
-                id: res.view.id,
-                attribute: "id_4",
-                values: ["a"],
-              },
-            ],
-            mode: "all",
-          });
-          return count === 1;
-        },
-      },
-      {
         name: "filter none",
         test: async (res) => {
           const count = await mapx.ask("set_highlighter", {
             filters: [
               {
                 id: res.view.id,
-                attribute: "amount",
-                values: [100],
-                operator: ">",
-              },
-              {
-                id: res.view.id,
-                attribute: "id_4",
-                values: ["a","b"],
+                filter: [
+                  "any",
+                  [">", ["get", "amount"], 100],
+                  ["in", ["get", "id_4"], ["literal", ["x", "y"]]],
+                ],
               },
             ],
-            mode: "any",
           });
-          return count === 2;
+          return count === 0;
         },
       },
       {
-        name: "filter update",
+        name: "filter all",
+        test: async () => {
+          const count = await mapx.ask("set_highlighter", {
+            all: true,
+          });
+          return count === 3;
+        },
+      },
+      {
+        name: "filter one",
+        test: async (res) => {
+          const count = await mapx.ask("set_highlighter", {
+            filters: [
+              {
+                id: res.view.id,
+                filter: [
+                  "all",
+                  [">", ["get", "amount"], 20],
+                  ["in", ["get", "id_4"], ["literal", ["a", "b"]]],
+                ],
+              },
+            ],
+          });
+          return count === 1;
+        },
+      },
+
+      {
+        name: "filter one update",
         test: async () => {
           const count = await mapx.ask("update_highlighter");
-          return count === 2;
+          return count === 1;
         },
       },
       {

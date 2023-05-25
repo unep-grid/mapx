@@ -1,11 +1,6 @@
 import { cancelFrame, onNextFrame } from "../animation_frame";
 import { bindAll } from "../bind_class_methods";
-import {
-  isArrayOfObject,
-  isEmpty,
-  isNotEmpty,
-  isString,
-} from "./../is_test/index";
+import { isEmpty, isString } from "./../is_test/index";
 const def = {
   map: null, // Mapbox gl instance
   use_animation: false, // Enable animation
@@ -63,7 +58,7 @@ class Highlighter {
   destroy() {
     const hl = this;
     if (hl._listener) {
-      hl.map.off(hl.opt.event_type, hl._listener);
+      hl._map.off(hl.opt.event_type, hl._listener);
     }
     hl._clear();
   }
@@ -77,10 +72,10 @@ class Highlighter {
       throw new Error("mapbox-gl map is required");
     }
 
-    hl.map = map;
+    hl._map = map;
     if (hl.opt.register_listener === true) {
       hl._listener = hl.update;
-      hl.map.on(hl.opt.event_type, hl._listener);
+      hl._map.on(hl.opt.event_type, hl._listener);
     }
   }
 
@@ -91,29 +86,37 @@ class Highlighter {
    * @param {(PointLike | Array<PointLike>)?} config.point Location to query
    * @param {Array.<Object>} config.filters - Array of filter objects to be applied.
    * @param {String} config.filters[].id - Identifier of the view to which the filter applies.
-   * @param {Array} config.filters[].values - Array of values that will determine the filtering behaviour.
-   * @param {String} config.filters[].attribute - Attribute on which the filter values will be applied.
+   * @param {Array} config.filters[].filter - MapboxGL expression
    * @returns {number} Number of matched feature
    * @example
-   * hl.set({all:true})
-   * hl.set({filters:[{id:'MX-123', values:["a","b","c"], attribute:"name"}]})
-   * hl.set({filters:[{id:'MX-123', values:["a","b","c"], attribute:"name"}]})
-   * hl.set({filters:[{id:'MX-456', values:[10], attribute:"count", operator:">"}]})
    * hl.set({
-   *   mode : "any" 
-   *   filters:[
-   *   { 
-   *     id:'MX-456',
-   *     values:[10],
-   *     attribute:"count",
-   *     operator:">"
-   *   },
-   *   { 
-   *     id:'MX-456',
-   *     values:["a","b","c"],
-   *     attribute:"group"
-   *   }
-   * ]})
+   *   all: true,
+   * });
+   * 
+   * hl.set({
+   *   filters: [
+   *     { id: "MX-TC0O1-34A9Y-RYDJG", filter: ["<", ["get", "year"], 2000] },
+   *   ],
+   * });
+   * 
+   * hl.set({
+   *   filters: [
+   *     { id: "MX-TC0O1-34A9Y-RYDJG", filter: [">=", ["get", "fatalities"], 7000] },
+   *   ],
+   * });
+   * 
+   * hl.set({
+   *   filters: [
+   *     {
+   *       id: "MX-TC0O1-34A9Y-RYDJG",
+   *       filter: [
+   *         "in",
+   *         ["get", "country"],
+   *         ["literal", ["Nigeria", "Gabon", "Angola"]],
+   *       ],
+   *     },
+   *   ],
+   * });
    */
   set(config) {
     const hl = this;
@@ -196,7 +199,7 @@ class Highlighter {
   addHighlightLayer(layer) {
     const hl = this;
     hl.removeHighlightLayer(layer);
-    hl.map.addLayer(layer);
+    hl._map.addLayer(layer);
   }
 
   /**
@@ -219,13 +222,13 @@ class Highlighter {
    */
   removeHighlightLayer(layer) {
     const hl = this;
-    if (!hl.map.getLayer(layer.id)) {
+    if (!hl._map.getLayer(layer.id)) {
       return;
     }
     if (layer._animation instanceof Animate) {
       layer._animation.stop();
     }
-    hl.map.removeLayer(layer.id);
+    hl._map.removeLayer(layer.id);
   }
 
   /**
@@ -250,15 +253,67 @@ class Highlighter {
       return;
     }
 
-    const items = hl.map
-      .queryRenderedFeatures(config?.point)
-      .filter((f) => hl._match_feature(f, config))
+    const layers = hl._map
+      .getStyle()
+      .layers.map((l) => l.id)
+      .filter((id) => id.match(hl.opt.regex_layer_id));
+
+    const features = [];
+
+    if (config.all) {
+      /**
+       * All features in selected layers
+       */
+      const allFeatures = hl._map.queryRenderedFeatures(null, {
+        layers: layers,
+      });
+
+      for (const feature of allFeatures) {
+        features.push(feature);
+      }
+    } else if (config.point) {
+      /**
+       * All features touched  by "PointLike" object
+       */
+      const pointFeatures = hl._map.queryRenderedFeatures(config?.point, {
+        layers: layers,
+      });
+
+      for (const feature of pointFeatures) {
+        features.push(feature);
+      }
+    } else {
+      /**
+       * All feature filtered by config
+       */
+      for (const filter of config.filters) {
+        const viewLayers = hl._id_view_layers(filter.id, layers);
+        const viewFeatures = hl._map.queryRenderedFeatures(null, {
+          layers: viewLayers,
+          filter: filter.filter,
+        });
+
+        for (const feature of viewFeatures) {
+          features.push(feature);
+        }
+      }
+    }
+
+    const items = features
       .map((f) => hl._features_to_item(f))
       .reduce((a, i) => hl._features_aggregate(a, i), new Map());
 
     for (const [id, item] of items) {
       hl._items.set(id, item);
     }
+  }
+
+  /**
+   * Filter layer by view id as prefix
+   */
+  _id_view_layers(id, layers) {
+    const reg = new RegExp(`^${id}`);
+    return layers.filter((id) => id.match(reg));
   }
 
   /**
@@ -273,6 +328,9 @@ class Highlighter {
     return count;
   }
 
+  /**
+   * Create layers using items, matching gids
+   */
   _update_layers() {
     const hl = this;
     const items = hl._items;
@@ -287,65 +345,6 @@ class Highlighter {
       ];
       hl._layers.set(id, hl._item_to_layer(item));
     }
-  }
-
-  _match_feature(feature, config) {
-    config = config || {};
-    const hl = this;
-    const modeAny = config.mode === "any"; //"all";
-    const ok = hl.isSupportedFeature(feature);
-   
-    if (!ok) {
-      return false;
-    }
-
-    if (isEmpty(config.filters)) {
-      return ok;
-    }
-
-    if (!isArrayOfObject(config.filters)) {
-      throw new Error(
-        "Array of object {id:<id>,values:[...],attribute:'<attr>'} expected"
-      );
-    }
-
-    const selects = [];
-    for (const filter of config.filters) {
-      const values = filter.values || [];
-      const operator = filter.operator || "==";
-      const value = isNotEmpty(feature.properties[filter.attribute])
-        ? feature.properties[filter.attribute]
-        : feature.properties?.gid;
-
-      if (filter.id !== feature?.layer?.id) {
-        continue;
-      }
-
-      const select = values.reduce((acc, currentValue) => {
-        switch (operator) {
-          case ">":
-            return acc || value > currentValue;
-          case "<":
-            return acc || value < currentValue;
-          case ">=":
-            return acc || value >= currentValue;
-          case "<=":
-            return acc || value <= currentValue;
-          case "==":
-            return acc || value == currentValue;
-          default:
-            throw new Error(`Invalid operator ${operator}`);
-        }
-      }, false);
-
-      selects.push(select);
-    }
-
-    const select =
-      selects.length > 0 && modeAny
-        ? selects.includes(true)
-        : !selects.includes(false);
-    return ok && select;
   }
 
   /**
@@ -487,7 +486,7 @@ class Animate {
   constructor(hl, layer) {
     const anim = this;
     anim._opt = hl.opt;
-    anim._map = hl.map;
+    anim._map = hl._map;
     anim._dim = false;
     anim._stopped = false;
     anim._time_limit = anim._opt.animation_duration
