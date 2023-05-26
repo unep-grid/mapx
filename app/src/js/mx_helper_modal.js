@@ -849,11 +849,9 @@ export function modalPrompt(opt) {
        */
       if (isNotEmpty(valid) && isBoolean(valid)) {
         if (!valid) {
-          console.log("disable");
           elBtnConfirm.setAttribute("disabled", "disabled");
           elBtnConfirm.classList.add("disabled");
         } else {
-          console.log("enable");
           elBtnConfirm.removeAttribute("disabled");
           elBtnConfirm.classList.remove("disabled");
         }

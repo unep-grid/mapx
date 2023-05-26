@@ -8,6 +8,7 @@ const def = {
   elContainer: null,
   selector: "div > ul > li",
   timeout: 300,
+  modeFlex: false,
 };
 
 export class TextFilter {
@@ -51,6 +52,9 @@ export class TextFilter {
       sr._elContent.classList.add("txt-filter--content");
       sr._elContainer.appendChild(sr._elContent);
     }
+    if (sr.opt.modeFlex) {
+      sr._elContent.classList.add("txt-filter--content-flex");
+    }
   }
 
   search() {
@@ -61,6 +65,7 @@ export class TextFilter {
       return sr.reset();
     }
     let count = 0;
+    const max = sr._elsTarget.length;
     sr._search_to_id = setTimeout(() => {
       const re = new RegExp(`${txt}`, "gi");
       sr.reset();
@@ -70,11 +75,19 @@ export class TextFilter {
         }
         const match = el.dataset._cache.match(re);
         if (!match) {
-          el.style.display = "none";
+          if (sr.opt.modeFlex) {
+            el.style.order = max;
+          } else {
+            el.style.display = "none";
+          }
           continue;
         } else {
           count++;
-          el.style.display = "block";
+          if (sr.opt.modeFlex) {
+            el.style.order = count;
+          } else {
+            el.style.display = "block";
+          }
           for (const elInner of el.querySelectorAll("*")) {
             for (const node of elInner.childNodes) {
               if (node.nodeType == Node.TEXT_NODE) {
@@ -98,8 +111,13 @@ export class TextFilter {
 
   reset() {
     const sr = this;
+    let count = 0;
     for (const elTarget of sr._elsTarget) {
-      elTarget.style.display = "block";
+      if (sr.opt.modeFlex) {
+        elTarget.style.order = count++;
+      } else {
+        elTarget.style.display = "block";
+      }
     }
     const elsHl = sr._elContent.querySelectorAll(".txt-filter--box");
     for (const elHl of elsHl) {

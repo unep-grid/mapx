@@ -49,7 +49,7 @@ class Highlighter {
   setOptions(opt) {
     const hl = this;
     Object.assign(hl.opt, opt);
-    hl._render();
+    hl.update();
   }
 
   /**

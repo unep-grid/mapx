@@ -5,7 +5,7 @@ import chroma from "chroma-js";
 import { layer_resolver, css_resolver } from "./mapx_style_resolver.js";
 import { bindAll } from "../bind_class_methods";
 import { isJson, isEmpty } from "../is_test";
-import { onNextFrame } from "../animation_frame/index.js";
+import { onNextFrame, waitFrameAsync } from "../animation_frame/index.js";
 import { modalPrompt } from "../mx_helper_modal";
 import { isElement, makeSafeName, isStringRange } from "../is_test";
 import { settings } from "../settings";
@@ -30,7 +30,7 @@ import "./style.less";
  */
 const global = {
   elStyle: null,
-  elInputsContainer: null,
+  elContainer: null,
   map: null,
   themes: [classic_light, classic_dark, water_light, water_dark],
   fonts_enabled: {
@@ -445,6 +445,7 @@ class Theme extends EventSimple {
   async updateFromInput() {
     try {
       const t = this;
+      await waitFrameAsync();
       const colors = t.getColorsFromInputs();
       await t.setColors(colors);
     } catch (e) {
@@ -607,52 +608,64 @@ class Theme extends EventSimple {
     );
   }
 
-  async linkInputs(elInputsContainer) {
+  async initManager(elTarget) {
     const t = this;
-    const elContainer = elInputsContainer || t._opt.elInputsContainer;
-    if (t._elInputsContainer) {
+
+    if (t._elContainer) {
       return;
     }
-    if (!elContainer instanceof Element) {
+
+    t._elContainer = elTarget || t._opt.elContainer;
+
+    if (!isElement(t._elContainer)) {
       return;
     }
-    t._elContainer = elContainer;
-    t._elContainer.addEventListener("input", t.updateFromInput);
+
     t.buildManager();
     await t.buildInputs();
-    t.buildSearchTool();
   }
 
   buildManager() {
     const t = this;
     t._elContainer.classList.add("mx-theme--manager");
     t._elInputsContainer = el("div");
-    const elBtnExport = elButtonFa("mx_theme_export_button", {
+    t._elBtnExport = elButtonFa("mx_theme_export_button", {
       icon: "cloud-download",
       action: t.exportThemeDownload,
     });
-    const elBtnImport = elButtonFa("mx_theme_import_button", {
+    t._elBtnImport = elButtonFa("mx_theme_import_button", {
       icon: "cloud-upload",
       action: t.importTheme,
     });
-    const elInputFilter = el("input", {
+    t._elInputFilter = el("input", {
       type: "text",
       class: ["form-control", "mx-theme--manager-filter"],
       placeholder: "Filter items...",
     });
-    t._elInputFilter = elInputFilter;
 
-    const elGroup = el("div", { class: "mx-theme--manager-bar" }, [
+    t._elTools = el("div", { class: "mx-theme--manager-bar" }, [
       el("div", { class: ["btn-group", "mx-theme--manager-buttons"] }, [
-        elBtnExport,
-        elBtnImport,
+        t._elBtnExport,
+        t._elBtnImport,
       ]),
-      elInputFilter,
+      t._elInputFilter,
     ]);
 
-    const elTools = el("div", { class: "well" }, elGroup);
-    t._elContainer.appendChild(elTools);
+    t._elToolsWrapper = el("div", { class: "well" }, t._elTools);
+    t._elContainer.appendChild(t._elToolsWrapper);
     t._elContainer.appendChild(t._elInputsContainer);
+    t._elInputsContainer.addEventListener("input", t.updateFromInput);
+
+    /**
+     * Filter helper
+     */
+    t._filter = new TextFilter({
+      modeFlex: true,
+      selector: ".mx-theme--inputs",
+      elInput: t._elInputFilter,
+      elContent: t._elInputsContainer,
+      timeout: 10,
+    });
   }
 
   async buildInputs() {
@@ -680,30 +693,12 @@ class Theme extends EventSimple {
          */
         onNextFrame(() => {
           elContainer.replaceChildren(elFrag);
+          t._filter.update();
           return resolve(true);
         });
       } catch (e) {
         reject(e);
       }
-    });
-  }
-
-  buildSearchTool() {
-    const t = this;
-    const valid =
-      isElement(t._elInputsContainer) && isNotEmpty(t._elInputsContainer);
-
-    if (!valid) {
-      return;
-    }
-    /**
-     * Filter helper
-     */
-    t._filter = new TextFilter({
-      selector: ".mx-theme--inputs",
-      elInput: t._elInputFilter,
-      elContent: t._elInputsContainer,
-      timeout: 10,
     });
   }
 
@@ -781,7 +776,6 @@ class Theme extends EventSimple {
             if (!valid) {
               elMsg.innerText = `Not in range min: ${min} max: ${max}`;
             }
-            console.log(valid);
             return valid;
           },
         });

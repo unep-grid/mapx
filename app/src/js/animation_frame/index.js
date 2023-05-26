@@ -41,10 +41,11 @@ function cancelFrame(id) {
  * Wait next frame async
  * @return {Promise} next frame;
  */
-
+let idFrame = 0;
 function waitFrameAsync() {
+  cancelFrame(idFrame);
   return new Promise((r) => {
-    nf(r);
+    return (idFrame = nf(r));
   });
 }
 

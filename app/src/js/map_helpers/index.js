@@ -1154,10 +1154,10 @@ export async function initMapx(o) {
     mx.panel_main.on("tab_change", async (id) => {
       try {
         if (id === "tools") {
-          const elInputs = document.getElementById("mxInputThemeColors");
-          if (isElement(elInputs) && isEmpty(elInputs)) {
-            await theme.linkInputs(elInputs);
-          }
+          const elThemeContainer = document.querySelector(
+            "#mxInputThemeColors"
+          );
+          await theme.initManager(elThemeContainer);
         }
       } catch (e) {
         console.error(e);
@@ -1357,7 +1357,6 @@ export function initMapListener(map) {
       highlighter.reset();
     },
   });
-
 
   theme.on("set_colors", (colors) => {
     highlighter.setOptions({

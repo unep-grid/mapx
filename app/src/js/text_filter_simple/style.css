@@ -10,4 +10,7 @@
 .txt-filter--box {
   border-bottom: 1px solid var(--mx_ui_input_accent);
 }
-
+.txt-filter--content-flex {
+  display: flex;
+  flex-direction: column;
+}
