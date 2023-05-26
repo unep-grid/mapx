@@ -1,3 +1,12 @@
+  - [1.12.1-alpha.5](https://github.com/unep-grid/mapx/tree/1.12.1-alpha.5) 
+
+    - APP
+        - SearchText module : added an option to reorder item with flex instead of hiding/showing items when matched
+        - Themes : fixed search text not working after tab / project change
+
+    - API
+        - Fixed an error in source summary : Cannot read properties of undefined (reading column_type)
+
   - [1.12.1-alpha.4](https://github.com/unep-grid/mapx/tree/1.12.1-alpha.4) 
 
     - APP / SDK
