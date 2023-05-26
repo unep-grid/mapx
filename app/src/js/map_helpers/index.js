@@ -1369,13 +1369,30 @@ export function initMapListener(map) {
     }
   });
 
+  map.on("moveend", () => {
+    if (highlighter.isNotSet()) {
+      return;
+    }
+    highlighter.update();
+  });
+
   map.on("mousemove", (e) => {
+    const layers = getLayerNamesByPrefix({
+      id: map.id,
+      prefix: "MX", // custom code could be MXCC ...
+    });
+    /**
+     * Change cursor when hovering mapx layers : invite for click
+     */
+    const features = map.queryRenderedFeatures(e.point, { layers: layers });
+    map.getCanvas().style.cursor = features.length ? "pointer" : "";
+
+    /**
+     * Change illuminaion direction accoding to mouse position
+     * - Quite intensive on GPU.
+     * - setPaintProperty seems buggy
+     */
     if (0) {
-      /**
-       * Change illuminaion direction accoding to mouse position
-       * - Quite intensive on GPU.
-       * - setPaintProperty seems buggy
-       */
       const elCanvas = map.getCanvas();
       const dpx = window.devicePixelRatio || 1;
       const wMap = elCanvas.width;
@@ -1390,16 +1407,6 @@ export function initMapListener(map) {
         deg
       );
     }
-
-    const layers = getLayerNamesByPrefix({
-      id: map.id,
-      prefix: "MX", // custom code could be MXCC ...
-    });
-    /**
-     * Change cursor when hovering mapx layers : invite for click
-     */
-    const features = map.queryRenderedFeatures(e.point, { layers: layers });
-    map.getCanvas().style.cursor = features.length ? "pointer" : "";
   });
 }
 

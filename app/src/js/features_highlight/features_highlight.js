@@ -92,19 +92,19 @@ class Highlighter {
    * hl.set({
    *   all: true,
    * });
-   * 
+   *
    * hl.set({
    *   filters: [
    *     { id: "MX-TC0O1-34A9Y-RYDJG", filter: ["<", ["get", "year"], 2000] },
    *   ],
    * });
-   * 
+   *
    * hl.set({
    *   filters: [
    *     { id: "MX-TC0O1-34A9Y-RYDJG", filter: [">=", ["get", "fatalities"], 7000] },
    *   ],
    * });
-   * 
+   *
    * hl.set({
    *   filters: [
    *     {
@@ -124,7 +124,7 @@ class Highlighter {
       console.error("Missing config. Use 'update' to re-use previous config");
       return;
     }
-    hl.reset("set");
+    hl.reset();
     Object.assign(hl._config, config);
     return hl.update({ animate: true });
   }
@@ -134,8 +134,8 @@ class Highlighter {
    */
   reset() {
     const hl = this;
-    hl._config = {};
     hl._clear();
+    hl._config = {};
     return hl.count();
   }
 
@@ -222,11 +222,12 @@ class Highlighter {
    */
   removeHighlightLayer(layer) {
     const hl = this;
-    if (!hl._map.getLayer(layer.id)) {
-      return;
-    }
     if (layer._animation instanceof Animate) {
       layer._animation.stop();
+    }
+    const mapLayer = hl._map.getLayer(layer.id);
+    if (isEmpty(mapLayer)) {
+      return;
     }
     hl._map.removeLayer(layer.id);
   }
@@ -247,9 +248,7 @@ class Highlighter {
       hl._config
     );
 
-    hl._items.clear();
-
-    if (isEmpty(config.point) && isEmpty(config.filters) && !config.all) {
+    if (hl.isNotSet()) {
       return;
     }
 
@@ -328,13 +327,18 @@ class Highlighter {
     return count;
   }
 
+  isNotSet() {
+    const hl = this;
+    const config = hl._config;
+    return isEmpty(config.point) && isEmpty(config.filters) && !config.all;
+  }
+
   /**
    * Create layers using items, matching gids
    */
   _update_layers() {
     const hl = this;
     const items = hl._items;
-    hl._layers.clear();
     for (const [id, item] of items) {
       item.filter = [
         "match",
