@@ -29,6 +29,7 @@ import {
   getBoundsArray,
   fitMaxBounds,
   validateBounds,
+  viewsLayersOrderUpdate,
 } from "../../../map_helpers/index.js";
 
 import {
@@ -391,27 +392,11 @@ class MapxResolversStatic extends ResolversBase {
   }
 
   /**
-   * Get list views with visible layers
-   * @return  {Array} Array of views
-   */
-  get_views_with_visible_layer() {
-    return getViewsLayersVisibles();
-  }
-
-  /**
    * Get list of available views id
    * @return  {Array} Array of id
    */
   get_views_id() {
     return getViewsForJSON().map((v) => v.id);
-  }
-
-  /**
-   * Get list of available views id
-   * @return  {Array} Array of id
-   */
-  get_views_id_open() {
-    return getViewsOpen();
   }
 
   /**
@@ -506,6 +491,36 @@ class MapxResolversStatic extends ResolversBase {
    */
   get_view_legend_image(opt) {
     return getViewLegendImage({ view: opt.idView, format: opt.format });
+  }
+
+  /**
+   * Set view layer z position
+   * @param {Object} opt Options
+   * @param {String[]} opt.order View order
+   * @return {Boolean} Done
+   * @example
+   * const views = await mapx.ask("get_views_with_visible_layer");
+   * const order = views.toReversed();
+   * const result = await mapx.ask("set_views_layer_order",{order});
+   */
+  set_views_layer_order(opt) {
+    return viewsLayersOrderUpdate(opt);
+  }
+
+  /**
+   * Get list views with visible layers
+   * @return  {Array} Array of views
+   */
+  get_views_layer_order() {
+    return getViewsLayersVisibles(true);
+  }
+
+  /**
+   * Get list views with visible layers (alias)
+   * @return  {Array} Array of views
+   */
+  get_views_with_visible_layer() {
+    return getViewsLayersVisibles(true);
   }
 
   /**

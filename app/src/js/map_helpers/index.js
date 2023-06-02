@@ -2406,7 +2406,7 @@ export function viewsLayersOrderUpdate(o) {
     const views = getViews({ id: o.id });
     const order = o.order || getViewsOrder() || views.map((v) => v.id) || null;
 
-    if (!order || order.length === 0) {
+    if (isEmpty(order)) {
       resolve(order);
     }
 

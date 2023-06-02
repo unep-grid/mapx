@@ -5,6 +5,7 @@ import {
   setProject,
   getMapData,
   getViewsOrder,
+  getViewsOpen,
 } from "../../../map_helpers/index.js";
 import { isView, isFunction, isObject } from "./../../../is_test";
 import { viewToMetaModal } from "../../../mx_helper_map_view_metadata.js";
@@ -338,6 +339,15 @@ class MapxResolversApp extends MapxResolversStatic {
   }
 
   /**
+   * Get list of view in "open" state
+   * -> from the views list : possibly without layer
+   * @return  {Array} Array of id
+   */
+  get_views_id_open() {
+    return getViewsOpen();
+  }
+
+  /**
    * Set views list filter (ui)
    * @param {Object} opt options
    * @param {Boolean} opt.reset Reset and remove all rules
@@ -390,14 +400,20 @@ class MapxResolversApp extends MapxResolversStatic {
     const vf = getMapData().viewsFilter;
     return vf.getRules();
   }
+
   /**
-   * Get views current absolute order (without groups)
-   * @return {Array}
+   * Get views current absolute order (without groups) in the list
+   * @return {Array} 
    */
-  get_views_order() {
+  get_views_list_order() {
     return getViewsOrder();
   }
-
+  get_views_order() {
+    console.warn(
+      "Deprecated: use 'get_views_list_order' to retrieve views order from the list"
+    );
+    return getViewsOrder();
+  }
   /**
    * Set state / views list order, groups, etc. Opened view will be closed
    * @param {Object} opt Options

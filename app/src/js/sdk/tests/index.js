@@ -71,6 +71,67 @@ mapx.once("ready", async () => {
     ],
   });
 
+  t.check("Views layer order", {
+    init: async () => {
+      const views = await mapx.ask("get_views");
+      const n = 5;
+      let i = 0;
+      const select = [];
+      for (const view of views) {
+        if (t.valid.isViewVtWithRules(view) && i++ <= n) {
+          await mapx.ask("view_add", { idView: view.id });
+          select.push(view.id);
+        }
+      }
+      return { select };
+    },
+    tests: [
+      {
+        name: "Set order",
+        test: async (r) => {
+          await mapx.ask("set_views_layer_order", { order: r.select });
+          const ordered = await mapx.ask("get_views_layer_order");
+          for (let i = 0; i < r.select.length; i++) {
+            if (r.select[i] !== ordered[i]) {
+              return false;
+            }
+          }
+          return true;
+        },
+      },
+      {
+        name: "Set random order",
+        test: async (r) => {
+          /**
+           * Assumes views id are random, sorting by id = sorting by random
+           */
+          const sorted = r.select.toSorted();
+          await mapx.ask("set_views_layer_order", { order: sorted });
+          const ordered = await mapx.ask("get_views_layer_order");
+          for (let i = 0; i < sorted.length; i++) {
+            if (sorted[i] !== ordered[i]) {
+              return false;
+            }
+          }
+          return true;
+        },
+      },
+      {
+        name: "Clean",
+        test: async (r) => {
+          /**
+           * Assumes views id are random, sorting by id = sorting by random
+           */
+          for (const idView of r.select) {
+            await mapx.ask("view_remove", { idView });
+          }
+          const result = await mapx.ask("get_views_layer_order");
+          return t.valid.isEmpty(result);
+        },
+      },
+    ],
+  });
+
   t.check("highlighter", {
     init: async () => {
       const res = {};

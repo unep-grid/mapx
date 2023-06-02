@@ -31,7 +31,6 @@ export class EventSimple {
     while (cL--) {
       const c = evt._cbs[cL];
       if (!c?.type) {
-        console.warn("EventSimple, missing fire cb type", c);
         continue;
       }
       const t = isArray(c.type) ? c.type : [c.type];
