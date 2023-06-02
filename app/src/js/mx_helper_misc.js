@@ -836,7 +836,7 @@ export function unicodeToChar(text) {
 }
 
 /**
- *  * Returns a function, that, as long as it continues to be invoked, will not
+ * Returns a function, that, as long as it continues to be invoked, will not
  * be triggered. The function will be called after it stops being called for
  * N milliseconds. If
  * @note https://davidwalsh.name/javascript-debounce-function
@@ -861,6 +861,25 @@ export function debounce(func, wait, immediate) {
     timeout = setTimeout(later, wait);
     if (callNow) {
       func.apply(context, args);
+    }
+  };
+}
+
+/**
+ * Throttles a function by delaying its execution.
+ *
+ * @param {Function} func - The function to be throttled.
+ * @param {number} delay - The amount of time in milliseconds that the function should be throttled.
+ * @returns {Function} - The throttled function.
+ */
+export function throttle(func, delay) {
+  let timeout = null; // Now each throttled function will have its own timer
+  return function (...args) {
+    if (!timeout) {
+      timeout = setTimeout(() => {
+        func.apply(this, args);
+        timeout = null; // Once function is executed, reset timeout
+      }, delay);
     }
   };
 }

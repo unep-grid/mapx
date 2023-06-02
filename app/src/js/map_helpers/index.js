@@ -7,8 +7,8 @@ import {
   mapboxgl,
   maps,
   highlighter,
+  settings,
 } from "./../mx.js";
-import { settings } from "./../settings";
 import { featuresToPopup } from "./features_to_popup.js";
 import { RadialProgress } from "./../radial_progress";
 import { handleViewClick } from "./../views_click";
@@ -51,7 +51,6 @@ import {
 import { initLog } from "./../mx_helper_log.js";
 import { dashboardHelper } from "./../dashboards/dashboard_instances.js";
 import {
-  date,
   updateIfEmpty,
   round,
   setBusy,
@@ -61,7 +60,6 @@ import {
   showSelectProject,
   showSelectLanguage,
   showLogin,
-  debounce,
   updateTitle,
   childRemover,
   getClickHandlers,
@@ -118,7 +116,6 @@ import {
   isViewVt,
   isHTML,
   isElement,
-  isNumeric,
   isString,
   isFunction,
   isBoolean,
@@ -140,6 +137,8 @@ import {
   isBoundsInsideBounds,
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
+import { viewFiltersInit } from "./view_filters.js";
+export * from "./view_filters.js";
 
 /**
  * Storage
@@ -2524,347 +2523,6 @@ export function getViewsOrder() {
 }
 
 /**
- * Create and listen to transparency sliders
-@param {Object} o Options
-@param {Object} o.view View data
-@param {String} o.idMap Map id
-*/
-export async function makeTransparencySlider(o) {
-  const view = o.view;
-  const el = document.querySelector(
-    "[data-transparency_for='" + view.id + "']"
-  );
-
-  if (!el) {
-    return;
-  }
-
-  const noUiSlider = await moduleLoad("nouislider");
-  const oldSlider = view._filters_tools.transparencySlider;
-  if (oldSlider) {
-    oldSlider.destroy();
-  }
-
-  const slider = noUiSlider.create(el, {
-    range: { min: 0, max: 100 },
-    step: 1,
-    start: 0,
-    tooltips: false,
-  });
-
-  slider._view = view;
-
-  /*
-   * Save the slider in the view
-   */
-  view._filters_tools.transparencySlider = slider;
-
-  /*
-   *
-   */
-  slider.on(
-    "update",
-    debounce((n, h) => {
-      const view = slider._view;
-      const opacity = 1 - n[h] * 0.01;
-      view._setOpacity({ opacity: opacity });
-    }, 10)
-  );
-}
-
-/**
- * Create and listen to numeric sliders
-@param {Object} o Options
-@param {Object} o.view View data
-@param {String} o.idMap Map id
-*/
-export async function makeNumericSlider(o) {
-  const view = o.view;
-
-  const el = document.querySelector(
-    "[data-range_numeric_for='" + view.id + "']"
-  );
-
-  if (!el) {
-    return;
-  }
-
-  const oldSlider = view._filters_tools.numericSlider;
-  if (oldSlider) {
-    oldSlider.destroy();
-  }
-
-  const summary = await getViewSourceSummary(view);
-
-  let min = path(summary, "attribute_stat.min", 0);
-  let max = path(summary, "attribute_stat.max", min);
-
-  if (view && min !== null && max !== null) {
-    if (min === max) {
-      min = min - 1;
-      max = max + 1;
-    }
-
-    const range = {
-      min: min,
-      max: max,
-    };
-    const noUiSlider = await moduleLoad("nouislider");
-
-    const slider = noUiSlider.create(el, {
-      range: range,
-      step: (min + max) / 1000,
-      start: [min, max],
-      connect: true,
-      behaviour: "drag",
-      tooltips: false,
-    });
-
-    slider._view = view;
-    slider._elMin = el.parentElement.querySelector(".mx-slider-range-min");
-    slider._elMax = el.parentElement.querySelector(".mx-slider-range-max");
-    slider._elDMax = el.parentElement.querySelector(".mx-slider-dyn-max");
-    slider._elDMin = el.parentElement.querySelector(".mx-slider-dyn-min");
-
-    /**
-     * update min / max range
-     */
-    slider._elMin.innerText = range.min;
-    slider._elMax.innerText = range.max;
-
-    /*
-     * Save the slider in the view
-     */
-    view._filters_tools.numericSlider = slider;
-
-    /*
-     *
-     */
-    slider.on(
-      "update",
-      debounce((n) => {
-        const view = slider._view;
-        const elDMin = slider._elDMin;
-        const elDMax = slider._elDMax;
-        const k = path(view, "data.attribute.name", "");
-
-        /* Update text values*/
-        if (n[0]) {
-          elDMin.innerHTML = n[0];
-        }
-        if (n[1]) {
-          elDMax.innerHTML = " – " + n[1];
-        }
-
-        const filter = [
-          "any",
-          [
-            "all",
-            ["has", k],
-            [
-              "any",
-              ["!=", ["typeof", ["get", k]], "number"],
-              [
-                "all",
-                ["<=", ["get", k], n[1] * 1],
-                [">=", ["get", k], n[0] * 1],
-              ],
-            ],
-          ],
-        ];
-
-        if (isArray(view._null_filter)) {
-          /**
-           * Values should be filtered except for null values,
-           * always visible when using the slider filter
-           */
-          filter.push(view._null_filter);
-        }
-
-        view._setFilter({
-          filter: filter,
-          type: "numeric_slider",
-        });
-      }, 100)
-    );
-  }
-}
-
-/**
- * Create and listen to time sliders
- */
-export async function makeTimeSlider(o) {
-  const k = {};
-  k.t0 = "mx_t0";
-  k.t1 = "mx_t1";
-
-  const view = o.view;
-  const elView = getViewEl(view);
-  let el;
-  if (elView) {
-    el = elView.querySelector('[data-range_time_for="' + view.id + '"]');
-    if (!el) {
-      return;
-    }
-  }
-  const oldSlider = view._filters_tools.timeSlider;
-  if (oldSlider) {
-    oldSlider.destroy();
-  }
-
-  const summary = await getViewSourceSummary(view);
-  const extent = path(summary, "extent_time", {});
-  const attributes = path(summary, "attributes", []);
-
-  /*
-   * Create a time slider for each time enabled view
-   */
-  /* from slider to num */
-  const fFrom = function (x) {
-    return x;
-  };
-  /* num to slider */
-  const fTo = function (x) {
-    return Math.round(x);
-  };
-
-  if (extent.min || extent.max) {
-    const start = [];
-
-    if (extent.min && extent.max) {
-      const hasT0 = attributes.indexOf(k.t0) > -1;
-      const hasT1 = attributes.indexOf(k.t1) > -1;
-      let min = extent.min * 1000;
-      let max = extent.max * 1000;
-
-      if (min === max) {
-        min = min - 1;
-        max = max + 1;
-      }
-
-      const range = {
-        min: min,
-        max: max,
-      };
-
-      start.push(min);
-      start.push(max);
-
-      const noUiSlider = await moduleLoad("nouislider");
-
-      const slider = noUiSlider.create(el, {
-        range: range,
-        step: 24 * 60 * 60 * 1000,
-        start: start,
-        connect: true,
-        behaviour: "drag",
-        tooltips: false,
-        format: {
-          to: fTo,
-          from: fFrom,
-        },
-      });
-
-      /**
-       * Save slider in the view and view ref in target
-       */
-      slider._view = view;
-      slider._elDMin = el.parentElement.querySelector(".mx-slider-dyn-min");
-      slider._elDMax = el.parentElement.querySelector(".mx-slider-dyn-max");
-      slider._elMin = el.parentElement.querySelector(".mx-slider-range-min");
-      slider._elMax = el.parentElement.querySelector(".mx-slider-range-max");
-
-      slider._elMin.innerText = date(range.min);
-      slider._elMax.innerText = date(range.max);
-
-      view._filters_tools.timeSlider = slider;
-
-      slider.on(
-        "update",
-        debounce((t) => {
-          const view = slider._view;
-          const elDMax = slider._elDMax;
-          const elDMin = slider._elDMin;
-          /* Update text values*/
-          if (t[0]) {
-            elDMin.innerHTML = date(t[0]);
-          }
-          if (t[1]) {
-            elDMax.innerHTML = " – " + date(t[1]);
-          }
-
-          const filterAll = ["all"];
-
-          const filter = [
-            "any",
-            ["==", ["typeof", ["get", k.t0]], "string"],
-            ["==", ["typeof", ["get", k.t1]], "string"],
-          ];
-
-          //filter.push(["==", ["get", k.t0], -9e10]);
-          //filter.push(["==", ["get", k.t1], -9e10]);
-
-          if (hasT0 && hasT1) {
-            filterAll.push(
-              ...[
-                ["<=", ["get", k.t0], t[1] / 1000],
-                [">=", ["get", k.t1], t[0] / 1000],
-              ]
-            );
-          } else if (hasT0) {
-            filterAll.push(
-              ...[
-                [">=", ["get", k.t0], t[0] / 1000],
-                ["<=", ["get", k.t0], t[1] / 1000],
-              ]
-            );
-          }
-          filter.push(filterAll);
-
-          view._setFilter({
-            filter: filter,
-            type: "time_slider",
-          });
-        }, 100)
-      );
-    }
-  }
-}
-
-/**
- * Handle view data text filter listener
- * @param {object} o options
- * @param {string} o.id map id
- */
-export function handleViewValueFilterText(o) {
-  /*
-   * Set listener for each view search input
-   * NOTE: keyup is set globaly, on the whole view list
-   */
-  return function (event) {
-    let action, el, idView, search, options;
-    el = event.target;
-
-    idView = el.dataset.view_action_target;
-    action = el.dataset.view_action_key;
-
-    if (!idView || action !== "view_search_value") {
-      return;
-    }
-
-    search = event.target.value;
-
-    options = {
-      id: o.id,
-      idView: idView,
-      search: search,
-    };
-
-    filterViewValues(options);
-  };
-}
-
-/**
  * Remove view from views list and geojson database
  * @param {Object} view View to remove from the list
  */
@@ -3074,148 +2732,6 @@ export function getViewsActive() {
  */
 export function getViewEl(view) {
   return view._el || document.querySelector("[data-view_id='" + view.id + "']");
-}
-
-/**
- * Filter current view and store rules
- * @param {Object} o Options
- * @param {Array} o.filter Array of filter
- * @param {String} o.type Type of filter : style, legend, time_slider, search_box or numeric_slider
- */
-export function viewSetFilter(o) {
-  o = o || {};
-  const m = getMap();
-  const view = this;
-  const idView = view.id;
-  const filterView = view._filters;
-  const filter = o.filter;
-  const type = o.type ? o.type : "default";
-  const layers = getLayerByPrefix({ prefix: idView });
-  const hasFilter = isArray(filter) && filter.length > 1;
-  const filterNew = [];
-
-  events.fire({
-    type: "view_filter",
-    data: {
-      idView: idView,
-      filter: filter,
-    },
-  });
-
-  /**
-   * Add filter to filter type e.g. {legend:["all"],...} -> {legend:["all",["==","value","a"],...}
-   * ... or reset to default null
-   */
-  filterView[type] = hasFilter ? filter : ["all"];
-
-  /**
-   * Filter object to filter array
-   */
-  for (let t in filterView) {
-    let f = filterView[t];
-    if (f) {
-      filterNew.push(f);
-    }
-  }
-
-  /**
-   * Apply filters to each layer, in top of base filters
-   */
-  for (let layer of layers) {
-    let filterOrig = path(layer, "metadata.filter", []);
-    let filterFinal = [];
-    if (isEmpty(filterOrig)) {
-      filterFinal.push("all", ...filterNew);
-    } else {
-      filterFinal.push(...filterOrig, ...filterNew);
-    }
-    m.setFilter(layer.id, filterFinal);
-  }
-
-  events.fire({
-    type: "view_filtered",
-    data: {
-      idView: idView,
-      filter: filterView,
-    },
-  });
-}
-
-/**
- * Set this view opacity
- * @param {Object} o Options
- * @param {Array} o.opacity
- */
-export function viewSetOpacity(o) {
-  o = o || {};
-  const view = this;
-  const idView = view.id;
-  const opacity = o.opacity;
-  const idMap = view._idMap ? view._idMap : settings.map.id;
-  const map = getMap(idMap);
-  const layers = getLayerByPrefix({
-    map: map,
-    prefix: idView,
-  });
-
-  layers.forEach((layer) => {
-    const type = layer.type === "symbol" ? "icon" : layer.type;
-    const property = type + "-opacity";
-    try {
-      map.setPaintProperty(layer.id, property, opacity);
-    } catch (e) {
-      console.error(e);
-    }
-  });
-}
-
-/**
- * Plot distribution
- * @param {Object} o options
- * @param {Object} o.data Object containing year "year" and value "n"
- * @param {Element} o.el Element where to append the plot
-# @param {string} o.type Type of plot. By default = density
-*/
-export function plotTimeSliderData(o) {
-  const data = o.data;
-  const el = o.el;
-  o.type = o.type ? o.type : "density";
-
-  if (!data || !data.year || !data.n) {
-    return;
-  }
-
-  const obj = {
-    labels: data.year,
-    series: [data.n],
-  };
-
-  const options = {
-    seriesBarDistance: 100,
-    height: "30px",
-    showPoint: false,
-    showLine: false,
-    showArea: true,
-    fullWidth: true,
-    showLabel: false,
-    axisX: {
-      showGrid: false,
-      showLabel: false,
-      offset: 0,
-    },
-    axisY: {
-      showGrid: false,
-      showLabel: false,
-      offset: 0,
-    },
-    chartPadding: 0,
-    low: 0,
-  };
-
-  divPlot = document.createElement("div");
-  divPlot.className = "ct-chart ct-square mx-slider-chart";
-  el.append(divPlot);
-  cL = new Chartist.Line(divPlot, obj, options);
 }
 
 /**
@@ -4253,38 +3769,38 @@ export async function viewLayersAddVt(o) {
   /**
    * Add layer and legends
    */
-  if (layers.length > 0) {
-    /**
-     * Apply filters for custom style
-     * TODO: this could probably be done elsewhere
-     */
-    if (out.config.useStyleCustom && isFunction(view._setFilter)) {
-      view._setFilter({
-        filter: out?.config?.styleCustom.filter || ["all"],
-        type: "custom_style",
-      });
-    }
-
-    /**
-     * Set legend
-     */
-    if (addLegend) {
-      setVtLegend({
-        rules: rules,
-        view: view,
-        elLegendContainer: o.elLegendContainer,
-        addTitle: o.addTitle,
-      });
-    }
-
-    /*
-     * Add layers to the map
-     */
-    await addLayers(layers, o.before);
-    await viewsLayersOrderUpdate();
-  } else {
+  if (layers.length == 0) {
     return false;
   }
+  /**
+   * Apply filters for custom style
+   * TODO: this could probably be done elsewhere
+   */
+  if (out.config.useStyleCustom && isFunction(view._setFilter)) {
+    view._setFilter({
+      filter: out?.config?.styleCustom.filter || ["all"],
+      type: "custom_style",
+    });
+  }
+
+  /**
+   * Set legend
+   */
+  if (addLegend) {
+    setVtLegend({
+      rules: rules,
+      view: view,
+      elLegendContainer: o.elLegendContainer,
+      addTitle: o.addTitle,
+    });
+  }
+
+  /*
+   * Add layers to the map
+   */
+  await addLayers(layers, o.before);
+  await viewsLayersOrderUpdate();
+  return true;
 }
 
 /**
@@ -4392,91 +3908,45 @@ function addLayers(layers, idBefore) {
 }
 
 /**
- * Add filtering system to views
- * @param {String|Object} idView id or View to update
- * @return {Promise}
+ * Init view item content
+ * -> Render templates for options, controls and filters
+ * @param {String} id View id
  */
-export function viewFiltersInit(idView) {
-  const view = getView(idView);
-  if (!isView(view)) {
-    return;
-  }
-  /**
-   * Add methods
-   */
-  view._filters = {
-    style: ["all"],
-    legend: ["all"],
-    time_slider: ["all"],
-    search_box: ["all"],
-    numeric_slider: ["all"],
-    custom_style: ["all"],
-  };
-  view._setFilter = viewSetFilter;
-  view._setOpacity = viewSetOpacity;
-}
-
 export async function viewUiContent(id) {
   const view = getView(id);
   if (!isView(view)) {
-    return;
+    return false;
   }
 
   const elView = getViewEl(view);
   const hasViewEl = isElement(elView);
 
-  if (hasViewEl) {
-    const elOptions = elView.querySelector(
-      `[data-view_options_for='${view.id}']`
-    );
-
-    if (elOptions) {
-      elOptions.innerHTML = mx.templates.viewListOptions(view);
-    }
-    const elControls = elView.querySelector(
-      `#view_contols_container_${view.id}`
-    );
-    if (elControls) {
-      elControls.innerHTML = mx.templates.viewListControls(view);
-    }
-    const elFilters = elView.querySelector(
-      `#view_filters_container_${view.id}`
-    );
-    if (elFilters) {
-      elFilters.innerHTML = mx.templates.viewListFilters(view);
-    }
-    return true;
+  if (!hasViewEl) {
+    return false;
   }
-}
-
-/**
- * Add sliders and searchbox
- * @param {String|Object} id id or View to update
- */
-export async function viewFilterToolsInit(id, opt) {
-  opt = Object.assign({}, { clear: false }, opt);
-  try {
-    const view = getView(id);
-    if (!isView(view)) {
-      return;
-    }
-    const idMap = settings.map.id;
-    if (view._filters_tools) {
-      return;
-    }
-    view._filters_tools = {};
-    const proms = [];
-    /**
-     * Add interactive module
-     */
-    proms.push(makeTimeSlider({ view: view, idMap: idMap }));
-    proms.push(makeNumericSlider({ view: view, idMap: idMap }));
-    proms.push(makeTransparencySlider({ view: view, idMap: idMap }));
-    proms.push(makeSearchBox({ view: view, idMap: idMap }));
-    await Promise.all(proms);
-  } catch (e) {
-    throw new Error(e);
+  /**
+   * Options
+   */
+  const elOptions = elView.querySelector(
+    `[data-view_options_for='${view.id}']`
+  );
+  if (elOptions) {
+    elOptions.innerHTML = mx.templates.viewListOptions(view);
   }
+
+  /**
+   * Controls and filters
+   */
+  const elControls = elView.querySelector(`#view_contols_container_${view.id}`);
+  const elFilters = elView.querySelector(`#view_filters_container_${view.id}`);
+
+  if (elControls) {
+    elControls.innerHTML = mx.templates.viewListControls(view);
+  }
+  if (elFilters) {
+    elFilters.innerHTML = mx.templates.viewListFilters(view);
+  }
+  return true;
 }
 
 /**
@@ -4496,7 +3966,6 @@ export async function viewModulesRemove(view) {
 
   if (isFunction(view._onRemoveCustomView)) {
     await view._onRemoveCustomView();
-    console.log("remove cc module");
   }
 
   if (isElement(view._elLegend)) {
@@ -4861,111 +4330,6 @@ export function getLayersPropertiesAtPoint(opt) {
       resolve(out);
     });
   }
-}
-
-/*selectize version*/
-export async function makeSearchBox(o) {
-  const view = o.view;
-  const el = document.querySelector(`[data-search_box_for='${view.id}']`);
-  if (!el) {
-    return;
-  }
-  const elViewParent = getViewEl(view).parentElement;
-
-  await moduleLoad("selectize");
-
-  const attr = path(view, "data.attribute.name");
-
-  const summary = await getViewSourceSummary(view);
-
-  const choices = summaryToChoices(summary);
-
-  const searchBox = $(el)
-    .selectize({
-      dropdownParent: elViewParent,
-      placeholder: "Search",
-      choices: choices,
-      valueField: "value",
-      labelField: "label",
-      searchField: ["label"],
-      options: choices,
-      onChange: selectOnChange,
-    })
-    .data().selectize;
-
-  /**
-   * Save selectr object in the view
-   */
-  searchBox.view = view;
-  view._filters_tools.searchBox = searchBox;
-
-  return searchBox;
-
-  function selectOnChange() {
-    const view = this.view;
-    const listObj = this.getValue();
-    const filter = ["any"];
-    listObj.forEach(function (x) {
-      filter.push(["==", ["get", attr], x]);
-    });
-    view._setFilter({
-      filter: filter,
-      type: "search_box",
-    });
-  }
-
-  function summaryToChoices(summary) {
-    const table = path(summary, "attribute_stat.table", []);
-    return table.map((r) => {
-      return {
-        value: r.value,
-        label: `${r.value} (${r.count})`,
-      };
-    });
-  }
-}
-
-export function filterViewValues(o) {
-  const search = path(o, "search", "").trim();
-  const attr = o.attribute;
-  const idView = o.idView;
-  const operator = o.operator || ">=";
-  const filterType = o.filterType || "filter";
-  const hasNumeric = isNumeric(search);
-  const view = getView(idView);
-  const map = getMap();
-  const idSource = `${idView}-SRC`;
-  const filter = ["all"];
-
-  if (search) {
-    if (hasNumeric) {
-      filter.push([operator, ["get", attr], search * 1]);
-    } else {
-      const features = map.querySourceFeatures(idSource, {
-        sourceLayer: idView,
-      });
-
-      const values = {};
-      for (const f of features) {
-        const value = f.properties[attr];
-        const splited = value.split(/\s*,\s*/);
-        if (splited.includes(search)) {
-          values[value] = true;
-        }
-      }
-
-      const valuesDistinct = Object.keys(values);
-
-      if (isNotEmpty(valuesDistinct)) {
-        filter.push(["in", ["get", attr], ...valuesDistinct]);
-      }
-    }
-  }
-
-  view._setFilter({
-    filter: filter,
-    type: filterType,
-  });
 }
 
 /**
@@ -6069,7 +5433,6 @@ export function randomUiColorAuto() {
  * Notify binding for shiny
  * @param {Object} NotifyCenter notify options
  */
-
 export async function shinyNotify(opt) {
   if (nc instanceof NotifCenter) {
     nc.notify(opt.notif);
@@ -6101,78 +5464,4 @@ async function getSearchApiKey() {
   }
 }
 
-export async function chaosTest(opt) {
-  opt = Object.assign({}, { run: 5, batch: 5, run_timeout: 10 * 1000 }, opt);
-  const views = getViews();
-  const layersBefore = getLayerNamesByPrefix();
-  const viewsBefore = getViewsOpen();
 
-  for (let i = 0; i < opt.run; i++) {
-    const tt = [];
-    for (let j = 0; j < opt.batch; j++) {
-      tt.push(t());
-    }
-    const promOk = Promise.all(tt);
-    const promFail = stopIfTimeout(opt.run_timeout);
-    await Promise.race([promOk, promFail]);
-    await wait(100);
-  }
-
-  return valid();
-
-  /**
-   * Helpers
-   */
-  function valid() {
-    /*
-     * Check state before adding
-     */
-    const layersAfter = getLayerNamesByPrefix();
-    const viewsAfter = getViewsOpen();
-
-    /**
-     * Validation
-     */
-    const validLN = layersBefore.length === layersAfter.length;
-    const validVN = viewsBefore.length === viewsAfter.length;
-
-    if (!validLN || !validVN) {
-      return false;
-    }
-
-    const hasLayers = layersBefore.reduce(
-      (a, c) => a && layersAfter.includes(c),
-      true
-    );
-
-    const hasViews = viewsBefore.reduce(
-      (a, c) => a && viewsAfter.includes(c),
-      true
-    );
-
-    if (!hasLayers || !hasViews) {
-      return false;
-    }
-
-    return true;
-  }
-
-  async function stopIfTimeout(t) {
-    await wait(t);
-    throw new Error(`Run Timeout after : + ${t * 1} ms`);
-  }
-
-  async function t() {
-    const pos = Math.floor(Math.random() * views.length);
-    const view = views[pos];
-    await viewAdd(view);
-    await wait(rt(1000));
-    await viewRemove(view);
-  }
-  function wait(t) {
-    return new Promise((r) => setTimeout(r, t || 100));
-  }
-  function rt(t) {
-    return Math.round(Math.random() * t);
-  }
-}

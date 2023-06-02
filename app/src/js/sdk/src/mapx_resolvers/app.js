@@ -2,7 +2,6 @@ import { getToken, setToken } from "./../../../mx_helper_cookies.js";
 import { fetchProjects } from "./../../../mx_helper_map_project_fetch.js";
 import {
   getView,
-  chaosTest,
   setProject,
   getMapData,
   getViewsOrder,
@@ -15,6 +14,7 @@ import { isStringRange, isString, isEmpty } from "../../../is_test/index.js";
 import { settings } from "./../../../settings";
 import { wsGetSourcesListEdit } from "./../../../source";
 import { ws_tools } from "./../../../mx.js";
+import { ChaosTest } from "../../../map_helpers/chaos_test.js";
 
 /**
  * MapX resolvers available in app only
@@ -65,8 +65,8 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} pass
    */
   async launch_chaos_test(opt) {
-    opt = Object.assign({}, { run: 5, batch: 5, run_timeout: 1000 }, opt);
-    const res = await chaosTest(opt);
+    const chaos = new ChaosTest(opt);
+    const res = await chaos.start();
     return res;
   }
 

@@ -135,16 +135,15 @@ async function handleViewClick(event) {
         comment: "target is the delete geojson button",
         test: dataset.view_action_key === "btn_opt_delete_geojson",
         action: async () => {
-          
           const ok = await modalConfirm({
             title: elSpanTranslate("delete_confirm_geojson_modal_title"),
             content: elSpanTranslate("delete_confirm_geojson_modal"),
           });
-          
+
           if (!ok) {
             return;
           }
-          
+
           const arg = dataset;
           await viewDelete(arg.view_action_target);
         },
@@ -153,7 +152,6 @@ async function handleViewClick(event) {
         comment: "target is the import linked view button",
         test: dataset.view_action_key === "btn_opt_import_view_linked",
         action: async () => {
-
           const ok = await modalConfirm({
             title: elSpanTranslate("import_view_linked_title"),
             content: elSpanTranslate("import_view_linked"),

@@ -30,6 +30,18 @@ import {
   fitMaxBounds,
   validateBounds,
 } from "../../../map_helpers/index.js";
+
+import {
+  viewSetOpacity,
+  viewGetOpacityValue,
+  viewSetNumericFilter,
+  viewGetNumericFilterValues,
+  viewSetTextFilter,
+  viewGetTextFilterValues,
+  viewSetTimeFilter,
+  viewGetTimeFilterValues,
+} from "../../../map_helpers/view_filters.js";
+
 import { mapComposerModalAuto } from "../../../map_composer";
 import {
   commonLocFitBbox,
@@ -56,7 +68,7 @@ import { viewsListAddSingle } from "../../../mx_helper_map_view_ui.js";
 import { modalCloseAll } from "../../../mx_helper_modal.js";
 import { toggleSpotlight } from "../../../mx_helper_map_pixop.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
-import { highlighter, theme, ws } from "./../../../mx";
+import { settings, highlighter, theme, ws } from "./../../../mx";
 
 /**
  * MapX resolvers available in static and app
@@ -327,6 +339,7 @@ class MapxResolversStatic extends ResolversBase {
    * @param {Object} opt Options
    * @param {String} opt.idView Id of the view
    * @param {Array} opt.stats Stats to retrieve. ['base', 'attributes', 'temporal', 'spatial']
+   * @param {String} opt.idAttr Attribute for stat (default = attrbute of the style)
    * @return {Object} Source summary
    */
   get_view_source_summary(opt) {
@@ -498,66 +511,51 @@ class MapxResolversStatic extends ResolversBase {
   /**
    * Filter view layer by text (if attribute is text)
    * @param {Options} opt Options
-   * @return {Boolean} done
+   * @param {String} opt.idView View id
+   * @param {array} opt.values Values to use as filter
+   * @param {string} opt.attribute Attribute to use as filter (default from style)
+   * @return {void}
    */
-  set_view_layer_filter_text(opt) {
-    return this._apply_filter_layer_select.bind(this)(
-      "searchBox",
-      "setValue",
-      opt
-    );
+  async set_view_layer_filter_text(opt) {
+    const rslv = this;
+    if (settings.mode.static) {
+      viewSetTextFilter(opt);
+    } else {
+      await rslv._apply_filter_layer_select("searchBox", "setValue", opt);
+    }
   }
+
   /**
-   * Get current search box item
+   * Get current text filter values for a given view
+   * @param {String} opt.idView View id
    * @param {Options} opt Options
-   * @return {Boolean} done
+   * @return {array} values
    */
   get_view_layer_filter_text(opt) {
-    return this._apply_filter_layer_select.bind(this)(
-      "searchBox",
-      "getValue",
-      opt
-    );
+    return viewGetTextFilterValues(opt);
   }
 
   /**
    * Filter view layer by numeric (if attribute is numeric)
    * @param {Options} opt Options
    * @param {String} opt.idView Target view id
-   * @param {Numeric} opt.value Value
+   * @param {String} opt.attribute Attribute name (default from style)
+   * @param {Numeric} opt.from Value
+   * @param {Numeric} opt.to Value
+   * @param {array} opt.value Values (Deprecated)
+   * @return {void}
    */
-  set_view_layer_filter_numeric(opt) {
-    return this._apply_filter_layer_slider.bind(this)(
-      "numericSlider",
-      "set",
-      opt
-    );
-  }
-
-  /**
-   * Filter view layer by time ( if posix mx_t0 and/or mx_t1 attributes exist )
-   * @param {Options} opt Options
-   * @param {String} opt.idView Target view id
-   * @param {Numeric | Array} opt.value Value or range of value
-   * @return null
-   */
-  set_view_layer_filter_time(opt) {
-    return this._apply_filter_layer_slider.bind(this)("timeSlider", "set", opt);
-  }
-
-  /**
-   * Set layer transarency (0 : visible, 100 : 100% transparent)
-   * @param {Options} opt Options
-   * @param {String} opt.idView Target view id
-   * @param {Numeric} opt.value Value
-   * @return null
-   */
-  set_view_layer_transparency(opt) {
-    return this._apply_filter_layer_slider.bind(this)(
-      "transparencySlider",
-      "set",
-      opt
-    );
+  async set_view_layer_filter_numeric(opt) {
+    const rslv = this;
+    if (opt.value) {
+      opt.from = Math.min(...opt.value);
+      opt.to = Math.max(...opt.value);
+    }
+    if (settings.mode.static) {
+      viewSetNumericFilter(opt);
+    } else {
+      await rslv._apply_filter_layer_slider("numericSlider", "set", opt);
+    }
   }
 
   /**
@@ -566,8 +564,24 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.idView Target view id
    * @return {Number|Array} values
    */
-  get_view_layer_filter_numeric() {
-    return this._apply_filter_layer_slider.bind(this)("numericSlider", "get");
+  get_view_layer_filter_numeric(opt) {
+    return viewGetNumericFilterValues(opt);
+  }
+
+  /**
+   * Filter view layer by time ( if posix mx_t0 and/or mx_t1 attributes exist )
+   * @param {Options} opt Options
+   * @param {String} opt.idView Target view id
+   * @param {Numeric | Array} opt.value Value or range of value
+   * @return {void}
+   */
+  async set_view_layer_filter_time(opt) {
+    const rslv = this;
+    if (settings.mode.static) {
+      viewSetTimeFilter(opt);
+    } else {
+      await rslv._apply_filter_layer_slider("timeSlider", "set", opt);
+    }
   }
 
   /**
@@ -576,8 +590,24 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.idView Target view id
    * @return {Number|Array} values
    */
-  get_view_layer_filter_time() {
-    return this._apply_filter_layer_slider.bind(this)("timeSlider", "get");
+  get_view_layer_filter_time(opt) {
+    return viewGetTimeFilterValues(opt);
+  }
+
+  /**
+   * Set layer transarency (0 : visible, 100 : 100% transparent)
+   * @param {Options} opt Options
+   * @param {String} opt.idView Target view id
+   * @param {Numeric} opt.value Value
+   * @return {void}
+   */
+  async set_view_layer_transparency(opt) {
+    const rslv = this;
+    if (settings.mode.static) {
+      viewSetOpacity(opt);
+    } else {
+      await rslv._apply_filter_layer_slider("transparencySlider", "set", opt);
+    }
   }
 
   /**
@@ -586,11 +616,8 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.idView Target view id
    * @return {Number} value
    */
-  get_view_layer_transparency() {
-    return this._apply_filter_layer_slider.bind(this)(
-      "transparencySlider",
-      "get"
-    );
+  get_view_layer_transparency(opt) {
+    return viewGetOpacityValue(opt);
   }
 
   /**

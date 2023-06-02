@@ -25,6 +25,11 @@
     "fr": "Cette vue n'est pas valide"
   },
   {
+    "key": "err_config_invalid",
+    "en": "This configuration is not valid",
+    "fr": "Cette configuration n'est pas valide"
+  },
+  {
     "key": "err_layer_not_found",
     "en": "Layer or view not found ${idView}",
     "fr": "Couche ou vue introuvable ${idView}"

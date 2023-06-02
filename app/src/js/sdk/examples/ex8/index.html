@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Examples</title>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+
+    <style>
+      .input-group {
+        padding: 5px;
+      }
+      .input-group label {
+        margin-bottom: 5px;
+        display: block;
+      }
+      .button-reset {
+        display: inline;
+        border: none;
+        padding: 0;
+        margin: 0;
+        background: none;
+        color: inherit;
+        font: inherit;
+        text-align: inherit;
+        cursor: pointer;
+        scale: 1;
+      }
+      .button-reset:hover,
+      .button-reset:focus {
+        scale: 1.1;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/nouislider@15.7.0/dist/nouislider.min.css"
+    />
+    <link
+      href="https://unpkg.com/tom-select@2.2.2/dist/css/tom-select.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <h1>Example filters</h1>
+    <div class="container">
+      <!--inputs-->
+      <div class="pane-left item">
+        <!--opacity-->
+        <div class="input-group">
+          <label for="setOpacity"
+            >Set opacity <span id="resOpacity">100%</span>
+          </label>
+          <div id="setOpacity"></div>
+        </div>
+        <!--time-->
+
+        <div class="input-group">
+          <label for="setTime">
+            <button class="button-reset" id="btnAnimTime"></button>
+            <span>Dates:</span>
+            <span id="resTime"></span>
+          </label>
+          <div id="setTime"></div>
+        </div>
+
+        <!--numeric-->
+
+        <div class="input-group">
+          <label for="setNumeric"
+            >Fatalities <span id="resNumeric"></span>
+          </label>
+          <div id="setNumeric"></div>
+        </div>
+        <!--text-->
+        <div class="input-group">
+          <label for="setText">Set text n=<span id="resText">0</span> </label>
+          <select
+            id="setText"
+            placeholder="Search"
+            multiple
+            autocomplete="off"
+          ></select>
+        </div>
+      </div>
+      <!--map -->
+      <div id="mapx" class="mapx pane-right item"></div>
+    </div>
+    <p>Source <a href="index.js" target="_blank">>></a></p>
+    <p>Examples home <a href="/index.html">>></a></p>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

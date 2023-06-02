@@ -345,7 +345,7 @@ async function showSourceTableAttributeModal(opt) {
     }, 200);
   }
 
-  async function destroy() {
+  function destroy() {
     if (destroyed) {
       return;
     }

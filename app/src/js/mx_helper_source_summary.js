@@ -39,7 +39,9 @@ const def = {
  * @return {Object} source summary
  */
 export async function getViewSourceSummary(view, opt) {
+
   view = getView(view);
+  
   opt = Object.assign(
     {},
     {
