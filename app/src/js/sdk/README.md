@@ -166,9 +166,10 @@ MapX resolvers available in app only
     * [.get_project_collections(opt)](#MapxResolversApp+get_project_collections) ⇒ <code>Array</code>
     * [.is_user_guest()](#MapxResolversApp+is_user_guest) ⇒ <code>Boolean</code>
     * [.get_views_list_state()](#MapxResolversApp+get_views_list_state) ⇒ <code>Array</code>
+    * [.get_views_id_open()](#MapxResolversApp+get_views_id_open) ⇒ <code>Array</code>
     * [.set_views_list_filters(opt)](#MapxResolversApp+set_views_list_filters) ⇒ <code>Boolean</code>
     * [.get_views_list_filters()](#MapxResolversApp+get_views_list_filters) ⇒ <code>Array</code>
-    * [.get_views_order()](#MapxResolversApp+get_views_order) ⇒ <code>Array</code>
+    * [.get_views_list_order()](#MapxResolversApp+get_views_list_order) ⇒ <code>Array</code>
     * [.set_views_list_state(opt)](#MapxResolversApp+set_views_list_state) ⇒ <code>Boolean</code>
     * [.set_views_list_sort(opt)](#MapxResolversApp+set_views_list_sort) ⇒ <code>Boolean</code>
     * [.is_views_list_sorted(opt)](#MapxResolversApp+is_views_list_sorted) ⇒ <code>Boolean</code>
@@ -362,6 +363,14 @@ Test if the current user is guest
 Get views list state
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+<a name="MapxResolversApp+get_views_id_open"></a>
+
+#### mapxResolversApp.get\_views\_id\_open() ⇒ <code>Array</code>
+Get list of view in "open" state
+-> from the views list : possibly without layer
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+**Returns**: <code>Array</code> - Array of id  
 <a name="MapxResolversApp+set_views_list_filters"></a>
 
 #### mapxResolversApp.set\_views\_list\_filters(opt) ⇒ <code>Boolean</code>
@@ -416,10 +425,10 @@ Get views list filter rules
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 **Returns**: <code>Array</code> - Rule list  
-<a name="MapxResolversApp+get_views_order"></a>
+<a name="MapxResolversApp+get_views_list_order"></a>
 
-#### mapxResolversApp.get\_views\_order() ⇒ <code>Array</code>
-Get views current absolute order (without groups)
+#### mapxResolversApp.get\_views\_list\_order() ⇒ <code>Array</code>
+Get views current absolute order (without groups) in the list
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 <a name="MapxResolversApp+set_views_list_state"></a>
@@ -621,22 +630,23 @@ MapX resolvers available in static and app
     * [.set_language(opt)](#MapxResolversStatic+set_language) ⇒ <code>Boolean</code>
     * [.get_languages()](#MapxResolversStatic+get_languages) ⇒ <code>Array</code>
     * [.get_views()](#MapxResolversStatic+get_views) ⇒ <code>Array</code>
-    * [.get_views_with_visible_layer()](#MapxResolversStatic+get_views_with_visible_layer) ⇒ <code>Array</code>
     * [.get_views_id()](#MapxResolversStatic+get_views_id) ⇒ <code>Array</code>
-    * [.get_views_id_open()](#MapxResolversStatic+get_views_id_open) ⇒ <code>Array</code>
     * [.get_view_meta_vt_attribute(opt)](#MapxResolversStatic+get_view_meta_vt_attribute) ⇒ <code>Object</code>
     * [.get_view_meta(opt, view)](#MapxResolversStatic+get_view_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.get_view_table_attribute_config(opt)](#MapxResolversStatic+get_view_table_attribute_config) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Array.&lt;Object&gt;</code>
     * [.get_view_legend_image(opt)](#MapxResolversStatic+get_view_legend_image) ⇒ <code>String</code>
-    * [.set_view_layer_filter_text(opt)](#MapxResolversStatic+set_view_layer_filter_text) ⇒ <code>Boolean</code>
-    * [.get_view_layer_filter_text(opt)](#MapxResolversStatic+get_view_layer_filter_text) ⇒ <code>Boolean</code>
-    * [.set_view_layer_filter_numeric(opt)](#MapxResolversStatic+set_view_layer_filter_numeric)
-    * [.set_view_layer_filter_time(opt)](#MapxResolversStatic+set_view_layer_filter_time) ⇒
-    * [.set_view_layer_transparency(opt)](#MapxResolversStatic+set_view_layer_transparency) ⇒
+    * [.set_views_layer_order(opt)](#MapxResolversStatic+set_views_layer_order) ⇒ <code>Boolean</code>
+    * [.get_views_layer_order()](#MapxResolversStatic+get_views_layer_order) ⇒ <code>Array</code>
+    * [.get_views_with_visible_layer()](#MapxResolversStatic+get_views_with_visible_layer) ⇒ <code>Array</code>
+    * [.set_view_layer_filter_text(opt)](#MapxResolversStatic+set_view_layer_filter_text) ⇒ <code>void</code>
+    * [.get_view_layer_filter_text(opt)](#MapxResolversStatic+get_view_layer_filter_text) ⇒ <code>array</code>
+    * [.set_view_layer_filter_numeric(opt)](#MapxResolversStatic+set_view_layer_filter_numeric) ⇒ <code>void</code>
     * [.get_view_layer_filter_numeric(opt)](#MapxResolversStatic+get_view_layer_filter_numeric) ⇒ <code>Number</code> \| <code>Array</code>
+    * [.set_view_layer_filter_time(opt)](#MapxResolversStatic+set_view_layer_filter_time) ⇒ <code>void</code>
     * [.get_view_layer_filter_time(opt)](#MapxResolversStatic+get_view_layer_filter_time) ⇒ <code>Number</code> \| <code>Array</code>
+    * [.set_view_layer_transparency(opt)](#MapxResolversStatic+set_view_layer_transparency) ⇒ <code>void</code>
     * [.get_view_layer_transparency(opt)](#MapxResolversStatic+get_view_layer_transparency) ⇒ <code>Number</code>
     * [.view_add(opt)](#MapxResolversStatic+view_add) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.view_remove(opt)](#MapxResolversStatic+view_remove) ⇒ <code>Boolean</code>
@@ -910,6 +920,7 @@ Get view's source summary
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>String</code> | Id of the view |
 | opt.stats | <code>Array</code> | Stats to retrieve. ['base', 'attributes', 'temporal', 'spatial'] |
+| opt.idAttr | <code>String</code> | Attribute for stat (default = attrbute of the style) |
 
 <a name="MapxResolversStatic+get_user_ip"></a>
 
@@ -952,23 +963,9 @@ Get list of available views as static objects
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Array</code> - Array of views  
-<a name="MapxResolversStatic+get_views_with_visible_layer"></a>
-
-#### mapxResolversStatic.get\_views\_with\_visible\_layer() ⇒ <code>Array</code>
-Get list views with visible layers
-
-**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Array</code> - Array of views  
 <a name="MapxResolversStatic+get_views_id"></a>
 
 #### mapxResolversStatic.get\_views\_id() ⇒ <code>Array</code>
-Get list of available views id
-
-**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Array</code> - Array of id  
-<a name="MapxResolversStatic+get_views_id_open"></a>
-
-#### mapxResolversStatic.get\_views\_id\_open() ⇒ <code>Array</code>
 Get list of available views id
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
@@ -1051,33 +1048,69 @@ Get view legend
 | opt.idView | <code>String</code> | Id of the view |
 | opt.format | <code>String</code> |  |
 
+<a name="MapxResolversStatic+set_views_layer_order"></a>
+
+#### mapxResolversStatic.set\_views\_layer\_order(opt) ⇒ <code>Boolean</code>
+Set view layer z position
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Boolean</code> - Done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.order | <code>Array.&lt;String&gt;</code> | View order |
+
+**Example**  
+```js
+const views = await mapx.ask("get_views_with_visible_layer");
+const order = views.toReversed();
+const result = await mapx.ask("set_views_layer_order",{order});
+```
+<a name="MapxResolversStatic+get_views_layer_order"></a>
+
+#### mapxResolversStatic.get\_views\_layer\_order() ⇒ <code>Array</code>
+Get list views with visible layers
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Array</code> - Array of views  
+<a name="MapxResolversStatic+get_views_with_visible_layer"></a>
+
+#### mapxResolversStatic.get\_views\_with\_visible\_layer() ⇒ <code>Array</code>
+Get list views with visible layers (alias)
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Array</code> - Array of views  
 <a name="MapxResolversStatic+set_view_layer_filter_text"></a>
 
-#### mapxResolversStatic.set\_view\_layer\_filter\_text(opt) ⇒ <code>Boolean</code>
+#### mapxResolversStatic.set\_view\_layer\_filter\_text(opt) ⇒ <code>void</code>
 Filter view layer by text (if attribute is text)
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Boolean</code> - done  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Options</code> | Options |
+| opt.idView | <code>String</code> | View id |
+| opt.values | <code>array</code> | Values to use as filter |
+| opt.attribute | <code>string</code> | Attribute to use as filter (default from style) |
 
 <a name="MapxResolversStatic+get_view_layer_filter_text"></a>
 
-#### mapxResolversStatic.get\_view\_layer\_filter\_text(opt) ⇒ <code>Boolean</code>
-Get current search box item
+#### mapxResolversStatic.get\_view\_layer\_filter\_text(opt) ⇒ <code>array</code>
+Get current text filter values for a given view
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Boolean</code> - done  
+**Returns**: <code>array</code> - values  
 
 | Param | Type | Description |
 | --- | --- | --- |
+| opt.idView | <code>String</code> | View id |
 | opt | <code>Options</code> | Options |
 
 <a name="MapxResolversStatic+set_view_layer_filter_numeric"></a>
 
-#### mapxResolversStatic.set\_view\_layer\_filter\_numeric(opt)
+#### mapxResolversStatic.set\_view\_layer\_filter\_numeric(opt) ⇒ <code>void</code>
 Filter view layer by numeric (if attribute is numeric)
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
@@ -1086,35 +1119,10 @@ Filter view layer by numeric (if attribute is numeric)
 | --- | --- | --- |
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
-| opt.value | <code>Numeric</code> | Value |
-
-<a name="MapxResolversStatic+set_view_layer_filter_time"></a>
-
-#### mapxResolversStatic.set\_view\_layer\_filter\_time(opt) ⇒
-Filter view layer by time ( if posix mx_t0 and/or mx_t1 attributes exist )
-
-**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: null  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| opt | <code>Options</code> | Options |
-| opt.idView | <code>String</code> | Target view id |
-| opt.value | <code>Numeric</code> \| <code>Array</code> | Value or range of value |
-
-<a name="MapxResolversStatic+set_view_layer_transparency"></a>
-
-#### mapxResolversStatic.set\_view\_layer\_transparency(opt) ⇒
-Set layer transarency (0 : visible, 100 : 100% transparent)
-
-**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: null  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| opt | <code>Options</code> | Options |
-| opt.idView | <code>String</code> | Target view id |
-| opt.value | <code>Numeric</code> | Value |
+| opt.attribute | <code>String</code> | Attribute name (default from style) |
+| opt.from | <code>Numeric</code> | Value |
+| opt.to | <code>Numeric</code> | Value |
+| opt.value | <code>array</code> | Values (Deprecated) |
 
 <a name="MapxResolversStatic+get_view_layer_filter_numeric"></a>
 
@@ -1129,6 +1137,19 @@ Get current numeric slider value
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
 
+<a name="MapxResolversStatic+set_view_layer_filter_time"></a>
+
+#### mapxResolversStatic.set\_view\_layer\_filter\_time(opt) ⇒ <code>void</code>
+Filter view layer by time ( if posix mx_t0 and/or mx_t1 attributes exist )
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Options</code> | Options |
+| opt.idView | <code>String</code> | Target view id |
+| opt.value | <code>Numeric</code> \| <code>Array</code> | Value or range of value |
+
 <a name="MapxResolversStatic+get_view_layer_filter_time"></a>
 
 #### mapxResolversStatic.get\_view\_layer\_filter\_time(opt) ⇒ <code>Number</code> \| <code>Array</code>
@@ -1141,6 +1162,19 @@ Get current time slider value
 | --- | --- | --- |
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
+
+<a name="MapxResolversStatic+set_view_layer_transparency"></a>
+
+#### mapxResolversStatic.set\_view\_layer\_transparency(opt) ⇒ <code>void</code>
+Set layer transarency (0 : visible, 100 : 100% transparent)
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Options</code> | Options |
+| opt.idView | <code>String</code> | Target view id |
+| opt.value | <code>Numeric</code> | Value |
 
 <a name="MapxResolversStatic+get_view_layer_transparency"></a>
 

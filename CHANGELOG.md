@@ -1,3 +1,12 @@
+  - [1.12.1-alpha.6](https://github.com/unep-grid/mapx/tree/1.12.1-alpha.6) 
+
+    - APP
+        - Highligther : fixed an issue where the highlight layer were still present after a clear, in some cases
+    - SDK
+        - Enable layers features filtering in static mode : numeric, text, date 
+        - Enable layers opacity update in static mode
+        - Added feature to set / update view's layers order using a list of views id. Should work in static mode ( independant of the view's list UI in app mode )
+
   - [1.12.1-alpha.5](https://github.com/unep-grid/mapx/tree/1.12.1-alpha.5) 
 
     - APP
