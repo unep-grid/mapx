@@ -1861,16 +1861,17 @@ export async function addSourceFromView(o) {
     /**
      * Add gid property if it does not exist
      */
-    const features = path(o.view, "data.source.data.features", []);
+
     let gid = 1;
-    features.forEach((f) => {
-      if (!f.properties) {
+    const features = o.view?.data?.source?.data?.features || [];
+    for (const f of features) {
+      if (isEmpty(f.properties)) {
         f.properties = {};
       }
       if (!f.properties.gid) {
         f.properties.gid = gid++;
       }
-    });
+    }
     o.view.data.source.promoteId = "gid";
   }
 
@@ -4291,7 +4292,7 @@ export function getLayersPropertiesAtPoint(opt) {
   function fetchVectorProp(view) {
     return new Promise((resolve) => {
       const id = view.id;
-
+      const attributes = view?.data?.attribute?.names || [];
       const layers = getLayerNamesByPrefix({
         map: map,
         prefix: id,
@@ -4304,12 +4305,23 @@ export function getLayersPropertiesAtPoint(opt) {
       const out = modeObject ? {} : [];
 
       features.forEach((f) => {
+        /**
+         * Fill null
+         * -> tiles can't contain nulls
+         * -> nulls expected in popup and widget clicked feature
+         */
+        for (const a of attributes) {
+          if (isEmpty(f.properties[a])) {
+            f.properties[a] = '$NULL';
+          }
+        }
+
         if (modeObject) {
           for (const p in f.properties) {
             /**
              * Exclude prop (time, gid, etc)
              */
-            if (excludeProp.indexOf(p) === -1) {
+            if (!excludeProp.includes(p)) {
               /**
                * Aggregate value by attribute
                */
@@ -5463,5 +5475,3 @@ async function getSearchApiKey() {
     console.error(e);
   }
 }
-
-

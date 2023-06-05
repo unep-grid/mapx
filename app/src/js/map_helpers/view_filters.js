@@ -49,7 +49,7 @@ export function viewSetFilter(o) {
    * Filter object to filter array
    */
   for (let t in filterView) {
-    let f = filterView[t];
+    const f = filterView[t];
     if (f) {
       filterNew.push(f);
     }
@@ -58,9 +58,9 @@ export function viewSetFilter(o) {
   /**
    * Apply filters to each layer, in top of base filters
    */
-  for (let layer of layers) {
-    let filterOrig = path(layer, "metadata.filter", []);
-    let filterFinal = [];
+  for (const layer of layers) {
+    const filterOrig = path(layer, "metadata.filter", []);
+    const filterFinal = [];
     if (isEmpty(filterOrig)) {
       filterFinal.push("all", ...filterNew);
     } else {
@@ -153,6 +153,7 @@ export function viewFiltersInit(idView) {
     text: ["all"],
     numeric: ["all"],
     custom_style: ["all"],
+    popup_filter: null,
   };
   view._setFilter = (opt) => viewSetFilter({ ...opt, idView });
   view._getFilters = (opt) => viewGetFilters({ ...opt, idView });
@@ -202,7 +203,11 @@ export function viewSetTextFilter(opt) {
   const view = getView(idView);
   const filter = ["any"];
   for (const value of values) {
-    filter.push(["==", ["get", attribute], value]);
+    if (value === settings.valuesMap.null) {
+      filter.push(["!", ["has", attribute]]);
+    } else {
+      filter.push(["==", ["get", attribute], value]);
+    }
   }
   view._setFilter({
     filter: filter,
@@ -507,7 +512,6 @@ export async function makeTimeSlider(o) {
       view._setTimeFilter({ from: t[0], to: t[1], hasT0, hasT1 });
     }, 100)
   );
-
 }
 
 /**
@@ -645,7 +649,6 @@ export async function makeTransparencySlider(o) {
       view._setOpacity({ opacity: opacity });
     }, 10)
   );
-
 }
 
 export async function makeSearchBox(o) {

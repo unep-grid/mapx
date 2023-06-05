@@ -5,6 +5,7 @@ import { getView, getViewTitle } from "./index.js";
 import { path, uiToggleBtn, parentFinder } from "./../mx_helper_misc.js";
 import { el } from "./../el/src/index.js";
 import { isEmpty, isElement, isNumeric, isArray } from "./../is_test/index.js";
+import { settings } from "./../mx.js";
 
 /*
  * Convert result from getFeaturesValuesByLayers to HTML
@@ -282,17 +283,21 @@ export function featuresToPopup(o) {
     const isNum = !isEmpty(type) ? type === "numeric" : isNumeric(value);
     let rule = [];
     if (add) {
-      if (isNum) {
-        /**
-         * Use both text or numeric if value has been converted to string at one point
-         */
-        rule = [
-          "any",
-          ["==", ["get", attribute], value],
-          ["==", ["get", attribute], value * 1],
-        ];
+      if (value === settings.valuesMap.null) {
+        rule.push(...["!", ["has", attribute]]);
       } else {
-        rule = ["==", ["get", attribute], value];
+        if (isNum) {
+          /**
+           * Use both text or numeric if value has been converted to string at one point
+           */
+          rule = [
+            "any",
+            ["==", ["get", attribute], value],
+            ["==", ["get", attribute], value * 1],
+          ];
+        } else {
+          rule = ["==", ["get", attribute], value];
+        }
       }
       filters[layer].push(rule);
     }

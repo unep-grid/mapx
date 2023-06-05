@@ -12,6 +12,11 @@ const settings = {
   highlightedCountries: [],
   initClosedPanels: false,
   project: {},
+  // special values map
+  valuesMap: {
+    // Used in view text filter, i.e viewSetTextFilter
+    null: "$NULL",
+  },
   logs: {
     disabled: false, // set in cookies as preferences ?
     levels: ["ERROR", "WARNING", "MESSAGE", "LOG", "USER_ACTION"],
