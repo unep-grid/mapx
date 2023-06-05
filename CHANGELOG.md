@@ -1,3 +1,14 @@
+  - [1.12.1-beta.1](https://github.com/unep-grid/mapx/tree/1.12.1-beta.1) 
+
+    - APP
+        - Popup filter : handle nulls
+        - Text filter : placeholder text contrast
+        - Sliders : removed border - cleaner UI
+    - SDK
+        - Time filter
+            - Fixed documentation
+            - Added example
+
   - [1.12.1-alpha.6](https://github.com/unep-grid/mapx/tree/1.12.1-alpha.6) 
 
     - APP

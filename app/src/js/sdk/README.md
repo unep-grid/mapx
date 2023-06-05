@@ -1142,14 +1142,41 @@ Get current numeric slider value
 #### mapxResolversStatic.set\_view\_layer\_filter\_time(opt) ⇒ <code>void</code>
 Filter view layer by time ( if posix mx_t0 and/or mx_t1 attributes exist )
 
+This function creates a time filter based on the provided options
+and sets this filter to the specific view identified by its ID.
+
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| opt | <code>Options</code> | Options |
-| opt.idView | <code>String</code> | Target view id |
-| opt.value | <code>Numeric</code> \| <code>Array</code> | Value or range of value |
+| opt | <code>Object</code> | The options for the time filter. |
+| opt.hasT0 | <code>boolean</code> | Flag indicating if the 'mx_t0' timestamp exists. |
+| opt.hasT1 | <code>boolean</code> | Flag indicating if the 'mx_t1' timestamp exists. |
+| opt.from | <code>number</code> | The 'from' timestamp for the filter in milliseconds. |
+| opt.to | <code>number</code> | The 'to' timestamp for the filter in milliseconds. |
+| opt.idView | <code>string</code> | The ID of the view to which the filter is to be applied. |
 
+**Example**  
+```js
+// Get summary ( any attribute: get_view_source_summary returns time extent
+// by default )
+const summary = await mapx.ask("get_view_source_summary", {
+ idView,
+ idAttr: idAttr,
+ });
+// set config + convert seconds -> milliseconds
+const start = summary.extent_time.min * 1000; 
+const end = summary.extent_time.max * 1000;
+const hasT0 = summary.attributes.includes("mx_t0");
+const hasT1 = summary.attributes.includes("mx_t1");
+await mapx.ask("set_view_layer_filter_time", {
+ idView,
+ from,
+ to,
+ hasT0,
+ hasT1,
+});
+```
 <a name="MapxResolversStatic+get_view_layer_filter_time"></a>
 
 #### mapxResolversStatic.get\_view\_layer\_filter\_time(opt) ⇒ <code>Number</code> \| <code>Array</code>
