@@ -22,6 +22,10 @@
   cursor: pointer;
 }
 
+.ts-wrapper .ts-control input::placeholder {
+  color : var(--mx_ui_text_faded);
+}
+
 .ts-wrapper.plugin-drag_drop.multi > .ts-control > div.ui-sortable-placeholder {
   visibility: visible !important;
   background: var(--mx_ui_background_contrast) !important;

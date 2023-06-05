@@ -22,7 +22,7 @@
     },
     "mx_ui_text_faded": {
       "visibility": "visible",
-      "color": "rgb(192,192,192)"
+      "color": "rgba(192,192,192,0.75)"
     },
     "mx_ui_hidden": {
       "visibility": "visible",
