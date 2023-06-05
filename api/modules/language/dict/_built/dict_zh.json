@@ -3020,6 +3020,11 @@
     "zh": "添加3D浮雕"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "zh": "使用地球模式"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "zh": "沉浸模式"

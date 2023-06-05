@@ -3020,6 +3020,11 @@
     "bn": "3D ভূখণ্ড যোগ করুন"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "bn": "গ্লোব মোড ব্যবহার করুন"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "bn": "নিমজ্জন মোড "

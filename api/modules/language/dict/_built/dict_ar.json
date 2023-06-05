@@ -3020,6 +3020,11 @@
     "ar": "أضف تضاريس ثلاثية الأبعاد"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "ar": "استخدم وضع الكرة الأرضية"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "ar": "الوضع الغامر "

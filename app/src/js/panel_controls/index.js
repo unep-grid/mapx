@@ -1,7 +1,7 @@
-import {ButtonPanel} from './../button_panel';
-import {ButtonsControls} from './buttons_controls.js';
-import {generateButtons} from './mapx_buttons.js';
-import './style.less';
+import { ButtonPanel } from "./../button_panel";
+import { ButtonsControls } from "./buttons_controls.js";
+import { generateButtons } from "./mapx_buttons.js";
+import "./style.less";
 
 /**
  * MapX map controls panel
@@ -10,11 +10,11 @@ const settings = {
   controls: {},
   panel: {
     elContainer: document.body,
-    position: 'top-right',
-    button_text: 'Controls',
-    button_classes: ['fa', 'fa-cog'],
-    animateDurationMs: 300
-  }
+    position: "top-right",
+    button_text: "Controls",
+    button_classes: ["fa", "fa-cog"],
+    animateDurationMs: 300,
+  },
 };
 
 class ControlsPanel {
@@ -36,17 +36,17 @@ class ControlsPanel {
     cp.controls = new ButtonsControls(buttons);
     cp.panel = new ButtonPanel(cp.opt.panel);
     cp.panel.elPanelContent.appendChild(cp.controls.elGroup);
-    cp.panel.on('resize-end', cp.sizeOptimizer);
-    cp.controls.on('register', cp.sizeOptimizer);
-    cp.controls.on('unregister', cp.sizeOptimizer);
-    window.addEventListener('resize', cp.sizeOptimizer);
+    cp.panel.on("resize-end", cp.sizeOptimizer);
+    cp.controls.on("register", cp.sizeOptimizer);
+    cp.controls.on("unregister", cp.sizeOptimizer);
+    window.addEventListener("resize", cp.sizeOptimizer);
   }
 
   destroy() {
     const cp = this;
     cp.panel.destroy();
     cp.controls.destroy();
-    window.removeEventListener('resize', cp.sizeOptimizer);
+    window.removeEventListener("resize", cp.sizeOptimizer);
   }
 
   /*resetPanelSize(){*/
@@ -165,4 +165,4 @@ class ControlsPanel {
   }
 }
 
-export {ControlsPanel};
+export { ControlsPanel };

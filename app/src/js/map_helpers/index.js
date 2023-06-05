@@ -8,6 +8,7 @@ import {
   maps,
   highlighter,
   settings,
+  panel_tools,
 } from "./../mx.js";
 import { featuresToPopup } from "./features_to_popup.js";
 import { RadialProgress } from "./../radial_progress";
@@ -26,7 +27,6 @@ import {
   MapControlLiveCoord,
   MapControlScale,
 } from "./../map_controls";
-import { ControlsPanel } from "./../panel_controls";
 import { MapxDraw } from "./../draw";
 import { NotifCenter } from "./../notif_center/";
 import { cleanDiacritic } from "./../string_util/";
@@ -1211,53 +1211,25 @@ export async function initMapx(o) {
     });
   }
 
-  /**
-   * Add map controls + left bar toolbox
-   */
-  mx.panel_tools = new ControlsPanel({
-    panel: {
-      id: "controls_panel",
-      elContainer: document.body,
-      position: "top-right",
-      noHandles: true,
-      button_text: getDictItem("btn_panel_controls"),
-      button_lang_key: "btn_panel_controls",
-      tooltip_position: "bottom-left",
-      handles: ["free"],
-      container_classes: [
-        "button-panel--container-no-full-width",
-        "button-panel--pinned-always",
-      ],
-      item_content_classes: [
-        "button-panel--item-content-transparent-background",
-      ],
-      panel_style: {
-        marginTop: "40px",
-      },
-      container_style: {
-        width: "100px",
-        height: "400px",
-        minWidth: "49px",
-        minHeight: "49px",
-      },
-    },
-  });
-
   if (!settings.initClosedPanels) {
-    mx.panel_tools.panel.open();
+    panel_tools.panel.open();
   }
 
   /**
    * Initial mode terrain 3d / Sat
    */
-  const ctrls = mx.panel_tools.controls;
+  const ctrls = panel_tools.controls;
   const enable3d = getQueryParameter("t3d")[0];
   const enableSat = getQueryParameter("sat")[0];
+  const enableGlobe = getQueryParameter("globe")[0];
   if (enable3d) {
     ctrls.getButton("btn_3d_terrain").action("enable");
   }
   if (enableSat) {
     ctrls.getButton("btn_theme_sat").action("enable");
+  }
+  if (enableGlobe) {
+    ctrls.getButton("btn_theme_globe").action("enable");
   }
 
   /**
@@ -1265,7 +1237,7 @@ export async function initMapx(o) {
    */
   mx.draw = new MapxDraw({
     map: map,
-    panel_tools: mx.panel_tools,
+    panel_tools: panel_tools,
     url_help: settings.links.repositoryWikiDrawTool,
   });
   mx.draw.on("enable", () => {
@@ -4312,7 +4284,7 @@ export function getLayersPropertiesAtPoint(opt) {
          */
         for (const a of attributes) {
           if (isEmpty(f.properties[a])) {
-            f.properties[a] = '$NULL';
+            f.properties[a] = "$NULL";
           }
         }
 
@@ -4807,24 +4779,57 @@ export function boundsAngleRelation(bounds1, bounds2) {
  * Set map projection
  * @param {Object} opt options
  * @param {String} opt.id map id
+ * @param {String} opt.globe
  * @param {String} opt.name
  * @param {Array} opt.center
  * @param {Array} opt.parallels
  */
 export function setMapProjection(opt) {
   const map = getMap(opt.id);
+  const current = map.getProjection();
+  const ctrls = panel_tools.controls;
   const def = {
-    name: "mercator",
-    center: [0, 0],
-    parallels: [0, 0],
+    name: current.name,
+    center: current.center,
+    parallels: current.parallels,
   };
-  opt = Object.assign({}, def, opt);
-  if (map) {
-    map.setProjection(opt.name, {
-      center: opt.center,
-      parallels: opt.parallels,
-    });
+
+  if (isNotEmpty(opt.globe)) {
+    switch (opt.globe) {
+      case "enable":
+        opt.name = "globe";
+        break;
+      case "disable":
+        opt.name = "mercator";
+        break;
+      default:
+        // toggle
+        if (current.name === "globe") {
+          opt.name = "mercator";
+        } else {
+          opt.name = "globe";
+        }
+    }
   }
+
+  settings.projection = Object.assign(settings.projection, def, opt);
+
+  map.setProjection(settings.projection.name, {
+    center: settings.projection.center,
+    parallels: settings.projection.parallels,
+  });
+
+  /**
+  * Set button state
+  */ 
+  const isGlobe = settings.projection.name === "globe";
+  const btnGlobe = ctrls.getButton("btn_globe");
+  if (isGlobe) {
+    btnGlobe.enable();
+  } else {
+    btnGlobe.disable();
+  }
+  return settings.projection;
 }
 
 /**
@@ -5173,7 +5178,7 @@ export function getViewsFilter(o) {
  */
 export function getMapPos(o) {
   o = o || {};
-  const ctrls = mx.panel_tools.controls;
+  const ctrls = panel_tools.controls;
   const map = getMap(o.id);
   const bounds = map.getBounds();
   const center = map.getCenter();

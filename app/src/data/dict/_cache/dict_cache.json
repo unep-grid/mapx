@@ -275,7 +275,7 @@
   {
     "id": "auto_style_size_desc",
     "en": "Set size for all classes",
-    "fr": "Définisser la taille pour toutes les classes ",
+    "fr": "Définisser la taille pour toutes les classes",
     "es": "Establecer tamaño para todas las clases",
     "ru": "Установить размер для всех классов",
     "zh": "为所有类设置大小",
@@ -7850,6 +7850,19 @@
     "ps": "د 3D خاوره اضافه کړئ",
     "bn": "3D ভূখণ্ড যোগ করুন",
     "de": "Fügen Sie 3D-Gelände hinzu"
+  },
+  {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "fr": "Utiliser le mode globe",
+    "es": "Usar el modo globo",
+    "ru": "Использовать режим глобуса",
+    "zh": "使用地球模式",
+    "ar": "استخدم وضع الكرة الأرضية",
+    "fa": "از حالت گلوب استفاده کنید",
+    "ps": "د ګلوب حالت وکاروئ",
+    "bn": "গ্লোব মোড ব্যবহার করুন",
+    "de": "Verwenden Sie den Globusmodus"
   },
   {
     "id": "btn_toggle_all",

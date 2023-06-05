@@ -3020,6 +3020,11 @@
     "ps": "د 3D خاوره اضافه کړئ"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "ps": "د ګلوب حالت وکاروئ"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "ps": "عمودي حالت "

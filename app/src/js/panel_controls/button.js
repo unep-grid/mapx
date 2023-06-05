@@ -114,6 +114,14 @@ class Button extends EventSimple {
     return this.elButton.classList.contains("active");
   }
 
+  enable() {
+    return this.elButton.classList.add("active");
+  }
+
+  disable() {
+    return this.elButton.classList.remove("active");
+  }
+
   show() {
     this.elButton.style.display = "flex";
     this.fire("show");

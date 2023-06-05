@@ -3020,6 +3020,11 @@
     "es": "Añade relieve en 3D"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "es": "Usar el modo globo"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "es": "Cerrar panel de herramientas"

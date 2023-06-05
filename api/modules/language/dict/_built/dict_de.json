@@ -3020,6 +3020,11 @@
     "de": "Fügen Sie 3D-Gelände hinzu"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "de": "Verwenden Sie den Globusmodus"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "de": "Immersiver Modus "

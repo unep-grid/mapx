@@ -7852,6 +7852,19 @@
     "de": "Fügen Sie 3D-Gelände hinzu"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "fr": "Utiliser le mode globe",
+    "es": "Usar el modo globo",
+    "ru": "Использовать режим глобуса",
+    "zh": "使用地球模式",
+    "ar": "استخدم وضع الكرة الأرضية",
+    "fa": "از حالت گلوب استفاده کنید",
+    "ps": "د ګلوب حالت وکاروئ",
+    "bn": "গ্লোব মোড ব্যবহার করুন",
+    "de": "Verwenden Sie den Globusmodus"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "fr": "Mode immersif",

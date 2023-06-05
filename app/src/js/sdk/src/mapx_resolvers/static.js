@@ -69,7 +69,7 @@ import { viewsListAddSingle } from "../../../mx_helper_map_view_ui.js";
 import { modalCloseAll } from "../../../mx_helper_modal.js";
 import { toggleSpotlight } from "../../../mx_helper_map_pixop.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
-import { settings, highlighter, theme, ws } from "./../../../mx";
+import { settings, highlighter, theme, ws, panel_tools } from "./../../../mx";
 
 /**
  * MapX resolvers available in static and app
@@ -138,7 +138,7 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.action Action to perform: 'enable','disable','toggle'
    */
   set_3d_terrain(opt) {
-    const ctrl = mx.panel_tools.controls.getButton("btn_3d_terrain");
+    const ctrl = panel_tools.controls.getButton("btn_3d_terrain");
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
@@ -150,7 +150,7 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.action Action to perform: 'show','hide','toggle'
    */
   set_mode_3d(opt) {
-    const ctrl = mx.panel_tools.controls.getButton("btn_3d_terrain");
+    const ctrl = panel_tools.controls.getButton("btn_3d_terrain");
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
@@ -163,7 +163,7 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.action Action to perform: 'show','hide','toggle'
    */
   set_mode_aerial(opt) {
-    const ctrl = mx.panel_tools.controls.getButton("btn_theme_sat");
+    const ctrl = panel_tools.controls.getButton("btn_theme_sat");
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
@@ -604,7 +604,7 @@ class MapxResolversStatic extends ResolversBase {
    *  idAttr: idAttr,
    *  });
    * // set config + convert seconds -> milliseconds
-   * const start = summary.extent_time.min * 1000; 
+   * const start = summary.extent_time.min * 1000;
    * const end = summary.extent_time.max * 1000;
    * const hasT0 = summary.attributes.includes("mx_t0");
    * const hasT1 = summary.attributes.includes("mx_t1");

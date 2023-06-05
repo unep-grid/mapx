@@ -5,6 +5,7 @@ import {
   geolocateUser,
   getMap,
   getLayerNamesByPrefix,
+  setMapProjection,
 } from "./../map_helpers/index.js";
 import { toggleSpotlight } from "./../mx_helper_map_pixop.js";
 import { ShareModal } from "./../share_modal/index.js";
@@ -136,10 +137,20 @@ export function generateButtons() {
         const enabled = toggleLayer({
           id: "map_main",
           idLayer: "mapbox_satellite",
-          elButton: btn.elButton,
+          button: btn,
           action: cmd,
         });
         return enabled;
+      },
+    }),
+    new Button({
+      key: "btn_globe",
+      classesIcon: ["fa", "fa-globe"],
+      action: function (cmd) {
+        const choice = ["toggle", "enable", "disable"];
+        setMapProjection({
+          globe: choice.includes(cmd) ? cmd : "toggle",
+        });
       },
     }),
     new Button({
@@ -223,7 +234,7 @@ async function toggleTheme() {
  * TODO: This is quite messy : simplify, generalize
  * @param {Object} opt options
  * @param {String} opt.idLayer Layer id to toggle
- * @param {Element} opt.elButton Button element to add 'active' class
+ * @param {Button} opt.button Button to add 'active' class
  * @param {String} opt.action hide, show, toggle
  * @return {String} Toggled
  */
@@ -234,7 +245,7 @@ function toggleLayer(opt) {
   opt = Object.assign({}, def, opt);
   const altLayers = [];
   const map = getMap();
-  const btn = opt.elButton;
+  const btn = opt.button;
   const layer = map.getLayer(opt.idLayer);
   const isAerial = opt.idLayer === "mapbox_satellite"; // hide also shades...
   const isTerrain = opt.idLayer === "terrain_sky"; // hide shade + show terrain...
@@ -270,7 +281,11 @@ function toggleLayer(opt) {
     map.setTerrain(toShow ? { source: "mapbox_dem", exaggeration: 1 } : null);
   }
   if (btn) {
-    btn.classList[toShow ? "add" : "remove"]("active");
+    if (toShow) {
+      btn.enable();
+    } else {
+      btn.disable();
+    }
   }
   return toShow;
 }

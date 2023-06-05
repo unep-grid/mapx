@@ -12,6 +12,11 @@ const settings = {
   highlightedCountries: [],
   initClosedPanels: false,
   project: {},
+  projection: {
+    name: "mercator",
+    center: [0, 0],
+    parallels: [0, 0],
+  },
   // special values map
   valuesMap: {
     // Used in view text filter, i.e viewSetTextFilter

@@ -1873,6 +1873,19 @@
     "de": ""
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "fr": "Utiliser le mode globe",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "fr": "Mode immersif",

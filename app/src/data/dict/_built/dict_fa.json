@@ -3020,6 +3020,11 @@
     "fa": "زمین سه بعدی را اضافه کنید"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "fa": "از حالت گلوب استفاده کنید"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "fa": "حالت غوطه وری "

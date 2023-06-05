@@ -2416,6 +2416,10 @@
     "en": "Add 3D terrain"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode"
   },

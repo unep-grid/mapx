@@ -3020,6 +3020,11 @@
     "ru": "Добавьте 3D-территорию"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "ru": "Использовать режим глобуса"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "ru": "Иммерсивный режим "

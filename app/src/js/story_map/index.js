@@ -6,7 +6,7 @@ import { errorHandler } from "./../error_handler/index.js";
 import { modal } from "./../mx_helper_modal.js";
 import { settings as settingsMapx } from "./../settings";
 import { settings as storySettings } from "./settings.js";
-import { theme } from "./../mx";
+import { theme, panel_tools } from "./../mx";
 import { UAParser } from "ua-parser-js";
 import {
   onNextFrame,
@@ -49,6 +49,7 @@ import {
   viewsLayersOrderUpdate,
   getMap,
   getViewsLayersVisibles,
+  setMapProjection,
 } from "./../map_helpers/index.js";
 
 /**
@@ -144,7 +145,7 @@ function initClickListener() {
       if (state.ct_editor) {
         return;
       }
-      mx.panel_tools.panel.open();
+      panel_tools.panel.open();
       state.ctrlLock.shake("look_at_me");
       new FlashItem("ban");
     },
@@ -698,7 +699,7 @@ async function initControls() {
   /**
    * Control panel buttons
    */
-  const ctrls = mx.panel_tools.controls;
+  const ctrls = panel_tools.controls;
   state.ctrlMode3d = ctrls.getButton(s.ctrl_btn_3d_terrain);
   state.ctrlAerial = ctrls.getButton(s.ctrl_btn_theme_sat);
   state.ctrlLock = ctrls.getButton(s.ctrl_btn_lock);
@@ -1155,7 +1156,7 @@ export async function storyMapLock(cmd) {
 async function storyControlsEnable() {
   const s = getSettings();
   const state = getState();
-  const ctrls = mx.panel_tools.controls;
+  const ctrls = panel_tools.controls;
   const autoStart = state.autoStart === true;
   const update = state.update === true;
 
@@ -1227,7 +1228,6 @@ async function initTheme() {
 }
 
 async function initProjection() {
-  const map = getMap();
   const s = getSettings();
   const useProj =
     isNotEmpty(s.projection_name) && s.projection_name !== "default";
@@ -1235,7 +1235,7 @@ async function initProjection() {
    * Set projection
    */
   if (useProj) {
-    map.setProjection(s.projection_name);
+    setMapProjection({ name: s.projection_name });
   }
 }
 
@@ -1319,7 +1319,7 @@ async function appStateRestore() {
   const idTheme = state.idTheme;
   const pos = state.position;
 
-  map.setProjection(state.projection);
+  setMapProjection({ name: state?.projection?.name });
 
   map.jumpTo({
     zoom: pos.z,

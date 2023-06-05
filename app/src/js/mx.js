@@ -12,6 +12,7 @@ import { HighlighterMapx } from "./features_highlight/highlighter_instance";
 import { WsToolsInstances } from "./ws_tools";
 import { theme } from "./init_theme";
 import { ProjectManager } from "./project/index.js";
+import { panel_tools } from "./panel_controls/instance.js";
 
 const templates = {
   viewListOptions: require("../dot/view_list_options.dot.html"),
@@ -46,6 +47,7 @@ const extend = {
 };
 const info = {};
 export {
+  panel_tools,
   mapboxgl,
   project,
   localforage,
