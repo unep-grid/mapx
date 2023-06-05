@@ -1,3 +1,8 @@
+  - [1.12.1-beta.2](https://github.com/unep-grid/mapx/tree/1.12.1-beta.2) 
+
+    - APP
+        - Added "globe" mode button. 
+
   - [1.12.1-beta.1](https://github.com/unep-grid/mapx/tree/1.12.1-beta.1) 
 
     - APP

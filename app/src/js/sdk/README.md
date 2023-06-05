@@ -1165,7 +1165,7 @@ const summary = await mapx.ask("get_view_source_summary", {
  idAttr: idAttr,
  });
 // set config + convert seconds -> milliseconds
-const start = summary.extent_time.min * 1000; 
+const start = summary.extent_time.min * 1000;
 const end = summary.extent_time.max * 1000;
 const hasT0 = summary.attributes.includes("mx_t0");
 const hasT1 = summary.attributes.includes("mx_t1");
