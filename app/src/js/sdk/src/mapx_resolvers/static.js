@@ -585,10 +585,36 @@ class MapxResolversStatic extends ResolversBase {
 
   /**
    * Filter view layer by time ( if posix mx_t0 and/or mx_t1 attributes exist )
-   * @param {Options} opt Options
-   * @param {String} opt.idView Target view id
-   * @param {Numeric | Array} opt.value Value or range of value
+   *
+   * This function creates a time filter based on the provided options
+   * and sets this filter to the specific view identified by its ID.
+   *
+   * @param {Object} opt - The options for the time filter.
+   * @param {boolean} opt.hasT0 - Flag indicating if the 'mx_t0' timestamp exists.
+   * @param {boolean} opt.hasT1 - Flag indicating if the 'mx_t1' timestamp exists.
+   * @param {number} opt.from - The 'from' timestamp for the filter in milliseconds.
+   * @param {number} opt.to - The 'to' timestamp for the filter in milliseconds.
+   * @param {string} opt.idView - The ID of the view to which the filter is to be applied.
    * @return {void}
+   * @example
+   * // Get summary ( any attribute: get_view_source_summary returns time extent
+   * // by default )
+   * const summary = await mapx.ask("get_view_source_summary", {
+   *  idView,
+   *  idAttr: idAttr,
+   *  });
+   * // set config + convert seconds -> milliseconds
+   * const start = summary.extent_time.min * 1000; 
+   * const end = summary.extent_time.max * 1000;
+   * const hasT0 = summary.attributes.includes("mx_t0");
+   * const hasT1 = summary.attributes.includes("mx_t1");
+   * await mapx.ask("set_view_layer_filter_time", {
+   *  idView,
+   *  from,
+   *  to,
+   *  hasT0,
+   *  hasT1,
+   * });
    */
   async set_view_layer_filter_time(opt) {
     const rslv = this;
