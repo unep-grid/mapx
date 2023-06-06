@@ -2,7 +2,6 @@ import { Button } from "./button.js";
 import screenfull from "screenfull";
 import { mapComposerModalAuto } from "./../map_composer";
 import {
-  geolocateUser,
   getMap,
   getLayerNamesByPrefix,
   setMapProjection,
@@ -78,11 +77,6 @@ export function generateButtons() {
         const map = getMap();
         map.easeTo({ bearing: 0, pitch: 0 });
       },
-    }),
-    new Button({
-      key: "btn_geolocate_user",
-      classesIcon: ["fa", "fa-map-marker"],
-      action: geolocateUser,
     }),
     new Button({
       key: "btn_fullscreen",
