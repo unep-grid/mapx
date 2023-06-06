@@ -91,23 +91,23 @@ config[["projections"]] <- list(
   default = "mercator",
   ids = c(
     "globe",
-    "albers",
-    "equalEarth",
-    "mercator",
-    "lambertConformalConic",
-    "winkelTripel",
-    "naturalEarth",
-    "equirectangular"
+    "mercator"
+    #"albers",
+    #"equalEarth",
+    #"lambertConformalConic",
+    #"winkelTripel",
+    #"naturalEarth",
+    #"equirectangular"
   ),
   names = c(
     "Globe",
-    "Albers",
-    "Equal Earth",
-    "Mercator",
-    "Lambert Conformal Conic",
-    "Winkel Tripel",
-    "Natural Earth",
-    "Equirectangular"
+    "Mercator"
+    #"Albers",
+    #"Equal Earth",
+    #"Lambert Conformal Conic",
+    #"Winkel Tripel",
+    #"Natural Earth",
+    #"Equirectangular"
   )
 )
 
