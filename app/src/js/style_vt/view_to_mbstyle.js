@@ -1,5 +1,9 @@
 import { colorToHex } from "./../color_utils";
-import { getView, getMap, getViewTitle } from "../map_helpers/index.js";
+import {
+  getView,
+  getViewTitle,
+  getStyleBaseMap,
+} from "../map_helpers/index.js";
 import { getViewMapboxLayers } from "./view_to_mb_layers";
 import { mapboxToSld } from "./mbstyle_to_sld";
 import { isViewVtWithStyleCustom, isString } from "./../is_test/index.js";
@@ -59,8 +63,7 @@ export async function getViewMapboxStyle(idView, opt) {
     simplifyExpression,
     mapxOrder,
   });
-  const map = getMap();
-  const style = map.getStyle();
+  const style = getStyleBaseMap({ sourcePrefixToKeep: view.id });
   const title = getViewTitle(view);
   const meta_layer_keep = ["position", "priority", "type"];
   const types = [];

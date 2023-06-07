@@ -1,11 +1,13 @@
 import * as styleDefault from "./../../data/style/style_mapx.json";
 import * as routesExpress from "./routes_express.json";
 import * as routesWs from "./routes_ws.json";
+import { version } from "./../../../package.json";
 
 const routes = Object.assign({}, routesWs.default, routesExpress.default);
 
 const settings = {
   title: "MapX",
+  version,
   devicePixelRatio: 0, // updated by getPixelRatio()
   language: "en",
   languages: ["en", "fr", "es", "ar", "ru", "zh", "de", "bn", "fa", "ps"],
@@ -79,7 +81,7 @@ const settings = {
   // ⚠️ also defined in app/settings/settings-global.R
   links: {
     mapboxSprites: "mapbox://sprites/mapbox/bright-v8",
-    mapboxGlyphs: "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
+    mapboxGlyphs: "mapbox://fonts/helsinki/{fontstack}/{range}.pbf",
     repositoryIssues: "https://github.com/unep-grid/mapx/issues",
     appKnowlegdeBase: "https://www.mapx.org/knowledge-base/",
     wiki: "https://github.com/unep-grid/mapx/wiki/",

@@ -1,6 +1,7 @@
 import {
   ws,
   nc,
+  mg,
   events,
   listeners,
   theme,
@@ -157,14 +158,17 @@ export { downloadViewVector } from "./../source";
 
 /**
  * Export style basemap
+ * @param {Object} opt Options
+ * @param {String} opt.sourcePrefixToKeep Prefix of source layers id to keep;
  * @returns {Object} Mapbox style with MapX basemap
  */
-export function getStyleBaseMap() {
+export function getStyleBaseMap(opt) {
   const map = getMap();
+  const sourcePrefixToKeep = opt?.sourcePrefixToKeep;
   const style = clone(map.getStyle());
   const themeData = theme.get();
   const styleOut = {};
-  style.name = themeData.id;
+  style.name = `${themeData.id}_${settings.version}`;
   style.sprite = settings.links.mapboxSprites;
   style.glyphs = settings.links.mapboxGlyphs;
 
@@ -174,27 +178,30 @@ export function getStyleBaseMap() {
   delete style.metadata;
 
   styleOut.metadata = {
-    //fonts: {
-    //source: settings.links.mapFonts,
-    //},
+    mapx_version: settings.version,
   };
 
-  /**
+  /*
+   *
    * Remove mapx layers
    */
   const layers = [];
   for (const layer of style.layers) {
-    if (layer.id.match(/^(?!MX-)/)) {
+    if (layer.id.match("^(?!MX-)")) {
       layers.push(layer);
     }
   }
   style.layers = layers;
 
-  /**
+  /*
    * Remove mapx sources
    */
+  const strReg =
+    `^MX-` + sourcePrefixToKeep ? `&^(?!${sourcePrefixToKeep})` : ``;
+  console.log(strReg);
   for (const idSource in style.sources) {
-    if (idSource.match(/^MX-/)) {
+    const reg = new RegExp(strReg);
+    if (idSource.match(reg)) {
       delete style.sources[idSource];
     }
   }
@@ -1100,12 +1107,6 @@ export async function initMapx(o) {
    * Wait for map to be loaded
    */
   await map.once("load");
-
-  /**
-  * TESTING 
-  */ 
-  mg.init(map); 
-
 
   /**
    * Link theme to map
@@ -4828,8 +4829,8 @@ export function setMapProjection(opt) {
   });
 
   /**
-  * Set button state
-  */ 
+   * Set button state
+   */
   const isGlobe = settings.projection.name === "globe";
   const btnGlobe = ctrls.getButton("btn_globe");
   if (isGlobe) {
@@ -5486,5 +5487,23 @@ async function getSearchApiKey() {
     }
   } catch (e) {
     console.error(e);
+  }
+}
+
+/**
+ * Magnifier
+ */
+export function toggleMagnifier() {
+  const map = getMap();
+  if (map._has_mg) {
+    mg.hide();
+    map._has_mg = false;
+  } else {
+    if (mg.isInit) {
+      mg.show();
+    } else {
+      mg.init(map);
+    }
+    map._has_mg = true;
   }
 }

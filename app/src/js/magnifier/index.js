@@ -4,6 +4,7 @@ import mapboxgl from "mapbox-gl";
 import Draggabilly from "draggabilly";
 import { bindAll } from "../bind_class_methods/index.js";
 import "./style.less";
+import { isEqualNoType } from "../is_test/index.js";
 const def = {
   radius: 200,
 };
@@ -18,18 +19,25 @@ export class Magnifier extends EventSimple {
 
   init(map) {
     const m = this;
-    if (m._init) {
+    if (m.isInit) {
       return;
     }
     m._init = true;
     m._map = map;
+    m._state = {};
     m.build();
     m.initMap();
     m.initSync();
   }
 
+  get isInit() {
+    return this._init;
+  }
   get locked() {
     return this._locked;
+  }
+  get built() {
+    return this._built;
   }
   lock() {
     return (this._locked = true);
@@ -87,6 +95,7 @@ export class Magnifier extends EventSimple {
       handle: ".mg__handle",
     });
     m._el_container.appendChild(m._el_main);
+    m._built = true;
   }
 
   syncMapMain() {
@@ -102,6 +111,7 @@ export class Magnifier extends EventSimple {
   syncMap(mapSrc, mapDest) {
     const m = this;
     if (m.locked) return;
+    if (!m.built) return;
     try {
       m.lock();
 
@@ -116,17 +126,27 @@ export class Magnifier extends EventSimple {
       // unproject to the linked map. Like a mouseover or something.
       const destCenterLatLong = mapSrc.unproject([destCenter.x, destCenter.y]);
 
-      const pos = {
-        center: destCenterLatLong,
-        zoom: mapSrc.getZoom(),
-        pitch: mapSrc.getPitch(),
-        bearing: mapSrc.getBearing(),
-      };
+      const zoom = mapSrc.getZoom();
+      const pitch = mapSrc.getPitch();
+      const bearing = mapSrc.getBearing();
+      const center = destCenterLatLong;
 
-      mapDest.setCenter(pos.center);
-      mapDest.setZoom(pos.zoom);
-      mapDest.setPitch(pos.pitch);
-      mapDest.setBearing(pos.bearing);
+      if (!isEqualNoType(zoom, m._state.zoom)) {
+        mapDest.setZoom(zoom);
+        m._state.zoom = zoom;
+      }
+      if (!isEqualNoType(pitch, m._state.pitch)) {
+        mapDest.setPitch(pitch);
+        m._state.pitch = pitch;
+      }
+      if (!isEqualNoType(bearing, m._state.bearing)) {
+        mapDest.setBearing(bearing);
+        m._state.bearing = bearing;
+      }
+      if (!isEqualNoType(center, m._state.center)) {
+        mapDest.setCenter(center);
+        m._state.center = center;
+      }
     } catch (e) {
       console.error(e);
     } finally {
@@ -139,9 +159,18 @@ export class Magnifier extends EventSimple {
   setRadius() {}
   setLeft() {}
   setTop() {}
-  show() {}
-  hide() {}
-  addView() {}
-  removeView() {}
-  listViews() {}
+  show() {
+    const m = this;
+    m.unlock();
+    if (m._el_main) {
+      m._el_main.style.display = "block";
+    }
+  }
+  hide() {
+    const m = this;
+    m.lock();
+    if (m._el_main) {
+      m._el_main.style.display = "none";
+    }
+  }
 }

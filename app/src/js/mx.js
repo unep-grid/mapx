@@ -1,5 +1,4 @@
 import * as helpers from "./mx_helpers.js";
-import { version } from "./../../package.json";
 import localforage from "localforage";
 import mapboxgl from "mapbox-gl";
 import { settings } from "./settings/index.js";
@@ -15,6 +14,7 @@ import { theme } from "./init_theme";
 import { ProjectManager } from "./project/index.js";
 import { panel_tools } from "./panel_controls/instance.js";
 
+const version = settings.version;
 
 const templates = {
   viewListOptions: require("../dot/view_list_options.dot.html"),
@@ -49,6 +49,7 @@ const extend = {
   texteditor: {},
 };
 const info = {};
+
 export {
   panel_tools,
   mapboxgl,
