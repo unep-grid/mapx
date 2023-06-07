@@ -2,7 +2,6 @@ const settings = {
   ctrl_btn_disable: [
     'btn_overlap_spotlight',
     'btn_map_composer',
-    'btn_geolocate_user',
     'btn_overlap_spotlight',
     'btn_map_composer'
   ],
