@@ -198,7 +198,6 @@ export function getStyleBaseMap(opt) {
    */
   const strReg =
     `^MX-` + sourcePrefixToKeep ? `&^(?!${sourcePrefixToKeep})` : ``;
-  console.log(strReg);
   for (const idSource in style.sources) {
     const reg = new RegExp(strReg);
     if (idSource.match(reg)) {

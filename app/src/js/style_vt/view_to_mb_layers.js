@@ -516,8 +516,6 @@ export async function getViewMapboxLayers(v, opt) {
 
   sortLayers(layers);
 
-  //console.log(layers.map(l=>l.filter));
-
   return {
     layers,
     rules,

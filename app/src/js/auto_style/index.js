@@ -69,23 +69,17 @@ export class AutoStyle {
      */
     as._state = createState(Object.assign({}, stateDefault, config));
     const state = as._state;
+    state.title = getViewTitle(state.idView) || state.idView;
 
-    if (!state.title) {
-      state.title = getViewTitle(state.idView) || state.idView;
-    }
-
-    if (!state.type) {
-      /**
-       * Init : get type
-       */
-      const summary = await getViewSourceSummary(state.idView, {
-        useCache: false,
-        nullValue: state.nullValue,
-        stats: ["base", "attributes"],
-      });
-      state.type = summary.attribute_stat.type;
-    }
-
+    /**
+     * Init : get type
+     */
+    const summary = await getViewSourceSummary(state.idView, {
+      useCache: false,
+      nullValue: state.nullValue,
+      stats: ["base", "attributes"],
+    });
+    state.type = summary.attribute_stat.type;
     as.build();
     await as.setMode();
   }
