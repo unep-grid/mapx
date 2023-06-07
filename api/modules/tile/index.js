@@ -3,10 +3,9 @@
  */
 import { redisGet, redisSet, pgRead } from "#mapx/db";
 import { parseTemplate, attrToPgCol, asArray } from "#mapx/helpers";
-import { isSourceId } from "@fxi/mx_valid";
+import { isSourceId, isEmpty, isBoolean } from "@fxi/mx_valid";
 import { templates } from "#mapx/template";
-import { getSourceLastTimestamp, isPointLikeGeom } from "#mapx/db-utils";
-import { sourceHasService } from "#mapx/source";
+import { getSourceLastTimestamp } from "#mapx/db_utils";
 import { getParamsValidator } from "#mapx/route_validation";
 import crypto from "crypto";
 import util from "util";
@@ -45,14 +44,24 @@ export async function handlerTile(req, res) {
 
     /*
      * viewSrcAttr attributes:
-     * layer
-     * attribute
-     * attributes
-     * mask (optional)
+     * layer : layer / source id
+     * attribute : attribute for styling
+     * attributes : other attributes to include
+     * mask (optional) : secondary source to use as mask
      */
     Object.assign(data, viewSrcConfig);
 
     data.geom = "geom";
+    /*
+     * TODO: to be solved
+     * buffer = PostGIS as_mvtgeom buffer + buffer for cropping tile
+     * 0 : all tiles rendered, but tiles boundaries visibles
+     * > 0 : inconsistant behaviour : some tiles missing:
+     *  - 1, 64, 256 :
+     *      - error : geometry exceeds allowed extent, reduce your vector tile buffer size
+     *      - no tiles boundaries visible. Good, but tiles missing
+     */
+    data.buffer = 0;
     data.useMask = isSourceId(data?.mask);
     data.usePostgisTiles = req.query.usePostgisTiles && !data.useMask;
     data.useCache = !req.query.skipCache;
@@ -110,10 +119,6 @@ async function getTilePg(res, hash, data) {
     let buffer;
     const useAsMvt = data.usePostgisTiles;
     const useMask = data.useMask;
-    // Geometry test could be included in request, as CTE block.
-    // - per object based test – outside a deticated CTE – is probably expensive
-    // - isPointLikeGeom only works if there is only one type of geom per layer
-    data.isPointGeom = await isPointLikeGeom(data.layer);
 
     if (useAsMvt) {
       str = templates.getMvt;
@@ -126,14 +131,14 @@ async function getTilePg(res, hash, data) {
     }
 
     const qs = parseTemplate(str, data);
+
     const out = await pgRead.query(qs);
 
     if (out.rowCount > 0) {
       if (useAsMvt) {
         buffer = out.rows[0].mvt;
       } else {
-        const geojson = rowsToGeoJSON(out.rows);
-        buffer = geojsonToPbf(geojson, data);
+        buffer = geojsonToPbf(out.rows[0].geojson, data);
       }
 
       if (buffer?.length === 0) {
@@ -170,34 +175,44 @@ function sendTileError(res, err) {
   res.status(500).send(err.message);
 }
 
-function rowsToGeoJSON(rows) {
-  const features = rows.map((r) => {
-    var properties = {};
-    for (var attribute in r) {
-      if (attribute !== "geom") {
-        if (r[attribute] instanceof Date) {
-          r[attribute] *= 1;
-        }
-        if (r[attribute] === null) {
-          r[attribute] = "";
-        }
-        properties[attribute] = r[attribute];
+/**
+ * Sanitize geojson :
+ * - remove nulls / empty value : test using ["has",<field>]
+ * - convert boolean to text
+ * @param {Object} geojson GeoJSON data
+ */
+function geojsonSanitize(geojson) {
+  if (isEmpty(geojson.features)) {
+    geojson.features = [];
+    return geojson;
+  }
+  for (const feature of geojson.features || []) {
+    for (const id in feature.properties) {
+      const value = feature.properties[id];
+      if (isEmpty(value)) {
+        delete feature.properties[id];
+        continue;
+      }
+      if (isBoolean(value)) {
+        feature.properties[id] = `${feature.properties[id]}`;
+        continue;
       }
     }
-    return {
-      type: "Feature",
-      geometry: JSON.parse(r.geom),
-      properties: properties,
-    };
-  });
-
-  return {
-    type: "FeatureCollection",
-    features: features,
-  };
+  }
+  return geojson;
 }
 
+/**
+ * Conversion of the geojson to pbf
+ * @param {Object} geojson GeoJSON data
+ * @return {Buffer} buffer
+ */
 function geojsonToPbf(geojson, data) {
+  if (isEmpty(geojson)) {
+    return null;
+  }
+
+  geojsonSanitize(geojson);
   const pbfOptions = {};
   const tileIndex = geojsonvt(geojson, {
     maxZoom: data.zoom + 1,

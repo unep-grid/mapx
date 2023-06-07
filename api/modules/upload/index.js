@@ -1,7 +1,2 @@
-import {mwUpload as mwImage } from './image.js';
-import {mwUpload as mwVector} from './vector.js';
-
-export default  {
-  mwImage,
-  mwVector
-};
+export { mwUpload as mwImage } from "./image.js";
+export { mwUpload as mwVector, ioUploadSource } from "./vector.js";

@@ -1,27 +1,28 @@
 import multer from "multer";
+import { ioAddViewVt } from "#mapx/view/";
 import { access, unlink } from "fs/promises";
-import path from "path";
+import { constants } from "fs";
 import { spawn } from "child_process";
-
+import { ioChunkWriter } from "#mapx/chunks";
 import { sendMailAuto } from "#mapx/mail";
 import { handleErrorText } from "#mapx/error";
 import { settings } from "#root/settings";
-import { toRes, randomString } from "#mapx/helpers";
+import { randomString } from "#mapx/helpers";
+import { t } from "#mapx/language";
+const { emailAdmin } = settings.mail.config;
 import {
   removeSource,
+  removeView,
   isLayerValid,
   tableHasValues,
   registerOrRemoveSource,
-} from "#mapx/db-utils";
+} from "#mapx/db_utils";
 import {
   validateTokenHandler,
   validateRoleHandlerFor,
 } from "#mapx/authentication";
 
-/*
- * Shortcut
- */
-const { emailAdmin } = settings.mail.config;
+import { isEmail, isProjectId, isSourceId } from "@fxi/mx_valid";
 
 /**
  * Set multer storage
@@ -49,66 +50,214 @@ export const mwUpload = [
   uploadHandler,
   validateTokenHandler,
   validateRoleHandlerFor("publisher"),
-  convertOgrHandler,
-  addSourceHandler,
+  saveHandler,
 ];
+
+/**
+ * io upload middleware
+ * @param {Socket | Request} socket or request object
+ * @param {Object} chunk
+ * @property {string} chunk.chunk.id_request - The unique identifier for the request.
+ * @property {boolean} chunk.first - A flag indicating if it's the first request.
+ * @property {boolean} chunk.last - A flag indicating if it's the last request.
+ * @property {number} chunk.start - The start index of the data.
+ * @property {number} chunk.end chunk.- The end index of the data.
+ * @property {number} chunk.on chunk.- A number representing some state.
+ * @property {Array} chunk.data chunk.- An array of data.
+ * @property {number} chunk.id_file - The unique identifier for the file.
+ * @property {number} chunk.n_files - The total number of files.
+ * @property {boolean} chunk.canceled - A flag indicating if the request was canceled.
+ * @property {string} chunk.filename - The filename.
+ * @property {string} chunk.mimetype - The MIME type of the file.
+ * @property {string} chunk.driver - The Driver to use
+ * @property {string} chunk.title - The title of the file.
+ * @property {boolean} chunk.create_view - A flag indicating if a view should be created.
+ * @property {boolean} chunk.enable_download - A flag indicating if download is enabled.
+ * @property {boolean} chunk.enable_wms - A flag indicating if WMS is enabled.
+ * @property {boolean} chunk.assign_srs - A flag indicating if the SRS should be assigned.
+ * @property {number} chunk.source_srs - The source SRS identifier.
+ */
+export async function ioUploadSource(socket, chunk, callback) {
+  try {
+    /*
+     * Test for role
+     */
+    const session = socket.session;
+    if (!session.user_roles.publisher) {
+      return;
+    }
+    // Handle chunked data
+    const config = await ioChunkWriter(socket, chunk);
+
+    callback({ status: "uploaded" });
+
+    if (config) {
+      await save(socket, config);
+    }
+    //callback({ status: "ok" });
+  } catch (e) {
+    callback({ status: "error", message: e?.message || e });
+  }
+}
+
+/**
+ * Convert handler
+ */
+async function saveHandler(req, res, next) {
+  try {
+    const config = req.body;
+    config.file = req.file; // multer;
+    await save(res, config);
+    res.status(200).end();
+  } catch (e) {
+    res.status(403).end();
+  } finally {
+    next();
+  }
+}
+
+/**
+ * Complete save process
+ */
+async function save(socket, config) {
+  config.idSource = newIdSource();
+  config.idView = newIdView();
+  try {
+    await ioConvertOgr(socket, config);
+    await ioAddSource(socket, config);
+    await ioAddViewVt(socket, config);
+    await handleSuccess(socket, config);
+  } catch (e) {
+    await handleFailure(socket, config, e);
+
+    throw new Error(e);
+  } finally {
+    await cleanFile(config?.file?.path);
+  }
+}
+
+async function handleSuccess(socket, config) {
+  try {
+    const userEmail = config?.email || socket?.session?.user_email;
+    const filename = config?.file?.name || config?.file?.filename;
+    const idSource = config?.idSource;
+
+    const msg = t("upl_api_save_success", config.language, {
+      filename,
+      idSource,
+      title: config.title,
+    });
+
+    const msgSubject = t("upl_api_save_success_title", config.language, {
+      filename,
+    });
+
+    socket.notifyInfoSuccess({
+      idGroup: config.id_request,
+      message: msg,
+    });
+
+    if (isEmail(userEmail)) {
+      sendMailAuto({
+        to: userEmail,
+        subject: msgSubject,
+        content: msg,
+      });
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function handleFailure(socket, config, e) {
+  try {
+    const userEmail = config?.email || socket?.session?.user_email;
+    const filename = config?.file?.name || config?.file?.filename;
+    const idSource = config?.idSource;
+    const idView = config?.idView;
+    const sourceRemoved = await removeSource(idSource);
+    const viewRemoved = await removeView(idView);
+
+    const msg = t("upl_api_save_failed", config.language, {
+      title: config.title,
+      sourceRemoved,
+      viewRemoved,
+      filename,
+      error: e.message || e,
+    });
+
+    const msgSubject = t("upl_api_save_failed_title", config.language, {
+      filename,
+    });
+
+    socket.notifyInfoError({
+      idGroup: config.id_request,
+      message: msg,
+    });
+
+    await sendMailAuto({
+      to: [userEmail, emailAdmin],
+      subject: msgSubject,
+      content: msg,
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 /**
  * Convert data
  */
-export async function convertOgrHandler(req, res, next) {
-  const hasBody = typeof req.body === "object" && req.file;
+export async function ioConvertOgr(res, config) {
+  const { assign_srs, source_srs, file, id_request, idSource } = config;
 
-  if (!hasBody) {
-    throw Error("Empty body");
-  }
+  // handle both multer file // chunk writer file
+  const filename = file?.name || file?.originalname;
+  const mimetype = file?.type || file?.mimetype;
+  const filepath = file?.path;
 
-  const userEmail = req.body.email;
-  const { sourceSrs, title } = req.body;
-  const fileName = req.file.filename;
+  // throw an error if not accessible
+  await access(filepath, constants.R_OK);
+
   const isZipped =
-    req.file.mimetype === "application/zip" ||
-    req.file.mimetype === "application/x-zip-compressed" ||
-    req.file.mimetype === "multipart/x-zip";
-  const isCsv = req.file.mimeType === "text/csv" || !!fileName.match(/.csv$/);
+    mimetype === "application/zip" ||
+    mimetype === "application/x-zip-compressed" ||
+    mimetype === "multipart/x-zip";
+  const isCsv = mimetype === "text/csv" || !!filename.match(/.csv$/);
 
-  await fileToPostgres({
+  return fileToPostgres({
     isZipped: isZipped,
     isCsv: isCsv,
-    fileName: fileName,
-    sourceSrs: sourceSrs,
-    onSuccess: (idSource) => {
-      req.body.idSource = idSource;
-      next();
-    },
-    onMessage: (data) => {
-      if (data.msg) {
-        res.write(
-          toRes({
-            type: data.type,
-            msg: data.msg,
-          })
-        );
-      }
-    },
-    onError: async (data) => {
-      const subject = `MapX conversion of "${title}" failed`;
-      const err = `Error during the conversion of "${title}": ${data.msg}`;
-
-      res.write(
-        toRes({
-          type: "error",
-          msg: err,
-        })
-      );
-
-      await sendMailAuto({
-        to: [userEmail, emailAdmin].join(","),
-        content: data.msg,
-        subject: subject,
+    idSource: idSource,
+    filename: filename,
+    filepath: filepath,
+    sourceSrs: assign_srs ? source_srs : "",
+    onMessage: async (message) => {
+      await res.notifyInfoMessage({
+        idGroup: id_request,
+        message: message,
       });
-
-      res.status(500).end();
+    },
+    onVerbose: async (message) => {
+      await res.notifyInfoVerbose({
+        idGroup: id_request,
+        idMerge: "verbose_message",
+        message: message,
+      });
+    },
+    onProgress: async (value) => {
+      await res.notifyProgress({
+        idMerge: "postgres_write",
+        idGroup: id_request,
+        message: t("upl_import_db"),
+        value: value,
+      });
+    },
+    onWarning: async (message) => {
+      await res.notifyInfoWarning({
+        idGroup: id_request,
+        message: message,
+      });
     },
   });
 }
@@ -116,118 +265,89 @@ export async function convertOgrHandler(req, res, next) {
 /**
  * Handler for adding reccord in source table
  */
-async function addSourceHandler(req, res) {
-  const { title, email, idSource } = req.body;
-  const idProject = req.body.project;
-  const idUser = req.body.idUser * 1;
-  const fileToRemove = req.file.path;
-  const fileName = req.file.filename;
-  const msg = {};
-  const isCsv = req.file.mimetype === "text/csv" || !!fileName.match(/.csv$/);
+async function ioAddSource(socket, config) {
+  const { title, idSource, id_request, enable_wms, enable_download } = config;
+  const idProject = socket?.session?.project_id || config.idProject;
+  const idUser = (socket?.session?.user_id || config.idUser) * 1;
+
+  if (!isProjectId(idProject)) {
+    throw Error("Not a valid project id");
+  }
+
+  const file = config.file;
+  const fileName = file.name || file.originalname;
+  const mimetype = file.type || file.mimetype;
+  const isCsv = mimetype === "text/csv" || !!fileName.match(/.csv$/);
   const sourceType = isCsv ? "tabular" : "vector";
   const isVector = sourceType === "vector";
-  let isValid = true;
 
-  msg.waitValidation = `Geometry validation – This could take a while, please wait. If an error occurs, a message will be displayed `;
-  msg.addedNewEntry = `Added new entry "${title}" ( ${idSource} ) in project ${idProject}.`;
-  msg.invalidGeom = `Some geometries were not valid and some MapX functions will therefore not work properly. Please correct those geometries.`;
-  msg.sourceNotRegistered = `The source can't be registered, check if attributes table has at least one row`;
-  msg.titleMailSuccess = `MapX import success for source ${title}`;
-  msg.titleMailError = `MapX import failed for source ${title}`;
+  const reg = await registerOrRemoveSource(
+    idSource,
+    idUser,
+    idProject,
+    title,
+    sourceType,
+    enable_download,
+    enable_wms
+  );
 
-  try {
-    const reg = await registerOrRemoveSource(
-      idSource,
-      idUser,
-      idProject,
-      title,
-      sourceType
+  if (!reg.registered) {
+    throw Error(
+      "The can't be registered, check if table has at least one row with valid values"
     );
-
-    if (!reg.registered) {
-      throw Error(msg.sourceNotRegistered);
-    }
-
-    /**
-     * Layer validation
-     */
-    if (isVector) {
-      res.write(
-        toRes({
-          type: "message",
-          msg: msg.waitValidation,
-        })
-      );
-      const layerTest = await isLayerValid(idSource, false);
-      isValid = layerTest.valid;
-      if (!isValid) {
-        res.write(
-          toRes({
-            type: "warning",
-            msg: msg.invalidGeom,
-          })
-        );
-      }
-    }
-
-    const fileRemoved = await cleanFile(fileToRemove);
-
-    res.write(
-      toRes({
-        type: "message",
-        msg: `Cleaned temporary files: ${fileRemoved}`,
-      })
-    );
-
-    res.write(
-      toRes({
-        type: "end",
-        msg: msg.addedNewEntry,
-      })
-    );
-
-    if (email) {
-      await sendMailAuto({
-        to: [email],
-        content: isValid
-          ? msg.addedNewEntry
-          : msg.addedNewEntry + "\n" + msg.invalidGeom,
-        subject: msg.titleMailSuccess,
-      });
-    }
-
-    res.status(200).end();
-  } catch (err) {
-    try {
-      /**
-       * In case of error, send a mail
-       */
-      var msgError = msg.titleMailError + ": " + err;
-      res.write(
-        toRes({
-          type: "error",
-          msg: msgError,
-        })
-      );
-      await sendMailAuto({
-        to: [email, emailAdmin].join(","),
-        content: msgError,
-        subject: msg.titleMailError,
-      });
-
-      await cleanAll(fileToRemove, idSource, res);
-      res.status("403").end();
-    } catch (err) {
-      res.write(
-        toRes({
-          type: "error",
-          msg: `Unexpected error :  ${err} `,
-        })
-      );
-
-      res.status("403").end();
-    }
   }
+
+  if (!isVector) {
+    return true;
+  }
+
+  /**
+   * Layer validation
+   */
+  const validationResult = await isLayerValid({
+    idLayer: idSource,
+    useCache: false,
+    autoCorrect: false,
+    analyze: true,
+    validate: true,
+    onProgress: async (data) => {
+      await socket.notifyProgress({
+        idGroup: id_request,
+        idMerge: "geom_validation",
+        message: t("upl_api_save_validation"),
+        value: data.percent * 100,
+      });
+    },
+  });
+
+  await socket.notifyProgress({
+    idGroup: id_request,
+    idMerge: "geom_validation",
+    message: t("upl_api_save_validation"),
+    value: 100,
+  });
+
+  const isValid = validationResult.valid;
+
+  await socket.notifyInfo({
+    type: isValid ? "info" : "warning",
+    idGroup: id_request,
+    message: t("upl_api_save_validation_geom_count", config.language, {
+      count: validationResult.stat.invalid,
+    }),
+  });
+
+  /**
+   * Trigger source reload in shiny
+   * TODO: this will be removed after shiny transition over
+   * e.g. : trigger update source list in shiny app
+   *        ws -> handler -> shiny -> update view list
+   */
+  await socket.mx_emit_ws_response("/server/source/added", {
+    idSource,
+  });
+
+  return true;
 }
 
 /**
@@ -239,71 +359,49 @@ async function cleanFile(fileToRemove) {
     await access(fileToRemove);
     await unlink(fileToRemove);
   } catch (e) {
-    console.error("cleanFile error", e);
     removed = false;
   }
   return removed;
 }
 
 /**
- * In case of faillure, clean the db : remove added entry and table
- */
-async function cleanAll(fileToRemove, idSource, res) {
-  const sourceRemoved = await removeSource(idSource);
-  const fileRemoved = await cleanFile(fileToRemove);
-  res.write(
-    toRes({
-      type: "message",
-      msg: `Removed source : ${sourceRemoved}; Removed file : ${fileRemoved}`,
-    })
-  );
-}
-
-/**
  * Helper to write file in postgres
  *
  * @param {Object} config Config
- * @param {String} config.fileName Filename
+ * @param {String} config.filepath Filepath
+ * @param {String} config.idSource Source/Layer id
  * @param {String} config.sourceSrs Original SRS
  * @param {Boolean} config.isCsv CSV mode -> type tabular
  * @param {Boolean} config.isZipped Is zipped -> type shapefile
- * @param {Function} config.onError Callback on error
  * @param {Function} config.onMessage Callback on message
- * @param {Function} config.onSuccess Callback on success
+ * @param {Function} config.onVerbose Callback on verbose message
+ * @param {Function} config.onProgress Callback on progress
+ * @param {Function} config.onWarning Callback on warning
  */
 export async function fileToPostgres(config) {
-  config = config || {};
-  const {
-    fileName,
-    sourceSrs,
-    onMessage = function () {},
-    onError = function () {},
-    onSuccess = function () {},
-  } = config;
-
-  try {
-    const idSource = randomString("mx_vector", 4, 5).toLowerCase();
+  return new Promise((resolve, reject) => {
+    config = config || {};
+    const {
+      idSource,
+      filepath,
+      sourceSrs,
+      onMessage = function () {},
+      onVerbose = function () {},
+      onProgress = function () {},
+      onWarning = function () {},
+    } = config;
 
     const isZipped = Boolean(config.isZipped);
     const isCsv = Boolean(config.isCsv);
 
-    if (!fileName) {
-      throw Error("No filename given");
+    if (!isSourceId(idSource)) {
+      reject("Not a valid source id");
+      return false;
     }
 
-    let filePath = path.format({
-      dir: settings.vector.path.temporary,
-      base: fileName,
-    });
+    const filepathfull = isZipped ? "/vsizip/" + filepath : filepath;
 
-    if (isZipped) {
-      filePath = "/vsizip/" + filePath;
-    }
-
-    onMessage({
-      msg: "Conversion : please wait ...",
-      type: "message",
-    });
+    onMessage("Conversion : please wait ...");
 
     /**
      * NOTE: PGDump OGR driver was needed because OGR PG was not compatible with
@@ -329,44 +427,45 @@ export async function fileToPostgres(config) {
      */
     const args = [
       new URL("./sh/import_vector.sh", import.meta.url).pathname,
-      filePath,
+      filepathfull,
       idSource,
-      sourceSrs,
+      sourceSrs || "",
       isCsv ? "yes" : "no",
     ];
+
     const ogr = spawn("sh", args);
 
+    /**
+     * Handle stdout
+     */
     ogr.stdout.on("data", (data) => {
       data = data.toString("utf8");
-      let progressNums = data.split(".");
+      const progressNums = data.split(".");
       let hasProg = false;
-      let progFloat;
       for (const prog of progressNums) {
-        progFloat = parseFloat(prog);
-        if (!isNaN(progFloat) && isFinite(progFloat)) {
-          hasProg = true;
-          onMessage({
-            msg: progFloat,
-            type: "progress",
-          });
+        const progFloat = parseFloat(prog);
+        hasProg = !isNaN(progFloat) && isFinite(progFloat);
+        if (hasProg) {
+          onProgress(progFloat);
         }
       }
+
       if (!hasProg) {
-        onMessage({
-          msg: data,
-          type: "message",
-        });
+        onVerbose(data);
       }
     });
 
+    /**
+     * Handle "error".. -> seems to be just warnings.
+     */
     ogr.stderr.on("data", (data) => {
       data = data.toString("utf8");
-      onMessage({
-        msg: handleErrorText(data),
-        type: "warning",
-      });
+      onWarning(handleErrorText(data));
     });
 
+    /*
+     * Handle exit
+     */
     ogr.on("exit", async (code, signal) => {
       try {
         if (code !== 0) {
@@ -375,30 +474,29 @@ export async function fileToPostgres(config) {
           );
         }
         const hasValues = await tableHasValues(idSource);
+
         if (!hasValues) {
           throw Error(
             `The table ${idSource} is not valid. At least one attribute with value is required.`
           );
         }
 
-        onMessage({
-          msg: `The import was successful`,
-          type: "message",
-        });
-
-        onSuccess(idSource);
+        /**
+         * Here is the resolve
+         */
+        resolve(idSource);
       } catch (e) {
         const err = handleErrorText(e);
-        const sourceRemoved = await removeSource(idSource);
-        onError({
-          msg: `${err}. Source removed : ${sourceRemoved}`,
-        });
-        return;
+        reject(err);
+        return false;
       }
     });
-  } catch (e) {
-    onError({
-      msg: `An error occured in import function (${handleErrorText(e)})`,
-    });
-  }
+  });
+}
+
+function newIdSource() {
+  return randomString("mx_vector", 4, 5, true, false);
+}
+function newIdView() {
+  return randomString("MX", 3, 5, false, true, "-");
 }

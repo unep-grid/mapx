@@ -1,8 +1,8 @@
-import { fetchSourceMetadata } from "./mx_helpers.js";
+//import { fetchSourceMetadata } from "./mx_helpers.js";
 import { path } from "./mx_helper_misc.js";
 import { modal } from "./mx_helper_modal.js";
 import { getView, getViews } from "./map_helpers";
-import { isArray } from "./is_test";
+import { isView, isArray } from "./is_test";
 import { settings } from "./settings";
 import { getDictItem, updateLanguageElements } from "./language";
 import { el } from "./el/src/index.js";
@@ -15,25 +15,20 @@ import {
  * Update metadata and views badges
  * @param {Object} opt Config
  * @param {Array} opt.views List of views or views id to update. By default, all
+ * @param {Object} opt.meta New metadata object to assign to all listed views
  */
 export async function updateViewsBadges(opt) {
-  opt = Object.assign({}, { views: getViews() }, opt);
+  opt = Object.assign({}, { views: getViews(), meta: null }, opt);
   try {
     if (!isArray(opt.views)) {
       throw new Error("Views must by array of views or view id");
     }
     for (let v of opt.views) {
       const view = getView(v);
-      if (view) {
-        /**
-         * Only local view
-         */
-        if ((view.type = "vt")) {
-          /**
-           * Update view meta from remote for vt
-           */
-          const idSource = path(view, "data.source.layerInfo.name");
-          view._meta = await fetchSourceMetadata(idSource);
+
+      if (isView(view)) {
+        if (opt.meta) {
+          view._meta = opt.meta;
         }
         await setViewBadges(view);
       }
@@ -56,6 +51,7 @@ export async function setViewBadges(view) {
     const hasPublic = readers.includes("public");
     const elBadges = document.getElementById(`view_badges_${view.id}`);
     const isTemp = view._temp === true;
+
     //const isPublisher = settings.user.roles.publisher;
 
     if (!elBadges) {
@@ -120,9 +116,10 @@ export async function setViewBadges(view) {
     /**
      * View metadata button / badge
      */
-    const elBadgeMeta = elBadge("meta", { id: view.id });
-    badges.push(elBadgeMeta);
-
+    if (isValidable) {
+      const elBadgeMeta = elBadge("meta", { id: view.id });
+      badges.push(elBadgeMeta);
+    }
     /**
      * Single loop add badge
      */
@@ -248,10 +245,11 @@ function createViewBadge(opt) {
     opt.dataset
   );
   return el(
-    "span",
+    "button",
     {
-      class: opt.tooltipClasses || "hint--bottom-right",
+      class: ["mx-btn", ...(opt.tooltipClasses || ["hint--bottom-right"])],
       dataset: opt.dataset,
+      role: "button",
     },
     el("i", {
       class: opt.iconClasses || ["fa", "fa-check-circle"],

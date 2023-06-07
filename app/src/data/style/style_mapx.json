@@ -1,54 +1,8 @@
 {
   "version": 8,
   "name": "mx_white",
-  "metadata": {
-    "old_sources": {
-      "mapbox_composite": {
-        "type": "vector",
-        "url": "mapbox://mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v8,helsinki.drcnsbpx,helsinki.2pni6w09"
-      }
-    },
-    "desc_mx_layers_on_mapbox": {
-      "helsinki.1v0c5pdr": {
-        "layers": {
-          "bathymetry": {
-            "depth": "number"
-          }
-        },
-        "helsinki.6lefiu83": {
-          "layers": {
-            "un_2020_borders_line": {
-              "type": "number",
-              "iso3code": "string"
-            },
-            "un_2020_poly_country_boundary": {
-              "iso3code": "string",
-              "iso3code_admin": "string"
-            }
-          }
-        },
-        "helsinki.42ysskas": {
-          "layers": {
-            "un_2020_labels_countries_point": {
-              "iso3code": "string",
-              "iso3code_admin": "string",
-              "stscod": "number",
-              "group_size": "number",
-              "name_ar": "string",
-              "name_en": "string",
-              "name_es": "string",
-              "name_fr": "string",
-              "name_ru": "string",
-              "name_zh": "string",
-              "mx_info_box": "string"
-            }
-          }
-        }
-      }
-    }
-  },
   "sprite": "http://dev.mapx.localhost:8880/sprites/sprite",
-  "glyphs": "http://dev.mapx.localhost:8880/fontstack/{fontstack}/{range}.pbf",
+  "glyphs": "mapbox://fonts/helsinki/{fontstack}/{range}.pbf",
   "sources": {
     "mapbox_composite": {
       "type": "vector",
@@ -74,18 +28,6 @@
       },
       "paint": {
         "background-color": "rgb(255,255,255)"
-      }
-    },
-    {
-      "id": "terrain_sky",
-      "type": "sky",
-      "layout": {
-        "visibility": "none"
-      },
-      "paint": {
-        "sky-type": "atmosphere",
-        "sky-atmosphere-sun": [0, 0],
-        "sky-atmosphere-sun-intensity": 5
       }
     },
     {
@@ -146,12 +88,13 @@
       "filter": ["==", ["get", "type"], 4],
       "layout": {
         "line-join": "bevel",
-        "visibility": "visible"
+        "visibility": "visible",
+        "line-cap": "round"
       },
       "paint": {
-        "line-color": "rgba(38,38,38,0.3)",
-        "line-dasharray": [0.5, 1.5],
-        "line-width": ["interpolate", ["linear"], ["zoom"], 0, 0.5, 22, 2],
+        "line-color": "rgba(38,38,38,0.7)",
+        "line-dasharray": [0, 4],
+        "line-width": ["interpolate", ["linear"], ["zoom"], 0, 1, 22, 2],
         "line-opacity": ["interpolate", ["linear"], ["zoom"], 0, 0.9, 6, 1]
       }
     },
@@ -265,11 +208,11 @@
           5,
           0.17,
           7,
-          0.04,
+          0.1,
           8,
-          0.02,
+          0.09,
           15,
-          0,
+          0.09,
           22,
           0
         ],
@@ -285,17 +228,74 @@
       }
     },
     {
-      "id": "building",
-      "type": "fill",
+      "id": "bathymetry-lines",
+      "type": "line",
       "source": "mapbox_composite",
-      "source-layer": "building",
+      "source-layer": "water-depth",
+      "minzoom": 0,
+      "filter": ["all", ["==", ["geometry-type"], "Polygon"]],
       "layout": {
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(220,220,220,0.5)"
+        "line-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          0,
+          0,
+          5,
+          0.1,
+          7,
+          0.8,
+          22,
+          1
+        ],
+        "line-color": "rgb(255,255,255)",
+        "line-width": 1,
+        "line-dasharray": [1, 4]
       }
     },
+    {
+      "id": "bathymetry-label",
+      "type": "symbol",
+      "source": "mapbox_composite",
+      "source-layer": "water-depth",
+      "minzoom": 0,
+      "filter": ["all", ["==", ["geometry-type"], "Polygon"]],
+      "layout": {
+        "visibility": "visible",
+        "text-field": ["to-string", ["get", "depth"]],
+        "text-font": ["Varela Round Regular", "Noto Sans Regular"],
+        "text-size": 11,
+        "symbol-placement": "line",
+        "text-padding": 2,
+        "text-max-angle": 25,
+        "symbol-spacing": 400,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false
+      },
+      "paint": {
+        "text-color": "rgba(48,48,48,0.9)",
+        "text-halo-color": "rgba(255,255,255,0.3)",
+        "text-halo-width": 2,
+        "text-halo-blur": 1,
+        "text-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          0,
+          0,
+          5,
+          0.1,
+          7,
+          0.8,
+          22,
+          1
+        ]
+      }
+    },
+
     {
       "id": "road-street-low",
       "type": "line",
@@ -1482,7 +1482,11 @@
           22,
           750
         ],
-        "text-font": ["Arial"],
+        "text-font": [
+          "Noto Sans Regular",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
+        ],
         "symbol-placement": "line",
         "text-padding": 1,
         "text-rotation-alignment": "map",
@@ -1497,6 +1501,27 @@
         "text-halo-width": 1,
         "text-halo-blur": 1
       }
+    },
+    {
+      "id": "building",
+      "type": "fill-extrusion",
+      "source": "mapbox_composite",
+      "source-layer": "building",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-extrusion-color": "rgba(220,220,220,0.5)",
+        "fill-extrusion-height": ["get", "height"],
+        "fill-extrusion-base": 0,
+        "fill-extrusion-opacity": 0.8
+      },
+      "filter": [
+        "all",
+        ["==", "$type", "Polygon"],
+        ["has", "height"],
+        ["==", "extrude", "true"]
+      ]
     },
     {
       "id": "water-label-line",
@@ -1536,7 +1561,11 @@
           0.15,
           0
         ],
-        "text-font": ["Baskerville Italic"],
+        "text-font": [
+          "Libre Baskerville Regular",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
+        ],
         "symbol-placement": "line-center",
         "text-pitch-alignment": "viewport",
         "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
@@ -1545,6 +1574,7 @@
       "paint": {
         "text-color": "rgba(47,47,47,0.7)",
         "text-halo-color": "rgba(71,71,71,0)",
+        "text-halo-width": 1.2,
         "icon-color": "rgba(47,47,47,0.7)"
       }
     },
@@ -1575,7 +1605,11 @@
           10,
           ["step", ["get", "sizerank"], 18, 9, 12]
         ],
-        "text-font": ["Baskerville Italic"],
+        "text-font": [
+          "Libre Baskerville Regular",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
+        ],
         "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-letter-spacing": [
           "match",
@@ -1618,7 +1652,11 @@
         ["==", ["geometry-type"], "LineString"]
       ],
       "layout": {
-        "text-font": ["Arial"],
+        "text-font": [
+          "Libre Baskerville Regular",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
+        ],
         "text-max-angle": 30,
         "symbol-spacing": [
           "interpolate",
@@ -1697,7 +1735,8 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(153,153,153,0.4)"
+        "fill-color": "rgba(153,153,153,0.4)",
+        "fill-outline-color": "rgba(0,0,0,0)"
       }
     },
     {
@@ -1749,7 +1788,11 @@
       ],
       "layout": {
         "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
-        "text-font": ["Arial"],
+        "text-font": [
+          "Noto Sans Regular",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
+        ],
         "text-size": ["interpolate", ["linear"], ["zoom"], 4, 6, 15, 17],
         "text-letter-spacing": 0.2,
         "text-variable-anchor": [
@@ -1777,14 +1820,18 @@
       "type": "symbol",
       "source": "mapbox_composite",
       "source-layer": "place_label",
-      "minzoom": 4,
+      "minzoom": 3.01,
       "filter": [
         "all",
         ["==", ["get", "capital"], 2],
         ["!=", ["get", "iso_3166_1"], "AZ"]
       ],
       "layout": {
-        "text-font": ["Arial"],
+        "text-font": [
+          "Noto Sans Bold",
+          "Noto Sans Arabic Bold",
+          "Noto Sans Bengali Bold"
+        ],
         "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-size": ["interpolate", ["linear"], ["zoom"], 4, 7, 15, 20],
         "text-letter-spacing": 0.2,
@@ -1807,87 +1854,195 @@
       }
     },
     {
-      "id": "country-label",
+      "id": "country_un_1_label_1",
       "type": "symbol",
       "source": "mapbox_composite",
       "source-layer": "un_2020_labels_countries_point",
-      "minzoom": 1.585,
-      "filter": [
-        "step",
-        ["zoom"],
-        [">", ["get", "group_size"], 70],
-        4,
-        [">", ["get", "group_size"], 60],
-        5,
-        [">", ["get", "group_size"], 40],
-        7,
-        [">=", ["get", "group_size"], 10]
-      ],
+      "minzoom": 6.01,
+      "filter": ["match", ["get", "stscod"], [11], true, false],
       "layout": {
         "symbol-sort-key": ["-", 100, ["get", "group_size"]],
-        "text-size": [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          4,
-          [
-            "match",
-            ["get", "stscod"],
-            [0],
-            11,
-            [1, 3],
-            8,
-            [2, 4],
-            7.5,
-            [5],
-            7,
-            [99, 11],
-            6.5,
-            6
-          ],
-          22,
-          [
-            "match",
-            ["get", "stscod"],
-            [0],
-            30,
-            [1, 3],
-            45,
-            [2, 4],
-            42.5,
-            [5],
-            40,
-            [99, 11],
-            32.5,
-            35
-          ]
-        ],
-        "icon-size": ["interpolate", ["linear"], ["zoom"], 4, 0.8, 22, 2],
-        "text-transform": [
-          "match",
-          ["get", "stscod"],
-          [1, 2, 0, 11, 99],
-          "uppercase",
-          "none"
-        ],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 6, 22, 24],
         "text-allow-overlap": false,
         "text-field": ["get", "name_en"],
         "text-font": [
-          "match",
-          ["get", "stscod"],
-          [1, 3, 4, 99, 11],
-          ["literal", ["Arial"]],
-          [0, 2, 5],
-          ["literal", ["Arial Italic"]],
-          ["literal", ["Arial"]]
+          "Noto Sans Regular",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
+        ],
+        "text-letter-spacing": 0.2,
+        "text-padding": 10,
+        "text-anchor": "bottom",
+        "visibility": "visible",
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "rgba(47,47,47,0.8)",
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(48,48,48,0)",
+        "text-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          5,
+          1,
+          8,
+          0.8,
+          20,
+          0.4
+        ]
+      }
+    },
+    {
+      "id": "country_un_0_label_99",
+      "type": "symbol",
+      "source": "mapbox_composite",
+      "source-layer": "un_2020_labels_countries_point",
+      "minzoom": 6.01,
+      "filter": ["match", ["get", "stscod"], [99], true, false],
+      "layout": {
+        "symbol-sort-key": ["-", 100, ["get", "group_size"]],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 6, 22, 24],
+        "text-allow-overlap": false,
+        "text-field": ["get", "name_en"],
+        "text-font": [
+          "Noto Sans Regular",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
+        ],
+        "text-letter-spacing": 0.2,
+        "text-padding": 10,
+        "text-anchor": "bottom",
+        "visibility": "visible",
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "rgba(47,47,47,0.8)",
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(48,48,48,0)",
+        "text-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          5,
+          1,
+          8,
+          0.8,
+          20,
+          0.4
+        ]
+      }
+    },
+    {
+      "id": "country_un_0_label_5",
+      "type": "symbol",
+      "source": "mapbox_composite",
+      "source-layer": "un_2020_labels_countries_point",
+      "minzoom": 6.01,
+      "filter": ["match", ["get", "stscod"], [5], true, false],
+      "layout": {
+        "symbol-sort-key": ["-", 100, ["get", "group_size"]],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 8, 22, 32],
+        "text-allow-overlap": false,
+        "text-field": ["get", "name_en"],
+        "text-font": [
+          "Noto Sans Regular",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
+        ],
+        "text-letter-spacing": 0.2,
+        "text-padding": 10,
+        "text-anchor": "bottom",
+        "visibility": "visible",
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "rgba(47,47,47,0.8)",
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(48,48,48,0)",
+        "text-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          5,
+          1,
+          8,
+          0.8,
+          20,
+          0.4
+        ]
+      }
+    },
+    {
+      "id": "country_un_0_label_4",
+      "type": "symbol",
+      "source": "mapbox_composite",
+      "source-layer": "un_2020_labels_countries_point",
+      "minzoom": 4.01,
+      "filter": ["match", ["get", "stscod"], [4], true, false],
+      "layout": {
+        "symbol-sort-key": ["-", 100, ["get", "group_size"]],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 9, 22, 36],
+        "text-allow-overlap": false,
+        "text-field": ["get", "name_en"],
+        "text-font": [
+          "Noto Sans Regular",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
+        ],
+        "text-letter-spacing": 0.2,
+        "text-padding": 10,
+        "text-anchor": "bottom",
+        "visibility": "visible",
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "rgba(47,47,47,0.8)",
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(48,48,48,0)",
+        "text-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          5,
+          1,
+          8,
+          0.8,
+          20,
+          0.4
+        ]
+      }
+    },
+    {
+      "id": "country_un_0_label_3",
+      "type": "symbol",
+      "source": "mapbox_composite",
+      "source-layer": "un_2020_labels_countries_point",
+      "minzoom": 4.01,
+      "filter": ["match", ["get", "stscod"], [3], true, false],
+      "layout": {
+        "symbol-sort-key": ["-", 100, ["get", "group_size"]],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 9, 22, 36],
+        "icon-size": ["interpolate", ["linear"], ["zoom"], 4, 0.8, 22, 2],
+        "text-allow-overlap": false,
+        "text-field": ["get", "name_en"],
+        "text-font": [
+          "Noto Sans Regular",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
         ],
         "text-letter-spacing": 0.2,
         "text-padding": 10,
         "text-anchor": "bottom",
         "icon-anchor": "center",
         "visibility": "visible",
-        "icon-image": "maki-information-11",
-        "icon-offset": [0,10],
+        "icon-image": [
+          "case",
+          ["has", "mx_info_box"],
+          "maki-information-11",
+          ""
+        ],
+        "icon-offset": [0, 10],
         "text-justify": "auto"
       },
       "paint": {
@@ -1900,12 +2055,136 @@
           ["linear"],
           ["zoom"],
           5,
-          ["case", ["has", "mx_info_box"], 1, 0],
+          1,
           8,
-          ["case", ["has", "mx_info_box"], 0.8, 0],
+          0.8,
           20,
-          ["case", ["has", "mx_info_box"], 0.4, 0]
+          0.4
         ],
+        "text-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          5,
+          1,
+          8,
+          0.8,
+          20,
+          0.4
+        ]
+      }
+    },
+    {
+      "id": "country_un_0_label_2",
+      "type": "symbol",
+      "source": "mapbox_composite",
+      "source-layer": "un_2020_labels_countries_point",
+      "minzoom": 4.01,
+      "filter": ["match", ["get", "stscod"], [2], true, false],
+      "layout": {
+        "symbol-sort-key": ["-", 100, ["get", "group_size"]],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 9, 22, 36],
+        "text-transform": "uppercase",
+        "text-allow-overlap": false,
+        "text-field": ["get", "name_en"],
+        "text-font": [
+          "Noto Sans Italic",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
+        ],
+        "text-letter-spacing": 0.2,
+        "text-padding": 10,
+        "text-anchor": "bottom",
+        "visibility": "visible",
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "rgba(47,47,47,0.8)",
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(48,48,48,0)",
+        "text-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          5,
+          1,
+          8,
+          0.8,
+          20,
+          0.4
+        ]
+      }
+    },
+    {
+      "id": "country_un_0_label_1",
+      "type": "symbol",
+      "source": "mapbox_composite",
+      "source-layer": "un_2020_labels_countries_point",
+      "minzoom": 1.01,
+      "filter": ["match", ["get", "stscod"], [1], true, false],
+      "layout": {
+        "symbol-sort-key": ["-", 100, ["get", "group_size"]],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 10, 22, 40],
+        "text-transform": "uppercase",
+        "text-allow-overlap": false,
+        "text-field": ["get", "name_en"],
+        "text-font": [
+          "Noto Sans Regular",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
+        ],
+        "text-letter-spacing": 0.2,
+        "text-padding": 10,
+        "text-anchor": "bottom",
+        "visibility": "visible",
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "rgba(47,47,47,0.8)",
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(48,48,48,0)",
+        "text-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          5,
+          1,
+          8,
+          0.8,
+          20,
+          0.4
+        ]
+      }
+    },
+    {
+      "id": "country_un_0_label_0",
+      "type": "symbol",
+      "source": "mapbox_composite",
+      "source-layer": "un_2020_labels_countries_point",
+      "minzoom": 1.01,
+      "filter": ["match", ["get", "stscod"], [0], true, false],
+      "layout": {
+        "symbol-sort-key": ["-", 100, ["get", "group_size"]],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 11, 22, 44],
+        "text-transform": "uppercase",
+        "text-allow-overlap": false,
+        "text-field": ["get", "name_en"],
+        "text-font": [
+          "Noto Sans Italic",
+          "Noto Sans Arabic Regular",
+          "Noto Sans Bengali Regular"
+        ],
+        "text-letter-spacing": 0.2,
+        "text-padding": 10,
+        "text-anchor": "bottom",
+        "icon-anchor": "center",
+        "visibility": "visible",
+        "text-justify": "auto"
+      },
+      "paint": {
+        "text-color": "rgba(47,47,47,0.8)",
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(48,48,48,0)",
         "text-opacity": [
           "interpolate",
           ["linear"],

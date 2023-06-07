@@ -1,4 +1,4 @@
-import { isUrl, isArray, isEmpty } from "./../is_test/index.js";
+import { isUrl, isArray, isEmpty, isNotEmpty } from "./../is_test/index.js";
 import { parseTemplate } from "./../mx_helper_misc.js";
 import { settings } from "./../settings/index.js";
 import { getVersion } from "./../mx_helper_app_utils.js";
@@ -20,6 +20,7 @@ export async function mapboxToSld(style, opt) {
         fixFilters: true,
         fixImageCdn: true,
         fixIconSize: true,
+        ignoreConversionErrors: true,
       },
       opt
     );
@@ -28,12 +29,15 @@ export async function mapboxToSld(style, opt) {
     const mapbox = new MapboxStyleParser();
     const sld = new SldStyleParser();
 
-    mapbox.ignoreConversionErrors = true;
+    mapbox.ignoreConversionErrors = opt.ignoreConversionErrors;
+
     const gstyle = await mapbox.readStyle(style, {});
-    if (isArray(gstyle?.errors) && gstyle.errors.length > 0) {
-      const errors = gstyle.errors.reduce((a, c) => a + ", " + c, "");
+
+    if (isArray(gstyle?.errors) && isNotEmpty(gstyle.errors)) {
+      const errors = gstyle.errors.join(",");
       throw new Error(`Style had errors: ${errors}`);
     }
+
     if (opt.fixFilters) {
       geostylerFixFilters(gstyle, {
         fixNumeric: fixNumeric,
@@ -156,7 +160,7 @@ function spriteToCdnLink(str, params) {
   if (!name) {
     return;
   }
-  const path = `app/src/glyphs/dist/svg/${name}.svg`;
+  const path = `app/src/sprites/dist/svg/${name}.svg`;
   const cdnTemplate = settings.cdn.template;
   const urlImage = new URL(parseTemplate(cdnTemplate, { version, path }));
   if (params) {
@@ -211,9 +215,9 @@ function spriteToCdnLink(str, params) {
  * @param {Boolean} opt.fixNumeric All rules apply to numeric attribute
  */
 function geostylerFixFilters(gstyle, opt) {
-  const opKeep = [">", ">=", "<", "<=", "=="];
+  const opKeep = [">", ">=", "<", "<=", "==", "!"];
   const opCombi = ["&&", "||"];
-  const opExpr = ["get"];
+  const opExpr = ["get", "has"];
 
   const isNum = opt.fixNumeric;
 
@@ -225,6 +229,7 @@ function geostylerFixFilters(gstyle, opt) {
       /**
        * Handle combination operator
        */
+
       if (opCombi.includes(filter)) {
         filter_fix.push(filter);
         continue;
@@ -242,10 +247,20 @@ function geostylerFixFilters(gstyle, opt) {
            * ["==",["get","x"],"y"]
            *
            * ⚠️  should have been handled previously via
-           * 'simplifyExpression', but if used directly
+           * 'simplifyExpression' (makeSimpleLayer),
+           *  but if used directly...
            */
           if (isArray(filter[1])) {
-            if (opExpr.includes(filter[1][0])) {
+            if (filter[1][0] === "has" && filter[0] === "!") {
+              /**
+               * ["!",["has",<attr>]]
+               * ->
+               * ["==",<attr>,null]
+               */
+              const filterNull = ["==", filter[1][1], null];
+              filter.length = 0;
+              filter.push(...filterNull);
+            } else if (opExpr.includes(filter[1][0])) {
               filter[1] = filter[1][1];
             }
           }

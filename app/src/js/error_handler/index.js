@@ -13,10 +13,10 @@ export function errorHandler(err) {
   }
 
   if (errObject._to_warn) {
-    console.warn(errObject, errObject.stack);
+    console.warn(errObject);
   } else {
-    console.error(errObject, errObject.stack);
-  }
+    console.error(errObject);
+  } 
 }
 
 /**

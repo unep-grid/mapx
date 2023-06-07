@@ -3,7 +3,13 @@ import { path, all } from "./mx_helper_misc.js";
 import { el } from "./el/src/index.js";
 import { getDictItem, updateLanguageElements } from "./language";
 import { modal } from "./mx_helper_modal";
-import { isEmail, isUrl, isEmpty, isStringRange, isDateString } from "./is_test";
+import {
+  isEmail,
+  isUrl,
+  isEmpty,
+  isStringRange,
+  isDateString,
+} from "./is_test";
 /**
  * Validate metadata for a view
  * @param {Object} view View object

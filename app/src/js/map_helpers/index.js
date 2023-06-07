@@ -1,20 +1,32 @@
-import { mg, ws, nc, events, listeners, theme, mapboxgl } from "./../mx.js";
-import { settings } from "./../settings";
+import {
+  ws,
+  nc,
+  events,
+  listeners,
+  theme,
+  mapboxgl,
+  maps,
+  highlighter,
+  settings,
+  panel_tools,
+} from "./../mx.js";
 import { featuresToPopup } from "./features_to_popup.js";
 import { RadialProgress } from "./../radial_progress";
 import { handleViewClick } from "./../views_click";
 import { ButtonPanel } from "./../button_panel";
 import { RasterMiniMap } from "./../raster_mini_map";
 import { el, elSpanTranslate } from "./../el_mapx/index.js";
+import { shake } from "./../elshake/index.js";
 import { MainPanel } from "./../panel_main";
 import { MapInfoBox } from "./../map_info_box";
 import { Search } from "./../search";
+import { downloadJSON } from "../download/index.js";
+import { ViewBase } from "../views_builder/view_base.js";
 import {
   MapxLogo,
   MapControlLiveCoord,
   MapControlScale,
 } from "./../map_controls";
-import { ControlsPanel } from "./../panel_controls";
 import { MapxDraw } from "./../draw";
 import { NotifCenter } from "./../notif_center/";
 import { cleanDiacritic } from "./../string_util/";
@@ -37,9 +49,8 @@ import {
   viewsListAddSingle,
 } from "./../mx_helper_map_view_ui.js";
 import { initLog } from "./../mx_helper_log.js";
-import { dashboardHelper } from "./../mx_helper_map_dashboard.js";
+import { dashboardHelper } from "./../dashboards/dashboard_instances.js";
 import {
-  date,
   updateIfEmpty,
   round,
   setBusy,
@@ -49,7 +60,6 @@ import {
   showSelectProject,
   showSelectLanguage,
   showLogin,
-  debounce,
   updateTitle,
   childRemover,
   getClickHandlers,
@@ -104,8 +114,8 @@ import {
   isViewId,
   isViewRt,
   isViewVt,
+  isHTML,
   isElement,
-  isNumeric,
   isString,
   isFunction,
   isBoolean,
@@ -124,7 +134,11 @@ import {
   isViewDownloadable,
   isViewRtWithLegend,
   isViewVtWithAttributeType,
+  isBoundsInsideBounds,
 } from "./../is_test_mapx/index.js";
+import { FlashItem } from "../icon_flash/index.js";
+import { viewFiltersInit } from "./view_filters.js";
+export * from "./view_filters.js";
 
 /**
  * Storage
@@ -140,6 +154,55 @@ const viewsActive = new Set();
  * Definied is this file.
  */
 export { downloadViewVector } from "./../source";
+
+/**
+ * Export style basemap
+ * @returns {Object} Mapbox style with MapX basemap
+ */
+export function getStyleBaseMap() {
+  const map = getMap();
+  const style = clone(map.getStyle());
+  const themeData = theme.get();
+  const styleOut = {};
+  style.name = themeData.id;
+  style.sprite = settings.links.mapboxSprites;
+  style.glyphs = settings.links.mapboxGlyphs;
+
+  /**
+   * Clear metadata
+   */
+  delete style.metadata;
+
+  styleOut.metadata = {
+    //fonts: {
+    //source: settings.links.mapFonts,
+    //},
+  };
+
+  /**
+   * Remove mapx layers
+   */
+  const layers = [];
+  for (const layer of style.layers) {
+    if (layer.id.match(/^(?!MX-)/)) {
+      layers.push(layer);
+    }
+  }
+  style.layers = layers;
+
+  /**
+   * Remove mapx sources
+   */
+  for (const idSource in style.sources) {
+    if (idSource.match(/^MX-/)) {
+      delete style.sources[idSource];
+    }
+  }
+
+  Object.assign(styleOut, style);
+
+  return styleOut;
+}
 
 /**
  * Convert point in  degrees to meter
@@ -193,9 +256,7 @@ export async function downloadViewGeoJSON(opt) {
     filename = `${view.id}.geojson`;
   }
   if (opt.mode === "file") {
-    const download = await moduleLoad("downloadjs");
-    const data = JSON.stringify(geojson);
-    await download(data, filename);
+    await downloadJSON(geojson, filename);
   }
   if (opt.mode === "data") {
     opt.data = geojson;
@@ -409,6 +470,19 @@ export async function getLoginInfo() {
 }
 
 /**
+ * Wrapper to trigger layers list update (.e.g. after upload)
+ * @returns
+ */
+export function triggerUpdateSourcesList() {
+  const hasShiny = window.Shiny;
+  if (hasShiny) {
+    Shiny.onInputChange("mx_client_update_source_list", {
+      date: new Date() * 1,
+    });
+  }
+}
+
+/**
  * Set the project manually
  * @param {String} idProject project to load
  * @param {Object} opt Options
@@ -505,9 +579,8 @@ export function requestProjectMembership(idProject) {
  */
 export function isModeLocked() {
   let modeLocked =
-    getQueryParameterInit("noViews")[0] === "true" ||
-    getQueryParameterInit("modeLocked")[0] === "true";
-
+    getQueryParameterInit("noViews")[0] ||
+    getQueryParameterInit("modeLocked")[0];
   return !!modeLocked;
 }
 
@@ -821,36 +894,35 @@ export async function updateUiSettings() {
 }
 
 /**
- * Check if there is view activated and disable button if needed
+ * Update btn filter activated
  */
 export function updateBtnFilterActivated() {
-  const views = getViews();
   const elFilterActivated = document.getElementById("btnFilterChecked");
-  /**
-   * Check displayed views element
-   */
-  const hasViewsActivated = views.reduce((a, v) => {
-    if (!v._vb) {
-      return a || false;
-    }
-    let elView = v._vb.getEl();
-    let isOpen = v._vb.isOpen();
-    let style = window.getComputedStyle(elView);
-    let isVisible = style.display !== "none";
-
-    return a || (isOpen && isVisible);
-  }, false);
-
-  /**
-   * Set elFilter disabled class
-   */
+  const enable = hasViewsActivated();
   const isActivated = elFilterActivated.classList.contains("active");
-  if (isActivated || hasViewsActivated) {
+  if (isActivated || enable) {
     elFilterActivated.classList.remove("disabled");
   } else {
     elFilterActivated.classList.add("disabled");
   }
 }
+
+/**
+ * Check if there are some view item enable and visible
+ * @return {Boolean} has activated view items
+ */
+export function hasViewsActivated() {
+  const views = getViews();
+  for (const view of views) {
+    if (view._vb instanceof ViewBase) {
+      if (view._vb.isActive()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 /**
  * Initial mgl and mapboxgl
  * @param {Object} o options
@@ -866,8 +938,6 @@ export function updateBtnFilterActivated() {
  * @param {Number} o.mapPosition.bearing Bearing
  * @param {Number} o.mapPosition.lng Longitude center
  * @param {Number} o.mapPosition.lat Latitude center
- * @param {Object} o.mapPosition.bounds Mapbox bounds object
- * @param {Boolean} o.mapPosition.fitToBounds fit map to bounds
  * @param {Object} o.colorScheme Color sheme object
  * @param {String} o.idTheme Id of the theme to use
  * @param {Boolean} o.useQueryFilters Use query filters for fetch views
@@ -880,12 +950,12 @@ export async function initMapx(o) {
   /**
    * Set mapbox gl token
    */
-  mx.mapboxgl.accessToken = o.token || settings.map.token;
+  mapboxgl.accessToken = o.token || settings.map.token;
 
   /**
    * MapX map data : views, config, etc..
    */
-  mx.maps[o.id] = Object.assign(
+  maps[o.id] = Object.assign(
     {
       map: {},
       views: [],
@@ -896,7 +966,10 @@ export async function initMapx(o) {
   /**
    * Set mode
    */
-  if (!o.modeStatic && getQueryParameter("storyAutoStart")[0] === "true") {
+  const storyAutoStart =
+    !o.modeStatic && getQueryParameter("storyAutoStart")[0];
+
+  if (storyAutoStart) {
     /**
      * Temporary hack : force redirect here. URL rewrite in Traefik does
      * not allow lookaround : it's not possible to have non trivial redirect.
@@ -911,18 +984,19 @@ export async function initMapx(o) {
   /**
    * Update closed panel setting
    */
-  if (getQueryParameter("closePanels")[0] === "true") {
+  const closePanel = getQueryParameter("closePanels")[0];
+  if (closePanel) {
     settings.initClosedPanels = true;
   }
 
-  settings.mode.static = o.modeStatic || settings.mode.storyAutoStart;
+  settings.mode.static = !!o.modeStatic || settings.mode.storyAutoStart;
   settings.mode.app = !settings.mode.static;
 
   /**
    * Update  sprites path
    */
   settings.style.sprite = getAppPathUrl("sprites");
-  settings.style.glyphs = getAppPathUrl("fontstack");
+  //settings.style.glyphs = getAppPathUrl("fontstack");
 
   /**
    * WS connect + authentication
@@ -937,7 +1011,7 @@ export async function initMapx(o) {
   /*
    * test if mapbox gl is supported
    */
-  if (!mx.mapboxgl.supported()) {
+  if (!mapboxgl.supported()) {
     alert(
       "This website will not work with your browser. Please upgrade it or use a compatible one."
     );
@@ -952,37 +1026,62 @@ export async function initMapx(o) {
   const queryZoom = getQueryParameter(["z", "zoom"])[0];
   const queryPitch = getQueryParameter(["p", "pitch"])[0];
   const queryBearing = getQueryParameter(["b", "bearing"])[0];
+  const queryMinZoom = getQueryParameter(["zmin", "zoomMin"])[0];
+  const queryMaxZoom = getQueryParameter(["zmax", "zoomMax"])[0];
+  const queryMaxBounds = getQueryParameter(["useMaxBounds"]);
 
-  if (queryLat) {
+  if (isNotEmpty(queryLat)) {
     mp.center = null;
     mp.lat = queryLat * 1 || 0;
   }
-  if (queryLng) {
+  if (isNotEmpty(queryLng)) {
     mp.center = null;
     mp.lng = queryLng * 1 || 0;
   }
-  if (queryZoom) {
+  if (isNotEmpty(queryZoom)) {
     mp.z = queryZoom * 1 || 0;
   }
-  if (queryPitch) {
+  if (isNotEmpty(queryPitch)) {
     mp.p = queryPitch * 1 || 0;
   }
-  if (queryBearing) {
+  if (isNotEmpty(queryBearing)) {
     mp.b = queryBearing * 1 || 0;
   }
+  if (isNotEmpty(queryMaxZoom)) {
+    mp.zmax = queryMaxZoom * 1 || 22;
+  }
+  if (isNotEmpty(queryMinZoom)) {
+    mp.zmin = queryMinZoom * 1 || 0;
+  }
+
+  if (isNotEmpty(queryMaxBounds) || mp.useMaxBounds) {
+    const bounds = [];
+    for (const k of ["w", "s", "e", "n"]) {
+      const v = (getQueryParameter(k)[0] || mp[k] || 0) * 1;
+      bounds.push(v);
+    }
+    const vbounds = validateBounds(bounds);
+    mp.maxBounds = vbounds;
+  }
+
   /* map options */
   const mapOptions = {
     container: o.id, // container id
     style: settings.style, // mx default style
     maxZoom: settings.map.maxZoom,
     minZoom: settings.map.minZoom,
+    bounds: mp.bounds || null,
+    maxBounds: mp.maxBounds || null,
     preserveDrawingBuffer: false,
     attributionControl: false,
     crossSourceCollisions: true,
-    zoom: mp.z || mp.zoom || 0,
+    zoom: mp.z || mp.zoom || 1,
+    minZoom: mp.zmin || mp.zoomMax || null,
+    maxZoom: mp.zmax || mp.zoomMin || null,
     bearing: mp.b || mp.bearing || 0,
     pitch: mp.p || mp.pitch || 0,
     center: mp.center || [mp.lng || 0, mp.lat || 0],
+    localIdeographFontFamily: "'Noto Sans', 'Noto Sans SC', sans-serif",
   };
   /*
    * Create map object
@@ -1059,10 +1158,16 @@ export async function initMapx(o) {
     /**
      * Build theme config inputs only when settings tab is displayed
      */
-    mx.panel_main.on("tab_change", (id) => {
-      if (id === "tools") {
-        const elInputs = document.getElementById("mxInputThemeColors");
-        theme.linkInputs(elInputs);
+    mx.panel_main.on("tab_change", async (id) => {
+      try {
+        if (id === "tools") {
+          const elThemeContainer = document.querySelector(
+            "#mxInputThemeColors"
+          );
+          await theme.initManager(elThemeContainer);
+        }
+      } catch (e) {
+        console.error(e);
       }
     });
 
@@ -1114,50 +1219,25 @@ export async function initMapx(o) {
     });
   }
 
-  /**
-   * Add map controls + left bar toolbox
-   */
-  mx.panel_tools = new ControlsPanel({
-    panel: {
-      id: "controls_panel",
-      elContainer: document.body,
-      position: "top-right",
-      noHandles: true,
-      button_text: getDictItem("btn_panel_controls"),
-      button_lang_key: "btn_panel_controls",
-      tooltip_position: "bottom-left",
-      handles: ["free"],
-      container_classes: ["button-panel--container-no-full-width"],
-      item_content_classes: [
-        "button-panel--item-content-transparent-background",
-      ],
-      panel_style: {
-        marginTop: "40px",
-      },
-      container_style: {
-        width: "100px",
-        height: "400px",
-        minWidth: "49px",
-        minHeight: "49px",
-      },
-    },
-  });
-
   if (!settings.initClosedPanels) {
-    mx.panel_tools.panel.open();
+    panel_tools.panel.open();
   }
 
   /**
    * Initial mode terrain 3d / Sat
    */
-  const ctrls = mx.panel_tools.controls;
-  const enable3d = getQueryParameter("t3d")[0] === "true";
-  const enableSat = getQueryParameter("sat")[0] === "true";
+  const ctrls = panel_tools.controls;
+  const enable3d = getQueryParameter("t3d")[0];
+  const enableSat = getQueryParameter("sat")[0];
+  const enableGlobe = getQueryParameter("globe")[0];
   if (enable3d) {
     ctrls.getButton("btn_3d_terrain").action("enable");
   }
   if (enableSat) {
     ctrls.getButton("btn_theme_sat").action("enable");
+  }
+  if (enableGlobe) {
+    ctrls.getButton("btn_theme_globe").action("enable");
   }
 
   /**
@@ -1165,7 +1245,7 @@ export async function initMapx(o) {
    */
   mx.draw = new MapxDraw({
     map: map,
-    panel_tools: mx.panel_tools,
+    panel_tools: panel_tools,
     url_help: settings.links.repositoryWikiDrawTool,
   });
   mx.draw.on("enable", () => {
@@ -1201,6 +1281,7 @@ export async function initMapx(o) {
   initLog();
   initListenerGlobal();
   initMapListener(map);
+
   /**
    * Load mapx app or static
    */
@@ -1240,18 +1321,24 @@ export function initMapListener(map) {
   /**
    * Highlight on event
    */
-  mx.highlighter.init(map);
+  highlighter.init(map);
 
   events.on({
-    type: ["view_add", "view_remove", "story_step", "story_close"],
-    idGroup: "highlight_clear",
+    type: [
+      "view_add",
+      "view_remove",
+      "story_step",
+      "story_close",
+      "view_panel_click",
+    ],
+    idGroup: "highlight_reset",
     callback: () => {
-      mx.highlighter.clean();
+      highlighter.reset();
     },
   });
 
   theme.on("set_colors", (colors) => {
-    mx.highlighter.setOptions({
+    highlighter.setOptions({
       highlight_color: colors.mx_map_feature_highlight.color,
     });
     if (window.jed && jed.aceEditors) {
@@ -1261,13 +1348,30 @@ export function initMapListener(map) {
     }
   });
 
+  map.on("moveend", () => {
+    if (highlighter.isNotSet()) {
+      return;
+    }
+    highlighter.update();
+  });
+
   map.on("mousemove", (e) => {
+    const layers = getLayerNamesByPrefix({
+      id: map.id,
+      prefix: "MX", // custom code could be MXCC ...
+    });
+    /**
+     * Change cursor when hovering mapx layers : invite for click
+     */
+    const features = map.queryRenderedFeatures(e.point, { layers: layers });
+    map.getCanvas().style.cursor = features.length ? "pointer" : "";
+
+    /**
+     * Change illuminaion direction accoding to mouse position
+     * - Quite intensive on GPU.
+     * - setPaintProperty seems buggy
+     */
     if (0) {
-      /**
-       * Change illuminaion direction accoding to mouse position
-       * - Quite intensive on GPU.
-       * - setPaintProperty seems buggy
-       */
       const elCanvas = map.getCanvas();
       const dpx = window.devicePixelRatio || 1;
       const wMap = elCanvas.width;
@@ -1282,23 +1386,12 @@ export function initMapListener(map) {
         deg
       );
     }
-
-    const layers = getLayerNamesByPrefix({
-      id: map.id,
-      prefix: "MX", // custom code could be MXCC ...
-    });
-    /**
-     * Change cursor when hovering mapx layers : invite for click
-     */
-    const features = map.queryRenderedFeatures(e.point, { layers: layers });
-    map.getCanvas().style.cursor = features.length ? "pointer" : "";
   });
 }
 
 export async function initMapxStatic(o) {
-  const map = getMap();
   const mapData = getMapData();
-  const zoomToViews = getQueryParameter("zoomToViews")[0] === "true";
+  const zoomToViews = getQueryParameter("zoomToViews")[0];
   const language = getQueryParameter("language")[0] || getLanguageDefault();
   /**
    * NOTE: all views are
@@ -1366,16 +1459,7 @@ export async function initMapxStatic(o) {
   /**
    * If there is view, render all
    */
-
   if (mapData.views && mapData.views.length) {
-    /**
-     * Extract all views bounds
-     */
-    if (zoomToViews) {
-      const bounds = await getViewsBounds(mapData.views);
-      map.fitBounds(bounds);
-    }
-
     /**
      * Display views
      */
@@ -1386,14 +1470,24 @@ export async function initMapxStatic(o) {
         addTitle: true,
       });
     }
+
     await viewsLayersOrderUpdate({
       order: idViews.reverse(),
     });
+
+    /**
+     * Extract all views bounds
+     */
+    if (zoomToViews) {
+      const bounds = await getViewsBounds(mapData.views);
+      fitMaxBounds(bounds);
+    }
   }
 
   events.fire({
     type: "mapx_ready",
   });
+
   return;
 }
 
@@ -1488,68 +1582,6 @@ export async function handleClickEvent(e, idMap) {
     return;
   }
 
-  if (retrieveAttributes) {
-    /*
-     * Extract attributes, return an object with idView
-     * as key and promises as value
-     * e.g. {MX-OTXV7-C2HI3-Z7XLJ: Promise}
-     *
-     */
-    const layersAttributes = await getLayersPropertiesAtPoint({
-      map: map,
-      point: e.point,
-      type: ["vt", "gj", "cc", "rt"],
-      asObject: true,
-    });
-
-    if (isEmpty(layersAttributes)) {
-      return;
-    }
-
-    /**
-     * Dispatch to event
-     */
-    await attributesToEvent(layersAttributes, e);
-
-    if (addPopup) {
-      /**
-       * Click event : make a popup with attributes
-       */
-      const popup = new mx.mapboxgl.Popup()
-        .setLngLat(map.unproject(e.point))
-        .addTo(map);
-
-      events.once({
-        type: [
-          "view_remove",
-          "view_add",
-          "story_step",
-          "story_lock",
-          "story_close",
-        ],
-        idGroup: "click_popup",
-        callback: () => {
-          popup.remove();
-        },
-      });
-
-      /**
-       * Remove highlighter too
-       */
-      popup.on("close", () => {
-        mx.highlighter.clean();
-      });
-
-      /**
-       * NOTE: see features_popup.js
-       */
-      featuresToPopup({
-        layersAttributes: layersAttributes,
-        popup: popup,
-      });
-    }
-  }
-
   if (addHighlight) {
     /**
      * Update highlighter after displaying popup:
@@ -1558,7 +1590,70 @@ export async function handleClickEvent(e, idMap) {
      * onNextFrame seems to do the job by delaying the upadte to the next animation frame.
      */
     onNextFrame(() => {
-      mx.highlighter.update(e);
+      highlighter.set({ point: e.point });
+    });
+  }
+
+  if (!retrieveAttributes) {
+    return;
+  }
+  /*
+   * Extract attributes, return an object with idView
+   * as key and promises as value
+   * e.g. {MX-OTXV7-C2HI3-Z7XLJ: Promise}
+   *
+   */
+  const layersAttributes = await getLayersPropertiesAtPoint({
+    map: map,
+    point: e.point,
+    type: ["vt", "gj", "cc", "rt"],
+    asObject: true,
+  });
+
+  if (isEmpty(layersAttributes)) {
+    return;
+  }
+
+  /**
+   * Dispatch to event
+   */
+  await attributesToEvent(layersAttributes, e);
+
+  if (addPopup) {
+    /**
+     * Click event : make a popup with attributes
+     */
+    const popup = new mapboxgl.Popup()
+      .setLngLat(map.unproject(e.point))
+      .addTo(map);
+
+    events.once({
+      type: [
+        "view_remove",
+        "view_add",
+        "story_step",
+        "story_lock",
+        "story_close",
+      ],
+      idGroup: "click_popup",
+      callback: () => {
+        popup.remove();
+      },
+    });
+
+    /**
+     * Remove highlighter too
+     */
+    popup.on("close", () => {
+      highlighter.reset();
+    });
+
+    /**
+     * NOTE: see features_popup.js
+     */
+    featuresToPopup({
+      layersAttributes: layersAttributes,
+      popup: popup,
     });
   }
 }
@@ -1664,6 +1759,7 @@ export function geolocateUser() {
     });
   }
 }
+
 /**
  * Reset project : remove view, dashboards, etc
  * NOTE: Shiny require at least one argument. Not used, but, needed.
@@ -1745,16 +1841,17 @@ export async function addSourceFromView(o) {
     /**
      * Add gid property if it does not exist
      */
-    const features = path(o.view, "data.source.data.features", []);
+
     let gid = 1;
-    features.forEach((f) => {
-      if (!f.properties) {
+    const features = o.view?.data?.source?.data?.features || [];
+    for (const f of features) {
+      if (isEmpty(f.properties)) {
         f.properties = {};
       }
       if (!f.properties.gid) {
         f.properties.gid = gid++;
       }
-    });
+    }
     o.view.data.source.promoteId = "gid";
   }
 
@@ -1794,6 +1891,12 @@ export async function addSourceFromView(o) {
  */
 export async function getViewRemote(idView) {
   const apiUrlViews = getApiUrl("getView");
+  const isViewValid = isView(idView);
+
+  if (isViewValid) {
+    return idView;
+  }
+
   const isValid = isViewId(idView) && isUrl(apiUrlViews);
 
   if (!isValid) {
@@ -2284,7 +2387,7 @@ export function viewsLayersOrderUpdate(o) {
     const views = getViews({ id: o.id });
     const order = o.order || getViewsOrder() || views.map((v) => v.id) || null;
 
-    if (!order || order.length === 0) {
+    if (isEmpty(order)) {
       resolve(order);
     }
 
@@ -2389,378 +2492,15 @@ export function updateViewParams(o) {
  */
 export function getViewsOrder() {
   const viewContainer = document.querySelector(".mx-views-list");
+  const out = new Set();
   if (!viewContainer) {
     return [];
   }
   const els = viewContainer.querySelectorAll(".mx-view-item");
-  const res = [];
-  for (let el of els) {
-    res.push(el.dataset.view_id);
+  for (const el of els) {
+    out.add(el.dataset.view_id);
   }
-  return res;
-}
-
-/**
- * Get JSON representation of a view ( same as the one dowloaded );
- * @param {String} idView Id of the view;
- * @param {Object} opt Options
- * @param {Boolean} opt.asString As string
- * @return {String} JSON string with view data (or cleaned view object);
- */
-export function getViewJson(idView, opt) {
-  opt = Object.assign({}, { asString: true }, opt);
-  const view = getView(idView);
-  const keys = [
-    "id",
-    "editor",
-    "target",
-    "date_modified",
-    "data",
-    "type",
-    "pid",
-    "project",
-    "readers",
-    "editors",
-    "_edit",
-  ];
-  const out = {};
-  keys.forEach((k) => {
-    let value = view[k];
-    if (value) {
-      out[k] = value;
-    }
-  });
-  if (opt.asString) {
-    return JSON.stringify(out);
-  } else {
-    return out;
-  }
-}
-
-/**
- * Create and listen to transparency sliders
-@param {Object} o Options
-@param {Object} o.view View data
-@param {String} o.idMap Map id
-*/
-export async function makeTransparencySlider(o) {
-  const view = o.view;
-  const el = document.querySelector(
-    "[data-transparency_for='" + view.id + "']"
-  );
-
-  if (!el) {
-    return;
-  }
-
-  const noUiSlider = await moduleLoad("nouislider");
-  const oldSlider = view._filters_tools.transparencySlider;
-  if (oldSlider) {
-    oldSlider.destroy();
-  }
-
-  const slider = noUiSlider.create(el, {
-    range: { min: 0, max: 100 },
-    step: 1,
-    start: 0,
-    tooltips: false,
-  });
-
-  slider._view = view;
-
-  /*
-   * Save the slider in the view
-   */
-  view._filters_tools.transparencySlider = slider;
-
-  /*
-   *
-   */
-  slider.on(
-    "update",
-    debounce((n, h) => {
-      const view = slider._view;
-      const opacity = 1 - n[h] * 0.01;
-      view._setOpacity({ opacity: opacity });
-    }, 10)
-  );
-}
-
-/**
- * Create and listen to numeric sliders
-@param {Object} o Options
-@param {Object} o.view View data
-@param {String} o.idMap Map id
-*/
-export async function makeNumericSlider(o) {
-  const view = o.view;
-
-  const el = document.querySelector(
-    "[data-range_numeric_for='" + view.id + "']"
-  );
-
-  if (!el) {
-    return;
-  }
-
-  const oldSlider = view._filters_tools.numericSlider;
-  if (oldSlider) {
-    oldSlider.destroy();
-  }
-
-  const summary = await getViewSourceSummary(view);
-
-  let min = path(summary, "attribute_stat.min", 0);
-  let max = path(summary, "attribute_stat.max", min);
-
-  if (view && min !== null && max !== null) {
-    if (min === max) {
-      min = min - 1;
-      max = max + 1;
-    }
-
-    const range = {
-      min: min,
-      max: max,
-    };
-    const noUiSlider = await moduleLoad("nouislider");
-
-    const slider = noUiSlider.create(el, {
-      range: range,
-      step: (min + max) / 1000,
-      start: [min, max],
-      connect: true,
-      behaviour: "drag",
-      tooltips: false,
-    });
-
-    slider._view = view;
-    slider._elMin = el.parentElement.querySelector(".mx-slider-range-min");
-    slider._elMax = el.parentElement.querySelector(".mx-slider-range-max");
-    slider._elDMax = el.parentElement.querySelector(".mx-slider-dyn-max");
-    slider._elDMin = el.parentElement.querySelector(".mx-slider-dyn-min");
-
-    /**
-     * update min / max range
-     */
-    slider._elMin.innerText = range.min;
-    slider._elMax.innerText = range.max;
-
-    /*
-     * Save the slider in the view
-     */
-    view._filters_tools.numericSlider = slider;
-
-    /*
-     *
-     */
-    slider.on(
-      "update",
-      debounce((n) => {
-        const view = slider._view;
-        const elDMin = slider._elDMin;
-        const elDMax = slider._elDMax;
-        const k = path(view, "data.attribute.name", "");
-
-        /* Update text values*/
-        if (n[0]) {
-          elDMin.innerHTML = n[0];
-        }
-        if (n[1]) {
-          elDMax.innerHTML = " – " + n[1];
-        }
-
-        const filter = [
-          "any",
-          ["!=", ["typeof", ["get", k]], "number"],
-          ["all", ["<=", ["get", k], n[1] * 1], [">=", ["get", k], n[0] * 1]],
-        ];
-
-        if (isArray(view._null_filter)) {
-          filter.push(view._null_filter);
-        }
-
-        view._setFilter({
-          filter: filter,
-          type: "numeric_slider",
-        });
-      }, 100)
-    );
-  }
-}
-
-/**
- * Create and listen to time sliders
- */
-export async function makeTimeSlider(o) {
-  const k = {};
-  k.t0 = "mx_t0";
-  k.t1 = "mx_t1";
-
-  const view = o.view;
-  const elView = getViewEl(view);
-  let el;
-  if (elView) {
-    el = elView.querySelector('[data-range_time_for="' + view.id + '"]');
-    if (!el) {
-      return;
-    }
-  }
-  const oldSlider = view._filters_tools.timeSlider;
-  if (oldSlider) {
-    oldSlider.destroy();
-  }
-
-  const summary = await getViewSourceSummary(view);
-  const extent = path(summary, "extent_time", {});
-  const attributes = path(summary, "attributes", []);
-
-  /*
-   * Create a time slider for each time enabled view
-   */
-  /* from slider to num */
-  const fFrom = function (x) {
-    return x;
-  };
-  /* num to slider */
-  const fTo = function (x) {
-    return Math.round(x);
-  };
-
-  if (extent.min || extent.max) {
-    const start = [];
-
-    if (extent.min && extent.max) {
-      const hasT0 = attributes.indexOf(k.t0) > -1;
-      const hasT1 = attributes.indexOf(k.t1) > -1;
-      let min = extent.min * 1000;
-      let max = extent.max * 1000;
-
-      if (min === max) {
-        min = min - 1;
-        max = max + 1;
-      }
-
-      const range = {
-        min: min,
-        max: max,
-      };
-
-      start.push(min);
-      start.push(max);
-
-      const noUiSlider = await moduleLoad("nouislider");
-
-      const slider = noUiSlider.create(el, {
-        range: range,
-        step: 24 * 60 * 60 * 1000,
-        start: start,
-        connect: true,
-        behaviour: "drag",
-        tooltips: false,
-        format: {
-          to: fTo,
-          from: fFrom,
-        },
-      });
-
-      /**
-       * Save slider in the view and view ref in target
-       */
-      slider._view = view;
-      slider._elDMin = el.parentElement.querySelector(".mx-slider-dyn-min");
-      slider._elDMax = el.parentElement.querySelector(".mx-slider-dyn-max");
-      slider._elMin = el.parentElement.querySelector(".mx-slider-range-min");
-      slider._elMax = el.parentElement.querySelector(".mx-slider-range-max");
-
-      slider._elMin.innerText = date(range.min);
-      slider._elMax.innerText = date(range.max);
-
-      view._filters_tools.timeSlider = slider;
-
-      slider.on(
-        "update",
-        debounce((t) => {
-          const view = slider._view;
-          const elDMax = slider._elDMax;
-          const elDMin = slider._elDMin;
-          /* Update text values*/
-          if (t[0]) {
-            elDMin.innerHTML = date(t[0]);
-          }
-          if (t[1]) {
-            elDMax.innerHTML = " – " + date(t[1]);
-          }
-
-          const filterAll = ["all"];
-
-          const filter = [
-            "any",
-            ["==", ["typeof", ["get", k.t0]], "string"],
-            ["==", ["typeof", ["get", k.t1]], "string"],
-          ];
-
-          //filter.push(["==", ["get", k.t0], -9e10]);
-          //filter.push(["==", ["get", k.t1], -9e10]);
-
-          if (hasT0 && hasT1) {
-            filterAll.push(
-              ...[
-                ["<=", ["get", k.t0], t[1] / 1000],
-                [">=", ["get", k.t1], t[0] / 1000],
-              ]
-            );
-          } else if (hasT0) {
-            filterAll.push(
-              ...[
-                [">=", ["get", k.t0], t[0] / 1000],
-                ["<=", ["get", k.t0], t[1] / 1000],
-              ]
-            );
-          }
-          filter.push(filterAll);
-
-          view._setFilter({
-            filter: filter,
-            type: "time_slider",
-          });
-        }, 100)
-      );
-    }
-  }
-}
-
-/**
- * Handle view data text filter listener
- * @param {object} o options
- * @param {string} o.id map id
- */
-export function handleViewValueFilterText(o) {
-  /*
-   * Set listener for each view search input
-   * NOTE: keyup is set globaly, on the whole view list
-   */
-  return function (event) {
-    let action, el, idView, search, options;
-    el = event.target;
-
-    idView = el.dataset.view_action_target;
-    action = el.dataset.view_action_key;
-
-    if (!idView || action !== "view_search_value") {
-      return;
-    }
-
-    search = event.target.value;
-
-    options = {
-      id: o.id,
-      idView: idView,
-      search: search,
-    };
-
-    filterViewValues(options);
-  };
+  return Array.from(out);
 }
 
 /**
@@ -2856,7 +2596,7 @@ function _viewUiOpen(view) {
   if (!isView(view)) {
     return;
   }
-  if (view._vb) {
+  if (view._vb instanceof ViewBase) {
     view._vb.open();
   }
   view._open = true;
@@ -2878,7 +2618,7 @@ async function _viewUiClose(view) {
   if (!isView(view)) {
     return;
   }
-  if (view._vb) {
+  if (view._vb instanceof ViewBase) {
     view._vb.close();
   }
   view._open = false;
@@ -2973,149 +2713,6 @@ export function getViewsActive() {
  */
 export function getViewEl(view) {
   return view._el || document.querySelector("[data-view_id='" + view.id + "']");
-}
-
-/**
- * Filter current view and store rules
- * @param {Object} o Options
- * @param {Array} o.filter Array of filter
- * @param {String} o.type Type of filter : style, legend, time_slider, search_box or numeric_slider
- */
-export function viewSetFilter(o) {
-  o = o || {};
-  const m = getMap();
-  const view = this;
-  const idView = view.id;
-  const filterView = view._filters;
-  const filter = o.filter;
-  const type = o.type ? o.type : "default";
-  const layers = getLayerByPrefix({ prefix: idView });
-  const hasFilter = isArray(filter) && filter.length > 1;
-  const filterNew = [];
-
-  events.fire({
-    type: "view_filter",
-    data: {
-      idView: idView,
-      filter: filter,
-    },
-  });
-
-  /**
-   * Add filter to filter type e.g. {legend:["all"],...} -> {legend:["all",["==","value","a"],...}
-   * ... or reset to default null
-   */
-  filterView[type] = hasFilter ? filter : null;
-
-  /**
-   * Filter object to filter array
-   */
-  for (let t in filterView) {
-    let f = filterView[t];
-    if (f) {
-      filterNew.push(f);
-    }
-  }
-
-  /**
-   * Apply filters to each layer, in top of base filters
-   */
-
-  for (let layer of layers) {
-    let filterOrig = path(layer, "metadata.filter", null);
-    let filterFinal = [];
-    if (!filterOrig) {
-      filterFinal.push("all", ...filterNew);
-    } else {
-      filterFinal.push(...filterOrig, ...filterNew);
-    }
-    m.setFilter(layer.id, filterFinal);
-  }
-
-  events.fire({
-    type: "view_filtered",
-    data: {
-      idView: idView,
-      filter: filterView,
-    },
-  });
-}
-
-/**
- * Set this view opacity
- * @param {Object} o Options
- * @param {Array} o.opacity
- */
-export function viewSetOpacity(o) {
-  o = o || {};
-  const view = this;
-  const idView = view.id;
-  const opacity = o.opacity;
-  const idMap = view._idMap ? view._idMap : settings.map.id;
-  const map = getMap(idMap);
-  const layers = getLayerByPrefix({
-    map: map,
-    prefix: idView,
-  });
-
-  layers.forEach((layer) => {
-    const type = layer.type === "symbol" ? "icon" : layer.type;
-    const property = type + "-opacity";
-    try {
-      map.setPaintProperty(layer.id, property, opacity);
-    } catch (e) {
-      console.error(e);
-    }
-  });
-}
-
-/**
- * Plot distribution
- * @param {Object} o options
- * @param {Object} o.data Object containing year "year" and value "n"
- * @param {Element} o.el Element where to append the plot
-# @param {string} o.type Type of plot. By default = density
-*/
-export function plotTimeSliderData(o) {
-  const data = o.data;
-  const el = o.el;
-  o.type = o.type ? o.type : "density";
-
-  if (!data || !data.year || !data.n) {
-    return;
-  }
-
-  const obj = {
-    labels: data.year,
-    series: [data.n],
-  };
-
-  const options = {
-    seriesBarDistance: 100,
-    height: "30px",
-    showPoint: false,
-    showLine: false,
-    showArea: true,
-    fullWidth: true,
-    showLabel: false,
-    axisX: {
-      showGrid: false,
-      showLabel: false,
-      offset: 0,
-    },
-    axisY: {
-      showGrid: false,
-      showLabel: false,
-      offset: 0,
-    },
-    chartPadding: 0,
-    low: 0,
-  };
-
-  divPlot = document.createElement("div");
-  divPlot.className = "ct-chart ct-square mx-slider-chart";
-  el.append(divPlot);
-  cL = new Chartist.Line(divPlot, obj, options);
 }
 
 /**
@@ -3390,6 +2987,7 @@ export async function viewLayersAdd(o) {
 
   /**
    * Fire view add event
+   * -> view_added when done
    */
   events.fire({
     type: "view_add",
@@ -3442,7 +3040,7 @@ export async function viewLayersAdd(o) {
    */
   if (!isStory) {
     await dh.viewAutoDashboardAsync(view);
-    dh.autoDestroy();
+    await dh.autoDestroy();
   }
 
   /**
@@ -3465,29 +3063,29 @@ export async function viewLayersAdd(o) {
   /**
    * handler based on view type
    */
-  function handleLayer(viewType) {
-    /* Switch on view type*/
-    const types = {
-      rt: function () {
-        return viewLayersAddRt({
+  async function handleLayer(viewType) {
+    let res;
+    switch (viewType) {
+      case "rt":
+        res = await viewLayersAddRt({
           view: view,
           map: m.map,
           before: idLayerBefore,
           elLegendContainer: o.elLegendContainer,
           addTitle: o.addTitle,
         });
-      },
-      cc: function () {
-        return viewLayersAddCc({
+        break;
+      case "cc":
+        res = await viewLayersAddCc({
           view: view,
           map: m.map,
           before: idLayerBefore,
           elLegendContainer: o.elLegendContainer,
           addTitle: o.addTitle,
         });
-      },
-      vt: function () {
-        return viewLayersAddVt({
+        break;
+      case "vt":
+        res = await viewLayersAddVt({
           view: view,
           map: m.map,
           debug: o.debug,
@@ -3495,23 +3093,49 @@ export async function viewLayersAdd(o) {
           elLegendContainer: o.elLegendContainer,
           addTitle: o.addTitle,
         });
-      },
-      gj: function () {
-        return viewLayersAddGj({
+        break;
+      case "gj":
+        res = await viewLayersAddGj({
           view: view,
           map: m.map,
           before: idLayerBefore,
           elLegendContainer: o.elLegendContainer,
           addTitle: o.addTitle,
         });
-      },
-      sm: function () {
-        return Promise.resolve(true);
-      },
-    };
-
-    return types[viewType]();
+      case "sm":
+        res = true;
+        break;
+      default:
+        res = false;
+    }
+    return res;
   }
+}
+
+/**
+ * Get link to view, current mode/location
+ * @param {String} idView View id
+ * @param {Boolean} useStatic
+ * @return {URL} url to the view
+ */
+export function viewLink(idView, opt) {
+  const def = {
+    useStatic: true,
+    project: null,
+  };
+  opt = Object.assign({}, def, opt);
+
+  const urlView = new URL(window.location);
+  urlView.search = "";
+  if (opt.useStatic) {
+    urlView.pathname = settings.paths.static;
+    urlView.searchParams.append("views", idView);
+  } else if (opt.project) {
+    urlView.searchParams.append("project", opt.project);
+    urlView.searchParams.append("viewsOpen", idView);
+  }
+  urlView.searchParams.append("zoomToViews", true);
+  return urlView;
 }
 
 /**
@@ -3752,10 +3376,18 @@ async function viewLayersAddCc(o) {
   const map = o.map;
   const methods = path(view, "data.methods");
 
+  if (isEmpty(methods)) {
+    console.warn("Custom code view not initialized, skipping");
+    return false;
+  }
+
   const idView = view.id;
   const idSource = idView + "-SRC";
   const idListener = "listener_cc_" + view.id;
 
+  if (view._onRemoveCustomView) {
+    await view._onRemoveCustomView();
+  }
   let cc;
 
   const elLegend = elLegendBuild(view, {
@@ -3766,7 +3398,24 @@ async function viewLayersAddCc(o) {
   });
 
   try {
-    cc = new Function(methods)();
+    /**
+     * Remove comments
+     */
+    let strToEval = methods.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "");
+
+    /**
+     * Test if script start with function
+     */
+    const hasFunction = /function handler/.test(strToEval);
+
+    if (hasFunction) {
+      strToEval = strToEval.substring(
+        strToEval.indexOf("{") + 1,
+        strToEval.lastIndexOf("}")
+      );
+    }
+
+    cc = new Function(strToEval)();
   } catch (e) {
     throw new Error("Failed to parse cc view", e.message);
   }
@@ -3779,6 +3428,9 @@ async function viewLayersAddCc(o) {
     return console.warn("Invalid custom code  view");
   }
 
+  /**
+   * Config
+   */
   const opt = {
     _init: false,
     _closed: false,
@@ -3788,14 +3440,21 @@ async function viewLayersAddCc(o) {
     idSource: idSource,
     idLegend: elLegend.id,
     elLegend: elLegend,
+    clear: clear,
+    addSource: addSource,
+    setLegend: setLegend,
+    addLayer: addLayer,
+    isClosed: isClosed,
+    isInit: isInit,
   };
-  opt.onInit = tryCatched(cc.onInit.bind());
+
+  opt.onInit = cc.onInit.bind(opt);
   opt.onClose = cc.onClose.bind(opt);
 
-  removeLayersByPrefix({
-    prefix: opt.idView,
-    id: settings.map.id,
-  });
+  /**
+   * Preventive  clearing
+   */
+  clear();
 
   /**
    * Avoid event to propagate
@@ -3807,45 +3466,88 @@ async function viewLayersAddCc(o) {
     callback: catchEvent,
   });
 
-  if (opt.map.getSource(opt.idSource)) {
-    opt.map.removeSource(opt.idSource);
-  }
-
-  view._onRemoveCustomView = function () {
-    listeners.removeListenerByGroup(idListener);
-
-    if (!opt._init || opt._closed) {
-      return;
-    }
+  /**
+   * "destroy" usable by MapX
+   */
+  view._onRemoveCustomView = async function () {
     try {
-      opt.onClose(opt);
+      if (opt.isClosed()) {
+        return;
+      }
+      if (!opt.isInit()) {
+        console.warn("CC view : requested remove, but not yet initialized");
+      }
+      await opt.onClose(opt);
+      clear();
     } catch (e) {
       console.error(e);
+    } finally {
+      delete view._onRemoveCustomView; // remove itself
+      opt._closed = true;
     }
-    opt._closed = true;
   };
 
   /**
    * Init custom map
+   * clear, in case it's not done in custom script and previous version still
+   * there.
    */
-
-  opt.onInit(opt);
+  await opt.onInit(opt);
   opt._init = true;
+  return true;
   /**
    * Helpers
    */
   function catchEvent(e) {
     e.stopPropagation();
   }
-  function tryCatched(fun) {
-    return function (...args) {
-      try {
-        return fun(...args);
-      } catch (e) {
-        opt.onClose(opt);
-        console.error(e);
-      }
-    };
+
+  function clear() {
+    listeners.removeListenerByGroup(idListener);
+    removeLayers();
+    removeSource();
+  }
+
+  function removeSource() {
+    if (opt.map.getSource(opt.idSource)) {
+      opt.map.removeSource(opt.idSource);
+    }
+  }
+
+  function removeLayers() {
+    removeLayersByPrefix({
+      prefix: opt.idView,
+      id: settings.map.id,
+    });
+  }
+
+  function addSource(source) {
+    removeLayers();
+    removeSource();
+    map.addSource(opt.idSource, source);
+  }
+
+  function addLayer(layer) {
+    removeLayers();
+    map.addLayer(layer, mx.settings.layerBefore);
+  }
+
+  function setLegend(legend) {
+    if (isHTML(legend) || isString(legend)) {
+      legend = el("div", legend);
+    }
+    while (opt.elLegend.firstElementChild) {
+      opt.elLegend.firstElementChild.remove();
+    }
+    opt.elLegend.appendChild(legend);
+    return legend;
+  }
+
+  function isClosed() {
+    return !!opt._closed;
+  }
+  function isInit() {
+    return !!opt._init;
   }
 }
 
@@ -4006,14 +3708,7 @@ async function viewLayersAddRt(o) {
         path: "data.title",
         defaultValue: "[ missing title ]",
       });
-
-    const imgModal = el("img", {
-      src: img.src,
-      alt: "Legend",
-      onerror: handleImgError,
-    });
-
-    /* Add in modal */
+    const imgModal = img.cloneNode();
     modal({
       title: title,
       id: "legend-raster-" + view.id,
@@ -4024,12 +3719,15 @@ async function viewLayersAddRt(o) {
 
   /*  Add image to image box */
   function handleLoad() {
+    const dpr = window.devicePixelRatio;
+    img.style.width = img.naturalWidth / dpr + "px";
+    img.style.height = img.naturalHeight / dpr + "px";
     elLegendImageBox.appendChild(img);
   }
   /* error callback */
   function handleImgError() {
-    this.onerror = null;
-    this.src = legendB64Default;
+    img.onerror = null;
+    img.src = legendB64Default;
   }
 }
 
@@ -4052,38 +3750,38 @@ export async function viewLayersAddVt(o) {
   /**
    * Add layer and legends
    */
-  if (layers.length > 0) {
-    /**
-     * Apply filters for custom style
-     * TODO: this could probably be done elsewhere
-     */
-    if (out.config.useStyleCustom && isFunction(view._setFilter)) {
-      view._setFilter({
-        filter: out?.config?.styleCustom.filter || ["all"],
-        type: "custom_style",
-      });
-    }
-
-    /**
-     * Set legend
-     */
-    if (addLegend) {
-      setVtLegend({
-        rules: rules,
-        view: view,
-        elLegendContainer: o.elLegendContainer,
-        addTitle: o.addTitle,
-      });
-    }
-
-    /*
-     * Add layers to the map
-     */
-    await addLayers(layers, o.before);
-    await viewsLayersOrderUpdate();
-  } else {
+  if (layers.length == 0) {
     return false;
   }
+  /**
+   * Apply filters for custom style
+   * TODO: this could probably be done elsewhere
+   */
+  if (out.config.useStyleCustom && isFunction(view._setFilter)) {
+    view._setFilter({
+      filter: out?.config?.styleCustom.filter || ["all"],
+      type: "custom_style",
+    });
+  }
+
+  /**
+   * Set legend
+   */
+  if (addLegend) {
+    setVtLegend({
+      rules: rules,
+      view: view,
+      elLegendContainer: o.elLegendContainer,
+      addTitle: o.addTitle,
+    });
+  }
+
+  /*
+   * Add layers to the map
+   */
+  await addLayers(layers, o.before);
+  await viewsLayersOrderUpdate();
+  return true;
 }
 
 /**
@@ -4144,7 +3842,7 @@ function setVtLegend(options) {
   /**
    * Copy rules
    */
-  const rulesLegend = clone(rules);
+  view._style_rules = clone(rules);
 
   /*
    * Add legend using template
@@ -4156,35 +3854,13 @@ function setVtLegend(options) {
     addTitle: addTitle,
   });
   if (isElement(elLegend)) {
-    /**
-     * viewLayersAddVt rendering time :
-     * el + ecoregion2017
-     * 606 ms
-     * 534 ms
-     * 504 ms
-     * 403 ms
-     *
-     * dot + ecoregion2017
-     * 517 ms
-     * 725 ms
-     * 928 ms
-     * 660 ms
-     */
-    /**
-     * el
-     */
-    const elLegendContent = buildLegendVt(view, rulesLegend);
+    const elLegendContent = buildLegendVt(view);
     elLegend.appendChild(elLegendContent);
-    /*
-     * dot
-     */
-    //elLegend.innerHTML = mx.templates.viewListLegend(view);
   }
 }
 
 /**
  * Add mutiple layers at once
- * TODO: convert MapX layers to datadriven layers.
  * @param {Array} layers Array of layers
  * @param {String} idBefore Id of the layer to insert before
  */
@@ -4213,91 +3889,45 @@ function addLayers(layers, idBefore) {
 }
 
 /**
- * Add filtering system to views
- * @param {String|Object} idView id or View to update
- * @return {Promise}
+ * Init view item content
+ * -> Render templates for options, controls and filters
+ * @param {String} id View id
  */
-export function viewFiltersInit(idView) {
-  const view = getView(idView);
-  if (!isView(view)) {
-    return;
-  }
-  /**
-   * Add methods
-   */
-  view._filters = {
-    style: ["all"],
-    legend: ["all"],
-    time_slider: ["all"],
-    search_box: ["all"],
-    numeric_slider: ["all"],
-    custom_style: ["all"],
-  };
-  view._setFilter = viewSetFilter;
-  view._setOpacity = viewSetOpacity;
-}
-
 export async function viewUiContent(id) {
   const view = getView(id);
   if (!isView(view)) {
-    return;
+    return false;
   }
 
   const elView = getViewEl(view);
   const hasViewEl = isElement(elView);
 
-  if (hasViewEl) {
-    const elOptions = elView.querySelector(
-      `[data-view_options_for='${view.id}']`
-    );
-
-    if (elOptions) {
-      elOptions.innerHTML = mx.templates.viewListOptions(view);
-    }
-    const elControls = elView.querySelector(
-      `#view_contols_container_${view.id}`
-    );
-    if (elControls) {
-      elControls.innerHTML = mx.templates.viewListControls(view);
-    }
-    const elFilters = elView.querySelector(
-      `#view_filters_container_${view.id}`
-    );
-    if (elFilters) {
-      elFilters.innerHTML = mx.templates.viewListFilters(view);
-    }
-    return true;
+  if (!hasViewEl) {
+    return false;
   }
-}
-
-/**
- * Add sliders and searchbox
- * @param {String|Object} id id or View to update
- */
-export async function viewFilterToolsInit(id, opt) {
-  opt = Object.assign({}, { clear: false }, opt);
-  try {
-    const view = getView(id);
-    if (!isView(view)) {
-      return;
-    }
-    const idMap = settings.map.id;
-    if (view._filters_tools) {
-      return;
-    }
-    view._filters_tools = {};
-    const proms = [];
-    /**
-     * Add interactive module
-     */
-    proms.push(makeTimeSlider({ view: view, idMap: idMap }));
-    proms.push(makeNumericSlider({ view: view, idMap: idMap }));
-    proms.push(makeTransparencySlider({ view: view, idMap: idMap }));
-    proms.push(makeSearchBox({ view: view, idMap: idMap }));
-    await Promise.all(proms);
-  } catch (e) {
-    throw new Error(e);
+  /**
+   * Options
+   */
+  const elOptions = elView.querySelector(
+    `[data-view_options_for='${view.id}']`
+  );
+  if (elOptions) {
+    elOptions.innerHTML = mx.templates.viewListOptions(view);
   }
+
+  /**
+   * Controls and filters
+   */
+  const elControls = elView.querySelector(`#view_contols_container_${view.id}`);
+  const elFilters = elView.querySelector(`#view_filters_container_${view.id}`);
+
+  if (elControls) {
+    elControls.innerHTML = mx.templates.viewListControls(view);
+  }
+  if (elFilters) {
+    elFilters.innerHTML = mx.templates.viewListFilters(view);
+  }
+  return true;
 }
 
 /**
@@ -4316,7 +3946,7 @@ export async function viewModulesRemove(view) {
   delete view._filters_tools;
 
   if (isFunction(view._onRemoveCustomView)) {
-    view._onRemoveCustomView();
+    await view._onRemoveCustomView();
   }
 
   if (isElement(view._elLegend)) {
@@ -4325,8 +3955,8 @@ export async function viewModulesRemove(view) {
   }
 
   if (dh.viewHasWidget(view)) {
-    dh.viewRmWidgets(view);
-    dh.autoDestroy();
+    await dh.viewRmWidgets(view);
+    await dh.autoDestroy();
   }
 
   if (view._miniMap) {
@@ -4365,23 +3995,21 @@ export function viewsModulesRemove(views) {
  * @param {Element} o.elLegendContainer Legend container
  * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
+ * @return {Promise<boolean>} added
  */
-export function viewLayersAddGj(opt) {
-  return new Promise((resolve) => {
-    const layer = path(opt.view, "data.layer");
+export async function viewLayersAddGj(opt) {
+  const layer = path(opt.view, "data.layer");
 
-    if (!layer.metadata) {
-      layer.metadata = {
-        priority: 0,
-        position: 0,
-        idView: opt.view.id,
-        filter: [],
-      };
-    }
-
-    opt.map.addLayer(layer, opt.before);
-    resolve(true);
-  });
+  if (!layer.metadata) {
+    layer.metadata = {
+      priority: 0,
+      position: 0,
+      idView: opt.view.id,
+      filter: [],
+    };
+  }
+  await addLayers([layer], opt.before);
+  return true;
 }
 
 /**
@@ -4575,6 +4203,7 @@ export function getLayersPropertiesAtPoint(opt) {
               items[idView] = fetchRasterProp(view, sources[id]);
               break;
             case "vector":
+            case "geojson":
               items[view.id] = fetchVectorProp(view);
               break;
           }
@@ -4643,7 +4272,7 @@ export function getLayersPropertiesAtPoint(opt) {
   function fetchVectorProp(view) {
     return new Promise((resolve) => {
       const id = view.id;
-
+      const attributes = view?.data?.attribute?.names || [];
       const layers = getLayerNamesByPrefix({
         map: map,
         prefix: id,
@@ -4656,12 +4285,23 @@ export function getLayersPropertiesAtPoint(opt) {
       const out = modeObject ? {} : [];
 
       features.forEach((f) => {
+        /**
+         * Fill null
+         * -> tiles can't contain nulls
+         * -> nulls expected in popup and widget clicked feature
+         */
+        for (const a of attributes) {
+          if (isEmpty(f.properties[a])) {
+            f.properties[a] = "$NULL";
+          }
+        }
+
         if (modeObject) {
           for (const p in f.properties) {
             /**
              * Exclude prop (time, gid, etc)
              */
-            if (excludeProp.indexOf(p) === -1) {
+            if (!excludeProp.includes(p)) {
               /**
                * Aggregate value by attribute
                */
@@ -4682,110 +4322,6 @@ export function getLayersPropertiesAtPoint(opt) {
       resolve(out);
     });
   }
-}
-
-/*selectize version*/
-export async function makeSearchBox(o) {
-  const view = o.view;
-  const el = document.querySelector(`[data-search_box_for='${view.id}']`);
-  if (!el) {
-    return;
-  }
-  const elViewParent = getViewEl(view).parentElement;
-
-  await moduleLoad("selectize");
-
-  const attr = path(view, "data.attribute.name");
-
-  const summary = await getViewSourceSummary(view);
-  const choices = summaryToChoices(summary);
-
-  const searchBox = $(el)
-    .selectize({
-      dropdownParent: elViewParent,
-      placeholder: "Search",
-      choices: choices,
-      valueField: "value",
-      labelField: "label",
-      searchField: ["label"],
-      options: choices,
-      onChange: selectOnChange,
-    })
-    .data().selectize;
-
-  /**
-   * Save selectr object in the view
-   */
-  searchBox.view = view;
-  view._filters_tools.searchBox = searchBox;
-
-  return searchBox;
-
-  function selectOnChange() {
-    const view = this.view;
-    const listObj = this.getValue();
-    const filter = ["any"];
-    listObj.forEach(function (x) {
-      filter.push(["==", ["get", attr], x]);
-    });
-    view._setFilter({
-      filter: filter,
-      type: "search_box",
-    });
-  }
-
-  function summaryToChoices(summary) {
-    const table = path(summary, "attribute_stat.table", []);
-    return table.map((r) => {
-      return {
-        value: r.value,
-        label: `${r.value} (${r.count})`,
-      };
-    });
-  }
-}
-
-export function filterViewValues(o) {
-  const search = path(o, "search", "").trim();
-  const attr = o.attribute;
-  const idView = o.idView;
-  const operator = o.operator || ">=";
-  const filterType = o.filterType || "filter";
-  const hasNumeric = isNumeric(search);
-  const view = getView(idView);
-  const map = getMap();
-  const idSource = `${idView}-SRC`;
-  const filter = ["all"];
-
-  if (search) {
-    if (hasNumeric) {
-      filter.push([operator, ["get", attr], search * 1]);
-    } else {
-      const features = map.querySourceFeatures(idSource, {
-        sourceLayer: idView,
-      });
-
-      const values = {};
-      for (const f of features) {
-        const value = f.properties[attr];
-        const splited = value.split(/\s*,\s*/);
-        if (splited.includes(search)) {
-          values[value] = true;
-        }
-      }
-
-      const valuesDistinct = Object.keys(values);
-
-      if (isNotEmpty(valuesDistinct)) {
-        filter.push(["in", ["get", attr], ...valuesDistinct]);
-      }
-    }
-  }
-
-  view._setFilter({
-    filter: filter,
-    type: filterType,
-  });
 }
 
 /**
@@ -4835,11 +4371,9 @@ export function addLayer(o) {
  * @param {String} o.idView view id
  */
 export async function zoomToViewId(o) {
+  const timeout = 3 * 1000;
+  let cancelByTimeout = false;
   try {
-    const map = getMap();
-    const timeout = 3 * 1000;
-    let cancelByTimeout = false;
-
     if (isViewId(o)) {
       o = {
         idView: o,
@@ -4864,6 +4398,11 @@ export async function zoomToViewId(o) {
       );
     }
 
+    return res;
+
+    /**
+     * Helpers
+     */
     async function zoom() {
       const conf = {
         sum: await getViewSourceSummary(view, { useCache: true }),
@@ -4886,17 +4425,19 @@ export async function zoomToViewId(o) {
         }
       }
 
-      const llb = new mx.mapboxgl.LngLatBounds(
-        [conf.extent.lng1, conf.extent.lat1],
-        [conf.extent.lng2, conf.extent.lat2]
+      const llb = new mapboxgl.LngLatBounds(
+        [conf.extent.lng1, conf.extent.lat2],
+        [conf.extent.lng2, conf.extent.lat1]
       );
 
-      map.fitBounds(llb);
-      return true;
+      const done = fitMaxBounds(llb);
+
+      return done;
     }
 
     function cancel() {
       cancelByTimeout = true;
+      return "timeout";
     }
   } catch (e) {
     throw new Error(e);
@@ -4949,7 +4490,7 @@ export async function getViewsBounds(views) {
     [extent.lng2, extent.lat2],
   ];
 
-  /*return new mx.mapboxgl.LngLatBounds(*/
+  /*  return new mapboxgl.LngLatBounds(*/
   /*[extent.lng1, extent.lat1],*/
   /*[extent.lng2, extent.lat2]*/
   /*);*/
@@ -4986,15 +4527,17 @@ export async function zoomToViewIdVisible(o) {
     geomTemp.features.push(x);
   });
 
+  let done;
   if (geomTemp.features.length > 0) {
     const bbx = bbox(geomTemp);
     const sw = new mx.mapboxgl.LngLat(bbx[0], bbx[1]);
     const ne = new mx.mapboxgl.LngLat(bbx[2], bbx[3]);
     const llb = new mx.mapboxgl.LngLatBounds(sw, ne);
-    map.fitBounds(llb);
+    done = fitMaxBounds(llb);
   } else {
-    zoomToViewId(o);
+    done = zoomToViewId(o);
   }
+  return done;
 }
 
 /**
@@ -5010,69 +4553,291 @@ export async function resetViewStyle(o) {
 
   const view = getView(o.idView);
 
+  const isOpen = isViewOpen(view) || settings.mode.static;
+
   updateLanguageElements({
     el: view._el,
   });
-  await viewLayersAdd({
-    view: view,
-  });
-  await viewsLayersOrderUpdate(o);
+
+  if (isOpen) {
+    await viewLayersAdd({
+      view: view,
+    });
+    await viewsLayersOrderUpdate(o);
+  }
 }
 
 /**
- * Fly to location and zoom
- * @param {object} o options
- * @param {string} o.id map id
- * @param {boolean} o.jump
- * @param {number} o.param Parameters to use
+ * Fly to a specified location and zoom level on a map.
+ *
+ * @param {object} opt - The options for the function.
+ * @param {string} opt.id - The map ID.
+ * @param {number} [opt.duration=2000] - Optional duration for the animation, in milliseconds. Defaults to 2000ms.
+ * @param {object} opt.param - The parameters for the function.
+ * @param {number} [opt.param.w=0] - West coordinate of the bounding box.
+ * @param {number} [opt.param.s=0] - South coordinate of the bounding box.
+ * @param {number} [opt.param.e=0] - East coordinate of the bounding box.
+ * @param {number} [opt.param.n=0] - North coordinate of the bounding box.
+ * @param {number} [opt.param.lng=0] - Longitude of the center of the map.
+ * @param {number} [opt.param.lat=0] - Latitude of the center of the map.
+ * @param {number} [opt.param.zoom=1] - Zoom level for the map. Defaults to 1.
+ * @param {boolean} [opt.param.useMaxBounds=false] - Whether to apply the maximum bounds after flying to the location. Defaults to false.
+ * @param {boolean} [opt.param.fitToBounds=false] - Whether to fit the map to the specified bounds. Defaults to false.
+ * @param {boolean} [opt.param.jump=false] - Whether to jump to the location without animation. Defaults to false.
  */
-export function flyTo(o) {
-  const map = getMap(o.id);
+export async function setMapPos(opt) {
+  try {
+    const map = getMap(opt.id);
+    const p = opt.param;
+    const duration = p.jump ? 0 : isNotEmpty(p.duration) ? o.duration : 1000;
+    const bounds = new mapboxgl.LngLatBounds([
+      [p.w || 0, p.s || 0],
+      [p.e || 0, p.n || 0],
+    ]);
 
-  if (map) {
-    const p = o.param;
+    const center = new mapboxgl.LngLat(p.lng || 0, p.lat || 0);
 
-    if (!o.fromQuery && p.fitToBounds === true && !p.jump) {
-      map.fitBounds([p.w || 0, p.s || 0, p.e || 0, p.n || 0]);
-    } else {
-      const opt = {
-        center: [p.lng || 0, p.lat || 0],
-        zoom: p.zoom || 0,
-        jump: p.jump || false,
-        duration: o.duration || 3000,
-      };
+    map.setMaxBounds(null);
 
-      if (opt.jump) {
-        map.jumpTo(opt);
-      } else {
-        map.flyTo(opt);
-      }
+    if (p.useMaxBounds) {
+      /**
+       * Don't let the user zoom before the animation is done
+       */
+      map.scrollZoom.disable();
+
+      /**
+       * Ignore fitToBounds settings :
+       * -> if false, setMaxBounds could
+       *    create a small gaps in animation
+       */
+      p.fitToBounds = true;
+
+      /**
+       * a) timeout vs event
+       *   -> could use once('idle') but
+       *      could sometimes, there is some inertia
+       *   -> setTimeout make it clear
+       * b) use bounds vs getBounds
+       *   -> using "bounds" produced a small gap in
+       *      animation. Saved in a screen size, rendered in another
+       *   -> getBounds() make sure it will not
+       *   -> but if zoom is set by something else during this
+       *      "duration" -> inaccurate bounds...
+       */
+      setTimeout(() => {
+        map.setMaxBounds(map.getBounds());
+        map.scrollZoom.enable();
+      }, duration);
     }
+
+    if (p.fitToBounds) {
+      map.fitBounds(bounds, {
+        duration,
+      });
+    } else {
+      map.flyTo({
+        center: center,
+        zoom: p.zoom || p.z || 1,
+        bearing: p.bearing || p.b || 0,
+        pitch: p.pitch || p.p || 0,
+        duration: duration,
+      });
+    }
+
+    if (p.theme) {
+      await theme.set(p.theme, { force: true });
+    }
+    return true;
+  } catch (e) {
+    console.error(e);
   }
+}
+
+/**
+ * Fit bounds if not overlaping max bounds
+ * @param {LngLatBounds} bounds
+ * @param {Object} opt Options MaboxGL animation options
+ * @return {boolean} Fitted
+ */
+export function fitMaxBounds(bounds, opt) {
+  const map = getMap();
+  const validBBounds = bounds instanceof mapboxgl.LngLatBounds;
+  if (!validBBounds) {
+    bounds = validateBounds(bounds);
+    bounds = new mapboxgl.LngLatBounds(bounds);
+  }
+  let valid = true;
+  const maxBounds = map.getMaxBounds();
+  const currentBounds = map.getBounds();
+
+  if (maxBounds) {
+    valid = isBoundsInsideBounds(bounds, maxBounds);
+  }
+
+  if (valid) {
+    map.fitBounds(bounds, opt);
+  } else {
+    const outer = isBoundsInsideBounds(currentBounds, bounds);
+    const angle = outer ? 0 : boundsAngleRelation(currentBounds, bounds);
+    new FlashItem({ icon: outer ? "arrows-alt" : "arrow-up", angle: angle });
+
+    //map.fitBounds(maxBounds);//glitchy
+    const elMap = map.getContainer();
+    shake(elMap);
+  }
+  return valid;
+}
+
+/**
+ * Validates and corrects a bounds array, ensuring it meets the specified constraints.
+ *
+ * @param {number[]} bounds - An array of bounding box coordinates in the format [west, south, east, north].
+ * @returns {number[]} The corrected bounds array, with values adjusted to meet the specified constraints.
+ * @throws {Error} If the input bounds array does not have exactly 4 elements.
+ */
+export function validateBounds(bounds) {
+  // Define the maximum and minimum limits for longitude and latitude
+  const maxLongitude = 180;
+  const minLongitude = -180;
+  const maxLatitude = 90;
+  const minLatitude = -90;
+
+  // Define the minimum difference between coordinates
+  const minDelta = 0.5;
+
+  // array of array -> flatten
+  if (isArrayOf(bounds, isArray)) {
+    bounds = bounds.flat();
+  }
+  // Ensure the bounds array has exactly 4 elements
+  if (bounds.length !== 4) {
+    throw new Error("Bounds array should have exactly 4 elements.");
+  }
+
+  // Extract the coordinates from the input bounds array
+  let [west, south, east, north] = bounds;
+
+  // Check if west and east are within the limits and ensure west < east
+  if (west <= east) {
+    west = Math.max(minLongitude, west);
+    east = Math.min(maxLongitude, east);
+
+    if (east - west < minDelta) {
+      east = Math.min(maxLongitude, west + minDelta);
+    }
+  } else {
+    // Swap west and east values if west > east
+    [west, east] = [Math.max(minLongitude, east), Math.min(maxLongitude, west)];
+  }
+
+  // Check if north and south are within the limits and ensure north > south
+  if (north >= south) {
+    north = Math.min(maxLatitude, north);
+    south = Math.max(minLatitude, south);
+
+    if (north - south < minDelta) {
+      north = Math.min(maxLatitude, south + minDelta);
+    }
+  } else {
+    // Swap north and south values if north < south
+    [north, south] = [
+      Math.min(maxLatitude, south),
+      Math.max(minLatitude, north),
+    ];
+  }
+
+  return [west, south, east, north];
+}
+
+/**
+ * Calculates the angle in degrees between the centroids of two LngLatBounds.
+ * @param {mapboxgl.LngLatBounds} bounds1 - First LngLatBounds.
+ * @param {mapboxgl.LngLatBounds} bounds2 - Second LngLatBounds.
+ * @returns {number} Angle in degrees between the centroids of the bounds.
+ */
+export function boundsAngleRelation(bounds1, bounds2) {
+  if (
+    !(bounds1 instanceof mapboxgl.LngLatBounds) ||
+    !(bounds2 instanceof mapboxgl.LngLatBounds)
+  ) {
+    throw new Error(
+      "Invalid input: both arguments must be LngLatBounds instances."
+    );
+  }
+
+  const centroid1 = bounds1.getCenter();
+  const centroid2 = bounds2.getCenter();
+
+  const deltaY = centroid2.lat - centroid1.lat;
+  const deltaX = centroid2.lng - centroid1.lng;
+  let angle = (Math.atan2(deltaY, deltaX) * 180) / Math.PI;
+
+  // Adjust angle for compass directions
+  angle = 90 - angle;
+
+  // Normalize the angle to the range [0, 360)
+  if (angle < 0) {
+    angle += 360;
+  }
+
+  return angle;
 }
 
 /**
  * Set map projection
  * @param {Object} opt options
  * @param {String} opt.id map id
+ * @param {String} opt.globe
  * @param {String} opt.name
  * @param {Array} opt.center
  * @param {Array} opt.parallels
  */
 export function setMapProjection(opt) {
   const map = getMap(opt.id);
+  const current = map.getProjection();
+  const ctrls = panel_tools.controls;
   const def = {
-    name: "mercator",
-    center: [0, 0],
-    parallels: [0, 0],
+    name: current.name,
+    center: current.center,
+    parallels: current.parallels,
   };
-  opt = Object.assign({}, def, opt);
-  if (map) {
-    map.setProjection(opt.name, {
-      center: opt.center,
-      parallels: opt.parallels,
-    });
+
+  if (isNotEmpty(opt.globe)) {
+    switch (opt.globe) {
+      case "enable":
+        opt.name = "globe";
+        break;
+      case "disable":
+        opt.name = "mercator";
+        break;
+      default:
+        // toggle
+        if (current.name === "globe") {
+          opt.name = "mercator";
+        } else {
+          opt.name = "globe";
+        }
+    }
   }
+
+  settings.projection = Object.assign(settings.projection, def, opt);
+
+  map.setProjection(settings.projection.name, {
+    center: settings.projection.center,
+    parallels: settings.projection.parallels,
+  });
+
+  /**
+  * Set button state
+  */ 
+  const isGlobe = settings.projection.name === "globe";
+  const btnGlobe = ctrls.getButton("btn_globe");
+  if (isGlobe) {
+    btnGlobe.enable();
+  } else {
+    btnGlobe.disable();
+  }
+  return settings.projection;
 }
 
 /**
@@ -5239,7 +5004,7 @@ export function getViewLegend(id, opt) {
 /**
  * Get a map object by id
  * @param {String|Object} idMap Id of the map or the map itself.
- * @return {Object} map
+ * @return {MapboxMap} map
  */
 export function getMap(idMap) {
   idMap = idMap || settings.map.id;
@@ -5421,7 +5186,7 @@ export function getViewsFilter(o) {
  */
 export function getMapPos(o) {
   o = o || {};
-  const ctrls = mx.panel_tools.controls;
+  const ctrls = panel_tools.controls;
   const map = getMap(o.id);
   const bounds = map.getBounds();
   const center = map.getCenter();
@@ -5449,27 +5214,80 @@ export function getMapPos(o) {
 }
 
 /**
+ * Reset max bounds
+ * @return {void}
+ */
+export function resetMaxBounds() {
+  const map = getMap();
+  map.setMaxBounds(null);
+}
+
+/**
+ * Replace and reload views
+ * @param {Object} views
+ * @return {Promise<boolean>} replaced
+ */
+export async function viewsReplace(views) {
+  try {
+    if (!isArrayOfViews(views)) {
+      console.error("viewsReplace: expecting an array of views");
+      return false;
+    }
+    const d = getMapData();
+    const viewsAll = d.views || [];
+    for (const view of views) {
+      const idView = view.id;
+      const idViews = viewsAll.map((v) => v.id);
+      const pos = idViews.indexOf(idView);
+      if (pos === -1) {
+        continue;
+      }
+      const oldView = viewsAll[pos];
+      Object.assign(oldView, view);
+      await resetViewStyle({ idView: view.id });
+    }
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+}
+
+/**
  * Create views array or object with id as key, or single view if idView is provided in options
- * @param {Object | String} o options || id of the map
- * @param {String} o.id map id
+ * @param {Object | Array} o options || array of views id
+ * @param {String} o.id map id ( if null default map )
  * @param {String|Array} o.idView Optional. Filter view(s) to return. Default = all.
  * @return {Array} array of views
  */
 export function getViews(o) {
-  o = o || {};
-  const d = getMapData(o.id);
+  const isAV = isArrayOfViewsId(o);
+  const opt = Object.assign({}, isAV ? { idView: o } : o);
+  const d = getMapData(opt.id);
   const views = d.views || [];
-
-  if (o.idView) {
-    o.idView = isArray(o.idView) ? o.idView : [o.idView];
-    return views.filter((v) => o.idView.indexOf(v.id) > -1);
+  if (opt.idView) {
+    opt.idView = isArray(opt.idView) ? opt.idView : [opt.idView];
+    return opt.idView.map((id) => views.find((v) => v.id === id));
   } else {
     return views;
   }
 }
-export function getViewsForJSON() {
-  const views = getViews();
-  const f = [
+export function getViewsForJSON(o) {
+  const views = getViews(o);
+  return views.map((view) => getViewJson(view, { asString: false }));
+}
+
+/**
+ * Get JSON representation of a view ( same as the one dowloaded );
+ * @param {String} idView Id of the view;
+ * @param {Object} opt Options
+ * @param {Boolean} opt.asString As string
+ * @return {String} JSON string with view data (or cleaned view object);
+ */
+export function getViewJson(idView, opt) {
+  opt = Object.assign({}, { asString: true }, opt);
+  const view = getView(idView);
+  const keys = [
     "id",
     "editor",
     "target",
@@ -5482,14 +5300,23 @@ export function getViewsForJSON() {
     "editors",
     "_edit",
   ];
+  const out = {};
 
-  const viewsClean = views.map((v) => {
-    return f.reduce((a, k) => {
-      a[k] = v[k];
-      return a;
-    }, {});
-  });
-  return viewsClean;
+  for (const key of keys) {
+    out[key] = view[key];
+    if (key === "data" && isObject(out[key]?.style)) {
+      delete out[key]?.style._sld;
+      delete out[key]?.style._mapbox;
+      delete out[key]?.attribute?.table;
+      delete out[key]?.attribute?.sample;
+    }
+  }
+
+  if (opt.asString) {
+    return JSON.stringify(out);
+  }
+
+  return out;
 }
 
 /**
@@ -5631,7 +5458,6 @@ export function randomUiColorAuto() {
  * Notify binding for shiny
  * @param {Object} NotifyCenter notify options
  */
-
 export async function shinyNotify(opt) {
   if (nc instanceof NotifCenter) {
     nc.notify(opt.notif);
@@ -5660,81 +5486,5 @@ async function getSearchApiKey() {
     }
   } catch (e) {
     console.error(e);
-  }
-}
-
-export async function chaosTest(opt) {
-  opt = Object.assign({}, { run: 5, batch: 5, run_timeout: 10 * 1000 }, opt);
-  const views = getViews();
-  const layersBefore = getLayerNamesByPrefix();
-  const viewsBefore = getViewsOpen();
-
-  for (let i = 0; i < opt.run; i++) {
-    const tt = [];
-    for (let j = 0; j < opt.batch; j++) {
-      tt.push(t());
-    }
-    const promOk = Promise.all(tt);
-    const promFail = stopIfTimeout(opt.run_timeout);
-    await Promise.race([promOk, promFail]);
-    await wait(100);
-  }
-
-  return valid();
-
-  /**
-   * Helpers
-   */
-  function valid() {
-    /*
-     * Check state before adding
-     */
-    const layersAfter = getLayerNamesByPrefix();
-    const viewsAfter = getViewsOpen();
-
-    /**
-     * Validation
-     */
-    const validLN = layersBefore.length === layersAfter.length;
-    const validVN = viewsBefore.length === viewsAfter.length;
-
-    if (!validLN || !validVN) {
-      return false;
-    }
-
-    const hasLayers = layersBefore.reduce(
-      (a, c) => a && layersAfter.includes(c),
-      true
-    );
-
-    const hasViews = viewsBefore.reduce(
-      (a, c) => a && viewsAfter.includes(c),
-      true
-    );
-
-    if (!hasLayers || !hasViews) {
-      return false;
-    }
-
-    return true;
-  }
-
-  async function stopIfTimeout(t) {
-    await wait(t);
-    throw new Error(`Run Timeout after : + ${t * 1} ms`);
-  }
-
-  async function t() {
-    const pos = Math.floor(Math.random() * views.length);
-    const view = views[pos];
-    await viewAdd(view);
-    await wait(rt(1000));
-    await viewRemove(view);
-  }
-  function wait(t) {
-    return new Promise((r) => setTimeout(r, t || 100));
-  }
-  function rt(t) {
-    return Math.round(Math.random() * t);
   }
 }

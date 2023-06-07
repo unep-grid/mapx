@@ -3,16 +3,15 @@ import http from "http";
 import express from "express";
 import { Server as SocketServer } from "socket.io";
 import query from "#mapx/query";
-import project from "#mapx/project";
-import upload from "#mapx/upload";
+import * as project from "#mapx/project";
 import mirror from "#mapx/mirror";
 import mail from "#mapx/mail";
 import ip from "#mapx/ip";
 import tile from "#mapx/tile";
 import log from "#mapx/log";
+import * as upload from "#mapx/upload";
 import * as view from "#mapx/view";
 import * as source from "#mapx/source";
-//import { mwGeoserverRebuild } from "#mapx/geoserver";
 import { mwSetHeaders, mwGetConfigMap } from "#mapx/helpers";
 import { mwGemetSearchText, mwGemetSearchConcept } from "#mapx/gemet";
 import { mwGetSearchKey } from "#mapx/search";
@@ -20,15 +19,25 @@ import { mwGetBbox } from "#mapx/bbox";
 import { mwGetFormatsList } from "#mapx/file_formats";
 import { mwGetEpsgCodesFull } from "#mapx/epsg";
 import { ioMwAuthenticate } from "#mapx/authentication";
+import { ioUpdateGeoserver } from "#mapx/geoserver";
+import { ioEcho } from "#mapx/io";
+import { ioTestSum, ioTestEcho } from "#mapx/io";
+import { ioUploadSource } from "#mapx/upload";
+import { ioDownloadSource, ioEditSource, ioSourceListEdit } from "#mapx/source";
+import { ioViewPin } from "#mapx/view";
+import { ioProjectNameValidate, ioProjectCreate } from "#mapx/project";
 import {
   ioCreateAdapter,
   ioConnect,
   ioMwEmit,
   ioMwNotify,
-  ioMwHandlers,
   mwEmit,
   mwNotify,
+  use,
 } from "#mapx/io";
+
+import events from "events";
+events.EventEmitter.defaultMaxListeners = 100;
 
 /**
  * If port argument is set, use this instead
@@ -62,11 +71,30 @@ app.use("/download", mwDownload);
 const io = new SocketServer(server, settings.socket_io);
 const ioRedisAdapter = ioCreateAdapter();
 io.adapter(ioRedisAdapter);
-io.use(ioMwAuthenticate);
-io.use(ioMwEmit);
-io.use(ioMwNotify);
-io.use(ioMwHandlers);
-io.on("connection", ioConnect);
+io.use(ioMwAuthenticate); // Add socket.session
+io.use(ioMwEmit); // Add emit wrapper
+io.use(ioMwNotify); // Add notify system
+io.on("connection", ioConnect); // emit 'authentication', with roles
+
+/**
+ * Socket io routes / event id
+ * -> some event are handled in modules, ex. ioEditSource
+ * -> "use" wrapper = convert (request,cb) to (socket,request,cb)
+ */
+io.use((socket, next) => {
+  socket.on("/client/geoserver/update", use(ioUpdateGeoserver));
+  socket.on("/client/source/download", use(ioDownloadSource));
+  socket.on("/client/source/upload", use(ioUploadSource));
+  socket.on("/client/test/sum", use(ioTestSum));
+  socket.on("/client/test/echo", use(ioTestEcho));
+  socket.on("/client/source/edit/table", use(ioEditSource));
+  socket.on("/client/source/get/list/edit", use(ioSourceListEdit));
+  socket.on("/client/view/pin", use(ioViewPin));
+  socket.on("/client/project/validate/name", use(ioProjectNameValidate));
+  socket.on("/client/project/create", use(ioProjectCreate));
+  socket.on("echo", use(ioEcho));
+  next();
+});
 
 /*
  * Express routes
@@ -83,7 +111,6 @@ app.get("/get/mirror/", mirror.mwGet);
 app.get("/get/config/map", mwGetConfigMap);
 app.get("/get/epsg/codes/full", mwGetEpsgCodesFull);
 app.get("/get/file/formats/list", mwGetFormatsList);
-//app.get("/get/source/", source.mwGet);
 app.get("/get/source/metadata/:id", source.mwGetMetadata);
 app.get("/get/source/summary/", source.mwGetSummary);
 app.get("/get/source/table/attribute/", source.mwGetAttributeTable);
@@ -96,11 +123,8 @@ app.get("/get/gemet/concept", mwGemetSearchConcept);
 app.get("/get/bbox/", mwGetBbox);
 app.get("/get/projects/list/user/", project.mwGetListByUser);
 app.get("/get/project/search", project.mwProjectSearchText);
-//app.get("/get/io/test/job", mwIoFetchTest);
-//app.get("/get/geoserver/rebuild", mwGeoserverRebuild);
 
 app.post("/upload/image/", upload.mwImage);
-app.post("/upload/vector/", upload.mwVector);
 app.post("/send/mail/", mail.mwSend);
 app.post("/collect/logs/", log.mwCollect);
 

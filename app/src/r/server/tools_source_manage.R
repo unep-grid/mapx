@@ -1,91 +1,32 @@
-
-#
-# Geoserver manage
-#
-
-
-
 observeEvent(input$btnEditSourceSettings, {
-  mxCatch(title = "btn edit source settings", {
+  mxCatch(title = "btn edit source metadata", {
     userRole <- getUserRole()
     isPublisher <- "publishers" %in% userRole$groups
-    language <- reactData$language
-
     if (!isPublisher) {
       return()
     } else {
-      layers <- reactListEditSources()
-      disabled <- NULL
-      if (noDataCheck(layers)) {
-        layers <- list("noLayer")
-        disabled <- TRUE
-      }
-
-      uiOut <- tagList(
-        selectizeInput(
-          inputId = "selectSourceSettings",
-          label = d("source_select_layer", language),
-          choices = layers,
-          multiple = FALSE,
-          options = list(
-            sortField = "label"
-          )
-        )
-      )
-
-      btn <- list(
-        actionButton(
-          "btnEditSourceSettingsConfirm",
-          d("btn_edit_selected", language),
-          disabled = disabled
-        )
-      )
-
-      mxModal(
-        id = "editSourceSettings",
-        title = d("source_edit_settings", language),
-        content = uiOut,
-        buttons = btn,
-        textCloseButton = d("btn_close", language)
-      )
+      mxShowSelectSourceEdit(id = "selectSourceLayerForManage")
     }
   })
 })
 
 
-#
-# Trigger source manage
-#
-observeEvent(input$btnEditSourceSettingsConfirm, {
-  reactData$triggerSourceManage <- list(
-    idSource = input$selectSourceSettings,
-    update = runif(1)
-  )
-})
-
-#
-# Disable btn edit if not allowed
-#
-observeEvent(reactData$triggerSourceManage, {
-  language <- reactData$language
-  layer <- reactData$triggerSourceManage$idSource
-  layers <- reactListEditSources()
-  isAllowed <- layer %in% layers
-
-  mxToggleButton(
-    id = "btnSourceSettingsConfirm",
-    disable = !isAllowed
-  )
+observeEvent(input$selectSourceLayerForManage, {
+  data <- input$selectSourceLayerForManage
+  if (isEmpty(data$idSource)) {
+    return()
+  }
+  reactData$triggerSourceManage <- data
 })
 
 
 
 observeEvent(reactData$triggerSourceManage, {
   mxCatch(title = "Edit source settings", {
+    layer <- reactData$triggerSourceManage$idSource
     userRole <- getUserRole()
     isPublisher <- "publishers" %in% userRole$groups
     language <- reactData$language
-    layer <- reactData$triggerSourceManage$idSource
     layers <- reactListEditSources()
     isAllowed <- layer %in% layers
     project <- reactData$project
@@ -413,13 +354,13 @@ observeEvent(input$btnUpdateSource, {
       value = as.list(editors)
     )
 
-    #mxUpdateGeoserverSourcePublishingAsync(
-      #email = email,
-      #idProject = project,
-      #idSource = idSource,
-      #idGroups = as.list(idGroupsServices),
-      #idGroupsOld = as.list(idGroupsServicesOld)
-    #)
+    # mxUpdateGeoserverSourcePublishingAsync(
+    # email = email,
+    # idProject = project,
+    # idSource = idSource,
+    # idGroups = as.list(idGroupsServices),
+    # idGroupsOld = as.list(idGroupsServicesOld)
+    # )
 
     #
     # Generate the modal panel
@@ -433,7 +374,7 @@ observeEvent(input$btnUpdateSource, {
     reactData$updateEditSourceLayerList <- runif(1)
 
     #
-    # Invalidate view list 
+    # Invalidate view list
     #
     reactData$updateViewsList <- runif(1)
   })

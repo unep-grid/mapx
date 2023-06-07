@@ -104,6 +104,25 @@ picture {
   object-fit: contain;
 }
 
+/**
+* Global content-visibility
+* perf improvement
+* see https://css-tricks.com/more-on-content-visibility/
+* -> story steps 
+* -> view ui list item 
+* -> table rows
+* NOTE: not yet ready. Bad UX on chrome windows. Visual
+* scrollbar glitch. Uncomment to apply 
+*/
+/*
+.mx-story-step,
+.li-item,
+tr {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 1vh;
+}
+*/
+
 .mx-inline-progress-container {
   width: 100%;
   height: 10px;
@@ -214,15 +233,9 @@ picture {
   }
 }
 
-.mx-bar-filter > button {
-  border: none;
-  background: none;
-}
-
 .mx-bar-filter .mx-btn-toggle-filter {
   border-radius: 15px;
   padding: 5px;
-  cursor: pointer;
 }
 
 .mx-bar-filter .mx-btn-toggle-filter:focus {
@@ -298,8 +311,7 @@ picture {
   flex-grow: 1;
   width: 100%;
   border: 1px solid var(--mx_ui_border);
-  border-radius: 10px;
-  /*margin: 10px 10px 0px 10px;*/
+  border-radius: 5px;
 }
 .mx-views-filter-text-input:after {
   content: "";
@@ -351,7 +363,7 @@ picture {
   flex-direction: column;
 }
 
-.mx-tools-group .btn {
+.mx-tools-group > .btn {
   margin: 3px;
   text-align: left;
 }
@@ -521,10 +533,25 @@ picture {
 }
 
 /**
+* Reset button style
+*
+*/
+.mx-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+/**
 * View buttons / controls
 */
 .mx-controls-ul {
   display: flex;
+  flex-wrap: wrap;
   padding: 0;
 }
 
@@ -552,7 +579,6 @@ picture {
 */
 .mx-scroll-styled {
   overflow: auto;
-  scroll-behavior: smooth;
 }
 
 ::-webkit-scrollbar {
@@ -600,8 +626,9 @@ picture {
 .btn-icon > span {
   margin-right: 5px;
 }
-.btn > i,
-.btn > span {
+.btn i,
+.btn span,
+.btn .btn-icon-wrapper {
   pointer-events: none;
 }
 .btn-icon-wrapper {
@@ -629,7 +656,14 @@ picture {
   pointer-events: none;
 }
 
-.btn.disabled-with-events {
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.btn.disabled-with-events,
+.btn-circle.disabled-with-events {
   cursor: not-allowed;
   opacity: 0.5;
 }
@@ -667,6 +701,9 @@ picture {
   width: 100%;
   min-width: 50px;
   padding: 4px;
+}
+.mx input[type="range"].form-control {
+  padding: 0px;
 }
 
 .mx .mx-diff-item {
@@ -898,6 +935,10 @@ picture {
 
 .check-toggle {
   display: flex;
+  align-items: center;
+}
+.check-toggle input {
+  margin: unset;
 }
 
 .check-toggle > * {
@@ -1058,4 +1099,5 @@ code {
 
 .mx-version {
   cursor: pointer;
+  color: var(--mx_ui_link);
 }

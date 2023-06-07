@@ -6,6 +6,7 @@ import {
   getLanguagesAll,
   updateLanguage,
 } from "../../../language/index.js";
+import { ViewBase } from "../../../views_builder/view_base.js";
 import {
   getMap,
   setImmersiveMode,
@@ -17,15 +18,31 @@ import {
   getViewLegendImage,
   getViewRemote,
   viewRemove,
+  viewAdd,
+  viewDelete,
   downloadViewVector,
   downloadViewSourceExternal,
   downloadViewGeoJSON,
   getViewsTitleNormalized,
   getGeoJSONRandomPoints,
   getViewJson,
-  viewDelete,
   getBoundsArray,
+  fitMaxBounds,
+  validateBounds,
+  viewsLayersOrderUpdate,
 } from "../../../map_helpers/index.js";
+
+import {
+  viewSetOpacity,
+  viewGetOpacityValue,
+  viewSetNumericFilter,
+  viewGetNumericFilterValues,
+  viewSetTextFilter,
+  viewGetTextFilterValues,
+  viewSetTimeFilter,
+  viewGetTimeFilterValues,
+} from "../../../map_helpers/view_filters.js";
+
 import { mapComposerModalAuto } from "../../../map_composer";
 import {
   commonLocFitBbox,
@@ -34,7 +51,7 @@ import {
   commonLocGetTableCodes,
 } from "../../../commonloc/index.js";
 import { isArray, isMap, isView } from "./../../../is_test";
-import { dashboardHelper } from "../../../mx_helper_map_dashboard.js";
+import { dashboardHelper } from "./../../../dashboards/dashboard_instances.js";
 import {
   fetchSourceMetadata,
   fetchViewMetadata,
@@ -52,7 +69,7 @@ import { viewsListAddSingle } from "../../../mx_helper_map_view_ui.js";
 import { modalCloseAll } from "../../../mx_helper_modal.js";
 import { toggleSpotlight } from "../../../mx_helper_map_pixop.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
-import { theme } from "./../../../mx";
+import { settings, highlighter, theme, ws, panel_tools } from "./../../../mx";
 
 /**
  * MapX resolvers available in static and app
@@ -92,8 +109,8 @@ class MapxResolversStatic extends ResolversBase {
   /**
    * End to end ws com testing
    */
-  async test_ws(id) {
-    return await mx.ws.test(id);
+  async tests_ws() {
+    return await ws.tests();
   }
 
   /**
@@ -121,7 +138,7 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.action Action to perform: 'enable','disable','toggle'
    */
   set_3d_terrain(opt) {
-    const ctrl = mx.panel_tools.controls.getButton("btn_3d_terrain");
+    const ctrl = panel_tools.controls.getButton("btn_3d_terrain");
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
@@ -133,7 +150,7 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.action Action to perform: 'show','hide','toggle'
    */
   set_mode_3d(opt) {
-    const ctrl = mx.panel_tools.controls.getButton("btn_3d_terrain");
+    const ctrl = panel_tools.controls.getButton("btn_3d_terrain");
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
@@ -146,7 +163,7 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.action Action to perform: 'show','hide','toggle'
    */
   set_mode_aerial(opt) {
-    const ctrl = mx.panel_tools.controls.getButton("btn_theme_sat");
+    const ctrl = panel_tools.controls.getButton("btn_theme_sat");
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
@@ -159,12 +176,14 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} Done
    */
   async show_modal_share(opt) {
+    const rslv = this;
     opt = Object.assign({ idView: [] }, opt);
     const idViews = isArray(opt.idView) ? opt.idView : [opt.idView];
     const sm = new ShareModal({
       views: idViews,
     });
     await sm.once("updated");
+    rslv._sm = sm;
   }
 
   /**
@@ -172,15 +191,16 @@ class MapxResolversStatic extends ResolversBase {
    * @return {Boolean} Done
    */
   async close_modal_share() {
-    const sm = window._share_modal;
-    if (sm) {
-      const promClosed = sm.once("closed");
-      sm.close();
-      await promClosed;
-      return true;
-    } else {
-      return false;
+    const rslv = this;
+    const sm = rslv._sm;
+    if (!sm instanceof ShareModal) {
+      throw new Error("No share modal found");
     }
+    const promClosed = sm.once("closed");
+    sm.close();
+    await promClosed;
+    delete rslv._sm;
+    return true;
   }
 
   /**
@@ -188,10 +208,26 @@ class MapxResolversStatic extends ResolversBase {
    * @return {String} Sharing string ( code / url )
    */
   get_modal_share_string() {
-    if (!window._share_modal) {
+    const rslv = this;
+    const sm = rslv._sm;
+    if (!sm instanceof ShareModal) {
       throw new Error("No share modal found");
     }
-    return window._share_modal.getShareString();
+    return sm.getShareCode();
+  }
+
+  /**
+   * Modal Share Tests Suite
+   * @return {array} array of tests
+   */
+  async get_modal_share_tests() {
+    const rslv = this;
+    const sm = rslv._sm;
+    if (!sm instanceof ShareModal) {
+      throw new Error("No share modal found");
+    }
+    const ok = await sm.tests();
+    return ok;
   }
 
   /**
@@ -234,6 +270,18 @@ class MapxResolversStatic extends ResolversBase {
   get_theme_id() {
     return theme.id();
   }
+
+  /**
+   * Add a custom theme into mapx and use it.
+   * @param {Object} opt Options
+   * @param {String} opt.theme Valid theme (full).
+   * @return {Boolean} done
+   */
+  add_theme(opt) {
+    opt = Object.assign({}, opt);
+    return theme.addTheme(opt.theme, { save_url: true });
+  }
+
   /**
    * Check if element is visible, by id
    * @param {Object} opt Options
@@ -292,6 +340,7 @@ class MapxResolversStatic extends ResolversBase {
    * @param {Object} opt Options
    * @param {String} opt.idView Id of the view
    * @param {Array} opt.stats Stats to retrieve. ['base', 'attributes', 'temporal', 'spatial']
+   * @param {String} opt.idAttr Attribute for stat (default = attrbute of the style)
    * @return {Object} Source summary
    */
   get_view_source_summary(opt) {
@@ -343,27 +392,11 @@ class MapxResolversStatic extends ResolversBase {
   }
 
   /**
-   * Get list views with visible layers
-   * @return  {Array} Array of views
-   */
-  get_views_with_visible_layer() {
-    return getViewsLayersVisibles();
-  }
-
-  /**
    * Get list of available views id
    * @return  {Array} Array of id
    */
   get_views_id() {
     return getViewsForJSON().map((v) => v.id);
-  }
-
-  /**
-   * Get list of available views id
-   * @return  {Array} Array of id
-   */
-  get_views_id_open() {
-    return getViewsOpen();
   }
 
   /**
@@ -396,14 +429,14 @@ class MapxResolversStatic extends ResolversBase {
    * Get view table attribute config
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
-   * @return {Object}
+   * @return {Promise<Object>} view attribute config
    */
-  get_view_table_attribute_config(opt) {
+  async get_view_table_attribute_config(opt) {
     opt = Object.assign({}, { idView: null }, opt);
     const out = {};
     if (opt.idView) {
       const view = getView(opt.idView);
-      const config = getTableAttributeConfigFromView(view);
+      const config = await getTableAttributeConfigFromView(view);
       for (const key of ["attributes", "idSource", "labels"]) {
         out[key] = config[key];
       }
@@ -415,12 +448,12 @@ class MapxResolversStatic extends ResolversBase {
    * Get view table attribute url
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
-   * @return {String}
+   * @return {Promise<String>}
    */
-  get_view_table_attribute_url(opt) {
+  async get_view_table_attribute_url(opt) {
     const rslv = this;
     opt = Object.assign({}, { idView: null }, opt);
-    const config = rslv.get_view_table_attribute_config(opt);
+    const config = await rslv.get_view_table_attribute_config(opt);
     const url = new URL(getApiUrl("getSourceTableAttribute"));
     if (config) {
       url.searchParams.set("id", config.idSource);
@@ -433,16 +466,17 @@ class MapxResolversStatic extends ResolversBase {
    * Get view table attribute
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
-   * @return {Object}
+   * @return {Array.<Object>}
    */
   async get_view_table_attribute(opt) {
     opt = Object.assign({}, { idView: null }, opt);
     const rslv = this;
-    const url = rslv.get_view_table_attribute_url(opt);
+    const url = await rslv.get_view_table_attribute_url(opt);
     if (url) {
       const response = await fetch(url);
       if (response.ok) {
-        return response.json();
+        const { data } = await response.json();
+        return data;
       }
     }
     return null;
@@ -460,68 +494,83 @@ class MapxResolversStatic extends ResolversBase {
   }
 
   /**
+   * Set view layer z position
+   * @param {Object} opt Options
+   * @param {String[]} opt.order View order
+   * @return {Boolean} Done
+   * @example
+   * const views = await mapx.ask("get_views_with_visible_layer");
+   * const order = views.toReversed();
+   * const result = await mapx.ask("set_views_layer_order",{order});
+   */
+  set_views_layer_order(opt) {
+    return viewsLayersOrderUpdate(opt);
+  }
+
+  /**
+   * Get list views with visible layers
+   * @return  {Array} Array of views
+   */
+  get_views_layer_order() {
+    return getViewsLayersVisibles(true);
+  }
+
+  /**
+   * Get list views with visible layers (alias)
+   * @return  {Array} Array of views
+   */
+  get_views_with_visible_layer() {
+    return getViewsLayersVisibles(true);
+  }
+
+  /**
    * Filter view layer by text (if attribute is text)
    * @param {Options} opt Options
-   * @return {Boolean} done
+   * @param {String} opt.idView View id
+   * @param {array} opt.values Values to use as filter
+   * @param {string} opt.attribute Attribute to use as filter (default from style)
+   * @return {void}
    */
-  set_view_layer_filter_text(opt) {
-    return this._apply_filter_layer_select.bind(this)(
-      "searchBox",
-      "setValue",
-      opt
-    );
+  async set_view_layer_filter_text(opt) {
+    const rslv = this;
+    if (settings.mode.static) {
+      viewSetTextFilter(opt);
+    } else {
+      await rslv._apply_filter_layer_select("searchBox", "setValue", opt);
+    }
   }
+
   /**
-   * Get current search box item
+   * Get current text filter values for a given view
+   * @param {String} opt.idView View id
    * @param {Options} opt Options
-   * @return {Boolean} done
+   * @return {array} values
    */
   get_view_layer_filter_text(opt) {
-    return this._apply_filter_layer_select.bind(this)(
-      "searchBox",
-      "getValue",
-      opt
-    );
+    return viewGetTextFilterValues(opt);
   }
 
   /**
    * Filter view layer by numeric (if attribute is numeric)
    * @param {Options} opt Options
    * @param {String} opt.idView Target view id
-   * @param {Numeric} opt.value Value
+   * @param {String} opt.attribute Attribute name (default from style)
+   * @param {Numeric} opt.from Value
+   * @param {Numeric} opt.to Value
+   * @param {array} opt.value Values (Deprecated)
+   * @return {void}
    */
-  set_view_layer_filter_numeric(opt) {
-    return this._apply_filter_layer_slider.bind(this)(
-      "numericSlider",
-      "set",
-      opt
-    );
-  }
-
-  /**
-   * Filter view layer by time ( if posix mx_t0 and/or mx_t1 attributes exist )
-   * @param {Options} opt Options
-   * @param {String} opt.idView Target view id
-   * @param {Numeric | Array} opt.value Value or range of value
-   * @return null
-   */
-  set_view_layer_filter_time(opt) {
-    return this._apply_filter_layer_slider.bind(this)("timeSlider", "set", opt);
-  }
-
-  /**
-   * Set layer transarency (0 : visible, 100 : 100% transparent)
-   * @param {Options} opt Options
-   * @param {String} opt.idView Target view id
-   * @param {Numeric} opt.value Value
-   * @return null
-   */
-  set_view_layer_transparency(opt) {
-    return this._apply_filter_layer_slider.bind(this)(
-      "transparencySlider",
-      "set",
-      opt
-    );
+  async set_view_layer_filter_numeric(opt) {
+    const rslv = this;
+    if (opt.value) {
+      opt.from = Math.min(...opt.value);
+      opt.to = Math.max(...opt.value);
+    }
+    if (settings.mode.static) {
+      viewSetNumericFilter(opt);
+    } else {
+      await rslv._apply_filter_layer_slider("numericSlider", "set", opt);
+    }
   }
 
   /**
@@ -530,8 +579,50 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.idView Target view id
    * @return {Number|Array} values
    */
-  get_view_layer_filter_numeric() {
-    return this._apply_filter_layer_slider.bind(this)("numericSlider", "get");
+  get_view_layer_filter_numeric(opt) {
+    return viewGetNumericFilterValues(opt);
+  }
+
+  /**
+   * Filter view layer by time ( if posix mx_t0 and/or mx_t1 attributes exist )
+   *
+   * This function creates a time filter based on the provided options
+   * and sets this filter to the specific view identified by its ID.
+   *
+   * @param {Object} opt - The options for the time filter.
+   * @param {boolean} opt.hasT0 - Flag indicating if the 'mx_t0' timestamp exists.
+   * @param {boolean} opt.hasT1 - Flag indicating if the 'mx_t1' timestamp exists.
+   * @param {number} opt.from - The 'from' timestamp for the filter in milliseconds.
+   * @param {number} opt.to - The 'to' timestamp for the filter in milliseconds.
+   * @param {string} opt.idView - The ID of the view to which the filter is to be applied.
+   * @return {void}
+   * @example
+   * // Get summary ( any attribute: get_view_source_summary returns time extent
+   * // by default )
+   * const summary = await mapx.ask("get_view_source_summary", {
+   *  idView,
+   *  idAttr: idAttr,
+   *  });
+   * // set config + convert seconds -> milliseconds
+   * const start = summary.extent_time.min * 1000;
+   * const end = summary.extent_time.max * 1000;
+   * const hasT0 = summary.attributes.includes("mx_t0");
+   * const hasT1 = summary.attributes.includes("mx_t1");
+   * await mapx.ask("set_view_layer_filter_time", {
+   *  idView,
+   *  from,
+   *  to,
+   *  hasT0,
+   *  hasT1,
+   * });
+   */
+  async set_view_layer_filter_time(opt) {
+    const rslv = this;
+    if (settings.mode.static) {
+      viewSetTimeFilter(opt);
+    } else {
+      await rslv._apply_filter_layer_slider("timeSlider", "set", opt);
+    }
   }
 
   /**
@@ -540,8 +631,24 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.idView Target view id
    * @return {Number|Array} values
    */
-  get_view_layer_filter_time() {
-    return this._apply_filter_layer_slider.bind(this)("timeSlider", "get");
+  get_view_layer_filter_time(opt) {
+    return viewGetTimeFilterValues(opt);
+  }
+
+  /**
+   * Set layer transarency (0 : visible, 100 : 100% transparent)
+   * @param {Options} opt Options
+   * @param {String} opt.idView Target view id
+   * @param {Numeric} opt.value Value
+   * @return {void}
+   */
+  async set_view_layer_transparency(opt) {
+    const rslv = this;
+    if (settings.mode.static) {
+      viewSetOpacity(opt);
+    } else {
+      await rslv._apply_filter_layer_slider("transparencySlider", "set", opt);
+    }
   }
 
   /**
@@ -550,11 +657,8 @@ class MapxResolversStatic extends ResolversBase {
    * @param {String} opt.idView Target view id
    * @return {Number} value
    */
-  get_view_layer_transparency() {
-    return this._apply_filter_layer_slider.bind(this)(
-      "transparencySlider",
-      "get"
-    );
+  get_view_layer_transparency(opt) {
+    return viewGetOpacityValue(opt);
   }
 
   /**
@@ -569,17 +673,21 @@ class MapxResolversStatic extends ResolversBase {
     opt = Object.assign({}, { idView: null, zoomToView: false }, opt);
     const view = getView(opt.idView) || (await getViewRemote(opt.idView));
     const valid = isView(view);
-    if (valid) {
-      await viewsListAddSingle(view);
-      if (opt.zoomToView) {
-        const map = getMap();
-        const bounds = await getViewsBounds(opt.idView);
-        map.fitBounds(bounds);
-      }
-      return true;
-    } else {
+    if (!valid) {
       return rslv._err("err_view_invalid");
     }
+    if (view._vb instanceof ViewBase) {
+      await viewAdd(opt.idView);
+    } else {
+      await viewsListAddSingle(view, { open: true });
+    }
+
+    if (opt.zoomToView) {
+      const bounds = await getViewsBounds(opt.idView);
+      const ok = fitMaxBounds(bounds);
+      return ok;
+    }
+    return true;
   }
 
   /**
@@ -687,15 +795,79 @@ class MapxResolversStatic extends ResolversBase {
   }
 
   /**
-   * Highlight vector feature : Enable, disable, toggle
+   * Spotlight vector feature : Enable, disable, toggle
    * @param {Object} opt Options
-   * @param {Boolean} opt.enable Enable or disable. If not set, toggle highglight
-   * @param {Number} opt.nLayers Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is highlighted. If 0 = only part where all displayed layers are overlapping are highligthed
+   * @param {Boolean} opt.enable Enable or disable. If not set, toggle spotlight
+   * @param {Number} opt.nLayers Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is spotlighted. If 0 = only part where all displayed layers are overlapping are spotligthed
    * @param {Boolean} opt.calcArea Estimate area covered by visible feature and display result in MapX interface
    * @return {Object} options realised {enable:<false/true>,calcArea:<true/false>,nLayers:<n>}
    */
-  set_vector_highlight(opt) {
+  set_vector_spotlight(opt) {
     return toggleSpotlight(opt);
+  }
+  set_vector_highlight(opt) {
+    console.warn("Deprecated. Use set_vector_spotlight instead");
+    return toggleSpotlight(opt);
+  }
+
+  /**
+   * Set the highlighter with the provided options.
+   *
+   * @param {Object} opt - Configuration options for the highlighter.
+   * @param {(PointLike | Array<PointLike>)?} config.point Location to query
+   * @param {Array.<Object>} opt.filters - Array of filter objects to be applied.
+   * @param {String} opt.filters[].id - Identifier of the view to which the filter applies.
+   * @param {Array} opt.filters[].filter - MapboxGl filter expression 
+   * @returns {number} Feature count
+   * @example
+   * mapx.ask('set_highlighter',{
+   *   all: true,
+   * });
+   * 
+   * mapx.ask('set_highlighter',{
+   *   filters: [
+   *     { id: "MX-TC0O1-34A9Y-RYDJG", filter: ["<", ["get", "year"], 2000] },
+   *   ],
+   * });
+   * 
+   * mapx.ask('set_highlighter',{
+   *   filters: [
+   *     { id: "MX-TC0O1-34A9Y-RYDJG", filter: [">=", ["get", "fatalities"], 7000] },
+   *   ],
+   * });
+   * 
+   * mapx.ask('set_highlighter',{
+   *   filters: [
+   *     {
+   *       id: "MX-TC0O1-34A9Y-RYDJG",
+   *       filter: [
+   *         "in",
+   *         ["get", "country"],
+   *         ["literal", ["Nigeria", "Gabon", "Angola"]],
+   *       ],
+   *     },
+   *   ],
+   * });
+
+   */
+  set_highlighter(opt) {
+    return highlighter.set(opt);
+  }
+
+  /**
+   * Update highlighter using previous configuration i.e refresh features
+   * @returns {number} Feature count
+   */
+  update_highlighter() {
+    return highlighter.update();
+  }
+
+  /**
+   * Clear all highlighted features and reset config
+   * @returns {number} Feature count
+   */
+  reset_highlighter() {
+    return highlighter.reset();
   }
 
   /**
@@ -866,6 +1038,49 @@ class MapxResolversStatic extends ResolversBase {
    */
   map_get_bounds_array() {
     return getBoundsArray();
+  }
+
+  /**
+   * Set current map bounds
+   * @param {Object} opt Options
+   * @param {array} opt.bounds [west, south, east, north]
+   */
+  map_set_bounds_array(opt) {
+    return fitMaxBounds(opt.bounds);
+  }
+
+  /**
+   * Get current max bounds / world
+   * @return {Array|null} bounds [west, south, east, north] or null
+   */
+  map_get_max_bounds_array() {
+    const map = getMap();
+    const maxBounds = map.getMaxBounds();
+    if (!maxBounds) {
+      return null;
+    }
+    return [
+      maxBounds.getWest(),
+      maxBounds.getSouth(),
+      maxBounds.getEast(),
+      maxBounds.getNorth(),
+    ];
+  }
+
+  /**
+   * Set current max bounds / world
+   * @param {Object} opt Options
+   * @param {array} opt.bounds [west, south, east, north] If empty or null = reset
+   * @return {boolean} done
+   */
+  map_set_max_bounds_array(opt) {
+    opt = Object.assign({}, { bounds: null }, opt);
+    const map = getMap();
+    if (opt.bounds) {
+      opt.bounds = validateBounds(opt.bounds);
+    }
+    map.setMaxBounds(opt.bounds);
+    return true;
   }
 
   /**

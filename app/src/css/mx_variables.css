@@ -19,8 +19,11 @@
   --mx_ui_link: #12b0f8;
   --mx_ui_input_accent: #12b0f8;
 
-  border-color: var(--mx_ui_border);
-  color: var(--mx_ui_text);
+  /**
+  * Font family 
+  */ 
+  --mx_ui_font_text: system-ui;
+
   /**
   * font size
   */
@@ -38,6 +41,7 @@
   * Shadow
   */
   --mx_ui_box_shadow: 0px 0px 14px 0px var(--mx_ui_shadow);
+  --mx_ui_box_shadow_inset: inset 0 0 14px 3px var(--mx_ui_shadow);
 
   /**
   * Views colors
@@ -67,4 +71,5 @@
   --mx_ui_type_string: #fff50059;
   --mx_ui_type_number: #00ffff59;
   --mx_ui_type_boolean: #95ff0059;
+  --mx_ui_type_object: #dd511159;
 }

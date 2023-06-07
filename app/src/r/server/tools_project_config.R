@@ -73,7 +73,7 @@ observeEvent(input$btnShowProjectConfig, {
       id = "projectConfig",
       title = d("project_settings", language, web = F),
       content = ui,
-      textCloseButton = d("btn_cancel", language, web = F),
+      textCloseButton = d("btn_close", language, web = F),
       buttons = list(btnSave),
       addBackground = FALSE
     )
@@ -314,6 +314,11 @@ observeEvent(input$projectMapPosition_init, {
           type = "boolean",
           format = "checkbox",
           title = tt("map_fit_to_bounds")
+        ),
+        useMaxBounds = list(
+          type = "boolean",
+          format = "checkbox",
+          title = tt("map_use_max_bounds")
         )
       )
     )
@@ -425,46 +430,52 @@ observeEvent(input$btnSaveProjectConfig, {
     countries <- list()
   }
 
-  if (isAdmin && isValid) {
-    mxDbSaveProjectData(project, list(
-      public = isPublic,
-      active = TRUE,
-      title = input$projectTitleSchema_values$data,
-      description = input$projectDescriptionSchema_values$data,
-      alias = aliasProject,
-      admins = NULL,
-      members = NULL,
-      publishers = NULL,
-      map_position = input$projectMapPosition_values$data,
-      map_projection = input$projectMapProjection_values$data,
-      countries = countries,
-      theme = theme,
-      creator = NULL,
-      allow_join = allowJoin
-    ))
-
-    reactData$updateProject <- runif(1)
-
-    mxUpdateText(
-      id = "projectConfig_txt",
-      text = sprintf("Saved at %s", format(Sys.time(), "%H:%M"))
-    )
-    mxToggleButton(
-      id = "btnSaveProjectConfig",
-      disable = FALSE
-    )
-
-    #
-    # Update UI
-    #
-    mxUpdateSettings(list(
-      project = list(
-        id = project,
-        public = isPublic,
-        title = input$projectTitleSchema_values$data
-      )
-    ))
-
-    mxFlashIcon("floppy-o")
+  if (!isAdmin || !isValid) {
+    return()
   }
+
+  mxDbSaveProjectData(project, list(
+    public = isPublic,
+    active = TRUE,
+    title = input$projectTitleSchema_values$data,
+    description = input$projectDescriptionSchema_values$data,
+    alias = aliasProject,
+    admins = NULL,
+    members = NULL,
+    publishers = NULL,
+    map_position = input$projectMapPosition_values$data,
+    map_projection = input$projectMapProjection_values$data,
+    countries = countries,
+    theme = theme,
+    creator = NULL,
+    allow_join = allowJoin
+  ))
+
+  reactData$updateProject <- runif(1)
+
+  mxUpdateText(
+    id = "projectConfig_txt",
+    text = sprintf("Saved at %s", format(Sys.time(), "%H:%M"))
+  )
+
+  #
+  # Re-enable button only of success
+  #
+  mxToggleButton(
+    id = "btnSaveProjectConfig",
+    disable = FALSE
+  )
+
+  #
+  # Update UI
+  #
+  mxUpdateSettings(list(
+    project = list(
+      id = project,
+      public = isPublic,
+      title = input$projectTitleSchema_values$data
+    )
+  ))
+
+  mxFlashIcon("floppy-o")
 })

@@ -37,6 +37,12 @@ const mapx = new mxsdk.Manager({
 });
 ```
 
+### Search parameters 
+
+Mapx has a set of valid search parameters in its query string. The SDK will use the `params` object to build the querry string.
+
+Current supported parameters are [defined in the wiki](https://github.com/unep-grid/mapx/wiki/URL-parameters).
+
 
 ## Methods and events
 
@@ -103,8 +109,8 @@ MapX events:
 - view_filtered
 - view_add
 - view_added
-- highlight_progress
-- highlight_update
+- spotlight_progress
+- spotlight_update
 - settings_change
 - settings_user_change
 - story_step
@@ -118,7 +124,7 @@ Further usage resources:
 - [Starter project example](https://git.unepgrid.ch/drikc/mapx-sdk-starter-project)
 - [Prototype presentation (1-Jul-2020)](https://unepgrid.ch/storage/app/media/platforms/mapx-sdk-prototype-presentation-20200701.html)
 - [Package at npm registry](https://www.npmjs.com/package/@fxi/mxsdk)
-- [SDK Recipies](https://github.com/unep-grid/map-x-mgl/wiki/SDK---Recipes)
+- [Wiki example](https://github.com/unep-grid/mapx/wiki/SDK-usage-examples)
 
 ## Documentation
 
@@ -160,9 +166,10 @@ MapX resolvers available in app only
     * [.get_project_collections(opt)](#MapxResolversApp+get_project_collections) ⇒ <code>Array</code>
     * [.is_user_guest()](#MapxResolversApp+is_user_guest) ⇒ <code>Boolean</code>
     * [.get_views_list_state()](#MapxResolversApp+get_views_list_state) ⇒ <code>Array</code>
+    * [.get_views_id_open()](#MapxResolversApp+get_views_id_open) ⇒ <code>Array</code>
     * [.set_views_list_filters(opt)](#MapxResolversApp+set_views_list_filters) ⇒ <code>Boolean</code>
     * [.get_views_list_filters()](#MapxResolversApp+get_views_list_filters) ⇒ <code>Array</code>
-    * [.get_views_order()](#MapxResolversApp+get_views_order) ⇒ <code>Array</code>
+    * [.get_views_list_order()](#MapxResolversApp+get_views_list_order) ⇒ <code>Array</code>
     * [.set_views_list_state(opt)](#MapxResolversApp+set_views_list_state) ⇒ <code>Boolean</code>
     * [.set_views_list_sort(opt)](#MapxResolversApp+set_views_list_sort) ⇒ <code>Boolean</code>
     * [.is_views_list_sorted(opt)](#MapxResolversApp+is_views_list_sorted) ⇒ <code>Boolean</code>
@@ -356,6 +363,14 @@ Test if the current user is guest
 Get views list state
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+<a name="MapxResolversApp+get_views_id_open"></a>
+
+#### mapxResolversApp.get\_views\_id\_open() ⇒ <code>Array</code>
+Get list of view in "open" state
+-> from the views list : possibly without layer
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+**Returns**: <code>Array</code> - Array of id  
 <a name="MapxResolversApp+set_views_list_filters"></a>
 
 #### mapxResolversApp.set\_views\_list\_filters(opt) ⇒ <code>Boolean</code>
@@ -410,10 +425,10 @@ Get views list filter rules
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 **Returns**: <code>Array</code> - Rule list  
-<a name="MapxResolversApp+get_views_order"></a>
+<a name="MapxResolversApp+get_views_list_order"></a>
 
-#### mapxResolversApp.get\_views\_order() ⇒ <code>Array</code>
-Get views current absolute order (without groups)
+#### mapxResolversApp.get\_views\_list\_order() ⇒ <code>Array</code>
+Get views current absolute order (without groups) in the list
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 <a name="MapxResolversApp+set_views_list_state"></a>
@@ -590,7 +605,7 @@ MapX resolvers available in static and app
     * [.get_sdk_methods()](#MapxResolversStatic+get_sdk_methods) ⇒ <code>Array</code>
     * [.set_panel_left_visibility(opt)](#MapxResolversStatic+set_panel_left_visibility) ⇒ <code>Boolean</code>
     * [.has_dashboard()](#MapxResolversStatic+has_dashboard) ⇒ <code>Boolean</code>
-    * [.test_ws()](#MapxResolversStatic+test_ws)
+    * [.tests_ws()](#MapxResolversStatic+tests_ws)
     * [.set_immersive_mode()](#MapxResolversStatic+set_immersive_mode) ⇒ <code>Boolean</code>
     * [.get_immersive_mode()](#MapxResolversStatic+get_immersive_mode) ⇒ <code>Boolean</code>
     * [.set_3d_terrain(opt)](#MapxResolversStatic+set_3d_terrain)
@@ -599,10 +614,12 @@ MapX resolvers available in static and app
     * [.show_modal_share(opt)](#MapxResolversStatic+show_modal_share) ⇒ <code>Boolean</code>
     * [.close_modal_share()](#MapxResolversStatic+close_modal_share) ⇒ <code>Boolean</code>
     * [.get_modal_share_string()](#MapxResolversStatic+get_modal_share_string) ⇒ <code>String</code>
+    * [.get_modal_share_tests()](#MapxResolversStatic+get_modal_share_tests) ⇒ <code>array</code>
     * [.set_theme(opt)](#MapxResolversStatic+set_theme) ⇒ <code>Boolean</code>
     * [.get_themes_id()](#MapxResolversStatic+get_themes_id) ⇒ <code>Array</code>
     * [.get_themes()](#MapxResolversStatic+get_themes) ⇒ <code>Object</code>
     * [.get_theme_id()](#MapxResolversStatic+get_theme_id) ⇒ <code>string</code>
+    * [.add_theme(opt)](#MapxResolversStatic+add_theme) ⇒ <code>Boolean</code>
     * [.has_el_id(opt)](#MapxResolversStatic+has_el_id)
     * [.set_dashboard_visibility(opt)](#MapxResolversStatic+set_dashboard_visibility) ⇒ <code>Boolean</code>
     * [.is_dashboard_visible()](#MapxResolversStatic+is_dashboard_visible) ⇒ <code>Boolean</code>
@@ -613,22 +630,23 @@ MapX resolvers available in static and app
     * [.set_language(opt)](#MapxResolversStatic+set_language) ⇒ <code>Boolean</code>
     * [.get_languages()](#MapxResolversStatic+get_languages) ⇒ <code>Array</code>
     * [.get_views()](#MapxResolversStatic+get_views) ⇒ <code>Array</code>
-    * [.get_views_with_visible_layer()](#MapxResolversStatic+get_views_with_visible_layer) ⇒ <code>Array</code>
     * [.get_views_id()](#MapxResolversStatic+get_views_id) ⇒ <code>Array</code>
-    * [.get_views_id_open()](#MapxResolversStatic+get_views_id_open) ⇒ <code>Array</code>
     * [.get_view_meta_vt_attribute(opt)](#MapxResolversStatic+get_view_meta_vt_attribute) ⇒ <code>Object</code>
     * [.get_view_meta(opt, view)](#MapxResolversStatic+get_view_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
-    * [.get_view_table_attribute_config(opt)](#MapxResolversStatic+get_view_table_attribute_config) ⇒ <code>Object</code>
-    * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>String</code>
-    * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Object</code>
+    * [.get_view_table_attribute_config(opt)](#MapxResolversStatic+get_view_table_attribute_config) ⇒ <code>Promise.&lt;Object&gt;</code>
+    * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>Promise.&lt;String&gt;</code>
+    * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Array.&lt;Object&gt;</code>
     * [.get_view_legend_image(opt)](#MapxResolversStatic+get_view_legend_image) ⇒ <code>String</code>
-    * [.set_view_layer_filter_text(opt)](#MapxResolversStatic+set_view_layer_filter_text) ⇒ <code>Boolean</code>
-    * [.get_view_layer_filter_text(opt)](#MapxResolversStatic+get_view_layer_filter_text) ⇒ <code>Boolean</code>
-    * [.set_view_layer_filter_numeric(opt)](#MapxResolversStatic+set_view_layer_filter_numeric)
-    * [.set_view_layer_filter_time(opt)](#MapxResolversStatic+set_view_layer_filter_time) ⇒
-    * [.set_view_layer_transparency(opt)](#MapxResolversStatic+set_view_layer_transparency) ⇒
+    * [.set_views_layer_order(opt)](#MapxResolversStatic+set_views_layer_order) ⇒ <code>Boolean</code>
+    * [.get_views_layer_order()](#MapxResolversStatic+get_views_layer_order) ⇒ <code>Array</code>
+    * [.get_views_with_visible_layer()](#MapxResolversStatic+get_views_with_visible_layer) ⇒ <code>Array</code>
+    * [.set_view_layer_filter_text(opt)](#MapxResolversStatic+set_view_layer_filter_text) ⇒ <code>void</code>
+    * [.get_view_layer_filter_text(opt)](#MapxResolversStatic+get_view_layer_filter_text) ⇒ <code>array</code>
+    * [.set_view_layer_filter_numeric(opt)](#MapxResolversStatic+set_view_layer_filter_numeric) ⇒ <code>void</code>
     * [.get_view_layer_filter_numeric(opt)](#MapxResolversStatic+get_view_layer_filter_numeric) ⇒ <code>Number</code> \| <code>Array</code>
+    * [.set_view_layer_filter_time(opt)](#MapxResolversStatic+set_view_layer_filter_time) ⇒ <code>void</code>
     * [.get_view_layer_filter_time(opt)](#MapxResolversStatic+get_view_layer_filter_time) ⇒ <code>Number</code> \| <code>Array</code>
+    * [.set_view_layer_transparency(opt)](#MapxResolversStatic+set_view_layer_transparency) ⇒ <code>void</code>
     * [.get_view_layer_transparency(opt)](#MapxResolversStatic+get_view_layer_transparency) ⇒ <code>Number</code>
     * [.view_add(opt)](#MapxResolversStatic+view_add) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.view_remove(opt)](#MapxResolversStatic+view_remove) ⇒ <code>Boolean</code>
@@ -641,7 +659,10 @@ MapX resolvers available in static and app
     * [.close_modal_all()](#MapxResolversStatic+close_modal_all) ⇒ <code>Boolean</code>
     * [.toggle_draw_mode()](#MapxResolversStatic+toggle_draw_mode)
     * [.get_views_title(opt)](#MapxResolversStatic+get_views_title) ⇒ <code>Array</code>
-    * [.set_vector_highlight(opt)](#MapxResolversStatic+set_vector_highlight) ⇒ <code>Object</code>
+    * [.set_vector_spotlight(opt)](#MapxResolversStatic+set_vector_spotlight) ⇒ <code>Object</code>
+    * [.set_highlighter(opt)](#MapxResolversStatic+set_highlighter) ⇒ <code>number</code>
+    * [.update_highlighter()](#MapxResolversStatic+update_highlighter) ⇒ <code>number</code>
+    * [.reset_highlighter()](#MapxResolversStatic+reset_highlighter) ⇒ <code>number</code>
     * [.view_geojson_create(opt)](#MapxResolversStatic+view_geojson_create) ⇒ <code>Object</code>
     * [.view_geojson_set_style(opt)](#MapxResolversStatic+view_geojson_set_style) ⇒ <code>Boolean</code>
     * [.view_geojson_delete(opt)](#MapxResolversStatic+view_geojson_delete) ⇒ <code>Boolean</code>
@@ -652,6 +673,9 @@ MapX resolvers available in static and app
     * [.map_get_zoom()](#MapxResolversStatic+map_get_zoom) ⇒ <code>Float</code>
     * [.map_get_center()](#MapxResolversStatic+map_get_center) ⇒ <code>Object</code>
     * [.map_get_bounds_array()](#MapxResolversStatic+map_get_bounds_array) ⇒ <code>Array</code>
+    * [.map_set_bounds_array(opt)](#MapxResolversStatic+map_set_bounds_array)
+    * [.map_get_max_bounds_array()](#MapxResolversStatic+map_get_max_bounds_array) ⇒ <code>Array</code> \| <code>null</code>
+    * [.map_set_max_bounds_array(opt)](#MapxResolversStatic+map_set_max_bounds_array) ⇒ <code>boolean</code>
     * [.map(opt)](#MapxResolversStatic+map) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>
     * [.map_wait_idle()](#MapxResolversStatic+map_wait_idle) ⇒ <code>Boolean</code>
     * [.common_loc_get_list_codes()](#MapxResolversStatic+common_loc_get_list_codes) ⇒ <code>Array</code>
@@ -688,9 +712,9 @@ Test if dashboard exists
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Boolean</code> - exists  
-<a name="MapxResolversStatic+test_ws"></a>
+<a name="MapxResolversStatic+tests_ws"></a>
 
-#### mapxResolversStatic.test\_ws()
+#### mapxResolversStatic.tests\_ws()
 End to end ws com testing
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
@@ -780,6 +804,13 @@ Get sharing string
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>String</code> - Sharing string ( code / url )  
+<a name="MapxResolversStatic+get_modal_share_tests"></a>
+
+#### mapxResolversStatic.get\_modal\_share\_tests() ⇒ <code>array</code>
+Modal Share Tests Suite
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>array</code> - array of tests  
 <a name="MapxResolversStatic+set_theme"></a>
 
 #### mapxResolversStatic.set\_theme(opt) ⇒ <code>Boolean</code>
@@ -816,6 +847,19 @@ Get current theme id
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>string</code> - Theme id  
+<a name="MapxResolversStatic+add_theme"></a>
+
+#### mapxResolversStatic.add\_theme(opt) ⇒ <code>Boolean</code>
+Add a custom theme into mapx and use it.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Boolean</code> - done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.theme | <code>String</code> | Valid theme (full). |
+
 <a name="MapxResolversStatic+has_el_id"></a>
 
 #### mapxResolversStatic.has\_el\_id(opt)
@@ -876,6 +920,7 @@ Get view's source summary
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>String</code> | Id of the view |
 | opt.stats | <code>Array</code> | Stats to retrieve. ['base', 'attributes', 'temporal', 'spatial'] |
+| opt.idAttr | <code>String</code> | Attribute for stat (default = attrbute of the style) |
 
 <a name="MapxResolversStatic+get_user_ip"></a>
 
@@ -918,23 +963,9 @@ Get list of available views as static objects
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Array</code> - Array of views  
-<a name="MapxResolversStatic+get_views_with_visible_layer"></a>
-
-#### mapxResolversStatic.get\_views\_with\_visible\_layer() ⇒ <code>Array</code>
-Get list views with visible layers
-
-**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Array</code> - Array of views  
 <a name="MapxResolversStatic+get_views_id"></a>
 
 #### mapxResolversStatic.get\_views\_id() ⇒ <code>Array</code>
-Get list of available views id
-
-**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Array</code> - Array of id  
-<a name="MapxResolversStatic+get_views_id_open"></a>
-
-#### mapxResolversStatic.get\_views\_id\_open() ⇒ <code>Array</code>
 Get list of available views id
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
@@ -968,10 +999,11 @@ Get view metadata
 
 <a name="MapxResolversStatic+get_view_table_attribute_config"></a>
 
-#### mapxResolversStatic.get\_view\_table\_attribute\_config(opt) ⇒ <code>Object</code>
+#### mapxResolversStatic.get\_view\_table\_attribute\_config(opt) ⇒ <code>Promise.&lt;Object&gt;</code>
 Get view table attribute config
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Promise.&lt;Object&gt;</code> - view attribute config  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -980,7 +1012,7 @@ Get view table attribute config
 
 <a name="MapxResolversStatic+get_view_table_attribute_url"></a>
 
-#### mapxResolversStatic.get\_view\_table\_attribute\_url(opt) ⇒ <code>String</code>
+#### mapxResolversStatic.get\_view\_table\_attribute\_url(opt) ⇒ <code>Promise.&lt;String&gt;</code>
 Get view table attribute url
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
@@ -992,7 +1024,7 @@ Get view table attribute url
 
 <a name="MapxResolversStatic+get_view_table_attribute"></a>
 
-#### mapxResolversStatic.get\_view\_table\_attribute(opt) ⇒ <code>Object</code>
+#### mapxResolversStatic.get\_view\_table\_attribute(opt) ⇒ <code>Array.&lt;Object&gt;</code>
 Get view table attribute
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
@@ -1016,33 +1048,69 @@ Get view legend
 | opt.idView | <code>String</code> | Id of the view |
 | opt.format | <code>String</code> |  |
 
+<a name="MapxResolversStatic+set_views_layer_order"></a>
+
+#### mapxResolversStatic.set\_views\_layer\_order(opt) ⇒ <code>Boolean</code>
+Set view layer z position
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Boolean</code> - Done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.order | <code>Array.&lt;String&gt;</code> | View order |
+
+**Example**  
+```js
+const views = await mapx.ask("get_views_with_visible_layer");
+const order = views.toReversed();
+const result = await mapx.ask("set_views_layer_order",{order});
+```
+<a name="MapxResolversStatic+get_views_layer_order"></a>
+
+#### mapxResolversStatic.get\_views\_layer\_order() ⇒ <code>Array</code>
+Get list views with visible layers
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Array</code> - Array of views  
+<a name="MapxResolversStatic+get_views_with_visible_layer"></a>
+
+#### mapxResolversStatic.get\_views\_with\_visible\_layer() ⇒ <code>Array</code>
+Get list views with visible layers (alias)
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Array</code> - Array of views  
 <a name="MapxResolversStatic+set_view_layer_filter_text"></a>
 
-#### mapxResolversStatic.set\_view\_layer\_filter\_text(opt) ⇒ <code>Boolean</code>
+#### mapxResolversStatic.set\_view\_layer\_filter\_text(opt) ⇒ <code>void</code>
 Filter view layer by text (if attribute is text)
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Boolean</code> - done  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Options</code> | Options |
+| opt.idView | <code>String</code> | View id |
+| opt.values | <code>array</code> | Values to use as filter |
+| opt.attribute | <code>string</code> | Attribute to use as filter (default from style) |
 
 <a name="MapxResolversStatic+get_view_layer_filter_text"></a>
 
-#### mapxResolversStatic.get\_view\_layer\_filter\_text(opt) ⇒ <code>Boolean</code>
-Get current search box item
+#### mapxResolversStatic.get\_view\_layer\_filter\_text(opt) ⇒ <code>array</code>
+Get current text filter values for a given view
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Boolean</code> - done  
+**Returns**: <code>array</code> - values  
 
 | Param | Type | Description |
 | --- | --- | --- |
+| opt.idView | <code>String</code> | View id |
 | opt | <code>Options</code> | Options |
 
 <a name="MapxResolversStatic+set_view_layer_filter_numeric"></a>
 
-#### mapxResolversStatic.set\_view\_layer\_filter\_numeric(opt)
+#### mapxResolversStatic.set\_view\_layer\_filter\_numeric(opt) ⇒ <code>void</code>
 Filter view layer by numeric (if attribute is numeric)
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
@@ -1051,35 +1119,10 @@ Filter view layer by numeric (if attribute is numeric)
 | --- | --- | --- |
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
-| opt.value | <code>Numeric</code> | Value |
-
-<a name="MapxResolversStatic+set_view_layer_filter_time"></a>
-
-#### mapxResolversStatic.set\_view\_layer\_filter\_time(opt) ⇒
-Filter view layer by time ( if posix mx_t0 and/or mx_t1 attributes exist )
-
-**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: null  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| opt | <code>Options</code> | Options |
-| opt.idView | <code>String</code> | Target view id |
-| opt.value | <code>Numeric</code> \| <code>Array</code> | Value or range of value |
-
-<a name="MapxResolversStatic+set_view_layer_transparency"></a>
-
-#### mapxResolversStatic.set\_view\_layer\_transparency(opt) ⇒
-Set layer transarency (0 : visible, 100 : 100% transparent)
-
-**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: null  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| opt | <code>Options</code> | Options |
-| opt.idView | <code>String</code> | Target view id |
-| opt.value | <code>Numeric</code> | Value |
+| opt.attribute | <code>String</code> | Attribute name (default from style) |
+| opt.from | <code>Numeric</code> | Value |
+| opt.to | <code>Numeric</code> | Value |
+| opt.value | <code>array</code> | Values (Deprecated) |
 
 <a name="MapxResolversStatic+get_view_layer_filter_numeric"></a>
 
@@ -1094,6 +1137,46 @@ Get current numeric slider value
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
 
+<a name="MapxResolversStatic+set_view_layer_filter_time"></a>
+
+#### mapxResolversStatic.set\_view\_layer\_filter\_time(opt) ⇒ <code>void</code>
+Filter view layer by time ( if posix mx_t0 and/or mx_t1 attributes exist )
+
+This function creates a time filter based on the provided options
+and sets this filter to the specific view identified by its ID.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | The options for the time filter. |
+| opt.hasT0 | <code>boolean</code> | Flag indicating if the 'mx_t0' timestamp exists. |
+| opt.hasT1 | <code>boolean</code> | Flag indicating if the 'mx_t1' timestamp exists. |
+| opt.from | <code>number</code> | The 'from' timestamp for the filter in milliseconds. |
+| opt.to | <code>number</code> | The 'to' timestamp for the filter in milliseconds. |
+| opt.idView | <code>string</code> | The ID of the view to which the filter is to be applied. |
+
+**Example**  
+```js
+// Get summary ( any attribute: get_view_source_summary returns time extent
+// by default )
+const summary = await mapx.ask("get_view_source_summary", {
+ idView,
+ idAttr: idAttr,
+ });
+// set config + convert seconds -> milliseconds
+const start = summary.extent_time.min * 1000;
+const end = summary.extent_time.max * 1000;
+const hasT0 = summary.attributes.includes("mx_t0");
+const hasT1 = summary.attributes.includes("mx_t1");
+await mapx.ask("set_view_layer_filter_time", {
+ idView,
+ from,
+ to,
+ hasT0,
+ hasT1,
+});
+```
 <a name="MapxResolversStatic+get_view_layer_filter_time"></a>
 
 #### mapxResolversStatic.get\_view\_layer\_filter\_time(opt) ⇒ <code>Number</code> \| <code>Array</code>
@@ -1106,6 +1189,19 @@ Get current time slider value
 | --- | --- | --- |
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
+
+<a name="MapxResolversStatic+set_view_layer_transparency"></a>
+
+#### mapxResolversStatic.set\_view\_layer\_transparency(opt) ⇒ <code>void</code>
+Set layer transarency (0 : visible, 100 : 100% transparent)
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Options</code> | Options |
+| opt.idView | <code>String</code> | Target view id |
+| opt.value | <code>Numeric</code> | Value |
 
 <a name="MapxResolversStatic+get_view_layer_transparency"></a>
 
@@ -1234,10 +1330,10 @@ Get list of views title
 | opt.views | <code>Array</code> | List of views or views id |
 | opt.lang | <code>String</code> | Language code |
 
-<a name="MapxResolversStatic+set_vector_highlight"></a>
+<a name="MapxResolversStatic+set_vector_spotlight"></a>
 
-#### mapxResolversStatic.set\_vector\_highlight(opt) ⇒ <code>Object</code>
-Highlight vector feature : Enable, disable, toggle
+#### mapxResolversStatic.set\_vector\_spotlight(opt) ⇒ <code>Object</code>
+Spotlight vector feature : Enable, disable, toggle
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Object</code> - options realised {enable:<false/true>,calcArea:<true/false>,nLayers:<n>}  
@@ -1245,10 +1341,71 @@ Highlight vector feature : Enable, disable, toggle
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
-| opt.enable | <code>Boolean</code> | Enable or disable. If not set, toggle highglight |
-| opt.nLayers | <code>Number</code> | Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is highlighted. If 0 = only part where all displayed layers are overlapping are highligthed |
+| opt.enable | <code>Boolean</code> | Enable or disable. If not set, toggle spotlight |
+| opt.nLayers | <code>Number</code> | Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is spotlighted. If 0 = only part where all displayed layers are overlapping are spotligthed |
 | opt.calcArea | <code>Boolean</code> | Estimate area covered by visible feature and display result in MapX interface |
 
+<a name="MapxResolversStatic+set_highlighter"></a>
+
+#### mapxResolversStatic.set\_highlighter(opt) ⇒ <code>number</code>
+Set the highlighter with the provided options.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>number</code> - Feature count  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Configuration options for the highlighter. |
+| config.point | <code>PointLike</code> \| <code>Array.&lt;PointLike&gt;</code> | Location to query |
+| opt.filters | <code>Array.&lt;Object&gt;</code> | Array of filter objects to be applied. |
+| opt.filters[].id | <code>String</code> | Identifier of the view to which the filter applies. |
+| opt.filters[].filter | <code>Array</code> | MapboxGl filter expression |
+
+**Example**  
+```js
+mapx.ask('set_highlighter',{
+  all: true,
+});
+
+mapx.ask('set_highlighter',{
+  filters: [
+    { id: "MX-TC0O1-34A9Y-RYDJG", filter: ["<", ["get", "year"], 2000] },
+  ],
+});
+
+mapx.ask('set_highlighter',{
+  filters: [
+    { id: "MX-TC0O1-34A9Y-RYDJG", filter: [">=", ["get", "fatalities"], 7000] },
+  ],
+});
+
+mapx.ask('set_highlighter',{
+  filters: [
+    {
+      id: "MX-TC0O1-34A9Y-RYDJG",
+      filter: [
+        "in",
+        ["get", "country"],
+        ["literal", ["Nigeria", "Gabon", "Angola"]],
+      ],
+    },
+  ],
+});
+```
+<a name="MapxResolversStatic+update_highlighter"></a>
+
+#### mapxResolversStatic.update\_highlighter() ⇒ <code>number</code>
+Update highlighter using previous configuration i.e refresh features
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>number</code> - Feature count  
+<a name="MapxResolversStatic+reset_highlighter"></a>
+
+#### mapxResolversStatic.reset\_highlighter() ⇒ <code>number</code>
+Clear all highlighted features and reset config
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>number</code> - Feature count  
 <a name="MapxResolversStatic+view_geojson_create"></a>
 
 #### mapxResolversStatic.view\_geojson\_create(opt) ⇒ <code>Object</code>
@@ -1377,6 +1534,38 @@ Get current map bounds as array
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Array</code> - Bounds [west, south, east, north]  
+<a name="MapxResolversStatic+map_set_bounds_array"></a>
+
+#### mapxResolversStatic.map\_set\_bounds\_array(opt)
+Set current map bounds
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.bounds | <code>array</code> | [west, south, east, north] |
+
+<a name="MapxResolversStatic+map_get_max_bounds_array"></a>
+
+#### mapxResolversStatic.map\_get\_max\_bounds\_array() ⇒ <code>Array</code> \| <code>null</code>
+Get current max bounds / world
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Array</code> \| <code>null</code> - bounds [west, south, east, north] or null  
+<a name="MapxResolversStatic+map_set_max_bounds_array"></a>
+
+#### mapxResolversStatic.map\_set\_max\_bounds\_array(opt) ⇒ <code>boolean</code>
+Set current max bounds / world
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>boolean</code> - done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.bounds | <code>array</code> | [west, south, east, north] If empty or null = reset |
+
 <a name="MapxResolversStatic+map"></a>
 
 #### mapxResolversStatic.map(opt) ⇒ <code>Promise.&lt;(Any\|Boolean)&gt;</code>

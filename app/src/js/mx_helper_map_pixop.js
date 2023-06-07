@@ -1,16 +1,35 @@
-import {Spotlight} from './pixop/spotlight.js';
-import {RadialProgress} from './radial_progress/index.js';
+import { Spotlight } from "./pixop/spotlight.js";
+import { RadialProgress } from "./radial_progress/index.js";
+import { UAParser } from "ua-parser-js";
+import { events } from "./mx.js";
+
+const uaparser = new UAParser();
+const isNotBlink = uaparser.getEngine().name !== "Blink";
 
 let prog;
+
+window.addEventListener(
+  "load",
+  () => {
+    events.once("mapx_ready", () => {
+      const elPixopTools = document.getElementById("spotlight_tools_box");
+      if (elPixopTools && isNotBlink) {
+        elPixopTools.classList.add("disabled");
+      }
+    });
+  },
+  { once: true }
+);
+
 export function toggleSpotlight(opt) {
   const h = mx.helpers;
   const map = h.getMap();
-  const clActive = 'active';
+  const clActive = "active";
 
   /**
    * Mendatory expected ui
    */
-  const elToggleMain = document.getElementById('btnOverlapSpotlight');
+  const elToggleMain = document.getElementById("btnOverlapSpotlight");
   const elToggle = opt.currentTarget
     ? opt.currentTarget
     : h.isElement(opt.elToggle)
@@ -21,22 +40,22 @@ export function toggleSpotlight(opt) {
    * Select number of layer
    */
   const elSelectNum =
-    document.getElementById('selectNLayersOverlap') || h.el('select');
+    document.getElementById("selectNLayersOverlap") || h.el("select");
   /*
    * Text area
    */
-  const elTextArea = document.getElementById('txtAreaOverlap') || h.el('span');
+  const elTextArea = document.getElementById("txtAreaOverlap") || h.el("span");
   /**
    * Text resol
    */
   const elTextResol =
-    document.getElementById('txtResolOverlap') || h.el('span');
+    document.getElementById("txtResolOverlap") || h.el("span");
   /**
    * input checkbox to enable area estimation
    */
   const elEnableCalcArea =
-    document.getElementById('checkEnableOverlapArea') ||
-    h.el('input', {type: 'checkbox'});
+    document.getElementById("checkEnableOverlapArea") ||
+    h.el("input", { type: "checkbox" });
 
   /**
    * Default
@@ -45,7 +64,7 @@ export function toggleSpotlight(opt) {
     {
       enable: !elToggle.classList.contains(clActive),
       calcArea: !!elEnableCalcArea.checked,
-      nLayers: elSelectNum.value
+      nLayers: elSelectNum.value,
     },
     opt
   );
@@ -66,7 +85,7 @@ export function toggleSpotlight(opt) {
     prog = new RadialProgress(elToggle, {
       radius: 20,
       stroke: 2,
-      strokeColor: 'red'
+      strokeColor: "red",
     });
   }
 
@@ -103,10 +122,10 @@ export function toggleSpotlight(opt) {
         prog.update(0);
       }
       mx.events.fire({
-        type: 'highlight_progress',
+        type: "spotlight_progress",
         data: {
-          progress: p
-        }
+          progress: p,
+        },
       });
     },
     onRendered: (px) => {
@@ -116,7 +135,7 @@ export function toggleSpotlight(opt) {
     onRender: (px) => {
       h.setBusy(true);
       px.setOpacity(0.1);
-    }
+    },
   };
 
   if (!opt.enable) {
@@ -140,25 +159,25 @@ export function toggleSpotlight(opt) {
       if (elEnableCalcArea) {
         mx.listeners.addListener({
           target: elEnableCalcArea,
-          type: 'change',
-          idGroup: 'spotlight_pixop_ui',
-          callback: render
+          type: "change",
+          idGroup: "spotlight_pixop_ui",
+          callback: render,
         });
       }
       if (elSelectNum) {
         mx.listeners.addListener({
           target: elSelectNum,
-          type: 'change',
-          idGroup: 'spotlight_pixop_ui',
-          callback: render
+          type: "change",
+          idGroup: "spotlight_pixop_ui",
+          callback: render,
         });
       }
       /**
        * Destroy if other changes
        */
-      map.on('movestart', clear);
-      map.on('moveend', render);
-      map.on('styledata', render);
+      map.on("movestart", clear);
+      map.on("moveend", render);
+      map.on("styledata", render);
     }
 
     /**
@@ -168,8 +187,8 @@ export function toggleSpotlight(opt) {
   }
 
   mx.events.fire({
-    type: 'highlight_update',
-    data: opt
+    type: "spotlight_update",
+    data: opt,
   });
 
   return opt;
@@ -178,13 +197,13 @@ export function toggleSpotlight(opt) {
 function formatDist(v, squared) {
   v = v || 0;
   squared = squared || false;
-  const suffix = squared ? '2' : '';
+  const suffix = squared ? "2" : "";
   const factor = squared ? 1e-6 : 1e-3;
 
   if (v > 1000) {
-    return Math.round(v * factor * 1000) / 1000 + ' km' + suffix;
+    return Math.round(v * factor * 1000) / 1000 + " km" + suffix;
   } else {
-    return Math.round(v * 1000) / 1000 + ' m' + suffix;
+    return Math.round(v * 1000) / 1000 + " m" + suffix;
   }
 }
 
@@ -205,9 +224,9 @@ function destroy() {
   if (mx.spotlight instanceof Spotlight) {
     mx.spotlight.destroy();
     const map = mx.spotlight.pixop.map;
-    map.off('moveend', render);
-    map.off('movestart', clear);
-    map.off('styledata', render);
-    mx.listeners.removeListenerByGroup('spotlight_pixop_ui');
+    map.off("moveend", render);
+    map.off("movestart", clear);
+    map.off("styledata", render);
+    mx.listeners.removeListenerByGroup("spotlight_pixop_ui");
   }
 }

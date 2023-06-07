@@ -1,6 +1,6 @@
-import mapboxgl from 'mapbox-gl';
+import mapboxgl from "mapbox-gl";
 import style from '!postcss-loader!less-loader?{"mimetype":"text/css"}!./style.less';
-import {errorHandler} from './../error_handler/index.js';
+import { settings } from "./../settings";
 
 const def = {
   elContainer: document.body,
@@ -11,7 +11,7 @@ const def = {
   tileSize: 256,
   tiles: [],
   mapSync: null,
-  onAdded: null
+  onAdded: null,
 };
 
 class RasterMiniMap {
@@ -58,7 +58,7 @@ class RasterMiniMap {
     if (mm.hasSyncMap() && !mm.isSync()) {
       mm.syncNow();
       mm._sync_fun = mm.syncNow.bind(mm);
-      mm.opt.mapSync.on('move', mm._sync_fun);
+      mm.opt.mapSync.on("move", mm._sync_fun);
       mm._setSync(true);
     }
   }
@@ -66,7 +66,7 @@ class RasterMiniMap {
   syncEnd() {
     const mm = this;
     if (mm.hasSyncMap() && mm.isSync()) {
-      mm.opt.mapSync.off('move', mm._sync_fun);
+      mm.opt.mapSync.off("move", mm._sync_fun);
       mm._sync_fun = null;
       mm._setSync(false);
     }
@@ -74,84 +74,95 @@ class RasterMiniMap {
 
   getImage() {
     const mm = this;
-    return mm.map.getCanvas().toDataURL('png');
+    return mm.map.getCanvas().toDataURL("png");
   }
 
   init() {
     const mm = this;
-    mm._hasSyncMap = mm.opt.mapSync instanceof mapboxgl.Map;
-    /**
-     * Set style
-     */
-    mm.elStyle = document.createElement('style');
-    mm.elStyle.setAttribute('type', 'text/css');
-    mm.elStyle.appendChild(document.createTextNode(style));
-    /**
-     * Main element
-     */
-    mm.el = document.createElement('div');
-    mm.el.style.width = mm.opt.width + 'px';
-    mm.el.style.height = mm.opt.height + 'px';
-    mm.el.classList.add('rmm');
 
-    /**
-     * Root element
-     */
-    mm.elRoot = mm.opt.elContainer.attachShadow
-      ? mm.opt.elContainer.attachShadow({mode: 'open'})
-      : document.createElement('div');
-    mm.elRoot.appendChild(mm.elStyle);
-    /**
-     * Add to container
-     */
-    mm.elRoot.appendChild(mm.el);
-    /**
-     * Build map
-     */
-    mm.elMap = document.createElement('div');
-    mm.el.appendChild(mm.elMap);
+    try {
+      mm._hasSyncMap = mm.opt.mapSync instanceof mapboxgl.Map;
 
-    mm.map = new mapboxgl.Map({
-      preserveDrawingBuffer: true,
-      fadeDuration: 0,
-      container: mm.elMap,
-      center: mm.opt.center,
-      zoom: mm.opt.zoom,
-      style: {
-        version: 8,
-        sources: {
-          'rmm-src': {
-            type: 'raster',
-            tiles: mm.opt.tiles,
-            tileSize: mm.opt.tileSize
-          }
+      /**
+       * Set style
+       */
+      mm.elStyle = document.createElement("style");
+      mm.elStyle.setAttribute("type", "text/css");
+      mm.elStyle.appendChild(document.createTextNode(style));
+      /**
+       * Main element
+       */
+      mm.el = document.createElement("div");
+      mm.el.style.width = mm.opt.width + "px";
+      mm.el.style.height = mm.opt.height + "px";
+      mm.el.classList.add("rmm");
+
+      /**
+       * Root element
+       */
+      mm.elRoot = mm.opt.elContainer.attachShadow
+        ? mm.opt.elContainer.attachShadow({ mode: "open" })
+        : document.createElement("div");
+      mm.elRoot.appendChild(mm.elStyle);
+      /**
+       * Add to container
+       */
+      mm.elRoot.appendChild(mm.el);
+      /**
+       * Build map
+       */
+      mm.elMap = document.createElement("div");
+      mm.el.appendChild(mm.elMap);
+
+      mapboxgl.accessToken = settings.map.token;
+
+      mm.map = new mapboxgl.Map({
+        preserveDrawingBuffer: true,
+        fadeDuration: 0,
+        container: mm.elMap,
+        center: mm.opt.center,
+        zoom: mm.opt.zoom,
+        style: {
+          version: 8,
+          sources: {
+            "rmm-src": {
+              type: "raster",
+              tiles: mm.opt.tiles,
+              tileSize: mm.opt.tileSize,
+            },
+          },
+          layers: [
+            {
+              id: "rmm",
+              type: "raster",
+              source: "rmm-src",
+              minzoom: 0,
+              maxzoom: 22,
+            },
+          ],
         },
-        layers: [
-          {
-            id: 'rmm',
-            type: 'raster',
-            source: 'rmm-src',
-            minzoom: 0,
-            maxzoom: 22
-          }
-        ]
-      }
-    });
-    mm.map.on('error', (e) => {
-      errorHandler(e);
-    });
-    /**
-     * Add sync
-     */
-    mm.syncStart();
+      });
+      mm.map.on("error", (e) => {
+        mm.onError(e);
+      });
+      /**
+       * Add sync
+       */
+      mm.syncStart();
 
-    /**
-     * onAdded Callback
-     */
-    if (mm.opt.onAdded) {
-      mm.opt.onAdded(mm);
+      /**
+       * onAdded Callback
+       */
+      if (mm.opt.onAdded) {
+        mm.opt.onAdded(mm);
+      }
+    } catch (e) {
+      mm.onError(e);
     }
+  }
+  onError(e) {
+    console.warn(e);
   }
 }
 
-export {RasterMiniMap};
+export { RasterMiniMap };

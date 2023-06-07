@@ -15,6 +15,7 @@ import {
 } from "./../map_helpers/index.js";
 import { getArrayDistinct } from "../array_stat";
 import { settings } from "./../settings";
+import { buildLegendVt } from "../legend_vt";
 
 /**
  * Set current language ( for updating ui/views, use updateLanguage )
@@ -61,27 +62,30 @@ export function getLanguageDefault() {
  * @param {String} Language code
  */
 export async function updateLanguage(language) {
+  const currentLanguage = getLanguageCurrent();
   const validLang = isStringRange(language, 2, 2);
 
   if (!validLang) {
-    language = getLanguageCurrent();
+    language = currentLanguage;
   }
-  const lang = setLanguageCurrent(language);
+  const newLanguage = setLanguageCurrent(language);
 
   /**
-   * Fire language_change
+   * Fire language_change if required
    */
-  mx.events.fire({
-    type: "language_change",
-    data: {
-      new_language: lang,
-    },
-  });
+  if (currentLanguage !== newLanguage) {
+    mx.events.fire({
+      type: "language_change",
+      data: {
+        new_language: newLanguage,
+      },
+    });
+  }
 
   /*
    * Set language for the document
    */
-  document.querySelector("html").setAttribute("lang", lang);
+  document.querySelector("html").setAttribute("lang", newLanguage);
 
   /**
    * Update lang of interface
@@ -440,7 +444,7 @@ export function getLanguageItem(obj, language) {
  */
 export async function updateLanguageViewsList(o) {
   o = Object.assign({}, o);
-  const lang = o.lang || getLanguageDefault();
+  const lang = o.lang || getLanguageCurrent() || getLanguageDefault();
   const views = getViews();
   const isModeStatic = path(mx, "settings.mode.static") === true;
 
@@ -459,7 +463,9 @@ export async function updateLanguageViewsList(o) {
        * Regenerate vt legend
        */
       if (elLegendVt) {
-        elLegendVt.innerHTML = mx.templates.viewListLegend(view);
+        const elRules = buildLegendVt(view);
+        elLegendVt.innerHTML = "";
+        elLegendVt.appendChild(elRules);
       }
 
       /**
@@ -529,16 +535,22 @@ export async function updateLanguageMap(o) {
   const defaultLang = mapLang[0];
   const lang = mapLang.includes(o.language) ? o.language : defaultLang;
   const layers = [
-    "place-label-city",
-    "place-label-capital",
-    "country-label",
+    "road-label",
     "water-label-line",
     "water-label-point",
-    "poi-label",
-    "road-label",
+    "waterway-label",
+    "place-label-city",
+    "place-label-capital",
+    ...[0, 1, 2, 3, 4, 5, 99].map((i) => {
+      return `country_un_0_label_${i}`;
+    }),
+    ...[1].map((i) => {
+      return `country_un_1_label_${i}`;
+    }),
   ];
 
   const map = getMap(o.id);
+  const lang2 = lang === "zh" ? "zh-Hans" : defaultLang;
 
   if (!isMap(map)) {
     console.error("updateLanguageMap require a Map");
@@ -563,7 +575,9 @@ export async function updateLanguageMap(o) {
       map.setLayoutProperty(layer, "text-field", [
         "coalesce",
         ["get", `name_${lang}`],
-        ["get", "name_en"],
+        ["get", `name_${lang2}`],
+        ["get", `name_${defaultLang}`],
+        ["get", "name"],
       ]);
     }
   }

@@ -1,5 +1,6 @@
 import { EditTableSessionClient } from "./../source/edit_table.js";
 import { GeometryTools } from "./../source/geom_tools.js";
+import { Uploader } from "./../uploader";
 
 /**
  * Single instance manager, ws tools that requires single instance.
@@ -107,6 +108,10 @@ export class WsToolsInstances {
       case "edit_table":
         instance = new EditTableSessionClient(wst.socket, config);
         break;
+      case "uploader":
+        instance = new Uploader(config);
+        break;
+
       default:
         null;
     }

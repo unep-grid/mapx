@@ -1,6 +1,6 @@
 import { Events } from "./events.js";
 import { parse, stringify } from "./helpers.js";
-import { isObject } from "../../is_test/index.js";
+import { isObject, isEmpty } from "../../is_test/index.js";
 import { version } from "../package.json";
 import { EventSimple } from "../../event_simple/index.js";
 
@@ -160,7 +160,17 @@ class FrameWorker extends Events {
    */
   async handleMessageManager(msg) {
     const fw = this;
-    const request = Object.assign({}, parse(msg.data));
+    const request = Object.assign({}, parse(msg?.data));
+
+    if (isEmpty(request)) {
+      /**
+       * TODO: create a more robust test
+       * Handsontable 6.2.2 post stuff on .. window.
+       * -> if msg.data is empty = probably not a message we should handle..
+       */
+      console.warn("Empty request / message.data", msg);
+      return false;
+    }
     const idRequest = request.idRequest;
     const idResolver = request.idResolver;
     const resolver = fw.opt.resolvers[idResolver];

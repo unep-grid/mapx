@@ -2,6 +2,8 @@ import { isArray, isString, isFunction } from "./../is_test/index.js";
 
 const modules = {
   csvjson: loadCsvJSON,
+  "csv-stringify": loadCsvStringify,
+  "csv-parse": loadCsvParse,
   topojson: loadTopoJSON,
   d3: loadD3,
   "d3-geo": loadD3Geo,
@@ -12,7 +14,6 @@ const modules = {
   selectize: loadSelectize,
   pickolor: loadPickolor,
   nouislider: loadNoUiSlider,
-  downloadjs: loadDownloadjs,
   "wms-capabilities": loadWmsCapabilities,
   "mx-drag-drop-worker": loadDragDropWorker,
   handsontable: loadHandsontable,
@@ -21,9 +22,6 @@ const modules = {
   packery: loadPackery,
   draggabilly: loadDraggabilly,
   "size-of": loadSizeOf,
-  dashboard: loadDashboard,
-  ace: loadAceEditor,
-  "js-beautify": loadJsBeautify,
   html2canvas: loadHtmlToCanvas,
   "chroma-js": loadChromaJs,
   "radio-group": loadRadioGroup,
@@ -50,7 +48,7 @@ export async function modulesLoad(arr) {
 }
 
 /*
- * Loader definitions
+ * LOADERS - without attribution
  */
 async function loadProj4() {
   const m = await import("proj4");
@@ -77,19 +75,9 @@ async function loadButtonPanel() {
   return m.ButtonPanel;
 }
 
-async function loadJsBeautify() {
-  const m = await import("js-beautify");
-  return m.default;
-}
-
 async function loadSizeOf() {
   const m = await import("object-sizeof");
   return m.default;
-}
-
-async function loadDashboard() {
-  const m = await import("./../dashboards");
-  return m.Dashboard;
 }
 
 async function loadPackery() {
@@ -104,15 +92,7 @@ async function loadTurfBbox() {
   const m = await import("@turf/bbox");
   return m.default;
 }
-async function loadDownloadjs() {
-  const m = await import("downloadjs");
-  return m.default;
-}
 
-async function loadAceEditor() {
-  await import("ace-builds");
-  await import("ace-builds/webpack-resolver.js");
-}
 
 async function loadDragDropWorker() {
   const m = await import("./../mx_helper_map_dragdrop.mxworker.js");
@@ -124,31 +104,20 @@ async function loadWmsCapabilities() {
   return m.default;
 }
 
-async function loadTopoJSON() {
-  return import("topojson-client");
-}
-
-async function loadD3() {
-  return import("d3");
-}
-
 async function loadCsvJSON() {
+  /**
+   * TODO: deprecation warning ?
+   * use csv-stringify and
+   * csv-parse instead
+   */
   return import("csvjson");
 }
 
-async function loadD3Geo() {
-  return import("d3-geo");
+async function loadCsvStringify() {
+  return import("csv-stringify");
 }
-
-async function loadNoUiSlider() {
-  const m = await Promise.all([
-    import("nouislider"),
-    import("nouislider/distribute/nouislider.css"),
-    import("../../css/mx_sliders.css")
-  ]);
-  const nouislider = m[0].default;
-  nouislider[0] = { default: nouislider };
-  return nouislider;
+async function loadCsvParse() {
+  return import("csv-parse");
 }
 
 async function loadPickolor() {
@@ -164,6 +133,138 @@ async function loadTomSelect() {
   // require sortable ? await import('webpack-jquery-ui/sortable'),
   await import("../../css/mx_tom_select.css");
   return TomSelect;
+}
+
+async function loadShapefile() {
+  return import("shapefile");
+}
+
+async function loadJsonEditor() {
+  await import("json-editor");
+  await moduleLoad("selectize");
+  return Promise.all([
+    import("./../../css/mx_jed.css"),
+    import("./../mx_extend_jed_number_na.js"),
+    import("./../mx_extend_jed_position.js"),
+    import("./../mx_extend_jed_array_confirm_delete"),
+    import("./../mx_extend_jed_monaco.js"),
+    import("./../mx_extend_jed_validation.js"),
+    import("./../mx_extend_jed_table_source_stat_style.js"),
+    import("./../mx_extend_jed_selectize.js"),
+  ]);
+}
+
+async function loadHandsontable() {
+  const m = await Promise.all([
+    import("handsontable"),
+    import("handsontable/dist/handsontable.css"),
+    import("handsontable/languages/de-DE.js"),
+    import("handsontable/languages/es-MX.js"),
+    import("handsontable/languages/fr-FR.js"),
+    import("handsontable/languages/ru-RU.js"),
+    import("handsontable/languages/zh-CN.js"),
+  ]);
+  import("../handsontable/style.css");
+  return m[0].default;
+}
+
+async function loadMapComposer() {
+  const m = await import("./../map_composer/index.js");
+  return m.MapComposer;
+}
+async function loadNestedList() {
+  const m = await import("./../nested_list/index.js");
+  return m.NestedList;
+}
+
+async function loadMonacoEditor() {
+  const m = await import("./../monaco_wrapper");
+  return m.monaco;
+}
+
+/**
+ * LOADERS with attributions
+ * Available from dashboards:
+ * -> add attributions info
+ * highcharts", "d3", "d3-geo", "topojson", "selectize", "nouislider";
+ */
+async function loadTopoJSON() {
+  const module = await import("topojson-client");
+
+  /* Create attributions link, based on package.json*/
+  if (!module._attrib_info) {
+    const pkg = await import("topojson-client/package.json");
+    module._attrib_info = pkgAttribInfo(pkg);
+  }
+
+  return module;
+}
+async function loadD3() {
+  const module = await import("d3");
+
+  /* Create attributions link, based on package.json*/
+  if (!module._attrib_info) {
+    const pkg = await import("d3/package.json");
+    module._attrib_info = pkgAttribInfo(pkg);
+  }
+
+  return import("d3");
+}
+
+async function loadD3Geo() {
+  const module = await import("d3-geo");
+  /* Create attributions link, based on package.json*/
+  if (!module._attrib_info) {
+    const pkg = await import("d3-geo/package.json");
+    module._attrib_info = pkgAttribInfo(pkg);
+  }
+  return module;
+}
+
+async function loadNoUiSlider() {
+  const m = await Promise.all([
+    import("nouislider"),
+    import("nouislider/distribute/nouislider.css"),
+    import("../../css/mx_sliders.css"),
+  ]);
+  const nouislider = m[0].default;
+  nouislider[0] = { default: nouislider };
+
+  /* Create attributions link, based on package.json*/
+  if (!nouislider._attrib_info) {
+    const pkg = await import("nouislider/package.json");
+    nouislider._attrib_info = pkgAttribInfo(pkg);
+  }
+
+  return nouislider;
+}
+
+async function loadHighcharts() {
+  const m = await Promise.all([
+    import("highcharts"),
+    import("highcharts/highcharts-more.js"),
+    import("highcharts/modules/solid-gauge"),
+    import("highcharts/modules/stock"),
+    import("highcharts/modules/heatmap"),
+    import("highcharts/modules/exporting.js"),
+    import("highcharts/modules/export-data.js"),
+    import("../../css/mx_highcharts.css"),
+  ]);
+
+  const Highcharts = m[0].default;
+  m[1].default(Highcharts);
+  m[2].default(Highcharts);
+  m[3].default(Highcharts);
+  m[4].default(Highcharts);
+  m[5].default(Highcharts);
+  m[6].default(Highcharts);
+
+  /* Create attributions link, based on package.json*/
+  if (!Highcharts._attrib_info) {
+    const pkg = await import("highcharts/package.json");
+    Highcharts._attrib_info = pkgAttribInfo(pkg);
+  }
+  return Highcharts;
 }
 
 async function loadSelectize() {
@@ -190,6 +291,7 @@ async function loadSelectize() {
   window.jQuery = m[0].default;
   window.$ = window.jQuery;
   const Selectize = m[1].default;
+
   /*
    * Patch for placing drop downrelative to a div
    * https://github.com/selectize/selectize.js/pull/1447/commits
@@ -206,74 +308,27 @@ async function loadSelectize() {
       });
   };
 
+  /* Create attributions link, based on package.json */
+  if (!Selectize._attrib_info) {
+    const pkg = await import("selectize/package.json");
+    Selectize._attrib_info = pkgAttribInfo(pkg);
+  }
+
+  /* Save as global  */
   window.Selectize = Selectize;
   return Selectize;
 }
 
-async function loadHighcharts() {
-  const m = await Promise.all([
-    import("highcharts"),
-    import("highcharts/highcharts-more.js"),
-    import("highcharts/modules/solid-gauge"),
-    import("highcharts/modules/stock"),
-    import("highcharts/modules/heatmap"),
-    import("highcharts/modules/exporting.js"),
-    import("highcharts/modules/export-data.js"),
-  ]);
-  const Highcharts = m[0].default;
-  m[1].default(Highcharts);
-  m[2].default(Highcharts);
-  m[3].default(Highcharts);
-  m[4].default(Highcharts);
-  m[5].default(Highcharts);
-  m[6].default(Highcharts);
-  return Highcharts;
-}
+/**
+ * Helpers
+ */
 
-async function loadShapefile() {
-  return import("shapefile");
-}
-
-async function loadJsonEditor() {
-  await import("json-editor");
-  await moduleLoad("selectize");
-  return Promise.all([
-    import("./../../css/mx_jed.css"),
-    import("./../mx_extend_jed_number_na.js"),
-    import("./../mx_extend_jed_position.js"),
-    import("./../mx_extend_jed_array_confirm_delete"),
-    import("./../mx_extend_jed_ace.js"),
-    import("./../mx_extend_jed_validation.js"),
-    import("./../mx_extend_jed_table_source_stat_style.js"),
-    import("./../mx_extend_jed_color_picker.js"),
-    import("./../mx_extend_jed_selectize.js"),
-  ]);
-}
-
-async function loadHandsontable() {
-  const m = await Promise.all([
-    import("handsontable/index.mjs"),
-    import("handsontable/dist/handsontable.css"),
-    import("../handsontable/style.css"),
-    import("handsontable/languages/de-DE.mjs"),
-    import("handsontable/languages/es-MX.mjs"),
-    import("handsontable/languages/fr-FR.mjs"),
-    import("handsontable/languages/ru-RU.mjs"),
-    import("handsontable/languages/zh-CN.mjs"),
-  ]);
-  return m[0].default;
-}
-
-async function loadMapComposer() {
-  const m = await import("./../map_composer/index.js");
-  return m.MapComposer;
-}
-async function loadNestedList() {
-  const m = await import("./../nested_list/index.js");
-  return m.NestedList;
-}
-
-async function loadMonacoEditor() {
-  const m = await import("./../monaco_wrapper");
-  return m.monaco;
+/**
+ * Extract formated info from package object, e.g. to create attribution link
+ * @param  {Object} pkg Package.json config object
+ * @return {Object} info data
+ */
+function pkgAttribInfo(pkg) {
+  const { name, homepage, description } = pkg;
+  return { name, homepage, description };
 }

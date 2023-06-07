@@ -1,36 +1,30 @@
-import {meili, pgRead} from '#mapx/db';
-import {getParamsValidator} from '#mapx/route_validation';
-import {isObject} from '@fxi/mx_valid';
-import {validateTokenHandler} from '#mapx/authentication';
-import {sendError, sendJSON, wait} from '#mapx/helpers';
-import {templates} from '#mapx/template';
-import {settings} from '#root/settings';
-import {htmlToText} from 'html-to-text';
-import {config} from './config.js';
-import {getDictM49iso3} from '#mapx/language';
+import { meili, pgRead } from "#mapx/db";
+import { getParamsValidator } from "#mapx/route_validation";
+import { isObject } from "@fxi/mx_valid";
+import { validateTokenHandler } from "#mapx/authentication";
+import { sendError, sendJSON, wait } from "#mapx/helpers";
+import { templates } from "#mapx/template";
+import { settings } from "#root/settings";
+import { htmlToText } from "html-to-text";
+import { config } from "./config.js";
+import { getDictM49iso3 } from "#mapx/language";
 
-const {validation_defaults } = settings;
-const {
-  languages
-} = validation_defaults;
+const { validation_defaults } = settings;
+const { languages } = validation_defaults;
 
 const validateParamsHandler = getParamsValidator({
-  required: ['idUser', 'token'],
-  expected: ['searchIndexName', 'searchQuery']
+  required: ["idUser", "token"],
+  expected: ["searchIndexName", "searchQuery"],
 });
 
 const mwSearch = [validateParamsHandler, validateTokenHandler, handlerSearch];
 const mwGetSearchKey = [
   validateParamsHandler,
   validateTokenHandler,
-  handlerKey
+  handlerKey,
 ];
 
-export  {
-  mwSearch,
-  mwGetSearchKey,
-  updateIndexes
-};
+export { mwSearch, mwGetSearchKey, updateIndexes };
 
 //updateIndexes();
 
@@ -66,7 +60,7 @@ async function updateIndexes() {
      */
     for (let language of languages.codes) {
       const indexView = await meili.getOrCreateIndex(`views_${language}`, {
-        primaryKey: cid.primaryKey
+        primaryKey: cid.primaryKey,
       });
 
       /**
@@ -84,7 +78,7 @@ async function updateIndexes() {
       await indexView.updateAttributesForFaceting(cid.atributesForFaceting);
       await indexView.updateSettings({
         rankingRules: cid.rankingRules,
-        searchableAttributes: cid.searchableAttributes
+        searchableAttributes: cid.searchableAttributes,
       });
 
       /*
@@ -106,7 +100,7 @@ async function updateIndexes() {
        * Update index
        */
       console.log(`Update index for language ${language}`);
-      const doc = documents.map(item => flatLanguageStrings(item, language));
+      const doc = documents.map((item) => flatLanguageStrings(item, language));
 
       await indexView.addDocuments(doc);
       /**
@@ -128,9 +122,9 @@ async function handlerKey(_, res) {
     sendJSON(
       res,
       {
-        key: keys.private
+        key: keys.private,
       },
-      {end: true}
+      { end: true }
     );
   } catch (err) {
     sendError(res, err);
@@ -141,8 +135,8 @@ async function handlerSearch(req, res) {
   try {
     const index = meili.index(req.query.searchIndexName);
     const result = await index.search(req.query.searchQuery);
-    await res.notifyData('search_result', {
-      msg: result
+    await res.notifyData("search_result", {
+      msg: result,
     });
   } catch (err) {
     sendError(res, err);
@@ -162,7 +156,7 @@ function flatLanguageStrings(item, language) {
       g.push(k.label);
     }
   }
-  delete itemClone.source_keywords_gemet_multilingual
+  delete itemClone.source_keywords_gemet_multilingual;
   /**
    * Extend document with itemClones from meta_multilingual
    */
@@ -184,10 +178,10 @@ function flatLanguageStrings(item, language) {
     const as = config.idx_views.attributesStripHTML;
     const toStrip = as.includes(m);
     if (toStrip) {
-      itemClone[m] = htmlToText(itemClone[m], {wordwrap: false});
+      itemClone[m] = htmlToText(itemClone[m], { wordwrap: false });
     }
   }
-  delete itemClone.meta_multilingual
+  delete itemClone.meta_multilingual;
 
   /**
    * Set language in project data. Object => string

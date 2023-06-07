@@ -3,29 +3,29 @@
   class="mx-tab--panel mx-tab--panel-border-padding"
   data-panel="tools"
 >
-  <!-- highlight -->
+  <!-- Spotlight -->
   <div class="mx-tab--content-scrollable mx-tab--content-padding">
-    <h4 data-lang_key="title_config_highlight"></h4>
-    <div class="well">
+    <h4 data-lang_key="title_config_spotlight"></h4>
+    <div class="well" id="spotlight_tools_box">
       <div class="form-group shiny-input-container">
         <label
           class="control-label"
-          data-lang_key="select_highlight_mode"
+          data-lang_key="select_spotlight_mode"
           for="selectNLayersOverlap"
-          >highlight_mode</label
+          >spotlight_mode</label
         >
         <div>
           <select class='form-control' id="selectNLayersOverlap">
-            <option value="0" data-lang_key="highlight_where_all"></option>
+            <option value="0" data-lang_key="spotlight_where_all"></option>
             <option
-              data-lang_key="highlight_where_any"
+              data-lang_key="spotlight_where_any"
               selected="TRUE"
               value="1"
             ></option>
-            <option value="2" data-lang_key="highlight_where_two"></option>
-            <option value="3" data-lang_key="highlight_where_three"></option>
-            <option value="4" data-lang_key="highlight_where_four"></option>
-            <option value="5" data-lang_key="highlight_where_five"></option>
+            <option value="2" data-lang_key="spotlight_where_two"></option>
+            <option value="3" data-lang_key="spotlight_where_three"></option>
+            <option value="4" data-lang_key="spotlight_where_four"></option>
+            <option value="5" data-lang_key="spotlight_where_five"></option>
           </select>
         </div>
       </div>
@@ -114,7 +114,7 @@
     <div>
       <hr />
       <samall class="text-muted"
-        >Version <a  class="text-muted mx-version">0</a></small
+        >Version <span class="text-muted mx-version">0</a></small
       >
     </div>
   </div>

@@ -1,9 +1,9 @@
-import {el} from '../el/src/index.js';
-import {getDictItem} from './../mx_helpers.js';
-import {FlashCircle} from './../icon_flash/index.js';
-import {bindAll} from './../bind_class_methods/index.js';
-import {EventSimple} from '../event_simple';
-import {shake} from '../elshake/index.js';
+import { el } from "../el/src/index.js";
+import { getDictItem } from "./../mx_helpers.js";
+import { FlashCircle } from "./../icon_flash/index.js";
+import { bindAll } from "./../bind_class_methods/index.js";
+import { EventSimple } from "../event_simple";
+import { shake } from "../elshake/index.js";
 
 class Button extends EventSimple {
   constructor(opt) {
@@ -14,7 +14,8 @@ class Button extends EventSimple {
       classesButton: [],
       classesIcon: [],
       key: null,
-      display: true
+      display: true,
+      disabled: false,
     };
     bindAll(btn);
     btn.opt = Object.assign({}, def, opt);
@@ -43,30 +44,37 @@ class Button extends EventSimple {
     const btn = this;
     const opt = btn.opt;
 
+    if (opt.disabled) {
+      btn.action = () => {
+        console.log("disabled");
+      };
+      opt.classesButton.push("disabled-with-events");
+    }
+
     /**
      * Build button ui.
      */
     btn.elButton = el(
-      'button',
+      "button",
       {
-        on: {click: btn.action},
+        on: { click: btn.action },
         class: [
-          'btn-ctrl--item',
-          'btn',
-          'btn-circle',
-          'btn-circle-medium',
-          'hint--left',
-          'shadow',
-          ...opt.classesButton
+          "btn-ctrl--item",
+          "btn",
+          "btn-circle",
+          "btn-circle-medium",
+          "hint--left",
+          "shadow",
+          ...opt.classesButton,
         ],
         dataset: {
           lang_key: opt.key,
-          lang_type: 'tooltip'
+          lang_type: "tooltip",
         },
-        'aria-label': getDictItem(opt.key)
+        "aria-label": getDictItem(opt.key),
       },
-      el('i', {
-        class: opt.classesIcon
+      el("i", {
+        class: opt.classesIcon,
       })
     );
     if (opt.display === false) {
@@ -77,13 +85,13 @@ class Button extends EventSimple {
      * NOTE: el can ingest promises as children.
      */
     getDictItem(btn.opt.key).then((txt) =>
-      btn.elButton.setAttribute('aria-label', txt)
+      btn.elButton.setAttribute("aria-label", txt)
     );
   }
 
   shake(type) {
     shake(this.elButton, {
-      type: type
+      type: type,
     });
   }
 
@@ -97,28 +105,36 @@ class Button extends EventSimple {
     if (event instanceof Event) {
       new FlashCircle({
         x: event.clientX,
-        y: event.clientY
+        y: event.clientY,
       });
     }
   }
 
-  isActive(){
-    return this.elButton.classList.contains('active');
+  isActive() {
+    return this.elButton.classList.contains("active");
+  }
+
+  enable() {
+    return this.elButton.classList.add("active");
+  }
+
+  disable() {
+    return this.elButton.classList.remove("active");
   }
 
   show() {
-    this.elButton.style.display = 'flex';
-    this.fire('show');
+    this.elButton.style.display = "flex";
+    this.fire("show");
   }
 
   hide() {
-    this.elButton.style.display = 'none';
-    this.fire('hide');
+    this.elButton.style.display = "none";
+    this.fire("hide");
   }
 
   destroy() {
     this.elButton.remove();
-    this.fire('destroy');
+    this.fire("destroy");
   }
   isSmall() {
     return this.isSmallHeight() || this.isSmallWidth();
@@ -131,4 +147,4 @@ class Button extends EventSimple {
   }
 }
 
-export {Button};
+export { Button };

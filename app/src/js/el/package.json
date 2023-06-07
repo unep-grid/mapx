@@ -1,6 +1,6 @@
 {
   "name": "@fxi/el",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "main": "./dist/el.cjs",
   "module": "./dist/el.module.js",
   "unpkg": "./dist/el.umd.js",
@@ -11,7 +11,7 @@
   "amdName": "El",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/unep-grid/map-x-mgl"
+    "url": "git+https://github.com/unep-grid/mapx"
   },
   "description": "Quick DOM elements creation in js.",
   "scripts": {
@@ -19,7 +19,7 @@
     "dev": "microbundle watch -o dist",
     "serve": "live-server example --mount=/dist:dist",
     "build": "microbundle -o dist",
-    "prod": "npm build && npm publish"
+    "prod": "npm run build && npm publish"
   },
   "keywords": [
     "el",
@@ -37,9 +37,9 @@
   },
   "files":["dist","src"],
   "bugs": {
-    "url": "https://github.com/unep-grid/map-x-mgl"
+    "url": "https://github.com/unep-grid/mapx"
   },
-  "homepage": "https://github.com/unep-grid/map-x-mgl/tree/master/app/src/js/el",
+  "homepage": "https://github.com/unep-grid/mapx/tree/master/app/src/js/el",
   "directories": {
     "lib": "lib"
   }

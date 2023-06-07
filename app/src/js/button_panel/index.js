@@ -5,7 +5,11 @@ import { isNumeric } from "../is_test/index.js";
 import { shake } from "../elshake";
 import "./style.less";
 
-window._button_panels = [];
+/**
+ * Keeps track of all panels
+ */
+const _button_panels = [];
+window._button_panels = _button_panels;
 
 class ButtonPanel extends EventSimple {
   constructor(opt) {
@@ -22,8 +26,10 @@ class ButtonPanel extends EventSimple {
       container_style: { height: "0px", width: "0px" },
       container_classes: [],
       item_content_classes: [],
+      on_open_close_others: [],
       panel_style: {},
       add: true,
+      add_footer: false,
       handles: ["free", "resize"],
       animateDurationMs: 350,
     };
@@ -73,6 +79,7 @@ class ButtonPanel extends EventSimple {
       group: "base",
       type: "resize",
     });
+
     panel.restoreSize();
     panel.on("resize", panel.saveSize.bind(panel));
     panel.on("resize-auto", panel.saveSize.bind(panel));
@@ -149,9 +156,9 @@ class ButtonPanel extends EventSimple {
     }
     elsPanel.forEach((elPanelOther) => {
       if (elPanelOther === panel.elContainer) {
-        elPanelOther.classList.add("pinned");
+        elPanelOther.classList.add("button-panel--pinned");
       } else {
-        elPanelOther.classList.remove("pinned");
+        elPanelOther.classList.remove("button-panel--pinned");
       }
     });
   }
@@ -179,6 +186,92 @@ class ButtonPanel extends EventSimple {
       panel.elMain = elMain;
     }
 
+    /**
+     * Flag to indicate.. an event
+     */
+    panel.elBtnFlag = el("span", {
+      class: ["button-panel--btn-flag", "button-panel--hidden"],
+    });
+
+    /**
+     * The button
+     */
+    panel.elBtnPanel = el(
+      "div",
+      {
+        class: [
+          "button-panel--btn",
+          `button-panel--${panel.opt.position}`,
+          "hint",
+          `hint--${panel.opt.tooltip_position}`,
+          "button-panel--shadow",
+        ],
+        role:"button",
+        dataset: {
+          lang_key: panel.opt.button_lang_key,
+          lang_type: "tooltip",
+          button_panel_action: "toggle",
+        },
+      },
+      el("span", {
+        class: ["button-panel--btn-icon", ...panel.opt.button_classes],
+      }),
+      panel.elBtnFlag
+    );
+
+    /**
+     * Where the content will appear
+     */
+    panel.elPanelContent = el("div", {
+      class: [
+        "button-panel--item-content",
+        "button-panel--shadow",
+        ...panel.opt.item_content_classes,
+      ],
+    });
+
+    /**
+     * Handles / Buttons
+     */
+    panel.elHandles = el(
+      "div",
+      {
+        class: "button-panel--item-handles",
+      },
+      panel._el_handles("top-left"),
+      panel._el_handles("top-right"),
+      panel._el_handles("bottom-right"),
+      panel._el_handles("bottom-left")
+    );
+
+    /**
+     * Footer
+     */
+    if (panel.opt.add_footer) {
+      panel.elFooter = el("div", {
+        class: "button-panel--item-footer",
+      });
+    }
+    /**
+     * Panel
+     */
+    panel.elPanel = el(
+      "div",
+      {
+        class: [
+          "button-panel--item",
+          panel.opt.panelFull ? "button-panel--item-full" : null,
+        ],
+        style: panel.opt.panel_style,
+      },
+      panel.elPanelContent,
+      panel.elFooter,
+      panel.elHandles
+    );
+
+    /**
+     * Panel and button
+     */
     panel.elContainer = el(
       "div",
       {
@@ -189,67 +282,10 @@ class ButtonPanel extends EventSimple {
         ],
         style: panel.opt.container_style,
       },
-      (panel.elBtnPanel = el(
-        "div",
-        {
-          class: [
-            "button-panel--btn",
-            `button-panel--${panel.opt.position}`,
-            "hint",
-            `hint--${panel.opt.tooltip_position}`,
-            "button-panel--shadow",
-          ],
-          dataset: {
-            lang_key: panel.opt.button_lang_key,
-            lang_type: "tooltip",
-            button_panel_action: "toggle",
-          },
-        },
-        el("span", {
-          class: ["button-panel--btn-icon", ...panel.opt.button_classes],
-        }),
-        (panel.elBtnFlag = el("span", {
-          class: ["button-panel--btn-flag", "button-panel--hidden"],
-        }))
-      )),
-      (panel.elPanel = el(
-        "div",
-        {
-          class: [
-            "button-panel--item",
-            panel.opt.panelFull ? "button-panel--item-full" : null,
-          ],
-          style: panel.opt.panel_style,
-        },
-        /**
-         * Where the content will appear
-         */
-        (panel.elPanelContent = el("div", {
-          class: [
-            "button-panel--item-content",
-            "button-panel--shadow",
-            ...panel.opt.item_content_classes,
-          ],
-        })),
-        /**
-         * Handles / Buttons
-         */
-        (panel.elHandles = el(
-          "div",
-          {
-            class: "button-panel--item-handles",
-          },
-
-          /**
-           * Top Left
-           */
-          panel._el_handles("top-left"),
-          panel._el_handles("top-right"),
-          panel._el_handles("bottom-right"),
-          panel._el_handles("bottom-left")
-        ))
-      ))
+      panel.elBtnPanel,
+      panel.elPanel
     );
+
     panel.elMain.appendChild(panel.elContainer);
   }
 
@@ -261,40 +297,49 @@ class ButtonPanel extends EventSimple {
 
   _el_handles(pos) {
     const panel = this;
+    /**
+     *  Prevent buttons next to the main button location
+     *  -> top=top => no.
+     */
     if (pos === panel.opt.position) {
       return; // no handles near the button
     }
     const handles = panel.opt.handles;
-    const addResize = handles.indexOf("resize") > -1;
-    const addFree = handles.indexOf("free") > -1;
+    const addResize = handles.includes("resize");
+    const addFree = handles.includes("free");
+
     const p = pos.split("-");
     const loc = p[0]; // top, bottom
     const side = p[1]; // left right
     const op = `${loc === "top" ? "bottom" : "top"}-${
       side === "left" ? "right" : "left"
     }`;
+    const cl = ["button-panel--item-handles-group", `button-panel--${pos}`];
+
+    const elHandles = el("div", {
+      class: cl,
+    });
+
     const elResizes = addResize ? panel._el_resize_btns(op) : null;
     const elFree = addFree ? panel._el_resize(pos) : null;
-    const cl = ["button-panel--item-handles-group", `button-panel--${pos}`];
+
     if (loc === "top") {
-      return el(
-        "div",
-        {
-          class: cl,
-        },
-        elFree,
-        elResizes
-      );
-    } else {
-      return el(
-        "div",
-        {
-          class: cl,
-        },
-        elResizes,
-        elFree
-      );
+      if (elFree) {
+        elHandles.appendChild(elFree);
+      }
+      if (elResizes) {
+        elHandles.appendChild(elResizes);
+      }
+      return elHandles;
     }
+
+    if (elResizes) {
+      elHandles.appendChild(elResizes);
+    }
+    if (elFree) {
+      elHandles.appendChild(elFree);
+    }
+    return elHandles;
   }
 
   _el_resize(pos) {
@@ -609,10 +654,20 @@ class ButtonPanel extends EventSimple {
 
   open(skipFire) {
     const panel = this;
+
     if (!panel.isActive()) {
       if (panel.exclusiveMode) {
         _button_panels.forEach((p) => p.close());
       }
+
+      const closeOthers = panel.opt.on_open_close_others;
+      for (const id of closeOthers) {
+        const panelControl = panel.getOtherPanel(id);
+        if (panelControl) {
+          panelControl.close();
+        }
+      }
+
       panel.hideFlag();
       panel.elContainer.classList.add("active");
       panel.hintHandles();
@@ -621,6 +676,12 @@ class ButtonPanel extends EventSimple {
       }
     }
   }
+
+  getOtherPanel(id) {
+    const panel = _button_panels.find((p) => p?.opt.id === id);
+    return panel;
+  }
+
   close(skipFire) {
     const panel = this;
     if (panel.isActive()) {

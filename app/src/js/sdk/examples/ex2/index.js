@@ -1,52 +1,58 @@
+/**
+ * jQuery example
+ * ( why not )
+ */
+const $ = jQuery;
+
 const mapx = new mxsdk.Manager({
-  container: document.getElementById('mapx'),
+  container: document.getElementById("mapx"),
   verbose: true,
   url: {
-    host: 'dev.mapx.localhost',
-    port: 8880
+    host: "dev.mapx.localhost",
+    port: 8880,
   },
   params: {
-    closePanels: true
-  }
+    closePanels: true,
+  },
 });
 
-mapx.on('ready', () => {
+mapx.on("ready", async () => {
   /**
    * Hide views panel
    */
-  mapx.ask('set_panel_left_visibility', {
-    panel: 'views',
-    show: false
+  mapx.ask("set_panel_left_visibility", {
+    panel: "views",
+    show: false,
   });
 
   /**
    * Display current project name
    */
-  mapx.ask('get_project').then((s) => {
-    $('#project').text(s);
-  });
+  const project = await mapx.ask("get_project");
+
+  $("#project").text(project);
 
   /**
    * Build toggle buttons for each views found
    */
-  mapx.ask('get_views').then((views) => {
-    const $ = jQuery;
-    var $ul = $('<ul>');
-    views.forEach((view) => {
-      var $a = $('<a href="#">')
-        .text(view.data.title.en)
-        .click(view, function(e) {
-          e.preventDefault();
-          var $this = $(this);
-          var view = e.data;
-          $this.toggleClass('active');
-          var op = $this.hasClass('active') ? 'view_add' : 'view_remove';
-          mapx.ask(op, {
-            idView: view.id
-          });
+  const $ul = $("<ul>");
+  const views = await mapx.ask("get_views");
+
+  for (const view of views) {
+    const $a = $('<a href="#">')
+      .text(view.data.title.en)
+      .click(view, (e) => {
+        e.preventDefault();
+        const $elBtn = $(e.currentTarget);
+        $elBtn.toggleClass("active");
+        const op = $elBtn.hasClass("active") ? "view_add" : "view_remove";
+        mapx.ask(op, {
+          idView: view.id,
         });
-      $ul.append($('<li>').append($a));
-    });
-    $ul.appendTo($('#actions'));
-  });
+      });
+    $ul.append($("<li>").append($a));
+  }
+
+  $ul.appendTo($("#actions"));
+
 });

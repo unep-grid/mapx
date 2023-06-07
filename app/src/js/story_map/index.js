@@ -6,7 +6,8 @@ import { errorHandler } from "./../error_handler/index.js";
 import { modal } from "./../mx_helper_modal.js";
 import { settings as settingsMapx } from "./../settings";
 import { settings as storySettings } from "./settings.js";
-import { theme } from "./../mx";
+import { theme, panel_tools } from "./../mx";
+import { UAParser } from "ua-parser-js";
 import {
   onNextFrame,
   cancelFrame,
@@ -20,7 +21,7 @@ import {
   scrollFromTo,
   cssTransform,
 } from "./../mx_helper_misc.js";
-import { dashboardHelper } from "./../mx_helper_map_dashboard.js";
+import { dashboardHelper } from "./../dashboards/dashboard_instances.js";
 import { getArrayDiff } from "./../array_stat/index.js";
 import { createCanvas } from "./../mx_helper_canvas.js";
 import {
@@ -48,6 +49,7 @@ import {
   viewsLayersOrderUpdate,
   getMap,
   getViewsLayersVisibles,
+  setMapProjection,
 } from "./../map_helpers/index.js";
 
 /**
@@ -57,6 +59,8 @@ const viewsAdditional = []; // will be in state
 const story = {};
 const state = {};
 window._sm = { story, state };
+const uaparser = new UAParser();
+const isGecko = uaparser.getEngine().name === "Gecko";
 
 /**
  * Read and evaluate story map
@@ -87,7 +91,6 @@ export async function storyRead(opt) {
     await handleMissingImages();
     await initLegendPanel();
     await initAdaptiveLayout();
-    //await appStateSave();
     await start();
   } catch (e) {
     errorHandler(e);
@@ -142,7 +145,7 @@ function initClickListener() {
       if (state.ct_editor) {
         return;
       }
-      mx.panel_tools.panel.open();
+      panel_tools.panel.open();
       state.ctrlLock.shake("look_at_me");
       new FlashItem("ban");
     },
@@ -375,7 +378,7 @@ export async function storyStop() {
   const map = getMap();
   try {
     map.stop(false);
-    window.stop();
+    await cancelAll();
   } catch (e) {
     console.warn(e);
   }
@@ -383,6 +386,21 @@ export async function storyStop() {
   if (mapBusy) {
     await map.once("idle");
   }
+}
+
+/**
+ * Cancel all DOM processes and network requests
+ * -> does not block async code and timeouts
+ * -> see https://jsfiddle.net/fxi/u6ftLg9h/
+ */
+async function cancelAll() {
+  if (isGecko) {
+    /**
+     * Firefox breaks Shiny websocket when using window.stop.. "
+     */
+    return;
+  }
+  window.stop();
 }
 
 async function cleanState() {
@@ -510,9 +528,10 @@ async function start() {
   if (state.initScroll) {
     state.elStory.scrollTop = state.initScroll;
   }
-  if (state.stepUpdate) {
+  if (isNotEmpty(state.stepUpdate)) {
     state.stepActive = null;
     await storyGoTo(state.stepUpdate);
+    await storyPlayStep(state.stepUpdate);
   }
   /**
    * Render
@@ -680,7 +699,7 @@ async function initControls() {
   /**
    * Control panel buttons
    */
-  const ctrls = mx.panel_tools.controls;
+  const ctrls = panel_tools.controls;
   state.ctrlMode3d = ctrls.getButton(s.ctrl_btn_3d_terrain);
   state.ctrlAerial = ctrls.getButton(s.ctrl_btn_theme_sat);
   state.ctrlLock = ctrls.getButton(s.ctrl_btn_lock);
@@ -972,7 +991,6 @@ export async function storyGoTo(to, useTimeout, funStop) {
   let nextStep;
   let previousStep;
   let destStep;
-
   const maxStep = steps.length - 1;
 
   switch (to) {
@@ -1138,7 +1156,7 @@ export async function storyMapLock(cmd) {
 async function storyControlsEnable() {
   const s = getSettings();
   const state = getState();
-  const ctrls = mx.panel_tools.controls;
+  const ctrls = panel_tools.controls;
   const autoStart = state.autoStart === true;
   const update = state.update === true;
 
@@ -1210,7 +1228,6 @@ async function initTheme() {
 }
 
 async function initProjection() {
-  const map = getMap();
   const s = getSettings();
   const useProj =
     isNotEmpty(s.projection_name) && s.projection_name !== "default";
@@ -1218,7 +1235,7 @@ async function initProjection() {
    * Set projection
    */
   if (useProj) {
-    map.setProjection(s.projection_name);
+    setMapProjection({ name: s.projection_name });
   }
 }
 
@@ -1245,6 +1262,12 @@ async function initState() {
      */
     const position = getMapPos();
     const oldViews = getViewsLayersVisibles();
+    const maxBounds = map.getMaxBounds();
+
+    /**
+     * Release max bounds / bbox;
+     */
+    map.setMaxBounds();
 
     /**
      * Theme
@@ -1278,6 +1301,7 @@ async function initState() {
       projection,
       oldViews,
       position,
+      maxBounds,
       hasAerial,
       has3d,
     });
@@ -1295,7 +1319,7 @@ async function appStateRestore() {
   const idTheme = state.idTheme;
   const pos = state.position;
 
-  map.setProjection(state.projection);
+  setMapProjection({ name: state?.projection?.name });
 
   map.jumpTo({
     zoom: pos.z,
@@ -1303,6 +1327,8 @@ async function appStateRestore() {
     pitch: pos.p,
     center: [pos.lng, pos.lat],
   });
+
+  map.setMaxBounds(state.maxBounds);
 
   theme.set(idTheme, { sound: false, save: false, save_url: true });
 
@@ -1394,21 +1420,6 @@ function resetMapStyle() {
   }
   map.resize();
 }
-
-/**
- * Initial scroll position
- */
-
-/*async function initStoryScroll() {*/
-/*const state = getState();*/
-/*if (state.initScroll) {*/
-/*state.elStory.scrollTop = state.initScroll;*/
-/*state.initScroll = null;*/
-/*await waitTimeoutAsync(10);*/
-/*await storyUpdateSlides();*/
-/*await updateBullets();*/
-/*}*/
-/*}*/
 
 /**
  * Build story ui
@@ -1625,6 +1636,7 @@ export async function storyPlayStep(stepNum) {
   if (!isStoryPlaying()) {
     return;
   }
+
   const story = getStory();
   const state = getState();
   const settings = getSettings();
@@ -1634,12 +1646,15 @@ export async function storyPlayStep(stepNum) {
   if (steps.length === 0) {
     return;
   }
+  const step = steps[stepNum] || {};
+  if (isEmpty(step)) {
+    return;
+  }
   map.stop();
   mx.events.fire("story_step");
   /**
    * retrieve step information
    */
-  const step = steps[stepNum];
   state.currentStep = stepNum;
   state.stepActive = stepNum;
   state.step = step;
@@ -1678,9 +1693,10 @@ export async function storyPlayStep(stepNum) {
         console.error(`Missing position ${p} to fitbounds`);
       }
     }
-    map.fitBounds([pos.w, pos.s, pos.e, pos.n]);
-    map.once("moveend", () => {
-      map.easeTo({ pitch: 0.0 });
+    map.fitBounds([pos.w, pos.s, pos.e, pos.n], {
+      duration: anim.duration,
+      pitch: pos.pitch,
+      easing: easing,
     });
   } else {
     map[anim.method]({

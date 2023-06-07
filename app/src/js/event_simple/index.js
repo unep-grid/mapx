@@ -20,7 +20,7 @@ export class EventSimple {
       data = type.data;
       type = type.type;
     }
- 
+
     /**
      * Match type
      * NOTE: using while, as classes based on EventSimple can
@@ -30,6 +30,9 @@ export class EventSimple {
     let cL = evt._cbs.length;
     while (cL--) {
       const c = evt._cbs[cL];
+      if (!c?.type) {
+        continue;
+      }
       const t = isArray(c.type) ? c.type : [c.type];
       if (t.includes(type)) {
         res.push(await c.cb(data));

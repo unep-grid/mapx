@@ -1,14 +1,15 @@
 import { el, elSpanTranslate } from "./../el_mapx/index.js";
-import { isIconFont, isCanvas } from "./../is_test_mapx";
-import { path } from "./../mx_helper_misc.js";
+import { isIconFont, isCanvas, isEmpty } from "./../is_test_mapx";
+import { makeId, path } from "./../mx_helper_misc.js";
 import { modal, modalConfirm } from "./../mx_helper_modal.js";
-import { FlashCircle } from "./../icon_flash";
+import { FlashCircle, FlashItem } from "./../icon_flash";
 import { displayMetadataIssuesModal } from "./../mx_helper_map_view_badges.js";
 import { storyRead } from "./../story_map/index.js";
 import { viewToTableAttributeModal } from "./../source/display_table.js";
 import { viewToMetaModal } from "./../mx_helper_map_view_metadata.js";
 import { getDictItem, getLanguageCurrent } from "./../language";
-import { uploadGeoJSONModal } from "./../mx_helper_upload_source.js";
+//import { uploadGeoJSONModal } from "./../mx_helper_upload_source.js";
+import { Uploader } from "./../uploader";
 import { modalMirror } from "./../mirror_util";
 import { ShareModal } from "./../share_modal/index.js";
 import { ModalCodeIntegration } from "../code_integration_modal/index.js";
@@ -24,7 +25,12 @@ import {
   viewDelete,
   zoomToViewIdVisible,
   zoomToViewId,
+  getViewTitle,
 } from "./../map_helpers/index.js";
+
+import { ws, data } from "./../mx.js";
+import { settings } from "./../settings";
+import { viewsListAddSingle } from "../mx_helper_map_view_ui.js";
 
 export { handleViewClick };
 
@@ -34,7 +40,7 @@ async function handleViewClick(event) {
       return;
     }
 
-    const idMap = path(mx, "settings.map.id");
+    const idMap = settings?.map?.id;
     var elTarget = event.target;
     var t;
 
@@ -129,18 +135,52 @@ async function handleViewClick(event) {
         comment: "target is the delete geojson button",
         test: dataset.view_action_key === "btn_opt_delete_geojson",
         action: async () => {
-          const resp = await modalConfirm({
+          const ok = await modalConfirm({
             title: elSpanTranslate("delete_confirm_geojson_modal_title"),
             content: elSpanTranslate("delete_confirm_geojson_modal"),
           });
-          if (resp) {
-            const arg = dataset;
-            await viewDelete(arg.view_action_target);
+
+          if (!ok) {
+            return;
           }
+
+          const arg = dataset;
+          await viewDelete(arg.view_action_target);
         },
       },
       {
-        comment: "target is the remove linked view button",
+        comment: "target is the import linked view button",
+        test: dataset.view_action_key === "btn_opt_import_view_linked",
+        action: async () => {
+          const ok = await modalConfirm({
+            title: elSpanTranslate("import_view_linked_title"),
+            content: elSpanTranslate("import_view_linked"),
+          });
+
+          if (!ok) {
+            return;
+          }
+
+          const view = await ws.emitAsync(
+            "/client/view/pin",
+            {
+              id_view: dataset.view_action_target,
+              id_project: settings.project.id,
+              id_request: makeId(10),
+            },
+            60e3
+          );
+          await viewDelete(dataset.view_action_target);
+          await viewsListAddSingle(view, {
+            moveTop: true,
+            render: true,
+            open: true,
+          });
+          new FlashItem("floppy-o");
+        },
+      },
+      {
+        comment: "target is the remove linked view",
         test: dataset.view_action_key === "btn_opt_remove_linked",
         action: async () => {
           const resp = await modalConfirm({
@@ -180,9 +220,23 @@ async function handleViewClick(event) {
       {
         comment: "target is the upload geojson button",
         test: dataset.view_action_key === "btn_upload_geojson",
-        action: function () {
+        action: async function () {
           const idView = dataset.view_action_target;
-          uploadGeoJSONModal(idView);
+          const item = await data.geojson.getItem(idView);
+          const geojson = item?.view?.data?.source?.data;
+          const noGeojson = isEmpty(geojson);
+          if (noGeojson) {
+            return;
+          }
+          let filename = getViewTitle(idView);
+
+          if (!/\.geojson$/.test(filename)) {
+            filename = `${filename}.geojson`;
+          }
+          const strGeoJSON = JSON.stringify(geojson);
+          const blob = new Blob([strGeoJSON], { type: "application/json" });
+          const file = new File([blob], filename, { type: "application/json" });
+          new Uploader({ file });
         },
       },
       {
@@ -254,7 +308,7 @@ async function handleViewClick(event) {
           const idView = dataset.view_action_target;
           const view = getView(idView);
           const filter = ["any"];
-          const rules = JSON.parse(path(legendBox.dataset,'rules', '[]'));
+          const rules = view._style_rules;
           for (const li of legendInputs) {
             if (li.checked) {
               const index = li.dataset.view_action_index * 1;

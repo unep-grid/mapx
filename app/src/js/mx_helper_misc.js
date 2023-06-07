@@ -4,10 +4,220 @@ import {
   isLanguageObject,
   isEmpty,
   isPromise,
+  isElement,
   isString,
+  isArray,
+  isObject,
+  isBoolean,
 } from "./is_test_mapx/index.js";
+
+import { UAParser } from "ua-parser-js";
+
 import copy from "fast-copy";
 import { settings } from "./settings";
+import { modalSelectSource } from "./select_auto/modals";
+import { isSourceId } from "./is_test";
+import { el } from "./el_mapx";
+
+/**
+ * Performs a linear interpolation between minVal and maxVal, based on the normalized value of v
+ * (clamped between fromScale and toScale).
+ *
+ * @param {number} fromScale - The minimum value of the scale.
+ * @param {number} toScale - The maximum value of the scale
+ * @param {number} minVal - The minimum value.
+ * @param {number} maxVal - The maximum value .
+ * @param {number} v - The value to interpolate.
+ * @returns {number} The interpolated value.
+ */
+export function lerp(fromScale, toScale, minVal, maxVal, v) {
+  if (fromScale === toScale) {
+    return fromScale;
+  }
+  const clampedV = Math.max(minVal, Math.min(maxVal, v));
+  const normalizedV = (clampedV - minVal) / (maxVal - minVal);
+  return fromScale + normalizedV * (toScale - fromScale);
+}
+
+/**
+ * Coerse value to boolean, e.g. from url query string;
+ * @param {String|Boolean} value Value coercible to boolean.
+ * @return {Boolean}
+ */
+export function asBoolean(value) {
+  if (isBoolean(value)) {
+    return value;
+  }
+
+  if (value === "false" || value === "FALSE") {
+    return false;
+  }
+  if (value === "true" || value === "TRUE") {
+    return true;
+  }
+  throw new Error("Value can't be coerced to boolean");
+}
+
+/**
+ * Moves the given element to a new position by applying the specified CSS styles.
+ * @param {HTMLElement} el - The element to be moved.
+ * @param {Object} style - The CSS styles to be applied to the element.
+ * @param {number} [duration=200] - The duration of the animation in milliseconds.
+ * @returns {void}
+ */
+export function moveEl(el, style, duration = 300) {
+  const oldStyle = getComputedStyle(el);
+  if (el._move_el) {
+    return;
+  }
+  el._move_el = true;
+  for (const key in style) {
+    const v = oldStyle[key];
+    el.style[key] = v;
+  }
+
+  el.style.transition = `all ${duration}ms cubic-bezier(0.68, -0.6, 0.32, 1.6)`;
+
+  for (const key in style) {
+    el.style[key] = style[key];
+  }
+
+  setTimeout(() => {
+    el.style.transition = "";
+    delete el._move_el;
+  }, duration);
+}
+
+/**
+ * File selector hack
+ * -> file input "cancel" event do not exists.
+ * -> use focus on window to get the info that the dialog is gone
+ * -> out array will be empty in case of cancel, but amall delay is added
+ * @param {Object} opt options
+ * @parm {boolean} opt.multiple Multiple file allowed
+ * @returns {Promise<array>} array of files selected
+ */
+export function fileSelector(opt) {
+  const conf = Object.assign({}, { multiple: true }, opt);
+
+  const out = [];
+  return new Promise((resolve) => {
+    const elFile = el("input", {
+      type: "file",
+      style: {
+        display: "none",
+      },
+      multiple: conf.multiple,
+      on: {
+        change: (e) => {
+          out.push(...e.target.files);
+          resolve(out);
+        },
+      },
+    });
+    document.body.appendChild(elFile);
+    elFile.click();
+
+    window.addEventListener("focus", clear, { once: true });
+
+    function clear() {
+      /**
+       * Focus event is sent before change event on file input
+       * wait a bit before resolving  in case of cancel only
+       */
+      setTimeout(() => {
+        elFile.remove();
+        resolve(out);
+      }, 4e3);
+    }
+  });
+}
+
+/**
+ * File select + parse json, same option as fileSelector
+ * @return {Promise<array>}
+ */
+export async function fileSelectorJSON(opt) {
+  const files = await fileSelector(opt);
+  const out = [];
+
+  for (const file of files) {
+    const text = await textFileLoader(file);
+    const data = JSON.parse(text);
+    out.push(data);
+  }
+  return out;
+}
+
+/**
+ * Helper to read the file as text
+ * @param {File} file to read
+ * @return {Promise<string>} result
+ */
+function textFileLoader(file) {
+  return new Promise((resolve, reject) => {
+    try {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        resolve(reader.result);
+      });
+      reader.readAsText(file);
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
+/**
+ * Generic prevent function
+ * @param {Event} e - event, if any;
+ *
+ */
+export function prevent(e) {
+  if (e instanceof Event) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+}
+
+/**
+ * Convert form values to object, using default object key and value
+ * @param {Element} elForm Form data
+ * @return {Object}
+ */
+export function updateObjectWithForm(data, elForm, useClone = true) {
+  if (useClone) {
+    data = copy(data);
+  }
+  if (!isElement(elForm)) {
+    return data;
+  }
+  for (const key in data) {
+    const elInput = elForm.querySelector(`[name=${key}]`);
+    if (!elInput) {
+      console.warn(
+        `Form parsing issue : expected key ${key} not found in form names`
+      );
+      continue;
+    }
+    const type = typeof data[key];
+
+    switch (type) {
+      case "boolean":
+        data[key] = !!elInput.checked;
+        break;
+      case "number":
+        data[key] = elInput.value * 1;
+        break;
+      case "string":
+      default:
+        data[key] = elInput.value;
+    }
+  }
+
+  return data;
+}
+
 /**
  * Fill mising value of target with source object
  * NOTE: Similar to Object.assign, with handling of  "empty" values for each types ('',{},[],null,undefined, ...)
@@ -84,7 +294,7 @@ export function path(obj, path, def) {
     path = path.split(".");
   }
   for (let i = 0, iL = path.length; i < iL; i++) {
-    if (!obj || !h.isObject(obj)) {
+    if (!obj || !isObject(obj)) {
       return out(def);
     }
     obj = obj[path[i]];
@@ -234,7 +444,7 @@ export function parseTemplate(template, data, opt) {
     opt
   );
   return template.replace(/{{([^{}]+)}}/g, (_, key) => {
-    let txt = data[key] || "";
+    let txt = isEmpty(data[key]) ? "" : data[key];
     if (opt.encodeURIComponent) {
       txt = encodeURIComponent(txt);
     }
@@ -434,26 +644,28 @@ export function domToText(dom) {
 
 /**
  * Performs a deep merge of objects and returns new object. Does not modify
+ * TODO: replace with deltaMerge ? (mx_helper_utils_json/utils_json)
  * objects (immutable) and merges arrays via concatenation.
  * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
  *
  */
 export function mergeDeep(target, source) {
-  let output = Object.assign({}, target);
-  if (mx.helpers.isObject(target) && mx.helpers.isObject(source)) {
-    Object.keys(source).forEach((key) => {
-      if (mx.helpers.isObject(source[key])) {
-        if (!(key in target)) {
-          Object.assign(output, { [key]: source[key] });
-        } else {
-          output[key] = mergeDeep(target[key], source[key]);
-        }
-      } else {
-        Object.assign(output, { [key]: source[key] });
-      }
-    });
+  if (!isObject(target) || !isObject(source)) {
+    return source;
   }
-  return output;
+  for (const key in source) {
+    const targetValue = target[key];
+    const sourceValue = source[key];
+
+    if (isArray(targetValue) && isArray(sourceValue)) {
+      target[key] = targetValue.concat(sourceValue);
+    } else if (isObject(targetValue) && isObject(sourceValue)) {
+      target[key] = mergeDeep(Object.assign({}, targetValue), sourceValue);
+    } else {
+      target[key] = sourceValue;
+    }
+  }
+  return target;
 }
 
 /**
@@ -624,7 +836,7 @@ export function unicodeToChar(text) {
 }
 
 /**
- *  * Returns a function, that, as long as it continues to be invoked, will not
+ * Returns a function, that, as long as it continues to be invoked, will not
  * be triggered. The function will be called after it stops being called for
  * N milliseconds. If
  * @note https://davidwalsh.name/javascript-debounce-function
@@ -649,6 +861,25 @@ export function debounce(func, wait, immediate) {
     timeout = setTimeout(later, wait);
     if (callNow) {
       func.apply(context, args);
+    }
+  };
+}
+
+/**
+ * Throttles a function by delaying its execution.
+ *
+ * @param {Function} func - The function to be throttled.
+ * @param {number} delay - The amount of time in milliseconds that the function should be throttled.
+ * @returns {Function} - The throttled function.
+ */
+export function throttle(func, delay) {
+  let timeout = null; // Now each throttled function will have its own timer
+  return function (...args) {
+    if (!timeout) {
+      timeout = setTimeout(() => {
+        func.apply(this, args);
+        timeout = null; // Once function is executed, reset timeout
+      }, delay);
     }
   };
 }
@@ -1070,6 +1301,16 @@ export function updateCheckboxInput(o) {
 }
 
 /**
+ * Show select source edit modal
+ */
+export async function showSelectSourceEdit(opt) {
+  const idSource = await modalSelectSource({ disable_large: false });
+  if (isSourceId(idSource)) {
+    Shiny.onInputChange(opt.id, { idSource: idSource, update: Date.now() });
+  }
+}
+
+/**
  * btn control helper
  */
 
@@ -1204,8 +1445,6 @@ timer.prototype.stop = function () {
  */
 export function getSizeOf(obj, humanReadable) {
   const h = mx.helpers;
-  var bytes = 0;
-  var seenObjects = [];
   humanReadable = humanReadable === undefined ? true : humanReadable;
 
   return h
@@ -1889,10 +2128,12 @@ export function injectHead(items) {
 }
 
 export function getBrowserData() {
+  const userAgentData = new UAParser().getResult();
+  const lang = navigator.language;
   return {
-    language: navigator.language.substr(0, 2),
+    language: lang.substring(0, 2),
     cookies: mx.helpers.readCookie(),
-    userAgent: navigator.userAgent,
+    userAgent: userAgentData,
     timeZone: new Date().toString().replace(/.*[(](.*)[)].*/, "$1"),
     hasLocalStorage: !!window.sessionStorage,
     hasSessionStorage: !!window.sessionStorage,
@@ -2029,50 +2270,57 @@ export function handleRequestMessage(msg, msgs, on) {
  *
  *
  */
-export function urlToImageBase64(url) {
+export async function urlToImageBase64(url) {
   const h = mx.helpers;
-  const def = "";
-  if (h.isBase64img(url)) {
-    return Promise.resolve(url);
+  let out = "";
+
+  try {
+    if (h.isBase64img(url)) {
+      return url;
+    }
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`URL ${url}: status ${res.status}`);
+    }
+    const blob = await res.blob();
+    const validType = h.isValidType(blob.type, "image");
+    if (!validType) {
+      throw new Error(`No valid image type ${blob.type}`);
+    }
+    img.src = URL.createObjectURL(blob);
+    await waitImg(img);
+    out = convertToBase64(img);
+  } catch (e) {
+    console.warn("base64 converter issue:", e);
+  } finally {
+    return out;
   }
-  const img = new Image();
-  img.crossOrigin = "Anonymous";
-  return fetch(url)
-    .then(function (response) {
-      if (response.ok) {
-        return response.blob();
-      } else {
-        throw new Error(`No valid response for url ${url}`);
-      }
-    })
-    .then(function (blob) {
-      const validType = h.isValidType(blob.type, "image");
-      if (!validType) {
-        throw new Error(`No valid image type ${blob.type}`);
-      }
-      img.src = URL.createObjectURL(blob);
-      return new Promise((resolve) => {
-        img.onload = () => {
-          const b64 = convertToBase64(img);
-          resolve(b64);
-        };
-      });
-    })
-    .catch((e) => {
-      console.warn(`urlToImageBase64 failed: , ${e.message}`);
-      return def;
-    });
 
   /**
    * Helpers
    */
-  function convertToBase64(img) {
-    const elCanvas = h.el("canvas", {
-      width: img.naturalWidth,
-      height: img.naturalHeight,
-    });
+  async function convertToBase64(img) {
+    const dpr = window.devicePixelRatio;
+    const elCanvas = h.el("canvas");
+    const width = img.width;
+    const height = img.height;
+    elCanvas.width = width * dpr;
+    elCanvas.height = height * dpr;
+    elCanvas.style.width = width + "px";
+    elCanvas.style.height = height + "px";
     const ctx = elCanvas.getContext("2d");
+    ctx.scale(dpr, dpr);
     ctx.drawImage(img, 0, 0);
     return elCanvas.toDataURL("image/png");
+  }
+
+  function waitImg(img) {
+    return new Promise((resolve) => {
+      img.onload = () => {
+        resolve(true);
+      };
+    });
   }
 }

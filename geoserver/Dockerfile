@@ -4,7 +4,7 @@ FROM openjdk:11-slim-buster
 
 MAINTAINER Fred Moser <frederic.moser@unepgrid.ch>
 
-ARG GEOSERVER_VERSION=2.20.4
+ARG GEOSERVER_VERSION=2.22.2
 # Used in startup script, can be changed 
 ENV GEOSERVER_ADMIN_PASSWORD=1234
 

@@ -2,19 +2,20 @@ import { getToken, setToken } from "./../../../mx_helper_cookies.js";
 import { fetchProjects } from "./../../../mx_helper_map_project_fetch.js";
 import {
   getView,
-  chaosTest,
   setProject,
   getMapData,
   getViewsOrder,
+  getViewsOpen,
 } from "../../../map_helpers/index.js";
 import { isView, isFunction, isObject } from "./../../../is_test";
 import { viewToMetaModal } from "../../../mx_helper_map_view_metadata.js";
 import { getProjectViewsCollections } from "../../../mx_helper_map_view_ui.js";
 import { MapxResolversStatic } from "./static.js";
-import { isStringRange, isString } from "../../../is_test/index.js";
+import { isStringRange, isString, isEmpty } from "../../../is_test/index.js";
 import { settings } from "./../../../settings";
 import { wsGetSourcesListEdit } from "./../../../source";
 import { ws_tools } from "./../../../mx.js";
+import { ChaosTest } from "../../../map_helpers/chaos_test.js";
 
 /**
  * MapX resolvers available in app only
@@ -65,8 +66,8 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Boolean} pass
    */
   async launch_chaos_test(opt) {
-    opt = Object.assign({}, { run: 5, batch: 5, run_timeout: 1000 }, opt);
-    const res = await chaosTest(opt);
+    const chaos = new ChaosTest(opt);
+    const res = await chaos.start();
     return res;
   }
 
@@ -338,6 +339,15 @@ class MapxResolversApp extends MapxResolversStatic {
   }
 
   /**
+   * Get list of view in "open" state
+   * -> from the views list : possibly without layer
+   * @return  {Array} Array of id
+   */
+  get_views_id_open() {
+    return getViewsOpen();
+  }
+
+  /**
    * Set views list filter (ui)
    * @param {Object} opt options
    * @param {Boolean} opt.reset Reset and remove all rules
@@ -390,14 +400,20 @@ class MapxResolversApp extends MapxResolversStatic {
     const vf = getMapData().viewsFilter;
     return vf.getRules();
   }
+
   /**
-   * Get views current absolute order (without groups)
-   * @return {Array}
+   * Get views current absolute order (without groups) in the list
+   * @return {Array} 
    */
-  get_views_order() {
+  get_views_list_order() {
     return getViewsOrder();
   }
-
+  get_views_order() {
+    console.warn(
+      "Deprecated: use 'get_views_list_order' to retrieve views order from the list"
+    );
+    return getViewsOrder();
+  }
   /**
    * Set state / views list order, groups, etc. Opened view will be closed
    * @param {Object} opt Options
@@ -447,7 +463,8 @@ class MapxResolversApp extends MapxResolversStatic {
   is_views_list_sorted(opt) {
     const v = getMapData().viewsList;
     opt = Object.assign({}, { check: true }, opt);
-    return v.sortGroup(null, opt);
+    const res = v.sortGroup(null, opt);
+    return res;
   }
 
   /**
@@ -562,7 +579,8 @@ class MapxResolversApp extends MapxResolversStatic {
     }
     if (isFunction(method)) {
       const res = await method(opt.value);
-      return res || instance?.state || {};
+      const out = isEmpty(res) ? instance?.state || {} : res;
+      return out;
     }
     throw new Error(`Table editor exec, invalid method: ${opt.method}`);
   }

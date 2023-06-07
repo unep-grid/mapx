@@ -2,10 +2,6 @@
 * Slider noUi
 */
 
-.mx-slider-container:not(:first-of-type) {
-  border-top: 1px solid var(--mx_ui_border);
-}
-
 .mx-slider-container .noUi-horizontal .noUi-handle:hover {
   cursor: pointer;
 }

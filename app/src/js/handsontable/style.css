@@ -1,195 +1,251 @@
-* {
-  --ht-background: var(--mx_ui_background);
-  --ht-color: var(--mx_ui_text);
-  --ht-table-border-color: var(--mx_ui_border);
-  --ht-table-header-background: var(--mx_ui_background_contrast);
-  --ht-table-header-highlight: var(--mx_ui_background_accent);
-  --ht-table-header-color: var(--mx_ui_text);
-  --ht-background-color-row-odd: var(--mx_ui_background_contrast);
-  --ht-background-color-row-even: var(--mx_ui_background_accent);
-  --ht-background-color-row-first: var(--mx_ui_background);
-  --ht-cell-color: var(--mx_ui_background);
-  --ht-cell-selected-color: var(--mx_ui_background_accent);
-  --ht-ctx-background: var(--mx_ui_background);
-  --ht-ctx-background-hover: var(--mx_ui_background_faded);
-  --ht-scroll-track: var(--mx_ui_background_faded);
-  --ht-scroll-thumb: var(--mx_ui_text_faded);
-  --ht-scroll-thumb-hover: var(--mx_ui_text);
+/**
+* Additional handsontable styling to work with MapX themes 
+*/ 
+
+
+/**
+* Overwrite hardcoded values 
+*/ 
+.handsontable .wtBorder.current,
+.handsontable .wtBorder.area {
+  background-color: var(--mx_ui_input_accent) !important;
+  background-color: var(--mx_ui_input_accent) !important;
+}
+
+.handsontable tr {
+  background-color: var(--mx_ui_background);
+}
+
+
+/**
+* Based on original CSS 
+* - extracted manually all rules definining colors
+*/ 
+.handsontable th,
+.handsontable td {
+  border-right: 1px solid var(--mx_ui_border);
+  border-bottom: 1px solid var(--mx_ui_border);
+  background-color: var(--mx_ui_background);
+}
+
+.handsontable td.htInvalid {
+  /*gives priority over td.area selection background*/
+  background-color: var(--mx_ui_message_danger) !important;
+}
+
+.handsontable th:last-child {
+  /*Foundation framework fix*/
+  border-right: 1px solid var(--mx_ui_border);
+  border-bottom: 1px solid var(--mx_ui_border);
+}
+
+.handsontable tr:first-child th.htNoFrame,
+.handsontable th:first-child.htNoFrame,
+.handsontable th.htNoFrame {
+  background-color: var(--mx_ui_background);
+  border-color: var(--mx_ui_background);
+}
+
+.handsontable th:first-child,
+.handsontable th:nth-child(2),
+.handsontable td:first-of-type,
+.handsontable .htNoFrame + th,
+.handsontable .htNoFrame + td {
+  border-left: 1px solid var(--mx_ui_border);
+}
+
+.handsontable.htRowHeaders thead tr th:nth-child(2) {
+  border-left: 1px solid var(--mx_ui_border);
+}
+
+.handsontable tr:first-child th,
+.handsontable tr:first-child td {
+  border-top: 1px solid var(--mx_ui_border);
+}
+
+.handsontable th {
+  background-color: var(--mx_ui_background);
+  color: var(--mx_ui_text_faded);
+}
+
+.handsontable th.active {
+  background-color: var(--mx_ui_background_contrast);
+}
+
+#hot-display-license-info {
+  color: var(--mx_ui_text_faded);
+}
+
+.handsontable .manualColumnResizer:hover,
+.handsontable .manualColumnResizer.active,
+.handsontable .manualRowResizer:hover,
+.handsontable .manualRowResizer.active {
+  background-color: var(--mx_ui_input_accent);
+}
+
+.handsontable .manualColumnResizerGuide {
+  background-color: var(--mx_ui_input_accent);
+  border-right: 1px dashed var(--mx_ui_border);
+}
+
+.handsontable .manualRowResizerGuide {
+  background-color: var(--mx_ui_input_accent);
+  border-bottom: 1px dashed var(--mx_ui_border);
+}
+
+.handsontable span.colHeader.columnSorting.ascending::before {
+  /* arrow up */
+  background-image: none;
+  content: "↑";
+  color: var(--mx_ui_text);
+}
+
+.handsontable span.colHeader.columnSorting.descending::before {
+  /* arrow down */
+  background-image: none;
+  content: "↓";
+  color: var(--mx_ui_text);
+}
+
+.handsontable td.area:before,
+.handsontable td.area-1:before,
+.handsontable td.area-2:before,
+.handsontable td.area-3:before,
+.handsontable td.area-4:before,
+.handsontable td.area-5:before,
+.handsontable td.area-6:before,
+.handsontable td.area-7:before {
+  background: var(--mx_ui_input_accent);
+}
+
+.handsontable tbody th.ht__highlight,
+.handsontable thead th.ht__highlight {
+  background-color: var(--mx_ui_background_contrast);
+}
+
+.handsontable tbody th.ht__active_highlight,
+.handsontable thead th.ht__active_highlight {
+  background-color: var(--mx_ui_background_accent);
+  color: var(--mx_ui_text);
+}
+
+.handsontable .htBorder.htFillBorder {
+  background: var(--mx_ui_message_warning);
+}
+
+.handsontableInput {
+  box-shadow: 0 0 0 2px var(--mx_ui_input_accent) inset;
+  color: var(--mx_ui_text);
+  background-color: var(--mx_ui_background_contrast);
+}
+
+.handsontable .htDimmed {
+  color: var(--mx_ui_text_faded);
+}
+
+.handsontable .htSubmenu :after {
+  content: "▶";
+  color: var(--mx_ui_text_faded);
+}
+
+/*
+TextRenderer placeholder value
+*/
+
+.handsontable .htPlaceholder {
+  color: var(--mx_ui_text_faded);
+}
+
+/*
+AutocompleteRenderer down arrow
+*/
+
+.handsontable .htAutocompleteArrow {
+  color: var(--mx_ui_background);
+}
+
+.handsontable td .htAutocompleteArrow:hover {
+  color: var(--mx_ui_background_contrast);
+}
+
+.handsontable td.area .htAutocompleteArrow {
+  color: var(--mx_ui_background_contrast);
+}
+
+.handsontable.listbox .ht_master table {
+  border: 1px solid var(--mx_ui_border);
+  background: var(--mx_ui_background);
+}
+
+.handsontable.listbox tr td.current,
+.handsontable.listbox tr:hover td {
+  background: var(--mx_ui_background_contrast);
+}
+
+.handsontable td.htSearchResult {
+  background: var(--mx_ui_background_contrast);
+  color: var(--mx_ui_text_faded);
+}
+
+/*
+Cell borders
+*/
+.htBordered.htTopBorderSolid {
+  border-top-color: var(--mx_ui_border);
+}
+.htBordered.htRightBorderSolid {
+  border-right-color: var(--mx_ui_border);
+}
+.htBordered.htBottomBorderSolid {
+  border-bottom-color: var(--mx_ui_border);
+}
+.htBordered.htLeftBorderSolid {
+  border-left-color: var(--mx_ui_border);
 }
 
 /**
-* Menu not in mx_handsontable, attached to body 
+* NOTE: Light color border 
 */
-.mx .htMenu:not(.htGhostTable) {
-  z-index: 2010;
-}
-.mx .htMenu:not(.htGhostTable) .htUISelectCaption {
-  background-color: var(--ht-table-header-background);
-}
-.mx .htMenu:not(.htGhostTable) .htUISelectCaption:hover {
-  background-color: var(--ht-table-header-highlight);
+.handsontable tbody tr th:nth-last-child(2) {
+  border-right: 1px solid var(--mx_ui_border);
 }
 
-/*
-* Main wrapper 
-*/
-.mx_handsontable {
-  border-top: thin solid var(--ht-table-border-color);
-  border-bottom: thin solid var(--ht-table-border-color);
+.handsontable thead tr:nth-last-child(2) th.htGroupIndicatorContainer {
+  border-bottom: 1px solid var(--mx_ui_border);
 }
 
-.mx_handsontable .handsontable {
-  color: var(--ht-color);
+.ht_clone_top_left_corner thead tr th:nth-last-child(2) {
+  border-right: 1px solid var(--mx_ui_border);
 }
 
-.mx_handsontable .handsontable .wtHolder {
-  background-color: var(--ht-table-header-background);
+.htCollapseButton {
+  border: 1px solid var(--mx_ui_background);
+  -webkit-box-shadow: 1px 1px 3px var(--mx_ui_shadow);
+  box-shadow: 1px 1px 3px var(--mx_ui_shadow);
 }
 
-/*
-.mx_handsontable .htCore tbody tr:nth-of-type(odd) > td {
-  background-color: var(--ht-background-color-row-odd);
+.htCollapseButton:after {
+  background: var(--mx_ui_background_faded);
 }
 
-.mx_handsontable .htCore tbody tr:nth-of-type(even) > td {
-  background-color: var(--ht-background-color-row-even);
+thead .htCollapseButton {
+  background: var(--mx_ui_background);
+}
+.handsontable tr th .htExpandButton {
+  border: 1px solid var(--mx_ui_background_faded);
+  -webkit-box-shadow: 1px 1px 3px var(--mx_ui_shadow);
+  box-shadow: 1px 1px 3px var(--mx_ui_shadow);
 }
 
-.mx_handsontable .htCore tbody tr:first-child > td {
-  background-color: var(--ht-background-color-row-first);
-}
-*/
-/* All headers */
-.mx_handsontable .handsontable th {
-  background-color: var(--ht-table-header-background);
-  color: var(--ht-table-header-color);
-}
-
-/* Row headers */
-.mx_handsontable .ht_clone_left th {
-  background-color: var(--ht-table-header-background);
-  color: var(--ht-table-header-color);
+.collapsibleIndicator {
+  border: 1px solid var(--mx_ui_border);
+  color: var(--mx_ui_background_accent);
+  -webkit-box-shadow: 0 0 0 6px var(--mx_ui_shadow);
+  -moz-box-shadow: 0 0 0 6px var(--mx_ui_shadow);
+  box-shadow: 0 0 0 6px var(--mx_ui_shadow);
+  background: var(--mx_ui_background_faded);
 }
 
-/* Column headers */
-.mx_handsontable .ht_clone_top th {
-  background-color: var(--ht-table-header-background);
-  color: var(--ht-table-header-color);
-}
-
-/* Row headers */
-.mx_handsontable .ht_clone_top_left_corner th {
-  border-bottom: 1px solid var(--ht-table-border-color);
-}
-
-.mx_handsontable .ht_clone_left th {
-  border-right: 1px solid var(--ht-table-border-color);
-  border-left: 1px solid var(--ht-table-border-color);
-}
-
-/* Column headers */
-.mx_handsontable .ht_clone_top th {
-  border-top: 1px solid var(--ht-table-border-color);
-  border-right: 1px solid var(--ht-table-border-color);
-  border-bottom: 1px solid var(--ht-table-border-color);
-}
-
-.mx_handsontable .ht_clone_top_left_corner th {
-  border-right: 1px solid var(--ht-table-border-color);
-}
-
-.mx_handsontable .handsontable .changeType {
-  background: inherit;
-  border-color: var(--ht-table-border-color);
-}
-
-/* Borders */
-.mx_handsontable .handsontable th,
-.mx_handsontable .handsontable td {
-  border-right: 1px solid var(--ht-table-border-color);
-  border-bottom: 1px solid var(--ht-table-border-color);
-}
-
-.mx_handsontable .handsontable tr:first-child td,
-.mx_handsontable .handsontable tr:first-child th {
-  border-top: 1px solid var(--ht-table-border-color);
-}
-
-.mx_handsontable .handsontable th.ht__highlight {
-  background-color: var(--ht-table-header-highlight);
-}
-
-.mx_handsontable .ht_master tr > td {
-  border-bottom: 1px solid var(--ht-table-border-color);
-}
-
-/* Right */
-.mx_handsontable .ht_master tr > td {
-  border-right: 1px solid var(--ht-table-border-color);
-}
-
-.mx_handsontable .mx_handsontable .handsontable .htNoFrame + td,
-.mx_handsontable .handsontable .htNoFrame + th,
-.mx_handsontable .handsontable.htRowHeaders thead tr th:nth-child(2),
-.mx_handsontable .handsontable td:first-of-type,
-.mx_handsontable .handsontable th:first-child,
-.mx_handsontable .handsontable th:nth-child(2) {
-  border-left: 1px solid var(--ht-table-border-color);
-}
-
-.mx_handsontable .ht_clone_top_left_corner thead tr th:nth-last-child(2) {
-  border-right: 1px solid var(--ht-table-border-color);
-}
-
-.mx_handsontable .handsontable th:last-child {
-  border-right: 1px solid var(--ht-table-border-color);
-  border-bottom: 1px solid var(--ht-table-border-color);
-}
-
-.mx_handsontable
-  .ht_master:not(.innerBorderInlineStart):not(.emptyColumns)
-  ~ .handsontable
-  tbody
-  tr
-  th {
-  border-left: 1px solid var(--ht-table-border-color);
-}
-
-/* Selected cell */
-.mx_handsontable tr > td {
-  background-color: var(--ht-cell-color);
-}
-
-/* Selected cell */
-.mx_handsontable tr > td.current {
-  background-color: var(--ht-cell-selected-color);
-}
-
-/* Context menu */
-.mx .htContextMenu tr,
-.mx .htDropdownMenu tr,
-.mx .htFiltersConditionsMenu tr {
-  background-color: var(--ht-ctx-background);
-}
-.mx .htContextMenu table tbody tr td,
-.mx .htDropdownMenu table tbody tr td,
-.mx .htFiltersConditionsMenu table tbody tr td {
-  background-color: var(--ht-ctx-background);
-}
-.mx .htContextMenu table tbody tr td.current,
-.mx .htContextMenu table tbody tr td.zeroclipboard-is-hover,
-.mx .htDropdownMenu table tbody tr td.current,
-.mx .htDropdownMenu table tbody tr td.zeroclipboard-is-hover,
-.mx .htFiltersConditionsMenu table tbody tr td.current,
-.mx .htFiltersConditionsMenu table tbody tr td.zeroclipboard-is-hover {
-  background-color: var(--ht-ctx-background-hover);
-}
-
-.mx .htContextMenu .handsontable table td.htCustomMenuRenderer,
-.mx .htDropdownMenu .handsontable table td.htCustomMenuRenderer {
-  background-color: var(--ht-ctx-background);
-}
-
-.mx .handsontable .htUISelectCaption .handsontable .htUISelectCaption:hover {
-  background-color: var(--ht-ctx-background);
+.handsontable table tr th.lightRightBorder {
+  border-right: 1px solid var(--mx_ui_background_faded);
 }

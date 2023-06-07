@@ -1,5 +1,115 @@
 [
   {
+    "id": "auto_style_start",
+    "en": "Auto style...",
+    "ar": "نمط تلقائي ..."
+  },
+  {
+    "id": "auto_style_select_mode_label",
+    "en": "Select mode",
+    "ar": "حدد الوضع"
+  },
+  {
+    "id": "auto_style_select_bins_label",
+    "en": "Select binning method",
+    "ar": "حدد طريقة binning"
+  },
+  {
+    "id": "auto_style_bins_number_label",
+    "en": "Number of bins",
+    "ar": "عدد الصناديق"
+  },
+  {
+    "id": "auto_style_bins_number_desc",
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "ar": "عدد الحاويات المستخدمة أثناء التحليل الإحصائي. الحد الأدنى 2 ، الحد الأقصى 100"
+  },
+  {
+    "id": "auto_style_check_reverse_color_label",
+    "en": "Reverse color palette",
+    "ar": "لوحة ألوان عكسية"
+  },
+  {
+    "id": "auto_style_check_reverse_color_desc",
+    "en": "Inverse colors order in palettes",
+    "ar": "ترتيب الألوان المعكوسة في لوحات"
+  },
+  {
+    "id": "auto_style_check_preserve_label_label",
+    "en": "Preserve current labels",
+    "ar": "الحفاظ على التسميات الحالية"
+  },
+  {
+    "id": "auto_style_check_preserve_label_desc",
+    "en": "Preserve labels already defined in current rules",
+    "ar": "الاحتفاظ بالتسميات المحددة بالفعل في القواعد الحالية"
+  },
+  {
+    "id": "auto_style_button_update",
+    "en": "Update rules",
+    "ar": "تحديث القواعد"
+  },
+  {
+    "id": "auto_style_title_table_continuous",
+    "en": "Table. Method : {{method}}. Number of bins: {{bins}}",
+    "ar": "طاولة. طريقة : {{method}} . عدد الصناديق: {{bins}}"
+  },
+  {
+    "id": "auto_style_title_table_categorical",
+    "en": "Table. Number of rows = {{count}}",
+    "ar": "طاولة. عدد الصفوف = {{count}}"
+  },
+  {
+    "id": "auto_style_color_label",
+    "en": "Color",
+    "ar": "لون"
+  },
+  {
+    "id": "auto_style_color_desc",
+    "en": "Choose color for all classes",
+    "ar": "اختر اللون لجميع الفئات"
+  },
+  {
+    "id": "auto_style_sizes_min_label",
+    "en": "Start size",
+    "ar": "حجم البداية"
+  },
+  {
+    "id": "auto_style_sizes_min_desc",
+    "en": "Size of the first item in the table",
+    "ar": "حجم العنصر الأول في الجدول"
+  },
+  {
+    "id": "auto_style_sizes_max_label",
+    "en": "End size",
+    "ar": "حجم النهاية"
+  },
+  {
+    "id": "auto_style_sizes_max_desc",
+    "en": "Size of the last item in the table",
+    "ar": "حجم العنصر الأخير في الجدول"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "ar": "التعتيم"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "ar": "اضبط مكون ألفا (عتامة) للون ، حيث 0 = شفاف بالكامل و 1 معتم بالكامل"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "ar": "حجم العناصر"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "ar": "تعيين الحجم لجميع الفئات"
+  },
+  {
     "id": "btn_opt_code_integration",
     "en": "Code template / boilerplate / other format",
     "ar": "قالب الكود / المعياري / تنسيق آخر"
@@ -23,6 +133,11 @@
     "id": "code_integration_template_mapbox_style",
     "en": "Mapbox style (full)",
     "ar": "نمط Mapbox (ممتلئ)"
+  },
+  {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "ar": "نمط Mapbox (الخريطة الأساسية فقط ، يمكن استخدامها في الاستوديو)"
   },
   {
     "id": "code_integration_template_mapbox_layers",
@@ -1525,19 +1640,14 @@
     "ar": "إعادة"
   },
   {
-    "id": "edit_table_modal_value_invalid_title",
-    "en": "Invalid value",
-    "ar": "قيمة غير صالحة"
+    "id": "edit_table_modal_values_invalid_title",
+    "en": "Invalid values",
+    "ar": "قيم غير صحيحة"
   },
   {
-    "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
-    "ar": "تم استلام قيمة غير صحيحة. تأكد من استخدام النوع الصحيح: {{type}} .\n لن يتم حفظ هذا التغيير."
-  },
-  {
-    "id": "edit_table_modal_value_invalid_continue",
-    "en": "Ignore and continue",
-    "ar": "تجاهل واستمر"
+    "id": "edit_table_modal_values_invalid_ok",
+    "en": "Ok",
+    "ar": "موافق"
   },
   {
     "id": "btn_edit_add_column",
@@ -1566,8 +1676,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "ar": "أضف عمودًا جديدًا: الاسم"
+    "en": "Name of the column",
+    "ar": "اسم العمود"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1686,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "ar": "سيكون اسم العمود الجديد:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "ar": "سيكون اسم العمود:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1705,9 @@
     "ar": "الاسم غير متوفر"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "ar": "التالي"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "ar": "حدد نوع البيانات"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "ar": "التالي"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1716,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "ar": "أضف عمودًا جديدًا باسم<b> {{column_name}}</b> من النوع<b> {{column_type}}</b> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا ، ولكن أداة \"إزالة عمود\" ستعمل ، إذا لزم الأمر."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "ar": "أضف عمودًا جديدًا باسم<code> {{column_name}}</code> من النوع<code> {{column_type}}</code> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا ، ولكن أداة \"إزالة عمود\" ستعمل ، إذا لزم الأمر."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1735,14 @@
     "ar": "اسم العمود"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "ar": "التالي"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "ar": "إزالة عمود: قم بالتأكيد"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "ar": "قم بإزالة عمود مسمى<i> {{column_name}}</i> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا: يمكن أن تفقد البيانات."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "ar": "قم بإزالة عمود مسمى<code> {{column_name}}</code> ؟ سيتم إجراء التغيير في قاعدة البيانات وجميع الجداول التفاعلية. لا يمكن التراجع عن هذا: يمكن أن تفقد البيانات."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1686,8 +1781,8 @@
   },
   {
     "id": "edit_table_modal_warning_text",
-    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
-    "ar": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">قد يتسبب استخدام هذه الأداة في تغيير البيانات أو حتى حذفها بشكل لا يمكن إصلاحه ، كما هو الحال مع برامج تحرير جداول بيانات سطح المكتب.</li><li style=\";text-align:right;direction:rtl\"> لا نقدم خدمات استعادة البيانات لمصادر البيانات.</li><li style=\";text-align:right;direction:rtl\"> طالما يتم الاحتفاظ بالجلسة ، يمكن التراجع عن أي عملية على الخلايا / إعادة إجرائها باستخدام اختصارات لوحة المفاتيح أو الأزرار المخصصة.</li><li style=\";text-align:right;direction:rtl\"> ستؤدي \"إزالة العمود\" إلى حذف العمود وبياناته دون إمكانية التراجع عنه بعد لوحة التأكيد الأخيرة.</li><li style=\";text-align:right;direction:rtl\"> قبل أي تعديل ، من الممكن الحصول على نسخة احتياطية من البيانات عن طريق تنزيل مصدر البيانات أو عن طريق نسخ البيانات ولصقها في محرر جدول بيانات.</li><li style=\";text-align:right;direction:rtl\"> المنصة الحالية أو مطورها أو مديرو المشروع يرفضون كل المسؤولية.<ul style=\";text-align:right;direction:rtl\"></ul></li></ul>"
+    "en": "<ul><li>Using this tool may pose a risk of permanently altering or deleting data, similar to desktop spreadsheet editors.</li><li>It is possible to undo or redo any changes made to cells during a session using keyboard shortcuts or dedicated buttons.</li><li>The &#39;Remove column&#39; action will permanently delete the column and its data, and cannot be undone after the final confirmation panel.</li><li>Invalid cells, indicated by a red color, will not be saved.</li><li>A backup system has not yet been implemented. To safeguard your data, you can use the download tool in the toolbox to export the entire layer or table as a precautionary measure.</li><li>There may be incremental backup at the database level, but not at the layer or table level.</li><li>The developers of the current platform and project administrators do not accept any responsibility for any potential losses or damages.</li></ul>",
+    "ar": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">قد يؤدي استخدام هذه الأداة إلى خطر تعديل البيانات أو حذفها بشكل دائم ، على غرار برامج تحرير جداول بيانات سطح المكتب.</li><li style=\";text-align:right;direction:rtl\"> من الممكن التراجع عن أي تغييرات تم إجراؤها على الخلايا أو إعادتها أثناء الجلسة باستخدام اختصارات لوحة المفاتيح أو الأزرار المخصصة.</li><li style=\";text-align:right;direction:rtl\"> سيؤدي إجراء \"إزالة العمود\" إلى حذف العمود وبياناته نهائيًا ، ولا يمكن التراجع عنه بعد لوحة التأكيد النهائية.</li><li style=\";text-align:right;direction:rtl\"> لن يتم حفظ الخلايا غير الصالحة ، المشار إليها باللون الأحمر.</li><li style=\";text-align:right;direction:rtl\"> لم يتم تنفيذ نظام النسخ الاحتياطي. لحماية بياناتك ، يمكنك استخدام أداة التنزيل في مربع الأدوات لتصدير الطبقة أو الجدول بأكمله كإجراء وقائي.</li><li style=\";text-align:right;direction:rtl\"> قد يكون هناك نسخ احتياطي تزايدي على مستوى قاعدة البيانات ، ولكن ليس على مستوى الطبقة أو الجدول.</li><li style=\";text-align:right;direction:rtl\"> لا يتحمل مطورو النظام الأساسي الحالي ومسؤولو المشروع أي مسؤولية عن أي خسائر أو أضرار محتملة.</li></ul>"
   },
   {
     "id": "edit_table_modal_warning_ok_no_more",
@@ -1726,8 +1821,8 @@
   },
   {
     "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
-    "ar": "تحتوي بعض الأعمدة على أحرف غير صالحة ولا يمكن تحريرها:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
+    "en": "Some column(s) contain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "ar": "تحتوي بعض الأعمدة على أحرف غير صالحة ولا يمكن تعديلها:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
   },
   {
     "id": "edit_table_modal_attributes_title",
@@ -1795,6 +1890,156 @@
     "ar": "يحتوي هذا الجدول {{count}} التغييرات غير المحفوظة. هل أنت متأكد أنك تريد إنهاء وتجاهل هذه التغييرات؟"
   },
   {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "ar": "في الاستخدام"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "ar": "محجوز"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "ar": "غير آمن"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename column",
+    "ar": "إعادة تسمية العمود"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "ar": "اختر العمود الذي تريد إعادة تسميته:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "ar": "تأكيد"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "ar": "هل أنت متأكد أنك تريد إعادة تسمية العمود<code> {{column_name}}</code> ل<code> {{column_name_new}}</code> ؟"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename column",
+    "ar": "إعادة تسمية العمود"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename column",
+    "ar": "إعادة تسمية العمود"
+  },
+  {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "ar": "المراجع الموجودة في التعليمات البرمجية"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "ar": "<p style=\";text-align:right;direction:rtl\">لا يُسمح بإعادة تسمية العمود لأن هذا الجدول يُشار إليه في طرق عرض التعليمات البرمجية المخصصة و / أو لوحات المعلومات و / أو الأنماط المخصصة. إذا لزم الأمر ، فكر في تكرار العمود بدلاً من ذلك.<br><br> لمزيد من التفاصيل ، انقر فوق الزر \"تعليمات\".<br><br> فيما يلي قائمة وجهات النظر التابعة:</p>"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "ar": "يلغي"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "ar": "لوحة القيادة"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "ar": "التعليمات البرمجية المخصصة"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "ar": "نمط مخصص"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "ar": "طبقة المصدر"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "ar": "عمود مكرر"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "ar": "عمود مكرر"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "ar": "العمود المراد نسخه"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "ar": "العمود المراد نسخه: التأكيد"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "ar": "كرر العمود المسمى<code> {{column_name}}</code> إلى عمود جديد اسمه<code> {{column_name_new}}</code> ؟"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "ar": "كرر العمود"
+  },
+  {
+    "id": "btn_stat_attribute",
+    "en": "Statistics",
+    "ar": "إحصائيات"
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "ar": "السمة للإحصاءات"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "ar": "حدد سمة"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "ar": "تم تعديل ترتيب الأعمدة"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "ar": "تم تعديل ترتيب الأعمدة بواسطة مستخدم آخر."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "ar": "نعم"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "ar": "تعيين ترتيب الأعمدة"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "ar": "تعيين ترتيب الأعمدة"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ar": "أدوات الهندسة: حدد طبقة المصدر"
@@ -1803,6 +2048,21 @@
     "id": "geom_tools_modal_select_label",
     "en": "Select source layer",
     "ar": "حدد طبقة المصدر"
+  },
+  {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "ar": "استيراد كعرض خارجي"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "ar": "استيراد عرض خارجي"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "ar": "استيراد عرض خارجي؟ سيكون هذا العرض متاحًا كعرض خارجي في إعدادات المشروع"
   },
   {
     "id": "en",
@@ -2180,6 +2440,11 @@
     "ar": "يلغي "
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "ar": "التالي..."
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "ar": "يكمل"
@@ -2213,6 +2478,11 @@
     "id": "btn_close",
     "en": "Close",
     "ar": "اغلاق"
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "ar": "تكرار..."
   },
   {
     "id": "btn_download",
@@ -2515,6 +2785,11 @@
     "ar": "التنزيل غير مسموح به. مزيد من المعلومات في البيانات الوصفية."
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "ar": "الإجراء غير مسموح به: يطلب امتياز المطور"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "ar": "قم بتحرير طريقة العرض هذه"
@@ -2538,51 +2813,6 @@
     "id": "btn_opt_edit_style",
     "en": "Set the style of this view",
     "ar": "اضبط أسلوب هذا العرض "
-  },
-  {
-    "id": "schema_style_title_legend",
-    "en": "Legend title",
-    "ar": "عنوان وسيلة الإيضاح "
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval",
-    "ar": "تضمين الحد الأعلى في الفاصل الزمني "
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "ar": "إذا تم تحديده ، فستتضمن الفواصل الزمنية الحد الأعلى. إذا لم يتم تعريفه ، فسيكون الحد الأخير هو الحد الأقصى للقيمة. إذا تم إنشاء النمط باستخدام النمط التلقائي ، فيجب تحديد هذا الخيار"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order",
-    "ar": "عكس ترتيب الطبقات المعروضة "
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "ar": "إذا تم تحديده ، سيتم عكس مكدس الطبقة: سترسم القاعدة العليا طبقة في أسفل الحزمة "
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label",
-    "ar": "إظهار الرمز مع التسمية "
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?",
-    "ar": "في حالة استخدام الرموز مع بيانات النقاط ، هل يجب على MapX إضافة ملصقات حولها؟ "
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend",
-    "ar": "لا تعرض القيم المفقودة على الخريطة أو في وسيلة الإيضاح"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
-    "ar": "إذا تم تحديده ، فلن يتم عرض المعالم ذات القيمة المفقودة - أو القيمة المحددة على هذا النحو - في طبقة على الخريطة أو في وسيلة الإيضاح"
   },
   {
     "id": "btn_opt_meta",
@@ -2790,6 +3020,11 @@
     "ar": "أضف تضاريس ثلاثية الأبعاد"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "ar": "استخدم وضع الكرة الأرضية"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "ar": "الوضع الغامر "
@@ -2816,48 +3051,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
-    "ar": "قم بتمييز ميزات المتجه "
+    "en": "Spotlight vector features",
+    "ar": "ميزات ناقل أضواء كاشفة"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
-    "ar": "تسليط الضوء على تكوين الأداة "
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "ar": "تكوين أداة Spotlight"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
-    "ar": "حدد وضع التمييز "
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "ar": "حدد وضع تسليط الضوء"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "ar": "قم بتمييز مكان تداخل جميع الميزات "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "ar": "تسليط الضوء حيث تتداخل جميع الميزات"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "ar": "قم بتمييز أي ميزة مرئية "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "ar": "سلط الضوء على أي ميزة مرئية"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "ar": "ظلل مكان تداخل ميزتين "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "ar": "تسليط الضوء حيث تتداخل ميزتان"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "ar": "قم بتمييز مكان تداخل الميزات الثلاث "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "ar": "تسليط الضوء حيث تتداخل ثلاث ميزات"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "ar": "ظلل حيث تتداخل أربع ميزات "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "ar": "تسليط الضوء حيث تتداخل أربع ميزات"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "ar": "ظلل مكان تداخل خمس ميزات "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "ar": "تسليط الضوء حيث تتداخل خمس ميزات"
   },
   {
     "id": "label_check_instant_overlap",
@@ -2953,6 +3188,11 @@
     "id": "error_no_source",
     "en": "No source layer found",
     "ar": "لم يتم العثور على طبقة مصدر "
+  },
+  {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "ar": "نوع العرض مفقود"
   },
   {
     "id": "error_title_exists",
@@ -3465,24 +3705,14 @@
     "ar": "أضف مستخدم MapX هذا مباشرة "
   },
   {
-    "id": "schema_class",
-    "en": "Class",
-    "ar": "فصل "
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "ar": "البيانات الوصفية "
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values",
-    "ar": "قيم مفقودة "
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color",
-    "ar": "اللون "
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description",
-    "ar": "وصف "
+    "id": "schema_method",
+    "en": "Method",
+    "ar": "طريقة "
   },
   {
     "id": "schema_item",
@@ -3495,129 +3725,9 @@
     "ar": "مفتاح "
   },
   {
-    "id": "schema_style_label",
-    "en": "Label",
-    "ar": "ملصق "
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule",
-    "ar": "آخر حكم "
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data",
-    "ar": "البيانات الوصفية "
-  },
-  {
-    "id": "schema_method",
-    "en": "Method",
-    "ar": "طريقة "
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency",
-    "ar": "الشفافية"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule",
-    "ar": "القاعدة "
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules",
-    "ar": "قواعد "
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size",
-    "ar": "مقاس "
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings",
-    "ar": "إعدادات التكبير "
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max",
-    "ar": "معامل الحجم عند التكبير كحد أقصى "
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min",
-    "ar": "معامل الحجم عند التكبير دقيقة "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent",
-    "ar": "حجم الاستيفاء الأس "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "ar": "حجم دالة الأس الاستيفاء. تعطي القيمة 1 استيفاءً خطيًا. "
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max",
-    "ar": "تكبير ماكس "
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min",
-    "ar": "تكبير دقيقة "
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "ar": "رمز "
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "ar": "إذا كان أكبر من 0 ، معامل حجم الخطوط والنقاط عند التكبير دقيقة. "
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "ar": "إذا كان أكبر من 0 ، فإن معامل حجم الخطوط والنقاط عند التكبير كحد أقصى. "
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data",
-    "ar": "الحد الأدنى للتكبير لإظهار البيانات "
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data",
-    "ar": "أقصى تكبير لعرض البيانات "
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value",
-    "ar": "قيمة "
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From",
-    "ar": "من عند"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To",
-    "ar": "إلى"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds",
-    "ar": "تجاهل إحصائيات الحد الأدنى / الأقصى للحدود الدنيا / العليا"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
-    "ar": "تجاهل الحد الأدنى / الحد الأقصى من إحصائيات المصدر للحدود الدنيا / العلوية المطلقة. سيتم أخذ هذه القيم من مجموعة القواعد."
+    "id": "schema_class",
+    "en": "Class",
+    "ar": "فصل "
   },
   {
     "id": "self",
@@ -4080,6 +4190,11 @@
     "ar": "السيناريو الخاص بك "
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "ar": "تحييد / الاعتمادات. الشكل : HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "ar": "تعطيل لوحة القيادة هذه"
@@ -4228,6 +4343,11 @@
     "id": "view_dashboard_widgets",
     "en": "Widgets",
     "ar": "الحاجيات "
+  },
+  {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "ar": "Credits: "
   },
   {
     "id": "view_delete_confirm",
@@ -4521,8 +4641,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "ar": "السماح لغير الأعضاء بطلب عضوية في هذا المشروع. "
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "ar": "السماح لغير الأعضاء بطلب عضوية في هذا المشروع (فقط إذا كان عامًا)"
   },
   {
     "id": "project_state_key",
@@ -4730,9 +4850,14 @@
     "ar": "موقع الخريطة الأولي "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "ar": "استخدم معلمات الخريطة الحالية "
+    "ar": "استخدم معلمات الخريطة الحالية"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "ar": "إعادة تعيين حدود الخريطة القصوى"
   },
   {
     "id": "project_map_proj_set",
@@ -4763,6 +4888,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "ar": "خط العرض الجنوبي (ألبرز ، لامبر كونيك)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "ar": "استخدام النطاق لتقييد تحريك الخريطة"
   },
   {
     "id": "map_fit_to_bounds",
@@ -4923,11 +5053,6 @@
     "id": "update_app_button_confirm",
     "en": "Restart now",
     "ar": "اعد البدء الان"
-  },
-  {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "ar": "في وقت لاحق"
   },
   {
     "id": "btn_clear_cache",
@@ -6356,8 +6481,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "ar": "أهلا بك!<br> للحصول على معلومات تقنية ، يمكنك قراءة <a href=\"{{linkKnowledgeBase}}\">قاعدة المعرفة الخاصة</a> بنا. إذا كان لديك اقتراح حول هذا الموقع ، أو إذا كنت تريد الإبلاغ عن خطأ ، فتفضل بزيارة أداة <a href=\"{{linkIssue}}\">تعقب المشكلات الخاصة بنا</a><br> شكرا ! "
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "ar": "أهلا بك!<br> للحصول على معلومات تقنية ، يمكنك قراءة <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">قاعدة المعرفة الخاصة</a> بنا. إذا كان لديك اقتراح حول هذا الموقع ، أو إذا كنت تريد الإبلاغ عن خطأ ، فتفضل بزيارة أداة <a href=\"{{linkIssue}}\" target=\"_blank\">تعقب المشكلات الخاصة</a> بنا<br> شكرًا !"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6410,9 +6535,9 @@
     "ar": "كمي "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
-    "ar": "فواصل الرأس / الذيل "
+    "ar": "فواصل الرأس / الذيل"
   },
   {
     "id": "equal_interval",
@@ -6461,8 +6586,8 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "ar": "سيتم إرسال بريد إلكتروني إلى<a href=\"mailto:={{email}}\"> {{email}}</a> . <a href=\"{{url}}\">سيتم تفعيل رابط</a> التنزيل في نهاية العملية "
+    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
+    "ar": "سيتم إرسال بريد إلكتروني إلى<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . سيتم تفعيل <a download=\"\" href=\"{{url}}\" target=\"_blank\">رابط</a> التنزيل في نهاية العملية"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6491,8 +6616,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
-    "ar": "تم التحويل باستخدام التنسيق {{format}} . رابط التحميل:<a href=\"{{url}}\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "ar": "تم التحويل باستخدام التنسيق {{format}} . رابط التحميل:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6506,8 +6631,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "ar": "البيانات المطلوبة جاهزة للتنزيل باستخدام هذا الرابط:<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "ar": "البيانات المطلوبة جاهزة للتنزيل باستخدام هذا الرابط:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_zip_progress",
@@ -6633,6 +6758,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "ar": "إشعارات "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "ar": "قيم مفقودة: {{nullCount}}"
   },
   {
     "id": "mc_title",
@@ -6995,6 +7125,31 @@
     "ar": "ستتم قراءة البيانات الأولية من خادمنا. ومع ذلك ، فإننا لا نقوم بتخزينها أو استخدامها بأي شكل من الأشكال. كل شيء ينعكس ببساطة. يتم تخزين عناوين IP في الذاكرة لمنع إساءة الاستخدام."
   },
   {
+    "id": "btn_editor_tool_format",
+    "en": "Format",
+    "ar": "شكل"
+  },
+  {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "ar": "مساعدة"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "ar": "مساعدة"
+  },
+  {
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "ar": "توسيع/تصغير"
+  },
+  {
+    "id": "nc_label_merge",
+    "en": "Details...",
+    "ar": "تفاصيل..."
+  },
+  {
     "id": "pk_panel_options",
     "en": "Display options",
     "ar": "خيارات العرض "
@@ -7073,6 +7228,66 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "ar": "استخدم اللوحة الافتراضية "
+  },
+  {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "ar": "تحميل مشروع جديد؟"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "ar": "تحميل المشروع {{name}} ؟"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "ar": "إنشاء مشروع جديد"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "ar": "اسم المشروع (انجليزي)"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "ar": "يخلق"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "ar": "اسم المشروع (انجليزي)"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "ar": "الاسم صالح"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "ar": "الخلق غير مسموح به"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "ar": "غير مسموح"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "ar": "اسم غير صحيح"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "ar": "سلسلة الاسم ليست في النطاق: الحد الأدنى 3 ، الحد الأقصى 50 حرفًا"
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "ar": "الاسم غير متوفر"
   },
   {
     "id": "schema_story_theme",
@@ -7575,6 +7790,216 @@
     "ar": "وجه مكعب"
   },
   {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "ar": "عنوان وسيلة الإيضاح "
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "ar": "تضمين الحد الأعلى في الفاصل الزمني "
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "ar": "إذا تم تحديده ، فستتضمن الفواصل الزمنية الحد الأعلى. إذا لم يتم تعريفه ، فسيكون الحد الأخير هو الحد الأقصى للقيمة. إذا تم إنشاء النمط باستخدام النمط التلقائي ، فيجب تحديد هذا الخيار"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "ar": "عكس ترتيب الطبقات المعروضة "
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "ar": "إذا تم تحديده ، سيتم عكس مكدس الطبقة: سترسم القاعدة العليا طبقة في أسفل الحزمة "
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "ar": "إظهار الرمز مع التسمية "
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "ar": "في حالة استخدام الرموز مع بيانات النقاط ، هل يجب على MapX إضافة ملصقات حولها؟ "
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend",
+    "ar": "لا تعرض القيم المفقودة على الخريطة أو في وسيلة الإيضاح"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "ar": "إذا تم تحديده ، فلن يتم عرض المعالم ذات القيمة المفقودة - أو القيمة المحددة على هذا النحو - في طبقة على الخريطة أو في وسيلة الإيضاح"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "ar": "قيم مفقودة "
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "ar": "اللون "
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "ar": "وصف "
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "ar": "ملصق "
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "ar": "آخر حكم "
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency",
+    "ar": "الشفافية"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "ar": "القاعدة "
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "ar": "قواعد "
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "ar": "مقاس "
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "ar": "إعدادات التكبير "
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "ar": "معامل الحجم عند التكبير كحد أقصى "
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "ar": "معامل الحجم عند التكبير دقيقة "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "ar": "حجم الاستيفاء الأس "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "ar": "حجم دالة الأس الاستيفاء. تعطي القيمة 1 استيفاءً خطيًا. "
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "ar": "تكبير ماكس "
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "ar": "تكبير دقيقة "
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "ar": "رمز "
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "ar": "إذا كان أكبر من 0 ، معامل حجم الخطوط والنقاط عند التكبير دقيقة. "
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "ar": "إذا كان أكبر من 0 ، فإن معامل حجم الخطوط والنقاط عند التكبير كحد أقصى. "
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "ar": "الحد الأدنى للتكبير لإظهار البيانات "
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "ar": "أقصى تكبير لعرض البيانات "
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "ar": "قيمة "
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "ar": "من عند"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "ar": "إلى"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "ar": "تجاهل إحصائيات الحد الأدنى / الأقصى للحدود الدنيا / العليا"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "ar": "تجاهل الحد الأدنى / الحد الأقصى من إحصائيات المصدر للحدود الدنيا / العلوية المطلقة. سيتم أخذ هذه القيم من مجموعة القواعد."
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency",
+    "ar": "الشفافية"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque",
+    "ar": "شفافية الخط. 0 = شفاف ، 1 = معتم"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline",
+    "ar": "تمكين مخطط المضلع"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary.",
+    "ar": "حدد الخطوط العريضة للمضلع للتأكيد على حدوده."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color.",
+    "ar": "لون تلقائي."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule.",
+    "ar": "قم بتعيين لون مناسب تلقائيًا وفقًا للون كل قاعدة."
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color",
+    "ar": "لون مخطط مضلع"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "ar": "بحث في وجهات النظر العامة في جميع المشاريع ..."
@@ -7831,13 +8256,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "ar": "تعيين موقع الخريطة الأولي"
+    "en": "Set initial map extent",
+    "ar": "تعيين مدى الخريطة الأولية"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "ar": "سيتم استخدام المدى الحالي وإمالة واتجاه الخريطة. وبالتالي يتم الكتابة فوق افتراضات المشروع."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "ar": "الحد من تحريك الخريطة إلى المدى الحالي"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "ar": "سيتم تقييد الخريطة إلى مداها الحالي. بالنسبة إلى الإسقاطات بخلاف \"Mercator\" ، سيتم الاحتفاظ بالمركز فقط ضمن الحدود."
   },
   {
     "id": "share_filter_activated_label",
@@ -8055,6 +8490,11 @@
     "ar": "الخريطة: بلد الظل "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "ar": "الخريطة: مخطط الملصقات الأرضية العامة"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "ar": "الخريطة: المياه "
@@ -8068,6 +8508,21 @@
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)",
     "ar": "الخريطة: قياس الأعماق (مرتفع) "
+  },
+  {
+    "id": "mx_map_text_bathymetry",
+    "en": "Map: bathymetry labels",
+    "ar": "الخريطة: تسميات قياس الأعماق"
+  },
+  {
+    "id": "mx_map_text_bathymetry_outline",
+    "en": "Map: bathymetry labels outline",
+    "ar": "الخريطة: مخطط تسميات قياس الأعماق"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "ar": "الخريطة: خطوط قياس الأعماق"
   },
   {
     "id": "mx_map_road",
@@ -8130,6 +8585,51 @@
     "ar": "الخريطة: مكان مخطط النص "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 0 (أنتاركتيكا)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 1 - الولاية"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 2 - الأراضي المحتلة"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 3 - إقليم غير متمتع بالحكم الذاتي"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 4 - الإقليم"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 5 - منطقة أو مقاطعة خاصة"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "ar": "الخريطة: تسميات الأمم المتحدة 0 99 - عدم تسوية السيادة"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "ar": "الخريطة: تسميات الأمم المتحدة 1 1 - الوحدة الإدارية (المستوى دون الوطني 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "ar": "الخريطة: تسميات الأمم المتحدة 1 2 - الوحدة الإدارية (المستوى دون الوطني 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "ar": "الخريطة: نص الطريق "
@@ -8148,6 +8648,281 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "ar": "الخريطة: مخطط نص الجسم المائي "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "ar": "خط العائلة"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "ar": "الخط"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "ar": "التعتيم"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "ar": "لون"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "ar": "مرئي"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "ar": "اسم"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "ar": "وصف"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "ar": "مؤلف"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "ar": "التالي"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "ar": "يصدّر"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "ar": "يستورد"
+  },
+  {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "ar": "لا توصي MapX بملفات Shapefiles ، حيث لا توجد طرق لتحديد مجموعة الأحرف ، والتي يمكن أن تنتج مشكلات أثناء العرض والتحليل"
+  },
+  {
+    "id": "upl_title",
+    "en": "Upload",
+    "ar": "تحميل"
+  },
+  {
+    "id": "upl_title_layer_name",
+    "en": "Title of the source ({{language}})",
+    "ar": "عنوان المصدر ( {{language}} )"
+  },
+  {
+    "id": "upl_name_placeholder",
+    "en": "Source title...",
+    "ar": "عنوان المصدر..."
+  },
+  {
+    "id": "upl_upload_btn",
+    "en": "Upload",
+    "ar": "تحميل"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "ar": "تحميل غير مسموح به"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "ar": "تعيين نظام الإسناد المكاني (كود EPSG). الافتراضي هو 4326."
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "ar": "قم بإسقاط الملف (* .gpkg ، * .zip ، * .geojson) أو انقر للتصفح ..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})",
+    "ar": "عنوان ( {{language}} )"
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "ar": "عنوان ( {{language}} )"
+  },
+  {
+    "id": "upl_file_upload_progress",
+    "en": "Uploading '{{filename}}'...",
+    "ar": "تحميل ' {{filename}} \"..."
+  },
+  {
+    "id": "upl_api_save_validation",
+    "en": "Geometry validation: This may take a while.",
+    "ar": "التحقق من صحة الهندسة: قد يستغرق هذا بعض الوقت."
+  },
+  {
+    "id": "upl_api_save_validation_geom_count",
+    "en": "There are {{count}} invalid geometries.",
+    "ar": "هناك {{count}} هندسة غير صالحة."
+  },
+  {
+    "id": "upl_api_save_failed_title",
+    "en": "Upload of '{{filename}}' failed.",
+    "ar": "تحميل من ' {{filename}} ' باءت بالفشل."
+  },
+  {
+    "id": "upl_api_save_failed",
+    "en": "Upload of <samp>{{filename}}</samp> failed. Source removed: <samp>{{sourceRemoved}}</samp>. View removed : {{viewRemoved}}. Message : <samp> {{error}}</samp> ",
+    "ar": "تحميل من<samp> {{filename}}</samp> باءت بالفشل. تمت إزالة المصدر:<samp> {{sourceRemoved}}</samp> . تمت إزالة العرض: {{viewRemoved}} . رسالة :<samp> {{error}}</samp>"
+  },
+  {
+    "id": "upl_api_save_success_title",
+    "en": "Upload of '{{filename}}' done.",
+    "ar": "تحميل من ' {{filename}} ' فعله."
+  },
+  {
+    "id": "upl_api_save_success",
+    "en": "Upload of <samp>{{filename}}</samp> done. New source created: {{title}} – <samp>{{idSource}}</samp>. ",
+    "ar": "تحميل من<samp> {{filename}}</samp> فعله. تم إنشاء مصدر جديد: {{title}} -<samp> {{idSource}}</samp> ."
+  },
+  {
+    "id": "upl_api_import_db",
+    "en": "Importation in database",
+    "ar": "الاستيراد في قاعدة البيانات"
+  },
+  {
+    "id": "up_button_close",
+    "en": "Close",
+    "ar": "يغلق"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "ar": "إضافة ملفات..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "ar": "رفع"
+  },
+  {
+    "id": "up_button_reset",
+    "en": "Reset",
+    "ar": "إعادة ضبط"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "ar": "تأكيد إعادة التعيين"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "ar": "تأكيد الإزالة {{n}} عناصر ؟"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "ar": "تأكيد الرفع"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "ar": "تأكيد الرفع {{n}} العناصر ، ليصبح المجموع {{size}} ؟"
+  },
+  {
+    "id": "up_settings",
+    "en": "Settings",
+    "ar": "إعدادات"
+  },
+  {
+    "id": "up_select_epsg_code",
+    "en": "EPSG code",
+    "ar": "كود EPSG"
+  },
+  {
+    "id": "up_check_enable_wms_label",
+    "en": "Enable WMS services",
+    "ar": "تمكين خدمات WMS"
+  },
+  {
+    "id": "up_check_enable_wms_desc",
+    "en": "In a public project, if public views are created using this source, enabling WMS service will automatically create a WMS layer and SLD, available for anyone.",
+    "ar": "في مشروع عام ، إذا تم إنشاء طرق العرض العامة باستخدام هذا المصدر ، فإن تمكين خدمة WMS سيؤدي تلقائيًا إلى إنشاء طبقة WMS و SLD ، متاحين لأي شخص."
+  },
+  {
+    "id": "up_check_create_view_label",
+    "en": "Automatically create a view",
+    "ar": "إنشاء طريقة عرض تلقائيًا"
+  },
+  {
+    "id": "up_check_create_view_desc",
+    "en": "Create a basic view at the end of the process and add it to the project",
+    "ar": "قم بإنشاء عرض أساسي في نهاية العملية وإضافته إلى المشروع"
+  },
+  {
+    "id": "up_check_allow_download_label",
+    "en": "Allow this source to be downloaded",
+    "ar": "السماح بتحميل هذا المصدر"
+  },
+  {
+    "id": "up_check_allow_download_desc",
+    "en": "This source license allows for redistribution, enabling the download feature will make the data and metadata available for download by anyone",
+    "ar": "يسمح ترخيص المصدر هذا بإعادة التوزيع ، وسيؤدي تمكين ميزة التنزيل إلى إتاحة البيانات والبيانات الوصفية للتنزيل من قبل أي شخص"
+  },
+  {
+    "id": "up_check_assign_epsg_label",
+    "en": "Assign the SRS bellow",
+    "ar": "قم بتعيين SRS أدناه"
+  },
+  {
+    "id": "up_check_assign_epsg_desc",
+    "en": "The converter will automatically retrieve the SRS information from the uploaded dataset. However, if you prefer to use a different SRS, simply check this checkbox and select the desired EPSG code from the options below.",
+    "ar": "سيقوم المحول تلقائيًا باسترداد معلومات SRS من مجموعة البيانات التي تم تحميلها. ومع ذلك ، إذا كنت تفضل استخدام SRS مختلف ، فما عليك سوى تحديد مربع الاختيار هذا وتحديد رمز EPSG المطلوب من الخيارات أدناه."
+  },
+  {
+    "id": "up_drop_or_click",
+    "en": "Drop files or click to select…",
+    "ar": "إفلات الملفات أو النقر للتحديد ..."
+  },
+  {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "ar": "مشاكل"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "ar": "الملفات المفقودة"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "ar": "تبعية مفقودة: {{ext}} . الرجاء سحب وإسقاط الملف المفقود هنا."
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid element",
+    "ar": "عنصر غير صالح"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "ar": "التنسيق غير مدعوم"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "ar": "ملف كبير"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many elements. Max:",
+    "ar": "عناصر كثيرة جدًا. الأعلى:"
   },
   {
     "id": "wms_select_reviewed_service",

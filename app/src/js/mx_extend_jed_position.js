@@ -1,92 +1,134 @@
+import { el } from "./el/src/index.js";
+import { elButtonFa } from "./el_mapx";
+import { isNotEmpty } from "./is_test/index.js";
+import { getMapPos, resetMaxBounds } from "./map_helpers";
+
 /*
  * mx_extend_jed_position.js
  * Copyright (C) 2017 fxi <fxi@mbp-fxi.home>
  *
  * Distributed under terms of the MIT license.
  */
-(function(){
-  'use strict';
-
+(function () {
+  "use strict";
 
   /**
    * Set a resolver for the map position format
    */
-  JSONEditor.defaults.resolvers.unshift(function(schema) {
-    if(schema.type === "object" && schema.format === "position") {
+  JSONEditor.defaults.resolvers.unshift(function (schema) {
+    if (schema.type === "object" && schema.format === "position") {
       return "position";
     }
   });
 
-  JSONEditor.defaults.editors.position = JSONEditor.defaults.editors.object.extend({
-    layoutEditors : function() {
+  JSONEditor.defaults.editors.position =
+    JSONEditor.defaults.editors.object.extend({
+      layoutEditors: function () {
+        var self = this;
+        if (!this.row_container) {
+          return;
+        }
 
-      var self = this, i, j;
+        const elContainer = el("div");
 
-      if(!this.row_container) return;
+        /**
+         * Add button to get position from a map
+         */
 
-      var container; 
-      var mapPosKeys, addPos, idMap, mapPos, newValues, divBtnPos, btnPos, btnLabel, btnIcon;
+        if (this.options.addButtonPos) {
+          const elBtnPos = elButtonFa("btn_map_pos_get", {
+            icon: "magic",
+            action: updatePos,
+          });
+          const elBtnResetBounds = elButtonFa("btn_map_pos_reset_max_bounds", {
+            icon: "chain-broken",
+            action: resetPos,
+          });
 
-      container = document.createElement('div');
-      /**
-       * Add button to get position from a map
-       */  
+          const elBtnsGroup = el("div", { class: "btn-group" }, [
+            elBtnPos,
+            elBtnResetBounds,
+          ]);
 
-      if( this.options.addButtonPos ){
-        addPos = function(){
-          
-          idMap =  self.options.idMap;
-          if(!idMap) console.log("no id map provided in position editor as an option");
-          mapPosKeys = {
-            z : 'z',
-            lat : 'lat',
-            lng : 'lng',
-            pitch : 'p',
-            bearing : 'b',
-            n : 'n',
-            s : 's',
-            e : 'e',
-            w : 'w'
-          };
-          mapPos = mx.helpers.getMapPos({id:idMap});
-          newValues = self.getValue();
+          elContainer.appendChild(elBtnsGroup);
 
-          for(var k in newValues){
-            if(typeof mapPos[mapPosKeys[k]] !== "undefined"){
-              newValues[k] = mapPos[mapPosKeys[k]];
-            }
+          /**
+           * Helper
+           */
+          function resetPos() {
+            updatePos(true);
           }
+          function updatePos(reset) {
+            const idMap = self.options.idMap;
+            if (!idMap) {
+              console.log("no id map provided in position editor as an option");
+            }
 
-          self.setValue(newValues);
-        };
-        btnPos = document.createElement("button");
-        btnPos.type = "button";
-        btnPos.className += "btn btn-default";
+            if (reset === true) {
+              resetMaxBounds();
+            }
 
-        btnIcon = document.createElement("i");
-        btnIcon.className = "fa fa-refresh";
-        btnLabel = document.createTextNode(this.options.textButton);
-        btnPos.appendChild(btnIcon);
-        btnPos.appendChild(btnLabel);
-        btnPos.onclick = addPos;
-        container.appendChild(btnPos);
-      }
-      /**
-       * set layout
-       */
-      
-      jQuery.each(this.property_order, function(i,key) {
-        var editor = self.editors[key];
-        if(editor.property_removed) return;
-        var row = self.theme.getGridRow();
-        container.appendChild(row);
+            const def = {
+              z: 0,
+              lat: 0,
+              lng: 0,
+              p: 0,
+              b: 0,
+              n: 0,
+              s: 0,
+              e: 0,
+              w: 0,
+              useMaxBounds: false,
+              fitToBounds: false,
+            };
 
-        if(editor.options.hidden) editor.container.style.display = 'none';
-        else self.theme.setGridColumnSize(editor.container,12);
-        row.appendChild(editor.container);
-      });
-      this.row_container.innerHTML = '';
-      this.row_container.appendChild(container);
-    }
-  }) ;
+            /*
+             * Schema use long names, getMapPos, shorts.
+             */
+            const mapPosKeys = {
+              z: "z",
+              lat: "lat",
+              lng: "lng",
+              pitch: "p",
+              bearing: "b",
+              n: "n",
+              s: "s",
+              e: "e",
+              w: "w",
+            };
+            const mapPos = reset === true ? def : getMapPos({ id: idMap });
+            const newValues = self.getValue();
+            for (const k in newValues) {
+              const mapValue = mapPos[mapPosKeys[k]];
+              const newValue = isNotEmpty(mapValue) ? mapValue : mapPos[k];
+              if (isNotEmpty(newValue)) {
+                newValues[k] = newValue;
+              }
+            }
+            self.setValue(newValues);
+          }
+        }
+        /**
+         * set layout
+         */
+
+        jQuery.each(this.property_order, function (_, key) {
+          const editor = self.editors[key];
+          if (editor.property_removed) {
+            return;
+          }
+          const row = self.theme.getGridRow();
+          elContainer.appendChild(row);
+
+          if (editor.options.hidden) {
+            editor.container.style.display = "none";
+          } else {
+            self.theme.setGridColumnSize(editor.container, 12);
+          }
+          row.appendChild(editor.container);
+        });
+        this.row_container.innerHTML = "";
+        this.row_container.appendChild(elContainer);
+      },
+    });
 })();

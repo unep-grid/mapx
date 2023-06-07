@@ -1,5 +1,5 @@
-import * as t from '../../is_test/index.js';
-export {parse, stringify};
+import * as t from "../../is_test/index.js";
+export { parse, stringify };
 
 class JsonSanitizer {
   constructor(data) {
@@ -80,14 +80,18 @@ class JsonSanitizer {
 }
 
 function parse(str) {
-  return JSON.parse(str);
+  let out;
+  try {
+    out = JSON.parse(str);
+  } catch (_) {}
+  return out;
 }
 
 function stringify(data) {
+  let out = "";
   try {
     data = new JsonSanitizer(data).sanitize();
-    return JSON.stringify(data);
-  } catch (e) {
-    console.error('Error in stringify helper', e, data);
-  }
+    out = JSON.stringify(data);
+  } catch (_) {}
+  return out;
 }

@@ -1,5 +1,115 @@
 [
   {
+    "id": "auto_style_start",
+    "en": "Auto style...",
+    "ps": "اتومات سټایل ..."
+  },
+  {
+    "id": "auto_style_select_mode_label",
+    "en": "Select mode",
+    "ps": "حالت غوره کړئ"
+  },
+  {
+    "id": "auto_style_select_bins_label",
+    "en": "Select binning method",
+    "ps": "د بننګ طریقه غوره کړئ"
+  },
+  {
+    "id": "auto_style_bins_number_label",
+    "en": "Number of bins",
+    "ps": "د کڅوړو شمیر"
+  },
+  {
+    "id": "auto_style_bins_number_desc",
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "ps": "د احصایوي تحلیل په جریان کې د کارول شویو کڅوړو شمیر. لږترلږه 2، اعظمي 100"
+  },
+  {
+    "id": "auto_style_check_reverse_color_label",
+    "en": "Reverse color palette",
+    "ps": "د رنګ پیلټ برعکس"
+  },
+  {
+    "id": "auto_style_check_reverse_color_desc",
+    "en": "Inverse colors order in palettes",
+    "ps": "برعکس رنګونه په پیلټونو کې ترتیب کوي"
+  },
+  {
+    "id": "auto_style_check_preserve_label_label",
+    "en": "Preserve current labels",
+    "ps": "اوسني لیبلونه وساتئ"
+  },
+  {
+    "id": "auto_style_check_preserve_label_desc",
+    "en": "Preserve labels already defined in current rules",
+    "ps": "لیبلونه وساتئ چې دمخه په اوسني مقرراتو کې تعریف شوي"
+  },
+  {
+    "id": "auto_style_button_update",
+    "en": "Update rules",
+    "ps": "د قواعدو تازه کول"
+  },
+  {
+    "id": "auto_style_title_table_continuous",
+    "en": "Table. Method : {{method}}. Number of bins: {{bins}}",
+    "ps": "میز. طریقه: {{method}} . د کڅوړو شمیر: {{bins}}"
+  },
+  {
+    "id": "auto_style_title_table_categorical",
+    "en": "Table. Number of rows = {{count}}",
+    "ps": "میز. د قطارونو شمیر = {{count}}"
+  },
+  {
+    "id": "auto_style_color_label",
+    "en": "Color",
+    "ps": "رنګ"
+  },
+  {
+    "id": "auto_style_color_desc",
+    "en": "Choose color for all classes",
+    "ps": "د ټولو ټولګیو لپاره رنګ غوره کړئ"
+  },
+  {
+    "id": "auto_style_sizes_min_label",
+    "en": "Start size",
+    "ps": "د پیل اندازه"
+  },
+  {
+    "id": "auto_style_sizes_min_desc",
+    "en": "Size of the first item in the table",
+    "ps": "په جدول کې د لومړي توکي اندازه"
+  },
+  {
+    "id": "auto_style_sizes_max_label",
+    "en": "End size",
+    "ps": "د پای اندازه"
+  },
+  {
+    "id": "auto_style_sizes_max_desc",
+    "en": "Size of the last item in the table",
+    "ps": "په جدول کې د وروستي توکي اندازه"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "ps": "شفافیت"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "ps": "د رنګ الفا اجزا (د شفافیت) تنظیم کړئ، چیرې چې 0 = بشپړ شفاف او 1، په بشپړه توګه ناپاک"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "ps": "د توکو اندازه"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "ps": "د ټولو ټولګیو لپاره اندازه تنظیم کړئ"
+  },
+  {
     "id": "btn_opt_code_integration",
     "en": "Code template / boilerplate / other format",
     "ps": "د کوډ ټیمپلیټ / بویلر پلیټ / نور شکل"
@@ -23,6 +133,11 @@
     "id": "code_integration_template_mapbox_style",
     "en": "Mapbox style (full)",
     "ps": "د نقشه بکس سټایل (بشپړ)"
+  },
+  {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "ps": "د نقشه بکس سټایل (یوازې اساسی نقشه، په سټوډیو کې د کارولو وړ)"
   },
   {
     "id": "code_integration_template_mapbox_layers",
@@ -1525,19 +1640,14 @@
     "ps": "بیا کول"
   },
   {
-    "id": "edit_table_modal_value_invalid_title",
-    "en": "Invalid value",
-    "ps": "ناسم ارزښت"
+    "id": "edit_table_modal_values_invalid_title",
+    "en": "Invalid values",
+    "ps": "ناسم ارزښتونه"
   },
   {
-    "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
-    "ps": "ناسم ارزښت ترلاسه شوی. ډاډ ترلاسه کړئ چې سم ډول وکاروئ: {{type}} .\n دا بدلون به خوندي نشي."
-  },
-  {
-    "id": "edit_table_modal_value_invalid_continue",
-    "en": "Ignore and continue",
-    "ps": "سترګې پټې کړئ او دوام ورکړئ"
+    "id": "edit_table_modal_values_invalid_ok",
+    "en": "Ok",
+    "ps": "سمه ده"
   },
   {
     "id": "btn_edit_add_column",
@@ -1566,8 +1676,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "ps": "یو نوی کالم اضافه کړئ: نوم"
+    "en": "Name of the column",
+    "ps": "د کالم نوم"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1686,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "ps": "د نوي کالم نوم به دا وي:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "ps": "د کالم نوم به دا وي:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1705,9 @@
     "ps": "نوم شتون نلري"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "ps": "بل"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "ps": "د معلوماتو ډول وټاکئ"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "ps": "بل"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1716,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "ps": "په نوم یو نوی کالم اضافه کړئ<b> {{column_name}}</b> ډول<b> {{column_type}}</b> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "ps": "په نوم یو نوی کالم اضافه کړئ<code> {{column_name}}</code> د ډول<code> {{column_type}}</code> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی، مګر د اړتیا په صورت کې به د 'کالم لرې کول' وسیله کار وکړي."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1735,14 @@
     "ps": "د کالم نوم"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "ps": "بل"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "ps": "یو کالم لرې کړئ: تصدیق"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "ps": "په نوم یو کالم لرې کړئ<i> {{column_name}}</i> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی: ډاټا ورک کیدی شي."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "ps": "په نوم یو کالم لرې کړئ<code> {{column_name}}</code> ؟ بدلون به په ډیټابیس او ټولو متقابل جدولونو کې ترسره شي. دا بیرته نه شي کیدی: ډاټا ورک کیدی شي."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1686,8 +1781,8 @@
   },
   {
     "id": "edit_table_modal_warning_text",
-    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
-    "ps": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">د دې وسیلې کارول ممکن د ډیټا د نه بدلیدو یا حتی حذف کیدو لامل شي ، لکه د ډیسټاپ سپریډ شیټ ایډیټرانو سره.</li><li style=\";text-align:right;direction:rtl\"> موږ د معلوماتو سرچینو لپاره د ډیټا ریکوری خدمات نه وړاندې کوو.</li><li style=\";text-align:right;direction:rtl\"> تر هغه وخته چې یوه ناسته ساتل کیږي، په حجرو کې هر ډول عملیات د کیبورډ شارټ کټونو یا وقف شوي بټونو په کارولو سره بیرته راګرځول کیدی شي.</li><li style=\";text-align:right;direction:rtl\"> 'کالم لیرې کړئ' به کالم او د هغې ډیټا حذف کړي پرته له دې چې د وروستي تایید پینل وروسته یې د بیرته راګرځولو امکان نلري.</li><li style=\";text-align:right;direction:rtl\"> د هر ډول تعدیل دمخه، دا ممکنه ده چې د معلوماتو سرچینې ډاونلوډ کولو یا د سپریڈ شیټ ایډیټر کې ډاټا کاپي او پیسټ کولو له لارې د معلوماتو بیک اپ ترلاسه کړئ.</li><li style=\";text-align:right;direction:rtl\"> اوسنی پلیټ فارم، د هغې پراختیا کونکي یا د پروژې مدیران ټول مسؤلیت ردوي.<ul style=\";text-align:right;direction:rtl\"></ul></li></ul>"
+    "en": "<ul><li>Using this tool may pose a risk of permanently altering or deleting data, similar to desktop spreadsheet editors.</li><li>It is possible to undo or redo any changes made to cells during a session using keyboard shortcuts or dedicated buttons.</li><li>The &#39;Remove column&#39; action will permanently delete the column and its data, and cannot be undone after the final confirmation panel.</li><li>Invalid cells, indicated by a red color, will not be saved.</li><li>A backup system has not yet been implemented. To safeguard your data, you can use the download tool in the toolbox to export the entire layer or table as a precautionary measure.</li><li>There may be incremental backup at the database level, but not at the layer or table level.</li><li>The developers of the current platform and project administrators do not accept any responsibility for any potential losses or damages.</li></ul>",
+    "ps": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">د دې وسیلې کارول ممکن د ډیسټاپ سپریډ شیټ ایډیټرانو په څیر د تل لپاره د معلوماتو بدلولو یا حذف کولو خطر رامینځته کړي.</li><li style=\";text-align:right;direction:rtl\"> دا ممکنه ده چې د کیبورډ شارټ کټونو یا وقف شوي بټونو په کارولو سره د ناستې په جریان کې په حجرو کې کوم بدلونونه رد یا بیا پیل کړئ.</li><li style=\";text-align:right;direction:rtl\"> د 'کالم لیرې کول' عمل به د تل لپاره کالم او د هغې ډاټا حذف کړي، او د وروستي تایید پینل وروسته بیرته نه شي کیدی.</li><li style=\";text-align:right;direction:rtl\"> غلط حجرې، چې د سور رنګ لخوا ښودل شوي، خوندي نشي.</li><li style=\";text-align:right;direction:rtl\"> د بیک اپ سیسټم لاهم نه دی پلي شوی. د خپلو معلوماتو د خوندي کولو لپاره، تاسو کولی شئ په وسیله بکس کې د ډاونلوډ وسیله وکاروئ ترڅو ټول پرت یا میز د احتیاطي اقدام په توګه صادر کړئ.</li><li style=\";text-align:right;direction:rtl\"> کیدای شي د ډیټابیس په کچه زیاتیدونکي بیک اپ وي، مګر د پرت یا میز په کچه نه.</li><li style=\";text-align:right;direction:rtl\"> د اوسني پلیټ فارم پراختیا کونکي او د پروژې مدیران د احتمالي زیانونو یا زیانونو لپاره هیڅ مسؤلیت نه مني.</li></ul>"
   },
   {
     "id": "edit_table_modal_warning_ok_no_more",
@@ -1726,7 +1821,7 @@
   },
   {
     "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "en": "Some column(s) contain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
     "ps": "ځینې کالمونه ناسم توري لري او نشي ترمیم کیدی:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
   },
   {
@@ -1795,6 +1890,156 @@
     "ps": "دا جدول لري {{count}} نه خوندي شوي بدلونونه ایا تاسو ډاډه یاست چې دا بدلونونه پریږدئ او رد کړئ؟"
   },
   {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "ps": "په استعمال کې"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "ps": "ساتل شوی"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "ps": "خوندي نه"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename column",
+    "ps": "د کالم نوم بدل کړئ"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "ps": "هغه کالم غوره کړئ چې تاسو یې نوم بدلول غواړئ:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "ps": "تایید"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "ps": "ایا تاسو ډاډه یاست چې تاسو غواړئ د کالم نوم بدل کړئ<code> {{column_name}}</code> ته<code> {{column_name_new}}</code> ؟"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename column",
+    "ps": "د کالم نوم بدل کړئ"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename column",
+    "ps": "د کالم نوم بدل کړئ"
+  },
+  {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "ps": "په کوډ کې موجودې حوالې"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "ps": "<p style=\";text-align:right;direction:rtl\">د کالم نوم بدلولو اجازه نشته ځکه چې دا جدول د دودیز کوډ لیدونو، ډشبورډونو، او / یا دودیز سټایلونو کې حواله شوی. که اړتیا وي، د دې پرځای د کالم نقل کول په پام کې ونیسئ.<br><br> د نورو جزیاتو لپاره، د 'مرستې' تڼۍ کلیک وکړئ.<br><br> دلته د انحصاري لیدونو لیست دی:</p>"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "ps": "لغوه کړئ"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "ps": "ډشبورډ"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "ps": "دودیز کوډ"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "ps": "دودیز سټایل"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "ps": "د سرچینې طبقه"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "ps": "دوه اړخیز کالم"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "ps": "دوه اړخیز کالم"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "ps": "د نقل کولو کالم"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "ps": "د نقل کولو کالم: تصدیق"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "ps": "د نوم کالم نقل کړئ<code> {{column_name}}</code> په نوم نوي کالم ته<code> {{column_name_new}}</code> ؟"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "ps": "کالم نقل کړئ"
+  },
+  {
+    "id": "btn_stat_attribute",
+    "en": "Statistics",
+    "ps": "احصایې"
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "ps": "د احصایې لپاره خاصیت"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "ps": "یو خاصیت وټاکئ"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "ps": "د کالمونو ترتیب بدل شوی"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "ps": "د کالم ترتیب د بل کارونکي لخوا بدل شوی."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "ps": "سمه ده"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "ps": "د کالمونو ترتیب ترتیب کړئ"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "ps": "د کالمونو ترتیب ترتیب کړئ"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ps": "د جیومیټري وسیلې: د سرچینې پرت غوره کړئ"
@@ -1803,6 +2048,21 @@
     "id": "geom_tools_modal_select_label",
     "en": "Select source layer",
     "ps": "د سرچینې پرت غوره کړئ"
+  },
+  {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "ps": "د بهرني لید په توګه وارد کړئ"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "ps": "بهرنۍ لید وارد کړئ"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "ps": "بهرنۍ لید وارد کړئ؟ دا لید به د پروژې په ترتیباتو کې د بهرني لید په توګه شتون ولري"
   },
   {
     "id": "en",
@@ -2180,6 +2440,11 @@
     "ps": "لغوه کړی"
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "ps": "بل..."
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "ps": "ادامه ورکړئ"
@@ -2213,6 +2478,11 @@
     "id": "btn_close",
     "en": "Close",
     "ps": "وتړئ"
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "ps": "نقل کول..."
   },
   {
     "id": "btn_download",
@@ -2515,6 +2785,11 @@
     "ps": "د کښته کولو اجازه نشته. نور معلومات په میټاډاټا کې."
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "ps": "د عمل اجازه نشته: د پراختیا کونکي امتیاز غوښتنه کوي"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "ps": "دا نظر ترمیم کړئ"
@@ -2538,51 +2813,6 @@
     "id": "btn_opt_edit_style",
     "en": "Set the style of this view",
     "ps": "ددې لیدنې شکل تنظیم کړئ"
-  },
-  {
-    "id": "schema_style_title_legend",
-    "en": "Legend title",
-    "ps": "د لقب سرلیک "
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval",
-    "ps": "په وقفه کې د پورتنۍ حد شامل کړئ "
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "ps": "که چک شوی ، وقفو کې به لوړ حد شامل وي. که دا تعریف شوی نه وي ، وروستی حد به اعظمي ارزښت وي. که سټایل د آټو سټایل په کارولو سره جوړ شوی وي ، دا اختیار باید چیک شي"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order",
-    "ps": "بيرته ښودل شوي پوړونو ترتيب "
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "ps": "که چک شوی وي ، د پرت پوړ به وګرځول شي: پورته قاعده به د زېرمې په سطح کې یو پرت راوباسي "
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label",
-    "ps": "نښان د لیبل سره وښایاست "
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?",
-    "ps": "که د ټکي معلوماتو سره سمبولونه وکاروئ ، نو میپ ایکس باید د دې شاوخوا شاوخوا لیبلونه اضافه کړي؟ "
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend",
-    "ps": "په نقشه یا افسانه کې ورک شوي ارزښتونه مه ښکاره کوئ"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
-    "ps": "که چک شوی وي ، د ورک شوي ارزښت سره ب featuresې - یا یو ارزښت چې ورته ورته تعریف شوی - به په نقشه یا لیجنډ کې په یوه پرت کې ونه ښودل شي"
   },
   {
     "id": "btn_opt_meta",
@@ -2790,6 +3020,11 @@
     "ps": "د 3D خاوره اضافه کړئ"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "ps": "د ګلوب حالت وکاروئ"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "ps": "عمودي حالت "
@@ -2816,48 +3051,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
-    "ps": "د ویکتور ب Highه روښانه کړئ "
+    "en": "Spotlight vector features",
+    "ps": "د سپټ لائټ ویکتور ځانګړتیاوې"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
-    "ps": "د وسیلې ترتیب لوړ کړئ "
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "ps": "د سپټ لائټ وسیلې ترتیب"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
-    "ps": "د روښانه کولو اکر غوره کړئ "
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "ps": "د سپټ لائټ حالت غوره کړئ"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "ps": "روښانه کړئ چیرې چې ټولې ب featuresې پراخیږي "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "ps": "سپټ لائټ چیرې چې ټولې ځانګړتیاوې یو ځای کیږي"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "ps": "هره څرګندیدونکې ب featureه روښانه کړئ "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "ps": "هر لیدلی خصوصیت په نښه کړئ"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "ps": "روښانه کړئ چیرې چې دوه ب featuresې پراخه کیږي "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "ps": "سپټ لائټ چیرې چې دوه ځانګړتیاوې یوځای کیږي"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "ps": "روښانه کړئ چیرې چې درې ب featuresې پراخه کیږي "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "ps": "سپټ لائټ چیرې چې درې ځانګړتیاوې یوځای کیږي"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "ps": "روښانه کړئ چیرې چې څلور ب featuresې پراخه کیږي "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "ps": "سپټ لائټ چیرې چې څلور ځانګړتیاوې یوځای کیږي"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "ps": "روښانه کړئ چیرې چې پنځه ب featuresې پراخیږي "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "ps": "سپټ لائټ چیرې چې پنځه ځانګړتیاوې یوځای کیږي"
   },
   {
     "id": "label_check_instant_overlap",
@@ -2953,6 +3188,11 @@
     "id": "error_no_source",
     "en": "No source layer found",
     "ps": "د سرچینې لایه و نه موندل شوه"
+  },
+  {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "ps": "د لید ډول ورک شوی"
   },
   {
     "id": "error_title_exists",
@@ -3465,24 +3705,14 @@
     "ps": "د دې میپ ایکس کارن په مستقیم ډول اضافه کړئ "
   },
   {
-    "id": "schema_class",
-    "en": "Class",
-    "ps": "صنف"
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "ps": "میټا ډيټآ"
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values",
-    "ps": "ورک شوي ارزښتونه "
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color",
-    "ps": "رنګ"
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description",
-    "ps": "تفصیل"
+    "id": "schema_method",
+    "en": "Method",
+    "ps": "میتود"
   },
   {
     "id": "schema_item",
@@ -3495,129 +3725,9 @@
     "ps": "کلۍ"
   },
   {
-    "id": "schema_style_label",
-    "en": "Label",
-    "ps": "نښه"
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule",
-    "ps": "وروستی قانون"
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data",
-    "ps": "میټا ډيټآ"
-  },
-  {
-    "id": "schema_method",
-    "en": "Method",
-    "ps": "میتود"
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency",
-    "ps": "روڼتیا"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule",
-    "ps": "قانون"
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules",
-    "ps": "قوانین"
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size",
-    "ps": "اندازه"
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings",
-    "ps": "د زوم تنظیمات "
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max",
-    "ps": "په زوم اعظمي د اندازې کوفيفي "
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min",
-    "ps": "په زوم منټ کې د اندازې کوفيئیر "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent",
-    "ps": "د اندازې جریان توکی "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "ps": "د اندازې انډول کیښودونکی فعالیت. د 1 ارزښت یو خطي انګیرنه ورکوي. "
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max",
-    "ps": "زوم اعظمي "
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min",
-    "ps": "زوم منټ "
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "ps": "سمبول"
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "ps": "که له 0 څخه ډیر وي ، د زوم منټ کې د کرښو او نقطو لپاره د اندازې کوفیفین. "
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "ps": "که له 0 څخه ډیر وي ، د زوم په کچه د لینونو او ټکو لپاره د اندازې کوفیفین. "
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data",
-    "ps": "د معلوماتو ښودلو لپاره لږترلږه زوم "
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data",
-    "ps": "د ډیټا ښودلو لپاره اعظمي زوم "
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value",
-    "ps": "ارزښت"
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From",
-    "ps": "له"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To",
-    "ps": "ته"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds",
-    "ps": "د ټیټ / لوړ حدونو لپاره دقیق / اعظمي احصایې له پامه وغورځوئ"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
-    "ps": "د مطلق ټیټ / پورتني حدونو لپاره د سرچینې احصایو څخه دقیق / اعظمي له پامه غورځول. دا ارزښتونه به د ټاکل شوي مقرراتو څخه اخیستل کیږي."
+    "id": "schema_class",
+    "en": "Class",
+    "ps": "صنف"
   },
   {
     "id": "self",
@@ -4080,6 +4190,11 @@
     "ps": "ستاسو سکریپټ "
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "ps": "شایستی/اعتبارونه. فورمت : HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "ps": "دا ډشبورډ غیر فعال کړئ"
@@ -4228,6 +4343,11 @@
     "id": "view_dashboard_widgets",
     "en": "Widgets",
     "ps": "ویجټونه "
+  },
+  {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "ps": "Credits: "
   },
   {
     "id": "view_delete_confirm",
@@ -4521,8 +4641,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "ps": "غیر غړو ته اجازه ورکړئ چې پدې پروژه کې د غړیتوب غوښتنه وکړي. "
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "ps": "غیر غړو ته اجازه ورکړئ چې پدې پروژې کې د غړیتوب غوښتنه وکړي (یوازې که عامه)"
   },
   {
     "id": "project_state_key",
@@ -4730,9 +4850,14 @@
     "ps": "د نقشې لومړنی موقعیت "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "ps": "د نقشې اوسني پیرامیټرې وکاروئ "
+    "ps": "د اوسني نقشې پیرامیټونه وکاروئ"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "ps": "د نقشې اعظمي حدونه تنظیم کړئ"
   },
   {
     "id": "project_map_proj_set",
@@ -4763,6 +4888,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "ps": "عرض البلد جنوبي (البرز، لامبر کونک)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "ps": "د استعمالونو مخ سره د نقشه پوهستلو محدودول"
   },
   {
     "id": "map_fit_to_bounds",
@@ -4923,11 +5053,6 @@
     "id": "update_app_button_confirm",
     "en": "Restart now",
     "ps": "اوس بیا پیل کړئ"
-  },
-  {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "ps": "وروسته"
   },
   {
     "id": "btn_clear_cache",
@@ -6356,8 +6481,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "ps": "ښه راغلاست!<br> د تخنیکي معلوماتو لپاره ، تاسو ممکن زموږ د <a href=\"{{linkKnowledgeBase}}\">پوهې اساس</a> ولولئ. که تاسو د دې ویب پا aboutې په اړه وړاندیز لرئ ، یا که تاسو غواړئ یو غلط راپور ورکړئ ، نو زموږ د <a href=\"{{linkIssue}}\">مسلې تعقیب کونکي ته مراجعه وکړئ</a><br> مننه ! "
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "ps": "ښه راغلاست!<br> د تخنیکي معلوماتو لپاره، تاسو کولی شئ زموږ د <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">پوهې بنسټ</a> ولولئ. که تاسو د دې ویب پاڼې په اړه وړاندیز لرئ، یا که تاسو غواړئ د بګ راپور ورکړئ، زموږ د <a href=\"{{linkIssue}}\" target=\"_blank\">مسلې تعقیب کونکي</a> څخه لیدنه وکړئ<br> مننه !"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6410,9 +6535,9 @@
     "ps": "مقدار "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
-    "ps": "د سر / لکۍ وقفې "
+    "ps": "د سر / لکۍ ماتول"
   },
   {
     "id": "equal_interval",
@@ -6461,8 +6586,8 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "ps": "بریښنالیک ته به لیږل کیږي<a href=\"mailto:={{email}}\"> {{email}}</a> . د ډاونلوډ <a href=\"{{url}}\">لینک</a> به د پروسې په پای کې فعال شي "
+    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
+    "ps": "یو بریښنالیک به لیږل کیږي<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . د ډاونلوډ <a download=\"\" href=\"{{url}}\" target=\"_blank\">لینک</a> به د پروسې په پای کې فعال شي"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6491,8 +6616,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
-    "ps": "تبادله د شکل په کارولو سره ترسره کیږي {{format}} . د کښته کولو لینک:<a href=\"{{url}}\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "ps": "تبادله د شکل په کارولو سره ترسره کیږي {{format}} . د کښته کولو لینک:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6506,8 +6631,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "ps": "غوښتل شوي معلومات د دې لینک په کارولو سره ډاونلوډ ته چمتو دي:<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "ps": "غوښتل شوي معلومات د دې لینک په کارولو سره ډاونلوډ کولو لپاره چمتو دي:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_zip_progress",
@@ -6633,6 +6758,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "ps": "خبرتیاوې "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "ps": "ورک شوي ارزښتونه: {{nullCount}}"
   },
   {
     "id": "mc_title",
@@ -6995,6 +7125,31 @@
     "ps": "خام معلومات به زموږ له سرور څخه لوستل شي. په هرصورت، موږ دا په هیڅ ډول ذخیره یا نه کاروو. هرڅه په ساده ډول منعکس کیږي. IP پتې په حافظه کې ساتل کیږي ترڅو د ناوړه ګټه اخیستنې مخه ونیسي."
   },
   {
+    "id": "btn_editor_tool_format",
+    "en": "Format",
+    "ps": "بڼه"
+  },
+  {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "ps": "راهنمایی"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "ps": "راهنمایی"
+  },
+  {
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "ps": "په‌رته‌کاندن/کچک کول"
+  },
+  {
+    "id": "nc_label_merge",
+    "en": "Details...",
+    "ps": "جزیات..."
+  },
+  {
     "id": "pk_panel_options",
     "en": "Display options",
     "ps": "غوراوي ښودل "
@@ -7073,6 +7228,66 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "ps": "د تلواله پیلیټ وکاروه "
+  },
+  {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "ps": "نوې پروژه پورته کړئ؟"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "ps": "پروژه بار کړئ {{name}} ؟"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "ps": "نوې پروژه جوړه کړئ"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "ps": "د پروژې نوم (انګلیسي)"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "ps": "جوړ کړئ"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "ps": "د پروژې نوم (انګلیسي)"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "ps": "نوم معتبر دی"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "ps": "د جوړولو اجازه نشته"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "ps": "اجازه نه ورکول کیږي"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "ps": "ناسم نوم"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "ps": "د نوم تار په حد کې نه دی: لږ تر لږه 3، اعظمي 50 حروف"
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "ps": "نوم نشته"
   },
   {
     "id": "schema_story_theme",
@@ -7575,6 +7790,216 @@
     "ps": "د کیوب مخ"
   },
   {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "ps": "د لقب سرلیک "
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "ps": "په وقفه کې د پورتنۍ حد شامل کړئ "
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "ps": "که چک شوی ، وقفو کې به لوړ حد شامل وي. که دا تعریف شوی نه وي ، وروستی حد به اعظمي ارزښت وي. که سټایل د آټو سټایل په کارولو سره جوړ شوی وي ، دا اختیار باید چیک شي"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "ps": "بيرته ښودل شوي پوړونو ترتيب "
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "ps": "که چک شوی وي ، د پرت پوړ به وګرځول شي: پورته قاعده به د زېرمې په سطح کې یو پرت راوباسي "
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "ps": "نښان د لیبل سره وښایاست "
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "ps": "که د ټکي معلوماتو سره سمبولونه وکاروئ ، نو میپ ایکس باید د دې شاوخوا شاوخوا لیبلونه اضافه کړي؟ "
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend",
+    "ps": "په نقشه یا افسانه کې ورک شوي ارزښتونه مه ښکاره کوئ"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "ps": "که چک شوی وي ، د ورک شوي ارزښت سره ب featuresې - یا یو ارزښت چې ورته ورته تعریف شوی - به په نقشه یا لیجنډ کې په یوه پرت کې ونه ښودل شي"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "ps": "ورک شوي ارزښتونه "
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "ps": "رنګ"
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "ps": "تفصیل"
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "ps": "نښه"
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "ps": "وروستی قانون"
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency",
+    "ps": "روڼتیا"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "ps": "قانون"
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "ps": "قوانین"
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "ps": "اندازه"
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "ps": "د زوم تنظیمات "
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "ps": "په زوم اعظمي د اندازې کوفيفي "
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "ps": "په زوم منټ کې د اندازې کوفيئیر "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "ps": "د اندازې جریان توکی "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "ps": "د اندازې انډول کیښودونکی فعالیت. د 1 ارزښت یو خطي انګیرنه ورکوي. "
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "ps": "زوم اعظمي "
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "ps": "زوم منټ "
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "ps": "سمبول"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "ps": "که له 0 څخه ډیر وي ، د زوم منټ کې د کرښو او نقطو لپاره د اندازې کوفیفین. "
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "ps": "که له 0 څخه ډیر وي ، د زوم په کچه د لینونو او ټکو لپاره د اندازې کوفیفین. "
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "ps": "د معلوماتو ښودلو لپاره لږترلږه زوم "
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "ps": "د ډیټا ښودلو لپاره اعظمي زوم "
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "ps": "ارزښت"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "ps": "له"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "ps": "ته"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "ps": "د ټیټ / لوړ حدونو لپاره دقیق / اعظمي احصایې له پامه وغورځوئ"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "ps": "د مطلق ټیټ / پورتني حدونو لپاره د سرچینې احصایو څخه دقیق / اعظمي له پامه غورځول. دا ارزښتونه به د ټاکل شوي مقرراتو څخه اخیستل کیږي."
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency",
+    "ps": "روڼتیا"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque",
+    "ps": "د کرښې روڼتیا. 0 = شفاف، 1 = ناپاک"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline",
+    "ps": "د پولیګون خاکه فعاله کړئ"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary.",
+    "ps": "د پولیګون په نښه کولو لپاره د هغې په حد ټینګار وکړئ."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color.",
+    "ps": "اتومات رنګ."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule.",
+    "ps": "په اتوماتيک ډول د هرې قاعدې رنګ سره سم مناسب رنګ ورکړئ."
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color",
+    "ps": "د پولیګون خاکه رنګ"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "ps": "په ټولو پروژو کې د عامه نظرونو لټون وکړئ ..."
@@ -7831,13 +8256,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "ps": "د لومړني نقشې موقعیت تنظیم کړئ"
+    "en": "Set initial map extent",
+    "ps": "د لومړني نقشې حد تنظیم کړئ"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "ps": "د نقشې اوسنی حد، ټیټ او بییرنګ به وکارول شي. په دې توګه د پروژې ډیفالټ بیا لیکل کیږي."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "ps": "د نقشې پیننګ اوسنۍ حد ته محدود کړئ"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "ps": "نقشه به د هغې اوسني حد پورې محدوده وي. د 'Mercator' پرته د نورو اټکلونو لپاره، یوازې مرکز به په حدودو کې وساتل شي."
   },
   {
     "id": "share_filter_activated_label",
@@ -8055,6 +8490,11 @@
     "ps": "نقشه: د هیواد سیوري "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "ps": "نقشه: د ځمکې عمومي لیبلونه"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "ps": "نقشه: اوبه "
@@ -8068,6 +8508,21 @@
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)",
     "ps": "نقشه: حمامونه (لوړ) "
+  },
+  {
+    "id": "mx_map_text_bathymetry",
+    "en": "Map: bathymetry labels",
+    "ps": "نقشه: د تشناب لیبل"
+  },
+  {
+    "id": "mx_map_text_bathymetry_outline",
+    "en": "Map: bathymetry labels outline",
+    "ps": "نقشه: د تشناب لیبلونو خاکه"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "ps": "نقشه: د حمام لینونه"
   },
   {
     "id": "mx_map_road",
@@ -8130,6 +8585,51 @@
     "ps": "نقشه: د متن متن وټاکئ "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "ps": "نقشه: د ملګرو ملتونو لیبل 0 0 (انټارکټیکا)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 0 1 – ایالت"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "ps": "نقشه: د ملګرو ملتونو لیبل 0 2 - اشغال شوې سیمه"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 0 3 - غیر ځان اداره کولو سیمه"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "ps": "نقشه: د ملګرو ملتونو لیبل 0 4 – سیمه"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 0 5 – ځانګړې سیمه یا ولایت"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 0 99 - حاکمیت بې ثباته شوی"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 1 1 - اداري واحد (فرعي ملي کچه 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "ps": "نقشه: د ملګرو ملتونو لیبلونه 1 2 - اداري واحد (فرعي ملي کچه 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "ps": "نقشه: د سړک متن "
@@ -8148,6 +8648,281 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "ps": "نقشه: د اوبو د بدن متن لنډیز "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "ps": "د فونټ کورنۍ"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "ps": "فونټ"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "ps": "شفافیت"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "ps": "رنګ"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "ps": "د لیدلو وړ"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "ps": "نوم"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "ps": "تفصیل"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "ps": "لیکوال"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "ps": "بل"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "ps": "صادرول"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "ps": "واردول"
+  },
+  {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "ps": "MapX د شکل فایلونو سپارښتنه نه کوي، ځکه چې د کرکټرونو ټاکلو لپاره هیڅ میتود شتون نلري، کوم چې کولی شي د ښودلو او تحلیل په جریان کې ستونزې رامینځته کړي."
+  },
+  {
+    "id": "upl_title",
+    "en": "Upload",
+    "ps": "پورته کول"
+  },
+  {
+    "id": "upl_title_layer_name",
+    "en": "Title of the source ({{language}})",
+    "ps": "د سرچینې عنوان ( {{language}} )"
+  },
+  {
+    "id": "upl_name_placeholder",
+    "en": "Source title...",
+    "ps": "د سرچینې سرلیک ..."
+  },
+  {
+    "id": "upl_upload_btn",
+    "en": "Upload",
+    "ps": "پورته کول"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "ps": "د پورته کولو اجازه نشته"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "ps": "د ځایی حوالې سیسټم وټاکئ (EPSG کوډ). ډیفالټ 4326 دی."
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "ps": "فایل (*.gpkg، *.zip، *.geojson) ډراپ کړئ یا د لټون کولو لپاره کلیک وکړئ..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})",
+    "ps": "عنوان ( {{language}} )"
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "ps": "عنوان ( {{language}} )"
+  },
+  {
+    "id": "upl_file_upload_progress",
+    "en": "Uploading '{{filename}}'...",
+    "ps": "پورته کول ' {{filename}} '..."
+  },
+  {
+    "id": "upl_api_save_validation",
+    "en": "Geometry validation: This may take a while.",
+    "ps": "د جیومیټری اعتبار: دا ممکن یو څه وخت ونیسي."
+  },
+  {
+    "id": "upl_api_save_validation_geom_count",
+    "en": "There are {{count}} invalid geometries.",
+    "ps": "دلته دي {{count}} غلط جیومیټری"
+  },
+  {
+    "id": "upl_api_save_failed_title",
+    "en": "Upload of '{{filename}}' failed.",
+    "ps": "پورته کول {{filename}} ناکام شو."
+  },
+  {
+    "id": "upl_api_save_failed",
+    "en": "Upload of <samp>{{filename}}</samp> failed. Source removed: <samp>{{sourceRemoved}}</samp>. View removed : {{viewRemoved}}. Message : <samp> {{error}}</samp> ",
+    "ps": "د پورته کولو<samp> {{filename}}</samp> ناکام سرچینه لرې شوې:<samp> {{sourceRemoved}}</samp> . لیرې شوی لید {{viewRemoved}} . پیغام:<samp> {{error}}</samp>"
+  },
+  {
+    "id": "upl_api_save_success_title",
+    "en": "Upload of '{{filename}}' done.",
+    "ps": "پورته کول {{filename}} ترسره شو."
+  },
+  {
+    "id": "upl_api_save_success",
+    "en": "Upload of <samp>{{filename}}</samp> done. New source created: {{title}} – <samp>{{idSource}}</samp>. ",
+    "ps": "د پورته کولو<samp> {{filename}}</samp> ترسره شوی نوې سرچینه جوړه شوې: {{title}} –<samp> {{idSource}}</samp> ."
+  },
+  {
+    "id": "upl_api_import_db",
+    "en": "Importation in database",
+    "ps": "په ډیټابیس کې واردول"
+  },
+  {
+    "id": "up_button_close",
+    "en": "Close",
+    "ps": "تړل"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "ps": "فایلونه زیات کړئ..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "ps": "پورته کول"
+  },
+  {
+    "id": "up_button_reset",
+    "en": "Reset",
+    "ps": "بیا تنظیم کړئ"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "ps": "بیا تنظیم کول تایید کړئ"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "ps": "لرې کول تایید کړئ {{n}} عناصر؟"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "ps": "اپلوډ تایید کړئ"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "ps": "پورته کول تایید کړئ {{n}} عناصر، د ټولیز لپاره {{size}} ؟"
+  },
+  {
+    "id": "up_settings",
+    "en": "Settings",
+    "ps": "ترتیبات"
+  },
+  {
+    "id": "up_select_epsg_code",
+    "en": "EPSG code",
+    "ps": "د EPSG کوډ"
+  },
+  {
+    "id": "up_check_enable_wms_label",
+    "en": "Enable WMS services",
+    "ps": "د WMS خدمتونه فعال کړئ"
+  },
+  {
+    "id": "up_check_enable_wms_desc",
+    "en": "In a public project, if public views are created using this source, enabling WMS service will automatically create a WMS layer and SLD, available for anyone.",
+    "ps": "په یوه عامه پروژه کې، که د دې سرچینې په کارولو سره عامه نظرونه رامینځته شي، د WMS خدمت فعالول به په اوتومات ډول د WMS پرت او SLD رامینځته کړي چې د هرچا لپاره شتون لري."
+  },
+  {
+    "id": "up_check_create_view_label",
+    "en": "Automatically create a view",
+    "ps": "په اتوماتيک ډول یو لید جوړ کړئ"
+  },
+  {
+    "id": "up_check_create_view_desc",
+    "en": "Create a basic view at the end of the process and add it to the project",
+    "ps": "د پروسې په پای کې یو بنسټیز لید جوړ کړئ او په پروژه کې یې اضافه کړئ"
+  },
+  {
+    "id": "up_check_allow_download_label",
+    "en": "Allow this source to be downloaded",
+    "ps": "اجازه راکړئ چې دا سرچینه ډاونلوډ شي"
+  },
+  {
+    "id": "up_check_allow_download_desc",
+    "en": "This source license allows for redistribution, enabling the download feature will make the data and metadata available for download by anyone",
+    "ps": "د دې سرچینې جواز بیا توزیع ته اجازه ورکوي، د ډاونلوډ ځانګړتیا فعالول به ډاټا او میټاډاټا د هرچا لخوا د ډاونلوډ لپاره شتون ولري"
+  },
+  {
+    "id": "up_check_assign_epsg_label",
+    "en": "Assign the SRS bellow",
+    "ps": "لاندې SRS وټاکئ"
+  },
+  {
+    "id": "up_check_assign_epsg_desc",
+    "en": "The converter will automatically retrieve the SRS information from the uploaded dataset. However, if you prefer to use a different SRS, simply check this checkbox and select the desired EPSG code from the options below.",
+    "ps": "کنورټر به په اتوماتيک ډول د اپلوډ شوي ډیټا سیټ څخه د SRS معلومات بیرته ترلاسه کړي. په هرصورت، که تاسو غوره کوئ چې یو بل SRS وکاروئ، په ساده ډول دا چیک باکس وګورئ او د لاندې اختیارونو څخه د مطلوب EPSG کوډ غوره کړئ."
+  },
+  {
+    "id": "up_drop_or_click",
+    "en": "Drop files or click to select…",
+    "ps": "فایلونه پریږدئ یا د انتخاب کولو لپاره کلیک وکړئ…"
+  },
+  {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "ps": "مسلې"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "ps": "ورک شوي فایلونه"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "ps": "د انحصار نشتوالی: {{ext}} . مهرباني وکړئ ورک شوی فایل دلته کش کړئ او پریږدئ."
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid element",
+    "ps": "ناسم عنصر"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "ps": "شکل نه دی ملاتړ شوی"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "ps": "لوی ته فایل کړئ"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many elements. Max:",
+    "ps": "ډیر عناصر. اعظمي:"
   },
   {
     "id": "wms_select_reviewed_service",

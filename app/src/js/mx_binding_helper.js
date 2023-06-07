@@ -1,9 +1,7 @@
 import { geoserver } from "./geoserver/index.js";
-import { ws_tools } from "./mx.js";
+import { ws_tools, helpers as h } from "./mx.js";
 
 $(document).on("shiny:connected", function () {
-  const h = mx.helpers;
-
   /**
    * Set init query parameters
    */
@@ -15,7 +13,7 @@ $(document).on("shiny:connected", function () {
    * General bindings
    */
 
-  //bind("mxUpdateLanguage", h.updateLanguage);
+  bind("mxShowSelectSourceEdit", h.showSelectSourceEdit);
   bind("mxSetCookie", h.writeCookie);
   bind("mxModal", h.modal);
   bind("mxSetElementAttribute", h.setElementAttribute);
@@ -36,13 +34,14 @@ $(document).on("shiny:connected", function () {
   bind("mxUpdateSelectizeItems", h.updateSelectizeItems);
   bind("mxInitSelectizeAll", h.initSelectizeAll);
   bind("mxFlashIcon", h.itemFlash);
-  //bind('mxUpdateSettingsUser', h.updateSettingsUser );
   bind("mxUpdateSettings", h.updateSettings);
   bind("mxUpdateCheckboxInput", h.updateCheckboxInput);
   bind("mxNotify", h.shinyNotify);
   bind("mxGeoserverRebuild", geoserver.rebuild);
   bind("mxEditTable", ws_tools.getCb("edit_table"));
   bind("mxGeomTools", ws_tools.getCb("geometry_tools"));
+  bind("mxUploader", ws_tools.getCb("uploader"));
+  bind("mxProjectAdd", mx.project.create);
   /**
    * Mapx map and view related binding
    */
@@ -51,7 +50,7 @@ $(document).on("shiny:connected", function () {
   bind("mglSetFilter", h.setFilter);
   bind("mglSetHighlightedCountries", h.setHighlightedCountries);
   bind("mglAddLayer", h.addLayer);
-  bind("mglFlyTo", h.flyTo);
+  bind("mglSetMapPos", h.setMapPos);
   bind("mglSetMapProjection", h.setMapProjection);
   bind("mglSetTheme", h.setTheme);
   bind("mglSyncAllMaps", h.syncAll);

@@ -1,98 +1,30 @@
-
-
-observe({
-  triggerMetaSource <- isTRUE(input$btnEditSourceMetadata > 0)
-  triggerMetaSourceView <- isTRUE(input$btnViewEditMetadata > 0)
-  if (triggerMetaSourceView || triggerMetaSource) {
-    reactData$triggerModalEditMetadata <- runif(1)
-  }
-})
-
-observeEvent(reactData$triggerModalEditMetadata, {
-  mxCatch(title = "btn edit source meta", {
+observeEvent(input$btnEditSourceMetadata, {
+  mxCatch(title = "btn edit source metadata", {
     userRole <- getUserRole()
     isPublisher <- "publishers" %in% userRole$groups
-    language <- reactData$language
-
     if (!isPublisher) {
       return()
     } else {
-      layers <- reactListEditSources()
-      disabled <- NULL
-      if (noDataCheck(layers)) {
-        layers <- list("noLayer")
-        disabled <- TRUE
-      }
-
-
-      #
-      # Use the layer from the last edited view as default
-      #
-      view <- reactData$viewDataEdited
-      viewLayerName <- .get(view, c("data", "source", "layerInfo", "name"))
-
-      if (!noDataCheck(viewLayerName) && viewLayerName %in% layers) {
-        selectedLayer <- viewLayerName
-      } else {
-        selectedLayer <- NULL
-      }
-
-      uiOut <- tagList(
-        selectizeInput(
-          inputId = "selectSourceLayerForMeta",
-          label = d("source_select_layer", language),
-          choices = layers,
-          multiple = FALSE,
-          selected = selectedLayer,
-          options = list(
-            sortField = "label"
-          )
-        )
-      )
-
-      btn <- list(
-        actionButton(
-          "btnEditSourceMetadataSelect",
-          d("btn_edit_selected", language),
-          disabled = disabled
-        )
-      )
-
-      mxModal(
-        id = "editSourceMetadata",
-        title = d("source_edit_metadata", language),
-        content = uiOut,
-        buttons = btn,
-        textCloseButton = d("btn_close", language)
-      )
+      mxShowSelectSourceEdit(id = "selectSourceLayerForMeta")
     }
   })
 })
 
 
-#
-# Disable btn edit if not allowed
-#
 observeEvent(input$selectSourceLayerForMeta, {
-  language <- reactData$language
-  layer <- input$selectSourceLayerForMeta
-  layers <- reactListEditSources()
-  isAllowed <- layer %in% layers
-
-  mxToggleButton(
-    id = "btnEditSourceMetadataSelect",
-    disable = !isAllowed
-  )
+  data <- input$selectSourceLayerForMeta
+  if (isEmpty(data$idSource)) {
+    return()
+  }
+  reactData$triggerSourceMetadata <- data
 })
 
-
-
-observeEvent(input$btnEditSourceMetadataSelect, {
+observeEvent(reactData$triggerSourceMetadata, {
   mxCatch(title = "Display source  meta", {
+    layer <- reactData$triggerSourceMetadata$idSource
     userRole <- getUserRole()
     isPublisher <- "publishers" %in% userRole$groups
     language <- reactData$language
-    layer <- input$selectSourceLayerForMeta
     layers <- reactListEditSources()
     isAllowed <- layer %in% layers
     project <- reactData$project
@@ -247,7 +179,7 @@ observeEvent(input$jedSourceMetadata_values, {
         idUser <- .get(userData, c("id"))
         isPublisher <- "publishers" %in% userRole$groups
         language <- reactData$language
-        layer <- input$selectSourceLayerForMeta
+        layer <- reactData$triggerSourceMetadata$idSource
         idSource <- layer
         layers <- reactListEditSources()
         issues <- .get(input$jedSourceMetadata_issues, c("data"))
@@ -290,7 +222,8 @@ observeEvent(input$jedSourceMetadata_values, {
           views <- mxDbGetViewsIdBySourceId(idSource, language = language)
 
           mglUpdateViewsBadges(list(
-            views = as.list(views$id)
+            views = as.list(views$id),
+            meta = meta
           ))
         }
       })

@@ -2,9 +2,9 @@ import { Button } from "./button.js";
 import screenfull from "screenfull";
 import { mapComposerModalAuto } from "./../map_composer";
 import {
-  geolocateUser,
   getMap,
   getLayerNamesByPrefix,
+  setMapProjection,
 } from "./../map_helpers/index.js";
 import { toggleSpotlight } from "./../mx_helper_map_pixop.js";
 import { ShareModal } from "./../share_modal/index.js";
@@ -15,6 +15,12 @@ import {
 } from "./../story_map/index.js";
 import { modalMarkdown } from "../modal_markdown/index.js";
 import { settings } from "./../settings";
+import { UAParser } from "ua-parser-js";
+import { shake } from "../elshake/index.js";
+import { theme } from "./../mx.js";
+
+const uaparser = new UAParser();
+const isNotBlink = uaparser.getEngine().name !== "Blink";
 
 export function generateButtons() {
   return [
@@ -73,11 +79,6 @@ export function generateButtons() {
       },
     }),
     new Button({
-      key: "btn_geolocate_user",
-      classesIcon: ["fa", "fa-map-marker"],
-      action: geolocateUser,
-    }),
-    new Button({
       key: "btn_fullscreen",
       classesIcon: ["fa", "fa-expand"],
       classesButton: ["btn-ctrl--item-no-mobile"],
@@ -94,18 +95,30 @@ export function generateButtons() {
       action: function (cmd) {
         const btn = this;
         const map = getMap();
-        cmd = typeof cmd === "string" ? cmd : "toggle";
-        const enabled = toggleLayer({
-          id: "map_main",
-          idLayer: "terrain_sky",
-          elButton: btn.elButton,
-          action: cmd,
-        });
+        let classop = "toggle";
+
+        switch (cmd) {
+          case "hide":
+            classop = "remove";
+            break;
+          case "show":
+            classop = "add";
+            break;
+          default:
+            classop = "toggle";
+        }
+        btn.elButton.classList[classop]("active");
+        const enabled = btn.elButton.classList.contains("active");
         const curPitch = map.getPitch();
         const storyPlaying = isStoryPlaying();
         if (!storyPlaying) {
           map.flyTo({ pitch: enabled ? (curPitch > 0 ? curPitch : 60) : 0 });
         }
+
+        map.setTerrain(
+          enabled ? { source: "mapbox_dem", exaggeration: 1 } : null
+        );
+
         return enabled;
       },
     }),
@@ -118,16 +131,27 @@ export function generateButtons() {
         const enabled = toggleLayer({
           id: "map_main",
           idLayer: "mapbox_satellite",
-          elButton: btn.elButton,
+          button: btn,
           action: cmd,
         });
         return enabled;
       },
     }),
     new Button({
+      key: "btn_globe",
+      classesIcon: ["fa", "fa-globe"],
+      action: function (cmd) {
+        const choice = ["toggle", "enable", "disable"];
+        setMapProjection({
+          globe: choice.includes(cmd) ? cmd : "toggle",
+        });
+      },
+    }),
+    new Button({
       key: "btn_overlap_spotlight",
       classesIcon: ["fa", "fa-bullseye"],
       action: toggleSpotlight,
+      disabled: isNotBlink,
     }),
     new Button({
       key: "btn_map_composer",
@@ -185,10 +209,18 @@ function toggleFullScreen() {
   }
 }
 
-function toggleTheme() {
-  const elIcon = this.elButton.querySelector(".fa");
+async function toggleTheme() {
+  const ctrls = this;
+  if (ctrls._theme_loading) {
+    shake(ctrls.elButton);
+    return;
+  }
+  ctrls._theme_loading = true;
+  const elIcon = ctrls.elButton.querySelector(".fa");
   elIcon.classList.toggle("fa-rotate-180");
-  mx.theme.next({ sound: true, save: true, save_url: true });
+  const done = await theme.next({ sound: true, save: true, save_url: true });
+  ctrls._theme_loading = false;
+  return done;
 }
 
 /**
@@ -196,7 +228,7 @@ function toggleTheme() {
  * TODO: This is quite messy : simplify, generalize
  * @param {Object} opt options
  * @param {String} opt.idLayer Layer id to toggle
- * @param {Element} opt.elButton Button element to add 'active' class
+ * @param {Button} opt.button Button to add 'active' class
  * @param {String} opt.action hide, show, toggle
  * @return {String} Toggled
  */
@@ -207,7 +239,7 @@ function toggleLayer(opt) {
   opt = Object.assign({}, def, opt);
   const altLayers = [];
   const map = getMap();
-  const btn = opt.elButton;
+  const btn = opt.button;
   const layer = map.getLayer(opt.idLayer);
   const isAerial = opt.idLayer === "mapbox_satellite"; // hide also shades...
   const isTerrain = opt.idLayer === "terrain_sky"; // hide shade + show terrain...
@@ -217,7 +249,8 @@ function toggleLayer(opt) {
   const reqToggle = opt.action === "toggle";
   const toShow = reqToggle ? !isVisible : reqShow || !reqHide;
 
-  if (isAerial || isTerrain) {
+  //if (isAerial || isTerrain) {
+  if (isAerial) {
     /**
      * Special case : aerial and terrain mode should not have
      * hillshading or bathymetry.
@@ -226,7 +259,14 @@ function toggleLayer(opt) {
     altLayers.push(...getLayerNamesByPrefix({ prefix: "bathymetry" }));
   }
 
-  map.setLayoutProperty(opt.idLayer, "visibility", toShow ? "visible" : "none");
+  //if (isAerial || isTerrain) { // sky layer Deprecated since 2.9
+  if (isAerial) {
+    map.setLayoutProperty(
+      opt.idLayer,
+      "visibility",
+      toShow ? "visible" : "none"
+    );
+  }
 
   for (let id of altLayers) {
     map.setLayoutProperty(id, "visibility", toShow ? "none" : "visible");
@@ -235,7 +275,11 @@ function toggleLayer(opt) {
     map.setTerrain(toShow ? { source: "mapbox_dem", exaggeration: 1 } : null);
   }
   if (btn) {
-    btn.classList[toShow ? "add" : "remove"]("active");
+    if (toShow) {
+      btn.enable();
+    } else {
+      btn.disable();
+    }
   }
   return toShow;
 }

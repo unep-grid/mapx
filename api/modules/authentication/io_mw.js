@@ -20,20 +20,25 @@ export async function ioMwAuthenticate(socket, next) {
      * Validate user
      */
     const userData = await validateUser(idUser, key);
-
     /**
      * Handle validation
      */
-    socket._mx_user_authenticated = tokenData.isValid && userData.isValid;
+    const userAuthenticated = tokenData.isValid && userData.isValid;
 
-    if (socket._mx_user_authenticated) {
-      socket._mx_user_roles = await getUserRoles(idUser, idProject);
-    } else {
-      socket._mx_user_roles = {};
-    }
+    const roles = userAuthenticated
+      ? await getUserRoles(idUser, idProject)
+      : {};
 
-    socket._id_user = idUser;
-    socket._id_project = idProject;
+
+    /**
+     * Store session data
+     */
+    socket.session = {};
+    socket.session.user_authenticated = userAuthenticated;
+    socket.session.user_roles = roles;
+    socket.session.user_email = userData.email;
+    socket.session.user_id = idUser;
+    socket.session.project_id = idProject;
 
     next();
   } catch (e) {

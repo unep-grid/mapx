@@ -21,13 +21,15 @@ if (!colors) {
   /**
    * Auto
    */
-  initMatchMedia(theme);
+  initMatchMedia(theme).catch((e) => {
+    console.warn(e);
+  });
 }
 
 /*
  * Init match media query + listener
  */
-function initMatchMedia(theme) {
+async function initMatchMedia(theme) {
   try {
     if (idTheme !== "auto") {
       return;
@@ -43,13 +45,13 @@ function initMatchMedia(theme) {
     const wMlight = window.matchMedia("(prefers-color-scheme: light)");
 
     if (wMdark.matches) {
-      theme.set("classic_dark");
+      await theme.set("classic_dark");
     }
-    wMdark.addEventListener("change", (e) => {
-      return e.matches && theme.set("classic_dark");
+    wMdark.addEventListener("change", async (e) => {
+      return e.matches && (await theme.set("classic_dark"));
     });
-    wMlight.addEventListener("change", (e) => {
-      return e.matches && theme.set("classic_light");
+    wMlight.addEventListener("change", async (e) => {
+      return e.matches && (await theme.set("classic_light"));
     });
   } catch (e) {
     console.warn(e);

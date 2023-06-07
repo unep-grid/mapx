@@ -3,10 +3,17 @@ import { ViewsFilter } from "./views_filter/index.js";
 import { ViewBase } from "./views_builder/view_base.js";
 import { getArrayDistinct } from "./array_stat/index.js";
 import { settings } from "./settings";
-import { isView, isArray, isViewOpen, isObject } from "./is_test_mapx";
+import {
+  isTrue,
+  isView,
+  isArray,
+  isViewOpen,
+  isObject,
+} from "./is_test_mapx";
 import { path, itemFlashSave } from "./mx_helper_misc.js";
 import { getQueryParameterInit } from "./url_utils";
 import { getDictItem, updateLanguageElements } from "./language";
+import { updateViewsBadges } from "./mx_helper_map_view_badges.js";
 import { setViewBadges } from "./mx_helper_map_view_badges.js";
 import { el } from "./el/src/index.js";
 import {
@@ -185,6 +192,7 @@ export async function viewsListAddSingle(view, options) {
     });
   } else {
     await mData.viewsList.addItem(options);
+    await updateViewsBadges({ views: [view] });
     mData.viewsFilter.update();
   }
 
@@ -239,7 +247,7 @@ export async function viewsListRenderNew(o) {
   const views = o.views;
   const hasState = o.state && isArray(o.state) && o.state.length > 0;
   const state = hasState ? o.state : viewsToNestedListState(views);
-  const noViewsMode = getQueryParameterInit("noViews")[0] === "true";
+  const noViewsMode = isTrue(getQueryParameterInit("noViews")[0]);
 
   if (mData.viewsFilter instanceof ViewsFilter) {
     await mData.viewsFilter.destroy();
@@ -345,7 +353,7 @@ export async function viewsListRenderNew(o) {
     }
 
     if (isItem) {
-      return el.querySelector("label");
+      return el.querySelector(".mx-view-tgl-content");
     }
     return el;
   }
@@ -395,12 +403,12 @@ export async function viewsListRenderNew(o) {
        * No given element, assume it's a view
        */
       const view = data.view || mData.views.find((v) => v.id === data.id);
-      const missing = !isView(view);
+      const invalid = !isView(view);
 
       /**
        * View requested but not vailable)
        */
-      if (missing) {
+      if (invalid) {
         li.log(`View ${data.id} unavailable`);
         li.removeItemById(data.id);
         return;
@@ -458,7 +466,7 @@ export function setViewsListEmpty(enable) {
 }
 
 function getEmptyLabel() {
-  const noViewForced = getQueryParameterInit("noViews")[0] === "true";
+  const noViewForced = isTrue(getQueryParameterInit("noViews")[0]);
   const noViewKey = noViewForced ? "noView" : "noViewOrig";
   let elTitle;
   const elItem = el(

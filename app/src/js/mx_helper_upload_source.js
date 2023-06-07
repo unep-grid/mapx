@@ -1,17 +1,11 @@
 import { el, elSpanTranslate } from "./el_mapx";
-import { modal } from "./mx_helper_modal.js";
-import { getDictItem, updateLanguageElements } from "./language";
-import { getApiUrl } from "./api_routes";
+import { modalDialog, modalPrompt } from "./mx_helper_modal.js";
+import { elSpanTranslate as tt } from "./el_mapx";
+import { getApiRoute } from "./api_routes";
 import { isString } from "./is_test";
-import {
-  handleRequestMessage,
-  sendData,
-  getSizeOf,
-  formatByteSize,
-  path,
-  parseTemplate,
-  makeId,
-} from "./mx_helper_misc.js";
+import { ws, nc, data } from "./mx.js";
+import { getDictItem } from "./language";
+import { getSizeOf, formatByteSize, path, makeId } from "./mx_helper_misc.js";
 import { settings } from "./settings";
 
 export function triggerUploadForm(opt) {
@@ -23,7 +17,7 @@ export function triggerUploadForm(opt) {
   const elEmail = elForm.querySelector("#txtEmailSourceUpload");
   const elButton = document.getElementById("btnSourceUpload");
   const elEpsgCode = elForm.querySelector("#epsgTextInput");
-
+  const elModal = document.getElementById("modalSourceUpload");
   /*
    * Create fake input
    */
@@ -47,7 +41,7 @@ export function triggerUploadForm(opt) {
     elTitle.setAttribute("disabled", true);
     elButton.setAttribute("disabled", true);
     elEpsgCode.setAttribute("disabled", true);
-
+    elModal.close();
     /**
      * Get values
      */
@@ -64,108 +58,38 @@ export function triggerUploadForm(opt) {
   }
 }
 
-export function uploadGeoJSONModal(idView) {
-  mx.data.geojson.getItem(idView).then(function (item) {
+export async function uploadGeoJSONModal(idView) {
+  try {
+    const item = await data.geojson.getItem(idView);
     const geojson = path(item, "view.data.source.data");
-    const title = path(item, "view.data.title.en");
-    let hasIssue = false;
-    if (!title) {
-      title = idView;
-    }
+
     if (!geojson) {
       return;
     }
+    const language = settings.language;
 
-    const elBtnUpload = el("buton", {
-      class: "btn btn-default",
-      on: ["click", upload],
-      dataset: {
-        lang_key: "btn_upload",
+    const title = await modalPrompt({
+      title: tt("upl_title"),
+      label: tt("upl_title_layer_name", { data: { language } }),
+      confirm: tt("upl_upload_btn"),
+      inputOptions: {
+        type: "text",
+        value: path(item, "view.data.title.en", idView),
+        placeholder: await getDictItem("upl_name_placeholder"),
       },
     });
 
-    const elInput = el("input", {
-      class: "form-control",
-      id: "txtInputSourceTitle",
-      type: "text",
-      placeholder: "Source title",
-      value: title,
-      on: ["input", validateTitle],
-    });
-
-    const elWarning = el("span");
-    const elProgress = el("div");
-
-    const elLabel = el("label", {
-      dataset: {
-        lang_key: "src_upload_add",
-      },
-      for: "txtInputSourceTitle",
-    });
-
-    const elFormGroup = el(
-      "div",
-      {
-        class: "form-group",
-      },
-      elLabel,
-      elInput,
-      elWarning,
-      elProgress
-    );
-
-    const elFormUpload = el("div", elFormGroup);
-
-    const elModal = modal({
-      title: el("div", {
-        dataset: {
-          lang_key: "src_upload_add",
-        },
-      }),
-      content: elFormUpload,
-      buttons: [elBtnUpload],
-      addBackground: true,
-    });
-
-    updateLanguageElements({
-      el: elModal,
-    });
-
-    function upload() {
-      if (hasIssue) {
-        return;
-      }
-      elBtnUpload.setAttribute("disabled", true);
-      elBtnUpload.remove();
-      uploadSource({
-        title: elInput.value || title || idView,
-        geojson: geojson,
-        selectorProgressContainer: elProgress,
-      });
+    if (!title) {
+      return;
     }
 
-    function validateTitle() {
-      const title = elInput.value.trim();
-      const v = settings.validation.input.nchar;
-      hasIssue = false;
-      if (title.length < v.sourceTitle.min) {
-        hasIssue = true;
-        elWarning.innerText = "Title too short";
-      }
-      if (title.length > v.sourceTitle.max) {
-        hasIssue = true;
-        elWarning.innerText = "Title too long";
-      }
-      if (hasIssue) {
-        elFormGroup.classList.add("has-error");
-        elBtnUpload.setAttribute("disabled", true);
-      } else {
-        elBtnUpload.removeAttribute("disabled");
-        elFormGroup.classList.remove("has-error");
-        elWarning.innerText = "";
-      }
-    }
-  });
+    return uploadSource({
+      title: title,
+      geojson: geojson,
+    });
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 /**
@@ -186,20 +110,22 @@ export async function isUploadFileSizeValid(file, opt) {
   }
 
   const size = await getSizeOf(file, false);
-
   const sizeOk = size <= sizeMax;
-  if (!sizeOk) {
-    if (opt.showModal) {
-      const elMessage = el("span");
-      const msg = await getDictItem("api_upload_file_max_size_exceeded");
-      const sizeHuman = formatByteSize(sizeMax);
-      elMessage.innerText = parseTemplate(msg, { size: sizeHuman });
-      const modal = modal({
-        title: elSpanTranslate("api_upload_file_max_size_exceeded_title"),
-        id: "modal_max_size_exceeded",
-        content: elMessage,
-      });
-    }
+
+  if (sizeOk) {
+    return true;
+  }
+
+  if (opt.showModal) {
+    const sizeHuman = formatByteSize(sizeMax);
+    await modalDialog({
+      title: elSpanTranslate("api_upload_file_max_size_exceeded_title"),
+      id: "modal_max_size_exceeded",
+      content: tt("api_upload_file_max_size_exceeded", {
+        tooltip: false,
+        data: { size: sizeHuman },
+      }),
+    });
   }
   return sizeOk;
 }
@@ -219,7 +145,6 @@ export async function isUploadFileSizeValid(file, opt) {
  */
 export async function uploadSource(o) {
   const isSizeValid = await isUploadFileSizeValid(o.file || o.geojson);
-  let uploadDone = false;
 
   /*
    * Server will validate token of the user,
@@ -232,10 +157,9 @@ export async function uploadSource(o) {
     return;
   }
 
-  /**
-   ** rebuilding formdata, as append seems to add value in UI...
-   **/
-  const host = getApiUrl("uploadVector");
+  /*
+   * rebuilding formdata, as append seems to add value in UI...
+   */
 
   if (o.geojson) {
     o.geojson = isString(o.geojson) ? o.geojson : JSON.stringify(o.geojson);
@@ -250,165 +174,48 @@ export async function uploadSource(o) {
     });
   }
 
-  /*
-   * create upload form
-   */
-  const form = new FormData();
-  form.append("title", o.title);
-  form.append("vector", o.file || o.geojson);
-  form.append("token", o.token || settings.user.token);
-  form.append("idUser", o.idUser || settings.user.id);
-  form.append("email", o.email || settings.user.email);
-  form.append("project", o.idProject || settings.project.id);
-  form.append("sourceSrs", o.sourceSrs || "");
+  nc.panel.open();
+  const route = getApiRoute("uploadSource");
+  await uploader(o.file, route, { title: o.title });
+}
 
-  /**
-   * Create ui
-   */
-  const elOutput =
-    o.selectorProgressContainer instanceof Node
-      ? o.selectorProgressContainer
-      : document.querySelector(o.selectorProgressContainer);
+async function uploader(file, route, config) {
+  const data = await file.arrayBuffer();
 
-  /* log messages */
-  let elProgressBar, elProgressMessage;
+  //const x = await new Blob([a, b]).arrayBuffer();
 
-  const elProgressContainer = el(
-    "div",
-    /**
-     * Progress bar
-     */
-    el("label", {
-      dataset: { lang_key: "api_progress_title" },
-    }),
-    el(
-      "div",
+  let start, end;
+  const idRequest = makeId(10);
+  const n = data.byteLength;
+  const sChunk = 1e6;
+  const nChunk = Math.ceil(n / sChunk);
+  let id = 0;
+
+  for (let i = 0; i < nChunk; i++) {
+    start = i * sChunk;
+    end = (i + 1) * sChunk;
+
+    const message = Object.assign(
+      {},
       {
-        class: "mx-inline-progress-container",
+        idRequest: idRequest,
+        id: id++,
+        from: start,
+        to: end,
+        on: n,
+        last: i === nChunk - 1,
+        first: i === 0,
+        data: data.slice(start, end),
+        title: config.title,
+        canceled: false,
+        filename: file.name,
+        mimetype: file.type,
+        sourceSrs: 4326,
+        language: settings.language,
       },
-      (elProgressBar = el("div", {
-        class: "mx-inline-progress-bar",
-      }))
-    ),
-    /**
-     * Message box
-     */
-    el("label", { dataset: { lang_key: "api_log_title" } }),
-    el(
-      "div",
-      {
-        class: ["form-control", "mx-logs"],
-      },
-      (elProgressMessage = el("ul"))
-    )
-  );
+      config
+    );
 
-  elOutput.appendChild(elProgressContainer);
-  updateTranslation();
-
-  sendData({
-    maxWait: 1e3 * 60 * 60,
-    url: host,
-    data: form,
-    onProgress: function (progress) {
-      cleanMsg(progress);
-    },
-    onMessage: function (data) {
-      cleanMsg(data);
-    },
-    onSuccess: function (data) {
-      cleanMsg(data);
-    },
-    onError: function (er) {
-      cleanMsg(er);
-    },
-  });
-
-  function updateTranslation() {
-    updateLanguageElements({ el: elProgressContainer });
-  }
-
-  function updateLayerList() {
-    Shiny.onInputChange("mx_client_update_source_list", {
-      date: new Date() * 1,
-    });
-  }
-
-  const messageStore = {};
-
-  function cleanMsg(msg) {
-    return handleRequestMessage(msg, messageStore, {
-      end: function () {
-        const li = el("li", {
-          dataset: {
-            lang_key: "api_upload_ready",
-          },
-          class: ["mx-log-item", "mx-log-green"],
-        });
-        elProgressMessage.appendChild(li);
-        updateLayerList();
-        updateTranslation();
-      },
-      error: function (msg) {
-        const li = el(
-          "li",
-          {
-            class: ["mx-log-item", "mx-log-red"],
-          },
-          msg
-        );
-        elProgressMessage.appendChild(li);
-      },
-      message: function (msg) {
-        const li = el(
-          "li",
-          {
-            class: ["mx-log-item", "mx-log-blue"],
-          },
-          msg
-        );
-        elProgressMessage.appendChild(li);
-      },
-      warning: function (msg) {
-        const li = el(
-          "li",
-          {
-            class: ["mx-log-item", "mx-log-orange"],
-          },
-          msg
-        );
-        elProgressMessage.appendChild(li);
-      },
-      progress: function (progress) {
-        elProgressBar.style.width = progress + "%";
-        if (progress >= 99.9 && !uploadDone) {
-          uploadDone = true;
-          const li = el(
-            "li",
-            {
-              class: ["mx-log-item", "mx-log-white"],
-              dataset: {
-                lang_key: "api_upload_done_wait_db",
-              },
-            },
-            msg
-          );
-          elProgressMessage.appendChild(li);
-          updateTranslation();
-        }
-      },
-      default: function (msg) {
-        if (msg && msg.length > 3) {
-          const li = el(
-            "li",
-            {
-              class: ["mx-log-item", "mx-log-gray"],
-            },
-            msg
-          );
-          elProgressMessage.appendChild(li);
-        }
-      },
-    });
+    ws.emit(route, message);
   }
 }

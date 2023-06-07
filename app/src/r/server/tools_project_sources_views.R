@@ -9,8 +9,7 @@ observe({
     isPublisher <- "publishers" %in% userRole$groups
     project <- reactData$project
     idUser <- .get(reactUser$data, c("id"))
-    isRoot <- idUser %in% .get(config, c("root_mode", "members"))
-
+    isRoot <- mxIsUserRoot(idUser)
 
     if (!isPublisher) {
       uiSourceEdit <- div()

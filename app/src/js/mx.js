@@ -12,10 +12,11 @@ import { HighlighterMapx } from "./features_highlight/highlighter_instance";
 import { WsToolsInstances } from "./ws_tools";
 import { Magnifier } from "./magnifier/index.js";
 import { theme } from "./init_theme";
+import { ProjectManager } from "./project/index.js";
+import { panel_tools } from "./panel_controls/instance.js";
 
 
 const templates = {
-  viewListLegend: require("../dot/view_list_legend_vt.dot.html"),
   viewListOptions: require("../dot/view_list_options.dot.html"),
   viewListControls: require("../dot/view_list_controls.dot.html"),
   viewListFilters: require("../dot/view_list_filters.dot.html"),
@@ -36,6 +37,7 @@ const listeners = new ListenerStore();
 const events = new EventSimple();
 const mg = new Magnifier();
 const hinthack = new HintHack();
+const project = new ProjectManager();
 const ws = new WsHandlerMapx();
 const nc = new NotifCenterMapx();
 const highlighter = new HighlighterMapx();
@@ -48,7 +50,9 @@ const extend = {
 };
 const info = {};
 export {
+  panel_tools,
   mapboxgl,
+  project,
   localforage,
   selectize,
   helpers,

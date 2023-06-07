@@ -25,14 +25,14 @@ config[["brand"]] <- list(
 # ⚠️  also defined in app/src/js/mx_settings_global.json
 config[["links"]] <- list(
   mainProjectPage = "https://mapx.org",
-  repositoryIssues = "https://github.com/unep-grid/map-x-mgl/issues",
-  repositoryWiki = "https://github.com/unep-grid/map-x-mgl/wiki",
-  repositoryWikiMapComposer = "https://github.com/unep-grid/map-x-mgl/wiki/Map-composer",
-  repositoryWikiDrawTool = "https://github.com/unep-grid/map-x-mgl/wiki/Draw-tool",
-  repositoryWikiSharingManager = "https://github.com/unep-grid/map-x-mgl/wiki/Sharing-Manager",
-  repositoryWikiAttributeTable = "https://github.com/unep-grid/map-x-mgl/wiki/Attribute-table",
-  repositoryWikiSearchToolUI = "https://github.com/unep-grid/map-x-mgl/wiki/Search-tool-UI",
-  repositoryWikiTableEditor = "https://github.com/unep-grid/map-x-mgl/wiki/Attribute-table-edition",
+  repositoryIssues = "https://github.com/unep-grid/mapx/issues",
+  repositoryWiki = "https://github.com/unep-grid/mapx/wiki",
+  repositoryWikiMapComposer = "https://github.com/unep-grid/mapx/wiki/Map-composer",
+  repositoryWikiDrawTool = "https://github.com/unep-grid/mapx/wiki/Draw-tool",
+  repositoryWikiSharingManager = "https://github.com/unep-grid/mapx/wiki/Sharing-Manager",
+  repositoryWikiAttributeTable = "https://github.com/unep-grid/mapx/wiki/Attribute-table",
+  repositoryWikiSearchToolUI = "https://github.com/unep-grid/mapx/wiki/Search-tool-UI",
+  repositoryWikiTableEditor = "https://github.com/unep-grid/mapx/wiki/Attribute-table-edition",
   appKnowlegdeBase = "https://www.mapx.org/knowledge-base/"
 )
 
@@ -91,23 +91,23 @@ config[["projections"]] <- list(
   default = "mercator",
   ids = c(
     "globe",
-    "albers",
-    "equalEarth",
-    "mercator",
-    "lambertConformalConic",
-    "winkelTripel",
-    "naturalEarth",
-    "equirectangular"
+    "mercator"
+    #"albers",
+    #"equalEarth",
+    #"lambertConformalConic",
+    #"winkelTripel",
+    #"naturalEarth",
+    #"equirectangular"
   ),
   names = c(
     "Globe",
-    "Albers",
-    "Equal Earth",
-    "Mercator",
-    "Lambert Conformal Conic",
-    "Winkel Tripel",
-    "Natural Earth",
-    "Equirectangular"
+    "Mercator"
+    #"Albers",
+    #"Equal Earth",
+    #"Lambert Conformal Conic",
+    #"Winkel Tripel",
+    #"Natural Earth",
+    #"Equirectangular"
   )
 )
 
@@ -143,7 +143,7 @@ config[["api"]] <- list(
   host = "localhost",
   host_public = "locahost",
   protocol = "http:",
-  upload_size_max = 200 * 1024^2, # 100MiB
+  upload_size_max = 200 * 1024^2, # 200MiB
   routes = c(routes_ws, routes_express)
 )
 
@@ -389,6 +389,16 @@ config[["root_mode"]] <- list(
 )
 
 #
+# Dev members
+#
+config[["dev"]] <- list(
+  #
+  # Members of the root group
+  #
+  members = c(1)
+)
+
+#
 # countries configuration
 #
 config[["countries"]] <- list()
@@ -439,6 +449,14 @@ config[["views"]] <- list()
 config[[c("views", "type")]] <- list(
   "vt", # vector tiles
   "rt", # raster tiles
+  "sm" # story map
+)
+#
+# View type dev 
+#
+config[[c("views", "type_dev")]] <- list(
+  "vt", # vector tiles
+  "rt", # raster tiles
   "sm", # story map
   "cc" # custom code
 )
@@ -447,80 +465,9 @@ config[[c("views", "type")]] <- list(
 # Data configuration
 #
 config[["data"]] <- list()
-
 #
 # File format meta
-#
-# https://en.wikipedia.org/wiki/GIS_file_formats
-# http://www.w3schools.com/tags/att_input_accept.asp
-# ⚠️  Redefined in src/js/settings/index.js:
-# To be removed when upload/download fully migrated
-config[[c("data", "format")]] <- list(
-  list(
-    name = "ESRI Shapefile",
-    type = "vector",
-    driver = "ESRI Shapefile",
-    fileExt = c(".shp", ".shx", ".dbf", ".prj"),
-    multiple = TRUE
-  ),
-  list(
-    name = "GeoJSON",
-    type = "vector",
-    fileExt = c(".geojson", ".json"),
-    driver = "GeoJSON",
-    multiple = FALSE
-  ),
-  list(
-    name = "GML",
-    driver = "GML",
-    type = "vector",
-    fileExt = c(".kml"),
-    multiple = FALSE
-  ),
-  list(
-    name = "GPX",
-    driver = "GPX",
-    type = "vector",
-    fileExt = c(".gpx"),
-    multiple = FALSE
-  ),
-  list(
-    name = "GPKG",
-    driver = "GPKG",
-    type = "vector",
-    fileExt = c(".gpkg"),
-    multiple = FALSE
-  ),
-  list(
-    name = "KML",
-    driver = "KML",
-    type = "vector",
-    fileExt = c(".kml"),
-    multiple = FALSE
-  ),
-  list(
-    name = "SQLite",
-    driver = "SQLite",
-    type = "vector",
-    fileExt = c(".sqlite"),
-    multiple = FALSE
-  ),
-  list(
-    name = "DXF",
-    driver = "DXF",
-    type = "vector",
-    fileExt = c(".dxf"),
-    multiple = FALSE
-  ),
-  list(
-    name = "CSV",
-    driver = "CSV",
-    type = "vector",
-    fileExt = c(".csv"),
-    multiple = FALSE
-  )
-)
-
+# ⚠️  moved to  api/modules/file_formats/
 
 #
 # Email configuration

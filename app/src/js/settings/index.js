@@ -12,6 +12,16 @@ const settings = {
   highlightedCountries: [],
   initClosedPanels: false,
   project: {},
+  projection: {
+    name: "mercator",
+    center: [0, 0],
+    parallels: [0, 0],
+  },
+  // special values map
+  valuesMap: {
+    // Used in view text filter, i.e viewSetTextFilter
+    null: "$NULL",
+  },
   logs: {
     disabled: false, // set in cookies as preferences ?
     levels: ["ERROR", "WARNING", "MESSAGE", "LOG", "USER_ACTION"],
@@ -38,8 +48,7 @@ const settings = {
     protocol: "http://",
   },
   cdn: {
-    template:
-      "https://cdn.jsdelivr.net/gh/unep-grid/map-x-mgl@{{version}}/{{path}}",
+    template: "https://cdn.jsdelivr.net/gh/unep-grid/mapx@{{version}}/{{path}}",
   },
   tiles: {
     vector: {
@@ -47,16 +56,17 @@ const settings = {
       usePostgisTiles: null,
     },
   },
+  // overwritten by settings-global.R
   api: {
     host: "api",
     port: "3333",
     host_public: "api.mapx.org",
     port_public: "443",
     protocol: "https:",
-    upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
+    upload_size_max: Math.pow(1024, 2) * 200, //100 MiB
     routes: routes,
   },
-  // see https://github.com/unep-grid/map-x-mgl/issues/472
+  // see https://github.com/unep-grid/mapx/issues/472
   paramKeysPermanent: [
     "project",
     "language",
@@ -68,14 +78,19 @@ const settings = {
   ],
   // ⚠️ also defined in app/settings/settings-global.R
   links: {
-    repositoryIssues: "https://github.com/unep-grid/map-x-mgl/issues",
+    mapboxSprites: "mapbox://sprites/mapbox/bright-v8",
+    mapboxGlyphs: "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
+    repositoryIssues: "https://github.com/unep-grid/mapx/issues",
     appKnowlegdeBase: "https://www.mapx.org/knowledge-base/",
+    wiki: "https://github.com/unep-grid/mapx/wiki/",
+    wikiRaw: "https://raw.githubusercontent.com/wiki/unep-grid/mapx/",
   },
   mode: {
     static: false,
     app: false,
   },
   paths: {
+    static: "/static.html",
     sprites: "sprites/sprite",
     fontstack: "fontstack/{fontstack}/{range}.pbf",
     svg: "sprites/svg/",

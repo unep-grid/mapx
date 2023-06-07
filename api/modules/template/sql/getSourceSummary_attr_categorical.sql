@@ -1,5 +1,5 @@
 WITH
-attr_null_value as (
+null_value as (
   -- Allowed text value to express "null"/"missing"/"not set" value
   SELECT 
   CASE 
@@ -9,47 +9,71 @@ attr_null_value as (
     '{{nullValue}}'
    END as val
 ),
-attr_table_raw as (
+attr_as_text AS (
   SELECT
-  "{{idAttr}}" as value,
-  count(*) as count FROM
-  {{idSource}} s, attr_null_value n
+  "{{idAttr}}"::TEXT as value
+  FROM
+  {{idSource}}
+),
+attr_without_null as (
+  SELECT
+  value
+  FROM
+  attr_as_text s, null_value n
   WHERE NOT
   (
-    s."{{idAttr}}" IS NULL OR
-    s."{{idAttr}}" = '' OR
-    s."{{idAttr}}" ~ '^\s+$' OR
+    s.value IS NULL OR
+    s.value = '' OR
+    s.value ~ '^\s+$' OR
     CASE WHEN n.val IS NULL 
       --- NOT false = true 
       THEN false
       -- convert to float the nullValue
       ELSE
-        s."{{idAttr}}" = n.val 
+        s.value = n.val 
     END
   )
-  GROUP BY
-  "{{idAttr}}"
-  ORDER BY count desc
 ),
-attr_table as (
+attr_freq_table as (
+  SELECT
+  value,
+  count(*) as count FROM
+  attr_without_null
+  GROUP BY
+  value
+  ORDER BY count desc, value asc
+),
+attr_freq_table_limited as (
   SELECT * 
-  FROM attr_table_raw
+  FROM attr_freq_table
   LIMIT {{maxRowsCount}}
 ),
-attr_table_raw_count as (
-  SELECT count(*) from attr_table_raw
-),
-attr_table_count as (
-  SELECT count(*) from attr_table
-),
-attr_table_json as (
+attr_freq_table_limited_json as (
   SELECT json_agg(
     json_build_object(
       'value', at.value, 
       'count', at.count
     ) 
   ) as json
-  FROM attr_table at
+  FROM attr_freq_table_limited at
+),
+count_full as (
+  SELECT count(*) from  {{idSource}}
+),
+count_no_null as (
+  SELECT count(*) from attr_without_null
+),
+count_null as (
+  SELECT (cf.count - cnn.count) AS "count" 
+  FROM
+  count_full cf,
+  count_no_null cnn
+),
+count_freq_table as (
+  SELECT count(*) FROM attr_freq_table
+),
+count_freq_table_limited as (
+  SELECT count(*) FROM attr_freq_table_limited
 )
 
 SELECT json_build_object(
@@ -57,13 +81,19 @@ SELECT json_build_object(
     'type', 'categorical',
     'attribute', '{{idAttr}}',
     'nullValue', n.val,
-    'table', to_json(atj.json),
-    'table_row_count_all', to_json(tcr.count), 
-    'table_row_count', to_json(tc.count)
+    'nullCount', to_json(cn.count),
+    'row_count', to_json(cf.count),
+    'table', coalesce(to_json(atj.json),'[]'::json),
+    'table_row_count_all', to_json(cft.count), 
+    'table_row_count', to_json(cftl.count)
   )
 ) as res
 FROM
-attr_table_json as atj, 
-attr_table_count as tc,
-attr_table_raw_count as tcr,
-attr_null_value n;
+null_value n,
+count_null cn,
+count_full cf,
+attr_freq_table_limited_json atj,
+count_freq_table cft,
+count_freq_table_limited cftl
+
+

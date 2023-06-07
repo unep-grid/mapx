@@ -1,19 +1,20 @@
-import {modalDialog} from './../mx_helper_modal.js';
-import {isPromise, isUrl} from './../is_test';
-import {elButtonFa} from '../el_mapx';
+import { modalDialog } from "./../mx_helper_modal.js";
+import { isPromise, isUrl } from "./../is_test";
+import { elButtonFa } from "../el_mapx";
+import { settings } from "../settings";
 
 const def = {
   url: null,
   txt: null,
   wiki: null,
-  content: ''
+  content: "",
 };
 
 function wikiUrl(id) {
-  return `https://github.com/unep-grid/map-x-mgl/wiki/${id}`;
+  return `${settings.links.wiki}${id}`;
 }
 function wikiUrlRaw(id) {
-  return `https://raw.githubusercontent.com/wiki/unep-grid/map-x-mgl/${id}.md`;
+  return `${settings.links.wikiRaw}${id}.md`;
 }
 
 export async function modalMarkdown(options) {
@@ -22,14 +23,14 @@ export async function modalMarkdown(options) {
   if (opt.wiki) {
     opt.url = wikiUrlRaw(opt.wiki);
     opt.buttons = [
-      elButtonFa('btn_open_wiki', {
-        icon: 'external-link',
+      elButtonFa("btn_open_wiki", {
+        icon: "external-link",
         action: () => {
-          window.open(wikiUrl(opt.wiki), '_blank');
-        }
-      })
+          window.open(wikiUrl(opt.wiki), "_blank");
+        },
+      }),
     ];
-    opt.minWidth = '800px';
+    opt.minWidth = "800px";
   }
 
   if (isUrl(opt.url)) {
@@ -46,9 +47,9 @@ export async function modalMarkdown(options) {
   }
 
   if (opt.txt) {
-    const showdown = await import('showdown');
+    const showdown = await import("showdown");
     const converter = new showdown.Converter();
-    converter.setFlavor('github');
+    converter.setFlavor("github");
     opt.content = converter.makeHtml(opt.txt);
   }
 

@@ -1,6 +1,7 @@
 import { diff, clone } from "jsondiffpatch";
 import { settings } from "./settings";
-import { mergeDeep } from "./mx_helper_utils_json";
+import { mergeDeep } from "./mx_helper_misc.js";
+
 /**
  * Update settings
  * @param {Options} o Option with key from settings. Overwrite settings values.
@@ -44,5 +45,4 @@ export function updateSettings(o) {
       },
     });
   }
-
 }

@@ -1,8 +1,8 @@
 import { getLanguageCurrent } from "./language";
 import { isEmpty } from "./is_test_mapx";
-import { path } from "./mx_helper_misc.js";
+import { clone, path } from "./mx_helper_misc.js";
 import { getViewJson } from "./map_helpers/index.js";
-import { getViewMapboxStyle, mapboxToSld } from "./style_vt/index.js";
+import { getViewMapboxStyle, getViewSldStyle } from "./style_vt/index.js";
 import { settings } from "./settings";
 
 /**
@@ -42,7 +42,7 @@ export async function jedInit(o) {
     window.jed = jed = {
       editors: {},
       helper: {},
-      aceEditors: [],
+      monacoEditors: [],
       extend: {
         position: {},
         texteditor: {},
@@ -85,7 +85,6 @@ export async function jedInit(o) {
     draftDbTimeStamp = opt_final.draftAutoSaveDbTimestamp;
   }
 
-  JSONEditor.plugins.ace.theme = "github";
   JSONEditor.plugins.selectize.enable = !opt_final.disableSelectize;
 
   /**
@@ -504,13 +503,23 @@ async function jedHooksApply(value, hooks) {
     for (const hook of hooks) {
       switch (hook?.id) {
         case "view_style_add_sld":
+          /*
+           * NOTE: should match ws_handler job 'job_style_convert'
+           * - Clone view for json ( clone + subset + strip local ref and circular ref )
+           * - Overwrite cloned view style
+           * - Get a clean mapbox style
+           * - Get a sld compatible style
+           * - Convert to sld
+           * - Keep a reference  to _style_sld and _style_mapbox
+           */
           const idView = hook.idView;
           const view = getViewJson(idView, { asString: false });
-          view.data.style = Object.assign({}, view.data.style, value);
-          const styleMapbox = await getViewMapboxStyle(view);
-          const styleSld = await mapboxToSld(styleMapbox, { fixFilters: true });
-          value._style_sld = styleSld;
-          value._style_mapbox = JSON.stringify(styleMapbox);
+          /* NOTE: value.data becomes view's style. Clone to avoid altering editor value */
+          view.data.style = Object.assign({}, clone(value.data));
+          value._style_mapbox = await getViewMapboxStyle(view);
+          /* if custom style, null */
+          value._style_sld = await getViewSldStyle(view);
+
         default:
           null;
       }

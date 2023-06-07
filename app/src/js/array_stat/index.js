@@ -1,4 +1,6 @@
-export {getArrayStat, getArrayDiff, getArrayIntersect, getArrayDistinct};
+import { isNumeric, isArray, isEmpty } from "../is_test";
+
+export { getArrayStat, getArrayDiff, getArrayIntersect, getArrayDistinct };
 
 /**
  * Clone an array
@@ -61,21 +63,21 @@ function getArrayStat(o) {
   }
 
   if (
-    o.stat === 'quantile' &&
+    o.stat === "quantile" &&
     o.percentile &&
     o.percentile.constructor === Array
   ) {
-    o.stat = 'quantiles';
+    o.stat = "quantiles";
   }
   const arr = getArrayClone(o.arr);
-  const stat = o.stat ? o.stat : 'max';
+  const stat = o.stat ? o.stat : "max";
   const len_o = arr.length;
   const len = len_o;
   const opt = {
-    sortNatural: function() {
+    sortNatural: function () {
       return arr.sort(naturalSort);
     },
-    max: function() {
+    max: function () {
       const max = -Infinity;
       const v = 0;
       while (len--) {
@@ -86,7 +88,7 @@ function getArrayStat(o) {
       }
       return max;
     },
-    min: function() {
+    min: function () {
       const min = Infinity;
       while (len--) {
         const v = arr.pop();
@@ -96,29 +98,29 @@ function getArrayStat(o) {
       }
       return min;
     },
-    sum: function() {
+    sum: function () {
       const sum = 0;
       while (len--) {
         sum += arr.pop();
       }
       return sum;
     },
-    mean: function() {
+    mean: function () {
       const sum = getArrayStat({
-        stat: 'sum',
-        arr: arr
+        stat: "sum",
+        arr: arr,
       });
       return sum / len_o;
     },
-    median: function() {
+    median: function () {
       const median = getArrayStat({
-        stat: 'quantile',
+        stat: "quantile",
         arr: arr,
-        percentile: 50
+        percentile: 50,
       });
       return median;
     },
-    quantile: function() {
+    quantile: function () {
       let result;
       arr.sort(sortNumber);
       o.percentile = o.percentile ? o.percentile : 50;
@@ -132,37 +134,37 @@ function getArrayStat(o) {
       }
       return result;
     },
-    quantiles: function() {
+    quantiles: function () {
       const quantiles = {};
-      o.percentile.forEach(function(x) {
+      o.percentile.forEach(function (x) {
         const res = getArrayStat({
-          stat: 'quantile',
+          stat: "quantile",
           arr: arr,
-          percentile: x
+          percentile: x,
         });
         quantiles[x] = res;
       });
       return quantiles;
     },
-    distinct: function() {
+    distinct: function () {
       return getArrayDistinct(arr);
     },
-    diff: function() {},
-    frequency: function() {
+    diff: function () {},
+    frequency: function () {
       const areObjects =
-        arr[0] && typeof arr[0] === 'object' && arr[0].constructor === Object;
+        arr[0] && typeof arr[0] === "object" && arr[0].constructor === Object;
       let colNames = o.colNames;
       if (areObjects) {
         if (colNames.constructor !== Array) {
-          throw 'colnames must be array';
+          throw "colnames must be array";
         }
         if (colNames.length === 0) {
           colNames = Object.keys(arr[0]);
         }
       } else {
         colNames = getArrayStat({
-          stat: 'distinct',
-          arr: arr
+          stat: "distinct",
+          arr: arr,
         });
       }
       let val;
@@ -186,10 +188,10 @@ function getArrayStat(o) {
       }
       return table;
     },
-    sumBy: function() {
+    sumBy: function () {
       const colNames = o.colNames;
       if (colNames.constructor !== Array) {
-        throw 'colnames must be array';
+        throw "colnames must be array";
       }
       if (colNames.length === 0) {
         colNames = Object.keys(arr[1]);
@@ -205,7 +207,7 @@ function getArrayStat(o) {
         }
       }
       return table;
-    }
+    },
   };
 
   return opt[stat](o);
@@ -251,3 +253,4 @@ function getArrayIntersect(a, b) {
 function getArrayDistinct(a) {
   return Array.from(new Set(a));
 }
+

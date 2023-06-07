@@ -27,6 +27,8 @@ observe({
     projectData <- mxDbGetProjectData(project)
     mapPos <- projectData$map_position
     idTheme <- projectData$theme
+    reactData$mapPos <- mapPos
+
 
     # init map
     mglInit(list(

@@ -29,11 +29,17 @@ config[["pg"]][["poolMax"]] <- Sys.getenv("POSTGRES_POOL_MAX")
 config[["project"]][["default"]] <- Sys.getenv("MAPX_PROJECT_DEFAULT")
 
 usersRoot <- jsonlite::fromJSON(Sys.getenv("MAPX_ROOT_MODE_MEMBERS"))
+usersDev <- jsonlite::fromJSON(Sys.getenv("MAPX_DEV_MEMBERS"))
 usersCreateProject <- jsonlite::fromJSON(Sys.getenv("MAPX_PROJECT_CREATORS"))
 
 config[["project"]][["creation"]][["usersAllowed"]] <- usersCreateProject
 config[["root_mode"]][["members"]] <- usersRoot
+config[["dev"]][["members"]] <- usersDev
 config[["map"]][["token"]] <- Sys.getenv("MAPX_MAPBOX_TOKEN")
+
+config[["mode"]] <- Sys.getenv("MAPX_MODE")
+
+
 
 ## NOTE: see mx_helper_map_view_validation.js
 # config[["validation"]][["view"]][["rules"]] <- Sys.getenv("MAPX_VIEW_VALIDATION_RULES")

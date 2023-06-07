@@ -1,5 +1,115 @@
 [
   {
+    "id": "auto_style_start",
+    "en": "Auto style...",
+    "ru": "Авто стиль..."
+  },
+  {
+    "id": "auto_style_select_mode_label",
+    "en": "Select mode",
+    "ru": "Выберите режим"
+  },
+  {
+    "id": "auto_style_select_bins_label",
+    "en": "Select binning method",
+    "ru": "Выберите метод биннинга"
+  },
+  {
+    "id": "auto_style_bins_number_label",
+    "en": "Number of bins",
+    "ru": "Количество бункеров"
+  },
+  {
+    "id": "auto_style_bins_number_desc",
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "ru": "Количество бинов, используемых во время статистического анализа. Мин. 2, макс. 100"
+  },
+  {
+    "id": "auto_style_check_reverse_color_label",
+    "en": "Reverse color palette",
+    "ru": "Обратная цветовая палитра"
+  },
+  {
+    "id": "auto_style_check_reverse_color_desc",
+    "en": "Inverse colors order in palettes",
+    "ru": "Обратный порядок цветов в палитре"
+  },
+  {
+    "id": "auto_style_check_preserve_label_label",
+    "en": "Preserve current labels",
+    "ru": "Сохранить текущие ярлыки"
+  },
+  {
+    "id": "auto_style_check_preserve_label_desc",
+    "en": "Preserve labels already defined in current rules",
+    "ru": "Сохранить ярлыки, уже определенные в текущих правилах"
+  },
+  {
+    "id": "auto_style_button_update",
+    "en": "Update rules",
+    "ru": "Обновить правила"
+  },
+  {
+    "id": "auto_style_title_table_continuous",
+    "en": "Table. Method : {{method}}. Number of bins: {{bins}}",
+    "ru": "Стол. Метод: {{method}} . Количество бункеров: {{bins}}"
+  },
+  {
+    "id": "auto_style_title_table_categorical",
+    "en": "Table. Number of rows = {{count}}",
+    "ru": "Стол. Количество строк = {{count}}"
+  },
+  {
+    "id": "auto_style_color_label",
+    "en": "Color",
+    "ru": "Цвет"
+  },
+  {
+    "id": "auto_style_color_desc",
+    "en": "Choose color for all classes",
+    "ru": "Выберите цвет для всех классов"
+  },
+  {
+    "id": "auto_style_sizes_min_label",
+    "en": "Start size",
+    "ru": "Начальный размер"
+  },
+  {
+    "id": "auto_style_sizes_min_desc",
+    "en": "Size of the first item in the table",
+    "ru": "Размер первого элемента в таблице"
+  },
+  {
+    "id": "auto_style_sizes_max_label",
+    "en": "End size",
+    "ru": "Конечный размер"
+  },
+  {
+    "id": "auto_style_sizes_max_desc",
+    "en": "Size of the last item in the table",
+    "ru": "Размер последнего элемента в таблице"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "ru": "Непрозрачность"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "ru": "Установите альфа-компонент (непрозрачность) цвета, где 0 = полностью прозрачный и 1, полностью непрозрачный"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "ru": "Размер предметов"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "ru": "Установить размер для всех классов"
+  },
+  {
     "id": "btn_opt_code_integration",
     "en": "Code template / boilerplate / other format",
     "ru": "Шаблон кода/шаблон/другой формат"
@@ -23,6 +133,11 @@
     "id": "code_integration_template_mapbox_style",
     "en": "Mapbox style (full)",
     "ru": "Стиль Mapbox (полный)"
+  },
+  {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "ru": "Стиль Mapbox (только базовая карта, которую можно использовать в Studio)"
   },
   {
     "id": "code_integration_template_mapbox_layers",
@@ -1525,19 +1640,14 @@
     "ru": "Повторить"
   },
   {
-    "id": "edit_table_modal_value_invalid_title",
-    "en": "Invalid value",
-    "ru": "Неверное значение"
+    "id": "edit_table_modal_values_invalid_title",
+    "en": "Invalid values",
+    "ru": "Неверные значения"
   },
   {
-    "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
-    "ru": "Получено неверное значение. Убедитесь, что вы используете правильный тип: {{type}} .\n Это изменение не будет сохранено."
-  },
-  {
-    "id": "edit_table_modal_value_invalid_continue",
-    "en": "Ignore and continue",
-    "ru": "Игнорировать и продолжить"
+    "id": "edit_table_modal_values_invalid_ok",
+    "en": "Ok",
+    "ru": "Ok"
   },
   {
     "id": "btn_edit_add_column",
@@ -1566,8 +1676,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "ru": "Добавить новый столбец: имя"
+    "en": "Name of the column",
+    "ru": "Имя столбца"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1686,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "ru": "Имя нового столбца будет:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "ru": "Имя столбца будет:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1705,9 @@
     "ru": "Имя недоступно"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "ru": "Следующий"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "ru": "Выберите тип данных"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "ru": "Следующий"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1716,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "ru": "Добавьте новый столбец с именем<b> {{column_name}}</b> типа<b> {{column_type}}</b> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить, но при необходимости сработает инструмент «Удалить столбец»."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "ru": "Добавьте новый столбец с именем<code> {{column_name}}</code> типа<code> {{column_type}}</code> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить, но при необходимости сработает инструмент «Удалить столбец»."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1735,14 @@
     "ru": "Имя столбца"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "ru": "Следующий"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "ru": "Удалить столбец: подтвердить"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "ru": "Удалить столбец с именем<i> {{column_name}}</i> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить: данные могут быть потеряны."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "ru": "Удалить столбец с именем<code> {{column_name}}</code> ? Изменения будут внесены в базу данных и все интерактивные таблицы. Это нельзя отменить: данные могут быть потеряны."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1686,8 +1781,8 @@
   },
   {
     "id": "edit_table_modal_warning_text",
-    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
-    "ru": "<ul><li>Использование этого инструмента может привести к непоправимому изменению или даже удалению данных, как в случае с настольными редакторами электронных таблиц.</li><li> Мы не предлагаем услуги по восстановлению данных для источников данных.</li><li> Пока сеанс поддерживается, любую операцию с ячейками можно отменить/повторить с помощью сочетаний клавиш или специальных кнопок.</li><li> «Удалить столбец» удалит столбец и его данные без возможности отмены после последней панели подтверждения.</li><li> Перед любой модификацией можно получить резервную копию данных, загрузив источник данных или скопировав и вставив данные в редактор электронных таблиц.</li><li> Текущая платформа, ее разработчик или администраторы проекта снимают с себя всякую ответственность.<ul></ul></li></ul>"
+    "en": "<ul><li>Using this tool may pose a risk of permanently altering or deleting data, similar to desktop spreadsheet editors.</li><li>It is possible to undo or redo any changes made to cells during a session using keyboard shortcuts or dedicated buttons.</li><li>The &#39;Remove column&#39; action will permanently delete the column and its data, and cannot be undone after the final confirmation panel.</li><li>Invalid cells, indicated by a red color, will not be saved.</li><li>A backup system has not yet been implemented. To safeguard your data, you can use the download tool in the toolbox to export the entire layer or table as a precautionary measure.</li><li>There may be incremental backup at the database level, but not at the layer or table level.</li><li>The developers of the current platform and project administrators do not accept any responsibility for any potential losses or damages.</li></ul>",
+    "ru": "<ul><li>Использование этого инструмента может привести к необратимому изменению или удалению данных, как и в настольных редакторах электронных таблиц.</li><li> Можно отменить или повторить любые изменения, внесенные в ячейки во время сеанса, с помощью сочетаний клавиш или специальных кнопок.</li><li> Действие «Удалить столбец» безвозвратно удалит столбец и его данные, и его нельзя будет отменить после окончательной панели подтверждения.</li><li> Недопустимые ячейки, отмеченные красным цветом, не будут сохранены.</li><li> Система резервного копирования еще не реализована. Чтобы защитить свои данные, вы можете использовать инструмент загрузки на панели инструментов, чтобы экспортировать весь слой или таблицу в качестве меры предосторожности.</li><li> Инкрементное резервное копирование может выполняться на уровне базы данных, но не на уровне слоя или таблицы.</li><li> Разработчики текущей платформы и администраторы проекта не несут никакой ответственности за возможные убытки или ущерб.</li></ul>"
   },
   {
     "id": "edit_table_modal_warning_ok_no_more",
@@ -1726,7 +1821,7 @@
   },
   {
     "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "en": "Some column(s) contain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
     "ru": "Некоторые столбцы содержат недопустимые символы и не могут быть отредактированы:<ul> {{columns}}</ul>"
   },
   {
@@ -1795,6 +1890,156 @@
     "ru": "Эта таблица имеет {{count}} несохраненные изменения. Вы уверены, что хотите выйти и отменить эти изменения?"
   },
   {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "ru": "в использовании"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "ru": "сдержанный"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "ru": "не безопасно"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename column",
+    "ru": "Переименовать столбец"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "ru": "Выберите столбец, который вы хотите переименовать:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "ru": "Подтверждение"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "ru": "Вы уверены, что хотите переименовать столбец<code> {{column_name}}</code> к<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename column",
+    "ru": "Переименовать столбец"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename column",
+    "ru": "Переименовать столбец"
+  },
+  {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "ru": "Существующие ссылки в коде"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "ru": "<p>Переименование столбцов не допускается, поскольку на эту таблицу ссылаются в пользовательских представлениях кода, информационных панелях и/или пользовательских стилях. При необходимости рассмотрите возможность дублирования столбца.<br><br> Для получения более подробной информации нажмите кнопку «Помощь».<br><br> Вот список зависимых представлений:</p>"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "ru": "Отмена"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "ru": "Панель приборов"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "ru": "Пользовательский код"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "ru": "Пользовательский стиль"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "ru": "Исходный слой"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "ru": "Дублировать столбец"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "ru": "Дублировать столбец"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "ru": "Столбец для дублирования"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "ru": "Столбец для дублирования: подтвердить"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "ru": "Дублируйте столбец с именем<code> {{column_name}}</code> в новый столбец с именем<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "ru": "Дублировать столбец"
+  },
+  {
+    "id": "btn_stat_attribute",
+    "en": "Statistics",
+    "ru": "Статистика"
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "ru": "Атрибут для статистики"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "ru": "Выберите атрибут"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "ru": "Порядок столбцов изменен"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "ru": "Порядок столбцов изменен другим пользователем."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "ru": "хорошо"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "ru": "Установить порядок столбцов"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "ru": "Установить порядок столбцов"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ru": "Инструменты геометрии: выберите исходный слой"
@@ -1803,6 +2048,21 @@
     "id": "geom_tools_modal_select_label",
     "en": "Select source layer",
     "ru": "Выберите исходный слой"
+  },
+  {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "ru": "Импортировать как внешний вид"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "ru": "Импортировать внешний вид"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "ru": "Импортировать внешний вид? Это представление будет доступно как внешнее в настройках проекта."
   },
   {
     "id": "en",
@@ -2180,6 +2440,11 @@
     "ru": "Отмена "
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "ru": "Следующий..."
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "ru": "Продолжать"
@@ -2213,6 +2478,11 @@
     "id": "btn_close",
     "en": "Close",
     "ru": "Закрывать "
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "ru": "Дублировать..."
   },
   {
     "id": "btn_download",
@@ -2515,6 +2785,11 @@
     "ru": "Загрузка запрещена. Подробнее в метаданных."
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "ru": "Действие не разрешено: запрашивает права разработчика"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "ru": "Изменить это представление"
@@ -2538,51 +2813,6 @@
     "id": "btn_opt_edit_style",
     "en": "Set the style of this view",
     "ru": "Установите стиль этого вида "
-  },
-  {
-    "id": "schema_style_title_legend",
-    "en": "Legend title",
-    "ru": "Название легенды "
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval",
-    "ru": "Включить верхнюю границу в интервал "
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "ru": "Если этот флажок установлен, интервалы будут включать верхний предел. Если он не определен, последняя граница будет максимальным значением. Если стиль создается с использованием автоматического стиля, этот параметр должен быть отмечен"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order",
-    "ru": "Обратный порядок отображения слоев "
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "ru": "Если этот флажок установлен, стек слоев будет перевернут: верхнее правило будет рисовать слой внизу стопки. "
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label",
-    "ru": "Показать символ с меткой "
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?",
-    "ru": "При использовании символов с точечными данными должен ли MapX добавлять вокруг них надписи? "
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend",
-    "ru": "Не отображать отсутствующие значения на карте или в легенде"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
-    "ru": "Если этот флажок установлен, объекты с отсутствующим значением или значением, определенным как таковое, не будут отображаться в слое на карте или в легенде."
   },
   {
     "id": "btn_opt_meta",
@@ -2790,6 +3020,11 @@
     "ru": "Добавьте 3D-территорию"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "ru": "Использовать режим глобуса"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "ru": "Иммерсивный режим "
@@ -2816,48 +3051,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
-    "ru": "Выделите векторные особенности "
+    "en": "Spotlight vector features",
+    "ru": "Выделять векторные объекты"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
-    "ru": "Выделить конфигурацию инструмента "
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "ru": "Конфигурация инструмента Spotlight"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
-    "ru": "Выберите режим выделения "
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "ru": "Выберите режим прожектора"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "ru": "Выделите, где все функции пересекаются "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "ru": "В центре внимания, где все функции перекрываются"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "ru": "Выделите любую видимую функцию "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "ru": "Выделите любую видимую особенность"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "ru": "Выделите, где перекрываются две функции "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "ru": "В центре внимания, где две функции пересекаются"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "ru": "Выделите, где пересекаются три функции "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "ru": "В центре внимания, где три функции пересекаются"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "ru": "Выделите, где пересекаются четыре функции "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "ru": "В центре внимания, где пересекаются четыре функции"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "ru": "Выделите места пересечения пяти функций "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "ru": "В центре внимания, где пять функций пересекаются"
   },
   {
     "id": "label_check_instant_overlap",
@@ -2953,6 +3188,11 @@
     "id": "error_no_source",
     "en": "No source layer found",
     "ru": "Исходный слой не найден "
+  },
+  {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "ru": "Отсутствует тип просмотра"
   },
   {
     "id": "error_title_exists",
@@ -3465,24 +3705,14 @@
     "ru": "Добавить этого пользователя MapX напрямую "
   },
   {
-    "id": "schema_class",
-    "en": "Class",
-    "ru": "Учебный класс "
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "ru": "Метаданные "
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values",
-    "ru": "Отсутствующие значения "
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color",
-    "ru": "Цвет "
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description",
-    "ru": "Описание "
+    "id": "schema_method",
+    "en": "Method",
+    "ru": "Метод "
   },
   {
     "id": "schema_item",
@@ -3495,129 +3725,9 @@
     "ru": "Ключ "
   },
   {
-    "id": "schema_style_label",
-    "en": "Label",
-    "ru": "Этикетка "
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule",
-    "ru": "Последнее правило "
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data",
-    "ru": "Метаданные "
-  },
-  {
-    "id": "schema_method",
-    "en": "Method",
-    "ru": "Метод "
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency",
-    "ru": "Прозрачность"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule",
-    "ru": "Правило "
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules",
-    "ru": "Правила "
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size",
-    "ru": "Размер "
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings",
-    "ru": "Настройки масштабирования "
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max",
-    "ru": "Коэффициент размера при максимальном увеличении "
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min",
-    "ru": "Коэффициент размера при увеличении мин. "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent",
-    "ru": "Показатель интерполяции размера "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "ru": "Функция экспоненты интерполяции размера. Значение 1 дает линейную интерполяцию. "
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max",
-    "ru": "Максимальное увеличение "
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min",
-    "ru": "Масштаб мин. "
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "ru": "Símbolo"
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "ru": "Если больше 0, коэффициент размера для линий и точек при увеличении мин. "
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "ru": "Если больше 0, коэффициент размера для линий и точек при увеличении макс. "
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data",
-    "ru": "Минимальный масштаб для отображения данных "
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data",
-    "ru": "Максимальный масштаб для отображения данных "
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value",
-    "ru": "Ценить "
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From",
-    "ru": "Из"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To",
-    "ru": "К"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds",
-    "ru": "Игнорировать минимальную / максимальную статистику для нижней / верхней границы"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
-    "ru": "Игнорировать мин. / Макс. Из исходной статистики для абсолютных нижних / верхних границ. Эти значения будут взяты из набора правил."
+    "id": "schema_class",
+    "en": "Class",
+    "ru": "Учебный класс "
   },
   {
     "id": "self",
@@ -4080,6 +4190,11 @@
     "ru": "Ваш сценарий "
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "ru": "Атрибуция / кредиты. Формат: HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "ru": "Отключить эту панель"
@@ -4228,6 +4343,11 @@
     "id": "view_dashboard_widgets",
     "en": "Widgets",
     "ru": "Виджеты "
+  },
+  {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "ru": "Credits: "
   },
   {
     "id": "view_delete_confirm",
@@ -4521,8 +4641,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "ru": "Разрешить лицам, не являющимся участниками, запрашивать членство в этом проекте. "
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "ru": "Разрешить лицам, не являющимся членами, запрашивать членство в этом проекте (только если он общедоступный)"
   },
   {
     "id": "project_state_key",
@@ -4730,9 +4850,14 @@
     "ru": "Исходное положение на карте "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "ru": "Использовать текущие параметры карты "
+    "ru": "Использовать текущие параметры карты"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "ru": "Сбросить максимальные границы карты"
   },
   {
     "id": "project_map_proj_set",
@@ -4763,6 +4888,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "ru": "Южная широта (Альберс, Ламбер Коник)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "ru": "Использовать ограничение для ограничения перемещения карты"
   },
   {
     "id": "map_fit_to_bounds",
@@ -4923,11 +5053,6 @@
     "id": "update_app_button_confirm",
     "en": "Restart now",
     "ru": "Перезагрузить сейчас"
-  },
-  {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "ru": "Потом"
   },
   {
     "id": "btn_clear_cache",
@@ -6356,8 +6481,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "ru": "Добро пожаловать!<br> Для получения технической информации вы можете прочитать нашу <a href=\"{{linkKnowledgeBase}}\">базу знаний</a> . Если у вас есть предложения по поводу этого веб-сайта или вы хотите сообщить об ошибке, посетите нашу систему <a href=\"{{linkIssue}}\">отслеживания проблем.</a><br> Спасибо ! "
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "ru": "Добро пожаловать!<br> Для получения технической информации вы можете прочитать нашу <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">базу знаний</a> . Если у вас есть предложения по поводу этого веб-сайта или вы хотите сообщить об ошибке, посетите наш <a href=\"{{linkIssue}}\" target=\"_blank\">трекер проблем.</a><br> Спасибо !"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6410,9 +6535,9 @@
     "ru": "Квантиль "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
-    "ru": "Голова / хвост ломается "
+    "ru": "Перерывы головы/хвоста"
   },
   {
     "id": "equal_interval",
@@ -6461,8 +6586,8 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "ru": "Электронное письмо будет отправлено на адрес<a href=\"mailto:={{email}}\"> {{email}}</a> . <a href=\"{{url}}\">Ссылка для</a> скачивания будет активирована в конце процесса. "
+    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
+    "ru": "Электронное письмо будет отправлено на<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . <a download=\"\" href=\"{{url}}\" target=\"_blank\">Ссылка</a> для скачивания будет активирована в конце процесса"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6491,8 +6616,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
-    "ru": "Преобразование выполнено с использованием формата {{format}} . Ссылка на скачивание:<a href=\"{{url}}\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "ru": "Преобразование выполнено с использованием формата {{format}} . Ссылка на скачивание:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6506,8 +6631,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "ru": "Запрошенные данные готовы к загрузке по этой ссылке:<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "ru": "Запрошенные данные готовы к загрузке по этой ссылке:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_zip_progress",
@@ -6633,6 +6758,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "ru": "Уведомления "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "ru": "Отсутствующие значения: {{nullCount}}"
   },
   {
     "id": "mc_title",
@@ -6995,6 +7125,31 @@
     "ru": "Необработанные данные будут считаны с нашего сервера. Однако мы никоим образом не храним и не используем их. Все просто отражается. IP-адреса хранятся в памяти для предотвращения злоупотреблений."
   },
   {
+    "id": "btn_editor_tool_format",
+    "en": "Format",
+    "ru": "Формат"
+  },
+  {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "ru": "Помощь"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "ru": "Помощь"
+  },
+  {
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "ru": "Развернуть/Свернуть"
+  },
+  {
+    "id": "nc_label_merge",
+    "en": "Details...",
+    "ru": "Подробности..."
+  },
+  {
     "id": "pk_panel_options",
     "en": "Display options",
     "ru": "Показать варианты "
@@ -7073,6 +7228,66 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "ru": "Использовать палитру по умолчанию "
+  },
+  {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "ru": "Загрузить новый проект?"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "ru": "Загрузить проект {{name}} ?"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "ru": "Создать новый проект"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "ru": "Название проекта (англ.)"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "ru": "Создавать"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "ru": "Название проекта (англ.)"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "ru": "Имя допустимо"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "ru": "Создание запрещено"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "ru": "Не допускается"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "ru": "Неверное имя"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "ru": "Строка имени вне допустимого диапазона: не менее 3, не более 50 символов."
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "ru": "Имя не доступно"
   },
   {
     "id": "schema_story_theme",
@@ -7575,6 +7790,216 @@
     "ru": "Лицо куба"
   },
   {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "ru": "Название легенды "
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "ru": "Включить верхнюю границу в интервал "
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "ru": "Если этот флажок установлен, интервалы будут включать верхний предел. Если он не определен, последняя граница будет максимальным значением. Если стиль создается с использованием автоматического стиля, этот параметр должен быть отмечен"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "ru": "Обратный порядок отображения слоев "
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "ru": "Если этот флажок установлен, стек слоев будет перевернут: верхнее правило будет рисовать слой внизу стопки. "
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "ru": "Показать символ с меткой "
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "ru": "При использовании символов с точечными данными должен ли MapX добавлять вокруг них надписи? "
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend",
+    "ru": "Не отображать отсутствующие значения на карте или в легенде"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "ru": "Если этот флажок установлен, объекты с отсутствующим значением или значением, определенным как таковое, не будут отображаться в слое на карте или в легенде."
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "ru": "Отсутствующие значения "
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "ru": "Цвет "
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "ru": "Описание "
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "ru": "Этикетка "
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "ru": "Последнее правило "
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency",
+    "ru": "Прозрачность"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "ru": "Правило "
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "ru": "Правила "
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "ru": "Размер "
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "ru": "Настройки масштабирования "
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "ru": "Коэффициент размера при максимальном увеличении "
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "ru": "Коэффициент размера при увеличении мин. "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "ru": "Показатель интерполяции размера "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "ru": "Функция экспоненты интерполяции размера. Значение 1 дает линейную интерполяцию. "
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "ru": "Максимальное увеличение "
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "ru": "Масштаб мин. "
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "ru": "Símbolo"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "ru": "Если больше 0, коэффициент размера для линий и точек при увеличении мин. "
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "ru": "Если больше 0, коэффициент размера для линий и точек при увеличении макс. "
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "ru": "Минимальный масштаб для отображения данных "
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "ru": "Максимальный масштаб для отображения данных "
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "ru": "Ценить "
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "ru": "Из"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "ru": "К"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "ru": "Игнорировать минимальную / максимальную статистику для нижней / верхней границы"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "ru": "Игнорировать мин. / Макс. Из исходной статистики для абсолютных нижних / верхних границ. Эти значения будут взяты из набора правил."
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency",
+    "ru": "Прозрачность"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque",
+    "ru": "Прозрачность линии. 0 = прозрачный, 1 = непрозрачный"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline",
+    "ru": "Включить контур многоугольника"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary.",
+    "ru": "Обведите многоугольник, чтобы подчеркнуть его границу."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color.",
+    "ru": "Авто цвет."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule.",
+    "ru": "Автоматически назначать подходящий цвет в соответствии с цветом каждого правила."
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color",
+    "ru": "Цвет контура многоугольника"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "ru": "Искать в публичных представлениях во всех проектах ..."
@@ -7831,13 +8256,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "ru": "Установить начальное положение карты"
+    "en": "Set initial map extent",
+    "ru": "Установить начальный экстент карты"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "ru": "Будут использоваться текущий экстент, наклон и азимут карты. Таким образом, значения проекта по умолчанию перезаписываются."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "ru": "Ограничить панорамирование карты текущим экстентом"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "ru": "Карта будет ограничена своим текущим экстентом. Для проекций, отличных от «Меркатора», только центр будет оставаться в пределах границ."
   },
   {
     "id": "share_filter_activated_label",
@@ -8055,6 +8490,11 @@
     "ru": "Карта: тень страны "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "ru": "Карта: общий план меток земель"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "ru": "Карта: вода "
@@ -8068,6 +8508,21 @@
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)",
     "ru": "Карта: батиметрия (высокая) "
+  },
+  {
+    "id": "mx_map_text_bathymetry",
+    "en": "Map: bathymetry labels",
+    "ru": "Карта: батиметрические метки"
+  },
+  {
+    "id": "mx_map_text_bathymetry_outline",
+    "en": "Map: bathymetry labels outline",
+    "ru": "Карта: контур батиметрических меток"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "ru": "Карта: батиметрические линии"
   },
   {
     "id": "mx_map_road",
@@ -8130,6 +8585,51 @@
     "ru": "Карта: разместить контур текста "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "ru": "Карта: этикетки ООН 0 0 (Антарктида)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "ru": "Карта: этикетки ООН 0 1 – Государство"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "ru": "Карта: этикетки ООН 0 2 – оккупированная территория"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "ru": "Карта: маркировка ООН 0 3 – несамоуправляющаяся территория"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "ru": "Карта: Метки ООН 0 4 – Территория"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "ru": "Карта: Метки ООН 0 5 – Особый регион или провинция"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "ru": "Карта: этикетки ООН 0 99 — суверенитет не установлен"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "ru": "Карта: Метки ООН 1 1 – Административная единица (субнациональный уровень 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "ru": "Карта: Метки ООН 1 2 – Административная единица (субнациональный уровень 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "ru": "Карта: текст дороги "
@@ -8148,6 +8648,281 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "ru": "Карта: контур текста водоема "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "ru": "Семейство шрифтов"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "ru": "Шрифт"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "ru": "Непрозрачность"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "ru": "Цвет"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "ru": "Видимый"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "ru": "Имя"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "ru": "Описание"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "ru": "Автор"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "ru": "Следующий"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "ru": "Экспорт"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "ru": "Импортировать"
+  },
+  {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "ru": "MapX не рекомендует шейп-файлы, так как не существует способов указать набор символов, что может вызвать проблемы при отображении и анализе."
+  },
+  {
+    "id": "upl_title",
+    "en": "Upload",
+    "ru": "Загрузить"
+  },
+  {
+    "id": "upl_title_layer_name",
+    "en": "Title of the source ({{language}})",
+    "ru": "Название источника ( {{language}} )"
+  },
+  {
+    "id": "upl_name_placeholder",
+    "en": "Source title...",
+    "ru": "Название источника..."
+  },
+  {
+    "id": "upl_upload_btn",
+    "en": "Upload",
+    "ru": "Загрузить"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "ru": "Загрузка запрещена"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "ru": "Назначить систему пространственной привязки ( код EPSG ). По умолчанию 4326."
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "ru": "Перетащите файл ( *.gpkg, *.zip, *.geojson ) или нажмите, чтобы просмотреть..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})",
+    "ru": "Заголовок ( {{language}} )"
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "ru": "Заголовок ( {{language}} )"
+  },
+  {
+    "id": "upl_file_upload_progress",
+    "en": "Uploading '{{filename}}'...",
+    "ru": "Загрузка ' {{filename}} '..."
+  },
+  {
+    "id": "upl_api_save_validation",
+    "en": "Geometry validation: This may take a while.",
+    "ru": "Проверка геометрии: это может занять некоторое время."
+  },
+  {
+    "id": "upl_api_save_validation_geom_count",
+    "en": "There are {{count}} invalid geometries.",
+    "ru": "Есть {{count}} неправильная геометрия."
+  },
+  {
+    "id": "upl_api_save_failed_title",
+    "en": "Upload of '{{filename}}' failed.",
+    "ru": "Загрузка ' {{filename}} ' не удалось."
+  },
+  {
+    "id": "upl_api_save_failed",
+    "en": "Upload of <samp>{{filename}}</samp> failed. Source removed: <samp>{{sourceRemoved}}</samp>. View removed : {{viewRemoved}}. Message : <samp> {{error}}</samp> ",
+    "ru": "Загрузка<samp> {{filename}}</samp> не удалось. Исходник удален:<samp> {{sourceRemoved}}</samp> . Просмотр удален: {{viewRemoved}} . Сообщение :<samp> {{error}}</samp>"
+  },
+  {
+    "id": "upl_api_save_success_title",
+    "en": "Upload of '{{filename}}' done.",
+    "ru": "Загрузка ' {{filename}} ' Выполнено."
+  },
+  {
+    "id": "upl_api_save_success",
+    "en": "Upload of <samp>{{filename}}</samp> done. New source created: {{title}} – <samp>{{idSource}}</samp>. ",
+    "ru": "Загрузка<samp> {{filename}}</samp> Выполнено. Создан новый источник: {{title}} –<samp> {{idSource}}</samp> ."
+  },
+  {
+    "id": "upl_api_import_db",
+    "en": "Importation in database",
+    "ru": "Импорт в базу данных"
+  },
+  {
+    "id": "up_button_close",
+    "en": "Close",
+    "ru": "Закрывать"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "ru": "Добавить файлы..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "ru": "Загрузить"
+  },
+  {
+    "id": "up_button_reset",
+    "en": "Reset",
+    "ru": "Перезагрузить"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "ru": "Подтвердить сброс"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "ru": "Подтвердить удаление {{n}} элементы?"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "ru": "Подтвердить загрузку"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "ru": "Подтвердить загрузку {{n}} элементов, всего {{size}} ?"
+  },
+  {
+    "id": "up_settings",
+    "en": "Settings",
+    "ru": "Настройки"
+  },
+  {
+    "id": "up_select_epsg_code",
+    "en": "EPSG code",
+    "ru": "Код EPSG"
+  },
+  {
+    "id": "up_check_enable_wms_label",
+    "en": "Enable WMS services",
+    "ru": "Включить WMS-сервисы"
+  },
+  {
+    "id": "up_check_enable_wms_desc",
+    "en": "In a public project, if public views are created using this source, enabling WMS service will automatically create a WMS layer and SLD, available for anyone.",
+    "ru": "В общедоступном проекте, если общедоступные представления создаются с использованием этого источника, включение службы WMS автоматически создаст слой WMS и SLD, доступные для всех."
+  },
+  {
+    "id": "up_check_create_view_label",
+    "en": "Automatically create a view",
+    "ru": "Автоматически создавать представление"
+  },
+  {
+    "id": "up_check_create_view_desc",
+    "en": "Create a basic view at the end of the process and add it to the project",
+    "ru": "Создайте базовый вид в конце процесса и добавьте его в проект"
+  },
+  {
+    "id": "up_check_allow_download_label",
+    "en": "Allow this source to be downloaded",
+    "ru": "Разрешить загрузку этого источника"
+  },
+  {
+    "id": "up_check_allow_download_desc",
+    "en": "This source license allows for redistribution, enabling the download feature will make the data and metadata available for download by anyone",
+    "ru": "Эта исходная лицензия допускает повторное распространение, включение функции загрузки сделает данные и метаданные доступными для загрузки любым пользователем."
+  },
+  {
+    "id": "up_check_assign_epsg_label",
+    "en": "Assign the SRS bellow",
+    "ru": "Назначьте SRS ниже"
+  },
+  {
+    "id": "up_check_assign_epsg_desc",
+    "en": "The converter will automatically retrieve the SRS information from the uploaded dataset. However, if you prefer to use a different SRS, simply check this checkbox and select the desired EPSG code from the options below.",
+    "ru": "Преобразователь автоматически извлечет информацию SRS из загруженного набора данных. Однако, если вы предпочитаете использовать другой SRS, просто установите этот флажок и выберите нужный код EPSG из вариантов ниже."
+  },
+  {
+    "id": "up_drop_or_click",
+    "en": "Drop files or click to select…",
+    "ru": "Перетащите файлы или нажмите, чтобы выбрать…"
+  },
+  {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "ru": "Проблемы"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "ru": "Отсутствующие файлы"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "ru": "Отсутствует зависимость: {{ext}} . Пожалуйста, перетащите недостающий файл сюда."
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid element",
+    "ru": "Недопустимый элемент"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "ru": "Формат не поддерживается"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "ru": "Файл в большой"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many elements. Max:",
+    "ru": "Слишком много элементов. Макс:"
   },
   {
     "id": "wms_select_reviewed_service",

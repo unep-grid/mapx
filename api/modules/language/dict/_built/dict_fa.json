@@ -1,5 +1,115 @@
 [
   {
+    "id": "auto_style_start",
+    "en": "Auto style...",
+    "fa": "سبک خودکار ..."
+  },
+  {
+    "id": "auto_style_select_mode_label",
+    "en": "Select mode",
+    "fa": "حالت را انتخاب کنید"
+  },
+  {
+    "id": "auto_style_select_bins_label",
+    "en": "Select binning method",
+    "fa": "روش binning را انتخاب کنید"
+  },
+  {
+    "id": "auto_style_bins_number_label",
+    "en": "Number of bins",
+    "fa": "تعداد سطل ها"
+  },
+  {
+    "id": "auto_style_bins_number_desc",
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "fa": "تعداد سطل های استفاده شده در طول تجزیه و تحلیل آماری. حداقل 2، حداکثر 100"
+  },
+  {
+    "id": "auto_style_check_reverse_color_label",
+    "en": "Reverse color palette",
+    "fa": "پالت رنگ معکوس"
+  },
+  {
+    "id": "auto_style_check_reverse_color_desc",
+    "en": "Inverse colors order in palettes",
+    "fa": "ترتیب معکوس رنگ ها در پالت ها"
+  },
+  {
+    "id": "auto_style_check_preserve_label_label",
+    "en": "Preserve current labels",
+    "fa": "برچسب های فعلی را حفظ کنید"
+  },
+  {
+    "id": "auto_style_check_preserve_label_desc",
+    "en": "Preserve labels already defined in current rules",
+    "fa": "برچسب هایی را که قبلاً در قوانین فعلی تعریف شده اند حفظ کنید"
+  },
+  {
+    "id": "auto_style_button_update",
+    "en": "Update rules",
+    "fa": "قوانین را به روز کنید"
+  },
+  {
+    "id": "auto_style_title_table_continuous",
+    "en": "Table. Method : {{method}}. Number of bins: {{bins}}",
+    "fa": "جدول. روش : {{method}} . تعداد سطل زباله: {{bins}}"
+  },
+  {
+    "id": "auto_style_title_table_categorical",
+    "en": "Table. Number of rows = {{count}}",
+    "fa": "جدول. تعداد ردیف = {{count}}"
+  },
+  {
+    "id": "auto_style_color_label",
+    "en": "Color",
+    "fa": "رنگ"
+  },
+  {
+    "id": "auto_style_color_desc",
+    "en": "Choose color for all classes",
+    "fa": "رنگ را برای همه کلاس ها انتخاب کنید"
+  },
+  {
+    "id": "auto_style_sizes_min_label",
+    "en": "Start size",
+    "fa": "اندازه شروع"
+  },
+  {
+    "id": "auto_style_sizes_min_desc",
+    "en": "Size of the first item in the table",
+    "fa": "اندازه اولین مورد در جدول"
+  },
+  {
+    "id": "auto_style_sizes_max_label",
+    "en": "End size",
+    "fa": "اندازه نهایی"
+  },
+  {
+    "id": "auto_style_sizes_max_desc",
+    "en": "Size of the last item in the table",
+    "fa": "اندازه آخرین مورد در جدول"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "fa": "کدورت"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "fa": "مولفه آلفا (مادر بودن) رنگ را تنظیم کنید، جایی که 0 = کاملاً شفاف و 1، کاملاً مات است."
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "fa": "اندازه اقلام"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "fa": "اندازه را برای همه کلاس ها تنظیم کنید"
+  },
+  {
     "id": "btn_opt_code_integration",
     "en": "Code template / boilerplate / other format",
     "fa": "قالب کد / دیگ بخار / قالب دیگر"
@@ -23,6 +133,11 @@
     "id": "code_integration_template_mapbox_style",
     "en": "Mapbox style (full)",
     "fa": "سبک نقشه باکس (کامل)"
+  },
+  {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "fa": "سبک Mapbox (فقط نقشه پایه، قابل استفاده در استودیو)"
   },
   {
     "id": "code_integration_template_mapbox_layers",
@@ -1525,19 +1640,14 @@
     "fa": "دوباره انجام دهید"
   },
   {
-    "id": "edit_table_modal_value_invalid_title",
-    "en": "Invalid value",
-    "fa": "مقدار نامعتبر است"
+    "id": "edit_table_modal_values_invalid_title",
+    "en": "Invalid values",
+    "fa": "مقادیر نامعتبر"
   },
   {
-    "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
-    "fa": "مقدار نامعتبر دریافت شد. حتما از نوع صحیح استفاده کنید: {{type}} .\n این تغییر ذخیره نخواهد شد."
-  },
-  {
-    "id": "edit_table_modal_value_invalid_continue",
-    "en": "Ignore and continue",
-    "fa": "نادیده بگیرید و ادامه دهید"
+    "id": "edit_table_modal_values_invalid_ok",
+    "en": "Ok",
+    "fa": "خوب"
   },
   {
     "id": "btn_edit_add_column",
@@ -1566,8 +1676,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "fa": "یک ستون جدید اضافه کنید: نام"
+    "en": "Name of the column",
+    "fa": "نام ستون"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1686,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "fa": "نام ستون جدید این خواهد بود:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "fa": "نام ستون خواهد بود:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1705,9 @@
     "fa": "نام در دسترس نیست"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "fa": "بعد"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "fa": "نوع داده را انتخاب کنید"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "fa": "بعد"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1716,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "fa": "یک ستون جدید به نام اضافه کنید<b> {{column_name}}</b> از نوع<b> {{column_type}}</b> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست، اما در صورت لزوم، ابزار \"حذف ستون\" کار خواهد کرد."
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "fa": "یک ستون جدید به نام اضافه کنید<code> {{column_name}}</code> از نوع<code> {{column_type}}</code> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست، اما در صورت نیاز، ابزار \"حذف ستون\" کار خواهد کرد."
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1735,14 @@
     "fa": "نام ستون"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "fa": "بعد"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "fa": "حذف یک ستون: تایید"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "fa": "ستونی به نام را بردارید<i> {{column_name}}</i> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست: داده ها ممکن است از بین بروند."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "fa": "ستونی به نام را حذف کنید<code> {{column_name}}</code> ? تغییر در پایگاه داده و تمام جداول تعاملی انجام خواهد شد. این کار قابل واگرد نیست: داده ها ممکن است از بین بروند."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1686,8 +1781,8 @@
   },
   {
     "id": "edit_table_modal_warning_text",
-    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
-    "fa": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">استفاده از این ابزار ممکن است مانند ویرایشگرهای صفحه گسترده دسکتاپ باعث شود داده ها به طور جبران ناپذیری تغییر یا حتی حذف شوند.</li><li style=\";text-align:right;direction:rtl\"> ما خدمات بازیابی اطلاعات را برای منابع داده ارائه نمی دهیم.</li><li style=\";text-align:right;direction:rtl\"> تا زمانی که یک جلسه حفظ می شود، هر عملیات روی سلول ها را می توان با استفاده از میانبرهای صفحه کلید یا دکمه های اختصاصی لغو/دوباره کرد.</li><li style=\";text-align:right;direction:rtl\"> \"حذف ستون\" ستون و داده های آن را بدون امکان لغو پس از آخرین پانل تأیید حذف می کند.</li><li style=\";text-align:right;direction:rtl\"> قبل از هر گونه تغییر، می توان با دانلود منبع داده یا با کپی و چسباندن داده ها در ویرایشگر صفحه گسترده، یک نسخه پشتیبان از داده ها تهیه کرد.</li><li style=\";text-align:right;direction:rtl\"> پلت فرم فعلی، توسعه دهنده آن یا مدیران پروژه تمام مسئولیت ها را رد می کنند.<ul style=\";text-align:right;direction:rtl\"></ul></li></ul>"
+    "en": "<ul><li>Using this tool may pose a risk of permanently altering or deleting data, similar to desktop spreadsheet editors.</li><li>It is possible to undo or redo any changes made to cells during a session using keyboard shortcuts or dedicated buttons.</li><li>The &#39;Remove column&#39; action will permanently delete the column and its data, and cannot be undone after the final confirmation panel.</li><li>Invalid cells, indicated by a red color, will not be saved.</li><li>A backup system has not yet been implemented. To safeguard your data, you can use the download tool in the toolbox to export the entire layer or table as a precautionary measure.</li><li>There may be incremental backup at the database level, but not at the layer or table level.</li><li>The developers of the current platform and project administrators do not accept any responsibility for any potential losses or damages.</li></ul>",
+    "fa": "<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\">استفاده از این ابزار ممکن است مانند ویرایشگرهای صفحه گسترده دسکتاپ، خطر تغییر یا حذف دائمی داده ها را به همراه داشته باشد.</li><li style=\";text-align:right;direction:rtl\"> با استفاده از میانبرهای صفحه‌کلید یا دکمه‌های اختصاصی، می‌توان هر تغییری را که در سلول‌ها در طول جلسه ایجاد شده است، لغو یا دوباره انجام داد.</li><li style=\";text-align:right;direction:rtl\"> عمل \"حذف ستون\" ستون و داده های آن را برای همیشه حذف می کند و پس از پانل تایید نهایی قابل بازگشت نیست.</li><li style=\";text-align:right;direction:rtl\"> سلول های نامعتبر که با رنگ قرمز مشخص شده اند ذخیره نمی شوند.</li><li style=\";text-align:right;direction:rtl\"> یک سیستم پشتیبان هنوز پیاده سازی نشده است. برای محافظت از داده‌های خود، می‌توانید از ابزار دانلود در جعبه ابزار برای صادرات کل لایه یا جدول به عنوان یک اقدام احتیاطی استفاده کنید.</li><li style=\";text-align:right;direction:rtl\"> ممکن است پشتیبان گیری افزایشی در سطح پایگاه داده وجود داشته باشد، اما نه در سطح لایه یا جدول.</li><li style=\";text-align:right;direction:rtl\"> توسعه دهندگان پلتفرم فعلی و مدیران پروژه هیچ گونه مسئولیتی در قبال ضرر و زیان احتمالی نمی پذیرند.</li></ul>"
   },
   {
     "id": "edit_table_modal_warning_ok_no_more",
@@ -1726,8 +1821,8 @@
   },
   {
     "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
-    "fa": "برخی از ستون ها دارای نویسه های نامعتبر هستند و قابل ویرایش نیستند:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
+    "en": "Some column(s) contain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "fa": "برخی از ستون ها حاوی نویسه های نامعتبر هستند و قابل ویرایش نیستند:<ul style=\";text-align:right;direction:rtl\"> {{columns}}</ul>"
   },
   {
     "id": "edit_table_modal_attributes_title",
@@ -1795,6 +1890,156 @@
     "fa": "این جدول دارد {{count}} تغییرات ذخیره نشده آیا مطمئنید که می خواهید آن تغییرات را ترک کرده و نادیده بگیرید؟"
   },
   {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "fa": "در حال استفاده"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "fa": "رزرو شده است"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "fa": "امن نیست"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename column",
+    "fa": "تغییر نام ستون"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "fa": "ستون مورد نظر برای تغییر نام را انتخاب کنید:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "fa": "تائیدیه"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "fa": "آیا مطمئن هستید که می خواهید نام ستون را تغییر دهید؟<code> {{column_name}}</code> به<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename column",
+    "fa": "تغییر نام ستون"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename column",
+    "fa": "تغییر نام ستون"
+  },
+  {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "fa": "مراجع موجود در کد"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "fa": "<p style=\";text-align:right;direction:rtl\">تغییر نام ستون مجاز نیست زیرا این جدول در نماهای کد سفارشی، داشبورد و/یا سبک های سفارشی ارجاع داده می شود. در صورت لزوم، به جای آن ستون را کپی کنید.<br><br> برای جزئیات بیشتر، روی دکمه \"Help\" کلیک کنید.<br><br> در اینجا لیست نماهای وابسته آمده است:</p>"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "fa": "لغو کنید"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "fa": "داشبورد"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "fa": "کد سفارشی"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "fa": "سبک سفارشی"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "fa": "لایه منبع"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "fa": "ستون تکراری"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "fa": "ستون تکراری"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "fa": "ستون برای تکرار"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "fa": "ستون برای تکرار: تایید"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "fa": "ستون نامگذاری شده را کپی کنید<code> {{column_name}}</code> به ستون جدیدی به نام<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "fa": "ستون را کپی کنید"
+  },
+  {
+    "id": "btn_stat_attribute",
+    "en": "Statistics",
+    "fa": "آمار"
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "fa": "ویژگی برای آمار"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "fa": "یک ویژگی را انتخاب کنید"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "fa": "ترتیب ستون ها اصلاح شد"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "fa": "ترتیب ستون ها توسط کاربر دیگری اصلاح شده است."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "fa": "خوب"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "fa": "ترتیب ستون ها را تنظیم کنید"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "fa": "ترتیب ستون ها را تنظیم کنید"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fa": "ابزار هندسه: لایه منبع را انتخاب کنید"
@@ -1803,6 +2048,21 @@
     "id": "geom_tools_modal_select_label",
     "en": "Select source layer",
     "fa": "لایه منبع را انتخاب کنید"
+  },
+  {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "fa": "وارد کردن به عنوان نمای خارجی"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "fa": "نمای خارجی را وارد کنید"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "fa": "نمای خارجی را وارد کنید؟ این نمای به عنوان نمای خارجی در تنظیمات پروژه در دسترس خواهد بود"
   },
   {
     "id": "en",
@@ -2180,6 +2440,11 @@
     "fa": "لغو "
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "fa": "بعد..."
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "fa": "ادامه هید"
@@ -2213,6 +2478,11 @@
     "id": "btn_close",
     "en": "Close",
     "fa": "بستن"
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "fa": "تکرار..."
   },
   {
     "id": "btn_download",
@@ -2515,6 +2785,11 @@
     "fa": "دانلود مجاز نیست اطلاعات بیشتر در فراداده"
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "fa": "اقدام مجاز نیست: درخواست امتیاز توسعه دهنده"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "fa": "این نما را ویرایش کنید"
@@ -2538,51 +2813,6 @@
     "id": "btn_opt_edit_style",
     "en": "Set the style of this view",
     "fa": "تنظیم ستایل این نمایه"
-  },
-  {
-    "id": "schema_style_title_legend",
-    "en": "Legend title",
-    "fa": "عنوان افسانه ای "
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval",
-    "fa": "محدوده فوقانی را در فاصله قرار دهید "
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "fa": "در صورت علامت گذاری ، فواصل حد بالا را شامل می شود. اگر تعریف نشده باشد ، آخرین حد حداکثر مقدار خواهد بود. اگر سبک با استفاده از سبک خودکار ساخته شده است ، این گزینه باید علامت زده شود"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order",
-    "fa": "ترتیب لایه های نمایش داده شده را معکوس کنید "
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "fa": "در صورت علامت گذاری ، پشته لایه برعکس خواهد شد: قانون بالا یک لایه در پایین پشته رسم می کند "
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label",
-    "fa": "نماد را با برچسب نشان دهید "
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?",
-    "fa": "اگر از نمادهایی با داده های نقطه ای استفاده می کنید ، آیا MapX باید برچسب های اطراف خود را اضافه کند؟ "
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend",
-    "fa": "مقادیر گم شده را روی نقشه یا در افسانه نمایش ندهید"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
-    "fa": "اگر علامت زده شود ، ویژگی های با مقدار مفقود - یا مقداری که به این صورت تعریف شده است - در یک لایه روی نقشه یا در افسانه نمایش داده نمی شود"
   },
   {
     "id": "btn_opt_meta",
@@ -2790,6 +3020,11 @@
     "fa": "زمین سه بعدی را اضافه کنید"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "fa": "از حالت گلوب استفاده کنید"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "fa": "حالت غوطه وری "
@@ -2816,48 +3051,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
-    "fa": "ویژگی های برداری را برجسته کنید "
+    "en": "Spotlight vector features",
+    "fa": "ویژگی های وکتور Spotlight"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
-    "fa": "پیکربندی ابزار را برجسته کنید "
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "fa": "پیکربندی ابزار Spotlight"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
-    "fa": "حالت برجسته را انتخاب کنید "
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "fa": "حالت نورافکن را انتخاب کنید"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "fa": "در جایی که همه ویژگی ها با هم تداخل دارند برجسته کنید "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "fa": "کانونی که در آن همه ویژگی‌ها همپوشانی دارند"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "fa": "هر ویژگی قابل مشاهده را برجسته کنید "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "fa": "هر ویژگی قابل مشاهده را در کانون توجه قرار دهید"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "fa": "در جایی که دو ویژگی با هم تداخل دارند برجسته کنید "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "fa": "کانونی که در آن دو ویژگی با هم تداخل دارند"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "fa": "در جایی که سه ویژگی با هم تداخل دارند برجسته کنید "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "fa": "کانون توجه که در آن سه ویژگی با هم همپوشانی دارند"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "fa": "در جایی که چهار ویژگی با هم تداخل دارند برجسته کنید "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "fa": "کانون توجه که در آن چهار ویژگی همپوشانی دارند"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "fa": "در جایی که پنج ویژگی با هم تداخل دارند برجسته کنید "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "fa": "کانون توجه که در آن پنج ویژگی با هم همپوشانی دارند"
   },
   {
     "id": "label_check_instant_overlap",
@@ -2953,6 +3188,11 @@
     "id": "error_no_source",
     "en": "No source layer found",
     "fa": "منبع لایه مرتبط پیدا نشد"
+  },
+  {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "fa": "نوع نمای وجود ندارد"
   },
   {
     "id": "error_title_exists",
@@ -3465,24 +3705,14 @@
     "fa": "این کاربر MapX را مستقیماً اضافه کنید "
   },
   {
-    "id": "schema_class",
-    "en": "Class",
-    "fa": "صنف"
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "fa": "ابرداده"
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values",
-    "fa": "ارزش از دست رفته "
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color",
-    "fa": "رنگ "
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description",
-    "fa": "توضیحات"
+    "id": "schema_method",
+    "en": "Method",
+    "fa": "روش"
   },
   {
     "id": "schema_item",
@@ -3495,129 +3725,9 @@
     "fa": "کلید"
   },
   {
-    "id": "schema_style_label",
-    "en": "Label",
-    "fa": "لیبل"
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule",
-    "fa": "قانون آخر"
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data",
-    "fa": "ابرداده"
-  },
-  {
-    "id": "schema_method",
-    "en": "Method",
-    "fa": "روش"
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency",
-    "fa": "شفافیت"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule",
-    "fa": "قانون"
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules",
-    "fa": "قوانین"
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size",
-    "fa": "اندازه"
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings",
-    "fa": "تنظیمات بزرگنمایی "
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max",
-    "fa": "ضریب اندازه در حداکثر بزرگنمایی "
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min",
-    "fa": "ضریب اندازه در بزرگنمایی حداقل "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent",
-    "fa": "اندازه بینابینی اندازه "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "fa": "تابع نمایشگر درون یابی اندازه. مقدار 1 یک درون یابی خطی را نشان می دهد. "
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max",
-    "fa": "بزرگنمایی حداکثر "
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min",
-    "fa": "حداقل بزرگنمایی "
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "fa": "سمبول"
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "fa": "اگر بیشتر از 0 باشد ، ضریب اندازه خطوط و نقاط در زوم دقیقه. "
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "fa": "اگر بیشتر از 0 باشد ، ضریب اندازه خطوط و نقاط در بزرگنمایی حداکثر. "
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data",
-    "fa": "حداقل بزرگنمایی برای نمایش داده ها "
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data",
-    "fa": "بزرگنمایی حداکثر برای نمایش داده ها "
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value",
-    "fa": "قیمت"
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From",
-    "fa": "از جانب"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To",
-    "fa": "به"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds",
-    "fa": "از آمار حداقل / حداکثر برای محدوده های پایین / بالا چشم پوشی کنید"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
-    "fa": "حداقل / حداکثر آمارهای منبع را برای محدوده های مطلق پایین / بالا نادیده بگیرید. این مقادیر از قوانین تعیین شده گرفته خواهند شد."
+    "id": "schema_class",
+    "en": "Class",
+    "fa": "صنف"
   },
   {
     "id": "self",
@@ -4080,6 +4190,11 @@
     "fa": "فیلمنامه شما "
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "fa": "شایستگی/اعتبارات. فرمت : HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "fa": "این داشبورد را غیرفعال کنید"
@@ -4228,6 +4343,11 @@
     "id": "view_dashboard_widgets",
     "en": "Widgets",
     "fa": "ابزارک ها "
+  },
+  {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "fa": "Credits: "
   },
   {
     "id": "view_delete_confirm",
@@ -4521,8 +4641,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "fa": "به غیرعضوها اجازه دهید عضویت در این پروژه را درخواست کنند. "
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "fa": "به غیر اعضا اجازه درخواست عضویت در این پروژه را بدهید (فقط در صورت عمومی)"
   },
   {
     "id": "project_state_key",
@@ -4730,9 +4850,14 @@
     "fa": "موقعیت اولیه نقشه "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "fa": "از پارامترهای نقشه فعلی استفاده کنید "
+    "fa": "از پارامترهای نقشه فعلی استفاده کنید"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "fa": "حداکثر محدوده نقشه را بازنشانی کنید"
   },
   {
     "id": "project_map_proj_set",
@@ -4763,6 +4888,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "fa": "Latitude South (Albers، Lamber Conic)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "fa": "استفاده از محدوده برای محدود کردن جستجوی نقشه"
   },
   {
     "id": "map_fit_to_bounds",
@@ -4923,11 +5053,6 @@
     "id": "update_app_button_confirm",
     "en": "Restart now",
     "fa": "اکنون دوباره راه اندازی کنید"
-  },
-  {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "fa": "بعد"
   },
   {
     "id": "btn_clear_cache",
@@ -6356,8 +6481,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "fa": "خوش آمدی!<br> برای کسب اطلاعات فنی ، می توانید <a href=\"{{linkKnowledgeBase}}\">پایگاه دانش</a> ما را مطالعه کنید. اگر در مورد این وب سایت پیشنهادی دارید ، یا اگر می خواهید یک اشکال را گزارش دهید ، از <a href=\"{{linkIssue}}\">ردیاب مشکل ما دیدن کنید</a><br> با تشکر ! "
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "fa": "خوش آمدی!<br> برای اطلاعات فنی، می توانید <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">پایگاه دانش</a> ما را بخوانید. اگر پیشنهادی در مورد این وب‌سایت دارید، یا اگر می‌خواهید یک اشکال را گزارش کنید، از <a href=\"{{linkIssue}}\" target=\"_blank\">ردیاب مشکل</a> ما دیدن کنید<br> با تشکر !"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6410,9 +6535,9 @@
     "fa": "کوانتیل "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
-    "fa": "شکستگی سر / دم "
+    "fa": "سر/دم می شکند"
   },
   {
     "id": "equal_interval",
@@ -6461,8 +6586,8 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "fa": "یک ایمیل به ارسال می شود<a href=\"mailto:={{email}}\"> {{email}}</a> . در پایان مراحل <a href=\"{{url}}\">لینک</a> بارگیری فعال خواهد شد "
+    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
+    "fa": "یک ایمیل به<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . <a download=\"\" href=\"{{url}}\" target=\"_blank\">لینک</a> دانلود در پایان مراحل فعال خواهد شد"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6491,8 +6616,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
-    "fa": "تبدیل با استفاده از فرمت انجام می شود {{format}} . لینک دانلود:<a href=\"{{url}}\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "fa": "تبدیل با استفاده از فرمت انجام می شود {{format}} . لینک دانلود:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6506,8 +6631,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "fa": "داده های درخواستی با استفاده از این پیوند بارگیری می شوند:<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "fa": "داده های درخواستی با استفاده از این لینک آماده دانلود هستند:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_zip_progress",
@@ -6633,6 +6758,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "fa": "اطلاعیه "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "fa": "ارزش از دست رفته: {{nullCount}}"
   },
   {
     "id": "mc_title",
@@ -6995,6 +7125,31 @@
     "fa": "داده های خام از سرور ما خوانده می شود. با این حال، ما آن را به هیچ وجه ذخیره یا استفاده نمی کنیم. همه چیز به سادگی منعکس می شود. آدرس های IP در حافظه ذخیره می شوند تا از سوء استفاده جلوگیری شود."
   },
   {
+    "id": "btn_editor_tool_format",
+    "en": "Format",
+    "fa": "قالب"
+  },
+  {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "fa": "راهنما"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "fa": "راهنما"
+  },
+  {
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "fa": "بزرگ کردن/کوچک کردن"
+  },
+  {
+    "id": "nc_label_merge",
+    "en": "Details...",
+    "fa": "جزئیات..."
+  },
+  {
     "id": "pk_panel_options",
     "en": "Display options",
     "fa": "گزینه های نمایش "
@@ -7073,6 +7228,66 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "fa": "از پالت پیش فرض استفاده کنید "
+  },
+  {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "fa": "پروژه جدید بارگیری شود؟"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "fa": "بارگذاری پروژه {{name}} ?"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "fa": "پروژه جدید ایجاد کنید"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "fa": "نام پروژه (انگلیسی)"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "fa": "ايجاد كردن"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "fa": "نام پروژه (انگلیسی)"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "fa": "نام معتبر است"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "fa": "ایجاد مجاز نیست"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "fa": "مجاز نیست"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "fa": "نام نامعتبر"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "fa": "رشته نام در محدوده نیست: حداقل 3، حداکثر 50 کاراکتر"
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "fa": "نام در دسترس نیست"
   },
   {
     "id": "schema_story_theme",
@@ -7575,6 +7790,216 @@
     "fa": "صورت یک مکعب"
   },
   {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "fa": "عنوان افسانه ای "
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "fa": "محدوده فوقانی را در فاصله قرار دهید "
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "fa": "در صورت علامت گذاری ، فواصل حد بالا را شامل می شود. اگر تعریف نشده باشد ، آخرین حد حداکثر مقدار خواهد بود. اگر سبک با استفاده از سبک خودکار ساخته شده است ، این گزینه باید علامت زده شود"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "fa": "ترتیب لایه های نمایش داده شده را معکوس کنید "
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "fa": "در صورت علامت گذاری ، پشته لایه برعکس خواهد شد: قانون بالا یک لایه در پایین پشته رسم می کند "
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "fa": "نماد را با برچسب نشان دهید "
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "fa": "اگر از نمادهایی با داده های نقطه ای استفاده می کنید ، آیا MapX باید برچسب های اطراف خود را اضافه کند؟ "
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend",
+    "fa": "مقادیر گم شده را روی نقشه یا در افسانه نمایش ندهید"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "fa": "اگر علامت زده شود ، ویژگی های با مقدار مفقود - یا مقداری که به این صورت تعریف شده است - در یک لایه روی نقشه یا در افسانه نمایش داده نمی شود"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "fa": "ارزش از دست رفته "
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "fa": "رنگ "
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "fa": "توضیحات"
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "fa": "لیبل"
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "fa": "قانون آخر"
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency",
+    "fa": "شفافیت"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "fa": "قانون"
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "fa": "قوانین"
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "fa": "اندازه"
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "fa": "تنظیمات بزرگنمایی "
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "fa": "ضریب اندازه در حداکثر بزرگنمایی "
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "fa": "ضریب اندازه در بزرگنمایی حداقل "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "fa": "اندازه بینابینی اندازه "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "fa": "تابع نمایشگر درون یابی اندازه. مقدار 1 یک درون یابی خطی را نشان می دهد. "
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "fa": "بزرگنمایی حداکثر "
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "fa": "حداقل بزرگنمایی "
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "fa": "سمبول"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "fa": "اگر بیشتر از 0 باشد ، ضریب اندازه خطوط و نقاط در زوم دقیقه. "
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "fa": "اگر بیشتر از 0 باشد ، ضریب اندازه خطوط و نقاط در بزرگنمایی حداکثر. "
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "fa": "حداقل بزرگنمایی برای نمایش داده ها "
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "fa": "بزرگنمایی حداکثر برای نمایش داده ها "
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "fa": "قیمت"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "fa": "از جانب"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "fa": "به"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "fa": "از آمار حداقل / حداکثر برای محدوده های پایین / بالا چشم پوشی کنید"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "fa": "حداقل / حداکثر آمارهای منبع را برای محدوده های مطلق پایین / بالا نادیده بگیرید. این مقادیر از قوانین تعیین شده گرفته خواهند شد."
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency",
+    "fa": "شفافیت"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque",
+    "fa": "شفافیت خط 0 = شفاف، 1 = مات"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline",
+    "fa": "طرح چند ضلعی را فعال کنید"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary.",
+    "fa": "چند ضلعی را برای تاکید بر مرز آن مشخص کنید."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color.",
+    "fa": "رنگ خودکار."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule.",
+    "fa": "به طور خودکار یک رنگ مناسب را با توجه به رنگ هر قانون اختصاص دهید."
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color",
+    "fa": "رنگ طرح کلی چند ضلعی"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "fa": "مشاهده بازدیدهای عمومی در همه پروژه ها ..."
@@ -7831,13 +8256,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "fa": "موقعیت اولیه نقشه را تنظیم کنید"
+    "en": "Set initial map extent",
+    "fa": "وسعت نقشه اولیه را تنظیم کنید"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "fa": "وسعت فعلی، شیب و باربری نقشه استفاده خواهد شد. بنابراین پیش فرض های پروژه بازنویسی می شوند."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "fa": "حرکت نقشه را به میزان فعلی محدود کنید"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "fa": "نقشه به وسعت فعلی محدود خواهد شد. برای پیش بینی های غیر از \"Mercator\"، فقط مرکز در محدوده نگه داشته می شود."
   },
   {
     "id": "share_filter_activated_label",
@@ -8055,6 +8490,11 @@
     "fa": "نقشه: کشور سایه "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "fa": "نقشه: طرح کلی برچسب های زمین"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "fa": "نقشه: آب "
@@ -8068,6 +8508,21 @@
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)",
     "fa": "نقشه: متقارن (بالا) "
+  },
+  {
+    "id": "mx_map_text_bathymetry",
+    "en": "Map: bathymetry labels",
+    "fa": "نقشه: برچسب های حمام سنجی"
+  },
+  {
+    "id": "mx_map_text_bathymetry_outline",
+    "en": "Map: bathymetry labels outline",
+    "fa": "نقشه: طرح کلی برچسب های حمام سنجی"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "fa": "نقشه: خطوط حمام سنجی"
   },
   {
     "id": "mx_map_road",
@@ -8130,6 +8585,51 @@
     "fa": "نقشه: طرح کلی متن را قرار دهید "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "fa": "نقشه: UN labels 0 0 (قطب جنوب)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "fa": "نقشه: UN labels 0 1 – State"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "fa": "نقشه: برچسب های سازمان ملل 0 2 – سرزمین اشغالی"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "fa": "نقشه: برچسب های سازمان ملل 0 3 – سرزمین غیر خودگردان"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "fa": "نقشه: برچسب های سازمان ملل 0 4 – قلمرو"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "fa": "نقشه: برچسب های سازمان ملل 0 5 – منطقه یا استان ویژه"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "fa": "نقشه: برچسب های سازمان ملل 0 99 - حاکمیت نابسامان"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "fa": "نقشه: برچسب های سازمان ملل متحد 1 1 - واحد اداری (سطح فراملی 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "fa": "نقشه: برچسب های سازمان ملل متحد 1 2 - واحد اداری (سطح فراملی 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "fa": "نقشه: متن جاده "
@@ -8148,6 +8648,281 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "fa": "نقشه: طرح متن متن متناسب با آب "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "fa": "خانواده فونت"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "fa": "فونت"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "fa": "کدورت"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "fa": "رنگ"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "fa": "قابل رویت"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "fa": "نام"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "fa": "شرح"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "fa": "نویسنده"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "fa": "بعد"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "fa": "صادرات"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "fa": "وارد كردن"
+  },
+  {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "fa": "MapX Shapefiles را توصیه نمی کند، زیرا هیچ روشی برای تعیین مجموعه کاراکترها وجود ندارد، که می تواند مشکلاتی را در حین نمایش و تجزیه و تحلیل ایجاد کند."
+  },
+  {
+    "id": "upl_title",
+    "en": "Upload",
+    "fa": "بارگذاری"
+  },
+  {
+    "id": "upl_title_layer_name",
+    "en": "Title of the source ({{language}})",
+    "fa": "عنوان منبع ( {{language}} )"
+  },
+  {
+    "id": "upl_name_placeholder",
+    "en": "Source title...",
+    "fa": "عنوان منبع ..."
+  },
+  {
+    "id": "upl_upload_btn",
+    "en": "Upload",
+    "fa": "بارگذاری"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "fa": "آپلود مجاز نیست"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "fa": "اختصاص سیستم مرجع مکانی (کد EPSG). پیش فرض 4326 است."
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "fa": "فایل (*.gpkg، *.zip، *.geojson) را رها کنید یا برای مرور کلیک کنید..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})",
+    "fa": "عنوان ( {{language}} )"
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "fa": "عنوان ( {{language}} )"
+  },
+  {
+    "id": "upl_file_upload_progress",
+    "en": "Uploading '{{filename}}'...",
+    "fa": "در حال آپلود {{filename}} '..."
+  },
+  {
+    "id": "upl_api_save_validation",
+    "en": "Geometry validation: This may take a while.",
+    "fa": "اعتبارسنجی هندسه: ممکن است مدتی طول بکشد."
+  },
+  {
+    "id": "upl_api_save_validation_geom_count",
+    "en": "There are {{count}} invalid geometries.",
+    "fa": "وجود دارد {{count}} هندسه های نامعتبر"
+  },
+  {
+    "id": "upl_api_save_failed_title",
+    "en": "Upload of '{{filename}}' failed.",
+    "fa": "آپلود از ' {{filename}} ' ناموفق."
+  },
+  {
+    "id": "upl_api_save_failed",
+    "en": "Upload of <samp>{{filename}}</samp> failed. Source removed: <samp>{{sourceRemoved}}</samp>. View removed : {{viewRemoved}}. Message : <samp> {{error}}</samp> ",
+    "fa": "آپلود از<samp> {{filename}}</samp> ناموفق. منبع حذف شد:<samp> {{sourceRemoved}}</samp> . نمایش حذف شد: {{viewRemoved}} . پیام:<samp> {{error}}</samp>"
+  },
+  {
+    "id": "upl_api_save_success_title",
+    "en": "Upload of '{{filename}}' done.",
+    "fa": "آپلود از ' {{filename}} ' انجام شده."
+  },
+  {
+    "id": "upl_api_save_success",
+    "en": "Upload of <samp>{{filename}}</samp> done. New source created: {{title}} – <samp>{{idSource}}</samp>. ",
+    "fa": "آپلود از<samp> {{filename}}</samp> انجام شده. منبع جدید ایجاد شد: {{title}} –<samp> {{idSource}}</samp> ."
+  },
+  {
+    "id": "upl_api_import_db",
+    "en": "Importation in database",
+    "fa": "واردات در پایگاه داده"
+  },
+  {
+    "id": "up_button_close",
+    "en": "Close",
+    "fa": "بستن"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "fa": "افزودن فایل ..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "fa": "بارگذاری"
+  },
+  {
+    "id": "up_button_reset",
+    "en": "Reset",
+    "fa": "بازنشانی کنید"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "fa": "تنظیم مجدد را تأیید کنید"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "fa": "حذف را تایید کنید {{n}} عناصر ؟"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "fa": "تایید آپلود"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "fa": "آپلود را تایید کنید {{n}} عناصر، در مجموع {{size}} ?"
+  },
+  {
+    "id": "up_settings",
+    "en": "Settings",
+    "fa": "تنظیمات"
+  },
+  {
+    "id": "up_select_epsg_code",
+    "en": "EPSG code",
+    "fa": "کد EPSG"
+  },
+  {
+    "id": "up_check_enable_wms_label",
+    "en": "Enable WMS services",
+    "fa": "خدمات WMS را فعال کنید"
+  },
+  {
+    "id": "up_check_enable_wms_desc",
+    "en": "In a public project, if public views are created using this source, enabling WMS service will automatically create a WMS layer and SLD, available for anyone.",
+    "fa": "در یک پروژه عمومی، اگر نماهای عمومی با استفاده از این منبع ایجاد شوند، فعال کردن سرویس WMS به طور خودکار یک لایه WMS و SLD ایجاد می کند که برای همه در دسترس است."
+  },
+  {
+    "id": "up_check_create_view_label",
+    "en": "Automatically create a view",
+    "fa": "به صورت خودکار یک نمای ایجاد کنید"
+  },
+  {
+    "id": "up_check_create_view_desc",
+    "en": "Create a basic view at the end of the process and add it to the project",
+    "fa": "در پایان فرآیند یک نمای اولیه ایجاد کنید و آن را به پروژه اضافه کنید"
+  },
+  {
+    "id": "up_check_allow_download_label",
+    "en": "Allow this source to be downloaded",
+    "fa": "اجازه دانلود این منبع را بدهید"
+  },
+  {
+    "id": "up_check_allow_download_desc",
+    "en": "This source license allows for redistribution, enabling the download feature will make the data and metadata available for download by anyone",
+    "fa": "این مجوز منبع امکان توزیع مجدد را فراهم می کند، فعال کردن ویژگی دانلود، داده ها و ابرداده ها را برای دانلود در دسترس همه قرار می دهد."
+  },
+  {
+    "id": "up_check_assign_epsg_label",
+    "en": "Assign the SRS bellow",
+    "fa": "SRS را در زیر اختصاص دهید"
+  },
+  {
+    "id": "up_check_assign_epsg_desc",
+    "en": "The converter will automatically retrieve the SRS information from the uploaded dataset. However, if you prefer to use a different SRS, simply check this checkbox and select the desired EPSG code from the options below.",
+    "fa": "مبدل به طور خودکار اطلاعات SRS را از مجموعه داده آپلود شده بازیابی می کند. با این حال، اگر ترجیح می دهید از SRS دیگری استفاده کنید، به سادگی این کادر را علامت بزنید و کد EPSG مورد نظر را از گزینه های زیر انتخاب کنید."
+  },
+  {
+    "id": "up_drop_or_click",
+    "en": "Drop files or click to select…",
+    "fa": "فایل ها را رها کنید یا برای انتخاب کلیک کنید…"
+  },
+  {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "fa": "مسائل"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "fa": "فایل های از دست رفته"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "fa": "وابستگی از دست رفته: {{ext}} . لطفاً فایل گم شده را اینجا بکشید و رها کنید."
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid element",
+    "fa": "عنصر نامعتبر"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "fa": "قالب پشتیبانی نمی شود"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "fa": "فایل به بزرگ"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many elements. Max:",
+    "fa": "عناصر بسیار زیاد حداکثر:"
   },
   {
     "id": "wms_select_reviewed_service",

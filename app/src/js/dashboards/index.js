@@ -1,4 +1,1 @@
-import {Dashboard} from './dashboard.js';
-
-
-export {Dashboard};
+export { Dashboard } from "./dashboard.js";

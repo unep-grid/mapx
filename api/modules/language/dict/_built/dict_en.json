@@ -1,5 +1,93 @@
 [
   {
+    "id": "auto_style_start",
+    "en": "Auto style..."
+  },
+  {
+    "id": "auto_style_select_mode_label",
+    "en": "Select mode"
+  },
+  {
+    "id": "auto_style_select_bins_label",
+    "en": "Select binning method"
+  },
+  {
+    "id": "auto_style_bins_number_label",
+    "en": "Number of bins"
+  },
+  {
+    "id": "auto_style_bins_number_desc",
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100"
+  },
+  {
+    "id": "auto_style_check_reverse_color_label",
+    "en": "Reverse color palette"
+  },
+  {
+    "id": "auto_style_check_reverse_color_desc",
+    "en": "Inverse colors order in palettes"
+  },
+  {
+    "id": "auto_style_check_preserve_label_label",
+    "en": "Preserve current labels"
+  },
+  {
+    "id": "auto_style_check_preserve_label_desc",
+    "en": "Preserve labels already defined in current rules"
+  },
+  {
+    "id": "auto_style_button_update",
+    "en": "Update rules"
+  },
+  {
+    "id": "auto_style_title_table_continuous",
+    "en": "Table. Method : {{method}}. Number of bins: {{bins}}"
+  },
+  {
+    "id": "auto_style_title_table_categorical",
+    "en": "Table. Number of rows = {{count}}"
+  },
+  {
+    "id": "auto_style_color_label",
+    "en": "Color"
+  },
+  {
+    "id": "auto_style_color_desc",
+    "en": "Choose color for all classes"
+  },
+  {
+    "id": "auto_style_sizes_min_label",
+    "en": "Start size"
+  },
+  {
+    "id": "auto_style_sizes_min_desc",
+    "en": "Size of the first item in the table"
+  },
+  {
+    "id": "auto_style_sizes_max_label",
+    "en": "End size"
+  },
+  {
+    "id": "auto_style_sizes_max_desc",
+    "en": "Size of the last item in the table"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes"
+  },
+  {
     "id": "btn_opt_code_integration",
     "en": "Code template / boilerplate / other format"
   },
@@ -18,6 +106,10 @@
   {
     "id": "code_integration_template_mapbox_style",
     "en": "Mapbox style (full)"
+  },
+  {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)"
   },
   {
     "id": "code_integration_template_mapbox_layers",
@@ -1220,16 +1312,12 @@
     "en": "Redo"
   },
   {
-    "id": "edit_table_modal_value_invalid_title",
-    "en": "Invalid value"
+    "id": "edit_table_modal_values_invalid_title",
+    "en": "Invalid values"
   },
   {
-    "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved."
-  },
-  {
-    "id": "edit_table_modal_value_invalid_continue",
-    "en": "Ignore and continue"
+    "id": "edit_table_modal_values_invalid_ok",
+    "en": "Ok"
   },
   {
     "id": "btn_edit_add_column",
@@ -1253,7 +1341,7 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name"
+    "en": "Name of the column"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1261,7 +1349,7 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1276,16 +1364,8 @@
     "en": "Name unavailable"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1293,7 +1373,7 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. "
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. "
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1308,16 +1388,12 @@
     "en": "Column name"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost."
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost."
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1349,7 +1425,7 @@
   },
   {
     "id": "edit_table_modal_warning_text",
-    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>"
+    "en": "<ul><li>Using this tool may pose a risk of permanently altering or deleting data, similar to desktop spreadsheet editors.</li><li>It is possible to undo or redo any changes made to cells during a session using keyboard shortcuts or dedicated buttons.</li><li>The &#39;Remove column&#39; action will permanently delete the column and its data, and cannot be undone after the final confirmation panel.</li><li>Invalid cells, indicated by a red color, will not be saved.</li><li>A backup system has not yet been implemented. To safeguard your data, you can use the download tool in the toolbox to export the entire layer or table as a precautionary measure.</li><li>There may be incremental backup at the database level, but not at the layer or table level.</li><li>The developers of the current platform and project administrators do not accept any responsibility for any potential losses or damages.</li></ul>"
   },
   {
     "id": "edit_table_modal_warning_ok_no_more",
@@ -1381,7 +1457,7 @@
   },
   {
     "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>"
+    "en": "Some column(s) contain invalid characters and cannot be edited: <ul> {{columns}} </ul>"
   },
   {
     "id": "edit_table_modal_attributes_title",
@@ -1436,12 +1512,144 @@
     "en": "This table has {{count}} unsaved changes. Are you sure you want to quit and discard those changes ?"
   },
   {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename column"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename column"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename column"
+  },
+  {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column"
+  },
+  {
+    "id": "btn_stat_attribute",
+    "en": "Statistics"
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user."
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer"
   },
   {
     "id": "geom_tools_modal_select_label",
     "en": "Select source layer"
+  },
+  {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings"
   },
   {
     "id": "en",
@@ -1744,6 +1952,10 @@
     "en": "Cancel"
   },
   {
+    "id": "btn_next",
+    "en": "Next..."
+  },
+  {
     "id": "btn_continue",
     "en": "Continue"
   },
@@ -1770,6 +1982,10 @@
   {
     "id": "btn_close",
     "en": "Close"
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate..."
   },
   {
     "id": "btn_download",
@@ -2012,6 +2228,10 @@
     "en": "Downloading not allowed. More info in metadata."
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege "
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view"
   },
@@ -2030,42 +2250,6 @@
   {
     "id": "btn_opt_edit_style",
     "en": "Set the style of this view"
-  },
-  {
-    "id": "schema_style_title_legend",
-    "en": "Legend title"
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval"
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order"
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack"
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label"
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?"
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend"
   },
   {
     "id": "btn_opt_meta",
@@ -2232,6 +2416,10 @@
     "en": "Add 3D terrain"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode"
   },
@@ -2253,39 +2441,39 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features"
+    "en": "Spotlight vector features"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration"
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode"
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap"
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature"
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap"
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap"
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap"
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap"
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap"
   },
   {
     "id": "label_check_instant_overlap",
@@ -2362,6 +2550,10 @@
   {
     "id": "error_no_source",
     "en": "No source layer found"
+  },
+  {
+    "id": "error_type_missing",
+    "en": "Missing view type"
   },
   {
     "id": "error_title_exists",
@@ -2772,20 +2964,12 @@
     "en": "Add this MapX user directly"
   },
   {
-    "id": "schema_class",
-    "en": "Class"
+    "id": "schema_metadata",
+    "en": "Meta data"
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values"
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color"
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description"
+    "id": "schema_method",
+    "en": "Method"
   },
   {
     "id": "schema_item",
@@ -2796,104 +2980,8 @@
     "en": "Key"
   },
   {
-    "id": "schema_style_label",
-    "en": "Label"
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule"
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data"
-  },
-  {
-    "id": "schema_method",
-    "en": "Method"
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule"
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules"
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size"
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings"
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max"
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min"
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent"
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation."
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max"
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min"
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol"
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min."
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max."
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data"
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data"
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value"
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set."
+    "id": "schema_class",
+    "en": "Class"
   },
   {
     "id": "self",
@@ -3264,6 +3352,10 @@
     "en": "Your script"
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard"
   },
@@ -3382,6 +3474,10 @@
   {
     "id": "view_dashboard_widgets",
     "en": "Widgets"
+  },
+  {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: "
   },
   {
     "id": "view_delete_confirm",
@@ -3617,7 +3713,7 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project."
+    "en": "Allow non-members to request a membership to this project ( only if public )"
   },
   {
     "id": "project_state_key",
@@ -3784,8 +3880,12 @@
     "en": "Initial map position"
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds"
   },
   {
     "id": "project_map_proj_set",
@@ -3810,6 +3910,10 @@
   {
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning"
   },
   {
     "id": "map_fit_to_bounds",
@@ -3938,10 +4042,6 @@
   {
     "id": "update_app_button_confirm",
     "en": "Restart now"
-  },
-  {
-    "id": "update_app_button_later",
-    "en": "Later"
   },
   {
     "id": "btn_clear_cache",
@@ -5085,7 +5185,7 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -5128,7 +5228,7 @@
     "en": "Quantile"
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks"
   },
   {
@@ -5169,7 +5269,7 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process"
+    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process"
   },
   {
     "id": "get_source_extraction_wait",
@@ -5193,7 +5293,7 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -5205,7 +5305,7 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>"
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>"
   },
   {
     "id": "get_source_zip_progress",
@@ -5306,6 +5406,10 @@
   {
     "id": "nc_button",
     "en": "Notifications"
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}"
   },
   {
     "id": "mc_title",
@@ -5596,6 +5700,26 @@
     "en": "The raw data will be read from our server. However, we do not store or use it in any way. Everything is simply reflected. IP addresses are stored in memory to prevent abuse."
   },
   {
+    "id": "btn_editor_tool_format",
+    "en": "Format"
+  },
+  {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help"
+  },
+  {
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize"
+  },
+  {
+    "id": "nc_label_merge",
+    "en": "Details..."
+  },
+  {
     "id": "pk_panel_options",
     "en": "Display options"
   },
@@ -5658,6 +5782,54 @@
   {
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette"
+  },
+  {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters"
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available"
   },
   {
     "id": "schema_story_theme",
@@ -6060,6 +6232,174 @@
     "en": "Face of a cube"
   },
   {
+    "id": "schema_style_title_legend",
+    "en": "Legend title"
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval"
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order"
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack"
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label"
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?"
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values"
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color"
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description"
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label"
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule"
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule"
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules"
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size"
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings"
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max"
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation."
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max"
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min"
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min."
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max."
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data"
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data"
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set."
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color."
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule."
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ..."
   },
@@ -6265,11 +6605,19 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position"
+    "en": "Set initial map extent"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds."
   },
   {
     "id": "share_filter_activated_label",
@@ -6444,6 +6792,10 @@
     "en": "Map: country shadow"
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water"
   },
@@ -6454,6 +6806,18 @@
   {
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)"
+  },
+  {
+    "id": "mx_map_text_bathymetry",
+    "en": "Map: bathymetry labels"
+  },
+  {
+    "id": "mx_map_text_bathymetry_outline",
+    "en": "Map: bathymetry labels outline"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines"
   },
   {
     "id": "mx_map_road",
@@ -6504,6 +6868,42 @@
     "en": "Map: place text outline"
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text"
   },
@@ -6518,6 +6918,226 @@
   {
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline"
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import"
+  },
+  {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis"
+  },
+  {
+    "id": "upl_title",
+    "en": "Upload"
+  },
+  {
+    "id": "upl_title_layer_name",
+    "en": "Title of the source ({{language}})"
+  },
+  {
+    "id": "upl_name_placeholder",
+    "en": "Source title..."
+  },
+  {
+    "id": "upl_upload_btn",
+    "en": "Upload"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326."
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})"
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})"
+  },
+  {
+    "id": "upl_file_upload_progress",
+    "en": "Uploading '{{filename}}'..."
+  },
+  {
+    "id": "upl_api_save_validation",
+    "en": "Geometry validation: This may take a while."
+  },
+  {
+    "id": "upl_api_save_validation_geom_count",
+    "en": "There are {{count}} invalid geometries."
+  },
+  {
+    "id": "upl_api_save_failed_title",
+    "en": "Upload of '{{filename}}' failed."
+  },
+  {
+    "id": "upl_api_save_failed",
+    "en": "Upload of <samp>{{filename}}</samp> failed. Source removed: <samp>{{sourceRemoved}}</samp>. View removed : {{viewRemoved}}. Message : <samp> {{error}}</samp> "
+  },
+  {
+    "id": "upl_api_save_success_title",
+    "en": "Upload of '{{filename}}' done."
+  },
+  {
+    "id": "upl_api_save_success",
+    "en": "Upload of <samp>{{filename}}</samp> done. New source created: {{title}} – <samp>{{idSource}}</samp>. "
+  },
+  {
+    "id": "upl_api_import_db",
+    "en": "Importation in database"
+  },
+  {
+    "id": "up_button_close",
+    "en": "Close"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload"
+  },
+  {
+    "id": "up_button_reset",
+    "en": "Reset"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?"
+  },
+  {
+    "id": "up_settings",
+    "en": "Settings"
+  },
+  {
+    "id": "up_select_epsg_code",
+    "en": "EPSG code"
+  },
+  {
+    "id": "up_check_enable_wms_label",
+    "en": "Enable WMS services"
+  },
+  {
+    "id": "up_check_enable_wms_desc",
+    "en": "In a public project, if public views are created using this source, enabling WMS service will automatically create a WMS layer and SLD, available for anyone."
+  },
+  {
+    "id": "up_check_create_view_label",
+    "en": "Automatically create a view"
+  },
+  {
+    "id": "up_check_create_view_desc",
+    "en": "Create a basic view at the end of the process and add it to the project"
+  },
+  {
+    "id": "up_check_allow_download_label",
+    "en": "Allow this source to be downloaded"
+  },
+  {
+    "id": "up_check_allow_download_desc",
+    "en": "This source license allows for redistribution, enabling the download feature will make the data and metadata available for download by anyone"
+  },
+  {
+    "id": "up_check_assign_epsg_label",
+    "en": "Assign the SRS bellow"
+  },
+  {
+    "id": "up_check_assign_epsg_desc",
+    "en": "The converter will automatically retrieve the SRS information from the uploaded dataset. However, if you prefer to use a different SRS, simply check this checkbox and select the desired EPSG code from the options below."
+  },
+  {
+    "id": "up_drop_or_click",
+    "en": "Drop files or click to select…"
+  },
+  {
+    "id": "up_title_issue",
+    "en": "Issues"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here."
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid element"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many elements. Max:"
   },
   {
     "id": "wms_select_reviewed_service",

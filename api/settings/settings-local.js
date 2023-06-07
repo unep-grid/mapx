@@ -1,10 +1,20 @@
+import { mkdir } from "fs/promises";
 import { settings_global } from "./settings-global.js";
 const env = process.env;
+
+
+try {
+  await mkdir(env.MAPX_PATH_DOWNLOAD, { recursive: true });
+  await mkdir(env.MAPX_PATH_USERDATA, { recursive: true });
+} catch (e) {
+  throw new Error(`Could not create user/download directory`);
+}
 
 const settings = Object.assign({}, settings_global, {
   mapx: {
     users: {
       root: env.MAPX_ROOT_MODE_MEMBERS,
+      dev: env.MAPX_DEV_MEMBERS,
       project_creator: env.MAPX_PROJECT_CREATORS,
     },
   },
@@ -30,7 +40,7 @@ const settings = Object.assign({}, settings_global, {
     host: env.REDIS_HOST,
   },
   geoip: {
-    url_download : env.MAXMIND_URL_DOWNLOAD 
+    url_download: env.MAXMIND_URL_DOWNLOAD,
   },
   meili: {
     master_key: env.MEILI_MASTER_KEY,
@@ -49,7 +59,8 @@ const settings = Object.assign({}, settings_global, {
     port: env.POSTGRES_PORT,
     host: env.POSTGRES_HOST,
     schema: env.POSTGRES_SCHEMA_MAIN,
-    timeout: 1000 * 60 * 5, // 5 minutes
+    timeoutLong: 1000 * 60 * 5, // 5 minutes
+    timeoutShort: 1000 * 20, // 20 seconds
     poolMin: env.POSTGRES_POOL_MIN,
     poolMax: env.POSTGRES_POOL_MAX,
     admin: {
@@ -141,6 +152,12 @@ const settings = Object.assign({}, settings_global, {
       subtitle: null,
       content: "<b>Info</b>",
       subjectPrefix: "[ MapX ]",
+    },
+  },
+  project: {
+    name: {
+      min: 3,
+      max: 50,
     },
   },
 });

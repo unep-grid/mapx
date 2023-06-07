@@ -1,9 +1,8 @@
-/*jshint esversion: 6 */
-
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'hint.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import 'flag-icons/css/flag-icons.min.css';
 
 import '../css/mx_variables.css';
 import '../css/mx_base.css';
@@ -15,8 +14,6 @@ import '../css/mx_table.css';
 import '../css/mx_modal.css';
 import '../css/mx_project_list.css';
 import '../css/mx_legends.css';
-import '../css/mx_highcharts.css';
-
 
 import * as mx from './mx.js';
 window.mx = mx;

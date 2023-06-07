@@ -7,13 +7,10 @@
   border: 1px solid var(--mx_ui_border);
   border-radius: 10px;
 }
-.txt-filter--content {
-  margin-bottom: 20px;
-}
-.txt-filter--wrapper {
-  padding: 0px;
-}
 .txt-filter--box {
-  outline: 1px solid var(--mx_ui_input_accent);
+  border-bottom: 1px solid var(--mx_ui_input_accent);
 }
-
+.txt-filter--content-flex {
+  display: flex;
+  flex-direction: column;
+}

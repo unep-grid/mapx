@@ -1,4 +1,4 @@
-import { isArray, isString, isEmpty } from "@fxi/mx_valid";
+import { isArray, isString, isEmpty, isNotEmpty } from "@fxi/mx_valid";
 import path from "path";
 import fs from "fs";
 import zlib from "zlib";
@@ -7,9 +7,24 @@ import { readFile } from "fs/promises";
 
 /**
  * Conversion of array of column names to pg columns
+ * @param {Array} array of attibutes string
+ * @param {Object} opt options
+ * @param {Array} opt.castText Optional list  of attributes to cast as text
+ * @return {String} String usable in posgres query
  */
-function toPgColumn(arr) {
-  return '"' + arr.join('","') + '"';
+function toPgColumn(arr, opt) {
+  if (isEmpty(opt?.castText)) {
+    return `"${arr.join('","')}"`;
+  }
+  const ct = opt.castText;
+  const inner = arr.map((a) => {
+    if (ct.includes(a)) {
+      return `"${a}"::text`;
+    } else {
+      return `"${a}"`;
+    }
+  });
+  return `${inner.join(",")}`;
 }
 
 /**
@@ -26,6 +41,43 @@ function getDistinct(arr) {
   }
   return out;
 }
+
+/**
+ * Clone raw
+ */
+function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+/**
+ * Escape literals
+ * Ported from PostgreSQL 9.2.4 source code in src/interfaces/libpq/fe-exec.c
+ */
+function escapeLiteral(str) {
+  let hasBackslash = false;
+  let escaped = "'";
+
+  for (let i = 0; i < str.length; i++) {
+    const c = str[i];
+    if (c === "'") {
+      escaped += c + c;
+    } else if (c === "\\") {
+      escaped += c + c;
+      hasBackslash = true;
+    } else {
+      escaped += c;
+    }
+  }
+
+  escaped += "'";
+
+  if (hasBackslash === true) {
+    escaped = " E" + escaped;
+  }
+
+  return escaped;
+}
+
 /**
  * Send string for result message
  * @param {Object} obj object to be converted in string for messages
@@ -39,8 +91,10 @@ function toRes(obj) {
  * @param {Object} res Result object
  * @param {Object} data Data stringifiable to JSON
  * @param {Object} opt
- * @param {Object} opt.end If true, send, else continue writing
- * @param {Object} opt.etag If set, add custom etag
+ * @param {Boolean} opt.toRes If true, add '\t\n' for message delimiter (see toRes)
+ * @param {Boolean} opt.end If true, send, else continue writing
+ * @param {String} opt.etag If set, add custom etag
+ * @param {Function} opt.write_cb Function for the write function, if not 'end'.
  */
 function sendJSON(res, data, opt) {
   try {
@@ -49,17 +103,20 @@ function sendJSON(res, data, opt) {
       ...opt,
     };
     opt.end = opt.end || false;
-    data = JSON.stringify(data || "");
+    data = isString(data) ? data : JSON.stringify(data || "");
     res.setHeader("Mapx-Content-Length", data.length || 0);
     res.setHeader("Content-Type", "application/json");
     res.setHeader("Cache-Control", "max-age=0, s-maxage=0");
     if (opt.etag) {
       res.setHeader("Etag", opt.etag);
     }
+    if (opt.toRes) {
+      data = data + "\t\n";
+    }
     if (opt.end) {
       res.send(data);
     } else {
-      res.write(data);
+      res.write(data, "utf8", opt.write_cb);
     }
   } catch (e) {
     sendError(res, e);
@@ -127,22 +184,23 @@ function toBoolean(value, def) {
  * @param {nChar} nChar Number of characters per group : E.g. 2 => 12_12_12
  * @param {Boolean} toUpper To uppercase
  * @param {Boolean} toLower To lowercase
+ * @param {String} separator Separator. Default = '_'
  * @return {String} identifier
  */
-function randomString(prefix, nRep, nChar, toLower, toUpper) {
+function randomString(prefix, nRep, nChar, toLower, toUpper, sep) {
   nRep = nRep || 4;
   nChar = nChar || 5;
   prefix = prefix || "mx";
   toLower = toLower || false;
   toUpper = toUpper || false;
   const out = [prefix];
-  const sep = "_";
+  const sep_s = sep || "_";
   const chars =
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const n = chars.length - 1;
 
   for (let i = 0; i < nRep; i++) {
-    out.push(sep);
+    out.push(sep_s);
     for (let j = 0; j < nChar; j++) {
       out.push(chars[Math.round(Math.random() * n)]);
     }
@@ -478,6 +536,7 @@ function timeStep(start) {
  * Exports
  */
 export {
+  clone,
   toPgColumn,
   attrToPgCol,
   arrayToPgArray,
@@ -503,6 +562,7 @@ export {
   readJSON,
   prettyJson,
   timeStep,
+  escapeLiteral,
   /**
    * Middleware
    */

@@ -4,6 +4,7 @@ import {
   isElement,
   isArray,
   isString,
+  isNumeric,
   isHTML,
   isFunction
 } from './../../is_test';
@@ -138,6 +139,7 @@ function el(tagName, ...opt) {
     } else {
       setContent(o);
     }
+
   }
 
   return elOut;
@@ -145,7 +147,7 @@ function el(tagName, ...opt) {
   function setContent(str) {
     if (isHTML(str) || tagName === 'style') {
       elOut.innerHTML = str;
-    } else if (isString(str)) {
+    } else if (isString(str) || isNumeric(str)) {
       if (svgMode) {
         elOut.textContent = str;
       } else {

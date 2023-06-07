@@ -16,8 +16,11 @@
     min-width: 0px;
     max-width: calc(100vw - 30px);
     max-height: calc(100vh - 30px);
-    &.pinned {
+    &.button-panel--pinned {
       z-index: 1001;
+    }
+    &.button-panel--pinned-always {
+      z-index: 1002;
     }
     &.button-panel--top-right,
     &.button-panel--bottom-right {
@@ -42,7 +45,7 @@
       user-select: none;
     }
     &.active {
-      &:hover,
+      /*&:hover,*/
       &.button-panel--container-resize {
         z-index: 1500;
         .button-panel--item-handles {
@@ -123,6 +126,32 @@
           flex-direction: column;
         }
       }
+      .button-panel--item-footer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        font-size: 0.7rem;
+        padding: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background: var(--mx_ui_background);
+        box-shadow: var(--mx_ui_box_shadow);
+        border-radius: 0px 0px 10px 10px;
+
+        .button-panel--item-footer-attribution {
+          &:not(:last-child):after {
+            content: ", ";
+          }
+          a {
+            margin-left: 0.3em;
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+      }
       .button-panel--item-content-transparent-background {
         background: var(--mx_ui_background_transparent);
       }
@@ -161,12 +190,12 @@
             opacity: 1;
             margin: 30px;
             .button-panel--item-handle {
-              /** Add a surface around button to handle fast mvt**/
+              /** Add a surface around button to handle fast move **/
               &::after {
                 content: "";
                 position: absolute;
-                width: 100px;
-                height: 100px;
+                width: 50px;
+                height: 50px;
                 /*border: 1px solid red;*/
                 border-radius: 50%;
                 /** same as handle diameter */

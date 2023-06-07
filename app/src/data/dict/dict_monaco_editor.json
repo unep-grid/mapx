@@ -1,0 +1,54 @@
+[
+  {
+    "id": "btn_editor_tool_format",
+    "en": "Format",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "fr": "Aide",
+    "es": "Ayuda",
+    "ru": "Помощь",
+    "zh": "帮助",
+    "ar": "مساعدة",
+    "fa": "راهنما",
+    "ps": "راهنمایی",
+    "bn": "সাহায্য",
+    "de": "Hilfe"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "fr": "Aide",
+    "es": "Ayuda",
+    "ru": "Помощь",
+    "zh": "帮助",
+    "ar": "مساعدة",
+    "fa": "راهنما",
+    "ps": "راهنمایی",
+    "bn": "সাহায্য",
+    "de": "Hilfe"
+  },
+  {
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "fr": "Agrandir/Réduire",
+    "es": "Expandir/Minimizar",
+    "ru": "Развернуть/Свернуть",
+    "zh": "展开/最小化",
+    "ar": "توسيع/تصغير",
+    "fa": "بزرگ کردن/کوچک کردن",
+    "ps": "په‌رته‌کاندن/کچک کول",
+    "bn": "বাড়ান/সংকোচন",
+    "de": "Erweitern/Minimieren"
+  }
+]

@@ -41,7 +41,6 @@ const rules = [
     key: [
       "useCache",
       "skipCache",
-      "binsCompute",
       "publicOnly",
       "isGuest",
       "encrypt",

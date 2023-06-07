@@ -35,149 +35,131 @@ const customStyle = [
   { t: "Absolute 50% bottom", c: "absolute-50-bottom" },
 ];
 
+const defaults = {
+  selector: "*[data-editable]",
+};
+
 /**
  * Init editing function
  * @param {Object} sate Story state
  */
 export async function initEditing(state) {
-  if (state._init_editing) {
-    return;
-  }
-  state._init_editing = true;
+  const ContentTools = await loadContentTools();
 
-  const m = await Promise.all([
-    import("ContentTools"),
-    import("ContentTools/build/content-tools.min.css"),
-  ]);
-  const ContentTools = m[0].default;
-  await import("./coffee/mx_extend_content_tools.coffee");
+  state.ct_editor = ContentTools.EditorApp.get();
 
-  /*
-   * Get ContentTools and set upload logic
-   */
-
-  if (!ContentTools._init) {
-    ContentTools.DEFAULT_TOOLS = [
-      ["h1", "h2", "h3", "h4", "h5", "paragraph", "blockquote", "preformatted"],
-      ["italic", "bold"],
-      ["align-left", "align-center", "align-right"],
-      [
-        "unordered-list",
-        "ordered-list",
-        "table",
-        "indent",
-        "unindent",
-        "line-break",
-      ],
-      ["link", "image", "video"],
-      ["undo", "redo", "remove"],
-    ];
-
-    const style = customStyle.map(function (s) {
-      return new ContentTools.Style(s.t, s.c, s.f);
-    });
-    ContentTools.StylePalette.add(style);
-    ContentTools.IMAGE_UPLOADER = contentToolsImageUploader;
-    ContentTools._init = true;
-  }
   /**
-   * If not already set, create a new editor instance
+   * Add custom button logic
    */
-  if (!state.ct_editor) {
-    state.ct_editor = ContentTools.EditorApp.get();
+  const elBtnModalPreview = document.getElementById("btnViewPreviewStory");
+  const elBtnModalSave = document.getElementById("btnViewSaveStory");
+  const elModalEditView = document.getElementById("modalViewEdit");
+  /**
+   * Set a remove function for custom buttons
+   */
+  state.ct_editor_remove = () => {
+    state.ct_editor.destroy();
+    delete state.ct_editor;
+  };
 
-    /**
-     * Add custom button logic
-     */
-    const elBtnModalPreview = document.getElementById("btnViewPreviewStory");
-    const elBtnModalSave = document.getElementById("btnViewSaveStory");
-    const elModalEditView = document.getElementById("modalViewEdit");
-    /**
-     * Set a remove function for custom buttons
-     */
-    state.ct_editor_remove = () => {
-      state.ct_editor.destroy();
-    };
+  function preventEmptyEditing() {
+    const elRegions = document.querySelectorAll(defaults.selector);
+    if (elRegions.length === 0) {
+      state.ct_editor_remove();
+      return false;
+    }
+    return true;
+  }
 
-    /**
-     * Init editor
-     */
-    state.ct_editor.init(
-      "*[data-editable]", // class of region editable
-      "data-name", // name of regions
-      null, // fixture test
-      true
-    );
+  /**
+   * Init editor
+   */
+  state.ct_editor.init(
+    defaults.selector, // class of region editable
+    "data-name", // name of regions
+    null, // fixture test
+    true
+  );
 
-    /**
-     * On start
-     */
-    state.ct_editor.addEventListener("start", () => {
-      elBtnModalSave.setAttribute("disabled", true);
-      elBtnModalPreview.setAttribute("disabled", true);
-      //elBtnStoryClose.setAttribute("disabled",true);
-      elModalEditView.classList.add("mx-hide");
-      /* If jed has an story editor, disable it during edition */
-      if (jed.editors.storyEdit) {
-        jed.editors.storyEdit.disable();
-      }
-    });
+  /**
+   * On start
+   */
+  state.ct_editor.addEventListener("start", () => {
+    const ok = preventEmptyEditing();
 
-    /**
-     * On cancel
-     */
-    state.ct_editor.addEventListener("revert", () => {
-      elBtnModalSave.removeAttribute("disabled");
-      elBtnModalPreview.removeAttribute("disabled");
-      elModalEditView.classList.remove("mx-hide");
-      //elBtnStoryClose.removeAttribute("disabled");
-      if (jed.editors.storyEdit) {
-        jed.editors.storyEdit.enable();
-      }
-    });
+    if (!ok) {
+      return;
+    }
 
-    /**
-     * On save
-     */
-    state.ct_editor.addEventListener("saved", function (ev) {
-      elBtnModalSave.removeAttribute("disabled");
-      elBtnModalPreview.removeAttribute("disabled");
-      elModalEditView.classList.remove("mx-hide");
-      // Check that something changed
-      const regions = ev.detail().regions;
-      if (jed.editors.storyEdit) {
-        jed.editors.storyEdit.enable();
-      }
-      if (Object.keys(regions).length === 0) {
-        return;
-      }
+    elBtnModalSave.setAttribute("disabled", true);
+    elBtnModalPreview.setAttribute("disabled", true);
+    //elBtnStoryClose.setAttribute("disabled",true);
+    elModalEditView.classList.add("mx-hide");
+    /* If jed has an story editor, disable it during edition */
+    if (jed.editors.storyEdit) {
+      jed.editors.storyEdit.disable();
+    }
+  });
 
-      if (jed.editors.storyEdit) {
-        const j = jed.editors.storyEdit;
-        this.busy(true);
+  /**
+   * On cancel
+   */
+  state.ct_editor.addEventListener("revert", () => {
+    const ok = preventEmptyEditing();
 
-        for (var k in regions) {
-          const t = regions[k];
-          const s = k.split(":");
-          const step = +s[0];
-          const slide = +s[1];
-          const lang = getLanguageCurrent();
-          const e = j.getEditor(
-            "root.steps." + step + ".slides." + slide + ".html." + lang
-          );
-          if (e && e.setValue) {
-            e.setValue(t);
-          }
+    if (!ok) {
+      return;
+    }
+    elBtnModalSave.removeAttribute("disabled");
+    elBtnModalPreview.removeAttribute("disabled");
+    elModalEditView.classList.remove("mx-hide");
+    //elBtnStoryClose.removeAttribute("disabled");
+    if (jed.editors.storyEdit) {
+      jed.editors.storyEdit.enable();
+    }
+  });
+
+  /**
+   * On save
+   */
+  state.ct_editor.addEventListener("saved", function (ev) {
+    const ok = preventEmptyEditing();
+
+    if (!ok) {
+      return;
+    }
+    elBtnModalSave.removeAttribute("disabled");
+    elBtnModalPreview.removeAttribute("disabled");
+    elModalEditView.classList.remove("mx-hide");
+    // Check that something changed
+    const regions = ev.detail().regions;
+    if (jed.editors.storyEdit) {
+      jed.editors.storyEdit.enable();
+    }
+    if (Object.keys(regions).length === 0) {
+      return;
+    }
+
+    if (jed.editors.storyEdit) {
+      const j = jed.editors.storyEdit;
+      this.busy(true);
+
+      for (var k in regions) {
+        const t = regions[k];
+        const s = k.split(":");
+        const step = +s[0];
+        const slide = +s[1];
+        const lang = getLanguageCurrent();
+        const e = j.getEditor(
+          "root.steps." + step + ".slides." + slide + ".html." + lang
+        );
+        if (e && e.setValue) {
+          e.setValue(t);
         }
-        this.busy(false);
       }
-    });
-  }
-
-  /**
-   * Set language
-   */
-  await updateEditorLanguage();
+      this.busy(false);
+    }
+  });
 }
 
 function contentToolsImageUploader(dialog) {
@@ -401,4 +383,53 @@ function contentToolsImageUploader(dialog) {
     webP.src =
       "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA";
   }
+}
+
+async function loadContentTools() {
+  /**
+   * Available globaly:
+   * - ContentTools
+   * - ContentEdit
+   * - ContentSelect
+   * - ...
+   */
+  const { default: ContentTools } = await import("ContentTools");
+  await import("ContentTools/build/content-tools.min.css");
+  await import("./coffee/mx_extend_content_tools.coffee");
+
+  /*
+   * Get ContentTools and set upload logic
+   */
+  if (!ContentTools._init) {
+    ContentTools.DEFAULT_TOOLS = [
+      ["h1", "h2", "h3", "h4", "h5", "paragraph", "blockquote", "preformatted"],
+      ["italic", "bold"],
+      ["align-left", "align-center", "align-right"],
+      [
+        "unordered-list",
+        "ordered-list",
+        "table",
+        "indent",
+        "unindent",
+        "line-break",
+      ],
+      ["link", "image", "video"],
+      ["undo", "redo", "remove"],
+    ];
+
+    const style = customStyle.map(function (s) {
+      return new ContentTools.Style(s.t, s.c, s.f);
+    });
+    ContentTools.StylePalette.add(style);
+    ContentTools.IMAGE_UPLOADER = contentToolsImageUploader;
+    ContentTools._init = true;
+  }
+  /**
+   * Set language
+   * -> ContentEditor add a lot of stuff globally
+   * -> updateEditorLanguage exepects global ContentEdit
+   */
+  await updateEditorLanguage();
+
+  return ContentTools;
 }

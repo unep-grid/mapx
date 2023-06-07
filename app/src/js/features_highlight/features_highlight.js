@@ -1,13 +1,14 @@
-import chroma from "chroma-js";
-import { isEmpty } from "./../is_test/index";
+import { cancelFrame, onNextFrame } from "../animation_frame";
+import { bindAll } from "../bind_class_methods";
+import { isEmpty, isString } from "./../is_test/index";
 const def = {
-  map: null,
-  use_animation: false,
-  register_listener: false, // If trhe highligther will be triggered by event "event_type"
-  event_type: "click", // click, mousemove. Does not work yet with mousemove
+  map: null, // Mapbox gl instance
+  use_animation: false, // Enable animation
+  register_listener: false, // If true highligther will be triggered by event "event_type". "false" set as default as highligther is triggered during popup handling
+  event_type: "mousemove", // click, mousemove. Does not work yet with mousemove
   transition_duration: 200,
   transition_delay: 0,
-  animation_duration: 700, // 0 unlimited
+  animation_duration: 1400, // 0 unlimited
   animation_on: "line-width", // only option now
   highlight_offset: 2, // greater that 2 is too much for lines
   highlight_blur: 0.2,
@@ -15,18 +16,27 @@ const def = {
   highlight_color: "#F0F",
   highlight_opacity: 0.9,
   highlight_feature_opacity: 0.5,
+  highlight_radius: 20,
   supported_types: ["circle", "symbol", "fill", "line"],
-  regex_layer_id: /^MX/,
-  max_features_render: 5,
+  regex_layer_id: /^MX-/,
+  max_layers_render: 10,
 };
 
 class Highlighter {
   constructor(opt) {
     const hl = this;
     /**
+     * Bind
+     */
+    bindAll(hl);
+
+    /**
      * local store
      */
-    hl._features = [];
+    hl._layers = new Map();
+    hl._items = new Map();
+    hl._config = {};
+
     /**
      * Set options
      */
@@ -39,7 +49,7 @@ class Highlighter {
   setOptions(opt) {
     const hl = this;
     Object.assign(hl.opt, opt);
-    hl.render();
+    hl.update();
   }
 
   /**
@@ -48,9 +58,9 @@ class Highlighter {
   destroy() {
     const hl = this;
     if (hl._listener) {
-      hl.map.off(hl.opt.event_type, hl._listener);
+      hl._map.off(hl.opt.event_type, hl._listener);
     }
-    hl.clean();
+    hl._clear();
   }
 
   /**
@@ -62,38 +72,100 @@ class Highlighter {
       throw new Error("mapbox-gl map is required");
     }
 
-    hl.map = map;
+    hl._map = map;
     if (hl.opt.register_listener === true) {
-      hl._listener = hl.update.bind(hl);
-      hl.map.on(hl.opt.event_type, hl._listener);
+      hl._listener = hl.update;
+      hl._map.on(hl.opt.event_type, hl._listener);
     }
   }
 
   /**
-   * Event handler
+   * Set hl config
+   *
+   * @param {Object} config - Configuration options for the highlighter.
+   * @param {(PointLike | Array<PointLike>)?} config.point Location to query
+   * @param {Array.<Object>} config.filters - Array of filter objects to be applied.
+   * @param {String} config.filters[].id - Identifier of the view to which the filter applies.
+   * @param {Array} config.filters[].filter - MapboxGL expression
+   * @returns {number} Number of matched feature
+   * @example
+   * hl.set({
+   *   all: true,
+   * });
+   *
+   * hl.set({
+   *   filters: [
+   *     { id: "MX-TC0O1-34A9Y-RYDJG", filter: ["<", ["get", "year"], 2000] },
+   *   ],
+   * });
+   *
+   * hl.set({
+   *   filters: [
+   *     { id: "MX-TC0O1-34A9Y-RYDJG", filter: [">=", ["get", "fatalities"], 7000] },
+   *   ],
+   * });
+   *
+   * hl.set({
+   *   filters: [
+   *     {
+   *       id: "MX-TC0O1-34A9Y-RYDJG",
+   *       filter: [
+   *         "in",
+   *         ["get", "country"],
+   *         ["literal", ["Nigeria", "Gabon", "Angola"]],
+   *       ],
+   *     },
+   *   ],
+   * });
    */
-  update(e) {
+  set(config) {
     const hl = this;
-    hl.updateFeatures(e);
-    hl.render();
+    if (isEmpty(config)) {
+      console.error("Missing config. Use 'update' to re-use previous config");
+      return;
+    }
+    hl.reset();
+    Object.assign(hl._config, config);
+    return hl.update({ animate: true });
   }
 
   /**
-   * Clean : for each feature :
-   * - Remove from list
-   * - Disable state
-   * - Clean highlight layer
+   * Reset config and clear
    */
+  reset() {
+    const hl = this;
+    hl._clear();
+    hl._config = {};
+    return hl.count();
+  }
+
+  /**
+   * Update
+   * @returns {number} Number of matched features
+   */
+  update(renderOptions) {
+    const hl = this;
+    hl._update_items();
+    hl._update_layers();
+    hl._render(renderOptions);
+    return hl.count();
+  }
+
+  /**
+   * Clear
+   */
+  _clear() {
+    const hl = this;
+    for (const layer of hl._layers.values()) {
+      hl.removeHighlightLayer(layer);
+    }
+    hl._layers.clear();
+    hl._items.clear();
+  }
   clean() {
+    console.warn("Deprecated, use clear() instead");
     const hl = this;
-    while (hl._features.length) {
-      const f = hl._features.pop();
-      if (isEmpty(f.id)) {
-        return;
-      }
-      hl.disableState(f);
-      hl.removeHighlightLayer(f);
-    }
+    return hl._clear();
   }
 
   /**
@@ -101,64 +173,45 @@ class Highlighter {
    * - Enable state
    * - Add highlight layer
    */
-  render() {
+  _render(renderOptions) {
     const hl = this;
-    const max = hl.opt.max_features_render;
-    let i = 0;
-    for (const f of hl._features) {
-      if (i++ >= max || isEmpty(f.id)) {
-        return;
+    const opt = Object.assign({}, { animate: false }, renderOptions);
+    const max = hl.opt.max_layers_render;
+    const animate = opt.animate && hl.opt.use_animation;
+    cancelFrame(hl._id_render);
+    hl._id_render = onNextFrame(() => {
+      let i = 0;
+      for (const layer of hl._layers.values()) {
+        if (i++ >= max) {
+          return;
+        }
+        hl.addHighlightLayer(layer);
       }
-      hl.addHighlightLayer(f);
-      hl.enableState(f);
-    }
-  }
-
-  /**
-   * Remove highlight :
-   * - Remove layer if exists
-   * - reset feature state
-   * - Stop animation
-   */
-  disableState(f) {
-    const hl = this;
-    hl.map.setFeatureState(f, {
-      highlight: false,
+      if (animate) {
+        hl.animate();
+      }
     });
   }
 
   /**
-   * Add highlight
-   * - Clean previous highlight
-   * - Update layer to use feature state conditional expression
-   * - Set feature state
+   * Add layer
    */
-  enableState(f) {
+  addHighlightLayer(layer) {
     const hl = this;
-    //hl.updateLayerStyle(f);
-    hl.map.setFeatureState(f, {
-      highlight: true,
-    });
+    hl.removeHighlightLayer(layer);
+    hl._map.addLayer(layer);
   }
 
   /**
-   * Add highlight layer
-   * - Remove previous layer
-   * - Add layer
-   * - start animation
+   * Animate
    */
-  addHighlightLayer(f) {
+  animate() {
     const hl = this;
-    f._layer_hl = hl.buildHighlightLayer(f);
-    hl.removeHighlightLayer(f);
-    /**
-     * Even if we remove the layer in removeHighlightLayer, just before,
-     * it could still be there, somehow. TODO: check why.
-     */
-    hl.map.addLayer(f._layer_hl);
-    if (hl.opt.use_animation) {
-      f._animation = new Animate(hl, f._layer_hl);
-      f._animation.start();
+    for (const layer of hl._layers.values()) {
+      if (!layer._animation) {
+        layer._animation = new Animate(hl, layer);
+      }
+      layer._animation.start();
     }
   }
 
@@ -167,30 +220,233 @@ class Highlighter {
    * - Remove layer
    * - start animation
    */
-  removeHighlightLayer(f) {
+  removeHighlightLayer(layer) {
     const hl = this;
-    if (!f._layer_hl) {
+    if (layer._animation instanceof Animate) {
+      layer._animation.stop();
+    }
+    const mapLayer = hl._map.getLayer(layer.id);
+    if (isEmpty(mapLayer)) {
       return;
     }
-    const l = hl.map.getLayer(f._layer_hl.id);
-    if (l) {
-      hl.map.removeLayer(l.id);
+    hl._map.removeLayer(layer.id);
+  }
+
+  /**
+   * Recreate items configuration
+   * return {void}
+   */
+  _update_items() {
+    const hl = this;
+    const config = Object.assign(
+      {},
+      {
+        point: null,
+        filters: [],
+        all: false,
+      },
+      hl._config
+    );
+
+    if (hl.isNotSet()) {
+      return;
     }
-    if (f._animate instanceof Animate) {
-      f._animate.stop();
+
+    const layers = hl._map
+      .getStyle()
+      .layers.map((l) => l.id)
+      .filter((id) => id.match(hl.opt.regex_layer_id));
+
+    const features = [];
+
+    if (config.all) {
+      /**
+       * All features in selected layers
+       */
+      const allFeatures = hl._map.queryRenderedFeatures(null, {
+        layers: layers,
+      });
+
+      for (const feature of allFeatures) {
+        features.push(feature);
+      }
+    } else if (config.point) {
+      /**
+       * All features touched  by "PointLike" object
+       */
+      const pointFeatures = hl._map.queryRenderedFeatures(config?.point, {
+        layers: layers,
+      });
+
+      for (const feature of pointFeatures) {
+        features.push(feature);
+      }
+    } else {
+      /**
+       * All feature filtered by config
+       */
+      for (const filter of config.filters) {
+        const viewLayers = hl._id_view_layers(filter.id, layers);
+        const viewFeatures = hl._map.queryRenderedFeatures(null, {
+          layers: viewLayers,
+          filter: filter.filter,
+        });
+
+        for (const feature of viewFeatures) {
+          features.push(feature);
+        }
+      }
+    }
+
+    const items = features
+      .map((f) => hl._features_to_item(f))
+      .reduce((a, i) => hl._features_aggregate(a, i), new Map());
+
+    for (const [id, item] of items) {
+      hl._items.set(id, item);
     }
   }
 
   /**
-   * Add feature from click event location
+   * Filter layer by view id as prefix
    */
-  updateFeatures(e) {
+  _id_view_layers(id, layers) {
+    const reg = new RegExp(`^${id}`);
+    return layers.filter((id) => id.match(reg));
+  }
+
+  /**
+   * Count matched feeatures
+   */
+  count() {
     const hl = this;
-    hl.clean();
-    const rF = hl.map
-      .queryRenderedFeatures(e.point)
-      .filter(hl.isSupportedFeature.bind(hl));
-    hl._features.push(...rF);
+    let count = 0;
+    for (const [_, item] of hl._items) {
+      count += item.gids.size;
+    }
+    return count;
+  }
+
+  isNotSet() {
+    const hl = this;
+    const config = hl._config;
+    return isEmpty(config.point) && isEmpty(config.filters) && !config.all;
+  }
+
+  /**
+   * Create layers using items, matching gids
+   */
+  _update_layers() {
+    const hl = this;
+    const items = hl._items;
+    for (const [id, item] of items) {
+      item.filter = [
+        "match",
+        ["get", "gid"],
+        [...Array.from(item.gids)],
+        true,
+        false,
+      ];
+      hl._layers.set(id, hl._item_to_layer(item));
+    }
+  }
+
+  /**
+   * Feature to item, keeps track of gid
+   */
+  _features_to_item(feature) {
+    return {
+      sourceLayer: feature.sourceLayer,
+      source: feature.source,
+      type: feature.layer.type,
+      gid: feature?.properties?.gid,
+    };
+  }
+
+  _features_aggregate(acc, item) {
+    if (!acc.has(item.source)) {
+      acc.set(item.source, {
+        type: item.type,
+        gids: new Set([item.gid]),
+        source: item.source,
+        sourceLayer: item.sourceLayer,
+      });
+    } else {
+      acc.get(item.source).gids.add(item.gid);
+    }
+    return acc;
+  }
+
+  /**
+   * Build highlight layer:
+   */
+  _item_to_layer(item) {
+    const hl = this;
+    const idSource = item.source;
+    const idSourceLayer = item.sourceLayer;
+    const idLayer = `@hl-@${idSource}`;
+    const type = item.type;
+    const filter = item.filter;
+
+    const layer = {
+      id: idLayer,
+      source: idSource,
+      filter: filter,
+    };
+
+    if (idSourceLayer) {
+      layer["source-layer"] = idSourceLayer;
+    }
+
+    switch (type) {
+      case "fill":
+        Object.assign(layer, {
+          type: "line",
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-offset": 0, // -hl.opt.highlight_offset, result not good on complex polygon
+            "line-width": hl.opt.highlight_width,
+            "line-color": hl.opt.highlight_color,
+            "line-blur": hl.opt.highlight_blur,
+            "line-opacity": hl.opt.highlight_opacity,
+          },
+        });
+        break;
+      case "line":
+        Object.assign(layer, {
+          type: "line",
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-gap-width": hl.opt.highlight_offset,
+            "line-width": hl.opt.highlight_width,
+            "line-color": hl.opt.highlight_color,
+            "line-blur": hl.opt.highlight_blur,
+            "line-opacity": hl.opt.highlight_opacity,
+          },
+        });
+        break;
+      default:
+        let radius = hl.opt.highlight_radius + hl.opt.highlight_offset / 2;
+        Object.assign(layer, {
+          type: "circle",
+          paint: {
+            "circle-color": "rgba(0,0,0,0)",
+            "circle-stroke-color": hl.opt.highlight_color,
+            "circle-stroke-opacity": hl.opt.highlight_opacity,
+            "circle-stroke-width": hl.opt.highlight_width,
+            "circle-blur": hl.opt.highlight_blur / radius,
+            "circle-radius": radius,
+            "circle-opacity": hl.opt.highlight_opacity,
+          },
+        });
+    }
+    return layer;
   }
 
   /**
@@ -202,9 +458,8 @@ class Highlighter {
   }
   isValidIdLayer(idLayer) {
     const hl = this;
-    return (
-      typeof idLayer === "string" && !!idLayer.match(hl.opt.regex_layer_id)
-    );
+    const valid = isString(idLayer) && !!idLayer.match(hl.opt.regex_layer_id);
+    return valid;
   }
   isSupportedFeature(f) {
     const hl = this;
@@ -215,10 +470,8 @@ class Highlighter {
     const hl = this;
     const paint = f.layer.paint;
     const types = hl.opt.supported_types;
-    const supported =
-      types.indexOf(f.layer.type) > -1 &&
-      paint instanceof Object &&
-      paint[`${f.layer.type}-color`];
+    const supported = types.includes(f.layer.type) && paint instanceof Object;
+    //paint[`${f.layer.type}-color`];
     return supported;
   }
 
@@ -231,173 +484,13 @@ class Highlighter {
       opt.off,
     ];
   }
-
-  /**
-   * If needed, update layer style with required feature-stat opacity
-   */
-  updateLayerStyle(f) {
-    const hl = this;
-    const type = f.layer.type;
-    const idLayer = f.layer.id;
-    const idFeature = f.id;
-
-    /**
-     * Update conditional style if it's a feature with an id, set an opacity effect
-     * when the feature is highlighted.
-     *
-     * Caveat :
-     *     - feature must have and id
-     *     - feature color can't be an expression : string color only
-     */
-    if (idFeature) {
-      /**
-       * {type}-opacity can't be used : it's reserved for opacity slider
-       *
-       *  -- fill
-       *  fill-color <-
-       *  fill-outline-color
-       *
-       *  -- line
-       *  line-color <-
-       *
-       *  -- symbol
-       *  icon-color <-
-       *  icon-halo-color
-       *
-       *  text-color
-       *
-       *
-       *  -- circle
-       *
-       *  circle-color <-
-       *  circle-stroke-color
-       */
-
-      const propertyColor = {
-        fill: "fill-color",
-        line: "line-color",
-        symbol: "icon-color",
-        circle: "circle-color",
-      }[type];
-
-      const colorRaw = hl.map.getPaintProperty(idLayer, `${propertyColor}`);
-      const colorOrig = getChromaColor(colorRaw);
-
-      if (colorOrig) {
-        const colorExpr = hl.toFeatureStateConditional({
-          on: colorOrig.alpha(hl.opt.highlight_feature_opacity).css(),
-          off: colorOrig.css(),
-        });
-        hl.map.setPaintProperty(idLayer, `${propertyColor}`, colorExpr);
-      }
-    }
-  }
-
-  /**
-   * Build highlight layer:
-   * !!TODO: As some style property can't be set, e.g. fill-outline-width, we need to
-   * add a new line layer only for this. For now, adding one layer per feature, but
-   * we could group by feature with the same source and geometry.
-   */
-  buildHighlightLayer(f) {
-    const hl = this;
-    const idSource = f.layer.source;
-    const idSourceLayer = f.layer["source-layer"];
-    const idLayer = `@hl-@${f.id}-${f.layer.id}`;
-    const type = f.layer.type;
-    let layer = null;
-    const opacityExpr = hl.toFeatureStateConditional({
-      on: hl.opt.highlight_opacity,
-      off: 0,
-    });
-
-    /**
-     * This highlight layer display all features : we have to filter only the current feature.
-     * Should have worked with ['id'] as https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/#id
-     * workaround -> using properties -> gid. Works with vector/geojson point, line, polygons
-     */
-    const gid = f?.properties?.gid;
-    const filter =
-      gid !== null
-        ? ["==", ["get", "gid"], f.id]
-        : f.id !== null
-        ? ["==", ["id"], f.id]
-        : [];
-
-    switch (type) {
-      case "fill":
-        layer = {
-          id: idLayer,
-          type: "line",
-          source: idSource,
-          filter: filter,
-          layout: {
-            "line-cap": "round",
-            "line-join": "round",
-          },
-          paint: {
-            "line-offset": 0, // -hl.opt.highlight_offset, result not good on complex polygon
-            "line-width": hl.opt.highlight_width,
-            "line-color": hl.opt.highlight_color,
-            "line-blur": hl.opt.highlight_blur,
-            "line-opacity": opacityExpr,
-          },
-        };
-        break;
-      case "line":
-        layer = {
-          id: idLayer,
-          type: "line",
-          source: idSource,
-          filter: filter,
-          layout: {
-            "line-cap": "round",
-            "line-join": "round",
-          },
-          paint: {
-            "line-gap-width": hl.opt.highlight_offset,
-            "line-width": hl.opt.highlight_width,
-            "line-color": hl.opt.highlight_color,
-            "line-blur": hl.opt.highlight_blur,
-            "line-opacity": opacityExpr,
-          },
-        };
-        break;
-      default:
-        let radius =
-          (f.layer.paint["circle-radius"] || 1) + hl.opt.highlight_offset / 2;
-        if (radius < 17) {
-          radius = 17;
-        }
-        layer = {
-          filter: filter,
-          id: idLayer,
-          type: "circle",
-          source: idSource,
-          paint: {
-            "circle-color": "rgba(0,0,0,0)",
-            "circle-stroke-color": hl.opt.highlight_color,
-            "circle-stroke-opacity": hl.opt.highlight_opacity,
-            "circle-stroke-width": hl.opt.highlight_width,
-            "circle-blur": hl.opt.highlight_blur / radius,
-            "circle-radius": radius,
-            "circle-opacity": opacityExpr,
-          },
-        };
-    }
-    if (idSourceLayer) {
-      layer["source-layer"] = idSourceLayer;
-    }
-
-    return layer;
-  }
 }
 
 class Animate {
   constructor(hl, layer) {
     const anim = this;
     anim._opt = hl.opt;
-    anim._map = hl.map;
+    anim._map = hl._map;
     anim._dim = false;
     anim._stopped = false;
     anim._time_limit = anim._opt.animation_duration
@@ -439,8 +532,8 @@ class Animate {
     if (anim._idInterval) {
       return;
     }
-    anim._idInterval = window.setInterval(
-      anim.animate.bind(anim),
+    anim._idInterval = setInterval(
+      () => anim.animate(),
       anim._opt.transition_duration
     );
   }
@@ -516,18 +609,3 @@ class Animate {
 }
 
 export { Highlighter };
-
-/**
- * Helpers
- */
-
-/* test if it's a valid color */
-function getChromaColor(color) {
-  if (color instanceof Array) {
-    return;
-  }
-  const isValid = chroma.valid(color);
-  if (isValid) {
-    return chroma(color);
-  }
-}

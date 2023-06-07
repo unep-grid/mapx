@@ -1,6 +1,6 @@
-import { getApiUrl } from "./../../api_routes";
 import { el } from "../../el_mapx";
 import { isEmpty } from "../../is_test";
+import { fileFormatsVectorDownload } from "../../uploader/utils";
 
 const defaultFormat = "GPKG";
 
@@ -17,14 +17,8 @@ export const config = {
         callback();
         return;
       }
-
-      const url = getApiUrl("getFileFormatsList");
-      const fileFormatsResp = await fetch(url);
-      const fileFormats = await fileFormatsResp.json();
-      const formatsVector = fileFormats.filter((f) => {
-        return f.download && f.type === "vector";
-      });
-      callback(formatsVector);
+      const formats = await fileFormatsVectorDownload();
+      callback(formats);
       tom.settings.load = null;
     } catch (e) {
       callback();

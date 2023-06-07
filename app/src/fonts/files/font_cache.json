@@ -1,0 +1,401 @@
+[
+  {
+    "path": "Libre_Baskerville/LibreBaskerville-Bold.ttf",
+    "family_name": "Libre Baskerville",
+    "style_name": "Bold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Libre_Baskerville/LibreBaskerville-Italic.ttf",
+    "family_name": "Libre Baskerville",
+    "style_name": "Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Libre_Baskerville/LibreBaskerville-Regular.ttf",
+    "family_name": "Libre Baskerville",
+    "style_name": "Regular",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-Black.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "Black",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-BlackItalic.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "Black Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-Bold.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "Bold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-BoldItalic.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "Bold Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-ExtraBold.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "ExtraBold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-ExtraBoldItalic.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "ExtraBold Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-ExtraLight.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "ExtraLight",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-ExtraLightItalic.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "ExtraLight Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-Italic.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-Light.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "Light",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-LightItalic.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "Light Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-Medium.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "Medium",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-MediumItalic.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "Medium Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-Regular.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "Regular",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-SemiBold.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "SemiBold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-SemiBoldItalic.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "SemiBold Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-Thin.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "Thin",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans/NotoSans-ThinItalic.ttf",
+    "family_name": "Noto Sans",
+    "style_name": "Thin Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Arabic/NotoSansArabic-Black.ttf",
+    "family_name": "Noto Sans Arabic",
+    "style_name": "Black",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Arabic/NotoSansArabic-Bold.ttf",
+    "family_name": "Noto Sans Arabic",
+    "style_name": "Bold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Arabic/NotoSansArabic-ExtraBold.ttf",
+    "family_name": "Noto Sans Arabic",
+    "style_name": "ExtraBold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Arabic/NotoSansArabic-ExtraLight.ttf",
+    "family_name": "Noto Sans Arabic",
+    "style_name": "ExtraLight",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Arabic/NotoSansArabic-Light.ttf",
+    "family_name": "Noto Sans Arabic",
+    "style_name": "Light",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Arabic/NotoSansArabic-Medium.ttf",
+    "family_name": "Noto Sans Arabic",
+    "style_name": "Medium",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Arabic/NotoSansArabic-Regular.ttf",
+    "family_name": "Noto Sans Arabic",
+    "style_name": "Regular",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Arabic/NotoSansArabic-SemiBold.ttf",
+    "family_name": "Noto Sans Arabic",
+    "style_name": "SemiBold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Arabic/NotoSansArabic-Thin.ttf",
+    "family_name": "Noto Sans Arabic",
+    "style_name": "Thin",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Bengali/NotoSansBengali-Black.ttf",
+    "family_name": "Noto Sans Bengali",
+    "style_name": "Black",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Bengali/NotoSansBengali-Bold.ttf",
+    "family_name": "Noto Sans Bengali",
+    "style_name": "Bold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Bengali/NotoSansBengali-ExtraBold.ttf",
+    "family_name": "Noto Sans Bengali",
+    "style_name": "ExtraBold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Bengali/NotoSansBengali-ExtraLight.ttf",
+    "family_name": "Noto Sans Bengali",
+    "style_name": "ExtraLight",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Bengali/NotoSansBengali-Light.ttf",
+    "family_name": "Noto Sans Bengali",
+    "style_name": "Light",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Bengali/NotoSansBengali-Medium.ttf",
+    "family_name": "Noto Sans Bengali",
+    "style_name": "Medium",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Bengali/NotoSansBengali-Regular.ttf",
+    "family_name": "Noto Sans Bengali",
+    "style_name": "Regular",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Bengali/NotoSansBengali-SemiBold.ttf",
+    "family_name": "Noto Sans Bengali",
+    "style_name": "SemiBold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Bengali/NotoSansBengali-Thin.ttf",
+    "family_name": "Noto Sans Bengali",
+    "style_name": "Thin",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Roboto/Roboto-Black.ttf",
+    "family_name": "Roboto",
+    "style_name": "Black",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Roboto/Roboto-BlackItalic.ttf",
+    "family_name": "Roboto",
+    "style_name": "Black Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Roboto/Roboto-Bold.ttf",
+    "family_name": "Roboto",
+    "style_name": "Bold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Roboto/Roboto-BoldItalic.ttf",
+    "family_name": "Roboto",
+    "style_name": "Bold Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Roboto/Roboto-Italic.ttf",
+    "family_name": "Roboto",
+    "style_name": "Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Roboto/Roboto-Light.ttf",
+    "family_name": "Roboto",
+    "style_name": "Light",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Roboto/Roboto-LightItalic.ttf",
+    "family_name": "Roboto",
+    "style_name": "Light Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Roboto/Roboto-Medium.ttf",
+    "family_name": "Roboto",
+    "style_name": "Medium",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Roboto/Roboto-MediumItalic.ttf",
+    "family_name": "Roboto",
+    "style_name": "Medium Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Roboto/Roboto-Regular.ttf",
+    "family_name": "Roboto",
+    "style_name": "Regular",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Roboto/Roboto-Thin.ttf",
+    "family_name": "Roboto",
+    "style_name": "Thin",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Roboto/Roboto-ThinItalic.ttf",
+    "family_name": "Roboto",
+    "style_name": "Thin Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Varela_Round/VarelaRound-Regular.ttf",
+    "family_name": "Varela Round",
+    "style_name": "Regular",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Bangers/Bangers-Regular.ttf",
+    "family_name": "Bangers",
+    "style_name": "Regular",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Creepster/Creepster-Regular.ttf",
+    "family_name": "Creepster",
+    "style_name": "Regular",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Mono/NotoSansMono-Bold.ttf",
+    "family_name": "Noto Sans Mono",
+    "style_name": "Bold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Mono/NotoSansMono-Regular.ttf",
+    "family_name": "Noto Sans Mono",
+    "style_name": "Regular",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Mono/NotoSansMono-Thin.ttf",
+    "family_name": "Noto Sans Mono",
+    "style_name": "Thin",
+    "owner": "helsinki",
+    "visibility": "private"
+  }
+]

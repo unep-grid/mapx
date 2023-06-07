@@ -1,11 +1,12 @@
+import { bindAll } from "../../../bind_class_methods";
 import { isFunction, isObject, isView } from "../../../is_test";
 import {
   getMap,
   getView,
   getViewRandom,
   getViewJson,
-  viewFilterToolsInit,
 } from "../../../map_helpers/index.js";
+import { viewFilterToolsInit } from "../../../map_helpers/view_filters.js";
 
 /**
  * App and Static resolver base
@@ -16,6 +17,7 @@ class ResolversBase {
     const rslv = this;
     rslv.opt = Object.assign({}, opt);
     rslv._views = new Set();
+    bindAll(rslv);
   }
   /**
    * Bind worker
@@ -34,19 +36,26 @@ class ResolversBase {
     opt = Object.assign({}, { idView: null, value: null }, opt);
     const rslv = this;
     const view = getView(opt.idView);
-    await viewFilterToolsInit(view);
 
+    if (!isView(view)) {
+      return rslv._err("err_view_invalid");
+    }
+
+    /*
+     * Proxy update, via existing tool
+     */
+    await viewFilterToolsInit(view);
     const valid =
       isView(view) &&
       isObject(view._filters_tools) &&
       isObject(view._filters_tools[type]) &&
       isFunction(view._filters_tools[type][method]);
 
-    if (valid) {
-      return view._filters_tools[type][method](opt.value);
-    } else {
-      return rslv._err("err_view_invalid");
+    if (!valid) {
+      return rslv._err("err_config_invalid");
     }
+
+    return view._filters_tools[type][method](opt.value);
   }
 
   /**
@@ -55,21 +64,25 @@ class ResolversBase {
    */
   async _apply_filter_layer_select(type, method, opt) {
     const rslv = this;
-    type = type || "searchBox"; // selectize;
+    type = type || "searchBox"; // tom select;
     opt = Object.assign({}, { idView: null, value: null }, opt);
+
     const view = getView(opt.idView);
+
+    if (!isView(view)) {
+      return rslv._err("err_view_invalid");
+    }
+
     await viewFilterToolsInit(view);
     const valid =
-      isView(view) &&
       isObject(view._filters_tools) &&
       isObject(view._filters_tools[type]) &&
       isFunction(view._filters_tools[type][method]);
 
-    if (valid) {
-      return view._filters_tools[type][method](opt.value);
-    } else {
+    if (!valid) {
       return rslv._err("err_view_invalid");
     }
+    return view._filters_tools[type][method](opt.value);
   }
   /**
    * Error handling

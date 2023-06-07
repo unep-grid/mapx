@@ -2,7 +2,7 @@
 #' Get db connection
 #' @param {Function} cb Function with single param 'con'. The con will be returned to the pool
 #' @export
-mxDbWithUniqueCon <- function(cb){
+mxDbWithUniqueCon <- function(cb) {
   pool <- mxDbGetPool()
   con <- poolCheckout(pool)
   on.exit(poolReturn(con))
@@ -11,30 +11,30 @@ mxDbWithUniqueCon <- function(cb){
 
 #' Get db pg pool
 #' @return {PostgresqlConnection}
-mxDbGetPool <- function(){
- .get(db,c('pg','conPool'))
+mxDbGetPool <- function() {
+  .get(db, c("pg", "conPool"))
 }
 
 #' Get db pg con
 #' ⚠️  Do not forget to return OR use mxDbWithUniqueCon instead
 #' @return {PostgresqlConnection}
-mxDbGetCon <- function(){
+mxDbGetCon <- function() {
   pool <- mxDbGetPool()
   poolCheckout(pool)
 }
 
 #' Return con to pool
-#' @param {PostgresqlConnection} con 
-mxDbReturnCon <- function(con){
+#' @param {PostgresqlConnection} con
+mxDbReturnCon <- function(con) {
   poolReturn(con)
 }
 
 #' Close db connection
-#' 
+#'
 #' @export
-mxDbPoolClose <- function(){
+mxDbPoolClose <- function() {
   dbPool <- mxDbGetPool()
-  if(mxDbPoolIsValid(dbPool)){
+  if (mxDbPoolIsValid(dbPool)) {
     message("Close pool")
     poolClose(dbPool)
   }
@@ -43,56 +43,95 @@ mxDbPoolClose <- function(){
 #' Check if pool is still valid
 #' @param {Pool} pool Pool
 #' @export
-mxDbPoolIsValid <- function(pool){
-  !noDataCheck(pool) && 
-    isTRUE("Pool" %in% class(pool)) && 
+mxDbPoolIsValid <- function(pool) {
+  !noDataCheck(pool) &&
+    isTRUE("Pool" %in% class(pool)) &&
     isTRUE(pool$valid)
 }
 
-#' Init pool 
-#' 
+#' Init pool
+#'
 #' ⚠️  Executed in .GlobalEnv !
 #'
 #' @export
-mxDbPoolInit <- function(){
+mxDbPoolInit <- function() {
   #
   # Close pool if needed
   #
   mxDbPoolClose()
 
   init <- quote({
-
-    pg <- .get(config,c("pg"))
+    pg <- .get(config, c("pg"))
     pMax <- as.integer(pg$poolMax)
     pMin <- as.integer(pg$poolMin)
-    pMax <- ifelse(noDataCheck(pMax),1,pMax)
-    pMin <- ifelse(noDataCheck(pMin),1,pMin)
+    pMax <- ifelse(noDataCheck(pMax), 1, pMax)
+    pMin <- ifelse(noDataCheck(pMin), 1, pMin)
+    drv <- dbDriver("PostgreSQL")
 
-    db <- list(
-      pg = pg
-      )
+    #
+    # Pre test if connection is working,
+    # before pool;
+    #
+    tryCatch(
+      {
+        con <- dbConnect(drv,
+          user = pg$user,
+          password = pg$password,
+          host = pg$host,
+          port = pg$port,
+          dbname = pg$dbname
+        )
+      },
+      error = function(e) {
+        cat("TEST CONNECT issue", as.character(e))
+        stop(sprintf(
+          "Init db failed for postgresql://%1$s:<password>@%2$s:%3$s/%4$s",
+          pg$user,
+          pg$host,
+          pg$port,
+          pg$dbname
+        ))
+      }
+    )
+    tryCatch(
+      {
+        one <- dbGetQuery(con, "SELECT 1 as test")
+        if (one$test != 1) {
+          stop("failed")
+        }
+      },
+      error = function(cond) {
+        dbDisconnect(con)
+        stop("Innit db : validation query failed")
+      },
+      finally = {
+        dbDisconnect(con)
+      }
+    )
 
     #
     # Connection pool
     #
-    db <- .set(db,
-        c('pg','conPool'),
-        dbPool(
-          drv = dbDriver("PostgreSQL"),
-          dbname = pg$dbname,
-          host = pg$host,
-          port = pg$port,
-          user = pg$user,
-          password = pg$password,
-          minSize = pMin,
-          maxSize = pMax,
-          options = "-c application_name=mx_app"
-        )
-      )
+    db <- list(
+      pg = pg
+    )
 
+    db <- .set(
+      db,
+      c("pg", "conPool"),
+      dbPool(
+        drv = dbDriver("PostgreSQL"),
+        dbname = pg$dbname,
+        host = pg$host,
+        port = pg$port,
+        user = pg$user,
+        password = pg$password,
+        minSize = pMin,
+        maxSize = pMax,
+        options = "-c application_name=mx_app"
+      )
+    )
   })
 
-  eval(init,env=.GlobalEnv)
+  eval(init, env = .GlobalEnv)
 }
-
-

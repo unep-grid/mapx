@@ -3,11 +3,21 @@
  * JED FIXES
  *
  */
-
-.jed-container .jed-error {
-  margin-left: 1px;
-  border-left: 1px solid red !important;
+.jed-container {
+  padding-left: 5px;
 }
+
+.jed-container .jed-error:after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  border-left: 1px solid var(--mx_ui_message_danger);
+  top: 0;
+  left: -5px;
+  width: 0px;
+  bottom: 0px;
+}
+
 .jed-container .form-group {
   position: relative;
 }
@@ -60,7 +70,7 @@
   border: 0px 1px 0px 1px;
 }
 
-.jed-container td input[type='color']:focus {
+.jed-container td input[type="color"]:focus {
   min-width: 0px;
 }
 
@@ -82,7 +92,7 @@
   border: 0px;
 }
 
-.jed-container div[data-schematype='object'] {
+.jed-container div[data-schematype="object"] {
   padding: 15px;
   max-width: 100%;
   margin-bottom: 20px;
@@ -91,7 +101,14 @@
 }
 
 .jed-container h3 {
-  font-size: 1.1rem;
+  /**
+  * -> chould match "label"
+  */ 
+  font-size: 1rem;
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: 700;
 }
 
 /**

@@ -1,6 +1,33 @@
 import { colorToHex } from "./../color_utils";
 import { getView, getMap, getViewTitle } from "../map_helpers/index.js";
 import { getViewMapboxLayers } from "./view_to_mb_layers";
+import { mapboxToSld } from "./mbstyle_to_sld";
+import { isViewVtWithStyleCustom, isString } from "./../is_test/index.js";
+
+/**
+ * Create sld style from view's layers
+ * @param {String|object} idView Id of the view or view
+ * @param {Boolean} opt.mapxOrder Mapx order = order reversed to be sequentially added
+ * @return {Promise<String>} Style string
+ */
+export async function getViewSldStyle(idView) {
+  const view = getView(idView);
+  if (isViewVtWithStyleCustom(view)) {
+    return null;
+  }
+  const styleMapboxForSld = await getViewMapboxStyle(view, {
+    useLabelAsId: true,
+    addMetadata: true,
+    simplifyExpression: true,
+    mapxOrder: false,
+  });
+
+  const styleSld = await mapboxToSld(styleMapboxForSld, {
+    fixFilters: true,
+  });
+
+  return styleSld;
+}
 
 /**
  * Create mapbox style from view's layers
@@ -9,6 +36,7 @@ import { getViewMapboxLayers } from "./view_to_mb_layers";
  * @param {Boolean} opt.useLabelAsId Set id based on rule's label (e.g. for sld)
  * @param {Boolean} opt.simplifyExpression Simplify expressions (e.g. for SLD)
  * @param {Boolean} opt.addMetadata Add metadata (types...)
+ * @param {Boolean} opt.mapxOrder Mapx order = order reversed to be sequentially added
  * @return {Promise<Object>} Style object
  */
 export async function getViewMapboxStyle(idView, opt) {
@@ -16,13 +44,20 @@ export async function getViewMapboxStyle(idView, opt) {
     useLabelAsId = false,
     addMetadata = false,
     simplifyExpression = false,
+    mapxOrder = false,
   } = opt || {};
+
+  /**
+   * TODO: set simplifyColors as an option
+   */
+  const simplifyColors = simplifyExpression;
 
   const view = getView(idView);
   const base = await getViewMapboxLayers(view, {
     useLabelAsId,
     addMetadata,
     simplifyExpression,
+    mapxOrder,
   });
   const map = getMap();
   const style = map.getStyle();
@@ -40,9 +75,16 @@ export async function getViewMapboxStyle(idView, opt) {
   for (const layer of base.layers) {
     if (layer.paint) {
       for (const k in layer.paint) {
-        /* rgb / rgba not yet supported by sld */
-        if (/color$/.test(k)) {
-          layer.paint[k] = colorToHex(layer.paint[k]);
+        /*
+         * rgb / rgba not yet supported by sld
+         */
+        if (simplifyColors && /color$/.test(k)) {
+          const color = layer.paint[k];
+          if (isString(color)) {
+            layer.paint[k] = colorToHex(color);
+          } else {
+            console.warn("Non-string color found: skipping conversion ", color);
+          }
         }
 
         /* outline do not render well in sld, better removing it */
@@ -66,10 +108,11 @@ export async function getViewMapboxStyle(idView, opt) {
 
     style.layers.push(layer);
   }
+
   /**
    * If used directly in mapbox style,
    * all layers should be reversed. If used in mapx,
-   * They will be added sequentially, at a given point, but
+   * they will be added sequentially, at a given point, but
    * not directly. reverse option in sortLayers is not usefull
    * here, as it take in account position AND priority.
    */

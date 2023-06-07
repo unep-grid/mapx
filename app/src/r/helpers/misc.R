@@ -36,11 +36,24 @@ mxQueryTitleParser <- function(title = "", default = NULL) {
   return(out)
 }
 
+#' Check if user id is in the root group
+#' @param {Integer} idUser user id
+#' @return {Logical} is root
+mxIsUserRoot <- function(idUser) {
+  return(idUser %in% .get(config, c("root_mode", "members")))
+}
+
+#' Check if user id is in the dev group
+#' @param {Integer} idUser user id
+#' @return {Logical} is dev
+mxIsUserDev <- function(idUser) {
+  return(idUser %in% .get(config, c("dev", "members")))
+}
 
 #' Is a source ok to be edited ?
 #'
-#' @param {Character} idSource  Source id 
-#' @return {Logical} 
+#' @param {Character} idSource  Source id
+#' @return {Logical}
 mxIsValidSourceEdit <- function(idSource) {
   maxRows <- 1e5 # Should match client + api server
   maxCols <- 200 # Shoudl match client + api server
@@ -276,7 +289,7 @@ mxSchemaMultiLingualInput <- function(
   list(
     propertyOrder = propOrder,
     title = paste(titlePrefix, d(keyTitle, lang = language, dict = dict, web = F)),
-    type = "object",
+    #type = "object",
     options = list(collapsed = collapsed),
     properties = prop
   )
@@ -1056,6 +1069,7 @@ mxCatchHandler <- function(type = "error", cond = NULL, session = shiny::getDefa
     )
   })
 }
+
 
 #' Parse template
 #'

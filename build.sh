@@ -6,7 +6,7 @@ set -e
 #
 
 DRY="true" 
-REPO="https://github.com/unep-grid/map-x-mgl"
+REPO="https://github.com/unep-grid/mapx"
 BRANCH=$(git branch --show-current)
 REMOTE="github"
 DOCKER_REPO_APP="fredmoser/mapx_app"
@@ -241,21 +241,36 @@ then
 
   cat $CHANGELOG >> $CHANGELOG_TMP
   cp $CHANGELOG_TMP $CHANGELOG 
+
   vim $CHANGELOG
 
   echo "Get diff"
   git --no-pager diff --minimal
 
-  echo "Verify git diff of versioning changes. Continue (commit, build, push) ? [YES/NO]"
+  echo "Verify git diff of versioning changes. Continue (commit, push) ? [YES/NO/EDIT]"
 
-  read confirm_diff
+  while true; do
+    read confirm_diff
+    confirm_diff=$(echo "$confirm_diff" | awk '{print tolower($0)}')
 
-  if [[ "$confirm_diff" != "YES"  ]]
-  then
-    echo "Stop here, stash changes. rollback to $CUR_HASH " 
-    git stash
-    exit 1
-  fi
+    if [[ "$confirm_diff" == "yes" || "$confirm_diff" == "y" ]]; then
+      echo "Proceeding with commit, build, and push."
+      break
+    elif [[ "$confirm_diff" == "no" || "$confirm_diff" == "n" ]]; then
+      echo "Stop here, stash changes. rollback to $CUR_HASH"
+      git stash
+      exit 1
+    elif [[ "$confirm_diff" == "edit" || "$confirm_diff" == "e" ]]; then
+      echo "Re-editing the diff file."
+      vim $CHANGELOG
+      echo "Get diff"
+      git --no-pager diff --minimal
+      echo "Verify git diff of versioning changes. Continue (commit, push) ? [YES/NO/EDIT]"
+    else
+      echo "Invalid input. Please enter 'YES', 'NO', 'EDIT', 'y', 'n', or 'e':"
+    fi
+  done
+
 fi
 
 #--------------------------------------------------------------------------------

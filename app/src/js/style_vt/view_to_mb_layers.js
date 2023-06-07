@@ -12,16 +12,37 @@ import { getLabelFromObjectPath, getDictItem } from "../language";
 import { getViewSourceSummary } from "./../mx_helper_source_summary.js";
 import { getView, sortLayers } from "../map_helpers/index.js";
 
+const def = {
+  zoomConfig: {
+    zoomMax: 22,
+    zoomMin: 0,
+    sizeFactorZoomMax: 0,
+    sizeFactorZoomMin: 0,
+    sizeFactorZoomExponent: 1,
+  },
+  polygonBorderConfig: {
+    enable: false,
+    opacity: 0.5,
+    color: "#000",
+    enableAutoColor: false,
+  },
+};
+
 /**
  * Create mapbox layers from mapx's style
  * @param {Object|String} v View or view's id
  * @param {Object} opt Options
  * @param {Boolean} opt.useLabelAsId Set id based on rule's label (e.g. for sld)
  * @param {Boolean} opt.simplifyExpression Simplify expressions (e.g. for SLD)
+ * @param {Boolean} opt.mapxOrder Order to add layers sequentially - instead of appending all at once
  * @return {Promise<Array>} Array of mapbox layers
  */
 export async function getViewMapboxLayers(v, opt) {
-  const { useLabelAsId = false, simplifyExpression = false } = opt || {};
+  const {
+    useLabelAsId = false,
+    simplifyExpression = false,
+    mapxOrder = true,
+  } = opt || {};
 
   const view = getView(v);
   const idView = view.id;
@@ -29,7 +50,6 @@ export async function getViewMapboxLayers(v, opt) {
   const viewData = p(view, "data");
   const attr = p(viewData, "attribute.name", null);
   const style = p(viewData, "style", {});
-  const zConfig = p(style, "zoomConfig", {});
   const showSymbolLabel = p(style, "showSymbolLabel", false);
   const includeUpper = p(style, "includeUpperBoundInInterval", false);
   const hideNulls = p(style, "hideNulls", false);
@@ -37,12 +57,24 @@ export async function getViewMapboxLayers(v, opt) {
   const geomType = p(viewData, "geometry.type", "point");
   const source = p(viewData, "source", {});
   const idSourceLayer = p(source, "layerInfo.name");
+  const zoomConfig = p(style, "zoomConfig", {});
+  const polygonBorderConfig = p(style, "polygonBorderConfig", {});
+
+  const reverseLayerOrder = mapxOrder
+    ? style.reverseLayer
+    : !style.reverseLayer;
 
   const out = {
     layers: [],
     rules: [],
     config: {},
   };
+
+  /**
+   * set defaults
+   */
+  updateIfEmpty(zoomConfig, def.zoomConfig);
+  updateIfEmpty(polygonBorderConfig, def.polygonBorderConfig);
 
   /**
    * No PostGIS layer id -> nothing to do
@@ -55,9 +87,10 @@ export async function getViewMapboxLayers(v, opt) {
    * Init null value
    */
   let nullValue = "";
-  if (isNotEmpty(ruleNulls.value)) {
+  if (!hideNulls && isNotEmpty(ruleNulls.value)) {
     nullValue = ruleNulls.value;
   }
+  const hasNullValue = !hideNulls && isNotEmpty(nullValue);
 
   /**
    * Fetch source stat.
@@ -94,41 +127,33 @@ export async function getViewMapboxLayers(v, opt) {
   }
 
   /**
-   * Updte filterNull ( after type is determined )
+   * Ref geom
    */
-  const filterIncludeNull = [];
-  const filterExcludeNull = [];
-
-  for (const op of ["==", "!="]) {
-    const f = op === "==" ? filterIncludeNull : filterExcludeNull;
-    if (isNumeric) {
-      if (isEmpty(nullValue)) {
-        f.push([op, ["get", attr], ""]);
-        f.push([op, ["get", attr], null]);
-      } else {
-        f.push([op, ["get", attr], nullValue * 1]);
-      }
-    } else {
-      if (isNotEmpty(nullValue) || nullValue === false) {
-        f.push([op, ["get", attr], nullValue]);
-      } else {
-        f.push([op, ["get", attr], ""]);
-        f.push([op, ["get", attr], null]);
-      }
-    }
-  }
+  const isPoint = geomType === "point";
+  const isPolygon = geomType === "polygon";
 
   /**
-   * Set zoom default
+   * Updte filterNull ( after type is determined )
    */
-  const zDef = {
-    zoomMax: 22,
-    zoomMin: 0,
-    sizeFactorZoomMax: 0,
-    sizeFactorZoomMin: 0,
-    sizeFactorZoomExponent: 1,
-  };
-  const zoomConfig = Object.assign(zDef, zConfig);
+  const hasAttr = ["has", attr];
+  const filterIncludeNull = [];
+  const filterExcludeNull = ["all", hasAttr];
+
+  if (!hasNullValue) {
+    filterIncludeNull.push(...["all", ["!", hasAttr]]);
+  }
+
+  if (hasNullValue) {
+    filterIncludeNull.push(...["all", hasAttr]);
+
+    if (isNumeric) {
+      filterIncludeNull.push(["==", ["get", attr], nullValue * 1]);
+      filterExcludeNull.push(["!=", ["get", attr], nullValue * 1]);
+    } else {
+      filterIncludeNull.push(["==", ["get", attr], nullValue]);
+      filterExcludeNull.push(["!=", ["get", attr], nullValue]);
+    }
+  }
 
   /**
    * Clean rules
@@ -233,8 +258,10 @@ export async function getViewMapboxLayers(v, opt) {
     const ruleDefault = {
       label_en: label,
       value: "all",
-      color: layerDefault?.metadata?.hexColor,
+      color: layerDefault?.metadata?.color,
       size: layerDefault?.metadata?.size,
+      color_border: isPolygon ? layerDefault?.metadata?.colorSecondary : null,
+      add_border: isPolygon ? layerDefault?.metadata?.useOutline : null,
     };
     rules.push(ruleDefault);
     layers.push(layerDefault);
@@ -245,17 +272,15 @@ export async function getViewMapboxLayers(v, opt) {
    */
   if (useStyleAll) {
     const hasSprite = ruleAll.sprite && ruleAll.sprite !== "none";
-    const hasSymbol = hasSprite && geomType === "point";
-    const hasPattern = hasSprite && geomType === "polygon";
+    const hasSymbol = hasSprite && isPoint;
+    const hasPattern = hasSprite && isPolygon;
 
     const filter = ["all"];
 
-    if (isNumeric) {
-      /*
-       * If null value, eg. 0 is included : [=>-10,==0 ,<10]
-       */
-      filter.push(...filterExcludeNull);
-    }
+    /**
+     * Exclude null
+     */
+    filter.push(filterExcludeNull);
 
     if (hasSymbol) {
       /**
@@ -264,14 +289,13 @@ export async function getViewMapboxLayers(v, opt) {
       const layerSprite = _build_layer({
         priority: 0,
         geomType: "symbol",
-        hexColor: ruleAll.color,
+        color: ruleAll.color,
         sprite: ruleAll.sprite,
         opacity: ruleAll.opacity,
         size: ruleAll.size,
         filter: filter,
         rule: ruleAll,
       });
-
       layers.push(layerSprite);
     } else {
       /**
@@ -281,7 +305,7 @@ export async function getViewMapboxLayers(v, opt) {
         geomType: geomType,
         type: isNumeric ? "number" : "string",
         priority: 1,
-        hexColor: ruleAll.color,
+        color: ruleAll.color,
         sprite: ruleAll.sprite,
         opacity: ruleAll.opacity,
         size: ruleAll.size,
@@ -289,13 +313,18 @@ export async function getViewMapboxLayers(v, opt) {
         rule: ruleAll,
       });
 
+      ruleAll.color_border = isPolygon
+        ? layerAll?.metadata?.colorSecondary
+        : null;
+      ruleAll.add_border = isPolygon ? layerAll?.metadata?.useOutline : null;
+
       layers.push(layerAll);
 
       if (hasPattern) {
         const layerPattern = _build_layer({
           priority: 0,
           geomType: "pattern",
-          hexColor: ruleAll.color,
+          color: ruleAll.color,
           sprite: ruleAll.sprite,
           opacity: ruleAll.opacity,
           size: ruleAll.size,
@@ -317,17 +346,16 @@ export async function getViewMapboxLayers(v, opt) {
     rules.forEach((rule, i) => {
       const filter = ["all"];
 
-      if (isNumeric) {
-        /*
-         * If null value, eg. 0 is included : [>=-10,==0,<10]
-         */
-        filter.push(...filterExcludeNull);
-      }
+      /**
+       * Exclude null
+       */
+      filter.push(filterExcludeNull);
+
       /*
        * Set logic for rules
        */
       const nRules = rules.length - 1;
-      const position = style.reverseLayer ? nRules - i : i;
+      const position = reverseLayerOrder ? nRules - i : i;
       const isLast = i === nRules;
       const isFirst = i === 0;
 
@@ -335,18 +363,27 @@ export async function getViewMapboxLayers(v, opt) {
       /**
        * If no value_to, use next value, or use max, or null (non numeric)
        */
-      const nextValue = p(nextRule, "value", rulesValues.max);
-      rule.value_to = p(rule, "value_to", nextValue);
+      let nextValue = nextRule?.value;
+      if (isEmpty(nextValue)) {
+        nextValue = rulesValues.max;
+      }
+      if (isEmpty(rule.value_to)) {
+        rule.value_to = nextValue;
+      }
 
       const fromValue = rule.value;
-      const toValue = isNumeric ? rule.value_to : null;
+      const toValue = isNumeric
+        ? isEmpty(rule.value_to)
+          ? rule.value_from
+          : rule.value_to
+        : null;
       const sameFromTo = isNumeric && toValue === fromValue;
       /**
        *  Symbols and pattern check
        */
       const hasSprite = rule.sprite && rule.sprite !== "none";
-      const hasSymbol = hasSprite && geomType === "point";
-      const hasPattern = hasSprite && geomType === "polygon";
+      const hasSymbol = hasSprite && isPoint;
+      const hasPattern = hasSprite && isPolygon;
 
       if (isNumeric && !sameFromTo) {
         /**
@@ -373,7 +410,7 @@ export async function getViewMapboxLayers(v, opt) {
           position: position,
           priority: 1,
           geomType: geomType,
-          hexColor: rule.color,
+          color: rule.color,
           opacity: rule.opacity,
           size: rule.size,
           sprite: rule.sprite,
@@ -382,12 +419,18 @@ export async function getViewMapboxLayers(v, opt) {
         });
         layers.push(layerMain);
 
+        rule.color_border = isPolygon
+          ? layerMain?.metadata?.colorSecondary
+          : null;
+
+        rule.add_border = isPolygon ? layerMain?.metadata?.useOutline : null;
+
         if (hasPattern) {
           const layerPattern = _build_layer({
             position: position,
             priority: 0,
             geomType: "pattern",
-            hexColor: rule.color,
+            color: rule.color,
             opacity: rule.opacity,
             sprite: rule.sprite,
             filter: filter,
@@ -402,7 +445,7 @@ export async function getViewMapboxLayers(v, opt) {
         const layerSprite = _build_layer({
           position: position,
           geomType: "symbol",
-          hexColor: rule.color,
+          color: rule.color,
           opacity: rule.opacity,
           size: rule.size,
           sprite: rule.sprite,
@@ -419,8 +462,6 @@ export async function getViewMapboxLayers(v, opt) {
    * Handle layer for null values
    */
   if (useStyleNull) {
-    const filter = ["all", ...filterIncludeNull];
-
     updateIfEmpty(ruleNulls, {
       color: "#A9A9A9",
       size: 2,
@@ -428,24 +469,54 @@ export async function getViewMapboxLayers(v, opt) {
     });
 
     const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== "none";
+    const hasPattern = isPolygon && hasSprite;
+    const position = -1;
+    const filter = filterIncludeNull;
+
     const layerNull = _build_layer({
       priority: 1,
-      geomType: geomType === "point" && hasSprite ? "symbol" : geomType,
-      hexColor: ruleNulls.color,
+      position: position,
+      geomType: isPoint && hasSprite ? "symbol" : geomType,
+      color: ruleNulls.color,
       opacity: ruleNulls.opacity,
       size: ruleNulls.size,
       sprite: hasSprite ? ruleNulls.sprite : null,
       filter: filter,
       rule: ruleNulls,
     });
+
     ruleNulls.filter = filter;
+    ruleNulls.color_border = isPolygon
+      ? layerNull?.metadata?.colorSecondary
+      : null;
+    ruleNulls.add_border = isPolygon ? layerNull?.metadata?.useOutline : null;
     // Hack to reference null in makeNumericSlider
     view._null_filter = filter;
     layers.push(layerNull);
     rules.push(ruleNulls);
+
+    /**
+     * Pattern for null
+     */
+
+    if (hasPattern) {
+      const layerPattern = _build_layer({
+        position: position,
+        priority: 0,
+        geomType: "pattern",
+        color: ruleNulls.color,
+        opacity: ruleNulls.opacity,
+        sprite: ruleNulls.sprite,
+        filter: filter,
+        rule: ruleNulls,
+      });
+      layers.push(layerPattern);
+    }
   }
 
   sortLayers(layers);
+
+  //console.log(layers.map(l=>l.filter));
 
   return {
     layers,
@@ -485,6 +556,10 @@ export async function getViewMapboxLayers(v, opt) {
         zoomMin: zoomConfig.zoomMin,
         useLabelAsId: useLabelAsId,
         simplifyExpression: simplifyExpression,
+        useOutline: polygonBorderConfig.enable,
+        colorSecondary: polygonBorderConfig.color,
+        useOutlineAuto: polygonBorderConfig.enableAutoColor,
+        outlineOpacity: polygonBorderConfig.opacity,
       },
       opt
     );

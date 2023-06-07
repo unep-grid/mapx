@@ -6,6 +6,7 @@ import {
 } from "./../language";
 import * as test from "./../is_test_mapx/index.js";
 import { parseTemplate } from "../mx_helper_misc.js";
+import { isElement, isNotEmpty } from "./../is_test_mapx/index.js";
 
 export { el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate };
 
@@ -34,12 +35,13 @@ export { el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate };
  * @param {String} opt.langKeyPrefix Language prefix for translation ['open','close'] + prefix 'btn_' -> 'btn_open', 'btn_close'
  * @param {Boolean} opt.stringAsLanguageKey Use string as language key
  * @param {String} opt.urlDefaultLabel Defaut label for links. e.g. "[ link ]"
+ * @param {String} opt.urlDefaultTitle Defaut title for links. e.g. "[ homepage ]"
  */
 
 function elAuto(render, data, opt) {
   opt = opt || {};
 
-  var def = {
+  const def = {
     render: "auto",
     tableHeadersSkip: false,
     tableHeadersClasses: [],
@@ -56,6 +58,7 @@ function elAuto(render, data, opt) {
     langKeyPrefix: "",
     stringAsLanguageKey: false,
     urlDefaultLabel: "Link",
+    urlDefaultTitle: "",
   };
 
   /*
@@ -72,6 +75,7 @@ function elAuto(render, data, opt) {
     string: renderString,
     date: renderDate,
     boolean: renderBoolean,
+    url: renderUrl,
     array_auto: renderArrayAuto,
     array_table: renderArrayTable,
     array_string: renderArrayString,
@@ -171,14 +175,17 @@ function elAuto(render, data, opt) {
 
     return el("span", { style: opt.dateStyle }, new Date(date).toDateString());
   }
-  function renderUrl(url, label) {
+  function renderUrl(url, label, title) {
     label = label || opt.urlDefaultLabel;
+    title = title || opt.urlDefaultTitle;
 
     return el(
       "a",
       {
         target: "_blank",
         href: url,
+        "aria-label": title,
+        class: ["hint--left"],
       },
       label
     );
@@ -199,6 +206,10 @@ function elAuto(render, data, opt) {
     );
   }
   function renderString(str, asLanguageKey) {
+    if (isElement(str)) {
+      return str;
+    }
+
     asLanguageKey = test.isBoolean(asLanguageKey)
       ? asLanguageKey
       : opt.stringAsLanguageKey;
@@ -401,14 +412,33 @@ function elButtonIcon(key, opt) {
     opt
   );
 
-  const addIcon = opt.mode === "text_icon" || opt.mode === "icon";
-  const addText = opt.mode === "text_icon" || opt.mode === "text";
+  const addIcon = isNotEmpty(opt.icon);
+  const addText =
+    opt.mode === "icon_text" || opt.mode === "text_icon" || opt.mode === "text";
+
   const addBadge = !!opt.badgeContent;
   const addContent = !!opt.content;
 
   opt.dataset.lang_type = "tooltip";
   opt.classes.push("hint--bottom");
   opt.dataset.lang_key = key;
+
+  const content = [
+    addBadge ? el("span", { class: ["badge"] }, `${opt.badgeContent}`) : false,
+    addText ? elSpanTranslate(key) : false,
+    addIcon
+      ? el(
+          "div",
+          { class: "btn-icon-wrapper" },
+          el("i", { class: ["fa", opt.icon] })
+        )
+      : false,
+    addContent ? opt.content : false,
+  ];
+
+  if (opt.mode === "icon_text") {
+    content.reverse();
+  }
 
   const elBtn = el(
     "button",
@@ -419,20 +449,7 @@ function elButtonIcon(key, opt) {
       style: opt.style,
       ...opt.config,
     },
-    [
-      addBadge
-        ? el("span", { class: ["badge"] }, `${opt.badgeContent}`)
-        : false,
-      addText ? elSpanTranslate(key) : false,
-      addIcon
-        ? el(
-            "div",
-            { class: "btn-icon-wrapper" },
-            el("i", { class: ["fa", opt.icon] })
-          )
-        : false,
-      addContent ? opt.content : false,
-    ]
+    content
   );
 
   getDictItem(key).then((txt) => {
@@ -446,6 +463,7 @@ function elButtonIcon(key, opt) {
  * @param {String} key Translation key
  * @param {Object} opt Options
  * @param {String} opt.icon Font awesome icon name e.g. fa-lock => 'lock'
+ * @param {String} opt.mode Mode "text_icon"(default)"icon_text"
  * @param {Function} opt.action Callback when clicked
  * @return {Element}
  */
@@ -455,28 +473,123 @@ export function elButtonFa(key, opt) {
     {
       icon: "question",
       action: () => {},
+      mode: "text_icon",
     },
     opt
   );
   return elButtonIcon(key, {
     icon: `fa-${opt.icon}`,
-    mode: "text_icon",
+    mode: opt.mode,
     config: {
       on: { click: opt.action },
     },
   });
 }
 
+/**
+ * Generic input element
+ * @param {String} key Unique key : used for name + translation
+ * @param {Object} opt Options
+ * @param {String} opt.id Element id
+ * @param {String} opt.dataset Additional custom data
+ * @param {String} opt.action Callback
+ * @param {String} opt.name Form name item, if not equal to key
+ * @param {String} opt.value Default value
+ * @param {Boolean} opt.checked Checked at start (only for checkboxes)
+ * @param {Boolean} opt.disabled Disabled at start
+ * @param {Boolean} opt.tooltip Add tooltip (false)
+ * @param {Boolean} opt.keyLabel Optional translation key for label
+ * @param {Boolean} opt.keyDesc Optional translation key for description
+ * @param {Object} opt.attributes Optional attributes
+ * @param {String} opt.type Input type (text, number, checkbox, etc.)
+ */
+export function elInput(key, opt) {
+  opt = Object.assign(
+    {},
+    {
+      id: Math.random().toString(32),
+      action: () => {},
+      checked: null,
+      disabled: false,
+      tooltip: false,
+      keyLabel: null,
+      keyDesc: null,
+      dataset: "",
+      type: "text",
+      class: null,
+      attributes: {},
+    },
+    opt
+  );
 
+  const inputOptions = Object.assign(
+    {},
+    {
+      name: opt.name || key,
+      id: opt.id,
+      type: opt.type,
+      disabled: opt.disabled,
+      value: opt.value,
+      on: ["change", opt.action],
+      dataset: opt.dataset,
+    },
+    opt.attributes
+  );
+
+
+  if (opt.type === "checkbox") {
+    inputOptions.checked = opt.checked;
+    inputOptions.value = "true"; // for form data. If not set, "on" will be returned.
+  }
+
+  const elInput = el("input", inputOptions);
+
+  const elLabelText = elSpanTranslate(
+    opt.keyLabel ? opt.keyLabel : `${key}_label`,
+    {
+      tooltip: opt.tooltip,
+    }
+  );
+  const elLabel = el("label", { for: opt.id });
+
+  const elHelp = el(
+    "div",
+    { class: ["text-muted", "help-box"] },
+    elSpanTranslate(opt.keyDesc ? opt.keyDesc : `${key}_desc`, {
+      tooltip: opt.tooltip,
+    })
+  );
+
+  if (opt.type === "checkbox") {
+    elLabel.appendChild(elInput);
+    elLabel.appendChild(elLabelText);
+    const elCheckbox = el("div", { class: ["checkbox", opt.class] }, [
+      elLabel,
+      elHelp,
+    ]);
+    return elCheckbox;
+  }
+
+  elInput.classList.add("form-control");
+  elLabel.appendChild(elLabelText);
+  const elGroup = el("div", { class: ["form-group", opt.class] }, [
+    elLabel,
+    elInput,
+    elHelp,
+  ]);
+  return elGroup;
+}
 
 /**
  * Standard checkbox
  * @param {String} key Unique key : used form name + translation
  * @param {Object} opt Options
  * @param {String} opt.id Element id
- * @param {String} opt.dataset Additional custom data-
+ * @param {String} opt.dataset Additional custom data
  * @param {String} opt.action Callback
+ * @param {String} opt.name Form name item, if not equal to key
  * @param {Boolean} opt.checked Checked at start
+ * @param {Boolean} opt.checked Disabled at start
  * @param {Boolean} opt.tooltip Add tooltip (false)
  * @param {Boolean} opt.keyLabel Optional translation key for label
  * @param {Boolean} opt.keyDesc Optional translation key for descriptiom
@@ -485,41 +598,16 @@ export function elCheckbox(key, opt) {
   opt = Object.assign(
     {},
     {
-      id: Math.random().toString(32),
-      action: () => {},
+      type: "checkbox",
       checked: true,
-      tooltip: false,
-      keyLabel: null,
-      keyDesc: null,
-      dataset: "",
+      value: "true", // will be used in form data. If not set, "on" will be returned.
     },
     opt
   );
 
-  return el("div", { class: "checkbox" }, [
-    el("label", { for: opt.id }, [
-      el("input", {
-        name: key,
-        id: opt.id,
-        type: "checkbox",
-        checked: opt.checked,
-        value: true,
-        on: ["change", opt.action],
-        dataset: opt.dataset,
-      }),
-      elSpanTranslate(opt.keyLabel ? opt.keyLabel : `${key}_label`, {
-        tooltip: opt.tooltip,
-      }),
-      el(
-        "div",
-        { class: ["text-muted", "help-box"] },
-        elSpanTranslate(opt.keyDesc ? opt.keyDesc : `${key}_desc`, {
-          tooltip: opt.tooltip,
-        })
-      ),
-    ]),
-  ]);
+  return elInput(key, opt);
 }
+
 /**
  * Standard select
  * @param {String} key Unique key : used form name + translation
@@ -527,8 +615,9 @@ export function elCheckbox(key, opt) {
  * @param {String} opt.id Element id
  * @param {String} opt.dataset Additional custom data-
  * @param {String} opt.action Callback
- * @param {Boolean} opt.keyLabel Optional translation key for label
- * @param {Boolean} opt.keyDesc Optional translation key for descriptiom
+ * @param {String} opt.keyLabel Optional translation key for label
+ * @param {String} opt.keyDesc Optional translation key for descriptiom
+ * @param {Boolean} opt.asRow return result as table row ( tr<td, td> )
  */
 export function elSelect(key, opt) {
   opt = Object.assign(
@@ -540,28 +629,43 @@ export function elSelect(key, opt) {
       keyLabel: null,
       keyDesc: null,
       dataset: "",
+      asRow: false,
     },
     opt
   );
 
-  return el("div", { class: "form-group" }, [
-    el(
-      "label",
-      { for: opt.id },
-      elSpanTranslate(opt.keyLabel ? opt.keyLabel : `${key}_label`)
-    ),
-    el(
-      "select",
-      {
-        on: ["change", opt.action],
-        name: key,
-        id: opt.id,
-        class: "form-control",
-        dataset: opt.dataset,
-      },
-      opt.items
-    ),
-  ]);
+  if (isNotEmpty(opt.item)) {
+    opt.item[0].selected = true;
+  }
+
+  const elOut = opt.asRow ? el("tr") : el("div", { class: "form-group" });
+
+  const elSelectInput = el(
+    "select",
+    {
+      on: ["change", opt.action],
+      name: key,
+      id: opt.id,
+      class: "form-control",
+      dataset: opt.dataset,
+    },
+    opt.items
+  );
+
+  const elLabelText = elSpanTranslate(
+    opt.keyLabel ? opt.keyLabel : `${key}_label`
+  );
+
+  const elLabel = opt.asRow
+    ? el("td", elLabelText)
+    : el("label", { for: opt.id }, elLabelText);
+
+  const elInput = opt.asRow ? el("td", elSelectInput) : elSelectInput;
+
+  elOut.appendChild(elLabel);
+  elOut.appendChild(elInput);
+
+  return elOut;
 }
 
 /**

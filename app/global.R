@@ -73,11 +73,10 @@ tryCatch(
     }
   },
   error = function(e) {
-
     #
-    # Show error as warning t
+    # Print error
     #
-    warning(e)
+    cat("Init early error:", as.character(e))
 
     #
     # If available, send mail
@@ -92,15 +91,17 @@ tryCatch(
           as.character(e)
         ),
         # if the db is down, do not try to encrypt
-        encrypt = F
+        encrypt = FALSE
       )
     }
+
     #
     # If available, clean DB pool
     #
-    if (exists('mxDbPoolClose')) {
+    if (exists("mxDbPoolClose")) {
       mxDbPoolClose()
     }
+
 
     #
     # Quit and set status 1

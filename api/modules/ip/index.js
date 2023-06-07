@@ -1,17 +1,14 @@
-import { isJson } from "@fxi/mx_valid";
+import { isJson, isEmpty } from "@fxi/mx_valid";
 import { pgRead, redisGet, redisSet } from "#mapx/db";
 import { sendJSON } from "#mapx/helpers";
 import { updateGeoIpTable } from "./update.js";
-import os from "os";
-
 const outDefault = {
   country: "",
   country_name: "",
-  ip_node: os.networkInterfaces().eth0[0].address,
 };
 
 function getGeoIP(req, res) {
-  sendJSON(res, req.ipGeo, { end: true });
+  sendJSON(res, req._ip_geo, { end: true });
 }
 
 async function setGeoIP(req, _, next) {
@@ -20,13 +17,13 @@ async function setGeoIP(req, _, next) {
       req.headers["x-real-ip"] || req.headers["x-forwarded-for"] || "";
     const ip = xForwardedFor || req.connection.remoteAddress;
     const ipGeo = await getGeoInfo(ip);
-    const out = {
+
+    req._ip_geo = {
       ip,
       ...outDefault,
       ...ipGeo,
     };
-    req.ipGeo = out;
-    // error "stream is not readable", probably calling this mw before it's ready.
+    //await wait(10);
     next();
   } catch (e) {
     console.error("setGeoIp:", e);
@@ -42,15 +39,17 @@ async function getGeoInfo(ip) {
     source: null,
   };
 
-  const cache = await redisGet(rkey);
+  try {
+    const cache = await redisGet(rkey);
 
-  if (cache && isJson(cache)) {
-    const dataCache = JSON.parse(cache);
-    dataCache.source = "redis";
-  }
+    if (!isEmpty(cache) && isJson(cache)) {
+      const outCache = JSON.parse(cache);
+      outCache.source = "redis";
+      return outCache;
+    }
 
-  const q = {
-    text: `
+    const q = {
+      text: `
   SELECT 
     country_name,
     country_iso_code AS country 
@@ -58,19 +57,22 @@ async function getGeoInfo(ip) {
   WHERE $1::inet << network
   LIMIT 1
     `,
-    values: [ip],
-  };
+      values: [ip],
+    };
 
-  try {
     const res = await pgRead.query(q);
     if (res.rowCount > 0) {
       const dat = res.rows[0];
       Object.assign(out, dat);
       out.source = "db";
-      if (out.country) {
-        await redisSet(rkey, JSON.stringify(out));
-      }
     }
+
+    const noCountry = isEmpty(out.country);
+
+    await redisSet(rkey, JSON.stringify(out), {
+      // set expiration date: one day or no limit
+      EX: noCountry ? 60 * 60 * 24 : 0,
+    });
   } catch (e) {
     console.error("getGeoInfo:", e);
   }

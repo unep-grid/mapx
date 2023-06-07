@@ -1,12 +1,18 @@
 import { el } from "./../el/src/index.js";
 import { ButtonPanel } from "../button_panel";
 import { bindAll } from "../bind_class_methods";
-import localforage from "localforage";
 import { isFunction, isObject, isEmpty } from "../is_test/index.js";
+import { tt } from "../el_mapx";
+import { mergeDeep } from "../mx_helper_misc.js";
 import "font-awesome/css/font-awesome.min.css";
 import "./style.less";
 
 const def = {
+  timestart: new Date("2015/01/01").getTime(),
+  storage: {
+    label: "nc_notifs",
+    max: 300,
+  },
   config: {
     id: null,
     on: {
@@ -15,7 +21,6 @@ const def = {
     },
   },
   ui: {
-    mode: "light",
     logo: require("./../../png/map-x-logo.png"),
   },
   panel: {
@@ -23,7 +28,7 @@ const def = {
     elContainer: null,
     button_lang_key: "nc_button",
     button_classes: ["fa", "fa-bell"],
-    tooltip_position: "top-right",
+    tooltip_position: "bottom-left",
     position: "bottom-left",
     container_style: {
       minWidth: "470px",
@@ -39,35 +44,53 @@ export class NotifCenter {
   constructor(opt) {
     const nc = this;
     bindAll(nc);
-    nc._opt = opt;
+    nc._opt = mergeDeep(def, opt);
+
+    /* bind methods used in cb */
+    nc._handler_info = nc._handler_info.bind(nc);
+    nc._handler_progress = nc._handler_progress.bind(nc);
+    nc._handler_browser = nc._handler_browser.bind(nc);
+    nc._handler_data = nc._handler_data.bind(nc);
+    nc.clearHistory = nc.clearHistory.bind(nc);
   }
 
-  async init(opt) {
+  async init() {
     try {
       const nc = this;
-      opt = opt || nc._opt;
       nc.clear();
-      await nc.updateOptions(opt);
-      nc.store = await nc.createStorage();
+
+      /**
+       * Set id
+       */
+      if (isFunction(nc._opt.config.id)) {
+        nc._id = await nc._opt.config.id();
+      } else {
+        nc._id = nc._opt.config.id;
+      }
+
+      /**
+       * Storage
+       */
 
       /**
        * Panel button
        */
-
       if (!nc.panel) {
-        nc.panel = new ButtonPanel(nc.opt.panel);
+        nc.panel = new ButtonPanel(nc._opt.panel);
       }
 
-      nc.restore();
-      nc.setSeenAll();
+      if (nc.panel.isActive()) {
+        await nc.restore();
+        await nc.setSeenAll();
+      }
 
-      nc.panel.on("open", () => {
-        nc.setSeenAll();
-        nc.restore();
+      nc.panel.on("open", async () => {
         nc.enableRender();
+        await nc.setSeenAll();
+        await nc.restore();
       });
 
-      nc.panel.on("close", () => {
+      nc.panel.on("close", async () => {
         nc.clear();
         nc.disableRender();
       });
@@ -81,15 +104,10 @@ export class NotifCenter {
       }
 
       /**
-       * Set theme mode ( dark light )
-       */
-      nc.setMode(nc.opt.ui.mode);
-
-      /**
        * Add callback
        */
-      if (isFunction(nc.opt.config.on.add)) {
-        nc.opt.config.on.add(nc);
+      if (isFunction(nc._opt.config.on.add)) {
+        nc._opt.config.on.add(nc);
       }
 
       /**
@@ -105,31 +123,6 @@ export class NotifCenter {
     }
   }
 
-  async createStorage() {
-    const nc = this;
-    return localforage.createInstance({
-      name: `notif_center_${nc._id || "default"}`,
-    });
-  }
-  async updateOptions(opt) {
-    const nc = this;
-    const orig = nc.opt || def;
-    nc.opt = Object.assign({}, orig, opt);
-
-    if (isFunction(nc.opt.config.id)) {
-      nc._id = await nc.opt.config.id();
-    } else {
-      nc._id = nc.opt.config.id;
-    }
-
-    Object.keys(orig).forEach((k) => {
-      nc.opt[k] = Object.assign({}, orig[k], opt[k]);
-    });
-    if (!nc.opt.panel.elContainer) {
-      throw new Error("No container found");
-    }
-  }
-
   async hasNotifPermission() {
     const nc = this;
     if (!nc._browser_notif_granted) {
@@ -139,18 +132,70 @@ export class NotifCenter {
     return nc._browser_notif_granted === true;
   }
 
+  setCount(v) {
+    const nc = this;
+    nc._count = v || 0;
+    return nc._count;
+  }
+
+  incCount() {
+    const nc = this;
+    return nc._count++;
+  }
+
   async restore() {
     const nc = this;
     nc.clear();
-    const notifs = [];
-    await nc.store.iterate((notif) => {
-      notifs.push(notif);
-    });
-
-    notifs.sort((a, b) => a.timestamp - b.timestamp);
-    notifs.forEach((notif) => {
+    const notifs = await nc.getItems();
+    nc.setCount(0);
+    for (const notif of notifs) {
       nc.notify(notif, { save: false, scroll: false });
+    }
+  }
+
+  async saveItem(notif) {
+    const nc = this;
+    const notifs = await nc.getItems();
+    notifs.push(notif);
+    if (notifs.length > 300) {
+      // TODO: remove based on groups, individual items are not significant
+      notifs.splice(notifs.length - nc._opt.storage.max, notifs.length);
+    }
+    return nc.replaceItems(notifs);
+  }
+
+  async replaceItems(notifs) {
+    const nc = this;
+    return new Promise((resolve) => {
+      try {
+        if (isEmpty(notifs)) {
+          notifs = [];
+        }
+        const sid = nc.getStoreId();
+        localStorage.setItem(sid, JSON.stringify(notifs));
+        nc.setCount(notifs.length);
+        resolve(true);
+      } catch (e) {
+        console.error(e);
+      }
     });
+  }
+
+  getItems() {
+    const nc = this;
+    return new Promise((resolve) => {
+      const sid = nc.getStoreId();
+      const notifs = JSON.parse(localStorage.getItem(sid) || "[]");
+      notifs.sort((a, b) => a.timestamp - b.timestamp);
+      resolve(notifs);
+    });
+  }
+
+  getStoreId() {
+    const nc = this;
+    const lab = nc._opt.storage.label;
+    const id = nc._id || 0;
+    return `${lab}_${id}`;
   }
 
   enableRender() {
@@ -171,7 +216,7 @@ export class NotifCenter {
 
   clearHistory() {
     const nc = this;
-    nc.store.clear();
+    nc.replaceItems([]);
     nc.clear();
   }
 
@@ -179,8 +224,8 @@ export class NotifCenter {
     const nc = this;
     nc._removed = true;
     nc.clear();
-    if (isFunction(nc.opt.config.on.remove)) {
-      nc.opt.config.on.remove(nc);
+    if (isFunction(nc._opt.config.on.remove)) {
+      nc._opt.config.on.remove(nc);
     }
     nc.panel.destroy();
   }
@@ -193,17 +238,10 @@ export class NotifCenter {
 
   scroll() {
     const nc = this;
-    nc.elContainer.scrollTop = nc.elContainer.scrollHeight;
-  }
-
-  setMode(mode) {
-    const nc = this;
-    nc._mode_dark = mode === "dark";
-    if (nc._mode_dark) {
-      nc.elMain.classList.add(`nc-dark`);
-    } else {
-      nc.elMain.classList.remove(`nc-dark`);
-    }
+    clearTimeout(nc._scroll_timeout);
+    nc._scroll_timeout = setTimeout(() => {
+      nc.elContainer.scrollTop = nc.elContainer.scrollHeight;
+    }, 100);
   }
 
   getElGroup(o) {
@@ -253,11 +291,14 @@ export class NotifCenter {
       if (!valid) {
         return console.warn("Invalid notification", notif);
       }
+
+      notif.order = nc.incCount();
+
       if (!notif.id) {
         notif.id = nc.idRandom();
       }
       if (!notif.timestamp) {
-        notif.timestamp = Date.now() ;
+        notif.timestamp = Date.now();
       }
       if (!notif.idGroup) {
         notif.idGroup = notif.id;
@@ -265,29 +306,30 @@ export class NotifCenter {
       const options = Object.assign({}, { save: true, scroll: true }, opt);
 
       const resolver = {
-        info: nc._handler_info.bind(nc),
-        progress: nc._handler_progress.bind(nc),
-        browser: nc._handler_browser.bind(nc),
-        data: nc._handler_data.bind(nc),
+        info: nc._handler_info,
+        progress: nc._handler_progress,
+        browser: nc._handler_browser,
+        data: nc._handler_data.bind,
       }[notif.type];
 
-      if (resolver) {
-        const conf = resolver(notif);
-
-        if (conf.save && options.save) {
-          if (nc.panel.isActive()) {
-            notif.seen = true;
-          }
-          await nc.store.setItem(`${notif.idGroup}_${notif.id}`, notif);
-        }
-        if (conf.scroll) {
-          nc.scroll();
-        }
-        if (!notif.seen) {
-          nc.panel.showFlag();
-        }
-      } else {
+      if (!resolver) {
         console.warn("resolver not found for", notif);
+        return;
+      }
+      const conf = resolver(notif);
+
+      if (conf.save && options.save) {
+        const notifVisible = nc.panel.isActive();
+        if (notifVisible) {
+          notif.seen = true;
+        }
+        await nc.saveItem(notif);
+      }
+      if (conf.scroll) {
+        nc.scroll();
+      }
+      if (!notif.seen) {
+        nc.panel.showFlag();
       }
     } catch (e) {
       console.warn(e);
@@ -297,20 +339,22 @@ export class NotifCenter {
   async getUnseenCount() {
     const nc = this;
     let c = 0;
-    await nc.store.iterate((notif) => {
+    const notifs = await nc.getItems();
+    for (const notif of notifs) {
       if (!notif.seen) {
         c++;
       }
-    });
+    }
     return c;
   }
 
   async setSeenAll() {
     const nc = this;
-    return nc.store.iterate((notif, key) => {
+    const notifs = await nc.getItems();
+    for (const notif of notifs) {
       notif.seen = true;
-      nc.store.setItem(key, notif);
-    });
+    }
+    return nc.replaceItems(notifs);
   }
 
   validateNotif(notif) {
@@ -325,12 +369,16 @@ export class NotifCenter {
   async _handler_browser(notif) {
     const nc = this;
     nc._handler_info(notif);
-    if (await nc.hasNotifPermission()) {
+    const granted = await nc.hasNotifPermission();
+    if (granted) {
       new Notification(notif.title, {
         body: notif.message,
-        icon: nc.opt.ui.logo,
+        icon: nc._opt.ui.logo,
       });
+    } else {
+      console.warn("User refused notifications. Notif:", notif);
     }
+
     return {
       save: false,
       scroll: false,
@@ -341,14 +389,13 @@ export class NotifCenter {
     const nc = this;
     if (nc._enable_render) {
       const elMsg = nc._el_info(notif);
+      const elGroup = nc.getElGroup(notif);
+      elGroup.appendChild(elMsg);
       if (notif.idMerge) {
         const elMerge = nc.getElMerge(notif);
-        if (elMerge.childElementCount <= nc.opt.items.maxMerge) {
+        if (elMerge.childElementCount <= nc._opt.items.maxMerge) {
           elMerge.appendChild(elMsg);
         }
-      } else {
-        const elGroup = nc.getElGroup(notif);
-        elGroup.appendChild(elMsg);
       }
     }
     return {
@@ -412,7 +459,7 @@ export class NotifCenter {
             type: "button",
             class: ["nc-button", "hint--bottom-left"],
             "aria-label": "Delete all",
-            on: { click: nc.clearHistory.bind(nc) },
+            on: { click: nc.clearHistory },
           },
           el("i", {
             class: ["fa", "fa-trash"],
@@ -434,7 +481,7 @@ export class NotifCenter {
       {
         class: ["nc-group-container"],
         style: {
-          order: notif.timestamp,
+          order: notif.order,
         },
       },
       el(
@@ -458,10 +505,14 @@ export class NotifCenter {
   }
 
   _el_merge(notif) {
-    return el("div", {
-      id: `nc_merge_${notif.idGroup}_${notif.idMerge}`,
-      class: ["nc-merge"],
-    });
+    return el(
+      "details",
+      {
+        id: `nc_merge_${notif.idGroup}_${notif.idMerge}`,
+        class: ["nc-merge"],
+      },
+      el("summary", tt("nc_label_merge"))
+    );
   }
 
   _el_info(notif) {

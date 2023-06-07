@@ -1,16 +1,16 @@
 import { pgWrite } from "#mapx/db";
 import { templates } from "#mapx/template";
-import { decrypt } from "#mapx/db-utils";
+import { decrypt } from "#mapx/db_utils";
 import { settings } from "#root/settings";
 
 /**
  * Get user roles
  * ⚠️  ONLY FOR AUTHENTICATED USERS ⚠️
- * TODO: 
+ * TODO:
  * - If role definition is updated during runtime, overwriting DB values:
- *    - merge `list` and `group` 
+ *    - merge `list` and `group`
  *    - decide how to handle singluar vs plural. member vs members ( confusing )
- * - If not, remove inheritance 
+ * - If not, remove inheritance
  * @param {Numeric} idUser User id
  * @param {Character} idProject Project id
  * @return {Object} list with keys like {list:roles,admin:boolean,...}
@@ -140,4 +140,25 @@ export async function getUserEmail(idUser) {
   const sqlUser = templates.getUserEmail;
   const res = await pgWrite.query(sqlUser, [idUser * 1]);
   return res.rows[0]?.email;
+}
+
+/**
+ * Session role testing
+ * @param {Object} s Session - authentication
+ */
+export function isMember(socket) {
+  const s = socket.session || {};
+  return !!s?.user_authenticated && s?.user_roles.member;
+}
+export function isPublisher(socket) {
+  const s = socket.session || {};
+  return !!s?.user_authenticated && s?.user_roles.publisher;
+}
+export function isAdmin(socket) {
+  const s = socket.session || {};
+  return !!s?.user_authenticated && s?.user_roles.admin;
+}
+export function isRoot(socket) {
+  const s = socket.session || {};
+  return !!s?.user_authenticated && s?.user_roles.root;
 }

@@ -1,5 +1,115 @@
 [
   {
+    "id": "auto_style_start",
+    "en": "Auto style...",
+    "zh": "汽车风格..."
+  },
+  {
+    "id": "auto_style_select_mode_label",
+    "en": "Select mode",
+    "zh": "选择模式"
+  },
+  {
+    "id": "auto_style_select_bins_label",
+    "en": "Select binning method",
+    "zh": "选择装箱方法"
+  },
+  {
+    "id": "auto_style_bins_number_label",
+    "en": "Number of bins",
+    "zh": "箱数"
+  },
+  {
+    "id": "auto_style_bins_number_desc",
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "zh": "统计分析期间使用的箱数。最少 2 个，最多 100 个"
+  },
+  {
+    "id": "auto_style_check_reverse_color_label",
+    "en": "Reverse color palette",
+    "zh": "反转调色板"
+  },
+  {
+    "id": "auto_style_check_reverse_color_desc",
+    "en": "Inverse colors order in palettes",
+    "zh": "调色板中的反色顺序"
+  },
+  {
+    "id": "auto_style_check_preserve_label_label",
+    "en": "Preserve current labels",
+    "zh": "保留当前标签"
+  },
+  {
+    "id": "auto_style_check_preserve_label_desc",
+    "en": "Preserve labels already defined in current rules",
+    "zh": "保留已在当前规则中定义的标签"
+  },
+  {
+    "id": "auto_style_button_update",
+    "en": "Update rules",
+    "zh": "更新规则"
+  },
+  {
+    "id": "auto_style_title_table_continuous",
+    "en": "Table. Method : {{method}}. Number of bins: {{bins}}",
+    "zh": "桌子。方法 ： {{method}} .箱数： {{bins}}"
+  },
+  {
+    "id": "auto_style_title_table_categorical",
+    "en": "Table. Number of rows = {{count}}",
+    "zh": "桌子。行数 = {{count}}"
+  },
+  {
+    "id": "auto_style_color_label",
+    "en": "Color",
+    "zh": "颜色"
+  },
+  {
+    "id": "auto_style_color_desc",
+    "en": "Choose color for all classes",
+    "zh": "为所有类别选择颜色"
+  },
+  {
+    "id": "auto_style_sizes_min_label",
+    "en": "Start size",
+    "zh": "起始尺码"
+  },
+  {
+    "id": "auto_style_sizes_min_desc",
+    "en": "Size of the first item in the table",
+    "zh": "表中第一项的大小"
+  },
+  {
+    "id": "auto_style_sizes_max_label",
+    "en": "End size",
+    "zh": "末端尺寸"
+  },
+  {
+    "id": "auto_style_sizes_max_desc",
+    "en": "Size of the last item in the table",
+    "zh": "表中最后一项的大小"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "zh": "不透明度"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "zh": "设置颜色的 alpha 分量（不透明度），其中 0 = 完全透明，1 表示完全不透明"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "zh": "物品尺寸"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "zh": "为所有类设置大小"
+  },
+  {
     "id": "btn_opt_code_integration",
     "en": "Code template / boilerplate / other format",
     "zh": "代码模板/样板/其他格式"
@@ -23,6 +133,11 @@
     "id": "code_integration_template_mapbox_style",
     "en": "Mapbox style (full)",
     "zh": "Mapbox 样式（完整）"
+  },
+  {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "zh": "Mapbox 样式（仅底图，可在 Studio 中使用）"
   },
   {
     "id": "code_integration_template_mapbox_layers",
@@ -1525,19 +1640,14 @@
     "zh": "重做"
   },
   {
-    "id": "edit_table_modal_value_invalid_title",
-    "en": "Invalid value",
+    "id": "edit_table_modal_values_invalid_title",
+    "en": "Invalid values",
     "zh": "无效值"
   },
   {
-    "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
-    "zh": "收到无效值。确保使用正确的类型： {{type}} .\n不会保存此更改。"
-  },
-  {
-    "id": "edit_table_modal_value_invalid_continue",
-    "en": "Ignore and continue",
-    "zh": "忽略并继续"
+    "id": "edit_table_modal_values_invalid_ok",
+    "en": "Ok",
+    "zh": "好的"
   },
   {
     "id": "btn_edit_add_column",
@@ -1566,8 +1676,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "zh": "添加一个新列：名称"
+    "en": "Name of the column",
+    "zh": "列的名称"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1686,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "zh": "新的列名称将是：<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "zh": "列名将是：<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1705,9 @@
     "zh": "名称不可用"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "zh": "下一个"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "zh": "选择数据类型"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "zh": "下一个"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1716,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "zh": "添加一个名为的新列<b> {{column_name}}</b>类型<b> {{column_type}}</b>?更改将在数据库和所有交互式表中完成。这无法撤消，但如果需要，“删除列”工具将起作用。"
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "zh": "添加一个名为的新列<code> {{column_name}}</code>类型<code> {{column_type}}</code>？更改将在数据库和所有交互式表中完成。此操作无法撤消，但如果需要，“删除列”工具将起作用。"
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1735,14 @@
     "zh": "列名"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "zh": "下一个"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "zh": "删除列：确认"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "zh": "删除名为<i> {{column_name}}</i>?更改将在数据库和所有交互式表中完成。这是无法撤消的：数据可能会丢失。"
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "zh": "删除名为的列<code> {{column_name}}</code>？更改将在数据库和所有交互式表中完成。这无法撤消：数据可能会丢失。"
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1686,8 +1781,8 @@
   },
   {
     "id": "edit_table_modal_warning_text",
-    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
-    "zh": "<ul><li>与桌面电子表格编辑器一样，使用此工具可能会导致数据被不可挽回地更改甚至删除。</li><li>我们不提供数据源的数据恢复服务。</li><li>只要保持会话，就可以使用键盘快捷键或专用按钮撤消/重做对单元格的任何操作。</li><li> “删除列”将删除列及其数据，在最后一个确认面板之后无法撤消它。</li><li>在进行任何修改之前，可以通过下载数据源或将数据复制并粘贴到电子表格编辑器中来获取数据的备份。</li><li>当前平台、其开发者或项目管理员拒绝承担任何责任。<ul></ul></li></ul>"
+    "en": "<ul><li>Using this tool may pose a risk of permanently altering or deleting data, similar to desktop spreadsheet editors.</li><li>It is possible to undo or redo any changes made to cells during a session using keyboard shortcuts or dedicated buttons.</li><li>The &#39;Remove column&#39; action will permanently delete the column and its data, and cannot be undone after the final confirmation panel.</li><li>Invalid cells, indicated by a red color, will not be saved.</li><li>A backup system has not yet been implemented. To safeguard your data, you can use the download tool in the toolbox to export the entire layer or table as a precautionary measure.</li><li>There may be incremental backup at the database level, but not at the layer or table level.</li><li>The developers of the current platform and project administrators do not accept any responsibility for any potential losses or damages.</li></ul>",
+    "zh": "<ul><li>使用此工具可能会带来永久更改或删除数据的风险，类似于桌面电子表格编辑器。</li><li>可以使用键盘快捷键或专用按钮撤消或重做会话期间对单元格所做的任何更改。</li><li> “删除列”操作将永久删除列及其数据，并且在最终确认面板后无法撤消。</li><li>无效单元格（用红色表示）将不会被保存。</li><li>备份系统尚未实施。为了保护您的数据，您可以使用工具箱中的下载工具导出整个图层或表格作为预防措施。</li><li>在数据库级别可能有增量备份，但在层或表级别没有。</li><li>当前平台的开发人员和项目管理员不对任何潜在的损失或损害承担任何责任。</li></ul>"
   },
   {
     "id": "edit_table_modal_warning_ok_no_more",
@@ -1726,7 +1821,7 @@
   },
   {
     "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "en": "Some column(s) contain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
     "zh": "某些列包含无效字符且无法编辑：<ul> {{columns}}</ul>"
   },
   {
@@ -1795,6 +1890,156 @@
     "zh": "这个表有 {{count}}未保存的更改。您确定要退出并放弃这些更改吗？"
   },
   {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "zh": "正在使用"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "zh": "预订的"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "zh": "不安全"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename column",
+    "zh": "重命名列"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "zh": "选择要重命名的列："
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "zh": "确认"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "zh": "您确定要重命名该列吗<code> {{column_name}}</code>到<code> {{column_name_new}}</code>？"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename column",
+    "zh": "重命名列"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename column",
+    "zh": "重命名列"
+  },
+  {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "zh": "代码中的现有引用"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "zh": "<p>不允许重命名列，因为在自定义代码视图、仪表板和/或自定义样式中引用了此表。如果需要，请考虑复制该列。<br><br>有关详细信息，请单击“帮助”按钮。<br><br>以下是相关视图的列表：</p>"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "zh": "取消"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "zh": "仪表板"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "zh": "自定义代码"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "zh": "自定义样式"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "zh": "源层"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "zh": "重复列"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "zh": "重复列"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "zh": "要复制的列"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "zh": "要复制的列：确认"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "zh": "复制名为的列<code> {{column_name}}</code>到一个名为的新列<code> {{column_name_new}}</code>？"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "zh": "复制列"
+  },
+  {
+    "id": "btn_stat_attribute",
+    "en": "Statistics",
+    "zh": "统计数据"
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "zh": "统计属性"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "zh": "选择一个属性"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "zh": "列顺序已修改"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "zh": "列顺序已被另一用户修改。"
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "zh": "好的"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "zh": "设置列顺序"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "zh": "设置列顺序"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "zh": "几何工具：选择源层"
@@ -1803,6 +2048,21 @@
     "id": "geom_tools_modal_select_label",
     "en": "Select source layer",
     "zh": "选择源层"
+  },
+  {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "zh": "导入为外部视图"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "zh": "导入外部视图"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "zh": "导入外部视图 ?此视图将作为项目设置中的外部视图提供"
   },
   {
     "id": "en",
@@ -2180,6 +2440,11 @@
     "zh": "取消"
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "zh": "下一个..."
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "zh": "继续"
@@ -2213,6 +2478,11 @@
     "id": "btn_close",
     "en": "Close",
     "zh": "关闭"
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "zh": "复制..."
   },
   {
     "id": "btn_download",
@@ -2515,6 +2785,11 @@
     "zh": "不允许下载。元数据中的更多信息。"
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "zh": "不允许的操作：请求开发者权限"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "zh": "编辑此视图"
@@ -2538,51 +2813,6 @@
     "id": "btn_opt_edit_style",
     "en": "Set the style of this view",
     "zh": "设置视图样式"
-  },
-  {
-    "id": "schema_style_title_legend",
-    "en": "Legend title",
-    "zh": "图例标题"
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval",
-    "zh": "区间包含上限"
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "zh": "如果选中，间隔将包括上限。如果未定义，则最后一个界限将是最大值。如果样式是使用自动样式构建的，则应选中此选项"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order",
-    "zh": "反向显示图层顺序"
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "zh": "如果勾选，则图层堆栈将颠倒：顶部规则将会堆栈底部绘制一个图层"
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label",
-    "zh": "显示符号的标签"
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?",
-    "zh": "使用符号表示点数据时，是否在其周围添加标签？"
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend",
-    "zh": "不在地图或图例中显示缺失值"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
-    "zh": "如果选中，具有缺失值（或定义为此类值的值）的要素将不会显示在地图上的图层或图例中"
   },
   {
     "id": "btn_opt_meta",
@@ -2790,6 +3020,11 @@
     "zh": "添加3D浮雕"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "zh": "使用地球模式"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "zh": "沉浸模式"
@@ -2816,48 +3051,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
+    "en": "Spotlight vector features",
     "zh": "突出显示矢量要素"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
     "zh": "突出显示工具配置"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
     "zh": "选择突出显示模式"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "zh": "突出显示所有功能重叠的地方 "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "zh": "所有功能重叠的聚光灯"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "zh": "突出显示任何可见功能 "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "zh": "聚焦任何可见的特征"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "zh": "突出显示两个要素重叠的地方 "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "zh": "聚焦两个特征重叠的地方"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "zh": "突出显示三个功能重叠的地方 "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "zh": "聚焦三个特征重叠的地方"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "zh": "突出显示四个要素重叠的地方 "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "zh": "四个功能重叠的聚光灯"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "zh": "突出显示五个功能重叠的地方 "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "zh": "聚焦五个特征重叠的地方"
   },
   {
     "id": "label_check_instant_overlap",
@@ -2953,6 +3188,11 @@
     "id": "error_no_source",
     "en": "No source layer found",
     "zh": "没有找到源图层"
+  },
+  {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "zh": "缺少视图类型"
   },
   {
     "id": "error_title_exists",
@@ -3465,24 +3705,14 @@
     "zh": "直接添加此MapX用户 "
   },
   {
-    "id": "schema_class",
-    "en": "Class",
-    "zh": "类"
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "zh": "元数据"
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values",
-    "zh": "缺少值"
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color",
-    "zh": "颜色"
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description",
-    "zh": "描述"
+    "id": "schema_method",
+    "en": "Method",
+    "zh": "方法"
   },
   {
     "id": "schema_item",
@@ -3495,129 +3725,9 @@
     "zh": "主键"
   },
   {
-    "id": "schema_style_label",
-    "en": "Label",
-    "zh": "标签"
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule",
-    "zh": "最后规则"
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data",
-    "zh": "元数据"
-  },
-  {
-    "id": "schema_method",
-    "en": "Method",
-    "zh": "方法"
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency",
-    "zh": "透明度"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule",
-    "zh": "规则"
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules",
-    "zh": "规则"
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size",
-    "zh": "尺寸"
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings",
-    "zh": "缩放设置"
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max",
-    "zh": "最大缩放时尺寸的系数"
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min",
-    "zh": "最小缩放时尺寸的系数"
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent",
-    "zh": "尺寸的指数插值"
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "zh": "尺寸的指数插值函数。1表示线性插值。"
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max",
-    "zh": "最大缩放"
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min",
-    "zh": "最小缩放"
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "zh": "符号"
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "zh": "如果大于0，则线和点尺寸的系数为缩放最小值。"
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "zh": "如果大于0，则线和点尺寸的系数为缩放最大值。"
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data",
-    "zh": "最小缩放以显示数据"
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data",
-    "zh": "最大缩放以显示数据"
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value",
-    "zh": "值"
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From",
-    "zh": "从"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To",
-    "zh": "到"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds",
-    "zh": "忽略下限/上限的最小/最大统计信息"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
-    "zh": "忽略绝对下限/上限的源统计信息中的最小值/最大值。这些值将取自规则集。"
+    "id": "schema_class",
+    "en": "Class",
+    "zh": "类"
   },
   {
     "id": "self",
@@ -4080,6 +4190,11 @@
     "zh": "你的脚本"
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "zh": "归因/贡献。格式：HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "zh": "禁用此仪表板"
@@ -4228,6 +4343,11 @@
     "id": "view_dashboard_widgets",
     "en": "Widgets",
     "zh": "小组件"
+  },
+  {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "zh": "Credits: "
   },
   {
     "id": "view_delete_confirm",
@@ -4521,8 +4641,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "zh": "允许非成员申请成为此项目的成员。"
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "zh": "允许非成员请求成为该项目的成员（仅当公开时）"
   },
   {
     "id": "project_state_key",
@@ -4730,9 +4850,14 @@
     "zh": "初始化地图位置"
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
     "zh": "使用当前地图参数"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "zh": "重置最大地图边界"
   },
   {
     "id": "project_map_proj_set",
@@ -4763,6 +4888,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "zh": "南纬 (Albers, Lamber Conic )"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "zh": "使用范围限制地图平移"
   },
   {
     "id": "map_fit_to_bounds",
@@ -4923,11 +5053,6 @@
     "id": "update_app_button_confirm",
     "en": "Restart now",
     "zh": "现在重启"
-  },
-  {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "zh": "之后"
   },
   {
     "id": "btn_clear_cache",
@@ -6356,8 +6481,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "zh": "欢迎！<br>有关技术信息，您可以阅读我们的<a href=\"{{linkKnowledgeBase}}\">知识库</a>。如果您对本网站有建议，或者想要报告错误，请访问我们的<a href=\"{{linkIssue}}\">问题跟踪器</a><br>谢谢 ！ "
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "zh": "欢迎！<br>有关技术信息，您可以阅读我们的<a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">知识库</a>。如果您对本网站有任何建议，或者想报告错误，请访问我们的<a href=\"{{linkIssue}}\" target=\"_blank\">问题跟踪器</a><br>谢谢 ！"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6410,7 +6535,7 @@
     "zh": "分位数"
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
     "zh": "首尾分割"
   },
@@ -6461,8 +6586,8 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "zh": "电子邮件将发送至<a href=\"mailto:={{email}}\"> {{email}}</a>。下载<a href=\"{{url}}\">链接</a>将在流程结束时激活 "
+    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
+    "zh": "一封电子邮件将发送至<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a>.下载<a download=\"\" href=\"{{url}}\" target=\"_blank\">链接</a>将在过程结束时激活"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6491,8 +6616,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
-    "zh": "使用格式完成转换 {{format}}.下载链接：<a href=\"{{url}}\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "zh": "使用格式完成转换 {{format}}.下载链接：<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6506,8 +6631,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "zh": "可以使用此链接下载所需的数据：<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "zh": "已准备好使用此链接下载请求的数据：<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_zip_progress",
@@ -6633,6 +6758,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "zh": "通知事项 "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "zh": "缺失值： {{nullCount}}"
   },
   {
     "id": "mc_title",
@@ -6995,6 +7125,31 @@
     "zh": "原始数据将从我们的服务器读取。但是，我们不会以任何方式存储或使用它。一切都简单地反映了。 IP 地址存储在内存中以防止滥用。"
   },
   {
+    "id": "btn_editor_tool_format",
+    "en": "Format",
+    "zh": "格式"
+  },
+  {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "zh": "帮助"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "zh": "帮助"
+  },
+  {
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "zh": "展开/最小化"
+  },
+  {
+    "id": "nc_label_merge",
+    "en": "Details...",
+    "zh": "细节..."
+  },
+  {
     "id": "pk_panel_options",
     "en": "Display options",
     "zh": "显示选项"
@@ -7073,6 +7228,66 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "zh": "使用默认调色板"
+  },
+  {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "zh": "加载新项目？"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "zh": "加载项目 {{name}}？"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "zh": "创建新项目"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "zh": "项目名称（英文）"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "zh": "创造"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "zh": "项目名称（英文）"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "zh": "名称有效"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "zh": "不允许创建"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "zh": "不允许"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "zh": "名称无效"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "zh": "名称字符串不在范围内：最少 3 个，最多 50 个字符"
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "zh": "名字不可用"
   },
   {
     "id": "schema_story_theme",
@@ -7575,6 +7790,216 @@
     "zh": "立方体的脸"
   },
   {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "zh": "图例标题"
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "zh": "区间包含上限"
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "zh": "如果选中，间隔将包括上限。如果未定义，则最后一个界限将是最大值。如果样式是使用自动样式构建的，则应选中此选项"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "zh": "反向显示图层顺序"
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "zh": "如果勾选，则图层堆栈将颠倒：顶部规则将会堆栈底部绘制一个图层"
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "zh": "显示符号的标签"
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "zh": "使用符号表示点数据时，是否在其周围添加标签？"
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend",
+    "zh": "不在地图或图例中显示缺失值"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "zh": "如果选中，具有缺失值（或定义为此类值的值）的要素将不会显示在地图上的图层或图例中"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "zh": "缺少值"
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "zh": "颜色"
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "zh": "描述"
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "zh": "标签"
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "zh": "最后规则"
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency",
+    "zh": "透明度"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "zh": "规则"
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "zh": "规则"
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "zh": "尺寸"
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "zh": "缩放设置"
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "zh": "最大缩放时尺寸的系数"
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "zh": "最小缩放时尺寸的系数"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "zh": "尺寸的指数插值"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "zh": "尺寸的指数插值函数。1表示线性插值。"
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "zh": "最大缩放"
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "zh": "最小缩放"
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "zh": "符号"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "zh": "如果大于0，则线和点尺寸的系数为缩放最小值。"
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "zh": "如果大于0，则线和点尺寸的系数为缩放最大值。"
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "zh": "最小缩放以显示数据"
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "zh": "最大缩放以显示数据"
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "zh": "值"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "zh": "从"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "zh": "到"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "zh": "忽略下限/上限的最小/最大统计信息"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "zh": "忽略绝对下限/上限的源统计信息中的最小值/最大值。这些值将取自规则集。"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency",
+    "zh": "透明度"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque",
+    "zh": "线条透明度。 0 = 透明，1 = 不透明"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline",
+    "zh": "启用多边形轮廓"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary.",
+    "zh": "勾勒出多边形以强调其边界。"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color.",
+    "zh": "自动颜色。"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule.",
+    "zh": "根据每条规则的颜色自动分配合适的颜色。"
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color",
+    "zh": "多边形轮廓颜色"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "zh": "在所有项目中搜索公众意见..."
@@ -7831,13 +8256,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "zh": "设置初始地图位置"
+    "en": "Set initial map extent",
+    "zh": "设置初始地图范围"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "zh": "将使用地图的当前范围、倾斜度和方位。项目默认值因此被覆盖。"
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "zh": "将地图平移限制在当前范围内"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "zh": "地图将被限制在其当前范围内。对于“墨卡托”以外的投影，只有中心会保持在范围内。"
   },
   {
     "id": "share_filter_activated_label",
@@ -8055,6 +8490,11 @@
     "zh": "地图：国家/地区阴影"
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "zh": "地图：通用土地标签大纲"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "zh": "地图：水"
@@ -8068,6 +8508,21 @@
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)",
     "zh": "地图：测深（高）"
+  },
+  {
+    "id": "mx_map_text_bathymetry",
+    "en": "Map: bathymetry labels",
+    "zh": "地图：测深标签"
+  },
+  {
+    "id": "mx_map_text_bathymetry_outline",
+    "en": "Map: bathymetry labels outline",
+    "zh": "地图：测深标签轮廓"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "zh": "地图：测深线"
   },
   {
     "id": "mx_map_road",
@@ -8130,6 +8585,51 @@
     "zh": "地图：放置文本边框"
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "zh": "地图：联合国标签 0 0（南极洲）"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "zh": "地图：联合国标签 0 1 – 州"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "zh": "地图：联合国标签 0 2 – 占领区"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "zh": "地图：联合国标签 0 3 – 非自治领土"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "zh": "地图：联合国标签 0 4 – 领土"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "zh": "地图：联合国标签 0 5 – 特殊地区或省份"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "zh": "地图：联合国标签 0 99 – 主权悬而未决"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "zh": "地图：联合国标签 1 1 – 行政单位（次国家级 01）"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "zh": "地图：联合国标签 1 2 – 行政单位（次国家级 01）"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "zh": "地图：道路文本"
@@ -8148,6 +8648,281 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "zh": "地图：水体文本边框"
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "zh": "字体系列"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "zh": "字体"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "zh": "不透明度"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "zh": "颜色"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "zh": "可见的"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "zh": "姓名"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "zh": "描述"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "zh": "作者"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "zh": "下一个"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "zh": "出口"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "zh": "进口"
+  },
+  {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "zh": "MapX 不推荐 Shapefile，因为没有指定字符集的方法，这会在显示和分析过程中产生问题"
+  },
+  {
+    "id": "upl_title",
+    "en": "Upload",
+    "zh": "上传"
+  },
+  {
+    "id": "upl_title_layer_name",
+    "en": "Title of the source ({{language}})",
+    "zh": "来源标题（ {{language}} )"
+  },
+  {
+    "id": "upl_name_placeholder",
+    "en": "Source title...",
+    "zh": "来源标题..."
+  },
+  {
+    "id": "upl_upload_btn",
+    "en": "Upload",
+    "zh": "上传"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "zh": "不允许上传"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "zh": "分配空间参考系统（EPSG 代码）。默认值为 4326。"
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "zh": "拖放文件（*.gpkg、*.zip、*.geojson）或点击浏览..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})",
+    "zh": "标题 （ {{language}} )"
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "zh": "标题 （ {{language}} )"
+  },
+  {
+    "id": "upl_file_upload_progress",
+    "en": "Uploading '{{filename}}'...",
+    "zh": "正在上传 ' {{filename}} '..."
+  },
+  {
+    "id": "upl_api_save_validation",
+    "en": "Geometry validation: This may take a while.",
+    "zh": "几何验证：这可能需要一段时间。"
+  },
+  {
+    "id": "upl_api_save_validation_geom_count",
+    "en": "There are {{count}} invalid geometries.",
+    "zh": "有 {{count}}无效的几何图形。"
+  },
+  {
+    "id": "upl_api_save_failed_title",
+    "en": "Upload of '{{filename}}' failed.",
+    "zh": "上传' {{filename}} ' 失败的。"
+  },
+  {
+    "id": "upl_api_save_failed",
+    "en": "Upload of <samp>{{filename}}</samp> failed. Source removed: <samp>{{sourceRemoved}}</samp>. View removed : {{viewRemoved}}. Message : <samp> {{error}}</samp> ",
+    "zh": "上传的<samp> {{filename}}</samp>失败的。来源已删除：<samp> {{sourceRemoved}}</samp> .查看已删除： {{viewRemoved}} .信息 ：<samp> {{error}}</samp>"
+  },
+  {
+    "id": "upl_api_save_success_title",
+    "en": "Upload of '{{filename}}' done.",
+    "zh": "上传' {{filename}} ' 完毕。"
+  },
+  {
+    "id": "upl_api_save_success",
+    "en": "Upload of <samp>{{filename}}</samp> done. New source created: {{title}} – <samp>{{idSource}}</samp>. ",
+    "zh": "上传的<samp> {{filename}}</samp>完毕。新来源创建： {{title}} –<samp> {{idSource}}</samp> ."
+  },
+  {
+    "id": "upl_api_import_db",
+    "en": "Importation in database",
+    "zh": "在数据库中导入"
+  },
+  {
+    "id": "up_button_close",
+    "en": "Close",
+    "zh": "关闭"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "zh": "添加文件..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "zh": "上传"
+  },
+  {
+    "id": "up_button_reset",
+    "en": "Reset",
+    "zh": "重置"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "zh": "确认重置"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "zh": "确认移除 {{n}}元素？"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "zh": "确认上传"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "zh": "确认上传 {{n}}元素，总共有 {{size}}？"
+  },
+  {
+    "id": "up_settings",
+    "en": "Settings",
+    "zh": "设置"
+  },
+  {
+    "id": "up_select_epsg_code",
+    "en": "EPSG code",
+    "zh": "EPSG代码"
+  },
+  {
+    "id": "up_check_enable_wms_label",
+    "en": "Enable WMS services",
+    "zh": "启用 WMS 服务"
+  },
+  {
+    "id": "up_check_enable_wms_desc",
+    "en": "In a public project, if public views are created using this source, enabling WMS service will automatically create a WMS layer and SLD, available for anyone.",
+    "zh": "在公共项目中，如果使用此源创建公共视图，启用 WMS 服务将自动创建 WMS 图层和 SLD，任何人都可以使用。"
+  },
+  {
+    "id": "up_check_create_view_label",
+    "en": "Automatically create a view",
+    "zh": "自动创建视图"
+  },
+  {
+    "id": "up_check_create_view_desc",
+    "en": "Create a basic view at the end of the process and add it to the project",
+    "zh": "在流程结束时创建一个基本视图并将其添加到项目中"
+  },
+  {
+    "id": "up_check_allow_download_label",
+    "en": "Allow this source to be downloaded",
+    "zh": "允许下载此源"
+  },
+  {
+    "id": "up_check_allow_download_desc",
+    "en": "This source license allows for redistribution, enabling the download feature will make the data and metadata available for download by anyone",
+    "zh": "此源许可证允许重新分发，启用下载功能将使任何人都可以下载数据和元数据"
+  },
+  {
+    "id": "up_check_assign_epsg_label",
+    "en": "Assign the SRS bellow",
+    "zh": "分配下面的 SRS"
+  },
+  {
+    "id": "up_check_assign_epsg_desc",
+    "en": "The converter will automatically retrieve the SRS information from the uploaded dataset. However, if you prefer to use a different SRS, simply check this checkbox and select the desired EPSG code from the options below.",
+    "zh": "转换器将自动从上传的数据集中检索 SRS 信息。但是，如果您更喜欢使用不同的 SRS，只需选中此复选框并从下面的选项中选择所需的 EPSG 代码。"
+  },
+  {
+    "id": "up_drop_or_click",
+    "en": "Drop files or click to select…",
+    "zh": "拖放文件或单击以选择..."
+  },
+  {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "zh": "问题"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "zh": "丢失的文件"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "zh": "缺少依赖项： {{ext}} .请将丢失的文件拖放到此处。"
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid element",
+    "zh": "无效元素"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "zh": "不支持的格式"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "zh": "档案要大"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many elements. Max:",
+    "zh": "元素太多。最大限度："
   },
   {
     "id": "wms_select_reviewed_service",

@@ -3,7 +3,7 @@ import { getApiUrl } from "./api_routes";
 import { getView, getViewTitle } from "./map_helpers/index.js";
 import { path } from "./mx_helper_misc.js";
 import { objToParams, getQueryParametersAsObject } from "./url_utils";
-import { el, elAuto } from "./el_mapx";
+import { el, elAuto, elSpanTranslate } from "./el_mapx";
 import { modal } from "./mx_helper_modal.js";
 import { wmsGetLayers } from "./wms";
 import { moduleLoad } from "./modules_loader_async";
@@ -17,6 +17,7 @@ import {
   isString,
   isObject,
   isArray,
+  isNotEmpty,
 } from "./is_test";
 
 const def = {
@@ -38,7 +39,9 @@ const def = {
  * @return {Object} source summary
  */
 export async function getViewSourceSummary(view, opt) {
+
   view = getView(view);
+  
   opt = Object.assign(
     {},
     {
@@ -182,20 +185,35 @@ export async function getSourceVtSummaryUI(opt) {
   }
 
   if (aStat.type === "continuous") {
-    aStat.table.forEach((r) => {
-      Object.keys(r).forEach((k) => (r[k] = Math.round(r[k] * 1000) / 1000));
-    });
+    for (const row of aStat.table) {
+      for (const col in row) {
+        row[col] = Math.round(row[col] * 1000) / 1000;
+      }
+    }
     titleTable = `${titleTable} ( Method : ${aStat.binsMethod}, number of bins : ${aStat.binsNumber} )`;
   }
   const elTable = elAuto("array_table", aStat.table, {
     tableTitle: titleTable,
   });
 
+
+  if (isNotEmpty(aStat.nullCount)) {
+    const elNull = el(
+      "div",
+      {
+        class: "well",
+      },
+      elSpanTranslate("null_count", { data: { nullCount: aStat.nullCount } })
+    );
+    elContainer.appendChild(elNull);
+  }
+
   elContainer.appendChild(elTable);
 
   modal({
     title: title,
     content: elContainer,
+    addBackground: true,
   });
 }
 

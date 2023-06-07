@@ -13,13 +13,34 @@ isGuestUser <- reactive({
 # Get user role
 #
 getUserRole <- reactive({
-  mxDebugMsg("get user roles")
-
   roles <- list()
   idProject <- reactData$project
   idUser <- reactUser$data$id
 
+  #
+  # Session roles
+  #
+  isGuest <- isGuestUser()
+  isRoot <- mxIsUserRoot(idUser)
+  isDev <- mxIsUserDev(idUser)
+
+  #
+  # DB roles
+  #
   roles <- mxDbGetProjectUserRoles(idUser, idProject)
+
+  #
+  # Add session roles to groups
+  #
+  if (isDev) {
+    roles$groups <- c(roles$groups, "developers")
+  }
+  if (isRoot) {
+    roles$groups <- c(roles$groups, "roots")
+  }
+  roles$developer <- isDev
+  roles$root <- isRoot
+  roles$guest <- isGuest # eq. to roles$groups => public
 
   return(roles)
 })

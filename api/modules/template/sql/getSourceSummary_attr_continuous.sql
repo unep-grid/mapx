@@ -7,39 +7,56 @@ attr_null_value as (
    THEN  '{{nullValue}}'
   ELSE
     NULL 
-   END as val
+   END as _value
 ),
 attr_no_null as (
   SELECT
-  s."{{idAttr}}"
+  "{{idAttr}}" as _attr
   FROM "{{idSource}}" s, attr_null_value n
   WHERE NOT (
-    s."{{idAttr}}" IS NULL OR
-    CASE WHEN n.val IS NULL 
+    "{{idAttr}}" IS NULL OR
+    CASE WHEN n._value IS NULL 
       --- NOT false = true 
       THEN false
       -- convert to float the nullValue
-      ELSE
-        s."{{idAttr}}" = n.val::FLOAT 
-  END
+    ELSE
+      "{{idAttr}}" = n._value::NUMERIC 
+END
 )
+),
+attr_no_null_count AS (
+  SELECT count(*) count
+  FROM attr_no_null
+),
+table_count AS (
+  SELECT count(*) count
+  FROM "{{idSource}}"
+),
+attr_null_count AS (
+  SELECT (a.count - s.count) as count 
+  FROM table_count a, attr_no_null_count s
 ),
 attr_max AS (
   SELECT
-  MAX("{{idAttr}}")::NUMERIC
+  MAX(_attr)::NUMERIC 
   FROM attr_no_null
 ),
 attr_min AS (
   SELECT
-  MIN("{{idAttr}}")::NUMERIC
+  MIN(_attr)::NUMERIC
+  FROM attr_no_null
+),
+attr_m AS (
+  SELECT
+  MIN(_attr)::NUMERIC
   FROM attr_no_null
 ),
 attr_array AS (
-  SELECT array_agg("{{idAttr}}"::NUMERIC) AS agg
+  SELECT array_agg(_attr::NUMERIC) AS agg
   FROM attr_no_null
 ),
 attr_distinct AS (
-  SELECT COUNT(DISTINCT "{{idAttr}}") AS val_distinct
+  SELECT COUNT(DISTINCT _attr) AS val_distinct
   FROM attr_no_null
 ),
 bins_valid AS (
@@ -117,10 +134,10 @@ freqtable AS (
     WHERE
     CASE
       WHEN b.from = b.to
-      THEN a."{{idAttr}}" = b.from AND a."{{idAttr}}" = b.to
+      THEN a._attr = b.from AND a._attr = b.to
       WHEN b.from < b.to AND b.from = amin.min AND bvminc.bin_vmin_unique
-      THEN a."{{idAttr}}" >= b.from AND a."{{idAttr}}" <= b.to
-      ELSE a."{{idAttr}}" > b.from AND a."{{idAttr}}" <= b.to
+      THEN a._attr >= b.from AND a._attr <= b.to
+      ELSE a._attr > b.from AND a._attr <= b.to
     END
 ) AS count
 FROM classes b, attr_min amin, attr_max amax, bin_vmin_count bvminc
@@ -141,7 +158,8 @@ SELECT json_build_object(
   'attribute_stat', json_build_object(
     'attribute', '{{idAttr}}',
     'type', 'continuous',
-    'nullValue', n.val,
+    'nullValue', n._value,
+    'nullCount',nc.count,
     'min', amin.min,
     'max', amax.max,
     'bins', b.bins,
@@ -156,5 +174,6 @@ attr_max amax,
 bins b,
 bins_valid v,
 freqtable_json ft,
-attr_null_value n
+attr_null_value n,
+attr_null_count nc
 

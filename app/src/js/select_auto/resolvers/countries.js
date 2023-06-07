@@ -1,20 +1,20 @@
-import {el, elSpanTranslate} from '../../el_mapx';
-import {getLanguagesAll} from '../../language';
+import { el, elSpanTranslate } from "../../el_mapx";
+import { getLanguagesAll } from "../../language";
 
 const langs = getLanguagesAll();
 
-
 export const config = {
-  valueField: 'id',
-  searchField: ['id', ...langs],
+  valueField: "id",
+  searchField: ["id", ...langs],
   allowEmptyOption: true,
   options: null,
   create: false,
   closeAfterSelect: true,
-  sortField: {field: 'en'},
-  dropdownParent: 'body',
+  sortField: { field: "en" },
+  preload: "focus",
+  dropdownParent: "body",
   maxItems: 10,
-  plugins: ['remove_button'],
+  plugins: ["remove_button"],
   load: async function (_, callback) {
     const tom = this;
     try {
@@ -22,8 +22,8 @@ export const config = {
         callback();
         return;
       }
-      const {default: countries} = await import(
-        './../../../data/dict/dict_countries.json'
+      const { default: countries } = await import(
+        "./../../../data/dict/dict_countries.json"
       );
       callback(countries);
       tom.settings.load = null;
@@ -35,23 +35,15 @@ export const config = {
   render: {
     option: (data, escape) => {
       const id = escape(data.id);
-      return el(
-        'div',
-        el('h4', elSpanTranslate(id)),
-        el('small', `${id}`)
-      );
+      return el("div", el("h4", elSpanTranslate(id)), el("small", `${id}`));
     },
     item: (data, escape) => {
       const id = escape(data.id);
       return el(
-        'div',
-        el('span', elSpanTranslate(id)),
-        el(
-          'span',
-          {class: ['text-muted', 'space-around']},
-          ` ${id}`
-        )
+        "div",
+        el("span", elSpanTranslate(id)),
+        el("span", { class: ["text-muted", "space-around"] }, ` ${id}`)
       );
-    }
-  }
+    },
+  },
 };

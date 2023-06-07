@@ -1,3 +1,3 @@
-export function ioEcho(socket, data) {
-  socket.emit("echo", data);
+export function ioEcho(_, __, cb) {
+  cb("echo");
 }

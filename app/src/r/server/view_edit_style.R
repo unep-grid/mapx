@@ -52,6 +52,24 @@ observeEvent(input$styleEdit_init, {
         as.POSIXct(view$date_modified, format = "%Y-%m-%d%tT%T", tz = "UTC")
       )
 
+      #
+      # Handle issue with hex color + alpha
+      # -> probably an issue with the color picker allowed hex + alpha value.
+      # -> not wanted
+      #
+      if (isNotEmpty(style$rules)) {
+        style$rules <- lapply(style$rules, function(rule) {
+          rule$color <- substr(rule$color, 1, 7)
+          return(rule)
+        })
+      }
+      if (isNotEmpty(style$nulls)) {
+        style$nulls <- lapply(style$nulls, function(rule) {
+          rule$color <- substr(rule$color, 1, 7)
+          return(rule)
+        })
+      }
+
       jedSchema(
         id = "styleEdit",
         schema = schema,
@@ -123,6 +141,7 @@ observeEvent(input$styleEdit_values, {
     view <- .set(view, c("data", "style", "custom"), .get(style, c("custom")))
     view <- .set(view, c("data", "style", "rules"), .get(style, c("rules")))
     view <- .set(view, c("data", "style", "zoomConfig"), .get(style, c("zoomConfig")))
+    view <- .set(view, c("data", "style", "polygonBorderConfig"), .get(style, c("polygonBorderConfig")))
     view <- .set(view, c("data", "style", "showSymbolLabel"), .get(style, c("showSymbolLabel")))
     view <- .set(view, c("data", "style", "nulls"), .get(style, c("nulls")))
     view <- .set(view, c("data", "style", "hideNulls"), .get(style, c("hideNulls")))
@@ -138,7 +157,7 @@ observeEvent(input$styleEdit_values, {
     if (!isEmpty(values$`_style_mapbox`)) {
       view <- .set(view, c("data", "style", "_mapbox"), values$`_style_mapbox`)
     }
-    
+
     switch(idEvent,
       "preview" = {
         mglUpdateView(view)

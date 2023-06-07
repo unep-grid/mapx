@@ -2,11 +2,16 @@ const elContainer = document.getElementById("mapx");
 const elResults = document.getElementById("results");
 const mapx = new mxsdk.Manager({
   container: elContainer,
-  url: "http://dev.mapx.localhost:8880",
+  url: { protocol: "http", host: "dev.mapx.localhost", port: 8880 },
   style: {
     minHeight: "800px",
     minWidth: "800px",
     width: "100%",
+  },
+  params: {
+    project: "MX-A3M-LVK-V7S-XOT-J48",
+    zoomMin: 0,
+    zoomMax: 22,
   },
 });
 
@@ -66,6 +71,309 @@ mapx.once("ready", async () => {
     ],
   });
 
+  t.check("Views layer order", {
+    init: async () => {
+      const views = await mapx.ask("get_views");
+      const n = 5;
+      let i = 0;
+      const select = [];
+      for (const view of views) {
+        if (t.valid.isViewVtWithRules(view) && i++ <= n) {
+          await mapx.ask("view_add", { idView: view.id });
+          select.push(view.id);
+        }
+      }
+      return { select };
+    },
+    tests: [
+      {
+        name: "Set order",
+        test: async (r) => {
+          await mapx.ask("set_views_layer_order", { order: r.select });
+          const ordered = await mapx.ask("get_views_layer_order");
+          for (let i = 0; i < r.select.length; i++) {
+            if (r.select[i] !== ordered[i]) {
+              return false;
+            }
+          }
+          return true;
+        },
+      },
+      {
+        name: "Set random order",
+        test: async (r) => {
+          /**
+           * Assumes views id are random, sorting by id = sorting by random
+           */
+          const sorted = r.select.toSorted();
+          await mapx.ask("set_views_layer_order", { order: sorted });
+          const ordered = await mapx.ask("get_views_layer_order");
+          for (let i = 0; i < sorted.length; i++) {
+            if (sorted[i] !== ordered[i]) {
+              return false;
+            }
+          }
+          return true;
+        },
+      },
+      {
+        name: "Clean",
+        test: async (r) => {
+          /**
+           * Assumes views id are random, sorting by id = sorting by random
+           */
+          for (const idView of r.select) {
+            await mapx.ask("view_remove", { idView });
+          }
+          const result = await mapx.ask("get_views_layer_order");
+          return t.valid.isEmpty(result);
+        },
+      },
+    ],
+  });
+
+  t.check("highlighter", {
+    init: async () => {
+      const res = {};
+      const resp = await fetch("data/iceland_test.geojson");
+      const gj = await resp.json();
+      const view = await mapx.ask("view_geojson_create", { data: gj });
+      res.boundsOrig = await mapx.ask("map_get_bounds_array");
+      await mapx.ask("map_jump_to", {
+        center: [-18.785, 65.267],
+        zoom: 6,
+      });
+      res.view = view;
+      return res;
+    },
+    tests: [
+      {
+        name: "position wait",
+        test: () => {
+          // map_jump_to return after move_end
+          // the view is there, but queryRenderedFeatures returns nothing
+          return new Promise((resolve) => {
+            setTimeout(() => resolve(true), 1000);
+          });
+        },
+      },
+      {
+        name: "filter none",
+        test: async (res) => {
+          const count = await mapx.ask("set_highlighter", {
+            filters: [
+              {
+                id: res.view.id,
+                filter: [
+                  "any",
+                  [">", ["get", "amount"], 100],
+                  ["in", ["get", "id_4"], ["literal", ["x", "y"]]],
+                ],
+              },
+            ],
+          });
+          return count === 0;
+        },
+      },
+      {
+        name: "filter all",
+        test: async () => {
+          const count = await mapx.ask("set_highlighter", {
+            all: true,
+          });
+          return count === 3;
+        },
+      },
+      {
+        name: "filter one",
+        test: async (res) => {
+          const count = await mapx.ask("set_highlighter", {
+            filters: [
+              {
+                id: res.view.id,
+                filter: [
+                  "all",
+                  [">", ["get", "amount"], 20],
+                  ["in", ["get", "id_4"], ["literal", ["a", "b"]]],
+                ],
+              },
+            ],
+          });
+          return count === 1;
+        },
+      },
+
+      {
+        name: "filter one update",
+        test: async () => {
+          const count = await mapx.ask("update_highlighter");
+          return count === 1;
+        },
+      },
+      {
+        name: "filter reset",
+        test: async () => {
+          const count = await mapx.ask("reset_highlighter");
+          return count === 0;
+        },
+      },
+      {
+        name: "Reset bounds",
+        test: async (res) => {
+          await mapx.ask("map_set_bounds_array", {
+            bounds: res.boundsOrig,
+          });
+          return true;
+        },
+      },
+    ],
+  });
+
+  t.check("Set theme", {
+    init: async () => {
+      const res = {};
+      res.themes = await mapx.ask("get_themes");
+      return res;
+    },
+    tests: [
+      {
+        name: "theme wait",
+        test: () => {
+          return new Promise((resolve) => {
+            setTimeout(() => resolve(true), 1000);
+          });
+        },
+      },
+      {
+        name: "add theme",
+        test: async (res) => {
+          const out = await mapx.ask("add_theme", {
+            theme: res.themes[0],
+          });
+          return out;
+        },
+      },
+    ],
+  });
+
+  t.check("Set max bounds", {
+    init: async () => {
+      const res = {};
+      res.boundsMax = await mapx.ask("map_get_max_bounds_array");
+      res.boundsOrig = await mapx.ask("map_get_bounds_array");
+      // sri lanka
+      res.boundsTest = [77.9602, 5.7703, 83.169, 9.8485];
+      res.boundsTestWrong = [83.169, 9.8485, 77.9602, 5.7703];
+      return res;
+    },
+    tests: [
+      {
+        name: "Set max bounds",
+        test: async (res) => {
+          const done = await mapx.ask("map_set_max_bounds_array", {
+            bounds: res.boundsTest,
+          });
+          return done;
+        },
+      },
+      {
+        name: "Get max bounds",
+        test: async (res) => {
+          const bounds = await mapx.ask("map_get_max_bounds_array");
+
+          if (bounds.length !== res.boundsTest.length) {
+            return false;
+          }
+
+          for (let i = 0; i < bounds.length; i++) {
+            if (bounds[i] !== res.boundsTest[i]) {
+              return false;
+            }
+          }
+          return true;
+        },
+      },
+      {
+        name: "Set max wrong bounds",
+        test: async (res) => {
+          const done = await mapx.ask("map_set_max_bounds_array", {
+            bounds: res.boundsTestWrong,
+          });
+          return done;
+        },
+      },
+      {
+        name: "Get max bounds bis",
+        test: async (res) => {
+          const bounds = await mapx.ask("map_get_max_bounds_array");
+
+          if (bounds.length !== res.boundsTest.length) {
+            return false;
+          }
+
+          for (let i = 0; i < bounds.length; i++) {
+            if (bounds[i] !== res.boundsTest[i]) {
+              return false;
+            }
+          }
+          return true;
+        },
+      },
+      {
+        name: "Reset bounds",
+        test: async (res) => {
+          await mapx.ask("map_set_max_bounds_array", {
+            bounds: res.boundsMax,
+          });
+          await mapx.ask("map_set_bounds_array", {
+            bounds: res.boundsOrig,
+          });
+          return true;
+        },
+      },
+    ],
+  });
+
+  t.check("Sharing module", {
+    init: async () => {
+      const view = await mapx.ask("_get_random_view", {
+        type: ["vt", "rt", "sm", "cc"],
+      });
+      await mapx.ask("show_modal_share", {
+        idView: view.id,
+      });
+      return {
+        id: view.id,
+      };
+    },
+    tests: [
+      {
+        name: "has valid url with view id",
+        test: async (r) => {
+          const urlString = await mapx.ask("get_modal_share_string");
+          const url = new URL(urlString);
+          const hasId = url.searchParams.get("views") === r.id;
+          return hasId;
+        },
+      },
+      {
+        name: "test suite work",
+        test: async (r) => {
+          const ok = await mapx.ask("get_modal_share_tests");
+          return ok;
+        },
+      },
+      {
+        name: "can be closed",
+        test: async () => {
+          const hadModal = await mapx.ask("close_modal_share");
+          await mapx.ask("close_modal_all");
+          return hadModal;
+        },
+      },
+    ],
+  });
+
   t.check("Table editor", {
     init: async () => {
       return mapx.ask("get_sources_list_edit");
@@ -80,7 +388,8 @@ mapx.once("ready", async () => {
       {
         name: "Editor is running",
         test: async (res) => {
-          const pos = Math.floor(Math.random() * (res.list.length - 1));
+          const sourcesSelect = res.list.filter((s) => s.nrow > 10);
+          const pos = Math.floor(Math.random() * (sourcesSelect.length - 1));
           const idTable = res.list[pos]?.id;
           res._id_table = idTable;
           const state = await mapx.ask("table_editor_open", {
@@ -99,9 +408,9 @@ mapx.once("ready", async () => {
             test_mode: true,
           });
           /*
-          * Id is unique and shoult match previous editor
-          */ 
-          return state.id === res._state.id ;
+           * Id is unique and shoult match previous editor
+           */
+          return state.id === res._state.id;
         },
       },
       {
@@ -167,14 +476,14 @@ mapx.once("ready", async () => {
         },
       },
       {
-        name: "Editor : add / remove column",
+        name: "Editor : add column",
         test: async (res) => {
           res._column_add = "_mx_test_column";
           const update = {
             type: "add_column",
             id_table: res._id_table,
             column_name: res._column_add,
-            column_type: "boolean",
+            column_type: "numeric",
           };
           await mapx.ask("table_editor_exec", {
             id_table: res._id_table,
@@ -189,7 +498,86 @@ mapx.once("ready", async () => {
           if (!colNames.includes(res._column_add)) {
             return false;
           }
-          update.type = "remove_column";
+
+          return true;
+        },
+      },
+      {
+        name: "Editor : handle invalid values",
+        test: async (res) => {
+          const cellsError = [];
+          const cellsValid = [];
+          const enabled = await mapx.ask("table_editor_exec", {
+            id_table: res._id_table,
+            method: "setAutoSave",
+            value: false,
+          });
+
+          if (enabled) {
+            return false;
+          }
+
+          const column_id = await mapx.ask("table_editor_exec", {
+            id_table: res._id_table,
+            method: "getColumnId",
+            value: res._column_add,
+          });
+
+          if (t.valid.isEmpty(column_id)) {
+            return false;
+          }
+
+          const dim = await mapx.ask("table_editor_exec", {
+            id_table: res._id_table,
+            method: "getTableDimension",
+          });
+
+          const nCells = dim.rows > 100 ? 100 : dim.rows;
+
+          for (let i = 0; i < nCells; i++) {
+            cellsError.push([i, column_id, "bad_" + i]);
+            cellsValid.push([i, column_id, i]);
+          }
+
+          const sanStatErrors = await mapx.ask("table_editor_exec", {
+            id_table: res._id_table,
+            method: "setCellsWaitSanitize",
+            value: {
+              cells: cellsError,
+              source: "testing",
+            },
+          });
+
+          if (sanStatErrors.nError !== nCells) {
+            return false;
+          }
+
+          const sanStatValid = await mapx.ask("table_editor_exec", {
+            id_table: res._id_table,
+            method: "setCellsWaitSanitize",
+            value: {
+              cells: cellsValid,
+              source: "testing",
+            },
+          });
+
+          if (sanStatValid.nValid !== nCells) {
+            return false;
+          }
+
+          return true;
+        },
+      },
+      {
+        name: "Editor : remove column",
+        test: async (res) => {
+          const update = {
+            type: "remove_column",
+            id_table: res._id_table,
+            column_name: res._column_add,
+            column_type: "boolean",
+          };
+
           await mapx.ask("table_editor_exec", {
             id_table: res._id_table,
             method: "handlerUpdateColumnRemove",
@@ -206,6 +594,7 @@ mapx.once("ready", async () => {
           return true;
         },
       },
+
       {
         name: "Editor closed",
         test: async (res) => {
@@ -219,16 +608,13 @@ mapx.once("ready", async () => {
 
   t.check("Full websocket communication", {
     init: async () => {
-      return Promise.all([
-        mapx.ask("test_ws", "job_sum"),
-        mapx.ask("test_ws", "job_echo"),
-      ]);
+      return mapx.ask("tests_ws");
     },
     tests: [
       {
         name: "All tests should be true ",
         test: (res) => {
-          return res.reduce((a, c) => a && c, true);
+          return res === true;
         },
       },
     ],
@@ -306,6 +692,7 @@ mapx.once("ready", async () => {
           const now = performance.now();
           const n = 20;
           const l = codes.length;
+          const bounds = await mapx.ask("map_get_bounds_array");
           await mapx.ask("map_wait_idle");
           for (let i = 0; i < n; i++) {
             if (performance.now() - now > item.timeout) {
@@ -330,7 +717,8 @@ mapx.once("ready", async () => {
              *                 s
              * NOTE: mapbox do not allow south < -86 and north > 86, which
              * means.. validation could fail with
-             */ const included =
+             */
+            const included =
               bbx[0] >= Math.floor(bbxA[0]) && // w
               (bbx[1] >= Math.floor(bbxA[1]) || bbx[1] >= -90) && // s
               bbx[2] <= Math.ceil(bbxA[2]) && // e
@@ -339,6 +727,7 @@ mapx.once("ready", async () => {
               return false;
             }
           }
+          await mapx.ask("map_set_bounds_array", { bounds });
           return true;
         },
       },
@@ -490,7 +879,7 @@ mapx.once("ready", async () => {
             asc: true,
             mode: "text",
           });
-          return sorted_asc && !sorted_desc;
+          return sorted_asc && sorted_desc;
         },
       },
     ],
@@ -762,7 +1151,7 @@ mapx.once("ready", async () => {
     },
     tests: [
       {
-        name: "Dashboard is added and removed properly",
+        name: "Dashboard is added then, removed properly",
         test: async (view) => {
           let visible = false;
           let removed = false;
@@ -978,39 +1367,6 @@ mapx.once("ready", async () => {
     ],
   });
 
-  t.check("Sharing module", {
-    init: async () => {
-      const view = await mapx.ask("_get_random_view", {
-        type: ["vt", "rt", "sm", "cc"],
-      });
-      await mapx.ask("show_modal_share", {
-        idView: view.id,
-      });
-      return {
-        id: view.id,
-      };
-    },
-    tests: [
-      {
-        name: "has valid url with view id",
-        test: async (r) => {
-          const urlString = await mapx.ask("get_modal_share_string");
-          const url = new URL(urlString);
-          const hasId = url.searchParams.get("views") === r.id;
-          return hasId;
-        },
-      },
-      {
-        name: "can be closed",
-        test: async () => {
-          const hadModal = await mapx.ask("close_modal_share");
-          await mapx.ask("close_modal_all");
-          return hadModal;
-        },
-      },
-    ],
-  });
-
   t.check("Tools - add new view", {
     init: async () => {
       await stopIfGuest();
@@ -1036,10 +1392,19 @@ mapx.once("ready", async () => {
 
   /**
    * Run tests
-   */ t.run({
+   */
+  t.run({
     finally: () => {
       console.log("Tests finished");
-      console.log(t._results);
+      const resTable = t._results.map((r) => {
+        return {
+          title: r.title,
+          message: r.message,
+          n_tests: r.tests.length,
+          passes: r.tests.reduce((a, c) => a && c.success, true),
+        };
+      });
+      console.table(resTable);
     },
   });
 });

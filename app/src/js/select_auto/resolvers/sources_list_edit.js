@@ -1,13 +1,11 @@
 import { el } from "../../el_mapx";
 import { wsGetSourcesListEdit } from "../../source";
 
-const def = {
-  max_rows: 1e5,
-  max_cols: 200,
-  disable_missing: true,
-};
-
 export const config = {
+  max_rows : 1e5,
+  max_cols : 200,
+  disable_missing : true,
+  disable_large : true,
   valueField: "id",
   searchField: ["id", "title", "abstract", "views", "type"],
   allowEmptyOption: false,
@@ -42,11 +40,14 @@ export const config = {
       const data = res.list || [];
       for (const row of data) {
         if (!row.exists) {
-          if (def.disable_missing) {
+          if (config.disable_missing) {
             row.disabled = true;
           }
         } else {
-          if (row.ncol > def.max_cols || row.nrow > def.max_rows) {
+          if (
+            config.disable_large &&
+            (row.ncol > config.max_cols || row.nrow > config.max_rows)
+          ) {
             row.disabled = true;
           }
         }
@@ -65,16 +66,18 @@ export const config = {
 };
 
 function formater(data, escape) {
-  const warnRow = data.nrow > def.max_rows ? ` ⚠️ ` : "";
-  const warnCol = data.ncol > def.max_cols ? ` ⚠️ ` : "";
-  const nCol = escape(data.ncol) + warnCol;
-  const nRow = escape(data.nrow) + warnRow;
+  const warnRow = data.nrow > config.max_rows ? ` ⚠️ ` : "";
+  const warnCol = data.ncol > config.max_cols ? ` ⚠️ ` : "";
+  const nCol = warnCol + escape(data.ncol);
+  const nRow = warnRow + escape(data.nrow);
   const type = escape(data.type);
   const title = escape(data.title);
   const abstr = escape(data.abstract.substr(0, 100));
   const date = escape(data.date_modified);
   const views = data?.views || [];
-  const dateUi = new Date(date).toLocaleDateString();
+  const dateObject = new Date(date);
+  const time = dateObject.toLocaleTimeString();
+  const dateUi = dateObject.toLocaleDateString();
 
   return el(
     "div",
@@ -84,17 +87,31 @@ function formater(data, escape) {
     },
     el(
       "div",
-      el("span", { style: { display: "block" } }, title),
+      { class: "well", style: { margin: "5px" } },
       el(
-        "span",
-        { class: ["text-muted", "space-around"] },
-        `${dateUi} ${type} ${nRow} x ${nCol}`
+        "div",
+        el(
+          "div",
+          {
+            class: ["text-muted"],
+            style: {
+              display: "flex",
+              justifyContent: "space-between",
+            },
+          },
+          [
+            el("span", `${nRow} x ${nCol}`),
+            el("span", `${type}`),
+            el("span", `${dateUi} – ${time}`),
+          ]
+        ),
+        el("span", { style: { display: "block" } }, title)
+      ),
+      el(
+        "ul",
+        { class: "text-muted" },
+        views.map((v) => el("li", escape(v)))
       )
-    ),
-    el(
-      "ul",
-      { class: "text-muted" },
-      views.map((v) => el("li", escape(v)))
     )
   );
 }

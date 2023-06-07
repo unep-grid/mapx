@@ -1,16 +1,16 @@
-import bodyParser from "body-parser";
+import express from "express";
 import { htmlToText } from "html-to-text";
 import nodemailer from "nodemailer";
 import { templates } from "#mapx/template";
 import { settings } from "#root/settings";
 import { paramsValidator } from "#mapx/route_validation";
 import { parseTemplate } from "#mapx/helpers";
-import { decrypt } from "#mapx/db-utils";
+import { decrypt } from "#mapx/db_utils";
 import { isEmail, isString, isArrayOf } from "@fxi/mx_valid";
 
 export const mwSend = [
-  bodyParser.urlencoded({ extended: false }),
-  bodyParser.json(),
+  express.urlencoded({ extended: false }),
+  express.json(),
   mwSendMail,
 ];
 
@@ -37,6 +37,7 @@ export async function mwSendMail(req, res) {
         conf = dat.msg;
       }
     }
+
     /**
      * Validate
      */

@@ -4,21 +4,21 @@
 html,
 body.mx {
   font-size: var(--mx_ui_font_size_base);
+  font-family: var(--mx_ui_font_text), Helvetica, Arial, system-ui, sans-serif;
 }
 
 input {
   accent-color: var(--mx_ui_input_accent);
 }
 
+* {
+  border-color: var(--mx_ui_border);
+  color: var(--mx_ui_text);
+}
+
 /**
 * Input
 */
-
-/*.mx select {*/
-/*appearance: none;*/
-/*padding: 5px;*/
-/*background: var(--mx_ui_background);*/
-/*}*/
 
 .mx input {
   background: var(--mx_ui_background);
@@ -47,7 +47,6 @@ input {
 /*
 * Badge and icons
 */
-
 .mx-readers-grp i {
   color: var(--mx_ui_text_faded);
 }
@@ -190,8 +189,13 @@ span.mx-badge-role {
   background-color: var(--mx_ui_background_accent);
 }
 
+.mx .btn-warning {
+  border-color: var(--mx_ui_message_warning);
+}
+
 .mx .selectize-control.multi .selectize-input > .active {
   background-color: var(--mx_ui_background_contrast);
+  color: var(--mx_ui_text);
 }
 .mx .selectize-control.multi .selectize-input > div {
   border: 1px solid var(--mx_ui_border);
@@ -311,7 +315,7 @@ span.mx-badge-role {
 
 /**
 * Step bullet
-*/ 
+*/
 .mx-story-step-bullet,
 .mx-story-btn-legend {
   background: var(--mx_ui_background);
@@ -381,7 +385,7 @@ span.mx-badge-role {
 /*.mx .mc .mc-page,*/
 /*.mx .mc.mc-mode-layout .mc-item,*/
 /*.mx .mc .mx-legend-box {*/
-  /*background: var(--mx_ui_background);*/
+/*background: var(--mx_ui_background);*/
 /*}*/
 
 /**

@@ -1,5 +1,115 @@
 [
   {
+    "id": "auto_style_start",
+    "en": "Auto style...",
+    "bn": "অটো স্টাইল..."
+  },
+  {
+    "id": "auto_style_select_mode_label",
+    "en": "Select mode",
+    "bn": "মোড নির্বাচন করুন"
+  },
+  {
+    "id": "auto_style_select_bins_label",
+    "en": "Select binning method",
+    "bn": "বিনিং পদ্ধতি নির্বাচন করুন"
+  },
+  {
+    "id": "auto_style_bins_number_label",
+    "en": "Number of bins",
+    "bn": "বিনের সংখ্যা"
+  },
+  {
+    "id": "auto_style_bins_number_desc",
+    "en": "Number of bins used during the statistical analysis. Min 2, max 100",
+    "bn": "পরিসংখ্যানগত বিশ্লেষণের সময় ব্যবহৃত বিনের সংখ্যা। সর্বনিম্ন 2, সর্বোচ্চ 100"
+  },
+  {
+    "id": "auto_style_check_reverse_color_label",
+    "en": "Reverse color palette",
+    "bn": "বিপরীত রঙের প্যালেট"
+  },
+  {
+    "id": "auto_style_check_reverse_color_desc",
+    "en": "Inverse colors order in palettes",
+    "bn": "প্যালেটে বিপরীত রঙের ক্রম"
+  },
+  {
+    "id": "auto_style_check_preserve_label_label",
+    "en": "Preserve current labels",
+    "bn": "বর্তমান লেবেল সংরক্ষণ করুন"
+  },
+  {
+    "id": "auto_style_check_preserve_label_desc",
+    "en": "Preserve labels already defined in current rules",
+    "bn": "বর্তমান নিয়মে ইতিমধ্যে সংজ্ঞায়িত লেবেলগুলি সংরক্ষণ করুন৷"
+  },
+  {
+    "id": "auto_style_button_update",
+    "en": "Update rules",
+    "bn": "আপডেট নিয়ম"
+  },
+  {
+    "id": "auto_style_title_table_continuous",
+    "en": "Table. Method : {{method}}. Number of bins: {{bins}}",
+    "bn": "টেবিল। পদ্ধতি: {{method}} . বিনের সংখ্যা: {{bins}}"
+  },
+  {
+    "id": "auto_style_title_table_categorical",
+    "en": "Table. Number of rows = {{count}}",
+    "bn": "টেবিল। সারির সংখ্যা = {{count}}"
+  },
+  {
+    "id": "auto_style_color_label",
+    "en": "Color",
+    "bn": "রঙ"
+  },
+  {
+    "id": "auto_style_color_desc",
+    "en": "Choose color for all classes",
+    "bn": "সব শ্রেণীর জন্য রং নির্বাচন করুন"
+  },
+  {
+    "id": "auto_style_sizes_min_label",
+    "en": "Start size",
+    "bn": "শুরু আকার"
+  },
+  {
+    "id": "auto_style_sizes_min_desc",
+    "en": "Size of the first item in the table",
+    "bn": "টেবিলের প্রথম আইটেমের আকার"
+  },
+  {
+    "id": "auto_style_sizes_max_label",
+    "en": "End size",
+    "bn": "শেষ আকার"
+  },
+  {
+    "id": "auto_style_sizes_max_desc",
+    "en": "Size of the last item in the table",
+    "bn": "টেবিলের শেষ আইটেমের আকার"
+  },
+  {
+    "id": "auto_style_opacity_label",
+    "en": "Opacity",
+    "bn": "অস্বচ্ছতা"
+  },
+  {
+    "id": "auto_style_opacity_desc",
+    "en": "Set the alpha component (opacity) of the color, where 0 = fully transparent and 1, fully opaque",
+    "bn": "রঙের আলফা উপাদান (অস্বচ্ছতা) সেট করুন, যেখানে 0 = সম্পূর্ণ স্বচ্ছ এবং 1, সম্পূর্ণ অস্বচ্ছ"
+  },
+  {
+    "id": "auto_style_size_label",
+    "en": "Items size",
+    "bn": "আইটেম আকার"
+  },
+  {
+    "id": "auto_style_size_desc",
+    "en": "Set size for all classes",
+    "bn": "সমস্ত শ্রেণীর জন্য আকার সেট করুন"
+  },
+  {
     "id": "btn_opt_code_integration",
     "en": "Code template / boilerplate / other format",
     "bn": "কোড টেমপ্লেট / বয়লারপ্লেট / অন্যান্য বিন্যাস"
@@ -23,6 +133,11 @@
     "id": "code_integration_template_mapbox_style",
     "en": "Mapbox style (full)",
     "bn": "ম্যাপবক্স শৈলী (সম্পূর্ণ)"
+  },
+  {
+    "id": "code_integration_template_mapbox_style_basemap",
+    "en": "Mapbox style (base map only, usable in Studio)",
+    "bn": "ম্যাপবক্স শৈলী (শুধুমাত্র ভিত্তি মানচিত্র, স্টুডিওতে ব্যবহারযোগ্য)"
   },
   {
     "id": "code_integration_template_mapbox_layers",
@@ -1525,19 +1640,14 @@
     "bn": "আবার করুন"
   },
   {
-    "id": "edit_table_modal_value_invalid_title",
-    "en": "Invalid value",
+    "id": "edit_table_modal_values_invalid_title",
+    "en": "Invalid values",
     "bn": "অবৈধ মান"
   },
   {
-    "id": "edit_table_modal_value_invalid",
-    "en": "Invalid value received. Make sure to use the correct type : {{type}}.\n This change will not be saved.",
-    "bn": "অবৈধ মান প্রাপ্ত. সঠিক টাইপ ব্যবহার নিশ্চিত করুন: {{type}} .\n এই পরিবর্তন সংরক্ষণ করা হবে না."
-  },
-  {
-    "id": "edit_table_modal_value_invalid_continue",
-    "en": "Ignore and continue",
-    "bn": "উপেক্ষা করুন এবং চালিয়ে যান"
+    "id": "edit_table_modal_values_invalid_ok",
+    "en": "Ok",
+    "bn": "ঠিক আছে"
   },
   {
     "id": "btn_edit_add_column",
@@ -1566,8 +1676,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_title",
-    "en": "Add a new column : name",
-    "bn": "একটি নতুন কলাম যোগ করুন: নাম"
+    "en": "Name of the column",
+    "bn": "কলামের নাম"
   },
   {
     "id": "edit_table_modal_add_column_name_label",
@@ -1576,8 +1686,8 @@
   },
   {
     "id": "edit_table_modal_add_column_name_template",
-    "en": "The new column name will be: <b>{{column_name}}</b>",
-    "bn": "নতুন কলামের নাম হবে:<b> {{column_name}}</b>"
+    "en": "The column name will be: <code>{{column_name}}</code>",
+    "bn": "কলামের নাম হবে:<code> {{column_name}}</code>"
   },
   {
     "id": "edit_table_modal_add_column_name_issue_length",
@@ -1595,19 +1705,9 @@
     "bn": "নাম অনুপলব্ধ"
   },
   {
-    "id": "edit_table_modal_add_column_name_next",
-    "en": "Next",
-    "bn": "পরবর্তী"
-  },
-  {
     "id": "edit_table_modal_add_column_type_label",
     "en": "Select data type",
     "bn": "ডেটা টাইপ নির্বাচন করুন"
-  },
-  {
-    "id": "edit_table_modal_add_column_type_next",
-    "en": "Next",
-    "bn": "পরবর্তী"
   },
   {
     "id": "edit_table_modal_add_column_confirm_title",
@@ -1616,8 +1716,8 @@
   },
   {
     "id": "edit_table_modal_add_column_confirm_text",
-    "en": "Add a new column named <b>{{column_name}}</b> of type <b>{{column_type}}</b> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
-    "bn": "নামে একটি নতুন কলাম যোগ করুন<b> {{column_name}}</b> ধরনের<b> {{column_type}}</b> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না, তবে প্রয়োজন হলে 'একটি কলাম সরান' টুলটি কাজ করবে।"
+    "en": "Add a new column named <code>{{column_name}}</code> of type <code>{{column_type}}</code> ? Change will be done in the database and all interactive tables. This can't be undone, but the tool 'Remove a column' will work, if required. ",
+    "bn": "নামে একটি নতুন কলাম যোগ করুন<code> {{column_name}}</code> ধরনের<code> {{column_type}}</code> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না, তবে প্রয়োজন হলে 'একটি কলাম সরান' টুলটি কাজ করবে।"
   },
   {
     "id": "btn_edit_table_modal_add_column_confirm",
@@ -1635,19 +1735,14 @@
     "bn": "কলামের নাম"
   },
   {
-    "id": "edit_table_modal_remove_column_next",
-    "en": "Next",
-    "bn": "পরবর্তী"
-  },
-  {
     "id": "edit_table_modal_remove_column_confirm_title",
     "en": "Remove a column : confirm",
     "bn": "একটি কলাম সরান: নিশ্চিত করুন"
   },
   {
     "id": "edit_table_modal_remove_column_confirm_text",
-    "en": "Remove a column named <i>{{column_name}}</i> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
-    "bn": "নামের একটি কলাম সরান<i> {{column_name}}</i> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না: ডেটা হারিয়ে যেতে পারে।"
+    "en": "Remove a column named <code>{{column_name}}</code> ? Change will be done in the database and all interactive tables. This can't be undone: data can be lost.",
+    "bn": "নামের একটি কলাম সরান<code> {{column_name}}</code> ? ডাটাবেস এবং সমস্ত ইন্টারেক্টিভ টেবিলে পরিবর্তন করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না: ডেটা হারিয়ে যেতে পারে।"
   },
   {
     "id": "btn_edit_table_modal_remove_column_confirm",
@@ -1686,8 +1781,8 @@
   },
   {
     "id": "edit_table_modal_warning_text",
-    "en": "<ul><li>Using this tool may cause data to be irreparably altered or even deleted, as with desktop spreadsheet editors.</li><li>We do not offer data recovery services for data sources.</li><li>As long as a session is maintained, any operation on the cells can be undone/redone using keyboard shortcuts or the dedicated buttons.</li><li>'Remove column' will delete the column and its data with no possibility of undoing it after the last confirmation panel.</li><li>Before any modification, it is possible to obtain a backup of the data by downloading the data source or by copying and pasting the data into a spreadsheet editor.</li><li>The current platform, its developer or the project administrators decline all responsibility.<ul>",
-    "bn": "<ul><li>এই টুলটি ব্যবহার করার ফলে ডেটা অপূরণীয়ভাবে পরিবর্তিত হতে পারে বা এমনকি মুছেও যেতে পারে, যেমন ডেস্কটপ স্প্রেডশীট সম্পাদকের সাথে।</li><li> আমরা ডেটা উত্সের জন্য ডেটা পুনরুদ্ধার পরিষেবা অফার করি না।</li><li> যতক্ষণ একটি সেশন রক্ষণাবেক্ষণ করা হয়, কোষের যেকোনো অপারেশন কীবোর্ড শর্টকাট বা ডেডিকেটেড বোতাম ব্যবহার করে পূর্বাবস্থায় ফেরানো/পুনরায় করা যেতে পারে।</li><li> 'কলাম সরান' শেষ নিশ্চিতকরণ প্যানেলের পরে এটিকে পূর্বাবস্থায় ফেরানোর কোনো সম্ভাবনা ছাড়াই কলাম এবং এর ডেটা মুছে ফেলবে।</li><li> কোনো পরিবর্তনের আগে, ডেটা উৎস ডাউনলোড করে বা স্প্রেডশীট এডিটরে ডেটা কপি করে পেস্ট করে ডেটার ব্যাকআপ নেওয়া সম্ভব।</li><li> বর্তমান প্ল্যাটফর্ম, এর বিকাশকারী বা প্রকল্প প্রশাসকরা সমস্ত দায়িত্ব অস্বীকার করে।<ul></ul></li></ul>"
+    "en": "<ul><li>Using this tool may pose a risk of permanently altering or deleting data, similar to desktop spreadsheet editors.</li><li>It is possible to undo or redo any changes made to cells during a session using keyboard shortcuts or dedicated buttons.</li><li>The &#39;Remove column&#39; action will permanently delete the column and its data, and cannot be undone after the final confirmation panel.</li><li>Invalid cells, indicated by a red color, will not be saved.</li><li>A backup system has not yet been implemented. To safeguard your data, you can use the download tool in the toolbox to export the entire layer or table as a precautionary measure.</li><li>There may be incremental backup at the database level, but not at the layer or table level.</li><li>The developers of the current platform and project administrators do not accept any responsibility for any potential losses or damages.</li></ul>",
+    "bn": "<ul><li>এই টুল ব্যবহার করে ডেস্কটপ স্প্রেডশীট এডিটরগুলির মতো স্থায়ীভাবে ডেটা পরিবর্তন বা মুছে ফেলার ঝুঁকি তৈরি করতে পারে।</li><li> কীবোর্ড শর্টকাট বা ডেডিকেটেড বোতাম ব্যবহার করে একটি সেশন চলাকালীন কক্ষে করা যেকোনো পরিবর্তন পূর্বাবস্থায় ফেরানো বা পুনরায় করা সম্ভব।</li><li> 'কলাম সরান' ক্রিয়াটি স্থায়ীভাবে কলাম এবং এর ডেটা মুছে ফেলবে এবং চূড়ান্ত নিশ্চিতকরণ প্যানেলের পরে পূর্বাবস্থায় ফেরানো যাবে না।</li><li> একটি লাল রঙ দ্বারা নির্দেশিত অবৈধ কক্ষগুলি সংরক্ষণ করা হবে না৷</li><li> একটি ব্যাকআপ সিস্টেম এখনও কার্যকর করা হয়নি. আপনার ডেটা সুরক্ষিত রাখতে, আপনি সতর্কতামূলক ব্যবস্থা হিসাবে সমগ্র স্তর বা টেবিল রপ্তানি করতে টুলবক্সে ডাউনলোড টুল ব্যবহার করতে পারেন।</li><li> ডাটাবেস স্তরে ক্রমবর্ধমান ব্যাকআপ থাকতে পারে, তবে স্তর বা টেবিল স্তরে নয়।</li><li> বর্তমান প্ল্যাটফর্মের ডেভেলপার এবং প্রকল্প প্রশাসকরা কোনো সম্ভাব্য ক্ষতি বা ক্ষতির জন্য কোনো দায় স্বীকার করেন না।</li></ul>"
   },
   {
     "id": "edit_table_modal_warning_ok_no_more",
@@ -1726,7 +1821,7 @@
   },
   {
     "id": "edit_table_modal_columns_name_issue_content",
-    "en": "Some column(s) cotain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
+    "en": "Some column(s) contain invalid characters and cannot be edited: <ul> {{columns}} </ul>",
     "bn": "কিছু কলাম(গুলি) অবৈধ অক্ষর ধারণ করে এবং সম্পাদনা করা যাবে না:<ul> {{columns}}</ul>"
   },
   {
@@ -1795,6 +1890,156 @@
     "bn": "এই টেবিল আছে {{count}} অসংরক্ষিত পরিবর্তন আপনি কি এই পরিবর্তনগুলি প্রস্থান এবং বাতিল করার বিষয়ে নিশ্চিত?"
   },
   {
+    "id": "edit_table_modal_issue_name_is_not_used",
+    "en": "in use",
+    "bn": "ব্যাবহৃত হচ্ছে"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_not_reserved",
+    "en": "reserved",
+    "bn": "সংরক্ষিত"
+  },
+  {
+    "id": "edit_table_modal_issue_name_is_safe",
+    "en": "not safe",
+    "bn": "নিরাপদ না"
+  },
+  {
+    "id": "edit_table_modal_rename_column_title",
+    "en": "Rename column",
+    "bn": "কলাম পুনঃনামকরণ করুন"
+  },
+  {
+    "id": "edit_table_modal_rename_column_label",
+    "en": "Choose the column you want to rename:",
+    "bn": "আপনি যে কলামটির নাম পরিবর্তন করতে চান তা চয়ন করুন:"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_title",
+    "en": "Confirmation",
+    "bn": "নিশ্চিতকরণ"
+  },
+  {
+    "id": "edit_table_modal_rename_column_confirm_text",
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
+    "bn": "আপনি কি নিশ্চিত যে আপনি কলামটির নাম পরিবর্তন করতে চান৷<code> {{column_name}}</code> প্রতি<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_rename_column",
+    "en": "Rename column",
+    "bn": "কলাম পুনঃনামকরণ করুন"
+  },
+  {
+    "id": "btn_edit_table_modal_rename_column_confirm",
+    "en": "Rename column",
+    "bn": "কলাম পুনঃনামকরণ করুন"
+  },
+  {
+    "id": "edit_table_modal_has_code_title",
+    "en": "Existing references in code",
+    "bn": "কোডে বিদ্যমান রেফারেন্স"
+  },
+  {
+    "id": "edit_table_modal_has_code",
+    "en": "<p>Column renaming is not allowed since this table is referenced in custom code views, dashboards, and / or custom styles. If required, consider duplicating the column instead.<br><br>For more details, click the 'Help' button.<br><br>Here is the list of dependent views:</p>",
+    "bn": "<p>কলাম পুনঃনামকরণ অনুমোদিত নয় যেহেতু এই টেবিলটি কাস্টম কোড ভিউ, ড্যাশবোর্ড এবং/অথবা কাস্টম শৈলীতে উল্লেখ করা হয়েছে। প্রয়োজনে, পরিবর্তে কলামটি নকল করার কথা বিবেচনা করুন।<br><br> আরও বিস্তারিত জানার জন্য, 'সহায়তা' বোতামে ক্লিক করুন।<br><br> এখানে নির্ভরশীল দৃষ্টিভঙ্গির তালিকা রয়েছে:</p>"
+  },
+  {
+    "id": "edit_table_modal_has_code_close",
+    "en": "Cancel",
+    "bn": "বাতিল করুন"
+  },
+  {
+    "id": "edit_table_view_with_dashboard",
+    "en": "Dashboard",
+    "bn": "ড্যাশবোর্ড"
+  },
+  {
+    "id": "edit_table_view_with_custom_code",
+    "en": "Custom Code",
+    "bn": "প্রচলিত সংকেত"
+  },
+  {
+    "id": "edit_table_view_with_custom_style",
+    "en": "Custom style",
+    "bn": "কাস্টম শৈলী"
+  },
+  {
+    "id": "edit_table_view_with_layer",
+    "en": "Source layer",
+    "bn": "উৎস স্তর"
+  },
+  {
+    "id": "btn_edit_duplicate_column",
+    "en": "Duplicate column",
+    "bn": "সদৃশ কলাম"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_title",
+    "en": "Duplicate column",
+    "bn": "সদৃশ কলাম"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_label",
+    "en": "Column to duplicate",
+    "bn": "নকল করতে কলাম"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_title",
+    "en": "Column to duplicate : confirm",
+    "bn": "নকল করতে কলাম: নিশ্চিত করুন"
+  },
+  {
+    "id": "edit_table_modal_duplicate_column_confirm_text",
+    "en": "Duplicate the column named <code>{{column_name}}</code> to a new column named <code>{{column_name_new}}</code> ?",
+    "bn": "নামের কলামটি নকল করুন<code> {{column_name}}</code> নামের একটি নতুন কলামে<code> {{column_name_new}}</code> ?"
+  },
+  {
+    "id": "btn_edit_table_modal_duplicate_column_confirm",
+    "en": "Duplicate the column",
+    "bn": "কলামটি নকল করুন"
+  },
+  {
+    "id": "btn_stat_attribute",
+    "en": "Statistics",
+    "bn": "পরিসংখ্যান"
+  },
+  {
+    "id": "edit_table_modal_stat_column_title",
+    "en": "Attribute for statistics",
+    "bn": "পরিসংখ্যান জন্য বৈশিষ্ট্য"
+  },
+  {
+    "id": "edit_table_modal_stat_column_label",
+    "en": "Select an attribute",
+    "bn": "একটি বৈশিষ্ট্য নির্বাচন করুন"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_title",
+    "en": "Columns order modified",
+    "bn": "কলামের ক্রম সংশোধন করা হয়েছে"
+  },
+  {
+    "id": "edit_table_modal_order_columns_modified_text",
+    "en": "Columns order has been modified by another user.",
+    "bn": "কলামের ক্রম অন্য ব্যবহারকারী দ্বারা সংশোধন করা হয়েছে।"
+  },
+  {
+    "id": "btn_edit_table_modal_order_columns_modified_ok",
+    "en": "ok",
+    "bn": "ঠিক আছে"
+  },
+  {
+    "id": "btn_edit_columns_order",
+    "en": "Set columns order",
+    "bn": "কলামের ক্রম সেট করুন"
+  },
+  {
+    "id": "edit_table_modal_order_columns_title",
+    "en": "Set columns order",
+    "bn": "কলামের ক্রম সেট করুন"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "bn": "জ্যামিতি সরঞ্জাম: উৎস স্তর নির্বাচন করুন"
@@ -1803,6 +2048,21 @@
     "id": "geom_tools_modal_select_label",
     "en": "Select source layer",
     "bn": "উৎস স্তর নির্বাচন করুন"
+  },
+  {
+    "id": "btn_opt_import_view_linked",
+    "en": "Import as external view",
+    "bn": "বাহ্যিক দৃশ্য হিসাবে আমদানি করুন"
+  },
+  {
+    "id": "import_view_linked_title",
+    "en": "Import external view",
+    "bn": "বাহ্যিক দৃশ্য আমদানি করুন"
+  },
+  {
+    "id": "import_view_linked",
+    "en": "Import external view ? This view will be available as view external in project's settings",
+    "bn": "বাহ্যিক দৃশ্য আমদানি করবেন? এই ভিউটি প্রজেক্টের সেটিংসে ভিউ এক্সটার্নাল হিসেবে পাওয়া যাবে"
   },
   {
     "id": "en",
@@ -2180,6 +2440,11 @@
     "bn": "বাতিল "
   },
   {
+    "id": "btn_next",
+    "en": "Next...",
+    "bn": "পরবর্তী..."
+  },
+  {
     "id": "btn_continue",
     "en": "Continue",
     "bn": "চালিয়ে যান"
@@ -2213,6 +2478,11 @@
     "id": "btn_close",
     "en": "Close",
     "bn": "বন্ধ "
+  },
+  {
+    "id": "btn_duplicate",
+    "en": "Duplicate...",
+    "bn": "ডুপ্লিকেট..."
   },
   {
     "id": "btn_download",
@@ -2515,6 +2785,11 @@
     "bn": "ডাউনলোড করা অনুমোদিত নয়। মেটাডেটা আরো তথ্য."
   },
   {
+    "id": "action_not_allowed_dev",
+    "en": "Action not allowed: requests developer privilege ",
+    "bn": "অ্যাকশন অনুমোদিত নয়: বিকাশকারীর বিশেষাধিকারের জন্য অনুরোধ করে"
+  },
+  {
     "id": "btn_opt_edit_config",
     "en": "Edit this view",
     "bn": "এই দৃশ্য সম্পাদনা করুন"
@@ -2538,51 +2813,6 @@
     "id": "btn_opt_edit_style",
     "en": "Set the style of this view",
     "bn": "এই দৃশ্যের স্টাইলটি সেট করুন "
-  },
-  {
-    "id": "schema_style_title_legend",
-    "en": "Legend title",
-    "bn": "কিংবদন্তি শিরোনাম "
-  },
-  {
-    "id": "schema_style_include_upper_bound",
-    "en": "Include upper bound in interval",
-    "bn": "অন্তর অন্তর উপরের আবদ্ধ অন্তর্ভুক্ত "
-  },
-  {
-    "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "bn": "যদি চেক করা হয়, ব্যবধানগুলি উপরের সীমা অন্তর্ভুক্ত করবে। যদি এটি সংজ্ঞায়িত করা না হয়, শেষ সীমা সর্বোচ্চ মান হবে। যদি স্টাইলটি অটো-স্টাইল ব্যবহার করে তৈরি করা হয় তবে এই বিকল্পটি পরীক্ষা করা উচিত"
-  },
-  {
-    "id": "schema_style_reverse_order",
-    "en": "Reverse displayed layers order",
-    "bn": "বিপরীত প্রদর্শিত স্তর ক্রম "
-  },
-  {
-    "id": "schema_style_reverse_order_desc",
-    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "bn": "যদি চেক করা থাকে তবে স্তর স্ট্যাকটি বিপরীত হবে: উপরের নিয়মটি স্ট্যাকের নীচে একটি স্তর আঁকবে "
-  },
-  {
-    "id": "schema_style_show_symbol_label",
-    "en": "Show symbol with label",
-    "bn": "লেবেল সহ প্রতীক দেখান "
-  },
-  {
-    "id": "schema_style_show_symbol_label_desc",
-    "en": "If using symbols with point data, should MapX add labels around it?",
-    "bn": "যদি পয়েন্ট ডেটা সহ প্রতীক ব্যবহার করা হয়, তবে ম্যাপএক্সের চারপাশে লেবেল যুক্ত করা উচিত? "
-  },
-  {
-    "id": "schema_style_hide_nulls",
-    "en": "Do not display missing values on the map or in the legend",
-    "bn": "মানচিত্রে বা কিংবদন্তীতে অনুপস্থিত মান প্রদর্শন করবেন না"
-  },
-  {
-    "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
-    "bn": "যদি চেক করা হয়, একটি অনুপস্থিত মান সহ বৈশিষ্ট্যগুলি - বা এর মতো সংজ্ঞায়িত মান - মানচিত্রে বা কিংবদন্তীতে একটি স্তরে প্রদর্শিত হবে না"
   },
   {
     "id": "btn_opt_meta",
@@ -2790,6 +3020,11 @@
     "bn": "3D ভূখণ্ড যোগ করুন"
   },
   {
+    "id": "btn_globe",
+    "en": "Use globe mode",
+    "bn": "গ্লোব মোড ব্যবহার করুন"
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "bn": "নিমজ্জন মোড "
@@ -2816,48 +3051,48 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features",
-    "bn": "ভেক্টর বৈশিষ্ট্য হাইলাইট করুন "
+    "en": "Spotlight vector features",
+    "bn": "স্পটলাইট ভেক্টর বৈশিষ্ট্য"
   },
   {
-    "id": "title_config_highlight",
-    "en": "Highlight tool configuration",
-    "bn": "হাইলাইট সরঞ্জাম কনফিগারেশন "
+    "id": "title_config_spotlight",
+    "en": "Spotlight tool configuration",
+    "bn": "স্পটলাইট টুল কনফিগারেশন"
   },
   {
-    "id": "select_highlight_mode",
-    "en": "Select highlight mode",
-    "bn": "হাইলাইট মোড নির্বাচন করুন "
+    "id": "select_spotlight_mode",
+    "en": "Select spotlight mode",
+    "bn": "স্পটলাইট মোড নির্বাচন করুন"
   },
   {
-    "id": "highlight_where_all",
-    "en": "Highlight where all features overlap",
-    "bn": "হাইলাইট করুন যেখানে সমস্ত বৈশিষ্ট্য ওভারল্যাপ হয় "
+    "id": "spotlight_where_all",
+    "en": "Spotlight where all features overlap",
+    "bn": "স্পটলাইট যেখানে সমস্ত বৈশিষ্ট্য ওভারল্যাপ"
   },
   {
-    "id": "highlight_where_any",
-    "en": "Highlight any visible feature",
-    "bn": "যে কোনও দৃশ্যমান বৈশিষ্ট্য হাইলাইট করুন "
+    "id": "spotlight_where_any",
+    "en": "Spotlight any visible feature",
+    "bn": "কোন দৃশ্যমান বৈশিষ্ট্য স্পটলাইট"
   },
   {
-    "id": "highlight_where_two",
-    "en": "Highlight where two features overlap",
-    "bn": "হাইলাইট করুন যেখানে দুটি বৈশিষ্ট্য ওভারল্যাপ হয় "
+    "id": "spotlight_where_two",
+    "en": "Spotlight where two features overlap",
+    "bn": "স্পটলাইট যেখানে দুটি বৈশিষ্ট্য ওভারল্যাপ"
   },
   {
-    "id": "highlight_where_three",
-    "en": "Highlight where three features overlap",
-    "bn": "হাইলাইট করুন যেখানে তিনটি বৈশিষ্ট্য ওভারল্যাপ হয় "
+    "id": "spotlight_where_three",
+    "en": "Spotlight where three features overlap",
+    "bn": "স্পটলাইট যেখানে তিনটি বৈশিষ্ট্য ওভারল্যাপ"
   },
   {
-    "id": "highlight_where_four",
-    "en": "Highlight where four features overlap",
-    "bn": "হাইলাইট করুন যেখানে চারটি বৈশিষ্ট্য ওভারল্যাপ হয় "
+    "id": "spotlight_where_four",
+    "en": "Spotlight where four features overlap",
+    "bn": "স্পটলাইট যেখানে চারটি বৈশিষ্ট্য ওভারল্যাপ"
   },
   {
-    "id": "highlight_where_five",
-    "en": "Highlight where five features overlap",
-    "bn": "হাইলাইট করুন যেখানে পাঁচটি বৈশিষ্ট্য ওভারল্যাপ করে "
+    "id": "spotlight_where_five",
+    "en": "Spotlight where five features overlap",
+    "bn": "স্পটলাইট যেখানে পাঁচটি বৈশিষ্ট্য ওভারল্যাপ"
   },
   {
     "id": "label_check_instant_overlap",
@@ -2953,6 +3188,11 @@
     "id": "error_no_source",
     "en": "No source layer found",
     "bn": "কোনও উত্স স্তর পাওয়া যায় নি "
+  },
+  {
+    "id": "error_type_missing",
+    "en": "Missing view type",
+    "bn": "অনুপস্থিত ভিউ টাইপ"
   },
   {
     "id": "error_title_exists",
@@ -3465,24 +3705,14 @@
     "bn": "এই ম্যাপএক্স ব্যবহারকারীকে সরাসরি যুক্ত করুন "
   },
   {
-    "id": "schema_class",
-    "en": "Class",
-    "bn": "ক্লাস "
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "bn": "মেটা ডেটা "
   },
   {
-    "id": "schema_style_nulls",
-    "en": "Missing values",
-    "bn": "অনুপস্থিত মানের "
-  },
-  {
-    "id": "schema_style_color",
-    "en": "Color",
-    "bn": "রঙ "
-  },
-  {
-    "id": "schema_style_description",
-    "en": "Description",
-    "bn": "বর্ণনা "
+    "id": "schema_method",
+    "en": "Method",
+    "bn": "পদ্ধতি "
   },
   {
     "id": "schema_item",
@@ -3495,129 +3725,9 @@
     "bn": "মূল "
   },
   {
-    "id": "schema_style_label",
-    "en": "Label",
-    "bn": "লেবেল "
-  },
-  {
-    "id": "schema_style_last_rule",
-    "en": "Last rule",
-    "bn": "শেষ নিয়ম "
-  },
-  {
-    "id": "schema_metadata",
-    "en": "Meta data",
-    "bn": "মেটা ডেটা "
-  },
-  {
-    "id": "schema_method",
-    "en": "Method",
-    "bn": "পদ্ধতি "
-  },
-  {
-    "id": "schema_style_opacity",
-    "en": "Transparency",
-    "bn": "স্বচ্ছতা"
-  },
-  {
-    "id": "schema_style_rule",
-    "en": "Rule",
-    "bn": "নিয়ম "
-  },
-  {
-    "id": "schema_style_rules",
-    "en": "Rules",
-    "bn": "বিধি "
-  },
-  {
-    "id": "schema_style_size",
-    "en": "Size",
-    "bn": "আকার "
-  },
-  {
-    "id": "schema_style_config_zoom",
-    "en": "Zoom settings",
-    "bn": "জুম সেটিংস "
-  },
-  {
-    "id": "schema_style_size_zoom_max",
-    "en": "Coeficient of size at zoom max",
-    "bn": "জুম সর্বাধিক আকারের সহগ "
-  },
-  {
-    "id": "schema_style_size_zoom_min",
-    "en": "Coeficient of size at zoom min",
-    "bn": "জুম মিনিটে আকারের সহগ "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent",
-    "en": "Size interpolation exponent",
-    "bn": "আকার প্রবর্তন ঘনিষ্ঠ "
-  },
-  {
-    "id": "schema_style_size_zoom_exponent_desc",
-    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "bn": "আকার ইন্টারপোলেশন এক্সপোনেন্ট ফাংশন। 1 এর মান একটি লিনিয়ার ইন্টারপোলেশন দেয়। "
-  },
-  {
-    "id": "schema_style_zoom_max",
-    "en": "Zoom max",
-    "bn": "জুম সর্বাধিক "
-  },
-  {
-    "id": "schema_style_zoom_min",
-    "en": "Zoom min",
-    "bn": "জুম মিনিট "
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "bn": "প্রতীক "
-  },
-  {
-    "id": "schema_style_size_zoom_min_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "bn": "যদি 0 এর বেশি হয় তবে জুম মিনিটে লাইন এবং পয়েন্টগুলির জন্য আকারের গুণফল। "
-  },
-  {
-    "id": "schema_style_size_zoom_max_desc",
-    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "bn": "যদি 0 এর চেয়ে বেশি হয় তবে লাইন এবং জুম সর্বাধিক পয়েন্টের জন্য আকারের সহগ। "
-  },
-  {
-    "id": "schema_style_zoom_min_desc",
-    "en": "Minimum zoom to show the data",
-    "bn": "ডেটা দেখানোর জন্য সর্বনিম্ন জুম "
-  },
-  {
-    "id": "schema_style_zoom_max_desc",
-    "en": "Maximum zoom to display the data",
-    "bn": "ডেটা প্রদর্শন করতে সর্বোচ্চ জুম "
-  },
-  {
-    "id": "schema_style_value",
-    "en": "Value",
-    "bn": "মান "
-  },
-  {
-    "id": "schema_style_value_from",
-    "en": "From",
-    "bn": "থেকে"
-  },
-  {
-    "id": "schema_style_value_to",
-    "en": "To",
-    "bn": "প্রতি"
-  },
-  {
-    "id": "schema_style_exclude_min_max",
-    "en": "Ignore min/max statistics for the lower / upper bounds",
-    "bn": "নিম্ন / উপরের সীমার জন্য সর্বনিম্ন / সর্বোচ্চ পরিসংখ্যান উপেক্ষা করুন"
-  },
-  {
-    "id": "schema_style_exclude_min_max_desc",
-    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
-    "bn": "পরম নিম্ন / উচ্চ সীমার জন্য উৎস পরিসংখ্যান থেকে সর্বনিম্ন / সর্বোচ্চ উপেক্ষা করুন। সেই মানগুলি নির্ধারিত নিয়ম থেকে নেওয়া হবে।"
+    "id": "schema_class",
+    "en": "Class",
+    "bn": "ক্লাস "
   },
   {
     "id": "self",
@@ -4080,6 +4190,11 @@
     "bn": "আপনার লিপি "
   },
   {
+    "id": "view_dashboard_html_attribution",
+    "en": "Attribution / credits. Format : HTML",
+    "bn": "স্বাক্ষর/ক্রেডিট. ফর্ম্যাট : HTML"
+  },
+  {
     "id": "view_dashboard_disable",
     "en": "Disable this dashboard",
     "bn": "এই ড্যাশবোর্ড নিষ্ক্রিয় করুন"
@@ -4228,6 +4343,11 @@
     "id": "view_dashboard_widgets",
     "en": "Widgets",
     "bn": "উইজেট "
+  },
+  {
+    "id": "view_dashboard_attribution_made_with",
+    "en": "Credits: ",
+    "bn": "Credits: "
   },
   {
     "id": "view_delete_confirm",
@@ -4521,8 +4641,8 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow non-members to request a membership to this project.",
-    "bn": "অ-সদস্যদের এই প্রকল্পে সদস্যতার জন্য অনুরোধ করার অনুমতি দিন। "
+    "en": "Allow non-members to request a membership to this project ( only if public )",
+    "bn": "অ-সদস্যদের এই প্রকল্পে সদস্যতার অনুরোধ করার অনুমতি দিন (শুধুমাত্র যদি সর্বজনীন)"
   },
   {
     "id": "project_state_key",
@@ -4730,9 +4850,14 @@
     "bn": "প্রাথমিক মানচিত্রের অবস্থান "
   },
   {
-    "id": "project_map_pos_get",
+    "id": "btn_map_pos_get",
     "en": "Use current map parameters",
-    "bn": "বর্তমান মানচিত্রের পরামিতিগুলি ব্যবহার করুন "
+    "bn": "বর্তমান মানচিত্র পরামিতি ব্যবহার করুন"
+  },
+  {
+    "id": "btn_map_pos_reset_max_bounds",
+    "en": "Reset maximum map bounds",
+    "bn": "সর্বোচ্চ মানচিত্র সীমানা রিসেট করুন"
   },
   {
     "id": "project_map_proj_set",
@@ -4763,6 +4888,11 @@
     "id": "project_map_proj_parallels_latitude_1",
     "en": "Latitude South (Albers, Lamber Conic )",
     "bn": "অক্ষাংশ দক্ষিণ (আলবার্স, ল্যাম্বার কনিক)"
+  },
+  {
+    "id": "map_use_max_bounds",
+    "en": "Use extent to limit map panning",
+    "bn": "মানদন্ড ব্যবহার করে মানচিত্র প্যানিং সীমিত করুন"
   },
   {
     "id": "map_fit_to_bounds",
@@ -4923,11 +5053,6 @@
     "id": "update_app_button_confirm",
     "en": "Restart now",
     "bn": "এখন আবার চালু করুন"
-  },
-  {
-    "id": "update_app_button_later",
-    "en": "Later",
-    "bn": "পরে"
   },
   {
     "id": "btn_clear_cache",
@@ -6356,8 +6481,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "bn": "স্বাগত!<br> প্রযুক্তিগত তথ্যের জন্য, আপনি আমাদের <a href=\"{{linkKnowledgeBase}}\">জ্ঞান বেসটি</a> পড়তে পারেন। আপনার যদি এই ওয়েবসাইট সম্পর্কে কোনও পরামর্শ থাকে বা আপনি যদি কোনও বাগ রিপোর্ট করতে চান তবে আমাদের <a href=\"{{linkIssue}}\">ইস্যু ট্র্যাকারটি দেখুন</a><br> ধন্যবাদ! "
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}' target='_blank'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}' target='_blank'>issue tracker</a> <br> Thanks !",
+    "bn": "স্বাগত!<br> প্রযুক্তিগত তথ্যের জন্য, আপনি আমাদের <a href=\"{{linkKnowledgeBase}}\" target=\"_blank\">নলেজ বেস</a> পড়তে পারেন। আপনার যদি এই ওয়েবসাইট সম্পর্কে পরামর্শ থাকে, বা আপনি যদি একটি বাগ রিপোর্ট করতে চান, আমাদের <a href=\"{{linkIssue}}\" target=\"_blank\">সমস্যা ট্র্যাকার</a> দেখুন<br> ধন্যবাদ!"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6410,9 +6535,9 @@
     "bn": "কোয়ান্টাইল "
   },
   {
-    "id": "head_tails",
+    "id": "heads_tails",
     "en": "Head/tail Breaks",
-    "bn": "মাথা / লেজ বিরতি "
+    "bn": "মাথা/লেজ ভাঙ্গা"
   },
   {
     "id": "equal_interval",
@@ -6461,8 +6586,8 @@
   },
   {
     "id": "get_source_email_dl_link",
-    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "bn": "একটি ইমেল পাঠানো হবে<a href=\"mailto:={{email}}\"> {{email}}</a> । ডাউনলোড <a href=\"{{url}}\">লিঙ্কটি</a> প্রক্রিয়া শেষে সক্রিয় করা হবে "
+    "en": "An email will be sent to <a href='mailto:{{email}}' target='_blank'>{{email}}</a>. The download <a download='' href='{{url}}' target='_blank'>link</a> will be activated at the end of the process",
+    "bn": "একটি ইমেইল পাঠানো হবে<a href=\"mailto:{{email}}\" target=\"_blank\"> {{email}}</a> . ডাউনলোড <a download=\"\" href=\"{{url}}\" target=\"_blank\">লিঙ্ক</a> প্রক্রিয়া শেষে সক্রিয় করা হবে"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6491,8 +6616,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}}>{{title}}</a>",
-    "bn": "ফর্ম্যাট ব্যবহার করে রূপান্তর করা হয়েছে {{format}} . ডাউনলোড লিংক:<a href=\"{{url}}\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "bn": "ফর্ম্যাট ব্যবহার করে রূপান্তর করা হয়েছে {{format}} . ডাউনলোড লিংক:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6506,8 +6631,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "bn": "অনুরোধ করা ডেটা এই লিঙ্কটি ব্যবহার করে ডাউনলোড করার জন্য প্রস্তুত:<a href=\"{{url}}\"> {{title}}</a> "
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
+    "bn": "অনুরোধ করা ডেটা এই লিঙ্কটি ব্যবহার করে ডাউনলোড করার জন্য প্রস্তুত:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
   },
   {
     "id": "get_source_zip_progress",
@@ -6633,6 +6758,11 @@
     "id": "nc_button",
     "en": "Notifications",
     "bn": "বিজ্ঞপ্তি "
+  },
+  {
+    "id": "null_count",
+    "en": "Missing values: {{nullCount}}",
+    "bn": "অনুপস্থিত মানের: {{nullCount}}"
   },
   {
     "id": "mc_title",
@@ -6995,6 +7125,31 @@
     "bn": "কাঁচা তথ্য আমাদের সার্ভার থেকে পড়া হবে. যাইহোক, আমরা এটি কোন ভাবেই সংরক্ষণ করি না বা ব্যবহার করি না। সবকিছু সহজভাবে প্রতিফলিত হয়. অপব্যবহার প্রতিরোধ করার জন্য IP ঠিকানাগুলি মেমরিতে সংরক্ষণ করা হয়।"
   },
   {
+    "id": "btn_editor_tool_format",
+    "en": "Format",
+    "bn": "বিন্যাস"
+  },
+  {
+    "id": "btn_editor_tool_help_title",
+    "en": "Help",
+    "bn": "সাহায্য"
+  },
+  {
+    "id": "btn_editor_tool_help",
+    "en": "Help",
+    "bn": "সাহায্য"
+  },
+  {
+    "id": "btn_editor_tool_expand_editor",
+    "en": "Expand/Minimize",
+    "bn": "বাড়ান/সংকোচন"
+  },
+  {
+    "id": "nc_label_merge",
+    "en": "Details...",
+    "bn": "বিস্তারিত..."
+  },
+  {
     "id": "pk_panel_options",
     "en": "Display options",
     "bn": "প্রদর্শনের বিকল্পগুলি "
@@ -7073,6 +7228,66 @@
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
     "bn": "ডিফল্ট প্যালেট ব্যবহার করুন "
+  },
+  {
+    "id": "proj_manage_load_title",
+    "en": "Load new project ?",
+    "bn": "নতুন প্রকল্প লোড?"
+  },
+  {
+    "id": "proj_manage_load_content",
+    "en": "Load project {{name}} ?",
+    "bn": "লোড প্রকল্প {{name}} ?"
+  },
+  {
+    "id": "proj_manage_create_title",
+    "en": "Create new project",
+    "bn": "নতুন প্রকল্প তৈরি করুন"
+  },
+  {
+    "id": "proj_manage_create_label",
+    "en": "Project name (english)",
+    "bn": "প্রকল্পের নাম (ইংরেজি)"
+  },
+  {
+    "id": "proj_manage_btn_create",
+    "en": "Create",
+    "bn": "সৃষ্টি"
+  },
+  {
+    "id": "proj_manage_create_placeholder",
+    "en": "Project name (english)",
+    "bn": "প্রকল্পের নাম (ইংরেজি)"
+  },
+  {
+    "id": "proj_manage_name_ok",
+    "en": "Name valid",
+    "bn": "নাম বৈধ"
+  },
+  {
+    "id": "proj_manage_creation_not_allowed",
+    "en": "Creation not allowed",
+    "bn": "সৃষ্টির অনুমতি নেই"
+  },
+  {
+    "id": "proj_manage_not_allowed",
+    "en": "Not allowed",
+    "bn": "অনুমতি নেই"
+  },
+  {
+    "id": "proj_manage_name_not_valid",
+    "en": "Invalid name",
+    "bn": "অবৈধ নাম"
+  },
+  {
+    "id": "proj_manage_name_not_in_range",
+    "en": "Name string not in range : min 3, max 50 characters",
+    "bn": "নামের স্ট্রিং ব্যাপ্তির মধ্যে নেই : সর্বনিম্ন 3, সর্বোচ্চ 50টি অক্ষর৷"
+  },
+  {
+    "id": "proj_manage_name_not_available",
+    "en": "Name not available",
+    "bn": "নাম উপলব্ধ নেই"
   },
   {
     "id": "schema_story_theme",
@@ -7575,6 +7790,216 @@
     "bn": "একটি ঘনক মুখ"
   },
   {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "bn": "কিংবদন্তি শিরোনাম "
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "bn": "অন্তর অন্তর উপরের আবদ্ধ অন্তর্ভুক্ত "
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "bn": "যদি চেক করা হয়, ব্যবধানগুলি উপরের সীমা অন্তর্ভুক্ত করবে। যদি এটি সংজ্ঞায়িত করা না হয়, শেষ সীমা সর্বোচ্চ মান হবে। যদি স্টাইলটি অটো-স্টাইল ব্যবহার করে তৈরি করা হয় তবে এই বিকল্পটি পরীক্ষা করা উচিত"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "bn": "বিপরীত প্রদর্শিত স্তর ক্রম "
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "bn": "যদি চেক করা থাকে তবে স্তর স্ট্যাকটি বিপরীত হবে: উপরের নিয়মটি স্ট্যাকের নীচে একটি স্তর আঁকবে "
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "bn": "লেবেল সহ প্রতীক দেখান "
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "bn": "যদি পয়েন্ট ডেটা সহ প্রতীক ব্যবহার করা হয়, তবে ম্যাপএক্সের চারপাশে লেবেল যুক্ত করা উচিত? "
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Do not display missing values on the map or in the legend",
+    "bn": "মানচিত্রে বা কিংবদন্তীতে অনুপস্থিত মান প্রদর্শন করবেন না"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "bn": "যদি চেক করা হয়, একটি অনুপস্থিত মান সহ বৈশিষ্ট্যগুলি - বা এর মতো সংজ্ঞায়িত মান - মানচিত্রে বা কিংবদন্তীতে একটি স্তরে প্রদর্শিত হবে না"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "bn": "অনুপস্থিত মানের "
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "bn": "রঙ "
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "bn": "বর্ণনা "
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "bn": "লেবেল "
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "bn": "শেষ নিয়ম "
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Transparency",
+    "bn": "স্বচ্ছতা"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "bn": "নিয়ম "
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "bn": "বিধি "
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "bn": "আকার "
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "bn": "জুম সেটিংস "
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "bn": "জুম সর্বাধিক আকারের সহগ "
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "bn": "জুম মিনিটে আকারের সহগ "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "bn": "আকার প্রবর্তন ঘনিষ্ঠ "
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "bn": "আকার ইন্টারপোলেশন এক্সপোনেন্ট ফাংশন। 1 এর মান একটি লিনিয়ার ইন্টারপোলেশন দেয়। "
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "bn": "জুম সর্বাধিক "
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "bn": "জুম মিনিট "
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "bn": "প্রতীক "
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "bn": "যদি 0 এর বেশি হয় তবে জুম মিনিটে লাইন এবং পয়েন্টগুলির জন্য আকারের গুণফল। "
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "bn": "যদি 0 এর চেয়ে বেশি হয় তবে লাইন এবং জুম সর্বাধিক পয়েন্টের জন্য আকারের সহগ। "
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "bn": "ডেটা দেখানোর জন্য সর্বনিম্ন জুম "
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "bn": "ডেটা প্রদর্শন করতে সর্বোচ্চ জুম "
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "bn": "মান "
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "bn": "থেকে"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "bn": "প্রতি"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "bn": "নিম্ন / উপরের সীমার জন্য সর্বনিম্ন / সর্বোচ্চ পরিসংখ্যান উপেক্ষা করুন"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "bn": "পরম নিম্ন / উচ্চ সীমার জন্য উৎস পরিসংখ্যান থেকে সর্বনিম্ন / সর্বোচ্চ উপেক্ষা করুন। সেই মানগুলি নির্ধারিত নিয়ম থেকে নেওয়া হবে।"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity",
+    "en": "Transparency",
+    "bn": "স্বচ্ছতা"
+  },
+  {
+    "id": "schema_style_polygon_border_opacity_desc",
+    "en": "Line transparency. 0 = transparent, 1 = opaque",
+    "bn": "লাইনের স্বচ্ছতা। 0 = স্বচ্ছ, 1 = অস্বচ্ছ"
+  },
+  {
+    "id": "schema_style_polygon_border_enable",
+    "en": "Enable polygon outline",
+    "bn": "বহুভুজ রূপরেখা সক্ষম করুন"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_desc",
+    "en": "Outline the polygon to emphasize its boundary.",
+    "bn": "বহুভুজের সীমারেখার উপর জোর দিতে তার রূপরেখা।"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color",
+    "en": "Auto color.",
+    "bn": "স্বয়ংক্রিয় রঙ।"
+  },
+  {
+    "id": "schema_style_polygon_border_enable_auto_color_desc",
+    "en": "Automatically assign a suitable color according to the color of each rule.",
+    "bn": "স্বয়ংক্রিয়ভাবে প্রতিটি নিয়মের রঙ অনুযায়ী একটি উপযুক্ত রঙ বরাদ্দ করুন।"
+  },
+  {
+    "id": "schema_style_config_polygon_border",
+    "en": "Polygon outline color",
+    "bn": "বহুভুজ রূপরেখার রঙ"
+  },
+  {
     "id": "search_placeholder",
     "en": "Search public views in all projects ...",
     "bn": "সমস্ত প্রকল্পে সর্বজনীন দর্শন অনুসন্ধান করুন ..."
@@ -7831,13 +8256,23 @@
   },
   {
     "id": "share_map_pos_label",
-    "en": "Set initial map position",
-    "bn": "প্রাথমিক মানচিত্রের অবস্থান সেট করুন"
+    "en": "Set initial map extent",
+    "bn": "প্রারম্ভিক মানচিত্র ব্যাপ্তি সেট করুন"
   },
   {
     "id": "share_map_pos_desc",
     "en": "The current extent, tilt and bearing of the map will be used. Project defaults are thus overwritten.",
     "bn": "মানচিত্রের বর্তমান ব্যাপ্তি, কাত এবং বিয়ারিং ব্যবহার করা হবে। প্রকল্প ডিফল্ট এইভাবে ওভাররাইট করা হয়."
+  },
+  {
+    "id": "share_map_pos_max_label",
+    "en": "Limit map panning to current extent",
+    "bn": "মানচিত্র প্যানিংকে বর্তমান মাত্রায় সীমাবদ্ধ করুন"
+  },
+  {
+    "id": "share_map_pos_max_desc",
+    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "bn": "মানচিত্রটি তার বর্তমান মাত্রায় সীমাবদ্ধ থাকবে। 'Mercator' ছাড়া অন্য অনুমানগুলির জন্য, শুধুমাত্র কেন্দ্রকে সীমার মধ্যে রাখা হবে।"
   },
   {
     "id": "share_filter_activated_label",
@@ -8055,6 +8490,11 @@
     "bn": "মানচিত্র: দেশের ছায়া "
   },
   {
+    "id": "mx_map_text_land_outline",
+    "en": "Map: generic land labels outline",
+    "bn": "মানচিত্র: জেনেরিক ল্যান্ড লেবেল রূপরেখা"
+  },
+  {
     "id": "mx_map_water",
     "en": "Map: water",
     "bn": "মানচিত্র: জল "
@@ -8068,6 +8508,21 @@
     "id": "mx_map_bathymetry_high",
     "en": "Map: bathymetry (high)",
     "bn": "মানচিত্র: বাথমেট্রি (উচ্চ) "
+  },
+  {
+    "id": "mx_map_text_bathymetry",
+    "en": "Map: bathymetry labels",
+    "bn": "মানচিত্র: bathymetry লেবেল"
+  },
+  {
+    "id": "mx_map_text_bathymetry_outline",
+    "en": "Map: bathymetry labels outline",
+    "bn": "মানচিত্র: bathymetry লেবেল রূপরেখা"
+  },
+  {
+    "id": "mx_map_bathymetry_lines",
+    "en": "Map: bathymetry lines",
+    "bn": "মানচিত্র: bathymetry লাইন"
   },
   {
     "id": "mx_map_road",
@@ -8130,6 +8585,51 @@
     "bn": "মানচিত্র: পাঠ্য রূপরেখা রাখুন "
   },
   {
+    "id": "mx_map_text_country_0_0",
+    "en": "Map: UN labels 0 0 (Antarctica)",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 0 (অ্যান্টার্কটিকা)"
+  },
+  {
+    "id": "mx_map_text_country_0_1",
+    "en": "Map: UN labels 0 1 – State",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 1 – রাজ্য"
+  },
+  {
+    "id": "mx_map_text_country_0_2",
+    "en": "Map: UN labels 0 2 – Occupied Territory",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 2 – অধিকৃত অঞ্চল"
+  },
+  {
+    "id": "mx_map_text_country_0_3",
+    "en": "Map: UN labels 0 3 – Non-Self-Governing Territory",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 3 – অ-স্ব-শাসিত অঞ্চল"
+  },
+  {
+    "id": "mx_map_text_country_0_4",
+    "en": "Map: UN labels 0 4 – Territory",
+    "bn": "মানচিত্র: জাতিসংঘ লেবেল 0 4 – অঞ্চল"
+  },
+  {
+    "id": "mx_map_text_country_0_5",
+    "en": "Map: UN labels 0 5 – Special region or province",
+    "bn": "মানচিত্র: জাতিসংঘ লেবেল 0 5 – বিশেষ অঞ্চল বা প্রদেশ"
+  },
+  {
+    "id": "mx_map_text_country_0_99",
+    "en": "Map: UN labels 0 99 – Sovereignty unsettled",
+    "bn": "মানচিত্র: জাতিসংঘের লেবেল 0 99 - সার্বভৌমত্ব অস্থির"
+  },
+  {
+    "id": "mx_map_text_country_1_1",
+    "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
+    "bn": "মানচিত্র: জাতিসংঘ লেবেল 1 1 - প্রশাসনিক ইউনিট (উপজাতীয় স্তর 01)"
+  },
+  {
+    "id": "mx_map_text_country_1_2",
+    "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
+    "bn": "মানচিত্র: জাতিসংঘ লেবেল 1 2 - প্রশাসনিক ইউনিট (উপজাতীয় স্তর 01)"
+  },
+  {
     "id": "mx_map_text_road",
     "en": "Map: road text",
     "bn": "মানচিত্র: রাস্তার পাঠ্য "
@@ -8148,6 +8648,281 @@
     "id": "mx_map_text_water_outline",
     "en": "Map: water body text outline",
     "bn": "মানচিত্র: জলের দেহের পাঠ্য রূপরেখা "
+  },
+  {
+    "id": "mx_theme_input_font_family",
+    "en": "Font family",
+    "bn": "ফন্ট পরিবার"
+  },
+  {
+    "id": "mx_theme_input_font",
+    "en": "Font",
+    "bn": "হরফ"
+  },
+  {
+    "id": "mx_theme_input_range",
+    "en": "Opacity",
+    "bn": "অস্বচ্ছতা"
+  },
+  {
+    "id": "mx_theme_input_color",
+    "en": "Color",
+    "bn": "রঙ"
+  },
+  {
+    "id": "mx_theme_input_checkbox",
+    "en": "Visible",
+    "bn": "দৃশ্যমান"
+  },
+  {
+    "id": "mx_theme_export_id",
+    "en": "Name",
+    "bn": "নাম"
+  },
+  {
+    "id": "mx_theme_export_description",
+    "en": "Description",
+    "bn": "বর্ণনা"
+  },
+  {
+    "id": "mx_theme_export_author",
+    "en": "Author",
+    "bn": "লেখক"
+  },
+  {
+    "id": "mx_theme_export_next",
+    "en": "Next",
+    "bn": "পরবর্তী"
+  },
+  {
+    "id": "mx_theme_export_button",
+    "en": "Export",
+    "bn": "রপ্তানি"
+  },
+  {
+    "id": "mx_theme_import_button",
+    "en": "Import",
+    "bn": "আমদানি"
+  },
+  {
+    "id": "upl_shapefile_warning",
+    "en": "MapX doesn't recommends Shapefiles, as there is no methods to specify characters set, which can produce issues during display and analysis",
+    "bn": "MapX Shapefiles সুপারিশ করে না, কারণ অক্ষর সেট নির্দিষ্ট করার কোনো পদ্ধতি নেই, যা প্রদর্শন এবং বিশ্লেষণের সময় সমস্যা তৈরি করতে পারে"
+  },
+  {
+    "id": "upl_title",
+    "en": "Upload",
+    "bn": "আপলোড করুন"
+  },
+  {
+    "id": "upl_title_layer_name",
+    "en": "Title of the source ({{language}})",
+    "bn": "উৎসের শিরোনাম ( {{language}} )"
+  },
+  {
+    "id": "upl_name_placeholder",
+    "en": "Source title...",
+    "bn": "উৎস শিরোনাম..."
+  },
+  {
+    "id": "upl_upload_btn",
+    "en": "Upload",
+    "bn": "আপলোড করুন"
+  },
+  {
+    "id": "upl_title_not_allowed",
+    "en": "Upload not allowed",
+    "bn": "আপলোড অনুমোদিত নয়"
+  },
+  {
+    "id": "upl_select_epsg_code",
+    "en": "Assign spatial reference system ( EPSG code ). Default is 4326.",
+    "bn": "স্থানিক রেফারেন্স সিস্টেম বরাদ্দ করুন (EPSG কোড)। ডিফল্ট হল 4326।"
+  },
+  {
+    "id": "upl_browse_or_drop",
+    "en": "Drop file ( *.gpkg, *.zip, *.geojson ) or click to browse...",
+    "bn": "ফাইল ড্রপ করুন ( *.gpkg, *.zip, *.geojson ) অথবা ব্রাউজ করতে ক্লিক করুন..."
+  },
+  {
+    "id": "upl_title_meta",
+    "en": "Title ({{language}})",
+    "bn": "শিরোনাম ( {{language}} )"
+  },
+  {
+    "id": "upl_meta_title",
+    "en": "Title ({{language}})",
+    "bn": "শিরোনাম ( {{language}} )"
+  },
+  {
+    "id": "upl_file_upload_progress",
+    "en": "Uploading '{{filename}}'...",
+    "bn": "আপলোড করা হচ্ছে' {{filename}} '..."
+  },
+  {
+    "id": "upl_api_save_validation",
+    "en": "Geometry validation: This may take a while.",
+    "bn": "জ্যামিতি যাচাইকরণ: এটি কিছু সময় নিতে পারে।"
+  },
+  {
+    "id": "upl_api_save_validation_geom_count",
+    "en": "There are {{count}} invalid geometries.",
+    "bn": "সেখানে {{count}} অবৈধ জ্যামিতি"
+  },
+  {
+    "id": "upl_api_save_failed_title",
+    "en": "Upload of '{{filename}}' failed.",
+    "bn": "'এর আপলোড {{filename}} ' ব্যর্থ হয়েছে."
+  },
+  {
+    "id": "upl_api_save_failed",
+    "en": "Upload of <samp>{{filename}}</samp> failed. Source removed: <samp>{{sourceRemoved}}</samp>. View removed : {{viewRemoved}}. Message : <samp> {{error}}</samp> ",
+    "bn": "আপলোড<samp> {{filename}}</samp> ব্যর্থ হয়েছে. উত্স সরানো হয়েছে:<samp> {{sourceRemoved}}</samp> . সরানো হয়েছে দেখুন: {{viewRemoved}} . বার্তা:<samp> {{error}}</samp>"
+  },
+  {
+    "id": "upl_api_save_success_title",
+    "en": "Upload of '{{filename}}' done.",
+    "bn": "'এর আপলোড {{filename}} ' সম্পন্ন."
+  },
+  {
+    "id": "upl_api_save_success",
+    "en": "Upload of <samp>{{filename}}</samp> done. New source created: {{title}} – <samp>{{idSource}}</samp>. ",
+    "bn": "আপলোড<samp> {{filename}}</samp> সম্পন্ন. নতুন উৎস তৈরি করা হয়েছে: {{title}} -<samp> {{idSource}}</samp> ."
+  },
+  {
+    "id": "upl_api_import_db",
+    "en": "Importation in database",
+    "bn": "ডাটাবেসে আমদানি"
+  },
+  {
+    "id": "up_button_close",
+    "en": "Close",
+    "bn": "বন্ধ"
+  },
+  {
+    "id": "up_button_add_files",
+    "en": "Add files...",
+    "bn": "ফাইল যোগ করুন..."
+  },
+  {
+    "id": "up_button_upload",
+    "en": "Upload",
+    "bn": "আপলোড করুন"
+  },
+  {
+    "id": "up_button_reset",
+    "en": "Reset",
+    "bn": "রিসেট"
+  },
+  {
+    "id": "up_confirm_reset_title",
+    "en": "Confirm reset",
+    "bn": "রিসেট নিশ্চিত করুন"
+  },
+  {
+    "id": "up_confirm_reset",
+    "en": "Confirm removing {{n}} elements ?",
+    "bn": "অপসারণ নিশ্চিত করুন {{n}} উপাদান?"
+  },
+  {
+    "id": "up_confirm_upload_title",
+    "en": "Confirm upload",
+    "bn": "আপলোড নিশ্চিত করুন"
+  },
+  {
+    "id": "up_confirm_upload",
+    "en": "Confirm uploading {{n}} elements, for a total of {{size}} ?",
+    "bn": "আপলোড নিশ্চিত করুন {{n}} উপাদান, মোট জন্য {{size}} ?"
+  },
+  {
+    "id": "up_settings",
+    "en": "Settings",
+    "bn": "সেটিংস"
+  },
+  {
+    "id": "up_select_epsg_code",
+    "en": "EPSG code",
+    "bn": "EPSG কোড"
+  },
+  {
+    "id": "up_check_enable_wms_label",
+    "en": "Enable WMS services",
+    "bn": "WMS পরিষেবাগুলি সক্ষম করুন৷"
+  },
+  {
+    "id": "up_check_enable_wms_desc",
+    "en": "In a public project, if public views are created using this source, enabling WMS service will automatically create a WMS layer and SLD, available for anyone.",
+    "bn": "একটি পাবলিক প্রোজেক্টে, যদি এই উৎস ব্যবহার করে সর্বজনীন ভিউ তৈরি করা হয়, তাহলে WMS পরিষেবা সক্রিয় করা স্বয়ংক্রিয়ভাবে একটি WMS স্তর এবং SLD তৈরি করবে, যে কারো জন্য উপলব্ধ।"
+  },
+  {
+    "id": "up_check_create_view_label",
+    "en": "Automatically create a view",
+    "bn": "স্বয়ংক্রিয়ভাবে একটি দৃশ্য তৈরি করুন"
+  },
+  {
+    "id": "up_check_create_view_desc",
+    "en": "Create a basic view at the end of the process and add it to the project",
+    "bn": "প্রক্রিয়া শেষে একটি মৌলিক দৃশ্য তৈরি করুন এবং এটি প্রকল্পে যোগ করুন"
+  },
+  {
+    "id": "up_check_allow_download_label",
+    "en": "Allow this source to be downloaded",
+    "bn": "এই উত্সটি ডাউনলোড করার অনুমতি দিন"
+  },
+  {
+    "id": "up_check_allow_download_desc",
+    "en": "This source license allows for redistribution, enabling the download feature will make the data and metadata available for download by anyone",
+    "bn": "এই সোর্স লাইসেন্সটি পুনরায় বিতরণের অনুমতি দেয়, ডাউনলোড বৈশিষ্ট্যটি সক্ষম করলে যে কেউ ডাউনলোডের জন্য ডেটা এবং মেটাডেটা উপলব্ধ করবে"
+  },
+  {
+    "id": "up_check_assign_epsg_label",
+    "en": "Assign the SRS bellow",
+    "bn": "নিচে SRS বরাদ্দ করুন"
+  },
+  {
+    "id": "up_check_assign_epsg_desc",
+    "en": "The converter will automatically retrieve the SRS information from the uploaded dataset. However, if you prefer to use a different SRS, simply check this checkbox and select the desired EPSG code from the options below.",
+    "bn": "কনভার্টার আপলোড করা ডেটাসেট থেকে স্বয়ংক্রিয়ভাবে SRS তথ্য পুনরুদ্ধার করবে। যাইহোক, যদি আপনি একটি ভিন্ন SRS ব্যবহার করতে পছন্দ করেন, তাহলে কেবল এই চেকবক্সটি চেক করুন এবং নীচের বিকল্পগুলি থেকে পছন্দসই EPSG কোডটি নির্বাচন করুন৷"
+  },
+  {
+    "id": "up_drop_or_click",
+    "en": "Drop files or click to select…",
+    "bn": "ফাইল বাদ দিন বা নির্বাচন করতে ক্লিক করুন..."
+  },
+  {
+    "id": "up_title_issue",
+    "en": "Issues",
+    "bn": "ইস্যু"
+  },
+  {
+    "id": "up_issue_missing_files",
+    "en": "Missing files",
+    "bn": "অনুপস্থিত ফাইল"
+  },
+  {
+    "id": "up_issue_missing_dependency",
+    "en": "Missing dependency : {{ext}}. Please drag and drop missing file here.",
+    "bn": "অনুপস্থিত নির্ভরতা: {{ext}} . অনুপস্থিত ফাইল এখানে টেনে আনুন এবং ড্রপ করুন."
+  },
+  {
+    "id": "up_issue_invalid_items",
+    "en": "Invalid element",
+    "bn": "অবৈধ উপাদান"
+  },
+  {
+    "id": "up_issue_format_not_supported",
+    "en": "Format not supported",
+    "bn": "বিন্যাস সমর্থিত নয়"
+  },
+  {
+    "id": "up_issue_file_too_big",
+    "en": "File to big",
+    "bn": "বড় ফাইল"
+  },
+  {
+    "id": "up_issue_too_many",
+    "en": "Too many elements. Max:",
+    "bn": "অনেক উপাদান। সর্বোচ্চ:"
   },
   {
     "id": "wms_select_reviewed_service",
