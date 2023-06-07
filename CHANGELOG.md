@@ -1,3 +1,10 @@
+  - [1.12.1-beta.3](https://github.com/unep-grid/mapx/tree/1.12.1-beta.3) 
+
+    - APP
+        - Removed geolocate button
+        - Projections choice : limit to only mercator + globe
+        - AutoSyle : Solved an issue occuring if the attribute used for styling changed type, e.g. text -> numeric. Stats were cached.
+
   - [1.12.1-beta.2](https://github.com/unep-grid/mapx/tree/1.12.1-beta.2) 
 
     - APP
