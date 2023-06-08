@@ -38,7 +38,7 @@ import { isStoryPlaying, storyRead } from "./../story_map/index.js";
 import { fetchViews } from "./../mx_helper_map_view_fetch.js";
 import { wmsQuery } from "./../wms/index.js";
 import { clearMapxCache, getVersion } from "./../app_utils";
-import { onNextFrame } from "./../animation_frame/index.js";
+import { onNextFrame, waitFrameAsync } from "./../animation_frame/index.js";
 import {
   handleMapDragOver,
   handleMapDrop,
@@ -1792,7 +1792,13 @@ export async function addSourceFromView({ view, noLocationCheck, map }) {
   const projectsView = path(view, "data.projects", []);
   const useMirror = path(view, "data.source.useMirror");
 
-  checkAndSetViewEditability(view, noLocationCheck, currentProjectId, viewProjectId, projectsView);
+  checkAndSetViewEditability(
+    view,
+    noLocationCheck,
+    currentProjectId,
+    viewProjectId,
+    projectsView
+  );
 
   if (vType === "vt") {
     handleVectorTileView(view);
@@ -1802,7 +1808,7 @@ export async function addSourceFromView({ view, noLocationCheck, map }) {
     handleGeoJsonView(view);
   }
 
-  replaceOldSourceIfExists(view, map, sourceId);
+  await removeOldSourceIfExists(view, map, sourceId);
 
   const source = clone(view.data.source);
 
@@ -1843,7 +1849,13 @@ function handleGeoJsonView(view) {
   view.data.source.promoteId = "gid";
 }
 
-function checkAndSetViewEditability(view, noLocationCheck, currentProjectId, viewProjectId, projectsView) {
+function checkAndSetViewEditability(
+  view,
+  noLocationCheck,
+  currentProjectId,
+  viewProjectId,
+  projectsView
+) {
   const isEditable = isViewEditable(view);
   const isLocationOk =
     noLocationCheck ||
@@ -1855,7 +1867,7 @@ function checkAndSetViewEditability(view, noLocationCheck, currentProjectId, vie
   }
 }
 
-function replaceOldSourceIfExists(view, map, sourceId) {
+async function removeOldSourceIfExists(view, map, sourceId) {
   const sourceExists = Boolean(map.getSource(sourceId));
 
   if (sourceExists) {
@@ -1863,6 +1875,12 @@ function replaceOldSourceIfExists(view, map, sourceId) {
       prefix: view.id,
       map,
     });
+    /*
+     * Bug in mapbox gl with updatingTerrain :
+     * -> fails when removing layer and right after, their source. 
+     * -> Waiting a frame seems to solve the issue;
+     */
+    await waitFrameAsync();
     map.removeSource(sourceId);
   }
 }
@@ -1873,8 +1891,6 @@ function modifyTileUrlsToMirror(source) {
     tiles[i] = mirrorUrlCreate(tiles[i]);
   }
 }
-
-
 
 /**
  * Get remote view from latest views table
@@ -4265,9 +4281,9 @@ export function getLayersPropertiesAtPoint(opt) {
     return new Promise((resolve) => {
       const id = view.id;
       let attributes = view?.data?.attribute?.names || [];
-      if(isString(attributes)){
-         // vector of 1 in R -> string during r->json conversion
-         attributes = [attributes];
+      if (isString(attributes)) {
+        // vector of 1 in R -> string during r->json conversion
+        attributes = [attributes];
       }
       const layers = getLayerNamesByPrefix({
         map: map,
