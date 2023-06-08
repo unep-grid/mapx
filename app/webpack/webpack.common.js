@@ -107,14 +107,6 @@ module.exports = {
         use: { loader: "worker-loader" },
       },
       {
-        test: /mapbox-gl-rtl-text.js$/,
-        use: [
-          {
-            loader: "file-loader",
-          },
-        ],
-      },
-      {
         test: /\.js$/,
         loader: "esbuild-loader",
         options: {

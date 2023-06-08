@@ -79,7 +79,6 @@ class RasterMiniMap {
 
   init() {
     const mm = this;
-
     try {
       mm._hasSyncMap = mm.opt.mapSync instanceof mapboxgl.Map;
 

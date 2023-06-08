@@ -1777,112 +1777,104 @@ export function viewsCloseAll(o) {
   return Promise.all(removed);
 }
 
-/**
- * Add source from view object
- * @param {Object} o options
- * @param {Object|String} o.map Map object or map id
- * @param {Oject} o.view View object
- * @param {Boolean} o.noLocationCheck Don't check for location matching
- */
-export async function addSourceFromView(o) {
-  const p = path;
-
-  const vType = p(o.view, "type");
-  const isVt = vType === "vt";
-  const isRt = vType === "rt";
-  const isGj = vType === "gj";
-  const validType = isVt || isRt || isGj;
-  const hasSource = !!p(o.view, "data.source");
+export async function addSourceFromView({ view, noLocationCheck, map }) {
+  const vType = path(view, "type");
+  const validType = ["vt", "rt", "gj"].includes(vType);
+  const hasSource = Boolean(path(view, "data.source"));
 
   if (!validType || !hasSource) {
     return;
   }
 
-  const idSource = `${o.view.id}-SRC`;
-  const project = p(mx, "settings.project.id");
-  const projectView = p(o.view, "project");
-  const projectsView = p(o.view, "data.projects", []);
-  const useMirror = p(o.view, "data.source.useMirror");
-  const isEditable = isViewEditable(o.view);
+  const sourceId = `${view.id}-SRC`;
+  const currentProjectId = path(mx, "settings.project.id");
+  const viewProjectId = path(view, "project");
+  const projectsView = path(view, "data.projects", []);
+  const useMirror = path(view, "data.source.useMirror");
+
+  checkAndSetViewEditability(view, noLocationCheck, currentProjectId, viewProjectId, projectsView);
+
+  if (vType === "vt") {
+    handleVectorTileView(view);
+  }
+
+  if (vType === "gj") {
+    handleGeoJsonView(view);
+  }
+
+  replaceOldSourceIfExists(view, map, sourceId);
+
+  const source = clone(view.data.source);
+
+  if (vType === "rt" && useMirror) {
+    modifyTileUrlsToMirror(source);
+  }
+
+  map.addSource(sourceId, source);
+}
+
+function handleVectorTileView(view) {
+  const urlBase = getApiUrl("getTile");
+  const useServerCache = settings.tiles.vector.useCache;
+  const usePostgisTiles = !isEmpty(settings.tiles.vector.usePostgisTiles)
+    ? settings.tiles.vector.usePostgisTiles
+    : view._use_postgis_tiler;
+  const url =
+    `${urlBase}?view=${view.id}&` +
+    `skipCache=${!useServerCache}&` +
+    `usePostgisTiles=${Boolean(usePostgisTiles)}&` +
+    `timestamp=${view.date_modified}`;
+
+  view.data.source.tiles = [url, url];
+  view.data.source.promoteId = "gid";
+}
+
+function handleGeoJsonView(view) {
+  let gid = 1;
+  const features = view?.data?.source?.data?.features || [];
+  for (const f of features) {
+    if (isEmpty(f.properties)) {
+      f.properties = {};
+    }
+    if (!f.properties.gid) {
+      f.properties.gid = gid++;
+    }
+  }
+  view.data.source.promoteId = "gid";
+}
+
+function checkAndSetViewEditability(view, noLocationCheck, currentProjectId, viewProjectId, projectsView) {
+  const isEditable = isViewEditable(view);
   const isLocationOk =
-    o.noLocationCheck ||
-    projectView === project ||
-    projectsView.indexOf(project) > -1;
+    noLocationCheck ||
+    viewProjectId === currentProjectId ||
+    projectsView.indexOf(currentProjectId) > -1;
 
   if (!isLocationOk && isEditable) {
-    /*
-     * This should be handled in DB. TODO:check why this is needed here...
-     */
-    o.view._edit = false;
+    view._edit = false;
   }
+}
 
-  if (isVt) {
-    const urlBase = getApiUrl("getTile");
-    const useServerCache = settings.tiles.vector.useCache;
-    // Per source settings: set in mx_sources -> services ->'mx_postgis_tiler'
-    const usePostgisTiles = isEmpty(settings.tiles.vector.usePostgisTiles)
-      ? o.view._use_postgis_tiler
-      : settings.tiles.vector.usePostgisTiles;
-    // NOTE: Can't use URL() : contains {x}/{y}/{z} = escaped.
-    const url =
-      `${urlBase}?view=${o.view.id}&` +
-      // Server cache invalidation
-      `skipCache=${!useServerCache}&` +
-      // By defautl, geojson-vt is used alternative: postgis asmvt
-      `usePostgisTiles=${!!usePostgisTiles}&` +
-      // Browser cache invalidation using view timestamp
-      `timestamp=${o.view.date_modified}`;
-
-    o.view.data.source.tiles = [url, url];
-    o.view.data.source.promoteId = "gid";
-  }
-
-  if (isGj) {
-    /**
-     * Add gid property if it does not exist
-     */
-
-    let gid = 1;
-    const features = o.view?.data?.source?.data?.features || [];
-    for (const f of features) {
-      if (isEmpty(f.properties)) {
-        f.properties = {};
-      }
-      if (!f.properties.gid) {
-        f.properties.gid = gid++;
-      }
-    }
-    o.view.data.source.promoteId = "gid";
-  }
-
-  const sourceExists = !!o.map.getSource(idSource);
+function replaceOldSourceIfExists(view, map, sourceId) {
+  const sourceExists = Boolean(map.getSource(sourceId));
 
   if (sourceExists) {
-    /**
-     * Handle case when old layers remain in map
-     * This could prevent source removal
-     */
     removeLayersByPrefix({
-      prefix: o.view.id,
-      map: o.map,
+      prefix: view.id,
+      map,
     });
-    /**
-     * Remove old source
-     */
-    o.map.removeSource(idSource);
+    map.removeSource(sourceId);
   }
-
-  const source = clone(o.view.data.source);
-
-  if (isRt && useMirror) {
-    const tiles = source.tiles;
-    for (let i = 0, iL = tiles.length; i < iL; i++) {
-      tiles[i] = mirrorUrlCreate(tiles[i]);
-    }
-  }
-
-  o.map.addSource(idSource, source);
 }
+
+function modifyTileUrlsToMirror(source) {
+  const tiles = source.tiles;
+  for (let i = 0, iL = tiles.length; i < iL; i++) {
+    tiles[i] = mirrorUrlCreate(tiles[i]);
+  }
+}
+
+
 
 /**
  * Get remote view from latest views table
