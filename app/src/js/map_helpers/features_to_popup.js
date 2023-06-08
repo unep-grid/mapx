@@ -113,6 +113,7 @@ export function featuresToPopup(o) {
       elWait.remove();
       const attrNames = Object.keys(attributes);
 
+
       if (attrNames.length === 0) {
         elLayer.appendChild(await elIssueMessage("noValue"));
         return;

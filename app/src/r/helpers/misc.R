@@ -2169,7 +2169,7 @@ mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, ad
       name = .get(sourceData, c("variableName")),
       type = .get(sourceData, c("variableType")),
       names = unique(
-        c(
+        list(
           .get(sourceData, c("variableName")),
           additionalAttributes
         )

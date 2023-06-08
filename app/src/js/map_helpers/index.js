@@ -4272,7 +4272,11 @@ export function getLayersPropertiesAtPoint(opt) {
   function fetchVectorProp(view) {
     return new Promise((resolve) => {
       const id = view.id;
-      const attributes = view?.data?.attribute?.names || [];
+      let attributes = view?.data?.attribute?.names || [];
+      if(isString(attributes)){
+         // vector of 1 in R -> string during r->json conversion
+         attributes = [attributes];
+      }
       const layers = getLayerNamesByPrefix({
         map: map,
         prefix: id,
