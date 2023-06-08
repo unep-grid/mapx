@@ -1,3 +1,11 @@
+  - [1.12.1-beta.4](https://github.com/unep-grid/mapx/tree/1.12.1-beta.4) 
+
+    - APP 
+        - Workaround an issue of mapboxgl [#12747](https://github.com/mapbox/mapbox-gl-js/issues/12747), when removing some layers, then their source directly after, when using the 3d/terrain mode : updateTerrain function seems to fail
+        - Update mapbox to 2.15.0; 
+        - removed package 'mapbox-gl-rtl-text' package, use CDN instead (peer dependency issue)
+        - Bug when vt view's attributes of length 1 -> converted as string instead of array
+
   - [1.12.1-beta.3](https://github.com/unep-grid/mapx/tree/1.12.1-beta.3) 
 
     - APP
