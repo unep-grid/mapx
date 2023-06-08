@@ -1,4 +1,3 @@
-
 #' Validate date
 #'
 #' @param {Date|string} d Date to test
@@ -74,7 +73,6 @@ mxIsValidSourceEdit <- function(idSource) {
 #' @param {List} view list
 #' @param {List} views compact list
 mxUpdateStoryViews <- function(story, view, allViews) {
-
   #
   # Retrieve and store data for all views used in story.
   #
@@ -289,7 +287,7 @@ mxSchemaMultiLingualInput <- function(
   list(
     propertyOrder = propOrder,
     title = paste(titlePrefix, d(keyTitle, lang = language, dict = dict, web = F)),
-    #type = "object",
+    # type = "object",
     options = list(collapsed = collapsed),
     properties = prop
   )
@@ -2168,10 +2166,12 @@ mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, ad
     attributesInfo <- list(
       name = .get(sourceData, c("variableName")),
       type = .get(sourceData, c("variableType")),
-      names = unique(
-        list(
-          .get(sourceData, c("variableName")),
-          additionalAttributes
+      names = as.list(
+        unique(
+          c(
+            .get(sourceData, c("variableName")),
+            additionalAttributes
+          )
         )
       )
     )
