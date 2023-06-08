@@ -1,3 +1,8 @@
+  - [1.12.1-beta.5](https://github.com/unep-grid/mapx/tree/1.12.1-beta.5) 
+    
+    - APP
+        - "null" handling is converted in real `null` in widget ( nulls not reported in tiles, therefore not available in properties -> deduced, converted as '$null' for filtering and display, then now, converted as real `null` in data rows in widgets. )
+
   - [1.12.1-beta.4](https://github.com/unep-grid/mapx/tree/1.12.1-beta.4) 
 
     - APP 
