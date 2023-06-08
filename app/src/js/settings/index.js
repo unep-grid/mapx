@@ -23,6 +23,7 @@ const settings = {
   valuesMap: {
     // Used in view text filter, i.e viewSetTextFilter
     null: "$NULL",
+    $NULL: null,
   },
   logs: {
     disabled: false, // set in cookies as preferences ?

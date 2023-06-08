@@ -2,8 +2,9 @@ import { el } from "./../el/src/index.js";
 import { ListenerStore } from "./../listener_store/index.js";
 import { path, any, setClickHandler } from "./../mx_helper_misc.js";
 import { getLayersPropertiesAtPoint } from "./../map_helpers/index.js";
-import { isEmpty } from "./../is_test/index.js";
-
+import { isEmpty, isUndefined } from "./../is_test/index.js";
+import { settings } from "./../mx.js";
+const { valuesMap } = settings;
 /**
  * Widget method
  */
@@ -423,6 +424,14 @@ class Widget {
     const triggerOnData = hasData || (!hasData && !ignoreEmptyData);
     if (triggerOnData) {
       widget.data = hasData ? await d : [];
+      for (const row of widget.data) {
+        for (const [key, value] of Object.entries(row)) {
+          // e.g. convert $NULL to real null, to use in code
+          if (!isUndefined(valuesMap[value])) {
+            row[key] = valuesMap[value];
+          }
+        }
+      }
       await widget.onData(widget, widget.data);
     }
   }
