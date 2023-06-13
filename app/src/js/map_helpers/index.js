@@ -23,6 +23,7 @@ import { MapInfoBox } from "./../map_info_box";
 import { Search } from "./../search";
 import { downloadJSON } from "../download/index.js";
 import { ViewBase } from "../views_builder/view_base.js";
+import { ChaosTest } from "./chaos_test.js";
 import {
   MapxLogo,
   MapControlLiveCoord,
@@ -770,16 +771,18 @@ export function initListenersApp() {
   events.on({
     type: ["view_created", "view_deleted"],
     idGroup: "clean_history_and_state",
-    callback: () => {
+    callback: async () => {
       updateViewsFilter();
-      viewsCheckedUpdate();
     },
   });
 
   events.on({
     type: ["views_list_updated", "view_add", "view_remove", "mapx_ready"],
     idGroup: "update_btn_filter_view_activated",
-    callback: updateBtnFilterActivated,
+    callback: () => {
+      updateBtnFilterActivated();
+      viewsCheckedUpdate();
+    },
   });
 
   listeners.addListener({
@@ -1471,8 +1474,9 @@ export async function initMapxStatic(o) {
       });
     }
 
-    await viewsLayersOrderUpdate({
+    viewsLayersOrderUpdate({
       order: idViews.reverse(),
+      orig: "init_mapx_static",
     });
 
     /**
@@ -1783,10 +1787,11 @@ export async function addSourceFromView({ view, noLocationCheck, map }) {
   const hasSource = Boolean(path(view, "data.source"));
 
   if (!validType || !hasSource) {
-    return;
+    return false;
   }
 
-  const sourceId = `${view.id}-SRC`;
+  const idSource = `${view.id}-SRC`;
+
   const currentProjectId = path(mx, "settings.project.id");
   const viewProjectId = path(view, "project");
   const projectsView = path(view, "data.projects", []);
@@ -1801,14 +1806,12 @@ export async function addSourceFromView({ view, noLocationCheck, map }) {
   );
 
   if (vType === "vt") {
-    handleVectorTileView(view);
+    setSourceViewVt(view);
   }
 
   if (vType === "gj") {
-    handleGeoJsonView(view);
+    setSourceViewGj(view);
   }
-
-  await removeOldSourceIfExists(view, map, sourceId);
 
   const source = clone(view.data.source);
 
@@ -1816,10 +1819,11 @@ export async function addSourceFromView({ view, noLocationCheck, map }) {
     modifyTileUrlsToMirror(source);
   }
 
-  map.addSource(sourceId, source);
+  await removeOldSourceIfExists(view, map, idSource);
+  map.addSource(idSource, source);
 }
 
-function handleVectorTileView(view) {
+function setSourceViewVt(view) {
   const urlBase = getApiUrl("getTile");
   const useServerCache = settings.tiles.vector.useCache;
   const usePostgisTiles = !isEmpty(settings.tiles.vector.usePostgisTiles)
@@ -1835,7 +1839,7 @@ function handleVectorTileView(view) {
   view.data.source.promoteId = "gid";
 }
 
-function handleGeoJsonView(view) {
+function setSourceViewGj(view) {
   let gid = 1;
   const features = view?.data?.source?.data?.features || [];
   for (const f of features) {
@@ -1867,22 +1871,26 @@ function checkAndSetViewEditability(
   }
 }
 
-async function removeOldSourceIfExists(view, map, sourceId) {
-  const sourceExists = Boolean(map.getSource(sourceId));
+async function removeOldSourceIfExists(view, map, idSource) {
+  const sourceExists = Boolean(map.getSource(idSource));
 
-  if (sourceExists) {
-    removeLayersByPrefix({
-      prefix: view.id,
-      map,
-    });
-    /*
-     * Bug in mapbox gl with updatingTerrain :
-     * -> fails when removing layer and right after, their source. 
-     * -> Waiting a frame seems to solve the issue;
-     */
-    await waitFrameAsync();
-    map.removeSource(sourceId);
+  if (!sourceExists) {
+    return false;
   }
+
+  removeLayersByPrefix({
+    prefix: view.id,
+    map,
+  });
+
+  /*
+   * Bug in mapbox gl with updatingTerrain :
+   * -> fails when removing layer and right after, their source.
+   * -> Waiting a bit seems to solve the issue;
+   */
+  await waitTimeoutAsync(100);
+  map.removeSource(idSource);
+  return true;
 }
 
 function modifyTileUrlsToMirror(source) {
@@ -2085,7 +2093,7 @@ export async function updateViewsList(opt) {
        * Add views views
        */
       for (const id of idViewsOpen) {
-        await viewAdd(id);
+        await viewAdd(id, "add async all");
       }
 
       /**
@@ -2099,8 +2107,10 @@ export async function updateViewsList(opt) {
       /**
        * Update layers order
        */
-
-      await viewsLayersOrderUpdate();
+      viewsLayersOrderUpdate({
+        orig: "update_views_list",
+        order: getViewsListOrder(),
+      });
     }
 
     events.fire({
@@ -2185,81 +2195,18 @@ export async function getGeoJSONViewsFromStorage(o) {
 }
 
 /**
- * TODO: Early/historic code. Refactor this and integrate into a view class
+ * Update server side with views status
  */
-export async function viewsCheckedUpdate(o) {
-  o = o || {};
-
-  const vToAdd = [];
-  const vToRemove = [];
-  const vVisible = [];
-  const vChecked = [];
-  const proms = [];
-
-  let isChecked, id;
-
-  /**
-   * Get views checked
-   */
-  const els = document.querySelectorAll(
-    "[data-view_action_key='btn_toggle_view']"
-  );
-
-  for (var i = 0; i < els.length; i++) {
-    id = els[i].dataset.view_action_target;
-    isChecked = els[i].checked === true;
-    if (isChecked) {
-      vChecked.push(id);
-    }
+export async function viewsCheckedUpdate() {
+  const hasShiny = window.Shiny;
+  if (!hasShiny) {
+    return;
   }
-
-  /**
-   * Update views groups
-   */
-  vVisible.push(...getViewsOpen());
-  vToRemove.push(...getArrayDiff(vVisible, vChecked));
-  vToAdd.push(...getArrayDiff(vChecked, vVisible));
-
-  /**
-   * View to add
-   */
-  proms.push(...vToAdd.map(viewAdd));
-
-  /**
-   * View to remove
-   */
-  proms.push(...vToRemove.map(viewRemove));
-
-  /**
-   * Inform Shiny about the state
-   */
-  if (true) {
-    const summary = {
-      vVisible: getViewsLayersVisibles(),
-      vChecked: vChecked,
-      vToRemove: vToRemove,
-      vToAdd: vToAdd,
-    };
-    Shiny.onInputChange("mx_client_views_status", summary);
-  }
-
-  /**
-   * Wait add/remove views operations to be completed
-   */
-  const done = await Promise.all(proms);
-
-  /**
-   * Set layer order
-   */
-  await viewsLayersOrderUpdate(o);
-
-  /**
-   * Fire event
-   */
-  events.fire({
-    type: "views_list_ordered",
-  });
-  return done;
+  const summary = {
+    vVisible: getViewsLayersVisibles(),
+    vChecked: getViewsListOpen(),
+  };
+  Shiny.onInputChange("mx_client_views_status", summary);
 }
 
 /**
@@ -2378,74 +2325,85 @@ export function getSpriteImage(id, opt) {
  * Update layer order based on view list position
  * @param {Object} o Options
  * @param {String} o.id Id of the map
- * @param {Array} o.order Array of layer base name. If empty, use `getViewsOrder`
- * @return {Promise}
+ * @param {Array} o.order Array of layer base name.
+ * @param {String} o.orig Id of the caller
+ * @param {Boolean} o.debug Debug mode - print state
+ * @return {Array} order
  */
-
 export function viewsLayersOrderUpdate(o) {
-  o = o || {};
-  return new Promise((resolve) => {
-    /**
-     * Get order list by priority :
-     * 1) Given order
-     * 2) Order of displayed views (ui, list)
-     * 3) Views list
-     */
-    const map = getMap(o.id);
-    const views = getViews({ id: o.id });
-    const order = o.order || getViewsOrder() || views.map((v) => v.id) || null;
+  const opt = Object.assign(
+    {},
+    { order: null, id: null, orig: null, debug: false },
+    o
+  );
+  /**
+   * Get order list by priority :
+   * 1) Given order
+   * 2) Order of displayed views (ui, list)
+   * 3) Views list
+   */
+  const map = getMap(opt.id);
+  const order = opt.order || [];
 
-    if (isEmpty(order)) {
-      resolve(order);
-    }
+  if (!isArray(order)) {
+    throw new Error("Missing order");
+  }
+  if (opt.debug) {
+    console.table([
+      {
+        opt: opt.orig,
+        order: JSON.stringify(order),
+        titles: JSON.stringify(order.map(getViewTitle)),
+      },
+    ]);
+  }
 
-    /**
-     * Get displayed layer
-     */
-    const layersDiplayed = getLayerByPrefix({
-      prefix: /^MX-/,
-    });
-    /**
-     * For each group (view id) [a,b,c],
-     * 1) Get corresponding layers [a_1,a_0],
-     * 2) Set inner order [a_0,a_1]
-     * 3) Push result
-     */
-    let incView = 0;
-    let idPrevious;
-    const sorted = [];
-    for (let idView of order) {
-      const layersView = layersDiplayed.filter(
-        (d) => path(d, "metadata.idView", d.id) === idView
-      );
+  /**
+   * Get displayed layer
+   */
+  const layersDiplayed = getLayerByPrefix({
+    prefix: /^MX-/,
+  });
+  /**
+   * For each group (view id) [a,b,c],
+   * 1) Get corresponding layers [a_1,a_0],
+   * 2) Set inner order [a_0,a_1]
+   * 3) Push result
+   */
+  let incView = 0;
+  let idPrevious;
+  const sorted = [];
+  for (let idView of order) {
+    const layersView = layersDiplayed.filter(
+      (layer) => layer?.metadata?.idView === idView
+    );
 
-      if (layersView.length > 0) {
-        /*
-         * Sort layers within view context
-         */
-        sortLayers(layersView);
+    if (layersView.length > 0) {
+      /*
+       * Sort layers within view context
+       */
+      sortLayers(layersView);
 
-        /**
-         * Sort layer within map context
-         */
-        for (let layer of layersView) {
-          const firstOfAll = incView++ === 0;
-          const idBefore = firstOfAll ? settings.layerBefore : idPrevious;
-          map.moveLayer(layer.id, idBefore);
-          idPrevious = layer.id;
-          sorted.push({ id: layer.id, idBefore });
-        }
+      /**
+       * Sort layer within map context
+       */
+      for (let layer of layersView) {
+        const firstOfAll = incView++ === 0;
+        const idBefore = firstOfAll ? settings.layerBefore : idPrevious;
+        map.moveLayer(layer.id, idBefore);
+        idPrevious = layer.id;
+        sorted.push({ id: layer.id, idBefore });
       }
     }
+  }
 
-    events.fire({
-      type: "layers_ordered",
-      data: {
-        layers: order,
-      },
-    });
-    resolve(order);
+  events.fire({
+    type: "layers_ordered",
+    data: {
+      layers: order,
+    },
   });
+  return order;
 }
 
 /**
@@ -2498,7 +2456,7 @@ export function updateViewParams(o) {
  * Get the current view order
  * @return {Array} view id array or null
  */
-export function getViewsOrder() {
+export function getViewsListOrder() {
   const viewContainer = document.querySelector(".mx-views-list");
   const out = new Set();
   if (!viewContainer) {
@@ -2509,6 +2467,29 @@ export function getViewsOrder() {
     out.add(el.dataset.view_id);
   }
   return Array.from(out);
+}
+
+/**
+ * Get id of all views opened
+ * @return {Array}
+ */
+export function getViewsListOpen() {
+  const open = [];
+  const viewOrder = getViewsListOrder();
+  for (let idView of viewOrder) {
+    if (isViewOpen(idView)) {
+      open.push(idView);
+    }
+  }
+  return open;
+}
+
+/**
+ * Get list of active views ( no specific order )
+ * @return {Array} Array of views array
+ */
+export function getViewsActive() {
+  return Array.from(viewsActive);
 }
 
 /**
@@ -2596,50 +2577,6 @@ export async function viewLayersRemove(o) {
 }
 
 /**
- * Enable/open view from the list
- * @param {Object} view View to open
- */
-function _viewUiOpen(view) {
-  view = getView(view);
-  if (!isView(view)) {
-    return;
-  }
-  if (view._vb instanceof ViewBase) {
-    view._vb.open();
-  }
-  view._open = true;
-  events.fire({
-    type: "view_ui_open",
-    data: {
-      idView: view.id,
-    },
-  });
-  return true;
-}
-
-/**
- * Close / uncheck view – if exists – in view list
- * @param {String|View} idView id of the view or view object
- */
-async function _viewUiClose(view) {
-  view = getView(view);
-  if (!isView(view)) {
-    return;
-  }
-  if (view._vb instanceof ViewBase) {
-    view._vb.close();
-  }
-  view._open = false;
-  events.fire({
-    type: "view_ui_close",
-    data: {
-      idView: view.id,
-    },
-  });
-  return true;
-}
-
-/**
  * Get view, open it and add layers if any
  * @param {Object} view View to open
  * @return {Promise} Boolean
@@ -2648,15 +2585,18 @@ export async function viewAdd(view) {
   try {
     view = getView(view);
     if (!isView(view)) {
-      return;
+      return false;
     }
     /**
-     * Open ui before layers :
+     * Open UI
      * - Layers can take a while
      * - Search list need quickly an
      *   event to trigger toggles
+     * - vb.open triggers viewAdd too
      */
-    _viewUiOpen(view);
+    if (view._vb instanceof ViewBase) {
+      view._vb.open();
+    }
     await viewLayersAdd({
       view: view,
     });
@@ -2679,40 +2619,28 @@ export async function viewRemove(view) {
   try {
     view = getView(view);
     if (!isView(view)) {
-      return;
+      return true;
     }
-    _viewUiClose(view);
+    /**
+     * Close UI
+     * - Layers can take a while
+     * - Search list need quickly an
+     *   event to trigger toggles
+     * - vb.close triggers viewRemove too
+     */
+    if (view._vb instanceof ViewBase) {
+      view._vb.close();
+    }
+
     await viewLayersRemove({
       idView: view.id,
     });
+
     return true;
   } catch (e) {
     console.warn(e);
     return false;
   }
-}
-
-/**
- * Get id of all view opened
- * @return {Array}
- */
-export function getViewsOpen() {
-  const open = [];
-  const viewOrder = getViewsOrder();
-  for (let idView of viewOrder) {
-    if (isViewOpen(idView)) {
-      open.push(idView);
-    }
-  }
-  return open;
-}
-
-/**
- * Get list of active views ( no specific order )
- * @return {Array} Array of views array
- */
-export function getViewsActive() {
-  return Array.from(viewsActive);
 }
 
 /**
@@ -3042,6 +2970,14 @@ export async function viewLayersAdd(o) {
   await handleLayer(idType);
 
   /**
+   * Update layers order according to current list
+   */
+  viewsLayersOrderUpdate({
+    order: getViewsListOrder(),
+    orig: "view_layer_add_vt",
+  });
+
+  /**
    * Create dashboard.
    * - As story steps could manage dashboard state,
    *   it's rendered inside the story
@@ -3325,7 +3261,7 @@ export async function getViewLegendImage(opt) {
 
   if (isVt) {
     try {
-      await viewAdd(view);
+      await viewAdd(view, "getViewLegendImage");
 
       const hasLegend = isElement(view._elLegend);
 
@@ -3788,7 +3724,6 @@ export async function viewLayersAddVt(o) {
    * Add layers to the map
    */
   await addLayers(layers, o.before);
-  await viewsLayersOrderUpdate();
   return true;
 }
 
@@ -4575,7 +4510,10 @@ export async function resetViewStyle(o) {
     await viewLayersAdd({
       view: view,
     });
-    await viewsLayersOrderUpdate(o);
+    viewsLayersOrderUpdate({
+      order: getViewsListOrder(),
+      orig: "reset_view_style",
+    });
   }
 }
 
@@ -5517,4 +5455,13 @@ export function toggleMagnifier() {
     }
     map._has_mg = true;
   }
+}
+
+/**
+ * Simple chaos test
+ */
+export async function chaosTest(opt) {
+  const chaos = new ChaosTest(opt);
+  const res = await chaos.start();
+  return res;
 }

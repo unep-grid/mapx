@@ -71,26 +71,54 @@ mapx.once("ready", async () => {
     ],
   });
 
+  t.check("Chaos views display 1", {
+    tests: [
+      {
+        name: "Adding / removing views in random order during a specified duration",
+        timeout: 60 * 1000,
+        test: async () => {
+          return mapx.ask("launch_chaos_test", {
+            run: 5,
+            batch: 5,
+            run_timeout: 10 * 1000,
+          });
+        },
+      },
+    ],
+  });
+
   t.check("Views layer order", {
     init: async () => {
       const views = await mapx.ask("get_views");
-      const n = 5;
+      const n = 15;
       let i = 0;
       const select = [];
       for (const view of views) {
-        if (t.valid.isViewVtWithRules(view) && i++ <= n) {
+        if (t.valid.isViewVtWithRules(view) && ++i <= n) {
           await mapx.ask("view_add", { idView: view.id });
           select.push(view.id);
         }
       }
+
       return { select };
     },
     tests: [
       {
         name: "Set order",
         test: async (r) => {
-          await mapx.ask("set_views_layer_order", { order: r.select });
+          await mapx.ask("set_views_layer_order", {
+            order: r.select,
+          });
+          return true;
+        },
+      },
+      {
+        name: "Get order",
+        test: async (r) => {
           const ordered = await mapx.ask("get_views_layer_order");
+          if (r.select.length !== ordered.length) {
+            return false;
+          }
           for (let i = 0; i < r.select.length; i++) {
             if (r.select[i] !== ordered[i]) {
               return false;
@@ -657,21 +685,6 @@ mapx.once("ready", async () => {
     ],
   });
 
-  t.check("chaos views display", {
-    tests: [
-      {
-        name: "Adding / removing views in random order during a specified duration",
-        timeout: 60 * 1000,
-        test: async () => {
-          return mapx.ask("launch_chaos_test", {
-            run: 5,
-            batch: 5,
-            run_timeout: 10 * 1000,
-          });
-        },
-      },
-    ],
-  });
 
   t.check("Common loc", {
     init: () => {
@@ -1385,6 +1398,23 @@ mapx.once("ready", async () => {
           });
           await mapx.ask("close_modal_all");
           return hasModalEl;
+        },
+      },
+    ],
+  });
+
+  
+  t.check("Chaos views display 2", {
+    tests: [
+      {
+        name: "Adding / removing views in random order during a specified duration",
+        timeout: 60 * 1000,
+        test: async () => {
+          return mapx.ask("launch_chaos_test", {
+            run: 5,
+            batch: 5,
+            run_timeout: 10 * 1000,
+          });
         },
       },
     ],

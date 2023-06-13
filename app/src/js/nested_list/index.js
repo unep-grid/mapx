@@ -306,7 +306,12 @@ class NestedList {
     li.setModeAnimate(false);
     move(data);
     li.setModeAnimate(true);
-    return li.fire("state_order");
+
+    li.fire("order_change", {
+      order: li.getItemsOrder(),
+      orig: "nested_list_sort_group",
+    });
+    return true;
 
     /**
      * Helpers
@@ -720,6 +725,15 @@ class NestedList {
     });
     return out;
   }
+
+  getItemsOrder() {
+    const li = this;
+    return li
+      .getState()
+      .filter((i) => i.type === "item")
+      .map((i) => i.id);
+  }
+
   getStateHash(i) {
     let hash = i
       .map((s) =>
@@ -897,7 +911,7 @@ class NestedList {
     let state = li.getState({ keepItemContent: true });
     li.setState({ render: false, state: state, useStateStored: false });
   }
-  resetState() {
+  async resetState() {
     const li = this;
     let state = li.getStateOrig();
     if (li.isModeEmpty()) {
@@ -907,7 +921,12 @@ class NestedList {
     li.clearAllItems();
     li.setStateStored([]);
     li.setState({ render: true, state: state, useStateStored: false });
-    return li.fireAsync("state_reset", state);
+    await li.fireAsync("order_change", {
+      order: li.getItemsOrder(),
+      orig: "nested_list_reset",
+    });
+    await li.fireAsync("state_reset", state);
+    return true;
   }
   setState(opt) {
     const li = this;
@@ -1379,7 +1398,10 @@ class NestedList {
     function end() {
       if (done.length === els.length) {
         setTimeout(() => {
-          li.fireAsync("state_order");
+          li.fireAsync("order_change", {
+            order: li.getItemsOrder(),
+            orig: "nested_list_move",
+          });
           li.setBusy(false);
         }, relaxDuration);
       }

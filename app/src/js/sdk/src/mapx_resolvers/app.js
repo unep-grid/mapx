@@ -4,8 +4,8 @@ import {
   getView,
   setProject,
   getMapData,
-  getViewsOrder,
-  getViewsOpen,
+  getViewsListOrder,
+  getViewsListOpen,
 } from "../../../map_helpers/index.js";
 import { isView, isFunction, isObject } from "./../../../is_test";
 import { viewToMetaModal } from "../../../mx_helper_map_view_metadata.js";
@@ -344,7 +344,7 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return  {Array} Array of id
    */
   get_views_id_open() {
-    return getViewsOpen();
+    return getViewsListOpen();
   }
 
   /**
@@ -406,13 +406,13 @@ class MapxResolversApp extends MapxResolversStatic {
    * @return {Array} 
    */
   get_views_list_order() {
-    return getViewsOrder();
+    return getViewsListOrder();
   }
   get_views_order() {
     console.warn(
       "Deprecated: use 'get_views_list_order' to retrieve views order from the list"
     );
-    return getViewsOrder();
+    return getViewsListOrder();
   }
   /**
    * Set state / views list order, groups, etc. Opened view will be closed

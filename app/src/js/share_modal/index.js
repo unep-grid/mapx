@@ -18,7 +18,6 @@ import {
   isArrayOfViewsId,
   isBoolean,
   isEqual,
-  isEqualSearch,
   isTrue,
 } from "../is_test/index.js";
 import { parseTemplate } from "../mx_helper_misc.js";
@@ -32,7 +31,7 @@ import {
   getViews,
   getViewsForJSON,
   getViewsLayersVisibles,
-  getViewsOpen,
+  getViewsListOpen,
   getViewsActive,
   getMapPos,
   setMapPos,
@@ -279,7 +278,7 @@ export class ShareModal extends EventSimple {
         break;
       case "share_views_select_method_map_list_open":
       default:
-        views.push(...(getViewsOpen() || []));
+        views.push(...(getViewsListOpen() || []));
         break;
       /**
        * Disabled handler

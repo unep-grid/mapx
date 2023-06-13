@@ -82,8 +82,8 @@ export class EventSimple {
     }
   }
   once(type, cb, group) {
+    const evt = this;
     return new Promise((resolve) => {
-      const evt = this;
       if (isObject(type)) {
         cb = type.cb || type.callback || cb;
         group = type.idGroup || type.group || group;
@@ -94,6 +94,7 @@ export class EventSimple {
         resolve(d);
         return cb(d);
       };
+
       evt.on(type, cbProm, group, true);
     });
   }

@@ -89,21 +89,24 @@ export class ProjectManager {
   async validateCreatePrompt(name, btnCreate, elMessage) {
     const pm = this;
     const result = await pm.validate(name);
-    elMessage.innerHTML = "";
+    
+    const elFrag = document.createDocumentFragment();
     if (!result.valid) {
       for (const issue of result.issues) {
         const elIssue = el("span", tt(issue));
-        elMessage.appendChild(elIssue);
+        elFrag.appendChild(elIssue);
       }
       btnCreate.setAttribute("disabled", "disabled");
       btnCreate.classList.add("disabled");
       pm.disable();
     } else {
-      elMessage.appendChild(el("span", tt("proj_manage_name_ok")));
+      elFrag.appendChild(el("span", tt("proj_manage_name_ok")));
       btnCreate.removeAttribute("disabled");
       btnCreate.classList.remove("disabled");
       pm.enable();
     }
+    elMessage.innerHTML="";
+    elMessage.appendChild(elFrag);
     return result.valid;
   }
 

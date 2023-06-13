@@ -3,13 +3,7 @@ import { ViewsFilter } from "./views_filter/index.js";
 import { ViewBase } from "./views_builder/view_base.js";
 import { getArrayDistinct } from "./array_stat/index.js";
 import { settings } from "./settings";
-import {
-  isTrue,
-  isView,
-  isArray,
-  isViewOpen,
-  isObject,
-} from "./is_test_mapx";
+import { isTrue, isView, isArray, isViewOpen, isObject } from "./is_test_mapx";
 import { path, itemFlashSave } from "./mx_helper_misc.js";
 import { getQueryParameterInit } from "./url_utils";
 import { getDictItem, updateLanguageElements } from "./language";
@@ -26,7 +20,6 @@ import {
   viewAdd,
   getViewTitleNormalized,
   getViewDateModified,
-  viewsCheckedUpdate,
   viewsLayersOrderUpdate,
   updateBtnFilterActivated,
 } from "./map_helpers";
@@ -299,8 +292,7 @@ export async function viewsListRenderNew(o) {
        * Async handlers
        */
       { id: "render_item_content", action: handleRenderItemContent },
-      { id: "state_reset", action: viewsCheckedUpdate },
-      { id: "state_order", action: viewsLayersOrderUpdate },
+      { id: "order_change", action: viewsLayersOrderUpdate },
       { id: "destroy", action: viewsCloseAll },
     ],
   });

@@ -8,7 +8,6 @@ import { storyRead } from "./../story_map/index.js";
 import { viewToTableAttributeModal } from "./../source/display_table.js";
 import { viewToMetaModal } from "./../mx_helper_map_view_metadata.js";
 import { getDictItem, getLanguageCurrent } from "./../language";
-//import { uploadGeoJSONModal } from "./../mx_helper_upload_source.js";
 import { Uploader } from "./../uploader";
 import { modalMirror } from "./../mirror_util";
 import { ShareModal } from "./../share_modal/index.js";
@@ -18,7 +17,6 @@ import {
   downloadViewGeoJSON,
   downloadViewVector,
   resetViewStyle,
-  viewsCheckedUpdate,
   viewFilterToolsInit,
   getView,
   setProject,
@@ -26,6 +24,8 @@ import {
   zoomToViewIdVisible,
   zoomToViewId,
   getViewTitle,
+  viewAdd,
+  viewRemove,
 } from "./../map_helpers/index.js";
 
 import { ws, data } from "./../mx.js";
@@ -329,8 +329,17 @@ async function handleViewClick(event) {
         comment: "target is the label/input for the view to toggle",
         test: dataset.view_action_key === "btn_toggle_view",
         allowDefault: true,
-        action: function () {
-          viewsCheckedUpdate();
+        action: async () => {
+          const idView = dataset.view_action_target;
+          const view = getView(idView);
+          if (view._vb) {
+            const open = view._vb.toggle();
+            if (open) {
+              await viewAdd(view);
+            } else {
+              await viewRemove(view);
+            }
+          }
         },
       },
       {

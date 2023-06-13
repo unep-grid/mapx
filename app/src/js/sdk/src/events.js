@@ -11,7 +11,7 @@ class Events {
    * new Event handler
    */
   constructor() {
-    this._emitter = 'generic';
+    this._emitter = "generic";
     this._on_cb = [];
   }
   /**
@@ -41,7 +41,7 @@ class Events {
     this._on_cb.push({
       type: type,
       cb: cb,
-      once: false
+      once: false,
     });
   }
 
@@ -64,14 +64,26 @@ class Events {
    * Register a callback only and remove it after the first evaluation
    * @param {String} type Type of callback to be evaluated when fired
    * @param {Function} cb Callback
+   * @return {Promise<any>} alternative promise based cb
    */
   once(type, cb) {
-    this._on_cb.push({
-      type: type,
-      cb: cb,
-      once: true
+    const evt = this;
+    if (!cb) {
+      // in case using as await once("<type>",<empty cb>);
+      cb = () => {};
+    }
+    return new Promise((resolve) => {
+      const cbr = (data) => {
+        cb(data);
+        resolve(data);
+      };
+      evt._on_cb.push({
+        type: type,
+        cb: cbr,
+        once: true,
+      });
     });
   }
 }
 
-export {Events};
+export { Events };

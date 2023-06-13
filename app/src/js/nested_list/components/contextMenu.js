@@ -1,9 +1,9 @@
-import {NestedList} from '../index.js';
+import { NestedList } from "../index.js";
 
 class ContextMenu {
   constructor(evt, li) {
     if (!(li instanceof NestedList)) {
-      throw new Error('NestedList instance not valid');
+      throw new Error("NestedList instance not valid");
     }
     let cm = this;
     cm.li = li;
@@ -48,13 +48,13 @@ class ContextMenu {
     let rCon = cm.elContainer.getBoundingClientRect();
 
     if (rCtx.right > rCon.right) {
-      cm.elContext.style.left = rCon.right - rCtx.width - 20 + 'px';
+      cm.elContext.style.left = rCon.right - rCtx.width - 20 + "px";
     }
     if (rCtx.left < rCon.left) {
-      cm.elContext.style.left = rCon.left + 20 + 'px';
+      cm.elContext.style.left = rCon.left + 20 + "px";
     }
     if (rCtx.bottom > rCon.bottom) {
-      cm.elContext.style.top = rCon.bottom - rCtx.height - 20 + 'px';
+      cm.elContext.style.top = rCon.bottom - rCtx.height - 20 + "px";
     }
   }
 
@@ -84,30 +84,30 @@ class ContextMenu {
   startListen() {
     let cm = this;
     cm.li.listenerStore.addListener({
-      type: 'mousedown',
-      group: 'context',
+      type: "mousedown",
+      group: "context",
       target: window,
       callback: handleContextEvent,
-      bind: cm
+      bind: cm,
     });
     cm.li.listenerStore.addListener({
-      type: 'input',
-      group: 'context',
+      type: "input",
+      group: "context",
       target: cm.elContainer,
       callback: handleContextEvent,
-      bind: cm
+      bind: cm,
     });
     cm.li.listenerStore.addListener({
-      type: 'keydown',
-      group: 'context',
+      type: "keydown",
+      group: "context",
       target: window,
       callback: handleContextEventKeyDown,
-      bind: cm
+      bind: cm,
     });
   }
   stopListen() {
     let cm = this;
-    cm.li.listenerStore.removeListenerByGroup('context');
+    cm.li.listenerStore.removeListenerByGroup("context");
   }
 
   buildContext() {
@@ -115,32 +115,32 @@ class ContextMenu {
     let isRoot = cm.li.isRoot(cm.elTarget);
     let isGroup = !isRoot && cm.li.isGroup(cm.elTarget);
     let elContainer = cm.elContainer;
-    let type = isRoot ? 'root' : isGroup ? 'group' : 'item';
+    let type = isRoot ? "root" : isGroup ? "group" : "item";
     /**
      * Filter context item and build UI according to
      * settings;
      */
     let contextItems = cm.li.opt.contextMenuItems.filter(filterContextItem);
     let ui = contextItems.map((i) => {
-      if (i.ui === 'header') {
+      if (i.ui === "header") {
         return cm.elHeader(i.label);
       }
-      if (i.ui === 'button') {
+      if (i.ui === "button") {
         return cm.elButton(i.label, i.action);
       }
-      if (i.ui === 'input_text') {
-        let value = '';
+      if (i.ui === "input_text") {
+        let value = "";
         if (isGroup) {
           value = cm.li.getGroupTitle(cm.elTarget);
         }
-        return cm.elInput('text', i.action, i.label, value);
+        return cm.elInput("text", i.action, i.label, value);
       }
-      if (i.ui === 'input_color') {
-        let value = '';
+      if (i.ui === "input_color") {
+        let value = "";
         if (isGroup) {
           value = cm.li.getGroupColor(cm.elTarget);
         }
-        return cm.elInput('color', i.action, i.label, value);
+        return cm.elInput("color", i.action, i.label, value);
       }
     });
 
@@ -148,9 +148,9 @@ class ContextMenu {
      * Context content
      */
     let elMenuGroup = cm.li.el(
-      'div',
+      "div",
       {
-        class: cm.li.opt.class.contextMenuGroup
+        class: cm.li.opt.class.contextMenuGroup,
       },
       ui
     );
@@ -159,14 +159,14 @@ class ContextMenu {
      * Context
      */
     let elContext = cm.li.el(
-      'span',
+      "span",
       {
         class: cm.li.opt.class.contextMenu,
         style: {
-          position: 'absolute',
-          top: cm.top + 'px',
-          left: cm.left + 'px'
-        }
+          position: "absolute",
+          top: cm.top + "px",
+          left: cm.left + "px",
+        },
       },
       elMenuGroup
     );
@@ -182,7 +182,7 @@ class ContextMenu {
           return false;
         }
       }
-      return i.forType === 'all' || i.forType.indexOf(type) > -1;
+      return i.forType === "all" || i.forType.indexOf(type) > -1;
     }
   }
   elHeader(idLabel) {
@@ -190,9 +190,9 @@ class ContextMenu {
     let title = cm.li.d(idLabel);
     let el = cm.li.el;
     return el(
-      'div',
+      "div",
       {
-        class: cm.li.opt.class.contextMenuHeader
+        class: cm.li.opt.class.contextMenuHeader,
       },
       title
     );
@@ -202,13 +202,13 @@ class ContextMenu {
     let title = cm.li.d(idLabel);
     let el = cm.li.el;
     return el(
-      'div',
+      "div",
       {
         class: cm.li.opt.class.contextMenuButton,
         dataset: {
           li_id_action: idAction,
-          li_event_type: 'mousedown'
-        }
+          li_event_type: "mousedown",
+        },
       },
       title
     );
@@ -220,7 +220,7 @@ class ContextMenu {
     value = value || null;
     let lang = cm.li.getLanguage();
     let placeHolder = cm.li.d(idAction);
-    let isText = type === 'text';
+    let isText = type === "text";
     let title = cm.li.d(idLabel);
 
     if (isText) {
@@ -228,36 +228,36 @@ class ContextMenu {
     }
 
     return el(
-      'div',
+      "div",
       {
-        class: cm.li.opt.class.contextMenuInputGroup
+        class: cm.li.opt.class.contextMenuInputGroup,
       },
       el(
-        'span',
+        "span",
         {
-          class: cm.li.opt.class.contextMenuInputLabel
+          class: cm.li.opt.class.contextMenuInputLabel,
         },
         title
       ),
-      el('input', {
+      el("input", {
         class: cm.li.opt.class.contextMenuInput,
-        type: type || 'text',
+        type: type || "text",
         placeholder: placeHolder,
         dataset: {
           li_id_action: idAction,
-          li_event_type: 'input'
+          li_event_type: "input",
         },
-        value: value
+        value: value,
       })
     );
   }
 }
 
-export {ContextMenu};
+export { ContextMenu };
 
 function handleContextEventKeyDown(evt) {
   let cm = this;
-  if (evt.code === 'Enter' || evt.code === 'Escape' || evt.code === 'Tab') {
+  if (evt.code === "Enter" || evt.code === "Escape" || evt.code === "Tab") {
     cm.destroy();
   }
 }
@@ -268,9 +268,9 @@ function handleContextEvent(evt) {
   let elInput = evt.target;
   let idType = elInput.dataset.li_event_type;
   //let isEventInput = eventType === 'input';
-  let isEventClick = eventType === 'mousedown';
-  let isValidInput = idType === 'input';
-  let isValidClick = idType === 'mousedown';
+  let isEventClick = eventType === "mousedown";
+  let isValidInput = idType === "input";
+  let isValidClick = idType === "mousedown";
   let elTarget = cm.elTarget;
   let elTargetOriginal = cm.elTargetOriginal;
   let elContext = cm.elContext;
@@ -289,19 +289,19 @@ function handleContextEvent(evt) {
   let act = {
     cm_group_sort_text_asc: () => {
       cm.addUndoStepOnce();
-      cm.li.sortGroup(elTarget, {mode: 'text', asc: true});
+      cm.li.sortGroup(elTarget, { mode: "text", asc: true });
     },
     cm_group_sort_text_desc: () => {
       cm.addUndoStepOnce();
-      cm.li.sortGroup(elTarget, {mode: 'text', asc: false});
+      cm.li.sortGroup(elTarget, { mode: "text", asc: false });
     },
     cm_group_sort_date_asc: () => {
       cm.addUndoStepOnce();
-      cm.li.sortGroup(elTarget, {mode: 'date', asc: false});
+      cm.li.sortGroup(elTarget, { mode: "date", asc: false });
     },
     cm_group_sort_date_desc: () => {
       cm.addUndoStepOnce();
-      cm.li.sortGroup(elTarget, {mode: 'date', asc: true});
+      cm.li.sortGroup(elTarget, { mode: "date", asc: true });
     },
     cm_target_move_top: () => {
       cm.addUndoStepOnce();
@@ -323,7 +323,7 @@ function handleContextEvent(evt) {
       cm.li.undo();
     },
     cm_global_reset_state: () => {
-      cm.li.resetState();
+      cm.li.resetState().catch(console.error);
     },
     cm_global_clear_history: () => {
       cm.li.clearHistory();
@@ -335,13 +335,13 @@ function handleContextEvent(evt) {
       cm.addUndoStepOnce();
       cm.li.addGroup({
         content: elTarget,
-        group: elGroup
+        group: elGroup,
       });
     },
     cm_group_add: () => {
       cm.addUndoStepOnce();
       cm.li.addGroup({
-        group: elTarget
+        group: elTarget,
       });
     },
     cm_group_remove: () => {
@@ -358,8 +358,8 @@ function handleContextEvent(evt) {
     },
     cm_btn_close: () => {},
     cm_btn_inspect: () => {
-      console.log(elTargetOriginal); 
-    }
+      console.log(elTargetOriginal);
+    },
   };
 
   if (idAction) {

@@ -735,6 +735,7 @@ export function modalPrompt(opt) {
       style: {
         display: "flex",
         flexDirection: "column",
+        minHeight: "20px",
       },
     });
     const elContent = el("div", [elInputGroup, elMessage]);

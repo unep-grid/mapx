@@ -1,19 +1,24 @@
 import { getLabelFromObjectPath } from "../language";
 import { el } from "../el/src/index.js";
-import { viewsCheckedUpdate } from "../map_helpers";
+import { isViewOpen } from "../is_test_mapx/index.js";
+import { getView, getViewTitle } from "../map_helpers/index.js";
+import { events } from "../mx.js";
 
 class ViewBase {
-  constructor(view, enable) {
+  constructor(idView, enable) {
     let vb = this;
-    vb.view = view;
+    const view = getView(idView);
+    vb._view = view;
+    vb._title = getViewTitle(view);
     view._vb = vb;
+    view._open = false;
     vb.build(enable);
   }
   getEl() {
     return this.el;
   }
   isOpen() {
-    return this.elInput.checked === true;
+    return isViewOpen(this._view);
   }
 
   isActive() {
@@ -25,17 +30,52 @@ class ViewBase {
   }
 
   open() {
-    if (!this.isOpen()) {
-      this.elInput.checked = true;
-      viewsCheckedUpdate();
+    const vb = this;
+    if (vb.isOpen()) {
+      return;
     }
+    vb._view._open = true;
+    if (!vb.elInput.checked) {
+      vb.elInput.checked = true;
+    }
+    events.fire({
+      type: "view_ui_open",
+      data: {
+        idView: vb._view.id,
+      },
+    });
+    return true;
   }
+
   close() {
-    if (this.isOpen()) {
-      this.elInput.checked = false;
-      viewsCheckedUpdate();
+    const vb = this;
+    if (!vb.isOpen()) {
+      return;
+    }
+    vb._view._open = false;
+    if (vb.elInput.checked) {
+      vb.elInput.checked = false;
+    }
+    events.fire({
+      type: "view_ui_close",
+      data: {
+        idView: vb._view.id,
+      },
+    });
+    return true;
+  }
+
+  toggle() {
+    const vb = this;
+    if (vb.isOpen()) {
+      vb.close();
+      return false;
+    } else {
+      vb.open();
+      return true;
     }
   }
+
   destroy() {
     const elParent = this.el.parentElement;
     if (elParent) {
@@ -45,7 +85,7 @@ class ViewBase {
   build(enable) {
     enable = !!enable;
     const vb = this;
-    const view = vb.view;
+    const view = vb._view;
     const title = getLabelFromObjectPath({
       obj: view,
       path: "data.title",

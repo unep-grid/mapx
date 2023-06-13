@@ -497,6 +497,7 @@ class MapxResolversStatic extends ResolversBase {
    * Set view layer z position
    * @param {Object} opt Options
    * @param {String[]} opt.order View order
+   * @param {String} opt.orig Optional label for origin / logs
    * @return {Boolean} Done
    * @example
    * const views = await mapx.ask("get_views_with_visible_layer");
@@ -504,6 +505,7 @@ class MapxResolversStatic extends ResolversBase {
    * const result = await mapx.ask("set_views_layer_order",{order});
    */
   set_views_layer_order(opt) {
+    opt = Object.assign({}, { order: null, orig: "sdk" }, opt);
     return viewsLayersOrderUpdate(opt);
   }
 
@@ -676,8 +678,9 @@ class MapxResolversStatic extends ResolversBase {
     if (!valid) {
       return rslv._err("err_view_invalid");
     }
+
     if (view._vb instanceof ViewBase) {
-      await viewAdd(opt.idView);
+      await viewAdd(opt.idView, "sdk");
     } else {
       await viewsListAddSingle(view, { open: true });
     }

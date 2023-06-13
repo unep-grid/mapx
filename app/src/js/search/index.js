@@ -18,7 +18,7 @@ import {
   getViewRemote,
   viewAdd,
   viewRemove,
-  getViewsOpen,
+  getViewsListOpen,
   hasViewLocal,
   viewLink,
 } from "./../map_helpers/index.js";
@@ -882,7 +882,7 @@ class Search extends EventSimple {
              * Check if it's open
              * - Add or remove view
              */
-            const viewIsOpen = getViewsOpen().includes(idView);
+            const viewIsOpen = getViewsListOpen().includes(idView);
 
             if (viewIsOpen) {
               await viewRemove(view);
@@ -1385,7 +1385,7 @@ class Search extends EventSimple {
     if (!s._elResults) {
       return;
     }
-    const idViewsOpen = getViewsOpen();
+    const idViewsOpen = getViewsListOpen();
     const elsToggle = s._elResults.querySelectorAll(
       '[data-action="search_view_toggle"]'
     );
