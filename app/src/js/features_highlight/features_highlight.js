@@ -22,6 +22,12 @@ const def = {
   max_layers_render: 10,
 };
 
+const defConfig = {
+  point: null,
+  filters: [],
+  all: false,
+};
+
 class Highlighter {
   constructor(opt) {
     const hl = this;
@@ -129,13 +135,18 @@ class Highlighter {
     return hl.update({ animate: true });
   }
 
+  _clearConfig() {
+    const hl = this;
+    hl._config = Object.assign({}, defConfig);
+  }
+
   /**
    * Reset config and clear
    */
   reset() {
     const hl = this;
+    hl._clearConfig();
     hl._clear();
-    hl._config = {};
     return hl.count();
   }
 
@@ -198,8 +209,15 @@ class Highlighter {
    */
   addHighlightLayer(layer) {
     const hl = this;
-    hl.removeHighlightLayer(layer);
-    hl._map.addLayer(layer);
+    if (layer?._animation instanceof Animate) {
+      layer._animation.stop();
+    }
+    const mapLayer = hl._map.getLayer(layer.id);
+    if (isEmpty(mapLayer)) {
+      hl._map.addLayer(layer);
+    } else {
+      hl._map.setFilter(mapLayer.id, layer.filter);
+    }
   }
 
   /**
@@ -238,15 +256,7 @@ class Highlighter {
    */
   _update_items() {
     const hl = this;
-    const config = Object.assign(
-      {},
-      {
-        point: null,
-        filters: [],
-        all: false,
-      },
-      hl._config
-    );
+    const config = Object.assign({}, defConfig, hl._config);
 
     if (hl.isNotSet()) {
       return;
@@ -281,6 +291,8 @@ class Highlighter {
       for (const feature of pointFeatures) {
         features.push(feature);
       }
+
+      hl._clearConfig();
     } else {
       /**
        * All feature filtered by config
