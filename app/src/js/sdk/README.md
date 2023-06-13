@@ -1060,6 +1060,7 @@ Set view layer z position
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
 | opt.order | <code>Array.&lt;String&gt;</code> | View order |
+| opt.orig | <code>String</code> | Optional label for origin / logs |
 
 **Example**  
 ```js

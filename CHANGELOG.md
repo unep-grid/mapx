@@ -1,3 +1,9 @@
+  - [1.12.2](https://github.com/unep-grid/mapx/tree/1.12.2) 
+
+    - APP
+        - Fixed issues with the view order update
+        - Fixed #912
+
   - [1.12.1](https://github.com/unep-grid/mapx/tree/1.12.1) 
 
     - APP
