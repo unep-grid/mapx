@@ -363,7 +363,7 @@ export async function viewsListRenderNew(o) {
     if (isItem) {
       const elView = el.querySelector(".mx-view-item");
       if (elView && elView._vb) {
-        let out = mx.helpers.getViewJson(elView._vb.view);
+        let out = mx.helpers.getViewJson(elView._vb._view);
         return out;
       } else {
         return el.dataset;
