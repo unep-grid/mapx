@@ -97,6 +97,10 @@ class Button extends EventSimple {
 
   action(event) {
     const btn = this;
+    if (btn.isLocked()) {
+      btn.shake();
+      return null;
+    }
     btn.flash(event);
     return btn.opt.action(event);
   }
@@ -115,11 +119,29 @@ class Button extends EventSimple {
   }
 
   enable() {
+    if (this.isLocked()) {
+      return;
+    }
     return this.elButton.classList.add("active");
   }
 
   disable() {
+    if (this.isLocked()) {
+      return;
+    }
     return this.elButton.classList.remove("active");
+  }
+
+  lock() {
+    this.elButton.classList.add("locked");
+  }
+
+  unlock() {
+    this.elButton.classList.remove("locked");
+  }
+
+  isLocked() {
+    return this.elButton.classList.contains("locked");
   }
 
   show() {

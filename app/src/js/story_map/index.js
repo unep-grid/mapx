@@ -1235,7 +1235,7 @@ async function initProjection() {
    * Set projection
    */
   if (useProj) {
-    setMapProjection({ name: s.projection_name });
+    await setMapProjection({ name: s.projection_name });
   }
 }
 
@@ -1319,7 +1319,7 @@ async function appStateRestore() {
   const idTheme = state.idTheme;
   const pos = state.position;
 
-  setMapProjection({ name: state?.projection?.name });
+  await setMapProjection({ name: state?.projection?.name });
 
   map.jumpTo({
     zoom: pos.z,

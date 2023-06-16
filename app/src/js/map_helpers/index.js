@@ -1240,8 +1240,13 @@ export async function initMapx(o) {
     ctrls.getButton("btn_theme_sat").action("enable");
   }
   if (enableGlobe) {
-    ctrls.getButton("btn_theme_globe").action("enable");
+    ctrls.getButton("btn_globe").action("enable");
   }
+
+  /**
+   * Set globe state ( initial )
+   */
+  events.fire("update_button_globe");
 
   /**
    * Add mapx draw handler
@@ -1337,6 +1342,36 @@ export function initMapListener(map) {
     idGroup: "highlight_reset",
     callback: () => {
       highlighter.reset();
+    },
+  });
+
+  events.on({
+    type: ["set_map_projection", "set_map_pos", "update_button_globe"],
+    idGroup: "globe_state",
+    callback: async () => {
+      const ctrls = panel_tools.controls;
+      const btnGlobe = ctrls.getButton("btn_globe");
+      const hasMaxBounds = !!map.getMaxBounds();
+      let isGlobe = settings.projection.name === "globe";
+
+      if (hasMaxBounds) {
+        // NOTE: this should be done using btnGlobe.action
+        isGlobe = false;
+        btnGlobe.disable();
+        btnGlobe.lock();
+        setMapProjection({ globe: "disable", skipEvent: true });
+      } else {
+        btnGlobe.unlock();
+      }
+
+      /**
+       * Set button state
+       */
+      if (isGlobe) {
+        btnGlobe.enable();
+      } else {
+        btnGlobe.disable();
+      }
     },
   });
 
@@ -2369,10 +2404,10 @@ export function viewsLayersOrderUpdate(o) {
   const sorted = [];
   for (let idView of order) {
     /**
-    * Amongst visible layers, does a layer match view's order item ?
-    * -> cc views: layer.id should match idView
-    * -> vt,rt,gj views : layer.metadata.idView should match idView   
-    */ 
+     * Amongst visible layers, does a layer match view's order item ?
+     * -> cc views: layer.id should match idView
+     * -> vt,rt,gj views : layer.metadata.idView should match idView
+     */
     const layersView = layersDiplayed.filter((layer) => {
       return layer?.id === idView || layer?.metadata?.idView === idView;
     });
@@ -4538,6 +4573,9 @@ export async function setMapPos(opt) {
   try {
     const map = getMap(opt.id);
     const p = opt.param;
+    if (p.useMaxBounds) {
+      p.jump = true;
+    }
     const duration = p.jump ? 0 : isNotEmpty(p.duration) ? o.duration : 1000;
     const bounds = new mapboxgl.LngLatBounds([
       [p.w || 0, p.s || 0],
@@ -4545,8 +4583,21 @@ export async function setMapPos(opt) {
     ]);
 
     const center = new mapboxgl.LngLat(p.lng || 0, p.lat || 0);
-
     map.setMaxBounds(null);
+
+    if (p.fitToBounds) {
+      map.fitBounds(bounds, {
+        duration,
+      });
+    } else {
+      map.flyTo({
+        center: center,
+        zoom: p.zoom || p.z || 1,
+        bearing: p.bearing || p.b || 0,
+        pitch: p.pitch || p.p || 0,
+        duration: duration,
+      });
+    }
 
     if (p.useMaxBounds) {
       /**
@@ -4573,29 +4624,17 @@ export async function setMapPos(opt) {
        *   -> but if zoom is set by something else during this
        *      "duration" -> inaccurate bounds...
        */
-      setTimeout(() => {
-        map.setMaxBounds(map.getBounds());
-        map.scrollZoom.enable();
-      }, duration);
-    }
-
-    if (p.fitToBounds) {
-      map.fitBounds(bounds, {
-        duration,
-      });
-    } else {
-      map.flyTo({
-        center: center,
-        zoom: p.zoom || p.z || 1,
-        bearing: p.bearing || p.b || 0,
-        pitch: p.pitch || p.p || 0,
-        duration: duration,
-      });
+      await waitTimeoutAsync(duration);
+      map.setMaxBounds(map.getBounds());
+      map.scrollZoom.enable();
     }
 
     if (p.theme) {
       await theme.set(p.theme, { force: true });
     }
+
+    events.fire("set_map_pos", p);
+
     return true;
   } catch (e) {
     console.error(e);
@@ -4740,51 +4779,50 @@ export function boundsAngleRelation(bounds1, bounds2) {
  * @param {String} opt.name
  * @param {Array} opt.center
  * @param {Array} opt.parallels
+ * @param {Boolean} opt.cancelEvent Don't propagate
  */
-export function setMapProjection(opt) {
-  const map = getMap(opt.id);
-  const current = map.getProjection();
-  const ctrls = panel_tools.controls;
-  const def = {
-    name: current.name,
-    center: current.center,
-    parallels: current.parallels,
-  };
+export async function setMapProjection(opt) {
+  try {
+    const map = getMap(opt.id);
+    const current = map.getProjection();
+    const def = {
+      name: current.name,
+      center: current.center,
+      parallels: current.parallels,
+    };
 
-  if (isNotEmpty(opt.globe)) {
-    switch (opt.globe) {
-      case "enable":
-        opt.name = "globe";
-        break;
-      case "disable":
-        opt.name = "mercator";
-        break;
-      default:
-        // toggle
-        if (current.name === "globe") {
-          opt.name = "mercator";
-        } else {
+    if (isNotEmpty(opt.globe)) {
+      switch (opt.globe) {
+        case "enable":
           opt.name = "globe";
-        }
+          break;
+        case "disable":
+          opt.name = "mercator";
+          break;
+        default:
+          // toggle
+          if (current.name === "globe") {
+            opt.name = "mercator";
+          } else {
+            opt.name = "globe";
+          }
+      }
     }
-  }
 
-  settings.projection = Object.assign(settings.projection, def, opt);
+    settings.projection = Object.assign(settings.projection, def, opt);
 
-  map.setProjection(settings.projection.name, {
-    center: settings.projection.center,
-    parallels: settings.projection.parallels,
-  });
+    console.log("setMapProjection", settings.projection.name);
 
-  /**
-   * Set button state
-   */
-  const isGlobe = settings.projection.name === "globe";
-  const btnGlobe = ctrls.getButton("btn_globe");
-  if (isGlobe) {
-    btnGlobe.enable();
-  } else {
-    btnGlobe.disable();
+    map.setProjection(settings.projection.name, {
+      center: settings.projection.center,
+      parallels: settings.projection.parallels,
+    });
+
+    if (!opt.skipEvent) {
+      events.fire("set_map_projection", settings.projection);
+    }
+  } catch (e) {
+    console.error(e);
   }
   return settings.projection;
 }

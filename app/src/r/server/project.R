@@ -1,6 +1,3 @@
-
-
-
 #
 # Define project selection.
 #
@@ -41,7 +38,6 @@ observe({
 
 
     isolate({
-
       # user info
       isGuest <- isGuestUser()
       language <- reactData$language
@@ -60,7 +56,6 @@ observe({
 
       # Project requested can be an iso3 code or mapx project id or custom alias.
       if (isNotEmpty(project_query)) {
-
         # case project requested is an iso3code. e.g. COD, USA, etc
         if (nchar(project_query) == 3) project_query <- mxDbGetProjectIdByOldId(project_query)
 
@@ -75,7 +70,6 @@ observe({
         # priority to query
         project_out <- project_query
       } else {
-
         # if there is no already defined project but there is something from the db, use the later
         if (isEmpty(project_react) && isNotEmpty(project_db)) {
           project_out <- project_db
@@ -370,7 +364,6 @@ observeEvent(reactData$project, {
 # Update map position based on project config
 #
 observe({
-
   # data
   idMap <- .get(config, c("map", "id"))
   project <- reactData$project
@@ -419,6 +412,7 @@ observe({
     }
 
 
+
     #
     # Update map projection
     #
@@ -436,8 +430,11 @@ observe({
       )
     }
 
+    #
+    # Update map pos config 
+    # -> after proj to update btn globe state
+    #
     if (posChange) {
-
       mglSetMapPos(
         id = idMap,
         mapPos

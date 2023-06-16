@@ -140,9 +140,9 @@ export function generateButtons() {
     new Button({
       key: "btn_globe",
       classesIcon: ["fa", "fa-globe"],
-      action: function (cmd) {
+      action: async function (cmd) {
         const choice = ["toggle", "enable", "disable"];
-        setMapProjection({
+        await setMapProjection({
           globe: choice.includes(cmd) ? cmd : "toggle",
         });
       },
