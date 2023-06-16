@@ -2349,13 +2349,7 @@ export function viewsLayersOrderUpdate(o) {
     throw new Error("Missing order");
   }
   if (opt.debug) {
-    console.table([
-      {
-        opt: opt.orig,
-        order: JSON.stringify(order),
-        titles: JSON.stringify(order.map(getViewTitle)),
-      },
-    ]);
+    console.table(order.map(getViewTitle));
   }
 
   /**
@@ -2374,9 +2368,14 @@ export function viewsLayersOrderUpdate(o) {
   let idPrevious;
   const sorted = [];
   for (let idView of order) {
-    const layersView = layersDiplayed.filter(
-      (layer) => layer?.metadata?.idView === idView
-    );
+    /**
+    * Amongst visible layers, does a layer match view's order item ?
+    * -> cc views: layer.id should match idView
+    * -> vt,rt,gj views : layer.metadata.idView should match idView   
+    */ 
+    const layersView = layersDiplayed.filter((layer) => {
+      return layer?.id === idView || layer?.metadata?.idView === idView;
+    });
 
     if (layersView.length > 0) {
       /*
