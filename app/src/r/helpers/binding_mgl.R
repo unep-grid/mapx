@@ -1,5 +1,3 @@
-
-
 #' Set filter based on a list of rules
 #' @param id Map id
 #' @param layerId Layer id
@@ -276,6 +274,7 @@ mglSetMapPos <- function(id = NULL, mapPosition, session = shiny::getDefaultReac
 #' @param name  Projection name
 #' @param center  Center
 #' @param parallels  Parallels
+#' @param origin  Origin name for debugging
 #' @param {Reactive} session Shiny session
 #' @export
 mglSetMapProjection <- function(
@@ -283,14 +282,15 @@ mglSetMapProjection <- function(
   name = config$projections$ids,
   center = list(0, 0),
   parallels = list(0, 0),
-  session = shiny::getDefaultReactiveDomain()
+  session = shiny::getDefaultReactiveDomain(),
+  origin = "server"
 ) {
-
   session$sendCustomMessage("mglSetMapProjection", list(
     id = id,
     name = name,
     center = center,
-    parallels = parallels
+    parallels = parallels,
+    origin = origin
   ))
 }
 

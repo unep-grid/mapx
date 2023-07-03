@@ -137,6 +137,7 @@ import {
   isViewRtWithLegend,
   isViewVtWithAttributeType,
   isBoundsInsideBounds,
+  isEqual,
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
@@ -1354,12 +1355,19 @@ export function initMapListener(map) {
       const hasMaxBounds = !!map.getMaxBounds();
       let isGlobe = settings.projection.name === "globe";
 
+      console.log("Event update globe button state");
+
       if (hasMaxBounds) {
+        debugger;
         // NOTE: this should be done using btnGlobe.action
         isGlobe = false;
         btnGlobe.disable();
         btnGlobe.lock();
-        setMapProjection({ globe: "disable", skipEvent: true });
+        setMapProjection({
+          globe: "disable",
+          skipEvent: true,
+          origin: "event",
+        });
       } else {
         btnGlobe.unlock();
       }
@@ -4779,18 +4787,15 @@ export function boundsAngleRelation(bounds1, bounds2) {
  * @param {String} opt.name
  * @param {Array} opt.center
  * @param {Array} opt.parallels
+ * @param {String} opt.origin Origin for debugging
  * @param {Boolean} opt.cancelEvent Don't propagate
  */
 export async function setMapProjection(opt) {
   try {
     const map = getMap(opt.id);
     const current = map.getProjection();
-    const def = {
-      name: current.name,
-      center: current.center,
-      parallels: current.parallels,
-    };
 
+    // update proj name using "globe" option value
     if (isNotEmpty(opt.globe)) {
       switch (opt.globe) {
         case "enable":
@@ -4809,9 +4814,23 @@ export async function setMapProjection(opt) {
       }
     }
 
-    settings.projection = Object.assign(settings.projection, def, opt);
+    const def = {
+      name: current.name,
+      center: current.center || [0, 0],
+      parallels: current.parallels || [0, 0],
+    };
 
-    console.log("setMapProjection", settings.projection.name);
+    const proj = {
+      name: opt.name,
+      center: opt.center || [0, 0],
+      parallels: opt.parallels || [0, 0],
+    };
+
+    settings.projection = Object.assign(settings.projection, def, proj);
+
+    console.log(
+      `Set map projection ${settings.projection.name} from ${opt.origin}`
+    );
 
     map.setProjection(settings.projection.name, {
       center: settings.projection.center,

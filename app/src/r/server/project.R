@@ -383,6 +383,7 @@ observe({
     mapProj <- projectData$map_projection
     theme <- projectData$theme
     themeQuery <- query$theme
+    hasMaxBounds <- isTRUE(mapPos$useMaxBounds)
     language <- reactData$language
     hasNoClip <- isEmpty(countryClip) || "WLD" %in% countryClip
     posChange <- !identical(reactData$mapPos, mapPos)
@@ -416,17 +417,19 @@ observe({
     #
     # Update map projection
     #
-    if (isEmpty(mapProj)) {
+    if (isEmpty(mapProj) || hasMaxBounds) {
       mglSetMapProjection(
         id = idMap,
-        name = config$projections$default
+        name = config$projections$default,
+        origin = "server"
       )
     } else {
       mglSetMapProjection(
         id = idMap,
         name = mapProj$name,
         center = list(mapProj$center_lng, mapProj$center_lat),
-        parallels = list(mapProj$parallels_lat_0, mapProj$parallels_lat_1)
+        parallels = list(mapProj$parallels_lat_0, mapProj$parallels_lat_1),
+        origin = "server"
       )
     }
 
