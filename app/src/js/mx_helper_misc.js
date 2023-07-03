@@ -826,7 +826,7 @@ export function formatZeros(num, n) {
 
 /**
  * Replace unicode char by string
- * @param {sring} txt String to convert
+ * @param {string} txt String to convert
  * @note come from http://stackoverflow.com/questions/17267329/converting-unicode-character-to-string-format
  */
 export function unicodeToChar(text) {
