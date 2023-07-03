@@ -11,6 +11,7 @@ observeEvent(input$btnShowProjectConfig, {
 
   if (isAdmin) {
     projectData <- mxDbGetProjectData(project)
+    projection <- .get(projectData, "map_projection", list())
     #
     # Set public mode and
     # create select input for members, publishers and admins
@@ -19,7 +20,6 @@ observeEvent(input$btnShowProjectConfig, {
       jedOutput("projectTitleSchema"),
       jedOutput("projectDescriptionSchema"),
       jedOutput("projectMapPosition"),
-      jedOutput("projectMapProjection"),
       selectizeInput(
         "selectProjectConfigCountries",
         label = d("project_countries_highlight", language, web = F),
@@ -40,25 +40,26 @@ observeEvent(input$btnShowProjectConfig, {
         class = "well",
         tagList(
           textInput("txtProjectNameAlias",
-            d("project_alias_name", language, web = F),
+            ddesc("project_alias_name", language),
             value = projectData$alias,
             placeholder = project
-          ),
-          p(
-            class = "text-muted",
-            d("project_alias_name_desc", language, web = F)
           )
         )
       ),
       checkboxInput(
+        "checkProjectionGlobe",
+        label = ddesc("project_globe_projection", language),
+        value = isTRUE(projection$name == "globe")
+      ),
+      checkboxInput(
         "checkProjectPublic",
-        label = d("project_enable_public", language),
-        value =  projectData$public
+        label = ddesc("project_enable_public", language),
+        value = projectData$public
       ),
       checkboxInput(
         "checkProjectEnableJoin",
         label = d("project_enable_join", language),
-        value =  projectData$allow_join
+        value = projectData$allow_join
       ),
       uiOutput("uiValidateProject")
     )
@@ -124,8 +125,7 @@ observe({
     errTest <- function(language = "en",
       type = "",
       test =
-        {})
-    {
+        {}) {
       if (isTRUE(test)) {
         err <- list(
           type = type,
@@ -168,78 +168,6 @@ observe({
 
     reactData$projectConfigValid <- !disabled
   })
-})
-
-
-observeEvent(input$projectMapProjection_init, {
-  userRole <- getUserRole()
-  isAdmin <- isTRUE(userRole$admin)
-  if (isAdmin) {
-    project <- reactData$project
-    projectData <- mxDbGetProjectData(project)
-    language <- reactData$language
-    tt <- function(id) {
-      d(id, language, web = F)
-    }
-    mapProjection <- .get(projectData, c("map_projection"))
-
-    schema <- list(
-      type = "object",
-      title = tt("project_map_proj_set"),
-      options = list(
-        collapsed = TRUE
-      ),
-      properties = list(
-        name = list(
-          title = tt("project_map_proj_name"),
-          type = "string",
-          enum = config$projection$ids,
-          default = config$projection$default,
-          options = list(
-            enum_titles = config$projections$names
-          )
-        ),
-        center_lat = list(
-          type = "number",
-          title = tt("project_map_proj_center_latitude"),
-          minimum = -90,
-          maximum = 90,
-          default = 0
-        ),
-        center_lng = list(
-          title = tt("project_map_proj_center_longitude"),
-          type = "number",
-          minimum = -180,
-          maximum = 180,
-          default = 0
-        ),
-        parallels_lat_0 = list(
-          type = "number",
-          title = tt("project_map_proj_parallels_latitude_0"),
-          minimum = -90,
-          maximum = 90,
-          default = 0
-        ),
-        parallels_lat_1 = list(
-          type = "number",
-          title = tt("project_map_proj_parallels_latitude_1"),
-          minimum = -90,
-          maximum = 90,
-          default = 0
-        )
-      )
-    )
-
-    jedSchema(
-      id = "projectMapProjection",
-      schema = schema,
-      startVal = mapProjection,
-      options = list(
-        getValidationOnChange = TRUE,
-        getValuesOnChange = TRUE
-      )
-    )
-  }
 })
 
 
@@ -318,7 +246,8 @@ observeEvent(input$projectMapPosition_init, {
         useMaxBounds = list(
           type = "boolean",
           format = "checkbox",
-          title = tt("map_use_max_bounds")
+          title = tt("map_use_max_bounds"),
+          description = tt("map_use_max_bounds_desc")
         )
       )
     )
@@ -426,6 +355,12 @@ observeEvent(input$btnSaveProjectConfig, {
   countries <- input$selectProjectConfigCountries
   theme <- input$selectProjectConfigTheme
 
+  projection <- list(
+    name = ifelse(isTRUE(input$checkProjectionGlobe), "globe", "mercator"),
+    disableGlobe = isTRUE(input$checkProjectionGlobeDisable)
+  )
+
+
   if (noDataCheck(countries)) {
     countries <- list()
   }
@@ -444,7 +379,7 @@ observeEvent(input$btnSaveProjectConfig, {
     members = NULL,
     publishers = NULL,
     map_position = input$projectMapPosition_values$data,
-    map_projection = input$projectMapProjection_values$data,
+    map_projection = projection,
     countries = countries,
     theme = theme,
     creator = NULL,

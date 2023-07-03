@@ -4636,8 +4636,23 @@
   },
   {
     "id": "project_enable_public",
-    "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "de": "Dieses Projekt ist öffentlich. Es wird im Projektkatalog aufgeführt. Alle in diesem Projekt veröffentlichten öffentlichen Ansichten sind für alle lesbar. "
+    "en": "This poject is public",
+    "de": "Dieses Projekt ist öffentlich"
+  },
+  {
+    "id": "project_enable_public_desc",
+    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "de": "Wenn aktiviert, wird das Projekt im Projektkatalog aufgeführt. Alle in diesem Projekt veröffentlichten öffentlichen Ansichten sind für jedermann lesbar."
+  },
+  {
+    "id": "project_globe_projection",
+    "en": "Enable globe mode",
+    "de": "Aktivieren Sie den Globusmodus"
+  },
+  {
+    "id": "project_globe_projection_desc",
+    "en": "If the option 'Use extent to limit map panning' is not checked, display the map on a globe, else use standard Mercator projection",
+    "de": "Wenn die Option 'Verwenden Sie den Umfang, um das Verschieben der Karte zu begrenzen' nicht aktiviert ist, zeigen Sie die Karte auf einem Globus an, sonst verwenden Sie die Standard-Mercator-Projektion"
   },
   {
     "id": "project_enable_join",
@@ -4893,6 +4908,11 @@
     "id": "map_use_max_bounds",
     "en": "Use extent to limit map panning",
     "de": "Grenzen verwenden, um das Verschieben der Karte zu begrenzen"
+  },
+  {
+    "id": "map_use_max_bounds_desc",
+    "en": "Users are prevented from panning the map beyond the designated area. If enabled, this option supersedes 'Enable globe mode', since the globe mode cannot be constrained by an extent. However, the static mode selection in the sharing manager can override this option.",
+    "de": "Benutzer können die Karte nicht über den festgelegten Bereich hinaus schwenken. Wenn diese Option aktiviert ist, ersetzt sie „Globusmodus aktivieren“, da der Globusmodus nicht durch eine Ausdehnung eingeschränkt werden kann. Die Auswahl des statischen Modus im Freigabemanager kann diese Option jedoch außer Kraft setzen."
   },
   {
     "id": "map_fit_to_bounds",

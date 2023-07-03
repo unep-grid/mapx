@@ -4636,8 +4636,23 @@
   },
   {
     "id": "project_enable_public",
-    "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "ps": "دا پروژه عامه ده. دا به د پروژو په لیست کې درج شي. پدې پروژه کې خپاره شوي ټول عامه لیدونه به د هرچا لپاره د لوستلو وړ وي. "
+    "en": "This poject is public",
+    "ps": "دا پروژه عامه ده"
+  },
+  {
+    "id": "project_enable_public_desc",
+    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "ps": "که فعاله شي، پروژه به د پروژو په کتلاګ کې لیست شي. په دې پروژه کې خپاره شوي ټول عامه نظریات به د هرچا لپاره د لوستلو وړ وي."
+  },
+  {
+    "id": "project_globe_projection",
+    "en": "Enable globe mode",
+    "ps": "د ګلوب حالت فعال کړئ"
+  },
+  {
+    "id": "project_globe_projection_desc",
+    "en": "If the option 'Use extent to limit map panning' is not checked, display the map on a globe, else use standard Mercator projection",
+    "ps": "که ګزینه 'محدوده استفاده کړی ته کارته وړاندی کولو لپاره' نشان نده، په ګردونه کې کارته ښکاره کړی، ورنا استاندارد مرکاتور پروجکشن استفاده کړی"
   },
   {
     "id": "project_enable_join",
@@ -4893,6 +4908,11 @@
     "id": "map_use_max_bounds",
     "en": "Use extent to limit map panning",
     "ps": "د استعمالونو مخ سره د نقشه پوهستلو محدودول"
+  },
+  {
+    "id": "map_use_max_bounds_desc",
+    "en": "Users are prevented from panning the map beyond the designated area. If enabled, this option supersedes 'Enable globe mode', since the globe mode cannot be constrained by an extent. However, the static mode selection in the sharing manager can override this option.",
+    "ps": "کاروونکي د ټاکل شوي ساحې هاخوا د نقشې پین کولو مخه نیسي. که فعال شوی وي، دا اختیار د 'ګلوب حالت فعالول' بدلوي، ځکه چې د ګلوب حالت د یوې اندازې محدودیت نشي کولی. په هرصورت، د شریکولو مدیر کې د جامد حالت انتخاب کولی شي دا اختیار بیرته راولي."
   },
   {
     "id": "map_fit_to_bounds",

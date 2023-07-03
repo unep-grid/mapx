@@ -4636,8 +4636,23 @@
   },
   {
     "id": "project_enable_public",
-    "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "bn": "এই প্রকল্পটি সর্বজনীন। এটি প্রকল্পের ক্যাটালগ তালিকাভুক্ত করা হবে। এই প্রকল্পে প্রকাশিত সমস্ত জনসাধারণের দর্শন সবার জন্য পঠনযোগ্য। "
+    "en": "This poject is public",
+    "bn": "এই প্রকল্পটি সর্বজনীন"
+  },
+  {
+    "id": "project_enable_public_desc",
+    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "bn": "সক্ষম হলে, প্রকল্পটি প্রকল্পের ক্যাটালগে তালিকাভুক্ত হবে৷ এই প্রকল্পে প্রকাশিত সকল পাবলিক মতামত সকলের জন্য পাঠযোগ্য হবে।"
+  },
+  {
+    "id": "project_globe_projection",
+    "en": "Enable globe mode",
+    "bn": "গ্লোব মোড সক্ষম করুন"
+  },
+  {
+    "id": "project_globe_projection_desc",
+    "en": "If the option 'Use extent to limit map panning' is not checked, display the map on a globe, else use standard Mercator projection",
+    "bn": "যদি 'ম্যাপ প্যানিং সীমিত করতে পরিসর ব্যবহার করুন' অপশনটি চেক না করা হয়, তাহলে ম্যাপটি একটি গ্লোবে প্রদর্শন করুন, নতুবা স্ট্যান্ডার্ড মার্কাটর প্রোজেকশন ব্যবহার করুন"
   },
   {
     "id": "project_enable_join",
@@ -4893,6 +4908,11 @@
     "id": "map_use_max_bounds",
     "en": "Use extent to limit map panning",
     "bn": "মানদন্ড ব্যবহার করে মানচিত্র প্যানিং সীমিত করুন"
+  },
+  {
+    "id": "map_use_max_bounds_desc",
+    "en": "Users are prevented from panning the map beyond the designated area. If enabled, this option supersedes 'Enable globe mode', since the globe mode cannot be constrained by an extent. However, the static mode selection in the sharing manager can override this option.",
+    "bn": "ব্যবহারকারীদের মনোনীত এলাকার বাইরে মানচিত্র প্যান করা থেকে বাধা দেওয়া হয়। যদি সক্ষম করা থাকে, এই বিকল্পটি 'গ্লোব মোড সক্ষম করুন'-কে ছাড়িয়ে যায়, যেহেতু গ্লোব মোড একটি পরিমাণে সীমাবদ্ধ করা যায় না৷ যাইহোক, শেয়ারিং ম্যানেজারে স্ট্যাটিক মোড নির্বাচন এই বিকল্পটিকে ওভাররাইড করতে পারে।"
   },
   {
     "id": "map_fit_to_bounds",

@@ -4636,8 +4636,23 @@
   },
   {
     "id": "project_enable_public",
-    "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "ar": "هذا المشروع عام. سيتم إدراجه في كتالوج المشاريع. ستكون جميع الآراء العامة المنشورة في هذا المشروع قابلة للقراءة للجميع. "
+    "en": "This poject is public",
+    "ar": "هذا القصيدة عامة"
+  },
+  {
+    "id": "project_enable_public_desc",
+    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "ar": "في حالة التمكين ، سيتم إدراج المشروع في كتالوج المشاريع. ستكون جميع الآراء العامة المنشورة في هذا المشروع قابلة للقراءة للجميع."
+  },
+  {
+    "id": "project_globe_projection",
+    "en": "Enable globe mode",
+    "ar": "تفعيل وضع الكرة الأرضية"
+  },
+  {
+    "id": "project_globe_projection_desc",
+    "en": "If the option 'Use extent to limit map panning' is not checked, display the map on a globe, else use standard Mercator projection",
+    "ar": "إذا لم يتم تحديد الخيار 'استخدم النطاق لتحديد تحريك الخريطة'، قم بعرض الخريطة على الكرة الأرضية، وإلا استخدم الإسقاط المركاتور القياسي"
   },
   {
     "id": "project_enable_join",
@@ -4893,6 +4908,11 @@
     "id": "map_use_max_bounds",
     "en": "Use extent to limit map panning",
     "ar": "استخدام النطاق لتقييد تحريك الخريطة"
+  },
+  {
+    "id": "map_use_max_bounds_desc",
+    "en": "Users are prevented from panning the map beyond the designated area. If enabled, this option supersedes 'Enable globe mode', since the globe mode cannot be constrained by an extent. However, the static mode selection in the sharing manager can override this option.",
+    "ar": "يُمنع المستخدمون من تحريك الخريطة خارج المنطقة المحددة. إذا تم تمكينه ، فإن هذا الخيار يحل محل \"تمكين وضع الكرة الأرضية\" ، حيث لا يمكن تقييد وضع الكرة الأرضية بنطاق. ومع ذلك ، يمكن أن يتجاوز تحديد الوضع الثابت في مدير المشاركة هذا الخيار."
   },
   {
     "id": "map_fit_to_bounds",

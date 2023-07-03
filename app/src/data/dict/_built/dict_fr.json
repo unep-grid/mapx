@@ -4636,8 +4636,23 @@
   },
   {
     "id": "project_enable_public",
-    "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "fr": "Ce projet est public. Il va être listé dans le catalogue des projets. Toutes les vues publiques publiées dans ce projet seront également visibles à tous."
+    "en": "This poject is public",
+    "fr": "Ce projet est public."
+  },
+  {
+    "id": "project_enable_public_desc",
+    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "fr": "Si activé, le projet va être listé dans le catalogue des projets. Toutes les vues publiques publiées dans ce projet seront également visibles à tous."
+  },
+  {
+    "id": "project_globe_projection",
+    "en": "Enable globe mode",
+    "fr": "Activer le mode globe"
+  },
+  {
+    "id": "project_globe_projection_desc",
+    "en": "If the option 'Use extent to limit map panning' is not checked, display the map on a globe, else use standard Mercator projection",
+    "fr": "Si l'option 'Utiliser l'étendue pour limiter le déplacement de la carte' n'est pas cochée, afficher la carte sur un globe, sinon utiliser la projection Mercator standard"
   },
   {
     "id": "project_enable_join",
@@ -4893,6 +4908,11 @@
     "id": "map_use_max_bounds",
     "en": "Use extent to limit map panning",
     "fr": "Utiliser l'étendue pour limiter le défilement de la carte"
+  },
+  {
+    "id": "map_use_max_bounds_desc",
+    "en": "Users are prevented from panning the map beyond the designated area. If enabled, this option supersedes 'Enable globe mode', since the globe mode cannot be constrained by an extent. However, the static mode selection in the sharing manager can override this option.",
+    "fr": "Les utilisateurs ne peuvent pas déplacer la carte au-delà de la zone désignée. Si elle est activée, cette option remplace \"Activer le mode globe\", car le mode globe ne peut pas être contraint par une étendue. Cependant, la sélection du mode statique dans le gestionnaire de partage peut remplacer cette option."
   },
   {
     "id": "map_fit_to_bounds",

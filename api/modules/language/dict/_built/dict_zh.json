@@ -4636,8 +4636,23 @@
   },
   {
     "id": "project_enable_public",
-    "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "zh": "此项目是公开的。它将被列入项目目录中。项目发布的所有公开视图对每个人可读。"
+    "en": "This poject is public",
+    "zh": "此项目是公开的。"
+  },
+  {
+    "id": "project_enable_public_desc",
+    "en": "If enabled, the project will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "zh": "如果启用，该项目将列在项目目录中。该项目中发布的所有公众观点都可供所有人阅读。"
+  },
+  {
+    "id": "project_globe_projection",
+    "en": "Enable globe mode",
+    "zh": "启用地球模式"
+  },
+  {
+    "id": "project_globe_projection_desc",
+    "en": "If the option 'Use extent to limit map panning' is not checked, display the map on a globe, else use standard Mercator projection",
+    "zh": "如果未勾选'使用范围限制地图平移'选项，则在球体上显示地图，否则使用标准的墨卡托投影"
   },
   {
     "id": "project_enable_join",
@@ -4893,6 +4908,11 @@
     "id": "map_use_max_bounds",
     "en": "Use extent to limit map panning",
     "zh": "使用范围限制地图平移"
+  },
+  {
+    "id": "map_use_max_bounds_desc",
+    "en": "Users are prevented from panning the map beyond the designated area. If enabled, this option supersedes 'Enable globe mode', since the globe mode cannot be constrained by an extent. However, the static mode selection in the sharing manager can override this option.",
+    "zh": "阻止用户将地图平移到指定区域之外。如果启用，此选项将取代“启用地球模式”，因为地球模式不受范围限制。但是，共享管理器中的静态模式选择可以覆盖此选项。"
   },
   {
     "id": "map_fit_to_bounds",
