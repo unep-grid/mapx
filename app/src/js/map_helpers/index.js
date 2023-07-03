@@ -1245,11 +1245,6 @@ export async function initMapx(o) {
   }
 
   /**
-   * Set globe state ( initial )
-   */
-  events.fire("update_button_globe");
-
-  /**
    * Add mapx draw handler
    */
   mx.draw = new MapxDraw({
@@ -1286,10 +1281,16 @@ export async function initMapx(o) {
 
   /**
    * Init global listeners
+   * -> no fire/events before this
    */
   initLog();
   initListenerGlobal();
   initMapListener(map);
+
+  /**
+   * Set initial globe button state 
+   */
+  await events.fire("init_button_globe");
 
   /**
    * Load mapx app or static
@@ -1347,41 +1348,11 @@ export function initMapListener(map) {
   });
 
   events.on({
-    type: ["set_map_projection", "set_map_pos", "update_button_globe"],
+    type: ["set_map_projection", "set_map_pos", "init_button_globe"],
     idGroup: "globe_state",
-    callback: async () => {
-      const ctrls = panel_tools.controls;
-      const btnGlobe = ctrls.getButton("btn_globe");
-      const hasMaxBounds = !!map.getMaxBounds();
-      let isGlobe = settings.projection.name === "globe";
-
-      console.log("Event update globe button state");
-
-      if (hasMaxBounds) {
-        debugger;
-        // NOTE: this should be done using btnGlobe.action
-        isGlobe = false;
-        btnGlobe.disable();
-        btnGlobe.lock();
-        setMapProjection({
-          globe: "disable",
-          skipEvent: true,
-          origin: "event",
-        });
-      } else {
-        btnGlobe.unlock();
-      }
-
-      /**
-       * Set button state
-       */
-      if (isGlobe) {
-        btnGlobe.enable();
-      } else {
-        btnGlobe.disable();
-      }
-    },
+    callback: updateButtonGlobe,
   });
+
 
   theme.on("set_colors", (colors) => {
     highlighter.setOptions({
@@ -1605,6 +1576,39 @@ export async function initMapxApp(opt) {
   events.fire({
     type: "mapx_ready",
   });
+}
+
+/**
+ * Update globe buttton state
+ */
+async function updateButtonGlobe() {
+  const map = getMap();
+  const ctrls = panel_tools.controls;
+  const btnGlobe = ctrls.getButton("btn_globe");
+  const hasMaxBounds = !!map.getMaxBounds();
+
+  if (hasMaxBounds) {
+    btnGlobe.disable();
+    btnGlobe.lock();
+    await setMapProjection({
+      skipEvent: true,
+      name: "mercator",
+      origin: "event",
+    });
+  } else {
+    btnGlobe.unlock();
+  }
+
+  const isGlobe = settings.projection.name === "globe";
+
+  /**
+   * Set button state
+   */
+  if (isGlobe) {
+    btnGlobe.enable();
+  } else {
+    btnGlobe.disable();
+  }
 }
 
 /**
@@ -4641,7 +4645,7 @@ export async function setMapPos(opt) {
       await theme.set(p.theme, { force: true });
     }
 
-    events.fire("set_map_pos", p);
+    await events.fire("set_map_pos", p);
 
     return true;
   } catch (e) {
@@ -4828,17 +4832,13 @@ export async function setMapProjection(opt) {
 
     settings.projection = Object.assign(settings.projection, def, proj);
 
-    console.log(
-      `Set map projection ${settings.projection.name} from ${opt.origin}`
-    );
-
     map.setProjection(settings.projection.name, {
       center: settings.projection.center,
       parallels: settings.projection.parallels,
     });
 
     if (!opt.skipEvent) {
-      events.fire("set_map_projection", settings.projection);
+      await events.fire("set_map_projection", settings.projection);
     }
   } catch (e) {
     console.error(e);

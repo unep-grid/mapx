@@ -412,6 +412,20 @@ observe({
       mglSetTheme(theme)
     }
 
+    #
+    # Update map pos config
+    # before setting projection
+    # -> Set max bounds
+    # -> button globe update require that info
+    #    to have the correct state (lock/unlock)
+    #
+    if (posChange) {
+      mglSetMapPos(
+        id = idMap,
+        mapPos
+      )
+      reactData$mapPos <- mapPos
+    }
 
 
     #
@@ -431,18 +445,6 @@ observe({
         parallels = list(mapProj$parallels_lat_0, mapProj$parallels_lat_1),
         origin = "server"
       )
-    }
-
-    #
-    # Update map pos config 
-    # -> after proj to update btn globe state
-    #
-    if (posChange) {
-      mglSetMapPos(
-        id = idMap,
-        mapPos
-      )
-      reactData$mapPos <- mapPos
     }
   })
 })

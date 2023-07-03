@@ -35,7 +35,7 @@ export class EventSimple {
       }
       const t = isArray(c.type) ? c.type : [c.type];
       if (t.includes(type)) {
-        res.push(await c.cb(data));
+        res.push(await c.cb(data, type));
         if (c.once) {
           evt._rm(c);
         }
