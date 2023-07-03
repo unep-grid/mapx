@@ -1,3 +1,8 @@
+  - [1.12.3-alpha.1](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.1) 
+    
+    - APP
+        - Fixed #913
+
   - [1.12.2](https://github.com/unep-grid/mapx/tree/1.12.2) 
 
     - APP
