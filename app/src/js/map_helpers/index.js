@@ -39,7 +39,7 @@ import { isStoryPlaying, storyRead } from "./../story_map/index.js";
 import { fetchViews } from "./../mx_helper_map_view_fetch.js";
 import { wmsQuery } from "./../wms/index.js";
 import { clearMapxCache, getVersion } from "./../app_utils";
-import { onNextFrame, waitFrameAsync } from "./../animation_frame/index.js";
+import { onNextFrame } from "./../animation_frame/index.js";
 import {
   handleMapDragOver,
   handleMapDrop,
@@ -77,7 +77,7 @@ import {
 } from "./../mx_helper_modal.js";
 import { errorHandler } from "./../error_handler/index.js";
 import { waitTimeoutAsync } from "./../animation_frame";
-import { getArrayDiff, getArrayDistinct } from "./../array_stat/index.js";
+import { getArrayDistinct } from "./../array_stat/index.js";
 import { getApiUrl } from "./../api_routes";
 import { getViewSourceSummary } from "./../mx_helper_source_summary";
 import {
@@ -646,6 +646,7 @@ export function initListenerGlobal() {
       "story_step",
       "language_change",
       "views_list_ordered",
+      "set_map_projection",
     ],
     idGroup: "update_share_modale",
     callback: updateSharingTool,
@@ -1039,6 +1040,7 @@ export async function initMapx(o) {
   const queryMinZoom = getQueryParameter(["zmin", "zoomMin"])[0];
   const queryMaxZoom = getQueryParameter(["zmax", "zoomMax"])[0];
   const queryMaxBounds = getQueryParameter(["useMaxBounds"]);
+  const queryGlobe = getQueryParameter(["globe"])[0];
 
   if (isNotEmpty(queryLat)) {
     mp.center = null;
@@ -1064,6 +1066,10 @@ export async function initMapx(o) {
     mp.zmin = queryMinZoom * 1 || 0;
   }
 
+  if (isNotEmpty(queryGlobe)) {
+    mp.globe = !!queryGlobe;
+  }
+
   if (isNotEmpty(queryMaxBounds) || mp.useMaxBounds) {
     const bounds = [];
     for (const k of ["w", "s", "e", "n"]) {
@@ -1085,6 +1091,7 @@ export async function initMapx(o) {
     preserveDrawingBuffer: false,
     attributionControl: false,
     crossSourceCollisions: true,
+    projection: mp.globe ? "globe" : null,
     zoom: mp.z || mp.zoom || 1,
     minZoom: mp.zmin || mp.zoomMax || null,
     maxZoom: mp.zmax || mp.zoomMin || null,
@@ -1288,7 +1295,7 @@ export async function initMapx(o) {
   initMapListener(map);
 
   /**
-   * Set initial globe button state 
+   * Set initial globe button state
    */
   await events.fire("init_button_globe");
 
@@ -1352,7 +1359,6 @@ export function initMapListener(map) {
     idGroup: "globe_state",
     callback: updateButtonGlobe,
   });
-
 
   theme.on("set_colors", (colors) => {
     highlighter.setOptions({
@@ -5201,6 +5207,7 @@ export function getMapPos(o) {
   const pitch = map.getPitch();
   const modeSat = ctrls.getButton("btn_theme_sat").isActive();
   const mode3d = ctrls.getButton("btn_3d_terrain").isActive();
+  const modeGlobe = ctrls.getButton("btn_globe").isActive();
   const idTheme = theme.id();
   const out = {
     n: round(bounds.getNorth()),
@@ -5215,6 +5222,7 @@ export function getMapPos(o) {
     sat: modeSat,
     t3d: mode3d,
     theme: idTheme,
+    globe: modeGlobe,
   };
   return out;
 }
