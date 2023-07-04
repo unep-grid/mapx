@@ -1,3 +1,9 @@
+  - [1.12.3-alpha.2](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.2) 
+    
+    - APP
+        - Globe mode from sharing manager #914
+        - Better themes #915
+
   - [1.12.3-alpha.1](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.1) 
     
     - APP
