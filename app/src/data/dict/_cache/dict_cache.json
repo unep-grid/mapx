@@ -22061,6 +22061,58 @@
     "de": "Karte: Hintergrund "
   },
   {
+    "id": "mx_map_vegetation",
+    "en": "Map: vegetation",
+    "fr": "Carte : végétation",
+    "es": "Mapa: vegetación",
+    "ru": "Карта: растительность",
+    "zh": "地图: 植被",
+    "ar": "الخريطة: الغطاء النباتي",
+    "fa": "نقشه: پوشش گیاهی",
+    "ps": "نقشه: نباتات",
+    "bn": "মানচিত্র: গাছপালা",
+    "de": "Karte: Vegetation"
+  },
+  {
+    "id": "mx_map_zone_commercial",
+    "en": "Map: commercial area",
+    "fr": "Carte: zone commerciale",
+    "es": "Mapa: zona comercial",
+    "ru": "Карта: коммерческий район",
+    "zh": "地图：商业区",
+    "ar": "الخريطة: المنطقة التجارية",
+    "fa": "نقشه: منطقه تجاری",
+    "ps": "نقشه: سوداګریزه سیمه",
+    "bn": "মানচিত্র: বাণিজ্যিক এলাকা",
+    "de": "Karte: Gewerbegebiet"
+  },
+  {
+    "id": "mx_map_snow",
+    "en": "Map: snow / glacier",
+    "fr": "Carte: neige / glacier",
+    "es": "Mapa: nieve / glaciar",
+    "ru": "Карта: снег/ледник",
+    "zh": "地图: 雪地/冰川",
+    "ar": "الخريطة: الثلج / الأنهار الجليدية",
+    "fa": "نقشه: برف / یخچال طبیعی",
+    "ps": "نقشه: واوره / ګلیشیر",
+    "bn": "মানচিত্র: তুষার / হিমবাহ",
+    "de": "Karte: Schnee / Gletscher"
+  },
+  {
+    "id": "mx_map_rail",
+    "en": "Map: railway",
+    "fr": "Carte: chemin de fer",
+    "es": "Mapa: ferrocarril",
+    "ru": "Карта: железная дорога",
+    "zh": "地图: 铁路",
+    "ar": "الخريطة: السكك الحديدية",
+    "fa": "نقشه: راه آهن",
+    "ps": "نقشه: ریل پټلۍ",
+    "bn": "মানচিত্র: রেলপথ",
+    "de": "Karte: Eisenbahn"
+  },
+  {
     "id": "mx_map_feature_highlight",
     "en": "Map: feature highlight",
     "fr": "Carte : mise en évidence des éléments",

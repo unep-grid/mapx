@@ -3,6 +3,9 @@ import { getDictItem } from "../language";
 import { isNotEmpty } from "../is_test/index.js";
 import "./style.less";
 
+
+const debug = false;
+
 /**
  * MapInfoBpx
  * - if `mx_info_box` attribute exist when hovering the map, this module will display an infobox
@@ -42,7 +45,11 @@ export class MapInfoBox {
       const ids = [];
 
       for (const f of featuresAll) {
+        const lId = f?.layer?.id;
         for (const key in f.properties) {
+          if(debug){
+            console.log(`${lId}. k:${key} v:${f.properties[key]}`);
+          }
           if (triggerName.includes(key)) {
             ids.push(f.properties[key]);
           }

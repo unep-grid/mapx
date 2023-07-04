@@ -27,7 +27,151 @@
         "visibility": "visible"
       },
       "paint": {
-        "background-color": "rgb(255,255,255)"
+        "background-color": "hsl(20, 18%, 91%)"
+      }
+    },
+    {
+      "id": "landcover_vegetation",
+      "type": "fill",
+      "source": "mapbox_composite",
+      "source-layer": "landcover",
+      "maxzoom": 20,
+      "filter": [
+        "match",
+        ["get", "class"],
+        ["scrub", "grass", "wood"],
+        true,
+        false
+      ],
+      "layout": {},
+      "paint": {
+        "fill-color": "hsl(110, 41%, 78%)",
+        "fill-opacity": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          9,
+          0.4,
+          10,
+          ["match", ["get", "class"], "crop", 0, 0.4],
+          11,
+          ["match", ["get", "class"], "crop", 0, 0.4],
+          12,
+          0.2
+        ],
+        "fill-antialias": false
+      }
+    },
+    {
+      "id": "national_park",
+      "type": "fill",
+      "source": "mapbox_composite",
+      "source-layer": "landuse_overlay",
+      "minzoom": 5,
+      "filter": ["==", ["get", "class"], "national_park"],
+      "layout": {},
+      "paint": {
+        "fill-color": "hsl(110, 41%, 78%)",
+        "fill-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          5,
+          0,
+          6,
+          0.6,
+          12,
+          0.2
+        ]
+      }
+    },
+
+    {
+      "id": "landuse_commercial",
+      "type": "fill",
+      "source": "mapbox_composite",
+      "source-layer": "landuse",
+      "minzoom": 5,
+      "filter": [
+        "all",
+        [">=", ["to-number", ["get", "sizerank"]], 0],
+        [
+          "match",
+          ["get", "class"],
+          [
+            "airport",
+            "facility",
+            "industrial",
+            "school",
+            "commercial_area",
+            "hospital"
+          ],
+          true,
+          false
+        ],
+        [
+          "<=",
+          [
+            "-",
+            ["to-number", ["get", "sizerank"]],
+            ["interpolate", ["exponential", 1.5], ["zoom"], 12, 0, 18, 14]
+          ],
+          14
+        ]
+      ],
+      "layout": {},
+      "paint": {
+        "fill-color": "rgba(200,153,153,0.0)",
+        "fill-opacity": 0.6,
+        "fill-antialias": false
+      }
+    },
+
+    {
+      "id": "landuse_vegetation",
+      "type": "fill",
+      "source": "mapbox_composite",
+      "source-layer": "landuse",
+      "minzoom": 5,
+      "filter": [
+        "all",
+        [">=", ["to-number", ["get", "sizerank"]], 0],
+        [
+          "match",
+          ["get", "class"],
+          ["wood", "scrub", "agriculture", "park", "grass", "cemetery"],
+          true,
+          false
+        ],
+        [
+          "<=",
+          [
+            "-",
+            ["to-number", ["get", "sizerank"]],
+            ["interpolate", ["exponential", 1.5], ["zoom"], 12, 0, 18, 14]
+          ],
+          14
+        ]
+      ],
+      "layout": {},
+      "paint": {
+        "fill-color": "hsla(115, 55%, 74%, 0.0)",
+        "fill-opacity": 0.6,
+        "fill-antialias": false
+      }
+    },
+    {
+      "id": "landuse_snow",
+      "type": "fill",
+      "source": "mapbox_composite",
+      "source-layer": "landuse",
+      "minzoom": 5,
+      "filter": ["match", ["get", "class"], ["glacier", "snow"], true, false],
+      "layout": {},
+      "paint": {
+        "fill-color": "rgba(200,210,250,0.0)",
+        "fill-opacity": 0.6,
+        "fill-antialias": false
       }
     },
     {
@@ -1293,18 +1437,17 @@
       }
     },
     {
-      "id": "road-rail",
+      "id": "rail",
       "type": "line",
       "source": "mapbox_composite",
       "source-layer": "road",
-      "minzoom": 13,
+      "minzoom": 4,
       "filter": [
         "all",
         ["==", ["geometry-type"], "LineString"],
         [
           "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["match", ["get", "class"], ["major_rail", "minor_rail"], true, false]
+          ["match", ["get", "class"], ["major_rail", "rail"], true, false]
         ]
       ],
       "layout": {
@@ -1312,31 +1455,30 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgb(255,255,255)",
+        "line-color": "rgba(0,0,0,0)",
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
           ["zoom"],
           14,
-          0.5,
+          1,
           20,
-          1
+          2
         ]
       }
     },
     {
-      "id": "road-rail-tracks",
+      "id": "rail_ticks",
       "type": "line",
       "source": "mapbox_composite",
       "source-layer": "road",
-      "minzoom": 13,
+      "minzoom": 4,
       "filter": [
         "all",
         ["==", ["geometry-type"], "LineString"],
         [
           "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["match", ["get", "class"], ["major_rail", "minor_rail"], true, false]
+          ["match", ["get", "class"], ["major_rail", "rail"], true, false]
         ]
       ],
       "layout": {
@@ -1344,7 +1486,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgb(255,255,255)",
+        "line-color": "rgba(0,0,0,0)",
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
@@ -1354,8 +1496,7 @@
           20,
           8
         ],
-        "line-dasharray": [0.1, 15],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 13.75, 0, 14, 1]
+        "line-dasharray": [0.1, 5]
       }
     },
     {

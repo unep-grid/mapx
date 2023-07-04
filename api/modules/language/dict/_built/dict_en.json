@@ -6788,6 +6788,22 @@
     "en": "Map: background"
   },
   {
+    "id": "mx_map_vegetation",
+    "en": "Map: vegetation"
+  },
+  {
+    "id": "mx_map_zone_commercial",
+    "en": "Map: commercial area"
+  },
+  {
+    "id": "mx_map_snow",
+    "en": "Map: snow / glacier"
+  },
+  {
+    "id": "mx_map_rail",
+    "en": "Map: railway"
+  },
+  {
     "id": "mx_map_feature_highlight",
     "en": "Map: feature highlight"
   },

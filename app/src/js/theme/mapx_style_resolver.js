@@ -40,6 +40,34 @@ export function layer_resolver(c) {
         "background-color": c.mx_map_background.color,
       },
     },
+
+    {
+      id: ["landuse_vegetation", "national_park", "landcover_vegetation"],
+      layout: {
+        visibility: c.mx_map_vegetation.visibility,
+      },
+      paint: {
+        "fill-color": c.mx_map_vegetation.color,
+      },
+    },
+    {
+      id: ["landuse_commercial"],
+      layout: {
+        visibility: c.mx_map_zone_commercial.visibility,
+      },
+      paint: {
+        "fill-color": c.mx_map_zone_commercial.color,
+      },
+    },
+    {
+      id: ["landuse_snow"],
+      layout: {
+        visibility: c.mx_map_snow.visibility,
+      },
+      paint: {
+        "fill-color": c.mx_map_snow.color,
+      },
+    },
     {
       id: ["hillshading"],
       layout: {
@@ -141,14 +169,21 @@ export function layer_resolver(c) {
         "road-primary",
         "road-trunk",
         "road-motorway",
-        "road-rail",
-        "road-rail-tracks",
       ],
       layout: {
         visibility: c.mx_map_road.visibility,
       },
       paint: {
         "line-color": c.mx_map_road.color,
+      },
+    },
+    {
+      id: ["rail", "rail_ticks"],
+      layout: {
+        visibility: c.mx_map_rail.visibility,
+      },
+      paint: {
+        "line-color": c.mx_map_rail.color,
       },
     },
     {
