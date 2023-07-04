@@ -8485,6 +8485,26 @@
     "fa": "نقشه: پس زمینه "
   },
   {
+    "id": "mx_map_vegetation",
+    "en": "Map: vegetation",
+    "fa": "نقشه: پوشش گیاهی"
+  },
+  {
+    "id": "mx_map_zone_commercial",
+    "en": "Map: commercial area",
+    "fa": "نقشه: منطقه تجاری"
+  },
+  {
+    "id": "mx_map_snow",
+    "en": "Map: snow / glacier",
+    "fa": "نقشه: برف / یخچال طبیعی"
+  },
+  {
+    "id": "mx_map_rail",
+    "en": "Map: railway",
+    "fa": "نقشه: راه آهن"
+  },
+  {
     "id": "mx_map_feature_highlight",
     "en": "Map: feature highlight",
     "fa": "نقشه: ویژگی برجسته "

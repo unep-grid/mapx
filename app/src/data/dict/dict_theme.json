@@ -170,6 +170,58 @@
     "de": ""
   },
   {
+    "id": "mx_map_vegetation",
+    "en": "Map: vegetation",
+    "fr": "Carte : végétation",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "mx_map_zone_commercial",
+    "en": "Map: commercial area",
+    "fr": "Carte: zone commerciale",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "mx_map_snow",
+    "en": "Map: snow / glacier",
+    "fr": "Carte: neige / glacier",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "mx_map_rail",
+    "en": "Map: railway",
+    "fr": "Carte: chemin de fer",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "mx_map_feature_highlight",
     "en": "Map: feature highlight",
     "fr": "Carte : mise en évidence des éléments",
@@ -234,7 +286,7 @@
     "bn": "",
     "de": ""
   },
-   {
+  {
     "id": "mx_map_text_land_outline",
     "en": "Map: generic land labels outline",
     "fr": "",
@@ -546,7 +598,7 @@
     "bn": "",
     "de": ""
   },
- {
+  {
     "id": "mx_map_text_country_0_5",
     "en": "Map: UN labels 0 5 – Special region or province",
     "fr": "",
@@ -559,7 +611,7 @@
     "bn": "",
     "de": ""
   },
- {
+  {
     "id": "mx_map_text_country_0_99",
     "en": "Map: UN labels 0 99 – Sovereignty unsettled",
     "fr": "",
@@ -572,7 +624,7 @@
     "bn": "",
     "de": ""
   },
- {
+  {
     "id": "mx_map_text_country_1_1",
     "en": "Map: UN labels 1 1 – Administrative unit (subnational level 01)",
     "fr": "",
@@ -585,7 +637,7 @@
     "bn": "",
     "de": ""
   },
- {
+  {
     "id": "mx_map_text_country_1_2",
     "en": "Map: UN labels 1 2 – Administrative unit (subnational level 01)",
     "fr": "",
@@ -793,6 +845,4 @@
     "bn": "",
     "de": ""
   }
-
-
 ]

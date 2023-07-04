@@ -58,7 +58,19 @@
     },
     "mx_map_background": {
       "visibility": "visible",
-      "color": "rgb(255,255,255)"
+      "color": "rgb(250,245,230)"
+    },
+    "mx_map_snow": {
+      "visibility": "visible",
+      "color": "rgba(210,200,255,0.4)"
+    },
+    "mx_map_vegetation": {
+      "visibility": "visible",
+      "color": "hsla(115, 55%, 74%, 0.4)"
+    },
+    "mx_map_zone_commercial": {
+      "visibility": "visible",
+      "color": "rgba(200,153,153,0.4)"
     },
     "mx_map_text_land_outline": {
       "visibility": "visible",
@@ -131,6 +143,10 @@
     "mx_map_road_border": {
       "visibility": "visible",
       "color": "rgba(220,220,220,0.36)"
+    },
+    "mx_map_rail": {
+      "visibility": "visible",
+      "color": "rgba(12,12,12,0.2)"
     },
     "mx_map_building": {
       "visibility": "visible",
