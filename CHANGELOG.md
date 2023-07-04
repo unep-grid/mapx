@@ -1,4 +1,5 @@
-  - [1.12.3-alpha.2](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.2) 
+
+  - [1.12.3-alpha.3](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.2) 
     
     - APP
         - Globe mode from sharing manager #914
