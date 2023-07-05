@@ -112,11 +112,21 @@ export function generateButtons() {
         const curPitch = map.getPitch();
         const storyPlaying = isStoryPlaying();
         if (!storyPlaying) {
-          map.flyTo({ pitch: enabled ? (curPitch > 0 ? curPitch : 60) : 0 });
+          const autoPitch =
+            (enabled && curPitch === 0) || (!enabled && curPitch !== 0);
+          if (autoPitch) {
+            map.flyTo({ pitch: enabled ? 60 : 0 });
+          }
         }
 
         map.setTerrain(
           enabled ? { source: "mapbox_dem", exaggeration: 1 } : null
+        );
+
+        map.setLayoutProperty(
+          "building_extrusion",
+          "visibility",
+          enabled ? "visible" : "none"
         );
 
         return enabled;

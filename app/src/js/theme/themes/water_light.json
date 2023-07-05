@@ -138,7 +138,7 @@
     },
     "mx_map_road": {
       "visibility": "visible",
-      "color": "rgba(255,255,255,0.86)"
+      "color": "rgba(255,255,255,1)"
     },
     "mx_map_road_border": {
       "visibility": "visible",
@@ -146,7 +146,7 @@
     },
     "mx_map_rail": {
       "visibility": "visible",
-      "color": "rgba(12,12,12,0.2)"
+      "color": "rgba(251,4,4,0.15)"
     },
     "mx_map_building": {
       "visibility": "visible",

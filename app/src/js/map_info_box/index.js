@@ -43,7 +43,7 @@ export class MapInfoBox {
       const triggerName = ["mx_info_box"];
       const featuresAll = map.queryRenderedFeatures(e.point);
       const ids = [];
-
+      console.log("----");
       for (const f of featuresAll) {
         const lId = f?.layer?.id;
         for (const key in f.properties) {

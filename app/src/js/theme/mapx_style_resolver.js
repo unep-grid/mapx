@@ -157,8 +157,6 @@ export function layer_resolver(c) {
     {
       id: [
         "road-street-low",
-        "road-street_limited-low",
-        "road-path",
         "road-construction",
         "road-trunk_link",
         "road-motorway_link",
@@ -169,6 +167,7 @@ export function layer_resolver(c) {
         "road-primary",
         "road-trunk",
         "road-motorway",
+        "road-tunnel",
       ],
       layout: {
         visibility: c.mx_map_road.visibility,
@@ -207,6 +206,7 @@ export function layer_resolver(c) {
         "road-trunk_link-case",
         "road-trunk-case",
         "road-motorway-case",
+        "road-street-low-tunnel",
       ],
       layout: {
         visibility: c.mx_map_road_border.visibility,
@@ -216,12 +216,18 @@ export function layer_resolver(c) {
       },
     },
     {
+      id: ["building_extrusion"],
+      paint: {
+        "fill-extrusion-color": c.mx_map_building.color,
+      },
+    },
+    {
       id: ["building"],
       layout: {
         visibility: c.mx_map_building.visibility,
       },
       paint: {
-        "fill-extrusion-color": c.mx_map_building.color,
+        "fill-color": c.mx_map_building.color,
       },
     },
     /**

@@ -68,6 +68,7 @@ import {
   setClickHandler,
   cssTransformFun,
   xyToDegree,
+  debounce,
 } from "./../mx_helper_misc.js";
 import {
   modal,
@@ -598,6 +599,8 @@ export function isModeLocked() {
 
 export function initListenerGlobal() {
   const map = getMap();
+  const ctrls = panel_tools.controls;
+  const btn3d = ctrls.getButton("btn_3d_terrain");
   /**
    * Handle view click
    */
@@ -658,6 +661,18 @@ export function initListenerGlobal() {
   });
   map.on("move", updateSharingTool);
   map.on("styledata", updateSharingTool);
+  map.on("pitch", debounce(update3d));
+
+  function update3d() {
+    const enable = map.getPitch() > 0;
+    const enabled = btn3d.isActive();
+    if (enable && !enabled) {
+      btn3d.action("enable");
+    }
+    if (!enable && enabled) {
+      btn3d.action("disable");
+    }
+  }
 
   function updateSharingTool() {
     if (window._share_modal) {
@@ -5528,4 +5543,18 @@ export async function chaosTest(opt) {
   const chaos = new ChaosTest(opt);
   const res = await chaos.start();
   return res;
+}
+
+/**
+ * Debug style road
+ */
+export function debugRoad() {
+  const map = getMap();
+  const enabled =
+    map.getLayoutProperty("road-debug", "visibility") === "visible";
+  map.setLayoutProperty(
+    "road-debug",
+    "visibility",
+    enabled ? "none" : "visible"
+  );
 }
