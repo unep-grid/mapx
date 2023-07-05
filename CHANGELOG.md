@@ -1,3 +1,9 @@
+  - [1.12.3-alpha.4](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.4) 
+
+    - APP
+        - Improved themes : road casing, layer order, small path visibility, tunnels
+        - Avoiding building extrusion if not in 3d mode
+        - If the map pitch > 0, enable 3d mode 
 
   - [1.12.3-alpha.3](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.2) 
     
