@@ -207,6 +207,7 @@ export function layer_resolver(c) {
         "road-trunk-case",
         "road-motorway-case",
         "road-street-low-tunnel",
+        "building_border",
       ],
       layout: {
         visibility: c.mx_map_road_border.visibility,

@@ -115,7 +115,10 @@
       "color": "rgba(220,220,220,0.5)"
     },
     "mx_map_rail": { "visibility": "visible", "color": "rgba(12,12,12,0.2)" },
-    "mx_map_building": { "visibility": "visible", "color": "rgb(227,227,227)" },
+    "mx_map_building": {
+      "visibility": "visible",
+      "color": "rgba(209,209,209,0.95)"
+    },
     "mx_map_boundary_un_1": {
       "visibility": "visible",
       "color": "rgba(38,38,38,0.3)"
@@ -199,4 +202,3 @@
     }
   }
 }
-
