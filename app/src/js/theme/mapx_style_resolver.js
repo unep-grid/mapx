@@ -156,18 +156,15 @@ export function layer_resolver(c) {
     },
     {
       id: [
-        "road-street-low",
-        "road-construction",
-        "road-trunk_link",
-        "road-motorway_link",
-        "road-service-link-track",
-        "road-street_limited",
-        "road-street",
-        "road-secondary-tertiary",
-        "road-primary",
-        "road-trunk",
-        "road-motorway",
-        "road-tunnel",
+        "road_path_tunnel",
+        "road_path",
+        "road_path_bridge",
+        "road_regular_tunnel",
+        "road_regular",
+        "road_regular_bridge",
+        "road_motor_tunnel",
+        "road_motor",
+        "road_motor_bridge",
       ],
       layout: {
         visibility: c.mx_map_road.visibility,
@@ -177,7 +174,7 @@ export function layer_resolver(c) {
       },
     },
     {
-      id: ["rail", "rail_ticks"],
+      id: ["road_rail", "road_rail_ticks"],
       layout: {
         visibility: c.mx_map_rail.visibility,
       },
@@ -186,7 +183,7 @@ export function layer_resolver(c) {
       },
     },
     {
-      id: ["road-pedestrian-polygon", "road-polygon"],
+      id: ["road_pedestrian_polygon", "road_polygon"],
       layout: {
         visibility: c.mx_map_road.visibility,
       },
@@ -196,18 +193,15 @@ export function layer_resolver(c) {
     },
     {
       id: [
-        "road-pedestrian-polygon-case",
-        "road-service-link-track-case",
-        "road-street_limited-case",
-        "road-street-case",
-        "road-secondary-tertiary-case",
-        "road-primary-case",
-        "road-motorway_link-case",
-        "road-trunk_link-case",
-        "road-trunk-case",
-        "road-motorway-case",
-        "road-street-low-tunnel",
-        "building_border",
+        "road_path_tunnel_case",
+        "road_path_case",
+        "road_path_bridge_case",
+        "road_regular_tunnel_case",
+        "road_regular_case",
+        "road_regular_bridge_case",
+        "road_motor_tunnel_case",
+        "road_motor_case",
+        "road_motor_bridge_case",
       ],
       layout: {
         visibility: c.mx_map_road_border.visibility,

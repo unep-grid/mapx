@@ -3,7 +3,7 @@ import { getDictItem } from "../language";
 import { isNotEmpty } from "../is_test/index.js";
 import "./style.less";
 
-const debug = false;
+const debug = true;
 
 /**
  * MapInfoBpx
@@ -42,14 +42,16 @@ export class MapInfoBox {
       const triggerName = ["mx_info_box"];
       const featuresAll = map.queryRenderedFeatures(e.point);
       const ids = [];
-      console.log("----");
+      if (debug) {
+        console.log("----");
+      }
       for (const f of featuresAll) {
         const lId = f?.layer?.id;
         for (const key in f.properties) {
           if (debug) {
-            if (["class"].includes(key)) {
+            //if (["class","structure"].includes(key)) {
               console.log(`${lId}. k:${key} v:${f.properties[key]}`);
-            }
+            //}
           }
           if (triggerName.includes(key)) {
             ids.push(f.properties[key]);

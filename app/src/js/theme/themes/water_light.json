@@ -58,7 +58,7 @@
     },
     "mx_map_background": {
       "visibility": "visible",
-      "color": "rgb(250,245,230)"
+      "color": "rgb(236,232,223)"
     },
     "mx_map_snow": {
       "visibility": "visible",
@@ -107,7 +107,7 @@
     },
     "mx_map_text_road": {
       "visibility": "visible",
-      "color": "rgba(121,121,121,0.5)",
+      "color": "rgb(143,143,143)",
       "font": "Noto Sans Medium"
     },
     "mx_map_text_water": {
@@ -142,13 +142,17 @@
     },
     "mx_map_road_border": {
       "visibility": "visible",
-      "color": "rgba(220,220,220,0.36)"
+      "color": "rgba(155,155,155,1)"
     },
     "mx_map_rail": {
       "visibility": "visible",
       "color": "rgba(251,4,4,0.15)"
     },
     "mx_map_building": {
+      "visibility": "visible",
+      "color": "rgba(209,209,209,0.95)"
+    },
+    "mx_map_building_border": {
       "visibility": "visible",
       "color": "rgba(209,209,209,0.95)"
     },

@@ -112,7 +112,7 @@
     "mx_map_road": { "visibility": "visible", "color": "rgb(255,255,255)" },
     "mx_map_road_border": {
       "visibility": "visible",
-      "color": "rgba(220,220,220,0.5)"
+      "color": "rgba(220,220,220,1)"
     },
     "mx_map_rail": { "visibility": "visible", "color": "rgba(12,12,12,0.2)" },
     "mx_map_building": {

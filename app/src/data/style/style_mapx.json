@@ -476,1043 +476,757 @@
       }
     },
     {
-      "id": "road-tunnel",
+      "id": "road_path_tunnel_case",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 12,
       "type": "line",
       "source": "mapbox_composite",
       "source-layer": "road",
       "filter": [
         "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], true, false],
-          [
-            "match",
-            ["get", "class"],
-            ["motorway", "primary", "secondary", "tertiary", "primary_link"],
-            true,
-            false
-          ]
-        ]
-      ],
-      "layout": {
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          9,
-          0.95,
-          10,
-          1,
-          18,
-          26
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-opacity": [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          10.1,
-          0.2,
-          11,
-          0.5
-        ]
-      }
-    },
-    {
-      "id": "road-street-low-tunnel",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], true, false],
-          [
-            "match",
-            ["get", "class"],
-            ["street", "path", "street_limited", "pedestrian"],
-            true,
-            false
-          ]
-        ]
-      ],
-      "layout": {
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          15,
-          0.5,
-          18,
-          1
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          9,
-          0.2,
-          10,
-          0.4,
-          18,
-          1
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 10.1, 0, 11, 1]
-      }
-    },
-
-    {
-      "id": "road-street-low",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        ["match", ["get", "structure"], ["tunnel"], false, true],
         [
           "match",
           ["get", "class"],
-          ["street", "path", "street_limited", "pedestrian"],
+          ["path", "pedestrian", "footway", "steps", "track"],
           true,
           false
-        ]
+        ],
+        ["==", ["get", "structure"], "tunnel"],
+        ["match", ["get", "type"], ["platform"], false, true]
       ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
       "paint": {
+        "line-color": "rgb(200,200,200)",
+        "line-opacity": 0.4,
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
           ["zoom"],
-          12.5,
-          0.5,
-          14,
-          2,
+          10,
+          0.41,
           18,
-          5
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          11,
-          0,
-          11.25,
-          1,
-          14,
-          1
+          4.1
         ]
-      }
-    },
-    {
-      "id": "road-service-link-track-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["!=", ["get", "type"], "trunk_link"],
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          [
-            "match",
-            ["get", "class"],
-            ["link", "service", "track", "secondary_link", "tertiary_link"],
-            true,
-            false
-          ]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
       },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.75,
-          20,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          14,
-          0.5,
-          18,
-          12
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 14.5, 0, 15, 1]
-      }
-    },
-    {
-      "id": "road-trunk_link-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["==", ["get", "type"], "trunk_link"]
-        ]
-      ],
       "layout": {
-        "line-cap": "round",
         "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.75,
-          20,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.5,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 10.99, 0, 11, 1]
+        "line-cap": "butt",
+        "line-round-limit": 2
       }
     },
     {
-      "id": "road-motorway_link-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 10,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["==", ["get", "class"], "motorway_link"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.75,
-          20,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.5,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 10.99, 0, 11, 1]
-      }
-    },
-    {
-      "id": "road-pedestrian-polygon-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
+      "id": "road_path_tunnel",
+      "metadata": { "auto_generated": true, "generator": "roads" },
       "minzoom": 12,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "Polygon"],
-        [
-          "all",
-          ["!=", ["get", "type"], "platform"],
-          ["==", ["get", "structure"], "none"],
-          ["match", ["get", "class"], ["path", "pedestrian"], true, false]
-        ]
-      ],
-      "layout": {
-        "visibility": "visible",
-        "line-cap": "round"
-      },
-      "paint": {
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-width": [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          12,
-          0.5,
-          16,
-          1,
-          20,
-          2
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 15.5, 1, 16, 1],
-        "line-gap-width": 1
-      }
-    },
-    {
-      "id": "road-street_limited-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["==", ["get", "class"], "street_limited"],
-          ["==", ["get", "structure"], "none"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.75,
-          20,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          13,
-          0,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 13.99, 0, 14, 1]
-      }
-    },
-    {
-      "id": "road-street-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["!=", ["get", "type"], "platform"],
-          ["==", ["get", "structure"], "none"],
-          ["match", ["get", "class"], ["pedestrian", "street"], true, false]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.75,
-          20,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          13,
-          0,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 13.99, 0, 14, 1]
-      }
-    },
-    {
-      "id": "road-secondary-tertiary-case",
       "type": "line",
       "source": "mapbox_composite",
       "source-layer": "road",
       "filter": [
         "all",
-        ["==", ["geometry-type"], "LineString"],
         [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["match", ["get", "class"], ["secondary", "tertiary"], true, false]
-        ]
+          "match",
+          ["get", "class"],
+          ["path", "pedestrian", "footway", "steps", "track"],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "tunnel"],
+        ["match", ["get", "type"], ["platform"], false, true]
       ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
       "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.2],
-          ["zoom"],
-          10,
-          0.5,
-          11,
-          0.83,
-          18,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          9,
-          0.95,
-          10,
-          1,
-          18,
-          26
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 10.1, 0, 11, 1]
-      }
-    },
-    {
-      "id": "road-primary-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["match", ["get", "class"], ["primary_link", "primary"], true, false]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          10,
-          1,
-          16,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          5,
-          0.75,
-          18,
-          32
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 9.5, 0, 10, 1]
-      }
-    },
-    {
-      "id": "road-trunk-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["==", ["get", "class"], "trunk"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          7,
-          0.65,
-          8,
-          1,
-          10,
-          1,
-          16,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          5,
-          1.25,
-          7,
-          1,
-          8,
-          1.68,
-          18,
-          36
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 6.5, 0, 7, 1]
-      }
-    },
-    {
-      "id": "road-motorway-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 6,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["==", ["get", "class"], "motorway"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          10,
-          1,
-          16,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          5,
-          1.25,
-          18,
-          36
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 6.5, 0, 7, 1]
-      }
-    },
-    {
-      "id": "road-service-link-track",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["!=", ["get", "type"], "trunk_link"],
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          [
-            "match",
-            ["get", "class"],
-            ["link", "service", "track", "secondary_link", "tertiary_link"],
-            true,
-            false
-          ]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          14,
-          0.5,
-          18,
-          12
-        ],
-        "line-color": "rgb(255,255,255)"
-      }
-    },
-
-    {
-      "id": "road-construction",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["==", ["get", "class"], "construction"],
-          ["==", ["get", "structure"], "none"]
-        ]
-      ],
-      "layout": {
-        "line-join": "miter",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12.5,
-          0.5,
-          14,
-          2,
-          18,
-          18
-        ],
         "line-color": "rgb(255,255,255)",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 13.99, 0, 14, 1],
-        "line-dasharray": [
-          "step",
-          ["zoom"],
-          ["literal", [0.4, 0.8]],
-          15,
-          ["literal", [0.3, 0.6]],
-          16,
-          ["literal", [0.2, 0.3]],
-          17,
-          ["literal", [0.2, 0.25]],
-          18,
-          ["literal", [0.15, 0.15]]
-        ]
-      }
-    },
-
-    {
-      "id": "road-trunk_link",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["==", ["get", "type"], "trunk_link"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
+        "line-opacity": 0.4,
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
           ["zoom"],
-          12,
-          0.5,
-          14,
-          2,
+          10,
+          0.26,
           18,
-          18
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": 1
-      }
-    },
-
-    {
-      "id": "road-motorway_link",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 10,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["==", ["get", "class"], "motorway_link"]
+          2.6
         ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
       },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.5,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": 1
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
       }
     },
-
     {
-      "id": "road-pedestrian-polygon",
-      "type": "fill",
-      "source": "mapbox_composite",
-      "source-layer": "road",
+      "id": "road_path_case",
+      "metadata": { "auto_generated": true, "generator": "roads" },
       "minzoom": 12,
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "road",
       "filter": [
         "all",
-        ["==", ["geometry-type"], "Polygon"],
         [
-          "all",
-          ["!=", ["get", "type"], "platform"],
-          ["==", ["get", "structure"], "none"],
-          ["match", ["get", "class"], ["path", "pedestrian"], true, false]
-        ]
+          "match",
+          ["get", "class"],
+          ["path", "pedestrian", "footway", "steps", "track"],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "none"],
+        ["match", ["get", "type"], ["platform"], false, true]
       ],
-      "layout": {
-        "visibility": "visible"
-      },
       "paint": {
-        "fill-color": "rgb(255,255,255)",
-        "fill-opacity": 1
+        "line-color": "rgb(200,200,200)",
+        "line-opacity": 1,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0.41,
+          18,
+          4.1
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
       }
     },
     {
-      "id": "road-polygon",
-      "type": "fill",
+      "id": "road_path",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 12,
+      "type": "line",
       "source": "mapbox_composite",
       "source-layer": "road",
-      "minzoom": 12,
       "filter": [
         "all",
-        ["==", ["geometry-type"], "Polygon"],
         [
-          "all",
-          ["!=", ["get", "class"], "service"],
+          "match",
+          ["get", "class"],
+          ["path", "pedestrian", "footway", "steps", "track"],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "none"],
+        ["match", ["get", "type"], ["platform"], false, true]
+      ],
+      "paint": {
+        "line-color": "rgb(255,255,255)",
+        "line-opacity": 1,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0.26,
+          18,
+          2.6
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round",
+        "line-round-limit": 2
+      }
+    },
+    {
+      "id": "road_path_bridge_case",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 12,
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "match",
+          ["get", "class"],
+          ["path", "pedestrian", "footway", "steps", "track"],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "bridge"],
+        ["match", ["get", "type"], ["platform"], false, true]
+      ],
+      "paint": {
+        "line-color": "rgb(200,200,200)",
+        "line-opacity": 1,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0.41,
+          18,
+          4.1
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
+      }
+    },
+    {
+      "id": "road_path_bridge",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 12,
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "match",
+          ["get", "class"],
+          ["path", "pedestrian", "footway", "steps", "track"],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "bridge"],
+        ["match", ["get", "type"], ["platform"], false, true]
+      ],
+      "paint": {
+        "line-color": "rgb(255,255,255)",
+        "line-opacity": 1,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0.26,
+          18,
+          2.6
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
+      }
+    },
+    {
+      "id": "road_regular_tunnel_case",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 8,
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "match",
+          ["get", "class"],
           [
-            "match",
-            ["get", "class"],
-            ["motorway", "path", "pedestrian", "trunk"],
-            false,
-            true
+            "primary",
+            "primary_link",
+            "secondary",
+            "secondary_link",
+            "tertiary",
+            "tertiary_link",
+            "residential",
+            "street",
+            "street_limited",
+            "service"
           ],
-          ["match", ["get", "structure"], ["tunnel"], false, true]
-        ]
-      ],
-      "layout": {
-        "visibility": "visible"
-      },
-      "paint": {
-        "fill-color": "rgb(255,255,255)"
-      }
-    },
-
-    {
-      "id": "road-street_limited",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["==", ["get", "class"], "street_limited"],
-          ["==", ["get", "structure"], "none"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12.5,
-          0.5,
-          14,
-          2,
-          18,
-          18
+          true,
+          false
         ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 13.99, 0, 14, 1]
-      }
-    },
-
-    {
-      "id": "road-street",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["!=", ["get", "type"], "platform"],
-          ["==", ["get", "structure"], "none"],
-          ["match", ["get", "class"], ["pedestrian", "street"], true, false]
-        ]
+        ["==", ["get", "structure"], "tunnel"],
+        ["match", ["get", "type"], ["platform"], false, true]
       ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
       "paint": {
+        "line-color": "rgb(200,200,200)",
+        "line-opacity": 0.4,
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
           ["zoom"],
-          12.5,
-          0.5,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 13.99, 0, 14, 1]
-      }
-    },
-
-    {
-      "id": "road-secondary-tertiary",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 6,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["match", ["get", "class"], ["secondary", "tertiary"], true, false]
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          9,
-          0.95,
           10,
-          1,
+          1.01,
           18,
-          26
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": [
-          "interpolate",
-          ["exponential", 1.2],
-          ["zoom"],
-          8.5,
-          0,
-          9,
-          1
+          10.1
         ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
       }
     },
-
     {
-      "id": "road-primary",
+      "id": "road_regular_tunnel",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
       "source-layer": "road",
       "filter": [
         "all",
-        ["==", ["geometry-type"], "LineString"],
         [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["match", ["get", "class"], ["primary_link", "primary"], true, false]
-        ]
+          "match",
+          ["get", "class"],
+          [
+            "primary",
+            "primary_link",
+            "secondary",
+            "secondary_link",
+            "tertiary",
+            "tertiary_link",
+            "residential",
+            "street",
+            "street_limited",
+            "service"
+          ],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "tunnel"],
+        ["match", ["get", "type"], ["platform"], false, true]
       ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
       "paint": {
+        "line-color": "rgb(255,255,255)",
+        "line-opacity": 0.4,
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
           ["zoom"],
-          7,
-          0.95,
+          10,
+          0.86,
           18,
-          32
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 6.5, 0, 7, 1]
+          8.6
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
       }
     },
-
     {
-      "id": "road-trunk",
+      "id": "road_regular_case",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
       "source-layer": "road",
       "filter": [
         "all",
-        ["==", ["geometry-type"], "LineString"],
         [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["==", ["get", "class"], "trunk"]
-        ]
+          "match",
+          ["get", "class"],
+          [
+            "primary",
+            "primary_link",
+            "secondary",
+            "secondary_link",
+            "tertiary",
+            "tertiary_link",
+            "residential",
+            "street",
+            "street_limited",
+            "service"
+          ],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "none"],
+        ["match", ["get", "type"], ["platform"], false, true]
       ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
       "paint": {
+        "line-color": "rgb(200,200,200)",
+        "line-opacity": 1,
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
           ["zoom"],
-          7,
-          1,
-          8,
-          1.68,
+          10,
+          1.01,
           18,
-          36
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 6, 0, 7, 1]
+          10.1
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
       }
     },
     {
-      "id": "road-motorway",
+      "id": "road_regular",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
       "source-layer": "road",
       "filter": [
         "all",
-        ["==", ["geometry-type"], "LineString"],
         [
-          "all",
-          ["match", ["get", "structure"], ["tunnel"], false, true],
-          ["==", ["get", "class"], "motorway"]
-        ]
+          "match",
+          ["get", "class"],
+          [
+            "primary",
+            "primary_link",
+            "secondary",
+            "secondary_link",
+            "tertiary",
+            "tertiary_link",
+            "residential",
+            "street",
+            "street_limited",
+            "service"
+          ],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "none"],
+        ["match", ["get", "type"], ["platform"], false, true]
       ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
       "paint": {
+        "line-color": "rgb(255,255,255)",
+        "line-opacity": 1,
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
           ["zoom"],
-          7,
-          1.47,
+          10,
+          0.86,
           18,
-          36
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 6, 0, 7, 1]
+          8.6
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round",
+        "line-round-limit": 2
       }
     },
     {
-      "id": "rail",
+      "id": "road_regular_bridge_case",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 8,
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "match",
+          ["get", "class"],
+          [
+            "primary",
+            "primary_link",
+            "secondary",
+            "secondary_link",
+            "tertiary",
+            "tertiary_link",
+            "residential",
+            "street",
+            "street_limited",
+            "service"
+          ],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "bridge"],
+        ["match", ["get", "type"], ["platform"], false, true]
+      ],
+      "paint": {
+        "line-color": "rgb(200,200,200)",
+        "line-opacity": 1,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          1.01,
+          18,
+          10.1
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
+      }
+    },
+    {
+      "id": "road_regular_bridge",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 8,
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "match",
+          ["get", "class"],
+          [
+            "primary",
+            "primary_link",
+            "secondary",
+            "secondary_link",
+            "tertiary",
+            "tertiary_link",
+            "residential",
+            "street",
+            "street_limited",
+            "service"
+          ],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "bridge"],
+        ["match", ["get", "type"], ["platform"], false, true]
+      ],
+      "paint": {
+        "line-color": "rgb(255,255,255)",
+        "line-opacity": 1,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0.86,
+          18,
+          8.6
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
+      }
+    },
+    {
+      "id": "road_motor_tunnel_case",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 8,
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "match",
+          ["get", "class"],
+          ["motorway", "trunk", "motorway_link", "trunk_link"],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "tunnel"],
+        ["match", ["get", "type"], ["platform"], false, true]
+      ],
+      "paint": {
+        "line-color": "rgb(200,200,200)",
+        "line-opacity": 0.4,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          1.21,
+          18,
+          12.1
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
+      }
+    },
+    {
+      "id": "road_motor_tunnel",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 8,
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "match",
+          ["get", "class"],
+          ["motorway", "trunk", "motorway_link", "trunk_link"],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "tunnel"],
+        ["match", ["get", "type"], ["platform"], false, true]
+      ],
+      "paint": {
+        "line-color": "rgb(240,240,240)",
+        "line-opacity": 0.4,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          1.06,
+          18,
+          10.6
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
+      }
+    },
+    {
+      "id": "road_motor_case",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 8,
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "match",
+          ["get", "class"],
+          ["motorway", "trunk", "motorway_link", "trunk_link"],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "none"],
+        ["match", ["get", "type"], ["platform"], false, true]
+      ],
+      "paint": {
+        "line-color": "rgb(200,200,200)",
+        "line-opacity": 1,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          1.21,
+          18,
+          12.1
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
+      }
+    },
+    {
+      "id": "road_motor",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 8,
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "match",
+          ["get", "class"],
+          ["motorway", "trunk", "motorway_link", "trunk_link"],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "none"],
+        ["match", ["get", "type"], ["platform"], false, true]
+      ],
+      "paint": {
+        "line-color": "rgb(240,240,240)",
+        "line-opacity": 1,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          1.06,
+          18,
+          10.6
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round",
+        "line-round-limit": 2
+      }
+    },
+    {
+      "id": "road_motor_bridge_case",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 8,
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "match",
+          ["get", "class"],
+          ["motorway", "trunk", "motorway_link", "trunk_link"],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "bridge"],
+        ["match", ["get", "type"], ["platform"], false, true]
+      ],
+      "paint": {
+        "line-color": "rgb(200,200,200)",
+        "line-opacity": 1,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          1.21,
+          18,
+          12.1
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
+      }
+    },
+    {
+      "id": "road_motor_bridge",
+      "metadata": { "auto_generated": true, "generator": "roads" },
+      "minzoom": 8,
+      "type": "line",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "match",
+          ["get", "class"],
+          ["motorway", "trunk", "motorway_link", "trunk_link"],
+          true,
+          false
+        ],
+        ["==", ["get", "structure"], "bridge"],
+        ["match", ["get", "type"], ["platform"], false, true]
+      ],
+      "paint": {
+        "line-color": "rgb(240,240,240)",
+        "line-opacity": 1,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          1.06,
+          18,
+          10.6
+        ]
+      },
+      "layout": {
+        "line-join": "round",
+        "line-cap": "butt",
+        "line-round-limit": 2
+      }
+    },
+    {
+      "id": "road_rail",
       "type": "line",
       "source": "mapbox_composite",
       "source-layer": "road",
@@ -1545,7 +1259,7 @@
       }
     },
     {
-      "id": "rail_ticks",
+      "id": "road_rail_ticks",
       "type": "line",
       "source": "mapbox_composite",
       "source-layer": "road",
@@ -1578,6 +1292,87 @@
         "line-dasharray": [0.1, 5]
       }
     },
+
+    {
+      "id": "road_pedestrian_polygon",
+      "type": "fill",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "minzoom": 12,
+      "filter": [
+        "all",
+        ["==", ["geometry-type"], "Polygon"],
+        [
+          "all",
+          ["!=", ["get", "type"], "platform"],
+          ["==", ["get", "structure"], "none"],
+          ["match", ["get", "class"], ["path", "pedestrian"], true, false]
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "rgb(255,255,255)",
+        "fill-opacity": 1
+      }
+    },
+    {
+      "id": "road_pedestrian_polygon_pattern",
+      "type": "fill",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "minzoom": 12,
+      "filter": [
+        "all",
+        ["==", ["geometry-type"], "Polygon"],
+        [
+          "all",
+          ["!=", ["get", "type"], "platform"],
+          ["==", ["get", "structure"], "none"],
+          ["match", ["get", "class"], ["path", "pedestrian"], true, false]
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "rgb(255,255,255)",
+        "fill-opacity": 0.2,
+        "fill-pattern": "geol_hatch_01",
+        "fill-antialias": false
+      }
+    },
+    {
+      "id": "road_polygon",
+      "type": "fill",
+      "source": "mapbox_composite",
+      "source-layer": "road",
+      "minzoom": 12,
+      "filter": [
+        "all",
+        ["==", ["geometry-type"], "Polygon"],
+        [
+          "all",
+          ["!=", ["get", "class"], "service"],
+          [
+            "match",
+            ["get", "class"],
+            ["motorway", "path", "pedestrian", "trunk"],
+            false,
+            true
+          ],
+          ["match", ["get", "structure"], ["tunnel"], false, true]
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "rgb(255,255,255)"
+      }
+    },
+
     {
       "id": "building",
       "type": "fill",
@@ -1588,8 +1383,7 @@
       },
       "paint": {
         "fill-color": "rgba(220,220,220,0.5)",
-        "fill-opacity": 0.8,
-        "fill-outline-color": "rgba(20,20,20,0.5)"
+        "fill-opacity": 0.8
       },
       "minzoom": 15,
       "filter": [
@@ -1607,8 +1401,8 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-opacity": 0.8
+        "line-color": "rgb(155,155,155)",
+        "line-opacity": 0.4
       },
       "minzoom": 15,
       "filter": [
@@ -1638,862 +1432,7 @@
         ["==", "extrude", "true"]
       ]
     },
-    {
-      "id": "bridge-street-low",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        ["match", ["get", "structure"], ["bridge"], true, false],
-        [
-          "match",
-          ["get", "class"],
-          ["street", "path", "street_limited", "pedestrian"],
-          true,
-          false
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12.5,
-          0.5,
-          14,
-          2,
-          18,
-          5
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          11,
-          0,
-          11.25,
-          1,
-          14,
-          1
-        ]
-      }
-    },
-    {
-      "id": "bridge-service-link-track-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["!=", ["get", "type"], "trunk_link"],
-          ["match", ["get", "structure"], ["brige"], true, false],
-          [
-            "match",
-            ["get", "class"],
-            ["link", "service", "track", "secondary_link", "tertiary_link"],
-            true,
-            false
-          ]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.75,
-          20,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          14,
-          0.5,
-          18,
-          12
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 14.5, 0, 15, 1]
-      }
-    },
-    {
-      "id": "bridge-trunk_link-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          ["==", ["get", "type"], "trunk_link"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.75,
-          20,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.5,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 10.99, 0, 11, 1]
-      }
-    },
-    {
-      "id": "bridge-motorway_link-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 10,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          ["==", ["get", "class"], "motorway_link"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.75,
-          20,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.5,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 10.99, 0, 11, 1]
-      }
-    },
-    {
-      "id": "bridge-street-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["!=", ["get", "type"], "platform"],
-          ["==", ["get", "structure"], "bridge"],
-          ["match", ["get", "class"], ["pedestrian", "street"], true, false]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.75,
-          20,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          13,
-          0,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 13.99, 0, 14, 1]
-      }
-    },
-    {
-      "id": "bridge-secondary-tertiary-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          ["match", ["get", "class"], ["secondary", "tertiary"], true, false]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.2],
-          ["zoom"],
-          10,
-          0.5,
-          11,
-          0.83,
-          18,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          9,
-          0.95,
-          10,
-          1,
-          18,
-          26
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 10.1, 0, 11, 1]
-      }
-    },
-    {
-      "id": "bridge-primary-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          ["match", ["get", "class"], ["primary_link", "primary"], true, false]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          10,
-          1,
-          16,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          5,
-          0.75,
-          18,
-          32
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 9.5, 0, 10, 1]
-      }
-    },
-    {
-      "id": "bridge-trunk-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          ["==", ["get", "class"], "trunk"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          7,
-          0.65,
-          8,
-          1,
-          10,
-          1,
-          16,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          5,
-          1.25,
-          7,
-          1,
-          8,
-          1.68,
-          18,
-          36
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 6.5, 0, 7, 1]
-      }
-    },
-    {
-      "id": "bridge-motorway-case",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 6,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          ["==", ["get", "class"], "motorway"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          10,
-          1,
-          16,
-          2
-        ],
-        "line-color": "rgba(220,220,220,0.5)",
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          5,
-          1.25,
-          18,
-          36
-        ],
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 6.5, 0, 7, 1]
-      }
-    },
-    {
-      "id": "bridge-service-link-track",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["!=", ["get", "type"], "trunk_link"],
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          [
-            "match",
-            ["get", "class"],
-            ["link", "service", "track", "secondary_link", "tertiary_link"],
-            true,
-            false
-          ]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          14,
-          0.5,
-          18,
-          12
-        ],
-        "line-color": "rgb(255,255,255)"
-      }
-    },
 
-    {
-      "id": "bridge-construction",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 14,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["==", ["get", "class"], "construction"],
-          ["==", ["get", "structure"], "bridge"]
-        ]
-      ],
-      "layout": {
-        "line-join": "miter",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12.5,
-          0.5,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 13.99, 0, 14, 1],
-        "line-dasharray": [
-          "step",
-          ["zoom"],
-          ["literal", [0.4, 0.8]],
-          15,
-          ["literal", [0.3, 0.6]],
-          16,
-          ["literal", [0.2, 0.3]],
-          17,
-          ["literal", [0.2, 0.25]],
-          18,
-          ["literal", [0.15, 0.15]]
-        ]
-      }
-    },
-
-    {
-      "id": "bridge-trunk_link",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          ["==", ["get", "type"], "trunk_link"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.5,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": 1
-      }
-    },
-
-    {
-      "id": "bridge-motorway_link",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 10,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          ["==", ["get", "class"], "motorway_link"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12,
-          0.5,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": 1
-      }
-    },
-
-    {
-      "id": "bridge-pedestrian-polygon",
-      "type": "fill",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 12,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "Polygon"],
-        [
-          "all",
-          ["!=", ["get", "type"], "platform"],
-          ["==", ["get", "structure"], "bridge"],
-          ["match", ["get", "class"], ["path", "pedestrian"], true, false]
-        ]
-      ],
-      "layout": {
-        "visibility": "visible"
-      },
-      "paint": {
-        "fill-color": "rgb(255,255,255)",
-        "fill-opacity": 1
-      }
-    },
-    {
-      "id": "bridge-polygon",
-      "type": "fill",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 12,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "Polygon"],
-        [
-          "all",
-          ["!=", ["get", "class"], "service"],
-          [
-            "match",
-            ["get", "class"],
-            ["motorway", "path", "pedestrian", "trunk"],
-            false,
-            true
-          ],
-          ["match", ["get", "structure"], ["bridge"], true, false]
-        ]
-      ],
-      "layout": {
-        "visibility": "visible"
-      },
-      "paint": {
-        "fill-color": "rgb(255,255,255)"
-      }
-    },
-
-    {
-      "id": "bridge-street_limited",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["==", ["get", "class"], "street_limited"],
-          ["==", ["get", "structure"], "bridge"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12.5,
-          0.5,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 13.99, 0, 14, 1]
-      }
-    },
-
-    {
-      "id": "bridge-street",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 11,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["!=", ["get", "type"], "platform"],
-          ["==", ["get", "structure"], "bridge"],
-          ["match", ["get", "class"], ["pedestrian", "street"], true, false]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          12.5,
-          0.5,
-          14,
-          2,
-          18,
-          18
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 13.99, 0, 14, 1]
-      }
-    },
-
-    {
-      "id": "bridge-secondary-tertiary",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "minzoom": 6,
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          ["match", ["get", "class"], ["secondary", "tertiary"], true, false]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          9,
-          0.95,
-          10,
-          1,
-          18,
-          26
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": [
-          "interpolate",
-          ["exponential", 1.2],
-          ["zoom"],
-          8.5,
-          0,
-          9,
-          1
-        ]
-      }
-    },
-
-    {
-      "id": "bridge-primary",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          ["match", ["get", "class"], ["primary_link", "primary"], true, false]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          7,
-          0.95,
-          18,
-          32
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 6.5, 0, 7, 1]
-      }
-    },
-
-    {
-      "id": "bridge-trunk",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          ["==", ["get", "class"], "trunk"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          7,
-          1,
-          8,
-          1.68,
-          18,
-          36
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 6, 0, 7, 1]
-      }
-    },
-    {
-      "id": "bridge-motorway",
-      "type": "line",
-      "source": "mapbox_composite",
-      "source-layer": "road",
-      "filter": [
-        "all",
-        ["==", ["geometry-type"], "LineString"],
-        [
-          "all",
-          ["match", ["get", "structure"], ["bridge"], true, false],
-          ["==", ["get", "class"], "motorway"]
-        ]
-      ],
-      "layout": {
-        "line-cap": "butt",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.5],
-          ["zoom"],
-          7,
-          1.47,
-          18,
-          36
-        ],
-        "line-color": "rgb(255,255,255)",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 6, 0, 7, 1]
-      }
-    },
     {
       "id": "road-label",
       "type": "symbol",
@@ -2869,7 +1808,7 @@
       "type": "symbol",
       "source": "mapbox_composite",
       "source-layer": "place_label",
-      "minzoom": 5,
+      "minzoom": 5.01,
       "filter": [
         "all",
         ["<=", ["get", "filterrank"], 1],
@@ -2935,17 +1874,16 @@
         "icon-image": "maki-star-11",
         "icon-size": ["interpolate", ["linear"], ["zoom"], 4, 0.5, 15, 1.5],
         "icon-rotation-alignment": "viewport",
-        "text-allow-overlap": false,
-        "text-variable-anchor": ["bottom-right", "top-right"],
-        "text-radial-offset": 0.15,
+        "text-variable-anchor": ["bottom-right", "top-right", "top-left"],
+        "text-radial-offset": 0,
         "visibility": "visible"
       },
       "paint": {
         "text-halo-color": "rgba(48,48,48,0)",
         "text-halo-blur": 0.5,
         "text-halo-width": 1.5,
-        "icon-translate": [2, 2],
-        "text-translate": [-2, -2],
+        "icon-translate": [3, 3],
+        "text-translate": [-3, -3],
         "text-color": "rgba(47,47,47,0.8)",
         "icon-color": "rgba(47,47,47,0.8)"
       }
