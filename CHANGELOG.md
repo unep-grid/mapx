@@ -1,3 +1,8 @@
+  - [1.12.3-alpha.8](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.8) 
+
+    - APP/API
+        - Should solve issues #917, #916, #890, #919 and #920
+
   - [1.12.3-alpha.7](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.7) 
 
     - APP
