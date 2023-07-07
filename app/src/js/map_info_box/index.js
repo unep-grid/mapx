@@ -3,7 +3,7 @@ import { getDictItem } from "../language";
 import { isNotEmpty } from "../is_test/index.js";
 import "./style.less";
 
-const debug = true;
+const debug = false;
 
 /**
  * MapInfoBpx
