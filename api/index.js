@@ -12,6 +12,7 @@ import log from "#mapx/log";
 import * as upload from "#mapx/upload";
 import * as view from "#mapx/view";
 import * as source from "#mapx/source";
+import { mwHealth } from "#mapx/health";
 import { mwSetHeaders, mwGetConfigMap } from "#mapx/helpers";
 import { mwGemetSearchText, mwGemetSearchConcept } from "#mapx/gemet";
 import { mwGetSearchKey } from "#mapx/search";
@@ -99,6 +100,7 @@ io.use((socket, next) => {
 /*
  * Express routes
  */
+app.get("/health", mwHealth);
 app.get("/get/view/item/:id", view.mwGet);
 app.get("/get/view/metadata/:id", view.mwGetMetadata);
 app.get("/get/views/list/project/", view.mwGetListByProject);
