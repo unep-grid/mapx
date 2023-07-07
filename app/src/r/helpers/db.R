@@ -72,6 +72,21 @@ mxDbGetQuery <- function(
         }
       }
     },
+    error = function(e) {
+      mxDebugMsg("There was an error in the mxDbGetQuery. The session will be terminated.")
+
+      #
+      # If available, clean DB pool
+      #
+      if (exists("mxDbPoolClose")) {
+        mxDbPoolClose()
+      }
+
+      quit(
+        save = "no",
+        status = 1,
+      )
+    },
     finally = {
       mxDbClearResult(con)
     }
@@ -153,7 +168,6 @@ mxDbSlimViews <- function(max = 10, daysback = 60) {
 #' @return Boolean worked or not
 #' @export
 mxDbUpdate <- function(table, column, idCol = "id", id, value, path = NULL, expectedRowsAffected = 1) {
-
   # explicit check
   stopifnot(mxDbExistsTable(table))
 
@@ -164,7 +178,6 @@ mxDbUpdate <- function(table, column, idCol = "id", id, value, path = NULL, expe
 
   # Use single connection for all
   mxDbWithUniqueCon(function(con) {
-
     # final query
     query <- NULL
 
@@ -304,7 +317,6 @@ mxDbGetLayerExtent <- function(table = NULL, geomColumn = "geom") {
 
 
   if (mxDbExistsTable(table)) {
-
     #
     # Get extent
     #
@@ -1563,7 +1575,6 @@ mxDbAnalysisOverlaps <- function(inputBaseLayer, inputMaskLayer, outName, dataOw
   msg <- character(0)
 
   if (!mxDbExistsTable(outName)) {
-
     # get geometry type.
     # NOTE: qgis seems confused if the geom type is not updated.
     geomType <- mxDbGetQuery(
