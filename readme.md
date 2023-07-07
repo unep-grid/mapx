@@ -1,10 +1,11 @@
 # [MapX](https://app.mapx.org/)
 
-[MapX](https://app.mapx.org/) is a an online platform for managing geospatial data on natural resources, developed by [UNEP/GRID-Geneva](https://unepgrid.ch/en) and [UN Environment](https://www.unep.org/).
+[MapX](https://app.mapx.org/) is an online platform for managing geospatial data on natural resources, developed by [UNEP/GRID-Geneva](https://unepgrid.ch/en) - a data centre resulting from the partnership between
+[UN Environment Programme](https://www.unep.org/), the Swiss [Federal Office for the Environment](https://www.bafu.admin.ch/) and the [University of Geneva](https://unige.ch/).
 
 Field applications of MapX are varied and include chemical management, disaster risk reduction, biodiversity planning, land-use planning, extractive industry, renewable energy and environmental security. 
 
-MapX targets a wide community of users that are primarily UN Environment and partners, the Secretariats of Multilateral Environmental Agreements (MEAs) and other UN agencies mandated to collect and use geospatial data in environmental decision-making. Civil society groups, non-governmental organizations, academia and citizens complement this set of users. 
+MapX targets a wide community of users that are primarily UN Environment Programme and partners, the Secretariats of Multilateral Environmental Agreements (MEAs) and other UN agencies mandated to collect and use geospatial data in environmental decision-making. Civil society groups, non-governmental organizations, academia and citizens complement this set of users. 
 
 MapX was designed in 2014 and since then continuously improved with wide international stakeholder consultations. 
 
