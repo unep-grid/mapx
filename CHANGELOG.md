@@ -1,3 +1,10 @@
+  - [1.12.3-alpha.7](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.7) 
+
+    - APP
+        - Themes : 
+            - Removed "cycle through themes" behaviour in the theme toggle button
+            - Added a button to switch between monochrome / classic themes and more colored ones
+
   - [1.12.3-alpha.5](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.5) 
     
     - APP
