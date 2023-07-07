@@ -3005,9 +3005,14 @@
     "es": "Catalogar"
   },
   {
-    "id": "btn_theme_switch",
-    "en": "Switch theme",
-    "es": "Cambiar el tema"
+    "id": "btn_toggle_theme_monochrome",
+    "en": "Toggle monochrome theme",
+    "es": "Alternar tema monocromático"
+  },
+  {
+    "id": "btn_toggle_theme_dark",
+    "en": "Toggle dark theme",
+    "es": "Alternar tema oscuro"
   },
   {
     "id": "btn_theme_sat",

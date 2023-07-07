@@ -1,9 +1,9 @@
 {
   "id": "classic_light",
   "description": { "en": "White and dark gray." },
-  "mode": "light",
   "author": "frederic.moser@unepgrid.ch",
-  "sound": "switch-on",
+  "dark": false,
+  "mono": true,
   "colors": {
     "mx_ui_text": {
       "visibility": "visible",

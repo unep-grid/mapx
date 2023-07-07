@@ -3005,9 +3005,14 @@
     "ar": "فهرس"
   },
   {
-    "id": "btn_theme_switch",
-    "en": "Switch theme",
-    "ar": "تبديل الموضوع "
+    "id": "btn_toggle_theme_monochrome",
+    "en": "Toggle monochrome theme",
+    "ar": "تبديل السمة أحادية اللون"
+  },
+  {
+    "id": "btn_toggle_theme_dark",
+    "en": "Toggle dark theme",
+    "ar": "تبديل المظهر الداكن"
   },
   {
     "id": "btn_theme_sat",

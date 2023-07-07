@@ -3005,9 +3005,14 @@
     "zh": "目录"
   },
   {
-    "id": "btn_theme_switch",
-    "en": "Switch theme",
-    "zh": "切换主题"
+    "id": "btn_toggle_theme_monochrome",
+    "en": "Toggle monochrome theme",
+    "zh": "切换单色主题"
+  },
+  {
+    "id": "btn_toggle_theme_dark",
+    "en": "Toggle dark theme",
+    "zh": "切换深色主题"
   },
   {
     "id": "btn_theme_sat",

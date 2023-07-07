@@ -4,6 +4,7 @@ import { FlashCircle } from "./../icon_flash/index.js";
 import { bindAll } from "./../bind_class_methods/index.js";
 import { EventSimple } from "../event_simple";
 import { shake } from "../elshake/index.js";
+import { isFunction } from "../is_test/index.js";
 
 class Button extends EventSimple {
   constructor(opt) {
@@ -11,6 +12,7 @@ class Button extends EventSimple {
     const btn = this;
     const def = {
       action: () => {},
+      onInit: null,
       classesButton: [],
       classesIcon: [],
       key: null,
@@ -25,11 +27,16 @@ class Button extends EventSimple {
 
   init() {
     const btn = this;
-    const hasFun = btn.opt.action instanceof Function;
-    if (!hasFun) {
-      btn.opt.action = () => {};
+    btn.setAction(btn.opt.action);
+    if (isFunction(btn.opt.onInit)) {
+      btn.opt.onInit(btn);
     }
-    btn.opt.action = btn.opt.action.bind(btn);
+  }
+
+  setAction(action) {
+    const btn = this;
+    action = isFunction(action) ? action : () => {};
+    btn.opt.action = action.bind(btn);
   }
 
   get rect() {
@@ -118,6 +125,14 @@ class Button extends EventSimple {
     return this.elButton.classList.contains("active");
   }
 
+  activate(value) {
+    if (value) {
+      this.enable();
+    } else {
+      this.disable();
+    }
+  }
+
   enable() {
     if (this.isLocked()) {
       return;
@@ -130,6 +145,17 @@ class Button extends EventSimple {
       return;
     }
     return this.elButton.classList.remove("active");
+  }
+
+  toggle() {
+    if (this.isLocked()) {
+      return;
+    }
+    if (this.isActive()) {
+      this.disable();
+    } else {
+      this.enable();
+    }
   }
 
   lock() {

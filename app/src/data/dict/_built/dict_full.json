@@ -7813,17 +7813,30 @@
     "de": "Katalog"
   },
   {
-    "id": "btn_theme_switch",
-    "en": "Switch theme",
-    "fr": "Changer le thème",
-    "es": "Cambiar el tema",
-    "ru": "Сменить тему ",
-    "zh": "切换主题",
-    "ar": "تبديل الموضوع ",
-    "fa": "تغییر طرح زمینه ",
-    "ps": "موضوع بدل کړئ ",
-    "bn": "থিম স্যুইচ করুন ",
-    "de": "Thema wechseln "
+    "id": "btn_toggle_theme_monochrome",
+    "en": "Toggle monochrome theme",
+    "fr": "Basculer en mode monochrome",
+    "es": "Alternar tema monocromático",
+    "ru": "Переключить монохромную тему",
+    "zh": "切换单色主题",
+    "ar": "تبديل السمة أحادية اللون",
+    "fa": "تم تک رنگ را تغییر دهید",
+    "ps": "د مونوکروم موضوع بدل کړئ",
+    "bn": "একরঙা থিম টগল করুন",
+    "de": "Monochromes Design umschalten"
+  },
+  {
+    "id": "btn_toggle_theme_dark",
+    "en": "Toggle dark theme",
+    "fr": "Basculer en mode sombre",
+    "es": "Alternar tema oscuro",
+    "ru": "Включить тёмную тему",
+    "zh": "切换深色主题",
+    "ar": "تبديل المظهر الداكن",
+    "fa": "تم تاریک را تغییر دهید",
+    "ps": "تیاره موضوع بدله کړئ",
+    "bn": "অন্ধকার থিম টগল করুন",
+    "de": "Dunkles Thema umschalten"
   },
   {
     "id": "btn_theme_sat",

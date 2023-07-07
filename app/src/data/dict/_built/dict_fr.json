@@ -3005,9 +3005,14 @@
     "fr": "Catalogue"
   },
   {
-    "id": "btn_theme_switch",
-    "en": "Switch theme",
-    "fr": "Changer le thème"
+    "id": "btn_toggle_theme_monochrome",
+    "en": "Toggle monochrome theme",
+    "fr": "Basculer en mode monochrome"
+  },
+  {
+    "id": "btn_toggle_theme_dark",
+    "en": "Toggle dark theme",
+    "fr": "Basculer en mode sombre"
   },
   {
     "id": "btn_theme_sat",

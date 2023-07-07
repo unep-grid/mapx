@@ -2,8 +2,8 @@
   "id": "classic_dark",
   "description": { "en": "Dark gray theme." },
   "author": "frederic.moser@unepgrid.ch",
-  "mode": "dark",
-  "sound": "switch-off",
+  "dark": true,
+  "mono": true,
   "colors": {
     "mx_ui_text": {
       "visibility": "visible",

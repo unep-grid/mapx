@@ -3,9 +3,9 @@
   "description": {
     "en": "Water theme"
   },
-  "mode": "light",
   "author": "F.Moser",
-  "sound": "switch-on",
+  "dark": false,
+  "mono": false,
   "colors": {
     "mx_ui_text": {
       "visibility": "visible",

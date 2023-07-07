@@ -3005,9 +3005,14 @@
     "ps": "نوملړ"
   },
   {
-    "id": "btn_theme_switch",
-    "en": "Switch theme",
-    "ps": "موضوع بدل کړئ "
+    "id": "btn_toggle_theme_monochrome",
+    "en": "Toggle monochrome theme",
+    "ps": "د مونوکروم موضوع بدل کړئ"
+  },
+  {
+    "id": "btn_toggle_theme_dark",
+    "en": "Toggle dark theme",
+    "ps": "تیاره موضوع بدله کړئ"
   },
   {
     "id": "btn_theme_sat",

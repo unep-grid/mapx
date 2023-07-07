@@ -3005,9 +3005,14 @@
     "de": "Katalog"
   },
   {
-    "id": "btn_theme_switch",
-    "en": "Switch theme",
-    "de": "Thema wechseln "
+    "id": "btn_toggle_theme_monochrome",
+    "en": "Toggle monochrome theme",
+    "de": "Monochromes Design umschalten"
+  },
+  {
+    "id": "btn_toggle_theme_dark",
+    "en": "Toggle dark theme",
+    "de": "Dunkles Thema umschalten"
   },
   {
     "id": "btn_theme_sat",

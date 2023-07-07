@@ -16,8 +16,8 @@ import {
 import { modalMarkdown } from "../modal_markdown/index.js";
 import { settings } from "./../settings";
 import { UAParser } from "ua-parser-js";
-import { shake } from "../elshake/index.js";
 import { theme } from "./../mx.js";
+import { panel_tools } from "./../mx.js";
 
 const uaparser = new UAParser();
 const isNotBlink = uaparser.getEngine().name !== "Blink";
@@ -85,9 +85,18 @@ export function generateButtons() {
       action: toggleFullScreen,
     }),
     new Button({
-      key: "btn_theme_switch",
-      classesIcon: ["fa", "fa-adjust", "fa-transition-generic"],
-      action: toggleTheme,
+      key: "btn_toggle_theme_dark",
+      classesIcon: ["fa", "fa-adjust"],
+      onInit: function (btn) {
+        theme.registerButton(btn, "dark");
+      },
+    }),
+    new Button({
+      key: "btn_toggle_theme_monochrome",
+      classesIcon: ["fa", "fa-paint-brush"],
+      onInit: function (btn) {
+        theme.registerButton(btn, "mono");
+      },
     }),
     new Button({
       key: "btn_3d_terrain",
@@ -219,20 +228,6 @@ function toggleFullScreen() {
     screenfull.request();
     btn._fullscreen = true;
   }
-}
-
-async function toggleTheme() {
-  const ctrls = this;
-  if (ctrls._theme_loading) {
-    shake(ctrls.elButton);
-    return;
-  }
-  ctrls._theme_loading = true;
-  const elIcon = ctrls.elButton.querySelector(".fa");
-  elIcon.classList.toggle("fa-rotate-180");
-  const done = await theme.next({ sound: true, save: true, save_url: true });
-  ctrls._theme_loading = false;
-  return done;
 }
 
 /**

@@ -17,11 +17,12 @@ import { default as water_dark } from "./themes/water_dark.json";
 import { default as water_light } from "./themes/water_light.json";
 import switchOn from "./sound/switch-on.mp3";
 import switchOff from "./sound/switch-off.mp3";
-import waterDrops from "./sound/water-drops.mp3";
+import click from "./sound/click.mp3";
 import { fileSelectorJSON } from "../mx_helper_misc";
 import { isNotEmpty } from "../is_test";
 import { fontFamilies, fonts } from "./fonts.js";
 import { validate } from "./validator.js";
+import { Button } from "./../panel_controls/button.js";
 
 import "./style.less";
 
@@ -52,13 +53,23 @@ const global = {
   },
   id: "classic_light",
   id_default: "classic_light",
+  modes: {
+    dark: {
+      mono: "classic_dark",
+      color: "water_dark",
+    },
+    light: {
+      mono: "classic_light",
+      color: "water_light",
+    },
+  },
   colors: null,
   debug: false,
   on: {},
   sounds: {
     "switch-on": switchOn,
     "switch-off": switchOff,
-    "water-drops": waterDrops,
+    "click": click,
   },
 };
 
@@ -96,6 +107,39 @@ class Theme extends EventSimple {
   }
 
   /**
+   * Register dark/mono buttons
+   */
+  registerButton(btn, type) {
+    const t = this;
+    if (!btn instanceof Button) {
+      console.warn("registerButton expects a Button instance");
+      return;
+    }
+    switch (type) {
+      case "dark":
+        t._btn_dark = btn;
+        btn.setAction(() => {
+          btn.toggle();
+          const light = btn.isActive() ? "dark" : "light";
+          const color = t.isMono() ? "mono" : "color";
+          const idTheme = t._opt.modes[light][color];
+          t.set(idTheme, { sound: true, save: true, save_url: true });
+        });
+        break;
+      case "mono":
+        t._btn_mono = btn;
+        btn.setAction(() => {
+          btn.toggle();
+          const color = btn.isActive() ? "mono" : "color";
+          const light = t.isDark() ? "dark" : "light";
+          const idTheme = t._opt.modes[light][color];
+          t.set(idTheme, { sound: true, save: true, save_url: true });
+        });
+        break;
+    }
+  }
+
+  /**
    * Remove
    */
   remove() {
@@ -123,7 +167,20 @@ class Theme extends EventSimple {
   }
 
   mode() {
-    return this._theme.mode;
+    return this.isDark() ? "dark" : "light";
+  }
+
+  isDark() {
+    return !!this._theme.dark;
+  }
+
+  isDarkMode() {
+    const t = this;
+    return t.isDark();
+  }
+
+  isMono() {
+    return !!this._theme.mono;
   }
 
   ids() {
@@ -185,15 +242,19 @@ class Theme extends EventSimple {
    */
   async set(id, opt) {
     const t = this;
+    opt = Object.assign(
+      {},
+      { sound: false, save: false, save_url: false, force: false },
+      opt
+    );
+    let { sound, save, save_url, force } = opt;
     let ok = false;
 
-    if (!opt.force && t._is_setting) {
-      console.warn("Theme : can't set theme, probably too fast");
-      return ok;
-    }
     try {
+      if (!force && t._is_setting) {
+        return ok;
+      }
       t._is_setting = true;
-      let { sound = false, save = false, save_url = false } = opt || {};
       const valid = t.isValidId(id);
 
       if (!valid) {
@@ -204,12 +265,26 @@ class Theme extends EventSimple {
       }
       const theme = t.get(id);
 
+      if (id === t._id) {
+        return ok;
+      }
+
+      if (sound) {
+        const oldTheme = t._theme;
+        const newTheme = theme;
+
+        const idSound =
+          oldTheme.dark && !newTheme.dark
+            ? "switch-on"
+            : !oldTheme.dark && newTheme.dark
+            ? "switch-off"
+            : "click";
+
+        await t.sound(idSound);
+      }
+
       t._id = theme.id;
       t._theme = theme;
-
-      if (sound && theme.sound) {
-        await t.sound(theme.sound);
-      }
 
       if (save) {
         localStorage.setItem("theme@id", id);
@@ -225,6 +300,14 @@ class Theme extends EventSimple {
 
       ok = true;
       t.fire("mode_changed", t.mode());
+
+      if (t._btn_dark) {
+        t._btn_dark.activate(t.isDark());
+      }
+
+      if (t._btn_mono) {
+        t._btn_mono.activate(t.isMono());
+      }
     } catch (e) {
       console.warn(e);
     } finally {
@@ -287,11 +370,6 @@ class Theme extends EventSimple {
       console.warn("Invalid colors.", e);
       return false;
     }
-  }
-
-  isDarkMode() {
-    const t = this;
-    return t.mode() === "dark";
   }
 
   async next(opt) {

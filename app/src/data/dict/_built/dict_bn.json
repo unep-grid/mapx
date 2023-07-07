@@ -3005,9 +3005,14 @@
     "bn": "ক্যাটালগ"
   },
   {
-    "id": "btn_theme_switch",
-    "en": "Switch theme",
-    "bn": "থিম স্যুইচ করুন "
+    "id": "btn_toggle_theme_monochrome",
+    "en": "Toggle monochrome theme",
+    "bn": "একরঙা থিম টগল করুন"
+  },
+  {
+    "id": "btn_toggle_theme_dark",
+    "en": "Toggle dark theme",
+    "bn": "অন্ধকার থিম টগল করুন"
   },
   {
     "id": "btn_theme_sat",

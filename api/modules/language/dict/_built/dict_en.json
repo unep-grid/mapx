@@ -2404,8 +2404,12 @@
     "en": "Catalog"
   },
   {
-    "id": "btn_theme_switch",
-    "en": "Switch theme"
+    "id": "btn_toggle_theme_monochrome",
+    "en": "Toggle monochrome theme"
+  },
+  {
+    "id": "btn_toggle_theme_dark",
+    "en": "Toggle dark theme"
   },
   {
     "id": "btn_theme_sat",
