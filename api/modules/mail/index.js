@@ -175,7 +175,9 @@ export async function sendMailAuto(config) {
     c.subtitle = c.subject;
   }
   const html = templates.email_base;
-  c.footer = templates.email_footer;
+  c.footer = parseTemplate(templates.email_footer, {
+    host: settings.api.host_public,
+  });
   const body = parseTemplate(html, c);
   c.html = body;
   c.text = htmlToText(body);
