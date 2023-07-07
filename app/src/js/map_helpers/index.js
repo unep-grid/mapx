@@ -1646,7 +1646,7 @@ export async function handleClickEvent(e, idMap) {
   const hasSdk = clickModes.includes("sdk");
   const hasCC = clickModes.includes("cc");
   const addPopup = !(hasCC || hasSdk || hasDraw || hasDashboard);
-  const addHighlight = !hasDraw;
+  const addHighlight = !hasDraw && !hasDashboard;
 
   const retrieveAttributes = addPopup || hasSdk;
 
