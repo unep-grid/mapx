@@ -2,25 +2,227 @@
   {
     "pos": {
       "jump": true,
-      "n": 48.86,
-      "s": 26.362,
-      "e": 74.393,
-      "w": 47.087,
-      "lat": 33.876,
-      "lng": 66.15,
+      "n": 37.051,
+      "s": 31.692,
+      "e": 70.348,
+      "w": 63.377,
+      "lat": 34.415,
+      "lng": 66.862,
       "b": -20.788,
-      "p": 49.927,
-      "z": 5.728,
+      "p": 0,
+      "z": 7.091,
       "sat": false,
       "t3d": false,
-      "theme": "classic_dark"
+      "theme": "color_light",
+      "globe": false
+    },
+    "views": [
+      {
+        "id": "MX-UUDXB-R5TEV-L4LS3",
+        "editor": 1,
+        "target": null,
+        "date_modified": "2023-01-16T15:33:31.000Z",
+        "data": {
+          "title": {
+            "ar": "",
+            "bn": "",
+            "de": "",
+            "en": "Annual average wind power density at 50 m above ground level (National Renewable Energy Laboratory, 2007)",
+            "es": "",
+            "fa": "",
+            "fr": "",
+            "ps": "",
+            "ru": "",
+            "zh": ""
+          },
+          "source": {
+            "meta": {
+              "text": {
+                "notes": {
+                  "ar": "",
+                  "bn": "",
+                  "de": "",
+                  "en": "",
+                  "es": "",
+                  "fa": "",
+                  "fr": "",
+                  "ps": "",
+                  "ru": "",
+                  "zh": ""
+                },
+                "title": {
+                  "ar": "",
+                  "bn": "",
+                  "de": "",
+                  "en": "Annual average wind power density at 50 m above ground level (National Renewable Energy Laboratory, 2007)",
+                  "es": "",
+                  "fa": "",
+                  "fr": "",
+                  "ps": "",
+                  "ru": "",
+                  "zh": ""
+                },
+                "abstract": {
+                  "ar": "",
+                  "bn": "",
+                  "de": "",
+                  "en": "Wind power class is an indicator of likely resource strength, with a higher wind power class (w/m2) representing higher wind resource levels. The following classification information is for utility-scale applications at a 50 meter height. More information on: <a href=\"https://www.nrel.gov/international/downloads/afgpak_wind.zip\" target=\"_blank\"> https://www.nrel.gov/international/downloads/afgpak_wind.zip</a>",
+                  "es": "",
+                  "fa": "",
+                  "fr": "",
+                  "ps": "",
+                  "ru": "",
+                  "zh": ""
+                },
+                "keywords": {
+                  "keys": ["wind"],
+                  "keys_m49": ["AFG"],
+                  "keys_gemet": ["9335"]
+                },
+                "language": {
+                  "codes": []
+                }
+              },
+              "annex": {
+                "references": []
+              },
+              "origin": {
+                "source": {
+                  "urls": [
+                    {
+                      "url": "https://www.nrel.gov/international/downloads/afgpak_wind.zip",
+                      "label": "afgpak_wind.zip",
+                      "is_download_link": true
+                    }
+                  ]
+                },
+                "homepage": {
+                  "url": "https://www.nrel.gov/"
+                }
+              },
+              "contact": {
+                "contacts": [
+                  {
+                    "name": "Fred",
+                    "email": "f@fxi.io",
+                    "address": "Geneva",
+                    "function": "master"
+                  }
+                ]
+              },
+              "license": {
+                "licenses": [
+                  {
+                    "name": "unlicensed",
+                    "text": "unlicensed"
+                  }
+                ]
+              },
+              "spatial": {
+                "crs": {
+                  "url": "http://spatialreference.org/ref/epsg/4326/",
+                  "code": "EPSG:4326"
+                },
+                "bbox": {
+                  "lat_max": 0,
+                  "lat_min": 0,
+                  "lng_max": 0,
+                  "lng_min": 0
+                }
+              },
+              "temporal": {
+                "range": {
+                  "end_at": "0001-01-01",
+                  "start_at": "0001-01-01",
+                  "is_timeless": false
+                },
+                "issuance": {
+                  "modified_at": "0001-01-01",
+                  "periodicity": "continual",
+                  "released_at": "0001-01-01"
+                }
+              }
+            },
+            "type": "raster",
+            "tiles": [
+              "https://datacore.unepgrid.ch/geoserver/wms?bbox={bbox-epsg-3857}&service=WMS&version=1.1.1&styles=&request=GetMap&ZINDEX=10&srs=EPSG%3A3857&layers=MAPX:afghanistan_wind&format=image/png8&transparent=true&height=512&width=512",
+              "https://datacore.unepgrid.ch/geoserver/wms?bbox={bbox-epsg-3857}&service=WMS&version=1.1.1&styles=&request=GetMap&ZINDEX=10&srs=EPSG%3A3857&layers=MAPX:afghanistan_wind&format=image/png8&transparent=true&height=512&width=512"
+            ],
+            "legend": "https://datacore.unepgrid.ch/geoserver/wms?service=WMS&version=1.1.1&styles=&request=GetLegendGraphic&layer=MAPX:afghanistan_wind&format=image/png&transparent=true",
+            "tileSize": 512,
+            "useMirror": false,
+            "legendTitles": {
+              "ar": "",
+              "bn": "",
+              "de": "",
+              "en": "Legend",
+              "es": "",
+              "fa": "",
+              "fr": "",
+              "ps": "",
+              "ru": "",
+              "zh": ""
+            }
+          },
+          "classes": "oth",
+          "abstract": {
+            "ar": "",
+            "bn": "",
+            "de": "",
+            "en": "Wind power class is an indicator of likely resource strength, with a higher wind power class (w/m2) representing higher wind resource levels. The following classification information is for utility-scale applications at a 50 meter height. More information on: <a href=\"https://www.nrel.gov/international/downloads/afgpak_wind.zip\" target=\"_blank\"> https://www.nrel.gov/international/downloads/afgpak_wind.zip</a>",
+            "es": "",
+            "fa": "",
+            "fr": "",
+            "ps": "",
+            "ru": "",
+            "zh": ""
+          },
+          "projects": [],
+          "collections": []
+        },
+        "type": "rt",
+        "pid": 72343,
+        "project": "MX-A3M-LVK-V7S-XOT-J48",
+        "readers": ["self", "members", "public"],
+        "editors": ["self", "publishers", "98", "17", "1"],
+        "_edit": true
+      }
+    ],
+    "form": {
+      "share_code": "http://dev.mapx.localhost:8880/static.html?language=en&views=MX-UUDXB-R5TEV-L4LS3&zoomToViews=true&p=0&b=-20.788&z=7.091&lat=34.415&lng=66.862&t3d=false&sat=false&theme=color_light&globe=false",
+      "share_template": "soc_link_url",
+      "share_views_select": "share_views_select_method_map_list_open",
+      "share_views_zoom": true,
+      "share_map_pos": true,
+      "share_map_pos_max": false,
+      "share_mode_static": true,
+      "share_category_hide": null
+    },
+    "search": "?language=en&views=MX-UUDXB-R5TEV-L4LS3&zoomToViews=true&p=0&b=-20.788&z=7.091&lat=34.415&lng=66.862&t3d=false&sat=false&theme=color_light&globe=false"
+  },
+  {
+    "pos": {
+      "jump": true,
+      "n": 37.051,
+      "s": 31.692,
+      "e": 70.348,
+      "w": 63.377,
+      "lat": 34.415,
+      "lng": 66.862,
+      "b": -20.788,
+      "p": 0,
+      "z": 7.091,
+      "sat": false,
+      "t3d": false,
+      "theme": "color_light",
+      "globe": false
     },
     "views": [
       {
         "id": "MX-T7PXA-39GK2-QIH5T",
         "editor": 1,
         "target": [],
-        "date_modified": "2023-01-27T15:24:36.000Z",
+        "date_modified": "2023-04-25T11:35:09.462Z",
         "data": {
           "style": {
             "nulls": [
@@ -40,7 +242,7 @@
                 "label_ps": "",
                 "label_ru": "",
                 "label_zh": "",
-                "filter": ["all", ["!", ["has", "status"]]],
+                "filter": ["all", ["!", ["has", "status_2"]]],
                 "color_border": null,
                 "add_border": null
               }
@@ -173,8 +375,8 @@
             },
             "attribution": "<a href=\"https://mapx.org\">AFG_Road_Network</a>",
             "tiles": [
-              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-T7PXA-39GK2-QIH5T&skipCache=false&usePostgisTiles=false&timestamp=2023-01-27T15:24:36.000Z",
-              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-T7PXA-39GK2-QIH5T&skipCache=false&usePostgisTiles=false&timestamp=2023-01-27T15:24:36.000Z"
+              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-T7PXA-39GK2-QIH5T&skipCache=false&usePostgisTiles=false&timestamp=2023-04-25T11:35:09.462Z",
+              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-T7PXA-39GK2-QIH5T&skipCache=false&usePostgisTiles=false&timestamp=2023-04-25T11:35:09.462Z"
             ],
             "promoteId": "gid"
           },
@@ -195,54 +397,14 @@
           },
           "projects": [],
           "attribute": {
-            "name": "status",
+            "name": "status_2",
             "type": "string",
-            "names": ["status", "objectid"],
-            "table": [
-              {
-                "value": "Not Resourced",
-                "count": 6370
-              },
-              {
-                "value": "Identified Not Resourced",
-                "count": 621
-              },
-              {
-                "value": "Completed",
-                "count": 408
-              },
-              {
-                "value": "Identified",
-                "count": 138
-              },
-              {
-                "value": "Under Construction",
-                "count": 136
-              }
-            ]
-          },
-          "dashboard": {
-            "layout": "fit",
-            "modules": [],
-            "widgets": [
-              {
-                "width": "250",
-                "height": "250",
-                "script": "/** \n * Add functions to handle dashboard events\n * onAdd = Action to exectute when the widget is added to the DOM\n * onRemove = Action to execute when the widget is removed\n * onData = Action to execute when data is updated. Data is available with this.data \n */\nreturn {\n  onAdd : function(widget) {\n    console.log(widget);\n  },\n  onRemove : function(widget) {\n    console.log(widget);\n  },\n  onData : function(widget,data) {\n    console.log(data);\n  }\n};",
-                "source": "viewFreqTable",
-                "disabled": false,
-                "colorBackground": "#000000",
-                "sourceIgnoreEmpty": true,
-                "addColorBackground": false
-              }
-            ],
-            "disabled": false,
-            "panel_init_close": false
+            "names": ["objectid", "status_2"]
           },
           "collections": []
         },
         "type": "vt",
-        "pid": 73254,
+        "pid": 74547,
         "project": "MX-A3M-LVK-V7S-XOT-J48",
         "readers": ["self"],
         "editors": ["self", "1"],
@@ -250,7 +412,7 @@
       }
     ],
     "form": {
-      "share_code": "http://dev.mapx.localhost:8880/static.html?language=en&views=MX-T7PXA-39GK2-QIH5T&zoomToViews=true&p=49.927&b=-20.788&z=5.728&lat=33.876&lng=66.15&t3d=false&sat=false&theme=classic_dark",
+      "share_code": "http://dev.mapx.localhost:8880/static.html?language=en&views=MX-T7PXA-39GK2-QIH5T&zoomToViews=true&p=0&b=-20.788&z=7.091&lat=34.415&lng=66.862&t3d=false&sat=false&theme=color_light&globe=false",
       "share_template": "soc_link_url",
       "share_views_select": "share_views_select_method_map_list_open",
       "share_views_zoom": true,
@@ -259,331 +421,31 @@
       "share_mode_static": true,
       "share_category_hide": null
     },
-    "search": "?language=en&views=MX-T7PXA-39GK2-QIH5T&zoomToViews=true&p=49.927&b=-20.788&z=5.728&lat=33.876&lng=66.15&t3d=false&sat=false&theme=classic_dark"
+    "search": "?language=en&views=MX-T7PXA-39GK2-QIH5T&zoomToViews=true&p=0&b=-20.788&z=7.091&lat=34.415&lng=66.862&t3d=false&sat=false&theme=color_light&globe=false"
   },
   {
     "pos": {
       "jump": true,
-      "n": 48.86,
-      "s": 26.362,
-      "e": 74.393,
-      "w": 47.087,
-      "lat": 33.876,
-      "lng": 66.15,
+      "n": 37.051,
+      "s": 31.692,
+      "e": 70.348,
+      "w": 63.377,
+      "lat": 34.415,
+      "lng": 66.862,
       "b": -20.788,
-      "p": 49.927,
-      "z": 5.728,
+      "p": 0,
+      "z": 7.091,
       "sat": false,
       "t3d": false,
-      "theme": "classic_dark"
+      "theme": "color_light",
+      "globe": false
     },
     "views": [
       {
-        "id": "MX-3Q41Y-AH46I-1QGD9",
-        "editor": 1,
-        "target": [],
-        "date_modified": "2023-03-07T17:36:11.748Z",
-        "data": {
-          "style": {
-            "nulls": [
-              {
-                "size": 40,
-                "color": "#c6f606ff",
-                "value": "",
-                "sprite": "maki-marker-11",
-                "opacity": 0.7,
-                "label_ar": "",
-                "label_bn": "",
-                "label_de": "",
-                "label_en": "No data",
-                "label_es": "",
-                "label_fa": "",
-                "label_fr": "",
-                "label_ps": "",
-                "label_ru": "",
-                "label_zh": "",
-                "filter": ["all", ["!", ["has", "amount"]]],
-                "color_border": null,
-                "add_border": null
-              }
-            ],
-            "rules": [
-              {
-                "size": 40,
-                "color": "#fff7fb",
-                "value": 0,
-                "sprite": "maki-marker-11",
-                "opacity": 0.7,
-                "label_ar": "",
-                "label_bn": "",
-                "label_de": "",
-                "label_en": "0 - 0",
-                "label_es": "",
-                "label_fa": "",
-                "label_fr": "",
-                "label_ps": "",
-                "label_ru": "",
-                "label_zh": "",
-                "value_to": 0
-              },
-              {
-                "size": 40,
-                "color": "#023858",
-                "value": 0,
-                "sprite": "maki-marker-11",
-                "opacity": 0.7,
-                "label_ar": "",
-                "label_bn": "",
-                "label_de": "",
-                "label_en": "0 - 10.12",
-                "label_es": "",
-                "label_fa": "",
-                "label_fr": "",
-                "label_ps": "",
-                "label_ru": "",
-                "label_zh": "",
-                "value_to": 10.12
-              }
-            ],
-            "custom": {
-              "json": "{\n  \"enable\":false,\n  \"paint\":{},\n  \"layout\":{},\n  \"filter\":[],\n  \"minzoom\":0,\n  \"maxzoom\":22,\n  \"type\":\"circle\"\n}\n"
-            },
-            "hideNulls": false,
-            "zoomConfig": {
-              "zoomMax": 22,
-              "zoomMin": 0,
-              "sizeFactorZoomMax": 0,
-              "sizeFactorZoomMin": 0,
-              "sizeFactorZoomExponent": 1
-            },
-            "titleLegend": {
-              "ar": "",
-              "bn": "",
-              "de": "",
-              "en": "Legend",
-              "es": "",
-              "fa": "",
-              "fr": "",
-              "ps": "",
-              "ru": "",
-              "zh": ""
-            },
-            "reverseLayer": false,
-            "showSymbolLabel": true,
-            "includeUpperBoundInInterval": true
-          },
-          "title": {
-            "ar": "",
-            "bn": "",
-            "de": "",
-            "en": "iceland numeric test",
-            "es": "",
-            "fa": "",
-            "fr": "",
-            "ps": "",
-            "ru": "",
-            "zh": ""
-          },
-          "source": {
-            "type": "vector",
-            "layerInfo": {
-              "name": "mx_vector_2r63w_aailg_s7xbb_mfprt",
-              "maskName": {}
-            },
-            "attribution": "<a>iceland_test_numeric</a>",
-            "tiles": [
-              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-3Q41Y-AH46I-1QGD9&skipCache=false&usePostgisTiles=false&timestamp=2023-03-07T17:36:11.748Z",
-              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-3Q41Y-AH46I-1QGD9&skipCache=false&usePostgisTiles=false&timestamp=2023-03-07T17:36:11.748Z"
-            ],
-            "promoteId": "gid"
-          },
-          "abstract": {
-            "ar": "",
-            "bn": "",
-            "de": "",
-            "en": "test",
-            "es": "",
-            "fa": "",
-            "fr": "",
-            "ps": "",
-            "ru": "",
-            "zh": ""
-          },
-          "geometry": {
-            "type": "point"
-          },
-          "projects": [],
-          "attribute": {
-            "name": "amount",
-            "type": "number",
-            "names": ["amount", "id"],
-            "max": 30,
-            "min": 10,
-            "table": [
-              {
-                "from": 10,
-                "to": 10,
-                "diff": 0,
-                "count": 1
-              },
-              {
-                "from": 10,
-                "to": 20,
-                "diff": 10,
-                "count": 1
-              },
-              {
-                "from": 20,
-                "to": 30,
-                "diff": 10,
-                "count": 1
-              }
-            ]
-          },
-          "collections": []
-        },
-        "type": "vt",
-        "pid": 74129,
-        "project": "MX-QNN-G0C-I6F-GZB-MPA",
-        "readers": ["self", "public"],
-        "editors": ["self", "1"],
-        "_edit": false
-      },
-      {
-        "id": "MX-4R5B5-COSEK-BSFVK",
-        "editor": 1,
-        "target": [],
-        "date_modified": "2021-09-01T14:21:00.000Z",
-        "data": {
-          "style": {
-            "nulls": [
-              {
-                "size": 7,
-                "color": "#000",
-                "value": "",
-                "sprite": null,
-                "opacity": 0.7,
-                "label_ar": "",
-                "label_bn": "",
-                "label_de": "",
-                "label_en": "Missing values",
-                "label_es": "",
-                "label_fa": "",
-                "label_fr": "",
-                "label_ps": "",
-                "label_ru": "",
-                "label_zh": "",
-                "filter": ["all", ["!", ["has", "objectuid"]]],
-                "color_border": null,
-                "add_border": null
-              }
-            ],
-            "rules": [
-              {
-                "size": 4,
-                "color": "#2881f5ff",
-                "value": "all",
-                "sprite": "none",
-                "opacity": 0.1,
-                "label_ar": "",
-                "label_bn": "",
-                "label_de": "",
-                "label_en": "haha",
-                "label_es": "",
-                "label_fa": "",
-                "label_fr": "",
-                "label_ps": "",
-                "label_ru": "",
-                "label_zh": ""
-              }
-            ],
-            "custom": {
-              "json": "{\n  \"enable\":false,\n  \"paint\":{},\n  \"layout\":{},\n  \"filter\":[],\n  \"minzoom\":0,\n  \"maxzoom\":22,\n  \"type\":\"circle\"\n}\n"
-            },
-            "hideNulls": false,
-            "zoomConfig": {
-              "zoomMax": 22,
-              "zoomMin": 0,
-              "sizeFactorZoomMax": 0,
-              "sizeFactorZoomMin": 0,
-              "sizeFactorZoomExponent": 1
-            },
-            "titleLegend": {
-              "ar": "",
-              "bn": "",
-              "de": "",
-              "en": "Legend",
-              "es": "",
-              "fa": "",
-              "fr": "",
-              "ps": "",
-              "ru": "",
-              "zh": ""
-            },
-            "reverseLayer": false,
-            "showSymbolLabel": false
-          },
-          "title": {
-            "ar": "",
-            "bn": "",
-            "de": "",
-            "en": "MX 4R5B5 COSEK BSFVK",
-            "es": "",
-            "fa": "",
-            "fr": "",
-            "ps": "",
-            "ru": "",
-            "zh": ""
-          },
-          "source": {
-            "type": "vector",
-            "layerInfo": {
-              "name": "mx_afg_vector_53h3f_war7f_nuvt1",
-              "maskName": {}
-            },
-            "attribution": "<a href=\"http://www.mineaction.org/programmes/afghanistan\">Active mine threat (UNMACCA)</a>",
-            "tiles": [
-              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-4R5B5-COSEK-BSFVK&skipCache=false&usePostgisTiles=false&timestamp=2021-09-01T14:21:00.000Z",
-              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-4R5B5-COSEK-BSFVK&skipCache=false&usePostgisTiles=false&timestamp=2021-09-01T14:21:00.000Z"
-            ],
-            "promoteId": "gid"
-          },
-          "abstract": {
-            "ar": "",
-            "bn": "",
-            "de": "",
-            "en": "etw",
-            "es": "",
-            "fa": "",
-            "fr": "",
-            "ps": "",
-            "ru": "",
-            "zh": ""
-          },
-          "geometry": {
-            "type": "point"
-          },
-          "projects": [],
-          "attribute": {
-            "name": "objectuid",
-            "type": "string",
-            "names": ["objectuid", "featureid"],
-            "table":[] 
-          },
-          "collections": []
-        },
-        "type": "vt",
-        "pid": 68974,
-        "project": "MX-A3M-LVK-V7S-XOT-J48",
-        "readers": ["self"],
-        "editors": ["self", "1"],
-        "_edit": true
-      },
-      {
-        "id": "MX-80R2H-8B9LN-0A3A1",
+        "id": "MX-X0CF7-XZZ95-PK0U2",
         "editor": 1335,
         "target": [],
-        "date_modified": "2020-01-23T16:32:28.000Z",
+        "date_modified": "2020-01-20T11:08:48.000Z",
         "data": {
           "style": {
             "nulls": [
@@ -606,11 +468,59 @@
             ],
             "rules": [
               {
-                "size": 1,
-                "color": "#ffcc00",
-                "value": "all",
+                "size": 3,
+                "color": "#ca0020",
+                "value": "canal",
                 "sprite": "none",
-                "opacity": 0.3,
+                "opacity": 0.5,
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": ""
+              },
+              {
+                "size": 3,
+                "color": "#f4a582",
+                "value": "drain",
+                "sprite": "none",
+                "opacity": 0.5,
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": ""
+              },
+              {
+                "size": 3,
+                "color": "#00ccff",
+                "value": "river",
+                "sprite": "none",
+                "opacity": 0.5,
+                "label_bn": "",
+                "label_de": "",
+                "label_en": "",
+                "label_es": "",
+                "label_fa": "",
+                "label_fr": "",
+                "label_ps": "",
+                "label_ru": "",
+                "label_zh": ""
+              },
+              {
+                "size": 3,
+                "color": "#0000ff",
+                "value": "stream",
+                "sprite": "none",
+                "opacity": 0.5,
                 "label_bn": "",
                 "label_de": "",
                 "label_en": "",
@@ -628,7 +538,7 @@
             "hideNulls": true,
             "zoomConfig": {
               "zoomMax": 22,
-              "zoomMin": 1,
+              "zoomMin": 0,
               "sizeFactorZoomMax": 0,
               "sizeFactorZoomMin": 0,
               "sizeFactorZoomExponent": 1
@@ -649,7 +559,7 @@
           "title": {
             "bn": "",
             "de": "",
-            "en": "Ethnic groups",
+            "en": "Waterways",
             "es": "",
             "fa": "",
             "fr": "",
@@ -664,20 +574,20 @@
           "source": {
             "type": "vector",
             "layerInfo": {
-              "name": "mx_vector_wtzeh_wsdtn_edgzs_qrthu",
+              "name": "mx_vector_vcr8w_atlox_jfiud_jmc8e",
               "maskName": {}
             },
-            "attribution": "<a>UNEP_AFG Ethnic_groups</a>",
+            "attribution": "<a>UNEP_AFG_waterways</a>",
             "tiles": [
-              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-80R2H-8B9LN-0A3A1&skipCache=false&usePostgisTiles=false&timestamp=2020-01-23T16:32:28.000Z",
-              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-80R2H-8B9LN-0A3A1&skipCache=false&usePostgisTiles=false&timestamp=2020-01-23T16:32:28.000Z"
+              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-X0CF7-XZZ95-PK0U2&skipCache=false&usePostgisTiles=false&timestamp=2020-01-20T11:08:48.000Z",
+              "http://apidev.mapx.localhost:8880/get/tile/{x}/{y}/{z}.mvt?view=MX-X0CF7-XZZ95-PK0U2&skipCache=false&usePostgisTiles=false&timestamp=2020-01-20T11:08:48.000Z"
             ],
             "promoteId": "gid"
           },
           "abstract": {
             "bn": "",
             "de": "",
-            "en": "Summary:\nPresense and distribution of ethnics in Afghanistan.\nDescription\nPresence and extension of major ethnic groups in Afghanistan based on UNHCR.",
+            "en": "Waterways in Afghanistan.",
             "es": "",
             "fa": "",
             "fr": "",
@@ -686,189 +596,39 @@
             "zh": ""
           },
           "geometry": {
-            "type": "polygon",
+            "type": "line",
             "extent": {
-              "lat1": 29.3771,
-              "lat2": 38.4907,
-              "lng1": 60.4719,
-              "lng2": 74.8896
+              "lat1": 30.1474,
+              "lat2": 38.4905,
+              "lng1": 61.0559,
+              "lng2": 74.4917
             },
             "centroid": {
-              "lat": 33.834,
-              "lng": 66.0401
+              "lat": 34.4014,
+              "lng": 67.0212
             }
           },
           "projects": [],
           "attribute": {
-            "name": "ethnic_gro",
-            "rows": 128,
+            "name": "fclass",
+            "rows": 263,
             "type": "string",
-            "names": ["ethnic_gro", "shape_length", "shape_area"],
+            "names": ["fclass", "lastchange", "name", "shape_length"],
             "nulls": 0,
-            "sample": [
-              "Arab",
-              "Baluchi",
-              "Baluchi/Brahui",
-              "Baluchi/Persian",
-              "Brahui",
-              "Chahar Aimak - Firuzkuhi",
-              "Chahar Aimak - Hazara-Aimak",
-              "Chahar Aimak - Jamshidi",
-              "Chahar Aimak - Taimani",
-              "Chahar Aimak - Taimuri"
-            ],
-            "distincts": 34,
-            "table": [
-              {
-                "value": "Tajik",
-                "count": 14
-              },
-              {
-                "value": "Uninhabited",
-                "count": 12
-              },
-              {
-                "value": "Pashtun/Tajik",
-                "count": 10
-              },
-              {
-                "value": "Sparsely Populated",
-                "count": 8
-              },
-              {
-                "value": "Turkmen",
-                "count": 8
-              },
-              {
-                "value": "Tajik/Uzbek",
-                "count": 7
-              },
-              {
-                "value": "Hazara",
-                "count": 7
-              },
-              {
-                "value": "Uzbek",
-                "count": 7
-              },
-              {
-                "value": "Pashtun",
-                "count": 6
-              },
-              {
-                "value": "Chahar Aimak - Taimuri",
-                "count": 5
-              },
-              {
-                "value": "Mongol/Punjabi/Afshari/Kizilbash/Kazakh/Karakalpak/Jewish/Jats",
-                "count": 5
-              },
-              {
-                "value": "Arab",
-                "count": 4
-              },
-              {
-                "value": "Uzbek/Hazara",
-                "count": 4
-              },
-              {
-                "value": "Mountain Tajik",
-                "count": 4
-              },
-              {
-                "value": "Pashai",
-                "count": 2
-              },
-              {
-                "value": "Nuristani",
-                "count": 2
-              },
-              {
-                "value": "Gujari, Jati, Nari",
-                "count": 2
-              },
-              {
-                "value": "Persian",
-                "count": 2
-              },
-              {
-                "value": "Brahui",
-                "count": 2
-              },
-              {
-                "value": "Pashtun/Uzbek",
-                "count": 2
-              },
-              {
-                "value": "Parachi",
-                "count": 2
-              },
-              {
-                "value": "Baluchi/Persian",
-                "count": 1
-              },
-              {
-                "value": "Pashtun/Hazara",
-                "count": 1
-              },
-              {
-                "value": "Ormuri",
-                "count": 1
-              },
-              {
-                "value": "Chahar Aimak - Firuzkuhi",
-                "count": 1
-              },
-              {
-                "value": "Tajik/Hazara",
-                "count": 1
-              },
-              {
-                "value": "Chahar Aimak - Taimani",
-                "count": 1
-              },
-              {
-                "value": "Baluchi",
-                "count": 1
-              },
-              {
-                "value": "Tirahi",
-                "count": 1
-              },
-              {
-                "value": "Baluchi/Brahui",
-                "count": 1
-              },
-              {
-                "value": "Chahar Aimak - Jamshidi",
-                "count": 1
-              },
-              {
-                "value": "Tajik/Persian",
-                "count": 1
-              },
-              {
-                "value": "Kirghiz",
-                "count": 1
-              },
-              {
-                "value": "Chahar Aimak - Hazara-Aimak",
-                "count": 1
-              }
-            ]
+            "distincts": 4
           },
-          "collections": "Social Economic"
+          "collections": "hydrology"
         },
         "type": "vt",
-        "pid": 67590,
+        "pid": 67036,
         "project": "MX-A3M-LVK-V7S-XOT-J48",
-        "readers": ["self", "public"],
-        "editors": ["self", "1335", "publishers"],
+        "readers": ["public"],
+        "editors": ["publishers", "1335"],
         "_edit": true
       }
     ],
     "form": {
-      "share_code": "http://dev.mapx.localhost:8880/static.html?language=en&views=MX-4R5B5-COSEK-BSFVK%2CMX-3Q41Y-AH46I-1QGD9%2CMX-80R2H-8B9LN-0A3A1&zoomToViews=true&p=49.927&b=-20.788&z=5.728&lat=33.876&lng=66.15&t3d=false&sat=false&theme=classic_dark",
+      "share_code": "http://dev.mapx.localhost:8880/static.html?language=en&views=MX-X0CF7-XZZ95-PK0U2&zoomToViews=true&p=0&b=-20.788&z=7.091&lat=34.415&lng=66.862&t3d=false&sat=false&theme=color_light&globe=false",
       "share_template": "soc_link_url",
       "share_views_select": "share_views_select_method_map_list_open",
       "share_views_zoom": true,
@@ -877,6 +637,6 @@
       "share_mode_static": true,
       "share_category_hide": null
     },
-    "search":"?language=en&views=MX-3Q41Y-AH46I-1QGD9%2CMX-4R5B5-COSEK-BSFVK%2CMX-80R2H-8B9LN-0A3A1&zoomToViews=true&p=49.927&b=-20.788&z=5.728&lat=33.876&lng=66.15&t3d=false&sat=false&theme=classic_dark"
+    "search": "?language=en&views=MX-X0CF7-XZZ95-PK0U2&zoomToViews=true&p=0&b=-20.788&z=7.091&lat=34.415&lng=66.862&t3d=false&sat=false&theme=color_light&globe=false"
   }
 ]

@@ -1,15 +1,13 @@
 {
-  "id": "water_light",
-  "description": {
-    "en": "Water theme"
-  },
-  "author": "F.Moser",
-  "dark": false,
+  "id": "color_dark",
+  "description": { "en": "Color dark theme" },
+  "author": "frederic.moser@unepgrid.ch",
+  "dark": true,
   "mono": false,
   "colors": {
     "mx_ui_text": {
       "visibility": "visible",
-      "color": "rgb(53,53,53)",
+      "color": "rgb(250,250,250)",
       "font": "Noto Sans"
     },
     "mx_ui_link": {
@@ -22,206 +20,202 @@
     },
     "mx_ui_text_faded": {
       "visibility": "visible",
-      "color": "rgba(53,53,53,0.5)"
+      "color": "rgba(192,192,192,0.75)"
     },
     "mx_ui_hidden": {
       "visibility": "visible",
-      "color": "rgba(2,186,253,0)"
+      "color": "rgba(0,84,147,0)"
     },
     "mx_ui_border": {
       "visibility": "visible",
-      "color": "rgba(156,156,156,0.2)"
+      "color": "rgba(255,255,255,0.1)"
     },
     "mx_ui_background": {
       "visibility": "visible",
-      "color": "rgb(255,255,255)"
+      "color": "rgb(66,66,66)"
     },
     "mx_ui_background_accent": {
       "visibility": "visible",
-      "color": "rgb(252,252,252)"
+      "color": "rgb(70,70,70)"
     },
     "mx_ui_background_faded": {
       "visibility": "visible",
-      "color": "rgb(250,250,250)"
+      "color": "rgb(51,51,51)"
     },
     "mx_ui_background_contrast": {
       "visibility": "visible",
-      "color": "rgb(245,245,245)"
+      "color": "rgb(58,58,58)"
     },
     "mx_ui_background_transparent": {
       "visibility": "visible",
-      "color": "rgba(245,245,245,0.4)"
+      "color": "rgba(66,66,66,0.5)"
     },
     "mx_ui_shadow": {
       "visibility": "visible",
-      "color": "rgba(61,61,61,0.09)"
+      "color": "rgba(36,36,36,0.3)"
     },
     "mx_map_background": {
       "visibility": "visible",
-      "color": "rgb(236,232,223)"
+      "color": "rgb(0,49,61)"
     },
     "mx_map_snow": {
       "visibility": "visible",
-      "color": "rgba(210,200,255,0.4)"
+      "color": "rgb(107,107,107)"
     },
     "mx_map_vegetation": {
       "visibility": "visible",
-      "color": "hsla(115, 55%, 74%, 0.4)"
+      "color": "rgba(1,75,81,0.4)"
     },
     "mx_map_zone_commercial": {
       "visibility": "visible",
-      "color": "rgba(200,153,153,0.4)"
-    },
-    "mx_map_text_land_outline": {
-      "visibility": "visible",
-      "color": "rgba(255,255,255,0.24)"
-    },
-    "mx_map_text_water_outline": {
-      "visibility": "visible",
-      "color": "rgba(169,196,218,0.63)"
-    },
-    "mx_map_text_bathymetry_outline": {
-      "visibility": "visible",
-      "color": "rgba(255,255,255,0.9)"
+      "color": "rgba(1,9,9,0.73)"
     },
     "mx_map_feature_highlight": {
       "visibility": "visible",
-      "color": "rgb(255,0,255)"
+      "color": "rgb(0,255,0)"
     },
     "mx_map_hillshade_shadow": {
       "visibility": "visible",
-      "color": "rgba(145,145,145,0.1)"
+      "color": "rgba(18,18,18,0.32)"
     },
     "mx_map_hillshade_highlight": {
       "visibility": "visible",
-      "color": "rgba(255,255,255,0.1)"
+      "color": "rgba(121,121,121,0.2)"
     },
     "mx_map_mask": {
       "visibility": "visible",
-      "color": "rgba(153,153,153,0.4)"
+      "color": "rgba(0,0,0,0.2)"
     },
     "mx_map_text_place": {
       "visibility": "visible",
-      "color": "rgba(47,47,47,0.8)",
+      "color": "rgb(95,242,232)",
       "font": "Noto Sans Regular"
     },
     "mx_map_text_road": {
       "visibility": "visible",
-      "color": "rgb(143,143,143)",
+      "color": "rgb(148,217,240)",
       "font": "Noto Sans Medium"
     },
     "mx_map_text_water": {
       "visibility": "visible",
-      "color": "rgba(45,64,74,0.63)",
+      "color": "rgba(56,56,56,0.9)",
       "font": "Libre Baskerville Italic"
+    },
+    "mx_map_text_water_outline": {
+      "visibility": "visible",
+      "color": "rgba(46,60,71,0.1)"
     },
     "mx_map_water": {
       "visibility": "visible",
-      "color": "rgb(189,209,227)"
+      "color": "rgb(150,236,253)"
     },
     "mx_map_bathymetry_high": {
       "visibility": "visible",
-      "color": "rgba(109,156,190,0.5)"
+      "color": "rgba(86,167,225,0.5)"
     },
     "mx_map_bathymetry_low": {
       "visibility": "visible",
-      "color": "rgba(11,16,19,0.5)"
+      "color": "rgba(1,12,50,0.5)"
     },
     "mx_map_bathymetry_lines": {
       "visibility": "visible",
-      "color": "rgb(255,255,255)"
-    },
-    "mx_map_text_bathymetry": {
-      "visibility": "visible",
-      "color": "rgba(0,71,102,0.9)",
-      "font": "Varela Round Regular"
+      "color": "rgba(255,255,255,0.8)"
     },
     "mx_map_road": {
       "visibility": "visible",
-      "color": "rgba(255,255,255,1)"
-    },
-    "mx_map_road_border": {
-      "visibility": "visible",
-      "color": "rgba(155,155,155,1)"
+      "color": "rgb(0,94,112)"
     },
     "mx_map_rail": {
       "visibility": "visible",
-      "color": "rgba(251,4,4,0.15)"
+      "color": "rgba(250,250,250,0.2)"
+    },
+    "mx_map_road_border": {
+      "visibility": "visible",
+      "color": "rgb(0,59,66)"
     },
     "mx_map_building": {
       "visibility": "visible",
-      "color": "rgba(209,209,209,0.95)"
-    },
-    "mx_map_building_border": {
-      "visibility": "visible",
-      "color": "rgba(209,209,209,0.95)"
+      "color": "rgba(47,127,167,0.76)"
     },
     "mx_map_boundary_un_1": {
       "visibility": "visible",
-      "color": "rgba(38,38,38,0.3)"
+      "color": "rgb(121,121,121)"
     },
     "mx_map_boundary_un_2": {
       "visibility": "visible",
-      "color": "rgba(38,38,38,0.3)"
+      "color": "rgba(121,121,121,0.6)"
     },
     "mx_map_boundary_un_3": {
       "visibility": "visible",
-      "color": "rgba(38,38,38,0.3)"
+      "color": "rgba(121,121,121,0.6)"
     },
     "mx_map_boundary_un_4": {
       "visibility": "visible",
-      "color": "rgba(38,38,38,0.3)"
+      "color": "rgba(121,121,121,0.6)"
     },
     "mx_map_boundary_un_8": {
       "visibility": "visible",
-      "color": "rgba(38,38,38,0.3)"
+      "color": "rgba(121,121,121,0.6)"
     },
     "mx_map_boundary_un_9": {
       "visibility": "visible",
-      "color": "rgba(38,38,38,0.3)"
+      "color": "rgba(121,121,121,0.6)"
     },
     "mx_map_boundary_un_6": {
       "visibility": "visible",
       "color": "rgba(121,121,121,0.6)"
     },
+    "mx_map_text_land_outline": {
+      "visibility": "visible",
+      "color": "rgba(6,71,111,0.24)"
+    },
+    "mx_map_text_bathymetry_outline": {
+      "visibility": "visible",
+      "color": "rgba(255,255,255,0.6)"
+    },
+    "mx_map_text_bathymetry": {
+      "visibility": "visible",
+      "color": "rgba(10,10,10,0.6)",
+      "font": "Varela Round Regular"
+    },
     "mx_map_text_country_0_0": {
       "visibility": "visible",
-      "color": "rgba(11,16,19,0.78)",
+      "color": "rgb(247,247,247)",
       "font": "Noto Sans Medium Italic"
     },
     "mx_map_text_country_0_1": {
       "visibility": "visible",
-      "color": "rgba(11,16,19,0.76)",
+      "color": "rgb(155,248,237)",
       "font": "Noto Sans Regular"
     },
     "mx_map_text_country_0_2": {
       "visibility": "visible",
-      "color": "rgba(11,16,19,0.81)",
+      "color": "rgb(154,248,237)",
       "font": "Noto Sans Italic"
     },
     "mx_map_text_country_0_3": {
       "visibility": "visible",
-      "color": "rgba(11,16,19,0.93)",
+      "color": "rgb(154,248,237)",
       "font": "Noto Sans Regular"
     },
     "mx_map_text_country_0_4": {
       "visibility": "visible",
-      "color": "rgba(11,16,19,0.72)",
+      "color": "rgb(154,248,237)",
       "font": "Noto Sans Regular"
     },
     "mx_map_text_country_0_5": {
       "visibility": "visible",
-      "color": "rgba(11,16,19,0.72)",
+      "color": "rgb(154,248,237)",
       "font": "Noto Sans Italic"
     },
     "mx_map_text_country_0_99": {
       "visibility": "visible",
-      "color": "rgba(11,16,19,0.72)",
+      "color": "rgb(154,248,237)",
       "font": "Noto Sans Regular"
     },
     "mx_map_text_country_1_1": {
       "visibility": "visible",
-      "color": "rgba(11,16,19,0.72)",
+      "color": "rgb(154,248,237)",
       "font": "Noto Sans Italic"
     }
   }

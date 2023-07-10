@@ -386,7 +386,7 @@ mapx.once("ready", async () => {
       },
       {
         name: "test suite work",
-        test: async (r) => {
+        test: async () => {
           const ok = await mapx.ask("get_modal_share_tests");
           return ok;
         },

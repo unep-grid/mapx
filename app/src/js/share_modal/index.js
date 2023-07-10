@@ -840,11 +840,9 @@ export class ShareModal extends EventSimple {
 
   async tests() {
     const sm = this;
-    const state = sm._state;
     const { default: tests } = await import("./tests.json");
     const results = [];
     const langCurrent = getLanguageCurrent();
-    let i = 0;
     for (const test of tests) {
       /**
        * Clear open views
@@ -890,8 +888,9 @@ export class ShareModal extends EventSimple {
        */
       const search = sm.url.search;
       test.passed = isEqual(search, test.search);
+      
       if (!test.passed) {
-        console.table({ search: search, test: test.search });
+        console.log({ search: search, test: test.search });
       }
       /**
        * Close and remove views

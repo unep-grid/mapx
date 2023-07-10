@@ -13,10 +13,10 @@ import { downloadJSON } from "../download";
 import { TextFilter } from "../text_filter_simple";
 import { default as classic_light } from "./themes/classic_light.json";
 import { default as classic_dark } from "./themes/classic_dark.json";
-import { default as water_dark } from "./themes/water_dark.json";
-import { default as water_light } from "./themes/water_light.json";
-import switchOn from "./sound/switch-on.mp3";
-import switchOff from "./sound/switch-off.mp3";
+import { default as color_dark } from "./themes/color_dark.json";
+import { default as color_light } from "./themes/color_light.json";
+import switchOn from "./sound/switch_on.mp3";
+import switchOff from "./sound/switch_off.mp3";
 import click from "./sound/click.mp3";
 import { fileSelectorJSON } from "../mx_helper_misc";
 import { isNotEmpty } from "../is_test";
@@ -33,7 +33,7 @@ const global = {
   elStyle: null,
   elContainer: null,
   map: null,
-  themes: [classic_light, classic_dark, water_light, water_dark],
+  themes: [classic_light, classic_dark, color_light, color_dark],
   fonts_enabled: {
     css: ["mx_ui_text"],
     map: [
@@ -56,21 +56,28 @@ const global = {
   modes: {
     dark: {
       mono: "classic_dark",
-      color: "water_dark",
+      color: "color_dark",
     },
     light: {
       mono: "classic_light",
-      color: "water_light",
+      color: "color_light",
     },
   },
   colors: null,
   debug: false,
   on: {},
   sounds: {
-    "switch-on": switchOn,
-    "switch-off": switchOff,
-    "click": click,
+    switch_on: switchOn,
+    switch_off: switchOff,
+    click: click,
   },
+};
+
+const legacyThemesMap = {
+  classic_light: "classic_light",
+  water_light: "color_light",
+  water_dark: "color_dark",
+  classic_dark: "classic_dark",
 };
 
 class Theme extends EventSimple {
@@ -97,11 +104,16 @@ class Theme extends EventSimple {
     for (const k in Object.keys(t._opt.on)) {
       t.on(k, t._opt.on[k]);
     }
-    const id_saved = localStorage.getItem("theme@id");
+    let id_saved = localStorage.getItem("theme@id");
+
+    if (!t.isValidId(id_saved)) {
+      id_saved = t._opt.id_default;
+    }
+
     const ok = await t.set(t._opt.id || id_saved || t._opt.id_default, {
       sound: false,
       save: false,
-      save_url: false,
+      save_url: true,
     });
     return ok;
   }
@@ -248,25 +260,28 @@ class Theme extends EventSimple {
       opt
     );
     let { sound, save, save_url, force } = opt;
-    let ok = false;
 
     try {
       if (!force && t._is_setting) {
-        return ok;
+        return false;
       }
       t._is_setting = true;
       const valid = t.isValidId(id);
 
       if (!valid) {
-        id = t._opt.id_default;
-        // probably set in url or localStorage : overwrite that
-        save_url = true;
-        save = true;
+        id = legacyThemesMap[id];
+        if (!t.isValidId(id)) {
+          id = t._opt.id || t._opt.id_default;
+          // reset save_url and localStorage
+          save_url = true;
+          save = true;
+        }
       }
+
       const theme = t.get(id);
 
       if (id === t._id) {
-        return ok;
+        return true;
       }
 
       if (sound) {
@@ -275,9 +290,9 @@ class Theme extends EventSimple {
 
         const idSound =
           oldTheme.dark && !newTheme.dark
-            ? "switch-on"
+            ? "switch_on"
             : !oldTheme.dark && newTheme.dark
-            ? "switch-off"
+            ? "switch_off"
             : "click";
 
         await t.sound(idSound);
@@ -298,7 +313,6 @@ class Theme extends EventSimple {
 
       await t.buildInputs();
 
-      ok = true;
       t.fire("mode_changed", t.mode());
 
       if (t._btn_dark) {
@@ -308,12 +322,13 @@ class Theme extends EventSimple {
       if (t._btn_mono) {
         t._btn_mono.activate(t.isMono());
       }
+      return true;
     } catch (e) {
       console.warn(e);
     } finally {
       t._is_setting = false;
-      return ok;
     }
+    return false;
   }
 
   setThemeUrl(id) {

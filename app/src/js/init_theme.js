@@ -10,26 +10,15 @@ const colors = queryIdTheme ? null : queryColors;
 const storageIdTheme = localStorage.getItem("theme@id");
 const idTheme = queryIdTheme || storageIdTheme;
 
-const theme = new Theme({
+export const theme = new Theme({
   id: idTheme,
   colors: colors || settings.ui.colors,
 });
 
-export { theme };
-
-if (!colors) {
-  /**
-   * Auto
-   */
-  initMatchMedia(theme).catch((e) => {
-    console.warn(e);
-  });
-}
-
 /*
  * Init match media query + listener
  */
-async function initMatchMedia(theme) {
+export async function initMatchMedia(theme) {
   try {
     if (idTheme !== "auto") {
       return;
