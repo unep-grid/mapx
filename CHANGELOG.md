@@ -1,3 +1,8 @@
+  - [1.12.3-alpha.9](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.9) 
+
+    - APP
+        - Themes: renaming + maping to older names + tests rewritten
+
   - [1.12.3-alpha.8](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.8) 
 
     - APP/API
