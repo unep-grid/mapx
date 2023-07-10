@@ -82,10 +82,12 @@ mxDbGetQuery <- function(
         mxDbPoolClose()
       }
 
-      quit(
-        save = "no",
-        status = 1,
-      )
+      #
+      # Aggressive quit
+      # stop() can't be intercepted
+      # quit() doesn't work in some cases...
+      #
+      system(sprintf("kill %s", Sys.getpid()))
     },
     finally = {
       mxDbClearResult(con)

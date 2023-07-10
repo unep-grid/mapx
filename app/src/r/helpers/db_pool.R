@@ -1,4 +1,3 @@
-
 #' Get db connection
 #' @param {Function} cb Function with single param 'con'. The con will be returned to the pool
 #' @export
@@ -102,7 +101,13 @@ mxDbPoolInit <- function() {
       },
       error = function(cond) {
         dbDisconnect(con)
-        stop("Innit db : validation query failed")
+        mxDebugMsg("There was an error in the pool init. The session will be terminated.")
+        #
+        # Aggressive quit
+        # stop() can be intercepted
+        # quit() doesn't seem to work within shiny context
+        #
+        system(sprintf("kill %s", Sys.getpid()))
       },
       finally = {
         dbDisconnect(con)
