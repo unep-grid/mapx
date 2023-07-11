@@ -5,7 +5,7 @@ import {
   getLanguagesAll,
 } from "./../language";
 import * as test from "./../is_test_mapx/index.js";
-import { parseTemplate } from "../mx_helper_misc.js";
+import { parseTemplate, makeId } from "../mx_helper_misc.js";
 import { isElement, isNotEmpty } from "./../is_test_mapx/index.js";
 
 export { el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate };
@@ -536,7 +536,6 @@ export function elInput(key, opt) {
     opt.attributes
   );
 
-
   if (opt.type === "checkbox") {
     inputOptions.checked = opt.checked;
     inputOptions.value = "true"; // for form data. If not set, "on" will be returned.
@@ -689,4 +688,49 @@ export function elAlert(key, type, opt) {
     elSpanTranslate(key, opt)
   );
   return elAlert;
+}
+
+/**
+ * Creates a toggle button that switches between two Font Awesome icons when checked and unchecked.
+ *
+ * @param {Object} options - Options for the toggle button.
+ * @param {string} options.containerClass - Class for the container
+ * @param {string} options.iconDefault - The Font Awesome icon class for the unchecked state.
+ * @param {string} options.iconActive - The Font Awesome icon class for the checked state.
+ * @param {Object} options.on - An object containing event handlers for the toggle button.
+ * @param {Function} options.on.change - The function to call when the toggle button is checked or unchecked.
+ *
+ * @returns {HTMLElement} The created toggle button.
+ */
+export function elToggle({ containerClass, iconDefault, iconActive, on }) {
+  const id = makeId();
+  const checkbox = el("input", {
+    type: "checkbox",
+    id: id,
+    style: { display: "none" }, // hide the checkbox
+    on: {
+      change: (e) => {
+        const isChecked = e.target.checked;
+        icon.className = `fa fa-${isChecked ? iconActive : iconDefault}`;
+        if (on && on.change) {
+          on.change(e);
+        }
+      },
+    },
+  });
+
+  const icon = el("i", {
+    class: `fa fa-${iconDefault}`,
+  });
+
+  const label = el(
+    "label",
+    {
+      for: id, // associate the label with the checkbox
+      style: { cursor: "pointer" }, // make it clear that the label is clickable
+    },
+    [icon]
+  );
+
+  return el("div", { class: containerClass }, [checkbox, label]);
 }

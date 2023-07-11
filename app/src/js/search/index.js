@@ -6,7 +6,12 @@ import { getDictItem } from "./../language";
 import { EventSimple } from "./../event_simple";
 import { modalMarkdown } from "./../modal_markdown/index.js";
 import { viewsListAddSingle } from "./../mx_helper_map_view_ui.js";
-import { el, elSpanTranslate, elButtonIcon } from "../el_mapx/index.js";
+import {
+  el,
+  elSpanTranslate,
+  elButtonIcon,
+  elToggle,
+} from "../el_mapx/index.js";
 import { prefGet, prefSet } from "./../user_pref";
 import { isDate } from "./../is_test/index.js";
 import { moduleLoad } from "./../modules_loader_async";
@@ -28,6 +33,7 @@ import {
   isArray,
   isBoolean,
   isStringRange,
+  isEmpty,
 } from "./../is_test/index.js";
 
 import { def } from "./default.js";
@@ -51,6 +57,7 @@ class Search extends EventSimple {
     }
     s._init = true;
     s._filters = {};
+    s._facets = {};
     s._infinite_page = 0;
 
     /**
@@ -93,6 +100,14 @@ class Search extends EventSimple {
 
   get isReady() {
     return !!this._init;
+  }
+
+  get facets() {
+    return this._facets;
+  }
+
+  set facets(facets) {
+    return (this._facets = facets);
   }
 
   showApiConfig() {
@@ -312,21 +327,22 @@ class Search extends EventSimple {
            * Label or key, e.g. vt, environment, global
            */
           const count = tags[tag];
-          const facet = s._facets[k];
-          facet.count = count;
+          const facet = s.facets[k];
+          if (facet) {
+            facet.count = count;
+          }
         }
       }
     }
   }
 
   _build_facets(distrib) {
+    const s = this;
     if (!distrib) {
       console.warn("No facet distribution");
       return el("span", "");
     }
-    const s = this;
-    s._facets = {};
-    s._facets_containers = [];
+    s.facets = {};
     const attrKeys = s.opt("keywords").map((k) => k.type);
     const frag = new DocumentFragment();
 
@@ -339,8 +355,8 @@ class Search extends EventSimple {
       const { elFacetGroup, elFacetItems } = build_facets_group(attr, {
         details: true,
         open: !frag.firstElementChild,
+        addSortBtn: true,
       });
-      s._facets_containers.push(elFacetItems);
       frag.appendChild(elFacetGroup);
 
       /**
@@ -352,7 +368,7 @@ class Search extends EventSimple {
         for (let g of subgroups) {
           const { elFacetGroup: elFg, elFacetItems: elFi } = build_facets_group(
             g.key,
-            { details: false }
+            { details: false, addSortBtn: false }
           );
           elFacetItems.appendChild(elFg);
           g._elSubFacetItems = elFi;
@@ -388,7 +404,7 @@ class Search extends EventSimple {
             checked: false,
             id: k,
           });
-          s._facets[k] = fc;
+          s.facets[k] = fc;
           if (!subgroups) {
             elFacetItems.appendChild(fc.el);
             continue;
@@ -405,8 +421,48 @@ class Search extends EventSimple {
     }
 
     function build_facets_group(key, opt) {
-      let elFacetItems;
-      opt = Object.assign({}, { details: true, open: false }, opt);
+      opt = Object.assign(
+        {},
+        { details: true, open: false, addSortBtn: false },
+        opt
+      );
+
+      const elFacetItems = el("div", {
+        class: "search--filter-facets-items",
+      });
+
+      const elOrderChange = !opt.addSortBtn
+        ? null
+        : elToggle({
+            containerClass: "search--filter-facets-sort-items",
+            iconActive: "sort-numeric-desc",
+            iconDefault: "sort-alpha-asc",
+            on: {
+              change: (e) => {
+                const isAlpha = e.target.checked;
+                const facets = s.getFacetsArray();
+                const facetsGroup = facets.filter((f) => f.group === key);
+                const facetsSorted = facetsGroup.sort((a, b) => {
+                  if (isAlpha) {
+                    // text asc
+                    return b.text.localeCompare(a.text);
+                  }
+                  // num desc
+                  return a.count - b.count;
+                });
+
+                let n = 0;
+                for (const f of facetsSorted) {
+                  if (s._opt.sort.keysAlwaysTop.includes(f.label)) {
+                    f.order = -1e4;
+                  } else {
+                    f.order = 1 - n++;
+                  }
+                }
+              },
+            },
+          });
+
       const elFacetGroup = el(
         opt.details ? "details" : "div",
         {
@@ -420,9 +476,7 @@ class Search extends EventSimple {
             },
             elSpanTranslate(`search_${key}`)
           ),
-          (elFacetItems = el("div", {
-            class: "search--filter-facets-items",
-          })),
+          el("div", [elFacetItems, elOrderChange]),
         ]
       );
       if (opt.details && opt.open) {
@@ -436,7 +490,7 @@ class Search extends EventSimple {
 
   async _build_facets_or_update(distrib) {
     const s = this;
-    if (!s._facets) {
+    if (isEmpty(s.facets)) {
       const fragFacet = s._build_facets(distrib);
       s._elFiltersFacets.replaceChildren(fragFacet);
     } else {
@@ -670,11 +724,11 @@ class Search extends EventSimple {
   getFacetsArray() {
     const s = this;
     const out = [];
-    if (!s._facets) {
+    if (!s.facets) {
       return out;
     }
-    for (let n in s._facets) {
-      out.push(s._facets[n]);
+    for (let n in s.facets) {
+      out.push(s.facets[n]);
     }
     // slower ? return Object.values(s._facets);
     return out;
@@ -716,7 +770,7 @@ class Search extends EventSimple {
     for (let facet of facets) {
       facet.destroy();
     }
-    delete s._facets;
+    s.facets = {};
     const dates = s._flatpickr_filters;
     for (let date of dates) {
       date.clear();
@@ -824,7 +878,7 @@ class Search extends EventSimple {
           {
             const keyword = ds.keyword;
             const type = ds.type;
-            const facet = s._facets[`${type}:${keyword}`];
+            const facet = s.facets[`${type}:${keyword}`];
             if (facet) {
               facet.checked = !facet.checked;
               await s.update();
@@ -1185,12 +1239,12 @@ class Search extends EventSimple {
     op = op || "AND";
     const inner = [];
     const outer = [];
-    if (!s._facets) {
+    if (!s.facets) {
       return;
     }
-    const keys = Object.keys(s._facets);
+    const keys = Object.keys(s.facets);
     for (let key of keys) {
-      const facet = s._facets[key];
+      const facet = s.facets[key];
       if (facet.checked) {
         if (op === "AND") {
           inner.push(key);
@@ -1643,15 +1697,19 @@ class Facet {
       "div",
       {
         class: "search--filter-facet-item",
-        style: {
-          order: 1000 - fc._opt.count,
-        },
       },
       [fc._elCheckbox, fc._elLabel, fc._elCount]
     );
+    fc.order = -fc._opt.count;
+  }
+  set order(pos) {
+    this._elTag.style.order = pos;
   }
   get id() {
     return this._opt.id;
+  }
+  get group() {
+    return this._opt.group;
   }
   get el() {
     return this._elTag;
@@ -1683,6 +1741,18 @@ class Facet {
   get order() {
     return this._opt.order;
   }
+  get label() {
+    return this._opt.label;
+  }
+
+  get text() {
+    return this._elLabel.innerText || this.label;
+  }
+
+  /**
+   * Set facet position
+   * @param {number} pos Numeric position
+   */
   set order(pos) {
     const fc = this;
     if (pos === fc.order) {

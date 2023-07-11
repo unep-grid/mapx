@@ -14,7 +14,7 @@
   max-height: calc(100% - 100px);
 
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     top: -8px;
     right: 3px;
@@ -61,6 +61,13 @@
 
     .search--filter-facets {
       .search--filter-facets-group {
+        position: relative;
+        .search--filter-facets-sort-items {
+          padding: 10px;
+          position: absolute;
+          top: 0px;
+          right: 0px;
+        }
         .search--filter-facets-sub-items {
           padding: 10px;
         }
@@ -72,7 +79,7 @@
           overflow: auto;
           justify-content: flex-start;
           align-content: flex-start;
-          resize: vertical;
+          resize: none;
           max-height: 20em;
           min-height: 2em;
           padding: 10px;
