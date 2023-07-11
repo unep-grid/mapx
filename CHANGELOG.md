@@ -1,3 +1,8 @@
+  - [1.12.3-alpha.12](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.12) 
+
+    - APP 
+        - Themes : configurable building borders
+
   - [1.12.3-alpha.11](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.11) 
 
     - APP 
