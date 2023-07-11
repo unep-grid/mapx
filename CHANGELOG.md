@@ -1,3 +1,8 @@
+  - [1.12.3-alpha.11](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.11) 
+
+    - APP 
+        - Search : sort by text asc / count desc #918 
+
   - [1.12.3-alpha.9](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.9) 
 
     - APP
