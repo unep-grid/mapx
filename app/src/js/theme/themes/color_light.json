@@ -70,7 +70,7 @@
     },
     "mx_map_zone_commercial": {
       "visibility": "visible",
-      "color": "rgba(200,153,153,0.4)"
+      "color": "rgba(255,194,194,0.4)"
     },
     "mx_map_text_land_outline": {
       "visibility": "visible",
@@ -154,7 +154,7 @@
     },
     "mx_map_building_border": {
       "visibility": "visible",
-      "color": "rgba(209,209,209,0.95)"
+      "color": "rgba(255,255,255,0.95)"
     },
     "mx_map_boundary_un_1": {
       "visibility": "visible",

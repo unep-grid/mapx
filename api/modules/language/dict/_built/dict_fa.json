@@ -8585,6 +8585,11 @@
     "fa": "نقشه: ساختمانها "
   },
   {
+    "id": "mx_map_building_border",
+    "en": "Map: buildings border",
+    "fa": "نقشه: مرز ساختمان"
+  },
+  {
     "id": "mx_map_boundary_un_1",
     "en": "Map: International boundary",
     "fa": "نقشه: مرز بین المللی "

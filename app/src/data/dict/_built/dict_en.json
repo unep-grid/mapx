@@ -6868,6 +6868,10 @@
     "en": "Map: buildings"
   },
   {
+    "id": "mx_map_building_border",
+    "en": "Map: buildings border"
+  },
+  {
     "id": "mx_map_boundary_un_1",
     "en": "Map: International boundary"
   },

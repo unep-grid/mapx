@@ -475,9 +475,14 @@
         "line-color": "rgba(220,0,220,0.5)"
       }
     },
+
     {
       "id": "road_path_tunnel_case",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 12,
       "type": "line",
       "source": "mapbox_composite",
@@ -496,7 +501,19 @@
       ],
       "paint": {
         "line-color": "rgb(200,200,200)",
-        "line-opacity": 0.4,
+        "line-opacity": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0,
+          14,
+          0.2,
+          15,
+          0.8,
+          15.1,
+          1
+        ],
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
@@ -515,7 +532,11 @@
     },
     {
       "id": "road_path_tunnel",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 12,
       "type": "line",
       "source": "mapbox_composite",
@@ -553,7 +574,11 @@
     },
     {
       "id": "road_path_case",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 12,
       "type": "line",
       "source": "mapbox_composite",
@@ -572,7 +597,19 @@
       ],
       "paint": {
         "line-color": "rgb(200,200,200)",
-        "line-opacity": 1,
+        "line-opacity": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0,
+          14,
+          0.2,
+          15,
+          0.8,
+          15.1,
+          1
+        ],
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
@@ -591,7 +628,11 @@
     },
     {
       "id": "road_path",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 12,
       "type": "line",
       "source": "mapbox_composite",
@@ -629,7 +670,11 @@
     },
     {
       "id": "road_path_bridge_case",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 12,
       "type": "line",
       "source": "mapbox_composite",
@@ -648,7 +693,19 @@
       ],
       "paint": {
         "line-color": "rgb(200,200,200)",
-        "line-opacity": 1,
+        "line-opacity": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0,
+          14,
+          0.2,
+          15,
+          0.8,
+          15.1,
+          1
+        ],
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
@@ -667,7 +724,11 @@
     },
     {
       "id": "road_path_bridge",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 12,
       "type": "line",
       "source": "mapbox_composite",
@@ -705,7 +766,11 @@
     },
     {
       "id": "road_regular_tunnel_case",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
@@ -735,7 +800,19 @@
       ],
       "paint": {
         "line-color": "rgb(200,200,200)",
-        "line-opacity": 0.4,
+        "line-opacity": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0,
+          14,
+          0.2,
+          15,
+          0.8,
+          15.1,
+          1
+        ],
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
@@ -754,7 +831,11 @@
     },
     {
       "id": "road_regular_tunnel",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
@@ -803,7 +884,11 @@
     },
     {
       "id": "road_regular_case",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
@@ -833,7 +918,19 @@
       ],
       "paint": {
         "line-color": "rgb(200,200,200)",
-        "line-opacity": 1,
+        "line-opacity": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0,
+          14,
+          0.2,
+          15,
+          0.8,
+          15.1,
+          1
+        ],
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
@@ -852,7 +949,11 @@
     },
     {
       "id": "road_regular",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
@@ -901,7 +1002,11 @@
     },
     {
       "id": "road_regular_bridge_case",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
@@ -931,7 +1036,19 @@
       ],
       "paint": {
         "line-color": "rgb(200,200,200)",
-        "line-opacity": 1,
+        "line-opacity": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0,
+          14,
+          0.2,
+          15,
+          0.8,
+          15.1,
+          1
+        ],
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
@@ -950,7 +1067,11 @@
     },
     {
       "id": "road_regular_bridge",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
@@ -999,7 +1120,11 @@
     },
     {
       "id": "road_motor_tunnel_case",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
@@ -1018,7 +1143,19 @@
       ],
       "paint": {
         "line-color": "rgb(200,200,200)",
-        "line-opacity": 0.4,
+        "line-opacity": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0,
+          14,
+          0.2,
+          15,
+          0.8,
+          15.1,
+          1
+        ],
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
@@ -1037,7 +1174,11 @@
     },
     {
       "id": "road_motor_tunnel",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
@@ -1075,7 +1216,11 @@
     },
     {
       "id": "road_motor_case",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
@@ -1094,7 +1239,19 @@
       ],
       "paint": {
         "line-color": "rgb(200,200,200)",
-        "line-opacity": 1,
+        "line-opacity": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0,
+          14,
+          0.2,
+          15,
+          0.8,
+          15.1,
+          1
+        ],
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
@@ -1113,7 +1270,11 @@
     },
     {
       "id": "road_motor",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
@@ -1151,7 +1312,11 @@
     },
     {
       "id": "road_motor_bridge_case",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
@@ -1170,7 +1335,19 @@
       ],
       "paint": {
         "line-color": "rgb(200,200,200)",
-        "line-opacity": 1,
+        "line-opacity": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0,
+          14,
+          0.2,
+          15,
+          0.8,
+          15.1,
+          1
+        ],
         "line-width": [
           "interpolate",
           ["exponential", 1.5],
@@ -1189,7 +1366,11 @@
     },
     {
       "id": "road_motor_bridge",
-      "metadata": { "auto_generated": true, "generator": "roads" },
+      "metadata": {
+        "auto_generated": true,
+        "generator": "generator_roads.js",
+        "date": "2023-07-11T13:05:56.121Z"
+      },
       "minzoom": 8,
       "type": "line",
       "source": "mapbox_composite",
@@ -1225,6 +1406,7 @@
         "line-round-limit": 2
       }
     },
+
     {
       "id": "road_rail",
       "type": "line",

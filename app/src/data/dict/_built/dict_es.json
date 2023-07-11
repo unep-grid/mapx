@@ -8585,6 +8585,11 @@
     "es": "Mapa: edificios"
   },
   {
+    "id": "mx_map_building_border",
+    "en": "Map: buildings border",
+    "es": "Mapa: borde de edificios"
+  },
+  {
     "id": "mx_map_boundary_un_1",
     "en": "Map: International boundary",
     "es": "Mapa: frontera internacional"

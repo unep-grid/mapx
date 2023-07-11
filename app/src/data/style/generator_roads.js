@@ -10,18 +10,16 @@
  * - Works with zoom levels
  *
  * Usage :
- * node index.js | pbcopy
+ * node generator_roads.js | pbcopy
  *
  * -> replace roads layers
  *
  */
-
 const config = {
-  timestamp: new Date().toISOString(),
   generatorName: "generator_roads.js",
-  types: ["path", "regular", "motor"],
-  source: "mapbox_composite",
-  classes: {
+  roadTypes: ["path", "regular", "motor"],
+  mapSource: "mapbox_composite",
+  roadClasses: {
     motor: ["motorway", "trunk", "motorway_link", "trunk_link"],
     regular: [
       "primary",
@@ -44,7 +42,7 @@ const config = {
     path: "rgb(255,255,255)",
   },
   baseWidth: 0.6,
-  widthType: {
+  roadTypeWidths: {
     motor: 10,
     regular: 8,
     path: 2,
@@ -56,113 +54,146 @@ const config = {
   },
   casingColor: "rgb(200,200,200)",
   casingWidth: 1.5,
-  zoomWidthStart: 10,
-  zoomWidthEnd: 18,
-  startWidth: 0.1,
-  endWidth: 1,
+  zoomWidthRange: {
+    start: 10,
+    end: 18,
+  },
+  widthRange: {
+    start: 0.1,
+    end: 1,
+  },
 };
 
-function createLayer(
-  id,
-  classes,
-  structure,
-  opacity,
-  minZoom,
-  color,
-  width,
-  capStyle = "round"
-) {
-  return {
-    id,
-    metadata: {
-      auto_generated: true,
-      generator: config.generatorName,
-      date: config.timestamp,
-    },
-    minzoom: minZoom,
-    type: "line",
-    source: config.source,
-    "source-layer": "road",
-    filter: [
-      "all",
-      ["match", ["get", "class"], classes, true, false],
-      ["==", ["get", "structure"], structure],
-      ["match", ["get", "type"], ["platform"], false, true],
-    ],
-    paint: {
-      "line-color": color,
-      "line-opacity": opacity,
-      "line-width": [
-        "interpolate",
-        ["exponential", 1.5],
-        ["zoom"],
-        config.zoomWidthStart,
-        width * config.startWidth,
-        config.zoomWidthEnd,
-        width * config.endWidth,
-      ],
-    },
-    layout: {
-      "line-join": "round",
-      "line-cap": capStyle,
-      "line-round-limit": 2,
-    },
-  };
-}
+class RoadLayerGenerator {
+  constructor(opt) {
+    this.config = Object.assign({}, config, opt);
+  }
 
-function createCasingLayer(id, classes, structure, opacity, minZoom, width) {
-  return createLayer(
-    `${id}_case`,
+  createLayer(
+    id,
     classes,
     structure,
     opacity,
     minZoom,
-    config.casingColor,
-    width + config.casingWidth,
-    "butt"
-  );
-}
-
-function createLayers() {
-  const layers = [];
-
-  for (const type of config.types) {
-    for (const structure of config.structures) {
-      const id = `road_${type}${structure === "none" ? "" : `_${structure}`}`;
-      const width = config.baseWidth + config.widthType[type];
-      const minZoom = config.minZoomType[type];
-      const capStyle = structure === "none" ? "round" : "butt";
-      const opacity = structure === "tunnel" ? 0.4 : 1;
-      // Add casing layer first
-      layers.push(
-        createCasingLayer(
-          id,
-          config.classes[type],
-          structure,
-          opacity,
-          minZoom,
-          width
-        )
-      );
-      // Add regular layer
-      layers.push(
-        createLayer(
-          id,
-          config.classes[type],
-          structure,
-          opacity,
-          minZoom,
-          config.colors[type],
-          width,
-          capStyle
-        )
-      );
-    }
+    color,
+    width,
+    capStyle = "round"
+  ) {
+    const rlg = this;
+    return {
+      id,
+      metadata: {
+        auto_generated: true,
+        generator: rlg.config.generatorName,
+        date: new Date().toISOString(),
+      },
+      minzoom: minZoom,
+      type: "line",
+      source: rlg.config.mapSource,
+      "source-layer": "road",
+      filter: [
+        "all",
+        ["match", ["get", "class"], classes, true, false],
+        ["==", ["get", "structure"], structure],
+        ["match", ["get", "type"], ["platform"], false, true],
+      ],
+      paint: {
+        "line-color": color,
+        "line-opacity": opacity,
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          rlg.config.zoomWidthRange.start,
+          width * rlg.config.widthRange.start,
+          rlg.config.zoomWidthRange.end,
+          width * rlg.config.widthRange.end,
+        ],
+      },
+      layout: {
+        "line-join": "round",
+        "line-cap": capStyle,
+        "line-round-limit": 2,
+      },
+    };
   }
 
-  return layers;
+  createCasingLayer(id, classes, structure, opacity, minZoom, width) {
+    const rlg = this;
+    return rlg.createLayer(
+      `${id}_case`,
+      classes,
+      structure,
+      opacity,
+      minZoom,
+      rlg.config.casingColor,
+      width + rlg.config.casingWidth,
+      "butt"
+    );
+  }
+
+  createLayers() {
+    const rlg = this;
+    const layers = [];
+    for (const type of rlg.config.roadTypes) {
+      for (const structure of rlg.config.structures) {
+        const id = `road_${type}${structure === "none" ? "" : `_${structure}`}`;
+        const width = rlg.config.baseWidth + rlg.config.roadTypeWidths[type];
+        const minZoom = rlg.config.minZoomType[type];
+        const capStyle = structure === "none" ? "round" : "butt";
+        const opacity = structure === "tunnel" ? 0.4 : 1;
+
+        const opacityCasing = [
+          "interpolate",
+          ["exponential", 1.5],
+          ["zoom"],
+          10,
+          0,
+          14,
+          0.2,
+          15,
+          0.8,
+          15.1,
+          1,
+        ];
+
+        // Add casing layer first
+        layers.push(
+          rlg.createCasingLayer(
+            id,
+            rlg.config.roadClasses[type],
+            structure,
+            opacityCasing,
+            minZoom,
+            width
+          )
+        );
+        // Add regular layer
+        layers.push(
+          rlg.createLayer(
+            id,
+            rlg.config.roadClasses[type],
+            structure,
+            opacity,
+            minZoom,
+            rlg.config.colors[type],
+            width,
+            capStyle
+          )
+        );
+      }
+    }
+
+    return layers;
+  }
+
+  printLayers() {
+    const rlg = this;
+    const layers = rlg.createLayers();
+    const string = JSON.stringify(layers).slice(1, -1) + ",";
+    console.log(string);
+  }
 }
 
-const layers = createLayers();
-const string = JSON.stringify(layers).slice(1, -1) + ",";
-console.log(string);
+const roadLayerGenerator = new RoadLayerGenerator();
+roadLayerGenerator.printLayers();

@@ -22321,6 +22321,19 @@
     "de": "Karte: Gebäude "
   },
   {
+    "id": "mx_map_building_border",
+    "en": "Map: buildings border",
+    "fr": "Carte : bordure des bâtiments",
+    "es": "Mapa: borde de edificios",
+    "ru": "Карта: граница зданий",
+    "zh": "地图：建筑物边界",
+    "ar": "الخريطة: حدود المباني",
+    "fa": "نقشه: مرز ساختمان",
+    "ps": "نقشه: د ودانیو سرحد",
+    "bn": "মানচিত্র: ভবন সীমানা",
+    "de": "Karte: Gebäudegrenze"
+  },
+  {
     "id": "mx_map_boundary_un_1",
     "en": "Map: International boundary",
     "fr": "Carte : Frontières internationales",

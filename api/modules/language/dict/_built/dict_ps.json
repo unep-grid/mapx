@@ -8585,6 +8585,11 @@
     "ps": "نقشه: ودانۍ "
   },
   {
+    "id": "mx_map_building_border",
+    "en": "Map: buildings border",
+    "ps": "نقشه: د ودانیو سرحد"
+  },
+  {
     "id": "mx_map_boundary_un_1",
     "en": "Map: International boundary",
     "ps": "نقشه: نړیوال حد "

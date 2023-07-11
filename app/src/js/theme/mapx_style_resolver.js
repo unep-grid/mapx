@@ -225,6 +225,15 @@ export function layer_resolver(c) {
         "fill-color": c.mx_map_building.color,
       },
     },
+   {
+      id: ["building_border"],
+      layout: {
+        visibility: c.mx_map_building_border.visibility,
+      },
+      paint: {
+        "line-color": c.mx_map_building_border.color,
+      },
+    },
     /**
      * BOUNDARIES
      */
