@@ -1,3 +1,8 @@
+  - [1.12.3-alpha.13](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.13) 
+
+    - APP 
+        - Force the app to shut down if a db connection error is reported #920, let the container management system restart it, if require. 3 levels : at init (global), add session start (server), and during query. 
+
   - [1.12.3-alpha.12](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.12) 
 
     - APP 
