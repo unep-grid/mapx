@@ -13,6 +13,13 @@ mxDbGetView <- function(idView) {
   jsonlite::fromJSON(v, simplifyDataFrame = F)
 }
 
+#' Test connection and fail early
+#' -> use this at the beginning of a the session
+#'
+#'
+mxDbFailEarly <- function() {
+  mxDbGetQuery("SELECT 'fail_early'")
+}
 
 #' Get query result from postgresql
 #'
@@ -73,8 +80,6 @@ mxDbGetQuery <- function(
       }
     },
     error = function(e) {
-      mxDebugMsg("There was an error in the mxDbGetQuery. The session will be terminated.")
-
       #
       # If available, clean DB pool
       #
@@ -83,11 +88,11 @@ mxDbGetQuery <- function(
       }
 
       #
-      # Aggressive quit
-      # stop() can't be intercepted
-      # quit() doesn't work in some cases...
-      #
-      system(sprintf("kill %s", Sys.getpid()))
+      # Quit
+      msg <- sprintf(
+        "An error occured in mxDbGetQuery. The session will be terminated. Query = %s", query
+      )
+      mxKillProcess(msg)
     },
     finally = {
       mxDbClearResult(con)

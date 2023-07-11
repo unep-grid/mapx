@@ -94,20 +94,16 @@ mxDbPoolInit <- function() {
     )
     tryCatch(
       {
-        one <- dbGetQuery(con, "SELECT 1 as test")
-        if (one$test != 1) {
+        one <- dbGetQuery(con, "SELECT 3 as test")
+        if (.get(one, c("test")) != 3) {
           stop("failed")
         }
       },
       error = function(cond) {
         dbDisconnect(con)
-        mxDebugMsg("There was an error in the pool init. The session will be terminated.")
-        #
-        # Aggressive quit
-        # stop() can be intercepted
-        # quit() doesn't seem to work within shiny context
-        #
-        system(sprintf("kill %s", Sys.getpid()))
+        mxKillProcess(
+          "There was an error in the pool init. The session will be terminated."
+        )
       },
       finally = {
         dbDisconnect(con)

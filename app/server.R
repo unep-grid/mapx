@@ -19,6 +19,7 @@ server <- function(input, output, session) {
     return()
   }
 
+  mxDbFailEarly()
 
   session$allowReconnect(TRUE)
   #

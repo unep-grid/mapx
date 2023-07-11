@@ -10,6 +10,24 @@ mxIsDate <- function(d) {
   return(valid)
 }
 
+
+#' Force quit the app
+#' -> last resort solution in case of failing db con.
+#' -> same bahaviour as node.js api
+#'
+#' @param {Character} msg Message to print
+#'
+mxKillProcess <- function(msg) {
+  #
+  # Aggressive quit
+  # stop() can be intercepted
+  # quit() doesn't seem to work within shiny context
+  #
+  mxDebugMsg(msg)
+  system(sprintf("kill %s", Sys.getpid()))
+}
+
+
 #' Clean role from query with partial match
 #' @param {Character} role Role name
 #' @return {Character} matched role or "any"

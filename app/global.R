@@ -76,8 +76,11 @@ tryCatch(
     #
     # Print error
     #
-    cat("Init early error:", as.character(e))
-
+    msg <- sprintf(
+      "Init, Early Error: API HOST PUBLIC: %1$s;\nERROR: %2$s",
+      Sys.getenv("API_HOST_PUBLIC"),
+      as.character(e)
+    )
     #
     # If available, send mail
     #
@@ -85,11 +88,7 @@ tryCatch(
       mxSendMail(
         to = config$mail$admin,
         subject = "Init early error",
-        content = sprintf(
-          "API HOST PUBLIC: %1$s;\nERROR: %2$s",
-          Sys.getenv("API_HOST_PUBLIC"),
-          as.character(e)
-        ),
+        content = msg,
         # if the db is down, do not try to encrypt
         encrypt = FALSE
       )
@@ -104,11 +103,8 @@ tryCatch(
 
 
     #
-    # Quit and set status 1
+    # Quit
     #
-    quit(
-      save = "no",
-      status = 1,
-    )
+    mxKillProcess(msg)
   }
 )
