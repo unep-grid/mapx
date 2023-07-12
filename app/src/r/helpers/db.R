@@ -16,10 +16,33 @@ mxDbGetView <- function(idView) {
 #' Test connection and fail early
 #' -> use this at the beginning of a the session
 #'
-#'
 mxDbFailEarly <- function() {
-  mxDbGetQuery("SELECT 'fail_early'")
+  mxDbTest("db_test_fail_early")
 }
+
+#' Simple connection test
+#'
+#' @param {Character} key
+mxDbTest <- function(key) {
+  ok <- FALSE
+  tryCatch(
+    {
+      res <- mxDbGetQuery(sprintf("SELECT '%s' as test", key))
+      val <- .get(res, c("test"))
+      ok <- identical(val, key)
+    },
+    error = function(e) {
+      ok <<- FALSE
+      mxDebugMsg(e)
+    }
+  )
+  if (!ok) {
+    mxDebugMsg(sprintf("mxDbTest failed %s", key))
+  }
+  return(ok)
+}
+
+
 
 #' Get query result from postgresql
 #'
@@ -36,7 +59,7 @@ mxDbGetQuery <- function(
     r
   }) {
   res <- NULL
-  hasCon <- !noDataCheck(con)
+  hasCon <- isNotEmpty(con)
   #
   # Get a connection
   #
@@ -67,7 +90,7 @@ mxDbGetQuery <- function(
         }
       })
 
-      if (class(res) == "data.frame" && noDataCheck(res)) {
+      if (class(res) == "data.frame" && isEmpty(res)) {
         res <- NULL
       }
 
@@ -105,7 +128,7 @@ mxDbGetQuery <- function(
 #' @rdname mxDbGetDistinctCollectionsTags
 #' @param {character} Project name
 mxDbGetDistinctCollectionsTags <- function(project = NULL) {
-  if (noDataCheck(project)) stop("mxDbGetDistinctCollectionsTags need a project")
+  if (isEmpty(project)) stop("mxDbGetDistinctCollectionsTags need a project")
 
   sql <- "
   WITH collections as (
@@ -180,8 +203,8 @@ mxDbUpdate <- function(table, column, idCol = "id", id, value, path = NULL, expe
 
   stopifnot(tolower(column) %in% tolower(mxDbGetTableColumnsNames(table)))
   # implicit check
-  stopifnot(!noDataCheck(id))
-  stopifnot(!noDataCheck(idCol))
+  stopifnot(!isEmpty(id))
+  stopifnot(!isEmpty(idCol))
 
   # Use single connection for all
   mxDbWithUniqueCon(function(con) {
@@ -500,7 +523,7 @@ mxDbGetUnregisteredTable <- function(tableSource = "mx_sources", excludes = c("m
 #' @param {character} res json string
 mxJsonToList <- function(res) {
   out <- list()
-  if (!noDataCheck(res)) {
+  if (!isEmpty(res)) {
     out <- jsonlite::fromJSON(res, simplifyDataFrame = FALSE)
   }
   return(out)
@@ -513,10 +536,10 @@ mxJsonToList <- memoise(mxJsonToList)
 #' @export
 mxDbGetValByCoord <- function(table = NULL, column = NULL, lat = NULL, lng = NULL, geomColumn = "geom", srid = "4326", distKm = 1) {
   if (
-    noDataCheck(table) ||
-      noDataCheck(column) ||
-      noDataCheck(lat) ||
-      noDataCheck(lng) ||
+    isEmpty(table) ||
+      isEmpty(column) ||
+      isEmpty(lat) ||
+      isEmpty(lng) ||
       isTRUE(column == "gid")
   ) {
     return()
@@ -552,7 +575,7 @@ mxDbGetValByCoord <- function(table = NULL, column = NULL, lat = NULL, lng = NUL
 #' @param column Column/Variable on wich extract summary
 #' @export
 mxDbGetColumnInfo <- function(table = NULL, column = NULL) {
-  if (noDataCheck(table) || noDataCheck(column) || isTRUE(column == "gid")) {
+  if (isEmpty(table) || isEmpty(column) || isTRUE(column == "gid")) {
     return()
   }
 
@@ -701,7 +724,7 @@ mxDbGetFilterCenter <- function(table = NULL, column = NULL, value = NULL, geomC
 
     ext <- mxDbGetQuery(q)$data_extent
 
-    if (noDataCheck(ext)) {
+    if (isEmpty(ext)) {
       return(NULL)
     }
 
@@ -1149,7 +1172,7 @@ mxDbCreateUser <- function(
 #' @param {list} listInput List to send in a pg table
 #' @export
 mxToJsonForDb <- function(listInput) {
-  if (noDataCheck(names(listInput))) {
+  if (isEmpty(names(listInput))) {
     #
     # Force names = null to avoid names = character(0),
     # which translate in '{}' with toJSON
@@ -1178,8 +1201,8 @@ mxDbDropLayer <- function(layerName) {
 
   viewsTable <- mxDbGetViewsIdBySourceId(layerName)
   existsTable <- isTRUE(mxDbExistsTable(layerName))
-  existsEntry <- !noDataCheck(idSource)
-  existViews <- !noDataCheck(viewsTable)
+  existsEntry <- !isEmpty(idSource)
+  existViews <- !isEmpty(viewsTable)
 
   if (existViews) {
     stop("Attempt to remove source layer with active view depending on it")
@@ -1205,8 +1228,8 @@ mxDbDropLayer <- function(layerName) {
 #' @param path Path to reach the value to update, in both db mx_users->data and reactUser$data$data
 #' @export
 mxDbUpdateUserData <- function(reactUser, path, value) {
-  stopifnot(!noDataCheck(path))
-  stopifnot(!noDataCheck(value))
+  stopifnot(!isEmpty(path))
+  stopifnot(!isEmpty(value))
   stopifnot(is.reactivevalues(reactUser))
 
   conf <- mxGetDefaultConfig()
@@ -1261,7 +1284,7 @@ mxDbKeyValue <- function(key, value, action = c("set", "get"), table = "mx_confi
 
   if (action == "get") {
     data <- mxDbGetQuery("SELECT data from " + tableName + " WHERE key = '" + key + "'")$data
-    if (!noDataCheck(data)) {
+    if (!isEmpty(data)) {
       return(jsonlite::fromJSON(data, simplifyVector = F, simplifyDataFrame = F))
     }
     return(NULL)
@@ -1513,7 +1536,7 @@ mxDbDecrypt <- function(data = NULL, key = NULL) {
 
   out <- try(
     {
-      # if vector containing encrypted data is empty (or not a vector.. see noDataCheck) OR
+      # if vector containing encrypted data is empty (or not a vector.. see isEmpty) OR
       # if nchar is not even (should be hex data)
       if (
         is.null(data) ||
@@ -1700,7 +1723,7 @@ mxDbGetSessionDurationHMS <- function(id = NULL) {
     id
   ))$start
 
-  if (noDataCheck(sessionStart)) {
+  if (isEmpty(sessionStart)) {
     return()
   }
 
@@ -1722,7 +1745,7 @@ mxDbGetSessionDurationHMS <- function(id = NULL) {
 #' @return boolean exists
 #' @export
 mxDbEmailIsKnown <- function(email = NULL, userTable = "mx_users", active = TRUE, validated = TRUE) {
-  if (noDataCheck(email)) {
+  if (isEmpty(email)) {
     return(FALSE)
   }
   if (!mxEmailIsValid(email)) {
@@ -1748,7 +1771,7 @@ mxDbEmailIsKnown <- function(email = NULL, userTable = "mx_users", active = TRUE
 
 mxDbGetEmailFromId <- function(id, userTable = "mx_users") {
   email <- mxDbGetQuery(sprintf("SELECT email from mx_users where id = '%1$s'", id))$email
-  if (noDataCheck(email)) email <- id
+  if (isEmpty(email)) email <- id
   return(tolower(email))
 }
 
@@ -1759,12 +1782,12 @@ mxDbGetIdFromEmail <- function(email, userTable = "mx_users") {
 }
 
 mxDbGetEmailListFromId <- function(id = list(), userTable = "mx_users", asNamedList = FALSE, munged = FALSE) {
-  if (noDataCheck(id)) {
+  if (isEmpty(id)) {
     return(id)
   }
-  id <- id[!vapply(id, noDataCheck, TRUE)]
+  id <- id[!vapply(id, isEmpty, TRUE)]
   id <- vapply(id, as.integer, 1L)
-  if (noDataCheck(id)) {
+  if (isEmpty(id)) {
     return(id)
   }
   idString <- paste("(", paste(id, collapse = ","), ")")
@@ -1809,7 +1832,7 @@ mxDbGetDistinctTableFromSql <- function(sql) {
   tryCatch(
     {
       res <- mxDbGetQuery("EXPLAIN (format JSON) (" + sql + ")")$`QUERY PLAN`
-      if (!noDataCheck(res)) {
+      if (!isEmpty(res)) {
         res <- fromJSON(res, simplifyDataFrame = F)
       }
       if (isTRUE("list" %in% class(res))) {
@@ -1821,7 +1844,7 @@ mxDbGetDistinctTableFromSql <- function(sql) {
       out <- def
     },
     finally = {
-      if (!noDataCheck(names(out))) {
+      if (!isEmpty(names(out))) {
         names(out) <- NULL
       }
     }

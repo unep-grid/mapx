@@ -12,10 +12,6 @@ mxDbWithUniqueCon <- function(cb) {
 #' @return {PostgresqlConnection}
 mxDbGetPool <- function(failIfNotValid = TRUE) {
   pool <- .get(db, c("pg", "conPool"))
-  if (failIfNotValid && !mxDbPoolIsValid(pool)) {
-    mxKillProcess("Invalid pool, quit")
-    return()
-  }
   return(pool)
 }
 
@@ -47,11 +43,16 @@ mxDbPoolClose <- function() {
 #' Check if pool is still valid
 #' @param {Pool} pool Pool
 #' @export
-mxDbPoolIsValid <- function(pool) {
-  !noDataCheck(pool) &&
+mxDbPoolIsValid <- function(pool = NULL) {
+  if (isEmpty(pool)) {
+    pool <- mxDbGetPool()
+  }
+  isNotEmpty(pool) &&
     isTRUE("Pool" %in% class(pool)) &&
-    isTRUE(pool$valid)
+    isTRUE(pool$valid) &&
+    isTRUE(mxDbTest("pool_valid_check"))
 }
+
 
 #' Init pool
 #'
@@ -68,8 +69,8 @@ mxDbPoolInit <- function() {
     pg <- .get(config, c("pg"))
     pMax <- as.integer(pg$poolMax)
     pMin <- as.integer(pg$poolMin)
-    pMax <- ifelse(noDataCheck(pMax), 1, pMax)
-    pMin <- ifelse(noDataCheck(pMin), 1, pMin)
+    pMax <- ifelse(isEmpty(pMax), 1, pMax)
+    pMin <- ifelse(isEmpty(pMin), 1, pMin)
     drv <- dbDriver("PostgreSQL")
 
     #
@@ -97,23 +98,7 @@ mxDbPoolInit <- function() {
         ))
       }
     )
-    tryCatch(
-      {
-        one <- dbGetQuery(con, "SELECT 3 as test")
-        if (.get(one, c("test")) != 3) {
-          stop("failed")
-        }
-      },
-      error = function(cond) {
-        dbDisconnect(con)
-        mxKillProcess(
-          "There was an error in the pool init. The session will be terminated."
-        )
-      },
-      finally = {
-        dbDisconnect(con)
-      }
-    )
+
 
     #
     # Connection pool
@@ -136,6 +121,27 @@ mxDbPoolInit <- function() {
         maxSize = pMax,
         options = "-c application_name=mx_app"
       )
+    )
+
+    #
+    # Testing pool
+    #
+    tryCatch(
+      {
+        ok <- mxDbTest("pool_init_check")
+        if (!ok) {
+          stop("failed")
+        }
+      },
+      error = function(cond) {
+        dbDisconnect(con)
+        mxKillProcess(
+          "There was an error in the pool init. The session will be terminated."
+        )
+      },
+      finally = {
+        dbDisconnect(con)
+      }
     )
   })
 

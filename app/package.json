@@ -16,7 +16,8 @@
     "build_dict": "node ./src/node/build_dict.js dict.config.json",
     "docker": "npm run prod && ./build.sh -a",
     "prod": "npm run build_dict && npm run build",
-    "prod_docker": "npm run prod && ./build.sh -ap"
+    "prod_docker": "npm run prod && ./build.sh -ap",
+    "prod_docker_local": "npm run prod && ./build.sh -a"
   },
   "author": "unepgrid.ch",
   "license": "GPLv3",

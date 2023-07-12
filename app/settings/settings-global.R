@@ -195,8 +195,8 @@ config[["resources"]] <- list(
 # Client side path
 #
 config[["paths"]] <- list(
-  sprites = "sprites/sprite",
-  fontstack = "fontstack/{fontstack}/{range}.pbf"
+  sprites = "assets/sprites/sprite",
+  fontstack = "assets/fontstack/{fontstack}/{range}.pbf"
 )
 
 config[["sprites_prefix"]] <- list(

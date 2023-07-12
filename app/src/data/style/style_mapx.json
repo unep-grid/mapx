@@ -2056,18 +2056,10 @@
         "icon-image": "maki-star-11",
         "icon-size": ["interpolate", ["linear"], ["zoom"], 4, 0.5, 15, 1.5],
         "icon-rotation-alignment": "viewport",
-        "text-variable-anchor": ["bottom-right", "top-right", "top-left"],
-        "text-radial-offset": 0,
+        "text-allow-overlap": false,
+        "text-variable-anchor": ["bottom-right", "top-right"],
+        "text-radial-offset": 0.15,
         "visibility": "visible"
-      },
-      "paint": {
-        "text-halo-color": "rgba(48,48,48,0)",
-        "text-halo-blur": 0.5,
-        "text-halo-width": 1.5,
-        "icon-translate": [3, 3],
-        "text-translate": [-3, -3],
-        "text-color": "rgba(47,47,47,0.8)",
-        "icon-color": "rgba(47,47,47,0.8)"
       }
     },
     {

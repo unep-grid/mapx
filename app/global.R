@@ -48,8 +48,7 @@ tryCatch(
     #
     # Resolve ressource path
     #
-    mxSetResourcePath(.get(config, c("resources")))
-
+    addResourcePath("assets", "./www")
 
 
     #

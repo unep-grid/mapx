@@ -29,7 +29,7 @@ module.exports = {
     filename: "[name].[chunkhash].bundle.js",
     chunkFilename: "[name].[chunkhash].chunk.js",
     path: path.resolve(__dirname, "../www"),
-    publicPath: "",
+    publicPath: "/assets/",
   },
   plugins: [
     new WebpackPwaManifest({
@@ -41,9 +41,9 @@ module.exports = {
       orientation: "portrait",
       display: "standalone",
       crossorigin: "use-credentials", //can be null, use-credentials or anonymous
-      filename: "manifest.json",
+      filename: "assets/manifest.json",
       inject: true,
-      start_url: "/",
+      start_url: ".",
       "theme-color": "#15b0f8",
       theme_color: "#15b0f8",
       icons: [
@@ -71,7 +71,7 @@ module.exports = {
     /* new MonacoWebpackPlugin({*/
     /*}),*/
     new MonacoWebpackPlugin({
-      publicPath: "",
+      publicPath: "/assets/",
       filename: "[name].worker.js",
       /// see app/node_modules/monaco-editor/esm/vs/language/ for a list ,
       languages: ["typescript", "html", "json"],
