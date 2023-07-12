@@ -10,8 +10,13 @@ mxDbWithUniqueCon <- function(cb) {
 
 #' Get db pg pool
 #' @return {PostgresqlConnection}
-mxDbGetPool <- function() {
-  .get(db, c("pg", "conPool"))
+mxDbGetPool <- function(failIfNotValid = TRUE) {
+  pool <- .get(db, c("pg", "conPool"))
+  if (failIfNotValid && !mxDbPoolIsValid(pool)) {
+    mxKillProcess("Invalid pool, quit")
+    return()
+  }
+  return(pool)
 }
 
 #' Get db pg con
@@ -32,7 +37,7 @@ mxDbReturnCon <- function(con) {
 #'
 #' @export
 mxDbPoolClose <- function() {
-  dbPool <- mxDbGetPool()
+  dbPool <- mxDbGetPool(FALSE)
   if (mxDbPoolIsValid(dbPool)) {
     message("Close pool")
     poolClose(dbPool)

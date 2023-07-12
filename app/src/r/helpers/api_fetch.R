@@ -2,19 +2,26 @@
 #'
 #' @param route {Character} route. E.g. '/get/views'
 #' @param listParam {List} Query param. E.g. list(idUser=1,idProject="MX-TEST")
-#' @param asDataFrame {Logical} Return a data.frame 
+#' @param asDataFrame {Logical} Return a data.frame
 #' @return Data {List}
 #'
-mxApiFetch <- function(route,listParam, asDataFrame = FALSE){
+mxApiFetch <- function(route, listParam, asDataFrame = FALSE) {
   data <- list()
-  host <-  .get(config,c("api","host")) 
-  port <- .get(config,c("api","port"))
-  param <- mxListToQueryStringParam(listParam)
-  url <- "http://" + host + ":" + port + route + '?' + param
-  data <- fromJSON(url, simplifyDataFrame = asDataFrame)
-  if(isTRUE(!noDataCheck(data)) && isTRUE(data$type == "error")){
-    stop(data$message)
-  }
+  tryCatch(
+    {
+      host <- .get(config, c("api", "host"))
+      port <- .get(config, c("api", "port"))
+      param <- mxListToQueryStringParam(listParam)
+      url <- "http://" + host + ":" + port + route + "?" + param
+      data <- fromJSON(url, simplifyDataFrame = asDataFrame)
+      if (isTRUE(!noDataCheck(data)) && isTRUE(data$type == "error")) {
+        stop(data$message)
+      }
+    },
+    error = function(e) {
+      mxKillProcess(sprintf("mxApiFetch: api issue, shut down. Details: %s", e$message))
+    }
+  )
   return(data)
 }
 
@@ -23,15 +30,15 @@ mxApiFetch <- function(route,listParam, asDataFrame = FALSE){
 #' Get URL query param from a list
 #'
 #' @param data {List} List of param
-#' @return {Character} Character string with url param. 
+#' @return {Character} Character string with url param.
 #'
-mxListToQueryStringParam <- function(data){
+mxListToQueryStringParam <- function(data) {
   str <- ""
-  enc = htmltools::urlEncodePath;
-  for(i in 1:length(data)){
+  enc <- htmltools::urlEncodePath
+  for (i in 1:length(data)) {
     n <- names(data[i])
     v <- data[[i]]
-    str <- str + n + '=' + enc(paste(v,collapse=',')) + '&'
+    str <- str + n + "=" + enc(paste(v, collapse = ",")) + "&"
   }
 
   str
@@ -40,106 +47,106 @@ mxListToQueryStringParam <- function(data){
 
 #' CURL wrapper for mapx api post request
 #'
-#' @param route {Character} route. E.g. '/get/views'
+#' @param route {Character} route. E.g. '/post/views'
 #' @param listParam {List} Query param. E.g. list(idUser=1,idProject="MX-TEST")
 #' @return Data {List}
 #'
-mxApiPost <- function(route,listParam){
+mxApiPost <- function(route, listParam) {
   out <- list()
-  data <- toJSON(listParam,auto_unbox=T)
-  host <-  .get(config,c("api","host")) 
-  port <- .get(config,c("api","port"))
-  url <- "http://" + host + ":" + port + route
-  h <- new_handle(copypostfields = data)
+  tryCatch(
+    {
+      data <- toJSON(listParam, auto_unbox = T)
+      host <- .get(config, c("api", "host"))
+      port <- .get(config, c("api", "port"))
+      url <- "http://" + host + ":" + port + route
+      h <- new_handle(copypostfields = data)
 
-  handle_setheaders(h,
-    "Content-Type" = "application/json",
-    "Cache-Control" = "no-cache",
-    "Host" = host 
-    )
+      handle_setheaders(h,
+        "Content-Type" = "application/json",
+        "Cache-Control" = "no-cache",
+        "Host" = host
+      )
 
-  req <- curl_fetch_memory(url, handle = h)
-  cnt <- rawToChar(req$content)
+      req <- curl_fetch_memory(url, handle = h)
+      cnt <- rawToChar(req$content)
 
-  if(jsonlite:::validate(cnt)){
-    out <- fromJSON(cnt)
-  }else{
-    out <- list(msg=cnt)
-  }
+      if (jsonlite:::validate(cnt)) {
+        out <- fromJSON(cnt)
+      } else {
+        out <- list(msg = cnt)
+      }
+    },
+    error = function(e) {
+      mxKillProcess(sprintf("mxApiFetch: api issue, shut down. Details: %s", e$message))
+    }
+  )
 
   return(out)
-
 }
 
 mxApiGetViewsAllPublicProject <- function(
   idUser,
-  idProject, 
+  idProject,
   idProjectExclude,
   token,
-  language = c('en'),
-  types = c('vt','cc','rt'),
+  language = c("en"),
+  types = c("vt", "cc", "rt"),
   keys = c("id")
-  ){
-
-  route <- .get(config,c('api','routes','getViewsListGlobalPublic'))
-  res <- mxApiFetch(route,list(
-      idUser = idUser,
-      idProject = idProject,
-      idProjectExclude = idProjectExclude,
-      token = token,
-      language = language,
-      selectKeys = keys,
-      types = c('vt','cc','rt')
-      ))
+) {
+  route <- .get(config, c("api", "routes", "getViewsListGlobalPublic"))
+  res <- mxApiFetch(route, list(
+    idUser = idUser,
+    idProject = idProject,
+    idProjectExclude = idProjectExclude,
+    token = token,
+    language = language,
+    selectKeys = keys,
+    types = c("vt", "cc", "rt")
+  ))
 
   return(res$views)
-
 }
 
 
-mxApiGetViews <-  function(
+mxApiGetViews <- function(
   idUser = NULL,
   idViews = NULL,
-  idProject = .get(config,c("project","default")),
+  idProject = .get(config, c("project", "default")),
   token = "",
-  collections = NULL, 
+  collections = NULL,
   collectionsSelectOperator = "ANY",
-  keys = '*',
-  types = c('vt','sm','cc','rt'),
+  keys = "*",
+  types = c("vt", "sm", "cc", "rt"),
   allProjects = FALSE,
   allReaders = FALSE,
-  rolesInProject = list( public = T, member = F,publisher = F, admin = F), 
+  rolesInProject = list(public = T, member = F, publisher = F, admin = F),
   filterViewsByRoleMax = "admin",
   language = "en"
-  ){
-  route <- .get(config,c('api','routes','getViewsListByProject'))
-  res <- mxApiFetch(route,list(
-      token = token,
-      idProject = idProject,
-      idUser = idUser,
-      selectKeys = keys,
-      idViews = idViews,
-      language = language,
-      collections = collections,
-      types = types
-      )
-    )
+) {
+  route <- .get(config, c("api", "routes", "getViewsListByProject"))
+  res <- mxApiFetch(route, list(
+    token = token,
+    idProject = idProject,
+    idUser = idUser,
+    selectKeys = keys,
+    idViews = idViews,
+    language = language,
+    collections = collections,
+    types = types
+  ))
   return(res$views)
 }
 
-mxApiGetSourceSummary <-  function(
+mxApiGetSourceSummary <- function(
   idView = NULL,
   idSource = NULL,
   idAttr = NULL
-  ){
-  route <- .get(config,c('api','routes','getSourceSummary'))
-  res <- mxApiFetch(route,list(
-      idSource = idSource,
-      idView = idView,
-      idAttr = idAttr
-  )
-  )
+) {
+  route <- .get(config, c("api", "routes", "getSourceSummary"))
+  res <- mxApiFetch(route, list(
+    idSource = idSource,
+    idView = idView,
+    idAttr = idAttr
+  ))
   return(res)
 }
-
-
