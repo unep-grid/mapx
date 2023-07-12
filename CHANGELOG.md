@@ -1,3 +1,8 @@
+  - [1.12.3-alpha.14](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.14) 
+
+    - APP
+        - Trying to fix issue with db pool not working properly after a db restart: quit process in case of invalid pool during pool connection checkout
+
   - [1.12.3-alpha.13](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.13) 
 
     - APP 
