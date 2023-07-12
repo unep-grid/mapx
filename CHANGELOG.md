@@ -1,3 +1,11 @@
+  - [1.12.3-alpha.15](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.15) 
+
+    - APP
+        - Added /health route 
+        - Changed app structure to implement the healthcheck
+        - Changed some db pool testing
+        - Themes : solved a validation issue due to recently added building_border 
+
   - [1.12.3-alpha.14](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.14) 
 
     - APP
