@@ -14,6 +14,7 @@ import '../css/mx_table.css';
 import '../css/mx_modal.css';
 import '../css/mx_project_list.css';
 import '../css/mx_legends.css';
+import '../css/mx_icons.css';
 
 import * as mx from './mx.js';
 window.mx = mx;
