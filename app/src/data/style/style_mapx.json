@@ -72,7 +72,7 @@
       "filter": ["==", ["get", "class"], "national_park"],
       "layout": {},
       "paint": {
-        "fill-color": "hsl(110, 41%, 78%)",
+        "fill-color": "hsla(110, 41%, 78%, 0)",
         "fill-opacity": [
           "interpolate",
           ["linear"],
@@ -334,7 +334,7 @@
       },
       "paint": {
         "line-opacity": ["interpolate", ["linear"], ["zoom"], 0, 0, 22, 0.8],
-        "line-color": "rgb(115,115,115)",
+        "line-color": "rgba(115,115,115, 0)",
         "line-blur": 0,
         "line-width": 1
       }
@@ -348,7 +348,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgb(115,115,115)",
+        "fill-color": "rgba(115,115,115, 0)",
         "fill-opacity": 1,
         "fill-outline-color": "hsla(0, 0%, 45%, 0.55)",
         "fill-antialias": false
@@ -387,9 +387,9 @@
           ["cubic-bezier", 0, 0.5, 1, 0.5],
           ["get", "depth"],
           200,
-          "rgba(100,100,100,0.4)",
+          "rgba(100,100,100,0)",
           9000,
-          "rgba(20,20,20,0.4)"
+          "rgba(20,20,20,0)"
         ]
       }
     },
@@ -417,7 +417,7 @@
           22,
           1
         ],
-        "line-color": "rgb(255,255,255)",
+        "line-color": "rgba(255,255,255, 0)",
         "line-width": 1,
         "line-dasharray": [1, 4]
       }
@@ -500,7 +500,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(200,200,200)",
+        "line-color": "rgba(200,200,200, 0)",
         "line-opacity": [
           "interpolate",
           ["exponential", 1.5],
@@ -554,7 +554,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(255,255,255)",
+        "line-color": "rgba(255,255,255, 0)",
         "line-opacity": 0.4,
         "line-width": [
           "interpolate",
@@ -596,7 +596,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(200,200,200)",
+        "line-color": "rgba(200,200,200, 0)",
         "line-opacity": [
           "interpolate",
           ["exponential", 1.5],
@@ -650,7 +650,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(255,255,255)",
+        "line-color": "rgba(255,255,255, 0)",
         "line-opacity": 1,
         "line-width": [
           "interpolate",
@@ -692,7 +692,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(200,200,200)",
+        "line-color": "rgba(200,200,200, 0)",
         "line-opacity": [
           "interpolate",
           ["exponential", 1.5],
@@ -746,7 +746,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(255,255,255)",
+        "line-color": "rgba(255,255,255, 0)",
         "line-opacity": 1,
         "line-width": [
           "interpolate",
@@ -799,7 +799,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(200,200,200)",
+        "line-color": "rgba(200,200,200, 0)",
         "line-opacity": [
           "interpolate",
           ["exponential", 1.5],
@@ -864,7 +864,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(255,255,255)",
+        "line-color": "rgba(255,255,255, 0)",
         "line-opacity": 0.4,
         "line-width": [
           "interpolate",
@@ -917,7 +917,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(200,200,200)",
+        "line-color": "rgba(200,200,200, 0)",
         "line-opacity": [
           "interpolate",
           ["exponential", 1.5],
@@ -982,7 +982,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(255,255,255)",
+        "line-color": "rgba(255,255,255, 0)",
         "line-opacity": 1,
         "line-width": [
           "interpolate",
@@ -1035,7 +1035,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(200,200,200)",
+        "line-color": "rgba(200,200,200, 0)",
         "line-opacity": [
           "interpolate",
           ["exponential", 1.5],
@@ -1100,7 +1100,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(255,255,255)",
+        "line-color": "rgba(255,255,255, 0)",
         "line-opacity": 1,
         "line-width": [
           "interpolate",
@@ -1142,7 +1142,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(200,200,200)",
+        "line-color": "rgba(200,200,200, 0)",
         "line-opacity": [
           "interpolate",
           ["exponential", 1.5],
@@ -1196,7 +1196,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(240,240,240)",
+        "line-color": "rgba(240,240,240, 0)",
         "line-opacity": 0.4,
         "line-width": [
           "interpolate",
@@ -1238,7 +1238,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(200,200,200)",
+        "line-color": "rgba(200,200,200, 0)",
         "line-opacity": [
           "interpolate",
           ["exponential", 1.5],
@@ -1292,7 +1292,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(240,240,240)",
+        "line-color": "rgba(240,240,240, 0)",
         "line-opacity": 1,
         "line-width": [
           "interpolate",
@@ -1334,7 +1334,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(200,200,200)",
+        "line-color": "rgba(200,200,200, 0)",
         "line-opacity": [
           "interpolate",
           ["exponential", 1.5],
@@ -1388,7 +1388,7 @@
         ["match", ["get", "type"], ["platform"], false, true]
       ],
       "paint": {
-        "line-color": "rgb(240,240,240)",
+        "line-color": "rgba(240,240,240, 0)",
         "line-opacity": 1,
         "line-width": [
           "interpolate",
@@ -1495,7 +1495,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgb(255,255,255)",
+        "fill-color": "rgba(255,255,255, 0)",
         "fill-opacity": 1
       }
     },
@@ -1519,7 +1519,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgb(255,255,255)",
+        "fill-color": "rgba(255,255,255, 0)",
         "fill-opacity": 0.2,
         "fill-pattern": "geol_hatch_01",
         "fill-antialias": false
@@ -1551,7 +1551,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgb(255,255,255)"
+        "fill-color": "rgba(255,255,255, 0)"
       }
     },
 
@@ -1583,7 +1583,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgb(155,155,155)",
+        "line-color": "rgba(155,155,155, 0)",
         "line-opacity": 0.4
       },
       "minzoom": 15,
@@ -1935,7 +1935,7 @@
         "visibility": "none"
       },
       "paint": {
-        "background-color": "rgb(255,0,0)",
+        "background-color": "rgba(255,0,0, 0)",
         "background-opacity": 0
       }
     },
@@ -1967,7 +1967,7 @@
         "visibility": "none"
       },
       "paint": {
-        "line-color": "rgb(255,255,255)",
+        "line-color": "rgba(255,255,255, 0)",
         "line-dasharray": [3, 2],
         "line-width": [
           "interpolate",
