@@ -41,7 +41,7 @@ module.exports = {
       orientation: "portrait",
       display: "standalone",
       crossorigin: "use-credentials", //can be null, use-credentials or anonymous
-      filename: "assets/manifest.json",
+      filename: "manifest.json",
       inject: true,
       start_url: ".",
       "theme-color": "#15b0f8",

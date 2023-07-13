@@ -89,7 +89,7 @@ async function hasEnoughStorage() {
 async function handleInitSw() {
   console.log("SW - register !");
   const registration = await navigator.serviceWorker.register(
-    "/service-worker.js"
+    "/assets/service-worker.js"
   );
   await handleRegistration(registration);
 }
