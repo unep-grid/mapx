@@ -1,3 +1,8 @@
+  - [1.12.3-alpha.16](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.16) 
+
+    - APP
+        - Fixed issues with service worker and static mode not working
+
   - [1.12.3-alpha.15](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.15) 
 
     - APP
