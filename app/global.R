@@ -1,8 +1,22 @@
-#
-# Dependencies
-#
+
 tryCatch(
   {
+    #
+    # Update environment
+    #
+    # - always be in the app location
+    setwd(Sys.getenv("MAPX_PATH_APP"))
+    # - Some package uses "~" as project root and report error
+    #   as there is nothing in /home/app -> /app
+    Sys.setenv("HOME" = "/")
+    # if SHINY_PORT is set, shiny think it's in shiny-server
+    # if SHINY_SERVER_VERSION is not set, it  complains
+    Sys.setenv("SHINY_SERVER_VERSION" = "0.5.0")
+
+    #
+    # Dependencies
+    #
+
     library(shiny)
     library(RPostgreSQL)
     library(memoise)
@@ -49,7 +63,6 @@ tryCatch(
     # Resolve ressource path
     #
     addResourcePath("assets", "./www")
-
 
     #
     # Init pool and master direct connection
