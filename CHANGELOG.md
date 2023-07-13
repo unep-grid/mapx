@@ -1,3 +1,8 @@
+  - [1.12.3-alpha.17](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.17) 
+
+    - APP
+        - Test solving issue occuring in kubernetes, during init
+
   - [1.12.3-alpha.16](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.16) 
 
     - APP
