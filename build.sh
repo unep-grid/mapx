@@ -31,6 +31,11 @@ CHANGELOG="changelog.md"
 CHANGELOG_TMP="/tmp/changelog.md"
 
 #
+# log/re log in docker 
+#
+docker login
+
+#
 # Helpers 
 #
 usage() {

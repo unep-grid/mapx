@@ -12,6 +12,7 @@
 !www/**
 !global.R
 !server.R
+!ui.R
 !run.R
 !start_mapx.sh
 !package.json
