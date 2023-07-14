@@ -188,9 +188,9 @@
           "match",
           ["get", "class"],
           "highlight",
-          "rgba(255,255,255,0.1)",
+          "rgba(255,255,255,0)",
           "shadow",
-          "rgba(145,145,145,0.1)",
+          "rgba(145,145,145,0)",
           "hsla(0, 0%, 0%, 0)"
         ],
         "fill-outline-color": "hsla(0,0,0,0)"
@@ -207,7 +207,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgba(38,38,38,0.3)",
+        "line-color": "rgba(38,38,38,0)",
         "line-width": ["interpolate", ["linear"], ["zoom"], 0, 0.5, 22, 2],
         "line-opacity": ["interpolate", ["linear"], ["zoom"], 0, 0.9, 6, 1]
       }
@@ -223,7 +223,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "rgba(38,38,38,0.3)",
+        "line-color": "rgba(38,38,38,0)",
         "line-dasharray": [1, 2, 6, 2],
         "line-width": ["interpolate", ["linear"], ["zoom"], 0, 0.5, 22, 2],
         "line-opacity": ["interpolate", ["linear"], ["zoom"], 0, 0.9, 6, 1]

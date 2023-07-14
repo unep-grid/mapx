@@ -85,22 +85,17 @@ export function generateButtons() {
     }),
     new Button({
       key: "btn_toggle_theme_dark",
-      classesIcon: ["fa", "fa-sun-o"],
+      classesIcon: ["fa", "fa-moon-o"],
+      classesIconActive: ["fa", "fa-sun-o"],
       onInit: (btn) => {
-        theme.registerButton(btn, {
-          type: "dark",
-          classActive: "fa-moon-o",
-          classInactive: "fa-sun-o",
-        });
+        theme.registerButton(btn, "dark");
       },
     }),
     new Button({
       key: "btn_toggle_theme_tree",
       classesIcon: ["fa", "fa-tree"],
       onInit: (btn) => {
-        theme.registerButton(btn, {
-          tag: "tree",
-        });
+        theme.registerButton(btn, "tree");
       },
     }),
     new Button({

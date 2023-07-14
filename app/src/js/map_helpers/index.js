@@ -138,7 +138,6 @@ import {
   isViewRtWithLegend,
   isViewVtWithAttributeType,
   isBoundsInsideBounds,
-  isEqual,
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
@@ -1149,7 +1148,7 @@ export async function initMapx(o) {
   if (isEmpty(idThemeQuery)) {
     const idTheme = o.idTheme;
     if (theme.isValidId(idTheme)) {
-      theme.set(idTheme, { save_url: true });
+      await theme.set(idTheme, { save_url: true });
     }
   }
 
@@ -4872,9 +4871,9 @@ export async function setMapProjection(opt) {
  * @param {Object} opt options
  * @param {String} opt.id Theme id
  */
-export function setTheme(opt) {
+export async function setTheme(opt) {
   if (theme.isValidId(opt.id)) {
-    theme.set(opt.id, { save_url: true });
+    await theme.set(opt.id, { save_url: true });
   }
 }
 

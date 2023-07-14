@@ -61,6 +61,11 @@ class Button extends EventSimple {
     /**
      * Build button ui.
      */
+
+    btn.elIcon = el("i", {
+      class: opt.classesIcon,
+    });
+
     btn.elButton = el(
       "button",
       {
@@ -80,9 +85,7 @@ class Button extends EventSimple {
         },
         "aria-label": getDictItem(opt.key),
       },
-      el("i", {
-        class: opt.classesIcon,
-      })
+      btn.elIcon
     );
     if (opt.display === false) {
       btn.hide();
@@ -137,12 +140,28 @@ class Button extends EventSimple {
     if (this.isLocked()) {
       return;
     }
+    if (this.opt.classesIconActive) {
+      for (const cl of this.opt.classesIcon) {
+        this.elIcon.classList.remove(cl);
+      }
+      for (const cl of this.opt.classesIconActive) {
+        this.elIcon.classList.add(cl);
+      }
+    }
     return this.elButton.classList.add("active");
   }
 
   disable() {
     if (this.isLocked()) {
       return;
+    }
+    if (this.opt.classesIconActive) {
+      for (const cl of this.opt.classesIconActive) {
+        this.elIcon.classList.remove(cl);
+      }
+      for (const cl of this.opt.classesIcon) {
+        this.elIcon.classList.add(cl);
+      }
     }
     return this.elButton.classList.remove("active");
   }

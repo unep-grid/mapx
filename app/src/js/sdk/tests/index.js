@@ -54,6 +54,12 @@ async function stopIfGuest() {
   }
 }
 
+async function waitAsync(d) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(true), d);
+  });
+}
+
 mapx.once("ready", async () => {
   await stopIfGuest();
 
@@ -180,9 +186,7 @@ mapx.once("ready", async () => {
         test: () => {
           // map_jump_to return after move_end
           // the view is there, but queryRenderedFeatures returns nothing
-          return new Promise((resolve) => {
-            setTimeout(() => resolve(true), 1000);
-          });
+          return waitAsync(1000);
         },
       },
       {
@@ -261,24 +265,32 @@ mapx.once("ready", async () => {
     init: async () => {
       const res = {};
       res.themes = await mapx.ask("get_themes");
+      res.idTheme = await mapx.ask("get_theme_id");
+      res.idThemes = await mapx.ask("get_themes_ids");
       return res;
     },
     tests: [
       {
         name: "theme wait",
         test: () => {
-          return new Promise((resolve) => {
-            setTimeout(() => resolve(true), 1000);
-          });
+          return waitAsync(1000);
         },
       },
       {
-        name: "add theme",
+        name: "all themes",
         test: async (res) => {
-          const out = await mapx.ask("add_theme", {
-            theme: res.themes[0],
+          // all themes 
+          for (const id of res.idThemes) {
+            await mapx.ask("add_theme", {
+              theme: res.themes[id],
+            });
+            await waitAsync(200);
+          }
+          // orig theme 
+          await mapx.ask("add_theme", {
+            theme: res.themes[res.idTheme],
           });
-          return out;
+          return true;
         },
       },
     ],
@@ -684,7 +696,6 @@ mapx.once("ready", async () => {
       },
     ],
   });
-
 
   t.check("Common loc", {
     init: () => {
@@ -1403,7 +1414,6 @@ mapx.once("ready", async () => {
     ],
   });
 
-  
   t.check("Chaos views display 2", {
     tests: [
       {

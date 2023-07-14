@@ -94,9 +94,9 @@ const settings = {
   },
   paths: {
     static: "/static.html",
-    sprites: "sprites/sprite",
+    sprites: "assets/sprites/sprite",
     fontstack: "fontstack/{fontstack}/{range}.pbf",
-    svg: "sprites/svg/",
+    svg: "assets/sprites/svg/",
   },
   style: styleDefault.default,
   layerBefore: "mxlayers",
