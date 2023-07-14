@@ -17,7 +17,6 @@ import { modalMarkdown } from "../modal_markdown/index.js";
 import { settings } from "./../settings";
 import { UAParser } from "ua-parser-js";
 import { theme } from "./../mx.js";
-import { panel_tools } from "./../mx.js";
 
 const uaparser = new UAParser();
 const isNotBlink = uaparser.getEngine().name !== "Blink";
@@ -86,16 +85,24 @@ export function generateButtons() {
     }),
     new Button({
       key: "btn_toggle_theme_dark",
-      classesIcon: ["fa", "fa-adjust"],
-      onInit: function (btn) {
+      classesIcon: ["fa", "fa-moon-o"],
+      classesIconActive: ["fa", "fa-sun-o"],
+      onInit: (btn) => {
         theme.registerButton(btn, "dark");
       },
     }),
     new Button({
-      key: "btn_toggle_theme_monochrome",
-      classesIcon: ["fa", "fa-paint-brush"],
-      onInit: function (btn) {
-        theme.registerButton(btn, "mono");
+      key: "btn_toggle_theme_tree",
+      classesIcon: ["fa", "fa-tree"],
+      onInit: (btn) => {
+        theme.registerButton(btn, "tree");
+      },
+    }),
+    new Button({
+      key: "btn_toggle_theme_water",
+      classesIcon: ["mx-water"],
+      onInit: (btn) => {
+        theme.registerButton(btn, "water");
       },
     }),
     new Button({

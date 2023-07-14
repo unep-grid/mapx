@@ -272,6 +272,14 @@ class MapxResolversStatic extends ResolversBase {
   }
 
   /**
+   * Get all theme id
+   * @return {Array<string>} Theme ids
+   */
+  get_themes_ids() {
+    return theme.ids();
+  }
+
+  /**
    * Add a custom theme into mapx and use it.
    * @param {Object} opt Options
    * @param {String} opt.theme Valid theme (full).

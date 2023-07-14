@@ -1,5 +1,4 @@
-import { isStringRange } from "../is_test";
-import { isElement } from "../is_test";
+import { isStringRange, isElement } from "../is_test";
 import { el } from "./../el/src";
 import "./style.css";
 const def = {
@@ -65,15 +64,21 @@ export class TextFilter {
       return sr.reset();
     }
     let count = 0;
+    let elFirst = null;
+    const substrings = txt.split(" ");
+    const regex = new RegExp(
+      "^(?=.*" + substrings.join(")(?=.*") + ").*$",
+      "i"
+    );
     const max = sr._elsTarget.length;
     sr._search_to_id = setTimeout(() => {
-      const re = new RegExp(`${txt}`, "gi");
       sr.reset();
       for (const el of sr._elsTarget) {
         if (!el.dataset._cache) {
           el.dataset._cache = el.textContent || el.innerText;
         }
-        const match = el.dataset._cache.match(re);
+        const match = regex.test(el.dataset._cache);
+
         if (!match) {
           if (sr.opt.modeFlex) {
             el.style.order = max;
@@ -91,9 +96,12 @@ export class TextFilter {
           for (const elInner of el.querySelectorAll("*")) {
             for (const node of elInner.childNodes) {
               if (node.nodeType == Node.TEXT_NODE) {
-                const okNode = node.textContent.match(re);
+                const okNode = regex.test(node.textContent);
                 if (okNode) {
                   elInner.classList.add("txt-filter--box");
+                  if (!elFirst) {
+                    elFirst = elInner;
+                  }
                 }
               }
             }
@@ -103,8 +111,13 @@ export class TextFilter {
       if (count === 0) {
         sr.reset();
       }
-      if (sr._mode_container) {
-        sr._elContainer.scrollIntoView();
+
+      if (elFirst) {
+        if (elFirst.scrollIntoViewIfNeeded) {
+          elFirst.scrollIntoViewIfNeeded();
+        } else {
+          elFirst.scrollIntoView();
+        }
       }
     }, sr.opt.timeout);
   }

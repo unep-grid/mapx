@@ -1,3 +1,4 @@
+import { default as global } from "./settings.json";
 import { EventSimple } from "./../event_simple";
 import { el } from "./../el/src/index.js";
 import { elButtonFa, elSelect, tt } from "./../el_mapx";
@@ -11,81 +12,31 @@ import { isElement, makeSafeName, isStringRange } from "../is_test";
 import { settings } from "../settings";
 import { downloadJSON } from "../download";
 import { TextFilter } from "../text_filter_simple";
-import { default as classic_light } from "./themes/classic_light.json";
-import { default as classic_dark } from "./themes/classic_dark.json";
-import { default as color_dark } from "./themes/color_dark.json";
-import { default as color_light } from "./themes/color_light.json";
-import switchOn from "./sound/switch_on.mp3";
-import switchOff from "./sound/switch_off.mp3";
-import click from "./sound/click.mp3";
+import { inverseResolver, resolver, themes } from "./themes/index.js";
 import { fileSelectorJSON } from "../mx_helper_misc";
 import { isNotEmpty } from "../is_test";
 import { fontFamilies, fonts } from "./fonts.js";
 import { validate } from "./validator.js";
 import { Button } from "./../panel_controls/button.js";
+import { sounds } from "./sound/index.js";
 
 import "./style.less";
 
 /**
  * Set globals
  */
-const global = {
-  elStyle: null,
-  elContainer: null,
-  map: null,
-  themes: [classic_light, classic_dark, color_light, color_dark],
-  fonts_enabled: {
-    css: ["mx_ui_text"],
-    map: [
-      "mx_map_text_place",
-      "mx_map_text_road",
-      "mx_map_text_water",
-      "mx_map_text_bathymetry",
-      "mx_map_text_country_0_0",
-      "mx_map_text_country_0_1",
-      "mx_map_text_country_0_2",
-      "mx_map_text_country_0_3",
-      "mx_map_text_country_0_4",
-      "mx_map_text_country_0_5",
-      "mx_map_text_country_0_99",
-      "mx_map_text_country_1_1",
-    ],
-  },
-  id: "classic_light",
-  id_default: "classic_light",
-  modes: {
-    dark: {
-      mono: "classic_dark",
-      color: "color_dark",
-    },
-    light: {
-      mono: "classic_light",
-      color: "color_light",
-    },
-  },
-  colors: null,
-  debug: false,
-  on: {},
-  sounds: {
-    switch_on: switchOn,
-    switch_off: switchOff,
-    click: click,
-  },
-};
-
-const legacyThemesMap = {
-  classic_light: "classic_light",
-  water_light: "color_light",
-  water_dark: "color_dark",
-  classic_dark: "classic_dark",
-};
-
 class Theme extends EventSimple {
   constructor(opt) {
     super();
     const t = this;
     bindAll(t);
-    t._opt = Object.assign({}, global, opt);
+    t._opt = Object.assign({}, { themes: Object.keys(themes) }, global, opt);
+
+    t._btns = {
+      dark: null,
+      tree: null,
+      water: null,
+    };
     t._inputs = [];
     t.init().catch((e) => {
       console.warn(e);
@@ -118,6 +69,29 @@ class Theme extends EventSimple {
     return ok;
   }
 
+  async updateThemeByButton() {
+    const t = this;
+    const s = {};
+    for (const k in t._btns) {
+      s[k] = t._btns[k].isActive();
+    }
+    const theme = resolver(s);
+    await t.set(theme, {
+      sound: true,
+      save: true,
+      save_url: true,
+      update_buttons: false,
+    });
+  }
+
+  updateButtons() {
+    const t = this;
+    const s = inverseResolver(t.id());
+    for (const k in s) {
+      t._btns[k].activate(s[k]);
+    }
+  }
+
   /**
    * Register dark/mono buttons
    */
@@ -127,28 +101,11 @@ class Theme extends EventSimple {
       console.warn("registerButton expects a Button instance");
       return;
     }
-    switch (type) {
-      case "dark":
-        t._btn_dark = btn;
-        btn.setAction(() => {
-          btn.toggle();
-          const light = btn.isActive() ? "dark" : "light";
-          const color = t.isMono() ? "mono" : "color";
-          const idTheme = t._opt.modes[light][color];
-          t.set(idTheme, { sound: true, save: true, save_url: true });
-        });
-        break;
-      case "mono":
-        t._btn_mono = btn;
-        btn.setAction(() => {
-          btn.toggle();
-          const color = btn.isActive() ? "mono" : "color";
-          const light = t.isDark() ? "dark" : "light";
-          const idTheme = t._opt.modes[light][color];
-          t.set(idTheme, { sound: true, save: true, save_url: true });
-        });
-        break;
-    }
+    t._btns[type] = btn;
+    btn.setAction(async () => {
+      btn.toggle();
+      await t.updateThemeByButton();
+    });
   }
 
   /**
@@ -167,7 +124,7 @@ class Theme extends EventSimple {
   }
 
   id() {
-    return this._theme.id;
+    return this.theme().id;
   }
 
   theme() {
@@ -175,7 +132,7 @@ class Theme extends EventSimple {
   }
 
   colors() {
-    return this._theme.colors || {};
+    return this.theme().colors || {};
   }
 
   mode() {
@@ -183,7 +140,7 @@ class Theme extends EventSimple {
   }
 
   isDark() {
-    return !!this._theme.dark;
+    return !!this.theme().dark;
   }
 
   isDarkMode() {
@@ -191,13 +148,8 @@ class Theme extends EventSimple {
     return t.isDark();
   }
 
-  isMono() {
-    return !!this._theme.mono;
-  }
-
   ids() {
-    const t = this;
-    return t._opt.themes.map((theme) => theme.id);
+    return Object.values(themes).map((theme) => theme.id);
   }
 
   isValidId(id) {
@@ -210,12 +162,11 @@ class Theme extends EventSimple {
     if (!id) {
       id = t.id();
     }
-    return t._opt.themes.find((theme) => theme.id === id);
+    return themes[id];
   }
 
   getAll() {
-    const t = this;
-    return t._opt.themes;
+    return themes;
   }
 
   /**
@@ -228,65 +179,63 @@ class Theme extends EventSimple {
     const t = this;
     opt = Object.assign({}, opt);
     const ok = await validate(theme);
-    const ids = t.ids();
     if (!ok) {
       throw new Error("Invalid theme");
     }
-    if (ids.includes(theme.id)) {
-      const pos = ids.indexOf(theme.id);
-      t._opt.themes.splice(pos, 1);
-    }
-    t._opt.themes.push(theme);
-    return await t.set(theme.id, opt);
+    themes[theme.id] = theme;
+    return await t.set(theme, opt);
   }
 
   /**
    * Set the theme with the provided ID and options.
+   * colors: 947.512939453125 ms
+   *inputs: 0.02978515625 ms
+   * sound: 0.085693359375 ms
    * @async
-   * @param {string} id - The theme ID to set.
+   * @param {string|Object} theme - The theme or theme id
    * @param {Object} [opt] - Optional settings for the theme.
    * @param {boolean} [opt.sound=false] - Whether to play the theme sound.
-   * @param {boolean} [opt.force=false] - Whether force settting.
    * @param {boolean} [opt.save=false] - Whether to save the theme ID to localStorage.
    * @param {boolean} [opt.save_url=false] - Whether to save the theme ID in the URL.
    * @returns {Promise<boolean>} Returns true if the theme was successfully set, otherwise false.
    * @throws {Error} If there is an error while setting the theme.
    */
-  async set(id, opt) {
+  async set(theme, opt) {
     const t = this;
     opt = Object.assign(
       {},
-      { sound: false, save: false, save_url: false, force: false },
+      {
+        sound: false,
+        save: false,
+        save_url: false,
+        update_buttons: true,
+      },
       opt
     );
-    let { sound, save, save_url, force } = opt;
+    let { sound, save, save_url, update_buttons } = opt;
 
     try {
-      if (!force && t._is_setting) {
-        return false;
-      }
-      t._is_setting = true;
-      const valid = t.isValidId(id);
 
-      if (!valid) {
-        id = legacyThemesMap[id];
-        if (!t.isValidId(id)) {
-          id = t._opt.id || t._opt.id_default;
-          // reset save_url and localStorage
-          save_url = true;
-          save = true;
-        }
+      const isId = t.isValidId(theme);
+
+      if (isId) {
+        theme = t.get(theme);
       }
 
-      const theme = t.get(id);
+      if (!validate(theme)) {
+        throw new Error("Invalid theme");
+      }
 
-      if (id === t._id) {
+      if (theme.id === t._id) {
         return true;
       }
+      const oldTheme = t.theme();
+      const newTheme = theme;
+
+      t._id = theme.id;
+      t._theme = theme;
 
       if (sound) {
-        const oldTheme = t._theme;
-        const newTheme = theme;
 
         const idSound =
           oldTheme.dark && !newTheme.dark
@@ -298,30 +247,21 @@ class Theme extends EventSimple {
         await t.sound(idSound);
       }
 
-      t._id = theme.id;
-      t._theme = theme;
+      await t.setColors(theme.colors);
 
       if (save) {
-        localStorage.setItem("theme@id", id);
+        localStorage.setItem("theme@id", theme.id);
       }
 
       if (save_url) {
-        t.setThemeUrl(id);
+        t.setThemeUrl(theme.id);
       }
-
-      await t.setColors(theme.colors);
-
-      await t.buildInputs();
+      if (update_buttons) {
+        t.updateButtons();
+      }
 
       t.fire("mode_changed", t.mode());
 
-      if (t._btn_dark) {
-        t._btn_dark.activate(t.isDark());
-      }
-
-      if (t._btn_mono) {
-        t._btn_mono.activate(t.isMono());
-      }
       return true;
     } catch (e) {
       console.warn(e);
@@ -420,12 +360,14 @@ class Theme extends EventSimple {
       colors || t._opt.colors
     );
     const validColors = await t.validateColors(new_colors);
-    if (validColors) {
-      t._colors = new_colors;
-      await t.updateCss();
-      await t.updateMap();
-      t.fire("set_colors", new_colors);
+    if (!validColors) {
+      console.warn("Invalid colors", new_colors);
+      return;
     }
+    t._theme.colors = new_colors;
+    await t.updateCss();
+    await t.updateMap();
+    t.fire("set_colors", new_colors);
   }
 
   getColorThemeItem(id) {
@@ -438,7 +380,7 @@ class Theme extends EventSimple {
 
   async updateCss() {
     const t = this;
-    global.elStyle.textContent = await css_resolver(t._colors);
+    global.elStyle.textContent = await css_resolver(t.colors());
     return true;
   }
 
@@ -454,14 +396,24 @@ class Theme extends EventSimple {
     if (!map) {
       return;
     }
-    /*    const isMapStyleLoaded = map.isStyleLoaded();*/
 
-    /*if (!isMapStyleLoaded) {*/
-    /*await map.once("load", t.updateMap.bind(t));*/
-    /*return false;*/
-    /*}*/
+    if (t._update_map_when_calm) {
+      // Map is busy, command postponed
+      return;
+    }
+
+    if (!map.isStyleLoaded()) {
+      t._update_map_when_calm = true;
+      await map.once("idle");
+    }
+    t._update_map_when_calm = false;
+
+    /**
+     * Get latest colors and state
+     */
     const isDark = t.isDarkMode();
-    const layers = layer_resolver(t._colors);
+    const colors = t.colors();
+    const layers = layer_resolver(colors);
 
     for (const grp of layers) {
       for (const id of grp.id) {
@@ -488,50 +440,10 @@ class Theme extends EventSimple {
     }
 
     if (isDark) {
-      map.setFog({
-        "horizon-blend": ["interpolate", ["linear"], ["zoom"], 4, 0.1, 7, 0.3],
-        color: [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          4,
-          "rgba(255, 255, 255, 0.1)",
-          7,
-          "rgba(255, 255, 255, 0.8)",
-        ],
-        "high-color": "rgba(255,255,255,0.1)",
-        "space-color": "#111",
-        "star-intensity": 0.1,
-      });
+      map.setFog(t._opt.fog.dark);
     } else {
-      map.setFog({
-        "horizon-blend": ["interpolate", ["linear"], ["zoom"], 4, 0.1, 7, 0.3],
-        color: [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          0,
-          "rgba(17, 176, 248, 0.3)",
-          4,
-          "rgba(255, 255, 255, 0.3)",
-          7,
-          "rgba(255, 255, 255, 0.8)",
-        ],
-        "high-color": "rgba(255,255,255,0.1)",
-        "space-color": [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          4,
-          "#111",
-          7,
-          "rgba(17,176,248,0.9)",
-        ],
-        "star-intensity": ["interpolate", ["linear"], ["zoom"], 4, 0.1, 7, 0],
-      });
+      map.setFog(t._opt.fog.light);
     }
-
-    await map.once("idle");
     return true;
   }
 
@@ -548,7 +460,7 @@ class Theme extends EventSimple {
 
   buildInputGroup(cid) {
     const t = this;
-    const colors = t._colors;
+    const colors = t.colors();
     const inputType = ["checkbox", "color", "range"];
     const conf = colors[cid];
     const color = chroma(conf.color);
@@ -721,7 +633,13 @@ class Theme extends EventSimple {
   buildManager() {
     const t = this;
     t._elContainer.classList.add("mx-theme--manager");
-    t._elInputsContainer = el("div");
+    t._elInputsContainer = el("div", {
+      class: "well",
+      style: {
+        maxHeight: "400px",
+        overflowY: "auto",
+      },
+    });
     t._elBtnExport = elButtonFa("mx_theme_export_button", {
       icon: "cloud-download",
       action: t.exportThemeDownload,
@@ -765,7 +683,7 @@ class Theme extends EventSimple {
     return new Promise((resolve, reject) => {
       try {
         const t = this;
-        const colors = t._colors;
+        const colors = t.colors();
         const elContainer = t._elInputsContainer;
         const elFrag = new DocumentFragment();
         if (!isElement(elContainer)) {
@@ -812,7 +730,10 @@ class Theme extends EventSimple {
     try {
       const t = this;
       const theme = await t.exportStyle();
-      await downloadJSON(theme, `mx_theme_${makeSafeName(theme.id)}.json`);
+      if (!theme) {
+        return;
+      }
+      await downloadJSON(theme, `${makeSafeName(theme.id)}.json`);
     } catch (e) {
       console.error(e);
     }
@@ -823,7 +744,6 @@ class Theme extends EventSimple {
       const t = this;
       const config = {};
       const theme = t.get();
-
       const colors = t.getColorsFromInputs();
 
       if (isNotEmpty(colors)) {
@@ -930,19 +850,7 @@ class Theme extends EventSimple {
    * Sound
    */
   async sound(id) {
-    try {
-      const t = this;
-      if (t._playing) {
-        return;
-      }
-      t._playing = true;
-      t._elAudio = t._elAudio || el("audio");
-      t._elAudio.setAttribute("src", t._opt.sounds[id]);
-      await t._elAudio.play();
-      t._playing = false;
-    } catch (e) {
-      console.warn(e);
-    }
+    await sounds[id].play();
   }
 }
 

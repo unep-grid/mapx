@@ -1,0 +1,70 @@
+{
+  "elStyle": null,
+  "elContainer": null,
+  "map": null,
+  "themes": [],
+  "fonts_enabled": {
+    "css": ["mx_ui_text"],
+    "map": [
+      "mx_map_text_place",
+      "mx_map_text_road",
+      "mx_map_text_water",
+      "mx_map_text_bathymetry",
+      "mx_map_text_country_0_0",
+      "mx_map_text_country_0_1",
+      "mx_map_text_country_0_2",
+      "mx_map_text_country_0_3",
+      "mx_map_text_country_0_4",
+      "mx_map_text_country_0_5",
+      "mx_map_text_country_0_99",
+      "mx_map_text_country_1_1"
+    ]
+  },
+  "id": "color_light",
+  "id_default": "color_light",
+  "colors": null,
+  "debug": false,
+  "on": {},
+  "fog": {
+    "dark": {
+      "horizon-blend": ["interpolate", ["linear"], ["zoom"], 4, 0.1, 7, 0.3],
+      "color": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        4,
+        "rgba(255, 255, 255, 0.1)",
+        7,
+        "rgba(255, 255, 255, 0.8)"
+      ],
+      "high-color": "rgba(255,255,255,0.1)",
+      "space-color": "#111",
+      "star-intensity": 0.1
+    },
+    "light": {
+      "horizon-blend": ["interpolate", ["linear"], ["zoom"], 4, 0.1, 7, 0.3],
+      "color": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        0,
+        "rgba(17, 176, 248, 0.3)",
+        4,
+        "rgba(255, 255, 255, 0.3)",
+        7,
+        "rgba(255, 255, 255, 0.8)"
+      ],
+      "high-color": "rgba(255,255,255,0.1)",
+      "space-color": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        4,
+        "#111",
+        7,
+        "rgba(17,176,248,0.9)"
+      ],
+      "star-intensity": ["interpolate", ["linear"], ["zoom"], 4, 0.1, 7, 0]
+    }
+  }
+}
