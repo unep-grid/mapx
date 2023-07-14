@@ -619,6 +619,7 @@ MapX resolvers available in static and app
     * [.get_themes_id()](#MapxResolversStatic+get_themes_id) ⇒ <code>Array</code>
     * [.get_themes()](#MapxResolversStatic+get_themes) ⇒ <code>Object</code>
     * [.get_theme_id()](#MapxResolversStatic+get_theme_id) ⇒ <code>string</code>
+    * [.get_themes_ids()](#MapxResolversStatic+get_themes_ids) ⇒ <code>Array.&lt;string&gt;</code>
     * [.add_theme(opt)](#MapxResolversStatic+add_theme) ⇒ <code>Boolean</code>
     * [.has_el_id(opt)](#MapxResolversStatic+has_el_id)
     * [.set_dashboard_visibility(opt)](#MapxResolversStatic+set_dashboard_visibility) ⇒ <code>Boolean</code>
@@ -847,6 +848,13 @@ Get current theme id
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>string</code> - Theme id  
+<a name="MapxResolversStatic+get_themes_ids"></a>
+
+#### mapxResolversStatic.get\_themes\_ids() ⇒ <code>Array.&lt;string&gt;</code>
+Get all theme id
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Array.&lt;string&gt;</code> - Theme ids  
 <a name="MapxResolversStatic+add_theme"></a>
 
 #### mapxResolversStatic.add\_theme(opt) ⇒ <code>Boolean</code>

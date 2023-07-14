@@ -1,3 +1,8 @@
+  - [1.12.3-alpha.18](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.18) 
+
+    - APP
+        - Revised themes module : new button, better UX + performance
+
   - [1.12.3-alpha.17](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.17) 
 
     - APP
