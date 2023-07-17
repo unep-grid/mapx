@@ -1953,7 +1953,7 @@ async function removeOldSourceIfExists(view, map, idSource) {
   });
 
   /*
-   * Bug in mapbox gl with updatingTerrain :
+   * Bug in mapbox gl with updatingTerrain ( #12747 )
    * -> fails when removing layer and right after, their source.
    * -> Waiting a bit seems to solve the issue;
    */

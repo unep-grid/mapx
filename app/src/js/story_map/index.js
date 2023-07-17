@@ -1742,7 +1742,7 @@ export async function storyPlayStep(stepNum) {
     });
   }
 
-  await viewsLayersOrderUpdate({
+  viewsLayersOrderUpdate({
     order: vStep,
   });
 
