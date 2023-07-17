@@ -1464,6 +1464,9 @@ class Search extends EventSimple {
    */
   async search(opt) {
     const s = this;
+    if (!s._init) {
+      return;
+    }
     const search = Object.assign(
       {},
       {

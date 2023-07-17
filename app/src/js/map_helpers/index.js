@@ -1154,6 +1154,20 @@ export async function initMapx(o) {
 
   if (!settings.mode.static) {
     /**
+     * Configure search tool
+     */
+    const key = await getSearchApiKey();
+    mx.search = new Search({
+      key: key,
+      container: "#mxTabPanelSearch",
+      host: settings.search.host,
+      protocol: settings.search.protocol,
+      port: settings.search.port,
+      language: getLanguageCurrent(),
+      index_template: "views_{{language}}",
+    });
+
+    /**
      * Init left panel
      */
     mx.panel_main = new MainPanel({
@@ -1182,41 +1196,29 @@ export async function initMapx(o) {
 
     /**
      * Build theme config inputs only when settings tab is displayed
-     */
-    mx.panel_main.on("tab_change", async (id) => {
-      try {
-        if (id === "tools") {
-          const elThemeContainer = document.querySelector(
-            "#mxInputThemeColors"
-          );
-          await theme.initManager(elThemeContainer);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    });
-
-    /**
-     * Configure search tool
-     */
-    const key = await getSearchApiKey();
-    mx.search = new Search({
-      key: key,
-      container: "#mxTabPanelSearch",
-      host: settings.search.host,
-      protocol: settings.search.protocol,
-      port: settings.search.port,
-      language: getLanguageCurrent(),
-      index_template: "views_{{language}}",
-    });
-
-    /**
      * On tab change to search, perform a search
      */
     mx.panel_main.on("tab_change", async (id) => {
-      if (id === "search") {
-        await mx.search.initCheck();
-        mx.search._elInput.focus();
+      try {
+        switch (id) {
+          case "tools":
+            const elThemeContainer = document.querySelector(
+              "#mxInputThemeColors"
+            );
+            await theme.initManager(elThemeContainer);
+            break;
+
+          case "search":
+            await mx.search.initCheck();
+            mx.search._elInput.focus();
+            break;
+
+          default:
+            // No action for other cases
+            break;
+        }
+      } catch (e) {
+        console.error(e);
       }
     });
 
