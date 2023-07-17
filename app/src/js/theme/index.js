@@ -117,9 +117,9 @@ class Theme extends EventSimple {
     if (global.elStyle) {
       global.elStyle.remove();
     }
-    if (t._elInputsContainer) {
-      t._elInputsContainer.off("change", t.updateFromInput);
-      t._elInputsContainer.replaceChildren();
+    if (t._elManagerInputs) {
+      t._elManagerInputs.off("change", t.updateFromInput);
+      t._elManagerInputs.replaceChildren();
     }
   }
 
@@ -215,7 +215,6 @@ class Theme extends EventSimple {
     let { sound, save, save_url, update_buttons } = opt;
 
     try {
-
       const isId = t.isValidId(theme);
 
       if (isId) {
@@ -236,7 +235,6 @@ class Theme extends EventSimple {
       t._theme = theme;
 
       if (sound) {
-
         const idSound =
           oldTheme.dark && !newTheme.dark
             ? "switch_on"
@@ -248,6 +246,7 @@ class Theme extends EventSimple {
       }
 
       await t.setColors(theme.colors);
+      await t.buildInputs()
 
       if (save) {
         localStorage.setItem("theme@id", theme.id);
@@ -616,13 +615,13 @@ class Theme extends EventSimple {
   async initManager(elTarget) {
     const t = this;
 
-    if (t._elContainer) {
+    if (t._elManager) {
       return;
     }
 
-    t._elContainer = elTarget || t._opt.elContainer;
+    t._elManager = elTarget || t._opt.elManager;
 
-    if (!isElement(t._elContainer)) {
+    if (!isElement(t._elManager)) {
       return;
     }
 
@@ -632,40 +631,40 @@ class Theme extends EventSimple {
 
   buildManager() {
     const t = this;
-    t._elContainer.classList.add("mx-theme--manager");
-    t._elInputsContainer = el("div", {
+    t._elManager.classList.add("mx-theme--manager");
+    t._elManagerInputs = el("div", {
       class: "well",
       style: {
         maxHeight: "400px",
         overflowY: "auto",
       },
     });
-    t._elBtnExport = elButtonFa("mx_theme_export_button", {
+    t._elManagerBtnExport = elButtonFa("mx_theme_export_button", {
       icon: "cloud-download",
       action: t.exportThemeDownload,
     });
-    t._elBtnImport = elButtonFa("mx_theme_import_button", {
+    t._elManagerBtnImport = elButtonFa("mx_theme_import_button", {
       icon: "cloud-upload",
       action: t.importTheme,
     });
-    t._elInputFilter = el("input", {
+    t._elManagerInputFilter = el("input", {
       type: "text",
       class: ["form-control", "mx-theme--manager-filter"],
       placeholder: "Filter items...",
     });
 
-    t._elTools = el("div", { class: "mx-theme--manager-bar" }, [
+    t._elManagerTools = el("div", { class: "mx-theme--manager-bar" }, [
       el("div", { class: ["btn-group", "mx-theme--manager-buttons"] }, [
-        t._elBtnExport,
-        t._elBtnImport,
+        t._elManagerBtnExport,
+        t._elManagerBtnImport,
       ]),
-      t._elInputFilter,
+      t._elManagerInputFilter,
     ]);
 
-    t._elToolsWrapper = el("div", { class: "well" }, t._elTools);
-    t._elContainer.appendChild(t._elToolsWrapper);
-    t._elContainer.appendChild(t._elInputsContainer);
-    t._elInputsContainer.addEventListener("input", t.updateFromInput);
+    t._elManagerToolsWrapper = el("div", { class: "well" }, t._elManagerTools);
+    t._elManager.appendChild(t._elManagerToolsWrapper);
+    t._elManager.appendChild(t._elManagerInputs);
+    t._elManagerInputs.addEventListener("input", t.updateFromInput);
 
     /**
      * Filter helper
@@ -673,8 +672,8 @@ class Theme extends EventSimple {
     t._filter = new TextFilter({
       modeFlex: true,
       selector: ".mx-theme--inputs",
-      elInput: t._elInputFilter,
-      elContent: t._elInputsContainer,
+      elInput: t._elManagerInputFilter,
+      elContent: t._elManagerInputs,
       timeout: 10,
     });
   }
@@ -684,12 +683,14 @@ class Theme extends EventSimple {
       try {
         const t = this;
         const colors = t.colors();
-        const elContainer = t._elInputsContainer;
+        const elManagerInputs = t._elManagerInputs;
         const elFrag = new DocumentFragment();
-        if (!isElement(elContainer)) {
+        if (!isElement(elManagerInputs)) {
           return resolve(false);
         }
-        elContainer.replaceChildren();
+        elManagerInputs.replaceChildren();
+
+        
 
         for (const cid in colors) {
           const elInputGrp = t.buildInputGroup(cid);
@@ -703,7 +704,7 @@ class Theme extends EventSimple {
          * fragment require 10ms instead of 28ms.
          */
         onNextFrame(() => {
-          elContainer.replaceChildren(elFrag);
+          elManagerInputs.replaceChildren(elFrag);
           t._filter.update();
           return resolve(true);
         });
