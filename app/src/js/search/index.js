@@ -435,8 +435,8 @@ class Search extends EventSimple {
         ? null
         : elToggle({
             containerClass: "search--filter-facets-sort-items",
-            iconActive: "sort-numeric-desc",
-            iconDefault: "sort-alpha-asc",
+            iconActive: "sort-alpha-asc",
+            iconDefault: "sort-numeric-desc",
             on: {
               change: (e) => {
                 const isAlpha = e.target.checked;
