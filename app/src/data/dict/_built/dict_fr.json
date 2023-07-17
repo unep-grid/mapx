@@ -4656,8 +4656,8 @@
   },
   {
     "id": "project_globe_projection_desc",
-    "en": "If the option 'Use extent to limit map panning' is not checked, display the map on a globe, else use standard Mercator projection",
-    "fr": "Si l'option 'Utiliser l'étendue pour limiter le déplacement de la carte' n'est pas cochée, afficher la carte sur un globe, sinon utiliser la projection Mercator standard"
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. This will override the 'Use extent to limit map panning' setting.",
+    "fr": "Lorsqu'activée, la carte sera présentée comme un globe, se démarquant de la projection Web Mercator standard. Ceci annulera l'option 'Utiliser l'étendue pour limiter le déplacement de la carte'."
   },
   {
     "id": "project_enable_join",

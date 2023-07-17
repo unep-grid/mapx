@@ -6129,16 +6129,16 @@
   },
   {
     "id": "project_globe_projection_desc",
-    "en": "If the option 'Use extent to limit map panning' is not checked, display the map on a globe, else use standard Mercator projection",
-    "fr": "Si l'option 'Utiliser l'étendue pour limiter le déplacement de la carte' n'est pas cochée, afficher la carte sur un globe, sinon utiliser la projection Mercator standard",
-    "es": "Si la opción 'Usar extensión para limitar el desplazamiento del mapa' no está marcada, muestra el mapa en un globo, de lo contrario usa la proyección Mercator estándar",
-    "ru": "Если опция 'Использовать размер для ограничения панорамирования карты' не отмечена, отобразите карту на глобусе, в противном случае используйте стандартную проекцию Меркатора",
-    "zh": "如果未勾选'使用范围限制地图平移'选项，则在球体上显示地图，否则使用标准的墨卡托投影",
-    "ar": "إذا لم يتم تحديد الخيار 'استخدم النطاق لتحديد تحريك الخريطة'، قم بعرض الخريطة على الكرة الأرضية، وإلا استخدم الإسقاط المركاتور القياسي",
-    "fa": "اگر گزینه 'استفاده از محدوده برای محدود کردن حرکت نقشه' علامت زده نشده است، نقشه را روی گوی نمایش دهید، در غیر این صورت از پروژکشن مرکاتور استاندارد استفاده کنید",
-    "ps": "که ګزینه 'محدوده استفاده کړی ته کارته وړاندی کولو لپاره' نشان نده، په ګردونه کې کارته ښکاره کړی، ورنا استاندارد مرکاتور پروجکشن استفاده کړی",
-    "bn": "যদি 'ম্যাপ প্যানিং সীমিত করতে পরিসর ব্যবহার করুন' অপশনটি চেক না করা হয়, তাহলে ম্যাপটি একটি গ্লোবে প্রদর্শন করুন, নতুবা স্ট্যান্ডার্ড মার্কাটর প্রোজেকশন ব্যবহার করুন",
-    "de": "Wenn die Option 'Verwenden Sie den Umfang, um das Verschieben der Karte zu begrenzen' nicht aktiviert ist, zeigen Sie die Karte auf einem Globus an, sonst verwenden Sie die Standard-Mercator-Projektion"
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. This will override the 'Use extent to limit map panning' setting.",
+    "fr": "Lorsqu'activée, la carte sera présentée comme un globe, se démarquant de la projection Web Mercator standard. Ceci annulera l'option 'Utiliser l'étendue pour limiter le déplacement de la carte'.",
+    "es": "Cuando está activado, el mapa se presentará como un globo, en lugar de la proyección estándar de Web Mercator. Esto anulará la opción 'Usar extensión para limitar el desplazamiento del mapa'.",
+    "ru": "При активации карта будет отображаться в виде глобуса, отходя от стандартной проекции Веб-Меркатора. Это отменит настройку 'Использовать размер для ограничения панорамирования карты'.",
+    "zh": "启用后，地图将以地球仪的形式呈现，而不是常规的Web Mercator投影。这将覆盖'使用范围限制地图平移'的设置。",
+    "ar": "عند التفعيل، سيتم عرض الخريطة على شكل كرة أرضية بدلاً من الإسقاط القياسي لويب ميركاتور. سيتم الغاء خيار 'استخدم المدى لتحديد تحريك الخريطة'.",
+    "fa": "وقتی فعال می‌شود، نقشه به شکل گلوبال به جای پروژه مرسوم وب مرکاتور نمایش داده می‌شود. این مورد گزینه 'استفاده از محدوده برای محدود کردن حرکت نقشه' را لغو می‌کند.",
+    "ps": "کله چې فعال شي، نقشه يوځای ځمکه به پرداختل شي، د وېب مرکېټور معیاري پروژکشن له نښه ځانګړی شي. دا 'د نقشه تګ وګورئ د محدودیت کېدلو' خوښښونه لغوه کړي.",
+    "bn": "যখন সক্রিয় হবে, ম্যাপটি গ্লোব হিসেবে প্রদর্শিত হবে, স্বাভাবিক ওয়েব মার্কেটর প্রজেকশন থেকে বিচ্যুতি পাবে। এটি 'ম্যাপ প্যানিং সীমিত করার জন্য ব্যবহার পরিসর' বিকল্পটি বাতিল করবে।",
+    "de": "Wenn aktiviert, wird die Karte als Globus dargestellt, abweichend von der herkömmlichen Web-Mercator-Projektion. Dies hebt die Einstellung 'Verwende Ausdehnung, um das Verschieben der Karte zu begrenzen' auf."
   },
   {
     "id": "project_enable_join",

@@ -4656,8 +4656,8 @@
   },
   {
     "id": "project_globe_projection_desc",
-    "en": "If the option 'Use extent to limit map panning' is not checked, display the map on a globe, else use standard Mercator projection",
-    "bn": "যদি 'ম্যাপ প্যানিং সীমিত করতে পরিসর ব্যবহার করুন' অপশনটি চেক না করা হয়, তাহলে ম্যাপটি একটি গ্লোবে প্রদর্শন করুন, নতুবা স্ট্যান্ডার্ড মার্কাটর প্রোজেকশন ব্যবহার করুন"
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. This will override the 'Use extent to limit map panning' setting.",
+    "bn": "যখন সক্রিয় হবে, ম্যাপটি গ্লোব হিসেবে প্রদর্শিত হবে, স্বাভাবিক ওয়েব মার্কেটর প্রজেকশন থেকে বিচ্যুতি পাবে। এটি 'ম্যাপ প্যানিং সীমিত করার জন্য ব্যবহার পরিসর' বিকল্পটি বাতিল করবে।"
   },
   {
     "id": "project_enable_join",

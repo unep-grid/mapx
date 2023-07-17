@@ -4656,8 +4656,8 @@
   },
   {
     "id": "project_globe_projection_desc",
-    "en": "If the option 'Use extent to limit map panning' is not checked, display the map on a globe, else use standard Mercator projection",
-    "zh": "如果未勾选'使用范围限制地图平移'选项，则在球体上显示地图，否则使用标准的墨卡托投影"
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. This will override the 'Use extent to limit map panning' setting.",
+    "zh": "启用后，地图将以地球仪的形式呈现，而不是常规的Web Mercator投影。这将覆盖'使用范围限制地图平移'的设置。"
   },
   {
     "id": "project_enable_join",

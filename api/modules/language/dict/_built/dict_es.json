@@ -4656,8 +4656,8 @@
   },
   {
     "id": "project_globe_projection_desc",
-    "en": "If the option 'Use extent to limit map panning' is not checked, display the map on a globe, else use standard Mercator projection",
-    "es": "Si la opción 'Usar extensión para limitar el desplazamiento del mapa' no está marcada, muestra el mapa en un globo, de lo contrario usa la proyección Mercator estándar"
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. This will override the 'Use extent to limit map panning' setting.",
+    "es": "Cuando está activado, el mapa se presentará como un globo, en lugar de la proyección estándar de Web Mercator. Esto anulará la opción 'Usar extensión para limitar el desplazamiento del mapa'."
   },
   {
     "id": "project_enable_join",
