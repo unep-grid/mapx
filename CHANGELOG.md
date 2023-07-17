@@ -1,3 +1,10 @@
+  - [1.12.3-beta.1](https://github.com/unep-grid/mapx/tree/1.12.3-beta.1) 
+
+    - APP
+        - Theme adjustments: vegetation visibility, translation, reload manager after theme change
+    - API
+        - Minor bug : missing next call in IP try-catch 
+
   - [1.12.3-alpha.18](https://github.com/unep-grid/mapx/tree/1.12.3-alpha.18) 
 
     - APP
