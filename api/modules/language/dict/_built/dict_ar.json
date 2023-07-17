@@ -3012,12 +3012,22 @@
   {
     "id": "btn_toggle_theme_dark",
     "en": "Toggle dark theme",
-    "ar": "تبديل المظهر الداكن"
+    "ar": "تبديل السمة الداكنة"
+  },
+  {
+    "id": "btn_toggle_theme_water",
+    "en": "Toggle water theme",
+    "ar": "تبديل سمة الماء"
+  },
+  {
+    "id": "btn_toggle_theme_tree",
+    "en": "Toggle vegetation cover theme",
+    "ar": "تبديل سمة غطاء النبات"
   },
   {
     "id": "btn_theme_sat",
     "en": "Add an aerial imagery layer",
-    "ar": "أضف طبقة صور جوية"
+    "ar": "إضافة طبقة للصور الجوية"
   },
   {
     "id": "btn_3d_terrain",

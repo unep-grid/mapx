@@ -3012,7 +3012,17 @@
   {
     "id": "btn_toggle_theme_dark",
     "en": "Toggle dark theme",
-    "es": "Alternar tema oscuro"
+    "es": "Alternar el tema oscuro"
+  },
+  {
+    "id": "btn_toggle_theme_water",
+    "en": "Toggle water theme",
+    "es": "Alternar el tema de agua"
+  },
+  {
+    "id": "btn_toggle_theme_tree",
+    "en": "Toggle vegetation cover theme",
+    "es": "Alternar el tema de cobertura vegetal"
   },
   {
     "id": "btn_theme_sat",

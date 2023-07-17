@@ -3012,12 +3012,22 @@
   {
     "id": "btn_toggle_theme_dark",
     "en": "Toggle dark theme",
-    "ps": "تیاره موضوع بدله کړئ"
+    "ps": "تاری تم تبدیلول"
+  },
+  {
+    "id": "btn_toggle_theme_water",
+    "en": "Toggle water theme",
+    "ps": "ابی تم تبدیلول"
+  },
+  {
+    "id": "btn_toggle_theme_tree",
+    "en": "Toggle vegetation cover theme",
+    "ps": "پوښتنه ژغورنۍ تم تبدیلول"
   },
   {
     "id": "btn_theme_sat",
     "en": "Add an aerial imagery layer",
-    "ps": "د هوایی عکس العمل پرت اضافه کړئ"
+    "ps": "یو هوایي انځورونو پاڼه ورګډول"
   },
   {
     "id": "btn_3d_terrain",

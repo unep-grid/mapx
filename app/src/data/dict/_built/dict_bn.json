@@ -3012,12 +3012,22 @@
   {
     "id": "btn_toggle_theme_dark",
     "en": "Toggle dark theme",
-    "bn": "অন্ধকার থিম টগল করুন"
+    "bn": "অন্ধকার থিম পরিবর্তন করুন"
+  },
+  {
+    "id": "btn_toggle_theme_water",
+    "en": "Toggle water theme",
+    "bn": "জল থিম পরিবর্তন করুন"
+  },
+  {
+    "id": "btn_toggle_theme_tree",
+    "en": "Toggle vegetation cover theme",
+    "bn": "বাঁশপাতাগঞ্জন থিম পরিবর্তন করুন"
   },
   {
     "id": "btn_theme_sat",
     "en": "Add an aerial imagery layer",
-    "bn": "একটি বায়বীয় চিত্র স্তর যোগ করুন"
+    "bn": "একটি বায়ুমানচিত্র স্তর যোগ করুন"
   },
   {
     "id": "btn_3d_terrain",

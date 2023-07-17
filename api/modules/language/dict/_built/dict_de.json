@@ -3015,9 +3015,19 @@
     "de": "Dunkles Thema umschalten"
   },
   {
+    "id": "btn_toggle_theme_water",
+    "en": "Toggle water theme",
+    "de": "Wasserthema umschalten"
+  },
+  {
+    "id": "btn_toggle_theme_tree",
+    "en": "Toggle vegetation cover theme",
+    "de": "Vegetationsthema umschalten"
+  },
+  {
     "id": "btn_theme_sat",
     "en": "Add an aerial imagery layer",
-    "de": "Fügen Sie einen Luftbild-Layer hinzu"
+    "de": "Eine Luftbildschicht hinzufügen"
   },
   {
     "id": "btn_3d_terrain",

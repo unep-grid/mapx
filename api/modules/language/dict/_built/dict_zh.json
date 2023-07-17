@@ -3015,9 +3015,19 @@
     "zh": "切换深色主题"
   },
   {
+    "id": "btn_toggle_theme_water",
+    "en": "Toggle water theme",
+    "zh": "切换水主题"
+  },
+  {
+    "id": "btn_toggle_theme_tree",
+    "en": "Toggle vegetation cover theme",
+    "zh": "切换植被覆盖主题"
+  },
+  {
     "id": "btn_theme_sat",
     "en": "Add an aerial imagery layer",
-    "zh": "添加航空影像图层"
+    "zh": "添加一个航空影像层"
   },
   {
     "id": "btn_3d_terrain",

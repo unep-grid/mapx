@@ -3012,12 +3012,22 @@
   {
     "id": "btn_toggle_theme_dark",
     "en": "Toggle dark theme",
-    "ru": "Включить тёмную тему"
+    "ru": "Переключить темную тему"
+  },
+  {
+    "id": "btn_toggle_theme_water",
+    "en": "Toggle water theme",
+    "ru": "Переключить водную тему"
+  },
+  {
+    "id": "btn_toggle_theme_tree",
+    "en": "Toggle vegetation cover theme",
+    "ru": "Переключить тему растительного покрова"
   },
   {
     "id": "btn_theme_sat",
     "en": "Add an aerial imagery layer",
-    "ru": "Добавьте слой аэрофотоснимков"
+    "ru": "Добавить слой аэрофотосъемки"
   },
   {
     "id": "btn_3d_terrain",

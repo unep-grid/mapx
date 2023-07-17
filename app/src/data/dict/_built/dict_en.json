@@ -2412,6 +2412,14 @@
     "en": "Toggle dark theme"
   },
   {
+    "id": "btn_toggle_theme_water",
+    "en": "Toggle water theme"
+  },
+  {
+    "id": "btn_toggle_theme_tree",
+    "en": "Toggle vegetation cover theme"
+  },
+  {
     "id": "btn_theme_sat",
     "en": "Add an aerial imagery layer"
   },

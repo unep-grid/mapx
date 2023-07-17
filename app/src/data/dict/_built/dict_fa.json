@@ -3012,12 +3012,22 @@
   {
     "id": "btn_toggle_theme_dark",
     "en": "Toggle dark theme",
-    "fa": "تم تاریک را تغییر دهید"
+    "fa": "تغییر تم تاریک"
+  },
+  {
+    "id": "btn_toggle_theme_water",
+    "en": "Toggle water theme",
+    "fa": "تغییر تم آب"
+  },
+  {
+    "id": "btn_toggle_theme_tree",
+    "en": "Toggle vegetation cover theme",
+    "fa": "تغییر تم پوشش گیاهی"
   },
   {
     "id": "btn_theme_sat",
     "en": "Add an aerial imagery layer",
-    "fa": "یک لایه تصویر هوایی اضافه کنید"
+    "fa": "یک لایه تصاویر هوایی اضافه کنید"
   },
   {
     "id": "btn_3d_terrain",

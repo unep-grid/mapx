@@ -3015,6 +3015,16 @@
     "fr": "Basculer en mode sombre"
   },
   {
+    "id": "btn_toggle_theme_water",
+    "en": "Toggle water theme",
+    "fr": "Basculer en thématique eau"
+  },
+  {
+    "id": "btn_toggle_theme_tree",
+    "en": "Toggle vegetation cover theme",
+    "fr": "Basculer en thématique couverture végétation"
+  },
+  {
     "id": "btn_theme_sat",
     "en": "Add an aerial imagery layer",
     "fr": "Ajouter une couche d'images aériennes"

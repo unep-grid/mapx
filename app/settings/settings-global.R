@@ -75,13 +75,17 @@ config[["themes"]] <- list(
     "classic_light",
     "classic_dark",
     "color_light",
-    "color_dark"
+    "color_dark",
+    "water_light",
+    "water_dark"
   ),
   names = c(
     "Classic Light",
     "Classic Dark",
     "Color Light",
-    "Color Dark"
+    "Color Dark",
+    "Water Light",
+    "Water Dark"
   )
 )
 config$themes$idsNamed <- config$themes$ids
@@ -92,22 +96,22 @@ config[["projections"]] <- list(
   ids = c(
     "globe",
     "mercator"
-    #"albers",
-    #"equalEarth",
-    #"lambertConformalConic",
-    #"winkelTripel",
-    #"naturalEarth",
-    #"equirectangular"
+    # "albers",
+    # "equalEarth",
+    # "lambertConformalConic",
+    # "winkelTripel",
+    # "naturalEarth",
+    # "equirectangular"
   ),
   names = c(
     "Globe",
     "Mercator"
-    #"Albers",
-    #"Equal Earth",
-    #"Lambert Conformal Conic",
-    #"Winkel Tripel",
-    #"Natural Earth",
-    #"Equirectangular"
+    # "Albers",
+    # "Equal Earth",
+    # "Lambert Conformal Conic",
+    # "Winkel Tripel",
+    # "Natural Earth",
+    # "Equirectangular"
   )
 )
 
@@ -452,7 +456,7 @@ config[[c("views", "type")]] <- list(
   "sm" # story map
 )
 #
-# View type dev 
+# View type dev
 #
 config[[c("views", "type_dev")]] <- list(
   "vt", # vector tiles
