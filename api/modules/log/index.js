@@ -1,5 +1,4 @@
 import { Sql } from "sql-ts";
-//import bodyParser from "body-parser";
 import Ajv from "ajv";
 import { pgWrite } from "#mapx/db";
 import { mwSet } from "#mapx/ip";

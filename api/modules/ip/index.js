@@ -23,10 +23,10 @@ async function setGeoIP(req, _, next) {
       ...outDefault,
       ...ipGeo,
     };
-    //await wait(10);
     next();
   } catch (e) {
     console.error("setGeoIp:", e);
+    next(e);
   }
 }
 
