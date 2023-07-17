@@ -1,3 +1,11 @@
+  - [1.12.3-beta.2](https://github.com/unep-grid/mapx/tree/1.12.3-beta.2) 
+
+    - APP
+        - tab change cb : using switch for search / themes
+        - Search :
+            - moved facet class in it's own file
+            - check if ready before search
+
   - [1.12.3-beta.1](https://github.com/unep-grid/mapx/tree/1.12.3-beta.1) 
 
     - APP
