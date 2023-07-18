@@ -1,3 +1,8 @@
+  - [1.12.3-beta.3](https://github.com/unep-grid/mapx/tree/1.12.3-beta.3) 
+
+    - APP
+        - Highlighter : log a warning if a feature is missing `properties.gid` 
+
   - [1.12.3-beta.2](https://github.com/unep-grid/mapx/tree/1.12.3-beta.2) 
 
     - APP
