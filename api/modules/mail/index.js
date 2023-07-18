@@ -9,8 +9,8 @@ import { decrypt } from "#mapx/db_utils";
 import { isEmail, isString, isArrayOf } from "@fxi/mx_valid";
 
 export const mwSend = [
-  express.urlencoded({ extended: false }),
   express.json(),
+  express.urlencoded({ extended: false }),
   mwSendMail,
 ];
 

@@ -30,7 +30,7 @@ const tblLogs = sql.define({
 /**
  * Middleware stack
  */
-export const mwCollect = [mwSet, express.json(), mwCollectHelper];
+export const mwCollect = [express.json(), mwSet, mwCollectHelper];
 export default { mwCollect };
 
 /**
