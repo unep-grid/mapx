@@ -109,10 +109,10 @@ async function saveHandler(req, res, next) {
     config.file = req.file; // multer;
     await save(res, config);
     res.status(200).end();
+    next();
   } catch (e) {
     res.status(403).end();
-  } finally {
-    next();
+    next(e);
   }
 }
 

@@ -61,7 +61,7 @@ async function moveFilesHandler(req, _, next) {
     req.file.url = url;
     next();
   } catch (e) {
-    throw new Error(e);
+    next(e);
   }
 }
 

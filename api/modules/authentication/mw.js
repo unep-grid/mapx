@@ -1,5 +1,5 @@
 import { sendError } from "#mapx/helpers";
-import { isEmail } from "@fxi/mx_valid";
+import { isEmail, isEmpty } from "@fxi/mx_valid";
 import {
   validateToken,
   validateUser,
@@ -10,8 +10,11 @@ import {
  * Validate / authenticate user
  */
 export async function validateTokenHandler(req, res, next) {
+  let tokenData = { isValid: false };
+  let userData = { isValid: false };
   let idUser;
   let userToken;
+
   const hasBody = typeof req.body === "object";
 
   if (hasBody) {
@@ -22,18 +25,15 @@ export async function validateTokenHandler(req, res, next) {
     userToken = req.query.token;
   }
 
-  const tokenData = { isValid: false };
-  const userData = { isValid: false };
-
   try {
     /**
      * Validate token
      */
-    const tokenData = await validateToken(userToken);
+    tokenData = await validateToken(userToken);
     /**
      * Validate user
      */
-    const userData = await validateUser(idUser, tokenData.key);
+    userData = await validateUser(idUser, tokenData.key);
 
     /**
      * Handle validation
@@ -76,6 +76,7 @@ export async function validateTokenHandler(req, res, next) {
       },
       403
     );
+    next(e);
   }
 }
 
@@ -97,6 +98,7 @@ export function validateRoleSuperUserHandler(req, res, next) {
     next();
   } catch (e) {
     sendError(res, "Validate root failed", 403);
+    next(e);
   }
 }
 
@@ -118,7 +120,7 @@ export function validateRoleHandlerFor(role) {
 
       roles = await getUserRoles(idUser, idProject);
 
-      if (!roles[role]) {
+      if (isEmpty(roles) || isEmpty(!roles[role])) {
         throw Error("Unautorized role");
       }
 
@@ -130,7 +132,7 @@ export function validateRoleHandlerFor(role) {
           reason: "authentication failed",
           status: {
             roleRequested: role,
-            roles: roles.list,
+            roles: roles?.list,
             idProject: idProject,
             idUser: idUser,
             err: e,
@@ -138,8 +140,7 @@ export function validateRoleHandlerFor(role) {
         },
         403
       );
-
-      res.status("403").end();
+      next(e);
     }
   };
 }

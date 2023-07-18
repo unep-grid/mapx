@@ -124,6 +124,7 @@ function getParamsValidator(opt) {
           message: e.message,
         });
       }
+      next(e);
     }
   };
 }

@@ -24,8 +24,9 @@ export async function decryptQuery(req, res, next) {
     } else {
       next();
     }
-  } catch {
+  } catch (e) {
     res.status(500).send("500 Bad request");
+    next(e);
   }
 }
 
@@ -85,13 +86,13 @@ export function validateSql(req, res, next) {
 
   if (messages.length === 0) {
     req.sqlQuery = sqlParsed;
-    next();
-  } else {
-    res.send({
-      type: "error",
-      msg: messages,
-    });
+    return next();
   }
+  res.status(400).send({
+    type: "error",
+    msg: messages,
+  });
+  return next(new Error(messages.join(' ')));
 }
 
 /**
