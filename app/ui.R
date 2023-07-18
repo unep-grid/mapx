@@ -1,3 +1,18 @@
+healthCheck <- function() {
+  now <- Sys.time()
+  ok <- mxDbPoolIsValid()
+  timing <- Sys.time() - now
+  httpResponse(
+    status = ifelse(ok, 200L, 500L),
+    content_type = "application/json",
+    content = sprintf(
+      '{"status": "%1$s", "timing": %2$.3f}',
+      ifelse(ok, "ok", "error"),
+      timing
+    )
+  )
+}
+
 route_request <- function(http_method, path_info, protocol) {
   # Redirect images
   if (grepl("^/userdata/", path_info)) {
