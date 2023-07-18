@@ -1,3 +1,32 @@
+#' Build API URL
+#'
+#' @param route {Character} route. E.g. '/get/views'
+#' @param listParam {List} Query param. E.g. list(idUser=1,idProject="MX-TEST")
+#' @return {Character} API URL
+#'
+mxApiUrl <- function(route, listParam = NULL, public = FALSE, protocol = "http") {
+  host <- ifelse(public,
+    .get(config, c("api", "host_public")),
+    .get(config, c("api", "host"))
+  )
+  port <- ifelse(public,
+    .get(config, c("api", "port_public")),
+    .get(config, c("api", "port"))
+    )
+
+  if (isNotEmpty(listParam)) {
+    param <- paste0("?", mxListToQueryStringParam(listParam))
+  } else {
+    param <- ""
+  }
+
+  url <- paste0(protocol, "://", host, ":", port, route, param)
+
+  return(url)
+}
+
+
+
 #' Fetch json data from API
 #'
 #' @param route {Character} route. E.g. '/get/views'
@@ -5,14 +34,11 @@
 #' @param asDataFrame {Logical} Return a data.frame
 #' @return Data {List}
 #'
-mxApiFetch <- function(route, listParam, asDataFrame = FALSE) {
+mxApiFetch <- function(route, listParam = NULL, asDataFrame = FALSE) {
   data <- list()
   tryCatch(
     {
-      host <- .get(config, c("api", "host"))
-      port <- .get(config, c("api", "port"))
-      param <- mxListToQueryStringParam(listParam)
-      url <- "http://" + host + ":" + port + route + "?" + param
+      url <- mxApiUrl(route, listParam)
       data <- fromJSON(url, simplifyDataFrame = asDataFrame)
       if (isTRUE(!noDataCheck(data)) && isTRUE(data$type == "error")) {
         stop(data$message)

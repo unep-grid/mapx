@@ -60,11 +60,14 @@ for (const val of process.argv) {
 const app = express();
 const server = http.createServer(app);
 const mwDownload = express.static(settings.vector.path.download);
+const mwUserData = express.static(settings.image.path.permanent);
 app.use(mwSetHeaders);
 app.use(mwEmit);
 app.use(mwNotify);
 app.set("trust proxy", true);
 app.use("/download", mwDownload);
+app.use("/userdata", mwUserData);
+
 
 /**
  * Socket io
