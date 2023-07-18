@@ -1,3 +1,12 @@
+  - [1.12.3-beta.5](https://github.com/unep-grid/mapx/tree/1.12.3-beta.5) 
+
+    - API: 
+        - Use express.json before other middleware, to ensure correct body parsing
+        - Solved inconsistancies with some next(<error>) callbacks
+    
+    - APP:
+        - Missing healthcheck function
+
   - [1.12.3-beta.4](https://github.com/unep-grid/mapx/tree/1.12.3-beta.4) 
 
     - APP / API
