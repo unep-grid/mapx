@@ -376,6 +376,13 @@ class Highlighter {
   }
 
   _features_aggregate(acc, item) {
+    if (isEmpty(item.gid)) {
+      console.warn(
+        "Missing gid / feature.properties.gid, skip item to highlight",
+        item
+      );
+      return acc;
+    }
     if (!acc.has(item.source)) {
       acc.set(item.source, {
         type: item.type,
