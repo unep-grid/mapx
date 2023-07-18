@@ -1,3 +1,8 @@
+  - [1.12.3-beta.4](https://github.com/unep-grid/mapx/tree/1.12.3-beta.4) 
+
+    - APP / API
+        - Redirect user data (images) request to api
+
   - [1.12.3-beta.3](https://github.com/unep-grid/mapx/tree/1.12.3-beta.3) 
 
     - APP
