@@ -4666,8 +4666,8 @@
   },
   {
     "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. This will override the 'Use extent to limit map panning' setting.",
-    "ru": "При активации карта будет отображаться в виде глобуса, отходя от стандартной проекции Веб-Меркатора. Это отменит настройку 'Использовать размер для ограничения панорамирования карты'."
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
+    "ru": "При активации карта будет представлена ​​в виде глобуса, отличающегося от обычной веб-проекции Меркатора. Включение параметра «Использовать экстент для ограничения панорамирования карты» автоматически отключит режим глобуса."
   },
   {
     "id": "project_enable_join",
@@ -8306,8 +8306,8 @@
   },
   {
     "id": "share_map_pos_max_desc",
-    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
-    "ru": "Карта будет ограничена своим текущим экстентом. Для проекций, отличных от «Меркатора», только центр будет оставаться в пределах границ."
+    "en": "The map will be constrained to its current extent. Enabling this option automatically disables the globe mode.",
+    "ru": "Карта будет ограничена своим текущим экстентом. Включение этой опции автоматически отключает режим глобуса."
   },
   {
     "id": "share_filter_activated_label",

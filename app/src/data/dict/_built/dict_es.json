@@ -4666,8 +4666,8 @@
   },
   {
     "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. This will override the 'Use extent to limit map panning' setting.",
-    "es": "Cuando está activado, el mapa se presentará como un globo, en lugar de la proyección estándar de Web Mercator. Esto anulará la opción 'Usar extensión para limitar el desplazamiento del mapa'."
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
+    "es": "Cuando está activado, el mapa se presentará como un globo terráqueo, partiendo de la proyección convencional de Web Mercator. Habilitar la configuración 'Usar extensión para limitar la panorámica del mapa' desactivará automáticamente el modo de globo"
   },
   {
     "id": "project_enable_join",
@@ -8306,8 +8306,8 @@
   },
   {
     "id": "share_map_pos_max_desc",
-    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
-    "es": "El mapa se limitará a su extensión actual. Para proyecciones que no sean 'Mercator', solo el centro se mantendrá dentro de los límites."
+    "en": "The map will be constrained to its current extent. Enabling this option automatically disables the globe mode.",
+    "es": "El mapa se limitará a su extensión actual. Habilitar esta opción deshabilita automáticamente el modo globo."
   },
   {
     "id": "share_filter_activated_label",

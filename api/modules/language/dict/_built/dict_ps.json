@@ -4666,8 +4666,8 @@
   },
   {
     "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. This will override the 'Use extent to limit map panning' setting.",
-    "ps": "کله چې فعال شي، نقشه يوځای ځمکه به پرداختل شي، د وېب مرکېټور معیاري پروژکشن له نښه ځانګړی شي. دا 'د نقشه تګ وګورئ د محدودیت کېدلو' خوښښونه لغوه کړي."
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
+    "ps": "کله چې فعال شي، نقشه به د نړۍ په توګه وړاندې شي، د دودیز ویب مرکټر پروجیکشن څخه وځي. د نقشې پینګ کولو محدودولو لپاره د حد څخه کار اخیستلو فعالول به په اتوماتيک ډول د نړۍ حالت غیر فعال کړي"
   },
   {
     "id": "project_enable_join",
@@ -8306,8 +8306,8 @@
   },
   {
     "id": "share_map_pos_max_desc",
-    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
-    "ps": "نقشه به د هغې اوسني حد پورې محدوده وي. د 'Mercator' پرته د نورو اټکلونو لپاره، یوازې مرکز به په حدودو کې وساتل شي."
+    "en": "The map will be constrained to its current extent. Enabling this option automatically disables the globe mode.",
+    "ps": "نقشه به د هغې اوسني حد پورې محدوده وي. د دې اختیار فعالول په اتوماتيک ډول د نړۍ حالت غیر فعالوي."
   },
   {
     "id": "share_filter_activated_label",

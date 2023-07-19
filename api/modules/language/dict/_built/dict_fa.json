@@ -4666,8 +4666,8 @@
   },
   {
     "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. This will override the 'Use extent to limit map panning' setting.",
-    "fa": "وقتی فعال می‌شود، نقشه به شکل گلوبال به جای پروژه مرسوم وب مرکاتور نمایش داده می‌شود. این مورد گزینه 'استفاده از محدوده برای محدود کردن حرکت نقشه' را لغو می‌کند."
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
+    "fa": "هنگامی که فعال می شود، نقشه به عنوان یک کره ارائه می شود، که از طرح مرکب Web Mercator خارج می شود. فعال کردن تنظیمات «استفاده از وسعت برای محدود کردن پیمایش نقشه» به طور خودکار حالت کره زمین را غیرفعال می کند"
   },
   {
     "id": "project_enable_join",
@@ -8306,8 +8306,8 @@
   },
   {
     "id": "share_map_pos_max_desc",
-    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
-    "fa": "نقشه به وسعت فعلی محدود خواهد شد. برای پیش بینی های غیر از \"Mercator\"، فقط مرکز در محدوده نگه داشته می شود."
+    "en": "The map will be constrained to its current extent. Enabling this option automatically disables the globe mode.",
+    "fa": "نقشه به وسعت فعلی محدود خواهد شد. فعال کردن این گزینه به طور خودکار حالت گلوب را غیرفعال می کند."
   },
   {
     "id": "share_filter_activated_label",

@@ -4666,8 +4666,8 @@
   },
   {
     "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. This will override the 'Use extent to limit map panning' setting.",
-    "zh": "启用后，地图将以地球仪的形式呈现，而不是常规的Web Mercator投影。这将覆盖'使用范围限制地图平移'的设置。"
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
+    "zh": "激活后，地图将呈现为地球仪，与传统的 Web 墨卡托投影不同。启用“使用范围限制地图平移”设置将自动禁用地球模式"
   },
   {
     "id": "project_enable_join",
@@ -8306,8 +8306,8 @@
   },
   {
     "id": "share_map_pos_max_desc",
-    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
-    "zh": "地图将被限制在其当前范围内。对于“墨卡托”以外的投影，只有中心会保持在范围内。"
+    "en": "The map will be constrained to its current extent. Enabling this option automatically disables the globe mode.",
+    "zh": "地图将被限制在当前范围内。启用此选项会自动禁用地球模式。"
   },
   {
     "id": "share_filter_activated_label",

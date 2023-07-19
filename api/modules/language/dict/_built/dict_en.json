@@ -3733,7 +3733,7 @@
   },
   {
     "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. This will override the 'Use extent to limit map panning' setting."
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode"
   },
   {
     "id": "project_enable_join",
@@ -6645,7 +6645,7 @@
   },
   {
     "id": "share_map_pos_max_desc",
-    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds."
+    "en": "The map will be constrained to its current extent. Enabling this option automatically disables the globe mode."
   },
   {
     "id": "share_filter_activated_label",

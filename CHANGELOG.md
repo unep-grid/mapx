@@ -1,3 +1,10 @@
+  - [1.12.3-beta.7](https://github.com/unep-grid/mapx/tree/1.12.3-beta.7) 
+
+    - APP
+        - Updated dictionnary entries #924 
+        - Added Titillium Web font #922
+        - Exposed loadFontFace #923
+
   - [1.12.3-beta.6](https://github.com/unep-grid/mapx/tree/1.12.3-beta.6) 
 
     - APP

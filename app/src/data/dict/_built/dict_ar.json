@@ -4666,8 +4666,8 @@
   },
   {
     "id": "project_globe_projection_desc",
-    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. This will override the 'Use extent to limit map panning' setting.",
-    "ar": "عند التفعيل، سيتم عرض الخريطة على شكل كرة أرضية بدلاً من الإسقاط القياسي لويب ميركاتور. سيتم الغاء خيار 'استخدم المدى لتحديد تحريك الخريطة'."
+    "en": "When activated, the map will be presented as a globe, departing from the conventional Web Mercator projection. Enabling the 'Use extent to limit map panning' setting will automatically disable the globe mode",
+    "ar": "عند التنشيط ، سيتم تقديم الخريطة على شكل كرة أرضية ، مبتعدة عن إسقاط ويب مركاتور التقليدي. يؤدي تمكين إعداد \"استخدام المدى للحد من تحريك الخريطة\" إلى تعطيل وضع الكرة الأرضية تلقائيًا"
   },
   {
     "id": "project_enable_join",
@@ -8306,8 +8306,8 @@
   },
   {
     "id": "share_map_pos_max_desc",
-    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
-    "ar": "سيتم تقييد الخريطة إلى مداها الحالي. بالنسبة إلى الإسقاطات بخلاف \"Mercator\" ، سيتم الاحتفاظ بالمركز فقط ضمن الحدود."
+    "en": "The map will be constrained to its current extent. Enabling this option automatically disables the globe mode.",
+    "ar": "سيتم تقييد الخريطة إلى مداها الحالي. يؤدي تمكين هذا الخيار إلى تعطيل وضع الكرة الأرضية تلقائيًا."
   },
   {
     "id": "share_filter_activated_label",
