@@ -1,3 +1,8 @@
+  - [1.12.3-beta.6](https://github.com/unep-grid/mapx/tree/1.12.3-beta.6) 
+
+    - APP
+        - Solved issue with service-workers not working properly
+
   - [1.12.3-beta.5](https://github.com/unep-grid/mapx/tree/1.12.3-beta.5) 
 
     - API: 
