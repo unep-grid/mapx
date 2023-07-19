@@ -19,6 +19,8 @@ app <- shinyApp(ui, server, uiPattern = ".*")
 
 #
 # Hack to serve www as /
+# addResourcePath doesn't allow / as a path, but it's required
+# for service-worker.js to work properly.
 #
 app$staticPaths <- list(`/` = structure(list(
   path = file.path(getwd(), "www"),
