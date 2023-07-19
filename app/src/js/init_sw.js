@@ -180,15 +180,13 @@ async function showRefreshUI(registration) {
   );
   const elMessage = el("p", t("update_app_msg"));
 
-  const res = await modalDialog({
+  await modalDialog({
     title: t("update_app_modal_title"),
     content: el("div", [elMessage, elBtnChanges]),
     close: t("update_app_button_confirm"),
   });
 
-  if (res === true) {
-    update();
-  }
+  update();
 
   function update() {
     if (!registration.waiting) {

@@ -69,6 +69,7 @@ import {
   cssTransformFun,
   xyToDegree,
   debounce,
+  isShinyReady,
 } from "./../mx_helper_misc.js";
 import {
   modal,
@@ -482,7 +483,7 @@ export async function getLoginInfo() {
  * @returns
  */
 export function triggerUpdateSourcesList() {
-  const hasShiny = window.Shiny;
+  const hasShiny = isShinyReady();
   if (hasShiny) {
     Shiny.onInputChange("mx_client_update_source_list", {
       date: new Date() * 1,
@@ -498,7 +499,7 @@ export function triggerUpdateSourcesList() {
  * @return null
  */
 export async function setProject(idProject, opt) {
-  const hasShiny = window.Shiny;
+  const hasShiny = isShinyReady();
   opt = Object.assign({}, { askConfirmIfModal: true, askConfirm: false }, opt);
   const idCurrentProject = path(mx, "settings.project.id");
 
@@ -853,7 +854,8 @@ export function initListenersApp() {
   /**
    * Redirect Shiny events
    */
-  if (window.Shiny) {
+  const hasShiny = isShinyReady();
+  if (hasShiny) {
     $(document).on("shiny:connected", () => {
       events.fire("mapx_connected");
     });
@@ -1537,7 +1539,7 @@ export async function initMapxStatic(o) {
 export async function initMapxApp(opt) {
   const map = opt.map;
   const elMap = map.getContainer();
-  const hasShiny = !!window.Shiny;
+  const hasShiny = isShinyReady();
 
   /**
    * Init app listeners: view add, language, project change, etc.
@@ -1773,7 +1775,7 @@ async function attributesToEvent(layersAttributes, e) {
 }
 
 /**
- * Get local forage item and send it to shiny server
+ * Get local forage item and send it to shiny app
  * @param {Object} o options
  * @param {String} o.idStore Id/Name of the store
  * @param {String} o.idKey Key to retrieve
@@ -2267,7 +2269,7 @@ export async function getGeoJSONViewsFromStorage(o) {
  * Update server side with views status
  */
 export async function viewsCheckedUpdate() {
-  const hasShiny = window.Shiny;
+  const hasShiny = isShinyReady();
   if (!hasShiny) {
     return;
   }

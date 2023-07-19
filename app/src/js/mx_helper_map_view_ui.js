@@ -3,8 +3,8 @@ import { ViewsFilter } from "./views_filter/index.js";
 import { ViewBase } from "./views_builder/view_base.js";
 import { getArrayDistinct } from "./array_stat/index.js";
 import { settings } from "./settings";
-import { isTrue, isView, isArray, isViewOpen, isObject } from "./is_test_mapx";
-import { path, itemFlashSave } from "./mx_helper_misc.js";
+import { isTrue, isView, isArray, isViewOpen } from "./is_test_mapx";
+import { path, itemFlashSave, isShinyReady } from "./mx_helper_misc.js";
 import { getQueryParameterInit } from "./url_utils";
 import { getDictItem, updateLanguageElements } from "./language";
 import { updateViewsBadges } from "./mx_helper_map_view_badges.js";
@@ -40,7 +40,7 @@ export function getProjectViewsState(opt) {
   );
   const idInput = opt.idInput;
   const isCurrentProject = opt.idProject === settings.project.id;
-  const hasShiny = isObject(window.Shiny);
+  const hasShiny = isShinyReady();
   const state = [];
   if (isCurrentProject) {
     const mData = getMapData();
@@ -67,7 +67,7 @@ export function getProjectViewsState(opt) {
 export function getProjectViewsCollectionsShiny(opt) {
   opt = Object.assign({}, { idInput: "projectViewsCollections" }, opt);
 
-  const hasShiny = isObject(window.Shiny);
+  const hasShiny = isShinyReady();
   const collections = getProjectViewsCollections();
 
   if (hasShiny && opt.idInput) {

@@ -4,6 +4,7 @@ import { bindAll } from "./../bind_class_methods/index.js";
 import "./less/mx_panel.less";
 import { EventSimple } from "./../event_simple";
 import { modalChangelog } from "./../changelog";
+import { isShinyReady } from "../mx_helper_misc";
 
 /**
  * This is a partial implementation of the main MapX panel
@@ -51,8 +52,7 @@ class MainPanel extends EventSimple {
       return;
     }
     mp._init = true;
-
-    const hasShiny = !!window.Shiny;
+    const hasShiny = isShinyReady();
     const htmlImport = [
       require("./html/headers.html"),
       require("./html/tabs.html"),

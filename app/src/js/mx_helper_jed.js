@@ -1,6 +1,6 @@
 import { getLanguageCurrent } from "./language";
-import { isEmpty } from "./is_test_mapx";
-import { clone, path } from "./mx_helper_misc.js";
+import { isEmpty, isObject } from "./is_test_mapx";
+import { clone, isShinyReady, path } from "./mx_helper_misc.js";
 import { getViewJson } from "./map_helpers/index.js";
 import { getViewMapboxStyle, getViewSldStyle } from "./style_vt/index.js";
 import { settings } from "./settings";
@@ -113,6 +113,7 @@ export async function jedInit(o) {
    * Test for readyness
    */
   editor.on("ready", async function () {
+    const hasShiny = isShinyReady();
     /**
      * Auto save draft
      */
@@ -144,7 +145,7 @@ export async function jedInit(o) {
     /**
      * Report ready state to shiny
      */
-    if (window.Shiny) {
+    if (hasShiny) {
       Shiny.onInputChange(id + "_ready", new Date());
     } else {
       console.log(id + "_ready");
@@ -274,24 +275,27 @@ export function jedUpdate(o) {
 export async function jedGetValuesById(o) {
   const id = o.id;
   const jed = path(window, "jed.editors." + id);
-  if (jed) {
-    const values = {
-      data: jed.getValue(),
-      time: Date.now(),
-      idEvent: o.idEvent,
-    };
-    if (values && window.Shiny) {
-      /**
-       * Apply value transform on get values
-       */
-      const hasHooks = !isEmpty(jed.options.hooksOnGet);
-      if (hasHooks) {
-        await jedHooksApply(values, jed.options.hooksOnGet);
-      }
-      Shiny.onInputChange(id + "_values", values);
-    } else {
-      return values;
+  const hasShiny = isShinyReady();
+  const hasJed = isObject(jed);
+  if (!hasJed) {
+    return;
+  }
+  const values = {
+    data: jed.getValue(),
+    time: Date.now(),
+    idEvent: o.idEvent,
+  };
+  if (values && hasShiny) {
+    /**
+     * Apply value transform on get values
+     */
+    const hasHooks = !isEmpty(jed.options.hooksOnGet);
+    if (hasHooks) {
+      await jedHooksApply(values, jed.options.hooksOnGet);
     }
+    Shiny.onInputChange(id + "_values", values);
+  } else {
+    return values;
   }
 }
 
@@ -302,17 +306,20 @@ export async function jedGetValuesById(o) {
 export function jedGetValidationById(o) {
   const id = o.id;
   const jed = path(window, "jed.editors." + id);
-  if (jed) {
-    const valid = {
-      data: jed.validate(),
-      time: Date.now(),
-      idEvent: o.idEvent,
-    };
-    if (window.Shiny) {
-      Shiny.onInputChange(id + "_issues", valid);
-    } else {
-      return values;
-    }
+  const hasJed = isObject(jed);
+  const hasShiny = isShinyReady();
+  if (!hasJed) {
+    return;
+  }
+  const valid = {
+    data: jed.validate(),
+    time: Date.now(),
+    idEvent: o.idEvent,
+  };
+  if (hasShiny) {
+    Shiny.onInputChange(id + "_issues", valid);
+  } else {
+    return values;
   }
 }
 /** Show recovery panel

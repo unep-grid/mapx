@@ -14,5 +14,6 @@ $(document).on("shiny:disconnected", () => {
     onClose: mx.helpers.reload,
     textCloseButton: "Reload",
     addBackground: true,
+    noShinyBinding: true,
   });
 });

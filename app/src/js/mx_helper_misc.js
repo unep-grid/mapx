@@ -20,6 +20,14 @@ import { isSourceId } from "./is_test";
 import { el } from "./el_mapx";
 
 /**
+ * Test if Shiny is up
+ * @returns {Boolean} true if ready
+ */
+export function isShinyReady() {
+  return !!window?.Shiny?.shinyapp?.$socket?.readyState;
+}
+
+/**
  * Performs a linear interpolation between minVal and maxVal, based on the normalized value of v
  * (clamped between fromScale and toScale).
  *
@@ -1282,6 +1290,7 @@ export function updateText(o) {
  */
 export function updateCheckboxInput(o) {
   const h = mx.helpers;
+  const hasShiny = isShinyReady();
   var el = document.getElementById(o.id);
   if (h.isElement(el)) {
     if (h.isBoolean(o.disabled)) {
@@ -1293,7 +1302,7 @@ export function updateCheckboxInput(o) {
     }
     if (h.isBoolean(o.checked)) {
       el.checked = o.checked;
-      if (window.Shiny) {
+      if (hasShiny) {
         Shiny.onInputChange(o.id, el.checked);
       }
     }

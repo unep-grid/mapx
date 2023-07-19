@@ -1,6 +1,6 @@
 import { el } from "./el/src/index.js";
 import { ObserveMutationAttribute } from "./mutations_observer/index.js";
-import { moveEl, makeId, textToDom } from "./mx_helper_misc.js";
+import { moveEl, makeId, textToDom, isShinyReady } from "./mx_helper_misc.js";
 import { getDictItem } from "./language";
 import { draggable } from "./mx_helper_draggable.js";
 import {
@@ -74,8 +74,8 @@ export function modal(o) {
     cb: o.onMutation,
   });
 
+  const hasShiny = isShinyReady();
   const hasJquery = isFunction(window.jQuery);
-  const hasShiny = isObject(window.Shiny);
   const hasSelectize = hasJquery && isFunction(window.Selectize);
   const noShinyBinding =
     !hasShiny || isBoolean(o.noShinyBinding) ? o.noShinyBinding : false;

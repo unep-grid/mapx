@@ -1,3 +1,5 @@
+import { isShinyReady } from "./mx_helper_misc.js";
+
 /**
  * Switch user :)
  *
@@ -6,15 +8,17 @@
  *
  */
 export function switchUser(opt) {
-  if (window.Shiny) {
-    if (!opt) {
-      opt = {};
-    }
-    if (typeof opt === 'number') {
-      opt = {
-        id: opt
-      };
-    }
-    Shiny.onInputChange('switchUser', opt);
+  const hasShiny = isShinyReady();
+  if (!hasShiny) {
+    return;
   }
+  if (!opt) {
+    opt = {};
+  }
+  if (typeof opt === "number") {
+    opt = {
+      id: opt,
+    };
+  }
+  Shiny.onInputChange("switchUser", opt);
 }
