@@ -170,7 +170,7 @@
   },
   {
     "id": "share_map_pos_max_desc",
-    "en": "The map will be constrained to its current extent. For projections other than 'Mercator', only the center will be kept within bounds.",
+    "en": "The map will be constrained to its current extent. Enabling this option automatically disables the globe mode.",
     "fr": "",
     "es": "",
     "ru": "",
