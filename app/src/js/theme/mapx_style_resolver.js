@@ -1,7 +1,5 @@
 import chroma from "chroma-js";
 import { loadFontFace } from "./fonts";
-import style from "./../../data/style/style_mapx.json";
-import { isNotEmpty } from "../is_test";
 
 export async function css_resolver(c) {
   const family = await font(c.mx_ui_text);

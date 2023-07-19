@@ -15,7 +15,7 @@ import { TextFilter } from "../text_filter_simple";
 import { inverseResolver, resolver, themes } from "./themes/index.js";
 import { fileSelectorJSON } from "../mx_helper_misc";
 import { isNotEmpty } from "../is_test";
-import { fontFamilies, fonts } from "./fonts.js";
+import { fontFamilies, fonts, loadFontFace } from "./fonts.js";
 import { validate } from "./validator.js";
 import { Button } from "./../panel_controls/button.js";
 import { sounds } from "./sound/index.js";
@@ -246,7 +246,7 @@ class Theme extends EventSimple {
       }
 
       await t.setColors(theme.colors);
-      await t.buildInputs()
+      await t.buildInputs();
 
       if (save) {
         localStorage.setItem("theme@id", theme.id);
@@ -612,6 +612,15 @@ class Theme extends EventSimple {
     );
   }
 
+  /**
+   * Expose loadFontFace method
+   * -> not used directly here
+   * -> could be used in cc, widget
+   */
+  loadFontFace(name) {
+    loadFontFace(name);
+  }
+
   async initManager(elTarget) {
     const t = this;
 
@@ -689,8 +698,6 @@ class Theme extends EventSimple {
           return resolve(false);
         }
         elManagerInputs.replaceChildren();
-
-        
 
         for (const cid in colors) {
           const elInputGrp = t.buildInputGroup(cid);

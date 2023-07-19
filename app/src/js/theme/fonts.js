@@ -23,6 +23,7 @@ export const fontFamilies = [
   "Noto Sans",
   "Noto Sans Mono",
   "Roboto",
+  "Titillium Web",
   "Varela Round",
   "Bangers",
   "Creepster",
@@ -53,6 +54,10 @@ export async function loadFontFace(family) {
       import("../../fonts/css/Bangers.css");
     case "Creepster":
       import("../../fonts/css/Creepster.css");
+      break;
+    case "Titillium Web":
+      import("../../fonts/css/Titillium Web.css");
+      break;
   }
   return family;
 }

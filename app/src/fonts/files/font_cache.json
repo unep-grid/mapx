@@ -397,5 +397,82 @@
     "style_name": "Thin",
     "owner": "helsinki",
     "visibility": "private"
+  },
+  {
+    "path": "Titillium_Web/TitilliumWeb-Black.ttf",
+    "family_name": "Titillium Web",
+    "style_name": "Black",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Titillium_Web/TitilliumWeb-Bold.ttf",
+    "family_name": "Titillium Web",
+    "style_name": "Bold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Titillium_Web/TitilliumWeb-BoldItalic.ttf",
+    "family_name": "Titillium Web",
+    "style_name": "Bold Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Titillium_Web/TitilliumWeb-ExtraLight.ttf",
+    "family_name": "Titillium Web",
+    "style_name": "ExtraLight",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Titillium_Web/TitilliumWeb-ExtraLightItalic.ttf",
+    "family_name": "Titillium Web",
+    "style_name": "ExtraLight Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Titillium_Web/TitilliumWeb-Italic.ttf",
+    "family_name": "Titillium Web",
+    "style_name": "Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Titillium_Web/TitilliumWeb-Light.ttf",
+    "family_name": "Titillium Web",
+    "style_name": "Light",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Titillium_Web/TitilliumWeb-LightItalic.ttf",
+    "family_name": "Titillium Web",
+    "style_name": "Light Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Titillium_Web/TitilliumWeb-Regular.ttf",
+    "family_name": "Titillium Web",
+    "style_name": "Regular",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Titillium_Web/TitilliumWeb-SemiBold.ttf",
+    "family_name": "Titillium Web",
+    "style_name": "SemiBold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Titillium_Web/TitilliumWeb-SemiBoldItalic.ttf",
+    "family_name": "Titillium Web",
+    "style_name": "SemiBold Italic",
+    "owner": "helsinki",
+    "visibility": "private"
   }
 ]
