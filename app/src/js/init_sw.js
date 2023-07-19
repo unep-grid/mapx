@@ -27,7 +27,7 @@ let blockReload = false;
 console.log("INIT SW");
 
 if (isCompatible) {
-  cleanIfNeeded();
+  cleanIfNeeded().catch(console.error);
 } else {
   console.log("SW not supported");
 }
@@ -87,20 +87,25 @@ async function hasEnoughStorage() {
 }
 
 async function handleInitSw() {
-  console.log("SW - register !");
-  const registration = await navigator.serviceWorker.register(
-    "/assets/service-worker.js"
-  );
-  await handleRegistration(registration);
+  console.log("SW - Register ...");
+  try {
+    const registration = await navigator.serviceWorker.register(
+      "/service-worker.js"
+    );
+    await handleRegistration(registration);
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 function handleRegistration(registration) {
   return new Promise((resolve) => {
     /**
-     *  if no controller, new service worker will
+     *  if no active registration new service worker will
      *  activate immediatly
      */
-    if (!navigator.serviceWorker.controller) {
+    if (!registration.active) {
+      console.log("SW - No controler, activate immediately");
       resolve(false);
       return;
     }
@@ -110,7 +115,12 @@ function handleRegistration(registration) {
       handleControllerChange
     );
 
+    console.log("SW - Handle registration...");
     handleNewServiceWorker(registration, async () => {
+      /*
+       * informUser()
+       */
+      console.log("SW - Inform user");
       await showRefreshUI(registration);
       return resolve(true);
     });
@@ -118,6 +128,7 @@ function handleRegistration(registration) {
 }
 
 function handleControllerChange() {
+  console.log("SW - controllerchange received", { blockReload });
   if (blockReload) {
     return;
   }
@@ -130,29 +141,28 @@ function restart() {
 }
 
 function handleNewServiceWorker(registration, informUser) {
+  // Check if the service worker is waiting to activate.
   if (registration.waiting) {
-    /**
-     * SW is waiting to activate. Can occur if multiple clients open and
-     * one of the clients is refreshed.
-     */
     return informUser();
   }
 
+  // If a new service worker is being installed...
   if (registration.installing) {
-    return listenInstalledStateChange();
-  } else {
-    // We are currently controlled so a new SW may be found...
-    // Add a listener in case a new SW is found,
-    registration.addEventListener("updatefound", listenInstalledStateChange);
+    registration.installing.addEventListener("statechange", checkState);
   }
 
-  function listenInstalledStateChange() {
-    registration.installing.addEventListener("statechange", (event) => {
-      if (event.target.state === "installed") {
-        // A new service worker is available, inform the user
-        informUser();
-      }
-    });
+  // If an update is found...
+  registration.addEventListener("updatefound", () => {
+    if (registration.installing) {
+      registration.installing.addEventListener("statechange", checkState);
+    }
+  });
+
+  // Check the state of the service worker.
+  function checkState(event) {
+    if (event.target.state === "installed") {
+      informUser();
+    }
   }
 }
 
@@ -164,6 +174,8 @@ async function showRefreshUI(registration) {
   const isEmbeded = window.parent !== window;
   const hasMapx = window.mx && getDictItem;
   const skipWaiting = !hasMapx || isEmbeded;
+
+  console.log("SW - Refresh sw ui button", { skipWaiting, hasMapx });
 
   if (skipWaiting) {
     return update();
@@ -192,6 +204,7 @@ async function showRefreshUI(registration) {
     if (!registration.waiting) {
       return;
     }
+    console.log("SW - Refresh sw ui : install request");
     registration.waiting.postMessage("mx_install");
   }
 }

@@ -56,11 +56,6 @@ mxSource("settings/settings-global.R")
 #
 mxSource("settings/settings-local.R")
 
-#
-# Resolve ressource path
-#
-addResourcePath("assets", "./www")
-
 tryCatch(
   {
     #
