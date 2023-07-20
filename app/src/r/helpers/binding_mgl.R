@@ -143,6 +143,15 @@ mglGetLocalForageData <- function(idStore, idKey, idInput, session = shiny::getD
 }
 
 
+#' Close all currently activated views
+#'
+mglViewsCloseAll <- function(session = shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    "mglViewsCloseAll",
+    list()
+  )
+}
+
 
 
 #' Remove view

@@ -45,6 +45,7 @@ $(document).on("shiny:connected", function () {
   /**
    * Mapx map and view related binding
    */
+  bind("mglViewsCloseAll", h.viewsCloseAll);
   bind("mglUpdateViewsBadges", h.updateViewsBadges);
   bind("mglRenderViewsList", h.viewsListRenderNew);
   bind("mglSetFilter", h.setFilter);

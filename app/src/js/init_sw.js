@@ -120,7 +120,6 @@ function handleRegistration(registration) {
       /*
        * informUser()
        */
-      console.log("SW - Inform user");
       await showRefreshUI(registration);
       return resolve(true);
     });
@@ -172,14 +171,17 @@ function handleNewServiceWorker(registration, informUser) {
  */
 async function showRefreshUI(registration) {
   const isEmbeded = window.parent !== window;
-  const hasMapx = window.mx && getDictItem;
+  const hasMapx = window.mx && !!getDictItem;
   const skipWaiting = !hasMapx || isEmbeded;
 
-  console.log("SW - Refresh sw ui button", { skipWaiting, hasMapx });
 
   if (skipWaiting) {
+    console.log(`SW - update SW now, skip waiting`);
     return update();
   }
+
+  console.log(`SW - update SW request user confirm`);
+
   const t = getDictItem;
 
   const elBtnChanges = el(
@@ -204,7 +206,7 @@ async function showRefreshUI(registration) {
     if (!registration.waiting) {
       return;
     }
-    console.log("SW - Refresh sw ui : install request");
+    console.log(`SW - update SW, trigger install`);
     registration.waiting.postMessage("mx_install");
   }
 }

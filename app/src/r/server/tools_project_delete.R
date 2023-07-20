@@ -169,6 +169,8 @@ observeEvent(input$btnDeleteProjectConfirm, {
       return()
     }
 
+    mglViewsCloseAll()
+
     mxUpdateQueryParameters(list(
       project = ""
     ))
