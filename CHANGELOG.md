@@ -1,3 +1,7 @@
+  - [1.12.3](https://github.com/unep-grid/mapx/tree/1.12.3) 
+
+    - Prod version
+
   - [1.12.3-beta.8](https://github.com/unep-grid/mapx/tree/1.12.3-beta.8) 
 
     - APP
