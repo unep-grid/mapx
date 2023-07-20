@@ -378,27 +378,6 @@
     "visibility": "private"
   },
   {
-    "path": "Noto_Sans_Mono/NotoSansMono-Bold.ttf",
-    "family_name": "Noto Sans Mono",
-    "style_name": "Bold",
-    "owner": "helsinki",
-    "visibility": "private"
-  },
-  {
-    "path": "Noto_Sans_Mono/NotoSansMono-Regular.ttf",
-    "family_name": "Noto Sans Mono",
-    "style_name": "Regular",
-    "owner": "helsinki",
-    "visibility": "private"
-  },
-  {
-    "path": "Noto_Sans_Mono/NotoSansMono-Thin.ttf",
-    "family_name": "Noto Sans Mono",
-    "style_name": "Thin",
-    "owner": "helsinki",
-    "visibility": "private"
-  },
-  {
     "path": "Titillium_Web/TitilliumWeb-Black.ttf",
     "family_name": "Titillium Web",
     "style_name": "Black",
@@ -472,6 +451,27 @@
     "path": "Titillium_Web/TitilliumWeb-SemiBoldItalic.ttf",
     "family_name": "Titillium Web",
     "style_name": "SemiBold Italic",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Mono/NotoSansMono-Bold.ttf",
+    "family_name": "Noto Sans Mono",
+    "style_name": "Bold",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Mono/NotoSansMono-Regular.ttf",
+    "family_name": "Noto Sans Mono",
+    "style_name": "Regular",
+    "owner": "helsinki",
+    "visibility": "private"
+  },
+  {
+    "path": "Noto_Sans_Mono/NotoSansMono-Thin.ttf",
+    "family_name": "Noto Sans Mono",
+    "style_name": "Thin",
     "owner": "helsinki",
     "visibility": "private"
   }
