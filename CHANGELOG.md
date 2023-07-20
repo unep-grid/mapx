@@ -1,3 +1,8 @@
+  - [1.12.3-beta.8](https://github.com/unep-grid/mapx/tree/1.12.3-beta.8) 
+
+    - APP
+        - Close all views when deleting a project
+
   - [1.12.3-beta.7](https://github.com/unep-grid/mapx/tree/1.12.3-beta.7) 
 
     - APP
