@@ -43,6 +43,7 @@ export async function getSourceMetadata(opt) {
     return def;
   }
 
+
   [out] = res.rows;
   meta = out.metadata;
   meta._email_editor = out.email_editor;

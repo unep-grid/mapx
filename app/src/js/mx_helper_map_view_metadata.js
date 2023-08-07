@@ -106,7 +106,8 @@ export async function viewToMetaModal(view) {
     content: elContent,
     addBackground: true,
     style: {
-      width: "640px",
+      // to fit the table content without too much wrapping
+      width: "700px",
     },
   });
 
@@ -695,6 +696,7 @@ export function metaSourceToUi(meta) {
   const elStartAt = elAuto("date", p("temporal.range.start_at", null));
 
   const elEndAt = elAuto("date", p("temporal.range.end_at", null));
+
   const elId = el("span", p("_id_source"));
   /**
    * Summary table
@@ -702,6 +704,7 @@ export function metaSourceToUi(meta) {
   const tblSummary = oToA(
     {
       title: elTitle,
+      id: elId,
       abstract: elAbstract,
       notes: elNotes,
       keywords: elKeywords,
@@ -709,6 +712,7 @@ export function metaSourceToUi(meta) {
       keywords_gemet: elKeywordsGemet,
       languages: elLanguages,
       contacts: elContacts,
+      licenses: elLicenses,
       homepage: elHomepage,
       url_download: elSourceUrl,
       url_annexes: elAnnexesUrl,
@@ -716,10 +720,8 @@ export function metaSourceToUi(meta) {
       released_at: elReleasedAt,
       modified_at: elModifiedAt,
       is_timeless: elIsTimeless,
-      licenses: elLicenses,
       start_at: elStartAt,
       end_at: elEndAt,
-      id: elId,
     },
     // make an array of object
     true
