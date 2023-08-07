@@ -2985,14 +2985,14 @@
     "ru": "Переключить панели мониторинга "
   },
   {
-    "id": "btn_tab_settings",
-    "en": "Settings ",
-    "ru": "Настройки "
-  },
-  {
     "id": "btn_tab_tools",
     "en": "Toolbox",
-    "ru": "Ящик для инструментов "
+    "ru": "Ящик инструментов"
+  },
+  {
+    "id": "btn_tab_tools_desc",
+    "en": "Tools for the app (depending on role within the project)",
+    "ru": "Инструменты для приложения (в зависимости от роли в проекте)"
   },
   {
     "id": "btn_tab_views",
@@ -3000,9 +3000,19 @@
     "ru": "Просмотры проекта"
   },
   {
+    "id": "btn_tab_views_desc",
+    "en": "The list of views that are published in this project",
+    "ru": "Список представлений, опубликованных в этом проекте"
+  },
+  {
     "id": "btn_tab_search",
     "en": "Catalog",
     "ru": "Каталог"
+  },
+  {
+    "id": "btn_tab_search_desc",
+    "en": "Search the MapX public catalog",
+    "ru": "Поиск в общедоступном каталоге MapX"
   },
   {
     "id": "btn_toggle_theme_monochrome",

@@ -2388,20 +2388,28 @@
     "en": "Toggle dashboards"
   },
   {
-    "id": "btn_tab_settings",
-    "en": "Settings "
-  },
-  {
     "id": "btn_tab_tools",
     "en": "Toolbox"
+  },
+  {
+    "id": "btn_tab_tools_desc",
+    "en": "Tools for the app (depending on role within the project)"
   },
   {
     "id": "btn_tab_views",
     "en": "Project's views"
   },
   {
+    "id": "btn_tab_views_desc",
+    "en": "The list of views that are published in this project"
+  },
+  {
     "id": "btn_tab_search",
     "en": "Catalog"
+  },
+  {
+    "id": "btn_tab_search_desc",
+    "en": "Search the MapX public catalog"
   },
   {
     "id": "btn_toggle_theme_monochrome",

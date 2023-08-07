@@ -2985,24 +2985,34 @@
     "ar": "تبديل لوحات المعلومات "
   },
   {
-    "id": "btn_tab_settings",
-    "en": "Settings ",
-    "ar": "إعدادات "
-  },
-  {
     "id": "btn_tab_tools",
     "en": "Toolbox",
-    "ar": "صندوق الأدوات "
+    "ar": "صندوق الأدوات"
+  },
+  {
+    "id": "btn_tab_tools_desc",
+    "en": "Tools for the app (depending on role within the project)",
+    "ar": "أدوات للتطبيق (حسب الدور داخل المشروع)"
   },
   {
     "id": "btn_tab_views",
     "en": "Project's views",
-    "ar": "وجهات نظر المشروع"
+    "ar": "عروض المشروع"
+  },
+  {
+    "id": "btn_tab_views_desc",
+    "en": "The list of views that are published in this project",
+    "ar": "قائمة العروض المنشورة في هذا المشروع"
   },
   {
     "id": "btn_tab_search",
     "en": "Catalog",
-    "ar": "فهرس"
+    "ar": "كتالوج"
+  },
+  {
+    "id": "btn_tab_search_desc",
+    "en": "Search the MapX public catalog",
+    "ar": "ابحث في كتالوج MapX العام"
   },
   {
     "id": "btn_toggle_theme_monochrome",

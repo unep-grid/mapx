@@ -2985,24 +2985,34 @@
     "fa": "تغییر داشبورد "
   },
   {
-    "id": "btn_tab_settings",
-    "en": "Settings ",
-    "fa": "تنظیمات "
-  },
-  {
     "id": "btn_tab_tools",
     "en": "Toolbox",
-    "fa": "جبعه ابزار"
+    "fa": "جعبه ابزار"
+  },
+  {
+    "id": "btn_tab_tools_desc",
+    "en": "Tools for the app (depending on role within the project)",
+    "fa": "ابزار برای برنامه (براساس نقش در پروژه)"
   },
   {
     "id": "btn_tab_views",
     "en": "Project's views",
-    "fa": "نظرات پروژه"
+    "fa": "نمایش‌های پروژه"
+  },
+  {
+    "id": "btn_tab_views_desc",
+    "en": "The list of views that are published in this project",
+    "fa": "لیست نمایش‌های منتشر شده در این پروژه"
   },
   {
     "id": "btn_tab_search",
     "en": "Catalog",
     "fa": "کاتالوگ"
+  },
+  {
+    "id": "btn_tab_search_desc",
+    "en": "Search the MapX public catalog",
+    "fa": "در کاتالوگ عمومی MapX جستجو کنید"
   },
   {
     "id": "btn_toggle_theme_monochrome",

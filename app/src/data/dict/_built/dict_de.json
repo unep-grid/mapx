@@ -2985,14 +2985,14 @@
     "de": "Dashboards umschalten "
   },
   {
-    "id": "btn_tab_settings",
-    "en": "Settings ",
-    "de": "die Einstellungen "
-  },
-  {
     "id": "btn_tab_tools",
     "en": "Toolbox",
-    "de": "Werkzeugkasten "
+    "de": "Werkzeugkasten"
+  },
+  {
+    "id": "btn_tab_tools_desc",
+    "en": "Tools for the app (depending on role within the project)",
+    "de": "Tools für die App (abhängig von der Rolle im Projekt)"
   },
   {
     "id": "btn_tab_views",
@@ -3000,9 +3000,19 @@
     "de": "Projektansichten"
   },
   {
+    "id": "btn_tab_views_desc",
+    "en": "The list of views that are published in this project",
+    "de": "Die Liste der in diesem Projekt veröffentlichten Ansichten"
+  },
+  {
     "id": "btn_tab_search",
     "en": "Catalog",
     "de": "Katalog"
+  },
+  {
+    "id": "btn_tab_search_desc",
+    "en": "Search the MapX public catalog",
+    "de": "Durchsuchen Sie den öffentlichen Katalog von MapX"
   },
   {
     "id": "btn_toggle_theme_monochrome",

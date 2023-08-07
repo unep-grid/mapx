@@ -2985,14 +2985,14 @@
     "fr": "Tableau de bord"
   },
   {
-    "id": "btn_tab_settings",
-    "en": "Settings ",
-    "fr": "Préférences"
-  },
-  {
     "id": "btn_tab_tools",
     "en": "Toolbox",
     "fr": "Boîte à outils"
+  },
+  {
+    "id": "btn_tab_tools_desc",
+    "en": "Tools for the app (depending on role within the project)",
+    "fr": "Outils pour l'application (selon le rôle au sein du projet)"
   },
   {
     "id": "btn_tab_views",
@@ -3000,9 +3000,19 @@
     "fr": "Vues du projet"
   },
   {
+    "id": "btn_tab_views_desc",
+    "en": "The list of views that are published in this project",
+    "fr": "La liste des vues publiées dans ce projet"
+  },
+  {
     "id": "btn_tab_search",
     "en": "Catalog",
     "fr": "Catalogue"
+  },
+  {
+    "id": "btn_tab_search_desc",
+    "en": "Search the MapX public catalog",
+    "fr": "Recherchez dans le catalogue public MapX"
   },
   {
     "id": "btn_toggle_theme_monochrome",

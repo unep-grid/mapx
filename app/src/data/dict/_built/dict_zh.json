@@ -2985,24 +2985,34 @@
     "zh": "切换操控版"
   },
   {
-    "id": "btn_tab_settings",
-    "en": "Settings ",
-    "zh": "设置"
-  },
-  {
     "id": "btn_tab_tools",
     "en": "Toolbox",
     "zh": "工具箱"
   },
   {
+    "id": "btn_tab_tools_desc",
+    "en": "Tools for the app (depending on role within the project)",
+    "zh": "应用程序的工具（取决于项目中的角色）"
+  },
+  {
     "id": "btn_tab_views",
     "en": "Project's views",
-    "zh": "项目观点"
+    "zh": "项目的视图"
+  },
+  {
+    "id": "btn_tab_views_desc",
+    "en": "The list of views that are published in this project",
+    "zh": "在此项目中发布的视图列表"
   },
   {
     "id": "btn_tab_search",
     "en": "Catalog",
     "zh": "目录"
+  },
+  {
+    "id": "btn_tab_search_desc",
+    "en": "Search the MapX public catalog",
+    "zh": "搜索MapX的公共目录"
   },
   {
     "id": "btn_toggle_theme_monochrome",

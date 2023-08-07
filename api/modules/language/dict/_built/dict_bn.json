@@ -2985,24 +2985,34 @@
     "bn": "ড্যাশবোর্ড টগল করুন "
   },
   {
-    "id": "btn_tab_settings",
-    "en": "Settings ",
-    "bn": "সেটিংস "
-  },
-  {
     "id": "btn_tab_tools",
     "en": "Toolbox",
-    "bn": "টুলবক্স "
+    "bn": "টুলবক্স"
+  },
+  {
+    "id": "btn_tab_tools_desc",
+    "en": "Tools for the app (depending on role within the project)",
+    "bn": "অ্যাপের জন্য সরঞ্জাম (প্রকল্পের ভিতরে ভূমিকা উপর নির্ভর করে)"
   },
   {
     "id": "btn_tab_views",
     "en": "Project's views",
-    "bn": "প্রকল্পের মতামত"
+    "bn": "প্রকল্পের দৃশ্য"
+  },
+  {
+    "id": "btn_tab_views_desc",
+    "en": "The list of views that are published in this project",
+    "bn": "এই প্রকল্পে প্রকাশিত দৃশ্যগুলির তালিকা"
   },
   {
     "id": "btn_tab_search",
     "en": "Catalog",
     "bn": "ক্যাটালগ"
+  },
+  {
+    "id": "btn_tab_search_desc",
+    "en": "Search the MapX public catalog",
+    "bn": "MapX পাবলিক ক্যাটালগ অনুসন্ধান করুন"
   },
   {
     "id": "btn_toggle_theme_monochrome",

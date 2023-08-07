@@ -2985,24 +2985,34 @@
     "ps": "ټوټه ډشبورډونه "
   },
   {
-    "id": "btn_tab_settings",
-    "en": "Settings ",
-    "ps": "امستنې (تنظیمات)"
-  },
-  {
     "id": "btn_tab_tools",
     "en": "Toolbox",
-    "ps": "د وسایلو بکس"
+    "ps": "د اوزارونو صندوق"
+  },
+  {
+    "id": "btn_tab_tools_desc",
+    "en": "Tools for the app (depending on role within the project)",
+    "ps": "د برنامې اوزارونه (د پروژې کې د نقش له پاره)"
   },
   {
     "id": "btn_tab_views",
     "en": "Project's views",
-    "ps": "د پروژې نظرونه"
+    "ps": "د پروژې ليدنې"
+  },
+  {
+    "id": "btn_tab_views_desc",
+    "en": "The list of views that are published in this project",
+    "ps": "د دې پروژې کې خپرونې شوي ليدنو لړليک"
   },
   {
     "id": "btn_tab_search",
     "en": "Catalog",
-    "ps": "نوملړ"
+    "ps": "کاتالوگ"
+  },
+  {
+    "id": "btn_tab_search_desc",
+    "en": "Search the MapX public catalog",
+    "ps": "د MapX عمومي کاتالوگ کې لټون وکړئ"
   },
   {
     "id": "btn_toggle_theme_monochrome",

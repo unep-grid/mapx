@@ -2985,14 +2985,14 @@
     "es": "Tablero de instrumentos"
   },
   {
-    "id": "btn_tab_settings",
-    "en": "Settings ",
-    "es": "Configuración"
-  },
-  {
     "id": "btn_tab_tools",
     "en": "Toolbox",
     "es": "Caja de herramientas"
+  },
+  {
+    "id": "btn_tab_tools_desc",
+    "en": "Tools for the app (depending on role within the project)",
+    "es": "Herramientas para la aplicación (dependiendo del papel dentro del proyecto)"
   },
   {
     "id": "btn_tab_views",
@@ -3000,9 +3000,19 @@
     "es": "Vistas del proyecto"
   },
   {
+    "id": "btn_tab_views_desc",
+    "en": "The list of views that are published in this project",
+    "es": "La lista de vistas que se publican en este proyecto"
+  },
+  {
     "id": "btn_tab_search",
     "en": "Catalog",
-    "es": "Catalogar"
+    "es": "Catálogo"
+  },
+  {
+    "id": "btn_tab_search_desc",
+    "en": "Search the MapX public catalog",
+    "es": "Busque en el catálogo público de MapX"
   },
   {
     "id": "btn_toggle_theme_monochrome",
