@@ -6661,8 +6661,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
-    "ar": "تم التحويل باستخدام التنسيق {{format}} . رابط التحميل:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>. The link is valid during 48h.",
+    "ar": "تم التحويل باستخدام التنسيق {{format}} . رابط التحميل:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> . الرابط صالح خلال 48 ساعة."
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6676,8 +6676,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
-    "ar": "البيانات المطلوبة جاهزة للتنزيل باستخدام هذا الرابط:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>. The link is valid during 48h",
+    "ar": "البيانات المطلوبة جاهزة للتنزيل باستخدام هذا الرابط: <a href={{url}} download='' target='_blank'>{{title}}</a>. الرابط صالح لمدة 48 ساعة"
   },
   {
     "id": "get_source_zip_progress",

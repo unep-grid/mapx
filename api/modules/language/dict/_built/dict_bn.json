@@ -6661,8 +6661,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
-    "bn": "ফর্ম্যাট ব্যবহার করে রূপান্তর করা হয়েছে {{format}} . ডাউনলোড লিংক:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>. The link is valid during 48h.",
+    "bn": "ফর্ম্যাট ব্যবহার করে রূপান্তর করা হয়েছে {{format}} . ডাউনলোড লিংক:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> . লিঙ্কটি 48 ঘন্টার মধ্যে বৈধ।"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6676,8 +6676,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
-    "bn": "অনুরোধ করা ডেটা এই লিঙ্কটি ব্যবহার করে ডাউনলোড করার জন্য প্রস্তুত:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>. The link is valid during 48h",
+    "bn": "অনুরোধ করা ডেটা এই লিঙ্ক ব্যবহার করে ডাউনলোড করতে প্রস্তুত: <a href={{url}} download='' target='_blank'>{{title}}</a>. লিঙ্কটি 48 ঘণ্টা সক্রিয় আছে"
   },
   {
     "id": "get_source_zip_progress",

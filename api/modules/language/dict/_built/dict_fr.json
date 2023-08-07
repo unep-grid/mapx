@@ -6661,8 +6661,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
-    "fr": "Conversion effectuée à l'aide du format {{format}} . Lien de téléchargement:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>. The link is valid during 48h.",
+    "fr": "Conversion effectuée à l'aide du format {{format}} . Lien de téléchargement:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> . Le lien est valide pendant 48h."
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6676,8 +6676,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
-    "fr": "Les données demandées sont prêtes à être téléchargées via ce lien :<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>. The link is valid during 48h",
+    "fr": "Les données demandées sont prêtes à être téléchargées via ce lien : <a href={{url}} download='' target='_blank'>{{title}}</a>. Le lien est valide pendant 48h"
   },
   {
     "id": "get_source_zip_progress",

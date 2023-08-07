@@ -6661,8 +6661,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
-    "zh": "使用格式完成转换 {{format}}.下载链接：<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>. The link is valid during 48h.",
+    "zh": "使用格式完成转换 {{format}}。下载链接：<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> 。该链接在 48 小时内有效。"
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6676,8 +6676,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
-    "zh": "已准备好使用此链接下载请求的数据：<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>. The link is valid during 48h",
+    "zh": "请求的数据已准备好，可通过此链接下载：<a href={{url}} download='' target='_blank'>{{title}}</a>。链接在48小时内有效"
   },
   {
     "id": "get_source_zip_progress",

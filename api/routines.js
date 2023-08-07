@@ -3,6 +3,7 @@ import * as language from "#mapx/language";
 import { updateIndexes } from "#mapx/search";
 import { updateGeoIpTable } from "#mapx/ip";
 import { updateGeoserver } from "#mapx/geoserver";
+import { clearDownload } from "#mapx/helpers";
 import { once, onceInterval } from "#mapx/helpers";
 
 /**
@@ -18,7 +19,7 @@ const updateLanguageRoutine = () => language.init();
 const updateIndexesRoutine = () => updateIndexes({});
 const updateGeoIpTableRoutine = () => updateGeoIpTable();
 const updateGeoserverRoutine = () => updateGeoserver();
-
+const clearDownloadRoutine = () => clearDownload();
 /**
  * Config
  */
@@ -71,6 +72,7 @@ const optDaily = {
  */
 once(
   [
+    clearDownloadRoutine,
     updateDbRoutine,
     updateLanguageRoutine,
     updateIndexesRoutine,
@@ -84,4 +86,4 @@ once(
  */
 onceInterval([updateIndexesRoutine], optHourly);
 onceInterval([updateGeoIpTableRoutine], optWeekly);
-onceInterval([updateGeoserverRoutine], optDaily);
+onceInterval([updateGeoserverRoutine, clearDownloadRoutine], optDaily);

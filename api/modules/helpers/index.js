@@ -1,9 +1,10 @@
-import { isArray, isString, isEmpty, isNotEmpty } from "@fxi/mx_valid";
+import { isArray, isString, isEmpty } from "@fxi/mx_valid";
 import path from "path";
 import fs from "fs";
 import zlib from "zlib";
 import { settings } from "#root/settings";
 import { readFile } from "fs/promises";
+import { clearDownload, deleteOldFiles } from "./deleteOldFiles.js";
 
 /**
  * Conversion of array of column names to pg columns
@@ -536,6 +537,8 @@ function timeStep(start) {
  * Exports
  */
 export {
+  deleteOldFiles,
+  clearDownload,
   clone,
   toPgColumn,
   attrToPgCol,

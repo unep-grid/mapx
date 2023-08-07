@@ -228,6 +228,7 @@ services:
       - search
     volumes:
       - ./api:/api
+      - ./_shared:/shared
     command: ["node", "/api/routines.js"]
     deploy:
       replicas: 1

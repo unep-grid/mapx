@@ -17317,16 +17317,16 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
-    "fr": "Conversion effectuée à l'aide du format {{format}} . Lien de téléchargement:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "es": "Conversión hecha usando formato {{format}} . Enlace de descarga:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "ru": "Преобразование выполнено с использованием формата {{format}} . Ссылка на скачивание:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "zh": "使用格式完成转换 {{format}}.下载链接：<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "ar": "تم التحويل باستخدام التنسيق {{format}} . رابط التحميل:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "fa": "تبدیل با استفاده از فرمت انجام می شود {{format}} . لینک دانلود:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "ps": "تبادله د شکل په کارولو سره ترسره کیږي {{format}} . د کښته کولو لینک:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "bn": "ফর্ম্যাট ব্যবহার করে রূপান্তর করা হয়েছে {{format}} . ডাউনলোড লিংক:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "de": "Konvertierung erfolgt mit Format {{format}} . Download-Link:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>. The link is valid during 48h.",
+    "fr": "Conversion effectuée à l'aide du format {{format}} . Lien de téléchargement:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> . Le lien est valide pendant 48h.",
+    "es": "Conversión hecha usando formato {{format}} . Enlace de descarga:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> . El enlace es válido durante 48h.",
+    "ru": "Преобразование выполнено с использованием формата {{format}} . Ссылка для скачивания:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> . Ссылка действительна в течение 48 часов.",
+    "zh": "使用格式完成转换 {{format}}。下载链接：<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> 。该链接在 48 小时内有效。",
+    "ar": "تم التحويل باستخدام التنسيق {{format}} . رابط التحميل:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> . الرابط صالح خلال 48 ساعة.",
+    "fa": "تبدیل با استفاده از فرمت انجام می شود {{format}} . لینک دانلود:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> . لینک در طول 48 ساعت معتبر است.",
+    "ps": "تبادله د شکل په کارولو سره ترسره کیږي {{format}} . د کښته کولو لینک:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> . لینک د 48 ساعتونو په جریان کې اعتبار لري.",
+    "bn": "ফর্ম্যাট ব্যবহার করে রূপান্তর করা হয়েছে {{format}} . ডাউনলোড লিংক:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> . লিঙ্কটি 48 ঘন্টার মধ্যে বৈধ।",
+    "de": "Die Konvertierung erfolgt mithilfe des Formats {{format}} . Download-Link:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> . Der Link ist 48 Stunden lang gültig."
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -17356,16 +17356,16 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
-    "fr": "Les données demandées sont prêtes à être téléchargées via ce lien :<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "es": "Los datos solicitados están listos para ser descargados a través de este enlace:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "ru": "Запрошенные данные готовы к загрузке по этой ссылке:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "zh": "已准备好使用此链接下载请求的数据：<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "ar": "البيانات المطلوبة جاهزة للتنزيل باستخدام هذا الرابط:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "fa": "داده های درخواستی با استفاده از این لینک آماده دانلود هستند:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "ps": "غوښتل شوي معلومات د دې لینک په کارولو سره ډاونلوډ کولو لپاره چمتو دي:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "bn": "অনুরোধ করা ডেটা এই লিঙ্কটি ব্যবহার করে ডাউনলোড করার জন্য প্রস্তুত:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>",
-    "de": "Die angeforderten Daten können unter diesem Link heruntergeladen werden:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>. The link is valid during 48h",
+    "fr": "Les données demandées sont prêtes à être téléchargées via ce lien : <a href={{url}} download='' target='_blank'>{{title}}</a>. Le lien est valide pendant 48h",
+    "es": "Los datos solicitados están listos para ser descargados usando este enlace: <a href={{url}} download='' target='_blank'>{{title}}</a>. El enlace es válido durante 48h",
+    "ru": "Запрошенные данные готовы к скачиванию по этой ссылке: <a href={{url}} download='' target='_blank'>{{title}}</a>. Ссылка действительна в течение 48 часов",
+    "zh": "请求的数据已准备好，可通过此链接下载：<a href={{url}} download='' target='_blank'>{{title}}</a>。链接在48小时内有效",
+    "ar": "البيانات المطلوبة جاهزة للتنزيل باستخدام هذا الرابط: <a href={{url}} download='' target='_blank'>{{title}}</a>. الرابط صالح لمدة 48 ساعة",
+    "fa": "داده‌های درخواست شده آماده برای دانلود با استفاده از این لینک است: <a href={{url}} download='' target='_blank'>{{title}}</a>. این لینک به مدت 48 ساعت معتبر است",
+    "ps": "طلب شوي ډیټا د دې تړنې له لارې د لېږلو لپاره چمتو دی: <a href={{url}} download='' target='_blank'>{{title}}</a>. دا تړنه 48 ساعتونو په جریان کې سم ده",
+    "bn": "অনুরোধ করা ডেটা এই লিঙ্ক ব্যবহার করে ডাউনলোড করতে প্রস্তুত: <a href={{url}} download='' target='_blank'>{{title}}</a>. লিঙ্কটি 48 ঘণ্টা সক্রিয় আছে",
+    "de": "Die angeforderten Daten sind bereit zum Herunterladen über diesen Link: <a href={{url}} download='' target='_blank'>{{title}}</a>. Der Link ist 48 Stunden lang gültig"
   },
   {
     "id": "get_source_zip_progress",

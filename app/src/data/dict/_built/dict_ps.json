@@ -6661,8 +6661,8 @@
   },
   {
     "id": "get_source_conversion_done_link",
-    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
-    "ps": "تبادله د شکل په کارولو سره ترسره کیږي {{format}} . د کښته کولو لینک:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
+    "en": "Conversion done using format {{format}}. Download link: <a href={{url}} download='' target='_blank'>{{title}}</a>. The link is valid during 48h.",
+    "ps": "تبادله د شکل په کارولو سره ترسره کیږي {{format}} . د کښته کولو لینک:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a> . لینک د 48 ساعتونو په جریان کې اعتبار لري."
   },
   {
     "id": "get_source_conversion_done_browser",
@@ -6676,8 +6676,8 @@
   },
   {
     "id": "get_source_conversion_done_email",
-    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>",
-    "ps": "غوښتل شوي معلومات د دې لینک په کارولو سره ډاونلوډ کولو لپاره چمتو دي:<a href=\"{{url}}\" download=\"\" target=\"_blank\"> {{title}}</a>"
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}} download='' target='_blank'>{{title}}</a>. The link is valid during 48h",
+    "ps": "طلب شوي ډیټا د دې تړنې له لارې د لېږلو لپاره چمتو دی: <a href={{url}} download='' target='_blank'>{{title}}</a>. دا تړنه 48 ساعتونو په جریان کې سم ده"
   },
   {
     "id": "get_source_zip_progress",

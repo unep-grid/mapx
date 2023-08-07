@@ -8,6 +8,12 @@ const settings_global = {
   session: {
     secret: "cat",
   },
+  ttl: {
+    downloads: {
+      hours: 48,
+      prefix: "mx_dl*",
+    },
+  },
   api: {
     host: "api",
     port: "8080",
