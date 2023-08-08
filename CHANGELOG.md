@@ -1,3 +1,13 @@
+  - [1.12.4-alpha.1](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.1) 
+
+    - APP
+        - issue #857 : partial resolution, wait feedback. Changed :validate area before any change, better warning, fixed a bug with setSizeWidth/Height returning the non-snaped value
+        - Added views/toolbox/catalog tab tooltip + update translation #734
+    
+    - Routines 
+        - Download : set a 48h ttl on downloads, warn user, added routine to remove the files #709
+ Changed view metadata panel, source section, as requested #782 + discussion
+
   - [1.12.3](https://github.com/unep-grid/mapx/tree/1.12.3) 
 
     - Prod version
