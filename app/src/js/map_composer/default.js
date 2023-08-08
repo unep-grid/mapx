@@ -1,17 +1,17 @@
-import {el} from './../el/src/index.js';
+import { el } from "./../el/src/index.js";
 
 const pixelRatioOrig = window.devicePixelRatio;
 
 /**
-* TODO : move state properties in options
-*/
+ * TODO : move state properties in options
+ */
 const state = {
-  unit: 'px',
-  units: ['mm', 'in', 'px'],
-  modes: ['layout', 'preview'],
-  modes_internal: ['print', 'layout', 'preview'],
+  unit: "px",
+  units: ["mm", "in", "px"],
+  modes: ["layout", "preview"],
+  modes_internal: ["print", "layout", "preview"],
   dpi: 96 * pixelRatioOrig,
-  mode: 'layout',
+  mode: "layout",
   page_width: 600,
   page_height: 600,
   content_scale: 1,
@@ -21,40 +21,41 @@ const state = {
   item_width: 10,
   workspace_height: 200,
   workspace_width: 200,
-  canvas_max_area: 268435456,
+  canvas_max_area_theory: 268_435_456, // 16_384 * 16_384 
+  canvas_max_area: 12_000_000, // 4_000 * 3_000
   items: [
     {
-      type: 'map',
+      type: "map",
       width: 50,
       height: 20,
       options: {},
-      editable: false
+      editable: false,
     },
     {
-      type: 'legend',
-      element: el('ul', el('li', el('label', 'editable'))),
+      type: "legend",
+      element: el("ul", el("li", el("label", "editable"))),
       width: 5,
       height: 10,
-      editable: true
+      editable: true,
     },
     {
-      type: 'title',
-      text: 'Title',
+      type: "title",
+      text: "Title",
       width: 40,
       height: 4,
-      editable: true
+      editable: true,
     },
     {
-      type: 'text',
-      text: 'Abstract',
+      type: "text",
+      text: "Abstract",
       width: 20,
       height: 4,
-      editable: true
-    }
-  ]
+      editable: true,
+    },
+  ],
 };
 
 const options = {
-   onDestroy : function(){}
+  onDestroy: function () {},
 };
-export {state, options};
+export { state, options };

@@ -198,35 +198,6 @@ class Box {
     this.setHeight(h || this.height);
   }
 
-  /*_updateContentScale() {*/
-  /*const box = this;*/
-  /*if (!box.elContent) {*/
-  /*return;*/
-  /*}*/
-  /*const scale = box.contentScale;*/
-  /*if (scale === 1) {*/
-  /*box.elContent.style.width = "100%";*/
-  /*box.elContent.style.height = "100%";*/
-  /*box.setTransform("content", "scale", 1);*/
-  /*} else {*/
-  /*const hP = (1 / scale) * 100;*/
-  /*const wP = hP;*/
-  /*box.elContent.style.width = wP + "%";*/
-  /*box.elContent.style.height = hP + "%";*/
-  /*box.setTransform("content", "scale", scale);*/
-  /*}*/
-  /*}*/
-
-  validateSize() {
-    const box = this;
-    const mc = box.mc;
-    const max = mc.state.canvas_max_area;
-    const area = (box.width / box.state.scale) * (box.height / box.state.scale);
-    if (area >= max) {
-      mc.displayWarning("Your browser will not handle this kind of size");
-    }
-  }
-
   setTransform(target, type, ...args) {
     const box = this;
     const elTarget = target === "content" ? box.elContent : box.el;
@@ -241,14 +212,6 @@ class Box {
     if (type === "scale") {
     }
   }
-
-  /*resetContentTransform(target) {*/
-  /*const box = this;*/
-  /*const elTarget = target === "content" ? box.elContent : box.el;*/
-  /*box.setScale(1);*/
-  /*box.transform[target] = {};*/
-  /*elTarget.style.transform = "";*/
-  /*}*/
 
   calcRect() {
     return this.el.getBoundingClientRect();
@@ -343,22 +306,44 @@ class Box {
     const box = this;
     const wUnit = inPx ? w : box.toLengthPixel(w);
     const wSnap = box.snapToGrid(wUnit);
+
+    const valid = box.checkAndWarnSize(wSnap, box.height);
+
+    if (!valid) {
+      return box.width;
+    }
+
     box.width = wSnap;
     box.el.style.width = `${wSnap}px`;
-    box.validateSize();
     box.onResize();
-    return w;
+    return wSnap;
   }
 
   setHeight(h, inPx) {
     const box = this;
     const hUnit = inPx ? h : box.toLengthPixel(h);
     const hSnap = box.snapToGrid(hUnit);
+
+    const valid = box.checkAndWarnSize(box.width, hSnap);
+    if (!valid) {
+      return box.height;
+    }
     box.height = hSnap;
     box.el.style.height = `${hSnap}px`;
-    box.validateSize();
     box.onResize();
-    return h;
+    return hSnap;
+  }
+
+  checkAndWarnSize(width, height) {
+    const box = this;
+    const mc = box.mc;
+    const max = mc.state.canvas_max_area;
+    const area = (width / box.scale) * (height / box.scale);
+    if (area >= max) {
+      mc.displayWarning("The latest resize can't be fully performed, the maximum area has been reached.");
+      return false;
+    }
+    return true;
   }
 
   displayDim() {

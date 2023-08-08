@@ -106,7 +106,7 @@
       "height": 1189,
       "unit": "mm",
       "dpi": 125,
-      "disabled": false
+      "disabled": true
     },
     {
       "name": "A1",
@@ -114,7 +114,7 @@
       "height": 841,
       "unit": "mm",
       "dpi": 200,
-      "disabled": false
+      "disabled": true
     },
     {
       "name": "A2",
