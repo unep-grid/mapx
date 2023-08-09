@@ -2162,6 +2162,15 @@ mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, ad
     viewData <- .get(view, c("data"))
     meta <- mxDbGetSourceMeta(layerName)
 
+
+    oldLayer <- .get(viewData, c("source", "layerInfo", "name"))
+    newLayer <- .get(sourceData, c("layerName"))
+    layerChanged <- !identical(oldLayer, newLayer)
+
+    oldVariable <- .get(viewData, c("attribute", "name"))
+    newVariable <- .get(sourceData, c("variableName"))
+    variableChanged <- !identical(oldVariable, newVariable)
+
     #
     # Source info
     #
@@ -2203,6 +2212,8 @@ mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, ad
     #
     # Update view data
     #
+
+
     viewData <- .set(viewData, c("attribute"), attributesInfo)
     viewData <- .set(viewData, c("source"), sourceInfo)
     viewData <- .set(viewData, c("geometry"), geomInfo)
@@ -2212,7 +2223,7 @@ mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, ad
     #
     style <- .get(viewData, c("style"))
 
-    if (noDataCheck(style)) {
+    if (noDataCheck(style) || variableChanged || layerChanged) {
       viewData <- .set(viewData, c("style"), list())
     }
 
