@@ -3833,7 +3833,8 @@ function setVtLegend(options) {
     const isDuplicated =
       ruleNext &&
       ruleNext.value === rule.value &&
-      ruleNext.color === rule.color;
+      ruleNext.value_to === rule.value_to
+      //ruleNext.color === rule.color;
 
     if (!hasSprite) {
       rule.sprite = null;
