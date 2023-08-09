@@ -1,3 +1,12 @@
+  - [1.12.4-alpha.2](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.2) 
+
+    - APP
+        - Issue with closing a view item after an update: the view was reloaded once instead of closing.
+        - Style rule duplication : use value + value_to instead of color to check if it's a duplicate.
+        - #598 
+            - Save an empty style if attribute or source change in the view editor
+            - Use stored style after closing the editor, overwriting local changes ( keep change in local storage as backup )    
+
   - [1.12.4-alpha.1](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.1) 
 
     - APP
