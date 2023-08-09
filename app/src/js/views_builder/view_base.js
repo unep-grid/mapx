@@ -142,10 +142,6 @@ class ViewBase {
       },
     });
 
-    if (enable) {
-      elInput.checked = true;
-    }
-
     const elLabel = el(
       "label",
       {
@@ -178,6 +174,9 @@ class ViewBase {
     vb.elToggleMore = elToggleMore;
     vb.el._vb = this;
     view._el = elView;
+    if (enable) {
+      vb.open();
+    }
   }
 }
 

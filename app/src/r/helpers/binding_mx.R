@@ -330,7 +330,6 @@ mxJsonToHtml <- function(id, data, session = shiny:::getDefaultReactiveDomain())
 
 #' Save named list of value into cookie
 #'
-#' Note : don't use this for storing sensitive data, unless you have a trusted network.
 #'
 #' @param session Shiny session object. By default: default reactive domain.
 #' @param cookie Named list holding paired cookie value. e.g. (list(whoAteTheCat="Alf"))

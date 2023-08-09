@@ -118,6 +118,21 @@ observeEvent(input$btnViewSaveStyle, {
   )
   jedTriggerGetValues("styleEdit", "save")
 })
+#
+# View style close
+#
+observeEvent(input$btnViewCloseStyle, {
+  mxToggleButton(
+    id = "btnViewSaveStyle",
+    disable = TRUE
+  )
+  mxToggleButton(
+    id = "btnViewPreviewStyle",
+    disable = TRUE
+  )
+  jedTriggerGetValues("styleEdit", "close")
+})
+
 
 
 observeEvent(input$styleEdit_values, {
@@ -131,6 +146,7 @@ observeEvent(input$styleEdit_values, {
   editor <- reactUser$data$id
   project <- reactData$project
   view <- reactData$viewDataEdited
+  token <- reactUser$token
   isEditable <- view[["_edit"]] && view[["type"]] == "vt"
 
   if (isEditable) {
@@ -161,6 +177,26 @@ observeEvent(input$styleEdit_values, {
     switch(idEvent,
       "preview" = {
         mglUpdateView(view)
+      },
+      "close" = {
+        #
+        # Use the latest version to make sure
+        # the use see the non-altered version
+        #
+        mxModal(
+          id = "modalViewEdit",
+          close = TRUE
+        )
+        views <- mxApiGetViews(
+          idViews = view$id,
+          idProject = project,
+          idUser = editor,
+          token = token
+        )
+        viewStored <- views[[1]]
+        if (isNotEmpty(viewStored)) {
+          mglUpdateView(viewStored)
+        }
       },
       "save" = {
         view[["_edit"]] <- NULL

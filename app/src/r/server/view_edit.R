@@ -1,11 +1,9 @@
-
 #
 # View action handler
 #
 
 observe({
   mxCatch("view_edit.R", {
-
     #
     # Extract action type
     #
@@ -23,12 +21,10 @@ observe({
         isDev <- mxIsUserDev(idUser)
 
         if (viewAction[["action"]] == "btn_upload_geojson") {
-
           #
           # Section to remove
           #
         } else {
-
           #
           # Get view data and check if user can edit
           #
@@ -46,6 +42,7 @@ observe({
             language = language,
             token = token
           )
+
           mxTimeDiff(timer)
 
 
@@ -607,6 +604,10 @@ observe({
 
               btnList <- list(
                 actionButton(
+                  inputId = "btnViewCloseStyle",
+                  label = d("btn_close", language)
+                ),
+                actionButton(
                   inputId = "btnViewSaveStyle",
                   label = d("btn_save", language)
                 ),
@@ -626,7 +627,7 @@ observe({
                   jedOutput(id = "styleEdit")
                 ),
                 buttons = btnList,
-                textCloseButton = d("btn_close", language)
+                removeCloseButton = TRUE
               )
             }
           )

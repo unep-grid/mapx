@@ -382,10 +382,10 @@ export async function viewsListRenderNew(o) {
       const data = config.data;
       const update = data.update;
       const open = data.open === true;
+      
       /**
        * Add given element
        */
-
       if (data.el) {
         elItem.appendChild(data.el);
         return;
