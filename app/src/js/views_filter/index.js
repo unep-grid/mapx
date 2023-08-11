@@ -9,7 +9,7 @@ import { ListenerStore } from "./../listener_store/index.js";
 import { path } from "./../mx_helper_misc.js";
 import { el } from "../el/src/index.js";
 import { getDictItem } from "./../language";
-import { isEmpty } from "./../is_test/index.js";
+import { isElement, isEmpty } from "./../is_test/index.js";
 import { settings } from "./../settings";
 
 import "./style.less";
@@ -577,13 +577,13 @@ class ViewsFilter {
     /**
      * Remove checkboxes
      */
-    vf.getCheckboxes().forEach((t) => {
+    for (const t of vf.getCheckboxes()) {
       t.destroy();
       vf.removeCheckbox(t);
-    });
+    }
     const elCheckboxes = vf.opt.elFilterTags;
-    while (elCheckboxes.firstElementChild) {
-      elCheckboxes.removeChild(elCheckboxes.firstElementChild);
+    if (isElement(elCheckboxes)) {
+      elCheckboxes.replaceChildren();
     }
   }
 

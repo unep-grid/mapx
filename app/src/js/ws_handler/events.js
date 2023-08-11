@@ -3,7 +3,7 @@ import {
   triggerUpdateSourcesList,
   viewsReplace,
 } from "./../map_helpers/index.js";
-import { viewsListAddSingle } from "./../mx_helper_map_view_ui.js";
+import { viewsListAddSingle } from "./../views_list_manager";
 import { isNotEmpty, isArrayOfViews, isFunction } from "../is_test/index.js";
 import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt/index.js";
 import { isProd } from "./../app_utils";
@@ -20,7 +20,6 @@ export const eventsHandlers = {
   "/server/view/add": handlerViewAdd,
   "/server/source/added": handlerSourceAdded,
   "/server/view/style/get": handlerViewStyleGet,
-  //"/server/views/replace": handleViewsReplace,
   "/server/test/echo": handlerEcho,
   "/server/test/sum": handlerSum,
   "/server/spread/views/update": handleViewsReplace,

@@ -36,20 +36,19 @@
 }
 .li-group {
   position: relative;
-  padding: 8px;
-  margin: 11px;
-  border-radius: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: 10px;
   overflow: hidden;
-  box-shadow: 1px 1px 4px 1px var(--mx_ui_shadow);
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     top: 10px;
     bottom: 10px;
     border-left: 2px solid var(--group_color);
   }
   &:not(.li-group-collapsed) {
-    min-height: 40px;
+    min-height: 80px;
     > .li-group-header > .li-group-caret {
       transform: rotate(0deg);
     }

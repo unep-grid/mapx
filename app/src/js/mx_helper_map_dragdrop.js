@@ -2,7 +2,7 @@ import { modal } from "./mx_helper_modal.js";
 import { makeId, getExtension, progressScreen } from "./mx_helper_misc.js";
 import { isUploadFileSizeValid } from "./mx_helper_upload_source.js";
 import { isView, isJson, isString } from "./is_test";
-import { viewsListAddSingle } from "./mx_helper_map_view_ui.js";
+import { viewsListAddSingle } from "./views_list_manager";
 import { moduleLoad } from "./modules_loader_async/index.js";
 import { settings } from "./settings";
 

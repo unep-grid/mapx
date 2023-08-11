@@ -9,7 +9,6 @@ import {
 } from "../../../map_helpers/index.js";
 import { isView, isFunction, isObject } from "./../../../is_test";
 import { viewToMetaModal } from "../../../mx_helper_map_view_metadata.js";
-import { getProjectViewsCollections } from "../../../mx_helper_map_view_ui.js";
 import { MapxResolversStatic } from "./static.js";
 import { isStringRange, isString, isEmpty } from "../../../is_test/index.js";
 import { settings } from "./../../../settings";
@@ -317,8 +316,9 @@ class MapxResolversApp extends MapxResolversStatic {
    * @param {Boolean} opt.open Return only collections from open views
    * @return {Array} Array of collections names
    */
-  get_project_collections(opt) {
-    return getProjectViewsCollections(opt);
+  get_project_collections() {
+    console.warn("Deprecated : collections are not used anymore");
+    return [];
   }
 
   /**
@@ -403,7 +403,7 @@ class MapxResolversApp extends MapxResolversStatic {
 
   /**
    * Get views current absolute order (without groups) in the list
-   * @return {Array} 
+   * @return {Array}
    */
   get_views_list_order() {
     return getViewsListOrder();

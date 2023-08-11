@@ -4,7 +4,7 @@ import { Item } from "./components/item.js";
 import { Group } from "./components/group.js";
 import { ContextMenu } from "./components/contextMenu.js";
 import { ListenerStore } from "../listener_store/index.js";
-import { isSortedArray, isAgtB } from "../is_test/index.js";
+import { isSortedArray, isAgtB, isElement } from "../is_test/index.js";
 
 import "./style/nested_list.less";
 
@@ -27,21 +27,21 @@ class NestedList {
     li.history = [];
     li.meta = [];
     li.contextMenu = null;
-    li.init();
     li.drag = {};
+    li.init().catch(console.error);
   }
   /**
    * Init/destroy
    */
-  init() {
+  async init() {
     const li = this;
     li.initCustomDictItem();
-    li.initState();
+    await li.initState();
     li.initHistory();
     li.startListening();
   }
-  initState() {
-    this.setState({ render: true });
+  async initState() {
+    await this.setState({ render: true });
   }
   initHistory() {
     this.setHistory();
@@ -54,9 +54,9 @@ class NestedList {
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
-      callback: handleContextClick,
+      callback: li.handleContextClick,
       group: "base",
-      type: ["dblclick", "contextmenu"],
+      type: ["contextmenu"],
     });
     li.listenerStore.addListener({
       target: li.elRoot,
@@ -69,11 +69,11 @@ class NestedList {
   stopListening() {
     this.listenerStore.removeListenerByGroup("base");
   }
-  destroy() {
+  async destroy() {
     const li = this;
     li.listenerStore.destroy();
     li.clearHistory();
-    li.clearAllItems();
+    await li.clearAllItems();
     return li.fireAsync("destroy");
   }
   /**
@@ -198,12 +198,8 @@ class NestedList {
    * Sorting and ordering
    */
   filterById(ids, opt) {
-    opt = Object.assign({}, { flatMode: false }, opt);
-
     const li = this;
-    if (li.isModeEmpty()) {
-      return;
-    }
+    opt = Object.assign({}, { flatMode: false }, opt);
     let elTargets = li.getChildrenTarget();
     let clHidden = li.opt.class.itemHidden;
     ids = li.isArray(ids) ? ids : [ids];
@@ -219,9 +215,6 @@ class NestedList {
     elTargets.forEach((el) => {
       if (li.isItem(el)) {
         let id = el.id;
-        if (id === li.opt.idEmptyItem) {
-          return;
-        }
         if (ids.indexOf(id) > -1) {
           el.classList.remove(clHidden);
         } else {
@@ -856,71 +849,37 @@ class NestedList {
   hasHistory() {
     return this.history.length > 0;
   }
-  undo() {
+  async undo() {
     const li = this;
+    let state = li.history.pop();
+    if (!state) {
+      console.warn("Nothing to undo");
+      return;
+    }
     li.clearAllItems();
-    let last = li.history.pop();
-    li.setState({
-      render: false,
-      state: last,
+    await li.setState({
+      render: true,
+      state: state,
       useStateStored: false,
       debug: true,
     });
   }
 
   /**
-   * Empty mode
-   */
-  setModeEmpty(enable) {
-    const li = this;
-    let idEmpty = li.opt.idEmptyItem;
-    let ignore = (enable && li.isModeEmpty()) || (!enable && !li.isModeEmpty());
-    let nItems = li.getChildrenCount();
-    let elLabel = el("div", li.opt.emptyLabel);
-
-    if (ignore) {
-      return;
-    }
-
-    if (enable) {
-      if (nItems > 0) {
-        li.clearAllItems();
-      }
-
-      li.addItem({
-        id: idEmpty,
-        type: "item",
-        el: elLabel,
-        empty: true,
-      });
-    } else {
-      li.removeItemById(idEmpty);
-    }
-
-    li._is_mode_empty = !!enable;
-  }
-  isModeEmpty() {
-    return !!this._is_mode_empty;
-  }
-
-  /**
    * State management
    */
-  refreshState() {
+  async refreshState() {
     const li = this;
     let state = li.getState({ keepItemContent: true });
-    li.setState({ render: false, state: state, useStateStored: false });
+    await li.setState({ render: false, state: state, useStateStored: false });
   }
   async resetState() {
     const li = this;
     let state = li.getStateOrig();
-    if (li.isModeEmpty()) {
-      return;
-    }
     li.addUndoStep();
-    li.clearAllItems();
+    await li.clearAllItems();
     li.setStateStored([]);
-    li.setState({ render: true, state: state, useStateStored: false });
+    await li.setState({ render: true, state: state, useStateStored: false });
     await li.fireAsync("order_change", {
       order: li.getItemsOrder(),
       orig: "nested_list_reset",
@@ -928,10 +887,10 @@ class NestedList {
     await li.fireAsync("state_reset", state);
     return true;
   }
-  setState(opt) {
+  async setState(opt) {
     const li = this;
     li.setModeAnimate(false);
-    li.clearAllItems();
+    await li.clearAllItems();
     opt = Object.assign({}, li.opt, opt);
     let stateOrig = opt.state || li.getStateOrig();
     let stateStored;
@@ -947,28 +906,16 @@ class NestedList {
     })[0];
 
     /*
-     * If the state is empty,
-     * add empty label
+     * Render state item
      */
-    let emptyState = state.length === 0;
-    if (emptyState) {
-      /*
-       * Render empty label
-       */
-      li.setModeEmpty(true);
-    } else {
-      /*
-       * Render state item
-       */
-      state.forEach((s) => {
-        if (s.type === "group") {
-          li.addGroup(s);
-        } else {
-          s.render = opt.render;
-          s.initState = true;
-          li.addItem(s);
-        }
-      });
+    for (const s of state) {
+      if (s.type === "group") {
+        li.addGroup(s);
+      } else {
+        s.render = opt.render;
+        s.initState = true;
+        li.addItem(s);
+      }
     }
     li.fire("state_change", state);
     li.setModeAnimate(true);
@@ -979,12 +926,11 @@ class NestedList {
   setStateOrig(state) {
     this._state_orig = this.cloneObject(state || this.getState() || []);
   }
-  clearAllItems() {
+
+  async clearAllItems() {
     const li = this;
-    let els = li.getChildrenTarget(li.elRoot);
-    els.forEach((el) => {
-      li.removeElement(el);
-    });
+    await li.fireAsync("clear_all_items");
+    li.elRoot.replaceChildren();
   }
 
   updateItem(attr) {
@@ -997,7 +943,12 @@ class NestedList {
   addItem(attr) {
     const li = this;
 
-    attr.render = attr.render || !attr.content || false;
+    if (attr.render) {
+      delete attr.content;
+    }
+    if (attr.content) {
+      attr.render = false;
+    }
     let isGroup = li.isGroup(attr.group);
     let isLocked = li.isModeLock();
     let elGroupParent = isGroup
@@ -1007,14 +958,9 @@ class NestedList {
     let item = new Item(attr, li);
     let elItem = item.el;
     let elContent = item.elContent;
-    let isEmptyItem = !!attr.empty;
-    let isModeEmpty = li.isModeEmpty();
-    if (isLocked && !isEmptyItem) {
-      return;
-    }
 
-    if (!isEmptyItem && isModeEmpty) {
-      li.setModeEmpty(false);
+    if (isLocked) {
+      return;
     }
 
     elGroupParent.appendChild(elItem);
@@ -1053,7 +999,7 @@ class NestedList {
   removeItemById(id) {
     const li = this;
     let elItem = li.elRoot.querySelector("#" + id);
-    li.removeElement(elItem);
+    elItem.remove();
   }
 
   removeGroupById(id) {
@@ -1061,19 +1007,21 @@ class NestedList {
     let elGroup = li.elRoot.querySelector("#" + id);
     li.removeGroup(elGroup);
   }
+
   removeGroup(elGroup) {
     const li = this;
-    let isValid = li.isGroup(elGroup) && elGroup !== li.elRoot;
-    if (isValid) {
-      let elParent = li.getGroup(elGroup);
-      let els = li.getChildrenTarget(elGroup, true);
-      els.forEach((el) => {
-        li.animateMove([el, elGroup], () => {
-          elParent.insertBefore(el, elGroup);
-        });
-      });
-      li.removeElement(elGroup);
+    const isValid = li.isGroup(elGroup) && elGroup !== li.elRoot;
+    if (!isValid) {
+      return;
     }
+    const elParent = li.getGroup(elGroup);
+    const els = li.getChildrenTarget(elGroup, true);
+    for (const el of els) {
+      li.animateMove([el, elGroup], () => {
+        elParent.insertBefore(el, elGroup);
+      });
+    }
+    elGroup.remove();
   }
   /**
    * Helpers
@@ -1152,22 +1100,13 @@ class NestedList {
     }
   }
   removeElement(el) {
-    const li = this;
-    if (el instanceof Element) {
-      if (el.remove) {
-        el.remove();
-      } else if (el) {
-        el.parentElement.removeChild(el);
-      }
-    }
-    let isEmpty = li.getChildrenCount() === 0;
-    if (isEmpty) {
-      li.setModeEmpty(true);
+    if (isElement(el)) {
+      el.remove();
     }
   }
   removeContent(el) {
-    while (el.firstElementChild) {
-      el.removeChild(el.firstElementChild);
+    if (isElement(el)) {
+      el.replaceChildren();
     }
   }
   d(id) {
@@ -1411,26 +1350,22 @@ class NestedList {
   isDevMode() {
     return window.innerWidth < window.outerWidth;
   }
+  /**
+   * Click in context menu event listener
+   */
+  handleContextClick(evt) {
+    const li = this;
+    evt.preventDefault();
+    if (li.contextMenu instanceof ContextMenu) {
+      li.contextMenu.destroy();
+    }
+    evt.stopPropagation();
+    evt.stopImmediatePropagation();
+    li.contextMenu = new ContextMenu(evt, li);
+  }
 }
 
 export { NestedList };
-
-/**
- * Click in context menu event listener
- */
-function handleContextClick(evt) {
-  const li = this;
-  evt.preventDefault();
-  if (li.contextMenu instanceof ContextMenu) {
-    li.contextMenu.destroy();
-  }
-  if (li.isModeEmpty()) {
-    return;
-  }
-  evt.stopPropagation();
-  evt.stopImmediatePropagation();
-  li.contextMenu = new ContextMenu(evt, li);
-}
 
 /**
  * Mouse click
@@ -1586,14 +1521,11 @@ function handleDragEnd(evt) {
   const li = this;
   const elNoImg = el("img");
   evt.dataTransfer.setDragImage(elNoImg, 0, 0);
-
-  if (!li.isModeEmpty()) {
-    li.fire("sort_end", evt);
-    if (li.elNext !== li.drag.el.nextSibling) {
-      li.fire("sort_done", evt);
-    }
-    li.setDragClean();
+  li.fire("sort_end", evt);
+  if (li.elNext !== li.drag.el.nextSibling) {
+    li.fire("sort_done", evt);
   }
+  li.setDragClean();
 }
 
 /**

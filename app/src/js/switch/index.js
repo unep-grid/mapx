@@ -1,13 +1,14 @@
-import {el} from './../el/src/index.js';
-import {ListenerStore} from './../listener_store/index.js';
-import './switch.css';
+import { isElement } from "../is_test/index.js";
+import { el } from "./../el/src/index.js";
+import { ListenerStore } from "./../listener_store/index.js";
+import "./switch.css";
 
 let settings = {
-  labelLeft: 'on',
-  labelRight: 'off',
+  labelLeft: "on",
+  labelRight: "off",
   onChange: (s) => {
     console.log(s);
-  }
+  },
 };
 
 class Switch {
@@ -25,31 +26,31 @@ class Switch {
     var sw = this;
     var elInput;
     var elSwitch = el(
-      'div',
-      {class: 'switch'},
-      el('span', sw.opt.labelLeft),
-      (elInput = el('input', {
-        class: 'switch-input',
-        type: 'checkbox',
-        id: sw.id
+      "div",
+      { class: "switch" },
+      el("span", sw.opt.labelLeft),
+      (elInput = el("input", {
+        class: "switch-input",
+        type: "checkbox",
+        id: sw.id,
       })),
       el(
-        'label',
+        "label",
         {
           for: sw.id,
-          class: 'switch-label'
+          class: "switch-label",
         },
         el(
-          'div',
-          {class: 'switch-container'},
-          el('div', {class: 'switch-handle'})
+          "div",
+          { class: "switch-container" },
+          el("div", { class: "switch-handle" })
         )
       ),
-      el('span', sw.opt.labelRight)
+      el("span", sw.opt.labelRight)
     );
     sw.elSwitch = elSwitch;
     sw.elInput = elInput;
-    sw.elContainer.innerHTML = '';
+    sw.elContainer.innerHTML = "";
     sw.elContainer.appendChild(sw.elSwitch);
   }
 
@@ -58,10 +59,10 @@ class Switch {
     sw.build();
     sw.lStore = new ListenerStore();
     sw.lStore.addListener({
-      type: 'input',
+      type: "input",
       target: sw.elInput,
       callback: sw.handleChange,
-      bind: sw
+      bind: sw,
     });
   }
 
@@ -76,7 +77,9 @@ class Switch {
   }
 
   destroy() {
-    this.elContainer.removeChild(this.elSwitch);
+    if (isElement(this.elSwitch)) {
+      this.elSwitch.remove();
+    }
     this.lStore.destroy();
   }
 
@@ -106,4 +109,4 @@ class Switch {
     sw.opt.onChange(sw.state);
   }
 }
-export {Switch};
+export { Switch };

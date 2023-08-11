@@ -1,6 +1,6 @@
 import { getLabelFromObjectPath } from "../language";
 import { el } from "../el/src/index.js";
-import { isViewOpen } from "../is_test_mapx/index.js";
+import { isElement, isViewOpen } from "../is_test_mapx/index.js";
 import { getView, getViewTitle } from "../map_helpers/index.js";
 import { events } from "../mx.js";
 
@@ -77,11 +77,11 @@ class ViewBase {
   }
 
   destroy() {
-    const elParent = this.el.parentElement;
-    if (elParent) {
-      elParent.removeChild(this.el);
+    if (isElement(this.el)) {
+      this.el.remove();
     }
   }
+
   build(enable) {
     enable = !!enable;
     const vb = this;

@@ -12,7 +12,7 @@ import {
   getViewsStep,
 } from "../story_map/index.js";
 import { getArrayDistinct } from "../array_stat/index.js";
-import { viewsListAddSingle } from "../mx_helper_map_view_ui.js";
+import { viewsListAddSingle } from "../views_list_manager";
 import {
   isNotEmpty,
   isArrayOfViewsId,

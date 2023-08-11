@@ -30,7 +30,7 @@ import {
 
 import { ws, data } from "./../mx.js";
 import { settings } from "./../settings";
-import { viewsListAddSingle } from "../mx_helper_map_view_ui.js";
+import { viewsListAddSingle } from "../views_list_manager";
 
 export { handleViewClick };
 

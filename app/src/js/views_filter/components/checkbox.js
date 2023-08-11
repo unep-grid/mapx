@@ -1,5 +1,6 @@
 import { el } from "../../el/src/index.js";
 import { onNextFrame } from "../../animation_frame/index.js";
+import { isElement } from "../../is_test/index.js";
 
 let settings = {
   onDestroy: () => {},
@@ -42,7 +43,10 @@ class Checkbox {
     if (cbx._destroyed || !cbx.el.parentElement) {
       return;
     }
-    cbx.el.parentElement.removeChild(cbx.el);
+
+    if (isElement(cbx.el)) {
+      cbx.el.remove();
+    }
     cbx.opt.onDestroy.bind(cbx)();
     cbx._destroyed = true;
   }

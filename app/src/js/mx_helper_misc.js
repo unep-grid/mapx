@@ -1805,29 +1805,6 @@ export function parentFinder(o) {
 }
 
 /**
- * Remove all child of given element. Fast.
- * @param {Object|Element} o Input
- * @param {String} o.selector Selector
- * @return {Element} Empty element
- */
-export function childRemover(o) {
-  var el;
-  const h = mx.helpers;
-  if (h.isElement(o)) {
-    el = o;
-  } else if (h.isElement(o.selector)) {
-    el = o.selector;
-  } else {
-    el = document.querySelector(o.selector);
-  }
-
-  while (el.firstChild) {
-    el.removeChild(el.firstChild);
-  }
-  return el;
-}
-
-/**
  * Set element attributes
  * @param {object} o options
  * @param {string} o.selector element selector

@@ -1,6 +1,5 @@
 import { ResolversBase } from "./base.js";
 import { ShareModal } from "./../../../share_modal/index.js";
-import { drawModeToggle } from "./../../../mx_helper_map_draw.js";
 import {
   getLanguageCurrent,
   getLanguagesAll,
@@ -65,7 +64,7 @@ import {
 } from "../../../mx_helper_misc.js";
 import { getTableAttributeConfigFromView } from "../../../source/display_table.js";
 import { getApiUrl } from "../../../api_routes/index.js";
-import { viewsListAddSingle } from "../../../mx_helper_map_view_ui.js";
+import { viewsListAddSingle } from "../../../views_list_manager";
 import { modalCloseAll } from "../../../mx_helper_modal.js";
 import { toggleSpotlight } from "../../../mx_helper_map_pixop.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
@@ -784,13 +783,6 @@ class MapxResolversStatic extends ResolversBase {
   close_modal_all() {
     modalCloseAll();
     return true;
-  }
-
-  /**
-   * Toggle draw mode
-   */
-  toggle_draw_mode() {
-    return drawModeToggle();
   }
 
   /**

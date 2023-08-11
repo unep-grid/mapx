@@ -107,7 +107,7 @@ const contextMenuItems = [
     label: 'cm_global_save_state_self',
     ui: 'button',
     condition: function() {
-      return !this.isModeFrozen() && !this.isModeEmpty() && this.hasHistory();
+      return !this.isModeFrozen() && this.hasHistory();
     }
   },
   {
@@ -125,7 +125,7 @@ const contextMenuItems = [
     label: 'cm_global_reset_state',
     ui: 'button',
     condition: function() {
-      return !this.isModeFrozen() && !this.isModeEmpty();
+      return !this.isModeFrozen();
     }
   },
   {
@@ -134,7 +134,7 @@ const contextMenuItems = [
     label: 'cm_global_undo_last',
     ui: 'button',
     condition: function() {
-      return !this.isModeFrozen() && !this.isModeEmpty() && this.hasHistory();
+      return !this.isModeFrozen() && this.hasHistory();
     }
   },
   {

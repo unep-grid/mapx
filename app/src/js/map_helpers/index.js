@@ -45,11 +45,10 @@ import {
   handleMapDrop,
 } from "./../mx_helper_map_dragdrop.js";
 import {
-  getProjectViewsCollectionsShiny,
   updateViewsFilter,
   viewsListRenderNew,
   viewsListAddSingle,
-} from "./../mx_helper_map_view_ui.js";
+} from "./../views_list_manager";
 import { initLog } from "./../mx_helper_log.js";
 import { dashboardHelper } from "./../dashboards/dashboard_instances.js";
 import {
@@ -63,7 +62,6 @@ import {
   showSelectLanguage,
   showLogin,
   updateTitle,
-  childRemover,
   getClickHandlers,
   setClickHandler,
   cssTransformFun,
@@ -536,13 +534,12 @@ export async function setProject(idProject, opt) {
     if (hasShiny) {
       Shiny.onInputChange("selectProject", idProject);
     }
-    const r = await Promise.all([
-      events.once("settings_project_change"),
-      events.once("views_list_updated"),
-    ]);
 
-    const idProjectNew = path(r[0], "new_project");
-    const idProjectOld = path(r[0], "old_project");
+    const r = await events.once("settings_project_change");
+    await events.once("views_list_updated");
+
+    const idProjectNew = r?.new_project;
+    const idProjectOld = r?.old_project;
 
     if (idProjectNew === idProjectOld) {
       console.warn("Project did not change", { idProjectNew, idProjectOld });
@@ -776,16 +773,6 @@ export function initListenersApp() {
   updateUiSettings();
 
   events.on({
-    type: "views_list_updated",
-    idGroup: "view_list_updated",
-    callback: function () {
-      getProjectViewsCollectionsShiny({
-        idInput: "viewsListCollections",
-      });
-    },
-  });
-
-  events.on({
     type: ["view_created", "view_deleted"],
     idGroup: "clean_history_and_state",
     callback: async () => {
@@ -797,7 +784,8 @@ export function initListenersApp() {
     type: ["views_list_updated", "view_add", "view_remove", "mapx_ready"],
     idGroup: "update_btn_filter_view_activated",
     callback: () => {
-      updateBtnFilterActivated();
+      const mData = getMapData();
+      mData.viewsListManager.updateBtnFilterActivated();
       viewsCheckedUpdate();
     },
   });
@@ -918,20 +906,6 @@ export async function updateUiSettings() {
   await updateLanguage();
   const elBtnLanguage = document.getElementById("btnShowLanguageLabel");
   elBtnLanguage.innerText = await getDictItem(lang);
-}
-
-/**
- * Update btn filter activated
- */
-export function updateBtnFilterActivated() {
-  const elFilterActivated = document.getElementById("btnFilterChecked");
-  const enable = hasViewsActivated();
-  const isActivated = elFilterActivated.classList.contains("active");
-  if (isActivated || enable) {
-    elFilterActivated.classList.remove("disabled");
-  } else {
-    elFilterActivated.classList.add("disabled");
-  }
 }
 
 /**
@@ -2225,7 +2199,7 @@ export async function updateViewsList(opt) {
     }
 
     if (!prog && elProgContainer) {
-      childRemover(elProgContainer);
+      elProgContainer.replaceChildren();
       prog = new RadialProgress(elProgContainer, {
         radius: 30,
         stroke: 4,
@@ -3833,8 +3807,8 @@ function setVtLegend(options) {
     const isDuplicated =
       ruleNext &&
       ruleNext.value === rule.value &&
-      ruleNext.value_to === rule.value_to
-      //ruleNext.color === rule.color;
+      ruleNext.value_to === rule.value_to;
+    //ruleNext.color === rule.color;
 
     if (!hasSprite) {
       rule.sprite = null;

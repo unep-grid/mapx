@@ -7,14 +7,12 @@ let settings = {
    * General options
    */
   id: 'li-default',
-  idEmptyItem: 'liEmptyItem',
   prefix: 'li',
   dict: dict,
   addDictItems : [],
   state: state,
   useStateStored: false,
   autoMergeState: false,
-  emptyLabel: '<h3>Empty list</h3>',
   language: 'en',
   languageDefault: 'en',
   languages: ['en', 'fr', 'es'],

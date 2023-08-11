@@ -1,6 +1,7 @@
-import {el} from './../el/src/index.js';
-import {formatZeros, path} from './../mx_helpers.js';
-import mapxlogo from './../../svg/map-x-logo-full.svg';
+import { el } from "./../el/src/index.js";
+import { formatZeros, path } from "./../mx_helpers.js";
+import mapxlogo from "./../../svg/map-x-logo-full.svg";
+import { isElement } from "../is_test/index.js";
 /**
  * Control for live coordinate
  */
@@ -8,8 +9,8 @@ class MapControlLiveCoord {
   constructor() {}
   onAdd(map) {
     const mlc = this;
-    const coord = el('div');
-    map.on('mousemove', (e) => {
+    const coord = el("div");
+    map.on("mousemove", (e) => {
       const pos = e.lngLat;
       const lat = formatZeros(pos.lat, 3);
       const lng = formatZeros(pos.lng, 3);
@@ -17,9 +18,9 @@ class MapControlLiveCoord {
     });
     mlc.map = map;
     mlc.elContainer = el(
-      'div',
+      "div",
       {
-        class: ['mapboxgl-ctrl', 'mapboxgl-ctrl-attrib']
+        class: ["mapboxgl-ctrl", "mapboxgl-ctrl-attrib"],
       },
       coord
     );
@@ -28,38 +29,40 @@ class MapControlLiveCoord {
   onRemove() {
     const mlc = this;
     mlc.map = undefined;
-    mlc.elContainer.parentNode.removeChild(mlc.elContainer);
+    if (isElement(mlc.elContainer)) {
+      mlc.elContainer.remove();
+    }
   }
 }
 /**
- * Control for MapX logo 
+ * Control for MapX logo
  */
 class MapxLogo {
   constructor() {}
   onAdd() {
     const ml = this;
     const elLogo = el(
-      'a',
+      "a",
       {
-        href: path(mx, 'settings.links.mainProjectPage'),
-        class: 'mx-logo',
-        target: '_blank',
-        rel: 'noreferrer',
+        href: path(mx, "settings.links.mainProjectPage"),
+        class: "mx-logo",
+        target: "_blank",
+        rel: "noreferrer",
         style: {
           backgroundImage: `url(${mapxlogo})`,
-          fontSize: '0em'
-        }
+          fontSize: "0em",
+        },
       },
-      'Main project page'
+      "Main project page"
     );
-    ml.elContainer =  el(
-      'div',
+    ml.elContainer = el(
+      "div",
       {
-        class: 'mapboxgl-ctrl',
+        class: "mapboxgl-ctrl",
         style: {
-          display: 'inline-block',
-          float: 'none'
-        }
+          display: "inline-block",
+          float: "none",
+        },
       },
       elLogo
     );
@@ -67,7 +70,9 @@ class MapxLogo {
   }
   onRemove() {
     const ml = this;
-    ml.elContainer.parentNode.removeChild(ml.elContainer);
+    if (isElement(ml.elContainer)) {
+      ml.elContainer.remove();
+    }
   }
 }
 
@@ -83,18 +88,18 @@ class MapControlScale {
     const mcs = this;
     mcs.map = map;
     mcs.elContainer = el(
-      'div',
+      "div",
       {
-        class: ['mapboxgl-ctrl', 'mapboxgl-ctrl-attrib']
+        class: ["mapboxgl-ctrl", "mapboxgl-ctrl-attrib"],
       },
       (mcs.elScale = el(
-        'div',
-        {class: 'mx-scale-box'},
-        (mcs.elText = el('div', {class: ['mx-scale-text']}))
+        "div",
+        { class: "mx-scale-box" },
+        (mcs.elText = el("div", { class: ["mx-scale-text"] }))
       ))
     );
 
-    map.on('mousemove', (e) => {
+    map.on("mousemove", (e) => {
       const y = e.point.y;
       mcs.render(y);
     });
@@ -106,7 +111,7 @@ class MapControlScale {
 
   render(y) {
     const mcs = this;
-    let unit = 'm';
+    let unit = "m";
     let maxWidth = 100;
     //const y = map._container.clientHeight / 2;
     let maxMeters = getDistance(
@@ -117,21 +122,23 @@ class MapControlScale {
     let ratio = distance / maxMeters;
     if (distance >= 1000) {
       distance = distance / 1000;
-      unit = 'km';
+      unit = "km";
     }
 
-    mcs.elScale.style.width = maxWidth * ratio + 'px';
+    mcs.elScale.style.width = maxWidth * ratio + "px";
     mcs.elText.innerText = distance + unit;
   }
 
   onRemove() {
     const mcs = this;
-    mcs.elContainer.parentNode.removeChild(mcs.elContainer);
+    if (isElement(mcs.elContainer)) {
+      mcs.elContainer.remove();
+    }
     mcs.map = undefined;
   }
 }
 
-export {MapControlScale, MapxLogo, MapControlLiveCoord};
+export { MapControlScale, MapxLogo, MapControlLiveCoord };
 
 function getDistance(latlng1, latlng2) {
   // Uses spherical law of cosines approximation.
