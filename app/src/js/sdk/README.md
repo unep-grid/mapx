@@ -658,7 +658,6 @@ MapX resolvers available in static and app
     * [.download_view_source_geojson(opt)](#MapxResolversStatic+download_view_source_geojson) ⇒ <code>Object</code>
     * [.show_modal_map_composer()](#MapxResolversStatic+show_modal_map_composer) ⇒ <code>Boolean</code>
     * [.close_modal_all()](#MapxResolversStatic+close_modal_all) ⇒ <code>Boolean</code>
-    * [.toggle_draw_mode()](#MapxResolversStatic+toggle_draw_mode)
     * [.get_views_title(opt)](#MapxResolversStatic+get_views_title) ⇒ <code>Array</code>
     * [.set_vector_spotlight(opt)](#MapxResolversStatic+set_vector_spotlight) ⇒ <code>Object</code>
     * [.set_highlighter(opt)](#MapxResolversStatic+set_highlighter) ⇒ <code>number</code>
@@ -1319,12 +1318,6 @@ close all modal windows
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Boolean</code> - done  
-<a name="MapxResolversStatic+toggle_draw_mode"></a>
-
-#### mapxResolversStatic.toggle\_draw\_mode()
-Toggle draw mode
-
-**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 <a name="MapxResolversStatic+get_views_title"></a>
 
 #### mapxResolversStatic.get\_views\_title(opt) ⇒ <code>Array</code>

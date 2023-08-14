@@ -1,3 +1,16 @@
+  - [1.12.4-alpha.3](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.3) 
+
+    - APP 
+        - Streamlining and enhancing the codebase. Impacted: 
+            - Views list,
+            - Shiny bindings, 
+            - Draw tool, 
+            - Helpers, 
+            - View's item,
+            - Components,
+            - vt numeric style rules.
+            -> Should solve issue #590 too
+
   - [1.12.4-alpha.2](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.2) 
 
     - APP
