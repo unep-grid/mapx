@@ -303,19 +303,20 @@ async function handleViewClick(event) {
            * After click on legend, select all sibling to check
            * for other values to filter using "OR" logical operator
            */
-          const legendBox = elTarget.closest(".mx-legend-box");
-          const legendInputs = legendBox.querySelectorAll("input");
+          const elLegendBox = elTarget.closest(".mx-legend-box");
+          const elsChecked = elLegendBox.querySelectorAll(
+            'input[type="checkbox"]:checked'
+          );
           const idView = dataset.view_action_target;
           const view = getView(idView);
           const filter = ["any"];
           const rules = view._style_rules;
-          for (const li of legendInputs) {
-            if (li.checked) {
-              const index = li.dataset.view_action_index * 1;
-              const ruleIndex = rules[index];
-              if (ruleIndex && ruleIndex.filter) {
-                filter.push(ruleIndex.filter);
-              }
+
+          for (const elLi of elsChecked) {
+            const idRule = elLi.dataset.view_action_rule_id * 1;
+            const rule = rules[idRule];
+            if (rule && rule.filter) {
+              filter.push(rule.filter);
             }
           }
 

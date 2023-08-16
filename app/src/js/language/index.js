@@ -15,7 +15,7 @@ import {
 } from "./../map_helpers/index.js";
 import { getArrayDistinct } from "../array_stat";
 import { settings } from "./../settings";
-import { buildLegendVt } from "../legend_vt";
+import { buildLegendVt, updateLegendVt } from "../legend_vt";
 
 /**
  * Set current language ( for updating ui/views, use updateLanguage )
@@ -389,16 +389,23 @@ export function checkLanguage(opt) {
     prefix: "",
   };
   const o = Object.assign({}, def, opt);
+
   /*
    * Put code expected in first position and
    * remove duplicate if any
    */
   const langs = getArrayDistinct([o.language, ...o.languages]);
 
+  /**
+   * Set path separator
+   */
+  if (isNotEmpty(o.path)) {
+    o.path = `${o.path}.`;
+  }
+
   for (const lang of langs) {
-    const value = path(o.obj, `${o.path}.${o.prefix + lang}`);
-    const notEmpty = !isEmpty(value);
-    if (notEmpty) {
+    const value = path(o.obj, `${o.path}${o.prefix + lang}`);
+    if (isNotEmpty(value)) {
       return lang;
     }
   }
@@ -463,9 +470,10 @@ export async function updateLanguageViewsList(o) {
        * Regenerate vt legend
        */
       if (elLegendVt) {
-        const elRules = buildLegendVt(view);
-        elLegendVt.innerHTML = "";
-        elLegendVt.appendChild(elRules);
+        updateLegendVt(view);
+        /* const elRules = buildLegendVt(view);*/
+        /*elLegendVt.innerHTML = "";*/
+        /*elLegendVt.appendChild(elRules);*/
       }
 
       /**
@@ -612,7 +620,7 @@ async function mapboxRTLload() {
   return new Promise((resolve, reject) => {
     try {
       mx.mapboxgl.setRTLTextPlugin(
-        'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js',
+        "https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js",
         (err) => {
           if (err) {
             reject(err);

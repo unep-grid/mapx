@@ -1,8 +1,13 @@
 import chroma from "chroma-js";
-import { isArray } from "./../is_test/index.js";
+import {
+  isArray,
+  isEmpty,
+  isNotEmpty,
+  isViewVt,
+  isElement,
+} from "./../is_test/index.js";
 import { checkLanguage, getLabelFromObjectPath } from "./../language/index.js";
 import { path, updateIfEmpty, makeId, firstOf } from "./../mx_helper_misc.js";
-import { isNotEmpty } from "./../is_test/index.js";
 import { getSpriteImage } from "./../map_helpers/index.js";
 import { el } from "./../el/src/index.js";
 
@@ -32,7 +37,7 @@ export function buildLegendVt(view, rules) {
      * Configure legend item
      */
     const lang = checkLanguage({ obj: rule, path: "", prefix: "label_" });
-    const label = firstOf([rule["label_" + lang], rule.value, "No data"]);
+    const label = firstOf([rule[`label_${lang}`], rule.value, "No data"]);
     const inputId = makeId();
     const colStyle = {};
     const hasSprite = isNotEmpty(rule.sprite) && rule.sprite !== "none";
@@ -117,7 +122,7 @@ export function buildLegendVt(view, rules) {
             dataset: {
               view_action_key: "btn_legend_filter",
               view_action_target: view.id,
-              view_action_index: id,
+              view_action_rule_id: id,
             },
           }),
           el(
@@ -125,9 +130,15 @@ export function buildLegendVt(view, rules) {
             {
               class: "mx-legend-vt-rule-label",
               for: inputId,
-              title: `${label}`,
             },
-            el("span", { class: "mx-legend-vt-rule-label-text" }, label)
+            el(
+              "span",
+              {
+                title: `${label}`,
+                class: "mx-legend-vt-rule-label-text",
+              },
+              label
+            )
           )
         ),
       ]
@@ -152,9 +163,6 @@ export function buildLegendVt(view, rules) {
       "div",
       {
         class: "mx-legend-box",
-        /*dataset: {*/
-        /*rules: JSON.stringify(rules),*/
-        /*},*/
       },
       el(
         "table",
@@ -165,4 +173,49 @@ export function buildLegendVt(view, rules) {
       )
     )
   );
+}
+
+export function updateLegendVt(view) {
+  if (!isViewVt(view)) {
+    return;
+  }
+  const elView = view._el;
+  const rules = view?._style_rules || view?.data?.style?.rules || [];
+
+  if (isEmpty(rules) || !isElement(elView)) {
+    return;
+  }
+
+  /**
+   * Title
+   */
+  const titleLegend = getLabelFromObjectPath({
+    obj: view,
+    path: "data.style.titleLegend",
+  });
+  const elLegendTitle = elView.querySelector(".mx-legend-vt-title");
+  if (isElement(elLegendTitle)) {
+    elLegendTitle.innerText = titleLegend;
+  }
+  /**
+   * Filter label
+   */
+  let id = 0;
+  for (const rule of rules) {
+    const lang = checkLanguage({
+      debug: true,
+      obj: rule,
+      path: "",
+      prefix: "label_",
+    });
+    const label = firstOf([rule[`label_${lang}`], rule.value, "No data"]);
+    const elLabel = elView.querySelector(
+      `input[data-view_action_rule_id="${id}"] + label > span`
+    );
+    if (isElement(elLabel)) {
+      elLabel.innerText = label;
+      elLabel.title = label;
+    }
+    id++;
+  }
 }
