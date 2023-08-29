@@ -153,11 +153,14 @@ export function buildLegendVt(view, rules) {
       class: "mx-legend-container",
     },
     el(
-      "span",
-      {
-        class: ["mx-legend-vt-title", "text-muted"],
-      },
-      titleLegend
+      "div",
+      el(
+        "span",
+        {
+          class: ["mx-legend-vt-title"],
+        },
+        titleLegend
+      )
     ),
     el(
       "div",

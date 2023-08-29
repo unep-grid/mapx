@@ -14,11 +14,7 @@
   --mc-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.4);
   * {
     transform-origin: top left;
-    touch-action: none;
     user-select: none;
-  }
-  .mc-item-text * {
-    user-select: auto !important;
   }
   .mc-content {
     height: 100%;
@@ -62,6 +58,7 @@
     transform-origin: top left;
     background: var(--mc-color-background);
     position: relative;
+    box-shadow: var(--mc-shadow);
   }
   .mc-page-content {
     &::after {
@@ -78,15 +75,18 @@
       overflow: hidden;
       height: 100%;
       width: 100%;
-      border: 1px solid var(--mc-color-border);
-      border-radius: 4px;
-      .mc-item-title {
-        padding: 10px;
+      box-shadow: var(--mc-shadow);
+      * {
+        user-select: auto !important;
       }
-      .mc-item-legend {
+      /*border: 1px solid var(--mc-color-border);*/
+      /*border-radius: 4px;*/
+      &.mc-item-title,
+      &.mc-item-text,
+      &.mc-item-element,
+      &.mc-item-title {
+        border: 1px solid var(--mc-color-background);
         padding: 10px;
-      }
-      .mc-item-text {
         width: 100%;
         overflow: hidden;
         height: 100%;
@@ -290,6 +290,10 @@
   .mc-page {
     overflow: hidden;
     transform: none !important;
+    box-shadow: none !important;
+    .mc-item {
+      box-shadow: none !important;
+    }
   }
   .mc-workspace {
     &:after {
@@ -312,7 +316,9 @@
   .mc-page {
     overflow: hidden;
     transform: none !important;
-    box-shadow: var(--mc-shadow);
+    .mc-item {
+      box-shadow: none !important;
+    }
   }
   .mc-flash {
     display: none;

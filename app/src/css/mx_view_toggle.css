@@ -21,7 +21,6 @@
 }
 
 .mx-view-badges i {
-  font-size: 0.9em;
   color: #ccc;
   margin: 3px;
 }
@@ -53,7 +52,7 @@
 }
 
 .mx-views-list:empty:after {
-  color : var(--mx_ui_text_faded);
+  color: var(--mx_ui_text_faded);
   content: "[ No view available ]";
   padding: 50px;
   font-size: 1.5em;
@@ -66,7 +65,7 @@
   min-height: 30px;
 }
 
-.mx-view-item{
+.mx-view-item {
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -108,7 +107,6 @@
 
 .mx-view-item-desc {
   padding: 10px;
-  font-size: 1em;
   padding: 10px;
   max-height: 220px;
   overflow-x: hidden;
@@ -153,7 +151,6 @@
 
 .mx-view-tgl-title {
   font-weight: initial;
-  font-size: 1em;
   padding: 10px;
   cursor: grab;
   flex: 1;
@@ -169,7 +166,6 @@
   ~ .mx-view-tgl-more-container {
   opacity: 1;
   max-height: 1000px;
-  font-size: inherit;
   transition: opacity ease-in-out 0.3s 0.3s;
 }
 
@@ -195,13 +191,7 @@
 .mx-view-tgl-more {
   padding-left: 10px;
   padding-right: 10px;
-}
-
-.mx-view-tgl-more label {
-  font-size: 0.9em;
-}
-.mx-view-tgl-more span {
-  font-size: 0.8em;
+  font-size: 0.9em; /*global size for all*/
 }
 
 .mx-view-content {

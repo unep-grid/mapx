@@ -597,20 +597,6 @@ export function initListenerGlobal() {
   const map = getMap();
   const ctrls = panel_tools.controls;
   const btn3d = ctrls.getButton("btn_3d_terrain");
-  console.log("INIT LISTENER GLOBAL");
-  /**
-   * Handle view/legend click
-   */
-  const targetClick = mx?.panel_main?.elContent || mx?.panel_legend?.elContent;
-  if (targetClick) {
-    listeners.addListener({
-      target: targetClick,
-      type: "click",
-      idGroup: "view_list",
-      callback: handleViewClick,
-      debug: true,
-    });
-  }
 
   /*
    * Fire session start
@@ -692,8 +678,16 @@ export function initListenerGlobal() {
  */
 export function initListenersApp() {
   /**
-   *  Other listener
+   * Handle view/legend click
    */
+  const targetClick = mx?.panel_main?.elContent;
+  listeners.addListener({
+    target: targetClick,
+    type: "click",
+    idGroup: "view_list",
+    callback: handleViewClick,
+  });
+
   listeners.addListener({
     target: document.getElementById("btnShowProject"),
     type: "click",
@@ -1473,6 +1467,14 @@ export async function initMapxStatic(o) {
       minWidth: "200px",
       minHeight: "200px",
     },
+  });
+
+  const targetClick = mx?.panel_legend?.elPanelContent;
+  listeners.addListener({
+    target: targetClick,
+    type: "click",
+    idGroup: "static_legend",
+    callback: handleViewClick,
   });
 
   /**

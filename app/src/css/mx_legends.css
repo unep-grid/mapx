@@ -1,5 +1,4 @@
 .mx-legend-box {
-  /*padding: 5px;*/
   border-top: 1px solid var(--mx_ui_border);
   border-bottom: 1px solid var(--mx_ui_border);
   width: 100%;
@@ -9,9 +8,6 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
-/*.mx-view-legend-container {*/
-/*padding: 10px;*/
-/*}*/
 
 .mx-legend-vt-rule > .mx-legend-vt-td {
   width: 1px;
@@ -43,8 +39,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
-  font-size: 0.8em;
-  padding: 10px;
+  margin-bottom: 10px;
 }
 
 .mx-legend-view-title-container {
@@ -56,7 +51,6 @@
 }
 
 .mx-legend-view-title {
-  font-size: 1.1em;
   text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
@@ -127,7 +121,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin-left: 10px;
-  font-size: 0.9em;
   font-weight: normal;
 }
 
@@ -136,8 +129,6 @@
 */
 .button-panel--item-content .mx-view-legend-group {
   width: 100%;
-  /*overflow-y: auto;*/
-  /*overflow-x: hidden;*/
   padding: 0px;
   user-select: none;
 }

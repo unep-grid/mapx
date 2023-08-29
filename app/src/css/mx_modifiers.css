@@ -379,14 +379,13 @@ span.mx-badge-role {
 }
 
 /**
-* Map composer
-*/
-/*.mx .mc .mc-item,*/
-/*.mx .mc .mc-page,*/
-/*.mx .mc.mc-mode-layout .mc-item,*/
-/*.mx .mc .mx-legend-box {*/
-/*background: var(--mx_ui_background);*/
-/*}*/
+* Map composer 
+*/ 
+.mx .mc-item .mx-legend-vt-rule:hover {
+  background: none;
+  border-radius: 0px;
+}
+
 
 /**
 * Button Panel

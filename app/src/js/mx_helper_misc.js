@@ -1938,6 +1938,39 @@ export function clone(obj) {
 }
 
 /**
+ * Clone a given node and its descendants, while removing
+ * all "id", "for" attributes, and event listeners.
+ *
+ * @param {Node} node - The node to be cloned.
+ * @returns {Node} - The cloned node without 
+ *  "id", "for" attributes, and listeners.
+ */
+export function cloneNodeClean(node) {
+  const clonedNode = node.cloneNode(true);
+  cleanNode(clonedNode);
+  return clonedNode;
+}
+
+/**
+ * Recursively remove 'id', 'for' attributes from a given 
+ * node and its descendants.
+ *
+ * @param {Node} node - The node to be cleaned.
+ */
+export function cleanNode(node) {
+  if (node.nodeType === 1) { // Check if node is of type Element
+    // Remove 'id' and 'for' attributes
+    node.removeAttribute("id");
+    node.removeAttribute("for");
+  }
+
+  // Recurse on child nodes
+  for (let i = 0; i < node.childNodes.length; i++) {
+    cleanNode(node.childNodes[i]);
+  }
+}
+
+/**
  * htmlToData
  * @param {Object} o Options
  * @param {String|Element} o.selector Selector

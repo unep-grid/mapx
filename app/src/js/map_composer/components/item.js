@@ -1,5 +1,6 @@
 import mapboxgl from "mapbox-gl";
 import { el } from "../../el/src/index.js";
+import { cloneNodeClean } from "../../mx_helper_misc.js";
 import { Box } from "./box.js";
 import { MapNorthArrow } from "./north_arrow.js";
 
@@ -70,16 +71,34 @@ class Item extends Box {
 
   buildElNode() {
     const item = this;
+
+    const content = cloneNodeClean(item.orig.element);
+    const elsEditables = content.querySelectorAll("span");
+
+    for (const elEditable of elsEditables) {
+      const elDiv = el(
+        "div",
+        {
+          dataset: { mc_editable: item.editable },
+          class: [...elEditable.classList],
+        },
+        el(
+          "div",
+          elEditable.innerText
+        )
+      );
+      elEditable.parentElement.appendChild(elDiv);
+      elEditable.remove();
+    }
+
     const elOut = el(
       "div",
       {
-        dataset: {
-          mc_editable: item.editable,
-        },
         class: ["mc-item", "mc-item-element"],
       },
-      item.orig.element
+      content
     );
+
     return elOut;
   }
 
@@ -87,19 +106,14 @@ class Item extends Box {
     const item = this;
     const text = el("span", item.orig.text).innerText; //quick html removal ?
     const elOut = el(
-      "span",
+      "div",
       {
         class: ["mc-item", "mc-item-text"],
-      },
-      el(
-        "div",
-        {
-          dataset: {
-            mc_editable: item.editable,
-          },
+        dataset: {
+          mc_editable: item.editable,
         },
-        el("p", text)
-      )
+      },
+      el("p", el("span", text))
     );
     return elOut;
   }
