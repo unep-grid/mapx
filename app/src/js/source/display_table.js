@@ -286,7 +286,7 @@ async function showSourceTableAttributeModal(opt) {
 
   async function restart() {
     try {
-      await destroy();
+      destroy();
       await viewToTableAttributeModal(config.view);
     } catch (e) {
       console.error(e);

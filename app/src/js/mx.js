@@ -35,6 +35,11 @@ const data = {
 const initQueryParams = {}; // set in init_common.js
 const listeners = new ListenerStore();
 const events = new EventSimple();
+/**
+ * Magnifier demo
+ * mx.mg.init(mx.helpers.getMap())
+ * mx.mg.show();
+ */
 const mg = new Magnifier();
 const hinthack = new HintHack();
 const project = new ProjectManager();

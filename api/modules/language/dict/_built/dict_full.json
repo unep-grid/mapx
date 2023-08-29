@@ -7371,17 +7371,17 @@
     "de": "Mach ein Screenshoot "
   },
   {
-    "id": "btn_opt_search",
+    "id": "btn_opt_settings",
     "en": "Settings",
     "fr": "Préférences",
     "es": "Configuración",
-    "ru": "Настройки ",
+    "ru": "Настройки",
     "zh": "设置",
-    "ar": "إعدادات ",
+    "ar": "إعدادات",
     "fa": "جستجو و فلتر",
     "ps": "ټول فلټرونه ولټوئ",
-    "bn": "সেটিংস ",
-    "de": "die Einstellungen "
+    "bn": "সেটিংস",
+    "de": "Einstellungen"
   },
   {
     "id": "btn_opt_share",

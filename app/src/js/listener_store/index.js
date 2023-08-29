@@ -1,5 +1,6 @@
 import { onNextFrame, cancelFrame } from "../animation_frame/index.js";
 import { Map } from "mapbox-gl";
+
 /**
  * Event management
  */

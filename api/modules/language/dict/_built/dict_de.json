@@ -2835,9 +2835,9 @@
     "de": "Mach ein Screenshoot "
   },
   {
-    "id": "btn_opt_search",
+    "id": "btn_opt_settings",
     "en": "Settings",
-    "de": "die Einstellungen "
+    "de": "Einstellungen"
   },
   {
     "id": "btn_opt_share",

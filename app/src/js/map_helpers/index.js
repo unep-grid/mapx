@@ -593,20 +593,24 @@ export function isModeLocked() {
 /**
  * Init global listener
  */
-
 export function initListenerGlobal() {
   const map = getMap();
   const ctrls = panel_tools.controls;
   const btn3d = ctrls.getButton("btn_3d_terrain");
+  console.log("INIT LISTENER GLOBAL");
   /**
-   * Handle view click
+   * Handle view/legend click
    */
-  listeners.addListener({
-    target: document.body,
-    type: "click",
-    idGroup: "view_list",
-    callback: handleViewClick,
-  });
+  const targetClick = mx?.panel_main?.elContent || mx?.panel_legend?.elContent;
+  if (targetClick) {
+    listeners.addListener({
+      target: targetClick,
+      type: "click",
+      idGroup: "view_list",
+      callback: handleViewClick,
+      debug: true,
+    });
+  }
 
   /*
    * Fire session start

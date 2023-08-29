@@ -16,9 +16,9 @@ const vtProps = isVtWithAttr ? h.path(view,'data.attribute.names',[]) : [];
 const isVtTemporal = h.hasIndex(vtProps,'mx_t0');
 }}
 
-<div id="mx-search-tool-{{=view.id}}" class="mx-hide">
-  <div class="mx-search-tool-wait" data-lang_key="stat_load_please_wait">Please wait..</div>
-  <div class="mx-search-tool-content mx-hide">
+<div id="mx-settings-tool-{{=view.id}}" class="mx-hide">
+  <div class="mx-settings-tool-wait" data-lang_key="stat_load_please_wait">Please wait..</div>
+  <div class="mx-settings-tool-content mx-hide">
   {{? isVt || isGj }} 
   {{? isVtGjWithString }}
   <label

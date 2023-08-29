@@ -2835,9 +2835,9 @@
     "ru": "Сделайте снимок экрана "
   },
   {
-    "id": "btn_opt_search",
+    "id": "btn_opt_settings",
     "en": "Settings",
-    "ru": "Настройки "
+    "ru": "Настройки"
   },
   {
     "id": "btn_opt_share",
