@@ -1,22 +1,24 @@
 import { el } from "../../el/src/index.js";
-import { debounce } from "./helpers.js";
+import { isString } from "../../is_test/index.js";
+
+const DEFAULT = {
+  duration: 2000,
+  text: "hello",
+  level: "message", //"warning","error"
+  force: false,
+};
 
 class MessageFlash {
   constructor(parent) {
     this.addTo(parent.el);
-    this.timeout = 0;
-    this.flash = debounce(this._flash, 50);
+    this._timeout = 0;
   }
 
   addTo(elContainer) {
     const mf = this;
-
-    mf.elMessageContainer = el(
-      "div",
-      { class: ["mc-flash"] },
-      (mf.elMessage = el("div", { class: "mc-flash-message" }))
-    );
-    elContainer.appendChild(mf.elMessageContainer);
+    mf._elMessage = el("div", { class: "mc-flash-message" });
+    mf._elMessageContainer = el("div", { class: ["mc-flash"] }, mf._elMessage);
+    elContainer.appendChild(mf._elMessageContainer);
   }
 
   destroy() {
@@ -25,37 +27,41 @@ class MessageFlash {
     mf.elMesssageContainer.remove();
   }
 
-  _flash(str, duration) {
+  flash(opt) {
     const mf = this;
-    duration = duration || 2000;
-    str = str || "";
+    opt = Object.assign({}, DEFAULT, isString(opt) ? { text: opt } : opt);
     mf.cancel();
     mf.activate();
-    mf.setMessage(str);
-    mf.timeout = setTimeout(() => {
+    mf.setMessage(opt.text);
+    mf.setLevel(opt.level);
+    mf._timeout = setTimeout(() => {
       mf.disable();
-    }, duration);
+    }, opt.duration);
   }
 
   setMessage(str) {
     const mf = this;
-    mf.elMessage.dataset.message = str;
+    mf._elMessage.dataset.message = str;
+  }
+  setLevel(level) {
+    const mf = this;
+    mf._elMessage.dataset.level = level || DEFAULT.level;
   }
 
   cancel() {
     const mf = this;
-    clearTimeout(mf.timeout);
+    clearTimeout(mf._timeout);
     mf.disable();
   }
 
   activate() {
     const mf = this;
-    mf.elMessageContainer.classList.add("active");
+    mf._elMessageContainer.classList.add("active");
   }
 
   disable() {
     const mf = this;
-    mf.elMessageContainer.classList.remove("active");
+    mf._elMessageContainer.classList.remove("active");
   }
 }
 

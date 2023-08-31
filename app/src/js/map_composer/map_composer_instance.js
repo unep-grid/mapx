@@ -9,8 +9,7 @@ import {
   getViewLegend,
   getViewTitle,
 } from "./../map_helpers/index.js";
-import { objectToArray } from "./../mx_helper_misc.js";
-
+import { objectToArray, getContentSize } from "./../mx_helper_misc.js";
 export async function mapComposerModalAuto() {
   const oldComposer = window._mc;
 
@@ -25,7 +24,11 @@ export async function mapComposerModalAuto() {
   const { MapComposer } = await import("./map_composer");
   const elContainer = el("div");
   const map = getMap();
-  const state = { items: [] };
+  const config = {
+    page_width: 600,
+    page_height: 600,
+    items: [],
+  };
   const style = map.getStyle();
   if (style.terrain) {
     /*
@@ -54,7 +57,7 @@ export async function mapComposerModalAuto() {
   );
 
   /**
-   * Create initial state
+   * Create initial config
    */
   const vVisible = getLayerNamesByPrefix({
     id: map.id,
@@ -62,16 +65,19 @@ export async function mapComposerModalAuto() {
     base: true,
   });
 
-  state.items.push({
+  config.items.push({
     type: "map",
-    width: 600,
-    height: 400,
+    width: 500,
+    height: 500,
     options: {},
   });
 
   for (const id of vVisible) {
     const title = getViewTitle(id);
     const description = getViewDescription(id);
+
+    const elTitle = el("div", [el("h1", title), el("p", description)]);
+
     const elLegend = getViewLegend(id, {
       clone: true,
       input: false,
@@ -79,27 +85,22 @@ export async function mapComposerModalAuto() {
       style: false,
     });
 
-    state.items.push({
+    const dimLegend = getContentSize(elLegend);
+    const dimTitle = getContentSize(elTitle);
+
+    config.items.push({
       type: "legend",
       element: elLegend,
-      width: 300,
-      height: 400,
+      width: dimLegend.width,
+      height: dimLegend.height,
       editable: true,
     });
 
-    state.items.push({
-      type: "title",
-      text: title,
-      width: 300,
-      height: 100,
-      editable: true,
-    });
-
-    state.items.push({
-      type: "text",
-      text: description,
-      width: 300,
-      height: 100,
+    config.items.push({
+      type: "element",
+      element: elTitle,
+      width: dimTitle.width,
+      height: dimTitle.height,
       editable: true,
     });
   }
@@ -122,7 +123,7 @@ export async function mapComposerModalAuto() {
     }
   }
 
-  for (const item of state.items) {
+  for (const item of config.items) {
     if (item.type === "map") {
       Object.assign(item.options, {
         attributionControl: false,
@@ -140,14 +141,14 @@ export async function mapComposerModalAuto() {
   /**
    * Init map composer
    */
-  const mc = new MapComposer(elContainer, state, {
+  const mc = new MapComposer(elContainer, config, {
     onDestroy: () => {
       map.resize();
     },
   });
 
   modal({
-    id : "map_composer",
+    id: "map_composer",
     title: tt("mc_title"),
     buttons: [elBtnHelp],
     content: elContainer,

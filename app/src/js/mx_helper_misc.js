@@ -814,6 +814,21 @@ export function round(n, d) {
   return Math.round(n * e) / e;
 }
 
+/**
+ * Round a number up to the nearest multiple of 5.
+ *
+ * @param {number} value - The number to round up.
+ * @param {number} target - The nearst integer.
+ * @returns {number} The rounded value.
+ *
+ * @example
+ * const result = roundToNext(121.5);
+ * console.log(result); // 125
+ */
+export function roundToNext(value, nearest = 5) {
+  return Math.ceil(value / nearest) * nearest;
+}
+
 export function formatZeros(num, n) {
   if (typeof num !== "number") {
     return num;
@@ -1938,11 +1953,108 @@ export function clone(obj) {
 }
 
 /**
+ * This function "flattens" a DOM element by moving any child nodes of block-level elements
+ * to the parent level, effectively removing the block-level elements while preserving the 
+ * order and hierarchy of other elements and text nodes.
+ *
+ * Example:
+ * <div><p>test</p></div> --> <p>test</p>
+ * <h3>test <b>bold</b></h3> --> <h3>test<b>bold</b></h3>
+ * <h1>title<h2>sub</h2></h1> --> <h1>title</h1><h2>sub</h2>
+ *
+ * @param {HTMLElement} element - The element within which to flatten block-level elements.
+ */
+const BLOCK_ELEMENTS = [
+  "DIV",
+  "P",
+  "H1",
+  "H2",
+  "H3",
+  "H4",
+  "H5",
+  "H6",
+  "UL",
+  "OL",
+];
+
+export function flattenBlockElements(element) {
+  const children = Array.from(
+    element.querySelectorAll(BLOCK_ELEMENTS.join(","))
+  );
+
+  for (const child of children) {
+    const container = child.parentElement;
+    if (container === element || !BLOCK_ELEMENTS.includes(container.tagName)) {
+      continue;
+    }
+
+    while (container.firstChild) {
+      container.before(container.firstChild);
+    }
+
+    if (container.parentNode) {
+      container.parentNode.removeChild(container);
+    }
+  }
+}
+
+
+/**
+ * Estimate the natural content size of a div element without constraints.
+ *
+ * @param {HTMLElement} divElement - The div element to measure.
+ * @returns {Object} An object containing the width and height of the content.
+ *
+ * @example
+ * const divElement = document.querySelector("#yourDivId");
+ * const size = getContentSize(divElement);
+ * console.log(`Width: ${size.width}, Height: ${size.height}`);
+ */
+export function getContentSize(divElement) {
+  const elClone = divElement.cloneNode(true);
+  Object.assign(elClone.style, {
+    visibility: "hidden",
+    position: "absolute",
+    left: 0,
+    top: 0,
+    width: "fit-content",
+    height: "fit-content",
+    overflow: "visible",
+    zIndex: 1000,
+  });
+  document.body.appendChild(elClone);
+  const { width, height } = elClone.getBoundingClientRect();
+  document.body.removeChild(elClone);
+  return { width, height };
+}
+
+/**
+ * Get the padding values of an element as numbers.
+ *
+ * @param {HTMLElement} element - The element to get padding from.
+ * @returns {Object} An object with the padding values for top, right, bottom, and left.
+ *
+ * @example
+ * const divElement = document.querySelector("#yourDivId");
+ * const padding = getPadding(divElement);
+ * console.log(padding);
+ */
+export function getPadding(element) {
+  const style = window.getComputedStyle(element);
+  return {
+    top: parseFloat(style.paddingTop),
+    right: parseFloat(style.paddingRight),
+    bottom: parseFloat(style.paddingBottom),
+    left: parseFloat(style.paddingLeft),
+  };
+}
+
+/**
  * Clone a given node and its descendants, while removing
  * all "id", "for" attributes, and event listeners.
  *
  * @param {Node} node - The node to be cloned.
- * @returns {Node} - The cloned node without 
+ * @returns {Node} - The cloned node without
  *  "id", "for" attributes, and listeners.
  */
 export function cloneNodeClean(node) {
@@ -1950,15 +2062,15 @@ export function cloneNodeClean(node) {
   cleanNode(clonedNode);
   return clonedNode;
 }
-
 /**
- * Recursively remove 'id', 'for' attributes from a given 
+ * Recursively remove 'id', 'for' attributes from a given
  * node and its descendants.
  *
  * @param {Node} node - The node to be cleaned.
  */
 export function cleanNode(node) {
-  if (node.nodeType === 1) { // Check if node is of type Element
+  if (node.nodeType === 1) {
+    // Check if node is of type Element
     // Remove 'id' and 'for' attributes
     node.removeAttribute("id");
     node.removeAttribute("for");

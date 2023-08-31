@@ -10,11 +10,11 @@ class Box {
     box[boxParent.title] = boxParent;
     box.boxParent = boxParent;
     box.state = boxParent.state;
-    box.lStore = new ListenerStore();
-    box.width = 0;
-    box.height = 0;
-    box.left = 0;
-    box.top = 0;
+    box._lStore = new ListenerStore();
+    box._width = 0;
+    box._height = 0;
+    box._left = 0;
+    box._top = 0;
     box.message = null;
     box.title = "box";
     box.transform = {
@@ -24,13 +24,12 @@ class Box {
     box.listeners = [];
     box.draggers = [];
     box.resizers = [];
-    box.editabel = false;
+    box.editable = false;
     box.resizable = false;
     box.draggable = false;
     box.removable = false;
     box._scale = 1;
   }
-
   init(opt) {
     opt = opt || {};
     const box = this;
@@ -43,18 +42,18 @@ class Box {
     box.el.appendChild(box.elContent);
     box.addMessageSupport();
     // bound for resize / drag
-    box.boxBound = opt.boxBound || box.boxParent;
-    box.boundEdges = opt.boundEdges || {
+    box._boxBound = opt.boxBound || box.boxParent;
+    box._boundEdges = opt.boundEdges || {
       top: true,
       left: true,
       bottom: true,
       right: true,
     };
 
-    box.lStore.addListener({
+    box._lStore.addListener({
       target: box.el,
       type: "click",
-      idGroup: "set_last_focus",
+      idGroup: box.id,
       callback: (e) => {
         if (e.currentTarget === box.el) {
           e.stopPropagation();
@@ -64,18 +63,19 @@ class Box {
     });
 
     if (opt.width) {
-      box.setWidth(opt.width);
+      box.setWidth(opt.width, true);
     }
+
     if (opt.height) {
-      box.setHeight(opt.height);
+      box.setHeight(opt.height, true);
     }
 
     if (opt.draggable || opt.resizable) {
-      box.lStore.addListener({
+      box._lStore.addListener({
         target: box.el,
         type: "mousedown",
-        idGroup: "drag_resize",
-        callback: dragResizeListener,
+        idGroup: box.id,
+        callback: box.dragResizeListener,
         bind: box,
       });
 
@@ -90,18 +90,46 @@ class Box {
           box.resizers.push(opt.onResize);
         }
         box.makeResizable({
-          boxBound: opt.boxBound || box.boxParent,
+          boxBound: box._boxBound,
         });
       }
     }
-    //box.setContentScale(1);
     box.setTextSize(12);
+  }
+
+  get width() {
+    return this._width;
+  }
+  get height() {
+    return this._height;
+  }
+  set width(v) {
+    this._width = v;
+  }
+  set height(v) {
+    this._height = v;
+  }
+  get top() {
+    return this._top;
+  }
+  get left() {
+    return this._left;
+  }
+  set top(v) {
+    this._top = v;
+  }
+  set left(v) {
+    this._left = v;
+  }
+
+  get lStore() {
+    return this._lStore;
   }
 
   isDragging() {
     return this._is_dragging === true;
   }
-  setDragingFlag(s) {
+  setDraggingFlag(s) {
     this._is_dragging = s === true;
   }
   isResizing() {
@@ -138,7 +166,7 @@ class Box {
   destroy() {
     const box = this;
     box.el.remove();
-    box.lStore.removeListenerByGroup(box.id);
+    box._lStore.removeListenerByGroup(box.id);
     if (box.config.onRemove) {
       box.config.onRemove();
     }
@@ -193,11 +221,6 @@ class Box {
     this.el.classList.remove("mc-focus");
   }
 
-  setSize(w, h) {
-    this.setWidth(w || this.width);
-    this.setHeight(h || this.height);
-  }
-
   setTransform(target, type, ...args) {
     const box = this;
     const elTarget = target === "content" ? box.elContent : box.el;
@@ -244,8 +267,8 @@ class Box {
     // get limits
     const rBox = box.rect;
     const rParent = box.boxParent.rect;
-    const rMax = box.boxBound.rect;
-    const b = box.boundEdges;
+    const rMax = box._boxBound.rect;
+    const b = box._boundEdges;
     const dTop = rMax.top - rParent.top;
     const dLeft = rMax.left - rParent.left;
 
@@ -298,35 +321,30 @@ class Box {
   snapToGrid(length) {
     const box = this;
     const res = box.state.grid_snap_size;
-    //return Math.ceil(length / res) * res;
     return Math.round(length / res) * res;
   }
 
-  setWidth(w, inPx) {
+  setWidth(w, inPx = false) {
     const box = this;
     const wUnit = inPx ? w : box.toLengthPixel(w);
-    const wSnap = box.snapToGrid(wUnit);
-
+    let wSnap = box.snapToGrid(wUnit);
     const valid = box.checkAndWarnSize(wSnap, box.height);
-
     if (!valid) {
-      return box.width;
+      wSnap = box.width;
     }
-
     box.width = wSnap;
     box.el.style.width = `${wSnap}px`;
     box.onResize();
     return wSnap;
   }
 
-  setHeight(h, inPx) {
+  setHeight(h, inPx = false) {
     const box = this;
     const hUnit = inPx ? h : box.toLengthPixel(h);
-    const hSnap = box.snapToGrid(hUnit);
-
+    let hSnap = box.snapToGrid(hUnit);
     const valid = box.checkAndWarnSize(box.width, hSnap);
     if (!valid) {
-      return box.height;
+      hSnap = box.height;
     }
     box.height = hSnap;
     box.el.style.height = `${hSnap}px`;
@@ -337,10 +355,15 @@ class Box {
   checkAndWarnSize(width, height) {
     const box = this;
     const mc = box.mc;
+    const dpr = window.devicePixelRatio;
     const max = mc.state.canvas_max_area;
-    const area = (width / box.scale) * (height / box.scale);
+    const area = width * dpr * height * dpr;
     if (area >= max) {
-      mc.displayWarning("The latest resize can't be fully performed, the maximum area has been reached.");
+      const msger = mc.workspace.message;
+      msger.flash({
+        text: "Maximum area exceeded",
+        level: "warning",
+      });
       return false;
     }
     return true;
@@ -354,6 +377,7 @@ class Box {
     const unit = box.state.unit;
     const wUnit = box.toLengthUnit(box.width);
     const hUnit = box.toLengthUnit(box.height);
+
     const wDisp =
       unit === "in" ? Math.round(wUnit * 100) / 100 : Math.round(wUnit);
     const hDisp =
@@ -392,13 +416,6 @@ class Box {
   get contentScale() {
     return this._content_scale;
   }
-  /*setContentScale(scale) {*/
-  /*const box = this;*/
-  /*box._content_scale = scale;*/
-  /*box._updateContentScale();*/
-  /*box.onResize();*/
-  /*box.validateSize();*/
-  /*}*/
 
   get textSize() {
     return this._text_size;
@@ -416,6 +433,7 @@ class Box {
     const size = box.textSize + 1;
     box.setTextSize(size);
   }
+
   sizeTextLess() {
     const box = this;
     const size = box.textSize - 1;
@@ -438,6 +456,7 @@ class Box {
     const scaleHeight = box.workspace.rect.height / h;
     box.setScale(scaleHeight);
   }
+
   zoomFitWidth() {
     const box = this;
     const dW = box.rect.left - box.workspace.rect.left;
@@ -445,16 +464,19 @@ class Box {
     const scaleWidth = box.workspace.rect.width / w;
     box.setScale(scaleWidth);
   }
+
   setScale(scale) {
     const box = this;
     box._scale = scale;
     box.el.style.setProperty(`--mc-box-scale`, box.scale);
     box.setTransform("box", "scale", scale);
   }
+
   get scale() {
     const box = this;
     return box._scale;
   }
+
   getScaleParent() {
     const box = this;
     const scaleStack =
@@ -472,134 +494,133 @@ class Box {
     const box = this;
     box.addHandleResize();
   }
+
+  dragResizeListener(e) {
+    const box = this;
+    const elTarget = e.target;
+    const d = elTarget.dataset;
+    // read the property of the handle;
+    const idAction = d.mc_action;
+    const idType = d.mc_event_type;
+    const isDrag = idAction === "box_drag";
+    const isResize = idAction === "box_resize";
+    const isMouseDown = idType === "mousedown";
+    const isDragResize = isDrag || isResize;
+
+    if (isMouseDown && isDragResize) {
+      if (box.isDragging() || box.isResizing()) {
+        return;
+      }
+
+      e.stopImmediatePropagation();
+
+      if (isDrag) {
+        box.setDraggingFlag(true);
+      }
+      if (isResize) {
+        box.setResizingFlag(true);
+      }
+
+      box.startDragResize({
+        e: e,
+        type: idAction,
+        scale: box.getScaleParent(),
+      });
+    }
+  }
+
+  startDragResize(opt) {
+    const box = this;
+    const scale = box.getScaleParent();
+    const { e, type } = opt;
+    const isDrag = type === "box_drag";
+    const oX = box.left || 0;
+    const oY = box.top || 0;
+    const oW = box.width || 0;
+    const oH = box.height || 0;
+    const cX = e.clientX;
+    const cY = e.clientY;
+    const rDir = e.target.dataset.mc_resize_dir;
+
+    box._lStore.addListener({
+      target: window,
+      type: "mouseup",
+      idGroup: "drag_resize_active",
+      callback: cancel,
+      bind: box,
+    });
+
+    box._lStore.addListener({
+      target: window,
+      type: "mousemove",
+      idGroup: "drag_resize_active",
+      callback: isDrag ? drag : resize,
+      bind: box,
+    });
+
+    function drag(e) {
+      e.stopPropagation();
+      const box = this;
+      const dX = (e.clientX - cX) / scale;
+      const dY = (e.clientY - cY) / scale;
+      box.setTopLeft({
+        left: oX + dX,
+        top: oY + dY,
+        inPx: true,
+      });
+    }
+
+    function resize(e) {
+      e.stopPropagation();
+      const box = this;
+      const dX = (e.clientX - cX) / scale;
+      const dY = (e.clientY - cY) / scale;
+      const drag = {};
+      if (rDir === "left") {
+        Object.assign(
+          drag,
+          box.setTopLeft({
+            left: oX + dX,
+            top: oY,
+            inPx: true,
+          })
+        );
+        if (!drag.hitLeft) {
+          box.setWidth(oW - dX, true);
+        }
+      }
+      if (rDir === "top") {
+        Object.assign(
+          drag,
+          box.setTopLeft({
+            left: oX,
+            top: oY + dY,
+            inPx: true,
+          })
+        );
+        if (!drag.hitTop) {
+          box.setHeight(oH - dY, true);
+        }
+      }
+      if (rDir === "right") {
+        box.setWidth(oW + dX, true);
+      }
+      if (rDir === "bottom") {
+        box.setHeight(oH + dY, true);
+      }
+    }
+
+    function cancel() {
+      box._lStore.removeListenerByGroup("drag_resize_active");
+
+      if (box.isDragging()) {
+        box.setDraggingFlag(false);
+      }
+      if (box.isResizing()) {
+        box.setResizingFlag(false);
+      }
+    }
+  }
 }
 
 export { Box };
-
-function dragResizeListener(e) {
-  const box = this;
-  const elTarget = e.target;
-  const d = elTarget.dataset;
-  // read the property of the handle;
-  const idAction = d.mc_action;
-  const idType = d.mc_event_type;
-  const isDrag = idAction === "box_drag";
-  const isResize = idAction === "box_resize";
-  const isMouseDown = idType === "mousedown";
-  const isDragResize = isDrag || isResize;
-
-  if (isMouseDown && isDragResize) {
-    if (box.isDragging() || box.isResizing()) {
-      return;
-    }
-
-    e.stopImmediatePropagation();
-
-    if (isDrag) {
-      box.setDragingFlag(true);
-    }
-    if (isResize) {
-      box.setResizingFlag(true);
-    }
-
-    startDragResize({
-      e: e,
-      type: idAction,
-      box: box,
-      scale: box.getScaleParent(),
-    });
-  }
-}
-
-function startDragResize(opt) {
-  const box = opt.box;
-  const e = opt.e;
-  const isDrag = opt.type === "box_drag";
-  const oX = box.left || 0;
-  const oY = box.top || 0;
-  const oW = box.width || 0;
-  const oH = box.height || 0;
-  const cX = e.clientX;
-  const cY = e.clientY;
-  const rDir = e.target.dataset.mc_resize_dir;
-
-  box.lStore.addListener({
-    target: window,
-    type: "mouseup",
-    idGroup: "drag_resize_active",
-    callback: cancel,
-    bind: box,
-  });
-
-  box.lStore.addListener({
-    target: window,
-    type: "mousemove",
-    idGroup: "drag_resize_active",
-    callback: isDrag ? drag : resize,
-    bind: box,
-  });
-
-  function drag(e) {
-    e.stopPropagation();
-    const box = this;
-    const dX = (e.clientX - cX) / opt.scale;
-    const dY = (e.clientY - cY) / opt.scale;
-    box.setTopLeft({
-      left: oX + dX,
-      top: oY + dY,
-      inPx: true,
-    });
-  }
-
-  function resize(e) {
-    e.stopPropagation();
-    const box = this;
-    const dX = (e.clientX - cX) / opt.scale;
-    const dY = (e.clientY - cY) / opt.scale;
-    const drag = {};
-    if (rDir === "left") {
-      Object.assign(
-        drag,
-        box.setTopLeft({
-          left: oX + dX,
-          top: oY,
-          inPx: true,
-        })
-      );
-      if (!drag.hitLeft) {
-        box.setWidth(oW - dX, true);
-      }
-    }
-    if (rDir === "top") {
-      Object.assign(
-        drag,
-        box.setTopLeft({
-          left: oX,
-          top: oY + dY,
-          inPx: true,
-        })
-      );
-      if (!drag.hitTop) {
-        box.setHeight(oH - dY, true);
-      }
-    }
-    if (rDir === "right") {
-      box.setWidth(oW + dX, true);
-    }
-    if (rDir === "bottom") {
-      box.setHeight(oH + dY, true);
-    }
-  }
-
-  function cancel() {
-    const box = this;
-    box.lStore.removeListenerByGroup("drag_resize_active");
-
-    if (box.isDragging()) {
-      box.setDragingFlag(false);
-    }
-    if (box.isResizing()) {
-      box.setResizingFlag(false);
-    }
-  }
-}

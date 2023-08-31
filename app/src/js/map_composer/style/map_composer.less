@@ -4,6 +4,8 @@
   height: 100%;
   overflow-y: auto;
   padding: 5px;
+  --mc-color-warning: hsl(40, 100%, 50%);
+  --mc-color-error: hsl(20, 100%, 50%);
   --mc-color-contrast-dark: #474747;
   --mc-color-contrast-medium: #ccc;
   --mc-color-contrast-light: #fff;
@@ -26,12 +28,11 @@
     > .mc-workspace {
       position: relative;
     }
-    &.mc-theme-light {
-      .mc-item {
-        background-color: var(--mc-color-background);
-        * {
-          color: var(--mc-color-text);
-        }
+    .mc-item {
+      color: var(--mc-color-text);
+      background-color: var(--mc-color-background);
+      * {
+        color: var(--mc-color-text);
       }
     }
   }
@@ -79,8 +80,6 @@
       * {
         user-select: auto !important;
       }
-      /*border: 1px solid var(--mc-color-border);*/
-      /*border-radius: 4px;*/
       &.mc-item-title,
       &.mc-item-text,
       &.mc-item-element,
@@ -181,19 +180,29 @@
     pointer-events: none;
     width: inherit;
     .mc-flash-message {
-      font-size: 5px;
+      font-size: calc(0.2em / var(--mc-box-scale));
       opacity: 0;
       max-width: 100%;
       overflow: hidden;
       transition: opacity 0.3s ease-out, font-size 0.3s ease-out;
       &:after {
-        padding: 5px;
+        content: "";
+        padding: calc(5px / var(--mc-box-scale));
         color: var(--mc-color-contrast-light);
-        background-color: var(--mc-color-contrast-dark);
         content: attr(data-message);
         position: absolute;
         top: 0;
         left: 0;
+        width: fit-content;
+      }
+      &[data-level="message"]:after {
+        background-color: var(--mc-color-contrast-dark);
+      }
+      &[data-level="warning"]:after {
+        background-color: var(--mc-color-warning);
+      }
+      &[data-level="error"]:after {
+        background-color: var(--mc-color-error);
       }
     }
   }
@@ -201,7 +210,7 @@
     z-index: 2;
     .mc-flash-message {
       opacity: 1;
-      font-size: 12px;
+      font-size: calc(0.8em / var(--mc-box-scale));
     }
   }
   h1 {

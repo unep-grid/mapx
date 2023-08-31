@@ -13,7 +13,6 @@ class Item extends Box {
     item.type = config.type;
     item.title = "item-" + item.type;
     item.editable = config.editable === true;
-
     item.onRemove = item.onRemove.bind(item);
     item.onResize = item.onResize.bind(item);
 
@@ -47,6 +46,7 @@ class Item extends Box {
       case "text":
         return item.buildElText();
       case "legend":
+        return item.buildElLegend();
       case "element":
         return item.buildElNode();
       default:
@@ -71,7 +71,22 @@ class Item extends Box {
 
   buildElNode() {
     const item = this;
+    const content = item.orig.element;
+    const elOut = el(
+      "div",
+      {
+        dataset: { mc_editable: item.editable },
+        class: ["mc-item", "mc-item-element"],
+      },
+      // must be first level <div mc-item><h1>..</h1><p>...</p> 
+      [...content.children] 
+    );
+    return elOut;
+  }
 
+  buildElLegend() {
+    const item = this;
+    // remove id,for, other unwanted attributes 
     const content = cloneNodeClean(item.orig.element);
     const elsEditables = content.querySelectorAll("span");
 
@@ -80,12 +95,9 @@ class Item extends Box {
         "div",
         {
           dataset: { mc_editable: item.editable },
-          class: [...elEditable.classList],
+          class: [...elEditable.classList, "mc-item-editable"],
         },
-        el(
-          "div",
-          elEditable.innerText
-        )
+        el("div", elEditable.innerText)
       );
       elEditable.parentElement.appendChild(elDiv);
       elEditable.remove();
@@ -104,16 +116,16 @@ class Item extends Box {
 
   buildElText() {
     const item = this;
-    const text = el("span", item.orig.text).innerText; //quick html removal ?
+    const text = el("span", item.orig.text).innerText;
     const elOut = el(
       "div",
       {
-        class: ["mc-item", "mc-item-text"],
+        class: ["mc-item", "mc-item-text", "mc-item"],
         dataset: {
           mc_editable: item.editable,
         },
       },
-      el("p", el("span", text))
+      el("div", el("span", text))
     );
     return elOut;
   }

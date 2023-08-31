@@ -21,8 +21,8 @@ const state = {
   item_width: 10,
   workspace_height: 200,
   workspace_width: 200,
-  canvas_max_area_theory: 268435456, // 16_384 * 16_384 
-  canvas_max_area: 12000000, // 4_000 * 3_000
+  canvas_max_area_theory: 16_384 * 16_384,
+  canvas_max_area: 5_000 * 4_000,
   items: [
     {
       type: "map",

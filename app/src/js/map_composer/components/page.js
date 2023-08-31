@@ -9,6 +9,7 @@ class Page extends Box {
     super(boxParent);
     const page = this;
     const state = page.state;
+    page.items = [];
     page.title = "page";
     page.init({
       class: ["mc-page"],
@@ -23,8 +24,6 @@ class Page extends Box {
       width: state.page_width,
       height: state.page_height,
     });
-    page.addItems();
-    page.placeItems();
   }
 
   onResize() {
@@ -35,42 +34,43 @@ class Page extends Box {
     const h = Math.round(page.toLengthUnit(page.height));
     page.mc.toolbar.elInputPageWidth.value = w;
     page.mc.toolbar.elInputPageHeight.value = h;
-    mc.setState("page_width", w);
-    mc.setState("page_height", h);
+    mc.state.page_width = w;
+    mc.state.page_height = h;
   }
 
   onRemove() {
     const page = this;
-    page.items.forEach((i) => {
-      i.destroy();
-    });
+    for (const item of page.items) {
+      item.destroy();
+    }
   }
 
   async exportPng() {
     const page = this;
     const mc = page.mc;
+    const elPrint = page.el;
     const curMode = mc.state.mode;
     const curDpi = mc.state.dpi;
+    const curScale = mc.page.scale;
     try {
-      const page = this;
-      const elPrint = page.el;
-      const currentScale = mc.page.scale;
       page.setScale(1);
-      await mc.setMode("print");
+      mc.setMode("print");
+      mc.update();
       const canvas = await html2canvas(elPrint, {
         logging: false,
       });
       await downloadCanvas(canvas, "map-composer-export.png", "image/png");
-      await mc.setMode(curMode);
-      await mc.setDpi(curDpi);
-      page.setScale(currentScale);
     } catch (e) {
-      mc.displayWarning(
-        "Oups, something went wrong during the rendering, please read the console log."
-      );
+      page.message.flash({
+        level: "error",
+        text: "Rendering error. More info in console",
+      });
       console.error(e);
-      await mc.setMode(curMode);
-      await mc.setDpi(curDpi);
+    } finally {
+      mc.setMode(curMode);
+      mc.setDpi(curDpi);
+      mc.update();
+      page.setScale(curScale);
     }
   }
 
@@ -82,9 +82,10 @@ class Page extends Box {
 
   addItems() {
     const page = this;
-    page.items = page.state.items.map((config) => {
-      return new Item(page, config);
-    });
+    for (const config of page.state.items) {
+      const item = new Item(page, config);
+      page.items.push(item);
+    }
   }
 
   placeItems() {

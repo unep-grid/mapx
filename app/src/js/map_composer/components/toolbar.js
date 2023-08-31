@@ -19,7 +19,7 @@ class Toolbar extends Box {
     toolbar.init({
       class: ["mc-toolbar"],
       boxContainer: toolbar.mc,
-      content: toolbar.buildEl(),
+      content: toolbar.buildToolbar(),
       draggable: false,
       resizable: false,
       onRemove: toolbar.onRemove.bind(toolbar),
@@ -30,7 +30,7 @@ class Toolbar extends Box {
       target: toolbar.el,
       type: "change",
       idGroup: "toolbar_change",
-      callback: changeCallback,
+      callback: toolbar.changeCallback,
       bind: toolbar,
     });
 
@@ -38,7 +38,7 @@ class Toolbar extends Box {
       target: toolbar.el,
       type: "click",
       idGroup: "toolbar_click",
-      callback: clickCallback,
+      callback: toolbar.clickCallback,
       bind: toolbar,
     });
     /**
@@ -77,31 +77,131 @@ class Toolbar extends Box {
     toolbar.elSelectPreset.appendChild(elOptions);
   }
 
+  async changeCallback(e) {
+    const toolbar = this;
+    const mc = toolbar.mc;
+    if (!mc.ready) {
+      return;
+    }
+    const elTarget = e.target;
+    const d = elTarget.dataset;
+    const idAction = d.mc_action;
+    if (idAction !== "update_state") {
+      return;
+    }
+    const value = toolbar.validateValue(e.target);
+    const idState = d.mc_state_name;
+    mc.setState(idState, value);
+  }
+
+  async clickCallback(e) {
+    const toolbar = this;
+    const mc = toolbar.mc;
+    if (!mc.ready) {
+      return;
+    }
+    const elTarget = e.target;
+    const d = elTarget.dataset;
+    const idAction = d.mc_action;
+
+    switch (idAction) {
+      case "export_page":
+        await mc.workspace.page.exportPng();
+        break;
+      case "toggle_landscape":
+        mc.inversePageHeightWidth();
+        break;
+      case "fit_map_to_page":
+        mc.fitMapToPage();
+        break;
+      case "zoom_in":
+        mc.workspace.page.zoomIn();
+        break;
+      case "zoom_out":
+        mc.workspace.page.zoomOut();
+        break;
+      case "zoom_fit_width":
+        mc.workspace.page.zoomFitWidth();
+        break;
+      case "zoom_fit_height":
+        mc.workspace.page.zoomFitHeight();
+        break;
+      default:
+        null;
+    }
+  }
+
+  validateValueNumber(el) {
+    let value = el.value * 1;
+    const min = el.min * 1;
+    const max = el.max * 1;
+    if (value >= max) {
+      value = max;
+    }
+    if (value <= min) {
+      value = min;
+    }
+    el.value = value;
+    return value;
+  }
+
+  validateValueString(el) {
+    const value = el.value + "";
+    el.value = value;
+    return value;
+  }
+
+  validateValueSelect(el) {
+    const toolbar = this; 
+    return toolbar.validateValueString(el);
+  }
+
+  validateValueCheckbox(el) {
+    return !!el.checked;
+  }
+
+  validateValue(el) {
+    const toolbar = this;
+    if (el.type === "checkbox") {
+      return toolbar.validateValueCheckbox(el);
+    }
+    if (el.type === "number") {
+      return toolbar.validateValueNumber(el);
+    }
+    if (el.type === "select-one") {
+      return toolbar.validateValueSelect(el);
+    }
+    if (el.type === "string") {
+      return toolbar.validateValueString(el);
+    }
+    return "";
+  }
+
   /**
    * Build toolbox form / ui
    */
-  buildEl() {
+  buildToolbar() {
     const toolbar = this;
-    const state = toolbar.state;
+    const {dpi, unit, units, mode, modes, grid_snap_size} = toolbar.state;
 
     /**
      *  Set default  for units and mode
      */
-    const elUnitOptions = state.units.map((u) => {
-      return state.unit === u
+    const elUnitOptions = units.map((u) => {
+      return unit === u
         ? el("option", { selected: true }, u)
         : el("option", u);
     });
-    const elModesOptions = state.modes.map((u) => {
-      return state.mode === u
-        ? el("option", { selected: true, value: u }, u)
-        : el("option", { value: u }, u);
+    const elModesOptions = modes.map((m) => {
+      return mode === m
+        ? el("option", { selected: true, value: m }, m)
+        : el("option", { value: m }, m);
     });
 
     /**
      * Set snap size
      */
-    const sizeStep = state.grid_snap_size * window.devicePixelRatio;
+    const sizeStep = grid_snap_size * window.devicePixelRatio;
     return el(
       "form",
       {
@@ -303,7 +403,7 @@ class Toolbar extends Box {
               mc_state_name: "dpi",
             },
             step: 1,
-            value: state.dpi,
+            value: dpi,
             max: 300,
             min: 72,
           })),
@@ -349,29 +449,6 @@ class Toolbar extends Box {
           })),
           el("span", { class: "text-muted" }, tt("mc_label_height_desc"))
         ),
-        /** Scaling does not work with html2canvas, as the
-        * css transform is not fully supported
-        *
-        el(
-          'div',
-          {
-            class: 'form-group'
-          },
-          el('label', 'Scale'),
-          el('input', {
-            type: 'number',
-            class: 'form-control',
-            dataset: {
-              mc_action: 'update_state',
-              mc_event_type: 'change',
-              mc_state_name: 'content_scale'
-            },
-            value: 1,
-            max: 1,
-            min: 0.5
-          })
-        ),
-        */
         el(
           "div",
           {
@@ -425,98 +502,3 @@ class Toolbar extends Box {
 }
 
 export { Toolbar };
-
-function clickCallback(e) {
-  const toolbar = this;
-  const mc = toolbar.mc;
-  if (!mc.ready) {
-    return;
-  }
-  const elTarget = e.target;
-  const d = elTarget.dataset;
-  const idAction = d.mc_action;
-
-  switch (idAction) {
-    case "export_page":
-      mc.workspace.page.exportPng();
-      break;
-    case "toggle_landscape":
-      mc.inversePageHeightWidth();
-      break;
-    case "fit_map_to_page":
-      mc.fitMapToPage();
-      break;
-    case "zoom_in":
-      mc.workspace.page.zoomIn();
-      break;
-    case "zoom_out":
-      mc.workspace.page.zoomOut();
-      break;
-    case "zoom_fit_width":
-      mc.workspace.page.zoomFitWidth();
-      break;
-    case "zoom_fit_height":
-      mc.workspace.page.zoomFitHeight();
-      break;
-    default:
-      null;
-  }
-}
-
-function changeCallback(e) {
-  const toolbar = this;
-  const mc = toolbar.mc;
-  if (!mc.ready) {
-    return;
-  }
-  const elTarget = e.target;
-  const d = elTarget.dataset;
-  const idAction = d.mc_action;
-  if (idAction === "update_state") {
-    const value = validateValue(e.target);
-    const idState = d.mc_state_name;
-    mc.setState(idState, value);
-  }
-}
-
-function validateValueNumber(el) {
-  let value = el.value * 1;
-  const min = el.min * 1;
-  const max = el.max * 1;
-  if (value >= max) {
-    value = max;
-  }
-  if (value <= min) {
-    value = min;
-  }
-  el.value = value;
-  return value;
-}
-
-function validateValueString(el) {
-  const value = el.value + "";
-  el.value = value;
-  return value;
-}
-function validateValueSelect(el) {
-  return validateValueString(el);
-}
-function validateValueCheckbox(el) {
-  return !!el.checked;
-}
-
-function validateValue(el) {
-  if (el.type === "checkbox") {
-    return validateValueCheckbox(el);
-  }
-  if (el.type === "number") {
-    return validateValueNumber(el);
-  }
-  if (el.type === "select-one") {
-    return validateValueSelect(el);
-  }
-  if (el.type === "string") {
-    return validateValueString(el);
-  }
-  return "";
-}

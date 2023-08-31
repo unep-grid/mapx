@@ -118,7 +118,6 @@
 }
 .mx-legend-vt-rule-label-text {
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
   margin-left: 10px;
   font-weight: normal;
