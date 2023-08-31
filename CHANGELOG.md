@@ -1,3 +1,10 @@
+  - [1.12.4-alpha.4](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.4) 
+
+   - APP
+        - #539 should solve legend checkbox reseted after a translation
+        - Solved issue with duplicated events during click on view element buttons 
+        - #551 Map composer text editor inconsistances in Chrome. Still some edge cases in Chrome and Firefox with block formaters
+        
   - [1.12.4-alpha.3](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.3) 
 
     - APP 
