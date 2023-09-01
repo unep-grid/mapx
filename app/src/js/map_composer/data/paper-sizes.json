@@ -105,7 +105,7 @@
       "width": 841,
       "height": 1189,
       "unit": "mm",
-      "dpi": 125,
+      "dpi": 300,
       "disabled": true
     },
     {
@@ -113,7 +113,7 @@
       "width": 594,
       "height": 841,
       "unit": "mm",
-      "dpi": 200,
+      "dpi": 300,
       "disabled": true
     },
     {
@@ -121,8 +121,8 @@
       "width": 420,
       "height": 594,
       "unit": "mm",
-      "dpi": 275,
-      "disabled": false
+      "dpi": 300,
+      "disabled": true
     },
     {
       "name": "A6",
@@ -211,7 +211,8 @@
       "width": 500,
       "height": 353,
       "unit": "mm",
-      "dpi": 300
+      "dpi": 300,
+      "disabled": true
     },
     {
       "name": "B4",
@@ -269,7 +270,6 @@
       "height": 917,
       "unit": "mm",
       "dpi": 300,
-
       "disabled": true
     },
     {
@@ -278,7 +278,6 @@
       "height": 648,
       "unit": "mm",
       "dpi": 300,
-
       "disabled": true
     },
     {
@@ -287,7 +286,6 @@
       "height": 458,
       "unit": "mm",
       "dpi": 300,
-
       "disabled": true
     },
     {
@@ -295,7 +293,8 @@
       "width": 458,
       "height": 324,
       "unit": "mm",
-      "dpi": 300
+      "dpi": 300,
+      "disabled": true
     },
     {
       "name": "C4",
@@ -374,35 +373,40 @@
       "width": 279,
       "height": 432,
       "unit": "mm",
-      "dpi": 300
+      "dpi": 300,
+      "disabled": true
     },
     {
       "name": "mc_preset_us_ansi_b_ledger",
       "width": 432,
       "height": 279,
       "unit": "mm",
-      "dpi": 300
+      "dpi": 300,
+      "disabled": true
     },
     {
       "name": "mc_preset_us_ansi_c",
       "width": 432,
       "height": 559,
       "unit": "mm",
-      "dpi": 275
+      "dpi": 300,
+      "disabled": true
     },
     {
       "name": "mc_preset_us_ansi_d",
       "width": 559,
       "height": 864,
       "unit": "mm",
-      "dpi": 200
+      "dpi": 300,
+      "disabled": true
     },
     {
       "name": "mc_preset_us_ansi_e",
       "width": 864,
       "height": 1118,
       "unit": "mm",
-      "dpi": 125
+      "dpi": 300,
+      "disabled": true
     }
   ],
   "mc_preset_group_screen": [

@@ -134,8 +134,8 @@ export class MapComposer {
       console.warn(`Preset ${id} not found`);
       return;
     }
-    mc.setUnit(item.unit);
     mc.setDpi(item.dpi);
+    mc.setUnit(item.unit);
     mc.setPageHeight(item.height);
     mc.setPageWidth(item.width);
   }
@@ -194,7 +194,7 @@ export class MapComposer {
       return;
     }
     w = mc.state.page_width = w || mc.state.page_width;
-    mc.page.setWidth(w);
+    mc.page.setWidth(w, false);
   }
 
   setPageHeight(h) {
@@ -203,7 +203,7 @@ export class MapComposer {
       return;
     }
     h = mc.state.page_height = h || mc.state.page_height;
-    mc.page.setHeight(h);
+    mc.page.setHeight(h, false);
   }
 
   setUnit(unit) {
@@ -272,6 +272,7 @@ export class MapComposer {
       mc.state.dpi = nDpi;
       mc.toolbar.elInputDpi.value = mc.state.dpi;
     }
+
   }
 
   update() {

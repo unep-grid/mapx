@@ -326,9 +326,9 @@ class Box {
 
   setWidth(w, inPx = false) {
     const box = this;
-    const wUnit = inPx ? w : box.toLengthPixel(w);
-    let wSnap = box.snapToGrid(wUnit);
-    const valid = box.checkAndWarnSize(wSnap, box.height);
+    const wPx = inPx ? w : box.toLengthPixel(w);
+    let wSnap = box.snapToGrid(wPx);
+    const valid = box.checkAndWarnSize(wPx, "width");
     if (!valid) {
       wSnap = box.width;
     }
@@ -340,9 +340,9 @@ class Box {
 
   setHeight(h, inPx = false) {
     const box = this;
-    const hUnit = inPx ? h : box.toLengthPixel(h);
-    let hSnap = box.snapToGrid(hUnit);
-    const valid = box.checkAndWarnSize(box.width, hSnap);
+    const hPx = inPx ? h : box.toLengthPixel(h);
+    let hSnap = box.snapToGrid(hPx);
+    const valid = box.checkAndWarnSize(hSnap, "height");
     if (!valid) {
       hSnap = box.height;
     }
@@ -352,16 +352,16 @@ class Box {
     return hSnap;
   }
 
-  checkAndWarnSize(width, height) {
+  checkAndWarnSize(size, type = "width") {
     const box = this;
     const mc = box.mc;
     const dpr = window.devicePixelRatio;
-    const max = mc.state.canvas_max_area;
-    const area = width * dpr * height * dpr;
-    if (area >= max) {
+    const max = mc.state[`canvas_max_${type}`];
+    const sizePrint = size * dpr;
+    if (sizePrint > max) {
       const msger = mc.workspace.message;
       msger.flash({
-        text: "Maximum area exceeded",
+        text: `Maximum ${type} exceeded`,
         level: "warning",
       });
       return false;
