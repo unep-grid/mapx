@@ -1,3 +1,8 @@
+  - [1.12.4-alpha.6](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.6) 
+
+    - APP
+        - MapComposer : converted size validation from area to width/height, as the area calculation and validation was off when transitionning from extra wide to long format, with dimensions close to the maximum canvas export dimension.
+
   - [1.12.4-alpha.5](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.5) 
 
     - APP
