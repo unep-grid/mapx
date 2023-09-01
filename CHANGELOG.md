@@ -1,3 +1,9 @@
+  - [1.12.4-alpha.5](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.5) 
+
+    - APP
+        - #857 DPI issue
+        - #932 handle duplicated hits in the search module
+
   - [1.12.4-alpha.4](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.4) 
 
    - APP
