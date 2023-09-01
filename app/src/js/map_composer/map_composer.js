@@ -248,11 +248,6 @@ export class MapComposer {
     mc.toolbar.elInputPageHeight.setAttribute("min", sizeStep);
     mc.toolbar.elInputPageHeight.setAttribute("max", sizeStep * 1000);
     mc.state.unit = unit || mc.state.unit;
-    if (unit === "px") {
-      mc.toolbar.elFormDpi.style.display = "none";
-    } else {
-      mc.toolbar.elFormDpi.style.display = "block";
-    }
     mc.toolbar.elInputUnit.value = unit;
   }
   setDpi(dpi) {

@@ -152,7 +152,7 @@ class Toolbar extends Box {
   }
 
   validateValueSelect(el) {
-    const toolbar = this; 
+    const toolbar = this;
     return toolbar.validateValueString(el);
   }
 
@@ -182,15 +182,13 @@ class Toolbar extends Box {
    */
   buildToolbar() {
     const toolbar = this;
-    const {dpi, unit, units, mode, modes, grid_snap_size} = toolbar.state;
+    const { dpi, unit, units, mode, modes, grid_snap_size } = toolbar.state;
 
     /**
      *  Set default  for units and mode
      */
     const elUnitOptions = units.map((u) => {
-      return unit === u
-        ? el("option", { selected: true }, u)
-        : el("option", u);
+      return unit === u ? el("option", { selected: true }, u) : el("option", u);
     });
     const elModesOptions = modes.map((m) => {
       return mode === m
@@ -392,6 +390,9 @@ class Toolbar extends Box {
           "div",
           {
             class: "form-group",
+            style: {
+              display: "none",
+            },
           },
           el("label", tt("mc_label_resolution")),
           (toolbar.elInputDpi = el("input", {
