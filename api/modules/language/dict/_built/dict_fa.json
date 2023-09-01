@@ -8177,7 +8177,7 @@
   {
     "id": "search_results_stats_simple",
     "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
-    "fa": "~ {{strNbHit}} نتایج یافت شده در {{strTime}} میلی ثانیه"
+    "fa": " ~ {{strNbHit}} نتایج یافت شده در {{strTime}} میلی ثانیه"
   },
   {
     "id": "search_source_keywords_group_region",

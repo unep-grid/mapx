@@ -8177,7 +8177,7 @@
   {
     "id": "search_results_stats_simple",
     "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
-    "bn": "~ {{strNbHit}} ফলাফল পাওয়া যায় {{strTime}} মিলিসেকেন্ড"
+    "bn": " ~ {{strNbHit}} ফলাফল পাওয়া গেছে {{strTime}} মিলিসেকেন্ড"
   },
   {
     "id": "search_source_keywords_group_region",

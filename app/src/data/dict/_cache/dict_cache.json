@@ -21258,14 +21258,14 @@
     "id": "search_results_stats_simple",
     "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
     "fr": " ~ {{strNbHit}} résultats trouvés en {{strTime}} millisecondes.",
-    "es": "~ {{strNbHit}} resultados encontrados en {{strTime}} milisegundos.",
-    "ru": "~ {{strNbHit}} результаты найдены в {{strTime}} миллисекунды.",
-    "zh": "~ {{strNbHit}}结果在 {{strTime}}毫秒。",
-    "ar": "~ {{strNbHit}} النتائج التي تم العثور عليها في {{strTime}} مللي ثانية.",
-    "fa": "~ {{strNbHit}} نتایج یافت شده در {{strTime}} میلی ثانیه",
-    "ps": "د {{strNbHit}} پایلې وموندل شوې {{strTime}} ملی ثانیه",
-    "bn": "~ {{strNbHit}} ফলাফল পাওয়া যায় {{strTime}} মিলিসেকেন্ড",
-    "de": "~ {{strNbHit}} Ergebnisse gefunden in {{strTime}} Millisekunden."
+    "es": " ~ {{strNbHit}} resultados encontrados en {{strTime}} milisegundos.",
+    "ru": " ~ {{strNbHit}} результаты найдены в {{strTime}} миллисекунды.",
+    "zh": " ～ {{strNbHit}}结果发现于 {{strTime}}毫秒。",
+    "ar": " ~ {{strNbHit}} النتائج الموجودة في {{strTime}} ميلي ثانية.",
+    "fa": " ~ {{strNbHit}} نتایج یافت شده در {{strTime}} میلی ثانیه",
+    "ps": " ~ {{strNbHit}} پایلې یې موندلې {{strTime}} ملی ثانیه",
+    "bn": " ~ {{strNbHit}} ফলাফল পাওয়া গেছে {{strTime}} মিলিসেকেন্ড",
+    "de": " ~ {{strNbHit}} Ergebnisse gefunden in {{strTime}} Millisekunden."
   },
   {
     "id": "search_source_keywords_group_region",

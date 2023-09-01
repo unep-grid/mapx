@@ -889,6 +889,51 @@ export function debounce(func, wait, immediate) {
 }
 
 /**
+ * Debounces a function that returns a promise. The function will be invoked after the specified delay has elapsed
+ * since the last time the debounced function was invoked. If the debounced function is invoked before the delay has
+ * elapsed, the previous call will be cancelled and its promise will not resolve or reject.
+ *
+ * @export
+ * @param {Function} fn - The function to debounce. This function should return a promise.
+ * @param {number} [delay=200] - The number of milliseconds to delay invocation of the function.
+ * @returns {Function} - Returns a new debounced version of the provided function.
+ *
+ * @example
+ * const debouncedFetch = debouncePromise(fetchData, 300);
+ * debouncedFetch().then(data => console.log(data));
+ */
+export function debouncePromise(fn, delay = 200) {
+  let timerId;
+  let pendingResolve;
+  let pendingReject;
+  let pendingPromise;
+
+  return function (...args) {
+    clearTimeout(timerId);
+
+    if (!pendingPromise) {
+      pendingPromise = new Promise((resolve, reject) => {
+        pendingResolve = resolve;
+        pendingReject = reject;
+      });
+    }
+
+    timerId = setTimeout(async () => {
+      try {
+        const result = await fn(...args);
+        pendingResolve(result);
+      } catch (error) {
+        pendingReject(error);
+      } finally {
+        pendingPromise = null;
+      }
+    }, delay);
+
+    return pendingPromise;
+  };
+}
+
+/**
  * Throttles a function by delaying its execution.
  *
  * @param {Function} func - The function to be throttled.
@@ -1954,7 +1999,7 @@ export function clone(obj) {
 
 /**
  * This function "flattens" a DOM element by moving any child nodes of block-level elements
- * to the parent level, effectively removing the block-level elements while preserving the 
+ * to the parent level, effectively removing the block-level elements while preserving the
  * order and hierarchy of other elements and text nodes.
  *
  * Example:
@@ -1997,7 +2042,6 @@ export function flattenBlockElements(element) {
     }
   }
 }
-
 
 /**
  * Estimate the natural content size of a div element without constraints.

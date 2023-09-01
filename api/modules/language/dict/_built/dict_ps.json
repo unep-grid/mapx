@@ -8177,7 +8177,7 @@
   {
     "id": "search_results_stats_simple",
     "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
-    "ps": "د {{strNbHit}} پایلې وموندل شوې {{strTime}} ملی ثانیه"
+    "ps": " ~ {{strNbHit}} پایلې یې موندلې {{strTime}} ملی ثانیه"
   },
   {
     "id": "search_source_keywords_group_region",

@@ -15,7 +15,7 @@ import {
 import { prefGet, prefSet } from "./../user_pref";
 import { isDate } from "./../is_test/index.js";
 import { moduleLoad } from "./../modules_loader_async";
-import pDebounce from "p-debounce";
+import { debouncePromise } from "../mx_helper_misc";
 
 import {
   zoomToViewId,
@@ -37,16 +37,16 @@ import {
 
 import { Facet } from "./facet.js";
 import { def } from "./default.js";
+import { bindAll } from "../bind_class_methods";
 
 class Search extends EventSimple {
   constructor(opt) {
     super();
     const s = this;
     s.setOpt(opt);
-    s.update = pDebounce(s.update, 200).bind(s);
-    s._handle_infinite_scroll = pDebounce(s._handle_infinite_scroll, 200).bind(
-      s
-    );
+    bindAll(s);
+    s.update = debouncePromise(s.update);
+    s._handle_infinite_scroll = debouncePromise(s._handle_infinite_scroll);
     return s;
   }
 
@@ -898,7 +898,7 @@ class Search extends EventSimple {
         case "search_view_toggle":
           {
             s.vFeedback(e);
-            const idView = ds.id_view;
+            const idView = ds.id_view_toggle;
             const viewIsLocal = hasViewLocal(idView);
             const view = viewIsLocal
               ? getView(idView)
@@ -992,6 +992,7 @@ class Search extends EventSimple {
     const frag = new DocumentFragment();
     const confKeywords = s.opt("keywords");
     const sliderYears = s._year_slider.get().map((v) => parseInt(v * 1));
+
     for (let v of hits) {
       /**
        * Add keywords buttons
@@ -1114,7 +1115,10 @@ class Search extends EventSimple {
             "div",
             {
               class: ["search--button-keyword"],
-              dataset: { action: "search_view_toggle", id_view: v.view_id },
+              dataset: {
+                action: "search_view_toggle",
+                id_view_toggle: v.view_id,
+              },
             },
             [
               el("i", {
@@ -1128,7 +1132,7 @@ class Search extends EventSimple {
       frag.appendChild(
         el(
           "div",
-          { class: ["search--results-item"] },
+          { class: ["search--results-item"], dataset: { id_view: v.view_id } },
           el(
             "div",
             { class: "search--item-title" },
@@ -1335,28 +1339,27 @@ class Search extends EventSimple {
    */
   async update(opt) {
     const s = this;
-    const options = Object.assign(
-      { page: 0, append: false, page_stat: false },
-      opt
-    );
-    if (options.append === false) {
-      /**
-       * Reset infinite counter if non-append mode
-       */
-
-      s._infinite_page = 0;
-      s._infinite_scroll_last = false;
-    }
-    await s.initCheck();
-    s._timer_update_cancel = performance.now();
+    const timer = performance.now();
     try {
-      const timer = s._timer_update_cancel;
+      const options = Object.assign(
+        { page: 0, append: false, page_stat: false },
+        opt
+      );
+      await s.initCheck();
+      if (options.append === false) {
+        /**
+         * Reset infinite counter if non-append mode
+         */
+
+        s._infinite_page = 0;
+        s._infinite_scroll_last = false;
+      }
       const attr = s.opt("attributes");
       const hPage = s.opt("hitsPerPage");
       const attrKeys = s.opt("keywords").map((k) => k.type);
       const strFilters = s.getFilters();
       const facetFilters = s.getFiltersFacets();
-
+      s._search_timer = timer;
       const results = await s.search({
         q: s._elInput.value,
         offset: options.page * hPage,
@@ -1374,7 +1377,7 @@ class Search extends EventSimple {
        * has changed, another request is on its way.
        * -> Do not render the old one, cancel.
        */
-      if (s._timer_update_cancel !== timer) {
+      if (s._search_timer !== timer) {
         return;
       }
       /**
@@ -1382,7 +1385,20 @@ class Search extends EventSimple {
        */
 
       const fragItems = s._build_result_list(results.hits);
+
       if (options.append) {
+        /**
+         * Offset seems to produce duplicates
+         * -> check the results id
+         * -> remove previous item
+         */
+        const ids = results.hits.map((r) => r.view_id);
+        for (const id of ids) {
+          const elPrevious = s._elResults.querySelector(`[data-id_view=${id}]`);
+          if (elPrevious) {
+            elPrevious.remove();
+          }
+        }
         s._elResults.appendChild(fragItems);
       } else {
         s._elResults.replaceChildren(fragItems);
@@ -1446,7 +1462,7 @@ class Search extends EventSimple {
       '[data-action="search_view_toggle"]'
     );
     for (let elT of elsToggle) {
-      const idView = elT.dataset.id_view;
+      const idView = elT.dataset.id_view_toggle;
       const isOpen = idViewsOpen.includes(idView);
       const elIcon = elT.querySelector("i");
       if (isOpen) {
@@ -1512,7 +1528,8 @@ class Search extends EventSimple {
   async _update_stats_simple(results) {
     const s = this;
     const strTime = `${results.processingTimeMs}`;
-    const strNbHit = `${results.nbHits}`;
+    // NOTE: rounding due to issue in MeiliSearch  #711
+    const strNbHit = `${s.customRound(results.nbHits)}`;
     const tmpl = await getDictItem("search_results_stats_simple");
     const txt = s.template(tmpl, { strNbHit, strTime });
     s._elStatHits.setAttribute("stat", txt);
@@ -1646,6 +1663,20 @@ class Search extends EventSimple {
     return str.replace(/{{([^{}]+)}}/g, (matched, key) => {
       return data[key];
     });
+  }
+
+  /**
+   * custom round for hits approximation
+   * -> meilisearch issue #711
+   */
+  customRound(num) {
+    if (num <= 10) {
+      return num;
+    } else if (num < 100) {
+      return Math.round(num / 10) * 10;
+    } else {
+      return Math.round(num / 100) * 100;
+    }
   }
 }
 

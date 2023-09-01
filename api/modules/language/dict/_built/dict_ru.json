@@ -8177,7 +8177,7 @@
   {
     "id": "search_results_stats_simple",
     "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
-    "ru": "~ {{strNbHit}} результаты найдены в {{strTime}} миллисекунды."
+    "ru": " ~ {{strNbHit}} результаты найдены в {{strTime}} миллисекунды."
   },
   {
     "id": "search_source_keywords_group_region",
