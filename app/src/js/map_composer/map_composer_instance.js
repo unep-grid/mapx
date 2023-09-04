@@ -25,8 +25,7 @@ export async function mapComposerModalAuto() {
   const elContainer = el("div");
   const map = getMap();
   const config = {
-    page_width: 600,
-    page_height: 600,
+    predefined_dim: "A5",
     items: [],
   };
   const style = map.getStyle();

@@ -12,6 +12,7 @@ const state = {
   modes_internal: ["print", "layout", "preview"],
   dpi: 96 * pixelRatioOrig,
   mode: "layout",
+  predefined_dim: "A5",
   page_width: 600,
   page_height: 600,
   content_scale: 1,
@@ -22,8 +23,7 @@ const state = {
   workspace_height: 200,
   workspace_width: 200,
   canvas_max_area_theory: 16384 * 16384,
-  canvas_max_width: 5000,
-  canvas_max_height: 5000,
+  canvas_max_area: 5000 * 5000,
   items: [
     {
       type: "map",

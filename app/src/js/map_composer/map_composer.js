@@ -30,17 +30,25 @@ export class MapComposer {
 
   init() {
     const mc = this;
-    mc.setDpi(mc.state.dpi);
-    mc.setUnit(mc.state.unit);
+    // values
+    mc._preset_flat = presetFlat;
+
+    // components
     mc.toolbar = new Toolbar(mc);
     mc.workspace = new Workspace(mc);
     mc.editor = new EditorToolbar(mc, {
       boxTarget: mc.workspace.page,
     });
     mc.page = mc.workspace.page;
+
+    // set readiness
     mc.ready = true;
+
+    // default
+    mc.setPredefinedDim(mc.state.predefined_dim);
     mc.page.addItems();
     mc.page.placeItems();
+
     mc.update();
     mc.setMode(mc.state.mode);
     mc.fitMapToPage();
@@ -89,8 +97,12 @@ export class MapComposer {
     mc.options.onDestroy();
   }
 
+  /**
+   * Switch state id, set state within handlers
+   */
   setState(id, value) {
     const mc = this;
+
     switch (id) {
       case "mode":
         mc.setMode(value);
@@ -124,20 +136,31 @@ export class MapComposer {
     }
   }
 
-  setPredefinedDim(id) {
+  setPredefinedDim(value) {
     const mc = this;
-    if (id === "mc_preset_manual") {
-      return;
-    }
-    const item = presetFlat.find((p) => p.name === id);
+
+    const item = mc._preset_flat.find((p) => p.name === value);
     if (!item) {
-      console.warn(`Preset ${id} not found`);
+      console.warn(`Preset ${value} not found`);
       return;
     }
+
+    mc.state.predefined_dim = value;
+
+    mc.toolbar.elSelectPreset.value = value;
+
+    if (value === "mc_preset_manual") {
+      mc.toolbar.enableControl("unit");
+      mc.toolbar.enableControl("dpi");
+      return;
+    } else {
+      mc.toolbar.disableControl("unit");
+      mc.toolbar.disableControl("dpi");
+    }
+
     mc.setDpi(item.dpi);
     mc.setUnit(item.unit);
-    mc.setPageHeight(item.height);
-    mc.setPageWidth(item.width);
+    mc.setPageSize(item.width, item.height, false);
   }
 
   setMode(mode) {
@@ -156,12 +179,12 @@ export class MapComposer {
     } else {
       mc.editor.disable();
     }
+    return mode;
   }
 
   updatePageSizes() {
     const mc = this;
-    mc.setPageHeight();
-    mc.setPageWidth();
+    mc.setPageSize();
   }
 
   fitMapToPage() {
@@ -184,8 +207,7 @@ export class MapComposer {
     const mc = this;
     const h = mc.state.page_height;
     const w = mc.state.page_width;
-    mc.setPageWidth(h);
-    mc.setPageHeight(w);
+    mc.setPageSize(h, w, false);
   }
 
   setPageWidth(w) {
@@ -204,6 +226,16 @@ export class MapComposer {
     }
     h = mc.state.page_height = h || mc.state.page_height;
     mc.page.setHeight(h, false);
+  }
+
+  setPageSize(w, h, inPx = false) {
+    const mc = this;
+    if (mc.state.page_height === h || mc.state.page_width === w) {
+      return;
+    }
+    h = mc.state.page_height = h || mc.state.page_height;
+    w = mc.state.page_height = w || mc.state.page_width;
+    mc.page.setSize(w, h, inPx);
   }
 
   setUnit(unit) {
@@ -272,7 +304,6 @@ export class MapComposer {
       mc.state.dpi = nDpi;
       mc.toolbar.elInputDpi.value = mc.state.dpi;
     }
-
   }
 
   update() {

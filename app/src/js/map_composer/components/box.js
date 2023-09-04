@@ -328,7 +328,7 @@ class Box {
     const box = this;
     const wPx = inPx ? w : box.toLengthPixel(w);
     let wSnap = box.snapToGrid(wPx);
-    const valid = box.checkAndWarnSize(wPx, "width");
+    const valid = box.checkAndWarnSize(wSnap, box.height);
     if (!valid) {
       wSnap = box.width;
     }
@@ -342,7 +342,7 @@ class Box {
     const box = this;
     const hPx = inPx ? h : box.toLengthPixel(h);
     let hSnap = box.snapToGrid(hPx);
-    const valid = box.checkAndWarnSize(hSnap, "height");
+    const valid = box.checkAndWarnSize(box.width, hSnap);
     if (!valid) {
       hSnap = box.height;
     }
@@ -352,18 +352,41 @@ class Box {
     return hSnap;
   }
 
-  checkAndWarnSize(size, type = "width") {
+  /*
+   * Set width and height at the same time
+   */
+  setSize(w, h, inPx = false) {
+    const box = this;
+    const hPx = inPx ? h : box.toLengthPixel(h);
+    const wPx = inPx ? w : box.toLengthPixel(w);
+    let hSnap = box.snapToGrid(hPx);
+    let wSnap = box.snapToGrid(wPx);
+    const valid = box.checkAndWarnSize(wSnap, hSnap);
+    if (!valid) {
+      hSnap = box.height;
+      wSnap = box.width;
+    }
+    box.height = hSnap;
+    box.width = wSnap;
+    box.el.style.height = `${hSnap}px`;
+    box.el.style.width = `${wSnap}px`;
+    box.onResize();
+    return hSnap;
+  }
+
+  checkAndWarnSize(width, height) {
     const box = this;
     const mc = box.mc;
     const dpr = window.devicePixelRatio;
-    const max = mc.state[`canvas_max_${type}`];
-    const sizePrint = size * dpr;
-    if (sizePrint > max) {
+    const area = mc.state.canvas_max_area;
+    const areaPrint = width * dpr * height * dpr;
+    if (areaPrint > area) {
       const msger = mc.workspace.message;
       msger.flash({
-        text: `Maximum ${type} exceeded`,
+        text: `Maximum area exceeded`,
         level: "warning",
       });
+      console.warn("mc max area exceeded", { area, areaPrint });
       return false;
     }
     return true;

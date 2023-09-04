@@ -41,40 +41,7 @@ class Toolbar extends Box {
       callback: toolbar.clickCallback,
       bind: toolbar,
     });
-    /**
-     * add options : async => translation.
-     * TODO: Regenerate when language change
-     */
-    toolbar.buildPresetOptions().catch(console.error);
-  }
-
-  /**
-   * Build preset options : paper sizes
-   */
-  async buildPresetOptions() {
-    const toolbar = this;
-    /**
-     * Generate preset options
-     */
-    const elOptions = document.createDocumentFragment();
-
-    for (const presetGroup of Object.keys(presets)) {
-      const preset = presets[presetGroup];
-      const elPresetGroup = el("optgroup", {
-        label: await getDictItem(presetGroup),
-      });
-      for (const item of preset) {
-        if (item.disabled) {
-          continue;
-        }
-        elPresetGroup.appendChild(
-          el("option", { value: item.name }, await getDictItem(item.name))
-        );
-      }
-      elOptions.appendChild(elPresetGroup);
-    }
-    toolbar.elSelectPreset.innerHTML = "";
-    toolbar.elSelectPreset.appendChild(elOptions);
+    toolbar.buildPresetOptions();
   }
 
   async changeCallback(e) {
@@ -91,6 +58,7 @@ class Toolbar extends Box {
     }
     const value = toolbar.validateValue(e.target);
     const idState = d.mc_state_name;
+
     mc.setState(idState, value);
   }
 
@@ -177,6 +145,66 @@ class Toolbar extends Box {
     return "";
   }
 
+  getControl(id) {
+    const toolbar = this;
+    const elControl = toolbar.el.querySelector(`[data-mc_state_name=${id}]`);
+    return elControl;
+  }
+
+  enableControl(id) {
+    const toolbar = this;
+    const elControl = toolbar.getControl(id);
+    if (elControl) {
+      elControl.removeAttribute("disabled");
+      elControl.classList.remove("mc-disabled");
+    }
+  }
+
+  disableControl(id) {
+    const toolbar = this;
+    const elControl = toolbar.getControl(id);
+    if (elControl) {
+      elControl.setAttribute("disabled", true);
+      elControl.classList.add("mc-disabled");
+    }
+  }
+
+  /**
+   * Build preset options : paper sizes
+   */
+  buildPresetOptions() {
+    const toolbar = this;
+    /**
+     * Generate preset options
+     */
+    const elOptions = document.createDocumentFragment();
+
+    for (const presetGroup of Object.keys(presets)) {
+      const preset = presets[presetGroup];
+      const elPresetGroup = el("optgroup");
+      getDictItem(presetGroup)
+        .then((v) => {
+          elPresetGroup.setAttribute("label", v);
+        })
+        .catch(console.error);
+
+      for (const item of preset) {
+        if (item.disabled) {
+          continue;
+        }
+        const elOption = el("option", { value: item.name });
+        getDictItem(item.name)
+          .then((v) => {
+            elOption.innerText = v;
+          })
+          .catch(console.error);
+        elPresetGroup.appendChild(elOption);
+      }
+      elOptions.appendChild(elPresetGroup);
+    }
+    toolbar.elSelectPreset.innerHTML = "";
+    toolbar.elSelectPreset.appendChild(elOptions);
+  }
   /**
    * Build toolbox form / ui
    */
@@ -390,9 +418,6 @@ class Toolbar extends Box {
           "div",
           {
             class: "form-group",
-            style: {
-              display: "none",
-            },
           },
           el("label", tt("mc_label_resolution")),
           (toolbar.elInputDpi = el("input", {

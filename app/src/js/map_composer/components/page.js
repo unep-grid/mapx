@@ -29,11 +29,40 @@ class Page extends Box {
   onResize() {
     const page = this;
     const mc = page.mc;
+    if (!mc.ready) {
+      return;
+    }
     page.displayDim();
     const w = Math.round(page.toLengthUnit(page.width));
     const h = Math.round(page.toLengthUnit(page.height));
     page.mc.toolbar.elInputPageWidth.value = w;
     page.mc.toolbar.elInputPageHeight.value = h;
+
+    /**
+     * Make sure that a manual change set the preset to manual
+     */
+    if (mc.state.predefined_dim !== "mc_preset_manual") {
+      const preset = mc._preset_flat.find(
+        (p) => p.name === mc.state.predefined_dim
+      );
+
+      const wPreset = page.snapToGrid(page.toLengthPixel(preset.width));
+      const hPreset = page.snapToGrid(page.toLengthPixel(preset.height));
+      const wPage = page.snapToGrid(page.width);
+      const hPage = page.snapToGrid(page.height);
+
+      if (
+        (wPreset !== wPage || hPreset !== hPage) &&
+        // landscape mode
+        (wPreset !== hPage || hPreset !== wPage)
+      ) {
+        mc.setPredefinedDim("mc_preset_manual");
+      }
+    }
+
+    /*
+     * Save state
+     */
     mc.state.page_width = w;
     mc.state.page_height = h;
   }

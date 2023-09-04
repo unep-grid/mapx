@@ -4,78 +4,6 @@
       "name": "mc_preset_manual"
     }
   ],
-  "mc_preset_group_social": [
-    {
-      "name": "mc_preset_linkedin_shared_link",
-      "width": 552,
-      "height": 289,
-      "unit": "px",
-      "dpi": 72
-    },
-    {
-      "name": "mc_preset_linkedin_single_image",
-      "width": 1200,
-      "height": 627,
-      "unit": "px",
-      "dpi": 72
-    },
-    {
-      "name": "mc_preset_linkedin_company_main",
-      "width": 1128,
-      "height": 376,
-      "unit": "px",
-      "dpi": 72
-    },
-    {
-      "name": "mc_preset_linkedin_company_photo",
-      "width": 264,
-      "height": 176,
-      "unit": "px",
-      "dpi": 72
-    },
-    {
-      "name": "mc_preset_twitter_shared_link",
-      "width": 1200,
-      "height": 628,
-      "unit": "px",
-      "dpi": 72
-    },
-    {
-      "name": "mc_preset_twitter_single_image",
-      "width": 1200,
-      "height": 675,
-      "unit": "px",
-      "dpi": 72
-    },
-    {
-      "name": "mc_preset_twitter_two_images",
-      "width": 700,
-      "height": 800,
-      "unit": "px",
-      "dpi": 72
-    },
-    {
-      "name": "mc_preset_twitter_three_images",
-      "width": 700,
-      "height": 800,
-      "unit": "px",
-      "dpi": 72
-    },
-    {
-      "name": "mc_preset_twitter_three_images_2nd_3rd",
-      "width": 1200,
-      "height": 686,
-      "unit": "px",
-      "dpi": 72
-    },
-    {
-      "name": "mc_preset_twitter_four_images",
-      "width": 1200,
-      "height": 600,
-      "unit": "px",
-      "dpi": 72
-    }
-  ],
   "mc_preset_group_iso": [
     {
       "name": "A5",
@@ -409,6 +337,79 @@
       "disabled": true
     }
   ],
+  "mc_preset_group_social": [
+    {
+      "name": "mc_preset_linkedin_shared_link",
+      "width": 552,
+      "height": 289,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_linkedin_single_image",
+      "width": 1200,
+      "height": 627,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_linkedin_company_main",
+      "width": 1128,
+      "height": 376,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_linkedin_company_photo",
+      "width": 264,
+      "height": 176,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_twitter_shared_link",
+      "width": 1200,
+      "height": 628,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_twitter_single_image",
+      "width": 1200,
+      "height": 675,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_twitter_two_images",
+      "width": 700,
+      "height": 800,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_twitter_three_images",
+      "width": 700,
+      "height": 800,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_twitter_three_images_2nd_3rd",
+      "width": 1200,
+      "height": 686,
+      "unit": "px",
+      "dpi": 72
+    },
+    {
+      "name": "mc_preset_twitter_four_images",
+      "width": 1200,
+      "height": 600,
+      "unit": "px",
+      "dpi": 72
+    }
+  ],
+
   "mc_preset_group_screen": [
     {
       "name": "mc_preset_screen_sxga",
