@@ -1,3 +1,13 @@
+  - [1.12.4-alpha.7](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.7) 
+
+    - APP
+        - MapComposer : 
+            - Disable unit/dpi when using presset; 
+            - If altering dimensions, load the manual presset; 
+            - Added a combined mode width + height to check for maximum area
+        - Highlighter 
+            - Remove last animation 'toMin' during stop process
+
   - [1.12.4-alpha.6](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.6) 
 
     - APP
