@@ -619,11 +619,10 @@ class Animate {
    */
   stop() {
     const anim = this;
-    anim._toMin();
-    anim._map.stop();
-    anim._stopped = true;
     window.clearInterval(anim._idInterval);
     anim._idInterval = null;
+    anim._map.stop();
+    anim._stopped = true;
   }
 }
 

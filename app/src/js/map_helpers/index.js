@@ -2591,6 +2591,9 @@ export async function viewLayersRemove(o) {
 
   const now = Date.now();
   const viewDuration = now - view._added_at || 0;
+  if (viewDuration === 0) {
+    return;
+  }
   delete view._added_at;
 
   events.fire({
