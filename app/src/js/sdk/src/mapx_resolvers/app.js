@@ -18,8 +18,10 @@ import { ChaosTest } from "../../../map_helpers/chaos_test.js";
 
 /**
  * MapX resolvers available in app only
+ * @class
+ * @extends MapxResolversStatic
  */
-class MapxResolversApp extends MapxResolversStatic {
+export class MapxResolversApp extends MapxResolversStatic {
   /**
    * List resolvers methods
    * @return {Array} array of supported methods
@@ -612,4 +614,3 @@ class MapxResolversApp extends MapxResolversStatic {
   }
 }
 
-export { MapxResolversApp };

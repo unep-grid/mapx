@@ -1,12 +1,12 @@
 import "./style.less";
 import { getDictItem, getLabelFromObjectPath } from "./../language";
 import { el } from "./../el/src/index.js";
-import { ButtonPanel } from "./../button_panel/index.js";
+import { ButtonPanel} from "./../button_panel/index.js";
 import { errorHandler } from "./../error_handler/index.js";
 import { modal } from "./../mx_helper_modal.js";
 import { settings as settingsMapx } from "./../settings";
 import { settings as storySettings } from "./settings.js";
-import { theme, panel_tools } from "./../mx";
+import { theme, panel_tools, panels } from "./../mx";
 import { UAParser } from "ua-parser-js";
 import {
   onNextFrame,
@@ -60,6 +60,7 @@ const state = {};
 window._sm = { story, state };
 const uaparser = new UAParser();
 const isGecko = uaparser.getEngine().name === "Gecko";
+
 
 /**
  * Read and evaluate story map
@@ -1207,13 +1208,9 @@ async function storyControlsEnable() {
    * Panels
    */
   const panelDisable = s.panel_disable;
-  for (const panel of window._button_panels) {
-    for (const key of panelDisable) {
-      if (panel.opt.id === key) {
-        panel.hide();
-        state.panelsRemoved.push(panel);
-      }
-    }
+  if (isNotEmpty(panelDisable)) {
+    panels.hide(panelDisable);
+    state.panelsRemoved.push(...panelDisable);
   }
 
   /**
@@ -1379,11 +1376,10 @@ function resetControls() {
 }
 function resetPanels() {
   const state = getState();
-  if (isArray(state.panelsRemoved)) {
-    for (const panel of state.panelsRemoved) {
-      panel.show();
-    }
+  if (isEmpty(state.panelsRemoved)) {
+    return;
   }
+  panels.show(state.panelsRemoved);
 }
 
 async function initLegendPanel() {

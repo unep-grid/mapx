@@ -33,6 +33,7 @@ const defaults = {
     },
   },
   panel: {
+    id : "dashboard_panel",
     panelFull: true,
     elContainer: document.body,
     title_text: "",

@@ -1,4 +1,4 @@
-import { ResolversBase } from "./base.js";
+import { MapxResolversPanels } from "./panels.js";
 import { ShareModal } from "./../../../share_modal/index.js";
 import {
   getLanguageCurrent,
@@ -72,8 +72,10 @@ import { settings, highlighter, theme, ws, panel_tools } from "./../../../mx";
 
 /**
  * MapX resolvers available in static and app
+ * @class
+ * @extends MapxResolversPanels
  */
-class MapxResolversStatic extends ResolversBase {
+export class MapxResolversStatic extends MapxResolversPanels {
   /**
    * List resolvers methods
    * @return {Array} array of supported methods
@@ -1228,4 +1230,3 @@ class MapxResolversStatic extends ResolversBase {
    **/
 }
 
-export { MapxResolversStatic };

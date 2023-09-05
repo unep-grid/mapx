@@ -24,7 +24,7 @@ const def = {
     logo: require("./../../png/map-x-logo.png"),
   },
   panel: {
-    id: "notif_center",
+    id: "notif_panel",
     elContainer: null,
     button_lang_key: "nc_button",
     button_classes: ["fa", "fa-bell"],

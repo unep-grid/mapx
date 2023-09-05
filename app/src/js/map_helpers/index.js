@@ -10,6 +10,7 @@ import {
   highlighter,
   settings,
   panel_tools,
+  panels,
 } from "./../mx.js";
 import { featuresToPopup } from "./features_to_popup.js";
 import { RadialProgress } from "./../radial_progress";
@@ -810,9 +811,7 @@ export function initListenersApp() {
     target: document.getElementById("btnResetPanelSize"),
     type: "click",
     callback: () => {
-      if (window._button_panels) {
-        _button_panels.forEach((p) => p.resetSize());
-      }
+      panels.resetSizeAll();
     },
     group: "mapx_base",
   });
@@ -993,9 +992,10 @@ export async function initMapx(o) {
 
   /**
    * Update  sprites path
+   * -> glyphs are hosted with mapbox. If self hosted:
+   * settings.style.glyphs = getAppPathUrl("fontstack");
    */
   settings.style.sprite = getAppPathUrl("sprites");
-  //settings.style.glyphs = getAppPathUrl("fontstack");
 
   /**
    * WS connect + authentication
@@ -1164,8 +1164,14 @@ export async function initMapx(o) {
         },
       },
     });
+
     if (!settings.initClosedPanels) {
       mx.panel_main.panel.open();
+    }
+
+    const panelState = getQueryParameterInit("panels")[0];
+    if (isNotEmpty(panelState)) {
+      panels.batch(panelState);
     }
 
     /**
@@ -5429,7 +5435,6 @@ export function makeLayerJiggle(mapId, prefix) {
  */
 export function setImmersiveMode(opt) {
   opt = Object.assign({}, { enable: null, toggle: true, disable: null }, opt);
-  const panels = window._button_panels;
   if (isBoolean(opt.disable)) {
     opt.enable = !opt.disable;
   }
@@ -5441,14 +5446,10 @@ export function setImmersiveMode(opt) {
   } else {
     immersive = !isImmersive;
   }
-  if (panels) {
-    for (let panel of panels) {
-      if (immersive) {
-        panel.hide();
-      } else {
-        panel.show();
-      }
-    }
+  if (immersive) {
+    panels.hideAll();
+  } else {
+    panel.showAll();
   }
   return immersive;
 }
@@ -5458,12 +5459,8 @@ export function setImmersiveMode(opt) {
  * @return {Boolean} Enabled
  */
 export function getImmersiveMode() {
-  const panels = window._button_panels;
-  let isImmersive = false;
-  if (panels) {
-    isImmersive = panels.every((p) => !p.isVisible());
-  }
-  return isImmersive;
+  // assmue all hidden === immersive mode
+  return panels.areAllhidden();
 }
 
 /**

@@ -13,7 +13,9 @@ import { Magnifier } from "./magnifier/index.js";
 import { theme } from "./init_theme";
 import { ProjectManager } from "./project/index.js";
 import { panel_tools } from "./panel_controls/instance.js";
+import { ButtonPanelManager } from "./button_panel/manager.js";
 
+const panels = new ButtonPanelManager();
 const version = settings.version;
 
 const templates = {
@@ -57,6 +59,7 @@ const info = {};
 
 export {
   panel_tools,
+  panels,
   mapboxgl,
   project,
   localforage,

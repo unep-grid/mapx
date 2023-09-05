@@ -17,7 +17,7 @@ class NotifCenterMapx extends NotifCenter {
         id: () => settings.user.id,
       },
       panel: {
-        id: "notif_center",
+        id: "notif_panel",
         elContainer: document.body,
         button_lang_key: "nc_button",
         button_classes: ["fa", "fa-bell"],
