@@ -1,3 +1,10 @@
+  - [1.12.4-alpha.8](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.8) 
+
+    - APP
+        - StoryMap
+            - Should fix issue during story map preview where widgets could be rendered multiple times
+            - Should fix issue #933 + translation completion
+
   - [1.12.4-alpha.7](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.7) 
 
     - APP
