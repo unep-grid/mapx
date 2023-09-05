@@ -4661,8 +4661,8 @@
   },
   {
     "id": "project_enable_public",
-    "en": "This poject is public",
-    "ar": "هذا القصيدة عامة"
+    "en": "This project is public",
+    "ar": "هذا المشروع عام."
   },
   {
     "id": "project_enable_public_desc",

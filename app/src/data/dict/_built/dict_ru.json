@@ -4661,8 +4661,8 @@
   },
   {
     "id": "project_enable_public",
-    "en": "This poject is public",
-    "ru": "Этот проект является общедоступным"
+    "en": "This project is public",
+    "ru": "Этот проект является публичным."
   },
   {
     "id": "project_enable_public_desc",

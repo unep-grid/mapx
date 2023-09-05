@@ -4661,8 +4661,8 @@
   },
   {
     "id": "project_enable_public",
-    "en": "This poject is public",
-    "bn": "এই প্রকল্পটি সর্বজনীন"
+    "en": "This project is public",
+    "bn": "এই প্রকল্পটি পাবলিক।"
   },
   {
     "id": "project_enable_public_desc",
