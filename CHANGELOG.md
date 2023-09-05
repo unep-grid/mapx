@@ -1,3 +1,8 @@
+  - [1.12.4-alpha.9](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.9) 
+
+    - APP
+        - PanelsManager : initial implementation #925
+
   - [1.12.4-alpha.8](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.8) 
 
     - APP
