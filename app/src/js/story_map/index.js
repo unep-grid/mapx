@@ -45,7 +45,6 @@ import {
   viewRemove,
   viewLayersRemove,
   viewLayersAdd,
-  viewModulesRemove,
   viewsLayersOrderUpdate,
   getMap,
   getViewsLayersVisibles,
@@ -82,6 +81,7 @@ export async function storyRead(opt) {
     await initStory();
     await initSettings();
     await initControls();
+    await initLegendPanel();
     await initViews();
     await build();
     await initState();
@@ -89,7 +89,6 @@ export async function storyRead(opt) {
     await initProjection();
     await initListeners();
     await handleMissingImages();
-    await initLegendPanel();
     await initAdaptiveLayout();
     await start();
   } catch (e) {
@@ -106,7 +105,7 @@ async function init(opt) {
     state.stepUpdate = state.stepActive;
   }
   state.map = getMap();
-  state.enable = true;
+  state.enable = false;
 }
 
 async function initListeners() {
@@ -297,10 +296,10 @@ export function isStoryPlaying() {
  */
 
 export function getStoryId() {
-  if (!isStoryPlaying()) {
+  const state = getState();
+  if (!state.enable) {
     return null;
   }
-  const state = getState();
   return state.idView;
 }
 
@@ -309,9 +308,6 @@ export function getStoryId() {
  * @return {Array} array of views id
  */
 export function getViewsStep() {
-  if (!isStoryPlaying()) {
-    return null;
-  }
   const views = [];
   const state = getState();
   /**
@@ -340,11 +336,41 @@ function getStory() {
   return story || {};
 }
 
+/**
+ * Clear vVisible view, e.g. before update / restart / preview
+ */
+async function clearViewsVisible() {
+  const map = getMap();
+  map.stop();
+  const state = getState();
+  const elLegendContainer = state?.buttonLegend?.elPanelContent;
+  const vVisible = getViewsLayersVisibles();
+  for (const v of vVisible) {
+    await viewLayersRemove({
+      idView: v,
+      elLegendContainer,
+    });
+  }
+}
+
+export async function cleanRemoveViews() {
+  await clearViewsVisible();
+  const views = getViews();
+  while (viewsAdditional.length) {
+    const view = viewsAdditional.pop();
+    const pos = views.indexOf(view);
+    if (pos > -1) {
+      views.splice(pos, 1);
+    }
+  }
+  return true;
+}
+
+/**
+ * Remove ui elements
+ */
 async function storyUiClear() {
   const state = getState();
-  /**
-   * Remove ui elements
-   */
   if (state._init_ui) {
     state.elStory.remove();
     state.elStoryContainer.remove();
@@ -439,35 +465,15 @@ async function initStory() {
   Object.assign(story, state.view.data.story);
 }
 
-export async function cleanRemoveViews() {
-  const map = getMap();
-  const views = getViews();
-  const vVisible = getViewsLayersVisibles();
-  map.stop();
-
-  for (let idView of vVisible) {
-    await viewLayersRemove({
-      idView: idView,
-    });
-    await viewModulesRemove(idView);
-  }
-
-  while (viewsAdditional.length) {
-    const view = viewsAdditional.pop();
-    const pos = views.indexOf(view);
-    if (pos > -1) {
-      views.splice(pos, 1);
-    }
-  }
-  return true;
-}
-
 /**
  * Evaluate missing view and fetch them if needed
  */
 async function initViews() {
+  await cleanRemoveViews();
+
   const idViewsStory = [];
   const idViewsToAdd = [];
+
   const viewsBase = getViews();
   const idViewsBase = viewsBase.map((v) => v.id);
   /**
@@ -509,13 +515,21 @@ async function initViews() {
 }
 
 /**
- * Add listeners : scroll, key, adaptive screen
+ * Start
  */
-
 async function start() {
   const state = getState();
 
-  mx.events.fire("story_start");
+  if (state.enable) {
+    throw new Error("Story already playing");
+  }
+  state.enable = true;
+
+  if (state.update) {
+    mx.events.fire("story_update");
+  } else {
+    mx.events.fire("story_start");
+  }
   /**
    * Initial layout
    */
@@ -528,10 +542,11 @@ async function start() {
   if (state.initScroll) {
     state.elStory.scrollTop = state.initScroll;
   }
+
   if (isNotEmpty(state.stepUpdate)) {
     state.stepActive = null;
+    await clearViewsVisible();
     await storyGoTo(state.stepUpdate);
-    await storyPlayStep(state.stepUpdate);
   }
   /**
    * Render
@@ -540,12 +555,11 @@ async function start() {
 
   /* main animation loop */
   async function render() {
-    await waitFrameAsync();
-    const sd = state.scrollData;
-
-    if (!isStoryPlaying()) {
+    if (!state.enable) {
       return;
     }
+    await waitFrameAsync();
+    const sd = state.scrollData;
 
     // NOTE: scrollTop does not reflect actual dimension but non scaled ones.
     const posNow = state.elStory.scrollTop * state.scaleWrapper || 1;
@@ -820,7 +834,7 @@ async function storyUpdateSlides() {
   let clRemove = "mx-display-none";
   let isHidden = false;
   let config;
-  if (!isStoryPlaying()) {
+  if (!state.enable) {
     return;
   }
   for (let s = 0, sL = sc.length; s < sL; s++) {
@@ -870,10 +884,10 @@ async function storyUpdateSlides() {
 }
 
 async function updateBullets() {
-  if (!isStoryPlaying()) {
+  const state = getState();
+  if (!state.enable) {
     return;
   }
-  const state = getState();
   const s = state.stepActive;
   const elBullets = state.elBullets;
   const nStep = state.stepsConfig.length;
@@ -907,7 +921,7 @@ const keyState = {
 async function storyHandleKeyDown(event) {
   const state = getState();
 
-  if (!isStoryPlaying()) {
+  if (!state.enable) {
     return;
   }
 
@@ -1245,69 +1259,65 @@ async function initState() {
   if (state._app_state_saved) {
     return;
   }
-  if (state.enable) {
-    /**
-     * Enable story controls
-     */
-    await storyControlsEnable();
+  state._app_state_saved = true;
+  /**
+   * Enable story controls
+   */
+  await storyControlsEnable();
 
-    /**
-     * Get controls status
-     */
-    const hasAerial = state.ctrlAerial.isActive();
-    const has3d = state.ctrlMode3d.isActive();
+  /**
+   * Get controls status
+   */
+  const hasAerial = state.ctrlAerial.isActive();
+  const has3d = state.ctrlMode3d.isActive();
 
-    /**
-     * Get map / view set
-     */
-    const position = getMapPos();
-    const oldViews = getViewsLayersVisibles();
-    const maxBounds = map.getMaxBounds();
+  /**
+   * Get map / view set
+   */
+  const position = getMapPos();
+  const oldViews = getViewsLayersVisibles();
+  const maxBounds = map.getMaxBounds();
 
-    /**
-     * Release max bounds / bbox;
-     */
-    map.setMaxBounds();
+  /**
+   * Release max bounds / bbox;
+   */
+  map.setMaxBounds();
 
-    /**
-     * Theme
-     */
-    const idTheme = theme.id();
+  /**
+   * Theme
+   */
+  const idTheme = theme.id();
 
-    /**
-     * Projection
-     */
-    const projection = map.getProjection();
+  /**
+   * Projection
+   */
+  const projection = map.getProjection();
 
-    /**
-     * Clear views
-     */
-    for (const id of oldViews) {
-      console.log("story remove view", id);
-      await viewRemove(id);
-    }
-
-    /**
-     * Hide modes
-     */
-    state.ctrlAerial.action("hide");
-    state.ctrlMode3d.action("hide");
-
-    /*
-     * save in state
-     */
-    Object.assign(state, {
-      idTheme,
-      projection,
-      oldViews,
-      position,
-      maxBounds,
-      hasAerial,
-      has3d,
-    });
-
-    state._app_state_saved = true;
+  /**
+   * Clear views
+   */
+  for (const id of oldViews) {
+    await viewRemove(id);
   }
+
+  /**
+   * Hide modes
+   */
+  state.ctrlAerial.action("hide");
+  state.ctrlMode3d.action("hide");
+
+  /*
+   * save in state
+   */
+  Object.assign(state, {
+    idTheme,
+    projection,
+    oldViews,
+    position,
+    maxBounds,
+    hasAerial,
+    has3d,
+  });
 }
 
 async function appStateRestore() {
@@ -1633,15 +1643,15 @@ export function storySetTransform(o) {
 }
 
 export async function storyPlayStep(stepNum) {
-  if (!isStoryPlaying()) {
+  const state = getState();
+  if (!state.enable) {
     return;
   }
 
   const story = getStory();
-  const state = getState();
   const settings = getSettings();
   const steps = path(story, "steps", []);
-  const elLegendContainer = state.buttonLegend.elPanelContent;
+  const elLegendContainer = state?.buttonLegend?.elPanelContent;
   const map = state.map;
   if (steps.length === 0) {
     return;
@@ -1658,6 +1668,7 @@ export async function storyPlayStep(stepNum) {
   state.currentStep = stepNum;
   state.stepActive = stepNum;
   state.step = step;
+
   const pos = step.position;
   const anim = Object.assign(
     {},
@@ -1754,7 +1765,7 @@ export async function storyPlayStep(stepNum) {
   /**
    * Update panels behaviour
    */
-  await updatePanelBehaviour(state, settings, step);
+  await updatePanelBehaviour(settings, step);
 }
 
 /**
@@ -1776,13 +1787,14 @@ async function viewsLegendsOrderUpdate(opt) {
   }
 }
 
-async function updatePanelBehaviour(state, settings, step) {
-  const dh = dashboardHelper;
-  const idViews = path(step, "views", []).map((v) => v.view || v);
-
-  if (!isStoryPlaying()) {
+async function updatePanelBehaviour(settings, step) {
+  const state = getState();
+  if (!state.enable) {
     return;
   }
+
+  const dh = dashboardHelper;
+  const idViews = path(step, "views", []).map((v) => v.view || v);
 
   /**
    * Set dashboard panel behaviour

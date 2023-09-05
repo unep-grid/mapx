@@ -76,7 +76,7 @@ async function viewAutoDashboardAsync(idView) {
     const config = viewConfigGet(idView);
     if (!config.panel_init_close) {
       const d = getInstance();
-      d.show(); 
+      d.show();
     }
   }
   if (widgets && widgets.length > 0) {
@@ -142,15 +142,19 @@ function viewHasWidget(idView) {
  * @param {String} idView View id
  * @return null
  */
+
 async function viewRmWidgets(idView) {
   const hasWidgets = viewHasWidget(idView);
   if (!hasWidgets) {
     return;
   }
   const view = getView(idView);
+
   for (const widget of view._widgets) {
     await widget.destroy();
   }
+
+  view._widgets.length = 0;
 }
 
 /**

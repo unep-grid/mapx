@@ -642,7 +642,7 @@ export function initListenerGlobal() {
     callback: updateSharingTool,
   });
   events.on({
-    type: ["story_start", "story_close"],
+    type: ["story_start", "story_close", "story_update"],
     idGroup: "update_share_modale_story",
     callback: resetSharingTool,
   });
@@ -1870,7 +1870,7 @@ export async function addSourceFromView({ view, noLocationCheck, map }) {
     modifyTileUrlsToMirror(source);
   }
 
-  await removeOldSourceIfExists(view, map, idSource);
+  removeOldSourceIfExists(view, map, idSource);
   map.addSource(idSource, source);
 }
 
@@ -1922,25 +1922,35 @@ function checkAndSetViewEditability(
   }
 }
 
-async function removeOldSourceIfExists(view, map, idSource) {
-  const sourceExists = Boolean(map.getSource(idSource));
-
-  if (!sourceExists) {
-    return false;
-  }
-
+/**
+ * Remove source safely
+ */
+function removeOldSourceIfExists(view, map, idSource) {
+  /**
+   * Direct layer removal, if called outside a view context
+   */
   removeLayersByPrefix({
     prefix: view.id,
     map,
   });
 
+  const sourceExists = isNotEmpty(map.getSource(idSource));
+
+  if (!sourceExists) {
+    return false;
+  }
   /*
    * Bug in mapbox gl with updatingTerrain ( #12747 )
+   * -> "Cannot read properties of undefined (reading 'get')"
    * -> fails when removing layer and right after, their source.
    * -> Waiting a bit seems to solve the issue;
+   * UPDATE
+   * -> If waiting, produce inconsistant state later
+   * -> Removing waitTimeoutAsync
+   * await waitTimeoutAsync(100);
    */
-  await waitTimeoutAsync(100);
   map.removeSource(idSource);
+
   return true;
 }
 
@@ -2596,6 +2606,8 @@ export async function viewLayersRemove(o) {
   }
   delete view._added_at;
 
+  await viewModulesRemove(view);
+
   events.fire({
     type: "view_remove",
     data: {
@@ -2608,8 +2620,6 @@ export async function viewLayersRemove(o) {
     id: o.id,
     prefix: o.idView,
   });
-
-  await viewModulesRemove(view);
 
   viewsActive.delete(view.id);
 
@@ -2938,6 +2948,8 @@ export function existsInList(li, it, val, inverse) {
  * @param
  */
 export async function viewLayersAdd(o) {
+  await viewLayersRemove(o);
+
   const dh = dashboardHelper;
   const m = getMapData(o.id);
   if (o.idView) {

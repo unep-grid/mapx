@@ -1,70 +1,69 @@
-
-
 # View vt story: render schema
 #
-observeEvent(input$storyEdit_init,{
-
+observeEvent(input$storyEdit_init, {
   view <- reactData$viewDataEdited
 
-  if(!isTRUE(.get(view,c("_edit")))) return()
+  if (!isTRUE(.get(view, c("_edit")))) {
+    return()
+  }
 
-  language <- reactData$language  
-  story <- .get(view,c("data","story"))
+  language <- reactData$language
+  story <- .get(view, c("data", "story"))
   hasStory <- !noDataCheck(story)
   views <- reactViewsListIdAll()
-  idViewsStory <- unique(unlist(lapply(story$steps,`[[`,'views')))
-  viewsStory <- mxDbGetViewsTitle(idViewsStory, prefix = '[ story ]' )
+  idViewsStory <- unique(unlist(lapply(story$steps, `[[`, "views")))
+  viewsStory <- mxDbGetViewsTitle(idViewsStory, prefix = "[ story ]")
 
   schema <- mxSchemaViewStory(
-    view=view,
-    views=c(viewsStory,views),
-    language=language
-    )
+    view = view,
+    views = c(viewsStory, views),
+    language = language
+  )
 
   viewTimeStamp <- as.numeric(
-    as.POSIXct(view$date_modified,format="%Y-%m-%d%tT%T",tz="UTC")
-    )
+    as.POSIXct(view$date_modified, format = "%Y-%m-%d%tT%T", tz = "UTC")
+  )
 
   jedSchema(
-    id="storyEdit",
+    id = "storyEdit",
     schema = schema,
     startVal = story,
     options = list(
       disableSelectize = FALSE,
       draftAutoSaveId = view$id,
-      draftAutoSaveDbTimestamp= viewTimeStamp
-      )
+      draftAutoSaveDbTimestamp = viewTimeStamp
     )
+  )
 })
 
 #
-# Vew story preview 
+# Vew story preview
 #
-observeEvent(input$btnViewPreviewStory,{
-  mxDebugMsg("Preview story map");
+observeEvent(input$btnViewPreviewStory, {
+  mxDebugMsg("Preview story map")
   mxToggleButton(
-    id="btnViewSaveStory",
+    id = "btnViewSaveStory",
     disable = TRUE
-    )
+  )
   mxToggleButton(
-    id="btnViewPreviewStory",
+    id = "btnViewPreviewStory",
     disable = TRUE
-    )
-  jedTriggerGetValues("storyEdit","preview")
+  )
+  jedTriggerGetValues("storyEdit", "preview")
 })
 
-observeEvent(input$btnViewCloseStory,{
-  mxDebugMsg("Close story map");
+observeEvent(input$btnViewCloseStory, {
+  mxDebugMsg("Close story map")
 
   view <- reactData$viewDataEdited
 
-  if(isTRUE(reactData$storyPreviewed)){ 
+  if (isTRUE(reactData$storyPreviewed)) {
     mglReadStory(
       close = TRUE
-      )
+    )
     reactData$storyPreviewed <- FALSE
   }
-  if(isTRUE(reactData$storySaved)){
+  if (isTRUE(reactData$storySaved)) {
     mglUpdateView(view)
     reactData$storySaved <- FALSE
   }
@@ -72,34 +71,34 @@ observeEvent(input$btnViewCloseStory,{
   mxModal(
     id = "modalViewEdit",
     close = TRUE
-    )
-
+  )
 })
 
 #
 # View story save
 #
-observeEvent(input$btnViewSaveStory,{
-  mxDebugMsg("Save story map");
+observeEvent(input$btnViewSaveStory, {
+  mxDebugMsg("Save story map")
   mxToggleButton(
-    id="btnViewSaveStory",
+    id = "btnViewSaveStory",
     disable = TRUE
-    )
+  )
   mxToggleButton(
-    id="btnViewPreviewStory",
+    id = "btnViewPreviewStory",
     disable = TRUE
-    )
-  jedTriggerGetValues("storyEdit","save")
+  )
+  jedTriggerGetValues("storyEdit", "save")
 })
 
 
-observeEvent(input$storyEdit_values,{
+observeEvent(input$storyEdit_values, {
+  values <- input$storyEdit_values
+  if (noDataCheck(values)) {
+    return()
+  }
 
-  values <- input$storyEdit_values;
-  if(noDataCheck(values)) return();
-
-  story <- values$data;
-  idEvent <- values$idEvent;
+  story <- values$data
+  idEvent <- values$idEvent
   editor <- reactUser$data$id
   language <- reactData$language
   project <- reactData$project
@@ -109,10 +108,10 @@ observeEvent(input$storyEdit_values,{
   userData <- reactUser$data
   userRole <- getUserRole()
 
-  if(isEditable){
+  if (isEditable) {
     time <- Sys.time()
 
-    view <- .set(view,c("data","story"), story)
+    view <- .set(view, c("data", "story"), story)
     #
     # Add missing views refs
     #
@@ -120,62 +119,60 @@ observeEvent(input$storyEdit_values,{
       story = story,
       view = view,
       allViews = allViews
-      )
+    )
 
     switch(idEvent,
-      "preview"= {
+      "preview" = {
         mglReadStory(
           view = view,
           edit = TRUE,
           update = TRUE
-          )
-        reactData$storyPreviewed <- TRUE;
+        )
+        reactData$storyPreviewed <- TRUE
       },
       "save" = {
-        view[["_edit"]] = NULL
+        view[["_edit"]] <- NULL
 
 
         #
         # set default
         #
-        view <- .set(view, c("date_modified"), time )
-        view <- .set(view, c("target"), as.list(.get(view,c("target"))))
-        view <- .set(view, c("readers"), as.list(.get(view,c("readers"))))
-        view <- .set(view, c("editors"), as.list(.get(view,c("editors"))))
-        view <- .set(view, c("data"), as.list(.get(view,"data")))
+        view <- .set(view, c("date_modified"), time)
+        view <- .set(view, c("target"), as.list(.get(view, c("target"))))
+        view <- .set(view, c("readers"), as.list(.get(view, c("readers"))))
+        view <- .set(view, c("editors"), as.list(.get(view, c("editors"))))
+        view <- .set(view, c("data"), as.list(.get(view, "data")))
         view <- .set(view, c("editor"), editor)
 
 
 
         mxDbAddRow(
-          data=view,
-          table=.get(config,c("pg","tables","views"))
-          )
+          data = view,
+          table = .get(config, c("pg", "tables", "views"))
+        )
 
         # edit flag
-        view$`_edit` = TRUE 
+        view$`_edit` <- TRUE
         reactData$storySaved <- TRUE
         reactData$viewDataEdited <- view
 
         mxUpdateText(
           id = "modalViewEdit_txt",
-          text = sprintf("Saved at %s",format(time,'%H:%M'))
-          )
+          text = sprintf("Saved at %s", format(time, "%H:%M"))
+        )
 
         mxFlashIcon("floppy-o")
         reactData$updateViewListFetchOnly <- runif(1)
-
-      })
+      }
+    )
 
     mxToggleButton(
-      id="btnViewSaveStory",
+      id = "btnViewSaveStory",
       disable = FALSE
-      )
+    )
     mxToggleButton(
-      id="btnViewPreviewStory",
+      id = "btnViewPreviewStory",
       disable = FALSE
-      )
-
+    )
   }
-
 })
