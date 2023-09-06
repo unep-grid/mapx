@@ -12,7 +12,7 @@ const settings = {
   ctrl_btn_3d_terrain: 'btn_3d_terrain',
   ctrl_btn_theme_sat: 'btn_theme_sat',
   panel_enable: [],
-  panel_disable: ['main_panel', 'notif_center'],
+  panel_disable: ['main_panel', 'notif_panel'],
   id_story: 'story',
   class_story: 'mx-story',
   class_step: 'mx-story-step',
