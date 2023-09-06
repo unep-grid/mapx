@@ -56,8 +56,6 @@ export class ViewsListManager {
     vlm.noViewsMode = isTrue(getQueryParameterInit("noViews")[0]);
 
     bindAll(vlm);
-
-    vlm.init().catch(console.error);
   }
 
   async init() {
@@ -91,7 +89,6 @@ export class ViewsListManager {
     if (vlm.mData.viewsList instanceof NestedList) {
       await vlm.mData.viewsList.destroy();
     }
-    console.log("clear mData views");
     if (vlm.mData.views.length > 0) {
       vlm.mData.views.length = 0;
     }

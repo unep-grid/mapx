@@ -1,7 +1,7 @@
 import "./style.less";
 import { getDictItem, getLabelFromObjectPath } from "./../language";
 import { el } from "./../el/src/index.js";
-import { ButtonPanel} from "./../button_panel/index.js";
+import { ButtonPanel } from "./../button_panel/index.js";
 import { errorHandler } from "./../error_handler/index.js";
 import { modal } from "./../mx_helper_modal.js";
 import { settings as settingsMapx } from "./../settings";
@@ -60,7 +60,6 @@ const state = {};
 window._sm = { story, state };
 const uaparser = new UAParser();
 const isGecko = uaparser.getEngine().name === "Gecko";
-
 
 /**
  * Read and evaluate story map
@@ -274,6 +273,9 @@ function initMouseMoveListener() {
 async function initSettings() {
   const story = getStory();
   const sSettings = path(story, "settings", {});
+  if (settingsMapx.mode.static) {
+    storySettings.panel_disable = ["notif_panel"];
+  }
   story._settings = Object.assign({}, storySettings, sSettings);
 }
 

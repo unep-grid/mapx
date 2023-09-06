@@ -966,6 +966,8 @@ export async function initMapx(o) {
    */
   const storyAutoStart =
     !o.modeStatic && getQueryParameter("storyAutoStart")[0];
+  settings.mode.static = !!o.modeStatic || settings.mode.storyAutoStart;
+  settings.mode.app = !settings.mode.static;
 
   if (storyAutoStart) {
     /**
@@ -986,9 +988,6 @@ export async function initMapx(o) {
   if (closePanel) {
     settings.initClosedPanels = true;
   }
-
-  settings.mode.static = !!o.modeStatic || settings.mode.storyAutoStart;
-  settings.mode.app = !settings.mode.static;
 
   /**
    * Update  sprites path
@@ -2147,7 +2146,7 @@ export async function updateViewsList(opt) {
       /**
        * Move view to open to the top
        */
-      if (idViewsOpen.length) {
+      if (isNotEmpty(idViewsOpen)) {
         const idViewsOpenInv = idViewsOpen.reverse();
         viewsList.setModeAnimate(false);
         for (const id of idViewsOpenInv) {
@@ -2160,7 +2159,7 @@ export async function updateViewsList(opt) {
        * Add views views
        */
       for (const id of idViewsOpen) {
-        await viewAdd(id, "add async all");
+        await viewAdd(id);
       }
 
       /**
@@ -2663,6 +2662,7 @@ export async function viewAdd(view) {
      *   event to trigger toggles
      * - vb.open triggers viewAdd too
      */
+    await waitTimeoutAsync(100);
     if (view._vb instanceof ViewBase) {
       view._vb.open();
     }

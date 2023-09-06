@@ -1,4 +1,4 @@
-import { isJSON, isString } from "../is_test/index.js";
+import { isJSON, isNotEmpty, isString } from "../is_test/index.js";
 import { ButtonPanel } from "./button_panel.js";
 
 const BUTTON_PANELS = new Map();
@@ -87,26 +87,21 @@ export class ButtonPanelManager {
   /**
    * Retrieves one or more ButtonPanels by their ID or direct instance.
    * @param {(string|ButtonPanel|Array<string|ButtonPanel>)} panels - The panel ID(s), instance(s), or a mix of both.
-   * @returns {(ButtonPanel|Array<ButtonPanel>)} The corresponding ButtonPanel instance(s).
+   * @returns {Array<ButtonPanel>} The corresponding ButtonPanel instance(s).
    */
   get(panels) {
     if (Array.isArray(panels)) {
-      return panels.map((panel) => this._getSingle(panel));
+      return panels.map((panel) => this._getPanel(panel)).filter(isNotEmpty);
     }
-    return this._getSingle(panels);
+    return [this._getPanel(panels)];
   }
 
-  _getSingle(panel) {
+  _getPanel(panel) {
     if (panel instanceof ButtonPanel) {
       return panel;
     }
-    if (!isString(panel)) {
-      throw new Error(
-        `Panel ref should be a string or an instance of ButtonPanel`
-      );
-    }
-    if (!this.idExists(panel)) {
-      throw new Error(`Panel ${panel} does not exist`);
+    if (!isString(panel) || !this.idExists(panel)) {
+      return;
     }
     return BUTTON_PANELS.get(panel);
   }

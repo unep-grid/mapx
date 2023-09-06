@@ -11,6 +11,7 @@ import { getMapData } from "./../map_helpers";
 export async function viewsListRenderNew(o) {
   const mData = getMapData();
   mData.viewsListManager = new ViewsListManager(o);
+  await mData.viewsListManager.init();
 }
 
 /**
