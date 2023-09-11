@@ -11,6 +11,7 @@ import {
   isArrayOfNumber,
   isBooleanCoercible,
 } from "./../is_test";
+import { isJSON } from "../is_test/index.js";
 
 /**
  * Set url init param
@@ -18,21 +19,23 @@ import {
  * @param {Object} opt Options
  * @param {Boolean} opt.reset Reset current init params ?
  */
-export function setQueryParametersInit(param, opt) {
-  opt = Object.assign({}, { reset: false }, opt);
-  param = param || getQueryParametersAsObject();
+export function setQueryParametersInit(
+  param = getQueryParametersAsObject(),
+  opt = { reset: false }
+) {
   const init = initQueryParams;
 
   if (opt.reset) {
-    Object.keys(init).forEach((k) => {
+    for (const k of Object.keys(init)) {
       delete init[k];
-    });
+    }
   }
 
-  Object.keys(param).forEach((k) => {
-    init[k] = asArray(param[k]);
-  });
+  for (const [key, value] of Object.entries(param)) {
+    init[key] = asArray(value);
+  }
 }
+
 /**
  * Reset init parameters
  */
@@ -174,12 +177,15 @@ export function getQueryParametersAsObject(urlString, opt) {
 function asArray(str) {
   return !str
     ? []
+    : isJSON(str)
+    ? [JSON.parse(str)]
     : isArray(str)
     ? str
     : isString(str)
     ? str.split(",")
     : [str];
 }
+
 function asString(array) {
   return isString(array)
     ? array

@@ -1169,8 +1169,11 @@ export async function initMapx(o) {
     }
 
     const panelState = getQueryParameterInit("panels")[0];
+    
     if (isNotEmpty(panelState)) {
       panels.batch(panelState);
+    } else if (!settings.initClosedPanels) {
+      panel_tools.panel.open();
     }
 
     /**
@@ -1223,10 +1226,6 @@ export async function initMapx(o) {
         mx.search._update_toggles_icons();
       },
     });
-  }
-
-  if (!settings.initClosedPanels) {
-    panel_tools.panel.open();
   }
 
   /**

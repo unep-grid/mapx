@@ -36,12 +36,14 @@ export class ButtonPanelManager {
    *
    */
   batch(stateConfig) {
+
     if (isJSON(stateConfig)) {
       stateConfig = JSON.parse(stateConfig);
     }
 
     for (const [panelId, config] of Object.entries(stateConfig)) {
       const panel = BUTTON_PANELS.get(panelId);
+
       if (!panel) {
         console.warn(`Panel with ID ${panelId} not found.`);
         continue;
