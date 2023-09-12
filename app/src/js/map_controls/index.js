@@ -2,6 +2,7 @@ import { el } from "./../el/src/index.js";
 import { formatZeros, path } from "./../mx_helpers.js";
 import mapxlogo from "./../../svg/map-x-logo-full.svg";
 import { isElement } from "../is_test/index.js";
+import { modalMarkdown } from "../modal_markdown/index.js";
 /**
  * Control for live coordinate
  */
@@ -25,6 +26,61 @@ class MapControlLiveCoord {
       coord
     );
     return mlc.elContainer;
+  }
+  onRemove() {
+    const mlc = this;
+    mlc.map = undefined;
+    if (isElement(mlc.elContainer)) {
+      mlc.elContainer.remove();
+    }
+  }
+}
+
+/**
+ * Attribution
+ */
+
+class MapControlAttribution {
+  constructor() {}
+  onAdd(map) {
+    const mla = this;
+    mla.map = map;
+    mla.elContainer = el(
+      "div",
+      {
+        class: ["mapboxgl-ctrl", "mapboxgl-ctrl-attrib"],
+      },
+      [
+        el("span", " © "),
+        el(
+          "a",
+          {
+            target: "_blank",
+            href: "https://www.openstreetmap.org/copyright",
+          },
+          "OpenStreetMap"
+        ),
+        el("span", " and contributors; "),
+        el("span", " © "),
+        el(
+          "a",
+          {
+            href: "#",
+            on: [
+              "click",
+              async () => {
+                return modalMarkdown({
+                  title: "Disclaimer",
+                  txt: await import("./../../md/disclaimer.md"),
+                });
+              },
+            ],
+          },
+          "MapX"
+        ),
+      ]
+    );
+    return mla.elContainer;
   }
   onRemove() {
     const mlc = this;
@@ -138,7 +194,12 @@ class MapControlScale {
   }
 }
 
-export { MapControlScale, MapxLogo, MapControlLiveCoord };
+export {
+  MapControlScale,
+  MapxLogo,
+  MapControlLiveCoord,
+  MapControlAttribution,
+};
 
 function getDistance(latlng1, latlng2) {
   // Uses spherical law of cosines approximation.
