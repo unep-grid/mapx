@@ -342,6 +342,10 @@ span.mx-badge-role {
   color: var(--mx_ui_text);
 }
 
+.mapboxgl-ctrl.mapboxgl-ctrl-attrib {
+  background-color: var(--mx_ui_background_transparent);
+}
+
 .mx .mx-scale-box {
   width: 78.0685px;
   border-bottom: 1px solid var(--mx_ui_text);
@@ -380,12 +384,11 @@ span.mx-badge-role {
 
 /**
 * Map composer 
-*/ 
+*/
 .mx .mc-item .mx-legend-vt-rule:hover {
   background: none;
   border-radius: 0px;
 }
-
 
 /**
 * Button Panel
