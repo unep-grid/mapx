@@ -4302,17 +4302,22 @@
   {
     "id": "view_dashboard_txt_layout_fit",
     "en": "Fit to largest widget",
-    "zh": "适应最大组件"
+    "zh": "适应最大的小部件"
   },
   {
     "id": "view_dashboard_txt_layout_vertical",
     "en": "Vertical",
-    "zh": "垂直"
+    "zh": "垂直的"
   },
   {
     "id": "view_dashboard_txt_layout_horizontal",
     "en": "Horizontal",
-    "zh": "水平"
+    "zh": "水平的"
+  },
+  {
+    "id": "view_dashboard_txt_layout_auto",
+    "en": "Auto",
+    "zh": "自动"
   },
   {
     "id": "view_dashboard_txt_height",

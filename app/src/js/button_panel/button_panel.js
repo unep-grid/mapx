@@ -5,6 +5,7 @@ import { isNotEmpty, isNumeric } from "../is_test/index.js";
 import { shake } from "../elshake";
 import "./style.less";
 import { ButtonPanelManager } from "./manager.js";
+import { bindAll } from "../bind_class_methods/index.js";
 
 export class ButtonPanel extends EventSimple {
   constructor(opt) {
@@ -27,11 +28,14 @@ export class ButtonPanel extends EventSimple {
       add: true,
       add_footer: false,
       handles: ["free", "resize"],
-      animateDurationMs: 350,
+      animateDurationMs: 200,
     };
     panel.opt = Object.assign({}, options, opt);
     panel.ls = new ListenerStore();
+
     panel.init();
+    bindAll(panel);
+    panel.initListeners();
   }
 
   init() {
@@ -42,6 +46,10 @@ export class ButtonPanel extends EventSimple {
     panel.setButtonLabel();
     panel.setExclusiveMode(); // close other panel automatically;
     panel.show();
+  }
+
+  initListeners() {
+    const panel = this;
     panel.ls.addListener({
       target: panel.elBtnPanel,
       bind: panel,
@@ -77,8 +85,8 @@ export class ButtonPanel extends EventSimple {
     });
 
     panel.restoreSize();
-    panel.on("resize", panel.saveSize.bind(panel));
-    panel.on("resize-auto", panel.saveSize.bind(panel));
+    panel.on("resize", panel.saveSize);
+    panel.on("resize-auto", panel.saveSize);
   }
 
   get id() {
@@ -486,12 +494,12 @@ export class ButtonPanel extends EventSimple {
     if (a.w_allow) {
       const dW = orig.x - e.clientX;
       const newW = orig.rect.width + (a.w_dir ? -dW : dW);
-      panel.width = newW;
+      panel.setWidth(newW, true);
     }
     if (a.h_allow) {
       const dH = orig.y - e.clientY;
       const newH = orig.rect.height + (a.h_dir ? -dH : dH);
-      panel.height = newH;
+      panel.setHeight(newH, true);
     }
     panel.fire("resize-free");
     panel.fire("resize-button");
@@ -534,38 +542,57 @@ export class ButtonPanel extends EventSimple {
     shake(panel.elBtnPanel, opt);
   }
 
-  resizeAuto(type) {
+  resizeAuto(type, animate = true, silent = false) {
     const panel = this;
-    panel.setAnimate(true);
+    panel.setAnimate(animate);
 
     /**
      * Solve bug where the first animation did not work
      */
-    panel.width = panel.width - 1;
-    panel.height = panel.height - 1;
+    panel.setWidth(panel.width - 1, silent);
+    panel.setHeight(panel.height - 1, silent);
 
     /**
      * Animate
      */
     switch (type) {
+      case "half":
+        panel.setWidth(panel.rectParent.width / 2, silent);
+        panel.setHeight(panel.rectParent.height / 2, silent);
+        break;
       case "half-width":
-        panel.width = panel.rectParent.width / 2;
-        panel.height = panel.rectParent.height;
+        panel.setWidth(panel.rectParent.width / 2, silent);
+        panel.setHeight(panel.rectParent.height, silent);
         break;
       case "half-height":
-        panel.width = panel.rectParent.width;
-        panel.height = panel.rectParent.height / 2;
+        panel.setWidth(panel.rectParent.width, silent);
+        panel.setHeight(panel.rectParent.height / 2, silent);
+        break;
+      case "full-width":
+        panel.setHeight(30, silent);
+        panel.setWidth(panel.rectParent.width, silent);
+        break;
+      case "full-height":
+        panel.setWidth(30, silent);
+        panel.setHeight(panel.rectParent.height, silent);
         break;
       case "full":
-        panel.width = panel.rectParent.width;
-        panel.height = panel.rectParent.height;
+        panel.setWidth(panel.rectParent.width, silent);
+        panel.setHeight(panel.rectParent.height, silent);
         break;
       default:
         console.warn(`Resize auto '${type}' not handled`);
     }
 
-    panel.fire("resize-auto", type);
-    panel.fire("resize-button");
+    if (!silent) {
+      setTimeout(
+        () => {
+          panel.fire("resize-auto", type);
+          panel.fire("resize-button");
+        },
+        animate ? panel.opt.animateDurationMs : 0
+      );
+    }
   }
   get rectParent() {
     return this.elContainer.parentElement.getBoundingClientRect();
@@ -585,45 +612,51 @@ export class ButtonPanel extends EventSimple {
   get height() {
     return this.rect.height;
   }
+
   set width(w) {
+    this.setWidth(w, false);
+  }
+
+  setWidth(w, silent = false) {
     const panel = this;
-    cancelAnimationFrame(panel._af_wifth);
     if (!w) {
       return;
     }
-    panel._af_wifth = requestAnimationFrame(() => {
-      const isNum = isNumeric(w);
-      if (isNum) {
-        const width = Math.ceil(w / 10) * 10;
-        panel.elContainer.style.width = width + "px";
-      } else {
-        panel.elContainer.style.width = w;
-      }
-      clearTimeout(panel._to_width);
-      panel._to_width = setTimeout(() => {
-        panel.fire("resize");
-      }, 500);
-    });
+    const isNum = isNumeric(w);
+    const wBefore = panel.width;
+    if (isNum) {
+      const width = Math.ceil(w / 10) * 10;
+      panel.elContainer.style.width = width + "px";
+    } else {
+      panel.elContainer.style.width = w;
+    }
+    const wAfter = panel.width;
+    if (!silent && wAfter !== wBefore) {
+      panel.fire("resize", { wBefore, wAfter });
+    }
   }
+
   set height(h) {
+    return this.setHeight(h, false);
+  }
+
+  setHeight(h, silent = false) {
     const panel = this;
     if (!h) {
       return;
     }
-    cancelAnimationFrame(panel._af_height);
-    panel._af_height = requestAnimationFrame(() => {
-      const isNum = isNumeric(h);
-      if (isNum) {
-        const height = Math.ceil(h / 10) * 10;
-        panel.elContainer.style.height = height + "px";
-      } else {
-        panel.elContainer.style.height = h;
-      }
-      clearTimeout(panel._to_height);
-      panel._to_height = setTimeout(() => {
-        panel.fire("resize");
-      }, 500);
-    });
+    const isNum = isNumeric(h);
+    const hBefore = panel.height;
+    if (isNum) {
+      const height = Math.ceil(h / 10) * 10;
+      panel.elContainer.style.height = height + "px";
+    } else {
+      panel.elContainer.style.height = h;
+    }
+    const hAfter = panel.height;
+    if (!silent && hAfter !== hBefore) {
+      panel.fire("resize", { hBefore, hAfter });
+    }
   }
 
   resetStyle() {
@@ -658,7 +691,6 @@ export class ButtonPanel extends EventSimple {
   isOpen() {
     return this.isActive();
   }
-
 
   open(skipFire) {
     const panel = this;

@@ -3452,6 +3452,10 @@
     "en": "Horizontal"
   },
   {
+    "id": "view_dashboard_txt_layout_auto",
+    "en": "Auto"
+  },
+  {
     "id": "view_dashboard_txt_height",
     "en": "Height class"
   },

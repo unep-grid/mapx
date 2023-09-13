@@ -4302,17 +4302,22 @@
   {
     "id": "view_dashboard_txt_layout_fit",
     "en": "Fit to largest widget",
-    "bn": "বৃহত্তম উইজেটের সাথে মানানসই "
+    "bn": "সবচেয়ে বড় উইজেটের সাথে মিলিয়ে নিন"
   },
   {
     "id": "view_dashboard_txt_layout_vertical",
     "en": "Vertical",
-    "bn": "উল্লম্ব "
+    "bn": "উল্লম্ভ"
   },
   {
     "id": "view_dashboard_txt_layout_horizontal",
     "en": "Horizontal",
-    "bn": "অনুভূমিক "
+    "bn": "অনুভূমিক"
+  },
+  {
+    "id": "view_dashboard_txt_layout_auto",
+    "en": "Auto",
+    "bn": "অটো"
   },
   {
     "id": "view_dashboard_txt_height",

@@ -1,4 +1,3 @@
-
 observeEvent(input$dashboardEdit_init, {
   mxCatch("dashboard build", {
     mxToggleButton(
@@ -91,12 +90,6 @@ observeEvent(input$dashboardEdit_init, {
       type = "object",
       properties =
         list(
-          #          title = mxSchemaMultiLingualInput(
-          # keyTitle = "view_dashboard_title",
-          # format = "text",
-          # default = titles,
-          # language = language
-          # ),
           `modules` = list(
             title = t("view_dashboard_txt_module"),
             description = t("view_dashboard_txt_module_desc"),
@@ -111,14 +104,15 @@ observeEvent(input$dashboardEdit_init, {
             title = t("view_dashboard_txt_layout"),
             description = t("view_dashboard_txt_layout_desc"),
             type = "string",
-            enum = c("fit", "vertical", "horizontal", "full"),
-            default = "fit",
+            enum = c("auto", "vertical", "horizontal", "fit", "full"),
+            default = "auto",
             format = "radio",
             options = list(
               enum_titles = list(
-                t("view_dashboard_txt_layout_fit"),
+                t("view_dashboard_txt_layout_auto"),
                 t("view_dashboard_txt_layout_vertical"),
                 t("view_dashboard_txt_layout_horizontal"),
+                t("view_dashboard_txt_layout_fit"),
                 t("view_dashboard_txt_layout_full")
               )
             )

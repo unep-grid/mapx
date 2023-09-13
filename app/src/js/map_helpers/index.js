@@ -1170,7 +1170,7 @@ export async function initMapx(o) {
     }
 
     const panelState = getQueryParameterInit("panels")[0];
-    
+
     if (isNotEmpty(panelState)) {
       panels.batch(panelState);
     } else if (!settings.initClosedPanels) {
@@ -2607,6 +2607,7 @@ export async function viewLayersRemove(o) {
 
   const now = Date.now();
   const viewDuration = now - view._added_at || 0;
+
   if (viewDuration === 0) {
     return;
   }
@@ -3060,7 +3061,7 @@ export async function viewLayersAdd(o) {
   }
 
   /**
-   * View aded fully : send event
+   * View added fully : send event
    */
   view._added_at = Date.now();
 
@@ -5450,7 +5451,7 @@ export function setImmersiveMode(opt) {
   if (immersive) {
     panels.hideAll();
   } else {
-    panel.showAll();
+    panels.showAll();
   }
   return immersive;
 }

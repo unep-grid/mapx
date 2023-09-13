@@ -4315,6 +4315,11 @@
     "fr": "Horizontal"
   },
   {
+    "id": "view_dashboard_txt_layout_auto",
+    "en": "Auto",
+    "fr": "Auto"
+  },
+  {
     "id": "view_dashboard_txt_height",
     "en": "Height class",
     "fr": "Classe pour la hauteur"

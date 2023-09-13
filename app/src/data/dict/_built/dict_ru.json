@@ -4302,17 +4302,22 @@
   {
     "id": "view_dashboard_txt_layout_fit",
     "en": "Fit to largest widget",
-    "ru": "По размеру самого большого виджета "
+    "ru": "Подогнать под самый большой виджет"
   },
   {
     "id": "view_dashboard_txt_layout_vertical",
     "en": "Vertical",
-    "ru": "Вертикальный "
+    "ru": "Вертикальный"
   },
   {
     "id": "view_dashboard_txt_layout_horizontal",
     "en": "Horizontal",
-    "ru": "По горизонтали "
+    "ru": "Горизонтальный"
+  },
+  {
+    "id": "view_dashboard_txt_layout_auto",
+    "en": "Auto",
+    "ru": "Авто"
   },
   {
     "id": "view_dashboard_txt_height",

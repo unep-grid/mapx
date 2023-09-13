@@ -4302,17 +4302,22 @@
   {
     "id": "view_dashboard_txt_layout_fit",
     "en": "Fit to largest widget",
-    "ps": "ترټولو لوی غټ ته فټ "
+    "ps": "سبب لویترین وګاډجټ سم ورکول"
   },
   {
     "id": "view_dashboard_txt_layout_vertical",
     "en": "Vertical",
-    "ps": "عمودي "
+    "ps": "عمودي"
   },
   {
     "id": "view_dashboard_txt_layout_horizontal",
     "en": "Horizontal",
-    "ps": "افقي "
+    "ps": "افقي"
+  },
+  {
+    "id": "view_dashboard_txt_layout_auto",
+    "en": "Auto",
+    "ps": "خودکار"
   },
   {
     "id": "view_dashboard_txt_height",

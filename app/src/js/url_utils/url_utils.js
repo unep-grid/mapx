@@ -3,6 +3,7 @@ import { settings } from "./../settings";
 import { asBoolean } from "./../mx_helper_misc.js";
 import {
   isArray,
+  isEmpty,
   isString,
   isBoolean,
   isObject,
@@ -19,18 +20,14 @@ import { isJSON } from "../is_test/index.js";
  * @param {Object} opt Options
  * @param {Boolean} opt.reset Reset current init params ?
  */
-export function setQueryParametersInit(
-  param = getQueryParametersAsObject(),
-  opt = { reset: false }
-) {
+export function setQueryParametersInit(param = null, opt = { reset: false }) {
   const init = initQueryParams;
-
+  param = isEmpty(param) ? getQueryParametersAsObject() : param;
   if (opt.reset) {
     for (const k of Object.keys(init)) {
       delete init[k];
     }
   }
-
   for (const [key, value] of Object.entries(param)) {
     init[key] = asArray(value);
   }
@@ -153,7 +150,7 @@ function getQueryParameter_array(names) {
  * @param {Boolean} opt.lowerCase convert parameters to lower case
  * @return {Object}
  */
-export function getQueryParametersAsObject(urlString, opt) {
+export function getQueryParametersAsObject(urlString = "", opt = {}) {
   const out = {};
   opt = Object.assign({}, { lowerCase: false }, opt);
   const url = new URL(urlString || window.location.href);

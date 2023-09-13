@@ -4302,17 +4302,22 @@
   {
     "id": "view_dashboard_txt_layout_fit",
     "en": "Fit to largest widget",
-    "ar": "يصلح لأكبر القطعة "
+    "ar": "التكيف مع أكبر عنصر واجهة المستخدم"
   },
   {
     "id": "view_dashboard_txt_layout_vertical",
     "en": "Vertical",
-    "ar": "رأسي "
+    "ar": "عمودي"
   },
   {
     "id": "view_dashboard_txt_layout_horizontal",
     "en": "Horizontal",
-    "ar": "أفقي "
+    "ar": "أفقي"
+  },
+  {
+    "id": "view_dashboard_txt_layout_auto",
+    "en": "Auto",
+    "ar": "تلقائي"
   },
   {
     "id": "view_dashboard_txt_height",

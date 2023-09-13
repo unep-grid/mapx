@@ -4302,17 +4302,22 @@
   {
     "id": "view_dashboard_txt_layout_fit",
     "en": "Fit to largest widget",
-    "es": "Ajustar al widget más grande "
+    "es": "Ajustar al widget más grande"
   },
   {
     "id": "view_dashboard_txt_layout_vertical",
     "en": "Vertical",
-    "es": "Vertical "
+    "es": "Vertical"
   },
   {
     "id": "view_dashboard_txt_layout_horizontal",
     "en": "Horizontal",
-    "es": "Horizontal "
+    "es": "Horizontal"
+  },
+  {
+    "id": "view_dashboard_txt_layout_auto",
+    "en": "Auto",
+    "es": "Auto"
   },
   {
     "id": "view_dashboard_txt_height",

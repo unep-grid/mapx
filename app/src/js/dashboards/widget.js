@@ -250,6 +250,10 @@ class Widget {
     return this._height;
   }
 
+  get rect() {
+    return this.el.getBoundingClientRect();
+  }
+
   build() {
     const widget = this;
     const conf = widget.opt.conf;
@@ -284,10 +288,18 @@ class Widget {
     );
   }
 
+  async addToGrid() {
+    const widget = this;
+    return new Promise((resolve) => {
+      widget.grid.on("add", resolve);
+      widget.grid.add(widget.el);
+    });
+  }
+
   async add() {
     const widget = this;
     try {
-      widget.grid.add(widget.el);
+      await widget.addToGrid();
       widget.ls.addListener({
         target: widget.elButtonClose,
         bind: widget,

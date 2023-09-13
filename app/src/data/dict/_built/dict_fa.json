@@ -4302,17 +4302,22 @@
   {
     "id": "view_dashboard_txt_layout_fit",
     "en": "Fit to largest widget",
-    "fa": "متناسب با بزرگترین ابزارک "
+    "fa": "به بزرگترین ابزارک منطبق شود"
   },
   {
     "id": "view_dashboard_txt_layout_vertical",
     "en": "Vertical",
-    "fa": "عمودی "
+    "fa": "عمودی"
   },
   {
     "id": "view_dashboard_txt_layout_horizontal",
     "en": "Horizontal",
-    "fa": "افقی "
+    "fa": "افقی"
+  },
+  {
+    "id": "view_dashboard_txt_layout_auto",
+    "en": "Auto",
+    "fa": "خودکار"
   },
   {
     "id": "view_dashboard_txt_height",
