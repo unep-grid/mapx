@@ -1,3 +1,11 @@
+  - [1.12.4-alpha.10](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.10) 
+
+    - APP
+        - Dashboard : improved animations and auto-sizing widget. Added an 'auto' layout. Refactored Dashbard manager. Should cover issue #891
+        - Set map attributions background using theme colors
+        - Adding OSM attrib #936
+        - Fix object handling in url : panels parameter
+
   - [1.12.4-alpha.9](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.9) 
 
     - APP
