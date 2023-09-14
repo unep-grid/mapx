@@ -222,6 +222,9 @@ MapX resolvers available in app only
     * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Array.&lt;Object&gt;</code>
     * [.get_view_legend_image(opt)](#MapxResolversStatic+get_view_legend_image) ⇒ <code>String</code>
+    * [.set_view_legend_state(opt)](#MapxResolversStatic+set_view_legend_state) ⇒ <code>void</code> \| <code>Error</code>
+    * [.get_view_legend_state(opt)](#MapxResolversStatic+get_view_legend_state) ⇒ <code>Array</code> \| <code>Error</code>
+    * [.get_view_legend_values(opt)](#MapxResolversStatic+get_view_legend_values) ⇒ <code>Array</code>
     * [.set_views_layer_order(opt)](#MapxResolversStatic+set_views_layer_order) ⇒ <code>Boolean</code>
     * [.get_views_layer_order()](#MapxResolversStatic+get_views_layer_order) ⇒ <code>Array</code>
     * [.get_views_with_visible_layer()](#MapxResolversStatic+get_views_with_visible_layer) ⇒ <code>Array</code>
@@ -1043,6 +1046,57 @@ Get view legend
 | opt.idView | <code>String</code> | Id of the view |
 | opt.format | <code>String</code> |  |
 
+<a name="MapxResolversStatic+set_view_legend_state"></a>
+
+#### mapxResolversApp.set\_view\_legend\_state(opt) ⇒ <code>void</code> \| <code>Error</code>
+Updates the state of a view's legend with the provided values.
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+**Returns**: <code>void</code> \| <code>Error</code> - Returns nothing if successful or an error if there's no LegendVt instance.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> \| <code>Object</code> | The view object containing the legend instance. |
+| opt.values | <code>Array</code> | An array of values to set the legend's state. |
+
+<a name="MapxResolversStatic+get_view_legend_state"></a>
+
+#### mapxResolversApp.get\_view\_legend\_state(opt) ⇒ <code>Array</code> \| <code>Error</code>
+Retrieves the current state (checked values) of a view's legend.
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+**Returns**: <code>Array</code> \| <code>Error</code> - An array of the currently checked values in the legend, or an error if there's no LegendVt instance.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> \| <code>Object</code> | The view id containing the legend instance. |
+
+<a name="MapxResolversStatic+get_view_legend_values"></a>
+
+#### mapxResolversApp.get\_view\_legend\_values(opt) ⇒ <code>Array</code>
+Retrieves the values from the legend.
+
+For numeric rules, the method returns an array of range arrays ([from, to]),
+otherwise, it just returns an array of values.
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+**Returns**: <code>Array</code> - An array of checked values. For numeric rules, each entry is an array of format [from, to].  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> \| <code>Object</code> | The view id containing the legend instance. |
+
+**Example**  
+```js
+// Non-numeric rules
+get_view_legend_values({view:"123"}); // e.g. ["value1", "value2", ...]
+
+// Numeric rules
+get_view_legend_values({view:"123"}); // e.g. [[0, 10], [10, 20], ...]
+```
 <a name="MapxResolversStatic+set_views_layer_order"></a>
 
 #### mapxResolversApp.set\_views\_layer\_order(opt) ⇒ <code>Boolean</code>
@@ -1659,6 +1713,7 @@ MapX resolvers for interacting with panels
 
 * [MapxResolversPanels](#MapxResolversPanels) ⇐ <code>ResolversBase</code>
     * [.panels_batch(config)](#MapxResolversPanels+panels_batch) ⇒ <code>void</code>
+    * [.panels_state()](#MapxResolversPanels+panels_state) ⇒ <code>Object</code>
     * [.panels_list()](#MapxResolversPanels+panels_list) ⇒ <code>Promise.&lt;Array.&lt;string&gt;&gt;</code>
     * [.panels_close_all()](#MapxResolversPanels+panels_close_all) ⇒ <code>void</code>
     * [.panels_open_all()](#MapxResolversPanels+panels_open_all) ⇒ <code>void</code>
@@ -1690,6 +1745,25 @@ mapx.ask('panels_batch',{
     }
   }
 });
+```
+<a name="MapxResolversPanels+panels_state"></a>
+
+#### mapxResolversPanels.panels\_state() ⇒ <code>Object</code>
+Retrieves current state.
+
+**Kind**: instance method of [<code>MapxResolversPanels</code>](#MapxResolversPanels)  
+**Returns**: <code>Object</code> - config - The configuration object that maps panel IDs to their desired state.  
+**Example**  
+```js
+// Example usage :
+const state = await mapx.ask('panels_state');
+console.log(state);
+//  {
+//  "controls_panel": {
+//   "hide": false,
+//   "open": true
+//   }
+//  }
 ```
 <a name="MapxResolversPanels+panels_list"></a>
 
@@ -1820,6 +1894,9 @@ MapX resolvers available in static and app
     * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Array.&lt;Object&gt;</code>
     * [.get_view_legend_image(opt)](#MapxResolversStatic+get_view_legend_image) ⇒ <code>String</code>
+    * [.set_view_legend_state(opt)](#MapxResolversStatic+set_view_legend_state) ⇒ <code>void</code> \| <code>Error</code>
+    * [.get_view_legend_state(opt)](#MapxResolversStatic+get_view_legend_state) ⇒ <code>Array</code> \| <code>Error</code>
+    * [.get_view_legend_values(opt)](#MapxResolversStatic+get_view_legend_values) ⇒ <code>Array</code>
     * [.set_views_layer_order(opt)](#MapxResolversStatic+set_views_layer_order) ⇒ <code>Boolean</code>
     * [.get_views_layer_order()](#MapxResolversStatic+get_views_layer_order) ⇒ <code>Array</code>
     * [.get_views_with_visible_layer()](#MapxResolversStatic+get_views_with_visible_layer) ⇒ <code>Array</code>
@@ -1865,6 +1942,7 @@ MapX resolvers available in static and app
     * [.common_loc_get_bbox(o)](#MapxResolversStatic+common_loc_get_bbox) ⇒ <code>Promise.&lt;Array&gt;</code>
     * [.common_loc_fit_bbox(o)](#MapxResolversStatic+common_loc_fit_bbox) ⇒ <code>Promise.&lt;Array&gt;</code>
     * [.panels_batch(config)](#MapxResolversPanels+panels_batch) ⇒ <code>void</code>
+    * [.panels_state()](#MapxResolversPanels+panels_state) ⇒ <code>Object</code>
     * [.panels_list()](#MapxResolversPanels+panels_list) ⇒ <code>Promise.&lt;Array.&lt;string&gt;&gt;</code>
     * [.panels_close_all()](#MapxResolversPanels+panels_close_all) ⇒ <code>void</code>
     * [.panels_open_all()](#MapxResolversPanels+panels_open_all) ⇒ <code>void</code>
@@ -2247,6 +2325,57 @@ Get view legend
 | opt.idView | <code>String</code> | Id of the view |
 | opt.format | <code>String</code> |  |
 
+<a name="MapxResolversStatic+set_view_legend_state"></a>
+
+#### mapxResolversStatic.set\_view\_legend\_state(opt) ⇒ <code>void</code> \| <code>Error</code>
+Updates the state of a view's legend with the provided values.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>void</code> \| <code>Error</code> - Returns nothing if successful or an error if there's no LegendVt instance.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> \| <code>Object</code> | The view object containing the legend instance. |
+| opt.values | <code>Array</code> | An array of values to set the legend's state. |
+
+<a name="MapxResolversStatic+get_view_legend_state"></a>
+
+#### mapxResolversStatic.get\_view\_legend\_state(opt) ⇒ <code>Array</code> \| <code>Error</code>
+Retrieves the current state (checked values) of a view's legend.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Array</code> \| <code>Error</code> - An array of the currently checked values in the legend, or an error if there's no LegendVt instance.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> \| <code>Object</code> | The view id containing the legend instance. |
+
+<a name="MapxResolversStatic+get_view_legend_values"></a>
+
+#### mapxResolversStatic.get\_view\_legend\_values(opt) ⇒ <code>Array</code>
+Retrieves the values from the legend.
+
+For numeric rules, the method returns an array of range arrays ([from, to]),
+otherwise, it just returns an array of values.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Array</code> - An array of checked values. For numeric rules, each entry is an array of format [from, to].  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> \| <code>Object</code> | The view id containing the legend instance. |
+
+**Example**  
+```js
+// Non-numeric rules
+get_view_legend_values({view:"123"}); // e.g. ["value1", "value2", ...]
+
+// Numeric rules
+get_view_legend_values({view:"123"}); // e.g. [[0, 10], [10, 20], ...]
+```
 <a name="MapxResolversStatic+set_views_layer_order"></a>
 
 #### mapxResolversStatic.set\_views\_layer\_order(opt) ⇒ <code>Boolean</code>
@@ -2874,6 +3003,25 @@ mapx.ask('panels_batch',{
     }
   }
 });
+```
+<a name="MapxResolversPanels+panels_state"></a>
+
+#### mapxResolversStatic.panels\_state() ⇒ <code>Object</code>
+Retrieves current state.
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Object</code> - config - The configuration object that maps panel IDs to their desired state.  
+**Example**  
+```js
+// Example usage :
+const state = await mapx.ask('panels_state');
+console.log(state);
+//  {
+//  "controls_panel": {
+//   "hide": false,
+//   "open": true
+//   }
+//  }
 ```
 <a name="MapxResolversPanels+panels_list"></a>
 

@@ -1,3 +1,11 @@
+  - [1.12.4-beta.1](https://github.com/unep-grid/mapx/tree/1.12.4-beta.1) 
+
+    - APP
+        - Legend sync : class + helper to get/set/list legend values + state
+        - Panels : added methods to retrieve the current state
+        - SDK : added legend sync + updated panels methods + tests
+        - Fixed issue in static mode : panels config from URL not handled properly
+
   - [1.12.4-alpha.10](https://github.com/unep-grid/mapx/tree/1.12.4-alpha.10) 
 
     - APP
