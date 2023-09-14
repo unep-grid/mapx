@@ -1164,8 +1164,20 @@ export async function initMapx(o) {
         },
       },
     });
+
     if (!settings.initClosedPanels) {
       mx.panel_main.panel.open();
+    }
+
+    /**
+     * Panels (static  handled later)
+     */
+    const panelState = getQueryParameter("panels")[0];
+
+    if (isNotEmpty(panelState)) {
+      panels.batch(panelState);
+    } else if (!settings.initClosedPanels) {
+      panel_tools.panel.open();
     }
 
     /**
@@ -1218,17 +1230,6 @@ export async function initMapx(o) {
         mx.search._update_toggles_icons();
       },
     });
-  }
-
-  /**
-   * Panels
-   */
-  const panelState = getQueryParameter("panels")[0];
-
-  if (isNotEmpty(panelState)) {
-    panels.batch(panelState);
-  } else if (!settings.initClosedPanels) {
-    panel_tools.panel.open();
   }
 
   /**
@@ -1461,7 +1462,7 @@ export async function initMapxStatic(o) {
    * -> Story module add its own legend panel.
    */
   mx.panel_legend = new ButtonPanel({
-    id: "button_legend",
+    id: "legend_panel",
     elContainer: document.body,
     panelFull: true,
     position: "top-left",
@@ -1512,6 +1513,17 @@ export async function initMapxStatic(o) {
       const bounds = await getViewsBounds(mapData.views);
       fitMaxBounds(bounds);
     }
+  }
+
+  /**
+   * Panels (app  handled in initMapx)
+   */
+  const panelState = getQueryParameter("panels")[0];
+
+  if (isNotEmpty(panelState)) {
+    panels.batch(panelState);
+  } else if (!settings.initClosedPanels) {
+    panel_tools.panel.open();
   }
 
   events.fire({
