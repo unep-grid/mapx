@@ -15,7 +15,7 @@ import {
 } from "./../map_helpers/index.js";
 import { getArrayDistinct } from "../array_stat";
 import { settings } from "./../settings";
-import { buildLegendVt, updateLegendVt } from "../legend_vt";
+import { LegendVt } from "../legend_vt";
 
 /**
  * Set current language ( for updating ui/views, use updateLanguage )
@@ -454,26 +454,22 @@ export async function updateLanguageViewsList(o) {
   const lang = o.lang || getLanguageCurrent() || getLanguageDefault();
   const views = getViews();
   const isModeStatic = path(mx, "settings.mode.static") === true;
+  if (isModeStatic) {
+    return false;
+  }
 
-  try {
-    if (isModeStatic) {
-      return false;
-    }
-
-    views.forEach((view) => {
+  for (const view of views) {
+    try {
       const elTitle = view._el.querySelector(".mx-view-tgl-title");
       const elText = view._el.querySelector(".mx-view-item-desc");
-      const elLegendVt = view._el.querySelector(".mx-view-legend-vt");
       const elLegendRtTitle = view._el.querySelector(".mx-legend-rt-title");
+      const hasVtLegend = view._legend instanceof LegendVt;
 
       /**
-       * Regenerate vt legend
+       * Update vt legend
        */
-      if (elLegendVt) {
-        updateLegendVt(view);
-        /* const elRules = buildLegendVt(view);*/
-        /*elLegendVt.innerHTML = "";*/
-        /*elLegendVt.appendChild(elRules);*/
+      if (hasVtLegend) {
+        view._legend.updateLanguage();
       }
 
       /**
@@ -513,9 +509,9 @@ export async function updateLanguageViewsList(o) {
           path: "data.abstract",
         });
       }
-    });
-  } catch (e) {
-    console.warn("updateLanguageViewsList error", e.message);
+    } catch (e) {
+      console.warn("updateLanguageViewsList error", e.message);
+    }
   }
   return true;
 }

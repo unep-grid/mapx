@@ -31,6 +31,7 @@ import {
 import { ws, data } from "./../mx.js";
 import { settings } from "./../settings";
 import { viewsListAddSingle } from "../views_list_manager";
+import {LegendVt} from "../legend_vt/legend_vt.js";
 const idMap = settings?.map?.id;
 
 /**
@@ -333,27 +334,12 @@ export async function btn_opt_settings(dataset) {
  * @param {Element} elTarget
  * @returns {void}
  */
-export function btn_legend_filter(dataset, elTarget) {
-  const elLegendBox = elTarget.closest(".mx-legend-box");
-  const elsChecked = elLegendBox.querySelectorAll(
-    'input[type="checkbox"]:checked'
-  );
+export function btn_legend_filter(dataset) {
   const idView = dataset.view_action_target;
   const view = getView(idView);
-  const filter = ["any"];
-  const rules = view._style_rules;
-
-  for (const elLi of elsChecked) {
-    const idRule = elLi.dataset.view_action_rule_id * 1;
-    const rule = rules[idRule];
-    if (rule && rule.filter) {
-      filter.push(rule.filter);
-    }
+  if(view._legend instanceof LegendVt){
+     view._legend.updateFilter();
   }
-  view._setFilter({
-    type: "legend",
-    filter: filter,
-  });
 }
 
 /**

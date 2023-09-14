@@ -58,7 +58,7 @@ export class MapxResolversApp extends MapxResolversStatic {
       viewToMetaModal(view);
       return true;
     } else {
-      return rslv._err("err_view_invalid");
+      return rslv._err("err_view_invalid", { idView: opt.idView });
     }
   }
 
@@ -94,9 +94,9 @@ export class MapxResolversApp extends MapxResolversStatic {
       return true;
     } else {
       if (!editable && valid) {
-        return rslv._err("err_view_not_editable");
+        return rslv._err("err_view_not_editable", { idView: opt.idView });
       } else {
-        return rslv._err("err_view_invalid");
+        return rslv._err("err_view_invalid", { idView: opt.idView });
       }
     }
   }
@@ -613,4 +613,3 @@ export class MapxResolversApp extends MapxResolversStatic {
     return true;
   }
 }
-

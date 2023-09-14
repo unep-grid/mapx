@@ -16,13 +16,13 @@
   },
   {
     "key": "err_view_not_editable",
-    "en": "The user can't edit this view",
-    "fr": "L'utilisateur n'a pas les droits d'édition sur cette vue"
+    "en": "The user can't edit this view ${idView}",
+    "fr": "L'utilisateur n'a pas les droits d'édition sur cette vue ${idView}"
   },
   {
     "key": "err_view_invalid",
-    "en": "This view is not valid",
-    "fr": "Cette vue n'est pas valide"
+    "en": "This view is not valid ${idView}",
+    "fr": "Cette vue n'est pas valide ${idView}"
   },
   {
     "key": "err_config_invalid",

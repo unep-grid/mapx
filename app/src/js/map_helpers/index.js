@@ -92,7 +92,7 @@ import {
   cleanTemporaryQueryParameters,
 } from "./../url_utils";
 import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata";
-import { buildLegendVt } from "./../legend_vt/index.js";
+import { buildLegendVt, LegendVt } from "./../legend_vt/index.js";
 import { getViewMapboxLayers } from "./../style_vt/index.js";
 import { moduleLoad } from "./../modules_loader_async";
 import {
@@ -1164,17 +1164,8 @@ export async function initMapx(o) {
         },
       },
     });
-
     if (!settings.initClosedPanels) {
       mx.panel_main.panel.open();
-    }
-
-    const panelState = getQueryParameterInit("panels")[0];
-
-    if (isNotEmpty(panelState)) {
-      panels.batch(panelState);
-    } else if (!settings.initClosedPanels) {
-      panel_tools.panel.open();
     }
 
     /**
@@ -1227,6 +1218,17 @@ export async function initMapx(o) {
         mx.search._update_toggles_icons();
       },
     });
+  }
+
+  /**
+   * Panels
+   */
+  const panelState = getQueryParameter("panels")[0];
+
+  if (isNotEmpty(panelState)) {
+    panels.batch(panelState);
+  } else if (!settings.initClosedPanels) {
+    panel_tools.panel.open();
   }
 
   /**
@@ -3817,15 +3819,6 @@ function setVtLegend(options) {
     elLegendContainer = null, // elLegendBuild find it
   } = options;
 
-  /**
-   * Clean rules;
-   * - If next rules is identical, remove it from legend
-   * - Set sprite path
-   */
-  /*if (config.useStyleNull) {*/
-  /*rulesLegend.push(ruleNulls);*/
-  /*}*/
-
   let pos = 0;
   const idRulesToRemove = [];
   for (const rule of rules) {
@@ -3837,7 +3830,6 @@ function setVtLegend(options) {
       ruleNext &&
       ruleNext.value === rule.value &&
       ruleNext.value_to === rule.value_to;
-    //ruleNext.color === rule.color;
 
     if (!hasSprite) {
       rule.sprite = null;
@@ -3870,9 +3862,9 @@ function setVtLegend(options) {
     elLegendContainer: elLegendContainer,
     addTitle: addTitle,
   });
+
   if (isElement(elLegend)) {
-    const elLegendContent = buildLegendVt(view);
-    elLegend.appendChild(elLegendContent);
+    view._legend = new LegendVt(view, elLegend);
   }
 }
 
@@ -5096,7 +5088,7 @@ export function getViewsListId() {
  * @param {Array} config.type Array of type to select eg. ['cc']
  * @param {Boolean} config.rtHasTiles: false,
  * @param {Boolean} config.vtHasRules: false,
- * @param {Boolean | String} config.vtHasAttributeType: false,
+ * @param {String} config.vtHasAttributeType: null,'string',number
  * @param {Boolean} config.rtHasLegendLink: false,
  * @param {Boolean} config.isEditable: false,
  * @param {Boolean} config.isLocal: false,
@@ -5106,7 +5098,7 @@ const _get_random_view_default = {
   type: ["vt", "rt"],
   rtHasTiles: false,
   vtHasRules: false,
-  vtHasAttributeType: false,
+  vtAttributeType: null,
   rtHasLegendLink: false,
   hasDashboard: false,
   isEditable: false,
@@ -5150,8 +5142,8 @@ export function getViewRandom(config) {
         continue;
       }
       if (
-        opt.vtHasAttributeType &&
-        !isViewVtWithAttributeType(view, opt.hasAttributeType)
+        opt.vtAttributeType &&
+        !isViewVtWithAttributeType(view, opt.vtAttributeType)
       ) {
         continue;
       }

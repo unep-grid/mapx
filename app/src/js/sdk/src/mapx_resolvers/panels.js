@@ -29,6 +29,27 @@ export class MapxResolversPanels extends ResolversBase {
   }
 
   /**
+   * Retrieves current state.
+   * @returns {Object} config - The configuration object that maps panel IDs to their desired state.
+   *
+   * @example
+   *
+   * // Example usage :
+   * const state = await mapx.ask('panels_state');
+   * console.log(state);
+   * //  {
+   * //  "controls_panel": {
+   * //   "hide": false,
+   * //   "open": true
+   * //   }
+   * //  }
+   *
+   */
+  panels_state() {
+    return panels.getState();
+  }
+
+  /**
    * Lists all registered panel IDs.
    * @returns {Promise<Array<string>>} A promise that resolves to an array of panel IDs.
    *

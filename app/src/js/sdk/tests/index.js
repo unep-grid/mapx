@@ -93,6 +93,57 @@ mapx.once("ready", async () => {
     ],
   });
 
+  t.check("panels", {
+    init: async () => {
+      return mapx.ask("panels_list");
+    },
+    tests: [
+      {
+        name: "has map_composer panel",
+        test: async (ids) => {
+          const init = {};
+
+          for (const id of ids) {
+            const open = await mapx.ask("panels_is_open", id);
+            const hidden = await mapx.ask("panels_is_hidden", id);
+            init[id] = { open, hide: hidden };
+          }
+
+          const state = await mapx.ask("panels_state");
+
+          if (!t.valid.isEqual(state, init)) {
+            return false;
+          }
+
+          await mapx.ask("panels_open_all");
+
+          const openAll = [];
+
+          for (const id of ids) {
+            const open = await mapx.ask("panels_is_open", id);
+            openAll.push(open);
+          }
+
+          await mapx.ask("panels_hide_all");
+
+          const hideAll = [];
+
+          for (const id of ids) {
+            const hidden = await mapx.ask("panels_is_hidden", id);
+            hideAll.push(hidden);
+          }
+
+          await mapx.ask("panels_batch", init);
+
+          const pass =
+            hideAll.every((i) => i === true) &&
+            openAll.every((i) => i === true);
+          return pass;
+        },
+      },
+    ],
+  });
+
   t.check("Views layer order", {
     init: async () => {
       const views = await mapx.ask("get_views");
@@ -279,14 +330,14 @@ mapx.once("ready", async () => {
       {
         name: "all themes",
         test: async (res) => {
-          // all themes 
+          // all themes
           for (const id of res.idThemes) {
             await mapx.ask("add_theme", {
               theme: res.themes[id],
             });
             await waitAsync(200);
           }
-          // orig theme 
+          // orig theme
           await mapx.ask("add_theme", {
             theme: res.themes[res.idTheme],
           });
@@ -850,6 +901,52 @@ mapx.once("ready", async () => {
         name: "is array of views id",
         test: (idViews) => {
           return t.valid.isArrayOfViewsId(idViews);
+        },
+      },
+    ],
+  });
+
+  t.check("set_get_view_legend", {
+    init: async () => {
+      const views = [];
+      for (let i = 0; i < 10; i++) {
+        const view = await mapx.ask("_get_random_view", {
+          type: ["vt"],
+          vtHasRules: true,
+          vtAttributeType: "string",
+        });
+        views.push(view);
+      }
+      return views;
+    },
+    tests: [
+      {
+        name: "Set/Get view legend values",
+        test: async (views) => {
+          let pass = null;
+          for (const view of views) {
+            if (pass === false) {
+              return;
+            }
+
+            await mapx.ask("view_add", { idView: view.id });
+            const values = await mapx.ask("get_view_legend_values", {
+              idView: view.id,
+            });
+            const last = values[values.length - 1];
+            await mapx.ask("set_view_legend_state", {
+              idView: view.id,
+              values: last,
+            });
+            const returned = await mapx.ask("get_view_legend_state", {
+              idView: view.id,
+            });
+
+            const ok = returned.includes(last);
+            await mapx.ask("view_remove", { idView: view.id });
+            pass = t.valid.isEmpty(pass) ? ok : pass && ok;
+          }
+          return pass;
         },
       },
     ],

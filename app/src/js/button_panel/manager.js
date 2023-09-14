@@ -36,7 +36,6 @@ export class ButtonPanelManager {
    *
    */
   batch(stateConfig) {
-
     if (isJSON(stateConfig)) {
       stateConfig = JSON.parse(stateConfig);
     }
@@ -71,6 +70,23 @@ export class ButtonPanelManager {
   }
 
   /**
+   * Retrieves current state .
+   * @returns {Object} stateConfig - The configuration object that maps panel IDs to their desired state.
+   */
+  getState() {
+    const pm = this;
+    const ids = pm.list();
+    const state = {};
+
+    for (const id of ids) {
+      const open = pm.isOpen(id);
+      const hidden = pm.isHidden(id);
+      state[id] = { open, hide: hidden };
+    }
+    return state;
+  }
+
+  /**
    * Lists all registered ButtonPanel IDs.
    * @returns {Array<string>} Array of ButtonPanel IDs.
    */
@@ -96,6 +112,15 @@ export class ButtonPanelManager {
       return panels.map((panel) => this._getPanel(panel)).filter(isNotEmpty);
     }
     return [this._getPanel(panels)];
+  }
+
+  /**
+   * Retrieves one ButtonPanels by their ID or direct instance.
+   * @param {(string|ButtonPanel)} panel - The panel ID, instance(s), or a mix of both.
+   * @returns {<ButtonPanel} The corresponding ButtonPanel instance.
+   */
+  getSingle(panel) {
+    return this._getPanel(panel);
   }
 
   _getPanel(panel) {
@@ -162,7 +187,7 @@ export class ButtonPanelManager {
    * @param {string|ButtonPanel} panel - The panel ID or instance
    */
   isVisible(panel) {
-    return this.get(panel)?.isVisible();
+    return this.getSingle(panel)?.isVisible();
   }
 
   /**
@@ -178,7 +203,7 @@ export class ButtonPanelManager {
    * @param {string|ButtonPanel} panel - The panel ID or instance
    */
   isOpen(panel) {
-    return this.get(panel)?.isOpen();
+    return this.getSingle(panel)?.isOpen();
   }
 
   /**

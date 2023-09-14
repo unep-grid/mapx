@@ -25,6 +25,7 @@ export * from "./style_vt";
 export * from "./map_helpers";
 export * from "./legend_vt";
 export * from "./url_utils";
+export * from "./legend_vt/helpers.js";
 
 /**
  * Old modules that use global mx object

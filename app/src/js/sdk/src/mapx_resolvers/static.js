@@ -69,6 +69,11 @@ import { modalCloseAll } from "../../../mx_helper_modal.js";
 import { toggleSpotlight } from "../../../mx_helper_map_pixop.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
 import { settings, highlighter, theme, ws, panel_tools } from "./../../../mx";
+import {
+  getViewLegendState,
+  getViewLegendValues,
+  setViewLegendState,
+} from "../../../legend_vt/helpers.js";
 
 /**
  * MapX resolvers available in static and app
@@ -500,6 +505,50 @@ export class MapxResolversStatic extends MapxResolversPanels {
    */
   get_view_legend_image(opt) {
     return getViewLegendImage({ view: opt.idView, format: opt.format });
+  }
+
+  /**
+   * Updates the state of a view's legend with the provided values.
+   *
+   * @param {Object} opt options
+   * @param {String|Object} opt.idView - The view object containing the legend instance.
+   * @param {Array} opt.values - An array of values to set the legend's state.
+   * @returns {void|Error} Returns nothing if successful or an error if there's no LegendVt instance.
+   */
+  set_view_legend_state(opt) {
+    return setViewLegendState(opt.idView, opt.values);
+  }
+
+  /**
+   * Retrieves the current state (checked values) of a view's legend.
+   *
+   * @param {Object} opt options
+   * @param {String|Object} opt.idView - The view id containing the legend instance.
+   * @returns {Array|Error} An array of the currently checked values in the legend, or an error if there's no LegendVt instance.
+   */
+  get_view_legend_state(opt) {
+    return getViewLegendState(opt.idView);
+  }
+
+  /**
+   * Retrieves the values from the legend.
+   *
+   * For numeric rules, the method returns an array of range arrays ([from, to]),
+   * otherwise, it just returns an array of values.
+   *
+   * @param {Object} opt options
+   * @param {String|Object} opt.idView - The view id containing the legend instance.
+   * @returns {Array} An array of checked values. For numeric rules, each entry is an array of format [from, to].
+   *
+   * @example
+   * // Non-numeric rules
+   * get_view_legend_values({view:"123"}); // e.g. ["value1", "value2", ...]
+   *
+   * // Numeric rules
+   * get_view_legend_values({view:"123"}); // e.g. [[0, 10], [10, 20], ...]
+   */
+  get_view_legend_values(opt) {
+    return getViewLegendValues(opt.idView);
   }
 
   /**
@@ -1229,4 +1278,3 @@ export class MapxResolversStatic extends MapxResolversPanels {
    *  }
    **/
 }
-
