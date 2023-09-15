@@ -1,3 +1,10 @@
+  - [1.12.4-beta.2](https://github.com/unep-grid/mapx/tree/1.12.4-beta.2) 
+
+    - APP
+        - SDK : fix issue with setting params using an object, e.g. panels={...}
+        - Dashboards : better auto-size
+        - Panels : from url, splited logic for static/app mode. Solves an issue in static mode, as some panels have to be built late in the init process ( e.g. legends panel )
+
   - [1.12.4-beta.1](https://github.com/unep-grid/mapx/tree/1.12.4-beta.1) 
 
     - APP
