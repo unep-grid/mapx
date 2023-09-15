@@ -5,6 +5,7 @@ import { Group } from "./components/group.js";
 import { ContextMenu } from "./components/contextMenu.js";
 import { ListenerStore } from "../listener_store/index.js";
 import { isSortedArray, isAgtB, isElement } from "../is_test/index.js";
+import { shake } from "../elshake";
 
 import "./style/nested_list.less";
 
@@ -509,7 +510,28 @@ class NestedList {
     const li = this;
     el = li.getTarget(el);
     let elPrevious = li.getPreviousTarget(el);
-    li.moveTargetBefore(el, elPrevious);
+    const isTarget = li.isTarget(elPrevious);
+    if (isTarget) {
+      li.moveTargetBefore(el, elPrevious);
+      return;
+    }
+
+    const elGroup = li.getGroup(el);
+
+    if (li.isRoot(elGroup)) {
+      shake(el);
+      return;
+    }
+
+    const elParentGroup = li.getGroup(elGroup);
+
+    if (!li.isGroup(elParentGroup)) {
+      return;
+    }
+
+    li.animateMove([el, elGroup], () => {
+      elParentGroup.insertBefore(el, elGroup);
+    });
   }
   moveTargetAfter(el, elAfter) {
     const li = this;
@@ -533,7 +555,37 @@ class NestedList {
     const li = this;
     el = li.getTarget(el);
     let elNext = li.getNextTarget(el);
-    li.moveTargetAfter(el, elNext);
+    const isTarget = li.isTarget(elNext);
+
+    if (isTarget) {
+      li.moveTargetAfter(el, elNext);
+      return;
+    }
+
+    const elGroup = li.getGroup(el);
+
+    if (li.isRoot(elGroup)) {
+      shake(el);
+      return;
+    }
+
+    const elParentGroup = li.getGroup(elGroup);
+
+    if (!li.isGroup(elParentGroup)) {
+      shake(el);
+      return;
+    }
+
+    const elAfterNext = li.getNextTarget(elGroup);
+
+    if (!li.isItem(elAfterNext)) {
+      shake(el);
+      return;
+    }
+
+    li.animateMove([el], () => {
+      elParentGroup.insertBefore(el, elAfterNext);
+    });
   }
   moveTargetBottom(el) {
     const li = this;
