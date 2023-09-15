@@ -1,6 +1,5 @@
 import chroma from "chroma-js";
 import {
-  isArray,
   isEmpty,
   isNotEmpty,
   isViewVt,
@@ -11,14 +10,7 @@ import { checkLanguage, getLabelFromObjectPath } from "./../language/index.js";
 import { updateIfEmpty, makeId, firstOf } from "./../mx_helper_misc.js";
 import { getSpriteImage } from "./../map_helpers/index.js";
 import { el } from "./../el/src/index.js";
-
-const opDict = {
-  ">": (a, b) => a > b,
-  ">=": (a, b) => a >= b,
-  "<": (a, b) => a < b,
-  "<=": (a, b) => a <= b,
-  "==": (a, b) => a === b,
-};
+import { getArrayDistinct } from "../array_stat/index.js";
 
 export class LegendVt {
   /**
@@ -174,13 +166,16 @@ export class LegendVt {
       const checked = lvt.getInputStateById(i);
       if (checked) {
         if (lvt._is_numeric) {
-          checkedValues.push([rule.value, rule.value_to]);
+          const from = isEmpty(rule.value) ? null : rule.value;
+          const to = isEmpty(rule.value_to) ? null : rule.value_to;
+          checkedValues.push([from, to]);
         } else {
-          checkedValues.push(rule.value);
+          const value = isEmpty(rule.value) ? null : rule.value;
+          checkedValues.push(value);
         }
       }
     }
-    return checkedValues;
+    return getArrayDistinct(checkedValues);
   }
 
   /**
@@ -204,99 +199,102 @@ export class LegendVt {
     for (let i = 0; i < lvt._rules.length; i++) {
       const rule = lvt._rules[i];
       if (lvt._is_numeric) {
-        values.push([rule.value, rule.value_to]);
+        const from = isEmpty(rule.value) ? null : rule.value;
+        const to = isEmpty(rule.value_to) ? null : rule.value_to;
+        values.push([from, to]);
       } else {
-        values.push(rule.value);
+        const value = isEmpty(rule.value) ? null : rule.value;
+        values.push(value);
       }
     }
-    return values;
+    return getArrayDistinct(values);
   }
 
   /**
-   * Set the state of input elements in the legend by values.
+   * Retrieves the rules based on provided values.
    *
-   * If the legend is numeric-based, the provided values are used to determine the
-   * range within which an input element should be checked.
+   * For numeric rules, the method accepts an array of range arrays ([from, to]),
+   * otherwise, it accepts an array of values.
    *
-   * If the legend is text-based, input elements whose filter value matches
-   * any of the provided values will be checked.
+   * @param {Array} inputValues An array of values to check against. For numeric rules, each entry is an array of format [from, to].
+   * @returns {Array} An array of matching rules.
    *
-   * @param {Array} values - An array of values to determine the checked state of input elements.
-   * For numeric legends, expect a 2-item array representing [from, to].
-   * For text legends, an array of strings to match against.
+   * @example
+   * // Non-numeric rules
+   * getRules(["value1", "value2", ...]);
+   *
+   * // Numeric rules
+   * getRules([[0, 10], [10, 20], ...]);
    */
-  setCheckedByValue(values) {
+  getRules(inputValues) {
     const lvt = this;
-
-    values = isArray(values) ? values : [values];
+    const matchedRules = [];
 
     for (let i = 0; i < lvt._rules.length; i++) {
-      try {
-        const rule = lvt._rules[i];
-        const elInput = lvt.getInputById(i);
-        const filter = rule.filter;
+      const rule = lvt._rules[i];
 
-        if (!isElement(elInput)) {
-          continue;
+      if (lvt._is_numeric) {
+        for (let range of inputValues) {
+          const from = isEmpty(rule.value) ? null : rule.value;
+          const to = isEmpty(rule.value_to) ? null : rule.value_to;
+          if (from === range[0] && to === range[1]) {
+            matchedRules.push(rule);
+            break;
+          }
         }
-        if (values.includes("all")) {
-          elInput.checked = true;
-          return;
+      } else {
+        const value = isEmpty(rule.value) ? null : rule.value;
+        if (inputValues.includes(value)) {
+          matchedRules.push(rule);
         }
-        if (isEmpty(filter)) {
-          continue;
-        }
-
-        if (lvt._is_numeric) {
-          /**
-           * Sample
-           * [
-           * "all",
-           * ["all",["has","<attr>" ]],
-           * [ ">=",["get","<attr>"],"<value"],
-           * [ "<", ["get","<attr>"],"<value"]
-           * ]
-           */
-          const from = values[0];
-          const to = values[1];
-          const single = isEmpty(from) || isEmpty(to);
-          const fromFilter = rule.filter[2][2];
-          const fromOp = rule.filter[2][1];
-          const toFilter = rule.filter[3][2];
-          const toOp = rule.filter[3][1];
-          const resFrom = opDict[fromOp](from, fromFilter);
-          const resTo = opDict[toOp](single ? from : to, toFilter);
-          elInput.checked = resFrom && resTo;
-        } else {
-          /**
-           * Sample
-           * [
-           * "all",
-           * ["all",["has","<attr>" ]],
-           * [ "==",["get","<attr>"],"<value"]
-           * ]
-           * Missing value
-           * [
-           * "all",
-           * ["!",["has","<attr>"]],
-           * ]
-           *
-           */
-          const naValue = filter[1][0] === "!";
-          const res = values.some((v) => {
-            return naValue ? isEmpty(v) : v === filter[2][2] || v === "all";
-          });
-          elInput.checked = res;
-        }
-
-        /**
-         * Update filter
-         */
-        lvt.updateFilter();
-      } catch (e) {
-        console.warn("setCheckedByValue issue", e);
       }
     }
+    if (matchedRules.length === 0) {
+      debugger;
+    }
+    return matchedRules;
+  }
+
+  /**
+   * Updates checkboxes based on a set of rules.
+   *
+   * If a rule from the set is found, the corresponding checkbox will be checked.
+   * Otherwise, the checkbox will be unchecked.
+   *
+   * @param {Array} rulesToCheck - An array of rules to check against.
+   */
+  updateCheckboxes(rulesToCheck) {
+    const lvt = this;
+
+    // First, create a set of rule indexes from the rulesToCheck array for easier lookup.
+    const indexesToCheck = new Set(
+      rulesToCheck.map((rule) => lvt._rules.indexOf(rule))
+    );
+
+    for (let i = 0; i < lvt._rules.length; i++) {
+      const elInput = lvt.getInputById(i);
+      if (elInput) {
+        elInput.checked = indexesToCheck.has(i);
+      }
+    }
+  }
+
+  /**
+   * Updates checkboxes based on a set of input values.
+   *
+   * If a rule corresponding to an input value is found, the checkbox will be checked.
+   * Otherwise, the checkbox will be unchecked.
+   *
+   * @param {Array} inputValues - An array of values to check against.
+   */
+  setCheckedByValue(inputValues) {
+    const lvt = this;
+
+    // Retrieve the rules corresponding to the input values.
+    const rulesToCheck = lvt.getRules(inputValues);
+
+    // Update the checkboxes based on the retrieved rules.
+    lvt.updateCheckboxes(rulesToCheck);
   }
 
   /**

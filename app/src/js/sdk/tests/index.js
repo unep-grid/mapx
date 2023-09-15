@@ -910,41 +910,52 @@ mapx.once("ready", async () => {
     init: async () => {
       const views = [];
       for (let i = 0; i < 10; i++) {
-        const view = await mapx.ask("_get_random_view", {
+        const viewStr = await mapx.ask("_get_random_view", {
           type: ["vt"],
           vtHasRules: true,
           vtAttributeType: "string",
         });
-        views.push(view);
+        const viewNum = await mapx.ask("_get_random_view", {
+          type: ["vt"],
+          vtHasRules: true,
+          vtAttributeType: "number",
+        });
+        views.push(viewStr);
+        views.push(viewNum);
       }
       return views;
     },
     tests: [
       {
-        name: "Set/Get view legend values",
+        name: "Set/Get view legend values, string + number",
         test: async (views) => {
           let pass = null;
           for (const view of views) {
             if (pass === false) {
               return;
             }
-
             await mapx.ask("view_add", { idView: view.id });
             const values = await mapx.ask("get_view_legend_values", {
               idView: view.id,
             });
-            const last = values[values.length - 1];
-            await mapx.ask("set_view_legend_state", {
-              idView: view.id,
-              values: last,
-            });
-            const returned = await mapx.ask("get_view_legend_state", {
-              idView: view.id,
-            });
-
-            const ok = returned.includes(last);
-            await mapx.ask("view_remove", { idView: view.id });
-            pass = t.valid.isEmpty(pass) ? ok : pass && ok;
+            for (const value of values) {
+              if (pass === false) {
+                return;
+              }
+              await mapx.ask("set_view_legend_state", {
+                idView: view.id,
+                values: [value],
+              });
+              const returned = await mapx.ask("get_view_legend_state", {
+                idView: view.id,
+              });
+              const ok = t.valid.isEqual(returned, [value]);
+              if(!ok){
+               debugger;
+              }
+              await mapx.ask("view_remove", { idView: view.id });
+              pass = t.valid.isEmpty(pass) ? ok : pass && ok;
+            }
           }
           return pass;
         },
