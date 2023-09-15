@@ -116,6 +116,7 @@ export class LegendVt {
     if (elInput) {
       elInput.checked = state;
     }
+    lvt.updateFilter();
   }
 
   /**
@@ -249,9 +250,6 @@ export class LegendVt {
         }
       }
     }
-    if (matchedRules.length === 0) {
-      debugger;
-    }
     return matchedRules;
   }
 
@@ -277,6 +275,8 @@ export class LegendVt {
         elInput.checked = indexesToCheck.has(i);
       }
     }
+
+    lvt.updateFilter();
   }
 
   /**

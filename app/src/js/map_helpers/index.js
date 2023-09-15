@@ -607,6 +607,16 @@ export function initListenerGlobal() {
     type: "session_start",
   });
 
+  /**
+   * View / Legend click
+   */
+  listeners.addListener({
+    target: window,
+    type: "click",
+    idGroup: "view_legends",
+    callback: handleViewClick,
+  });
+
   /*
    * Fire session end
    */
@@ -679,17 +689,6 @@ export function initListenerGlobal() {
  * Init app listeners
  */
 export function initListenersApp() {
-  /**
-   * Handle view/legend click
-   */
-  const targetClick = mx?.panel_main?.elContent;
-  listeners.addListener({
-    target: targetClick,
-    type: "click",
-    idGroup: "view_list",
-    callback: handleViewClick,
-  });
-
   listeners.addListener({
     target: document.getElementById("btnShowProject"),
     type: "click",
@@ -1476,14 +1475,6 @@ export async function initMapxStatic(o) {
       minWidth: "200px",
       minHeight: "200px",
     },
-  });
-
-  const targetClick = mx?.panel_legend?.elPanelContent;
-  listeners.addListener({
-    target: targetClick,
-    type: "click",
-    idGroup: "static_legend",
-    callback: handleViewClick,
   });
 
   /**
