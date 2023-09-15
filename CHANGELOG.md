@@ -1,3 +1,8 @@
+  - [1.12.4-beta.3](https://github.com/unep-grid/mapx/tree/1.12.4-beta.3) 
+
+    - APP
+        - SDK : panels resolvers should use object instead of string, to match other resolvers
+
   - [1.12.4-beta.2](https://github.com/unep-grid/mapx/tree/1.12.4-beta.2) 
 
     - APP

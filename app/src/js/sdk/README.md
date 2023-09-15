@@ -1719,10 +1719,10 @@ MapX resolvers for interacting with panels
     * [.panels_open_all()](#MapxResolversPanels+panels_open_all) ⇒ <code>void</code>
     * [.panels_hide_all()](#MapxResolversPanels+panels_hide_all) ⇒ <code>void</code>
     * [.panels_show_all()](#MapxResolversPanels+panels_show_all) ⇒ <code>void</code>
-    * [.panels_is_open(id)](#MapxResolversPanels+panels_is_open) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [.panels_is_closed(id)](#MapxResolversPanels+panels_is_closed) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [.panels_is_visible(id)](#MapxResolversPanels+panels_is_visible) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [.panels_is_hidden(id)](#MapxResolversPanels+panels_is_hidden) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.panels_is_open(opt)](#MapxResolversPanels+panels_is_open) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.panels_is_closed(opt)](#MapxResolversPanels+panels_is_closed) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.panels_is_visible(opt)](#MapxResolversPanels+panels_is_visible) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.panels_is_hidden(opt)](#MapxResolversPanels+panels_is_hidden) ⇒ <code>Promise.&lt;boolean&gt;</code>
 
 <a name="MapxResolversPanels+panels_batch"></a>
 
@@ -1803,7 +1803,7 @@ Shows all registered panels.
 **Kind**: instance method of [<code>MapxResolversPanels</code>](#MapxResolversPanels)  
 <a name="MapxResolversPanels+panels_is_open"></a>
 
-#### mapxResolversPanels.panels\_is\_open(id) ⇒ <code>Promise.&lt;boolean&gt;</code>
+#### mapxResolversPanels.panels\_is\_open(opt) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Checks if a panel is open.
 
 **Kind**: instance method of [<code>MapxResolversPanels</code>](#MapxResolversPanels)  
@@ -1811,11 +1811,12 @@ Checks if a panel is open.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>string</code> | The panel ID. |
+| opt | <code>Object</code> | Config |
+| opt.id | <code>string</code> | The panel ID. |
 
 <a name="MapxResolversPanels+panels_is_closed"></a>
 
-#### mapxResolversPanels.panels\_is\_closed(id) ⇒ <code>Promise.&lt;boolean&gt;</code>
+#### mapxResolversPanels.panels\_is\_closed(opt) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Checks if a panel is closed.
 
 **Kind**: instance method of [<code>MapxResolversPanels</code>](#MapxResolversPanels)  
@@ -1823,11 +1824,12 @@ Checks if a panel is closed.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>string</code> | The panel ID. |
+| opt | <code>Object</code> | Config |
+| opt.id | <code>string</code> | The panel ID. |
 
 <a name="MapxResolversPanels+panels_is_visible"></a>
 
-#### mapxResolversPanels.panels\_is\_visible(id) ⇒ <code>Promise.&lt;boolean&gt;</code>
+#### mapxResolversPanels.panels\_is\_visible(opt) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Checks if a panel is visible.
 
 **Kind**: instance method of [<code>MapxResolversPanels</code>](#MapxResolversPanels)  
@@ -1835,11 +1837,12 @@ Checks if a panel is visible.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>string</code> | The panel ID. |
+| opt | <code>Object</code> | Config |
+| opt.id | <code>string</code> | The panel ID. |
 
 <a name="MapxResolversPanels+panels_is_hidden"></a>
 
-#### mapxResolversPanels.panels\_is\_hidden(id) ⇒ <code>Promise.&lt;boolean&gt;</code>
+#### mapxResolversPanels.panels\_is\_hidden(opt) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Checks if a panel is hidden.
 
 **Kind**: instance method of [<code>MapxResolversPanels</code>](#MapxResolversPanels)  
@@ -1847,7 +1850,8 @@ Checks if a panel is hidden.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>string</code> | The panel ID. |
+| opt | <code>Object</code> | Config |
+| opt.id | <code>string</code> | The panel ID. |
 
 <a name="MapxResolversStatic"></a>
 
@@ -1948,10 +1952,10 @@ MapX resolvers available in static and app
     * [.panels_open_all()](#MapxResolversPanels+panels_open_all) ⇒ <code>void</code>
     * [.panels_hide_all()](#MapxResolversPanels+panels_hide_all) ⇒ <code>void</code>
     * [.panels_show_all()](#MapxResolversPanels+panels_show_all) ⇒ <code>void</code>
-    * [.panels_is_open(id)](#MapxResolversPanels+panels_is_open) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [.panels_is_closed(id)](#MapxResolversPanels+panels_is_closed) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [.panels_is_visible(id)](#MapxResolversPanels+panels_is_visible) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [.panels_is_hidden(id)](#MapxResolversPanels+panels_is_hidden) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.panels_is_open(opt)](#MapxResolversPanels+panels_is_open) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.panels_is_closed(opt)](#MapxResolversPanels+panels_is_closed) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.panels_is_visible(opt)](#MapxResolversPanels+panels_is_visible) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.panels_is_hidden(opt)](#MapxResolversPanels+panels_is_hidden) ⇒ <code>Promise.&lt;boolean&gt;</code>
 
 <a name="MapxResolversStatic+get_sdk_methods"></a>
 
@@ -3061,7 +3065,7 @@ Shows all registered panels.
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 <a name="MapxResolversPanels+panels_is_open"></a>
 
-#### mapxResolversStatic.panels\_is\_open(id) ⇒ <code>Promise.&lt;boolean&gt;</code>
+#### mapxResolversStatic.panels\_is\_open(opt) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Checks if a panel is open.
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
@@ -3069,11 +3073,12 @@ Checks if a panel is open.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>string</code> | The panel ID. |
+| opt | <code>Object</code> | Config |
+| opt.id | <code>string</code> | The panel ID. |
 
 <a name="MapxResolversPanels+panels_is_closed"></a>
 
-#### mapxResolversStatic.panels\_is\_closed(id) ⇒ <code>Promise.&lt;boolean&gt;</code>
+#### mapxResolversStatic.panels\_is\_closed(opt) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Checks if a panel is closed.
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
@@ -3081,11 +3086,12 @@ Checks if a panel is closed.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>string</code> | The panel ID. |
+| opt | <code>Object</code> | Config |
+| opt.id | <code>string</code> | The panel ID. |
 
 <a name="MapxResolversPanels+panels_is_visible"></a>
 
-#### mapxResolversStatic.panels\_is\_visible(id) ⇒ <code>Promise.&lt;boolean&gt;</code>
+#### mapxResolversStatic.panels\_is\_visible(opt) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Checks if a panel is visible.
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
@@ -3093,11 +3099,12 @@ Checks if a panel is visible.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>string</code> | The panel ID. |
+| opt | <code>Object</code> | Config |
+| opt.id | <code>string</code> | The panel ID. |
 
 <a name="MapxResolversPanels+panels_is_hidden"></a>
 
-#### mapxResolversStatic.panels\_is\_hidden(id) ⇒ <code>Promise.&lt;boolean&gt;</code>
+#### mapxResolversStatic.panels\_is\_hidden(opt) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Checks if a panel is hidden.
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
@@ -3105,7 +3112,8 @@ Checks if a panel is hidden.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>string</code> | The panel ID. |
+| opt | <code>Object</code> | Config |
+| opt.id | <code>string</code> | The panel ID. |
 
 
 * * *
