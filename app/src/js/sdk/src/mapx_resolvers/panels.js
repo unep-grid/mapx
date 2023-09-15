@@ -97,37 +97,41 @@ export class MapxResolversPanels extends ResolversBase {
 
   /**
    * Checks if a panel is open.
-   * @param {string} id - The panel ID.
+   * @param {Object} opt Config
+   * @param {string} opt.id - The panel ID.
    * @returns {Promise<boolean>} True if the panel is open, false otherwise.
    */
-  panels_is_open(id) {
-    return panels.isOpen(id);
+  panels_is_open(opt) {
+    return panels.isOpen(opt?.id);
   }
 
   /**
    * Checks if a panel is closed.
-   * @param {string} id - The panel ID.
+   * @param {Object} opt Config
+   * @param {string} opt.id - The panel ID.
    * @returns {Promise<boolean>} True if the panel is closed, false otherwise.
    */
-  panels_is_closed(id) {
-    return panels.isClosed(id);
+  panels_is_closed(opt) {
+    return panels.isClosed(opt?.id);
   }
 
   /**
    * Checks if a panel is visible.
-   * @param {string} id - The panel ID.
+   * @param {Object} opt Config
+   * @param {string} opt.id - The panel ID.
    * @returns {Promise<boolean>} True if the panel is visible, false otherwise.
    */
-  panels_is_visible(id) {
-    return panels.isVisible(id);
+  panels_is_visible(opt) {
+    return panels.isVisible(opt?.id);
   }
 
   /**
    * Checks if a panel is hidden.
-   * @param {string} id - The panel ID.
+   * @param {Object} opt Config
+   * @param {string} opt.id - The panel ID.
    * @returns {Promise<boolean>} True if the panel is hidden, false otherwise.
    */
-  panels_is_hidden(id) {
-    return panels.isHidden(id);
+  panels_is_hidden(opt) {
+    return panels.isHidden(opt?.id);
   }
 }

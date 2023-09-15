@@ -99,13 +99,13 @@ mapx.once("ready", async () => {
     },
     tests: [
       {
-        name: "has map_composer panel",
+        name: "set/get/state of panels",
         test: async (ids) => {
           const init = {};
 
           for (const id of ids) {
-            const open = await mapx.ask("panels_is_open", id);
-            const hidden = await mapx.ask("panels_is_hidden", id);
+            const open = await mapx.ask("panels_is_open", { id });
+            const hidden = await mapx.ask("panels_is_hidden", { id });
             init[id] = { open, hide: hidden };
           }
 
@@ -120,7 +120,7 @@ mapx.once("ready", async () => {
           const openAll = [];
 
           for (const id of ids) {
-            const open = await mapx.ask("panels_is_open", id);
+            const open = await mapx.ask("panels_is_open", { id });
             openAll.push(open);
           }
 
@@ -129,7 +129,7 @@ mapx.once("ready", async () => {
           const hideAll = [];
 
           for (const id of ids) {
-            const hidden = await mapx.ask("panels_is_hidden", id);
+            const hidden = await mapx.ask("panels_is_hidden", { id });
             hideAll.push(hidden);
           }
 
