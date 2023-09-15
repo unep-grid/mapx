@@ -8,6 +8,11 @@ import "./style.less";
 import { EventSimple } from "../event_simple";
 import { isEmpty, isNotEmpty } from "../is_test";
 import { bindAll } from "../bind_class_methods/index.js";
+
+/**
+ * Default options for the Dashboard.
+ * @type {Object}
+ */
 const defaults = {
   dashboard: {
     widgets: [],
@@ -49,7 +54,14 @@ const defaults = {
   },
 };
 
+/**
+ * A class representing a dashboard. Extends from EventSimple.
+ */
 class Dashboard extends EventSimple {
+  /**
+   * Creates a new Dashboard.
+   * @param {Object} opt - Options to initialize the dashboard.
+   */
   constructor(opt) {
     super();
     const d = this;
@@ -61,6 +73,9 @@ class Dashboard extends EventSimple {
     d.init();
   }
 
+  /**
+   * Initializes the dashboard.
+   */
   init() {
     const d = this;
     if (d._init) {
@@ -114,14 +129,14 @@ class Dashboard extends EventSimple {
   }
 
   /**
-   * Process widgets configuration
-   * @param {Object} conf Configuration
-   * @param {Array} conf.widgets Widgets data
-   * @param {Array} conf.modules Modules name , e.g. ["d3"]
-   * @param {Object} conf.vie  View object
-   * @param {Object} conf.map mapbox gl map instance
-   * @param {Object} conf.view view instance
-   * @return {Array} array of widgets
+   * Adds widgets to the dashboard.
+   * @async
+   * @param {Object} conf - Configuration for the widgets.
+   * @param {Array} conf.widgets - Widgets data.
+   * @param {Array} conf.modules - Names of the modules e.g. ["d3"].
+   * @param {Object} conf.map - Mapbox gl map instance.
+   * @param {Object} conf.view - View instance.
+   * @returns {Promise<Array>} Returns a promise that resolves to an array of widgets.
    */
   async addWidgetsAsync(conf) {
     const d = this;
@@ -205,16 +220,28 @@ class Dashboard extends EventSimple {
     return widgets;
   }
 
+  /**
+   * Checks if the dashboard is visible.
+   * @returns {boolean} - True if visible, false otherwise.
+   */
   isVisible() {
     const d = this;
     return d.panel.isVisible();
   }
 
+  /**
+   * Checks if the dashboard is active.
+   * @returns {boolean} - True if active, false otherwise.
+   */
   isActive() {
     const d = this;
     return d.panel.isActive();
   }
 
+  /**
+   * Shows the dashboard.
+   * @async
+   */
   async show() {
     const d = this;
     if (d._open === true) {
@@ -226,6 +253,9 @@ class Dashboard extends EventSimple {
     d.fire("show");
   }
 
+  /**
+   * Hides the dashboard.
+   */
   hide() {
     const d = this;
     if (d._open === false) {
@@ -237,12 +267,19 @@ class Dashboard extends EventSimple {
     d.fire("hide");
   }
 
+  /**
+   * Toggles the visibility of the dashboard.
+   */
   toggle() {
     const d = this;
     d.panel.toggle();
     d.fire("toggle");
   }
 
+  /**
+   * Updates the layout of the panel.
+   * @param {boolean} animate - If true, animates the layout change.
+   */
   updatePanelLayout(animate = false) {
     const d = this;
     const layout = d.opt.dashboard.layout;
@@ -261,29 +298,45 @@ class Dashboard extends EventSimple {
         break;
       case "auto":
       default:
-        d.panel.resizeAuto("half-width", animate);
+        d.fitPanelToWidgetsAuto(animate);
         break;
     }
 
     d.fire("panel_layout");
   }
 
+  /**
+   * Updates the layout of the grid.
+   * @param {boolean} animate - If true, animates the layout change.
+   */
   updateGridLayout(animate = true) {
     const d = this;
     d.grid.layout();
     d.grid.refreshItems().layout(!animate);
   }
 
+  /**
+   * Updates the panel: size to the largest widget
+   * @param {boolean} animate
+   * @param {boolean} silent - Don't fire event
+   */
   fitPanelToWidgets(animate = true, silent = false) {
     const d = this;
     d.fitPanelToWidgetsHeight(animate, silent);
     d.fitPanelToWidgetsWidth(animate, silent);
   }
 
+  /**
+   * Updates the panel: size to the widgets bounding box
+   * @param {boolean} animate
+   * @param {boolean} silent - Don't fire event
+   */
   fitPanelToWidgetsBbox(animate = false, silent = false) {
     const d = this;
     const layout = d.opt.dashboard.layout;
+
     if (layout === "fit" || layout === "full") {
+      // don't resize panel when  'fit' or 'full'
       return;
     }
 
@@ -316,6 +369,10 @@ class Dashboard extends EventSimple {
     }
   }
 
+  /**
+   * Updates the panel: size to the widest widget
+   * @param {boolean} animate
+   */
   fitPanelToWidgetsWidth(animate) {
     const d = this;
     if (d.panel.isSmallWidth()) {
@@ -332,6 +389,10 @@ class Dashboard extends EventSimple {
     }
   }
 
+  /**
+   * Updates the panel: size to the highest widget
+   * @param {boolean} animate
+   */
   fitPanelToWidgetsHeight(animate) {
     const d = this;
     if (d.panel.isSmallHeight()) {
@@ -348,10 +409,41 @@ class Dashboard extends EventSimple {
     }
   }
 
+  /**
+   * Updates the panel: half sum height / width.
+   * @param {boolean} animate
+   */
+  fitPanelToWidgetsAuto(animate) {
+    const d = this;
+    if (d.panel.isSmallHeight() || d.panel.isSmallWidth()) {
+      return;
+    }
+    d.panel.setAnimate(animate);
+    const m = d.opt.dashboard.marginFitHeight;
+    const htot = d.widgets.reduce((a, w) => {
+      return (a += w.height);
+    }, 0);
+
+    const wtot = d.widgets.reduce((a, w) => {
+      return (a += w.width);
+    }, 0);
+
+    d.panel.height = wtot / 2 + m;
+    d.panel.width = htot / 2 + m;
+  }
+
+  /**
+   * Checks if the dashboard is destroyed.
+   * @returns {boolean} - True if destroyed, false otherwise.
+   */
   isDestroyed() {
     return this._destroyed;
   }
 
+  /**
+   * Destroys the dashboard.
+   * @async
+   */
   async destroy() {
     const d = this;
     if (d.isDestroyed()) {
@@ -365,6 +457,10 @@ class Dashboard extends EventSimple {
     d.fire("destroy");
   }
 
+  /**
+   * Removes all widgets from the dashboard.
+   * @async
+   */
   async removeWidgets() {
     const d = this;
     while (d.widgets.length) {
@@ -377,6 +473,11 @@ class Dashboard extends EventSimple {
     d.autoDestroy();
   }
 
+  /**
+   * Removes a specific widget from the dashboard.
+   * @async
+   * @param {Widget} widget - The widget to remove.
+   */
   async removeWidget(widget) {
     const d = this;
     const pos = d.widgets.indexOf(widget);
@@ -389,6 +490,10 @@ class Dashboard extends EventSimple {
     d.autoDestroy();
   }
 
+  /**
+   * Check that all widgets are disabled
+   * @returns {boolean}
+   */
   allWidgetsDisabled() {
     const d = this;
     const disabled = [];
@@ -398,6 +503,10 @@ class Dashboard extends EventSimple {
     return all(disabled);
   }
 
+  /**
+   * Destroy dashboard when no widgets
+   * @async
+   */
   async autoDestroy() {
     const d = this;
     if (d.isDestroyed()) {
@@ -481,6 +590,9 @@ class Dashboard extends EventSimple {
     }
   }
 
+  /**
+   * Shake panel button, e.g. signaling an issue
+   */
   shakeButton(opt) {
     const d = this;
     d.panel.shakeButton(opt);
