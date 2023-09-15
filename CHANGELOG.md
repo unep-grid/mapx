@@ -1,3 +1,10 @@
+  - [1.12.4-beta.4](https://github.com/unep-grid/mapx/tree/1.12.4-beta.4) 
+
+    - APP 
+        - Issue with click manager in static/story mode
+        - Nested list : item move up/down form within a group moves the item outside the group if possible
+        - Legend sync : numeric issue. Should now work with exact value, but mixed usage or range dont't work in edge cases.
+
   - [1.12.4-beta.3](https://github.com/unep-grid/mapx/tree/1.12.4-beta.3) 
 
     - APP
