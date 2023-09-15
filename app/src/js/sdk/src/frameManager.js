@@ -3,6 +3,7 @@ import settings from "./settings.json";
 import { MessageFrameCom, RequestFrameCom } from "./messages.js";
 import { parse, stringify } from "./helpers.js";
 import { version } from "../package.json";
+import { isObject } from "../../is_test/index.js";
 
 /**
  * Class to create a manager to build an iframe and post message to a worker inside
@@ -148,8 +149,8 @@ class FrameManager extends Events {
   }
 
   /**
-  * Get current iframe width 
-  */ 
+   * Get current iframe width
+   */
   get width() {
     const fm = this;
     return fm.rect.width;
@@ -166,8 +167,8 @@ class FrameManager extends Events {
   }
 
   /**
-  * Get current iframe height
-  */ 
+   * Get current iframe height
+   */
   get height() {
     const fm = this;
     return fm.rect.height;
@@ -258,6 +259,9 @@ class FrameManager extends Events {
   setParam(key, value) {
     const fm = this;
     if (key && value) {
+      if (isObject(value)) {
+        value = JSON.stringify(value);
+      }
       fm.url.searchParams.set(key, value);
     }
   }
@@ -477,9 +481,9 @@ class FrameManager extends Events {
   }
 
   /**
-  * If verbose mode is requested, display some basic message in the console 
-  * @param {Object} message Message  
-  */ 
+   * If verbose mode is requested, display some basic message in the console
+   * @param {Object} message Message
+   */
   _handle_verbose(message) {
     switch (message.level) {
       case "log":
