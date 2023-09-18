@@ -1,3 +1,9 @@
+  - [1.12.4-beta.5](https://github.com/unep-grid/mapx/tree/1.12.4-beta.5) 
+
+    - APP
+        - Style: Skip rules that could cause overlaps in from/to values when "include upper bound" is set and the last "to" value was already included in the penultimate rule.
+        - Source list: Removed hard limit of 50 sources displayed simultaneously in the tomselect input's source list.
+
   - [1.12.4-beta.4](https://github.com/unep-grid/mapx/tree/1.12.4-beta.4) 
 
     - APP 
