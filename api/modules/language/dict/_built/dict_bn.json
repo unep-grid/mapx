@@ -7851,8 +7851,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "bn": "যদি চেক করা হয়, ব্যবধানগুলি উপরের সীমা অন্তর্ভুক্ত করবে। যদি এটি সংজ্ঞায়িত করা না হয়, শেষ সীমা সর্বোচ্চ মান হবে। যদি স্টাইলটি অটো-স্টাইল ব্যবহার করে তৈরি করা হয় তবে এই বিকল্পটি পরীক্ষা করা উচিত"
+    "en": "If checked, the intervals will include the upper limit. <ul><li>If not defined, the last bound will be the maximum value.</li><li>If an overlap occurs, the rule will be omitted.</li><li>If the style is built using auto-style, this option should be checked.</li></ul>",
+    "bn": "চেক করা হলে, ব্যবধানগুলি উপরের সীমা অন্তর্ভুক্ত করবে।<ul><li> সংজ্ঞায়িত না হলে, শেষ সীমা হবে সর্বোচ্চ মান।</li><li> একটি ওভারল্যাপ ঘটলে, নিয়ম বাদ দেওয়া হবে।</li><li> শৈলী স্বয়ংক্রিয় শৈলী ব্যবহার করে নির্মিত হলে, এই বিকল্পটি চেক করা উচিত।</li></ul>"
   },
   {
     "id": "schema_style_reverse_order",

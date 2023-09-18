@@ -7851,8 +7851,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "es": "Si está marcado, los intervalos incluirán el límite superior. Si no está definido, el último límite será el valor máximo. Si el estilo se construye usando el estilo automático, esta opción debe estar marcada"
+    "en": "If checked, the intervals will include the upper limit. <ul><li>If not defined, the last bound will be the maximum value.</li><li>If an overlap occurs, the rule will be omitted.</li><li>If the style is built using auto-style, this option should be checked.</li></ul>",
+    "es": "Si se marca, los intervalos incluirán el límite superior.<ul><li> Si no se define, el último límite será el valor máximo.</li><li> Si se produce una superposición, se omitirá la regla.</li><li> Si el estilo se crea usando estilo automático, se debe marcar esta opción.</li></ul>"
   },
   {
     "id": "schema_style_reverse_order",

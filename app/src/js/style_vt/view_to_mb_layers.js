@@ -343,7 +343,9 @@ export async function getViewMapboxLayers(v, opt) {
     /**
      * evaluate rules
      */
-    rules.forEach((rule, i) => {
+    let lastUpperBound = null;
+    let i = 0;
+    for (const rule of rules) {
       const filter = ["all"];
 
       /**
@@ -385,6 +387,17 @@ export async function getViewMapboxLayers(v, opt) {
       const hasSymbol = hasSprite && isPoint;
       const hasPattern = hasSprite && isPolygon;
 
+      if (includeUpper && lastUpperBound === toValue) {
+        /**
+        * Avoid duplicate when the last two rules could overlap 
+        * last upperbound === last rule 
+        * >= 1 <= 2 
+        * > 2 <= 3
+        * == 3 <- duplicate 
+        */ 
+        continue;
+      }
+
       if (isNumeric && !sameFromTo) {
         /**
          * Case where attr to filter is numeric
@@ -399,6 +412,8 @@ export async function getViewMapboxLayers(v, opt) {
          */
         filter.push(["==", ["get", attr], fromValue]);
       }
+
+      lastUpperBound = toValue;
 
       rule.filter = filter;
 
@@ -455,7 +470,8 @@ export async function getViewMapboxLayers(v, opt) {
 
         layers.push(layerSprite);
       }
-    });
+      i++;
+    }
   }
 
   /**

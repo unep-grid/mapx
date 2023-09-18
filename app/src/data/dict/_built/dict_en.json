@@ -6281,7 +6281,7 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked"
+    "en": "If checked, the intervals will include the upper limit. <ul><li>If not defined, the last bound will be the maximum value.</li><li>If an overlap occurs, the rule will be omitted.</li><li>If the style is built using auto-style, this option should be checked.</li></ul>"
   },
   {
     "id": "schema_style_reverse_order",

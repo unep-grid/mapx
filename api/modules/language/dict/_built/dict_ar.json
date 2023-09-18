@@ -7851,8 +7851,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
-    "ar": "إذا تم تحديده ، فستتضمن الفواصل الزمنية الحد الأعلى. إذا لم يتم تعريفه ، فسيكون الحد الأخير هو الحد الأقصى للقيمة. إذا تم إنشاء النمط باستخدام النمط التلقائي ، فيجب تحديد هذا الخيار"
+    "en": "If checked, the intervals will include the upper limit. <ul><li>If not defined, the last bound will be the maximum value.</li><li>If an overlap occurs, the rule will be omitted.</li><li>If the style is built using auto-style, this option should be checked.</li></ul>",
+    "ar": "إذا تم تحديدها، فستتضمن الفواصل الزمنية الحد الأعلى.<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> إذا لم يتم تعريفه، فسيكون الحد الأخير هو الحد الأقصى للقيمة.</li><li style=\";text-align:right;direction:rtl\"> في حالة حدوث تداخل، سيتم حذف القاعدة.</li><li style=\";text-align:right;direction:rtl\"> إذا تم إنشاء النمط باستخدام النمط التلقائي، فيجب تحديد هذا الخيار.</li></ul>"
   },
   {
     "id": "schema_style_reverse_order",
