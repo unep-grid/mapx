@@ -2,10 +2,10 @@ import { el } from "../../el_mapx";
 import { wsGetSourcesListEdit } from "../../source";
 
 export const config = {
-  max_rows : 1e5,
-  max_cols : 200,
-  disable_missing : true,
-  disable_large : true,
+  max_rows: 1e5,
+  max_cols: 200,
+  disable_missing: true,
+  disable_large: true,
   valueField: "id",
   searchField: ["id", "title", "abstract", "views", "type"],
   allowEmptyOption: false,
@@ -19,6 +19,7 @@ export const config = {
     { field: "disabled", weight: 0.001 },
   ],
   dropdownParent: "body",
+  maxOptions: null, // unlimited number of options ⚠️ should be paginated
   maxItems: 1,
   onChange: function () {
     const tom = this;
