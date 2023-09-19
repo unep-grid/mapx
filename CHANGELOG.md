@@ -1,3 +1,9 @@
+  - [1.12.4-patch.1](https://github.com/unep-grid/mapx/tree/1.12.4-patch.1) 
+
+    - SDK
+        - Should fix view_add in static mode 
+
+
   - [1.12.4](https://github.com/unep-grid/mapx/tree/1.12.4) 
 
   - [1.12.4-beta.5](https://github.com/unep-grid/mapx/tree/1.12.4-beta.5) 
