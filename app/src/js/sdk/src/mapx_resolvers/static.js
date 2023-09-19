@@ -737,10 +737,14 @@ export class MapxResolversStatic extends MapxResolversPanels {
       return rslv._err("err_view_invalid");
     }
 
-    if (view._vb instanceof ViewBase) {
-      await viewAdd(opt.idView, "sdk");
+    if (settings.mode.static) {
+      await viewAdd(view);
     } else {
-      await viewsListAddSingle(view, { open: true });
+      if (view._vb instanceof ViewBase) {
+        await viewAdd(opt.idView);
+      } else {
+        await viewsListAddSingle(view, { open: true });
+      }
     }
 
     if (opt.zoomToView) {

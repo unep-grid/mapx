@@ -2662,6 +2662,12 @@ export async function viewAdd(view) {
     if (!isView(view)) {
       return false;
     }
+
+    const views = getViews();
+    if (!views.includes(view)) {
+      views.push(view);
+    }
+
     /**
      * Open UI
      * - Layers can take a while
