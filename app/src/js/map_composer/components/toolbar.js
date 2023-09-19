@@ -211,317 +211,353 @@ class Toolbar extends Box {
   buildToolbar() {
     const toolbar = this;
     const { dpi, unit, units, mode, modes, grid_snap_size } = toolbar.state;
+    const sizeStep = grid_snap_size * window.devicePixelRatio;
 
     /**
-     *  Set default  for units and mode
+     * Preset
+     */
+    toolbar.elSelectPreset = el(
+      "select",
+      {
+        class: "form-control",
+        dataset: {
+          mc_action: "update_state",
+          mc_event_type: "change",
+          mc_state_name: "predefined_dim",
+        },
+      }
+      // options generated later (translations);
+    );
+    toolbar.elGroupPreset = el(
+      "div",
+      {
+        class: "form-group",
+      },
+      [el("label", tt("mc_label_predefined_dim")), toolbar.elSelectPreset],
+      el("span", { class: "text-muted" }, tt("mc_label_predefined_dim_desc"))
+    );
+
+    /**
+     * Landscape
+     */
+    toolbar.elGroupLandscape = el(
+      "div",
+      {
+        class: "form-group",
+      },
+      el(
+        "button",
+        {
+          type: "button",
+          class: ["btn", "btn-default"],
+          dataset: {
+            mc_action: "toggle_landscape",
+            mc_event_type: "click",
+          },
+        },
+        tt("mc_button_toggle_landscape")
+      ),
+      el("span", { class: "text-muted" }, tt("mc_button_toggle_landscape_desc"))
+    );
+
+    /**
+     * Fit to map
+     */
+    toolbar.elGroupFitToMap = el(
+      "div",
+      {
+        class: "form-group",
+      },
+      el(
+        "button",
+        {
+          type: "button",
+          class: ["btn", "btn-default"],
+          dataset: {
+            mc_action: "fit_map_to_page",
+            mc_event_type: "click",
+          },
+        },
+        tt("mc_button_fit_map_page")
+      ),
+      el("span", { class: "text-muted" }, tt("mc_button_fit_map_page_desc"))
+    );
+
+    /**
+     * Layout zoom
+     */
+    toolbar.elGroupZoom = el(
+      "div",
+      {
+        class: ["form-group"],
+        style: {
+          display: "flex",
+          flexDirection: "column",
+        },
+      },
+      el("label", tt("mc_label_zoom")),
+      el("div", { class: "btn-group" }, [
+        el(
+          "button",
+          {
+            type: "button",
+            class: ["btn", "btn-default"],
+            style: { width: "50%" },
+            dataset: {
+              mc_action: "zoom_in",
+              mc_event_type: "click",
+            },
+          },
+          tt("mc_button_zoom_in")
+        ),
+        el(
+          "button",
+          {
+            type: "button",
+            class: ["btn", "btn-default"],
+            style: { width: "50%" },
+            dataset: {
+              mc_action: "zoom_out",
+              mc_event_type: "click",
+            },
+          },
+          tt("mc_button_zoom_out")
+        ),
+      ]),
+      el("div", { class: "btn-group" }, [
+        el(
+          "button",
+          {
+            type: "button",
+            class: ["btn", "btn-default"],
+            style: { width: "50%" },
+            dataset: {
+              mc_action: "zoom_fit_height",
+              mc_event_type: "click",
+            },
+          },
+          tt("mc_button_zoom_fit_height")
+        ),
+        el(
+          "button",
+          {
+            type: "button",
+            class: ["btn", "btn-default"],
+
+            style: { width: "50%" },
+            dataset: {
+              mc_action: "zoom_fit_width",
+              mc_event_type: "click",
+            },
+          },
+          tt("mc_button_zoom_fit_width")
+        ),
+      ]),
+      el("span", { class: "text-muted" }, tt("mc_button_zoom_desc"))
+    );
+
+    /**
+     * Export
+     */
+
+    toolbar.elGroupExport = el(
+      "div",
+      {
+        class: "form-group",
+      },
+      el(
+        "button",
+        {
+          type: "button",
+          class: ["btn", "btn-default"],
+          dataset: {
+            mc_action: "export_page",
+            mc_event_type: "click",
+          },
+        },
+        tt("mc_button_export")
+      ),
+      el("span", { class: "text-muted" }, tt("mc_button_export_desc"))
+    );
+
+    /**
+     * Group units
      */
     const elUnitOptions = units.map((u) => {
       return unit === u ? el("option", { selected: true }, u) : el("option", u);
     });
+
+    toolbar.elInputUnit = el(
+      "select",
+      {
+        class: "form-control",
+        dataset: {
+          mc_action: "update_state",
+          mc_event_type: "change",
+          mc_state_name: "unit",
+        },
+      },
+      elUnitOptions
+    );
+
+    toolbar.elGroupUnits = el(
+      "div",
+      {
+        class: "form-group",
+      },
+      [el("label", tt("mc_label_unit")), toolbar.elInputUnit],
+      el("span", { class: "text-muted" }, tt("mc_label_unit_desc"))
+    );
+
+    /**
+     * DPI
+     */
+    toolbar.elInputDpi = el("input", {
+      type: "number",
+      class: "form-control",
+      dataset: {
+        mc_action: "update_state",
+        mc_event_type: "change",
+        mc_state_name: "dpi",
+      },
+      step: 1,
+      value: dpi,
+      max: 300,
+      min: 72,
+    });
+    toolbar.elGroupDpi = el(
+      "div",
+      {
+        class: "form-group",
+      },
+      el("label", tt("mc_label_resolution")),
+      toolbar.elInputDpi,
+      el("span", { class: "text-muted" }, tt("mc_label_resolution_desc"))
+    );
+
+    /**
+     * Width
+     */
+    toolbar.elInputPageWidth = el("input", {
+      type: "number",
+      class: "form-control",
+      dataset: {
+        mc_action: "update_state",
+        mc_event_type: "change",
+        mc_state_name: "page_width",
+      },
+      step: sizeStep,
+      max: sizeStep * 1000,
+      min: sizeStep,
+    });
+    toolbar.elGroupWidth = el(
+      "div",
+      {
+        class: "form-group",
+      },
+      el("label", tt("mc_label_width")),
+      toolbar.elInputPageWidth,
+      el("span", { class: "text-muted" }, tt("mc_label_width_desc"))
+    );
+
+    /**
+     * Height
+     */
+    toolbar.elInputPageHeight = el("input", {
+      type: "number",
+      class: "form-control",
+      dataset: {
+        mc_action: "update_state",
+        mc_event_type: "change",
+        mc_state_name: "page_height",
+      },
+      step: sizeStep,
+      max: sizeStep * 1000,
+      min: sizeStep,
+    });
+    toolbar.elGroupHeight = el(
+      "div",
+      {
+        class: "form-group",
+      },
+      el("label", tt("mc_label_height")),
+      toolbar.elInputPageHeight,
+      el("span", { class: "text-muted" }, tt("mc_label_height_desc"))
+    );
+
+    /**
+     * Columns legends
+     */
+    toolbar.elGroupLegendColumns = el(
+      "div",
+      {
+        class: "form-group",
+      },
+      el("label", tt("mc_label_legend_columns")),
+      el("input", {
+        type: "number",
+        class: "form-control",
+        dataset: {
+          mc_action: "update_state",
+          mc_event_type: "change",
+          mc_state_name: "legends_n_columns",
+        },
+
+        value: 1,
+        max: 10,
+        min: 1,
+      }),
+      el("span", { class: "text-muted" }, tt("mc_label_legend_columns_desc"))
+    );
+
+    /**
+     * Modes
+     */
     const elModesOptions = modes.map((m) => {
       return mode === m
         ? el("option", { selected: true, value: m }, m)
         : el("option", { value: m }, m);
     });
+    toolbar.elGroupModes = el(
+      "div",
+      {
+        class: "form-group",
+      },
+      [
+        el("label", tt("mc_label_mode")),
+        el(
+          "select",
+          {
+            class: "form-control",
+            dataset: {
+              mc_action: "update_state",
+              mc_event_type: "change",
+              mc_state_name: "mode",
+            },
+          },
+          elModesOptions
+        ),
+      ],
+      el("span", { class: "text-muted" }, tt("mc_label_mode_desc"))
+    );
 
-    /**
-     * Set snap size
-     */
-    const sizeStep = grid_snap_size * window.devicePixelRatio;
     return el(
       "form",
       {
         class: "mc-toolbar-content",
       },
       [
-        el(
-          "div",
-          {
-            class: "form-group",
-          },
-          [
-            el("label", tt("mc_label_predefined_dim")),
-            /*
-             * NOTE: generated later, as div/span with current
-             * translation system does not work in options
-             */
-            (toolbar.elSelectPreset = el("select", {
-              class: "form-control",
-              dataset: {
-                mc_action: "update_state",
-                mc_event_type: "change",
-                mc_state_name: "predefined_dim",
-              },
-            })),
-          ],
-          el(
-            "span",
-            { class: "text-muted" },
-            tt("mc_label_predefined_dim_desc")
-          )
-        ),
-        el(
-          "div",
-          {
-            class: "form-group",
-          },
-          el(
-            "button",
-            {
-              type: "button",
-              class: ["btn", "btn-default"],
-              dataset: {
-                mc_action: "toggle_landscape",
-                mc_event_type: "click",
-              },
-            },
-            tt("mc_button_toggle_landscape")
-          ),
-          el(
-            "span",
-            { class: "text-muted" },
-            tt("mc_button_toggle_landscape_desc")
-          )
-        ),
-        el(
-          "div",
-          {
-            class: "form-group",
-          },
-          el(
-            "button",
-            {
-              type: "button",
-              class: ["btn", "btn-default"],
-              dataset: {
-                mc_action: "fit_map_to_page",
-                mc_event_type: "click",
-              },
-            },
-            tt("mc_button_fit_map_page")
-          ),
-          el("span", { class: "text-muted" }, tt("mc_button_fit_map_page_desc"))
-        ),
-        el(
-          "div",
-          {
-            class: ["form-group"],
-            style: {
-              display: "flex",
-              flexDirection: "column",
-            },
-          },
-          el("label", tt("mc_label_zoom")),
-          el("div", { class: "btn-group" }, [
-            el(
-              "button",
-              {
-                type: "button",
-                class: ["btn", "btn-default"],
-                style: { width: "50%" },
-                dataset: {
-                  mc_action: "zoom_in",
-                  mc_event_type: "click",
-                },
-              },
-              tt("mc_button_zoom_in")
-            ),
-            el(
-              "button",
-              {
-                type: "button",
-                class: ["btn", "btn-default"],
-                style: { width: "50%" },
-                dataset: {
-                  mc_action: "zoom_out",
-                  mc_event_type: "click",
-                },
-              },
-              tt("mc_button_zoom_out")
-            ),
-          ]),
-          el("div", { class: "btn-group" }, [
-            el(
-              "button",
-              {
-                type: "button",
-                class: ["btn", "btn-default"],
-                style: { width: "50%" },
-                dataset: {
-                  mc_action: "zoom_fit_height",
-                  mc_event_type: "click",
-                },
-              },
-              tt("mc_button_zoom_fit_height")
-            ),
-            el(
-              "button",
-              {
-                type: "button",
-                class: ["btn", "btn-default"],
-
-                style: { width: "50%" },
-                dataset: {
-                  mc_action: "zoom_fit_width",
-                  mc_event_type: "click",
-                },
-              },
-              tt("mc_button_zoom_fit_width")
-            ),
-          ]),
-          el("span", { class: "text-muted" }, tt("mc_button_zoom_desc"))
-        ),
-
-        el(
-          "div",
-          {
-            class: "form-group",
-          },
-          el(
-            "button",
-            {
-              type: "button",
-              class: ["btn", "btn-default"],
-              dataset: {
-                mc_action: "export_page",
-                mc_event_type: "click",
-              },
-            },
-            tt("mc_button_export")
-          ),
-          el("span", { class: "text-muted" }, tt("mc_button_export_desc"))
-        ),
-
-        el(
-          "div",
-          {
-            class: "form-group",
-          },
-          [
-            el("label", tt("mc_label_unit")),
-            (toolbar.elInputUnit = el(
-              "select",
-              {
-                class: "form-control",
-                dataset: {
-                  mc_action: "update_state",
-                  mc_event_type: "change",
-                  mc_state_name: "unit",
-                },
-              },
-              elUnitOptions
-            )),
-          ],
-          el("span", { class: "text-muted" }, tt("mc_label_unit_desc"))
-        ),
-        (toolbar.elFormDpi = el(
-          "div",
-          {
-            class: "form-group",
-          },
-          el("label", tt("mc_label_resolution")),
-          (toolbar.elInputDpi = el("input", {
-            type: "number",
-            class: "form-control",
-            dataset: {
-              mc_action: "update_state",
-              mc_event_type: "change",
-              mc_state_name: "dpi",
-            },
-            step: 1,
-            value: dpi,
-            max: 300,
-            min: 72,
-          })),
-          el("span", { class: "text-muted" }, tt("mc_label_resolution_desc"))
-        )),
-        el(
-          "div",
-          {
-            class: "form-group",
-          },
-          el("label", tt("mc_label_width")),
-          (toolbar.elInputPageWidth = el("input", {
-            type: "number",
-            class: "form-control",
-            dataset: {
-              mc_action: "update_state",
-              mc_event_type: "change",
-              mc_state_name: "page_width",
-            },
-            step: sizeStep,
-            max: sizeStep * 1000,
-            min: sizeStep,
-          })),
-          el("span", { class: "text-muted" }, tt("mc_label_width_desc"))
-        ),
-        el(
-          "div",
-          {
-            class: "form-group",
-          },
-          el("label", tt("mc_label_height")),
-          (toolbar.elInputPageHeight = el("input", {
-            type: "number",
-            class: "form-control",
-            dataset: {
-              mc_action: "update_state",
-              mc_event_type: "change",
-              mc_state_name: "page_height",
-            },
-            step: sizeStep,
-            max: sizeStep * 1000,
-            min: sizeStep,
-          })),
-          el("span", { class: "text-muted" }, tt("mc_label_height_desc"))
-        ),
-        el(
-          "div",
-          {
-            class: "form-group",
-          },
-          el("label", tt("mc_label_legend_columns")),
-          el("input", {
-            type: "number",
-            class: "form-control",
-            dataset: {
-              mc_action: "update_state",
-              mc_event_type: "change",
-              mc_state_name: "legends_n_columns",
-            },
-
-            value: 1,
-            max: 10,
-            min: 1,
-          }),
-          el(
-            "span",
-            { class: "text-muted" },
-            tt("mc_label_legend_columns_desc")
-          )
-        ),
-        el(
-          "div",
-          {
-            class: "form-group",
-          },
-          [
-            el("label", tt("mc_label_mode")),
-            el(
-              "select",
-              {
-                class: "form-control",
-                dataset: {
-                  mc_action: "update_state",
-                  mc_event_type: "change",
-                  mc_state_name: "mode",
-                },
-              },
-              elModesOptions
-            ),
-          ],
-          el("span", { class: "text-muted" }, tt("mc_label_mode_desc"))
-        ),
+        toolbar.elGroupPreset,
+        toolbar.elGroupLandscape,
+        toolbar.elGroupFitToMap,
+        toolbar.elGroupZoom,
+        toolbar.elGroupExport,
+        toolbar.elGroupUnits,
+        toolbar.elGroupDpi,
+        toolbar.elGroupWidth,
+        toolbar.elGroupHeight,
+        toolbar.elGroupLegendColumns,
+        toolbar.elGroupModes,
       ]
     );
   }
