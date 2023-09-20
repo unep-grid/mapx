@@ -699,7 +699,7 @@ export class ButtonPanel extends EventSimple {
     }
 
     if (panel.exclusiveMode) {
-      panel.manager.closeOthers(panel);
+      panel.manager.closeAllOther(panel);
     }
 
     const closeOthers = panel.opt.on_open_close_others;
