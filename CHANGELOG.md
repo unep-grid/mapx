@@ -1,8 +1,12 @@
+  - [1.12.4-patch.2](https://github.com/unep-grid/mapx/tree/1.12.4-patch.2) 
+
+    - Tests 
+        - Typo -> failing tests for 'get/set view text filter'
+
   - [1.12.4-patch.1](https://github.com/unep-grid/mapx/tree/1.12.4-patch.1) 
 
     - SDK
         - Should fix view_add in static mode 
-
 
   - [1.12.4](https://github.com/unep-grid/mapx/tree/1.12.4) 
 
