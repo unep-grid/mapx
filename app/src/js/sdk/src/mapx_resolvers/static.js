@@ -737,18 +737,14 @@ export class MapxResolversStatic extends MapxResolversPanels {
       return rslv._err("err_view_invalid");
     }
 
-    if (settings.mode.static) {
+    if (settings.mode.static || view._vb instanceof ViewBase) {
       await viewAdd(view);
     } else {
-      if (view._vb instanceof ViewBase) {
-        await viewAdd(opt.idView);
-      } else {
-        await viewsListAddSingle(view, { open: true });
-      }
+      await viewsListAddSingle(view, { open: true });
     }
 
     if (opt.zoomToView) {
-      const bounds = await getViewsBounds(opt.idView);
+      const bounds = await getViewsBounds(view);
       const ok = fitMaxBounds(bounds);
       return ok;
     }

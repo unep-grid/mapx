@@ -92,7 +92,7 @@ import {
   cleanTemporaryQueryParameters,
 } from "./../url_utils";
 import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata";
-import { buildLegendVt, LegendVt } from "./../legend_vt/index.js";
+import { LegendVt } from "./../legend_vt/index.js";
 import { getViewMapboxLayers } from "./../style_vt/index.js";
 import { moduleLoad } from "./../modules_loader_async";
 import {
@@ -2664,18 +2664,13 @@ export async function viewAdd(view) {
     }
 
     const views = getViews();
+
     if (!views.includes(view)) {
       views.push(view);
     }
 
-    /**
-     * Open UI
-     * - Layers can take a while
-     * - Search list need quickly an
-     *   event to trigger toggles
-     * - vb.open triggers viewAdd too
-     */
     await waitTimeoutAsync(100);
+
     if (view._vb instanceof ViewBase) {
       view._vb.open();
     }
@@ -3863,7 +3858,7 @@ function setVtLegend(options) {
   view._style_rules = clone(rules);
 
   /*
-   * Add legend using template
+   * Legend content
    */
   const elLegend = elLegendBuild(view, {
     type: "vt",

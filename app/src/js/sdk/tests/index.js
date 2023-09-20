@@ -950,9 +950,6 @@ mapx.once("ready", async () => {
                 idView: view.id,
               });
               const ok = t.valid.isEqual(returned, [value]);
-              if(!ok){
-               debugger;
-              }
               await mapx.ask("view_remove", { idView: view.id });
               pass = t.valid.isEmpty(pass) ? ok : pass && ok;
             }
@@ -1219,39 +1216,45 @@ mapx.once("ready", async () => {
   t.check("Filter view by text", {
     group: "filters",
     init: async () => {
-      const view = await mapx.ask("_get_random_view", {
-        type: ["vt"],
-        vtHasAttributeType: "string",
-      });
-      if (!t.valid.isView(view)) {
-        return t.stop("Need at least a vt view with string attribute");
+      const views = [];
+      for (let i = 0; i < 10; i++) {
+        const view = await mapx.ask("_get_random_view", {
+          type: ["vt"],
+          vtAttributeType: "string",
+        });
+
+        if (!t.valid.isView(view)) {
+          return t.stop("Need at least a vt view with string attribute");
+        }
+        views.push(view);
       }
-      return view;
+      return views;
     },
     tests: [
       {
         name: "Set/get filter layers by text values",
         timeout: 30000,
-        test: async (view) => {
-          if (!t.valid.isView(view)) {
-            return false;
+        test: async (views) => {
+          const out = [];
+          for (const view of views) {
+            await mapx.ask("view_add", { idView: view.id });
+            const summary = await mapx.ask("get_view_source_summary", {
+              idView: view.id,
+              stats: ["attributes"],
+              idAttr: view?.data?.attribute?.name,
+            });
+            const values = summary.attribute_stat.table.map((row) => row.value);
+            await mapx.ask("set_view_layer_filter_text", {
+              idView: view.id,
+              value: values,
+            });
+            const res = await mapx.ask("get_view_layer_filter_text", {
+              idView: view.id,
+            });
+            await mapx.ask("view_remove", { idView: view.id });
+            out.push(values.every((v) => res && res.includes(v)));
           }
-          await mapx.ask("view_add", { idView: view.id });
-          const summary = await mapx.ask("get_view_source_summary", {
-            idView: view.id,
-            stats: ["attributes"],
-            idAttr: view?.data?.attribute?.name,
-          });
-          const values = summary.attribute_stat.table.map((row) => row.value);
-          await mapx.ask("set_view_layer_filter_text", {
-            idView: view.id,
-            value: values,
-          });
-          const res = await mapx.ask("get_view_layer_filter_text", {
-            idView: view.id,
-          });
-          const pass = values.every((v) => res.includes(v));
-          await mapx.ask("view_remove", { idView: view.id });
+          const pass = out.every((r) => r === true);
           return pass;
         },
       },

@@ -38,7 +38,7 @@ class ResolversBase {
     const view = getView(opt.idView);
 
     if (!isView(view)) {
-      return rslv._err("err_view_invalid");
+      return rslv._err("err_view_invalid", { idView: opt.idView });
     }
 
     /*
@@ -70,7 +70,7 @@ class ResolversBase {
     const view = getView(opt.idView);
 
     if (!isView(view)) {
-      return rslv._err("err_view_invalid");
+      return rslv._err("err_view_invalid", { idView: opt.idView });
     }
 
     await viewFilterToolsInit(view);
@@ -80,8 +80,9 @@ class ResolversBase {
       isFunction(view._filters_tools[type][method]);
 
     if (!valid) {
-      return rslv._err("err_view_invalid");
+      return rslv._err("err_view_invalid", { idView: opt.idView });
     }
+
     return view._filters_tools[type][method](opt.value);
   }
   /**
