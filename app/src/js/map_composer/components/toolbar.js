@@ -553,6 +553,7 @@ class Toolbar extends Box {
         toolbar.elGroupZoom,
         toolbar.elGroupExport,
         toolbar.elGroupUnits,
+        toolbar.elGroupScale,
         toolbar.elGroupDpi,
         toolbar.elGroupWidth,
         toolbar.elGroupHeight,

@@ -433,7 +433,7 @@
         "visibility": "visible",
         "text-field": ["to-string", ["get", "depth"]],
         "text-font": ["Varela Round Regular", "Noto Sans Regular"],
-        "text-size": 11,
+        "text-size": ["*",11,1],
         "symbol-placement": "line",
         "text-padding": 2,
         "text-max-angle": 25,
@@ -1674,7 +1674,7 @@
             "match",
             ["get", "class"],
             ["motorway", "trunk", "primary", "secondary", "tertiary"],
-            10,
+            ["*",10,1],
             [
               "motorway_link",
               "trunk_link",
@@ -1685,15 +1685,15 @@
               "street_limited",
               "path"
             ],
-            9,
-            8
+             ["*",9,1],
+             ["*",8,1]
           ],
           18,
           [
             "match",
             ["get", "class"],
             ["motorway", "trunk", "primary", "secondary", "tertiary"],
-            11,
+            ["*",11,1],
             [
               "motorway_link",
               "trunk_link",
@@ -1704,15 +1704,15 @@
               "street_limited",
               "path"
             ],
-            10,
-            8
+              ["*",10,1],
+              ["*",8,1]
           ],
           22,
           [
             "match",
             ["get", "class"],
             ["motorway", "trunk", "primary", "secondary", "tertiary"],
-            12,
+              ["*",12,1],
             [
               "motorway_link",
               "trunk_link",
@@ -1723,8 +1723,8 @@
               "street_limited",
               "path"
             ],
-            11,
-            10
+              ["*",11,1],
+              ["*",10,1]
           ]
         ],
         "text-max-angle": 30,
@@ -1759,7 +1759,6 @@
         "text-halo-blur": 1
       }
     },
-
     {
       "id": "water-label-line",
       "type": "symbol",
@@ -1777,16 +1776,17 @@
         ["==", ["geometry-type"], "LineString"]
       ],
       "layout": {
+
         "text-size": [
           "interpolate",
           ["linear"],
           ["zoom"],
           7,
-          ["step", ["get", "sizerank"], 24, 6, 18, 12, 12],
+          ["step", ["get", "sizerank"], ["*", 24, 1], 6, ["*", 18, 1], 12, ["*", 12, 1]],
           10,
-          ["step", ["get", "sizerank"], 18, 9, 12],
+          ["step", ["get", "sizerank"], ["*", 18, 1], 9, ["*", 12, 1]],
           11,
-          ["step", ["get", "sizerank"], 18, 9, 16]
+          ["step", ["get", "sizerank"], ["*", 18, 1], 9, ["*", 16, 1]]
         ],
         "text-max-angle": 30,
         "text-letter-spacing": [
@@ -1833,14 +1833,15 @@
       ],
       "layout": {
         "text-line-height": 1.3,
+
         "text-size": [
           "interpolate",
           ["linear"],
           ["zoom"],
           7,
-          ["step", ["get", "sizerank"], 24, 6, 18, 12, 12],
+          ["step", ["get", "sizerank"], ["*", 24, 1], 6, ["*", 18, 1], 12, ["*", 12, 1]],
           10,
-          ["step", ["get", "sizerank"], 18, 9, 12]
+          ["step", ["get", "sizerank"], ["*", 18, 1], 9, ["*", 12, 1]]
         ],
         "text-font": [
           "Libre Baskerville Regular",
@@ -1904,7 +1905,15 @@
           17,
           400
         ],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 13, 6, 18, 12],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          13,
+          ["*", 6, 1],
+          18,
+          ["*", 12, 1]
+        ],
         "symbol-placement": "line",
         "text-pitch-alignment": "viewport",
         "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]]
@@ -2011,8 +2020,18 @@
           "Noto Sans Arabic Regular",
           "Noto Sans Bengali Regular"
         ],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 6, 15, 17],
+
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          ["*", 6, 1],
+          15,
+          ["*", 17, 1]
+        ],
         "text-letter-spacing": 0.2,
+
         "text-variable-anchor": [
           "bottom-right",
           "top-right",
@@ -2021,7 +2040,7 @@
         ],
         "text-radial-offset": 0.5,
         "icon-image": "maki-circle-11",
-        "icon-size": 0.2,
+        "icon-size":["*", 0.2, 1],
         "visibility": "visible"
       },
       "paint": {
@@ -2051,14 +2070,30 @@
           "Noto Sans Bengali Bold"
         ],
         "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 7, 15, 20],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          ["*", 7, 1],
+          15,
+          ["*", 20, 1]
+        ],
         "text-letter-spacing": 0.2,
         "icon-image": "maki-star-11",
-        "icon-size": ["interpolate", ["linear"], ["zoom"], 4, 0.5, 15, 1.5],
+        "icon-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          ["*", 0.5, 1],
+          15,
+          ["*", 1.5, 1]
+        ],
         "icon-rotation-alignment": "viewport",
         "text-allow-overlap": false,
         "text-variable-anchor": ["bottom-right", "top-right"],
-        "text-radial-offset": 0.15,
+        "text-radial-offset": 0.5,
         "visibility": "visible"
       }
     },
@@ -2071,7 +2106,15 @@
       "filter": ["match", ["get", "stscod"], [11], true, false],
       "layout": {
         "symbol-sort-key": ["-", 100, ["get", "group_size"]],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 6, 22, 24],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          ["*", 6, 1],
+          22,
+          ["*", 24, 1]
+        ],
         "text-allow-overlap": false,
         "text-field": ["get", "name_en"],
         "text-font": [
@@ -2111,7 +2154,16 @@
       "filter": ["match", ["get", "stscod"], [99], true, false],
       "layout": {
         "symbol-sort-key": ["-", 100, ["get", "group_size"]],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 6, 22, 24],
+
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          ["*", 6, 1],
+          22,
+          ["*", 24, 1]
+        ],
         "text-allow-overlap": false,
         "text-field": ["get", "name_en"],
         "text-font": [
@@ -2151,7 +2203,15 @@
       "filter": ["match", ["get", "stscod"], [5], true, false],
       "layout": {
         "symbol-sort-key": ["-", 100, ["get", "group_size"]],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 8, 22, 32],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          ["*", 8, 1],
+          22,
+          ["*", 32, 1]
+        ],
         "text-allow-overlap": false,
         "text-field": ["get", "name_en"],
         "text-font": [
@@ -2191,7 +2251,15 @@
       "filter": ["match", ["get", "stscod"], [4], true, false],
       "layout": {
         "symbol-sort-key": ["-", 100, ["get", "group_size"]],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 9, 22, 36],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          ["*", 9, 1],
+          22,
+          ["*", 36, 1]
+        ],
         "text-allow-overlap": false,
         "text-field": ["get", "name_en"],
         "text-font": [
@@ -2231,8 +2299,24 @@
       "filter": ["match", ["get", "stscod"], [3], true, false],
       "layout": {
         "symbol-sort-key": ["-", 100, ["get", "group_size"]],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 9, 22, 36],
-        "icon-size": ["interpolate", ["linear"], ["zoom"], 4, 0.8, 22, 2],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          ["*", 9, 1],
+          22,
+          ["*", 36, 1]
+        ],
+        "icon-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          ["*", 0.8, 1],
+          22,
+          ["*", 2, 1]
+        ],
         "text-allow-overlap": false,
         "text-field": ["get", "name_en"],
         "text-font": [
@@ -2292,7 +2376,15 @@
       "filter": ["match", ["get", "stscod"], [2], true, false],
       "layout": {
         "symbol-sort-key": ["-", 100, ["get", "group_size"]],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 9, 22, 36],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          ["*", 9, 1],
+          22,
+          ["*", 36, 1]
+        ],
         "text-transform": "uppercase",
         "text-allow-overlap": false,
         "text-field": ["get", "name_en"],
@@ -2333,7 +2425,15 @@
       "filter": ["match", ["get", "stscod"], [1], true, false],
       "layout": {
         "symbol-sort-key": ["-", 100, ["get", "group_size"]],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 10, 22, 40],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          ["*", 10, 1],
+          22,
+          ["*", 40, 1]
+        ],
         "text-transform": "uppercase",
         "text-allow-overlap": false,
         "text-field": ["get", "name_en"],
@@ -2374,7 +2474,15 @@
       "filter": ["match", ["get", "stscod"], [0], true, false],
       "layout": {
         "symbol-sort-key": ["-", 100, ["get", "group_size"]],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 11, 22, 44],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          ["*", 11, 1],
+          22,
+          ["*", 44, 1]
+        ],
         "text-transform": "uppercase",
         "text-allow-overlap": false,
         "text-field": ["get", "name_en"],
