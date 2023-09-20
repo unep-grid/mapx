@@ -1,3 +1,8 @@
+  - [1.12.4-patch.3](https://github.com/unep-grid/mapx/tree/1.12.4-patch.3) 
+
+    - Panel Manager : 
+        - Issue in method name (closeOthers -> closeAllOthers ) 
+
   - [1.12.4-patch.2](https://github.com/unep-grid/mapx/tree/1.12.4-patch.2) 
 
     - Tests 
