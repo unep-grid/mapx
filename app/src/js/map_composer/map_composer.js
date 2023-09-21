@@ -311,8 +311,9 @@ export class MapComposer {
     mc.updatePageSizes();
   }
 
-  setContentScale(scale) {
+  setContentScale(scale = 1) {
     const mc = this;
+    scale = Number(scale);
     mc._content_scale = scale;
     mc.page.el.style.setProperty(`--mc-item-scale-content`, mc.scale);
     for (const item of mc.page.items) {

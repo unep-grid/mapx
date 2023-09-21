@@ -2,6 +2,7 @@ import { Box } from "./box.js";
 import { el, elSpanTranslate as tt } from "../../el_mapx";
 import { getDictItem } from "../../language";
 import presets from "./../data/paper-sizes.json";
+import { throttle } from "../../mx_helper_misc.js";
 
 class Toolbar extends Box {
   constructor(boxParent) {
@@ -28,9 +29,9 @@ class Toolbar extends Box {
 
     toolbar.lStore.addListener({
       target: toolbar.el,
-      type: "change",
+      type: "input",
       idGroup: "toolbar_change",
-      callback: toolbar.changeCallback,
+      callback: throttle(toolbar.changeCallback, 10),
       bind: toolbar,
     });
 
@@ -133,7 +134,7 @@ class Toolbar extends Box {
     if (el.type === "checkbox") {
       return toolbar.validateValueCheckbox(el);
     }
-    if (el.type === "number") {
+    if (el.type === "number" || el.type === "range") {
       return toolbar.validateValueNumber(el);
     }
     if (el.type === "select-one") {
@@ -413,7 +414,7 @@ class Toolbar extends Box {
      * Content scale
      */
     toolbar.elInputScale = el("input", {
-      type: "number",
+      type: "range",
       class: "form-control",
       dataset: {
         mc_action: "update_state",
