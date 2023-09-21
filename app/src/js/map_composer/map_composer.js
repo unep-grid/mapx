@@ -123,7 +123,7 @@ export class MapComposer {
         mc.setPageHeight(value);
         break;
       case "content_scale":
-        mc.setScale(value);
+        mc.setContentScale(value);
         break;
       case "legends_n_columns":
         mc.setLegendColumnCount(value);
@@ -311,41 +311,31 @@ export class MapComposer {
     mc.updatePageSizes();
   }
 
-  setScale(scale) {
-    const mc = this;
-    if (!mc.ready) {
-      return;
-    }
-    mc.state.scale = scale || mc.state.scale;
-    mc.updatePageContentScale();
-  }
-
-  updatePageContentScale() {
-    const mc = this;
-    if (!mc.ready) {
-      return;
-    }
-    mc.page.items.forEach((i) => {
-      i.setContentScale(mc.state.scale);
-    });
-  }
-
   setContentScale(scale) {
     const mc = this;
-    mc._page_scale = scale;
-    mc.page.setScale(scale);
+    mc._content_scale = scale;
+    mc.page.el.style.setProperty(`--mc-item-scale-content`, mc.scale);
+    for (const item of mc.page.items) {
+      if (item.type === "map") {
+        item.scaler.text(scale);
+      }
+    }
+  }
+
+  get scale() {
+    return this._content_scale;
   }
 
   setLegendColumnCount(n) {
     const mc = this;
     n = n || 1;
-    mc.page.items.forEach((i) => {
-      if (i.type === "legend") {
-        const elLegendBox = i.el.querySelector(".mx-legend-box");
+    for (const item of mc.page.items) {
+      if (item.type === "legend") {
+        const elLegendBox = item.el.querySelector(".mx-legend-box");
         if (elLegendBox) {
           elLegendBox.style.columnCount = n;
         }
       }
-    });
+    }
   }
 }

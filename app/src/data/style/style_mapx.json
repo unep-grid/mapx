@@ -1776,7 +1776,6 @@
         ["==", ["geometry-type"], "LineString"]
       ],
       "layout": {
-
         "text-size": [
           "interpolate",
           ["linear"],

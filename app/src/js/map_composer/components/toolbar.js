@@ -410,6 +410,33 @@ class Toolbar extends Box {
     );
 
     /**
+     * Content scale
+     */
+    toolbar.elInputScale = el("input", {
+      type: "number",
+      class: "form-control",
+      dataset: {
+        mc_action: "update_state",
+        mc_event_type: "change",
+        mc_state_name: "content_scale",
+      },
+      step: 0.01,
+      value: 1,
+      max: 5,
+      min: 0.1,
+    });
+
+    toolbar.elGroupScale = el(
+      "div",
+      {
+        class: "form-group",
+      },
+      el("label", tt("mc_label_scale")),
+      toolbar.elInputScale,
+      el("span", { class: "text-muted" }, tt("mc_label_scale_desc"))
+    );
+
+    /**
      * DPI
      */
     toolbar.elInputDpi = el("input", {
@@ -425,6 +452,7 @@ class Toolbar extends Box {
       max: 300,
       min: 72,
     });
+
     toolbar.elGroupDpi = el(
       "div",
       {

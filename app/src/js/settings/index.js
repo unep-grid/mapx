@@ -45,6 +45,7 @@ const settings = {
     maxZoom: 20,
     minZoom: 0,
   },
+
   search: {
     host: "localhost",
     port: "8880",
@@ -103,6 +104,8 @@ const settings = {
   separators: {
     sublayer: "@",
   },
+  // set  in MapboxTextScaler
+  scale: 1,
   clickHandlers: [],
   maxByteJed: 300000, // 300 Kb
   maxByteFetch: 5e6, // 5MB

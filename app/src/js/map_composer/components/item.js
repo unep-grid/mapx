@@ -1,5 +1,6 @@
 import mapboxgl from "mapbox-gl";
 import { el } from "../../el/src/index.js";
+import { MapboxTextScaler } from "../../map_text_scaler/index.js";
 import { cloneNodeClean } from "../../mx_helper_misc.js";
 import { Box } from "./box.js";
 import { MapNorthArrow } from "./north_arrow.js";
@@ -78,17 +79,21 @@ class Item extends Box {
         dataset: { mc_editable: item.editable },
         class: ["mc-item", "mc-item-element"],
       },
-      // must be first level <div mc-item><h1>..</h1><p>...</p> 
-      [...content.children] 
+      el(
+        "div",
+        { class: "mc-item-scalable" },
+        // must be first level <div mc-item><h1>..</h1><p>...</p>
+        [...content.children]
+      )
     );
     return elOut;
   }
 
   buildElLegend() {
     const item = this;
-    // remove id,for, other unwanted attributes 
-    const content = cloneNodeClean(item.orig.element);
-    const elsEditables = content.querySelectorAll("span");
+    // remove id,for, other unwanted attributes
+    const elContent = cloneNodeClean(item.orig.element);
+    const elsEditables = elContent.querySelectorAll("span");
 
     for (const elEditable of elsEditables) {
       const elDiv = el(
@@ -108,7 +113,7 @@ class Item extends Box {
       {
         class: ["mc-item", "mc-item-element"],
       },
-      content
+      el("div", { class: "mc-item-scalable" }, elContent)
     );
 
     return elOut;
@@ -125,7 +130,7 @@ class Item extends Box {
           mc_editable: item.editable,
         },
       },
-      el("div", el("span", text))
+      el("div", { class: "mc-item-scalable" }, el("span", text))
     );
     return elOut;
   }
@@ -153,6 +158,7 @@ class Item extends Box {
     item.map = new mapboxgl.Map(mapOptions);
     item.map.addControl(new mapboxgl.ScaleControl(), "bottom-right");
     item.map.addControl(new MapNorthArrow(), "top-right");
+    item.scaler = new MapboxTextScaler(item.map);
 
     item.map.once("idle", () => {
       if (mapOptions.terrain) {

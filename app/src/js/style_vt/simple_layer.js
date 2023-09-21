@@ -196,7 +196,9 @@ export function makeSimpleLayer(opt) {
         type: "symbol",
         layout: {
           "icon-image": opt.sprite,
-          "icon-size": size(opt),
+          "icon-size": opt.simplifyExpression
+            ? size(opt)
+            : ["*", size(opt), settings.scale],
           "icon-allow-overlap": true,
           "icon-ignore-placement": false,
           "icon-optional": true,
@@ -208,7 +210,15 @@ export function makeSimpleLayer(opt) {
           "text-font": ["Noto Sans Medium"],
           "text-size": opt.simplifyExpression
             ? 10
-            : ["interpolate", ["linear"], ["zoom"], 1, 10, 18, 20],
+            : [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                1,
+                ["*", 10, settings.scale],
+                18,
+                ["*", 20, settings.scale],
+              ],
           "text-radial-offset": 1.2,
           "text-justify": "auto",
         },

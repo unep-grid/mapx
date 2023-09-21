@@ -1,5 +1,6 @@
 import { bindAll } from "../bind_class_methods";
 import { isArray, isNumeric } from "../is_test";
+import { settings } from "../settings";
 
 export class MapboxTextScaler {
   constructor(map) {
@@ -8,10 +9,10 @@ export class MapboxTextScaler {
     bindAll(mtc);
   }
 
-  scaleText(value = 1) {
+  text(value = 1) {
     const mtc = this;
     const layers = mtc._map.getStyle().layers;
-
+    settings.scale = value;
     for (const layer of layers) {
       if (layer.layout) {
         if (layer.layout["text-size"]) {
@@ -30,7 +31,6 @@ export class MapboxTextScaler {
     const mtc = this;
     if (mtc.isScalable(expr)) {
       expr[2] = scalingFactor;
-      console.log(expr);
       return expr;
     }
     if (isArray(expr)) {
