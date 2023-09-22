@@ -1,3 +1,8 @@
+  - [1.12.5-alpha.1](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.1) 
+    
+    - MapComposer
+        - Scale content + map labels / icons
+
   - [1.12.4-patch.3](https://github.com/unep-grid/mapx/tree/1.12.4-patch.3) 
 
     - Panel Manager : 
