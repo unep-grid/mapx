@@ -6830,6 +6830,16 @@
     "es": "Establecer modo de edición"
   },
   {
+    "id": "mc_label_scale",
+    "en": "Content scale",
+    "es": "Escala de contenido"
+  },
+  {
+    "id": "mc_label_scale_desc",
+    "en": "Set the scale of the text and icons",
+    "es": "Establecer la escala del texto y los iconos."
+  },
+  {
     "id": "mc_label_unit",
     "en": "Unit",
     "es": "Unidad"

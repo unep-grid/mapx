@@ -6830,6 +6830,16 @@
     "fa": "حالت ویرایش را تنظیم کنید"
   },
   {
+    "id": "mc_label_scale",
+    "en": "Content scale",
+    "fa": "مقیاس محتوا"
+  },
+  {
+    "id": "mc_label_scale_desc",
+    "en": "Set the scale of the text and icons",
+    "fa": "مقیاس متن و نمادها را تنظیم کنید"
+  },
+  {
     "id": "mc_label_unit",
     "en": "Unit",
     "fa": "واحد"

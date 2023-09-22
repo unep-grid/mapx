@@ -6830,6 +6830,16 @@
     "zh": "设置编辑模式"
   },
   {
+    "id": "mc_label_scale",
+    "en": "Content scale",
+    "zh": "内容规模"
+  },
+  {
+    "id": "mc_label_scale_desc",
+    "en": "Set the scale of the text and icons",
+    "zh": "设置文本和图标的比例"
+  },
+  {
     "id": "mc_label_unit",
     "en": "Unit",
     "zh": "单元"

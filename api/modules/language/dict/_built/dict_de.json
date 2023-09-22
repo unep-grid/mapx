@@ -6830,6 +6830,16 @@
     "de": "Bearbeitungsmodus einstellen"
   },
   {
+    "id": "mc_label_scale",
+    "en": "Content scale",
+    "de": "Inhaltsskala"
+  },
+  {
+    "id": "mc_label_scale_desc",
+    "en": "Set the scale of the text and icons",
+    "de": "Legen Sie den Maßstab des Textes und der Symbole fest"
+  },
+  {
     "id": "mc_label_unit",
     "en": "Unit",
     "de": "Einheit"

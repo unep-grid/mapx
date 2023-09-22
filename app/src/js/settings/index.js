@@ -104,8 +104,9 @@ const settings = {
   separators: {
     sublayer: "@",
   },
-  // set  in MapboxTextScaler
-  scale: 1,
+  // set  in MapScaler
+  scale_text: 1,
+  scale_icon: 1,
   clickHandlers: [],
   maxByteJed: 300000, // 300 Kb
   maxByteFetch: 5e6, // 5MB

@@ -19,7 +19,7 @@ import { fontFamilies, fonts, loadFontFace } from "./fonts.js";
 import { validate } from "./validator.js";
 import { Button } from "./../panel_controls/button.js";
 import { sounds } from "./sound/index.js";
-import { MapboxTextScaler } from "../map_text_scaler";
+import { MapScaler } from "../map_scaler";
 
 import "./style.less";
 
@@ -387,7 +387,7 @@ class Theme extends EventSimple {
   async linkMap(map) {
     const t = this;
     t._map = map;
-    t._map_scaler = new MapboxTextScaler(map);
+    t._map_scaler = new MapScaler(map);
     await t.updateMap();
   }
 

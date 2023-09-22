@@ -17758,6 +17758,32 @@
     "de": "Bearbeitungsmodus einstellen"
   },
   {
+    "id": "mc_label_scale",
+    "en": "Content scale",
+    "fr": "Échelle du contenu",
+    "es": "Escala de contenido",
+    "ru": "Масштаб контента",
+    "zh": "内容规模",
+    "ar": "مقياس المحتوى",
+    "fa": "مقیاس محتوا",
+    "ps": "د منځپانګې پیمانه",
+    "bn": "বিষয়বস্তুর স্কেল",
+    "de": "Inhaltsskala"
+  },
+  {
+    "id": "mc_label_scale_desc",
+    "en": "Set the scale of the text and icons",
+    "fr": "Définir l'échelle du texte et des icônes",
+    "es": "Establecer la escala del texto y los iconos.",
+    "ru": "Установите масштаб текста и значков",
+    "zh": "设置文本和图标的比例",
+    "ar": "ضبط حجم النص والأيقونات",
+    "fa": "مقیاس متن و نمادها را تنظیم کنید",
+    "ps": "د متن او شبیانو اندازه تنظیم کړئ",
+    "bn": "পাঠ্য এবং আইকনগুলির স্কেল সেট করুন",
+    "de": "Legen Sie den Maßstab des Textes und der Symbole fest"
+  },
+  {
     "id": "mc_label_unit",
     "en": "Unit",
     "fr": "Unité",

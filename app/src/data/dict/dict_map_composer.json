@@ -39,6 +39,32 @@
     "de": ""
   },
   {
+    "id": "mc_label_scale",
+    "en": "Content scale",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "mc_label_scale_desc",
+    "en": "Set the scale of the text and icons",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "mc_label_unit",
     "en": "Unit",
     "fr": "",

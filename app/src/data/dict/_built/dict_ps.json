@@ -6830,6 +6830,16 @@
     "ps": "د نسخې حالت تنظیم کړئ"
   },
   {
+    "id": "mc_label_scale",
+    "en": "Content scale",
+    "ps": "د منځپانګې پیمانه"
+  },
+  {
+    "id": "mc_label_scale_desc",
+    "en": "Set the scale of the text and icons",
+    "ps": "د متن او شبیانو اندازه تنظیم کړئ"
+  },
+  {
     "id": "mc_label_unit",
     "en": "Unit",
     "ps": "واحد"

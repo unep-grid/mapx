@@ -5464,6 +5464,14 @@
     "en": "Set edition mode"
   },
   {
+    "id": "mc_label_scale",
+    "en": "Content scale"
+  },
+  {
+    "id": "mc_label_scale_desc",
+    "en": "Set the scale of the text and icons"
+  },
+  {
     "id": "mc_label_unit",
     "en": "Unit"
   },

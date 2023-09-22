@@ -6830,6 +6830,16 @@
     "ar": "ضبط وضع الإصدار"
   },
   {
+    "id": "mc_label_scale",
+    "en": "Content scale",
+    "ar": "مقياس المحتوى"
+  },
+  {
+    "id": "mc_label_scale_desc",
+    "en": "Set the scale of the text and icons",
+    "ar": "ضبط حجم النص والأيقونات"
+  },
+  {
     "id": "mc_label_unit",
     "en": "Unit",
     "ar": "وحدة"

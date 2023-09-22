@@ -18,6 +18,7 @@ import { settings } from "./settings";
 import { modalSelectSource } from "./select_auto/modals";
 import { isSourceId } from "./is_test";
 import { el } from "./el_mapx";
+import { cancelFrame, onNextFrame } from "./animation_frame";
 
 /**
  * Test if Shiny is up
@@ -949,6 +950,22 @@ export function throttle(func, delay) {
         timeout = null; // Once function is executed, reset timeout
       }, delay);
     }
+  };
+}
+
+/**
+ * Throttles a function using animation frame.
+ *
+ * @param {Function} func - The function to be throttled.
+ * @returns {Function} - The throttled function.
+ */
+export function throttleFrame(func) {
+  const frame = { id: null };
+  return function (...args) {
+    cancelFrame(frame.id);
+    frame.id = onNextFrame(() => {
+      func.apply(this, args);
+    });
   };
 }
 

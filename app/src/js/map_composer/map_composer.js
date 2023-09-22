@@ -122,8 +122,12 @@ export class MapComposer {
       case "page_height":
         mc.setPageHeight(value);
         break;
-      case "content_scale":
-        mc.setContentScale(value);
+      case "scale_content":
+        mc.setScaleContent(value);
+        mc.setScaleMap(value);
+        break;
+      case "scale_map":
+        mc.setScaleMap(value);
         break;
       case "legends_n_columns":
         mc.setLegendColumnCount(value);
@@ -302,7 +306,7 @@ export class MapComposer {
     const changed = mc.state.dpi !== nDpi;
     if (changed) {
       mc.state.dpi = nDpi;
-      mc.toolbar.elInputDpi.value = mc.state.dpi;
+      //mc.toolbar.elInputDpi.value = mc.state.dpi;
     }
   }
 
@@ -311,20 +315,26 @@ export class MapComposer {
     mc.updatePageSizes();
   }
 
-  setContentScale(scale = 1) {
+  setScaleContent(scale = 1) {
     const mc = this;
     scale = Number(scale);
-    mc._content_scale = scale;
-    mc.page.el.style.setProperty(`--mc-item-scale-content`, mc.scale);
+    mc.state.scale_content = scale;
+    mc.page.el.style.setProperty(`--mc-item-scale-content`, scale);
+  }
+
+  setScaleMap(scale = 1) {
+    const mc = this;
+    scale = Number(scale);
+    mc.state.scale_map = scale;
     for (const item of mc.page.items) {
       if (item.type === "map") {
-        item.scaler.text(scale);
+        item.scaler.update(scale, ["text", "icon"]);
       }
     }
   }
 
-  get scale() {
-    return this._content_scale;
+  get scaleMap() {
+    return this._scale_map;
   }
 
   setLegendColumnCount(n) {

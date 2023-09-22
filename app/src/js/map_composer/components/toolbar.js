@@ -2,7 +2,7 @@ import { Box } from "./box.js";
 import { el, elSpanTranslate as tt } from "../../el_mapx";
 import { getDictItem } from "../../language";
 import presets from "./../data/paper-sizes.json";
-import { throttle } from "../../mx_helper_misc.js";
+import { throttleFrame } from "../../mx_helper_misc.js";
 
 class Toolbar extends Box {
   constructor(boxParent) {
@@ -31,7 +31,7 @@ class Toolbar extends Box {
       target: toolbar.el,
       type: "input",
       idGroup: "toolbar_change",
-      callback: throttle(toolbar.changeCallback, 10),
+      callback: throttleFrame(toolbar.changeCallback),
       bind: toolbar,
     });
 
@@ -413,55 +413,28 @@ class Toolbar extends Box {
     /**
      * Content scale
      */
-    toolbar.elInputScale = el("input", {
+    toolbar.elInputScaleContent = el("input", {
       type: "range",
       class: "form-control",
       dataset: {
         mc_action: "update_state",
         mc_event_type: "change",
-        mc_state_name: "content_scale",
+        mc_state_name: "scale_content",
       },
-      step: 0.01,
+      step: 0.1,
       value: 1,
       max: 5,
       min: 0.1,
     });
 
-    toolbar.elGroupScale = el(
+    toolbar.elGroupScaleContent = el(
       "div",
       {
         class: "form-group",
       },
       el("label", tt("mc_label_scale")),
-      toolbar.elInputScale,
+      toolbar.elInputScaleContent,
       el("span", { class: "text-muted" }, tt("mc_label_scale_desc"))
-    );
-
-    /**
-     * DPI
-     */
-    toolbar.elInputDpi = el("input", {
-      type: "number",
-      class: "form-control",
-      dataset: {
-        mc_action: "update_state",
-        mc_event_type: "change",
-        mc_state_name: "dpi",
-      },
-      step: 1,
-      value: dpi,
-      max: 300,
-      min: 72,
-    });
-
-    toolbar.elGroupDpi = el(
-      "div",
-      {
-        class: "form-group",
-      },
-      el("label", tt("mc_label_resolution")),
-      toolbar.elInputDpi,
-      el("span", { class: "text-muted" }, tt("mc_label_resolution_desc"))
     );
 
     /**
@@ -582,8 +555,7 @@ class Toolbar extends Box {
         toolbar.elGroupZoom,
         toolbar.elGroupExport,
         toolbar.elGroupUnits,
-        toolbar.elGroupScale,
-        toolbar.elGroupDpi,
+        toolbar.elGroupScaleContent,
         toolbar.elGroupWidth,
         toolbar.elGroupHeight,
         toolbar.elGroupLegendColumns,

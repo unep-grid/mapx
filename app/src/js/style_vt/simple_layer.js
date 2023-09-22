@@ -198,7 +198,7 @@ export function makeSimpleLayer(opt) {
           "icon-image": opt.sprite,
           "icon-size": opt.simplifyExpression
             ? size(opt)
-            : ["*", size(opt), settings.scale],
+            : ["*", size(opt), settings.scale_icon],
           "icon-allow-overlap": true,
           "icon-ignore-placement": false,
           "icon-optional": true,
@@ -215,9 +215,9 @@ export function makeSimpleLayer(opt) {
                 ["linear"],
                 ["zoom"],
                 1,
-                ["*", 10, settings.scale],
+                ["*", 10, settings.scale_text],
                 18,
-                ["*", 20, settings.scale],
+                ["*", 20, settings.scale_text],
               ],
           "text-radial-offset": 1.2,
           "text-justify": "auto",

@@ -20,6 +20,8 @@ const state = {
   grid_snap_size: 5,
   item_height: 10,
   item_width: 10,
+  scale_map: 1,
+  scale_content: 1,
   workspace_height: 200,
   workspace_width: 200,
   canvas_max_area_theory: 16384 * 16384,

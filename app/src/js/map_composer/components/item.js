@@ -1,6 +1,6 @@
 import mapboxgl from "mapbox-gl";
 import { el } from "../../el/src/index.js";
-import { MapboxTextScaler } from "../../map_text_scaler/index.js";
+import { MapScaler } from "../../map_scaler/index.js";
 import { cloneNodeClean } from "../../mx_helper_misc.js";
 import { Box } from "./box.js";
 import { MapNorthArrow } from "./north_arrow.js";
@@ -158,7 +158,7 @@ class Item extends Box {
     item.map = new mapboxgl.Map(mapOptions);
     item.map.addControl(new mapboxgl.ScaleControl(), "bottom-right");
     item.map.addControl(new MapNorthArrow(), "top-right");
-    item.scaler = new MapboxTextScaler(item.map);
+    item.scaler = new MapScaler(item.map);
 
     item.map.once("idle", () => {
       if (mapOptions.terrain) {
