@@ -1,3 +1,18 @@
+  - [1.12.5-alpha.2](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.2) 
+
+    - MapComposer
+        - MapComposer is now loaded using a MapComposerModal class : first step for SDK access + sdk testing
+        - Scaling for text content use now a scale factor based on em value
+        - North Arrow and map scale are scalable
+        - Exported + improved MapArrow control to work in dark/light mode
+        - dpr is altered during export, only for non-pixel unit
+        - US formats revised (inversion width/height, imperial unit)
+        - Refactor sizing system to accomodate fractionnal inches values
+        - Page zoom are icon-button - correct translations broke the layout - text available as tooltips 
+        - Use custom map scale module
+        - Removed +/- box text scale ( conflict with new global scaling) 
+        - Added an option to download the image in a new tab instead as a file ( not exposed yet )
+
   - [1.12.5-alpha.1](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.1) 
     
     - MapComposer
