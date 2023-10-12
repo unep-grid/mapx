@@ -6891,28 +6891,28 @@
   },
   {
     "id": "mc_label_zoom",
-    "en": "Zoom",
-    "zh": "飞涨"
+    "en": "Page zoom",
+    "zh": "页面缩放"
   },
   {
     "id": "mc_button_zoom_in",
-    "en": "More",
-    "zh": "更多的"
+    "en": "Zoom in",
+    "zh": "放大"
   },
   {
     "id": "mc_button_zoom_out",
-    "en": "Less",
-    "zh": "较少的"
+    "en": "Zoom out",
+    "zh": "缩小"
   },
   {
     "id": "mc_button_zoom_fit_width",
-    "en": "Width",
-    "zh": "宽度"
+    "en": "Fit width",
+    "zh": "适合宽度"
   },
   {
     "id": "mc_button_zoom_fit_height",
-    "en": "Height",
-    "zh": "高度"
+    "en": "Fit height",
+    "zh": "适合高度"
   },
   {
     "id": "mc_button_zoom_desc",

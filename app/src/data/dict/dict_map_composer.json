@@ -196,7 +196,7 @@
   },
   {
     "id": "mc_label_zoom",
-    "en": "Zoom",
+    "en": "Page zoom",
     "fr": "",
     "es": "",
     "ru": "",
@@ -209,7 +209,7 @@
   },
   {
     "id": "mc_button_zoom_in",
-    "en": "More",
+    "en": "Zoom in",
     "fr": "",
     "es": "",
     "ru": "",
@@ -222,7 +222,7 @@
   },
   {
     "id": "mc_button_zoom_out",
-    "en": "Less",
+    "en": "Zoom out",
     "fr": "",
     "es": "",
     "ru": "",
@@ -235,7 +235,7 @@
   },
   {
     "id": "mc_button_zoom_fit_width",
-    "en": "Width",
+    "en": "Fit width",
     "fr": "",
     "es": "",
     "ru": "",
@@ -248,7 +248,7 @@
   },
   {
     "id": "mc_button_zoom_fit_height",
-    "en": "Height",
+    "en": "Fit height",
     "fr": "",
     "es": "",
     "ru": "",

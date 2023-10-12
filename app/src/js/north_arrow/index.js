@@ -1,26 +1,36 @@
-import { el } from "../../el/src/index.js";
+import { el } from "../el_mapx";
+
 export class MapNorthArrow {
   constructor() {}
 
   onAdd(map) {
-    let elArrow;
     const na = this;
-    const imgSvg = require("../svg/arrow-north.svg");
+    const imgSvg = require("./arrow-north-n.svg");
+
+    const elArrow = el("img", {
+      src: imgSvg,
+      style: {
+        width: "20px",
+        height: "20px",
+        margin: "4px",
+        transformOrigin: "50% 50% 0",
+      },
+    });
+    const elWrapper = el(
+      "div",
+      {
+        class: ["mc-item-scalable-image"],
+        style: { transformOrigin: "top right" },
+      },
+      elArrow
+    );
 
     const elNorthCtrl = el(
       "div",
       {
         class: "mapboxgl-ctrl",
       },
-      (elArrow = el("img", {
-        src: imgSvg,
-        class: "mc-map-arrow",
-        style: {
-          width: "20px",
-          height: "20px",
-          transformOrigin: "50% 50% 0",
-        },
-      }))
+      elWrapper
     );
 
     map.on("rotate", function () {

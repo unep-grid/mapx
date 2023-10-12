@@ -3,6 +3,7 @@ import { formatZeros, path } from "./../mx_helpers.js";
 import mapxlogo from "./../../svg/map-x-logo-full.svg";
 import { isElement } from "../is_test/index.js";
 import { modalMarkdown } from "../modal_markdown/index.js";
+import { bindAll } from "../bind_class_methods/index.js";
 /**
  * Control for live coordinate
  */
@@ -134,42 +135,66 @@ class MapxLogo {
 
 /**
  * Create a nested scale indicator : text,box and container. Not possible by the original method.
- * This is a hack based on mapbox-gl-js/src/ui/control/scale_control.js
+ * modes : center, mouse, bottom, top
  */
-
 class MapControlScale {
-  constructor() {}
+  constructor(config) {
+    this._config = Object.assign({}, { mode: "mouse" }, config);
+    bindAll(this);
+  }
 
   onAdd(map) {
     const mcs = this;
     mcs.map = map;
+
+    mcs.elText = el("div", {
+      style: { transformOrigin: "bottom center" },
+      class: ["mx-scale-text", "mc-item-scalable-font"],
+    });
+
+    mcs.elScale = el("div", { class: ["mx-scale-box"] }, mcs.elText);
+
     mcs.elContainer = el(
       "div",
       {
         class: ["mapboxgl-ctrl", "mapboxgl-ctrl-attrib"],
       },
-      (mcs.elScale = el(
-        "div",
-        { class: "mx-scale-box" },
-        (mcs.elText = el("div", { class: ["mx-scale-text"] }))
-      ))
+      mcs.elScale
     );
 
-    map.on("mousemove", (e) => {
-      const y = e.point.y;
-      mcs.render(y);
-    });
+    if (mcs._config.mode === "mouse") {
+      map.on("mousemove", mcs.renderPoint);
+    } else {
+      map.on("moveend", mcs.renderCenter);
+    }
+    map.on("resize", mcs.updateY);
 
-    mcs.render(0);
-
+    mcs.updateY();
+    mcs.renderCenter();
     return mcs.elContainer;
+  }
+
+  updateY() {
+    const mcs = this;
+    mcs._y = mcs.map.getContainer().getBoundingClientRect().height / 2;
+  }
+
+  renderCenter() {
+    const mcs = this;
+    const y = mcs.map.getContainer().getBoundingClientRect().height / 2;
+    mcs.render(y);
+  }
+
+  renderPoint(e) {
+    const mcs = this;
+    const y = e.point.y;
+    mcs.render(y);
   }
 
   render(y) {
     const mcs = this;
     let unit = "m";
     let maxWidth = 100;
-    //const y = map._container.clientHeight / 2;
     let maxMeters = getDistance(
       mcs.map.unproject([0, y]),
       mcs.map.unproject([maxWidth, y])
@@ -180,7 +205,6 @@ class MapControlScale {
       distance = distance / 1000;
       unit = "km";
     }
-
     mcs.elScale.style.width = maxWidth * ratio + "px";
     mcs.elText.innerText = distance + unit;
   }
@@ -190,6 +214,9 @@ class MapControlScale {
     if (isElement(mcs.elContainer)) {
       mcs.elContainer.remove();
     }
+    mcs.map.off("mousemove", mcs.renderPoint);
+    mcs.map.off("moveend", mcs.renderCenter);
+    mcs.map.off("resize", mcs.updateY);
     mcs.map = undefined;
   }
 }

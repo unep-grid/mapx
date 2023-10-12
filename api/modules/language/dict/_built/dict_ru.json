@@ -6891,28 +6891,28 @@
   },
   {
     "id": "mc_label_zoom",
-    "en": "Zoom",
-    "ru": "Увеличить"
+    "en": "Page zoom",
+    "ru": "Масштаб страницы"
   },
   {
     "id": "mc_button_zoom_in",
-    "en": "More",
-    "ru": "Более"
+    "en": "Zoom in",
+    "ru": "Приблизить"
   },
   {
     "id": "mc_button_zoom_out",
-    "en": "Less",
-    "ru": "Меньше"
+    "en": "Zoom out",
+    "ru": "Уменьшить"
   },
   {
     "id": "mc_button_zoom_fit_width",
-    "en": "Width",
-    "ru": "Ширина"
+    "en": "Fit width",
+    "ru": "Подходит по ширине"
   },
   {
     "id": "mc_button_zoom_fit_height",
-    "en": "Height",
-    "ru": "Высота"
+    "en": "Fit height",
+    "ru": "Высота установки"
   },
   {
     "id": "mc_button_zoom_desc",

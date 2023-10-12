@@ -1,5 +1,6 @@
 import { el } from "./../../el/src/index.js";
 import { flattenBlockElements } from "../../mx_helper_misc.js";
+import { isNotEmpty } from "../../is_test/index.js";
 
 /**
  * Based on https://jsfiddle.net/RokoCB/az7f38w7/
@@ -97,12 +98,6 @@ function buildEl() {
     el(
       "span",
       { class: ["mc-box-bar-edit-btn-group", "btn-group-vertical"] },
-      btnEdit("sizeText:more", el("span", "+")),
-      btnEdit("sizeText:less", el("span", "-"))
-    ),
-    el(
-      "span",
-      { class: ["mc-box-bar-edit-btn-group", "btn-group-vertical"] },
       btnEdit("bold", el("b", "B")),
       btnEdit("italic", el("i", "I")),
       btnEdit("underline", el("u", "U")),
@@ -168,22 +163,16 @@ function edit(e) {
   const d = elTarget.dataset;
   const boxActive = boxTarget.mc.boxLastFocus;
   // read the property of the handle;
-  let cmd = d.mc_cmd;
+  const cmdstr = d.mc_cmd;
   const idType = d.mc_event_type;
   const isClick = idType === "click";
-  const hasCmd = !!cmd;
+  const hasCmd = isNotEmpty(cmdstr);
 
   if (!isClick || !hasCmd) {
     return;
   }
-  cmd = cmd.split(":");
-  switch (cmd[0]) {
-    case "sizeText":
-      sizeText(boxActive, cmd[1]);
-      break;
-    default:
-      document.execCommand(cmd[0], false, cmd[1]);
-  }
+  const cmd = cmdstr.split(":");
+  document.execCommand(cmd[0], false, cmd[1]);
   sanitizeBlocks(boxActive);
 }
 
@@ -191,16 +180,6 @@ function paste(e) {
   e.preventDefault();
   const text = (e.originalEvent || e).clipboardData.getData("text/plain");
   document.execCommand("insertText", false, text);
-}
-
-function sizeText(boxActive, cmd) {
-  if (boxActive && boxActive.editable) {
-    if (cmd === "more") {
-      boxActive.sizeTextMore();
-    } else {
-      boxActive.sizeTextLess();
-    }
-  }
 }
 
 function sanitizeBlocks(boxActive) {

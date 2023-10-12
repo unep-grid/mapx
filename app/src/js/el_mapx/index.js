@@ -464,6 +464,7 @@ function elButtonIcon(key, opt) {
  * @param {Object} opt Options
  * @param {String} opt.icon Font awesome icon name e.g. fa-lock => 'lock'
  * @param {String} opt.mode Mode "text_icon"(default)"icon_text"
+ * @param {Object} opt.dataset Button dataset
  * @param {Function} opt.action Callback when clicked
  * @return {Element}
  */
@@ -474,6 +475,7 @@ export function elButtonFa(key, opt) {
       icon: "question",
       action: () => {},
       mode: "text_icon",
+      dataset: {},
     },
     opt
   );
@@ -483,6 +485,7 @@ export function elButtonFa(key, opt) {
     config: {
       on: { click: opt.action },
     },
+    dataset: opt.dataset,
   });
 }
 

@@ -33,8 +33,13 @@ class Page extends Box {
       return;
     }
     page.displayDim();
-    const w = Math.round(page.toLengthUnit(page.width));
-    const h = Math.round(page.toLengthUnit(page.height));
+    const isInches = mc.state.unit === "in";
+    const wUnit = page.toLengthUnit(page.width);
+    const hUnit = page.toLengthUnit(page.height);
+
+    const w = isInches ? Math.round(wUnit * 10) / 10 : Math.round(wUnit);
+    const h = isInches ? Math.round(hUnit * 10) / 10 : Math.round(hUnit);
+
     page.mc.toolbar.elInputPageWidth.value = w;
     page.mc.toolbar.elInputPageHeight.value = h;
 
@@ -42,10 +47,7 @@ class Page extends Box {
      * Make sure that a manual change set the preset to manual
      */
     if (mc.state.predefined_dim !== "mc_preset_manual") {
-      const preset = mc._preset_flat.find(
-        (p) => p.name === mc.state.predefined_dim
-      );
-
+      const preset = mc.state.predefined_item;
       const wPreset = page.snapToGrid(page.toLengthPixel(preset.width));
       const hPreset = page.snapToGrid(page.toLengthPixel(preset.height));
       const wPage = page.snapToGrid(page.width);
@@ -79,16 +81,24 @@ class Page extends Box {
     const mc = page.mc;
     const elPrint = page.el;
     const curMode = mc.state.mode;
-    const curDpi = mc.state.dpi;
-    const curScale = mc.page.scale;
+    const dpi = mc.state.dpi;
+    const dpr = mc.state.dpr;
+
+    const scale = mc.state.unit === "px" ? dpr : (300 * dpr) / dpi;
+
     try {
-      page.setScale(1);
       mc.setMode("print");
-      mc.update();
+      await mc.setScaleMap(scale);
       const canvas = await html2canvas(elPrint, {
         logging: false,
+        scale: scale,
       });
-      await downloadCanvas(canvas, "map-composer-export.png", "image/png");
+      await downloadCanvas(
+        canvas,
+        "map-composer-export.png",
+        "image/png",
+        false // not in a new tab
+      );
     } catch (e) {
       page.message.flash({
         level: "error",
@@ -96,10 +106,8 @@ class Page extends Box {
       });
       console.error(e);
     } finally {
+      mc.setScaleMap(1);
       mc.setMode(curMode);
-      mc.setDpi(curDpi);
-      mc.update();
-      page.setScale(curScale);
     }
   }
 

@@ -6891,28 +6891,28 @@
   },
   {
     "id": "mc_label_zoom",
-    "en": "Zoom",
-    "bn": "জুম"
+    "en": "Page zoom",
+    "bn": "পৃষ্ঠা জুম"
   },
   {
     "id": "mc_button_zoom_in",
-    "en": "More",
-    "bn": "আরও"
+    "en": "Zoom in",
+    "bn": "প্রসারিত করো"
   },
   {
     "id": "mc_button_zoom_out",
-    "en": "Less",
-    "bn": "কম"
+    "en": "Zoom out",
+    "bn": "ছোট করা"
   },
   {
     "id": "mc_button_zoom_fit_width",
-    "en": "Width",
-    "bn": "প্রস্থ"
+    "en": "Fit width",
+    "bn": "মাপসই প্রস্থ"
   },
   {
     "id": "mc_button_zoom_fit_height",
-    "en": "Height",
-    "bn": "উচ্চতা"
+    "en": "Fit height",
+    "bn": "মানানসই উচ্চতা"
   },
   {
     "id": "mc_button_zoom_desc",

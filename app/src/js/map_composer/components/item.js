@@ -3,7 +3,8 @@ import { el } from "../../el/src/index.js";
 import { MapScaler } from "../../map_scaler/index.js";
 import { cloneNodeClean } from "../../mx_helper_misc.js";
 import { Box } from "./box.js";
-import { MapNorthArrow } from "./north_arrow.js";
+import { MapNorthArrow } from "./../../north_arrow/index.js";
+import { MapControlScale } from "../../map_controls/index.js";
 
 class Item extends Box {
   constructor(boxParent, config) {
@@ -81,7 +82,7 @@ class Item extends Box {
       },
       el(
         "div",
-        { class: "mc-item-scalable" },
+        { class: "mc-item-scalable-font" },
         // must be first level <div mc-item><h1>..</h1><p>...</p>
         [...content.children]
       )
@@ -113,7 +114,7 @@ class Item extends Box {
       {
         class: ["mc-item", "mc-item-element"],
       },
-      el("div", { class: "mc-item-scalable" }, elContent)
+      el("div", { class: "mc-item-scalable-font" }, elContent)
     );
 
     return elOut;
@@ -130,7 +131,7 @@ class Item extends Box {
           mc_editable: item.editable,
         },
       },
-      el("div", { class: "mc-item-scalable" }, el("span", text))
+      el("div", { class: "mc-item-scalable-font" }, el("span", text))
     );
     return elOut;
   }
@@ -156,7 +157,7 @@ class Item extends Box {
     );
 
     item.map = new mapboxgl.Map(mapOptions);
-    item.map.addControl(new mapboxgl.ScaleControl(), "bottom-right");
+    item.map.addControl(new MapControlScale({mode:'center'}), "bottom-right");
     item.map.addControl(new MapNorthArrow(), "top-right");
     item.scaler = new MapScaler(item.map);
 

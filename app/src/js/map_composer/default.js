@@ -1,6 +1,13 @@
 import { el } from "./../el/src/index.js";
+import { getDpi } from "./components/helpers.js";
+import preset from "./data/paper_sizes.json";
+const presetsFlat = Object.keys(preset).reduce((a, c) => {
+  a.push(...preset[c]);
+  return a;
+}, []);
 
-const pixelRatioOrig = window.devicePixelRatio;
+const dpr = window.devicePixelRatio;
+const dpiEstimate = getDpi();
 
 /**
  * TODO : move state properties in options
@@ -10,20 +17,23 @@ const state = {
   units: ["mm", "in", "px"],
   modes: ["layout", "preview"],
   modes_internal: ["print", "layout", "preview"],
-  dpi: 96 * pixelRatioOrig,
+  presets: presetsFlat,
+  dpi: dpiEstimate,
+  dpr: dpr,
   mode: "layout",
   predefined_dim: "A5",
-  page_width: 600,
-  page_height: 600,
+  predefined_item: {},
+  page_width: 600 * dpr,
+  page_height: 600 * dpr,
   content_scale: 1,
   legend_n_columns: 1,
-  grid_snap_size: 5,
-  item_height: 10,
-  item_width: 10,
+  grid_snap_size: 5 * dpr,
+  item_height: 10 * dpr,
+  item_width: 10 * dpr,
   scale_map: 1,
   scale_content: 1,
-  workspace_height: 200,
-  workspace_width: 200,
+  workspace_height: 200 * dpr,
+  workspace_width: 200 * dpr,
   canvas_max_area_theory: 16384 * 16384,
   canvas_max_area: 5000 * 5000,
   items: [

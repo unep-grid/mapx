@@ -4,18 +4,9 @@ import { Toolbar } from "./components/index.js";
 import { EditorToolbar } from "./components/text_editor.js";
 import { el } from "../el/src/index.js";
 import { unitConvert } from "./components/helpers";
-import preset from "./data/paper-sizes.json";
 import "./style/map_composer.less";
 import { bindAll } from "../bind_class_methods/index.js";
-const getDevicePixelRatio = Object.getOwnPropertyDescriptor(
-  window,
-  "devicePixelRatio"
-).get;
-
-const presetFlat = Object.keys(preset).reduce((a, c) => {
-  a.push(...preset[c]);
-  return a;
-}, []);
+import { waitTimeoutAsync } from "../animation_frame/index.js";
 
 export class MapComposer {
   constructor(elContainer, state, options) {
@@ -30,8 +21,6 @@ export class MapComposer {
 
   init() {
     const mc = this;
-    // values
-    mc._preset_flat = presetFlat;
 
     // components
     mc.toolbar = new Toolbar(mc);
@@ -90,7 +79,6 @@ export class MapComposer {
   }
   destroy() {
     const mc = this;
-    mc.setDpi();
     mc.workspace.destroy();
     mc.toolbar.destroy();
     mc.el.remove();
@@ -108,10 +96,6 @@ export class MapComposer {
         mc.setMode(value);
         mc.update();
         break;
-      case "dpi":
-        mc.setDpi(value);
-        mc.update();
-        break;
       case "unit":
         mc.setUnit(value);
         mc.update();
@@ -124,10 +108,7 @@ export class MapComposer {
         break;
       case "scale_content":
         mc.setScaleContent(value);
-        mc.setScaleMap(value);
-        break;
-      case "scale_map":
-        mc.setScaleMap(value);
+        mc.setScaleContentMap(value);
         break;
       case "legends_n_columns":
         mc.setLegendColumnCount(value);
@@ -142,27 +123,24 @@ export class MapComposer {
 
   setPredefinedDim(value) {
     const mc = this;
-
-    const item = mc._preset_flat.find((p) => p.name === value);
+    const item = mc.state.presets.find((p) => p.name === value);
     if (!item) {
       console.warn(`Preset ${value} not found`);
       return;
     }
 
     mc.state.predefined_dim = value;
+    mc.state.predefined_item = item;
 
     mc.toolbar.elSelectPreset.value = value;
 
     if (value === "mc_preset_manual") {
+      // Enable unit control and return, don't update
       mc.toolbar.enableControl("unit");
-      mc.toolbar.enableControl("dpi");
       return;
-    } else {
-      mc.toolbar.disableControl("unit");
-      mc.toolbar.disableControl("dpi");
     }
 
-    mc.setDpi(item.dpi);
+    mc.toolbar.disableControl("unit");
     mc.setUnit(item.unit);
     mc.setPageSize(item.width, item.height, false);
   }
@@ -247,67 +225,53 @@ export class MapComposer {
     if (!mc.ready) {
       return;
     }
-    if (unit === "px") {
-      mc.setDpi();
-    } else {
-      mc.setDpi(mc.state.dpi);
-    }
+
+    const isInches = unit === "in";
     const dpi = mc.state.dpi;
-    const sizeStep = Math.ceil(
-      unitConvert({
-        value: mc.state.grid_snap_size * window.devicePixelRatio,
-        unitFrom: "px",
-        unitTo: unit,
-        dpi: dpi,
-      })
-    );
-    mc.state.page_width = Math.round(
-      unitConvert({
-        value: mc.state.page_width,
-        unitFrom: mc.state.unit,
-        unitTo: unit,
-        dpi: dpi,
-      })
-    );
-    mc.state.page_height = Math.round(
-      unitConvert({
-        value: mc.state.page_height,
-        unitFrom: mc.state.unit,
-        unitTo: unit,
-        dpi: dpi,
-      })
-    );
+    const sizeStepRaw = unitConvert({
+      value: mc.state.grid_snap_size * window.devicePixelRatio,
+      unitFrom: "px",
+      unitTo: unit,
+      dpi: dpi,
+    });
+    const widthRaw = unitConvert({
+      value: mc.state.page_width,
+      unitFrom: mc.state.unit,
+      unitTo: unit,
+      dpi: dpi,
+    });
+    const heightRaw = unitConvert({
+      value: mc.state.page_height,
+      unitFrom: mc.state.unit,
+      unitTo: unit,
+      dpi: dpi,
+    });
+
+    const sizeStep = isInches
+      ? Math.ceil(sizeStepRaw * 10) / 10
+      : Math.ceil(sizeStepRaw);
+
+    const width = isInches
+      ? Math.ceil(widthRaw * 10) / 10
+      : Math.ceil(widthRaw);
+
+    const height = isInches
+      ? Math.ceil(heightRaw * 10) / 10
+      : Math.ceil(heightRaw);
+
+    // set state unit (used in setWidth/Height)
+    mc.state.unit = unit || mc.state.unit;
+    mc.toolbar.elInputUnit.value = unit;
+
+    mc.state.page_width = width;
+    mc.state.page_height = height;
+
     mc.toolbar.elInputPageWidth.setAttribute("step", sizeStep);
     mc.toolbar.elInputPageWidth.setAttribute("min", sizeStep);
     mc.toolbar.elInputPageWidth.setAttribute("max", sizeStep * 1000);
     mc.toolbar.elInputPageHeight.setAttribute("step", sizeStep);
     mc.toolbar.elInputPageHeight.setAttribute("min", sizeStep);
     mc.toolbar.elInputPageHeight.setAttribute("max", sizeStep * 1000);
-    mc.state.unit = unit || mc.state.unit;
-    mc.toolbar.elInputUnit.value = unit;
-  }
-  setDpi(dpi) {
-    const mc = this;
-    if (!mc.ready) {
-      return;
-    }
-    if (dpi && dpi >= 72 && dpi <= 300) {
-      Object.defineProperty(window, "devicePixelRatio", {
-        get: function () {
-          return dpi / 96;
-        },
-      });
-    } else {
-      Object.defineProperty(window, "devicePixelRatio", {
-        get: getDevicePixelRatio,
-      });
-    }
-    const nDpi = dpi || 96 * window.devicePixelRatio;
-    const changed = mc.state.dpi !== nDpi;
-    if (changed) {
-      mc.state.dpi = nDpi;
-      //mc.toolbar.elInputDpi.value = mc.state.dpi;
-    }
   }
 
   update() {
@@ -322,7 +286,7 @@ export class MapComposer {
     mc.page.el.style.setProperty(`--mc-item-scale-content`, scale);
   }
 
-  setScaleMap(scale = 1) {
+  setScaleContentMap(scale = 1) {
     const mc = this;
     scale = Number(scale);
     mc.state.scale_map = scale;
@@ -333,8 +297,30 @@ export class MapComposer {
     }
   }
 
-  get scaleMap() {
-    return this._scale_map;
+  async setScaleMap(scale = 1) {
+    const mc = this;
+    scale = Number(scale);
+    Object.defineProperty(window, "devicePixelRatio", {
+      get: function () {
+        return scale;
+      },
+    });
+    await waitTimeoutAsync(1);
+    for (const item of mc.page.items) {
+      if (item.type === "map") {
+        if (item.map._frame) {
+          item.map._frame.cancel();
+          item.map._frame = null;
+        }
+        item.map._render();
+      }
+    }
+    await waitTimeoutAsync(1);
+    Object.defineProperty(window, "devicePixelRatio", {
+      get: function () {
+        return mc.state.dpr;
+      },
+    });
   }
 
   setLegendColumnCount(n) {

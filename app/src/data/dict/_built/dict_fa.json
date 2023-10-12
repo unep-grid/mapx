@@ -6891,28 +6891,28 @@
   },
   {
     "id": "mc_label_zoom",
-    "en": "Zoom",
-    "fa": "بزرگنمایی"
+    "en": "Page zoom",
+    "fa": "بزرگنمایی صفحه"
   },
   {
     "id": "mc_button_zoom_in",
-    "en": "More",
-    "fa": "بیشتر"
+    "en": "Zoom in",
+    "fa": "بزرگنمایی"
   },
   {
     "id": "mc_button_zoom_out",
-    "en": "Less",
-    "fa": "کمتر"
+    "en": "Zoom out",
+    "fa": "کوچک نمایی"
   },
   {
     "id": "mc_button_zoom_fit_width",
-    "en": "Width",
-    "fa": "عرض"
+    "en": "Fit width",
+    "fa": "متناسب با عرض"
   },
   {
     "id": "mc_button_zoom_fit_height",
-    "en": "Height",
-    "fa": "ارتفاع"
+    "en": "Fit height",
+    "fa": "ارتفاع مناسب"
   },
   {
     "id": "mc_button_zoom_desc",

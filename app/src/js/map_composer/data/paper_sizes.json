@@ -1,0 +1,397 @@
+{
+  "mc_preset_group_default": [
+    {
+      "name": "mc_preset_manual"
+    }
+  ],
+  "mc_preset_group_iso": [
+    {
+      "name": "A5",
+      "width": 148,
+      "height": 210,
+      "unit": "mm"
+    },
+    {
+      "name": "A4",
+      "width": 210,
+      "height": 297,
+      "unit": "mm"
+    },
+    {
+      "name": "A3",
+      "width": 297,
+      "height": 420,
+      "unit": "mm"
+    }
+  ],
+  "mc_preset_group_iso_other": [
+    {
+      "name": "A0",
+      "width": 841,
+      "height": 1189,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "A1",
+      "width": 594,
+      "height": 841,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "A2",
+      "width": 420,
+      "height": 594,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "A6",
+      "width": 105,
+      "height": 148,
+      "unit": "mm"
+    },
+    {
+      "name": "A7",
+      "width": 74,
+      "height": 105,
+      "unit": "mm"
+    },
+    {
+      "name": "A8",
+      "width": 52,
+      "height": 74,
+      "unit": "mm"
+    },
+    {
+      "name": "A9",
+      "width": 37,
+      "height": 52,
+      "unit": "mm"
+    },
+    {
+      "name": "A10",
+      "width": 26,
+      "height": 37,
+      "unit": "mm"
+    }
+  ],
+  "mc_preset_group_iso_envelope": [
+    {
+      "name": "B0",
+      "width": 1000,
+      "height": 1414,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "B1",
+      "width": 707,
+      "height": 1000,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "B1+",
+      "width": 720,
+      "height": 1020,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "B2",
+      "width": 500,
+      "height": 707,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "B2+",
+      "width": 520,
+      "height": 720,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "B3",
+      "width": 353,
+      "height": 500,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "B4",
+      "width": 250,
+      "height": 353,
+      "unit": "mm"
+    },
+    {
+      "name": "B5",
+      "width": 176,
+      "height": 250,
+      "unit": "mm"
+    },
+    {
+      "name": "B6",
+      "width": 125,
+      "height": 176,
+      "unit": "mm"
+    },
+    {
+      "name": "B7",
+      "width": 88,
+      "height": 125,
+      "unit": "mm"
+    },
+    {
+      "name": "B8",
+      "width": 62,
+      "height": 88,
+      "unit": "mm"
+    },
+    {
+      "name": "B9",
+      "width": 44,
+      "height": 62,
+      "unit": "mm"
+    },
+    {
+      "name": "B10",
+      "width": 31,
+      "height": 44,
+      "unit": "mm"
+    },
+    {
+      "name": "C0",
+      "width": 917,
+      "height": 1297,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "C1",
+      "width": 648,
+      "height": 917,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "C2",
+      "width": 458,
+      "height": 648,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "C3",
+      "width": 324,
+      "height": 458,
+      "unit": "mm",
+      "disabled": true
+    },
+    {
+      "name": "C4",
+      "width": 229,
+      "height": 324,
+      "unit": "mm"
+    },
+    {
+      "name": "C5",
+      "width": 162,
+      "height": 229,
+      "unit": "mm"
+    },
+    {
+      "name": "C6",
+      "width": 114,
+      "height": 162,
+      "unit": "mm"
+    },
+    {
+      "name": "C7",
+      "width": 81,
+      "height": 114,
+      "unit": "mm"
+    },
+    {
+      "name": "C8",
+      "width": 57,
+      "height": 81,
+      "unit": "mm"
+    },
+    {
+      "name": "C9",
+      "width": 40,
+      "height": 57,
+      "unit": "mm"
+    },
+    {
+      "name": "C10",
+      "width": 28,
+      "height": 40,
+      "unit": "mm"
+    }
+  ],
+  "mc_preset_group_us": [
+    {
+      "name": "mc_preset_us_legal",
+      "width": 8.5,
+      "height": 14,
+      "unit": "in"
+    },
+    {
+      "name": "mc_preset_us_ansi_a_letter",
+      "width": 8.5,
+      "height": 11,
+      "unit": "in"
+    },
+    {
+      "name": "mc_preset_us_ansi_b_tabloid",
+      "width": 11,
+      "height": 17,
+      "unit": "in"
+    },
+    {
+      "name": "mc_preset_us_ansi_b_ledger",
+      "width": 17,
+      "height": 11,
+      "unit": "in",
+      "disabled": true
+    },
+    {
+      "name": "mc_preset_us_ansi_c",
+      "width": 17,
+      "height": 22,
+      "unit": "in",
+      "disabled": true
+    },
+    {
+      "name": "mc_preset_us_ansi_d",
+      "width": 22,
+      "height": 34,
+      "unit": "in",
+      "disabled": true
+    },
+    {
+      "name": "mc_preset_us_ansi_e",
+      "width": 34,
+      "height": 44,
+      "unit": "in",
+      "disabled": true
+    }
+  ],
+  "mc_preset_group_social": [
+    {
+      "name": "mc_preset_linkedin_shared_link",
+      "width": 552,
+      "height": 289,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_linkedin_single_image",
+      "width": 1200,
+      "height": 627,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_linkedin_company_main",
+      "width": 1128,
+      "height": 376,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_linkedin_company_photo",
+      "width": 264,
+      "height": 176,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_twitter_shared_link",
+      "width": 1200,
+      "height": 628,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_twitter_single_image",
+      "width": 1200,
+      "height": 675,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_twitter_two_images",
+      "width": 700,
+      "height": 800,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_twitter_three_images",
+      "width": 700,
+      "height": 800,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_twitter_three_images_2nd_3rd",
+      "width": 1200,
+      "height": 686,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_twitter_four_images",
+      "width": 1200,
+      "height": 600,
+      "unit": "px"
+    }
+  ],
+  "mc_preset_group_screen": [
+    {
+      "name": "mc_preset_screen_sxga",
+      "width": 1280,
+      "height": 1024,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_screen_hd",
+      "width": 1366,
+      "height": 768,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_screen_hd+",
+      "width": 1600,
+      "height": 900,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_screen_fhd",
+      "width": 1920,
+      "height": 1080,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_screen_wuxga",
+      "width": 1920,
+      "height": 1200,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_screen_qhd",
+      "width": 2560,
+      "height": 1440,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_screen_wqhd",
+      "width": 3440,
+      "height": 1440,
+      "unit": "px"
+    },
+    {
+      "name": "mc_preset_screen_uhd",
+      "width": 3840,
+      "height": 2160,
+      "unit": "px"
+    }
+  ]
+}
+

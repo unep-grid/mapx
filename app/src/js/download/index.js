@@ -41,11 +41,12 @@ export async function downloadHTML(data, filename) {
  * @param {HTMLCanvasElement} canvas
  * @param {String} filename File name
  * @param {String} type File mimetype
+ * @param {Boolean} newTab Open in new tab
  * @return {Promise<Boolean>}
  */
-export async function downloadCanvas(canvas, filename, type) {
+export async function downloadCanvas(canvas, filename, type, newTab) {
   const blob = await canvasToBlob(canvas, type || "image/png");
-  return downloadBlob(blob, filename);
+  return downloadBlob(blob, filename, newTab);
 }
 
 function canvasToBlob(canvas, type) {
@@ -59,48 +60,79 @@ function canvasToBlob(canvas, type) {
   });
 }
 
-export function downloadBlob(blob, filename) {
-  const state = {
-    done: true,
-  };
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(blob);
-
+/**
+ * Initiates the download of a blob as a file or opens it in a new browser tab.
+ * Returns a Promise that resolves when the blob is successfully downloaded or
+ * opened in a new tab, or rejects in the event of an error or timeout.
+ *
+ * @param {Blob} blob - The blob to be downloaded or opened in a new tab.
+ * @param {string} filename - The name to use for the downloaded file. Ignored if newTab is true.
+ * @param {boolean} newTab - If true, the blob will be opened in a new tab. Otherwise, it will be downloaded.
+ * @returns {Promise<boolean>} Resolves with `true` when successful, otherwise rejects with an error message.
+ */
+export function downloadBlob(blob, filename, newTab) {
+  const timeoutPromise = new Promise((_, reject) => {
     setTimeout(() => {
-      if (!state.done) {
-        cancel("timeout");
-      }
+      reject("timeout");
     }, 10e3);
+  });
 
-    const elA = el("a", {
-      href: url,
-      download: isEmpty(filename) ? "download" : filename,
-      on: [
-        "click",
-        done,
-        {
-          once: true,
-        },
-      ],
-    });
-
-    elA.click();
+  const downloadPromise = new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(blob);
+    if (newTab) {
+      const openedWindow = window.open(url, "_blank");
+      if (!openedWindow) {
+        reject(
+          "Failed to open the blob in a new tab. Pop-up might have been blocked."
+        );
+        clean();
+        return;
+      }
+      window.addEventListener("blur", done);
+    } else {
+      triggerDownload(url, filename, done);
+    }
 
     function done() {
-      state.done = true;
       resolve(true);
       clean();
     }
-    function cancel(e) {
-      reject(`downloadBlob: canceled, ${e}`);
-      clean();
-    }
+
     function clean() {
-      setTimeout((_) => {
-        URL.revokeObjectURL(url);
-      }, 1e3);
+      if (newTab) {
+        window.removeEventListener("blur", done);
+      } else {
+        // Don't keep the url active more than n seconds
+        setTimeout(() => {
+          URL.revokeObjectURL(url);
+        }, 10e3);
+      }
     }
   });
+
+  return Promise.race([downloadPromise, timeoutPromise]);
+}
+
+/**
+ * Initiates the download of a resource by simulating a click on an anchor element.
+ *
+ * @param {string} url - The URL of the resource to download.
+ * @param {string} filename - The name to use for the downloaded file.
+ * @param {function} callback - The function to call once the download is triggered.
+ */
+function triggerDownload(url, filename, callback) {
+  const elA = el("a", {
+    href: url,
+    download: isEmpty(filename) ? "download" : filename,
+    on: [
+      "click",
+      callback,
+      {
+        once: true,
+      },
+    ],
+  });
+  elA.click();
 }
 
 async function tableToCsv(table, headers) {

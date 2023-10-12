@@ -6891,28 +6891,28 @@
   },
   {
     "id": "mc_label_zoom",
-    "en": "Zoom",
-    "de": "Zoomen"
+    "en": "Page zoom",
+    "de": "Seitenzoom"
   },
   {
     "id": "mc_button_zoom_in",
-    "en": "More",
-    "de": "Mehr"
+    "en": "Zoom in",
+    "de": "Hineinzoomen"
   },
   {
     "id": "mc_button_zoom_out",
-    "en": "Less",
-    "de": "Weniger"
+    "en": "Zoom out",
+    "de": "Rauszoomen"
   },
   {
     "id": "mc_button_zoom_fit_width",
-    "en": "Width",
-    "de": "Breite"
+    "en": "Fit width",
+    "de": "Breite anpassen"
   },
   {
     "id": "mc_button_zoom_fit_height",
-    "en": "Height",
-    "de": "Höhe"
+    "en": "Fit height",
+    "de": "Passende Höhe"
   },
   {
     "id": "mc_button_zoom_desc",

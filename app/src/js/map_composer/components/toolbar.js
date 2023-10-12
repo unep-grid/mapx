@@ -1,7 +1,7 @@
 import { Box } from "./box.js";
-import { el, elSpanTranslate as tt } from "../../el_mapx";
+import { el, elButtonFa, elSpanTranslate as tt } from "../../el_mapx";
 import { getDictItem } from "../../language";
-import presets from "./../data/paper-sizes.json";
+import presets from "./../data/paper_sizes.json";
 import { throttleFrame } from "../../mx_helper_misc.js";
 
 class Toolbar extends Box {
@@ -211,8 +211,7 @@ class Toolbar extends Box {
    */
   buildToolbar() {
     const toolbar = this;
-    const { dpi, unit, units, mode, modes, grid_snap_size } = toolbar.state;
-    const sizeStep = grid_snap_size * window.devicePixelRatio;
+    const { unit, units, mode, modes } = toolbar.state;
 
     /**
      * Preset
@@ -291,70 +290,52 @@ class Toolbar extends Box {
       "div",
       {
         class: ["form-group"],
-        style: {
-          display: "flex",
-          flexDirection: "column",
-        },
       },
-      el("label", tt("mc_label_zoom")),
-      el("div", { class: "btn-group" }, [
+      [
+        el("label", tt("mc_label_zoom")),
         el(
-          "button",
+          "div",
           {
-            type: "button",
-            class: ["btn", "btn-default"],
-            style: { width: "50%" },
-            dataset: {
-              mc_action: "zoom_in",
-              mc_event_type: "click",
-            },
+            class: "btn-group",
           },
-          tt("mc_button_zoom_in")
-        ),
-        el(
-          "button",
-          {
-            type: "button",
-            class: ["btn", "btn-default"],
-            style: { width: "50%" },
-            dataset: {
-              mc_action: "zoom_out",
-              mc_event_type: "click",
-            },
-          },
-          tt("mc_button_zoom_out")
-        ),
-      ]),
-      el("div", { class: "btn-group" }, [
-        el(
-          "button",
-          {
-            type: "button",
-            class: ["btn", "btn-default"],
-            style: { width: "50%" },
-            dataset: {
-              mc_action: "zoom_fit_height",
-              mc_event_type: "click",
-            },
-          },
-          tt("mc_button_zoom_fit_height")
-        ),
-        el(
-          "button",
-          {
-            type: "button",
-            class: ["btn", "btn-default"],
+          [
+            elButtonFa("mc_button_zoom_in", {
+              icon: "search-plus",
+              mode: "icon",
+              dataset: {
+                mc_action: "zoom_in",
+                mc_event_type: "click",
+              },
+            }),
 
-            style: { width: "50%" },
-            dataset: {
-              mc_action: "zoom_fit_width",
-              mc_event_type: "click",
-            },
-          },
-          tt("mc_button_zoom_fit_width")
+            elButtonFa("mc_button_zoom_out", {
+              icon: "search-minus",
+              mode: "icon",
+              dataset: {
+                mc_action: "zoom_out",
+                mc_event_type: "click",
+              },
+            }),
+            elButtonFa("mc_button_zoom_fit_height", {
+              icon: "arrows-v",
+              mode: "icon",
+              dataset: {
+                mc_action: "zoom_fit_height",
+                mc_event_type: "click",
+              },
+            }),
+            elButtonFa("mc_button_zoom_fit_width", {
+              icon: "arrows-h",
+              mode: "icon",
+              dataset: {
+                mc_action: "zoom_fit_width",
+                mc_event_type: "click",
+              },
+            }),
+          ]
         ),
-      ]),
-      el("span", { class: "text-muted" }, tt("mc_button_zoom_desc"))
+        el("span", { class: "text-muted" }, tt("mc_button_zoom_desc")),
+      ]
     );
 
     /**
@@ -423,8 +404,8 @@ class Toolbar extends Box {
       },
       step: 0.1,
       value: 1,
-      max: 5,
-      min: 0.1,
+      max: 3,
+      min: 0.5,
     });
 
     toolbar.elGroupScaleContent = el(
@@ -448,9 +429,9 @@ class Toolbar extends Box {
         mc_event_type: "change",
         mc_state_name: "page_width",
       },
-      step: sizeStep,
-      max: sizeStep * 1000,
-      min: sizeStep,
+      step: 1,
+      max: 1000,
+      min: 1,
     });
     toolbar.elGroupWidth = el(
       "div",
@@ -473,9 +454,9 @@ class Toolbar extends Box {
         mc_event_type: "change",
         mc_state_name: "page_height",
       },
-      step: sizeStep,
-      max: sizeStep * 1000,
-      min: sizeStep,
+      step: 1,
+      max: 1000,
+      min: 1,
     });
     toolbar.elGroupHeight = el(
       "div",
