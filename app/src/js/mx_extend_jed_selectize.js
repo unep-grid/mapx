@@ -1,30 +1,167 @@
-import {getGemetConcept, searchGemet} from './gemet_util/index.js';
+import { getGemetConcept, searchGemet } from "./gemet_util/index.js";
+import { el } from "./el_mapx";
+import { isArray, isEmpty, isNotEmpty } from "./is_test/index.js";
+import { makeId, path } from "./mx_helper_misc.js";
+import { getDictItem } from "./language/index.js";
+import { getMetadataKeywords } from "./metadata/keywords.js";
 
-(function() {
-  'use strict';
 
-  const h = mx.helpers;
-  const el = h.el;
+(function () {
+  "use strict";
 
-  JSONEditor.defaults.resolvers.unshift(function(schema) {
-    if (schema.type === 'array' && schema.format === 'selectizeGemet') {
-      return 'selectizeGemet';
+  JSONEditor.defaults.resolvers.unshift(function (schema) {
+    if (schema.type === "array" && schema.format === "selectizeGemet") {
+      return "selectizeGemet";
     }
   });
 
-  JSONEditor.defaults.resolvers.unshift(function(schema) {
-    if (schema.type === 'array' && schema.format === 'selectizeOptGroup') {
-      return 'selectizeOptGroup';
+  JSONEditor.defaults.resolvers.unshift(function (schema) {
+    if (schema.type === "array" && schema.format === "selectizeOptGroup") {
+      return "selectizeOptGroup";
+    }
+  });
+
+  JSONEditor.defaults.resolvers.unshift(function (schema) {
+    if (schema.type === "array" && schema.format === "selectizeMetaKeywords") {
+      return "selectizeMetaKeywords";
     }
   });
 
   /**
+   * Metadata keywords input : remote websocket fetch
+   */
+  JSONEditor.defaults.editors.selectizeMetaKeywords =
+    JSONEditor.AbstractEditor.extend({
+      initValue: async function (keywords) {
+        const editor = this;
+        const selectize = editor.input.selectize;
+        if (editor._init_value) {
+          return;
+        }
+        /*
+         * Add initial option:
+         */
+        if (isNotEmpty(keywords)) {
+          for (const keyword of keywords) {
+            selectize.addOption(keyword);
+          }
+          editor._init_value = true;
+        }
+      },
+      build: function () {
+        const editor = this;
+        editor.title = editor.theme.getFormInputLabel(editor.getTitle());
+        editor.title_controls = editor.theme.getHeaderButtonHolder();
+        editor.title.appendChild(editor.title_controls);
+        editor.error_holder = document.createElement("div");
+
+        if (editor.schema.description) {
+          editor.description = editor.theme.getDescription(
+            editor.schema.description
+          );
+        }
+
+        editor.input = document.createElement("select");
+        editor.input.setAttribute("multiple", "multiple");
+
+        const group = editor.theme.getFormControl(
+          editor.title,
+          editor.input,
+          editor.description
+        );
+
+        editor.container.appendChild(group);
+        editor.container.appendChild(editor.error_holder);
+
+        window.jQuery(editor.input).selectize({
+          plugins: ["remove_button"],
+          valueField: "keyword",
+          labelField: "keyword",
+          searchField: "keyword",
+          options: [],
+          create: true,
+          multiple: true,
+          maxItems: 20,
+          score: function () {
+            /**
+             * For sifter score on the 'github repos' example, check this:
+             * https://github.com/selectize/selectize.js/blob/efcd689fc1590bc085aee728bcda71373f6bd0ff/examples/github.html#L129
+             * Here, we use score from similarity, trgm
+             */
+
+            return function (item) {
+              return item.score;
+            };
+          },
+          load: async function (query, callback) {
+            /**
+             * When the user search, fetch and
+             * format results for the callback
+             */
+            if (isEmpty(query)) {
+              return callback();
+            }
+            this.clearOptions();
+            try {
+              const data = await getMetadataKeywords(query);
+              console.log(query, data);
+              return callback(data);
+            } catch (e) {
+              console.warn(e);
+              return callback();
+            }
+          },
+        });
+
+        editor.refreshValue();
+      },
+      postBuild: function () {
+        const editor = this;
+        editor.input.selectize.on("change", function () {
+          editor.refreshValue();
+          editor.onChange(true);
+        });
+      },
+      destroy: function () {
+        const editor = this;
+        editor.empty(true);
+        if (editor.title && editor.title.parentNode) {
+          editor.title.parentNode.removeChild(editor.title);
+        }
+        if (editor.description && editor.description.parentNode) {
+          editor.description.parentNode.removeChild(editor.description);
+        }
+        if (editor.input && editor.input.parentNode) {
+          editor.input.parentNode.removeChild(editor.input);
+        }
+        editor._super();
+      },
+      empty: function () {},
+      setValue: async function (value) {
+        try {
+          const editor = this;
+          const selectize = editor.input.selectize;
+          selectize.clear(true);
+          value = isArray(value) ? value : [value];
+          await editor.initValue(value);
+          selectize.setValue(value);
+          editor.refreshValue();
+        } catch (e) {
+          console.warn(e);
+        }
+      },
+      refreshValue: function () {
+        const editor = this;
+        editor.value = editor.input.selectize.getValue();
+      },
+    });
+
+  /**
    * Gemet specific input : remote fetch
    */
-
   JSONEditor.defaults.editors.selectizeGemet = JSONEditor.AbstractEditor.extend(
     {
-      initValue: async function(value) {
+      initValue: async function (value) {
         const editor = this;
         const selectize = editor.input.selectize;
         if (editor._init_value) {
@@ -43,12 +180,12 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
           editor._init_value = true;
         }
       },
-      build: function() {
+      build: function () {
         const editor = this;
         editor.title = editor.theme.getFormInputLabel(editor.getTitle());
         editor.title_controls = editor.theme.getHeaderButtonHolder();
         editor.title.appendChild(editor.title_controls);
-        editor.error_holder = document.createElement('div');
+        editor.error_holder = document.createElement("div");
 
         if (editor.schema.description) {
           editor.description = editor.theme.getDescription(
@@ -56,8 +193,8 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
           );
         }
 
-        editor.input = document.createElement('select');
-        editor.input.setAttribute('multiple', 'multiple');
+        editor.input = document.createElement("select");
+        editor.input.setAttribute("multiple", "multiple");
 
         const group = editor.theme.getFormControl(
           editor.title,
@@ -69,42 +206,43 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
         editor.container.appendChild(editor.error_holder);
 
         window.jQuery(editor.input).selectize({
-          valueField: 'concept',
-          labelField: 'label',
-          searchField: ['label', 'definition'],
+          plugins: ["remove_button"],
+          valueField: "concept",
+          labelField: "label",
+          searchField: ["label", "definition"],
           //sortField : 'score', //do not work :(
           options: [],
-          //create: false,
+          create: false,
           multiple: true,
           maxItems: 20,
           render: {
-            option: function(item, escape) {
+            option: function (item, escape) {
               return el(
-                'div',
+                "div",
                 {
-                  class: ['hint', 'hint--top-right'],
+                  class: ["hint", "hint--top-right"],
                   style: {
-                    padding: '10px',
-                    display: 'flex'
+                    padding: "10px",
+                    display: "flex",
                   },
-                  'aria-label': escape(item.definition)
+                  "aria-label": escape(item.definition),
                 },
-                el('span', escape(item.label))
+                el("span", escape(item.label))
               );
-            }
+            },
           },
-          score: function() {
+          score: function () {
             /**
              * For sifter score on the 'github repos' example, check this:
              * https://github.com/selectize/selectize.js/blob/efcd689fc1590bc085aee728bcda71373f6bd0ff/examples/github.html#L129
              * Here, we use score from similarity, trgm
              */
 
-            return function(item) {
+            return function (item) {
               return item.score;
             };
           },
-          load: async function(query, callback) {
+          load: async function (query, callback) {
             /**
              * When the user search, fetch and
              * format results for the callback
@@ -118,19 +256,19 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
               console.warn(e);
               return callback();
             }
-          }
+          },
         });
 
         editor.refreshValue();
       },
-      postBuild: function() {
+      postBuild: function () {
         const editor = this;
-        editor.input.selectize.on('change', function() {
+        editor.input.selectize.on("change", function () {
           editor.refreshValue();
           editor.onChange(true);
         });
       },
-      destroy: function() {
+      destroy: function () {
         const editor = this;
         editor.empty(true);
         if (editor.title && editor.title.parentNode) {
@@ -144,13 +282,13 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
         }
         editor._super();
       },
-      empty: function() {},
-      setValue: async function(value) {
+      empty: function () {},
+      setValue: async function (value) {
         try {
           const editor = this;
           const selectize = editor.input.selectize;
           selectize.clear(true);
-          value = h.isArray(value) ? value : [value];
+          value = isArray(value) ? value : [value];
           await editor.initValue(value);
           selectize.setValue(value);
           editor.refreshValue();
@@ -158,10 +296,10 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
           console.warn(e);
         }
       },
-      refreshValue: function() {
+      refreshValue: function () {
         const editor = this;
         editor.value = editor.input.selectize.getValue();
-      }
+      },
     }
   );
 
@@ -169,16 +307,16 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
    * Generic input with group + async translation
    */
 
-  JSONEditor.defaults.editors.selectizeOptGroup = JSONEditor.AbstractEditor.extend(
-    {
-      initGroups: function() {
+  JSONEditor.defaults.editors.selectizeOptGroup =
+    JSONEditor.AbstractEditor.extend({
+      initGroups: function () {
         const editor = this;
         /**
          * Addition
          * - async
          * - Add group options
          */
-        const grp = h.path(editor, 'schema.options.groupOptions');
+        const grp = path(editor, "schema.options.groupOptions");
         if (grp) {
           editor._group_init = true;
           const selectize = editor.input.selectize;
@@ -189,7 +327,7 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
           // For each group, add an option
           for (let k in grp) {
             selectize.addOptionGroup(k, {
-              key: k
+              key: k,
             });
             const items = grp[k];
             for (let i = 0, iL = items.length; i < iL; i++) {
@@ -197,18 +335,18 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
               selectize.addOption({
                 label: it, // will be replaced in render
                 value: it,
-                optgroup: k
+                optgroup: k,
               });
             }
           }
         }
       },
-      build: function() {
+      build: function () {
         const editor = this;
         editor.title = editor.theme.getFormInputLabel(editor.getTitle());
         editor.title_controls = editor.theme.getHeaderButtonHolder();
         editor.title.appendChild(editor.title_controls);
-        editor.error_holder = document.createElement('div');
+        editor.error_holder = document.createElement("div");
 
         if (editor.schema.description) {
           editor.description = editor.theme.getDescription(
@@ -216,8 +354,8 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
           );
         }
 
-        editor.input = document.createElement('select');
-        editor.input.setAttribute('multiple', 'multiple');
+        editor.input = document.createElement("select");
+        editor.input.setAttribute("multiple", "multiple");
 
         const group = editor.theme.getFormControl(
           editor.title,
@@ -236,48 +374,48 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
           render: {
             item: editor.renderOption,
             option: editor.renderOption,
-            optgroup_header: editor.renderOptionHeader
+            optgroup_header: editor.renderOptionHeader,
           },
-          searchField: ['label', 'value']
+          searchField: ["label", "value"],
         });
         editor.refreshValue();
       },
-      renderOption: function(option) {
-        const elOption = h.el(
-          'div',
+      renderOption: function (option) {
+        const elOption = el(
+          "div",
           {
-            class: 'option',
+            class: "option",
             dataset: {
               selectable: true,
-              value: option.value
-            }
+              value: option.value,
+            },
           },
           option.value
         );
 
-        h.getDictItem(option.value).then((label) => {
+        getDictItem(option.value).then((label) => {
           elOption.innerText = label;
           option.label = label;
         });
 
         return elOption;
       },
-      renderOptionHeader: function(option) {
+      renderOptionHeader: function (option) {
         /**
          * Selectize seems to delete or clone header buit here.
          * It's not possible to async set label: it's removed. USELESS renderer !
          * Ugly hack : set an id and.. find it using getElementById.
          */
-        const id = h.makeId();
-        const elHeader = h.el(
-          'div',
+        const id = makeId();
+        const elHeader = el(
+          "div",
           {
             id: id,
-            class: 'optgroup-header'
+            class: "optgroup-header",
           },
           option.value
         );
-        h.getDictItem(option.value).then((v) => {
+        getDictItem(option.value).then((v) => {
           const elH = document.getElementById(id);
           if (elH) {
             elH.innerText = v;
@@ -285,14 +423,14 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
         });
         return elHeader;
       },
-      postBuild: function() {
+      postBuild: function () {
         const editor = this;
-        editor.input.selectize.on('change', function() {
+        editor.input.selectize.on("change", function () {
           editor.refreshValue();
           editor.onChange(true);
         });
       },
-      destroy: function() {
+      destroy: function () {
         const editor = this;
         editor.empty(true);
         if (editor.title && editor.title.parentNode) {
@@ -306,22 +444,21 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
         }
         editor._super();
       },
-      empty: function() {},
-      setValue: function(value) {
+      empty: function () {},
+      setValue: function (value) {
         const editor = this;
         if (!editor._group_init) {
           editor.initGroups();
         }
         const selectize = editor.input.selectize;
         selectize.clear(true);
-        value = h.isArray(value) ? value : [value];
+        value = isArray(value) ? value : [value];
         editor.input.selectize.setValue(value);
         editor.refreshValue();
       },
-      refreshValue: function() {
+      refreshValue: function () {
         const editor = this;
         editor.value = editor.input.selectize.getValue();
-      }
-    }
-  );
+      },
+    });
 })();

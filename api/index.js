@@ -27,6 +27,7 @@ import { ioUploadSource } from "#mapx/upload";
 import { ioDownloadSource, ioEditSource, ioSourceListEdit } from "#mapx/source";
 import { ioViewPin } from "#mapx/view";
 import { ioProjectNameValidate, ioProjectCreate } from "#mapx/project";
+import { ioKeywordsSearch } from "#mapx/keywords";
 import {
   ioCreateAdapter,
   ioConnect,
@@ -83,20 +84,23 @@ io.on("connection", ioConnect); // emit 'authentication', with roles
 /**
  * Socket io routes / event id
  * -> some event are handled in modules, ex. ioEditSource
- * -> "use" wrapper = convert (request,cb) to (socket,request,cb)
+ * -> "use()" wrapper = convert (request,cb) to (socket,request,cb)
  */
 io.use((socket, next) => {
   socket.on("/client/geoserver/update", use(ioUpdateGeoserver));
   socket.on("/client/source/download", use(ioDownloadSource));
   socket.on("/client/source/upload", use(ioUploadSource));
-  socket.on("/client/test/sum", use(ioTestSum));
-  socket.on("/client/test/echo", use(ioTestEcho));
   socket.on("/client/source/edit/table", use(ioEditSource));
   socket.on("/client/source/get/list/edit", use(ioSourceListEdit));
   socket.on("/client/view/pin", use(ioViewPin));
   socket.on("/client/project/validate/name", use(ioProjectNameValidate));
   socket.on("/client/project/create", use(ioProjectCreate));
+  socket.on("/client/metadata/keywords/search", use(ioKeywordsSearch));
+
+  // tests 
   socket.on("echo", use(ioEcho));
+  socket.on("/client/test/sum", use(ioTestSum));
+  socket.on("/client/test/echo", use(ioTestEcho));
   next();
 });
 
