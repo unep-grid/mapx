@@ -24,10 +24,6 @@ class Box {
     box.listeners = [];
     box.draggers = [];
     box.resizers = [];
-    box.editable = false;
-    box.resizable = false;
-    box.draggable = false;
-    box.removable = false;
     box._scale = 1;
   }
   init(opt) {
@@ -70,6 +66,10 @@ class Box {
       box.setHeight(opt.height, true);
     }
 
+    if (opt.removable) {
+      box.makeRemovable();
+    }
+
     if (opt.draggable || opt.resizable) {
       box._lStore.addListener({
         target: box.el,
@@ -94,7 +94,6 @@ class Box {
         });
       }
     }
-    box.setTextSize(12);
   }
 
   get width() {
@@ -172,7 +171,7 @@ class Box {
     }
   }
 
-  addHandle(type, opt) {
+  addHandle(type, opt, children) {
     const box = this;
     const title = box.title;
     const base = {
@@ -180,7 +179,7 @@ class Box {
       class: ["mc-handle", "mc-handle-" + type],
     };
     const conf = Object.assign({}, base, opt);
-    box.addEl(el("div", conf));
+    box.addEl(el("div", conf, children));
   }
 
   addHandleDrag() {
@@ -206,12 +205,18 @@ class Box {
   }
 
   addHandleRemove() {
-    this.addHandle("remove", {
-      dataset: {
-        mc_action: "box_remove",
-        mc_event_type: "click",
+    const box = this;
+    box.addHandle(
+      "remove",
+      {
+        dataset: {
+          mc_action: "box_remove",
+          mc_event_type: "click",
+        },
+        on: ["click", box.destroy],
       },
-    });
+      el("i", { class: ["mc-icon", "fa", "fa-times"] })
+    );
   }
 
   addFocus() {
@@ -436,30 +441,32 @@ class Box {
     return out;
   }
 
-  get contentScale() {
+  getContentScale() {
     return this._content_scale;
   }
 
-  get textSize() {
-    return this._text_size;
+  getTextSize() {
+    const box = this;
+    return Number(
+      window.getComputedStyle(box.el).fontSize.split("px")[0] || 12
+    );
   }
 
   setTextSize(size) {
     const box = this;
     size = size < 5 ? 5 : size > 30 ? 30 : size ? size : 12;
-    box._text_size = size;
-    box.elContent.style.fontSize = size + "px";
+    box.el.style.fontSize = size + "px";
   }
 
   sizeTextMore() {
     const box = this;
-    const size = box.textSize + 1;
+    const size = box.getTextSize() + 1;
     box.setTextSize(size);
   }
 
   sizeTextLess() {
     const box = this;
-    const size = box.textSize - 1;
+    const size = box.getTextSize() - 1;
     box.setTextSize(size);
   }
 
@@ -511,6 +518,11 @@ class Box {
   makeDraggable() {
     const box = this;
     box.addHandleDrag();
+  }
+
+  makeRemovable() {
+    const box = this;
+    box.addHandleRemove();
   }
 
   makeResizable() {

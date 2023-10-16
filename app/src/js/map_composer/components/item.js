@@ -18,9 +18,11 @@ class Item extends Box {
     item.onRemove = item.onRemove.bind(item);
     item.onResize = item.onResize.bind(item);
 
+    const elContent = item.buildEl();
+
     item.init({
       class: "mc-" + item.type,
-      content: item.buildEl(),
+      content: elContent,
       boxContainer: item.boxParent,
       boxBound: item.boxParent.boxParent,
       boundEdges: { top: true, left: true, bottom: false, right: false },
@@ -53,6 +55,7 @@ class Item extends Box {
         return item.buildElNode();
       default:
         console.error(`type ${type} not known`);
+        return;
     }
   }
 
@@ -78,14 +81,10 @@ class Item extends Box {
       "div",
       {
         dataset: { mc_editable: item.editable },
-        class: ["mc-item", "mc-item-element"],
+        class: ["mc-item", "mc-item-element", "mc-item-scalable-font"],
       },
-      el(
-        "div",
-        { class: "mc-item-scalable-font" },
-        // must be first level <div mc-item><h1>..</h1><p>...</p>
-        [...content.children]
-      )
+      // must be first level <div mc-item><h1>..</h1><p>...</p>
+      [...content.children]
     );
     return elOut;
   }
@@ -112,9 +111,9 @@ class Item extends Box {
     const elOut = el(
       "div",
       {
-        class: ["mc-item", "mc-item-element"],
+        class: ["mc-item", "mc-item-element", "mc-item-scalable-font"],
       },
-      el("div", { class: "mc-item-scalable-font" }, elContent)
+      elContent
     );
 
     return elOut;
@@ -122,17 +121,18 @@ class Item extends Box {
 
   buildElText() {
     const item = this;
-    const text = el("span", item.orig.text).innerText;
+    const text = el("span", item?.orig?.text || "").innerText;
     const elOut = el(
       "div",
       {
-        class: ["mc-item", "mc-item-text", "mc-item"],
+        class: ["mc-item", "mc-item-text", "mc-item", "mc-item-scalable-font"],
         dataset: {
           mc_editable: item.editable,
         },
       },
-      el("div", { class: "mc-item-scalable-font" }, el("span", text))
+      el("span", text)
     );
+
     return elOut;
   }
 
@@ -157,7 +157,10 @@ class Item extends Box {
     );
 
     item.map = new mapboxgl.Map(mapOptions);
-    item.map.addControl(new MapControlScale({mode:'center'}), "bottom-right");
+    item.map.addControl(
+      new MapControlScale({ mode: "center" }),
+      "bottom-right"
+    );
     item.map.addControl(new MapNorthArrow(), "top-right");
     item.scaler = new MapScaler(item.map);
 

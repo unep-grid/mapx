@@ -1,11 +1,12 @@
 import { el } from "./../../el/src/index.js";
 import { flattenBlockElements } from "../../mx_helper_misc.js";
 import { isNotEmpty } from "../../is_test/index.js";
+import { Box } from "./box.js";
 
 /**
  * Based on https://jsfiddle.net/RokoCB/az7f38w7/
  */
-class EditorToolbar {
+export class EditorToolbar {
   constructor(boxParent, config) {
     const ed = this;
     config = config || {};
@@ -45,11 +46,14 @@ class EditorToolbar {
 
   setTargetEditable(v) {
     const ed = this;
+
+    const enable = isNotEmpty(v) ? v : ed.enabled;
+
     const elsEditables = ed.boxTarget.elContent.querySelectorAll(
       "[data-mc_editable=true]"
     );
     for (const e of elsEditables) {
-      if (v === true) {
+      if (enable === true) {
         e.setAttribute("contenteditable", true);
       } else {
         e.removeAttribute("contenteditable");
@@ -72,8 +76,6 @@ class EditorToolbar {
   }
 }
 
-export { EditorToolbar };
-
 function btnEdit(cmd, content) {
   return el(
     "button",
@@ -95,8 +97,29 @@ function buildEl() {
     {
       class: ["mc-box-bar-edit"],
     },
+
     el(
-      "span",
+      "div",
+      { class: ["mc-box-bar-edit-btn-group", "btn-group-vertical"] },
+      btnEdit(
+        "item:add",
+        el("span", el("i", { class: "fa fa-sticky-note-o" }), el("b", "+"))
+      )
+    ),
+    el(
+      "div",
+      { class: ["mc-box-bar-edit-btn-group", "btn-group-vertical"] },
+      btnEdit(
+        "sizeText:more",
+        el("span", el("i", { class: "fa fa-font" }), el("b", "+"))
+      ),
+      btnEdit(
+        "sizeText:less",
+        el("span", el("i", { class: "fa fa-font" }), el("b", "-"))
+      )
+    ),
+    el(
+      "div",
       { class: ["mc-box-bar-edit-btn-group", "btn-group-vertical"] },
       btnEdit("bold", el("b", "B")),
       btnEdit("italic", el("i", "I")),
@@ -105,7 +128,7 @@ function buildEl() {
       btnEdit("removeFormat", el("span", { class: ["fa", "fa-times"] }))
     ),
     el(
-      "span",
+      "div",
       { class: ["mc-box-bar-edit-btn-group", "btn-group-vertical"] },
       btnEdit("formatBlock:P", el("span", "P")),
       btnEdit("formatBlock:H1", el("span", "H1")),
@@ -114,7 +137,7 @@ function buildEl() {
       btnEdit("formatBlock:DIV", el("span", { class: ["fa", "fa-times"] }))
     ),
     el(
-      "span",
+      "div",
       { class: ["mc-box-bar-edit-btn-group", "btn-group-vertical"] },
       btnEdit(
         "insertUnorderedList",
@@ -130,7 +153,7 @@ function buildEl() {
       )
     ),
     el(
-      "span",
+      "div",
       { class: ["mc-box-bar-edit-btn-group", "btn-group-vertical"] },
       btnEdit(
         "justifyLeft",
@@ -161,7 +184,8 @@ function edit(e) {
   const boxTarget = this;
   const elTarget = e.target;
   const d = elTarget.dataset;
-  const boxActive = boxTarget.mc.boxLastFocus;
+  const mc = boxTarget.mc;
+  const boxActive = mc.boxLastFocus;
   // read the property of the handle;
   const cmdstr = d.mc_cmd;
   const idType = d.mc_event_type;
@@ -172,8 +196,31 @@ function edit(e) {
     return;
   }
   const cmd = cmdstr.split(":");
-  document.execCommand(cmd[0], false, cmd[1]);
+  switch (cmd[0]) {
+    case "sizeText":
+      sizeText(boxActive, cmd[1]);
+      break;
+    case "item":
+      if (cmd[1] === "add") {
+        mc.page.addItemText();
+        return;
+      }
+      break;
+    default:
+      document.execCommand(cmd[0], false, cmd[1]);
+  }
   sanitizeBlocks(boxActive);
+}
+
+function sizeText(boxActive, cmd) {
+  if (!boxActive || !boxActive.editable) {
+    return;
+  }
+  if (cmd === "more") {
+    boxActive.sizeTextMore();
+  } else {
+    boxActive.sizeTextLess();
+  }
 }
 
 function paste(e) {
@@ -183,6 +230,9 @@ function paste(e) {
 }
 
 function sanitizeBlocks(boxActive) {
+  if (!boxActive instanceof Box) {
+    return;
+  }
   if (!boxActive.editable) {
     return;
   }

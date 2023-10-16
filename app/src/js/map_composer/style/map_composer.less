@@ -87,6 +87,7 @@
       overflow: hidden;
       height: 100%;
       width: 100%;
+      font-size: 12px;
       box-shadow: var(--mc-shadow);
       * {
         user-select: auto !important;
@@ -103,7 +104,8 @@
         height: 100%;
         padding: 10px;
       }
-      .mc-item-scalable-font {
+      &.mc-item-scalable-font [data-mc_editable="true"],
+      &.mc-item-scalable-font[data-mc_editable="true"] {
         font-size: calc(var(--mc-item-scale-content) * 1em);
       }
       .mc-item-scalable-image {
@@ -140,6 +142,16 @@
       content: "";
       border-radius: 50%;
       opacity: 0.2;
+    }
+    > .mc-icon {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    &.mc-handle-remove {
+      right: calc(-1 * var(--mc-handle-size-half));
+      top: calc(-1 * var(--mc-handle-size-half));
+      cursor: pointer;
     }
     &.mc-handle-resize-top {
       top: calc(-1 * var(--mc-handle-size-half));
