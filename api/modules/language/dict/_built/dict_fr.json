@@ -6570,6 +6570,21 @@
     "fr": "Confirmation de changement de projet"
   },
   {
+    "id": "modal_check_confirm_project_change_fail_title",
+    "en": "The project cannot be loaded",
+    "fr": "Le projet ne peut pas être chargé"
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_logged",
+    "en": "The project cannot be loaded. You either don't have the necessary permissions or an issue occurred. Please contact the view publisher for more information.",
+    "fr": "Le projet ne peut pas être chargé. Soit vous ne disposez pas des autorisations nécessaires, soit un problème est survenu. Veuillez contacter l'éditeur de vues pour plus d'informations."
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_not_logged",
+    "en": "The project cannot be loaded. Please log in and try again.",
+    "fr": "Le projet ne peut pas être chargé. Veuillez vous connecter et réessayer."
+  },
+  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "fr": "Vide"

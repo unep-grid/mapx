@@ -6570,6 +6570,21 @@
     "ru": "Подтверждение изменения проекта "
   },
   {
+    "id": "modal_check_confirm_project_change_fail_title",
+    "en": "The project cannot be loaded",
+    "ru": "Проект не может быть загружен"
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_logged",
+    "en": "The project cannot be loaded. You either don't have the necessary permissions or an issue occurred. Please contact the view publisher for more information.",
+    "ru": "Проект не может быть загружен. Либо у вас нет необходимых разрешений, либо возникла проблема. Пожалуйста, свяжитесь с издателем представления для получения дополнительной информации."
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_not_logged",
+    "en": "The project cannot be loaded. Please log in and try again.",
+    "ru": "Проект не может быть загружен. Пожалуйста, войдите в систему и повторите попытку."
+  },
+  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "ru": "Пустой "

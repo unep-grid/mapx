@@ -76,6 +76,7 @@ import {
   modalGetAll,
   modalCloseAll,
   modalConfirm,
+  modalDialog,
 } from "./../mx_helper_modal.js";
 import { errorHandler } from "./../error_handler/index.js";
 import { waitTimeoutAsync } from "./../animation_frame";
@@ -502,6 +503,7 @@ export async function setProject(idProject, opt) {
   const hasShiny = isShinyReady();
   opt = Object.assign({}, { askConfirmIfModal: true, askConfirm: false }, opt);
   const idCurrentProject = path(mx, "settings.project.id");
+  const isGuest = settings.user.guest;
 
   if (idProject === idCurrentProject) {
     return false;
@@ -537,7 +539,25 @@ export async function setProject(idProject, opt) {
       Shiny.onInputChange("selectProject", idProject);
     }
 
-    const r = await events.once("settings_project_change");
+    console.log("before project change");
+    const promRes = events.once("settings_project_change");
+    const promWait = waitTimeoutAsync(1000);
+
+    const res = await Promise.race([promRes, promWait]);
+
+    if (res === true) {
+      await modalDialog({
+        title: elSpanTranslate("modal_check_confirm_project_change_fail_title"),
+        content: elSpanTranslate(
+          isGuest
+            ? "modal_check_confirm_project_change_fail_content_not_logged"
+            : "modal_check_confirm_project_change_fail_content_logged"
+        ),
+      });
+      return;
+    }
+
+    console.log("after project change");
     await events.once("views_list_updated");
 
     const idProjectNew = r?.new_project;

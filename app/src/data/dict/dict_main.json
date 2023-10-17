@@ -11108,6 +11108,45 @@
     "de": ""
   },
   {
+    "id": "modal_check_confirm_project_change_fail_title",
+    "en": "The project cannot be loaded",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_logged",
+    "en":"The project cannot be loaded. You either don't have the necessary permissions or an issue occurred. Please contact the view publisher for more information.",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_not_logged",
+    "en": "The project cannot be loaded. Please log in and try again.",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "fr": "Vide",

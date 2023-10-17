@@ -6570,6 +6570,21 @@
     "es": "Confirmación de cambio de proyecto"
   },
   {
+    "id": "modal_check_confirm_project_change_fail_title",
+    "en": "The project cannot be loaded",
+    "es": "El proyecto no se puede cargar."
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_logged",
+    "en": "The project cannot be loaded. You either don't have the necessary permissions or an issue occurred. Please contact the view publisher for more information.",
+    "es": "El proyecto no se puede cargar. O no tienes los permisos necesarios o se produjo un problema. Comuníquese con el editor de la vista para obtener más información."
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_not_logged",
+    "en": "The project cannot be loaded. Please log in and try again.",
+    "es": "El proyecto no se puede cargar. Por favor inicie sesión e intente de nuevo."
+  },
+  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "es": "Vacío"

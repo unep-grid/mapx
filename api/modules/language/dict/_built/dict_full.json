@@ -17082,6 +17082,45 @@
     "de": "Projektbestätigung ändern "
   },
   {
+    "id": "modal_check_confirm_project_change_fail_title",
+    "en": "The project cannot be loaded",
+    "fr": "Le projet ne peut pas être chargé",
+    "es": "El proyecto no se puede cargar.",
+    "ru": "Проект не может быть загружен",
+    "zh": "项目无法加载",
+    "ar": "لا يمكن تحميل المشروع",
+    "fa": "پروژه قابل بارگیری نیست",
+    "ps": "پروژه نشي پورته کیدی",
+    "bn": "প্রকল্প লোড করা যাবে না",
+    "de": "Das Projekt kann nicht geladen werden"
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_logged",
+    "en": "The project cannot be loaded. You either don't have the necessary permissions or an issue occurred. Please contact the view publisher for more information.",
+    "fr": "Le projet ne peut pas être chargé. Soit vous ne disposez pas des autorisations nécessaires, soit un problème est survenu. Veuillez contacter l'éditeur de vues pour plus d'informations.",
+    "es": "El proyecto no se puede cargar. O no tienes los permisos necesarios o se produjo un problema. Comuníquese con el editor de la vista para obtener más información.",
+    "ru": "Проект не может быть загружен. Либо у вас нет необходимых разрешений, либо возникла проблема. Пожалуйста, свяжитесь с издателем представления для получения дополнительной информации.",
+    "zh": "无法加载该项目。您要么没有必要的权限，要么发生了问题。请联系视图发布者以获取更多信息。",
+    "ar": "لا يمكن تحميل المشروع. إما أنك لا تملك الأذونات اللازمة أو حدثت مشكلة. يرجى الاتصال بناشر العرض لمزيد من المعلومات.",
+    "fa": "پروژه قابل بارگیری نیست. شما یا مجوزهای لازم را ندارید یا مشکلی پیش آمده است. لطفاً برای اطلاعات بیشتر با ناشر view تماس بگیرید.",
+    "ps": "پروژه نشي پورته کیدی. تاسو یا اړین اجازې نلرئ یا کومه ستونزه رامینځته شوې. مهرباني وکړئ د نورو معلوماتو لپاره د لید خپرونکي سره اړیکه ونیسئ.",
+    "bn": "প্রকল্প লোড করা যাবে না. হয় আপনার কাছে প্রয়োজনীয় অনুমতি নেই বা কোনো সমস্যা হয়েছে। আরও তথ্যের জন্য ভিউ প্রকাশকের সাথে যোগাযোগ করুন।",
+    "de": "Das Projekt kann nicht geladen werden. Entweder verfügen Sie nicht über die erforderlichen Berechtigungen oder es ist ein Problem aufgetreten. Für weitere Informationen wenden Sie sich bitte an den Herausgeber der Ansicht."
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_not_logged",
+    "en": "The project cannot be loaded. Please log in and try again.",
+    "fr": "Le projet ne peut pas être chargé. Veuillez vous connecter et réessayer.",
+    "es": "El proyecto no se puede cargar. Por favor inicie sesión e intente de nuevo.",
+    "ru": "Проект не может быть загружен. Пожалуйста, войдите в систему и повторите попытку.",
+    "zh": "无法加载该项目。请登录并重试。",
+    "ar": "لا يمكن تحميل المشروع. يرجى تسجيل الدخول وإعادة المحاولة.",
+    "fa": "پروژه قابل بارگیری نیست. لطفا وارد شوید و دوباره امتحان کنیدو.",
+    "ps": "پروژه نشي پورته کیدی. مهرباني وکړئ ننوتئ او بیا هڅه وکړئ.",
+    "bn": "প্রকল্প লোড করা যাবে না. অনুগ্রহ করে লগইন করুন এবং আবার চেষ্টা করুন.",
+    "de": "Das Projekt kann nicht geladen werden. Bitte melden Sie sich an und versuchen Sie es erneut."
+  },
+  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "fr": "Vide",

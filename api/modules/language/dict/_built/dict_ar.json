@@ -6570,6 +6570,21 @@
     "ar": "تأكيد تغيير المشروع "
   },
   {
+    "id": "modal_check_confirm_project_change_fail_title",
+    "en": "The project cannot be loaded",
+    "ar": "لا يمكن تحميل المشروع"
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_logged",
+    "en": "The project cannot be loaded. You either don't have the necessary permissions or an issue occurred. Please contact the view publisher for more information.",
+    "ar": "لا يمكن تحميل المشروع. إما أنك لا تملك الأذونات اللازمة أو حدثت مشكلة. يرجى الاتصال بناشر العرض لمزيد من المعلومات."
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_not_logged",
+    "en": "The project cannot be loaded. Please log in and try again.",
+    "ar": "لا يمكن تحميل المشروع. يرجى تسجيل الدخول وإعادة المحاولة."
+  },
+  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "ar": "فارغة "

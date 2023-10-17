@@ -6570,6 +6570,21 @@
     "bn": "প্রকল্পের নিশ্চয়তা পরিবর্তন করুন "
   },
   {
+    "id": "modal_check_confirm_project_change_fail_title",
+    "en": "The project cannot be loaded",
+    "bn": "প্রকল্প লোড করা যাবে না"
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_logged",
+    "en": "The project cannot be loaded. You either don't have the necessary permissions or an issue occurred. Please contact the view publisher for more information.",
+    "bn": "প্রকল্প লোড করা যাবে না. হয় আপনার কাছে প্রয়োজনীয় অনুমতি নেই বা কোনো সমস্যা হয়েছে। আরও তথ্যের জন্য ভিউ প্রকাশকের সাথে যোগাযোগ করুন।"
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_not_logged",
+    "en": "The project cannot be loaded. Please log in and try again.",
+    "bn": "প্রকল্প লোড করা যাবে না. অনুগ্রহ করে লগইন করুন এবং আবার চেষ্টা করুন."
+  },
+  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "bn": "খালি "

@@ -6570,6 +6570,21 @@
     "de": "Projektbestätigung ändern "
   },
   {
+    "id": "modal_check_confirm_project_change_fail_title",
+    "en": "The project cannot be loaded",
+    "de": "Das Projekt kann nicht geladen werden"
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_logged",
+    "en": "The project cannot be loaded. You either don't have the necessary permissions or an issue occurred. Please contact the view publisher for more information.",
+    "de": "Das Projekt kann nicht geladen werden. Entweder verfügen Sie nicht über die erforderlichen Berechtigungen oder es ist ein Problem aufgetreten. Für weitere Informationen wenden Sie sich bitte an den Herausgeber der Ansicht."
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_not_logged",
+    "en": "The project cannot be loaded. Please log in and try again.",
+    "de": "Das Projekt kann nicht geladen werden. Bitte melden Sie sich an und versuchen Sie es erneut."
+  },
+  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "de": "Leer "

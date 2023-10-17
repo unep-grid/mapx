@@ -6570,6 +6570,21 @@
     "fa": "تأیید پروژه را تغییر دهید "
   },
   {
+    "id": "modal_check_confirm_project_change_fail_title",
+    "en": "The project cannot be loaded",
+    "fa": "پروژه قابل بارگیری نیست"
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_logged",
+    "en": "The project cannot be loaded. You either don't have the necessary permissions or an issue occurred. Please contact the view publisher for more information.",
+    "fa": "پروژه قابل بارگیری نیست. شما یا مجوزهای لازم را ندارید یا مشکلی پیش آمده است. لطفاً برای اطلاعات بیشتر با ناشر view تماس بگیرید."
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_not_logged",
+    "en": "The project cannot be loaded. Please log in and try again.",
+    "fa": "پروژه قابل بارگیری نیست. لطفا وارد شوید و دوباره امتحان کنیدو."
+  },
+  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "fa": "خالی "

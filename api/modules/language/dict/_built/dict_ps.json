@@ -6570,6 +6570,21 @@
     "ps": "د پروژې تایید بدل کړئ "
   },
   {
+    "id": "modal_check_confirm_project_change_fail_title",
+    "en": "The project cannot be loaded",
+    "ps": "پروژه نشي پورته کیدی"
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_logged",
+    "en": "The project cannot be loaded. You either don't have the necessary permissions or an issue occurred. Please contact the view publisher for more information.",
+    "ps": "پروژه نشي پورته کیدی. تاسو یا اړین اجازې نلرئ یا کومه ستونزه رامینځته شوې. مهرباني وکړئ د نورو معلوماتو لپاره د لید خپرونکي سره اړیکه ونیسئ."
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_not_logged",
+    "en": "The project cannot be loaded. Please log in and try again.",
+    "ps": "پروژه نشي پورته کیدی. مهرباني وکړئ ننوتئ او بیا هڅه وکړئ."
+  },
+  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "ps": "خالي "

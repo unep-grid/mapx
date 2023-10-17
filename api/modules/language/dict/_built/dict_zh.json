@@ -6570,6 +6570,21 @@
     "zh": "确认更改项目"
   },
   {
+    "id": "modal_check_confirm_project_change_fail_title",
+    "en": "The project cannot be loaded",
+    "zh": "项目无法加载"
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_logged",
+    "en": "The project cannot be loaded. You either don't have the necessary permissions or an issue occurred. Please contact the view publisher for more information.",
+    "zh": "无法加载该项目。您要么没有必要的权限，要么发生了问题。请联系视图发布者以获取更多信息。"
+  },
+  {
+    "id": "modal_check_confirm_project_change_fail_content_not_logged",
+    "en": "The project cannot be loaded. Please log in and try again.",
+    "zh": "无法加载该项目。请登录并重试。"
+  },
+  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "zh": "空"
