@@ -1,3 +1,9 @@
+  - [1.12.5-alpha.5](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.5) 
+
+    - MapComposer
+        - Small issue with legend text scale box base font size (+/- buttons)
+    - DB patch for the metadata keywords materialized view : wrong permission 
+
   - [1.12.5-alpha.4](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.3) 
 
     - MapComposer
