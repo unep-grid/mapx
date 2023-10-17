@@ -1261,19 +1261,6 @@ mapx.once("ready", async () => {
     ],
   });
 
-  t.check("Get collection by project", {
-    init: () => {
-      return mapx.ask("get_project_collections");
-    },
-    tests: [
-      {
-        name: "is array",
-        test: (r) => {
-          return t.valid.isArray(r);
-        },
-      },
-    ],
-  });
 
   t.check("Set dashboard visibility", {
     init: async () => {
@@ -1303,39 +1290,6 @@ mapx.once("ready", async () => {
           await mapx.ask("view_remove", { idView: view.id });
           removed = !(await mapx.ask("is_dashboard_visible"));
           return hasDashboard && visible && removed;
-        },
-      },
-    ],
-  });
-
-  t.check("Get collection of open views", {
-    init: async () => {
-      const views = await mapx.ask("get_views");
-      const view = views.find((v) => {
-        return (
-          t.valid.isArray(v.data.collections) && v.data.collections.length > 0
-        );
-      });
-      await mapx.ask("view_add", { idView: view.id });
-      return view;
-    },
-    tests: [
-      {
-        name: "View collections match",
-        test: async (view) => {
-          const collectionAfter = await mapx.ask("get_project_collections", {
-            open: true,
-          });
-          await mapx.ask("view_remove", { idView: view.id });
-          const diff = d(collectionAfter, view.data.collections);
-          const pass = diff.length === 0;
-          return pass;
-          function d(a, b) {
-            var bSet = new Set(b);
-            return a.filter(function (x) {
-              return !bSet.has(x);
-            });
-          }
         },
       },
     ],

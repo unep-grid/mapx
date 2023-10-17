@@ -539,7 +539,6 @@ export async function setProject(idProject, opt) {
       Shiny.onInputChange("selectProject", idProject);
     }
 
-    console.log("before project change");
     const promRes = events.once("settings_project_change");
     const promWait = waitTimeoutAsync(1000);
 
@@ -557,11 +556,10 @@ export async function setProject(idProject, opt) {
       return;
     }
 
-    console.log("after project change");
     await events.once("views_list_updated");
 
-    const idProjectNew = r?.new_project;
-    const idProjectOld = r?.old_project;
+    const idProjectNew = res?.new_project;
+    const idProjectOld = res?.old_project;
 
     if (idProjectNew === idProjectOld) {
       console.warn("Project did not change", { idProjectNew, idProjectOld });
