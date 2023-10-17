@@ -308,14 +308,17 @@ export class MapComposer {
     await waitTimeoutAsync(1);
     for (const item of mc.page.items) {
       if (item.type === "map") {
-        if (item.map._frame) {
-          item.map._frame.cancel();
-          item.map._frame = null;
-        }
-        item.map._render();
+        const map = item.map;
+        map._resizeCanvas(item.width, item.height);
+        map.transform.resize(map._containerWidth, map._containerHeight);
+        map.painter.resize(
+          Math.ceil(map._containerWidth),
+          Math.ceil(map._containerHeight)
+        );
+        item.map.setBearing(item.map.getBearing());
       }
     }
-    await waitTimeoutAsync(1);
+    await waitTimeoutAsync(10);
     Object.defineProperty(window, "devicePixelRatio", {
       get: function () {
         return mc.state.dpr;

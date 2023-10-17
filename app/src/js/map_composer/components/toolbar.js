@@ -12,8 +12,6 @@ class Toolbar extends Box {
     toolbar.initToolbar();
   }
 
-  onRemove() {}
-
   initToolbar() {
     const toolbar = this;
     toolbar.title = "toolbar";
@@ -23,8 +21,6 @@ class Toolbar extends Box {
       content: toolbar.buildToolbar(),
       draggable: false,
       resizable: false,
-      onRemove: toolbar.onRemove.bind(toolbar),
-      onResize: toolbar.onResize.bind(toolbar),
     });
 
     toolbar.lStore.addListener({

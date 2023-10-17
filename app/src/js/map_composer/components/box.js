@@ -2,6 +2,7 @@ import { MessageFlash } from "./message_flash.js";
 import { el } from "../../el/src/index.js";
 import { onNextFrame } from "./helpers.js";
 import { ListenerStore } from "./../../listener_store/index.js";
+import { isNotEmpty } from "../../is_test/index.js";
 
 class Box {
   constructor(boxParent) {
@@ -24,17 +25,14 @@ class Box {
     box.listeners = [];
     box.draggers = [];
     box.resizers = [];
-    box.editable = false;
-    box.resizable = false;
-    box.draggable = false;
-    box.removable = false;
+    box.removers = [];
     box._scale = 1;
   }
   init(opt) {
     opt = opt || {};
     const box = this;
-    box.config = opt;
-    box.id = Math.random().toString(32);
+    box.id = `box_${Math.random().toString(32)})`;
+    box.title = opt.title || box.title;
     box.elContent = opt.content || el("div");
     box.el = box.createEl(opt.class);
     box.elContainer = opt.boxContainer.elContent;
@@ -70,6 +68,14 @@ class Box {
       box.setHeight(opt.height, true);
     }
 
+    if (opt.removable) {
+      box.addHandleRemove();
+
+      if (isNotEmpty(opt.removers)) {
+        box.removers.push(...opt.removers);
+      }
+    }
+
     if (opt.draggable || opt.resizable) {
       box._lStore.addListener({
         target: box.el,
@@ -80,21 +86,18 @@ class Box {
       });
 
       if (opt.draggable) {
-        if (opt.onDrag) {
-          box.draggers.push(opt.onDrag);
+        box.addHandleDrag();
+        if (isNotEmpty(opt.draggers)) {
+          box.draggers.push(...opt.draggers);
         }
-        box.makeDraggable();
       }
       if (opt.resizable) {
-        if (opt.onResize) {
-          box.resizers.push(opt.onResize);
+        box.addHandleResize();
+        if (isNotEmpty(opt.resizers)) {
+          box.resizers.push(...opt.resizers);
         }
-        box.makeResizable({
-          boxBound: box._boxBound,
-        });
       }
     }
-    box.setTextSize(12);
   }
 
   get width() {
@@ -143,6 +146,7 @@ class Box {
     return this.draggers.forEach((d) => d(this));
   }
   onResize() {
+    this.displayDim();
     return this.resizers.forEach((d) => d(this));
   }
 
@@ -165,14 +169,18 @@ class Box {
 
   destroy() {
     const box = this;
+    if (box._destroyed) {
+      return;
+    }
+    box._destroyed = true;
     box.el.remove();
     box._lStore.removeListenerByGroup(box.id);
-    if (box.config.onRemove) {
-      box.config.onRemove();
+    for (const remover of box.removers) {
+      remover();
     }
   }
 
-  addHandle(type, opt) {
+  addHandle(type, opt, children) {
     const box = this;
     const title = box.title;
     const base = {
@@ -180,7 +188,7 @@ class Box {
       class: ["mc-handle", "mc-handle-" + type],
     };
     const conf = Object.assign({}, base, opt);
-    box.addEl(el("div", conf));
+    box.addEl(el("div", conf, children));
   }
 
   addHandleDrag() {
@@ -206,12 +214,19 @@ class Box {
   }
 
   addHandleRemove() {
-    this.addHandle("remove", {
-      dataset: {
-        mc_action: "box_remove",
-        mc_event_type: "click",
+    console.log("add handle remove");
+    const box = this;
+    box.addHandle(
+      "remove",
+      {
+        dataset: {
+          mc_action: "box_remove",
+          mc_event_type: "click",
+        },
+        on: ["click", box.destroy.bind(box)],
       },
-    });
+      el("i", { class: ["mc-handle-icon", "fa", "fa-times"] })
+    );
   }
 
   addFocus() {
@@ -436,30 +451,32 @@ class Box {
     return out;
   }
 
-  get contentScale() {
+  getContentScale() {
     return this._content_scale;
   }
 
-  get textSize() {
-    return this._text_size;
+  getTextSize() {
+    const box = this;
+    return Number(
+      window.getComputedStyle(box.el).fontSize.split("px")[0] || 12
+    );
   }
 
   setTextSize(size) {
     const box = this;
     size = size < 5 ? 5 : size > 30 ? 30 : size ? size : 12;
-    box._text_size = size;
-    box.elContent.style.fontSize = size + "px";
+    box.el.style.fontSize = size + "px";
   }
 
   sizeTextMore() {
     const box = this;
-    const size = box.textSize + 1;
+    const size = box.getTextSize() + 1;
     box.setTextSize(size);
   }
 
   sizeTextLess() {
     const box = this;
-    const size = box.textSize - 1;
+    const size = box.getTextSize() - 1;
     box.setTextSize(size);
   }
 
@@ -506,16 +523,6 @@ class Box {
       box.boxParent instanceof Box ? box.boxParent.getScaleParent() : 1;
     const scale = box.scale * scaleStack;
     return scale || 1;
-  }
-
-  makeDraggable() {
-    const box = this;
-    box.addHandleDrag();
-  }
-
-  makeResizable() {
-    const box = this;
-    box.addHandleResize();
   }
 
   dragResizeListener(e) {

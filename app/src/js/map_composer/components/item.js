@@ -10,90 +10,77 @@ class Item extends Box {
   constructor(boxParent, config) {
     super(boxParent);
     const item = this;
-    item.resizeAction = [];
-    item.orig = config;
-    item.type = config.type;
-    item.title = "item-" + item.type;
-    item.editable = config.editable === true;
-    item.onRemove = item.onRemove.bind(item);
-    item.onResize = item.onResize.bind(item);
-
+    // item ref
+    item._config = config;
+    item._type = config.type;
+    item._editable = config.editable === true;
+    // box option
     item.init({
-      class: "mc-" + item.type,
-      content: item.buildEl(),
+      title: `item-${item._type}`,
+      class: `mc-${item._type}`,
+      content: item.build(),
       boxContainer: item.boxParent,
       boxBound: item.boxParent.boxParent,
       boundEdges: { top: true, left: true, bottom: false, right: false },
       draggable: true,
       resizable: true,
-      removable: true,
-      onRemove: item.onRemove,
-      onResize: item.onResize,
+      removable: config.removable === true,
       width: config.width || item.state.item_width,
       height: config.height || item.state.item_height,
     });
   }
 
+  get type() {
+    return this._type;
+  }
+  get editable() {
+    return this._editable;
+  }
+  get config() {
+    return this._config;
+  }
   /*
    * Build given item
    * @returns {Element} item's element
    */
-  buildEl() {
+  build() {
     const item = this;
-    const type = item.type;
+    const type = item._type;
     switch (type) {
       case "map":
-        return item.buildElMap();
+        return item.buildMap();
       case "title":
       case "text":
-        return item.buildElText();
+        return item.buildText();
       case "legend":
-        return item.buildElLegend();
+        return item.buildLegend();
       case "element":
-        return item.buildElNode();
+        return item.buildElement();
       default:
         console.error(`type ${type} not known`);
+        return;
     }
   }
 
-  onResize() {
+  buildElement() {
     const item = this;
-    for (const a of item.resizeAction) {
-      a();
-    }
-    item.displayDim();
-  }
-
-  onRemove() {
-    const item = this;
-    if (item.map) {
-      item.map.remove();
-    }
-  }
-
-  buildElNode() {
-    const item = this;
-    const content = item.orig.element;
+    const content = item._config.element;
     const elOut = el(
       "div",
       {
         dataset: { mc_editable: item.editable },
-        class: ["mc-item", "mc-item-element"],
+        class: ["mc-item", "mc-item-element", "mc-item-scalable-font"],
       },
-      el(
-        "div",
-        { class: "mc-item-scalable-font" },
-        // must be first level <div mc-item><h1>..</h1><p>...</p>
-        [...content.children]
-      )
+      // must be first level <div mc-item><h1>..</h1><p>...</p>
+      [...content.children]
     );
     return elOut;
   }
 
-  buildElLegend() {
+  buildLegend() {
     const item = this;
     // remove id,for, other unwanted attributes
-    const elContent = cloneNodeClean(item.orig.element);
+    const elContent = cloneNodeClean(item._config.element);
     const elsEditables = elContent.querySelectorAll("span");
 
     for (const elEditable of elsEditables) {
@@ -112,31 +99,32 @@ class Item extends Box {
     const elOut = el(
       "div",
       {
-        class: ["mc-item", "mc-item-element"],
+        class: ["mc-item", "mc-item-element", "mc-item-scalable-font"],
       },
-      el("div", { class: "mc-item-scalable-font" }, elContent)
+      elContent
     );
 
     return elOut;
   }
 
-  buildElText() {
+  buildText() {
     const item = this;
-    const text = el("span", item.orig.text).innerText;
+    const text = el("span", item?._config?.text || "").innerText;
     const elOut = el(
       "div",
       {
-        class: ["mc-item", "mc-item-text", "mc-item"],
+        class: ["mc-item", "mc-item-text", "mc-item", "mc-item-scalable-font"],
         dataset: {
           mc_editable: item.editable,
         },
       },
-      el("div", { class: "mc-item-scalable-font" }, el("span", text))
+      el("span", text)
     );
+
     return elOut;
   }
 
-  buildElMap() {
+  buildMap() {
     const item = this;
     const elOut = el("div", {
       dataset: {
@@ -153,11 +141,14 @@ class Item extends Box {
         trackResize: false, // handled in mapcomposer
         renderWorldCopies: false,
       },
-      item.orig.options
+      item._config.options
     );
 
     item.map = new mapboxgl.Map(mapOptions);
-    item.map.addControl(new MapControlScale({mode:'center'}), "bottom-right");
+    item.map.addControl(
+      new MapControlScale({ mode: "center" }),
+      "bottom-right"
+    );
     item.map.addControl(new MapNorthArrow(), "top-right");
     item.scaler = new MapScaler(item.map);
 
@@ -167,8 +158,11 @@ class Item extends Box {
       }
     });
 
-    item.resizeAction.push(() => {
+    item.resizers.push(() => {
       item.map.resize();
+    });
+    item.removers.push(() => {
+      item.map.remove();
     });
     return elOut;
   }

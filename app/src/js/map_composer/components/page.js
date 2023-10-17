@@ -9,6 +9,10 @@ class Page extends Box {
     super(boxParent);
     const page = this;
     const state = page.state;
+    page.nextItemPos = {
+      x: 0,
+      y: 0,
+    };
     page.items = [];
     page.title = "page";
     page.init({
@@ -19,14 +23,14 @@ class Page extends Box {
       boundEdges: { top: true, left: true, bottom: false, right: false },
       draggable: false,
       resizable: true,
-      onRemove: page.onRemove.bind(page),
-      onResize: page.onResize.bind(page),
+      removers: [page.onPageRemove.bind(page)],
+      resizers: [page.onPageResize.bind(page)],
       width: state.page_width,
       height: state.page_height,
     });
   }
 
-  onResize() {
+  onPageResize() {
     const page = this;
     const mc = page.mc;
     if (!mc.ready) {
@@ -69,7 +73,7 @@ class Page extends Box {
     mc.state.page_height = h;
   }
 
-  onRemove() {
+  onPageRemove() {
     const page = this;
     for (const item of page.items) {
       item.destroy();
@@ -83,8 +87,8 @@ class Page extends Box {
     const curMode = mc.state.mode;
     const dpi = mc.state.dpi;
     const dpr = mc.state.dpr;
-
-    const scale = mc.state.unit === "px" ? dpr : (300 * dpr) / dpi;
+    const dpiPrint = 300;
+    const scale = mc.state.unit === "px" ? dpr : (dpiPrint * dpr) / dpi;
 
     try {
       mc.setMode("print");
@@ -125,20 +129,52 @@ class Page extends Box {
     }
   }
 
+  removeItem(item) {
+    const page = this;
+    const pos = page.items.indexOf(item);
+    if (pos > -1) {
+      page.items.splice(pos, 1);
+      item.destroy();
+    }
+  }
+
+  addItemText() {
+    const page = this;
+    const editor = page.mc.editor;
+    const config = {
+      type: "text",
+      text: "Text...",
+      editable: true,
+      removable: true,
+    };
+    const item = new Item(page, config);
+    page.items.push(item);
+    item.removers.push(() => {
+      page.removeItem(item);
+    });
+    editor.setTargetEditable();
+    page.placeItem(item);
+  }
+
+  placeItem(item) {
+    const page = this;
+    const mc = page.mc;
+    const g = page.state.grid_snap_size;
+    item.setTopLeft({
+      top: page.nextItemPos.y,
+      left: page.nextItemPos.x,
+      inPx: true,
+    });
+    page.nextItemPos.y += g;
+    page.nextItemPos.x += g;
+    mc.setBoxLastFocus(item);
+  }
+
   placeItems() {
     const page = this;
-    const g = page.state.grid_snap_size * 10;
-    let y = 0;
-    let x = 0;
-    page.items.forEach((i) => {
-      i.setTopLeft({
-        top: y,
-        left: x,
-        inPx: true,
-      });
-      x += g;
-      y += g;
-    });
+    for (const item of page.items) {
+      page.placeItem(item);
+    }
   }
 }
 
