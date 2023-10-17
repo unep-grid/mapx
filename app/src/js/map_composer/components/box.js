@@ -2,6 +2,7 @@ import { MessageFlash } from "./message_flash.js";
 import { el } from "../../el/src/index.js";
 import { onNextFrame } from "./helpers.js";
 import { ListenerStore } from "./../../listener_store/index.js";
+import { isNotEmpty } from "../../is_test/index.js";
 
 class Box {
   constructor(boxParent) {
@@ -24,13 +25,14 @@ class Box {
     box.listeners = [];
     box.draggers = [];
     box.resizers = [];
+    box.removers = [];
     box._scale = 1;
   }
   init(opt) {
     opt = opt || {};
     const box = this;
-    box.config = opt;
-    box.id = Math.random().toString(32);
+    box.id = `box_${Math.random().toString(32)})`;
+    box.title = opt.title || box.title;
     box.elContent = opt.content || el("div");
     box.el = box.createEl(opt.class);
     box.elContainer = opt.boxContainer.elContent;
@@ -67,7 +69,11 @@ class Box {
     }
 
     if (opt.removable) {
-      box.makeRemovable();
+      box.addHandleRemove();
+
+      if (isNotEmpty(opt.removers)) {
+        box.removers.push(...opt.removers);
+      }
     }
 
     if (opt.draggable || opt.resizable) {
@@ -80,18 +86,16 @@ class Box {
       });
 
       if (opt.draggable) {
-        if (opt.onDrag) {
-          box.draggers.push(opt.onDrag);
+        box.addHandleDrag();
+        if (isNotEmpty(opt.draggers)) {
+          box.draggers.push(...opt.draggers);
         }
-        box.makeDraggable();
       }
       if (opt.resizable) {
-        if (opt.onResize) {
-          box.resizers.push(opt.onResize);
+        box.addHandleResize();
+        if (isNotEmpty(opt.resizers)) {
+          box.resizers.push(...opt.resizers);
         }
-        box.makeResizable({
-          boxBound: box._boxBound,
-        });
       }
     }
   }
@@ -142,6 +146,7 @@ class Box {
     return this.draggers.forEach((d) => d(this));
   }
   onResize() {
+    this.displayDim();
     return this.resizers.forEach((d) => d(this));
   }
 
@@ -164,10 +169,14 @@ class Box {
 
   destroy() {
     const box = this;
+    if (box._destroyed) {
+      return;
+    }
+    box._destroyed = true;
     box.el.remove();
     box._lStore.removeListenerByGroup(box.id);
-    if (box.config.onRemove) {
-      box.config.onRemove();
+    for (const remover of box.removers) {
+      remover();
     }
   }
 
@@ -205,6 +214,7 @@ class Box {
   }
 
   addHandleRemove() {
+    console.log("add handle remove");
     const box = this;
     box.addHandle(
       "remove",
@@ -213,9 +223,9 @@ class Box {
           mc_action: "box_remove",
           mc_event_type: "click",
         },
-        on: ["click", box.destroy],
+        on: ["click", box.destroy.bind(box)],
       },
-      el("i", { class: ["mc-icon", "fa", "fa-times"] })
+      el("i", { class: ["mc-handle-icon", "fa", "fa-times"] })
     );
   }
 
@@ -513,21 +523,6 @@ class Box {
       box.boxParent instanceof Box ? box.boxParent.getScaleParent() : 1;
     const scale = box.scale * scaleStack;
     return scale || 1;
-  }
-
-  makeDraggable() {
-    const box = this;
-    box.addHandleDrag();
-  }
-
-  makeRemovable() {
-    const box = this;
-    box.addHandleRemove();
-  }
-
-  makeResizable() {
-    const box = this;
-    box.addHandleResize();
   }
 
   dragResizeListener(e) {

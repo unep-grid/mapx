@@ -73,6 +73,7 @@ export class MapComposerModal {
       type: "map",
       width: 500,
       height: 500,
+      removable: false,
       options: {},
     });
 
@@ -90,22 +91,21 @@ export class MapComposerModal {
       });
 
       const dimLegend = getContentSize(elLegend);
-      const dimTitle = getContentSize(elTitle);
 
       config.items.push({
         type: "legend",
         element: elLegend,
-        width: dimLegend.width,
-        height: dimLegend.height,
+        width: dimLegend.width + 10,
+        height: dimLegend.height + 10,
         editable: true,
+        removable: true,
       });
 
       config.items.push({
         type: "element",
         element: elTitle,
-        width: dimTitle.width,
-        height: dimTitle.height,
         editable: true,
+        removable: true,
       });
     }
 
@@ -176,4 +176,3 @@ export class MapComposerModal {
     return true;
   }
 }
-

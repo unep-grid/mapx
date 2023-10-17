@@ -15,7 +15,7 @@
   --mc-box-scale: 1;
   --mc-item-scale-content: 1;
   --mc-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.4);
-  * {
+  .mc-box {
     transform-origin: top left;
     user-select: none;
     transition: transform 0.1s ease-out;
@@ -127,11 +127,23 @@
     position: absolute;
     width: var(--mc-handle-size);
     height: var(--mc-handle-size);
-    background-color: var(--mc-color-contrast-dark);
+    &:empty {
+      background-color: var(--mc-color-contrast-dark);
+    }
     border-radius: 50%;
     opacity: 0.7;
     display: none;
     z-index: 1;
+    align-items: center;
+    justify-content: center;
+    > .mc-handle-icon {
+      font-size: calc(1rem / var(--mc-box-scale));
+      transform-origin: center, center;
+      &:hover {
+        transform: scale(1.14);
+      }
+    }
+    // Larger hit box
     &:after {
       top: calc(-1 * var(--mc-handle-size));
       left: calc(-1 * var(--mc-handle-size));
@@ -142,11 +154,6 @@
       content: "";
       border-radius: 50%;
       opacity: 0.2;
-    }
-    > .mc-icon {
-      position: absolute;
-      top: 0;
-      left: 0;
     }
     &.mc-handle-remove {
       right: calc(-1 * var(--mc-handle-size-half));
@@ -309,7 +316,7 @@
   .mc-box {
     &:hover {
       > .mc-handle {
-        display: block;
+        display: flex;
       }
     }
   }

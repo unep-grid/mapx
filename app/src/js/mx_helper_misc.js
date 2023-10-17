@@ -2071,7 +2071,7 @@ export function flattenBlockElements(element) {
  * const size = getContentSize(divElement);
  * console.log(`Width: ${size.width}, Height: ${size.height}`);
  */
-export function getContentSize(divElement) {
+export function getContentSize(divElement,) {
   const elClone = divElement.cloneNode(true);
   Object.assign(elClone.style, {
     visibility: "hidden",
