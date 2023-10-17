@@ -46,4 +46,5 @@ AFTER
 FOR EACH STATEMENT 
     EXECUTE FUNCTION mx_sources_meta_keywords_sync();
 
-ALTER MATERIALIZED VIEW public.mx_sources_meta_keywords OWNER TO mapxr;
+ALTER MATERIALIZED VIEW public.mx_sources_meta_keywords OWNER TO mapxw;
+GRANT SELECT ON TABLE public.mx_sources_meta_keywords TO mapxr;

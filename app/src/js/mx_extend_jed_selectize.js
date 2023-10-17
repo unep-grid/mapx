@@ -5,7 +5,6 @@ import { makeId, path } from "./mx_helper_misc.js";
 import { getDictItem } from "./language/index.js";
 import { getMetadataKeywords } from "./metadata/keywords.js";
 
-
 (function () {
   "use strict";
 
@@ -43,7 +42,7 @@ import { getMetadataKeywords } from "./metadata/keywords.js";
          */
         if (isNotEmpty(keywords)) {
           for (const keyword of keywords) {
-            selectize.addOption(keyword);
+            selectize.addOption({ keyword, score: 1 });
           }
           editor._init_value = true;
         }
@@ -104,7 +103,6 @@ import { getMetadataKeywords } from "./metadata/keywords.js";
             this.clearOptions();
             try {
               const data = await getMetadataKeywords(query);
-              console.log(query, data);
               return callback(data);
             } catch (e) {
               console.warn(e);

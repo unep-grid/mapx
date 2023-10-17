@@ -187,29 +187,36 @@ observeEvent(input$jedSourceMetadata_values, {
         isAllowed <- isPublisher && layer %in% layers
 
         if (hasNoIssues && isAllowed) {
-          mxDbUpdate(
-            table = .get(config, c("pg", "tables", "sources")),
-            idCol = "id",
-            id = idSource,
-            column = "data",
-            path = c("meta"),
-            value = meta
-          )
+          tryCatch(
+            {
+              mxDbUpdate(
+                table = .get(config, c("pg", "tables", "sources")),
+                idCol = "id",
+                id = idSource,
+                column = "data",
+                path = c("meta"),
+                value = meta
+              )
 
-          mxDbUpdate(
-            table = .get(config, c("pg", "tables", "sources")),
-            idCol = "id",
-            id = idSource,
-            column = "date_modified",
-            value = Sys.time()
-          )
+              mxDbUpdate(
+                table = .get(config, c("pg", "tables", "sources")),
+                idCol = "id",
+                id = idSource,
+                column = "date_modified",
+                value = Sys.time()
+              )
 
-          mxDbUpdate(
-            table = .get(config, c("pg", "tables", "sources")),
-            idCol = "id",
-            id = idSource,
-            column = "editor",
-            value = idUser
+              mxDbUpdate(
+                table = .get(config, c("pg", "tables", "sources")),
+                idCol = "id",
+                id = idSource,
+                column = "editor",
+                value = idUser
+              )
+            },
+            error = function(cond) {
+              stop("Error writing metadata in DB, check the DB logs")
+            }
           )
 
           mxFlashIcon("floppy-o")
