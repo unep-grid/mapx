@@ -1,3 +1,13 @@
+  - [1.12.5-alpha.3](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.3) 
+
+    - MapComposer
+        - Test new way of exporting high-definition map
+        - Expose feature to add / remove items
+        - Continue internal refactoring / maintenance
+
+    - Metadata editor 
+        - Keywords suggestion from vector sources metadata
+
   - [1.12.5-alpha.2](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.2) 
 
     - MapComposer
