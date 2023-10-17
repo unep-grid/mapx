@@ -1,4 +1,4 @@
-  - [1.12.5-alpha.3](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.3) 
+  - [1.12.5-alpha.4](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.3) 
 
     - MapComposer
         - Test new way of exporting high-definition map
