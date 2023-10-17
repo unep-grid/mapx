@@ -214,7 +214,6 @@ class Box {
   }
 
   addHandleRemove() {
-    console.log("add handle remove");
     const box = this;
     box.addHandle(
       "remove",
