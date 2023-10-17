@@ -1,3 +1,8 @@
+  - [1.12.5-alpha.6](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.6) 
+
+    - Shared View :
+        - When loading a project using the "home" button, inform the user in case something unexpected occurs  #760
+
   - [1.12.5-alpha.5](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.5) 
 
     - MapComposer
