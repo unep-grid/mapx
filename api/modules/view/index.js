@@ -3,6 +3,7 @@ import { ioViewPin } from "./pin.js";
 import {
   mwGet,
   mwGetMetadata,
+  mwGetSourceMetadata,
   getView,
   getViewMetadata,
   getViewsIdBySource,
@@ -32,6 +33,7 @@ export {
    */
   mwGet,
   mwGetMetadata,
+  mwGetSourceMetadata,
   mwGetListPublic,
   mwGetListByProject,
   /**

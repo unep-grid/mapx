@@ -69,7 +69,6 @@ app.set("trust proxy", true);
 app.use("/download", mwDownload);
 app.use("/userdata", mwUserData);
 
-
 /**
  * Socket io
  */
@@ -97,7 +96,7 @@ io.use((socket, next) => {
   socket.on("/client/project/create", use(ioProjectCreate));
   socket.on("/client/metadata/keywords/search", use(ioKeywordsSearch));
 
-  // tests 
+  // tests
   socket.on("echo", use(ioEcho));
   socket.on("/client/test/sum", use(ioTestSum));
   socket.on("/client/test/echo", use(ioTestEcho));
@@ -110,6 +109,7 @@ io.use((socket, next) => {
 app.get("/health", mwHealth);
 app.get("/get/view/item/:id", view.mwGet);
 app.get("/get/view/metadata/:id", view.mwGetMetadata);
+app.get("/get/view/source/metadata/:id", view.mwGetSourceMetadata);
 app.get("/get/views/list/project/", view.mwGetListByProject);
 app.get("/get/views/list/global/public/", view.mwGetListPublic);
 app.get("/get/tile/:x/:y/:z.:ext", tile.mwGet);

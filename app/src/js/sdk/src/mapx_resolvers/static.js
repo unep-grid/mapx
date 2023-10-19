@@ -54,6 +54,7 @@ import { dashboardHelper } from "./../../../dashboards/dashboard_instances.js";
 import {
   fetchSourceMetadata,
   fetchViewMetadata,
+  fetchViewSourceMetadata,
 } from "../../../mx_helper_map_view_metadata.js";
 import { getViewSourceSummary } from "../../../mx_helper_source_summary.js";
 import {
@@ -437,6 +438,18 @@ export class MapxResolversStatic extends MapxResolversPanels {
   get_view_meta(opt) {
     opt = Object.assign({}, { idView: null }, opt);
     return fetchViewMetadata(opt.idView);
+  }
+
+  /**
+   * Get view source metadata
+   * @param {Object} opt options
+   * @param {String} opt.idView Id of the view
+   * @param {Object} view meta data object
+   * @return {Promise<Object>} view metadata
+   */
+  get_view_source_meta(opt) {
+    opt = Object.assign({}, { idView: null }, opt);
+    return fetchViewSourceMetadata(opt.idView);
   }
 
   /**

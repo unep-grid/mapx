@@ -5,11 +5,11 @@ import { pgRead } from "#mapx/db";
 import { parseTemplate, sendJSON, sendError } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { isEmpty, isViewId, isSourceId } from "@fxi/mx_valid";
-export { mwGet, mwGetMetadata, getViewMetadata };
+
 /**
  * Get full view data
  */
-async function mwGet(req, res) {
+export async function mwGet(req, res) {
   try {
     const { id } = req.params;
 
@@ -51,7 +51,6 @@ export async function getViewsTableBySource(idSource) {
 }
 
 export async function getView(idView) {
-  
   if (!isViewId(idView)) {
     throw Error("Invalid view");
   }
@@ -73,7 +72,7 @@ export async function getView(idView) {
   }
 }
 
-async function mwGetMetadata(req, res) {
+export async function mwGetMetadata(req, res) {
   try {
     const start = new Date();
     const data = await getViewMetadata({ id: req.params.id });
@@ -90,13 +89,46 @@ async function mwGetMetadata(req, res) {
  * @param {String} opt.id Id of the view
  * @return {Object} view metadata
  */
-async function getViewMetadata(opt) {
+export async function getViewMetadata(opt) {
   const id = opt.id.toUpperCase();
   if (!isViewId(id)) {
     throw Error("No valid id");
   }
   const sql = parseTemplate(templates.getViewMetadata, {
-    idView: id.toUpperCase(),
+    idView: id,
+  });
+  const result = await pgRead.query(sql);
+  if (result && result.rowCount > 0) {
+    return result.rows[0];
+  } else {
+    return {};
+  }
+}
+
+export async function mwGetSourceMetadata(req, res) {
+  try {
+    const start = new Date();
+    const data = await getViewSourceMetadata({ id: req.params.id });
+    data._timing = new Date() - start;
+    sendJSON(res, data, { end: true });
+  } catch (e) {
+    sendError(res, e);
+  }
+}
+
+/**
+ * Helper to get view source metadata
+ * @param {Object} opt options
+ * @param {String} opt.id Id of the view
+ * @return {Object} view metadata
+ */
+export async function getViewSourceMetadata(opt) {
+  const id = opt.id.toUpperCase();
+  if (!isViewId(id)) {
+    throw Error("No valid id");
+  }
+  const sql = parseTemplate(templates.getViewSourceMetadata, {
+    idView: id,
   });
   const result = await pgRead.query(sql);
   if (result && result.rowCount > 0) {

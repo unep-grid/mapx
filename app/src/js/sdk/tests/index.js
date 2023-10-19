@@ -1014,6 +1014,30 @@ mapx.once("ready", async () => {
     ],
   });
 
+  t.check("Get views source meta", {
+    init: async () => {
+      const res = [];
+      for (let i = 0; i < 10; i++) {
+        const view = await mapx.ask("_get_random_view");
+        const r = await mapx.ask("get_view_source_meta", {
+          idView: view.id,
+        });
+        res.push(r);
+      }
+      return res;
+    },
+    tests: [
+      {
+        name: "All items have meta text object",
+        test: (res) => {
+          return res.reduce((ok, item) => {
+            return ok && t.valid.isObject(item?.meta?.text);
+          }, true);
+        },
+      },
+    ],
+  });
+
   t.check("Get view vt attribute meta", {
     init: async () => {
       const view = await mapx.ask("_get_random_view", {
@@ -1261,7 +1285,6 @@ mapx.once("ready", async () => {
     ],
   });
 
-
   t.check("Set dashboard visibility", {
     init: async () => {
       const view = await mapx.ask("_get_random_view", {
@@ -1506,7 +1529,9 @@ mapx.once("ready", async () => {
           title: r.title,
           message: r.message,
           n_tests: r.tests.length,
-          passes: r.tests.reduce((a, c) => a && c.success, true),
+          passes:
+            r.tests.length > 0 &&
+            r.tests.reduce((a, c) => a && c.success, true),
         };
       });
       console.table(resTable);

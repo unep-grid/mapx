@@ -8,6 +8,7 @@
   "getSourceMetadata": "/get/source/metadata/",
   "getSourceSummary": "/get/source/summary/",
   "getViewMetadata": "/get/view/metadata/",
+  "getViewSourceMetadata": "/get/view/source/metadata/",
   "getSourceOverlap": "/get/source/overlap/",
   "getSourceValidateGeom": "/get/source/validate/geom",
   "getSourceTableAttribute": "/get/source/table/attribute",

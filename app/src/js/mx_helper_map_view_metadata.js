@@ -57,6 +57,22 @@ export async function fetchViewMetadata(id) {
 
 /**
  * Get view source metadata
+ * @param {String} id Name/Id of the view
+ */
+export async function fetchViewSourceMetadata(id) {
+  if (!isViewId(id)) {
+    return console.warn("fetchViewSourceMetadata : invalid id");
+  }
+  const urlViewMeta = getApiUrl("getViewSourceMetadata");
+  const date = performance.now();
+  const url = `${urlViewMeta}${id}?date=${date}`;
+  const r = await fetch(url);
+  const meta = await r.json();
+  return meta;
+}
+
+/**
+ * Get view source metadata
  * @param {Object} view
  * @return {Object} metadata
  */
