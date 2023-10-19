@@ -1,3 +1,11 @@
+  - [1.12.5-alpha.8](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.8) 
+
+    - Metadata editor
+        - Added keywords count in choices
+        - Improved the materialized view for keywords
+    - SDK
+        - Added method to retrieve source metadata using a view id
+
   - [1.12.5-alpha.6](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.6) 
 
     - Shared View :

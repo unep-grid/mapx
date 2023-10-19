@@ -218,6 +218,7 @@ MapX resolvers available in app only
     * [.get_views_id()](#MapxResolversStatic+get_views_id) ⇒ <code>Array</code>
     * [.get_view_meta_vt_attribute(opt)](#MapxResolversStatic+get_view_meta_vt_attribute) ⇒ <code>Object</code>
     * [.get_view_meta(opt, view)](#MapxResolversStatic+get_view_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
+    * [.get_view_source_meta(opt, view)](#MapxResolversStatic+get_view_source_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.get_view_table_attribute_config(opt)](#MapxResolversStatic+get_view_table_attribute_config) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Array.&lt;Object&gt;</code>
@@ -985,6 +986,20 @@ Get vector view (vt) metadata of the attribute
 
 #### mapxResolversApp.get\_view\_meta(opt, view) ⇒ <code>Promise.&lt;Object&gt;</code>
 Get view metadata
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+**Returns**: <code>Promise.&lt;Object&gt;</code> - view metadata  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> | Id of the view |
+| view | <code>Object</code> | meta data object |
+
+<a name="MapxResolversStatic+get_view_source_meta"></a>
+
+#### mapxResolversApp.get\_view\_source\_meta(opt, view) ⇒ <code>Promise.&lt;Object&gt;</code>
+Get view source metadata
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 **Returns**: <code>Promise.&lt;Object&gt;</code> - view metadata  
@@ -1894,6 +1909,7 @@ MapX resolvers available in static and app
     * [.get_views_id()](#MapxResolversStatic+get_views_id) ⇒ <code>Array</code>
     * [.get_view_meta_vt_attribute(opt)](#MapxResolversStatic+get_view_meta_vt_attribute) ⇒ <code>Object</code>
     * [.get_view_meta(opt, view)](#MapxResolversStatic+get_view_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
+    * [.get_view_source_meta(opt, view)](#MapxResolversStatic+get_view_source_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.get_view_table_attribute_config(opt)](#MapxResolversStatic+get_view_table_attribute_config) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Array.&lt;Object&gt;</code>
@@ -2268,6 +2284,20 @@ Get vector view (vt) metadata of the attribute
 
 #### mapxResolversStatic.get\_view\_meta(opt, view) ⇒ <code>Promise.&lt;Object&gt;</code>
 Get view metadata
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
+**Returns**: <code>Promise.&lt;Object&gt;</code> - view metadata  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> | Id of the view |
+| view | <code>Object</code> | meta data object |
+
+<a name="MapxResolversStatic+get_view_source_meta"></a>
+
+#### mapxResolversStatic.get\_view\_source\_meta(opt, view) ⇒ <code>Promise.&lt;Object&gt;</code>
+Get view source metadata
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Promise.&lt;Object&gt;</code> - view metadata  
