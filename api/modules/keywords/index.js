@@ -25,10 +25,10 @@ export async function ioKeywordsSearch(socket, config, cb) {
 async function searchKeyword(keyword) {
   try {
     const queryString = `
-        SELECT keyword, similarity(keyword, $1) AS score
+        SELECT keyword, count, similarity(keyword, $1) AS similarity
         FROM mx_sources_meta_keywords 
         WHERE keyword % $1 
-        ORDER BY score DESC 
+        ORDER BY similarity DESC 
         LIMIT 10;
     `;
 

@@ -81,15 +81,34 @@ import { getMetadataKeywords } from "./metadata/keywords.js";
           create: true,
           multiple: true,
           maxItems: 20,
+          render: {
+            option: function (item, escape) {
+              return el(
+                "div",
+                {
+                  style: {
+                    display: "flex",
+                    justifyContent: "space-between",
+                  },
+                },
+                [
+                  el("span", escape(item.keyword)),
+                  el(
+                    "span",
+                    {
+                      title: ` Proximity score : ${escape(
+                        Math.round(item.similarity * 100) / 100
+                      )}`,
+                    },
+                    `(${escape(item.count || 1)})`
+                  ),
+                ]
+              );
+            },
+          },
           score: function () {
-            /**
-             * For sifter score on the 'github repos' example, check this:
-             * https://github.com/selectize/selectize.js/blob/efcd689fc1590bc085aee728bcda71373f6bd0ff/examples/github.html#L129
-             * Here, we use score from similarity, trgm
-             */
-
             return function (item) {
-              return item.score;
+              return item.similarity;
             };
           },
           load: async function (query, callback) {
