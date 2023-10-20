@@ -501,6 +501,10 @@ export function triggerUpdateSourcesList() {
  */
 export async function setProject(idProject, opt) {
   const hasShiny = isShinyReady();
+  if (!hasShiny) {
+    console.log("Project requested, missing Shiny");
+    return;
+  }
   opt = Object.assign({}, { askConfirmIfModal: true, askConfirm: false }, opt);
   const idCurrentProject = path(mx, "settings.project.id");
   const isGuest = settings.user.guest;
@@ -535,16 +539,17 @@ export async function setProject(idProject, opt) {
   async function change() {
     modalCloseAll();
     setQueryParametersInitReset();
-    if (hasShiny) {
-      Shiny.onInputChange("selectProject", idProject);
-    }
 
     const promRes = events.once("settings_project_change");
-    const promWait = waitTimeoutAsync(1000);
+    const promWait = waitTimeoutAsync(1000, null, "timeout");
+
+    Shiny.onInputChange("selectProject", idProject);
 
     const res = await Promise.race([promRes, promWait]);
+    const timeout = res === "timeout";
+    const projectRefused = res?.new_project !== idProject;
 
-    if (res === true) {
+    if (timeout || projectRefused) {
       await modalDialog({
         title: elSpanTranslate("modal_check_confirm_project_change_fail_title"),
         content: elSpanTranslate(
@@ -553,7 +558,9 @@ export async function setProject(idProject, opt) {
             : "modal_check_confirm_project_change_fail_content_logged"
         ),
       });
-      return;
+      if (timeout) {
+        return;
+      }
     }
 
     await events.once("views_list_updated");

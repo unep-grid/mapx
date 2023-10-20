@@ -1,3 +1,5 @@
+import { isEmpty } from "../is_test";
+
 let idDefault = 0;
 
 let cf = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
@@ -52,16 +54,18 @@ function waitFrameAsync() {
 /**
  * Wait async
  * @param {Number} t ms to wait
- * @param {Function} cb Optional callback
+ * @param {Function} cb Optional
+ * @param {Any} value Value to return default = true
  * @return {Promise<boolean>}
  */
-function waitTimeoutAsync(t, cb) {
+function waitTimeoutAsync(t, cb, value) {
   return new Promise((r) => {
     setTimeout(() => {
+      let out = isEmpty(value) ? true : value;
       if (cb instanceof Function) {
-        cb(t);
+        cb(out);
       }
-      r(true);
+      r(out);
     }, t || 1);
   });
 }
