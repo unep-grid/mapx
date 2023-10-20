@@ -28,7 +28,7 @@
 }
 
 .mx .selectize-control.single .selectize-input:after {
-  content: '\F0D7';
+  content: "\F0D7";
   font-family: fontawesome;
   display: block;
   float: right;
@@ -40,6 +40,12 @@
   top: auto;
   left: auto;
   bottom: auto;
+}
+
+/*'remove plugin' can't work with custom rederer : tweaks (e.g. mx_extend_jed_selectize)  + css tunning */
+.mx .selectize-control.plugin-remove_button [data-value] .remove,
+.mx .selectize-control [data-value] .remove * {
+  color: var(--mx_ui_text);
 }
 
 .selectize-control.multi .selectize-input.has-items {

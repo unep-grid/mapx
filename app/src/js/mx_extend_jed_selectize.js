@@ -376,6 +376,8 @@ import { getMetadataKeywords } from "./metadata/keywords.js";
         editor.input = document.createElement("select");
         editor.input.setAttribute("multiple", "multiple");
 
+        editor.input.classList.add("plugin-remove_button");
+
         const group = editor.theme.getFormControl(
           editor.title,
           editor.input,
@@ -386,12 +388,14 @@ import { getMetadataKeywords } from "./metadata/keywords.js";
         editor.container.appendChild(editor.error_holder);
 
         window.jQuery(editor.input).selectize({
+          // Plugin requires default renderer for raw html operation
+          // plugins: ["remove_button"],
           delimiter: false,
           createOnBlur: true,
           create: true,
           showAddOptionOnCreate: false,
           render: {
-            item: editor.renderOption,
+            item: editor.renderItem,
             option: editor.renderOption,
             optgroup_header: editor.renderOptionHeader,
           },
@@ -400,7 +404,7 @@ import { getMetadataKeywords } from "./metadata/keywords.js";
         editor.refreshValue();
       },
       renderOption: function (option) {
-        const elOption = el(
+        return el(
           "div",
           {
             class: "option",
@@ -409,20 +413,52 @@ import { getMetadataKeywords } from "./metadata/keywords.js";
               value: option.value,
             },
           },
-          option.value
+          getDictItem(option.value)
         );
-
-        getDictItem(option.value).then((label) => {
-          elOption.innerText = label;
-          option.label = label;
-        });
-
-        return elOption;
+      },
+      renderItem: function (option) {
+        const instance = this;
+        /**
+         * plugin-remove_button doesn't work with custom renderItem, as it performs text operation
+         * -> copy the logic from
+         *   https://github.com/selectize/selectize.js/blob/e3f2e0b4aa251375bc21b5fcd8ca7d374a921f08/src/plugins/remove_button/plugin.js#L69
+         */
+        const elRemove = el(
+          "a",
+          {
+            href: "#",
+            class: "remove",
+            tabindex: "-1",
+            title: "remove",
+            on: [
+              "click",
+              (e) => {
+                e.preventDefault();
+                const item = instance.getItem(option.value);
+                instance.setActiveItem(item);
+                if (instance.deleteSelection()) {
+                  instance.setCaret(instance.items.length);
+                }
+              },
+            ],
+          },
+          el("span", "×")
+        );
+        return el(
+          "div",
+          {
+            class: "item",
+            dataset: {
+              value: option.value,
+            },
+          },
+          [el("span", getDictItem(option.value)), elRemove]
+        );
       },
       renderOptionHeader: function (option) {
         /**
-         * Selectize seems to delete or clone header buit here.
-         * It's not possible to async set label: it's removed. USELESS renderer !
+         * Selectize seems to delete or clone header built here.
+         * It's not possible to async set label: it's removed.
          * Ugly hack : set an id and.. find it using getElementById.
          */
         const id = makeId();
