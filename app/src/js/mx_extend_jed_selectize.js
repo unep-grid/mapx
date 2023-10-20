@@ -89,6 +89,8 @@ import { getMetadataKeywords } from "./metadata/keywords.js";
                   style: {
                     display: "flex",
                     justifyContent: "space-between",
+                    padding: "10px",
+                    paddingLeft: "15px",
                   },
                 },
                 [
