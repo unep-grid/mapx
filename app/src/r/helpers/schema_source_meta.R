@@ -82,8 +82,6 @@ mxSchemaSourceMeta <- function(
                 type = "array",
                 uniqueItems = TRUE,
                 format = "selectizeMetaKeywords",
-                minItems = 1,
-                format = "select",
                 items = list(
                   type = "string",
                   title = t("textual_keyword_item_title"),
