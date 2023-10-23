@@ -84,7 +84,7 @@ class Item extends Box {
     const elsEditables = elContent.querySelectorAll("span");
 
     for (const elEditable of elsEditables) {
-      const elDiv = el(
+      const elEditableNew = el(
         "div",
         {
           dataset: { mc_editable: item.editable },
@@ -92,8 +92,7 @@ class Item extends Box {
         },
         el("div", elEditable.innerText)
       );
-      elEditable.parentElement.appendChild(elDiv);
-      elEditable.remove();
+      elEditable.replaceWith(elEditableNew);
     }
 
     const elOut = el(
