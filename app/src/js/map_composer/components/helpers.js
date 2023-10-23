@@ -1,4 +1,5 @@
 import { el } from "../../el_mapx";
+import { isEmpty } from "../../is_test";
 
 let idDefault = 0;
 
@@ -35,50 +36,81 @@ export function cancelFrame(id) {
  *
  * @param {Object} opt - Options for the conversion.
  * @param {number} opt.value - The value to convert.
- * @param {number} opt.dpi - DPI value for the conversion. Required for conversions involving pixels.
+ * @param {number} opt.dpi - DPI value for the conversion. Required for conversions involving pixels. Default to 96.
  * @param {string} opt.unitFrom - The unit of the given value ("mm", "px", or "in"). Defaults to "px".
  * @param {string} opt.unitTo - The unit to convert the value to ("mm", "px", or "in"). Defaults to "px".
  * @returns {number} The converted value.
  */
 export function unitConvert(opt) {
-  const v = opt.value || 0;
-  const dpi = opt.dpi;
+  opt = Object.assign(
+    {},
+    { value: null, dpi: getDpi(), unitFrom: "px", unitTo: "px" },
+    opt
+  );
 
-  if (!dpi && (opt.unitFrom === "px" || opt.unitTo === "px")) {
-    throw new Error("DPI is required for conversions involving pixels.");
+  if (isEmpty(opt.value)) {
+    throw new Error("unitConvert: missing value");
   }
 
+  if (opt.unitFrom === opt.unitTo) {
+    return opt.value;
+  }
+
+  const dpi = opt.dpi;
+  const v = opt.value;
   const unitFrom = opt.unitFrom || "px";
   const unitTo = opt.unitTo || "px";
 
-  if (unitFrom === unitTo) {
-    return v;
-  }
-
-  return {
+  const convert = {
     in: {
       px: v * dpi,
       mm: v * 25.4,
+      in: v,
     },
     mm: {
       px: (v / 25.4) * dpi,
       in: v / 25.4,
+      mm: v,
     },
     px: {
       mm: (v / dpi) * 25.4,
       in: v / dpi,
+      px: v,
     },
-  }[unitFrom][unitTo];
+  };
+
+  return convert[unitFrom][unitTo];
 }
 
 /**
- * Estimates the screen's dots per inch (DPI) taking into account device pixel ratio.
+ * Estimates the screen's dots per inch (DPI)
  * @returns {number} Estimated DPI.
  */
-export function getDpi() {
-  const elInch = el("div", { style: { width: "1in" } });
+const dpiDef = {
+  dpr: 0,
+  raw: 0,
+};
+export function getDpi(useDpr = false) {
+  const id = useDpr ? "dpr" : "raw";
+  const cache = dpiDef[id];
+
+  if (cache) {
+    return cache;
+  }
+
+  const elInch = el("div", {
+    style: {
+      position: "absolute",
+      top: "-2in",
+      left: "-2in",
+      width: "1in",
+      height: "1in",
+    },
+  });
   document.body.appendChild(elInch);
-  const dpi = elInch.getBoundingClientRect().width * window.devicePixelRatio;
+  const widthPixel = elInch.getBoundingClientRect().width;
+  const dpi = useDpr ? window.devicePixelRatio * widthPixel : widthPixel;
+  dpiDef[id] = dpi;
   elInch.remove();
   return dpi;
 }

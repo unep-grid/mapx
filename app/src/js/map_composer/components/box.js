@@ -1,8 +1,10 @@
 import { MessageFlash } from "./message_flash.js";
 import { el } from "../../el/src/index.js";
-import { onNextFrame } from "./helpers.js";
+import { onNextFrame, unitConvert } from "./helpers.js";
 import { ListenerStore } from "./../../listener_store/index.js";
 import { isNotEmpty } from "../../is_test/index.js";
+
+console.log("load mapx composer box");
 
 class Box {
   constructor(boxParent) {
@@ -391,9 +393,10 @@ class Box {
   checkAndWarnSize(width, height) {
     const box = this;
     const mc = box.mc;
-    const dpr = window.devicePixelRatio;
     const area = mc.state.canvas_max_area;
-    const areaPrint = width * dpr * height * dpr;
+    const scale = mc.getScaleOut();
+    const areaPrint = width * height * scale * scale;
+    console.log({ width, height, area, areaPrint });
     if (areaPrint > area) {
       const msger = mc.workspace.message;
       msger.flash({
@@ -423,31 +426,31 @@ class Box {
   }
 
   toLengthPixel(length) {
-    const box = this;
-    const state = box.state;
-    const r = window.devicePixelRatio;
-    length /= r;
+    const state = this.state;
+
     if (state.unit === "px") {
       return length;
     }
-    if (state.unit === "mm") {
-      length /= 25.4;
-    }
-    return state.dpi * length;
+
+    return unitConvert({
+      value: length,
+      unitFrom: state.unit,
+      unitTo: "px",
+    });
   }
 
   toLengthUnit(px) {
     const state = this.state;
-    const r = window.devicePixelRatio;
-    px *= r;
+
     if (state.unit === "px") {
       return px;
     }
-    let out = px / state.dpi;
-    if (state.unit === "mm") {
-      out *= 25.4;
-    }
-    return out;
+
+    return unitConvert({
+      value: px,
+      unitFrom: "px",
+      unitTo: state.unit,
+    });
   }
 
   getContentScale() {

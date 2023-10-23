@@ -79,16 +79,13 @@ class Page extends Box {
       item.destroy();
     }
   }
-
+ 
   async exportPng() {
     const page = this;
     const mc = page.mc;
     const elPrint = page.el;
     const curMode = mc.state.mode;
-    const dpi = mc.state.dpi;
-    const dpr = mc.state.dpr;
-    const dpiPrint = 300;
-    const scale = mc.state.unit === "px" ? dpr : (dpiPrint * dpr) / dpi;
+    const scale = mc.getScaleOut();
 
     try {
       mc.setMode("print");
@@ -101,7 +98,7 @@ class Page extends Box {
         canvas,
         "map-composer-export.png",
         "image/png",
-        false // not in a new tab
+        mc.state.exportTab // not in a new tab
       );
     } catch (e) {
       page.message.flash({
@@ -110,7 +107,7 @@ class Page extends Box {
       });
       console.error(e);
     } finally {
-      mc.setScaleMap(1);
+      await mc.setScaleMapReset();
       mc.setMode(curMode);
     }
   }

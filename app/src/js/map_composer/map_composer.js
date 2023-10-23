@@ -7,6 +7,7 @@ import { unitConvert } from "./components/helpers";
 import "./style/map_composer.less";
 import { bindAll } from "../bind_class_methods/index.js";
 import { waitTimeoutAsync } from "../animation_frame/index.js";
+import { getDpi } from "./components/helpers.js";
 
 export class MapComposer {
   constructor(elContainer, state, options) {
@@ -227,24 +228,20 @@ export class MapComposer {
     }
 
     const isInches = unit === "in";
-    const dpi = mc.state.dpi;
     const sizeStepRaw = unitConvert({
-      value: mc.state.grid_snap_size * window.devicePixelRatio,
+      value: mc.state.grid_snap_size,
       unitFrom: "px",
       unitTo: unit,
-      dpi: dpi,
     });
     const widthRaw = unitConvert({
       value: mc.state.page_width,
       unitFrom: mc.state.unit,
       unitTo: unit,
-      dpi: dpi,
     });
     const heightRaw = unitConvert({
       value: mc.state.page_height,
       unitFrom: mc.state.unit,
       unitTo: unit,
-      dpi: dpi,
     });
 
     const sizeStep = isInches
@@ -297,6 +294,18 @@ export class MapComposer {
     }
   }
 
+  getScaleOut() {
+    const mc = this;
+    const dpi = getDpi(true);
+    const dpr = mc.state.dpr;
+    const dpiPrint = 300;
+    const dpiWeb = 96;
+    const inPx = mc.state.unit === "px";
+    const dpiOut = inPx ? dpiWeb : dpiPrint;
+    const scale = (dpiOut * dpr) / dpi;
+    return scale;
+  }
+
   async setScaleMap(scale = 1) {
     const mc = this;
     scale = Number(scale);
@@ -305,7 +314,6 @@ export class MapComposer {
         return scale;
       },
     });
-    await waitTimeoutAsync(1);
     for (const item of mc.page.items) {
       if (item.type === "map") {
         const map = item.map;
@@ -318,12 +326,12 @@ export class MapComposer {
         item.map.setBearing(item.map.getBearing());
       }
     }
-    await waitTimeoutAsync(10);
-    Object.defineProperty(window, "devicePixelRatio", {
-      get: function () {
-        return mc.state.dpr;
-      },
-    });
+    await waitTimeoutAsync(100);
+  }
+
+  async setScaleMapReset() {
+    const mc = this;
+    await mc.setScaleMap(mc.state.dpr);
   }
 
   setLegendColumnCount(n) {
