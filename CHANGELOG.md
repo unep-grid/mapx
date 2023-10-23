@@ -1,3 +1,13 @@
+  - [1.12.5-alpha.9](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.9) 
+        
+    - MapComposer: 
+        - update scaling system, use/display browser dimensions until export + adapt max size checker to output scale computation
+        - issue with label placement for raster views
+    - View Item
+        - Home button : if project can't be loaded, display a message
+    - Metadata editor
+        - Improved keyword dropdown selector
+
   - [1.12.5-alpha.8](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.8) 
 
     - Metadata editor
