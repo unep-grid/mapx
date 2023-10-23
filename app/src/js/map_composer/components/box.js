@@ -4,8 +4,6 @@ import { onNextFrame, unitConvert } from "./helpers.js";
 import { ListenerStore } from "./../../listener_store/index.js";
 import { isNotEmpty } from "../../is_test/index.js";
 
-console.log("load mapx composer box");
-
 class Box {
   constructor(boxParent) {
     const box = this;
@@ -396,7 +394,6 @@ class Box {
     const area = mc.state.canvas_max_area;
     const scale = mc.getScaleOut();
     const areaPrint = width * height * scale * scale;
-    console.log({ width, height, area, areaPrint });
     if (areaPrint > area) {
       const msger = mc.workspace.message;
       msger.flash({

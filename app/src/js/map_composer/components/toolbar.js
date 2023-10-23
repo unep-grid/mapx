@@ -25,9 +25,17 @@ class Toolbar extends Box {
 
     toolbar.lStore.addListener({
       target: toolbar.el,
-      type: "input",
+      type: "change",
       idGroup: "toolbar_change",
       callback: throttleFrame(toolbar.changeCallback),
+      bind: toolbar,
+    });
+
+    toolbar.lStore.addListener({
+      target: toolbar.el,
+      type: "input",
+      idGroup: "toolbar_change",
+      callback: throttleFrame(toolbar.inputCallback),
       bind: toolbar,
     });
 
@@ -41,6 +49,25 @@ class Toolbar extends Box {
     toolbar.buildPresetOptions();
   }
 
+  async inputCallback(e) {
+    const toolbar = this;
+    const mc = toolbar.mc;
+    if (!mc.ready) {
+      return;
+    }
+    const elTarget = e.target;
+    const d = elTarget.dataset;
+    const idAction = d.mc_action;
+    const isInput = d.mc_event_type == "input";
+    if (!isInput || idAction !== "update_state") {
+      return;
+    }
+    const value = toolbar.validateValue(e.target);
+    const idState = d.mc_state_name;
+
+    mc.setState(idState, value);
+  }
+
   async changeCallback(e) {
     const toolbar = this;
     const mc = toolbar.mc;
@@ -50,7 +77,9 @@ class Toolbar extends Box {
     const elTarget = e.target;
     const d = elTarget.dataset;
     const idAction = d.mc_action;
-    if (idAction !== "update_state") {
+
+    const isChange = d.mc_event_type == "change";
+    if (!isChange || idAction !== "update_state") {
       return;
     }
     const value = toolbar.validateValue(e.target);
@@ -395,7 +424,7 @@ class Toolbar extends Box {
       class: "form-control",
       dataset: {
         mc_action: "update_state",
-        mc_event_type: "change",
+        mc_event_type: "input",
         mc_state_name: "scale_content",
       },
       step: 0.1,
