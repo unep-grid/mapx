@@ -1,3 +1,8 @@
+  - [1.12.5](https://github.com/unep-grid/mapx/tree/1.12.5) 
+
+    - MapComposer
+        - Update event listener type for sizes to 'change', keep 'input' for content scale.Fix issue with copy/paste value in width/height.
+
   - [1.12.5-alpha.9](https://github.com/unep-grid/mapx/tree/1.12.5-alpha.9) 
         
     - MapComposer: 
