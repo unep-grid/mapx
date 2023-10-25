@@ -24,7 +24,12 @@ import { ioUpdateGeoserver } from "#mapx/geoserver";
 import { ioEcho } from "#mapx/io";
 import { ioTestSum, ioTestEcho } from "#mapx/io";
 import { ioUploadSource } from "#mapx/upload";
-import { ioDownloadSource, ioEditSource, ioSourceListEdit } from "#mapx/source";
+import {
+  ioDownloadSource,
+  ioEditSource,
+  ioSourceListEdit,
+  ioSourceJoin 
+} from "#mapx/source";
 import { ioViewPin } from "#mapx/view";
 import { ioProjectNameValidate, ioProjectCreate } from "#mapx/project";
 import { ioKeywordsSearch } from "#mapx/keywords";
@@ -91,6 +96,7 @@ io.use((socket, next) => {
   socket.on("/client/source/upload", use(ioUploadSource));
   socket.on("/client/source/edit/table", use(ioEditSource));
   socket.on("/client/source/get/list/edit", use(ioSourceListEdit));
+  socket.on("/client/source/join", use(ioSourceJoin));
   socket.on("/client/view/pin", use(ioViewPin));
   socket.on("/client/project/validate/name", use(ioProjectNameValidate));
   socket.on("/client/project/create", use(ioProjectCreate));

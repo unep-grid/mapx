@@ -15,6 +15,8 @@ export {
 
 export { ioSourceListEdit } from "./list/index.js";
 
+export { ioSourceJoin } from "./join/index.js";
+
 export {
   mwGetSummary,
   getSourceSummary,

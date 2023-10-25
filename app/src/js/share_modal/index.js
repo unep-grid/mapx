@@ -172,7 +172,7 @@ export class ShareModal extends EventSimple {
     sm._closed = true;
     sm._modal.close();
     sm.fire("closed");
-    sm.destroy();
+    sm.destroy(); //events
     delete window._share_modal;
   }
 
@@ -888,7 +888,7 @@ export class ShareModal extends EventSimple {
        */
       const search = sm.url.search;
       test.passed = isEqual(search, test.search);
-      
+
       if (!test.passed) {
         console.log({ search: search, test: test.search });
       }

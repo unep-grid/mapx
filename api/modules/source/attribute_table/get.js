@@ -76,11 +76,15 @@ export async function getSourceAttributeTable(opt) {
   const allAttributes = await getColumnsNames(idSource);
 
   if (fullTable) {
+    attributes.length = 0;
     attributes.push(...allAttributes);
   }
 
   const attributesSelect = attributes.filter((a) => {
-    return !attributesToIgnore.includes(a) && allAttributes.includes(a);
+    const toIgnore = attributesToIgnore.includes(a);
+    // prevent unknow column / injection
+    const exists = allAttributes.includes(a);
+    return !toIgnore && exists ; 
   });
 
   if (isEmpty(attributesSelect)) {

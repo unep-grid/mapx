@@ -8,7 +8,7 @@ import { getLanguageCurrent } from "./../language/index.js";
 export async function wsGetSourcesListEdit(config) {
   const route = getApiRoute("sourceGetListEdit");
   const language = getLanguageCurrent();
-  const data = {language};
+  const data = { language };
   Object.assign(data, config);
-  return ws.emitGet(route, data);
+  return ws.emitAsync(route, data);
 }

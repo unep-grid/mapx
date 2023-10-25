@@ -5,7 +5,7 @@ import { parseTemplate } from "#mapx/helpers";
 
 export { ioSourceListEdit };
 
-async function ioSourceListEdit(socket, request) {
+async function ioSourceListEdit(socket, request, cb) {
   const session = socket.session;
 
   try {
@@ -31,10 +31,12 @@ async function ioSourceListEdit(socket, request) {
     Object.assign(options, request.input, auth);
 
     const list = await getSourcesListEdit(options);
-    const response = request;
-    response.list = list;
-    socket.emit("response", response);
+    const response = Object.assign({}, request, { list });
+
+    cb(response);
+
   } catch (e) {
+    cb(false);
     console.error(e);
     await socket.notifyInfoError({
       message: e.message,

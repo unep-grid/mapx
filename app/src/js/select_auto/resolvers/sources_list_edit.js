@@ -27,7 +27,7 @@ export const config = {
   },
   loaderData: {
     // select distinct type from mx_sources
-    types: ["vector", "raster", "tabular"],
+    types: ["vector", "raster", "tabular", "join"],
   },
   load: async function (_, callback) {
     const tom = this;

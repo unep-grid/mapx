@@ -526,22 +526,27 @@ async function getTableDimension(idTable) {
  * Get simple (json) column type
  * @param {String} idSource Id of the source
  * @param {String} idAttr Id of the attribute
- * @return {Promise<arrayA} Array of types
+ * @param {Array<String>} idAttrExclude Array of attribute ids to exclude. Default is ['gid','geom']
+ * @return {Promise<array>} Array of types
  */
-async function getColumnsTypesSimple(idSource, idAttr) {
-  if (!isSourceId(idSource) || !idAttr) {
+async function getColumnsTypesSimple(
+  idSource,
+  idAttr,
+  idAttrExclude = ["gid", "geom"]
+) {
+  if (!isSourceId(idSource)) {
     return [];
   }
+  if (isEmpty(idAttr)) {
+    idAttr = await getColumnsNames(idSource);
+  }
+
+  const sqlSrcAttr = templates.getColumnsTypesSimple;
   const cNames = isArray(idAttr) ? idAttr : [idAttr];
-  const cNamesTxt = `('${cNames.join(`','`)}')`;
+  const cNamesFiltered = cNames.filter((col) => !idAttrExclude.includes(col));
 
-  const opt = {
-    idSource: idSource,
-    idAttributesString: cNamesTxt,
-  };
-
-  const sqlSrcAttr = parseTemplate(templates.getColumnsTypesSimple, opt);
-  const resp = await pgRead.query(sqlSrcAttr);
+  const values = [idSource, cNamesFiltered];
+  const resp = await pgRead.query(sqlSrcAttr, values);
   return resp.rows;
 }
 
@@ -599,28 +604,45 @@ async function getSourceLastTimestamp(idSource) {
  * @param {String} idSource Id of the source
  * @return {Number} timetamp
  */
-export async function getSourceLastTimestamp_orig(idSource) {
+export async function getSourceLastTimestampCommit(idSource) {
   if (!isSourceId(idSource)) {
     return null;
   }
-  const q = `WITH maxTimestampData as (
-            SELECT pg_xact_commit_timestamp(xmin) as t 
-            FROM ${idSource}
-          ),
-          maxTimestampStructure as (
-            SELECT pg_xact_commit_timestamp(xmin) as t 
-            FROM pg_class
-            WHERE relname = '${idSource}'
-          ),
-          maxBoth as (
-             SELECT t 
-             FROM maxTimestampData
-             UNION
-             SELECT t 
-            FROM maxTimestampStructure
-            )
-          SELECT max(t) as timestamp from maxBoth;`;
-  const data = await pgRead.query(q);
+  const q = `
+WITH
+  maxTimestampData as (
+    SELECT
+      pg_xact_commit_timestamp(xmin) as t
+    FROM
+      $1
+  ),
+  maxTimestampStructure as (
+    SELECT
+      pg_xact_commit_timestamp(xmin) as t
+    FROM
+      pg_class
+    WHERE
+      relname = $1
+  ),
+  maxBoth as (
+    SELECT
+      t
+    FROM
+      maxTimestampData
+    UNION
+    SELECT
+      t
+    FROM
+      maxTimestampStructure
+  )
+SELECT
+  max(t) as timestamp
+from
+  maxBoth;
+  `;
+
+  const data = await pgRead.query(q, [idSource]);
+
   const [row] = data.rows;
 
   if (row) {

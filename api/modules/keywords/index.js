@@ -4,7 +4,6 @@ export async function ioKeywordsSearch(socket, config, cb) {
     const session = socket.session;
 
     if (!session.user_roles.publisher) {
-      cb(false);
       throw new Error("unauthorized");
     }
 
@@ -13,6 +12,7 @@ export async function ioKeywordsSearch(socket, config, cb) {
     const res = await searchKeyword(keyword);
 
     cb(res);
+
   } catch (e) {
     cb(false);
     socket.notifyInfoError({
