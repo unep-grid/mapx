@@ -2,7 +2,7 @@ import { el } from "./../el/src/index.js";
 import { ListenerStore } from "./../listener_store/index.js";
 import { path, any, setClickHandler } from "./../mx_helper_misc.js";
 import { getLayersPropertiesAtPoint } from "./../map_helpers/index.js";
-import { isEmpty, isUndefined } from "./../is_test/index.js";
+import { isEmpty, isFunction, isUndefined } from "./../is_test/index.js";
 import { settings } from "./../mx.js";
 const { valuesMap } = settings;
 /**
@@ -388,7 +388,7 @@ class Widget {
       /*
        * Exec widget on remove
        */
-      if (!skipOnRemove) {
+      if (!skipOnRemove && isFunction(widget.onRemove)) {
         /*
          * Case normal remove
          */
@@ -398,7 +398,7 @@ class Widget {
       /**
        * Remove from dashboard config
        */
-      dashboard.removeWidget(widget);
+      await dashboard.removeWidget(widget);
     } catch (e) {
       widget.warn("Issue when destroying widget", e);
     }
@@ -477,7 +477,7 @@ class Widget {
     } catch (e) {
       w.warn(`strToObj failed. Script = ${str}. Throwing error further down`);
       // pass error further.
-      throw e;
+      throw new Error(e.message);
     }
   }
 

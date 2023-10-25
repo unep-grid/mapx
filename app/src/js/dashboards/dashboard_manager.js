@@ -178,19 +178,23 @@ export class DashboardManager {
 
   async viewAutoDashboardAsync(idView) {
     const dm = this;
+    const { Dashboard } = await import("./dashboard.js");
     const created = await dm.viewCreateDashboardAsync(idView);
     const widgets = await dm.viewAddWidgetsAsync(idView);
+    const d = dm.getInstance();
+    const hasDashboard = d instanceof Dashboard;
+    if (!hasDashboard) {
+      return;
+    }
     if (created) {
       const config = dm.viewConfigGet(idView);
       if (!config.panel_init_close) {
-        const d = dm.getInstance();
-        await d.show();
-        d.updatePanelLayout();
-        d.updateAttributions();
+          await d.show();
+          d.updatePanelLayout();
+          d.updateAttributions();
       }
     }
     if (widgets && widgets.length > 0) {
-      const d = dm.getInstance();
       const isActive = d.isActive();
       if (!isActive) {
         d.shakeButton({
@@ -202,7 +206,4 @@ export class DashboardManager {
       }
     }
   }
-  
-
-
 }
