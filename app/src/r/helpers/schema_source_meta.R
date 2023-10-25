@@ -36,32 +36,7 @@ mxSchemaSourceMeta <- function(
     d(id = id, lang = language)
   }
 
-  #
-  # M9 keywords
-  # {"country":[{"id":'COD'},{"id":'AFG'},...]}
-  #
-  m49Group <- .get(config, c("m49_geo_keywords")) # country, etc..
-
-  # Translate groups and create optgroups
-  optgroups <- lapply(names(m49Group), function(group) {
-    list(value = group, label = t(group))
-  })
-
-  # Create options using lapply
-  options <- do.call(c, lapply(names(m49Group), function(group) {
-    lapply(m49Group[[group]], function(item) {
-      list(value = item, text = t(item), optgroup = group)
-    })
-  }))
-
-  options <- options[order(sapply(options, function(opt) {
-    opt$text
-  }))]
-
-  # Combine options and optgroups into a single list
-  m49Options <- list(options = options, optgroups = optgroups)
-
-
+  m49Options <- mxGetM49Options(language)
 
   #
   # Final object
@@ -543,4 +518,42 @@ mxSchemaSourceMeta <- function(
   }
 
   return(out)
+}
+
+#' Produce option and optgroup for m49 + countr name 
+#'
+#' @param language {Character} Two letter language code
+#' @return List with options  and optgroup list 
+mxGetM49Options <- function(language) {
+  #
+  # M9 keywords
+  # {"country":[{"id":'COD'},{"id":'AFG'},...]}
+  #
+  m49Group <- .get(config, c("m49_geo_keywords")) # country, etc..
+
+  # Translate groups and create optgroups
+  optgroups <- lapply(names(m49Group), function(group) {
+    list(value = group, label = d(group, language))
+  })
+
+  # Create options using lapply
+  options <- do.call(c, lapply(names(m49Group), function(group) {
+    lapply(m49Group[[group]], function(item) {
+      list(value = item, text = d(item, language), optgroup = group)
+    })
+  }))
+
+  # Sorting options based on the original order of
+  # optgroups and then alphabetically within each group
+  group_order <- setNames(1:length(names(m49Group)), names(m49Group))
+  options <- options[order(sapply(options, function(opt) {
+    group_order[opt$optgroup]
+  }), sapply(options, function(opt) {
+    opt$text
+  }))]
+
+  # Combine options and optgroups into a single list
+  m49Options <- list(options = options, optgroups = optgroups)
+
+  return(m49Options)
 }

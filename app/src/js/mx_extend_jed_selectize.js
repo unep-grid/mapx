@@ -1,8 +1,6 @@
 import { getGemetConcept, searchGemet } from "./gemet_util/index.js";
 import { el } from "./el_mapx";
 import { isArray, isEmpty, isNotEmpty } from "./is_test/index.js";
-import { makeId, path } from "./mx_helper_misc.js";
-import { getDictItem } from "./language/index.js";
 import { getMetadataKeywords } from "./metadata/keywords.js";
 
 (function () {
