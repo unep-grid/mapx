@@ -37,6 +37,33 @@ mxSchemaSourceMeta <- function(
   }
 
   #
+  # M9 keywords
+  # {"country":[{"id":'COD'},{"id":'AFG'},...]}
+  #
+  m49Group <- .get(config, c("m49_geo_keywords")) # country, etc..
+
+  # Translate groups and create optgroups
+  optgroups <- lapply(names(m49Group), function(group) {
+    list(value = group, label = t(group))
+  })
+
+  # Create options using lapply
+  options <- do.call(c, lapply(names(m49Group), function(group) {
+    lapply(m49Group[[group]], function(item) {
+      list(value = item, text = t(item), optgroup = group)
+    })
+  }))
+
+  options <- options[order(sapply(options, function(opt) {
+    opt$text
+  }))]
+
+  # Combine options and optgroups into a single list
+  m49Options <- list(options = options, optgroups = optgroups)
+
+
+
+  #
   # Final object
   #
   out <- list(
@@ -95,9 +122,7 @@ mxSchemaSourceMeta <- function(
                 format = "selectizeOptGroup",
                 uniqueItems = TRUE,
                 minItems = 1,
-                options = list(
-                  groupOptions = .get(config, c("m49_geo_keywords"))
-                ),
+                options = m49Options,
                 items = list(
                   type = "string"
                 )
