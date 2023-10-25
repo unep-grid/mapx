@@ -1,3 +1,8 @@
+  - [1.12.6](https://github.com/unep-grid/mapx/tree/1.12.6) 
+
+    - Metadata Editor
+        - Should solve geographic keyword order + search issue #955
+
   - [1.12.5](https://github.com/unep-grid/mapx/tree/1.12.5) 
 
     - MapComposer
