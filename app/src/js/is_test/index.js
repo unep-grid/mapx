@@ -334,15 +334,20 @@ export function isProjectId(idProject) {
   return !!idProject && !!idProject.match(reg);
 }
 
+
 /**
- * Test if it's a MapX view of type vt
- * @param {Object} item to test
+ * Determines if the given ID is a valid MapX source ID.
+ *
+ * A valid MapX source ID starts with 'mx', followed optionally by '_vector',
+ * and then by 5 to 7 segments of the pattern '_[a-z0-9]{1,6}'. The entire ID's 
+ * length should be within the range of 10 to 50 characters.
+ *
+ * @param {string} id - The ID to test.
+ * @returns {boolean} - Returns true if the ID matches the pattern and length constraints; otherwise, false.
  */
 export function isSourceId(id) {
-  const reg = new RegExp(
-    "^mx_(vector|[a-z]{3})(_vector)?_([0-9a-z]{5,6})_([0-9a-z]{5,6})_[0-9a-z]{5,6}_[0-9a-z]{5,6}(_u_[0-9]+|_o_u_[0-9]+)?$"
-  );
-  return isString(id) && !!id.match(reg);
+  const reg = new RegExp("^mx(?:_vector)?(_[a-z0-9]{1,6}){5,7}$");
+  return isStringRange(id,10,50) && !!id.match(reg);
 }
 
 /**

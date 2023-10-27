@@ -90,8 +90,14 @@ Regex.lastIndex is not reseted between calls,
 <dt><a href="#isArrayOfViewsId">isArrayOfViewsId(arr)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Test if array of views id</p>
 </dd>
-<dt><a href="#isSorted">isSorted(arr, desc)</a></dt>
+<dt><a href="#isSortedArray">isSortedArray(arr, desc)</a></dt>
 <dd><p>Check if array is sorted</p>
+</dd>
+<dt><a href="#isAgteB">isAgteB(a, b)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Compare value an return</p>
+</dd>
+<dt><a href="#isAgtB">isAgtB(a, b)</a> ⇒ <code>Number</code></dt>
+<dd><p>Compare a to b ( for sorting )</p>
 </dd>
 <dt><a href="#isRegExp">isRegExp(value)</a> ⇒ <code>Logical</code></dt>
 <dd><p>Test for RegExp instance</p>
@@ -99,8 +105,11 @@ Regex.lastIndex is not reseted between calls,
 <dt><a href="#isProjectId">isProjectId(id)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Test for valid project id</p>
 </dd>
-<dt><a href="#isSourceId">isSourceId(item)</a></dt>
-<dd><p>Test if it&#39;s a MapX view of type vt</p>
+<dt><a href="#isSourceId">isSourceId(id)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Determines if the given ID is a valid MapX source ID.</p>
+<p>A valid MapX source ID starts with &#39;mx&#39;, followed optionally by &#39;<em>vector&#39;,
+and then by 5 to 7 segments of the pattern &#39;</em>[a-z0-9]{1,6}&#39;. The entire ID&#39;s 
+length should be within the range of 10 to 50 characters.</p>
 </dd>
 <dt><a href="#isArrayOfSourceId">isArrayOfSourceId(arr)</a></dt>
 <dd><p>Test if it&#39;s an array of MapX source id</p>
@@ -150,6 +159,12 @@ Regex.lastIndex is not reseted between calls,
 <dt><a href="#isMap">isMap(map)</a></dt>
 <dd><p>Test if is map</p>
 </dd>
+<dt><a href="#isLngLatInsideBounds">isLngLatInsideBounds(lngLat, bounds)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Checks if a LngLat coordinate is inside the given LngLatBounds object.</p>
+</dd>
+<dt><a href="#isBoundsInsideBounds">isBoundsInsideBounds(bounds_test, bounds)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Checks if a LngLatBounds object is inside another LngLatBounds</p>
+</dd>
 <dt><a href="#isStringRange">isStringRange(str,, min, max)</a></dt>
 <dd><p>Test if entry is string and have the correct number of characters</p>
 </dd>
@@ -181,6 +196,13 @@ Use server side
 </dd>
 <dt><a href="#isEqual">isEqual(x, y)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Test for object equality</p>
+</dd>
+<dt><a href="#isEqualNoType">isEqualNoType(a, b)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Compares two values for equivalence, ignoring types and leading/trailing whitespace.</p>
+</dd>
+<dt><a href="#normalizeValue">normalizeValue(value)</a> ⇒ <code>string</code> | <code>number</code></dt>
+<dd><p>Normalizes a value by converting it to a string, trimming whitespace,
+and converting it to a number if it represents a valid number.</p>
 </dd>
 <dt><a href="#isUrl">isUrl(url)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Validate url</p>
@@ -472,9 +494,9 @@ Test if array of views id
 | --- | --- | --- |
 | arr | <code>Array</code> | Array of views id |
 
-<a name="isSorted"></a>
+<a name="isSortedArray"></a>
 
-## isSorted(arr, desc)
+## isSortedArray(arr, desc)
 Check if array is sorted
 
 **Kind**: global function  
@@ -483,6 +505,31 @@ Check if array is sorted
 | --- | --- | --- |
 | arr | <code>Array</code> | Array to test |
 | desc | <code>Boolean</code> | Descendent ? |
+
+<a name="isAgteB"></a>
+
+## isAgteB(a, b) ⇒ <code>boolean</code>
+Compare value an return
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| a | <code>Any</code> | A value |
+| b | <code>Any</code> | B value |
+
+<a name="isAgtB"></a>
+
+## isAgtB(a, b) ⇒ <code>Number</code>
+Compare a to b ( for sorting )
+
+**Kind**: global function  
+**Returns**: <code>Number</code> - 1,-1 or 0  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| a | <code>Any</code> | A value |
+| b | <code>Any</code> | B value |
 
 <a name="isRegExp"></a>
 
@@ -509,14 +556,19 @@ Test for valid project id
 
 <a name="isSourceId"></a>
 
-## isSourceId(item)
-Test if it's a MapX view of type vt
+## isSourceId(id) ⇒ <code>boolean</code>
+Determines if the given ID is a valid MapX source ID.
+
+A valid MapX source ID starts with 'mx', followed optionally by '_vector',
+and then by 5 to 7 segments of the pattern '_[a-z0-9]{1,6}'. The entire ID's 
+length should be within the range of 10 to 50 characters.
 
 **Kind**: global function  
+**Returns**: <code>boolean</code> - - Returns true if the ID matches the pattern and length constraints; otherwise, false.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| item | <code>Object</code> | to test |
+| id | <code>string</code> | The ID to test. |
 
 <a name="isArrayOfSourceId"></a>
 
@@ -694,6 +746,32 @@ Test if is map
 | --- | --- | --- |
 | map | <code>Object</code> | Map object |
 
+<a name="isLngLatInsideBounds"></a>
+
+## isLngLatInsideBounds(lngLat, bounds) ⇒ <code>boolean</code>
+Checks if a LngLat coordinate is inside the given LngLatBounds object.
+
+**Kind**: global function  
+**Returns**: <code>boolean</code> - - Returns true if the LngLat coordinate is inside the LngLatBounds, otherwise false.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| lngLat | <code>mapboxgl.LngLat</code> | The LngLat coordinate to check. |
+| bounds | <code>mapboxgl.LngLatBounds</code> | The LngLatBounds object to check against. |
+
+<a name="isBoundsInsideBounds"></a>
+
+## isBoundsInsideBounds(bounds_test, bounds) ⇒ <code>boolean</code>
+Checks if a LngLatBounds object is inside another LngLatBounds
+
+**Kind**: global function  
+**Returns**: <code>boolean</code> - - Returns true if the LngLatBounds object is inside the current bounds of getMaxBounds, otherwise false.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| bounds_test | <code>mapboxgl.LngLatBounds</code> | The LngLatBounds object to check. |
+| bounds | <code>mapboxgl.LngLatBounds</code> | The LngLatBounds object to compare t. |
+
 <a name="isStringRange"></a>
 
 ## isStringRange(str,, min, max)
@@ -812,6 +890,32 @@ Test for object equality
 | --- | --- | --- |
 | x | <code>Object</code> | First object to compare |
 | y | <code>Object</code> | Second object to compare |
+
+<a name="isEqualNoType"></a>
+
+## isEqualNoType(a, b) ⇒ <code>boolean</code>
+Compares two values for equivalence, ignoring types and leading/trailing whitespace.
+
+**Kind**: global function  
+**Returns**: <code>boolean</code> - - Returns true if the normalized forms of the two values are equivalent, false otherwise.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| a | <code>\*</code> | The first value to compare. |
+| b | <code>\*</code> | The second value to compare. |
+
+<a name="normalizeValue"></a>
+
+## normalizeValue(value) ⇒ <code>string</code> \| <code>number</code>
+Normalizes a value by converting it to a string, trimming whitespace,
+and converting it to a number if it represents a valid number.
+
+**Kind**: global function  
+**Returns**: <code>string</code> \| <code>number</code> - - The normalized value.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| value | <code>\*</code> | The value to normalize. |
 
 <a name="isUrl"></a>
 
