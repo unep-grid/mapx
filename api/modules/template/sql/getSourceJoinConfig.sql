@@ -1,5 +1,5 @@
 SELECT
-  data #> "{join,config}"
+  data #> '{join,config}'
 FROM
   mx_sources
 WHERE

@@ -2,13 +2,8 @@ import { pgTest, pgRead, pgWrite } from "#mapx/db";
 import { settings } from "#root/settings";
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
-import {
-  isEmpty,
-  isArray,
-  isSourceId,
-  isNumeric,
-  isProjectId,
-} from "@fxi/mx_valid";
+import { getUserRoles } from "#mapx/authentication";
+import { isEmpty, isArray, isSourceId, isProjectId } from "@fxi/mx_valid";
 import { isLayerValid, areLayersValid } from "./geom_validation.js";
 import { insertRow } from "./insert.js";
 export * from "./metadata.js";
@@ -243,88 +238,112 @@ async function analyzeSource(idTable) {
 
 /**
  * Register a source in mx_sources
- * @param {String} idSource Id of the source
+ * @param {String|Object} idSourceOrOptions Id of the source or an options object
  * @param {Integer} idUser Id of the user
  * @param {String} idProject Id of the project
- * @param {String} title English title
- * @param {String} type Type : vector,raster,tabular
+ * @param {String} [title] English title
+ * @param {String} [type="vector"] Type : vector, raster, tabular
+ * @param {Boolean} [enable_download=false]
+ * @param {Boolean} [enable_wms=false]
  * @return {Promise<Boolean>} inserted
  */
 async function registerSource(
-  idSource,
+  idSourceOrOptions,
   idUser,
   idProject,
   title,
   type = "vector",
-  enable_download,
-  enable_wms
+  enable_download = false,
+  enable_wms = false
 ) {
-  if (typeof idSource === "object") {
-    const options = idSource;
+  let idSource = idSourceOrOptions;
+
+  if (typeof idSourceOrOptions === "object") {
+    const options = idSourceOrOptions;
     idSource = options.idSource;
     idUser = options.idUser * 1;
     idProject = options.idProject;
     title = options.sourceTitle || options.layerTitle || options.title;
-    type = options.vector || "vector";
+    type = options.type || "vector";
+    enable_download = options.enable_download || false;
+    enable_wms = options.enable_wms || false;
   }
 
-  /**
-   * Validation
-   */
+  const roles = await getUserRoles(idUser, idProject);
+
+  // Validation
   if (!isSourceId(idSource)) {
-    throw Error("Register source : idSource not valid");
+    throw Error("Register source: idSource not valid");
   }
+
   if (!isProjectId(idProject)) {
-    throw Error("Register source : idProject not valid");
-  }
-  if (!isNumeric(idUser)) {
-    // check instead of existing user...
-    throw Error("Register source : idUser not valid");
-  }
-  if (!["vector", "raster", "tabular"].includes(type)) {
-    throw Error("Register source : type not valid");
+    throw Error("Register source: idProject not valid");
   }
 
-  /**
-   * Services
-   */
+  if (!roles.publisher) {
+    throw Error("Register source: Unauthorized");
+  }
+
+  if (!["vector", "raster", "tabular", "join"].includes(type)) {
+    throw Error("Register source: type not valid");
+  }
+
+  // Services
   const services = [];
-
   if (enable_wms) {
     services.push("gs_ws_b");
   }
+
   if (enable_download) {
     services.push("mx_download");
   }
 
-  const strServices = JSON.stringify(services);
+  // Insert
+  const meta = {
+    meta: {
+      text: {
+        title: {
+          en: title,
+        },
+      },
+    },
+  };
 
-  /**
-   * Insert
-   */
-  const sqlAddSource = `INSERT INTO mx_sources (
-    id, editor, readers, editors, date_modified, type, project, data, services
-  ) VALUES (
-    $1::text,
-    $2::integer,
-    '["publishers"]',
-    '["publishers"]',
-    now(),
-    $3::text,
-    $4::text,
-    '{"meta":{"text":{"title":{"en":"${title}"}}}}',
-    $5::jsonb
-  )`;
+  const sqlAddSource = `
+        INSERT INTO mx_sources (
+            id,
+            editor,
+            readers,
+            editors,
+            date_modified,
+            type,
+            project,
+            data,
+            services
+        )
+        VALUES (
+            $1::text,
+            $2::integer,
+            '["publishers"]',
+            '["publishers"]',
+            now(),
+            $3::text,
+            $4::text,
+            $5::jsonb,
+            $6::jsonb
+        )`;
+
   await pgWrite.query(sqlAddSource, [
     idSource,
     idUser,
     type,
     idProject,
-    strServices,
+    JSON.stringify(meta),
+    JSON.stringify(services),
   ]);
+
   return true;
 }
-
 /**
  * Updates the date_modified column of the mx_sources table for the specified source ID.
  *

@@ -2,7 +2,8 @@ import { pgRead } from "#mapx/db";
 import { templates } from "#mapx/template";
 import { isSourceId } from "@fxi/mx_valid";
 import { getColumnsTypesSimple } from "#mapx/db_utils";
-
+import { newIdSource } from "#mapx/upload";
+import { registerSource } from "#mapx/db_utils";
 export async function ioSourceJoin(socket, data, cb) {
   const session = socket.session;
 
@@ -17,7 +18,7 @@ export async function ioSourceJoin(socket, data, cb) {
 
     const { method, config } = data;
 
-    const value = await handleMethod(method, config);
+    const value = await handleMethod(method, config, session);
 
     cb(value);
   } catch (e) {
@@ -28,7 +29,7 @@ export async function ioSourceJoin(socket, data, cb) {
   }
 }
 
-async function handleMethod(method, config) {
+async function handleMethod(method, config, session) {
   switch (method) {
     case "get":
       return getJoinConfig(config);
@@ -36,9 +37,34 @@ async function handleMethod(method, config) {
       return setJoinConfig(config);
     case "attributes":
       return getAtributes(config);
+    case "create":
+      return create(config, session);
     default:
       throw new Error(msg("unsupported method"));
   }
+}
+
+async function create(config, session) {
+  const idSource = newIdSource();
+  const title = config.title || `New Join ${new Date().toLocaleString()}`;
+  const idUser = session.user_id;
+  const idProject = session.project_id;
+  const type = "join";
+  const allowDownload = false;
+  const enableWms = false;
+  const ok = await registerSource(
+    idSource,
+    idUser,
+    idProject,
+    title,
+    type,
+    allowDownload,
+    enableWms
+  );
+  if (!ok) {
+    throw new Error(msg("Creation failed"));
+  }
+  return { idSource };
 }
 
 async function setJoinConfig(config) {
@@ -50,7 +76,7 @@ async function getJoinConfig(config) {
   if (!isSourceId(idSource)) {
     throw new Error(msg("Missing Source ID"));
   }
-  const res = await pgRead(templates.getSourceJoinConfig, [idSource]);
+  const res = await pgRead.query(templates.getSourceJoinConfig, [idSource]);
   return res.rows[0] || {};
 }
 

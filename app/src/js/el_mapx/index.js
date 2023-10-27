@@ -452,9 +452,12 @@ function elButtonIcon(key, opt) {
     content
   );
 
-  getDictItem(key).then((txt) => {
-    elBtn.setAttribute("aria-label", txt);
-  });
+  getDictItem(key)
+    .then((txt) => {
+      elBtn.setAttribute("aria-label", txt);
+    })
+    .catch(console.error);
+
   return elBtn;
 }
 

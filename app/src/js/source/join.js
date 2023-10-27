@@ -1,41 +1,64 @@
-import { el } from "../el_mapx";
+import { el, elButtonFa, elSpanTranslate as tt } from "../el_mapx";
 import { EventSimple } from "../event_simple";
 import { isSourceId } from "../is_test";
 import { modalSelectSource } from "../select_auto";
-import { ws } from "../mx";
+import { settings, ws } from "../mx";
 import "./join.less";
+import { modalPrompt } from "../mx_helper_modal";
+import { isEmpty } from "../is_test";
+import { getDictItem } from "../language";
 
 const routes = {
   join: "/client/source/join",
 };
 
+const defs = {
+  id: null,
+  title: null,
+  id_a: null,
+  id_b: null,
+  cols_a: [],
+  cols_b: [],
+  join_a: null,
+  join_b: null,
+};
+
 export class SourcesJoinManager extends EventSimple {
   constructor() {
+    super();
     const sjm = this;
     return sjm;
   }
 
-  async init() {
+  async init(mode = "edit") {
     const sjm = this;
 
     if (sjm._init) {
       return;
     }
 
-    const idSource = await sjm.promptSelectSourceJoin();
-    const saved = await sjv.load(idSource);
+    sjm._id_source = null;
 
-    const defs = {
-      id: idSource,
-      id_a: null,
-      id_b: null,
-      cols_a: [],
-      cols_b: [],
-      join_a: null,
-      join_b: null,
-    };
+    if (mode === "edit") {
+      sjm._id_source = await sjm.promptSelectSourceJoin();
+    } else {
+      sjm._id_source = await sjm.promptCreate();
+    }
 
-    sjm._config = Object.assign({}, defs, saved);
+    if (!isSourceId(sjm._id_source)) {
+      console.warn("sjm : no valid source id");
+      return;
+    }
+
+    const config = await sjm.load(sjm._id_source);
+    debugger;
+
+    if (isEmpty(config)) {
+      console.log("sjm : empty config");
+      return;
+    }
+
+    sjm._config = Object.assign({}, defs, config);
 
     await sjm.build();
   }
@@ -45,7 +68,7 @@ export class SourcesJoinManager extends EventSimple {
   }
 
   async emit(method, config) {
-    return ws.emitAsync(routes.join, { method, config }, 100);
+    return ws.emitAsync(routes.join, { method, config }, 1000);
   }
 
   async save() {
@@ -54,6 +77,7 @@ export class SourcesJoinManager extends EventSimple {
   }
 
   async load(idSource) {
+    const sjm = this;
     if (!isSourceId(idSource)) {
       return {};
     }
@@ -81,18 +105,31 @@ export class SourcesJoinManager extends EventSimple {
     return attributes;
   }
 
+  async promptCreate() {
+    const sjm = this;
+    const title = await modalPrompt({
+      title: tt("sjm_create_title"),
+      label: tt("sjm_create_layer_name", {
+        data: { language: settings.language },
+      }),
+      confirm: tt("sjm_create_btn"),
+      inputOptions: {
+        type: "text",
+        value: `New Join ${new Date().toLocaleString()}`,
+        placeholder: await getDictItem("sjm_create_layer_placeholder"),
+      },
+    });
+    if (!title) {
+      return false;
+    }
+    const { idSource } = await sjm.emit("create", { title });
+    return idSource;
+  }
+
   async promptSelectSourceJoin() {
     const idSource = await modalSelectSource({
       disable_large: false,
       loaderData: { type: ["join"] },
-    });
-    return idSource;
-  }
-
-  async selectSourceJoin() {
-    const idSource = await modalSelectSource({
-      disable_large: false,
-      loaderData: { type: "join" },
     });
     return idSource;
   }

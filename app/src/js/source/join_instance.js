@@ -8,3 +8,12 @@ export async function modalSourceJoin() {
     console.error(e);
   }
 }
+
+export async function modalSourceJoinCreate() {
+  try {
+    const msj = new SourcesJoinManager();
+    await msj.init('create');
+  } catch (e) {
+    console.error(e);
+  }
+}

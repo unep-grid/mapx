@@ -26,6 +26,7 @@ export * from "./map_helpers";
 export * from "./legend_vt";
 export * from "./url_utils";
 export * from "./legend_vt/helpers.js";
+export * from "./source/join_instance.js";
 
 /**
  * Old modules that use global mx object

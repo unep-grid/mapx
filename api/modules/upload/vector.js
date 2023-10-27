@@ -494,8 +494,8 @@ export async function fileToPostgres(config) {
   });
 }
 
-function newIdSource() {
-  return randomString("mx_vector", 4, 5, true, false);
+export function newIdSource() {
+  return randomString("mx", 5, 5, true, false);
 }
 function newIdView() {
   return randomString("MX", 3, 5, false, true, "-");
