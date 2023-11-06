@@ -1,3 +1,7 @@
+  - [1.12.6-patch.1](https://github.com/unep-grid/mapx/tree/1.12.6-patch.1) 
+
+    - Should fix issue with the trigger for keywords views/sources update 
+
   - [1.12.6](https://github.com/unep-grid/mapx/tree/1.12.6) 
 
     - Metadata Editor
