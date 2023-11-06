@@ -1,10 +1,12 @@
 -- Drop previous artifacts if they exist
 DROP TRIGGER IF EXISTS mx_sources_meta_keywords_trg ON mx_sources;
 
-DROP MATERIALIZED VIEW IF EXISTS mx_sources_meta_keywords CASCADE;
+DROP TRIGGER IF EXISTS mx_views_meta_keywords_trg ON mx_views;
 
 -- cascade includes indexes
 DROP FUNCTION IF EXISTS mx_sources_meta_keywords_sync () CASCADE;
+
+DROP MATERIALIZED VIEW IF EXISTS mx_sources_meta_keywords CASCADE;
 
 -- Create the materialized view for distinct keywords
 CREATE MATERIALIZED VIEW
@@ -95,27 +97,38 @@ CREATE INDEX mx_sources_meta_keywords_trgm ON mx_sources_meta_keywords USING GIN
 CREATE
 OR REPLACE FUNCTION mx_sources_meta_keywords_sync () RETURNS TRIGGER AS $$
 BEGIN
-    REFRESH MATERIALIZED VIEW mx_sources_meta_keywords;
-    RETURN NULL; -- Since it's a STATEMENT level trigger, RETURN value is not used
+   IF TG_OP = 'DELETE' OR
+      (
+      TG_OP = 'UPDATE' AND
+      NEW.type IN ( 'vector','tabular' ) AND 
+      OLD.data #>> '{meta,text,keywords,keys}' 
+      IS DISTINCT FROM
+      NEW.data #>> '{meta,text,keywords,keys}'
+      ) OR
+      TG_OP = 'INSERT' AND 
+        NEW.type IN ('cc','rt')
+      THEN
+        REFRESH MATERIALIZED VIEW mx_sources_meta_keywords; 
+   END IF;
+ 
+   RETURN NULL; -- Since it's a statement-level trigger, RETURN value is not used
 END;
 $$ LANGUAGE plpgsql;
 
 -- Trigger to refresh the materialized view after changes to mx_sources
 CREATE TRIGGER mx_sources_meta_keywords_trg
-AFTER INSERT
-OR
+AFTER
 UPDATE
-OR DELETE ON mx_sources FOR EACH STATEMENT
+or DELETE ON mx_sources FOR EACH ROW
 EXECUTE FUNCTION mx_sources_meta_keywords_sync ();
 
 -- Trigger to refresh the materialized view after changes to mx_views
 CREATE TRIGGER mx_views_meta_keywords_trg
 AFTER INSERT
-OR
-UPDATE
-OR DELETE ON mx_views FOR EACH STATEMENT
+OR DELETE ON mx_views FOR EACH ROW
 EXECUTE FUNCTION mx_sources_meta_keywords_sync ();
 
+-- Set access rights 
 ALTER MATERIALIZED VIEW public.mx_sources_meta_keywords OWNER TO mapxw;
 
 GRANT

@@ -326,33 +326,24 @@ async function registerSource(
  * @returns {Promise<boolean>} - Returns true if the update is successful, false otherwise.
  * @throws {Error} - Throws an error if there's an issue with the database operation.
  */
-export async function updateMxSourceTimestamp(idSource) {
+export async function updateMxSourceTimestamp(idSource, pgClient = null) {
+
   if (!isSourceId(idSource)) {
     return false;
   }
 
-  const client = await pgWrite.connect();
-  try {
-    await client.query("BEGIN");
+  const client = pgClient || pgWrite;
 
-    const updateMxSourcesQuery = `
+  const updateMxSourcesQuery = `
       UPDATE mx_sources
       SET date_modified = NOW()
       WHERE id = $1
     `;
-    const result = await client.query(updateMxSourcesQuery, [idSource]);
 
-    if (result.rowCount !== 1) {
-      throw new Error("Rows affected is not equal to 1");
-    }
+  const result = await client.query(updateMxSourcesQuery, [idSource]);
 
-    await client.query("COMMIT");
-  } catch (error) {
-    console.error("Error updating mx_sources:", error);
-    await client.query("ROLLBACK");
-    return false;
-  } finally {
-    client.release();
+  if (result.rowCount !== 1) {
+    throw new Error("Rows affected is not equal to 1");
   }
 
   return true;

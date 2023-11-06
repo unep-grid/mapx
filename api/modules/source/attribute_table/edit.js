@@ -630,6 +630,7 @@ class EditTableSession {
       return;
     }
     const postScripts = new Map();
+    const tables_update = new Set();
     const client = await pgWrite.connect();
     await client.query("BEGIN");
 
@@ -727,6 +728,7 @@ class EditTableSession {
                     "Error during add_column : rows affected is not null"
                   );
                 }
+                tables_update.add(id_table);
               }
             }
             break;
@@ -745,6 +747,8 @@ class EditTableSession {
                     "Error during remove_column : rows affected is not null"
                   );
                 }
+
+                tables_update.add(id_table);
               }
             }
             break;
@@ -756,6 +760,8 @@ class EditTableSession {
                 column_name_new,
                 client
               );
+
+              tables_update.add(id_table);
             }
             break;
           case "rename_column":
@@ -773,6 +779,8 @@ class EditTableSession {
                 column_name_new,
                 client
               );
+
+              tables_update.add(id_table);
 
               postScripts.set(
                 `${id_table}_update_views_rename_rename`,
@@ -794,7 +802,10 @@ class EditTableSession {
         /**
          * Update table date_modifed
          */
-        await updateMxSourceTimestamp(id_table);
+      }
+
+      for (const id_table of tables_update) {
+        await updateMxSourceTimestamp(id_table, client);
       }
 
       /**

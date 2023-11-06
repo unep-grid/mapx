@@ -1,11 +1,9 @@
 WITH
-old_data_attr AS (
-  SELECT id, jsonb_extract_path(data, 'meta', 'text', 'attributes', $2) AS old_attr
-  FROM mx_sources
-  WHERE id = $1
-),
-old_data_attr_desc AS (
-  SELECT id, jsonb_extract_path(data, 'meta', 'text', 'attributes_description', $2) AS old_attr_desc
+old_data AS (
+  SELECT
+    id,
+    jsonb_extract_path(data, 'meta', 'text', 'attributes', $2) AS old_attr_desc,
+    jsonb_extract_path(data, 'meta', 'text', 'attributes_alias', $2) AS old_attr_alias
   FROM mx_sources
   WHERE id = $1
 )
@@ -14,14 +12,13 @@ SET data = jsonb_set(
   jsonb_set(
     data,
     ARRAY['meta', 'text', 'attributes', $3]::text[],
-    old_data_attr.old_attr
+    old_attr_desc
   ),
-  ARRAY['meta', 'text', 'attributes_description', $3]::text[],
-  old_data_attr_desc.old_attr_desc
+  ARRAY['meta', 'text', 'attributes_alias', $3]::text[],
+  old_attr_alias
 )
-FROM old_data_attr, old_data_attr_desc
+FROM old_data
 WHERE mx_sources.id = $1
-  AND mx_sources.id = old_data_attr.id
-  AND mx_sources.id = old_data_attr_desc.id
-  AND old_data_attr.old_attr IS NOT NULL
-  AND old_data_attr_desc.old_attr_desc IS NOT NULL;
+  AND mx_sources.id = old_data.id
+  AND old_data.old_attr_desc IS NOT NULL;
+
