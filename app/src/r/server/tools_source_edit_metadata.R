@@ -189,6 +189,7 @@ observeEvent(input$jedSourceMetadata_values, {
         if (hasNoIssues && isAllowed) {
           tryCatch(
             {
+
               mxDbUpdate(
                 table = .get(config, c("pg", "tables", "sources")),
                 idCol = "id",

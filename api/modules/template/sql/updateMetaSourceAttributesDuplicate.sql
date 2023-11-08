@@ -4,10 +4,12 @@ SET
     jsonb_set(
       data,
       ARRAY['meta', 'text', 'attributes', $3],
-      data #> ARRAY['meta', 'text', 'attributes', $2]
+      data #> ARRAY['meta', 'text', 'attributes', $2],
+      true
     ),
     ARRAY['meta', 'text', 'attributes_alias', $3],
-    data #> ARRAY['meta', 'text', 'attributes_alias', $2]
+    data #> ARRAY['meta', 'text', 'attributes_alias', $2],
+    true
   )
 WHERE
   id = $1

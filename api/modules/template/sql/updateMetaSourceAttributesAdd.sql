@@ -4,10 +4,12 @@ SET
     jsonb_set(
       data,
       ARRAY['meta', 'text', 'attributes', $2],
-      $3::jsonb
+      $3::jsonb,
+      true
     ),
     ARRAY['meta', 'text', 'attributes_alias', $2],
-    $3::jsonb
+    $3::jsonb,
+    true
   )
 WHERE
   id = $1;
