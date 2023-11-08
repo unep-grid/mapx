@@ -2,13 +2,19 @@ UPDATE mx_sources
 SET
   data = jsonb_set(
     jsonb_set(
-      data,
+      coalesce(data, '{}'::jsonb),
       ARRAY['meta', 'text', 'attributes', $3],
-      data #> ARRAY['meta', 'text', 'attributes', $2],
+      coalesce(
+        data #> ARRAY['meta', 'text', 'attributes', $2],
+        '"{}"'::jsonb
+      ),
       true
     ),
     ARRAY['meta', 'text', 'attributes_alias', $3],
-    data #> ARRAY['meta', 'text', 'attributes_alias', $2],
+    coalesce(
+      data #> ARRAY['meta', 'text', 'attributes_alias', $2],
+      '"{}"'::jsonb
+    ),
     true
   )
 WHERE

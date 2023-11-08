@@ -773,16 +773,11 @@ async function duplicateTableColumn(idSource, sourceName, destName, pgClient) {
     }
 
     const sourceExists = await columnExists(sourceName, idSource, pgClient);
-    const destExists = await columnExists(destName, idSource, pgClient);
 
     if (!sourceExists) {
       throw new Error(
         `Table "${idSource}" does not exist or does not have a column ${sourceName}`
       );
-    }
-
-    if (destExists) {
-      throw new Error(`Table "${idSource}" already have a column ${destName}`);
     }
 
     /**
@@ -793,7 +788,7 @@ async function duplicateTableColumn(idSource, sourceName, destName, pgClient) {
 
     await pgClient.query(`
     ALTER TABLE "${idSource}" 
-    ADD COLUMN "${destName}" ${sourceColumnType};
+    ADD COLUMN IF NOT EXISTS"${destName}" ${sourceColumnType};
     UPDATE "${idSource}" SET "${destName}" = "${sourceName}";
     `);
   } catch (error) {
