@@ -1,3 +1,8 @@
+  - [1.12.6-patch.2](https://github.com/unep-grid/mapx/tree/1.12.6-patch.2) 
+
+    - Table Editor + Metadata : Added support for updating automatically column description + alias according to changes in the table editor, without the need to load the metadata editor
+    - Table Editor : solve a bug where an animation frame request inside a promise prevented the propagation of dispached event in multi user mode
+
   - [1.12.6-patch.1](https://github.com/unep-grid/mapx/tree/1.12.6-patch.1) 
 
     - Should fix issue with the trigger for keywords views/sources update 
