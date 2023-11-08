@@ -8,12 +8,20 @@ import {
   getTableDimension,
   isLayerValid,
   sanitizeUpdates,
-  updateSourceAttribute,
+  updateViewsAttribute,
   renameTableColumn,
   duplicateTableColumn,
+  removeTableColumn,
+  addTableColumn,
   setMxSourceData,
   getMxSourceData,
   updateMxSourceTimestamp,
+  // update metadata
+  renameColumnMetadata,
+  addColumnMetadata,
+  duplicateColumnMetadata,
+  removeColumnMetadata,
+  updateTableCellByGid,
 } from "#mapx/db_utils";
 import { getSourceAttributeTable, getSourceEditors } from "#mapx/source";
 import { randomString } from "#mapx/helpers";
@@ -24,15 +32,11 @@ import {
   isSourceId,
   isSafeName,
 } from "@fxi/mx_valid";
-import { parseTemplate } from "#mapx/helpers";
-import { templates } from "#mapx/template";
 import { pgWrite, redisSetJSON, redisGetJSON } from "#mapx/db";
 import {
   ioUpdateDbViewsAltStyleBySource,
   getViewsTableBySource,
 } from "#mapx/view";
-
-const regDatePg = new RegExp("^date|^timestamp");
 
 /**
  * Triggered by '/client/source/edit/table' in ..api/index.js
@@ -675,79 +679,62 @@ class EditTableSession {
 
               let { value_new } = update;
               const valid = isNumeric(gid);
-              const isDate = regDatePg.test(column_type);
-              const colExists = await columnExists(column_name, id_table);
+              const colExists = await columnExists(
+                column_name,
+                id_table,
+                client
+              );
 
               if (valid && colExists) {
-                const qSql = parseTemplate(templates.updateTableCellByGid, {
+                await updateTableCellByGid(
                   id_table,
                   gid,
                   column_name,
                   column_type,
-                });
-
-                if (isDate) {
-                  /**
-                   * Date time conversion
-                   * - if its empty -> null
-                   * - if it's a date -> use a proper date instance
-                   * - if target type require a timestamp and value dont have one
-                   *   the timezone of te server will be used ⚠️
-                   */
-                  value_new = isEmpty(value_new) ? null : new Date(value_new);
-                }
-
-                const res = await client.query(qSql, [value_new]);
-                if (res.rowCount != 1) {
-                  throw new Error(
-                    "Error during update_cell : row affected =! 1"
-                  );
-                }
+                  value_new,
+                  client
+                );
               }
             }
             break;
           case "add_column":
             {
-              /** ALTER TABLE products ADD COLUMN description text; **/
               const { column_type } = update;
-              const colExists = await columnExists(column_name, id_table);
+              const colExists = await columnExists(
+                column_name,
+                id_table,
+                client
+              );
 
               if (!isSafeName(column_name)) {
                 throw new Error("Invalid update column");
               }
 
               if (!colExists) {
-                const qSql = parseTemplate(templates.updateTableAddColumn, {
+                await addTableColumn(
                   id_table,
                   column_name,
                   column_type,
-                });
-                const res = await client.query(qSql);
-                if (res.rowCount) {
-                  throw new Error(
-                    "Error during add_column : rows affected is not null"
-                  );
-                }
+                  client
+                );
+
+                await addColumnMetadata(id_table, column_name, client);
+
                 tables_update.add(id_table);
               }
             }
             break;
           case "remove_column":
             {
-              const colExists = await columnExists(column_name, id_table);
+              const colExists = await columnExists(
+                column_name,
+                id_table,
+                client
+              );
+
               if (colExists) {
-                const qSql = parseTemplate(templates.updateTableRemoveColumn, {
-                  id_table,
-                  column_name,
-                });
-
-                const res = await client.query(qSql);
-                if (res.rowCount) {
-                  throw new Error(
-                    "Error during remove_column : rows affected is not null"
-                  );
-                }
-
+                await removeTableColumn(id_table, column_name, client);
+                await removeColumnMetadata(id_table, column_name, client);
                 tables_update.add(id_table);
               }
             }
@@ -759,6 +746,12 @@ class EditTableSession {
                 column_name,
                 column_name_new,
                 client
+              );
+
+              await duplicateColumnMetadata(
+                id_table,
+                column_name,
+                column_name_new
               );
 
               tables_update.add(id_table);
@@ -773,7 +766,13 @@ class EditTableSession {
                 client
               );
 
-              const views = await updateSourceAttribute(
+              const views = await updateViewsAttribute(
+                id_table,
+                column_name,
+                column_name_new,
+                client
+              );
+              await renameColumnMetadata(
                 id_table,
                 column_name,
                 column_name_new,

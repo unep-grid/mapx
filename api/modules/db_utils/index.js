@@ -2,9 +2,16 @@ import { pgTest, pgRead, pgWrite } from "#mapx/db";
 import { settings } from "#root/settings";
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
-import { isArray, isSourceId, isNumeric, isProjectId } from "@fxi/mx_valid";
+import {
+  isEmpty,
+  isArray,
+  isSourceId,
+  isNumeric,
+  isProjectId,
+} from "@fxi/mx_valid";
 import { isLayerValid, areLayersValid } from "./geom_validation.js";
 import { insertRow } from "./insert.js";
+export * from "./metadata.js";
 
 /**
  * crypto key
@@ -156,7 +163,6 @@ async function columnsExist(idColumns, idTable, client) {
   }
   return ok;
 }
-
 
 /**
  * Test if a table exists, has rows, has attribute and a value
@@ -327,7 +333,6 @@ async function registerSource(
  * @throws {Error} - Throws an error if there's an issue with the database operation.
  */
 export async function updateMxSourceTimestamp(idSource, pgClient = null) {
-
   if (!isSourceId(idSource)) {
     return false;
   }
@@ -573,7 +578,7 @@ async function getSourceLastTimestamp(idSource) {
   if (!isSourceId(idSource)) {
     return null;
   }
-  
+
   const q = `
     SELECT date_modified 
     FROM mx_sources 
@@ -581,7 +586,6 @@ async function getSourceLastTimestamp(idSource) {
   `;
   const data = await pgRead.query(q, [idSource]);
   const [row] = data.rows;
-
 
   if (!row) {
     return 0;
@@ -716,7 +720,7 @@ async function renameTableColumn(idSource, oldName, newName, pgClient) {
 }
 
 /**
- * Updates source attribute, metadata and views related fields
+ * Updates view attribute
  * @async
  * @param {string} idSource - The ID of the source.
  * @param {string} oldName - The old name to search for and replace in the JSONB object.
@@ -725,7 +729,7 @@ async function renameTableColumn(idSource, oldName, newName, pgClient) {
  * @return {Promise<array>} Array of affected views
  * @throws {Error} If an error occurs during the update operation.
  */
-async function updateSourceAttribute(idSource, oldName, newName, pgClient) {
+async function updateViewsAttribute(idSource, oldName, newName, pgClient) {
   try {
     /*
      * Use connectionn in case of transaction
@@ -734,17 +738,12 @@ async function updateSourceAttribute(idSource, oldName, newName, pgClient) {
     /**
      * Update views
      */
-    const queryUpdateViews = templates.updateViewSourceAttributes;
+    const queryUpdateViews = templates.updateViewsSourceAttributes;
     const { rows: views } = await pgClient.query(queryUpdateViews, [
       idSource,
       oldName,
       newName,
     ]);
-    /**
-     * Update meta
-     */
-    const queryUpdateMeta = templates.updateMetaSourceAttributes;
-    await pgClient.query(queryUpdateMeta, [idSource, oldName, newName]);
 
     /**
      * Return affected views
@@ -803,6 +802,56 @@ async function duplicateTableColumn(idSource, sourceName, destName, pgClient) {
   }
 }
 
+async function removeTableColumn(idTable, column, pgClient = pgWrite) {
+  const qSql = parseTemplate(templates.updateTableRemoveColumn, {
+    id_table: idTable,
+    column_name: column,
+  });
+  await pgClient.query(qSql);
+}
+
+async function addTableColumn(idTable, column, type, pgClient = pgWrite) {
+  const qSql = parseTemplate(templates.updateTableAddColumn, {
+    id_table: idTable,
+    column_name: column,
+    column_type: type,
+  });
+  await pgClient.query(qSql);
+}
+
+async function updateTableCellByGid(
+  id_table,
+  gid,
+  column_name,
+  column_type,
+  value_new = null,
+  client = pgRead
+) {
+  const qSql = parseTemplate(templates.updateTableCellByGid, {
+    id_table,
+    gid,
+    column_name,
+    column_type,
+  });
+  const regDatePg = new RegExp("^date|^timestamp");
+  const isDate = regDatePg.test(column_type);
+  if (isDate) {
+    /**
+     * Date time conversion
+     * - if its empty -> null
+     * - if it's a date -> use a proper date instance
+     * - if target type require a timestamp and value dont have one
+     *   the timezone of te server will be used ⚠️
+     */
+    value_new = isEmpty(value_new) ? null : new Date(value_new);
+  }
+
+  const res = await client.query(qSql, [value_new]);
+  if (res.rowCount !== 1) {
+    throw new Error("Error during update_cell : row affected =! 1");
+  }
+}
+
 /**
  * Exports
  */
@@ -829,6 +878,9 @@ export {
   analyzeSource,
   getTableDimension,
   renameTableColumn,
-  updateSourceAttribute,
+  updateViewsAttribute,
   duplicateTableColumn,
+  removeTableColumn,
+  addTableColumn,
+  updateTableCellByGid,
 };

@@ -40,15 +40,23 @@ function cancelFrame(id) {
 }
 
 /**
- * Wait next frame async
- * @return {Promise} next frame;
+ * Waits for the next animation frame or 1/24 second timeout, whichever comes
+ * first, then resolves the promise.
+ * @return {Promise<void>} A promise that resolves after the condition is met.
  */
 let idFrame = 0;
 function waitFrameAsync() {
-  cancelFrame(idFrame);
-  return new Promise((r) => {
-    return (idFrame = nf(r));
+  cf(idFrame); // Assuming 'cancelAnimationFrame' is defined
+
+  const nextFramePromise = new Promise((resolve) => {
+    idFrame = nf(resolve);
   });
+
+  const timeoutPromise = new Promise((resolve) => {
+    setTimeout(resolve, 1000 / 24);
+  });
+
+  return Promise.race([nextFramePromise, timeoutPromise]);
 }
 
 /**

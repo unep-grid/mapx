@@ -1622,7 +1622,6 @@ export class EditTableSessionClient extends WsToolsBase {
       if (message.id_table !== et._id_table) {
         return;
       }
-
       et._log_dispatch("received", message);
       et.setProgressMessage(message, 1, 50);
       et.addDispached(message);
@@ -1830,6 +1829,7 @@ export class EditTableSessionClient extends WsToolsBase {
       const columns = et.getColumns();
       let n = columns.length;
       let colRemoved = {}; // keep track for cleaning redo / updates
+      console.warn("Handler COLUMN REMOVE");
       while (n--) {
         const col = columns[n];
         if (col.data === update.column_name) {
