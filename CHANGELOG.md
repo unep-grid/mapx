@@ -1,3 +1,5 @@
+  - [1.12.7](https://github.com/unep-grid/mapx/tree/1.12.7) 
+
   - [1.12.6-patch.2](https://github.com/unep-grid/mapx/tree/1.12.6-patch.2) 
 
     - Table Editor + Metadata : Added support for updating automatically column description + alias according to changes in the table editor, without the need to load the metadata editor
