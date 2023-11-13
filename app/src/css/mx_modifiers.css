@@ -194,6 +194,14 @@ span.mx-badge-role {
   background-color: var(--mx_ui_background_accent);
 }
 
+.mx button,
+.mx input,
+.mx select,
+.mx textarea {
+  color: var(--mx_ui_text);
+  background-color: var(--mx_ui_background);
+}
+
 .mx .btn-warning {
   border-color: var(--mx_ui_message_warning);
 }
@@ -467,6 +475,7 @@ span.mx-badge-role {
 /*.mx .panel-default  > .panel-heading.panel-heading-light span {*/
 /*color: var(--mx_ui_text);*/
 /*}*/
+
 
 .mx .panel {
   background-color: var(--mx_ui_background);
