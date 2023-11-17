@@ -1,31 +1,31 @@
-import { settings } from "../settings";
-import { WsToolsBase } from "../ws_tools/base.js";
+import { settings } from "../../settings";
+import { WsToolsBase } from "../../ws_tools/base.js";
 import {
   modal,
   modalPrompt,
   modalConfirm,
   modalDialog,
-} from "./../mx_helper_modal.js";
-import { modalSelectSource } from "../select_auto";
-import { el, elButtonFa, elCheckbox, tt } from "../el_mapx";
-import { moduleLoad } from "./../modules_loader_async";
-import { getDictTemplate, getDictItem } from "./../language";
-import { getArrayDistinct } from "./../array_stat";
-import { prefGet, prefSet } from "./../user_pref";
-import { modalMarkdown } from "./../modal_markdown/index.js";
-import { clone, makeId, buttonEnable } from "../mx_helper_misc.js";
-import { RadialProgress } from "../radial_progress";
-import { theme } from "../mx.js";
-import { Popup } from "../popup";
-import { viewLink, getView } from "../map_helpers/index.js";
-import { getSourceVtSummaryUI } from "../mx_helper_source_summary";
+} from "./../../mx_helper_modal.js";
+import { modalSelectSource } from "../../select_auto";
+import { el, elButtonFa, elCheckbox, tt } from "../../el_mapx";
+import { moduleLoad } from "./../../modules_loader_async";
+import { getDictTemplate, getDictItem } from "./../../language";
+import { getArrayDistinct } from "./../../array_stat";
+import { prefGet, prefSet } from "./../../user_pref";
+import { modalMarkdown } from "./../../modal_markdown/index.js";
+import { clone, makeId, buttonEnable } from "../../mx_helper_misc.js";
+import { RadialProgress } from "../../radial_progress";
+import { theme } from "../../mx.js";
+import { Popup } from "../../popup";
+import { viewLink, getView } from "../../map_helpers/index.js";
+import { getSourceVtSummaryUI } from "../../mx_helper_source_summary";
 import {
   isPgType,
   isPgTypeDate,
   typeConvert,
   getPgTypes,
   getHandsonLanguageCode,
-} from "./../handsontable/utils.js";
+} from "./../../handsontable/utils.js";
 import {
   isSourceId,
   isNotEmpty,
@@ -39,11 +39,11 @@ import {
   isArray,
   isEqual,
   isEqualNoType,
-} from "./../is_test/index.js";
+} from "./../../is_test/index.js";
 
-import "./edit_table.types.js";
-import "./edit_table.less";
-import { onNextFrame, waitFrameAsync } from "../animation_frame";
+import "./types.js";
+import "./style.less";
+import { onNextFrame, waitFrameAsync } from "../../animation_frame";
 
 const defaults = {
   debug: false,

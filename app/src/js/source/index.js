@@ -1,5 +1,5 @@
-export { EditTableSessionClient } from "./edit_table.js";
-export { GeometryTools } from "./geom_tools.js";
-export { DownloadSourceModal } from "./download.js";
-export { downloadViewVector } from "./download_instance_view.js";
-export * from "./utils.js";
+export { EditTableSessionClient } from "./edit/index.js";
+export { GeometryTools } from "./geometry/index.js";
+export { DownloadSourceModal } from "./download/index.js";
+export { downloadViewVector } from "./download/instance.js";
+export * from "./utils/index.js";

@@ -63,7 +63,7 @@ import {
   path,
   setClickHandler,
 } from "../../../mx_helper_misc.js";
-import { getTableAttributeConfigFromView } from "../../../source/display_table.js";
+import { getTableAttributeConfigFromView } from "../../../source/display/index.js";
 import { getApiUrl } from "../../../api_routes/index.js";
 import { viewsListAddSingle } from "../../../views_list_manager";
 import { modalCloseAll } from "../../../mx_helper_modal.js";

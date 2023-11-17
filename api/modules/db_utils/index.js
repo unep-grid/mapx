@@ -254,7 +254,8 @@ async function registerSource(
   title,
   type = "vector",
   enable_download = false,
-  enable_wms = false
+  enable_wms = false,
+  client = pgWrite
 ) {
   let idSource = idSourceOrOptions;
 
@@ -333,7 +334,7 @@ async function registerSource(
             $6::jsonb
         )`;
 
-  await pgWrite.query(sqlAddSource, [
+  await client.query(sqlAddSource, [
     idSource,
     idUser,
     type,
@@ -372,6 +373,7 @@ export async function updateMxSourceTimestamp(idSource, pgClient = null) {
 
   return true;
 }
+
 
 /**
  * Set mx_source data values, and create recursive keys if needed
@@ -889,9 +891,59 @@ async function updateTableCellByGid(
 }
 
 /**
+ * Asynchronously checks if a specific ID exists in a given column of a PostgreSQL table.
+ *
+ * @param {string} table - The name of the table to query.
+ * @param {string} id_col - The name of the column in which to look for the ID.
+ * @param {(string|number)} id - The ID value to check for in the table.
+ * @param {Client} [client=pgRead] - The PostgreSQL client to use for the query. Defaults to `pgRead`.
+ * @returns {Promise<boolean>} A promise that resolves to `true` if the ID exists, `false` otherwise.
+ **/
+const idExists = async (table, id_col, id, client = pgRead) => {
+  try {
+    const query = `
+    SELECT EXISTS(
+    SELECT 1 FROM ${table} WHERE ${id_col} = $1
+  )
+    `;
+    const values = [id];
+
+    const res = await client.query(query, values);
+    return res.rows[0].exists;
+  } catch (err) {
+    console.error("Error executing query", err.stack);
+    return false;
+  }
+};
+
+/**
+ * Wraps a function with a PostgreSQL transaction.
+ *
+ * @param {Function} action - The function to execute within the transaction.
+ * @returns {Promise<any>} - Result of the executed action.
+ */
+async function withTransaction(action) {
+  const client = await pgWrite.connect();
+  try {
+    await client.query('BEGIN');
+    const result = await action(client);
+    await client.query('COMMIT');
+    return result;
+  } catch (e) {
+    await client.query('ROLLBACK');
+    throw e;
+  } finally {
+    client.release();
+  }
+}
+
+
+
+/**
  * Exports
  */
 export {
+  withTransaction,
   insertRow,
   getLayerViewsAttributes,
   getColumnsNames,
@@ -907,6 +959,7 @@ export {
   tableExists,
   columnExists,
   columnsExist,
+  idExists,
   decrypt,
   encrypt,
   registerSource,

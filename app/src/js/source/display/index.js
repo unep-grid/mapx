@@ -1,26 +1,26 @@
-import { getArrayDistinct } from "./../array_stat/index.js";
-import { modalMarkdown } from "./../modal_markdown/index.js";
-import { getDictItem, getLanguageCurrent } from "./../language";
-import { elSpanTranslate } from "./../el_mapx";
-import { getApiUrl } from "./../api_routes";
-import { settings } from "./../settings";
-import { modal } from "./../mx_helper_modal";
-import { ws_tools } from "./../mx.js";
+import { getArrayDistinct } from "./../../array_stat/index.js";
+import { modalMarkdown } from "./../../modal_markdown/index.js";
+import { getDictItem, getLanguageCurrent } from "./../../language";
+import { elSpanTranslate } from "./../../el_mapx";
+import { getApiUrl } from "./../../api_routes";
+import { settings } from "./../../settings";
+import { modal } from "./../../mx_helper_modal";
+import { ws_tools } from "./../../mx.js";
 
 import {
   getHandsonLanguageCode,
   typeConvert,
-} from "./../handsontable/utils.js";
-import { path, progressScreen } from "./../mx_helper_misc.js";
-import { objToParams } from "./../url_utils";
-import { fetchJsonProgress } from "./../mx_helper_fetch_progress";
-import { el } from "./../el/src/index.js";
-import { getViewSourceSummary } from "./../mx_helper_source_summary.js";
-import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata.js";
-import { moduleLoad } from "./../modules_loader_async";
-import { getView, getViewTitle } from "./../map_helpers";
-import { isSourceId, isView, isArray, makeSafeName } from "./../is_test";
-import { downloadCSV } from "../download/index.js";
+} from "./../../handsontable/utils.js";
+import { path, progressScreen } from "./../../mx_helper_misc.js";
+import { objToParams } from "./../../url_utils";
+import { fetchJsonProgress } from "./../../mx_helper_fetch_progress";
+import { el } from "./../../el/src/index.js";
+import { getViewSourceSummary } from "./../../mx_helper_source_summary.js";
+import { fetchSourceMetadata } from "./../../mx_helper_map_view_metadata.js";
+import { moduleLoad } from "./../../modules_loader_async";
+import { getView, getViewTitle } from "./../../map_helpers";
+import { isSourceId, isView, isArray, makeSafeName } from "./../../is_test";
+import { downloadCSV } from "../../download/index.js";
 
 export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({}, opt);

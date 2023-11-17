@@ -4,7 +4,7 @@
  *
  */
 export * from "./map_composer/map_composer_instance.js";
-export * from "./source/display_table.js";
+export * from "./source/display/index.js";
 export * from "./app_utils";
 export * from "./mirror_util";
 export * from "./language";
@@ -26,7 +26,7 @@ export * from "./map_helpers";
 export * from "./legend_vt";
 export * from "./url_utils";
 export * from "./legend_vt/helpers.js";
-export * from "./source/join_instance.js";
+export * from "./source/joins/instance.js";
 
 /**
  * Old modules that use global mx object

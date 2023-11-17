@@ -1,16 +1,15 @@
-import { modal } from "./../mx_helper_modal";
-import { SelectAuto } from "../select_auto";
-import { buildForm } from "./download_form.js";
-import { el, elSpanTranslate, elButtonFa, elAlert } from "./../el_mapx";
-import { getLanguageCurrent, getLanguageItem } from "./../language";
-import { isEmail, isArray } from "../is_test";
-import { getApiRoute } from "../api_routes";
-import { FlashItem } from "../icon_flash";
-import { isSourceDownloadable } from "../mx_helpers";
-import { fetchSourceMetadata } from "../mx_helper_map_view_metadata";
-import { EventSimple } from "../event_simple";
-import { ws, nc } from "../mx.js";
-//import {settings} from './../settings';
+import { modal } from "./../../mx_helper_modal";
+import { SelectAuto } from "../../select_auto";
+import { el, elSpanTranslate, elButtonFa, elAlert } from "./../../el_mapx";
+import { getLanguageCurrent, getLanguageItem } from "./../../language";
+import { isEmail, isArray } from "../../is_test";
+import { getApiRoute } from "../../api_routes";
+import { FlashItem } from "../../icon_flash";
+import { isSourceDownloadable } from "../../mx_helpers";
+import { fetchSourceMetadata } from "../../mx_helper_map_view_metadata";
+import { EventSimple } from "../../event_simple";
+import { ws, nc } from "../../mx.js";
+import { buildForm } from "./form.js";
 
 const options = {
   idSource: null,

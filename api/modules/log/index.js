@@ -2,12 +2,15 @@ import { Sql } from "sql-ts";
 import Ajv from "ajv";
 import { pgWrite } from "#mapx/db";
 import { mwSet } from "#mapx/ip";
-import { apiLogs } from "#mapx/schema";
 import { isEmpty, isArray } from "@fxi/mx_valid";
 import express from "express";
+import { readJSON } from "#mapx/helpers";
+// import json still experimental
+const schema = await readJSON("./schema.json", import.meta.url);
+
 const sql = new Sql("postgres");
 const v = new Ajv();
-const check = v.compile(apiLogs);
+const check = v.compile(schema);
 /**
  * log table descriptiom
  */

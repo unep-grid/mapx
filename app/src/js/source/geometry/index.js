@@ -1,5 +1,5 @@
-import { isSourceId } from "./../is_test/index.js";
-import { el, elButtonFa, elCheckbox, tt } from "../el_mapx";
+import { isSourceId } from "./../../is_test/index.js";
+import { tt } from "../../el_mapx";
 
 const defaults = {
   id_table: null,

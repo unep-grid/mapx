@@ -1,6 +1,6 @@
-import { ws } from "./../mx.js";
-import { getApiRoute } from "../api_routes/index.js";
-import { getLanguageCurrent } from "./../language/index.js";
+import { ws } from "./../../mx.js";
+import { getApiRoute } from "../../api_routes/index.js";
+import { getLanguageCurrent } from "./../../language/index.js";
 
 /**
  * Get a list of editable source

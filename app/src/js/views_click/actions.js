@@ -5,7 +5,7 @@ import { modal, modalConfirm } from "./../mx_helper_modal.js";
 import { FlashItem } from "./../icon_flash";
 import { displayMetadataIssuesModal } from "./../mx_helper_map_view_badges.js";
 import { storyRead } from "./../story_map/index.js";
-import { viewToTableAttributeModal } from "./../source/display_table.js";
+import { viewToTableAttributeModal } from "./../source/display/index.js";
 import { viewToMetaModal } from "./../mx_helper_map_view_metadata.js";
 import { getDictItem, getLanguageCurrent } from "./../language";
 import { Uploader } from "./../uploader";

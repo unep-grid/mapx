@@ -36,20 +36,17 @@ export const config = {
         callback();
         return;
       }
-      const types = config.loaderData.types;
+      const { types } = config.loaderData;
       const res = await wsGetSourcesListEdit({ types: types });
       const data = res.list || [];
-      for (const row of data) {
-        if (!row.exists) {
-          if (config.disable_missing) {
-            row.disabled = true;
-          }
+      for (const item of data) {
+        if (!item.exists && config.disable_missing) {
+          item.disabled = true;
         } else {
-          if (
-            config.disable_large &&
-            (row.ncol > config.max_cols || row.nrow > config.max_rows)
-          ) {
-            row.disabled = true;
+          const maxCol = item.ncol > config.max_cols;
+          const maxRow = item.nrow > config.max_rows;
+          if (config.disable_large && (maxCol || maxRow)) {
+            item.disabled = true;
           }
         }
       }

@@ -1,5 +1,5 @@
-import { EditTableSessionClient } from "./../source/edit_table.js";
-import { GeometryTools } from "./../source/geom_tools.js";
+import { EditTableSessionClient } from "./../source/edit/index.js";
+import { GeometryTools } from "./../source/geometry/index.js";
 import { Uploader } from "./../uploader";
 
 /**

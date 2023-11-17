@@ -1,8 +1,8 @@
 import { DownloadSourceModal } from "./index.js";
-import { isView, isViewId } from "./../is_test";
-import { getView } from "./../map_helpers";
-import { getViewSourceSummary } from "./../mx_helper_source_summary";
-import {settings} from "./../settings";
+import { isView, isViewId } from "./../../is_test";
+import { getView } from "./../../map_helpers";
+import { getViewSourceSummary } from "./../../mx_helper_source_summary";
+import {settings} from "./../../settings";
 /**
  * Download source for vector view : show modal panel
  * @param {String} idView Id of the vector view

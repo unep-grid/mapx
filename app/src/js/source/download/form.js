@@ -1,5 +1,4 @@
-import { el, elSpanTranslate } from "./../el_mapx";
-//import { isEmail } from "./../is_test";
+import { el, elSpanTranslate } from "./../../el_mapx";
 const st = elSpanTranslate;
 
 export function buildForm(md) {

@@ -1,6 +1,5 @@
 import { el } from "./../el/src/index.js";
 import { ButtonPanel } from "../button_panel";
-import { bindAll } from "../bind_class_methods";
 import { isFunction, isObject, isEmpty } from "../is_test/index.js";
 import { tt } from "../el_mapx";
 import { mergeDeep } from "../mx_helper_misc.js";
@@ -43,7 +42,6 @@ const def = {
 export class NotifCenter {
   constructor(opt) {
     const nc = this;
-    bindAll(nc);
     nc._opt = mergeDeep(def, opt);
 
     /* bind methods used in cb */
@@ -213,7 +211,14 @@ export class NotifCenter {
       nc.elContainer.replaceChildren();
     }
   }
-
+  open() {
+    const nc = this;
+    nc.panel.open();
+  }
+  close() {
+    const nc = this;
+    nc.panel.close();
+  }
   clearHistory() {
     const nc = this;
     nc.replaceItems([]);
@@ -331,6 +336,9 @@ export class NotifCenter {
       if (!notif.seen) {
         nc.panel.showFlag();
       }
+      if (conf.open) {
+        nc.open();
+      }
     } catch (e) {
       console.warn(e);
     }
@@ -382,6 +390,7 @@ export class NotifCenter {
     return {
       save: false,
       scroll: false,
+      open: false,
     };
   }
 
@@ -401,6 +410,7 @@ export class NotifCenter {
     return {
       save: true,
       scroll: true,
+      open: notif.open,
     };
   }
 
@@ -420,6 +430,7 @@ export class NotifCenter {
     return {
       save: false,
       scroll: false,
+      open: notif.open,
     };
   }
 
@@ -427,6 +438,7 @@ export class NotifCenter {
     return {
       save: false,
       scroll: false,
+      open: false,
     };
   }
 

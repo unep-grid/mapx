@@ -44,6 +44,7 @@ function mwNotify(_, res, next) {
       data: null,
       value: null,
       timestamp: new Date() * 1,
+      open: false,
     };
     const out = {
       ...def,
@@ -126,6 +127,7 @@ function mwNotify(_, res, next) {
    */
   res.notifyInfoError = (opt) => {
     opt.level = "error";
+    opt.open = true;
     return res.notifyInfo(opt);
   };
 

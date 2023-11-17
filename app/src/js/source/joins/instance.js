@@ -1,4 +1,4 @@
-import { SourcesJoinManager } from "./join";
+import { SourcesJoinManager } from "./index.js";
 
 export async function modalSourceJoin() {
   try {

@@ -18,7 +18,8 @@ async function ioSourceListEdit(socket, request, cb) {
     }
 
     const options = {
-      types: ["tabular", "vector", "raster"],
+      language: "en",
+      types: ["tabular", "vector", "raster", "join"],
     };
 
     // can't be changed by options
@@ -28,13 +29,12 @@ async function ioSourceListEdit(socket, request, cb) {
       groups: socket.session.user_roles.group,
     };
 
-    Object.assign(options, request.input, auth);
+    Object.assign(options, request, auth);
 
     const list = await getSourcesListEdit(options);
     const response = Object.assign({}, request, { list });
 
     cb(response);
-
   } catch (e) {
     cb(false);
     console.error(e);
