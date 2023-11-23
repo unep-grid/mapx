@@ -451,7 +451,9 @@ function elButtonIcon(key, opt) {
     },
     content
   );
-
+  /**
+   * Detached async dict operation
+   */
   getDictItem(key)
     .then((txt) => {
       elBtn.setAttribute("aria-label", txt);

@@ -369,6 +369,16 @@ export class LegendVt {
         }
       }
 
+      const elColorBackground =
+        lvt._is_polygon && hasSprite
+          ? el("div", {
+              class: "mx-legend-vt-rule-background",
+              style: {
+                backgroundImage: `url(${spriteImage.url()})`,
+              },
+            })
+          : el("div");
+
       const elRule = el(
         "tr",
         {
@@ -395,14 +405,7 @@ export class LegendVt {
                 ],
               },
               [
-                lvt._is_polygon && hasSprite
-                  ? el("div", {
-                      class: "mx-legend-vt-rule-background",
-                      style: {
-                        backgroundImage: `url(${spriteImage.url()})`,
-                      },
-                    })
-                  : null,
+                elColorBackground,
                 el("div", {
                   class: "mx-legend-vt-rule-color",
                   style: colStyle,

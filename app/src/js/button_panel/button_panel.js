@@ -302,7 +302,7 @@ export class ButtonPanel extends EventSimple {
 
   _el_main() {
     return el("div", {
-      class: `button-panel--main`,
+      class: "button-panel--main",
     });
   }
 

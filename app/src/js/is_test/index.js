@@ -1,4 +1,9 @@
 /**
+ * Check if the current environment is Node.js
+ */
+const isNodeEnv = typeof process !== "undefined" && !!process.env;
+
+/**
  * Test if entry is empty : empty array, empty string, etc.
  * @param {Any} item item to test
  */
@@ -334,12 +339,11 @@ export function isProjectId(idProject) {
   return !!idProject && !!idProject.match(reg);
 }
 
-
 /**
  * Determines if the given ID is a valid MapX source ID.
  *
  * A valid MapX source ID starts with 'mx', followed optionally by '_vector',
- * and then by 5 to 7 segments of the pattern '_[a-z0-9]{1,6}'. The entire ID's 
+ * and then by 5 to 7 segments of the pattern '_[a-z0-9]{1,6}'. The entire ID's
  * length should be within the range of 10 to 50 characters.
  *
  * @param {string} id - The ID to test.
@@ -347,7 +351,7 @@ export function isProjectId(idProject) {
  */
 export function isSourceId(id) {
   const reg = new RegExp("^mx(?:_vector)?(_[a-z0-9]{1,6}){5,7}$");
-  return isStringRange(id,10,50) && !!id.match(reg);
+  return isStringRange(id, 10, 50) && !!id.match(reg);
 }
 
 /**
@@ -661,12 +665,24 @@ export function isValidType(type, group) {
 }
 
 /**
- * Test if string contain HTML
- * @param {String} n string to test
- * @note https://stackoverflow.com/questions/15458876/check-if-a-string-is-html-or-not#answer-36773193
+ * Test if a given string contains HTML.
+ * @param {String} str The string to test.
+ * @returns {Boolean} True if the string contains HTML, otherwise false.
  */
 export function isHTML(str) {
-  return isString(str) && /(<([^>]+)>)/i.test(str);
+  if (!isString(str)) {
+    return false;
+  }
+
+  // Check if running in a browser environment
+  if (isNodeEnv && window.DOMParser) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(str, "text/html");
+    return Array.from(doc.body.childNodes).some((node) => node.nodeType === 1);
+  } else {
+    // Fallback for environments without DOMParser (like Node.js)
+    return /(<([^>]+)>)/i.test(str);
+  }
 }
 
 /**

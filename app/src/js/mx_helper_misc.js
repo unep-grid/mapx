@@ -1196,20 +1196,33 @@ export function getXML(o) {
 }
 
 /**
- * Create random asci strint of given length
- * @param {integer} length of the string
+ * Create a random ASCII string of given length
+ * @param {integer} n - The length of the string. If not set, a UUID will be returned.
+ * @returns {string} A random ASCII string or a UUID.
  */
 export function makeId(n) {
-  var text = "";
-  var possible =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  n = n * 1 > 0 ? n * 1 : 5;
-
-  for (var i = 0; i < n; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  if (!n) {
+    return crypto.randomUUID();
   }
 
-  return text;
+  const array = new Uint8Array(n); // Corrected to use 'n' instead of 'length'
+  window.crypto.getRandomValues(array);
+
+  return array.reduce((acc, byte) => {
+    const code = byte % 62;
+    let charCode;
+    if (code < 10) {
+      // Numeric (0-9)
+      charCode = code + 48;
+    } else if (code < 36) {
+      // Uppercase Alphabet (A-Z)
+      charCode = code + 55;
+    } else {
+      // Lowercase Alphabet (a-z)
+      charCode = code + 61;
+    }
+    return acc + String.fromCharCode(charCode);
+  }, "");
 }
 
 /**
@@ -2071,7 +2084,7 @@ export function flattenBlockElements(element) {
  * const size = getContentSize(divElement);
  * console.log(`Width: ${size.width}, Height: ${size.height}`);
  */
-export function getContentSize(divElement,) {
+export function getContentSize(divElement) {
   const elClone = divElement.cloneNode(true);
   Object.assign(elClone.style, {
     visibility: "hidden",
