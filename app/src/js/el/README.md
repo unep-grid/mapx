@@ -1,32 +1,48 @@
-# el
 
-Quick DOM elements creation in js
+# ElementCreator
 
+## Overview
+ElementCreator is a JavaScript module designed to simplify the creation and management of DOM and SVG elements. It provides an intuitive API for creating elements, setting properties, attaching event listeners, and handling asynchronous content.
 
-## Installing
-
-```js
-npm install --save el
-````
+## Features
+- Create HTML and SVG elements with ease.
+- Manage attributes, classes, and styles.
+- Attach event listeners in a structured way.
+- Support for asynchronous content.
+- Automatic cleanup of event listeners for removed elements.
 
 ## Usage
-
-```js
-import {el} from '@fxi/el';
-
-el('div',
-  el('canvas',{
-    width: 300,
-    height: 300,
-    on : { 'click' : console.log }
-  })
-)
-
+First, import the module:
+```javascript
+import { el, svg } from 'path/to/ElementCreator';
 ```
 
-## See also
+### Creating an HTML Element
+```javascript
+const div = el('div', { class: 'my-class' }, 'Hello, World!');
+```
 
-- [crel](https://github.com/KoryNunn/crel) A small, simple, and fast DOM creation utility. 
-- [laconic](https://github.com/joestelmach/laconic) Laconic offers a sane solution to generating DOM content in JavaScript.
+### Creating an SVG Element
+```javascript
+const circle = svg('circle', { cx: 20, cy: 20, r: 10 });
+```
 
+### Attaching Event Listeners
+```javascript
+const button = el('button', { on: ['click', () => alert('Clicked!')] });
+```
 
+### Asynchronous Content
+```javascript
+const asyncDiv = el('div', fetchSomeData().then(data => data.text()));
+```
+
+## License
+This project is licensed under the MIT license.
+
+## Contributions
+Contributions are welcome. Please submit a pull request or open an issue for discussion.
+
+---
+
+ElementCreator - Simplifying DOM Manipulation

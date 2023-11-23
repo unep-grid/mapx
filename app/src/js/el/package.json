@@ -1,6 +1,6 @@
 {
   "name": "@fxi/el",
-  "version": "0.1.9",
+  "version": "1.0.0",
   "main": "./dist/el.cjs",
   "module": "./dist/el.module.js",
   "unpkg": "./dist/el.umd.js",
@@ -9,13 +9,16 @@
     "default": "./dist/el.modern.js"
   },
   "amdName": "El",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/unep-grid/mapx"
   },
   "description": "Quick DOM elements creation in js.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
+    "test-debug": "node --inspect-brk ./node_modules/.bin/vitest",
+    "inspect": "node inspect 127.0.0.1:9229",
     "dev": "microbundle watch -o dist",
     "serve": "live-server example --mount=/dist:dist",
     "build": "microbundle -o dist",
@@ -31,11 +34,15 @@
   ],
   "author": "unepgrid.ch",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
-    "microbundle": "^0.14.0"
+    "jsdom": "^22.1.0",
+    "microbundle": "^0.14.0",
+    "vitest": "^0.34.6"
   },
-  "files":["dist","src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "bugs": {
     "url": "https://github.com/unep-grid/mapx"
   },

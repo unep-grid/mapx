@@ -1,187 +1,315 @@
 import {
-  isPromise,
-  isObject,
-  isElement,
-  isArray,
+  isBoolean,
   isString,
+  isArray,
+  isObject,
+  isEmpty,
+  isFunction,
   isNumeric,
   isHTML,
-  isFunction
-} from './../../is_test';
-
-export {el, svg};
-
-const NSSvg = 'http://www.w3.org/2000/svg';
-const config = {
-  listeners: [],
-  debug: true,
-  interval: null
-};
-
-function svg(tagName, ...opt) {
-  return el(tagName, true, ...opt);
-}
+  isElement,
+  isPromise,
+} from "../../is_test";
 
 /**
- * clean listeners at interval
+ * Class representing an element creator which facilitates the creation
+ * and management of DOM elements, including SVG elements.
  */
-function el(tagName, ...opt) {
-  let item, elOut;
-
-  if (!config.interval) {
-    config.interval = setInterval(cleanListeners, 1e4);
-    window.el_config = config;
-  }
-  let svgMode = opt[0] === true;
+export class ElementCreator {
   /**
-   * Create element
+   * Creates an instance of ElementCreator.
    */
-  if (svgMode) {
-    elOut = document.createElementNS(NSSvg, tagName);
-  } else {
-    elOut = document.createElement(tagName);
+  constructor() {
+    this.NSSvg = "http://www.w3.org/2000/svg";
+    this.config = {
+      listeners: [],
+      debug: true,
+      interval: null,
+      interval_delay: 20 * 1e3,
+    };
+    this.el = this.el.bind(this);
+    this.svg = this.svg.bind(this);
+    this.el.parent = this;
+    this.svg.parent = this;
   }
 
   /**
-   * Compute options
+   * Initializes the interval for cleaning up event listeners.
+   * This method sets up a recurring task to remove event listeners from elements
+   * no longer in the DOM.
    */
-  for (const o of opt) {
+  _init_clearing() {
+    if (this.config.interval) {
+      return;
+    }
     /**
-     * Object part el("div",{Object})
+     * Clean listener each n milliseconds
      */
-    if (isObject(o) && !isArray(o)) {
-      const keys = Object.keys(o);
-      for (const k of keys) {
-        item = o[k];
-        if (
-          k === 'on' &&
-          isArray(item) &&
-          isString(item[0]) &&
-          isFunction(item[1])
-        ) {
-          /**
-           * If array = allow third item as listener option
-           */
+    this.config.interval = setInterval(
+      this.cleanListeners.bind(this),
+      this.config.interval_delay
+    );
+  }
 
-          elOut.addEventListener(item[0], item[1], item[2]);
-          elOut.dataset.el_id_listener = Math.random().toString(32);
-          /**
-           * Keep track of listener
-           */
-          config.listeners.push({
-            target: elOut,
-            tagName: item[0],
-            listener: item[1]
-          });
-        } else if (k === 'on' && isObject(item)) {
-          for (const i in item) {
-            if (isFunction(item[i])) {
-              elOut.addEventListener(i, item[i]);
-              elOut.dataset.el_id_listener = Math.random().toString(32);
-              /**
-               * Keep track of listener
-               */
-              config.listeners.push({
-                target: elOut,
-                tagName: i,
-                listener: item[i]
-              });
-            }
-          }
-        } else if (k === 'innerText' && isString(item)) {
-          elOut.innerText = item;
-        } else if ((k === 'dataset' || k === 'style') && isObject(item)) {
-          for (const i in item) {
-            elOut[k][i] = item[i];
-          }
-        } else if (k === 'class' && isArray(item)) {
-          for (const c of item) {
-            elOut.classList.add(c);
-          }
-        } else if (
-          tagName === 'input' &&
-          k === 'checked' &&
-          o.type === 'checkbox'
-        ) {
-          elOut.checked = item === true;
-        } else if (svgMode) {
-          try {
-            elOut.setAttributeNS(null, k, o[k]);
-          } catch (e) {
-            elOut.setAttribute(k, o[k]);
-          }
-        } else if (o[k]) {
-          elOut.setAttribute(k, o[k]);
-        }
-      }
-    }
-    /**
-     * Array part el("div",[Array])
-     */
-    if (isArray(o)) {
-      for (const elChildren of o) {
-        if (isElement(elChildren)) {
-          elOut.appendChild(elChildren);
-        }
-      }
-    }
-    /**
-     * Element part el("div",>Element>)
-     */
-    if (isElement(o)) {
-      elOut.appendChild(o);
-    }
-    /**
-     * HTML part el("div",>Element>)
-     */
-    if (isPromise(o)) {
-      o.then(setContent).catch(console.error);
+  /**
+   * Creates an SVG element with given tag name and options.
+   * @param {string} tagName - The name of the SVG element to create.
+   * @param {...any} opt - Options for creating the SVG element.
+   * @returns {SVGElement} The created SVG element.
+   */
+  svg(tagName, ...opt) {
+    return this.el(tagName, true, ...opt);
+  }
+
+  /**
+   * Creates a DOM element with given tag name and options.
+   * @param {string} tagName - The name of the element to create.
+   * @param {...any} opt - Options for creating the element.
+   * @returns {HTMLElement} The created HTML element.
+   */
+  el(tagName, ...opt) {
+    let elOut;
+    let svgMode = opt[0] === true;
+
+    if (svgMode) {
+      elOut = document.createElementNS(this.NSSvg, tagName);
     } else {
-      setContent(o);
+      elOut = document.createElement(tagName);
     }
 
+    this.processOptions(tagName, elOut, svgMode, opt);
+
+    return elOut;
   }
 
-  return elOut;
+  /**
+   * Processes the options for element creation.
+   * @param {string} tagName - The tag name of the element.
+   * @param {HTMLElement|SVGElement} elOut - The element being created.
+   * @param {boolean} svgMode - Whether the element is an SVG.
+   * @param {...any} opt - Options for creating the element.
+   */
+  processOptions(tagName, elOut, svgMode, opt) {
+    for (const o of opt) {
+      if (isArray(o)) {
+        this.processOptions(tagName, elOut, svgMode, o);
+      } else if (isPromise(o)) {
+        this.processAsync(tagName, elOut, svgMode, o);
+      } else if (isObject(o)) {
+        this.processObjectOptions(tagName, elOut, svgMode, o);
+      } else if (isElement(o)) {
+        elOut.appendChild(o);
+      } else {
+        this.setContent(o, elOut, svgMode, tagName);
+      }
+    }
+  }
 
-  function setContent(str) {
-    if (isHTML(str) || tagName === 'style') {
-      elOut.innerHTML = str;
-    } else if (isString(str) || isNumeric(str)) {
+  /**
+   * Asynchronously process option.
+   * @param {string} tagName - The tag name of the element.
+   * @param {HTMLElement|SVGElement} elOut - The element to set content on.
+   * @param {boolean} svgMode - Whether the element is an SVG.
+   * @param {Promise} promise - The promise resolving to the content.
+   * @returns {Promise<HTMLElement|SVGElement>} The element with content set.
+   */
+  async processAsync(tagName, elOut, svgMode, promise) {
+    try {
+      const value = await promise;
+      return this.processOptions(tagName, elOut, svgMode, [value]);
+    } catch (e) {
+      console.warn("ElementCreator", e);
+    }
+  }
+
+  /**
+   * Processes object options for element creation.
+   * @param {string} tagName - The tag name of the element.
+   * @param {HTMLElement|SVGElement} elOut - The element being created.
+   * @param {boolean} svgMode - Whether the element is an SVG.
+   * @param {Object} options - The options object for the element.
+   */
+  processObjectOptions(tagName, elOut, svgMode, options) {
+    for (const [key, value] of Object.entries(options)) {
+      this.handleOption(elOut, key, value, svgMode, tagName);
+    }
+  }
+
+  /**
+   * Handles individual options for element creation.
+   * @param {HTMLElement|SVGElement} elOut - The element being created.
+   * @param {string} key - The option key.
+   * @param {any} value - The option value.
+   * @param {boolean} svgMode - Whether the element is an SVG.
+   * @param {string} tagName - The tag name of the element.
+   */
+  handleOption(elOut, key, value, svgMode, tagName) {
+    if (isEmpty(value)) {
+      return;
+    }
+    switch (key) {
+      case "on":
+        this.handleEventListeners(elOut, value);
+        break;
+
+      case "innerText":
+        if (isString(value)) {
+          elOut.innerText = value;
+        }
+        break;
+
+      case "dataset":
+      case "style":
+        if (isObject(value)) {
+          Object.assign(elOut[key], value);
+        } else {
+          elOut[key] = value;
+        }
+        break;
+
+      case "class":
+        if (isArray(value)) {
+          for (const className of value) {
+            elOut.classList.add(className);
+          }
+        } else {
+          elOut.className = value;
+        }
+        break;
+      case "checked":
+        if (tagName === "input" && isBoolean(value)) {
+          elOut.checked = value;
+        }
+        break;
+      case "disabled":
+        if (tagName === "input" && value == true) {
+          elOut.disabled = value;
+        }
+        break;
+      default:
+        if (svgMode) {
+          elOut.setAttributeNS(null, key, value);
+        } else {
+          elOut.setAttribute(key, value);
+        }
+        break;
+    }
+  }
+
+  /**
+   * Handles the attachment of event listeners to the created element.
+   * Supports both array and object formats for specifying listeners.
+   * @param {HTMLElement|SVGElement} elOut - The element to attach listeners to.
+   * @param {Array|Object} listeners - Event listeners specifications.
+   */
+  handleEventListeners(elOut, listeners) {
+    const type = isArray(listeners)
+      ? "array"
+      : isObject(listeners)
+      ? "object"
+      : null;
+
+    switch (type) {
+      case "array":
+        // Array format: ['eventName', eventHandler, options]
+        const [eventName, eventHandler, options] = listeners;
+        this.trackListener(elOut, eventName, eventHandler, options);
+        break;
+      case "object":
+        // Object format: { eventName: eventHandler, ... }
+        for (const [eventName, eventHandler] of Object.entries(listeners)) {
+          this.trackListener(elOut, eventName, eventHandler);
+        }
+        break;
+      default:
+        console.warn("ElementCreator : unsuported event listener", listeners);
+    }
+  }
+
+  /**
+   * Sets the content of an element.
+   * @param {any} content - The content to set on the element.
+   * @param {HTMLElement|SVGElement} elOut - The element to set content on.
+   * @param {boolean} svgMode - Whether the element is an SVG.
+   * @param {string} tagName - The tag name of the element.
+   * @returns {HTMLElement|SVGElement} The element with content set.
+   */
+  setContent(content, elOut, svgMode, tagName) {
+    const typeValue = tagName === "input" || tagName === "textarea";
+    const typeHTML = isHTML(content);
+    const typeString = (!typeHTML && isString(content)) || isNumeric(content);
+
+    if (typeValue) {
+      /**
+       * Sets the value for input or textarea elements.
+       */
+      elOut.value = content.toString();
+    } else if (typeHTML) {
+      /**
+       * HTML
+       */
+      elOut.innerHTML = content;
+    } else if (typeString) {
+      /**
+       * String
+       */
+      const str = content.toString();
       if (svgMode) {
         elOut.textContent = str;
       } else {
-        if (tagName === 'input') {
-          elOut.value = str;
-        } else {
-          elOut.innerText = str;
-        }
+        elOut.innerText = str;
+      }
+    }
+    return elOut;
+  }
+
+  /**
+   * Tracks an event listener for later cleanup.
+   * @param {HTMLElement|SVGElement} elOut - The element with the listener.
+   * @param {string} eventName - The name of the event.
+   * @param {Function} eventHandler - The event handler function.
+   * @param {Object} [options={}] - Options for the event listener.
+   */
+  trackListener(elOut, eventName, eventHandler, options = {}) {
+    const valid = isString(eventName) && isFunction(eventHandler);
+
+    if (!valid) {
+      console.warn(
+        "ElementCreator : unsupported event",
+        eventName,
+        eventHandler
+      );
+      return;
+    }
+    const listenerId = crypto.randomUUID();
+    elOut.dataset.el_id_listener = listenerId;
+    elOut.addEventListener(eventName, eventHandler, options);
+
+    this.config.listeners.push({
+      target: elOut,
+      eventName: eventName,
+      eventHandler: eventHandler,
+      id: listenerId,
+    });
+
+    this._init_clearing();
+  }
+
+  /**
+   * Cleans up event listeners from elements no longer in the DOM.
+   */
+  cleanListeners() {
+    /**
+     * If user did not properly remove listener, remove it
+     */
+    for (let i = this.config.listeners.length - 1; i >= 0; i--) {
+      const item = this.config.listeners[i];
+      if (!document.contains(item.target)) {
+        this.config.listeners.splice(i, 1);
+        item.target.removeEventListener(item.eventName, item.eventHandler);
       }
     }
   }
 }
 
-/**
- * Automatically remove listeners
- */
-function cleanListeners() {
-  let cL = config.listeners.length;
-  if (cL < 1) {
-    return;
-  }
-  while (--cL) {
-    const l = config.listeners[cL];
-    if (!l) {
-      return;
-    }
-    const id = l.target.dataset.el_id_listener;
-    /**
-     * ⚠️  using query select instead of contains : contains seems to fail in some browser
-     */
-    const s = document.body.querySelector(`[data-el_id_listener="${id}"]`);
-    if (!s) {
-      config.listeners.pop();
-      l.target.removeEventListener(l.tagName, l.listener);
-    }
-  }
-}
+export const { el, svg } = new ElementCreator();
