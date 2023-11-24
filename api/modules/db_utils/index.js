@@ -13,8 +13,10 @@ export * from "./metadata.js";
  */
 const { key } = settings.db.crypto;
 
-const gid = settings.validation_defaults.tables.layer_id_col;
-const geom = settings.validation_defaults.tables.layer_id_geom;
+const def = settings.validation_defaults;
+const gid = def.tables.layer_id_col;
+const geom = def.tables.layer_id_geom;
+const languages = def.languages.codes;
 
 /**
  * Types, should matches "app/src/js/handsontable/types.js"
@@ -237,38 +239,30 @@ async function analyzeSource(idTable) {
 }
 
 /**
- * Register a source in mx_sources
- * @param {String|Object} idSourceOrOptions Id of the source or an options object
- * @param {Integer} idUser Id of the user
- * @param {String} idProject Id of the project
- * @param {String} [title] English title
- * @param {String} [type="vector"] Type : vector, raster, tabular
- * @param {Boolean} [enable_download=false]
- * @param {Boolean} [enable_wms=false]
- * @return {Promise<Boolean>} inserted
+ * Register a source in mx_sources.
+ * @param {Object} options Options object containing source details.
+ * @param {String} options.idSource Id of the source.
+ * @param {Integer} options.idUser Id of the user.
+ * @param {String} options.idProject Id of the project.
+ * @param {String} [options.title] English title.
+ * @param {String} [options.type="vector"] Type: vector, raster, tabular.
+ * @param {String} [options.language"] langauge 2 letters code
+ * @param {Boolean} [options.enable_download=false] Enable download option.
+ * @param {Boolean} [options.enable_wms=false] Enable WMS (Web Map Service).
+ * @param {PgClient} [client=pgWrite] The PostgreSQL client for database operations.
+ * @return {Promise<Boolean>} inserted - Promise resolving to a boolean indicating success.
  */
-async function registerSource(
-  idSourceOrOptions,
-  idUser,
-  idProject,
-  title,
-  type = "vector",
-  enable_download = false,
-  enable_wms = false,
-  client = pgWrite
-) {
-  let idSource = idSourceOrOptions;
-
-  if (typeof idSourceOrOptions === "object") {
-    const options = idSourceOrOptions;
-    idSource = options.idSource;
-    idUser = options.idUser * 1;
-    idProject = options.idProject;
-    title = options.sourceTitle || options.layerTitle || options.title;
-    type = options.type || "vector";
-    enable_download = options.enable_download || false;
-    enable_wms = options.enable_wms || false;
-  }
+async function registerSource(options, client = pgWrite) {
+  const {
+    idSource,
+    idUser,
+    idProject,
+    title,
+    type = "vector",
+    enable_download = false,
+    enable_wms = false,
+    language = "en",
+  } = options;
 
   const roles = await getUserRoles(idUser, idProject);
 
@@ -288,6 +282,9 @@ async function registerSource(
   if (!["vector", "raster", "tabular", "join"].includes(type)) {
     throw Error("Register source: type not valid");
   }
+  if (!languages.includes(language)) {
+    throw Error("Register source: language not valid");
+  }
 
   // Services
   const services = [];
@@ -299,13 +296,15 @@ async function registerSource(
     services.push("mx_download");
   }
 
+  const titleLanguage = {};
+
+  titleLanguage[language] = title;
+
   // Insert
   const meta = {
     meta: {
       text: {
-        title: {
-          en: title,
-        },
+        title: titleLanguage,
       },
     },
   };
@@ -373,7 +372,6 @@ export async function updateMxSourceTimestamp(idSource, pgClient = null) {
 
   return true;
 }
-
 
 /**
  * Set mx_source data values, and create recursive keys if needed
@@ -464,15 +462,15 @@ async function registerOrRemoveSource(
   }
 
   if (!stats.removed) {
-    await registerSource(
+    await registerSource({
       idSource,
       idUser,
       idProject,
       title,
       type,
       enable_download,
-      enable_wms
-    );
+      enable_wms,
+    });
 
     stats.registered = true;
   }
@@ -925,19 +923,17 @@ const idExists = async (table, id_col, id, client = pgRead) => {
 async function withTransaction(action) {
   const client = await pgWrite.connect();
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
     const result = await action(client);
-    await client.query('COMMIT');
+    await client.query("COMMIT");
     return result;
   } catch (e) {
-    await client.query('ROLLBACK');
+    await client.query("ROLLBACK");
     throw e;
   } finally {
     client.release();
   }
 }
-
-
 
 /**
  * Exports

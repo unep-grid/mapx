@@ -58,12 +58,36 @@ export const config = {
     }
   },
   render: {
-    option: formater,
-    item: formater,
+    option: formaterOptions,
+    item: formaterItem,
   },
 };
 
-function formater(data, escape) {
+function formaterItem(data, escape) {
+  const type = escape(data.type);
+  const title = escape(data.title);
+  const date = escape(data.date_modified);
+  const dateObject = new Date(date);
+  const dateUi = dateObject.toLocaleDateString();
+  const time = dateObject.toLocaleTimeString();
+
+  return el(
+    "div",
+    {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+      },
+    },
+    [
+      el("span", title),
+      el("span", { class: "text-muted" }, `${type}`),
+      el("span", { class: "text-muted" }, `${dateUi} – ${time}`),
+    ]
+  );
+}
+
+function formaterOptions(data, escape) {
   const warnRow = data.nrow > config.max_rows ? ` ⚠️ ` : "";
   const warnCol = data.ncol > config.max_cols ? ` ⚠️ ` : "";
   const nCol = warnCol + escape(data.ncol);
@@ -85,7 +109,12 @@ function formater(data, escape) {
     },
     el(
       "div",
-      { class: "well", style: { margin: "5px" } },
+      {
+        style: {
+          margin: "5px",
+          padding: "10px",
+        },
+      },
       el(
         "div",
         el(

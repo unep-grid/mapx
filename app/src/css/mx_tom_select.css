@@ -23,7 +23,7 @@
 }
 
 .ts-wrapper .ts-control input::placeholder {
-  color : var(--mx_ui_text_faded);
+  color: var(--mx_ui_text_faded);
 }
 
 .ts-wrapper.plugin-drag_drop.multi > .ts-control > div.ui-sortable-placeholder {
@@ -244,6 +244,7 @@
   background: var(--mx_ui_background_contrast);
   color: var(--mx_ui_text);
   border: 0px solid var(--mx_ui_border);
+  justify-content: space-between;
 }
 .ts-wrapper.multi .ts-control > div.active {
   background: var(--mx_ui_background_accent);
@@ -481,7 +482,9 @@
 
 .ts-control {
   min-height: calc(1.5em + 0.75rem + 2px);
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
   display: flex;
   align-items: center;
 }

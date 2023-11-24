@@ -6325,6 +6325,21 @@
     "zh": "日志"
   },
   {
+    "id": "buttton_save",
+    "en": "Save",
+    "zh": "节省"
+  },
+  {
+    "id": "buttton_cancel",
+    "en": "Cancel",
+    "zh": "取消"
+  },
+  {
+    "id": "buttton_copy",
+    "en": "Copy",
+    "zh": "复制"
+  },
+  {
     "id": "error_notset",
     "en": "Property must be set",
     "zh": "属性必须设置"

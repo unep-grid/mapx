@@ -63,7 +63,7 @@ import {
   jedGetValuesById,
   jedInit,
   jedUpdate,
-} from "./mx_helper_jed.js";
+} from "./json_editor";
 
 $(document).on("shiny:connected", mapxBindings);
 

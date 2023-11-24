@@ -1,9 +1,24 @@
-import { getLanguageCurrent } from "./language";
-import { isEmpty, isObject } from "./is_test_mapx";
-import { clone, isShinyReady, path } from "./mx_helper_misc.js";
-import { getViewJson } from "./map_helpers/index.js";
-import { getViewMapboxStyle, getViewSldStyle } from "./style_vt/index.js";
-import { settings } from "./settings";
+import {
+  getDict,
+  getLanguageCurrent,
+  updateLanguageElements,
+} from "./../language";
+import { isEmpty, isFunction, isObject } from "./../is_test_mapx";
+import { el } from "../el/src/index.js";
+import {
+  clone,
+  formatByteSize,
+  getSizeOf,
+  isShinyReady,
+  path,
+} from "./../mx_helper_misc.js";
+import { getViewJson } from "./../map_helpers/index.js";
+import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt/index.js";
+import { settings } from "./../settings";
+import { moduleLoad } from "../modules_loader_async";
+import { modalSimple } from "../mx_helper_modal";
+import { jsonDiff } from "../mx_helper_utils_json";
+import "./style.less";
 
 /**
  * @param {Object} o options
@@ -13,21 +28,18 @@ import { settings } from "./settings";
  * @param {Object} o.options JSONEditor options
  */
 export async function jedInit(o) {
-  const h = mx.helpers;
-
   const dict = await getDictJsonEditorDict();
-  await h.moduleLoad("json-editor");
+  const { JSONEditor } = await moduleLoad("json-editor");
   const id = o.id;
   const schema = o.schema;
   const startVal = o.startVal;
   const options = o.options;
-  const JSONEditor = window.JSONEditor;
   if (dict) {
     JSONEditor.defaults.languages = dict;
   }
   JSONEditor.defaults.language = getLanguageCurrent();
 
-  const elJed = document.getElementById(id);
+  const elJed = o.target || document.getElementById(id);
   let draftLock = true;
   let draftDbTimeStamp = 0;
   let jed = window.jed;
@@ -52,10 +64,6 @@ export async function jedInit(o) {
 
   const opt_final = {};
 
-  if (!options) {
-    options = {};
-  }
-
   // opt can't be changed after instantiation.
   const opt = {
     ajax: true,
@@ -68,6 +76,7 @@ export async function jedInit(o) {
     required_by_default: true,
     show_errors: "always",
     no_additional_properties: true,
+    prompt_before_delete: false,
     schema: schema,
     startval: startVal,
     draftAutoSaveEnable: false,
@@ -85,12 +94,15 @@ export async function jedInit(o) {
     draftDbTimeStamp = opt_final.draftAutoSaveDbTimestamp;
   }
 
-  JSONEditor.plugins.selectize.enable = !opt_final.disableSelectize;
+  /*
+   * legacy option
+   * JSONEditor.plugins.selectize.enable = !opt_final.disableSelectize;
+   */
 
   /**
    * Remove old editor if already exists
    */
-  if (jed.editors[id] && h.isFunction(jed.editors[id].destroy)) {
+  if (jed.editors[id] && isFunction(jed.editors[id].destroy)) {
     jed.editors[id].destroy();
   }
   /**
@@ -183,28 +195,29 @@ export async function jedInit(o) {
       jedGetValuesById({ id: id, idEvent: "change" });
     }
   });
+
+  return editor;
 }
 
-function jedValidateSize(editor) {
+async function jedValidateSize(editor) {
   /**
    * Test size
    */
-  const h = mx.helpers;
   const values = editor.getValue();
+  const size = await getSizeOf(values, false);
 
-  return h.getSizeOf(values, false).then(function (size) {
-    if (size > settings.maxByteJed) {
-      const sizeReadable = h.formatByteSize(size);
-      h.modal({
-        addBackground: true,
-        id: "warningSize",
-        title: `Warning : size greater than ${settings.maxByteJed} ( ${sizeReadable} )`,
-        content: h.el(
-          "b",
-          "Warning: this form data is too big. Please remove unnecessary item(s) and/or source data (images, binary files) from a dedicated server."
-        ),
-      });
-    }
+  if (size <= settings.maxByteJed) {
+    return;
+  }
+  const sizeReadable = formatByteSize(size);
+  modalSimple({
+    addBackground: true,
+    id: "warningSize",
+    title: `Warning : size greater than ${settings.maxByteJed} ( ${sizeReadable} )`,
+    content: el(
+      "b",
+      "Warning: this form data is too big. Please remove unnecessary item(s) and/or source data (images, binary files) from a dedicated server.",
+    ),
   });
 }
 
@@ -229,7 +242,7 @@ function jedAddAncestorErrors(editor) {
       const pL = p.length;
       for (let k = 0; k < pL; k++) {
         const elError = elEditor.querySelector(
-          "[data-schemapath='" + p.join(".") + "']"
+          "[data-schemapath='" + p.join(".") + "']",
         );
         if (elError) {
           elError.classList.add("jed-error");
@@ -331,9 +344,6 @@ export function jedGetValidationById(o) {
  * @param {Number} o.timeDb Posix time stamp of the db version
  */
 async function jedShowDraftRecovery(o) {
-  const h = mx.helpers;
-  const el = h.el;
-
   if (!o.draft || o.draft.type !== "draft") {
     throw new Error({
       msg: "Invalid draft",
@@ -373,10 +383,10 @@ async function jedShowDraftRecovery(o) {
 
   let elData;
 
-  const modal = h.modal({
+  const modal = modalSimple({
     addBackground: true,
     id: "modalDataRecovery",
-    title: h.el("span", { dataset: { lang_key: "draft_recover_modal_title" } }),
+    title: el("span", { dataset: { lang_key: "draft_recover_modal_title" } }),
     buttons: [btnYes, btnDiffData],
     textCloseButton: el("span", {
       dataset: { lang_key: "draft_recover_cancel" },
@@ -397,37 +407,38 @@ async function jedShowDraftRecovery(o) {
             el("span", {
               dataset: { lang_key: "draft_recover_last_saved_date" },
             }),
-            el("span", ": " + dateTimeDb)
+            el("span", ": " + dateTimeDb),
           ),
           el(
             "li",
             el("span", {
               dataset: { lang_key: "draft_recover_recovered_date" },
             }),
-            el("span", ": " + dateTimeBrowser)
-          )
+            el("span", ": " + dateTimeBrowser),
+          ),
         ),
-        (elData = el("div"))
-      )
+        (elData = el("div")),
+      ),
     ),
   });
 
-  h.updateLanguageElements({
+  updateLanguageElements({
     el: modal,
   });
 
-  function getDiff() {
-    return h.jsonDiff(dbData, recoveredData, {
-      propertyFilter: function (name) {
-        const firstChar = name.slice(0, 1);
-        /**
-         * Set of known key that should not be used in diff
-         */
-        return (
-          name !== "spriteEnable" && firstChar !== "_" && firstChar !== "$"
-        );
-      },
-    });
+  async function getDiff() {
+    const config = {
+      propertyFilter: filter,
+    };
+    const data = await jsonDiff(dbData, recoveredData, config);
+    return data;
+    function filter(name) {
+      const firstChar = name.slice(0, 1);
+      /**
+       * Set of known key that should not be used in diff
+       */
+      return name !== "spriteEnable" && firstChar !== "_" && firstChar !== "$";
+    }
   }
 
   async function previewDiff() {
@@ -437,10 +448,10 @@ async function jedShowDraftRecovery(o) {
     elData.innerHTML = "";
     elData.classList.add("mx-diff-items");
     elData.appendChild(
-      el("h3", el("span", { dataset: { lang_key: "draft_recover_diffs" } }))
+      el("h3", el("span", { dataset: { lang_key: "draft_recover_diffs" } })),
     );
     elData.appendChild(elItem);
-    const html = await h.jsonDiff(dbData, recoveredData, {
+    const html = await jsonDiff(dbData, recoveredData, {
       toHTML: true,
       propertyFilter: function (name) {
         const firstChar = name.slice(0, 1);
@@ -475,10 +486,9 @@ function formatDateTime(posix) {
  * @return {Promise} resolve to JSONEditor dict
  */
 async function getDictJsonEditorDict() {
-  const h = mx.helpers;
   const out = {};
   const lang = getLanguageCurrent();
-  const dict = await h.getDict(lang);
+  const dict = await getDict(lang);
   /**
    * For each item
    */

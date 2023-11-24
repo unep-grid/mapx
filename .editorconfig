@@ -1,0 +1,29 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+
+# Matches multiple files with brace expansion notation
+# Set default indentation to space, 2 spaces
+[*.{js,html,css,json,sh,r,R,sql}]
+indent_style = space
+indent_size = 2
+
+# Override for Makefiles: hard tabs of width 2
+[Makefile]
+indent_style = tab
+indent_size = 2
+
+# Override for Markdown files
+[*.md]
+indent_size = 4
+
+# No trailing whitespace
+[*]
+trim_trailing_whitespace = true

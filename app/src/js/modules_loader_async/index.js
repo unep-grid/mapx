@@ -93,7 +93,6 @@ async function loadTurfBbox() {
   return m.default;
 }
 
-
 async function loadDragDropWorker() {
   const m = await import("./../mx_helper_map_dragdrop.mxworker.js");
   return m.default;
@@ -140,18 +139,17 @@ async function loadShapefile() {
 }
 
 async function loadJsonEditor() {
-  await import("json-editor");
-  await moduleLoad("selectize");
-  return Promise.all([
-    import("./../../css/mx_jed.css"),
-    import("./../mx_extend_jed_number_na.js"),
-    import("./../mx_extend_jed_position.js"),
-    import("./../mx_extend_jed_array_confirm_delete"),
-    import("./../mx_extend_jed_monaco.js"),
-    import("./../mx_extend_jed_validation.js"),
-    import("./../mx_extend_jed_table_source_stat_style.js"),
-    import("./../mx_extend_jed_selectize.js"),
+  const { JSONEditor } = await import("@json-editor/json-editor");
+  await Promise.all([
+    import("./../json_editor/number_na.js"),
+    import("./../json_editor/position.js"),
+    import("./../json_editor/array_confirm_delete"),
+    import("./../json_editor/monaco.js"),
+    import("./../json_editor/validation.js"),
+    import("./../json_editor/table_source_stat.js"),
+    import("./../json_editor/selectize.js"),
   ]);
+  return { JSONEditor };
 }
 
 async function loadHandsontable() {

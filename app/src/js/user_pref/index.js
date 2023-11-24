@@ -1,30 +1,30 @@
-import localforage from 'localforage';
-import {modal} from './../mx_helper_modal.js';
-import {el} from './../el/src/index.js';
-import './../../css/mx_jed.css';
-import schema from './schema.json';
+import localforage from "localforage";
+import { modalSimple } from "./../mx_helper_modal.js";
+import { el } from "./../el/src/index.js";
+import schema from "./schema.json";
+import { moduleLoad } from "../modules_loader_async/index.js";
 
 const def = {
-  theme: 'bootstrap3',
-  iconlib: 'bootstrap3',
+  theme: "bootstrap3",
+  iconlib: "bootstrap3",
   disable_collapse: true,
   disable_properties: true,
   disableSelectize: true,
   disable_edit_json: true,
   required_by_default: true,
-  show_errors: 'always',
+  show_errors: "always",
   no_additional_properties: true,
   schema: {},
-  startval: {}
+  startval: {},
 };
 
 const defValues = {};
-for(const k in schema.properties){
-   defValues[k]=schema.properties[k].default;
+for (const k in schema.properties) {
+  defValues[k] = schema.properties[k].default;
 }
 
-const settings = localforage.createInstance('user_pref_settings');
-const prefData = localforage.createInstance('user_pref_data');
+const settings = localforage.createInstance("user_pref_settings");
+const prefData = localforage.createInstance("user_pref_data");
 
 /**
  * Simple preferences register.
@@ -34,7 +34,7 @@ export async function prefGet(key) {
     validate(key);
     return settings.getItem(key);
   } catch (e) {
-    console.warn('User get pref issue', e);
+    console.warn("User get pref issue", e);
   }
 }
 export async function prefSet(key, value) {
@@ -42,7 +42,7 @@ export async function prefSet(key, value) {
     validate(key);
     return settings.setItem(key, value);
   } catch (e) {
-    console.warn('User set pref issue', e);
+    console.warn("User set pref issue", e);
   }
 }
 export async function prefGetAll() {
@@ -51,25 +51,25 @@ export async function prefGetAll() {
     await settings.iterate((value, key) => (all[key] = value));
     return all;
   } catch (e) {
-    console.warn('User get all pref issue', e);
+    console.warn("User get all pref issue", e);
   }
 }
 export async function prefGetAllKeys() {
   try {
     return settings.keys();
   } catch (e) {
-    console.warn('User get all pref issue', e);
+    console.warn("User get all pref issue", e);
   }
 }
 export async function prefSetAll(data) {
   try {
-    data = Object.assign({},defValues,data);
+    data = Object.assign({}, defValues, data);
     for (const key in data) {
       await prefSet(key, data[key]);
     }
     return true;
   } catch (e) {
-    console.warn('User set all pref issue', e);
+    console.warn("User set all pref issue", e);
   }
 }
 export async function prefReset() {
@@ -77,7 +77,7 @@ export async function prefReset() {
     await prefSetAll(defValues);
     return true;
   } catch (e) {
-    console.warn('User set all pref issue', e);
+    console.warn("User set all pref issue", e);
   }
 }
 /**
@@ -121,20 +121,21 @@ export async function showPrefPanel() {
     if (elModal) {
       return;
     }
-    const elJsonEditor = el('div');
+    const { JSONEditor } = await moduleLoad("json-editor");
+    const elJsonEditor = el("div");
 
     const startval = await prefGetAll();
-    const options = Object.assign({}, def, {schema, startval});
+    const options = Object.assign({}, def, { schema, startval });
 
-    elModal = modal({
-      title: 'User settings',
+    elModal = modalSimple({
+      title: "User settings",
       content: elJsonEditor,
-      onClose: clean
+      onClose: clean,
     });
 
     const editor = new JSONEditor(elJsonEditor, options);
 
-    editor.on('change', () => {
+    editor.on("change", () => {
       console.log(editor.getValue());
     });
 
@@ -143,6 +144,6 @@ export async function showPrefPanel() {
       editor.destroy();
     }
   } catch (e) {
-    console.warn('User pref modale issue', e);
+    console.warn("User pref modale issue", e);
   }
 }

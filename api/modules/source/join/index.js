@@ -8,35 +8,26 @@ import {
   getColumnsTypesSimple,
   withTransaction,
 } from "#mapx/db_utils";
-import { validator } from "./validate.js";
+import { schema, validator } from "./validate.js";
 
-//schema in api/modules/source/join/schema.json
+const join_default = {
+  id_source: "",
+  columns: [],
+  prefix: "b_",
+  type: "INNER",
+  column_join: "",
+  column_base: "",
+};
 const config_default = {
   version: "1",
   id_source: "",
-  title: {
-    en: "",
-  },
-  description: {
-    en: "",
-  },
   base: {
     id_source: "",
     columns: [],
     prefix: "a_",
   },
-  joins: [
-    {
-      id_source: "",
-      columns: [],
-      prefix: "b_",
-      type: "INNER",
-      column_join: "",
-      column_base: "",
-    },
-  ],
+  joins: [join_default],
 };
-
 export async function ioSourceJoin(socket, data, cb) {
   const session = socket.session;
 
@@ -72,19 +63,22 @@ export async function ioSourceJoin(socket, data, cb) {
  */
 async function handleMethod(method, config, session) {
   const handlers = {
-    config_default: () => config_default,
-    get: () => getJoinConfig(config),
+    get_config_default: () => config_default,
+    get_join_default: () => join_default,
+    get_config: () => getJoinConfig(config),
+    get_data: () => getJoinData(config),
+    get_schema: () => schema,
     validate: () => validate(config),
-    attributes: () => getAtributes(config),
-    set: (client) => setJoinConfig(config, client),
-    create: (client) => create(config, session, client),
+    get_columns_type: () => getColumnsType(config),
+    set_config: (client) => setJoinConfig(config, client),
+    register: (client) => register(config, session, client),
   };
 
   if (!handlers[method]) {
     throw new Error(`Unsupported method ${method}`);
   }
 
-  const useTransaction = ["set", "create"].includes(method);
+  const useTransaction = ["set", "register"].includes(method);
 
   if (useTransaction) {
     return withTransaction((client) => handlers[method](client));
@@ -93,33 +87,38 @@ async function handleMethod(method, config, session) {
   }
 }
 
-async function create(config, session, client) {
+async function register(config, session, client) {
   const id_source = newIdSource();
-
-  config.id_source = id_source;
-
-  const title = config.title.en || `New Join ${new Date().toLocaleString()}`;
+  const { title, language } = config;
   const id_user = session.user_id;
   const id_project = session.project_id;
   const type = "join";
   const enable_download = false;
   const enable_wms = false;
+
   const ok = await registerSource(
-    id_source,
-    id_user,
-    id_project,
-    title,
-    type,
-    enable_download,
-    enable_wms,
+    {
+      idSource: id_source,
+      idUser: id_user,
+      idProject: id_project,
+      title,
+      type,
+      enable_download,
+      enable_wms,
+      language,
+    },
     client
   );
+
   if (!ok) {
     throw new Error(msg("Creation failed"));
   }
-  await updateJoin(config, client);
 
-  return config;
+  const newJoin = Object.assign({}, config_default, { id_source });
+
+  await updateJoin(newJoin, client);
+
+  return newJoin;
 }
 
 // returns array of errors
@@ -139,14 +138,14 @@ async function getJoinData(config, client = pgRead) {
   const { id_source } = config;
   const res = await client.query(templates.getSourceJoinData, [id_source]);
   if (res.rowCount) {
-    return res.rows[0].config;
+    return res.rows[0].data;
   } else {
     return {};
   }
 }
 
 async function getJoinConfig(configGet, client = pgRead) {
-  const config = await getJoinData(configGet, client);
+  const { config } = await getJoinData(configGet, client);
   return Object.assign(config_default, config);
 }
 
@@ -157,7 +156,8 @@ async function setJoinConfig(config, client = pgWrite) {
   return true;
 }
 
-async function getAtributes(config) {
+async function getColumnsType(config) {
+  // if no idAttr => all
   const { idSource, idAttr, idAttrExclude } = config;
   if (!isSourceId(idSource)) {
     throw new Error(msg("Missing Source ID"));

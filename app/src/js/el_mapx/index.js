@@ -150,7 +150,7 @@ function elAuto(render, data, opt) {
       },
       arr.map((d) => {
         return el("li", renderStringLanguage(d));
-      })
+      }),
     );
   }
   function renderArrayElement(arr) {
@@ -164,7 +164,7 @@ function elAuto(render, data, opt) {
       },
       arr.map((d) => {
         return el("li", d);
-      })
+      }),
     );
   }
   function renderDate(date) {
@@ -187,7 +187,7 @@ function elAuto(render, data, opt) {
         "aria-label": title,
         class: ["hint--left"],
       },
-      label
+      label,
     );
   }
   function renderEmail(email) {
@@ -202,7 +202,7 @@ function elAuto(render, data, opt) {
           whiteSpace: "nowrap",
         },
       },
-      email
+      email,
     );
   }
   function renderString(str, asLanguageKey) {
@@ -225,7 +225,7 @@ function elAuto(render, data, opt) {
             }
           : {},
       },
-      str + ""
+      str + "",
     );
   }
   function renderArrayString(arr) {
@@ -255,7 +255,7 @@ function elAuto(render, data, opt) {
         class: opt.tableClass,
       },
       makeHeaders(),
-      makeBody()
+      makeBody(),
     );
 
     return elPanel({
@@ -285,10 +285,10 @@ function elAuto(render, data, opt) {
                     lang_key: l,
                   },
                 },
-                l
+                l,
               );
-            })
-          )
+            }),
+          ),
         );
       }
     }
@@ -301,9 +301,9 @@ function elAuto(render, data, opt) {
             "tr",
             labels.map((l) => {
               return el("td", renderAuto(row[l]));
-            })
+            }),
           );
-        })
+        }),
       );
     }
   }
@@ -318,7 +318,7 @@ function elPanel(opt) {
       content: null,
       title: null,
     },
-    opt
+    opt,
   );
 
   return el(
@@ -331,9 +331,9 @@ function elPanel(opt) {
       {
         class: opt.classHeader,
       },
-      opt.title
+      opt.title,
     ),
-    opt.content
+    opt.content,
   );
 }
 
@@ -409,7 +409,7 @@ function elButtonIcon(key, opt) {
       content: null,
       config: null,
     },
-    opt
+    opt,
   );
 
   const addIcon = isNotEmpty(opt.icon);
@@ -430,7 +430,7 @@ function elButtonIcon(key, opt) {
       ? el(
           "div",
           { class: "btn-icon-wrapper" },
-          el("i", { class: ["fa", opt.icon] })
+          el("i", { class: ["fa", opt.icon] }),
         )
       : false,
     addContent ? opt.content : false,
@@ -449,7 +449,7 @@ function elButtonIcon(key, opt) {
       style: opt.style,
       ...opt.config,
     },
-    content
+    content,
   );
   /**
    * Detached async dict operation
@@ -482,7 +482,7 @@ export function elButtonFa(key, opt) {
       mode: "text_icon",
       dataset: {},
     },
-    opt
+    opt,
   );
   return elButtonIcon(key, {
     icon: `fa-${opt.icon}`,
@@ -527,7 +527,7 @@ export function elInput(key, opt) {
       class: null,
       attributes: {},
     },
-    opt
+    opt,
   );
 
   const inputOptions = Object.assign(
@@ -541,7 +541,7 @@ export function elInput(key, opt) {
       on: ["change", opt.action],
       dataset: opt.dataset,
     },
-    opt.attributes
+    opt.attributes,
   );
 
   if (opt.type === "checkbox") {
@@ -555,7 +555,7 @@ export function elInput(key, opt) {
     opt.keyLabel ? opt.keyLabel : `${key}_label`,
     {
       tooltip: opt.tooltip,
-    }
+    },
   );
   const elLabel = el("label", { for: opt.id });
 
@@ -564,7 +564,7 @@ export function elInput(key, opt) {
     { class: ["text-muted", "help-box"] },
     elSpanTranslate(opt.keyDesc ? opt.keyDesc : `${key}_desc`, {
       tooltip: opt.tooltip,
-    })
+    }),
   );
 
   if (opt.type === "checkbox") {
@@ -609,7 +609,7 @@ export function elCheckbox(key, opt) {
       checked: true,
       value: "true", // will be used in form data. If not set, "on" will be returned.
     },
-    opt
+    opt,
   );
 
   return elInput(key, opt);
@@ -620,6 +620,7 @@ export function elCheckbox(key, opt) {
  * @param {String} key Unique key : used form name + translation
  * @param {Object} opt Options
  * @param {String} opt.id Element id
+ * @param {Array} opt.items Array of options
  * @param {String} opt.dataset Additional custom data-
  * @param {String} opt.action Callback
  * @param {String} opt.keyLabel Optional translation key for label
@@ -638,12 +639,8 @@ export function elSelect(key, opt) {
       dataset: "",
       asRow: false,
     },
-    opt
+    opt,
   );
-
-  if (isNotEmpty(opt.item)) {
-    opt.item[0].selected = true;
-  }
 
   const elOut = opt.asRow ? el("tr") : el("div", { class: "form-group" });
 
@@ -656,11 +653,11 @@ export function elSelect(key, opt) {
       class: "form-control",
       dataset: opt.dataset,
     },
-    opt.items
+    opt.items,
   );
 
   const elLabelText = elSpanTranslate(
-    opt.keyLabel ? opt.keyLabel : `${key}_label`
+    opt.keyLabel ? opt.keyLabel : `${key}_label`,
   );
 
   const elLabel = opt.asRow
@@ -693,7 +690,7 @@ export function elAlert(key, type, opt) {
   const elAlert = el(
     "div",
     { class: ["alert", `alert-${type}`], role: "alert" },
-    elSpanTranslate(key, opt)
+    elSpanTranslate(key, opt),
   );
   return elAlert;
 }
@@ -737,7 +734,7 @@ export function elToggle({ containerClass, iconDefault, iconActive, on }) {
       for: id, // associate the label with the checkbox
       style: { cursor: "pointer" }, // make it clear that the label is clickable
     },
-    [icon]
+    [icon],
   );
 
   return el("div", { class: containerClass }, [checkbox, label]);

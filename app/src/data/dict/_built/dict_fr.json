@@ -6325,6 +6325,21 @@
     "fr": "Journal"
   },
   {
+    "id": "buttton_save",
+    "en": "Save",
+    "fr": "Sauvegarder"
+  },
+  {
+    "id": "buttton_cancel",
+    "en": "Cancel",
+    "fr": "Annuler"
+  },
+  {
+    "id": "buttton_copy",
+    "en": "Copy",
+    "fr": "Copier"
+  },
+  {
     "id": "error_notset",
     "en": "Property must be set",
     "fr": "La propriété doit être remplie"

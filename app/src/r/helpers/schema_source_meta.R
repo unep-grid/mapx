@@ -24,6 +24,7 @@ mxSchemaSourceMeta <- function(
   # dict =  .get(config,c("dictionaries","schemaMetadata"))
   dict <- config$dict
   v <- .get(config, c("validation", "input", "nchar"))
+  
   #
   # Counter to keep property in the same order as described here
   #
@@ -130,8 +131,8 @@ mxSchemaSourceMeta <- function(
               collapsed = TRUE,
               attributes = attributesNames,
               dict = dict,
-              maxLength = v$sourceAttributeDesc$max,
-              minLength = v$sourceAttributeDesc$min
+              maxLength = v$sourceAttributesDesc$max,
+              minLength = v$sourceAttributesDesc$min
             )
           ),
           attributes_alias = list(
@@ -149,8 +150,8 @@ mxSchemaSourceMeta <- function(
               collapsed = TRUE,
               attributes = attributesNames,
               dict = dict,
-              maxLength = v$sourceAttributeAlias$max,
-              minLength = v$sourceAttributeAlias$min
+              maxLength = v$sourceAttributesAlias$max,
+              minLength = v$sourceAttributesAlias$min
             )
           ),
           notes = mxSchemaMultiLingualInput(

@@ -4,7 +4,7 @@ import { columnExists, idExists } from "#mapx/db_utils";
 import { isSourceId } from "@fxi/mx_valid";
 
 // Load schema
-const schema = await readJSON("./schema.json", import.meta.url);
+export const schema = await readJSON("./schema.json", import.meta.url);
 
 /**
  * Validator class for performing data validation using AJV with custom

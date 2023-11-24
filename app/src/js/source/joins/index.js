@@ -1,13 +1,13 @@
-import { el, elButtonFa, elSpanTranslate as tt } from "../../el_mapx";
+import { el, elSpanTranslate as tt } from "../../el_mapx";
 import { EventSimple } from "../../event_simple";
-import { isSourceId } from "../../is_test";
-import { SelectAuto, modalSelectSource } from "../../select_auto";
+import { isSourceId, isArray, isEmpty, isElement } from "../../is_test";
+import { modalSelectSource } from "../../select_auto";
 import { settings, ws, nc } from "../../mx";
 import { modalPrompt, modalSimple } from "../../mx_helper_modal";
-import { isEmpty } from "../../is_test";
 import { getDictItem } from "../../language";
 import "./style.less";
 import { makeId } from "../../mx_helper_misc";
+import { jedInit } from "../../json_editor";
 
 const routes = {
   join: "/client/source/join",
@@ -40,14 +40,11 @@ export class SourcesJoinManager extends EventSimple {
       return;
     }
     sjm._id = makeId(10);
-    sjm._config_default = await sjm.getConfigDefault();
-    sjm._config = sjm._config_default;
-    sjm._id_source = null;
 
     if (mode === "edit") {
       sjm._id_source = await sjm.promptSelectSourceJoin();
     } else {
-      sjm._id_source = await sjm.promptCreate();
+      sjm._id_source = await sjm.promptNew();
     }
 
     if (!isSourceId(sjm._id_source)) {
@@ -55,54 +52,80 @@ export class SourcesJoinManager extends EventSimple {
       return;
     }
 
-    const config = await sjm.load(sjm._id_source);
+    const schema = await sjm.emit("get_schema");
+    const { config, meta } = await sjm.load(sjm._id_source);
+    const def = await sjm.getConfigDefault();
 
-    if (mode === "edit") {
-      const valid = await sjm.validate(config);
-      if (!valid) {
-        sjm.msg("No valid config", "error");
-        return;
-      }
-    }
-
-    Object.assign(sjm._config, config);
+    sjm._schema = schema;
+    sjm._config = Object.assign({}, def, config);
+    sjm._meta = Object.assign({}, meta);
 
     await sjm.build();
   }
 
   get config() {
-    return Object.assign(this._config_default, this._config);
+    return this._config;
+  }
+  get schema() {
+    return this._schema;
+  }
+
+  get meta() {
+    return this._meta;
   }
 
   async getConfigDefault() {
-    return this.emit("config_default");
+    return this.emit("get_config_default");
+  }
+  async getJoinDefault() {
+    return this.emit("get_join_default");
+  }
+  async getSchema() {
+    return this.emit("get_schema");
   }
 
-  updateSimple(
-    title,
-    description,
-    a_id_source,
-    a_columns,
-    a_column,
-    b_id_source,
-    b_columns,
-    b_column
-  ) {
+  /**
+   * Single join supported for now,
+   * ->
+   */
+  updateConfig(update) {
     const sjm = this;
-
     const conf = sjm.config;
+
+    const {
+      title,
+      description,
+      // base
+      id_source,
+      columns,
+      // all joins
+      joins,
+      // single join
+      join_id_source,
+      join_columns,
+      join_column_join,
+      join_column_base,
+    } = update;
 
     conf.title.en = title;
     conf.description.en = description;
-    conf.id_source = a_id_source;
-    conf.columns = a_columns;
+    conf.id_source = id_source;
+    conf.columns = columns;
 
-    const join = conf.joins[0] || {};
+    conf.join = joins || [];
 
-    join.id_source = b_id_source;
-    join.columns = b_columns;
-    join.column_join = b_column;
-    join.column_base = a_column;
+    if (!joins && isSourceId(join_id_source)) {
+      const joinSingle = {
+        id_source: join_id_source,
+        columns: join_columns,
+        column_join: join_column_join,
+        column_base: join_column_base,
+        prefix: "b_",
+        type: "INNER",
+      };
+      config.join.push(joinSingle);
+    }
+    return conf;
   }
 
   async emit(method, config) {
@@ -121,7 +144,7 @@ export class SourcesJoinManager extends EventSimple {
 
   async save() {
     const sjm = this;
-    return sjm.emit("set", sjm.config);
+    return sjm.emit("set_config", sjm.config);
   }
 
   async load(idSource) {
@@ -129,7 +152,7 @@ export class SourcesJoinManager extends EventSimple {
     if (!isSourceId(idSource)) {
       return {};
     }
-    return sjm.emit("get", { id_source: idSource });
+    return sjm.emit("get_data", { id_source: idSource });
   }
 
   close() {
@@ -144,23 +167,31 @@ export class SourcesJoinManager extends EventSimple {
     delete window._sjm;
   }
 
-  async getAttributes(idSource) {
+  async getColumnsType(idSource) {
+    if (!isSourceId(idSource)) {
+      return [];
+    }
     const sjm = this;
-    const attributes = await sjm.emit("attributes", {
+    const columnsType = await sjm.emit("get_columns_type", {
       idSource,
       idAttrExclude: ["gid", "geom", "_mx_valid"],
     });
-    return attributes;
+    return columnsType;
+  }
+  async getColumns(idSource) {
+    const sjm = this;
+    const columnsType = await sjm.getColumnsType(idSource);
+    return columnsType.map((c) => c.column_name);
   }
 
-  async promptCreate() {
+  async promptNew() {
     const sjm = this;
     const title = await modalPrompt({
-      title: tt("sjm_create_title"),
-      label: tt("sjm_create_layer_name", {
+      title: tt("sjm_new_title"),
+      label: tt("sjm_new_layer_name", {
         data: { language: settings.language },
       }),
-      confirm: tt("sjm_create_btn"),
+      confirm: tt("sjm_new_btn"),
       inputOptions: {
         type: "text",
         value: `New Join ${new Date().toLocaleString()}`,
@@ -170,8 +201,14 @@ export class SourcesJoinManager extends EventSimple {
     if (!title) {
       return false;
     }
-    sjm.updateSimple(title, title);
-    const { id_source } = await sjm.emit("create", sjm.config);
+
+    const register = {
+      title: title,
+      language: settings.language,
+    };
+
+    const { id_source } = await sjm.emit("register", register);
+
     return id_source;
   }
 
@@ -180,103 +217,140 @@ export class SourcesJoinManager extends EventSimple {
     return idSource;
   }
 
-  _build_join(index) {
-    // Dynamically create a join section
+  _select_options(value, options = []) {
+    const res = [];
+
+    if (isEmpty(value)) {
+      value = options[0];
+    }
+
+    if (isEmpty(value)) {
+      return;
+    }
+
+    /**
+     * Unselected
+     */
+    for (const option of options) {
+      if (option === value) {
+        continue;
+      }
+      res.push(el("option", { value: option }, option));
+    }
+
+    /**
+     * Selected
+     */
+    if (isArray(value)) {
+      res.push(
+        ...value.map((v) => {
+          el("option", { selected: true, value: v }, v);
+        }),
+      );
+    } else {
+      res.push(el("option", { selected: true, value }, value));
+    }
+    return res;
+  }
+
+  generateColumnsUpdateCallback(ids) {
+    const sjm = this;
+    return async function cb(e) {
+      const id_source = e.target.value;
+      const columns = await sjm.getColumnsType(id_source);
+
+      for (const id of ids) {
+        const s = sjm._ts[id];
+        const elSelect = sjm._elSjm.querySelector(`#${id}`);
+        if (!elSelect) {
+          return;
+        }
+        if (s) {
+          // update tom select
+        } else {
+          sjm._ts[id] = new sjm._TomSelect(elSelect, {
+            valueField: "column_name",
+            labelField: "column_name",
+            searchField: "column_name",
+            create: false,
+            maxItems: 10,
+            options: columns,
+            render: {
+              option: sjm.renderColumn,
+              item: sjm.renderColumn,
+            },
+          });
+        }
+      }
+    };
+  }
+
+  renderColumn(data, escape) {
     return el(
-      "fieldset",
-      { class: ["sjm-group", "sjm-join"], "data-join-index": index },
-      [
-        el("label", { for: `join_${index}_type` }, "Join Type"),
-        el("select", {
-          id: `join_${index}_type`,
-          name: `joins[${index}].type`,
-        }),
-        el("label", { for: `join_${index}_id_source` }, "Source B"),
-        el("select", {
-          id: `join_${index}_id_source`,
-          name: `joins[${index}].id_source`,
-        }),
-        el("label", { for: `join_${index}_columns` }, "Columns B"),
-        el("select", {
-          id: `join_${index}_columns`,
-          name: `joins[${index}].columns`,
-          multiple: true,
-        }),
-        el("label", { for: `join_${index}_prefix` }, "Prefix B"),
-        el("input", {
-          id: `join_${index}_prefix`,
-          type: "text",
-          name: `joins[${index}].prefix`,
-          readonly: true,
-        }),
-        el("label", { for: `join_${index}_column_join` }, "Column Join"),
-        el("select", {
-          id: `join_${index}_column_join`,
-          name: `joins[${index}].column_join`,
-        }),
-        el("label", { for: `join_${index}_column_base` }, "Column Base"),
-        el("select", {
-          id: `join_${index}_column_base`,
-          name: `joins[${index}].column_base`,
-        }),
-      ]
+      "div",
+      { class: "sjm-column-option" },
+      el("span", escape(data.column_name)),
+      el("span", { class: "text-muted" }, escape(data.column_type)),
     );
   }
 
   async build() {
     const sjm = this;
+    const { schema, config, meta } = sjm;
+    //const { join, base } = config;
+    const title = meta?.text?.title?.en || config.id_source;
+    const id_editor = "mx_join";
+    const elSjm = el("div", { id: id_editor });
 
-    /**
-     * Form (add labels, simplify)
-     */
-    sjm._elSjm = el(
-      "form",
-      { on: ["change", () => sjm.update()], class: "sjm" },
-      [
-        el("fieldset", { class: "sjm-group" }, [
-          el("label", { for: "base_id_source" }, "Source A"),
-          el("select", { id: "base_id_source", name: "base.id_source" }),
-          el("label", { for: "base_columns" }, "Columns A"),
-          el("select", {
-            id: "base_columns",
-            name: "base.columns",
-            multiple: true,
-          }),
-          el("label", { for: "base_prefix" }, "Prefix A"),
-          el("input", {
-            id: "base_prefix",
-            type: "text",
-            name: "base.prefix",
-            readonly: true,
-          }),
-        ]),
-        /**
-         * First join
-         */
-        sjm._build_join(0),
-      ]
-    );
+    schema.properties.version.options = { hidden: true };
+    schema.properties.id_source.options = { hidden: true };
+    schema.properties.base.properties.id_source.options = {
+      format: "selectize",
+    };
 
     sjm._modal = modalSimple({
-      title: sjm.config.title.en,
-      content: sjm._elSjm,
+      title,
+      content: elSjm,
     });
 
-    new SelectAuto({
-      target: sjm._elSjm.querySelector("#base_id_source"),
-      type: "sources_list_edit",
-      config: sjmSettings.selectSourceData,
+    sjm._jed = await jedInit({
+      schema,
+      id: id_editor,
+      target: elSjm,
+      options: {
+        disable_collapse: true,
+        disable_properties: true,
+        disableSelectize: false,
+        disable_edit_json: true,
+        required_by_default: true,
+        show_errors: "always",
+        no_additional_properties: true,
+        prompt_before_delete: false,
+      },
     });
 
-    new SelectAuto({
-      target: sjm._elSjm.querySelector("#join_0_id_source"),
-      type: "sources_list_edit",
-      config: sjmSettings.selectSourceData,
-    });
+    //const columnsJoin = await sjm.getColumns(join.id_source);
+    //const columnsBase = await sjm.getColumns(base.id_source);
   }
 
   update() {
-    debugger;
+    const sjm = this;
+    const elForm = sjm._elSjm;
+
+    if (!isElement(elForm)) {
+      return;
+    }
+
+    const formData = {};
+    for (const element of elForm.elements) {
+      if (element.name) {
+        formData[element.name] = element.value;
+      }
+    }
+
+    const values = JSON.stringify(formData, 0, 2);
+
+    console.log("Form changed", values);
   }
 
   msg(txt, level) {
