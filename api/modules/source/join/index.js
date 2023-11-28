@@ -2,13 +2,18 @@ import { pgRead, pgWrite } from "#mapx/db";
 import { templates } from "#mapx/template";
 import { isSourceId, isNotEmpty } from "@fxi/mx_valid";
 import { newIdSource } from "#mapx/upload";
+import { clone } from "#mapx/helpers";
 import {
   columnExists,
   registerSource,
   getColumnsTypesSimple,
   withTransaction,
 } from "#mapx/db_utils";
-import { schema, validator } from "./validate.js";
+
+import { schema } from "./schema.js";
+import { Validator } from "#mapx/schema";
+
+const validator = new Validator(schema);
 
 const join_default = {
   id_source: "",
@@ -68,7 +73,7 @@ async function handleMethod(method, config, session) {
     get_config: () => getJoinConfig(config),
     get_data: () => getJoinData(config),
     get_schema: () => schema,
-    validate: () => validate(config),
+    validate: () => validator.validate(config),
     get_columns_type: () => getColumnsType(config),
     set_config: (client) => setJoinConfig(config, client),
     register: (client) => register(config, session, client),
@@ -121,14 +126,8 @@ async function register(config, session, client) {
   return newJoin;
 }
 
-// returns array of errors
-async function validate(config, client) {
-  const errors = await validator.checkErrors(config, client);
-  return errors || [];
-}
-
 async function stopIfNotValid(config, client) {
-  const errors = await validate(config, client);
+  const errors = await validator.validate(config, client);
   if (isNotEmpty(errors)) {
     throw new Error(msg(`invalid config : ${JSON.stringify(errors, 0, 2)}`));
   }

@@ -2,6 +2,11 @@ import { el } from "../../el_mapx";
 import { wsGetSourcesListEdit } from "../../source";
 
 export const config = {
+  plugins: {
+    remove_button: {
+      title: "Remove",
+    },
+  },
   max_rows: 1e5,
   max_cols: 200,
   disable_missing: true,
@@ -29,33 +34,9 @@ export const config = {
     // select distinct type from mx_sources
     types: ["vector", "raster", "tabular", "join"],
   },
-  load: async function (_, callback) {
-    const tom = this;
-    try {
-      if (tom.loading > 1) {
-        callback();
-        return;
-      }
-      const { types } = config.loaderData;
-      const res = await wsGetSourcesListEdit({ types: types });
-      const data = res.list || [];
-      for (const item of data) {
-        if (!item.exists && config.disable_missing) {
-          item.disabled = true;
-        } else {
-          const maxCol = item.ncol > config.max_cols;
-          const maxRow = item.nrow > config.max_rows;
-          if (config.disable_large && (maxCol || maxRow)) {
-            item.disabled = true;
-          }
-        }
-      }
-      callback(data);
-      tom.settings.load = null;
-    } catch (e) {
-      console.error(e);
-      callback();
-    }
+  onInitialize: function () {
+    this.reset = reset.bind(this);
+    this.reset();
   },
   render: {
     option: formaterOptions,
@@ -63,28 +44,46 @@ export const config = {
   },
 };
 
+async function reset() {
+  const tom = this;
+  try {
+    const { types } = tom.settings.loaderData;
+    const res = await wsGetSourcesListEdit({ types: types });
+    const data = res.list || [];
+    for (const item of data) {
+      if (!item.exists && config.disable_missing) {
+        item.disabled = true;
+      } else {
+        const maxCol = item.ncol > config.max_cols;
+        const maxRow = item.nrow > config.max_rows;
+        if (config.disable_large && (maxCol || maxRow)) {
+          item.disabled = true;
+        }
+      }
+    }
+    tom.addOptions(data);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 function formaterItem(data, escape) {
   const type = escape(data.type);
   const title = escape(data.title);
-  const date = escape(data.date_modified);
-  const dateObject = new Date(date);
-  const dateUi = dateObject.toLocaleDateString();
-  const time = dateObject.toLocaleTimeString();
 
-  return el(
-    "div",
-    {
-      style: {
-        display: "flex",
-        justifyContent: "space-between",
+  return el("div", [
+    el(
+      "div",
+      {
+        style: {
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+        },
       },
-    },
-    [
-      el("span", title),
-      el("span", { class: "text-muted" }, `${type}`),
-      el("span", { class: "text-muted" }, `${dateUi} – ${time}`),
-    ]
-  );
+      [el("span", title), el("span", { class: "text-muted" }, `${type}`)],
+    ),
+  ]);
 }
 
 function formaterOptions(data, escape) {
@@ -130,15 +129,15 @@ function formaterOptions(data, escape) {
             el("span", `${nRow} x ${nCol}`),
             el("span", `${type}`),
             el("span", `${dateUi} – ${time}`),
-          ]
+          ],
         ),
-        el("span", { style: { display: "block" } }, title)
+        el("span", { style: { display: "block" } }, title),
       ),
       el(
         "ul",
         { class: "text-muted" },
-        views.map((v) => el("li", escape(v)))
-      )
-    )
+        views.map((v) => el("li", escape(v))),
+      ),
+    ),
   );
 }

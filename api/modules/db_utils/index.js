@@ -596,9 +596,10 @@ async function getColumnDataType(columnName, tableName) {
 /**
  * Get the latest timestamp from a source / layer / table
  * @param {String} idSource Id of the source
+ * @param {pg.Client} [client=pgRead] - PostgreSQL client to be used for the query. Defaults to `pgRead` if not provided.
  * @return {Number} timetamp
  */
-async function getSourceLastTimestamp(idSource) {
+async function getSourceLastTimestamp(idSource, client = pgRead) {
   if (!isSourceId(idSource)) {
     return null;
   }
@@ -608,7 +609,7 @@ async function getSourceLastTimestamp(idSource) {
     FROM mx_sources 
     WHERE id = $1 
   `;
-  const data = await pgRead.query(q, [idSource]);
+  const data = await client.query(q, [idSource]);
   const [row] = data.rows;
 
   if (!row) {
@@ -616,6 +617,30 @@ async function getSourceLastTimestamp(idSource) {
   }
 
   return row.date_modified;
+}
+
+/**
+ * Checks if a source exists in the database.
+ * @param {String} idSource - Id of the source to be checked.
+ * @param {pg.Client} [client=pgRead] - PostgreSQL client to be used for the query. Defaults to `pgRead` if not provided.
+ * @returns {Promise<Boolean>} - A promise that resolves to `true` if the source exists, or `false` if it does not.
+ */
+async function isSourceRegistered(idSource, client = pgRead) {
+  if (!isSourceId(idSource)) {
+    return false;
+  }
+
+  const query = `
+    SELECT EXISTS (
+      SELECT 1
+      FROM mx_sources
+      WHERE id = $1
+    )`;
+
+  const data = await client.query(query, [idSource]);
+  const [row] = data.rows;
+
+  return row.exists;
 }
 
 /**
@@ -947,6 +972,7 @@ export {
   getSourceLastTimestamp,
   getLayerTitle,
   isLayerValid,
+  isSourceRegistered,
   sanitizeUpdates,
   areLayersValid,
   removeSource,

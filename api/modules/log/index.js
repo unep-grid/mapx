@@ -1,16 +1,16 @@
 import { Sql } from "sql-ts";
-import Ajv from "ajv";
 import { pgWrite } from "#mapx/db";
 import { mwSet } from "#mapx/ip";
-import { isEmpty, isArray } from "@fxi/mx_valid";
+import { isNotEmpty } from "@fxi/mx_valid";
 import express from "express";
 import { readJSON } from "#mapx/helpers";
+import { Validator } from "#mapx/schema";
 // import json still experimental
 const schema = await readJSON("./schema.json", import.meta.url);
 
+const validator = new Validator(schema);
+
 const sql = new Sql("postgres");
-const v = new Ajv();
-const check = v.compile(schema);
 /**
  * log table descriptiom
  */
@@ -38,32 +38,34 @@ export default { mwCollect };
 
 /**
  * Collect
+ * Handles the collection of logs, validates them, and saves them if valid.
+ * Responds with appropriate HTTP status codes based on the operation result.
  */
 async function mwCollectHelper(req, res) {
   try {
     const ipGeo = req?._ip_geo || {};
-    const isValid = validateLogs(req?.body?.logs);
-    if (isValid) {
-      await saveLogs(req.body.logs, ipGeo);
-      res.end();
+    const errors = await validate(req?.body?.logs);
+    const hasErrors = isNotEmpty(errors);
+    if (hasErrors) {
+      res.status(400).json({ errors }); // Bad Request status
     } else {
-      res.send(isValid);
+      await saveLogs(req.body.logs, ipGeo);
+      res.status(200).end(); // OK status
     }
   } catch (e) {
     console.error(e);
-    res.end();
+    res.status(500).end(); // Internal Server Error status
   }
 }
 
 /**
- * Validate each logs (ajv does not validate object in array);
+ *  Validate;
  */
-function validateLogs(logs) {
-  if (isEmpty(logs) || !isArray(logs)) {
-    return false;
-  }
-  return logs.reduce((a, log) => (!a ? a : check(log)), true);
+async function validate(logs, client) {
+  const errors = await validator.validate(logs, client);
+  return errors || [];
 }
+
 /**
  * Save in DB
  */

@@ -63,6 +63,10 @@ export class SourcesJoinManager extends EventSimple {
     await sjm.build();
   }
 
+  get id() {
+    return this._id_source;
+  }
+
   get config() {
     return this._config;
   }
@@ -82,50 +86,6 @@ export class SourcesJoinManager extends EventSimple {
   }
   async getSchema() {
     return this.emit("get_schema");
-  }
-
-  /**
-   * Single join supported for now,
-   * ->
-   */
-  updateConfig(update) {
-    const sjm = this;
-    const conf = sjm.config;
-
-    const {
-      title,
-      description,
-      // base
-      id_source,
-      columns,
-      // all joins
-      joins,
-      // single join
-      join_id_source,
-      join_columns,
-      join_column_join,
-      join_column_base,
-    } = update;
-
-    conf.title.en = title;
-    conf.description.en = description;
-    conf.id_source = id_source;
-    conf.columns = columns;
-
-    conf.join = joins || [];
-
-    if (!joins && isSourceId(join_id_source)) {
-      const joinSingle = {
-        id_source: join_id_source,
-        columns: join_columns,
-        column_join: join_column_join,
-        column_base: join_column_base,
-        prefix: "b_",
-        type: "INNER",
-      };
-      config.join.push(joinSingle);
-    }
-    return conf;
   }
 
   async emit(method, config) {
@@ -253,70 +213,25 @@ export class SourcesJoinManager extends EventSimple {
     return res;
   }
 
-  generateColumnsUpdateCallback(ids) {
-    const sjm = this;
-    return async function cb(e) {
-      const id_source = e.target.value;
-      const columns = await sjm.getColumnsType(id_source);
-
-      for (const id of ids) {
-        const s = sjm._ts[id];
-        const elSelect = sjm._elSjm.querySelector(`#${id}`);
-        if (!elSelect) {
-          return;
-        }
-        if (s) {
-          // update tom select
-        } else {
-          sjm._ts[id] = new sjm._TomSelect(elSelect, {
-            valueField: "column_name",
-            labelField: "column_name",
-            searchField: "column_name",
-            create: false,
-            maxItems: 10,
-            options: columns,
-            render: {
-              option: sjm.renderColumn,
-              item: sjm.renderColumn,
-            },
-          });
-        }
-      }
-    };
-  }
-
-  renderColumn(data, escape) {
-    return el(
-      "div",
-      { class: "sjm-column-option" },
-      el("span", escape(data.column_name)),
-      el("span", { class: "text-muted" }, escape(data.column_type)),
-    );
-  }
-
   async build() {
     const sjm = this;
     const { schema, config, meta } = sjm;
-    //const { join, base } = config;
     const title = meta?.text?.title?.en || config.id_source;
     const id_editor = "mx_join";
-    const elSjm = el("div", { id: id_editor });
-
-    schema.properties.version.options = { hidden: true };
-    schema.properties.id_source.options = { hidden: true };
-    schema.properties.base.properties.id_source.options = {
-      format: "selectize",
-    };
+    const elSjm = el("div", { id: id_editor, class: "jed-container" });
 
     sjm._modal = modalSimple({
       title,
       content: elSjm,
     });
 
+    config.id_source = sjm.id;
+
     sjm._jed = await jedInit({
       schema,
       id: id_editor,
       target: elSjm,
+      startVal: config,
       options: {
         disable_collapse: true,
         disable_properties: true,
@@ -328,9 +243,6 @@ export class SourcesJoinManager extends EventSimple {
         prompt_before_delete: false,
       },
     });
-
-    //const columnsJoin = await sjm.getColumns(join.id_source);
-    //const columnsBase = await sjm.getColumns(base.id_source);
   }
 
   update() {

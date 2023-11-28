@@ -28,7 +28,8 @@ import {
   ioDownloadSource,
   ioEditSource,
   ioSourceListEdit,
-  ioSourceJoin 
+  ioSourceListColumns,
+  ioSourceJoin,
 } from "#mapx/source";
 import { ioViewPin } from "#mapx/view";
 import { ioProjectNameValidate, ioProjectCreate } from "#mapx/project";
@@ -96,6 +97,7 @@ io.use((socket, next) => {
   socket.on("/client/source/upload", use(ioUploadSource));
   socket.on("/client/source/edit/table", use(ioEditSource));
   socket.on("/client/source/get/list/edit", use(ioSourceListEdit));
+  socket.on("/client/source/get/list/columns", use(ioSourceListColumns));
   socket.on("/client/source/join", use(ioSourceJoin));
   socket.on("/client/view/pin", use(ioViewPin));
   socket.on("/client/project/validate/name", use(ioProjectNameValidate));

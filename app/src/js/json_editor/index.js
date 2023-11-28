@@ -19,6 +19,7 @@ import { moduleLoad } from "../modules_loader_async";
 import { modalSimple } from "../mx_helper_modal";
 import { jsonDiff } from "../mx_helper_utils_json";
 import "./style.less";
+import "./../../css/mx_tom_select.css";
 
 /**
  * @param {Object} o options
@@ -34,9 +35,11 @@ export async function jedInit(o) {
   const schema = o.schema;
   const startVal = o.startVal;
   const options = o.options;
+  
   if (dict) {
     JSONEditor.defaults.languages = dict;
   }
+
   JSONEditor.defaults.language = getLanguageCurrent();
 
   const elJed = o.target || document.getElementById(id);
