@@ -2,7 +2,6 @@ import { pgRead, pgWrite } from "#mapx/db";
 import { templates } from "#mapx/template";
 import { isSourceId, isNotEmpty } from "@fxi/mx_valid";
 import { newIdSource } from "#mapx/upload";
-import { clone } from "#mapx/helpers";
 import {
   columnExists,
   registerSource,
@@ -150,6 +149,7 @@ async function getJoinConfig(configGet, client = pgRead) {
 
 async function setJoinConfig(config, client = pgWrite) {
   await stopIfNotValid(config, client);
+
   await updatePgView(config, client);
   await updateJoin(config, client);
   return true;
@@ -235,6 +235,8 @@ async function updatePgView(config, client) {
       SELECT ${selectColumns.join(",")} 
       FROM ${baseSource} ${basePrefix} ${joinClause.join(" ")}
     `;
+
+  debugger;
 
   // Execute the SQL
   await client.query(sql);

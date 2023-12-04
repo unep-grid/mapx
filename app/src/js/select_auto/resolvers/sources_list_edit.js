@@ -1,6 +1,6 @@
 import { el } from "../../el_mapx";
+import { isEmpty } from "../../is_test";
 import { wsGetSourcesListEdit } from "../../source";
-
 export const config = {
   plugins: {
     remove_button: {
@@ -11,6 +11,7 @@ export const config = {
   max_cols: 200,
   disable_missing: true,
   disable_large: true,
+  update_on_init: false,
   valueField: "id",
   searchField: ["id", "title", "abstract", "views", "type"],
   allowEmptyOption: false,
@@ -34,9 +35,13 @@ export const config = {
     // select distinct type from mx_sources
     types: ["vector", "raster", "tabular", "join"],
   },
-  onInitialize: function () {
-    this.reset = reset.bind(this);
-    this.reset();
+  onInitialize: async function () {
+    const tom = this;
+    const { update_on_init } = tom.settings;
+    tom._update = update.bind(tom);
+    if (update_on_init) {
+      await tom._update();
+    }
   },
   render: {
     option: formaterOptions,
@@ -44,24 +49,22 @@ export const config = {
   },
 };
 
-async function reset() {
+async function update() {
   const tom = this;
   try {
     const { types } = tom.settings.loaderData;
-    const res = await wsGetSourcesListEdit({ types: types });
-    const data = res.list || [];
-    for (const item of data) {
-      if (!item.exists && config.disable_missing) {
-        item.disabled = true;
-      } else {
-        const maxCol = item.ncol > config.max_cols;
-        const maxRow = item.nrow > config.max_rows;
-        if (config.disable_large && (maxCol || maxRow)) {
-          item.disabled = true;
-        }
-      }
+    const { disable_large, disable_missing, max_cols, max_rows } = tom.settings;
+    const { list } = await wsGetSourcesListEdit({ types: types });
+    const items = list || [];
+    for (const item of items) {
+      const { exists, ncol, nrow } = item;
+      const missing = disable_missing && !exists;
+      const big = disable_large && (ncol > max_cols || nrow > max_rows);
+      item.disabled = missing || big;
     }
-    tom.addOptions(data);
+    tom.addOptions(items);
+    tom.refreshOptions(false);
+    console.log("sources updated");
   } catch (e) {
     console.error(e);
   }
@@ -87,8 +90,10 @@ function formaterItem(data, escape) {
 }
 
 function formaterOptions(data, escape) {
-  const warnRow = data.nrow > config.max_rows ? ` ⚠️ ` : "";
-  const warnCol = data.ncol > config.max_cols ? ` ⚠️ ` : "";
+  const tom = this;
+  const { max_cols, max_rows } = tom.settings;
+  const warnRow = data.nrow > max_rows ? ` ⚠️ ` : "";
+  const warnCol = data.ncol > max_cols ? ` ⚠️ ` : "";
   const nCol = warnCol + escape(data.ncol);
   const nRow = warnRow + escape(data.nrow);
   const type = escape(data.type);

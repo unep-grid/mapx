@@ -1,5 +1,5 @@
 import { el } from "../../el_mapx";
-import { isSourceId } from "../../is_test";
+import { isObject } from "../../is_test";
 import { wsGetSourcesListColumns } from "../../source";
 
 export const config = {
@@ -13,7 +13,7 @@ export const config = {
   allowEmptyOption: true,
   options: null,
   create: false,
-  preload: true, // propbably not wanted for columns...
+  preload: false, // propbably not wanted for columns...
   placeholder: "Select columns...",
   sortField: [
     { field: "column_name", weight: 2 },
@@ -31,8 +31,9 @@ export const config = {
     ignore_attr: ["geom", "gid", "_mx_valid"],
     value_field: "id_source",
   },
-  onInitialize: function () {
-    this.reset = reset.bind(this);
+  onInitialize: async function () {
+    const tom = this;
+    tom._update = update.bind(tom);
   },
   render: {
     option: formater,
@@ -40,15 +41,18 @@ export const config = {
   },
 };
 
-async function reset() {
+async function update() {
   const tom = this;
   try {
     const { settings } = tom;
     const { id_source, ignore_attr } = settings.loaderData;
+    tom.clear();
     tom.clearOptions();
     const res = await wsGetSourcesListColumns({ id_source, ignore_attr });
     const { columns } = res;
     tom.addOptions(columns);
+    tom.refreshOptions(false);
+    console.log("columns updated");
   } catch (e) {
     console.error(e);
   }

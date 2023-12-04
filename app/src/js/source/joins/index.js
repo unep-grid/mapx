@@ -26,6 +26,27 @@ const sjmSettings = {
   },
 };
 
+const testdata = {
+  version: "1",
+  id_source: "mx_i1ai9_zgj2n_vllo1_xr5ib_4wgiy",
+  base: {
+    id_source: "mx_xkbpr_vfd4q_vyvy9_t19nl_xo2l3",
+    columns: ["id"],
+    prefix: "a_",
+  },
+  joins: [
+    {
+      id_source: "mx_spfsm_4c3r7_4ff2g_b1q53_pekhq",
+      //columns: ["altitude", "caco3", "name", "id", "presence", "region"],
+      columns: ["caco3", "name", "id"],
+      prefix: "b_",
+      type: "INNER",
+      column_join: "id",
+      column_base: "id",
+    },
+  ],
+};
+
 export class SourcesJoinManager extends EventSimple {
   constructor() {
     super();
@@ -92,9 +113,11 @@ export class SourcesJoinManager extends EventSimple {
     return ws.emitAsync(routes.join, { method, config }, 1000);
   }
 
-  async validate(config) {
+  async validate() {
     const sjm = this;
+    const config = sjm._jed.getValue();
     const errors = await sjm.emit("validate", config);
+    debugger;
     if (isEmpty(errors)) {
       return true;
     }
@@ -220,9 +243,12 @@ export class SourcesJoinManager extends EventSimple {
     const id_editor = "mx_join";
     const elSjm = el("div", { id: id_editor, class: "jed-container" });
 
+    const btnValidate = el("button", { on: ["click", sjm.save.bind(sjm)] });
+
     sjm._modal = modalSimple({
       title,
       content: elSjm,
+      buttons: [btnValidate],
     });
 
     config.id_source = sjm.id;
@@ -231,7 +257,7 @@ export class SourcesJoinManager extends EventSimple {
       schema,
       id: id_editor,
       target: elSjm,
-      startVal: config,
+      startVal: testdata,
       options: {
         disable_collapse: true,
         disable_properties: true,
@@ -243,26 +269,6 @@ export class SourcesJoinManager extends EventSimple {
         prompt_before_delete: false,
       },
     });
-  }
-
-  update() {
-    const sjm = this;
-    const elForm = sjm._elSjm;
-
-    if (!isElement(elForm)) {
-      return;
-    }
-
-    const formData = {};
-    for (const element of elForm.elements) {
-      if (element.name) {
-        formData[element.name] = element.value;
-      }
-    }
-
-    const values = JSON.stringify(formData, 0, 2);
-
-    console.log("Form changed", values);
   }
 
   msg(txt, level) {

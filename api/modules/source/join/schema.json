@@ -9,30 +9,31 @@
   "properties": {
     "version": {
       "type": "string",
-      "default": "1"
+      "default": "1",
+      "options": {
+        "hidden": true
+      }
     },
     "id_source": {
       "type": "string",
-      "mx_validators": [
-        {
-          "type": "registered_source"
-        }
-      ]
+      "minLength": 1,
+      "options": {
+        "hidden": true
+      },
+      "mx_validate": {
+        "type": "source_registered"
+      }
     },
     "base": {
       "type": "object",
       "required": ["id_source", "columns", "prefix"],
-      "mx_validators": [
-        {
-          "type": "columns_in_table",
-          "columns": "columns",
-          "table": "id_source",
-          "path": "."
-        }
-      ],
       "properties": {
         "id_source": {
           "type": "string",
+          "minLength": 1,
+          "mx_validate": {
+            "type": "source_registered"
+          },
           "mx_options": {
             "renderer": "tom-select",
             "maxItems": 1,
@@ -42,8 +43,14 @@
         },
         "columns": {
           "type": "array",
+          "minLength": 1,
           "items": {
             "type": "string"
+          },
+          "mx_validate": {
+            "type": "columns_exist",
+            "property": "id_source",
+            "path": "root.base"
           },
           "mx_options": {
             "renderer": "tom-select",
@@ -57,34 +64,20 @@
         },
         "prefix": {
           "type": "string",
-          "default": "_a"
+          "minLength": 1,
+          "default": "_a",
+          "options": {
+            "hidden": true
+          }
         }
       }
     },
     "joins": {
       "type": "array",
+
+      "minLength": 1,
       "items": {
         "type": "object",
-        "mx_validators": [
-          {
-            "type": "columns_in_table",
-            "columns": "columns",
-            "table": "id_source",
-            "path": "."
-          },
-          {
-            "type": "column_in_table",
-            "columns": "column_base",
-            "table": "id_source",
-            "path": "root.base"
-          },
-          {
-            "type": "column_in_table",
-            "columns": "column_join",
-            "table": "id_source",
-            "path": "."
-          }
-        ],
         "required": [
           "id_source",
           "columns",
@@ -96,17 +89,27 @@
         "properties": {
           "id_source": {
             "type": "string",
+            "minLength": 1,
+            "mx_validate": {
+              "type": "source_registered"
+            },
             "mx_options": {
               "renderer": "tom-select",
               "maxItems": 1,
               "loader": "source_edit",
-              "types": ["vector", "tabular", "join"]
+              "types": ["vector", "tabular"]
             }
           },
           "columns": {
             "type": "array",
+            "minLength": 1,
             "items": {
               "type": "string"
+            },
+            "mx_validate": {
+              "type": "columns_exist",
+              "property": "id_source",
+              "path": "."
             },
             "mx_options": {
               "renderer": "tom-select",
@@ -120,14 +123,25 @@
           },
           "prefix": {
             "type": "string",
-            "default": "_b"
+            "minLength": 1,
+            "default": "_b",
+            "options": {
+              "hidden": true
+            }
           },
           "type": {
             "type": "string",
+            "minLength": 1,
             "enum": ["INNER", "LEFT", "RIGHT", "FULL"]
           },
           "column_join": {
             "type": "string",
+            "minLength": 1,
+            "mx_validate": {
+              "type": "column_exists",
+              "property": "id_source",
+              "path": "."
+            },
             "mx_options": {
               "renderer": "tom-select",
               "maxItems": 1,
@@ -140,6 +154,12 @@
           },
           "column_base": {
             "type": "string",
+            "minLength": 1,
+            "mx_validate": {
+              "type": "column_exists",
+              "property": "id_source",
+              "path": "root.base"
+            },
             "mx_options": {
               "renderer": "tom-select",
               "maxItems": 1,

@@ -18,14 +18,21 @@ export class Validator {
      * mapx validators
      */
     this._ajv.addKeyword({
-      keyword: "mx_validators",
+      keyword: "mx_validate",
+      async: true,
       type: ["string", "object"],
-      validate: this._mx_validators.bind(this),
+      validate: this._mx_validate.bind(this),
     });
 
     /*
      * json-editor options
      */
+    this._ajv.addKeyword({
+      keyword: "options",
+      type: "string",
+      validate: isObject,
+    });
+
     this._ajv.addKeyword({
       keyword: "mx_options",
       type: ["object", "string", "array"],
@@ -62,8 +69,8 @@ export class Validator {
   async validate(data, client) {
     this.setClient(client);
     try {
-      // Nothing returned if valid, errors if not
       await this._ajv_validate(data);
+      // https://ajv.js.org/guide/async-validation.html
       return [];
     } catch (err) {
       if (err instanceof Ajv.ValidationError) {
@@ -74,49 +81,71 @@ export class Validator {
     }
   }
 
-  /**
-   * Internal method to handle custom validations as specified in the mx_validators keyword.
-   * @param {Array} validators - The array of custom validators to be executed.
-   * @param {Object} dataValidator - The subset of data to be validated.
-   * @param {Object} dataRoot - The root data object, used for relative validations.
-   * @returns {Promise<boolean>} A promise that resolves to `true` if all validations pass, or `false` if any fail.
-   * @private
-   */
-  async _mx_validators(validators = [], dataValidator, dataRoot) {
-    try {
-      for (const validator of validators) {
-        const { type, columns, column, table, path } = validator;
-        const data = validator.path === "." ? dataValidator : dataRoot[path];
-        let isValid;
-        switch (type) {
-          case "source_registered":
-            isValid = await isSourceRegistered(data, this._client);
-            break;
-          case "columns_in_table":
-            isValid = await columnsExist(
-              data[columns],
-              data[table],
-              this._client
-            );
-            break;
-          case "column_in_table":
-            isValid = await columnExists(
-              data[column],
-              data[table],
-              this._client
-            );
-            break;
-          default:
-            throw new Error(`Unknown validator type: ${type}`);
-        }
+  resolveDataPath(path, dataPath, property) {
+    const { rootData, parentData } = dataPath;
 
-        if (!isValid) {
-          return false;
-        }
+    if (!path || path === ".") {
+      return parentData[property];
+    }
+
+    const pathParts = path.split(".");
+    let currentData = rootData;
+
+    for (const part of pathParts) {
+      if (part === "root") {
+        currentData = rootData;
+      } else if (currentData && typeof currentData === "object") {
+        currentData = currentData[part];
+      } else {
+        // Path not found or invalid
+        return undefined;
       }
-      return true;
+    }
+
+    return currentData[property];
+  }
+
+  async _mx_validate(
+    config,
+    value,
+    _, //parentSchema,
+    dataPath // {parentData,rootData,etc..}
+    //parentData,
+    //parentDataProperty,
+  ) {
+    const cv = this;
+
+    try {
+      if (!isObject(config)) {
+        return true; // Skip if schema is not properly defined
+      }
+
+      const { path, type, property } = config;
+      let isValid = true;
+      let source;
+      switch (type) {
+        case "source_registered":
+          isValid = await isSourceRegistered(value, cv._client);
+          break;
+        case "columns_exist":
+          source = cv.resolveDataPath(path, dataPath, property);
+          isValid = await columnsExist(value, source, cv._client);
+          break;
+        case "column_exists":
+          source = cv.resolveDataPath(path, dataPath, property);
+          isValid = await columnExists(value, source, cv._client);
+          break;
+        default:
+          isValid = false;
+      }
+
+      if (!isValid) {
+        debugger;
+      }
+
+      return isValid;
     } catch (error) {
-      console.error("Error in _mx_validators:", error);
+      console.error("Error in _mx_validate:", error);
       throw error;
     }
   }

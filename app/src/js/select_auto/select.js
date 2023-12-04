@@ -1,6 +1,7 @@
 import { moduleLoad } from "./../modules_loader_async/index.js";
 import { isElement } from "./../is_test";
 import { EventSimple } from "../event_simple/index.js";
+import {clone} from "../mx_helper_misc.js";
 
 const def = {
   target: null,
@@ -89,24 +90,19 @@ export class SelectAuto extends EventSimple {
   }
 
   async loadConfig(type) {
-    /**
-     * NOTE: tomselect 'load callback' could require direct refs to the config object
-     *    -> e.g. loaderData in sources_list_edit should be overwritable
-     *    -> if wrapped in with assign, the reference is lost
-     */
     switch (type) {
       case "epsg":
         const epsg = await import("./resolvers/epsg.js");
-        return epsg.config;
+        return clone(epsg.config);
       case "format_vector_download":
         const format = await import("./resolvers/format_vector_download.js");
-        return format.config;
+        return clone(format.config);
       case "countries":
         const countries = await import("./resolvers/countries.js");
-        return countries.config;
+        return clone(countries.config);
       case "sources_list_edit":
         const sourcesEdit = await import("./resolvers/sources_list_edit.js");
-        return sourcesEdit.config;
+        return clone(sourcesEdit.config);
       default:
         null;
     }

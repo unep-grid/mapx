@@ -118,7 +118,7 @@ export async function jedInit(o) {
 
   /**
    * Translate not available in custom validator (not binded)..
-   * we set one globaly here in jed object. Used in e.g. mx_extend_validation.js
+   * we set one globaly here in jed object. Used in e.g. ./validation.js
    */
   if (!jed.helper.translate) {
     jed.helper.translate = editor.translate;
