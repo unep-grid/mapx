@@ -5,7 +5,7 @@ import { clone } from "../mx_helper_misc.js";
 
 const def = {
   loaderData: {
-    types: ["tabular", "vector"],
+    types: ["tabular", "vector","join"],
   },
   disable_large: false,
   disable_missing: true,

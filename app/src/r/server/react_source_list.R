@@ -64,7 +64,7 @@ reactListReadSources <- reactive({
 })
 reactListReadSourcesVector <- reactive({
   layers <- reactTableReadSources()
-  layers <- layers[layers$type %in% c("vector"), ]
+  layers <- layers[layers$type %in% c("vector","join"), ]
 
   if (noDataCheck(layers)) {
     layers <- list("noLayer")
@@ -105,7 +105,7 @@ reactListEditSources <- reactive({
 })
 reactListEditSourcesVector <- reactive({
   layers <- reactTableEditSources()
-  layers <- layers[layers$type %in% c("vector"), ]
+  layers <- layers[layers$type %in% c("vector","join"), ]
   if (noDataCheck(layers)) {
     layers <- list("noLayer")
   } else {

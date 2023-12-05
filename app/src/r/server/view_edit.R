@@ -1123,6 +1123,8 @@ observe({
 
     language <- reactData$language
 
+    browser()
+
     geomTypesDf <- mxDbGetLayerGeomTypes(layerMain)
 
     geomTypes <- mxSetNameGeomType(geomTypesDf, language)

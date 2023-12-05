@@ -432,7 +432,7 @@ mxDbGetSourceTable <- function(
   projects,
   idUser,
   roleInProject,
-  types = c("vector", "raster", "tabular"),
+  types = c("vector", "raster", "tabular", "join"),
   language = "en",
   additionalSourcesIds = c(),
   editableOnly = FALSE
@@ -761,13 +761,25 @@ mxDbListTable <- function() {
 #'
 #' @param table Name of the table to check
 #' @export
-mxDbExistsTable <- function(table) {
+mxDbExistsTable <- function(table, schema = "public") {
   if (is.null(table)) {
     return(FALSE)
   }
-  pool <- mxDbGetPool()
-  res <- dbExistsTable(pool, table)
-  return(res)
+  query <- sprintf(
+    "SELECT EXISTS (
+       SELECT 1
+       FROM pg_tables
+       WHERE tablename = '%1$s'
+       AND schemaname = '%2$s'
+     ) OR EXISTS (
+       SELECT 1
+       FROM pg_views
+       WHERE viewname = '%1$s'
+       AND schemaname = '%2$s'
+     )", table, schema
+  )
+  result <- mxDbGetQuery(query)
+  return(as.logical(result[1, 1]))
 }
 
 
@@ -1335,26 +1347,28 @@ mxDbConfigSet <- function(key, value) {
 mxDbGetLayerGeomTypes <- function(table = NULL, geomColumn = "geom") {
   if (is.null(table)) stop("Missing table name")
 
-  if (mxDbExistsTable(table)) {
-    q <- sprintf(
-      "
+  if (!mxDbExistsTable(table)) {
+    return
+  }
+
+  q <- sprintf(
+    "
       SELECT count(*) AS count, ST_GeometryType(%1$s)::text as geom_type
       FROM %2$s
       GROUP BY  ST_GeometryType(%1$s)",
-      geomColumn,
-      table
-    )
+    geomColumn,
+    table
+  )
 
-    res <- mxDbGetQuery(q)
+  res <- mxDbGetQuery(q)
 
-    res$geom_type <- gsub(".*[pP]oint.*", "point", res$geom_type)
-    res$geom_type <- gsub(".*[lL]ine.*", "line", res$geom_type)
-    res$geom_type <- gsub(".*[pP]olygon.*", "polygon", res$geom_type)
+  res$geom_type <- gsub(".*[pP]oint.*", "point", res$geom_type)
+  res$geom_type <- gsub(".*[lL]ine.*", "line", res$geom_type)
+  res$geom_type <- gsub(".*[pP]olygon.*", "polygon", res$geom_type)
 
-    res <- aggregate(count ~ geom_type, sum, data = res)
+  res <- aggregate(count ~ geom_type, sum, data = res)
 
-    return(res)
-  }
+  return(res)
 }
 
 #' Get layer attribute type

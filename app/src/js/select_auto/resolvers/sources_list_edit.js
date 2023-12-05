@@ -1,5 +1,4 @@
 import { el } from "../../el_mapx";
-import { isEmpty } from "../../is_test";
 import { wsGetSourcesListEdit } from "../../source";
 export const config = {
   plugins: {

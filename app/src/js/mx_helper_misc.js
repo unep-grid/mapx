@@ -205,7 +205,7 @@ export function updateObjectWithForm(data, elForm, useClone = true) {
     const elInput = elForm.querySelector(`[name=${key}]`);
     if (!elInput) {
       console.warn(
-        `Form parsing issue : expected key ${key} not found in form names`
+        `Form parsing issue : expected key ${key} not found in form names`,
       );
       continue;
     }
@@ -450,7 +450,7 @@ export function parseTemplate(template, data, opt) {
     {
       encodeURIComponent: false,
     },
-    opt
+    opt,
   );
   return template.replace(/{{([^{}]+)}}/g, (_, key) => {
     let txt = isEmpty(data[key]) ? "" : data[key];
@@ -546,8 +546,8 @@ export function uiToggleBtn(o) {
         }`,
         for: id,
       },
-      label
-    ))
+      label,
+    )),
   );
 
   elInput.checked = checked;
@@ -751,7 +751,7 @@ export function objectToHTML(o) {
           content: makeUl(it),
           label: ti,
           open: false,
-        })
+        }),
       );
     } else {
       content.innerHTML =
@@ -1027,7 +1027,7 @@ export function sendAjax(o) {
     ? o.onTimeout
     : function () {
         throw new Error(
-          "Send ajax: max wait reached after " + o.maxWait + "[ms]"
+          "Send ajax: max wait reached after " + o.maxWait + "[ms]",
         );
       };
 
@@ -1403,7 +1403,10 @@ export function updateCheckboxInput(o) {
  * Show select source edit modal
  */
 export async function showSelectSourceEdit(opt) {
-  const idSource = await modalSelectSource({ disable_large: false });
+  const idSource = await modalSelectSource({
+    disable_large: false,
+    types: ["vector", "tabular", "join"],
+  });
   if (isSourceId(idSource)) {
     Shiny.onInputChange(opt.id, { idSource: idSource, update: Date.now() });
   }
@@ -2054,7 +2057,7 @@ const BLOCK_ELEMENTS = [
 
 export function flattenBlockElements(element) {
   const children = Array.from(
-    element.querySelectorAll(BLOCK_ELEMENTS.join(","))
+    element.querySelectorAll(BLOCK_ELEMENTS.join(",")),
   );
 
   for (const child of children) {
@@ -2383,7 +2386,7 @@ export function shareTwitter(id) {
   window.open(
     shareURL,
     "",
-    "left=0,top=0,width=550,height=450,personalbar=0,toolbar=0,scrollbars=0,resizable=0"
+    "left=0,top=0,width=550,height=450,personalbar=0,toolbar=0,scrollbars=0,resizable=0",
   );
 
   mx.helpers.itemFlash("twitter");
