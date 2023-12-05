@@ -3,7 +3,6 @@ import { templates } from "#mapx/template";
 import { isSourceId, isNotEmpty } from "@fxi/mx_valid";
 import { newIdSource } from "#mapx/upload";
 import {
-  columnExists,
   registerSource,
   getColumnsTypesSimple,
   withTransaction,
@@ -82,7 +81,7 @@ async function handleMethod(method, config, session) {
     throw new Error(`Unsupported method ${method}`);
   }
 
-  const useTransaction = ["set", "register"].includes(method);
+  const useTransaction = ["set_config", "register"].includes(method);
 
   if (useTransaction) {
     return withTransaction((client) => handlers[method](client));
@@ -149,7 +148,6 @@ async function getJoinConfig(configGet, client = pgRead) {
 
 async function setJoinConfig(config, client = pgWrite) {
   await stopIfNotValid(config, client);
-
   await updatePgView(config, client);
   await updateJoin(config, client);
   return true;
@@ -185,59 +183,65 @@ async function updateJoin(config, client) {
   }
 }
 
-async function updatePgView(config, client) {
-  const viewName = config.id_source;
-  const basePrefix = config.base.prefix;
-  const baseSource = config.base.id_source;
-  const baseHasGeom = await columnExists("geom", baseSource, client);
-  const mainColumns = ["gid"];
-  if (baseHasGeom) {
-    mainColumns.push("geom");
-  }
+function configToSql(config) {
+  // Extracting base layer details
+  const prefixes = "abcdefghijklmnopqrstuvwxyz";
+  const baseLayer = config.base;
+  const baseAlias = "base";
+  let sql = `
+  DROP VIEW IF EXISTS ${config.id_source}; 
+  CREATE VIEW ${config.id_source} 
+  AS
+  `;
+  let j = 0;
 
-  /*
-   * Prepare columns
-   */
-  const selectColumns = [];
-
-  // main columns
-  selectColumns.push(...mainColumns.map((col) => `${basePrefix}."${col}"`));
-
-  // columns with alias
-  selectColumns.push(
-    ...config.base.columns.map(
-      (col) => `${basePrefix}."${col.trim()}" AS "${basePrefix}_${col.trim()}"`
-    )
+  const baseColumns = formatColumns(
+    baseLayer.columns,
+    baseAlias,
+    `${prefixes[j++]}_`
   );
 
-  /*
-   * Join clause
-   */
-  const joinClause = [];
-  for (const join of config.joins) {
-    joinClause.push(`
-        ${join.type} JOIN ${join.id_source} 
-        ON ${basePrefix}."${join.column_target}" =
-        ${join.prefix}."${join.column_source}" 
-      `);
+  let selectClause = `
+  SELECT
+  ${baseAlias}.geom,
+  ${baseAlias}.gid,
+  ${baseColumns}`;
+  let joinClauses = "";
 
-    // Add join columns to SELECT with join prefix
-    selectColumns.push(
-      ...join.columns.map(
-        (col) => `${join.prefix}."${col}" AS "${join.prefix}_${col}"`
-      )
-    );
+  // Processing each join
+  for (const join of config.joins) {
+    const prefix = prefixes[j];
+    const joinAlias = `join_${prefix}`;
+    const prefixColumns = `${prefix}_`;
+    const joinColums = formatColumns(join.columns, joinAlias, prefixColumns);
+
+    selectClause += `, ${joinColums}`;
+    joinClauses += `
+      ${join.type}
+    JOIN ${join.id_source}
+    AS ${joinAlias}
+    ON ${baseAlias}.${join.column_base} = ${joinAlias}.${join.column_join}`;
+    j++;
   }
 
-  // Construct the SQL for view
-  const sql = `
-      CREATE OR REPLACE VIEW ${viewName} AS 
-      SELECT ${selectColumns.join(",")} 
-      FROM ${baseSource} ${basePrefix} ${joinClause.join(" ")}
-    `;
+  // Finalizing SQL
+  sql += `
+  ${selectClause}
+  FROM ${baseLayer.id_source}
+  AS ${baseAlias} ${joinClauses};
+  `;
 
-  debugger;
+  return sql;
+}
 
-  // Execute the SQL
+// Helper function to format columns with alias
+function formatColumns(columns, tableAlias, columnPrefix) {
+  return columns
+    .map((col) => `${tableAlias}.${col} AS ${columnPrefix}${col}`)
+    .join(", ");
+}
+
+async function updatePgView(config, client) {
+  const sql = configToSql(config);
   await client.query(sql);
 }

@@ -1,4 +1,4 @@
-import { el, elSpanTranslate as tt } from "../../el_mapx";
+import { el, elButtonFa, elSpanTranslate as tt } from "../../el_mapx";
 import { EventSimple } from "../../event_simple";
 import { isSourceId, isArray, isEmpty, isElement } from "../../is_test";
 import { modalSelectSource } from "../../select_auto";
@@ -6,8 +6,10 @@ import { settings, ws, nc } from "../../mx";
 import { modalPrompt, modalSimple } from "../../mx_helper_modal";
 import { getDictItem } from "../../language";
 import "./style.less";
-import { makeId } from "../../mx_helper_misc";
+import { itemFlashSave, makeId } from "../../mx_helper_misc";
 import { jedInit } from "../../json_editor";
+import { bindAll } from "../../bind_class_methods";
+import { FlashItem } from "../../icon_flash";
 
 const routes = {
   join: "/client/source/join",
@@ -26,7 +28,7 @@ const sjmSettings = {
   },
 };
 
-const testdata = {
+const testconfig = {
   version: "1",
   id_source: "mx_i1ai9_zgj2n_vllo1_xr5ib_4wgiy",
   base: {
@@ -51,6 +53,7 @@ export class SourcesJoinManager extends EventSimple {
   constructor() {
     super();
     const sjm = this;
+    bindAll(sjm);
     return sjm;
   }
 
@@ -74,7 +77,7 @@ export class SourcesJoinManager extends EventSimple {
     }
 
     const schema = await sjm.emit("get_schema");
-    const { config, meta } = await sjm.load(sjm._id_source);
+    const { join: config, meta } = await sjm.load(sjm.id);
     const def = await sjm.getConfigDefault();
 
     sjm._schema = schema;
@@ -89,8 +92,10 @@ export class SourcesJoinManager extends EventSimple {
   }
 
   get config() {
-    return this._config;
+    const sjm = this;
+    return sjm._config;
   }
+
   get schema() {
     return this._schema;
   }
@@ -99,12 +104,15 @@ export class SourcesJoinManager extends EventSimple {
     return this._meta;
   }
 
+  getConfigEditor() {
+    const sjm = this;
+    return sjm._jed.getValue();
+  }
+
   async getConfigDefault() {
     return this.emit("get_config_default");
   }
-  async getJoinDefault() {
-    return this.emit("get_join_default");
-  }
+
   async getSchema() {
     return this.emit("get_schema");
   }
@@ -117,7 +125,6 @@ export class SourcesJoinManager extends EventSimple {
     const sjm = this;
     const config = sjm._jed.getValue();
     const errors = await sjm.emit("validate", config);
-    debugger;
     if (isEmpty(errors)) {
       return true;
     }
@@ -127,7 +134,14 @@ export class SourcesJoinManager extends EventSimple {
 
   async save() {
     const sjm = this;
-    return sjm.emit("set_config", sjm.config);
+    const config = sjm.getConfigEditor();
+    sjm._config = config;
+    const res = await sjm.emit("set_config", config);
+    if (res === true) {
+      new FlashItem("floppy-o");
+    } else {
+      new FlashItem("exclamation-circle");
+    }
   }
 
   async load(idSource) {
@@ -146,25 +160,7 @@ export class SourcesJoinManager extends EventSimple {
     sjm._closed = true;
     sjm._modal.close();
     sjm.fire("closed");
-    sjm.destroy(); //events
     delete window._sjm;
-  }
-
-  async getColumnsType(idSource) {
-    if (!isSourceId(idSource)) {
-      return [];
-    }
-    const sjm = this;
-    const columnsType = await sjm.emit("get_columns_type", {
-      idSource,
-      idAttrExclude: ["gid", "geom", "_mx_valid"],
-    });
-    return columnsType;
-  }
-  async getColumns(idSource) {
-    const sjm = this;
-    const columnsType = await sjm.getColumnsType(idSource);
-    return columnsType.map((c) => c.column_name);
   }
 
   async promptNew() {
@@ -200,55 +196,28 @@ export class SourcesJoinManager extends EventSimple {
     return idSource;
   }
 
-  _select_options(value, options = []) {
-    const res = [];
-
-    if (isEmpty(value)) {
-      value = options[0];
-    }
-
-    if (isEmpty(value)) {
-      return;
-    }
-
-    /**
-     * Unselected
-     */
-    for (const option of options) {
-      if (option === value) {
-        continue;
-      }
-      res.push(el("option", { value: option }, option));
-    }
-
-    /**
-     * Selected
-     */
-    if (isArray(value)) {
-      res.push(
-        ...value.map((v) => {
-          el("option", { selected: true, value: v }, v);
-        }),
-      );
-    } else {
-      res.push(el("option", { selected: true, value }, value));
-    }
-    return res;
-  }
-
   async build() {
     const sjm = this;
     const { schema, config, meta } = sjm;
-    const title = meta?.text?.title?.en || config.id_source;
+    const title = meta?.text?.title?.en || sjm.id;
     const id_editor = "mx_join";
     const elSjm = el("div", { id: id_editor, class: "jed-container" });
 
-    const btnValidate = el("button", { on: ["click", sjm.save.bind(sjm)] });
+    const elBtnSave = elButtonFa("btn_save", {
+      icon: "floppy-o",
+      action: sjm.save,
+    });
+
+    const elBtnClose = elButtonFa("btn_close", {
+      icon: "times",
+      action: sjm.close,
+    });
 
     sjm._modal = modalSimple({
       title,
       content: elSjm,
-      buttons: [btnValidate],
+      buttons: [elBtnClose, elBtnSave],
+      removeCloseButton: true,
     });
 
     config.id_source = sjm.id;
@@ -257,7 +226,7 @@ export class SourcesJoinManager extends EventSimple {
       schema,
       id: id_editor,
       target: elSjm,
-      startVal: testdata,
+      startVal: config,
       options: {
         disable_collapse: true,
         disable_properties: true,

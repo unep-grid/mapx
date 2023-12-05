@@ -26,7 +26,7 @@
     },
     "base": {
       "type": "object",
-      "required": ["id_source", "columns", "prefix"],
+      "required": ["id_source", "columns"],
       "properties": {
         "id_source": {
           "type": "string",
@@ -61,14 +61,6 @@
               "path": "root.base"
             }
           }
-        },
-        "prefix": {
-          "type": "string",
-          "minLength": 1,
-          "default": "_a",
-          "options": {
-            "hidden": true
-          }
         }
       }
     },
@@ -81,7 +73,6 @@
         "required": [
           "id_source",
           "columns",
-          "prefix",
           "type",
           "column_join",
           "column_base"
@@ -119,14 +110,6 @@
                 "property": "id_source",
                 "path": "."
               }
-            }
-          },
-          "prefix": {
-            "type": "string",
-            "minLength": 1,
-            "default": "_b",
-            "options": {
-              "hidden": true
             }
           },
           "type": {
