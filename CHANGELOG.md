@@ -1,3 +1,7 @@
+  - [1.13.0-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.1) 
+
+    - Join Editor : alpha release
+
   - [1.12.7](https://github.com/unep-grid/mapx/tree/1.12.7) 
 
   - [1.12.6-patch.2](https://github.com/unep-grid/mapx/tree/1.12.6-patch.2) 
