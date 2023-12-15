@@ -1,0 +1,43 @@
+/**
+ * Error list
+ */
+
+.mx .mx-error-container {
+  position: sticky;
+  top: 10px;
+  z-index: 1000;
+}
+
+.mx .mx-error-list-container {
+  margin: 0px;
+}
+
+.mx .mx-error-list-container .mx-error-item {
+  padding: 5px;
+  margin: 5px;
+  background-color: var(--mx_ui_message_danger);
+  color: var(--mx_ui_message_danger_text);
+}
+.mx .mx-error-list-container .mx-error-item * {
+  color: var(--mx_ui_message_danger_text);
+}
+.mx .mx-error-list-container .mx-error-item a span {
+  color: var(--mx_ui_message_danger_text);
+  text-decoration: underline;
+  padding: 1em;
+}
+.mx .mx-error-list-container .mx-error-item:before {
+  font-family: "FontAwesome";
+  content: "\f06a";
+  padding: 5px;
+}
+-mx .mx-error-list-container .mx-warning-item {
+  padding: 5px;
+  margin: 3px;
+}
+
+.mx .mx-error-list-container .mx-warning-item:before {
+  font-family: "FontAwesome";
+  content: "\f071";
+  padding: 5px;
+}

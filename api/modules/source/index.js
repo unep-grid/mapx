@@ -1,4 +1,8 @@
-export { mwGetMetadata, getSourceMetadata } from "./metadata/index.js";
+export {
+  mwGetMetadata,
+  getSourceMetadata,
+  mwGetAttributesAlias,
+} from "./metadata/index.js";
 export { mwGetOverlap } from "./overlap/index.js";
 export { mwGetGeomValidate } from "./validate_geom/index.js";
 export {

@@ -38,6 +38,19 @@ export async function getViewsIdBySource(idSource) {
   return rows.map((r) => r.id);
 }
 
+export async function getViewsBySource(idSource) {
+  if (!isSourceId(idSource)) {
+    throw Error("No valid");
+  }
+  const sql = templates.getViewsBySource;
+  const { rows } = await pgRead.query(sql, [idSource]);
+  return rows;
+}
+
+
+
+
+
 export async function getViewsTableBySource(idSource) {
   if (!isSourceId(idSource)) {
     throw Error("No valid");

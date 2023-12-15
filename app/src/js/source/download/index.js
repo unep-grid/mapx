@@ -5,8 +5,8 @@ import { getLanguageCurrent, getLanguageItem } from "./../../language";
 import { isEmail, isArray } from "../../is_test";
 import { getApiRoute } from "../../api_routes";
 import { FlashItem } from "../../icon_flash";
-import { isSourceDownloadable } from "../../mx_helpers";
-import { fetchSourceMetadata } from "../../mx_helper_map_view_metadata";
+import { isSourceDownloadable } from "../../map_helpers";
+import { fetchSourceMetadata } from "../../metadata/utils.js";
 import { EventSimple } from "../../event_simple";
 import { ws, nc } from "../../mx.js";
 import { buildForm } from "./form.js";
@@ -63,7 +63,7 @@ export class DownloadSourceModal extends EventSimple {
       const meta = await fetchSourceMetadata(md._opt.idSource);
       md._opt.filename = getLanguageItem(
         meta?.text?.title || {},
-        md._opt.language
+        md._opt.language,
       );
     }
 

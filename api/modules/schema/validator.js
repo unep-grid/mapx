@@ -20,7 +20,7 @@ export class Validator {
     this._ajv.addKeyword({
       keyword: "mx_validate",
       async: true,
-      type: ["string", "object"],
+      type: ["string", "object", "array"],
       validate: this._mx_validate.bind(this),
     });
 
@@ -139,9 +139,6 @@ export class Validator {
           isValid = false;
       }
 
-      if (!isValid) {
-        debugger;
-      }
 
       return isValid;
     } catch (error) {

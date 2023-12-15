@@ -8,7 +8,7 @@ import {
   getViewsListOpen,
 } from "../../../map_helpers/index.js";
 import { isView, isFunction, isObject } from "./../../../is_test";
-import { viewToMetaModal } from "../../../mx_helper_map_view_metadata.js";
+import { viewToMetaModal } from "../../../metadata/utils.js";
 import { MapxResolversStatic } from "./static.js";
 import { isStringRange, isString, isEmpty } from "../../../is_test/index.js";
 import { settings } from "./../../../settings";

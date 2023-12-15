@@ -166,7 +166,8 @@ server <- function(input, output, session) {
           #
           # Root buttons
           #
-          "tools_geoserver.R"
+          "tools_geoserver.R",
+          "tools_join.R"
         )
       )
     })

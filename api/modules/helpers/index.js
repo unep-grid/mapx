@@ -127,28 +127,19 @@ function sendJSON(res, data, opt) {
 /**
  * Simple send error wrapper
  * @param {Object} res Result object
- * @param {Error|String} error Error object
- * @param {Number} code Code of the error
- * @return null
+ * @param {Error|String} error Error object or message
+ * @param {Number} [code=500] Code of the error
  */
-function sendError(res, error, code) {
-  if (!code) {
-    code = 500;
-  }
-
-  if (isString(error)) {
-    error = { message: error };
-  }
+function sendError(res, error, code = 500) {
+  let errorMessage = isString(error) ? error : error.message;
 
   const out = {
-    message: "Error",
-    ...error,
+    message: errorMessage,
     type: "error",
   };
 
   res.status(code).send(toRes(out));
 }
-
 /**
  * Simple boolean converter.
  * @param {*} value Value to convert

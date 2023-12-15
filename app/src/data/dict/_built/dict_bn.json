@@ -2065,6 +2065,486 @@
     "bn": "বাহ্যিক দৃশ্য আমদানি করবেন? এই ভিউটি প্রজেক্টের সেটিংসে ভিউ এক্সটার্নাল হিসেবে পাওয়া যাবে"
   },
   {
+    "id": "join_form_title",
+    "en": "Join Configurator",
+    "bn": "জোয়াইন কনফিগারেটর"
+  },
+  {
+    "id": "join_form_title_desc",
+    "en": "Configure how layers and tables should be joined",
+    "bn": "লেয়ার এবং টেবিলগুলি কীভাবে যুক্ত করা উচিত তা কনফিগার করুন"
+  },
+  {
+    "id": "join_source_base",
+    "en": "Base source",
+    "bn": "বেস উৎস"
+  },
+  {
+    "id": "join_columns_base",
+    "en": "Columns to display",
+    "bn": "প্রদর্শনের জন্য কলামগুলি"
+  },
+  {
+    "id": "join_source_join",
+    "en": "Join source",
+    "bn": "জোয়াইন উৎস"
+  },
+  {
+    "id": "join_columns_join",
+    "en": "Columns to display",
+    "bn": "প্রদর্শনের জন্য কলামগুলি"
+  },
+  {
+    "id": "join_column_base",
+    "en": "Base column",
+    "bn": "বেস কলাম"
+  },
+  {
+    "id": "join_column_join",
+    "en": "Join column",
+    "bn": "জোয়াইন কলাম"
+  },
+  {
+    "id": "join_type",
+    "en": "Type",
+    "bn": "ধরন"
+  },
+  {
+    "id": "join_base",
+    "en": "Base",
+    "bn": "বেস"
+  },
+  {
+    "id": "join_joins",
+    "en": "Join items",
+    "bn": "আইটেমগুলি জোড়া"
+  },
+  {
+    "id": "join_new_layer_name",
+    "en": "New Layer Name",
+    "bn": "নতুন স্তরের নাম"
+  },
+  {
+    "id": "join_new_btn",
+    "en": "Create New Join",
+    "bn": "নতুন যোগদান তৈরি করুন"
+  },
+  {
+    "id": "join_new_layer_placeholder",
+    "en": "Enter layer name",
+    "bn": "স্তরের নাম লিখুন"
+  },
+  {
+    "id": "join_warning_colums_issue",
+    "en": "Error: columns issue",
+    "bn": "ত্রুটি: কলাম সমস্যা"
+  },
+  {
+    "id": "join_warning_colums_used_in_views",
+    "en": "Column '{{column}}' unselected, but requested",
+    "bn": "কলাম '{{column}}' নির্বাচিত নয়, তবে অনুরোধ করা হয়েছে"
+  },
+  {
+    "id": "join_meta_title",
+    "en": "Metadata for the join",
+    "bn": "জয়েনের জন্য মেটাডেটা"
+  },
+  {
+    "id": "btn_join_editor",
+    "en": "Edit Table Join",
+    "bn": "টেবিল জয়েন সম্পাদনা করুন"
+  },
+  {
+    "id": "btn_join_editor_new",
+    "en": "Create New Table Join",
+    "bn": "নতুন টেবিল জয়েন তৈরি করুন"
+  },
+  {
+    "id": "error_notset",
+    "en": "Property must be set",
+    "bn": "সম্পত্তি সেট করা আবশ্যক "
+  },
+  {
+    "id": "error_notempty",
+    "en": "Value required",
+    "bn": "মান প্রয়োজন "
+  },
+  {
+    "id": "error_space_only",
+    "en": "The value can't be composed of whitespace only (space, tab, line break)",
+    "bn": "মানটি কেবল সাদা স্থানের সাথে তৈরি করা যায় না (স্থান, ট্যাব, লাইন ব্রেক) "
+  },
+  {
+    "id": "error_enum",
+    "en": "Value must be one of the enumerated values",
+    "bn": "মান অবশ্যই গণনা করা মানগুলির মধ্যে একটি হতে হবে "
+  },
+  {
+    "id": "error_anyOf",
+    "en": "Value must validate against at least one of the provided schemas",
+    "bn": "প্রদত্ত স্কিমার অন্তত একটির বিরুদ্ধে মানটি অবশ্যই বৈধ করা উচিত "
+  },
+  {
+    "id": "error_oneOf",
+    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
+    "bn": "প্রদত্ত স্কিমার ঠিক একটিতে মানটিকে অবশ্যই বৈধতা দিতে হবে। এটি বর্তমানে বিরুদ্ধে বৈধতা {{0}} স্কিমার। "
+  },
+  {
+    "id": "error_not",
+    "en": "Value must not validate against the provided schema",
+    "bn": "প্রদত্ত স্কিমাটির বিরুদ্ধে মান অবশ্যই বৈধ করা উচিত নয় "
+  },
+  {
+    "id": "error_type_union",
+    "en": "Value must be one of the provided types",
+    "bn": "মান অবশ্যই প্রদত্ত ধরণের একটি হতে হবে "
+  },
+  {
+    "id": "error_type",
+    "en": "Value must be of type {{0}}",
+    "bn": "মান অবশ্যই প্রকারের হতে হবে {{0}} "
+  },
+  {
+    "id": "error_disallow_union",
+    "en": "Value must not be one of the provided disallowed types",
+    "bn": "মান অবশ্যই প্রদত্ত অস্বীকৃত প্রকারগুলির মধ্যে একটি নয় "
+  },
+  {
+    "id": "error_disallow",
+    "en": "Value must not be of type {{0}}",
+    "bn": "মান অবশ্যই প্রকারের নয় {{0}} "
+  },
+  {
+    "id": "error_multipleOf",
+    "en": "Value must be a multiple of {{0}}",
+    "bn": "মান অবশ্যই একাধিক হতে হবে {{0}} "
+  },
+  {
+    "id": "error_maximum_excl",
+    "en": "Value must be less than {{0}}",
+    "bn": "মান অবশ্যই এর চেয়ে কম হওয়া উচিত {{0}} "
+  },
+  {
+    "id": "error_maximum_incl",
+    "en": "Value must be at most {{0}}",
+    "bn": "মান সর্বাধিক হওয়া উচিত {{0}} "
+  },
+  {
+    "id": "error_minimum_excl",
+    "en": "Value must be greater than {{0}}",
+    "bn": "মান অবশ্যই এর চেয়ে বড় হতে হবে {{0}} "
+  },
+  {
+    "id": "error_minimum_incl",
+    "en": "Value must be at least {{0}}",
+    "bn": "মান কমপক্ষে হওয়া উচিত {{0}} "
+  },
+  {
+    "id": "error_maxLength",
+    "en": "Value must be at most {{0}} characters long",
+    "bn": "মান সর্বাধিক হওয়া উচিত {{0}} অক্ষর দীর্ঘ "
+  },
+  {
+    "id": "error_minLength",
+    "en": "Value must be at least {{0}} characters long",
+    "bn": "মান কমপক্ষে হওয়া উচিত {{0}} অক্ষর দীর্ঘ "
+  },
+  {
+    "id": "error_pattern",
+    "en": "Value must match the pattern {{0}}",
+    "bn": "মানটি অবশ্যই প্যাটার্নের সাথে মেলে {{0}} "
+  },
+  {
+    "id": "error_additionalItems",
+    "en": "No additional items allowed in this array",
+    "bn": "এই অ্যারেতে কোনও অতিরিক্ত আইটেম অনুমোদিত নয় "
+  },
+  {
+    "id": "error_maxItems",
+    "en": "Value must have at most {{0}} items",
+    "bn": "সর্বাধিক মান থাকতে হবে {{0}} আইটেম "
+  },
+  {
+    "id": "error_minItems",
+    "en": "Value must have at least {{0}} items",
+    "bn": "মান কমপক্ষে থাকতে হবে {{0}} আইটেম "
+  },
+  {
+    "id": "error_uniqueItems",
+    "en": "Array must have unique items",
+    "bn": "অ্যারেতে অবশ্যই অনন্য আইটেম থাকতে হবে "
+  },
+  {
+    "id": "error_maxProperties",
+    "en": "Object must have at most {{0}} properties",
+    "bn": "অবজেক্টের সর্বাধিক থাকতে হবে {{0}} বৈশিষ্ট্য "
+  },
+  {
+    "id": "error_minProperties",
+    "en": "Object must have at least {{0}} properties",
+    "bn": "অবজেক্টের কমপক্ষে থাকতে হবে {{0}} বৈশিষ্ট্য "
+  },
+  {
+    "id": "error_required",
+    "en": "Object is missing the required property '{{0}}'",
+    "bn": "অবজেক্টটি প্রয়োজনীয় সম্পত্তি হারিয়েছে ' {{0}} ' "
+  },
+  {
+    "id": "error_additional_properties",
+    "en": "No additional properties allowed, but property {{0}} is set",
+    "bn": "কোনও অতিরিক্ত সম্পত্তি অনুমোদিত নয়, কিন্তু সম্পত্তি {{0}} সেট করা আছে "
+  },
+  {
+    "id": "error_dependency",
+    "en": "Must have property {{0}}",
+    "bn": "সম্পত্তি থাকতে হবে {{0}} "
+  },
+  {
+    "id": "button_delete_all",
+    "en": "All",
+    "bn": "সব "
+  },
+  {
+    "id": "button_delete_all_title",
+    "en": "Delete All",
+    "bn": "সব মুছে ফেলুন "
+  },
+  {
+    "id": "button_delete_last",
+    "en": "Last {{0}}",
+    "bn": "শেষ {{0}} "
+  },
+  {
+    "id": "button_delete_last_title",
+    "en": "Delete Last {{0}}",
+    "bn": "শেষ মুছুন {{0}} "
+  },
+  {
+    "id": "button_add_row_title",
+    "en": "Add {{0}}",
+    "bn": "অ্যাড {{0}} "
+  },
+  {
+    "id": "button_move_down_title",
+    "en": "Move down",
+    "bn": "নিচে যাও "
+  },
+  {
+    "id": "button_move_up_title",
+    "en": "Move up",
+    "bn": "উপরে উঠানো "
+  },
+  {
+    "id": "button_delete_row_title",
+    "en": "Delete {{0}}",
+    "bn": "মুছে ফেলা {{0}} "
+  },
+  {
+    "id": "button_delete_row_title_short",
+    "en": "Delete",
+    "bn": "মুছে ফেলা "
+  },
+  {
+    "id": "button_collapse",
+    "en": "Collapse",
+    "bn": "সঙ্কুচিত "
+  },
+  {
+    "id": "button_expand",
+    "en": "Expand",
+    "bn": "বিস্তৃত করা "
+  },
+  {
+    "id": "login_single_use_password_email_subject",
+    "en": "Single use password request",
+    "bn": "একক ব্যবহার পাসওয়ার্ড অনুরোধ "
+  },
+  {
+    "id": "error_const",
+    "en": "Value must be the constant value",
+    "bn": "মান অবশ্যই ধ্রুবক মান হতে হবে"
+  },
+  {
+    "id": "error_contains",
+    "en": "No items match contains",
+    "bn": "কোনো আইটেম মিল ধারণ করে"
+  },
+  {
+    "id": "error_minContains",
+    "en": "Contains match count {{0}} is less than minimum contains count of {{1}}",
+    "bn": "ম্যাচ গণনা রয়েছে {{0}} ন্যূনতম থেকে কম এর গণনা রয়েছে {{1}}"
+  },
+  {
+    "id": "error_maxContains",
+    "en": "Contains match count {{0}} exceeds maximum contains count of {{1}}",
+    "bn": "ম্যাচ গণনা রয়েছে {{0}} সর্বাধিক সংখ্যার সংখ্যা অতিক্রম করে {{1}}"
+  },
+  {
+    "id": "error_property_names_exceeds_maxlength",
+    "en": "Property name {{0}} exceeds maxLength",
+    "bn": "সম্পত্তির নাম {{0}} সর্বোচ্চ দৈর্ঘ্য অতিক্রম করে"
+  },
+  {
+    "id": "error_property_names_enum_mismatch",
+    "en": "Property name {{0}} does not match any enum values",
+    "bn": "সম্পত্তির নাম {{0}} কোনো enum মান মেলে না"
+  },
+  {
+    "id": "error_property_names_const_mismatch",
+    "en": "Property name {{0}} does not match the const value",
+    "bn": "সম্পত্তির নাম {{0}} কনস্ট মানের সাথে মেলে না"
+  },
+  {
+    "id": "error_property_names_pattern_mismatch",
+    "en": "Property name {{0}} does not match pattern",
+    "bn": "সম্পত্তির নাম {{0}} প্যাটার্ন মেলে না"
+  },
+  {
+    "id": "error_property_names_false",
+    "en": "Property name {{0}} fails when propertyName is false",
+    "bn": "সম্পত্তির নাম {{0}} যখন সম্পত্তির নাম মিথ্যা হয় তখন ব্যর্থ হয়"
+  },
+  {
+    "id": "error_property_names_maxlength",
+    "en": "Property name {{0}} cannot match invalid maxLength",
+    "bn": "সম্পত্তির নাম {{0}} অবৈধ সর্বোচ্চ দৈর্ঘ্যের সাথে মেলে না"
+  },
+  {
+    "id": "error_property_names_enum",
+    "en": "Property name {{0}} cannot match invalid enum",
+    "bn": "সম্পত্তির নাম {{0}} অবৈধ enum মেলে না"
+  },
+  {
+    "id": "error_property_names_pattern",
+    "en": "Property name {{0}} cannot match invalid pattern",
+    "bn": "সম্পত্তির নাম {{0}} অবৈধ প্যাটার্ন মেলে না"
+  },
+  {
+    "id": "error_property_names_unsupported",
+    "en": "Unsupported propertyName {{0}}",
+    "bn": "অসমর্থিত সম্পত্তির নাম {{0}}"
+  },
+  {
+    "id": "error_date",
+    "en": "Date must be in the format {{0}}",
+    "bn": "তারিখ বিন্যাসে হতে হবে {{0}}"
+  },
+  {
+    "id": "error_time",
+    "en": "Time must be in the format {{0}}",
+    "bn": "সময় ফরম্যাটে হতে হবে {{0}}"
+  },
+  {
+    "id": "error_datetime_local",
+    "en": "Datetime must be in the format {{0}}",
+    "bn": "তারিখ সময় বিন্যাসে হতে হবে {{0}}"
+  },
+  {
+    "id": "error_invalid_epoch",
+    "en": "Date must be greater than 1 January 1970",
+    "bn": "তারিখ 1 জানুয়ারী 1970 এর বেশি হতে হবে"
+  },
+  {
+    "id": "error_ipv4",
+    "en": "Value must be a valid IPv4 address in the form of 4 numbers between 0 and 255, separated by dots",
+    "bn": "মান অবশ্যই 0 এবং 255 এর মধ্যে 4টি সংখ্যার আকারে একটি বৈধ IPv4 ঠিকানা হতে হবে, বিন্দু দ্বারা পৃথক করা"
+  },
+  {
+    "id": "error_ipv6",
+    "en": "Value must be a valid IPv6 address",
+    "bn": "মান অবশ্যই একটি বৈধ IPv6 ঠিকানা হতে হবে"
+  },
+  {
+    "id": "error_hostname",
+    "en": "The hostname has the wrong format",
+    "bn": "হোস্টনামের ভুল বিন্যাস আছে"
+  },
+  {
+    "id": "upload_max_size",
+    "en": "Filesize too large. Max size is ",
+    "bn": "ফাইলের আকার খুব বড়। সর্বোচ্চ আকার হয় "
+  },
+  {
+    "id": "upload_wrong_file_format",
+    "en": "Wrong file format. Allowed format(s): ",
+    "bn": "ভুল ফাইল বিন্যাস। অনুমোদিত বিন্যাস(গুলি): "
+  },
+  {
+    "id": "button_save",
+    "en": "Save",
+    "bn": "সংরক্ষণ"
+  },
+  {
+    "id": "button_copy",
+    "en": "Copy",
+    "bn": "কপি"
+  },
+  {
+    "id": "button_cancel",
+    "en": "Cancel",
+    "bn": "বাতিল করুন"
+  },
+  {
+    "id": "button_add",
+    "en": "Add",
+    "bn": "যোগ করুন"
+  },
+  {
+    "id": "button_properties",
+    "en": "Properties",
+    "bn": "বৈশিষ্ট্য"
+  },
+  {
+    "id": "button_object_properties",
+    "en": "Object Properties",
+    "bn": "অবজেক্ট প্রোপার্টি"
+  },
+  {
+    "id": "button_copy_row_title",
+    "en": "Copy {{0}}",
+    "bn": "কপি {{0}}"
+  },
+  {
+    "id": "button_copy_row_title_short",
+    "en": "Copy",
+    "bn": "কপি"
+  },
+  {
+    "id": "button_edit_json",
+    "en": "Edit JSON",
+    "bn": "JSON সম্পাদনা করুন"
+  },
+  {
+    "id": "button_upload",
+    "en": "Upload",
+    "bn": "আপলোড করুন"
+  },
+  {
+    "id": "flatpickr_toggle_button",
+    "en": "Toggle",
+    "bn": "টগল করুন"
+  },
+  {
+    "id": "flatpickr_clear_button",
+    "en": "Clear",
+    "bn": "পরিষ্কার"
+  },
+  {
+    "id": "choices_placeholder_text",
+    "en": "Start typing to add value",
+    "bn": "মান যোগ করতে টাইপ করা শুরু করুন"
+  },
+  {
+    "id": "default_array_item_title",
+    "en": "Item",
+    "bn": "আইটেম"
+  },
+  {
+    "id": "button_delete_node_warning",
+    "en": "Are you sure you want to remove this item?",
+    "bn": "আপনি কি এই আইটেমটি সরানোর বিষয়ে নিশ্চিত?"
+  },
+  {
     "id": "en",
     "en": "English",
     "bn": "ইংরেজি "
@@ -6338,206 +6818,6 @@
     "id": "buttton_copy",
     "en": "Copy",
     "bn": "কপি"
-  },
-  {
-    "id": "error_notset",
-    "en": "Property must be set",
-    "bn": "সম্পত্তি সেট করা আবশ্যক "
-  },
-  {
-    "id": "error_notempty",
-    "en": "Value required",
-    "bn": "মান প্রয়োজন "
-  },
-  {
-    "id": "error_space_only",
-    "en": "The value can't be composed of whitespace only (space, tab, line break)",
-    "bn": "মানটি কেবল সাদা স্থানের সাথে তৈরি করা যায় না (স্থান, ট্যাব, লাইন ব্রেক) "
-  },
-  {
-    "id": "error_enum",
-    "en": "Value must be one of the enumerated values",
-    "bn": "মান অবশ্যই গণনা করা মানগুলির মধ্যে একটি হতে হবে "
-  },
-  {
-    "id": "error_anyOf",
-    "en": "Value must validate against at least one of the provided schemas",
-    "bn": "প্রদত্ত স্কিমার অন্তত একটির বিরুদ্ধে মানটি অবশ্যই বৈধ করা উচিত "
-  },
-  {
-    "id": "error_oneOf",
-    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "bn": "প্রদত্ত স্কিমার ঠিক একটিতে মানটিকে অবশ্যই বৈধতা দিতে হবে। এটি বর্তমানে বিরুদ্ধে বৈধতা {{0}} স্কিমার। "
-  },
-  {
-    "id": "error_not",
-    "en": "Value must not validate against the provided schema",
-    "bn": "প্রদত্ত স্কিমাটির বিরুদ্ধে মান অবশ্যই বৈধ করা উচিত নয় "
-  },
-  {
-    "id": "error_type_union",
-    "en": "Value must be one of the provided types",
-    "bn": "মান অবশ্যই প্রদত্ত ধরণের একটি হতে হবে "
-  },
-  {
-    "id": "error_type",
-    "en": "Value must be of type {{0}}",
-    "bn": "মান অবশ্যই প্রকারের হতে হবে {{0}} "
-  },
-  {
-    "id": "error_disallow_union",
-    "en": "Value must not be one of the provided disallowed types",
-    "bn": "মান অবশ্যই প্রদত্ত অস্বীকৃত প্রকারগুলির মধ্যে একটি নয় "
-  },
-  {
-    "id": "error_disallow",
-    "en": "Value must not be of type {{0}}",
-    "bn": "মান অবশ্যই প্রকারের নয় {{0}} "
-  },
-  {
-    "id": "error_multipleOf",
-    "en": "Value must be a multiple of {{0}}",
-    "bn": "মান অবশ্যই একাধিক হতে হবে {{0}} "
-  },
-  {
-    "id": "error_maximum_excl",
-    "en": "Value must be less than {{0}}",
-    "bn": "মান অবশ্যই এর চেয়ে কম হওয়া উচিত {{0}} "
-  },
-  {
-    "id": "error_maximum_incl",
-    "en": "Value must be at most {{0}}",
-    "bn": "মান সর্বাধিক হওয়া উচিত {{0}} "
-  },
-  {
-    "id": "error_minimum_excl",
-    "en": "Value must be greater than {{0}}",
-    "bn": "মান অবশ্যই এর চেয়ে বড় হতে হবে {{0}} "
-  },
-  {
-    "id": "error_minimum_incl",
-    "en": "Value must be at least {{0}}",
-    "bn": "মান কমপক্ষে হওয়া উচিত {{0}} "
-  },
-  {
-    "id": "error_maxLength",
-    "en": "Value must be at most {{0}} characters long",
-    "bn": "মান সর্বাধিক হওয়া উচিত {{0}} অক্ষর দীর্ঘ "
-  },
-  {
-    "id": "error_minLength",
-    "en": "Value must be at least {{0}} characters long",
-    "bn": "মান কমপক্ষে হওয়া উচিত {{0}} অক্ষর দীর্ঘ "
-  },
-  {
-    "id": "error_pattern",
-    "en": "Value must match the pattern {{0}}",
-    "bn": "মানটি অবশ্যই প্যাটার্নের সাথে মেলে {{0}} "
-  },
-  {
-    "id": "error_additionalItems",
-    "en": "No additional items allowed in this array",
-    "bn": "এই অ্যারেতে কোনও অতিরিক্ত আইটেম অনুমোদিত নয় "
-  },
-  {
-    "id": "error_maxItems",
-    "en": "Value must have at most {{0}} items",
-    "bn": "সর্বাধিক মান থাকতে হবে {{0}} আইটেম "
-  },
-  {
-    "id": "error_minItems",
-    "en": "Value must have at least {{0}} items",
-    "bn": "মান কমপক্ষে থাকতে হবে {{0}} আইটেম "
-  },
-  {
-    "id": "error_uniqueItems",
-    "en": "Array must have unique items",
-    "bn": "অ্যারেতে অবশ্যই অনন্য আইটেম থাকতে হবে "
-  },
-  {
-    "id": "error_maxProperties",
-    "en": "Object must have at most {{0}} properties",
-    "bn": "অবজেক্টের সর্বাধিক থাকতে হবে {{0}} বৈশিষ্ট্য "
-  },
-  {
-    "id": "error_minProperties",
-    "en": "Object must have at least {{0}} properties",
-    "bn": "অবজেক্টের কমপক্ষে থাকতে হবে {{0}} বৈশিষ্ট্য "
-  },
-  {
-    "id": "error_required",
-    "en": "Object is missing the required property '{{0}}'",
-    "bn": "অবজেক্টটি প্রয়োজনীয় সম্পত্তি হারিয়েছে ' {{0}} ' "
-  },
-  {
-    "id": "error_additional_properties",
-    "en": "No additional properties allowed, but property {{0}} is set",
-    "bn": "কোনও অতিরিক্ত সম্পত্তি অনুমোদিত নয়, কিন্তু সম্পত্তি {{0}} সেট করা আছে "
-  },
-  {
-    "id": "error_dependency",
-    "en": "Must have property {{0}}",
-    "bn": "সম্পত্তি থাকতে হবে {{0}} "
-  },
-  {
-    "id": "button_delete_all",
-    "en": "All",
-    "bn": "সব "
-  },
-  {
-    "id": "button_delete_all_title",
-    "en": "Delete All",
-    "bn": "সব মুছে ফেলুন "
-  },
-  {
-    "id": "button_delete_last",
-    "en": "Last {{0}}",
-    "bn": "শেষ {{0}} "
-  },
-  {
-    "id": "button_delete_last_title",
-    "en": "Delete Last {{0}}",
-    "bn": "শেষ মুছুন {{0}} "
-  },
-  {
-    "id": "button_add_row_title",
-    "en": "Add {{0}}",
-    "bn": "অ্যাড {{0}} "
-  },
-  {
-    "id": "button_move_down_title",
-    "en": "Move down",
-    "bn": "নিচে যাও "
-  },
-  {
-    "id": "button_move_up_title",
-    "en": "Move up",
-    "bn": "উপরে উঠানো "
-  },
-  {
-    "id": "button_delete_row_title",
-    "en": "Delete {{0}}",
-    "bn": "মুছে ফেলা {{0}} "
-  },
-  {
-    "id": "button_delete_row_title_short",
-    "en": "Delete",
-    "bn": "মুছে ফেলা "
-  },
-  {
-    "id": "button_collapse",
-    "en": "Collapse",
-    "bn": "সঙ্কুচিত "
-  },
-  {
-    "id": "button_expand",
-    "en": "Expand",
-    "bn": "বিস্তৃত করা "
-  },
-  {
-    "id": "login_single_use_password_email_subject",
-    "en": "Single use password request",
-    "bn": "একক ব্যবহার পাসওয়ার্ড অনুরোধ "
   },
   {
     "id": "login_single_use_password_email",

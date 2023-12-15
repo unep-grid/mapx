@@ -15,21 +15,16 @@ import {
  * Update metadata and views badges
  * @param {Object} opt Config
  * @param {Array} opt.views List of views or views id to update. By default, all
- * @param {Object} opt.meta New metadata object to assign to all listed views
  */
 export async function updateViewsBadges(opt) {
-  opt = Object.assign({}, { views: getViews(), meta: null }, opt);
+  opt = Object.assign({}, { views: getViews() }, opt);
   try {
     if (!isArray(opt.views)) {
       throw new Error("Views must by array of views or view id");
     }
     for (let v of opt.views) {
       const view = getView(v);
-
       if (isView(view)) {
-        if (opt.meta) {
-          view._meta = opt.meta;
-        }
         await setViewBadges(view);
       }
     }
@@ -232,7 +227,7 @@ function createViewBadge(opt) {
       dataset: {},
       style: {},
     },
-    opt
+    opt,
   );
   opt.dataset = Object.assign(
     {},
@@ -242,7 +237,7 @@ function createViewBadge(opt) {
       lang_type: "tooltip",
       lang_key: opt.tooltipKey || "",
     },
-    opt.dataset
+    opt.dataset,
   );
   return el(
     "button",
@@ -254,7 +249,7 @@ function createViewBadge(opt) {
     el("i", {
       class: opt.iconClasses || ["fa", "fa-check-circle"],
       style: opt.style,
-    })
+    }),
   );
 }
 

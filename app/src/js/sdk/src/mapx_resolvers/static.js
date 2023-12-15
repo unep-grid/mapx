@@ -55,7 +55,7 @@ import {
   fetchSourceMetadata,
   fetchViewMetadata,
   fetchViewSourceMetadata,
-} from "../../../mx_helper_map_view_metadata.js";
+} from "../../../metadata/utils.js";
 import { getViewSourceSummary } from "../../../mx_helper_source_summary.js";
 import {
   getClickHandlers,

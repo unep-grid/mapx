@@ -1,11 +1,23 @@
 import { uiReadMore } from "./../readmore/index.js";
 import { getArrayStat } from "./../array_stat/index.js";
-import { getDictItem, getLanguageCurrent } from "./../language";
-import { getView, getViewTitle } from "./index.js";
-import { path, uiToggleBtn, parentFinder } from "./../mx_helper_misc.js";
+import {
+  getDictItem,
+  getLabelFromObjectPath,
+  getLanguageCurrent,
+} from "./../language";
+import { getView, getViewTitle, getViewVtSourceId } from "./index.js";
+import {  uiToggleBtn, parentFinder } from "./../mx_helper_misc.js";
 import { el } from "./../el/src/index.js";
-import { isEmpty, isElement, isNumeric, isArray } from "./../is_test/index.js";
+import {
+  isEmpty,
+  isElement,
+  isNumeric,
+  isArray,
+  isViewVt,
+  isViewGj,
+} from "./../is_test/index.js";
 import { settings } from "./../mx.js";
+import { fetchAttributesAlias } from "../metadata/utils.js";
 
 /*
  * Convert result from getFeaturesValuesByLayers to HTML
@@ -68,10 +80,11 @@ export function featuresToPopup(o) {
   async function renderItem(idView, promAttributes) {
     const view = getView(idView);
     const language = getLanguageCurrent();
-    const labels = path(view, "_meta.text.attributes_alias");
-    const isVector = view.type === "vt" || view.type === "gj";
+    const isVt = isViewVt(view);
+    const isGj = isViewGj(view);
+    const isVector = isVt || isGj;
     const title = getViewTitle(idView);
-    var elLayer, elProps, elWait;
+    let elLayer, elProps, elWait, labels;
 
     try {
       /**
@@ -90,7 +103,7 @@ export function featuresToPopup(o) {
           {
             class: "mx-prop-layer-title",
           },
-          title
+          title,
         ),
         (elWait = el(
           "div",
@@ -99,9 +112,9 @@ export function featuresToPopup(o) {
           },
           el("div", {
             class: "fa fa-cog fa-spin",
-          })
+          }),
         )),
-        (elProps = el("div"))
+        (elProps = el("div")),
       );
 
       elContainer.appendChild(elLayer);
@@ -113,17 +126,21 @@ export function featuresToPopup(o) {
       elWait.remove();
       const attrNames = Object.keys(attributes);
 
-
       if (attrNames.length === 0) {
         elLayer.appendChild(await elIssueMessage("noValue"));
         return;
+      }
+
+      if (isVt) {
+        const idSource = getViewVtSourceId(view);
+        labels = await fetchAttributesAlias(idSource, attrNames);
       }
 
       /**
        * For each attributes, add
        */
       for (const attribute of attrNames) {
-        let elValue, elPropContainer, elPropToggles;
+        let elValue;
         let label = attribute;
 
         const values = getArrayStat({
@@ -137,14 +154,21 @@ export function featuresToPopup(o) {
         }
 
         if (labels && labels[attribute]) {
-          label =
-            labels[attribute][language] || labels[attribute].en || attribute;
+          label = getLabelFromObjectPath({
+            obj: labels,
+            path: attribute,
+            defaultValue: attribute,
+          });
         }
 
         /**
          * Build property elements
          */
-        elPropContainer = el(
+        const elPropToggles = el("div", {
+          class: "mx-prop-toggles",
+        });
+
+        const elPropContainer = el(
           "div",
           {
             class: "mx-prop-container",
@@ -162,13 +186,11 @@ export function featuresToPopup(o) {
                   class: "mx-prop-title",
                   title: attribute,
                 },
-                label
+                label,
               ),
-              (elPropToggles = el("div", {
-                class: "mx-prop-toggles",
-              }))
-            )
-          )
+              elPropToggles,
+            ),
+          ),
         );
 
         elProps.appendChild(elPropContainer);
@@ -208,8 +230,8 @@ export function featuresToPopup(o) {
                     {
                       class: "mx-prop-static",
                     },
-                    v
-                  )
+                    v,
+                  ),
                 );
               }
               elValue.appendChild(elFrag);

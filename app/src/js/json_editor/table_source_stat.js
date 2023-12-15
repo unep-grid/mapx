@@ -80,7 +80,7 @@ JSONEditor.defaults.editors.tableSourceAutoStyle = class mxeditors extends (
                 value: modeNumeric ? r.from : r.value,
                 color: r.color,
                 opacity: Math.round(r.opacity * 10) / 10,
-                size: r.size,
+                size: r.size || 1,
               };
               if (modeNumeric) {
                 newRule.value_to = r.to;

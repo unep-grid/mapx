@@ -1,5 +1,4 @@
 import { el } from "../../el_mapx";
-import { isObject } from "../../is_test";
 import { wsGetSourcesListColumns } from "../../source";
 
 export const config = {

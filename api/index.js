@@ -129,6 +129,7 @@ app.get("/get/config/map", mwGetConfigMap);
 app.get("/get/epsg/codes/full", mwGetEpsgCodesFull);
 app.get("/get/file/formats/list", mwGetFormatsList);
 app.get("/get/source/metadata/:id", source.mwGetMetadata);
+app.get("/get/source/attributes/alias", source.mwGetAttributesAlias);
 app.get("/get/source/summary/", source.mwGetSummary);
 app.get("/get/source/table/attribute/", source.mwGetAttributeTable);
 app.get("/get/source/overlap/", source.mwGetOverlap); //countries=[]&layers=[]&='area';

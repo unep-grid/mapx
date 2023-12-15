@@ -26,6 +26,13 @@ function ioMwEmit(socket, next) {
   };
 
   /**
+   * Broadcast
+   */
+  socket.mx_emit_ws_global = async (type, msg) => {
+    return emitGlobal(socket, type, msg);
+  };
+
+  /**
    * Emit and expect response
    */
   socket.mx_emit_ws_response = async (type, msg, timeout) => {
@@ -75,7 +82,7 @@ async function emitSocket(socket, type, msg) {
     await asyncDelay(1);
     return true;
   } catch (e) {
-    console.trace("Error in mx_emit (ws) :", e);
+    console.trace("Error in mx_emit_ws (ws) :", e);
     return false;
   }
 }
@@ -87,7 +94,20 @@ async function emitSocketBroadcast(socket, type, msg) {
     await asyncDelay(1);
     return true;
   } catch (e) {
-    console.trace("Error in mx_emit (ws) :", e);
+    console.trace("Error in mx_emit_ws_broadcast (ws) :", e);
+    return false;
+  }
+}
+
+async function emitGlobal(socket, type, msg) {
+  try {
+    socket.broadcast.emit(type, msg);
+    socket.emit(type, msg);
+    // async delay to match http version...
+    await asyncDelay(1);
+    return true;
+  } catch (e) {
+    console.trace("Error in mx_emit_ws_global (ws) :", e);
     return false;
   }
 }

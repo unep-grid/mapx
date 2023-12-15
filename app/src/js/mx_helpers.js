@@ -28,6 +28,7 @@ export * from "./url_utils";
 export * from "./legend_vt/helpers.js";
 export * from "./source/joins/instance.js";
 export * from "./json_editor";
+export * from "./metadata/utils.js";
 
 /**
  * Old modules that use global mx object
@@ -56,7 +57,6 @@ export * from "./mx_helper_map_view_fetch.js";
 export * from "./mx_helper_map_project_fetch.js";
 export * from "./mx_helper_map_view_click.js";
 export * from "./mx_helper_metadata_validation.js";
-export * from "./mx_helper_map_view_metadata.js";
 export * from "./mx_helper_canvas_star.js";
 export * from "./mx_helper_canvas.js";
 export * from "./mx_helper_filter_views.js";

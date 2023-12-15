@@ -2065,6 +2065,486 @@
     "ru": "Импортировать внешний вид? Это представление будет доступно как внешнее в настройках проекта."
   },
   {
+    "id": "join_form_title",
+    "en": "Join Configurator",
+    "ru": "Конфигуратор соединений"
+  },
+  {
+    "id": "join_form_title_desc",
+    "en": "Configure how layers and tables should be joined",
+    "ru": "Настройте, как должны соединяться слои и таблицы"
+  },
+  {
+    "id": "join_source_base",
+    "en": "Base source",
+    "ru": "Базовый источник"
+  },
+  {
+    "id": "join_columns_base",
+    "en": "Columns to display",
+    "ru": "Столбцы для отображения"
+  },
+  {
+    "id": "join_source_join",
+    "en": "Join source",
+    "ru": "Источник соединения"
+  },
+  {
+    "id": "join_columns_join",
+    "en": "Columns to display",
+    "ru": "Столбцы для отображения"
+  },
+  {
+    "id": "join_column_base",
+    "en": "Base column",
+    "ru": "Базовый столбец"
+  },
+  {
+    "id": "join_column_join",
+    "en": "Join column",
+    "ru": "Столбец соединения"
+  },
+  {
+    "id": "join_type",
+    "en": "Type",
+    "ru": "Тип"
+  },
+  {
+    "id": "join_base",
+    "en": "Base",
+    "ru": "Основа"
+  },
+  {
+    "id": "join_joins",
+    "en": "Join items",
+    "ru": "Соединить элементы"
+  },
+  {
+    "id": "join_new_layer_name",
+    "en": "New Layer Name",
+    "ru": "Название Нового Слоя"
+  },
+  {
+    "id": "join_new_btn",
+    "en": "Create New Join",
+    "ru": "Создать Новое Соединение"
+  },
+  {
+    "id": "join_new_layer_placeholder",
+    "en": "Enter layer name",
+    "ru": "Введите название слоя"
+  },
+  {
+    "id": "join_warning_colums_issue",
+    "en": "Error: columns issue",
+    "ru": "Ошибка: проблема со столбцами"
+  },
+  {
+    "id": "join_warning_colums_used_in_views",
+    "en": "Column '{{column}}' unselected, but requested",
+    "ru": "Столбец '{{column}}' не выбран, но запрошен"
+  },
+  {
+    "id": "join_meta_title",
+    "en": "Metadata for the join",
+    "ru": "Метаданные для объединения"
+  },
+  {
+    "id": "btn_join_editor",
+    "en": "Edit Table Join",
+    "ru": "Редактировать соединение таблиц"
+  },
+  {
+    "id": "btn_join_editor_new",
+    "en": "Create New Table Join",
+    "ru": "Создать новое соединение таблиц"
+  },
+  {
+    "id": "error_notset",
+    "en": "Property must be set",
+    "ru": "Свойство должно быть установлено "
+  },
+  {
+    "id": "error_notempty",
+    "en": "Value required",
+    "ru": "Требуемое значение "
+  },
+  {
+    "id": "error_space_only",
+    "en": "The value can't be composed of whitespace only (space, tab, line break)",
+    "ru": "Значение не может состоять только из пробелов (пробел, табуляция, разрыв строки) "
+  },
+  {
+    "id": "error_enum",
+    "en": "Value must be one of the enumerated values",
+    "ru": "Значение должно быть одним из перечисленных значений "
+  },
+  {
+    "id": "error_anyOf",
+    "en": "Value must validate against at least one of the provided schemas",
+    "ru": "Значение должно соответствовать хотя бы одной из предоставленных схем. "
+  },
+  {
+    "id": "error_oneOf",
+    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
+    "ru": "Значение должно соответствовать ровно одной из предоставленных схем. В настоящее время он проверяется на соответствие {{0}} схем. "
+  },
+  {
+    "id": "error_not",
+    "en": "Value must not validate against the provided schema",
+    "ru": "Значение не должно соответствовать предоставленной схеме "
+  },
+  {
+    "id": "error_type_union",
+    "en": "Value must be one of the provided types",
+    "ru": "Значение должно быть одного из указанных типов. "
+  },
+  {
+    "id": "error_type",
+    "en": "Value must be of type {{0}}",
+    "ru": "Значение должно быть типа {{0}} "
+  },
+  {
+    "id": "error_disallow_union",
+    "en": "Value must not be one of the provided disallowed types",
+    "ru": "Значение не должно быть одним из указанных запрещенных типов. "
+  },
+  {
+    "id": "error_disallow",
+    "en": "Value must not be of type {{0}}",
+    "ru": "Значение не должно быть типа {{0}} "
+  },
+  {
+    "id": "error_multipleOf",
+    "en": "Value must be a multiple of {{0}}",
+    "ru": "Значение должно быть кратным {{0}} "
+  },
+  {
+    "id": "error_maximum_excl",
+    "en": "Value must be less than {{0}}",
+    "ru": "Значение должно быть меньше {{0}} "
+  },
+  {
+    "id": "error_maximum_incl",
+    "en": "Value must be at most {{0}}",
+    "ru": "Значение должно быть не более {{0}} "
+  },
+  {
+    "id": "error_minimum_excl",
+    "en": "Value must be greater than {{0}}",
+    "ru": "Значение должно быть больше, чем {{0}} "
+  },
+  {
+    "id": "error_minimum_incl",
+    "en": "Value must be at least {{0}}",
+    "ru": "Значение должно быть не менее {{0}} "
+  },
+  {
+    "id": "error_maxLength",
+    "en": "Value must be at most {{0}} characters long",
+    "ru": "Значение должно быть не более {{0}} длинные символы "
+  },
+  {
+    "id": "error_minLength",
+    "en": "Value must be at least {{0}} characters long",
+    "ru": "Значение должно быть не менее {{0}} длинные символы "
+  },
+  {
+    "id": "error_pattern",
+    "en": "Value must match the pattern {{0}}",
+    "ru": "Значение должно соответствовать шаблону {{0}} "
+  },
+  {
+    "id": "error_additionalItems",
+    "en": "No additional items allowed in this array",
+    "ru": "В этом массиве нельзя использовать дополнительные элементы "
+  },
+  {
+    "id": "error_maxItems",
+    "en": "Value must have at most {{0}} items",
+    "ru": "Значение должно иметь не более {{0}} Предметы "
+  },
+  {
+    "id": "error_minItems",
+    "en": "Value must have at least {{0}} items",
+    "ru": "Значение должно иметь не менее {{0}} Предметы "
+  },
+  {
+    "id": "error_uniqueItems",
+    "en": "Array must have unique items",
+    "ru": "В массиве должны быть уникальные элементы "
+  },
+  {
+    "id": "error_maxProperties",
+    "en": "Object must have at most {{0}} properties",
+    "ru": "Объект должен иметь не более {{0}} характеристики "
+  },
+  {
+    "id": "error_minProperties",
+    "en": "Object must have at least {{0}} properties",
+    "ru": "Объект должен иметь не менее {{0}} характеристики "
+  },
+  {
+    "id": "error_required",
+    "en": "Object is missing the required property '{{0}}'",
+    "ru": "У объекта отсутствует требуемое свойство ' {{0}} ' "
+  },
+  {
+    "id": "error_additional_properties",
+    "en": "No additional properties allowed, but property {{0}} is set",
+    "ru": "Дополнительные свойства не допускаются, кроме собственности {{0}} установлен "
+  },
+  {
+    "id": "error_dependency",
+    "en": "Must have property {{0}}",
+    "ru": "Должен иметь собственность {{0}} "
+  },
+  {
+    "id": "button_delete_all",
+    "en": "All",
+    "ru": "Все "
+  },
+  {
+    "id": "button_delete_all_title",
+    "en": "Delete All",
+    "ru": "Удалить все "
+  },
+  {
+    "id": "button_delete_last",
+    "en": "Last {{0}}",
+    "ru": "Последний {{0}} "
+  },
+  {
+    "id": "button_delete_last_title",
+    "en": "Delete Last {{0}}",
+    "ru": "Удалить последнее {{0}} "
+  },
+  {
+    "id": "button_add_row_title",
+    "en": "Add {{0}}",
+    "ru": "Добавлять {{0}} "
+  },
+  {
+    "id": "button_move_down_title",
+    "en": "Move down",
+    "ru": "Двигаться вниз "
+  },
+  {
+    "id": "button_move_up_title",
+    "en": "Move up",
+    "ru": "Двигаться вверх "
+  },
+  {
+    "id": "button_delete_row_title",
+    "en": "Delete {{0}}",
+    "ru": "Удалить {{0}} "
+  },
+  {
+    "id": "button_delete_row_title_short",
+    "en": "Delete",
+    "ru": "Удалить "
+  },
+  {
+    "id": "button_collapse",
+    "en": "Collapse",
+    "ru": "Крах "
+  },
+  {
+    "id": "button_expand",
+    "en": "Expand",
+    "ru": "Расширять "
+  },
+  {
+    "id": "login_single_use_password_email_subject",
+    "en": "Single use password request",
+    "ru": "Запрос одноразового пароля "
+  },
+  {
+    "id": "error_const",
+    "en": "Value must be the constant value",
+    "ru": "Значение должно быть постоянным значением"
+  },
+  {
+    "id": "error_contains",
+    "en": "No items match contains",
+    "ru": "Ни одно совпадение не содержит элементов"
+  },
+  {
+    "id": "error_minContains",
+    "en": "Contains match count {{0}} is less than minimum contains count of {{1}}",
+    "ru": "Содержит количество совпадений {{0}} меньше минимума содержит количество {{1}}"
+  },
+  {
+    "id": "error_maxContains",
+    "en": "Contains match count {{0}} exceeds maximum contains count of {{1}}",
+    "ru": "Содержит количество совпадений {{0}} превышает максимум содержит количество {{1}}"
+  },
+  {
+    "id": "error_property_names_exceeds_maxlength",
+    "en": "Property name {{0}} exceeds maxLength",
+    "ru": "Имя свойства {{0}} превышает максимальную длину"
+  },
+  {
+    "id": "error_property_names_enum_mismatch",
+    "en": "Property name {{0}} does not match any enum values",
+    "ru": "Имя свойства {{0}} не соответствует ни одному из значений перечисления"
+  },
+  {
+    "id": "error_property_names_const_mismatch",
+    "en": "Property name {{0}} does not match the const value",
+    "ru": "Имя свойства {{0}} не соответствует константному значению"
+  },
+  {
+    "id": "error_property_names_pattern_mismatch",
+    "en": "Property name {{0}} does not match pattern",
+    "ru": "Имя свойства {{0}} не соответствует шаблону"
+  },
+  {
+    "id": "error_property_names_false",
+    "en": "Property name {{0}} fails when propertyName is false",
+    "ru": "Имя свойства {{0}} завершается сбоем, когда propertyName имеет значение false"
+  },
+  {
+    "id": "error_property_names_maxlength",
+    "en": "Property name {{0}} cannot match invalid maxLength",
+    "ru": "Имя свойства {{0}} невозможно сопоставить недействительную максимальную длину"
+  },
+  {
+    "id": "error_property_names_enum",
+    "en": "Property name {{0}} cannot match invalid enum",
+    "ru": "Имя свойства {{0}} невозможно сопоставить неверное перечисление"
+  },
+  {
+    "id": "error_property_names_pattern",
+    "en": "Property name {{0}} cannot match invalid pattern",
+    "ru": "Имя свойства {{0}} невозможно сопоставить недопустимый шаблон"
+  },
+  {
+    "id": "error_property_names_unsupported",
+    "en": "Unsupported propertyName {{0}}",
+    "ru": "Неподдерживаемое свойствоName {{0}}"
+  },
+  {
+    "id": "error_date",
+    "en": "Date must be in the format {{0}}",
+    "ru": "Дата должна быть в формате {{0}}"
+  },
+  {
+    "id": "error_time",
+    "en": "Time must be in the format {{0}}",
+    "ru": "Время должно быть в формате {{0}}"
+  },
+  {
+    "id": "error_datetime_local",
+    "en": "Datetime must be in the format {{0}}",
+    "ru": "Дата и время должны быть в формате {{0}}"
+  },
+  {
+    "id": "error_invalid_epoch",
+    "en": "Date must be greater than 1 January 1970",
+    "ru": "Дата должна быть больше 1 января 1970 г."
+  },
+  {
+    "id": "error_ipv4",
+    "en": "Value must be a valid IPv4 address in the form of 4 numbers between 0 and 255, separated by dots",
+    "ru": "Значение должно представлять собой действительный адрес IPv4 в виде 4 чисел от 0 до 255, разделенных точками."
+  },
+  {
+    "id": "error_ipv6",
+    "en": "Value must be a valid IPv6 address",
+    "ru": "Значение должно быть действительным адресом IPv6."
+  },
+  {
+    "id": "error_hostname",
+    "en": "The hostname has the wrong format",
+    "ru": "Имя хоста имеет неверный формат"
+  },
+  {
+    "id": "upload_max_size",
+    "en": "Filesize too large. Max size is ",
+    "ru": "Размер файла слишком велик. Максимальный размер "
+  },
+  {
+    "id": "upload_wrong_file_format",
+    "en": "Wrong file format. Allowed format(s): ",
+    "ru": "Неправильный формат файла. Разрешенный формат(ы): "
+  },
+  {
+    "id": "button_save",
+    "en": "Save",
+    "ru": "Сохранять"
+  },
+  {
+    "id": "button_copy",
+    "en": "Copy",
+    "ru": "Копировать"
+  },
+  {
+    "id": "button_cancel",
+    "en": "Cancel",
+    "ru": "Отмена"
+  },
+  {
+    "id": "button_add",
+    "en": "Add",
+    "ru": "Добавлять"
+  },
+  {
+    "id": "button_properties",
+    "en": "Properties",
+    "ru": "Характеристики"
+  },
+  {
+    "id": "button_object_properties",
+    "en": "Object Properties",
+    "ru": "Свойства объекта"
+  },
+  {
+    "id": "button_copy_row_title",
+    "en": "Copy {{0}}",
+    "ru": "Копировать {{0}}"
+  },
+  {
+    "id": "button_copy_row_title_short",
+    "en": "Copy",
+    "ru": "Копировать"
+  },
+  {
+    "id": "button_edit_json",
+    "en": "Edit JSON",
+    "ru": "Редактировать JSON"
+  },
+  {
+    "id": "button_upload",
+    "en": "Upload",
+    "ru": "Загрузить"
+  },
+  {
+    "id": "flatpickr_toggle_button",
+    "en": "Toggle",
+    "ru": "Переключать"
+  },
+  {
+    "id": "flatpickr_clear_button",
+    "en": "Clear",
+    "ru": "Прозрачный"
+  },
+  {
+    "id": "choices_placeholder_text",
+    "en": "Start typing to add value",
+    "ru": "Начните вводить текст, чтобы добавить ценность"
+  },
+  {
+    "id": "default_array_item_title",
+    "en": "Item",
+    "ru": "Элемент"
+  },
+  {
+    "id": "button_delete_node_warning",
+    "en": "Are you sure you want to remove this item?",
+    "ru": "Вы уверены, что хотите удалить этот элемент?"
+  },
+  {
     "id": "en",
     "en": "English",
     "ru": "английский "
@@ -6338,206 +6818,6 @@
     "id": "buttton_copy",
     "en": "Copy",
     "ru": "Копировать"
-  },
-  {
-    "id": "error_notset",
-    "en": "Property must be set",
-    "ru": "Свойство должно быть установлено "
-  },
-  {
-    "id": "error_notempty",
-    "en": "Value required",
-    "ru": "Требуемое значение "
-  },
-  {
-    "id": "error_space_only",
-    "en": "The value can't be composed of whitespace only (space, tab, line break)",
-    "ru": "Значение не может состоять только из пробелов (пробел, табуляция, разрыв строки) "
-  },
-  {
-    "id": "error_enum",
-    "en": "Value must be one of the enumerated values",
-    "ru": "Значение должно быть одним из перечисленных значений "
-  },
-  {
-    "id": "error_anyOf",
-    "en": "Value must validate against at least one of the provided schemas",
-    "ru": "Значение должно соответствовать хотя бы одной из предоставленных схем. "
-  },
-  {
-    "id": "error_oneOf",
-    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "ru": "Значение должно соответствовать ровно одной из предоставленных схем. В настоящее время он проверяется на соответствие {{0}} схем. "
-  },
-  {
-    "id": "error_not",
-    "en": "Value must not validate against the provided schema",
-    "ru": "Значение не должно соответствовать предоставленной схеме "
-  },
-  {
-    "id": "error_type_union",
-    "en": "Value must be one of the provided types",
-    "ru": "Значение должно быть одного из указанных типов. "
-  },
-  {
-    "id": "error_type",
-    "en": "Value must be of type {{0}}",
-    "ru": "Значение должно быть типа {{0}} "
-  },
-  {
-    "id": "error_disallow_union",
-    "en": "Value must not be one of the provided disallowed types",
-    "ru": "Значение не должно быть одним из указанных запрещенных типов. "
-  },
-  {
-    "id": "error_disallow",
-    "en": "Value must not be of type {{0}}",
-    "ru": "Значение не должно быть типа {{0}} "
-  },
-  {
-    "id": "error_multipleOf",
-    "en": "Value must be a multiple of {{0}}",
-    "ru": "Значение должно быть кратным {{0}} "
-  },
-  {
-    "id": "error_maximum_excl",
-    "en": "Value must be less than {{0}}",
-    "ru": "Значение должно быть меньше {{0}} "
-  },
-  {
-    "id": "error_maximum_incl",
-    "en": "Value must be at most {{0}}",
-    "ru": "Значение должно быть не более {{0}} "
-  },
-  {
-    "id": "error_minimum_excl",
-    "en": "Value must be greater than {{0}}",
-    "ru": "Значение должно быть больше, чем {{0}} "
-  },
-  {
-    "id": "error_minimum_incl",
-    "en": "Value must be at least {{0}}",
-    "ru": "Значение должно быть не менее {{0}} "
-  },
-  {
-    "id": "error_maxLength",
-    "en": "Value must be at most {{0}} characters long",
-    "ru": "Значение должно быть не более {{0}} длинные символы "
-  },
-  {
-    "id": "error_minLength",
-    "en": "Value must be at least {{0}} characters long",
-    "ru": "Значение должно быть не менее {{0}} длинные символы "
-  },
-  {
-    "id": "error_pattern",
-    "en": "Value must match the pattern {{0}}",
-    "ru": "Значение должно соответствовать шаблону {{0}} "
-  },
-  {
-    "id": "error_additionalItems",
-    "en": "No additional items allowed in this array",
-    "ru": "В этом массиве нельзя использовать дополнительные элементы "
-  },
-  {
-    "id": "error_maxItems",
-    "en": "Value must have at most {{0}} items",
-    "ru": "Значение должно иметь не более {{0}} Предметы "
-  },
-  {
-    "id": "error_minItems",
-    "en": "Value must have at least {{0}} items",
-    "ru": "Значение должно иметь не менее {{0}} Предметы "
-  },
-  {
-    "id": "error_uniqueItems",
-    "en": "Array must have unique items",
-    "ru": "В массиве должны быть уникальные элементы "
-  },
-  {
-    "id": "error_maxProperties",
-    "en": "Object must have at most {{0}} properties",
-    "ru": "Объект должен иметь не более {{0}} характеристики "
-  },
-  {
-    "id": "error_minProperties",
-    "en": "Object must have at least {{0}} properties",
-    "ru": "Объект должен иметь не менее {{0}} характеристики "
-  },
-  {
-    "id": "error_required",
-    "en": "Object is missing the required property '{{0}}'",
-    "ru": "У объекта отсутствует требуемое свойство ' {{0}} ' "
-  },
-  {
-    "id": "error_additional_properties",
-    "en": "No additional properties allowed, but property {{0}} is set",
-    "ru": "Дополнительные свойства не допускаются, кроме собственности {{0}} установлен "
-  },
-  {
-    "id": "error_dependency",
-    "en": "Must have property {{0}}",
-    "ru": "Должен иметь собственность {{0}} "
-  },
-  {
-    "id": "button_delete_all",
-    "en": "All",
-    "ru": "Все "
-  },
-  {
-    "id": "button_delete_all_title",
-    "en": "Delete All",
-    "ru": "Удалить все "
-  },
-  {
-    "id": "button_delete_last",
-    "en": "Last {{0}}",
-    "ru": "Последний {{0}} "
-  },
-  {
-    "id": "button_delete_last_title",
-    "en": "Delete Last {{0}}",
-    "ru": "Удалить последнее {{0}} "
-  },
-  {
-    "id": "button_add_row_title",
-    "en": "Add {{0}}",
-    "ru": "Добавлять {{0}} "
-  },
-  {
-    "id": "button_move_down_title",
-    "en": "Move down",
-    "ru": "Двигаться вниз "
-  },
-  {
-    "id": "button_move_up_title",
-    "en": "Move up",
-    "ru": "Двигаться вверх "
-  },
-  {
-    "id": "button_delete_row_title",
-    "en": "Delete {{0}}",
-    "ru": "Удалить {{0}} "
-  },
-  {
-    "id": "button_delete_row_title_short",
-    "en": "Delete",
-    "ru": "Удалить "
-  },
-  {
-    "id": "button_collapse",
-    "en": "Collapse",
-    "ru": "Крах "
-  },
-  {
-    "id": "button_expand",
-    "en": "Expand",
-    "ru": "Расширять "
-  },
-  {
-    "id": "login_single_use_password_email_subject",
-    "en": "Single use password request",
-    "ru": "Запрос одноразового пароля "
   },
   {
     "id": "login_single_use_password_email",

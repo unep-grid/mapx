@@ -2065,6 +2065,486 @@
     "fa": "نمای خارجی را وارد کنید؟ این نمای به عنوان نمای خارجی در تنظیمات پروژه در دسترس خواهد بود"
   },
   {
+    "id": "join_form_title",
+    "en": "Join Configurator",
+    "fa": "پیکربندی اتصال"
+  },
+  {
+    "id": "join_form_title_desc",
+    "en": "Configure how layers and tables should be joined",
+    "fa": "پیکربندی نحوه اتصال لایه‌ها و جدول‌ها"
+  },
+  {
+    "id": "join_source_base",
+    "en": "Base source",
+    "fa": "منبع پایه"
+  },
+  {
+    "id": "join_columns_base",
+    "en": "Columns to display",
+    "fa": "ستون‌ها برای نمایش"
+  },
+  {
+    "id": "join_source_join",
+    "en": "Join source",
+    "fa": "منبع اتصال"
+  },
+  {
+    "id": "join_columns_join",
+    "en": "Columns to display",
+    "fa": "ستون‌ها برای نمایش"
+  },
+  {
+    "id": "join_column_base",
+    "en": "Base column",
+    "fa": "ستون پایه"
+  },
+  {
+    "id": "join_column_join",
+    "en": "Join column",
+    "fa": "ستون اتصال"
+  },
+  {
+    "id": "join_type",
+    "en": "Type",
+    "fa": "نوع"
+  },
+  {
+    "id": "join_base",
+    "en": "Base",
+    "fa": "پایه"
+  },
+  {
+    "id": "join_joins",
+    "en": "Join items",
+    "fa": "موارد را اتصال دهید"
+  },
+  {
+    "id": "join_new_layer_name",
+    "en": "New Layer Name",
+    "fa": "نام لایه جدید"
+  },
+  {
+    "id": "join_new_btn",
+    "en": "Create New Join",
+    "fa": "اتصال جدید ایجاد کنید"
+  },
+  {
+    "id": "join_new_layer_placeholder",
+    "en": "Enter layer name",
+    "fa": "نام لایه را وارد کنید"
+  },
+  {
+    "id": "join_warning_colums_issue",
+    "en": "Error: columns issue",
+    "fa": "خطا: مشکل ستون ها"
+  },
+  {
+    "id": "join_warning_colums_used_in_views",
+    "en": "Column '{{column}}' unselected, but requested",
+    "fa": "ستون '{{column}}' انتخاب نشده، اما درخواست شده است"
+  },
+  {
+    "id": "join_meta_title",
+    "en": "Metadata for the join",
+    "fa": "متادیتا برای اتصال"
+  },
+  {
+    "id": "btn_join_editor",
+    "en": "Edit Table Join",
+    "fa": "ویرایش پیوست جدول"
+  },
+  {
+    "id": "btn_join_editor_new",
+    "en": "Create New Table Join",
+    "fa": "ایجاد پیوست جدول جدید"
+  },
+  {
+    "id": "error_notset",
+    "en": "Property must be set",
+    "fa": "ملک باید تنظیم شود "
+  },
+  {
+    "id": "error_notempty",
+    "en": "Value required",
+    "fa": "مقدار مورد نیاز "
+  },
+  {
+    "id": "error_space_only",
+    "en": "The value can't be composed of whitespace only (space, tab, line break)",
+    "fa": "این مقدار را نمی توان فقط از فضای خالی تشکیل داد (فضا ، برگه ، شکست خط) "
+  },
+  {
+    "id": "error_enum",
+    "en": "Value must be one of the enumerated values",
+    "fa": "مقدار باید یکی از مقادیر برشمرده شده باشد "
+  },
+  {
+    "id": "error_anyOf",
+    "en": "Value must validate against at least one of the provided schemas",
+    "fa": "مقدار باید حداقل در برابر یکی از طرح های ارائه شده معتبر باشد "
+  },
+  {
+    "id": "error_oneOf",
+    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
+    "fa": "مقدار باید دقیقاً در برابر یکی از طرح های ارائه شده تأیید شود. در حال حاضر خلاف اعتبار دارد {{0}} از طرح ها "
+  },
+  {
+    "id": "error_not",
+    "en": "Value must not validate against the provided schema",
+    "fa": "مقدار نباید در برابر طرح ارائه شده معتبر باشد "
+  },
+  {
+    "id": "error_type_union",
+    "en": "Value must be one of the provided types",
+    "fa": "مقدار باید یکی از انواع ارائه شده باشد "
+  },
+  {
+    "id": "error_type",
+    "en": "Value must be of type {{0}}",
+    "fa": "مقدار باید از نوع باشد {{0}} "
+  },
+  {
+    "id": "error_disallow_union",
+    "en": "Value must not be one of the provided disallowed types",
+    "fa": "مقدار نباید یکی از انواع ممنوع ارائه شده باشد "
+  },
+  {
+    "id": "error_disallow",
+    "en": "Value must not be of type {{0}}",
+    "fa": "مقدار نباید از نوع باشد {{0}} "
+  },
+  {
+    "id": "error_multipleOf",
+    "en": "Value must be a multiple of {{0}}",
+    "fa": "مقدار باید مضربی از باشد {{0}} "
+  },
+  {
+    "id": "error_maximum_excl",
+    "en": "Value must be less than {{0}}",
+    "fa": "مقدار باید کمتر از باشد {{0}} "
+  },
+  {
+    "id": "error_maximum_incl",
+    "en": "Value must be at most {{0}}",
+    "fa": "ارزش باید حداکثر باشد {{0}} "
+  },
+  {
+    "id": "error_minimum_excl",
+    "en": "Value must be greater than {{0}}",
+    "fa": "ارزش باید بیشتر از باشد {{0}} "
+  },
+  {
+    "id": "error_minimum_incl",
+    "en": "Value must be at least {{0}}",
+    "fa": "ارزش باید حداقل باشد {{0}} "
+  },
+  {
+    "id": "error_maxLength",
+    "en": "Value must be at most {{0}} characters long",
+    "fa": "ارزش باید حداکثر باشد {{0}} شخصیت های طولانی "
+  },
+  {
+    "id": "error_minLength",
+    "en": "Value must be at least {{0}} characters long",
+    "fa": "ارزش باید حداقل باشد {{0}} شخصیت های طولانی "
+  },
+  {
+    "id": "error_pattern",
+    "en": "Value must match the pattern {{0}}",
+    "fa": "مقدار باید با الگو مطابقت داشته باشد {{0}} "
+  },
+  {
+    "id": "error_additionalItems",
+    "en": "No additional items allowed in this array",
+    "fa": "هیچ مورد اضافی در این آرایه مجاز نیست "
+  },
+  {
+    "id": "error_maxItems",
+    "en": "Value must have at most {{0}} items",
+    "fa": "ارزش باید حداکثر داشته باشد {{0}} موارد "
+  },
+  {
+    "id": "error_minItems",
+    "en": "Value must have at least {{0}} items",
+    "fa": "ارزش باید حداقل داشته باشد {{0}} موارد "
+  },
+  {
+    "id": "error_uniqueItems",
+    "en": "Array must have unique items",
+    "fa": "آرایه باید موارد منحصر به فردی داشته باشد "
+  },
+  {
+    "id": "error_maxProperties",
+    "en": "Object must have at most {{0}} properties",
+    "fa": "شی باید حداکثر داشته باشد {{0}} خواص "
+  },
+  {
+    "id": "error_minProperties",
+    "en": "Object must have at least {{0}} properties",
+    "fa": "شی باید حداقل داشته باشد {{0}} خواص "
+  },
+  {
+    "id": "error_required",
+    "en": "Object is missing the required property '{{0}}'",
+    "fa": "شیject مورد نیاز را از دست می دهد \" {{0}} \" "
+  },
+  {
+    "id": "error_additional_properties",
+    "en": "No additional properties allowed, but property {{0}} is set",
+    "fa": "هیچ ویژگی اضافی مجاز نیست ، اما ملک {{0}} تنظیم شده است "
+  },
+  {
+    "id": "error_dependency",
+    "en": "Must have property {{0}}",
+    "fa": "باید دارایی داشته باشد {{0}} "
+  },
+  {
+    "id": "button_delete_all",
+    "en": "All",
+    "fa": "همه "
+  },
+  {
+    "id": "button_delete_all_title",
+    "en": "Delete All",
+    "fa": "حذف همه "
+  },
+  {
+    "id": "button_delete_last",
+    "en": "Last {{0}}",
+    "fa": "آخر {{0}} "
+  },
+  {
+    "id": "button_delete_last_title",
+    "en": "Delete Last {{0}}",
+    "fa": "حذف آخرین {{0}} "
+  },
+  {
+    "id": "button_add_row_title",
+    "en": "Add {{0}}",
+    "fa": "اضافه کردن {{0}} "
+  },
+  {
+    "id": "button_move_down_title",
+    "en": "Move down",
+    "fa": "حرکت به پایین "
+  },
+  {
+    "id": "button_move_up_title",
+    "en": "Move up",
+    "fa": "بالا بروید "
+  },
+  {
+    "id": "button_delete_row_title",
+    "en": "Delete {{0}}",
+    "fa": "حذف {{0}} "
+  },
+  {
+    "id": "button_delete_row_title_short",
+    "en": "Delete",
+    "fa": "حذف "
+  },
+  {
+    "id": "button_collapse",
+    "en": "Collapse",
+    "fa": "سقوط - فروپاشی "
+  },
+  {
+    "id": "button_expand",
+    "en": "Expand",
+    "fa": "بسط دادن "
+  },
+  {
+    "id": "login_single_use_password_email_subject",
+    "en": "Single use password request",
+    "fa": "درخواست رمز عبور یکبار مصرف "
+  },
+  {
+    "id": "error_const",
+    "en": "Value must be the constant value",
+    "fa": "مقدار باید مقدار ثابت باشد"
+  },
+  {
+    "id": "error_contains",
+    "en": "No items match contains",
+    "fa": "هیچ موردی مطابقت ندارد"
+  },
+  {
+    "id": "error_minContains",
+    "en": "Contains match count {{0}} is less than minimum contains count of {{1}}",
+    "fa": "حاوی تعداد بازی است {{0}} کمتر از حداقل است شامل تعداد {{1}}"
+  },
+  {
+    "id": "error_maxContains",
+    "en": "Contains match count {{0}} exceeds maximum contains count of {{1}}",
+    "fa": "حاوی تعداد بازی است {{0}} بیش از حداکثر شامل تعداد {{1}}"
+  },
+  {
+    "id": "error_property_names_exceeds_maxlength",
+    "en": "Property name {{0}} exceeds maxLength",
+    "fa": "نام ملک {{0}} بیش از حداکثر طول"
+  },
+  {
+    "id": "error_property_names_enum_mismatch",
+    "en": "Property name {{0}} does not match any enum values",
+    "fa": "نام ملک {{0}} با هیچ مقدار enum مطابقت ندارد"
+  },
+  {
+    "id": "error_property_names_const_mismatch",
+    "en": "Property name {{0}} does not match the const value",
+    "fa": "نام ملک {{0}} با مقدار const مطابقت ندارد"
+  },
+  {
+    "id": "error_property_names_pattern_mismatch",
+    "en": "Property name {{0}} does not match pattern",
+    "fa": "نام ملک {{0}} با الگو مطابقت ندارد"
+  },
+  {
+    "id": "error_property_names_false",
+    "en": "Property name {{0}} fails when propertyName is false",
+    "fa": "نام ملک {{0}} هنگامی که nameName نادرست باشد، از کار می افتد"
+  },
+  {
+    "id": "error_property_names_maxlength",
+    "en": "Property name {{0}} cannot match invalid maxLength",
+    "fa": "نام ملک {{0}} نمی تواند با حداکثر طول نامعتبر مطابقت داشته باشد"
+  },
+  {
+    "id": "error_property_names_enum",
+    "en": "Property name {{0}} cannot match invalid enum",
+    "fa": "نام ملک {{0}} نمی تواند با شماره نامعتبر مطابقت داشته باشد"
+  },
+  {
+    "id": "error_property_names_pattern",
+    "en": "Property name {{0}} cannot match invalid pattern",
+    "fa": "نام ملک {{0}} نمی تواند با الگوی نامعتبر مطابقت داشته باشد"
+  },
+  {
+    "id": "error_property_names_unsupported",
+    "en": "Unsupported propertyName {{0}}",
+    "fa": "نام ویژگی پشتیبانی نشده {{0}}"
+  },
+  {
+    "id": "error_date",
+    "en": "Date must be in the format {{0}}",
+    "fa": "تاریخ باید در قالب باشد {{0}}"
+  },
+  {
+    "id": "error_time",
+    "en": "Time must be in the format {{0}}",
+    "fa": "زمان باید در قالب باشد {{0}}"
+  },
+  {
+    "id": "error_datetime_local",
+    "en": "Datetime must be in the format {{0}}",
+    "fa": "Datetime باید در قالب باشد {{0}}"
+  },
+  {
+    "id": "error_invalid_epoch",
+    "en": "Date must be greater than 1 January 1970",
+    "fa": "تاریخ باید بیشتر از 1 ژانویه 1970 باشد"
+  },
+  {
+    "id": "error_ipv4",
+    "en": "Value must be a valid IPv4 address in the form of 4 numbers between 0 and 255, separated by dots",
+    "fa": "مقدار باید یک آدرس IPv4 معتبر در قالب 4 عدد بین 0 تا 255 باشد که با نقطه از هم جدا شده اند."
+  },
+  {
+    "id": "error_ipv6",
+    "en": "Value must be a valid IPv6 address",
+    "fa": "مقدار باید یک آدرس IPv6 معتبر باشد"
+  },
+  {
+    "id": "error_hostname",
+    "en": "The hostname has the wrong format",
+    "fa": "نام میزبان قالب اشتباهی دارد"
+  },
+  {
+    "id": "upload_max_size",
+    "en": "Filesize too large. Max size is ",
+    "fa": "اندازه فایل خیلی بزرگ است. حداکثر اندازه است "
+  },
+  {
+    "id": "upload_wrong_file_format",
+    "en": "Wrong file format. Allowed format(s): ",
+    "fa": "فرمت فایل اشتباه قالب(های) مجاز: "
+  },
+  {
+    "id": "button_save",
+    "en": "Save",
+    "fa": "صرفه جویی"
+  },
+  {
+    "id": "button_copy",
+    "en": "Copy",
+    "fa": "کپی 🀄"
+  },
+  {
+    "id": "button_cancel",
+    "en": "Cancel",
+    "fa": "لغو کنید"
+  },
+  {
+    "id": "button_add",
+    "en": "Add",
+    "fa": "اضافه کردن"
+  },
+  {
+    "id": "button_properties",
+    "en": "Properties",
+    "fa": "خواص"
+  },
+  {
+    "id": "button_object_properties",
+    "en": "Object Properties",
+    "fa": "ویژگی های شی"
+  },
+  {
+    "id": "button_copy_row_title",
+    "en": "Copy {{0}}",
+    "fa": "کپی 🀄 {{0}}"
+  },
+  {
+    "id": "button_copy_row_title_short",
+    "en": "Copy",
+    "fa": "کپی 🀄"
+  },
+  {
+    "id": "button_edit_json",
+    "en": "Edit JSON",
+    "fa": "JSON را ویرایش کنید"
+  },
+  {
+    "id": "button_upload",
+    "en": "Upload",
+    "fa": "بارگذاری"
+  },
+  {
+    "id": "flatpickr_toggle_button",
+    "en": "Toggle",
+    "fa": "تغییر وضعیت"
+  },
+  {
+    "id": "flatpickr_clear_button",
+    "en": "Clear",
+    "fa": "پاک کردن"
+  },
+  {
+    "id": "choices_placeholder_text",
+    "en": "Start typing to add value",
+    "fa": "برای افزودن ارزش شروع به تایپ کنید"
+  },
+  {
+    "id": "default_array_item_title",
+    "en": "Item",
+    "fa": "مورد"
+  },
+  {
+    "id": "button_delete_node_warning",
+    "en": "Are you sure you want to remove this item?",
+    "fa": "آیا مطمئن هستید که می خواهید این مورد را حذف کنید؟"
+  },
+  {
     "id": "en",
     "en": "English",
     "fa": "انگلیسی"
@@ -6338,206 +6818,6 @@
     "id": "buttton_copy",
     "en": "Copy",
     "fa": "کپی 🀄"
-  },
-  {
-    "id": "error_notset",
-    "en": "Property must be set",
-    "fa": "ملک باید تنظیم شود "
-  },
-  {
-    "id": "error_notempty",
-    "en": "Value required",
-    "fa": "مقدار مورد نیاز "
-  },
-  {
-    "id": "error_space_only",
-    "en": "The value can't be composed of whitespace only (space, tab, line break)",
-    "fa": "این مقدار را نمی توان فقط از فضای خالی تشکیل داد (فضا ، برگه ، شکست خط) "
-  },
-  {
-    "id": "error_enum",
-    "en": "Value must be one of the enumerated values",
-    "fa": "مقدار باید یکی از مقادیر برشمرده شده باشد "
-  },
-  {
-    "id": "error_anyOf",
-    "en": "Value must validate against at least one of the provided schemas",
-    "fa": "مقدار باید حداقل در برابر یکی از طرح های ارائه شده معتبر باشد "
-  },
-  {
-    "id": "error_oneOf",
-    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "fa": "مقدار باید دقیقاً در برابر یکی از طرح های ارائه شده تأیید شود. در حال حاضر خلاف اعتبار دارد {{0}} از طرح ها "
-  },
-  {
-    "id": "error_not",
-    "en": "Value must not validate against the provided schema",
-    "fa": "مقدار نباید در برابر طرح ارائه شده معتبر باشد "
-  },
-  {
-    "id": "error_type_union",
-    "en": "Value must be one of the provided types",
-    "fa": "مقدار باید یکی از انواع ارائه شده باشد "
-  },
-  {
-    "id": "error_type",
-    "en": "Value must be of type {{0}}",
-    "fa": "مقدار باید از نوع باشد {{0}} "
-  },
-  {
-    "id": "error_disallow_union",
-    "en": "Value must not be one of the provided disallowed types",
-    "fa": "مقدار نباید یکی از انواع ممنوع ارائه شده باشد "
-  },
-  {
-    "id": "error_disallow",
-    "en": "Value must not be of type {{0}}",
-    "fa": "مقدار نباید از نوع باشد {{0}} "
-  },
-  {
-    "id": "error_multipleOf",
-    "en": "Value must be a multiple of {{0}}",
-    "fa": "مقدار باید مضربی از باشد {{0}} "
-  },
-  {
-    "id": "error_maximum_excl",
-    "en": "Value must be less than {{0}}",
-    "fa": "مقدار باید کمتر از باشد {{0}} "
-  },
-  {
-    "id": "error_maximum_incl",
-    "en": "Value must be at most {{0}}",
-    "fa": "ارزش باید حداکثر باشد {{0}} "
-  },
-  {
-    "id": "error_minimum_excl",
-    "en": "Value must be greater than {{0}}",
-    "fa": "ارزش باید بیشتر از باشد {{0}} "
-  },
-  {
-    "id": "error_minimum_incl",
-    "en": "Value must be at least {{0}}",
-    "fa": "ارزش باید حداقل باشد {{0}} "
-  },
-  {
-    "id": "error_maxLength",
-    "en": "Value must be at most {{0}} characters long",
-    "fa": "ارزش باید حداکثر باشد {{0}} شخصیت های طولانی "
-  },
-  {
-    "id": "error_minLength",
-    "en": "Value must be at least {{0}} characters long",
-    "fa": "ارزش باید حداقل باشد {{0}} شخصیت های طولانی "
-  },
-  {
-    "id": "error_pattern",
-    "en": "Value must match the pattern {{0}}",
-    "fa": "مقدار باید با الگو مطابقت داشته باشد {{0}} "
-  },
-  {
-    "id": "error_additionalItems",
-    "en": "No additional items allowed in this array",
-    "fa": "هیچ مورد اضافی در این آرایه مجاز نیست "
-  },
-  {
-    "id": "error_maxItems",
-    "en": "Value must have at most {{0}} items",
-    "fa": "ارزش باید حداکثر داشته باشد {{0}} موارد "
-  },
-  {
-    "id": "error_minItems",
-    "en": "Value must have at least {{0}} items",
-    "fa": "ارزش باید حداقل داشته باشد {{0}} موارد "
-  },
-  {
-    "id": "error_uniqueItems",
-    "en": "Array must have unique items",
-    "fa": "آرایه باید موارد منحصر به فردی داشته باشد "
-  },
-  {
-    "id": "error_maxProperties",
-    "en": "Object must have at most {{0}} properties",
-    "fa": "شی باید حداکثر داشته باشد {{0}} خواص "
-  },
-  {
-    "id": "error_minProperties",
-    "en": "Object must have at least {{0}} properties",
-    "fa": "شی باید حداقل داشته باشد {{0}} خواص "
-  },
-  {
-    "id": "error_required",
-    "en": "Object is missing the required property '{{0}}'",
-    "fa": "شیject مورد نیاز را از دست می دهد \" {{0}} \" "
-  },
-  {
-    "id": "error_additional_properties",
-    "en": "No additional properties allowed, but property {{0}} is set",
-    "fa": "هیچ ویژگی اضافی مجاز نیست ، اما ملک {{0}} تنظیم شده است "
-  },
-  {
-    "id": "error_dependency",
-    "en": "Must have property {{0}}",
-    "fa": "باید دارایی داشته باشد {{0}} "
-  },
-  {
-    "id": "button_delete_all",
-    "en": "All",
-    "fa": "همه "
-  },
-  {
-    "id": "button_delete_all_title",
-    "en": "Delete All",
-    "fa": "حذف همه "
-  },
-  {
-    "id": "button_delete_last",
-    "en": "Last {{0}}",
-    "fa": "آخر {{0}} "
-  },
-  {
-    "id": "button_delete_last_title",
-    "en": "Delete Last {{0}}",
-    "fa": "حذف آخرین {{0}} "
-  },
-  {
-    "id": "button_add_row_title",
-    "en": "Add {{0}}",
-    "fa": "اضافه کردن {{0}} "
-  },
-  {
-    "id": "button_move_down_title",
-    "en": "Move down",
-    "fa": "حرکت به پایین "
-  },
-  {
-    "id": "button_move_up_title",
-    "en": "Move up",
-    "fa": "بالا بروید "
-  },
-  {
-    "id": "button_delete_row_title",
-    "en": "Delete {{0}}",
-    "fa": "حذف {{0}} "
-  },
-  {
-    "id": "button_delete_row_title_short",
-    "en": "Delete",
-    "fa": "حذف "
-  },
-  {
-    "id": "button_collapse",
-    "en": "Collapse",
-    "fa": "سقوط - فروپاشی "
-  },
-  {
-    "id": "button_expand",
-    "en": "Expand",
-    "fa": "بسط دادن "
-  },
-  {
-    "id": "login_single_use_password_email_subject",
-    "en": "Single use password request",
-    "fa": "درخواست رمز عبور یکبار مصرف "
   },
   {
     "id": "login_single_use_password_email",

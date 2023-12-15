@@ -1,21 +1,23 @@
 import { el, elButtonFa, elSpanTranslate as tt } from "../../el_mapx";
 import { EventSimple } from "../../event_simple";
-import { isSourceId, isArray, isEmpty, isElement } from "../../is_test";
+import { isSourceId, isEmpty } from "../../is_test";
 import { modalSelectSource } from "../../select_auto";
 import { settings, ws, nc } from "../../mx";
 import { modalPrompt, modalSimple } from "../../mx_helper_modal";
-import { getDictItem } from "../../language";
+import { getDictItem, getLabelFromObjectPath } from "../../language";
 import "./style.less";
-import { itemFlashSave, makeId } from "../../mx_helper_misc";
+import { makeId } from "../../mx_helper_misc";
 import { jedInit } from "../../json_editor";
 import { bindAll } from "../../bind_class_methods";
 import { FlashItem } from "../../icon_flash";
+import { getViewTitle, viewLink } from "../../map_helpers";
 
 const routes = {
   join: "/client/source/join",
 };
 
 const sjmSettings = {
+  wsTimeOut: 5000,
   selectSourceJoin: {
     disable_large: false,
     disable_missing: false,
@@ -28,38 +30,17 @@ const sjmSettings = {
   },
 };
 
-const testconfig = {
-  version: "1",
-  id_source: "mx_i1ai9_zgj2n_vllo1_xr5ib_4wgiy",
-  base: {
-    id_source: "mx_xkbpr_vfd4q_vyvy9_t19nl_xo2l3",
-    columns: ["id"],
-    prefix: "a_",
-  },
-  joins: [
-    {
-      id_source: "mx_spfsm_4c3r7_4ff2g_b1q53_pekhq",
-      //columns: ["altitude", "caco3", "name", "id", "presence", "region"],
-      columns: ["caco3", "name", "id"],
-      prefix: "b_",
-      type: "INNER",
-      column_join: "id",
-      column_base: "id",
-    },
-  ],
-};
-
 export class SourcesJoinManager extends EventSimple {
   constructor() {
     super();
     const sjm = this;
     bindAll(sjm);
+    window._sjm = sjm;
     return sjm;
   }
 
   async init(mode = "edit") {
     const sjm = this;
-
     if (sjm._init) {
       return;
     }
@@ -72,18 +53,20 @@ export class SourcesJoinManager extends EventSimple {
     }
 
     if (!isSourceId(sjm._id_source)) {
-      sjm.msg("No valid source id", "error");
       return;
     }
 
-    const schema = await sjm.emit("get_schema");
+    const schema = await sjm.emit("get_schema", {
+      language: settings.language,
+    });
+
     const { join: config, meta } = await sjm.load(sjm.id);
     const def = await sjm.getConfigDefault();
 
     sjm._schema = schema;
     sjm._config = Object.assign({}, def, config);
     sjm._meta = Object.assign({}, meta);
-
+    sjm._lock_save = false;
     await sjm.build();
   }
 
@@ -118,10 +101,10 @@ export class SourcesJoinManager extends EventSimple {
   }
 
   async emit(method, config) {
-    return ws.emitAsync(routes.join, { method, config }, 1000);
+    return ws.emitAsync(routes.join, { method, config }, sjmSettings.wsTimeOut);
   }
 
-  async validate() {
+  async validateRemote() {
     const sjm = this;
     const config = sjm._jed.getValue();
     const errors = await sjm.emit("validate", config);
@@ -132,8 +115,156 @@ export class SourcesJoinManager extends EventSimple {
     return false;
   }
 
+  async validate() {
+    const sjm = this;
+    sjm.lockSave();
+    const okEditor = sjm.validateEditor();
+    const okColumns = okEditor && (await sjm.validateColumns());
+    if (okColumns) {
+      sjm.unlockSave();
+    }
+    return okColumns;
+  }
+
+  validateEditor() {
+    const sjm = this;
+    return isEmpty(sjm._jed.validation_results);
+  }
+
+  async validateColumns() {
+    const sjm = this;
+    const missing = await sjm.getMissingColumns();
+    sjm.buildValidateMissing(missing);
+    return isEmpty(missing);
+  }
+
+  async getMissingColumns() {
+    const sjm = this;
+    if (!sjm.validateEditor()) {
+      return [];
+    }
+    const config = sjm._jed.getValue();
+    const missing = await sjm.emit("get_columns_missing", config);
+
+    return missing;
+  }
+
+  clearValidation() {
+    const sjm = this;
+    while (sjm._elValidationOutput.firstElementChild) {
+      sjm._elValidationOutput.firstElementChild.remove();
+    }
+  }
+  buildValidateMissing(missing) {
+    const sjm = this;
+    sjm.clearValidation();
+
+    if (isEmpty(missing)) {
+      return;
+    }
+
+    const elMissing = el("ul", {
+      class: ["list-group", "mx-error-list-container"],
+    });
+
+    const perAttribute = new Map();
+
+    for (const item of missing) {
+      const attributeId = item.id;
+      let previous = perAttribute.get(attributeId);
+      if (!previous) {
+        previous = {
+          attributeName: attributeId,
+          views: [],
+        };
+      }
+      previous.views.push({
+        title: getViewTitle(item.view),
+        link: viewLink(item.view),
+      });
+      perAttribute.set(attributeId, previous);
+    }
+
+    for (const { attributeName, views } of perAttribute.values()) {
+      const viewElements = views.map((v) => {
+        return el("li", [
+          tt("view"),
+          el("span", ":"),
+          el("a", { href: v.link, target: "_blank" }, el("span", v.title)),
+        ]);
+      });
+      const elItem = el("li", { class: ["list-group-item", "mx-error-item"] }, [
+        tt("join_warning_colums_used_in_views", {
+          data: { column: attributeName },
+        }),
+        el("ul", viewElements),
+      ]);
+      elMissing.appendChild(elItem);
+    }
+
+    sjm._elValidationOutput.appendChild(elMissing);
+  }
+  buildValidateMissing_old(missing) {
+    const sjm = this;
+    sjm.clearValidation();
+
+    if (isEmpty(missing)) {
+      return;
+    }
+
+    const elMissing = el("ul", {
+      class: ["list-group", "mx-error-list-container"],
+    });
+
+    const perView = new Map();
+
+    for (const item of missing) {
+      const idView = item?.view?.id;
+      let previous = perView.get(idView);
+      if (previous) {
+        previous.attributes.push(item.id);
+      } else {
+        previous = {
+          title: getViewTitle(item.view),
+          link: viewLink(item.view),
+          attributes: [item.id],
+        };
+      }
+      perView.set(idView, previous);
+    }
+
+    for (const item of perView.values()) {
+      const elItem = el(
+        "li",
+        {
+          class: ["list-group-item", "mx-error-item"],
+        },
+        [
+          el("span", tt("join_warning_colums_issue")),
+          el(
+            "a",
+            { target: "_blank", href: item.link },
+            el("span", item.title),
+          ),
+          el(
+            "ul",
+            item.attributes.map((a) => {
+              return el("li", el("span", a));
+            }),
+          ),
+        ],
+      );
+      elMissing.appendChild(elItem);
+    }
+
+    sjm._elValidationOutput.appendChild(elMissing);
+  }
+
   async save() {
     const sjm = this;
+    if (sjm.locked) {
+      return;
+    }
     const config = sjm.getConfigEditor();
     sjm._config = config;
     const res = await sjm.emit("set_config", config);
@@ -166,15 +297,15 @@ export class SourcesJoinManager extends EventSimple {
   async promptNew() {
     const sjm = this;
     const title = await modalPrompt({
-      title: tt("sjm_new_title"),
-      label: tt("sjm_new_layer_name", {
+      title: tt("join_new_layer_name"),
+      label: tt("join_new_layer_name", {
         data: { language: settings.language },
       }),
-      confirm: tt("sjm_new_btn"),
+      confirm: tt("join_new_btn"),
       inputOptions: {
         type: "text",
         value: `New Join ${new Date().toLocaleString()}`,
-        placeholder: await getDictItem("sjm_create_layer_placeholder"),
+        placeholder: await getDictItem("join_new_layer_placeholder"),
       },
     });
     if (!title) {
@@ -196,36 +327,67 @@ export class SourcesJoinManager extends EventSimple {
     return idSource;
   }
 
+  get locked() {
+    return !!this._lock_save;
+  }
+
+  lockSave() {
+    const sjm = this;
+    if (sjm.locked) {
+      return;
+    }
+    sjm._lock_save = true;
+    sjm._elBtnSave.setAttribute("disabled", "disabled");
+  }
+
+  unlockSave() {
+    const sjm = this;
+    sjm._lock_save = false;
+    sjm._elBtnSave.removeAttribute("disabled");
+  }
+
   async build() {
     const sjm = this;
     const { schema, config, meta } = sjm;
-    const title = meta?.text?.title?.en || sjm.id;
+    const { language } = settings;
     const id_editor = "mx_join";
-    const elSjm = el("div", { id: id_editor, class: "jed-container" });
+    const title = getLabelFromObjectPath({
+      obj: meta,
+      path: "text.title",
+      lang: language,
+      defaultValue: sjm.id,
+    });
 
-    const elBtnSave = elButtonFa("btn_save", {
+    sjm._elValidationOutput = el("div", {
+      class: "mx-error-container",
+    });
+
+    sjm._elSjm = el("div", { id: id_editor, class: "jed-container" });
+    const elContent = el("div", [sjm._elValidationOutput, sjm._elSjm]);
+
+    sjm._elBtnSave = elButtonFa("btn_save", {
       icon: "floppy-o",
       action: sjm.save,
     });
 
-    const elBtnClose = elButtonFa("btn_close", {
+    sjm._elBtnClose = elButtonFa("btn_close", {
       icon: "times",
       action: sjm.close,
     });
 
     sjm._modal = modalSimple({
       title,
-      content: elSjm,
-      buttons: [elBtnClose, elBtnSave],
+      content: elContent,
+      buttons: [sjm._elBtnClose, sjm._elBtnSave],
       removeCloseButton: true,
     });
 
     config.id_source = sjm.id;
-
+    sjm.lockSave();
     sjm._jed = await jedInit({
       schema,
       id: id_editor,
-      target: elSjm,
+      target: sjm._elSjm,
       startVal: config,
       options: {
         disable_collapse: true,
@@ -233,11 +395,13 @@ export class SourcesJoinManager extends EventSimple {
         disableSelectize: false,
         disable_edit_json: true,
         required_by_default: true,
-        show_errors: "always",
+        show_errors: "interaction",
         no_additional_properties: true,
         prompt_before_delete: false,
       },
     });
+    sjm.unlockSave();
+    sjm._jed.on("change", sjm.validate.bind(sjm));
   }
 
   msg(txt, level) {

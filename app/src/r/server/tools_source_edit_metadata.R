@@ -33,7 +33,7 @@ observeEvent(reactData$triggerSourceMetadata, {
       return()
     } else {
       uiOut <- tagList(
-        uiOutput("uiValidateSourceMetadata"),
+        uiOutput("uiValidateSourceMetadata", class = "mx-error-container"),
         jedOutput("jedSourceMetadata")
       )
 
@@ -60,21 +60,42 @@ observeEvent(reactData$triggerSourceMetadata, {
       #
       # Init schema
       #
-
       schema <- list()
       meta <- list()
       attributesNames <- list()
-      extent <- list()
+
 
       #
       # Get old layer meta
       #
       meta <- mxDbGetSourceMeta(layer)
+      hasJoin <- isNotEmpty(meta$join)
+
+      if (isEmpty(.get(meta, c("spatial", "bbox"), list()))) {
+        extent <- mxDbGetLayerExtent(layer)
+        bbox <- list(
+          lng_min  = .get(extent, "lng1", -180),
+          lng_max  = .get(extent, "lng2", 180),
+          lat_min  = .get(extent, "lat1", -90),
+          lat_max  = .get(extent, "lat2", 90)
+        )
+        meta <- .set(meta, c("spatial", "bbox"), bbox)
+      } else {
+        extent <- list()
+      }
 
       #
       # Clean and/or update attribute
       #
-      attributesNames <- mxDbGetTableColumnsNames(layer, notIn = c("gid", "geom", "mx_t0", "mx_t1", "_mx_valid"))
+      attributesNames <- mxDbGetTableColumnsNames(layer,
+        notIn = c(
+          "gid",
+          "geom",
+          "mx_t0",
+          "mx_t1",
+          "_mx_valid"
+        )
+      )
       attributesOld <- names(.get(meta, c("text", "attributes")))
       attributesRemoved <- attributesOld[!attributesOld %in% attributesNames]
 
@@ -88,13 +109,19 @@ observeEvent(reactData$triggerSourceMetadata, {
       #
       schema <- mxSchemaSourceMeta(
         language = language,
-        attributesNames = attributesNames
+        attributesNames = attributesNames,
+        noAttributes = hasJoin
       )
 
       sourceTimeLastModified <- mxDbGetSourceLastDateModified(layer)
       sourceTimeStamp <- as.numeric(
-        as.POSIXct(sourceTimeLastModified, format = "%Y-%m-%d%tT%T", tz = "UTC")
+        as.POSIXct(
+          sourceTimeLastModified,
+          format = "%Y-%m-%d%tT%T",
+          tz = "UTC"
+        )
       )
+
 
       jedSchema(
         id = "jedSourceMetadata",
@@ -121,7 +148,12 @@ observe({
 
     err[["error_form_issues"]] <- hasIssues
 
-    output$uiValidateSourceMetadata <- renderUI(mxErrorsToUi(errors = err, language = language))
+    output$uiValidateSourceMetadata <- renderUI(
+      mxErrorsToUi(
+        errors = err,
+        language = language
+      )
+    )
 
     mxToggleButton(
       id = "btnSaveSourceMetadata",
@@ -134,7 +166,8 @@ observe({
 # Validate metadata
 #
 observeEvent(input$btnValidateMetadata, {
-  # will be validate by mxValidateMetadataModal (r) through client function (js) mx.helpers.validateMetadataModal
+  # will be validate by mxValidateMetadataModal (r) through client function
+  # (js) validateMetadataModal
   jedTriggerGetValues("jedSourceMetadata", "validate")
 })
 
@@ -183,57 +216,63 @@ observeEvent(input$jedSourceMetadata_values, {
         idSource <- layer
         layers <- reactListEditSources()
         issues <- .get(input$jedSourceMetadata_issues, c("data"))
-        hasNoIssues <- noDataCheck(issues)
+        hasIssues <- isNotEmpty(issues)
         isAllowed <- isPublisher && layer %in% layers
 
-        if (hasNoIssues && isAllowed) {
-          tryCatch(
-            {
-
-              mxDbUpdate(
-                table = .get(config, c("pg", "tables", "sources")),
-                idCol = "id",
-                id = idSource,
-                column = "data",
-                path = c("meta"),
-                value = meta
-              )
-
-              mxDbUpdate(
-                table = .get(config, c("pg", "tables", "sources")),
-                idCol = "id",
-                id = idSource,
-                column = "date_modified",
-                value = Sys.time()
-              )
-
-              mxDbUpdate(
-                table = .get(config, c("pg", "tables", "sources")),
-                idCol = "id",
-                id = idSource,
-                column = "editor",
-                value = idUser
-              )
-            },
-            error = function(cond) {
-              stop("Error writing metadata in DB, check the DB logs")
-            }
-          )
-
-          mxFlashIcon("floppy-o")
-          mxUpdateText("editSourceMetadata_txt", "Saved at " + format(Sys.time(), "%H:%M"))
-          reactData$updateSourceLayerList <- runif(1)
-
-          #
-          # Reload views that use this source
-          #
-          views <- mxDbGetViewsIdBySourceId(idSource, language = language)
-
-          mglUpdateViewsBadges(list(
-            views = as.list(views$id),
-            meta = meta
-          ))
+        if (hasIssues || !isAllowed) {
+          stop("Save source metadata : operation not allowed")
         }
+
+        tryCatch(
+          {
+            mxDbUpdate(
+              table = .get(config, c("pg", "tables", "sources")),
+              idCol = "id",
+              id = idSource,
+              column = "data",
+              path = c("meta"),
+              value = meta
+            )
+
+            mxDbUpdate(
+              table = .get(config, c("pg", "tables", "sources")),
+              idCol = "id",
+              id = idSource,
+              column = "date_modified",
+              value = Sys.time()
+            )
+
+            mxDbUpdate(
+              table = .get(config, c("pg", "tables", "sources")),
+              idCol = "id",
+              id = idSource,
+              column = "editor",
+              value = idUser
+            )
+          },
+          error = function(cond) {
+            stop("Error writing metadata in DB, check the DB logs")
+          }
+        )
+
+        mxFlashIcon("floppy-o")
+
+        mxUpdateText(
+          "editSourceMetadata_txt",
+          "Saved at " + format(Sys.time(), "%H:%M")
+        )
+
+        reactData$updateSourceLayerList <- runif(1)
+
+        #
+        # Reload views that use this source
+        #
+        views <- mxDbGetViewsIdBySourceId(idSource, language = language)
+
+        mglUpdateViewsBadges(list(
+          views = as.list(views$id)
+          # meta no more included -> use metadata from server
+        ))
       })
     }
   )

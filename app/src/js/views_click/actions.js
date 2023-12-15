@@ -6,7 +6,7 @@ import { FlashItem } from "./../icon_flash";
 import { displayMetadataIssuesModal } from "./../mx_helper_map_view_badges.js";
 import { storyRead } from "./../story_map/index.js";
 import { viewToTableAttributeModal } from "./../source/display/index.js";
-import { viewToMetaModal } from "./../mx_helper_map_view_metadata.js";
+import { viewToMetaModal } from "./../metadata/utils.js";
 import { getDictItem, getLanguageCurrent } from "./../language";
 import { Uploader } from "./../uploader";
 import { modalMirror } from "./../mirror_util";
@@ -31,7 +31,7 @@ import {
 import { ws, data } from "./../mx.js";
 import { settings } from "./../settings";
 import { viewsListAddSingle } from "../views_list_manager";
-import {LegendVt} from "../legend_vt/legend_vt.js";
+import { LegendVt } from "../legend_vt/legend_vt.js";
 const idMap = settings?.map?.id;
 
 /**
@@ -171,7 +171,7 @@ export async function btn_opt_import_view_linked(dataset) {
       id_project: settings.project.id,
       id_request: makeId(10),
     },
-    60e3
+    60e3,
   );
   await viewDelete(dataset.view_action_target);
   await viewsListAddSingle(view, {
@@ -337,8 +337,8 @@ export async function btn_opt_settings(dataset) {
 export function btn_legend_filter(dataset) {
   const idView = dataset.view_action_target;
   const view = getView(idView);
-  if(view._legend instanceof LegendVt){
-     view._legend.updateFilter();
+  if (view._legend instanceof LegendVt) {
+    view._legend.updateFilter();
   }
 }
 
@@ -425,8 +425,8 @@ export async function btn_opt_meta_external(dataset) {
             minHeight: "150px",
           },
         },
-        title
-      )
+        title,
+      ),
     ),
   });
 }

@@ -84,7 +84,7 @@ export async function getSourceAttributeTable(opt) {
     const toIgnore = attributesToIgnore.includes(a);
     // prevent unknow column / injection
     const exists = allAttributes.includes(a);
-    return !toIgnore && exists ; 
+    return !toIgnore && exists;
   });
 
   if (isEmpty(attributesSelect)) {

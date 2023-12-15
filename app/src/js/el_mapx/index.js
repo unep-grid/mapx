@@ -314,6 +314,7 @@ function elPanel(opt) {
     {},
     {
       classHeader: ["panel-heading"],
+      classTitle: ["panel-title"],
       classContainer: ["panel", "panel-default"],
       content: null,
       title: null,
@@ -331,7 +332,13 @@ function elPanel(opt) {
       {
         class: opt.classHeader,
       },
-      opt.title,
+      el(
+        "div",
+        {
+          class: opt.classTitle,
+        },
+        opt.title,
+      ),
     ),
     opt.content,
   );

@@ -4,7 +4,7 @@ import {
   columnsExist,
   getColumnsTypesSimple,
   getLayerTitle,
-  getLayerViewsAttributes,
+  getLayerUsedAttributes,
   getTableDimension,
   isLayerValid,
   sanitizeUpdates,
@@ -342,7 +342,7 @@ class EditTableSession {
     switch (message.type) {
       case "columns_used":
         {
-          const data = await getLayerViewsAttributes(et._id_table);
+          const data = await getLayerUsedAttributes(et._id_table);
           callback(data);
         }
         break;
@@ -545,8 +545,7 @@ class EditTableSession {
    */
   emitSpread(type, data) {
     const et = this;
-    et._socket.mx_emit_ws_broadcast(type, data);
-    et._socket.mx_emit_ws(type, data);
+    et._socket.mx_emit_ws_gobal(type, data);
   }
 
   /**

@@ -2,7 +2,6 @@
 #'
 #' @param language {Character} Two letter language code
 #' @param attributesNames {Character} Vector of attribute names. Used to generate attribute and attribute_alias translation schema.
-#' @param extent {List} Default extent
 #' @param title {Character} Default Title
 #' @param abstract {Character} Default abstract
 #' @param notes {Character} Default notes
@@ -11,7 +10,6 @@
 mxSchemaSourceMeta <- function(
   language = NULL,
   attributesNames = c(),
-  extent = list(),
   title = "",
   abstract = "",
   notes = "",
@@ -24,7 +22,7 @@ mxSchemaSourceMeta <- function(
   # dict =  .get(config,c("dictionaries","schemaMetadata"))
   dict <- config$dict
   v <- .get(config, c("validation", "input", "nchar"))
-  
+
   #
   # Counter to keep property in the same order as described here
   #
@@ -38,6 +36,7 @@ mxSchemaSourceMeta <- function(
   }
 
   m49Options <- mxGetM49Options(language)
+
 
   #
   # Final object
@@ -320,34 +319,37 @@ mxSchemaSourceMeta <- function(
             description = t("spatial_bbx_desc"),
             type = "object",
             options = list(collapsed = TRUE),
+            required = c(),
             properties = list(
               lng_min = list(
                 title = t("spatial_bbx_lng_min"),
                 type = "number",
                 minimum = -180,
                 maximum = 180,
-                default = .get(extent, "lng1")
+                minLength = 0,
+                default = -180
               ),
               lng_max = list(
                 title = t("spatial_bbx_lng_max"),
                 type = "number",
                 minumum = -180,
                 maximum = 180,
-                default = .get(extent, "lng2")
+                minLength = 0,
+                default = 180
               ),
               lat_min = list(
                 title = t("spatial_bbx_lat_min"),
                 type = "number",
                 minumum = -90,
                 maximum = 90,
-                default = .get(extent, "lat1")
+                default = -90
               ),
               lat_max = list(
                 title = t("spatial_bbx_lat_max"),
                 type = "number",
                 minumum = -90,
                 maximum = 90,
-                default = .get(extent, "lat2")
+                default = 90
               )
             )
           )
@@ -521,10 +523,10 @@ mxSchemaSourceMeta <- function(
   return(out)
 }
 
-#' Produce option and optgroup for m49 + countr name 
+#' Produce option and optgroup for m49 + countr name
 #'
 #' @param language {Character} Two letter language code
-#' @return List with options  and optgroup list 
+#' @return List with options  and optgroup list
 mxGetM49Options <- function(language) {
   #
   # M9 keywords

@@ -542,10 +542,13 @@ async function getTableDimension(idTable) {
 }
 
 /**
- * Get simple (json) column type
+ * Get columns types
+ * @async
  * @param {String} idSource Id of the source
- * @param {String} idAttr Id of the attribute
- * @param {Array<String>} idAttrExclude Array of attribute ids to exclude. Default is ['gid','geom']
+ * @param {String|Array<String>} idAttr Id of the attribute. If empty, all
+ * attributes are returned
+ * @param {Array<String>} idAttrExclude Array of attribute ids to exclude,
+ * default are ['gid','geom']
  * @return {Promise<array>} Array of types
  */
 async function getColumnsTypesSimple(
@@ -567,30 +570,6 @@ async function getColumnsTypesSimple(
   const values = [idSource, cNamesFiltered];
   const resp = await pgRead.query(sqlSrcAttr, values);
   return resp.rows;
-}
-
-/**
- * Get column type
- * @async
- * @param {string} idAttr
- * @param {string} idTable
- * @returns {Promise<string>} type
- */
-async function getColumnDataType(columnName, tableName) {
-  const result = await pgRead.query(
-    `
-    SELECT column_name, data_type
-    FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE table_name = $1 AND column_name = $2;
-  `,
-    [tableName, columnName]
-  );
-
-  if (result.rowCount === 0) {
-    throw new Error(`Column "${columnName}" not found in table "${tableName}"`);
-  }
-
-  return result.rows[0].data_type;
 }
 
 /**
@@ -718,7 +697,7 @@ async function getLayerTitle(idLayer, language) {
  * NOTE: not including attributes used in cc, custom style and widgets
  * i.e -> atributes a,b,c are used in source xy by at least one view
  * @param {string} idLayer Id of the layer
- * @return {array} array of attribute used
+ * @return {Promise<string[]>} array of attribute used
  */
 async function getLayerViewsAttributes(idLayer) {
   const sql = `
@@ -735,6 +714,36 @@ async function getLayerViewsAttributes(idLayer) {
   }
   const names = res.rows.map((row) => row.column_name);
   return names;
+}
+
+/**
+ * Retrieves distinct column names of a source used in join.
+ * @param {string} idLayer - The ID of the layer to query.
+ * @returns {Promise<string[]>} A promise that resolves to an array of distinct column names.
+ */
+async function getLayerJoinAttributes(idLayer) {
+  try {
+    const query = templates.getSourceColumnsInJoin;
+    const res = await pgRead.query(query, [idLayer]);
+    return res.rows.map((row) => row.column_name);
+  } catch (err) {
+    console.error("Error executing query", err.stack);
+    throw err;
+  }
+}
+
+/**
+ * Retrieves source known used sources' columns.
+ * @param {string} idLayer - The ID of the layer to query.
+ * @returns {Promise<string[]>} A promise that resolves to an array of distinct column names.
+ */
+async function getLayerUsedAttributes(idLayer) {
+  const attributes = [];
+  const attributesInViews = await getLayerViewsAttributes(idLayer);
+  const attributesInJoin = await getLayerJoinAttributes(idLayer);
+  attributes.push(...attributesInJoin);
+  attributes.push(...attributesInViews);
+  return attributes;
 }
 
 /**
@@ -822,44 +831,44 @@ async function updateViewsAttribute(idSource, oldName, newName, pgClient) {
 }
 
 /**
- * Duplicate a postgres column
- * Transaction is handled upstream
+ * Duplicates a column in a PostgreSQL table.
+ * Assumes transaction management is handled upstream.
+ *
  * @async
- * @param {string} idColumn
- * @param {string} idColumnNew
- * @param {pg.Client} postgres
- * @return {Promise<boolean>} done
+ * @param {String} idSource - Name of the table where the column will be duplicated.
+ * @param {String} sourceColumn - Name of the source column to be duplicated.
+ * @param {String} newColumn - Name for the new, duplicated column.
+ * @param {pg.Client} pgClient - PostgreSQL client for database interaction.
+ * @throws {Error} If the source and new column names are the same, or if the source column doesn't exist.
+ * @return {Promise<void>}
  */
-async function duplicateTableColumn(idSource, sourceName, destName, pgClient) {
+async function duplicateTableColumn(
+  idSource,
+  sourceColumn,
+  newColumn,
+  pgClient
+) {
   try {
-    if (sourceName === destName) {
+    if (sourceColumn === newColumn) {
+      throw new Error("Source and new column names must be different.");
+    }
+
+    const columnTypes = await getColumnsTypesSimple(idSource, [sourceColumn]);
+    if (isEmpty(columnTypes)) {
       throw new Error(
-        "Source and destination names are the same, duplicate impossible"
+        `Table "${idSource}" does not exist or lacks column "${sourceColumn}".`
       );
     }
 
-    const sourceExists = await columnExists(sourceName, idSource, pgClient);
-
-    if (!sourceExists) {
-      throw new Error(
-        `Table "${idSource}" does not exist or does not have a column ${sourceName}`
-      );
-    }
-
-    /**
-     * Update source layer
-     * ( using template literral, as new/old name should be valid
-     */
-    const sourceColumnType = await getColumnDataType(sourceName, idSource);
-
+    const columnType = columnTypes[0].column_type;
     await pgClient.query(`
-    ALTER TABLE "${idSource}" 
-    ADD COLUMN IF NOT EXISTS"${destName}" ${sourceColumnType};
-    UPDATE "${idSource}" SET "${destName}" = "${sourceName}";
+      ALTER TABLE "${idSource}" 
+      ADD COLUMN IF NOT EXISTS "${newColumn}" ${columnType};
+      UPDATE "${idSource}" SET "${newColumn}" = "${sourceColumn}";
     `);
   } catch (error) {
-    console.error("Error duplicating source attributes", error);
-    throw new Error(error);
+    console.error("Error in duplicating column:", error);
+    throw error; 
   }
 }
 
@@ -967,6 +976,8 @@ export {
   withTransaction,
   insertRow,
   getLayerViewsAttributes,
+  getLayerUsedAttributes,
+  getLayerJoinAttributes,
   getColumnsNames,
   getColumnsTypesSimple,
   getSourceLastTimestamp,

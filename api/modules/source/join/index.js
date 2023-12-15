@@ -1,6 +1,6 @@
 import { pgRead, pgWrite } from "#mapx/db";
 import { templates } from "#mapx/template";
-import { isSourceId, isNotEmpty } from "@fxi/mx_valid";
+import { isSourceId, isEmpty, isNotEmpty } from "@fxi/mx_valid";
 import { newIdSource } from "#mapx/upload";
 import {
   registerSource,
@@ -8,15 +8,18 @@ import {
   withTransaction,
 } from "#mapx/db_utils";
 
-import { schema } from "./schema.js";
+import { getSchema } from "./schema.js";
 import { Validator } from "#mapx/schema";
+import { getViewsBySource } from "../../view/getView.js";
+
+const schema = getSchema();
 
 const validator = new Validator(schema);
 
 const join_default = {
   id_source: "",
   columns: [],
-  prefix: "b_",
+  _prefix: "j0_", // not part of the schema
   type: "INNER",
   column_join: "",
   column_base: "",
@@ -27,10 +30,10 @@ const config_default = {
   base: {
     id_source: "",
     columns: [],
-    prefix: "a_",
   },
   joins: [join_default],
 };
+
 export async function ioSourceJoin(socket, data, cb) {
   const session = socket.session;
 
@@ -45,7 +48,7 @@ export async function ioSourceJoin(socket, data, cb) {
 
     const { method, config } = data;
 
-    const response = await handleMethod(method, config, session);
+    const response = await handleMethod(method, config, session, socket);
 
     cb(response);
   } catch (e) {
@@ -62,18 +65,20 @@ export async function ioSourceJoin(socket, data, cb) {
  * @param {string} method - The method to execute.
  * @param {Object} config - Configuration.
  * @param {Object} session - Session information.
+ * @param {Object} socket - Websocket.
  * @returns {Promise<any>} - Result of the executed method.
  */
-async function handleMethod(method, config, session) {
+async function handleMethod(method, config, session, socket) {
   const handlers = {
     get_config_default: () => config_default,
     get_join_default: () => join_default,
     get_config: () => getJoinConfig(config),
     get_data: () => getJoinData(config),
-    get_schema: () => schema,
+    get_schema: () => getSchema(config?.language),
     validate: () => validator.validate(config),
+    get_columns_missing: () => getColumnsMissingInJoin(config),
     get_columns_type: () => getColumnsType(config),
-    set_config: (client) => setJoinConfig(config, client),
+    set_config: (client) => setJoinConfig(config, client, socket),
     register: (client) => register(config, session, client),
   };
 
@@ -146,10 +151,12 @@ async function getJoinConfig(configGet, client = pgRead) {
   return Object.assign(config_default, config);
 }
 
-async function setJoinConfig(config, client = pgWrite) {
+async function setJoinConfig(config, client = pgWrite, socket) {
   await stopIfNotValid(config, client);
+  await updatePrefixConfig(config);
   await updatePgView(config, client);
   await updateJoin(config, client);
+  await updateViews(config, socket);
   return true;
 }
 
@@ -166,15 +173,18 @@ function msg(txt) {
   return `Join (server): ${txt}`;
 }
 
+async function updateViews(config, socket) {
+  const views = await getViewsBySource(config.id_source);
+  if (isNotEmpty(views)) {
+    socket.mx_emit_ws_global("/server/spread/views/update", { views });
+  }
+}
+
 async function updateJoin(config, client) {
-  const result = await client.query(
-    `
-    UPDATE mx_sources
-    SET data = jsonb_set(data,'{join}',$1::jsonb,true)
-    WHERE id = $2
-    `,
-    [config, config.id_source]
-  );
+  const result = await client.query(templates.updateJoinConfig, [
+    config,
+    config.id_source,
+  ]);
 
   if (result.rowCount !== 1) {
     throw new Error(
@@ -183,9 +193,22 @@ async function updateJoin(config, client) {
   }
 }
 
-function configToSql(config) {
+async function updatePrefixConfig(config) {
   // Extracting base layer details
-  const prefixes = "abcdefghijklmnopqrstuvwxyz";
+  const prefixes = [];
+  const maxJoin = schema.properties.joins.maxItems;
+  for (let i = 0; i < maxJoin; i++) {
+    prefixes.push(`j${i}_`);
+  }
+
+  let j = 0;
+
+  for (const join of config.joins) {
+    join._prefix = prefixes[j++];
+  }
+}
+
+function configToSql(config) {
   const baseLayer = config.base;
   const baseAlias = "base";
   let sql = `
@@ -193,35 +216,38 @@ function configToSql(config) {
   CREATE VIEW ${config.id_source} 
   AS
   `;
-  let j = 0;
 
-  const baseColumns = formatColumns(
-    baseLayer.columns,
-    baseAlias,
-    `${prefixes[j++]}_`
-  );
+  const baseColumns = formatColumns({
+    colums: baseLayer.columns,
+    tableAlias: baseAlias,
+    columnPrefix: null,
+    addLeadingComma: true,
+  });
 
   let selectClause = `
   SELECT
   ${baseAlias}.geom,
-  ${baseAlias}.gid,
+  ${baseAlias}.gid
   ${baseColumns}`;
   let joinClauses = "";
 
   // Processing each join
   for (const join of config.joins) {
-    const prefix = prefixes[j];
-    const joinAlias = `join_${prefix}`;
-    const prefixColumns = `${prefix}_`;
-    const joinColums = formatColumns(join.columns, joinAlias, prefixColumns);
+    const prefix = join._prefix;
+    const joinAlias = `join_${prefix}_alias`;
+    const joinColums = formatColumns({
+      columns: join.columns,
+      tableAlias: joinAlias,
+      columnPrefix: prefix,
+      addLeadingComma: true,
+    });
 
-    selectClause += `, ${joinColums}`;
+    selectClause += `${joinColums}`;
     joinClauses += `
       ${join.type}
     JOIN ${join.id_source}
     AS ${joinAlias}
     ON ${baseAlias}.${join.column_base} = ${joinAlias}.${join.column_join}`;
-    j++;
   }
 
   // Finalizing SQL
@@ -235,13 +261,99 @@ function configToSql(config) {
 }
 
 // Helper function to format columns with alias
-function formatColumns(columns, tableAlias, columnPrefix) {
-  return columns
-    .map((col) => `${tableAlias}.${col} AS ${columnPrefix}${col}`)
-    .join(", ");
+function formatColumns(opt) {
+  const { columns, tableAlias, columnPrefix, addLeadingComma } = opt;
+  if (isEmpty(columns)) {
+    return "";
+  }
+  return (
+    `${addLeadingComma ? "," : ""}` +
+    columns
+      .map((col) => `${tableAlias}.${col} AS ${columnPrefix}${col}`)
+      .join(", ")
+  );
 }
 
 async function updatePgView(config, client) {
   const sql = configToSql(config);
   await client.query(sql);
+}
+
+/**
+ * Retrieves all views from the latest views list that use a specified source.
+ *
+ * @param {string} sourceId - The ID of the source to look for in the views.
+ * @param {Object} pgClient - Optional. PostgreSQL client for database queries. Defaults to 'pgRead'.
+ * @returns {Promise<Object[]>} - A promise that resolves to an array of view data objects.
+ */
+async function getViewsUsingSource(sourceId, pgClient = pgRead) {
+  const query = "SELECT * FROM mx_views_latest WHERE data @> $1";
+  const res = await pgClient.query(query, [
+    JSON.stringify({ source: { layerInfo: { name: sourceId } } }),
+  ]);
+  return res.rows;
+}
+
+/**
+ * Checks for missing columns in a join configuration against the attributes used in associated views.
+ *
+ * @param {Object} joinConfig - The join configuration object containing base and join details.
+ *   Expected to have 'id_source', 'base', and 'joins' properties.
+ * @returns {Promise<Object[]>} - A promise that resolves to an array of objects, each representing a missing column.
+ *   Each object contains an 'id' property corresponding to the missing attribute ID.
+ */
+async function getColumnsMissingInJoin(joinConfig) {
+  const { id_source: idSource, base, joins } = joinConfig;
+  const missingColumns = [];
+
+  if (!isSourceId(idSource)) {
+    return []; // No join configuration, so no missing columns
+  }
+
+  const validation = await validator.validate(joinConfig);
+
+  if (isNotEmpty(validation)) {
+    // pre-existing errors
+    return [];
+  }
+
+  const views = await getViewsUsingSource(idSource);
+
+  // Extracting attributes from views and checking against join configuration
+  for (const view of views) {
+    const attributes = new Set(view?.data?.attribute?.names || []);
+    attributes.add(view?.data?.attribute?.name);
+    for (const attr of attributes) {
+      if (isEmpty(attr)) {
+        continue;
+      }
+
+      const baseColumns = base.columns || [];
+
+      let found = baseColumns.includes(attr);
+      let j = 0;
+      for (const join of joins) {
+        // prefix don't exists until save, join config can be from client
+        const prefix = `j${j++}_`;
+        const matchPrefix = attr.startsWith(prefix);
+        if (!matchPrefix) {
+          continue;
+        }
+        const joinColumns = join.columns || [];
+        const originalAttr = attr.substring(prefix.length);
+
+        if (!found) {
+          found = joinColumns.includes(originalAttr);
+        }
+      }
+      if (!found) {
+        missingColumns.push({
+          id: attr,
+          view: view,
+        });
+      }
+    }
+  }
+
+  return missingColumns;
 }

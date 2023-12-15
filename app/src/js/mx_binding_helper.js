@@ -64,6 +64,7 @@ import {
   jedInit,
   jedUpdate,
 } from "./json_editor";
+import { modalSourceJoin } from "./source/joins/instance.js";
 
 $(document).on("shiny:connected", mapxBindings);
 
@@ -106,6 +107,7 @@ function mapxBindings() {
   bind("mxUpdateCheckboxInput", updateCheckboxInput);
   bind("mxNotify", shinyNotify);
   bind("mxGeoserverRebuild", geoserver.rebuild);
+  bind("mxJoinEditor", modalSourceJoin);
   bind("mxEditTable", ws_tools.getCb("edit_table"));
   bind("mxGeomTools", ws_tools.getCb("geometry_tools"));
   bind("mxUploader", ws_tools.getCb("uploader"));

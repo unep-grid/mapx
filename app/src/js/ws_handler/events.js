@@ -74,12 +74,16 @@ async function handlerViewAdd(message, cb) {
  */
 async function handleViewsReplace(message, cb) {
   const { views } = message;
-  if (!isArrayOfViews(views)) {
+  const valid = isArrayOfViews(views);
+  if (!valid) {
     console.error("Views replace should provide valid views ");
-    return cb({ ok: false });
+    if (isFunction(cb)) {
+      cb({ ok: false });
+    }
   }
-  message.ok = await viewsReplace(views);
+  const ok = await viewsReplace(views);
   if (isFunction(cb)) {
+    message.ok = ok;
     cb(message);
   }
 }
@@ -134,7 +138,7 @@ async function testSum(id, ws) {
     {
       arrayNum: [1, 2, 3, 4],
     },
-    10e3
+    10e3,
   );
   return response.result === 10;
 }
@@ -147,7 +151,7 @@ async function testEcho(id, ws) {
       start: now,
       end: null,
     },
-    10e3
+    10e3,
   );
   const valid = response.start === now;
   const duration = response.end - now;

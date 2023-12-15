@@ -2065,6 +2065,486 @@
     "de": "Externe Ansicht importieren ? Diese Ansicht ist in den Projekteinstellungen als externe Ansicht verfügbar"
   },
   {
+    "id": "join_form_title",
+    "en": "Join Configurator",
+    "de": "Verbindungs-Konfigurator"
+  },
+  {
+    "id": "join_form_title_desc",
+    "en": "Configure how layers and tables should be joined",
+    "de": "Konfigurieren, wie Schichten und Tabellen verbunden werden sollen"
+  },
+  {
+    "id": "join_source_base",
+    "en": "Base source",
+    "de": "Basisquelle"
+  },
+  {
+    "id": "join_columns_base",
+    "en": "Columns to display",
+    "de": "Anzuzeigende Spalten"
+  },
+  {
+    "id": "join_source_join",
+    "en": "Join source",
+    "de": "Verbindungsquelle"
+  },
+  {
+    "id": "join_columns_join",
+    "en": "Columns to display",
+    "de": "Anzuzeigende Spalten"
+  },
+  {
+    "id": "join_column_base",
+    "en": "Base column",
+    "de": "Basis-Spalte"
+  },
+  {
+    "id": "join_column_join",
+    "en": "Join column",
+    "de": "Verbindungsspalte"
+  },
+  {
+    "id": "join_type",
+    "en": "Type",
+    "de": "Typ"
+  },
+  {
+    "id": "join_base",
+    "en": "Base",
+    "de": "Basis"
+  },
+  {
+    "id": "join_joins",
+    "en": "Join items",
+    "de": "Elemente verbinden"
+  },
+  {
+    "id": "join_new_layer_name",
+    "en": "New Layer Name",
+    "de": "Name der Neuen Ebene"
+  },
+  {
+    "id": "join_new_btn",
+    "en": "Create New Join",
+    "de": "Neue Verbindung Erstellen"
+  },
+  {
+    "id": "join_new_layer_placeholder",
+    "en": "Enter layer name",
+    "de": "Geben Sie den Namen der Ebene ein"
+  },
+  {
+    "id": "join_warning_colums_issue",
+    "en": "Error: columns issue",
+    "de": "Fehler: Spaltenproblem"
+  },
+  {
+    "id": "join_warning_colums_used_in_views",
+    "en": "Column '{{column}}' unselected, but requested",
+    "de": "Spalte '{{column}}' nicht ausgewählt, aber angefordert"
+  },
+  {
+    "id": "join_meta_title",
+    "en": "Metadata for the join",
+    "de": "Metadaten für die Verknüpfung"
+  },
+  {
+    "id": "btn_join_editor",
+    "en": "Edit Table Join",
+    "de": "Tabellenverknüpfung bearbeiten"
+  },
+  {
+    "id": "btn_join_editor_new",
+    "en": "Create New Table Join",
+    "de": "Neue Tabellenverknüpfung erstellen"
+  },
+  {
+    "id": "error_notset",
+    "en": "Property must be set",
+    "de": "Eigenschaft muss festgelegt werden "
+  },
+  {
+    "id": "error_notempty",
+    "en": "Value required",
+    "de": "Wert erforderlich "
+  },
+  {
+    "id": "error_space_only",
+    "en": "The value can't be composed of whitespace only (space, tab, line break)",
+    "de": "Der Wert kann nicht nur aus Leerzeichen bestehen (Leerzeichen, Tabulator, Zeilenumbruch). "
+  },
+  {
+    "id": "error_enum",
+    "en": "Value must be one of the enumerated values",
+    "de": "Der Wert muss einer der aufgezählten Werte sein "
+  },
+  {
+    "id": "error_anyOf",
+    "en": "Value must validate against at least one of the provided schemas",
+    "de": "Der Wert muss anhand mindestens eines der bereitgestellten Schemas validiert werden "
+  },
+  {
+    "id": "error_oneOf",
+    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
+    "de": "Der Wert muss für genau eines der bereitgestellten Schemas validiert werden. Es validiert derzeit gegen {{0}} der Schemata. "
+  },
+  {
+    "id": "error_not",
+    "en": "Value must not validate against the provided schema",
+    "de": "Der Wert darf nicht anhand des angegebenen Schemas überprüft werden "
+  },
+  {
+    "id": "error_type_union",
+    "en": "Value must be one of the provided types",
+    "de": "Der Wert muss einer der angegebenen Typen sein "
+  },
+  {
+    "id": "error_type",
+    "en": "Value must be of type {{0}}",
+    "de": "Der Wert muss vom Typ sein {{0}} "
+  },
+  {
+    "id": "error_disallow_union",
+    "en": "Value must not be one of the provided disallowed types",
+    "de": "Der Wert darf nicht zu den angegebenen unzulässigen Typen gehören "
+  },
+  {
+    "id": "error_disallow",
+    "en": "Value must not be of type {{0}}",
+    "de": "Der Wert darf nicht vom Typ sein {{0}} "
+  },
+  {
+    "id": "error_multipleOf",
+    "en": "Value must be a multiple of {{0}}",
+    "de": "Der Wert muss ein Vielfaches von sein {{0}} "
+  },
+  {
+    "id": "error_maximum_excl",
+    "en": "Value must be less than {{0}}",
+    "de": "Wert muss kleiner sein als {{0}} "
+  },
+  {
+    "id": "error_maximum_incl",
+    "en": "Value must be at most {{0}}",
+    "de": "Wert muss höchstens sein {{0}} "
+  },
+  {
+    "id": "error_minimum_excl",
+    "en": "Value must be greater than {{0}}",
+    "de": "Wert muss größer sein als {{0}} "
+  },
+  {
+    "id": "error_minimum_incl",
+    "en": "Value must be at least {{0}}",
+    "de": "Wert muss mindestens sein {{0}} "
+  },
+  {
+    "id": "error_maxLength",
+    "en": "Value must be at most {{0}} characters long",
+    "de": "Wert muss höchstens sein {{0}} Zeichen lang "
+  },
+  {
+    "id": "error_minLength",
+    "en": "Value must be at least {{0}} characters long",
+    "de": "Wert muss mindestens sein {{0}} Zeichen lang "
+  },
+  {
+    "id": "error_pattern",
+    "en": "Value must match the pattern {{0}}",
+    "de": "Der Wert muss mit dem Muster übereinstimmen {{0}} "
+  },
+  {
+    "id": "error_additionalItems",
+    "en": "No additional items allowed in this array",
+    "de": "In diesem Array sind keine zusätzlichen Elemente zulässig "
+  },
+  {
+    "id": "error_maxItems",
+    "en": "Value must have at most {{0}} items",
+    "de": "Wert muss höchstens haben {{0}} Artikel "
+  },
+  {
+    "id": "error_minItems",
+    "en": "Value must have at least {{0}} items",
+    "de": "Wert muss mindestens haben {{0}} Artikel "
+  },
+  {
+    "id": "error_uniqueItems",
+    "en": "Array must have unique items",
+    "de": "Das Array muss eindeutige Elemente enthalten "
+  },
+  {
+    "id": "error_maxProperties",
+    "en": "Object must have at most {{0}} properties",
+    "de": "Objekt muss höchstens haben {{0}} Eigenschaften "
+  },
+  {
+    "id": "error_minProperties",
+    "en": "Object must have at least {{0}} properties",
+    "de": "Objekt muss mindestens haben {{0}} Eigenschaften "
+  },
+  {
+    "id": "error_required",
+    "en": "Object is missing the required property '{{0}}'",
+    "de": "Objekt fehlt die erforderliche Eigenschaft ' {{0}} ' "
+  },
+  {
+    "id": "error_additional_properties",
+    "en": "No additional properties allowed, but property {{0}} is set",
+    "de": "Keine zusätzlichen Eigenschaften erlaubt, aber Eigenschaft {{0}} eingestellt ist "
+  },
+  {
+    "id": "error_dependency",
+    "en": "Must have property {{0}}",
+    "de": "Muss Eigentum haben {{0}} "
+  },
+  {
+    "id": "button_delete_all",
+    "en": "All",
+    "de": "Alle "
+  },
+  {
+    "id": "button_delete_all_title",
+    "en": "Delete All",
+    "de": "Alles löschen "
+  },
+  {
+    "id": "button_delete_last",
+    "en": "Last {{0}}",
+    "de": "Letzte {{0}} "
+  },
+  {
+    "id": "button_delete_last_title",
+    "en": "Delete Last {{0}}",
+    "de": "Letzte löschen {{0}} "
+  },
+  {
+    "id": "button_add_row_title",
+    "en": "Add {{0}}",
+    "de": "Hinzufügen {{0}} "
+  },
+  {
+    "id": "button_move_down_title",
+    "en": "Move down",
+    "de": "Sich abwärts bewegen "
+  },
+  {
+    "id": "button_move_up_title",
+    "en": "Move up",
+    "de": "Bewegen Sie sich nach oben "
+  },
+  {
+    "id": "button_delete_row_title",
+    "en": "Delete {{0}}",
+    "de": "Löschen {{0}} "
+  },
+  {
+    "id": "button_delete_row_title_short",
+    "en": "Delete",
+    "de": "Löschen "
+  },
+  {
+    "id": "button_collapse",
+    "en": "Collapse",
+    "de": "Zusammenbruch "
+  },
+  {
+    "id": "button_expand",
+    "en": "Expand",
+    "de": "Erweitern "
+  },
+  {
+    "id": "login_single_use_password_email_subject",
+    "en": "Single use password request",
+    "de": "Einmalige Passwortanfrage "
+  },
+  {
+    "id": "error_const",
+    "en": "Value must be the constant value",
+    "de": "Der Wert muss der konstante Wert sein"
+  },
+  {
+    "id": "error_contains",
+    "en": "No items match contains",
+    "de": "Keine Artikelübereinstimmung enthält"
+  },
+  {
+    "id": "error_minContains",
+    "en": "Contains match count {{0}} is less than minimum contains count of {{1}}",
+    "de": "Enthält die Anzahl der Übereinstimmungen {{0}} ist kleiner als das Minimum und enthält die Anzahl von {{1}}"
+  },
+  {
+    "id": "error_maxContains",
+    "en": "Contains match count {{0}} exceeds maximum contains count of {{1}}",
+    "de": "Enthält die Anzahl der Übereinstimmungen {{0}} überschreitet das Maximum, enthält Anzahl von {{1}}"
+  },
+  {
+    "id": "error_property_names_exceeds_maxlength",
+    "en": "Property name {{0}} exceeds maxLength",
+    "de": "Name des Anwesens {{0}} überschreitet maxLength"
+  },
+  {
+    "id": "error_property_names_enum_mismatch",
+    "en": "Property name {{0}} does not match any enum values",
+    "de": "Name des Anwesens {{0}} stimmt mit keinem Enumerationswert überein"
+  },
+  {
+    "id": "error_property_names_const_mismatch",
+    "en": "Property name {{0}} does not match the const value",
+    "de": "Name des Anwesens {{0}} stimmt nicht mit dem const-Wert überein"
+  },
+  {
+    "id": "error_property_names_pattern_mismatch",
+    "en": "Property name {{0}} does not match pattern",
+    "de": "Name des Anwesens {{0}} entspricht nicht dem Muster"
+  },
+  {
+    "id": "error_property_names_false",
+    "en": "Property name {{0}} fails when propertyName is false",
+    "de": "Name des Anwesens {{0}} schlägt fehl, wenn propertyName falsch ist"
+  },
+  {
+    "id": "error_property_names_maxlength",
+    "en": "Property name {{0}} cannot match invalid maxLength",
+    "de": "Name des Anwesens {{0}} kann nicht mit der ungültigen maxLength übereinstimmen"
+  },
+  {
+    "id": "error_property_names_enum",
+    "en": "Property name {{0}} cannot match invalid enum",
+    "de": "Name des Anwesens {{0}} Kann keine ungültige Enumeration finden"
+  },
+  {
+    "id": "error_property_names_pattern",
+    "en": "Property name {{0}} cannot match invalid pattern",
+    "de": "Name des Anwesens {{0}} Kann kein ungültiges Muster finden"
+  },
+  {
+    "id": "error_property_names_unsupported",
+    "en": "Unsupported propertyName {{0}}",
+    "de": "Nicht unterstützter Eigenschaftsname {{0}}"
+  },
+  {
+    "id": "error_date",
+    "en": "Date must be in the format {{0}}",
+    "de": "Das Datum muss im Format vorliegen {{0}}"
+  },
+  {
+    "id": "error_time",
+    "en": "Time must be in the format {{0}}",
+    "de": "Die Zeit muss im Format vorliegen {{0}}"
+  },
+  {
+    "id": "error_datetime_local",
+    "en": "Datetime must be in the format {{0}}",
+    "de": "Datetime muss im Format vorliegen {{0}}"
+  },
+  {
+    "id": "error_invalid_epoch",
+    "en": "Date must be greater than 1 January 1970",
+    "de": "Das Datum muss nach dem 1. Januar 1970 liegen"
+  },
+  {
+    "id": "error_ipv4",
+    "en": "Value must be a valid IPv4 address in the form of 4 numbers between 0 and 255, separated by dots",
+    "de": "Der Wert muss eine gültige IPv4-Adresse in Form von 4 durch Punkte getrennten Zahlen zwischen 0 und 255 sein"
+  },
+  {
+    "id": "error_ipv6",
+    "en": "Value must be a valid IPv6 address",
+    "de": "Der Wert muss eine gültige IPv6-Adresse sein"
+  },
+  {
+    "id": "error_hostname",
+    "en": "The hostname has the wrong format",
+    "de": "Der Hostname hat das falsche Format"
+  },
+  {
+    "id": "upload_max_size",
+    "en": "Filesize too large. Max size is ",
+    "de": "Dateigröße zu groß. Maximale Größe ist "
+  },
+  {
+    "id": "upload_wrong_file_format",
+    "en": "Wrong file format. Allowed format(s): ",
+    "de": "Falsches Dateiformat. Zulässige(s) Format(e): "
+  },
+  {
+    "id": "button_save",
+    "en": "Save",
+    "de": "Speichern"
+  },
+  {
+    "id": "button_copy",
+    "en": "Copy",
+    "de": "Kopieren"
+  },
+  {
+    "id": "button_cancel",
+    "en": "Cancel",
+    "de": "Stornieren"
+  },
+  {
+    "id": "button_add",
+    "en": "Add",
+    "de": "Hinzufügen"
+  },
+  {
+    "id": "button_properties",
+    "en": "Properties",
+    "de": "Eigenschaften"
+  },
+  {
+    "id": "button_object_properties",
+    "en": "Object Properties",
+    "de": "Objekteigenschaften"
+  },
+  {
+    "id": "button_copy_row_title",
+    "en": "Copy {{0}}",
+    "de": "Kopieren {{0}}"
+  },
+  {
+    "id": "button_copy_row_title_short",
+    "en": "Copy",
+    "de": "Kopieren"
+  },
+  {
+    "id": "button_edit_json",
+    "en": "Edit JSON",
+    "de": "JSON bearbeiten"
+  },
+  {
+    "id": "button_upload",
+    "en": "Upload",
+    "de": "Hochladen"
+  },
+  {
+    "id": "flatpickr_toggle_button",
+    "en": "Toggle",
+    "de": "Umschalten"
+  },
+  {
+    "id": "flatpickr_clear_button",
+    "en": "Clear",
+    "de": "Klar"
+  },
+  {
+    "id": "choices_placeholder_text",
+    "en": "Start typing to add value",
+    "de": "Beginnen Sie mit der Eingabe, um einen Mehrwert zu schaffen"
+  },
+  {
+    "id": "default_array_item_title",
+    "en": "Item",
+    "de": "Artikel"
+  },
+  {
+    "id": "button_delete_node_warning",
+    "en": "Are you sure you want to remove this item?",
+    "de": "Möchten Sie dieses Element wirklich entfernen?"
+  },
+  {
     "id": "en",
     "en": "English",
     "de": "Englisch "
@@ -6338,206 +6818,6 @@
     "id": "buttton_copy",
     "en": "Copy",
     "de": "Kopieren"
-  },
-  {
-    "id": "error_notset",
-    "en": "Property must be set",
-    "de": "Eigenschaft muss festgelegt werden "
-  },
-  {
-    "id": "error_notempty",
-    "en": "Value required",
-    "de": "Wert erforderlich "
-  },
-  {
-    "id": "error_space_only",
-    "en": "The value can't be composed of whitespace only (space, tab, line break)",
-    "de": "Der Wert kann nicht nur aus Leerzeichen bestehen (Leerzeichen, Tabulator, Zeilenumbruch). "
-  },
-  {
-    "id": "error_enum",
-    "en": "Value must be one of the enumerated values",
-    "de": "Der Wert muss einer der aufgezählten Werte sein "
-  },
-  {
-    "id": "error_anyOf",
-    "en": "Value must validate against at least one of the provided schemas",
-    "de": "Der Wert muss anhand mindestens eines der bereitgestellten Schemas validiert werden "
-  },
-  {
-    "id": "error_oneOf",
-    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "de": "Der Wert muss für genau eines der bereitgestellten Schemas validiert werden. Es validiert derzeit gegen {{0}} der Schemata. "
-  },
-  {
-    "id": "error_not",
-    "en": "Value must not validate against the provided schema",
-    "de": "Der Wert darf nicht anhand des angegebenen Schemas überprüft werden "
-  },
-  {
-    "id": "error_type_union",
-    "en": "Value must be one of the provided types",
-    "de": "Der Wert muss einer der angegebenen Typen sein "
-  },
-  {
-    "id": "error_type",
-    "en": "Value must be of type {{0}}",
-    "de": "Der Wert muss vom Typ sein {{0}} "
-  },
-  {
-    "id": "error_disallow_union",
-    "en": "Value must not be one of the provided disallowed types",
-    "de": "Der Wert darf nicht zu den angegebenen unzulässigen Typen gehören "
-  },
-  {
-    "id": "error_disallow",
-    "en": "Value must not be of type {{0}}",
-    "de": "Der Wert darf nicht vom Typ sein {{0}} "
-  },
-  {
-    "id": "error_multipleOf",
-    "en": "Value must be a multiple of {{0}}",
-    "de": "Der Wert muss ein Vielfaches von sein {{0}} "
-  },
-  {
-    "id": "error_maximum_excl",
-    "en": "Value must be less than {{0}}",
-    "de": "Wert muss kleiner sein als {{0}} "
-  },
-  {
-    "id": "error_maximum_incl",
-    "en": "Value must be at most {{0}}",
-    "de": "Wert muss höchstens sein {{0}} "
-  },
-  {
-    "id": "error_minimum_excl",
-    "en": "Value must be greater than {{0}}",
-    "de": "Wert muss größer sein als {{0}} "
-  },
-  {
-    "id": "error_minimum_incl",
-    "en": "Value must be at least {{0}}",
-    "de": "Wert muss mindestens sein {{0}} "
-  },
-  {
-    "id": "error_maxLength",
-    "en": "Value must be at most {{0}} characters long",
-    "de": "Wert muss höchstens sein {{0}} Zeichen lang "
-  },
-  {
-    "id": "error_minLength",
-    "en": "Value must be at least {{0}} characters long",
-    "de": "Wert muss mindestens sein {{0}} Zeichen lang "
-  },
-  {
-    "id": "error_pattern",
-    "en": "Value must match the pattern {{0}}",
-    "de": "Der Wert muss mit dem Muster übereinstimmen {{0}} "
-  },
-  {
-    "id": "error_additionalItems",
-    "en": "No additional items allowed in this array",
-    "de": "In diesem Array sind keine zusätzlichen Elemente zulässig "
-  },
-  {
-    "id": "error_maxItems",
-    "en": "Value must have at most {{0}} items",
-    "de": "Wert muss höchstens haben {{0}} Artikel "
-  },
-  {
-    "id": "error_minItems",
-    "en": "Value must have at least {{0}} items",
-    "de": "Wert muss mindestens haben {{0}} Artikel "
-  },
-  {
-    "id": "error_uniqueItems",
-    "en": "Array must have unique items",
-    "de": "Das Array muss eindeutige Elemente enthalten "
-  },
-  {
-    "id": "error_maxProperties",
-    "en": "Object must have at most {{0}} properties",
-    "de": "Objekt muss höchstens haben {{0}} Eigenschaften "
-  },
-  {
-    "id": "error_minProperties",
-    "en": "Object must have at least {{0}} properties",
-    "de": "Objekt muss mindestens haben {{0}} Eigenschaften "
-  },
-  {
-    "id": "error_required",
-    "en": "Object is missing the required property '{{0}}'",
-    "de": "Objekt fehlt die erforderliche Eigenschaft ' {{0}} ' "
-  },
-  {
-    "id": "error_additional_properties",
-    "en": "No additional properties allowed, but property {{0}} is set",
-    "de": "Keine zusätzlichen Eigenschaften erlaubt, aber Eigenschaft {{0}} eingestellt ist "
-  },
-  {
-    "id": "error_dependency",
-    "en": "Must have property {{0}}",
-    "de": "Muss Eigentum haben {{0}} "
-  },
-  {
-    "id": "button_delete_all",
-    "en": "All",
-    "de": "Alle "
-  },
-  {
-    "id": "button_delete_all_title",
-    "en": "Delete All",
-    "de": "Alles löschen "
-  },
-  {
-    "id": "button_delete_last",
-    "en": "Last {{0}}",
-    "de": "Letzte {{0}} "
-  },
-  {
-    "id": "button_delete_last_title",
-    "en": "Delete Last {{0}}",
-    "de": "Letzte löschen {{0}} "
-  },
-  {
-    "id": "button_add_row_title",
-    "en": "Add {{0}}",
-    "de": "Hinzufügen {{0}} "
-  },
-  {
-    "id": "button_move_down_title",
-    "en": "Move down",
-    "de": "Sich abwärts bewegen "
-  },
-  {
-    "id": "button_move_up_title",
-    "en": "Move up",
-    "de": "Bewegen Sie sich nach oben "
-  },
-  {
-    "id": "button_delete_row_title",
-    "en": "Delete {{0}}",
-    "de": "Löschen {{0}} "
-  },
-  {
-    "id": "button_delete_row_title_short",
-    "en": "Delete",
-    "de": "Löschen "
-  },
-  {
-    "id": "button_collapse",
-    "en": "Collapse",
-    "de": "Zusammenbruch "
-  },
-  {
-    "id": "button_expand",
-    "en": "Expand",
-    "de": "Erweitern "
-  },
-  {
-    "id": "login_single_use_password_email_subject",
-    "en": "Single use password request",
-    "de": "Einmalige Passwortanfrage "
   },
   {
     "id": "login_single_use_password_email",

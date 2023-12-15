@@ -92,7 +92,7 @@ import {
   setQueryParameters,
   cleanTemporaryQueryParameters,
 } from "./../url_utils";
-import { fetchSourceMetadata } from "./../mx_helper_map_view_metadata";
+import { fetchSourceMetadata } from "./../metadata/utils.js";
 import { LegendVt } from "./../legend_vt/index.js";
 import { getViewMapboxLayers } from "./../style_vt/index.js";
 import { moduleLoad } from "./../modules_loader_async";
@@ -297,7 +297,7 @@ export function getDownloadUrlItemsFromViewMeta(view) {
     }
   }
   const urlItemsClean = urlItems.filter(
-    (urlItem) => isObject(urlItem) && isUrl(urlItem.url)
+    (urlItem) => isObject(urlItem) && isUrl(urlItem.url),
   );
 
   return urlItemsClean;
@@ -389,12 +389,12 @@ export async function downloadViewSourceExternal(opt) {
                 textOverflow: "ellipsis",
               },
             },
-            hasLabel ? item.label : item.url
-          )
-        )
+            hasLabel ? item.label : item.url,
+          ),
+        ),
       );
       return elItem;
-    })
+    }),
   );
 
   const elModal = modal({
@@ -426,7 +426,7 @@ export function getGeoJSONRandomPoints(opt) {
   opt = Object.assign(
     {},
     { n: 101, latRange: [-85, 85], lngRange: [-180, 180] },
-    opt
+    opt,
   );
 
   const features = [];
@@ -555,7 +555,7 @@ export async function setProject(idProject, opt) {
         content: elSpanTranslate(
           isGuest
             ? "modal_check_confirm_project_change_fail_content_not_logged"
-            : "modal_check_confirm_project_change_fail_content_logged"
+            : "modal_check_confirm_project_change_fail_content_logged",
         ),
       });
       if (timeout) {
@@ -900,10 +900,10 @@ export async function updateUiSettings() {
     const role = sRole.admin
       ? "admin"
       : sRole.publisher
-      ? "publisher"
-      : sRole.member
-      ? "member"
-      : "public";
+        ? "publisher"
+        : sRole.member
+          ? "member"
+          : "public";
 
     const roleLabel = await getDictItem(role);
     elBtnLogin.innerText = `${sUser.email} – ${roleLabel}`;
@@ -983,7 +983,7 @@ export async function initMapx(o) {
       map: {},
       views: [],
     },
-    mx.maps[o.id]
+    mx.maps[o.id],
   );
 
   /**
@@ -1036,7 +1036,7 @@ export async function initMapx(o) {
    */
   if (!mapboxgl.supported()) {
     alert(
-      "This website will not work with your browser. Please upgrade it or use a compatible one."
+      "This website will not work with your browser. Please upgrade it or use a compatible one.",
     );
     return;
   }
@@ -1213,7 +1213,7 @@ export async function initMapx(o) {
         switch (id) {
           case "tools":
             const elThemeContainer = document.querySelector(
-              "#mxInputThemeColors"
+              "#mxInputThemeColors",
             );
             await theme.initManager(elThemeContainer);
             break;
@@ -1429,7 +1429,7 @@ export function initMapListener(map) {
       map.setPaintProperty(
         "hillshading",
         "hillshade-illumination-direction",
-        deg
+        deg,
       );
     }
   });
@@ -1839,7 +1839,7 @@ export function geolocateUser() {
   function error(err) {
     getDictItem(
       ["error_cant_geolocate_msg", "error_geolocate_issue"],
-      lang
+      lang,
     ).then((it) => {
       setBusy(false);
       modal({
@@ -1889,7 +1889,7 @@ export async function addSourceFromView({ view, noLocationCheck, map }) {
     noLocationCheck,
     currentProjectId,
     viewProjectId,
-    projectsView
+    projectsView,
   );
 
   if (vType === "vt") {
@@ -1945,7 +1945,7 @@ function checkAndSetViewEditability(
   noLocationCheck,
   currentProjectId,
   viewProjectId,
-  projectsView
+  projectsView,
 ) {
   const isEditable = isViewEditable(view);
   const isLocationOk =
@@ -2146,7 +2146,7 @@ export async function updateViewsList(opt) {
         } else {
           return a;
         }
-      }, state)
+      }, state),
     );
 
     /**
@@ -2342,7 +2342,7 @@ export function viewLiAction(o) {
   }
 
   const elInput = el.querySelector(
-    "input[data-view_action_key='btn_toggle_view']"
+    "input[data-view_action_key='btn_toggle_view']",
   );
 
   if (o.action === "check" && elInput && !elInput.checked) {
@@ -2431,7 +2431,7 @@ export function viewsLayersOrderUpdate(o) {
   const opt = Object.assign(
     {},
     { order: null, id: null, orig: null, debug: false },
-    o
+    o,
   );
   /**
    * Get order list by priority :
@@ -2802,7 +2802,7 @@ export function getLayerByPrefix(o) {
       base: false,
       nameOnly: false,
     },
-    o
+    o,
   );
 
   const map = o.map || getMap(o.id);
@@ -2817,7 +2817,7 @@ export function getLayerByPrefix(o) {
 
   if (o.nameOnly) {
     const layerNames = layers.map((l) =>
-      o.base ? getLayerBaseName(l.id) : l.id
+      o.base ? getLayerBaseName(l.id) : l.id,
     );
     return getArrayDistinct(layerNames);
   } else {
@@ -3016,7 +3016,7 @@ export async function viewLayersAdd(o) {
   if (!isView(view)) {
     console.warn(
       "viewLayerAdd : view not found, locally or remotely. Options:",
-      o
+      o,
     );
     return;
   }
@@ -3162,14 +3162,17 @@ export async function viewLayersAdd(o) {
 
 /**
  * Get link to view, current mode/location
- * @param {String} idView View id
+ * @param {Object|String} view View or view id
  * @param {Boolean} useStatic
- * @return {URL} url to the view
+ * @return {URL|String} url to the view
  */
-export function viewLink(idView, opt) {
+export function viewLink(view, opt) {
+  view = getView(view);
+  const idView = view.id;
   const def = {
     useStatic: true,
     project: null,
+    asString: false,
   };
   opt = Object.assign({}, def, opt);
 
@@ -3183,6 +3186,9 @@ export function viewLink(idView, opt) {
     urlView.searchParams.append("viewsOpen", idView);
   }
   urlView.searchParams.append("zoomToViews", true);
+  if (opt.asString) {
+    return urlView.toString();
+  }
   return urlView;
 }
 
@@ -3215,7 +3221,7 @@ export function elLegendBuild(view, opt) {
       addTitle: false,
       elLegendContainer: null,
     },
-    opt
+    opt,
   );
 
   const idView = view.id;
@@ -3229,7 +3235,7 @@ export function elLegendBuild(view, opt) {
    */
   if (hasViewEl && !hasExternalContainer) {
     opt.elLegendContainer = elView.querySelector(
-      `#view_legend_container_${idView}`
+      `#view_legend_container_${idView}`,
     );
   }
 
@@ -3275,7 +3281,7 @@ export function elLegendBuild(view, opt) {
           class: ["mx-legend-view-title", "text-muted", "hint--bottom"],
           "aria-label": `${title}`,
         },
-        opt.addTitle ? title : ""
+        opt.addTitle ? title : "",
       ),
       el(
         "span",
@@ -3290,8 +3296,8 @@ export function elLegendBuild(view, opt) {
         },
         el("i", {
           class: ["fa", "fa-info-circle", "text-muted", "mx-legend-btn-meta"],
-        })
-      )
+        }),
+      ),
     ),
   ]);
 
@@ -3314,7 +3320,7 @@ export function elLegendBuild(view, opt) {
       style: { order: 0 },
     },
     opt.addTitle ? elLegendTitle : null,
-    elLegend
+    elLegend,
   );
 
   if (hasLegend) {
@@ -3459,7 +3465,7 @@ async function viewLayersAddCc(o) {
     if (hasFunction) {
       strToEval = strToEval.substring(
         strToEval.indexOf("{") + 1,
-        strToEval.lastIndexOf("}")
+        strToEval.lastIndexOf("}"),
       );
     }
 
@@ -3653,7 +3659,7 @@ async function viewLayersAddRt(o) {
         position: 0,
       },
     },
-    o.before
+    o.before,
   );
 
   /**
@@ -3679,7 +3685,7 @@ async function viewLayersAddRt(o) {
       {
         class: ["mx-legend-rt-title", "text-muted"],
       },
-      legendTitle
+      legendTitle,
     );
     elLegend.appendChild(elLabel);
   }
@@ -3947,7 +3953,7 @@ export async function viewUiContent(id) {
    * Options
    */
   const elOptions = elView.querySelector(
-    `[data-view_options_for='${view.id}']`
+    `[data-view_options_for='${view.id}']`,
   );
   if (elOptions) {
     elOptions.innerHTML = mx.templates.viewListOptions(view);
@@ -4076,7 +4082,7 @@ export function setHighlightedCountries(o) {
       idLayer: "country-code",
       countries: [],
     },
-    o
+    o,
   );
 
   const countries = o.countries;
@@ -4436,7 +4442,7 @@ export async function zoomToViewId(o) {
 
     if (res === "timeout") {
       console.warn(
-        `zoomToViewId for ${view.id}, was canceled ( ${timeout} ms )`
+        `zoomToViewId for ${view.id}, was canceled ( ${timeout} ms )`,
       );
     }
 
@@ -4469,7 +4475,7 @@ export async function zoomToViewId(o) {
 
       const llb = new mapboxgl.LngLatBounds(
         [conf.extent.lng1, conf.extent.lat2],
-        [conf.extent.lng2, conf.extent.lat1]
+        [conf.extent.lng2, conf.extent.lat1],
       );
 
       const done = fitMaxBounds(llb);
@@ -4520,7 +4526,7 @@ export async function getViewsBounds(views) {
       lat2: -80,
       lng1: 180,
       lng2: -180,
-    }
+    },
   );
 
   if (!set) {
@@ -4810,7 +4816,7 @@ export function boundsAngleRelation(bounds1, bounds2) {
     !(bounds2 instanceof mapboxgl.LngLatBounds)
   ) {
     throw new Error(
-      "Invalid input: both arguments must be LngLatBounds instances."
+      "Invalid input: both arguments must be LngLatBounds instances.",
     );
   }
 
@@ -5018,7 +5024,7 @@ export function getViewLegend(id, opt) {
   opt = Object.assign(
     {},
     { clone: true, input: false, class: true, style: false },
-    opt
+    opt,
   );
 
   if (isView(id)) {
@@ -5204,6 +5210,16 @@ export async function isViewVtDownloadableRemote(idView) {
 }
 
 /**
+ * Get view vt source id
+ * @param {Object} view
+ * @return {String} idSource
+ */
+export function getViewVtSourceId(view) {
+  view = getView(view);
+  return view?.data?.source?.layerInfo?.name;
+}
+
+/**
  * Test remotely if a source is downloadable.
  * @param {String} idSource Source id
  * @return {Promise<Boolean>} downloadable
@@ -5280,28 +5296,28 @@ export function resetMaxBounds() {
 }
 
 /**
- * Replace and reload views
- * @param {Object} views
- * @return {Promise<boolean>} replaced
+ * Replaces existing views with new ones and reloads them.
+ * @param {Object[]} viewsNew - Array of new view objects to replace existing views.
+ * @return {Promise<boolean>} Promise resolving to true if replacement is successful, false otherwise.
  */
-export async function viewsReplace(views) {
+export async function viewsReplace(viewsNew) {
   try {
-    if (!isArrayOfViews(views)) {
+    const valid = isArrayOfViews(viewsNew);
+    if (!valid) {
       console.error("viewsReplace: expecting an array of views");
       return false;
     }
-    const d = getMapData();
-    const viewsAll = d.views || [];
-    for (const view of views) {
-      const idView = view.id;
-      const idViews = viewsAll.map((v) => v.id);
-      const pos = idViews.indexOf(idView);
+    const views = getViews();
+    const idViews = views.map((view) => view.id);
+    for (const newView of viewsNew) {
+      const { id } = newView;
+      const pos = idViews.indexOf(id);
       if (pos === -1) {
         continue;
       }
-      const oldView = viewsAll[pos];
-      Object.assign(oldView, view);
-      await resetViewStyle({ idView: view.id });
+      const oldView = views[pos];
+      Object.assign(oldView, newView);
+      await resetViewStyle({ idView: id });
     }
     return true;
   } catch (e) {
@@ -5574,6 +5590,6 @@ export function debugRoad() {
   map.setLayoutProperty(
     "road-debug",
     "visibility",
-    enabled ? "none" : "visible"
+    enabled ? "none" : "visible",
   );
 }

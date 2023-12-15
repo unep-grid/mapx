@@ -2065,6 +2065,486 @@
     "ps": "بهرنۍ لید وارد کړئ؟ دا لید به د پروژې په ترتیباتو کې د بهرني لید په توګه شتون ولري"
   },
   {
+    "id": "join_form_title",
+    "en": "Join Configurator",
+    "ps": "یوچیګ کنفیګریټر"
+  },
+  {
+    "id": "join_form_title_desc",
+    "en": "Configure how layers and tables should be joined",
+    "ps": "دا کنفیګریټ کړئ چې څنګه پرتونه او میزونه باید یوځای شي"
+  },
+  {
+    "id": "join_source_base",
+    "en": "Base source",
+    "ps": "بنسټ سرچینه"
+  },
+  {
+    "id": "join_columns_base",
+    "en": "Columns to display",
+    "ps": "د ښودلو لپاره کالمونه"
+  },
+  {
+    "id": "join_source_join",
+    "en": "Join source",
+    "ps": "یوچیګ سرچینه"
+  },
+  {
+    "id": "join_columns_join",
+    "en": "Columns to display",
+    "ps": "د ښودلو لپاره کالمونه"
+  },
+  {
+    "id": "join_column_base",
+    "en": "Base column",
+    "ps": "بنسټ کالم"
+  },
+  {
+    "id": "join_column_join",
+    "en": "Join column",
+    "ps": "یوچیګ کالم"
+  },
+  {
+    "id": "join_type",
+    "en": "Type",
+    "ps": "ډول"
+  },
+  {
+    "id": "join_base",
+    "en": "Base",
+    "ps": "بنسټ"
+  },
+  {
+    "id": "join_joins",
+    "en": "Join items",
+    "ps": "توکي یوځای کړئ"
+  },
+  {
+    "id": "join_new_layer_name",
+    "en": "New Layer Name",
+    "ps": "د نوي پرت د نوم"
+  },
+  {
+    "id": "join_new_btn",
+    "en": "Create New Join",
+    "ps": "نوی یوځای کول جوړ کړئ"
+  },
+  {
+    "id": "join_new_layer_placeholder",
+    "en": "Enter layer name",
+    "ps": "د پرت نوم ولیکئ"
+  },
+  {
+    "id": "join_warning_colums_issue",
+    "en": "Error: columns issue",
+    "ps": "تېروتنه: د کالمو ستونزه"
+  },
+  {
+    "id": "join_warning_colums_used_in_views",
+    "en": "Column '{{column}}' unselected, but requested",
+    "ps": "ستون '{{column}}' ټاکل شوی نه دی، خو غوښتل شوی"
+  },
+  {
+    "id": "join_meta_title",
+    "en": "Metadata for the join",
+    "ps": "د نښلولو لپاره میټاډیټا"
+  },
+  {
+    "id": "btn_join_editor",
+    "en": "Edit Table Join",
+    "ps": "د جدول نښلول سمول"
+  },
+  {
+    "id": "btn_join_editor_new",
+    "en": "Create New Table Join",
+    "ps": "نوی د جدول نښلول جوړول"
+  },
+  {
+    "id": "error_notset",
+    "en": "Property must be set",
+    "ps": "ملکیت باید تنظیم شي "
+  },
+  {
+    "id": "error_notempty",
+    "en": "Value required",
+    "ps": "ارزښت اړین دی "
+  },
+  {
+    "id": "error_space_only",
+    "en": "The value can't be composed of whitespace only (space, tab, line break)",
+    "ps": "ارزښت یوازې د سپین ځای نه ترکیب کیدی شي (ځای ، ټب ، د مزي ماتول) "
+  },
+  {
+    "id": "error_enum",
+    "en": "Value must be one of the enumerated values",
+    "ps": "ارزښت باید یو له شمیره ارزښتونو څخه وي "
+  },
+  {
+    "id": "error_anyOf",
+    "en": "Value must validate against at least one of the provided schemas",
+    "ps": "ارزښت باید لږترلږه د ورکړل شوي سکیما په وړاندې تایید شي "
+  },
+  {
+    "id": "error_oneOf",
+    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
+    "ps": "ارزښت باید د ورکړل شوي سکیما څخه دقیقه په وړاندې تایید شي. دا مهال د دې په وړاندې باوري کیږي {{0}} د. "
+  },
+  {
+    "id": "error_not",
+    "en": "Value must not validate against the provided schema",
+    "ps": "ارزښت باید د ورکړل شوي سکیما په وړاندې اعتبار ونلري "
+  },
+  {
+    "id": "error_type_union",
+    "en": "Value must be one of the provided types",
+    "ps": "ارزښت باید له ورکړل شوي ډولونو څخه وي "
+  },
+  {
+    "id": "error_type",
+    "en": "Value must be of type {{0}}",
+    "ps": "ارزښت باید ډول وي {{0}} "
+  },
+  {
+    "id": "error_disallow_union",
+    "en": "Value must not be one of the provided disallowed types",
+    "ps": "ارزښت باید د ورکړل شوي منع شوي ډولونو څخه نه وي "
+  },
+  {
+    "id": "error_disallow",
+    "en": "Value must not be of type {{0}}",
+    "ps": "ارزښت باید ډول نه وي {{0}} "
+  },
+  {
+    "id": "error_multipleOf",
+    "en": "Value must be a multiple of {{0}}",
+    "ps": "ارزښت باید یو څو وي {{0}} "
+  },
+  {
+    "id": "error_maximum_excl",
+    "en": "Value must be less than {{0}}",
+    "ps": "ارزښت باید له دې څخه کم وي {{0}} "
+  },
+  {
+    "id": "error_maximum_incl",
+    "en": "Value must be at most {{0}}",
+    "ps": "ارزښت باید حد اکثر وي {{0}} "
+  },
+  {
+    "id": "error_minimum_excl",
+    "en": "Value must be greater than {{0}}",
+    "ps": "ارزښت باید له دې څخه ډیر وي {{0}} "
+  },
+  {
+    "id": "error_minimum_incl",
+    "en": "Value must be at least {{0}}",
+    "ps": "ارزښت باید لږترلږه وي {{0}} "
+  },
+  {
+    "id": "error_maxLength",
+    "en": "Value must be at most {{0}} characters long",
+    "ps": "ارزښت باید حد اکثر وي {{0}} لوښه اوږده "
+  },
+  {
+    "id": "error_minLength",
+    "en": "Value must be at least {{0}} characters long",
+    "ps": "ارزښت باید لږترلږه وي {{0}} لوښه اوږده "
+  },
+  {
+    "id": "error_pattern",
+    "en": "Value must match the pattern {{0}}",
+    "ps": "ارزښت باید له نمونې سره مطابقت ولري {{0}} "
+  },
+  {
+    "id": "error_additionalItems",
+    "en": "No additional items allowed in this array",
+    "ps": "دې صف کې د اضافي توکو اجازه نشته "
+  },
+  {
+    "id": "error_maxItems",
+    "en": "Value must have at most {{0}} items",
+    "ps": "ارزښت باید لږ تر لږه وي {{0}} توکي "
+  },
+  {
+    "id": "error_minItems",
+    "en": "Value must have at least {{0}} items",
+    "ps": "ارزښت باید لږترلږه وي {{0}} توکي "
+  },
+  {
+    "id": "error_uniqueItems",
+    "en": "Array must have unique items",
+    "ps": "صف باید ځانګړی توکی ولري "
+  },
+  {
+    "id": "error_maxProperties",
+    "en": "Object must have at most {{0}} properties",
+    "ps": "اعتراض باید لږترلږه وي {{0}} ځانتياوې "
+  },
+  {
+    "id": "error_minProperties",
+    "en": "Object must have at least {{0}} properties",
+    "ps": "څیز باید لږترلږه ولري {{0}} ځانتياوې "
+  },
+  {
+    "id": "error_required",
+    "en": "Object is missing the required property '{{0}}'",
+    "ps": "اعتراض اړین ملکیت ورک دی ' {{0}} ' "
+  },
+  {
+    "id": "error_additional_properties",
+    "en": "No additional properties allowed, but property {{0}} is set",
+    "ps": "د اضافي ملکیت اجازه نشته ، مګر ملکیت {{0}} ټاکل شوی "
+  },
+  {
+    "id": "error_dependency",
+    "en": "Must have property {{0}}",
+    "ps": "باید ملکیت ولری {{0}} "
+  },
+  {
+    "id": "button_delete_all",
+    "en": "All",
+    "ps": "ټول "
+  },
+  {
+    "id": "button_delete_all_title",
+    "en": "Delete All",
+    "ps": "ټول ړنګ کړئ "
+  },
+  {
+    "id": "button_delete_last",
+    "en": "Last {{0}}",
+    "ps": "اخري {{0}} "
+  },
+  {
+    "id": "button_delete_last_title",
+    "en": "Delete Last {{0}}",
+    "ps": "وروستۍ ړنګ کړئ {{0}} "
+  },
+  {
+    "id": "button_add_row_title",
+    "en": "Add {{0}}",
+    "ps": "اضافه کول {{0}} "
+  },
+  {
+    "id": "button_move_down_title",
+    "en": "Move down",
+    "ps": "لاندې حرکت وکړئ "
+  },
+  {
+    "id": "button_move_up_title",
+    "en": "Move up",
+    "ps": "پورته وخوت "
+  },
+  {
+    "id": "button_delete_row_title",
+    "en": "Delete {{0}}",
+    "ps": "ړنګول {{0}} "
+  },
+  {
+    "id": "button_delete_row_title_short",
+    "en": "Delete",
+    "ps": "ړنګول "
+  },
+  {
+    "id": "button_collapse",
+    "en": "Collapse",
+    "ps": "ماتول "
+  },
+  {
+    "id": "button_expand",
+    "en": "Expand",
+    "ps": "پراخول "
+  },
+  {
+    "id": "login_single_use_password_email_subject",
+    "en": "Single use password request",
+    "ps": "د استعمال یوزر شفر غوښتنه "
+  },
+  {
+    "id": "error_const",
+    "en": "Value must be the constant value",
+    "ps": "ارزښت باید ثابت ارزښت وي"
+  },
+  {
+    "id": "error_contains",
+    "en": "No items match contains",
+    "ps": "هیڅ توکي میچ نلري"
+  },
+  {
+    "id": "error_minContains",
+    "en": "Contains match count {{0}} is less than minimum contains count of {{1}}",
+    "ps": "د میچ شمیره لري {{0}} د لږ تر لږه څخه کم دی چې شمیرې لري {{1}}"
+  },
+  {
+    "id": "error_maxContains",
+    "en": "Contains match count {{0}} exceeds maximum contains count of {{1}}",
+    "ps": "د میچ شمیره لري {{0}} له اعظمي حد څخه زیات شمیر لري {{1}}"
+  },
+  {
+    "id": "error_property_names_exceeds_maxlength",
+    "en": "Property name {{0}} exceeds maxLength",
+    "ps": "د ملکیت نوم {{0}} د اعظمي اوږدوالي څخه ډیر"
+  },
+  {
+    "id": "error_property_names_enum_mismatch",
+    "en": "Property name {{0}} does not match any enum values",
+    "ps": "د ملکیت نوم {{0}} د هیڅ اینوم ارزښتونو سره سمون نه خوري"
+  },
+  {
+    "id": "error_property_names_const_mismatch",
+    "en": "Property name {{0}} does not match the const value",
+    "ps": "د ملکیت نوم {{0}} د ثابت ارزښت سره سمون نه خوري"
+  },
+  {
+    "id": "error_property_names_pattern_mismatch",
+    "en": "Property name {{0}} does not match pattern",
+    "ps": "د ملکیت نوم {{0}} د نمونې سره سمون نه خوري"
+  },
+  {
+    "id": "error_property_names_false",
+    "en": "Property name {{0}} fails when propertyName is false",
+    "ps": "د ملکیت نوم {{0}} ناکامیږي کله چې د ملکیت نوم غلط وي"
+  },
+  {
+    "id": "error_property_names_maxlength",
+    "en": "Property name {{0}} cannot match invalid maxLength",
+    "ps": "د ملکیت نوم {{0}} نشي کولی ناسم maxLength سره سمون ولري"
+  },
+  {
+    "id": "error_property_names_enum",
+    "en": "Property name {{0}} cannot match invalid enum",
+    "ps": "د ملکیت نوم {{0}} د ناسم انوم سره سمون نه خوري"
+  },
+  {
+    "id": "error_property_names_pattern",
+    "en": "Property name {{0}} cannot match invalid pattern",
+    "ps": "د ملکیت نوم {{0}} د غلط نمونې سره سمون نه خوري"
+  },
+  {
+    "id": "error_property_names_unsupported",
+    "en": "Unsupported propertyName {{0}}",
+    "ps": "نه ملاتړ شوی ملکیت نوم {{0}}"
+  },
+  {
+    "id": "error_date",
+    "en": "Date must be in the format {{0}}",
+    "ps": "نیټه باید په شکل کې وي {{0}}"
+  },
+  {
+    "id": "error_time",
+    "en": "Time must be in the format {{0}}",
+    "ps": "وخت باید په بڼه کې وي {{0}}"
+  },
+  {
+    "id": "error_datetime_local",
+    "en": "Datetime must be in the format {{0}}",
+    "ps": "د نیټې وخت باید په بڼه کې وي {{0}}"
+  },
+  {
+    "id": "error_invalid_epoch",
+    "en": "Date must be greater than 1 January 1970",
+    "ps": "نیټه باید د 1 جنوري 1970 څخه زیاته وي"
+  },
+  {
+    "id": "error_ipv4",
+    "en": "Value must be a valid IPv4 address in the form of 4 numbers between 0 and 255, separated by dots",
+    "ps": "ارزښت باید د 0 او 255 ترمنځ د 4 شمیرو په شکل کې یو معتبر IPv4 پته وي، د نقطو لخوا جلا شوی"
+  },
+  {
+    "id": "error_ipv6",
+    "en": "Value must be a valid IPv6 address",
+    "ps": "ارزښت باید د اعتبار وړ IPv6 پته وي"
+  },
+  {
+    "id": "error_hostname",
+    "en": "The hostname has the wrong format",
+    "ps": "کوربه نوم غلط شکل لري"
+  },
+  {
+    "id": "upload_max_size",
+    "en": "Filesize too large. Max size is ",
+    "ps": "د فایل اندازه ډیره لویه ده. اعظمي اندازه ده "
+  },
+  {
+    "id": "upload_wrong_file_format",
+    "en": "Wrong file format. Allowed format(s): ",
+    "ps": "غلط دوتنې بڼه. اجازه ورکړل شوې بڼه: "
+  },
+  {
+    "id": "button_save",
+    "en": "Save",
+    "ps": "خوندي کړئ"
+  },
+  {
+    "id": "button_copy",
+    "en": "Copy",
+    "ps": "کاپي"
+  },
+  {
+    "id": "button_cancel",
+    "en": "Cancel",
+    "ps": "لغوه کړئ"
+  },
+  {
+    "id": "button_add",
+    "en": "Add",
+    "ps": "اضافه کړئ"
+  },
+  {
+    "id": "button_properties",
+    "en": "Properties",
+    "ps": "ملکیتونه"
+  },
+  {
+    "id": "button_object_properties",
+    "en": "Object Properties",
+    "ps": "د شیانو ملکیتونه"
+  },
+  {
+    "id": "button_copy_row_title",
+    "en": "Copy {{0}}",
+    "ps": "کاپي {{0}}"
+  },
+  {
+    "id": "button_copy_row_title_short",
+    "en": "Copy",
+    "ps": "کاپي"
+  },
+  {
+    "id": "button_edit_json",
+    "en": "Edit JSON",
+    "ps": "JSON ایډیټ کړئ"
+  },
+  {
+    "id": "button_upload",
+    "en": "Upload",
+    "ps": "پورته کول"
+  },
+  {
+    "id": "flatpickr_toggle_button",
+    "en": "Toggle",
+    "ps": "ټګ"
+  },
+  {
+    "id": "flatpickr_clear_button",
+    "en": "Clear",
+    "ps": "روښانه"
+  },
+  {
+    "id": "choices_placeholder_text",
+    "en": "Start typing to add value",
+    "ps": "د ارزښت اضافه کولو لپاره ټایپ کول پیل کړئ"
+  },
+  {
+    "id": "default_array_item_title",
+    "en": "Item",
+    "ps": "توکي"
+  },
+  {
+    "id": "button_delete_node_warning",
+    "en": "Are you sure you want to remove this item?",
+    "ps": "ایا تاسو ډاډه یاست چې دا توکي لرې کول غواړئ؟"
+  },
+  {
     "id": "en",
     "en": "English",
     "ps": "انګلیسي"
@@ -6338,206 +6818,6 @@
     "id": "buttton_copy",
     "en": "Copy",
     "ps": "کاپي"
-  },
-  {
-    "id": "error_notset",
-    "en": "Property must be set",
-    "ps": "ملکیت باید تنظیم شي "
-  },
-  {
-    "id": "error_notempty",
-    "en": "Value required",
-    "ps": "ارزښت اړین دی "
-  },
-  {
-    "id": "error_space_only",
-    "en": "The value can't be composed of whitespace only (space, tab, line break)",
-    "ps": "ارزښت یوازې د سپین ځای نه ترکیب کیدی شي (ځای ، ټب ، د مزي ماتول) "
-  },
-  {
-    "id": "error_enum",
-    "en": "Value must be one of the enumerated values",
-    "ps": "ارزښت باید یو له شمیره ارزښتونو څخه وي "
-  },
-  {
-    "id": "error_anyOf",
-    "en": "Value must validate against at least one of the provided schemas",
-    "ps": "ارزښت باید لږترلږه د ورکړل شوي سکیما په وړاندې تایید شي "
-  },
-  {
-    "id": "error_oneOf",
-    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "ps": "ارزښت باید د ورکړل شوي سکیما څخه دقیقه په وړاندې تایید شي. دا مهال د دې په وړاندې باوري کیږي {{0}} د. "
-  },
-  {
-    "id": "error_not",
-    "en": "Value must not validate against the provided schema",
-    "ps": "ارزښت باید د ورکړل شوي سکیما په وړاندې اعتبار ونلري "
-  },
-  {
-    "id": "error_type_union",
-    "en": "Value must be one of the provided types",
-    "ps": "ارزښت باید له ورکړل شوي ډولونو څخه وي "
-  },
-  {
-    "id": "error_type",
-    "en": "Value must be of type {{0}}",
-    "ps": "ارزښت باید ډول وي {{0}} "
-  },
-  {
-    "id": "error_disallow_union",
-    "en": "Value must not be one of the provided disallowed types",
-    "ps": "ارزښت باید د ورکړل شوي منع شوي ډولونو څخه نه وي "
-  },
-  {
-    "id": "error_disallow",
-    "en": "Value must not be of type {{0}}",
-    "ps": "ارزښت باید ډول نه وي {{0}} "
-  },
-  {
-    "id": "error_multipleOf",
-    "en": "Value must be a multiple of {{0}}",
-    "ps": "ارزښت باید یو څو وي {{0}} "
-  },
-  {
-    "id": "error_maximum_excl",
-    "en": "Value must be less than {{0}}",
-    "ps": "ارزښت باید له دې څخه کم وي {{0}} "
-  },
-  {
-    "id": "error_maximum_incl",
-    "en": "Value must be at most {{0}}",
-    "ps": "ارزښت باید حد اکثر وي {{0}} "
-  },
-  {
-    "id": "error_minimum_excl",
-    "en": "Value must be greater than {{0}}",
-    "ps": "ارزښت باید له دې څخه ډیر وي {{0}} "
-  },
-  {
-    "id": "error_minimum_incl",
-    "en": "Value must be at least {{0}}",
-    "ps": "ارزښت باید لږترلږه وي {{0}} "
-  },
-  {
-    "id": "error_maxLength",
-    "en": "Value must be at most {{0}} characters long",
-    "ps": "ارزښت باید حد اکثر وي {{0}} لوښه اوږده "
-  },
-  {
-    "id": "error_minLength",
-    "en": "Value must be at least {{0}} characters long",
-    "ps": "ارزښت باید لږترلږه وي {{0}} لوښه اوږده "
-  },
-  {
-    "id": "error_pattern",
-    "en": "Value must match the pattern {{0}}",
-    "ps": "ارزښت باید له نمونې سره مطابقت ولري {{0}} "
-  },
-  {
-    "id": "error_additionalItems",
-    "en": "No additional items allowed in this array",
-    "ps": "دې صف کې د اضافي توکو اجازه نشته "
-  },
-  {
-    "id": "error_maxItems",
-    "en": "Value must have at most {{0}} items",
-    "ps": "ارزښت باید لږ تر لږه وي {{0}} توکي "
-  },
-  {
-    "id": "error_minItems",
-    "en": "Value must have at least {{0}} items",
-    "ps": "ارزښت باید لږترلږه وي {{0}} توکي "
-  },
-  {
-    "id": "error_uniqueItems",
-    "en": "Array must have unique items",
-    "ps": "صف باید ځانګړی توکی ولري "
-  },
-  {
-    "id": "error_maxProperties",
-    "en": "Object must have at most {{0}} properties",
-    "ps": "اعتراض باید لږترلږه وي {{0}} ځانتياوې "
-  },
-  {
-    "id": "error_minProperties",
-    "en": "Object must have at least {{0}} properties",
-    "ps": "څیز باید لږترلږه ولري {{0}} ځانتياوې "
-  },
-  {
-    "id": "error_required",
-    "en": "Object is missing the required property '{{0}}'",
-    "ps": "اعتراض اړین ملکیت ورک دی ' {{0}} ' "
-  },
-  {
-    "id": "error_additional_properties",
-    "en": "No additional properties allowed, but property {{0}} is set",
-    "ps": "د اضافي ملکیت اجازه نشته ، مګر ملکیت {{0}} ټاکل شوی "
-  },
-  {
-    "id": "error_dependency",
-    "en": "Must have property {{0}}",
-    "ps": "باید ملکیت ولری {{0}} "
-  },
-  {
-    "id": "button_delete_all",
-    "en": "All",
-    "ps": "ټول "
-  },
-  {
-    "id": "button_delete_all_title",
-    "en": "Delete All",
-    "ps": "ټول ړنګ کړئ "
-  },
-  {
-    "id": "button_delete_last",
-    "en": "Last {{0}}",
-    "ps": "اخري {{0}} "
-  },
-  {
-    "id": "button_delete_last_title",
-    "en": "Delete Last {{0}}",
-    "ps": "وروستۍ ړنګ کړئ {{0}} "
-  },
-  {
-    "id": "button_add_row_title",
-    "en": "Add {{0}}",
-    "ps": "اضافه کول {{0}} "
-  },
-  {
-    "id": "button_move_down_title",
-    "en": "Move down",
-    "ps": "لاندې حرکت وکړئ "
-  },
-  {
-    "id": "button_move_up_title",
-    "en": "Move up",
-    "ps": "پورته وخوت "
-  },
-  {
-    "id": "button_delete_row_title",
-    "en": "Delete {{0}}",
-    "ps": "ړنګول {{0}} "
-  },
-  {
-    "id": "button_delete_row_title_short",
-    "en": "Delete",
-    "ps": "ړنګول "
-  },
-  {
-    "id": "button_collapse",
-    "en": "Collapse",
-    "ps": "ماتول "
-  },
-  {
-    "id": "button_expand",
-    "en": "Expand",
-    "ps": "پراخول "
-  },
-  {
-    "id": "login_single_use_password_email_subject",
-    "en": "Single use password request",
-    "ps": "د استعمال یوزر شفر غوښتنه "
   },
   {
     "id": "login_single_use_password_email",

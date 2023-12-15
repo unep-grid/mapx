@@ -1,4 +1,3 @@
-
 #
 # Set view and source ui
 #
@@ -80,6 +79,18 @@ observe({
             inputId = "btnRebuildGeoserverRecalcStyle",
             class = "btn btn-default",
             `data-lang_key` = "btn_rebuild_geoserver_recalc_style",
+          ),
+          actionButton(
+            label = d("btn_join_editor_new", language),
+            inputId = "btnJoinEditorNew",
+            class = "btn btn-default",
+            `data-lang_key` = "btn_join_editor_new",
+          ),
+          actionButton(
+            label = d("btn_join_editor", language),
+            inputId = "btnJoinEditor",
+            class = "btn btn-default",
+            `data-lang_key` = "btn_join_editor",
           )
         )
       }

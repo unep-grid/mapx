@@ -1652,6 +1652,390 @@
     "en": "Import external view ? This view will be available as view external in project's settings"
   },
   {
+    "id": "join_form_title",
+    "en": "Join Configurator"
+  },
+  {
+    "id": "join_form_title_desc",
+    "en": "Configure how layers and tables should be joined"
+  },
+  {
+    "id": "join_source_base",
+    "en": "Base source"
+  },
+  {
+    "id": "join_columns_base",
+    "en": "Columns to display"
+  },
+  {
+    "id": "join_source_join",
+    "en": "Join source"
+  },
+  {
+    "id": "join_columns_join",
+    "en": "Columns to display"
+  },
+  {
+    "id": "join_column_base",
+    "en": "Base column"
+  },
+  {
+    "id": "join_column_join",
+    "en": "Join column"
+  },
+  {
+    "id": "join_type",
+    "en": "Type"
+  },
+  {
+    "id": "join_base",
+    "en": "Base"
+  },
+  {
+    "id": "join_joins",
+    "en": "Join items"
+  },
+  {
+    "id": "join_new_layer_name",
+    "en": "New Layer Name"
+  },
+  {
+    "id": "join_new_btn",
+    "en": "Create New Join"
+  },
+  {
+    "id": "join_new_layer_placeholder",
+    "en": "Enter layer name"
+  },
+  {
+    "id": "join_warning_colums_issue",
+    "en": "Error: columns issue"
+  },
+  {
+    "id": "join_warning_colums_used_in_views",
+    "en": "Column '{{column}}' unselected, but requested"
+  },
+  {
+    "id": "join_meta_title",
+    "en": "Metadata for the join"
+  },
+  {
+    "id": "btn_join_editor",
+    "en": "Edit Table Join"
+  },
+  {
+    "id": "btn_join_editor_new",
+    "en": "Create New Table Join"
+  },
+  {
+    "id": "error_notset",
+    "en": "Property must be set"
+  },
+  {
+    "id": "error_notempty",
+    "en": "Value required"
+  },
+  {
+    "id": "error_space_only",
+    "en": "The value can't be composed of whitespace only (space, tab, line break)"
+  },
+  {
+    "id": "error_enum",
+    "en": "Value must be one of the enumerated values"
+  },
+  {
+    "id": "error_anyOf",
+    "en": "Value must validate against at least one of the provided schemas"
+  },
+  {
+    "id": "error_oneOf",
+    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas."
+  },
+  {
+    "id": "error_not",
+    "en": "Value must not validate against the provided schema"
+  },
+  {
+    "id": "error_type_union",
+    "en": "Value must be one of the provided types"
+  },
+  {
+    "id": "error_type",
+    "en": "Value must be of type {{0}}"
+  },
+  {
+    "id": "error_disallow_union",
+    "en": "Value must not be one of the provided disallowed types"
+  },
+  {
+    "id": "error_disallow",
+    "en": "Value must not be of type {{0}}"
+  },
+  {
+    "id": "error_multipleOf",
+    "en": "Value must be a multiple of {{0}}"
+  },
+  {
+    "id": "error_maximum_excl",
+    "en": "Value must be less than {{0}}"
+  },
+  {
+    "id": "error_maximum_incl",
+    "en": "Value must be at most {{0}}"
+  },
+  {
+    "id": "error_minimum_excl",
+    "en": "Value must be greater than {{0}}"
+  },
+  {
+    "id": "error_minimum_incl",
+    "en": "Value must be at least {{0}}"
+  },
+  {
+    "id": "error_maxLength",
+    "en": "Value must be at most {{0}} characters long"
+  },
+  {
+    "id": "error_minLength",
+    "en": "Value must be at least {{0}} characters long"
+  },
+  {
+    "id": "error_pattern",
+    "en": "Value must match the pattern {{0}}"
+  },
+  {
+    "id": "error_additionalItems",
+    "en": "No additional items allowed in this array"
+  },
+  {
+    "id": "error_maxItems",
+    "en": "Value must have at most {{0}} items"
+  },
+  {
+    "id": "error_minItems",
+    "en": "Value must have at least {{0}} items"
+  },
+  {
+    "id": "error_uniqueItems",
+    "en": "Array must have unique items"
+  },
+  {
+    "id": "error_maxProperties",
+    "en": "Object must have at most {{0}} properties"
+  },
+  {
+    "id": "error_minProperties",
+    "en": "Object must have at least {{0}} properties"
+  },
+  {
+    "id": "error_required",
+    "en": "Object is missing the required property '{{0}}'"
+  },
+  {
+    "id": "error_additional_properties",
+    "en": "No additional properties allowed, but property {{0}} is set"
+  },
+  {
+    "id": "error_dependency",
+    "en": "Must have property {{0}}"
+  },
+  {
+    "id": "button_delete_all",
+    "en": "All"
+  },
+  {
+    "id": "button_delete_all_title",
+    "en": "Delete All"
+  },
+  {
+    "id": "button_delete_last",
+    "en": "Last {{0}}"
+  },
+  {
+    "id": "button_delete_last_title",
+    "en": "Delete Last {{0}}"
+  },
+  {
+    "id": "button_add_row_title",
+    "en": "Add {{0}}"
+  },
+  {
+    "id": "button_move_down_title",
+    "en": "Move down"
+  },
+  {
+    "id": "button_move_up_title",
+    "en": "Move up"
+  },
+  {
+    "id": "button_delete_row_title",
+    "en": "Delete {{0}}"
+  },
+  {
+    "id": "button_delete_row_title_short",
+    "en": "Delete"
+  },
+  {
+    "id": "button_collapse",
+    "en": "Collapse"
+  },
+  {
+    "id": "button_expand",
+    "en": "Expand"
+  },
+  {
+    "id": "login_single_use_password_email_subject",
+    "en": "Single use password request"
+  },
+  {
+    "id": "error_const",
+    "en": "Value must be the constant value"
+  },
+  {
+    "id": "error_contains",
+    "en": "No items match contains"
+  },
+  {
+    "id": "error_minContains",
+    "en": "Contains match count {{0}} is less than minimum contains count of {{1}}"
+  },
+  {
+    "id": "error_maxContains",
+    "en": "Contains match count {{0}} exceeds maximum contains count of {{1}}"
+  },
+  {
+    "id": "error_property_names_exceeds_maxlength",
+    "en": "Property name {{0}} exceeds maxLength"
+  },
+  {
+    "id": "error_property_names_enum_mismatch",
+    "en": "Property name {{0}} does not match any enum values"
+  },
+  {
+    "id": "error_property_names_const_mismatch",
+    "en": "Property name {{0}} does not match the const value"
+  },
+  {
+    "id": "error_property_names_pattern_mismatch",
+    "en": "Property name {{0}} does not match pattern"
+  },
+  {
+    "id": "error_property_names_false",
+    "en": "Property name {{0}} fails when propertyName is false"
+  },
+  {
+    "id": "error_property_names_maxlength",
+    "en": "Property name {{0}} cannot match invalid maxLength"
+  },
+  {
+    "id": "error_property_names_enum",
+    "en": "Property name {{0}} cannot match invalid enum"
+  },
+  {
+    "id": "error_property_names_pattern",
+    "en": "Property name {{0}} cannot match invalid pattern"
+  },
+  {
+    "id": "error_property_names_unsupported",
+    "en": "Unsupported propertyName {{0}}"
+  },
+  {
+    "id": "error_date",
+    "en": "Date must be in the format {{0}}"
+  },
+  {
+    "id": "error_time",
+    "en": "Time must be in the format {{0}}"
+  },
+  {
+    "id": "error_datetime_local",
+    "en": "Datetime must be in the format {{0}}"
+  },
+  {
+    "id": "error_invalid_epoch",
+    "en": "Date must be greater than 1 January 1970"
+  },
+  {
+    "id": "error_ipv4",
+    "en": "Value must be a valid IPv4 address in the form of 4 numbers between 0 and 255, separated by dots"
+  },
+  {
+    "id": "error_ipv6",
+    "en": "Value must be a valid IPv6 address"
+  },
+  {
+    "id": "error_hostname",
+    "en": "The hostname has the wrong format"
+  },
+  {
+    "id": "upload_max_size",
+    "en": "Filesize too large. Max size is "
+  },
+  {
+    "id": "upload_wrong_file_format",
+    "en": "Wrong file format. Allowed format(s): "
+  },
+  {
+    "id": "button_save",
+    "en": "Save"
+  },
+  {
+    "id": "button_copy",
+    "en": "Copy"
+  },
+  {
+    "id": "button_cancel",
+    "en": "Cancel"
+  },
+  {
+    "id": "button_add",
+    "en": "Add"
+  },
+  {
+    "id": "button_properties",
+    "en": "Properties"
+  },
+  {
+    "id": "button_object_properties",
+    "en": "Object Properties"
+  },
+  {
+    "id": "button_copy_row_title",
+    "en": "Copy {{0}}"
+  },
+  {
+    "id": "button_copy_row_title_short",
+    "en": "Copy"
+  },
+  {
+    "id": "button_edit_json",
+    "en": "Edit JSON"
+  },
+  {
+    "id": "button_upload",
+    "en": "Upload"
+  },
+  {
+    "id": "flatpickr_toggle_button",
+    "en": "Toggle"
+  },
+  {
+    "id": "flatpickr_clear_button",
+    "en": "Clear"
+  },
+  {
+    "id": "choices_placeholder_text",
+    "en": "Start typing to add value"
+  },
+  {
+    "id": "default_array_item_title",
+    "en": "Item"
+  },
+  {
+    "id": "button_delete_node_warning",
+    "en": "Are you sure you want to remove this item?"
+  },
+  {
     "id": "en",
     "en": "English"
   },
@@ -5070,166 +5454,6 @@
   {
     "id": "buttton_copy",
     "en": "Copy"
-  },
-  {
-    "id": "error_notset",
-    "en": "Property must be set"
-  },
-  {
-    "id": "error_notempty",
-    "en": "Value required"
-  },
-  {
-    "id": "error_space_only",
-    "en": "The value can't be composed of whitespace only (space, tab, line break)"
-  },
-  {
-    "id": "error_enum",
-    "en": "Value must be one of the enumerated values"
-  },
-  {
-    "id": "error_anyOf",
-    "en": "Value must validate against at least one of the provided schemas"
-  },
-  {
-    "id": "error_oneOf",
-    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas."
-  },
-  {
-    "id": "error_not",
-    "en": "Value must not validate against the provided schema"
-  },
-  {
-    "id": "error_type_union",
-    "en": "Value must be one of the provided types"
-  },
-  {
-    "id": "error_type",
-    "en": "Value must be of type {{0}}"
-  },
-  {
-    "id": "error_disallow_union",
-    "en": "Value must not be one of the provided disallowed types"
-  },
-  {
-    "id": "error_disallow",
-    "en": "Value must not be of type {{0}}"
-  },
-  {
-    "id": "error_multipleOf",
-    "en": "Value must be a multiple of {{0}}"
-  },
-  {
-    "id": "error_maximum_excl",
-    "en": "Value must be less than {{0}}"
-  },
-  {
-    "id": "error_maximum_incl",
-    "en": "Value must be at most {{0}}"
-  },
-  {
-    "id": "error_minimum_excl",
-    "en": "Value must be greater than {{0}}"
-  },
-  {
-    "id": "error_minimum_incl",
-    "en": "Value must be at least {{0}}"
-  },
-  {
-    "id": "error_maxLength",
-    "en": "Value must be at most {{0}} characters long"
-  },
-  {
-    "id": "error_minLength",
-    "en": "Value must be at least {{0}} characters long"
-  },
-  {
-    "id": "error_pattern",
-    "en": "Value must match the pattern {{0}}"
-  },
-  {
-    "id": "error_additionalItems",
-    "en": "No additional items allowed in this array"
-  },
-  {
-    "id": "error_maxItems",
-    "en": "Value must have at most {{0}} items"
-  },
-  {
-    "id": "error_minItems",
-    "en": "Value must have at least {{0}} items"
-  },
-  {
-    "id": "error_uniqueItems",
-    "en": "Array must have unique items"
-  },
-  {
-    "id": "error_maxProperties",
-    "en": "Object must have at most {{0}} properties"
-  },
-  {
-    "id": "error_minProperties",
-    "en": "Object must have at least {{0}} properties"
-  },
-  {
-    "id": "error_required",
-    "en": "Object is missing the required property '{{0}}'"
-  },
-  {
-    "id": "error_additional_properties",
-    "en": "No additional properties allowed, but property {{0}} is set"
-  },
-  {
-    "id": "error_dependency",
-    "en": "Must have property {{0}}"
-  },
-  {
-    "id": "button_delete_all",
-    "en": "All"
-  },
-  {
-    "id": "button_delete_all_title",
-    "en": "Delete All"
-  },
-  {
-    "id": "button_delete_last",
-    "en": "Last {{0}}"
-  },
-  {
-    "id": "button_delete_last_title",
-    "en": "Delete Last {{0}}"
-  },
-  {
-    "id": "button_add_row_title",
-    "en": "Add {{0}}"
-  },
-  {
-    "id": "button_move_down_title",
-    "en": "Move down"
-  },
-  {
-    "id": "button_move_up_title",
-    "en": "Move up"
-  },
-  {
-    "id": "button_delete_row_title",
-    "en": "Delete {{0}}"
-  },
-  {
-    "id": "button_delete_row_title_short",
-    "en": "Delete"
-  },
-  {
-    "id": "button_collapse",
-    "en": "Collapse"
-  },
-  {
-    "id": "button_expand",
-    "en": "Expand"
-  },
-  {
-    "id": "login_single_use_password_email_subject",
-    "en": "Single use password request"
   },
   {
     "id": "login_single_use_password_email",

@@ -343,14 +343,20 @@ mxDbUpdate <- function(table, column, idCol = "id", id, value, path = NULL, expe
 #' @return extent
 #' @export
 mxDbGetLayerExtent <- function(table = NULL, geomColumn = "geom") {
-  if (is.null(table)) stop("Missing table name")
+  if (isEmpty(table) || !mxDbExistsTable(table)) {
+    stop("Invalid table")
+  }
 
+  columns <- mxDbGetTableColumnsNames(table)
+  hasGeom <- "geom" %in% columns
+  if (!hasGeom) {
+    return(list())
+  }
 
-  if (mxDbExistsTable(table)) {
-    #
-    # Get extent
-    #
-    ext <- mxDbGetQuery("
+  #
+  # Get extent
+  #
+  ext <- mxDbGetQuery("
       SELECT
       ST_AsGeoJSON(
         ST_Extent(
@@ -360,33 +366,32 @@ mxDbGetLayerExtent <- function(table = NULL, geomColumn = "geom") {
           )
         ) as ext FROM " + table + "")
 
-    #
-    # Extract coordinates from json
-    #
-    res <- .get(
-      jsonlite::fromJSON(
-        ext$ext,
-        simplifyVector = F
-      ), c("coordinates")
-    )[[1]]
+  #
+  # Extract coordinates from json
+  #
+  res <- .get(
+    jsonlite::fromJSON(
+      ext$ext,
+      simplifyVector = F
+    ), c("coordinates")
+  )[[1]]
 
-    #
-    # GeoJSON coordinate order is : longitude, latitude
-    #
+  #
+  # GeoJSON coordinate order is : longitude, latitude
+  #
 
-    if (is.null(res)) {
-      out <- list()
-    } else {
-      out <- list(
-        "lng1" = res[[1]][[1]],
-        "lng2" = res[[3]][[1]],
-        "lat1" = res[[1]][[2]],
-        "lat2" = res[[3]][[2]]
-      )
-    }
-
-    return(out)
+  if (is.null(res)) {
+    out <- list()
+  } else {
+    out <- list(
+      "lng1" = res[[1]][[1]],
+      "lng2" = res[[3]][[1]],
+      "lat1" = res[[1]][[2]],
+      "lat2" = res[[3]][[2]]
+    )
   }
+
+  return(out)
 }
 
 
@@ -598,7 +603,6 @@ mxDbGetColumnInfo <- function(table = NULL, column = NULL) {
     columnExists <- nrow(mxDbGetQuery(q)) > 0
 
     if (!columnExists) {
-      message(paste("column", column, " does not exist in ", table))
       return()
     }
 
@@ -670,9 +674,12 @@ mxDbGetColumnInfo <- function(table = NULL, column = NULL) {
 mxDbGetLayerCentroid <- function(table = NULL, geomColumn = "geom") {
   if (is.null(table)) stop("Missing arguments")
 
-  if (mxDbExistsTable(table)) {
-    query <- sprintf(
-      "SELECT ST_AsGeoJSON(
+  if (!mxDbExistsTable(table)) {
+    return(list())
+  }
+
+  query <- sprintf(
+    "SELECT ST_AsGeoJSON(
       ST_centroid(
         ST_Collect(
           %1$s
@@ -680,18 +687,17 @@ mxDbGetLayerCentroid <- function(table = NULL, geomColumn = "geom") {
         )
       ) AS t
     FROM %2$s",
-      geomColumn,
-      table
-    )
+    geomColumn,
+    table
+  )
 
-    res <- mxDbGetQuery(query)$t %>% jsonlite::fromJSON()
+  res <- mxDbGetQuery(query)$t %>% jsonlite::fromJSON()
 
-    res <- as.list(res$coordinates)
+  res <- as.list(res$coordinates)
 
-    names(res) <- c("lng", "lat")
+  names(res) <- c("lng", "lat")
 
-    return(res)
-  }
+  return(res)
 }
 
 #' Get query extent, based on a pattern matching (character)
@@ -1424,19 +1430,30 @@ mxDbGetSourceMeta <- function(layer) {
     mxDebugMsg("mxGetMeta requested, but no layer available")
     return()
   }
-  # query
+
   query <- sprintf(
-    "SELECT data#>'{\"meta\"}' meta FROM %1$s WHERE \"id\"='%2$s'",
+    "SELECT
+      data #> '{meta}' as \"meta\",
+      data #> '{join}' as \"join\"
+    FROM %1$s WHERE \"id\"='%2$s'",
     layerTable,
     layer
   )
 
+  res <- mxDbGetQuery(query)
+  meta <- jsonToList(res$meta)
+  join <- jsonToList(res$join)
+  meta$join <- join
+  return(meta)
+}
 
-  res <- mxDbGetQuery(query)$meta
-  res <- res[length(res)]
-
+jsonToList <- function(res) {
   if (isTRUE(nchar(res) > 0)) {
-    res <- jsonlite::fromJSON(res, simplifyVector = F, simplifyDataFrame = F)
+    res <- fromJSON(
+      res,
+      simplifyVector = F,
+      simplifyDataFrame = F
+    )
   } else {
     res <- list()
   }

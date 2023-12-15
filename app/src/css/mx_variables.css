@@ -21,7 +21,7 @@
 
   /**
   * Font family 
-  */ 
+  */
   --mx_ui_font_text: system-ui;
 
   /**
@@ -64,6 +64,7 @@
   --mx_ui_message_info: var(--mx_ui_link);
   --mx_ui_message_warning: #f1d742;
   --mx_ui_message_danger: #f17642;
+  --mx_ui_message_danger_text: #333333;
 
   /**
   * Types 

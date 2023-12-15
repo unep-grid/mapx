@@ -96,6 +96,7 @@ export class EditTableSessionClient extends WsToolsBase {
     super(socket);
     const et = this;
     et._config = Object.assign(et._config, et._config, defaults, config);
+    et._columns_cache = { columns: [], timestamp: 0 };
     /**
      * cb bind
      */
@@ -444,7 +445,7 @@ export class EditTableSessionClient extends WsToolsBase {
     et._el_row_slider_container = el(
       "div",
       { class: "mx-slider-container" },
-      et._el_row_slider
+      et._el_row_slider,
     );
 
     et._el_toolbar = el("div", { class: "edit-table--toolbar" }, [
@@ -478,7 +479,7 @@ export class EditTableSessionClient extends WsToolsBase {
       {
         class: "edit-table--table-wrapper",
       },
-      et._el_table
+      et._el_table,
     );
 
     et._el_overlay = el("div", {
@@ -509,7 +510,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et._el_overlay,
       et._el_progress,
       et._el_table_wrapper,
-      et._el_toolbar
+      et._el_toolbar,
     );
     et._el_title = el("span");
     et._modal = modal({
@@ -555,10 +556,10 @@ export class EditTableSessionClient extends WsToolsBase {
       column._pos = singleCol
         ? nColumns
         : column._invalid
-        ? nColumns + 1
-        : column.readOnly
-        ? -1
-        : cPos++;
+          ? nColumns + 1
+          : column.readOnly
+            ? -1
+            : cPos++;
       if (isArray(order) && order.includes(column.data)) {
         column._pos = order.indexOf(column.data);
       }
@@ -575,7 +576,7 @@ export class EditTableSessionClient extends WsToolsBase {
 
     if (!isValid) {
       console.warn(
-        `Invalid column. Name: ${update.column_name} Type: ${update.column_type}`
+        `Invalid column. Name: ${update.column_name} Type: ${update.column_type}`,
       );
       return false;
     }
@@ -596,7 +597,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const columns = et.getColumns();
     const labels = et.getColumnLabels();
     const posData = columns.findIndex(
-      (column) => column.data === oldColumnName
+      (column) => column.data === oldColumnName,
     );
     const posLabel = labels.indexOf(oldColumnName);
 
@@ -672,11 +673,15 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     const names = et.getColumnLabels();
     const optionColumnNames = [];
+    const optionColumnNamesDisabled = [];
 
     for (const name of names) {
       const isValid = await et.isValidName(name, checks);
       const elOption = el("option", { value: name }, name);
-      if (!isValid) {
+      if (isValid) {
+        optionColumnNames.push(elOption);
+      } else {
+        optionColumnNamesDisabled.push(elOption);
         elOption.disabled = true;
         const reasons = await et.validateName(name);
         const issues = [];
@@ -688,9 +693,9 @@ export class EditTableSessionClient extends WsToolsBase {
         }
         elOption.label = `${name} (${issues.join(",")})`;
       }
-      optionColumnNames.push(elOption);
     }
-    return optionColumnNames;
+
+    return [...optionColumnNames, ...optionColumnNamesDisabled];
   }
 
   _column_create(name, pg_type) {
@@ -800,7 +805,7 @@ export class EditTableSessionClient extends WsToolsBase {
       const elMember = el(
         "li",
         el("span", member.email),
-        el("span", ` ( ${member.n_sessions} )`)
+        el("span", ` ( ${member.n_sessions} )`),
       );
       elFrag.appendChild(elMember);
     }
@@ -976,16 +981,26 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     return et._config.id_columns_reserved.includes(name);
   }
+
   /**
    * Column name validation : columns used in style and secondary attributes
    * @param {String} name
    * @return {Promise<Boolean>}
    */
-  async isColumnUsedInViews(name) {
+  async isColumnUsed(name) {
     const et = this;
-    const columns = await et.get("columns_used");
-    return columns.includes(name);
+    const cc = et._columns_cache;
+    const now = Date.now();
+    const ttl = 5 * 60 * 1000;
+    const age = now - cc.timestamp;
+    if (age > ttl) {
+      cc.columns = await et.get("columns_used");
+      cc.timestamp = now;
+    }
+
+    return cc.columns.includes(name);
   }
+
   /**
    *  Check if this is a date column
    * @param {String} name Column name
@@ -1060,7 +1075,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const headers = ["Title", "Project", "Type"];
     const elTrHead = el(
       "tr",
-      headers.map((header) => el("th", header))
+      headers.map((header) => el("th", header)),
     );
     elThead.appendChild(elTrHead);
     elTable.appendChild(elThead);
@@ -1079,7 +1094,7 @@ export class EditTableSessionClient extends WsToolsBase {
               }),
               target: "_blank",
             },
-            elTitle
+            elTitle,
           )
         : elTitle;
 
@@ -1129,12 +1144,12 @@ export class EditTableSessionClient extends WsToolsBase {
   async validateName(name) {
     const et = this;
     const isSafe = isSafeName(name);
-    const isAttribute = await et.isColumnUsedInViews(name);
-    const isNotAttribute = !isAttribute;
+    const isUsed = await et.isColumnUsed(name);
+    const isNotUsed = !isUsed;
     const isNotReserved = !et.isColumnReserved(name);
     return {
       is_safe: isSafe,
-      is_not_used: isNotAttribute,
+      is_not_used: isNotUsed,
       is_not_reserved: isNotReserved,
     };
   }
@@ -1190,7 +1205,7 @@ export class EditTableSessionClient extends WsToolsBase {
           "edit_table_modal_columns_name_issue_content",
           {
             columns: `<li>${columnsIssues.join("</li><li>")}</li>`,
-          }
+          },
         ),
       });
     }
@@ -1407,14 +1422,14 @@ export class EditTableSessionClient extends WsToolsBase {
           el(
             "div",
             { class: "edit-table--muuri-item-content" },
-            el("span", c.data)
-          )
+            el("span", c.data),
+          ),
         );
-      })
+      }),
     );
 
     const ro = new ResizeObserver(() => {
-      if (!grid instanceof Muuri) {
+      if ((!grid) instanceof Muuri) {
         return;
       }
       clearTimeout(grid._id_ro);
@@ -2100,7 +2115,7 @@ export class EditTableSessionClient extends WsToolsBase {
         {
           column_name: columnToDuplicate,
           column_name_new: columnNewName,
-        }
+        },
       ),
       cancel: tt("btn_cancel"),
       confirm: tt("btn_edit_table_modal_duplicate_column_confirm"),
@@ -2329,7 +2344,7 @@ export class EditTableSessionClient extends WsToolsBase {
     }
 
     if (isNotEmpty(name) && et.columnNameExists(name)) {
-      name = `${name}_${makeId()}`;
+      name = `${name}_${makeId(5)}`;
     }
 
     const columnName = await modalPrompt({
@@ -2369,14 +2384,14 @@ export class EditTableSessionClient extends WsToolsBase {
 
         if (!validName) {
           const elIssue = tt(
-            "edit_table_modal_add_column_name_issue_invalid_characters"
+            "edit_table_modal_add_column_name_issue_invalid_characters",
           );
           elMessage.appendChild(elIssue);
         }
 
         if (!validUnique) {
           const elIssue = tt(
-            "edit_table_modal_add_column_name_issue_non_available"
+            "edit_table_modal_add_column_name_issue_non_available",
           );
           elMessage.appendChild(elIssue);
         }
@@ -2572,7 +2587,7 @@ export class EditTableSessionClient extends WsToolsBase {
         "edit_table_modal_large_changes_number_content",
         {
           count: nChanges,
-        }
+        },
       ),
       confirm: tt("btn_edit_table_modal_large_changes_number_continue"),
       cancel: tt("btn_edit_table_modal_large_changes_number_undo"),
@@ -3133,7 +3148,7 @@ export class EditTableSessionClient extends WsToolsBase {
         use_cache: false,
         autoCorrect: false,
       },
-      et._config.timeout_geom_valid
+      et._config.timeout_geom_valid,
     );
 
     const res = await et.onGeomValidateResult(data);
@@ -3165,7 +3180,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const data = await et.emitGet(
       e.client_geom_validate,
       opt,
-      et._config.timeout_geom_valid
+      et._config.timeout_geom_valid,
     );
     const res = et.onGeomValidateResult(data);
     return res;
@@ -3208,7 +3223,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     return buttonEnable(
       elBtn,
-      et._disabled || et._in_progress ? false : enable
+      et._disabled || et._in_progress ? false : enable,
     );
   }
 
@@ -3416,7 +3431,7 @@ export class EditTableSessionClient extends WsToolsBase {
           {
             updates: chunk,
           },
-          et._config.timeout_sanizing
+          et._config.timeout_sanizing,
         );
         sanitized.push(...sanitizedChunk);
       }
@@ -3577,7 +3592,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     if (et._config.debug) {
       console.log(
-        `dispatch, ${label}: ${message?.part}/${message?.nParts} updates:${message?.updates?.length} type : ${message?.updates[0]?.type} `
+        `dispatch, ${label}: ${message?.part}/${message?.nParts} updates:${message?.updates?.length} type : ${message?.updates[0]?.type} `,
       );
     }
   }

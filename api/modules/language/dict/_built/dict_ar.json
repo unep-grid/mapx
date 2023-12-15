@@ -2065,6 +2065,486 @@
     "ar": "استيراد عرض خارجي؟ سيكون هذا العرض متاحًا كعرض خارجي في إعدادات المشروع"
   },
   {
+    "id": "join_form_title",
+    "en": "Join Configurator",
+    "ar": "موصل التهيئة"
+  },
+  {
+    "id": "join_form_title_desc",
+    "en": "Configure how layers and tables should be joined",
+    "ar": "تكوين كيفية الانضمام إلى الطبقات والجداول"
+  },
+  {
+    "id": "join_source_base",
+    "en": "Base source",
+    "ar": "المصدر الأساسي"
+  },
+  {
+    "id": "join_columns_base",
+    "en": "Columns to display",
+    "ar": "الأعمدة للعرض"
+  },
+  {
+    "id": "join_source_join",
+    "en": "Join source",
+    "ar": "مصدر الانضمام"
+  },
+  {
+    "id": "join_columns_join",
+    "en": "Columns to display",
+    "ar": "الأعمدة للعرض"
+  },
+  {
+    "id": "join_column_base",
+    "en": "Base column",
+    "ar": "العمود الأساسي"
+  },
+  {
+    "id": "join_column_join",
+    "en": "Join column",
+    "ar": "عمود الانضمام"
+  },
+  {
+    "id": "join_type",
+    "en": "Type",
+    "ar": "النوع"
+  },
+  {
+    "id": "join_base",
+    "en": "Base",
+    "ar": "الأساس"
+  },
+  {
+    "id": "join_joins",
+    "en": "Join items",
+    "ar": "انضم إلى العناصر"
+  },
+  {
+    "id": "join_new_layer_name",
+    "en": "New Layer Name",
+    "ar": "اسم الطبقة الجديدة"
+  },
+  {
+    "id": "join_new_btn",
+    "en": "Create New Join",
+    "ar": "إنشاء انضمام جديد"
+  },
+  {
+    "id": "join_new_layer_placeholder",
+    "en": "Enter layer name",
+    "ar": "أدخل اسم الطبقة"
+  },
+  {
+    "id": "join_warning_colums_issue",
+    "en": "Error: columns issue",
+    "ar": "خطأ: مشكلة في الأعمدة"
+  },
+  {
+    "id": "join_warning_colums_used_in_views",
+    "en": "Column '{{column}}' unselected, but requested",
+    "ar": "العمود '{{column}}' غير محدد، ولكن مطلوب"
+  },
+  {
+    "id": "join_meta_title",
+    "en": "Metadata for the join",
+    "ar": "بيانات تعريفية للربط"
+  },
+  {
+    "id": "btn_join_editor",
+    "en": "Edit Table Join",
+    "ar": "تحرير انضمام الجدول"
+  },
+  {
+    "id": "btn_join_editor_new",
+    "en": "Create New Table Join",
+    "ar": "إنشاء انضمام جدول جديد"
+  },
+  {
+    "id": "error_notset",
+    "en": "Property must be set",
+    "ar": "يجب تعيين الخاصية "
+  },
+  {
+    "id": "error_notempty",
+    "en": "Value required",
+    "ar": "القيمة المطلوبة "
+  },
+  {
+    "id": "error_space_only",
+    "en": "The value can't be composed of whitespace only (space, tab, line break)",
+    "ar": "لا يمكن أن تتكون القيمة من مسافة بيضاء فقط (مسافة ، علامة جدولة ، فاصل أسطر) "
+  },
+  {
+    "id": "error_enum",
+    "en": "Value must be one of the enumerated values",
+    "ar": "يجب أن تكون القيمة إحدى القيم التي تم تعدادها "
+  },
+  {
+    "id": "error_anyOf",
+    "en": "Value must validate against at least one of the provided schemas",
+    "ar": "يجب التحقق من صحة القيمة مقابل مخطط واحد على الأقل من المخططات المتوفرة "
+  },
+  {
+    "id": "error_oneOf",
+    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
+    "ar": "يجب التحقق من القيمة مقابل أحد المخططات المتوفرة بالضبط. هو يتحقق حاليا ضد {{0}} من المخططات. "
+  },
+  {
+    "id": "error_not",
+    "en": "Value must not validate against the provided schema",
+    "ar": "يجب ألا يتم التحقق من صحة القيمة مقابل مخطط قاعدة البيانات المقدم "
+  },
+  {
+    "id": "error_type_union",
+    "en": "Value must be one of the provided types",
+    "ar": "يجب أن تكون القيمة أحد الأنواع المتوفرة "
+  },
+  {
+    "id": "error_type",
+    "en": "Value must be of type {{0}}",
+    "ar": "يجب أن تكون القيمة من النوع {{0}} "
+  },
+  {
+    "id": "error_disallow_union",
+    "en": "Value must not be one of the provided disallowed types",
+    "ar": "يجب ألا تكون القيمة من الأنواع غير المسموح بها المقدمة "
+  },
+  {
+    "id": "error_disallow",
+    "en": "Value must not be of type {{0}}",
+    "ar": "يجب ألا تكون القيمة من النوع {{0}} "
+  },
+  {
+    "id": "error_multipleOf",
+    "en": "Value must be a multiple of {{0}}",
+    "ar": "يجب أن تكون القيمة من مضاعفات {{0}} "
+  },
+  {
+    "id": "error_maximum_excl",
+    "en": "Value must be less than {{0}}",
+    "ar": "يجب أن تكون القيمة أقل من {{0}} "
+  },
+  {
+    "id": "error_maximum_incl",
+    "en": "Value must be at most {{0}}",
+    "ar": "يجب أن تكون القيمة على الأكثر {{0}} "
+  },
+  {
+    "id": "error_minimum_excl",
+    "en": "Value must be greater than {{0}}",
+    "ar": "يجب أن تكون القيمة أكبر من {{0}} "
+  },
+  {
+    "id": "error_minimum_incl",
+    "en": "Value must be at least {{0}}",
+    "ar": "يجب أن تكون القيمة على الأقل {{0}} "
+  },
+  {
+    "id": "error_maxLength",
+    "en": "Value must be at most {{0}} characters long",
+    "ar": "يجب أن تكون القيمة على الأكثر {{0}} الحروف طويلة "
+  },
+  {
+    "id": "error_minLength",
+    "en": "Value must be at least {{0}} characters long",
+    "ar": "يجب أن تكون القيمة على الأقل {{0}} الحروف طويلة "
+  },
+  {
+    "id": "error_pattern",
+    "en": "Value must match the pattern {{0}}",
+    "ar": "يجب أن تتطابق القيمة مع النمط {{0}} "
+  },
+  {
+    "id": "error_additionalItems",
+    "en": "No additional items allowed in this array",
+    "ar": "لا يسمح بالعناصر الإضافية في هذه المجموعة "
+  },
+  {
+    "id": "error_maxItems",
+    "en": "Value must have at most {{0}} items",
+    "ar": "يجب أن تحتوي القيمة على الأكثر {{0}} العناصر "
+  },
+  {
+    "id": "error_minItems",
+    "en": "Value must have at least {{0}} items",
+    "ar": "يجب أن تحتوي القيمة على الأقل {{0}} العناصر "
+  },
+  {
+    "id": "error_uniqueItems",
+    "en": "Array must have unique items",
+    "ar": "يجب أن تحتوي المصفوفة على عناصر فريدة "
+  },
+  {
+    "id": "error_maxProperties",
+    "en": "Object must have at most {{0}} properties",
+    "ar": "يجب أن يحتوي الكائن على الأكثر {{0}} ملكيات "
+  },
+  {
+    "id": "error_minProperties",
+    "en": "Object must have at least {{0}} properties",
+    "ar": "يجب أن يحتوي الكائن على الأقل {{0}} ملكيات "
+  },
+  {
+    "id": "error_required",
+    "en": "Object is missing the required property '{{0}}'",
+    "ar": "يفتقد الكائن الخاصية المطلوبة ' {{0}} \" "
+  },
+  {
+    "id": "error_additional_properties",
+    "en": "No additional properties allowed, but property {{0}} is set",
+    "ar": "لا يسمح بخصائص إضافية ، ولكن الممتلكات {{0}} تم تعيينه "
+  },
+  {
+    "id": "error_dependency",
+    "en": "Must have property {{0}}",
+    "ar": "يجب أن يكون لديك ملكية {{0}} "
+  },
+  {
+    "id": "button_delete_all",
+    "en": "All",
+    "ar": "الجميع "
+  },
+  {
+    "id": "button_delete_all_title",
+    "en": "Delete All",
+    "ar": "حذف الكل "
+  },
+  {
+    "id": "button_delete_last",
+    "en": "Last {{0}}",
+    "ar": "آخر {{0}} "
+  },
+  {
+    "id": "button_delete_last_title",
+    "en": "Delete Last {{0}}",
+    "ar": "حذف الأخير {{0}} "
+  },
+  {
+    "id": "button_add_row_title",
+    "en": "Add {{0}}",
+    "ar": "يضيف {{0}} "
+  },
+  {
+    "id": "button_move_down_title",
+    "en": "Move down",
+    "ar": "تحرك لأسفل "
+  },
+  {
+    "id": "button_move_up_title",
+    "en": "Move up",
+    "ar": "تحرك "
+  },
+  {
+    "id": "button_delete_row_title",
+    "en": "Delete {{0}}",
+    "ar": "حذف {{0}} "
+  },
+  {
+    "id": "button_delete_row_title_short",
+    "en": "Delete",
+    "ar": "حذف "
+  },
+  {
+    "id": "button_collapse",
+    "en": "Collapse",
+    "ar": "انهيار "
+  },
+  {
+    "id": "button_expand",
+    "en": "Expand",
+    "ar": "يوسع "
+  },
+  {
+    "id": "login_single_use_password_email_subject",
+    "en": "Single use password request",
+    "ar": "طلب كلمة مرور للاستخدام الفردي "
+  },
+  {
+    "id": "error_const",
+    "en": "Value must be the constant value",
+    "ar": "يجب أن تكون القيمة هي القيمة الثابتة"
+  },
+  {
+    "id": "error_contains",
+    "en": "No items match contains",
+    "ar": "لا توجد عناصر متطابقة تحتوي على"
+  },
+  {
+    "id": "error_minContains",
+    "en": "Contains match count {{0}} is less than minimum contains count of {{1}}",
+    "ar": "يحتوي على عدد التطابقات {{0}} أقل من الحد الأدنى يحتوي على عدد {{1}}"
+  },
+  {
+    "id": "error_maxContains",
+    "en": "Contains match count {{0}} exceeds maximum contains count of {{1}}",
+    "ar": "يحتوي على عدد التطابقات {{0}} يتجاوز الحد الأقصى ويحتوي على عدد {{1}}"
+  },
+  {
+    "id": "error_property_names_exceeds_maxlength",
+    "en": "Property name {{0}} exceeds maxLength",
+    "ar": "اسم الخاصية {{0}} يتجاوز الحد الأقصى للطول"
+  },
+  {
+    "id": "error_property_names_enum_mismatch",
+    "en": "Property name {{0}} does not match any enum values",
+    "ar": "اسم الخاصية {{0}} لا يطابق أي قيم التعداد"
+  },
+  {
+    "id": "error_property_names_const_mismatch",
+    "en": "Property name {{0}} does not match the const value",
+    "ar": "اسم الخاصية {{0}} لا يتطابق مع قيمة const"
+  },
+  {
+    "id": "error_property_names_pattern_mismatch",
+    "en": "Property name {{0}} does not match pattern",
+    "ar": "اسم الخاصية {{0}} لا يتطابق مع النمط"
+  },
+  {
+    "id": "error_property_names_false",
+    "en": "Property name {{0}} fails when propertyName is false",
+    "ar": "اسم الخاصية {{0}} يفشل عندما يكون propertyName خطأ"
+  },
+  {
+    "id": "error_property_names_maxlength",
+    "en": "Property name {{0}} cannot match invalid maxLength",
+    "ar": "اسم الخاصية {{0}} لا يمكن أن يتطابق مع الحد الأقصى غير الصالح"
+  },
+  {
+    "id": "error_property_names_enum",
+    "en": "Property name {{0}} cannot match invalid enum",
+    "ar": "اسم الخاصية {{0}} لا يمكن أن يطابق التعداد غير الصالح"
+  },
+  {
+    "id": "error_property_names_pattern",
+    "en": "Property name {{0}} cannot match invalid pattern",
+    "ar": "اسم الخاصية {{0}} لا يمكن مطابقة النمط غير الصالح"
+  },
+  {
+    "id": "error_property_names_unsupported",
+    "en": "Unsupported propertyName {{0}}",
+    "ar": "اسم الخاصية غير معتمد {{0}}"
+  },
+  {
+    "id": "error_date",
+    "en": "Date must be in the format {{0}}",
+    "ar": "يجب أن يكون التاريخ بالتنسيق {{0}}"
+  },
+  {
+    "id": "error_time",
+    "en": "Time must be in the format {{0}}",
+    "ar": "يجب أن يكون الوقت بالتنسيق {{0}}"
+  },
+  {
+    "id": "error_datetime_local",
+    "en": "Datetime must be in the format {{0}}",
+    "ar": "يجب أن يكون التاريخ والوقت بالتنسيق {{0}}"
+  },
+  {
+    "id": "error_invalid_epoch",
+    "en": "Date must be greater than 1 January 1970",
+    "ar": "يجب أن يكون التاريخ أكبر من 1 يناير 1970"
+  },
+  {
+    "id": "error_ipv4",
+    "en": "Value must be a valid IPv4 address in the form of 4 numbers between 0 and 255, separated by dots",
+    "ar": "يجب أن تكون القيمة عنوان IPv4 صالحًا على شكل 4 أرقام بين 0 و255، مفصولة بنقاط"
+  },
+  {
+    "id": "error_ipv6",
+    "en": "Value must be a valid IPv6 address",
+    "ar": "يجب أن تكون القيمة عنوان IPv6 صالحًا"
+  },
+  {
+    "id": "error_hostname",
+    "en": "The hostname has the wrong format",
+    "ar": "اسم المضيف له تنسيق خاطئ"
+  },
+  {
+    "id": "upload_max_size",
+    "en": "Filesize too large. Max size is ",
+    "ar": "حجم الملف كبير جدًا. الحجم الأقصى هو "
+  },
+  {
+    "id": "upload_wrong_file_format",
+    "en": "Wrong file format. Allowed format(s): ",
+    "ar": "تنسيق ملف خاطئ. التنسيق (التنسيقات) المسموح بها: "
+  },
+  {
+    "id": "button_save",
+    "en": "Save",
+    "ar": "يحفظ"
+  },
+  {
+    "id": "button_copy",
+    "en": "Copy",
+    "ar": "ينسخ"
+  },
+  {
+    "id": "button_cancel",
+    "en": "Cancel",
+    "ar": "يلغي"
+  },
+  {
+    "id": "button_add",
+    "en": "Add",
+    "ar": "يضيف"
+  },
+  {
+    "id": "button_properties",
+    "en": "Properties",
+    "ar": "ملكيات"
+  },
+  {
+    "id": "button_object_properties",
+    "en": "Object Properties",
+    "ar": "خصائص الموضوع"
+  },
+  {
+    "id": "button_copy_row_title",
+    "en": "Copy {{0}}",
+    "ar": "ينسخ {{0}}"
+  },
+  {
+    "id": "button_copy_row_title_short",
+    "en": "Copy",
+    "ar": "ينسخ"
+  },
+  {
+    "id": "button_edit_json",
+    "en": "Edit JSON",
+    "ar": "تحرير JSON"
+  },
+  {
+    "id": "button_upload",
+    "en": "Upload",
+    "ar": "رفع"
+  },
+  {
+    "id": "flatpickr_toggle_button",
+    "en": "Toggle",
+    "ar": "تبديل"
+  },
+  {
+    "id": "flatpickr_clear_button",
+    "en": "Clear",
+    "ar": "واضح"
+  },
+  {
+    "id": "choices_placeholder_text",
+    "en": "Start typing to add value",
+    "ar": "ابدأ الكتابة لإضافة قيمة"
+  },
+  {
+    "id": "default_array_item_title",
+    "en": "Item",
+    "ar": "غرض"
+  },
+  {
+    "id": "button_delete_node_warning",
+    "en": "Are you sure you want to remove this item?",
+    "ar": "هل أنت متأكد أنك تريد إزالة هذا العنصر؟"
+  },
+  {
     "id": "en",
     "en": "English",
     "ar": "الإنجليزية "
@@ -6338,206 +6818,6 @@
     "id": "buttton_copy",
     "en": "Copy",
     "ar": "ينسخ"
-  },
-  {
-    "id": "error_notset",
-    "en": "Property must be set",
-    "ar": "يجب تعيين الخاصية "
-  },
-  {
-    "id": "error_notempty",
-    "en": "Value required",
-    "ar": "القيمة المطلوبة "
-  },
-  {
-    "id": "error_space_only",
-    "en": "The value can't be composed of whitespace only (space, tab, line break)",
-    "ar": "لا يمكن أن تتكون القيمة من مسافة بيضاء فقط (مسافة ، علامة جدولة ، فاصل أسطر) "
-  },
-  {
-    "id": "error_enum",
-    "en": "Value must be one of the enumerated values",
-    "ar": "يجب أن تكون القيمة إحدى القيم التي تم تعدادها "
-  },
-  {
-    "id": "error_anyOf",
-    "en": "Value must validate against at least one of the provided schemas",
-    "ar": "يجب التحقق من صحة القيمة مقابل مخطط واحد على الأقل من المخططات المتوفرة "
-  },
-  {
-    "id": "error_oneOf",
-    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "ar": "يجب التحقق من القيمة مقابل أحد المخططات المتوفرة بالضبط. هو يتحقق حاليا ضد {{0}} من المخططات. "
-  },
-  {
-    "id": "error_not",
-    "en": "Value must not validate against the provided schema",
-    "ar": "يجب ألا يتم التحقق من صحة القيمة مقابل مخطط قاعدة البيانات المقدم "
-  },
-  {
-    "id": "error_type_union",
-    "en": "Value must be one of the provided types",
-    "ar": "يجب أن تكون القيمة أحد الأنواع المتوفرة "
-  },
-  {
-    "id": "error_type",
-    "en": "Value must be of type {{0}}",
-    "ar": "يجب أن تكون القيمة من النوع {{0}} "
-  },
-  {
-    "id": "error_disallow_union",
-    "en": "Value must not be one of the provided disallowed types",
-    "ar": "يجب ألا تكون القيمة من الأنواع غير المسموح بها المقدمة "
-  },
-  {
-    "id": "error_disallow",
-    "en": "Value must not be of type {{0}}",
-    "ar": "يجب ألا تكون القيمة من النوع {{0}} "
-  },
-  {
-    "id": "error_multipleOf",
-    "en": "Value must be a multiple of {{0}}",
-    "ar": "يجب أن تكون القيمة من مضاعفات {{0}} "
-  },
-  {
-    "id": "error_maximum_excl",
-    "en": "Value must be less than {{0}}",
-    "ar": "يجب أن تكون القيمة أقل من {{0}} "
-  },
-  {
-    "id": "error_maximum_incl",
-    "en": "Value must be at most {{0}}",
-    "ar": "يجب أن تكون القيمة على الأكثر {{0}} "
-  },
-  {
-    "id": "error_minimum_excl",
-    "en": "Value must be greater than {{0}}",
-    "ar": "يجب أن تكون القيمة أكبر من {{0}} "
-  },
-  {
-    "id": "error_minimum_incl",
-    "en": "Value must be at least {{0}}",
-    "ar": "يجب أن تكون القيمة على الأقل {{0}} "
-  },
-  {
-    "id": "error_maxLength",
-    "en": "Value must be at most {{0}} characters long",
-    "ar": "يجب أن تكون القيمة على الأكثر {{0}} الحروف طويلة "
-  },
-  {
-    "id": "error_minLength",
-    "en": "Value must be at least {{0}} characters long",
-    "ar": "يجب أن تكون القيمة على الأقل {{0}} الحروف طويلة "
-  },
-  {
-    "id": "error_pattern",
-    "en": "Value must match the pattern {{0}}",
-    "ar": "يجب أن تتطابق القيمة مع النمط {{0}} "
-  },
-  {
-    "id": "error_additionalItems",
-    "en": "No additional items allowed in this array",
-    "ar": "لا يسمح بالعناصر الإضافية في هذه المجموعة "
-  },
-  {
-    "id": "error_maxItems",
-    "en": "Value must have at most {{0}} items",
-    "ar": "يجب أن تحتوي القيمة على الأكثر {{0}} العناصر "
-  },
-  {
-    "id": "error_minItems",
-    "en": "Value must have at least {{0}} items",
-    "ar": "يجب أن تحتوي القيمة على الأقل {{0}} العناصر "
-  },
-  {
-    "id": "error_uniqueItems",
-    "en": "Array must have unique items",
-    "ar": "يجب أن تحتوي المصفوفة على عناصر فريدة "
-  },
-  {
-    "id": "error_maxProperties",
-    "en": "Object must have at most {{0}} properties",
-    "ar": "يجب أن يحتوي الكائن على الأكثر {{0}} ملكيات "
-  },
-  {
-    "id": "error_minProperties",
-    "en": "Object must have at least {{0}} properties",
-    "ar": "يجب أن يحتوي الكائن على الأقل {{0}} ملكيات "
-  },
-  {
-    "id": "error_required",
-    "en": "Object is missing the required property '{{0}}'",
-    "ar": "يفتقد الكائن الخاصية المطلوبة ' {{0}} \" "
-  },
-  {
-    "id": "error_additional_properties",
-    "en": "No additional properties allowed, but property {{0}} is set",
-    "ar": "لا يسمح بخصائص إضافية ، ولكن الممتلكات {{0}} تم تعيينه "
-  },
-  {
-    "id": "error_dependency",
-    "en": "Must have property {{0}}",
-    "ar": "يجب أن يكون لديك ملكية {{0}} "
-  },
-  {
-    "id": "button_delete_all",
-    "en": "All",
-    "ar": "الجميع "
-  },
-  {
-    "id": "button_delete_all_title",
-    "en": "Delete All",
-    "ar": "حذف الكل "
-  },
-  {
-    "id": "button_delete_last",
-    "en": "Last {{0}}",
-    "ar": "آخر {{0}} "
-  },
-  {
-    "id": "button_delete_last_title",
-    "en": "Delete Last {{0}}",
-    "ar": "حذف الأخير {{0}} "
-  },
-  {
-    "id": "button_add_row_title",
-    "en": "Add {{0}}",
-    "ar": "يضيف {{0}} "
-  },
-  {
-    "id": "button_move_down_title",
-    "en": "Move down",
-    "ar": "تحرك لأسفل "
-  },
-  {
-    "id": "button_move_up_title",
-    "en": "Move up",
-    "ar": "تحرك "
-  },
-  {
-    "id": "button_delete_row_title",
-    "en": "Delete {{0}}",
-    "ar": "حذف {{0}} "
-  },
-  {
-    "id": "button_delete_row_title_short",
-    "en": "Delete",
-    "ar": "حذف "
-  },
-  {
-    "id": "button_collapse",
-    "en": "Collapse",
-    "ar": "انهيار "
-  },
-  {
-    "id": "button_expand",
-    "en": "Expand",
-    "ar": "يوسع "
-  },
-  {
-    "id": "login_single_use_password_email_subject",
-    "en": "Single use password request",
-    "ar": "طلب كلمة مرور للاستخدام الفردي "
   },
   {
     "id": "login_single_use_password_email",

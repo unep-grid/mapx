@@ -16,7 +16,10 @@ import { objToParams } from "./../../url_utils";
 import { fetchJsonProgress } from "./../../mx_helper_fetch_progress";
 import { el } from "./../../el/src/index.js";
 import { getViewSourceSummary } from "./../../mx_helper_source_summary.js";
-import { fetchSourceMetadata } from "./../../mx_helper_map_view_metadata.js";
+import {
+  fetchAttributesAlias,
+  fetchSourceMetadata,
+} from "./../../metadata/utils.js";
 import { moduleLoad } from "./../../modules_loader_async";
 import { getView, getViewTitle } from "./../../map_helpers";
 import { isSourceId, isView, isArray, makeSafeName } from "./../../is_test";
@@ -72,7 +75,7 @@ async function showSourceTableAttributeModal(opt) {
     const isProject = config?.view?.project === settings?.project?.id;
     const isEditor = editor === idUser;
     const isAllowed = editors.some(
-      (role) => groups.includes(role) || role === idUser
+      (role) => groups.includes(role) || role === idUser,
     );
 
     addEdit = isProject && (isEditor || isAllowed);
@@ -85,7 +88,6 @@ async function showSourceTableAttributeModal(opt) {
     const meta = await fetchSourceMetadata(config.idSource);
     const table = await fetchSourceTableAttribute(config);
     const data = table.data;
-
 
     const services = meta._services || [];
     const hasData = isArray(data) && data.length > 0;
@@ -110,7 +112,7 @@ async function showSourceTableAttributeModal(opt) {
           click: handleDownload,
         },
       },
-      elSpanTranslate("btn_edit_table_modal_export_csv")
+      elSpanTranslate("btn_edit_table_modal_export_csv"),
     );
     if (!allowDownload) {
       elButtonDownload.setAttribute("disabled", true);
@@ -125,7 +127,7 @@ async function showSourceTableAttributeModal(opt) {
         },
         title: "Help",
       },
-      elSpanTranslate("btn_help")
+      elSpanTranslate("btn_help"),
     );
 
     /**
@@ -151,7 +153,7 @@ async function showSourceTableAttributeModal(opt) {
           click: handleEdit,
         },
       },
-      elSpanTranslate("btn_edit_table_modal_edit")
+      elSpanTranslate("btn_edit_table_modal_edit"),
     );
 
     const elTitle = el(
@@ -162,7 +164,7 @@ async function showSourceTableAttributeModal(opt) {
           marginLeft: "10px",
           fontStyle: "italic",
         },
-      }))
+      })),
     );
 
     const buttons = [
@@ -393,13 +395,13 @@ export async function viewToTableAttributeModal(idView) {
 }
 
 export async function getTableAttributeConfigFromView(view) {
-  const language = getLanguageCurrent();
 
   if (view.type !== "vt") {
     console.warn("Only vt view are supported");
     return null;
   }
 
+  const title = getViewTitle(view);
   const idSource = path(view, "data.source.layerInfo.name");
   const attribute = path(view, "data.attribute.name");
   let attributes = path(view, "data.attribute.names") || [];
@@ -408,14 +410,14 @@ export async function getTableAttributeConfigFromView(view) {
   attributes = attributes.concat(["gid"]);
   attributes = getArrayDistinct(attributes);
 
-  if (!view._meta) {
-    view._meta = await fetchSourceMetadata(idSource);
-  }
+  const alias = fetchAttributesAlias(idSource, attributes);
 
-  const title = getViewTitle(view);
-  const labelsDict = path(view, "_meta.text.attributes_alias") || {};
-  const labels = attributes.map((a) => {
-    return labelsDict[a] ? labelsDict[a][language] || labelsDict[a].en || a : a;
+  const labels = attributes.map((attr) => {
+    return getLabelFromObjectPath({
+      obj: alias,
+      path: attr,
+      defaultValue: attr,
+    });
   });
 
   return {

@@ -767,33 +767,6 @@ tr {
   margin-top: 12px;
 }
 
-/**
- * Error list
- */
-.mx-error-list-container {
-  margin: 0px;
-}
-
-.mx-error-list-container .mx-error-item {
-  padding: 5px;
-  margin: 5px;
-}
-
-.mx-error-list-container .mx-error-item:before {
-  font-family: "FontAwesome";
-  content: "\f06a";
-  padding: 5px;
-}
-.mx-error-list-container .mx-warning-item {
-  padding: 5px;
-  margin: 3px;
-}
-
-.mx-error-list-container .mx-warning-item:before {
-  font-family: "FontAwesome";
-  content: "\f071";
-  padding: 5px;
-}
 
 /**
 * Progress bar

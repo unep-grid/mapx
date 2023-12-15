@@ -6,6 +6,7 @@ import 'flag-icons/css/flag-icons.min.css';
 
 import '../css/mx_variables.css';
 import '../css/mx_base.css';
+import '../css/mx_error.css';
 import '../css/mx_ace_editor.css';
 import '../css/mx_modifiers.css';
 import '../css/mx_mapbox.css';

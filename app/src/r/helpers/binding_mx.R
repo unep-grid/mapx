@@ -1,5 +1,3 @@
-
-
 #' Create new project
 #'
 #' @param session Shiny session object.
@@ -104,6 +102,23 @@ mxGeoserverRebuild <- function(
     type = "mxGeoserverRebuild",
     list(
       recalcStyle = isTRUE(recalcStyle)
+    )
+  )
+}
+
+#' Update / New join tool session
+#'
+#' @param create Create new join
+#' @param session Shiny session object.
+#' @export
+mxJoinEditor <- function(
+  create = FALSE,
+  session = shiny:::getDefaultReactiveDomain()
+) {
+  session$sendCustomMessage(
+    type = "mxJoinEditor",
+    list(
+      create = isTRUE(create)
     )
   )
 }

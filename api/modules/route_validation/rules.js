@@ -1,6 +1,7 @@
 import {
   isEmail,
   isViewId,
+  isArrayOfString,
   isProjectId,
   isSafe,
   isArray,
@@ -189,6 +190,19 @@ const rules = [
       return {
         valid: isValid,
         value: isValid ? d : methods,
+      };
+    },
+  },
+  {
+    key: ["attributes"],
+    test: (d) => {
+      if (isString(d)) {
+        d = d.split(",");
+      }
+      const isValid = isArrayOfString(d);
+      return {
+        valid: isValid,
+        value: isValid ? d : [],
       };
     },
   },
