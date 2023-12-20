@@ -18,7 +18,7 @@ const gzip = util.promisify(zlib.gzip);
  * Get tile
  */
 const validateParamsHandlerText = getParamsValidator({
-  required: ["view"],
+  required: ["idView"],
   expected: ["timestamp", "skipCache", "usePostgisTiles"],
 });
 
@@ -28,13 +28,9 @@ export default { mwGet };
 
 export async function handlerTile(req, res) {
   try {
-    const data = { idView: req.query.view };
-    const sqlViewInfo = parseTemplate(
-      templates.getViewSourceAndAttributes,
-      data
-    );
-
-    const resultView = await pgRead.query(sqlViewInfo);
+    const data = req.query;
+    const sqlViewInfo = templates.getViewSourceAndAttributes;
+    const resultView = await pgRead.query(sqlViewInfo, [data.idView]);
 
     if (resultView.rowCount !== 1) {
       throw Error("Error fetching view source and attribute");
@@ -48,6 +44,7 @@ export async function handlerTile(req, res) {
      * attribute : attribute for styling
      * attributes : other attributes to include
      * mask (optional) : secondary source to use as mask
+     * usePostgisTiles
      */
     Object.assign(data, viewSrcConfig);
 
@@ -61,11 +58,11 @@ export async function handlerTile(req, res) {
      *      - error : geometry exceeds allowed extent, reduce your vector tile buffer size
      *      - no tiles boundaries visible. Good, but tiles missing
      */
+    data.view = data.idView;
     data.buffer = 0;
     data.useMask = isSourceId(data?.mask);
-    data.usePostgisTiles = req.query.usePostgisTiles && !data.useMask;
-    data.useCache = !req.query.skipCache;
-    data.view = req.query.view;
+    data.usePostgisTiles = data.usePostgisTiles && !data.useMask;
+    data.useCache = !data.skipCache;
     data.zoom = req.params.z * 1;
     data.x = req.params.x * 1;
     data.y = req.params.y * 1;
@@ -83,6 +80,7 @@ export async function handlerTile(req, res) {
 
     data.usePostgisTiles = !!data.usePostgisTiles;
     data.sourceTimestamp = await getSourceLastTimestamp(data.layer);
+    console.log(data.sourceTimestamp);
 
     if (data.useMask) {
       data.maskTimestamp = await getSourceLastTimestamp(data.mask);

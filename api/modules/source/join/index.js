@@ -139,16 +139,16 @@ async function stopIfNotValid(config, client) {
 async function getJoinData(config, client = pgRead) {
   const { id_source } = config;
   const res = await client.query(templates.getSourceJoinData, [id_source]);
-  if (res.rowCount) {
-    return res.rows[0].data;
-  } else {
+  if (res.rowCount === 0) {
     return {};
   }
+  return res.rows[0].data;
 }
 
-async function getJoinConfig(configGet, client = pgRead) {
-  const { config } = await getJoinData(configGet, client);
-  return Object.assign(config_default, config);
+export async function getJoinConfig(configGet, client = pgRead) {
+  const res = await getJoinData(configGet, client);
+  const { join } = res;
+  return join;
 }
 
 async function setJoinConfig(config, client = pgWrite, socket) {

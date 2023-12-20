@@ -1,17 +1,3 @@
 
-Use 
-mx.helpers.modalSourceJoinCreate()
-
-- Improve source join form 
-    - Select Base source 
-        -> update columns in base 
-        -> update column_base in join
-    - Select Join Source
-        -> update columns in join 
-        -> update column_base 
-- Final columns selection columns base + columns join + column_base + column_join 
-- Check if it make sense to make the join on unprefixed column, then add the colums base + columns join
-- Create should only create an entry in mx_sources.
-- Update only updateJon ( data -> join ) should validate item 
-- Find a way to sync form data
-
+- Solve non vt view meta : fetchFrom server only fetch vector source 
+- Sove download button for vt and rt views

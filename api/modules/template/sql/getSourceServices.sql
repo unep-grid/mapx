@@ -4,5 +4,4 @@ SELECT
 FROM
   mx_sources
 WHERE
-  type = 'vector'
-  AND id = '{{idSource}}'
+  id = $1

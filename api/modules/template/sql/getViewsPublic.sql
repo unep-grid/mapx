@@ -112,15 +112,6 @@ views_public as (
   WHERE vo.id = vm.id_view
 ),
 /**
-* Views with source metadata
-*/ 
--- views_source_meta as (
-  -- SELECT vp.*,
-  -- coalesce(s.data #> '{meta}',vp.data #> '{source,meta}','{}'::jsonb) as _meta
-  -- FROM views_public vp
-  -- FULL OUTER JOIN  mx_sources s ON vp.data #>> '{source.layerInfo.name}' = s.id
--- ),
-/**
 * views public with project title
 */
 views_public_project_title as (

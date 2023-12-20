@@ -1,7 +1,7 @@
 WITH
 v_latest AS (
   SELECT *
-  FROM mx_views_latest WHERE id = '{{idView}}'
+  FROM mx_views_latest WHERE id = $1
 ),
 v_last_editor AS (
   SELECT editor
@@ -9,13 +9,13 @@ v_last_editor AS (
 ),
 v_date_created AS (
   SELECT date_modified
-  FROM mx_views WHERE id = '{{idView}}'
+  FROM mx_views WHERE id = $1
   ORDER BY date_modified ASC LIMIT 1
 ),
 v_log AS NOT MATERIALIZED (
  SELECT pid, ip_user, id_user, is_guest, date_modified
   FROM mx_logs
-  WHERE data #>> '{"id_view"}' = '{{idView}}'
+  WHERE data #>> '{"id_view"}' = $1
   AND id_log = 'view_add'
 ),
 v_log_ip_country AS (
@@ -69,7 +69,7 @@ v_stat_add_count_by_distinct_users AS (
 ),
 v_editor AS (
   SELECT editor, COUNT(pid) FROM mx_views
-  WHERE id = '{{idView}}'
+  WHERE id = $1
   GROUP BY editor
 ),
 v_editor_email AS (
@@ -108,7 +108,7 @@ v_projects_id AS (
 p_views_external AS (
  SELECT id
  FROM mx_projects
- WHERE views_external ? '{{idView}}' 
+ WHERE views_external ? $1 
 ),
 v_projects_id_all as (
   SELECT id

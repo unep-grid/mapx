@@ -693,6 +693,8 @@ class EditTableSession {
                   value_new,
                   client
                 );
+
+                tables_update.add(id_table);
               }
             }
             break;

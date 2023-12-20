@@ -52,9 +52,9 @@ import {
 import { isArray, isMap, isView } from "./../../../is_test";
 import { dashboardHelper } from "./../../../dashboards/dashboard_instances.js";
 import {
-  fetchSourceMetadata,
-  fetchViewMetadata,
-  fetchViewSourceMetadata,
+  getSourceMetadata,
+  getViewMetadata,
+  getViewSourceMetadata,
 } from "../../../metadata/utils.js";
 import { getViewSourceSummary } from "../../../mx_helper_source_summary.js";
 import {
@@ -200,7 +200,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
   async close_modal_share() {
     const rslv = this;
     const sm = rslv._sm;
-    if (!sm instanceof ShareModal) {
+    if ((!sm) instanceof ShareModal) {
       throw new Error("No share modal found");
     }
     const promClosed = sm.once("closed");
@@ -217,7 +217,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
   get_modal_share_string() {
     const rslv = this;
     const sm = rslv._sm;
-    if (!sm instanceof ShareModal) {
+    if ((!sm) instanceof ShareModal) {
       throw new Error("No share modal found");
     }
     return sm.getShareCode();
@@ -230,7 +230,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
   async get_modal_share_tests() {
     const rslv = this;
     const sm = rslv._sm;
-    if (!sm instanceof ShareModal) {
+    if ((!sm) instanceof ShareModal) {
       throw new Error("No share modal found");
     }
     const ok = await sm.tests();
@@ -344,10 +344,16 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * Get source metadata
    * @param {Object} opt Options
    * @param {String} opt.idSource Id of the source
-   * @return {Object} Source MapX metadata
+   * @param {Boolean} opt.asArray In case of joined meta, returns an array
+   * @return {Promise<Object|Array>} Source MapX metadata, or array of meta
    */
-  get_source_meta(opt) {
-    return fetchSourceMetadata(opt.idSource, opt.force);
+  async get_source_meta(opt) {
+    const metaAll = await getSourceMetadata(opt.idSource);
+    if (opt.asArray) {
+      return metaAll;
+    } else {
+      return metaAll[0];
+    }
   }
 
   /**
@@ -437,19 +443,25 @@ export class MapxResolversStatic extends MapxResolversPanels {
    */
   get_view_meta(opt) {
     opt = Object.assign({}, { idView: null }, opt);
-    return fetchViewMetadata(opt.idView);
+    return getViewMetadata(opt.idView);
   }
 
   /**
    * Get view source metadata
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
+   * @param {Boolean} opt.asArray In case of joined meta, returns an array
    * @param {Object} view meta data object
-   * @return {Promise<Object>} view metadata
+   * @return {Promise<Object|Array>} view metadata
    */
-  get_view_source_meta(opt) {
+  async get_view_source_meta(opt) {
     opt = Object.assign({}, { idView: null }, opt);
-    return fetchViewSourceMetadata(opt.idView);
+    const metaAll = await getViewSourceMetadata(opt.idView);
+    if (opt.asArray) {
+      return metaAll;
+    } else {
+      return metaAll[0];
+    }
   }
 
   /**
@@ -966,7 +978,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
         title: id,
         abstract: id,
       },
-      opt
+      opt,
     );
     if (opt.random && !opt.data) {
       opt.data = getGeoJSONRandomPoints(opt.random);
@@ -1059,7 +1071,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
       () => {
         map.flyTo(opt);
       },
-      opt
+      opt,
     );
   }
 
@@ -1077,7 +1089,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
       () => {
         map.jumpTo(opt);
       },
-      opt
+      opt,
     );
   }
 

@@ -6,7 +6,7 @@ import {
   getLanguageCurrent,
 } from "./../language";
 import { getView, getViewTitle, getViewVtSourceId } from "./index.js";
-import {  uiToggleBtn, parentFinder } from "./../mx_helper_misc.js";
+import { uiToggleBtn, parentFinder } from "./../mx_helper_misc.js";
 import { el } from "./../el/src/index.js";
 import {
   isEmpty,
@@ -17,7 +17,7 @@ import {
   isViewGj,
 } from "./../is_test/index.js";
 import { settings } from "./../mx.js";
-import { fetchAttributesAlias } from "../metadata/utils.js";
+import { getAttributesAlias } from "../metadata/utils.js";
 
 /*
  * Convert result from getFeaturesValuesByLayers to HTML
@@ -133,7 +133,7 @@ export function featuresToPopup(o) {
 
       if (isVt) {
         const idSource = getViewVtSourceId(view);
-        labels = await fetchAttributesAlias(idSource, attrNames);
+        labels = await getAttributesAlias(idSource, attrNames);
       }
 
       /**

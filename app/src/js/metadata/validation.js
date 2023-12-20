@@ -1,21 +1,24 @@
-import { settings } from "./settings";
-import { path, all } from "./mx_helper_misc.js";
-import { el } from "./el/src/index.js";
-import { getDictItem, updateLanguageElements } from "./language";
-import { modal } from "./mx_helper_modal";
+import { settings } from "./../settings";
+import { path, all } from "./../mx_helper_misc.js";
+import { el } from "../el/src/index.js";
+import { getDictItem, updateLanguageElements } from "../language";
+import { modal } from "../mx_helper_modal";
 import {
   isEmail,
   isUrl,
   isEmpty,
   isStringRange,
   isDateString,
-} from "./is_test";
+} from "../is_test";
+
+import { getViewSourceMetadata } from "../metadata/utils.js";
+
 /**
  * Validate metadata for a view
  * @param {Object} view View object
- * @return {{results: Object, valid:Boolean, validated:Boolean}}
+ * @return {Promise<{results: Object, valid:Boolean, validated:Boolean}>}
  */
-export function validateMetadataView(view) {
+export async function validateMetadataView(view) {
   const out = {
     validated: false,
     valid: false,
@@ -23,8 +26,8 @@ export function validateMetadataView(view) {
   };
 
   try {
-    const meta = path(view, "_meta", {});
     const attr = path(view, "data.attribute.name");
+    const meta = await getViewSourceMetadata(view);
     out.results = validateMetadataTests(meta, attr);
     out.validated = true;
     out.valid = all(out.results.tests.map((t) => t.valid));
@@ -42,37 +45,39 @@ export function validateMetadataView(view) {
  * @param {Object} meta MapX metadata
  * @return {Array} array of tests
  */
-export function validateMetadataTests(meta, attr) {
+export function validateMetadataTests(metaAll, attr) {
   const v = settings.validation.input.nchar;
   const tests = [];
 
   if (attr) {
     tests.push(
       validateAttribute(
-        meta,
+        metaAll[0],
         attr,
         v.sourceAttributesDesc.min,
-        v.sourceAttributesDesc.max
-      )
+        v.sourceAttributesDesc.max,
+      ),
     );
   }
 
-  tests.push(
-    ...[
-      validateAbstract(meta, v.sourceAbstract.min, v.sourceAbstract.max),
-      validateTitle(meta, v.sourceTitle.min, v.sourceTitle.max),
-      validateKeywords(meta, v.sourceKeywords.min, v.sourceKeywords.max),
-      validateKeywordsM49(meta, v.sourceKeywords.min, v.sourceKeywords.max),
-      validateContact(meta),
-      validateIssuance(meta),
-      validateSource(meta),
-      validateLicense(meta, v.sourceLicense.min, v.sourceLicense.max),
-    ]
-  );
+  for (const meta of metaAll) {
+    tests.push(
+      ...[
+        validateAbstract(meta, v.sourceAbstract.min, v.sourceAbstract.max),
+        validateTitle(meta, v.sourceTitle.min, v.sourceTitle.max),
+        validateKeywords(meta, v.sourceKeywords.min, v.sourceKeywords.max),
+        validateKeywordsM49(meta, v.sourceKeywords.min, v.sourceKeywords.max),
+        validateContact(meta),
+        validateIssuance(meta),
+        validateSource(meta),
+        validateLicense(meta, v.sourceLicense.min, v.sourceLicense.max),
+      ],
+    );
+  }
 
   return {
     tests: tests,
-    meta: meta,
+    meta: metaAll,
   };
 }
 /**
@@ -261,13 +266,13 @@ function validateIssuance(meta) {
 
   const hasPeriodicity = isStringRange(
     path(meta, "temporal.issuance.periodicity", ""),
-    3
+    3,
   );
   const hasReleasedAt = isDateString(
-    path(meta, "temporal.issuance.released_at", "")
+    path(meta, "temporal.issuance.released_at", ""),
   );
   const hasModifiedAt = isDateString(
-    path(meta, "temporal.issuance.modified_at", "")
+    path(meta, "temporal.issuance.modified_at", ""),
   );
 
   if (!hasPeriodicity) {
@@ -307,7 +312,7 @@ function validateLicense(meta, min, max) {
   const hasValidLicenses = all(
     licenses.map((l) => {
       return isStringRange(l.text, min, max) && isStringRange(l.name, min, max);
-    })
+    }),
   );
 
   if (!hasLicense) {
@@ -396,8 +401,8 @@ export function validationMetadataTestsToHTML(results) {
               lang_key: r,
             },
           });
-        })
-      )
+        }),
+      ),
     );
     elValidation.appendChild(elItem);
   });
@@ -415,7 +420,7 @@ export function validationMetadataTestsToHTML(results) {
         dataset: {
           lang_key: "validate_meta_no_issue",
         },
-      })
+      }),
     );
   }
   /**
@@ -430,7 +435,7 @@ export function validationMetadataTestsToHTML(results) {
           lang_key: "source_last_editor_email",
         },
       }),
-      el("p", meta._emailEditor)
+      el("p", meta._emailEditor),
     );
     elValidation.appendChild(elEditorInfo);
   }
@@ -446,7 +451,6 @@ export function validationMetadataTestsToHTML(results) {
  * Schema to modal validation window
  */
 export async function validateMetadataModal(meta) {
-  meta = meta.metadata ? meta.metadata : meta;
   const results = validateMetadataTests(meta);
   /**
    * Build a modal

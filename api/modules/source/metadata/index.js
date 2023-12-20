@@ -2,42 +2,68 @@ import { pgRead } from "#mapx/db";
 import { sendError, sendJSON, parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { isSourceId } from "@fxi/mx_valid";
-import { getParamsValidator } from "#mapx/route_validation";
 
 /**
- * Get tile
+ * WS handler for source attraibutes aliases
  */
-const validateParamsAlias = getParamsValidator({
-  required: ["idSource", "attributes"],
-  expected: ["timestamp"],
-});
+export async function ioSourceAttributesAlias(socket, data, cb) {
+  const session = socket.session;
 
-export const mwGetMetadata = [getSourceMetadataHandler];
-export const mwGetAttributesAlias = [
-  validateParamsAlias,
-  getSourceAttributesAliasHander,
-];
-
-async function getSourceMetadataHandler(req, res) {
   try {
-    const data = await getSourceMetadata({
-      id: req.params.id,
-      format: "mapx-json",
-    });
-    sendJSON(res, data, { end: true });
+    if (!session) {
+      throw new Error("No Session");
+    }
+
+    const { idSource, attributes } = data;
+
+    if (!isSourceId(idSource)) {
+      throw new Error("missing source id");
+    }
+    const aliases = await getAttributesAlias(idSource, attributes, pgRead);
+
+    cb(aliases);
   } catch (e) {
-    sendError(res, e);
+    console.error(e);
+    await socket.notifyInfoError({
+      message: e.message,
+    });
   }
+  cb(null);
+  return;
 }
 
-async function getSourceAttributesAliasHander(req, res) {
+/**
+ * WS handler for source metadata
+ */
+export async function ioSourceMetadata(socket, data, cb) {
+  const session = socket.session;
+
   try {
-    const { attributes, idSource } = req.query;
-    const data = await getAttributesAlias(idSource, attributes, pgRead);
-    sendJSON(res, data, { end: true });
+    if (!session) {
+      throw new Error("No Session");
+    }
+
+    const { idSource } = data;
+
+    if (!isSourceId(idSource)) {
+      throw new Error("missing source id");
+    }
+
+    // array of metadata
+    const metadata = await getSourceMetadata({
+      id: idSource,
+      format: "mapx-json",
+    });
+
+    cb(metadata);
   } catch (e) {
-    sendError(res, e);
+    console.error(e);
+    await socket.notifyInfoError({
+      message: e.message,
+    });
   }
+  cb(null);
+  return;
 }
 
 /**
@@ -64,7 +90,7 @@ async function getMetadataRow(id, pgClient = pgRead) {
  * @param {Object} opt options
  * @param {String} opt.id Id of the source
  * @param {String} opt.format format (disabled now. Will be mapx-json or iso-xml)
- * @return {Object} metadata object
+ * @return {Promise<Array>} Lsit of metadata
  */
 export async function getSourceMetadata(opt) {
   const { id } = opt;
@@ -73,40 +99,44 @@ export async function getSourceMetadata(opt) {
     throw Error("Not valid source id");
   }
 
-  const row = await getMetadataRow(id);
+  const all = [];
+  const meta = await getMetadataPrefixed(id, null);
+  const { _type: type, _join: joinConfig } = meta;
 
+  all.push(meta);
+
+  if (type === "join") {
+    const { id_source, _prefix: prefix } = joinConfig?.base || {};
+    const metaBase = await getMetadataPrefixed(id_source, prefix);
+
+    all.push(metaBase);
+
+    for (const join of joinConfig.joins) {
+      const { id_source: id_source_join, _prefix: prefix_join } = join;
+      const metaJoin = await getMetadataPrefixed(id_source_join, prefix_join);
+      all.push(metaJoin);
+    }
+  }
+
+  return all;
+}
+
+/**
+ * Retrieve metadata object and add internal properties
+ * @returns {Promise<Object>}  metadata with internal properties
+ */
+async function getMetadataPrefixed(idSource, prefix) {
+  const row = await getMetadataRow(idSource);
   const { type, metadata, join_config, email_editor, date_modified, services } =
     row;
 
+  metadata._id_source = idSource;
+  metadata._type = type;
   metadata._join = join_config;
   metadata._email_editor = email_editor;
   metadata._date_modified = date_modified;
   metadata._services = services;
-  metadata._id_source = id;
-  metadata._join_meta = [];
-
-  if (type === "join") {
-    const config = metadata._join;
-    const { id_source, _prefix: prefix } = config?.base || {};
-    const { metadata: metaBase } = await getMetadataRow(id_source);
-
-    metadata._join_meta.push({
-      id_source: id_source,
-      prefix: prefix,
-      meta: metaBase,
-    });
-
-    for (const join of config.joins) {
-      const { id_source: id_source_join, _prefix: prefix_join } = join;
-      const { metadata: metaJoin } = await getMetadataRow(id_source_join);
-      metadata._join_meta.push({
-        id_source: id_source_join,
-        prefix: prefix_join,
-        meta: metaJoin,
-      });
-    }
-  }
-
+  metadata._prefix = prefix;
   return metadata;
 }
 

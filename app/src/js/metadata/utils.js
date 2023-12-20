@@ -1,12 +1,13 @@
 import { getGemetConcept, getGemetConceptLink } from "./../gemet_util/index.js";
 import { el, elAuto, elPanel, elSpanTranslate } from "./../el_mapx";
-import { getApiUrl } from "./../api_routes";
+import { getApiRoute } from "./../api_routes";
 import { theme } from "./../mx";
 import { getView, getViewRemote } from "./../map_helpers";
 import { modal } from "./../mx_helper_modal.js";
 import { path, objectToArray } from "./../mx_helper_misc.js";
 import { moduleLoad } from "./../modules_loader_async";
 import { MenuBuilder } from "./menu.js";
+import { ws } from "./../mx.js";
 import {
   getLanguageItem,
   getDictItem,
@@ -19,90 +20,86 @@ import {
   isEmpty,
   isSourceId,
   isViewId,
+  isArray,
   isView,
   isNotEmpty,
 } from "./../is_test_mapx";
 
 /**
  * Get source metadata
- * @note : For updating only. see <view>._meta and <view>._has_download
+ * @note sdk only
  * @param {String} id Name/Id of the source layer
  */
-export async function fetchSourceMetadata(idSource) {
+export async function getSourceMetadata(idSource) {
   if (!isSourceId(idSource)) {
     throw new Error("getSourceMetadata : invalid id");
   }
-  const urlSourceMeta = getApiUrl("getSourceMetadata");
-  const date = Date.now();
-  const url = `${urlSourceMeta}${idSource}?date=${date}`;
-  const r = await fetch(url);
-  const meta = await r.json();
-  meta._id_source = idSource;
+
+  const meta = await ws.emitAsync(
+    getApiRoute("sourceGetMetadata"),
+    {
+      idSource,
+    },
+    1e3,
+  );
+
   return meta;
 }
 
-export async function fetchAttributesAlias(idSource, attributes) {
+export async function getAttributesAlias(idSource, attributes) {
   if (!isSourceId(idSource)) {
     throw new Error("getSourceMetadata : invalid id");
   }
-  const url = new URL(getApiUrl("getAttributesAlias"));
 
-  url.searchParams.set("idSource", idSource);
-  url.searchParams.set("attributes", attributes);
+  const aliases = await ws.emitAsync(
+    getApiRoute("sourceGetAttributesAlias"),
+    {
+      idSource,
+      attributes,
+    },
+    1e3,
+  );
 
-  const r = await fetch(url);
-  if (!r.ok) {
-    throw new Error("getAttributesAlias : invalid");
-  }
-  const attrbutes = await r.json();
-  return attrbutes;
+  return aliases;
 }
 
 /**
  * Get view metadata
  * @param {String} id Name/Id of the view
  */
-export async function fetchViewMetadata(id) {
+export async function getViewMetadata(id) {
   if (!isViewId(id)) {
-    return console.warn("fetchViewMetadata : invalid id");
+    return console.warn("getViewMetadata : invalid id");
   }
-  const urlViewMeta = getApiUrl("getViewMetadata");
-  const date = performance.now();
-  const url = `${urlViewMeta}${id}?date=${date}`;
-  const r = await fetch(url);
-  const meta = await r.json();
-  return meta;
+  const viewMeta = await ws.emitAsync(
+    getApiRoute("viewMetadata"),
+    {
+      idView: id,
+    },
+    1e3,
+  );
+  return viewMeta;
 }
 
 /**
- * Get view source metadata
- * @param {String} id Name/Id of the view
+ * Get view's source metadata (all type + join)
+ * @param {String|Object} view or idView
+ * @returns {Promise<Array>} an array of metadata object, with internal properties
  */
-export async function fetchViewSourceMetadata(id) {
-  if (!isViewId(id)) {
-    return console.warn("fetchViewSourceMetadata : invalid id");
+export async function getViewSourceMetadata(view) {
+  view = getView(view);
+  if (!isView(view)) {
+    return [];
   }
-  const urlViewMeta = getApiUrl("getViewSourceMetadata");
-  const date = performance.now();
-  const url = `${urlViewMeta}${id}?date=${date}`;
-  const r = await fetch(url);
-  const meta = await r.json();
-  return meta;
-}
+  const metadata = await ws.emitAsync(
+    getApiRoute("viewSourceMetadata"),
+    {
+      idView: view.id,
+    },
+    1e3,
+  );
 
-/**
- * Get view source metadata
- * @param {Object} view
- * @return {Object} metadata
- */
-async function getViewSourceMeta(view) {
-  const idSource = view?.data?.source?.layerInfo?.name || false;
-  if (!isSourceId(idSource)) {
-    return {};
-  }
-  const metaRemote = await fetchSourceMetadata(idSource);
-
-  return metaRemote;
+  return metadata;
 }
 
 /**
@@ -123,9 +120,9 @@ export async function viewToMetaModal(view) {
   }
 
   const idView = view?.id;
-  const meta = await getViewSourceMeta(view);
-  const { _join_meta: metaJoin } = meta;
-  const metaRasterLink = path(view, "data.source.urlMetadata");
+  /**
+   * UI
+   */
   const elContent = el("div");
   const elTitleModal = el("span", {
     dataset: { lang_key: "meta_view_modal_title" },
@@ -144,19 +141,21 @@ export async function viewToMetaModal(view) {
     },
   });
 
-  const data = await fetchViewMetadata(idView);
+  /**
+   * View meta section
+   */
+  const viewMeta = await getViewMetadata(idView);
 
-  if (data.meta) {
-    Object.assign(meta, data.meta);
-  }
-  meta.id = idView;
-
-  const elViewMeta = await metaViewToUi(meta, elModal);
+  const elViewMeta = await metaViewToUi(viewMeta, elModal);
 
   if (elViewMeta) {
     elContent.appendChild(elViewMeta);
   }
 
+  /**
+   * Raster meta section
+   */
+  const metaRasterLink = path(view, "data.source.urlMetadata");
   if (metaRasterLink) {
     const elRasterMetaLink = metaSourceRasterToUi({
       url: metaRasterLink,
@@ -166,17 +165,24 @@ export async function viewToMetaModal(view) {
     }
   }
 
-  if (isNotEmpty(meta)) {
-    const elSourceMeta = metaSourceToUi(meta);
+  /**
+   * Vector meta section
+   */
+  const meta = await getViewSourceMetadata(view);
+  if (isNotEmpty(meta) && isArray(meta)) {
+    const mainMeta = meta.splice(0, 1);
+    const joinMeta = meta;
+
+    const elSourceMeta = metaSourceToUi(mainMeta[0]);
     if (elSourceMeta) {
       elContent.appendChild(elSourceMeta);
     }
-  }
 
-  if (isNotEmpty(metaJoin)) {
-    const elMetaJoin = metaJoinSourceToUi(metaJoin);
-    if (isNotEmpty(elMetaJoin)) {
-      elContent.appendChild(elMetaJoin);
+    if (isNotEmpty(joinMeta)) {
+      const elMetaJoin = metaJoinSourceToUi(joinMeta);
+      if (isNotEmpty(elMetaJoin)) {
+        elContent.appendChild(elMetaJoin);
+      }
     }
   }
 
@@ -239,6 +245,7 @@ async function metaViewToUi(meta, elModal) {
     "meta_view_stat_n_add_by_users_distinct",
   );
   const tblSummaryFull = objectToArray(meta, true);
+
   const tblSummary = tblSummaryFull
     .filter((row) => keys.includes(row.key))
     .sort((a, b) => {
@@ -546,8 +553,8 @@ async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
  */
 function metaJoinSourceToUi(metaJoin) {
   const elOut = el("div", { style: { padding: "20px" } });
-  for (const item of metaJoin) {
-    elOut.appendChild(metaSourceToUi(item.meta, item.prefix));
+  for (const meta of metaJoin) {
+    elOut.appendChild(metaSourceToUi(meta, meta._prefix));
   }
   return elPanel({
     title: elSpanTranslate("join_meta_title"),

@@ -36,7 +36,7 @@ import { NotifCenter } from "./../notif_center/";
 import { cleanDiacritic } from "./../string_util/";
 import chroma from "chroma-js";
 import { mirrorUrlCreate } from "./../mirror_util";
-import { getAppPathUrl } from "./../api_routes/index.js";
+import { getApiRoute, getAppPathUrl } from "./../api_routes/index.js";
 import { isStoryPlaying, storyRead } from "./../story_map/index.js";
 import { fetchViews } from "./../mx_helper_map_view_fetch.js";
 import { wmsQuery } from "./../wms/index.js";
@@ -92,7 +92,6 @@ import {
   setQueryParameters,
   cleanTemporaryQueryParameters,
 } from "./../url_utils";
-import { fetchSourceMetadata } from "./../metadata/utils.js";
 import { LegendVt } from "./../legend_vt/index.js";
 import { getViewMapboxLayers } from "./../style_vt/index.js";
 import { moduleLoad } from "./../modules_loader_async";
@@ -1910,17 +1909,21 @@ export async function addSourceFromView({ view, noLocationCheck, map }) {
   map.addSource(idSource, source);
 }
 
+/**
+ * Configure view object: source urls and promoted id
+ * @pramam {Object} view
+ * @returns void
+ */
 function setSourceViewVt(view) {
   const urlBase = getApiUrl("getTile");
   const useServerCache = settings.tiles.vector.useCache;
-  const usePostgisTiles = !isEmpty(settings.tiles.vector.usePostgisTiles)
-    ? settings.tiles.vector.usePostgisTiles
-    : view._use_postgis_tiler;
+  const usePostgisTiles = settings.tiles.vector.usePostgisTiles;
+  // URL API escape {x}/{y}/{z}, use concat
   const url =
-    `${urlBase}?view=${view.id}&` +
-    `skipCache=${!useServerCache}&` +
-    `usePostgisTiles=${Boolean(usePostgisTiles)}&` +
-    `timestamp=${view.date_modified}`;
+    `${urlBase}?idView=${view.id}&` +
+    `timestamp=${view.date_modified}&` +
+    (usePostgisTiles === true ? `usePostgisTiles=true&` : "") +
+    (useServerCache === false ? `skipCache=true&` : "");
 
   view.data.source.tiles = [url, url];
   view.data.source.promoteId = "gid";
@@ -5225,12 +5228,27 @@ export function getViewVtSourceId(view) {
  * @return {Promise<Boolean>} downloadable
  */
 export async function isSourceDownloadable(idSource) {
-  if (!isSourceId(idSource)) {
-    return false;
-  }
-  const meta = await fetchSourceMetadata(idSource);
-  const isDownloadable = !!meta?._services?.includes("mx_download");
-  return isDownloadable;
+  const route = getApiRoute("sourceGetServices");
+  const res = await ws.emitAsync(
+    route,
+    { method: "is_downloadable", config: { idSource } },
+    10e3,
+  );
+  return res;
+}
+
+/**
+ * Test source current services
+ * @param {String} idSource Source id
+ * @return {Promise<Array>} services
+ */
+export async function getSourceServices(idSource) {
+  const res = await ws.emitAsync(
+    getApiRoute("sourceGetServices"),
+    { method: "get_services", config: { idSource } },
+    10e3,
+  );
+  return res;
 }
 
 /**

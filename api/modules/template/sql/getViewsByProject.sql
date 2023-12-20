@@ -156,30 +156,7 @@ AND
     ( p.u_is_admin AND v.readers ?| array['admins'] )
   )
 ),
-/**
-* Download external link
-*/ 
-v_meta AS (
-  SELECT 
-  v.*,
-  null as _id_source,
-  coalesce(data #> '{source,meta,origin,source,urls}', '[]'::jsonb ) @> '[{"is_download_link":true}]' as _has_download,
-  null as _use_postgis_tiler,
-  coalesce( v.data #> '{source,meta}','{}'::jsonb ) AS _meta
-  FROM v_all v
-  WHERE 
-  type !='vt' 
-  UNION
-  SELECT
-  v.*,
-  s.id as _id_source,
-  coalesce( s.services, '[]'::jsonb ) @> '"mx_download"' _has_download,
-  coalesce( s.services, '[]'::jsonb ) @> '"mx_postgis_tiler"' _use_postgis_tiler,
-  coalesce( s.data #> '{meta}', '{}'::jsonb ) AS _meta
-  FROM v_all v LEFT OUTER JOIN mx_sources s
-  ON v.data #>> '{source,layerInfo,name}' = s.id
-  WHERE v.type = 'vt'
-),
+
 /**
 * View list 
 * -> single project, repeated on all row
@@ -188,7 +165,7 @@ v_list AS (
   SELECT 
   v.*,
   p.title _title_project
-  FROM v_meta v, p_base p 
+  FROM v_all v, p_base p 
 )
 
 SELECT {{selectKeys}} FROM v_list;

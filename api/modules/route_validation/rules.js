@@ -75,15 +75,24 @@ const rules = [
     },
   },
   /*
-   * Date  / time
+   * Date  / time cleaner
    */
   {
     key: ["timestamp"],
     test: (d) => {
-      isValid = isDateString(d) || (isNumeric(d) && d > 0);
+      if (isDateString(d)) {
+        const date = new Date(d);
+        d = date.getTime();
+      }
+      if (!isNumeric(d)) {
+        d = Number(d);
+      }
+      if (isNumeric(d)) {
+        isValid = true;
+      }
       return {
         valid: isValid,
-        value: isValid ? d * 1 : null,
+        value: isValid ? d : null,
       };
     },
   },

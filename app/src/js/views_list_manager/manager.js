@@ -6,8 +6,7 @@ import { isTrue, isView, isArray } from "./../is_test_mapx";
 import { itemFlashSave } from "./../mx_helper_misc.js";
 import { getQueryParameterInit } from "./../url_utils";
 import { updateLanguageElements } from "./../language";
-import { updateViewsBadges } from "./../mx_helper_map_view_badges.js";
-import { setViewBadges } from "./../mx_helper_map_view_badges.js";
+import { updateViewsBadges, setViewBadges } from "./../badges/index.js";
 import { bindAll } from "./../bind_class_methods/index.js";
 import {
   viewModulesRemove,

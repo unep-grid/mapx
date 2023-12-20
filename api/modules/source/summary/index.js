@@ -3,6 +3,7 @@ import { isJson, isNotEmpty, isSourceId, isViewId } from "@fxi/mx_valid";
 import { redisGet, redisSet, pgRead, pgReadLong } from "#mapx/db";
 import { getParamsValidator } from "#mapx/route_validation";
 import { parseTemplate, sendJSON, sendError } from "#mapx/helpers";
+import { getSourceType } from "#mapx/db_utils";
 import { templates } from "#mapx/template";
 
 import {
@@ -102,6 +103,7 @@ export async function getSourceSummary(opt) {
 
     const columns = await getColumnsNames(opt.idSource);
     const timestamp = await getSourceLastTimestamp(opt.idSource);
+    const type = await getSourceType(opt.idSource);
     const tableTypes = await getColumnsTypesSimple(opt.idSource, columns);
 
     const attrType = opt.idAttr
@@ -152,6 +154,7 @@ export async function getSourceSummary(opt) {
 
     const out = {
       id: opt.idSource,
+      type: type,
       timestamp: opt.timestamp,
       attributes: columns,
       attributes_types: tableTypes,
@@ -256,8 +259,8 @@ async function getOrCalc(idTemplate, opt) {
  */
 async function updateSourceFromView(opt) {
   if (opt.idView) {
-    const sqlSrcAttr = parseTemplate(templates.getViewSourceAndAttributes, opt);
-    const respSrcAttr = await pgRead.query(sqlSrcAttr);
+    const sqlSrcAttr = templates.getViewSourceAndAttributes;
+    const respSrcAttr = await pgRead.query(sqlSrcAttr, [opt.idView]);
     if (respSrcAttr.rowCount > 0) {
       const [srcAttr] = respSrcAttr.rows;
       if (srcAttr.layer) {

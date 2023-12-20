@@ -6,7 +6,7 @@ import { isEmail, isArray } from "../../is_test";
 import { getApiRoute } from "../../api_routes";
 import { FlashItem } from "../../icon_flash";
 import { isSourceDownloadable } from "../../map_helpers";
-import { fetchSourceMetadata } from "../../metadata/utils.js";
+import { getSourceMetadata } from "../../metadata/utils.js";
 import { EventSimple } from "../../event_simple";
 import { ws, nc } from "../../mx.js";
 import { buildForm } from "./form.js";
@@ -60,11 +60,14 @@ export class DownloadSourceModal extends EventSimple {
     }
 
     if (!opt.filename) {
-      const meta = await fetchSourceMetadata(md._opt.idSource);
-      md._opt.filename = getLanguageItem(
-        meta?.text?.title || {},
-        md._opt.language,
-      );
+      const meta = await getSourceMetadata(md._opt.idSource);
+      if (!isEmpty(meta)) {
+        const mainMeta = meta[0];
+        md._opt.filename = getLanguageItem(
+          mainMeta?.text?.title || {},
+          md._opt.language,
+        );
+      }
     }
 
     await md.build();

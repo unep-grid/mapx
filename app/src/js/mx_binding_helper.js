@@ -19,7 +19,7 @@ import {
 import { ws_tools, helpers as h } from "./mx.js";
 import { writeCookie } from "./mx_helper_cookies.js";
 import { renderUserProjectsList } from "./mx_helper_list_projects.js";
-import { validateMetadataModal } from "./mx_helper_metadata_validation.js";
+import { validateMetadataModal } from "./metadata/validation.js";
 import {
   buttonToggle,
   getBrowserData,
@@ -48,7 +48,7 @@ import {
 } from "./url_utils/url_utils.js";
 import { wmsBuildQueryUi } from "./wms/ui.js";
 import { project } from "./mx.js";
-import { updateViewsBadges } from "./mx_helper_map_view_badges.js";
+import { updateViewsBadges } from "./badges/index.js";
 import {
   viewsListRenderNew,
   viewsListUpdateSingle,

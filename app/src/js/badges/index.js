@@ -1,15 +1,15 @@
-//import { fetchSourceMetadata } from "./mx_helpers.js";
-import { path } from "./mx_helper_misc.js";
-import { modal } from "./mx_helper_modal.js";
-import { getView, getViews } from "./map_helpers";
-import { isView, isArray } from "./is_test";
-import { settings } from "./settings";
-import { getDictItem, updateLanguageElements } from "./language";
-import { el } from "./el/src/index.js";
+import { path } from "./../mx_helper_misc.js";
+import { modal } from "./../mx_helper_modal.js";
+import { getView, getViews } from "./../map_helpers";
+import { isView, isArray } from "./../is_test";
+import { settings } from "./../settings";
+import { getDictItem, updateLanguageElements } from "./../language";
+import { el } from "../el/src/index.js";
 import {
   validationMetadataTestsToHTML,
   validateMetadataView,
-} from "./mx_helper_metadata_validation.js";
+} from "../metadata/validation.js";
+import { isEmpty } from "../is_test/index.js";
 
 /*
  * Update metadata and views badges
@@ -79,9 +79,12 @@ export async function setViewBadges(view) {
        * Validate asynchronously metadata
        */
       if (hasPublic) {
-        const validation = validateMetadataView(view);
+        const validation = await validateMetadataView(view);
 
         if (!validation.valid) {
+          if (isEmpty(validation.results)) {
+            debugger;
+          }
           /**
            * Add not valid badge
            */

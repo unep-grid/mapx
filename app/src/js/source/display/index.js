@@ -1,6 +1,6 @@
 import { getArrayDistinct } from "./../../array_stat/index.js";
 import { modalMarkdown } from "./../../modal_markdown/index.js";
-import { getDictItem, getLanguageCurrent } from "./../../language";
+import { getDictItem, getLabelFromObjectPath } from "./../../language";
 import { elSpanTranslate } from "./../../el_mapx";
 import { getApiUrl } from "./../../api_routes";
 import { settings } from "./../../settings";
@@ -16,12 +16,13 @@ import { objToParams } from "./../../url_utils";
 import { fetchJsonProgress } from "./../../mx_helper_fetch_progress";
 import { el } from "./../../el/src/index.js";
 import { getViewSourceSummary } from "./../../mx_helper_source_summary.js";
-import {
-  fetchAttributesAlias,
-  fetchSourceMetadata,
-} from "./../../metadata/utils.js";
+import { getAttributesAlias } from "./../../metadata/utils.js";
 import { moduleLoad } from "./../../modules_loader_async";
-import { getView, getViewTitle } from "./../../map_helpers";
+import {
+  getView,
+  getViewTitle,
+  isSourceDownloadable,
+} from "./../../map_helpers";
 import { isSourceId, isView, isArray, makeSafeName } from "./../../is_test";
 import { downloadCSV } from "../../download/index.js";
 
@@ -72,27 +73,27 @@ async function showSourceTableAttributeModal(opt) {
     const groups = settings?.user?.roles?.groups || [];
     const editor = summary?.roles?.editor;
     const editors = summary?.roles?.editors;
+    const isEditable = ["vector", "tabular"].includes(summary?.type);
     const isProject = config?.view?.project === settings?.project?.id;
     const isEditor = editor === idUser;
     const isAllowed = editors.some(
       (role) => groups.includes(role) || role === idUser,
     );
 
-    addEdit = isProject && (isEditor || isAllowed);
+    addEdit = isProject && (isEditor || isAllowed) && isEditable;
     /**
      * Start progress
      */
     onProgressStart();
 
     const handsontable = await moduleLoad("handsontable");
-    const meta = await fetchSourceMetadata(config.idSource);
     const table = await fetchSourceTableAttribute(config);
     const data = table.data;
 
-    const services = meta._services || [];
     const hasData = isArray(data) && data.length > 0;
     const license = "non-commercial-and-evaluation";
-    allowDownload = services.indexOf("mx_download") > -1;
+    allowDownload = await isSourceDownloadable(opt.idSource);
+    debugger;
     elTable = el("div", {
       class: "mx_handsontable",
       style: {
@@ -155,6 +156,9 @@ async function showSourceTableAttributeModal(opt) {
       },
       elSpanTranslate("btn_edit_table_modal_edit"),
     );
+    if (!addEdit) {
+      elButtonEdit.setAttribute("disabled", true);
+    }
 
     const elTitle = el(
       "div",
@@ -167,12 +171,7 @@ async function showSourceTableAttributeModal(opt) {
       })),
     );
 
-    const buttons = [
-      elButtonHelp,
-      //elButtonClearFilter,
-      elButtonDownload,
-      elButtonEdit,
-    ];
+    const buttons = [elButtonHelp, elButtonDownload, elButtonEdit];
 
     if (!hasData) {
       elTable.innerText = "no data";
@@ -395,7 +394,6 @@ export async function viewToTableAttributeModal(idView) {
 }
 
 export async function getTableAttributeConfigFromView(view) {
-
   if (view.type !== "vt") {
     console.warn("Only vt view are supported");
     return null;
@@ -410,7 +408,7 @@ export async function getTableAttributeConfigFromView(view) {
   attributes = attributes.concat(["gid"]);
   attributes = getArrayDistinct(attributes);
 
-  const alias = fetchAttributesAlias(idSource, attributes);
+  const alias = await getAttributesAlias(idSource, attributes);
 
   const labels = attributes.map((attr) => {
     return getLabelFromObjectPath({

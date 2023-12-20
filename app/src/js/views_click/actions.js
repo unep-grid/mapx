@@ -3,7 +3,7 @@ import { isEmpty } from "./../is_test_mapx";
 import { makeId, path } from "./../mx_helper_misc.js";
 import { modal, modalConfirm } from "./../mx_helper_modal.js";
 import { FlashItem } from "./../icon_flash";
-import { displayMetadataIssuesModal } from "./../mx_helper_map_view_badges.js";
+import { displayMetadataIssuesModal } from "./../badges/index.js";
 import { storyRead } from "./../story_map/index.js";
 import { viewToTableAttributeModal } from "./../source/display/index.js";
 import { viewToMetaModal } from "./../metadata/utils.js";

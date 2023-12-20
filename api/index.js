@@ -24,14 +24,18 @@ import { ioUpdateGeoserver } from "#mapx/geoserver";
 import { ioEcho } from "#mapx/io";
 import { ioTestSum, ioTestEcho } from "#mapx/io";
 import { ioUploadSource } from "#mapx/upload";
+
+import { ioViewPin, ioViewSourceMetaGet, ioViewMetaGet } from "#mapx/view";
 import {
   ioDownloadSource,
   ioEditSource,
   ioSourceListEdit,
   ioSourceListColumns,
   ioSourceJoin,
+  ioSourceServices,
+  ioSourceMetadata,
+  ioSourceAttributesAlias,
 } from "#mapx/source";
-import { ioViewPin } from "#mapx/view";
 import { ioProjectNameValidate, ioProjectCreate } from "#mapx/project";
 import { ioKeywordsSearch } from "#mapx/keywords";
 import {
@@ -98,10 +102,18 @@ io.use((socket, next) => {
   socket.on("/client/source/edit/table", use(ioEditSource));
   socket.on("/client/source/get/list/edit", use(ioSourceListEdit));
   socket.on("/client/source/get/list/columns", use(ioSourceListColumns));
+  socket.on("/client/source/get/services", use(ioSourceServices));
+  socket.on("/client/source/get/metadata", use(ioSourceMetadata));
   socket.on("/client/source/join", use(ioSourceJoin));
   socket.on("/client/view/pin", use(ioViewPin));
+  socket.on("/client/view/source/get/metadata", use(ioViewSourceMetaGet));
+  socket.on("/client/view/get/metadata", use(ioViewMetaGet));
   socket.on("/client/project/validate/name", use(ioProjectNameValidate));
   socket.on("/client/project/create", use(ioProjectCreate));
+  socket.on(
+    "/client/source/get/attributes/alias",
+    use(ioSourceAttributesAlias)
+  );
   socket.on("/client/metadata/keywords/search", use(ioKeywordsSearch));
 
   // tests
@@ -116,8 +128,6 @@ io.use((socket, next) => {
  */
 app.get("/health", mwHealth);
 app.get("/get/view/item/:id", view.mwGet);
-app.get("/get/view/metadata/:id", view.mwGetMetadata);
-app.get("/get/view/source/metadata/:id", view.mwGetSourceMetadata);
 app.get("/get/views/list/project/", view.mwGetListByProject);
 app.get("/get/views/list/global/public/", view.mwGetListPublic);
 app.get("/get/tile/:x/:y/:z.:ext", tile.mwGet);
@@ -128,8 +138,6 @@ app.get("/get/mirror/", mirror.mwGet);
 app.get("/get/config/map", mwGetConfigMap);
 app.get("/get/epsg/codes/full", mwGetEpsgCodesFull);
 app.get("/get/file/formats/list", mwGetFormatsList);
-app.get("/get/source/metadata/:id", source.mwGetMetadata);
-app.get("/get/source/attributes/alias", source.mwGetAttributesAlias);
 app.get("/get/source/summary/", source.mwGetSummary);
 app.get("/get/source/table/attribute/", source.mwGetAttributeTable);
 app.get("/get/source/overlap/", source.mwGetOverlap); //countries=[]&layers=[]&='area';

@@ -597,6 +597,30 @@ async function getSourceLastTimestamp(idSource, client = pgRead) {
 
   return row.date_modified;
 }
+/**
+ * Get source type
+ * @param {String} idSource
+ * @param {pg.Client} [client=pgRead] - PostgreSQL client to be used for the query. Defaults to `pgRead` if not provided.
+ * @return {String} type
+ */
+async function getSourceType(idSource, client = pgRead) {
+  if (!isSourceId(idSource)) {
+    return null;
+  }
+  const q = `
+    SELECT type
+    FROM mx_sources 
+    WHERE id = $1 
+  `;
+  const data = await client.query(q, [idSource]);
+  const [row] = data.rows;
+
+  if (!row) {
+    return null;
+  }
+
+  return row.type;
+}
 
 /**
  * Checks if a source exists in the database.
@@ -868,7 +892,7 @@ async function duplicateTableColumn(
     `);
   } catch (error) {
     console.error("Error in duplicating column:", error);
-    throw error; 
+    throw error;
   }
 }
 
@@ -981,6 +1005,7 @@ export {
   getColumnsNames,
   getColumnsTypesSimple,
   getSourceLastTimestamp,
+  getSourceType,
   getLayerTitle,
   isLayerValid,
   isSourceRegistered,
