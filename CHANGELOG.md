@@ -1,3 +1,6 @@
+  - [1.13.0-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.4) 
+    - Changed timeout for retrieving view metadata
+
   - [1.13.0-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.3) 
     - Solved SDK tests issue
     - ⚠️  Probable breaking change in SDK :
