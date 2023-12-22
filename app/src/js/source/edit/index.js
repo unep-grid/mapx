@@ -1,7 +1,7 @@
 import { settings } from "../../settings";
 import { WsToolsBase } from "../../ws_tools/base.js";
 import {
-  modal,
+  modalSimple,
   modalPrompt,
   modalConfirm,
   modalDialog,
@@ -17,7 +17,7 @@ import { clone, makeId, buttonEnable } from "../../mx_helper_misc.js";
 import { RadialProgress } from "../../radial_progress";
 import { theme } from "../../mx.js";
 import { Popup } from "../../popup";
-import { viewLink, getView } from "../../map_helpers/index.js";
+import { viewLink, getView, viewsReplace } from "../../map_helpers/index.js";
 import { getSourceVtSummaryUI } from "../../mx_helper_source_summary";
 import {
   isPgType,
@@ -322,6 +322,19 @@ export class EditTableSessionClient extends WsToolsBase {
       et.emit(e.client_exit).catch((e) => {
         console.error(e);
       });
+
+      /**
+      * Auto reload views locally 
+      * -> structural change requires broadcasting changes from the server 
+      * -> here quick local reload, to see values changes
+      */ 
+      const tableViews = await et.getTableViews();
+      if (tableViews) {
+        const views = tableViews.map((row) => getView(row.id));
+        await viewsReplace(views);
+      }
+
+
       et._modal?.close();
       et._popups.forEach((p) => p.destroy());
       et._resize_observer?.disconnect();
@@ -513,7 +526,7 @@ export class EditTableSessionClient extends WsToolsBase {
       et._el_toolbar,
     );
     et._el_title = el("span");
-    et._modal = modal({
+    et._modal = modalSimple({
       id: `edit_table_modal_${et.id}`,
       title: et._el_title,
       content: et._el_content,
@@ -521,8 +534,6 @@ export class EditTableSessionClient extends WsToolsBase {
       style: {
         minWidth: "800px",
       },
-      addSelectize: false,
-      noShinyBinding: true,
       removeCloseButton: true,
       addBackground: true,
       noBtnGroup: true,
@@ -3118,6 +3129,9 @@ export class EditTableSessionClient extends WsToolsBase {
     const res = await modalSelectSource({
       disable_large: true,
       disable_missing: true,
+      loaderData: {
+        types: ["vector", "tabular"],
+      },
     });
     return res;
   }

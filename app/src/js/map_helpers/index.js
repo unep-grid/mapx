@@ -17,7 +17,7 @@ import { RadialProgress } from "./../radial_progress";
 import { handleViewClick } from "./../views_click";
 import { ButtonPanel } from "./../button_panel";
 import { RasterMiniMap } from "./../raster_mini_map";
-import { el, elSpanTranslate } from "./../el_mapx/index.js";
+import { el, elSpanTranslate as tt } from "./../el_mapx/index.js";
 import { shake } from "./../elshake/index.js";
 import { MainPanel } from "./../panel_main";
 import { MapInfoBox } from "./../map_info_box";
@@ -124,7 +124,6 @@ import {
   isFunction,
   isBoolean,
   isViewOpen,
-  isSourceId,
   isNotEmpty,
   isArrayOfViews,
   isArrayOfViewsId,
@@ -139,6 +138,8 @@ import {
   isViewRtWithLegend,
   isViewVtWithAttributeType,
   isBoundsInsideBounds,
+  isSourceId,
+  isProjectId,
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
@@ -328,7 +329,6 @@ export async function downloadViewSourceExternal(opt) {
   /*
    * Retrieve urls list
    */
-
   const urlItemsClean = getDownloadUrlItemsFromViewMeta(view);
 
   /**
@@ -501,7 +501,7 @@ export function triggerUpdateSourcesList() {
 export async function setProject(idProject, opt) {
   const hasShiny = isShinyReady();
   if (!hasShiny) {
-    console.log("Project requested, missing Shiny");
+    console.log("Project change requires a valid app session");
     return;
   }
   opt = Object.assign({}, { askConfirmIfModal: true, askConfirm: false }, opt);
@@ -521,68 +521,69 @@ export async function setProject(idProject, opt) {
 
   if (askConfirm) {
     changeNow = await modalConfirm({
-      title: elSpanTranslate("modal_check_confirm_project_change_title"),
-      content: elSpanTranslate("modal_check_confirm_project_change_txt"),
+      title: tt("modal_check_confirm_project_change_title"),
+      content: tt("modal_check_confirm_project_change_txt"),
     });
   }
-  if (changeNow) {
-    await viewsCloseAll();
-    const res = await change();
-    return res;
+  if (!changeNow) {
+    return false;
+  }
+
+  modalCloseAll();
+  const promRes = events.once("settings_project_change");
+  const promWait = waitTimeoutAsync(1000, null, "timeout");
+
+  Shiny.onInputChange("selectProject", idProject);
+
+  const res = await Promise.race([promRes, promWait]);
+
+  const idProjectNew = res?.new_project;
+  const idProjectOld = res?.old_project;
+  const hadTimeout = res === "timeout";
+
+  const validProject = isProjectId(idProjectNew);
+  const projectNotChanged = validProject && idProjectNew === idProjectOld;
+  const projectRefused = !validProject || idProjectNew !== idProject;
+
+  if (hadTimeout || projectRefused || projectNotChanged) {
+    await modalDialog({
+      title: tt("modal_check_confirm_project_change_fail_title"),
+      content: tt(
+        isGuest
+          ? "modal_check_confirm_project_change_fail_content_not_logged"
+          : "modal_check_confirm_project_change_fail_content_logged",
+      ),
+    });
+    return false;
   }
 
   /**
-   * Change confirmed : remove all views, close modals, send
-   * selected project to shiny
+   * Clean params and close views
    */
-  async function change() {
-    modalCloseAll();
-    setQueryParametersInitReset();
+  setQueryParametersInitReset();
+  await viewsCloseAll();
 
-    const promRes = events.once("settings_project_change");
-    const promWait = waitTimeoutAsync(1000, null, "timeout");
+  /**
+   * Restart websocket
+   */
+  await ws.connect();
 
-    Shiny.onInputChange("selectProject", idProject);
+  /**
+   * Wait the view list to be updated
+   */
+  await events.once("views_list_updated");
 
-    const res = await Promise.race([promRes, promWait]);
-    const timeout = res === "timeout";
-    const projectRefused = res?.new_project !== idProject;
-
-    if (timeout || projectRefused) {
-      await modalDialog({
-        title: elSpanTranslate("modal_check_confirm_project_change_fail_title"),
-        content: elSpanTranslate(
-          isGuest
-            ? "modal_check_confirm_project_change_fail_content_not_logged"
-            : "modal_check_confirm_project_change_fail_content_logged",
-        ),
-      });
-      if (timeout) {
-        return;
-      }
-    }
-
-    await events.once("views_list_updated");
-
-    const idProjectNew = res?.new_project;
-    const idProjectOld = res?.old_project;
-
-    if (idProjectNew === idProjectOld) {
-      console.warn("Project did not change", { idProjectNew, idProjectOld });
-      return false;
-    }
-    if (isFunction(opt.onSuccess)) {
-      opt.onSuccess();
-    }
-    events.fire({
-      type: "project_change",
-      data: {
-        new_project: idProject,
-        old_project: idCurrentProject,
-      },
-    });
-    return true;
-  }
+  /**
+   * Fire project:changed event
+   */
+  events.fire({
+    type: "project_changed",
+    data: {
+      new_project: idProject,
+      old_project: idCurrentProject,
+    },
+  });
+  return true;
 }
 
 /**
@@ -768,14 +769,14 @@ export function initListenersApp() {
     },
   });
 
+  /**
+   * After project change
+   */
   events.on({
-    type: "project_change",
+    type: "project_changed",
     idGroup: "project_change",
-    callback: async function () {
-      /**
-       * Project change
-       */
-      await ws.connect();
+    callback: async () => {
+      console.log("project change : project_changed");
       const clActive = "active";
       const clHide = "mx-hide";
       const elBtn = document.getElementById("btnFilterShowPanel");
@@ -3013,6 +3014,13 @@ export async function viewLayersAdd(o) {
     view = await getViewRemote(o.idView);
   }
 
+  /**
+   * Set download flag
+   * -> used in isViewDownloadable
+   * -> async not possible in view_list_controles.dot.html
+   */
+  view._has_download = await isViewDownloadableRemote(view);
+
   /*
    * Validation
    */
@@ -3952,6 +3960,7 @@ export async function viewUiContent(id) {
   if (!hasViewEl) {
     return false;
   }
+
   /**
    * Options
    */
@@ -5130,7 +5139,7 @@ export function getViewsListId() {
  * @param {Boolean} config.rtHasLegendLink: false,
  * @param {Boolean} config.isEditable: false,
  * @param {Boolean} config.isLocal: false,
- * @return {Object} A view
+ * @return {Promise<Object>} A view
  */
 const _get_random_view_default = {
   type: ["vt", "rt"],
@@ -5143,7 +5152,7 @@ const _get_random_view_default = {
   isDownloadble: false,
   isLocal: false,
 };
-export function getViewRandom(config) {
+export async function getViewRandom(config) {
   const opt = Object.assign({}, _get_random_view_default, config);
   if (!isArray(opt.type)) {
     opt.type = [opt.type];
@@ -5167,7 +5176,7 @@ export function getViewRandom(config) {
       continue;
     }
 
-    if (opt.isDownloadble && !isViewDownloadable(view)) {
+    if (opt.isDownloadble && (await !isViewDownloadableRemote(view))) {
       continue;
     }
 
@@ -5202,24 +5211,40 @@ export function getViewRandom(config) {
 }
 
 /**
- * Test remotely if the source of a vt view is downloadable.
- * @param {String} idView View id
- * @return {Promise<Boolean>} downloadable
- */
-export async function isViewVtDownloadableRemote(idView) {
-  const view = getView(idView) || (await getViewRemote(idView));
-  const idSource = view?.data?.source?.layerInfo?.name;
-  return isSourceDownloadable(idSource);
-}
-
-/**
  * Get view vt source id
  * @param {Object} view
  * @return {String} idSource
  */
 export function getViewVtSourceId(view) {
   view = getView(view);
-  return view?.data?.source?.layerInfo?.name;
+  const idSource = view?.data?.source?.layerInfo?.name;
+  if (!isSourceId(idSource)) {
+    return null;
+  }
+  return idSource;
+}
+
+/**
+ * Test remotely if the source of a vt view is downloadable.
+ * @param {String} idView View id
+ * @return {Promise<Boolean>} downloadable
+ */
+export async function isViewDownloadableRemote(idView) {
+  const view = getView(idView) || (await getViewRemote(idView));
+  const { type } = view;
+  switch (type) {
+    case "cc":
+    case "sm":
+      return false;
+    case "rt":
+      return hasDownloadUrlItemsFromViewMeta(view);
+    case "vt":
+      const idSource = getViewVtSourceId(view);
+      if (idSource) {
+        return isSourceDownloadable(idSource);
+      }
+  }
+  return false;
 }
 
 /**

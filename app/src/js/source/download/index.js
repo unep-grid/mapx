@@ -2,7 +2,7 @@ import { modal } from "./../../mx_helper_modal";
 import { SelectAuto } from "../../select_auto";
 import { el, elSpanTranslate, elButtonFa, elAlert } from "./../../el_mapx";
 import { getLanguageCurrent, getLanguageItem } from "./../../language";
-import { isEmail, isArray } from "../../is_test";
+import { isEmail, isArray, isNotEmpty } from "../../is_test";
 import { getApiRoute } from "../../api_routes";
 import { FlashItem } from "../../icon_flash";
 import { isSourceDownloadable } from "../../map_helpers";
@@ -61,7 +61,7 @@ export class DownloadSourceModal extends EventSimple {
 
     if (!opt.filename) {
       const meta = await getSourceMetadata(md._opt.idSource);
-      if (!isEmpty(meta)) {
+      if (isNotEmpty(meta)) {
         const mainMeta = meta[0];
         md._opt.filename = getLanguageItem(
           mainMeta?.text?.title || {},

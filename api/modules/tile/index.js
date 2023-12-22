@@ -80,7 +80,6 @@ export async function handlerTile(req, res) {
 
     data.usePostgisTiles = !!data.usePostgisTiles;
     data.sourceTimestamp = await getSourceLastTimestamp(data.layer);
-    console.log(data.sourceTimestamp);
 
     if (data.useMask) {
       data.maskTimestamp = await getSourceLastTimestamp(data.mask);

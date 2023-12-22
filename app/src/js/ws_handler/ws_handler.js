@@ -40,18 +40,18 @@ class WsHandler {
   }
 
   get id() {
-    return this?._socket?.id || null;
+    return this.socket.id || null;
   }
 
   get connected() {
     const ws = this;
-    return ws._socket && ws._socket.connected;
+    return ws.socket && ws.socket.connected;
   }
 
   destroy() {
     const ws = this;
     if (ws.connected) {
-      ws._socket.disconnect();
+      ws.socket.disconnect();
     }
     ws.removeHandlers();
     delete ws._socket;
@@ -97,7 +97,7 @@ class WsHandler {
     }
     for (const key in ws._opt.handlers) {
       const handler = ws._opt.handlers[key].bind(ws);
-      ws._socket.on(key, handler);
+      ws.socket.on(key, handler);
     }
     ws._init_handler = true;
   }
@@ -106,7 +106,7 @@ class WsHandler {
     const ws = this;
     for (const key in ws._opt.handlers) {
       const handler = ws._opt.handlers[key].bind(ws);
-      ws._socket.off(key, handler);
+      ws.socket.off(key, handler);
     }
     ws._init_handler = false;
   }
@@ -140,7 +140,7 @@ class WsHandler {
    */
   emit(type, data, callback) {
     const ws = this;
-    return ws._socket.emit(type, data, callback);
+    return ws.socket.emit(type, data, callback);
   }
 
   /**
@@ -155,7 +155,7 @@ class WsHandler {
           return reject(`emitAsync timeout ${maxTime} on ${type}`);
         }, maxTime);
       }
-      ws._socket.emit(type, data, (response) => {
+      ws.socket.emit(type, data, (response) => {
         return resolve(response);
       });
     });
@@ -180,7 +180,7 @@ class WsHandler {
     const maxTime = timeout || ws._opt.timeout;
 
     return new Promise((resolve, reject) => {
-      ws._socket.on("response", handler);
+      ws.socket.on("response", handler);
       ws.emit(type, request);
 
       if (maxTime > 0) {
@@ -191,7 +191,7 @@ class WsHandler {
       }
 
       function clear() {
-        ws._socket.off("response", handler);
+        ws.socket.off("response", handler);
       }
       function handler(response) {
         if (response._id === request._id) {

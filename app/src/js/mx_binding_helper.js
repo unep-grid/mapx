@@ -18,7 +18,7 @@ import {
 } from "./map_helpers/index.js";
 import { ws_tools, helpers as h } from "./mx.js";
 import { writeCookie } from "./mx_helper_cookies.js";
-import { renderUserProjectsList } from "./mx_helper_list_projects.js";
+import { renderUserProjectsList } from "./project/index.js";
 import { validateMetadataModal } from "./metadata/validation.js";
 import {
   buttonToggle,

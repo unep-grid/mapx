@@ -583,17 +583,13 @@ async function getSourceLastTimestamp(idSource, client = pgRead) {
     return null;
   }
 
-  const q = `
-    SELECT date_modified 
-    FROM mx_sources 
-    WHERE id = $1 
-  `;
-  const data = await client.query(q, [idSource]);
-  const [row] = data.rows;
+  const res = await client.query(templates.getSourceDateModified, [idSource]);
 
-  if (!row) {
-    return 0;
+  if (res.rowCount === 0) {
+    throw new Error("No timestamp found for source " + idSource);
   }
+
+  const [row] = res.rows;
 
   return row.date_modified;
 }

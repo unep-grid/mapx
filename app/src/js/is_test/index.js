@@ -183,6 +183,7 @@ export function isViewRtWithLegend(item) {
 
 /**
  * Test if view is downloadable
+ * For accurate version, use isViewDownloadableRemote
  * @param {Object} item to test
  */
 export function isViewDownloadable(item) {

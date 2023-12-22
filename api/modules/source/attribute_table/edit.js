@@ -339,20 +339,24 @@ class EditTableSession {
 
   async onGet(message, callback) {
     const et = this;
-    switch (message.type) {
-      case "columns_used":
-        {
+    try {
+      switch (message.type) {
+        case "columns_used": {
           const data = await getLayerUsedAttributes(et._id_table);
-          callback(data);
+          return callback(data);
         }
-        break;
-      case "table_views":
-        {
-          const data = await getViewsTableBySource(et._id_table);
-          callback(data);
+        case "table_views": {
+          const data = await getViewsTableBySource(
+            et._id_table,
+            et._id_project
+          );
+          return callback(data);
         }
-        break;
+      }
+    } catch (e) {
+      et.error("Sanitize failed. Check logs", e);
     }
+    return callback(false);
   }
 
   async onSanitize(message, callback) {

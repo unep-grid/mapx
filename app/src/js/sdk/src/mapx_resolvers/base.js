@@ -127,12 +127,12 @@ class ResolversBase {
    * @note : see getViewRandom doc
    * @param {Object} opt Options
    * @param {String|Array} opt.type of view
-   * @return view
+   * @return {Promise<Object>}
    * @ignore
    */
-  _get_random_view(opt) {
+  async _get_random_view(opt) {
     opt = Object.assign({}, { type: ["vt", "rt"] }, opt);
-    const view = getViewRandom(opt);
+    const view = await getViewRandom(opt);
     if (!isView(view)) {
       throw new Error(`_get_random_view : no view found`);
     }

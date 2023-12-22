@@ -2,6 +2,7 @@ import { pgRead } from "#mapx/db";
 import { getTableDimension, tableExists } from "#mapx/db_utils";
 import { templates } from "#mapx/template";
 import { parseTemplate } from "#mapx/helpers";
+import { isSourceId } from "@fxi/mx_valid";
 
 export { ioSourceListEdit };
 
@@ -42,6 +43,24 @@ async function ioSourceListEdit(socket, request, cb) {
       message: e.message,
     });
   }
+}
+
+/**
+ * Get list of sources id, including join + base source id
+ * @param {String} idSource
+ * @param {String} idProject
+ * @returns {Promise<Array>} Array of sources ids
+ */
+export async function getSourceIdsIncludingJoin(idSource, idProject) {
+  if (!isSourceId(idSource)) {
+    throw new Error("Missing source id");
+  }
+  const res = await pgRead.query(templates.getSourcesIdIncludingJoin, [
+    idSource,
+    idProject,
+  ]);
+
+  return res.rows.map((r) => r.id_source);
 }
 
 async function getSourcesListEdit(options) {
