@@ -9,7 +9,7 @@ import {
   validationMetadataTestsToHTML,
   validateMetadataView,
 } from "../metadata/validation.js";
-import { isEmpty } from "../is_test/index.js";
+import { isNotEmpty } from "../is_test/index.js";
 
 /*
  * Update metadata and views badges
@@ -82,9 +82,6 @@ export async function setViewBadges(view) {
         const validation = await validateMetadataView(view);
 
         if (!validation.valid) {
-          if (isEmpty(validation.results)) {
-            debugger;
-          }
           /**
            * Add not valid badge
            */

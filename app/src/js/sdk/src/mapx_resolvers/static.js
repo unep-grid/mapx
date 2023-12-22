@@ -460,7 +460,15 @@ export class MapxResolversStatic extends MapxResolversPanels {
     if (opt.asArray) {
       return metaAll;
     } else {
-      return metaAll[0];
+      if (metaAll.length > 1) {
+        console.warn(
+          "Multiple metadata objects found " +
+            "only the first one will be returned " +
+            "use `asArray` to return all",
+        );
+      }
+      const meta = metaAll[0];
+      return meta;
     }
   }
 

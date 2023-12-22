@@ -93,7 +93,7 @@ async function showSourceTableAttributeModal(opt) {
     const hasData = isArray(data) && data.length > 0;
     const license = "non-commercial-and-evaluation";
     allowDownload = await isSourceDownloadable(opt.idSource);
-    debugger;
+    
     elTable = el("div", {
       class: "mx_handsontable",
       style: {

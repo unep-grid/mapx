@@ -1030,8 +1030,8 @@ mapx.once("ready", async () => {
       {
         name: "All items have meta text object",
         test: (res) => {
-          return res.reduce((ok, item) => {
-            return ok && t.valid.isObject(item?.meta?.text);
+          return res.reduce((ok, meta) => {
+            return ok && t.valid.isObject(meta?.text);
           }, true);
         },
       },
@@ -1172,9 +1172,43 @@ mapx.once("ready", async () => {
     },
     tests: [
       {
-        name: "is object with meta key",
+        name: "is object",
         test: (r) => {
-          return t.valid.isObject(r) && t.valid.isObject(r.meta);
+          return t.valid.isObject(r);
+        },
+      },
+      {
+        name: "expected keys are present",
+        test: (r) => {
+          const keys = [
+            "id",
+            "stat_n_add",
+            "stat_n_add_by_guests",
+            "stat_n_add_by_users",
+            "stat_n_add_by_distinct_users",
+            "stat_n_add_by_country",
+            "editor",
+            "project",
+            "project_title",
+            "readers",
+            "editors",
+            "date_modified",
+            "date_created",
+            "type",
+            "title",
+            "abstract",
+            "table_editors",
+          ];
+          const keysMeta = Object.keys(r);
+
+          const missingKeys = keys.filter((key) => !keysMeta.includes(key));
+
+          if (missingKeys.length > 0) {
+            console.log("View meta test, missing keys:", missingKeys);
+            return false;
+          } else {
+            return true;
+          }
         },
       },
     ],
