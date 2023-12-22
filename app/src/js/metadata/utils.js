@@ -76,7 +76,7 @@ export async function getViewMetadata(id) {
     {
       idView: id,
     },
-    1e3,
+    10e3,
   );
   return viewMeta;
 }
