@@ -208,7 +208,7 @@ MapX resolvers available in app only
     * [.has_el_id(opt)](#MapxResolversStatic+has_el_id)
     * [.set_dashboard_visibility(opt)](#MapxResolversStatic+set_dashboard_visibility) ⇒ <code>Boolean</code>
     * [.is_dashboard_visible()](#MapxResolversStatic+is_dashboard_visible) ⇒ <code>Boolean</code>
-    * [.get_source_meta(opt)](#MapxResolversStatic+get_source_meta) ⇒ <code>Object</code>
+    * [.get_source_meta(opt)](#MapxResolversStatic+get_source_meta) ⇒ <code>Promise.&lt;(Object\|Array)&gt;</code>
     * [.get_view_source_summary(opt)](#MapxResolversStatic+get_view_source_summary) ⇒ <code>Object</code>
     * [.get_user_ip()](#MapxResolversStatic+get_user_ip) ⇒ <code>Object</code>
     * [.get_language()](#MapxResolversStatic+get_language) ⇒ <code>String</code>
@@ -218,7 +218,7 @@ MapX resolvers available in app only
     * [.get_views_id()](#MapxResolversStatic+get_views_id) ⇒ <code>Array</code>
     * [.get_view_meta_vt_attribute(opt)](#MapxResolversStatic+get_view_meta_vt_attribute) ⇒ <code>Object</code>
     * [.get_view_meta(opt, view)](#MapxResolversStatic+get_view_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
-    * [.get_view_source_meta(opt, view)](#MapxResolversStatic+get_view_source_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
+    * [.get_view_source_meta(opt, view)](#MapxResolversStatic+get_view_source_meta) ⇒ <code>Promise.&lt;(Object\|Array)&gt;</code>
     * [.get_view_table_attribute_config(opt)](#MapxResolversStatic+get_view_table_attribute_config) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Array.&lt;Object&gt;</code>
@@ -895,16 +895,17 @@ Check if the dashboard is visible
 **Returns**: <code>Boolean</code> - The dashboard is visible  
 <a name="MapxResolversStatic+get_source_meta"></a>
 
-#### mapxResolversApp.get\_source\_meta(opt) ⇒ <code>Object</code>
+#### mapxResolversApp.get\_source\_meta(opt) ⇒ <code>Promise.&lt;(Object\|Array)&gt;</code>
 Get source metadata
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
-**Returns**: <code>Object</code> - Source MapX metadata  
+**Returns**: <code>Promise.&lt;(Object\|Array)&gt;</code> - Source MapX metadata, or array of meta  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
 | opt.idSource | <code>String</code> | Id of the source |
+| opt.asArray | <code>Boolean</code> | In case of joined meta, returns an array |
 
 <a name="MapxResolversStatic+get_view_source_summary"></a>
 
@@ -998,16 +999,17 @@ Get view metadata
 
 <a name="MapxResolversStatic+get_view_source_meta"></a>
 
-#### mapxResolversApp.get\_view\_source\_meta(opt, view) ⇒ <code>Promise.&lt;Object&gt;</code>
+#### mapxResolversApp.get\_view\_source\_meta(opt, view) ⇒ <code>Promise.&lt;(Object\|Array)&gt;</code>
 Get view source metadata
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
-**Returns**: <code>Promise.&lt;Object&gt;</code> - view metadata  
+**Returns**: <code>Promise.&lt;(Object\|Array)&gt;</code> - view metadata  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | options |
 | opt.idView | <code>String</code> | Id of the view |
+| opt.asArray | <code>Boolean</code> | In case of joined meta, returns an array |
 | view | <code>Object</code> | meta data object |
 
 <a name="MapxResolversStatic+get_view_table_attribute_config"></a>
@@ -1899,7 +1901,7 @@ MapX resolvers available in static and app
     * [.has_el_id(opt)](#MapxResolversStatic+has_el_id)
     * [.set_dashboard_visibility(opt)](#MapxResolversStatic+set_dashboard_visibility) ⇒ <code>Boolean</code>
     * [.is_dashboard_visible()](#MapxResolversStatic+is_dashboard_visible) ⇒ <code>Boolean</code>
-    * [.get_source_meta(opt)](#MapxResolversStatic+get_source_meta) ⇒ <code>Object</code>
+    * [.get_source_meta(opt)](#MapxResolversStatic+get_source_meta) ⇒ <code>Promise.&lt;(Object\|Array)&gt;</code>
     * [.get_view_source_summary(opt)](#MapxResolversStatic+get_view_source_summary) ⇒ <code>Object</code>
     * [.get_user_ip()](#MapxResolversStatic+get_user_ip) ⇒ <code>Object</code>
     * [.get_language()](#MapxResolversStatic+get_language) ⇒ <code>String</code>
@@ -1909,7 +1911,7 @@ MapX resolvers available in static and app
     * [.get_views_id()](#MapxResolversStatic+get_views_id) ⇒ <code>Array</code>
     * [.get_view_meta_vt_attribute(opt)](#MapxResolversStatic+get_view_meta_vt_attribute) ⇒ <code>Object</code>
     * [.get_view_meta(opt, view)](#MapxResolversStatic+get_view_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
-    * [.get_view_source_meta(opt, view)](#MapxResolversStatic+get_view_source_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
+    * [.get_view_source_meta(opt, view)](#MapxResolversStatic+get_view_source_meta) ⇒ <code>Promise.&lt;(Object\|Array)&gt;</code>
     * [.get_view_table_attribute_config(opt)](#MapxResolversStatic+get_view_table_attribute_config) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.get_view_table_attribute_url(opt)](#MapxResolversStatic+get_view_table_attribute_url) ⇒ <code>Promise.&lt;String&gt;</code>
     * [.get_view_table_attribute(opt)](#MapxResolversStatic+get_view_table_attribute) ⇒ <code>Array.&lt;Object&gt;</code>
@@ -2193,16 +2195,17 @@ Check if the dashboard is visible
 **Returns**: <code>Boolean</code> - The dashboard is visible  
 <a name="MapxResolversStatic+get_source_meta"></a>
 
-#### mapxResolversStatic.get\_source\_meta(opt) ⇒ <code>Object</code>
+#### mapxResolversStatic.get\_source\_meta(opt) ⇒ <code>Promise.&lt;(Object\|Array)&gt;</code>
 Get source metadata
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Object</code> - Source MapX metadata  
+**Returns**: <code>Promise.&lt;(Object\|Array)&gt;</code> - Source MapX metadata, or array of meta  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
 | opt.idSource | <code>String</code> | Id of the source |
+| opt.asArray | <code>Boolean</code> | In case of joined meta, returns an array |
 
 <a name="MapxResolversStatic+get_view_source_summary"></a>
 
@@ -2296,16 +2299,17 @@ Get view metadata
 
 <a name="MapxResolversStatic+get_view_source_meta"></a>
 
-#### mapxResolversStatic.get\_view\_source\_meta(opt, view) ⇒ <code>Promise.&lt;Object&gt;</code>
+#### mapxResolversStatic.get\_view\_source\_meta(opt, view) ⇒ <code>Promise.&lt;(Object\|Array)&gt;</code>
 Get view source metadata
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Promise.&lt;Object&gt;</code> - view metadata  
+**Returns**: <code>Promise.&lt;(Object\|Array)&gt;</code> - view metadata  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | options |
 | opt.idView | <code>String</code> | Id of the view |
+| opt.asArray | <code>Boolean</code> | In case of joined meta, returns an array |
 | view | <code>Object</code> | meta data object |
 
 <a name="MapxResolversStatic+get_view_table_attribute_config"></a>

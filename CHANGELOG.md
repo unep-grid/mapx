@@ -1,3 +1,11 @@
+  - [1.13.0-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.2) 
+
+    - Refactoring to handle multi source / metadata through the whole app :
+        - Tiles
+        - View metadata
+        - Source editor
+        - Stats
+
   - [1.13.0-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.1) 
 
     - Join Editor : alpha release
