@@ -1,3 +1,9 @@
+  - [1.13.0-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.3) 
+    - Solved SDK tests issue
+    - ⚠️  Probable breaking change in SDK :
+        - `get_source_meta` returns source metadata as object or array of object
+        - `get_view_meta` returns metadata as object or array of object
+
   - [1.13.0-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.2) 
 
     - Refactoring to handle multi source / metadata through the whole app :
