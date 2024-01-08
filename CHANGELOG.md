@@ -1,3 +1,9 @@
+  - [1.13.0-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.6) 
+    - Fixes
+        - Deletion of a 'join' source
+        - Download 'join' source 
+        - In-depth metadata validation
+
   - [1.13.0-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.5)
     - Various fixes impacting join sources 
         - typo that produced base properites in join-based view not showing up
