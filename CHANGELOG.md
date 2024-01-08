@@ -1,3 +1,9 @@
+  - [1.13.0-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.5)
+    - Various fixes impacting join sources 
+        - typo that produced base properites in join-based view not showing up
+        - extent estimation not working on non-table postgres object
+        - Default value in join editor not properly rendered 
+
   - [1.13.0-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.4) 
     - Changed timeout for retrieving view metadata
 
