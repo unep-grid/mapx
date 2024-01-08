@@ -1209,36 +1209,47 @@ mxToJsonForDb <- function(listInput) {
 #' @param layerName Layer to remove
 #' @export
 mxDbDropLayer <- function(layerName) {
-  idSource <- mxDbGetQuery(sprintf(
+  layer <- mxDbGetQuery(sprintf(
     "
-    SELECT id
+    SELECT id,type
     FROM mx_sources
     WHERE id='%1$s'",
     layerName
-  ))$id
+  ))
+
+  if (nrow(layer) > 1) {
+    stop(sprintf(
+      "Interruption of mxDbDropLayer : multiple sources found for %1$s",
+      layerName
+    ))
+  }
 
   viewsTable <- mxDbGetViewsIdBySourceId(layerName)
   existsTable <- isTRUE(mxDbExistsTable(layerName))
-  existsEntry <- !isEmpty(idSource)
-  existViews <- !isEmpty(viewsTable)
+  existsEntry <- isNotEmpty(layer)
+  existViews <- isNotEmpty(viewsTable)
 
   if (existViews) {
-    stop("Attempt to remove source layer with active view depending on it")
+    stop(sprintf(
+      "Interruption of mxDbDropLayer : active linked view for",
+      layerName
+    ))
   }
 
   if (existsTable) {
-    mxDbGetQuery(sprintf("DROP TABLE IF EXISTS %1$s", layerName))
-    mxDbGetQuery(sprintf("DROP VIEW IF EXISTS %1$s", layerName))
-  }
-
-  if (existsEntry) {
-    for (i in idSource) {
-      mxDbGetQuery(sprintf("DELETE FROM mx_sources WHERE id='%1$s'", i))
+    if (layer$type == "join") {
+      mxDbGetQuery(sprintf("DROP VIEW IF EXISTS %1$s", layerName))
+    } else {
+      mxDbGetQuery(sprintf("DROP TABLE IF EXISTS %1$s", layerName))
     }
   }
 
+  if (existsEntry) {
+    mxDbGetQuery(sprintf("DELETE FROM mx_sources WHERE id='%1$s'", layerName))
+  }
 
-  return()
+
+  return(TRUE)
 }
 
 #' Helper to update a value in a data jsonb column in db and reactUser$data, given a path
