@@ -12,6 +12,7 @@ import {
 } from "../is_test";
 
 import { getViewSourceMetadata } from "../metadata/utils.js";
+import { isArray } from "../is_test";
 
 /**
  * Validate metadata for a view
@@ -48,6 +49,11 @@ export async function validateMetadataView(view) {
 export function validateMetadataTests(metaAll, attr) {
   const v = settings.validation.input.nchar;
   const tests = [];
+
+  if (!isArray(metaAll)) {
+    // case metadata from app
+    metaAll = [metaAll];
+  }
 
   if (attr) {
     tests.push(

@@ -492,10 +492,11 @@ mxUpdateQueryParameters <- function(data = list(), session = shiny::getDefaultRe
 #'
 #' @param metadata {List} Metadata to validate
 #' @param session {Session} Shiny session
-mxValidateMetadataModal <- function(metadata = list(), session = shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mxValidateMetadataModal", list(
-    metadata = metadata
-  ))
+mxValidateMetadataModal <- function(
+  metadata = list(),
+  session = shiny::getDefaultReactiveDomain()
+) {
+  session$sendCustomMessage("mxValidateMetadataModal", metadata)
 }
 
 #' Display an flash icon
