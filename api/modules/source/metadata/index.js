@@ -1,7 +1,7 @@
 import { pgRead } from "#mapx/db";
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
-import { isSourceId } from "@fxi/mx_valid";
+import { isSourceId, isNotEmpty } from "@fxi/mx_valid";
 
 /**
  * WS handler for source attraibutes aliases
@@ -165,20 +165,29 @@ export async function getAttributesAlias(id_source, attributes) {
     }
   } else {
     // Handle join type source
-    for (const join of join_config.joins) {
-      const { metadata } = await getMetadataRow(join.id_source);
+    const items = join_config.joins;
+    items.push(join_config.base);
+    for (const item of items) {
+      const { metadata } = await getMetadataRow(item.id_source);
 
       const alias = metadata?.text?.attributes_alias || {};
+      const usePrefix = isNotEmpty(item._prefix);
 
-      for (const attr of attributes) {
-        const hasPrefix = attr.startsWith(join._prefix);
-        if (!hasPrefix) {
+      for (const attribute of attributes) {
+        let originalAttribute = attribute;
+
+        if (usePrefix) {
+          const matchPrefix = attribute.startsWith(item._prefix);
+
+          if (!matchPrefix) {
+            continue;
+          }
+          originalAttribute = attribute.substring(item._prefix.length);
+        }
+        if (!alias[originalAttribute]) {
           continue;
         }
-        const originalAttr = attr.substring(join._prefix.length);
-        aliases[attr] = alias[originalAttr] || {
-          en: originalAttr,
-        };
+        aliases[attribute] = alias[originalAttribute];
       }
     }
   }

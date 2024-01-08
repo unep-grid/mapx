@@ -211,18 +211,22 @@ async function updatePrefixConfig(config) {
 function configToSql(config) {
   const baseLayer = config.base;
   const baseAlias = "base";
+
+  const baseColumns = formatColumns({
+    columns: baseLayer.columns,
+    tableAlias: baseAlias,
+    columnPrefix: "",
+    addLeadingComma: true,
+  });
+
+  /**
+   * SQL init script
+   */
   let sql = `
   DROP VIEW IF EXISTS ${config.id_source}; 
   CREATE VIEW ${config.id_source} 
   AS
   `;
-
-  const baseColumns = formatColumns({
-    colums: baseLayer.columns,
-    tableAlias: baseAlias,
-    columnPrefix: null,
-    addLeadingComma: true,
-  });
 
   let selectClause = `
   SELECT
@@ -263,9 +267,11 @@ function configToSql(config) {
 // Helper function to format columns with alias
 function formatColumns(opt) {
   const { columns, tableAlias, columnPrefix, addLeadingComma } = opt;
+
   if (isEmpty(columns)) {
     return "";
   }
+
   return (
     `${addLeadingComma ? "," : ""}` +
     columns
@@ -321,31 +327,35 @@ async function getColumnsMissingInJoin(joinConfig) {
 
   // Extracting attributes from views and checking against join configuration
   for (const view of views) {
-    const attributes = new Set(view?.data?.attribute?.names || []);
-    attributes.add(view?.data?.attribute?.name);
+    const attributeNames = view?.data?.attribute?.names || [];
+    const attributeName = view?.data?.attribute?.name;
+    if (attributeName) {
+      attributeNames.push(attributeName);
+    }
+
+    const attributes = new Set(attributeNames);
+    const baseColumns = base.columns || [];
+
     for (const attr of attributes) {
       if (isEmpty(attr)) {
         continue;
       }
 
-      const baseColumns = base.columns || [];
-
       let found = baseColumns.includes(attr);
       let j = 0;
       for (const join of joins) {
-        // prefix don't exists until save, join config can be from client
         const prefix = `j${j++}_`;
-        const matchPrefix = attr.startsWith(prefix);
-        if (!matchPrefix) {
+        if (!attr.startsWith(prefix)) {
           continue;
         }
+
         const joinColumns = join.columns || [];
         const originalAttr = attr.substring(prefix.length);
-
         if (!found) {
           found = joinColumns.includes(originalAttr);
         }
       }
+
       if (!found) {
         missingColumns.push({
           id: attr,

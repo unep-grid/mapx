@@ -12,6 +12,7 @@ import {
   isEmpty,
   isElement,
   isNumeric,
+  isObject,
   isArray,
   isViewVt,
   isViewGj,
@@ -153,7 +154,7 @@ export function featuresToPopup(o) {
           values.push("-");
         }
 
-        if (labels && labels[attribute]) {
+        if (isObject(labels) && labels[attribute]) {
           label = getLabelFromObjectPath({
             obj: labels,
             path: attribute,

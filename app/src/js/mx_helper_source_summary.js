@@ -17,6 +17,7 @@ import {
   isString,
   isObject,
   isArray,
+  isBoolean,
   isNotEmpty,
 } from "./is_test";
 
@@ -36,12 +37,12 @@ const def = {
  * Get source summary of a view source
  * @param {Object} view View to get source summary
  * @param {Object} opt Additional option to pass to getSourceVtSummary
+ * @param {Boolean} opt.useCache Use local cache
  * @return {Object} source summary
  */
 export async function getViewSourceSummary(view, opt) {
-
   view = getView(view);
-  
+
   opt = Object.assign(
     {},
     {
@@ -49,9 +50,9 @@ export async function getViewSourceSummary(view, opt) {
       timestamp: view._src_timestamp,
       idAttr: path(view, "data.attribute.name"),
       idSource: path(view, "data.source.layerInfo.name"),
-      useCache: settings.useCache,
+      useCache: isBoolean(opt.useCache) ? opt.useCache : settings.useCache,
     },
-    opt
+    opt,
   );
 
   let out = {};
@@ -117,7 +118,7 @@ export async function getSourceVtSummary(opt) {
 
   if (!isViewId(opt.idView) && !isSourceId(opt.idSource)) {
     console.warn(
-      "getSourceVtSummary : at least id source or id view are required"
+      "getSourceVtSummary : at least id source or id view are required",
     );
     return {};
   }
@@ -146,8 +147,6 @@ export async function getSourceVtSummary(opt) {
       ttl: settings.maxTimeCache,
     });
   }
-
-
 
   /*
    * handle errors
@@ -198,14 +197,13 @@ export async function getSourceVtSummaryUI(opt) {
     tableTitle: titleTable,
   });
 
-
   if (isNotEmpty(aStat.nullCount)) {
     const elNull = el(
       "div",
       {
         class: "well",
       },
-      elSpanTranslate("null_count", { data: { nullCount: aStat.nullCount } })
+      elSpanTranslate("null_count", { data: { nullCount: aStat.nullCount } }),
     );
     elContainer.appendChild(elNull);
   }

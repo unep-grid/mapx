@@ -40,6 +40,7 @@ export function getSchema(language = "en") {
             title: t("join_source_base"),
             type: "string",
             minLength: 1,
+            default: null,
             mx_validate: {
               type: "source_registered",
             },
@@ -53,6 +54,7 @@ export function getSchema(language = "en") {
           columns: {
             title: t("join_columns_base"),
             type: "array",
+            default: [],
             minItems: 0,
             maxItems: 10,
             items: {

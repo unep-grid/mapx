@@ -134,7 +134,6 @@ import {
   isViewDashboard,
   isViewRtWithTiles,
   isViewVtWithRules,
-  isViewDownloadable,
   isViewRtWithLegend,
   isViewVtWithAttributeType,
   isBoundsInsideBounds,
@@ -4431,8 +4430,6 @@ export function addLayer(o) {
  * @param {String} o.idView view id
  */
 export async function zoomToViewId(o) {
-  const timeout = 3 * 1000;
-  let cancelByTimeout = false;
   try {
     if (isViewId(o)) {
       o = {
@@ -4441,66 +4438,91 @@ export async function zoomToViewId(o) {
     }
 
     const hasArray = isArray(o.idView);
-    o.idView = hasArray ? o.idView[0] : o.idView;
-    o.idView = o.idView.split(settings.separators.sublayer)[0];
-    const view = getView(o.idView);
+    if (hasArray) {
+      console.warn(
+        "zoomToViewId requires a single view or view id. Using the first",
+      );
+      o.idView = o.idView[0];
+    }
+    if (isView(o.idView)) {
+      o.idView = o.idView.id;
+    }
+    const idView = o.idView.split(settings.separators.sublayer)[0];
+    const view = getView(idView);
 
     if (!isView(view)) {
       console.warn("zoomToViewId : view object required");
       return;
     }
 
-    const res = await Promise.race([zoom(), waitTimeoutAsync(timeout, cancel)]);
+    const ext = await getViewExtent(view);
 
-    if (res === "timeout") {
-      console.warn(
-        `zoomToViewId for ${view.id}, was canceled ( ${timeout} ms )`,
-      );
-    }
+    const llb = new mapboxgl.LngLatBounds(
+      [ext.lng1, ext.lat2],
+      [ext.lng2, ext.lat1],
+    );
 
-    return res;
+    const done = fitMaxBounds(llb);
 
-    /**
-     * Helpers
-     */
-    async function zoom() {
-      const conf = {
-        sum: await getViewSourceSummary(view, { useCache: true }),
-      };
-      conf.extent = path(conf.sum, "extent_sp", null);
-
-      if (cancelByTimeout) {
-        return;
-      }
-
-      if (!isBbox(conf.extent)) {
-        conf.sum = await getViewSourceSummary(view, { useCache: false });
-        conf.extent = path(conf.sum, "extent_sp", null);
-        if (cancelByTimeout) {
-          return;
-        }
-        if (!isBbox(conf.extent)) {
-          console.warn(`zoomToViewId no extent found for ${view.id}`);
-          return;
-        }
-      }
-
-      const llb = new mapboxgl.LngLatBounds(
-        [conf.extent.lng1, conf.extent.lat2],
-        [conf.extent.lng2, conf.extent.lat1],
-      );
-
-      const done = fitMaxBounds(llb);
-
-      return done;
-    }
-
-    function cancel() {
-      cancelByTimeout = true;
-      return "timeout";
-    }
+    return done;
   } catch (e) {
     throw new Error(e);
+  }
+}
+
+/**
+ * Retrieves the geographical extent of a given view.
+ * If the extent is not found in the cache, it fetches from a remote source.
+ * The function will return an empty array if it times out or if no valid extent is found.
+ *
+ * @param {View} view - The view object for which the extent is to be fetched.
+ * @returns {Promise<Object>} Promise resolving to the extent / bbox.
+ */
+export async function getViewExtent(view) {
+  const timeout = settings.maxTimeFetch;
+  let cancelByTimeout = false;
+
+  const def = {
+    lat1: -80,
+    lat2: 80,
+    lng1: -180,
+    lng2: 180,
+  };
+
+  const ext = await Promise.race([
+    getExtent(),
+    waitTimeoutAsync(timeout, cancel),
+  ]);
+
+  return ext || def;
+
+  async function cancel() {
+    cancelByTimeout = true;
+    return;
+  }
+
+  async function getExtent() {
+    const summaryCache = await getViewSourceSummary(view, { useCache: true });
+
+    const extent = path(summaryCache, "extent_sp", null);
+
+    if (cancelByTimeout) {
+      return;
+    }
+
+    if (isBbox(extent)) {
+      return extent;
+    }
+    const summaryRemote = await getViewSourceSummary(view, { useCache: false });
+    const extentRemote = path(summaryRemote, "extent_sp", null);
+    if (cancelByTimeout) {
+      return;
+    }
+    if (!isBbox(extentRemote)) {
+      console.warn(`zoomToViewId no extent found for ${view.id}`);
+      return;
+    }
+    return extentRemote;
   }
 }
 
@@ -4511,55 +4533,35 @@ export async function zoomToViewId(o) {
  */
 export async function getViewsBounds(views) {
   views = views.constructor === Array ? views : [views];
-  let set = false;
-  const def = {
+
+  const init = {
     lat1: 80,
     lat2: -80,
     lng1: 180,
     lng2: -180,
   };
 
-  let summaries = await Promise.all(views.map(getViewSourceSummary));
-  let extents = summaries.map((s) => s.extent_sp);
+  const extents = await Promise.all(views.map((view) => getViewExtent(view)));
 
-  let extent = extents.reduce(
-    (a, ext) => {
-      if (ext) {
-        set = true;
-        a.lat1 = ext.lat1 < a.lat1 ? ext.lat1 : a.lat1;
-        a.lat2 = ext.lat2 > a.lat2 ? ext.lat2 : a.lat2;
-        a.lng1 = ext.lng1 < a.lng1 ? ext.lng1 : a.lng1;
-        a.lng2 = ext.lng2 > a.lng2 ? ext.lng2 : a.lng2;
-      }
-      return a;
-    },
-    {
-      lat1: 80,
-      lat2: -80,
-      lng1: 180,
-      lng2: -180,
-    },
-  );
-
-  if (!set) {
-    extent = def;
-  }
+  const extent = extents.reduce((a, ext) => {
+    if (ext) {
+      a.lat1 = ext.lat1 < a.lat1 ? ext.lat1 : a.lat1;
+      a.lat2 = ext.lat2 > a.lat2 ? ext.lat2 : a.lat2;
+      a.lng1 = ext.lng1 < a.lng1 ? ext.lng1 : a.lng1;
+      a.lng2 = ext.lng2 > a.lng2 ? ext.lng2 : a.lng2;
+    }
+    return a;
+  }, init);
 
   return [
     [extent.lng1, extent.lat1],
     [extent.lng2, extent.lat2],
   ];
-
-  /*  return new mapboxgl.LngLatBounds(*/
-  /*[extent.lng1, extent.lat1],*/
-  /*[extent.lng2, extent.lat2]*/
-  /*);*/
 }
 
 /**
  * Fly to view id using rendered features
  * @param {object} o options
- * @param {string} o.id map id
  * @param {string} o.idView view id
  */
 export async function zoomToViewIdVisible(o) {
@@ -4572,7 +4574,7 @@ export async function zoomToViewIdVisible(o) {
     features: [],
   };
 
-  const map = getMap(o.id);
+  const map = getMap();
 
   idLayerAll = getLayerNamesByPrefix({
     id: o.id,

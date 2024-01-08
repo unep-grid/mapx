@@ -119,9 +119,6 @@ export async function getSourceSummary(opt) {
       .digest("hex");
 
     if (opt.useCache) {
-      /**
-       *TODO: hide this mess in a module
-       */
       const strData = await redisGet(hash);
       if (isJson(strData)) {
         const data = JSON.parse(strData);
@@ -145,6 +142,7 @@ export async function getSourceSummary(opt) {
     opt.idAttrT1 = opt.hasT1 ? opt.idAttrT1 || "mx_t1" : 0;
     opt.binsNumber = opt.binsNumber || 5;
     opt.binsMethod = opt.binsMethod || "jenks";
+    opt.type = type || "vector"; // required in ext_sp;
     const hasGeom = columns.includes("geom");
     const hasAttr = columns.includes(opt.idAttr);
     /**

@@ -24,25 +24,6 @@ JSONEditor.defaults.resolvers.unshift(function (schema) {
 JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
   JSONEditor.AbstractEditor
 ) {
-  initValue(value) {
-    const editor = this;
-    const ts = editor.input.ts;
-    if (isEmpty(value) || isNotEmpty(ts.options)) {
-      return;
-    }
-    const vfield = ts.settings.valueField;
-    for (const v of value) {
-      if (isObject(v)) {
-        ts.addOption(v);
-      } else {
-        // worse case : the object is not complete. Strict minimum
-        const option = {};
-        option[vfield] = v;
-        ts.addOption(option);
-      }
-    }
-  }
-
   async build() {
     const editor = this;
     editor.title = editor.theme.getFormInputLabel(editor.getTitle());
@@ -162,6 +143,7 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     } else {
       editor._queued_value = valueArray;
     }
+    editor._refresh_value();
   }
   _refresh_value() {
     const editor = this;
