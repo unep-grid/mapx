@@ -1227,7 +1227,8 @@ mxDbDropLayer <- function(layerName) {
   }
 
   if (existsTable) {
-    mxDbGetQuery(sprintf("DROP table %1$s", layerName))
+    mxDbGetQuery(sprintf("DROP TABLE IF EXISTS %1$s", layerName))
+    mxDbGetQuery(sprintf("DROP VIEW IF EXISTS %1$s", layerName))
   }
 
   if (existsEntry) {
