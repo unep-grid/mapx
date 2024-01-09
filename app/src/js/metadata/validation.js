@@ -1,5 +1,5 @@
 import { settings } from "./../settings";
-import { path, all } from "./../mx_helper_misc.js";
+import { path } from "./../mx_helper_misc.js";
 import { el } from "../el/src/index.js";
 import { getDictItem, updateLanguageElements } from "../language";
 import { modal } from "../mx_helper_modal";
@@ -31,7 +31,7 @@ export async function validateMetadataView(view) {
     const meta = await getViewSourceMetadata(view);
     out.results = validateMetadataTests(meta, attr);
     out.validated = true;
-    out.valid = all(out.results.tests.map((t) => t.valid));
+    out.valid = out.results.tests.every((t) => t.valid);
   } catch (e) {
     console.error("validateMetadataView error", e);
   }
@@ -183,7 +183,7 @@ function validateKeywords(meta, min, max) {
   const reasons = [];
   const keywords = path(meta, "text.keywords.keys", []);
   const hasKeywords = !isEmpty(keywords);
-  const hasValidKeywords = all(keywords.map((k) => isStringRange(k, min, max)));
+  const hasValidKeywords = keywords.every((k) => isStringRange(k, min, max));
 
   if (!hasKeywords) {
     reasons.push("validate_meta_no_keyword");
@@ -214,7 +214,7 @@ function validateKeywordsM49(meta, min, max) {
   const reasons = [];
   const keywords = path(meta, "text.keywords.keys_m49", []);
   const hasKeywords = !isEmpty(keywords);
-  const hasValidKeywords = all(keywords.map((k) => isStringRange(k, min, max)));
+  const hasValidKeywords = keywords.every((k) => isStringRange(k, min, max));
 
   if (!hasKeywords) {
     reasons.push("validate_meta_no_keyword");
@@ -242,7 +242,7 @@ function validateContact(meta) {
   const reasons = [];
   const contacts = path(meta, "contact.contacts", []);
   const hasContact = !isEmpty(contacts);
-  const hasValidContact = all(contacts.map((c) => isEmail(c.email)));
+  const hasValidContact = contacts.every((c) => isEmail(c.email));
 
   if (!hasContact) {
     reasons.push("validate_meta_no_contact");
@@ -315,11 +315,9 @@ function validateLicense(meta, min, max) {
 
   const licenses = path(meta, "license.licenses", []);
   const hasLicense = !isEmpty(licenses);
-  const hasValidLicenses = all(
-    licenses.map((l) => {
-      return isStringRange(l.text, min, max) && isStringRange(l.name, min, max);
-    }),
-  );
+  const hasValidLicenses = licenses.every((l) => {
+    return isStringRange(l.text, min, max) && isStringRange(l.name, min, max);
+  });
 
   if (!hasLicense) {
     reasons.push("validate_meta_no_license");
@@ -348,7 +346,7 @@ function validateSource(meta) {
   const reasons = [];
   const sources = path(meta, "origin.source.urls", []);
   const hasSources = !isEmpty(sources);
-  const hasValidSources = all(sources.map((source) => isUrl(source.url)));
+  const hasValidSources = sources.every((source) => isUrl(source.url));
 
   if (!hasSources) {
     reasons.push("validate_meta_no_source");

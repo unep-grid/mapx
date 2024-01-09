@@ -142,6 +142,7 @@ import {
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
+import {updateViewsBadges} from "../badges/index.js";
 export * from "./view_filters.js";
 
 /**

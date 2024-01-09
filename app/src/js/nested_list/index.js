@@ -29,7 +29,9 @@ class NestedList {
     li.meta = [];
     li.contextMenu = null;
     li.drag = {};
-    li.init().catch(console.error);
+    if (opt.autoInit) {
+      li.init().catch(console.error);
+    }
   }
   /**
    * Init/destroy
@@ -327,7 +329,7 @@ class NestedList {
     function isSorted(arr) {
       let res = isSortedArray(
         arr.map((item) => item.value),
-        opt.asc
+        opt.asc,
       );
       if (res) {
         for (const item of arr) {
@@ -376,7 +378,7 @@ class NestedList {
     }
     let pref = direct ? ":scope > " : "";
     let els = el.querySelectorAll(
-      `${pref}.${li.opt.class.draggable}, ${pref}.${li.opt.class.group}`
+      `${pref}.${li.opt.class.draggable}, ${pref}.${li.opt.class.group}`,
     );
 
     return els;
@@ -783,8 +785,8 @@ class NestedList {
     let hash = i
       .map((s) =>
         [s.id, s.group, s.type, s.title ? JSON.stringify(s.title) : ""].join(
-          ":"
-        )
+          ":",
+        ),
       )
       .join(":");
     return hash;

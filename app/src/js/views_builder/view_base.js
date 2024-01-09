@@ -98,7 +98,7 @@ class ViewBase {
     const elTitle = el(
       "span",
       { class: ["mx-view-tgl-title", "li-drag-handle"] },
-      title
+      title,
     );
 
     const elBadges = el("div", {
@@ -112,7 +112,7 @@ class ViewBase {
         class: "mx-view-item-classes",
       },
       view.data.classes,
-      view.type
+      view.type,
     );
     const elIndex = el("span", {
       class: "mx-view-item-index",
@@ -127,7 +127,7 @@ class ViewBase {
         dataset: {
           view_options_for: view.id,
         },
-      })
+      }),
     );
 
     const elInput = el("input", {
@@ -152,7 +152,7 @@ class ViewBase {
       elTitle,
       elBadges,
       elClasses,
-      elIndex
+      elIndex,
     );
 
     const elView = el(
@@ -167,13 +167,15 @@ class ViewBase {
       },
       elInput,
       elLabel,
-      elToggleMore
+      elToggleMore,
     );
     vb.el = elView;
     vb.elInput = elInput;
     vb.elToggleMore = elToggleMore;
+    vb.elBadges = elBadges;
     vb.el._vb = this;
     view._el = elView;
+
     if (enable) {
       vb.open();
     }

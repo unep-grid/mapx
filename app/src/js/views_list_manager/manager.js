@@ -64,6 +64,8 @@ export class ViewsListManager {
     }
     previousInstance = vlm;
     await vlm.render();
+    const views = vlm.views;
+    await updateViewsBadges({ views });
   }
 
   /**
@@ -132,6 +134,7 @@ export class ViewsListManager {
         { id: "order_change", action: viewsLayersOrderUpdate },
         { id: "destroy", action: viewsCloseAll },
         { id: "clear_all_items", action: viewsCloseAll },
+        { id: "init", action: vlm.handleInit },
       ],
     });
 
@@ -161,6 +164,8 @@ export class ViewsListManager {
         vlm.elFilterCount.innerText = `( ${count.nSubset} / ${count.nTot} )`;
       },
     });
+
+    await vlm.mData.viewsList.init();
   }
 
   /**
@@ -290,11 +295,11 @@ export class ViewsListManager {
           await updateLanguageElements({
             el: view._el,
           });
+          await setViewBadges(view);
         }
         if (!update && open) {
           await viewAdd(view);
         }
-        await setViewBadges(view);
       }
     } catch (e) {
       console.error("handleRenderItemContent error", e);
@@ -393,8 +398,8 @@ export class ViewsListManager {
       });
     } else {
       await li.addItem(options);
-      await updateViewsBadges({ views: [view] });
       vlm.mData.viewsFilter.update();
+      await setViewBadges(view);
     }
 
     return options;

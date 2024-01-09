@@ -9,7 +9,6 @@ import {
   validationMetadataTestsToHTML,
   validateMetadataView,
 } from "../metadata/validation.js";
-import { isNotEmpty } from "../is_test/index.js";
 
 /*
  * Update metadata and views badges
@@ -22,12 +21,17 @@ export async function updateViewsBadges(opt) {
     if (!isArray(opt.views)) {
       throw new Error("Views must by array of views or view id");
     }
+    const start = Date.now();
+    const prom = [];
     for (let v of opt.views) {
       const view = getView(v);
       if (isView(view)) {
-        await setViewBadges(view);
+        prom.push(setViewBadges(view));
       }
     }
+    await Promise.all(prom);
+    const diff = Date.now() - start;
+    console.log(`Views badges + meta validation: ${diff} [ms] `);
   } catch (e) {
     console.error("updateViewsBadges error:", e);
   }
@@ -39,15 +43,14 @@ export async function updateViewsBadges(opt) {
  */
 export async function setViewBadges(view) {
   try {
+    const viewBase = view._vb;
     const readers = view.readers || [];
     const hasEdit = view._edit === true || view.type === "gj";
     const isShared = view.project !== settings.project.id;
     const isValidable = ["rt", "vt", "cc"].includes(view.type);
     const hasPublic = readers.includes("public");
-    const elBadges = document.getElementById(`view_badges_${view.id}`);
+    const elBadges = viewBase.elBadges;
     const isTemp = view._temp === true;
-
-    //const isPublisher = settings.user.roles.publisher;
 
     if (!elBadges) {
       return;

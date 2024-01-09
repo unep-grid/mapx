@@ -2,13 +2,15 @@ import { Manager } from "socket.io-client";
 import { isObject, isFunction, isEmpty } from "../is_test/index.js";
 import { bindAll } from "../bind_class_methods";
 import { makeId } from "../mx_helpers.js";
+import { settings } from "./../mx.js";
+
 /**
  * Wrapper for socket-io
  */
 const def = {
   url: "",
   onError: console.log,
-  timeout: 1e3 * 60,
+  timeout: settings.maxTimeFetchQuick,
   auth: {
     idUser: null,
     idProject: null,

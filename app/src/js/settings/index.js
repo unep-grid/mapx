@@ -111,8 +111,8 @@ const settings = {
   maxByteJed: 300000, // 300 Kb
   maxByteFetch: 5e6, // 5MB
   maxTimeFetch: 1000 * 60, // 1 minute
+  maxTimeFetchQuick: 1000 * 5, // 5 sec
   maxTimeCache: 1000 * 60 * 60 * 24, // aka ttl = 1 day
-  //maxTimeCache : 1, // aka ttl = 1 day
   useCache: true,
   user: {},
   ui: {

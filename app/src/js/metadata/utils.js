@@ -7,7 +7,7 @@ import { modal } from "./../mx_helper_modal.js";
 import { path, objectToArray } from "./../mx_helper_misc.js";
 import { moduleLoad } from "./../modules_loader_async";
 import { MenuBuilder } from "./menu.js";
-import { ws } from "./../mx.js";
+import { ws, settings } from "./../mx.js";
 import {
   getLanguageItem,
   getDictItem,
@@ -40,7 +40,7 @@ export async function getSourceMetadata(idSource) {
     {
       idSource,
     },
-    1e3,
+    settings.maxTimeFetchQuick,
   );
 
   return meta;
@@ -48,7 +48,7 @@ export async function getSourceMetadata(idSource) {
 
 export async function getAttributesAlias(idSource, attributes) {
   if (!isSourceId(idSource)) {
-    throw new Error("getSourceMetadata : invalid id");
+    throw new Error("getAttributesAlias : invalid id");
   }
 
   const aliases = await ws.emitAsync(
@@ -57,7 +57,7 @@ export async function getAttributesAlias(idSource, attributes) {
       idSource,
       attributes,
     },
-    1e3,
+    settings.maxTimeFetchQuick,
   );
 
   return aliases;
@@ -76,7 +76,7 @@ export async function getViewMetadata(id) {
     {
       idView: id,
     },
-    10e3,
+    settings.maxTimeFetch,
   );
   return viewMeta;
 }
@@ -96,7 +96,7 @@ export async function getViewSourceMetadata(view) {
     {
       idView: view.id,
     },
-    1e3,
+    settings.maxTimeFetchQuick,
   );
 
   return metadata;
