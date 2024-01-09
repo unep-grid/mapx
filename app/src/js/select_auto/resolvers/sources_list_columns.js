@@ -21,10 +21,14 @@ export const config = {
   dropdownParent: "body",
   maxOptions: null,
   maxItems: 1,
-  onChange: function () {
-    const tom = this;
-    tom.blur();
-  },
+  /** 
+  * Removed to enable fluid columns selection
+  * -> e.g. pressing enter continuously to select
+  * onChange: function () {
+  *  const tom = this;
+  *  tom.blur();
+  * }
+  */
   loaderData: {
     id_source: null,
     ignore_attr: ["geom", "gid", "_mx_valid"],
