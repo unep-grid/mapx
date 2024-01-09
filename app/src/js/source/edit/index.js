@@ -2364,7 +2364,7 @@ export class EditTableSessionClient extends WsToolsBase {
       confirm: tt("btn_next"),
       inputOptions: {
         type: "text",
-        value: name || `new_column_${makeId()}`,
+        value: name || `new_column_${makeId(5)}`,
         placeholder: "Column name",
       },
       onInput: async (name, elBtnConfirm, elMessage) => {
