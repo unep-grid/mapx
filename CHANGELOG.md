@@ -1,3 +1,9 @@
+  - [1.13.0-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.7) 
+    - Fixes
+        - Improve badges rendering performance + should solve slow metadata validation
+        - Trigger reactive source list after quitting the join tool
+        - Don't list sources of type join if they are empty or partially completed
+
   - [1.13.0-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.6) 
     - Fixes
         - Deletion of a 'join' source
