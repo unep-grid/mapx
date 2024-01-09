@@ -1,3 +1,8 @@
+  - [1.13.0-alpha.8](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.8) 
+    - Improvement
+        - Join colums : let the user select all collumn by pressing 'enter' continuously
+        - Set limit to maximum 50 columns
+
   - [1.13.0-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.7) 
     - Fixes
         - Improve badges rendering performance + should solve slow metadata validation
