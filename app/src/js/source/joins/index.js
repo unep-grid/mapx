@@ -10,7 +10,11 @@ import { makeId } from "../../mx_helper_misc";
 import { jedInit } from "../../json_editor";
 import { bindAll } from "../../bind_class_methods";
 import { FlashItem } from "../../icon_flash";
-import { getViewTitle, viewLink } from "../../map_helpers";
+import {
+  getViewTitle,
+  viewLink,
+  triggerUpdateSourcesList,
+} from "../../map_helpers";
 
 const routes = {
   join: "/client/source/join",
@@ -288,6 +292,7 @@ export class SourcesJoinManager extends EventSimple {
     if (sjm._closed) {
       return;
     }
+    triggerUpdateSourcesList();
     sjm._closed = true;
     sjm._modal.close();
     sjm.fire("closed");

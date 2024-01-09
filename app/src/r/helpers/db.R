@@ -470,27 +470,38 @@ mxDbGetSourceTable <- function(
     filter <- filterRead
   }
 
-  sql <- "
-  SELECT id, type,
-  CASE
-    WHEN
-      coalesce(data #>> '{\"meta\",\"text\",\"title\",\"" + language + "\"}','') = ''
-  THEN
-    data #>> '{\"meta\",\"text\",\"title\",\"en\"}'
-  ELSE
-    data #>> '{\"meta\",\"text\",\"title\",\"" + language + "\"}'
-  END as title, date_modified
-  FROM mx_sources
-  WHERE
-    project = '" + project + "'
-  AND
-    type in (" + types + ")
-  AND
+  sql <- sprintf("
+SELECT
+    id,
+    date_modified,
+    type,
+    coalesce(
+      data #>> '{\"meta\",\"text\",\"title\",\"%1$s\"}',
+      data #>> '{\"meta\",\"text\",\"title\",\"en\"}',
+      id
+      ) as title
+FROM mx_sources
+WHERE
+  project = '%2$s'
+AND
+  type in (%3$s)
+AND
+  (
+    id in (%4$s)
+    OR
+    (%5$s)
+  )
+AND
+  (
+    type != 'join'
+    OR
     (
-      id in (" + sourceIds + ")
-      OR
-      (" + filter + ")
-    )"
+      type = 'join'
+      AND data #>> '{join,base,id_source}' != ''
+      )
+  )
+", language, project, types, sourceIds, filter)
+
 
   dat <- mxDbGetQuery(sql)
 
