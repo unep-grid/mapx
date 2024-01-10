@@ -1,3 +1,9 @@
+  - [1.13.0-alpha.9](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.9) 
+    - Bug fix
+        - Issue when the decryption key has been changed, gray screen. Smooth transition to a guest session expected.
+    - Improvement
+        - Table editor : shorter name for default new column name
+
   - [1.13.0-alpha.8](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.8) 
     - Improvement
         - Join colums : let the user select all collumn by pressing 'enter' continuously
