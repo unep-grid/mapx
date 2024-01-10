@@ -42,65 +42,18 @@ mxDbTest <- function(key) {
   return(ok)
 }
 
-
-
-#' Get query result from postgresql
+#' Test Database Connection
 #'
-#' Wrapper to execute a query
+#' This internal function tests the active database connection.
 #'
-#' @param query SQL query
-#' @param {RPostgreSQL} con Connexion object
-#' @export
-mxDbGetQuery <- function(
-  query,
-  stringAsFactors = FALSE,
-  con = NULL,
-  onError = function(r) {
-    r
-  }) {
-  res <- NULL
-  hasCon <- isNotEmpty(con)
-  #
-  # Get a connection
-  #
-  if (!hasCon) {
-    con <- mxDbGetCon()
-    on.exit(mxDbReturnCon(con))
-  }
-
-  #
-  #  Timing flag
-  #
-  timing <- FALSE
-
+#' @param con The database connection object to be tested.
+#'
+#' @return TRUE if the connection is valid, otherwise the session is terminated.
+mxDbTestCon <- function(con) {
   tryCatch(
     {
-      #
-      # ⚠️  RPostgreSQL complain about jsonb..
-      # TODO: Check if this has been fixed and remove suppressWarnings
-      # ⚠️  Impossible to produce parametrized requests. Does not work in RPostgreSQL_0.6-2
-      #
-      if (timing) {
-        timer <- mxTimeDiff("request")
-      }
-      suppressWarnings({
-        res <- dbSendQuery(con, query)
-        if (!dbHasCompleted(res)) {
-          res <- dbFetch(res)
-        }
-      })
-
-      if (class(res) == "data.frame" && isEmpty(res)) {
-        res <- NULL
-      }
-
-      if (timing) {
-        diff <- mxTimeDiff(timer)
-        if (diff > 0.1) {
-          mxDebugMsg("SLOW REQUEST")
-          mxDebugMsg(sql)
-        }
-      }
+      dbGetQuery(con, "SELECT 1")
+      return(TRUE)
     },
     error = function(e) {
       #
@@ -113,16 +66,69 @@ mxDbGetQuery <- function(
       #
       # Quit
       msg <- sprintf(
-        "An error occured in mxDbGetQuery. The session will be terminated. Query = %s", query
+        "mxDbTestCon failed, the session will be terminated"
       )
       mxKillProcess(msg)
+
+      return(FALSE)
+    }
+  )
+}
+
+
+
+#' Get query result from postgresql
+#'
+#' Wrapper to execute a query
+#'
+#' @param query SQL query
+#' @param stringAsFactors Convert strings to factors, default is FALSE
+#' @param con Connection object (optional)
+#' @export
+mxDbGetQuery <- function(query, stringAsFactors = FALSE, con = NULL) {
+  hasCon <- isNotEmpty(con)
+  res <- NULL
+
+  tryCatch(
+    {
+      if (!hasCon) {
+        con <- mxDbGetCon()
+      }
+
+      mxDbTestCon(con)
+      #
+      # TODO: Check if those have been fixed and remove suppressWarnings
+      # ⚠️  RPostgreSQL complain about jsonb..
+      # ⚠️  Impossible to produce parametrized requests. Does not work in RPostgreSQL_0.6-2
+      #
+      suppressWarnings({
+        res <- dbSendQuery(con, query)
+        if (!dbHasCompleted(res)) {
+          res <- dbFetch(res)
+        }
+      })
+    },
+    error = function(e) {
+      stop(e)
     },
     finally = {
+      if (!hasCon) {
+        mxDbReturnCon(con)
+      }
+
       mxDbClearResult(con)
     }
   )
+
+  if (class(res) == "data.frame" && isEmpty(res)) {
+    return(NULL)
+  }
+
   return(res)
 }
+
+
+
 
 
 #' @rdname mxDbGetDistinctCollectionsTags
@@ -1581,54 +1587,55 @@ mxDbEncrypt <- function(data, ungroup = FALSE, key = NULL) {
 
   return(res)
 }
-#' @rdname mxDbEncrypt
+
 mxDbDecrypt <- function(data = NULL, key = NULL) {
   if (is.null(key)) {
     conf <- mxGetDefaultConfig()
     key <- conf$pg$encryptKey
   }
 
-  out <- try(
+  tryCatch(
     {
-      # if vector containing encrypted data is empty (or not a vector.. see isEmpty) OR
-      # if nchar is not even (should be hex data)
-      if (
-        is.null(data) ||
-          !all(sapply(data, length) > 0) ||
-          !all(sapply(data, is.character)) ||
-          !all(sapply(data, nchar) %% 2 == 0)
-      ) {
-        return()
+      if (is.null(data) ||
+        !all(sapply(data, length) > 0) ||
+        !all(sapply(data, is.character)) ||
+        !all(sapply(data, nchar) %% 2 == 0)) {
+        return(NULL)
       }
 
-      query <- sprintf(
-        "SELECT mx_decrypt('%1$s','%2$s') as res",
-        data,
-        key
-      )
-      if (length(query) > 1) query <- paste(query, collapse = " UNION ALL ")
+      query <- sprintf("SELECT mx_decrypt('%1$s','%2$s') as res", data, key)
+      if (length(query) > 1) {
+        query <- paste(query, collapse = " UNION ALL ")
+      }
 
       res <- mxDbGetQuery(query)$res
 
-      if (!is.null(res) && !is.na(res)) {
-        # if we convert r object as json with mxDbEncrypt, we may want
-        # retrieve decrypt no json based text.
-        isJSON <- all(sapply(res, jsonlite::validate))
+      if (isEmpty(res)) {
+        return(NULL)
+      }
 
-        if (isJSON) {
-          if (length(res) > 1) {
-            out <- lapply(res, jsonlite::fromJSON, simplifyVector = T)
-          } else {
-            out <- jsonlite::fromJSON(res, simplifyVector = T)
-          }
+      isJSON <- all(sapply(res, jsonlite::validate))
+
+      if (!isJSON) {
+        return(res)
+      } else {
+        if (length(res) > 1) {
+          out <- lapply(res, jsonlite::fromJSON, simplifyVector = TRUE)
         } else {
-          out <- res
+          out <- jsonlite::fromJSON(res, simplifyVector = TRUE)
         }
+        return(out)
       }
     },
-    silent = T
+    error = function(e) {
+      warning("Failed to decrypt value. Additional message: ", e$message)
+    },
+    finally = {
+      return(NULL)
+    }
   )
-  return(out)
+
+  return(NULL)
 }
 
 

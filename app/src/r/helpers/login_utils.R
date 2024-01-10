@@ -22,7 +22,8 @@ mxGetInitEmail <- function(browserData) {
       #
       # Check that the GUEST account exists
       #
-      if (!mxDbEmailIsKnown(emailGuest)) {
+      if (
+        !mxDbEmailIsKnown(emailGuest)) {
         mxDbCreateUser(emailGuest)
         return(emailGuest)
       }
@@ -196,7 +197,6 @@ mxLogin <- function(email, browserData, query, reactData) {
   newAccount <- !isTRUE(isGuest) && !mxDbEmailIsKnown(email)
 
   if (newAccount) {
-
     #
     # Create new user
     #
@@ -206,7 +206,6 @@ mxLogin <- function(email, browserData, query, reactData) {
       language = language
     )
   } else {
-
     #
     # Save last visit
     #
