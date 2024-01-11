@@ -1594,13 +1594,16 @@ mxDbDecrypt <- function(data = NULL, key = NULL) {
     key <- conf$pg$encryptKey
   }
 
+  out <- NULL
+
   tryCatch(
     {
       if (is.null(data) ||
         !all(sapply(data, length) > 0) ||
         !all(sapply(data, is.character)) ||
+        # hex chain
         !all(sapply(data, nchar) %% 2 == 0)) {
-        return(NULL)
+        return(out)
       }
 
       query <- sprintf("SELECT mx_decrypt('%1$s','%2$s') as res", data, key)
@@ -1611,31 +1614,27 @@ mxDbDecrypt <- function(data = NULL, key = NULL) {
       res <- mxDbGetQuery(query)$res
 
       if (isEmpty(res)) {
-        return(NULL)
+        return(out)
       }
 
       isJSON <- all(sapply(res, jsonlite::validate))
 
       if (!isJSON) {
-        return(res)
+        out <- res
       } else {
         if (length(res) > 1) {
           out <- lapply(res, jsonlite::fromJSON, simplifyVector = TRUE)
         } else {
           out <- jsonlite::fromJSON(res, simplifyVector = TRUE)
         }
-        return(out)
       }
     },
     error = function(e) {
-      warning("Failed to decrypt value. Additional message: ", e$message)
-    },
-    finally = {
-      return(NULL)
+      mxDebugMsg(sprintf("Failed to decrypt value. Additional message: %s", e$message))
     }
   )
 
-  return(NULL)
+  return(out)
 }
 
 
