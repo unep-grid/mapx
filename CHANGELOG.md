@@ -1,3 +1,10 @@
+  - [1.13.0-alpha.10](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.10) 
+
+    - New feature 
+        - Global sources.
+    - Improvement
+        - Significant improvement of source listing edit/read/global. 1'800ms to 83ms with the inclusion of all related views
+
   - [1.13.0-alpha.9](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.9) 
     - Bug fix
         - Issue when the decryption key has been changed, gray screen. Smooth transition to a guest session expected.
