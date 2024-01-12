@@ -3060,6 +3060,16 @@
     "ru": "Рассчитать площадь пересечения "
   },
   {
+    "id": "check_source_global_enable",
+    "en": "Global source",
+    "ru": "Глобальный источник"
+  },
+  {
+    "id": "check_source_global_enable_desc",
+    "en": "If enabled, this source will be available in all projects",
+    "ru": "Если включено, этот источник будет доступен во всех проектах"
+  },
+  {
     "id": "source_overlap_mode_create_source",
     "en": "Create new layer based on the intersection",
     "ru": "Создайте новый слой на основе пересечения "

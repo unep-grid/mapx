@@ -3060,6 +3060,16 @@
     "es": "Calcular el área de análisis"
   },
   {
+    "id": "check_source_global_enable",
+    "en": "Global source",
+    "es": "Fuente global"
+  },
+  {
+    "id": "check_source_global_enable_desc",
+    "en": "If enabled, this source will be available in all projects",
+    "es": "Si está habilitado, esta fuente estará disponible en todos los proyectos"
+  },
+  {
     "id": "source_overlap_mode_create_source",
     "en": "Create new layer based on the intersection",
     "es": "Crear una nueva capa basada en la intersección"

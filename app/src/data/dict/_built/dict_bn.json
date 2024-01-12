@@ -3060,6 +3060,16 @@
     "bn": "ছেদ করার ক্ষেত্রফল গণনা করুন "
   },
   {
+    "id": "check_source_global_enable",
+    "en": "Global source",
+    "bn": "বিশ্বব্যাপী উৎস"
+  },
+  {
+    "id": "check_source_global_enable_desc",
+    "en": "If enabled, this source will be available in all projects",
+    "bn": "সক্রিয় করা হলে, এই উৎস সমস্ত প্রকল্পে উপলব্ধ থাকবে"
+  },
+  {
     "id": "source_overlap_mode_create_source",
     "en": "Create new layer based on the intersection",
     "bn": "ছেদ ভিত্তিতে নতুন স্তর তৈরি করুন "

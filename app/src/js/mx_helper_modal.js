@@ -141,7 +141,7 @@ export function modal(o) {
           click: close,
         },
       },
-      o.textCloseButton
+      o.textCloseButton,
     );
     if (!o.textCloseButton) {
       getDictItem("btn_close").then((d) => {
@@ -352,8 +352,8 @@ export function modal(o) {
             elBtnCollapse,
             o.addBtnMove ? elBtnHalfLeft : null,
             o.addBtnMove ? elBtnHalfRight : null,
-          ]
-        )
+          ],
+        ),
       ),
       el("div", {
         class: ["mx-modal-head"],
@@ -366,7 +366,7 @@ export function modal(o) {
         (elContent = el("div", {
           style: styleContent,
           class: ["mx-modal-content"],
-        }))
+        })),
       )),
       el(
         "div",
@@ -382,12 +382,12 @@ export function modal(o) {
         }),
         (elButtonsAlt = el("div", {
           class: ["btn-group", "mx-modal-foot-btns"],
-        }))
+        })),
       ),
       el("div", {
         id: idModal + "_validation",
         class: ["shiny-html-output", "mx-modal-validation"],
-      })
+      }),
     );
     return elModal;
   }
@@ -555,7 +555,7 @@ export function modalDialog(opt) {
           },
         },
       },
-      opt.close || getDictItem("btn_close")
+      opt.close || getDictItem("btn_close"),
     );
 
     elModal = modal({
@@ -609,7 +609,7 @@ export function modalConfirm(opt) {
           },
         },
       },
-      opt.cancel || getDictItem("btn_cancel")
+      opt.cancel || getDictItem("btn_cancel"),
     );
 
     const elBtnConfirm = el(
@@ -631,7 +631,7 @@ export function modalConfirm(opt) {
           },
         },
       },
-      opt.confirm || getDictItem("btn_confirm")
+      opt.confirm || getDictItem("btn_confirm"),
     );
 
     elModal = modal({
@@ -674,14 +674,11 @@ export function modalPrompt(opt) {
     inputOptions: {
       type: "number",
       class: "form-control",
-      //min: 0,
-      //max: 1000,
-      //value: 10,
       id: Math.random().toString(32),
-      checkboxValues: {
-        true: true,
-        false: false,
-      },
+    },
+    checkboxValues: {
+      true: true,
+      false: false,
     },
     inputChildren: [],
     selectAutoOptions: null,
@@ -704,7 +701,7 @@ export function modalPrompt(opt) {
     const elLabel = el(
       "label",
       { for: opt.inputOptions.id },
-      el("div", opt.label || "Enter a value")
+      el("div", opt.label || "Enter a value"),
     );
 
     const elInputGroup = el("div", { class: "form-group" }, [elLabel, elInput]);
@@ -713,7 +710,7 @@ export function modalPrompt(opt) {
       const elDesc = el(
         "div",
         { class: ["text-muted", "help-box"], for: opt.inputOptions.id },
-        opt.desc
+        opt.desc,
       );
       elLabel.appendChild(elDesc);
     }
@@ -756,7 +753,7 @@ export function modalPrompt(opt) {
           },
         },
       },
-      opt.cancel || getDictItem("btn_cancel")
+      opt.cancel || getDictItem("btn_cancel"),
     );
 
     const elBtnConfirm = el(
@@ -776,7 +773,7 @@ export function modalPrompt(opt) {
             }
 
             const value = isCheckbox
-              ? opt.inputOptions.checkboxValues[elInput.checked]
+              ? opt.checkboxValues[elInput.checked]
               : elInput.value;
 
             resolve(value);
@@ -787,7 +784,7 @@ export function modalPrompt(opt) {
           },
         },
       },
-      opt.confirm || getDictItem("btn_confirm")
+      opt.confirm || getDictItem("btn_confirm"),
     );
 
     if (isFunction(opt.onInput)) {
@@ -833,7 +830,7 @@ export function modalPrompt(opt) {
      */
     function handlerInputWrapper(_) {
       const value = isCheckbox
-        ? opt.inputOptions.checkboxValues[elInput.checked]
+        ? opt.checkboxValues[elInput.checked]
         : elInput.value;
       handlerInput(value);
     }

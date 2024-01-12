@@ -729,6 +729,32 @@
     "de": ""
   },
   {
+    "id": "check_source_global_enable",
+    "en": "Global source",
+    "fr": "Source globale",
+    "es": "Fuente global",
+    "ru": "Глобальный источник",
+    "zh": "全球来源",
+    "ar": "المصدر العالمي",
+    "fa": "منبع جهانی",
+    "ps": "نړیوال سرچینه",
+    "bn": "বিশ্বব্যাপী উৎস",
+    "de": "Globale Quelle"
+  },
+  {
+    "id": "check_source_global_enable_desc",
+    "en": "If enabled, this source will be available in all projects",
+    "fr": "Si activé, cette source sera disponible dans tous les projets",
+    "es": "Si está habilitado, esta fuente estará disponible en todos los proyectos",
+    "ru": "Если включено, этот источник будет доступен во всех проектах",
+    "zh": "如果启用，此来源将在所有项目中可用",
+    "ar": "إذا تم تفعيله، سيكون هذا المصدر متاحًا في جميع المشاريع",
+    "fa": "اگر فعال شود، این منبع در تمام پروژه‌ها در دسترس خواهد بود",
+    "ps": "که فعاله شي، دا سرچینه به په ټولو پروژو کې شتون ولري",
+    "bn": "সক্রিয় করা হলে, এই উৎস সমস্ত প্রকল্পে উপলব্ধ থাকবে",
+    "de": "Wenn aktiviert, wird diese Quelle in allen Projekten verfügbar sein"
+  },
+  {
     "id": "source_overlap_mode_create_source",
     "en": "Create new layer based on the intersection",
     "fr": "Créer une nouvelle couche basée sur l'intersection",
@@ -10509,7 +10535,7 @@
     "bn": "",
     "de": ""
   },
-    {
+  {
     "id": "login_single_use_password_email",
     "en": "<div style='max-width:400px;padding:20px'>Hello,  <br><br> Here is the requested password:  <hr>  <span style='font-family:monospace;'>{{password}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style='opacity:0.5;font-size:0.8em'>If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
     "fr": "<div style='max-width:400px;padding:20px'>Bonjour,  <br><br>Voici le mot de passe demandé:  <hr>  <span style='font-family:monospace;'>{{password}}</span>  <hr> Ce mot de passe sécurisé ne sera vablable qu'une fois, pour la session MapX en cours et sera invalidé dans tous les cas après 20 minutes.<br>Meilleures salutations,<br><br>Votre équipe MapX.<br><br>  <span style='opacity:0.5;font-size:0.8em'>Si vous n'avez pas fait de demande, il s'agit probablement d'un utilisateur ayant entré votre adresse email par erreur</span></div>",

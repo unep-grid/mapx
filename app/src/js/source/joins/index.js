@@ -22,16 +22,6 @@ const routes = {
 
 const sjmSettings = {
   wsTimeOut: 5000,
-  selectSourceJoin: {
-    disable_large: false,
-    disable_missing: false,
-    loaderData: { types: ["join"] },
-  },
-  selectSourceData: {
-    disable_large: true,
-    disable_missing: true,
-    loaderData: { types: ["tabular", "vector"] },
-  },
 };
 
 export class SourcesJoinManager extends EventSimple {
@@ -328,7 +318,12 @@ export class SourcesJoinManager extends EventSimple {
   }
 
   async promptSelectSourceJoin() {
-    const idSource = await modalSelectSource(sjmSettings.selectSourceJoin);
+    const idSource = await modalSelectSource({
+      disable_large: false,
+      disable_missing: false,
+      types: ["join"],
+      editable: true,
+    });
     return idSource;
   }
 

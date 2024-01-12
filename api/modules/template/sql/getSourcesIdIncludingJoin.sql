@@ -4,7 +4,7 @@ WITH sources_project AS (
    FROM 
     mx_sources 
    WHERE 
-    ($2::text IS NULL OR project = $2)
+    ($2::text IS NULL OR project = $2) OR global = true
 ),
 id_sources AS (
   SELECT id as id_source, jsonb_array_elements(

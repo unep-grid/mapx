@@ -428,25 +428,25 @@ mxDbGetLayerListByViews <- function(idViews = c()) {
 }
 
 
-#' Extract table of layer for one project, for given role or userid
+#' Get table of layer for one project, for given role or userid
 #' @param project Project code
-#' @param projects Projects code
 #' @param idUser Integer user id
 #' @param roleInProject Role
-#' @param type Type : vector, raster, tabular
+#' @param type Type : vector, raster, tabular, join
 #' @param language language for layer name. Default is en.
 #' @param additionalSourcesIds Additional id to add in the list
 #' @param editableOnly Only editable
+#' @param addGlobal Include global sources
 #' @export
 mxDbGetSourceTable <- function(
   project,
-  projects,
   idUser,
   roleInProject,
   types = c("vector", "raster", "tabular", "join"),
   language = "en",
   additionalSourcesIds = c(),
-  editableOnly = FALSE
+  editableOnly = FALSE,
+  addGlobal = FALSE
 ) {
   sourceIds <- paste(paste0("'", additionalSourcesIds, "'"), collapse = ",")
   types <- paste(paste0("'", types, "'"), collapse = ",")
@@ -454,48 +454,91 @@ mxDbGetSourceTable <- function(
   role <- roleInProject
   filterRead <- "false"
   filterEdit <- "false"
-  filter <- "false"
+  projectFilter <- "false"
+
+  idUserStr <- as.character(idUser)
 
   if (role$member) {
-    filterRead <- "readers ?| array['public'] OR editor = " + idUser + " OR readers ?| array['members'] OR readers @> '[" + idUser + "]'"
+    filterRead <- sprintf(
+      "
+      readers ?| array['public']
+      OR editor = %1$s OR readers ?| array['members']
+      OR readers ? '%2$s'",
+      idUser,
+      idUserStr
+    )
   }
 
   if (role$publisher) {
-    filterRead <- "readers ?| array['public'] OR editor = " + idUser + " OR readers ?| array['members','publishers'] OR readers @> '[" + idUser + "]'"
-    filterEdit <- "editors ?| array['publishers'] OR editor = " + idUser + " OR editors @> '[" + idUser + "]'"
+    filterRead <- sprintf(
+      "
+      readers ?| array['public']
+      OR editor = %1$s OR readers ?| array['members','publishers']
+      OR readers ? '%2$s'",
+      idUser,
+      idUserStr
+    )
+    filterEdit <- sprintf(
+      "
+      editors ?| array['publishers']
+      OR editor = %1$s
+      OR editors ? '%2$s'",
+      idUser,
+      idUserStr
+    )
   }
 
   if (role$admin) {
-    filterRead <- "readers ?| array['public'] OR editor = " + idUser + " OR readers ?| array['members','publishers','admins'] OR readers @> '[" + idUser + "]'"
-    filterEdit <- "editors ?| array['publishers','admins'] OR editor = " + idUser + " OR editors @> '[" + idUser + "]'"
+    filterRead <- sprintf(
+      "
+      readers ?| array['public']
+      OR editor = %1$s
+      OR readers ?| array['members','publishers','admins']
+      OR readers ? '%2$s'",
+      idUser,
+      idUserStr
+    )
+    filterEdit <- sprintf(
+      "
+      editors ?| array['publishers','admins']
+      OR editor = '%1$s'
+      OR editors ? '%2$s'",
+      idUser,
+      idUserStr
+    )
   }
 
   if (editableOnly) {
-    filter <- filterEdit
+    projectFilter <- filterEdit
   } else {
-    filter <- filterRead
+    projectFilter <- filterRead
+  }
+
+  globalFilter <- "false"
+  if (addGlobal && !editableOnly) {
+    globalFilter <- "global = TRUE"
   }
 
   sql <- sprintf("
 SELECT
-    id,
-    date_modified,
-    type,
-    coalesce(
-      data #>> '{\"meta\",\"text\",\"title\",\"%1$s\"}',
-      data #>> '{\"meta\",\"text\",\"title\",\"en\"}',
-      id
-      ) as title
+  id,
+  date_modified,
+  type,
+  coalesce(
+    NULLIF(data #>> '{\"meta\",\"text\",\"title\",\"%1$s\"}',''),
+    NULLIF(data #>> '{\"meta\",\"text\",\"title\",\"en\"}',''),
+    id
+  ) as title
 FROM mx_sources
 WHERE
-  project = '%2$s'
-AND
-  type in (%3$s)
+  type in (%2$s)
 AND
   (
-    id in (%4$s)
+    id in (%3$s)
     OR
-    (%5$s)
+    (project = '%4$s' AND (%5$s))
+    OR
+    (%6$s)
   )
 AND
   (
@@ -504,10 +547,9 @@ AND
     (
       type = 'join'
       AND data #>> '{join,base,id_source}' != ''
-      )
+    )
   )
-", language, project, types, sourceIds, filter)
-
+", language, types, sourceIds, project, projectFilter, globalFilter)
 
   dat <- mxDbGetQuery(sql)
 

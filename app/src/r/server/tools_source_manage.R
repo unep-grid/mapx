@@ -1,12 +1,12 @@
 observeEvent(input$btnEditSourceSettings, {
   mxCatch(title = "btn edit source metadata", {
     userRole <- getUserRole()
-    isPublisher <- "publishers" %in% userRole$groups
+    isPublisher <- isTRUE(userRole$publisher)
     if (!isPublisher) {
       return()
-    } else {
-      mxShowSelectSourceEdit(id = "selectSourceLayerForManage")
     }
+
+    mxShowSelectSourceEdit(id = "selectSourceLayerForManage")
   })
 })
 
@@ -25,123 +25,142 @@ observeEvent(reactData$triggerSourceManage, {
   mxCatch(title = "Edit source settings", {
     layer <- reactData$triggerSourceManage$idSource
     userRole <- getUserRole()
-    isPublisher <- "publishers" %in% userRole$groups
+    isPublisher <- isTRUE(userRole$publisher)
     language <- reactData$language
     layers <- reactListEditSources()
     isAllowed <- layer %in% layers
     project <- reactData$project
+    isRoot <- isTRUE(userRole$root)
 
     if (!isPublisher || !isAllowed) {
       return()
-    } else {
-      idSource <- layer
-      sourceData <- mxDbGetQuery("SELECT readers, editors,type FROM mx_sources WHERE id ='" + idSource + "'")
-      services <- mxDbGetSourceServices(idSource)
-      readers <- mxFromJSON(sourceData$readers)
-      editors <- mxFromJSON(sourceData$editors)
-      type <- sourceData$type
-      #
-      # Who can view this
-      #
-      sourceReadTarget <- c("publishers", "admins")
-      sourceEditTarget <- c("publishers", "admins")
-      if (type == "vector") {
-        sourceEditServices <- c("mx_download", "gs_ws_b", "mx_postgis_tiler")
-      } else {
-        sourceEditServices <- c("mx_download")
-      }
-      names(sourceEditServices) <- d(sourceEditServices, lang = language)
-
-      #
-      # Format view list by email
-      #
-      data <- reactTableViewsUsingSource()
-      data <- data[, c("title", "email")]
-      hasRow <- isTRUE(nrow(data) > 0)
-
-      if (hasRow) {
-        names(data) <- c(
-          d("view_title", w = F, lang = language),
-          d("login_email", w = F, lang = language)
-        )
-
-        tblViews <- tagList(
-          tags$label(d("tbl_views_depending_source", language)),
-          mxTableToHtml(data)
-        )
-      } else {
-        tblViews <- tagList()
-      }
-
-
-      uiOut <- tagList(
-        selectizeInput(
-          inputId = "selectSourceReadersUpdate",
-          label = d("source_target_readers", language),
-          choices = sourceReadTarget,
-          selected = readers,
-          multiple = TRUE,
-          options = list(
-            sortField = "label",
-            plugins = list("remove_button")
-          )
-        ),
-        selectizeInput(
-          inputId = "selectSourceEditorsUpdate",
-          label = d("source_target_editors", language),
-          choices = sourceEditTarget,
-          selected = editors,
-          multiple = TRUE,
-          options = list(
-            sortField = "label",
-            plugins = list("remove_button")
-          )
-        ),
-        selectizeInput(
-          inputId = "selectSourceServicesUpdate",
-          label = d("source_services", language),
-          choices = sourceEditServices,
-          selected = as.list(services),
-          multiple = TRUE,
-          options = list(
-            sortField = "label",
-            plugins = list("remove_button")
-          )
-        ),
-        tblViews,
-        uiOutput("uiValidateSourceSettings")
-      )
-
-
-      btnDelete <- actionButton(
-        inputId = "btnDeleteSource",
-        class = "mx-modal-btn-float-right",
-        label = d("btn_delete", language)
-      )
-
-      btnList <- tagList(
-        actionButton(
-          inputId = "btnUpdateSource",
-          label = d("btn_update", language)
-        )
-      )
-
-      #
-      # Todo : check why btnDelete 'disabled' attribute
-      # could not be set using actionButton(.... disabled=FALSE);
-      #
-      if (!hasRow) {
-        btnList <- tagList(btnList, btnDelete)
-      }
-
-      mxModal(
-        id = "editSourceSettings",
-        title = d("source_edit_settings", language),
-        content = uiOut,
-        buttons = btnList,
-        textCloseButton = d("btn_close", language)
-      )
     }
+
+    idSource <- layer
+    sourceData <- mxDbGetQuery(sprintf("
+          SELECT readers, editors, type, global
+          FROM mx_sources
+          WHERE id ='%1$s'", idSource))
+    services <- mxDbGetSourceServices(idSource)
+    readers <- mxFromJSON(sourceData$readers)
+    editors <- mxFromJSON(sourceData$editors)
+    global <- isTRUE(sourceData$global)
+    type <- sourceData$type
+    #
+    # Who can view this
+    #
+    sourceReadTarget <- c("publishers", "admins")
+    sourceEditTarget <- c("publishers", "admins")
+    if (type == "vector") {
+      sourceEditServices <- c("mx_download", "gs_ws_b", "mx_postgis_tiler")
+    } else {
+      sourceEditServices <- c("mx_download")
+    }
+    names(sourceEditServices) <- d(sourceEditServices, lang = language)
+
+    #
+    # Format view list by email
+    #
+    data <- reactTableViewsUsingSource()
+    data <- data[, c("title", "email")]
+    hasRow <- isTRUE(nrow(data) > 0)
+
+    if (hasRow) {
+      names(data) <- c(
+        d("view_title", w = FALSE, lang = language),
+        d("login_email", w = FALSE, lang = language)
+      )
+
+      tblViews <- tagList(
+        tags$label(d("tbl_views_depending_source", language)),
+        mxTableToHtml(data)
+      )
+    } else {
+      tblViews <- tagList()
+    }
+
+
+    uiOut <- tagList(
+      selectizeInput(
+        inputId = "selectSourceReadersUpdate",
+        label = d("source_target_readers", language),
+        choices = sourceReadTarget,
+        selected = readers,
+        multiple = TRUE,
+        options = list(
+          sortField = "label",
+          plugins = list("remove_button")
+        )
+      ),
+      selectizeInput(
+        inputId = "selectSourceEditorsUpdate",
+        label = d("source_target_editors", language),
+        choices = sourceEditTarget,
+        selected = editors,
+        multiple = TRUE,
+        options = list(
+          sortField = "label",
+          plugins = list("remove_button")
+        )
+      ),
+      selectizeInput(
+        inputId = "selectSourceServicesUpdate",
+        label = d("source_services", language),
+        choices = sourceEditServices,
+        selected = as.list(services),
+        multiple = TRUE,
+        options = list(
+          sortField = "label",
+          plugins = list("remove_button")
+        )
+      ),
+      checkboxInput(
+        "checkSourceGlobal",
+        label = ddesc("check_source_global_enable", language),
+        value = isTRUE(global),
+      ),
+      tblViews,
+      uiOutput("uiValidateSourceSettings")
+    )
+
+
+    btnDelete <- actionButton(
+      inputId = "btnDeleteSource",
+      class = "mx-modal-btn-float-right",
+      label = d("btn_delete", language)
+    )
+
+    btnList <- tagList(
+      actionButton(
+        inputId = "btnUpdateSource",
+        label = d("btn_update", language)
+      )
+    )
+
+    #
+    # Todo : check why btnDelete 'disabled' attribute
+    # could not be set using actionButton(.... disabled=FALSE);
+    #
+    if (!hasRow) {
+      btnList <- tagList(btnList, btnDelete)
+    }
+
+    mxModal(
+      id = "editSourceSettings",
+      title = d("source_edit_settings", language),
+      content = uiOut,
+      buttons = btnList,
+      textCloseButton = d("btn_close", language)
+    )
+
+    #
+    # Set value for checkbox 'global' source
+    #
+    mxUpdateCheckboxInput(
+      id = "checkSourceGlobal",
+      disabled = !isRoot,
+      checked = global
+    )
   })
 })
 
@@ -161,7 +180,7 @@ observe({
   idUser <- .get(userData, c("id"))
   hasNoLayer <- noDataCheck(idSource)
   hasNoReaders <- !isTRUE("publishers" %in% readers)
-  isPublisher <- "publishers" %in% userRole$groups
+  isPublisher <- isTRUE(userRole$publisher)
 
   if (hasNoLayer || !isPublisher) {
     return()
@@ -292,25 +311,29 @@ observeEvent(input$btnDeleteSourceConfirm, {
 # Update source
 #
 observeEvent(input$btnUpdateSource, {
+  userRole <- getUserRole()
   idSource <- reactData$triggerSourceManage$idSource
   project <- reactData$project
   language <- reactData$language
   idUser <- reactUser$data$id
   email <- reactUser$data$email
+  isPublisher <- isTRUE(userRole$publisher)
+  isRoot <- isTRUE(userRole$root)
 
   mxCatch(title = "btn update manage source", {
-    userRoles <- getUserRole()
-
     blockUpdate <- isTRUE(reactData$sourceEditBlockUpdate)
 
-    if (blockUpdate) {
+    if (blockUpdate || !isPublisher) {
       return()
     }
+
     idGroupsServicesOld <- mxDbGetSourceServices(idSource)
     idGroupsServices <- input$selectSourceServicesUpdate
 
     readers <- input$selectSourceReadersUpdate
     editors <- input$selectSourceEditorsUpdate
+    isGlobal <- input$checkSourceGlobal
+
     #
     # Control roles
     #
@@ -354,13 +377,15 @@ observeEvent(input$btnUpdateSource, {
       value = as.list(editors)
     )
 
-    # mxUpdateGeoserverSourcePublishingAsync(
-    # email = email,
-    # idProject = project,
-    # idSource = idSource,
-    # idGroups = as.list(idGroupsServices),
-    # idGroupsOld = as.list(idGroupsServicesOld)
-    # )
+    if (isRoot) {
+      mxDbUpdate(
+        table = .get(config, c("pg", "tables", "sources")),
+        idCol = "id",
+        id = idSource,
+        column = "global",
+        value = isGlobal
+      )
+    }
 
     #
     # Generate the modal panel

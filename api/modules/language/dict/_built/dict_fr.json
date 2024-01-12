@@ -3060,6 +3060,16 @@
     "fr": "Calculer l'aire de chevauchement"
   },
   {
+    "id": "check_source_global_enable",
+    "en": "Global source",
+    "fr": "Source globale"
+  },
+  {
+    "id": "check_source_global_enable_desc",
+    "en": "If enabled, this source will be available in all projects",
+    "fr": "Si activé, cette source sera disponible dans tous les projets"
+  },
+  {
     "id": "source_overlap_mode_create_source",
     "en": "Create new layer based on the intersection",
     "fr": "Créer une nouvelle couche basée sur l'intersection"

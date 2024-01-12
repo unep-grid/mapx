@@ -1,16 +1,14 @@
 import { el } from "../../el_mapx";
-import { wsGetSourcesListEdit } from "../../source";
+import { wsGetSourcesList } from "../../source";
 export const config = {
+  /*
+   * TomSelect
+   */
   plugins: {
     remove_button: {
       title: "Remove",
     },
   },
-  max_rows: 1e5,
-  max_cols: 200,
-  disable_missing: true,
-  disable_large: true,
-  update_on_init: false,
   valueField: "id",
   searchField: ["id", "title", "abstract", "views", "type"],
   allowEmptyOption: false,
@@ -30,13 +28,10 @@ export const config = {
     const tom = this;
     tom.blur();
   },
-  loaderData: {
-    // select distinct type from mx_sources
-    types: ["vector", "raster", "tabular", "join"],
-  },
+
   onInitialize: async function () {
     const tom = this;
-    const { update_on_init } = tom.settings;
+    const { update_on_init } = tom.settings.loader_config;
     tom._update = update.bind(tom);
     if (update_on_init) {
       await tom._update();
@@ -46,14 +41,44 @@ export const config = {
     option: formaterOptions,
     item: formaterItem,
   },
+  /*
+   * Resolver config
+   */
+  loader_config: {
+    types: ["vector", "raster", "tabular", "join"],
+    max_rows: 1e5,
+    max_cols: 200,
+    disable_missing: true,
+    disable_large: true,
+    update_on_init: false,
+    readable: false,
+    editable: false,
+    add_global: false,
+    addional_items: [], // e.g. already configured id, to avoid missing
+  },
 };
 
 async function update() {
   const tom = this;
   try {
-    const { types } = tom.settings.loaderData;
-    const { disable_large, disable_missing, max_cols, max_rows } = tom.settings;
-    const { list } = await wsGetSourcesListEdit({ types: types });
+    const {
+      types,
+      editable,
+      readable,
+      add_global,
+      addional_items,
+      max_rows,
+      max_cols,
+      disable_large,
+      disable_missing,
+    } = tom.settings.loader_config;
+    const { list } = await wsGetSourcesList({
+      types,
+      editable,
+      readable,
+      addional_items,
+      add_global,
+    });
     const items = list || [];
     for (const item of items) {
       const { exists, ncol, nrow } = item;
@@ -63,7 +88,6 @@ async function update() {
     }
     tom.addOptions(items);
     tom.refreshOptions(false);
-    console.log("sources updated");
   } catch (e) {
     console.error(e);
   }
@@ -90,7 +114,7 @@ function formaterItem(data, escape) {
 
 function formaterOptions(data, escape) {
   const tom = this;
-  const { max_cols, max_rows } = tom.settings;
+  const { max_cols, max_rows } = tom.settings.loader_config;
   const warnRow = data.nrow > max_rows ? ` ⚠️ ` : "";
   const warnCol = data.ncol > max_cols ? ` ⚠️ ` : "";
   const nCol = warnCol + escape(data.ncol);

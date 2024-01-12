@@ -1,5 +1,5 @@
 import { isSourceId } from "./../../is_test/index.js";
-import { tt } from "../../el_mapx";
+import { modalSelectSource } from "../../select_auto/index.js";
 
 const defaults = {
   id_table: null,
@@ -66,17 +66,8 @@ export class GeometryTools {
    * - built with tom select, in select_auto module
    */
   async dialogSelectTable() {
-    const res = await modalPrompt({
-      title: tt("edit_table_modal_select_title"),
-      label: tt("edit_table_modal_select_label"),
-      selectAutoOptions: {
-        type: "sources_list_edit",
-        config: {
-          loaderData: {
-            types: ["vector"],
-          },
-        },
-      },
+    const res = await modalSelectSource({
+      types: ["vector"],
     });
     return res;
   }

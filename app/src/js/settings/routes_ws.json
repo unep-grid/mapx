@@ -3,7 +3,6 @@
   "downloadSource": "/client/source/download",
   "uploadSource": "/client/source/upload",
   "sourceGetList": "/client/source/get/list",
-  "sourceGetListEdit": "/client/source/get/list/edit",
   "sourceGetListColumns": "/client/source/get/list/columns",
   "sourceGetServices": "/client/source/get/services",
   "sourceGetMetadata" : "/client/source/get/metadata",

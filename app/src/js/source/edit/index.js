@@ -55,7 +55,6 @@ const defaults = {
   id_columns_reserved: ["gid", "_mx_valid", "geom"],
   max_changes: 1e5, //max one column at max rows
   min_columns: 3,
-  max_rows: 1e5, // should match server
   max_changes_large: 1e3,
   max_columns: 1e3, // should match server
   timeout_emit: 1e3 * 60, // 10s round trip
@@ -324,16 +323,15 @@ export class EditTableSessionClient extends WsToolsBase {
       });
 
       /**
-      * Auto reload views locally 
-      * -> structural change requires broadcasting changes from the server 
-      * -> here quick local reload, to see values changes
-      */ 
+       * Auto reload views locally
+       * -> structural change requires broadcasting changes from the server
+       * -> here quick local reload, to see values changes
+       */
       const tableViews = await et.getTableViews();
       if (tableViews) {
         const views = tableViews.map((row) => getView(row.id));
         await viewsReplace(views);
       }
-
 
       et._modal?.close();
       et._popups.forEach((p) => p.destroy());
@@ -3127,11 +3125,9 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async dialogSelectTable() {
     const res = await modalSelectSource({
+      types: ["vector", "tabular"],
       disable_large: true,
       disable_missing: true,
-      loaderData: {
-        types: ["vector", "tabular"],
-      },
     });
     return res;
   }

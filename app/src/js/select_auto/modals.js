@@ -3,17 +3,18 @@ import { getDictItem } from "./../language";
 import { isSourceId } from "./../is_test/index.js";
 import { clone } from "../mx_helper_misc.js";
 
-const def = {
-  loaderData: {
-    types: ["tabular", "vector","join"],
-  },
+const resolver_default = {
+  types: ["tabular", "vector", "join"],
   disable_large: false,
   disable_missing: true,
   update_on_init: true,
+  add_global: false,
+  readable: true,
+  editable: false,
 };
 
 export async function modalSelectSource(opt) {
-  const config = Object.assign({}, clone(def), clone(opt));
+  const loader_config = Object.assign({}, clone(resolver_default), clone(opt));
 
   const res = await modalPrompt({
     title: getDictItem("edit_table_modal_select_title"),
@@ -26,8 +27,10 @@ export async function modalSelectSource(opt) {
       }
     },
     selectAutoOptions: {
-      type: "sources_list_edit",
-      config: config,
+      type: "sources_list",
+      config: {
+        loader_config,
+      },
     },
   });
   return res;

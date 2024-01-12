@@ -12,7 +12,7 @@ import { viewToMetaModal } from "../../../metadata/utils.js";
 import { MapxResolversStatic } from "./static.js";
 import { isStringRange, isString, isEmpty } from "../../../is_test/index.js";
 import { settings } from "./../../../settings";
-import { wsGetSourcesListEdit } from "./../../../source";
+import { wsGetSourcesList } from "./../../../source";
 import { ws_tools } from "./../../../mx.js";
 import { ChaosTest } from "../../../map_helpers/chaos_test.js";
 
@@ -178,7 +178,7 @@ export class MapxResolversApp extends MapxResolversStatic {
        */
       if (conf.deprecated) {
         console.warn(
-          `The tool ${opt.tool} is deprecated. Use ${conf.new_resolver}. instead`
+          `The tool ${opt.tool} is deprecated. Use ${conf.new_resolver}. instead`,
         );
         return rslv[conf.new_method]();
       }
@@ -412,7 +412,7 @@ export class MapxResolversApp extends MapxResolversStatic {
   }
   get_views_order() {
     console.warn(
-      "Deprecated: use 'get_views_list_order' to retrieve views order from the list"
+      "Deprecated: use 'get_views_list_order' to retrieve views order from the list",
     );
     return getViewsListOrder();
   }
@@ -591,7 +591,7 @@ export class MapxResolversApp extends MapxResolversStatic {
    * @return {Array} Rows
    */
   get_sources_list_edit() {
-    return wsGetSourcesListEdit();
+    return wsGetSourcesList({ editable: true });
   }
 
   /**

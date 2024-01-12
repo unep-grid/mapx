@@ -21,19 +21,6 @@ export const config = {
   dropdownParent: "body",
   maxOptions: null,
   maxItems: 1,
-  /** 
-  * Removed to enable fluid columns selection
-  * -> e.g. pressing enter continuously to select
-  * onChange: function () {
-  *  const tom = this;
-  *  tom.blur();
-  * }
-  */
-  loaderData: {
-    id_source: null,
-    ignore_attr: ["geom", "gid", "_mx_valid"],
-    value_field: "id_source",
-  },
   onInitialize: async function () {
     const tom = this;
     tom._update = update.bind(tom);
@@ -42,20 +29,27 @@ export const config = {
     option: formater,
     item: formater,
   },
+  /**
+   * Resolver configuration
+   */
+  loader_config: {
+    id_source: null,
+    ignore_attr: ["geom", "gid", "_mx_valid"],
+    value_field: "id_source",
+  },
 };
 
 async function update() {
   const tom = this;
   try {
     const { settings } = tom;
-    const { id_source, ignore_attr } = settings.loaderData;
+    const { id_source, ignore_attr } = settings.loader_config;
     tom.clear();
     tom.clearOptions();
     const res = await wsGetSourcesListColumns({ id_source, ignore_attr });
     const { columns } = res;
     tom.addOptions(columns);
     tom.refreshOptions(false);
-    console.log("columns updated");
   } catch (e) {
     console.error(e);
   }

@@ -7956,6 +7956,32 @@
     "de": "Schnittfläche berechnen "
   },
   {
+    "id": "check_source_global_enable",
+    "en": "Global source",
+    "fr": "Source globale",
+    "es": "Fuente global",
+    "ru": "Глобальный источник",
+    "zh": "全球来源",
+    "ar": "المصدر العالمي",
+    "fa": "منبع جهانی",
+    "ps": "نړیوال سرچینه",
+    "bn": "বিশ্বব্যাপী উৎস",
+    "de": "Globale Quelle"
+  },
+  {
+    "id": "check_source_global_enable_desc",
+    "en": "If enabled, this source will be available in all projects",
+    "fr": "Si activé, cette source sera disponible dans tous les projets",
+    "es": "Si está habilitado, esta fuente estará disponible en todos los proyectos",
+    "ru": "Если включено, этот источник будет доступен во всех проектах",
+    "zh": "如果启用，此来源将在所有项目中可用",
+    "ar": "إذا تم تفعيله، سيكون هذا المصدر متاحًا في جميع المشاريع",
+    "fa": "اگر فعال شود، این منبع در تمام پروژه‌ها در دسترس خواهد بود",
+    "ps": "که فعاله شي، دا سرچینه به په ټولو پروژو کې شتون ولري",
+    "bn": "সক্রিয় করা হলে, এই উৎস সমস্ত প্রকল্পে উপলব্ধ থাকবে",
+    "de": "Wenn aktiviert, wird diese Quelle in allen Projekten verfügbar sein"
+  },
+  {
     "id": "source_overlap_mode_create_source",
     "en": "Create new layer based on the intersection",
     "fr": "Créer une nouvelle couche basée sur l'intersection",

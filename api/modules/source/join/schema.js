@@ -46,8 +46,10 @@ export function getSchema(language = "en") {
             mx_options: {
               renderer: "tom-select",
               maxItems: 1,
-              loader: "source_edit",
+              loader: "source",
               types: ["vector"],
+              readable: true,
+              add_global: true,
             },
           },
           columns: {
@@ -66,7 +68,7 @@ export function getSchema(language = "en") {
             mx_options: {
               renderer: "tom-select",
               maxItems: 50,
-              loader: "source_edit_columns",
+              loader: "source_columns",
               watch: {
                 property: "id_source",
                 path: "root.base",
@@ -102,6 +104,7 @@ export function getSchema(language = "en") {
                 maxItems: 1,
                 loader: "source_edit",
                 types: ["vector", "tabular"],
+                readable: true,
               },
             },
             columns: {

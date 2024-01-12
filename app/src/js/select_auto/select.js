@@ -1,7 +1,7 @@
 import { moduleLoad } from "./../modules_loader_async/index.js";
 import { isElement } from "./../is_test";
 import { EventSimple } from "../event_simple/index.js";
-import {clone} from "../mx_helper_misc.js";
+import { clone } from "../mx_helper_misc.js";
 
 const def = {
   target: null,
@@ -70,9 +70,9 @@ export class SelectAuto extends EventSimple {
     const TomSelect = await moduleLoad("tom-select");
     const config = await se.loadConfig(se._opt.type);
     Object.assign(config, se._opt.config);
+    se._tom = new TomSelect(se._opt.target, config);
 
     return new Promise((resolve) => {
-      se._tom = new TomSelect(se._opt.target, config);
       /*
        *
        * -> bug, doesn't work ...
@@ -100,9 +100,9 @@ export class SelectAuto extends EventSimple {
       case "countries":
         const countries = await import("./resolvers/countries.js");
         return clone(countries.config);
-      case "sources_list_edit":
-        const sourcesEdit = await import("./resolvers/sources_list_edit.js");
-        return clone(sourcesEdit.config);
+      case "sources_list":
+        const sourcesList = await import("./resolvers/sources_list.js");
+        return clone(sourcesList.config);
       default:
         null;
     }

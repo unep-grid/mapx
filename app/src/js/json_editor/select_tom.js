@@ -1,10 +1,10 @@
 import { JSONEditor } from "@json-editor/json-editor";
 import { el } from "./../el_mapx";
-import { isNotEmpty, isEmpty, isArray, isObject } from "./../is_test/index.js";
+import { isEmpty, isArray, isObject } from "./../is_test/index.js";
 import TomSelect from "tom-select";
 
-import { config as config_source_edit } from "../select_auto/resolvers/sources_list_edit";
-import { config as config_source_edit_columns } from "../select_auto/resolvers/sources_list_columns";
+import { config as config_source } from "../select_auto/resolvers/sources_list.js";
+import { config as config_source_columns } from "../select_auto/resolvers/sources_list_columns";
 import { clone } from "../mx_helper_misc";
 
 JSONEditor.defaults.resolvers.unshift(function (schema) {
@@ -31,21 +31,25 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     editor.title.appendChild(editor.title_controls);
     editor.error_holder = document.createElement("div");
 
+    const config = {};
     const { schema } = editor;
-
-    const { maxItems, types, loader, watch } = schema.mx_options;
-
-    let config;
+    const { maxItems, watch, loader } = schema.mx_options;
 
     switch (loader) {
       case "source_edit":
-        config = clone(config_source_edit);
-        Object.assign(config.loaderData, { types });
+        const { types, readable, editable, add_global } =
+          schema.mx_options;
+        Object.assign(config, clone(config_source));
+        Object.assign(config.loader_config, {
+          types,
+          readable,
+          editable,
+          add_global,
+        });
         break;
       case "source_edit_columns":
-        config = clone(config_source_edit_columns);
-        const id_source = null; // updated after the watch event
-        Object.assign(config.loaderData, { id_source });
+        Object.assign(config, clone(config_source_columns));
+        Object.assign(config.loader_config, { id_source: null });
         break;
       default:
         throw new Error(`tomSelectAuto, unknown loader ${loader}`);
@@ -168,11 +172,12 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     const editor = this;
     const ts = editor.input.ts;
     const value = editor.jsoneditor.getEditor(watch_path)?.getValue();
-    const idField = ts.settings.loaderData.value_field;
+    const idField = ts.settings.loader_config.value_field; //e.g. id_source
     if (!value) {
       return;
     }
-    ts.settings.loaderData[idField] = value;
+    // e.g. ts.settings.loader_config["id_source"] = "MX_123";
+    ts.settings.loader_config[idField] = value;
     await ts._update();
     editor._on_ready();
   }

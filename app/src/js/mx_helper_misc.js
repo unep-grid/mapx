@@ -1315,26 +1315,28 @@ export function doPar(o) {
  * @param {boolean} r.warning Use warning state instead of danger
  */
 export function buttonToggle(r) {
-  var elBtn = document.getElementById(r.id);
-  if (elBtn) {
-    var c = elBtn.classList;
+  const elBtn = document.getElementById(r.id);
+  if (!isElement(elBtn)) {
+    return;
+  }
+  const c = elBtn.classList;
 
-    if (r.disable === true) {
-      c.add("btn-danger");
-      c.remove("btn-warning");
-      c.remove("btn-default");
-      elBtn.setAttribute("disabled", true);
-    } else if (r.warning === true) {
-      c.add("btn-warning");
-      c.remove("btn-danger");
-      c.remove("btn-default");
-      elBtn.removeAttribute("disabled");
-    } else {
-      c.add("btn-default");
-      c.remove("btn-danger");
-      c.remove("btn-warning");
-      elBtn.removeAttribute("disabled");
-    }
+  if (r.disable === true) {
+    c.add("btn-danger");
+    c.remove("btn-warning");
+    c.remove("btn-default");
+    elBtn.setAttribute("disabled", true);
+    elBtn.setAttribute("tabindex", "-1");
+  } else if (r.warning === true) {
+    c.add("btn-warning");
+    c.remove("btn-danger");
+    c.remove("btn-default");
+    elBtn.removeAttribute("disabled");
+  } else {
+    c.add("btn-default");
+    c.remove("btn-danger");
+    c.remove("btn-warning");
+    elBtn.removeAttribute("disabled");
   }
 }
 
@@ -1344,13 +1346,13 @@ export function buttonToggle(r) {
  * @param {Boolean} enable Enable or disable
  */
 export function buttonEnable(elBtn, enable) {
-  const c = elBtn.classList;
   if (enable) {
-    c.remove("disabled-with-events");
+    elBtn.classList.remove("disabled-with-events");
     elBtn.removeAttribute("disabled");
   } else {
-    c.add("disabled-with-events");
+    elBtn.classList.add("disabled-with-events");
     elBtn.setAttribute("disabled", true);
+    elBtn.setAttribute("tabindex", "-1");
   }
 }
 /**
@@ -1379,22 +1381,25 @@ export function updateText(o) {
  * @param {string} o.checked Enabled
  */
 export function updateCheckboxInput(o) {
-  const h = mx.helpers;
   const hasShiny = isShinyReady();
-  var el = document.getElementById(o.id);
-  if (h.isElement(el)) {
-    if (h.isBoolean(o.disabled)) {
-      if (o.disabled) {
-        el.setAttribute("disabled", true);
-      } else {
-        el.removeAttribute("disabled");
-      }
+  const el = document.getElementById(o.id);
+
+  if (!isElement(el)) {
+    return;
+  }
+
+  if (isBoolean(o.disabled)) {
+    if (o.disabled) {
+      el.setAttribute("disabled", true);
+      elBtn.setAttribute("tabindex", "-1");
+    } else {
+      el.removeAttribute("disabled");
     }
-    if (h.isBoolean(o.checked)) {
-      el.checked = o.checked;
-      if (hasShiny) {
-        Shiny.onInputChange(o.id, el.checked);
-      }
+  }
+  if (isBoolean(o.checked)) {
+    el.checked = o.checked;
+    if (hasShiny) {
+      Shiny.onInputChange(o.id, el.checked);
     }
   }
 }
@@ -1748,19 +1753,24 @@ export function jsDebugMsg(m) {
   console.log(m.message || m.msg);
 }
 
-/** Add or remove a class depending on enable option. The element has a class, ex. "hidden" and this will remove the class if m.enable is true.
+/**
+ *  Add or remove a class depending on enable option. The element has a class, ex. "hidden" and this will remove the class if m.enable is true.
  * @param {Object} m Options
- * @param {String} m.element Element id
+ * @param {String} m.id Element id
+ * @param {String} m.class Element class
  * @param {String} m.hideClass Class to remove if enabled is true
  * @param {Boolean} m.hide Hide add hideClass to given element
  * @param {Boolean} m.disable Add disabled attr to element
  */
 export function hide(m) {
-  var element, prefix;
-
   if (!m || !(m.class || m.id)) {
     return;
   }
+
+  const element = isEmpty(m.id)
+    ? document.querySelector(`.${m.class}`)
+    : document.getElementById(m.id);
+
   if (!m.hideClass) {
     m.hideClass = "mx-hide";
   }
@@ -1771,26 +1781,17 @@ export function hide(m) {
     m.disable = true;
   }
 
-  prefix = m.id === undefined ? "." : "#";
-
-  if (m.id) {
-    element = prefix + m.id;
-  } else {
-    element = prefix + m.class;
-  }
-
-  var $el = $(element);
-
-  if ($el.length > 0) {
+  if (isElement(element)) {
     if (m.hide) {
-      $el.addClass(m.hideClass);
+      element.classList.add(m.hideClass);
     } else {
-      $el.removeClass(m.hideClass);
+      element.classList.remove(m.hideClass);
     }
     if (m.disable) {
-      $el.attr("disabled", true);
+      element.setAttribute("disabled", true);
+      element.setAttribute("tabindex", "-1");
     } else {
-      $el.attr("disabled", false);
+      element.removeAttribute("disabled");
     }
   }
 }

@@ -51,7 +51,8 @@ reactTableReadSources <- reactive({
     roleInProject = userRole,
     language = language,
     additionalSourcesIds = additionalLayers,
-    editableOnly = FALSE
+    editableOnly = FALSE,
+    addGlobal = TRUE
   )
 
   return(layers)

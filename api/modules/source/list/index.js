@@ -4,9 +4,9 @@ import { templates } from "#mapx/template";
 import { parseTemplate } from "#mapx/helpers";
 import { isSourceId } from "@fxi/mx_valid";
 
-export { ioSourceListEdit };
+export { ioSourceList };
 
-async function ioSourceListEdit(socket, request, cb) {
+async function ioSourceList(socket, request, cb) {
   const session = socket.session;
 
   try {
@@ -21,6 +21,7 @@ async function ioSourceListEdit(socket, request, cb) {
     const options = {
       language: "en",
       types: ["tabular", "vector", "raster", "join"],
+      addGlobal: false,
     };
 
     // can't be changed by options
@@ -32,7 +33,7 @@ async function ioSourceListEdit(socket, request, cb) {
 
     Object.assign(options, request, auth);
 
-    const list = await getSourcesListEdit(options);
+    const list = await getSourcesList(options);
     const response = Object.assign({}, request, { list });
 
     cb(response);
@@ -63,22 +64,28 @@ export async function getSourceIdsIncludingJoin(idSource, idProject) {
   return res.rows.map((r) => r.id_source);
 }
 
-async function getSourcesListEdit(options) {
-  const { idProject, idUser, groups, types, language } = options;
+async function getSourcesList(options) {
+  const {
+    idProject,
+    idUser,
+    groups,
+    types,
+    language,
+    add_global,
+    editable,
+    readable,
+  } = options;
+
   const qSqlTemplate = templates.getSourcesListByRoles;
   const qSql = parseTemplate(qSqlTemplate, { language });
-  const groupsStr = JSON.stringify(groups);
 
   const res = await pgRead.query({
     text: qSql,
-    values: [idProject, idUser, groupsStr, types],
+    values: [idProject, idUser, groups, types, add_global, editable, readable],
   });
 
   /**
-   * Add
-   * - table dimension
-   * - linked views
-   *
+   * Add table dimension
    */
   for (const row of res.rows) {
     row.exists = await tableExists(row.id);
@@ -86,6 +93,9 @@ async function getSourcesListEdit(options) {
       const dim = await getTableDimension(row.id);
       row.nrow = dim.nrow;
       row.ncol = dim.ncol;
+    } else {
+      row.nrow = 0;
+      row.ncol = 0;
     }
   }
 

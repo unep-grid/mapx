@@ -3060,6 +3060,16 @@
     "fa": "مساحت تقاطع را محاسبه کنید "
   },
   {
+    "id": "check_source_global_enable",
+    "en": "Global source",
+    "fa": "منبع جهانی"
+  },
+  {
+    "id": "check_source_global_enable_desc",
+    "en": "If enabled, this source will be available in all projects",
+    "fa": "اگر فعال شود، این منبع در تمام پروژه‌ها در دسترس خواهد بود"
+  },
+  {
     "id": "source_overlap_mode_create_source",
     "en": "Create new layer based on the intersection",
     "fa": "بر اساس تقاطع لایه جدید ایجاد کنید "
