@@ -134,7 +134,7 @@ try {
     database: s.db.name,
     password: s.db.admin.password,
     port: s.db.port,
-    statement_timeout: s.db.timeoutShort,
+    statement_timeout: s.db.timeoutLong,
     max: s.db.poolMax,
     application_name: "mx_api_admin",
   });
