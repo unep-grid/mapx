@@ -1,4 +1,4 @@
-import { pgRead } from "#mapx/db";
+import { pgReadLong } from "#mapx/db";
 import { templates } from "#mapx/template";
 
 /**
@@ -8,6 +8,6 @@ import { templates } from "#mapx/template";
  */
 export async function getViewsGeoserver() {
   const sql = templates.getViewsGeoserver;
-  const res = await pgRead.query(sql);
+  const res = await pgReadLong.query(sql);
   return res.rows;
 }
