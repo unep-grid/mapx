@@ -1,3 +1,7 @@
+  - [1.13.0-alpha.13](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.13) 
+
+    - Migration patches : higher timeout for pgAdmin pool, as index creation / update can take more than the current 20s used for short lived queries 
+
   - [1.13.0-alpha.12](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.12) 
     
     - Migration patches : force sorting to ensure correct order
