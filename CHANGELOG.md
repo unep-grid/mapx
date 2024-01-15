@@ -1,3 +1,7 @@
+  - [1.13.0-alpha.11](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.11) 
+
+    - Patch order issue : column global in mx_sources not created before index creation
+
   - [1.13.0-alpha.10](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.10) 
 
     - New feature 
