@@ -1,3 +1,7 @@
+  - [1.13.0-alpha.14](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.14) 
+
+    - Update geoserver : higher timeout for views for geoserver update
+
   - [1.13.0-alpha.13](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.13) 
 
     - Migration patches : higher timeout for pgAdmin pool, as index creation / update can take more than the current 20s used for short lived queries 
