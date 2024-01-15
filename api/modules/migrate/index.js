@@ -1,7 +1,7 @@
-import {readTxt, parseTemplate} from '#mapx/helpers';
-import {pgAdmin} from '#mapx/db';
-import path from 'path';
-import fs from 'fs';
+import { readTxt, parseTemplate } from "#mapx/helpers";
+import { pgAdmin } from "#mapx/db";
+import path from "path";
+import fs from "fs";
 
 /**
  * ROLL FORWARD ONLY migration patches
@@ -10,20 +10,20 @@ import fs from 'fs';
 /**
  * Paths
  */
-const dirSqlPatches = new URL('sql_patches', import.meta.url).pathname;
+const dirSqlPatches = new URL("sql_patches", import.meta.url).pathname;
 //const dirSqlRoutines = path.join(__dirname, 'sql_routines') # not used
-const dirSqlBase = new URL('sql_base', import.meta.url).pathname;
-const dirSqlAdmin = new URL('sql_admin', import.meta.url).pathname;
+const dirSqlBase = new URL("sql_base", import.meta.url).pathname;
+const dirSqlAdmin = new URL("sql_admin", import.meta.url).pathname;
 
 /*
  * Load sql/templates
  */
-const sqlHasPatch = readTxt(path.join(dirSqlBase, 'has_patch.template.sql'));
+const sqlHasPatch = readTxt(path.join(dirSqlBase, "has_patch.template.sql"));
 const sqlRegisterPatch = readTxt(
-  path.join(dirSqlBase, 'register_patch.template.sql')
+  path.join(dirSqlBase, "register_patch.template.sql")
 );
-const sqlInit = readTxt(path.join(dirSqlBase, 'init.sql'));
-const sqlIsInit = readTxt(path.join(dirSqlBase, 'exists.sql'));
+const sqlInit = readTxt(path.join(dirSqlBase, "init.sql"));
+const sqlIsInit = readTxt(path.join(dirSqlBase, "exists.sql"));
 
 /**
  * Apply patch with logs
@@ -32,15 +32,15 @@ export async function apply() {
   try {
     const r = await applyPatches();
     if (r.length > 0) {
-      console.log(`Migrate : applied patches \n ${r.join(',\n')}`);
+      console.log(`Migrate : applied patches \n ${r.join(",\n")}`);
     } else {
       console.log(`Migrate : No patch applied`);
     }
   } catch (e) {
     /*
-    * Handled in parent, e.g. once / withTimeLimit 
-    */ 
-    throw Error(e); 
+     * Handled in parent, e.g. once / withTimeLimit
+     */
+    throw Error(e);
   }
 }
 
@@ -53,12 +53,14 @@ async function applyPatches() {
   // With transaction
   const patches = fs
     .readdirSync(dirSqlPatches)
-    .filter((f) => f.match(/\.sql$/));
+    .filter((f) => f.match(/\.sql$/))
+    .sort();
 
   // No transaction
   const patchesAdmin = fs
     .readdirSync(dirSqlAdmin)
-    .filter((f) => f.match(/\.sql$/));
+    .filter((f) => f.match(/\.sql$/))
+    .sort();
 
   /**
    * Init patch table
@@ -76,8 +78,8 @@ async function applyPatches() {
   for (let p of patchesAdmin) {
     const fInfo = path.parse(p);
     const id = fInfo.name;
-    const sqlHas = parseTemplate(sqlHasPatch, {id});
-    const sqlReg = parseTemplate(sqlRegisterPatch, {id});
+    const sqlHas = parseTemplate(sqlHasPatch, { id });
+    const sqlReg = parseTemplate(sqlRegisterPatch, { id });
     /**
      * Don't apply patch more than once
      */
@@ -97,20 +99,20 @@ async function applyPatches() {
 
   const client = await pgAdmin.connect();
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
     /**
      * LOCK
      * - because we don't want another process
      *   do the same operation at the same time
      * - Lock released when commit/rollback.
      */
-    await client.query('LOCK mx_patches');
+    await client.query("LOCK mx_patches");
 
     for (let p of patches) {
       const fInfo = path.parse(p);
       const id = fInfo.name;
-      const sqlHas = parseTemplate(sqlHasPatch, {id});
-      const sqlReg = parseTemplate(sqlRegisterPatch, {id});
+      const sqlHas = parseTemplate(sqlHasPatch, { id });
+      const sqlReg = parseTemplate(sqlRegisterPatch, { id });
       /**
        * Don't apply patch more than once
        */
@@ -131,12 +133,12 @@ async function applyPatches() {
         }
       }
     }
-    client.query('COMMIT');
+    client.query("COMMIT");
   } catch (e) {
     /*
      * Rollack and propagate
      */
-    client.query('ROLLBACK');
+    client.query("ROLLBACK");
     throw Error(e);
   } finally {
     client.release();
