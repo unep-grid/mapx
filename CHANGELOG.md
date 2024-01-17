@@ -1,3 +1,13 @@
+  - [1.13.0-alpha.15](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.15) 
+
+    - Join Editor
+        - New feature : count and preview. Should help detect join issues, e.g. rows multiplication. 
+        - New class to manage SQL query. As the SQL grows in complexity, should help maintenance.
+        - New join type tester : type mismatch is not allowed.
+ 
+    - Source settings
+        - Improve logic for changes and better resilience for concurrent changes.
+
   - [1.13.0-alpha.14](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.14) 
 
     - Update geoserver : higher timeout for views for geoserver update
