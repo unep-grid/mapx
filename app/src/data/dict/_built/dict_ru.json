@@ -2095,6 +2095,16 @@
     "ru": "Столбцы для отображения"
   },
   {
+    "id": "join_rows_count",
+    "en": "Rows count",
+    "ru": "Количество строк"
+  },
+  {
+    "id": "join_preview",
+    "en": "Preview table",
+    "ru": "Предварительный просмотр таблицы"
+  },
+  {
     "id": "join_column_base",
     "en": "Base column",
     "ru": "Базовый столбец"
@@ -3685,6 +3695,11 @@
     "ru": "Среда "
   },
   {
+    "id": "error_source_has_dependencies",
+    "en": "The source has dependencies",
+    "ru": "Источник имеет зависимости"
+  },
+  {
     "id": "error_no_layer",
     "en": "No source layer set",
     "ru": "Исходный слой не задан "
@@ -4580,6 +4595,11 @@
     "ru": "Вид "
   },
   {
+    "id": "project",
+    "en": "Projet",
+    "ru": "Проект"
+  },
+  {
     "id": "views",
     "en": "Views",
     "ru": "Взгляды "
@@ -5140,9 +5160,9 @@
     "ru": "Требуется хотя бы один администратор "
   },
   {
-    "id": "error_views_need_data",
-    "en": "Deletion of a source disabled because at least one view depends on it",
-    "ru": "Удаление источника отключено, поскольку от него зависит как минимум одно представление "
+    "id": "error_views_require_source",
+    "en": "At least one view depends on this source.",
+    "ru": "По крайней мере одно представление зависит от этого источника."
   },
   {
     "id": "error_views_need_publishers",
@@ -5645,6 +5665,11 @@
     "ru": "Таблица просмотров в зависимости от источника "
   },
   {
+    "id": "tbl_dependencies_source",
+    "en": "Table of objects depending on the source",
+    "ru": "Таблица объектов, зависящих от источника"
+  },
+  {
     "id": "btn_validate_metadata",
     "en": "In depth validation",
     "ru": "Глубокая проверка "
@@ -5783,6 +5808,11 @@
     "id": "source_last_editor_email",
     "en": "Email of the last editor",
     "ru": "Электронная почта последнего редактора "
+  },
+  {
+    "id": "email_editor",
+    "en": "Editor's email",
+    "ru": "Электронная почта редактора"
   },
   {
     "id": "additional_doc_desc",

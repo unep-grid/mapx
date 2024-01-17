@@ -8,6 +8,7 @@ import { modal } from "./../../mx_helper_modal";
 import { ws_tools } from "./../../mx.js";
 
 import {
+  TableResizer,
   getHandsonLanguageCode,
   typeConvert,
 } from "./../../handsontable/utils.js";
@@ -46,7 +47,7 @@ async function showSourceTableAttributeModal(opt) {
   const config = Object.assign({}, { labels: null }, opt);
   let destroyed = false;
   let hot;
-  let resizeObserver;
+  let tableObserver;
   let labels = config.labels || null;
   let elViewTitle;
   let elTable;
@@ -91,14 +92,12 @@ async function showSourceTableAttributeModal(opt) {
     const data = table.data;
 
     const hasData = isArray(data) && data.length > 0;
-    const license = "non-commercial-and-evaluation";
     allowDownload = await isSourceDownloadable(opt.idSource);
-    
+
     elTable = el("div", {
       class: "mx_handsontable",
       style: {
         width: "100%",
-        height: "350",
         minHeight: "350px",
         minWidth: "100px",
         overflow: "hidden",
@@ -234,7 +233,7 @@ async function showSourceTableAttributeModal(opt) {
       rowHeaders: true,
       columnSorting: true,
       colHeaders: labelsOrdered,
-      licenseKey: license,
+      licenseKey: "non-commercial-and-evaluation",
       dropdownMenu: [
         "filter_by_condition",
         "filter_operators",
@@ -245,10 +244,6 @@ async function showSourceTableAttributeModal(opt) {
       language: getHandsonLanguageCode(),
       afterFilter: handleViewFilter,
       renderAllRows: false,
-      height: function () {
-        const r = elTable.getBoundingClientRect();
-        return r.height - 30;
-      },
       disableVisualSelection: !allowDownload,
     });
 
@@ -258,8 +253,7 @@ async function showSourceTableAttributeModal(opt) {
     /**
      * If everything is fine, add a mutation observer to render the table
      */
-    resizeObserver = new ResizeObserver(tableRender);
-    resizeObserver.observe(elModal);
+    tableObserver = new TableResizer(hot, elTable, elModal);
   } catch (e) {
     console.error(e);
     progressScreen({
@@ -326,26 +320,6 @@ async function showSourceTableAttributeModal(opt) {
     elViewTitle.innerText = getViewTitle(view);
   }
 
-  let _to_render_table = 0;
-  function tableRender() {
-    clearTimeout(_to_render_table);
-    _to_render_table = setTimeout(() => {
-      if (hot && hot.render) {
-        const elTableParent = elTable.parentElement;
-        // compute padding ..
-        let pStyle = getComputedStyle(elTableParent);
-        let pad =
-          parseFloat(pStyle.paddingTop) + parseFloat(pStyle.paddingBottom);
-        // and actual size
-        let height = elTableParent.getBoundingClientRect().height;
-        if (height > 350) {
-          elTable.style.height = height - pad + "px";
-          hot.render();
-        }
-      }
-    }, 200);
-  }
-
   function destroy() {
     if (destroyed) {
       return;
@@ -354,8 +328,8 @@ async function showSourceTableAttributeModal(opt) {
     if (hot) {
       hot.destroy();
     }
-    if (resizeObserver) {
-      resizeObserver.disconnect();
+    if (tableObserver) {
+      tableObserver.disconnect();
     }
     let view = config.view;
     if (!isView(view)) {

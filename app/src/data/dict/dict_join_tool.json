@@ -77,6 +77,33 @@
     "fa": "ستون‌ها برای نمایش",
     "ps": "د ښودلو لپاره کالمونه"
   },
+
+  {
+    "id": "join_rows_count",
+    "en": "Rows count",
+    "fr": "Nombre de lignes",
+    "zh": "行数",
+    "es": "Conteo de filas",
+    "ar": "عدد الصفوف",
+    "ru": "Количество строк",
+    "de": "Anzahl der Zeilen",
+    "bn": "সারির সংখ্যা",
+    "fa": "تعداد ردیف ها",
+    "ps": "د قطارونو شمېر"
+  },
+  {
+    "id": "join_preview",
+    "en": "Preview table",
+    "fr": "Prévisualiser la table",
+    "zh": "预览表格",
+    "es": "Vista previa de la tabla",
+    "ar": "معاينة الجدول",
+    "ru": "Предварительный просмотр таблицы",
+    "de": "Vorschau der Tabelle",
+    "bn": "টেবিল প্রাকদর্শন",
+    "fa": "پیش‌نمایش جدول",
+    "ps": "د جدول مخکتنه"
+  },
   {
     "id": "join_column_base",
     "en": "Base column",

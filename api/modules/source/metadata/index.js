@@ -159,7 +159,7 @@ export async function getAttributesAlias(id_source, attributes) {
 
   if (type !== "join") {
     // Handle tabular or vector type source
-    const attributesAlias = metadata?.text?.attributes_alias;
+    const attributesAlias = metadata?.text?.attributes_alias || {};
     for (const attr of attributes) {
       aliases[attr] = attributesAlias[attr] || { en: attr };
     }

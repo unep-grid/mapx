@@ -2095,6 +2095,16 @@
     "zh": "要显示的列"
   },
   {
+    "id": "join_rows_count",
+    "en": "Rows count",
+    "zh": "行数"
+  },
+  {
+    "id": "join_preview",
+    "en": "Preview table",
+    "zh": "预览表格"
+  },
+  {
     "id": "join_column_base",
     "en": "Base column",
     "zh": "基础列"
@@ -3685,6 +3695,11 @@
     "zh": "环境"
   },
   {
+    "id": "error_source_has_dependencies",
+    "en": "The source has dependencies",
+    "zh": "源文件有依赖"
+  },
+  {
     "id": "error_no_layer",
     "en": "No source layer set",
     "zh": "没有设置源图层"
@@ -4580,6 +4595,11 @@
     "zh": "视图"
   },
   {
+    "id": "project",
+    "en": "Projet",
+    "zh": "项目"
+  },
+  {
     "id": "views",
     "en": "Views",
     "zh": "视图"
@@ -5140,9 +5160,9 @@
     "zh": "需要至少一名管理员"
   },
   {
-    "id": "error_views_need_data",
-    "en": "Deletion of a source disabled because at least one view depends on it",
-    "zh": "禁用源的删除，因为至少一个视图依赖此源"
+    "id": "error_views_require_source",
+    "en": "At least one view depends on this source.",
+    "zh": "至少有一个视图依赖于此源。"
   },
   {
     "id": "error_views_need_publishers",
@@ -5645,6 +5665,11 @@
     "zh": "依赖此源的视图表"
   },
   {
+    "id": "tbl_dependencies_source",
+    "en": "Table of objects depending on the source",
+    "zh": "依赖源的对象表"
+  },
+  {
     "id": "btn_validate_metadata",
     "en": "In depth validation",
     "zh": "深度验证"
@@ -5783,6 +5808,11 @@
     "id": "source_last_editor_email",
     "en": "Email of the last editor",
     "zh": "最后一位编辑者的邮箱"
+  },
+  {
+    "id": "email_editor",
+    "en": "Editor's email",
+    "zh": "编辑的电子邮件"
   },
   {
     "id": "additional_doc_desc",

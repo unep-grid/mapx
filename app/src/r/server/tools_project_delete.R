@@ -1,4 +1,3 @@
-
 observeEvent(input$btnShowProjectDelete, {
   userRole <- getUserRole()
   idProject <- reactData$project
@@ -111,7 +110,7 @@ observeEvent(input$btnDeleteProject, {
     #
 
     for (src in sourcesToRemove) {
-      viewsToRemove <- c(mxDbGetViewsIdBySourceId(src)$id, viewsToRemove)
+      viewsToRemove <- c(mxDbGetViewsTableBySourceId(src)$view_id, viewsToRemove)
     }
 
     viewsToRemove <- c(viewsToRemove, viewsProject)

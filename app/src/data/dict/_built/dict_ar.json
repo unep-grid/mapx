@@ -2095,6 +2095,16 @@
     "ar": "الأعمدة للعرض"
   },
   {
+    "id": "join_rows_count",
+    "en": "Rows count",
+    "ar": "عدد الصفوف"
+  },
+  {
+    "id": "join_preview",
+    "en": "Preview table",
+    "ar": "معاينة الجدول"
+  },
+  {
     "id": "join_column_base",
     "en": "Base column",
     "ar": "العمود الأساسي"
@@ -3685,6 +3695,11 @@
     "ar": "بيئة "
   },
   {
+    "id": "error_source_has_dependencies",
+    "en": "The source has dependencies",
+    "ar": "المصدر له تبعيات"
+  },
+  {
     "id": "error_no_layer",
     "en": "No source layer set",
     "ar": "لم يتم تعيين طبقة المصدر "
@@ -4580,6 +4595,11 @@
     "ar": "رأي "
   },
   {
+    "id": "project",
+    "en": "Projet",
+    "ar": "بروجيت"
+  },
+  {
     "id": "views",
     "en": "Views",
     "ar": "الآراء "
@@ -5140,9 +5160,9 @@
     "ar": "تتطلب مشرفًا واحدًا على الأقل "
   },
   {
-    "id": "error_views_need_data",
-    "en": "Deletion of a source disabled because at least one view depends on it",
-    "ar": "تم تعطيل حذف المصدر لأن طريقة عرض واحدة على الأقل تعتمد عليه "
+    "id": "error_views_require_source",
+    "en": "At least one view depends on this source.",
+    "ar": "يعتمد مشهد واحد على الأقل على هذا المصدر."
   },
   {
     "id": "error_views_need_publishers",
@@ -5645,6 +5665,11 @@
     "ar": "جدول وجهات النظر حسب المصدر "
   },
   {
+    "id": "tbl_dependencies_source",
+    "en": "Table of objects depending on the source",
+    "ar": "جدول الكائنات المعتمدة على المصدر"
+  },
+  {
     "id": "btn_validate_metadata",
     "en": "In depth validation",
     "ar": "في التحقق من العمق "
@@ -5783,6 +5808,11 @@
     "id": "source_last_editor_email",
     "en": "Email of the last editor",
     "ar": "البريد الإلكتروني للمحرر الأخير "
+  },
+  {
+    "id": "email_editor",
+    "en": "Editor's email",
+    "ar": "بريد الناشر الإلكتروني"
   },
   {
     "id": "additional_doc_desc",

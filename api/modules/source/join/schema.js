@@ -177,6 +177,9 @@ export function getSchema(language = "en") {
         },
       },
     },
+    mx_validate: {
+      type: "valid_joins",
+    },
   };
   return schama;
 }

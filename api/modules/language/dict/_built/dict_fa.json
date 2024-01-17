@@ -2095,6 +2095,16 @@
     "fa": "ستون‌ها برای نمایش"
   },
   {
+    "id": "join_rows_count",
+    "en": "Rows count",
+    "fa": "تعداد ردیف ها"
+  },
+  {
+    "id": "join_preview",
+    "en": "Preview table",
+    "fa": "پیش‌نمایش جدول"
+  },
+  {
     "id": "join_column_base",
     "en": "Base column",
     "fa": "ستون پایه"
@@ -3685,6 +3695,11 @@
     "fa": "محیط"
   },
   {
+    "id": "error_source_has_dependencies",
+    "en": "The source has dependencies",
+    "fa": "منبع وابستگی‌هایی دارد"
+  },
+  {
     "id": "error_no_layer",
     "en": "No source layer set",
     "fa": "لایه منبع ایجاد نشد"
@@ -4580,6 +4595,11 @@
     "fa": "نمایش"
   },
   {
+    "id": "project",
+    "en": "Projet",
+    "fa": "پروژه"
+  },
+  {
     "id": "views",
     "en": "Views",
     "fa": "بازدیدها "
@@ -5140,9 +5160,9 @@
     "fa": "حداقل به یک مدیر نیاز دارید "
   },
   {
-    "id": "error_views_need_data",
-    "en": "Deletion of a source disabled because at least one view depends on it",
-    "fa": "حذف منبع غیرفعال است زیرا حداقل یک نمایش به آن بستگی دارد "
+    "id": "error_views_require_source",
+    "en": "At least one view depends on this source.",
+    "fa": "دست کم یک نما به این منبع وابسته است."
   },
   {
     "id": "error_views_need_publishers",
@@ -5645,6 +5665,11 @@
     "fa": "جدول نماها بسته به منبع "
   },
   {
+    "id": "tbl_dependencies_source",
+    "en": "Table of objects depending on the source",
+    "fa": "جدول اشیاء وابسته به منبع"
+  },
+  {
     "id": "btn_validate_metadata",
     "en": "In depth validation",
     "fa": "در اعتبار سنجی عمیق "
@@ -5783,6 +5808,11 @@
     "id": "source_last_editor_email",
     "en": "Email of the last editor",
     "fa": "ایمیل آخرین ویرایشگر "
+  },
+  {
+    "id": "email_editor",
+    "en": "Editor's email",
+    "fa": "ایمیل ویراستار"
   },
   {
     "id": "additional_doc_desc",

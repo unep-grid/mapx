@@ -2095,6 +2095,16 @@
     "bn": "প্রদর্শনের জন্য কলামগুলি"
   },
   {
+    "id": "join_rows_count",
+    "en": "Rows count",
+    "bn": "সারির সংখ্যা"
+  },
+  {
+    "id": "join_preview",
+    "en": "Preview table",
+    "bn": "টেবিল প্রাকদর্শন"
+  },
+  {
     "id": "join_column_base",
     "en": "Base column",
     "bn": "বেস কলাম"
@@ -3685,6 +3695,11 @@
     "bn": "পরিবেশ "
   },
   {
+    "id": "error_source_has_dependencies",
+    "en": "The source has dependencies",
+    "bn": "সোর্সের নির্ভরতা রয়েছে"
+  },
+  {
     "id": "error_no_layer",
     "en": "No source layer set",
     "bn": "কোনও উত্স স্তর সেট নেই "
@@ -4580,6 +4595,11 @@
     "bn": "দেখুন "
   },
   {
+    "id": "project",
+    "en": "Projet",
+    "bn": "প্রকল্প"
+  },
+  {
     "id": "views",
     "en": "Views",
     "bn": "ভিউ "
@@ -5140,9 +5160,9 @@
     "bn": "কমপক্ষে একজন প্রশাসকের প্রয়োজন "
   },
   {
-    "id": "error_views_need_data",
-    "en": "Deletion of a source disabled because at least one view depends on it",
-    "bn": "উত্স মোছা অক্ষম করা হয়েছে কারণ কমপক্ষে একটি দর্শন তার উপর নির্ভর করে "
+    "id": "error_views_require_source",
+    "en": "At least one view depends on this source.",
+    "bn": "অন্তত একটি দৃশ্য এই উৎসের উপর নির্ভরশীল।"
   },
   {
     "id": "error_views_need_publishers",
@@ -5645,6 +5665,11 @@
     "bn": "উত্সের উপর নির্ভর করে দর্শনের সারণী "
   },
   {
+    "id": "tbl_dependencies_source",
+    "en": "Table of objects depending on the source",
+    "bn": "উৎস নির্ভর অবজেক্টের তালিকা"
+  },
+  {
     "id": "btn_validate_metadata",
     "en": "In depth validation",
     "bn": "গভীরতার বৈধতা "
@@ -5783,6 +5808,11 @@
     "id": "source_last_editor_email",
     "en": "Email of the last editor",
     "bn": "শেষ সম্পাদকের ইমেল "
+  },
+  {
+    "id": "email_editor",
+    "en": "Editor's email",
+    "bn": "সম্পাদকের ইমেইল"
   },
   {
     "id": "additional_doc_desc",

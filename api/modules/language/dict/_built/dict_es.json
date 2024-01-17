@@ -2095,6 +2095,16 @@
     "es": "Columnas para mostrar"
   },
   {
+    "id": "join_rows_count",
+    "en": "Rows count",
+    "es": "Conteo de filas"
+  },
+  {
+    "id": "join_preview",
+    "en": "Preview table",
+    "es": "Vista previa de la tabla"
+  },
+  {
     "id": "join_column_base",
     "en": "Base column",
     "es": "Columna base"
@@ -3685,6 +3695,11 @@
     "es": "Ambiente"
   },
   {
+    "id": "error_source_has_dependencies",
+    "en": "The source has dependencies",
+    "es": "La fuente tiene dependencias"
+  },
+  {
     "id": "error_no_layer",
     "en": "No source layer set",
     "es": "No hay colección de capa de fuente de datos"
@@ -4580,6 +4595,11 @@
     "es": "Vista"
   },
   {
+    "id": "project",
+    "en": "Projet",
+    "es": "Proyecto"
+  },
+  {
     "id": "views",
     "en": "Views",
     "es": "Vista"
@@ -5140,9 +5160,9 @@
     "es": "Al menos un administrador es necesario"
   },
   {
-    "id": "error_views_need_data",
-    "en": "Deletion of a source disabled because at least one view depends on it",
-    "es": "Eliminación desactivada porque hay una vista que depende de la fuente de datos"
+    "id": "error_views_require_source",
+    "en": "At least one view depends on this source.",
+    "es": "Al menos una vista depende de esta fuente."
   },
   {
     "id": "error_views_need_publishers",
@@ -5645,6 +5665,11 @@
     "es": "Tabla de vistas que depende de la fuente de datos"
   },
   {
+    "id": "tbl_dependencies_source",
+    "en": "Table of objects depending on the source",
+    "es": "Tabla de objetos que dependen de la fuente"
+  },
+  {
     "id": "btn_validate_metadata",
     "en": "In depth validation",
     "es": "Validación avanzada"
@@ -5783,6 +5808,11 @@
     "id": "source_last_editor_email",
     "en": "Email of the last editor",
     "es": "E-mail del último editor"
+  },
+  {
+    "id": "email_editor",
+    "en": "Editor's email",
+    "es": "Correo del editor"
   },
   {
     "id": "additional_doc_desc",

@@ -407,6 +407,7 @@ function elButtonIcon(key, opt) {
   opt = Object.assign(
     {},
     {
+      tag: "button",
       mode: "text_icon",
       classes: [],
       icon: null,
@@ -433,6 +434,7 @@ function elButtonIcon(key, opt) {
   const content = [
     addBadge ? el("span", { class: ["badge"] }, `${opt.badgeContent}`) : false,
     addText ? elSpanTranslate(key) : false,
+    addContent ? opt.content : false,
     addIcon
       ? el(
           "div",
@@ -440,7 +442,6 @@ function elButtonIcon(key, opt) {
           el("i", { class: ["fa", opt.icon] }),
         )
       : false,
-    addContent ? opt.content : false,
   ];
 
   if (opt.mode === "icon_text") {
@@ -448,7 +449,7 @@ function elButtonIcon(key, opt) {
   }
 
   const elBtn = el(
-    "button",
+    opt.tag,
     {
       type: "button",
       class: ["btn", "btn-default", "btn-icon", ...opt.classes],
@@ -478,26 +479,31 @@ function elButtonIcon(key, opt) {
  * @param {String} opt.mode Mode "text_icon"(default)"icon_text"
  * @param {Object} opt.dataset Button dataset
  * @param {Function} opt.action Callback when clicked
+ * @param {Element} opt.content Additinal content
  * @return {Element}
  */
 export function elButtonFa(key, opt) {
   opt = Object.assign(
     {},
     {
+      tag: "button",
       icon: "question",
       action: () => {},
       mode: "text_icon",
       dataset: {},
+      content: null,
     },
     opt,
   );
   return elButtonIcon(key, {
     icon: `fa-${opt.icon}`,
     mode: opt.mode,
+    tag: opt.tag,
     config: {
       on: { click: opt.action },
     },
     dataset: opt.dataset,
+    content: opt.content,
   });
 }
 

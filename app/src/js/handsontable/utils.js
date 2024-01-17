@@ -62,3 +62,52 @@ const regDatePg = new RegExp("^date|^timestamp");
 export function isPgTypeDate(type) {
   return regDatePg.test(type);
 }
+
+export class TableResizer {
+  constructor(hot, elTable, elObserve) {
+    this._hot = hot;
+    this._elTable = elTable;
+    this._elObserve = elObserve;
+    this._timeout = 200;
+    this._to = null;
+    this._init = false;
+    this.init();
+  }
+
+  disconnect() {
+    return this._resizeObserver.disconnect();
+  }
+
+  init() {
+    if (this._init) {
+      return;
+    }
+    this._resizeObserver = new ResizeObserver(this.tableRender.bind(this));
+    this._resizeObserver.observe(this._elObserve);
+    this.tableRender();
+    this._init = true;
+  }
+
+  tableRender() {
+    const hot = this._hot;
+    clearTimeout(this._to);
+    const elTable = this._elTable;
+    const elTableParent = elTable.parentElement;
+
+    this._to = setTimeout(() => {
+      if (!hot || !hot.render) {
+        return;
+      }
+      const styleParent = getComputedStyle(elTableParent);
+      const bboxParent = this._elTable.parentElement.getBoundingClientRect();
+      const padW =
+        parseInt(styleParent.paddingLeft) + parseInt(styleParent.paddingRight);
+      const padH =
+        parseInt(styleParent.paddingTop) + parseInt(styleParent.paddingBottom);
+      this._elTable.style.width = bboxParent.width - padW + "px";
+      this._elTable.style.height = bboxParent.height - padH + "px";
+
+      hot.render();
+    }, this._timeout);
+  }
+}

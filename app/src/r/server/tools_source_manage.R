@@ -12,11 +12,13 @@ observeEvent(input$btnEditSourceSettings, {
 
 
 observeEvent(input$selectSourceLayerForManage, {
-  data <- input$selectSourceLayerForManage
-  if (isEmpty(data$idSource)) {
-    return()
-  }
-  reactData$triggerSourceManage <- data
+  mxCatch(title = "Edit source : trigger manage", {
+    data <- input$selectSourceLayerForManage
+    if (isEmpty(data$idSource)) {
+      return()
+    }
+    reactData$triggerSourceManage <- data
+  })
 })
 
 
@@ -36,16 +38,15 @@ observeEvent(reactData$triggerSourceManage, {
       return()
     }
 
+
     idSource <- layer
-    sourceData <- mxDbGetQuery(sprintf("
-          SELECT readers, editors, type, global
-          FROM mx_sources
-          WHERE id ='%1$s'", idSource))
+    sourceData <- mxDbGetSourceData(idSource)
     services <- mxDbGetSourceServices(idSource)
-    readers <- mxFromJSON(sourceData$readers)
-    editors <- mxFromJSON(sourceData$editors)
+    readers <- sourceData$readers
+    editors <- sourceData$editors
     global <- isTRUE(sourceData$global)
     type <- sourceData$type
+
     #
     # Who can view this
     #
@@ -61,22 +62,55 @@ observeEvent(reactData$triggerSourceManage, {
     #
     # Format view list by email
     #
-    data <- reactTableViewsUsingSource()
-    data <- data[, c("title", "email")]
-    hasRow <- isTRUE(nrow(data) > 0)
+    viewsTable <- reactTableViewsUsingSource()
+    viewsTable <- viewsTable[, c(
+      "title",
+      "email_editor",
+      "title_project"
+    )]
+    hasViews <- isNotEmpty(viewsTable)
 
-    if (hasRow) {
-      names(data) <- c(
-        d("view_title", w = FALSE, lang = language),
-        d("login_email", w = FALSE, lang = language)
+
+    if (hasViews) {
+      names(viewsTable) <- c(
+        d("title", w = FALSE, lang = language),
+        d("email_editor", w = FALSE, lang = language),
+        d("project", w = FALSE, lang = language)
       )
 
       tblViews <- tagList(
         tags$label(d("tbl_views_depending_source", language)),
-        mxTableToHtml(data)
+        tableOutput("tbl_views_depending_source")
       )
     } else {
       tblViews <- tagList()
+    }
+
+
+    #
+    # Also list hidden dependencies
+    #
+    tableDependencies <- reactDependenciesUsingSource()
+    tableDependencies <- tableDependencies[, c(
+      "title",
+      "email_editor",
+      "title_project"
+    )]
+    hasDependencies <- isNotEmpty(tableDependencies)
+
+    if (hasDependencies) {
+      names(tableDependencies) <- c(
+        d("title", w = FALSE, lang = language),
+        d("email_editor", w = FALSE, lang = language),
+        d("project", w = FALSE, lang = language)
+      )
+
+      tblDependencies <- tagList(
+        tags$label(d("tbl_dependencies_source", language)),
+        tableOutput("tbl_dependencies_source")
+      )
+    } else {
+      tblDependencies <- tagList()
     }
 
 
@@ -120,37 +154,29 @@ observeEvent(reactData$triggerSourceManage, {
         value = isTRUE(global),
       ),
       tblViews,
+      tblDependencies,
       uiOutput("uiValidateSourceSettings")
-    )
-
-
-    btnDelete <- actionButton(
-      inputId = "btnDeleteSource",
-      class = "mx-modal-btn-float-right",
-      label = d("btn_delete", language)
     )
 
     btnList <- tagList(
       actionButton(
         inputId = "btnUpdateSource",
         label = d("btn_update", language)
+      ),
+      actionButton(
+        inputId = "btnDeleteSource",
+        class = "mx-modal-btn-float-right",
+        label = d("btn_delete", language)
       )
     )
-
-    #
-    # Todo : check why btnDelete 'disabled' attribute
-    # could not be set using actionButton(.... disabled=FALSE);
-    #
-    if (!hasRow) {
-      btnList <- tagList(btnList, btnDelete)
-    }
 
     mxModal(
       id = "editSourceSettings",
       title = d("source_edit_settings", language),
       content = uiOut,
       buttons = btnList,
-      textCloseButton = d("btn_close", language)
+      textCloseButton = d("btn_close", language),
+      minWidth = 700
     )
 
     #
@@ -161,6 +187,19 @@ observeEvent(reactData$triggerSourceManage, {
       disabled = !isRoot,
       checked = global
     )
+
+
+    if (hasViews) {
+      output$tbl_views_depending_source <- renderTable({
+        viewsTable
+      })
+    }
+
+    if (hasDependencies) {
+      output$tbl_dependencies_source <- renderTable({
+        tableDependencies
+      })
+    }
   })
 })
 
@@ -169,62 +208,71 @@ observeEvent(reactData$triggerSourceManage, {
 # Validation
 #
 observe({
-  userRole <- getUserRole()
-  idSource <- reactData$triggerSourceManage$idSource
-  language <- reactData$language
-  readers <- input$selectSourceReadersUpdate
-  editors <- input$selectSourceEditorsUpdate
-  errors <- logical(0)
-  warning <- logical(0)
-  userData <- reactUser$data
-  idUser <- .get(userData, c("id"))
-  hasNoLayer <- noDataCheck(idSource)
-  hasNoReaders <- !isTRUE("publishers" %in% readers)
-  isPublisher <- isTRUE(userRole$publisher)
+  mxCatch(title = "Edit source validate", {
+    userRole <- getUserRole()
+    idSource <- reactData$triggerSourceManage$idSource
+    language <- reactData$language
+    readers <- input$selectSourceReadersUpdate
+    editors <- input$selectSourceEditorsUpdate
+    errors <- logical(0)
+    warning <- logical(0)
+    userData <- reactUser$data
+    idUser <- .get(userData, c("id"))
+    hasNoLayer <- isEmpty(idSource)
+    hasNoReaders <- !isTRUE("publishers" %in% readers)
+    isPublisher <- isTRUE(userRole$publisher)
 
-  if (hasNoLayer || !isPublisher) {
-    return()
-  }
 
-  data <- reactTableViewsUsingSource()
 
-  isolate({
-    hasData <- !noDataCheck(data)
-    hasViewsFromOthers <- !isTRUE(all(data$editor %in% idUser))
-
-    blockUpdate <- (hasNoLayer || (hasData && hasNoReaders && hasViewsFromOthers))
-    blockDelete <- (hasNoLayer || (hasData))
-
-    errors["error_no_layer"] <- hasNoLayer
-
-    if (!hasNoLayer) {
-      errors["error_views_need_publishers"] <- blockUpdate
-      errors["error_views_need_data"] <- hasData
+    if (hasNoLayer || !isPublisher) {
+      return()
     }
 
-    errors <- errors[errors]
-    hasError <- length(errors) > 0
+    views <- reactTableViewsUsingSource()
+    dependencies <- reactDependenciesUsingSource()
 
-    reactData$sourceEditBlockUpdate <- blockUpdate
-    reactData$sourceEditBlockDelete <- blockDelete
+    isolate({
+      hasViews <- isNotEmpty(views)
+      hasDependencies <- isNotEmpty(dependencies)
+      hasViewsFromOthers <- !isTRUE(all(views$id_editor %in% idUser))
 
-    output$uiValidateSourceSettings <- renderUI(
-      mxErrorsToUi(
-        errors = errors,
-        warning = warning,
-        language = language
+      blockUpdate <- hasViews && hasNoReaders && hasViewsFromOthers
+      blockDelete <- hasViews || hasDependencies
+
+      errors["error_views_need_publishers"] <- blockUpdate
+      errors["error_views_require_source"] <- hasViews
+      errors["error_source_has_dependencies"] <- hasDependencies
+
+      errors <- errors[errors]
+      hasError <- length(errors) > 0
+
+      reactData$sourceEditBlockUpdate <- blockUpdate
+      reactData$sourceEditBlockDelete <- blockDelete
+
+      output$uiValidateSourceSettings <- renderUI(
+        mxErrorsToUi(
+          errors = errors,
+          warning = warning,
+          language = language
+        )
       )
-    )
 
-    mxToggleButton(
-      id = "btnUpdateSource",
-      disable = blockUpdate
-    )
+      mxToggleButton(
+        id = "btnUpdateSource",
+        disable = blockUpdate
+      )
 
-    mxToggleButton(
-      id = "btnDeleteSource",
-      disable = blockDelete
-    )
+      mxToggleButton(
+        id = "btnDeleteSource",
+        disable = blockDelete
+      )
+
+      mxToggleButton(
+        id = "checkSourceGlobal",
+        disable = hasDependencies || hasViews
+      )
+    })
+
   })
 })
 
@@ -259,7 +307,7 @@ observeEvent(input$btnDeleteSource, {
     content = tags$span(d("source_confirm_remove", language)),
     buttons = btnList,
     textCloseButton = d("btn_close", language),
-    addBackground = T
+    addBackground = TRUE
   )
 })
 
@@ -271,39 +319,56 @@ observeEvent(input$btnDeleteSource, {
 observeEvent(input$btnDeleteSourceConfirm, {
   blockDelete <- isTRUE(reactData$sourceEditBlockDelete)
 
-  if (blockDelete) {
-    return()
-  }
-
   idSource <- reactData$triggerSourceManage$idSource
+  mxCatch(title = "Edit source : delete ", {
+    if (blockDelete) {
+      stop("Deletion not possible : blocked")
+    }
 
-  project <- reactData$project
-  language <- reactData$language
-  idUser <- reactUser$data$id
-  userRoles <- getUserRole()
+    #
+    # Last check
+    # prevent deletion if concurent changes
+    #
+    hasDependencies <- isNotEmpty(mxDbGetTableDependencies(idSource))
+    hasViews <- isNotEmpty(mxDbGetViewsTableBySourceId(idSource))
 
-  mxModal(
-    id = "editSourceManageDeleteConfirm",
-    close = TRUE
-  )
+    if (hasDependencies || hasView) {
+      stop("Deletion not possible : state changed")
+    }
 
-  mxModal(
-    id = "editSourceSettings",
-    close = TRUE
-  )
+    project <- reactData$project
+    language <- reactData$language
+    idUser <- reactUser$data$id
+    userRoles <- getUserRole()
 
-  mxDbDropLayer(idSource)
 
-  reactData$updateEditSourceLayerList <- runif(1)
 
-  layers <- reactListEditSources()
 
-  mxModal(
-    id = "uiConfirmSourceRemoveDone",
-    title = d("source_removed"),
-    content = tags$span(d("source_removed", lang = language)),
-    textCloseButton = d("btn_close", language)
-  )
+
+
+    mxModal(
+      id = "editSourceManageDeleteConfirm",
+      close = TRUE
+    )
+
+    mxModal(
+      id = "editSourceSettings",
+      close = TRUE
+    )
+
+    mxDbDropLayer(idSource)
+
+    reactData$updateEditSourceLayerList <- runif(1)
+
+    layers <- reactListEditSources()
+
+    mxModal(
+      id = "uiConfirmSourceRemoveDone",
+      title = d("source_removed"),
+      content = tags$span(d("source_removed", lang = language)),
+      textCloseButton = d("btn_close", language)
+    )
+  })
 })
 
 
@@ -311,6 +376,7 @@ observeEvent(input$btnDeleteSourceConfirm, {
 # Update source
 #
 observeEvent(input$btnUpdateSource, {
+
   userRole <- getUserRole()
   idSource <- reactData$triggerSourceManage$idSource
   project <- reactData$project
@@ -319,20 +385,32 @@ observeEvent(input$btnUpdateSource, {
   email <- reactUser$data$email
   isPublisher <- isTRUE(userRole$publisher)
   isRoot <- isTRUE(userRole$root)
+  idGroupsServices <- input$selectSourceServicesUpdate
+  readers <- input$selectSourceReadersUpdate
+  editors <- input$selectSourceEditorsUpdate
+  isGlobal <- input$checkSourceGlobal
 
-  mxCatch(title = "btn update manage source", {
+
+  mxCatch(title = "Edit source : update", {
     blockUpdate <- isTRUE(reactData$sourceEditBlockUpdate)
 
     if (blockUpdate || !isPublisher) {
       return()
     }
 
-    idGroupsServicesOld <- mxDbGetSourceServices(idSource)
-    idGroupsServices <- input$selectSourceServicesUpdate
-
-    readers <- input$selectSourceReadersUpdate
-    editors <- input$selectSourceEditorsUpdate
-    isGlobal <- input$checkSourceGlobal
+    #
+    # Last check
+    # -> stop if global has been changed and a join or a view has been created
+    # in the meantime
+    #
+    if (isRoot) {
+      isGlobalCurrent <- mxDbGetSourceData(idSource)$global
+      hasDependencies <- isNotEmpty(mxDbGetTableDependencies(idSource))
+      hasViews <- isNotEmpty(mxDbGetViewsTableBySourceId(idSource))
+      if (isGlobal != isGlobalCurrent && (hasDependencies || hasViews)) {
+        stop("Update of global not possible : concurrency issue ?")
+      }
+    }
 
     #
     # Control roles
@@ -376,6 +454,7 @@ observeEvent(input$btnUpdateSource, {
       column = "editors",
       value = as.list(editors)
     )
+
 
     if (isRoot) {
       mxDbUpdate(

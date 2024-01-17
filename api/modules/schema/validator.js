@@ -1,5 +1,6 @@
 import Ajv from "ajv";
 import { columnsExist, columnExists, isSourceRegistered } from "#mapx/db_utils";
+import { validateJoins } from "#mapx/db_utils";
 import { isObject } from "@fxi/mx_valid";
 
 /**
@@ -135,10 +136,13 @@ export class Validator {
           source = cv.resolveDataPath(path, dataPath, property);
           isValid = await columnExists(value, source, cv._client);
           break;
+        case "valid_joins":
+          isValid = await validateJoins(value, cv._client);
+          break;
+
         default:
           isValid = false;
       }
-
 
       return isValid;
     } catch (error) {

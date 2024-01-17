@@ -5447,6 +5447,32 @@
     "ps": "د ښودلو لپاره کالمونه"
   },
   {
+    "id": "join_rows_count",
+    "en": "Rows count",
+    "fr": "Nombre de lignes",
+    "zh": "行数",
+    "es": "Conteo de filas",
+    "ar": "عدد الصفوف",
+    "ru": "Количество строк",
+    "de": "Anzahl der Zeilen",
+    "bn": "সারির সংখ্যা",
+    "fa": "تعداد ردیف ها",
+    "ps": "د قطارونو شمېر"
+  },
+  {
+    "id": "join_preview",
+    "en": "Preview table",
+    "fr": "Prévisualiser la table",
+    "zh": "预览表格",
+    "es": "Vista previa de la tabla",
+    "ar": "معاينة الجدول",
+    "ru": "Предварительный просмотр таблицы",
+    "de": "Vorschau der Tabelle",
+    "bn": "টেবিল প্রাকদর্শন",
+    "fa": "پیش‌نمایش جدول",
+    "ps": "د جدول مخکتنه"
+  },
+  {
     "id": "join_column_base",
     "en": "Base column",
     "fr": "Colonne de base",
@@ -5578,16 +5604,42 @@
   },
   {
     "id": "join_meta_title",
-    "en": "Join metadata",
-    "fr": "Rejoindre les métadonnées",
-    "zh": "加入元数据",
-    "es": "Unirse a metadatos",
-    "ar": "الانضمام إلى البيانات الوصفية",
-    "ru": "Присоединиться к метаданным",
-    "de": "Metadaten beitreten",
-    "bn": "মেটাডেটা যোগ দিন",
-    "fa": "به فراداده بپیوندید",
-    "ps": "د میټاډاټا سره یوځای شئ"
+    "en": "Metadata for the join",
+    "fr": "Métadonnées pour la jointure",
+    "zh": "连接的元数据",
+    "es": "Metadatos para la unión",
+    "ar": "بيانات تعريفية للربط",
+    "ru": "Метаданные для объединения",
+    "de": "Metadaten für die Verknüpfung",
+    "bn": "জয়েনের জন্য মেটাডেটা",
+    "fa": "متادیتا برای اتصال",
+    "ps": "د نښلولو لپاره میټاډیټا"
+  },
+  {
+    "id": "btn_join_editor",
+    "en": "Edit Table Join",
+    "fr": "Editer une jointure",
+    "zh": "编辑表连接",
+    "es": "Editar unión de tablas",
+    "ar": "تحرير انضمام الجدول",
+    "ru": "Редактировать соединение таблиц",
+    "de": "Tabellenverknüpfung bearbeiten",
+    "bn": "টেবিল জয়েন সম্পাদনা করুন",
+    "fa": "ویرایش پیوست جدول",
+    "ps": "د جدول نښلول سمول"
+  },
+  {
+    "id": "btn_join_editor_new",
+    "en": "Create New Table Join",
+    "fr": "Créer une nouvelle jointure de table",
+    "zh": "创建新表连接",
+    "es": "Crear nueva unión de tablas",
+    "ar": "إنشاء انضمام جدول جديد",
+    "ru": "Создать новое соединение таблиц",
+    "de": "Neue Tabellenverknüpfung erstellen",
+    "bn": "নতুন টেবিল জয়েন তৈরি করুন",
+    "fa": "ایجاد پیوست جدول جدید",
+    "ps": "نوی د جدول نښلول جوړول"
   },
   {
     "id": "error_notset",
@@ -7930,6 +7982,32 @@
     "de": "Schnittfläche berechnen "
   },
   {
+    "id": "check_source_global_enable",
+    "en": "Global source",
+    "fr": "Source globale",
+    "es": "Fuente global",
+    "ru": "Глобальный источник",
+    "zh": "全球来源",
+    "ar": "المصدر العالمي",
+    "fa": "منبع جهانی",
+    "ps": "نړیوال سرچینه",
+    "bn": "বিশ্বব্যাপী উৎস",
+    "de": "Globale Quelle"
+  },
+  {
+    "id": "check_source_global_enable_desc",
+    "en": "If enabled, this source will be available in all projects",
+    "fr": "Si activé, cette source sera disponible dans tous les projets",
+    "es": "Si está habilitado, esta fuente estará disponible en todos los proyectos",
+    "ru": "Если включено, этот источник будет доступен во всех проектах",
+    "zh": "如果启用，此来源将在所有项目中可用",
+    "ar": "إذا تم تفعيله، سيكون هذا المصدر متاحًا في جميع المشاريع",
+    "fa": "اگر فعال شود، این منبع در تمام پروژه‌ها در دسترس خواهد بود",
+    "ps": "که فعاله شي، دا سرچینه به په ټولو پروژو کې شتون ولري",
+    "bn": "সক্রিয় করা হলে, এই উৎস সমস্ত প্রকল্পে উপলব্ধ থাকবে",
+    "de": "Wenn aktiviert, wird diese Quelle in allen Projekten verfügbar sein"
+  },
+  {
     "id": "source_overlap_mode_create_source",
     "en": "Create new layer based on the intersection",
     "fr": "Créer une nouvelle couche basée sur l'intersection",
@@ -9529,6 +9607,19 @@
     "de": "Umgebung "
   },
   {
+    "id": "error_source_has_dependencies",
+    "en": "The source has dependencies",
+    "fr": "La source a des dépendances",
+    "es": "La fuente tiene dependencias",
+    "ru": "Источник имеет зависимости",
+    "zh": "源文件有依赖",
+    "ar": "المصدر له تبعيات",
+    "fa": "منبع وابستگی‌هایی دارد",
+    "ps": "سرچینه لرې والی لري",
+    "bn": "সোর্সের নির্ভরতা রয়েছে",
+    "de": "Die Quelle hat Abhängigkeiten"
+  },
+  {
     "id": "error_no_layer",
     "en": "No source layer set",
     "fr": "Pas de couche source attribuée",
@@ -10790,6 +10881,19 @@
     "de": "Email "
   },
   {
+    "id": "email_editor",
+    "en": "Editor's email",
+    "fr": "Email de l'éditeur",
+    "es": "correo electrónico del editor",
+    "ru": "электронная почта редактора",
+    "zh": "编辑的电子邮件",
+    "ar": "البريد الإلكتروني للمحرر",
+    "fa": "ایمیل سردبیر",
+    "ps": "د مدیر بریښنالیک",
+    "bn": "সম্পাদকের ইমেইল",
+    "de": "E-Mail des Herausgebers"
+  },
+  {
     "id": "from",
     "en": "From",
     "fr": "De",
@@ -11854,6 +11958,19 @@
     "ps": "ښکاره کول",
     "bn": "দেখুন ",
     "de": "Aussicht "
+  },
+  {
+    "id": "project",
+    "en": "Projet",
+    "fr": "Projet",
+    "es": "Proyecto",
+    "ru": "Проект",
+    "zh": "项目",
+    "ar": "بروجيت",
+    "fa": "پروژه",
+    "ps": "پروژه",
+    "bn": "প্রকল্প",
+    "de": "Projekt"
   },
   {
     "id": "views",
@@ -14623,6 +14740,19 @@
     "ps": "د سرچینو پراساس د لیدونو جدول ",
     "bn": "উত্সের উপর নির্ভর করে দর্শনের সারণী ",
     "de": "Ansichtstabelle je nach Quelle "
+  },
+  {
+    "id": "tbl_dependencies_source",
+    "en": "Table of objects depending on the source",
+    "fr": "Table des objets dépendants de la source",
+    "es": "Tabla de objetos que dependen de la fuente",
+    "ru": "Таблица объектов, зависящих от источника",
+    "zh": "依赖源的对象表",
+    "ar": "جدول الكائنات المعتمدة على المصدر",
+    "fa": "جدول اشیاء وابسته به منبع",
+    "ps": "د سرچینې پورې اړوند شیانو جدول",
+    "bn": "উৎস নির্ভর অবজেক্টের তালিকা",
+    "de": "Tabelle der vom Quell abhängigen Objekte"
   },
   {
     "id": "btn_validate_metadata",

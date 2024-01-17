@@ -2354,6 +2354,19 @@
     "de": ""
   },
   {
+    "id": "error_source_has_dependencies",
+    "en": "The source has dependencies",
+    "fr": "La source a des dépendances",
+    "es": "La fuente tiene dependencias",
+    "ru": "Источник имеет зависимости",
+    "zh": "源文件有依赖",
+    "ar": "المصدر له تبعيات",
+    "fa": "منبع وابستگی‌هایی دارد",
+    "ps": "سرچینه لرې والی لري",
+    "bn": "সোর্সের নির্ভরতা রয়েছে",
+    "de": "Die Quelle hat Abhängigkeiten"
+  },
+  {
     "id": "error_no_layer",
     "en": "No source layer set",
     "fr": "Pas de couche source attribuée",
@@ -4684,6 +4697,19 @@
     "de": ""
   },
   {
+    "id": "project",
+    "en": "Projet",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "views",
     "en": "Views",
     "fr": "Vues",
@@ -6142,17 +6168,17 @@
     "de": ""
   },
   {
-    "id": "error_views_need_data",
-    "en": "Deletion of a source disabled because at least one view depends on it",
-    "fr": "La suppression d'une source est désactivée tant qu'une vue dépend de cette source",
-    "es": "Eliminación desactivada porque hay una vista que depende de la fuente de datos",
-    "ru": "",
-    "zh": "禁用源的删除，因为至少一个视图依赖此源",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
+    "id": "error_views_require_source",
+    "en": "At least one view depends on this source.",
+    "fr": "Au moins une vue dépend de cette source.",
+    "es": "Al menos una vista depende de esta fuente.",
+    "ru": "По крайней мере одно представление зависит от этого источника.",
+    "zh": "至少有一个视图依赖于此源。",
+    "ar": "يعتمد مشهد واحد على الأقل على هذا المصدر.",
+    "fa": "دست کم یک نما به این منبع وابسته است.",
+    "ps": "لږترلږه یوه کتنه د دې سرچینې پورې اړه لري.",
+    "bn": "অন্তত একটি দৃশ্য এই উৎসের উপর নির্ভরশীল।",
+    "de": "Mindestens eine Ansicht hängt von dieser Quelle ab."
   },
   {
     "id": "error_views_need_publishers",
@@ -7455,6 +7481,19 @@
     "de": ""
   },
   {
+    "id": "tbl_dependencies_source",
+    "en": "Table of objects depending on the source",
+    "fr": "Table des objets dépendants de la source",
+    "es": "Tabla de objetos que dependen de la fuente",
+    "ru": "Таблица объектов, зависящих от источника",
+    "zh": "依赖源的对象表",
+    "ar": "جدول الكائنات المعتمدة على المصدر",
+    "fa": "جدول اشیاء وابسته به منبع",
+    "ps": "د سرچینې پورې اړوند شیانو جدول",
+    "bn": "উৎস নির্ভর অবজেক্টের তালিকা",
+    "de": "Tabelle der vom Quell abhängigen Objekte"
+  },
+  {
     "id": "btn_validate_metadata",
     "en": "In depth validation",
     "fr": "Validation avancée",
@@ -7817,6 +7856,19 @@
     "ps": "",
     "bn": "",
     "de": ""
+  },
+  {
+    "id": "email_editor",
+    "en": "Editor's email",
+    "fr": "Email de l'éditeur",
+    "es": "Correo del editor",
+    "ru": "Электронная почта редактора",
+    "zh": "编辑的电子邮件",
+    "ar": "بريد الناشر الإلكتروني",
+    "fa": "ایمیل ویراستار",
+    "ps": "د مدیر برېښنالیک",
+    "bn": "সম্পাদকের ইমেইল",
+    "de": "E-Mail des Herausgebers"
   },
   {
     "id": "additional_doc_desc",

@@ -2095,6 +2095,16 @@
     "ps": "د ښودلو لپاره کالمونه"
   },
   {
+    "id": "join_rows_count",
+    "en": "Rows count",
+    "ps": "د قطارونو شمېر"
+  },
+  {
+    "id": "join_preview",
+    "en": "Preview table",
+    "ps": "د جدول مخکتنه"
+  },
+  {
     "id": "join_column_base",
     "en": "Base column",
     "ps": "بنسټ کالم"
@@ -3685,6 +3695,11 @@
     "ps": "چاپېریال"
   },
   {
+    "id": "error_source_has_dependencies",
+    "en": "The source has dependencies",
+    "ps": "سرچینه لرې والی لري"
+  },
+  {
     "id": "error_no_layer",
     "en": "No source layer set",
     "ps": "د سرچینې لایه نده جوړه شوې"
@@ -4580,6 +4595,11 @@
     "ps": "ښکاره کول"
   },
   {
+    "id": "project",
+    "en": "Projet",
+    "ps": "پروژه"
+  },
+  {
     "id": "views",
     "en": "Views",
     "ps": "لیدونه "
@@ -5140,9 +5160,9 @@
     "ps": "لږترلږه یو اداره وغواړئ "
   },
   {
-    "id": "error_views_need_data",
-    "en": "Deletion of a source disabled because at least one view depends on it",
-    "ps": "د سرچینې ړنګول معلول شوي ځکه چې لږترلږه یو نظر پدې پورې اړه لري "
+    "id": "error_views_require_source",
+    "en": "At least one view depends on this source.",
+    "ps": "لږترلږه یوه کتنه د دې سرچینې پورې اړه لري."
   },
   {
     "id": "error_views_need_publishers",
@@ -5645,6 +5665,11 @@
     "ps": "د سرچینو پراساس د لیدونو جدول "
   },
   {
+    "id": "tbl_dependencies_source",
+    "en": "Table of objects depending on the source",
+    "ps": "د سرچینې پورې اړوند شیانو جدول"
+  },
+  {
     "id": "btn_validate_metadata",
     "en": "In depth validation",
     "ps": "ژور اعتبار "
@@ -5783,6 +5808,11 @@
     "id": "source_last_editor_email",
     "en": "Email of the last editor",
     "ps": "د وروستي مدیر بریښنالیک "
+  },
+  {
+    "id": "email_editor",
+    "en": "Editor's email",
+    "ps": "د مدیر برېښنالیک"
   },
   {
     "id": "additional_doc_desc",

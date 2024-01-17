@@ -2095,6 +2095,16 @@
     "de": "Anzuzeigende Spalten"
   },
   {
+    "id": "join_rows_count",
+    "en": "Rows count",
+    "de": "Anzahl der Zeilen"
+  },
+  {
+    "id": "join_preview",
+    "en": "Preview table",
+    "de": "Vorschau der Tabelle"
+  },
+  {
     "id": "join_column_base",
     "en": "Base column",
     "de": "Basis-Spalte"
@@ -3685,6 +3695,11 @@
     "de": "Umgebung "
   },
   {
+    "id": "error_source_has_dependencies",
+    "en": "The source has dependencies",
+    "de": "Die Quelle hat Abhängigkeiten"
+  },
+  {
     "id": "error_no_layer",
     "en": "No source layer set",
     "de": "Keine Quellenebene festgelegt "
@@ -4580,6 +4595,11 @@
     "de": "Aussicht "
   },
   {
+    "id": "project",
+    "en": "Projet",
+    "de": "Projekt"
+  },
+  {
     "id": "views",
     "en": "Views",
     "de": "Ansichten "
@@ -5140,9 +5160,9 @@
     "de": "Benötigen Sie mindestens einen Administrator "
   },
   {
-    "id": "error_views_need_data",
-    "en": "Deletion of a source disabled because at least one view depends on it",
-    "de": "Das Löschen einer Quelle ist deaktiviert, da mindestens eine Ansicht davon abhängt "
+    "id": "error_views_require_source",
+    "en": "At least one view depends on this source.",
+    "de": "Mindestens eine Ansicht hängt von dieser Quelle ab."
   },
   {
     "id": "error_views_need_publishers",
@@ -5645,6 +5665,11 @@
     "de": "Ansichtstabelle je nach Quelle "
   },
   {
+    "id": "tbl_dependencies_source",
+    "en": "Table of objects depending on the source",
+    "de": "Tabelle der vom Quell abhängigen Objekte"
+  },
+  {
     "id": "btn_validate_metadata",
     "en": "In depth validation",
     "de": "Eingehende Validierung "
@@ -5783,6 +5808,11 @@
     "id": "source_last_editor_email",
     "en": "Email of the last editor",
     "de": "E-Mail des letzten Editors "
+  },
+  {
+    "id": "email_editor",
+    "en": "Editor's email",
+    "de": "E-Mail des Herausgebers"
   },
   {
     "id": "additional_doc_desc",

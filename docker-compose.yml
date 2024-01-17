@@ -247,9 +247,10 @@ services:
     restart: on-failure
     networks:
       - frontend
-      - traefik-frontend
+      - traefik-frontend 
     logging:
-      driver: none
+      driver: 'none' 
+    entrypoint: ["/bin/sh", "-c", "MailHog > /dev/null 2>&1"]
     command:
       - --invite-jim=false
       - --jim-reject-sender=0.5

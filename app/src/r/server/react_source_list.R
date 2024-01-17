@@ -1,6 +1,3 @@
-
-
-
 observe({
   updateSourceLayer <- reactData$updateEditSourceLayerList
   updateMgl <- input$mx_client_update_source_list
@@ -65,7 +62,7 @@ reactListReadSources <- reactive({
 })
 reactListReadSourcesVector <- reactive({
   layers <- reactTableReadSources()
-  layers <- layers[layers$type %in% c("vector","join"), ]
+  layers <- layers[layers$type %in% c("vector", "join"), ]
 
   if (noDataCheck(layers)) {
     layers <- list("noLayer")
@@ -106,7 +103,7 @@ reactListEditSources <- reactive({
 })
 reactListEditSourcesVector <- reactive({
   layers <- reactTableEditSources()
-  layers <- layers[layers$type %in% c("vector","join"), ]
+  layers <- layers[layers$type %in% c("vector", "join"), ]
   if (noDataCheck(layers)) {
     layers <- list("noLayer")
   } else {
@@ -120,7 +117,6 @@ reactListEditSourcesVector <- reactive({
 # Reactive table of views depending on selected source
 #
 reactTableViewsUsingSource <- reactive({
-
   #
   # Values
   #
@@ -136,5 +132,15 @@ reactTableViewsUsingSource <- reactive({
   #
   # Get views table
   #
-  mxDbGetViewsIdBySourceId(idSource, language = language)
+  mxDbGetViewsTableBySourceId(idSource, language = language)
+})
+
+#
+# List source/table dependencies
+#
+reactDependenciesUsingSource <- reactive({
+  idSource <- reactData$triggerSourceManage$idSource
+  update <- reactData$updateViewList
+  updateFetchOnly <- reactData$updateViewListFetchOnly
+  mxDbGetTableDependencies(idSource)
 })

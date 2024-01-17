@@ -5,8 +5,9 @@
 .mx .table > thead > tr > td,
 .mx .table > thead > tr > th {
   width: 1%;
+  border-color: var(--mx_ui_border);
 }
 
-.mx .table {
-  word-break: break-word;
+.mx .table > tbody > tr:nth-child(odd) {
+  background-color: var(--mx_ui_background_accent);
 }

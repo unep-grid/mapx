@@ -1,4 +1,3 @@
-
 #' Check if mx view name exists in postgresql
 #'
 #' @param viewName view name to check
@@ -42,48 +41,74 @@ mxDbViewTitleExists <- function(title, project, languages = NULL) {
 
 
 
-#' Get a list of view id currently associated with a source
+#' Retrieve View Table Entries by Source ID
 #'
-#' @param idSource Source (layer) id
+#' This function fetches entries from the views table based on the provided
+#' source ID, including PG views (join).
 #'
-mxDbGetViewsIdBySourceId <- function(idSource, selectAlsoByMask = TRUE, language = "en") {
-  tableName <- "mx_views_latest"
-  strMask <- ifelse(
-    isTRUE(selectAlsoByMask),
-    "OR data#>>'{\"source\",\"layerInfo\",\"maskName\"}' = '" + idSource + "'",
-    ""
+#' @param idSource The source ID used to filter views.
+#' @param language The language preference for the title (default is "en").
+#'
+#' @return A dataframe including view and project titles, editor details,
+#'
+mxDbGetViewsTableBySourceId <- function(
+  idSource,
+  language = "en"
+) {
+  dependencyTable <- mxDbGetTableDependencies(idSource)
+
+  idSources <- c(dependencyTable$id, idSource)
+  do.call(
+    rbind,
+    lapply(
+      idSources, mxDbGetViewsTableBySourceIdNoDep,
+      language
+    )
+  )
+}
+
+mxDbGetViewsTableBySourceIdNoDep <- function(
+  idSource,
+  language = "en"
+) {
+  sql <- sprintf(
+    "
+  SELECT
+  u.email AS email_editor,
+  u.id  AS id_editor,
+  v.data#>>'{attribute,name}' AS variable,
+  v.pid,
+  v.readers ? 'public' as is_public,
+  v.id AS id,
+  COALESCE(
+     NULLIF(v.data#>>'{title,%1$s}',''),
+     NULLIF(v.data#>>'{title,en}',''),
+     v.id
+  ) AS title,
+ v.project project,
+ COALESCE(
+     NULLIF(p.title#>>'{%1$s}',''),
+     NULLIF(p.title#>>'{en}',''),
+     p.id
+  ) AS title_project
+  FROM mx_views_latest v
+  JOIN mx_projects p ON p.id = v.project
+  JOIN mx_users u ON v.editor = u.id
+  WHERE
+  v.data #>> '{source,layerInfo,name}' = '%2$s'
+  OR
+  v.data#>>'{source,layerInfo,maskName}'= '%2$s'
+",
+    language, idSource
   )
 
-  sql <- "
-  WITH views_table AS (
-    SELECT
-    " + tableName + ".editor,
-    " + tableName + ".id,
-    " + tableName + ".data#>>'{\"attribute\",\"name\"}' as variable,
-    " + tableName + ".pid,
-    " + tableName + ".project,
-    " + tableName + ".readers@>'\"public\"' as is_public,
-    CASE
-    WHEN data#>>'{\"title\",\"" + language + "\"}' != ''
-    THEN data#>>'{\"title\",\"" + language + "\"}'
-    ELSE data#>>'{\"title\",\"en\"}'
-    END AS title
-    FROM mx_views_latest
-    WHERE
-    data #>> '{\"source\",\"layerInfo\",\"name\"}' = '" + idSource + "'
-    " + strMask + ")
-
-  SELECT views_table.*, mx_users.email
-  FROM views_table
-  JOIN mx_users
-  ON views_table.editor = mx_users.id"
-
-  timer <- mxTimeDiff("mxDbGetViewsIdBySourceId")
   out <- mxDbGetQuery(sql)
-  mxTimeDiff(timer)
-
   return(out)
 }
+
+
+
+
 
 #' Get a view's project
 #'

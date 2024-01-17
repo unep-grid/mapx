@@ -11,6 +11,7 @@ import {
 import { getSchema } from "./schema.js";
 import { Validator } from "#mapx/schema";
 import { getViewsBySource } from "../../view/getView.js";
+import { SQLQueryBuilder } from "./sql_builder.js";
 
 const schema = getSchema();
 
@@ -75,6 +76,8 @@ async function handleMethod(method, config, session, socket) {
     get_config: () => getJoinConfig(config),
     get_data: () => getJoinData(config),
     get_schema: () => getSchema(config?.language),
+    get_count: () => getCount(config),
+    get_preview: () => getPreview(config),
     validate: () => validator.validate(config),
     get_columns_missing: () => getColumnsMissingInJoin(config),
     get_columns_type: () => getColumnsType(config),
@@ -208,106 +211,49 @@ async function updatePrefixConfig(config) {
   }
 }
 
-function configToSql(config) {
-  const baseLayer = config.base;
-  const baseAlias = "base";
-
-  const baseColumns = formatColumns({
-    columns: baseLayer.columns,
-    tableAlias: baseAlias,
-    columnPrefix: "",
-    addLeadingComma: true,
-  });
-
-  /**
-   * SQL init script
-   */
-  let sql = `
-  DROP VIEW IF EXISTS ${config.id_source}; 
-  CREATE VIEW ${config.id_source} 
-  AS
-  `;
-
-  let selectClause = `
-  SELECT
-  ${baseAlias}.geom,
-  ${baseAlias}.gid
-  ${baseColumns}`;
-  let joinClauses = "";
-
-  // Processing each join
-  for (const join of config.joins) {
-    const prefix = join._prefix;
-    const joinAlias = `join_${prefix}_alias`;
-    const joinColums = formatColumns({
-      columns: join.columns,
-      tableAlias: joinAlias,
-      columnPrefix: prefix,
-      addLeadingComma: true,
-    });
-
-    selectClause += `${joinColums}`;
-    joinClauses += `
-      ${join.type}
-    JOIN ${join.id_source}
-    AS ${joinAlias}
-    ON ${baseAlias}.${join.column_base} = ${joinAlias}.${join.column_join}`;
-  }
-
-  // Finalizing SQL
-  sql += `
-  ${selectClause}
-  FROM ${baseLayer.id_source}
-  AS ${baseAlias} ${joinClauses};
-  `;
-
-  return sql;
-}
-
-// Helper function to format columns with alias
-function formatColumns(opt) {
-  const { columns, tableAlias, columnPrefix, addLeadingComma } = opt;
-
-  if (isEmpty(columns)) {
-    return "";
-  }
-
-  return (
-    `${addLeadingComma ? "," : ""}` +
-    columns
-      .map((col) => `${tableAlias}.${col} AS ${columnPrefix}${col}`)
-      .join(", ")
-  );
-}
-
 async function updatePgView(config, client) {
-  const sql = configToSql(config);
+  const sqb = new SQLQueryBuilder(config);
+  const sql = sqb.createViewSQL();
   await client.query(sql);
 }
 
-/**
- * Retrieves all views from the latest views list that use a specified source.
- *
- * @param {string} sourceId - The ID of the source to look for in the views.
- * @param {Object} pgClient - Optional. PostgreSQL client for database queries. Defaults to 'pgRead'.
- * @returns {Promise<Object[]>} - A promise that resolves to an array of view data objects.
- */
-async function getViewsUsingSource(sourceId, pgClient = pgRead) {
-  const query = "SELECT * FROM mx_views_latest WHERE data @> $1";
-  const res = await pgClient.query(query, [
-    JSON.stringify({ source: { layerInfo: { name: sourceId } } }),
-  ]);
-  return res.rows;
+async function getCount(config, client = pgRead) {
+  try {
+    const errors = await validator.validate(config, client);
+    if (isNotEmpty(errors)) {
+      return 0;
+    }
+    await updatePrefixConfig(config);
+    const sqb = new SQLQueryBuilder(config);
+    const sql = sqb.rowCountSQL();
+    const res = await client.query(sql);
+    if (res.rowsCount === 0) {
+      return 0;
+    }
+    const { count } = res.rows[0];
+    return count;
+  } catch (e) {
+    return 0;
+  }
 }
 
-/**
- * Checks for missing columns in a join configuration against the attributes used in associated views.
- *
- * @param {Object} joinConfig - The join configuration object containing base and join details.
- *   Expected to have 'id_source', 'base', and 'joins' properties.
- * @returns {Promise<Object[]>} - A promise that resolves to an array of objects, each representing a missing column.
- *   Each object contains an 'id' property corresponding to the missing attribute ID.
- */
+async function getPreview(config, client = pgRead) {
+  try {
+    await updatePrefixConfig(config);
+    const errors = await validator.validate(config, client);
+    if (isNotEmpty(errors)) {
+      return null;
+    }
+    const sqb = new SQLQueryBuilder(config);
+    const sql = sqb.firstNRowsSQL(50);
+    const res = await client.query(sql);
+    return res.rows;
+  } catch (e) {
+    return null;
+  }
+}
+
+
 async function getColumnsMissingInJoin(joinConfig) {
   const { id_source: idSource, base, joins } = joinConfig;
   const missingColumns = [];
@@ -323,7 +269,7 @@ async function getColumnsMissingInJoin(joinConfig) {
     return [];
   }
 
-  const views = await getViewsUsingSource(idSource);
+  const views = await getViewsBySource(idSource);
 
   // Extracting attributes from views and checking against join configuration
   for (const view of views) {

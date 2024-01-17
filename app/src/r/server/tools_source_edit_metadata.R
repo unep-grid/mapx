@@ -267,11 +267,11 @@ observeEvent(input$jedSourceMetadata_values, {
         #
         # Reload views that use this source
         #
-        views <- mxDbGetViewsIdBySourceId(idSource, language = language)
+        views <- mxDbGetViewsTableBySourceId(idSource, language = language)
 
+        # NOTE: meta no more included -> use metadata from server
         mglUpdateViewsBadges(list(
-          views = as.list(views$id)
-          # meta no more included -> use metadata from server
+          views = as.list(views$view_id)
         ))
       })
     }

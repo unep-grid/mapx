@@ -1676,6 +1676,14 @@
     "en": "Columns to display"
   },
   {
+    "id": "join_rows_count",
+    "en": "Rows count"
+  },
+  {
+    "id": "join_preview",
+    "en": "Preview table"
+  },
+  {
     "id": "join_column_base",
     "en": "Base column"
   },
@@ -2948,6 +2956,10 @@
     "en": "Environment"
   },
   {
+    "id": "error_source_has_dependencies",
+    "en": "The source has dependencies"
+  },
+  {
     "id": "error_no_layer",
     "en": "No source layer set"
   },
@@ -3664,6 +3676,10 @@
     "en": "View"
   },
   {
+    "id": "project",
+    "en": "Projet"
+  },
+  {
     "id": "views",
     "en": "Views"
   },
@@ -4112,8 +4128,8 @@
     "en": "Require at least one admin"
   },
   {
-    "id": "error_views_need_data",
-    "en": "Deletion of a source disabled because at least one view depends on it"
+    "id": "error_views_require_source",
+    "en": "At least one view depends on this source."
   },
   {
     "id": "error_views_need_publishers",
@@ -4516,6 +4532,10 @@
     "en": "Table of views depending on the source"
   },
   {
+    "id": "tbl_dependencies_source",
+    "en": "Table of objects depending on the source"
+  },
+  {
     "id": "btn_validate_metadata",
     "en": "In depth validation"
   },
@@ -4626,6 +4646,10 @@
   {
     "id": "source_last_editor_email",
     "en": "Email of the last editor"
+  },
+  {
+    "id": "email_editor",
+    "en": "Editor's email"
   },
   {
     "id": "additional_doc_desc",

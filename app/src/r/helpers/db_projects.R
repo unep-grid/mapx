@@ -1,7 +1,3 @@
-
-
-
-
 #' Get the project id using old id (iso3 country code)
 #' @param id {character} Project id
 #' @return id {character} new id
@@ -481,7 +477,7 @@ mxDbSaveProjectData <- function(idProject, values = list(
     }
   }
 
-  for (key in c("alias","theme")) {
+  for (key in c("alias", "theme")) {
     value <- values[[key]]
     toUpdate <- notNull(value)
     if (toUpdate) {

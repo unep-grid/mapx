@@ -36,9 +36,9 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     const { maxItems, watch, loader } = schema.mx_options;
 
     switch (loader) {
-      case "source_edit":
-        const { types, readable, editable, add_global } =
-          schema.mx_options;
+      case "source":
+      case "source_edit": // back compatibility 
+        const { types, readable, editable, add_global } = schema.mx_options;
         Object.assign(config, clone(config_source));
         Object.assign(config.loader_config, {
           types,
@@ -47,7 +47,8 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
           add_global,
         });
         break;
-      case "source_edit_columns":
+      case "source_columns":
+      case "source_edit_columns": // back compatibility 
         Object.assign(config, clone(config_source_columns));
         Object.assign(config.loader_config, { id_source: null });
         break;

@@ -967,8 +967,13 @@ mxGetStackTrace <- function(cond,
 #' Convert data.frame to html table.
 #' @param table data.frame
 #' @return html table
-mxTableToHtml <- function(table, id = randomString(), class = "mx-table", classContainer = "mx-table-container") {
-  shiny::tagList(
+mxTableToHtml <- function(
+  table,
+  id = randomString(),
+  class = "mx-table",
+  classContainer = "mx-table-container"
+) {
+  tagList(
     tags$div(
       class = classContainer,
       shiny::HTML(
@@ -2124,6 +2129,9 @@ mxGetAppUrl <- function(session = shiny::getDefaultReactiveDomain()) {
 #' @return {Character} project url
 mxGetProjectUrl <- function(project) {
   sprintf("%1$s?project=%2$s", mxGetAppUrl(), project)
+}
+mxGetProjectLink <- function(project, title) {
+  tagList(tags$a(href = mxGetProjectUrl(project), title))
 }
 
 

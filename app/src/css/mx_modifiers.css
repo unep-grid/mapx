@@ -436,22 +436,6 @@ span.mx-badge-role {
   background: var(--mx_ui_text);
 }
 
-/**
-* Boostrap colors changes
-*/
-.mx .table > tbody > tr > td,
-.mx .table > tbody > tr > th,
-.mx .table > tfoot > tr > td,
-.mx .table > tfoot > tr > th,
-.mx .table > thead > tr > td,
-.mx .table > thead > tr > th {
-  border-color: var(--mx_ui_border);
-}
-
-.mx .table > tbody > tr:nth-child(odd) {
-  background-color: var(--mx_ui_background_accent);
-}
-
 .mx .panel-default > .panel-heading {
   display: flex;
   justify-content: center;

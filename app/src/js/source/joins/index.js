@@ -1,9 +1,9 @@
-import { el, elButtonFa, elSpanTranslate as tt } from "../../el_mapx";
+import { el, elAuto, elButtonFa, elSpanTranslate as tt } from "../../el_mapx";
 import { EventSimple } from "../../event_simple";
 import { isSourceId, isEmpty } from "../../is_test";
 import { modalSelectSource } from "../../select_auto";
 import { settings, ws, nc } from "../../mx";
-import { modalPrompt, modalSimple } from "../../mx_helper_modal";
+import { modalDialog, modalPrompt, modalSimple } from "../../mx_helper_modal";
 import { getDictItem, getLabelFromObjectPath } from "../../language";
 import "./style.less";
 import { makeId } from "../../mx_helper_misc";
@@ -15,6 +15,8 @@ import {
   viewLink,
   triggerUpdateSourcesList,
 } from "../../map_helpers";
+import { moduleLoad } from "../../modules_loader_async";
+import { TableResizer } from "../../handsontable/utils";
 
 const routes = {
   join: "/client/source/join",
@@ -57,6 +59,7 @@ export class SourcesJoinManager extends EventSimple {
     const { join: config, meta } = await sjm.load(sjm.id);
     const def = await sjm.getConfigDefault();
 
+    sjm._allow_preview = false;
     sjm._schema = schema;
     sjm._config = Object.assign({}, def, config);
     sjm._meta = Object.assign({}, meta);
@@ -94,8 +97,38 @@ export class SourcesJoinManager extends EventSimple {
     return this.emit("get_schema");
   }
 
+  async getCount() {
+    return this.emit("get_count", this.getConfigEditor());
+  }
+  async setCount(count) {
+    if (isEmpty(count)) {
+      return;
+    }
+    this._elCount.innerText = count;
+  }
   async emit(method, config) {
     return ws.emitAsync(routes.join, { method, config }, sjmSettings.wsTimeOut);
+  }
+
+  async updateCount() {
+    const sjm = this;
+    const count = await sjm.getCount();
+    sjm.enablePreview(count > 0);
+    sjm.setCount(count);
+    return count;
+  }
+
+  enablePreview(enable) {
+    const sjm = this;
+    if (isEmpty(enable)) {
+      enable = true;
+    }
+    sjm._allow_preview = enable;
+    if (enable) {
+      sjm._elBtnPreview.removeAttribute("disabled");
+    } else {
+      sjm._elBtnPreview.setAttribute("disabled", true);
+    }
   }
 
   async validateRemote() {
@@ -112,9 +145,12 @@ export class SourcesJoinManager extends EventSimple {
   async validate() {
     const sjm = this;
     sjm.lockSave();
+    sjm.enablePreview(false);
     const okEditor = sjm.validateEditor();
     const okColumns = okEditor && (await sjm.validateColumns());
-    if (okColumns) {
+    const rowsCount = okEditor && okColumns ? await sjm.updateCount() : 0;
+    if (okColumns && rowsCount > 0) {
+      sjm.enablePreview(true);
       sjm.unlockSave();
     }
     return okColumns;
@@ -193,61 +229,6 @@ export class SourcesJoinManager extends EventSimple {
         }),
         el("ul", viewElements),
       ]);
-      elMissing.appendChild(elItem);
-    }
-
-    sjm._elValidationOutput.appendChild(elMissing);
-  }
-  buildValidateMissing_old(missing) {
-    const sjm = this;
-    sjm.clearValidation();
-
-    if (isEmpty(missing)) {
-      return;
-    }
-
-    const elMissing = el("ul", {
-      class: ["list-group", "mx-error-list-container"],
-    });
-
-    const perView = new Map();
-
-    for (const item of missing) {
-      const idView = item?.view?.id;
-      let previous = perView.get(idView);
-      if (previous) {
-        previous.attributes.push(item.id);
-      } else {
-        previous = {
-          title: getViewTitle(item.view),
-          link: viewLink(item.view),
-          attributes: [item.id],
-        };
-      }
-      perView.set(idView, previous);
-    }
-
-    for (const item of perView.values()) {
-      const elItem = el(
-        "li",
-        {
-          class: ["list-group-item", "mx-error-item"],
-        },
-        [
-          el("span", tt("join_warning_colums_issue")),
-          el(
-            "a",
-            { target: "_blank", href: item.link },
-            el("span", item.title),
-          ),
-          el(
-            "ul",
-            item.attributes.map((a) => {
-              return el("li", el("span", a));
-            }),
-          ),
-        ],
-      );
       elMissing.appendChild(elItem);
     }
 
@@ -346,6 +327,53 @@ export class SourcesJoinManager extends EventSimple {
     sjm._elBtnSave.removeAttribute("disabled");
   }
 
+  async preview() {
+    const sjm = this;
+
+    if (!sjm._allow_preview) {
+      return;
+    }
+
+    const elTable = el(
+      "div",
+      {
+        class: "mx_handsontable",
+        style: {
+          minHeight: "350px",
+          minWidth: "100px",
+          overflow: "hidden",
+          backgroundColor: "var(--mx_ui_shadow)",
+        },
+      },
+      "Loading...",
+    );
+    const elModal = modalSimple({
+      title: "preview",
+      content: elTable,
+      onClose: destroy,
+    });
+
+    const config = sjm.getConfigEditor();
+    const data = await sjm.emit("get_preview", config);
+    elTable.innerHTML = "";
+    const columns = Object.keys(data[0] || {});
+    const handsontable = await moduleLoad("handsontable");
+    const ht = new handsontable(elTable, {
+      data: data,
+      colHeaders: columns,
+      rowHeaders: true,
+      licenseKey: "non-commercial-and-evaluation",
+    });
+    const tableObserver = new TableResizer(ht, elTable, elModal);
+
+    function destroy() {
+      if (ht instanceof handsontable) {
+        ht.destroy();
+        tableObserver.disconnect();
+      }
+    }
+  }
+
   async build() {
     const sjm = this;
     const { schema, config, meta } = sjm;
@@ -363,7 +391,29 @@ export class SourcesJoinManager extends EventSimple {
     });
 
     sjm._elSjm = el("div", { id: id_editor, class: "jed-container" });
-    const elContent = el("div", [sjm._elValidationOutput, sjm._elSjm]);
+    sjm._elCount = el(
+      "span",
+      {
+        class: ["hint--left"],
+        lang_type: "tooltip",
+        lang_key: "join_rows_count",
+        "aria-label": await getDictItem("join_rows_count"),
+      },
+      0,
+    );
+
+    const elContent = el("div", [
+      sjm._elValidationOutput,
+      sjm._elSjm,
+      sjm._elCountContainer,
+    ]);
+
+    sjm._elBtnPreview = elButtonFa("join_preview", {
+      tag: "div",
+      icon: "table",
+      content: sjm._elCount,
+      action: sjm.preview,
+    });
 
     sjm._elBtnSave = elButtonFa("btn_save", {
       icon: "floppy-o",
@@ -376,9 +426,9 @@ export class SourcesJoinManager extends EventSimple {
     });
 
     sjm._modal = modalSimple({
-      title,
+      title: title,
       content: elContent,
-      buttons: [sjm._elBtnClose, sjm._elBtnSave],
+      buttons: [sjm._elBtnClose, sjm._elBtnSave, sjm._elBtnPreview],
       removeCloseButton: true,
     });
 

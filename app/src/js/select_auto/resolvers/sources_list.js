@@ -14,8 +14,7 @@ export const config = {
   allowEmptyOption: false,
   options: null,
   create: false,
-  preload: true,
-  placeholder: "Select source...",
+  placeholder: null,
   sortField: [
     { field: "title", weight: 2 },
     { field: "date_modified", weight: 1 },
@@ -28,7 +27,8 @@ export const config = {
     const tom = this;
     tom.blur();
   },
-
+  preload: false,
+  load: null,
   onInitialize: async function () {
     const tom = this;
     const { update_on_init } = tom.settings.loader_config;
@@ -55,12 +55,19 @@ export const config = {
     editable: false,
     add_global: false,
     addional_items: [], // e.g. already configured id, to avoid missing
+    placeholder_wait: "Please wait...",
+    placeholder_ready: "Select source...",
   },
 };
 
 async function update() {
   const tom = this;
   try {
+    const conf = Object.assign(
+      {},
+      config.loader_config,
+      tom.settings.loader_config,
+    );
     const {
       types,
       editable,
@@ -71,7 +78,13 @@ async function update() {
       max_cols,
       disable_large,
       disable_missing,
-    } = tom.settings.loader_config;
+      placeholder_wait,
+      placeholder_ready,
+    } = conf;
+
+    tom.disable();
+    tom.control_input.placeholder = placeholder_wait;
+
     const { list } = await wsGetSourcesList({
       types,
       editable,
@@ -86,6 +99,9 @@ async function update() {
       const big = disable_large && (ncol > max_cols || nrow > max_rows);
       item.disabled = missing || big;
     }
+    tom.control_input.placeholder = placeholder_ready;
+    tom.settings.placeholder = placeholder_ready;
+    tom.enable();
     tom.addOptions(items);
     tom.refreshOptions(false);
   } catch (e) {

@@ -1283,14 +1283,16 @@ mxDbDropLayer <- function(layerName) {
     ))
   }
 
-  viewsTable <- mxDbGetViewsIdBySourceId(layerName)
+  viewsTable <- mxDbGetViewsTableBySourceId(layerName)
+  dependenciesTable <- mxDbGetTableDependencies(layerName)
   existsTable <- isTRUE(mxDbExistsTable(layerName))
   existsEntry <- isNotEmpty(layer)
   existViews <- isNotEmpty(viewsTable)
+  existsJoin <- isNotEmpty(dependenciesTable)
 
-  if (existViews) {
+  if (existViews || existsJoin) {
     stop(sprintf(
-      "Interruption of mxDbDropLayer : active linked view for",
+      "Interruption of mxDbDropLayer : active linked view or join for %s",
       layerName
     ))
   }
@@ -1531,25 +1533,56 @@ jsonToList <- function(res) {
   return(res)
 }
 
-#' Get layer services in default layer table
-#' @param layer Postgis layer stored in layer table.
+#' Get source services
+#' @param idSource
 #' @export
 mxDbGetSourceServices <- function(idSource) {
-  isDownloadableOld <- isTRUE(mxDbGetQuery("
-      SELECT data#>>'{\"meta\",\"license\",\"allowDownload\"}' as allow_download
+  isDownloadableOld <- isTRUE(
+    mxDbGetQuery(
+      sprintf(
+        "
+      SELECT data#>>'{meta,license,allowDownload}' as allow_download
       FROM mx_sources
-      WHERE id ='" + idSource + "'")$allow_download == "true")
+      WHERE id ='%1$s'",
+        idSource
+      )
+    )$allow_download == "true"
+  )
 
-  services <- as.character(mxFromJSON(mxDbGetQuery("
+  services <- as.character(
+    mxFromJSON(
+      mxDbGetQuery(
+        sprintf(
+          "
         SELECT services
         FROM mx_sources
-        WHERE id ='" + idSource + "'")$services))
+        WHERE id ='%1$s'",
+          idSource
+        )$services
+      )
+    )
+  )
 
   if (isDownloadableOld && (!"mx_download" %in% services)) {
     services <- c("mx_download", services)
   }
 
   return(as.list(services))
+}
+
+#' Get layer services in default layer table
+#' @param idSource
+#' @export
+mxDbGetSourceData <- function(idSource) {
+  mxDbGetQuery(
+    sprintf(
+      "
+   SELECT readers, editors, type, global
+   FROM mx_sources
+   WHERE id ='%1$s'",
+      idSource
+    )
+  )
 }
 
 #' Get layer title
@@ -1953,4 +1986,58 @@ mxDbGetDistinctTableFromSql <- function(sql) {
   )
 
   return(out)
+}
+
+#' Fetch Dependent Object Details for a Specified Table
+#'
+#' This function fetches details about pg views/object that depend on a
+#' specified table in the database. It returns a data frame with the IDs,
+#' dependency types, titles, and projects for each dependent pg view.
+#'
+#' @param idTable The ID of the table to find dependencies for.
+#' @return A data frame with the id, dep_type, title, and project for each
+#'         dependent pg view.
+#' @export
+mxDbGetTableDependencies <- function(idTable, language = "en") {
+  query <- sprintf(
+    "
+    SELECT DISTINCT
+      dv.relname AS id,
+      'view' AS type,
+      COALESCE(
+      NULLIF(ms.data #>> '{meta,text,title,%2$s}',''),
+      NULLIF(ms.data #>> '{meta,text,title,en}',''),
+      ms.id
+      ) AS title,
+      ms.project AS id_project,
+      COALESCE(
+      NULLIF(p.title #>> '{%2$s}',''),
+      NULLIF(p.title #>> '{en}',''),
+      p.id
+      ) AS title_project,
+      u.email AS email_editor
+    FROM pg_depend pd
+    JOIN pg_rewrite pr ON pd.objid = pr.oid
+    JOIN pg_class dv ON pr.ev_class = dv.oid
+    JOIN pg_class st ON pd.refobjid = st.oid
+    JOIN pg_namespace dns ON dns.oid = dv.relnamespace
+    JOIN pg_namespace sns ON sns.oid = st.relnamespace
+    JOIN mx_sources ms ON ms.id = dv.relname
+    JOIN mx_projects p ON ms.project = p.id
+    JOIN mx_users u on ms.editor = u.id
+    WHERE
+      st.relkind = 'r'
+      AND dv.relkind = 'v'
+      AND st.relname = '%1$s'
+    ORDER BY
+      dv.relname;
+    ",
+    idTable,
+    language
+  )
+
+  # Use mxDbGetQuery() to execute the query and get the result
+  result <- mxDbGetQuery(query)
+
+  return(result)
 }
