@@ -1,3 +1,7 @@
+  - [1.13.0-alpha.18](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.18) 
+    
+    - Improve source settings edtion : sticky warning + mini summary source (title,email, id)
+
   - [1.13.0-alpha.16](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.16) 
 
     - Overlapp number evaluation issue, handle case with no result retunrned
