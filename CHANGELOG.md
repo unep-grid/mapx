@@ -1,3 +1,8 @@
+  - [1.13.0-alpha.16](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.16) 
+
+    - Overlapp number evaluation issue, handle case with no result retunrned
+    - Failing DB last resort restart should also occurs in case of warning in the test
+
   - [1.13.0-alpha.15](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.15) 
 
     - Join Editor
