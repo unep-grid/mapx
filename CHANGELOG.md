@@ -1,3 +1,7 @@
+  - [1.13.0-alpha.19](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.19) 
+    
+    - Rewrite manage sources settings & validation
+
   - [1.13.0-alpha.18](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.18) 
     
     - Improve source settings edtion : sticky warning + mini summary source (title,email, id)
