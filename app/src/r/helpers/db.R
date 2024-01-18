@@ -1554,19 +1554,17 @@ mxDbGetSourceServices <- function(idSource) {
     )$allow_download == "true"
   )
 
-  services <- as.character(
-    mxFromJSON(
-      mxDbGetQuery(
-        sprintf(
-          "
+  qSql <- sprintf(
+    "
         SELECT services
         FROM mx_sources
         WHERE id ='%1$s'",
-          idSource
-        )$services
-      )
-    )
+    idSource
   )
+  data <- mxDbGetQuery(qSql)
+
+  services <- as.list(fromJSON(data$services))
+
 
   if (isDownloadableOld && (!"mx_download" %in% services)) {
     services <- c("mx_download", services)
@@ -1579,15 +1577,26 @@ mxDbGetSourceServices <- function(idSource) {
 #' @param idSource
 #' @export
 mxDbGetSourceData <- function(idSource) {
-  mxDbGetQuery(
+  data <- mxDbGetQuery(
     sprintf(
       "
-   SELECT readers, editors, type, global
+   SELECT editor, readers, editors, type, global
    FROM mx_sources
    WHERE id ='%1$s'",
       idSource
     )
   )
+
+  if (isEmpty(data)) {
+    return(data)
+  }
+
+  data <- as.list(data)
+
+  data$readers <- as.character(fromJSON(data$readers))
+  data$editors <- as.character(fromJSON(data$editors))
+
+  return(data)
 }
 
 #' Get layer title
@@ -1597,18 +1606,18 @@ mxDbGetSourceTitle <- function(layer, asNamedList = TRUE, language = "en") {
   layer <- paste(paste0("'", layer, "'"), collapse = ",")
 
   # query
-  sql <- "
+  sql <- sprintf(
+    "
   SELECT id,
-  CASE
-  WHEN
-  coalesce(data #>> '{\"meta\",\"text\",\"title\",\"" + language + "\"}','') = ''
-  THEN
-  data #>> '{\"meta\",\"text\",\"title\",\"en\"}'
-  ELSE
-  data #>> '{\"meta\",\"text\",\"title\",\"" + language + "\"}'
-  END as title
+  COALESCE(
+      NULLIF(data #>> '{meta,text,title,%2$s}',''),
+      NULLIF(data #>> '{meta,text,title,en}',''),
+      id
+      ) AS title
   FROM mx_sources
-  WHERE id in (" + layer + ")"
+  WHERE id in (%1$s)",
+    layer, language
+  )
 
   out <- mxDbGetQuery(sql)
 

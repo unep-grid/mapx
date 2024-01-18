@@ -38,15 +38,20 @@ observeEvent(reactData$triggerSourceManage, {
       return()
     }
 
-
     idSource <- layer
     sourceData <- mxDbGetSourceData(idSource)
     services <- mxDbGetSourceServices(idSource)
+    sourceTitle <- mxDbGetSourceTitle(
+      idSource,
+      asNamedList = FALSE,
+      language = language
+    )
+
     readers <- sourceData$readers
     editors <- sourceData$editors
     global <- isTRUE(sourceData$global)
     type <- sourceData$type
-
+    emailLastEditor <- mxDbGetEmailFromId(sourceData$editor)
     #
     # Who can view this
     #
@@ -113,8 +118,51 @@ observeEvent(reactData$triggerSourceManage, {
       tblDependencies <- tagList()
     }
 
+    #
+    # Quick summmary
+    #
+    uiSummary <- tags$ul(
+      class = "list-group",
+      tagList(
+        tags$li(
+          class = "list-group-item",
+          tags$label(
+            d("source_title", w = FALSE, lang = language)
+          ),
+          tags$span(
+            class = "badge",
+            sourceTitle
+          )
+        ),
+        tags$li(
+          class = "list-group-item",
+          tags$label(
+            d("source_id", w = FALSE, lang = language)
+          ),
+          tags$span(
+            class = "badge",
+            idSource
+          )
+        ),
+        tags$li(
+          class = "list-group-item",
+          tags$label(
+            d("email_editor", w = FALSE, lang = language)
+          ),
+          tags$span(
+            class = "badge",
+            emailLastEditor
+          )
+        )
+      )
+    )
 
     uiOut <- tagList(
+      tags$div(
+        class = "mx-sticky-top-20",
+        uiOutput("uiValidateSourceSettings")
+      ),
+      uiSummary,
       selectizeInput(
         inputId = "selectSourceReadersUpdate",
         label = d("source_target_readers", language),
@@ -155,7 +203,6 @@ observeEvent(reactData$triggerSourceManage, {
       ),
       tblViews,
       tblDependencies,
-      uiOutput("uiValidateSourceSettings")
     )
 
     btnList <- tagList(
@@ -272,7 +319,6 @@ observe({
         disable = hasDependencies || hasViews
       )
     })
-
   })
 })
 
@@ -376,7 +422,6 @@ observeEvent(input$btnDeleteSourceConfirm, {
 # Update source
 #
 observeEvent(input$btnUpdateSource, {
-
   userRole <- getUserRole()
   idSource <- reactData$triggerSourceManage$idSource
   project <- reactData$project

@@ -11115,6 +11115,19 @@
     "de": "Sozial "
   },
   {
+    "id": "source_id",
+    "en": "Source id",
+    "fr": "Id de la source",
+    "es": "Id de la fuente de datos",
+    "ru": "Идентификатор источника",
+    "zh": "源ID",
+    "ar": "معرف المصدر",
+    "fa": "شناسه منبع",
+    "ps": "سرچینه id",
+    "bn": "উৎস আইডি",
+    "de": "Quellen-ID"
+  },
+  {
     "id": "source_meta_data",
     "en": "Metadata for the source",
     "fr": "Métadonnées de la source",

@@ -10881,19 +10881,6 @@
     "de": "Email "
   },
   {
-    "id": "email_editor",
-    "en": "Editor's email",
-    "fr": "Email de l'éditeur",
-    "es": "correo electrónico del editor",
-    "ru": "электронная почта редактора",
-    "zh": "编辑的电子邮件",
-    "ar": "البريد الإلكتروني للمحرر",
-    "fa": "ایمیل سردبیر",
-    "ps": "د مدیر بریښنالیک",
-    "bn": "সম্পাদকের ইমেইল",
-    "de": "E-Mail des Herausgebers"
-  },
-  {
     "id": "from",
     "en": "From",
     "fr": "De",
@@ -11126,6 +11113,19 @@
     "ps": "ټولنیز",
     "bn": "সামাজিক ",
     "de": "Sozial "
+  },
+  {
+    "id": "source_id",
+    "en": "Source id",
+    "fr": "Id de la source",
+    "es": "Id de la fuente de datos",
+    "ru": "Идентификатор источника",
+    "zh": "源ID",
+    "ar": "معرف المصدر",
+    "fa": "شناسه منبع",
+    "ps": "سرچینه id",
+    "bn": "উৎস আইডি",
+    "de": "Quellen-ID"
   },
   {
     "id": "source_meta_data",
@@ -13429,17 +13429,17 @@
     "de": "Benötigen Sie mindestens einen Administrator "
   },
   {
-    "id": "error_views_need_data",
-    "en": "Deletion of a source disabled because at least one view depends on it",
-    "fr": "La suppression d'une source est désactivée tant qu'une vue dépend de cette source",
-    "es": "Eliminación desactivada porque hay una vista que depende de la fuente de datos",
-    "ru": "Удаление источника отключено, поскольку от него зависит как минимум одно представление ",
-    "zh": "禁用源的删除，因为至少一个视图依赖此源",
-    "ar": "تم تعطيل حذف المصدر لأن طريقة عرض واحدة على الأقل تعتمد عليه ",
-    "fa": "حذف منبع غیرفعال است زیرا حداقل یک نمایش به آن بستگی دارد ",
-    "ps": "د سرچینې ړنګول معلول شوي ځکه چې لږترلږه یو نظر پدې پورې اړه لري ",
-    "bn": "উত্স মোছা অক্ষম করা হয়েছে কারণ কমপক্ষে একটি দর্শন তার উপর নির্ভর করে ",
-    "de": "Das Löschen einer Quelle ist deaktiviert, da mindestens eine Ansicht davon abhängt "
+    "id": "error_views_require_source",
+    "en": "At least one view depends on this source.",
+    "fr": "Au moins une vue dépend de cette source.",
+    "es": "Al menos una vista depende de esta fuente.",
+    "ru": "По крайней мере одно представление зависит от этого источника.",
+    "zh": "至少有一个视图依赖于此源。",
+    "ar": "يعتمد مشهد واحد على الأقل على هذا المصدر.",
+    "fa": "دست کم یک نما به این منبع وابسته است.",
+    "ps": "لږترلږه یوه کتنه د دې سرچینې پورې اړه لري.",
+    "bn": "অন্তত একটি দৃশ্য এই উৎসের উপর নির্ভরশীল।",
+    "de": "Mindestens eine Ansicht hängt von dieser Quelle ab."
   },
   {
     "id": "error_views_need_publishers",
@@ -15117,6 +15117,19 @@
     "ps": "د وروستي مدیر بریښنالیک ",
     "bn": "শেষ সম্পাদকের ইমেল ",
     "de": "E-Mail des letzten Editors "
+  },
+  {
+    "id": "email_editor",
+    "en": "Editor's email",
+    "fr": "Email de l'éditeur",
+    "es": "Correo del editor",
+    "ru": "Электронная почта редактора",
+    "zh": "编辑的电子邮件",
+    "ar": "بريد الناشر الإلكتروني",
+    "fa": "ایمیل ویراستار",
+    "ps": "د مدیر برېښنالیک",
+    "bn": "সম্পাদকের ইমেইল",
+    "de": "E-Mail des Herausgebers"
   },
   {
     "id": "additional_doc_desc",
