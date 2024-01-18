@@ -429,6 +429,44 @@ mxDbGetLayerListByViews <- function(idViews = c()) {
 }
 
 
+#' Helper to get source edition info list
+#'
+mxDbGetSourceEditInfo <- function(idProject, idSource, idUser, language = "en") {
+  services <- mxDbGetSourceServices(idSource)
+  sourceData <- mxDbGetSourceData(idSource)
+  tableViews <- mxDbGetViewsTableBySourceId(idSource, language = language)
+  emailLastEditor <- mxDbGetEmailFromId(sourceData$editor)
+  tableDependencies <- mxDbGetTableDependencies(idSource)
+  sourceTitle <- mxDbGetSourceTitle(
+    idSource,
+    asNamedList = FALSE,
+    language = language
+  )
+
+  global <- isTRUE(sourceData$global)
+  readers <- sourceData$readers
+  editors <- sourceData$editors
+  type <- sourceData$type
+
+  hasViews <- isNotEmpty(tableViews)
+  hasDependencies <- isNotEmpty(tableDependencies)
+  hasViewsFromOthers <- !isTRUE(all(tableViews$id_editor %in% idUser))
+  hasViewsFromOut <- !isTRUE(all(tableViews$project %in% idProject))
+  hasDependenciesFromOut <- !isTRUE(all(
+    tableDependencies$project %in% idProject
+  ))
+  hasDependenciesFromOthers <- !isTRUE(all(
+    tableDependencies$id_editor %in% idUser
+  ))
+
+  hasExtViews <- hasViewsFromOut || hasViewsFromOthers
+  hasExtDependencies <- hasDependenciesFromOut || hasDependenciesFromOthers
+
+  return(mget(ls()))
+}
+
+
+
 #' Get table of layer for one project, for given role or userid
 #' @param project Project code
 #' @param idUser Integer user id

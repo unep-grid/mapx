@@ -113,34 +113,3 @@ reactListEditSourcesVector <- reactive({
 })
 
 
-#
-# Reactive table of views depending on selected source
-#
-reactTableViewsUsingSource <- reactive({
-  #
-  # Values
-  #
-  idSource <- reactData$triggerSourceManage$idSource
-  language <- reactData$language
-
-  #
-  # Other triggers
-  #
-  update <- reactData$updateViewList
-  updateFetchOnly <- reactData$updateViewListFetchOnly
-
-  #
-  # Get views table
-  #
-  mxDbGetViewsTableBySourceId(idSource, language = language)
-})
-
-#
-# List source/table dependencies
-#
-reactDependenciesUsingSource <- reactive({
-  idSource <- reactData$triggerSourceManage$idSource
-  update <- reactData$updateViewList
-  updateFetchOnly <- reactData$updateViewListFetchOnly
-  mxDbGetTableDependencies(idSource)
-})
