@@ -42,6 +42,7 @@ mxDbTest <- function(key) {
   return(ok)
 }
 
+
 #' Test Database Connection
 #'
 #' This internal function tests the active database connection.
@@ -50,32 +51,32 @@ mxDbTest <- function(key) {
 #'
 #' @return TRUE if the connection is valid, otherwise the session is terminated.
 mxDbTestCon <- function(con) {
+  clear <- function(e) {
+    #
+    # If available, clean DB pool
+    #
+    if (exists("mxDbPoolClose")) {
+      mxDbPoolClose()
+    }
+
+    #
+    # Quit
+    msg <- sprintf(
+      "mxDbTestCon failed, the session will be terminated"
+    )
+    mxKillProcess(msg)
+    return(FALSE)
+  }
+
   tryCatch(
     {
       dbGetQuery(con, "SELECT 1")
       return(TRUE)
     },
-    error = function(e) {
-      #
-      # If available, clean DB pool
-      #
-      if (exists("mxDbPoolClose")) {
-        mxDbPoolClose()
-      }
-
-      #
-      # Quit
-      msg <- sprintf(
-        "mxDbTestCon failed, the session will be terminated"
-      )
-      mxKillProcess(msg)
-
-      return(FALSE)
-    }
+    warning = clear,
+    error = clear
   )
 }
-
-
 
 #' Get query result from postgresql
 #'
@@ -1440,6 +1441,10 @@ mxDbGetLayerGeomTypes <- function(table = NULL, geomColumn = "geom") {
   )
 
   res <- mxDbGetQuery(q)
+
+  if (isEmpty(res)) {
+    return(data.frame(geom_type = character(), count = integer()))
+  }
 
   res$geom_type <- gsub(".*[pP]oint.*", "point", res$geom_type)
   res$geom_type <- gsub(".*[lL]ine.*", "line", res$geom_type)
