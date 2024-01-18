@@ -1382,24 +1382,24 @@ export function updateText(o) {
  */
 export function updateCheckboxInput(o) {
   const hasShiny = isShinyReady();
-  const el = document.getElementById(o.id);
+  const elInput = document.getElementById(o.id);
 
-  if (!isElement(el)) {
+  if (!isElement(elInput)) {
     return;
   }
 
   if (isBoolean(o.disabled)) {
     if (o.disabled) {
-      el.setAttribute("disabled", true);
-      elBtn.setAttribute("tabindex", "-1");
+      elInput.setAttribute("disabled", true);
+      elInput.setAttribute("tabindex", "-1");
     } else {
-      el.removeAttribute("disabled");
+      elInput.removeAttribute("disabled");
     }
   }
   if (isBoolean(o.checked)) {
-    el.checked = o.checked;
+    elInput.checked = o.checked;
     if (hasShiny) {
-      Shiny.onInputChange(o.id, el.checked);
+      Shiny.onInputChange(o.id, elInput.checked);
     }
   }
 }

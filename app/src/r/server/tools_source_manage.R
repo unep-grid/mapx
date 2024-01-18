@@ -333,10 +333,13 @@ observe({
         disable = blockDelete
       )
 
-      mxToggleButton(
-        id = "checkSourceGlobal",
-        disable = blockGlobal
-      )
+      if (blockGlobal) {
+        mxUpdateCheckboxInput(
+          id = "checkSourceGlobal",
+          disabled = blockGlobal,
+          checked = blockGlobal
+        )
+      }
     })
 
     reactData$sourceEditBlockDelete <- blockDelete
@@ -455,12 +458,11 @@ observeEvent(input$btnUpdateSource, {
     if (isRoot) {
       src <- reactSourceEditInfo()
 
-      isGlobalCurrent <- src$global
-      hasDependencies <- src$hasDependencies
-      hasViews <- src$hasViews
+      hasDependencies <- src$hasExtDependencies
+      hasViews <- src$hasExtViews
 
-      if (isGlobal != isGlobalCurrent && (hasDependencies || hasViews)) {
-        stop("Update of global not possible : concurrency issue ?")
+      if (!isGlobal && (hasDependencies || hasViews)) {
+        isGlobal <- TRUE
       }
     }
 
