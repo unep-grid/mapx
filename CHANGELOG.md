@@ -1,3 +1,7 @@
+  - [1.13.0-alpha.20](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.20) 
+    
+    -  Solve issue when creating a new join type source, when geom is requested (no preview mode ) and no base column was selected
+
   - [1.13.0-alpha.19](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.19) 
     
     - Rewrite manage sources settings & validation
