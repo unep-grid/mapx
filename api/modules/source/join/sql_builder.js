@@ -38,11 +38,8 @@ export class SQLQueryBuilder {
    */
   buildCoreQuery(skipGeom = false) {
     const colsBase = skipGeom
-      ? ""
-      : `
-    ${this.baseAlias}.geom,
-    ${this.baseAlias}.gid
-    `;
+      ? []
+      : [`${this.baseAlias}.geom`, `${this.baseAlias}.gid`];
 
     const colsMain = this.formatColumns({
       columns: this.config.base.columns,
@@ -60,27 +57,24 @@ export class SQLQueryBuilder {
       )
       .join(",");
 
-    const selectClause = `
-    SELECT
-    ${colsBase}${colsBase && colsMain ? "," : ""}   
-    ${colsMain}${colsMain && colsJoin ? "," : ""}
-    ${colsJoin}`;
+    const selectParts = [...colsBase, colsMain, colsJoin].filter(
+      (part) => part.length > 0
+    );
+    const selectClause = `SELECT ${selectParts.join(",\n")}`;
 
-    let joinClauses = "";
-    for (const join of this.config.joins) {
-      const joinAlias = `join_${join._prefix}_alias`;
-      joinClauses += `
-        ${join.type}
-      JOIN ${join.id_source}
-      AS ${joinAlias}
-      ON ${this.baseAlias}.${join.column_base} = ${joinAlias}.${join.column_join}`;
-    }
+    let joinClauses = this.config.joins
+      .map((join) => {
+        const joinAlias = `join_${join._prefix}_alias`;
+        return `${join.type} JOIN ${join.id_source}
+            AS ${joinAlias}
+            ON ${this.baseAlias}.${join.column_base} = ${joinAlias}.${join.column_join}`;
+      })
+      .join("\n");
 
-    const query = `
-    ${selectClause}
-    FROM ${this.config.base.id_source}
-    AS ${this.baseAlias} ${joinClauses}
-    `;
+    const query = `${selectClause}
+                 FROM ${this.config.base.id_source}
+                 AS ${this.baseAlias} ${joinClauses}`;
+
     return query;
   }
 
@@ -90,7 +84,9 @@ export class SQLQueryBuilder {
    */
   createViewSQL() {
     let coreQuery = this.buildCoreQuery();
-    return `DROP VIEW IF EXISTS ${this.config.id_source}; CREATE VIEW ${this.config.id_source} AS ${coreQuery};`;
+    return `
+    DROP VIEW IF EXISTS ${this.config.id_source};
+    CREATE VIEW ${this.config.id_source} AS ${coreQuery};`;
   }
 
   /**
