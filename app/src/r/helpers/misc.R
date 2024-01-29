@@ -1568,19 +1568,6 @@ mxButton <- function(inputId, labelId = NULL, class = NULL) {
 }
 
 
-#' Password input
-#'
-#' Create a password input.
-#'
-#' @param inputId Input id
-#' @param label Label to display
-#' @export
-mxInputPassword <- function(inputId, label) {
-  tagList(
-    tags$input(id = inputId, placeholder = label, class = "mx-login-input", type = "password", value = "")
-  )
-}
-
 #' User name input
 #'
 #' Create a username input
@@ -1588,17 +1575,28 @@ mxInputPassword <- function(inputId, label) {
 #' @param inputId Input id
 #' @param label Label to display
 #' @export
-mxInputUser <- function(inputId, label, class = "form-control") {
-  tags$input(
+mxInputUser <- function(
+  inputId,
+  placeholder = "Text...",
+  tabindex = 0,
+  autofocus = FALSE,
+  class = "form-control"
+) {
+  elInput <- tags$input(
     id = inputId,
-    placeholder = label,
+    placeholder = placeholder,
     class = paste("mx-login-input", class),
     value = "",
     autocomplete = "off",
     autocorrect = "off",
     autocapitalize = "off",
-    spellcheck = "false"
+    spellcheck = "false",
+    tabindex = tabindex,
   )
+  if (isTRUE(autofocus)) {
+    elInput <- tagAppendAttributes(elInput, autofocus = "autofocus")
+  }
+  elInput
 }
 
 

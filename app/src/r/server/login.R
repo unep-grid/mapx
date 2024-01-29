@@ -1,4 +1,3 @@
-
 #
 # Hamdle logout process
 #
@@ -29,7 +28,6 @@ observeEvent(reactChain$forceLogout, {
 # Login email input validation
 #
 observeEvent(input$loginUserEmail, {
-
   #  login validation timing 2-9 ms
   mxCatch(title = "Login email validation", {
     email <- input$loginUserEmail
@@ -38,7 +36,7 @@ observeEvent(input$loginUserEmail, {
     mxUiHide(
       id = "btnSendLoginKey",
       disable = !emailIsValid,
-      hide = FALSE
+      hide = FALSE,
     )
   })
 })
@@ -95,7 +93,6 @@ observeEvent(input$btnSendLoginKey, {
       # Handle issues
       #
       if (!isTRUE(status$success)) {
-
         #
         # Simple error message for dialog txt
         #
@@ -120,7 +117,8 @@ observeEvent(input$btnSendLoginKey, {
         mxUiHide(
           id = "loginKey",
           disable = FALSE,
-          hide = FALSE
+          hide = FALSE,
+          focus = TRUE
         )
         mxUiHide(
           id = "divEmailInput",
@@ -152,7 +150,6 @@ observe({
     #
     hasNoError <- !any(sapply(k, isTRUE))
     if (hasNoError) {
-
       # trigger login observer
       reactChainCallback("loginRequested")
 
@@ -185,7 +182,6 @@ observe({
 #
 observeEvent(reactChain$loginRequested, {
   mxCatch(title = "Login process", {
-
     #
     # get the email adress provided in input
     #

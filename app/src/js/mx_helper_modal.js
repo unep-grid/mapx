@@ -194,14 +194,6 @@ export function modal(o) {
    */
   document.body.appendChild(elModal);
 
-  /**
-   * Add focus
-   */
-  const elFirstButton = elButtons.firstElementChild;
-
-  if (elFirstButton) {
-    elFirstButton.focus();
-  }
 
   /*
    * Initial pinned status

@@ -1,5 +1,3 @@
-
-
 observeEvent(input$btn_control, {
   mxCatch("controls.R", {
     switch(input$btn_control$value,
@@ -83,8 +81,10 @@ observeEvent(reactChain$showLogin, {
         class = "input-group mx-login-group",
         mxInputUser(
           inputId = "loginUserEmail",
-          label = d("login_email", language, web = F),
-          class = "mx-login-input-black form-control"
+          placeholder = d("login_email", language, web = F),
+          class = "mx-login-input-black form-control",
+          tabindex = 10,
+          autofocus = TRUE
         ),
         tags$span(
           class = "input-group-btn",
@@ -92,17 +92,17 @@ observeEvent(reactChain$showLogin, {
             inputId = "btnSendLoginKey",
             label = d("login_send_pwd", language),
             class = "btn-square btn-black",
-            disabled = TRUE
+            disabled = TRUE,
+            tabindex = 11
           )
         )
       ),
-      div(
-        tags$input(
-          id = "loginKey",
-          type = "text",
-          placeholder = d("login_insert_pwd", language, web = F),
-          class = "form-control mx-login-input mx-login-input-black  mx-hide"
-        )
+      mxInputUser(
+        inputId = "loginKey",
+        placeholder = d("login_insert_pwd", language, web = FALSE),
+        class = "form-control mx-login-input mx-login-input-black  mx-hide",
+        tabindex = 12,
+        autofocus = FALSE
       ),
       div(
         class = "mx-login-info",
@@ -110,7 +110,6 @@ observeEvent(reactChain$showLogin, {
       )
     )
   } else {
-
     #
     # If already logged, display the session status
     #
@@ -219,7 +218,7 @@ observeEvent(reactChain$showAbout, {
       title <- .get(ab, c("title", language))
       if (noDataCheck(title)) title <- .get(ab, c("title", languageDefault))
       content <- .get(ab, c("content", language))
-      if (noDataCheck(content)){
+      if (noDataCheck(content)) {
         content <- .get(ab, c("content", languageDefault))
       }
 

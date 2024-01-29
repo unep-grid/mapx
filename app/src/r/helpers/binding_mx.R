@@ -223,13 +223,21 @@ mxActionButtonState <- function(id, disable = FALSE, warning = FALSE, session = 
 #' @param id Id of element to enable/disable
 #' @param enable Boolean. Enable or not.
 #' @export
-mxUiHide <- function(id = NULL, class = NULL, disable = TRUE, hide = TRUE, hideClass = "mx-hide", session = shiny:::getDefaultReactiveDomain()) {
+mxUiHide <- function(
+  id = NULL,
+  class = NULL,
+  disable = TRUE,
+  hide = TRUE,
+  hideClass = "mx-hide",
+  focus = FALSE,
+  session = shiny:::getDefaultReactiveDomain()) {
   out <- jsonlite::toJSON(list(
     id = id,
     class = class,
     hide = hide,
     disable = disable,
-    hideClass = hideClass
+    hideClass = hideClass,
+    focus = focus
   ), auto_unbox = T)
 
 

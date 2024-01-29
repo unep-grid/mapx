@@ -1326,7 +1326,6 @@ export function buttonToggle(r) {
     c.remove("btn-warning");
     c.remove("btn-default");
     elBtn.setAttribute("disabled", true);
-    elBtn.setAttribute("tabindex", "-1");
   } else if (r.warning === true) {
     c.add("btn-warning");
     c.remove("btn-danger");
@@ -1352,7 +1351,6 @@ export function buttonEnable(elBtn, enable) {
   } else {
     elBtn.classList.add("disabled-with-events");
     elBtn.setAttribute("disabled", true);
-    elBtn.setAttribute("tabindex", "-1");
   }
 }
 /**
@@ -1391,7 +1389,6 @@ export function updateCheckboxInput(o) {
   if (isBoolean(o.disabled)) {
     if (o.disabled) {
       elInput.setAttribute("disabled", true);
-      elInput.setAttribute("tabindex", "-1");
     } else {
       elInput.removeAttribute("disabled");
     }
@@ -1761,6 +1758,7 @@ export function jsDebugMsg(m) {
  * @param {String} m.hideClass Class to remove if enabled is true
  * @param {Boolean} m.hide Hide add hideClass to given element
  * @param {Boolean} m.disable Add disabled attr to element
+ * @param {Boolean} m.focus Focus
  */
 export function hide(m) {
   if (!m || !(m.class || m.id)) {
@@ -1789,10 +1787,12 @@ export function hide(m) {
     }
     if (m.disable) {
       element.setAttribute("disabled", true);
-      element.setAttribute("tabindex", "-1");
     } else {
       element.removeAttribute("disabled");
     }
+  }
+  if (m.focus) {
+    element.focus();
   }
 }
 
