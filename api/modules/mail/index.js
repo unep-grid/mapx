@@ -27,16 +27,12 @@ export async function mwSendMail(req, res) {
     /*
      * Decrypt the message if needed
      */
-    let conf = {};
-    if (dat.encrypted) {
-      conf = await decrypt(dat.msg);
-    } else {
-      if (isString(dat.msg)) {
-        conf = JSON.parse(dat.msg);
-      } else {
-        conf = dat.msg;
-      }
+
+    if (!dat.encrypted) {
+      return;
     }
+
+    const conf = await decrypt(dat.msg);
 
     /**
      * Validate

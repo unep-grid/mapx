@@ -8,6 +8,7 @@ WITH
    * $5 add_global boolean
    * $6 editable boolean
    * $7 readable boolean
+   * $8 add related views title boolean
    */
   sources as (
     SELECT
@@ -37,15 +38,24 @@ WITH
       mx_sources
     WHERE
       /**
+       * At least read or edit mode
+       */
+      (
+        $6::boolean
+        OR $7::boolean
+      )
+      AND
+      /**
        * Type matching
        */
     type = ANY ($4)
     AND (
       (
         /**
-         * Match global source 
+         * Match readable AND global source 
          */
-        $5::boolean
+        $7::boolean
+        AND $5::boolean
         AND global
       )
       OR (
@@ -54,23 +64,37 @@ WITH
          */
         project = $1
         AND (
+          /**
+           * In case of edit mode
+           */
           (
             $6::boolean
             AND (
-              editors ?| $3
+              editor = $2::integer
+              OR editors ?| $3
               OR editors ? $2::varchar
             )
           )
-          OR (
+          OR
+          /**
+           * In case of read mode
+           */
+          (
             $7::boolean
             AND (
-              readers ?| $3
+              editor = $2::integer
+              OR readers ?| $3
               OR readers ? $2::varchar
             )
           )
-          OR editor = $2::integer
         )
       )
+    )
+    OR (
+      /**
+       * Includes predefined id 
+       */
+      id = ANY ($9)
     )
     ORDER BY
       title ASC
@@ -80,7 +104,7 @@ WITH
    */
   views_agg as (
     SELECT
-      s.id,
+      s.id id_source,
       array_agg(
         coalesce(
           NULLIF(v.data #>> '{title,{{language}}}', ''),
@@ -92,12 +116,15 @@ WITH
       sources s
       JOIN mx_views_latest v ON v.data #>> '{source,layerInfo,name}' = s.id
     WHERE
-      v.project = $1
+      $8::boolean
+      AND v.project = $1
       AND v.type = 'vt'
       AND (
         v.editor = $2::integer
         OR v.editors ? $2::varchar
         OR v.editors ?| $3
+        OR v.readers ? $2::varchar
+        OR v.readers ?| $3
       )
     GROUP BY
       s.id
@@ -108,12 +135,15 @@ WITH
   grouped as (
     SELECT
       s.*,
-      v.titles as views
+      coalesce(v.titles, array[]::text[]) AS views
     FROM
       sources s
-      LEFT OUTER JOIN views_agg v ON s.id = v.id
+      LEFT OUTER JOIN views_agg v ON s.id = v.id_source
   )
-select
+  /**
+   * Return source list with or without related views title
+   */
+SELECT
   *
-from
+FROM
   grouped

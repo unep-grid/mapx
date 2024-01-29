@@ -12,7 +12,7 @@ mxApiUrl <- function(route, listParam = NULL, public = FALSE, protocol = "http")
   port <- ifelse(public,
     .get(config, c("api", "port_public")),
     .get(config, c("api", "port"))
-    )
+  )
 
   if (isNotEmpty(listParam)) {
     param <- paste0("?", mxListToQueryStringParam(listParam))
@@ -36,18 +36,14 @@ mxApiUrl <- function(route, listParam = NULL, public = FALSE, protocol = "http")
 #'
 mxApiFetch <- function(route, listParam = NULL, asDataFrame = FALSE) {
   data <- list()
-  tryCatch(
-    {
-      url <- mxApiUrl(route, listParam)
-      data <- fromJSON(url, simplifyDataFrame = asDataFrame)
-      if (isTRUE(!noDataCheck(data)) && isTRUE(data$type == "error")) {
-        stop(data$message)
-      }
-    },
-    error = function(e) {
-      mxKillProcess(sprintf("mxApiFetch: api issue, shut down. Details: %s", e$message))
+  mxCatch("Api Fetch", {
+    url <- mxApiUrl(route, listParam)
+    data <- fromJSON(url, simplifyDataFrame = asDataFrame)
+
+    if (isTRUE(!noDataCheck(data)) && isTRUE(data$type == "error")) {
+      stop(data$message)
     }
-  )
+  })
   return(data)
 }
 
@@ -175,4 +171,37 @@ mxApiGetSourceSummary <- function(
     idAttr = idAttr
   ))
   return(res)
+}
+
+
+#' Get table of layer for one project, for given role or userid
+#' @export
+mxApiGetSourceTable <- function(
+  idProject,
+  idUser,
+  language = "en",
+  idSources = list(),
+  types = c("vector", "raster", "tabular", "join"),
+  editable = FALSE,
+  readable = FALSE,
+  add_global = FALSE,
+  token = NULL,
+  add_views = FALSE
+) {
+  config <- list(
+    idProject = idProject,
+    idUser = idUser,
+    language = language,
+    idSources = idSources,
+    types = types,
+    editable = editable,
+    readable = readable,
+    add_global = add_global,
+    token = token,
+    add_views = add_views
+  )
+
+  data <- mxApiFetch("/get/sources/list/user", config, asDataFrame = TRUE)
+  
+  return(data)
 }

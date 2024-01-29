@@ -48,17 +48,25 @@ const rules = [
       "allViews",
       "overwriteStyle",
       "usePostgisTiles",
+      "add_global",
+      "add_views",
+      "editable",
+      "readable",
     ],
     test: (d) => {
+
       if (isString(d)) {
         switch (d) {
           case "null":
+          case "NULL":
             d = false;
             break;
           case "true":
+          case "TRUE":
             d = true;
             break;
           case "false":
+          case "FALSE":
             d = false;
             break;
           default:
@@ -264,6 +272,20 @@ const rules = [
       return {
         valid: isValid,
         value: d,
+      };
+    },
+  },
+  {
+    key: ["idSources"],
+    test: (d) => {
+      d = asArray(d);
+      isValid = d.reduce(
+        (a, x) => a && isSourceId(x) && !tableNotQueryable.includes(x),
+        true
+      );
+      return {
+        valid: isValid,
+        value: isValid ? d : [],
       };
     },
   },

@@ -1,9 +1,9 @@
-import { el, elAuto, elButtonFa, elSpanTranslate as tt } from "../../el_mapx";
+import { el, elButtonFa, elSpanTranslate as tt } from "../../el_mapx";
 import { EventSimple } from "../../event_simple";
 import { isSourceId, isEmpty } from "../../is_test";
 import { modalSelectSource } from "../../select_auto";
 import { settings, ws, nc } from "../../mx";
-import { modalDialog, modalPrompt, modalSimple } from "../../mx_helper_modal";
+import { modalPrompt, modalSimple } from "../../mx_helper_modal";
 import { getDictItem, getLabelFromObjectPath } from "../../language";
 import "./style.less";
 import { makeId } from "../../mx_helper_misc";

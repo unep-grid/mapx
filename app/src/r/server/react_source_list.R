@@ -8,56 +8,63 @@ observe({
 # List of layers
 #
 reactTableReadSources <- reactive({
-  update <- reactData$updateSourceLayerList
-  userRole <- getUserRole()
-  idUser <- .get(reactUser, c("data", "id"))
-  project <- reactData$project
-  language <- reactData$language
+  mxCatch(title = "React table source readable", {
+    update <- reactData$updateSourceLayerList
+    userData <- reactUser$data
+    idUser <- userData$id
+    project <- reactData$project
+    language <- reactData$language
+    token <- reactUser$token
 
-  ## non reactif
-  additionalLayers <- c()
-  userCanRead <- .get(userRole, c("read"))
+    ## non reactif
+    additionalLayers <- c()
 
-  views <- reactViewsCompact()
 
-  #
-  # Extract all sources id set in views and add them in the layer list.
-  #
-  if (!noDataCheck(views)) {
-    #
-    # Filter edit
-    #
-    viewsEdit <- views[sapply(views, `[[`, "_edit")]
-    #
-    # Get ids
-    #
-    viewsIds <- sapply(viewsEdit, .get, c("id"))
+    views <- reactViewsCompact()
 
     #
-    # Get related source layer
+    # Extract all sources id set in views and add them in the layer list.
     #
-    additionalLayers <- mxDbGetLayerListByViews(viewsIds)
-  }
+    if (!noDataCheck(views)) {
+      #
+      # Filter edit
+      #
+      viewsEdit <- views[sapply(views, `[[`, "_edit")]
+      #
+      # Get ids
+      #
+      viewsIds <- sapply(viewsEdit, .get, c("id"))
 
-  #
-  # Get layer table
-  #
-  layers <- mxDbGetSourceTable(
-    project = project,
-    idUser = idUser,
-    roleInProject = userRole,
-    language = language,
-    additionalSourcesIds = additionalLayers,
-    editableOnly = FALSE,
-    addGlobal = TRUE
-  )
+      #
+      # Get related source layer
+      #
+      additionalLayers <- mxDbGetLayerListByViews(viewsIds)
+    }
 
-  return(layers)
+    #
+    # Get layer table
+    #
+    layers <- mxApiGetSourceTable(
+      idProject = project,
+      idUser = idUser,
+      language = language,
+      idSources = additionalLayers,
+      types = c("join", "vector"),
+      editable = FALSE,
+      readable = TRUE,
+      add_global = TRUE,
+      add_views = FALSE,
+      token = token
+    )
+
+    return(layers)
+  })
 })
 
 reactListReadSources <- reactive({
   layers <- reactTableReadSources()
   layers <- mxGetSourceNamedList(layers)
+  browser()
   return(layers)
 })
 reactListReadSourcesVector <- reactive({
@@ -76,25 +83,36 @@ reactListReadSourcesVector <- reactive({
 
 
 reactTableEditSources <- reactive({
-  update <- reactData$updateSourceLayerList
-  userRole <- getUserRole()
-  isPublisher <- "publishers" %in% userRole$groups
-  language <- reactData$language
-  project <- reactData$project
-  userData <- reactUser
-  idUser <- .get(userData, c("data", "id"))
+  mxCatch(title = "React table source editable", {
+    update <- reactData$updateSourceLayerList
+    userRole <- getUserRole()
+    isPublisher <- "publishers" %in% userRole$groups
+    language <- reactData$language
+    project <- reactData$project
+    userData <- reactUser
+    idUser <- .get(userData, c("data", "id"))
+    token <- userData$token
 
-  tbl <- data.frame()
-  if (isPublisher) {
-    tbl <- mxDbGetSourceTable(
-      project = project,
+    tbl <- data.frame()
+    if (!isPublisher) {
+      return()
+    }
+
+    tbl <- mxApiGetSourceTable(
+      idProject = project,
       idUser = idUser,
-      roleInProject = userRole,
       language = language,
-      editableOnly = TRUE
+      idSources = additionalLayers,
+      types = c("join", "vector"),
+      editable = TRUE,
+      readable = FALSE,
+      add_global = TRUE,
+      add_views = FALSE,
+      token = token
     )
-  }
-  return(tbl)
+
+    return(tbl)
+  })
 })
 reactListEditSources <- reactive({
   layers <- reactTableEditSources()
@@ -111,5 +129,3 @@ reactListEditSourcesVector <- reactive({
   }
   return(layers)
 })
-
-

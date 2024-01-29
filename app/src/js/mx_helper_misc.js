@@ -1407,6 +1407,8 @@ export function updateCheckboxInput(o) {
 export async function showSelectSourceEdit(opt) {
   const idSource = await modalSelectSource({
     disable_large: false,
+    readable: false,
+    editable: true,
     types: ["vector", "tabular", "join"],
   });
   if (isSourceId(idSource)) {

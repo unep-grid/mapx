@@ -142,6 +142,7 @@ app.get("/get/source/summary/", source.mwGetSummary);
 app.get("/get/source/table/attribute/", source.mwGetAttributeTable);
 app.get("/get/source/overlap/", source.mwGetOverlap); //countries=[]&layers=[]&='area';
 app.get("/get/source/validate/geom", source.mwGetGeomValidate);
+app.get("/get/sources/list/user", source.mwGetSourcesList);
 app.get("/get/ip", ip.mwGet);
 app.get("/get/search/key", mwGetSearchKey);
 app.get("/get/gemet/search", mwGemetSearchText);

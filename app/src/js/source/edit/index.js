@@ -3128,6 +3128,8 @@ export class EditTableSessionClient extends WsToolsBase {
       types: ["vector", "tabular"],
       disable_large: true,
       disable_missing: true,
+      readable: false,
+      editable: true,
     });
     return res;
   }

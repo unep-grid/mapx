@@ -676,7 +676,7 @@ d <- mxDictTranslate
 mxGetSourceNamedList <- function(layerTable) {
   out <- as.list(layerTable$id)
   titles <- layerTable$title
-  date <- layerTable$date_modified
+  date <- as.Date(layerTable$date_modified)
 
   titlesDate <- sprintf("%1$s ( %2$s )", titles, format(date, "%Y-%m-%d"))
 

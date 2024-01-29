@@ -2,11 +2,43 @@ import { pgRead } from "#mapx/db";
 import { getTableDimension, tableExists } from "#mapx/db_utils";
 import { templates } from "#mapx/template";
 import { parseTemplate } from "#mapx/helpers";
-import { isSourceId } from "@fxi/mx_valid";
+import { isEmpty, isSourceId } from "@fxi/mx_valid";
+import { validateTokenHandler, getUserRoles } from "#mapx/authentication";
+import { getParamsValidator } from "#mapx/route_validation";
 
-export { ioSourceList };
+const validateParamsHandler = getParamsValidator({
+  expected: [
+    "idUser",
+    "idProject",
+    "idSources",
+    "language",
+    "token",
+    "types",
+    "add_global",
+    "add_views",
+    "editable",
+    "readable",
+  ],
+});
 
-async function ioSourceList(socket, request, cb) {
+export const mwGetSourcesList = [
+  validateParamsHandler,
+  validateTokenHandler,
+  sourcesListHandler,
+];
+
+async function sourcesListHandler(req, res) {
+  try {
+    const { query } = req;
+    const sourceList = await getSourcesList(query);
+    return res.status(200).json(sourceList);
+  } catch (error) {
+    console.error("Error fetching source list:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export async function ioSourceList(socket, request, cb) {
   const session = socket.session;
 
   try {
@@ -18,11 +50,7 @@ async function ioSourceList(socket, request, cb) {
       throw new Error("Unautorized");
     }
 
-    const options = {
-      language: "en",
-      types: ["tabular", "vector", "raster", "join"],
-      addGlobal: false,
-    };
+    const options = {};
 
     // can't be changed by options
     const auth = {
@@ -65,27 +93,72 @@ export async function getSourceIdsIncludingJoin(idSource, idProject) {
 }
 
 async function getSourcesList(options) {
+  const def = {
+    idProject: null,
+    idUser: null,
+    groups: [],
+    types: ["tabular", "vector", "raster", "join"],
+    language: "en",
+    idSources: [],
+    editable: false,
+    readable: true,
+    add_views: true,
+    add_global: false,
+  };
+
+  const config = Object.assign({}, def, options);
+
+  if (isEmpty(config.groups)) {
+    const roles = await getUserRoles(config.idUser, config.idProject);
+    config.groups = roles.group;
+  }
+
   const {
     idProject,
     idUser,
     groups,
     types,
     language,
-    add_global,
+    idSources,
     editable,
     readable,
-  } = options;
+    add_views,
+    add_global,
+  } = config;
+
+
+  if (editable && readable) {
+    throw new Error("Editable and readable are exclusive");
+  }
+  if (global && editable) {
+    throw new Error("Editable and global are exclusive");
+  }
+  if (!global && !readable && !editable) {
+    throw new Error(
+      "At least one of Global, Editable or Readable should be true"
+    );
+  }
 
   const qSqlTemplate = templates.getSourcesListByRoles;
   const qSql = parseTemplate(qSqlTemplate, { language });
 
   const res = await pgRead.query({
     text: qSql,
-    values: [idProject, idUser, groups, types, add_global, editable, readable],
+    values: [
+      idProject,
+      idUser,
+      groups,
+      types,
+      add_global,
+      editable,
+      readable,
+      add_views,
+      idSources,
+    ],
   });
 
   /**
-   * Add table dimension
+   * Add table dimensions
    */
   for (const row of res.rows) {
     row.exists = await tableExists(row.id);

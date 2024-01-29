@@ -68,6 +68,8 @@ export class GeometryTools {
   async dialogSelectTable() {
     const res = await modalSelectSource({
       types: ["vector"],
+      editable: true,
+      readable: false,
     });
     return res;
   }
