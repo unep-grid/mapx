@@ -54,6 +54,7 @@ export const config = {
     readable: false,
     editable: false,
     add_global: false,
+    add_views: false,
     addional_items: [], // e.g. already configured id, to avoid missing
     placeholder_wait: "Please wait...",
     placeholder_ready: "Select source...",
@@ -73,6 +74,7 @@ async function update() {
       editable,
       readable,
       add_global,
+      add_views,
       addional_items,
       max_rows,
       max_cols,
@@ -91,6 +93,7 @@ async function update() {
       readable,
       addional_items,
       add_global,
+      add_views,
     });
     const items = list || [];
     for (const item of items) {

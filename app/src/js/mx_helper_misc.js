@@ -1409,6 +1409,8 @@ export async function showSelectSourceEdit(opt) {
     disable_large: false,
     readable: false,
     editable: true,
+    add_views: true,
+    add_global: false,
     types: ["vector", "tabular", "join"],
   });
   if (isSourceId(idSource)) {

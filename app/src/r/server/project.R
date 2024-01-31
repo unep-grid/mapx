@@ -210,7 +210,6 @@ observeEvent(reactData$mapIsReady, {
 # Show project panel
 #
 observeEvent(reactChain$showProjectsList, {
-  reactData$timerProjectList <- mxTimeDiff("Build project list") ## end timer in control.js
 
   userRole <- getUserRole()
   userData <- reactUser$data
@@ -324,7 +323,6 @@ observeEvent(reactChain$renderUserProjectsList, {
     "mxRenderUserProjectsList",
     reactChain$renderUserProjectsList$data
   )
-  mxTimeDiff(reactData$timerProjectList)
 })
 
 

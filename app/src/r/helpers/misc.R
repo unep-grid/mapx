@@ -667,10 +667,6 @@ mxDictTranslate <- function(
 d <- mxDictTranslate
 
 
-
-
-
-
 #' Create source named list from layer table
 #' @param layerTable {table} table with columns "id", "title", "date_modified"
 mxGetSourceNamedList <- function(layerTable) {

@@ -74,6 +74,16 @@
   border: 1px solid var(--mx_ui_border);
   border-radius: 3px;
 }
+.mx-list-projects.mx-list-empty:after {
+  content: "[ No project found ]";
+  min-height: 60px;
+  color: var(--mx_ui_text_faded);
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .mx-list-projects-search {
   padding: 10px 10px 10px 10px;
   width: 100%;

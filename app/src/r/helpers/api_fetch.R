@@ -34,13 +34,31 @@ mxApiUrl <- function(route, listParam = NULL, public = FALSE, protocol = "http")
 #' @param asDataFrame {Logical} Return a data.frame
 #' @return Data {List}
 #'
-mxApiFetch <- function(route, listParam = NULL, asDataFrame = FALSE) {
+mxApiFetch <- function(route, listParam = NULL, asDataFrame = FALSE, debug = FALSE) {
   data <- list()
   mxCatch("Api Fetch", {
+    
     url <- mxApiUrl(route, listParam)
-    data <- fromJSON(url, simplifyDataFrame = asDataFrame)
+    
+    if (isTRUE(debug)) {
+      diff <- mxTimeDiff(sprintf("API FETCH %s", route))
+    }
+    
+    response <- curl_fetch_memory(url)
+    strData <- rawToChar(response$content)
 
-    if (isTRUE(!noDataCheck(data)) && isTRUE(data$type == "error")) {
+    if (isTRUE(debug)) {
+      mxTimeDiff(diff)
+    }
+
+    if (isEmpty(strData)) {
+      warning("API fetch, empty data for", route, listParam)
+      return(data)
+    }
+
+    data <- fromJSON(strData, simplifyDataFrame = asDataFrame)
+
+    if (isNotEmpty(data) && isTRUE(data$type == "error")) {
       stop(data$message)
     }
   })
@@ -202,6 +220,6 @@ mxApiGetSourceTable <- function(
   )
 
   data <- mxApiFetch("/get/sources/list/user", config, asDataFrame = TRUE)
-  
+
   return(data)
 }

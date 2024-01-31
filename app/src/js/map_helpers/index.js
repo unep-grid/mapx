@@ -142,7 +142,7 @@ import {
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
-import {updateViewsBadges} from "../badges/index.js";
+import { updateViewsBadges } from "../badges/index.js";
 export * from "./view_filters.js";
 
 /**
@@ -531,7 +531,7 @@ export async function setProject(idProject, opt) {
 
   modalCloseAll();
   const promRes = events.once("settings_project_change");
-  const promWait = waitTimeoutAsync(1000, null, "timeout");
+  const promWait = waitTimeoutAsync(10e3, null, "timeout");
 
   Shiny.onInputChange("selectProject", idProject);
 
@@ -553,6 +553,12 @@ export async function setProject(idProject, opt) {
           ? "modal_check_confirm_project_change_fail_content_not_logged"
           : "modal_check_confirm_project_change_fail_content_logged",
       ),
+    });
+    console.error("Project change failed",{
+      hadTimeout,
+      validProject,
+      projectRefused,
+      projectNotChanged,
     });
     return false;
   }

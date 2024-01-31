@@ -236,7 +236,7 @@ span.mx-badge-role {
 .mx .selectize-control.single .selectize-input.dropdown-active:after,
 .mx .selectize-dropdown.form-control {
   background-color: var(--mx_ui_background);
-  border-color: var(--mx_ui_border);
+  border-color: var(--mx_ui_border) transparent transparent;
 }
 
 .mx .selectize-dropdown [data-selectable].active,

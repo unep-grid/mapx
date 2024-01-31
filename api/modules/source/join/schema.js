@@ -105,6 +105,7 @@ export function getSchema(language = "en") {
                 loader: "source_edit",
                 types: ["vector", "tabular"],
                 readable: true,
+                add_global: true,
               },
             },
             columns: {

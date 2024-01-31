@@ -9,7 +9,7 @@ const resolver_default = {
   disable_missing: true,
   update_on_init: true,
   add_global: false,
-  readable: true,
+  readable: false,
   editable: false,
 };
 

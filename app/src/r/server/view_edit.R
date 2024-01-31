@@ -9,629 +9,627 @@ observe({
     #
     viewAction <- input$mx_client_view_action
 
+    if (isEmpty(viewAction)) {
+      return()
+    }
+
     isolate({
-      if (!noDataCheck(viewAction)) {
-        isGuest <- isGuestUser()
-        userData <- reactUser$data
-        idUser <- userData$id
-        userRole <- getUserRole()
-        language <- reactData$language
-        project <- reactData$project
-        token <- reactUser$token
-        isDev <- mxIsUserDev(idUser)
+      isGuest <- isGuestUser()
+      userData <- reactUser$data
+      idUser <- userData$id
+      userRole <- getUserRole()
+      language <- reactData$language
+      project <- reactData$project
+      token <- reactUser$token
+      isDev <- mxIsUserDev(idUser)
 
-        if (viewAction[["action"]] == "btn_upload_geojson") {
+      if (viewAction[["action"]] == "btn_upload_geojson") {
+        #
+        # Section to remove
+        #
+      } else {
+        #
+        # Get view data and check if user can edit
+        #
+
+        viewId <- viewAction[["target"]]
+        if (isEmpty(viewId)) {
+          return()
+        }
+
+        viewData <- mxApiGetViews(
+          idViews = viewId,
+          idProject = project,
+          idUser = userData$id,
+          language = language,
+          token = token
+        )
+
+        if (isEmpty(viewData)) {
+          return()
+        }
+
+        if (length(viewData) > 1) {
           #
-          # Section to remove
+          # mxApiGetViews did not found the view and return everything.
           #
+          return()
         } else {
-          #
-          # Get view data and check if user can edit
-          #
+          viewData <- viewData[[1]]
+        }
 
-          viewId <- viewAction[["target"]]
-          if (noDataCheck(viewId)) {
-            return()
-          }
+        if (isEmpty(viewData)) {
+          return()
+        }
+        #
+        # Keep a version of the view edited
+        #
+        reactData$viewDataEdited <- viewData
 
-          timer <- mxTimeDiff("get view to edit")
-          viewData <- mxApiGetViews(
-            idViews = viewId,
-            idProject = project,
-            idUser = userData$id,
-            language = language,
-            token = token
-          )
+        #
+        # Check if the request gave edit flag to the user
+        #
+        viewIsEditable <- isTRUE(.get(viewData, c("_edit")))
 
-          mxTimeDiff(timer)
+        #
+        # Get type and title
+        #
+        viewType <- .get(viewData, c("type"))
+        viewTitle <- .get(viewData, c("_title"))
+
+        #
+        # Who can view this
+        #
+        viewReadTarget <- c("self", "public", "members", "publishers", "admins")
+        viewEditTarget <- c("self", "publishers", "admins")
+        viewReaders <- c("self", .get(viewData, c("readers")))
+        viewEditors <- c("self", .get(viewData, c("editors")))
+        viewEditors <- unique(c(viewEditors, .get(viewData, c("editor"))))
+        viewReaders <- viewReaders[!viewReaders == idUser]
+        viewEditors <- viewEditors[!viewEditors == idUser]
+        #
+        # View collection
+        #
+        collectionsTags <- reactCollections()
+        collectionsCurrent <- .get(viewData, c("data", "collections"))
 
 
-          if (noDataCheck(viewData)) {
-            return()
-          }
+        #
+        # Initial button list for the modal
+        #
+        btnList <- tagList()
 
-          if (length(viewData) > 1) {
+        #
+        # Switch through actions
+        #
+        switch(viewAction$action,
+          "btn_opt_share_to_project" = {
+            reactData$showShareManagerProject <- runif(1)
+          },
+          "btn_opt_share" = {
+            reactData$showShareManager <- list(
+              views = list(viewId),
+              isStory = .get(viewData, c("type")) == "sm",
+              project = project,
+              collections = collectionsCurrent,
+              trigger = runif(1)
+            )
+          },
+          "btn_opt_download" = {
+            idSource <- .get(viewData, c("data", "source", "layerInfo", "name"))
+            if (isEmpty(idSource)) {
+              return()
+            }
+
+            reactData$sourceDownloadRequest <- list(
+              idSource = idSource,
+              idView = viewId,
+              update = runif(1)
+            )
+          },
+          "btn_opt_delete" = {
+            if (!viewIsEditable) {
+              return()
+            }
+
+            uiOut <- tagList(
+              tags$p(
+                tags$span(d("view_delete_confirm", language))
+              )
+            )
+
+            btnList <- list(
+              actionButton(
+                inputId = "btnViewDeleteConfirm",
+                label = d("btn_confirm", language)
+              )
+            )
+
+            mxModal(
+              id = "modalViewEdit",
+              title = sprintf(d("view_delete_modal_title", language), viewTitle),
+              content = uiOut,
+              textCloseButton = d("btn_close", language),
+              buttons = btnList,
+              addBackground = TRUE,
+              addBtnMove = TRUE
+            )
+          },
+          "btn_opt_edit_config" = {
+            if (!viewIsEditable) {
+              return()
+            }
+
             #
-            # mxApiGetViews did not found the view and return everything.
+            # Set list of project by user
             #
-            return()
-          } else {
-            viewData <- viewData[[1]]
-          }
+            projectsList <- mxDbGetProjectListByUser(
+              id = userData$id,
+              whereUserRoleIs = "publisher",
+              language = language,
+              token = reactUser$token,
+              asNamedList = TRUE,
+              idsAdditionalProjects = .get(viewData, c("data", "projects"))
+            )
 
-          if (noDataCheck(viewData)) {
-            return()
-          }
-          #
-          # Keep a version of the view edited
-          #
-          reactData$viewDataEdited <- viewData
+            #
+            # Get additional editors from members
+            #
+            members <- reactTableUsers()$members
 
-          #
-          # Check if the request gave edit flag to the user
-          #
-          viewIsEditable <- isTRUE(.get(viewData, c("_edit")))
+            #
+            # Create named lists for editors and members
+            #
+            targetNamesEditors <- c(d("group_project", language, web = F), d("members", language, web = F))
+            targetNamesReaders <- c(d("group_project", language, web = F))
+            viewReadTarget <- list(Groups = d(viewReadTarget, language, namedVector = T))
+            viewEditTarget <- list(Groups = d(viewEditTarget, language, namedVector = T), Users = members)
+            names(viewReadTarget) <- targetNamesReaders
+            names(viewEditTarget) <- targetNamesEditors
 
-          #
-          # Get type and title
-          #
-          viewType <- .get(viewData, c("type"))
-          viewTitle <- .get(viewData, c("_title"))
+            #
+            # Specific ui for each type (sm,vt,rt). Default empty ;
+            #
+            uiType <- tagList()
 
-          #
-          # Who can view this
-          #
-          viewReadTarget <- c("self", "public", "members", "publishers", "admins")
-          viewEditTarget <- c("self", "publishers", "admins")
-          viewReaders <- c("self", .get(viewData, c("readers")))
-          viewEditors <- c("self", .get(viewData, c("editors")))
-          viewEditors <- unique(c(viewEditors, .get(viewData, c("editor"))))
-          viewReaders <- viewReaders[!viewReaders == idUser]
-          viewEditors <- viewEditors[!viewEditors == idUser]
-          #
-          # View collection
-          #
-          collectionsTags <- reactCollections()
-          collectionsCurrent <- .get(viewData, c("data", "collections"))
+            #
+            # Common ui
+            #
+            uiDesc <- tagList(
+              #
+              # Title and abstract (schema based)
+              #
+              jedOutput("viewTitleSchema"),
+              jedOutput("viewAbstractSchema"),
 
-
-          #
-          # Initial button list for the modal
-          #
-          btnList <- tagList()
-
-          #
-          # Switch through actions
-          #
-          switch(viewAction$action,
-            "btn_opt_share_to_project" = {
-              reactData$showShareManagerProject <- runif(1)
-            },
-            "btn_opt_share" = {
-              reactData$showShareManager <- list(
-                views = list(viewId),
-                isStory = .get(viewData, c("type")) == "sm",
-                project = project,
-                collections = collectionsCurrent,
-                trigger = runif(1)
-              )
-            },
-            "btn_opt_download" = {
-              idSource <- .get(viewData, c("data", "source", "layerInfo", "name"))
-              if (noDataCheck(idSource)) {
-                return()
-              }
-
-              reactData$sourceDownloadRequest <- list(
-                idSource = idSource,
-                idView = viewId,
-                update = runif(1)
-              )
-            },
-            "btn_opt_delete" = {
-              if (!viewIsEditable) {
-                return()
-              }
-
-              uiOut <- tagList(
-                tags$p(
-                  tags$span(d("view_delete_confirm", language))
+              #
+              # Projects of the view ?
+              #
+              selectizeInput(
+                inputId = "selViewProjectsUpdate",
+                label = d("view_projects", language),
+                choices = projectsList,
+                selected = .get(viewData, c("data", "projects")),
+                multiple = TRUE,
+                options = list(
+                  sortField = "label",
+                  plugins = list("remove_button")
                 )
-              )
-
-              btnList <- list(
-                actionButton(
-                  inputId = "btnViewDeleteConfirm",
-                  label = d("btn_confirm", language)
+              ),
+              #
+              # Who can see this ?
+              #
+              selectizeInput(
+                inputId = "selViewReadersUpdate",
+                label = d("view_target_readers", language),
+                choices = viewReadTarget,
+                selected = viewReaders,
+                multiple = TRUE,
+                options = list(
+                  sortField = "label",
+                  plugins = list("remove_button")
                 )
+              ),
+              selectizeInput(
+                inputId = "selViewEditorsUpdate",
+                label = d("view_target_editors", language),
+                choices = viewEditTarget,
+                selected = viewEditors,
+                multiple = TRUE,
+                options = list(
+                  sortField = "label",
+                  plugins = list("remove_button")
+                )
+              ),
+              #
+              # Collections
+              #
+              if (FALSE) {
+                selectizeInput(
+                  inputId = "selViewCollectionsUpdate",
+                  label = d("view_collections", language),
+                  choices = collectionsTags,
+                  selected = collectionsCurrent,
+                  multiple = TRUE,
+                  options = list(
+                    create = userRole$publisher,
+                    sortField = "label",
+                    plugins = list("remove_button")
+                  )
+                )
+              }
+            )
+
+            #
+            # vector tile specific
+            #
+            if (viewType == "vt") {
+              srcAvailable <- reactListReadSourcesVector()
+              srcSet <- .get(viewData, c("data", "source", "layerInfo", "name"))
+              srcSetMask <- .get(viewData, c("data", "source", "layerInfo", "maskName"))
+
+
+              srcAvailableMask <- srcAvailable[!srcAvailable %in% srcSet]
+              hasSource <- srcSet %in% srcAvailable
+              reactData$sourceLayerFromView <- list(
+                trigger = Sys.time(),
+                srcSet = srcSet,
+                srcSetMask = srcSetMask
               )
 
-              mxModal(
-                id = "modalViewEdit",
-                title = sprintf(d("view_delete_modal_title", language), viewTitle),
-                content = uiOut,
-                textCloseButton = d("btn_close", language),
-                buttons = btnList,
-                addBackground = TRUE,
-                addBtnMove = TRUE
-              )
-            },
-            "btn_opt_edit_config" = {
-              if (!viewIsEditable) {
-                return()
+              if (isNotEmpty(srcSet) && !hasSource) {
+                names(srcSet) <- mxGetTitleFromSourceID(
+                  id = srcSet,
+                  language = language
+                )
+
+                srcAvailable <- c(srcSet, srcAvailable)
               }
 
-              #
-              # Set list of project by user
-              #
-              projectsList <- mxDbGetProjectListByUser(
-                id = userData$id,
-                whereUserRoleIs = "publisher",
-                language = language,
-                token = reactUser$token,
-                asNamedList = TRUE,
-                idsAdditionalProjects = .get(viewData, c("data", "projects"))
-              )
-
-              #
-              # Get additional editors from members
-              #
-              members <- reactTableUsers()$members
-
-              #
-              # Create named lists for editors and members
-              #
-              targetNamesEditors <- c(d("group_project", language, web = F), d("members", language, web = F))
-              targetNamesReaders <- c(d("group_project", language, web = F))
-              viewReadTarget <- list(Groups = d(viewReadTarget, language, namedVector = T))
-              viewEditTarget <- list(Groups = d(viewEditTarget, language, namedVector = T), Users = members)
-              names(viewReadTarget) <- targetNamesReaders
-              names(viewEditTarget) <- targetNamesEditors
-
-              #
-              # Specific ui for each type (sm,vt,rt). Default empty ;
-              #
-              uiType <- tagList()
-
-              #
-              # Common ui
-              #
-              uiDesc <- tagList(
+              uiType <- tagList(
                 #
-                # Title and abstract (schema based)
-                #
-                jedOutput("viewTitleSchema"),
-                jedOutput("viewAbstractSchema"),
-
-                #
-                # Projects of the view ?
+                # main layer
                 #
                 selectizeInput(
-                  inputId = "selViewProjectsUpdate",
-                  label = d("view_projects", language),
-                  choices = projectsList,
-                  selected = .get(viewData, c("data", "projects")),
-                  multiple = TRUE,
+                  inputId = "selectSourceLayerMain",
+                  label = d("source_select_layer", language),
+                  choices = srcAvailable,
+                  selected = NULL,
                   options = list(
-                    sortField = "label",
-                    plugins = list("remove_button")
+                    sortField = "label"
                   )
                 ),
-                #
-                # Who can see this ?
-                #
-                selectizeInput(
-                  inputId = "selViewReadersUpdate",
-                  label = d("view_target_readers", language),
-                  choices = viewReadTarget,
-                  selected = viewReaders,
-                  multiple = TRUE,
-                  options = list(
-                    sortField = "label",
-                    plugins = list("remove_button")
-                  )
-                ),
-                selectizeInput(
-                  inputId = "selViewEditorsUpdate",
-                  label = d("view_target_editors", language),
-                  choices = viewEditTarget,
-                  selected = viewEditors,
-                  multiple = TRUE,
-                  options = list(
-                    sortField = "label",
-                    plugins = list("remove_button")
-                  )
-                ),
-                #
-                # Collections
-                #
-                if (FALSE) {
+                tagList(
                   selectizeInput(
-                    inputId = "selViewCollectionsUpdate",
-                    label = d("view_collections", language),
-                    choices = collectionsTags,
-                    selected = collectionsCurrent,
+                    inputId = "selectSourceLayerMainGeom",
+                    label = d("source_select_geometry", language),
+                    choices = NULL,
+                    selected = NULL
+                  ),
+                  selectizeInput(
+                    inputId = "selectSourceLayerMainVariable",
+                    label = d("source_select_variable", language),
+                    choices = NULL,
+                    selected = NULL
+                  ),
+                  selectizeInput(
+                    inputId = "selectSourceLayerOtherVariables",
+                    label = d("source_select_variable_alt", language),
+                    choices = NULL,
+                    selected = NULL,
                     multiple = TRUE,
                     options = list(
-                      create = userRole$publisher,
-                      sortField = "label",
                       plugins = list("remove_button")
                     )
-                  )
-                }
-              )
-
-              #
-              # vector tile specific
-              #
-              if (viewType == "vt") {
-                srcAvailable <- reactListReadSourcesVector()
-                srcSet <- .get(viewData, c("data", "source", "layerInfo", "name"))
-                srcSetMask <- .get(viewData, c("data", "source", "layerInfo", "maskName"))
-
-
-                srcAvailableMask <- srcAvailable[!srcAvailable %in% srcSet]
-                hasSource <- srcSet %in% srcAvailable
-                reactData$sourceLayerFromView <- list(
-                  trigger = Sys.time(),
-                  srcSet = srcSet,
-                  srcSetMask = srcSetMask
-                )
-
-                if (!noDataCheck(srcSet) && !hasSource) {
-                  names(srcSet) <- mxGetTitleFromSourceID(
-                    id = srcSet,
-                    language = language
-                  )
-
-                  srcAvailable <- c(srcSet, srcAvailable)
-                }
-
-                uiType <- tagList(
-                  #
-                  # main layer
-                  #
-                  selectizeInput(
-                    inputId = "selectSourceLayerMain",
-                    label = d("source_select_layer", language),
-                    choices = srcAvailable,
-                    selected = NULL,
-                    options = list(
-                      sortField = "label"
-                    )
                   ),
+                  actionButton(
+                    inputId = "btnGetLayerSummary",
+                    label = d("btn_get_layer_summary", language)
+                  )
+                ),
+                # uiOutput("uiViewEditVtMain"),
+                #
+                # mask / overlap layer
+                #
+                checkboxInput(
+                  inputId = "checkAddMaskLayer",
+                  label = ddesc("view_add_overlap_layer", language),
+                  value = isNotEmpty(srcSetMask)
+                ),
+                conditionalPanel(
+                  condition = "input.checkAddMaskLayer",
                   tagList(
                     selectizeInput(
-                      inputId = "selectSourceLayerMainGeom",
-                      label = d("source_select_geometry", language),
-                      choices = NULL,
-                      selected = NULL
-                    ),
-                    selectizeInput(
-                      inputId = "selectSourceLayerMainVariable",
-                      label = d("source_select_variable", language),
-                      choices = NULL,
-                      selected = NULL
-                    ),
-                    selectizeInput(
-                      inputId = "selectSourceLayerOtherVariables",
-                      label = d("source_select_variable_alt", language),
-                      choices = NULL,
+                      inputId = "selectSourceLayerMask",
+                      label = d("source_select_layer_mask", language),
+                      choices = srcAvailableMask,
                       selected = NULL,
-                      multiple = TRUE,
                       options = list(
-                        plugins = list("remove_button")
+                        sortField = "label"
                       )
                     ),
-                    actionButton(
-                      inputId = "btnGetLayerSummary",
-                      label = d("btn_get_layer_summary", language)
-                    )
-                  ),
-                  # uiOutput("uiViewEditVtMain"),
-                  #
-                  # mask / overlap layer
-                  #
-                  checkboxInput(
-                    inputId = "checkAddMaskLayer",
-                    label = ddesc("view_add_overlap_layer", language),
-                    value = !noDataCheck(srcSetMask)
-                  ),
-                  conditionalPanel(
-                    condition = "input.checkAddMaskLayer",
-                    tagList(
-                      selectizeInput(
-                        inputId = "selectSourceLayerMask",
-                        label = d("source_select_layer_mask", language),
-                        choices = srcAvailableMask,
-                        selected = NULL,
-                        options = list(
-                          sortField = "label"
-                        )
-                      ),
-                      uiOutput("uiViewEditVtMask")
-                    )
+                    uiOutput("uiViewEditVtMask")
                   )
                 )
-              }
-              #
-              # raster tile specific
-              #
-              if (viewType == "rt") {
-                url <- .get(viewData, c("data", "source", "tiles"))
-                legend <- .get(viewData, c("data", "source", "legend"))
-                urlMetadata <- .get(viewData, c("data", "source", "urlMetadata"))
-                urlDownload <- .get(viewData, c("data", "source", "urlDownload"))
-
-                if (noDataCheck(url)) url <- list()
-                url <- unlist(url[1])
-
-                uiType <- tagList(
-                  selectizeInput(
-                    inputId = "selectRasterTileSize",
-                    label = mxDictTranslateTagDesc("source_raster_tile_size", language),
-                    selected = .get(viewData, c("data", "source", "tileSize")),
-                    choices = c(256, 512)
-                  ),
-                  checkboxInput(
-                    inputId = "checkRasterTileUseMirror",
-                    label = mxDictTranslateTagDesc("tool_mirror_enable", language),
-                    value = .get(viewData, c("data", "source", "useMirror"))
-                  ),
-                  checkboxInput(
-                    inputId = "checkShowWmsGenerator",
-                    label = mxDictTranslateTagDesc("wms_display_tool", language)
-                  ),
-                  conditionalPanel(
-                    condition = "input.checkShowWmsGenerator == true",
-                    tags$div(
-                      class = "well",
-                      tags$h3(mxDictTranslateTag("wms_display_tool_title", language)),
-                      tags$hr(),
-                      tags$div(id = "wmsGenerator")
-                    )
-                  ),
-                  textAreaInput(
-                    inputId = "textRasterTileUrl",
-                    label = d("source_raster_tile_url", language),
-                    value = url
-                  ),
-                  textAreaInput(
-                    inputId = "textRasterTileLegend",
-                    label = d("source_raster_tile_legend", language),
-                    value = legend
-                  ),
-                  jedOutput("viewRasterLegendTitles")
-                )
-              }
-
-              #
-              # Add source metedata for view
-              #
-              if (viewType %in% c("rt", "cc")) {
-                uiType <- tagList(
-                  uiType,
-                  jedOutput("viewSourceMetadata")
-                )
-                # Used to trigger fetching value from editor
-                # and then, validate 'in depth', independently from
-                # schema.
-                btnList <- tagList(
-                  actionButton(
-                    inputId = "btnValidateViewMetadata",
-                    label = d("btn_validate_metadata", language)
-                  )
-                )
-              }
-
-
-              #
-              # ui title/ desc and type specific ui
-              #
-              uiOut <- tagList(
-                uiDesc,
-                uiType,
-                tags$div(style = "height:300px")
-              )
-              #
-              # Buttons
-              #
-              btnList <- tagList(
-                btnList,
-                actionButton(
-                  inputId = "btnViewSave",
-                  label = d("btn_save", language),
-                  disabled = "disabled",
-                  `data-keep` = TRUE
-                )
-              )
-
-              #
-              # Final edit modal panel
-              #
-              mxModal(
-                id = "modalViewEdit",
-                title = sprintf("%1$s : %2$s", d("view_edit_current", language, web = F), viewTitle),
-                content = uiOut,
-                buttons = btnList,
-                addBackground = FALSE,
-                textCloseButton = d("btn_close", language),
-                addBtnMove = TRUE
-              )
-
-              if (viewType == "rt") {
-                #
-                # Build wms generator
-                #
-                mxWmsBuildQueryUi(list(
-                  timestamp = .get(viewData, c("date_modified")),
-                  useCache = FALSE,
-                  services = .get(config, c("wms")),
-                  selectorParent = "#wmsGenerator",
-                  selectorTileInput = "#textRasterTileUrl",
-                  selectorLegendInput = "#textRasterTileLegend",
-                  selectorUseMirror = "#checkRasterTileUseMirror",
-                  selectorTileSizeInput = "#selectRasterTileSize"
-                  # selectorMetaInput = '#textRasterTileUrlMetadata'
-                ))
-              }
-            },
-            "btn_opt_edit_custom_code" = {
-              if (!viewIsEditable) {
-                return()
-              }
-              if (viewType != "cc") {
-                return()
-              }
-              if (!isDev) {
-                return()
-              }
-
-
-              btnList <- list(
-                actionButton(
-                  inputId = "btnViewSaveCustomCode",
-                  label = d("btn_save", language)
-                ),
-                actionButton(
-                  inputId = "btnViewPreviewCustomCode",
-                  label = d("btn_preview", language)
-                )
-              )
-
-              mxModal(
-                id = "modalViewEdit",
-                title = sprintf(d("view_edit_custom_code_modal_title", language), viewTitle),
-                addBackground = FALSE,
-                addBtnMove = TRUE,
-                content = tagList(
-                  jedOutput(id = "customCodeEdit")
-                ),
-                buttons = btnList,
-                textCloseButton = d("btn_close", language)
-              )
-            },
-            "btn_opt_edit_dashboard" = {
-              if (!viewIsEditable) {
-                return()
-              }
-              if (viewType == "sm" || viewType == "gj") {
-                return()
-              }
-
-              btnList <- list(
-                actionButton(
-                  inputId = "btnViewSaveDashboard",
-                  label = d("btn_save", language)
-                ),
-                actionButton(
-                  inputId = "btnViewPreviewDashboard",
-                  label = d("btn_preview", language)
-                ),
-                actionButton(
-                  inputId = "btnViewRemoveDashboard",
-                  label = d("btn_delete", language)
-                )
-              )
-
-              mxModal(
-                id = "modalViewEdit",
-                title = sprintf(d("view_edit_dashboard_modal_title", language), viewTitle),
-                addBackground = FALSE,
-                addBtnMove = TRUE,
-                content = tagList(
-                  uiOutput("txtValidSchema"),
-                  jedOutput(id = "dashboardEdit")
-                ),
-                buttons = btnList,
-                textCloseButton = d("btn_close", language)
-              )
-            },
-            "btn_opt_edit_story" = {
-              if (!viewIsEditable) {
-                return()
-              }
-              if (viewType != "sm") {
-                return()
-              }
-
-              btnList <- list(
-                actionButton(
-                  inputId = "btnViewCloseStory",
-                  label = d("btn_close", language),
-                  `data-keep` = TRUE
-                ),
-                actionButton(
-                  inputId = "btnViewSaveStory",
-                  label = d("btn_save", language),
-                  `data-keep` = TRUE
-                ),
-                actionButton(
-                  inputId = "btnViewPreviewStory",
-                  label = d("btn_preview", language),
-                  `data-keep` = TRUE
-                )
-              )
-
-              tips <- mxFold(
-                content = HTML(d("schema_story_tips", language)),
-                labelText = d("schema_story_tips_title", language),
-                labelDictKey = "schema_story_tips_title",
-                open = FALSE
-              )
-              mxModal(
-                id = "modalViewEdit",
-                title = sprintf(d("view_edit_story_modal_title", language), viewTitle),
-                addBackground = FALSE,
-                addBtnMove = TRUE,
-                content = tagList(
-                  uiOutput("txtValidSchema"),
-                  jedOutput(id = "storyEdit"),
-                  tips
-                ),
-                buttons = btnList,
-                textCloseButton = d("btn_close", language),
-                removeCloseButton = T
-              )
-            },
-            "btn_opt_edit_style" = {
-              if (!viewIsEditable) {
-                return()
-              }
-              if (viewType != "vt") {
-                return()
-              }
-
-              btnList <- list(
-                actionButton(
-                  inputId = "btnViewCloseStyle",
-                  label = d("btn_close", language)
-                ),
-                actionButton(
-                  inputId = "btnViewSaveStyle",
-                  label = d("btn_save", language)
-                ),
-                actionButton(
-                  inputId = "btnViewPreviewStyle",
-                  label = d("btn_preview", language)
-                )
-              )
-
-              mxModal(
-                id = "modalViewEdit",
-                title = sprintf(d("view_edit_style_modal_title", language), viewTitle),
-                addBackground = FALSE,
-                addBtnMove = TRUE,
-                content = tagList(
-                  uiOutput("txtValidSchema"),
-                  jedOutput(id = "styleEdit")
-                ),
-                buttons = btnList,
-                removeCloseButton = TRUE
               )
             }
-          )
-        }
+            #
+            # raster tile specific
+            #
+            if (viewType == "rt") {
+              url <- .get(viewData, c("data", "source", "tiles"))
+              legend <- .get(viewData, c("data", "source", "legend"))
+              urlMetadata <- .get(viewData, c("data", "source", "urlMetadata"))
+              urlDownload <- .get(viewData, c("data", "source", "urlDownload"))
+
+              if (isEmpty(url)) url <- list()
+              url <- unlist(url[1])
+
+              uiType <- tagList(
+                selectizeInput(
+                  inputId = "selectRasterTileSize",
+                  label = mxDictTranslateTagDesc("source_raster_tile_size", language),
+                  selected = .get(viewData, c("data", "source", "tileSize")),
+                  choices = c(256, 512)
+                ),
+                checkboxInput(
+                  inputId = "checkRasterTileUseMirror",
+                  label = mxDictTranslateTagDesc("tool_mirror_enable", language),
+                  value = .get(viewData, c("data", "source", "useMirror"))
+                ),
+                checkboxInput(
+                  inputId = "checkShowWmsGenerator",
+                  label = mxDictTranslateTagDesc("wms_display_tool", language)
+                ),
+                conditionalPanel(
+                  condition = "input.checkShowWmsGenerator == true",
+                  tags$div(
+                    class = "well",
+                    tags$h3(mxDictTranslateTag("wms_display_tool_title", language)),
+                    tags$hr(),
+                    tags$div(id = "wmsGenerator")
+                  )
+                ),
+                textAreaInput(
+                  inputId = "textRasterTileUrl",
+                  label = d("source_raster_tile_url", language),
+                  value = url
+                ),
+                textAreaInput(
+                  inputId = "textRasterTileLegend",
+                  label = d("source_raster_tile_legend", language),
+                  value = legend
+                ),
+                jedOutput("viewRasterLegendTitles")
+              )
+            }
+
+            #
+            # Add source metedata for view
+            #
+            if (viewType %in% c("rt", "cc")) {
+              uiType <- tagList(
+                uiType,
+                jedOutput("viewSourceMetadata")
+              )
+              # Used to trigger fetching value from editor
+              # and then, validate 'in depth', independently from
+              # schema.
+              btnList <- tagList(
+                actionButton(
+                  inputId = "btnValidateViewMetadata",
+                  label = d("btn_validate_metadata", language)
+                )
+              )
+            }
+
+
+            #
+            # ui title/ desc and type specific ui
+            #
+            uiOut <- tagList(
+              uiDesc,
+              uiType,
+              tags$div(style = "height:300px")
+            )
+            #
+            # Buttons
+            #
+            btnList <- tagList(
+              btnList,
+              actionButton(
+                inputId = "btnViewSave",
+                label = d("btn_save", language),
+                disabled = "disabled",
+                `data-keep` = TRUE
+              )
+            )
+
+            #
+            # Final edit modal panel
+            #
+            mxModal(
+              id = "modalViewEdit",
+              title = sprintf("%1$s : %2$s", d("view_edit_current", language, web = F), viewTitle),
+              content = uiOut,
+              buttons = btnList,
+              addBackground = FALSE,
+              textCloseButton = d("btn_close", language),
+              addBtnMove = TRUE
+            )
+
+            if (viewType == "rt") {
+              #
+              # Build wms generator
+              #
+              mxWmsBuildQueryUi(list(
+                timestamp = .get(viewData, c("date_modified")),
+                useCache = FALSE,
+                services = .get(config, c("wms")),
+                selectorParent = "#wmsGenerator",
+                selectorTileInput = "#textRasterTileUrl",
+                selectorLegendInput = "#textRasterTileLegend",
+                selectorUseMirror = "#checkRasterTileUseMirror",
+                selectorTileSizeInput = "#selectRasterTileSize"
+                # selectorMetaInput = '#textRasterTileUrlMetadata'
+              ))
+            }
+          },
+          "btn_opt_edit_custom_code" = {
+            if (!viewIsEditable) {
+              return()
+            }
+            if (viewType != "cc") {
+              return()
+            }
+            if (!isDev) {
+              return()
+            }
+
+
+            btnList <- list(
+              actionButton(
+                inputId = "btnViewSaveCustomCode",
+                label = d("btn_save", language)
+              ),
+              actionButton(
+                inputId = "btnViewPreviewCustomCode",
+                label = d("btn_preview", language)
+              )
+            )
+
+            mxModal(
+              id = "modalViewEdit",
+              title = sprintf(d("view_edit_custom_code_modal_title", language), viewTitle),
+              addBackground = FALSE,
+              addBtnMove = TRUE,
+              content = tagList(
+                jedOutput(id = "customCodeEdit")
+              ),
+              buttons = btnList,
+              textCloseButton = d("btn_close", language)
+            )
+          },
+          "btn_opt_edit_dashboard" = {
+            if (!viewIsEditable) {
+              return()
+            }
+            if (viewType == "sm" || viewType == "gj") {
+              return()
+            }
+
+            btnList <- list(
+              actionButton(
+                inputId = "btnViewSaveDashboard",
+                label = d("btn_save", language)
+              ),
+              actionButton(
+                inputId = "btnViewPreviewDashboard",
+                label = d("btn_preview", language)
+              ),
+              actionButton(
+                inputId = "btnViewRemoveDashboard",
+                label = d("btn_delete", language)
+              )
+            )
+
+            mxModal(
+              id = "modalViewEdit",
+              title = sprintf(d("view_edit_dashboard_modal_title", language), viewTitle),
+              addBackground = FALSE,
+              addBtnMove = TRUE,
+              content = tagList(
+                uiOutput("txtValidSchema"),
+                jedOutput(id = "dashboardEdit")
+              ),
+              buttons = btnList,
+              textCloseButton = d("btn_close", language)
+            )
+          },
+          "btn_opt_edit_story" = {
+            if (!viewIsEditable) {
+              return()
+            }
+            if (viewType != "sm") {
+              return()
+            }
+
+            btnList <- list(
+              actionButton(
+                inputId = "btnViewCloseStory",
+                label = d("btn_close", language),
+                `data-keep` = TRUE
+              ),
+              actionButton(
+                inputId = "btnViewSaveStory",
+                label = d("btn_save", language),
+                `data-keep` = TRUE
+              ),
+              actionButton(
+                inputId = "btnViewPreviewStory",
+                label = d("btn_preview", language),
+                `data-keep` = TRUE
+              )
+            )
+
+            tips <- mxFold(
+              content = HTML(d("schema_story_tips", language)),
+              labelText = d("schema_story_tips_title", language),
+              labelDictKey = "schema_story_tips_title",
+              open = FALSE
+            )
+            mxModal(
+              id = "modalViewEdit",
+              title = sprintf(d("view_edit_story_modal_title", language), viewTitle),
+              addBackground = FALSE,
+              addBtnMove = TRUE,
+              content = tagList(
+                uiOutput("txtValidSchema"),
+                jedOutput(id = "storyEdit"),
+                tips
+              ),
+              buttons = btnList,
+              textCloseButton = d("btn_close", language),
+              removeCloseButton = T
+            )
+          },
+          "btn_opt_edit_style" = {
+            if (!viewIsEditable) {
+              return()
+            }
+            if (viewType != "vt") {
+              return()
+            }
+
+            btnList <- list(
+              actionButton(
+                inputId = "btnViewCloseStyle",
+                label = d("btn_close", language)
+              ),
+              actionButton(
+                inputId = "btnViewSaveStyle",
+                label = d("btn_save", language)
+              ),
+              actionButton(
+                inputId = "btnViewPreviewStyle",
+                label = d("btn_preview", language)
+              )
+            )
+
+            mxModal(
+              id = "modalViewEdit",
+              title = sprintf(d("view_edit_style_modal_title", language), viewTitle),
+              addBackground = FALSE,
+              addBtnMove = TRUE,
+              content = tagList(
+                uiOutput("txtValidSchema"),
+                jedOutput(id = "styleEdit")
+              ),
+              buttons = btnList,
+              removeCloseButton = TRUE
+            )
+          }
+        )
       }
     })
   })
@@ -747,8 +745,8 @@ observeEvent(input$viewSourceMetadata_init, {
   # Auto fill view meta for view < mapx 1.8
   # if the view has ho metadata
   #
-  if (noDataCheck(viewSourceMetadata)) {
-    hasUrlDownload <- !noDataCheck(.get(view, c("data", "source", "urlDownload")))
+  if (isEmpty(viewSourceMetadata)) {
+    hasUrlDownload <- isNotEmpty(.get(view, c("data", "source", "urlDownload")))
     if (hasUrlDownload) {
       source <- list(
         urls = list(
@@ -793,7 +791,7 @@ observeEvent(input$btnViewDeleteConfirm, {
   idView <- .get(reactData$viewDataEdited, c("id"))
   email <- reactUser$data$email
 
-  if (noDataCheck(idView)) mxDebugMsg("View to delete not found")
+  if (isEmpty(idView)) mxDebugMsg("View to delete not found")
 
   #
   # Remove all views rows
@@ -827,7 +825,7 @@ observeEvent(input$btnViewDeleteConfirm, {
 #
 observeEvent(input$btnValidateViewMetadata, {
   values <- input$viewSourceMetadata_values
-  if (noDataCheck(values)) {
+  if (isEmpty(values)) {
     return()
   }
   meta <- .get(values, c("data"))
@@ -845,7 +843,7 @@ observe({
   errors <- list()
   view <- reactData$viewDataEdited
 
-  hasView <- !noDataCheck(view)
+  hasView <- isNotEmpty(view)
   hasInvalidLayer <- TRUE
 
 
@@ -875,17 +873,17 @@ observe({
     abstractValues <- input$viewAbstractSchema_values
     abstractIssues <- input$viewAbstractSchema_issues
 
-    hasNoSchemaTitle <- noDataCheck(.get(titleValues, c("data", "en")))
-    hasNoSchemaAbstract <- noDataCheck(.get(abstractValues, c("data", "en")))
-    hasTitleIssues <- !noDataCheck(.get(titleIssues, c("data")))
-    hasAbstractIssues <- !noDataCheck(.get(abstractIssues, c("data")))
+    hasNoSchemaTitle <- isEmpty(.get(titleValues, c("data", "en")))
+    hasNoSchemaAbstract <- isEmpty(.get(abstractValues, c("data", "en")))
+    hasTitleIssues <- isNotEmpty(.get(titleIssues, c("data")))
+    hasAbstractIssues <- isNotEmpty(.get(abstractIssues, c("data")))
 
     if (view[["type"]] == "rt") {
       #
       # Issue with raster legend
       #
       legendTitlesIssues <- input$viewRasterLegendTitles_issues
-      hasLegendTitlesIssues <- !noDataCheck(.get(legendTitlesIssues, c("data")))
+      hasLegendTitlesIssues <- isNotEmpty(.get(legendTitlesIssues, c("data")))
     } else {
       hasLegendTitlesIssues <- FALSE
     }
@@ -894,7 +892,7 @@ observe({
       # Issue with view metadata
       #
       viewSourceMetadataIssues <- input$viewSourceMetadata_issues
-      hasViewMetadataIssues <- !noDataCheck(.get(viewSourceMetadataIssues, c("data")))
+      hasViewMetadataIssues <- isNotEmpty(.get(viewSourceMetadataIssues, c("data")))
     } else {
       hasViewMetadataIssues <- FALSE
     }
@@ -971,14 +969,14 @@ observeEvent(input$btnViewSave, {
     # Update project
     #
     projectsUpdate <- input$selViewProjectsUpdate
-    if (noDataCheck(projectsUpdate)) projectsUpdate <- list()
+    if (isEmpty(projectsUpdate)) projectsUpdate <- list()
     projects <- as.list(projectsUpdate)
     editor <- reactUser$data$id
 
     view[[c("editor")]] <- editor
     view[[c("data", "projects")]] <- projects
 
-    if (noDataCheck(editors)) editors <- c(as.character(editor))
+    if (isEmpty(editors)) editors <- c(as.character(editor))
     if (!isTRUE(as.character(editor) %in% editors)) editors <- c(editors, as.character(editor))
 
     #
@@ -986,7 +984,7 @@ observeEvent(input$btnViewSave, {
     #
     collections <- input$selViewCollectionsUpdate
     view[[c("data", "collections")]] <- as.list(collections)
-    hideView <- !noDataCheck(query$collections) && !any(collections %in% query$collections)
+    hideView <- isNotEmpty(query$collections) && !any(collections %in% query$collections)
 
     #
     # Title and description
@@ -1100,10 +1098,9 @@ observe({
 })
 observe({
   layerMain <- input$selectSourceLayerMain
-  if (noDataCheck(layerMain)) {
+  if (isEmpty(layerMain)) {
     return()
   }
-  timer <- mxTimeDiff("Layer properties timing ")
   #
   # In case of of reopening same view, this oberver is not
   # invalidated. Meaning properties not updated
@@ -1114,7 +1111,7 @@ observe({
   isolate({
     viewData <- reactData$viewDataEdited
 
-    if (noDataCheck(viewData)) {
+    if (isEmpty(viewData)) {
       return()
     }
     if (viewData$type != "vt") {
@@ -1176,8 +1173,6 @@ observe({
       selected = variablesOtherSelected
     )
   })
-
-  mxTimeDiff(timer)
 })
 
 #
@@ -1187,7 +1182,7 @@ observeEvent(input$btnGetLayerSummary, {
   idAttr <- input$selectSourceLayerMainVariable
   idSource <- input$selectSourceLayerMain
 
-  if (noDataCheck(idAttr) || noDataCheck(idSource)) {
+  if (isEmpty(idAttr) || isEmpty(idSource)) {
     return()
   }
 
@@ -1207,7 +1202,7 @@ observe({
   layerMain <- input$selectSourceLayerMain
   useMask <- isTRUE(input$checkAddMaskLayer)
 
-  if (!useMask || noDataCheck(layerMain) || noDataCheck(layerMask)) {
+  if (!useMask || isEmpty(layerMain) || isEmpty(layerMask)) {
     return()
   }
 
@@ -1233,7 +1228,7 @@ observe({
   layerMask <- NULL
 
   layer <- input$selectSourceLayerMain
-  hasLayer <- !noDataCheck(layer)
+  hasLayer <- isNotEmpty(layer)
   useMask <- isTRUE(input$checkAddMaskLayer)
 
   isolate({

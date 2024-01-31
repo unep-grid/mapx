@@ -17,6 +17,8 @@ async function get(route, config) {
  * @param {string} config.language - The language setting, e.g., "en".
  * @param {boolean} config.editable
  * @param {boolean} config.readable
+ * @param {boolean} config.add_global 
+ * @param {boolean} config.add_views
  * @param {string[]} config.types - The types of sources to be retrieved. Can include "tabular", "vector", "raster", "join".
  * @returns {Promise<Object>} A Promise that resolves to the list of editable sources.
  */

@@ -124,13 +124,22 @@ export class UserProjectsListRenderer {
   }
 
   filterList(e) {
+    this.elProjects.classList.remove("mx-list-empty");
+    let found = false;
     const textSearch = this.cleanString(e.target.value);
     for (const elRow of this.elsRows) {
       const textRow = elRow.dataset.text;
       if (!textRow) {
         continue;
       }
-      elRow.style.display = textRow.match(textSearch) ? "block" : "none";
+      const matched = textRow.match(textSearch);
+      elRow.style.display = matched ? "block" : "none";
+      if (!found && matched) {
+        found = true;
+      }
+    }
+    if (!found) {
+      this.elProjects.classList.add("mx-list-empty");
     }
   }
 

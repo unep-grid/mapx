@@ -101,9 +101,9 @@ async function getSourcesList(options) {
     language: "en",
     idSources: [],
     editable: false,
-    readable: true,
-    add_views: true,
+    readable: false,
     add_global: false,
+    add_views: false,
   };
 
   const config = Object.assign({}, def, options);
@@ -130,10 +130,10 @@ async function getSourcesList(options) {
   if (editable && readable) {
     throw new Error("Editable and readable are exclusive");
   }
-  if (global && editable) {
+  if (add_global && editable) {
     throw new Error("Editable and global are exclusive");
   }
-  if (!global && !readable && !editable) {
+  if (!add_global && !readable && !editable) {
     throw new Error(
       "At least one of Global, Editable or Readable should be true"
     );

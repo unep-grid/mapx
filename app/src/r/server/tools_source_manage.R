@@ -413,7 +413,7 @@ observeEvent(input$btnDeleteSourceConfirm, {
       close = TRUE
     )
 
-    reactData$updateEditSourceLayerList <- runif(1)
+    reactData$updateSourceLayerList <- runif(1)
 
     mxModal(
       id = "uiConfirmSourceRemoveDone",
@@ -532,7 +532,7 @@ observeEvent(input$btnUpdateSource, {
     #
     # Invalidate source list
     #
-    reactData$updateEditSourceLayerList <- runif(1)
+    reactData$updateSourceLayerList <- runif(1)
 
     #
     # Invalidate view list

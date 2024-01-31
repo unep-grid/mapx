@@ -1,5 +1,4 @@
 observe({
-  updateSourceLayer <- reactData$updateEditSourceLayerList
   updateMgl <- input$mx_client_update_source_list
   reactData$updateSourceLayerList <- runif(1)
 })
@@ -17,29 +16,8 @@ reactTableReadSources <- reactive({
     token <- reactUser$token
 
     ## non reactif
-    additionalLayers <- c()
-
-
-    views <- reactViewsCompact()
-
-    #
-    # Extract all sources id set in views and add them in the layer list.
-    #
-    if (!noDataCheck(views)) {
-      #
-      # Filter edit
-      #
-      viewsEdit <- views[sapply(views, `[[`, "_edit")]
-      #
-      # Get ids
-      #
-      viewsIds <- sapply(viewsEdit, .get, c("id"))
-
-      #
-      # Get related source layer
-      #
-      additionalLayers <- mxDbGetLayerListByViews(viewsIds)
-    }
+    view <- reactData$viewDataEdited
+    includeLayers <- .get(view, c("data", "source", "layerInfo", "name"))
 
     #
     # Get layer table
@@ -48,7 +26,7 @@ reactTableReadSources <- reactive({
       idProject = project,
       idUser = idUser,
       language = language,
-      idSources = additionalLayers,
+      idSources = includeLayers,
       types = c("join", "vector"),
       editable = FALSE,
       readable = TRUE,
@@ -64,18 +42,19 @@ reactTableReadSources <- reactive({
 reactListReadSources <- reactive({
   layers <- reactTableReadSources()
   layers <- mxGetSourceNamedList(layers)
-  browser()
   return(layers)
 })
+
 reactListReadSourcesVector <- reactive({
   layers <- reactTableReadSources()
   layers <- layers[layers$type %in% c("vector", "join"), ]
 
-  if (noDataCheck(layers)) {
+  if (isEmpty(layers)) {
     layers <- list("noLayer")
   } else {
     layers <- mxGetSourceNamedList(layers)
   }
+
   return(layers)
 })
 
@@ -102,11 +81,11 @@ reactTableEditSources <- reactive({
       idProject = project,
       idUser = idUser,
       language = language,
-      idSources = additionalLayers,
+      idSources = NULL,
       types = c("join", "vector"),
       editable = TRUE,
       readable = FALSE,
-      add_global = TRUE,
+      add_global = FALSE,
       add_views = FALSE,
       token = token
     )
@@ -122,7 +101,7 @@ reactListEditSources <- reactive({
 reactListEditSourcesVector <- reactive({
   layers <- reactTableEditSources()
   layers <- layers[layers$type %in% c("vector", "join"), ]
-  if (noDataCheck(layers)) {
+  if (isEmpty(layers)) {
     layers <- list("noLayer")
   } else {
     layers <- mxGetSourceNamedList(layers)

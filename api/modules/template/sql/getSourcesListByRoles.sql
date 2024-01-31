@@ -33,7 +33,8 @@ WITH
     editor,
     readers,
     editors,
-    services
+    services,
+    global
     FROM
       mx_sources
     WHERE

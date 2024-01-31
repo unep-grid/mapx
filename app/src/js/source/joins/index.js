@@ -304,6 +304,7 @@ export class SourcesJoinManager extends EventSimple {
       disable_missing: false,
       types: ["join"],
       editable: true,
+      readable: false,
     });
     return idSource;
   }

@@ -1470,6 +1470,16 @@ mxDbGetSourceServices <- function(idSource) {
   )
   data <- mxDbGetQuery(qSql)
 
+  if (isEmpty(data$services)) {
+    warning(
+      sprintf(
+        "mxDbGetSourceServices : unexpected no service for %s",
+        idSource
+      )
+    )
+    data$services <- list()
+  }
+
   services <- as.list(fromJSON(data$services))
 
 
