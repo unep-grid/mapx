@@ -15,35 +15,63 @@ export const config = {
   dropdownParent: "body",
   maxItems: 10,
   plugins: ["remove_button"],
-  load: async function (_, callback) {
+  load: null,
+  onInitialize: async function () {
     const tom = this;
-    try {
-      if (tom.loading > 1) {
-        callback();
-        return;
-      }
-      const { default: countries } = await import(
-        "./../../../data/dict/dict_countries.json"
-      );
-      callback(countries);
-      tom.settings.load = null;
-    } catch (e) {
-      console.error(e);
-      callback();
-    }
+    tom._update = update.bind(tom);
+    await tom._update();
   },
   render: {
     option: (data, escape) => {
       const id = escape(data.id);
-      return el("div", el("h4", elSpanTranslate(id)), el("small", `${id}`));
+      return el(
+        "div",
+        {
+          class: "mx-flex-space-between",
+        },
+        el("label", elSpanTranslate(id)),
+        el("small", { class: "text-muted" }, `${id}`),
+      );
     },
     item: (data, escape) => {
       const id = escape(data.id);
       return el(
         "div",
-        el("span", elSpanTranslate(id)),
-        el("span", { class: ["text-muted", "space-around"] }, ` ${id}`)
+        // remove button will be added here
+        el(
+          "div",
+          {
+            class: "mx-flex-space-between",
+          },
+          [
+            el("span", elSpanTranslate(id)),
+            el("span", { class: ["text-muted"] }, ` ${id}`),
+          ],
+        ),
       );
     },
   },
 };
+
+async function update() {
+  const tom = this;
+  try {
+    const placeholder_wait = "Wait...";
+    const placeholder_ready = "Select...";
+
+    tom.disable();
+    tom.control_input.placeholder = placeholder_wait;
+
+    const { default: countries } = await import(
+      "./../../../data/dict/dict_countries.json"
+    );
+
+    tom.enable();
+    tom.control_input.placeholder = placeholder_ready;
+    tom.settings.placeholder = placeholder_ready;
+    tom.addOptions(countries);
+    tom.refreshOptions(false);
+  } catch (e) {
+    console.error(e);
+  }
+}

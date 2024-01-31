@@ -1074,3 +1074,9 @@ code {
   top: 20px;
   z-index: 10;
 }
+
+.mx-flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
