@@ -10,7 +10,15 @@ export const config = {
     },
   },
   valueField: "id",
-  searchField: ["id", "title", "abstract", "views", "type"],
+  searchField: [
+    "id",
+    "title",
+    "abstract",
+    "views",
+    "type",
+    "date_modified",
+    "_global_txt",
+  ],
   allowEmptyOption: false,
   options: null,
   create: false,
@@ -18,7 +26,7 @@ export const config = {
   sortField: [
     { field: "title", weight: 2 },
     { field: "date_modified", weight: 1 },
-    { field: "disabled", weight: 0.001 },
+    { field: "_disabled", weight: 0.001 },
   ],
   dropdownParent: "body",
   maxOptions: null, // unlimited number of options ⚠️ should be paginated
@@ -100,7 +108,8 @@ async function update() {
       const { exists, ncol, nrow } = item;
       const missing = disable_missing && !exists;
       const big = disable_large && (ncol > max_cols || nrow > max_rows);
-      item.disabled = missing || big;
+      item._disabled = missing || big;
+      item._global_txt = item.global ? " – global" : "";
     }
     tom.control_input.placeholder = placeholder_ready;
     tom.settings.placeholder = placeholder_ready;
@@ -115,6 +124,7 @@ async function update() {
 function formaterItem(data, escape) {
   const type = escape(data.type);
   const title = escape(data.title);
+  const txt_global = escape(data._global_txt);
 
   return el("div", [
     el(
@@ -126,7 +136,10 @@ function formaterItem(data, escape) {
           width: "100%",
         },
       },
-      [el("span", title), el("span", { class: "text-muted" }, `${type}`)],
+      [
+        el("span", title),
+        el("span", { class: "text-muted" }, `${type}${txt_global}`),
+      ],
     ),
   ]);
 }
@@ -146,6 +159,7 @@ function formaterOptions(data, escape) {
   const dateObject = new Date(date);
   const time = dateObject.toLocaleTimeString();
   const dateUi = dateObject.toLocaleDateString();
+  const txt_global = escape(data._global_txt);
 
   return el(
     "div",
@@ -174,7 +188,7 @@ function formaterOptions(data, escape) {
           },
           [
             el("span", `${nRow} x ${nCol}`),
-            el("span", `${type}`),
+            el("span", `${type}${txt_global}`),
             el("span", `${dateUi} – ${time}`),
           ],
         ),
