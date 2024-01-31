@@ -5166,13 +5166,13 @@
   },
   {
     "id": "error_views_require_source",
-    "en": "At least one view depends on this source.",
-    "es": "Al menos una vista depende de esta fuente."
+    "en": "At least one view depends on this source, 'delete' disabled",
+    "es": "Al menos una vista depende de esta fuente, 'eliminar' deshabilitado"
   },
   {
     "id": "error_views_need_publishers",
-    "en": "At least one view needs this source to be available for publishers. Update disabled.",
-    "es": "Al menos una vista necesita esta fuente de datos disponible para los editores. No se puede actualizar."
+    "en": "At least one view needs this source to be available for publishers. 'update' disabled.",
+    "es": "Al menos una vista necesita que esta fuente esté disponible para los editores. 'actualizar' deshabilitado."
   },
   {
     "id": "error_roles_removed_self",

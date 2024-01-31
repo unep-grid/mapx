@@ -5166,13 +5166,13 @@
   },
   {
     "id": "error_views_require_source",
-    "en": "At least one view depends on this source.",
-    "bn": "অন্তত একটি দৃশ্য এই উৎসের উপর নির্ভরশীল।"
+    "en": "At least one view depends on this source, 'delete' disabled",
+    "bn": "অন্তত একটি দৃশ্য এই উৎসের উপর নির্ভরশীল, 'মুছে ফেলা' নিষ্ক্রিয়"
   },
   {
     "id": "error_views_need_publishers",
-    "en": "At least one view needs this source to be available for publishers. Update disabled.",
-    "bn": "কমপক্ষে একটি দৃশ্যের এই উত্সটি প্রকাশকদের জন্য উপলব্ধ থাকতে হবে। আপডেট অক্ষম। "
+    "en": "At least one view needs this source to be available for publishers. 'update' disabled.",
+    "bn": "অন্তত একটি দৃশ্যের এই উৎস প্রকাশকদের জন্য উপলব্ধ থাকা প্রয়োজন। 'হালনাগাদ' নিষ্ক্রিয় করা হয়েছে।"
   },
   {
     "id": "error_roles_removed_self",

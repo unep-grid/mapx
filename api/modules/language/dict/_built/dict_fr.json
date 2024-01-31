@@ -5166,13 +5166,13 @@
   },
   {
     "id": "error_views_require_source",
-    "en": "At least one view depends on this source.",
-    "fr": "Au moins une vue dépend de cette source."
+    "en": "At least one view depends on this source, 'delete' disabled",
+    "fr": "Au moins une vue dépend de cette source, 'suppression' désactivée"
   },
   {
     "id": "error_views_need_publishers",
-    "en": "At least one view needs this source to be available for publishers. Update disabled.",
-    "fr": "Au moins une vue a besoin d'un accès en utilisation pour les éditeurs. Mise à jour non-autorisée"
+    "en": "At least one view needs this source to be available for publishers. 'update' disabled.",
+    "fr": "Au moins une vue nécessite que cette source soit disponible pour les éditeurs. 'mise à jour' désactivée."
   },
   {
     "id": "error_roles_removed_self",

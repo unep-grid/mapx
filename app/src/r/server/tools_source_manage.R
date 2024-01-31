@@ -257,7 +257,7 @@ observeEvent(reactData$triggerSourceManage, {
     mxUpdateCheckboxInput(
       id = "checkSourceGlobal",
       disabled = !isRoot,
-      checked = src$global
+      checked = isTRUE(src$global)
     )
 
     #
@@ -302,11 +302,12 @@ observe({
         return()
       }
 
-      hasNoReaders <- isEmpty(readers)
+      hasNoPubReaders <- !"publishers" %in% readers
 
+      usedByOtherUser <- src$hasViewsFromOthers || src$hasDependenciesFromOthers
       blockDelete <- src$hasViews || src$hasDependencies
-      blockUpdate <- hasNoReaders && (src$hasExtViews || src$hasExtDependencies)
-      blockGlobal <- src$hasExtViews || src$hasExtDependencies
+      blockUpdate <- !global && hasNoPubReaders && usedByOtherUser
+      forceGlobal <- src$hasViewsFromOut || src$hasDependenciesFromOut
 
       errors["error_views_need_publishers"] <- blockUpdate
       errors["error_views_require_source"] <- src$hasViews
@@ -333,11 +334,11 @@ observe({
         disable = blockDelete
       )
 
-      if (blockGlobal) {
+      if (forceGlobal) {
         mxUpdateCheckboxInput(
           id = "checkSourceGlobal",
-          disabled = blockGlobal,
-          checked = blockGlobal
+          disabled = forceGlobal,
+          checked = forceGlobal
         )
       }
     })
@@ -458,13 +459,15 @@ observeEvent(input$btnUpdateSource, {
     if (isRoot) {
       src <- reactSourceEditInfo()
 
-      hasDependencies <- src$hasExtDependencies
-      hasViews <- src$hasExtViews
+      hasDependencies <- src$hasDependenciesFromOut
+      hasViews <- src$hasViewsFromOut
 
       if (!isGlobal && (hasDependencies || hasViews)) {
         isGlobal <- TRUE
       }
     }
+
+
 
     #
     # Control roles

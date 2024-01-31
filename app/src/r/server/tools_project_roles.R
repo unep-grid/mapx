@@ -164,7 +164,7 @@ observeEvent(input$btnSaveProjectConfigRoles, {
     )
 
     res <- sapply(res, mxDbGetEmailListFromId)
-    res <- res[!sapply(res, isEmptx)]
+    res <- res[!sapply(res, isEmpty)]
 
     if (length(res) > 0) {
       reactData$rolesChangesList <- res

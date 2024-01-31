@@ -297,7 +297,8 @@ mxLogin <- function(email, browserData, query, reactData) {
   #
   # Get user info
   #
-  mxDebugMsg(" User " + email + " loged in.")
+  mxDebugMsg(sprintf("USER '%s' loged in.",email))
+
   #
   # Return user info data
   #

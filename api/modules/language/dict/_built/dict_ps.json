@@ -5166,13 +5166,13 @@
   },
   {
     "id": "error_views_require_source",
-    "en": "At least one view depends on this source.",
-    "ps": "لږترلږه یوه کتنه د دې سرچینې پورې اړه لري."
+    "en": "At least one view depends on this source, 'delete' disabled",
+    "ps": "لږترلږه یوه کتنه د دې سرچینې پورې اړه لري، 'حذف' ناکاره دی"
   },
   {
     "id": "error_views_need_publishers",
-    "en": "At least one view needs this source to be available for publishers. Update disabled.",
-    "ps": "لږترلږه یو نظر دې سرچینې ته اړتیا لري ترڅو د خپرونکو لپاره شتون ولري. اوسمهال ناتوان شوی. "
+    "en": "At least one view needs this source to be available for publishers. 'update' disabled.",
+    "ps": "لږترلږه یوه کتنه ته دا سرچینه د ناشرانو لپاره شتون لرل ضروري دي. 'تازه' ناکاره دی."
   },
   {
     "id": "error_roles_removed_self",

@@ -5166,13 +5166,13 @@
   },
   {
     "id": "error_views_require_source",
-    "en": "At least one view depends on this source.",
-    "ru": "По крайней мере одно представление зависит от этого источника."
+    "en": "At least one view depends on this source, 'delete' disabled",
+    "ru": "По крайней мере одно представление зависит от этого источника, 'удаление' отключено"
   },
   {
     "id": "error_views_need_publishers",
-    "en": "At least one view needs this source to be available for publishers. Update disabled.",
-    "ru": "По крайней мере, для одного представления этот источник должен быть доступен для издателей. Обновление отключено. "
+    "en": "At least one view needs this source to be available for publishers. 'update' disabled.",
+    "ru": "По крайней мере одно представление требует, чтобы этот источник был доступен для издателей. 'обновление' отключено."
   },
   {
     "id": "error_roles_removed_self",

@@ -4133,11 +4133,11 @@
   },
   {
     "id": "error_views_require_source",
-    "en": "At least one view depends on this source."
+    "en": "At least one view depends on this source, 'delete' disabled"
   },
   {
     "id": "error_views_need_publishers",
-    "en": "At least one view needs this source to be available for publishers. Update disabled."
+    "en": "At least one view needs this source to be available for publishers. 'update' disabled."
   },
   {
     "id": "error_roles_removed_self",

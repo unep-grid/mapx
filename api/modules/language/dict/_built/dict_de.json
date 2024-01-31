@@ -5166,13 +5166,13 @@
   },
   {
     "id": "error_views_require_source",
-    "en": "At least one view depends on this source.",
-    "de": "Mindestens eine Ansicht hängt von dieser Quelle ab."
+    "en": "At least one view depends on this source, 'delete' disabled",
+    "de": "Mindestens eine Ansicht hängt von dieser Quelle ab, 'Löschen' deaktiviert"
   },
   {
     "id": "error_views_need_publishers",
-    "en": "At least one view needs this source to be available for publishers. Update disabled.",
-    "de": "Für mindestens eine Ansicht muss diese Quelle für Verlage verfügbar sein. Update deaktiviert. "
+    "en": "At least one view needs this source to be available for publishers. 'update' disabled.",
+    "de": "Mindestens eine Ansicht benötigt diese Quelle, um für Verleger verfügbar zu sein. 'Aktualisierung' deaktiviert."
   },
   {
     "id": "error_roles_removed_self",

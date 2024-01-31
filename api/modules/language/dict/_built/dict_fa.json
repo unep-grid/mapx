@@ -5166,13 +5166,13 @@
   },
   {
     "id": "error_views_require_source",
-    "en": "At least one view depends on this source.",
-    "fa": "دست کم یک نما به این منبع وابسته است."
+    "en": "At least one view depends on this source, 'delete' disabled",
+    "fa": "دست کم یک نما به این منبع وابسته است، 'حذف' غیرفعال است"
   },
   {
     "id": "error_views_need_publishers",
-    "en": "At least one view needs this source to be available for publishers. Update disabled.",
-    "fa": "حداقل یک نمایش برای در دسترس بودن ناشران به این منبع نیاز دارد. به روزرسانی غیرفعال است "
+    "en": "At least one view needs this source to be available for publishers. 'update' disabled.",
+    "fa": "حداقل یک نمایش نیاز دارد که این منبع برای ناشران در دسترس باشد. 'به‌روزرسانی' غیرفعال شده است."
   },
   {
     "id": "error_roles_removed_self",

@@ -448,18 +448,32 @@ mxDbGetSourceEditInfo <- function(idProject, idSource, idUser, language = "en") 
   editors <- sourceData$editors
   type <- sourceData$type
 
+  # Dependent view(s)
   hasViews <- isNotEmpty(tableViews)
+
+  # Dependent object(s) (e.g. join)
   hasDependencies <- isNotEmpty(tableDependencies)
+
+  # View  edited by another user
   hasViewsFromOthers <- !isTRUE(all(tableViews$id_editor %in% idUser))
+
+  # View  from another project
   hasViewsFromOut <- !isTRUE(all(tableViews$project %in% idProject))
+
+  # Dependencies from another project
   hasDependenciesFromOut <- !isTRUE(all(
     tableDependencies$project %in% idProject
   ))
+
+  # Dependencies from another user
   hasDependenciesFromOthers <- !isTRUE(all(
     tableDependencies$id_editor %in% idUser
   ))
 
+  # views from another project or user 
   hasExtViews <- hasViewsFromOut || hasViewsFromOthers
+  
+  # object from another project or user 
   hasExtDependencies <- hasDependenciesFromOut || hasDependenciesFromOthers
 
   return(mget(ls()))
@@ -1105,9 +1119,7 @@ mxDbCreateUser <- function(
     "SELECT last_value as id FROM public.%s_id_seq",
     userTable
   )
-  nextId <- mxDbGetQuery(getCurId, onError = function(x) {
-    stop(x)
-  })
+  nextId <- mxDbGetQuery(getCurId)
 
   # quick check on what we get is what we expect
   if (nrow(nextId) > 0 && "id" %in% names(nextId)) {

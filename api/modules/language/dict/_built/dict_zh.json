@@ -5166,13 +5166,13 @@
   },
   {
     "id": "error_views_require_source",
-    "en": "At least one view depends on this source.",
-    "zh": "至少有一个视图依赖于此源。"
+    "en": "At least one view depends on this source, 'delete' disabled",
+    "zh": "至少有一个视图依赖于此源，'删除'被禁用"
   },
   {
     "id": "error_views_need_publishers",
-    "en": "At least one view needs this source to be available for publishers. Update disabled.",
-    "zh": "至少有一个视图需要此源供发布者使用。 禁用更新。"
+    "en": "At least one view needs this source to be available for publishers. 'update' disabled.",
+    "zh": "至少有一个视图需要此源对出版者可用。'更新'被禁用。"
   },
   {
     "id": "error_roles_removed_self",

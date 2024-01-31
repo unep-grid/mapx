@@ -5166,13 +5166,13 @@
   },
   {
     "id": "error_views_require_source",
-    "en": "At least one view depends on this source.",
-    "ar": "يعتمد مشهد واحد على الأقل على هذا المصدر."
+    "en": "At least one view depends on this source, 'delete' disabled",
+    "ar": "يعتمد مشهد واحد على الأقل على هذا المصدر، 'الحذف' معطل"
   },
   {
     "id": "error_views_need_publishers",
-    "en": "At least one view needs this source to be available for publishers. Update disabled.",
-    "ar": "يحتاج عرض واحد على الأقل إلى أن يكون هذا المصدر متاحًا للناشرين. التحديث معطل. "
+    "en": "At least one view needs this source to be available for publishers. 'update' disabled.",
+    "ar": "على الأقل واحدة من العروض تحتاج هذا المصدر ليكون متاحًا للناشرين. 'تحديث' معطل."
   },
   {
     "id": "error_roles_removed_self",
