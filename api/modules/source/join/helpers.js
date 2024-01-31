@@ -1,4 +1,31 @@
 import { pgRead } from "#mapx/db";
+import { getSourceData } from "#mapx/source";
+import { getSourceType } from "#mapx/db_utils";
+
+/**
+ * Get join data for a source
+ */
+export async function getSourceJoinData(idSource, client = pgRead) {
+  const { join } = await getSourceData(idSource, client);
+  return join || {};
+}
+
+/**
+ * Get vector layer from a join object
+ */
+export async function getSourceJoinLayers(idSource, client = pgRead) {
+  const { base, joins } = await getSourceJoinData(idSource, client);
+  const out = new Set();
+  out.add(base.id_source);
+  for (const join of joins || []) {
+    const type = await getSourceType(join.id_source);
+    if (type === "vector") {
+      out.add(join.id_source);
+    }
+  }
+  return Array.from(out);
+}
+
 /**
  * Helper used in schema mx_validate
  */

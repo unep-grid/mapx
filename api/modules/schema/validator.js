@@ -1,6 +1,6 @@
 import Ajv from "ajv";
 import { columnsExist, columnExists, isSourceRegistered } from "#mapx/db_utils";
-import { validateJoins } from "#mapx/db_utils";
+import { validateJoins } from "#mapx/source";
 import { isObject } from "@fxi/mx_valid";
 
 /**

@@ -4,12 +4,13 @@ import { isArray, isFunction, isObject } from "@fxi/mx_valid";
 import { toBoolean } from "#mapx/helpers";
 import { analyzeSource, getLayerTitle } from "./index.js";
 import { settings } from "#root/settings";
+import { getSourceJoinLayers } from "#mapx/source";
+import { getSourceType } from "#mapx/db_utils";
 
 const def = settings.validation_defaults;
 const idValidColumn = def.tables.layer_id_valid;
 const idGeomColumn = def.tables.layer_id_geom;
 const idGeomId = def.tables.layer_id_col;
-const maxLat = "85.051129";
 
 /**
  * Check for layer geom validity
@@ -45,8 +46,19 @@ export async function isLayerValid(
   autoCorrect = toBoolean(autoCorrect, false);
   analyze = toBoolean(analyze, true);
   validate = toBoolean(validate, true);
+
   const title = await getLayerTitle(idLayer);
   const withProgress = isFunction(onProgress);
+
+  const type = await getSourceType(idLayer);
+  if (type === "join") {
+    const layers = await getSourceJoinLayers(idLayer);
+    /**
+     * Multi geom join not yet implemented, use the first (base);
+     */
+    idLayer = layers[0];
+  }
+
   /**
    * Add validation column (cache)
    */
@@ -86,8 +98,7 @@ export async function isLayerValid(
    *  - buffer can drop invalid polygons
    *  - makevalid can reduce the geometry dimensions ( poly -> lines -> points )
    */
-  const sqlFixGeom =
-    `UPDATE ${idLayer}
+  const sqlFixGeom = `UPDATE ${idLayer}
   SET geom =
     CASE
       WHEN GeometryType(${idGeomColumn}) ~* 'POLYGON'
@@ -141,7 +152,7 @@ export async function isLayerValid(
    * Autocorrect steps :
    * - Validation
    * - Geom validation
-   * - revalidate 
+   * - revalidate
    * - Extent / world
    * - revalidate
    */

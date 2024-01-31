@@ -7,11 +7,14 @@ import {
   getColumnsTypesSimple,
   withTransaction,
 } from "#mapx/db_utils";
-
+import { getSourceData } from "#mapx/source";
+import { getSourceJoinData } from "./helpers.js";
 import { getSchema } from "./schema.js";
 import { Validator } from "#mapx/schema";
 import { getViewsBySource } from "../../view/getView.js";
 import { SQLQueryBuilder } from "./sql_builder.js";
+
+export * from "./helpers.js";
 
 const schema = getSchema();
 
@@ -141,17 +144,12 @@ async function stopIfNotValid(config, client) {
 
 async function getJoinData(config, client = pgRead) {
   const { id_source } = config;
-  const res = await client.query(templates.getSourceJoinData, [id_source]);
-  if (res.rowCount === 0) {
-    return {};
-  }
-  return res.rows[0].data;
+  return getSourceData(id_source, client);
 }
 
 export async function getJoinConfig(configGet, client = pgRead) {
-  const res = await getJoinData(configGet, client);
-  const { join } = res;
-  return join;
+  const { id_source } = configGet;
+  return getSourceJoinData(id_source, client);
 }
 
 async function setJoinConfig(config, client = pgWrite, socket) {
@@ -252,7 +250,6 @@ async function getPreview(config, client = pgRead) {
     return null;
   }
 }
-
 
 async function getColumnsMissingInJoin(joinConfig) {
   const { id_source: idSource, base, joins } = joinConfig;

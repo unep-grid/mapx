@@ -194,3 +194,15 @@ export async function getAttributesAlias(id_source, attributes) {
 
   return aliases;
 }
+
+
+/**
+* Get source data from mx_sources
+*/ 
+export async function getSourceData(idSource, client = pgRead) {
+  const res = await client.query(templates.getSourceJoinData, [idSource]);
+  if (res.rowCount === 0) {
+    return {};
+  }
+  return res.rows[0]?.data || {};
+}

@@ -7,7 +7,7 @@ import { isEmpty, isArray, isSourceId, isProjectId } from "@fxi/mx_valid";
 import { isLayerValid, areLayersValid } from "./geom_validation.js";
 import { insertRow } from "./insert.js";
 export * from "./metadata.js";
-export * from "./join_validation.js";
+
 /**
  * crypto key
  */
