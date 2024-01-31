@@ -53,10 +53,9 @@ export async function getViewsTableBySource(idSource, idProject) {
     throw Error("No valid");
   }
 
+  const out = [];
   const sql = templates.getViewsTableBySource;
   const idSourcesAll = await getSourceIdsIncludingJoin(idSource, idProject);
-
-  const out = [];
 
   for (const id of idSourcesAll) {
     const { rows } = await pgRead.query(sql, [id]);

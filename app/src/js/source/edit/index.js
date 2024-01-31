@@ -2986,15 +2986,11 @@ export class EditTableSessionClient extends WsToolsBase {
   async emitGet(type, message, timeout) {
     const et = this;
     const to = isEmpty(timeout) ? et._config.timeout_emit : timeout;
+    const messageEmit = et.message_formater(message);
     return new Promise((resolve) => {
-      const messageEmit = et.message_formater(message);
-      /*   if (_et._socket.disconnected) {*/
-      /*console.warn("Disconnected message not sent", messageEmit);*/
-      /*return resolve(false);*/
-      /*}*/
       et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
         if (err) {
-          console.error(err);
+          console.error(type, message, err);
           return resolve(false);
         } else {
           return resolve(res);
@@ -3006,13 +3002,13 @@ export class EditTableSessionClient extends WsToolsBase {
   /**
    * Get data from specific events, cache result
    */
-  async get(type) {
+  async get(type, timeout) {
     const et = this;
     const cached = et._get_cache.get(type);
     if (cached) {
       return cached;
     }
-    const data = et.emitGet("/client/get", { type });
+    const data = et.emitGet("/client/get", { type }, timeout);
     et._get_cache.set(type, data);
     setTimeout(() => {
       et._get_cache.delete(type);
@@ -3130,6 +3126,7 @@ export class EditTableSessionClient extends WsToolsBase {
       disable_missing: true,
       readable: false,
       editable: true,
+      add_views: true,
     });
     return res;
   }
