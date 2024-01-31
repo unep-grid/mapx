@@ -180,7 +180,7 @@ mxUpdateCheckboxInput <- function(id, disabled = NULL, checked = NULL, session =
 #' @session {reactive} Shiny reactive object
 #' @export
 mxDebugToJs <- function(text, session = getDefaultReactiveDomain()) {
-  if (!noDataCheck(session)) {
+  if (isNotEmpty(session)) {
     res <- session$sendCustomMessage(
       type = "mxJsDebugMsg",
       list(
@@ -456,7 +456,7 @@ mxModal <- function(
   removeCloseButton = F,
   textCloseButton = "ok",
   session = shiny::getDefaultReactiveDomain()) {
-  if (!noDataCheck(buttons) && is.list(buttons)) {
+  if (isNotEmpty(buttons) && is.list(buttons)) {
     buttons <- lapply(buttons, function(b) {
       as.character(b)
     })
@@ -523,9 +523,9 @@ mxFlashIcon <- function(icon = "cog", text = "", update = runif(1), session = sh
 #' @return
 mxNotify <- function(notif, update = runif(1), session = shiny::getDefaultReactiveDomain()) {
   isList <- is.list(notif)
-  hasMsg <- isList && !noDataCheck(notif$message)
-  hasType <- isList && !noDataCheck(notif$type)
-  hasSession <- !noDataCheck(session)
+  hasMsg <- isList && isNotEmpty(notif$message)
+  hasType <- isList && isNotEmpty(notif$type)
+  hasSession <- isNotEmpty(session)
   if (hasSession && isList && hasMsg && hasType) {
     notif$timestamp <- as.numeric(Sys.time()) * 1000
     session$sendCustomMessage("mxNotify", list(

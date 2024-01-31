@@ -16,7 +16,7 @@ observeEvent(input$btnInviteMemberEmail,{
 #
 observeEvent(reactData$mapIsReady,{
   if(reactData$mapIsReady){
-    hasAction <- !noDataCheck(query$action)
+    hasAction <- isNotEmpty(query$action)
     if(hasAction && .get(query$action,c("id")) == 'invite_member'){
       reactData$showInviteMemberCompose <- .get(query,c("action","data"))
     }
@@ -96,7 +96,7 @@ observeEvent(reactData$showInviteMember,{
 observeEvent(input$txtInviteEmail,{
 
   email <-  input$txtInviteEmail
-  isEmpty <- noDataCheck(email)
+  isEmpty <- isEmpty(email)
   project <- reactData$project
   language <- reactData$language 
   isValid <- mxEmailIsValid(email)
@@ -174,7 +174,7 @@ observeEvent(reactData$showInviteMemberCompose,{
   #
   inviteData <- reactData$showInviteMemberCompose 
   isListInviteData <- isTRUE(
-    !noDataCheck(inviteData) && class(inviteData) == "list"
+    isNotEmpty(inviteData) && class(inviteData) == "list"
   )
   if( isListInviteData ){
     #
@@ -301,7 +301,7 @@ observeEvent(input$btnSendInviteMessage,{
   mxCatch(title="Send invitation",{
 
     inviteData <- reactData$showInviteMemberCompose 
-    if( !noDataCheck(inviteData) && class(inviteData) == "list"){
+    if( isNotEmpty(inviteData) && class(inviteData) == "list"){
       email <- inviteData$email_invite
     }else{
       email <- input$txtInviteEmail 

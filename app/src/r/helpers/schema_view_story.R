@@ -1,5 +1,5 @@
 mxSchemaViewStory <- function(view, views, language) {
-  if (noDataCheck(view)) {
+  if (isEmpty(view)) {
     return()
   }
 

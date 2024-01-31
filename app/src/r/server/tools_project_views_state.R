@@ -25,7 +25,7 @@ observeEvent(input$projectViewsState,{
   isAdmin <- isTRUE(userRole$admin)
   userData <- reactUser$data
   
-  if(noDataCheck(input$projectViewsState)){
+  if(isEmpty(input$projectViewsState)){
     return()
   }
 
@@ -70,7 +70,7 @@ observeEvent(input$selectProjectStateKey,{
   key <- input$selectProjectStateKey 
   mxToggleButton(
     id="btnSaveViewsState",
-    disable = noDataCheck(key)
+    disable = isEmpty(key)
     )
 })
 
@@ -86,9 +86,9 @@ observeEvent(input$btnSaveViewsState,{
   key <- input$selectProjectStateKey 
   state <- fromJSON(input$projectViewsState,simplifyDataFrame = FALSE)
 
-  hasState <- !noDataCheck(state)
+  hasState <- isNotEmpty(state)
   states <- mxDbGetProjectStates(idProject)
-  hasKey <- !noDataCheck(key)
+  hasKey <- isNotEmpty(key)
   userRole <- getUserRole()
   language <- reactData$language
   isAdmin <- isTRUE(userRole$admin)

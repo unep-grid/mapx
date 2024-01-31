@@ -33,11 +33,11 @@ mxKillProcess <- function(msg) {
 #' @return {Character} matched role or "any"
 mxQueryRoleParser <- function(role = "any", default = NULL) {
   out <- default
-  if (!noDataCheck(role)) {
+  if (isNotEmpty(role)) {
     role <- tolower(role)
     roles <- c("publisher", "admin", "member", "public")
     roleMatch <- roles[pmatch(role, roles)]
-    if (!noDataCheck(roleMatch)) out <- roleMatch
+    if (isNotEmpty(roleMatch)) out <- roleMatch
   }
   return(out)
 }
@@ -47,7 +47,7 @@ mxQueryRoleParser <- function(role = "any", default = NULL) {
 #' @return {Character} matched role or "any"
 mxQueryTitleParser <- function(title = "", default = NULL) {
   out <- default
-  if (!noDataCheck(title)) {
+  if (isNotEmpty(title)) {
     out <- title
   }
   return(out)
@@ -111,7 +111,7 @@ mxUpdateStoryViews <- function(story, view, allViews) {
   viewsId <- as.list(viewsId)
 
   # If there is at least on views used, get views object.
-  if (!noDataCheck(viewsId)) {
+  if (isNotEmpty(viewsId)) {
     views <- unique(allViews[sapply(allViews, function(v) {
       v %in% viewsId
     })])
@@ -151,7 +151,7 @@ mxSource <- function(files = "", base = ".", env = .GlobalEnv) {
 # mxSourceSrv <- function(files=NULL){
 
 # conf <- mxGetDefaultConfig()
-# if(noDataCheck(files)) return;
+# if(isEmpty(files)) return;
 
 # for(f in files){
 # source(file.path(conf[["srvPath"]],f), local=parent.frame())
@@ -189,7 +189,7 @@ mxCounter <- function(id, reset = F) {
     mxCounters <<- list()
   }
   if (!reset) {
-    if (noDataCheck(mxCounters[[id]])) {
+    if (isEmpty(mxCounters[[id]])) {
       mxCounters[[id]] <<- 1
     } else {
       mxCounters[[id]] <<- mxCounters[[id]] + 1
@@ -238,19 +238,19 @@ mxSchemaMultiLingualInput <- function(
   strict = FALSE,
   options = list()
 ) {
-  if (noDataCheck(language)) {
+  if (isEmpty(language)) {
     language <- get("language", envir = parent.frame())
   }
 
-  if (noDataCheck(dict)) {
+  if (isEmpty(dict)) {
     dict <- dynGet("dict", ifnotfound = config$dict)
   }
 
-  if (noDataCheck(dict)) {
+  if (isEmpty(dict)) {
     dict <- config$dict
   }
 
-  if (noDataCheck(languagesHidden)) {
+  if (isEmpty(languagesHidden)) {
     languagesHidden <- languages[!languages %in% language]
   }
 
@@ -299,7 +299,7 @@ mxSchemaMultiLingualInput <- function(
   })
   names(prop) <- languages
 
-  propOrder <- ifelse(noDataCheck(keyCounter), mxCounter(keyCounter), propertyOrder)
+  propOrder <- ifelse(isEmpty(keyCounter), mxCounter(keyCounter), propertyOrder)
 
 
   list(
@@ -390,7 +390,7 @@ isEmpty <- function(val = NULL, debug = FALSE) {
             is.list(val) &&
             (
               length(val) == 0 ||
-                all(sapply(val, noDataCheck))
+                all(sapply(val, isEmpty))
             )
         ) ||
         #
@@ -413,7 +413,6 @@ isEmpty <- function(val = NULL, debug = FALSE) {
   return(res)
 }
 
-noDataCheck <- isEmpty
 isNotEmpty <- function(...) {
   !isEmpty(...)
 }
@@ -487,7 +486,7 @@ mxDictTranslateSimple <- function(id,
   dict = .get(config, "dict")
 ) {
   language <- match.arg(language)
-  if (noDataCheck(dict)) {
+  if (isEmpty(dict)) {
     return(id)
   }
   out <- dict[dict$id == id, c(language, "en")]
@@ -499,7 +498,7 @@ mxDictTranslateSimple <- function(id,
     out <- out[c(1), ]
   }
   str <- out[, c(language)]
-  if (noDataCheck(str)) {
+  if (isEmpty(str)) {
     return(out[, c("en")])
   }
   return(str)
@@ -570,12 +569,12 @@ mxDictTranslate <- function(
   out <- NULL
 
   # if no dictionary provided, search for one in parent env
-  if (noDataCheck(dict)) {
+  if (isEmpty(dict)) {
     dict <- dynGet("dict", inherits = T)
   }
 
   # if no dict found, get the default. Else, append default and provided
-  if (noDataCheck(dict)) {
+  if (isEmpty(dict)) {
     dict <- .get(config, "dict")
   } else {
     dict <- rbind(dict, .get(config, "dict"))
@@ -584,11 +583,11 @@ mxDictTranslate <- function(
   d <- dict
 
   # if no language, get the default or the first of the language available
-  if (noDataCheck(lang)) {
+  if (isEmpty(lang)) {
     lang <- dynGet("lang", inherits = T)
-    if (noDataCheck(lang)) {
+    if (isEmpty(lang)) {
       lang <- langDefault
-      if (noDataCheck(lang)) {
+      if (isEmpty(lang)) {
         lang <- config[["languages"]][["list"]][[1]]
       }
     }
@@ -633,9 +632,9 @@ mxDictTranslate <- function(
           # Get only the selected language
           trad <- trads[, lang]
           # if it's empty, use the default language
-          if (noDataCheck(trad)) trad <- trads[, langDefault]
+          if (isEmpty(trad)) trad <- trads[, langDefault]
           # if it's empty, use the id
-          if (noDataCheck(trad)) trad <- x
+          if (isEmpty(trad)) trad <- x
           # If there is multiple match, paste. It should not happen...
           trad <- paste(trad, collapse = "/")
           return(trad)
@@ -654,8 +653,8 @@ mxDictTranslate <- function(
       # Single id
       #
       out <- d[d$id == id, lang][1]
-      if (noDataCheck(out)) out <- d[d$id == id, langDefault][1]
-      if (noDataCheck(out)) out <- id
+      if (isEmpty(out)) out <- d[d$id == id, langDefault][1]
+      if (isEmpty(out)) out <- id
       if (web) out <- tags$div(out, `data-lang_key` = id, style = "display:inline-block")
       if (asChar) out <- as.character(out)
     }
@@ -698,7 +697,7 @@ mxGetTitleFromSourceID <- function(id, language = "en") {
 
   df <- mxDbGetQuery(sql)
   out <- df[, "en"]
-  hasLanguage <- !noDataCheck(df[, language])
+  hasLanguage <- isNotEmpty(df[, language])
 
   if (hasLanguage) {
     out <- df[, language]
@@ -770,7 +769,7 @@ mxRecursiveSearch <- function(li, column = "", operator = "==", search = "", fil
 #' @return file without extension
 #' @export
 removeExtension <- function(file) {
-  if (noDataCheck(file)) {
+  if (isEmpty(file)) {
     return("")
   }
   file <- basename(file)
@@ -996,14 +995,14 @@ mxCatchHandler <- function(type = "error", cond = NULL, session = shiny::getDefa
     sysStack <- mxGetStackTrace(cond)
     isDev <- isTRUE(as.logical(Sys.getenv("MAPX_DEV")))
 
-    if (!exists("cdata") || noDataCheck(cdata)) {
+    if (!exists("cdata") || isEmpty(cdata)) {
       cdata <- "<unkown>"
     }
 
-    if (noDataCheck(type)) {
+    if (isEmpty(type)) {
       type <- "<unknown>"
     }
-    if (noDataCheck(message)) {
+    if (isEmpty(message)) {
       message <- "<no message>"
     }
 
@@ -1021,7 +1020,7 @@ mxCatchHandler <- function(type = "error", cond = NULL, session = shiny::getDefa
       #
       # outut user facing message
       #
-      if (!noDataCheck(session)) {
+      if (isNotEmpty(session)) {
         mxModal(
           id = randomString(),
           zIndex = 100000,
@@ -1065,7 +1064,7 @@ mxCatchHandler <- function(type = "error", cond = NULL, session = shiny::getDefa
       CALL = err$stack
     ))
 
-    if (noDataCheck(content)) content <- ""
+    if (isEmpty(content)) content <- ""
     #
     # else send an email
     #
@@ -1349,7 +1348,7 @@ mxEmailMunger <- function(emails) {
 #' @export
 mxEmailIsValid <- function(email = NULL) {
   res <- FALSE
-  if (!noDataCheck(email)) {
+  if (isNotEmpty(email)) {
     email <- as.character(email)
     tryCatch(
       {
@@ -1459,10 +1458,10 @@ mxGetListValue <- function(listInput, path, default = NULL, flattenList = FALSE)
         return(out)
       }
       out <- listInput[[path]]
-      if (flattenList && !noDataCheck(out) && is.list(out)) {
+      if (flattenList && isNotEmpty(out) && is.list(out)) {
         out <- as.list(unlist(out, use.names = F))
       }
-      if (noDataCheck(out)) {
+      if (isEmpty(out)) {
         out <- default
       }
     },
@@ -1623,10 +1622,10 @@ mxAccordionGroup <- function(id, style = NULL, show = NULL, itemList) {
     cnt <<- cnt + 1
     ref <- paste0(subPunct(id, "_"), cnt)
     showItem <- ifelse(cnt %in% show, "collapse.in", "collapse")
-    stopifnot(is.list(x) || !noDataCheck(x$title) || !noDataCheck(x$content))
+    stopifnot(is.list(x) || isNotEmpty(x$title) || isNotEmpty(x$content))
 
-    onShow <- ifelse(noDataCheck(x$onShow), "", x$onShow)
-    onHide <- ifelse(noDataCheck(x$onHide), "", x$onHide)
+    onShow <- ifelse(isEmpty(x$onShow), "", x$onShow)
+    onHide <- ifelse(isEmpty(x$onHide), "", x$onHide)
 
     if (is.null(x$condition)) x$condition <- "true"
     div(
@@ -1841,7 +1840,7 @@ mxFoldOrig <- function(
   classContent = "fold-content",
   classLabel = "fold-label",
   classScroll = "mx-scroll-styled") {
-  if (noDataCheck(id)) id <- randomString()
+  if (isEmpty(id)) id <- randomString()
 
   foldType <- ifelse(type == "caret", "fold-caret", "fold-check")
 
@@ -1851,7 +1850,7 @@ mxFoldOrig <- function(
     elInput$attribs$checked <- T
   }
 
-  if (noDataCheck(labelUi)) {
+  if (isEmpty(labelUi)) {
     label <- tags$label(class = classLabel, `for` = id, `data-lang_key` = labelDictKey, labelText)
   } else {
     label <- tags$label(labelUi, class = classLabel, `for` = id)
@@ -1876,7 +1875,7 @@ mxFold <- function(
   open = FALSE) {
   elDetails <- tags$details()
 
-  if (noDataCheck(labelUi)) {
+  if (isEmpty(labelUi)) {
     elSummary <- tags$summary(`data-lang_key` = labelDictKey, labelText)
   } else {
     elSummary <- tags$summary(labelUi)
@@ -1914,7 +1913,7 @@ listToHtmlSimple <- function(listInput, lang = "en", dict = config$dict, useFold
     if (lL > 0) {
       for (i in 1:lL) {
         name <- nL[[i]]
-        if (noDataCheck(name)) {
+        if (isEmpty(name)) {
           name <- ifelse(numberArray, i, "")
         }
         # content <- tagList(content, makeLi(li[[i]],name,i))
@@ -1951,7 +1950,7 @@ listToHtmlSimple <- function(listInput, lang = "en", dict = config$dict, useFold
         )
       )
     } else {
-      if (!noDataCheck(valReplace) && !noDataCheck(it)) {
+      if (isNotEmpty(valReplace) && isNotEmpty(it)) {
         it <- valReplace(it)
       }
 
@@ -2047,7 +2046,7 @@ mxProfanityChecker <- function(txt) {
   pass <- TRUE
   words <- .get(config, c("badwords", "words"))
 
-  if (!noDataCheck(txt)) {
+  if (isNotEmpty(txt)) {
     for (dict in words) {
       for (w in dict) {
         n <- nchar(w)
@@ -2113,7 +2112,7 @@ mxGetAppUrl <- function(session = shiny::getDefaultReactiveDomain()) {
   urlHost <- session$clientData[["url_hostname"]]
   urlPort <- session$clientData[["url_port"]]
   urlProtocol <- session$clientData[["url_protocol"]]
-  urlPort <- ifelse(!noDataCheck(urlPort), sprintf(":%s", urlPort), "")
+  urlPort <- ifelse(isNotEmpty(urlPort), sprintf(":%s", urlPort), "")
   return(urlProtocol + "//" + urlHost + urlPort)
 }
 
@@ -2225,7 +2224,7 @@ mxUpdateDefViewVt <- function(view, sourceData = NULL, sourceDataMask = NULL, ad
     #
     style <- .get(viewData, c("style"))
 
-    if (noDataCheck(style) || variableChanged || layerChanged) {
+    if (isEmpty(style) || variableChanged || layerChanged) {
       viewData <- .set(viewData, c("style"), list())
     }
 

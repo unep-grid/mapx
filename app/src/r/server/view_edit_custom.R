@@ -75,7 +75,7 @@ observeEvent(input$btnViewSaveCustomCode, {
 
 observeEvent(input$customCodeEdit_values, {
   values <- input$customCodeEdit_values
-  if (noDataCheck(values)) {
+  if (isEmpty(values)) {
     return()
   }
 

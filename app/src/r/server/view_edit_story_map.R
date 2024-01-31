@@ -9,7 +9,7 @@ observeEvent(input$storyEdit_init, {
 
   language <- reactData$language
   story <- .get(view, c("data", "story"))
-  hasStory <- !noDataCheck(story)
+  hasStory <- isNotEmpty(story)
   views <- reactViewsListIdAll()
   idViewsStory <- unique(unlist(lapply(story$steps, `[[`, "views")))
   viewsStory <- mxDbGetViewsTitle(idViewsStory, prefix = "[ story ]")
@@ -93,7 +93,7 @@ observeEvent(input$btnViewSaveStory, {
 
 observeEvent(input$storyEdit_values, {
   values <- input$storyEdit_values
-  if (noDataCheck(values)) {
+  if (isEmpty(values)) {
     return()
   }
 

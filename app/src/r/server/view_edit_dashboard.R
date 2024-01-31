@@ -36,8 +36,8 @@ observeEvent(input$dashboardEdit_init, {
 
       out <- oldClasses[[dim]]
 
-      out <- ifelse(noDataCheck(out), dim, out)
-      out <- ifelse(noDataCheck(out), "100", out)
+      out <- ifelse(isEmpty(out), dim, out)
+      out <- ifelse(isEmpty(out), "100", out)
 
       return(out)
     }
@@ -268,7 +268,7 @@ observeEvent(input$btnViewRemoveDashboard, {
 observeEvent(input$btnViewRemoveDashboardConfirm, {
   idView <- .get(reactData$viewDataEdited, c("id"))
 
-  if (noDataCheck(idView)) mxDebugMsg("View to delete not found")
+  if (isEmpty(idView)) mxDebugMsg("View to delete not found")
 
   jedTriggerGetValues("dashboardEdit", "remove")
 
@@ -313,7 +313,7 @@ observeEvent(input$btnViewSaveDashboard, {
 
 observeEvent(input$dashboardEdit_values, {
   values <- input$dashboardEdit_values
-  if (noDataCheck(values)) {
+  if (isEmpty(values)) {
     return()
   }
 

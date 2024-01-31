@@ -29,8 +29,8 @@ reactLayerSummary <- reactive({
   geomType <- input$selectSourceLayerMainGeom
   variableName <- input$selectSourceLayerMainVariable
 
-  hasVariable <- !noDataCheck(variableName)
-  hasLayer <- !noDataCheck(layerName)
+  hasVariable <- isNotEmpty(variableName)
+  hasLayer <- isNotEmpty(layerName)
 
   out <- list()
 
@@ -64,7 +64,7 @@ reactLayerSummary <- reactive({
 reactLayerVariables <- reactive({
 
   layerName <- input$selectSourceLayerMain
-  hasLayer <- !noDataCheck(layerName)
+  hasLayer <- isNotEmpty(layerName)
   language <- reactData$language
 
   out <- "noVariable"
@@ -76,7 +76,7 @@ reactLayerVariables <- reactive({
     if(isLayerOk){
       outLocal <- mxDbGetTableColumnsNames(layerName,notIn=c("geom","gid","_mx_valid"))
 
-      if(!noDataCheck(outLocal)) out <- outLocal
+      if(isNotEmpty(outLocal)) out <- outLocal
     }
   }
   return(out)

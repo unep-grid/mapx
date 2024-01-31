@@ -8,7 +8,7 @@ observeEvent(reactData$showShareManagerProject,{
     idUser <- userData$id
     idView <- viewData$id
     viewsList <- reactViewsListProject()
-    hasViews <- !noDataCheck(idView) && idView %in% viewsList
+    hasViews <- isNotEmpty(idView) && idView %in% viewsList
 
     if(hasViews){
       viewProject <- .get(viewData, c('project'), project)
@@ -30,7 +30,7 @@ observeEvent(reactData$showShareManagerProject,{
       #
       projectsPublisher <- projectsPublisher[!projectsPublisher %in% project]
       projectsPublisher <- projectsPublisher[!projectsPublisher %in% viewProject]
-      enableShareViewProject <- !noDataCheck(projectsPublisher) && hasViews
+      enableShareViewProject <- isNotEmpty(projectsPublisher) && hasViews
       reactData$projectsPublisher <- projectsPublisher
 
       #

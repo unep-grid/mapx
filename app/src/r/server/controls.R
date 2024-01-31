@@ -209,16 +209,16 @@ observeEvent(reactChain$showAbout, {
 
   out <- tagList()
 
-  if (!noDataCheck(about) && typeof(about) == "list") {
+  if (isNotEmpty(about) && typeof(about) == "list") {
     out <- lapply(about, function(ab) {
       #
       # Get correct conttent according to language, with default.
       # NOTE: this could be done in DB.
       #
       title <- .get(ab, c("title", language))
-      if (noDataCheck(title)) title <- .get(ab, c("title", languageDefault))
+      if (isEmpty(title)) title <- .get(ab, c("title", languageDefault))
       content <- .get(ab, c("content", language))
-      if (noDataCheck(content)) {
+      if (isEmpty(content)) {
         content <- .get(ab, c("content", languageDefault))
       }
 

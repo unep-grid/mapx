@@ -5,7 +5,7 @@ observeEvent(input$switchUser, {
   data <- input$switchUser
   language <- reactData$language
 
-  if (noDataCheck(data)) {
+  if (isEmpty(data)) {
     data <- list()
   }
 
@@ -81,7 +81,7 @@ observeEvent(input$btnSwitchUser, {
   token_root_input <- input$txtSwitchUserToken
 
   token_root <- reactData$rootToken
-  hasToken <- !noDataCheck(token_root)
+  hasToken <- isNotEmpty(token_root)
   isValidToken <- hasToken && identical(token_root_input, token_root)
   isValidCheckPrivacy <- isTRUE(input$checkSwitchUserPrivacyConfirm)
   isValidId <- id_user_target %in% mxDbGetEmailList()

@@ -12,13 +12,13 @@ observe({
     if (isMapReady) {
       return()
     }
-    if (noDataCheck(userRole)) {
+    if (isEmpty(userRole)) {
       return()
     }
-    if (noDataCheck(project)) {
+    if (isEmpty(project)) {
       return()
     }
-    if (noDataCheck(language)) {
+    if (isEmpty(language)) {
       return()
     }
 

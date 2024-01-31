@@ -60,24 +60,24 @@ mxSendMail <- function(
   ){
   res <- NULL
   brand <- .get(config,c('brand','name'))
-  if(noDataCheck(subjectPrefix)){
+  if(isEmpty(subjectPrefix)){
     subjectPrefix <- brand
   }
-  if(noDataCheck(title)){
+  if(isEmpty(title)){
     title <- brand
   }
-  if(noDataCheck(subtitle)){
+  if(isEmpty(subtitle)){
     subtitle <- subject
   }
-  if(noDataCheck(from)){
+  if(isEmpty(from)){
     from = .get(config,c("mail","bot")) 
   }
 
-  hasContent <- !noDataCheck(content)
+  hasContent <- isNotEmpty(content)
   toValid <- mxEmailIsValid(to)
   fromValid <- mxEmailIsValid(from) 
-  hasSubject <- !noDataCheck(subject)
-  useNotify <- !noDataCheck(shiny::getDefaultReactiveDomain()) && useNotify
+  hasSubject <- isNotEmpty(subject)
+  useNotify <- isNotEmpty(shiny::getDefaultReactiveDomain()) && useNotify
   
   if(!hasContent || !toValid || !fromValid || !hasSubject){
     stop("Issue is email formating : can't send email")
@@ -117,7 +117,7 @@ mxSendMail <- function(
     }else{
       txt <-  mxParseTemplateDict("email_manager_sent_error_generic",language,list(email=to))
     }
-    if(noDataCheck(idGroupNotify)){
+    if(isEmpty(idGroupNotify)){
        idGroupNotify = randomString('mx_email')
     }
     mxNotify(

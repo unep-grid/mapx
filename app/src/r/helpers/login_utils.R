@@ -115,7 +115,7 @@ mxGetInitEmail <- function(browserData) {
 #' @param {ReactiveList} reactData Reactive list
 #' @return {List} user data
 mxLogin <- function(email, browserData, query, reactData) {
-  isReactiveContext <- !noDataCheck(shiny:::getDefaultReactiveDomain())
+  isReactiveContext <- isNotEmpty(shiny:::getDefaultReactiveDomain())
   hasExpired <- FALSE
   hasInvalidMail <- FALSE
 
@@ -245,7 +245,7 @@ mxLogin <- function(email, browserData, query, reactData) {
   # If query action was performed, forceProject is set and
   # bypass last_project value.
   #
-  updateProject <- !isGuest && (useAutoRegister || useInviteMember) && !noDataCheck(forceProject)
+  updateProject <- !isGuest && (useAutoRegister || useInviteMember) && isNotEmpty(forceProject)
   if (updateProject) {
     mxDbUpdate(
       table = .get(config, c("pg", "tables", "users")),

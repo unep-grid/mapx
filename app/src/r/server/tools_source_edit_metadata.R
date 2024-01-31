@@ -144,7 +144,7 @@ observe({
 
   isolate({
     language <- reactData$language
-    hasIssues <- !noDataCheck(msg)
+    hasIssues <- isNotEmpty(msg)
 
     err[["error_form_issues"]] <- hasIssues
 
@@ -182,7 +182,7 @@ observeEvent(input$btnSaveSourceMetadata, {
 observeEvent(input$jedSourceMetadata_values, {
   values <- input$jedSourceMetadata_values
 
-  if (noDataCheck(values)) {
+  if (isEmpty(values)) {
     return()
   }
 

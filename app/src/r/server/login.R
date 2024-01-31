@@ -202,7 +202,7 @@ observeEvent(reactChain$loginRequested, {
     #
     # Execute login callback
     #
-    if (!noDataCheck(reactChain$onLoggedIn)) {
+    if (isNotEmpty(reactChain$onLoggedIn)) {
       reactChainCallbackHandler(reactChain$onLoggedIn,
         type = "on_logged_in",
         expr = {

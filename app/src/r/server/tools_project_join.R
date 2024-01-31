@@ -21,7 +21,7 @@ observeEvent(reactData$requestProjectMembership,{
   projectRequestData <- reactData$requestProjectMembership
   project <- projectRequestData$id
 
-  if(noDataCheck(project)) return()
+  if(isEmpty(project)) return()
 
   userData <- reactUser$data
   language <- reactData$language

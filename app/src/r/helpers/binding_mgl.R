@@ -191,7 +191,7 @@ mglUpdateViewsList <- function(
   session = shiny::getDefaultReactiveDomain()) {
   conf <- mxGetDefaultConfig()
 
-  if (noDataCheck(id)) {
+  if (isEmpty(id)) {
     id <- conf[[c("map", "id")]]
   }
 
@@ -210,7 +210,7 @@ mglUpdateViewsList <- function(
 #' @param id {character} map id
 #' @export
 mglRenderViewsList <- function(id = NULL, session = shiny::getDefaultReactiveDomain()) {
-  if (noDataCheck(id)) id <- config[["map"]][["id"]]
+  if (isEmpty(id)) id <- config[["map"]][["id"]]
 
   session$sendCustomMessage("mglRenderViewsList", list(
     id = id
@@ -270,7 +270,7 @@ mglInit <- function(config, session = shiny::getDefaultReactiveDomain()) {
 #' @param {Reactive} session Shiny session
 #' @export
 mglSetMapPos <- function(id = NULL, mapPosition, session = shiny::getDefaultReactiveDomain()) {
-  stopifnot(!noDataCheck(id))
+  stopifnot(isNotEmpty(id))
 
   session$sendCustomMessage("mglSetMapPos", list(
     id = id,
@@ -329,7 +329,7 @@ mglSetTheme <- function(
 #' @param labelLayer Name of the layer that contains the label text to display
 #' @export
 mglSetLanguage <- function(id = NULL, language = "en", labelLayer = "country-label", session = shiny::getDefaultReactiveDomain()) {
-  stopifnot(!noDataCheck(id))
+  stopifnot(isNotEmpty(id))
 
   session$sendCustomMessage(
     "mglSetLanguage",
@@ -347,7 +347,7 @@ mglSetLanguage <- function(id = NULL, language = "en", labelLayer = "country-lab
 #' @param sources named list that contain mapbox source.
 #' @export
 mglAddSources <- function(id = NULL, sources, session = shiny::getDefaultReactiveDomain()) {
-  if (noDataCheck(id)) {
+  if (isEmpty(id)) {
     id <- .get(config, c("map", "id"))
   }
 
@@ -391,7 +391,7 @@ mglAddLayer <- function(id, before = NULL, options, session = shiny::getDefaultR
 #' @param style
 #' @param before
 mglAddAutoLayer <- function(id = NULL, style = NULL, before = NULL, session = shiny::getDefaultReactiveDomain()) {
-  stopifnot(!noDataCheck(id))
+  stopifnot(isNotEmpty(id))
   stopifnot(is.list(style))
   stopifnot(is.list(style$sources))
 
@@ -413,7 +413,7 @@ mglAddAutoLayer <- function(id = NULL, style = NULL, before = NULL, session = sh
 #' @param close Close the current story
 #' @param session Shiny session object
 mglReadStory <- function(id = NULL, view = list(), save = TRUE, update = TRUE, edit = TRUE, close = FALSE, session = shiny::getDefaultReactiveDomain()) {
-  if (noDataCheck(id)) {
+  if (isEmpty(id)) {
     id <- .get(config, c("map", "id"))
   }
 

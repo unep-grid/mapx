@@ -20,7 +20,7 @@ reactViewsCompact <- reactive({
   idProject <- reactData$project
   idUser <- userData$id
   userRole <- getUserRole()
-  hasRole <- !noDataCheck(userRole)
+  hasRole <- isNotEmpty(userRole)
   token <- reactUser$token
 
   #
@@ -121,7 +121,7 @@ reactViewsListIdAll <- reactive({
 
 reactViewsCompactListVector <- reactive({
   views <- reactViewsCompact()
-  if (noDataCheck(views)) {
+  if (isEmpty(views)) {
     return(list())
   }
   views <- views[sapply(views, function(v) {
@@ -137,7 +137,7 @@ reactViewsCompactListVector <- reactive({
 reactViewsCheckedList <- reactive({
   viewsStatus <- input$mx_client_views_status
   viewsChecked <- .get(viewsStatus, c("vChecked"), default = list())
-  if (noDataCheck(viewsChecked)) {
+  if (isEmpty(viewsChecked)) {
     viewsChecked <- list()
   }
   return(viewsChecked)
@@ -182,7 +182,7 @@ reactViewsListProject <- reactive({
     keys = c("id", "_title")
   )
 
-  if (noDataCheck(views)) {
+  if (isEmpty(views)) {
     viewsList <- list()
   } else {
     viewsList <- lapply(views, `[[`, "id")

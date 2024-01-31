@@ -5,7 +5,7 @@ isGuestUser <- reactive({
   a <- .get(reactUser, c("data", "email"))
   b <- .get(config, c("mail", "guest"))
 
-  if (noDataCheck(a) || noDataCheck(b)) stop("User can't be identified")
+  if (isEmpty(a) || isEmpty(b)) stop("User can't be identified")
   return(identical(a, b))
 })
 

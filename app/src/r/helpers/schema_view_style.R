@@ -13,7 +13,7 @@ mxSchemaViewStyle <- function(
   isLine <- geomType == "line"
   isPolygon <- geomType == "polygon"
 
-  if (noDataCheck(view)) {
+  if (isEmpty(view)) {
     return()
   }
 

@@ -9,7 +9,7 @@ observeEvent(input$btnShowProjectDelete, {
   if (isAdmin && !isProjectDefault) {
     projectData <- mxDbGetProjectData(idProject)
     projectTitle <- .get(projectData, c("title", language))
-    if (noDataCheck(projectTitle)) {
+    if (isEmpty(projectTitle)) {
       projectTitle <- .get(projectData, c("title", "en"))
     }
     reactData$projectTitle <- projectTitle

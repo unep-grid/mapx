@@ -1,26 +1,22 @@
-
-
-observeEvent(input$btnShowRoleManager,{
-
+observeEvent(input$btnShowRoleManager, {
   userRole <- getUserRole()
   project <- reactData$project
-  language <- reactData$language 
+  language <- reactData$language
   isAdmin <- isTRUE(userRole$admin)
-  #emails <- as.list(mxDbGetEmailList(munged=T))
+  # emails <- as.list(mxDbGetEmailList(munged=T))
   userData <- reactUser$data
   projectIsPublic <- mxDbGetProjectIsPublic(project)
 
 
-  if( isAdmin ){
-
+  if (isAdmin) {
     userList <- reactTableEditableUsers()
 
     userListAll <- c(
       userList$members,
       userList$publishers,
       userList$admins
-      )
-    
+    )
+
     #
     # create select input for members, publishers and admins
     #
@@ -28,127 +24,122 @@ observeEvent(input$btnShowRoleManager,{
       uiOutput("uiValidateProjectRoles"),
       selectizeInput(
         "selectProjectContacts",
-        label = d("list_contacts",language,web=F),
+        label = d("list_contacts", language, web = F),
         selected = unique(userList$contacts),
         choices = userList$admins,
         multiple = FALSE
-        ),
+      ),
       selectizeInput(
         "selectProjectAdmins",
-        label = d("list_admins",language,web=F),
+        label = d("list_admins", language, web = F),
         selected = userList$admins,
         choices = userListAll,
         multiple = TRUE,
-        options=list(
+        options = list(
           plugins = list("remove_button"),
-          sortField="label"
-          )
-        ),
+          sortField = "label"
+        )
+      ),
       selectizeInput(
         "selectProjectPublishers",
-        label = d("list_publishers",language,web=F),
-        selected = unique(c(userList$admins,userList$publishers)),
+        label = d("list_publishers", language, web = F),
+        selected = unique(c(userList$admins, userList$publishers)),
         choices = userListAll,
         multiple = TRUE,
-        options=list(
+        options = list(
           plugins = list("remove_button"),
-          sortField="label"
-          )
-        ),
+          sortField = "label"
+        )
+      ),
       selectizeInput(
         "selectProjectMembers",
-        label = d("list_members",language,web=F),
-        selected = unique(c(userList$admins,userList$publishers,userList$members)),
+        label = d("list_members", language, web = F),
+        selected = unique(c(userList$admins, userList$publishers, userList$members)),
         choices = userListAll,
         multiple = TRUE,
-        options=list(
-          sortField="label",
+        options = list(
+          sortField = "label",
           plugins = list("remove_button")
-          )
-        ),
-        tags$div(style="height:300px;")
-      )
+        )
+      ),
+      tags$div(style = "height:300px;")
+    )
 
     btnSave <- actionButton(
       "btnSaveProjectConfigRoles",
-      d("btn_save",language)
-      )
+      d("btn_save", language)
+    )
 
 
     mxModal(
       id = "roleInfo",
-      title = d("project_roles_modal_title",language),
+      title = d("project_roles_modal_title", language),
       content = ui,
-      textCloseButton = d("btn_cancel",language,web=F),
+      textCloseButton = d("btn_cancel", language, web = F),
       buttons = list(btnSave)
-      )
+    )
   }
-
 })
 
 
-observeEvent(input$selectProjectAdmins,{
+observeEvent(input$selectProjectAdmins, {
   contacts <- unique(as.numeric(input$selectProjectContacts))
   admins <- unique(as.numeric(input$selectProjectAdmins))
-  emails <- vapply(admins,mxDbGetEmailFromId,character(1))
+  emails <- vapply(admins, mxDbGetEmailFromId, character(1))
   names(admins) <- emails
 
-  if( ! contacts %in% admins ){
+  if (!contacts %in% admins) {
     contacts <- admins[1]
   }
 
   updateSelectizeInput(session,
-    inputId = 'selectProjectContacts',
-    selected = contacts, 
+    inputId = "selectProjectContacts",
+    selected = contacts,
     choices = admins
-    )
+  )
 })
 
 
 
 #
 # Validation of roles
-# 
+#
 observe({
-
   admins <- input$selectProjectAdmins
 
   isolate({
-    idCurent <- .get(reactUser$data,c("id"))
+    idCurent <- .get(reactUser$data, c("id"))
 
 
-    removedSelf <-  ! isTRUE(idCurent %in% admins)
+    removedSelf <- !isTRUE(idCurent %in% admins)
     language <- reactData$language
     err <- logical(0)
     btnEnable <- FALSE
-    hasAdmins <- !noDataCheck(admins)
+    hasAdmins <- isNotEmpty(admins)
 
-    err[['error_roles_no_admins']] <- !hasAdmins
-    err[['error_roles_removed_self']] <- removedSelf
+    err[["error_roles_no_admins"]] <- !hasAdmins
+    err[["error_roles_removed_self"]] <- removedSelf
 
-    output$uiValidateProjectRoles <- renderUI(mxErrorsToUi(errors=err,language=language))
+    output$uiValidateProjectRoles <- renderUI(mxErrorsToUi(errors = err, language = language))
 
     hasErrors <- any(err)
 
     mxToggleButton(
-      id="btnSaveProjectConfigRoles",
+      id = "btnSaveProjectConfigRoles",
       disable = hasErrors
-      )
+    )
   })
 })
 
 
-observeEvent(input$btnSaveProjectConfigRoles,{
-
-
+observeEvent(input$btnSaveProjectConfigRoles, {
   userRole <- getUserRole()
   project <- reactData$project
-  language <- reactData$language 
+  language <- reactData$language
   isAdmin <- isTRUE(userRole$admin)
-  btnCloseText = "btn_cancel"
+  btnCloseText <- "btn_cancel"
 
-  if(isAdmin){
-
+  if (isAdmin) {
     btnConfirm <- list()
     userList <- reactTableEditableUsers()
     oldPublic <- mxDbGetProjectIsPublic(project)
@@ -162,131 +153,118 @@ observeEvent(input$btnSaveProjectConfigRoles,{
     contacts <- as.numeric(input$selectProjectContacts)
 
     res <- list(
-      new_members = members[ ! members %in% oldMembers ],
-      new_publishers = publishers[ ! publishers %in% oldPublishers ],
-      new_admins = admins[ ! admins %in% oldAdmins ],
-      new_contacts = contacts[ ! contacts %in% oldContacts ],
-      rem_members = oldMembers[ ! oldMembers %in% members ],
-      rem_publishers = oldPublishers[ ! oldPublishers %in% publishers ],
-      rem_admins = oldAdmins[ ! oldAdmins %in% admins ],
-      rem_contacts = oldContacts[ ! oldContacts %in% contacts ]
-      )
+      new_members = members[!members %in% oldMembers],
+      new_publishers = publishers[!publishers %in% oldPublishers],
+      new_admins = admins[!admins %in% oldAdmins],
+      new_contacts = contacts[!contacts %in% oldContacts],
+      rem_members = oldMembers[!oldMembers %in% members],
+      rem_publishers = oldPublishers[!oldPublishers %in% publishers],
+      rem_admins = oldAdmins[!oldAdmins %in% admins],
+      rem_contacts = oldContacts[!oldContacts %in% contacts]
+    )
 
-    res <- sapply(res,mxDbGetEmailListFromId)
-    res <- res[!sapply(res,noDataCheck)]
-   
-    if(length(res)>0){
+    res <- sapply(res, mxDbGetEmailListFromId)
+    res <- res[!sapply(res, isEmptx)]
 
+    if (length(res) > 0) {
       reactData$rolesChangesList <- res
-      resText <- sapply(res,paste,collapse=", ")
-      ui <- listToHtmlSimple(resText,lang=language)
+      resText <- sapply(res, paste, collapse = ", ")
+      ui <- listToHtmlSimple(resText, lang = language)
 
       btnConfirm <- list(
         actionButton(
           "btnConfirmProjectConfigRoles",
-          d("btn_confirm",lang=language,web=F)
-          )
+          d("btn_confirm", lang = language, web = FALSE)
         )
-
-    }else{
+      )
+    } else {
       btnCloseText <- "btn_close"
-      ui <- d("no_changes",lang=language,web=F) 
+      ui <- d("no_changes", lang = language, web = FALSE)
     }
 
     mxModal(
       id = "roleInfo",
-      title = d("project_roles_modal_title",language),
+      title = d("project_roles_modal_title", language),
       content = ui,
-      textCloseButton = d(btnCloseText,language,web=F),
+      textCloseButton = d(btnCloseText, language, web = FALSE),
       buttons = btnConfirm
-      )
-
+    )
   }
-
 })
 
-observeEvent(input$btnConfirmProjectConfigRoles,{
-
+observeEvent(input$btnConfirmProjectConfigRoles, {
   userRole <- getUserRole()
   project <- reactData$project
-  language <- reactData$language 
+  language <- reactData$language
   isAdmin <- isTRUE(userRole$admin)
-  changesList <- reactData$rolesChangesList 
+  changesList <- reactData$rolesChangesList
   isValid <- length(changesList) > 0
 
-  if(isAdmin && isValid){
-   
+  if (isAdmin && isValid) {
     members <- unique(as.integer(input$selectProjectMembers))
     admins <- unique(as.integer(input$selectProjectAdmins))
     publishers <- unique(as.integer(input$selectProjectPublishers))
     contacts <- unique(as.integer(input$selectProjectContacts))
 
+    mxDbUpdate(
+      table = "mx_projects",
+      idCol = "id",
+      id = project,
+      column = "members",
+      value = as.list(unique(members))
+    )
+
+    mxDbUpdate(
+      table = "mx_projects",
+      idCol = "id",
+      id = project,
+      column = "publishers",
+      value = as.list(unique(publishers))
+    )
+
+    mxDbUpdate(
+      table = "mx_projects",
+      idCol = "id",
+      id = project,
+      column = "contacts",
+      value = as.list(unique(contacts))
+    )
+
+    mxDbUpdate(
+      table = "mx_projects",
+      idCol = "id",
+      id = project,
+      column = "publishers",
+      value = as.list(unique(publishers))
+    )
+
+
+    if (isNotEmpty(admins)) {
       mxDbUpdate(
         table = "mx_projects",
-        idCol = 'id',
+        idCol = "id",
         id = project,
-        column = 'members',
-        value = as.list(unique(members))
-        )
-
-      mxDbUpdate(
-        table = "mx_projects",
-        idCol = 'id',
-        id = project,
-        column = 'publishers',
-        value = as.list(unique(publishers))
-        )
-
-      mxDbUpdate(
-        table = "mx_projects",
-        idCol = 'id',
-        id = project,
-        column = 'contacts',
-        value = as.list(unique(contacts))
-        )
-
-      mxDbUpdate(
-        table = "mx_projects",
-        idCol = 'id',
-        id = project,
-        column = 'publishers',
-        value = as.list(unique(publishers))
-        )
-
-
-      if(!noDataCheck(admins)){
-        mxDbUpdate(
-          table = "mx_projects",
-          idCol = 'id',
-          id = project,
-          column = 'admins',
-          value = as.list(unique(admins))
-          )
-      }
+        column = "admins",
+        value = as.list(unique(admins))
+      )
+    }
     #
     # Send emails with changes
     #
     mxProjectSendEmailsRolesChange(admins, changesList, project, language)
     reactData$updateRoleList <- runif(1)
     reactData$rolesChangesList <- NULL
-    mxFlashIcon('envelope')
-    
+    mxFlashIcon("envelope")
+
     #
     # Last message
     #
-    ui = tags$span(d("roles_updated",lang=language,web=F));
-    
+    ui <- tags$span(d("roles_updated", lang = language, web = F))
+
     mxModal(
       id = "roleInfo",
-      title = d("project_roles_modal_title",language),
+      title = d("project_roles_modal_title", language),
       content = ui
-      )
-
+    )
   }
-
 })
-
-
-
-
-

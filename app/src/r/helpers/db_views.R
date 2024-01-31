@@ -3,7 +3,7 @@
 #' @param viewName view name to check
 #' @export
 mxDbViewTitleExists <- function(title, project, languages = NULL) {
-  if (noDataCheck(title)) {
+  if (isEmpty(title)) {
     return(FALSE)
   }
 
@@ -139,7 +139,7 @@ mxDbGetViewMainSource <- function(idView) {
 mxDbGetViewsTitle <- function(idsViews, asNamedList = TRUE, language = "en", prefix = "") {
   tableName <- "mx_views_latest"
 
-  if (noDataCheck(idsViews)) {
+  if (isEmpty(idsViews)) {
     return("")
   }
 
@@ -156,7 +156,7 @@ mxDbGetViewsTitle <- function(idsViews, asNamedList = TRUE, language = "en", pre
   ORDER BY title asc"
 
   out <- mxDbGetQuery(sql)
-  if (!noDataCheck(prefix)) {
+  if (isNotEmpty(prefix)) {
     out$title <- paste(prefix, out$title)
   }
 

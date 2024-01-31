@@ -103,7 +103,7 @@ observe({
 
 
     project <- reactData$project
-    if (noDataCheck(project)) {
+    if (isEmpty(project)) {
       return()
     }
     projectTitle <- input$projectTitleSchema_values$data
@@ -136,10 +136,10 @@ observe({
     }
 
     for (l in languagesTest) {
-      errTest(l, "error_description_short", noDataCheck(projectDesc[[l]]) || nchar(projectDesc[[l]]) < v$projectAbstract$min)
+      errTest(l, "error_description_short", isEmpty(projectDesc[[l]]) || nchar(projectDesc[[l]]) < v$projectAbstract$min)
       errTest(l, "error_description_long", nchar(projectDesc[[l]]) > v$projecAbstract$max)
       errTest(l, "error_description_bad", mxProfanityChecker(projectDesc[[l]]))
-      errTest(l, "error_title_short", noDataCheck(projectTitle[[l]]) || nchar(projectTitle[[l]]) < v$projectTitle$min)
+      errTest(l, "error_title_short", isEmpty(projectTitle[[l]]) || nchar(projectTitle[[l]]) < v$projectTitle$min)
       errTest(l, "error_title_long", nchar(projectTitle[[l]]) > v$projectTitle$max)
       errTest(l, "error_title_bad", mxProfanityChecker(projectTitle[[l]]))
       errTest(l, "error_title_exists", mxDbProjectTitleExists(projectTitle[[l]], ignore = project))
@@ -361,7 +361,7 @@ observeEvent(input$btnSaveProjectConfig, {
   )
 
 
-  if (noDataCheck(countries)) {
+  if (isEmpty(countries)) {
     countries <- list()
   }
 

@@ -13,19 +13,19 @@ observe({
 
     lang_react <- reactData$language
 
-    if(!noDataCheck(lang_query)){
+    if(isNotEmpty(lang_query)){
       query$language <<- NULL
       lang_out <- lang_query
     }else{
-      if(noDataCheck(lang_react) && !noDataCheck(lang_db)){
+      if(isEmpty(lang_react) && isNotEmpty(lang_db)){
         lang_out <- lang_db
-      }else if(!noDataCheck(lang_ui)){
+      }else if(isNotEmpty(lang_ui)){
         lang_out <- lang_ui
       }else{
         lang_out <- lang_def
       }
 
-      if(noDataCheck(lang_out)){
+      if(isEmpty(lang_out)){
         lang_out <- lang_def
       }
     }

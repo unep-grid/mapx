@@ -11,9 +11,9 @@ observeEvent(input$styleEdit_init, {
 
   style <- .get(view, c("data", "style"))
   language <- reactData$language
-  hasLayer <- !noDataCheck(.get(view, c("data", "source", "layerInfo", "name")))
-  hasSources <- !noDataCheck(reactListReadSourcesVector())
-  hasStyle <- !noDataCheck(style)
+  hasLayer <- isNotEmpty(.get(view, c("data", "source", "layerInfo", "name")))
+  hasSources <- isNotEmpty(reactListReadSourcesVector())
+  hasStyle <- isNotEmpty(style)
 
   mxCatch(title = "style edit init", {
     if (!hasStyle) style <- NULL
@@ -137,7 +137,7 @@ observeEvent(input$btnViewCloseStyle, {
 
 observeEvent(input$styleEdit_values, {
   values <- input$styleEdit_values
-  if (noDataCheck(values)) {
+  if (isEmpty(values)) {
     return()
   }
 

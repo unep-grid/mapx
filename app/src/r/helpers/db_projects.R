@@ -3,7 +3,7 @@
 #' @return id {character} new id
 mxDbGetProjectIdByOldId <- function(id) {
   out <- mxDbGetQuery("select id from mx_projects where id_old ='" + id + "'")$id
-  if (noDataCheck(out)) {
+  if (isEmpty(out)) {
     return(id)
   }
   return(out)
@@ -14,10 +14,10 @@ mxDbGetProjectIdByOldId <- function(id) {
 #' @param id{character} Project id
 #' @return id {character} new id
 mxDbValidateProjectAlias <- function(alias, id) {
-  if (noDataCheck(alias)) {
+  if (isEmpty(alias)) {
     return(TRUE)
   }
-  if (noDataCheck(id)) {
+  if (isEmpty(id)) {
     return(FALSE)
   }
   isProjectAliasValid <- isTRUE(grepl("^[a-z0-9\\_\\-]*$", alias, perl = T))
@@ -31,7 +31,7 @@ mxDbValidateProjectAlias <- function(alias, id) {
 #' @return id {character} new id
 mxDbGetProjectIdByAlias <- function(alias) {
   out <- mxDbGetQuery("SELECT id FROM mx_projects WHERE alias ='" + tolower(alias) + "'")$id
-  if (noDataCheck(out)) {
+  if (isEmpty(out)) {
     return(alias)
   }
   return(out)
@@ -77,7 +77,7 @@ mxDbGetProjectStateKeys <- function(idProject, language = "en") {
     idProject
   ))
 
-  if (noDataCheck(tableKeys)) {
+  if (isEmpty(tableKeys)) {
     tableKeys <- data.frame(id = "default", label = "Default")
   }
 
@@ -100,7 +100,7 @@ mxDbGetProjectStates <- function(idProject) {
 
   states <- fromJSON(states, simplifyDataFrame = FALSE)
 
-  if (noDataCheck(states)) {
+  if (isEmpty(states)) {
     states <- list(
       list(
         id = "default",
@@ -143,7 +143,7 @@ mxDbGetProjectTitle <- function(id, language = "en") {
 
   title <- mxDbGetQuery(quer)$title
 
-  if (noDataCheck(title)) title <- id
+  if (isEmpty(title)) title <- id
 
   return(title)
 }
@@ -160,7 +160,7 @@ mxDbProjectGetViewsExternal <- function(idProject) {
     FROM mx_projects
     WHERE id = '" + idProject + "'")$v
 
-  if (!noDataCheck(views)) out <- as.list(fromJSON(views))
+  if (isNotEmpty(views)) out <- as.list(fromJSON(views))
 
   return(out)
 }
@@ -300,7 +300,7 @@ mxDbGetProjectUserRoles <- function(idUser, idProject) {
   # If no records, return default
   #
 
-  if (noDataCheck(res)) {
+  if (isEmpty(res)) {
     return(out)
   }
 
@@ -327,7 +327,7 @@ mxDbGetProjectUserRoles <- function(idUser, idProject) {
 mxDbProjectCheckEmailMembership <- function(email, idProject) {
   out <- FALSE
   idUser <- mxDbGetIdFromEmail(email)
-  if (!noDataCheck(idUser)) {
+  if (isNotEmpty(idUser)) {
     roles <- mxDbGetProjectUserRoles(idUser, idProject)
     if (isTRUE(roles$member)) {
       out <- TRUE
@@ -346,7 +346,7 @@ mxDbGetProjectData <- function(idProject) {
     )[1, ]
   )
 
-  if (noDataCheck(projectData)) {
+  if (isEmpty(projectData)) {
     return(list())
   }
   for (i in 1:length(projectData)) {
@@ -365,7 +365,7 @@ mxDbGetProjectData <- function(idProject) {
       "states_views"
     )) {
       val <- p[[1]]
-      if (!noDataCheck(val)) {
+      if (isNotEmpty(val)) {
         projectData[[i]] <- fromJSON(val, simplifyDataFrame = FALSE)
       }
     }
@@ -383,7 +383,7 @@ mxDbGetProjectEmailContact <- function(idProject) {
   projectAdmin <- projectData$admins
   projectContact <- projectData$contacts
   emailContact <- NULL
-  if (!noDataCheck(projectContact)) {
+  if (isNotEmpty(projectContact)) {
     nContacts <- length(projectContact)
     if (nContacts > 1) projectContact <- projectContact[ceiling(runif(1) * nContacts)]
     emailContact <- mxDbGetEmailListFromId(projectContact)
@@ -519,7 +519,7 @@ mxDbGetProjectMembers <- function(idProject) {
 
   sapply(c("members", "publishers", "admins", "contacts"), function(m) {
     group <- unique(as.list(members[[m]]))
-    if (!noDataCheck(group)) {
+    if (isNotEmpty(group)) {
       group[sapply(group, is.character)] <- NULL
       names(group) <- sapply(group, mxDbGetEmailFromId)
       group <- group[order(names(group))]
@@ -541,10 +541,10 @@ mxDbGetProjectIsPublic <- function(idProject) {
 #' @param {Character} title Project title to check
 #' @export
 mxDbProjectTitleExists <- function(title, ignore = NULL, languages = NULL) {
-  if (noDataCheck(title)) {
+  if (isEmpty(title)) {
     return(FALSE)
   }
-  if (noDataCheck(ignore)) ignore <- ""
+  if (isEmpty(ignore)) ignore <- ""
 
   title <- gsub("'", "''", title)
   title <- gsub("\"", "\\\"", title)
@@ -630,7 +630,7 @@ mxProjectSendEmailsRolesChange <- function(admins, res, project, lang) {
     # If the notice content is not empty nd
     # email is valid, compose the message
     #
-    isValid <- !noDataCheck(notice) && mxEmailIsValid(email)
+    isValid <- isNotEmpty(notice) && mxEmailIsValid(email)
     if (isValid) {
       title <- d("roles_updated_mail_title", lang)
       subject <- mxParseTemplateDict(
@@ -707,7 +707,7 @@ mxDbProjectAddUser <- function(idProject, idUser, roles = c("members"), useNotif
   idGroupNotify <- "added_user"
   added <- FALSE
   urlProject <- mxGetProjectUrl(idProject)
-  if (noDataCheck(projectData)) {
+  if (isEmpty(projectData)) {
     stop("Can't add user to project : no project data")
   }
 

@@ -8,8 +8,8 @@ observeEvent(reactData$updateViewsList,{
   project <- reactData$project 
   isMapOk <- isMapReady()
   isGuest <- isGuestUser()
-  hasProject <- !noDataCheck(project)
-  hasRole <- !noDataCheck(getUserRole())
+  hasProject <- isNotEmpty(project)
+  hasRole <- isNotEmpty(getUserRole())
 
   if(!isMapOk) return()
   if(!hasRole) return()

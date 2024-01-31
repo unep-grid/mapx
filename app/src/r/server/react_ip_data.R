@@ -3,7 +3,7 @@
 #
 reactIpInfo <- reactive({
    data <- input$clientIpData
-   if(noDataCheck(data)){
+   if(isEmpty(data)){
      data <- list()
    }
    data

@@ -149,11 +149,11 @@ observe({
     err <- logical(0)
     btnEnable <- FALSE
 
-    err[['n_layers_less_1']] <- noDataCheck(layers) || length(layers) < 1
+    err[['n_layers_less_1']] <- isEmpty(layers) || length(layers) < 1
     err[['n_layers_more_3']] <- length(layers) > 3
-    err[['n_country_not_1']] <- noDataCheck(countries) || length(countries) != 1
+    err[['n_country_not_1']] <- isEmpty(countries) || length(countries) != 1
     if(createMode){
-      err[['error_title_short']] <- noDataCheck(title) || nchar(title) < 5
+      err[['error_title_short']] <- isEmpty(title) || nchar(title) < 5
       err[['error_title_not_valid']] <- mxProfanityChecker(title)
     }
 
@@ -179,7 +179,7 @@ observeEvent(input$btnOverlapAddSourceFromView,{
   #
   views <- reactViewsCompact()
   idViewsSelected <- input$selectOverlapSourceFromView
-  if(noDataCheck(idViewsSelected)) return()
+  if(isEmpty(idViewsSelected)) return()
 
   viewsSubset <- views[sapply(views,function(v){v$id %in% idViewsSelected})]
   idSourcesViews <- lapply(viewsSubset,`[[`,"_source")
@@ -194,7 +194,7 @@ observeEvent(input$btnOverlapAddSourceFromView,{
   # Build selected list
   #
   idSourcesSelected <- input$selectOverlapLayers
-  if(noDataCheck(idSourcesSelected)){
+  if(isEmpty(idSourcesSelected)){
     idSourcesSelected <- list()
   }
   idSourcesSelected <- unique(c(as.list(idSourcesSelected),as.list(idSourcesViews)))

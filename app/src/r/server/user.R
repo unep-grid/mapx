@@ -5,10 +5,10 @@ observe(
     userData <- reactUser$data
     idUser <- userData$id
 
-    if (noDataCheck(project)) {
+    if (isEmpty(project)) {
       return()
     }
-    if (noDataCheck(idUser)) {
+    if (isEmpty(idUser)) {
       return()
     }
 
