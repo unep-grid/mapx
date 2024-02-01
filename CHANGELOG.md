@@ -1,3 +1,9 @@
+  - [1.13.0-alpha.23](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.23) 
+    - Added icons to toolbox items
+    - Solved style issue in some selectize padding
+    - Autoformat tools.html
+    - Added timeout in download vt test
+
   - [1.13.0-alpha.22](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.22) 
     - Countries select-auto :
         - Display all countries in the dropdown, not just on search (user request)
