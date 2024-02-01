@@ -14,6 +14,7 @@ export const config = {
   preload: "focus",
   dropdownParent: "body",
   maxItems: 10,
+  maxOptions: 300,
   plugins: ["remove_button"],
   load: null,
   onInitialize: async function () {
