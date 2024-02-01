@@ -1,8 +1,7 @@
 <div
   id="mxTabPanelTools"
   class="mx-tab--panel mx-tab--panel-border-padding"
-  data-panel="tools"
->
+  data-panel="tools">
   <!-- Spotlight -->
   <div class="mx-tab--content-scrollable mx-tab--content-padding">
     <h4 data-lang_key="title_config_spotlight"></h4>
@@ -11,17 +10,16 @@
         <label
           class="control-label"
           data-lang_key="select_spotlight_mode"
-          for="selectNLayersOverlap"
-          >spotlight_mode</label
-        >
+          for="selectNLayersOverlap">
+          spotlight_mode
+        </label>
         <div>
-          <select class='form-control' id="selectNLayersOverlap">
+          <select class="form-control" id="selectNLayersOverlap">
             <option value="0" data-lang_key="spotlight_where_all"></option>
             <option
               data-lang_key="spotlight_where_any"
               selected="TRUE"
-              value="1"
-            ></option>
+              value="1"></option>
             <option value="2" data-lang_key="spotlight_where_two"></option>
             <option value="3" data-lang_key="spotlight_where_three"></option>
             <option value="4" data-lang_key="spotlight_where_four"></option>
@@ -33,29 +31,25 @@
         <input
           type="checkbox"
           id="checkEnableOverlapArea"
-          class="fold-switch fold-check"
-        />
+          class="fold-switch fold-check" />
         <label
           class="fold-label"
           for="checkEnableOverlapArea"
-          data-lang_key="label_check_instant_overlap"
-        ></label>
+          data-lang_key="label_check_instant_overlap"></label>
         <div class="fold-content mx-scroll-styled">
           <div class="form-group">
             <label data-lang_key="label_area_instant_overlap"></label>
             <div class="form-control" id="txtAreaOverlap"></div>
             <small
               data-lang_key="label_help_area_instant_overlap"
-              class="text-muted"
-            ></small>
+              class="text-muted"></small>
           </div>
           <div class="form-group">
             <label data-lang_key="label_resol_instant_overlap"></label>
             <div class="form-control" id="txtResolOverlap"></div>
             <small
               data-lang_key="label_help_resol_instant_overlap"
-              class="text-muted"
-            ></small>
+              class="text-muted"></small>
           </div>
         </div>
       </div>
@@ -66,40 +60,41 @@
     <div id="uiBtnShowDbInfo" class="mx-tools-group shiny-html-output"></div>
     <div
       id="uiBtnShowRoleManager"
-      class="mx-tools-group shiny-html-output"
-    ></div>
+      class="mx-tools-group shiny-html-output"></div>
     <div id="uiBtnShowAppConfig" class="mx-tools-group shiny-html-output"></div>
     <div id="uiBtnProjectConfig" class="mx-tools-group shiny-html-output"></div>
     <h3 data-lang_key="title_utilities"></h3>
     <div class="mx-tools-group">
       <button
         id="btnMirrorUrl"
-        data-lang_key="tool_mirror_toolbox_btn"
         data-tool_id="btn_mirror_url"
-        class="btn btn-default"
-      >
-        mirror
+        class="btn btn-default">
+        <div class="label-icon">
+          <span data-lang_key="tool_mirror_toolbox_btn">mirror</span>
+          <i class="fa fa-reply"></i>
+        </div>
       </button>
-      <button
-        id="btnClearCache"
-        class="btn btn-default"
-        data-lang_key="btn_clear_cache"
-      >
-        Clear cached data
+      <button id="btnClearCache" class="btn btn-default">
+        <div class="label-icon">
+          <span data-lang_key="btn_clear_cache">Clear cache</span>
+          <i class="fa fa-fire-extinguisher"></i>
+        </div>
       </button>
-      <button
-        id="btnResetPanelSize"
-        class="btn btn-default"
-        data-lang_key="btn_reset_panel_size"
-      >
-        Reset default panel sizes
+      <button id="btnResetPanelSize" class="btn btn-default">
+        <div class="label-icon">
+          <span data-lang_key="btn_reset_panel_size">
+            Reset default panel sizes
+          </span>
+          <i class="fa fa-window-restore"></i>
+        </div>
       </button>
-      <button
-        id="btnShowSearchApiConfig"
-        class="btn btn-default"
-        data-lang_key="search_show_api_config"
-      >
-        Get search API key and configuration
+      <button id="btnShowSearchApiConfig" class="btn btn-default">
+        <div class="label-icon">
+          <span data-lang_key="search_show_api_config">
+            Get search API key and configuration
+          </span>
+          <i class="fa fa-key"></i>
+        </div>
       </button>
       <hr />
       <h3 data-lang_key="title_settings_colors"></h3>
@@ -109,9 +104,10 @@
     </div>
     <div>
       <hr />
-      <samall class="text-muted"
-        >Version <span class="text-muted mx-version">0</a></small
-      >
+      <small class="text-muted">
+        Version
+        <span class="text-muted mx-version">0</span>
+      </small>
     </div>
   </div>
 </div>

@@ -1562,6 +1562,19 @@ mxButton <- function(inputId, labelId = NULL, class = NULL) {
   )
 }
 
+#' Label + translation + icon
+#'
+#'
+mxLabel <- function(id, language, icon) {
+  div(
+    class = "label-icon",
+    tagList(
+      d(id, language, web = TRUE),
+      tags$i(class = sprintf("fa fa-%s", icon))
+    )
+  )
+}
+
 
 #' User name input
 #'

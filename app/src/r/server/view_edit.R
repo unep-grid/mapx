@@ -290,16 +290,16 @@ observe({
                 #
                 # main layer
                 #
-                selectizeInput(
-                  inputId = "selectSourceLayerMain",
-                  label = d("source_select_layer", language),
-                  choices = srcAvailable,
-                  selected = NULL,
-                  options = list(
-                    sortField = "label"
-                  )
-                ),
                 tagList(
+                  selectizeInput(
+                    inputId = "selectSourceLayerMain",
+                    label = d("source_select_layer", language),
+                    choices = srcAvailable,
+                    selected = NULL,
+                    options = list(
+                      sortField = "label"
+                    )
+                  ),
                   selectizeInput(
                     inputId = "selectSourceLayerMainGeom",
                     label = d("source_select_geometry", language),

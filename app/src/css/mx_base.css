@@ -612,9 +612,11 @@ tr {
  * Buttons
  *
  */
-.btn-icon {
+.btn-icon,
+.label-icon {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .btn-icon > span {
   margin-right: 5px;
@@ -693,7 +695,6 @@ tr {
   display: block;
   width: 100%;
   min-width: 50px;
-  padding: 4px;
 }
 .mx input[type="range"].form-control {
   padding: 0px;

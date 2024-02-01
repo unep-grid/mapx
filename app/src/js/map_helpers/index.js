@@ -554,7 +554,7 @@ export async function setProject(idProject, opt) {
           : "modal_check_confirm_project_change_fail_content_logged",
       ),
     });
-    console.error("Project change failed",{
+    console.error("Project change failed", {
       hadTimeout,
       validProject,
       projectRefused,
@@ -5185,8 +5185,11 @@ export async function getViewRandom(config) {
       continue;
     }
 
-    if (opt.isDownloadble && (await !isViewDownloadableRemote(view))) {
-      continue;
+    if (opt.isDownloadble) {
+      const isDownloadble = await isViewDownloadableRemote(view);
+      if (!isDownloadble) {
+        continue;
+      }
     }
 
     if (opt.hasDashboard && !isViewDashboard(view)) {
@@ -5249,9 +5252,7 @@ export async function isViewDownloadableRemote(idView) {
       return hasDownloadUrlItemsFromViewMeta(view);
     case "vt":
       const idSource = getViewVtSourceId(view);
-      if (idSource) {
-        return isSourceDownloadable(idSource);
-      }
+      return isSourceDownloadable(idSource);
   }
   return false;
 }
@@ -5262,6 +5263,9 @@ export async function isViewDownloadableRemote(idView) {
  * @return {Promise<Boolean>} downloadable
  */
 export async function isSourceDownloadable(idSource) {
+  if (!isSourceId(idSource)) {
+    return false;
+  }
   const route = getApiRoute("sourceGetServices");
   const res = await ws.emitAsync(
     route,

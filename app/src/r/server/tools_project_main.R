@@ -2,13 +2,19 @@
 # Admin panel and button
 #
 observe({
-  usersAllowedToCreate <- .get(config, c("project", "creation", "usersAllowed"), default = list())
+  usersAllowedToCreate <- .get(
+    config,
+    c("project", "creation", "usersAllowed"),
+    default = list()
+  )
   userRole <- getUserRole()
   userData <- reactUser$data
   isAdmin <- isTRUE(userRole$admin)
   isPublisher <- isTRUE(userRole$publisher)
   isProjectCreator <- isTRUE(userData$id %in% usersAllowedToCreate)
-  isProjectDefault <- isTRUE(reactData$project == .get(config, c("project", "default")))
+  isProjectDefault <- isTRUE(
+    reactData$project == .get(config, c("project", "default"))
+  )
   isGuest <- isGuestUser()
   reactData$projectAllowedToCreate <- isProjectCreator
 
@@ -24,15 +30,22 @@ observe({
 
     btns <- tagList()
 
-    labelBtnAdd <- ifelse(isProjectCreator, "btn_show_add_project", "btn_show_add_project_disabled")
-    labelBtnDelete <- ifelse(isProjectDefault, "btn_show_project_delete_disabled", "btn_show_project_delete")
-
+    labelBtnAdd <- ifelse(
+      isProjectCreator,
+      "btn_show_add_project",
+      "btn_show_add_project_disabled"
+    )
+    labelBtnDelete <- ifelse(
+      isProjectDefault,
+      "btn_show_project_delete_disabled",
+      "btn_show_project_delete"
+    )
 
 
     btns <- tagList(
       btns,
       actionButton(
-        label = d(labelBtnAdd, language, web = T),
+        label = mxLabel(labelBtnAdd, language, 'plus'),
         inputId = "btnShowAddProject",
         class = "btn btn-default " + ifelse(isProjectCreator, "", "disabled")
       )
@@ -42,7 +55,7 @@ observe({
       btns <- tagList(
         btns,
         actionButton(
-          label = d("btn_show_project_external_views", language, web = T),
+          label = mxLabel("btn_show_project_external_views", language, "share-alt-square"),
           inputId = "btnShowProjectExternalViews",
           class = "btn btn-default"
         )
@@ -53,27 +66,27 @@ observe({
       btns <- tagList(
         btns,
         actionButton(
-          label = d("btn_show_role_manager", language, web = T),
+          label = mxLabel("btn_show_role_manager", language, "users"),
           inputId = "btnShowRoleManager",
           class = "btn btn-default",
         ),
         actionButton(
-          label = d("btn_show_invite_member", language, web = T),
+          label = mxLabel("btn_show_invite_member", language, "user-plus"),
           inputId = "btnShowInviteMember",
           class = "btn btn-default",
         ),
         actionButton(
-          label = d("btn_show_project_config", language, web = T),
+          label = mxLabel("btn_show_project_config", language, "cog"),
           inputId = "btnShowProjectConfig",
           class = "btn btn-default",
         ),
         actionButton(
-          label = d(labelBtnDelete, language, web = T),
+          label = mxLabel(labelBtnDelete, language, "trash-o"),
           inputId = "btnShowProjectDelete",
           class = "btn btn-default " + ifelse(isProjectDefault, "disabled", ""),
         ),
         actionButton(
-          label = d("btn_show_project_views_states", language, web = T),
+          label = mxLabel("btn_show_project_views_states", language, "sitemap fa-rotate-270"),
           inputId = "btnShowProjectViewsStates",
           class = "btn btn-default "
         )

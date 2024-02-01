@@ -412,7 +412,10 @@ export function isCanvas(item) {
  * @param {Element} item item to test
  */
 export function isIconFont(item) {
-  return isElement(item) && item.classList.contains("fa");
+  return (
+    isElement(item) &&
+    (item.classList.contains("fa") || item.classList.contains("label-icon"))
+  );
 }
 
 /**
@@ -629,7 +632,7 @@ export function makeSafeName(x, repl = "_") {
  * Test if valide base64
  */
 const regexDataImg = new RegExp(
-  /^data:image\/(png|jpeg|svg);base64\,[a-zA-Z0-9\+\/\=]+$/
+  /^data:image\/(png|jpeg|svg);base64\,[a-zA-Z0-9\+\/\=]+$/,
 );
 export function isBase64img(str) {
   try {
@@ -694,7 +697,7 @@ export function isEmail(email) {
   return (
     isString(email) &&
     /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
-      email
+      email,
     )
   );
 }

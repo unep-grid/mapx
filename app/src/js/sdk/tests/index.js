@@ -1445,6 +1445,7 @@ mapx.once("ready", async () => {
   });
 
   t.check("Trigger download view source : vt", {
+    timeout: 15 * 1000,
     init: async () => {
       await stopIfGuest();
       const view = await mapx.ask("_get_random_view", {

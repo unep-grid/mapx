@@ -19,6 +19,7 @@ export async function downloadViewVector(idView) {
     throw new Error(`View ${idView} not found`);
   }
   const srcSummary = await getViewSourceSummary(view);
+
   const dl = new DownloadSourceModal({
     email: settings.user.guest ? null : settings.user.email,
     idSource: srcSummary.id,
