@@ -5,7 +5,6 @@
         - Improved style
     - Should solve issue with columns used in join being removable in table editor
     - Download + click : solve issue with which layer to validate for bad geom (base)
-    - Countries list in refactor value loading (wrong approach) + style
     - Added views list for source selection in table editor. Formating, removed log, set timeout as an option for tabele editor's get()
     - Source list : added 'global' flag for global sources
     - Source settings : 'if no reader' replaced by 'if no publishers' in readers for the block update test
