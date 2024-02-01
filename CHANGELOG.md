@@ -1,3 +1,20 @@
+  - [1.13.0-alpha.22](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.22) 
+    - Countries select-auto :
+        - Display all countries in the dropdown, not just on search (user request)
+        - Refactor options loading logic 
+        - Improved style
+    - Should solve issue with columns used in join being removable in table editor
+    - Download + click : solve issue with which layer to validate for bad geom (base)
+    - Countries list in refactor value loading (wrong approach) + style
+    - Added views list for source selection in table editor. Formating, removed log, set timeout as an option for tabele editor's get()
+    - Source list : added 'global' flag for global sources
+    - Source settings : 'if no reader' replaced by 'if no publishers' in readers for the block update test
+    - App wide replacement of noDataCheck/\!noDatacCheck with isEmpty/isNotEmpty helpers.
+    - Sources list + views edition improvements
+    - Transfer sources list per user to API, adapted the reactive objects, removed DB query. 
+    - Removed unsecure email from the app, always use encryption. Delegate early app failure log to Docker instead of trying to send and email
+    - Improve tabindex during login
+
   - [1.13.0-alpha.20](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.20) 
     
     -  Solve issue when creating a new join type source, when geom is requested (no preview mode ) and no base column was selected
