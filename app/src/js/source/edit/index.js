@@ -31,6 +31,7 @@ import {
   isNotEmpty,
   isFunction,
   isEmpty,
+  isView,
   isNumeric,
   isString,
   isStringRange,
@@ -329,7 +330,9 @@ export class EditTableSessionClient extends WsToolsBase {
        */
       const tableViews = await et.getTableViews();
       if (tableViews) {
-        const views = tableViews.map((row) => getView(row.id));
+        const views = tableViews
+          .map((row) => getView(row.id))
+          .filter((v) => isView(v));
         await viewsReplace(views);
       }
 

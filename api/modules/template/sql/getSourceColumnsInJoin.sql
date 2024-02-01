@@ -1,44 +1,54 @@
-WITH 
-  columns_from_base AS (
+WITH
+  base AS (
     SELECT
-      s.id,
-      jsonb_array_elements_text(s.data #> '{join,base,columns}') AS column_name
+      jsonb_array_elements_text(data #> '{join,base,columns}') AS column_name,
+      jsonb_array_elements(data #> '{join,joins}') ->> 'column_base' as column_base
     FROM
-      mx_sources s
+      mx_sources
+    WHERE
+    type = 'join'
+    AND data #>> '{join,base,id_source}' = $1
+  ),
+  joins AS (
+    SELECT
+      jsonb_array_elements_text(je -> 'columns') AS column_name,
+      je ->> 'column_join' AS column_join
+    FROM
+      mx_sources s,
+      jsonb_array_elements(s.data #> '{join,joins}') je
     WHERE
       s.type = 'join'
-      AND s.data #>> '{join,base,id_source}' = $1
+      AND je ->> 'id_source' = $1
   ),
-  source_columns AS (
-    SELECT
-      s.id,
-      jsonb_array_elements(s.data #> '{join,joins}') AS join_element
-    FROM
-      mx_sources s
-    WHERE
-      s.type = 'join'
-  ),
-  columns_from_joins AS (
-    SELECT
-      sc.id,
-      jsonb_array_elements_text(sc.join_element -> 'columns') AS column_name
-    FROM
-      source_columns sc
-    WHERE
-      sc.join_element ->> 'id_source' = $1
-  ),
-  columns_all AS (
-    SELECT
+  columns AS (
+    SELECT DISTINCT
       column_name
     FROM
-      columns_from_base
-    UNION ALL
-    SELECT
-      column_name
-    FROM
-      columns_from_joins
+      (
+        SELECT
+          column_name
+        FROM
+          base
+        UNION ALL
+        SELECT
+          column_base
+        FROM
+          base
+        UNION ALL
+        SELECT
+          column_name
+        FROM
+          joins
+        UNION ALL
+        SELECT
+          column_join
+        FROM
+          joins
+      ) all_columns
   )
-SELECT DISTINCT
-  column_name
+SELECT
+  *
 FROM
-  columns_all;
+  columns
+WHERE
+  column_name is not null;
