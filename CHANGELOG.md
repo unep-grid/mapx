@@ -1,3 +1,9 @@
+  - [1.13.0-alpha.24](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.24) 
+  - Join editor :
+      - Prompt to delete a join, if a new join has been created and not valid, when closing the window. 
+      - If there is a delta (DB VS editor), prompt the user if he want to quit anyway. 
+      - Exclude join with missing `id_source` in base from the read list (view editor)
+
   - [1.13.0-alpha.23](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.23) 
     - Added icons to toolbox items
     - Solved style issue in some selectize padding
