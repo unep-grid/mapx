@@ -22,7 +22,9 @@ observeEvent(input$selectSourceLayerForManage, {
     # data = {idSource:<id_src>, update:timestamp}
     #
     data <- input$selectSourceLayerForManage
+
     if (isEmpty(data$idSource)) {
+      mxDebugMsg("empty idSource (input)")
       return()
     }
     reactData$triggerSourceManage <- data
@@ -39,6 +41,7 @@ reactSourceEditInfo <- reactive({
   idUser <- .get(userData, c("id"))
 
   if (isEmpty(idSource)) {
+    mxDebugMsg("empty idSource (reactSourceEditInfo)")
     return(list())
   }
 

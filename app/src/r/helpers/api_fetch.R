@@ -37,13 +37,12 @@ mxApiUrl <- function(route, listParam = NULL, public = FALSE, protocol = "http")
 mxApiFetch <- function(route, listParam = NULL, asDataFrame = FALSE, debug = FALSE) {
   data <- list()
   mxCatch("Api Fetch", {
-    
     url <- mxApiUrl(route, listParam)
-    
+
     if (isTRUE(debug)) {
       diff <- mxTimeDiff(sprintf("API FETCH %s", route))
     }
-    
+
     response <- curl_fetch_memory(url)
     strData <- rawToChar(response$content)
 
@@ -204,7 +203,8 @@ mxApiGetSourceTable <- function(
   readable = FALSE,
   add_global = FALSE,
   token = NULL,
-  add_views = FALSE
+  add_views = FALSE,
+  exclude_empty_join = FALSE
 ) {
   config <- list(
     idProject = idProject,
@@ -216,7 +216,8 @@ mxApiGetSourceTable <- function(
     readable = readable,
     add_global = add_global,
     token = token,
-    add_views = add_views
+    add_views = add_views,
+    exclude_empty_join = exclude_empty_join
   )
 
   data <- mxApiFetch("/get/sources/list/user", config, asDataFrame = TRUE)

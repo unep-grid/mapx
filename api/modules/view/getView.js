@@ -48,17 +48,25 @@ export async function getViewsBySource(idSource) {
   return rows;
 }
 
-export async function getViewsTableBySource(idSource, idProject) {
+export async function getViewsTableBySource(
+  idSource,
+  idProject,
+  client = pgRead
+) {
   if (!isSourceId(idSource)) {
     throw Error("No valid");
   }
 
   const out = [];
   const sql = templates.getViewsTableBySource;
-  const idSourcesAll = await getSourceIdsIncludingJoin(idSource, idProject);
+  const idSourcesAll = await getSourceIdsIncludingJoin(
+    idSource,
+    idProject,
+    client
+  );
 
   for (const id of idSourcesAll) {
-    const { rows } = await pgRead.query(sql, [id]);
+    const { rows } = await client.query(sql, [id]);
     out.push(...rows);
   }
 

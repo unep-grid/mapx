@@ -4,6 +4,7 @@ import { isSourceId, isEmpty, isNotEmpty } from "@fxi/mx_valid";
 import { newIdSource } from "#mapx/upload";
 import {
   registerSource,
+  removeSource,
   getColumnsTypesSimple,
   withTransaction,
 } from "#mapx/db_utils";
@@ -86,6 +87,7 @@ async function handleMethod(method, config, session, socket) {
     get_columns_type: () => getColumnsType(config),
     set_config: (client) => setJoinConfig(config, client, socket),
     register: (client) => register(config, session, client),
+    unregister: (client) => unregister(config, session, client),
   };
 
   if (!handlers[method]) {
@@ -133,6 +135,13 @@ async function register(config, session, client) {
   await updateJoin(newJoin, client);
 
   return newJoin;
+}
+
+async function unregister(config, session, client) {
+  const { id_source } = config;
+  const id_user = session.user_id;
+  const removed = await removeSource(id_source, id_user, client);
+  return removed;
 }
 
 async function stopIfNotValid(config, client) {

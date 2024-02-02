@@ -1,9 +1,9 @@
 import { el, elButtonFa, elSpanTranslate as tt } from "../../el_mapx";
 import { EventSimple } from "../../event_simple";
-import { isSourceId, isEmpty } from "../../is_test";
+import { isSourceId, isNotEmpty, isEmpty } from "../../is_test";
 import { modalSelectSource } from "../../select_auto";
 import { settings, ws, nc } from "../../mx";
-import { modalPrompt, modalSimple } from "../../mx_helper_modal";
+import { modalPrompt, modalSimple, modalConfirm } from "../../mx_helper_modal";
 import { getDictItem, getLabelFromObjectPath } from "../../language";
 import "./style.less";
 import { makeId } from "../../mx_helper_misc";
@@ -17,6 +17,7 @@ import {
 } from "../../map_helpers";
 import { moduleLoad } from "../../modules_loader_async";
 import { TableResizer } from "../../handsontable/utils";
+import { jsonDiff } from "../../mx_helper_utils_json";
 
 const routes = {
   join: "/client/source/join",
@@ -41,6 +42,7 @@ export class SourcesJoinManager extends EventSimple {
       return;
     }
     sjm._id = makeId(10);
+    sjm._mode = mode;
 
     if (mode === "edit") {
       sjm._id_source = await sjm.promptSelectSourceJoin();
@@ -56,7 +58,7 @@ export class SourcesJoinManager extends EventSimple {
       language: settings.language,
     });
 
-    const { join: config, meta } = await sjm.load(sjm.id);
+    const { join: config, meta } = await sjm.loadData(sjm.id);
     const def = await sjm.getConfigDefault();
 
     sjm._allow_preview = false;
@@ -100,12 +102,30 @@ export class SourcesJoinManager extends EventSimple {
   async getCount() {
     return this.emit("get_count", this.getConfigEditor());
   }
+
+  async getDiff() {
+    const sjm = this;
+    const { join: configOrig } = await sjm.loadData(sjm.id);
+    const configCurrent = sjm.getConfigEditor();
+    const delta = await jsonDiff(configOrig, configCurrent, {
+      propertyFilter: (p) => !p.startsWith("_"),
+    });
+    return delta;
+  }
+
+  async hasUnsavedChange() {
+    const sjm = this;
+    const diff = await sjm.getDiff();
+    return isNotEmpty(diff);
+  }
+
   async setCount(count) {
     if (isEmpty(count)) {
       return;
     }
     this._elCount.innerText = count;
   }
+
   async emit(method, config) {
     return ws.emitAsync(routes.join, { method, config }, sjmSettings.wsTimeOut);
   }
@@ -158,7 +178,10 @@ export class SourcesJoinManager extends EventSimple {
 
   validateEditor() {
     const sjm = this;
-    return isEmpty(sjm._jed.validation_results);
+    return isNotEmpty(sjm._jed) && isEmpty(sjm._jed.validation_results);
+  }
+  get valid() {
+    return this.validateEditor();
   }
 
   async validateColumns() {
@@ -250,7 +273,7 @@ export class SourcesJoinManager extends EventSimple {
     }
   }
 
-  async load(idSource) {
+  async loadData(idSource) {
     const sjm = this;
     if (!isSourceId(idSource)) {
       return {};
@@ -258,16 +281,60 @@ export class SourcesJoinManager extends EventSimple {
     return sjm.emit("get_data", { id_source: idSource });
   }
 
-  close() {
+  async close() {
     const sjm = this;
     if (sjm._closed) {
       return;
     }
+
+    const newInvalid = sjm._mode === "create" && !sjm.valid;
+    const unsavedChange = await sjm.hasUnsavedChange();
+
+    if (unsavedChange) {
+      const continueUnsaved = await sjm.promptContinueUnsavedChanges();
+      if (!continueUnsaved) {
+        return;
+      }
+    }
+
+    if (newInvalid) {
+      const deleteJoin = await sjm.promptDeleteCreateInvalid();
+      if (!deleteJoin) {
+        return;
+      }
+      await sjm.emit("unregister", { id_source: sjm.id });
+    }
+
     triggerUpdateSourcesList();
     sjm._closed = true;
     sjm._modal.close();
     sjm.fire("closed");
     delete window._sjm;
+  }
+
+  async promptContinueUnsavedChanges() {
+    const continueUnsaved = await modalConfirm({
+      title: tt("join_quit_unsaved"),
+      content: tt("join_quit_unsaved_desc"),
+      confirm: tt("btn_confirm"),
+      cancel: tt("btn_cancel"),
+    });
+    return continueUnsaved;
+  }
+
+  async promptDeleteCreateInvalid() {
+    const sjm = this;
+
+    if (sjm._mode !== "create" || sjm.valid) {
+      return;
+    }
+    const deletedJoin = await modalConfirm({
+      title: tt("join_delete_created_invalid"),
+      content: tt("join_delete_created_invalid_desc"),
+      confirm: tt("btn_confirm"),
+      cancel: tt("btn_cancel"),
+    });
+    return deletedJoin;
   }
 
   async promptNew() {

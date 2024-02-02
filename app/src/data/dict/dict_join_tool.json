@@ -273,5 +273,57 @@
     "bn": "নতুন টেবিল জয়েন তৈরি করুন",
     "fa": "ایجاد پیوست جدول جدید",
     "ps": "نوی د جدول نښلول جوړول"
+  },
+  {
+    "id": "join_delete_created_invalid",
+    "en": "Delete join?",
+    "fr": "Supprimer la jointure?",
+    "zh": "删除连接？",
+    "es": "¿Eliminar unión?",
+    "ar": "حذف الانضمام؟",
+    "ru": "Удалить соединение?",
+    "de": "Verknüpfung löschen?",
+    "bn": "জয়েন মুছে ফেলবেন?",
+    "fa": "پیوستن حذف شود؟",
+    "ps": "جوړښت ړنګ کړئ؟"
+  },
+  {
+    "id": "join_delete_created_invalid_desc",
+    "en": "The created join is incomplete or invalid. Would you like to delete it?",
+    "fr": "La jointure crée est incomplète ou invalide. Voulez-vous la supprimer?",
+    "zh": "已创建的连接不完整或无效。您想要删除它吗？",
+    "es": "La unión creada está incompleta o es inválida. ¿Deseas eliminarla?",
+    "ar": "الانضمام المُنشأ غير مكتمل أو غير صالح. هل ترغب في حذفه؟",
+    "ru": "Созданное соединение неполное или недействительно. Хотите ли вы удалить его?",
+    "de": "Die erstellte Verknüpfung ist unvollständig oder ungültig. Möchten Sie sie löschen?",
+    "bn": "তৈরি করা জয়েন অসম্পূর্ণ বা অবৈধ। আপনি কি এটি মুছে ফেলতে চান?",
+    "fa": "پیوست ایجاد شده ناقص یا نامعتبر است. آیا می‌خواهید آن را حذف کنید؟",
+    "ps": "جوړ شوی نښلونکی ناکامل یا ناسم دی. ایا غواړئ چې دا له منځه یوسئ؟"
+  },
+  {
+    "id": "join_quit_unsaved",
+    "en": "Unsaved Join Configuration",
+    "fr": "Configuration de jointure non enregistrée",
+    "zh": "未保存的连接配置",
+    "es": "Configuración de unión no guardada",
+    "ar": "تكوين الانضمام غير المحفوظ",
+    "ru": "Несохраненная конфигурация соединения",
+    "de": "Nicht gespeicherte Verknüpfungskonfiguration",
+    "bn": "সংরক্ষিত না করা জয়েন কনফিগারেশন",
+    "fa": "پیکربندی پیوسته ذخیره نشده",
+    "ps": "نه خوندي شوې جوړښت تنظیمات"
+  },
+  {
+    "id": "join_quit_unsaved_desc",
+    "en": "You have unsaved changes in the join configuration. Do you want to quit anyway?",
+    "fr": "Vous avez des modifications non enregistrées dans la configuration de jointure. Voulez-vous quitter quand même?",
+    "zh": "您在连接配置中有未保存的更改。您还是想退出吗？",
+    "es": "Tienes cambios no guardados en la configuración de unión. ¿Quieres salir de todos modos?",
+    "ar": "لديك تغييرات غير محفوظة في تكوين الانضمام. هل تريد الخروج على أي حال؟",
+    "ru": "У вас есть несохраненные изменения в конфигурации соединения. Вы все равно хотите выйти?",
+    "de": "Sie haben nicht gespeicherte Änderungen in der Verknüpfungskonfiguration. Möchten Sie trotzdem beenden?",
+    "bn": "জয়েন কনফিগারেশনে আপনার সংরক্ষিত না করা পরিবর্তন আছে। তবুও আপনি বের হতে চান?",
+    "fa": "تغییرات ذخیره نشده‌ای در پیکربندی پیوسته دارید. آیا باز هم می‌خواهید خارج شوید؟",
+    "ps": "په جوړښت تنظیماتو کې مو نه خوندي شوي بدلونونه لرئ. ایا غواړئ بیا هم ووځئ؟"
   }
 ]

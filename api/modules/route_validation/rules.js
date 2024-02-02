@@ -50,6 +50,7 @@ const rules = [
       "usePostgisTiles",
       "add_global",
       "add_views",
+      "exclude_empty_join",
       "editable",
       "readable",
     ],

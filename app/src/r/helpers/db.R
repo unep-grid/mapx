@@ -1933,6 +1933,7 @@ mxDbGetDistinctTableFromSql <- function(sql) {
 
 #' Fetch Dependent Object Details for a Specified Table
 #'
+#' ⚠️  USE API VERSION 'getSourceDependencies' instead 
 #' This function fetches details about pg views/object that depend on a
 #' specified table in the database. It returns a data frame with the IDs,
 #' dependency types, titles, and projects for each dependent pg view.

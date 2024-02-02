@@ -2,9 +2,10 @@ import { pgRead } from "#mapx/db";
 import { getTableDimension, tableExists } from "#mapx/db_utils";
 import { templates } from "#mapx/template";
 import { parseTemplate } from "#mapx/helpers";
-import { isEmpty, isSourceId } from "@fxi/mx_valid";
+import { isNotEmpty, isEmpty, isSourceId } from "@fxi/mx_valid";
 import { validateTokenHandler, getUserRoles } from "#mapx/authentication";
 import { getParamsValidator } from "#mapx/route_validation";
+import { getViewsTableBySource } from "#mapx/view";
 
 const validateParamsHandler = getParamsValidator({
   expected: [
@@ -18,6 +19,7 @@ const validateParamsHandler = getParamsValidator({
     "add_views",
     "editable",
     "readable",
+    "exclude_empty_join",
   ],
 });
 
@@ -75,16 +77,38 @@ export async function ioSourceList(socket, request, cb) {
 }
 
 /**
+ * Check if a source have dependencies : views or
+ * @param {String} id_source
+ * @param {PgClient} client
+ *
+ */
+export async function hasSourceDependencies(id_source, client) {
+  const idSources = await getSourceDependencies(id_source, "en", client);
+  if (isNotEmpty(idSources)) {
+    return true;
+  }
+  const views = await getViewsTableBySource(id_source, null, client);
+  if (isNotEmpty(views)) {
+    return true;
+  }
+  return false;
+}
+
+/**
  * Get list of sources id, including join + base source id
  * @param {String} idSource
  * @param {String} idProject
  * @returns {Promise<Array>} Array of sources ids
  */
-export async function getSourceIdsIncludingJoin(idSource, idProject) {
+export async function getSourceIdsIncludingJoin(
+  idSource,
+  idProject,
+  client = pgRead
+) {
   if (!isSourceId(idSource)) {
     throw new Error("Missing source id");
   }
-  const res = await pgRead.query(templates.getSourcesIdIncludingJoin, [
+  const res = await client.query(templates.getSourcesIdIncludingJoin, [
     idSource,
     idProject,
   ]);
@@ -92,6 +116,28 @@ export async function getSourceIdsIncludingJoin(idSource, idProject) {
   return res.rows.map((r) => r.id_source);
 }
 
+/**
+ *  Get source dependencies ( pg views, low level )
+ * @param {String} idSource
+ * @param {String} language
+ * @return {Arary} List of dependencies
+ */
+export async function getSourceDependencies(
+  idSource,
+  language = "en",
+  client = pgRead
+) {
+  if (!isSourceId(idSource)) {
+    throw new Error("Missing source id");
+  }
+  const sql = parseTemplate(templates.getSourceDependencies, { language });
+  const res = await client.query(sql, [idSource]);
+  return res.rows;
+}
+
+/**
+ *  Get source list
+ */
 async function getSourcesList(options) {
   const def = {
     idProject: null,
@@ -104,6 +150,7 @@ async function getSourcesList(options) {
     readable: false,
     add_global: false,
     add_views: false,
+    exclude_empty_join: false,
   };
 
   const config = Object.assign({}, def, options);
@@ -124,8 +171,8 @@ async function getSourcesList(options) {
     readable,
     add_views,
     add_global,
+    exclude_empty_join,
   } = config;
-
 
   if (editable && readable) {
     throw new Error("Editable and readable are exclusive");
@@ -154,6 +201,7 @@ async function getSourcesList(options) {
       readable,
       add_views,
       idSources,
+      exclude_empty_join,
     ],
   });
 

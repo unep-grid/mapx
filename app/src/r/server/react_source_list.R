@@ -32,6 +32,7 @@ reactTableReadSources <- reactive({
       readable = TRUE,
       add_global = TRUE,
       add_views = FALSE,
+      exclude_empty_join = TRUE,
       token = token
     )
 
@@ -82,7 +83,7 @@ reactTableEditSources <- reactive({
       idUser = idUser,
       language = language,
       idSources = NULL,
-      types = c("join", "vector"),
+      types = c("join", "vector", "tabular"),
       editable = TRUE,
       readable = FALSE,
       add_global = FALSE,

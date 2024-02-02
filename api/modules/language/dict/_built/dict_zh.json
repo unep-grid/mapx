@@ -2170,6 +2170,26 @@
     "zh": "创建新表连接"
   },
   {
+    "id": "join_delete_created_invalid",
+    "en": "Delete join?",
+    "zh": "删除连接？"
+  },
+  {
+    "id": "join_delete_created_invalid_desc",
+    "en": "The created join is incomplete or invalid. Would you like to delete it?",
+    "zh": "已创建的连接不完整或无效。您想要删除它吗？"
+  },
+  {
+    "id": "join_quit_unsaved",
+    "en": "Unsaved Join Configuration",
+    "zh": "未保存的连接配置"
+  },
+  {
+    "id": "join_quit_unsaved_desc",
+    "en": "You have unsaved changes in the join configuration. Do you want to quit anyway?",
+    "zh": "您在连接配置中有未保存的更改。您还是想退出吗？"
+  },
+  {
     "id": "error_notset",
     "en": "Property must be set",
     "zh": "属性必须设置"

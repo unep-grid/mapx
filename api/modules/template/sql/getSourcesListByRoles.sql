@@ -51,6 +51,18 @@ WITH
        */
     type = ANY ($4)
     AND (
+      /*
+       * Exclude empty join
+       */
+      CASE
+        WHEN (
+          type = 'join'
+          AND $10::boolean
+        ) THEN data #>> '{join,base,id_source}' <> ''
+        ELSE true
+      END
+    )
+    AND (
       (
         /**
          * Match readable AND global source 

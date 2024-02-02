@@ -6,6 +6,7 @@ import { getUserRoles } from "#mapx/authentication";
 import { isEmpty, isArray, isSourceId, isProjectId } from "@fxi/mx_valid";
 import { isLayerValid, areLayersValid } from "./geom_validation.js";
 import { insertRow } from "./insert.js";
+import { hasSourceDependencies } from "#mapx/source";
 export * from "./metadata.js";
 
 /**
@@ -108,8 +109,7 @@ async function sanitizeUpdates(updates) {
  * @param {String} idTable id of the table
  * @return {Promise<Boolean>} Table exists
  */
-async function tableExists(idTable, schema) {
-  schema = schema || "public";
+async function tableExists(idTable, schema = "public", client = pgRead) {
   const sqlExists = `
   SELECT EXISTS (
    SELECT 1
@@ -117,7 +117,7 @@ async function tableExists(idTable, schema) {
    WHERE  table_schema = '${schema}'
    AND    table_name = '${idTable}'
    )`;
-  const res = await pgRead.query(sqlExists);
+  const res = await client.query(sqlExists);
   const exists = res.rowCount > 0 && res.rows[0].exists;
 
   return exists;
@@ -458,7 +458,7 @@ async function registerOrRemoveSource(
   const count = r.rowCount > 0 ? r.rows[0].n * 1 : 0;
 
   if (count === 0) {
-    stats.removed = await removeSource(idSource);
+    stats.removed = await removeSource(idSource, idUser);
   }
 
   if (!stats.removed) {
@@ -480,21 +480,47 @@ async function registerOrRemoveSource(
 
 /**
  * Remove source
+ *
  * @param {String} idSource Source to remove
- * @return {Promise<Boolean>} Removed
+ * @param {String} idUser User ID for permission validation (optional)
+ * @param {Object} client Database client (optional)
+ * @return {Promise<Boolean>} True if removed successfully, otherwise throws an error
  */
-async function removeSource(idSource) {
-  const sqlDelete = {
-    text: `DELETE FROM mx_sources WHERE id = $1::text`,
-    values: [idSource],
-  };
-  const sqlDrop = {
-    text: `DROP TABLE IF EXISTS ${idSource}`,
-  };
-  await pgWrite.query(sqlDrop);
-  await pgWrite.query(sqlDelete);
-  const sourceExists = await tableExists(idSource);
-  return !sourceExists;
+async function removeSource(idSource, idUser, client = pgWrite) {
+  const pgClient = await client.connect();
+  try {
+    await pgClient.query("BEGIN");
+    const hasDep = await hasSourceDependencies(idSource);
+
+    if (idUser) {
+      // Implement user rights check here
+    }
+
+    if (hasDep) {
+      throw new Error(`Source ${idSource} can't be removed [has dependencies]`);
+    }
+
+    const sqlDelete = {
+      text: `DELETE FROM mx_sources WHERE id = $1::text`,
+      values: [idSource],
+    };
+    const sqlDrop = {
+      text: `DROP TABLE IF EXISTS ${idSource}`,
+    };
+    await pgClient.query(sqlDrop);
+    await pgClient.query(sqlDelete);
+    const sourceExists = await tableExists(idSource, "public", pgClient);
+    if (sourceExists) {
+      throw new Error(`Source ${idSource} not removed`);
+    }
+    await pgClient.query("COMMIT");
+  } catch (e) {
+    await pgClient.query("ROLLBACK");
+    throw e; // Rethrow the error for external handling
+  } finally {
+    pgClient.release();
+  }
+  return true;
 }
 
 /**
