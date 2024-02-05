@@ -106,11 +106,11 @@ export async function getViewSourceMetadata(view) {
  * Display view metadata in a modal panel
  * @param {Object|String} view View or view id
  */
-export async function viewToMetaModal(view) {
-  view = getView(view);
+export async function viewToMetaModal(idView) {
+  let view = getView(idView);
 
   if (!isView(view)) {
-    view = await getViewRemote(view);
+    view = await getViewRemote(idView);
   }
 
   if (!isView(view)) {
@@ -119,7 +119,11 @@ export async function viewToMetaModal(view) {
     });
   }
 
-  const idView = view?.id;
+  /**
+   * Case when idView is a view, reassign idView
+   */
+  idView = view?.id;
+
   /**
    * UI
    */
