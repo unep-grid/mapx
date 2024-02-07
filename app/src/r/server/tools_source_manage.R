@@ -41,7 +41,6 @@ reactSourceEditInfo <- reactive({
   idUser <- .get(userData, c("id"))
 
   if (isEmpty(idSource)) {
-    mxDebugMsg("empty idSource (reactSourceEditInfo)")
     return(list())
   }
 

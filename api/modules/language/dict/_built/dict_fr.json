@@ -4115,6 +4115,11 @@
     "fr": "Point"
   },
   {
+    "id": "empty",
+    "en": "Empty",
+    "fr": "Vide"
+  },
+  {
     "id": "pol",
     "en": "Politics",
     "fr": "Politique"

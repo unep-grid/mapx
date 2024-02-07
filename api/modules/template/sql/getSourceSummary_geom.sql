@@ -3,17 +3,17 @@ WITH
     SELECT
       gid,
       CASE
+        WHEN geom IS NULL OR ST_isEmpty(geom) then 'empty'
         WHEN lower(ST_GeometryType (geom)) like '%point' THEN 'point'
         WHEN lower(ST_GeometryType (geom)) like '%polygon' THEN 'polygon'
         WHEN lower(ST_GeometryType (geom)) like '%linestring' THEN 'line'
       END geom_type
     FROM
       "{{idSource}}"
-    WHERE ST_GeometryType (geom) is not NULL
   ),
   gtable as (
     SELECT
-      count(gid) geom_count,
+      count(*) geom_count,
       geom_type
     FROM
       gtype

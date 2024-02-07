@@ -271,11 +271,6 @@ observe({
 
               srcAvailableMask <- srcAvailable[!srcAvailable %in% srcSet]
               hasSource <- srcSet %in% srcAvailable
-              reactData$sourceLayerFromView <- list(
-                trigger = Sys.time(),
-                srcSet = srcSet,
-                srcSetMask = srcSetMask
-              )
 
               if (isNotEmpty(srcSet) && !hasSource) {
                 names(srcSet) <- mxGetTitleFromSourceID(
@@ -295,7 +290,7 @@ observe({
                     inputId = "selectSourceLayerMain",
                     label = d("source_select_layer", language),
                     choices = srcAvailable,
-                    selected = NULL,
+                    selected = srcSet,
                     options = list(
                       sortField = "label"
                     )
@@ -327,7 +322,6 @@ observe({
                     label = d("btn_get_layer_summary", language)
                   )
                 ),
-                # uiOutput("uiViewEditVtMain"),
                 #
                 # mask / overlap layer
                 #
@@ -343,7 +337,7 @@ observe({
                       inputId = "selectSourceLayerMask",
                       label = d("source_select_layer_mask", language),
                       choices = srcAvailableMask,
-                      selected = NULL,
+                      selected = srcSetMask,
                       options = list(
                         sortField = "label"
                       )
@@ -856,11 +850,11 @@ observe({
     if (isVectorTile) {
       layer <- input$selectSourceLayerMain
       variable <- input$selectSourceLayerMainVariable
-      gtype <- input$selectSourceLayerMainGeom
+      geomType <- input$selectSourceLayerMainGeom
       errors <- c(
         isEmpty(layer),
         isEmpty(variable),
-        isEmpty(gtype),
+        isEmpty(geomType),
         !layer %in% reactListReadSourcesVector()
       )
     }
@@ -923,7 +917,7 @@ observe({
 # View vt, rt, sm : save
 #
 observeEvent(input$btnViewSave, {
-  mxCatch("Save view", {
+  mxCatch("view_edit : save", {
     mxToggleButton(
       id = "btnViewSave",
       disable = TRUE
@@ -1082,96 +1076,89 @@ observeEvent(input$btnViewSave, {
   })
 })
 
-#
-# Select layer logic : geomType, and variable name
-#
-observe({
-  src <- reactData$sourceLayerFromView
-  isolate({
-    updateSelectizeInput(session, "selectSourceLayerMain",
-      selected = src$srcSet
-    )
-    updateSelectizeInput(session, "selectSourceLayerMask",
-      selected = src$srcSetMask
-    )
-  })
-})
-observe({
-  layerMain <- input$selectSourceLayerMain
-  if (isEmpty(layerMain)) {
-    return()
-  }
-  #
-  # In case of of reopening same view, this oberver is not
-  # invalidated. Meaning properties not updated
-  # Using init from viewTitleSchema_init make sure to invalidate
-  # this.
-  #
-  update <- input$viewTitleSchema_init
-  isolate({
-    viewData <- reactData$viewDataEdited
 
-    if (isEmpty(viewData)) {
-      return()
-    }
-    if (viewData$type != "vt") {
+observe({
+  mxCatch("view_edit : update available variables", {
+    layerMain <- input$selectSourceLayerMain
+    if (isEmpty(layerMain)) {
       return()
     }
 
-    language <- reactData$language
+    #
+    # In case of of reopening same view, this oberver is not
+    # invalidated. Meaning properties not updated
+    # Using init from viewTitleSchema_init make sure to invalidate
+    # this.
+    #
+    update <- input$viewTitleSchema_init
+    isolate({
+      viewData <- reactData$viewDataEdited
 
-    geomTypesDf <- mxDbGetLayerGeomTypes(layerMain)
+      if (isEmpty(viewData)) {
+        return()
+      }
+      if (viewData$type != "vt") {
+        return()
+      }
 
-    geomTypes <- mxSetNameGeomType(geomTypesDf, language)
+      language <- reactData$language
 
-    variablesMain <- mxDbGetTableColumnsNames(
-      table = layerMain,
-      notIn = c("geom", "gid", "_mx_valid"),
-      notType = c(
-        "date",
-        "time with time zone",
-        "time without time zone",
-        "timestamp with time zone",
-        "timestamp without time zone"
+      geomTypesDf <- mxApiGetSourceSummaryGeom(layerMain)
+
+      geomTypes <- mxSetNameGeomType(geomTypesDf, language)
+
+      variablesMain <- mxDbGetTableColumnsNames(
+        table = layerMain,
+        notIn = c("geom", "gid", "_mx_valid"),
+        notType = c(
+          "date",
+          "time with time zone",
+          "time without time zone",
+          "timestamp with time zone",
+          "timestamp without time zone"
+        )
       )
-    )
-    variables <- mxDbGetTableColumnsNames(
-      table = layerMain,
-      notIn = c("geom", "gid", "_mx_valid"),
-    )
+      variables <- mxDbGetTableColumnsNames(
+        table = layerMain,
+        notIn = c("geom", "gid", "_mx_valid"),
+      )
 
-    geomType <- .get(viewData, c("data", "geometry", "type"))
-    variableName <- .get(viewData, c("data", "attribute", "name"))
-    variableNames <- .get(viewData, c("data", "attribute", "names"))
+      geomType <- .get(viewData, c("data", "geometry", "type"))
+      variableName <- .get(viewData, c("data", "attribute", "name"))
+      variableNames <- .get(viewData, c("data", "attribute", "names"))
 
-    if (isTRUE(geomType %in% geomTypes)) {
-      geomTypeSelected <- geomType
-    } else {
-      geomTypeSelected <- geomTypes[[1]]
-    }
-    if (isTRUE(variableName %in% variablesMain)) {
-      variableMainSelected <- variableName
-    } else {
-      variableMainSelected <- variablesMain[[1]]
-    }
-    if (isTRUE(all(variableNames %in% variables))) {
-      variablesOtherSelected <- variableNames
-    } else {
-      variablesOtherSelected <- NULL
-    }
+      if (isTRUE(geomType %in% geomTypes)) {
+        geomTypeSelected <- geomType
+      } else if (isNotEmpty(geomTypes)) {
+        geomTypeSelected <- geomTypes[[1]]
+      } else {
+        geomTypeSelected <- NULL
+      }
+      
+      if (isTRUE(variableName %in% variablesMain)) {
+        variableMainSelected <- variableName
+      } else {
+        variableMainSelected <- variablesMain[[1]]
+      }
+      if (isTRUE(all(variableNames %in% variables))) {
+        variablesOtherSelected <- variableNames
+      } else {
+        variablesOtherSelected <- NULL
+      }
 
-    updateSelectizeInput(session, "selectSourceLayerMainGeom",
-      choices = geomTypes,
-      selected = geomTypeSelected
-    )
-    updateSelectizeInput(session, "selectSourceLayerMainVariable",
-      choices = variablesMain,
-      selected = variableMainSelected
-    )
-    updateSelectizeInput(session, "selectSourceLayerOtherVariables",
-      choices = variables,
-      selected = variablesOtherSelected
-    )
+      updateSelectizeInput(session, "selectSourceLayerMainGeom",
+        choices = geomTypes,
+        selected = geomTypeSelected
+      )
+      updateSelectizeInput(session, "selectSourceLayerMainVariable",
+        choices = variablesMain,
+        selected = variableMainSelected
+      )
+      updateSelectizeInput(session, "selectSourceLayerOtherVariables",
+        choices = variables,
+        selected = variablesOtherSelected
+      )
+    })
   })
 })
 
@@ -1198,76 +1185,63 @@ observeEvent(input$btnGetLayerSummary, {
 # Number of overlap indication
 #
 observe({
-  layerMask <- input$selectSourceLayerMask
-  layerMain <- input$selectSourceLayerMain
-  useMask <- isTRUE(input$checkAddMaskLayer)
+  mxCatch("view_edit : update mask overlap count", {
+    layerMask <- input$selectSourceLayerMask
+    layerMain <- input$selectSourceLayerMain
 
-  if (!useMask || isEmpty(layerMain) || isEmpty(layerMask)) {
-    return()
-  }
+    isolate({
+      useMask <- isTRUE(input$checkAddMaskLayer)
 
-  isolate({
-    language <- reactData$language
+      if (!useMask || isEmpty(layerMain) || isEmpty(layerMask)) {
+        return()
+      }
 
-    output$uiViewEditVtMask <- renderUI({
-      numOverlapping <- mxDbGetOverlapsCount(layerMain, layerMask)
+      language <- reactData$language
 
-      listToHtmlSimple(
-        list(
-          "view_num_overlap" = numOverlapping
-        ),
-        lang = language
-      )
+      output$uiViewEditVtMask <- renderUI({
+        numOverlapping <- mxDbGetOverlapsCount(layerMain, layerMask)
+
+        listToHtmlSimple(
+          list(
+            "view_num_overlap" = numOverlapping
+          ),
+          lang = language
+        )
+      })
     })
   })
 })
 
 
 observe({
-  out <- list()
-  layerMask <- NULL
+  mxCatch("view_edit : update source input", {
+    out <- list()
+    layerMask <- NULL
 
-  layer <- input$selectSourceLayerMain
-  hasLayer <- isNotEmpty(layer)
-  useMask <- isTRUE(input$checkAddMaskLayer)
+    layer <- input$selectSourceLayerMain
+    hasLayer <- isNotEmpty(layer)
 
-  isolate({
-    if (hasLayer && useMask) {
+    isolate({
+      useMask <- isTRUE(input$checkAddMaskLayer)
+
+      if (!hasLayer || !useMask) {
+        return()
+      }
       language <- reactData$language
       layerMask <- input$selectSourceLayerMask
       layers <- reactListReadSourcesVector()
       layers <- layers[!layers %in% layer]
 
-      if (length(layers) > 0) {
-        geomTypesCheck <- sapply(
-          layers,
-          function(x) {
-            #
-            # Get geomtype for this layer
-            #
-            geomType <- mxDbGetLayerGeomTypes(x)$geom_type
-
-            #
-            # Not a point
-            #
-            geomOk <- isTRUE(geomType != "point")
-            return(geomOk)
-          }
-        )
-
-        #
-        # Filter layer by geom
-        #
-        out <- layers[geomTypesCheck]
+      if (length(layers) == 0) {
+        return()
       }
-    }
 
-
-    updateSelectInput(
-      session,
-      "selectSourceLayerMask",
-      choices = out,
-      selected = layerMask
-    )
+      updateSelectInput(
+        session,
+        "selectSourceLayerMask",
+        choices = layers,
+        selected = layerMask
+      )
+    })
   })
 })

@@ -179,6 +179,10 @@ tr {
   z-index: -1000;
 }
 
+.mx-hide-if-empty:empty {
+  display: none;
+}
+
 .mx-display-none *,
 .mx-display-none {
   display: none !important;
@@ -468,6 +472,10 @@ tr {
 /**
 * boostrap list-group 
 */
+
+.list-group-item .list-group {
+  padding-top: 20px;
+}
 
 .list-group-item > .badge {
   max-width: 270px;

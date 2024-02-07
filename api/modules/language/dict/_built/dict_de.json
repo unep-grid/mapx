@@ -4115,6 +4115,11 @@
     "de": "Punkt "
   },
   {
+    "id": "empty",
+    "en": "Empty",
+    "de": "Leer"
+  },
+  {
     "id": "pol",
     "en": "Politics",
     "de": "Politik "

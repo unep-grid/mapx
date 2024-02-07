@@ -36,10 +36,20 @@ export class SQLQueryBuilder {
    * Builds the core part of the SQL query.
    * @returns {string} Core SQL query string.
    */
-  buildCoreQuery(skipGeom = false) {
-    const colsBase = skipGeom
-      ? []
-      : [`${this.baseAlias}.geom`, `${this.baseAlias}.gid`];
+  buildCoreQuery(config = { geom: "include" }) {
+    const colsBase = [];
+
+    switch (config?.geom) {
+      case "include":
+        colsBase.push(...[`${this.baseAlias}.geom`, `${this.baseAlias}.gid`]);
+        break;
+      case "type":
+        colsBase.push(...[`ST_GeometryType(${this.baseAlias}.geom) geom`]);
+        break;
+      case "exclude":
+      default:
+        null;
+    }
 
     const colsMain = this.formatColumns({
       columns: this.config.base.columns,
@@ -83,7 +93,7 @@ export class SQLQueryBuilder {
    * @returns {string} SQL query for creating a view.
    */
   createViewSQL() {
-    let coreQuery = this.buildCoreQuery();
+    let coreQuery = this.buildCoreQuery({ geom: "include" });
     return `
     DROP VIEW IF EXISTS ${this.config.id_source};
     CREATE VIEW ${this.config.id_source} AS ${coreQuery};`;
@@ -94,7 +104,7 @@ export class SQLQueryBuilder {
    * @returns {string} SQL query for row count.
    */
   rowCountSQL() {
-    let coreQuery = this.buildCoreQuery(true);
+    let coreQuery = this.buildCoreQuery({ geom: "exclude" });
     return `SELECT COUNT(*) FROM (${coreQuery}) AS temp;`;
   }
 
@@ -104,7 +114,7 @@ export class SQLQueryBuilder {
    * @returns {string} SQL query for fetching the first N rows.
    */
   firstNRowsSQL(n) {
-    let coreQuery = this.buildCoreQuery(true);
+    let coreQuery = this.buildCoreQuery({ geom: "type" });
     return `${coreQuery} LIMIT ${n};`;
   }
 }

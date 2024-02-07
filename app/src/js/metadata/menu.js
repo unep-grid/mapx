@@ -24,7 +24,7 @@ export class MenuBuilder {
     if (elPanels.length === 0) {
       return null;
     }
-    const elMenu = el("ul", { class: ["list-group"] });
+    const elMenu = el("ul", { class: ["mx-hide-if-empty","list-group"] });
     for (const elPanel of elPanels) {
       const elMenuItem = bm.createMenuItem(elPanel);
       if (elMenuItem) {

@@ -470,10 +470,10 @@ mxDbGetSourceEditInfo <- function(idProject, idSource, idUser, language = "en") 
     tableDependencies$id_editor %in% idUser
   ))
 
-  # views from another project or user 
+  # views from another project or user
   hasExtViews <- hasViewsFromOut || hasViewsFromOthers
-  
-  # object from another project or user 
+
+  # object from another project or user
   hasExtDependencies <- hasDependenciesFromOut || hasDependenciesFromOthers
 
   return(mget(ls()))
@@ -1337,43 +1337,6 @@ mxDbConfigSet <- function(key, value) {
   return(mxDbKeyValue(key, value, "set", .get(config, c("pg", "tables", "config"))))
 }
 
-
-# TODO: replace this with api source summary 'geom'.
-#' Get layer geom types
-#' @param table {character} Layer name
-#' @param geomColumn {character} Geometry column name
-#' @export
-mxDbGetLayerGeomTypes <- function(table = NULL, geomColumn = "geom") {
-  if (is.null(table)) stop("Missing table name")
-
-  if (!mxDbExistsTable(table)) {
-    return
-  }
-
-  q <- sprintf(
-    "
-      SELECT count(*) AS count, ST_GeometryType(%1$s)::text as geom_type
-      FROM %2$s
-      GROUP BY  ST_GeometryType(%1$s)",
-    geomColumn,
-    table
-  )
-
-  res <- mxDbGetQuery(q)
-
-  if (isEmpty(res)) {
-    return(data.frame(geom_type = character(), count = integer()))
-  }
-
-  res$geom_type <- gsub(".*[pP]oint.*", "point", res$geom_type)
-  res$geom_type <- gsub(".*[lL]ine.*", "line", res$geom_type)
-  res$geom_type <- gsub(".*[pP]olygon.*", "polygon", res$geom_type)
-
-  res <- aggregate(count ~ geom_type, sum, data = res)
-
-  return(res)
-}
-
 #' Get layer attribute type
 #' @param table {character} Layer name
 #' @param attribute {character} Attribute name
@@ -1402,12 +1365,18 @@ mxDbGetTableAttributeJsonType <- function(table = NULL, attribute = NULL) {
 #' @param layer {Character} Table to query
 #' @param variable {Character} Column
 #' @export
-mxDbGetLayerSummary <- function(layer = NULL, variable = NULL) {
+mxDbGetLayerSummary <- function(layer = NULL, variable = NULL, geomType = "empty") {
+  geomTypesDf <- mxApiGetSourceSummaryGeom(layer)
+
+  if (!geomType %in% geomTypesDf$geom_type) {
+    geomType <- "empty"
+  }
+
   summary <- list(
     layerName = layer,
     variableName = variable,
     variableType = mxDbGetTableAttributeJsonType(layer, variable),
-    geomType = mxDbGetLayerGeomTypes(layer)[1, "geom_type"]
+    geomType = geomType
   )
   return(summary)
 }
@@ -1933,7 +1902,7 @@ mxDbGetDistinctTableFromSql <- function(sql) {
 
 #' Fetch Dependent Object Details for a Specified Table
 #'
-#' ⚠️  USE API VERSION 'getSourceDependencies' instead 
+#' ⚠️  USE API VERSION 'getSourceDependencies' instead
 #' This function fetches details about pg views/object that depend on a
 #' specified table in the database. It returns a data frame with the IDs,
 #' dependency types, titles, and projects for each dependent pg view.

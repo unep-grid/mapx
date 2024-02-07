@@ -235,15 +235,6 @@ export function makeSimpleLayer(opt) {
         },
       });
       break;
-    case "point":
-      Object.assign(layer, {
-        type: "circle",
-        paint: {
-          "circle-color": opt.color,
-          "circle-radius": size(opt, 0.5),
-        },
-      });
-      break;
     case "polygon":
       Object.assign(layer, {
         type: "fill",
@@ -275,8 +266,16 @@ export function makeSimpleLayer(opt) {
         },
       });
       break;
+    case "point":
     default:
-      throw new Error(`${opt.geomType} not supported`);
+      Object.assign(layer, {
+        type: "circle",
+        paint: {
+          "circle-color": opt.color,
+          "circle-radius": size(opt, 0.5),
+        },
+      });
+      break;
   }
 
   return layer;

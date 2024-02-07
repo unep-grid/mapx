@@ -55,7 +55,6 @@ const rules = [
       "readable",
     ],
     test: (d) => {
-
       if (isString(d)) {
         switch (d) {
           case "null":
@@ -200,8 +199,17 @@ const rules = [
   {
     key: ["stats"],
     test: (d) => {
-      const methods = ["base", "temporal", "spatial", "attributes", "roles"];
-      if (isString(d)) d = d.split(",");
+      const methods = [
+        "geom",
+        "base",
+        "temporal",
+        "spatial",
+        "attributes",
+        "roles",
+      ];
+      if (isString(d)) {
+        d = d.split(",");
+      }
       const isValid =
         isArray(d) &&
         d.reduce((a, c) => (!a ? a : methods.indexOf(c) > -1), true);

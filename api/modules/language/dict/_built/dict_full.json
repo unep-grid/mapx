@@ -10699,6 +10699,19 @@
     "de": "Punkt "
   },
   {
+    "id": "empty",
+    "en": "Empty",
+    "fr": "Vide",
+    "es": "Vacío",
+    "ru": "Пустой",
+    "zh": "空的",
+    "ar": "فارغ",
+    "fa": "خالی",
+    "ps": "خالي",
+    "bn": "খালি",
+    "de": "Leer"
+  },
+  {
     "id": "pol",
     "en": "Politics",
     "fr": "Politique",

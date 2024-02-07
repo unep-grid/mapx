@@ -5,6 +5,10 @@
 #' @return {Character} API URL
 #'
 mxApiUrl <- function(route, listParam = NULL, public = FALSE, protocol = "http") {
+  if (isEmpty(route)) {
+    stop("missing route")
+  }
+
   host <- ifelse(public,
     .get(config, c("api", "host_public")),
     .get(config, c("api", "host"))
@@ -79,7 +83,6 @@ mxListToQueryStringParam <- function(data) {
     v <- data[[i]]
     str <- str + n + "=" + enc(paste(v, collapse = ",")) + "&"
   }
-
   str
 }
 
@@ -176,19 +179,7 @@ mxApiGetViews <- function(
   return(res$views)
 }
 
-mxApiGetSourceSummary <- function(
-  idView = NULL,
-  idSource = NULL,
-  idAttr = NULL
-) {
-  route <- .get(config, c("api", "routes", "getSourceSummary"))
-  res <- mxApiFetch(route, list(
-    idSource = idSource,
-    idView = idView,
-    idAttr = idAttr
-  ))
-  return(res)
-}
+
 
 
 #' Get table of layer for one project, for given role or userid
@@ -206,7 +197,7 @@ mxApiGetSourceTable <- function(
   add_views = FALSE,
   exclude_empty_join = FALSE
 ) {
-  config <- list(
+  params <- list(
     idProject = idProject,
     idUser = idUser,
     language = language,
@@ -220,7 +211,49 @@ mxApiGetSourceTable <- function(
     exclude_empty_join = exclude_empty_join
   )
 
-  data <- mxApiFetch("/get/sources/list/user", config, asDataFrame = TRUE)
+  data <- mxApiFetch("/get/sources/list/user", params, asDataFrame = TRUE)
 
   return(data)
+}
+
+#' Get source summary.
+#' @export
+mxApiGetSourceSummary <- function(
+  idView = NULL,
+  timestamp = NULL,
+  idSource = NULL,
+  idAttr = NULL,
+  useCache = TRUE,
+  binsMethod = "jenks",
+  binsNumber = 5,
+  maxRowsCount = 1e6,
+  stats = list(),
+  nullValue = NULL
+) {
+  params <- mget(ls())
+  route <- .get(config, c("api", "routes", "getSourceSummary"))
+  data <- mxApiFetch(route, params, debug = TRUE)
+  return(data)
+}
+#' Get layer geom types
+#' @param table {character} Layer name
+#' @param geomColumn {character} Geometry column name
+#' @export
+mxApiGetSourceSummaryGeom <- function(table) {
+  sourceSummary <- mxApiGetSourceSummary(
+    idSource = table,
+    stats = list("geom"),
+    useCache = FALSE # debug only
+  )
+  types <- list(type = character(0), count = numeric(0))
+  typesDf <- as.data.frame(types)
+  geomList <- .get(sourceSummary, c("geom_type_table"), types)
+
+  for (item in geomList) {
+    typesDf <- rbind(typesDf, as.data.frame(item))
+  }
+
+  names(typesDf) <- c("geom_type", "count")
+
+  return(typesDf)
 }

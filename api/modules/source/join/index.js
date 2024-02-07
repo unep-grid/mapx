@@ -1,6 +1,6 @@
 import { pgRead, pgWrite } from "#mapx/db";
 import { templates } from "#mapx/template";
-import { isSourceId, isEmpty, isNotEmpty } from "@fxi/mx_valid";
+import { isArray, isSourceId, isEmpty, isNotEmpty } from "@fxi/mx_valid";
 import { newIdSource } from "#mapx/upload";
 import {
   registerSource,
@@ -281,6 +281,9 @@ async function getColumnsMissingInJoin(joinConfig) {
   for (const view of views) {
     const attributeNames = view?.data?.attribute?.names || [];
     const attributeName = view?.data?.attribute?.name;
+    if (!isArray(attributeNames)) {
+      attributeNames = [attributeNames];
+    }
     if (attributeName) {
       attributeNames.push(attributeName);
     }

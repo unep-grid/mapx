@@ -552,14 +552,14 @@ async function getColumnsNames(idLayer) {
 }
 
 /**
- * Get layer dimensions (gid expected)
+ * Get layer dimensions
  * @param {String} id of the table
  * @return{Object} { nrow : <n>, ncol :<n>}
  */
 async function getTableDimension(idTable) {
   const colNames = await getColumnsNames(idTable);
   const ncol = colNames.length;
-  const resRows = await pgRead.query(`SELECT count(${gid}) FROM ${idTable}`);
+  const resRows = await pgRead.query(`SELECT count(*) FROM ${idTable}`);
   const nrow = resRows.rows[0]?.count;
   return {
     nrow,

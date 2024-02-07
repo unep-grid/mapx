@@ -158,6 +158,7 @@ export async function getSourceSummary(opt) {
       attributes_types: tableTypes,
     };
 
+
     for (const id_stat of stats) {
       switch (id_stat) {
         case "base":
@@ -256,18 +257,20 @@ async function getOrCalc(idTemplate, opt) {
  * @return {Object} options
  */
 async function updateSourceFromView(opt) {
-  if (opt.idView) {
-    const sqlSrcAttr = templates.getViewSourceAndAttributes;
-    const respSrcAttr = await pgRead.query(sqlSrcAttr, [opt.idView]);
-    if (respSrcAttr.rowCount > 0) {
-      const [srcAttr] = respSrcAttr.rows;
-      if (srcAttr.layer) {
-        opt.idSource = srcAttr.layer;
-      }
-      if (!opt.idAttr && srcAttr.attribute) {
-        opt.idAttr = srcAttr.attribute;
-      }
-    }
+  if (!isViewId(opt.idView)) {
+    return opt;
+  }
+  const sqlSrcAttr = templates.getViewSourceAndAttributes;
+  const respSrcAttr = await pgRead.query(sqlSrcAttr, [opt.idView]);
+  if (respSrcAttr.rowCount === 0) {
+    return opt;
+  }
+  const [srcAttr] = respSrcAttr.rows;
+  if (srcAttr.layer) {
+    opt.idSource = srcAttr.layer;
+  }
+  if (!opt.idAttr && srcAttr.attribute) {
+    opt.idAttr = srcAttr.attribute;
   }
   return opt;
 }
