@@ -2145,6 +2145,11 @@
     "es": "Ingrese el nombre de la capa"
   },
   {
+    "id": "join_warning_remote_mx_validate",
+    "en": "Invalid join : check for matching column types",
+    "es": "Unión inválida: verificar la coincidencia de tipos de columnas"
+  },
+  {
     "id": "join_warning_colums_issue",
     "en": "Error: columns issue",
     "es": "Error: problema con las columnas"

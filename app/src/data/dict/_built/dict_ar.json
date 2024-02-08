@@ -2145,6 +2145,11 @@
     "ar": "أدخل اسم الطبقة"
   },
   {
+    "id": "join_warning_remote_mx_validate",
+    "en": "Invalid join : check for matching column types",
+    "ar": "الانضمام غير صالح: تحقق من تطابق أنواع الأعمدة"
+  },
+  {
     "id": "join_warning_colums_issue",
     "en": "Error: columns issue",
     "ar": "خطأ: مشكلة في الأعمدة"

@@ -2145,6 +2145,11 @@
     "bn": "স্তরের নাম লিখুন"
   },
   {
+    "id": "join_warning_remote_mx_validate",
+    "en": "Invalid join : check for matching column types",
+    "bn": "অবৈধ জয়েন: কলামের ধরণ মিলে কিনা যাচাই করুন"
+  },
+  {
     "id": "join_warning_colums_issue",
     "en": "Error: columns issue",
     "bn": "ত্রুটি: কলাম সমস্যা"

@@ -2145,6 +2145,11 @@
     "fr": "Entrez le nom de la couche"
   },
   {
+    "id": "join_warning_remote_mx_validate",
+    "en": "Invalid join : check for matching column types",
+    "fr": "Jointure invalide : vérifier les types de colonnes"
+  },
+  {
     "id": "join_warning_colums_issue",
     "en": "Error: columns issue",
     "fr": "Erreur : problème de colonnes"

@@ -151,37 +151,28 @@ export class SourcesJoinManager extends EventSimple {
     }
   }
 
-  async validateRemote() {
-    const sjm = this;
-    const config = sjm._jed.getValue();
-    const errors = await sjm.emit("validate", config);
-    if (isEmpty(errors)) {
-      return true;
-    }
-    sjm.msg(JSON.stringify(errors, 0, 2), "warning");
-    return false;
-  }
-
   async validate() {
     const sjm = this;
     sjm.lockSave();
     sjm.enablePreview(false);
+    sjm.clearValidation();
     const okEditor = sjm.validateEditor();
+    const okRemote = okEditor && (await sjm.validateRemote());
     const okColumns = okEditor && (await sjm.validateColumns());
-    const rowsCount = okEditor && okColumns ? await sjm.updateCount() : 0;
-    if (okColumns && rowsCount > 0) {
+    const okAll = okEditor && okColumns && okRemote;
+    const rowsCount = okAll ? await sjm.updateCount() : 0;
+    if (okAll && rowsCount > 0) {
       sjm.enablePreview(true);
       sjm.unlockSave();
     }
-    return okColumns;
+    return okAll;
   }
 
   validateEditor() {
     const sjm = this;
-    return isNotEmpty(sjm._jed) && isEmpty(sjm._jed.validation_results);
-  }
-  get valid() {
-    return this.validateEditor();
+    const errors = sjm._jed?.validation_results;
+    sjm.buildValidateEditor(errors);
+    return isNotEmpty(sjm._jed) && isEmpty(errors);
   }
 
   async validateColumns() {
@@ -191,14 +182,18 @@ export class SourcesJoinManager extends EventSimple {
     return isEmpty(missing);
   }
 
+  async validateRemote() {
+    const sjm = this;
+    const config = sjm._jed.getValue();
+    const errors = await sjm.emit("validate", config);
+    sjm.buildValidateRemote(errors);
+    return isEmpty(errors);
+  }
+
   async getMissingColumns() {
     const sjm = this;
-    if (!sjm.validateEditor()) {
-      return [];
-    }
     const config = sjm._jed.getValue();
     const missing = await sjm.emit("get_columns_missing", config);
-
     return missing;
   }
 
@@ -208,17 +203,40 @@ export class SourcesJoinManager extends EventSimple {
       sjm._elValidationOutput.firstElementChild.remove();
     }
   }
+
+  buildValidateEditor(errors) {
+    const sjm = this;
+
+    if (isEmpty(errors)) {
+      return;
+    }
+    for (const error of errors) {
+      const elMessage = el("span", `${error.message} (${error.path})`);
+      const elItem = sjm.buildError(elMessage);
+      sjm._elValidationOutput.appendChild(elItem);
+    }
+  }
+
+  buildValidateRemote(errors) {
+    const sjm = this;
+
+    if (isEmpty(errors)) {
+      return;
+    }
+
+    for (const error of errors) {
+      const elMessage = tt(`join_warning_remote_${error.keyword}`);
+      const elItem = sjm.buildError(elMessage);
+      sjm._elValidationOutput.appendChild(elItem);
+    }
+  }
+
   buildValidateMissing(missing) {
     const sjm = this;
-    sjm.clearValidation();
 
     if (isEmpty(missing)) {
       return;
     }
-
-    const elMissing = el("ul", {
-      class: ["list-group", "mx-error-list-container"],
-    });
 
     const perAttribute = new Map();
 
@@ -246,16 +264,18 @@ export class SourcesJoinManager extends EventSimple {
           el("a", { href: v.link, target: "_blank" }, el("span", v.title)),
         ]);
       });
-      const elItem = el("li", { class: ["list-group-item", "mx-error-item"] }, [
+      const elItem = sjm.buildError([
         tt("join_warning_colums_used_in_views", {
           data: { column: attributeName },
         }),
         el("ul", viewElements),
       ]);
-      elMissing.appendChild(elItem);
+      sjm._elValidationOutput.appendChild(elItem);
     }
+  }
 
-    sjm._elValidationOutput.appendChild(elMissing);
+  buildError(content) {
+    return el("li", { class: ["list-group-item", "mx-error-item"] }, content);
   }
 
   async save() {
@@ -287,7 +307,7 @@ export class SourcesJoinManager extends EventSimple {
       return;
     }
 
-    const newInvalid = sjm._mode === "create" && !sjm.valid;
+    const newInvalid = sjm._mode === "create" && !sjm.validateEditor();
     const unsavedChange = await sjm.hasUnsavedChange();
 
     if (unsavedChange) {
@@ -324,8 +344,8 @@ export class SourcesJoinManager extends EventSimple {
 
   async promptDeleteCreateInvalid() {
     const sjm = this;
-
-    if (sjm._mode !== "create" || sjm.valid) {
+    const isEditorValid = sjm.validateEditor();
+    if (sjm._mode !== "create" || isEditorValid) {
       return;
     }
     const deletedJoin = await modalConfirm({
@@ -454,9 +474,16 @@ export class SourcesJoinManager extends EventSimple {
       defaultValue: sjm.id,
     });
 
-    sjm._elValidationOutput = el("div", {
-      class: "mx-error-container",
+    sjm._elValidationOutput = el("ul", {
+      class: ["list-group", "mx-error-list-container"],
     });
+    sjm._elValidationContainer = el(
+      "div",
+      {
+        class: "mx-error-container",
+      },
+      sjm._elValidationOutput,
+    );
 
     sjm._elSjm = el("div", { id: id_editor, class: "jed-container" });
     sjm._elCount = el(
@@ -471,7 +498,7 @@ export class SourcesJoinManager extends EventSimple {
     );
 
     const elContent = el("div", [
-      sjm._elValidationOutput,
+      sjm._elValidationContainer,
       sjm._elSjm,
       sjm._elCountContainer,
     ]);

@@ -2145,6 +2145,11 @@
     "fa": "نام لایه را وارد کنید"
   },
   {
+    "id": "join_warning_remote_mx_validate",
+    "en": "Invalid join : check for matching column types",
+    "fa": "پیوست نامعتبر: بررسی تطابق انواع ستون‌ها"
+  },
+  {
     "id": "join_warning_colums_issue",
     "en": "Error: columns issue",
     "fa": "خطا: مشکل ستون ها"

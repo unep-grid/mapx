@@ -5577,6 +5577,19 @@
     "ps": "د پرت نوم ولیکئ"
   },
   {
+    "id": "join_warning_remote_mx_validate",
+    "en": "Invalid join : check for matching column types",
+    "fr": "Jointure invalide : vérifier les types de colonnes",
+    "zh": "无效连接：检查匹配的列类型",
+    "es": "Unión no válida: compruebe si hay tipos de columnas coincidentes",
+    "ar": "صلة غير صالحة: تحقق من مطابقة أنواع الأعمدة",
+    "ru": "Неверное соединение: проверьте соответствие типов столбцов.",
+    "de": "Ungültiger Join: Suchen Sie nach passenden Spaltentypen",
+    "bn": "অবৈধ যোগদান: মিলিত কলামের ধরন পরীক্ষা করুন",
+    "fa": "پیوستن نامعتبر: بررسی انواع ستون مطابقت",
+    "ps": "ناسم یوځای کیدل: د ورته کالم ډولونو لپاره وګورئ"
+  },
+  {
     "id": "join_warning_colums_issue",
     "en": "Error: columns issue",
     "fr": "Erreur : problème de colonnes",

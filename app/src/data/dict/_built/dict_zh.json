@@ -2145,6 +2145,11 @@
     "zh": "输入层名称"
   },
   {
+    "id": "join_warning_remote_mx_validate",
+    "en": "Invalid join : check for matching column types",
+    "zh": "无效的连接：检查匹配的列类型"
+  },
+  {
     "id": "join_warning_colums_issue",
     "en": "Error: columns issue",
     "zh": "错误：列问题"

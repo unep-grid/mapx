@@ -2145,6 +2145,11 @@
     "ps": "د پرت نوم ولیکئ"
   },
   {
+    "id": "join_warning_remote_mx_validate",
+    "en": "Invalid join : check for matching column types",
+    "ps": "ناسمه نښلول: د ستونونو د قسمونو سره سمون وګورئ"
+  },
+  {
     "id": "join_warning_colums_issue",
     "en": "Error: columns issue",
     "ps": "تېروتنه: د کالمو ستونزه"

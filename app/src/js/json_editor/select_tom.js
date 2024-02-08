@@ -37,7 +37,7 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
 
     switch (loader) {
       case "source":
-      case "source_edit": // back compatibility 
+      case "source_edit": // back compatibility
         const { types, readable, editable, add_global } = schema.mx_options;
         Object.assign(config, clone(config_source));
         Object.assign(config.loader_config, {
@@ -48,7 +48,7 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
         });
         break;
       case "source_columns":
-      case "source_edit_columns": // back compatibility 
+      case "source_edit_columns": // back compatibility
         Object.assign(config, clone(config_source_columns));
         Object.assign(config.loader_config, { id_source: null });
         break;
@@ -95,8 +95,7 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     });
 
     if (watch) {
-      editor._watch = watch;
-      await editor._register_watcher();
+      await editor._register_watcher(watch);
       return;
     }
 
@@ -106,6 +105,9 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
 
   _on_ready() {
     const editor = this;
+    /*
+     * Set ready
+     */
     editor._is_ready = true;
     if (editor._queued_value) {
       editor.setValue(editor._queued_value);
@@ -132,6 +134,7 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
 
     super.destroy();
   }
+
   empty() {}
 
   setValue(value) {
@@ -143,6 +146,9 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
 
     const valueArray = isEmptyValue ? [] : [value].flat();
 
+    /*
+     * Not ready if init time or watched editor value changed
+     */
     if (editor._is_ready) {
       ts.setValue(valueArray);
     } else {
@@ -150,35 +156,62 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     }
     editor._refresh_value();
   }
+
+  /**
+   * Refresh editor value with the current tom-select value
+   */
   _refresh_value() {
     const editor = this;
     editor.value = editor.input?.ts?.getValue();
   }
-  async _register_watcher() {
+  /**
+   *
+   */
+  async _register_watcher(watch) {
     const editor = this;
-    const { property, path } = editor._watch;
+    if (editor._watched_path) {
+      return;
+    }
+    const { property, path } = watch;
     const relative = isEmpty(path) || path === ".";
-
     const watch_path = relative
       ? `${editor.parent.path}.${property}`
       : `${path}.${property}`;
 
-    await editor._update_if_set(watch_path);
+    editor._watched_path = watch_path;
+
+    await editor._update_if_change(watch_path);
 
     editor.jsoneditor.watch(watch_path, async () => {
-      await editor._update_if_set(watch_path);
+      try {
+        await editor._update_if_change(watch_path);
+      } catch (e) {
+        console.error(e);
+      }
     });
   }
-  async _update_if_set(watch_path) {
+  /**
+   * Update the loader config if the watched value has changed
+   * .e.g  ts.settings.loader_config["id_source"] = "MX_123";
+   */
+  async _update_if_change(path) {
     const editor = this;
     const ts = editor.input.ts;
-    const value = editor.jsoneditor.getEditor(watch_path)?.getValue();
-    const idField = ts.settings.loader_config.value_field; //e.g. id_source
-    if (!value) {
+    const editorWatched = editor.jsoneditor.getEditor(path);
+    if (!editorWatched) {
       return;
     }
-    // e.g. ts.settings.loader_config["id_source"] = "MX_123";
+    const value = editorWatched.getValue();
+    const idField = ts.settings.loader_config.value_field;
+    const previousValue = ts.settings.loader_config[idField];
+    if (!value || previousValue === value) {
+      return;
+    }
     ts.settings.loader_config[idField] = value;
+    /*
+     * Not ready - if setValue, will be queued
+     */
+    editor._is_ready = false;
     await ts._update();
     editor._on_ready();
   }
