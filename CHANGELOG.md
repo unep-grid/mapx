@@ -1,8 +1,13 @@
+  - [1.13.0-alpha.26](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.26) 
+
+    - Toolbox
+        - Ellipsis in names
+
   - [1.13.0-alpha.25](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.25) 
 
     - Join editor :
         - Improved error messages
-        -  Should fix and issue occuring when removing a intermediate join item – but not the last join
+        - Should fix and issue occuring when removing a intermediate join item – but not the last join
         - Empty geom type + performance improvement during mask settings
         - Button in toolbox translation issue
         - Metadata from public catalogue : issue when fetching metadata from remote view
