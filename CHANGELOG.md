@@ -1,4 +1,14 @@
+  - [1.13.0-alpha.25](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.25) 
+
+    - Join editor :
+        - Improved error messages
+        -  Should fix and issue occuring when removing a intermediate join item – but not the last join
+        - Empty geom type + performance improvement during mask settings
+        - Button in toolbox translation issue
+        - Metadata from public catalogue : issue when fetching metadata from remote view
+
   - [1.13.0-alpha.24](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.24) 
+
   - Join editor :
       - Prompt to delete a join, if a new join has been created and not valid, when closing the window. 
       - If there is a delta (DB VS editor), prompt the user if he want to quit anyway. 
@@ -11,6 +21,7 @@
     - Added timeout in download vt test
 
   - [1.13.0-alpha.22](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.22) 
+
     - Countries select-auto :
         - Display all countries in the dropdown, not just on search (user request)
         - Refactor options loading logic 
