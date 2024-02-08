@@ -626,6 +626,12 @@ tr {
   justify-content: space-between;
   align-items: center;
 }
+.label-icon > span {
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .btn-icon > span {
   margin-right: 5px;
 }

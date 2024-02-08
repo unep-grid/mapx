@@ -35,7 +35,7 @@ observeEvent(input$projectViewsState,{
 
   stateKeys <- mxDbGetProjectStateKeys(idProject,language)
 
-  ui = tagList(
+  ui <- tagList(
     selectizeInput(
       "selectProjectStateKey",
       label = d("project_state_key",language,web=F),

@@ -1569,7 +1569,7 @@ mxLabel <- function(id, language, icon) {
   div(
     class = "label-icon",
     tagList(
-      d(id, language, web = TRUE),
+      mxDictTranslateTag(id, language),
       tags$i(class = sprintf("fa fa-%s", icon))
     )
   )
