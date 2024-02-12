@@ -50,7 +50,7 @@ import {
   commonLocGetTableCodes,
 } from "../../../commonloc/index.js";
 import { isArray, isMap, isView } from "./../../../is_test";
-import { dashboardHelper } from "./../../../dashboards/dashboard_instances.js";
+import { dashboard } from "./../../../dashboards/dashboard_instances.js";
 import {
   getSourceMetadata,
   getViewMetadata,
@@ -110,7 +110,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * @return {Boolean} exists
    */
   has_dashboard() {
-    return dashboardHelper.hasInstance();
+    return dashboard.hasInstance();
   }
 
   /**
@@ -324,20 +324,17 @@ export class MapxResolversStatic extends MapxResolversPanels {
     if (!rslv.has_dashboard()) {
       throw new Error("No dashboard container found");
     }
-    const dh = dashboardHelper.getInstance();
-    const panel = dh.panel;
+    const { panel } = dashboard.getInstance();
     return rslv._handle_panel_visibility(panel, opt);
   }
 
   /**
    * Check if the dashboard is visible
-   * @return {Boolean} The dashboard is visible
+   * @return {Promise<Boolean>} The dashboard is visible
    */
-  is_dashboard_visible() {
+  async is_dashboard_visible() {
     const rslv = this;
-    const dh = dashboardHelper;
-    const d = dh.getInstance();
-    return rslv.has_dashboard() && d.isVisible();
+    return rslv.has_dashboard() && dashboard.exec("isVisible");
   }
 
   /**

@@ -21,7 +21,7 @@ import {
   scrollFromTo,
   cssTransform,
 } from "./../mx_helper_misc.js";
-import { dashboardHelper } from "./../dashboards/dashboard_instances.js";
+import { dashboard } from "./../dashboards/dashboard_instances.js";
 import { getArrayDiff } from "./../array_stat/index.js";
 import { createCanvas } from "./../mx_helper_canvas.js";
 import {
@@ -626,14 +626,13 @@ function updateAdaptiveLayout() {
   const state = getState();
   state.scaleWrapper = Math.min(
     window.innerWidth / state.rectStory.width,
-    window.innerHeight / state.rectStory.height
+    window.innerHeight / state.rectStory.height,
   );
 
   const height = state.rectStory.height * state.scaleWrapper;
   const width = state.rectStory.width * state.scaleWrapper;
-  state.elStoryContainer.style[
-    cssTransform
-  ] = `translate(-50%,-50%) scale(${state.scaleWrapper})`;
+  state.elStoryContainer.style[cssTransform] =
+    `translate(-50%,-50%) scale(${state.scaleWrapper})`;
   state.elMapContainer.style.height = `${height}px`;
   state.elMapContainer.style.width = `${width}px`;
   state.elMapContainer.style[cssTransform] = "translate(-50%,-50%)";
@@ -665,7 +664,7 @@ function getStoryViewsId() {
         } else {
           console.warn(
             `View ${j} of step ${i} is not recognised. Received:`,
-            item
+            item,
           );
           step.views.splice(j, 1);
         }
@@ -784,7 +783,7 @@ function setStepConfig() {
           step: s - 1,
         },
       },
-      `${s}`
+      `${s}`,
     );
 
     elBullets.appendChild(elBullet);
@@ -1118,7 +1117,6 @@ export async function storyAutoPlay(cmd) {
  */
 export async function storyMapLock(cmd) {
   try {
-    const dh = dashboardHelper;
     const state = getState();
     const valid = ["recalc", "lock", "unlock", "toggle"].includes(cmd);
     if (!valid) {
@@ -1160,9 +1158,8 @@ export async function storyMapLock(cmd) {
       if (!isRecalc && hasChanged) {
         new FlashItem("lock");
       }
-      if (dh.hasInstance()) {
-        const d = dh.getInstance();
-        d.hide();
+      if (dashboard.hasInstance()) {
+        await dashboard.exec("hide");
       }
     }
   } catch (e) {
@@ -1453,7 +1450,7 @@ async function buildMain() {
    */
   state.elMapContainer = state.map.getContainer();
   state.elMapControls = state.elMapContainer.querySelector(
-    `.${s.class_controls}`
+    `.${s.class_controls}`,
   );
 
   /**
@@ -1495,7 +1492,7 @@ async function buildMain() {
 
               class: [s.class_slide].concat(
                 slide.classes.map((c) => s.class_story + "-" + c.name),
-                "mx-display-none"
+                "mx-display-none",
               ),
             },
             el(
@@ -1517,7 +1514,7 @@ async function buildMain() {
                 obj: slide,
                 path: "html",
                 default: "<p></p>",
-              })
+              }),
             ),
             el("div", {
               style: {
@@ -1528,11 +1525,11 @@ async function buildMain() {
                     : slide.opacity_bg || s.colors.alpha,
               },
               class: s.class_slide_back,
-            })
+            }),
           );
-        }) // end slides
+        }), // end slides
       );
-    }) // end steps
+    }), // end steps
   );
 
   state.elStoryContainer.appendChild(state.elStory);
@@ -1550,7 +1547,7 @@ async function buildBullets() {
     {
       class: ["mx-story-step-bullets-container", "noselect"],
     },
-    state.elBullets
+    state.elBullets,
   );
 
   state.elMapControls.appendChild(state.elBulletsContainer);
@@ -1676,7 +1673,7 @@ export async function storyPlayStep(stepNum) {
       easing_power: 1,
       method: "easeTo",
     },
-    step.animation
+    step.animation,
   );
   const easing = easingFun({
     type: anim.easing,
@@ -1777,7 +1774,7 @@ async function viewsLegendsOrderUpdate(opt) {
   let pos = 0;
   for (const idView of opt.order) {
     const elLegend = opt.elContainer.querySelector(
-      `[data-id_view="${idView}"]`
+      `[data-id_view="${idView}"]`,
     );
     if (elLegend) {
       elLegend.style.order = pos++;
@@ -1791,7 +1788,6 @@ async function updatePanelBehaviour(settings, step) {
     return;
   }
 
-  const dh = dashboardHelper;
   const idViews = path(step, "views", []).map((v) => v.view || v);
 
   /**
@@ -1815,51 +1811,48 @@ async function updatePanelBehaviour(settings, step) {
   }
 
   if (dBehaviour === "disabled") {
-    dh.rmInstance();
+    dashboard.rmInstance();
   } else {
     /**
      * Add widgets if any
      */
     for (const v of idViews) {
-      await dh.viewAddWidgetsAsync(v);
+      await dashboard.viewAddWidgetsAsync(v);
     }
-    const dashboard = dh.getInstance();
 
     /**
      * If a dashboard exists, apply behaviour
      */
-    if (dashboard) {
-      switch (dBehaviour) {
-        case "open":
-          dashboard.show();
-          break;
-        case "closed":
-          dashboard.hide();
-          break;
-        default:
-          /**
-           * Get the the default from the first
-           * view with config
-           */
-          for (const v of idViews) {
-            const config = dh.viewConfigGet(v);
-            if (config) {
-              if (config.panel_init_close) {
-                dashboard.hide();
-              } else {
-                dashboard.show();
-              }
-              break;
-            }
+    switch (dBehaviour) {
+      case "open":
+        await dashboard.exec("show");
+        break;
+      case "closed":
+        await dashboard.exec("hide");
+        break;
+      default:
+        /**
+         * Get the the default from the first
+         * view with config
+         */
+        for (const v of idViews) {
+          const config = dashboard.viewConfigGet(v);
+          if (!config) {
+            continue;
           }
-      }
-
-      /**
-       * Auto destroy e.g. if empty
-       */
-
-      dashboard.autoDestroy();
+          if (config.panel_init_close) {
+            await dashboard.exec("hide");
+          } else {
+            await dashboard.exec("show");
+          }
+          break;
+        }
     }
+
+    /**
+     * Auto destroy e.g. if empty
+     */
+    dashboard.autoDestroy();
   }
 
   /**

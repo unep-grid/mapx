@@ -3,7 +3,16 @@ import { path } from "./../mx_helper_misc.js";
 import { storyMapLock, isStoryPlaying } from "../story_map";
 import { getDictItem } from "../language";
 import { isString, isEmpty, isView, isArray } from "./../is_test";
-
+/**
+ * DashboardManager: A high-level manager for Dashboard instances.
+ *
+ * This class serves as a wrapper around the Dashboard class,
+ * facilitating enhanced interaction with dashboard instances by
+ * integrating additional views and story behavior management. It provides
+ * methods to execute commands on dashboard instances, manage their lifecycle,
+ * and dynamically manipulate dashboard views and  widgets based on
+ * application logic.
+ */
 export class DashboardManager {
   constructor() {
     const dm = this;
@@ -12,11 +21,21 @@ export class DashboardManager {
     };
   }
 
+  /**
+   * Checks if a dashboard instance is currently stored and not destroyed.
+   * @returns {boolean} True if an active dashboard instance exists,
+   * false otherwise.
+   */
   hasInstance() {
     const dm = this;
     return dm.store.dashboard && !dm.store.dashboard.isDestroyed();
   }
 
+  /**
+   * Retrieves the stored dashboard instance if it exists and is not destroyed.
+   * @returns {Dashboard|null} The current dashboard instance or null if none
+   * exists or it has been destroyed.
+   */
   getInstance() {
     const dm = this;
     if (!dm.hasInstance()) {
@@ -25,6 +44,30 @@ export class DashboardManager {
     return dm.store.dashboard;
   }
 
+  /**
+   * Executes a specified command on the dashboard instance, if available.
+   * @param {string} cmd The command name to execute on the dashboard instance.
+   * @param {*} value The value or argument to pass to the command function.
+   * @returns {Promise<*>} The result of the command execution, or
+   * undefined if the instance does not exist.
+   */
+  async exec(cmd, value) {
+    try {
+      const dm = this;
+      if (!dm.hasInstance()) {
+        return;
+      }
+      const d = d.getInstance();
+      return d[cmd](value);
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
+  /**
+   * Destroys the stored dashboard instance if it exists.
+   * @returns {void}
+   */
   rmInstance() {
     const dm = this;
     if (!dm.hasInstance()) {
@@ -33,6 +76,11 @@ export class DashboardManager {
     return dm.store.dashboard.destroy();
   }
 
+  /**
+   * Invokes the autoDestroy method on the stored dashboard instance, if it
+   * exists.
+   * @returns {void}
+   */
   autoDestroy() {
     const dm = this;
     if (!dm.hasInstance()) {
@@ -40,7 +88,11 @@ export class DashboardManager {
     }
     return dm.store.dashboard.autoDestroy();
   }
-
+  /**
+   * Retrieves the configuration for a view with dashoard
+   * @param {string} idView The identifier for the view
+   * @returns {Object|null} The view dashoard config
+   */
   viewConfigGet(idView) {
     const view = getView(idView);
 
@@ -61,12 +113,17 @@ export class DashboardManager {
     config.modules = isArray(config.modules)
       ? config.modules
       : isString(config.modules)
-      ? [config.modules]
-      : [];
+        ? [config.modules]
+        : [];
 
     return config;
   }
 
+  /**
+   * Checks if a view contains any widgets.
+   * @param {string} idView
+   * @returns {boolean}
+   */
   viewHasWidget(idView) {
     const view = getView(idView);
     if (!isView(view)) {
@@ -75,6 +132,11 @@ export class DashboardManager {
     return isArray(view._widgets) && view._widgets.length > 0;
   }
 
+  /**
+   * Removes all widgets from a given view.
+   * @param {string} idView
+   * @returns {Promise<boolean>} Done
+   */
   async viewRmWidgets(idView) {
     const dm = this;
     const hasWidgets = dm.viewHasWidget(idView);
@@ -88,8 +150,14 @@ export class DashboardManager {
     }
 
     view._widgets.length = 0;
+    return true;
   }
 
+  /**
+   * Adds widgets to a view based on its configuration, if applicable.
+   * @param {string} idView
+   * @returns {Promise<Array>} Added widgets
+   */
   async viewAddWidgetsAsync(idView) {
     const dm = this;
     const config = dm.viewConfigGet(idView);
@@ -110,6 +178,11 @@ export class DashboardManager {
     return view._widgets;
   }
 
+  /**
+   * Create the view's dashboard
+   * @param {string} idView
+   * @returns {Promise<boolean>}
+   */
   async viewCreateDashboardAsync(idView) {
     const dm = this;
     const { Dashboard } = await import("./dashboard.js");
@@ -176,6 +249,11 @@ export class DashboardManager {
     return true;
   }
 
+  /**
+   * Create the view's dashboard, and populate widgets
+   * @param {string} idView
+   * @returns {Promise<boolean>}
+   */
   async viewAutoDashboardAsync(idView) {
     const dm = this;
     const { Dashboard } = await import("./dashboard.js");
@@ -189,9 +267,9 @@ export class DashboardManager {
     if (created) {
       const config = dm.viewConfigGet(idView);
       if (!config.panel_init_close) {
-          await d.show();
-          d.updatePanelLayout();
-          d.updateAttributions();
+        await d.show();
+        d.updatePanelLayout();
+        d.updateAttributions();
       }
     }
     if (widgets && widgets.length > 0) {

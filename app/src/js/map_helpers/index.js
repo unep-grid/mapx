@@ -52,7 +52,7 @@ import {
   viewsListAddSingle,
 } from "./../views_list_manager";
 import { initLog } from "./../mx_helper_log.js";
-import { dashboardHelper } from "./../dashboards/dashboard_instances.js";
+import { dashboard } from "./../dashboards/dashboard_instances.js";
 import {
   updateIfEmpty,
   round,
@@ -2999,7 +2999,6 @@ export function existsInList(li, it, val, inverse) {
 export async function viewLayersAdd(o) {
   await viewLayersRemove(o);
 
-  const dh = dashboardHelper;
   const m = getMapData(o.id);
   if (o.idView) {
     o.idView = o.idView.split(settings.separators.sublayer)[0];
@@ -3104,8 +3103,8 @@ export async function viewLayersAdd(o) {
    *   it's rendered inside the story
    */
   if (!isStory) {
-    await dh.viewAutoDashboardAsync(view);
-    await dh.autoDestroy();
+    await dashboard.viewAutoDashboardAsync(view);
+    await dashboard.autoDestroy();
   }
 
   /**
@@ -3996,8 +3995,6 @@ export async function viewUiContent(id) {
  * Clean stored modules : dashboard, custom view, etc.
  */
 export async function viewModulesRemove(view) {
-  const dh = dashboardHelper;
-
   view = isViewId(view) ? getView(view) : view;
 
   if (!isView(view)) {
@@ -4016,9 +4013,9 @@ export async function viewModulesRemove(view) {
     delete view._elLegend;
   }
 
-  if (dh.viewHasWidget(view)) {
-    await dh.viewRmWidgets(view);
-    await dh.autoDestroy();
+  if (dashboard.viewHasWidget(view)) {
+    await dashboard.viewRmWidgets(view);
+    await dashboard.autoDestroy();
   }
 
   if (view._miniMap) {
