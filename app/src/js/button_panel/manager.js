@@ -1,4 +1,4 @@
-import { isJSON, isNotEmpty, isString } from "../is_test/index.js";
+import { isArray, isJSON, isNotEmpty, isString } from "../is_test/index.js";
 import { ButtonPanel } from "./button_panel.js";
 
 const BUTTON_PANELS = new Map();
@@ -107,7 +107,7 @@ export class ButtonPanelManager {
    * @param {(string|ButtonPanel|Array<string|ButtonPanel>)} panels - The panel ID(s), instance(s), or a mix of both.
    * @returns {Array<ButtonPanel>} The corresponding ButtonPanel instance(s).
    */
-  get(panels) {
+  getAll(panels) {
     if (Array.isArray(panels)) {
       return panels.map((panel) => this._getPanel(panel)).filter(isNotEmpty);
     }
@@ -121,6 +121,18 @@ export class ButtonPanelManager {
    */
   getSingle(panel) {
     return this._getPanel(panel);
+  }
+
+  /**
+   * If panel is an array, return an array, else a single
+   * @param {string|Array<string>} panel
+   */
+  get(panel) {
+    if (isArray(panel)) {
+      return this.getAll(panel);
+    } else {
+      return this.getSingle(panel);
+    }
   }
 
   _getPanel(panel) {

@@ -14,7 +14,7 @@ import {
 } from "./../mx_helper_misc.js";
 import { getViewJson } from "./../map_helpers/index.js";
 import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt/index.js";
-import { settings } from "./../settings";
+import { settings, data as mx_storage } from "./../mx.js";
 import { moduleLoad } from "../modules_loader_async";
 import { modalSimple } from "../mx_helper_modal";
 import { jsonDiff } from "../mx_helper_utils_json";
@@ -35,7 +35,7 @@ export async function jedInit(o) {
   const schema = o.schema;
   const startVal = o.startVal;
   const options = o.options;
-  
+
   if (dict) {
     JSONEditor.defaults.languages = dict;
   }
@@ -134,7 +134,7 @@ export async function jedInit(o) {
      */
     if (idDraft) {
       try {
-        const draft = await mx.data.draft.getItem(idDraft);
+        const draft = await mx_storage.draft.getItem(idDraft);
         draftLock = false;
         if (!draft || draft.type !== "draft") {
           return;
@@ -173,7 +173,7 @@ export async function jedInit(o) {
   editor.on("change", async function () {
     if (idDraft && !draftLock) {
       const data = editor.getValue();
-      await mx.data.draft.setItem(idDraft, {
+      await mx_storage.draft.setItem(idDraft, {
         type: "draft",
         timestamp: Math.round(Date.now() / 1000),
         data: data,
@@ -264,8 +264,8 @@ export function jedRemoveDraft(o) {
   const idEditor = o.id;
   const idItem = o.idItem;
   const idDraft = idEditor + "@" + idItem;
-  mx.data.draft.removeItem(idDraft).then(() => {
-    console.log("item " + idDraft + "removed from mx.data.draft");
+  mx_storage.draft.removeItem(idDraft).then(() => {
+    console.log("item " + idDraft + "removed from mx_storage.draft");
   });
 }
 

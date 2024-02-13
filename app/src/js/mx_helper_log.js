@@ -3,6 +3,7 @@ import { getApiUrl } from "./api_routes";
 import { isViewId } from "./is_test";
 import { updateIfEmpty } from "./mx_helper_misc.js";
 import { settings } from "./settings";
+import { events } from "./mx";
 
 let logger;
 
@@ -12,7 +13,7 @@ let logger;
 export function initLog() {
   const isStatic = settings.mode.static === true;
   if (!logger) {
-     logger = new Logger({
+    logger = new Logger({
       url: getApiUrl("collectLogs"),
       timeCollect: 15000,
       baseForm: {},
@@ -23,7 +24,7 @@ export function initLog() {
   /**
    * On view added
    */
-  mx.events.on({
+  events.on({
     type: "view_added",
     idGroup: "mx_log",
     callback: (d) => {
@@ -41,7 +42,7 @@ export function initLog() {
   /**
    * On view removed
    */
-  mx.events.on({
+  events.on({
     type: "view_removed",
     idGroup: "mx_log",
     callback: (d) => {
@@ -60,7 +61,7 @@ export function initLog() {
   /**
    * On session start
    */
-  mx.events.on({
+  events.on({
     type: "session_start",
     idGroup: "mx_log",
     callback: () => {
@@ -78,7 +79,7 @@ export function initLog() {
   /**
    * On session end
    */
-  mx.events.on({
+  events.on({
     type: "session_end",
     idGroup: "mx_log",
     callback: () => {
@@ -96,7 +97,7 @@ export function initLog() {
   /**
    * On lang change
    */
-  mx.events.on({
+  events.on({
     type: "language_change",
     idGroup: "mx_log",
     callback: (d) => {
@@ -111,7 +112,7 @@ export function initLog() {
     /**
      * On project change
      */
-    mx.events.on({
+    events.on({
       type: "project_change",
       idGroup: "mx_log",
       callback: (d) => {
@@ -124,7 +125,7 @@ export function initLog() {
     /**
      * On view panel click
      */
-    mx.events.on({
+    events.on({
       type: "view_panel_click",
       idGroup: "mx_log",
       callback: (d) => {

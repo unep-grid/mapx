@@ -1,20 +1,19 @@
-
-
+import { createCanvas } from "./mx_helper_canvas";
 
 
 /**
-*  create a star on a canvas
-*  @param {Number} options.diameter Diameter
-*  @param {Number} options.nBranch Number of branch 
-*  @param {Number} options.inlet Star inner circle ratio
-*  @param {Number} options.progress Progress
-*  @param {Number} options.threshod Thresold
-*  @param {String} options.color1 Color before threshold
-*  @param {String} options.color2 Color after threshold
-*
-*/
+ *  create a star on a canvas
+ *  @param {Number} options.diameter Diameter
+ *  @param {Number} options.nBranch Number of branch
+ *  @param {Number} options.inlet Star inner circle ratio
+ *  @param {Number} options.progress Progress
+ *  @param {Number} options.threshod Thresold
+ *  @param {String} options.color1 Color before threshold
+ *  @param {String} options.color2 Color after threshold
+ *
+ */
 export function elStrokeStar(c) {
-  var elCanvas = mx.helpers.createCanvas(c.diameter, c.diameter);
+  var elCanvas = createCanvas(c.diameter, c.diameter);
   var ctx = elCanvas.getContext("2d");
   var color = c.progress <= c.threshold ? c.color1 : c.color2;
   ctx.fillStyle = color;
@@ -29,8 +28,6 @@ export function elStrokeStar(c) {
   return elCanvas;
 }
 
-
-
 function star(ctx, r, n, inlet, fill) {
   ctx.save();
   ctx.beginPath();
@@ -38,7 +35,7 @@ function star(ctx, r, n, inlet, fill) {
   ctx.moveTo(0, 0 - r);
   for (var i = 0; i < n; i++) {
     ctx.rotate(Math.PI / n);
-    ctx.lineTo(0, 0 - (r * inlet));
+    ctx.lineTo(0, 0 - r * inlet);
     ctx.rotate(Math.PI / n);
     ctx.lineTo(0, 0 - r);
   }
@@ -54,6 +51,3 @@ function square(ctx, d, p) {
   ctx.moveTo(0, 0);
   ctx.fillRect(0, 0, d - d * p, d);
 }
-
-
-

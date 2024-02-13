@@ -1,5 +1,6 @@
 import { ControlsPanel } from "./index.js";
-export const panel_tools = new ControlsPanel({
+
+const config = {
   panel: {
     id: "controls_panel",
     elContainer: document.body,
@@ -24,4 +25,10 @@ export const panel_tools = new ControlsPanel({
       minHeight: "49px",
     },
   },
-});
+};
+
+export class ControlsPanelInstance extends ControlsPanel {
+  constructor() {
+    super(config);
+  }
+}

@@ -1,25 +1,26 @@
-import {FlashItem} from './icon_flash/index.js';
-import {getDictItem, getDictTemplate} from './language';
-import {modalConfirm} from './mx_helper_modal.js';
-import {clearAllCache, getStorageEstimate} from './cache_management/index.js';
-import {removeCookie} from './mx_helper_cookies.js';
+import { FlashItem } from "./icon_flash/index.js";
+import { getDictItem, getDictTemplate } from "./language";
+import { modalConfirm } from "./mx_helper_modal.js";
+import { clearAllCache, getStorageEstimate } from "./cache_management/index.js";
+import { removeCookie } from "./mx_helper_cookies.js";
+import { version } from "./mx.js";
 
 /**
  * Remove service worker cache
  */
 export async function clearMapxCache() {
   const remove = await modalConfirm({
-    title: getDictItem('utils_clear_cache_title'),
-    content: getDictTemplate('utils_clear_cache', {
-      usage: await getStorageEstimate({format: true})
-    })
+    title: getDictItem("utils_clear_cache_title"),
+    content: getDictTemplate("utils_clear_cache", {
+      usage: await getStorageEstimate({ format: true }),
+    }),
   });
   if (remove) {
     await clearAllCache();
-    new FlashItem('trash-o');
+    new FlashItem("trash-o");
     const confirmReload = await modalConfirm({
-      title: getDictItem('utils_clear_cache_reload_title'),
-      content: getDictItem('utils_clear_cache_reload')
+      title: getDictItem("utils_clear_cache_reload_title"),
+      content: getDictItem("utils_clear_cache_reload"),
     });
     if (confirmReload) {
       removeCookie();
@@ -39,9 +40,9 @@ export function reload() {
  * Get version as array [major,minor,maintenance]
  */
 export function getVersion() {
-  return mx.version;
+  return version;
 }
 
-export function isProd(){
- return location.protocol === 'https:';
+export function isProd() {
+  return location.protocol === "https:";
 }

@@ -1,4 +1,6 @@
 import { JSONEditor } from "@json-editor/json-editor";
+import { modal } from "./../mx_helper_modal.js";
+
 /*
  * Add an array format asking user to confirm removal
  *
@@ -65,7 +67,7 @@ JSONEditor.defaults.editors.arrayConfirmDelete = class mxeditors extends (
         /**
          * Add modal for confirmation
          */
-        mx.helpers.modal({
+        modal({
           title: "Remove item",
           id: "modalRemoveRow",
           content: "Are you sure to remove this?",
@@ -78,7 +80,7 @@ JSONEditor.defaults.editors.arrayConfirmDelete = class mxeditors extends (
          */
         btnConfirm.addEventListener("click", function () {
           // remove the modal window if exists
-          mx.helpers.modal({
+          modal({
             id: "modalRemoveRow",
             close: true,
           });

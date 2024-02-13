@@ -12,8 +12,8 @@ import { WsToolsInstances } from "./ws_tools";
 import { Magnifier } from "./magnifier/index.js";
 import { theme } from "./init_theme";
 import { ProjectManager } from "./project/index.js";
-import { panel_tools } from "./panel_controls/instance.js";
 import { ButtonPanelManager } from "./button_panel/manager.js";
+import { ControlsPanelInstance } from "./panel_controls/instance.js";
 
 const panels = new ButtonPanelManager();
 const version = settings.version;
@@ -37,6 +37,7 @@ const data = {
 const initQueryParams = {}; // set in init_common.js
 const listeners = new ListenerStore();
 const events = new EventSimple();
+const controls = new ControlsPanelInstance();
 /**
  * Magnifier demo
  * mx.mg.init(mx.helpers.getMap())
@@ -48,8 +49,8 @@ const project = new ProjectManager();
 const ws = new WsHandlerMapx();
 const nc = new NotifCenterMapx();
 const highlighter = new HighlighterMapx();
-const ws_tools = new WsToolsInstances(ws); //Tools using websocket
-const selectize = {};
+const ws_tools = new WsToolsInstances(ws); // Tools using websocket
+const selectize = {}; // manage selectize by groups id
 const editors = {};
 const extend = {
   position: {},
@@ -58,8 +59,8 @@ const extend = {
 const info = {};
 
 export {
-  panel_tools,
   panels,
+  controls,
   mapboxgl,
   project,
   localforage,

@@ -1,9 +1,11 @@
+import { el } from "../el_mapx";
+import { isObject } from "../is_test";
+import { getDictItem, updateLanguageElements } from "../language";
+
 export function epsgBuildSearchBox(opt) {
-  const h = mx.helpers;
-  const el = h.el;
   const selector = opt.selector;
   const elInput = document.querySelector(selector);
-  const hasShiny = h.isObject(Shiny) && Shiny.onInputChange;
+  const hasShiny = isObject(Shiny) && Shiny.onInputChange;
   if (!elInput) {
     console.warn(`epsgBuildSearchBox : element ${selector} not found`);
     return;
@@ -14,97 +16,97 @@ export function epsgBuildSearchBox(opt) {
   /*
    * hide actual input
    */
-  elInput.style.display = 'none';
+  elInput.style.display = "none";
 
   /*
    * New inputs
    */
-  const elEpsgInput = el('input', {
-    class: ['form-control'],
-    placeholder: 'Epsg code. e.g. 4326',
+  const elEpsgInput = el("input", {
+    class: ["form-control"],
+    placeholder: "Epsg code. e.g. 4326",
     dataset: {
-      lang_key: 'epsg_placeholder_input',
-      lang_type: 'placeholder'
+      lang_key: "epsg_placeholder_input",
+      lang_type: "placeholder",
     },
-    value: elInput.value ? elInput.value * 1 : '',
-    id: 'epsgTextInput'
+    value: elInput.value ? elInput.value * 1 : "",
+    id: "epsgTextInput",
   });
 
   const elButtonGroup = el(
-    'span',
+    "span",
     {
-      class: ['input-group-btn']
+      class: ["input-group-btn"],
     },
-    el('button', {
-      class: ['btn', 'btn-default'],
-      dataset: {lang_key: 'epsg_btn_open_search'},
-      innerText: 'Search',
-      on: ['click', toggleSearch]
-    })
+    el("button", {
+      class: ["btn", "btn-default"],
+      dataset: { lang_key: "epsg_btn_open_search" },
+      innerText: "Search",
+      on: ["click", toggleSearch],
+    }),
   );
 
   const elEpsgChange = el(
-    'div',
+    "div",
     {
-      class: ['input-group']
+      class: ["input-group"],
     },
     elEpsgInput,
-    elButtonGroup
+    elButtonGroup,
   );
 
   /**
    * Search group
    */
 
-  const elInputSearch = el('input', {
-    class: ['form-control'],
-    placeholder: 'Enter country/region name',
+  const elInputSearch = el("input", {
+    class: ["form-control"],
+    placeholder: "Enter country/region name",
     dataset: {
-      lang_key: 'epsg_placeholder_search',
-      lang_type: 'placeholder'
+      lang_key: "epsg_placeholder_search",
+      lang_type: "placeholder",
     },
-    type: 'text',
-    id: 'epsgSearchInput'
+    type: "text",
+    id: "epsgSearchInput",
   });
 
-  const elResults = el('div', {
-    id: 'epsgListResults',
-    on: ['click', choose, true],
+  const elResults = el("div", {
+    id: "epsgListResults",
+    on: ["click", choose, true],
   });
 
   const elSearchGroup = el(
-    'div',
+    "div",
     {
-      class: ['epsgio-box', 'well'],
+      class: ["epsgio-box", "well"],
       style: {
-        display: 'none'
-      }
+        display: "none",
+      },
     },
-    el('label', {
+    el("label", {
       dataset: {
-        lang_key: 'epsg_label_search'
-      }
+        lang_key: "epsg_label_search",
+      },
     }),
     el(
-      'div',
+      "div",
       {
-        class: ['input-group']
+        class: ["input-group"],
       },
       elInputSearch,
       el(
-        'span',
+        "span",
         {
-          class: ['input-group-btn']
+          class: ["input-group-btn"],
         },
-        el('button', {
-          class: ['btn', 'btn-default'],
-          innerText: 'Search',
-          dataset: {lang_key: 'epsg_btn_search'},
-          on: ['click', searchEpsg]
-        })
-      )
+        el("button", {
+          class: ["btn", "btn-default"],
+          innerText: "Search",
+          dataset: { lang_key: "epsg_btn_search" },
+          on: ["click", searchEpsg],
+        }),
+      ),
     ),
-    elResults
+    elResults,
   );
 
   /**
@@ -116,14 +118,14 @@ export function epsgBuildSearchBox(opt) {
   /**
    * Update labels
    */
-  h.updateLanguageElements({el: elInputParent});
+  updateLanguageElements({ el: elInputParent });
 
   /**
    * Show or hide search block
    */
   function toggleSearch() {
-    const isVisible = elSearchGroup.style.display === 'block';
-    elSearchGroup.style.display = isVisible ? 'none' : 'block';
+    const isVisible = elSearchGroup.style.display === "block";
+    elSearchGroup.style.display = isVisible ? "none" : "block";
   }
 
   /**
@@ -141,7 +143,7 @@ export function epsgBuildSearchBox(opt) {
     if (hasShiny) {
       Shiny.onInputChange(elInput.id, code);
     }
-    elSearchGroup.style.display = 'none';
+    elSearchGroup.style.display = "none";
     return code;
   }
   /**
@@ -153,15 +155,15 @@ export function epsgBuildSearchBox(opt) {
     if (!txt) {
       return;
     }
-    elResults.innerHTML = '';
+    elResults.innerHTML = "";
 
     const res = await epsgQuery(txt);
 
     if (res.length === 0) {
-      const elEmpty = el('button', {
-        class: ['btn', 'btn-default', 'epsgio-btn-choose', 'disabled']
+      const elEmpty = el("button", {
+        class: ["btn", "btn-default", "epsgio-btn-choose", "disabled"],
       });
-      elEmpty.innerText = await h.getDictItem('noValue');
+      elEmpty.innerText = await getDictItem("noValue");
       elResults.appendChild(elEmpty);
     } else {
       for (const r of res) {
@@ -169,14 +171,14 @@ export function epsgBuildSearchBox(opt) {
          * Build select button
          */
         const elRow = el(
-          'div',
-          el('button', {
-            innerText: r.name + ' (' + r.code + ')',
-            class: ['btn', 'btn-default', 'epsgio-btn-choose'],
+          "div",
+          el("button", {
+            innerText: r.name + " (" + r.code + ")",
+            class: ["btn", "btn-default", "epsgio-btn-choose"],
             dataset: {
-              code: r.code
-            }
-          })
+              code: r.code,
+            },
+          }),
         );
         elResults.appendChild(elRow);
       }

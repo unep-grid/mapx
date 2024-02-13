@@ -9,16 +9,24 @@ import {
   isArray,
   isObject,
   isBoolean,
+  isArrayOfString,
+  isBase64img,
+  isValidType,
+  isNumeric,
+  isJson,
 } from "./is_test_mapx/index.js";
 
 import { UAParser } from "ua-parser-js";
 
 import copy from "fast-copy";
-import { settings } from "./settings";
+import { settings, data as mx_storage } from "./mx.js";
 import { modalSelectSource } from "./select_auto/modals";
 import { isSourceId } from "./is_test";
 import { el } from "./el_mapx";
 import { cancelFrame, onNextFrame } from "./animation_frame";
+import { moduleLoad } from "./modules_loader_async";
+import { getDictItem } from "./language";
+import { readCookie } from "./mx_helper_cookies";
 
 /**
  * Test if Shiny is up
@@ -287,10 +295,9 @@ export function setBusy(enable) {
  * @returns {*}
  */
 export function path(obj, path, def) {
-  const h = mx.helpers;
   const isDefaultMissing = typeof def === "undefined";
-  const isPathString = h.isString(path);
-  const isPathArray = h.isArrayOfString(path);
+  const isPathString = isString(path);
+  const isPathArray = isArrayOfString(path);
 
   if (isDefaultMissing) {
     def = null;
@@ -516,50 +523,43 @@ export function cssTransformFun() {
 export var cssTransform = cssTransformFun();
 
 export function uiToggleBtn(o) {
-  const h = mx.helpers;
   o.label =
-    h.isString(o.label) || h.isElement(o.label)
-      ? o.label
-      : JSON.stringify(o.label);
-  var noLabel = isEmpty(o.label);
-  var label = noLabel ? "" : o.label;
-  var onChange = o.onChange || function () {};
-  var data = o.data || {};
-  var checked = o.checked || false;
-  var id = makeId();
-  var elInput, elLabel;
+    isString(o.label) || isElement(o.label) ? o.label : JSON.stringify(o.label);
+  const noLabel = isEmpty(o.label);
+  const label = noLabel ? "" : o.label;
+  const onChange = o.onChange || function () {};
+  const data = o.data || {};
+  const checked = o.checked || false;
+  const id = makeId();
+  const elInput = el("input", {
+    class: "check-toggle-input",
+    id: id,
+    type: "checkbox",
+    on: { click: onChange },
+    dataset: data,
+  });
 
-  const elContainer = h.el(
-    "div",
-    { class: "check-toggle" },
-    (elInput = h.el("input", {
-      class: "check-toggle-input",
-      id: id,
-      type: "checkbox",
-      on: { click: onChange },
-    })),
-    (elLabel = h.el(
-      "label",
-      {
-        class: `check-toggle-label ${
-          o.labelBoxed ? "check-toggle-label-boxed" : ""
-        }`,
-        for: id,
-      },
-      label,
-    )),
+  const elLabel = el(
+    "label",
+    {
+      class: `check-toggle-label ${
+        o.labelBoxed ? "check-toggle-label-boxed" : ""
+      }`,
+      for: id,
+    },
+    label,
   );
 
   elInput.checked = checked;
 
-  for (var d in data) {
-    elInput.dataset[d] = data[d];
-  }
+  const elContainer = el("div", { class: "check-toggle" }, [elInput, elLabel]);
 
   if (noLabel) {
-    h.getDictItem("noValue").then((na) => {
-      elLabel.innerText = na;
-    });
+    getDictItem("noValue")
+      .then((na) => {
+        elLabel.innerText = na;
+      })
+      .catch(console.error);
   }
 
   return elContainer;
@@ -685,21 +685,18 @@ export function mergeDeep(target, source) {
  * @param {String} o.classValue Group item additional class (optional)
  * @return {Element} Html ul element
  */
-export function objectToHTML(o) {
-  // if data and id : send by mxJsonToHtml, convert.
-  var obj = o.data;
-  var id = o.id;
-  var classValue;
-  var classGroup = "list-group";
-  var classGroupItem = "list-group-item";
-  var classGroupItemValue = ["list-group-item-member"];
-  var el = mx.helpers.el;
+export function objectToHTML(config) {
+  const { data: obj, id } = config;
+  const classGroup = "list-group";
+  const classGroupItem = "list-group-item";
+  let classGroupItemValue = ["list-group-item-member"];
+  let classValue;
 
   if (classValue) {
-    classGroupItemValue.concat(classValue);
+    classGroupItemValue = [...classGroupItemValue, ...classValue];
   }
 
-  var html = makeUl(obj);
+  const html = makeUl(obj);
 
   if (id) {
     document.getElementById(id).appendChild(html);
@@ -708,44 +705,39 @@ export function objectToHTML(o) {
   }
 
   function makeUl(li) {
-    var l,
-      elLi,
-      k,
-      keys = [];
+    const keys = [];
 
-    var ul = el("ul", {
+    const ul = el("ul", {
       class: classGroup,
     });
 
-    var isObject = mx.helpers.isObject(li);
-    var isArray = mx.helpers.isArray(li);
+    const isAnObject = isObject(li);
+    const isAnArray = isArray(li);
 
-    if (isObject) {
+    if (isAnObject) {
       keys = Object.keys(li);
     }
 
-    if (isArray) {
-      for (var i = 0, iL = li.length; i < iL; i++) {
-        keys.push(i);
-      }
+    if (isAnArray) {
+      keys = [...li.keys()];
     }
 
-    for (var j = 0, jL = keys.length; j < jL; j++) {
-      k = keys[j];
-      l = isArray ? k + 1 : k;
-      elLi = makeLi(li);
-      ul.appendChild(elLi, l);
-    }
+    keys.forEach((k) => {
+      const l = isAnArray ? k + 1 : k;
+      const elLi = makeLi(li[k], l);
+      ul.appendChild(elLi);
+    });
+
     return ul;
   }
 
   function makeLi(it, ti) {
-    var li = el("li", {
+    const li = el("li", {
       class: classGroupItem,
     });
-    var content = el("div");
+    const content = el("div");
 
-    if (it.constructor === Object || it.constructor === Array) {
+    if (isObject(it) || isArray(it)) {
       content.appendChild(
         uiFold({
           content: makeUl(it),
@@ -754,15 +746,15 @@ export function objectToHTML(o) {
         }),
       );
     } else {
-      content.innerHTML =
-        "<div>" +
-        "<span class='list-group-title'>" +
-        ti +
-        "</span>" +
-        "<span>" +
-        it +
-        "</span>" +
-        "</div>";
+      content.innerHTML = `
+        <div>
+        <span class='list-group-title'>
+        ${ti}
+        </span>
+        <span>
+        ${it}
+        </span></div>
+        `;
     }
 
     li.appendChild(content);
@@ -834,11 +826,11 @@ export function formatZeros(num, n) {
   if (typeof num !== "number") {
     return num;
   }
-  num = mx.helpers.round(num, n);
+  num = round(num, n);
   num = num + "" || "0";
   n = n || 3;
-  var a = num.split(".");
-  var b = a[1];
+  let a = num.split(".");
+  let b = a[1];
   if (!b) {
     b = "";
   }
@@ -1083,8 +1075,7 @@ export function sendAjax(o) {
  * @param {Function} o.onError Function to call on error
  */
 export async function getCSV(o) {
-  const h = mx.helpers;
-  const csvjson = await h.moduleLoad("csvjson");
+  const csvjson = await moduleLoad("csvjson");
   sendAjax({
     type: "get",
     url: o.url,
@@ -1512,8 +1503,8 @@ export function chunkString(str, size) {
  */
 export function getExtension(str) {
   // "/" represent folder in jsZip and "^__" is prefix for max os x hidden folder. Both case : invalid.
-  var isWrong = str.search(/^__/) > -1;
-  var ext = str.toLowerCase().match(/.[a-z0-9]+$/);
+  const isWrong = str.search(/^__/) > -1;
+  const ext = str.toLowerCase().match(/.[a-z0-9]+$/);
 
   if (!isWrong && ext && ext instanceof Array) {
     return ext[0];
@@ -1523,27 +1514,29 @@ export function getExtension(str) {
 }
 
 /**
- * Simple timer
- * @method start Start the timer
- * @method stop Start the timer
- * @example
- *  var a = new timer();
- * timer.start();
- * timer.stop();
+ * Simple timer class.
+ * Provides methods to start and stop a timer and measure elapsed time.
  */
+export class Timer {
+  constructor() {
+    this.startTime = 0;
+  }
 
-export function timer() {
-  this.start = 0;
-  return this;
+  /**
+   * Starts the timer.
+   */
+  start() {
+    this.startTime = window.performance.now();
+  }
+
+  /**
+   * Stops the timer and returns the elapsed time in milliseconds.
+   * @return {number} The elapsed time since the timer was started.
+   */
+  stop() {
+    return window.performance.now() - this.startTime;
+  }
 }
-
-timer.prototype.start = function () {
-  this.start = window.performance.now();
-};
-
-timer.prototype.stop = function () {
-  return window.performance.now() - this.start;
-};
 
 /**
  * Estimate memory size of object
@@ -1551,22 +1544,14 @@ timer.prototype.stop = function () {
  * @param {Object} object to evaluate
  * @param {Boolean} humanReadable Output the result in formated text with units bytes; KiB; MiB, etc.. instead of bytes
  */
-export function getSizeOf(obj, humanReadable) {
-  const h = mx.helpers;
-  humanReadable = humanReadable === undefined ? true : humanReadable;
-
-  return h
-    .moduleLoad("size-of")
-    .then((s) => {
-      return obj instanceof File ? obj.size : s(obj);
-    })
-    .then((res) => {
-      if (!humanReadable) {
-        return res;
-      } else {
-        return formatByteSize(res);
-      }
-    });
+export async function getSizeOf(obj, humanReadable) {
+  humanReadable = Boolean(humanReadable);
+  const sizeOf = await moduleLoad("size-of");
+  const size = obj instanceof File ? obj.size : await sizeOf(obj);
+  if (!humanReadable) {
+    return size;
+  }
+  return formatByteSize(size);
 }
 
 /**
@@ -1602,7 +1587,6 @@ const scrollToBreaks = {
   idFrame: 0,
 };
 export function scrollFromTo(opt) {
-  const h = mx.helpers;
   opt = Object.assign({}, opt);
 
   let start, time, percent, duration, easing, bodyDim;
@@ -1634,7 +1618,7 @@ export function scrollFromTo(opt) {
      * Cancel previous frame request
      */
 
-    h.cancelFrame(scrollToBreaks.idFrame);
+    cancelFrame(scrollToBreaks.idFrame);
 
     scrollToBreaks.idTimeout = setTimeout(() => {
       if (axis === "y") {
@@ -1658,7 +1642,7 @@ export function scrollFromTo(opt) {
       } else {
         duration = opt.during || 1000;
 
-        scrollToBreaks.idFrame = h.onNextFrame(step);
+        scrollToBreaks.idFrame = onNextFrame(step);
 
         function step(timestamp) {
           if (!start) {
@@ -1677,7 +1661,7 @@ export function scrollFromTo(opt) {
           }
 
           if (time < duration && !(stop && stop())) {
-            scrollToBreaks.idFrame = h.onNextFrame(step);
+            scrollToBreaks.idFrame = onNextFrame(step);
           } else {
             resolve(true);
           }
@@ -1817,11 +1801,11 @@ export function classAction(o) {
     o.action = "toggle";
   }
 
-  if (!mx.helpers.isArray(o.class)) {
+  if (!isArray(o.class)) {
     o.class = o.class.split(/\s+/);
   }
 
-  if (mx.helpers.isElement(o.selector)) {
+  if (isElement(o.selector)) {
     el = o.selector;
   } else {
     el = document.querySelectorAll(o.selector);
@@ -1856,7 +1840,7 @@ export function classAction(o) {
  *
  */
 export function forEachEl(o) {
-  if (mx.helpers.isElement(o.els)) {
+  if (isElement(o.els)) {
     o.callback(o.els);
   } else {
     for (var i = 0; i < o.els.length; ++i) {
@@ -1890,8 +1874,7 @@ export function objectToArray(obj, asTable) {
  */
 export function parentFinder(o) {
   var el;
-  const h = mx.helpers;
-  if (h.isElement(o.selector)) {
+  if (isElement(o.selector)) {
     el = o.selector;
   } else {
     el = document.querySelector(o.selector);
@@ -2238,7 +2221,7 @@ export function htmlToData(o) {
      */
 
     function buildSvgImageUrl(svg) {
-      var b64 = mx.helpers.utf8_to_b64(svg);
+      const b64 = utf8_to_b64(svg);
       return "data:image/svg+xml;base64," + b64;
     }
 
@@ -2314,13 +2297,13 @@ export function injectHead(items) {
   var s = items.scripts || [];
   var c = items.css || [];
 
-  if (!mx.data.headItems) {
-    mx.data.headItems = {};
+  if (!mx_storage.headItems) {
+    mx_storage.headItems = {};
   }
 
   s.forEach(function (i) {
-    if (!mx.data.headItems[i]) {
-      mx.data.headItems[i] = true;
+    if (!mx_storage.headItems[i]) {
+      mx_storage.headItems[i] = true;
       var script = document.createElement("script");
       script.src = i;
       script.async = false;
@@ -2329,8 +2312,8 @@ export function injectHead(items) {
   });
 
   c.forEach(function (i) {
-    if (!mx.data.headItems[i]) {
-      mx.data.headItems[i] = true;
+    if (!mx_storage.headItems[i]) {
+      mx_storage.headItems[i] = true;
       var link = document.createElement("link");
       link.rel = "stylesheet";
       link.type = "text/css";
@@ -2345,7 +2328,7 @@ export function getBrowserData() {
   const lang = navigator.language;
   return {
     language: lang.substring(0, 2),
-    cookies: mx.helpers.readCookie(),
+    cookies: readCookie(),
     userAgent: userAgentData,
     timeZone: new Date().toString().replace(/.*[(](.*)[)].*/, "$1"),
     hasLocalStorage: !!window.sessionStorage,
@@ -2366,7 +2349,7 @@ export function copyText(id) {
   }
   elText.select();
   document.execCommand("copy");
-  mx.helpers.itemFlash("clipboard");
+  itemFlash("clipboard");
 }
 
 export function shareTwitter(id) {
@@ -2394,18 +2377,18 @@ export function shareTwitter(id) {
     "left=0,top=0,width=550,height=450,personalbar=0,toolbar=0,scrollbars=0,resizable=0",
   );
 
-  mx.helpers.itemFlash("twitter");
+  itemFlash("twitter");
 }
 
 export function updateLogScroll(selector) {
   selector = selector || ".mx-logs";
-  var elLogs =
+  const elLogs =
     selector instanceof Element ? selector : document.querySelector(selector);
   if (!elLogs) {
     return;
   }
-  var h = elLogs.getBoundingClientRect();
-  elLogs.scrollTop = h.height;
+  const rect = elLogs.getBoundingClientRect();
+  elLogs.scrollTop = rect.height;
 }
 
 export function handleRequestMessage(msg, msgs, on) {
@@ -2453,17 +2436,16 @@ export function handleRequestMessage(msg, msgs, on) {
     res = res + "";
     res.split("\t\n").forEach(function (m) {
       if (m) {
-        if (mx.helpers.isNumeric(m)) {
+        if (isNumeric(m)) {
           m = m * 100;
           addMsg(m, "progress");
         } else {
-          if (mx.helpers.isJson(m)) {
+          if (isJson(m)) {
             m = JSON.parse(m);
           }
-
-          var isObject = mx.helpers.isObject(m);
-          var msg = isObject ? m.message || m.msg : m;
-          var type = m.type || "default";
+          const isAnObject = isObject(m);
+          const msg = isAnObject ? m.message || m.msg : m;
+          const type = m.type || "default";
 
           if (msgs[msg]) {
             return;
@@ -2484,11 +2466,10 @@ export function handleRequestMessage(msg, msgs, on) {
  *
  */
 export async function urlToImageBase64(url) {
-  const h = mx.helpers;
   let out = "";
 
   try {
-    if (h.isBase64img(url)) {
+    if (isBase64img(url)) {
       return url;
     }
     const img = new Image();
@@ -2498,7 +2479,7 @@ export async function urlToImageBase64(url) {
       throw new Error(`URL ${url}: status ${res.status}`);
     }
     const blob = await res.blob();
-    const validType = h.isValidType(blob.type, "image");
+    const validType = isValidType(blob.type, "image");
     if (!validType) {
       throw new Error(`No valid image type ${blob.type}`);
     }
@@ -2516,7 +2497,7 @@ export async function urlToImageBase64(url) {
    */
   async function convertToBase64(img) {
     const dpr = window.devicePixelRatio;
-    const elCanvas = h.el("canvas");
+    const elCanvas = el("canvas");
     const width = img.width;
     const height = img.height;
     elCanvas.width = width * dpr;

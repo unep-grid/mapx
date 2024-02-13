@@ -5,9 +5,10 @@ import {
   MapxResolversApp,
   MapxResolversStatic,
 } from "./sdk/src/mapx_resolvers";
+import { events } from "./mx";
 
 window.addEventListener("load", () => {
-  mx.events.once({
+  events.once({
     type: ["mapx_ready"],
     idGroup: "sdk_binding",
     callback: () => {
@@ -26,7 +27,7 @@ window.addEventListener("load", () => {
 
       window.mxsdkworker = new Worker({
         resolvers: resolvers,
-        events: mx.events,
+        events: events,
         sdkToken: sdkToken,
       });
     },

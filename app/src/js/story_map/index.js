@@ -6,7 +6,7 @@ import { errorHandler } from "./../error_handler/index.js";
 import { modal } from "./../mx_helper_modal.js";
 import { settings as settingsMapx } from "./../settings";
 import { settings as storySettings } from "./settings.js";
-import { theme, panel_tools, panels } from "./../mx";
+import { theme, panels, events, controls, listeners } from "./../mx";
 import { UAParser } from "ua-parser-js";
 import {
   onNextFrame,
@@ -129,7 +129,7 @@ async function initListeners() {
 }
 
 function removeAllListeners() {
-  mx.listeners.removeListenerByGroup("story_map");
+  listeners.removeListenerByGroup("story_map");
 }
 
 function initClickListener() {
@@ -137,14 +137,14 @@ function initClickListener() {
   /**
    * Locked
    */
-  mx.listeners.addListener({
+  listeners.addListener({
     target: state.elStoryContainer,
     type: "click",
     callback: () => {
       if (state.ct_editor) {
         return;
       }
-      panel_tools.panel.open();
+      controls.panel.open();
       state.ctrlLock.shake("look_at_me");
       new FlashItem("ban");
     },
@@ -154,7 +154,7 @@ function initClickListener() {
   /**
    * When click, scroll to step
    */
-  mx.listeners.addListener({
+  listeners.addListener({
     target: state.elBullets,
     type: "click",
     callback: bulletScrollTo,
@@ -174,7 +174,7 @@ function initKeydownListener() {
     map.keyboard.disable();
   }
 
-  mx.listeners.addListener({
+  listeners.addListener({
     target: window,
     type: "keydown",
     callback: storyHandleKeyDown,
@@ -213,7 +213,7 @@ function initMouseMoveListener() {
     elCtrl.classList.add(classOpacitySmooth);
   }
 
-  mx.listeners.addListener({
+  listeners.addListener({
     target: window,
     callback: mouseHider,
     type: ["mousemove", "click", "wheel"],
@@ -221,7 +221,7 @@ function initMouseMoveListener() {
     onRemove: destroy,
   });
 
-  mx.events.on("story_step", mouseHider);
+  events.on("story_step", mouseHider);
 
   function mouseHider() {
     if (timer) {
@@ -264,7 +264,7 @@ function initMouseMoveListener() {
 
   function destroy() {
     destroyed = true;
-    mx.events.off("story_step", mouseHider);
+    events.off("story_step", mouseHider);
     show();
     clean();
   }
@@ -389,7 +389,7 @@ async function storyUiClear() {
 export async function storyClose() {
   const state = getState();
   state.enable = false;
-  mx.events.fire("story_close");
+  events.fire("story_close");
   removeAllListeners();
   if (state.ct_editor_remove) {
     state.ct_editor_remove();
@@ -529,9 +529,9 @@ async function start() {
   state.enable = true;
 
   if (state.update) {
-    mx.events.fire("story_update");
+    events.fire("story_update");
   } else {
-    mx.events.fire("story_start");
+    events.fire("story_start");
   }
   /**
    * Initial layout
@@ -582,7 +582,7 @@ async function start() {
  */
 
 function initResizeListener() {
-  mx.listeners.addListener({
+  listeners.addListener({
     target: window,
     type: "resize",
     callback: updateLayout,
@@ -711,14 +711,12 @@ async function initControls() {
     return;
   }
   state._init_buttons = true;
-
   /**
    * Control panel buttons
    */
-  const ctrls = panel_tools.controls;
-  state.ctrlMode3d = ctrls.getButton(s.ctrl_btn_3d_terrain);
-  state.ctrlAerial = ctrls.getButton(s.ctrl_btn_theme_sat);
-  state.ctrlLock = ctrls.getButton(s.ctrl_btn_lock);
+  state.ctrlMode3d = controls.get(s.ctrl_btn_3d_terrain);
+  state.ctrlAerial = controls.get(s.ctrl_btn_theme_sat);
+  state.ctrlLock = controls.get(s.ctrl_btn_lock);
 }
 
 /*
@@ -1151,7 +1149,7 @@ export async function storyMapLock(cmd) {
         new FlashItem("unlock");
       }
     } else {
-      mx.events.fire("story_lock");
+      events.fire("story_lock");
       elIcon.classList.add(classLock);
       elIcon.classList.remove(classUnlock);
       elStoryContainer.classList.remove(classNoEvent);
@@ -1170,15 +1168,14 @@ export async function storyMapLock(cmd) {
 async function storyControlsEnable() {
   const s = getSettings();
   const state = getState();
-  const ctrls = panel_tools.controls;
   const autoStart = state.autoStart === true;
   const update = state.update === true;
 
   if (state._controls_enabled) {
     return;
   }
-
   state._controls_enabled = true;
+
   state.controlsAdded = [];
   state.controlsRemoved = [];
   state.panelsRemoved = [];
@@ -1192,13 +1189,19 @@ async function storyControlsEnable() {
   } else {
     keyBtnShow.push(...s.ctrl_btn_enable);
   }
+
   for (const key of s.ctrl_btn_disable) {
-    const ctrl = ctrls.getButton(key);
-    ctrl.hide();
+    const ctrl = controls.get(key);
+    if (!ctrl) {
+      continue;
+    }
     state.controlsRemoved.push(ctrl);
   }
   for (const key of keyBtnShow) {
-    const ctrl = ctrls.getButton(key);
+    const ctrl = controls.get(key);
+    if (!ctrl) {
+      continue;
+    }
     ctrl.show();
     state.controlsAdded.push(ctrl);
   }
@@ -1656,7 +1659,7 @@ export async function storyPlayStep(stepNum) {
     return;
   }
   map.stop();
-  mx.events.fire("story_step");
+  events.fire("story_step");
   /**
    * retrieve step information
    */

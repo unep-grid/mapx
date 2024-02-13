@@ -1,5 +1,6 @@
-import {formatByteSize} from './../mx_helper_misc';
-import {miniCacheClear} from './../minicache';
+import { formatByteSize } from "./../mx_helper_misc";
+import { miniCacheClear } from "./../minicache";
+import { nc, data as mx_storage } from "./../mx.js";
 
 /**
  * Remove all accessible caches
@@ -17,11 +18,11 @@ export async function clearAllCache() {
 export async function getStorageEstimate(opt) {
   let usage = 0;
   try {
-    opt = Object.assign({}, {format: false}, opt);
+    opt = Object.assign({}, { format: false }, opt);
     const est = await navigator.storage.estimate();
     usage = est.usage;
   } catch (e) {
-    console.warn('getStorageEstimate failed to estimate storage size.');
+    console.warn("getStorageEstimate failed to estimate storage size.");
   }
   if (opt.format) {
     usage = formatByteSize(usage);
@@ -36,13 +37,13 @@ export async function getStorageEstimate(opt) {
 export async function clearForageCache() {
   if (mx) {
     if (mx?.data?.draft) {
-      await mx.data.draft.dropInstance();
+      await mx_storage.draft.dropInstance();
     }
     if (mx?.data?.geojson) {
-      await mx.data.geojson.dropInstance();
+      await mx_storage.geojson.dropInstance();
     }
     if (mx?.nc) {
-      mx.nc.clearHistory();
+      nc.clearHistory();
     }
   }
   await miniCacheClear();
@@ -53,7 +54,7 @@ export async function clearForageCache() {
  */
 export async function clearServiceWorker() {
   let hadSW = false;
-  if ('serviceWorker' in navigator) {
+  if ("serviceWorker" in navigator) {
     const registrations = await navigator.serviceWorker.getRegistrations();
     for (let registration of registrations) {
       hadSW = true;

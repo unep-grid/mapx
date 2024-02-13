@@ -69,7 +69,14 @@ import { viewsListAddSingle } from "../../../views_list_manager";
 import { modalCloseAll } from "../../../mx_helper_modal.js";
 import { toggleSpotlight } from "../../../mx_helper_map_pixop.js";
 import { spatialDataToView } from "../../../mx_helper_map_dragdrop.js";
-import { settings, highlighter, theme, ws, panel_tools } from "./../../../mx";
+import {
+  settings,
+  highlighter,
+  theme,
+  ws,
+  controls,
+  panels,
+} from "./../../../mx";
 import {
   getViewLegendState,
   getViewLegendValues,
@@ -101,7 +108,8 @@ export class MapxResolversStatic extends MapxResolversPanels {
    */
   set_panel_left_visibility(opt) {
     const rslv = this;
-    const panel = mx.panel_main.panel;
+    const panelMain = panels.get("panel_main");
+    const panel = panelMain.panel;
     return rslv._handle_panel_visibility(panel, opt);
   }
 
@@ -141,26 +149,21 @@ export class MapxResolversStatic extends MapxResolversPanels {
 
   /**
    * Enable or disable 3d terrain
-   * @param {Object} opt Options
-   * @param {String} opt.action Action to perform: 'enable','disable','toggle'
-   */
-  set_3d_terrain(opt) {
-    const ctrl = panel_tools.controls.getButton("btn_3d_terrain");
-    if (ctrl && ctrl.action) {
-      ctrl.action(opt.action);
-    }
-  }
-  /**
-   * Enable or disable 3d terrain
    * Set related layers visibility, change control buttons state
    * @param {Object} opt Options
    * @param {String} opt.action Action to perform: 'show','hide','toggle'
    */
   set_mode_3d(opt) {
-    const ctrl = panel_tools.controls.getButton("btn_3d_terrain");
+    const ctrl = controls.get("btn_3d_terrain");
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
+  }
+  /**
+   * Enable or disable 3d terrain ( same as set_mode_3d;
+   */
+  set_3d_terrain(opt) {
+    return this.set_mode_3d(opt);
   }
 
   /**
@@ -170,7 +173,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * @param {String} opt.action Action to perform: 'show','hide','toggle'
    */
   set_mode_aerial(opt) {
-    const ctrl = panel_tools.controls.getButton("btn_theme_sat");
+    const ctrl = controls.get("btn_theme_sat");
     if (ctrl && ctrl.action) {
       ctrl.action(opt.action);
     }
@@ -766,11 +769,13 @@ export class MapxResolversStatic extends MapxResolversPanels {
     if (!valid) {
       return rslv._err("err_view_invalid");
     }
+    const addViewToList =
+      !settings.mode.static && (!view._vb) instanceof ViewBase;
 
-    if (settings.mode.static || view._vb instanceof ViewBase) {
-      await viewAdd(view);
-    } else {
+    if (addViewToList) {
       await viewsListAddSingle(view, { open: true });
+    } else {
+      await viewAdd(view);
     }
 
     if (opt.zoomToView) {

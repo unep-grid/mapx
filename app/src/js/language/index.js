@@ -16,6 +16,7 @@ import {
 import { getArrayDistinct } from "../array_stat";
 import { settings } from "./../settings";
 import { LegendVt } from "../legend_vt";
+import { events, mapboxgl } from "../mx.js";
 
 /**
  * Set current language ( for updating ui/views, use updateLanguage )
@@ -74,7 +75,7 @@ export async function updateLanguage(language) {
    * Fire language_change if required
    */
   if (currentLanguage !== newLanguage) {
-    mx.events.fire({
+    events.fire({
       type: "language_change",
       data: {
         new_language: newLanguage,
@@ -528,7 +529,7 @@ export async function updateLanguageMap(o) {
     {
       language: getLanguageCurrent(),
     },
-    o
+    o,
   );
 
   /**
@@ -615,7 +616,7 @@ async function mapboxRTLload() {
 
   return new Promise((resolve, reject) => {
     try {
-      mx.mapboxgl.setRTLTextPlugin(
+      mapboxgl.setRTLTextPlugin(
         "https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js",
         (err) => {
           if (err) {
@@ -625,7 +626,7 @@ async function mapboxRTLload() {
             resolve(true);
           }
         },
-        false
+        false,
       );
     } catch (e) {
       reject(e);

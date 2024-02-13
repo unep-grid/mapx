@@ -9,6 +9,7 @@ import { bindAll } from "./../bind_class_methods/index.js";
 import { spatialDataToView } from "./../mx_helper_map_dragdrop.js";
 import { viewsListAddSingle } from "./../views_list_manager";
 import { EventSimple } from "../event_simple";
+import { controls } from "./../mx.js";
 
 import "./style.less";
 
@@ -25,7 +26,8 @@ class MapxDraw extends EventSimple {
     const md = this;
     md.opt = Object.assign({}, def, opt);
     md._map = md.opt.map;
-    md._panel_tools = md.opt.panel_tools;
+    md._controls = md.opt.controls || controls;
+
     md.init();
     return md;
   }
@@ -41,9 +43,11 @@ class MapxDraw extends EventSimple {
       return;
     }
 
-    if (!md._panel_tools instanceof ControlsPanel) {
+    const controlsValid = md._controls instanceof ControlsPanel;
+
+    if (!controlsValid) {
       throw new Error(
-        "MapxDraw require a ControlsPanel to be provided in options {panel_tools:<ControlsPanel>}"
+        "MapxDraw require a ControlsPanel to be provided in options {controls:<ControlsPanel>}",
       );
     }
 
@@ -199,7 +203,7 @@ class MapxDraw extends EventSimple {
     opt = Object.assign({}, { classesButton: ["mx-draw--btn"] }, opt);
     const btn = new Button(opt);
     md._buttons.push(btn);
-    md._panel_tools.controls.register(btn);
+    md._controls.register(btn);
     return btn;
   }
 
@@ -317,7 +321,7 @@ class MapxDraw extends EventSimple {
           "draw_btn_uncombine",
           async () => {
             md._draw.uncombineFeatures();
-          }
+          },
         );
       },
     });
@@ -375,21 +379,21 @@ class MapxDraw extends EventSimple {
             { class: "form-control" },
             el("option", { value: "point" }, elSpanTranslate("draw_point")),
             el("option", { value: "line" }, elSpanTranslate("draw_line")),
-            el("option", { value: "polygon" }, elSpanTranslate("draw_polygon"))
+            el("option", { value: "polygon" }, elSpanTranslate("draw_polygon")),
           )),
         ]),
         el("div", { class: "form-group" }, [
           el(
             "label",
             { class: "control-label" },
-            elSpanTranslate("draw_layer_name")
+            elSpanTranslate("draw_layer_name"),
           ),
           (elTitle = el("input", {
             class: "form-control",
             type: "text",
             value: md._default_title(),
           })),
-        ])
+        ]),
       );
 
       const elBtnSubmit = el(
@@ -408,7 +412,7 @@ class MapxDraw extends EventSimple {
             },
           },
         },
-        elSpanTranslate("draw_config_submit")
+        elSpanTranslate("draw_config_submit"),
       );
       md._modal_config = modal({
         noShinyBinding: true,

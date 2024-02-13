@@ -1,6 +1,6 @@
 import { moduleLoad } from "./../modules_loader_async";
 import { getMap } from "./../map_helpers";
-import { makeId } from "./../mx_helper_misc.js";
+import { makeId, setClickHandler } from "./../mx_helper_misc.js";
 import { spatialDataToView } from "./../mx_helper_map_dragdrop.js";
 import { viewsListAddSingle } from "./../views_list_manager";
 
@@ -54,7 +54,7 @@ function disableDraw() {
   c.map.removeControl(c.draw, c.position);
   c.draw = null;
   c.enabled = false;
-  mx.helpers.setClickHandler({
+  setClickHandler({
     type: "draw",
     enable: c.enabled,
   });
@@ -68,7 +68,7 @@ async function enableDraw() {
     disableDraw();
   }
   await initDraw();
-  mx.helpers.setClickHandler({
+  setClickHandler({
     type: "draw",
     enable: c.enabled,
   });

@@ -42,17 +42,28 @@ class ControlsPanel {
     window.addEventListener("resize", cp.sizeOptimizer);
   }
 
+  /**
+   * Controls -> get control by id
+   * @param {string} id  ctrl id
+   */
+  get(id) {
+    return this.controls.getButton(id);
+  }
+
+  /*
+   * controls -> register
+   * @param {object} ctrl ctrl/button to register
+   */
+  register(ctrl) {
+    return this.controls.register(ctrl);
+  }
+
   destroy() {
     const cp = this;
     cp.panel.destroy();
     cp.controls.destroy();
     window.removeEventListener("resize", cp.sizeOptimizer);
   }
-
-  /*resetPanelSize(){*/
-  /*const cp = this;*/
-  /*cp.panel.resetSize();*/
-  /*}*/
 
   sizeOptimizer() {
     const cp = this;

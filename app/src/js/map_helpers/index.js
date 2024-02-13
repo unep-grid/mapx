@@ -3,14 +3,16 @@ import {
   nc,
   mg,
   events,
+  data as mx_storage,
   listeners,
   theme,
+  templates,
   mapboxgl,
   maps,
   highlighter,
   settings,
-  panel_tools,
   panels,
+  controls,
 } from "./../mx.js";
 import { featuresToPopup } from "./features_to_popup.js";
 import { RadialProgress } from "./../radial_progress";
@@ -142,23 +144,19 @@ import {
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
-import { updateViewsBadges } from "../badges/index.js";
 export * from "./view_filters.js";
 
 /**
  * Storage
+ * - keep a ref to instances and objects previouly attached to mx global,
+ *   but only used in map helpers / mapx js instance management
  */
-const viewsActive = new Set();
-
-/**
- * Export downloadViewVector from here, to match pattern
- *  map_helpers ->
- *  downloadViewVector
- *  downloadViewGeoJSON
- *  downloadViewSourceExternal
- * Definied is this file.
- */
-export { downloadViewVector } from "./../source";
+const mx_local = {
+  views_active: new Set(),
+  panel_main: null,
+  draw: null,
+  search: null,
+};
 
 /**
  * Export style basemap
@@ -245,6 +243,18 @@ export function metersToDegrees(point) {
     lng: lng,
   };
 }
+
+
+/**
+ * Export downloadViewVector from here, to match pattern
+ *  map_helpers ->
+ *  downloadViewVector
+ *  downloadViewGeoJSON
+ *  downloadViewSourceExternal
+ * Definied is this file.
+ */
+export { downloadViewVector } from "./../source";
+
 
 /**
  * Download view geojson
@@ -628,8 +638,7 @@ export function isModeLocked() {
  */
 export function initListenerGlobal() {
   const map = getMap();
-  const ctrls = panel_tools.controls;
-  const btn3d = ctrls.getButton("btn_3d_terrain");
+  const btn3d = controls.get("btn_3d_terrain");
 
   /*
    * Fire session start
@@ -831,8 +840,8 @@ export function initListenersApp() {
     target: document.getElementById("btnShowSearchApiConfig"),
     type: "click",
     callback: () => {
-      if (mx.search) {
-        return mx.search.showApiConfig();
+      if (mx_local.search) {
+        return mx_local.search.showApiConfig();
       }
     },
     group: "mapx_base",
@@ -989,7 +998,7 @@ export async function initMapx(o) {
       map: {},
       views: [],
     },
-    mx.maps[o.id],
+    maps[o.id],
   );
 
   /**
@@ -1129,7 +1138,7 @@ export async function initMapx(o) {
   // -> many function have an option for getting the map by id, but
   //    only one really exists. TODO: refactoring
   o.map = map;
-  mx.maps[o.id].map = map;
+  maps[o.id].map = map;
 
   /**
    * Wait for map to be loaded
@@ -1161,7 +1170,7 @@ export async function initMapx(o) {
      * Configure search tool
      */
     const key = await getSearchApiKey();
-    mx.search = new Search({
+    mx_local.search = new Search({
       key: key,
       container: "#mxTabPanelSearch",
       host: settings.search.host,
@@ -1174,7 +1183,7 @@ export async function initMapx(o) {
     /**
      * Init left panel
      */
-    mx.panel_main = new MainPanel({
+    mx_local.panel_main = new MainPanel({
       mapx: {
         version: getVersion(),
       },
@@ -1196,25 +1205,26 @@ export async function initMapx(o) {
     });
 
     if (!settings.initClosedPanels) {
-      mx.panel_main.panel.open();
+      panels.get("main_panel").open();
     }
 
     /**
      * Panels (static  handled later)
      */
     const panelState = getQueryParameter("panels")[0];
+    const panelControls = panels.get("controls_panel");
 
     if (isNotEmpty(panelState)) {
       panels.batch(panelState);
     } else if (!settings.initClosedPanels) {
-      panel_tools.panel.open();
+      panelControls.open();
     }
 
     /**
      * Build theme config inputs only when settings tab is displayed
      * On tab change to search, perform a search
      */
-    mx.panel_main.on("tab_change", async (id) => {
+    mx_local.panel_main.on("tab_change", async (id) => {
       try {
         switch (id) {
           case "tools":
@@ -1225,8 +1235,8 @@ export async function initMapx(o) {
             break;
 
           case "search":
-            await mx.search.initCheck();
-            mx.search._elInput.focus();
+            await mx_local.search.initCheck();
+            mx_local.search._elInput.focus();
             break;
 
           default:
@@ -1245,8 +1255,8 @@ export async function initMapx(o) {
       type: "language_change",
       idGroup: "search_index",
       callback: (data) => {
-        if (mx.search) {
-          mx.search.setLanguage({
+        if (mx_local.search) {
+          mx_local.search.setLanguage({
             language: data?.new_language,
           });
         }
@@ -1257,7 +1267,7 @@ export async function initMapx(o) {
       type: ["view_ui_open", "view_ui_close", "view_deleted"],
       idGroup: "search_index",
       callback: () => {
-        mx.search._update_toggles_icons();
+        mx_local.search._update_toggles_icons();
       },
     });
   }
@@ -1265,35 +1275,34 @@ export async function initMapx(o) {
   /**
    * Initial mode terrain 3d / Sat
    */
-  const ctrls = panel_tools.controls;
   const enable3d = getQueryParameter("t3d")[0];
   const enableSat = getQueryParameter("sat")[0];
   const enableGlobe = getQueryParameter("globe")[0];
   if (enable3d) {
-    ctrls.getButton("btn_3d_terrain").action("enable");
+    controls.get("btn_3d_terrain").action("enable");
   }
   if (enableSat) {
-    ctrls.getButton("btn_theme_sat").action("enable");
+    controls.get("btn_theme_sat").action("enable");
   }
   if (enableGlobe) {
-    ctrls.getButton("btn_globe").action("enable");
+    controls.get("btn_globe").action("enable");
   }
 
   /**
    * Add mapx draw handler
    */
-  mx.draw = new MapxDraw({
+  mx_local.draw = new MapxDraw({
     map: map,
-    panel_tools: panel_tools,
+    controls,
     url_help: settings.links.repositoryWikiDrawTool,
   });
-  mx.draw.on("enable", () => {
+  mx_local.draw.on("enable", () => {
     setClickHandler({
       type: "draw",
       enable: true,
     });
   });
-  mx.draw.on("disable", () => {
+  mx_local.draw.on("disable", () => {
     setClickHandler({
       type: "draw",
       enable: false,
@@ -1305,7 +1314,7 @@ export async function initMapx(o) {
    * - if `mx_info_box` attribute exist when hovering the map,
    *   this module will display an infobox
    */
-  mx.infobox = new MapInfoBox(map);
+  mx_local.infobox = new MapInfoBox(map);
 
   /**
    * Add controls
@@ -1491,7 +1500,7 @@ export async function initMapxStatic(o) {
    * Create button panel for legends
    * -> Story module add its own legend panel.
    */
-  mx.panel_legend = new ButtonPanel({
+  mx_local.panel_legend = new ButtonPanel({
     id: "legend_panel",
     elContainer: document.body,
     panelFull: true,
@@ -1518,7 +1527,7 @@ export async function initMapxStatic(o) {
     for (const view of mapData.views) {
       await viewLayersAdd({
         view: view,
-        elLegendContainer: mx.panel_legend.elPanelContent,
+        elLegendContainer: mx_local.panel_legend.elPanelContent,
         addTitle: true,
       });
     }
@@ -1541,11 +1550,12 @@ export async function initMapxStatic(o) {
    * Panels (app  handled in initMapx)
    */
   const panelState = getQueryParameter("panels")[0];
+  const panelControls = panels.get("controls_panel");
 
   if (isNotEmpty(panelState)) {
     panels.batch(panelState);
   } else if (!settings.initClosedPanels) {
-    panel_tools.panel.open();
+    panelControls.open();
   }
 
   events.fire({
@@ -1629,8 +1639,7 @@ export async function initMapxApp(opt) {
  */
 async function updateButtonGlobe() {
   const map = getMap();
-  const ctrls = panel_tools.controls;
-  const btnGlobe = ctrls.getButton("btn_globe");
+  const btnGlobe = controls.get("btn_globe");
   const hasMaxBounds = !!map.getMaxBounds();
 
   if (hasMaxBounds) {
@@ -1804,7 +1813,7 @@ async function attributesToEvent(layersAttributes, e) {
  * @param {String} o.idInput Which id to trigger in Shiny
  */
 export function getLocalForageData(o) {
-  const db = mx.data[o.idStore];
+  const db = mx_storage[o.idStore];
   db.getItem(o.idKey).then((item) => {
     Shiny.onInputChange(o.idInput, {
       item: item,
@@ -2292,7 +2301,7 @@ export async function getGeoJSONViewsFromStorage(o) {
   /**
    * extract views from local storage
    */
-  await mx.data.geojson.iterate((value) => {
+  await mx_storage.geojson.iterate((value) => {
     const view = value.view;
     if (view.project === project) {
       out.push(view);
@@ -2595,7 +2604,7 @@ export function getViewsListOpen() {
  * @return {Array} Array of views array
  */
 export function getViewsActive() {
-  return Array.from(viewsActive);
+  return Array.from(mx_local.views_active);
 }
 
 /**
@@ -2611,7 +2620,7 @@ export async function viewDelete(view) {
     return;
   }
   const vIndex = views.indexOf(view);
-  const geojsonData = mx.data.geojson;
+  const geojsonData = mx_storage.geojson;
 
   await viewLayersRemove({
     idView: view.id,
@@ -2668,7 +2677,7 @@ export async function viewLayersRemove(o) {
     prefix: o.idView,
   });
 
-  viewsActive.delete(view.id);
+  mx_local.views_active.delete(view.id);
 
   events.fire({
     type: "view_removed",
@@ -2887,7 +2896,6 @@ export function syncAll(o) {
     enabled = false;
   }
 
-  maps = mx.maps;
   ids = [];
 
   for (const m in maps) {
@@ -3003,8 +3011,8 @@ export async function viewLayersAdd(o) {
   if (o.idView) {
     o.idView = o.idView.split(settings.separators.sublayer)[0];
   }
-  if (!o.elLegendContainer && mx.panel_legend) {
-    o.elLegendContainer = mx.panel_legend.elPanelContent;
+  if (!o.elLegendContainer && mx_local.panel_legend) {
+    o.elLegendContainer = mx_local.panel_legend.elPanelContent;
   }
   const isStory = isStoryPlaying();
   const idLayerBefore = o.before
@@ -3112,7 +3120,7 @@ export async function viewLayersAdd(o) {
    */
   view._added_at = Date.now();
 
-  viewsActive.add(view.id);
+  mx_local.views_active.add(view.id);
 
   events.fire({
     type: "view_added",
@@ -3599,7 +3607,7 @@ async function viewLayersAddCc(o) {
 
   function addLayer(layer) {
     removeLayers();
-    map.addLayer(layer, mx.settings.layerBefore);
+    map.addLayer(layer, settings.layerBefore);
   }
 
   function setLegend(legend) {
@@ -3973,7 +3981,7 @@ export async function viewUiContent(id) {
     `[data-view_options_for='${view.id}']`,
   );
   if (elOptions) {
-    elOptions.innerHTML = mx.templates.viewListOptions(view);
+    elOptions.innerHTML = templates.viewListOptions(view);
   }
 
   /**
@@ -3983,10 +3991,10 @@ export async function viewUiContent(id) {
   const elFilters = elView.querySelector(`#view_filters_container_${view.id}`);
 
   if (elControls) {
-    elControls.innerHTML = mx.templates.viewListControls(view);
+    elControls.innerHTML = templates.viewListControls(view);
   }
   if (elFilters) {
-    elFilters.innerHTML = mx.templates.viewListFilters(view);
+    elFilters.innerHTML = templates.viewListFilters(view);
   }
   return true;
 }
@@ -4596,9 +4604,9 @@ export async function zoomToViewIdVisible(o) {
   let done;
   if (geomTemp.features.length > 0) {
     const bbx = bbox(geomTemp);
-    const sw = new mx.mapboxgl.LngLat(bbx[0], bbx[1]);
-    const ne = new mx.mapboxgl.LngLat(bbx[2], bbx[3]);
-    const llb = new mx.mapboxgl.LngLatBounds(sw, ne);
+    const sw = new mapboxgl.LngLat(bbx[0], bbx[1]);
+    const ne = new mapboxgl.LngLat(bbx[2], bbx[3]);
+    const llb = new mapboxgl.LngLatBounds(sw, ne);
     done = fitMaxBounds(llb);
   } else {
     done = zoomToViewId(o);
@@ -5096,8 +5104,8 @@ export function getMap(idMap) {
     return idMap;
   }
 
-  if (isId && mx.maps[idMap]) {
-    map = mx.maps[idMap].map;
+  if (isId && maps[idMap]) {
+    map = maps[idMap].map;
     map.id = idMap;
   }
 
@@ -5113,7 +5121,7 @@ export function getMap(idMap) {
  */
 export function getMapData(idMap) {
   idMap = idMap || settings.map.id;
-  const data = mx.maps[idMap || settings.map.id];
+  const data = maps[idMap || settings.map.id];
   data.id = idMap;
   return data;
 }
@@ -5310,16 +5318,15 @@ export function getViewsFilter(o) {
  */
 export function getMapPos(o) {
   o = o || {};
-  const ctrls = panel_tools.controls;
   const map = getMap(o.id);
   const bounds = map.getBounds();
   const center = map.getCenter();
   const zoom = map.getZoom();
   const bearing = map.getBearing();
   const pitch = map.getPitch();
-  const modeSat = ctrls.getButton("btn_theme_sat").isActive();
-  const mode3d = ctrls.getButton("btn_3d_terrain").isActive();
-  const modeGlobe = ctrls.getButton("btn_globe").isActive();
+  const modeSat = controls.get("btn_theme_sat").isActive();
+  const mode3d = controls.get("btn_3d_terrain").isActive();
+  const modeGlobe = controls.get("btn_globe").isActive();
   const idTheme = theme.id();
   const out = {
     n: round(bounds.getNorth()),

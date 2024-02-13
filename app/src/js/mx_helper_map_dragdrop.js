@@ -4,7 +4,7 @@ import { isUploadFileSizeValid } from "./mx_helper_upload_source.js";
 import { isView, isJson, isString } from "./is_test";
 import { viewsListAddSingle } from "./views_list_manager";
 import { moduleLoad } from "./modules_loader_async/index.js";
-import { settings } from "./settings";
+import { settings, data as mx_storage, mapboxgl } from "./mx.js";
 
 import {
   viewAdd,
@@ -177,7 +177,7 @@ export async function spatialDataToView(opt) {
       abstract: idRandom,
       fileType: "geojson",
     },
-    opt
+    opt,
   );
 
   /**
@@ -242,9 +242,9 @@ export async function spatialDataToView(opt) {
           m.extent[1] -= 1;
         }
 
-        const a = new mx.mapboxgl.LngLatBounds(
-          new mx.mapboxgl.LngLat(m.extent[0], m.extent[1]),
-          new mx.mapboxgl.LngLat(m.extent[2], m.extent[3])
+        const a = new mapboxgl.LngLatBounds(
+          new mapboxgl.LngLat(m.extent[0], m.extent[1]),
+          new mapboxgl.LngLat(m.extent[2], m.extent[3]),
         );
         fitMaxBounds(a);
       }
@@ -321,11 +321,11 @@ export async function spatialDataToView(opt) {
 }
 
 async function saveInLocalDb(opt) {
-  await mx.data.geojson.setItem(opt.view.id, {
+  await mx_storage.geojson.setItem(opt.view.id, {
     view: getViewJson(opt.view, { asString: false }),
   });
   console.log(
-    `Data saved and registered as geojson source. Id = ${opt.view.id} `
+    `Data saved and registered as geojson source. Id = ${opt.view.id} `,
   );
 }
 
@@ -410,7 +410,7 @@ export function handleFiles(files) {
       alert(
         `${f.name}: filename not valid. 
       Supported files – based on file extension – are :
-      ${JSON.stringify(Object.keys(exts))}`
+      ${JSON.stringify(Object.keys(exts))}`,
       );
       continue;
     }
