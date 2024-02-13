@@ -16,9 +16,7 @@ import { isString, isEmpty, isView, isArray } from "./../is_test";
 export class DashboardManager {
   constructor() {
     const dm = this;
-    dm.store = {
-      dashboard: null,
-    };
+    dm._dashboard = null;
   }
 
   /**
@@ -28,11 +26,11 @@ export class DashboardManager {
    */
   hasInstance() {
     const dm = this;
-    return dm.store.dashboard && !dm.store.dashboard.isDestroyed();
+    return dm._dashboard && !dm._dashboard.isDestroyed();
   }
 
   /**
-   * Retrieves the stored dashboard instance if it exists and is not destroyed.
+   * Retrieves the dashboard instance if it exists and is not destroyed.
    * @returns {Dashboard|null} The current dashboard instance or null if none
    * exists or it has been destroyed.
    */
@@ -41,7 +39,7 @@ export class DashboardManager {
     if (!dm.hasInstance()) {
       return;
     }
-    return dm.store.dashboard;
+    return dm._dashboard;
   }
 
   /**
@@ -57,7 +55,7 @@ export class DashboardManager {
       if (!dm.hasInstance()) {
         return;
       }
-      const d = d.getInstance();
+      const d = dm.getInstance();
       return d[cmd](value);
     } catch (e) {
       console.warn(e);
@@ -65,7 +63,7 @@ export class DashboardManager {
   }
 
   /**
-   * Destroys the stored dashboard instance if it exists.
+   * Destroys the dashboard instance if it exists.
    * @returns {void}
    */
   rmInstance() {
@@ -73,11 +71,11 @@ export class DashboardManager {
     if (!dm.hasInstance()) {
       return;
     }
-    return dm.store.dashboard.destroy();
+    return dm._dashboard.destroy();
   }
 
   /**
-   * Invokes the autoDestroy method on the stored dashboard instance, if it
+   * Invokes the autoDestroy method on the dashboard instance, if it
    * exists.
    * @returns {void}
    */
@@ -86,7 +84,7 @@ export class DashboardManager {
     if (!dm.hasInstance()) {
       return;
     }
-    return dm.store.dashboard.autoDestroy();
+    return dm._dashboard.autoDestroy();
   }
   /**
    * Retrieves the configuration for a view with dashoard
@@ -196,7 +194,7 @@ export class DashboardManager {
       return;
     }
 
-    dm.store.dashboard = new Dashboard({
+    dm._dashboard = new Dashboard({
       dashboard: {
         layout: config.layout,
       },
@@ -225,21 +223,21 @@ export class DashboardManager {
       },
     });
 
-    dm.store.dashboard.on("show", () => {
+    dm._dashboard.on("show", () => {
       const hasStory = isStoryPlaying();
       if (hasStory) {
         storyMapLock("unlock");
       }
     });
 
-    dm.store.dashboard.on("hide", () => {
+    dm._dashboard.on("hide", () => {
       const hasStory = isStoryPlaying();
       if (hasStory) {
         storyMapLock("lock");
       }
     });
 
-    dm.store.dashboard.on("destroy", () => {
+    dm._dashboard.on("destroy", () => {
       const hasStory = isStoryPlaying();
       if (hasStory) {
         storyMapLock("lock");
