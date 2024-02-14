@@ -38,12 +38,7 @@ const initQueryParams = {}; // set in init_common.js
 const listeners = new ListenerStore();
 const events = new EventSimple();
 const controls = new ControlsPanelInstance();
-/**
- * Magnifier demo
- * mx.mg.init(mx.helpers.getMap())
- * mx.mg.show();
- */
-const mg = new Magnifier();
+const mg = new Magnifier(); // see demo.js in /magnifier package
 const hinthack = new HintHack();
 const project = new ProjectManager();
 const ws = new WsHandlerMapx();

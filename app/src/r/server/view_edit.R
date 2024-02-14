@@ -717,7 +717,8 @@ observeEvent(input$viewRasterLegendTitles_init, {
 # Validate metadata
 #
 observeEvent(input$btnValidateViewMetadata, {
-  # will be validate by mxValidateMetadataModal (r) through client function (js) mx.helpers.validateMetadataModal
+  # will be validated by mxValidateMetadataModal through client, using
+  # validateMetadataModal
   jedTriggerGetValues("viewSourceMetadata", "validate")
 })
 
@@ -1134,7 +1135,7 @@ observe({
       } else {
         geomTypeSelected <- NULL
       }
-      
+
       if (isTRUE(variableName %in% variablesMain)) {
         variableMainSelected <- variableName
       } else {
