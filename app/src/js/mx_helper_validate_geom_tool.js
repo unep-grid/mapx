@@ -1,17 +1,19 @@
 import { settings } from "./settings";
 import { el } from "./el_mapx/index.js";
+import { getJSON, handleRequestMessage } from "./mx_helper_misc";
+import { getApiUrl } from "./api_routes";
+import { objToParams } from "./url_utils";
 
 export function getValidateSourceGeom(opt) {
   if (settings.user.guest) {
     return;
   }
 
-  var h = mx.helpers;
   var elForm = document.getElementById(opt.idForm);
   var elButtonValidate = document.getElementById(opt.idButtonValidate);
   var elListMessage = elForm.querySelector("#" + opt.idListMessage);
 
-  var host = h.getApiUrl("getSourceValidateGeom");
+  var host = getApiUrl("getSourceValidateGeom");
   var query = {
     idSource: opt.idSource,
     idUser: settings.user.id,
@@ -21,15 +23,14 @@ export function getValidateSourceGeom(opt) {
     autoCorrect: opt.autoCorrect || false,
     analyze: opt.analyze || true,
   };
-
-  var params = h.objToParams(query);
+  var params = objToParams(query);
   var url = host + "?" + params;
 
   enableButtons(false);
   elListMessage.innerHTML = "";
 
   try {
-    h.getJSON({
+    getJSON({
       maxWait: 1e3 * 120,
       url: url,
       onProgress: handleMessage,
@@ -51,7 +52,7 @@ export function getValidateSourceGeom(opt) {
   var messageStore = {};
 
   function handleMessage(msg) {
-    return h.handleRequestMessage(msg, messageStore, {
+    return handleRequestMessage(msg, messageStore, {
       result: function (msg) {
         var elMsg = el(
           "li",
@@ -62,27 +63,27 @@ export function getValidateSourceGeom(opt) {
             el("li", el("span", "Valid: " + msg.valid || false)),
             el(
               "li",
-              el("span", "Count of valid geometries: " + msg.stat.valid || 0)
+              el("span", "Count of valid geometries: " + msg.stat.valid || 0),
             ),
             el(
               "li",
               el(
                 "span",
-                "Count of invalid geometries: " + msg.stat.invalid || 0
-              )
+                "Count of invalid geometries: " + msg.stat.invalid || 0,
+              ),
             ),
             el(
               "li",
-              el("span", "Count of unknown validity: " + msg.stat.unknown || 0)
+              el("span", "Count of unknown validity: " + msg.stat.unknown || 0),
             ),
             el("li", el("span", "Cache enabled: " + msg.useCache || false)),
             el(
               "li",
-              el("span", "Automatic correction: " + msg.autoCorrect || false)
+              el("span", "Automatic correction: " + msg.autoCorrect || false),
             ),
-            el("li", el("span", "Analyze " + msg.analyze || false))
+            el("li", el("span", "Analyze " + msg.analyze || false)),
           ),
-          el("hr")
+          el("hr"),
         );
         elListMessage.appendChild(elMsg);
         enableButtons(true);
@@ -91,7 +92,7 @@ export function getValidateSourceGeom(opt) {
         var elErr = el(
           "li",
           { class: ["mx-log-item", "mx-log-red"] },
-          JSON.stringify(msg)
+          JSON.stringify(msg),
         );
         elListMessage.appendChild(elErr);
         enableButtons(true);
