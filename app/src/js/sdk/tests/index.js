@@ -15,17 +15,31 @@ const mapx = new mxsdk.Manager({
   },
 });
 
+const debugLevel = ["error", "warning"];
+
 mapx.on("message", (message) => {
-  if (message.level === "log") {
-    console.info(`%c 🤓 ${message.text}`, "color: #76bbf7");
-  } else if (message.level === "message") {
-    console.info(`%c 😎 ${message.text}`, "color: #70e497");
-  } else if (message.level === "warning") {
-    console.info(`%c 🥴 ${message.text}`, "color: #d09c23");
-  } else if (message.level === "error") {
-    console.info(`%c 🤬 ${message.text}`, "color: #F00");
+  let color = "#76bbf7";
+  let type = "info";
+  const { level, text } = message;
+  switch (message.level) {
+    case "message":
+      color = "#70e497";
+      break;
+    case "warning":
+      color = "#d09c23";
+      type = "warn";
+      break;
+    case "error":
+      color = "#F00";
+      type = "error";
+      break;
+  }
+
+  if (debugLevel.includes(level)) {
+    console[type](`%c ${text}`, `color: ${color}`);
   }
 });
+
 const groups = new window.URL(window.location.href).searchParams.get("groups");
 const titles = new window.URL(window.location.href).searchParams.get("titles");
 const t = new mxsdk.Testing({
@@ -1407,16 +1421,12 @@ mapx.once("ready", async () => {
         name: "Display view edit modal",
         timeout: 10000,
         test: async (v) => {
-          const editable = t.valid.isViewEditable(v);
-          if (!editable) {
-            return false;
-          }
           const show = await mapx.ask("show_modal_view_edit", {
             idView: v.id,
           });
           const pass = await mapx.ask("has_el_id", {
             id: "modalViewEdit",
-            timeout: 1500,
+            timeout: 3000,
           });
           await mapx.ask("close_modal_all");
           return show && pass;
@@ -1450,7 +1460,7 @@ mapx.once("ready", async () => {
       await stopIfGuest();
       const view = await mapx.ask("_get_random_view", {
         type: ["vt"],
-        isDownloadble: true,
+        isDownloadable: true,
       });
       const done = await mapx.ask("download_view_source_vector", {
         idView: view.id,

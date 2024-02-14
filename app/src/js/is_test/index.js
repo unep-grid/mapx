@@ -134,17 +134,6 @@ export function isViewGj(item) {
 export function isViewEditable(item) {
   return isView(item) && item._edit === true;
 }
-/**
- * Test if it's a MapX view is local
- * @param {Object} item to test
- */
-export function isViewLocal(item) {
-  return (
-    isView(item) &&
-    isArray(item._components) &&
-    item._components.includes("view_local")
-  );
-}
 
 /**
  * Test if view vt has style rules

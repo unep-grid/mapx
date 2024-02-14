@@ -6,7 +6,7 @@ import {
 import { Checkbox } from "./components/checkbox.js";
 import { Switch } from "./../switch/index.js";
 import { ListenerStore } from "./../listener_store/index.js";
-import { path } from "./../mx_helper_misc.js";
+import { debouncePromise, path } from "./../mx_helper_misc.js";
 import { el } from "../el/src/index.js";
 import { getDictItem } from "./../language";
 import { isElement, isEmpty } from "./../is_test/index.js";
@@ -39,14 +39,19 @@ class ViewsFilter {
     vf.initStorage(views);
     vf.initListeners();
     vf.initSwitchMode();
+    vf.update = debouncePromise(vf.update.bind(vf));
     vf.update();
   }
 
   async update() {
-    const vf = this;
-    vf.removeRules();
-    vf.updateViewsComponents();
-    await vf.updateCheckboxes();
+    try {
+      const vf = this;
+      vf.removeRules();
+      vf.updateViewsComponents();
+      await vf.updateCheckboxes();
+    } catch (e) {
+      console.error("ViewsFilter update error", e);
+    }
   }
 
   initStorage(views) {
@@ -91,12 +96,12 @@ class ViewsFilter {
       labelLeft: el(
         "div",
         { dataset: { lang_key: "filter_views_list_mode_intersection" } },
-        "Intersection"
+        "Intersection",
       ),
       labelRight: el(
         "div",
         { dataset: { lang_key: "filter_views_list_mode_union" } },
-        "Union"
+        "Union",
       ),
       onChange: (enabled) => {
         const op = enabled === true ? "union" : "intersection";
@@ -141,7 +146,7 @@ class ViewsFilter {
   getRuleByHash(hash) {
     return this._rules.reduce(
       (a, r) => (a ? a : r.hash === hash ? r : null),
-      null
+      null,
     );
   }
 
@@ -164,7 +169,7 @@ class ViewsFilter {
         group: null,
         enable: false,
       },
-      rule
+      rule,
     );
 
     const hash = [rule.group, rule.type, rule.id].join(":");
@@ -245,7 +250,7 @@ class ViewsFilter {
   getCheckbox(id, type) {
     return this.getCheckboxes().reduce(
       (a, t) => (!a && t._id === id && t_type === type ? t : a),
-      null
+      null,
     );
   }
 
@@ -258,7 +263,7 @@ class ViewsFilter {
         rules: [],
         mode: "intersection",
       },
-      opt
+      opt,
     );
 
     if (opt.reset) {
@@ -349,7 +354,7 @@ class ViewsFilter {
         value: [],
         state: true,
       },
-      opt
+      opt,
     );
 
     opt.state = opt.state === false ? false : true;
@@ -381,7 +386,7 @@ class ViewsFilter {
         value: "",
         state: false,
       },
-      opt
+      opt,
     );
 
     if (update) {
@@ -437,7 +442,7 @@ class ViewsFilter {
             a.push(v.id);
           }
           return a;
-        }, [])
+        }, []),
       );
     }
 
@@ -771,7 +776,7 @@ function elTitleKey(key) {
       class: "vf-checkbox-group-title",
       dataset: { lang_key: key },
     },
-    getDictItem(key)
+    getDictItem(key),
   );
 }
 
@@ -787,7 +792,7 @@ function elEmpty() {
       class: ["vf-checkbox-empty"],
       dataset: { lang_key: "view_filter_no_items" },
     },
-    getDictItem("view_filter_no_items")
+    getDictItem("view_filter_no_items"),
   );
 }
 

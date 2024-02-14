@@ -244,7 +244,6 @@ export function metersToDegrees(point) {
   };
 }
 
-
 /**
  * Export downloadViewVector from here, to match pattern
  *  map_helpers ->
@@ -254,7 +253,6 @@ export function metersToDegrees(point) {
  * Definied is this file.
  */
 export { downloadViewVector } from "./../source";
-
 
 /**
  * Download view geojson
@@ -4678,6 +4676,10 @@ export async function setMapPos(opt) {
     const center = new mapboxgl.LngLat(p.lng || 0, p.lat || 0);
     map.setMaxBounds(null);
 
+    if (isBoolean(p.globe)) {
+      await controls.get("btn_globe").action(p.globe ? "enable" : "disable");
+    }
+
     if (p.fitToBounds) {
       map.fitBounds(bounds, {
         duration,
@@ -5163,44 +5165,58 @@ const _get_random_view_default = {
   rtHasLegendLink: false,
   hasDashboard: false,
   isEditable: false,
-  isDownloadble: false,
+  isDownloadable: false,
   isLocal: false,
 };
 export async function getViewRandom(config) {
-  const opt = Object.assign({}, _get_random_view_default, config);
+  // Merge user config with default settings
+  const opt = {
+    ..._get_random_view_default,
+    ...config,
+  };
+
+  // Ensure opt.type is an array
   if (!isArray(opt.type)) {
     opt.type = [opt.type];
   }
-  const out = [];
+
+  // Retrieve all views
   const views = getViews();
+  const filteredViews = [];
 
+  // Filter views based on criteria
   for (const view of views) {
-    const type = view.type;
-    const hasType = opt.type.includes(type);
+    const { type } = view;
 
-    if (!hasType) {
+    // Check if the view type is among the types we're interested in
+    if (!opt.type.includes(type)) {
       continue;
     }
 
+    // Check if the view should be editable
     if (opt.isEditable && !isViewEditable(view)) {
       continue;
     }
 
+    // Check if the view should be local
     if (opt.isLocal && !isViewLocal(view)) {
       continue;
     }
 
-    if (opt.isDownloadble) {
-      const isDownloadble = await isViewDownloadableRemote(view);
-      if (!isDownloadble) {
+    // Check if the view should be downloadable
+    if (opt.isDownloadable) {
+      const isDownloadable = await isViewDownloadableRemote(view);
+      if (!isDownloadable) {
         continue;
       }
     }
 
+    // Check if the view should have a dashboard
     if (opt.hasDashboard && !isViewDashboard(view)) {
       continue;
     }
 
+    // Additional checks for specific types
     if (type === "vt") {
       if (opt.vtHasRules && !isViewVtWithRules(view)) {
         continue;
@@ -5221,10 +5237,18 @@ export async function getViewRandom(config) {
         continue;
       }
     }
-    out.push(view);
+
+    // If all checks pass, add the view to the filtered list
+    filteredViews.push(view);
   }
-  const pos = Math.floor(Math.random() * (out.length - 1));
-  return out[pos];
+
+  // Select a random view from the filtered list
+  if (filteredViews.length === 0) {
+    return null;
+  }
+
+  const randomIndex = Math.floor(Math.random() * filteredViews.length);
+  return filteredViews[randomIndex];
 }
 
 /**

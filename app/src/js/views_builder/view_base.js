@@ -1,7 +1,8 @@
-import { getLabelFromObjectPath } from "../language";
+import { getLabelFromObjectPath, updateLanguageElements } from "../language";
 import { el } from "../el/src/index.js";
 import { isElement, isViewOpen } from "../is_test_mapx/index.js";
 import { getView, getViewTitle } from "../map_helpers/index.js";
+import { setViewBadges } from "./../badges/index.js";
 import { events } from "../mx.js";
 
 class ViewBase {
@@ -82,102 +83,109 @@ class ViewBase {
     }
   }
 
-  build(enable) {
-    enable = !!enable;
-    const vb = this;
-    const view = vb._view;
-    const title = getLabelFromObjectPath({
-      obj: view,
-      path: "data.title",
-    });
+  async build(enable) {
+    try {
+      enable = !!enable;
+      const vb = this;
+      const view = vb._view;
+      const title = getLabelFromObjectPath({
+        obj: view,
+        path: "data.title",
+      });
 
-    const elButton = el("div", {
-      class: "mx-view-tgl-btn",
-    });
+      const elButton = el("div", {
+        class: "mx-view-tgl-btn",
+      });
 
-    const elTitle = el(
-      "span",
-      { class: ["mx-view-tgl-title", "li-drag-handle"] },
-      title,
-    );
+      const elTitle = el(
+        "span",
+        { class: ["mx-view-tgl-title", "li-drag-handle"] },
+        title,
+      );
 
-    const elBadges = el("div", {
-      id: "view_badges_" + view.id,
-      class: "mx-view-badges",
-    });
+      const elBadges = el("div", {
+        id: "view_badges_" + view.id,
+        class: "mx-view-badges",
+      });
 
-    const elClasses = el(
-      "span",
-      {
-        class: "mx-view-item-classes",
-      },
-      view.data.classes,
-      view.type,
-    );
-    const elIndex = el("span", {
-      class: "mx-view-item-index",
-    });
-    const elToggleMore = el(
-      "div",
-      {
-        class: "mx-view-tgl-more-container",
-      },
-      el("div", {
-        class: "mx-view-tgl-more",
-        dataset: {
-          view_options_for: view.id,
+      const elClasses = el(
+        "span",
+        {
+          class: "mx-view-item-classes",
         },
-      }),
-    );
-
-    const elInput = el("input", {
-      id: "check_view_enable_" + view.id,
-      class: "mx-view-tgl-input",
-      type: "checkbox",
-      role: "button",
-      "aria-label": `Open view ${title}`,
-      dataset: {
-        view_action_key: "btn_toggle_view",
-        view_action_target: view.id,
-      },
-    });
-
-    const elLabel = el(
-      "label",
-      {
-        class: ["mx-view-tgl-content"],
-        for: "check_view_enable_" + view.id,
-      },
-      elButton,
-      elTitle,
-      elBadges,
-      elClasses,
-      elIndex,
-    );
-
-    const elView = el(
-      "div",
-      {
-        dataset: {
-          view_id: view.id,
-          view_date_modified: view.date_modified,
-          view_title: title,
+        view.data.classes,
+        view.type,
+      );
+      const elIndex = el("span", {
+        class: "mx-view-item-index",
+      });
+      const elToggleMore = el(
+        "div",
+        {
+          class: "mx-view-tgl-more-container",
         },
-        class: ["mx-view-item", "mx-view-item-" + view.type, "noselect"],
-      },
-      elInput,
-      elLabel,
-      elToggleMore,
-    );
-    vb.el = elView;
-    vb.elInput = elInput;
-    vb.elToggleMore = elToggleMore;
-    vb.elBadges = elBadges;
-    vb.el._vb = this;
-    view._el = elView;
+        el("div", {
+          class: "mx-view-tgl-more",
+          dataset: {
+            view_options_for: view.id,
+          },
+        }),
+      );
 
-    if (enable) {
-      vb.open();
+      const elInput = el("input", {
+        id: "check_view_enable_" + view.id,
+        class: "mx-view-tgl-input",
+        type: "checkbox",
+        role: "button",
+        "aria-label": `Open view ${title}`,
+        dataset: {
+          view_action_key: "btn_toggle_view",
+          view_action_target: view.id,
+        },
+      });
+
+      const elLabel = el(
+        "label",
+        {
+          class: ["mx-view-tgl-content"],
+          for: "check_view_enable_" + view.id,
+        },
+        elButton,
+        elTitle,
+        elBadges,
+        elClasses,
+        elIndex,
+      );
+
+      const elView = el(
+        "div",
+        {
+          dataset: {
+            view_id: view.id,
+            view_date_modified: view.date_modified,
+            view_title: title,
+          },
+          class: ["mx-view-item", "mx-view-item-" + view.type, "noselect"],
+        },
+        elInput,
+        elLabel,
+        elToggleMore,
+      );
+      vb.el = elView;
+      vb.elInput = elInput;
+      vb.elToggleMore = elToggleMore;
+      vb.elBadges = elBadges;
+      vb.el._vb = this;
+      view._el = elView;
+      if (enable) {
+        vb.open();
+      }
+      await setViewBadges(view);
+      await updateLanguageElements({
+        el: vb.el,
+      });
+    } catch (e) {
+      console.error("ViewBase build error", e);
     }
   }
 }

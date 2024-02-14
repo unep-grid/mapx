@@ -134,7 +134,9 @@ class ResolversBase {
     opt = Object.assign({}, { type: ["vt", "rt"] }, opt);
     const view = await getViewRandom(opt);
     if (!isView(view)) {
-      throw new Error(`_get_random_view : no view found`);
+      throw new Error(
+        `_get_random_view : no view found ${JSON.stringify(opt)}`,
+      );
     }
     const vJson = getViewJson(view, { asString: false });
     return vJson;

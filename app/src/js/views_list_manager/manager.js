@@ -5,8 +5,6 @@ import { settings } from "./../settings";
 import { isTrue, isView, isArray } from "./../is_test_mapx";
 import { itemFlashSave } from "./../mx_helper_misc.js";
 import { getQueryParameterInit } from "./../url_utils";
-import { updateLanguageElements } from "./../language";
-import { updateViewsBadges, setViewBadges } from "./../badges/index.js";
 import { bindAll } from "./../bind_class_methods/index.js";
 import {
   viewModulesRemove,
@@ -64,8 +62,6 @@ export class ViewsListManager {
     }
     previousInstance = vlm;
     await vlm.render();
-    const views = vlm.views;
-    await updateViewsBadges({ views });
   }
 
   /**
@@ -292,15 +288,16 @@ export class ViewsListManager {
           await viewLayersAdd({
             view: view,
           });
-          await updateLanguageElements({
-            el: view._el,
-          });
-          await setViewBadges(view);
         }
         if (!update && open) {
           await viewAdd(view);
         }
       }
+
+      /**
+       * Update Filters
+       */
+      vlm.mData.viewsFilter.update();
     } catch (e) {
       console.error("handleRenderItemContent error", e);
     }
@@ -398,8 +395,6 @@ export class ViewsListManager {
       });
     } else {
       await li.addItem(options);
-      vlm.mData.viewsFilter.update();
-      await setViewBadges(view);
     }
 
     return options;

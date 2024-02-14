@@ -5,7 +5,7 @@ import {
   getLanguageCurrent,
   updateLanguage,
 } from "./../language/index.js";
-import { waitFrameAsync } from "./../animation_frame/index.js";
+import { waitTimeoutAsync } from "./../animation_frame/index.js";
 import {
   isStoryPlaying,
   getStoryId,
@@ -20,11 +20,10 @@ import {
   isEqual,
   isTrue,
 } from "../is_test/index.js";
-import { parseTemplate } from "../mx_helper_misc.js";
+import { debouncePromise, parseTemplate } from "../mx_helper_misc.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { getQueryParametersAsObject } from "../url_utils";
 import { modalMarkdown } from "../modal_markdown";
-import { Throttle } from "./throttle.js";
 
 import {
   getView,
@@ -64,8 +63,8 @@ export class ShareModal extends EventSimple {
     super();
     const sm = this;
     bindAll(sm);
+    sm.update = debouncePromise(sm.update.bind(sm));
     opt = Object.assign({}, def, opt);
-    sm._throttle_update = new Throttle(50);
     sm.init(opt).catch((err) => {
       console.error(err);
     });
@@ -178,30 +177,22 @@ export class ShareModal extends EventSimple {
 
   /**
    * Update
-   * @return {Promise<boolean>} done
+   * @return {Promise<Boolean>} done
    */
-  update() {
+  async update() {
     const sm = this;
-    return sm._throttle_update.exec(sm._update);
-  }
-
-  _update() {
-    const sm = this;
-    return new Promise((resolve) => {
-      sm._state.prevent.clear();
-      /* linked updates */
-      sm._update_state_form();
-      sm._update_state_views();
-      sm._update_options_visibility();
-      /* result update */
-      sm._update_messages();
-      sm._update_buttons();
-      sm._update_url();
-      sm._update_template();
-
-      sm.fire("updated");
-      resolve(true);
-    });
+    sm._state.prevent.clear();
+    /* linked updates */
+    sm._update_state_form();
+    sm._update_state_views();
+    sm._update_options_visibility();
+    /* result update */
+    sm._update_messages();
+    sm._update_buttons();
+    sm._update_url();
+    sm._update_template();
+    sm.fire("updated");
+    return true;
   }
 
   /**
@@ -322,7 +313,7 @@ export class ShareModal extends EventSimple {
       f.share_views_select === "share_views_select_method_story_itself";
     const storyInViews = getViews(idViews).reduce(
       (a, c) => a || c.type === "sm",
-      false
+      false,
     );
     return modeTargetStory || storyInViews;
   }
@@ -425,7 +416,7 @@ export class ShareModal extends EventSimple {
       sm.setClassDisable(sm._el_checkbox_map_pos_max, disableMaxPos),
       sm.setClassDisable(
         sm._el_checkbox_zoom,
-        targetStory || !hasViews || !modeStatic
+        targetStory || !hasViews || !modeStatic,
       ),
     ];
     if (out.some(isTrue)) {
@@ -558,7 +549,7 @@ export class ShareModal extends EventSimple {
       },
       {
         encodeURIComponent: !disableEncode,
-      }
+      },
     );
 
     /*
@@ -719,10 +710,10 @@ export class ShareModal extends EventSimple {
       sViews.length > 0
         ? "preselect"
         : isStoryPlaying()
-        ? "story"
-        : !!settings.mode.app
-        ? "app"
-        : "static";
+          ? "story"
+          : !!settings.mode.app
+            ? "app"
+            : "static";
   }
 
   build() {
@@ -744,12 +735,12 @@ export class ShareModal extends EventSimple {
       el(
         "label",
         { class: "share--label-group", for: "share_code" },
-        t("share_form_title")
+        t("share_form_title"),
       ),
       el(
         "small",
         { class: ["help-block", "text-muted"] },
-        t("share_mode_warn")
+        t("share_mode_warn"),
       ),
       sm._el_input,
     ]);
@@ -806,8 +797,8 @@ export class ShareModal extends EventSimple {
           sm._el_checkbox_map_pos_max,
           sm._el_checkbox_zoom,
           sm._el_checkbox_category_hide,
-        ]
-      )
+        ],
+      ),
     );
 
     /**
@@ -822,7 +813,7 @@ export class ShareModal extends EventSimple {
         sm._el_select_mode,
         sm._el_group_options,
         sm._el_container_validation,
-      ]
+      ],
     );
 
     /**
@@ -838,11 +829,15 @@ export class ShareModal extends EventSimple {
     sm.fire("built");
   }
 
+  /**
+   * TODO : convert that into individual tests, e.g. in SDK
+   */
   async tests() {
     const sm = this;
     const { default: tests } = await import("./tests.json");
     const results = [];
     const langCurrent = getLanguageCurrent();
+
     for (const test of tests) {
       /**
        * Clear open views
@@ -870,6 +865,7 @@ export class ShareModal extends EventSimple {
         if (!hasView) {
           idViewsAdded.add(view.id);
         }
+        console.log("share modal test views add single", view);
         const res = await viewsListAddSingle(view, { moveTop: true });
         if (!res) {
           console.error("View not added:", view?.id);
@@ -880,8 +876,8 @@ export class ShareModal extends EventSimple {
        * Set map setting (lat,lng,..theme,...3d,..sat);
        */
       await setMapPos({ param: test.pos });
-      await waitFrameAsync();
       await sm.setForm(test.form);
+      await waitTimeoutAsync(100);
 
       /**
        * Compare result
@@ -912,8 +908,8 @@ export class ShareModal extends EventSimple {
     console.log(
       `${tests.length} tests passed : ${results.reduce(
         (a, r) => a && r.passed,
-        true
-      )}`
+        true,
+      )}`,
     );
     return results.reduce((a, r) => a && r.passed, true);
   }

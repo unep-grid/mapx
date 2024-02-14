@@ -1,7 +1,9 @@
 import { getLanguagesAll } from "../language/index.js";
+import { settings } from "../mx.js";
 import { isObject, isArrayOf, isView } from "./../is_test/index.js";
 import { getView } from "./../map_helpers/index.js";
 export * from "./../is_test/index.js";
+
 /**
  * MapX specific method to extend 'is_test'
  */
@@ -59,4 +61,12 @@ export function isLanguageObjectArray(arr) {
 export function isViewOpen(view) {
   view = getView(view);
   return isView(view) && view._open === true;
+}
+
+/**
+ * Test if it's a MapX view is local
+ * @param {Object} item to test
+ */
+export function isViewLocal(item) {
+  return isView(item) && item?.project === settings?.project?.id;
 }

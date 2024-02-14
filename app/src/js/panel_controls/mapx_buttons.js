@@ -168,7 +168,6 @@ export function generateButtons() {
       classesIcon: ["fa", "fa-globe"],
       action: async function (cmd) {
         const choice = ["toggle", "enable", "disable"];
-
         await setMapProjection({
           globe: choice.includes(cmd) ? cmd : "toggle",
           origin: "button",
