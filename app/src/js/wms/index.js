@@ -2,6 +2,20 @@ import { miniCacheSet, miniCacheGet } from "./../minicache";
 import { mirrorUrlCreate } from "./../mirror_util";
 import { wmsBuildQueryUi } from "./ui.js";
 import { settings } from "./../settings";
+import { objToParams } from "../url_utils";
+import {
+  isArray,
+  isString,
+  isUrlValidWms,
+  isUrlHttps,
+  isObject,
+  isStringRange,
+} from "../is_test";
+import { moduleLoad } from "../modules_loader_async";
+import { fetchProgress_xhr } from "../mx_helper_fetch_progress";
+import { path } from "../mx_helper_misc";
+import { getMap } from "../map_helpers";
+
 export {
   wmsBuildQueryUi,
   wmsGetCapabilities,
@@ -24,7 +38,6 @@ export {
  *TODO: event delegation, destroy method
  */
 async function wmsGetCapabilities(baseUrl, opt) {
-  const h = mx.helpers;
   opt = Object.assign(
     {},
     {
@@ -32,9 +45,9 @@ async function wmsGetCapabilities(baseUrl, opt) {
       searchParams: null,
       useMirror: false,
     },
-    opt
+    opt,
   );
-  const queryString = h.objToParams(
+  const queryString = objToParams(
     Object.assign(
       {},
       {
@@ -42,45 +55,45 @@ async function wmsGetCapabilities(baseUrl, opt) {
         request: "GetCapabilities",
         version: "1.1.1",
       },
-      opt.searchParams
-    )
+      opt.searchParams,
+    ),
   );
   const ignoreCache = opt.useCache === false;
   const useMirror = opt.useMirror === true;
   const url = `${baseUrl}?${queryString}`;
 
-  if (!h.isUrlValidWms(url)) {
+  if (!isUrlValidWms(url)) {
     throw new Error(`wmsGetCapabilities requires valid wms URL`);
   }
 
-  if (!useMirror && !h.isUrlHttps(url)) {
+  if (!useMirror && !isUrlHttps(url)) {
     throw new Error(
       `wmsGetCapabilities requires ssl/tls enabled ('https:'). Tips: 
        - Use 'https:' protocol,
        - Request provider to use a ssl/tls certificate,
-       - Use a mirror.`
+       - Use a mirror.`,
     );
   }
 
-  const WMSCapabilities = await h.moduleLoad("wms-capabilities");
+  const WMSCapabilities = await moduleLoad("wms-capabilities");
 
   const dataCache = await miniCacheGet(url);
 
   if (!ignoreCache && dataCache) {
     console.log("WMS GetCapabilities from cache");
-    return h.path(dataCache, "Capability", {});
+    return path(dataCache, "Capability", {});
   }
 
   console.log("WMS GetCapabilities from server");
   const urlFetch = useMirror ? mirrorUrlCreate(url) : url;
-  const xmlString = await h.fetchProgress_xhr(urlFetch, {
+  const xmlString = await fetchProgress_xhr(urlFetch, {
     maxSize: settings.maxByteFetch,
     timeout: 2e4,
   });
 
   const dataFetch = new WMSCapabilities(xmlString).toJSON();
   miniCacheSet(url, dataFetch, { ttl: settings.maxTimeCache });
-  return h.path(dataFetch, "Capability", {});
+  return path(dataFetch, "Capability", {});
 }
 
 async function wmsGetLayers(baseUrl, opt) {
@@ -109,18 +122,13 @@ function layerFinder(layer, arr) {
 }
 
 function isWmsLayer(layer) {
-  const h = mx.helpers;
   return (
-    h.isObject(layer) &&
-    h.isStringRange(layer.Name, 1) &&
-    h.isStringRange(layer.Title, 1) &&
-    h.isArray(layer.BoundingBox) &&
+    isObject(layer) &&
+    isStringRange(layer.Name, 1) &&
+    isStringRange(layer.Title, 1) &&
+    isArray(layer.BoundingBox) &&
     layer.BoundingBox.length > 0
   );
-}
-
-function isArray(layer) {
-  return mx.helpers.isArray(layer);
 }
 
 /**
@@ -135,13 +143,12 @@ function isArray(layer) {
  */
 export async function wmsQuery(opt) {
   opt = Object.assign({}, opt);
-  const h = mx.helpers;
-  const map = opt.map || h.getMap();
+  const map = opt.map || getMap();
   const point = opt.point;
   const urlBase = opt.url;
   const modeObject = opt.asObject === true || false;
   const ignoreBbox = true;
-  const useMirror = h.path(opt, "optGetCapabilities.useMirror", false);
+  const useMirror = path(opt, "optGetCapabilities.useMirror", false);
   /**
    * Return fetch promise
    */
@@ -179,14 +186,14 @@ export async function wmsQuery(opt) {
    * Update formats using capabilities
    */
   const allowedFormatsInfo = ["application/json", "application/geojson"];
-  const formatsInfo = h.path(cap, "Request.GetFeatureInfo.Format", []);
-  const layersAll = h.path(cap, "Layer.Layer", []);
+  const formatsInfo = path(cap, "Request.GetFeatureInfo.Format", []);
+  const layersAll = path(cap, "Layer.Layer", []);
 
   query.info_format = allowedFormatsInfo.reduce((a, f) => {
     return !a ? (formatsInfo.indexOf(f) > -1 ? f : a) : a;
   }, null);
 
-  query.exception = h.path(cap, "Exception", [])[1];
+  query.exception = path(cap, "Exception", [])[1];
 
   /**
    * Test if layer is queryable
@@ -194,7 +201,7 @@ export async function wmsQuery(opt) {
   const layersQueryable = layersAll.reduce((a, l) => {
     let isQueryable = layers.indexOf(l.Name) > -1 && l.queryable === true;
 
-    if (!isQueryable && h.isArray(l.Layer)) {
+    if (!isQueryable && isArray(l.Layer)) {
       isQueryable = l.Layer.reduce((a, ll) => (a ? a : ll.queryable), false);
     }
 
@@ -208,13 +215,13 @@ export async function wmsQuery(opt) {
    * Validate
    */
   const validLayer = layersQueryable.length > 0;
-  const validInfo = h.isString(query.info_format);
-  const validException = h.isString(query.exception);
+  const validInfo = isString(query.info_format);
+  const validException = isString(query.exception);
 
   /**
    * Fetch or stop here
    */
-  const queryString = h.objToParams(query);
+  const queryString = objToParams(query);
   const url = `${urlBase}?${queryString}`;
 
   if (!validException || !validLayer || !validInfo) {
@@ -225,7 +232,7 @@ export async function wmsQuery(opt) {
       "Valid info format": validInfo,
     });
     throw new Error(
-      `Operation not permited by the requested server or layer, check console for details`
+      `Operation not permited by the requested server or layer, check console for details`,
     );
   }
 
@@ -266,7 +273,7 @@ export async function wmsQuery(opt) {
 }
 
 function urlTile(opt) {
-  let query = mx.helpers.objToParams({
+  let query = objToParams({
     bbox: "bbx_mapbox",
     service: "WMS",
     version: "1.1.1",
@@ -289,7 +296,7 @@ function urlTile(opt) {
 }
 
 function urlLegend(opt) {
-  const query = mx.helpers.objToParams({
+  const query = objToParams({
     service: "WMS",
     version: "1.1.1",
     style: "",
