@@ -107,6 +107,50 @@ mapx.once("ready", async () => {
     ],
   });
 
+  t.check("GeoJSON create view download geojson data", {
+    init: async () => {
+      const view = await mapx.ask("view_geojson_create", {
+        random: { n: 100 },
+        save: false,
+      });
+      const res = await mapx.ask("download_view_source_geojson", {
+        idView: view.id,
+      });
+      return {
+        data: res.data,
+        id: view.id,
+      };
+    },
+    tests: [
+      {
+        name: "has data",
+        test: (res) => {
+          return res.data.features.length === 100;
+        },
+      },
+      {
+        name: "has layers",
+        test: async (res) => {
+          const visibles = await mapx.ask("get_views_with_visible_layer");
+          return visibles.includes(res.id);
+        },
+      },
+      {
+        name: "properly removed",
+        test: async (res) => {
+          const removed = await mapx.ask("view_geojson_delete", {
+            idView: res.id,
+          });
+          await mapx.ask("map_jump_to", {
+            center: [-18.785, 65.267],
+            zoom: 6,
+          });
+          return removed;
+        },
+      },
+    ],
+  });
+
   t.check("panels", {
     init: async () => {
       return mapx.ask("panels_list");
@@ -1366,37 +1410,6 @@ mapx.once("ready", async () => {
     ],
   });
 
-  t.check("Load projects", {
-    init: () => {
-      return mapx.ask("get_projects");
-    },
-    tests: [
-      {
-        name: "is array of projects",
-        test: (r) => {
-          return t.valid.isProjectsArray(r);
-        },
-      },
-      {
-        name: "Change project",
-        timeout: 10000,
-        test: async (r) => {
-          const pos = Math.floor(Math.random() * (r.length - 1));
-          const newProject = r[pos].id;
-          const currProject = await mapx.ask("get_project");
-          const success = await mapx.ask("set_project", {
-            idProject: newProject,
-          });
-          if (success) {
-            return mapx.ask("set_project", { idProject: currProject });
-          } else {
-            return false;
-          }
-        },
-      },
-    ],
-  });
-
   t.check("Show edit view modal", {
     init: async () => {
       await stopIfGuest();
@@ -1484,41 +1497,32 @@ mapx.once("ready", async () => {
     ],
   });
 
-  t.check("GeoJSON create view download geojson data", {
-    init: async () => {
-      const view = await mapx.ask("view_geojson_create", {
-        random: { n: 100 },
-        save: false,
-      });
-      const res = await mapx.ask("download_view_source_geojson", {
-        idView: view.id,
-      });
-      return {
-        data: res.data,
-        id: view.id,
-      };
+  t.check("Load projects", {
+    init: () => {
+      return mapx.ask("get_projects");
     },
     tests: [
       {
-        name: "has data",
-        test: (res) => {
-          return res.data.features.length === 100;
+        name: "is array of projects",
+        test: (r) => {
+          return t.valid.isProjectsArray(r);
         },
       },
       {
-        name: "has layers",
-        test: async (res) => {
-          const visibles = await mapx.ask("get_views_with_visible_layer");
-          return visibles.includes(res.id);
-        },
-      },
-      {
-        name: "properly removed",
-        test: async (res) => {
-          const removed = await mapx.ask("view_geojson_delete", {
-            idView: res.id,
+        name: "Change project",
+        timeout: 10000,
+        test: async (r) => {
+          const pos = Math.floor(Math.random() * (r.length - 1));
+          const newProject = r[pos].id;
+          const currProject = await mapx.ask("get_project");
+          const success = await mapx.ask("set_project", {
+            idProject: newProject,
           });
-          return removed;
+          if (success) {
+            return mapx.ask("set_project", { idProject: currProject });
+          } else {
+            return false;
+          }
         },
       },
     ],

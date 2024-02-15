@@ -5,7 +5,6 @@ import {
   getLanguagesAll,
   updateLanguage,
 } from "../../../language/index.js";
-import { ViewBase } from "../../../views_builder/view_base.js";
 import {
   getMap,
   setImmersiveMode,
@@ -13,11 +12,8 @@ import {
   getViewsForJSON,
   getViewsLayersVisibles,
   getView,
-  getViewsBounds,
   getViewLegendImage,
-  getViewRemote,
   viewRemove,
-  viewAdd,
   viewDelete,
   downloadViewVector,
   downloadViewSourceExternal,
@@ -29,6 +25,7 @@ import {
   fitMaxBounds,
   validateBounds,
   viewsLayersOrderUpdate,
+  viewAddAuto,
 } from "../../../map_helpers/index.js";
 
 import {
@@ -763,25 +760,9 @@ export class MapxResolversStatic extends MapxResolversPanels {
    */
   async view_add(opt) {
     const rslv = this;
-    opt = Object.assign({}, { idView: null, zoomToView: false }, opt);
-    const view = getView(opt.idView) || (await getViewRemote(opt.idView));
-    const valid = isView(view);
-    if (!valid) {
+    const res = await viewAddAuto(opt.idView, opt);
+    if (!res) {
       return rslv._err("err_view_invalid");
-    }
-    const addViewToList =
-      !settings.mode.static && (!view._vb) instanceof ViewBase;
-
-    if (addViewToList) {
-      await viewsListAddSingle(view, { open: true });
-    } else {
-      await viewAdd(view);
-    }
-
-    if (opt.zoomToView) {
-      const bounds = await getViewsBounds(view);
-      const ok = fitMaxBounds(bounds);
-      return ok;
     }
     return true;
   }

@@ -2700,7 +2700,8 @@ export async function viewLayersRemove(o) {
  */
 export async function viewAdd(view) {
   try {
-    view = getView(view);
+    view = getView(view) || (await getViewRemote(view));
+
     if (!isView(view)) {
       return false;
     }
@@ -2727,6 +2728,36 @@ export async function viewAdd(view) {
     console.warn(e);
     return false;
   }
+}
+
+/**
+ * Automatically add and open a view
+ * - static/app mode
+ * - from local or remote source
+ * @param {string} idView View id
+ * @param {Object} options options
+ * @returns {Promise<boolean>}
+ */
+export async function viewAddAuto(idView, options) {
+  options = Object.assign({}, { zoomToView: false }, options);
+  const view = getView(idView) || (await getViewRemote(idView));
+  const valid = isView(view);
+  if (!valid) {
+    throw new Error("viewAddAuto : invalid view", idView);
+  }
+  const addToList = !!settings.mode.app;
+  if (addToList) {
+    await viewsListAddSingle(view, { open: true });
+  } else {
+    await viewAdd(view);
+  }
+
+  if (options.zoomToView) {
+    const bounds = await getViewsBounds(view);
+    const ok = fitMaxBounds(bounds);
+    return ok;
+  }
+  return true;
 }
 
 /**
