@@ -29,7 +29,7 @@
 }
 
 .mx .ct-widget .ct-section:hover {
-    background: var(--mx_ui_background_accent);
+  background: var(--mx_ui_background_accent);
 }
 
 .mx .ce-element--type-image:after,
