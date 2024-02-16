@@ -1,14 +1,13 @@
 import { ws } from "./../../mx.js";
-import { getApiRoute } from "../../api_routes/index.js";
 import { getLanguageCurrent } from "./../../language/index.js";
 
 async function get(route, config) {
-  const routeApi = getApiRoute(route);
   const language = getLanguageCurrent();
   const data = { language };
   Object.assign(data, config);
-  return ws.emitAsync(routeApi, data);
+  return ws.emitAsync(route, data);
 }
+
 
 /**
  * Retrieves a list of sources from the server.
@@ -23,7 +22,7 @@ async function get(route, config) {
  * @returns {Promise<Object>} A Promise that resolves to the list of editable sources.
  */
 export async function wsGetSourcesList(config) {
-  return get("sourceGetList", config);
+  return get("/client/source/get/list", config);
 }
 
 /**
@@ -35,5 +34,5 @@ export async function wsGetSourcesList(config) {
  * @returns {Promise<Object>} A Promise that resolves to the list of source columns.
  */
 export async function wsGetSourcesListColumns(config) {
-  return get("sourceGetListColumns", config);
+  return get("/client/source/get/list/columns", config);
 }

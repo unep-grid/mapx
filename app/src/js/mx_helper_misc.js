@@ -22,11 +22,12 @@ import copy from "fast-copy";
 import { settings, data as mx_storage } from "./mx.js";
 import { modalSelectSource } from "./select_auto/modals";
 import { isSourceId } from "./is_test";
-import { el } from "./el_mapx";
+import { el, tt } from "./el_mapx";
 import { cancelFrame, onNextFrame } from "./animation_frame";
 import { moduleLoad } from "./modules_loader_async";
 import { getDictItem } from "./language";
 import { readCookie } from "./mx_helper_cookies";
+import {modalDialog} from "./mx_helper_modal";
 
 /**
  * Test if Shiny is up
@@ -1568,6 +1569,44 @@ export function formatByteSize(bytes) {
     return (bytes / 1073741824).toFixed(3) + " GiB";
   }
 }
+/**
+ * File size checker
+ * @param {File||Object||String} file File or geojson to test
+ * @param {Object} opt Options
+ * @param {Boolean} opt.showModal Display a modal panel to warn the user
+ * @return {Promise<Boolean>} Is the file below limit =
+ */
+export async function isUploadFileSizeValid(file, opt) {
+  opt = Object.assign({}, { showModal: true }, opt);
+  const sizeMax = settings.api.upload_size_max;
+  const isFile = file instanceof File;
+  const isData = file && !isFile;
+
+  if (!isFile && !isData) {
+    throw new Error("maxSizeFileTest : input is not a file or data");
+  }
+
+  const size = await getSizeOf(file, false);
+  const sizeOk = size <= sizeMax;
+
+  if (sizeOk) {
+    return true;
+  }
+  if (opt.showModal) {
+    const sizeHuman = formatByteSize(sizeMax);
+    await modalDialog({
+      title: tt("api_upload_file_max_size_exceeded_title"),
+      id: "modal_max_size_exceeded",
+      content: tt("api_upload_file_max_size_exceeded", {
+        tooltip: false,
+        data: { size: sizeHuman },
+      }),
+    });
+  }
+  return sizeOk;
+}
+
+
 
 /**
  * Smooth scroll

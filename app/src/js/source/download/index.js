@@ -3,7 +3,6 @@ import { SelectAuto } from "../../select_auto";
 import { el, elSpanTranslate, elButtonFa, elAlert } from "./../../el_mapx";
 import { getLanguageCurrent, getLanguageItem } from "./../../language";
 import { isEmail, isArray, isNotEmpty } from "../../is_test";
-import { getApiRoute } from "../../api_routes";
 import { FlashItem } from "../../icon_flash";
 import { isSourceDownloadable } from "../../map_helpers";
 import { getSourceMetadata } from "../../metadata/utils.js";
@@ -95,8 +94,7 @@ export class DownloadSourceModal extends EventSimple {
       const opt = md._opt;
       const formIsValid = md.isValid();
       if (formIsValid) {
-        const route = getApiRoute("downloadSource");
-        ws.emit(route, opt);
+        ws.emit("/client/source/download", opt);
         nc.panel.open();
         md.close();
         new FlashItem("bell");

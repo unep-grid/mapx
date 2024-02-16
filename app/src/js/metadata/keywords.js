@@ -1,4 +1,3 @@
-import { getApiRoute } from "../api_routes";
 import { isEmpty } from "../is_test";
 
 import { ws } from "./../mx.js";
@@ -14,7 +13,7 @@ export async function getMetadataKeywords(search) {
   }
 
   const keywords = await ws.emitAsync(
-    getApiRoute("metadataKeywordsSearch"),
+    "/client/metadata/keywords/search",
     {
       keyword: search,
     },

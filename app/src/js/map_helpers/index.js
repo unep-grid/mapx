@@ -5326,9 +5326,8 @@ export async function isSourceDownloadable(idSource) {
   if (!isSourceId(idSource)) {
     return false;
   }
-  const route = getApiRoute("sourceGetServices");
   const res = await ws.emitAsync(
-    route,
+    "/client/source/get/services",
     { method: "is_downloadable", config: { idSource } },
     10e3,
   );
@@ -5342,7 +5341,7 @@ export async function isSourceDownloadable(idSource) {
  */
 export async function getSourceServices(idSource) {
   const res = await ws.emitAsync(
-    getApiRoute("sourceGetServices"),
+    "/client/source/get/services",
     { method: "get_services", config: { idSource } },
     10e3,
   );

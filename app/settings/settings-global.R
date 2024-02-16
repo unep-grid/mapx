@@ -140,7 +140,6 @@ config[["validation"]] <- list(
 # api configuration
 #
 routes_express <- as.list(fromJSON("./src/js/settings/routes_express.json"))
-routes_ws <- as.list(fromJSON("./src/js/settings/routes_ws.json"))
 config[["api"]] <- list(
   port = 3030,
   port_public = 8888,
@@ -148,7 +147,7 @@ config[["api"]] <- list(
   host_public = "locahost",
   protocol = "http:",
   upload_size_max = 200 * 1024^2, # 200MiB
-  routes = c(routes_ws, routes_express)
+  routes = c(routes_express)
 )
 
 #

@@ -36,7 +36,7 @@ export async function getSourceMetadata(idSource) {
   }
 
   const meta = await ws.emitAsync(
-    getApiRoute("sourceGetMetadata"),
+    "/client/source/get/metadata",
     {
       idSource,
     },
@@ -52,7 +52,7 @@ export async function getAttributesAlias(idSource, attributes) {
   }
 
   const aliases = await ws.emitAsync(
-    getApiRoute("sourceGetAttributesAlias"),
+    "/client/source/get/attributes/alias",
     {
       idSource,
       attributes,
@@ -72,7 +72,7 @@ export async function getViewMetadata(id) {
     return console.warn("getViewMetadata : invalid id");
   }
   const viewMeta = await ws.emitAsync(
-    getApiRoute("viewMetadata"),
+    "/client/view/get/metadata",
     {
       idView: id,
     },
@@ -92,7 +92,7 @@ export async function getViewSourceMetadata(view) {
     return [];
   }
   const metadata = await ws.emitAsync(
-    getApiRoute("viewSourceMetadata"),
+    "/client/view/source/get/metadata",
     {
       idView: view.id,
     },

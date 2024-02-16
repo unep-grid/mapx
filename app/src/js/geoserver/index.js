@@ -1,4 +1,3 @@
-import { getApiRoute } from "./../api_routes/index.js";
 import { nc, ws } from "./../mx.js";
 import { settings } from "./../settings";
 
@@ -8,7 +7,6 @@ export const geoserver = {
    *  - bind("mxGeoserverRebuild", geoserver.rebuild);
    */
   rebuild: (opt) => {
-    const route = getApiRoute("updateGeoserver");
     opt = Object.assign(
       {},
       {
@@ -27,7 +25,7 @@ export const geoserver = {
     }
 
     nc.panel.open();
-    ws.emit(route, config);
+    ws.emit("/client/geoserver/update", config);
     return true;
   },
 };

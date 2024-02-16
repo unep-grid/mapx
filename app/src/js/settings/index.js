@@ -1,9 +1,8 @@
 import * as styleDefault from "./../../data/style/style_mapx.json";
 import * as routesExpress from "./routes_express.json";
-import * as routesWs from "./routes_ws.json";
 import { version } from "./../../../package.json";
 
-const routes = Object.assign({}, routesWs.default, routesExpress.default);
+const routes = Object.assign({}, routesExpress.default);
 
 const settings = {
   title: "MapX",
