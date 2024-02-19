@@ -279,8 +279,8 @@ async function getColumnsMissingInJoin(joinConfig) {
 
   // Extracting attributes from views and checking against join configuration
   for (const view of views) {
-    const attributeNames = view?.data?.attribute?.names || [];
-    const attributeName = view?.data?.attribute?.name;
+    let attributeNames = view?.data?.attribute?.names || [];
+    let attributeName = view?.data?.attribute?.name;
     if (!isArray(attributeNames)) {
       attributeNames = [attributeNames];
     }
