@@ -59,6 +59,7 @@ const defaults = {
   max_changes_large: 1e3,
   max_columns: 1e3, // should match server
   timeout_emit: 1e3 * 60, // 10s round trip
+  timeout_emit_short: 1e3, // 1s round trip
   timeout_sanizing: 1e3 * 60,
   timeout_geom_valid: 1e3 * 120,
   events: {
@@ -240,6 +241,7 @@ export class EditTableSessionClient extends WsToolsBase {
     if (nPending === 0 || skip) {
       return true;
     }
+
     const discard = await modalConfirm({
       title: tt("edit_table_modal_quit_ignore_changes_title"),
       content: tt("edit_table_modal_quit_ignore_changes", {
@@ -310,7 +312,9 @@ export class EditTableSessionClient extends WsToolsBase {
       if (!discard) {
         return;
       }
-
+      /**
+       * Clean
+       */
       et._destroyed = true;
       et._lock_table_concurrent = false;
       et._lock_table_by_user_id = null;
@@ -319,9 +323,12 @@ export class EditTableSessionClient extends WsToolsBase {
           console.error(e);
         });
       }
-      et.emit(e.client_exit).catch((e) => {
-        console.error(e);
-      });
+
+      /**
+       * Close modal
+       * -> could trigger a destroy
+       */
+      et._modal?.close();
 
       /**
        * Auto reload views locally
@@ -329,6 +336,7 @@ export class EditTableSessionClient extends WsToolsBase {
        * -> here quick local reload, to see values changes
        */
       const tableViews = await et.getTableViews();
+
       if (tableViews) {
         const views = tableViews
           .map((row) => getView(row.id))
@@ -336,7 +344,14 @@ export class EditTableSessionClient extends WsToolsBase {
         await viewsReplace(views);
       }
 
-      et._modal?.close();
+      /**
+       * Emit exit
+       */
+      await et.emit(e.client_exit, null, et._config.timeout_emit_short);
+
+      /**
+       * Remove listeners, clear
+       */
       et._popups.forEach((p) => p.destroy());
       et._resize_observer?.disconnect();
       et._socket.off(e.server_joined, et.onJoined);
@@ -534,6 +549,7 @@ export class EditTableSessionClient extends WsToolsBase {
       buttons: elModalButtons,
       style: {
         minWidth: "800px",
+        top: "60px",
       },
       removeCloseButton: true,
       addBackground: true,
@@ -1296,22 +1312,30 @@ export class EditTableSessionClient extends WsToolsBase {
     }
 
     /**
-     * Show progress
+     * Empty array at start
      */
-
     if (table.start) {
       et._init_data.length = 0;
     }
 
+    /**
+     * Push rows
+     */
     et._init_data.push(...table.data);
 
+    /**
+     * If not end, wait for the next rows
+     */
     if (!table.end) {
       return;
     }
 
-    // Remove progress, replace data with the temporary one
-    table.data = et._init_data;
-    delete et._init_data;
+    /**
+     * Transfer rows
+     */
+    table.data.length = 0;
+    table.data.push(...et._init_data);
+    et._init_data.length = 0;
 
     /**
      * Build handsontable object
@@ -2959,12 +2983,6 @@ export class EditTableSessionClient extends WsToolsBase {
 
         const messageEmit = et.message_formater(message);
 
-        // Avoid sending emit if disconnected
-        /*   if (_et._socket.disconnected) {*/
-        /*console.warn("Disconnected message not sent", messageEmit);*/
-        /*return resolve(false);*/
-        /*}*/
-
         et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
           if (err) {
             console.error(err, messageEmit);
@@ -2993,7 +3011,7 @@ export class EditTableSessionClient extends WsToolsBase {
     return new Promise((resolve) => {
       et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
         if (err) {
-          console.error(type, message, err);
+          console.warn(type, message, err);
           return resolve(false);
         } else {
           return resolve(res);

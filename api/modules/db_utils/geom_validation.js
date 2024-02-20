@@ -19,7 +19,7 @@ const idGeomId = def.tables.layer_id_col;
  * @param {Boolean} useCache Use cache
  * @param {Boolean} autoCorrect Try an automatic correction
  * @param {Boolean} autoCorrect Try an automatic correction
- * @return {<Promise>Object} Geom validiy summary
+ * @return {Promise<Object>} Geom validiy summary
  */
 export async function isLayerValid(
   idLayer,

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "#root/*": ["./index.js"],
+      "#mapx/*": ["./modules/*/index.js"]
+    }
+  }
+}

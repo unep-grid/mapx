@@ -623,7 +623,7 @@ async function getSourceLastTimestamp(idSource, client = pgRead) {
  * Get source type
  * @param {String} idSource
  * @param {pg.Client} [client=pgRead] - PostgreSQL client to be used for the query. Defaults to `pgRead` if not provided.
- * @return {String} type
+ * @return {Promise<string>} type
  */
 async function getSourceType(idSource, client = pgRead) {
   if (!isSourceId(idSource)) {
@@ -877,6 +877,28 @@ async function updateViewsAttribute(idSource, oldName, newName, pgClient) {
 }
 
 /**
+ * Updates view attribute in batch using Promise.all to handle concurrency
+ * @async
+ * @param {array} updates  - Array of updates {id_source,old_column,new_column}
+ * @param {pg.Client} pgClient - The node-postgres client instance to use for database operations.
+ * @return {Promise<array>} Array of affected views
+ * @throws {Error} If an error occurs during the update operation.
+ */
+async function updateViewsAttributeBatch(updates, pgClient) {
+  const updatePromises = updates.map((update) =>
+    updateViewsAttribute(
+      update.id_source,
+      update.old_column,
+      update.new_column,
+      pgClient
+    )
+  );
+  const results = await Promise.all(updatePromises);
+  const views = results.flat();
+  return views;
+}
+
+/**
  * Duplicates a column in a PostgreSQL table.
  * Assumes transaction management is handled upstream.
  *
@@ -1048,6 +1070,7 @@ export {
   getTableDimension,
   renameTableColumn,
   updateViewsAttribute,
+  updateViewsAttributeBatch,
   duplicateTableColumn,
   removeTableColumn,
   addTableColumn,

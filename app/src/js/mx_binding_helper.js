@@ -16,7 +16,7 @@ import {
   viewDelete,
   viewsCloseAll,
 } from "./map_helpers/index.js";
-import { ws_tools, helpers as h } from "./mx.js";
+import { ws_tools } from "./mx.js";
 import { writeCookie } from "./mx_helper_cookies.js";
 import { renderUserProjectsList } from "./project/index.js";
 import { validateMetadataModal } from "./metadata/validation.js";
@@ -44,6 +44,7 @@ import {
 import { updateSettings } from "./mx_helper_settings.js";
 import {
   getQueryParametersInit,
+  setQueryParametersInit,
   setQueryParametersUpdate,
 } from "./url_utils/url_utils.js";
 import { wmsBuildQueryUi } from "./wms/ui.js";
@@ -75,7 +76,7 @@ function mapxBindings() {
   /**
    * Set init query parameters
    */
-  h.setQueryParametersInit();
+  setQueryParametersInit();
   input("urlSearchQuery", getQueryParametersInit());
   input("browserData", getBrowserData());
 

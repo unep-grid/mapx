@@ -48,7 +48,11 @@ observe({
           class = "btn btn-default"
         ),
         actionButton(
-          label = mxLabel("btn_edit_source_attributes_table", language, "table"),
+          label = mxLabel(
+            "btn_edit_source_attributes_table",
+            language,
+            "table"
+            ),
           inputId = "btnEditSourceTable",
           class = "btn btn-default"
         ),

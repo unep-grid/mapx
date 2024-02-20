@@ -34,8 +34,12 @@ export class WsToolsInstances {
    */
   getCb(type) {
     const wst = this;
-    return (config) => {
-      return wst.start(type, config);
+    return async (config) => {
+      try {
+        return wst.start(type, config);
+      } catch (e) {
+        await wst.remove(type);
+      }
     };
   }
 
@@ -54,21 +58,24 @@ export class WsToolsInstances {
   async start(type, config) {
     try {
       const wst = this;
-      let instance = wst.get(type);
-      if (instance) {
-        return instance;
+      const oldInstance = wst.get(type);
+
+      if (oldInstance && !oldInstance._destroyed) {
+        return oldInstance;
       }
-      instance = wst.resolver(type, config);
+      await wst.remove(type);
+      const instance = wst.resolver(type, config);
       wst._store[type] = instance;
       if (instance?.addDestroyCb) {
-        instance.addDestroyCb(() => {
-          delete wst._store[type];
+        instance.addDestroyCb(async () => {
+          await wst.remove(type);
         });
       }
       await instance.init();
       return instance;
     } catch (err) {
       console.error(err);
+      throw new Error(err);
     }
   }
 

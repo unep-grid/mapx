@@ -8,7 +8,6 @@ import {
   getTableDimension,
   isLayerValid,
   sanitizeUpdates,
-  updateViewsAttribute,
   renameTableColumn,
   duplicateTableColumn,
   removeTableColumn,
@@ -22,8 +21,13 @@ import {
   duplicateColumnMetadata,
   removeColumnMetadata,
   updateTableCellByGid,
+  updateViewsAttributeBatch,
 } from "#mapx/db_utils";
-import { getSourceAttributeTable, getSourceEditors } from "#mapx/source";
+import {
+  getSourceAttributeTable,
+  getSourceEditors,
+  updateJoinColumnsNames,
+} from "#mapx/source";
 import { randomString } from "#mapx/helpers";
 import {
   isEmpty,
@@ -549,7 +553,7 @@ class EditTableSession {
    */
   emitSpread(type, data) {
     const et = this;
-    et._socket.mx_emit_ws_gobal(type, data);
+    et._socket.mx_emit_ws_global(type, data);
   }
 
   /**
@@ -764,14 +768,10 @@ class EditTableSession {
             break;
           case "rename_column":
             {
+              /**
+               * Table and metadata
+               */
               await renameTableColumn(
-                id_table,
-                column_name,
-                column_name_new,
-                client
-              );
-
-              const views = await updateViewsAttribute(
                 id_table,
                 column_name,
                 column_name_new,
@@ -783,13 +783,40 @@ class EditTableSession {
                 column_name_new,
                 client
               );
-
               tables_update.add(id_table);
 
               postScripts.set(
                 `${id_table}_update_views_rename_rename`,
                 async () => {
-                  et.emitSpread(events.server_spread_views_update, { views });
+                  /**
+                   * Update joins
+                   */
+                  const updates = await updateJoinColumnsNames(
+                    id_table,
+                    column_name,
+                    column_name_new,
+                    client
+                  );
+
+                  /**
+                   * Update views's attribute
+                   * considering source update and join updates
+                   */
+                  const updateSourceViews = {
+                    id_table: id_table,
+                    old_column: column_name,
+                    new_column: column_name_new,
+                  };
+                  updates.push(updateSourceViews);
+
+                  const views = await updateViewsAttributeBatch(
+                    updates,
+                    client
+                  );
+
+                  et.emitSpread(events.server_spread_views_update, {
+                    views,
+                  });
                   await et.updateAltStyleClient(id_table);
                   return;
                 }

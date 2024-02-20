@@ -194,7 +194,6 @@ export function modal(o) {
    */
   document.body.appendChild(elModal);
 
-
   /*
    * Initial pinned status
    */
@@ -586,7 +585,9 @@ export function modalConfirm(opt) {
   let elModal;
   return new Promise((resolve) => {
     const elContent = el("div", opt.content);
-
+    const hasCbData = isFunction(opt.cbData);
+    const hasOnClose = isFunction(opt.onClose);
+    const hasCbInit = isFunction(opt.cbInit);
     const elBtnCancel = el(
       "button",
       {
@@ -613,12 +614,8 @@ export function modalConfirm(opt) {
           click: async (e) => {
             e.stopPropagation();
             e.preventDefault();
-            if (opt.cbData) {
-              const data = await opt.cbData(elModal, elContent);
-              resolve(data);
-            } else {
-              resolve(true);
-            }
+            const out = hasCbData ? await opt.cbData(elModal, elContent) : true;
+            resolve(out);
             elModal.close();
           },
         },
@@ -635,14 +632,13 @@ export function modalConfirm(opt) {
       buttons: [elBtnConfirm, elBtnCancel],
       addBackground: true,
       onClose: () => {
-        if (isFunction(opt.onClose)) {
+        if (hasOnClose) {
           opt.onClose();
         }
-        resolve();
       },
     });
 
-    if (opt.cbInit) {
+    if (hasCbInit) {
       opt.cbInit(elModal, elContent);
     }
   });
