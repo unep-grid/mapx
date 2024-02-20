@@ -192,8 +192,8 @@ MapX resolvers available in app only
     * [.tests_ws()](#MapxResolversStatic+tests_ws)
     * [.set_immersive_mode()](#MapxResolversStatic+set_immersive_mode) ⇒ <code>Boolean</code>
     * [.get_immersive_mode()](#MapxResolversStatic+get_immersive_mode) ⇒ <code>Boolean</code>
-    * [.set_3d_terrain(opt)](#MapxResolversStatic+set_3d_terrain)
     * [.set_mode_3d(opt)](#MapxResolversStatic+set_mode_3d)
+    * [.set_3d_terrain()](#MapxResolversStatic+set_3d_terrain)
     * [.set_mode_aerial(opt)](#MapxResolversStatic+set_mode_aerial)
     * [.show_modal_share(opt)](#MapxResolversStatic+show_modal_share) ⇒ <code>Boolean</code>
     * [.close_modal_share()](#MapxResolversStatic+close_modal_share) ⇒ <code>Boolean</code>
@@ -207,7 +207,7 @@ MapX resolvers available in app only
     * [.add_theme(opt)](#MapxResolversStatic+add_theme) ⇒ <code>Boolean</code>
     * [.has_el_id(opt)](#MapxResolversStatic+has_el_id)
     * [.set_dashboard_visibility(opt)](#MapxResolversStatic+set_dashboard_visibility) ⇒ <code>Boolean</code>
-    * [.is_dashboard_visible()](#MapxResolversStatic+is_dashboard_visible) ⇒ <code>Boolean</code>
+    * [.is_dashboard_visible()](#MapxResolversStatic+is_dashboard_visible) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.get_source_meta(opt)](#MapxResolversStatic+get_source_meta) ⇒ <code>Promise.&lt;(Object\|Array)&gt;</code>
     * [.get_view_source_summary(opt)](#MapxResolversStatic+get_view_source_summary) ⇒ <code>Object</code>
     * [.get_user_ip()](#MapxResolversStatic+get_user_ip) ⇒ <code>Object</code>
@@ -731,18 +731,6 @@ Get immersive mode state
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 **Returns**: <code>Boolean</code> - Enabled  
-<a name="MapxResolversStatic+set_3d_terrain"></a>
-
-#### mapxResolversApp.set\_3d\_terrain(opt)
-Enable or disable 3d terrain
-
-**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| opt | <code>Object</code> | Options |
-| opt.action | <code>String</code> | Action to perform: 'enable','disable','toggle' |
-
 <a name="MapxResolversStatic+set_mode_3d"></a>
 
 #### mapxResolversApp.set\_mode\_3d(opt)
@@ -756,6 +744,12 @@ Set related layers visibility, change control buttons state
 | opt | <code>Object</code> | Options |
 | opt.action | <code>String</code> | Action to perform: 'show','hide','toggle' |
 
+<a name="MapxResolversStatic+set_3d_terrain"></a>
+
+#### mapxResolversApp.set\_3d\_terrain()
+Enable or disable 3d terrain ( same as set_mode_3d;
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 <a name="MapxResolversStatic+set_mode_aerial"></a>
 
 #### mapxResolversApp.set\_mode\_aerial(opt)
@@ -888,11 +882,11 @@ Set dashboard visibility
 
 <a name="MapxResolversStatic+is_dashboard_visible"></a>
 
-#### mapxResolversApp.is\_dashboard\_visible() ⇒ <code>Boolean</code>
+#### mapxResolversApp.is\_dashboard\_visible() ⇒ <code>Promise.&lt;Boolean&gt;</code>
 Check if the dashboard is visible
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
-**Returns**: <code>Boolean</code> - The dashboard is visible  
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - The dashboard is visible  
 <a name="MapxResolversStatic+get_source_meta"></a>
 
 #### mapxResolversApp.get\_source\_meta(opt) ⇒ <code>Promise.&lt;(Object\|Array)&gt;</code>
@@ -1885,8 +1879,8 @@ MapX resolvers available in static and app
     * [.tests_ws()](#MapxResolversStatic+tests_ws)
     * [.set_immersive_mode()](#MapxResolversStatic+set_immersive_mode) ⇒ <code>Boolean</code>
     * [.get_immersive_mode()](#MapxResolversStatic+get_immersive_mode) ⇒ <code>Boolean</code>
-    * [.set_3d_terrain(opt)](#MapxResolversStatic+set_3d_terrain)
     * [.set_mode_3d(opt)](#MapxResolversStatic+set_mode_3d)
+    * [.set_3d_terrain()](#MapxResolversStatic+set_3d_terrain)
     * [.set_mode_aerial(opt)](#MapxResolversStatic+set_mode_aerial)
     * [.show_modal_share(opt)](#MapxResolversStatic+show_modal_share) ⇒ <code>Boolean</code>
     * [.close_modal_share()](#MapxResolversStatic+close_modal_share) ⇒ <code>Boolean</code>
@@ -1900,7 +1894,7 @@ MapX resolvers available in static and app
     * [.add_theme(opt)](#MapxResolversStatic+add_theme) ⇒ <code>Boolean</code>
     * [.has_el_id(opt)](#MapxResolversStatic+has_el_id)
     * [.set_dashboard_visibility(opt)](#MapxResolversStatic+set_dashboard_visibility) ⇒ <code>Boolean</code>
-    * [.is_dashboard_visible()](#MapxResolversStatic+is_dashboard_visible) ⇒ <code>Boolean</code>
+    * [.is_dashboard_visible()](#MapxResolversStatic+is_dashboard_visible) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.get_source_meta(opt)](#MapxResolversStatic+get_source_meta) ⇒ <code>Promise.&lt;(Object\|Array)&gt;</code>
     * [.get_view_source_summary(opt)](#MapxResolversStatic+get_view_source_summary) ⇒ <code>Object</code>
     * [.get_user_ip()](#MapxResolversStatic+get_user_ip) ⇒ <code>Object</code>
@@ -2031,18 +2025,6 @@ Get immersive mode state
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 **Returns**: <code>Boolean</code> - Enabled  
-<a name="MapxResolversStatic+set_3d_terrain"></a>
-
-#### mapxResolversStatic.set\_3d\_terrain(opt)
-Enable or disable 3d terrain
-
-**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| opt | <code>Object</code> | Options |
-| opt.action | <code>String</code> | Action to perform: 'enable','disable','toggle' |
-
 <a name="MapxResolversStatic+set_mode_3d"></a>
 
 #### mapxResolversStatic.set\_mode\_3d(opt)
@@ -2056,6 +2038,12 @@ Set related layers visibility, change control buttons state
 | opt | <code>Object</code> | Options |
 | opt.action | <code>String</code> | Action to perform: 'show','hide','toggle' |
 
+<a name="MapxResolversStatic+set_3d_terrain"></a>
+
+#### mapxResolversStatic.set\_3d\_terrain()
+Enable or disable 3d terrain ( same as set_mode_3d;
+
+**Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
 <a name="MapxResolversStatic+set_mode_aerial"></a>
 
 #### mapxResolversStatic.set\_mode\_aerial(opt)
@@ -2188,11 +2176,11 @@ Set dashboard visibility
 
 <a name="MapxResolversStatic+is_dashboard_visible"></a>
 
-#### mapxResolversStatic.is\_dashboard\_visible() ⇒ <code>Boolean</code>
+#### mapxResolversStatic.is\_dashboard\_visible() ⇒ <code>Promise.&lt;Boolean&gt;</code>
 Check if the dashboard is visible
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Boolean</code> - The dashboard is visible  
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - The dashboard is visible  
 <a name="MapxResolversStatic+get_source_meta"></a>
 
 #### mapxResolversStatic.get\_source\_meta(opt) ⇒ <code>Promise.&lt;(Object\|Array)&gt;</code>

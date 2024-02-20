@@ -1,3 +1,17 @@
+  - [1.13.0-alpha.27](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.27) 
+
+    - Table Editor: Enhanced to propagate column name changes through joins and views that depend on the join.
+    - Reassignment Issue: Addressed and resolved.
+    - StoryMap Editor: Improved CSS formatting for better presentation.
+    - WS Routes/Event ID: Simplified by removing from config and using event IDs directly in emitters.
+    - StoryMap: Enhanced text editor CSS for minimal support in dark theme.
+    - Map Helpers: Introduced `viewAddAuto` method for automatic view addition, updated SDK accordingly.
+    - View Management: Streamlined view management flow, eliminated duplicate steps, and resolved issues with view selection process and sharing manager.
+    - Refactoring: Transitioned from using global objects (mx) and helpers to preferring imports for better modularity and maintainability.
+    - WMS Module: Refactored to reduce reliance on global objects and helpers, promoting the use of imports.
+    - Dashboard Management: Fixed an issue and simplified dashboard storage logic, acknowledging that multi-dashboard configuration is not feasible.
+    - Dashboard Manager: Refactored calls for improved efficiency and maintainability.
+
   - [1.13.0-alpha.26](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.26) 
 
     - Toolbox
