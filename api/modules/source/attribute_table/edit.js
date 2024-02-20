@@ -778,7 +778,6 @@ class EditTableSession {
                 client
               );
 
-              
               await renameColumnMetadata(
                 id_table,
                 column_name,
