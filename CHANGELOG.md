@@ -1,3 +1,8 @@
+  - [1.13.0-alpha.28](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.28) 
+
+    - Upload 
+        - Missing socket event id 
+
   - [1.13.0-alpha.27](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.27) 
 
     - Table Editor: Enhanced to propagate column name changes through joins and views that depend on the join.
