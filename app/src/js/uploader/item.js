@@ -10,7 +10,6 @@ import { el, elCheckbox, elSpanTranslate as tt, elDetails } from "./../el_mapx";
 import { isArray, isEmpty, isBooleanCoercible } from "../is_test";
 import { bindAll } from "../bind_class_methods";
 import { SelectAuto } from "../select_auto";
-import { getApiRoute } from "./../api_routes";
 import { settings as mx_settings } from "./../settings";
 import { ws, nc } from "./../mx.js";
 import { Issue } from "./issue.js";
@@ -645,13 +644,12 @@ export class Item {
    * @returns {Object} response
    */
   async _emit_chunk(chunk) {
-    const route = getApiRoute("uploadSource");
 
     if (chunk.first) {
       nc.panel.height = 200;
       nc.panel.open();
     }
-    const res = await ws.emitAsync(route, chunk, 10e3);
+    const res = await ws.emitAsync('/client/source/upload', chunk, 10e3);
 
     if (res.status === "uploaded") {
       return true;

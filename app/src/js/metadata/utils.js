@@ -1,6 +1,5 @@
 import { getGemetConcept, getGemetConceptLink } from "./../gemet_util/index.js";
 import { el, elAuto, elPanel, elSpanTranslate } from "./../el_mapx";
-import { getApiRoute } from "./../api_routes";
 import { theme } from "./../mx";
 import { getView, getViewRemote } from "./../map_helpers";
 import { modal } from "./../mx_helper_modal.js";
