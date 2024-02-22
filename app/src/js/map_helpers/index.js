@@ -38,7 +38,7 @@ import { NotifCenter } from "./../notif_center/";
 import { cleanDiacritic } from "./../string_util/";
 import chroma from "chroma-js";
 import { mirrorUrlCreate } from "./../mirror_util";
-import { getApiRoute, getAppPathUrl } from "./../api_routes/index.js";
+import { getAppPathUrl } from "./../api_routes/index.js";
 import { isStoryPlaying, storyRead } from "./../story_map/index.js";
 import { fetchViews } from "./../mx_helper_map_view_fetch.js";
 import { wmsQuery } from "./../wms/index.js";

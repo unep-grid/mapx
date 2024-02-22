@@ -259,6 +259,7 @@ class EditTableSession {
     const et = this;
     et.emit(events.server_error, {
       message: txt,
+      error: err?.message || err,
       id_room: et._id_room,
     });
     console.error(txt, err);
@@ -332,7 +333,6 @@ class EditTableSession {
       });
       callback(out);
     } catch (e) {
-      console.error(e);
       et.error("Validation failed. Check logs", e);
       callback(false);
     } finally {
@@ -417,8 +417,8 @@ class EditTableSession {
 
       et.dispatch(message);
     } catch (e) {
-      console.warn(e.message);
       callback(false);
+      et.error("Update error", e);
     }
     callback(true);
   }
@@ -777,6 +777,8 @@ class EditTableSession {
                 column_name_new,
                 client
               );
+
+              
               await renameColumnMetadata(
                 id_table,
                 column_name,
@@ -785,35 +787,33 @@ class EditTableSession {
               );
               tables_update.add(id_table);
 
+              /**
+               * Update joins
+               */
+              // debug note : table correctly updated here !
+              const updates = await updateJoinColumnsNames(
+                id_table,
+                column_name,
+                column_name_new,
+                client
+              );
+
+              /**
+               * Update views's attribute
+               * considering source update and join updates
+               */
+              const updateSourceViews = {
+                id_table: id_table,
+                old_column: column_name,
+                new_column: column_name_new,
+              };
+              updates.push(updateSourceViews);
+
+              const views = await updateViewsAttributeBatch(updates, client);
+
               postScripts.set(
                 `${id_table}_update_views_rename_rename`,
                 async () => {
-                  /**
-                   * Update joins
-                   */
-                  const updates = await updateJoinColumnsNames(
-                    id_table,
-                    column_name,
-                    column_name_new,
-                    client
-                  );
-
-                  /**
-                   * Update views's attribute
-                   * considering source update and join updates
-                   */
-                  const updateSourceViews = {
-                    id_table: id_table,
-                    old_column: column_name,
-                    new_column: column_name_new,
-                  };
-                  updates.push(updateSourceViews);
-
-                  const views = await updateViewsAttributeBatch(
-                    updates,
-                    client
-                  );
-
                   et.emitSpread(events.server_spread_views_update, {
                     views,
                   });
@@ -829,12 +829,11 @@ class EditTableSession {
               `Error during write: unknow method: ${update.type}`
             );
         }
-
-        /**
-         * Update table date_modifed
-         */
       }
 
+      /**
+       * Update table date_modifed
+       */
       for (const id_table of tables_update) {
         await updateMxSourceTimestamp(id_table, client);
       }
@@ -845,7 +844,7 @@ class EditTableSession {
       await client.query("COMMIT");
     } catch (e) {
       await client.query("ROLLBACK");
-      throw e;
+      throw new Error(e);
     } finally {
       client.release();
     }

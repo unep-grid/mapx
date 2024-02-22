@@ -1921,8 +1921,8 @@
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
-    "es": "¿Estás seguro de que quieres cambiar el nombre de la columna?<code> {{column_name}}</code> a<code> {{column_name_new}}</code> ?"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?<br> Objects and dependencies stored in the DB will be updated seamlessly, but custom scripts such as those used in dashboards, custom styles, or hardcoded SQL queries should be updated manually.",
+    "es": "¿Estás seguro de que deseas renombrar la columna <code>{{column_name}}</code> a <code>{{column_name_new}}</code>?<br> Los objetos y dependencias almacenados en la base de datos se actualizarán de forma transparente, pero los scripts personalizados, como los utilizados en paneles de control, estilos personalizados o consultas SQL codificadas directamente, deben actualizarse manualmente."
   },
   {
     "id": "btn_edit_rename_column",

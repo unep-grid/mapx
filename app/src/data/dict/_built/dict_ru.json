@@ -1921,8 +1921,8 @@
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
-    "ru": "Вы уверены, что хотите переименовать столбец<code> {{column_name}}</code> к<code> {{column_name_new}}</code> ?"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?<br> Objects and dependencies stored in the DB will be updated seamlessly, but custom scripts such as those used in dashboards, custom styles, or hardcoded SQL queries should be updated manually.",
+    "ru": "Вы уверены, что хотите переименовать столбец <code>{{column_name}}</code> в <code>{{column_name_new}}</code>?<br> Объекты и зависимости, хранящиеся в базе данных, будут обновлены автоматически, но пользовательские скрипты, такие как используемые в панелях мониторинга, пользовательские стили или жестко закодированные SQL-запросы, должны быть обновлены вручную."
   },
   {
     "id": "btn_edit_rename_column",

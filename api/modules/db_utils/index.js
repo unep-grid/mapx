@@ -87,7 +87,7 @@ async function sanitizeUpdate(update) {
  * }
  *
  * @param {Array} updates Array of update  * @return {Boolean} ok
- * @return {Array} Array of updates, with new update.value_sanitized
+ * @return {Promise<Array>} Array of updates, with new update.value_sanitized
  */
 async function sanitizeUpdates(updates) {
   try {
@@ -131,9 +131,8 @@ async function tableExists(idTable, schema = "public", client = pgRead) {
  * @param {pg.Client} pgClient - The node-postgres client.
  * @return {Promise<Boolean>} Table exists
  */
-async function columnExists(idColumn, idTable, client) {
+async function columnExists(idColumn, idTable, client = pgRead) {
   try {
-    const pgClient = client || pgRead;
     const sql = `
     SELECT EXISTS ( 
     SELECT 1
@@ -141,7 +140,7 @@ async function columnExists(idColumn, idTable, client) {
     WHERE table_name=$1 
     AND column_name=$2
     )`;
-    const res = await pgClient.query(sql, [idTable, idColumn]);
+    const res = await client.query(sql, [idTable, idColumn]);
     const exists = res.rowCount > 0 && res.rows[0].exists;
     return exists;
   } catch (e) {
@@ -800,12 +799,16 @@ async function getLayerUsedAttributes(idLayer) {
  * @param {pg.Client} pgClient - The node-postgres client instance to use for database operations.
  * @throws {Error} If an error occurs during the update operation.
  */
-async function renameTableColumn(idSource, oldName, newName, pgClient) {
+async function renameTableColumn(
+  idSource,
+  oldName,
+  newName,
+  pgClient = pgWrite
+) {
   try {
     /**
      * Use existing client in case of rallback
      */
-    pgClient = pgClient || pgWrite;
 
     if (oldName === newName) {
       console.log("Old and new names are the same, no update needed.");

@@ -1921,8 +1921,8 @@
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
-    "bn": "আপনি কি নিশ্চিত যে আপনি কলামটির নাম পরিবর্তন করতে চান৷<code> {{column_name}}</code> প্রতি<code> {{column_name_new}}</code> ?"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?<br> Objects and dependencies stored in the DB will be updated seamlessly, but custom scripts such as those used in dashboards, custom styles, or hardcoded SQL queries should be updated manually.",
+    "bn": "আপনি কি নিশ্চিত যে আপনি কলাম <code>{{column_name}}</code> এর নাম পরিবর্তন করে <code>{{column_name_new}}</code> করতে চান?<br> ডাটাবেসে সংরক্ষিত অবজেক্ট এবং নির্ভরতা সমূহ সহজে আপডেট হবে, তবে ড্যাশবোর্ডে ব্যবহৃত, কাস্টম স্টাইল বা হার্ডকোডেড SQL কোয়েরির মতো কাস্টম স্ক্রিপ্টগুলি ম্যানুয়ালি আপডেট করতে হবে।"
   },
   {
     "id": "btn_edit_rename_column",

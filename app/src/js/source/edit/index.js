@@ -1189,7 +1189,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async validateNewName(name) {
     const et = this;
-    const minLength = 3;
+    const minLength = 1;
     const maxLength = 50;
     const validUnique = !et.columnNameExists(name);
     const validName = await et.isValidName(name, [
@@ -1596,6 +1596,7 @@ export class EditTableSessionClient extends WsToolsBase {
   async onServerError(error) {
     const et = this;
     try {
+      
       console.error("server error", error);
 
       if (!et._config.test_mode) {
@@ -2380,7 +2381,7 @@ export class EditTableSessionClient extends WsToolsBase {
     }
 
     if (isNotEmpty(name) && et.columnNameExists(name)) {
-      name = `${name}_${makeId(5)}`;
+      name = `${name}_${makeId(5, true)}`;
     }
 
     const columnName = await modalPrompt({
@@ -2389,7 +2390,7 @@ export class EditTableSessionClient extends WsToolsBase {
       confirm: tt("btn_next"),
       inputOptions: {
         type: "text",
-        value: name || `new_column_${makeId(5)}`,
+        value: name || `new_column_${makeId(5, true)}`,
         placeholder: "Column name",
       },
       onInput: async (name, elBtnConfirm, elMessage) => {
@@ -2444,7 +2445,7 @@ export class EditTableSessionClient extends WsToolsBase {
         et._button_enable(elBtnConfirm, valid);
       },
     });
-    return columnName;
+    return makeSafeName(columnName);
   }
 
   /*

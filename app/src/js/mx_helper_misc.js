@@ -27,7 +27,7 @@ import { cancelFrame, onNextFrame } from "./animation_frame";
 import { moduleLoad } from "./modules_loader_async";
 import { getDictItem } from "./language";
 import { readCookie } from "./mx_helper_cookies";
-import {modalDialog} from "./mx_helper_modal";
+import { modalDialog } from "./mx_helper_modal";
 
 /**
  * Test if Shiny is up
@@ -1190,31 +1190,38 @@ export function getXML(o) {
 /**
  * Create a random ASCII string of given length
  * @param {integer} n - The length of the string. If not set, a UUID will be returned.
+ * @param {boolean} lowercase - Return a lowercase string
  * @returns {string} A random ASCII string or a UUID.
  */
-export function makeId(n) {
+export function makeId(n, lowercase = false) {
+  let out = "";
+
   if (!n) {
-    return crypto.randomUUID();
+    out = crypto.randomUUID();
+  } else {
+    const array = new Uint8Array(n); 
+    window.crypto.getRandomValues(array);
+    out = array.reduce((acc, byte) => {
+      const code = byte % 62;
+      let charCode;
+      if (code < 10) {
+        // Numeric (0-9)
+        charCode = code + 48;
+      } else if (code < 36) {
+        // Uppercase Alphabet (A-Z)
+        charCode = code + 55;
+      } else {
+        // Lowercase Alphabet (a-z)
+        charCode = code + 61;
+      }
+      return acc + String.fromCharCode(charCode);
+    }, "");
   }
-
-  const array = new Uint8Array(n); // Corrected to use 'n' instead of 'length'
-  window.crypto.getRandomValues(array);
-
-  return array.reduce((acc, byte) => {
-    const code = byte % 62;
-    let charCode;
-    if (code < 10) {
-      // Numeric (0-9)
-      charCode = code + 48;
-    } else if (code < 36) {
-      // Uppercase Alphabet (A-Z)
-      charCode = code + 55;
-    } else {
-      // Lowercase Alphabet (a-z)
-      charCode = code + 61;
-    }
-    return acc + String.fromCharCode(charCode);
-  }, "");
+  if (lowercase) {
+    return out.toLowerCase();
+  } else {
+    return out;
+  }
 }
 
 /**
@@ -1605,8 +1612,6 @@ export async function isUploadFileSizeValid(file, opt) {
   }
   return sizeOk;
 }
-
-
 
 /**
  * Smooth scroll

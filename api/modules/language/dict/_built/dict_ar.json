@@ -1921,8 +1921,8 @@
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
-    "ar": "هل أنت متأكد أنك تريد إعادة تسمية العمود<code> {{column_name}}</code> ل<code> {{column_name_new}}</code> ؟"
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?<br> Objects and dependencies stored in the DB will be updated seamlessly, but custom scripts such as those used in dashboards, custom styles, or hardcoded SQL queries should be updated manually.",
+    "ar": "هل أنت متأكد أنك تريد إعادة تسمية العمود <code>{{column_name}}</code> إلى <code>{{column_name_new}}</code>؟<br> سيتم تحديث الكائنات والتبعيات المخزنة في قاعدة البيانات بسلاسة، ولكن يجب تحديث السكريبتات المخصصة مثل تلك المستخدمة في لوحات المعلومات، الأنماط المخصصة، أو الاستعلامات SQL المكتوبة بشكل صلب يدويًا."
   },
   {
     "id": "btn_edit_rename_column",

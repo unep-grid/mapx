@@ -138,9 +138,15 @@ export class Validator {
           break;
         case "valid_joins":
           isValid = await validateJoins(value, cv._client);
+          if (!isValid) {
+            const data = await cv._client.query(
+              `Select * from ${value.base.id_source}`
+            );
+            console.log(data.rows);
+          }
           break;
-
         default:
+          console.error(`Missing validate keyword ${type}`);
           isValid = false;
       }
 

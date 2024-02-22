@@ -324,15 +324,23 @@ export async function updateJoinColumnsNames(
     const { join: joinConfig } = data;
 
     if (joinConfig.id_source !== idSourceJoin) {
-      continue;
+      throw new Error(
+        `Join id '${joinConfig.id_source}' should source id ${idSourceJoin} `
+      );
     }
 
     const { joins, base } = joinConfig;
 
-    if (base.id_source === idSourceUpdate) {
-      const baseColumnIndex = base.columns.indexOf(oldColumnName);
-      if (baseColumnIndex) {
+    const updateBase = base.id_source === idSourceUpdate;
+
+    /**
+     * Update base -> columns
+     */
+    if (updateBase) {
+      const updateBaseColumn = base.columns.includes(oldColumnName);
+      if (updateBaseColumn) {
         updates.push({
+          type: "columns_base",
           id_source: idSourceJoin,
           old_column: oldColumnName,
           new_column: newColumnName,
@@ -340,27 +348,61 @@ export async function updateJoinColumnsNames(
       }
     }
 
+    /**
+     * Update join -> [ columns, column_join ]
+     */
     for (const join of joins) {
-      if (join.id_source !== idSourceUpdate) {
+      /**
+       * Continue if no columns to update in join or base
+       */
+      if (join.id_source !== idSourceUpdate && !updateBase) {
         continue;
       }
 
-      const columnIndex = join.columns.indexOf(oldColumnName);
+      /*
+       * Check what should be updated
+       */
+      const updateJoinColumns = join.columns.includes(oldColumnName);
+      const updateJoinColumn = join.column_join === oldColumnName;
+      const updateBaseColumn = updateBase && join.column_base === oldColumnName;
 
-      if (columnIndex === -1) {
+      if (!updateJoinColumn && !updateJoinColumns && !updateBaseColumn) {
         continue;
       }
-
-      join.columns[columnIndex] = newColumnName;
 
       const oldColumnNamePrefix = `${join._prefix}${oldColumnName}`;
       const newColumnNamePrefix = `${join._prefix}${newColumnName}`;
 
-      updates.push({
-        id_source: idSourceJoin,
-        old_column: oldColumnNamePrefix,
-        new_column: newColumnNamePrefix,
-      });
+      if (updateJoinColumns) {
+        const columnIndex = join.columns.indexOf(oldColumnName);
+        join.columns[columnIndex] = newColumnName;
+        updates.push({
+          type: "columns",
+          id_source: idSourceJoin,
+          old_column: oldColumnNamePrefix,
+          new_column: newColumnNamePrefix,
+        });
+      }
+
+      if (updateJoinColumn) {
+        join.column_join = newColumnName;
+        updates.push({
+          type: "column_join",
+          id_source: idSourceJoin,
+          old_column: oldColumnNamePrefix,
+          new_column: newColumnNamePrefix,
+        });
+      }
+
+      if (updateBaseColumn) {
+        join.column_base = newColumnName;
+        updates.push({
+          type: "column_base",
+          id_source: idSourceJoin,
+          old_column: oldColumnName,
+          new_column: newColumnName,
+        });
+      }
     }
 
     await stopIfNotValid(joinConfig, client);

@@ -848,16 +848,16 @@
   },
   {
     "id": "edit_table_modal_rename_column_confirm_text",
-    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?",
-    "fr": "",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
+    "en": "Are you sure you want to rename the column <code>{{column_name}}</code> to <code>{{column_name_new}}</code>?<br> Objects and dependencies stored in the DB will be updated seamlessly, but custom scripts such as those used in dashboards, custom styles, or hardcoded SQL queries should be updated manually.",
+    "fr": "Êtes-vous sûr de vouloir renommer la colonne <code>{{column_name}}</code> en <code>{{column_name_new}}</code> ?<br> Les objets et dépendances stockés dans la base de données seront mis à jour automatiquement, mais les scripts personnalisés tels que ceux utilisés dans les tableaux de bord, les styles personnalisés ou les requêtes SQL codées en dur doivent être mis à jour manuellement.",
+    "es": "¿Estás seguro de que deseas renombrar la columna <code>{{column_name}}</code> a <code>{{column_name_new}}</code>?<br> Los objetos y dependencias almacenados en la base de datos se actualizarán de forma transparente, pero los scripts personalizados, como los utilizados en paneles de control, estilos personalizados o consultas SQL codificadas directamente, deben actualizarse manualmente.",
+    "ru": "Вы уверены, что хотите переименовать столбец <code>{{column_name}}</code> в <code>{{column_name_new}}</code>?<br> Объекты и зависимости, хранящиеся в базе данных, будут обновлены автоматически, но пользовательские скрипты, такие как используемые в панелях мониторинга, пользовательские стили или жестко закодированные SQL-запросы, должны быть обновлены вручную.",
+    "zh": "您确定要将列 <code>{{column_name}}</code> 重命名为 <code>{{column_name_new}}</code> 吗？<br> 存储在数据库中的对象和依赖项将无缝更新，但是自定义脚本，如仪表板中使用的脚本、自定义样式或硬编码的 SQL 查询，需要手动更新。",
+    "ar": "هل أنت متأكد أنك تريد إعادة تسمية العمود <code>{{column_name}}</code> إلى <code>{{column_name_new}}</code>؟<br> سيتم تحديث الكائنات والتبعيات المخزنة في قاعدة البيانات بسلاسة، ولكن يجب تحديث السكريبتات المخصصة مثل تلك المستخدمة في لوحات المعلومات، الأنماط المخصصة، أو الاستعلامات SQL المكتوبة بشكل صلب يدويًا.",
+    "fa": "آیا مطمئن هستید که می‌خواهید ستون <code>{{column_name}}</code> را به <code>{{column_name_new}}</code> تغییر نام دهید؟<br> اشیاء و وابستگی‌های ذخیره‌شده در پایگاه داده به طور خودکار به‌روزرسانی می‌شوند، اما اسکریپت‌های سفارشی مانند آنهایی که در داشبوردها، سبک‌های سفارشی، یا پرس‌وجوهای SQL سخت‌کد شده استفاده می‌شوند، باید به صورت دستی به‌روزرسانی شوند.",
+    "ps": "آیا تاسو ډاډه یاست چې غواړئ کالم <code>{{column_name}}</code> بیا نومول <code>{{column_name_new}}</code> ته؟<br> په ډیټابیس کې ذخیره شوي اشیا او تکیه ځایونه به په بې ساري ډول تازه شي، خو د دشبورډونو، دودیزو سټایلونو، یا سخت کوډ شوي SQL پوښتنو په څیر دودیز سکریپټونه باید په لاسي ډول تازه شي.",
+    "bn": "আপনি কি নিশ্চিত যে আপনি কলাম <code>{{column_name}}</code> এর নাম পরিবর্তন করে <code>{{column_name_new}}</code> করতে চান?<br> ডাটাবেসে সংরক্ষিত অবজেক্ট এবং নির্ভরতা সমূহ সহজে আপডেট হবে, তবে ড্যাশবোর্ডে ব্যবহৃত, কাস্টম স্টাইল বা হার্ডকোডেড SQL কোয়েরির মতো কাস্টম স্ক্রিপ্টগুলি ম্যানুয়ালি আপডেট করতে হবে।",
+    "de": "Sind Sie sicher, dass Sie die Spalte <code>{{column_name}}</code> in <code>{{column_name_new}}</code> umbenennen möchten?<br> Objekte und Abhängigkeiten in der DB werden nahtlos aktualisiert, aber benutzerdefinierte Skripte, wie sie in Dashboards, benutzerdefinierten Stilen oder hartkodierten SQL-Abfragen verwendet werden, müssen manuell aktualisiert werden."
   },
   {
     "id": "btn_edit_rename_column",
