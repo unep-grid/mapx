@@ -97,7 +97,6 @@ export class EditTableSessionClient extends WsToolsBase {
     super(socket);
     const et = this;
     et._config = Object.assign(et._config, et._config, defaults, config);
-    et._columns_cache = { columns: [], timestamp: 0 };
     /**
      * cb bind
      */
@@ -1017,7 +1016,7 @@ export class EditTableSessionClient extends WsToolsBase {
    */
   async isColumnUsed(name) {
     const et = this;
-    const cc = et._columns_cache;
+    const cc = et.getColumnsUsedCache();
     const now = Date.now();
     const ttl = 5 * 60 * 1000;
     const age = now - cc.timestamp;
@@ -1027,6 +1026,26 @@ export class EditTableSessionClient extends WsToolsBase {
     }
 
     return cc.columns.includes(name);
+  }
+
+  /**
+   * Reset columns cache
+   */
+  resetColumnsUsedCache() {
+    const et = this;
+    et._columns_used_cache = { columns: [], timestamp: 0 };
+  }
+
+  /**
+   * Get column cache
+   * @return {Object} cache {columns:[], timestamp: n}
+   */
+  getColumnsUsedCache() {
+    const et = this;
+    if (!et._columns_used_cache) {
+      et.resetColumnsUsedCache();
+    }
+    return et._columns_used_cache;
   }
 
   /**
@@ -1596,7 +1615,6 @@ export class EditTableSessionClient extends WsToolsBase {
   async onServerError(error) {
     const et = this;
     try {
-      
       console.error("server error", error);
 
       if (!et._config.test_mode) {
@@ -2277,6 +2295,7 @@ export class EditTableSessionClient extends WsToolsBase {
     };
 
     await et.handlerUpdateColumnRename(update, source);
+    et.resetColumnsUsedCache();
   }
 
   /**
