@@ -1,3 +1,8 @@
+  - [1.13.0-beta.3](https://github.com/unep-grid/mapx/tree/1.13.0-beta.3) 
+
+    - Table editor : 
+        - Prevent columns being removable after being renamed, within the same session AND within 5 minutes (cache invalidation)
+
   - [1.13.0-beta.2](https://github.com/unep-grid/mapx/tree/1.13.0-beta.2) 
 
     - Fix previous merging issue: commited code, merged but not present after merge.
