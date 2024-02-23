@@ -38,7 +38,7 @@ export async function setViewStyleAlt(idView, config, client) {
  * @param {Object} layer
  * @param {String} options.idView View id ;
  * @param {pg.Client} client pg client
- * @return {Object} result {mapbox,sld}
+ * @return {Promise<Object>} result {mapbox,sld}
  */
 export async function ioUpdateDbViewAltStyle(socket, options, client) {
   const { idView } = options || {};
@@ -70,7 +70,7 @@ export async function ioUpdateDbViewAltStyle(socket, options, client) {
  * @param {Object} layer
  * @param {String} options.idSource source id ;
  * @param {pg.Client} client pg client
- * @return {Boolean} done
+ * @return {Promise<Boolean>} done
  */
 export async function ioUpdateDbViewsAltStyleBySource(socket, options, client) {
   const { idSource } = options || {};
@@ -82,6 +82,7 @@ export async function ioUpdateDbViewsAltStyleBySource(socket, options, client) {
     if (!res.valid) {
       await socket.notifyInfoError({
         message: `Alt style failed for view ${id}`,
+        group: "alt_style",
       });
     }
   }

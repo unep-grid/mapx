@@ -612,6 +612,9 @@ export function isSafeName(x) {
  * @raturn {String} "safe" string
  */
 export function makeSafeName(x, repl = "_") {
+  if (!isString(x)) {
+    return;
+  }
   const reg = new RegExp(regexUnsafeName, ["g"]);
   const name = x.replaceAll(reg, repl);
   return name.toLowerCase();

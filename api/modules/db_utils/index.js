@@ -853,22 +853,26 @@ async function renameTableColumn(
  * @return {Promise<array>} Array of affected views
  * @throws {Error} If an error occurs during the update operation.
  */
-async function updateViewsAttribute(idSource, oldName, newName, pgClient) {
+async function updateViewsAttribute(
+  idSource,
+  oldName,
+  newName,
+  pgClient = pgWrite
+) {
   try {
     /*
      * Use connectionn in case of transaction
      */
-    pgClient = pgClient || pgWrite;
     /**
      * Update views
      */
     const queryUpdateViews = templates.updateViewsSourceAttributes;
+
     const { rows: views } = await pgClient.query(queryUpdateViews, [
       idSource,
       oldName,
       newName,
     ]);
-
     /**
      * Return affected views
      */
@@ -887,7 +891,7 @@ async function updateViewsAttribute(idSource, oldName, newName, pgClient) {
  * @return {Promise<array>} Array of affected views
  * @throws {Error} If an error occurs during the update operation.
  */
-async function updateViewsAttributeBatch(updates, pgClient) {
+async function updateViewsAttributeBatch(updates, pgClient = pgWrite) {
   const updatePromises = updates.map((update) =>
     updateViewsAttribute(
       update.id_source,

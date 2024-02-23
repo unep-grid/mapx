@@ -339,6 +339,8 @@ export async function updateJoinColumnsNames(
     if (updateBase) {
       const updateBaseColumn = base.columns.includes(oldColumnName);
       if (updateBaseColumn) {
+        const columnIndex = base.columns.indexOf(oldColumnName);
+        base.columns[columnIndex] = newColumnName;
         updates.push({
           type: "columns_base",
           id_source: idSourceJoin,

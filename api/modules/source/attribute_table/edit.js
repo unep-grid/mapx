@@ -789,7 +789,6 @@ class EditTableSession {
               /**
                * Update joins
                */
-              // debug note : table correctly updated here !
               const updates = await updateJoinColumnsNames(
                 id_table,
                 column_name,
@@ -802,7 +801,7 @@ class EditTableSession {
                * considering source update and join updates
                */
               const updateSourceViews = {
-                id_table: id_table,
+                id_source: id_table,
                 old_column: column_name,
                 new_column: column_name_new,
               };
@@ -840,6 +839,7 @@ class EditTableSession {
       /**
        * Update done. Commit.
        */
+
       await client.query("COMMIT");
     } catch (e) {
       await client.query("ROLLBACK");
