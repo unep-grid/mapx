@@ -1,3 +1,7 @@
+  - [1.13.0-beta.2](https://github.com/unep-grid/mapx/tree/1.13.0-beta.2) 
+
+    - Fix previous merging issue: commited code, merged but not present after merge.
+
   - [1.13.0-beta.1](https://github.com/unep-grid/mapx/tree/1.13.0-beta.1) 
     
     - Helpers : 
