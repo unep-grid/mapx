@@ -141,6 +141,7 @@ import {
   isBoundsInsideBounds,
   isSourceId,
   isProjectId,
+  isViewInstance,
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
@@ -150,6 +151,8 @@ export * from "./view_filters.js";
  * Storage
  * - keep a ref to instances and objects previouly attached to mx global,
  *   but only used in map helpers / mapx js instance management
+ * - views_active 'Set' is required to handle a simple state in 'static' mode,
+ *   where there are no views list
  */
 const mx_local = {
   views_active: new Set(),
@@ -1522,13 +1525,14 @@ export async function initMapxStatic(o) {
     /**
      * Display views
      */
-    for (const view of mapData.views) {
-      await viewLayersAdd({
+    const promAdd = mapData.views.map((view) => {
+      return viewRender({
         view: view,
         elLegendContainer: mx_local.panel_legend.elPanelContent,
         addTitle: true,
       });
-    }
+    });
+    await Promise.all(promAdd);
 
     viewsLayersOrderUpdate({
       order: idViews.reverse(),
@@ -2053,10 +2057,24 @@ export async function getViewRemote(idView) {
 
   return view;
 }
+
+/**
+ * Get view local or remote, but prefer local over remote
+ * @param {String|Object} idView View id or view
+ */
+export async function getViewAuto(idView) {
+  const view = getView(idView) || (await getViewRemote(idView));
+  const valid = isView(view);
+  if (!valid) {
+    throw new Error("getViewAuto failed  to get: ", idView);
+  }
+  return view;
+}
+
 /**
  * Get multipler remote views from latest views table
  * @param {Array} idViews array of views id
- * @return {Promise} Promise resolving to abject
+ * @return {Promise<array>} Promise resolving to an array of views
  */
 export async function getViewsRemote(idViews) {
   const views = [];
@@ -2607,7 +2625,7 @@ export function getViewsActive() {
 
 /**
  * Remove view from views list and geojson database
- * @param {Object} view View to remove from the list
+ * @param {Object|String} view View or view id to remove from the list
  */
 export async function viewDelete(view) {
   const mData = getMapData();
@@ -2620,7 +2638,7 @@ export async function viewDelete(view) {
   const vIndex = views.indexOf(view);
   const geojsonData = mx_storage.geojson;
 
-  await viewLayersRemove({
+  await viewClear({
     idView: view.id,
   });
   mData.viewsList.removeItemById(view.id);
@@ -2644,7 +2662,7 @@ export async function viewDelete(view) {
  * @param {String} o.idView view id
  * @param {Object} o.view view
  */
-export async function viewLayersRemove(o) {
+export async function viewClear(o) {
   const view = o.view || getView(o.idView);
   o.id = o.id || settings.map.id;
 
@@ -2695,12 +2713,12 @@ export async function viewLayersRemove(o) {
 
 /**
  * Get view, open it and add layers if any
- * @param {Object} view View to open
+ * @param {String|Object} idView View to open
  * @return {Promise} Boolean
  */
-export async function viewAdd(view) {
+export async function viewAdd(idView) {
   try {
-    view = getView(view) || (await getViewRemote(view));
+    const view = await getViewAuto(idView);
 
     if (!isView(view)) {
       return false;
@@ -2717,7 +2735,7 @@ export async function viewAdd(view) {
     if (view._vb instanceof ViewBase) {
       view._vb.open();
     }
-    await viewLayersAdd({
+    await viewRender({
       view: view,
     });
     await updateLanguageElements({
@@ -2740,16 +2758,20 @@ export async function viewAdd(view) {
  */
 export async function viewAddAuto(idView, options) {
   options = Object.assign({}, { zoomToView: false }, options);
-  const view = getView(idView) || (await getViewRemote(idView));
-  const valid = isView(view);
-  if (!valid) {
-    throw new Error("viewAddAuto : invalid view", idView);
-  }
-  const addToList = !!settings.mode.app;
-  if (addToList) {
+  const view = await getViewAuto(idView);
+  const isApp = !!settings.mode.app;
+  const isInstance = isViewInstance(view);
+
+  if (isApp && !isInstance) {
     await viewsListAddSingle(view, { open: true });
-  } else {
+  } else if (isApp) {
     await viewAdd(view);
+  } else {
+    await viewRender({
+      view: view,
+      elLegendContainer: mx_local.panel_legend.elPanelContent,
+      addTitle: true,
+    });
   }
 
   if (options.zoomToView) {
@@ -2762,12 +2784,12 @@ export async function viewAddAuto(idView, options) {
 
 /**
  * Removed both view UI and layers, handle view_removed event
- * @param {Object} view
+ * @param {String|Object} idView View id or view
  * @return {Promise<Boolean>} Boolean
  */
-export async function viewRemove(view) {
+export async function viewRemove(idView) {
   try {
-    view = getView(view);
+    const view = getView(idView);
     if (!isView(view)) {
       return true;
     }
@@ -2782,7 +2804,7 @@ export async function viewRemove(view) {
       view._vb.close();
     }
 
-    await viewLayersRemove({
+    await viewClear({
       idView: view.id,
     });
 
@@ -3033,8 +3055,8 @@ export function existsInList(li, it, val, inverse) {
  * @param {string} o.before Layer before which insert this view layer(s)
  * @param
  */
-export async function viewLayersAdd(o) {
-  await viewLayersRemove(o);
+export async function viewRender(o) {
+  await viewClear(o);
 
   const m = getMapData(o.id);
   if (o.idView) {
@@ -3047,14 +3069,11 @@ export async function viewLayersAdd(o) {
   const idLayerBefore = o.before
     ? getLayerNamesByPrefix({ prefix: o.before })[0]
     : settings.layerBefore;
-  let view = o.view || getView(o.idView) || {};
 
   /**
    * Solve case where view is not set : try to fetch remote
    */
-  if (!isView(view) && isViewId(o.idView)) {
-    view = await getViewRemote(o.idView);
-  }
+  const view = await getViewAuto(o.view || o.idView);
 
   /**
    * Set download flag
@@ -3168,7 +3187,7 @@ export async function viewLayersAdd(o) {
     let res;
     switch (viewType) {
       case "rt":
-        res = await viewLayersAddRt({
+        res = await viewRenderRt({
           view: view,
           map: m.map,
           before: idLayerBefore,
@@ -3177,7 +3196,7 @@ export async function viewLayersAdd(o) {
         });
         break;
       case "cc":
-        res = await viewLayersAddCc({
+        res = await viewRenderCc({
           view: view,
           map: m.map,
           before: idLayerBefore,
@@ -3186,7 +3205,7 @@ export async function viewLayersAdd(o) {
         });
         break;
       case "vt":
-        res = await viewLayersAddVt({
+        res = await viewRenderVt({
           view: view,
           map: m.map,
           debug: o.debug,
@@ -3196,7 +3215,7 @@ export async function viewLayersAdd(o) {
         });
         break;
       case "gj":
-        res = await viewLayersAddGj({
+        res = await viewRenderGj({
           view: view,
           map: m.map,
           before: idLayerBefore,
@@ -3478,7 +3497,7 @@ export async function getViewLegendImage(opt) {
  * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
-async function viewLayersAddCc(o) {
+async function viewRenderCc(o) {
   const view = o.view;
   const map = o.map;
   const methods = path(view, "data.methods");
@@ -3667,7 +3686,7 @@ async function viewLayersAddCc(o) {
  * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
-async function viewLayersAddRt(o) {
+async function viewRenderRt(o) {
   const view = o.view;
   const map = o.map;
   const idView = view.id;
@@ -3848,7 +3867,7 @@ async function viewLayersAddRt(o) {
  * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
-export async function viewLayersAddVt(o) {
+export async function viewRenderVt(o) {
   const view = getView(o.view);
   const addLegend = isEmpty(o.addLegend) ? true : !!o.addLegend;
   const out = await getViewMapboxLayers(view);
@@ -4093,7 +4112,7 @@ export function viewsModulesRemove(views) {
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  * @return {Promise<boolean>} added
  */
-export async function viewLayersAddGj(opt) {
+export async function viewRenderGj(opt) {
   const layer = path(opt.view, "data.layer");
 
   if (!layer.metadata) {
@@ -4663,7 +4682,7 @@ export async function resetViewStyle(o) {
   });
 
   if (isOpen) {
-    await viewLayersAdd({
+    await viewRender({
       view: view,
     });
     viewsLayersOrderUpdate({
@@ -5302,7 +5321,7 @@ export function getViewVtSourceId(view) {
  * @return {Promise<Boolean>} downloadable
  */
 export async function isViewDownloadableRemote(idView) {
-  const view = getView(idView) || (await getViewRemote(idView));
+  const view = await getViewAuto(idView);
   const { type } = view;
   switch (type) {
     case "cc":

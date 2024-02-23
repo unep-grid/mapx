@@ -37,18 +37,17 @@ import {
 } from "./../is_test/index.js";
 import {
   getMapPos,
-  getViewRemote,
   getViewsRemote,
-  getView,
   getViews,
   viewAdd,
   viewRemove,
-  viewLayersRemove,
-  viewLayersAdd,
+  viewClear,
+  viewRender,
   viewsLayersOrderUpdate,
   getMap,
   getViewsLayersVisibles,
   setMapProjection,
+  getViewAuto,
 } from "./../map_helpers/index.js";
 
 /**
@@ -307,28 +306,6 @@ export function getStoryId() {
 }
 
 /**
- * Get current views featured in step
- * @return {Array} array of views id
- */
-export function getViewsStep() {
-  const views = [];
-  const state = getState();
-  /**
-   * TODO : Duplicate code ! merge this code with getStoryViewsId
-   */
-  for (const item of state.step.views) {
-    if (isViewId(item)) {
-      views.push(id);
-    } else if (isObject(item) && isViewId(item.id)) {
-      views.push(item.id);
-    } else if (isObject(item) && isViewId(item.view)) {
-      views.push(item.view);
-    }
-  }
-  return views;
-}
-
-/**
  * Get current state
  */
 function getState() {
@@ -349,7 +326,7 @@ async function clearViewsVisible() {
   const elLegendContainer = state?.buttonLegend?.elPanelContent;
   const vVisible = getViewsLayersVisibles();
   for (const v of vVisible) {
-    await viewLayersRemove({
+    await viewClear({
       idView: v,
       elLegendContainer,
     });
@@ -450,10 +427,7 @@ async function cleanState() {
  */
 async function initStory() {
   const state = getState();
-  state.view = getView(state.view || state.idView);
-  if (!isView(state.view)) {
-    state.view = await getViewRemote(state.idView);
-  }
+  state.view = await getViewAuto(state.view || state.idView);
   if (isStory(state.view)) {
     state.idView = state.view.id;
   } else {
@@ -639,6 +613,16 @@ function updateAdaptiveLayout() {
   state.map.resize();
 }
 
+/**
+ * List views id from story steps
+ * NOTE: could be merged with getViewsStep ?
+ * Accepted id are
+ * array of id,
+ * array of object with id as key,
+ * array of object with view as key
+ * if something else : warn
+ *
+ */
 function getStoryViewsId() {
   const story = getStory();
   const idViewsStory = [];
@@ -647,20 +631,10 @@ function getStoryViewsId() {
     if (isObject(step) && isArray(step.views)) {
       let j = 0;
 
-      /**
-       * Accepted id are
-       * array of id,
-       * array of object with id as key,
-       * array of object with view as key
-       * if something else : warn
-       */
       for (const item of step.views) {
-        if (isViewId(item)) {
-          idViewsStory.push(id);
-        } else if (isObject(item) && isViewId(item.id)) {
-          idViewsStory.push(item.id);
-        } else if (isObject(item) && isViewId(item.view)) {
-          idViewsStory.push(item.view);
+        const idView = getStoryViewId(item);
+        if (isViewId(idView)) {
+          idViewsStory.push(idView);
         } else {
           console.warn(
             `View ${j} of step ${i} is not recognised. Received:`,
@@ -674,6 +648,40 @@ function getStoryViewsId() {
     }
   }
   return idViewsStory;
+}
+
+/**
+ * Get current views featured in step
+ * @return {Array} array of views id
+ */
+export function getViewsStep() {
+  const views = [];
+  const state = getState();
+  for (const item of state.step.views) {
+    const idView = getStoryViewId(item);
+    if (isViewId(idView)) {
+      views.push(idView);
+    }
+  }
+  return views;
+}
+
+/**
+ * Get view id
+ * -> Story schema used different format for storing views
+ * @param {Any} item Item that contain a view id
+ * @returns {String} id of the view
+ */
+function getStoryViewId(item) {
+  if (isViewId(item)) {
+    return item;
+  } else if (isViewId(item.view)) {
+    return item.view;
+  } else if (isView(item)) {
+    return item.id;
+  } else if (isView(item.view)) {
+    return item.view.id;
+  }
 }
 
 /**
@@ -1732,7 +1740,7 @@ export async function storyPlayStep(stepNum) {
   let i = 0;
   for (const v of vToAdd) {
     const vPrevious = vStep[i++ - 1] || settingsMapx.layerBefore;
-    await viewLayersAdd({
+    await viewRender({
       idView: v,
       openView: false,
       addTitle: true,
@@ -1745,7 +1753,7 @@ export async function storyPlayStep(stepNum) {
    * Remove views not used
    */
   for (const v of vToRemove) {
-    await viewLayersRemove({
+    await viewClear({
       idView: v,
       elLegendContainer,
     });

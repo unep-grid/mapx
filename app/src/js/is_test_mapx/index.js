@@ -1,5 +1,6 @@
 import { getLanguagesAll } from "../language/index.js";
 import { settings } from "../mx.js";
+import { ViewBase } from "../views_builder/view_base.js";
 import { isObject, isArrayOf, isView } from "./../is_test/index.js";
 import { getView } from "./../map_helpers/index.js";
 export * from "./../is_test/index.js";
@@ -61,6 +62,18 @@ export function isLanguageObjectArray(arr) {
 export function isViewOpen(view) {
   view = getView(view);
   return isView(view) && view._open === true;
+}
+
+/**
+ * Check if a view is an instance
+ * @note : 'instance' is just a test on  _vb === ViewBase, but a test will be 
+ *         performed to check if view === ViewInstance
+ * @param {String|Object} view View or view id
+ * @return {Boolean}
+ */
+export function isViewInstance(view) {
+  view = getView(view);
+  return isView(view) && view._vb instanceof ViewBase;
 }
 
 /**

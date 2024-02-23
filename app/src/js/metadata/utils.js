@@ -1,7 +1,7 @@
 import { getGemetConcept, getGemetConceptLink } from "./../gemet_util/index.js";
 import { el, elAuto, elPanel, elSpanTranslate } from "./../el_mapx";
 import { theme } from "./../mx";
-import { getView, getViewRemote } from "./../map_helpers";
+import { getView, getViewAuto } from "./../map_helpers";
 import { modal } from "./../mx_helper_modal.js";
 import { path, objectToArray } from "./../mx_helper_misc.js";
 import { moduleLoad } from "./../modules_loader_async";
@@ -106,11 +106,7 @@ export async function getViewSourceMetadata(view) {
  * @param {Object|String} view View or view id
  */
 export async function viewToMetaModal(idView) {
-  let view = getView(idView);
-
-  if (!isView(view)) {
-    view = await getViewRemote(idView);
-  }
+  const view = await getViewAuto(idView);
 
   if (!isView(view)) {
     return modal({

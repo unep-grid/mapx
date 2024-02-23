@@ -26,6 +26,7 @@ import {
   getViewsListOpen,
   hasViewLocal,
   viewLink,
+  getViewAuto,
 } from "./../map_helpers/index.js";
 import {
   isView,
@@ -134,8 +135,8 @@ class Search extends EventSimple {
           `curl '${url}/indexes/views_${language}/search' \\\n` +
             `-H 'X-Meili-API-Key: ${s.opt("key")}' \\\n` +
             `--data-raw '{"q":"water"}' \\\n` +
-            `--compressed;\n`
-        )
+            `--compressed;\n`,
+        ),
       ),
     ]);
     s._elModalShowApiConfig = modal({
@@ -262,7 +263,7 @@ class Search extends EventSimple {
         s._elFiltersYearsRange,
         s._elFiltersFacets,
         s._elFiltersDateGroup,
-      ])
+      ]),
     );
 
     /**
@@ -276,7 +277,7 @@ class Search extends EventSimple {
       {
         class: ["search--stats"],
       },
-      s._elStatHits
+      s._elStatHits,
     );
 
     /**
@@ -301,7 +302,7 @@ class Search extends EventSimple {
       s._elFilters,
       s._elResults,
       //s._elPagination,
-      s._elStats
+      s._elStats,
     );
 
     s._elContainer.appendChild(s._elSearch);
@@ -370,7 +371,7 @@ class Search extends EventSimple {
         for (let g of subgroups) {
           const { elFacetGroup: elFg, elFacetItems: elFi } = build_facets_group(
             g.key,
-            { details: false, addSortBtn: false }
+            { details: false, addSortBtn: false },
           );
           elFacetItems.appendChild(elFg);
           g._elSubFacetItems = elFi;
@@ -426,7 +427,7 @@ class Search extends EventSimple {
       opt = Object.assign(
         {},
         { details: true, open: false, addSortBtn: false },
-        opt
+        opt,
       );
 
       const elFacetItems = el("div", {
@@ -476,10 +477,10 @@ class Search extends EventSimple {
             {
               class: "search--filter-group-title",
             },
-            elSpanTranslate(`search_${key}`)
+            elSpanTranslate(`search_${key}`),
           ),
           el("div", [elFacetItems, elOrderChange]),
-        ]
+        ],
       );
       if (opt.details && opt.open) {
         elFacetGroup.setAttribute("open", true);
@@ -523,14 +524,14 @@ class Search extends EventSimple {
       {
         class: "search--filter-years-row",
       },
-      [elSliderYearInputMin, elSliderYearTitle, elSliderYearInputMax]
+      [elSliderYearInputMin, elSliderYearTitle, elSliderYearInputMax],
     );
     const elSliderYearRowBottom = el(
       "div",
       {
         class: "search--filter-years-row",
       },
-      [el("span", `${yMin}`), el("span", `${yMax}`)]
+      [el("span", `${yMin}`), el("span", `${yMax}`)],
     );
 
     s._elFiltersYearsRange.appendChild(elSliderYearRowTop);
@@ -597,7 +598,7 @@ class Search extends EventSimple {
     attrDateItems.push(
       ...attrDateRange.map((attr) => {
         return { attr, range: true };
-      })
+      }),
     );
     const txtPlaceholder = await getDictItem("search_filter_date_placeholder");
     for (let item of attrDateItems) {
@@ -620,12 +621,12 @@ class Search extends EventSimple {
           class: "search--filter-date-label",
           for: elFilterDate.id,
         },
-        elSpanTranslate(`search_filter_${item.attr}`)
+        elSpanTranslate(`search_filter_${item.attr}`),
       );
       const elFilterContainer = el(
         "div",
         { class: "search--filter-date-item" },
-        [elFilterDateLabel, elFilterDate]
+        [elFilterDateLabel, elFilterDate],
       );
       s._elFiltersDate.appendChild(elFilterContainer);
       /**
@@ -711,7 +712,7 @@ class Search extends EventSimple {
       {
         class: "btn-group",
       },
-      [s._elBtnHelp, s._elBtnClear, s._elBtnToggleFilters]
+      [s._elBtnHelp, s._elBtnClear, s._elBtnToggleFilters],
     );
 
     s._elInputContainer = el(
@@ -719,7 +720,7 @@ class Search extends EventSimple {
       {
         class: "search--input-container",
       },
-      [s._elInput, elButtons]
+      [s._elInput, elButtons],
     );
     return s._elInputContainer;
   }
@@ -900,9 +901,7 @@ class Search extends EventSimple {
             s.vFeedback(e);
             const idView = ds.id_view_toggle;
             const viewIsLocal = hasViewLocal(idView);
-            const view = viewIsLocal
-              ? getView(idView)
-              : await getViewRemote(idView);
+            const view = await getViewAuto(idView);
             const viewIsValid = isView(view);
 
             if (!viewIsValid) {
@@ -916,18 +915,20 @@ class Search extends EventSimple {
                * - Show message about what's happening
                * - Save preferences
                */
-
-              view._temp = true;
-              await viewsListAddSingle(view, { open: false, render: true });
+              await viewsListAddSingle(view, {
+                open: false,
+                render: true,
+                temp: true,
+              });
               const showNotify = await prefGet(
-                "pref_show_notify_add_view_temp"
+                "pref_show_notify_add_view_temp",
               );
               if (showNotify === null || showNotify === true) {
                 const keepShowing = await modalConfirm({
                   title: getDictItem("search_view_added_temporarily_title"),
                   content: getDictItem("search_view_added_temporarily"),
                   cancel: getDictItem(
-                    "search_view_added_temporarily_ok_no_more"
+                    "search_view_added_temporarily_ok_no_more",
                   ),
                   confirm: getDictItem("search_view_added_temporarily_ok"),
                 });
@@ -1026,7 +1027,7 @@ class Search extends EventSimple {
                     class: ["fa", k.icon],
                   }),
                   elSpanTranslate(keyword),
-                ]
+                ],
               );
               elKeywords.appendChild(elKeyword);
             }
@@ -1056,7 +1057,7 @@ class Search extends EventSimple {
               class: ["fa", "fa-hourglass-start"],
             }),
             el("span", `${v.range_start_at_year}`),
-          ]
+          ],
         ),
         el(
           "div",
@@ -1075,7 +1076,7 @@ class Search extends EventSimple {
               class: ["fa", "fa-hourglass-end"],
             }),
             el("span", `${v.range_end_at_year}`),
-          ]
+          ],
         ),
       ]);
       /**
@@ -1096,7 +1097,7 @@ class Search extends EventSimple {
                 class: ["fa", "fa-external-link"],
               }),
               elSpanTranslate("search_view_link"),
-            ]
+            ],
           ),
           el(
             "div",
@@ -1109,7 +1110,7 @@ class Search extends EventSimple {
                 class: ["fa", "fa-info-circle"],
               }),
               elSpanTranslate("search_show_view_meta"),
-            ]
+            ],
           ),
           el(
             "div",
@@ -1125,9 +1126,9 @@ class Search extends EventSimple {
                 class: ["fa", "fa-toggle-off"],
               }),
               elSpanTranslate("search_view_toggle"),
-            ]
+            ],
           ),
-        ]
+        ],
       );
       frag.appendChild(
         el(
@@ -1136,7 +1137,7 @@ class Search extends EventSimple {
           el(
             "div",
             { class: "search--item-title" },
-            el("span", s.formatCroppedText(v._formatted.view_title))
+            el("span", s.formatCroppedText(v._formatted.view_title)),
           ),
           el(
             "p",
@@ -1158,14 +1159,14 @@ class Search extends EventSimple {
                     lang_type: "tooltip",
                   },
                 },
-                s.formatCroppedText(v._formatted[row.key])
+                s.formatCroppedText(v._formatted[row.key]),
               );
-            })
+            }),
           ),
           elButtonsBar,
           elKeywords,
-          elYears
-        )
+          elYears,
+        ),
       );
     }
     return frag;
@@ -1199,7 +1200,7 @@ class Search extends EventSimple {
         class: ["search--cutext"],
       },
       elSummary,
-      elHide
+      elHide,
     );
   }
   /**
@@ -1343,7 +1344,7 @@ class Search extends EventSimple {
     try {
       const options = Object.assign(
         { page: 0, append: false, page_stat: false },
-        opt
+        opt,
       );
       await s.initCheck();
       if (options.append === false) {
@@ -1459,7 +1460,7 @@ class Search extends EventSimple {
     }
     const idViewsOpen = getViewsListOpen();
     const elsToggle = s._elResults.querySelectorAll(
-      '[data-action="search_view_toggle"]'
+      '[data-action="search_view_toggle"]',
     );
     for (let elT of elsToggle) {
       const idView = elT.dataset.id_view_toggle;
@@ -1500,7 +1501,7 @@ class Search extends EventSimple {
         attributesToHighlight: null,
         matches: false,
       },
-      opt
+      opt,
     );
     const res = await s._index.search(search.q, search);
 
@@ -1513,7 +1514,7 @@ class Search extends EventSimple {
     const s = this;
     const nPage = Math.ceil(results.nbHits / results.limit);
     const cPage = Math.ceil(
-      nPage - (results.nbHits - results.offset) / results.limit
+      nPage - (results.nbHits - results.offset) / results.limit,
     );
     const strTime = `${results.processingTimeMs}`;
     const strNbHit = `${results.nbHits}`;
@@ -1631,7 +1632,7 @@ class Search extends EventSimple {
           (elItem = el("span", {
             class: ["search--pagination-item"],
             dataset: { page: i + 1 },
-          }))
+          })),
         );
         /**
          * The item is the current page

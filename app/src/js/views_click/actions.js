@@ -194,8 +194,8 @@ export async function btn_opt_remove_linked(dataset) {
     content: elSpanTranslate("remove_confirm_temp_modal"),
   });
   if (resp) {
-    const arg = dataset;
-    await viewDelete(arg.view_action_target);
+    const { view_action_target } = dataset;
+    await viewDelete(view_action_target);
   }
 }
 

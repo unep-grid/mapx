@@ -10,7 +10,7 @@ import {
   viewModulesRemove,
   getView,
   getMapData,
-  viewLayersAdd,
+  viewRender,
   viewsCloseAll,
   viewAdd,
   getViewTitleNormalized,
@@ -285,7 +285,7 @@ export class ViewsListManager {
         elItem.appendChild(elView);
 
         if (update) {
-          await viewLayersAdd({
+          await viewRender({
             view: view,
           });
         }
@@ -376,9 +376,14 @@ export class ViewsListManager {
       render: true,
       open: true,
       view: view,
+      temp: false,
     };
 
     options = Object.assign({}, opt_default, options);
+
+    if (options.temp) {
+      view._temp = true;
+    }
 
     const ids = vlm.mData.views.map((v) => v.id);
     const idPosOld = ids.indexOf(view.id);
@@ -389,7 +394,7 @@ export class ViewsListManager {
     vlm.mData.views.unshift(view);
 
     if (staticMode) {
-      await viewLayersAdd({
+      await viewRender({
         idView: view.id,
         addTitle: true,
       });
