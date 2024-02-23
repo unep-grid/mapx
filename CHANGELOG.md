@@ -1,3 +1,10 @@
+  - [1.13.0-beta.1](https://github.com/unep-grid/mapx/tree/1.13.0-beta.1) 
+    
+    - Helpers : 
+        - `viewAddAuto`/`viewRemove` pair should work as expected in app and static mode for custom code
+        - renamed `viewLayersAdd<...>` as `viewRender<...>` as it handle more than layers. Works with `viewClear` for the inverse action.
+    - Story Map : solved code duplication issue
+
   - [1.13.0-alpha.28](https://github.com/unep-grid/mapx/tree/1.13.0-alpha.28) 
 
     - Upload 
