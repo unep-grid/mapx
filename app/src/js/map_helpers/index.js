@@ -1403,11 +1403,6 @@ export function initMapListener(map) {
     highlighter.setOptions({
       highlight_color: colors.mx_map_feature_highlight.color,
     });
-    if (window.jed && jed.aceEditors) {
-      for (const e of jed.aceEditors) {
-        e._set_theme_auto();
-      }
-    }
   });
 
   map.on("moveend", () => {

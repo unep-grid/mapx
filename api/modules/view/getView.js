@@ -58,6 +58,7 @@ export async function getViewsTableBySource(
   }
 
   const out = [];
+  const outPromises = [];
   const sql = templates.getViewsTableBySource;
   const idSourcesAll = await getSourceIdsIncludingJoin(
     idSource,
@@ -66,7 +67,13 @@ export async function getViewsTableBySource(
   );
 
   for (const id of idSourcesAll) {
-    const { rows } = await client.query(sql, [id]);
+    outPromises.push(client.query(sql, [id]));
+  }
+
+  const res = await Promise.all(outPromises);
+
+  for (const r of res) {
+    const { rows } = r;
     out.push(...rows);
   }
 

@@ -3,7 +3,12 @@ import { EventSimple } from "../../event_simple";
 import { isSourceId, isNotEmpty, isEmpty } from "../../is_test";
 import { modalSelectSource } from "../../select_auto";
 import { settings, ws, nc } from "../../mx";
-import { modalPrompt, modalSimple, modalConfirm } from "../../mx_helper_modal";
+import {
+  modalPrompt,
+  modalSimple,
+  modalConfirm,
+  modalDialog,
+} from "../../mx_helper_modal";
 import { getDictItem, getLabelFromObjectPath } from "../../language";
 import "./style.less";
 import { makeId } from "../../mx_helper_misc";
@@ -18,6 +23,7 @@ import {
 import { moduleLoad } from "../../modules_loader_async";
 import { TableResizer } from "../../handsontable/utils";
 import { jsonDiff } from "../../mx_helper_utils_json";
+import { downloadJSON } from "../../download";
 
 const routes = {
   join: "/client/source/join",
@@ -26,6 +32,8 @@ const routes = {
 const sjmSettings = {
   wsTimeOut: 5000,
 };
+
+export const sjm_instances = new Set();
 
 export class SourcesJoinManager extends EventSimple {
   constructor() {
@@ -61,12 +69,59 @@ export class SourcesJoinManager extends EventSimple {
     const { join: config, meta } = await sjm.loadData(sjm.id);
     const def = await sjm.getConfigDefault();
 
+    sjm._id_editor = "mx_join";
     sjm._allow_preview = false;
     sjm._schema = schema;
     sjm._config = Object.assign({}, def, config);
     sjm._meta = Object.assign({}, meta);
     sjm._lock_save = false;
     await sjm.build();
+    sjm_instances.add(sjm);
+    sjm._init = true;
+  }
+
+  /**
+   * Reload the values stored server side
+   * @param {Boolean} Reload requested by the server
+   */
+  async reload(server) {
+    const sjm = this;
+    if (sjm._reloading) {
+      return;
+    }
+    sjm._reloading = true;
+    if (server) {
+      await sjm.promptBackup();
+    }
+    const { join: config, meta } = await sjm.loadData(sjm.id);
+    const def = await sjm.getConfigDefault();
+    sjm._config = Object.assign({}, def, config);
+    sjm._meta = Object.assign({}, meta);
+    await sjm.loadEditor();
+    sjm._reloading = false;
+  }
+
+  /**
+   * Load if updates match current config
+   */
+  async autoReload(updates, server) {
+    const sjm = this;
+    let reload = false;
+    const enabled = sjm.isEnabled();
+    if (!enabled) {
+      console.log("sjm not enabled");
+      return;
+    }
+    const joinConfig = await sjm.getConfigEditor();
+    for (const update of updates) {
+      reload = reload || joinConfig.base.id_source === update.id_source;
+      for (const join of joinConfig.joins) {
+        reload = reload || join.id_source === update.id_source;
+      }
+    }
+    if (reload) {
+      sjm.reload(server);
+    }
   }
 
   get id() {
@@ -86,9 +141,29 @@ export class SourcesJoinManager extends EventSimple {
     return this._meta;
   }
 
-  getConfigEditor() {
+  async getConfigEditor() {
     const sjm = this;
     return sjm._jed.getValue();
+  }
+
+  async setConfigEditor(config) {
+    const sjm = this;
+    const diff = await sjm.getDiff(configDiff);
+
+    if (isEmpty(diff)) {
+      return;
+    }
+    const errors = await sjm.emit("validate", config);
+
+    if (isNotEmpty(errors)) {
+      await modalDialog({
+        title: "Set config : errors in value",
+        content: "Set config : errors in value",
+      });
+      return;
+    }
+
+    sjm._jed.setValue(config);
   }
 
   async getConfigDefault() {
@@ -100,14 +175,17 @@ export class SourcesJoinManager extends EventSimple {
   }
 
   async getCount() {
-    return this.emit("get_count", this.getConfigEditor());
+    return this.emit("get_count", await this.getConfigEditor());
   }
 
-  async getDiff() {
+  async getDiff(configDiff) {
     const sjm = this;
-    const { join: configOrig } = await sjm.loadData(sjm.id);
-    const configCurrent = sjm.getConfigEditor();
-    const delta = await jsonDiff(configOrig, configCurrent, {
+    if (!configDiff) {
+      const { join: configOrig } = await sjm.loadData(sjm.id);
+      configDiff = configOrig;
+    }
+    const configCurrent = await sjm.getConfigEditor();
+    const delta = await jsonDiff(configDiff, configCurrent, {
       propertyFilter: (p) => !p.startsWith("_"),
     });
     return delta;
@@ -283,7 +361,7 @@ export class SourcesJoinManager extends EventSimple {
     if (sjm.locked) {
       return;
     }
-    const config = sjm.getConfigEditor();
+    const config = await sjm.getConfigEditor();
     sjm._config = config;
     const res = await sjm.emit("set_config", config);
     if (res === true) {
@@ -301,35 +379,52 @@ export class SourcesJoinManager extends EventSimple {
     return sjm.emit("get_data", { id_source: idSource });
   }
 
-  async close() {
+  isEnabled() {
+    return this._init && !this._closed;
+  }
+
+  async close(force = false) {
     const sjm = this;
     if (sjm._closed) {
       return;
     }
 
-    const newInvalid = sjm._mode === "create" && !sjm.validateEditor();
-    const unsavedChange = await sjm.hasUnsavedChange();
-
-    if (unsavedChange) {
-      const continueUnsaved = await sjm.promptContinueUnsavedChanges();
-      if (!continueUnsaved) {
-        return;
+    if (!force) {
+      const unsavedChange = await sjm.hasUnsavedChange();
+      if (unsavedChange) {
+        const continueUnsaved = await sjm.promptContinueUnsavedChanges();
+        if (!continueUnsaved) {
+          return;
+        }
       }
-    }
 
-    if (newInvalid) {
-      const deleteJoin = await sjm.promptDeleteCreateInvalid();
-      if (!deleteJoin) {
-        return;
+      const newInvalid = sjm._mode === "create" && !sjm.validateEditor();
+      if (newInvalid) {
+        const deleteJoin = await sjm.promptDeleteCreateInvalid();
+        if (!deleteJoin) {
+          return;
+        }
+        await sjm.emit("unregister", { id_source: sjm.id });
       }
-      await sjm.emit("unregister", { id_source: sjm.id });
     }
 
     triggerUpdateSourcesList();
     sjm._closed = true;
     sjm._modal.close();
     sjm.fire("closed");
-    delete window._sjm;
+    sjm_instances.delete(sjm);
+  }
+
+  async promptBackup() {
+    const sjm = this;
+    const backup = await modalConfirm({
+      title: "Reload",
+      content:
+        "The server requested a reload of the table join configurator, after a structural change in one of the tables. Would you want to download a backup file of the  current state ?",
+    });
+    if (backup) {
+      await downloadJSON(sjm.getConfigEditor(), `join_config_${sjm._id}.json`);
+    }
   }
 
   async promptContinueUnsavedChanges() {
@@ -441,7 +536,7 @@ export class SourcesJoinManager extends EventSimple {
       onClose: destroy,
     });
 
-    const config = sjm.getConfigEditor();
+    const config = await sjm.getConfigEditor();
     const data = await sjm.emit("get_preview", config);
     elTable.innerHTML = "";
     const columns = Object.keys(data[0] || {});
@@ -462,17 +557,23 @@ export class SourcesJoinManager extends EventSimple {
     }
   }
 
-  async build() {
+  getTitle() {
     const sjm = this;
-    const { schema, config, meta } = sjm;
+    const { meta } = sjm;
     const { language } = settings;
-    const id_editor = "mx_join";
     const title = getLabelFromObjectPath({
       obj: meta,
       path: "text.title",
       lang: language,
       defaultValue: sjm.id,
     });
+    return title;
+  }
+
+  async build() {
+    const sjm = this;
+
+    const title = sjm.getTitle();
 
     sjm._elValidationOutput = el("ul", {
       class: ["list-group", "mx-error-list-container"],
@@ -485,7 +586,7 @@ export class SourcesJoinManager extends EventSimple {
       sjm._elValidationOutput,
     );
 
-    sjm._elSjm = el("div", { id: id_editor, class: "jed-container" });
+    sjm._elSjm = el("div", { id: sjm._id_editor, class: "jed-container" });
     sjm._elCount = el(
       "span",
       {
@@ -527,11 +628,17 @@ export class SourcesJoinManager extends EventSimple {
       removeCloseButton: true,
     });
 
-    config.id_source = sjm.id;
+    await sjm.loadEditor();
+  }
+
+  async loadEditor() {
+    const sjm = this;
+    const { schema, config } = sjm;
     sjm.lockSave();
+    sjm._config.id_source = sjm.id;
     sjm._jed = await jedInit({
       schema,
-      id: id_editor,
+      id: sjm._id_editor,
       target: sjm._elSjm,
       startVal: config,
       options: {

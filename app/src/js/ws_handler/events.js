@@ -1,14 +1,11 @@
-import {
-  getViewRemote,
-  triggerUpdateSourcesList,
-  viewsReplace,
-} from "./../map_helpers/index.js";
+import { viewsReplace } from "./../map_helpers/index.js";
 import { viewsListAddSingle } from "./../views_list_manager";
 import { isNotEmpty, isArrayOfViews, isFunction } from "../is_test/index.js";
 import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt/index.js";
 import { isProd } from "./../app_utils";
 import { nc } from "./../mx.js";
 import { clone } from "./../mx_helper_misc.js";
+import { sjm_instances } from "../source/joins/index.js";
 /**
  * Create list of handlers
  *
@@ -23,6 +20,7 @@ export const eventsHandlers = {
   "/server/test/echo": handlerEcho,
   "/server/test/sum": handlerSum,
   "/server/spread/views/update": handleViewsReplace,
+  "/server/spread/join_editor/update": handleJoinEditorUpdate,
 };
 
 async function handlerSourceAdded(data, cb) {
@@ -122,6 +120,30 @@ async function handlerViewStyleGet(message, cb) {
     message.error = `Error processing style for view ${e.message}`;
   }
   cb(message);
+}
+
+/**
+ * Server sent updates. If an editor exists with the given source :
+ * - handle updates
+ * message -> source_columns_rename -> [
+ *   {
+ *     id_source: 'mx_xkbpr_vfd4q_vyvy9_t19nl_xo2l3',
+ *     old_column: 'x1_new_4',
+ *     new_column: 'x1_new_5'
+ *   }
+ *
+ * ]
+ *
+ */
+async function handleJoinEditorUpdate(message, cb) {
+  const updates = message?.source_columns_rename;
+  for (const sjm of sjm_instances) {
+    await sjm.autoReload(updates, true);
+  }
+  if (isFunction(cb)) {
+    message.ok = ok;
+    cb(message);
+  }
 }
 
 /**

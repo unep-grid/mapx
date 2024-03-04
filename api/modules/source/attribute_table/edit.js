@@ -93,6 +93,7 @@ export const events = {
    * server broaddcast / spread
    */
   server_spread_views_update: "/server/spread/views/update",
+  server_spread_join_editor_update: "/server/spread/join_editor/update",
 };
 
 class EditTableSession {
@@ -358,7 +359,7 @@ class EditTableSession {
         }
       }
     } catch (e) {
-      et.error("Sanitize failed. Check logs", e);
+      et.error("Get handler failed. Check logs", e);
     }
     return callback(false);
   }
@@ -814,6 +815,9 @@ class EditTableSession {
                 async () => {
                   et.emitSpread(events.server_spread_views_update, {
                     views,
+                  });
+                  et.emitSpread(events.server_spread_join_editor_update, {
+                    source_columns_rename : updates
                   });
                   await et.updateAltStyleClient(id_table);
                   return;

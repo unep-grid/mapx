@@ -20,6 +20,7 @@ import {
   isBoolean,
 } from "./is_test/index.js";
 import { SelectAuto } from "./select_auto";
+import { jed } from "./json_editor/index.js";
 /**
  * TODO:
  * - this helper should be converted to Class

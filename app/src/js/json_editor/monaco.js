@@ -4,7 +4,7 @@ import { moduleLoad } from "./../modules_loader_async";
 import { textToDom } from "./../mx_helper_misc.js";
 import { el, elSpanTranslate, elButtonFa } from "./../el_mapx/index.js";
 import { theme } from "./../mx.js";
-import { isEmpty } from "./../is_test/index.js";
+import { jed } from "./index.js";
 
 JSONEditor.defaults.resolvers.unshift(function (schema) {
   if (
@@ -82,10 +82,7 @@ JSONEditor.defaults.editors.monaco = class mxeditors extends (
         ? "typescript"
         : editor.options.language;
 
-    if (isEmpty(window.jed.monacoEditors)) {
-      window.jed.monacoEditors = [];
-    }
-    const editors = window.jed.monacoEditors;
+    const editors = jed.monacoEditors;
 
     if (editor.options.hidden) {
       editor.theme.afterInputReady(editor.input);
@@ -265,7 +262,7 @@ JSONEditor.defaults.editors.monaco = class mxeditors extends (
   destroy() {
     const editor = this;
     const monacoEditor = editor._monaco_editor;
-    const editors = window.jed.monacoEditors || [];
+    const editors = jed.monacoEditors || [];
     if (monacoEditor) {
       monacoEditor.dispose();
       if (editors.includes(monacoEditor)) {

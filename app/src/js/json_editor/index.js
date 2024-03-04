@@ -10,7 +10,6 @@ import {
   formatByteSize,
   getSizeOf,
   isShinyReady,
-  path,
 } from "./../mx_helper_misc.js";
 import { getViewJson } from "./../map_helpers/index.js";
 import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt/index.js";
@@ -20,6 +19,18 @@ import { modalSimple } from "../mx_helper_modal";
 import { jsonDiff } from "../mx_helper_utils_json";
 import "./style.less";
 import "./../../css/mx_tom_select.css";
+
+
+
+export const jed = {
+  editors: {},
+  helper: {},
+  monacoEditors: [],
+  extend: {
+    position: {},
+    texteditor: {},
+  },
+};
 
 /**
  * @param {Object} o options
@@ -45,24 +56,11 @@ export async function jedInit(o) {
   const elJed = o.target || document.getElementById(id);
   let draftLock = true;
   let draftDbTimeStamp = 0;
-  let jed = window.jed;
   let idDraft;
 
   if (!elJed) {
     console.warn(`jed element ${id} not found`);
     return;
-  }
-
-  if (!jed) {
-    window.jed = jed = {
-      editors: {},
-      helper: {},
-      monacoEditors: [],
-      extend: {
-        position: {},
-        texteditor: {},
-      },
-    };
   }
 
   const opt_final = {};
@@ -255,6 +253,15 @@ function jedAddAncestorErrors(editor) {
     });
   }
 }
+
+/**
+ * Get jed editors
+ * @returns {Object} editors
+ */
+export function jedEditors() {
+  return jed.editors;
+}
+
 /** Remove draft
  * @param {Object} o options
  * @param {String} o.id Id of the editor
@@ -277,7 +284,7 @@ export function jedRemoveDraft(o) {
 export function jedUpdate(o) {
   const id = o.id;
   const val = o.val;
-  const jed = path(window, "jed.editors." + id);
+  const jed = jed.editors[id];
   if (jed) {
     jed.setValue(val);
   }
@@ -290,7 +297,7 @@ export function jedUpdate(o) {
  */
 export async function jedGetValuesById(o) {
   const id = o.id;
-  const jed = path(window, "jed.editors." + id);
+  const jed = jed.editors[id];
   const hasShiny = isShinyReady();
   const hasJed = isObject(jed);
   if (!hasJed) {
@@ -321,7 +328,7 @@ export async function jedGetValuesById(o) {
  */
 export function jedGetValidationById(o) {
   const id = o.id;
-  const jed = path(window, "jed.editors." + id);
+  const jed = jed.editors[id];
   const hasJed = isObject(jed);
   const hasShiny = isShinyReady();
   if (!hasJed) {

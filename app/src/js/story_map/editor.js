@@ -1,3 +1,4 @@
+import { jed } from "../json_editor";
 import { getLanguageCurrent } from "../language";
 import { getApiUrl } from "./../api_routes";
 import { sendData, path } from "./../mx_helper_misc.js";
@@ -78,7 +79,7 @@ export async function initEditing(state) {
     defaults.selector, // class of region editable
     "data-name", // name of regions
     null, // fixture test
-    true
+    true,
   );
 
   /**
@@ -151,7 +152,7 @@ export async function initEditing(state) {
         const slide = +s[1];
         const lang = getLanguageCurrent();
         const e = j.getEditor(
-          "root.steps." + step + ".slides." + slide + ".html." + lang
+          "root.steps." + step + ".slides." + slide + ".html." + lang,
         );
         if (e && e.setValue) {
           e.setValue(t);
@@ -244,7 +245,7 @@ function contentToolsImageUploader(dialog) {
     canvas.toBlob(
       buildSendBlob(cropW, cropH),
       supportWebp ? "image/webp" : typeFile || "image/jpeg",
-      0.95
+      0.95,
     );
   });
 
