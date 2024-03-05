@@ -1,3 +1,16 @@
+  - [1.13.0-beta.4](https://github.com/unep-grid/mapx/tree/1.13.0-beta.4) 
+
+    - Bug Fixes
+        - Fixed typos in JSON Editor helpers.
+    - Updates
+        - Updated the browserslist database to the latest version using npx browserslist@latest --update-db
+    - Enhancements
+        - Table Editor: 
+            - Renaming a column now triggers a reload of all join editors in all client sessions. This update includes reloading with new values if the affected table is in use in any step of the join editor. A prompt is displayed to users to inform them of the change. 
+        - View Editor :
+            - Display a warning if an attribute has been renamed or removed while the view was edited. The editor is closed.
+            - Display a message if another user updated the current view, while the view was edited. A message saying that the latest version will be kept.  
+
   - [1.13.0-beta.3](https://github.com/unep-grid/mapx/tree/1.13.0-beta.3) 
 
     - Table editor : 
