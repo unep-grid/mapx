@@ -72,6 +72,7 @@ import {
   xyToDegree,
   debounce,
   isShinyReady,
+  debouncePromise,
 } from "./../mx_helper_misc.js";
 import {
   modal,
@@ -541,8 +542,9 @@ export async function setProject(idProject, opt) {
   }
 
   modalCloseAll();
-  const promRes = events.once("settings_project_change");
+
   const promWait = waitTimeoutAsync(10e3, null, "timeout");
+  const promRes = events.once("settings_project_change");
 
   Shiny.onInputChange("selectProject", idProject);
 
@@ -792,7 +794,6 @@ export function initListenersApp() {
     type: "project_changed",
     idGroup: "project_change",
     callback: async () => {
-      console.log("project change : project_changed");
       const clActive = "active";
       const clHide = "mx-hide";
       const elBtn = document.getElementById("btnFilterShowPanel");
@@ -806,7 +807,7 @@ export function initListenersApp() {
   });
 
   events.on({
-    type: ["settings_user_change", "settings_change"],
+    type: ["settings_change"],
     idGroup: "mapx_base",
     callback: updateUiSettings,
   });
@@ -895,55 +896,68 @@ export function initListenersApp() {
  * Update element and button text that could not be translated automatically
  * after a settings change
  */
-export async function updateUiSettings() {
-  const langDef = getLanguageDefault();
-  const lang = getLanguageCurrent();
-  /**
-   * Update app title (project or default)
-   */
-  updateTitle();
+export const updateUiSettings = debouncePromise(updateUiSettings_base);
 
-  /**
-   * User / login labels
-   */
-  const elBtnLogin = document.getElementById("btnShowLoginLabel");
-  const sUser = path(mx, "settings.user", {});
-  const sRole = path(mx, "settings.user.roles", {});
+async function updateUiSettings_base() {
+  try {
+    await waitTimeoutAsync(10);
 
-  if (sUser.guest) {
-    elBtnLogin.innerText = await getDictItem("login_label");
-  } else {
-    const role = sRole.admin
-      ? "admin"
-      : sRole.publisher
-        ? "publisher"
-        : sRole.member
-          ? "member"
-          : "public";
+    const langDef = getLanguageDefault();
+    const lang = getLanguageCurrent();
+    /**
+     * User / login labels
+     */
+    const elBtnLogin = document.getElementById("btnShowLoginLabel");
+    const sUser = path(mx, "settings.user", {});
+    const sRole = path(mx, "settings.user.roles", {});
 
-    const roleLabel = await getDictItem(role);
-    elBtnLogin.innerText = `${sUser.email} – ${roleLabel}`;
+    if (sUser.guest) {
+      elBtnLogin.innerText = await getDictItem("login_label");
+    } else {
+      const role = sRole.admin
+        ? "admin"
+        : sRole.publisher
+          ? "publisher"
+          : sRole.member
+            ? "member"
+            : "public";
+
+      const roleLabel = await getDictItem(role);
+      elBtnLogin.innerText = `${sUser.email} – ${roleLabel}`;
+    }
+
+    /**
+     * Project labels
+     */
+    const elBtnProject = document.getElementById("btnShowProjectLabel");
+    const elBtnProjectPrivate = document.getElementById(
+      "btnShowProjectPrivate",
+    );
+    const title = path(mx, "settings.project.title");
+    
+    elBtnProject.innerText =
+      title[lang] || title[langDef] || settings.project.id;
+
+    if (settings.project.public) {
+      elBtnProjectPrivate.classList.remove("fa-lock");
+    } else {
+      elBtnProjectPrivate.classList.add("fa-lock");
+    }
+
+    /**
+     * Update app title (project or default)
+     */
+    updateTitle();
+
+    /**
+     * Language
+     */
+    await updateLanguage();
+    const elBtnLanguage = document.getElementById("btnShowLanguageLabel");
+    elBtnLanguage.innerText = await getDictItem(lang);
+  } catch (e) {
+    console.error("updateUiSettings error", e);
   }
-
-  /**
-   * Project labels
-   */
-  const elBtnProject = document.getElementById("btnShowProjectLabel");
-  const elBtnProjectPrivate = document.getElementById("btnShowProjectPrivate");
-  const title = path(mx, "settings.project.title");
-  elBtnProject.innerText = title[lang] || title[langDef] || settings.project.id;
-  if (settings.project.public) {
-    elBtnProjectPrivate.classList.remove("fa-lock");
-  } else {
-    elBtnProjectPrivate.classList.add("fa-lock");
-  }
-
-  /**
-   * Language
-   */
-  await updateLanguage();
-  const elBtnLanguage = document.getElementById("btnShowLanguageLabel");
-  elBtnLanguage.innerText = await getDictItem(lang);
 }
 
 /**

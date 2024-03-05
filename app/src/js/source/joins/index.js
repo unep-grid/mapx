@@ -24,6 +24,8 @@ import { moduleLoad } from "../../modules_loader_async";
 import { TableResizer } from "../../handsontable/utils";
 import { jsonDiff } from "../../mx_helper_utils_json";
 import { downloadJSON } from "../../download";
+import { isTrue } from "../../is_test";
+import { isBoolean } from "../../is_test";
 
 const routes = {
   join: "/client/source/join",
@@ -618,7 +620,7 @@ export class SourcesJoinManager extends EventSimple {
 
     sjm._elBtnClose = elButtonFa("btn_close", {
       icon: "times",
-      action: sjm.close,
+      action: () => sjm.close(false),
     });
 
     sjm._modal = modalSimple({

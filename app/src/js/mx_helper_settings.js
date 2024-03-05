@@ -1,15 +1,21 @@
 import { diff, clone } from "jsondiffpatch";
 import { settings } from "./settings";
-import { mergeDeep } from "./mx_helper_misc.js";
+//import { mergeDeep } from "./mx_helper_misc.js";
 
 /**
  * Update settings
  * @param {Options} o Option with key from settings. Overwrite settings values.
  */
-export function updateSettings(o) {
+export function updateSettings(newSettings) {
   const oldSettings = clone(settings);
 
-  mergeDeep(settings, o);
+  /**
+   * Simple reassign
+   * - mergeDeep filled also translated value, such as project :
+   *   a project in french was reported in the next project if the
+   *   project had no project translation
+   */
+  Object.assign(settings, newSettings);
 
   const delta = diff(oldSettings, settings);
 
