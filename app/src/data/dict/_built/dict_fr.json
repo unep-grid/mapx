@@ -7200,6 +7200,26 @@
     "fr": "Valeurs manquantes : {{nullCount}}"
   },
   {
+    "id": "view_edit_warning_date_concurrency",
+    "en": "Current view have been modified concurently",
+    "fr": "La vue actuelle a été modifiée simultanément"
+  },
+  {
+    "id": "view_edit_warning_date_concurrency_desc",
+    "en": "The current view has been updated by another user while you were editing. Your version is the latest one. Last editor's email:",
+    "fr": "La vue actuelle a été mise à jour par un autre utilisateur pendant que vous étiez en train de la modifier. Votre version est la dernière. Email du dernier éditeur :"
+  },
+  {
+    "id": "view_edit_attribute_error",
+    "en": "Attributes error",
+    "fr": "Erreur d'attributs"
+  },
+  {
+    "id": "view_edit_attribute_error_desc",
+    "en": "Some selected attributes are no longer available or have been renamed during this session by another user. The view editor must be reloaded.",
+    "fr": "Certains attributs sélectionnés ne sont plus disponibles ou ont été renommés lors de cette session par un autre utilisateur. L'éditeur de vues doit être rechargé."
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "fr": "Composeur de carte"

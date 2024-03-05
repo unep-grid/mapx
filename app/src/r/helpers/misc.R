@@ -2179,7 +2179,8 @@ mxUpdateDefViewVt <- function(
     layerName <- .get(sourceData, c("layerName"))
     viewData <- .get(view, c("data"))
     meta <- mxDbGetSourceMeta(layerName)
-
+    sourceTitle <- .get(meta, c("text", "title", "en"))
+    sourceUrl <- .get(meta, c("origin", "homepage", "url"))
 
     oldLayer <- .get(viewData, c("source", "layerInfo", "name"))
     newLayer <- .get(sourceData, c("layerName"))
@@ -2196,8 +2197,8 @@ mxUpdateDefViewVt <- function(
       type = "vector",
       attribution = as.character(
         tags$a(
-          href = .get(meta, c("origin", "homepage", "url")),
-          .get(meta, c("text", "title", "en"))
+          href = sourceUrl,
+          sourceTitle
         )
       ),
       layerInfo = list(
@@ -2208,18 +2209,18 @@ mxUpdateDefViewVt <- function(
     #
     # Attributes info
     #
+    attributesAll <- unique(
+      c(
+        .get(sourceData, c("variableName"), list()),
+        additionalAttributes
+      )
+    )
     attributesInfo <- list(
       name = .get(sourceData, c("variableName")),
       type = .get(sourceData, c("variableType")),
-      names = as.list(
-        unique(
-          c(
-            .get(sourceData, c("variableName"),list()),
-            additionalAttributes
-          )
-        )
-      )
+      names = as.list(attributesAll)
     )
+
     #
     # Geom info
     #
@@ -2230,8 +2231,6 @@ mxUpdateDefViewVt <- function(
     #
     # Update view data
     #
-
-
     viewData <- .set(viewData, c("attribute"), attributesInfo)
     viewData <- .set(viewData, c("source"), sourceInfo)
     viewData <- .set(viewData, c("geometry"), geomInfo)

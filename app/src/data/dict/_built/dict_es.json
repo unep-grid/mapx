@@ -7200,6 +7200,26 @@
     "es": "Valores faltantes: {{nullCount}}"
   },
   {
+    "id": "view_edit_warning_date_concurrency",
+    "en": "Current view have been modified concurently",
+    "es": "La vista actual se ha modificado simultáneamente."
+  },
+  {
+    "id": "view_edit_warning_date_concurrency_desc",
+    "en": "The current view has been updated by another user while you were editing. Your version is the latest one. Last editor's email:",
+    "es": "Otro usuario actualizó la vista actual mientras usted estaba editando. Tu versión es la más reciente. Correo electrónico del último editor:"
+  },
+  {
+    "id": "view_edit_attribute_error",
+    "en": "Attributes error",
+    "es": "Error de atributos"
+  },
+  {
+    "id": "view_edit_attribute_error_desc",
+    "en": "Some selected attributes are no longer available or have been renamed during this session by another user. The view editor must be reloaded.",
+    "es": "Algunos atributos seleccionados ya no están disponibles o otro usuario les ha cambiado el nombre durante esta sesión. Se debe recargar el editor de vistas."
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "es": "Creador de mapas"

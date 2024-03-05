@@ -180,10 +180,20 @@ observe({
             #
             # Create named lists for editors and members
             #
-            targetNamesEditors <- c(d("group_project", language, web = F), d("members", language, web = F))
-            targetNamesReaders <- c(d("group_project", language, web = F))
-            viewReadTarget <- list(Groups = d(viewReadTarget, language, namedVector = T))
-            viewEditTarget <- list(Groups = d(viewEditTarget, language, namedVector = T), Users = members)
+            targetNamesEditors <- c(
+              d("group_project", language, web = F),
+              d("members", language, web = F)
+            )
+            targetNamesReaders <- c(
+              d("group_project", language, web = F)
+            )
+            viewReadTarget <- list(
+              Groups = d(viewReadTarget, language, namedVector = T)
+            )
+            viewEditTarget <- list(
+              Groups = d(viewEditTarget, language, namedVector = T),
+              Users = members
+            )
             names(viewReadTarget) <- targetNamesReaders
             names(viewEditTarget) <- targetNamesEditors
 
@@ -933,7 +943,6 @@ observeEvent(input$btnViewSave, {
     #
     # Retrieve view value
     #
-    time <- Sys.time()
     view <- reactData$viewDataEdited
     idView <- .get(view, c("id"))
     project <- reactData$project
@@ -971,9 +980,12 @@ observeEvent(input$btnViewSave, {
     view[[c("editor")]] <- editor
     view[[c("data", "projects")]] <- projects
 
-    if (isEmpty(editors)) editors <- c(as.character(editor))
-    if (!isTRUE(as.character(editor) %in% editors)) editors <- c(editors, as.character(editor))
-
+    if (isEmpty(editors)) {
+      editors <- c(as.character(editor))
+    }
+    if (!isTRUE(as.character(editor) %in% editors)) {
+      editors <- c(editors, as.character(editor))
+    }
     #
     # Update collections
     #
@@ -991,7 +1003,6 @@ observeEvent(input$btnViewSave, {
     # Update first level values
     #
     view[["data"]] <- as.list(view$data)
-    view[["date_modified"]] <- time
     view[[c("readers")]] <- as.list(readers)
     view[[c("editors")]] <- as.list(editors)
     view[[c("target")]] <- NULL
@@ -1002,10 +1013,41 @@ observeEvent(input$btnViewSave, {
     if (view[["type"]] == "vt") {
       #
       # Get reactive data source summary
+      # - uses selectSourceLayerMainVariable
       #
       sourceData <- reactLayerSummary()
       sourceDataMask <- reactLayerMaskSummary()
       additionalAttributes <- input$selectSourceLayerOtherVariables
+      layerMain <- input$selectSourceLayerMain
+      attribute <- input$selectSourceLayerMainVariable
+
+      #
+      # Last check
+      #
+      attributesValid <- mxDbExistsColumns(layerMain, c(
+        additionalAttributes, attribute
+      ))
+      if (!attributesValid) {
+        reactData$updateSourceLayerList <- runif(1)
+
+        mxModal(
+          id = "modalViewEdit",
+          close = TRUE
+        )
+        mxModal(
+          id = "modalViewEditError",
+          title = dd("view_edit_attribute_error"),
+          addBackground = TRUE,
+          content = tagList(
+            tags$span(
+              dd("view_edit_attribute_error_desc"),
+            )
+          )
+        )
+        return()
+      }
+
+
       #
       # Update view data
       #
@@ -1027,8 +1069,6 @@ observeEvent(input$btnViewSave, {
         type = "raster",
         tiles = rep(input$textRasterTileUrl, 2),
         legend = input$textRasterTileLegend,
-        # urlMetadata = input$textRasterTileUrlMetadata,
-        # urlDownload = input$textRasterTileUrlDownload,
         tileSize = as.integer(input$selectRasterTileSize),
         useMirror = input$checkRasterTileUseMirror
       )
@@ -1045,6 +1085,50 @@ observeEvent(input$btnViewSave, {
       # A copy is required for current session
       view$`_meta` <- viewSourceMetadata
     }
+
+
+    #
+    # Warning if date_modified missmatch
+    #
+    viewStored <- mxDbGetView(.get(view, "id"))[[1]]
+    lastEditor <- .get(viewStored, "editor")
+    lastEditorEmail <- mxDbGetEmailFromId(lastEditor)
+
+    dateStoredStr <- .get(viewStored, "date_modified")
+    dateCurrentStr <- .get(view, "date_modified")
+    dateFormat <- .get(config, c("dates_format", "db"))
+    dateStored <- as.POSIXct(
+      dateStoredStr,
+      format = dateFormat,
+      tz = "UTC"
+    )
+    dateCurrent <- as.POSIXct(
+      dateCurrentStr,
+      format = dateFormat,
+      tz = "UTC"
+    )
+
+    storedIsMoreRecent <- dateStored > dateCurrent
+
+    if (storedIsMoreRecent) {
+      mxModal(
+        id = "modalViewEditTimestampIssue",
+        title = dd("view_edit_warning_date_concurrency"),
+        content =
+          tags$span(
+            dd("view_edit_warning_date_concurrency_desc"),
+            lastEditorEmail
+          ),
+        addBackground = TRUE,
+      )
+    }
+
+    #
+    # Set timestamp
+    #
+    time <- Sys.time()
+    view[["date_modified"]] <- time
+
 
     #
     # save a version in db

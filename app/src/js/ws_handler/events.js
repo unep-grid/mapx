@@ -1,4 +1,4 @@
-import { viewsReplace } from "./../map_helpers/index.js";
+import { getViewRemote, viewsReplace } from "./../map_helpers/index.js";
 import { viewsListAddSingle } from "./../views_list_manager";
 import { isNotEmpty, isArrayOfViews, isFunction } from "../is_test/index.js";
 import { getViewMapboxStyle, getViewSldStyle } from "./../style_vt/index.js";

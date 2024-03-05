@@ -7200,6 +7200,26 @@
     "zh": "缺失值： {{nullCount}}"
   },
   {
+    "id": "view_edit_warning_date_concurrency",
+    "en": "Current view have been modified concurently",
+    "zh": "当前视图已同时修改"
+  },
+  {
+    "id": "view_edit_warning_date_concurrency_desc",
+    "en": "The current view has been updated by another user while you were editing. Your version is the latest one. Last editor's email:",
+    "zh": "在您编辑时，当前视图已被其他用户更新。你的版本是最新的。最后编辑的电子邮件："
+  },
+  {
+    "id": "view_edit_attribute_error",
+    "en": "Attributes error",
+    "zh": "属性错误"
+  },
+  {
+    "id": "view_edit_attribute_error_desc",
+    "en": "Some selected attributes are no longer available or have been renamed during this session by another user. The view editor must be reloaded.",
+    "zh": "某些选定的属性不再可用，或者在此会话期间已被其他用户重命名。必须重新加载视图编辑器。"
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "zh": "地图编辑器"

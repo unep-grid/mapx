@@ -7200,6 +7200,26 @@
     "fa": "ارزش از دست رفته: {{nullCount}}"
   },
   {
+    "id": "view_edit_warning_date_concurrency",
+    "en": "Current view have been modified concurently",
+    "fa": "نمای فعلی به طور همزمان اصلاح شده است"
+  },
+  {
+    "id": "view_edit_warning_date_concurrency_desc",
+    "en": "The current view has been updated by another user while you were editing. Your version is the latest one. Last editor's email:",
+    "fa": "نمای فعلی توسط کاربر دیگری در حین ویرایش به‌روزرسانی شده است. نسخه شما آخرین نسخه است. آخرین ایمیل ویرایشگر:"
+  },
+  {
+    "id": "view_edit_attribute_error",
+    "en": "Attributes error",
+    "fa": "خطای صفات"
+  },
+  {
+    "id": "view_edit_attribute_error_desc",
+    "en": "Some selected attributes are no longer available or have been renamed during this session by another user. The view editor must be reloaded.",
+    "fa": "برخی از ویژگی‌های انتخاب‌شده دیگر در دسترس نیستند یا در طول این جلسه توسط کاربر دیگری تغییر نام داده‌اند. ویرایشگر view باید دوباره بارگیری شود."
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "fa": "Map Composer"

@@ -7200,6 +7200,26 @@
     "bn": "অনুপস্থিত মানের: {{nullCount}}"
   },
   {
+    "id": "view_edit_warning_date_concurrency",
+    "en": "Current view have been modified concurently",
+    "bn": "বর্তমান দৃশ্য একযোগে সংশোধন করা হয়েছে"
+  },
+  {
+    "id": "view_edit_warning_date_concurrency_desc",
+    "en": "The current view has been updated by another user while you were editing. Your version is the latest one. Last editor's email:",
+    "bn": "আপনি সম্পাদনা করার সময় বর্তমান দৃশ্যটি অন্য ব্যবহারকারী দ্বারা আপডেট করা হয়েছে। আপনার সংস্করণ সর্বশেষ সংস্করণ. শেষ সম্পাদকের ইমেল:"
+  },
+  {
+    "id": "view_edit_attribute_error",
+    "en": "Attributes error",
+    "bn": "বৈশিষ্ট্য ত্রুটি"
+  },
+  {
+    "id": "view_edit_attribute_error_desc",
+    "en": "Some selected attributes are no longer available or have been renamed during this session by another user. The view editor must be reloaded.",
+    "bn": "কিছু নির্বাচিত গুণাবলী আর উপলব্ধ নেই বা অন্য ব্যবহারকারীর দ্বারা এই সেশনের সময় পুনঃনামকরণ করা হয়েছে৷ ভিউ এডিটর রিলোড করতে হবে।"
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer",
     "bn": "মানচিত্র সুরকার"

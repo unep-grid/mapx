@@ -207,8 +207,7 @@ mxDbSlimViews <- function(max = 10, daysback = 60) {
 mxDbUpdate <- function(table, column, idCol = "id", id, value, path = NULL, expectedRowsAffected = 1) {
   # explicit check
   stopifnot(mxDbExistsTable(table))
-
-  stopifnot(tolower(column) %in% tolower(mxDbGetTableColumnsNames(table)))
+  stopifnot(mxDbExistsColumns(table, column))
   # implicit check
   stopifnot(!isEmpty(id))
   stopifnot(!isEmpty(idCol))
@@ -354,8 +353,7 @@ mxDbGetLayerExtent <- function(table = NULL, geomColumn = "geom") {
     stop("Invalid table")
   }
 
-  columns <- mxDbGetTableColumnsNames(table)
-  hasGeom <- "geom" %in% columns
+  hasGeom <- mxDbExistsColumns(table, "geom")
   if (!hasGeom) {
     return(list())
   }
@@ -565,8 +563,9 @@ mxDbGetColumnInfo <- function(table = NULL, column = NULL) {
     return()
   }
 
+  hasColumns <- mxDbExistsColumns(table,column)
+  stopifnot(hasColumns)
 
-  stopifnot(tolower(column) %in% tolower(mxDbGetTableColumnsNames(table)))
   timing <- system.time({
     q <- sprintf(
       "SELECT attname
@@ -768,6 +767,17 @@ mxDbExistsTable <- function(table, schema = "public") {
   result <- mxDbGetQuery(query)
   return(as.logical(result[1, 1]))
 }
+
+#' Check if all columns are availble in table
+#'
+#' @param table Table
+#' @param columns Columns to check
+#' @return boolean
+mxDbExistsColumns <- function(table, columns) {
+  tableColumns <- mxDbGetTableColumnsNames(table)
+  return(all(tolower(columns) %in% tolower(tableColumns)))
+}
+
 
 
 #' Convert list of columns namme no sql colulmns array

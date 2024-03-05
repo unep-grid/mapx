@@ -20,8 +20,6 @@ import { jsonDiff } from "../mx_helper_utils_json";
 import "./style.less";
 import "./../../css/mx_tom_select.css";
 
-
-
 export const jed = {
   editors: {},
   helper: {},
@@ -267,13 +265,12 @@ export function jedEditors() {
  * @param {String} o.id Id of the editor
  * @param {Object} o.idItem id of the item to remove
  */
-export function jedRemoveDraft(o) {
+export async function jedRemoveDraft(o) {
   const idEditor = o.id;
   const idItem = o.idItem;
   const idDraft = idEditor + "@" + idItem;
-  mx_storage.draft.removeItem(idDraft).then(() => {
-    console.log("item " + idDraft + "removed from mx_storage.draft");
-  });
+  await mx_storage.draft.removeItem(idDraft);
+  console.log("item " + idDraft + "removed from mx_storage.draft");
 }
 
 /** Update jed editor
@@ -284,9 +281,9 @@ export function jedRemoveDraft(o) {
 export function jedUpdate(o) {
   const id = o.id;
   const val = o.val;
-  const jed = jed.editors[id];
-  if (jed) {
-    jed.setValue(val);
+  const editor = jed.editors[id];
+  if (editor) {
+    editor.setValue(val);
   }
 }
 
@@ -297,14 +294,14 @@ export function jedUpdate(o) {
  */
 export async function jedGetValuesById(o) {
   const id = o.id;
-  const jed = jed.editors[id];
+  const editor = jed.editors[id];
   const hasShiny = isShinyReady();
   const hasJed = isObject(jed);
   if (!hasJed) {
     return;
   }
   const values = {
-    data: jed.getValue(),
+    data: editor.getValue(),
     time: Date.now(),
     idEvent: o.idEvent,
   };
@@ -312,9 +309,9 @@ export async function jedGetValuesById(o) {
     /**
      * Apply value transform on get values
      */
-    const hasHooks = !isEmpty(jed.options.hooksOnGet);
+    const hasHooks = !isEmpty(editor.options.hooksOnGet);
     if (hasHooks) {
-      await jedHooksApply(values, jed.options.hooksOnGet);
+      await jedHooksApply(values, editor.options.hooksOnGet);
     }
     Shiny.onInputChange(id + "_values", values);
   } else {
@@ -328,14 +325,14 @@ export async function jedGetValuesById(o) {
  */
 export function jedGetValidationById(o) {
   const id = o.id;
-  const jed = jed.editors[id];
-  const hasJed = isObject(jed);
+  const editor = jed.editors[id];
+  const hasJed = isObject(editor);
   const hasShiny = isShinyReady();
   if (!hasJed) {
     return;
   }
   const valid = {
-    data: jed.validate(),
+    data: editor.validate(),
     time: Date.now(),
     idEvent: o.idEvent,
   };
@@ -347,25 +344,26 @@ export function jedGetValidationById(o) {
 }
 /** Show recovery panel
  * @param {Object} o options
- * @param {Object} o.jed Editor
+ * @param {Object} o.editor Editor
  * @param {String} o.idDraft Id of the draft
  * @param {Object} o.draft draft to recover
  * @param {Object} o.saved data provided from db
  * @param {Number} o.timeDb Posix time stamp of the db version
  */
 async function jedShowDraftRecovery(o) {
-  if (!o.draft || o.draft.type !== "draft") {
+  const { draft, editor, saved, timeDb } = o;
+
+  if (isEmpty(draft) || draft.type !== "draft") {
     throw new Error({
       msg: "Invalid draft",
       data: o.draft,
     });
   }
 
-  const jed = o.jed;
-  const recoveredData = o.draft.data;
-  const dbData = o.saved;
-  const dateTimeDb = formatDateTime(o.timeDb);
-  const dateTimeBrowser = formatDateTime(o.draft.timestamp);
+  const recoveredData = draft.data;
+  const dbData = saved;
+  const dateTimeDb = formatDateTime(timeDb);
+  const dateTimeBrowser = formatDateTime(draft.timestamp);
 
   const diff = await getDiff();
   const hasEmptyDiff = isEmpty(diff);
@@ -478,7 +476,7 @@ async function jedShowDraftRecovery(o) {
 
   function restore() {
     delete recoveredData._timestamp;
-    jed.setValue(recoveredData);
+    editor.setValue(recoveredData);
     modal.close();
   }
 }

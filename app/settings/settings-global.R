@@ -468,6 +468,19 @@ config[[c("views", "type_dev")]] <- list(
 # Data configuration
 #
 config[["data"]] <- list()
+
+
+#
+# Date formats  
+#
+config[["dates_format"]] <- list(
+  # 2024-03-05T10:01:00.92089+00:00
+  "db" =  "%Y-%m-%d%tT%T", 
+  # 2024-03-05 10:02:22.0133 UTC
+  "r" = "%Y-%m-%d %H:%M:%OS %Z"
+)
+
+
 #
 # File format meta
 # ⚠️  moved to  api/modules/file_formats/

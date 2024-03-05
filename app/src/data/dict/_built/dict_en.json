@@ -5760,6 +5760,22 @@
     "en": "Missing values: {{nullCount}}"
   },
   {
+    "id": "view_edit_warning_date_concurrency",
+    "en": "Current view have been modified concurently"
+  },
+  {
+    "id": "view_edit_warning_date_concurrency_desc",
+    "en": "The current view has been updated by another user while you were editing. Your version is the latest one. Last editor's email:"
+  },
+  {
+    "id": "view_edit_attribute_error",
+    "en": "Attributes error"
+  },
+  {
+    "id": "view_edit_attribute_error_desc",
+    "en": "Some selected attributes are no longer available or have been renamed during this session by another user. The view editor must be reloaded."
+  },
+  {
     "id": "mc_title",
     "en": "Map Composer"
   },
