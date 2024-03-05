@@ -1,3 +1,10 @@
+  - [1.13.0-beta.5](https://github.com/unep-grid/mapx/tree/1.13.0-beta.5) 
+
+    - Bug fixes
+        - Project change : title could have been wrong in some cases
+    - Project Removal 
+        - New basic interface to visualise what will be removed, including source, views and dependent views
+
   - [1.13.0-beta.4](https://github.com/unep-grid/mapx/tree/1.13.0-beta.4) 
 
     - Bug Fixes
