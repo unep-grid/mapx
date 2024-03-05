@@ -5390,14 +5390,19 @@
     "zh": "分析中，请稍候..."
   },
   {
-    "id": "project_delete_number_of_sources",
-    "en": "Number of sources to delete",
-    "zh": "要删除的源数量"
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete",
+    "zh": "要删除的视图表"
   },
   {
-    "id": "project_delete_number_of_views",
-    "en": "Number of views to delete",
-    "zh": "要删除的视图数量"
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete",
+    "zh": "要删除的源表"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete",
+    "zh": "要删除的从属视图表"
   },
   {
     "id": "project_delete_title",

@@ -285,8 +285,8 @@ mxSchemaMultiLingualInput <- function(
     list(
       title = sprintf(
         "%1$s (%2$s%3$s)",
-        d(keyTitle, lang = x, dict = dict, web = F),
-        d(x, lang = language, dict = dict, web = F),
+        d(keyTitle, lang = x, dict = dict, web = FALSE),
+        d(x, lang = language, dict = dict, web = FALSE),
         ifelse(opt$readOnly, ", read only", "")
       ),
       type = type,

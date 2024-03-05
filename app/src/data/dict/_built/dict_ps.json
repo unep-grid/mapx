@@ -5390,14 +5390,19 @@
     "ps": "شننه ، مهرباني وکړئ انتظار وکړئ ... "
   },
   {
-    "id": "project_delete_number_of_sources",
-    "en": "Number of sources to delete",
-    "ps": "د حذف کولو لپاره د سرچینو شمیر "
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete",
+    "ps": "د ړنګولو لپاره د لیدونو جدول"
   },
   {
-    "id": "project_delete_number_of_views",
-    "en": "Number of views to delete",
-    "ps": "د ړنګولو لپاره د لیدونو شمیر "
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete",
+    "ps": "د ړنګولو لپاره د سرچینو جدول"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete",
+    "ps": "د ړنګولو لپاره د انحصاري لیدونو جدول"
   },
   {
     "id": "project_delete_title",

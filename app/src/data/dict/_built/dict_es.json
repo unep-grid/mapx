@@ -5390,14 +5390,19 @@
     "es": "Analizando, por favor espere..."
   },
   {
-    "id": "project_delete_number_of_sources",
-    "en": "Number of sources to delete",
-    "es": "Nombre de la fuente de datos para eliminar"
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete",
+    "es": "Tabla de vistas para eliminar"
   },
   {
-    "id": "project_delete_number_of_views",
-    "en": "Number of views to delete",
-    "es": "Nombre de las vista para eliminar"
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete",
+    "es": "Tabla de fuentes para eliminar"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete",
+    "es": "Tabla de vistas dependientes para eliminar"
   },
   {
     "id": "project_delete_title",

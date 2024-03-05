@@ -5390,14 +5390,19 @@
     "fr": "Analyse, veuillez patienter..."
   },
   {
-    "id": "project_delete_number_of_sources",
-    "en": "Number of sources to delete",
-    "fr": "Nombre de sources à supprimer"
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete",
+    "fr": "Table des vues à supprimer"
   },
   {
-    "id": "project_delete_number_of_views",
-    "en": "Number of views to delete",
-    "fr": "Nombre de vues à supprimer"
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete",
+    "fr": "Table des sources à supprimer"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete",
+    "fr": "Table des vues dépendantes à supprimer"
   },
   {
     "id": "project_delete_title",

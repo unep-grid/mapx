@@ -5390,14 +5390,19 @@
     "bn": "বিশ্লেষণ করা হচ্ছে, দয়া করে অপেক্ষা করুন ... "
   },
   {
-    "id": "project_delete_number_of_sources",
-    "en": "Number of sources to delete",
-    "bn": "মুছে ফেলার সংখ্যা of "
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete",
+    "bn": "মুছে ফেলার জন্য দর্শনের সারণী"
   },
   {
-    "id": "project_delete_number_of_views",
-    "en": "Number of views to delete",
-    "bn": "মোছার মতামতের সংখ্যা "
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete",
+    "bn": "মুছে ফেলার জন্য উৎসের সারণী"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete",
+    "bn": "মুছে ফেলার জন্য নির্ভরশীল দর্শনের সারণী"
   },
   {
     "id": "project_delete_title",

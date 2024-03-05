@@ -5390,14 +5390,19 @@
     "ru": "Анализируем, подождите ... "
   },
   {
-    "id": "project_delete_number_of_sources",
-    "en": "Number of sources to delete",
-    "ru": "Количество удаляемых источников "
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete",
+    "ru": "Таблица представлений для удаления"
   },
   {
-    "id": "project_delete_number_of_views",
-    "en": "Number of views to delete",
-    "ru": "Количество просмотров для удаления "
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete",
+    "ru": "Таблица источников для удаления"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete",
+    "ru": "Таблица зависимых представлений для удаления"
   },
   {
     "id": "project_delete_title",

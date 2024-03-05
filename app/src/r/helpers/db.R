@@ -563,7 +563,7 @@ mxDbGetColumnInfo <- function(table = NULL, column = NULL) {
     return()
   }
 
-  hasColumns <- mxDbExistsColumns(table,column)
+  hasColumns <- mxDbExistsColumns(table, column)
   stopifnot(hasColumns)
 
   timing <- system.time({
@@ -1510,7 +1510,12 @@ mxDbGetSourceData <- function(idSource) {
 #' Get layer title
 #' @param layer Postgis layer stored in layer table.
 #' @export
-mxDbGetSourceTitle <- function(layer, asNamedList = TRUE, language = "en") {
+mxDbGetSourceTitle <- function(
+  layer,
+  asNamedList = TRUE,
+  asTable = FALSE,
+  language = "en"
+) {
   layer <- paste(paste0("'", layer, "'"), collapse = ",")
 
   # query
@@ -1524,12 +1529,15 @@ mxDbGetSourceTitle <- function(layer, asNamedList = TRUE, language = "en") {
       ) AS title
   FROM mx_sources
   WHERE id in (%1$s)",
-    layer, language
+    layer,
+    language
   )
 
   out <- mxDbGetQuery(sql)
 
-  if (asNamedList) {
+  if (asTable) {
+    out <- out
+  } else if (asNamedList) {
     idLayer <- as.list(out$id)
     names(idLayer) <- out$title
     out <- idLayer

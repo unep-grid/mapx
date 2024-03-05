@@ -6,39 +6,50 @@ observeEvent(input$btnShowProjectDelete, {
   userData <- reactUser$data
   isProjectDefault <- isTRUE(idProject == config[[c("project", "default")]])
 
-  if (isAdmin && !isProjectDefault) {
-    projectData <- mxDbGetProjectData(idProject)
-    projectTitle <- .get(projectData, c("title", language))
-    if (isEmpty(projectTitle)) {
-      projectTitle <- .get(projectData, c("title", "en"))
-    }
-    reactData$projectTitle <- projectTitle
 
-    #
-    # Set public mode and
-    # create select input for members, publishers and admins
-    #
-    ui <- tagList(
-      textInput(
-        "txtProjectConfirmName",
-        label = d("project_delete_confirm_title", language, web = F),
-      ),
-      uiOutput("uiProjectDeleteValidation")
-    )
-
-    btnDelete <- actionButton(
-      "btnDeleteProject",
-      d("btn_delete", language, web = F)
-    )
-
-    mxModal(
-      id = "deleteProject",
-      title = d("project_delete_title", language, web = F) + " \" " + projectTitle + " \" ",
-      content = ui,
-      textCloseButton = d("btn_cancel", language, web = F),
-      buttons = list(btnDelete)
-    )
+  if (!isAdmin || isProjectDefault) {
+    return()
   }
+  projectData <- mxDbGetProjectData(idProject)
+  projectTitle <- .get(projectData, c("title", language))
+
+  if (isEmpty(projectTitle)) {
+    projectTitle <- .get(projectData, c("title", "en"))
+  }
+
+  modalTitle <- sprintf(
+    "%1$s \" %2$s \"",
+    dd("project_delete_title", language),
+    projectTitle
+  )
+
+  reactData$projectTitle <- projectTitle
+  reactData$projectModalTitle <- modalTitle
+
+  #
+  # Set public mode and
+  # create select input for members, publishers and admins
+  #
+  ui <- tagList(
+    textInput(
+      "txtProjectConfirmName",
+      label = dd("project_delete_confirm_title", language),
+    ),
+    uiOutput("uiProjectDeleteValidation")
+  )
+
+  btnDelete <- actionButton(
+    "btnDeleteProject",
+    dd("btn_delete", language)
+  )
+
+  mxModal(
+    id = "deleteProject",
+    title = modalTitle,
+    content = ui,
+    textCloseButton = dd("btn_cancel", language),
+    buttons = list(btnDelete)
+  )
 })
 
 
@@ -50,7 +61,9 @@ observeEvent(input$txtProjectConfirmName, {
   errors <- logical(0)
   warning <- logical(0)
 
-  errors["error_title_no_match"] <- isTRUE(tolower(projectTitle) != tolower(projectConfirmName))
+  errors["error_title_no_match"] <- isTRUE(
+    tolower(projectTitle) != tolower(projectConfirmName)
+  )
   errors <- errors[errors]
   hasError <- length(errors) > 0
 
@@ -85,67 +98,132 @@ observeEvent(input$btnDeleteProject, {
   mxCatch(title = "Delete project: search data to remove", {
     project <- reactData$project
     projectTitle <- reactData$projectTitle
+    modalTitle <- reactData$projectModalTitle
     language <- reactData$language
+
 
     mxModal(
       id = "deleteProject",
-      title = d("project_delete_title", language, web = F) + " \" " + projectTitle + " \" ",
-      content = d("project_delete_analyze", language),
+      title = modalTitle,
+      content = dd("project_delete_analyze", language),
       buttons = list(),
       removeCloseButton = TRUE
     )
 
-    sourcesToRemove <- mxDbGetQuery("
+    querySource <- sprintf(
+      "
       SELECT id
       FROM mx_sources
-      WHERE project = '" + project + "'")$id
-    viewsProject <- mxDbGetQuery("
+      WHERE project = '%1$s'
+      ",
+      project
+    )
+
+    queryViews <- sprintf(
+      "
       SELECT distinct id
       FROM mx_views_latest
-      WHERE project = '" + project + "'")$id
+      WHERE project = '%1$s'
+      ",
+      project
+    )
 
-    viewsToRemove <- c()
-    #
-    # Remove remaining views
-    #
+    sourcesToRemove <- mxDbGetQuery(querySource)$id
+    viewsProject <- mxDbGetQuery(queryViews)$id
 
+    tableViewsProject <- mxDbGetViewsTitle(
+      viewsProject,
+      asNamedList = FALSE,
+      language = language
+    )
+
+    tableSourcesProject <- mxDbGetSourceTitle(
+      sourcesToRemove,
+      asTable = TRUE,
+      language = language
+    )
+
+    #
+    # Remove linked views
+    #
+    tableViewsDep <- data.frame(
+      id = character(0),
+      title = character(0),
+      project = character(0)
+    )
     for (src in sourcesToRemove) {
-      viewsToRemove <- c(mxDbGetViewsTableBySourceId(src)$view_id, viewsToRemove)
+      tableViewsBySource <- mxDbGetViewsTableBySourceId(src)
+      tableViewsDep <- rbind(tableViewsDep, tableViewsBySource)
     }
 
-    viewsToRemove <- c(viewsToRemove, viewsProject)
-    viewsToRemove <- unique(viewsToRemove)
-
-    reactData$projectDeleteViews <- viewsToRemove
-    reactData$projectDeleteSources <- sourcesToRemove
-  })
+    hasViews <- isNotEmpty(tableViewsProject)
+    hasViewsDep <- isNotEmpty(tableViewsDep)
+    hasSources <- isNotEmpty(tableSourcesProject)
 
 
-  ui <- tags$ul(
-    tags$li(
-      tags$b(d("project_delete_number_of_sources", language)),
-      ":",
-      tags$span(length(sourcesToRemove))
-    ),
-    tags$li(
-      tags$b(d("project_delete_number_of_views", language)),
-      ":",
-      tags$span(length(viewsToRemove))
+    if (hasViewsDep) {
+      tableViewsDep <- tableViewsDep[
+        !tableViewsDep$project %in% project &
+          !tableViewsDep$id %in% tableViewsProject$id,
+        c("id", "title", "project")
+      ]
+      tableViewsDep <- tableViewsDep[!duplicated(tableViewsDep$id), ]
+    }
+
+
+    reactData$projectDeleteViews <- if (hasViews) {
+      tableViewsProject$id
+    } else {
+      NULL
+    }
+    reactData$projectDeleteSources <- if (hasSources) {
+      tableSourcesProject$id
+    } else {
+      NULL
+    }
+    reactData$projectDeleteViewsDep <- if (hasViewsDep) {
+      tableViewsDep$id
+    } else {
+      NULL
+    }
+
+    ui <- tags$ul(
+      if (hasSources) {
+        tags$li(
+          tags$b(dd("project_delete_table_sources", language)),
+          ":",
+          if (hasSources) mxTableToHtml(tableSourcesProject)
+        )
+      },
+      if (hasViews) {
+        tags$li(
+          tags$b(dd("project_delete_table_views", language)),
+          ":",
+          mxTableToHtml(tableViewsProject)
+        )
+      },
+      if (hasViewsDep) {
+        tags$li(
+          tags$b(dd("project_delete_table_views_dep", language)),
+          ":",
+          mxTableToHtml(tableViewsDep)
+        )
+      }
     )
-  )
 
-  btnDelete <- actionButton(
-    "btnDeleteProjectConfirm",
-    d("btn_confirm", language, web = F)
-  )
+    btnDelete <- actionButton(
+      "btnDeleteProjectConfirm",
+      dd("btn_confirm", language)
+    )
 
-  mxModal(
-    id = "deleteProject",
-    title = d("project_delete_title", language, web = F) + " \" " + projectTitle + " \" ",
-    content = ui,
-    textCloseButton = d("btn_cancel", language, web = F),
-    buttons = list(btnDelete)
-  )
+    mxModal(
+      id = "deleteProject",
+      title = modalTitle,
+      content = ui,
+      textCloseButton = dd("btn_cancel", language),
+      buttons = list(btnDelete)
+    )
+  })
 })
 
 
@@ -154,10 +232,6 @@ observeEvent(input$btnDeleteProjectConfirm, {
     if (reactData$projectDeleteHasError) {
       return()
     }
-
-    views <- unique(reactData$projectDeleteViews)
-    sources <- unique(reactData$projectDeleteSources)
-
     userRole <- getUserRole()
     idProject <- reactData$project
     language <- reactData$language
@@ -168,32 +242,139 @@ observeEvent(input$btnDeleteProjectConfirm, {
       return()
     }
 
+    #
+    # Get id of what to remove
+    #
+    views <- na.omit(unique(c(
+      reactData$projectDeleteViews,
+      reactData$projectDeleteViewsDep
+    )))
+
+
+    sources <- na.omit(unique(reactData$projectDeleteSources))
+
     mglViewsCloseAll()
 
+    con <- mxDbGetCon()
+
+    on.exit({
+      mxDbReturnCon(con)
+    })
+
+    dbBegin(con)
+
+    tryCatch(
+      {
+        #
+        # Delete mapx views
+        # - all views, included view from other projects that are
+        #   dependent on global sources from this project
+        #
+        for (v in views) {
+          query <- sprintf("DELETE FROM mx_views WHERE id = '%s'", v)
+          rowsAffected <- dbExecute(con, query)
+          #
+          # expeecting at least one view, many views version possible
+          # Check if the count of affected rows > 0
+          #
+          if (rowsAffected == 0) {
+            msg <- sprintf(
+              "Error removing view '%s': %d rows were affected",
+              v,
+              rowsAffected
+            )
+            stop(msg)
+          }
+        }
+
+        for (s in sources) {
+          #
+          # Fetch the type of the source
+          #
+          querySourceType <- sprintf(
+            "SELECT type FROM mx_sources WHERE id = '%s'",
+            s
+          )
+          sourceType <- dbGetQuery(con, querySourceType)$type
+
+          if (sourceType == "join") {
+            #
+            # Delete postgres views
+            #
+            queryViewDrop <- sprintf(
+              "DROP VIEW IF EXISTS %s CASCADE",
+              s
+            )
+            dbExecute(con, queryViewDrop)
+          } else {
+            #
+            # Delete table / layer
+            #
+            queryTableDrop <- sprintf(
+              "DROP TABLE IF EXISTS %s CASCADE",
+              s
+            )
+
+            dbExecute(con, queryTableDrop)
+          }
+
+          #
+          # Delete source
+          #
+
+          querySourceDelete <- sprintf(
+            "DELETE FROM mx_sources WHERE id = '%s'",
+            s
+          )
+          rowsAffected <- dbExecute(con, querySourceDelete)
+          if (rowsAffected != 1) {
+            msg <- sprintf(
+              "Error removing source '%s': %d rows were affected",
+              s,
+              rowsAffected
+            )
+            stop(msg)
+          }
+        }
+
+        #
+        # Delete project
+        #
+        queryProjectDelete <- sprintf(
+          "DELETE FROM mx_projects WHERE id = '%s'",
+          idProject
+        )
+
+        rowsAffected <- dbExecute(con, queryProjectDelete)
+        if (rowsAffected != 1) {
+          msg <- sprintf(
+            "Error removing project '%s': %d rows were affected",
+            s,
+            rowsAffected
+          )
+          stop(msg)
+        }
+
+
+        # If everything went well, commit the transaction
+        dbCommit(con)
+      },
+      error = function(e) {
+        dbRollback(con)
+        stop("Error during project removal, rollback")
+        return()
+      }
+    )
+
+    #
+    # Clear query parameters
+    #
     mxUpdateQueryParameters(list(
       project = ""
     ))
 
     #
-    # Remove all related views
-    #
-    for (v in views) {
-      mxDbGetQuery("delete from mx_views where id = '" + v + "'")
-    }
-    #
-    # Remove all related sources
-    #
-    for (s in sources) {
-      mxDbGetQuery("delete from mx_sources where id = '" + s + "'")
-      mxDbGetQuery("drop table if exists " + s)
-    }
-    #
-    # Remove project itself
-    #
-    mxDbGetQuery("delete from mx_projects where id = '" + idProject + "'")
-
-    #
-    # Force logout
+    # Clear modals and force logout
     #
     mxModal(
       id = "deleteProject",

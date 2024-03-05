@@ -4312,12 +4312,16 @@
     "en": "Analysing, please wait..."
   },
   {
-    "id": "project_delete_number_of_sources",
-    "en": "Number of sources to delete"
+    "id": "project_delete_table_views",
+    "en": "Table of views to delete"
   },
   {
-    "id": "project_delete_number_of_views",
-    "en": "Number of views to delete"
+    "id": "project_delete_table_sources",
+    "en": "Table of sources to delete"
+  },
+  {
+    "id": "project_delete_table_views_dep",
+    "en": "Table of dependent views to delete"
   },
   {
     "id": "project_delete_title",
