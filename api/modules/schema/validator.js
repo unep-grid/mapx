@@ -144,14 +144,7 @@ export class Validator {
           console.error(`Missing validate keyword ${type}`);
           isValid = false;
       }
-      if (!isValid) {
-        console.log({
-          type,
-          value,
-          source,
-          origin: cv._client.origin,
-        });
-      }
+
       return isValid;
     } catch (error) {
       console.error("Error in _mx_validate:", error);

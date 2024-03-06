@@ -788,7 +788,6 @@ class EditTableSession {
               /**
                * Update joins
                */
-              client._origin  = "rename_column";
               const updates = await updateJoinColumnsNames(
                 id_table,
                 column_name,
