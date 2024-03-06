@@ -1,3 +1,12 @@
+  - [1.13.0-beta.7](https://github.com/unep-grid/mapx/tree/1.13.0-beta.7) 
+
+    - Projects
+        - Removing a project should now also update external views in other projects.
+        - Solved an issue where "NOTICE" messages were apparently causing instability in the app.
+    - Table Editor
+        - Corrected handling of rename operations: resolved an issue where mixing up columns and tables was causing the validation process to fail, as expected.
+
+
   - [1.13.0-beta.6](https://github.com/unep-grid/mapx/tree/1.13.0-beta.6) 
 
     - Join editor
