@@ -1756,6 +1756,14 @@
     "en": "You have unsaved changes in the join configuration. Do you want to quit anyway?"
   },
   {
+    "id": "join_server_reload_backup",
+    "en": "Server reload. Backup?"
+  },
+  {
+    "id": "join_server_reload_backup_desc",
+    "en": "The server has requested a reload of the table join configurator due to a structural change in one of the tables. Would you like to download a backup file of the current state?"
+  },
+  {
     "id": "error_notset",
     "en": "Property must be set"
   },

@@ -24,8 +24,6 @@ import { moduleLoad } from "../../modules_loader_async";
 import { TableResizer } from "../../handsontable/utils";
 import { jsonDiff } from "../../mx_helper_utils_json";
 import { downloadJSON } from "../../download";
-import { isTrue } from "../../is_test";
-import { isBoolean } from "../../is_test";
 
 const routes = {
   join: "/client/source/join",
@@ -420,12 +418,12 @@ export class SourcesJoinManager extends EventSimple {
   async promptBackup() {
     const sjm = this;
     const backup = await modalConfirm({
-      title: "Reload",
-      content:
-        "The server requested a reload of the table join configurator, after a structural change in one of the tables. Would you want to download a backup file of the  current state ?",
+      title: tt("join_server_reload_backup"),
+      content: tt("join_server_reload_backup_desc"),
     });
     if (backup) {
-      await downloadJSON(sjm.getConfigEditor(), `join_config_${sjm._id}.json`);
+      const config = await sjm.getConfigEditor();
+      await downloadJSON(config, `join_config_${sjm._id}.json`);
     }
   }
 

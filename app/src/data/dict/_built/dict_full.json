@@ -5707,6 +5707,32 @@
     "ps": "په جوړښت تنظیماتو کې مو نه خوندي شوي بدلونونه لرئ. ایا غواړئ بیا هم ووځئ؟"
   },
   {
+    "id": "join_server_reload_backup",
+    "en": "Server reload. Backup?",
+    "fr": "Rechargement du serveur. Sauvegarde?",
+    "zh": "服务器重载。备份?",
+    "es": "Recarga del servidor. ¿Copia de seguridad?",
+    "ar": "إعادة تحميل الخادم. نسخة احتياطية؟",
+    "ru": "Перезагрузка сервера. Резервная копия?",
+    "de": "Server-Neustart. Sicherung?",
+    "bn": "সার্ভার পুনরায় লোড করুন। ব্যাকআপ?",
+    "fa": "بازآغاز کردن سرور. پشتیبان؟",
+    "ps": "سرور بیا راپورته کول. بکاپ؟"
+  },
+  {
+    "id": "join_server_reload_backup_desc",
+    "en": "The server has requested a reload of the table join configurator due to a structural change in one of the tables. Would you like to download a backup file of the current state?",
+    "fr": "Le serveur a demandé un rechargement du configurateur de jointure de tables en raison d'un changement structurel dans l'une des tables. Voulez-vous télécharger un fichier de sauvegarde de l'état actuel?",
+    "zh": "由于其中一个表的结构发生变化,服务器要求重新加载表连接配置器。您想下载当前状态的备份文件吗?",
+    "es": "El servidor ha solicitado una recarga del configurador de unión de tablas debido a un cambio estructural en una de las tablas. ¿Desea descargar un archivo de copia de seguridad del estado actual?",
+    "ar": "طلب الخادم إعادة تحميل محدِّد تكوين ربط الجداول بسبب تغيير هيكلي في أحد الجداول. هل ترغب في تنزيل ملف نسخة احتياطية للحالة الحالية؟",
+    "ru": "Сервер запросил перезагрузку конфигуратора объединения таблиц из-за структурного изменения в одной из таблиц. Хотите скачать файл резервной копии текущего состояния?",
+    "de": "Der Server hat aufgrund einer strukturellen Änderung in einer der Tabellen einen Neustart des Tabellenjoinkonfigurators angefordert. Möchten Sie eine Sicherungsdatei des aktuellen Zustands herunterladen?",
+    "bn": "একটি টেবিলে কাঠামোগত পরিবর্তনের কারণে সার্ভার টেবিল জয়েন কনফিগারেটর পুনরায় লোড করার অনুরোধ করেছে। আপনি কি বর্তমান অবস্থার একটি ব্যাকআপ ফাইল ডাউনলোড করতে চান?",
+    "fa": "سرور به دلیل تغییر ساختاری در یکی از جداول، بازآغاز کردن پیکربندی اتصال جداول را درخواست کرده است. آیا می‌خواهید یک فایل پشتیبان از وضعیت فعلی را دانلود کنید؟",
+    "ps": "سرور د یوې جدول کې د جوړښتي بدلون له امله د جدول یو ځای کولو تنظیموونکی بیا راپورته کېدل غوښتي دي. آیا تاسو غواړئ چې د اوسنۍ حالت بکاپ فایل ترلاسه کړئ؟"
+  },
+  {
     "id": "error_notset",
     "en": "Property must be set",
     "fr": "La propriété doit être remplie",

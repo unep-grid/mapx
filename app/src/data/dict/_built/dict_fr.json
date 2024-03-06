@@ -2195,6 +2195,16 @@
     "fr": "Vous avez des modifications non enregistrées dans la configuration de jointure. Voulez-vous quitter quand même?"
   },
   {
+    "id": "join_server_reload_backup",
+    "en": "Server reload. Backup?",
+    "fr": "Rechargement du serveur. Sauvegarde?"
+  },
+  {
+    "id": "join_server_reload_backup_desc",
+    "en": "The server has requested a reload of the table join configurator due to a structural change in one of the tables. Would you like to download a backup file of the current state?",
+    "fr": "Le serveur a demandé un rechargement du configurateur de jointure de tables en raison d'un changement structurel dans l'une des tables. Voulez-vous télécharger un fichier de sauvegarde de l'état actuel?"
+  },
+  {
     "id": "error_notset",
     "en": "Property must be set",
     "fr": "La propriété doit être remplie"

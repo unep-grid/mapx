@@ -2195,6 +2195,16 @@
     "bn": "জয়েন কনফিগারেশনে আপনার সংরক্ষিত না করা পরিবর্তন আছে। তবুও আপনি বের হতে চান?"
   },
   {
+    "id": "join_server_reload_backup",
+    "en": "Server reload. Backup?",
+    "bn": "সার্ভার পুনরায় লোড করুন। ব্যাকআপ?"
+  },
+  {
+    "id": "join_server_reload_backup_desc",
+    "en": "The server has requested a reload of the table join configurator due to a structural change in one of the tables. Would you like to download a backup file of the current state?",
+    "bn": "একটি টেবিলে কাঠামোগত পরিবর্তনের কারণে সার্ভার টেবিল জয়েন কনফিগারেটর পুনরায় লোড করার অনুরোধ করেছে। আপনি কি বর্তমান অবস্থার একটি ব্যাকআপ ফাইল ডাউনলোড করতে চান?"
+  },
+  {
     "id": "error_notset",
     "en": "Property must be set",
     "bn": "সম্পত্তি সেট করা আবশ্যক "
