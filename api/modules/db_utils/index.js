@@ -140,6 +140,7 @@ async function columnExists(idColumn, idTable, client = pgRead) {
     WHERE table_name=$1 
     AND column_name=$2
     )`;
+    console.log("ORIGIN", client._origin);
     const res = await client.query(sql, [idTable, idColumn]);
     const exists = res.rowCount > 0 && res.rows[0].exists;
     return exists;

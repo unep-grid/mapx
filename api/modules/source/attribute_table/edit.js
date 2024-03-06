@@ -62,8 +62,6 @@ const def = {
   log_perf: false,
   max_rows: 1e5,
   max_columns: 1000, // should match client
-  //threshold_chunk: 1e3,
-  threshold_chunk: 20,
   size_chunk: 1e3,
   col_geom: "geom",
 };
@@ -790,6 +788,7 @@ class EditTableSession {
               /**
                * Update joins
                */
+              client._origin  = "rename_column";
               const updates = await updateJoinColumnsNames(
                 id_table,
                 column_name,

@@ -135,15 +135,16 @@ export class Validator {
         case "column_exists":
           source = cv.resolveDataPath(path, dataPath, property);
           isValid = await columnExists(value, source, cv._client);
+          if (!isValid) {
+            console.log({
+              value,
+              source,
+              origin: cv._client.origin,
+            });
+          }
           break;
         case "valid_joins":
           isValid = await validateJoins(value, cv._client);
-          if (!isValid) {
-            const data = await cv._client.query(
-              `Select * from ${value.base.id_source}`
-            );
-            console.log(data.rows);
-          }
           break;
         default:
           console.error(`Missing validate keyword ${type}`);
