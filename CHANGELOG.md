@@ -1,3 +1,9 @@
+  - [1.13.0-beta.6](https://github.com/unep-grid/mapx/tree/1.13.0-beta.6) 
+
+    - Join editor
+        - Fixes a bug where the backup JSON was empty after a server forced reload
+        - Translation + text update for the backup modal
+
   - [1.13.0-beta.5](https://github.com/unep-grid/mapx/tree/1.13.0-beta.5) 
 
     - Bug fixes
