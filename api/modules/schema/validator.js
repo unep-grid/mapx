@@ -135,13 +135,7 @@ export class Validator {
         case "column_exists":
           source = cv.resolveDataPath(path, dataPath, property);
           isValid = await columnExists(value, source, cv._client);
-          if (!isValid) {
-            console.log({
-              value,
-              source,
-              origin: cv._client.origin,
-            });
-          }
+
           break;
         case "valid_joins":
           isValid = await validateJoins(value, cv._client);
@@ -150,7 +144,14 @@ export class Validator {
           console.error(`Missing validate keyword ${type}`);
           isValid = false;
       }
-
+      if (!isValid) {
+        console.log({
+          type,
+          value,
+          source,
+          origin: cv._client.origin,
+        });
+      }
       return isValid;
     } catch (error) {
       console.error("Error in _mx_validate:", error);
