@@ -220,6 +220,42 @@ mxDbProjectSetViewExternal <- function(idProject, idView, action = "add") {
     expectedRowsAffected = 1
   )
 }
+#' Update the views_external column in the mx_projects table
+#'
+#' This function updates the views_external JSONB array in the mx_projects table,
+#' retaining only those view IDs that exist in the mx_views_latest table.
+#'
+#' @param con A DBI connection object to the database.
+#'
+#' @return NULL
+#' @export
+mxDbProjectResetViewsExternal <- function(con = NULL) {
+  sql <- "WITH p_ext_views AS (
+   SELECT
+      jsonb_array_elements_text(p.views_external) AS id_view,
+      p.id AS id_project
+   FROM mx_projects p
+), views_updated AS (
+   SELECT
+      p.id_view,
+      p.id_project
+   FROM p_ext_views p
+   JOIN mx_views_latest v ON p.id_view = v.id::text
+), views_grouped AS (
+   SELECT
+      id_project,
+      jsonb_agg(id_view) AS views
+   FROM views_updated
+   GROUP BY id_project
+)
+UPDATE mx_projects p
+SET views_external = v.views
+FROM views_grouped v
+WHERE p.id = v.id_project"
+
+  mxDbGetQuery(sql, con = con)
+}
+
 
 
 #' Return a table of project by user id

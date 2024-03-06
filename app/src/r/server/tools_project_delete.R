@@ -338,6 +338,11 @@ observeEvent(input$btnDeleteProjectConfirm, {
         }
 
         #
+        # Reset views external
+        #
+        mxDbProjectResetViewsExternal(con)
+
+        #
         # Delete project
         #
         queryProjectDelete <- sprintf(
@@ -356,13 +361,17 @@ observeEvent(input$btnDeleteProjectConfirm, {
         }
 
 
+
         # If everything went well, commit the transaction
         dbCommit(con)
       },
       error = function(e) {
         dbRollback(con)
-        stop("Error during project removal, rollback")
+        stop(e)
         return()
+      },
+      warning <- function(e) {
+        waring(e)
       }
     )
 
