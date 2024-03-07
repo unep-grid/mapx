@@ -170,7 +170,7 @@ observeEvent(input$btnDeleteProject, {
 
     if (hasViewsDep) {
       tableViewsDep <- tableViewsDep[
-        !tableViewsDep$project %in% project &
+        !tableViewsDep$project %in% project && hasViews &&
           !tableViewsDep$id %in% tableViewsProject$id,
         c("id", "title", "project")
       ]
@@ -400,10 +400,8 @@ observeEvent(input$btnDeleteProjectConfirm, {
     )
 
     mxSetCookie(
-      deleteAll = TRUE,
+      deleteAll = FALSE,
       reloadPage = TRUE
     )
-
-
   })
 })

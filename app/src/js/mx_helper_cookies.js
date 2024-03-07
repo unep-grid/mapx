@@ -1,3 +1,5 @@
+import { isNotEmpty } from "./is_test";
+import { reload } from "./mx_helper_app_utils";
 /**
  * NOTE: this was used to store encrypted token
  * in cookies. The name persisted but we store
@@ -13,8 +15,15 @@
  * @return {Object} Object containing cookies values
  */
 export function readCookie() {
-  const str = localStorage.getItem('mx-cookies') || '{}';
-  return JSON.parse(str);
+  const str = localStorage.getItem("mx-cookies");
+  const out = {};
+  try {
+    const stored = JSON.parse(str);
+    return Object.assign({}, out, stored);
+  } catch (e) {
+    console.warn(e);
+    return out;
+  }
 }
 
 /**
@@ -24,11 +33,16 @@ export function readCookie() {
  * @param e.reload {Boolean} Reload location
  */
 export function writeCookie(e) {
-  e = Object.assign({}, {reload: false}, e);
-  const item = e.deleteAll ? '{}' : JSON.stringify(e.cookie);
-  localStorage.setItem('mx-cookies', item);
+  e = Object.assign({}, { reload: false, deleteAll: false, cookie: null }, e);
+  if (e.deleteAll) {
+    e.cookie = {};
+  }
+  if (isNotEmpty(e.cookie)) {
+    const cookieStr = JSON.stringify(e.cookie);
+    localStorage.setItem("mx-cookies", cookieStr);
+  }
   if (e.reload) {
-    window.location.reload();
+    reload();
   }
 }
 
@@ -53,7 +67,7 @@ export function setToken(str) {
     data.mx_token = str;
     writeCookie({
       cookie: data,
-      reload: true
+      reload: true,
     });
   }
 }
@@ -63,9 +77,9 @@ export function setToken(str) {
  * @param e.reload {Boolean} Reload location
  */
 export function removeCookie(e) {
-  e = Object.assign({}, {reload: false}, e);
-  localStorage.setItem('mx-cookies', '{}');
+  e = Object.assign({}, { reload: false }, e);
+  localStorage.setItem("mx-cookies", "{}");
   if (e.reload) {
-    window.location.reload();
+    reload();
   }
 }
