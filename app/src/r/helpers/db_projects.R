@@ -230,7 +230,8 @@ mxDbProjectSetViewExternal <- function(idProject, idView, action = "add") {
 #' @return NULL
 #' @export
 mxDbProjectResetViewsExternal <- function(con = NULL) {
-  sql <- "WITH p_ext_views AS (
+  sql <- "
+  WITH p_ext_views AS (
    SELECT
       jsonb_array_elements_text(p.views_external) AS id_view,
       p.id AS id_project
@@ -240,19 +241,13 @@ mxDbProjectResetViewsExternal <- function(con = NULL) {
       p.id_view,
       p.id_project
    FROM p_ext_views p
-   JOIN mx_views_latest v ON p.id_view = v.id::text
-), views_grouped AS (
-   SELECT
-      id_project,
-      jsonb_agg(id_view) AS views
-   FROM views_updated
-   GROUP BY id_project
+   LEFT JOIN mx_views_latest v ON p.id_view = v.id::text
+     WHERE v.id IS NULL
 )
 UPDATE mx_projects p
-SET views_external = v.views
-FROM views_grouped v
-WHERE p.id = v.id_project"
-
+SET views_external = p.views_external - v.id_view
+FROM views_updated v
+WHERE p.id = v.id_project;"
   mxDbGetQuery(sql, con = con)
 }
 
