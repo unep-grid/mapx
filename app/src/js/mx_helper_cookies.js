@@ -35,7 +35,7 @@ export function readCookie() {
 export function writeCookie(e) {
   e = Object.assign({}, { reload: false, deleteAll: false, cookie: null }, e);
   if (e.deleteAll) {
-    e.cookie = {};
+    e.cookie = { mx_token: "" };
   }
   if (isNotEmpty(e.cookie)) {
     const cookieStr = JSON.stringify(e.cookie);
