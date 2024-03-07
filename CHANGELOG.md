@@ -1,9 +1,14 @@
+  - [1.13.0-beta.9](https://github.com/unep-grid/mapx/tree/1.13.0-beta.9) 
+
+   - Project remove
+        - Should  solve issue when the project to delete has no views, but a view has been created in another project with a global source 
+        - Improved reload app after project deletion
+
   - [1.13.0-beta.8](https://github.com/unep-grid/mapx/tree/1.13.0-beta.8) 
 
-    - Projects
-        - Project deletion 
-            - fix query to update `views_external` 
-            - fix issues with app not reloaded properly after project removal
+    - Projects remove
+        - fix query to update `views_external` 
+        - fix issues with app not reloaded properly after project removal
         
   - [1.13.0-beta.7](https://github.com/unep-grid/mapx/tree/1.13.0-beta.7) 
 
