@@ -1,3 +1,10 @@
+  - [1.13.0-beta.8](https://github.com/unep-grid/mapx/tree/1.13.0-beta.8) 
+
+    - Projects
+        - Project deletion 
+            - fix query to update `views_external` 
+            - fix issues with app not reloaded properly after project removal
+        
   - [1.13.0-beta.7](https://github.com/unep-grid/mapx/tree/1.13.0-beta.7) 
 
     - Projects
