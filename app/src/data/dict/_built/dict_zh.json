@@ -5415,6 +5415,11 @@
     "zh": "要删除的从属视图表"
   },
   {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "zh": "要删除的依赖源表"
+  },
+  {
     "id": "project_delete_title",
     "en": "Project deletion",
     "zh": "删除项目"

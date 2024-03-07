@@ -5415,6 +5415,11 @@
     "es": "Tabla de vistas dependientes para eliminar"
   },
   {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "es": "Tabla de fuentes dependientes para eliminar"
+  },
+  {
     "id": "project_delete_title",
     "en": "Project deletion",
     "es": "Eliminare el proyecto"

@@ -14079,6 +14079,19 @@
     "de": "Tabelle der zu löschenden abhängigen Ansichten"
   },
   {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "fr": "Table des sources dépendantes à supprimer",
+    "es": "Tabla de fuentes dependientes para eliminar",
+    "ru": "Таблица зависимых источников для удаления",
+    "zh": "要删除的依赖源表",
+    "ar": "جدول المصادر التابعة المراد حذفها",
+    "fa": "جدول منابع وابسته برای حذف",
+    "ps": "د ړنګولو لپاره د انحصاري سرچینو جدول",
+    "bn": "মুছে ফেলার জন্য নির্ভরশীল উত্সের সারণী",
+    "de": "Tabelle der zu löschenden abhängigen Quellen"
+  },
+  {
     "id": "project_delete_title",
     "en": "Project deletion",
     "fr": "Suppression du projet",

@@ -5415,6 +5415,11 @@
     "fa": "جدول نماهای وابسته برای حذف"
   },
   {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "fa": "جدول منابع وابسته برای حذف"
+  },
+  {
     "id": "project_delete_title",
     "en": "Project deletion",
     "fa": "حذف پروژه "

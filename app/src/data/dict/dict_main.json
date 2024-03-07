@@ -6740,6 +6740,19 @@
     "de": ""
   },
   {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "fr": "Table des sources dépendantes à supprimer",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "project_delete_title",
     "en": "Project deletion",
     "fr": "Suppression du projet",

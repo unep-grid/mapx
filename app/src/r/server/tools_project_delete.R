@@ -135,6 +135,7 @@ observeEvent(input$btnDeleteProject, {
       project
     )
 
+
     sourcesToRemove <- mxDbGetQuery(querySource)$id
     viewsProject <- mxDbGetQuery(queryViews)$id
 
@@ -163,23 +164,45 @@ observeEvent(input$btnDeleteProject, {
       tableViewsDep <- rbind(tableViewsDep, tableViewsBySource)
     }
 
+    tableSourcesDep <- data.frame(
+      id = character(0),
+      title = character(0),
+      id_project = character(0)
+    )
+
+    for (src in sourcesToRemove) {
+      tableSourcesBySource <- mxDbGetTableDependencies(src)
+      tableSourcesDep <- rbind(tableSourcesDep, tableSourcesBySource)
+    }
+
+
     hasViews <- isNotEmpty(tableViewsProject)
     hasViewsDep <- isNotEmpty(tableViewsDep)
     hasSources <- isNotEmpty(tableSourcesProject)
-
+    hasSourcesDep <- isNotEmpty(tableSourcesDep)
 
     if (hasViewsDep) {
-      filterNotInProject <-
-        !tableViewsDep$project %in% project
+      filter <-
+        !tableViewsDep$project %in% project &
+          !duplicated(tableViewsDep$id)
 
       tableViewsDep <- tableViewsDep[
-        filterNotInProject,
+        filter,
         c("id", "title", "project")
       ]
-
-      tableViewsDep <- tableViewsDep[!duplicated(tableViewsDep$id), ]
     }
 
+
+    if (hasSourcesDep) {
+      filter <-
+        !tableSourcesDep$id_project %in% project &
+          !duplicated(tableSourcesDep$id)
+
+      tableSourcesDep <- tableSourcesDep[
+        filter,
+        c("id", "title", "id_project")
+      ]
+    }
 
     reactData$projectDeleteViews <- if (hasViews) {
       tableViewsProject$id
@@ -196,6 +219,13 @@ observeEvent(input$btnDeleteProject, {
     } else {
       NULL
     }
+
+    reactData$projectDeleteSourcesDep <- if (hasSourcesDep) {
+      tableSourcesDep$id
+    } else {
+      NULL
+    }
+
 
     ui <- tags$ul(
       if (hasSources) {
@@ -217,6 +247,13 @@ observeEvent(input$btnDeleteProject, {
           tags$b(dd("project_delete_table_views_dep", language)),
           ":",
           mxTableToHtml(tableViewsDep)
+        )
+      },
+      if (hasSourcesDep) {
+        tags$li(
+          tags$b(dd("project_delete_table_sources_dep", language)),
+          ":",
+          mxTableToHtml(tableSourcesDep)
         )
       }
     )
@@ -260,8 +297,11 @@ observeEvent(input$btnDeleteProjectConfirm, {
       reactData$projectDeleteViewsDep
     )))
 
+    sources <- na.omit(unique(c(
+      reactData$projectDeleteSources,
+      reactData$projectDeleteSourcesDep
+    )))
 
-    sources <- na.omit(unique(reactData$projectDeleteSources))
 
     mglViewsCloseAll()
 
@@ -280,22 +320,12 @@ observeEvent(input$btnDeleteProjectConfirm, {
         # - all views, included view from other projects that are
         #   dependent on global sources from this project
         #
-        for (v in views) {
-          mxDebugMsg("REMOVE VIEW" + v)
-          query <- sprintf("DELETE FROM mx_views WHERE id = '%s'", v)
-          rowsAffected <- dbExecute(con, query)
-          #
-          # expeecting at least one view, many views version possible
-          # Check if the count of affected rows > 0
-          #
-          if (rowsAffected == 0) {
-            msg <- sprintf(
-              "Error removing view '%s': %d rows were affected",
-              v,
-              rowsAffected
-            )
-            stop(msg)
-          }
+        if (length(views) > 0) {
+          viewsQuery <- sprintf(
+            "DELETE FROM mx_views WHERE id IN ('%s')",
+            paste(views, collapse = "','")
+          )
+          dbExecute(con, viewsQuery)
         }
 
         for (s in sources) {
@@ -321,7 +351,7 @@ observeEvent(input$btnDeleteProjectConfirm, {
           } else {
             #
             # Delete table / layer
-            # - CASCADE required if removing a pg view dependencies before 
+            # - CASCADE required if removing a pg view dependencies before
             #   the join
             #
             queryTableDrop <- sprintf(
@@ -385,7 +415,7 @@ observeEvent(input$btnDeleteProjectConfirm, {
         stop(e)
       },
       warning <- function(e) {
-        waring(e)
+        warning(e)
       }
     )
 

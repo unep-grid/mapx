@@ -5415,6 +5415,11 @@
     "ps": "د ړنګولو لپاره د انحصاري لیدونو جدول"
   },
   {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "ps": "د ړنګولو لپاره د انحصاري سرچینو جدول"
+  },
+  {
     "id": "project_delete_title",
     "en": "Project deletion",
     "ps": "د پروژې ړنګول "

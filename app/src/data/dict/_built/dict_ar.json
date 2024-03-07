@@ -5415,6 +5415,11 @@
     "ar": "جدول طرق العرض التابعة المطلوب حذفها"
   },
   {
+    "id": "project_delete_table_sources_dep",
+    "en": "Table of dependent sources to delete",
+    "ar": "جدول المصادر التابعة المراد حذفها"
+  },
+  {
     "id": "project_delete_title",
     "en": "Project deletion",
     "ar": "حذف المشروع "
