@@ -22,7 +22,7 @@ export async function mapboxToSld(style, opt) {
         fixIconSize: true,
         ignoreConversionErrors: true,
       },
-      opt
+      opt,
     );
 
     const fixNumeric = !!style?.metadata?.type_all_numeric;
@@ -30,7 +30,6 @@ export async function mapboxToSld(style, opt) {
     const sld = new SldStyleParser();
 
     mapbox.ignoreConversionErrors = opt.ignoreConversionErrors;
-
     const gstyle = await mapbox.readStyle(style, {});
 
     if (isArray(gstyle?.errors) && isNotEmpty(gstyle.errors)) {
@@ -157,11 +156,15 @@ function spriteToCdnLink(str, params) {
   const url = new URL(location.origin + str);
   const version = getVersion();
   const name = url.searchParams.get("name");
+
   if (!name) {
     return;
   }
-  const path = `app/src/sprites/dist/svg/${name}.svg`;
+
+  const image = `${name}.svg`;
   const cdnTemplate = settings.cdn.template;
+  const cdnPath = settings.cdn.path_svg;
+  const path = `${cdnPath}/${image}`;
   const urlImage = new URL(parseTemplate(cdnTemplate, { version, path }));
   if (params) {
     for (const p in params) {

@@ -125,6 +125,7 @@ async function rebuildHandler(socket, options) {
     stateGlobal.success = true;
   } catch (e) {
     stateGlobal.success = false;
+    console.error(e);
     await socket.notifyInfoError({
       message: e.message || e,
       data: e.stack,

@@ -175,8 +175,6 @@ export function getStyleBaseMap(opt) {
   const themeData = theme.get();
   const styleOut = {};
   style.name = `${themeData.id}_${settings.version}`;
-  style.sprite = settings.links.mapboxSprites;
-  style.glyphs = settings.links.mapboxGlyphs;
 
   /**
    * Clear metadata

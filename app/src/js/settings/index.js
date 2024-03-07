@@ -44,7 +44,6 @@ const settings = {
     maxZoom: 20,
     minZoom: 0,
   },
-
   search: {
     host: "localhost",
     port: "8880",
@@ -52,6 +51,7 @@ const settings = {
   },
   cdn: {
     template: "https://cdn.jsdelivr.net/gh/unep-grid/mapx@{{version}}/{{path}}",
+    path_svg: "app/src/sprites/dist/svg",
   },
   tiles: {
     vector: {

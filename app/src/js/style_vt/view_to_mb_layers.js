@@ -432,6 +432,7 @@ export async function getViewMapboxLayers(v, opt) {
           filter: filter,
           rule: rule,
         });
+
         layers.push(layerMain);
 
         rule.color_border = isPolygon
@@ -500,6 +501,7 @@ export async function getViewMapboxLayers(v, opt) {
       filter: filter,
       rule: ruleNulls,
     });
+
 
     ruleNulls.filter = filter;
     ruleNulls.color_border = isPolygon
