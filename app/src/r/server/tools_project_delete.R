@@ -169,11 +169,14 @@ observeEvent(input$btnDeleteProject, {
 
 
     if (hasViewsDep) {
+      filterNotInProject <-
+        !tableViewsDep$project %in% project
+
       tableViewsDep <- tableViewsDep[
-        !tableViewsDep$project %in% project && hasViews &&
-          !tableViewsDep$id %in% tableViewsProject$id,
+        filterNotInProject,
         c("id", "title", "project")
       ]
+
       tableViewsDep <- tableViewsDep[!duplicated(tableViewsDep$id), ]
     }
 
