@@ -94,14 +94,21 @@ observeEvent(input$btnDeleteProject, {
   if (reactData$projectDeleteHasError) {
     return()
   }
+  project <- reactData$project
+  projectTitle <- reactData$projectTitle
+  modalTitle <- reactData$projectModalTitle
+  language <- reactData$language
+
+  userRole <- getUserRole()
+  isAdmin <- isTRUE(userRole$admin)
+  userData <- reactUser$data
+  isProjectDefault <- isTRUE(project == config[[c("project", "default")]])
+
+  if (!isAdmin || isProjectDefault) {
+    return()
+  }
 
   mxCatch(title = "Delete project: search data to remove", {
-    project <- reactData$project
-    projectTitle <- reactData$projectTitle
-    modalTitle <- reactData$projectModalTitle
-    language <- reactData$language
-
-
     mxModal(
       id = "deleteProject",
       title = modalTitle,
@@ -271,6 +278,7 @@ observeEvent(input$btnDeleteProjectConfirm, {
         #   dependent on global sources from this project
         #
         for (v in views) {
+          mxDebugMsg("REMOVE VIEW" + v)
           query <- sprintf("DELETE FROM mx_views WHERE id = '%s'", v)
           rowsAffected <- dbExecute(con, query)
           #
@@ -288,6 +296,7 @@ observeEvent(input$btnDeleteProjectConfirm, {
         }
 
         for (s in sources) {
+          mxDebugMsg("REMOVE SOURCE" + s)
           #
           # Fetch the type of the source
           #
@@ -302,7 +311,7 @@ observeEvent(input$btnDeleteProjectConfirm, {
             # Delete postgres views
             #
             queryViewDrop <- sprintf(
-              "DROP VIEW IF EXISTS %s CASCADE",
+              "DROP VIEW IF EXISTS %s",
               s
             )
             dbExecute(con, queryViewDrop)
@@ -311,7 +320,7 @@ observeEvent(input$btnDeleteProjectConfirm, {
             # Delete table / layer
             #
             queryTableDrop <- sprintf(
-              "DROP TABLE IF EXISTS %s CASCADE",
+              "DROP TABLE IF EXISTS %s",
               s
             )
 
@@ -340,6 +349,7 @@ observeEvent(input$btnDeleteProjectConfirm, {
         #
         # Reset views external
         #
+        mxDebugMsg("Reset views external")
         mxDbProjectResetViewsExternal(con)
 
         #
@@ -368,7 +378,6 @@ observeEvent(input$btnDeleteProjectConfirm, {
       error = function(e) {
         dbRollback(con)
         stop(e)
-        return()
       },
       warning <- function(e) {
         waring(e)
@@ -390,6 +399,11 @@ observeEvent(input$btnDeleteProjectConfirm, {
       close = TRUE
     )
 
-    reactData$project <- .get(config, c("project", "default"))
+    mxSetCookie(
+      deleteAll = TRUE,
+      reloadPage = TRUE
+    )
+
+
   })
 })
