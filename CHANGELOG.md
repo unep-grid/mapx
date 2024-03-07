@@ -1,3 +1,8 @@
+  - [1.13.0-beta.12](https://github.com/unep-grid/mapx/tree/1.13.0-beta.12) 
+
+    - Project remove 
+        - Also list dependant sources from other project that will be deleted
+
   - [1.13.0-beta.11](https://github.com/unep-grid/mapx/tree/1.13.0-beta.11) 
 
     - Geoserver update : should fix missing sprites in CDN & invalid sld 
