@@ -141,7 +141,7 @@ export async function jedInit(o) {
 
         if (moreRecent) {
           await jedShowDraftRecovery({
-            jed: editor,
+            editor: editor,
             idDraft: idDraft,
             timeDb: opt_final.draftAutoSaveDbTimestamp,
             draft: draft,
