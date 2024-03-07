@@ -1,3 +1,8 @@
+  - [1.13.0-beta.10](https://github.com/unep-grid/mapx/tree/1.13.0-beta.10) 
+
+    - Project remove
+        -  Edge case when deleting a project with no views, but external views from a global source in another proejct
+
   - [1.13.0-beta.9](https://github.com/unep-grid/mapx/tree/1.13.0-beta.9) 
 
    - Project remove
