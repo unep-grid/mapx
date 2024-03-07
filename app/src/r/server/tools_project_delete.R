@@ -321,9 +321,11 @@ observeEvent(input$btnDeleteProjectConfirm, {
           } else {
             #
             # Delete table / layer
+            # - CASCADE required if removing a pg view dependencies before 
+            #   the join
             #
             queryTableDrop <- sprintf(
-              "DROP TABLE IF EXISTS %s",
+              "DROP TABLE IF EXISTS %s CASCADE",
               s
             )
 
