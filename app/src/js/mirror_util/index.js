@@ -1,5 +1,5 @@
 import { getApiUrl } from "./../api_routes";
-import { isUrl } from "./../is_test/index.js";
+import { isNotEmpty, isUrl } from "./../is_test/index.js";
 import { modalMirror } from "./tool_modal.js";
 
 export { modalMirror };
@@ -12,7 +12,7 @@ export { modalMirror };
  * @param {String} url URL to access
  * @return {String} url string e.g.
  */
-export function mirrorUrlCreate(url) {
+export function mirrorUrlCreate(url, contentType = "") {
   if (!isUrl(url)) {
     throw new Error(`Not a valid URL`);
   }
@@ -22,6 +22,9 @@ export function mirrorUrlCreate(url) {
   }
   const mUrl = new URL(getApiUrl("getMirror"));
   mUrl.searchParams.set("url", url);
+  if (isNotEmpty(contentType)) {
+    mUrl.searchParams.set("contentType", contentType);
+  }
   /**
    * Replace % utf8 escaped brackets by the actual character.
    * -> if not, {bbox-epsg-3857}, {z}, {x} template
@@ -65,14 +68,13 @@ export function mirrorUrlGet(url) {
   return mUrl.searchParams.get("url");
 }
 
-
 /**
-* Fetch url, using mirror. Takes cares of mapbox bbox brackets 
-* @param {String} url Url to fetch
-* @param {Any} opt Fetch method options 
-* @return {Promise} Fetch promise 
-*/ 
-export function fetchMirror(url,opt) {
+ * Fetch url, using mirror. Takes cares of mapbox bbox brackets
+ * @param {String} url Url to fetch
+ * @param {Any} opt Fetch method options
+ * @return {Promise} Fetch promise
+ */
+export function fetchMirror(url, opt) {
   const urlMirror = mirrorUrlCreate(url);
-  return fetch(urlMirror,opt);
+  return fetch(urlMirror, opt);
 }
