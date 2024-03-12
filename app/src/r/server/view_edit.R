@@ -1128,6 +1128,8 @@ observeEvent(input$btnViewSave, {
     #
     time <- Sys.time()
     view[["date_modified"]] <- time
+    reactData$viewDataEdited$date_modified <- time
+
 
 
     #
