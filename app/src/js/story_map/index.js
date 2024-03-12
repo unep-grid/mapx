@@ -1312,6 +1312,7 @@ async function initState() {
    */
   state.ctrlAerial.action("hide");
   state.ctrlMode3d.action("hide");
+  controls.sizeOptimizer();
 
   /*
    * save in state
@@ -1383,6 +1384,7 @@ function resetControls() {
       ctrl.show();
     }
   }
+  controls.sizeOptimizer();
 }
 function resetPanels() {
   const state = getState();
