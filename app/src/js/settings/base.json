@@ -1,0 +1,101 @@
+{
+  "title": "MapX",
+  "version": null,
+  "style": {},
+  "links": {},
+  "devicePixelRatio": 0,
+  "language": "en",
+  "languages": ["en", "fr", "es", "ar", "ru", "zh", "de", "bn", "fa", "ps"],
+  "highlightedCountries": [],
+  "initClosedPanels": false,
+  "project": {},
+  "projection": {
+    "name": "mercator",
+    "center": [0, 0],
+    "parallels": [0, 0]
+  },
+  "valuesMap": {
+    "null": "$NULL",
+    "$NULL": null
+  },
+  "logs": {
+    "disabled": false,
+    "levels": ["ERROR", "WARNING", "MESSAGE", "LOG", "USER_ACTION"],
+    "ids": [
+      "session_end",
+      "session_start",
+      "view_remove",
+      "view_add",
+      "view_panel_click",
+      "project_change",
+      "language_change"
+    ],
+    "sides": ["browser", "app", "api"]
+  },
+  "map": {
+    "id": "map_main",
+    "token": "",
+    "maxZoom": 20,
+    "minZoom": 0
+  },
+  "search": {
+    "host": "localhost",
+    "port": "8880",
+    "protocol": "http://"
+  },
+  "cdn": {
+    "template": "https://cdn.jsdelivr.net/gh/unep-grid/mapx@{{version}}/{{path}}",
+    "path_svg": "app/src/sprites/dist/svg"
+  },
+  "tiles": {
+    "vector": {
+      "useCache": true,
+      "usePostgisTiles": null
+    }
+  },
+  "api": {
+    "host": "api",
+    "port": "3333",
+    "host_public": "api.mapx.org",
+    "port_public": "443",
+    "protocol": "https:",
+    "upload_size_max": 209715200,
+    "routes": []
+  },
+  "paramKeysPermanent": [
+    "project",
+    "language",
+    "lockProject",
+    "style",
+    "theme",
+    "colors",
+    "sdkToken"
+  ],
+  "mode": {
+    "static": false,
+    "app": false
+  },
+  "paths": {
+    "static": "/static.html",
+    "sprites": "/sprites/sprite",
+    "fontstack": "/fontstack/{fontstack}/{range}.pbf",
+    "svg": "/sprites/svg/"
+  },
+  "layerBefore": "mxlayers",
+  "separators": {
+    "sublayer": "@"
+  },
+  "scale_text": 1,
+  "scale_icon": 1,
+  "clickHandlers": [],
+  "maxByteJed": 300000,
+  "maxByteFetch": 5000000,
+  "maxTimeFetch": 60000,
+  "maxTimeFetchQuick": 5000,
+  "maxTimeCache": 86400000,
+  "useCache": true,
+  "user": {},
+  "ui": {
+    "colors": null
+  }
+}

@@ -11,10 +11,10 @@ const def = {
 };
 
 function wikiUrl(id) {
-  return `${settings.links.wiki}${id}`;
+  return `${settings.links.repositoryWiki}${id}`;
 }
 function wikiUrlRaw(id) {
-  return `${settings.links.wikiRaw}${id}.md`;
+  return `${settings.links.repositoryWikiRaw}${id}.md`;
 }
 
 export async function modalMarkdown(options) {

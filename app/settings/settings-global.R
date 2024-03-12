@@ -1,5 +1,7 @@
 #
 # Configuration and options
+# TODO: the configuration should progressivelly transfered to js settings
+#  app/src/js/settings/
 #
 config <- list()
 
@@ -22,19 +24,14 @@ config[["brand"]] <- list(
   name = "MapX"
 )
 
-# ⚠️  also defined in app/src/js/mx_settings_global.json
-config[["links"]] <- list(
-  mainProjectPage = "https://mapx.org",
-  repositoryIssues = "https://github.com/unep-grid/mapx/issues",
-  repositoryWiki = "https://github.com/unep-grid/mapx/wiki",
-  repositoryWikiMapComposer = "https://github.com/unep-grid/mapx/wiki/Map-composer",
-  repositoryWikiDrawTool = "https://github.com/unep-grid/mapx/wiki/Draw-tool",
-  repositoryWikiSharingManager = "https://github.com/unep-grid/mapx/wiki/Sharing-Manager",
-  repositoryWikiAttributeTable = "https://github.com/unep-grid/mapx/wiki/Attribute-table",
-  repositoryWikiSearchToolUI = "https://github.com/unep-grid/mapx/wiki/Search-tool-UI",
-  repositoryWikiTableEditor = "https://github.com/unep-grid/mapx/wiki/Attribute-table-edition",
-  appKnowlegdeBase = "https://www.mapx.org/knowledge-base/"
-)
+
+#
+# Links
+#
+configLinks <- as.list(fromJSON("./src/js/settings/links.json"))
+config[["links"]] <- configLinks
+
+
 
 #
 # MapX version
@@ -116,25 +113,10 @@ config[["projections"]] <- list(
 )
 
 #
-# Input control
+# Input valdiation/control
 #
-config[["validation"]] <- list(
-  input = list(
-    nchar = list(
-      sourceAbstract = list(min = 1, max = 5000),
-      sourceAttributesAlias = list(min = 1, max = 30),
-      sourceAttributesDesc = list(min = 1, max = 5000),
-      sourceLicense = list(min = 1, max = 5000),
-      sourceKeywords = list(min = 1, max = 30),
-      sourceTitle = list(min = 1, max = 300),
-      projectAbstract = list(min = 1, max = 5000),
-      projectTitle = list(min = 1, max = 150),
-      projectAlias = list(min = 1, max = 30),
-      viewAbstract = list(min = 1, max = 5000),
-      viewTitle = list(min = 1, max = 300)
-    )
-  )
-)
+configValidation <- as.list(fromJSON("./src/js/settings/validation.json"))
+config[["validation"]] <- configValidation
 
 #
 # api configuration
@@ -197,11 +179,14 @@ config[["resources"]] <- list(
 #
 # Client side path
 #
-config[["paths"]] <- list(
-  sprites = "/sprites/sprite",
-  fontstack = "/fontstack/{fontstack}/{range}.pbf"
-)
 
+configPaths <- as.list(fromJSON("./src/js/settings/paths.json"))
+config[["paths"]] <- configPaths
+
+
+#
+#  Sprites prefix
+#
 config[["sprites_prefix"]] <- list(
   point = "^maki-",
   polygon = "^t_|^geol_",
@@ -229,18 +214,11 @@ config[["dictionaries"]] <- list(
 #
 config[["dict"]] <- .get(config, c("dictionaries", "main"))
 
-
+#
 # map default
 #
-config[["map"]] <- list(
-  zoom = 4.936283,
-  lat = -2.6781140,
-  lng = 17.3440031,
-  maxZoom = 22,
-  minZoom = 0,
-  token = "",
-  id = "map_main"
-)
+configMap <- as.list(fromJSON("./src/js/settings/map.json"))
+config[["map"]] <- configMap
 
 #
 # Default ui and map colors
@@ -261,44 +239,8 @@ config[["ui"]] <- list(
 #
 # wms sources
 #
-config[["wms"]] <- list(
-  list(
-    label = "datacore",
-    value = "https://datacore.unepgrid.ch/geoserver/wms"
-  ),
-  list(
-    label = "preview",
-    value = "https://preview.grid.unep.ch/geoserver/wms"
-  ),
-  list(
-    label = "forestCover",
-    value = "https://gis-gfw.wri.org/arcgis/services/forest_change/MapServer/WMSServer"
-  ),
-  list(
-    label = "columbia.edu",
-    value = "https://sedac.ciesin.columbia.edu/geoserver/wms"
-  ),
-  list(
-    label = "sampleserver6.arcgisonline.com",
-    value = "https://sampleserver6.arcgisonline.com/arcgis/services/911CallsHotspot/MapServer/WMSServer"
-  ),
-  list(
-    label = "nowcoast.noaa.gov",
-    value = "https://nowcoast.noaa.gov/arcgis/services/nowcoast/analysis_meteohydro_sfc_qpe_time/MapServer/WmsServer"
-  ),
-  list(
-    label = "idesa.gob.ar",
-    value = "http://geoportal.idesa.gob.ar/geoserver/wms"
-  ),
-  list(
-    label = "mapas.apn.gob.ar",
-    value = "https://mapas.apn.gob.ar/geoserver/ows"
-  ),
-  list(
-    label = "geointa.inta.gov.ar",
-    value = "http://geointa.inta.gov.ar/geoserver/gwc/service/wms"
-  )
-)
+configWms <- as.list(fromJSON("./src/js/settings/wms.json"))
+config[["wms"]] <- configWms
 
 #
 # Set default variable names
@@ -471,11 +413,11 @@ config[["data"]] <- list()
 
 
 #
-# Date formats  
+# Date formats
 #
 config[["dates_format"]] <- list(
   # 2024-03-05T10:01:00.92089+00:00
-  "db" =  "%Y-%m-%d%tT%T", 
+  "db" = "%Y-%m-%d%tT%T",
   # 2024-03-05 10:02:22.0133 UTC
   "r" = "%Y-%m-%d %H:%M:%OS %Z"
 )

@@ -1,4 +1,3 @@
-
 #
 #  SERVER FUNCTION
 #
@@ -29,23 +28,34 @@ server <- function(input, output, session) {
 
   mxUpdateSettings(
     #
-    # See all defaults in /src/js/mx_settings_default.js
+    # Update values from app/src/js/settings/
+    # -> only
+    #   - dynamic values ( e.g. from var env )
+    #   - simplified version from large tables
     #
     list(
+      #
+      # Dynamic
+      #
       api = .get(config, c("api")),
       search = .get(config, c("search")),
-      validation = .get(config, c("validation")),
-      dbLogLevels = .get(config, c("db_log", "levels"), default = c("ERROR")),
+      map = .get(config, c("map")),
+      #
+      # Languages, short version using code and array of code
+      #
       language = .get(config, c("language", "default")),
       languages = .get(config, c("languages", "codes")),
+      #
+      # Project default
+      #
       project = list(
         id = .get(config, c("project", "default")),
         public = TRUE
       ),
-      countries = .get(config, c("countries", "table", "id")),
-      map = .get(config, c("map")),
-      paths = .get(config, c("paths")),
-      links = .get(config, c("links"))
+      #
+      # Countries iso3 code
+      #
+      countries = .get(config, c("countries", "table", "id"))
     )
   )
 
@@ -83,9 +93,6 @@ server <- function(input, output, session) {
     # Launch init
     #
     mxCatch(title = "MapX main process", {
-
-
-
       #
       # Get email after browser data validation
       # -> default = guest

@@ -1,0 +1,5 @@
+{
+  "sprites": "/sprites/sprite",
+  "fontstack": "/fontstack/{fontstack}/{range}.pbf",
+  "static": "/static.html"
+}

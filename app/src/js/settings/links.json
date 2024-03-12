@@ -1,0 +1,15 @@
+{
+  "mainProjectPage": "https://mapx.org",
+  "mapboxSprites": "mapbox://sprites/mapbox/bright-v8",
+  "mapboxGlyphs": "mapbox://fonts/helsinki/{fontstack}/{range}.pbf",
+  "appKnowlegdeBase": "https://www.mapx.org/knowledge-base/",
+  "repositoryWiki": "https://github.com/unep-grid/mapx/wiki/",
+  "repositoryWikiRaw": "https://raw.githubusercontent.com/wiki/unep-grid/mapx/",
+  "repositoryIssues": "https://github.com/unep-grid/mapx/issues",
+  "repositoryWikiMapComposer": "https://github.com/unep-grid/mapx/wiki/Map-composer",
+  "repositoryWikiDrawTool": "https://github.com/unep-grid/mapx/wiki/Draw-tool",
+  "repositoryWikiSharingManager": "https://github.com/unep-grid/mapx/wiki/Sharing-Manager",
+  "repositoryWikiAttributeTable": "https://github.com/unep-grid/mapx/wiki/Attribute-table",
+  "repositoryWikiSearchToolUI": "https://github.com/unep-grid/mapx/wiki/Search-tool-UI",
+  "repositoryWikiTableEditor": "https://github.com/unep-grid/mapx/wiki/Attribute-table-edition"
+}

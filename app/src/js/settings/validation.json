@@ -1,0 +1,17 @@
+{
+  "input": {
+    "nchar": {
+      "sourceAbstract": { "min": 1, "max": 5000 },
+      "sourceAttributesAlias": { "min": 1, "max": 30 },
+      "sourceAttributesDesc": { "min": 1, "max": 5000 },
+      "sourceLicense": { "min": 1, "max": 5000 },
+      "sourceKeywords": { "min": 1, "max": 30 },
+      "sourceTitle": { "min": 1, "max": 300 },
+      "projectAbstract": { "min": 1, "max": 5000 },
+      "projectTitle": { "min": 1, "max": 150 },
+      "projectAlias": { "min": 1, "max": 30 },
+      "viewAbstract": { "min": 1, "max": 5000 },
+      "viewTitle": { "min": 1, "max": 300 }
+    }
+  }
+}

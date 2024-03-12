@@ -932,7 +932,7 @@ async function updateUiSettings_base() {
       "btnShowProjectPrivate",
     );
     const title = path(mx, "settings.project.title");
-    
+
     elBtnProject.innerText =
       title[lang] || title[langDef] || settings.project.id;
 
@@ -2068,6 +2068,7 @@ export async function getViewRemote(idView) {
 /**
  * Get view local or remote, but prefer local over remote
  * @param {String|Object} idView View id or view
+ * @return {Promise<Object>}
  */
 export async function getViewAuto(idView) {
   const view = getView(idView) || (await getViewRemote(idView));
@@ -3241,13 +3242,16 @@ export async function viewRender(o) {
 
 /**
  * Get link to view, current mode/location
- * @param {Object|String} view View or view id
+ * @param {String|Object} idView idView or view
  * @param {Boolean} useStatic
- * @return {URL|String} url to the view
+ * @return {String>} url to the view
  */
-export function viewLink(view, opt) {
-  view = getView(view);
-  const idView = view.id;
+export function viewLink(idView, opt) {
+  
+  if(isView(idView)){
+     idView = idView.id;
+  }
+
   const def = {
     useStatic: true,
     project: null,
