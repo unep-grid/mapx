@@ -148,6 +148,7 @@ async function loadJsonEditor() {
     import("./../json_editor/validation.js"),
     import("./../json_editor/table_source_stat.js"),
     import("./../json_editor/select_tom.js"),
+    import("./../json_editor/select_tom_simple.js"),
     import("./../json_editor/select_gemet.js"),
     import("./../json_editor/select_group.js"),
     import("./../json_editor/select_keywords.js"),

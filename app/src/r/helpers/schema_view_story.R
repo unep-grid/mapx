@@ -20,6 +20,7 @@ mxSchemaViewStory <- function(view, views, language) {
 
   mxCounter(reset = T)
 
+
   #
   # Opacity auto timeout
   #
@@ -191,6 +192,7 @@ mxSchemaViewStory <- function(view, views, language) {
           type = "string",
           minLength = 1,
           enum = as.list(as.character(views)),
+          format = "selectizeSingle",
           options = list(
             enum_titles = names(views),
             selectize_options = list(
