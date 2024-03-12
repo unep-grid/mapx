@@ -1,3 +1,7 @@
+  - [1.13.0-beta.14](https://github.com/unep-grid/mapx/tree/1.13.0-beta.14) 
+
+    - Api Mirror : add optional type to the request
+
   - [1.13.0-beta.13](https://github.com/unep-grid/mapx/tree/1.13.0-beta.13) 
 
     - View editor, concurency warning : store last date in reactive object to avoid the concurency warning being diplayed
