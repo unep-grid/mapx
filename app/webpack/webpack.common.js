@@ -73,8 +73,9 @@ module.exports = {
     new MonacoWebpackPlugin({
       publicPath: "/",
       filename: "[name].worker.js",
-      /// see app/node_modules/monaco-editor/esm/vs/language/ for a list ,
-      languages: ["typescript", "html", "json"],
+      // see app/node_modules/monaco-editor/esm/vs/language/ 
+      //             and basic-languages for a list
+      languages: ["typescript", "html", "json", "javascript"],
     }),
   ],
   module: {

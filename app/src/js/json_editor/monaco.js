@@ -77,10 +77,11 @@ JSONEditor.defaults.editors.monaco = class mxeditors extends (
   }
   async afterInputReady() {
     const editor = this;
-    const mode =
-      editor.options.language === "javascript"
-        ? "typescript"
-        : editor.options.language;
+    const mode = editor.options.language;
+
+   /* === "javascript"*/
+        /*? "typescript"*/
+        /*: editor.options.language;*/
 
     const editors = jed.monacoEditors;
 
