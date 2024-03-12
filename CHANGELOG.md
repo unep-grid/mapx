@@ -1,3 +1,12 @@
+  - [1.13.0-beta.13](https://github.com/unep-grid/mapx/tree/1.13.0-beta.13) 
+
+    - View editor, concurency warning : store last date in reactive object to avoid the concurency warning being diplayed
+    - Story Map : update control panel size after state init and state reset
+    - JSON-editor : added simple, single value tom select editor, that should work for single text value, e.g. story map views selection
+    - WMS configurator : prevent jsonlite convert to df, list should be valid
+    - Configuration : duplicated config app/client. Minor refactoring + transfer to client settings items not dynamically changed. Should solve wiki links and direct static view links
+    - Monaco editor : added javascript support: should improve all custom code editors
+
   - [1.13.0-beta.12](https://github.com/unep-grid/mapx/tree/1.13.0-beta.12) 
 
     - Project remove 
