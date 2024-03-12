@@ -239,7 +239,7 @@ config[["ui"]] <- list(
 #
 # wms sources
 #
-configWms <- as.list(fromJSON("./src/js/settings/wms.json"))
+configWms <- fromJSON("./src/js/settings/wms.json", simplifyDataFrame = FALSE)
 config[["wms"]] <- configWms
 
 #
