@@ -1,3 +1,7 @@
+  - [1.13.0-beta.15](https://github.com/unep-grid/mapx/tree/1.13.0-beta.15) 
+
+    - Extensions : test dynamic import of extension / module to use in widgets and custom code view, via moduleLoad('extension',<id>') 
+
   - [1.13.0-beta.14](https://github.com/unep-grid/mapx/tree/1.13.0-beta.14) 
 
     - Api Mirror : add optional type to the request
