@@ -2517,6 +2517,7 @@ export function viewsLayersOrderUpdate(o) {
       return layer?.id === idView || layer?.metadata?.idView === idView;
     });
 
+
     if (layersView.length > 0) {
       /*
        * Sort layers within view context

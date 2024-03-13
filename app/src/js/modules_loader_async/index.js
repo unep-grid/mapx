@@ -29,15 +29,16 @@ const modules = {
   button_panel: loadButtonPanel,
   "tom-select": loadTomSelect,
   "monaco-editor": loadMonacoEditor,
+  extension: loadExtension,
 };
 
-export async function moduleLoad(name) {
+export async function moduleLoad(name, id) {
   const loader = modules[name];
   if (!isFunction(loader)) {
     console.warn(`Module ${name} not found`);
     return Promise.resolve({});
   }
-  const m = await loader();
+  const m = await loader(id);
   return m;
 }
 
@@ -182,6 +183,17 @@ async function loadNestedList() {
 async function loadMonacoEditor() {
   const m = await import("./../monaco_wrapper");
   return m.monaco;
+}
+
+async function loadExtension(id) {
+  const m = await import("./../extensions/index.js");
+  return m[id];
+}
+
+if (module.hot) {
+  module.hot.accept("./../extensions/index.js", function () {
+    console.log("Accepting the updated module!");
+  });
 }
 
 /**

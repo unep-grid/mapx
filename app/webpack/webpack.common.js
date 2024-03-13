@@ -68,8 +68,6 @@ module.exports = {
       { from: "./src/favicons", to: "." },
       { from: "./src/js/sdk/dist/", to: "sdk/", ignore: [".DS_Store"] },
     ]),
-    /* new MonacoWebpackPlugin({*/
-    /*}),*/
     new MonacoWebpackPlugin({
       publicPath: "/",
       filename: "[name].worker.js",

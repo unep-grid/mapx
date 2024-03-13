@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const {WatchFolderPlugin} = require('./webpack.watch_folder.js');
