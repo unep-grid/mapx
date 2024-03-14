@@ -1,3 +1,9 @@
+  - [1.13.0](https://github.com/unep-grid/mapx/tree/1.13.0) 
+    
+    - Table Editor :
+        - Issue when retrieving views to update if the table was not built yet, producing a timeout error
+        - Remote request to update alternative style, failure/ style not valid : display a warning in the notification box instead of an error.
+
   - [1.13.0-beta.15](https://github.com/unep-grid/mapx/tree/1.13.0-beta.15) 
 
     - Extensions : test dynamic import of extension / module to use in widgets and custom code view, via moduleLoad('extension',<id>') 
