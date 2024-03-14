@@ -66,7 +66,7 @@ module.exports = merge(common, {
           handler: "NetworkFirst",
         },
         {
-          urlPattern: /^https:\/\/.*wms\?bbox=/,
+          urlPattern: /^https:\/\/.*\/wms\/.*bbox=/is,
           handler: "CacheFirst",
         },
         {
