@@ -311,16 +311,25 @@ export class EditTableSessionClient extends WsToolsBase {
       if (!discard) {
         return;
       }
-      /**
-       * Clean
-       */
-      et._destroyed = true;
-      et._lock_table_concurrent = false;
-      et._lock_table_by_user_id = null;
-      if (!et._auto_save) {
-        et.lockTableConcurrent(false).catch((e) => {
-          console.error(e);
-        });
+
+      if (et._built) {
+        et.lock();
+
+        /**
+         * Auto reload views locally
+         * -> structural change requires broadcasting changes from the server
+         * -> here quick local reload, to see values changes
+         */
+        const tableViews = await et.getTableViews();
+
+        console.log("table views to update", tableViews);
+
+        if (tableViews) {
+          const views = tableViews
+            .map((row) => getView(row.id))
+            .filter((v) => isView(v));
+          await viewsReplace(views);
+        }
       }
 
       /**
@@ -330,17 +339,16 @@ export class EditTableSessionClient extends WsToolsBase {
       et._modal?.close();
 
       /**
-       * Auto reload views locally
-       * -> structural change requires broadcasting changes from the server
-       * -> here quick local reload, to see values changes
+       * Clean
        */
-      const tableViews = await et.getTableViews();
+      et._destroyed = true;
+      et._lock_table_concurrent = false;
+      et._lock_table_by_user_id = null;
 
-      if (tableViews) {
-        const views = tableViews
-          .map((row) => getView(row.id))
-          .filter((v) => isView(v));
-        await viewsReplace(views);
+      if (et._built && !et._auto_save) {
+        et.lockTableConcurrent(false).catch((e) => {
+          console.error(e);
+        });
       }
 
       /**
@@ -2865,7 +2873,7 @@ export class EditTableSessionClient extends WsToolsBase {
   disable() {
     const et = this;
     et._disabled = true;
-    et._el_overlay.classList.add("edit-table--disabled");
+    et._el_overlay?.classList?.add("edit-table--disabled");
     et.setReadOnly(true);
   }
 
@@ -2875,7 +2883,7 @@ export class EditTableSessionClient extends WsToolsBase {
   enable() {
     const et = this;
     et._disabled = false;
-    et._el_overlay.classList.remove("edit-table--disabled");
+    et._el_overlay?.classList?.remove("edit-table--disabled");
     et.setReadOnly(false);
   }
 
@@ -2886,7 +2894,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     et.disable();
     et._disconnected = true;
-    et._el_overlay.classList.add("edit-table--disconnected");
+    et._el_overlay?.classList?.add("edit-table--disconnected");
     et._socket.io.once("reconnect", et.onReconnect);
   }
 
@@ -2897,7 +2905,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     try {
       et._disconnected = false;
-      et._el_overlay.classList.remove("edit-table--disconnected");
+      et._el_overlay?.classList?.remove("edit-table--disconnected");
       et.enable();
       await et.start({
         send_table: false,
@@ -2922,7 +2930,7 @@ export class EditTableSessionClient extends WsToolsBase {
     const et = this;
     et.disable();
     et._locked = true;
-    et._el_overlay.classList.add("edit-table--locked");
+    et._el_overlay?.classList?.add("edit-table--locked");
   }
 
   /**
@@ -2931,7 +2939,7 @@ export class EditTableSessionClient extends WsToolsBase {
   unlock() {
     const et = this;
     et._disconnected = false;
-    et._el_overlay.classList.remove("edit-table--locked");
+    et._el_overlay?.classList?.remove("edit-table--locked");
     et._locked = false;
     et.enable();
   }
