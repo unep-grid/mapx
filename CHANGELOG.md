@@ -1,3 +1,8 @@
+  - [1.13.1](https://github.com/unep-grid/mapx/tree/1.13.1) 
+
+    - SDK 
+        - Should fix view removal in static mode
+
   - [1.13.0](https://github.com/unep-grid/mapx/tree/1.13.0) 
     
     - Table Editor :
