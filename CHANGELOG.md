@@ -1,3 +1,8 @@
+  - [1.13.2](https://github.com/unep-grid/mapx/tree/1.13.2) 
+
+    - Panel Manager
+        - Fix issue with unexpected single panel recieved
+
   - [1.13.1](https://github.com/unep-grid/mapx/tree/1.13.1) 
 
     - SDK 
