@@ -1,48 +1,45 @@
+import { DateTime, Duration, Interval } from "luxon";
 import { el } from "../../el";
+import { isNotEmpty } from "../../is_test";
+import { isEmpty } from "../../is_test";
 
-export class OceanMapLegend {
+// Define external default options
+const defaultOptions = {
+  depths: [-0.5, -1, -5, -10, -20, -50, -100],
+  palettes: ["redblue"],
+  transitionDuration: 2000,
+};
+
+export class TimeMapLegend {
   constructor(options) {
+    this._opt = { ...defaultOptions, ...options };
     this._i = 0;
-    this.map = options.map;
-    this.idLayer = options.idLayer;
-    this.elLegend = options.elLegend;
-    this.elInputs = options.elInputs;
-    this.baseURL = options.baseURL;
-    this.palette = options.palette;
-    this.maxDate = options.maxDate;
-    this.minDate = options.minDate;
-    this.metadata = options.metadata;
-    this.before = options.before;
-    // WMS depths : may be hardcoded in WMS server
-    this.depths = options.depths || [-0.5, -1, -5, -10, -20, -50, -100];
-    this.palettes = options.palettes || ["redblue"];
-    this.transitionDuration = options.transitionDuration || 2000;
+  }
+
+  async init() {
+    await this.updateCapabilities();
     this.setupUI();
     this.update();
   }
 
   setupUI() {
-    const optDepth = this.depths.map((value) =>
+    const optDepth = this._opt.depths.map((value) =>
       el("option", { value }, value.toFixed(2)),
     );
-    const optPalettes = this.palettes.map((value) =>
+    const optPalettes = this._opt.palettes.map((value) =>
       el("option", { value }, value),
     );
 
     this.elDepthInput = el(
       "select",
-      {
-        class: "form-control",
-      },
+      { class: "form-control" },
       { on: { change: () => this.updateMapSource() } },
       optDepth,
     );
 
     this.elPaletteInput = el(
       "select",
-      {
-        class: "form-control",
-      },
+      { class: "form-control" },
       { on: { change: () => this.update() } },
       optPalettes,
     );
@@ -50,9 +47,9 @@ export class OceanMapLegend {
     this.elDateInput = el("input", {
       class: "form-control",
       type: "date",
-      min: this.formatDate(this.minDate),
-      max: this.getDateDayBefore(this.maxDate),
-      value: this.getDateDayBefore(this.maxDate),
+      min: this.formatDate(this._opt.minDate),
+      max: this.getDateDayBefore(this._opt.maxDate),
+      value: this.getDateDayBefore(this._opt.maxDate),
       on: {
         change: () => {
           this.stop();
@@ -96,9 +93,9 @@ export class OceanMapLegend {
       ),
     ]);
 
-    this.elImageLegend = el("img", { src: null });
+    this._elImageLegend = el("img", { src: null });
 
-    this.elInputContainer = el(
+    this._elInputContainer = el(
       "div",
       {
         class: "form-group",
@@ -117,9 +114,8 @@ export class OceanMapLegend {
       ],
     );
 
-    this.elLegend.appendChild(this.elImageLegend);
-
-    this.elInputs.appendChild(this.elInputContainer);
+    this._opt.elLegend.appendChild(this._elImageLegend);
+    this._opt.elInputs.appendChild(this._elInputContainer);
   }
 
   computeLegendUrl() {
@@ -131,20 +127,20 @@ export class OceanMapLegend {
       format: "image/png",
       colorscalerange: "-0.00001,0.00001",
       logscale: "false",
-      palette: this.palette,
+      palette: this._opt.palette,
     });
-    return `${this.baseURL}?${params}`;
+    return `${this._opt.baseURL}?${params}`;
   }
 
   clear(id) {
-    id = id || this.idLayer;
+    id = id || this._opt.idLayer;
 
-    if (this.map.getLayer(id)) {
-      this.map.removeLayer(id);
+    if (this._opt.map.getLayer(id)) {
+      this._opt.map.removeLayer(id);
     }
 
-    if (this.map.getSource(id)) {
-      this.map.removeSource(id);
+    if (this._opt.map.getSource(id)) {
+      this._opt.map.removeSource(id);
     }
   }
 
@@ -183,6 +179,7 @@ export class OceanMapLegend {
     day.setDate(day.getDate() + 1);
     this.setDate(day);
   }
+
   previousDay() {
     this.stop();
     const value = this.elDateInput.value;
@@ -211,8 +208,6 @@ export class OceanMapLegend {
     }
 
     this.elDateInput.value = this.formatDate(day);
-    console.log(this.formatDate(day), this.elDateInput.value);
-
     this.updateMapSource();
   }
 
@@ -223,7 +218,7 @@ export class OceanMapLegend {
 
   getDateDayBefore(d) {
     const today = this.dateNoon(d);
-    today.setDate(today.getDate());
+    today.setDate(today.getDate() - 1);
     return this.formatDate(today);
   }
 
@@ -234,18 +229,18 @@ export class OceanMapLegend {
   }
 
   transition(a, b) {
-    const layerA = this.map.getLayer(a);
-    const layerB = this.map.getLayer(b);
+    const layerA = this._opt.map.getLayer(a);
+    const layerB = this._opt.map.getLayer(b);
     if (layerA) {
       setTimeout(() => {
-        this.map.setPaintProperty(a, "raster-opacity", 0);
-      }, this.transitionDuration * 2);
+        this._opt.map.setPaintProperty(a, "raster-opacity", 0);
+      }, this._opt.transitionDuration * 2);
       setTimeout(() => {
         this.clear(a);
-      }, this.transitionDuration * 3);
+      }, this._opt.transitionDuration * 3);
     }
     if (layerB) {
-      this.map.setPaintProperty(b, "raster-opacity", 1);
+      this._opt.map.setPaintProperty(b, "raster-opacity", 1);
     }
   }
 
@@ -261,21 +256,21 @@ export class OceanMapLegend {
     );
     const idLayerCurrent = this._id_layer;
     const idLayer = `${
-      this.idLayer
+      this._opt.idLayer
     }@${selectedDate}_${selectedPalette}_${selectedDepth}_${this._i++}`;
 
-    this.clear(idLayer);
+    this.clear(idLayerCurrent);
 
-    this.map.addLayer({
+    this._opt.map.addLayer({
       id: idLayer,
-      before: this.before,
+      before: this._opt.before,
       type: "raster",
       source: idLayer,
-      metadata: this.metadata,
+      metadata: this._opt.metadata,
       paint: {
         "raster-opacity": 0,
         "raster-opacity-transition": {
-          duration: this.transitionDuration,
+          duration: this._opt.transitionDuration,
         },
       },
       source: {
@@ -290,8 +285,8 @@ export class OceanMapLegend {
   }
 
   updateLegend() {
-    this.palette = this.elPaletteInput.value;
-    this.elImageLegend.src = this.computeLegendUrl();
+    this._opt.palette = this.elPaletteInput.value;
+    this._elImageLegend.src = this.computeLegendUrl();
   }
 
   update() {
@@ -300,14 +295,12 @@ export class OceanMapLegend {
   }
 
   play() {
-    if (this._playing) {
-      return;
-    }
+    if (this._playing) return;
     this._playing = true;
     this.nextDay();
     this._id_anim = setTimeout(() => {
       this.play();
-    }, this.transitionDuration);
+    }, this._opt.transitionDuration);
   }
 
   stop() {
@@ -334,41 +327,101 @@ export class OceanMapLegend {
     };
     const params = new URLSearchParams(objParam).toString();
     const bboxCode = "&bbox={bbox-epsg-3857}";
-    return `${this.baseURL}?${params}${bboxCode}`;
+    return `${this._opt.baseURL}?${params}${bboxCode}`;
   }
-}
-export function getPalettes() {
-  return [
-    "ferret",
-    "rainbow",
-    "occam",
-    "redblue",
-    "ncview",
-    "sst_36",
-    "greyscale",
-    "alg2",
-    "occam_pastel-30",
-    "alg",
-  ];
-}
 
-export function getDepths() {
-  return [
-    -0.49402499198913574, -1.5413750410079956, -2.6456689834594727,
-    -3.8194949626922607, -5.078224182128906, -6.440614223480225,
-    -7.92956018447876, -9.572997093200684, -11.404999732971191,
-    -13.467140197753906, -15.810070037841797, -18.495559692382812,
-    -21.598819732666016, -25.211410522460938, -29.444730758666992,
-    -34.43415069580078, -40.344051361083984, -47.37369155883789,
-    -55.76428985595703, -65.80726623535156, -77.85385131835938,
-    -92.3260726928711, -109.72930145263672, -130.66600036621094,
-    -155.85069274902344, -186.12559509277344, -222.47520446777344,
-    -266.0403137207031, -318.1274108886719, -380.2130126953125,
-    -453.9377136230469, -541.0889282226562, -643.5667724609375,
-    -763.3331298828125, -902.3392944335938, -1062.43994140625, -1245.291015625,
-    -1452.2509765625, -1684.2840576171875, -1941.8929443359375,
-    -2225.077880859375, -2533.3359375, -2865.702880859375, -3220.820068359375,
-    -3597.031982421875, -3992.48388671875, -4405.22412109375, -4833.291015625,
-    -5274.7841796875, -5727.9169921875,
-  ];
+  constructWmsGetCapabilitiesUrl() {
+    const params = new URLSearchParams({
+      service: "WMS",
+      request: "GetCapabilities",
+      version: "1.3.0",
+    });
+    return `${this._opt.baseURL}?${params.toString()}`;
+  }
+
+  async updateCapabilities() {
+    try {
+      const url = this.constructWmsGetCapabilitiesUrl();
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(
+          `WMS get capabilities error! Status: ${response.status}`,
+        );
+      }
+      const xmlText = await response.text();
+      this._capabilities = await this.parseCapabilities(xmlText);
+    } catch (error) {
+      console.error("Failed to fetch or parse capabilities:", error);
+      this._capabilities = null;
+    }
+  }
+
+  async parseCapabilities(xmlText) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+
+    debugger;
+
+    return {
+      serviceTitle: xmlDoc.querySelector("Service > Title")?.textContent,
+      serviceAbstract: xmlDoc.querySelector("Service > Abstract")?.textContent,
+    };
+  }
+
+  getLayerInfo(xmlDoc) {
+    const layerName = this._opt.layerName;
+    const out = {};
+    if (isEmpty(layerName)) {
+      throw new Error("Missing 'layerName' value");
+    }
+    const layers = Array.from(xmlDoc.querySelectorAll("Layer Layer"));
+
+    const names = layers.map((l) => l.querySelector("Name")?.textContent);
+
+    if (!names.includes(layerName)) {
+      throw new Error(
+        `Invalid layer name '${layerName}'. Available names : '${names.join(
+          ",",
+        )}' `,
+      );
+    }
+
+    const layer = layers.find(
+      (l) => l.querySelector("Name")?.textContent === layerName,
+    );
+
+    out.styles = Array.from(layer.querySelectorAll("Style > Name")).map(
+      (s) => s.textContent,
+    );
+
+    const nodeElevation = layer.querySelector("Dimension[name='elevation']");
+
+    if (isNotEmpty(nodeElevation)) {
+      out.elevation_default = nodeElevation.getAttribute("default");
+      out.elevation_values = nodeElevation.textContent.split(",");
+      out.elevation_units = nodeElevation.getAttribute("units");
+    }
+
+    const nodeTime = layer.querySelector("Dimension[name='time']");
+
+    if (isNotEmpty(nodeTime)) {
+      out.time_default = nodeTime.getAttribute("default");
+      out.time_values = this.parseTime(nodeTime);
+    }
+  }
+
+  parseTime(node) {
+    const intervals = node.textContent.split(",");
+    return intervals.map((interval) => {
+      Interval.fromISO(interval);
+    });
+  }
+
+  findCurrentInterval(){
+    this._itnerval.find(i=> i.contains(this._date));
+
+  }
+
+
+
 }
