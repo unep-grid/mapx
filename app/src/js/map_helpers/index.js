@@ -2076,6 +2076,12 @@ export async function getViewAuto(idView) {
   if (!valid) {
     throw new Error("getViewAuto failed  to get: ", idView);
   }
+  const views = getViews();
+
+  if (!views.includes(view)) {
+    views.push(view);
+  }
+
   return view;
 }
 
@@ -2517,7 +2523,6 @@ export function viewsLayersOrderUpdate(o) {
       return layer?.id === idView || layer?.metadata?.idView === idView;
     });
 
-
     if (layersView.length > 0) {
       /*
        * Sort layers within view context
@@ -2641,9 +2646,11 @@ export async function viewDelete(view) {
   const views = getViews();
   view = getView(view);
   const exists = views.includes(view);
+
   if (!exists) {
-    return;
+    throw new Error("viewDelete : view does not exist");
   }
+
   const vIndex = views.indexOf(view);
   const geojsonData = mx_storage.geojson;
 
@@ -2676,7 +2683,7 @@ export async function viewClear(o) {
   o.id = o.id || settings.map.id;
 
   if (!isView(view)) {
-    return false;
+    throw new Error("viewClear : view not found");
   }
 
   const now = Date.now();
@@ -2730,13 +2737,7 @@ export async function viewAdd(idView) {
     const view = await getViewAuto(idView);
 
     if (!isView(view)) {
-      return false;
-    }
-
-    const views = getViews();
-
-    if (!views.includes(view)) {
-      views.push(view);
+      throw new Error("viewAdd : not a view");
     }
 
     await waitTimeoutAsync(100);
@@ -2799,8 +2800,9 @@ export async function viewAddAuto(idView, options) {
 export async function viewRemove(idView) {
   try {
     const view = getView(idView);
+
     if (!isView(view)) {
-      return true;
+      throw new Error("viewRemove : view not found");
     }
     /**
      * Close UI
@@ -3248,9 +3250,8 @@ export async function viewRender(o) {
  * @return {String>} url to the view
  */
 export function viewLink(idView, opt) {
-  
-  if(isView(idView)){
-     idView = idView.id;
+  if (isView(idView)) {
+    idView = idView.id;
   }
 
   const def = {
@@ -5334,6 +5335,7 @@ export function getViewVtSourceId(view) {
  */
 export async function isViewDownloadableRemote(idView) {
   const view = await getViewAuto(idView);
+
   const { type } = view;
   switch (type) {
     case "cc":

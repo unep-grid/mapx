@@ -16,7 +16,7 @@ const mapx = new mxsdk.Manager({
     zoomToViews: true,
     closePanels: true,
     //views: ['MX-CRPXN-W8IAC-XWFLU'],
-    //views: ['MX-FI9VW-B0HTQ-EGB09'],// ecoregion afg
+    views: ['MX-FI9VW-B0HTQ-EGB09'],// ecoregion afg
     //views: ['MX-V453A-JPA5O-8EIRD'],
     language: "en",
   },
@@ -27,13 +27,11 @@ mapx.on("ready", async () => {
     enable: true,
   });
   await mapx.ask("view_add", {
-    idView: "MX-FI9VW-B0HTQ-EGB09",
+    idView: "MX-NHM17-ATTWX-MQTKD",
     zoomToView: true,
   });
-  await mapx.ask("view_add", {
-    idView: "MX-T7PXA-39GK2-QIH5T",
-    zoomToView: false,
-  });
+
+
 });
 
 mapx.on("view_added", (o) => {
