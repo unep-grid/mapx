@@ -108,7 +108,7 @@ export class ButtonPanelManager {
    * @returns {Array<ButtonPanel>} The corresponding ButtonPanel instance(s).
    */
   getAll(panels) {
-    if (Array.isArray(panels)) {
+    if (isArray(panels)) {
       return panels.map((panel) => this._getPanel(panel)).filter(isNotEmpty);
     }
     return [this._getPanel(panels)];
@@ -318,7 +318,7 @@ export class ButtonPanelManager {
 
   // Helper method to process actions on all panels except specified ones
   _processAllOther(panels, action) {
-    const excludePanels = new Set(this.get(panels));
+    const excludePanels = new Set(this.getAll(panels));
     for (let panel of BUTTON_PANELS.values()) {
       if (!excludePanels.has(panel)) {
         panel[action]();

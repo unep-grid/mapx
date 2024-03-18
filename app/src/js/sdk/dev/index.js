@@ -14,7 +14,7 @@ const mapx = new mxsdk.Manager({
   verbose: true,
   params: {
     zoomToViews: true,
-    closePanels: true,
+    closePanels: false,
     //views: ['MX-CRPXN-W8IAC-XWFLU'],
     views: ['MX-FI9VW-B0HTQ-EGB09'],// ecoregion afg
     //views: ['MX-V453A-JPA5O-8EIRD'],
