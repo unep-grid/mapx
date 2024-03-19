@@ -1,6 +1,6 @@
 import { DateTime, Duration, Interval } from "luxon";
 import { el } from "../../el";
-import { isEmpty } from "../../is_test";
+import { isEmpty, isDate } from "../../is_test";
 import flatpickr from "flatpickr";
 import "../../search/style_flatpickr.less";
 
@@ -26,13 +26,23 @@ export class TimeMapLegend {
   }
 
   setupUI() {
-    const { elevation_values, elevation_default, time_default, styles } =
-      this.getLayerInfoAll();
+    const {
+      elevation_values,
+      elevation_default,
+      time_default,
+      time_intervals,
+      styles,
+    } = this.getLayerInfoAll();
+
+    const defaultDate = time_default.toUTC().toISO();
+    const defaultHour = time_default.toUTC().hour;
+    const defaultHourIncrement = time_intervals[0].step.toFormat("hh") * 1;
+    const enableTime = defaultHourIncrement < 24;
 
     const optDepth = elevation_values.map((value) =>
       el(
         "option",
-        { value, selected: value === elevation_default },
+        { value, selected: value === elevation_default ? true : null },
         Number(value).toFixed(2),
       ),
     );
@@ -58,14 +68,22 @@ export class TimeMapLegend {
     });
 
     this._fp = flatpickr(this.elDateInput, {
+      dateFormat: "Z",
+      altInput: "Z",
+      defaultDate: defaultDate,
+      time_24hr: enableTime,
+      enableTime: enableTime,
+      defaultHour: defaultHour,
+      hourIncrement: defaultHourIncrement,
       disable: [
         (date) => {
           return !this.validate(DateTime.fromJSDate(date));
         },
       ],
-      enableTime: true,
+      onChange: (x) => {
+        debugger;
+      },
     });
-    this._fp.setDate(time_default.toISO());
 
     const elButtonsDays = el("div", { class: "input-group-btn" }, [
       el(
@@ -410,7 +428,15 @@ export class TimeMapLegend {
   }
 
   getTime() {
-    return this._time || this.getLayerInfo("time_default");
+    const uiDate = this._fp?.selectedDates[0];
+    if (isDate(uiDate)) {
+      return DateTime.fromJSDate(uiDate).toUTC();
+    }
+    return this.getLayerInfo("time_default").toUTC();
+  }
+
+  getTimeISOstring() {
+    return this.getTime().toISOString();
   }
 
   nextTime() {
@@ -440,7 +466,7 @@ export class TimeMapLegend {
   getPreviousTime() {
     return this.getTimeMove(-1);
   }
-  
+
   getNextTime() {
     return this.getTimeMove(1);
   }
