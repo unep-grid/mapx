@@ -27,11 +27,9 @@ mapx.on("ready", async () => {
     enable: true,
   });
   await mapx.ask("view_add", {
-    idView: "MX-NHM17-ATTWX-MQTKD",
+    idView: "MX-FI9VW-B0HTQ-EGB09",
     zoomToView: true,
   });
-
-
 });
 
 mapx.on("view_added", (o) => {

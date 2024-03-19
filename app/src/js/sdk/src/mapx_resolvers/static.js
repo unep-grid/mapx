@@ -56,6 +56,7 @@ import {
 import { getViewSourceSummary } from "../../../mx_helper_source_summary.js";
 import {
   getClickHandlers,
+  clone,
   makeId,
   path,
   setClickHandler,
@@ -438,9 +439,15 @@ export class MapxResolversStatic extends MapxResolversPanels {
    * @param {Object} view meta data object
    * @return {Promise<Object>} view metadata
    */
-  get_view_meta(opt) {
+  async get_view_meta(opt) {
     opt = Object.assign({}, { idView: null }, opt);
-    return getViewMetadata(opt.idView);
+    const meta = await getViewMetadata(opt.idView);
+    /*
+     * back compatibility with previous version
+     * {meta : ..., _timing : ...}
+     */
+    meta.meta = clone(meta);
+    return meta;
   }
 
   /**

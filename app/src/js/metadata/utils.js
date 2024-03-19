@@ -77,6 +77,7 @@ export async function getViewMetadata(id) {
     },
     settings.maxTimeFetch,
   );
+
   return viewMeta;
 }
 
