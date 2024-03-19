@@ -1,7 +1,8 @@
 import { DateTime, Duration, Interval } from "luxon";
 import { el } from "../../el";
-import { isNotEmpty } from "../../is_test";
 import { isEmpty } from "../../is_test";
+import flatpickr from "flatpickr";
+import "../../search/style_flatpickr.less";
 
 // Define external default options
 const defaultOptions = {
@@ -18,17 +19,24 @@ export class TimeMapLegend {
 
   async init() {
     await this.updateCapabilities();
+    await this.updateLayerInfo();
     this.setupUI();
-    this.update();
+    debugger;
+    //this.update();
   }
 
   setupUI() {
-    const optDepth = this._opt.depths.map((value) =>
-      el("option", { value }, value.toFixed(2)),
+    const { elevation_values, elevation_default, time_default, styles } =
+      this.getLayerInfoAll();
+
+    const optDepth = elevation_values.map((value) =>
+      el(
+        "option",
+        { value, selected: value === elevation_default },
+        Number(value).toFixed(2),
+      ),
     );
-    const optPalettes = this._opt.palettes.map((value) =>
-      el("option", { value }, value),
-    );
+    const optPalettes = styles.map((value) => el("option", { value }, value));
 
     this.elDepthInput = el(
       "select",
@@ -45,25 +53,26 @@ export class TimeMapLegend {
     );
 
     this.elDateInput = el("input", {
-      class: "form-control",
       type: "date",
-      min: this.formatDate(this._opt.minDate),
-      max: this.getDateDayBefore(this._opt.maxDate),
-      value: this.getDateDayBefore(this._opt.maxDate),
-      on: {
-        change: () => {
-          this.stop();
-          this.updateMapSource();
-        },
-      },
+      class: "form-control",
     });
+
+    this._fp = flatpickr(this.elDateInput, {
+      disable: [
+        (date) => {
+          return !this.validate(DateTime.fromJSDate(date));
+        },
+      ],
+      enableTime: true,
+    });
+    this._fp.setDate(time_default.toISO());
 
     const elButtonsDays = el("div", { class: "input-group-btn" }, [
       el(
         "button",
         {
           class: ["btn", "btn-default"],
-          on: { click: () => this.previousDay() },
+          on: { click: () => this.nextTime() },
         },
         el("i", { class: ["fa", "fa-step-backward"], title: "previous" }),
       ),
@@ -87,7 +96,7 @@ export class TimeMapLegend {
         "button",
         {
           class: ["btn", "btn-default"],
-          on: { click: () => this.nextDay() },
+          on: { click: () => this.nextTime() },
         },
         el("i", { class: ["fa", "fa-step-forward"], title: "next" }),
       ),
@@ -118,7 +127,7 @@ export class TimeMapLegend {
     this._opt.elInputs.appendChild(this._elInputContainer);
   }
 
-  computeLegendUrl() {
+  getLegendUrl() {
     const params = new URLSearchParams({
       service: "WMS",
       request: "GetLegendGraphic",
@@ -147,85 +156,6 @@ export class TimeMapLegend {
   destroy() {
     this.stop();
     this.clear();
-  }
-
-  getMinDate() {
-    return this.dateNoon(this.elDateInput.getAttribute("min"));
-  }
-
-  getMaxDate() {
-    return this.dateNoon(this.elDateInput.getAttribute("max"));
-  }
-
-  dateInRange(d) {
-    const date = this.dateNoon(d);
-    return date >= this.getMinDate() && date <= this.getMaxDate();
-  }
-
-  isDateGtMax(d) {
-    const date = this.dateNoon(d);
-    return date > this.getMaxDate();
-  }
-
-  isDateLtMin(d) {
-    const date = this.dateNoon(d);
-    return date < this.getMinDate();
-  }
-
-  nextDay() {
-    this.stop();
-    const value = this.elDateInput.value;
-    const day = this.dateNoon(value);
-    day.setDate(day.getDate() + 1);
-    this.setDate(day);
-  }
-
-  previousDay() {
-    this.stop();
-    const value = this.elDateInput.value;
-    const day = this.dateNoon(value);
-    day.setDate(day.getDate() - 1);
-    this.setDate(day);
-  }
-
-  dateNoon(d) {
-    let date = new Date(d);
-    date.setHours("12");
-    return date;
-  }
-
-  setDate(d) {
-    let day = this.dateNoon(d);
-    const isLtMin = this.isDateLtMin(day);
-    const isGtMax = this.isDateGtMax(day);
-
-    if (isLtMin) {
-      day = this.getMaxDate();
-    }
-
-    if (isGtMax) {
-      day = this.getMinDate();
-    }
-
-    this.elDateInput.value = this.formatDate(day);
-    this.updateMapSource();
-  }
-
-  formatDate(d) {
-    const now = this.dateNoon(d);
-    return now.toISOString().split("T")[0];
-  }
-
-  getDateDayBefore(d) {
-    const today = this.dateNoon(d);
-    today.setDate(today.getDate() - 1);
-    return this.formatDate(today);
-  }
-
-  formatTimeNoon(d) {
-    const date = this.formatDate(d);
-    const time = `${date}T12:00:00.000Z`;
-    return time;
   }
 
   transition(a, b) {
@@ -286,7 +216,7 @@ export class TimeMapLegend {
 
   updateLegend() {
     this._opt.palette = this.elPaletteInput.value;
-    this._elImageLegend.src = this.computeLegendUrl();
+    this._elImageLegend.src = this.getLegendUrl();
   }
 
   update() {
@@ -297,7 +227,7 @@ export class TimeMapLegend {
   play() {
     if (this._playing) return;
     this._playing = true;
-    this.nextDay();
+    this.nextTime();
     this._id_anim = setTimeout(() => {
       this.play();
     }, this._opt.transitionDuration);
@@ -339,6 +269,12 @@ export class TimeMapLegend {
     return `${this._opt.baseURL}?${params.toString()}`;
   }
 
+  async parseCapabilities(xmlText) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+    return xmlDoc;
+  }
+
   async updateCapabilities() {
     try {
       const url = this.constructWmsGetCapabilitiesUrl();
@@ -351,36 +287,49 @@ export class TimeMapLegend {
       const xmlText = await response.text();
       this._capabilities = await this.parseCapabilities(xmlText);
     } catch (error) {
+      this.destroy();
       console.error("Failed to fetch or parse capabilities:", error);
-      this._capabilities = null;
     }
   }
 
-  async parseCapabilities(xmlText) {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlText, "application/xml");
-
-    debugger;
-
-    return {
-      serviceTitle: xmlDoc.querySelector("Service > Title")?.textContent,
-      serviceAbstract: xmlDoc.querySelector("Service > Abstract")?.textContent,
-    };
+  async updateLayerInfo() {
+    this._layer_info = this.createLayerInfo(this._capabilities);
   }
 
-  getLayerInfo(xmlDoc) {
-    const layerName = this._opt.layerName;
+  getLayerInfo(id) {
+    /**
+     * Available:
+     *  [
+     *    "layer_names",
+     *    "styles",
+     *    "elevation_default",
+     *    "elevation_values",
+     *    "elevation_units",
+     *    "time_default",
+     *    "time_intervals",
+     *  ];
+     */
+    return this._layer_info[id];
+  }
+  getLayerInfoAll() {
+    return this._layer_info;
+  }
+
+  createLayerInfo(xmlDoc) {
     const out = {};
+    const { layerName } = this._opt;
+
     if (isEmpty(layerName)) {
       throw new Error("Missing 'layerName' value");
     }
+
     const layers = Array.from(xmlDoc.querySelectorAll("Layer Layer"));
 
-    const names = layers.map((l) => l.querySelector("Name")?.textContent);
+    out.layer_names = layers.map((l) => l.querySelector("Name")?.textContent);
 
-    if (!names.includes(layerName)) {
+    if (!out.layer_names.includes(layerName)) {
       throw new Error(
-        `Invalid layer name '${layerName}'. Available names : '${names.join(
+        `Invalid layer name '${layerName}'. Available names : '${out.layer_names.join(
           ",",
         )}' `,
       );
@@ -396,32 +345,116 @@ export class TimeMapLegend {
 
     const nodeElevation = layer.querySelector("Dimension[name='elevation']");
 
-    if (isNotEmpty(nodeElevation)) {
+    if (nodeElevation) {
       out.elevation_default = nodeElevation.getAttribute("default");
-      out.elevation_values = nodeElevation.textContent.split(",");
+      out.elevation_values = nodeElevation.textContent
+        .split(",")
+        .map((v) => v.trim());
       out.elevation_units = nodeElevation.getAttribute("units");
     }
 
     const nodeTime = layer.querySelector("Dimension[name='time']");
 
-    if (isNotEmpty(nodeTime)) {
-      out.time_default = nodeTime.getAttribute("default");
-      out.time_values = this.parseTime(nodeTime);
+    if (nodeTime) {
+      out.time_default = DateTime.fromISO(nodeTime.getAttribute("default"));
+      out.time_intervals = this.parseIntervals(nodeTime);
     }
+
+    return out;
   }
 
-  parseTime(node) {
-    const intervals = node.textContent.split(",");
-    return intervals.map((interval) => {
-      Interval.fromISO(interval);
+  parseIntervals(node) {
+    const intervalsValues = node.textContent.split(",");
+    const intervals = intervalsValues.map((interval) => {
+      const intervalTrimmed = interval.trim();
+      const duration = intervalTrimmed.split("/")[2]; //e.g. 'PT3H'
+      return {
+        step: Duration.fromISO(duration),
+        interval: Interval.fromISO(intervalTrimmed),
+      };
     });
+    return intervals;
   }
 
-  findCurrentInterval(){
-    this._itnerval.find(i=> i.contains(this._date));
-
+  findCurrentInterval() {
+    return this.findInterval("current");
+  }
+  findNextInterval() {
+    return this.findInterval("next");
+  }
+  findPreviousInterval() {
+    return this.findInterval("previous");
+  }
+  findInterval(type = "current") {
+    const intervals = this.getLayerInfo("time_intervals");
+    const nInterval = intervals.length;
+    for (let i = 0; i < nInterval; i++) {
+      const isCurrent = intervals[i].interval.contains(this.getTime());
+      if (isCurrent) {
+        switch (type) {
+          case "current": {
+            return intervals[i];
+          }
+          case "next": {
+            const next = intervals[i + 1] || intervals[0];
+            return next;
+          }
+          case "previous":
+            const next = intervals[i - 1] || intervals[nInterval - 1];
+            return next;
+        }
+      }
+    }
+    console.warn("no interval found returning first");
+    return intervals[0];
   }
 
+  getTime() {
+    return this._time || this.getLayerInfo("time_default");
+  }
 
+  nextTime() {
+    const t = this.getNextTime();
+    this._fp.setDate(t);
+  }
+  previousTime() {
+    const t = this.getPreviousTime();
+    this._fp.setDate(t);
+  }
 
+  getTimeMove(n = 1) {
+    const { interval, step } = this.findCurrentInterval();
+    const moved = this.getTime().plus(step * n);
+
+    if (moved < interval.start) {
+      const { interval } = this.findPreviousInterval();
+      return interval.end;
+    }
+    if (moved > interval.end) {
+      const { interval } = this.findNextInterval();
+      return interval.start;
+    }
+    return moved;
+  }
+
+  getPreviousTime() {
+    return this.getTimeMove(-1);
+  }
+  
+  getNextTime() {
+    return this.getTimeMove(1);
+  }
+
+  validate(time) {
+    const intervals = this.getLayerInfo("time_intervals");
+    if ((!time) instanceof DateTime) {
+      time = DateTime.fromISO(time);
+    }
+    for (const { interval } of intervals) {
+      if (interval.contains(time)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
