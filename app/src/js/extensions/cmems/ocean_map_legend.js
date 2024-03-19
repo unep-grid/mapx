@@ -1,162 +1,86 @@
 import { DateTime, Duration, Interval } from "luxon";
 import { el } from "../../el";
-import { isEmpty, isDate } from "../../is_test";
+import { isEmpty } from "../../is_test";
 import flatpickr from "flatpickr";
 import "../../search/style_flatpickr.less";
 
 // Define external default options
 const defaultOptions = {
-  depths: [-0.5, -1, -5, -10, -20, -50, -100],
-  palettes: ["redblue"],
+  style: "boxfill/rainbow",
+  elevation: 0,
   transitionDuration: 2000,
+  // layer metadata
+  metedata: { id: "x" },
 };
 
 export class TimeMapLegend {
   constructor(options) {
     this._opt = { ...defaultOptions, ...options };
     this._i = 0;
+    window._tml = this;
   }
 
   async init() {
     await this.updateCapabilities();
     await this.updateLayerInfo();
-    this.setupUI();
-    debugger;
-    //this.update();
+    this.build();
+    this.update();
   }
 
-  setupUI() {
-    const {
-      elevation_values,
-      elevation_default,
-      time_default,
-      time_intervals,
-      styles,
-    } = this.getLayerInfoAll();
-
-    const defaultDate = time_default.toUTC().toISO();
-    const defaultHour = time_default.toUTC().hour;
-    const defaultHourIncrement = time_intervals[0].step.toFormat("hh") * 1;
-    const enableTime = defaultHourIncrement < 24;
-
-    const optDepth = elevation_values.map((value) =>
-      el(
-        "option",
-        { value, selected: value === elevation_default ? true : null },
-        Number(value).toFixed(2),
-      ),
-    );
-    const optPalettes = styles.map((value) => el("option", { value }, value));
-
-    this.elDepthInput = el(
-      "select",
-      { class: "form-control" },
-      { on: { change: () => this.updateMapSource() } },
-      optDepth,
-    );
-
-    this.elPaletteInput = el(
-      "select",
-      { class: "form-control" },
-      { on: { change: () => this.update() } },
-      optPalettes,
-    );
-
-    this.elDateInput = el("input", {
-      type: "date",
-      class: "form-control",
-    });
-
-    this._fp = flatpickr(this.elDateInput, {
-      dateFormat: "Z",
-      altInput: "Z",
-      defaultDate: defaultDate,
-      time_24hr: enableTime,
-      enableTime: enableTime,
-      defaultHour: defaultHour,
-      hourIncrement: defaultHourIncrement,
-      disable: [
-        (date) => {
-          return !this.validate(DateTime.fromJSDate(date));
-        },
-      ],
-      onChange: (x) => {
-        debugger;
-      },
-    });
-
-    const elButtonsDays = el("div", { class: "input-group-btn" }, [
-      el(
-        "button",
-        {
-          class: ["btn", "btn-default"],
-          on: { click: () => this.nextTime() },
-        },
-        el("i", { class: ["fa", "fa-step-backward"], title: "previous" }),
-      ),
-      el(
-        "button",
-        {
-          class: ["btn", "btn-default"],
-          on: { click: () => this.play() },
-        },
-        el("i", { class: ["fa", "fa-play"], title: "play" }),
-      ),
-      el(
-        "button",
-        {
-          class: ["btn", "btn-default"],
-          on: { click: () => this.stop() },
-        },
-        el("i", { class: ["fa", "fa-stop"], title: "stop" }),
-      ),
-      el(
-        "button",
-        {
-          class: ["btn", "btn-default"],
-          on: { click: () => this.nextTime() },
-        },
-        el("i", { class: ["fa", "fa-step-forward"], title: "next" }),
-      ),
-    ]);
-
-    this._elImageLegend = el("img", { src: null });
-
-    this._elInputContainer = el(
-      "div",
-      {
-        class: "form-group",
-        style: {
-          padding: "20px",
-        },
-      },
-      [
-        el("label", "Date"),
-        el("div", { class: "input-group" }, [this.elDateInput, elButtonsDays]),
-
-        el("label", "Depth"),
-        this.elDepthInput,
-        el("label", "Palette"),
-        this.elPaletteInput,
-      ],
-    );
-
-    this._opt.elLegend.appendChild(this._elImageLegend);
-    this._opt.elInputs.appendChild(this._elInputContainer);
+  destroy() {
+    this.stop();
+    this.clear();
+  }
+  update() {
+    this.updateMapSource();
+    this.updateLegend();
   }
 
-  getLegendUrl() {
-    const params = new URLSearchParams({
-      service: "WMS",
-      request: "GetLegendGraphic",
-      version: "1.1.1",
-      layer: "wo",
-      format: "image/png",
-      colorscalerange: "-0.00001,0.00001",
-      logscale: "false",
-      palette: this._opt.palette,
-    });
-    return `${this._opt.baseURL}?${params}`;
+  play() {
+    if (this._playing) {
+      return;
+    }
+    this._playing = true;
+    this.next();
+    this._id_anim = setTimeout(() => {
+      this.stop();
+      this.play();
+    }, this._opt.transitionDuration);
+  }
+
+  stop() {
+    this._playing = false;
+    clearTimeout(this._id_anim);
+  }
+
+  onInputChange() {
+    const t = this.getTime();
+    this.set(t, false);
+  }
+
+  set(t, updateUi = true) {
+    t = t || this.getLayerInfo("time_default");
+    const valid = this.validate(t, true);
+
+    if (!valid) {
+      console.warn("Invalid date", t);
+      return;
+    }
+    if (updateUi) {
+      this._fp.setDate(t.toISO());
+    }
+    this._hour = t.hour;
+    this.updateMapSource();
+  }
+
+  next() {
+    const t = this.getNextTime();
+    this.set(t);
+  }
+
+  previous() {
+    const t = this.getPreviousTime();
+    this.set(t);
   }
 
   clear(id) {
@@ -171,14 +95,10 @@ export class TimeMapLegend {
     }
   }
 
-  destroy() {
-    this.stop();
-    this.clear();
-  }
-
   transition(a, b) {
     const layerA = this._opt.map.getLayer(a);
     const layerB = this._opt.map.getLayer(b);
+
     if (layerA) {
       setTimeout(() => {
         this._opt.map.setPaintProperty(a, "raster-opacity", 0);
@@ -193,21 +113,19 @@ export class TimeMapLegend {
   }
 
   updateMapSource() {
-    const selectedDate = this.elDateInput.value;
-    const selectedDepth = this.elDepthInput.value;
-    const selectedPalette = this.elPaletteInput.value;
+    const selectedDate = this.getTimeISOstring();
+    const selectedElevation = this.elElevationInput.value;
+    const selectedStyle = this.elStyleInput.value;
 
     let newWmsUrl = this.constructWmsUrl(
       selectedDate,
-      selectedDepth,
-      selectedPalette,
+      selectedElevation,
+      selectedStyle,
     );
     const idLayerCurrent = this._id_layer;
     const idLayer = `${
       this._opt.idLayer
-    }@${selectedDate}_${selectedPalette}_${selectedDepth}_${this._i++}`;
-
-    this.clear(idLayerCurrent);
+    }@${selectedDate}_${selectedStyle}_${selectedElevation}_${this._i++}`;
 
     this._opt.map.addLayer({
       id: idLayer,
@@ -233,35 +151,16 @@ export class TimeMapLegend {
   }
 
   updateLegend() {
-    this._opt.palette = this.elPaletteInput.value;
+    this._opt.style = this.elStyleInput.value;
     this._elImageLegend.src = this.getLegendUrl();
   }
 
-  update() {
-    this.updateMapSource();
-    this.updateLegend();
-  }
-
-  play() {
-    if (this._playing) return;
-    this._playing = true;
-    this.nextTime();
-    this._id_anim = setTimeout(() => {
-      this.play();
-    }, this._opt.transitionDuration);
-  }
-
-  stop() {
-    clearTimeout(this._id_anim);
-    this._playing = false;
-  }
-
-  constructWmsUrl(selectedDate, selectedDepth, selectedPalette) {
+  constructWmsUrl(selectedDate, selectedElevation, selectedStyle) {
     const objParam = {
       service: "WMS",
       request: "GetMap",
       layers: "wo",
-      styles: `boxfill/${selectedPalette}`,
+      styles: selectedStyle,
       format: "image/png",
       transparent: "true",
       version: "1.3.0",
@@ -270,12 +169,13 @@ export class TimeMapLegend {
       height: 256,
       colorscalerange: "-0.00001,0.00001",
       logscale: "false",
-      time: this.formatTimeNoon(selectedDate),
-      elevation: selectedDepth,
+      time: selectedDate,
+      elevation: selectedElevation,
     };
     const params = new URLSearchParams(objParam).toString();
     const bboxCode = "&bbox={bbox-epsg-3857}";
-    return `${this._opt.baseURL}?${params}${bboxCode}`;
+    const url = `${this._opt.baseURL}?${params}${bboxCode}`;
+    return url;
   }
 
   constructWmsGetCapabilitiesUrl() {
@@ -318,6 +218,8 @@ export class TimeMapLegend {
     /**
      * Available:
      *  [
+     *    "title",
+     *    "abstract",
      *    "layer_names",
      *    "styles",
      *    "elevation_default",
@@ -357,14 +259,20 @@ export class TimeMapLegend {
       (l) => l.querySelector("Name")?.textContent === layerName,
     );
 
+    out.title = layer.querySelector("Title")?.textContent;
+    out.abstract = layer.querySelector("Abstract")?.textContent;
+
     out.styles = Array.from(layer.querySelectorAll("Style > Name")).map(
       (s) => s.textContent,
     );
 
+    out.style_default = this._opt.style || out.styles[0];
+
     const nodeElevation = layer.querySelector("Dimension[name='elevation']");
 
     if (nodeElevation) {
-      out.elevation_default = nodeElevation.getAttribute("default");
+      out.elevation_default =
+        this._opt.elevation || nodeElevation.getAttribute("default");
       out.elevation_values = nodeElevation.textContent
         .split(",")
         .map((v) => v.trim());
@@ -374,7 +282,9 @@ export class TimeMapLegend {
     const nodeTime = layer.querySelector("Dimension[name='time']");
 
     if (nodeTime) {
-      out.time_default = DateTime.fromISO(nodeTime.getAttribute("default"));
+      out.time_default = DateTime.fromISO(
+        nodeTime.getAttribute("default"),
+      ).toUTC();
       out.time_intervals = this.parseIntervals(nodeTime);
     }
 
@@ -407,7 +317,8 @@ export class TimeMapLegend {
     const intervals = this.getLayerInfo("time_intervals");
     const nInterval = intervals.length;
     for (let i = 0; i < nInterval; i++) {
-      const isCurrent = intervals[i].interval.contains(this.getTime());
+      const { interval } = intervals[i];
+      const isCurrent = this.intervalIncludes(interval, this.getTime());
       if (isCurrent) {
         switch (type) {
           case "current": {
@@ -427,38 +338,44 @@ export class TimeMapLegend {
     return intervals[0];
   }
 
+  getHour() {
+    return this._hour || this.getLayerInfo("time_default").hour;
+  }
+
+  getTimeInput() {
+    return DateTime.fromJSDate(this._fp?.selectedDates[0]).toUTC();
+  }
+
+  /**
+   * @returns {DateTime} utc timestamp
+   */
   getTime() {
-    const uiDate = this._fp?.selectedDates[0];
-    if (isDate(uiDate)) {
-      return DateTime.fromJSDate(uiDate).toUTC();
-    }
-    return this.getLayerInfo("time_default").toUTC();
+    const timeInput = this.getTimeInput();
+    const time = timeInput.set({
+      hour: this.getHour(),
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+    });
+    return time.toUTC();
   }
 
   getTimeISOstring() {
-    return this.getTime().toISOString();
-  }
-
-  nextTime() {
-    const t = this.getNextTime();
-    this._fp.setDate(t);
-  }
-  previousTime() {
-    const t = this.getPreviousTime();
-    this._fp.setDate(t);
+    return this.getTime().toISO();
   }
 
   getTimeMove(n = 1) {
     const { interval, step } = this.findCurrentInterval();
     const moved = this.getTime().plus(step * n);
-
-    if (moved < interval.start) {
+    // _m__|-----|___
+    if (interval.isAfter(moved)) {
       const { interval } = this.findPreviousInterval();
-      return interval.end;
+      return interval.end.toUTC();
     }
-    if (moved > interval.end) {
+    // ___|-----|__m_
+    if (interval.isBefore(moved)) {
       const { interval } = this.findNextInterval();
-      return interval.start;
+      return interval.start.toUTC();
     }
     return moved;
   }
@@ -471,16 +388,157 @@ export class TimeMapLegend {
     return this.getTimeMove(1);
   }
 
-  validate(time) {
+  validate(time, debug) {
     const intervals = this.getLayerInfo("time_intervals");
-    if ((!time) instanceof DateTime) {
+    const isDateTime = time instanceof DateTime;
+    if (!isDateTime) {
       time = DateTime.fromISO(time);
     }
     for (const { interval } of intervals) {
-      if (interval.contains(time)) {
+      if (this.intervalIncludes(interval, time)) {
         return true;
       }
     }
+    if (debug) {
+      debugger;
+    }
     return false;
+  }
+
+  intervalIncludes(interval, time) {
+    const t = time.toUTC();
+    const s = interval.start.toUTC();
+    const e = interval.end.toUTC();
+    return interval.contains(time) || t.equals(s) || t.equals(e);
+  }
+
+  getLegendUrl() {
+    const params = new URLSearchParams({
+      service: "WMS",
+      request: "GetLegendGraphic",
+      version: "1.1.1",
+      layer: "wo",
+      format: "image/png",
+      colorscalerange: "-0.00001,0.00001",
+      logscale: "false",
+      palette: this._opt.style,
+    });
+    return `${this._opt.baseURL}?${params}`;
+  }
+
+  build() {
+    const {
+      elevation_values,
+      elevation_default,
+      time_default,
+      styles,
+      style_default,
+    } = this.getLayerInfoAll();
+    const defaultDate = time_default.toISO();
+
+    const optElevation = elevation_values.map((value) =>
+      el(
+        "option",
+        { value, selected: value === elevation_default ? true : null },
+        Number(value).toFixed(2),
+      ),
+    );
+    const optStyles = styles.map((value) =>
+      el(
+        "option",
+        { value, selected: value === style_default ? true : null },
+        value,
+      ),
+    );
+
+    this.elElevationInput = el(
+      "select",
+      { class: "form-control" },
+      { on: { change: () => this.updateMapSource() } },
+      optElevation,
+    );
+
+    this.elStyleInput = el(
+      "select",
+      { class: "form-control" },
+      { on: { change: () => this.update() } },
+      optStyles,
+    );
+
+    this.elDateInput = el("input", {
+      type: "date",
+      class: "form-control",
+    });
+
+    this._fp = flatpickr(this.elDateInput, {
+      defaultDate: defaultDate,
+      disable: [
+        (date) => {
+          return !this.validate(DateTime.fromJSDate(date).toUTC());
+        },
+      ],
+      onChange: () => {
+        this.onInputChange();
+      },
+    });
+
+    const elButtonsDays = el("div", { class: "input-group-btn" }, [
+      el(
+        "button",
+        {
+          class: ["btn", "btn-default"],
+          on: { click: () => this.previous() },
+        },
+        el("i", { class: ["fa", "fa-step-backward"], title: "previous" }),
+      ),
+      el(
+        "button",
+        {
+          class: ["btn", "btn-default"],
+          on: { click: () => this.play() },
+        },
+        el("i", { class: ["fa", "fa-play"], title: "play" }),
+      ),
+      el(
+        "button",
+        {
+          class: ["btn", "btn-default"],
+          on: { click: () => this.stop() },
+        },
+        el("i", { class: ["fa", "fa-stop"], title: "stop" }),
+      ),
+      el(
+        "button",
+        {
+          class: ["btn", "btn-default"],
+          on: { click: () => this.next() },
+        },
+        el("i", { class: ["fa", "fa-step-forward"], title: "next" }),
+      ),
+    ]);
+
+    this._elImageLegend = el("img", { src: null });
+
+    this._elInputContainer = el(
+      "div",
+      {
+        class: "form-group",
+        style: {
+          padding: "20px",
+        },
+      },
+      [
+        el("label", "Date"),
+        el("div", { class: "input-group" }, [this.elDateInput, elButtonsDays]),
+
+        el("label", "Elevation"),
+        this.elElevationInput,
+        el("label", "Style"),
+        this.elStyleInput,
+      ],
+    );
+
+    this._opt.elLegend.appendChild(this._elImageLegend);
+    this._opt.elInputs.appendChild(this._elInputContainer);
   }
 }
