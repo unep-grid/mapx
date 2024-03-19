@@ -1,3 +1,8 @@
+  - [1.13.3](https://github.com/unep-grid/mapx/tree/1.13.3) 
+
+    - SDK
+        - get_view_meta format back-compatibility with 1.12.* versions
+
   - [1.13.2](https://github.com/unep-grid/mapx/tree/1.13.2) 
 
     - Panel Manager
