@@ -5,6 +5,8 @@ import "../../search/style_flatpickr.less";
 import { isNotEmpty } from "../../is_test";
 import { isEmpty } from "../../is_test";
 import { isDateString } from "../../is_test";
+import "./style.less";
+import { debounce } from "../../mx_helper_misc";
 
 // Define external default options
 const defaultOptions = {
@@ -20,11 +22,19 @@ export class TimeMapLegend {
     this._i = 0;
     this._layers = new Set();
     window._tml = this;
+    this.next = debounce(this.next.bind(this), 500);
+    this.previous = debounce(this.previous.bind(this), 500);
   }
 
   async init() {
     await this.updateCapabilities();
-    await this.updateLayerInfo();
+    this.reset();
+  }
+
+  reset() {
+    this.stop();
+    this.clearAll();
+    this.updateLayerInfo();
     this.build();
     this.update();
   }
@@ -43,6 +53,7 @@ export class TimeMapLegend {
     if (this._playing) {
       return;
     }
+    this.elButtonPlay?.classList.add("playing");
     this._playing = true;
     this.next();
     this._id_anim = setTimeout(() => {
@@ -53,6 +64,7 @@ export class TimeMapLegend {
 
   stop() {
     this._playing = false;
+    this.elButtonPlay?.classList.remove("playing");
     clearTimeout(this._id_anim);
   }
 
@@ -66,12 +78,18 @@ export class TimeMapLegend {
     this.updateMapSource();
   }
 
-  next() {
+  next(stop) {
+    if (stop) {
+      this.stop();
+    }
     const ts = this.getNextTimeSlot();
     this.set(ts);
   }
 
-  previous() {
+  previous(stop) {
+    if (stop) {
+      this.stop();
+    }
     const ts = this.getPreviousTimeSlot();
     this.set(ts);
   }
@@ -133,7 +151,7 @@ export class TimeMapLegend {
       selectedDate,
       selectedStyle,
       selectedElevation,
-      this._id++,
+      this._i++,
     ].join("_");
 
     this.clear(idLayer);
@@ -222,7 +240,7 @@ export class TimeMapLegend {
     }
   }
 
-  async updateLayerInfo() {
+  updateLayerInfo() {
     this._layer_info = this.createLayerInfo(this._capabilities);
     this.setTime(this.getTimeDefault());
     this.setSlot(this.getDefaultSlot());
@@ -235,6 +253,7 @@ export class TimeMapLegend {
      *    "title",
      *    "abstract",
      *    "layer_names",
+     *    "layer_name",
      *    "styles",
      *    "elevation_default",
      *    "elevation_values",
@@ -250,10 +269,15 @@ export class TimeMapLegend {
   }
 
   createLayerInfo(xmlDoc) {
-    const { layerName } = this._opt;
+    let { layerName } = this._opt;
 
     const layers = Array.from(xmlDoc.querySelectorAll("Layer Layer"));
     const layerNames = layers.map((l) => l.querySelector("Name")?.textContent);
+
+    if (isEmpty(layerName)) {
+      layerName = layerNames[0];
+    }
+
     const layerExists = layerNames.includes(layerName);
 
     if (!layerExists) {
@@ -266,6 +290,7 @@ export class TimeMapLegend {
     /**
      * Get layer data
      */
+
     const layer = layers.find(
       (l) => l.querySelector("Name")?.textContent === layerName,
     );
@@ -289,7 +314,8 @@ export class TimeMapLegend {
       styles,
       abstract,
       style_default: style,
-      layer_names: layerNames,
+      layer_names: Array.from(new Set(layerNames)),
+      layer_name: layerName,
     };
 
     /**
@@ -545,6 +571,15 @@ export class TimeMapLegend {
     return data?.url_legend;
   }
 
+  setLayer(layer) {
+    const layers = this.getLayerInfo("layer_names");
+    if (!layers.includes(layer)) {
+      throw new Error(`Layer ${layer} not found`);
+    }
+    this.elLayerInput.value = layer;
+    this._opt.layerName = layer;
+  }
+
   build() {
     const {
       elevation_values,
@@ -552,6 +587,8 @@ export class TimeMapLegend {
       time_default,
       styles,
       style_default,
+      layer_names,
+      layer_name,
     } = this.getLayerInfoAll();
     const defaultDate = time_default.toISO();
 
@@ -623,25 +660,57 @@ export class TimeMapLegend {
     });
 
     /**
+     * Layers
+     */
+    const optLayers = layer_names.map((name) =>
+      el(
+        "option",
+        {
+          value: name,
+          selected: name === layer_name ? true : null,
+        },
+        name,
+      ),
+    );
+
+    this.elLayerInput = el(
+      "select",
+      { class: "form-control" },
+      {
+        on: {
+          change: (e) => {
+            this._opt.layerName = e.target.value;
+            this.reset();
+          },
+        },
+      },
+      optLayers,
+    );
+
+    this.elLayer = el("div", [el("label", "Layer"), this.elLayerInput]);
+
+    /**
      * Player
      */
-    const elButtonsDays = el("div", { class: "input-group-btn" }, [
+    this.elButtonPlay = el(
+      "button",
+      {
+        class: ["btn", "btn-default"],
+        on: { click: () => this.play() },
+      },
+      el("i", { class: ["fa", "fa-play"], title: "play" }),
+    );
+
+    const elButtonsPlayer = el("div", { class: "input-group-btn" }, [
       el(
         "button",
         {
           class: ["btn", "btn-default"],
-          on: { click: () => this.previous() },
+          on: { click: () => this.previous(true) },
         },
         el("i", { class: ["fa", "fa-step-backward"], title: "previous" }),
       ),
-      el(
-        "button",
-        {
-          class: ["btn", "btn-default"],
-          on: { click: () => this.play() },
-        },
-        el("i", { class: ["fa", "fa-play"], title: "play" }),
-      ),
+      this.elButtonPlay,
       el(
         "button",
         {
@@ -654,7 +723,7 @@ export class TimeMapLegend {
         "button",
         {
           class: ["btn", "btn-default"],
-          on: { click: () => this.next() },
+          on: { click: () => this.next(true) },
         },
         el("i", { class: ["fa", "fa-step-forward"], title: "next" }),
       ),
@@ -672,19 +741,25 @@ export class TimeMapLegend {
     this._elInputContainer = el(
       "div",
       {
-        class: "form-group",
+        class: ["form-group", "cmems_extension"],
         style: {
           padding: "20px",
         },
       },
       [
         el("label", "Date"),
-        el("div", { class: "input-group" }, [this.elDateInput, elButtonsDays]),
+        el("div", { class: "input-group" }, [
+          this.elDateInput,
+          elButtonsPlayer,
+        ]),
         this.elElevation,
         this.elStyle,
+        this.elLayer,
       ],
     );
 
+    this._opt.elLegend.innerHTML = "";
+    this._opt.elInputs.innerHTML = "";
     this._opt.elLegend.appendChild(this._elImageLegend);
     this._opt.elInputs.appendChild(this._elInputContainer);
   }
