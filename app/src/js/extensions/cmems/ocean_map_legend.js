@@ -10,10 +10,18 @@ import { debounce } from "../../mx_helper_misc";
 
 // Define external default options
 const defaultOptions = {
+  map: null,
   style: "boxfill/rainbow",
+  animation: true,
   elevation: 0,
+  layerName: null,
   transitionDuration: 2000,
   metedata: { id: "x" },
+  idLayer: null,
+  before: null,
+  elInputs: null,
+  elLegend: null,
+  baseURL: null,
 };
 
 export class TimeMapLegend {
@@ -21,6 +29,7 @@ export class TimeMapLegend {
     this._opt = { ...defaultOptions, ...options };
     this._i = 0;
     this._layers = new Set();
+    this._id_anim = new Set();
     window._tml = this;
     this.next = debounce(this.next.bind(this), 500);
     this.previous = debounce(this.previous.bind(this), 500);
@@ -56,16 +65,24 @@ export class TimeMapLegend {
     this.elButtonPlay?.classList.add("playing");
     this._playing = true;
     this.next();
-    this._id_anim = setTimeout(() => {
+    const id_anim_play = setTimeout(() => {
       this.stop();
       this.play();
     }, this._opt.transitionDuration);
+    this._id_anim.add(id_anim_play);
   }
 
   stop() {
     this._playing = false;
     this.elButtonPlay?.classList.remove("playing");
-    clearTimeout(this._id_anim);
+    this.stopAnim();
+  }
+
+  stopAnim() {
+    for (const id of this._id_anim) {
+      clearTimeout(id);
+      this._id_anim.delete(id);
+    }
   }
 
   set(ts, updateUi = true) {
@@ -123,14 +140,22 @@ export class TimeMapLegend {
     }
 
     if (layerA) {
-      setTimeout(() => {
+      if (!this._opt.animation) {
+        this.clear(a);
+        return;
+      }
+
+      const id_anim_opacity = setTimeout(() => {
         if (this._opt.map.getLayer(a)) {
           this._opt.map.setPaintProperty(a, "raster-opacity", 0);
         }
       }, this._opt.transitionDuration * 2);
+
       setTimeout(() => {
         this.clear(a);
       }, this._opt.transitionDuration * 3);
+
+      this._id_anim.add(id_anim_opacity);
     }
   }
 
@@ -153,11 +178,13 @@ export class TimeMapLegend {
       selectedElevation,
       this._i++,
     ].join("_");
-
     this.clear(idLayer);
+
+    const hasOldLayer = this._opt.map.getLayer(idLayerCurrent);
+
     this._opt.map.addLayer({
       id: idLayer,
-      before: this._opt.before,
+      before: hasOldLayer ? idLayerCurrent : this._opt.before,
       type: "raster",
       source: idLayer,
       metadata: this._opt.metadata,
@@ -276,6 +303,7 @@ export class TimeMapLegend {
 
     if (isEmpty(layerName)) {
       layerName = layerNames[0];
+      this._opt.layerName = layerName;
     }
 
     const layerExists = layerNames.includes(layerName);
@@ -463,6 +491,7 @@ export class TimeMapLegend {
   }
 
   onInputChange() {
+    this.stop();
     const time = this.getTimeInput();
     const ts = this.getTimeSlot(time);
     this.set(ts, false);
