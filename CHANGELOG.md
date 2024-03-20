@@ -1,3 +1,12 @@
+  - [1.13.4-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.4-alpha.1) 
+
+    - Extensions
+        - Based on multiple CMEMS WMS source, generalised time and elevation support:
+            - Interval, gaps, single values, multiple interval duration
+            - Layer selection
+        - Animation improvement
+        - Better style
+
   - [1.13.3](https://github.com/unep-grid/mapx/tree/1.13.3) 
 
     - SDK
