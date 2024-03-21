@@ -1,7 +1,7 @@
 import { getGemetConcept, getGemetConceptLink } from "./../gemet_util/index.js";
 import { el, elAuto, elPanel, elSpanTranslate } from "./../el_mapx";
 import { theme } from "./../mx";
-import { getView, getViewAuto } from "./../map_helpers";
+import { getView, getViewAuto, viewLink } from "./../map_helpers";
 import { modal } from "./../mx_helper_modal.js";
 import { path, objectToArray } from "./../mx_helper_misc.js";
 import { moduleLoad } from "./../modules_loader_async";
@@ -286,15 +286,10 @@ async function metaViewToUi(meta, elModal) {
        * Add view static link
        */
       if (row.key === "title") {
-        const linkView = new URL(window.location.origin);
-        linkView.pathname = "/static.html";
-        linkView.searchParams.set("views", meta.id);
-        linkView.searchParams.set("zoomToViews", true);
-
         row.value = el(
           "a",
           {
-            href: linkView,
+            href: viewLink(meta.id),
             target: "_blank",
           },
           isLanguageObject(row.value) //-> titles...
