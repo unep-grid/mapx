@@ -5,32 +5,32 @@ import "../../search/style_flatpickr.less";
 import { isNotEmpty } from "../../is_test";
 import { isEmpty } from "../../is_test";
 import { isDateString } from "../../is_test";
+import { debounce, makeId, toHttps } from "../../mx_helper_misc";
 import "./style.less";
-import { debounce } from "../../mx_helper_misc";
+import { layersOrderAuto } from "../../map_helpers";
+import { settings } from "../../settings";
 
 // Define external default options
 const defaultOptions = {
+  idView: null,
   map: null,
-  style: "boxfill/rainbow",
-  animation: true,
-  elevation: 0,
   layerName: null,
-  transitionDuration: 2000,
-  metedata: { id: "x" },
-  idLayer: null,
-  before: null,
   elInputs: null,
   elLegend: null,
   baseURL: null,
+  style: "boxfill/rainbow",
+  animation: true,
+  elevation: 0,
+  transitionDuration: 2000,
+  before: settings.layerBefore,
 };
 
 export class TimeMapLegend {
   constructor(options) {
-    this._opt = { ...defaultOptions, ...options };
+    this._opt = Object.assign({}, defaultOptions, options);
     this._i = 0;
     this._layers = new Set();
     this._id_anim = new Set();
-    window._tml = this;
     this.next = debounce(this.next.bind(this), 500);
     this.previous = debounce(this.previous.bind(this), 500);
   }
@@ -41,6 +41,9 @@ export class TimeMapLegend {
   }
 
   reset() {
+    if (this.isDestroyed()) {
+      return;
+    }
     this.stop();
     this.clearAll();
     this.updateLayerInfo();
@@ -49,8 +52,13 @@ export class TimeMapLegend {
   }
 
   destroy() {
+    this._destroyed = true;
     this.stop();
     this.clearAll();
+  }
+
+  isDestroyed() {
+    return !!this._destroyed;
   }
 
   update() {
@@ -151,11 +159,11 @@ export class TimeMapLegend {
         }
       }, this._opt.transitionDuration * 2);
 
+      this._id_anim.add(id_anim_opacity);
+
       setTimeout(() => {
         this.clear(a);
       }, this._opt.transitionDuration * 3);
-
-      this._id_anim.add(id_anim_opacity);
     }
   }
 
@@ -171,39 +179,40 @@ export class TimeMapLegend {
     );
 
     const idLayerCurrent = this._id_layer;
-    const idLayer = [
-      this._opt.idLayer,
-      selectedDate,
-      selectedStyle,
-      selectedElevation,
-      this._i++,
-    ].join("_");
+    const idLayer = [this._opt.idView || "MX-TML", makeId(15)].join("_");
     this.clear(idLayer);
 
     const hasOldLayer = this._opt.map.getLayer(idLayerCurrent);
 
-    this._opt.map.addLayer({
-      id: idLayer,
-      before: hasOldLayer ? idLayerCurrent : this._opt.before,
-      type: "raster",
-      source: idLayer,
-      metadata: this._opt.metadata,
-      paint: {
-        "raster-opacity": 0,
-        "raster-opacity-transition": {
-          duration: this._opt.transitionDuration,
+    this._opt.map.addLayer(
+      {
+        id: idLayer,
+        type: "raster",
+        source: idLayer,
+        metadata: {
+          idView: this._opt.idView,
+          position: this._i--,
+          priority: 0,
+        },
+        paint: {
+          "raster-opacity": 0,
+          "raster-opacity-transition": {
+            duration: this._opt.transitionDuration,
+          },
+        },
+        source: {
+          type: "raster",
+          tiles: [newWmsUrl],
+          tileSize: 256,
         },
       },
-      source: {
-        type: "raster",
-        tiles: [newWmsUrl],
-        tileSize: 256,
-      },
-    });
+      hasOldLayer ? idLayerCurrent : this._opt.before,
+    );
 
     this.transition(idLayerCurrent, idLayer);
     this._id_layer = idLayer;
     this._layers.add(idLayer);
+    layersOrderAuto("tml");
   }
 
   updateLegend() {
@@ -327,11 +336,17 @@ export class TimeMapLegend {
     const abstract = layer.querySelector("Abstract")?.textContent;
 
     const styles = Array.from(layer.querySelectorAll("Style")).map((s) => {
-      return {
-        name: s.querySelector("Name")?.textContent,
-        url_legend: s
+      const url_legend = toHttps(
+        s
           .querySelector("LegendURL > OnlineResource")
           .getAttribute("xlink:href"),
+      );
+
+      const name = s.querySelector("Name")?.textContent;
+
+      return {
+        name,
+        url_legend,
       };
     });
 

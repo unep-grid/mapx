@@ -1763,6 +1763,7 @@ export async function storyPlayStep(stepNum) {
 
   viewsLayersOrderUpdate({
     order: vStep,
+    origin: "story_map",
   });
 
   await viewsLegendsOrderUpdate({

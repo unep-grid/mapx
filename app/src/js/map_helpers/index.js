@@ -2253,10 +2253,7 @@ export async function updateViewsList(opt) {
       /**
        * Update layers order
        */
-      viewsLayersOrderUpdate({
-        orig: "update_views_list",
-        order: getViewsListOrder(),
-      });
+      layersOrderAuto("update_views_list");
     }
 
     events.fire({
@@ -2468,6 +2465,24 @@ export function getSpriteImage(id, opt) {
 }
 
 /**
+ * Set layers position according to current views order
+ * - app : list of view
+ * - static : current views_active NOTE: will change
+ * @param {string} orgin Label to keep track of the origin of the request
+ * @return {Array} order
+ */
+export function layersOrderAuto(origin) {
+  const isStatic = !!settings.mode.static;
+  const order = isStatic
+    ? Array.from(mx_local.views_active)
+    : getViewsListOrder();
+  return viewsLayersOrderUpdate({
+    order,
+    orig: origin || "views_list_order",
+  });
+}
+
+/**
  * Update layer order based on view list position
  * @param {Object} o Options
  * @param {String} o.id Id of the map
@@ -2504,6 +2519,7 @@ export function viewsLayersOrderUpdate(o) {
   const layersDiplayed = getLayerByPrefix({
     prefix: /^MX-/,
   });
+  
   /**
    * For each group (view id) [a,b,c],
    * 1) Get corresponding layers [a_1,a_0],
@@ -2522,6 +2538,7 @@ export function viewsLayersOrderUpdate(o) {
     const layersView = layersDiplayed.filter((layer) => {
       return layer?.id === idView || layer?.metadata?.idView === idView;
     });
+
 
     if (layersView.length > 0) {
       /*
@@ -3159,10 +3176,7 @@ export async function viewRender(o) {
   /**
    * Update layers order according to current list
    */
-  viewsLayersOrderUpdate({
-    order: getViewsListOrder(),
-    orig: "view_layer_add_vt",
-  });
+  layersOrderAuto("view_layer_add_vt");
 
   /**
    * Create dashboard.
@@ -4698,10 +4712,8 @@ export async function resetViewStyle(o) {
     await viewRender({
       view: view,
     });
-    viewsLayersOrderUpdate({
-      order: getViewsListOrder(),
-      orig: "reset_view_style",
-    });
+
+    layersOrderAuto("reset_view_style");
   }
 }
 

@@ -653,6 +653,22 @@ export function domToText(dom) {
 }
 
 /**
+ * Converts an HTTP URL to HTTPS.
+ * @param {string} urlString - The URL to convert.
+ * @returns {string} The converted URL, or the original URL if not valid or already HTTPS.
+ */
+export function toHttps(urlString) {
+  try {
+    const url = new URL(urlString);
+    url.protocol = "https:";
+    return url.toString();
+  } catch (error) {
+    console.warn("Invalid URL provided:", error.message);
+    return urlString;
+  }
+}
+
+/**
  * Performs a deep merge of objects and returns new object. Does not modify
  * TODO: replace with deltaMerge ? (mx_helper_utils_json/utils_json)
  * objects (immutable) and merges arrays via concatenation.
@@ -1199,7 +1215,7 @@ export function makeId(n, lowercase = false) {
   if (!n) {
     out = crypto.randomUUID();
   } else {
-    const array = new Uint8Array(n); 
+    const array = new Uint8Array(n);
     window.crypto.getRandomValues(array);
     out = array.reduce((acc, byte) => {
       const code = byte % 62;

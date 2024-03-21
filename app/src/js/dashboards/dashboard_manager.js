@@ -77,9 +77,9 @@ export class DashboardManager {
   /**
    * Invokes the autoDestroy method on the dashboard instance, if it
    * exists.
-   * @returns {void}
+   * @returns {Promise<void>}
    */
-  autoDestroy() {
+  async autoDestroy() {
     const dm = this;
     if (!dm.hasInstance()) {
       return;
