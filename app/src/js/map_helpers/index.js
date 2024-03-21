@@ -94,6 +94,7 @@ import {
   getQueryInit,
   setQueryParameters,
   cleanTemporaryQueryParameters,
+  getQueryParametersInit,
 } from "./../url_utils";
 import { LegendVt } from "./../legend_vt/index.js";
 import { getViewMapboxLayers } from "./../style_vt/index.js";
@@ -2519,7 +2520,7 @@ export function viewsLayersOrderUpdate(o) {
   const layersDiplayed = getLayerByPrefix({
     prefix: /^MX-/,
   });
-  
+
   /**
    * For each group (view id) [a,b,c],
    * 1) Get corresponding layers [a_1,a_0],
@@ -2538,7 +2539,6 @@ export function viewsLayersOrderUpdate(o) {
     const layersView = layersDiplayed.filter((layer) => {
       return layer?.id === idView || layer?.metadata?.idView === idView;
     });
-
 
     if (layersView.length > 0) {
       /*
@@ -3267,12 +3267,15 @@ export function viewLink(idView, opt) {
   if (isView(idView)) {
     idView = idView.id;
   }
-
   const def = {
     useStatic: true,
     project: null,
     asString: false,
   };
+
+  /**
+   * Apply options
+   */
   opt = Object.assign({}, def, opt);
 
   const urlView = new URL(window.location);
@@ -3284,7 +3287,38 @@ export function viewLink(idView, opt) {
     urlView.searchParams.append("project", opt.project);
     urlView.searchParams.append("viewsOpen", idView);
   }
+
+  /**
+   * Use params from original parameters
+   */
+  const pInit = getQueryParametersInit();
+  const copyInit = [
+    "useMaxBounds",
+    "n",
+    "s",
+    "e",
+    "w",
+    "zoomMin",
+    "zoomMax",
+    "lng",
+    "lat",
+  ];
+
+  for (const i of copyInit) {
+    const v = pInit[i];
+    if (isNotEmpty(v)) {
+      urlView.searchParams.append(i, v);
+    }
+  }
+
+  /**
+   * Force zoomToViews
+   */
   urlView.searchParams.append("zoomToViews", true);
+
+  /**
+   * Return as string if required
+   */
   if (opt.asString) {
     return urlView.toString();
   }
