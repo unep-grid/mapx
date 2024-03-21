@@ -1,3 +1,9 @@
+  - [1.13.4-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.4-alpha.2) 
+
+    - Extensions / CMEMS
+        - Fixed issue with layers order
+        - Legend URL should always have https. Force that.
+
   - [1.13.4-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.4-alpha.1) 
 
     - Extensions
