@@ -1,3 +1,5 @@
+  - [1.13.4](https://github.com/unep-grid/mapx/tree/1.13.4) 
+
   - [1.13.4-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.4-alpha.2) 
 
     - Extensions / CMEMS
