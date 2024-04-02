@@ -1,3 +1,8 @@
+  - [1.13.5-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.5-alpha.1) 
+
+    - MapComposer
+        - Provide attribution, disclaimer, license and metadata in a zip archive
+
   - [1.13.4](https://github.com/unep-grid/mapx/tree/1.13.4) 
 
   - [1.13.4-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.4-alpha.2) 
