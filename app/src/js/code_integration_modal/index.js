@@ -21,7 +21,7 @@ export class ModalCodeIntegration {
     mci._config = Object.assign(
       {},
       { idView: idView, darkMode: false },
-      config
+      config,
     );
     mci.updateCode = mci.updateCode.bind(mci);
     mci.updateLayout = mci.updateLayout.bind(mci);
@@ -63,7 +63,7 @@ export class ModalCodeIntegration {
           {
             value: t.id,
           },
-          getDictItem(t.key)
+          getDictItem(t.key),
         );
       }),
     });
@@ -81,7 +81,7 @@ export class ModalCodeIntegration {
           flex: 1,
         },
       },
-      [mci._el_select, mci._el_code]
+      [mci._el_select, mci._el_code],
     );
 
     const elButtonCopy = elButtonFa("btn_copy", {
@@ -108,7 +108,7 @@ export class ModalCodeIntegration {
       style: {
         height: "500px",
       },
-      onMutation: mci.updateLayout,
+      onResize: mci.updateLayout,
     });
     const monaco = await moduleLoad("monaco-editor");
     mci._monaco = monaco;
@@ -121,14 +121,9 @@ export class ModalCodeIntegration {
     await mci.updateCode();
   }
 
-  updateLayout(mut) {
+  updateLayout() {
     const mci = this;
-    if (mci.editor && mut.type === "attributes") {
-      clearTimeout(mci._updating_layout_to);
-      mci._updating_layout_to = setTimeout(() => {
-        mci.editor.layout();
-      }, 150);
-    }
+    mci.editor.layout();
   }
 
   get idTemplate() {

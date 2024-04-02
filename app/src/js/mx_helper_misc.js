@@ -2578,3 +2578,4 @@ export async function urlToImageBase64(url) {
     });
   }
 }
+

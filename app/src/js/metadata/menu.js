@@ -1,19 +1,19 @@
 import { el } from "../el_mapx";
 import { clone, makeId } from "../mx_helper_misc";
+
 export class MenuBuilder {
   constructor(elementTarget) {
     const bm = this;
-    bm.elementTarget = elementTarget;
-    if (!bm.elementTarget.id) {
-      bm.elementTarget.id = makeId();
-    }
-    bm.elMenu = bm.buildMenu();
+    bm._id = makeId();
+    bm._elementTarget = elementTarget;
+    bm._elMenu = bm.buildMenu();
+    bm._elMenu.id = bm._id;
     bm.insertMenu();
   }
 
   buildMenu() {
     const bm = this;
-    const elPanels = this.elementTarget.querySelectorAll(
+    const elPanels = this._elementTarget.querySelectorAll(
       ".panel:not(.panel .panel)",
     );
     return bm.createNestedMenu(elPanels);
@@ -24,7 +24,7 @@ export class MenuBuilder {
     if (elPanels.length === 0) {
       return null;
     }
-    const elMenu = el("ul", { class: ["mx-hide-if-empty","list-group"] });
+    const elMenu = el("ul", { class: ["mx-hide-if-empty", "list-group"] });
     for (const elPanel of elPanels) {
       const elMenuItem = bm.createMenuItem(elPanel);
       if (elMenuItem) {
@@ -40,19 +40,18 @@ export class MenuBuilder {
     if (!elHeading) {
       return null;
     }
-    const id = makeId();
+    const idItem = makeId();
+    const idBack = bm._id;
     const elTitleContainer = elHeading.querySelector(".panel-title");
     const elTitle = elTitleContainer.querySelector("span");
-    elTitle.id = id;
-    const elBack = el(
-      "a",
-      { href: `#${bm.elementTarget.id}` },
+    const elBack = el("a", { id: idItem, href: `#${idBack}` }, [
+      elTitle,
       el("i", { class: ["fa", "fa-chevron-up"] }),
-    );
+    ]);
     elHeading.appendChild(elBack);
     const elLink = el(
       "a",
-      { href: `#${id}`, dataset: clone(elTitle.dataset) },
+      { href: `#${idItem}`, dataset: clone(elTitle.dataset) },
       elTitle.cloneNode(),
     );
     const elMenuItem = el("li", { class: ["list-group-item"] }, elLink);
@@ -68,6 +67,6 @@ export class MenuBuilder {
 
   insertMenu() {
     const bm = this;
-    bm.elementTarget.insertBefore(bm.elMenu, bm.elementTarget.firstChild);
+    bm._elementTarget.insertBefore(bm._elMenu, bm._elementTarget.firstChild);
   }
 }

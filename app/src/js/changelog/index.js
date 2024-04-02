@@ -1,14 +1,12 @@
 import { modalSimple } from "./../mx_helper_modal.js";
 import { TextFilter } from "./../text_filter_simple";
 import { el } from "./../el/src";
+import { markdownToHtml } from "./../markdown";
 
 export async function changeLogHtml() {
-  const showdown = await import("showdown");
   /* don't include CHANGELOG in pre cache / workbox */
   const { default: txt } = await import("../../../../CHANGELOG.md");
-  const converter = new showdown.Converter();
-  const html = converter.makeHtml(txt);
-  return html;
+  return markdownToHtml(txt);
 }
 
 export async function modalChangelog() {
@@ -21,18 +19,21 @@ export async function modalChangelog() {
     placeholder: "Search",
   });
 
+  modalSimple({
+    title: "Changelog",
+    content: elContainer,
+    addBackground: true,
+    onClose: clear,
+  });
+
   const textFilter = new TextFilter({
     elInput: elInput,
     elContent: elContent,
     elContainer: elContainer,
   });
 
-  modalSimple({
-    title: "Changelog",
-    content: elContainer,
-    addBackground: true,
-    onClose: () => {
-      textFilter.destroy();
-    },
-  });
+
+  function clear() {
+    textFilter?.destroy();
+  }
 }

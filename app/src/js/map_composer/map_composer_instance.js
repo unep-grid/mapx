@@ -1,5 +1,9 @@
-import { MapComposerModal } from "./map_composer_modal";
-
 export async function mapComposerModalAuto() {
-  return new MapComposerModal();
+  try {
+    const { MapComposerModal } = await import("./map_composer_modal.js");
+    const mc = new MapComposerModal();
+    await mc.init();
+  } catch (e) {
+    console.error(e);
+  }
 }

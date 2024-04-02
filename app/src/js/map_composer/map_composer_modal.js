@@ -9,17 +9,20 @@ import {
   getViewLegend,
   getViewTitle,
 } from "./../map_helpers/index.js";
+import { getViewMetaToHtml } from "../metadata/utils";
 import { objectToArray, getContentSize } from "./../mx_helper_misc.js";
+
+const store = {
+  mc: null,
+};
 
 export class MapComposerModal {
   constructor() {
-    const mcm = this;
-    const oldComposer = window._mc;
+    const oldComposer = store.mc;
     if (oldComposer) {
       console.warn("Map Composer already active");
       return false;
     }
-    return mcm.init().catch(console.error);
   }
 
   async init() {
@@ -32,6 +35,7 @@ export class MapComposerModal {
     const config = {
       predefined_dim: "A5",
       items: [],
+      files: [],
     };
     const style = map.getStyle();
     if (style.terrain) {
@@ -57,11 +61,13 @@ export class MapComposerModal {
           },
         },
       },
-      getDictItem("btn_help")
+      getDictItem("btn_help"),
     );
 
     /**
      * Create initial config
+     * - Use views with layers
+     * - For views active -> getViewsActive
      */
     const vVisible = getLayerNamesByPrefix({
       id: map.id,
@@ -80,7 +86,6 @@ export class MapComposerModal {
     for (const id of vVisible) {
       const title = getViewTitle(id);
       const description = getViewDescription(id);
-
       const elTitle = el("div", [el("h1", title), el("p", description)]);
 
       const elLegend = getViewLegend(id, {
@@ -107,8 +112,38 @@ export class MapComposerModal {
         editable: true,
         removable: true,
       });
+
+      /**
+      * Provide metadata as files
+      */ 
+      const meta = await getViewMetaToHtml(id);
+
+      config.files.push({
+        type: "file",
+        content: new Blob([meta], { type: "text/html" }),
+        name: `view_metadata_${id}.html`,
+      });
     }
 
+    /**
+     * Add disclaimer and atribution
+     */
+    const { default: disclaimer } = await import("./../../md/disclaimer.md");
+    config.files.push({
+      type: "file",
+      content: new Blob([disclaimer], { type: "text/markdown" }),
+      name: "disclaimer.md",
+    });
+
+    const { default: attribution } = await import(
+      "./../../md/attribution.md"
+    );
+    config.files.push({
+      type: "file",
+      content: new Blob([attribution], { type: "text/markdown" }),
+      name: "attribution.md",
+    });
+    
     /**
      * Remove canvas source and layers
      */
@@ -146,10 +181,12 @@ export class MapComposerModal {
      * Init map composer
      */
     const mc = new MapComposer(elContainer, config, {
-      onDestroy: () => {},
+      onDestroy: destroy,
     });
 
-    modal({
+    let closed = false;
+
+    const modalComposer = modal({
       id: "map_composer",
       title: tt("mc_title"),
       buttons: [elBtnHelp],
@@ -168,11 +205,16 @@ export class MapComposerModal {
     });
 
     function destroy() {
+      if (closed) {
+        return;
+      }
+      closed = true;
+      modalComposer.close();
       mc.destroy();
-      delete window._mc;
+      delete store.mc;
     }
 
-    window._mc = mc;
+    store.mc = mc;
     return true;
   }
 }

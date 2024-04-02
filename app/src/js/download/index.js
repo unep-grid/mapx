@@ -37,6 +37,28 @@ export async function downloadHTML(data, filename) {
 }
 
 /**
+ * Download Markdown
+ * @param {String} data String string or nested array
+ * @param {String} filename File name
+ * @return {Promise<Boolean>}
+ */
+export async function downloadMarkdown(data, filename) {
+  const blob = new Blob([data], { type: "text/markdown" });
+  return downloadBlob(blob, filename);
+}
+
+/**
+ * Download Markdown
+ * @param {JSZip} zip Zip instance
+ * @param {String} filename File name
+ * @return {Promise<Boolean>}
+ */
+export async function downloadZip(zip, filename, newTab) {
+  const zipFile = await zip.generateAsync({ type: "blob" });
+  downloadBlob(zipFile, filename, newTab);
+}
+
+/**
  * Download canvas
  * @param {HTMLCanvasElement} canvas
  * @param {String} filename File name
@@ -49,7 +71,12 @@ export async function downloadCanvas(canvas, filename, type, newTab) {
   return downloadBlob(blob, filename, newTab);
 }
 
-function canvasToBlob(canvas, type) {
+/**
+ * Convert canvas to blob
+ * @param {Canvas} canvas
+ * @param {type} mimetype
+ */
+export function canvasToBlob(canvas, type) {
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (!blob) {
@@ -83,7 +110,7 @@ export function downloadBlob(blob, filename, newTab) {
       const openedWindow = window.open(url, "_blank");
       if (!openedWindow) {
         reject(
-          "Failed to open the blob in a new tab. Pop-up might have been blocked."
+          "Failed to open the blob in a new tab. Pop-up might have been blocked.",
         );
         clean();
         return;

@@ -18,7 +18,7 @@ const state = {
   presets: presetsFlat,
   dpr: dpr, // keep original dpr, reset after print
   mode: "layout",
-  exportTab: false,// testing : export image in a tab instead of download
+  exportTab: false, // testing : export image in a tab instead of download
   predefined_dim: "A5",
   predefined_item: {},
   page_width: 600,
@@ -34,6 +34,7 @@ const state = {
   workspace_width: 200,
   canvas_max_area_theory: 16384 * 16384,
   canvas_max_area: 5000 * 5000,
+  files: [],
   items: [
     {
       type: "map",

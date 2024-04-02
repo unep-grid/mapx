@@ -1,6 +1,11 @@
 import { el } from "./el/src/index.js";
-import { ObserveMutationAttribute } from "./mutations_observer/index.js";
-import { moveEl, makeId, textToDom, isShinyReady } from "./mx_helper_misc.js";
+import {
+  moveEl,
+  makeId,
+  textToDom,
+  isShinyReady,
+  debounce,
+} from "./mx_helper_misc.js";
 import { getDictItem } from "./language";
 import { draggable } from "./mx_helper_draggable.js";
 import {
@@ -24,7 +29,6 @@ import { jed } from "./json_editor/index.js";
 /**
  * TODO:
  * - this helper should be converted to Class
- * - avoid manual DOM element extension (close,addMutationObserver,setTitle..)
  */
 
 /**
@@ -40,6 +44,7 @@ import { jed } from "./json_editor/index.js";
  * @param {Object} o.styleContent Style object to apply to content of the modal window. Default : empty
  * @param {String} o.idScrollTo Scroll to id in the body
  * @param {Boolean} o.addBtnMove Add top button to move the modal
+ * @param {Function} o.onResize Add resize observer cb
  * @param {String|Element} o.content Body content of the modal. Default  : undefined
  * @param {Function} o.onClose On close callback
  * @param {Array.<String>|Array.<Element>} o.buttons Array of buttons to in footer.
@@ -70,10 +75,12 @@ export function modal(o) {
     elModal = buildModal(id, o.style, o.styleContent);
   }
 
-  const oa = new ObserveMutationAttribute({
-    el: elModal,
-    cb: o.onMutation,
-  });
+  const resizeObserver = isFunction(o.onResize)
+    ? new ResizeObserver(debounce(o.onResize, 200))
+    : null;
+  if(resizeObserver){
+    resizeObserver.observe(elModal)
+  }
 
   const hasShiny = isShinyReady();
   const hasJquery = isFunction(window.jQuery);
@@ -189,7 +196,7 @@ export function modal(o) {
 
   elModal.close = close;
   elModal.setTitle = setTitle;
-  elModal.addMutationObserver = oa.setCb;
+
   /**
    * Add to dom
    */
@@ -420,11 +427,11 @@ export function modal(o) {
   }
 
   function close() {
-    if (oa) {
+    if (resizeObserver) {
       /**
        * Destroy mutation observer
        */
-      oa.destroy();
+      resizeObserver.disconnect();
     }
     if (isElement(elContent)) {
       /**

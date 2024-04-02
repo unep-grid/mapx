@@ -3,7 +3,12 @@ import { el, elAuto, elPanel, elSpanTranslate } from "./../el_mapx";
 import { theme } from "./../mx";
 import { getView, getViewAuto, viewLink } from "./../map_helpers";
 import { modal } from "./../mx_helper_modal.js";
-import { path, objectToArray } from "./../mx_helper_misc.js";
+import {
+  path,
+  objectToArray,
+  debounce,
+  parseTemplate,
+} from "./../mx_helper_misc.js";
 import { moduleLoad } from "./../modules_loader_async";
 import { MenuBuilder } from "./menu.js";
 import { ws, settings } from "./../mx.js";
@@ -23,6 +28,11 @@ import {
   isView,
   isNotEmpty,
 } from "./../is_test_mapx";
+
+const def_opt = {
+  add_menu: true,
+  add_views_stats: true,
+};
 
 /**
  * Get source metadata
@@ -123,7 +133,7 @@ export async function viewToMetaModal(idView) {
   /**
    * UI
    */
-  const elContent = el("div");
+  const elContent = el("div", "Please wait...");
   const elTitleModal = el("span", {
     dataset: { lang_key: "meta_view_modal_title" },
   });
@@ -141,16 +151,42 @@ export async function viewToMetaModal(idView) {
     },
   });
 
+  await viewMetaToUi(idView, elContent);
+
+  return elModal;
+}
+
+export async function getViewMetaToHtml(idView) {
+  const elDoc = el("div");
+  const opt = {
+    add_views_stats: false,
+    add_menu: true,
+  };
+  const elRes = await viewMetaToUi(idView, elDoc, opt);
+  const html = elRes.innerHTML;
+  const { default: template } = await import("./export_template.html");
+  const out = parseTemplate(template, {
+    title: "View Metadata",
+    body: html,
+  });
+  return out;
+}
+
+async function viewMetaToUi(idView, elTarget, opt) {
+  opt = Object.assign({}, def_opt, opt);
+
+  const view = await getViewAuto(idView);
+
+  /**
+   * Clear
+   */
+  elTarget.innerHTML = "";
+
   /**
    * View meta section
    */
   const viewMeta = await getViewMetadata(idView);
-
-  const elViewMeta = await metaViewToUi(viewMeta, elModal);
-
-  if (elViewMeta) {
-    elContent.appendChild(elViewMeta);
-  }
+  await metaViewToUi(viewMeta, elTarget, opt);
 
   /**
    * Raster meta section
@@ -161,7 +197,7 @@ export async function viewToMetaModal(idView) {
       url: metaRasterLink,
     });
     if (elRasterMetaLink) {
-      elContent.appendChild(elRasterMetaLink);
+      elTarget.appendChild(elRasterMetaLink);
     }
   }
 
@@ -169,35 +205,37 @@ export async function viewToMetaModal(idView) {
    * Vector meta section
    */
   const meta = await getViewSourceMetadata(view);
+
   if (isNotEmpty(meta) && isArray(meta)) {
     const mainMeta = meta.splice(0, 1);
     const joinMeta = meta;
 
     const elSourceMeta = metaSourceToUi(mainMeta[0]);
     if (elSourceMeta) {
-      elContent.appendChild(elSourceMeta);
+      elTarget.appendChild(elSourceMeta);
     }
 
     if (isNotEmpty(joinMeta)) {
       const elMetaJoin = metaJoinSourceToUi(joinMeta);
       if (isNotEmpty(elMetaJoin)) {
-        elContent.appendChild(elMetaJoin);
+        elTarget.appendChild(elMetaJoin);
       }
     }
   }
 
   /**
-   * Update language element
-   */
-
-  updateLanguageElements({
-    el: elModal,
-  });
-
-  /**
    * Build menu
    */
-  new MenuBuilder(elContent);
+  if (opt.add_menu) {
+    new MenuBuilder(elTarget);
+  }
+  /**
+   * Update language element
+   */
+  await updateLanguageElements({
+    el: elTarget,
+  });
+  return elTarget;
 }
 
 export function metaSourceRasterToUi(rasterMeta) {
@@ -224,7 +262,9 @@ export function metaSourceRasterToUi(rasterMeta) {
   });
 }
 
-async function metaViewToUi(meta, elModal) {
+async function metaViewToUi(meta, elTarget, opt) {
+  opt = Object.assign({}, def_opt, opt);
+
   const prefixKey = "meta_view_";
   const keys = [
     "title",
@@ -343,25 +383,26 @@ async function metaViewToUi(meta, elModal) {
    * to find the size.. Create the container now,
    * render later :
    */
-  const elPlot = el("div", {
-    class: ["panel", "panel-default"],
-    style: {
-      width: "100%",
-      maxWidth: "100%",
-      display: "flex",
-      justifyContent: "center",
-      overflow: "visible",
-    },
-  });
-  const elPlotPanel = elPanel({
-    title: elSpanTranslate("meta_view_stat_n_add_by_country"),
-    content: elPlot,
-  });
-  setTimeout(() => {
-    metaCountByCountryToPlot(meta.stat_n_add_by_country, elPlot, elModal);
-  }, 100);
+  let elPlotPanel, elPlot;
 
-  return el(
+  if (opt.add_views_stats) {
+    elPlot = el("div", {
+      class: ["panel", "panel-default"],
+      style: {
+        width: "100%",
+        maxWidth: "100%",
+        display: "flex",
+        justifyContent: "center",
+        overflow: "visible",
+      },
+    });
+    elPlotPanel = elPanel({
+      title: elSpanTranslate("meta_view_stat_n_add_by_country"),
+      content: elPlot,
+    });
+  }
+
+  const elMeta = el(
     "div",
     elAuto("array_table", tblSummary, {
       render: "array_table",
@@ -384,49 +425,30 @@ async function metaViewToUi(meta, elModal) {
       tableTitle: "meta_view_table_editors_title",
     }),
   );
-}
 
-function randomTable(n) {
-  const ctries = ["CHE", "COD", "USA", "FRE", "ITA", "GER", "COL", "AFG"];
-  const s = [];
-  for (let i = 0; i < n; i++) {
-    s.push(ctries[Math.floor(Math.random() * ctries.length)]);
+  elTarget.appendChild(elMeta);
+
+  if (opt.add_views_stats) {
+    await metaCountByCountryToPlot(meta.stat_n_add_by_country, elPlot);
   }
-
-  const data = s.map((c, i) => {
-    return {
-      country: c,
-      country_name: c,
-      count: Math.floor(Math.random() * 100 * (1 / (i + 1))),
-    };
-  });
-  data.sort((a, b) => b.count - a.count);
-  return data;
 }
 
 /**
  * Build plot
  * @param {Array} table Array of value [{country:<2 leter code>,contry_name:<string>,count:<integer>},<...>]
- * @param {Element} elPlot Target element
- * @param {Element} elModal Modal element
+ * @param {Element} elPlot Plot element
  * @param {Boolean} useRandom Use rando data ( for dev)
  * @return {Object} Highcharts instance
  */
-async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
+async function metaCountByCountryToPlot(table, elPlot) {
   try {
     if (isEmpty(table)) {
       return;
     }
 
     const highcharts = await moduleLoad("highcharts");
-    /**
-     * Reads per country, first 20
-     */
-    if (useRandom) {
-      table = randomTable(100);
-    }
-
     const nCountryMap = new Map();
+
     for (let i = 0, iL = table.length; i < iL; i++) {
       const t = table[i];
       if (!t.country) {
@@ -520,19 +542,14 @@ async function metaCountByCountryToPlot(table, elPlot, elModal, useRandom) {
     chart.container.style.overflow = "visible";
 
     /**
-     * Handle mutation from modal here
+     * Handle resize
      */
-    if (elModal) {
-      elModal.addMutationObserver(updateChart);
-    }
+    elPlot._ro = new ResizeObserver(debounce(updateChart, 100));
+    elPlot._ro.observe(elPlot);
 
-    let idT = 0;
     function updateChart() {
-      clearTimeout(idT);
-      idT = setTimeout(() => {
-        const w = elPlot.getBoundingClientRect().width;
-        chart.setSize(w);
-      }, 50);
+      const w = elPlot.getBoundingClientRect().width;
+      chart.setSize(w);
     }
 
     function chartHeight() {

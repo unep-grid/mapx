@@ -35,6 +35,10 @@ export class ObserveMutationAttribute {
     if (oa._destroyed) {
       return;
     }
+    if (!document.body.contains(oa._el)) {
+      oa.destroy();
+      return;
+    }
     if (oa._opt.cb instanceof Function) {
       oa._opt.cb(mt);
     }

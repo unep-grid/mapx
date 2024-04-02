@@ -13,7 +13,6 @@ export class MapComposer {
   constructor(elContainer, state, options) {
     const mc = this;
     bindAll(mc);
-    window._mc = mc; // for easy access in console. To remove in prod.
     mc.options = Object.assign({}, def.options, options);
     mc.state = Object.assign({}, def.state, state);
     mc.initRoot(elContainer);
@@ -78,8 +77,13 @@ export class MapComposer {
   get boxLastFocus() {
     return this._box_last_focus;
   }
+
   destroy() {
     const mc = this;
+    if (mc._destroyed) {
+      return;
+    }
+    mc._destroyed = true;
     mc.workspace.destroy();
     mc.toolbar.destroy();
     mc.el.remove();
@@ -321,7 +325,7 @@ export class MapComposer {
         map.transform.resize(map._containerWidth, map._containerHeight);
         map.painter.resize(
           Math.ceil(map._containerWidth),
-          Math.ceil(map._containerHeight)
+          Math.ceil(map._containerHeight),
         );
         item.map.setBearing(item.map.getBearing());
       }

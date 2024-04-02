@@ -66,34 +66,32 @@ export class TextFilter {
     let count = 0;
     let elFirst = null;
     const substrings = txt.split(" ");
-    const regex = new RegExp(
-      "^(?=.*" + substrings.join(")(?=.*") + ").*$",
-      "i"
-    );
+    const regex = new RegExp(`${substrings.join("|")}`, 'i');
+
     const max = sr._elsTarget.length;
     sr._search_to_id = setTimeout(() => {
       sr.reset();
-      for (const el of sr._elsTarget) {
-        if (!el.dataset._cache) {
-          el.dataset._cache = el.textContent || el.innerText;
+      for (const elTarget of sr._elsTarget) {
+        if (!elTarget.dataset.cache) {
+          elTarget.dataset.cache = elTarget.textContent || elTarget.innerText;
         }
-        const match = regex.test(el.dataset._cache);
+        const match = regex.test(elTarget.dataset.cache);
 
         if (!match) {
           if (sr.opt.modeFlex) {
-            el.style.order = max;
+            elTarget.style.order = max;
           } else {
-            el.style.display = "none";
+            elTarget.style.display = "none";
           }
           continue;
         } else {
           count++;
           if (sr.opt.modeFlex) {
-            el.style.order = count;
+            elTarget.style.order = count;
           } else {
-            el.style.display = "block";
+            elTarget.style.display = "block";
           }
-          for (const elInner of el.querySelectorAll("*")) {
+          for (const elInner of elTarget.querySelectorAll("*")) {
             for (const node of elInner.childNodes) {
               if (node.nodeType == Node.TEXT_NODE) {
                 const okNode = regex.test(node.textContent);

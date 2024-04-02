@@ -100,7 +100,7 @@ class Toolbar extends Box {
 
     switch (idAction) {
       case "export_page":
-        await mc.workspace.page.exportPng();
+        await mc.workspace.page.export();
         break;
       case "toggle_landscape":
         mc.inversePageHeightWidth();

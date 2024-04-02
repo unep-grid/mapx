@@ -1,7 +1,7 @@
 import { el } from "../../el/src/index.js";
 import { Box } from "./box.js";
 import { Item } from "./item.js";
-import { downloadCanvas } from "./../../download";
+import { canvasToBlob, downloadZip } from "./../../download";
 import html2canvas from "html2canvas";
 
 class Page extends Box {
@@ -79,27 +79,39 @@ class Page extends Box {
       item.destroy();
     }
   }
- 
-  async exportPng() {
+
+  async export() {
     const page = this;
     const mc = page.mc;
-    const elPrint = page.el;
     const curMode = mc.state.mode;
-    const scale = mc.getScaleOut();
 
     try {
       mc.setMode("print");
+      const { default: JSZip } = await import("jszip");
+      const zip = new JSZip();
+
+      for (const file of mc.state.files) {
+        zip.file(file.name, file.content);
+      }
+
+      const elPrint = page.el;
+      const scale = mc.getScaleOut();
+
       await mc.setScaleMap(scale);
+
       const canvas = await html2canvas(elPrint, {
         logging: false,
         scale: scale,
       });
-      await downloadCanvas(
-        canvas,
-        "map-composer-export.png",
-        "image/png",
-        mc.state.exportTab // not in a new tab
-      );
+
+      const canvasBlob = await canvasToBlob(canvas, "img/png");
+      zip.file("map_composer.png", canvasBlob);
+
+      /**
+       * Download
+       */
+      await downloadZip(zip, "map_compose_export.zip", mc.state.exportTab);
+
     } catch (e) {
       page.message.flash({
         level: "error",

@@ -2,6 +2,7 @@ import { modalDialog } from "./../mx_helper_modal.js";
 import { isPromise, isUrl } from "./../is_test";
 import { elButtonFa } from "../el_mapx";
 import { settings } from "../settings";
+import { markdownToHtml } from "../markdown/index.js";
 
 const def = {
   url: null,
@@ -47,10 +48,7 @@ export async function modalMarkdown(options) {
   }
 
   if (opt.txt) {
-    const showdown = await import("showdown");
-    const converter = new showdown.Converter();
-    converter.setFlavor("github");
-    opt.content = converter.makeHtml(opt.txt);
+    opt.content = await markdownToHtml(opt.txt);
   }
 
   await modalDialog(opt);
