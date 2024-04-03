@@ -40,7 +40,7 @@ export async function apply() {
     /*
      * Handled in parent, e.g. once / withTimeLimit
      */
-    throw Error(e);
+    throw new Error(e);
   }
 }
 
@@ -65,10 +65,11 @@ async function applyPatches() {
   /**
    * Init patch table
    */
+  const {
+    rows: [{ exists }],
+  } = await pgAdmin.query(sqlIsInit);
 
-  const res = await pgAdmin.query(sqlIsInit);
-  const init = (res.rows[0] || {}).exists === true;
-  if (!init) {
+  if (!exists) {
     await pgAdmin.query(sqlInit);
   }
 
@@ -129,7 +130,7 @@ async function applyPatches() {
            * Log an error + stop early, this should be rollbacked
            */
           console.error(`Patch ${id} not applied`, e);
-          throw Error(e);
+          throw new Error(e);
         }
       }
     }
@@ -139,7 +140,7 @@ async function applyPatches() {
      * Rollack and propagate
      */
     client.query("ROLLBACK");
-    throw Error(e);
+    throw new Error(e);
   } finally {
     client.release();
   }
