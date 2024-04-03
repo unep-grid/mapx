@@ -16,8 +16,6 @@ volumes:
 networks:
   frontend:
   backend:
-  traefik-frontend:
-    external: true
 services:
   traefik:
     image: traefik:v2.3.2
@@ -29,9 +27,8 @@ services:
         published: 8881
         mode: host
     networks:
-      - backend
       - frontend
-      - traefik-frontend
+      - backend
     command:
       - --api.insecure=true
       - --providers.docker=true
@@ -51,7 +48,6 @@ services:
     networks:
       - backend
       - frontend
-      - traefik-frontend
     volumes:
       - searchmeili:/data.ms
     labels:
@@ -72,7 +68,6 @@ services:
     networks:
       - backend
       - frontend
-      - traefik-frontend
     volumes:
       - ./app:/app
       - ./_shared:/shared
@@ -107,7 +102,6 @@ services:
     networks:
       - backend
       - frontend
-      - traefik-frontend
     volumes:
       - ./app:/app
       - ./_shared:/shared
@@ -136,7 +130,6 @@ services:
     networks:
       - backend
       - frontend
-      - traefik-frontend
     volumes:
       - ./api:/api
       - ./_shared:/shared
@@ -168,7 +161,6 @@ services:
     networks:
       - backend
       - frontend
-      - traefik-frontend
     volumes:
       - ./api:/api
       - ./_shared:/shared
@@ -191,7 +183,6 @@ services:
     networks:
       - backend
       - frontend
-      - traefik-frontend
     volumes:
       - ./_shared/geoserver:/geoserver/db
     labels:
@@ -209,8 +200,6 @@ services:
       - 5432:5432
     networks:
       - backend
-      - frontend
-      - traefik-frontend
     volumes:
       - ./_shared:/shared
       - ./pg/init/script_initdb.sh:/docker-entrypoint-initdb.d/script_initdb.sh
@@ -247,7 +236,7 @@ services:
     restart: on-failure
     networks:
       - frontend
-      - traefik-frontend
+      - backend
     logging:
       driver: 'none'
     entrypoint: ["/bin/sh", "-c", "MailHog > /dev/null 2>&1"]
