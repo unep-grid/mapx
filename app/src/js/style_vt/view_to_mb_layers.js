@@ -282,6 +282,9 @@ export async function getViewMapboxLayers(v, opt) {
      */
     filter.push(filterExcludeNull);
 
+    ruleAll.filter = filter;
+
+
     if (hasSymbol) {
       /**
        * Symbol only

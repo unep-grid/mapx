@@ -98,6 +98,7 @@ export class LegendVt {
         filter.push(rule.filter);
       }
     }
+
     view._setFilter({
       type: "legend",
       filter: filter,
