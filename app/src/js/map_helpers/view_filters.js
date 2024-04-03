@@ -17,6 +17,7 @@ import { getViewSourceSummary } from "./../mx_helper_source_summary";
  * @param {Object} o Options
  * @param {String} o.idView View id
  * @param {Array} o.filter Array of filter
+ * @param {String} o.add_event_id Additional event id to fire
  * @param {String} o.type Type of filter : style, legend, time, text or numeric
  */
 export function viewSetFilter(o) {
@@ -38,6 +39,16 @@ export function viewSetFilter(o) {
       filter: filter,
     },
   });
+
+  if (o.add_event_id) {
+    events.fire({
+      type: o.add_event_id,
+      data: {
+        idView: idView,
+        filter: filter,
+      },
+    });
+  }
 
   /**
    * Add filter to filter type e.g. {legend:["all"],...} -> {legend:["all",["==","value","a"],...}
@@ -343,14 +354,14 @@ export function viewSetTimeFilter(opt) {
       ...[
         ["<=", ["get", "mx_t0"], to / 1000],
         [">=", ["get", "mx_t1"], from / 1000],
-      ]
+      ],
     );
   } else if (hasT0) {
     filterAll.push(
       ...[
         [">=", ["get", "mx_t0"], from / 1000],
         ["<=", ["get", "mx_t0"], to / 1000],
-      ]
+      ],
     );
   }
   filter.push(filterAll);
@@ -510,7 +521,7 @@ export async function makeTimeSlider(o) {
       }
 
       view._setTimeFilter({ from: t[0], to: t[1], hasT0, hasT1 });
-    }, 100)
+    }, 100),
   );
 }
 
@@ -524,7 +535,7 @@ export async function makeNumericSlider(o) {
   const view = o.view;
 
   const el = document.querySelector(
-    "[data-range_numeric_for='" + view.id + "']"
+    "[data-range_numeric_for='" + view.id + "']",
   );
 
   if (!el) {
@@ -598,7 +609,7 @@ export async function makeNumericSlider(o) {
           elDMax.innerHTML = " – " + n[1];
         }
         view._setNumericFilter({ from: n[0], to: n[1], attribute });
-      }, 100)
+      }, 100),
     );
   }
 }
@@ -611,7 +622,7 @@ export async function makeNumericSlider(o) {
 export async function makeTransparencySlider(o) {
   const view = o.view;
   const el = document.querySelector(
-    "[data-transparency_for='" + view.id + "']"
+    "[data-transparency_for='" + view.id + "']",
   );
 
   if (!el) {
@@ -647,7 +658,7 @@ export async function makeTransparencySlider(o) {
       const view = slider._view;
       const opacity = 1 - n[h] * 0.01;
       view._setOpacity({ opacity: opacity });
-    }, 10)
+    }, 10),
   );
 }
 

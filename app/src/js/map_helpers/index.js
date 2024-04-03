@@ -1750,6 +1750,7 @@ export async function handleClickEvent(e, idMap) {
         "story_step",
         "story_lock",
         "story_close",
+        "view_filter_legend",
       ],
       idGroup: "click_popup",
       callback: () => {

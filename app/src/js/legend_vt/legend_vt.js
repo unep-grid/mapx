@@ -81,12 +81,14 @@ export class LegendVt {
     const view = lvt._view;
     const rules = lvt._rules;
 
-    if (!isFunction(view._setFilter)) {
+    const hasFilter = isFunction(view._setFilter);
+
+    if (!hasFilter) {
       return;
     }
 
     const elsChecked = lvt._el_container.querySelectorAll(
-      'input[type="checkbox"]:checked'
+      'input[type="checkbox"]:checked',
     );
 
     const filter = ["any"];
@@ -102,6 +104,7 @@ export class LegendVt {
     view._setFilter({
       type: "legend",
       filter: filter,
+      add_event_id: "view_filter_legend",
     });
   }
 
@@ -138,7 +141,7 @@ export class LegendVt {
   getInputById(ruleIndex) {
     const lvt = this;
     const elInput = lvt._el_container.querySelector(
-      `input[data-view_action_rule_id="${ruleIndex}"]`
+      `input[data-view_action_rule_id="${ruleIndex}"]`,
     );
     return elInput;
   }
@@ -267,7 +270,7 @@ export class LegendVt {
 
     // First, create a set of rule indexes from the rulesToCheck array for easier lookup.
     const indexesToCheck = new Set(
-      rulesToCheck.map((rule) => lvt._rules.indexOf(rule))
+      rulesToCheck.map((rule) => lvt._rules.indexOf(rule)),
     );
 
     for (let i = 0; i < lvt._rules.length; i++) {
@@ -411,8 +414,8 @@ export class LegendVt {
                   class: "mx-legend-vt-rule-color",
                   style: colStyle,
                 }),
-              ]
-            )
+              ],
+            ),
           ),
           el(
             "td",
@@ -439,11 +442,11 @@ export class LegendVt {
                   title: `${label}`,
                   class: "mx-legend-vt-rule-label-text",
                 },
-                label
-              )
-            )
+                label,
+              ),
+            ),
           ),
-        ]
+        ],
       );
       aElRules.push(elRule);
     }
@@ -460,8 +463,8 @@ export class LegendVt {
           {
             class: ["mx-legend-vt-title"],
           },
-          titleLegend
-        )
+          titleLegend,
+        ),
       ),
       el(
         "div",
@@ -473,9 +476,9 @@ export class LegendVt {
           {
             class: "mx-legend-vt-rules",
           },
-          el("tbody", aElRules)
-        )
-      )
+          el("tbody", aElRules),
+        ),
+      ),
     );
     lvt._el_container.appendChild(elLegendBuilt);
     return elLegendBuilt;
@@ -502,7 +505,7 @@ export class LegendVt {
       path: "data.style.titleLegend",
     });
     const elLegendTitle = lvt._el_container.querySelector(
-      ".mx-legend-vt-title"
+      ".mx-legend-vt-title",
     );
     if (isElement(elLegendTitle)) {
       elLegendTitle.innerText = titleLegend;
@@ -524,7 +527,7 @@ export class LegendVt {
       });
       const label = firstOf([rule[`label_${lang}`], rule.value, "No data"]);
       const elLabel = lvt._el_container.querySelector(
-        `input[data-view_action_rule_id="${i}"] + label > span`
+        `input[data-view_action_rule_id="${i}"] + label > span`,
       );
       if (isElement(elLabel)) {
         elLabel.innerText = label;
