@@ -79,14 +79,15 @@ async function update(url) {
   } catch (e) {
     console.error("Err during download files ", e);
   }
-
 }
 
 function mxCopyStreamToTable(stream, table) {
   return new Promise((resolve, reject) => {
     setTimeout(() => reject("copy timeout"), 1000 * 60);
     pgAdmin.connect((err, client, done) => {
-      if (err) reject(err);
+      if (err) {
+        reject(err);
+      }
       const copyStream = client.query(
         from(`COPY ${table} FROM STDIN CSV HEADER`)
       );
@@ -130,7 +131,7 @@ async function createFinal() {
     .toQuery().text;
 
   /**
-   * TODO: 
+   * TODO:
    * -> 'AS' keyword for 'CREATE TABlE' is not supported. Fix this when so.
    */
 
