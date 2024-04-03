@@ -7130,6 +7130,11 @@
     "fa": "گزارش یک اشکال / درخواست ویژگی"
   },
   {
+    "id": "btn_doc_wiki",
+    "en": "MapX documentation",
+    "fa": "مستندات MapX"
+  },
+  {
     "id": "fetch_views_not_found_modal_title",
     "en": "Views not found",
     "fa": "بازدیدها یافت نشد"

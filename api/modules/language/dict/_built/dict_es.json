@@ -7130,6 +7130,11 @@
     "es": "Informar de un error/solicitud de función"
   },
   {
+    "id": "btn_doc_wiki",
+    "en": "MapX documentation",
+    "es": "Documentación de MapX"
+  },
+  {
     "id": "fetch_views_not_found_modal_title",
     "en": "Views not found",
     "es": "Vistas no encontradas"

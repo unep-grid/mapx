@@ -136,13 +136,13 @@ export function generateButtons() {
         }
 
         map.setTerrain(
-          enabled ? { source: "mapbox_dem", exaggeration: 1 } : null
+          enabled ? { source: "mapbox_dem", exaggeration: 1 } : null,
         );
 
         map.setLayoutProperty(
           "building_extrusion",
           "visibility",
-          enabled ? "visible" : "none"
+          enabled ? "visible" : "none",
         );
 
         return enabled;
@@ -208,6 +208,13 @@ export function generateButtons() {
       classesIcon: ["fa", "fa-bug"],
       action: () => {
         window.open(settings.links.repositoryIssues, "_blank");
+      },
+    }),
+    new Button({
+      key: "btn_doc_wiki",
+      classesIcon: ["fa", "fa-book"],
+      action: () => {
+        window.open(settings.links.repositoryWiki, "_blank");
       },
     }),
   ];
@@ -277,7 +284,7 @@ function toggleLayer(opt) {
     map.setLayoutProperty(
       opt.idLayer,
       "visibility",
-      toShow ? "visible" : "none"
+      toShow ? "visible" : "none",
     );
   }
 

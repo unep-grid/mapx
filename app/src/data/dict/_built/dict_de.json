@@ -7130,6 +7130,11 @@
     "de": "Melden Sie einen Fehler / eine Feature-Anfrage"
   },
   {
+    "id": "btn_doc_wiki",
+    "en": "MapX documentation",
+    "de": "MapX-Dokumentation"
+  },
+  {
     "id": "fetch_views_not_found_modal_title",
     "en": "Views not found",
     "de": "Ansichten nicht gefunden"

@@ -18538,6 +18538,19 @@
     "de": "Melden Sie einen Fehler / eine Feature-Anfrage"
   },
   {
+    "id": "btn_doc_wiki",
+    "en": "MapX documentation",
+    "fr": "Documentation MapX",
+    "es": "Documentación de MapX",
+    "ru": "Документация MapX",
+    "zh": "MapX文档",
+    "ar": "توثيق MapX",
+    "fa": "مستندات MapX",
+    "ps": "MapX سندونه",
+    "bn": "MapX ডকুমেন্টেশন",
+    "de": "MapX-Dokumentation"
+  },
+  {
     "id": "fetch_views_not_found_modal_title",
     "en": "Views not found",
     "fr": "Vues non trouvées",
