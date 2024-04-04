@@ -70,14 +70,9 @@ async function sanitize(value, type) {
   return v;
 }
 
-async function sanitizeUpdate(update) {
-  update.value_sanitized = await sanitize(update.value_new, update.column_type);
-  return update;
-}
-
 /**
- * Check if updates are valid
- * Updates are formated as :
+ * Check if update is valid
+ * Update are formated as :
  *
  * {
  *   row_id:<integer>,
@@ -86,7 +81,18 @@ async function sanitizeUpdate(update) {
  *   value_new:<any>
  * }
  *
- * @param {Array} updates Array of update  * @return {Boolean} ok
+ * @param {Object} update update
+ * @return {Promise<Object>} sanitized update
+ */
+
+async function sanitizeUpdate(update) {
+  update.value_sanitized = await sanitize(update.value_new, update.column_type);
+  return update;
+}
+
+/**
+ * Check if array of updates are valid
+ * @param {Array} updates Array of update
  * @return {Promise<Array>} Array of updates, with new update.value_sanitized
  */
 async function sanitizeUpdates(updates) {

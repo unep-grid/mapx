@@ -8,7 +8,6 @@ import { HintHack } from "./hint_hack/index.js";
 import { WsHandlerMapx } from "./ws_handler/ws_handler_instance.js";
 import { NotifCenterMapx } from "./notif_center/nc_instance.js";
 import { HighlighterMapx } from "./features_highlight/highlighter_instance";
-import { WsToolsInstances } from "./ws_tools";
 import { Magnifier } from "./magnifier/index.js";
 import { theme } from "./init_theme";
 import { ProjectManager } from "./project/index.js";
@@ -44,7 +43,6 @@ const project = new ProjectManager();
 const ws = new WsHandlerMapx();
 const nc = new NotifCenterMapx();
 const highlighter = new HighlighterMapx();
-const ws_tools = new WsToolsInstances(ws); // Tools using websocket
 const selectize = {}; // manage selectize by groups id
 const editors = {};
 const extend = {
@@ -66,7 +64,6 @@ export {
   hinthack,
   theme,
   ws,
-  ws_tools,
   nc,
   mg,
   highlighter,

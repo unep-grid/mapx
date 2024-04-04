@@ -733,7 +733,7 @@ mapx.once("ready", async () => {
             value: update,
           });
           const columnsAfter = await mapx.ask("table_editor_exec", {
-            idTable: res._id_table,
+            id_table: res._id_table,
             method: "getColumns",
           });
           const colNamesAfter = columnsAfter.map((col) => col.data);

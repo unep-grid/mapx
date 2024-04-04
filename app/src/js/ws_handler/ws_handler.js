@@ -146,64 +146,37 @@ class WsHandler {
   }
 
   /**
-   * Emit with promisified cb
+   * Asynchronously emits data of a specified type, returning a promise that resolves upon acknowledgement.
+   * @param {string} type - The event type to emit.
+   * @param {*} data - The data to emit with the event.
+   * @param {number} [timeout=0] - Optional. The maximum time (in milliseconds) to wait for an acknowledgement. Defaults to `this._opt.timeout`.
+   * @returns {Promise<*>} A promise that resolves with the acknowledgement response, or rejects if the operation times out.
    */
-  emitAsync(type, data, timeout) {
+  async emitAsync(type, data, timeout) {
     const ws = this;
     return new Promise((resolve, reject) => {
       const maxTime = timeout || ws._opt.timeout;
-      if (maxTime > 0) {
-        setTimeout(() => {
-          return reject(`emitAsync timeout ${maxTime} on ${type}`);
-        }, maxTime);
-      }
-      ws.socket.emit(type, data, (response) => {
-        return resolve(response);
-      });
-    });
-  }
-
-  /**
-   * Emit and get result
-   * ⚠️  Use acknowledgements callback in emit instead ⚠️
-   * -> implemented in emitAsync
-   * @param {String} type Route/Identifier for the request handler.
-   *                 eg. "ws/get/project/layers/list"
-   * @param {Object} data
-   * @param {Number} timeout Timeout in milliseconds
-   * @return {Promise<Object>}
-   */
-  emitGet(type, data, timeout) {
-    const ws = this;
-    if (isEmpty(type)) {
-      throw new Error(`emitGet : missing route`);
-    }
-    const request = { input: data, _id: makeId(10) };
-    const maxTime = timeout || ws._opt.timeout;
-
-    return new Promise((resolve, reject) => {
-      ws.socket.on("response", handler);
-      ws.emit(type, request);
+      /**
+       * Resolve in all case
+       * ( ignored if already resolved )
+       */
+      const to = setTimeout(() => {
+        return resolve(null);
+      }, maxTime + 10);
 
       if (maxTime > 0) {
-        setTimeout(() => {
-          clear();
-          reject(new Error(`Timeout ${timeout} [ms]`));
-        }, maxTime);
-      }
-
-      function clear() {
-        ws.socket.off("response", handler);
-      }
-      function handler(response) {
-        if (response._id === request._id) {
-          clear();
-          if (response.type === "error") {
-            reject(response);
-          } else {
-            resolve(response);
+        ws.socket.timeout(maxTime).emit(type, data, (error, response) => {
+          clearTimeout(to);
+          if (error instanceof Error) {
+            return reject(error);
           }
-        }
+          return resolve(response);
+        });
+      } else {
+        ws.socket.emit(type, data, (response) => {
+          clearTimeout(to);
+          return resolve(response);
+        });
       }
     });
   }

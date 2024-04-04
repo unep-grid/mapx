@@ -26,9 +26,7 @@ export class Uploader {
    */
   constructor(config) {
     const up = this;
-    up.init(config).catch(console.error);
-    // debug
-    window.up = up;
+    up._config = config; 
   }
 
   /**
@@ -41,6 +39,7 @@ export class Uploader {
     if (up._init) {
       return;
     }
+    config = config || up._config;
     up._init = true;
     up._disabled = false;
     up._busy_msg = false;

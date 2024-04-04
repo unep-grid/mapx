@@ -48,7 +48,7 @@ import { onNextFrame, waitFrameAsync } from "../../animation_frame";
 
 const defaults = {
   debug: false,
-  log_perf: false, //def from ws_tools
+  log_perf: false, 
   id_table: null,
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
@@ -62,6 +62,7 @@ const defaults = {
   timeout_emit_short: 1e3, // 1s round trip
   timeout_sanizing: 1e3 * 60,
   timeout_geom_valid: 1e3 * 120,
+  timeout_cache: 1e3 * 10,
   events: {
     /**
      * server to here
@@ -93,14 +94,10 @@ const defaults = {
 };
 
 export class EditTableSessionClient extends EditTableBase {
-  constructor(socket, config) {
-    super(socket);
+  constructor(ws, config) {
+    super(ws);
     const et = this;
     et._config = Object.assign(et._config, et._config, defaults, config);
-    /**
-     * cb bind
-     */
-    //et._validate_text_date = et._validate_text_date.bind(et);
   }
 
   /**
@@ -157,7 +154,8 @@ export class EditTableSessionClient extends EditTableBase {
        */
       if (isEmpty(et._id_table)) {
         et._id_table = await et.dialogSelectTable();
-        if (!isSourceId(et._id_table)) {
+        const valid = isSourceId(et._id_table);
+        if (!valid) {
           et.destroy("invalid id table");
           return;
         }
@@ -194,17 +192,6 @@ export class EditTableSessionClient extends EditTableBase {
       et._socket.on(e.server_progress, et.onProgress);
 
       et._socket.on("disconnect", et.onDisconnect);
-      await et.dialogWarning();
-      /**
-       * Build UI
-       */
-      await et.build();
-
-      /**
-       * Request data from server
-       * -> detached ! Build UI in the meantime
-       */
-      await et.start();
 
       /**
        * If a on_destroy callback is set in option, add it
@@ -213,6 +200,18 @@ export class EditTableSessionClient extends EditTableBase {
       if (isFunction(et._config.on_destroy)) {
         et.addDestroyCb(et._config.on_destroy);
       }
+
+      await et.dialogWarning();
+
+      /**
+       * Build UI
+       */
+      await et.build();
+
+      /**
+       * Start data edition
+       */
+      await et.start();
 
       await et.once("table_ready", null);
 
@@ -225,7 +224,7 @@ export class EditTableSessionClient extends EditTableBase {
 
       return true;
     } catch (e) {
-      et.destroy("init issue");
+      et.destroy();
       throw new Error(e);
     }
   }
@@ -312,32 +311,6 @@ export class EditTableSessionClient extends EditTableBase {
         return;
       }
 
-      if (et._built) {
-        et.lock();
-
-        /**
-         * Auto reload views locally
-         * -> structural change requires broadcasting changes from the server
-         * -> here quick local reload, to see values changes
-         */
-        const tableViews = await et.getTableViews();
-
-        console.log("table views to update", tableViews);
-
-        if (tableViews) {
-          const views = tableViews
-            .map((row) => getView(row.id))
-            .filter((v) => isView(v));
-          await viewsReplace(views);
-        }
-      }
-
-      /**
-       * Close modal
-       * -> could trigger a destroy
-       */
-      et._modal?.close();
-
       /**
        * Clean
        */
@@ -345,10 +318,32 @@ export class EditTableSessionClient extends EditTableBase {
       et._lock_table_concurrent = false;
       et._lock_table_by_user_id = null;
 
+      /**
+       * Close modal
+       * -> could trigger a destroy
+       */
+      et._modal?.close();
+
       if (et._built && !et._auto_save) {
         et.lockTableConcurrent(false).catch((e) => {
           console.error(e);
         });
+      }
+
+      /**
+       * Auto reload views locally
+       * -> structural change requires broadcasting changes from the server
+       * -> here quick local reload, to see values changes
+       */
+      if (et._built) {
+        et.lock();
+        const tableViews = await et.getTableViews();
+        if (tableViews) {
+          const views = tableViews
+            .map((row) => getView(row.id))
+            .filter((v) => isView(v));
+          await viewsReplace(views);
+        }
       }
 
       /**
@@ -369,6 +364,10 @@ export class EditTableSessionClient extends EditTableBase {
       et._socket.off(e.server_dispatch, et.onDispatch);
       et._socket.off(e.server_progress, et.onProgress);
       et._socket.off("disconnect", et.onDisconnect);
+
+      /**
+       * Fire destroy event / trigger destroy callbacks
+       */
       et.fire("destroy").catch((e) => {
         console.error(e);
       });
@@ -1029,7 +1028,7 @@ export class EditTableSessionClient extends EditTableBase {
     const ttl = 5 * 60 * 1000;
     const age = now - cc.timestamp;
     if (age > ttl) {
-      cc.columns = await et.get("columns_used");
+      cc.columns = await et.emitGetCached("columns_used");
       cc.timestamp = now;
     }
 
@@ -1091,7 +1090,7 @@ export class EditTableSessionClient extends EditTableBase {
    */
   async getTableViews() {
     const et = this;
-    const tableViews = await et.get("table_views");
+    const tableViews = await et.emitGetCached("table_views");
     return tableViews;
   }
 
@@ -1369,8 +1368,9 @@ export class EditTableSessionClient extends EditTableBase {
      */
     const initLocked = table.locked && et.hasConcurrentMembers();
     const handsontable = await moduleLoad("handsontable");
+    et._handsontable = handsontable;
 
-    if (et._ht instanceof handsontable) {
+    if (et.hasHt()) {
       et._ht.destroy();
     }
 
@@ -1463,6 +1463,11 @@ export class EditTableSessionClient extends EditTableBase {
     if (initLocked) {
       et.lock();
     }
+  }
+
+  hasHt() {
+    const et = this;
+    return et._handsontable && et._ht instanceof et._handsontable;
   }
 
   async dialogColumnOrder() {
@@ -2859,11 +2864,14 @@ export class EditTableSessionClient extends EditTableBase {
   setReadOnly(readOnly) {
     const et = this;
     const ro = !!readOnly;
-    et._ht.deselectCell();
-    et._ht.updateSettings({
-      readOnly: ro,
-      disableVisualSelection: ro,
-    });
+    const hasTable = et.hasHt();
+    if (hasTable) {
+      et._ht.deselectCell();
+      et._ht.updateSettings({
+        readOnly: ro,
+        disableVisualSelection: ro,
+      });
+    }
     et.updateButtons();
   }
 
@@ -2999,69 +3007,48 @@ export class EditTableSessionClient extends EditTableBase {
    * ws emit wrapper : format message and emit
    * @param {String} type Emit type
    * @param {Object} message Message to emit, if not locked
+   * @return {Promise<any>}
    */
   async emit(type, message, timeout) {
     const et = this;
-    const to = isEmpty(timeout) ? et._config.timeout_emit : timeout;
-    const res = await new Promise((resolve, reject) => {
-      try {
-        if (!et.state.built || et.locked) {
-          return resolve(false);
-        }
-
-        const messageEmit = et.message_formater(message);
-
-        et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
-          if (err) {
-            console.error(err, messageEmit);
-            return reject(err);
-          } else {
-            return resolve(res);
-          }
-        });
-      } catch (e) {
-        return reject(e);
-      }
-    });
-
-    return res;
+    if (!et.state.built || et.locked) {
+      return false;
+    }
+    const maxTime = isEmpty(timeout) ? et._config.timeout_emit : timeout;
+    const messageEmit = et.message_formater(message);
+    return et._ws.emitAsync(type, messageEmit, maxTime);
   }
 
   /**
-   * ws emit wrapper : format message and emit
+   * ws get emit wrapper : format message and emit
+   * @note : same as emit, but allow when not build/locked
    * @param {String} type Emit type
-   * @param {Object} message Message to emit, if not locked
+   * @param {Object} message Message to emit
+   * @return {Promise<any>}
    */
   async emitGet(type, message, timeout) {
     const et = this;
-    const to = isEmpty(timeout) ? et._config.timeout_emit : timeout;
+    const maxTime = isEmpty(timeout) ? et._config.timeout_emit : timeout;
     const messageEmit = et.message_formater(message);
-    return new Promise((resolve) => {
-      et._socket.timeout(to).emit(type, messageEmit, (err, res) => {
-        if (err) {
-          console.warn(type, message, err);
-          return resolve(false);
-        } else {
-          return resolve(res);
-        }
-      });
-    });
+    return et._ws.emitAsync(type, messageEmit, maxTime);
   }
 
   /**
    * Get data from specific events, cache result
    */
-  async get(type, timeout) {
+  async emitGetCached(type, timeout) {
     const et = this;
     const cached = et._get_cache.get(type);
     if (cached) {
       return cached;
     }
-    const data = et.emitGet("/client/get", { type }, timeout);
-    et._get_cache.set(type, data);
+    const data = await et.emitGet("/client/get", { type }, timeout);
+    if (data) {
+      et._get_cache.set(type, data);
+    }
     setTimeout(() => {
       et._get_cache.delete(type);
-    }, 10 * 1000);
+    }, et._config.timeout_cache);
     return data;
   }
 
@@ -3200,7 +3187,7 @@ export class EditTableSessionClient extends EditTableBase {
       return;
     }
 
-    const data = await et.emitGet(
+    const data = await et.emit(
       e.client_geom_validate,
       {
         use_cache: false,
@@ -3235,7 +3222,7 @@ export class EditTableSessionClient extends EditTableBase {
     }
 
     const opt = { use_cache: true, autoCorrect: true };
-    const data = await et.emitGet(
+    const data = await et.emit(
       e.client_geom_validate,
       opt,
       et._config.timeout_geom_valid,
@@ -3484,7 +3471,7 @@ export class EditTableSessionClient extends EditTableBase {
           et.setProgress(percent);
         }
 
-        const sanitizedChunk = await et.emitGet(
+        const sanitizedChunk = await et.emit(
           et._config.events.client_changes_sanitize,
           {
             updates: chunk,

@@ -13,8 +13,8 @@ import { MapxResolversStatic } from "./static.js";
 import { isStringRange, isString, isEmpty } from "../../../is_test/index.js";
 import { settings } from "./../../../settings";
 import { wsGetSourcesList } from "./../../../source";
-import { ws_tools } from "./../../../mx.js";
 import { ChaosTest } from "../../../map_helpers/chaos_test.js";
+import { editTable } from "../../../source/edit/instance.js";
 
 /**
  * MapX resolvers available in app only
@@ -539,21 +539,24 @@ export class MapxResolversApp extends MapxResolversStatic {
   }
 
   /**
-   * Show table editor ( require log in
+   * Show table editor ( require log in )
    * @param {Object} opt Options
-   * @param {String} opt.idTable Id of the table to edit
+   * @param {String} opt.id_table id of the table to edit
    * @return {Object} instance state
    */
   async table_editor_open(opt) {
-    const instance = await ws_tools.start("edit_table", opt);
+    const instance = await editTable(opt);
     return instance?.state || {};
   }
 
   /**
    * Close table editor
+   * @param {Object} opt Options
+   * @param {String} opt.id_table id of the table to close
+   * @return {Object} instance state
    */
-  async table_editor_close() {
-    const instance = ws_tools.get("edit_table");
+  async table_editor_close(opt) {
+    const instance = await editTable(opt);
     if (!instance) {
       throw new Error(`Table editor close: no table`);
     }
@@ -565,13 +568,13 @@ export class MapxResolversApp extends MapxResolversStatic {
    * Apply any command on Table Editor
    * Initially for testing purposes. May cause data loss.
    * @param {Object} opt Options
-   * @param {String} opt.idTable Id of the table to edit
+   * @param {String} opt.id_table Id of the table to edit
    * @param {String} opt.method Method name
    * @param {Object} opt.value Method arguments
    * @return {Any} res Result. If null, instance state
    */
   async table_editor_exec(opt) {
-    const instance = ws_tools.get("edit_table");
+    const instance = await editTable(opt);
     if (!instance) {
       throw new Error(`Table editor exec: no table`);
     }

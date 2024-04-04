@@ -10,11 +10,12 @@ const defaults = {
 };
 
 export class GeometryTools {
-  constructor(socket, config) {
+  constructor(ws, config) {
     const gt = this;
+    const socket = ws.socket;
+    gt._ws = ws;
     gt._config = Object.assign({}, defaults, config);
     gt._socket = socket;
-    gt.init().catch(console.error);
   }
 
   async init() {

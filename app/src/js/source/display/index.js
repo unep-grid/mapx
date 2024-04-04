@@ -5,7 +5,6 @@ import { elSpanTranslate } from "./../../el_mapx";
 import { getApiUrl } from "./../../api_routes";
 import { settings } from "./../../settings";
 import { modal } from "./../../mx_helper_modal";
-import { ws_tools } from "./../../mx.js";
 
 import {
   TableResizer,
@@ -26,6 +25,7 @@ import {
 } from "./../../map_helpers";
 import { isSourceId, isView, isArray, makeSafeName } from "./../../is_test";
 import { downloadCSV } from "../../download/index.js";
+import {editTable} from "../edit/instance.js";
 
 export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({}, opt);
@@ -270,10 +270,10 @@ async function showSourceTableAttributeModal(opt) {
       if (!addEdit) {
         return;
       }
-      await ws_tools.start("edit_table", {
-        id_table: config.idSource,
-        on_destroy: restart,
-      });
+      await editTable({
+         id_table : config.idSource, 
+         on_destroy : restart
+      })
     } catch (e) {
       console.error(e);
     }

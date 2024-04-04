@@ -16,7 +16,6 @@ import {
   viewDelete,
   viewsCloseAll,
 } from "./map_helpers/index.js";
-import { ws_tools } from "./mx.js";
 import { writeCookie } from "./mx_helper_cookies.js";
 import { renderUserProjectsList } from "./project/index.js";
 import { validateMetadataModal } from "./metadata/validation.js";
@@ -66,6 +65,9 @@ import {
   jedUpdate,
 } from "./json_editor";
 import { modalSourceJoin } from "./source/joins/instance.js";
+import { editTable } from "./source/edit/instance.js";
+import { uploadSource } from "./uploader/instance.js";
+import { geomTools } from "./source/geometry/instance.js";
 
 $(document).on("shiny:connected", mapxBindings);
 
@@ -109,9 +111,9 @@ function mapxBindings() {
   bind("mxNotify", shinyNotify);
   bind("mxGeoserverRebuild", geoserver.rebuild);
   bind("mxJoinEditor", modalSourceJoin);
-  bind("mxEditTable", ws_tools.getCb("edit_table"));
-  bind("mxGeomTools", ws_tools.getCb("geometry_tools"));
-  bind("mxUploader", ws_tools.getCb("uploader"));
+  bind("mxEditTable", editTable);
+  bind("mxGeomTools", geomTools);
+  bind("mxUploader", uploadSource);
   bind("mxProjectAdd", project.create);
   /**
    * Mapx map and view related binding

@@ -10,20 +10,19 @@ const defaults = {
 };
 
 /**
- * Base class that should work with ws_tools_instances
+ * Base class
  */
 export class EditTableBase extends EventSimple {
-  constructor(socket, config) {
+  constructor(ws, config) {
     super();
-    const wsb = this;
-    wsb._socket = socket;
-    wsb._config = Object.assign({}, defaults, config);
-    wsb._id = makeId();
-    wsb._socket = socket;
-    //wsb._on_cb = new Set();
-    wsb._initialized = false;
-    wsb._perf = {};
-    bindAll(wsb);
+    const base = this;
+    base._ws = ws; 
+    base._socket = ws.socket;
+    base._config = Object.assign({}, defaults, config);
+    base._id = makeId();
+    base._initialized = false;
+    base._perf = {};
+    bindAll(base);
   }
   /**
    * Instance id
@@ -38,8 +37,8 @@ export class EditTableBase extends EventSimple {
    * @param {Function} Callback
    */
   addDestroyCb(cb) {
-    const wsb = this;
-    wsb.once("destroy", cb);
+    const base = this;
+    base.once("destroy", cb);
   }
 
   /**
@@ -48,12 +47,12 @@ export class EditTableBase extends EventSimple {
    * @param {String} label Label of the performance
    */
   perf(label) {
-    const wsb = this;
-    if (!wsb._config.log_perf) {
+    const base = this;
+    if (!base._config.log_perf) {
       return;
     }
-    delete wsb._perf[label];
-    wsb._perf[label] = performance.now();
+    delete base._perf[label];
+    base._perf[label] = performance.now();
   }
 
   /**
@@ -61,11 +60,11 @@ export class EditTableBase extends EventSimple {
    * @param {String} label Label of the performance
    */
   perfEnd(label) {
-    const wsb = this;
-    if (!wsb._config.log_perf) {
+    const base = this;
+    if (!base._config.log_perf) {
       return;
     }
-    const diff = performance.now() - wsb._perf[label];
+    const diff = performance.now() - base._perf[label];
     console.log(`Perf ${label}: ${diff} [ms]`);
   }
 }
