@@ -1,6 +1,6 @@
-import { bindAll } from "./../bind_class_methods";
-import { makeId } from "./../mx_helper_misc.js";
-import { EventSimple } from "./../event_simple";
+import { bindAll } from "../../bind_class_methods";
+import { EventSimple } from "../../event_simple";
+import { makeId } from "../../mx_helper_misc";
 
 const defaults = {
   test_mode: false,
@@ -12,7 +12,7 @@ const defaults = {
 /**
  * Base class that should work with ws_tools_instances
  */
-export class WsToolsBase extends EventSimple {
+export class EditTableBase extends EventSimple {
   constructor(socket, config) {
     super();
     const wsb = this;
@@ -68,5 +68,4 @@ export class WsToolsBase extends EventSimple {
     const diff = performance.now() - wsb._perf[label];
     console.log(`Perf ${label}: ${diff} [ms]`);
   }
-
 }

@@ -1,5 +1,4 @@
 import { settings } from "../../settings";
-import { WsToolsBase } from "../../ws_tools/base.js";
 import {
   modalSimple,
   modalPrompt,
@@ -19,6 +18,7 @@ import { theme } from "../../mx.js";
 import { Popup } from "../../popup";
 import { viewLink, getView, viewsReplace } from "../../map_helpers/index.js";
 import { getSourceVtSummaryUI } from "../../mx_helper_source_summary";
+import { EditTableBase } from "./base.js";
 import {
   isPgType,
   isPgTypeDate,
@@ -92,7 +92,7 @@ const defaults = {
   id_source_sanitize_error: "from_sanitize_error",
 };
 
-export class EditTableSessionClient extends WsToolsBase {
+export class EditTableSessionClient extends EditTableBase {
   constructor(socket, config) {
     super(socket);
     const et = this;
