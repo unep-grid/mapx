@@ -2093,14 +2093,14 @@ export async function getViewAuto(idView) {
  * @return {Promise<array>} Promise resolving to an array of views
  */
 export async function getViewsRemote(idViews) {
-  const views = [];
-  for (let id of idViews) {
-    const view = await getViewRemote(id);
-    if (isView(view)) {
-      views.push(view);
-    }
+  const viewsProm = [];
+  const idViewsToFetch = getArrayDistinct(idViews);
+  for (const id of idViewsToFetch) {
+    const viewProm = getViewRemote(id);
+    viewsProm.push(viewProm);
   }
-  return views;
+  const views = await Promise.all(viewsProm);
+  return views.filter(isView);
 }
 
 /**

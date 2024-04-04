@@ -27,7 +27,6 @@ import { createCanvas } from "./../mx_helper_canvas.js";
 import {
   isJson,
   isArray,
-  isObject,
   isStory,
   isViewId,
   isNumeric,
@@ -48,6 +47,7 @@ import {
   getViewsLayersVisibles,
   setMapProjection,
   getViewAuto,
+  getViewsListId,
 } from "./../map_helpers/index.js";
 
 /**
@@ -448,24 +448,10 @@ async function initStory() {
 async function initViews() {
   await cleanRemoveViews();
 
-  const idViewsStory = [];
   const idViewsToAdd = [];
-
   const viewsBase = getViews();
-  const idViewsBase = viewsBase.map((v) => v.id);
-  /**
-   * Case views are stored within state.views (deprecated)
-   */
-  for (const id of story?.views || []) {
-    if (isViewId(id)) {
-      idViewsStory.push(id);
-    }
-  }
-
-  /**
-   * Case when views are not stored in state.view but only in steps (current behaviour).
-   */
-  idViewsStory.push(...getStoryViewsId());
+  const idViewsBase = getViewsListId();
+  const idViewsStory = getStoryViewsId();
 
   /**
    * Create a list of views id to download
@@ -473,8 +459,7 @@ async function initViews() {
    */
   for (const id of idViewsStory) {
     const existsInBase = idViewsBase.includes(id);
-    const existsInAdd = idViewsToAdd.includes(id);
-    if (!existsInBase && !existsInAdd) {
+    if (!existsInBase) {
       idViewsToAdd.push(id);
     }
   }
@@ -614,53 +599,25 @@ function updateAdaptiveLayout() {
 }
 
 /**
- * List views id from story steps
- * NOTE: could be merged with getViewsStep ?
- * Accepted id are
- * array of id,
- * array of object with id as key,
- * array of object with view as key
- * if something else : warn
- *
- */
-function getStoryViewsId() {
-  const story = getStory();
-  const idViewsStory = [];
-  let i = 0;
-  for (const step of story.steps) {
-    if (isObject(step) && isArray(step.views)) {
-      let j = 0;
-
-      for (const item of step.views) {
-        const idView = getStoryViewId(item);
-        if (isViewId(idView)) {
-          idViewsStory.push(idView);
-        } else {
-          console.warn(
-            `View ${j} of step ${i} is not recognised. Received:`,
-            item,
-          );
-          step.views.splice(j, 1);
-        }
-        j++;
-      }
-      i++;
-    }
-  }
-  return idViewsStory;
-}
-
-/**
  * Get current views featured in step
+ * @param {Boolean} onlyCurrentStep Only list current step views id
  * @return {Array} array of views id
  */
-export function getViewsStep() {
+export function getStoryViewsId(onlyCurrentStep) {
   const views = [];
+  const story = getStory();
   const state = getState();
-  for (const item of state.step.views) {
-    const idView = getStoryViewId(item);
-    if (isViewId(idView)) {
-      views.push(idView);
+  for (const step of story.steps) {
+    if (onlyCurrentStep) {
+      if (step !== state?.step) {
+        continue;
+      }
+    }
+    for (const item of step.views) {
+      const idView = getStepViewId(item);
+      if (isViewId(idView)) {
+        views.push(idView);
+      }
     }
   }
   return views;
@@ -668,11 +625,11 @@ export function getViewsStep() {
 
 /**
  * Get view id
- * -> Story schema used different format for storing views
+ * -> Story schema used to work with different format for storing views
  * @param {Any} item Item that contain a view id
  * @returns {String} id of the view
  */
-function getStoryViewId(item) {
+function getStepViewId(item) {
   if (isViewId(item)) {
     return item;
   } else if (isViewId(item.view)) {

@@ -9,7 +9,7 @@ import { waitTimeoutAsync } from "./../animation_frame/index.js";
 import {
   isStoryPlaying,
   getStoryId,
-  getViewsStep,
+  getStoryViewsId,
 } from "../story_map/index.js";
 import { getArrayDistinct } from "../array_stat/index.js";
 import { viewsListAddSingle } from "../views_list_manager";
@@ -263,7 +263,7 @@ export class ShareModal extends EventSimple {
         views.push(...sm._get_views_opt());
         break;
       case "share_views_select_method_story_step":
-        views.push(...(getViewsStep() || []));
+        views.push(...(getStoryViewsId(true) || []));
         break;
       case "share_views_select_method_story_itself":
         views.push(getStoryId());
@@ -311,10 +311,8 @@ export class ShareModal extends EventSimple {
     const idViews = sm._state.views;
     const modeTargetStory =
       f.share_views_select === "share_views_select_method_story_itself";
-    const storyInViews = getViews(idViews).reduce(
-      (a, c) => a || c.type === "sm",
-      false,
-    );
+    const views = getViews(idViews);
+    const storyInViews = views.reduce((a, c) => a || c?.type === "sm", false);
     return modeTargetStory || storyInViews;
   }
 

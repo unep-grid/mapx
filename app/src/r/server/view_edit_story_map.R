@@ -97,6 +97,7 @@ observeEvent(input$storyEdit_values, {
     return()
   }
 
+  time <- Sys.time()
   story <- values$data
   idEvent <- values$idEvent
   editor <- reactUser$data$id
@@ -108,71 +109,66 @@ observeEvent(input$storyEdit_values, {
   userData <- reactUser$data
   userRole <- getUserRole()
 
-  if (isEditable) {
-    time <- Sys.time()
-
-    view <- .set(view, c("data", "story"), story)
-    #
-    # Add missing views refs
-    #
-    view <- mxUpdateStoryViews(
-      story = story,
-      view = view,
-      allViews = allViews
-    )
-
-    switch(idEvent,
-      "preview" = {
-        mglReadStory(
-          view = view,
-          edit = TRUE,
-          update = TRUE
-        )
-        reactData$storyPreviewed <- TRUE
-      },
-      "save" = {
-        view[["_edit"]] <- NULL
-
-
-        #
-        # set default
-        #
-        view <- .set(view, c("date_modified"), time)
-        view <- .set(view, c("target"), as.list(.get(view, c("target"))))
-        view <- .set(view, c("readers"), as.list(.get(view, c("readers"))))
-        view <- .set(view, c("editors"), as.list(.get(view, c("editors"))))
-        view <- .set(view, c("data"), as.list(.get(view, "data")))
-        view <- .set(view, c("editor"), editor)
-
-
-
-        mxDbAddRow(
-          data = view,
-          table = .get(config, c("pg", "tables", "views"))
-        )
-
-        # edit flag
-        view$`_edit` <- TRUE
-        reactData$storySaved <- TRUE
-        reactData$viewDataEdited <- view
-
-        mxUpdateText(
-          id = "modalViewEdit_txt",
-          text = sprintf("Saved at %s", format(time, "%H:%M"))
-        )
-
-        mxFlashIcon("floppy-o")
-        reactData$updateViewListFetchOnly <- runif(1)
-      }
-    )
-
-    mxToggleButton(
-      id = "btnViewSaveStory",
-      disable = FALSE
-    )
-    mxToggleButton(
-      id = "btnViewPreviewStory",
-      disable = FALSE
-    )
+  if (!isEditable) {
+    return()
   }
+
+  #
+  # Update story
+  #
+  view <- .set(view, c("data", "story"), story)
+
+  switch(idEvent,
+    "preview" = {
+      mglReadStory(
+        view = view,
+        edit = TRUE,
+        update = TRUE
+      )
+      reactData$storyPreviewed <- TRUE
+    },
+    "save" = {
+      view[["_edit"]] <- NULL
+
+
+      #
+      # set default
+      #
+      view <- .set(view, c("date_modified"), time)
+      view <- .set(view, c("target"), as.list(.get(view, c("target"))))
+      view <- .set(view, c("readers"), as.list(.get(view, c("readers"))))
+      view <- .set(view, c("editors"), as.list(.get(view, c("editors"))))
+      view <- .set(view, c("data"), as.list(.get(view, "data")))
+      view <- .set(view, c("editor"), editor)
+
+
+
+      mxDbAddRow(
+        data = view,
+        table = .get(config, c("pg", "tables", "views"))
+      )
+
+      # edit flag
+      view$`_edit` <- TRUE
+      reactData$storySaved <- TRUE
+      reactData$viewDataEdited <- view
+
+      mxUpdateText(
+        id = "modalViewEdit_txt",
+        text = sprintf("Saved at %s", format(time, "%H:%M"))
+      )
+
+      mxFlashIcon("floppy-o")
+      reactData$updateViewListFetchOnly <- runif(1)
+    }
+  )
+
+  mxToggleButton(
+    id = "btnViewSaveStory",
+    disable = FALSE
+  )
+  mxToggleButton(
+    id = "btnViewPreviewStory",
+    disable = FALSE
+  )
 })

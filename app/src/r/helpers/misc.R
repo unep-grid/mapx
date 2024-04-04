@@ -86,45 +86,6 @@ mxIsValidSourceEdit <- function(idSource) {
 
 
 
-#' Add or update views from story steps to view dependencies
-#' @param {List} story list
-#' @param {List} view list
-#' @param {List} views compact list
-mxUpdateStoryViews <- function(story, view, allViews) {
-  #
-  # Retrieve and store data for all views used in story.
-  #
-  views <- list()
-  allViews <- unlist(allViews)
-
-  #
-  # All views id extracted from the story
-  #
-  viewsStory <- lapply(story$steps, function(s) {
-    lapply(s$views, function(v) {
-      v
-    })
-  })
-
-  # Final view list
-  viewsId <- unique(unlist(viewsStory))
-  viewsId <- as.list(viewsId)
-
-  # If there is at least on views used, get views object.
-  if (isNotEmpty(viewsId)) {
-    views <- unique(allViews[sapply(allViews, function(v) {
-      v %in% viewsId
-    })])
-  }
-
-  #
-  # Save local views from story, if any
-  #
-  view <- .set(view, c("data", "views"), as.list(views))
-  return(view)
-}
-
-
 #' Load external ui file value in shiny app
 #'
 #' Shortcut to load external shiny ui file
