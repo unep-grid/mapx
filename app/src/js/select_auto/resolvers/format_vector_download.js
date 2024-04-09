@@ -54,9 +54,9 @@ export const config = {
         el(
           "small",
           `Driver: ${escape(data.driver)} | File extensions: ${escape(
-            data.fileExt
-          )}`
-        )
+            data.fileExt,
+          )}`,
+        ),
       );
     },
     item: (data, escape) => {
@@ -66,9 +66,10 @@ export const config = {
         el(
           "span",
           { class: ["text-muted", "space-around"] },
-          `${escape(data.driver)}`
-        )
+          `${escape(data.driver)}`,
+        ),
       );
     },
   },
 };
+

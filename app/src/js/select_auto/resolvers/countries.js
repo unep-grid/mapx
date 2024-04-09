@@ -1,6 +1,5 @@
 import { el, elSpanTranslate } from "../../el_mapx";
 import { getLanguagesAll } from "../../language";
-
 const langs = getLanguagesAll();
 
 export const config = {

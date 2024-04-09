@@ -71,6 +71,7 @@ export class DownloadSourceModal extends EventSimple {
 
     await md.build();
     md.fire("init");
+    return true;
   }
 
   close() {
@@ -241,7 +242,11 @@ export class DownloadSourceModal extends EventSimple {
     const selectEpsg = new SelectAuto(elFormEpsg);
     const selectFormat = new SelectAuto(elFormFormat);
     const selectCountries = new SelectAuto(elFormCountries);
-
+    const promInit = [
+      selectFormat.init(),
+      selectEpsg.init(),
+      selectCountries.init(),
+    ];
     md._select_auto_store.push(selectEpsg);
     md._select_auto_store.push(selectFormat);
     md._select_auto_store.push(selectCountries);
@@ -251,6 +256,8 @@ export class DownloadSourceModal extends EventSimple {
         await select_auto.once("built");
       }
     }
+
+    await Promise.all(promInit);
 
     md.fire("built");
   }

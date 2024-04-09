@@ -1,5 +1,6 @@
 import { el } from "../../el_mapx";
 import { wsGetSourcesList } from "../../source";
+
 export const config = {
   /*
    * TomSelect
@@ -68,6 +69,7 @@ export const config = {
     placeholder_ready: "Select source...",
   },
 };
+
 
 async function update() {
   const tom = this;

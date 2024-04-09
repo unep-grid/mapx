@@ -1,7 +1,7 @@
 import { moduleLoad } from "./../modules_loader_async/index.js";
 import { isElement } from "./../is_test";
 import { EventSimple } from "../event_simple/index.js";
-import { clone } from "../mx_helper_misc.js";
+import { getConfig } from "./utils.js";
 
 const def = {
   target: null,
@@ -13,11 +13,14 @@ export class SelectAuto extends EventSimple {
   constructor(opt, config) {
     super();
     const se = this;
-    se._opt = Object.assign({}, def, opt);
+
+    se._opt = {};
 
     if (isElement(opt)) {
       se._opt.target = opt.querySelector("select");
       se._opt.type = se._opt.target.dataset.type;
+    } else {
+      Object.assign(se._opt, def, opt);
     }
 
     if (config) {
@@ -25,7 +28,6 @@ export class SelectAuto extends EventSimple {
     }
 
     se.destroy = se.destroy.bind(se);
-    se.init().catch(console.error);
   }
 
   async init() {
@@ -68,44 +70,29 @@ export class SelectAuto extends EventSimple {
   async build() {
     const se = this;
     const TomSelect = await moduleLoad("tom-select");
-    const config = await se.loadConfig(se._opt.type);
-    Object.assign(config, se._opt.config);
+    const config = await getConfig(se._opt.type, se._opt.config);
+
     se._tom = new TomSelect(se._opt.target, config);
 
-    return new Promise((resolve) => {
-      /*
-       *
-       * -> bug, doesn't work ...
-       *
-       * se._tom.on("initialize", () => {
-       *  resolve(true);
-       * });
-       */
-      setTimeout(() => {
-        se._built = true;
-        se.fire("built");
-        resolve(true);
-      }, 1000);
+    /**
+     * initialize is not always fired
+     * -> not sure why
+     * -> use timeout instead
+     */
+    const promInit = new Promise((resolve) => {
+      se._tom.on("initialize", () => {
+        resolve("init");
+      });
     });
-  }
 
-  async loadConfig(type) {
-    switch (type) {
-      case "epsg":
-        const epsg = await import("./resolvers/epsg.js");
-        return clone(epsg.config);
-      case "format_vector_download":
-        const format = await import("./resolvers/format_vector_download.js");
-        return clone(format.config);
-      case "countries":
-        const countries = await import("./resolvers/countries.js");
-        return clone(countries.config);
-      case "sources_list":
-        const sourcesList = await import("./resolvers/sources_list.js");
-        return clone(sourcesList.config);
-      default:
-        null;
-    }
-    return {};
+    const promTimeout = new Promise((resolve) => {
+      setTimeout(() => {
+        resolve("timeout");
+      }, 100);
+    });
+    await Promise.race([promInit, promTimeout]);
+
+    se._built = true;
+    se.fire("built");
   }
 }

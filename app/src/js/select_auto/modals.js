@@ -27,7 +27,7 @@ export async function modalSelectSource(opt) {
       }
     },
     selectAutoOptions: {
-      type: "sources_list",
+      type: "sources",
       config: {
         loader_config,
       },

@@ -40,7 +40,6 @@ import chroma from "chroma-js";
 import { mirrorUrlCreate } from "./../mirror_util";
 import { getAppPathUrl } from "./../api_routes/index.js";
 import { isStoryPlaying, storyRead } from "./../story_map/index.js";
-import { fetchViews } from "./../mx_helper_map_view_fetch.js";
 import { wmsQuery } from "./../wms/index.js";
 import { clearMapxCache, getVersion } from "./../app_utils";
 import { onNextFrame } from "./../animation_frame/index.js";
@@ -147,6 +146,7 @@ import {
 } from "./../is_test_mapx/index.js";
 import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
+import { fetchViews } from "./views_fetch.js";
 export * from "./view_filters.js";
 
 /**

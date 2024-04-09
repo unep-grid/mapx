@@ -1,7 +1,6 @@
 import { getApiUrl } from "./../../api_routes";
 import { el } from "../../el_mapx";
 import { isEmpty } from "../../is_test";
-
 const defaultSrid = "4326";
 
 export const config = {
@@ -53,7 +52,7 @@ export const config = {
       return el(
         "div",
         el("h4", escape(data.name)),
-        el("small", `EPSG:${escape(data.srid)} | ${escape(data.region)}`)
+        el("small", `EPSG:${escape(data.srid)} | ${escape(data.region)}`),
       );
     },
     item: (data, escape) => {
@@ -63,9 +62,10 @@ export const config = {
         el(
           "span",
           { class: ["text-muted", "space-around"] },
-          `EPSG:${escape(data.srid)}`
-        )
+          `EPSG:${escape(data.srid)}`,
+        ),
       );
     },
   },
 };
+

@@ -150,7 +150,7 @@ export class Item {
       if (!allExts) {
         const missing = f.fileExt.filter((f) => !it.exts.includes(f));
         it._issues.add(
-          new Issue("error", "up_issue_missing_dependency", { ext: missing })
+          new Issue("error", "up_issue_missing_dependency", { ext: missing }),
         );
       }
     }
@@ -207,8 +207,9 @@ export class Item {
 
   /**
    * Registers the item for upload.
+   * @returns {Promise<boolean>} registered 
    */
-  register() {
+  async register() {
     const it = this;
     const up = it.up;
     const isMultiFile = it.multiple;
@@ -241,20 +242,23 @@ export class Item {
     /*
      * Add new item
      */
-    it.add();
+    await it.add();
+    return true;
   }
 
   /**
    * Adds the item to the uploader's list of items to be uploaded.
+   * @returns {Promise<boolean>}  added
    */
-  add() {
+  async add() {
     const it = this;
     const up = it.up;
     up.addItem(it);
-    it.buildItem();
+    await it.buildItem();
     it.buildFiles(it.files);
     it.validate();
     it.up.update();
+    return true;
   }
 
   /**
@@ -355,7 +359,7 @@ export class Item {
         "div",
         { class: "uploader--file" },
         el("span", { class: "text-muted" }, file.name),
-        el("span", { class: "text-muted" }, formatByteSize(file.size))
+        el("span", { class: "text-muted" }, formatByteSize(file.size)),
       );
       it._el_group_files.appendChild(elFile);
     }
@@ -373,7 +377,7 @@ export class Item {
         {
           class: `uploader__issue_${issue.level}`,
         },
-        tt(issue.type, { data: issue.data })
+        tt(issue.type, { data: issue.data }),
       );
       it._el_issues.appendChild(elIssue);
     }
@@ -397,8 +401,9 @@ export class Item {
   /**
    * Builds the HTML for the item's files and their configuration settings.
    * @param {Array.<File>} files - The files to be uploaded.
+   * @returns {Promise<boolean>} built
    */
-  buildItem() {
+  async buildItem() {
     const it = this;
 
     /**
@@ -411,7 +416,7 @@ export class Item {
         class: ["uploader--item-button", "uploader--item-button-remove"],
         on: ["click", it.cancel],
       },
-      el("i", { class: ["fa", "fa-times"] })
+      el("i", { class: ["fa", "fa-times"] }),
     );
 
     const elButtonSend = el(
@@ -421,7 +426,7 @@ export class Item {
         class: ["uploader--item-button", "uploader--item-button-send"],
         on: ["click", it.upload],
       },
-      el("i", { class: ["fa", "fa-paper-plane-o"] })
+      el("i", { class: ["fa", "fa-paper-plane-o"] }),
     );
 
     /**
@@ -444,10 +449,11 @@ export class Item {
         id: `up_epsg_code_${it.key}`,
         name: "source_srs",
         dataset: { type: "epsg" },
-      })
+      }),
     );
 
     const selectEpsg = new SelectAuto(elEpsg);
+    await selectEpsg.init();
 
     selectEpsg.once("init", () => {
       selectEpsg.disable();
@@ -506,8 +512,8 @@ export class Item {
           type: "text",
           placeholder: it.key,
         },
-        it.key
-      )
+        it.key,
+      ),
     );
 
     /**
@@ -517,7 +523,7 @@ export class Item {
     it._el_group_size = el(
       "div",
       { class: "uploader--group" },
-      el("div", { class: "uploader--size" }, el("span", "Total"), it._el_size)
+      el("div", { class: "uploader--size" }, el("span", "Total"), it._el_size),
     );
     it._el_group_files = el("div", { class: "uploader--group" });
 
@@ -537,7 +543,7 @@ export class Item {
           elCheckAllowDownlaod,
           elCheckAssignEpsg,
           elEpsg,
-        ])
+        ]),
       ),
       it._el_issues,
     ]);
@@ -552,6 +558,7 @@ export class Item {
       it._el_form_wrapper,
     ]);
     it.up._el_container.appendChild(it._el_item);
+    return true;
   }
 
   /**
@@ -644,12 +651,11 @@ export class Item {
    * @returns {Object} response
    */
   async _emit_chunk(chunk) {
-
     if (chunk.first) {
       nc.panel.height = 200;
       nc.panel.open();
     }
-    const res = await ws.emitAsync('/client/source/upload', chunk, 10e3);
+    const res = await ws.emitAsync("/client/source/upload", chunk, 10e3);
 
     if (res.status === "uploaded") {
       return true;

@@ -247,7 +247,6 @@ export function updateIfEmpty(target, source) {
   if (!target) {
     target = {};
   }
-
   /**
    * Transfer values from source
    */
@@ -259,6 +258,72 @@ export function updateIfEmpty(target, source) {
   }
   return target;
 }
+
+/**
+ * Recursively merges two objects without modifying the original objects.
+ * @note TODO replace updateIfEmpty and mergeDeep
+ * @param {Object} source The source object to be updated.
+ * @param {Object} patch The object containing updates. Undefined or null values are ignored.
+ * @returns {Object} A new object with properties from both source and patch.
+ */
+export function patchObject(source, patch) {
+  if (!isObject(source) || !isObject(patch)) {
+    return source;
+  }
+
+  const result = { ...source }; 
+
+  for (const key in patch) {
+    if (!patch.hasOwnProperty(key)) {
+      continue;
+    }
+    const patchValue = patch[key];
+    const sourceValue = source[key];
+
+    const sourceIsObject = isObject(sourceValue);
+    const patchIsObject = isObject(patchValue);
+    const patchIsEmpty = isEmpty(patchValue);
+
+    if (patchIsEmpty) {
+      continue;
+    }
+
+    if (patchIsObject && sourceIsObject) {
+      result[key] = patchObject(sourceValue, patchValue);
+      continue;
+    }
+
+    result[key] = patchValue;
+  }
+
+  return result;
+}
+
+/**
+ * Performs a deep merge of objects and returns new object. Does not modify
+ * objects (immutable) and merges arrays via concatenation.
+ * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
+ *
+ */
+export function mergeDeep(target, source) {
+  if (!isObject(target) || !isObject(source)) {
+    return source;
+  }
+  for (const key in source) {
+    const targetValue = target[key];
+    const sourceValue = source[key];
+
+    if (isArray(targetValue) && isArray(sourceValue)) {
+      target[key] = targetValue.concat(sourceValue);
+    } else if (isObject(targetValue) && isObject(sourceValue)) {
+      target[key] = mergeDeep(Object.assign({}, targetValue), sourceValue);
+    } else {
+      target[key] = sourceValue;
+    }
+  }
+  return target;
+}
+
 
 /**
  * Update title based on settings
@@ -643,16 +708,6 @@ export function textToDom(text) {
 }
 
 /**
- * Dom element to text
- * @param {Element} dom Dom element to convert
- * @return {String}
- */
-export function domToText(dom) {
-  var el = document.createElement("div");
-  el.appendChild(dom);
-}
-
-/**
  * Converts an HTTP URL to HTTPS.
  * @param {string} urlString - The URL to convert.
  * @returns {string} The converted URL, or the original URL if not valid or already HTTPS.
@@ -668,31 +723,6 @@ export function toHttps(urlString) {
   }
 }
 
-/**
- * Performs a deep merge of objects and returns new object. Does not modify
- * TODO: replace with deltaMerge ? (mx_helper_utils_json/utils_json)
- * objects (immutable) and merges arrays via concatenation.
- * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
- *
- */
-export function mergeDeep(target, source) {
-  if (!isObject(target) || !isObject(source)) {
-    return source;
-  }
-  for (const key in source) {
-    const targetValue = target[key];
-    const sourceValue = source[key];
-
-    if (isArray(targetValue) && isArray(sourceValue)) {
-      target[key] = targetValue.concat(sourceValue);
-    } else if (isObject(targetValue) && isObject(sourceValue)) {
-      target[key] = mergeDeep(Object.assign({}, targetValue), sourceValue);
-    } else {
-      target[key] = sourceValue;
-    }
-  }
-  return target;
-}
 
 /**
  * Convert a simple object to an HTML list

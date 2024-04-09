@@ -2,10 +2,8 @@ import { JSONEditor } from "@json-editor/json-editor";
 import { el } from "./../el_mapx";
 import { isEmpty, isArray, isObject } from "./../is_test/index.js";
 import TomSelect from "tom-select";
-
-import { config as config_source } from "../select_auto/resolvers/sources_list.js";
-import { config as config_source_columns } from "../select_auto/resolvers/sources_list_columns";
-import { clone } from "../mx_helper_misc";
+import { getConfig } from "../select_auto/utils.js";
+import { deltaMerge } from "../mx_helper_utils_json";
 
 JSONEditor.defaults.resolvers.unshift(function (schema) {
   const options = schema.mx_options;
@@ -19,7 +17,7 @@ JSONEditor.defaults.resolvers.unshift(function (schema) {
 });
 
 /**
- * Gemet specific input : remote fetch
+ * Use tom select pre configured objects
  */
 JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
   JSONEditor.AbstractEditor
@@ -31,30 +29,9 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     editor.title.appendChild(editor.title_controls);
     editor.error_holder = document.createElement("div");
 
-    const config = {};
     const { schema } = editor;
-    const { maxItems, watch, loader } = schema.mx_options;
 
-    switch (loader) {
-      case "source":
-      case "source_edit": // back compatibility
-        const { types, readable, editable, add_global } = schema.mx_options;
-        Object.assign(config, clone(config_source));
-        Object.assign(config.loader_config, {
-          types,
-          readable,
-          editable,
-          add_global,
-        });
-        break;
-      case "source_columns":
-      case "source_edit_columns": // back compatibility
-        Object.assign(config, clone(config_source_columns));
-        Object.assign(config.loader_config, { id_source: null });
-        break;
-      default:
-        throw new Error(`tomSelectAuto, unknown loader ${loader}`);
-    }
+    const config = await editor._build_config(schema.mx_options);
 
     if (editor.schema.description) {
       editor.description = editor.theme.getDescription(
@@ -62,9 +39,7 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
       );
     }
 
-    if (maxItems) {
-      config.maxItems = maxItems;
-    }
+    const { watch } = config;
 
     if (schema.type === "array") {
       editor.input = el("select", {
@@ -103,6 +78,50 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     editor._on_ready();
   }
 
+  async _build_config(options) {
+    const { loader } = options;
+    const editor = this;
+    const patch = editor._get_config_patch(options);
+    const config = await getConfig(loader, patch);
+    return config;
+  }
+
+  _get_config_patch(options) {
+    const { maxItems, watch, loader } = options;
+    switch (loader) {
+      case "views":
+        const { includeAllPublic } = options;
+        return {
+          watch,
+          maxItems,
+          loader_config: { includeAllPublic },
+        };
+      case "sources":
+        const { types, readable, editable, add_global } = options;
+        return {
+          maxItems,
+          watch,
+          loader_config: {
+            types,
+            readable,
+            editable,
+            add_global,
+          },
+        };
+
+      case "source_columns":
+        return {
+          maxItems,
+          watch,
+          loader_config: {
+            id_source: null,
+          },
+        };
+      default:
+        throw new Error(`tomSelectAuto, unknown loader ${loader}`);
+    }
+  }
+
   _on_ready() {
     const editor = this;
     /*
@@ -117,7 +136,6 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
 
   destroy() {
     const editor = this;
-    editor.empty(true);
     if (editor.title && editor.title.parentNode) {
       editor.title.parentNode.removeChild(editor.title);
     }
@@ -135,12 +153,9 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     super.destroy();
   }
 
-  empty() {}
-
   setValue(value) {
     const editor = this;
-    const ts = editor.input.ts;
-
+    const { ts } = editor?.input || {};
     const isEmptyValue =
       isEmpty(value) || (isArray(value) && value.every((v) => isEmpty(v)));
 

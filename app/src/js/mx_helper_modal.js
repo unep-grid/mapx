@@ -78,8 +78,8 @@ export function modal(o) {
   const resizeObserver = isFunction(o.onResize)
     ? new ResizeObserver(debounce(o.onResize, 200))
     : null;
-  if(resizeObserver){
-    resizeObserver.observe(elModal)
+  if (resizeObserver) {
+    resizeObserver.observe(elModal);
   }
 
   const hasShiny = isShinyReady();
@@ -663,7 +663,7 @@ export function modalConfirm(opt) {
  * @param {Function} opt.onInput Callback on input with (value, elBtnConfirm, elMessage, elInput) as args
  * @return {Promise} resolve to input type
  */
-export function modalPrompt(opt) {
+export async function modalPrompt(opt) {
   let elModal;
   const def = {
     inputTag: "input",
@@ -683,44 +683,46 @@ export function modalPrompt(opt) {
   opt.inputOptions = Object.assign({}, def.inputOptions, opt.inputOptions);
   opt = Object.assign({}, def, opt);
 
-  return new Promise((resolve) => {
-    const isCheckbox = opt.inputOptions.type === "checkbox";
-    const isSelectAuto = isObject(opt.selectAutoOptions);
-    let selectAuto;
+  const isCheckbox = opt.inputOptions.type === "checkbox";
+  const isSelectAuto = isObject(opt.selectAutoOptions);
+  let selectAuto;
 
-    if (isSelectAuto) {
-      opt.inputTag = "select";
-    }
+  if (isSelectAuto) {
+    opt.inputTag = "select";
+  }
 
-    const elInput = el(opt.inputTag, opt.inputOptions, [...opt.inputChildren]);
+  const elInput = el(opt.inputTag, opt.inputOptions, [...opt.inputChildren]);
 
-    const elLabel = el(
-      "label",
-      { for: opt.inputOptions.id },
-      el("div", opt.label || "Enter a value"),
+  const elLabel = el(
+    "label",
+    { for: opt.inputOptions.id },
+    el("div", opt.label || "Enter a value"),
+  );
+
+  const elInputGroup = el("div", { class: "form-group" }, [elLabel, elInput]);
+
+  if (opt.desc) {
+    const elDesc = el(
+      "div",
+      { class: ["text-muted", "help-box"], for: opt.inputOptions.id },
+      opt.desc,
     );
+    elLabel.appendChild(elDesc);
+  }
 
-    const elInputGroup = el("div", { class: "form-group" }, [elLabel, elInput]);
-
-    if (opt.desc) {
-      const elDesc = el(
-        "div",
-        { class: ["text-muted", "help-box"], for: opt.inputOptions.id },
-        opt.desc,
-      );
-      elLabel.appendChild(elDesc);
+  if (isCheckbox) {
+    elInputGroup.className = "checkbox";
+    elLabel.prepend(elInput);
+    if (opt.inputOptions.value) {
+      elInput.setAttribute("checked", true);
     }
+  }
 
-    if (isCheckbox) {
-      elInputGroup.className = "checkbox";
-      elLabel.prepend(elInput);
-      if (opt.inputOptions.value) {
-        elInput.setAttribute("checked", true);
-      }
-    }
+  return new Promise((resolve, reject) => {
     if (isSelectAuto) {
       opt.selectAutoOptions.target = elInput;
       selectAuto = new SelectAuto(opt.selectAutoOptions);
+      selectAuto.init().catch(reject);
     }
 
     const elMessage = el("small", {

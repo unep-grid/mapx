@@ -26,7 +26,7 @@ export class Uploader {
    */
   constructor(config) {
     const up = this;
-    up._config = config; 
+    up._config = config;
   }
 
   /**
@@ -134,7 +134,7 @@ export class Uploader {
         wait: config.msg_duration,
         str: "",
       },
-      opt
+      opt,
     );
 
     const up = this;
@@ -199,7 +199,7 @@ export class Uploader {
         class: ["btn", "btn-default", "disabled"],
         on: ["click", up.upload],
       },
-      tt("up_button_upload")
+      tt("up_button_upload"),
     );
     up._el_button_add = el(
       "button",
@@ -207,7 +207,7 @@ export class Uploader {
         class: ["btn", "btn-default", "disabled"],
         on: ["click", up.handleButtonAddFile],
       },
-      tt("up_button_add_files")
+      tt("up_button_add_files"),
     );
     up._el_button_reset = el(
       "button",
@@ -215,7 +215,7 @@ export class Uploader {
         class: ["btn", "btn-default"],
         on: ["click", up.reset],
       },
-      tt("up_button_reset")
+      tt("up_button_reset"),
     );
 
     up._el_button_close = el(
@@ -224,7 +224,7 @@ export class Uploader {
         class: ["btn", "btn-default", "disabled"],
         on: ["click", up.destroy],
       },
-      tt("up_button_close")
+      tt("up_button_close"),
     );
 
     up._modal = modalSimple({
@@ -652,6 +652,8 @@ export class Uploader {
       return;
     }
 
+    const promRegistered = [];
+
     for (const file of files) {
       const item = new Item(file, up);
       if (!item.supported) {
@@ -659,8 +661,9 @@ export class Uploader {
         await up.message("up_issue_format_not_supported", { str: file.name });
         continue;
       }
-      item.register();
+      promRegistered.push(item.register());
     }
+    return Promise.all(promRegistered);
   }
 
   /**
