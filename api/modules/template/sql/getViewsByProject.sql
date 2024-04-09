@@ -18,15 +18,12 @@ p_base AS (
   publishers @> '[{{idUser}}]'::jsonb as u_is_publisher,
   members @> '[{{idUser}}]'::jsonb as u_is_member,
   public as is_public,
-  CASE WHEN coalesce(title #>> '{"{{language}}"}','') = ''
-    THEN 
-    CASE WHEN coalesce(title #>> '{"en"}','') = '' 
-      THEN id 
-    ELSE title #>> '{"en"}' 
-END
-ELSE title #>> '{"{{language}}"}'  
-END as title,
-views_external as v_ext
+  COALESCE(
+    NULLIF(title #>> '{"{{language}}"}',''),
+    NULLIF(title #>> '{"en"}',''),
+    id
+  ) title,
+  views_external as v_ext
 FROM mx_projects 
 WHERE id = '{{idProject}}'
 ),
@@ -76,13 +73,19 @@ v_all AS (
   /**
    * alias title
    */
-  CASE WHEN coalesce(data #>> '{"title","{{language}}"}','') = ''
-    THEN 
-    CASE WHEN coalesce(data #>> '{"title","en"}','') = '' 
-      THEN id 
-    ELSE data #>> '{"title","en"}' END
-    ELSE data #>> '{"title","{{language}}"}'  
-END as _title
+   COALESCE(
+   NULLIF(data #>> '{"title","{{language}}"}',''), 
+   NULLIF(data #>> '{"title","en"}',''), 
+   id
+  ) as _title,
+
+  /**
+   * alias description
+   */
+ COALESCE(
+   NULLIF(data #>> '{"abstract","{{language}}"}',''), 
+   data #>> '{"abstract","en"}'
+  ) as _description
 /**
  * Data source
  */

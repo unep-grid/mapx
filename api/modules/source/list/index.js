@@ -189,6 +189,7 @@ async function getSourcesList(options) {
   const qSqlTemplate = templates.getSourcesListByRoles;
   const qSql = parseTemplate(qSqlTemplate, { language });
 
+
   const res = await pgRead.query({
     text: qSql,
     values: [

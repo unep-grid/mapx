@@ -3,7 +3,8 @@ import { parseTemplate, sendJSON, sendError } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { validateTokenHandler } from "#mapx/authentication";
 import { getParamsValidator } from "#mapx/route_validation";
-import { isEmpty } from "@fxi/mx_valid";
+import { getViewsPublic } from "./getViewsPublic.js";
+import { getRows } from "#mapx/db_utils";
 
 const validateParamsHandler = getParamsValidator({
   required: ["idUser", "idProject", "token"],
@@ -13,13 +14,13 @@ const validateParamsHandler = getParamsValidator({
     "collections",
     "collectionsSelectOperator",
     "selectKeys",
-    "selectKeysPublic",
     "types",
     "roleMax",
     "language",
     "publicOnly",
     "email",
     "allViews",
+    "includeAllPublic",
   ],
 });
 
@@ -71,10 +72,11 @@ async function getViews(opt) {
     roleMax: "admin",
     allViews: false,
     selectKeys: ["*"],
+    includeAllPublic: false,
   };
 
   const config = Object.assign({}, def, opt);
-  const views = [];
+  const viewsProm = [];
   /**
    * Set variable to alter the template :
    * Instead of concatenating conditionally bits of
@@ -101,11 +103,20 @@ async function getViews(opt) {
   /**
    * Query
    */
-  const result = await pgRead.query(sql);
+  const promProject = getRows(sql);
+  viewsProm.push(promProject);
 
-  views.push(...result.rows);
-
-  return views;
+  if (config.includeAllPublic) {
+    const promPublic = getViewsPublic({
+      idUser: config.idUser,
+      idProjectExclude: config.idProject,
+      types: config.types,
+      selectKeys: config.selectKeys,
+    });
+    viewsProm.push(promPublic);
+  }
+  const views = await Promise.all(viewsProm);
+  return views.flat();
 }
 
 /**

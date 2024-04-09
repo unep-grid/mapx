@@ -130,6 +130,17 @@ async function tableExists(idTable, schema = "public", client = pgRead) {
 }
 
 /**
+ * Alias to query and return rows directly
+ * @param {String} query
+ * @param {pg.Client} PostgreSQL client
+ * @return {Array} rows
+ */
+async function getRows(query, pgClient = pgRead) {
+  const result = await pgClient.query(query);
+  return result.rows;
+}
+
+/**
  * Test if a columm in a table exist
  *
  * @param {String} idColumn id of the column
@@ -1088,4 +1099,5 @@ export {
   removeTableColumn,
   addTableColumn,
   updateTableCellByGid,
+  getRows,
 };

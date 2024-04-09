@@ -46,6 +46,7 @@ const rules = [
       "isGuest",
       "encrypt",
       "allViews",
+      "includeAllPublic",
       "overwriteStyle",
       "usePostgisTiles",
       "add_global",
@@ -377,19 +378,7 @@ const rules = [
   },
   /**
    * Views by project : keys
-   * TODO: selectKeysPublic not used ?
    */
-  {
-    key: "selectKeysPublic",
-    test: (d) => {
-      d = asArray(d);
-      isValid = d.reduce((a, x) => a && viewKeysPublic.indexOf(x) > -1, true);
-      return {
-        valid: isValid,
-        value: d.length === 0 ? [viewKeysPublic[0]] : d,
-      };
-    },
-  },
   {
     key: ["selectKeys", "viewKeys"],
     test: (d) => {
