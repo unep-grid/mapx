@@ -184,7 +184,7 @@ MapX resolvers available in app only
     * [.move_view_up(opt)](#MapxResolversApp+move_view_up) ⇒ <code>Boolean</code>
     * [.move_view_down(opt)](#MapxResolversApp+move_view_down) ⇒ <code>Boolean</code>
     * [.table_editor_open(opt)](#MapxResolversApp+table_editor_open) ⇒ <code>Object</code>
-    * [.table_editor_close()](#MapxResolversApp+table_editor_close)
+    * [.table_editor_close(opt)](#MapxResolversApp+table_editor_close) ⇒ <code>Object</code>
     * [.table_editor_exec(opt)](#MapxResolversApp+table_editor_exec) ⇒ <code>Any</code>
     * [.get_sources_list_edit()](#MapxResolversApp+get_sources_list_edit) ⇒ <code>Array</code>
     * [.set_panel_left_visibility(opt)](#MapxResolversStatic+set_panel_left_visibility) ⇒ <code>Boolean</code>
@@ -643,7 +643,7 @@ Move view down
 <a name="MapxResolversApp+table_editor_open"></a>
 
 #### mapxResolversApp.table\_editor\_open(opt) ⇒ <code>Object</code>
-Show table editor ( require log in
+Show table editor ( require log in )
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 **Returns**: <code>Object</code> - instance state  
@@ -651,14 +651,21 @@ Show table editor ( require log in
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
-| opt.idTable | <code>String</code> | Id of the table to edit |
+| opt.id_table | <code>String</code> | id of the table to edit |
 
 <a name="MapxResolversApp+table_editor_close"></a>
 
-#### mapxResolversApp.table\_editor\_close()
+#### mapxResolversApp.table\_editor\_close(opt) ⇒ <code>Object</code>
 Close table editor
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+**Returns**: <code>Object</code> - instance state  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.id_table | <code>String</code> | id of the table to close |
+
 <a name="MapxResolversApp+table_editor_exec"></a>
 
 #### mapxResolversApp.table\_editor\_exec(opt) ⇒ <code>Any</code>
@@ -671,7 +678,7 @@ Initially for testing purposes. May cause data loss.
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
-| opt.idTable | <code>String</code> | Id of the table to edit |
+| opt.id_table | <code>String</code> | Id of the table to edit |
 | opt.method | <code>String</code> | Method name |
 | opt.value | <code>Object</code> | Method arguments |
 

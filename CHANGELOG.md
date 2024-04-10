@@ -1,3 +1,16 @@
+  - [1.13.5-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.5-alpha.2) 
+    
+    - StoryMap editor, issue #525 + removing blocking code
+
+        - Story views are dynamically fetched when the user open the dropdown menu, no more blocking R code for that specific feature,
+        - The list includes public views. Server handler has been adapted,
+        - Non-available views are building/create options, and are fetched. Server handler has been adapted,
+        - Options can be created by copy-pasting view id, if valid ( side effect of the option creation part ) ,
+        - Schema has been modified : from array of object to array of string ( view id ), cleaner UI,
+        - The schema builder is now used only for translation and feature a converter from the previous format to the new one (see previous point ),
+        - Search match includes date, title, project title and description,
+        - The [story] label is not kept, as it's too complex to keep that up to date dynamically, especially if the story is built non linearly. But if required, a post-script could be included in the select_auto views resolver,
+
   - [1.13.5-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.5-alpha.1) 
 
     - MapComposer
