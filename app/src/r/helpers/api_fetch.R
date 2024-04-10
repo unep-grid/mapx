@@ -126,10 +126,16 @@ mxApiPost <- function(route, listParam) {
   return(out)
 }
 
+
+#' Get all public views.
+# @note : probably better to use mxApiGetViews with includeAllPublic
+#'
+#'
 mxApiGetViewsAllPublicProject <- function(
   idUser,
   idProject,
   idProjectExclude,
+  filterViewsByRoleMax,
   token,
   language = c("en"),
   types = c("vt", "cc", "rt"),
@@ -140,6 +146,7 @@ mxApiGetViewsAllPublicProject <- function(
     idUser = idUser,
     idProject = idProject,
     idProjectExclude = idProjectExclude,
+    filterViewsByRoleMax = filterViewsByRoleMax, ,
     token = token,
     language = language,
     selectKeys = keys,
@@ -149,7 +156,8 @@ mxApiGetViewsAllPublicProject <- function(
   return(res$views)
 }
 
-
+#' Get views
+#'
 mxApiGetViews <- function(
   idUser = NULL,
   idViews = NULL,
@@ -157,12 +165,10 @@ mxApiGetViews <- function(
   token = "",
   collections = NULL,
   collectionsSelectOperator = "ANY",
+  filterViewsByRoleMax,
   keys = "*",
   types = c("vt", "sm", "cc", "rt"),
-  allProjects = FALSE,
-  allReaders = FALSE,
-  rolesInProject = list(public = T, member = F, publisher = F, admin = F),
-  filterViewsByRoleMax = "admin",
+  includeAllPublic = FALSE,
   language = "en"
 ) {
   route <- .get(config, c("api", "routes", "getViewsListByProject"))
@@ -173,7 +179,9 @@ mxApiGetViews <- function(
     selectKeys = keys,
     idViews = idViews,
     language = language,
+    includeAllPublic = includeAllPublic,
     collections = collections,
+    collectionsSelectOperator = collectionsSelectOperator,
     types = types
   ))
   return(res$views)

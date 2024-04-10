@@ -3,15 +3,21 @@ import { el } from "./../el_mapx";
 import { isEmpty, isArray, isObject } from "./../is_test/index.js";
 import TomSelect from "tom-select";
 import { getConfig } from "../select_auto/utils.js";
-import { deltaMerge } from "../mx_helper_utils_json";
 
-JSONEditor.defaults.resolvers.unshift(function (schema) {
-  const options = schema.mx_options;
-  const isMxOptions = isObject(options);
+JSONEditor.defaults.resolvers.unshift((schema) => {
+  const { type, format, mx_options } = schema;
+  const supported = ["string", "array"];
+  const isMxOptions = isObject(mx_options);
+
   if (!isMxOptions) {
     return;
   }
-  if (options.renderer === "tom-select") {
+
+  const isFormat = supported.includes(type) && format === "tom-select";
+  const isRenderer = mx_options.renderer === "tom-select";
+  const isSupported = isFormat || isRenderer;
+
+  if (isSupported) {
     return "tomSelectAuto";
   }
 });
@@ -30,8 +36,9 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     editor.error_holder = document.createElement("div");
 
     const { schema } = editor;
+    const { mx_options } = schema;
 
-    const config = await editor._build_config(schema.mx_options);
+    const config = await editor._build_config(mx_options);
 
     if (editor.schema.description) {
       editor.description = editor.theme.getDescription(
@@ -74,7 +81,10 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
       return;
     }
 
-    await editor.input.ts._update();
+    if (editor.input.ts._update) {
+      await editor.input.ts._update();
+    }
+
     editor._on_ready();
   }
 
@@ -88,6 +98,7 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
 
   _get_config_patch(options) {
     const { maxItems, watch, loader } = options;
+
     switch (loader) {
       case "views":
         const { includeAllPublic } = options;
@@ -153,7 +164,7 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     super.destroy();
   }
 
-  setValue(value) {
+  async setValue(value) {
     const editor = this;
     const { ts } = editor?.input || {};
     const isEmptyValue =
@@ -165,6 +176,12 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
      * Not ready if init time or watched editor value changed
      */
     if (editor._is_ready) {
+      for (const value of valueArray) {
+        const opt = ts.getOption(value);
+        if (!opt) {
+          await new Promise((resolve) => ts.createItem(value, resolve));
+        }
+      }
       ts.setValue(valueArray);
     } else {
       editor._queued_value = valueArray;
@@ -177,7 +194,9 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
    */
   _refresh_value() {
     const editor = this;
-    editor.value = editor.input?.ts?.getValue();
+    const { schema } = editor;
+    const def = schema.type === "array" ? [] : "";
+    editor.value = editor.input?.ts?.getValue() || def;
   }
   /**
    *

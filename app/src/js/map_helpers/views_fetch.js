@@ -24,6 +24,7 @@ export async function fetchViews(o) {
     "roleMax",
     "allViews",
     "includeAllPublic",
+    "types",
   ];
 
   const def = {
@@ -41,6 +42,7 @@ export async function fetchViews(o) {
     roleMax: "",
     allViews: false,
     includeAllPublic: false,
+    types: ["vt", "rt", "cc", "sm"],
   };
   const opt = Object.assign({}, def, o);
 
@@ -90,7 +92,7 @@ export async function fetchViews(o) {
   for (let id of queryItems) {
     url.searchParams.set(id, opt[id]);
   }
-
+  
   const data = await fetchJsonProgress(url, {
     onProgress: opt.onProgress || onProgress,
     onError: opt.onError || onError,

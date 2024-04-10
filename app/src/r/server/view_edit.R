@@ -14,6 +14,7 @@ observe({
     }
 
     isolate({
+
       isGuest <- isGuestUser()
       userData <- reactUser$data
       idUser <- userData$id
@@ -582,6 +583,7 @@ observe({
               labelDictKey = "schema_story_tips_title",
               open = FALSE
             )
+
             mxModal(
               id = "modalViewEdit",
               title = sprintf(d("view_edit_story_modal_title", language), viewTitle),
@@ -594,8 +596,9 @@ observe({
               ),
               buttons = btnList,
               textCloseButton = d("btn_close", language),
-              removeCloseButton = T
+              removeCloseButton = TRUE
             )
+
           },
           "btn_opt_edit_style" = {
             if (!viewIsEditable) {

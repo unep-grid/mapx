@@ -21,6 +21,7 @@ const validateParamsHandler = getParamsValidator({
     "email",
     "allViews",
     "includeAllPublic",
+    "types",
   ],
 });
 

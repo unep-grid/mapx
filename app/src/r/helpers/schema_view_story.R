@@ -1,4 +1,4 @@
-mxSchemaViewStory <- function(view, views, language) {
+mxSchemaViewStory <- function(view, language) {
   if (isEmpty(view)) {
     return()
   }
@@ -176,34 +176,17 @@ mxSchemaViewStory <- function(view, views, language) {
   #
   stepMapViews <- list(
     type = "array",
-    # format = "table",
     title = tt("schema_story_views_activate"),
-    options = list(
-      collapsed = TRUE,
-      disable_array_delete_all_rows = TRUE,
-      disable_array_delete_last_row = TRUE
-    ),
     items = list(
-      type = "object",
-      title = tt("view"),
-      properties = list(
-        view = list(
-          title = tt("view"),
-          type = "string",
-          minLength = 1,
-          enum = as.list(as.character(views)),
-          format = "selectizeSingle",
-          options = list(
-            enum_titles = names(views),
-            selectize_options = list(
-              #
-              # create = TRUE is HARDCODED in jsoneditor
-              #
-              create = FALSE
-            )
-          )
-        )
-      )
+      type = "string"
+    ),
+    maxItems = 10,
+    minItems = 0,
+    mx_options = list(
+      renderer = "tom-select",
+      loader = "views",
+      includeAllPublic = TRUE,
+      types = list("vt", "rt", "cc")
     )
   )
 
@@ -650,8 +633,8 @@ mxSchemaViewStory <- function(view, views, language) {
     ),
     properties = list(
       name = stepName,
-      slides = stepSlide,
       views = stepMapViews,
+      slides = stepSlide,
       base_layer = stepBaseLayer,
       position = stepMapPosition,
       animation = stepMapAnimation,

@@ -179,6 +179,16 @@ tr {
   z-index: -1000;
 }
 
+.mx-text-ellipsis {
+  text-decoration: none;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 80%;
+  height: 32px;
+}
+
 .mx-hide-if-empty:empty {
   display: none;
 }
@@ -227,7 +237,6 @@ tr {
   margin-top: 10px;
   margin-bottom: 5px;
   display: flex;
-  flex-wrap: wrap;
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
@@ -876,19 +885,6 @@ tr {
   transition: transform 0.3s ease-in-out;
 }
 
-/**
-*
-*/
-
-.mx-text-ellipsis {
-  text-decoration: none;
-  text-overflow: ellipsis;
-  display: block;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 80%;
-  height: 32px;
-}
 
 /**
 * Filter switch operator

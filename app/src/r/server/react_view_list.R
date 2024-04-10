@@ -52,7 +52,15 @@ reactViewsCompact <- reactive({
       collections = collections,
       collectionsSelectOperator = collectionsSelectOperator,
       language = language,
-      keys = c("id", "pid", "type", "project", "_edit", "_title", "_source")
+      keys = c(
+        "id",
+        "pid",
+        "type",
+        "project",
+        "_edit",
+        "_title",
+        "_source"
+      )
     )
   }
 
@@ -69,54 +77,35 @@ reactViewsListIdAll <- reactive({
   idUser <- userData$id
   token <- reactUser$token
 
-  timerFetchPublic <- mxTimeDiff("Fetching all view public")
-  viewsPublic <- mxApiGetViewsAllPublicProject(
-    idUser = idUser,
-    idProject = idProject,
-    idProjectExclude = idProject,
-    types = c("vt", "cc", "rt"),
-    token = token,
-    language = language,
-    keys = c("id", "_title", "_title_project")
-  )
-  mxTimeDiff(timerFetchPublic)
-
   timerFetchProject <- mxTimeDiff("Fetching views project")
-  viewsProject <- mxApiGetViews(
+
+  views <- mxApiGetViews(
     idUser = idUser,
     idProject = idProject,
+    includeAllPublic = TRUE,
     token = token,
     types = c("vt", "cc", "rt"),
     language = language,
     keys = c("id", "_title", "_title_project")
   )
+
   mxTimeDiff(timerFetchProject)
 
-  timer <- mxTimeDiff("Fetching all view: post process")
+  timerPostProcess <- mxTimeDiff("Fetching all view: post process")
 
-  viewsProjectList <- vapply(viewsProject, function(v) {
+  viewsProjectList <- vapply(views, function(v) {
     v$id
   }, character(1))
-  viewsProjectTitle <- vapply(viewsProject, function(v) {
-    " [ " + v$`_title_project` + " ] " + v$`_title`
-  }, character(1))
-  viewsPublicList <- vapply(viewsPublic, function(v) {
-    v$id
-  }, character(1))
-  viewsPublicTitle <- vapply(viewsPublic, function(v) {
+  viewsProjectTitle <- vapply(views, function(v) {
     " [ " + v$`_title_project` + " ] " + v$`_title`
   }, character(1))
 
-  names(viewsPublicList) <- viewsPublicTitle
   names(viewsProjectList) <- viewsProjectTitle
 
   viewsProjectList <- viewsProjectList[order(names(viewsProjectList))]
-  viewsPublicList <- viewsPublicList[order(names(viewsPublicList))]
 
-  out <- c(viewsProjectList, viewsPublicList)
-
-  mxTimeDiff(timer)
-  return(out)
+  mxTimeDiff(timerPostProcess)
+  return(viewsProjectList)
 })
 
 reactViewsCompactListVector <- reactive({

@@ -2076,7 +2076,7 @@ export async function getViewAuto(idView) {
   const view = getView(idView) || (await getViewRemote(idView));
   const valid = isView(view);
   if (!valid) {
-    throw new Error("getViewAuto failed  to get: ", idView);
+    throw new Error(`View not found: ${JSON.stringify(idView)}`);
   }
   const views = getViews();
 

@@ -320,16 +320,20 @@ function getStory() {
  * Clear vVisible view, e.g. before update / restart / preview
  */
 async function clearViewsVisible() {
-  const map = getMap();
-  map.stop();
-  const state = getState();
-  const elLegendContainer = state?.buttonLegend?.elPanelContent;
-  const vVisible = getViewsLayersVisibles();
-  for (const v of vVisible) {
-    await viewClear({
-      idView: v,
-      elLegendContainer,
-    });
+  try {
+    const map = getMap();
+    map.stop();
+    const state = getState();
+    const elLegendContainer = state?.buttonLegend?.elPanelContent;
+    const vVisible = getViewsLayersVisibles();
+    for (const v of vVisible) {
+      await viewClear({
+        idView: v,
+        elLegendContainer,
+      });
+    }
+  } catch (e) {
+    console.warn(e);
   }
 }
 
@@ -1608,130 +1612,134 @@ export function storySetTransform(o) {
 }
 
 export async function storyPlayStep(stepNum) {
-  const state = getState();
-  if (!state.enable) {
-    return;
-  }
-
-  const story = getStory();
-  const settings = getSettings();
-  const steps = path(story, "steps", []);
-  const elLegendContainer = state?.buttonLegend?.elPanelContent;
-  const map = state.map;
-  if (steps.length === 0) {
-    return;
-  }
-  const step = steps[stepNum] || {};
-  if (isEmpty(step)) {
-    return;
-  }
-  map.stop();
-  events.fire("story_step");
-  /**
-   * retrieve step information
-   */
-  state.currentStep = stepNum;
-  state.stepActive = stepNum;
-  state.step = step;
-
-  const pos = step.position;
-  const anim = Object.assign(
-    {},
-    {
-      duration: 1000,
-      easing: "easeIn",
-      easing_power: 1,
-      method: "easeTo",
-    },
-    step.animation,
-  );
-  const easing = easingFun({
-    type: anim.easing,
-    power: anim.easing_power,
-  });
-  /**
-   * Set base map mode
-   */
-  if (step.base_layer) {
-    const actionAerial = step.base_layer.add_aerial ? "show" : "hide";
-    const actionTerrain = step.base_layer.add_3d_terrain ? "show" : "hide";
-    state.ctrlAerial.action(actionAerial);
-    state.ctrlMode3d.action(actionTerrain);
-  }
-
-  /**
-   * Fly to position
-   */
-  if (anim.method === "fitBounds") {
-    for (const p of ["w", "e", "s", "n"]) {
-      if (isEmpty(pos[p])) {
-        pos[p] = 0;
-        console.error(`Missing position ${p} to fitbounds`);
-      }
+  try {
+    const state = getState();
+    if (!state.enable) {
+      return;
     }
-    map.fitBounds([pos.w, pos.s, pos.e, pos.n], {
-      duration: anim.duration,
-      pitch: pos.pitch,
-      easing: easing,
+
+    const story = getStory();
+    const settings = getSettings();
+    const steps = path(story, "steps", []);
+    const elLegendContainer = state?.buttonLegend?.elPanelContent;
+    const map = state.map;
+    if (steps.length === 0) {
+      return;
+    }
+    const step = steps[stepNum] || {};
+    if (isEmpty(step)) {
+      return;
+    }
+    map.stop();
+    events.fire("story_step");
+    /**
+     * retrieve step information
+     */
+    state.currentStep = stepNum;
+    state.stepActive = stepNum;
+    state.step = step;
+
+    const pos = step.position;
+    const anim = Object.assign(
+      {},
+      {
+        duration: 1000,
+        easing: "easeIn",
+        easing_power: 1,
+        method: "easeTo",
+      },
+      step.animation,
+    );
+    const easing = easingFun({
+      type: anim.easing,
+      power: anim.easing_power,
     });
-  } else {
-    map[anim.method]({
-      duration: anim.duration,
-      zoom: pos.z,
-      easing: easing,
-      bearing: pos.bearing,
-      pitch: pos.pitch,
-      center: [pos.lng, pos.lat],
+    /**
+     * Set base map mode
+     */
+    if (step.base_layer) {
+      const actionAerial = step.base_layer.add_aerial ? "show" : "hide";
+      const actionTerrain = step.base_layer.add_3d_terrain ? "show" : "hide";
+      state.ctrlAerial.action(actionAerial);
+      state.ctrlMode3d.action(actionTerrain);
+    }
+
+    /**
+     * Fly to position
+     */
+    if (anim.method === "fitBounds") {
+      for (const p of ["w", "e", "s", "n"]) {
+        if (isEmpty(pos[p])) {
+          pos[p] = 0;
+          console.error(`Missing position ${p} to fitbounds`);
+        }
+      }
+      map.fitBounds([pos.w, pos.s, pos.e, pos.n], {
+        duration: anim.duration,
+        pitch: pos.pitch,
+        easing: easing,
+      });
+    } else {
+      map[anim.method]({
+        duration: anim.duration,
+        zoom: pos.z,
+        easing: easing,
+        bearing: pos.bearing,
+        pitch: pos.pitch,
+        center: [pos.lng, pos.lat],
+      });
+    }
+
+    /**
+     * Views set
+     */
+    const vStep = step.views.map(getStepViewId);
+    const vVisible = getViewsLayersVisibles();
+    const vToRemove = getArrayDiff(vVisible, vStep);
+    const vToAdd = getArrayDiff(vStep, vVisible);
+
+    /**
+     * Add views if not alredy there
+     */
+    let i = 0;
+    for (const v of vToAdd) {
+      const vPrevious = vStep[i++ - 1] || settingsMapx.layerBefore;
+      await viewRender({
+        idView: v,
+        openView: false,
+        addTitle: true,
+        before: vPrevious,
+        elLegendContainer,
+      });
+    }
+
+    /**
+     * Remove views not used
+     */
+    for (const v of vToRemove) {
+      await viewClear({
+        idView: v,
+        elLegendContainer,
+      });
+    }
+
+    viewsLayersOrderUpdate({
+      order: vStep,
+      origin: "story_map",
     });
+
+    await viewsLegendsOrderUpdate({
+      elContainer: elLegendContainer,
+      order: vStep,
+    });
+
+    /**
+     * Update panels behaviour
+     */
+    await updatePanelBehaviour(settings, step);
+  } catch (e) {
+    console.warn(e);
   }
-
-  /**
-   * Views set
-   */
-  const vStep = step.views.map((v) => v.view);
-  const vVisible = getViewsLayersVisibles();
-  const vToRemove = getArrayDiff(vVisible, vStep);
-  const vToAdd = getArrayDiff(vStep, vVisible);
-
-  /**
-   * Add views if not alredy there
-   */
-  let i = 0;
-  for (const v of vToAdd) {
-    const vPrevious = vStep[i++ - 1] || settingsMapx.layerBefore;
-    await viewRender({
-      idView: v,
-      openView: false,
-      addTitle: true,
-      before: vPrevious,
-      elLegendContainer,
-    });
-  }
-
-  /**
-   * Remove views not used
-   */
-  for (const v of vToRemove) {
-    await viewClear({
-      idView: v,
-      elLegendContainer,
-    });
-  }
-
-  viewsLayersOrderUpdate({
-    order: vStep,
-    origin: "story_map",
-  });
-
-  await viewsLegendsOrderUpdate({
-    elContainer: elLegendContainer,
-    order: vStep,
-  });
-
-  /**
-   * Update panels behaviour
-   */
-  await updatePanelBehaviour(settings, step);
 }
 
 /**
@@ -1759,7 +1767,7 @@ async function updatePanelBehaviour(settings, step) {
     return;
   }
 
-  const idViews = path(step, "views", []).map((v) => v.view || v);
+  const idViews = path(step, "views", []).map(getStepViewId);
 
   /**
    * Set dashboard panel behaviour

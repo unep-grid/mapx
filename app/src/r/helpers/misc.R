@@ -106,23 +106,6 @@ mxSource <- function(files = "", base = ".", env = .GlobalEnv) {
 }
 
 
-##' Source additional server files
-##' @param files Vector of files to source
-##' @export
-# mxSourceSrv <- function(files=NULL){
-
-# conf <- mxGetDefaultConfig()
-# if(isEmpty(files)) return;
-
-# for(f in files){
-# source(file.path(conf[["srvPath"]],f), local=parent.frame())
-# }
-
-# }
-
-
-
-
 #' Get md5 of a file or R object
 #' @param f File or Object
 #' @return md5 sum

@@ -30,6 +30,8 @@ export const jed = {
   },
 };
 
+window.jed = jed;
+
 /**
  * @param {Object} o options
  * @param {String} o.id Id of target element
@@ -111,6 +113,8 @@ export async function jedInit(o) {
   elJed.dataset.jed_id = id;
   const editor = new JSONEditor(elJed, opt_final);
   jed.editors[id] = editor;
+
+  
 
   /**
    * Translate not available in custom validator (not binded)..

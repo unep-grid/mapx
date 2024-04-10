@@ -7,18 +7,46 @@ observeEvent(input$storyEdit_init, {
     return()
   }
 
+
   language <- reactData$language
   story <- .get(view, c("data", "story"))
   hasStory <- isNotEmpty(story)
-  views <- reactViewsListIdAll()
-  idViewsStory <- unique(unlist(lapply(story$steps, `[[`, "views")))
-  viewsStory <- mxDbGetViewsTitle(idViewsStory, prefix = "[ story ]")
 
   schema <- mxSchemaViewStory(
     view = view,
-    views = c(viewsStory, views),
     language = language
   )
+
+
+  if (hasStory) {
+    # NOTE: Schema update.
+    # views used to be stored in full inside the story
+    # to avoid missing view. This was abandoned and the view id
+    # was kept instead. All story have been updated.
+    # Now, the view id is stored in the array, outside an object.
+    # To update progressively, we convert the view level here:
+    # Convert view's level
+    # [{view:<idview>}] -> [<idview>]
+    #
+
+    story$steps <- lapply(story$steps, function(step) {
+      if (is.list(step$views)) {
+        step$views <- lapply(step$views, function(view) {
+          if (is.list(view) && isNotEmpty(view$view)) {
+            return(view$view)
+          } else {
+            return(view)
+          }
+        })
+      }
+      return(step)
+    })
+  }
+
+
+
+
+
 
   viewTimeStamp <- as.numeric(
     as.POSIXct(view$date_modified, format = "%Y-%m-%d%tT%T", tz = "UTC")
@@ -34,6 +62,7 @@ observeEvent(input$storyEdit_init, {
       draftAutoSaveDbTimestamp = viewTimeStamp
     )
   )
+
 })
 
 #
@@ -104,7 +133,6 @@ observeEvent(input$storyEdit_values, {
   language <- reactData$language
   project <- reactData$project
   view <- reactData$viewDataEdited
-  allViews <- reactViewsListIdAll()
   isEditable <- view[["_edit"]] && view[["type"]] == "sm"
   userData <- reactUser$data
   userRole <- getUserRole()
