@@ -60,14 +60,14 @@ https://asciiflow.com/#/local/mapx_SDK
 
 # Statement of Need
 
-[MapX](https://unepgrid.ch/en/mapx) is a geospatial platform managed by [UNEP/GRID-Geneva](https://www.unepgrid.ch/) that enables the management, analysis, and visualization of a curated catalog of scientific geospatial data on natural resources and the environment [@lacroix_mapx_2019]. Its main objective is to promote the use of such data in environmental decision-making for sustainable use of natural resources, in alignment with the United Nations Environment Program's mandate [@unep_site]. MapX facilitates access to a global public catalog of high-quality spatial information on environmental topics such as biodiversity planning, chemicals management, climate change, disaster risk reduction, environmental security, extractive industries, land use planning, and renewable energy. 
+[MapX](https://unepgrid.ch/en/mapx) is a geospatial platform managed by [UNEP/GRID-Geneva](https://www.unepgrid.ch/) that enables the management, analysis, and visualization of a catalog of scientific geospatial data on natural resources and the environment [@lacroix_mapx_2019]. Its main objective is to promote the use of such data in environmental decision-making for sustainable use of natural resources, in alignment with the United Nations Environment Program's mandate [@unep_site]. MapX facilitates access to a global public catalog of high-quality spatial information on environmental topics such as biodiversity planning, chemicals management, climate change, disaster risk reduction, environmental security, extractive industries, land use planning, and renewable energy. 
 
 Currently, MapX hosts over 2000 curated GIS layers and tables, sourced from reputable data providers such as the @un_gis_site, @jrc_site, @sedac_site, @wcmc_site, @nasa_data_site, @wri_site, @protected_planet_site, and many more, covering needs from local to global scales. To date, 4000 registered scientists and publishers have created accounts on MapX. Notably, UNEP partners and other institutions collaborate with, or use MapX to contextualize their work and to promote the outcomes of their projects within a geospatial framework.
 
 In this context, the MapX SDK has a crucial role:
 
 1. **Scientific Data Diffusion**
-   - It facilitates the integration of scientific, curated, up-to-date data into web pages or applications, ensuring that developers have seamless access to high-quality geospatial information.
+   - It facilitates the integration of scientific data, into web pages or applications, ensuring that developers have seamless access to high-quality geospatial information.
 
 2. **Abstraction**
    - It offers an abstraction layer for integrating complex geospatial visualizations and interactive dashboards. This abstraction simplifies the process of incorporating advanced data representations into user interfaces.

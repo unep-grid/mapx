@@ -145,9 +145,8 @@ a Creative Commons Attribution 4.0 International License (CC BY
   <p><ext-link ext-link-type="uri" xlink:href="https://unepgrid.ch/en/mapx">MapX</ext-link>
   is a geospatial platform managed by
   <ext-link ext-link-type="uri" xlink:href="https://www.unepgrid.ch/">UNEP/GRID-Geneva</ext-link>
-  that enables the management, analysis, and visualization of a curated
-  catalog of scientific geospatial data on natural resources and the
-  environment
+  that enables the management, analysis, and visualization of a catalog
+  of scientific geospatial data on natural resources and the environment
   (<xref alt="Lacroix et al., 2019" rid="ref-lacroix_mapx_2019" ref-type="bibr">Lacroix
   et al., 2019</xref>). Its main objective is to promote the use of such
   data in environmental decision-making for sustainable use of natural
@@ -186,10 +185,9 @@ a Creative Commons Attribution 4.0 International License (CC BY
       <p><bold>Scientific Data Diffusion</bold></p>
       <list list-type="bullet">
         <list-item>
-          <p>It facilitates the integration of scientific, curated,
-          up-to-date data into web pages or applications, ensuring that
-          developers have seamless access to high-quality geospatial
-          information.</p>
+          <p>It facilitates the integration of scientific data, into web
+          pages or applications, ensuring that developers have seamless
+          access to high-quality geospatial information.</p>
         </list-item>
       </list>
     </list-item>
