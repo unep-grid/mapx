@@ -896,6 +896,7 @@ class NestedList {
   clearHistory() {
     this.history.length = 0;
     this.setHistoryStored([]);
+    this.resetState();
   }
   clearMeta() {
     this.meta.length = 0;
