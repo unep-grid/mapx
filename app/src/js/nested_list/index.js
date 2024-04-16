@@ -57,16 +57,23 @@ class NestedList {
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
-      callback: li.handleContextClick,
+      callback: li.handleContext,
       group: "base",
       type: ["contextmenu"],
     });
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
-      callback: handleMouseDown,
+      callback: handleDrag,
       group: "base",
-      type: "mousedown",
+      type: ["mousedown"],
+    });
+    li.listenerStore.addListener({
+      target: li.elRoot,
+      bind: li,
+      callback: handleClick,
+      group: "base",
+      type: ["click"],
     });
   }
   stopListening() {
@@ -887,16 +894,20 @@ class NestedList {
       hasDiff = li.areStateDifferent(lastState, state);
     }
     if (hasDiff) {
-      li.history.push(state);
+      li.historyAdd(state);
     }
+  }
+  historyAdd(state) {
+    const li = this;
+    li.history.push(state);
     if (li.history.length > li.opt.maxHistoryLength) {
       li.history.splice(0, 1);
     }
   }
   clearHistory() {
-    this.history.length = 0;
-    this.setHistoryStored([]);
-    this.resetState();
+    const li = this;
+    li.history.length = 0;
+    this.setHistoryStored(this.history);
   }
   clearMeta() {
     this.meta.length = 0;
@@ -1248,10 +1259,14 @@ class NestedList {
   }
   isDragHandle(el) {
     const li = this;
+    const isValidEl = li.isElement(el);
+
+    if (!isValidEl) {
+      return;
+    }
     const isValidHandle =
-      li.isElement(el) &&
-      (el.classList.contains(li.opt.class.dragHandle) ||
-        el.classList.contains(li.opt.classDragHandle));
+      el.classList.contains(li.opt.class.dragHandle) ||
+      el.classList.contains(li.opt.classDragHandle);
     return isValidHandle;
   }
   isItem(el) {
@@ -1408,7 +1423,7 @@ class NestedList {
   /**
    * Click in context menu event listener
    */
-  handleContextClick(evt) {
+  handleContext(evt) {
     const li = this;
     evt.preventDefault();
     if (li.contextMenu instanceof ContextMenu) {
@@ -1425,103 +1440,97 @@ export { NestedList };
 /**
  * Mouse click
  */
-function handleMouseClick(evt) {
+function handleClick(evt) {
+  console.log("handle click");
   const li = this;
   const elTarget = li.getTarget(evt.target);
   const idAction = elTarget.dataset.li_id_action;
   const idType = elTarget.dataset.li_event_type;
-  const isValid =
-    !li.drag.el &&
-    idType === "click" &&
-    idAction &&
-    idAction === "li_group_toggle" &&
-    li.isTarget(elTarget);
-  if (isValid) {
-    evt.stopPropagation();
-    evt.stopImmediatePropagation();
-    li.groupToggle(elTarget, true);
+  const isValid = idType === "click" && li.isTarget(elTarget);
+
+  if (!isValid) {
+    return;
+  }
+  evt.stopPropagation();
+  evt.stopImmediatePropagation();
+
+  switch (idAction) {
+    case "li_group_toggle":
+      li.groupToggle(elTarget, true);
+      break;
+    default:
+      console.warn("Click action not defined", idAction);
   }
 }
+
 /**
  * Mouse down
  */
-function handleMouseDown(evt) {
+function handleDrag(evt) {
   const li = this;
   const elTarget = li.getTarget(evt.target);
   const isHandle = li.isDragHandle(evt.target);
+
+  if (!isHandle) {
+    return;
+  }
   /**
    * Case when drag was not properly finished
    */
   li.setDragClean();
+  /**
+   * Prepare the UI for global change : style, cursore,
+   * temporary register of drag item...
+   */
+  li.setDragInit(elTarget);
 
-  if (!isHandle) {
-    /**
-     * It's not a valid handle, add listener
-     * mouseup to continue to a full 'click'
-     */
-    li.listenerStore.addListenerOnce({
-      target: evt.target,
-      bind: li,
-      callback: handleMouseClick,
-      group: "base",
-      type: "mouseup",
-    });
-  } else {
-    /**
-     * Prepare the UI for global change : style, cursore,
-     * temporary register of drag item...
-     */
+  /**
+   * Draggable
+   */
+  li.listenerStore.addListenerOnce({
+    target: elTarget,
+    bind: li,
+    callback: handleDragStart,
+    group: "item_dragging",
+    type: ["dragstart"],
+  });
 
-    li.setDragInit(elTarget);
+  li.listenerStore.addListenerOnce({
+    target: window,
+    bind: li,
+    callback: handleDragEnd,
+    group: "item_dragging",
+    type: ["dragend"],
+  });
 
-    /**
-     * Draggable
-     */
-    li.listenerStore.addListenerOnce({
-      target: elTarget,
-      bind: li,
-      callback: handleDragStart,
-      group: "item_dragging",
-      type: ["dragstart"],
-    });
+  /*
+   * Drop zones
+   */
+  li.listenerStore.addListener({
+    target: li.elRoot,
+    bind: li,
+    callback: handleDragEnter,
+    group: "item_dragging",
+    type: ["dragenter"],
+  });
 
-    li.listenerStore.addListenerOnce({
-      target: window,
-      bind: li,
-      callback: handleDragEnd,
-      group: "item_dragging",
-      type: ["dragend"],
-    });
+  li.listenerStore.addListener({
+    target: li.elRoot,
+    bind: li,
+    group: "item_dragging",
+    callback: handleDragOver,
+    throttle: true,
+    throttleTime: 200,
+    type: ["dragover"],
+  });
 
-    /*
-     * Drop zones
-     */
-    li.listenerStore.addListener({
-      target: li.elRoot,
-      bind: li,
-      callback: handleDragEnter,
-      group: "item_dragging",
-      type: ["dragenter"],
-    });
-
-    li.listenerStore.addListener({
-      target: li.elRoot,
-      bind: li,
-      group: "item_dragging",
-      callback: handleDragOver,
-      throttle: true,
-      throttleTime: 200,
-      type: ["dragover"],
-    });
-
-    li.listenerStore.addListener({
-      target: elTarget,
-      bind: li,
-      callback: handleDrop,
-      group: "item_dragging",
-      type: ["drop"],
-    });
-  }
+  li.listenerStore.addListener({
+    target: elTarget,
+    bind: li,
+    callback: handleDrop,
+    group: "item_dragging",
+    type: ["drop"],
+  });
 }
 
 /**

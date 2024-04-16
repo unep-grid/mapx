@@ -112,15 +112,6 @@ const contextMenuItems = [
   },
   {
     forType: ['root', 'group', 'item'],
-    action: 'cm_global_clear_history',
-    label: 'cm_global_clear_history',
-    ui: 'button',
-    condition: function() {
-      return !this.isModeFrozen() && this.hasHistory();
-    }
-  },
-  {
-    forType: ['root', 'group', 'item'],
     action: 'cm_global_reset_state',
     label: 'cm_global_reset_state',
     ui: 'button',
