@@ -1,3 +1,17 @@
+  - [1.13.5-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.5-alpha.3) 
+
+    - JOSS paper 
+        - MapX SDK Draft 
+    - CMEMS extension BREAKING CHANGES 
+        - Refactor to handle WMTS
+        - Solve bug with calendar pick 
+        - Solve animation issue 
+        - Handle device pixel raitin / multiple matrix 
+        
+    - NestedList 
+        - Context click on group triggered a toggle of the group. Impacts all mouse/tap operation on the list, including drag, drop, context, etc...
+        - Fix #601 
+
   - [1.13.5-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.5-alpha.2) 
     
     - StoryMap editor, issue #525 + removing blocking code
