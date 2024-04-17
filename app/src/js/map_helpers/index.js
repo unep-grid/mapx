@@ -3293,6 +3293,9 @@ export function viewLink(idView, opt) {
    * Use params from original parameters
    */
   const pInit = getQueryParametersInit();
+  const pCurrent = getQueryParametersAsObject();
+  const pAll = { ...pCurrent, ...pInit };
+
   const copyInit = [
     "useMaxBounds",
     "n",
@@ -3303,10 +3306,11 @@ export function viewLink(idView, opt) {
     "zoomMax",
     "lng",
     "lat",
+    "theme",
   ];
 
   for (const i of copyInit) {
-    const v = pInit[i];
+    const v = pAll[i];
     if (isNotEmpty(v)) {
       urlView.searchParams.append(i, v);
     }
