@@ -1,3 +1,11 @@
+  - [1.13.5-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.5-alpha.4) 
+
+    - Uploader 
+        - Fix issue when uploading a GeoJSON : init not used 
+    - View Metedata 
+        - Static link from a static context : missing useMaxBounds
+
+
   - [1.13.5-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.5-alpha.3) 
 
     - JOSS paper 
