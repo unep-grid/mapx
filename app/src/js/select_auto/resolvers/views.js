@@ -31,7 +31,7 @@ export const config = {
   dropdownParent: "body",
   maxItems: 10,
   maxOptions: def.maxOptions,
-  plugins: ["remove_button"],
+  plugins: ["remove_button", "drag_drop"],
   onInitialize: null,
   create: create,
   loadThrottle: 50,
