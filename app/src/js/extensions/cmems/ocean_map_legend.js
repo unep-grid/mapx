@@ -5,39 +5,42 @@ import "../../search/style_flatpickr.less";
 import { isNotEmpty } from "../../is_test";
 import { isEmpty } from "../../is_test";
 import { isDateString } from "../../is_test";
-import { debounce, makeId, toHttps } from "../../mx_helper_misc";
+import { makeId } from "../../mx_helper_misc";
 import "./style.less";
 import { layersOrderAuto } from "../../map_helpers";
 import { settings } from "../../settings";
 
-// Define external default options
 const defaultOptions = {
   idView: null,
   map: null,
-  layerName: null,
+  variable: null,
+  dataset: null,
+  product: null,
   elInputs: null,
   elLegend: null,
   baseURL: null,
-  style: "boxfill/rainbow",
+  style: null,
   animation: true,
   elevation: 0,
   transitionDuration: 2000,
   before: settings.layerBefore,
+  dpr: window.devicePixelRatio,
+  showLayers: true,
+  showStyles: true,
 };
 
 export class TimeMapLegend {
   constructor(options) {
-    this._opt = Object.assign({}, defaultOptions, options);
+    this._opt = { ...defaultOptions, ...options };
     this._i = 0;
-    this._layers = new Set();
+    this._layers = new Array();
     this._id_anim = new Set();
-    this.next = debounce(this.next.bind(this), 500);
-    this.previous = debounce(this.previous.bind(this), 500);
   }
 
   async init() {
     await this.updateCapabilities();
     this.reset();
+    window._tm = this;
   }
 
   reset() {
@@ -100,6 +103,7 @@ export class TimeMapLegend {
     if (updateUi) {
       this._fp.setDate(time.toISO());
     }
+    this.elTime.innerText = time.toSQL();
     this.updateMapSource();
   }
 
@@ -129,7 +133,10 @@ export class TimeMapLegend {
     if (this._opt.map.getSource(id)) {
       this._opt.map.removeSource(id);
     }
-    this._layers.delete(id);
+    const pos = this._layers.indexOf(id);
+    if (pos) {
+      this._layers.splice(pos, 1);
+    }
   }
 
   clearAll() {
@@ -147,43 +154,51 @@ export class TimeMapLegend {
       this._opt.map.setPaintProperty(b, "raster-opacity", 1);
     }
 
-    if (layerA) {
-      if (!this._opt.animation) {
-        this.clear(a);
-        return;
-      }
-
-      const id_anim_opacity = setTimeout(() => {
-        if (this._opt.map.getLayer(a)) {
-          this._opt.map.setPaintProperty(a, "raster-opacity", 0);
-        }
-      }, this._opt.transitionDuration * 2);
-
-      this._id_anim.add(id_anim_opacity);
-
-      setTimeout(() => {
-        this.clear(a);
-      }, this._opt.transitionDuration * 3);
+    if (!layerA) {
+      return;
     }
+
+    if (!this._opt.animation) {
+      this.clear(a);
+      return;
+    }
+
+    const id_anim_opacity = setTimeout(() => {
+      if (this._opt.map.getLayer(a)) {
+        this._opt.map.setPaintProperty(a, "raster-opacity", 0);
+      }
+    }, this._opt.transitionDuration * 2);
+
+    this._id_anim.add(id_anim_opacity);
+
+    setTimeout(() => {
+      this.clear(a);
+    }, this._opt.transitionDuration * 3);
   }
 
   updateMapSource() {
     const selectedDate = this.getTimeISOstring();
     const selectedElevation = this?.elElevationInput?.value;
     const selectedStyle = this.elStyleInput.value;
-
-    let newWmsUrl = this.constructWmsUrl(
+    const idLayerCurrent = this._id_layer;
+    const hasOldLayer = this._opt.map.getLayer(idLayerCurrent);
+    const idLayer = [this._opt.idView || "MX-TML", makeId(15)].join("_");
+    const idBefore = hasOldLayer ? idLayerCurrent : this._opt.before;
+    const newWmsUrl = this.constructWmtsUrl(
       selectedDate,
       selectedElevation,
       selectedStyle,
     );
 
-    const idLayerCurrent = this._id_layer;
-    const idLayer = [this._opt.idView || "MX-TML", makeId(15)].join("_");
     this.clear(idLayer);
+    this.add(idLayer, newWmsUrl, idBefore);
+    this.transition(idLayerCurrent, idLayer);
 
-    const hasOldLayer = this._opt.map.getLayer(idLayerCurrent);
+    layersOrderAuto("tml");
+  }
 
+  add(idLayer, url, idBefore) {
+    const { dpr } = this._opt;
     this._opt.map.addLayer(
       {
         id: idLayer,
@@ -202,45 +217,50 @@ export class TimeMapLegend {
         },
         source: {
           type: "raster",
-          tiles: [newWmsUrl],
-          tileSize: 256,
+          tiles: [url],
+          tileSize: dpr > 1 ? 512 : 256,
         },
       },
-      hasOldLayer ? idLayerCurrent : this._opt.before,
+      idBefore,
     );
-
-    this.transition(idLayerCurrent, idLayer);
     this._id_layer = idLayer;
-    this._layers.add(idLayer);
-    layersOrderAuto("tml");
+
+    if (!this._layers.includes(idLayer)) {
+      this._layers.push(idLayer);
+    }
   }
 
   updateLegend() {
     this._opt.style = this.elStyleInput.value;
-    this._elImageLegend.src = this.getLegendUrl();
+    const url = this.getLegendUrl();
+    if (url) {
+      this._elImageLegend.src = url;
+    }
   }
 
-  constructWmsUrl(selectedDate, selectedElevation, selectedStyle) {
-    const { layerName } = this._opt;
-    const objParam = {
-      service: "WMS",
-      request: "GetMap",
-      layers: layerName,
-      styles: selectedStyle,
-      format: "image/png",
-      transparent: "true",
-      version: "1.3.0",
-      crs: "EPSG:3857",
-      width: 256,
-      height: 256,
-      colorscalerange: "-0.00001,0.00001",
-      logscale: "false",
-      time: selectedDate,
+  constructWmtsUrl(selectedDate, selectedElevation, selectedStyle) {
+    const { variable, baseURL, product, dataset, dpr } = this._opt;
+
+    const layer = `${product}/${dataset}/${variable}`;
+
+    const style = [selectedStyle, "inverse", "noclamp", "logscale"]
+      .filter(isEmpty)
+      .join(",");
+
+    const paramObject = {
+      service: "WMTS",
+      version: "1.0",
+      request: "GetTile",
+      layer: layer,
+      tilematrixset: dpr > 1 ? "EPSG:3857@2x" : "EPSG:3857",
+      style: style,
       elevation: selectedElevation,
+      time: selectedDate,
     };
-    const params = new URLSearchParams(objParam).toString();
-    const bboxCode = "&bbox={bbox-epsg-3857}";
-    const url = `${this._opt.baseURL}?${params}${bboxCode}`;
+
+    const params = new URLSearchParams(paramObject).toString();
+    const tile = "&tileMatrix={z}&tileRow={y}&tileCol={x}";
+    const url = `${baseURL}?${params}${tile}`;
     return url;
   }
 
@@ -250,7 +270,8 @@ export class TimeMapLegend {
       request: "GetCapabilities",
       version: "1.3.0",
     });
-    return `${this._opt.baseURL}?${params.toString()}`;
+    const { baseURL, product, dataset } = this._opt;
+    return `${baseURL}/${product}/${dataset}/?${params.toString()}`;
   }
 
   async parseCapabilities(xmlText) {
@@ -288,12 +309,12 @@ export class TimeMapLegend {
      *  [
      *    "title",
      *    "abstract",
-     *    "layer_names",
-     *    "layer_name",
+     *    "variables",
+     *    "variable",
      *    "styles",
      *    "elevation_default",
      *    "elevation_values",
-     *    "elevation_units",
+     *    "elevation_unit",
      *    "time_default",
      *    "time_slots",
      *  ];
@@ -305,92 +326,113 @@ export class TimeMapLegend {
   }
 
   createLayerInfo(xmlDoc) {
-    let { layerName } = this._opt;
+    let { variable } = this._opt;
 
-    const layers = Array.from(xmlDoc.querySelectorAll("Layer Layer"));
-    const layerNames = layers.map((l) => l.querySelector("Name")?.textContent);
+    /**
+     * NOTE: this should work for the prototype, but
+     * we should probably handle namespace, like (ows:<Key>)
+     * Possible solution :
+     * - getElementsByTagNameNS ?
+     * - xPath ?
+     */
+    const layers = Array.from(xmlDoc.querySelectorAll("Contents Layer"));
+    const variables = layers.map(
+      (l) => l.querySelector("VariableInformation Id")?.textContent,
+    );
 
-    if (isEmpty(layerName)) {
-      layerName = layerNames[0];
-      this._opt.layerName = layerName;
+    if (isEmpty(variable)) {
+      variable = variables[0];
+      this._opt.variable = variable;
     }
 
-    const layerExists = layerNames.includes(layerName);
+    const variableExists = variables.includes(variable);
 
-    if (!layerExists) {
-      const layersPrint = layerNames.join(",\n");
+    if (!variableExists) {
+      const variablesPrint = variables.join(",\n");
       throw new Error(
-        `Invalid layerName '${layerName}'. Available names : '${layersPrint}`,
+        `Invalid variable '${variable}' Available names : '${variablesPrint} `,
       );
     }
 
     /**
      * Get layer data
      */
-
     const layer = layers.find(
-      (l) => l.querySelector("Name")?.textContent === layerName,
+      (l) => l.querySelector("VariableInformation Id").textContent === variable,
     );
 
-    const title = layer.querySelector("Title")?.textContent;
-    const abstract = layer.querySelector("Abstract")?.textContent;
+    const dimensions = Array.from(layer.querySelectorAll("Dimension"));
 
-    const styles = Array.from(layer.querySelectorAll("Style")).map((s) => {
-      const url_legend = toHttps(
-        s
-          .querySelector("LegendURL > OnlineResource")
-          .getAttribute("xlink:href"),
-      );
+    const meta = layer.querySelector("VariableInformation");
 
-      const name = s.querySelector("Name")?.textContent;
+    const title = meta.querySelector("Name").textContent;
+    const abstract = ""; // seems to be in doc -> Themes>Theme>Theme>Title...
 
-      return {
-        name,
-        url_legend,
-      };
-    });
+    const styles = Array.from(layer.querySelectorAll("Style Identifier")).map(
+      (s) => {
+        return {
+          name: s.textContent,
+          url_legend: null,
+        };
+      },
+    );
 
-    const style = this._opt.style || out.styles[0]?.name;
+    const style = this._opt.style || styles[0]?.name;
 
     const out = {
       title,
       styles,
       abstract,
       style_default: style,
-      layer_names: Array.from(new Set(layerNames)),
-      layer_name: layerName,
+      variables: Array.from(new Set(variables)),
+      variable: variable,
     };
 
     /**
      * Elevation
      */
-    const nodeElevation = layer.querySelector("Dimension[name='elevation']");
+    const nodeElevation = dimensions.find(
+      (d) => d.querySelector("Identifier").textContent === "elevation",
+    );
 
     if (nodeElevation) {
       out.elevation_default =
-        this._opt.elevation || nodeElevation.getAttribute("default");
-      out.elevation_values = nodeElevation.textContent
-        .split(",")
-        .map((v) => v.trim());
-      out.elevation_units = nodeElevation.getAttribute("units");
+        this._opt.elevation ||
+        nodeElevation.querySelector("Default").textContent;
+
+      out.elevation_values = Array.from(
+        nodeElevation.querySelectorAll("Value"),
+      ).map((v) => v.textContent);
+
+      out.elevation_unit =
+        nodeElevation.querySelector("UnitSymbol").textContent;
     }
 
     /**
      * Time
      */
-    const nodeTime = layer.querySelector("Dimension[name='time']");
+    const nodeTime = dimensions.find(
+      (d) => d.querySelector("Identifier").textContent === "time",
+    );
 
     if (nodeTime) {
-      const timeDefault = nodeTime.getAttribute("default");
-      out.time_default = DateTime.fromISO(timeDefault).toUTC();
-      out.time_slots = this.parseTimeSlots(nodeTime);
+      const validInterval =
+        nodeTime.querySelector("UOM").textContent === "ISO8601";
+      if (validInterval) {
+        const timeDefault = nodeTime.querySelector("Default").textContent;
+        out.time_default = DateTime.fromISO(timeDefault).toUTC();
+        out.time_slots = this.parseTimeSlots(nodeTime);
+      }
     }
 
     return out;
   }
 
   parseTimeSlots(node) {
-    const intervalsValues = node.textContent.split(",");
+    const intervalsValues = Array.from(node.querySelectorAll("Value")).map(
+      (v) => v.textContent,
+    );
+
     const slots = intervalsValues.map((intervalString) => {
       let intervalTrimmed = intervalString.trim();
       let components = intervalTrimmed.split("/");
@@ -498,7 +540,14 @@ export class TimeMapLegend {
   }
 
   getTimeInput() {
-    return DateTime.fromJSDate(this._fp?.selectedDates[0]).toUTC();
+    const dates = this._fp?.selectedDates;
+    const start = dates[0];
+    // utc compensation
+    const delta = start.getTimezoneOffset() * 60 * 1000;
+    const time = start.getTime();
+    const utc = new Date(time - delta);
+    const dateTimeUtc = DateTime.fromJSDate(utc).toUTC();
+    return dateTimeUtc;
   }
 
   getTimeISOstring() {
@@ -524,7 +573,8 @@ export class TimeMapLegend {
   getTimeSlot(time) {
     const slot = this.getSlotFromTime(time);
     const { start, step } = slot;
-    const nStep = Math.ceil(start.diff(time) / step);
+
+    const nStep = Math.ceil(time.diff(start) / step);
     const snapTime = start.plus(nStep * step);
     const valid = this.validate(snapTime);
 
@@ -534,6 +584,7 @@ export class TimeMapLegend {
         slot: slot,
       };
     }
+    console.warn(`Invalid timeslot, using default`, slot);
     return this.getTimeSlotDefault();
   }
 
@@ -615,13 +666,13 @@ export class TimeMapLegend {
     return data?.url_legend;
   }
 
-  setLayer(layer) {
-    const layers = this.getLayerInfo("layer_names");
-    if (!layers.includes(layer)) {
-      throw new Error(`Layer ${layer} not found`);
+  setVariable(variable) {
+    const variables = this.getLayerInfo("variables");
+    if (!variables.includes(variable)) {
+      throw new Error(`Variable '${variable}' not found`);
     }
-    this.elLayerInput.value = layer;
-    this._opt.layerName = layer;
+    this.elVariableInput.value = variable;
+    this._opt.variable = variable;
   }
 
   build() {
@@ -631,10 +682,14 @@ export class TimeMapLegend {
       time_default,
       styles,
       style_default,
-      layer_names,
-      layer_name,
+      variables,
+      variable,
     } = this.getLayerInfoAll();
+
+    const { showLayers, showStyles } = this._opt;
+
     const defaultDate = time_default.toISO();
+    const defaultDateSql = time_default.toSQL();
 
     /**
      * Elevation
@@ -682,6 +737,10 @@ export class TimeMapLegend {
 
     this.elStyle = el("div", [el("label", "Style"), this.elStyleInput]);
 
+    if (!showStyles) {
+      this.elStyle.style.display = "none";
+    }
+
     /**
      * Date
      */
@@ -706,32 +765,36 @@ export class TimeMapLegend {
     /**
      * Layers
      */
-    const optLayers = layer_names.map((name) =>
+    const optVariables = variables.map((name) =>
       el(
         "option",
         {
           value: name,
-          selected: name === layer_name ? true : null,
+          selected: name === variable ? true : null,
         },
         name,
       ),
     );
 
-    this.elLayerInput = el(
+    this.elVariableInput = el(
       "select",
       { class: "form-control" },
       {
         on: {
           change: (e) => {
-            this._opt.layerName = e.target.value;
+            this._opt.variable = e.target.value;
             this.reset();
           },
         },
       },
-      optLayers,
+      optVariables,
     );
 
-    this.elLayer = el("div", [el("label", "Layer"), this.elLayerInput]);
+    this.elVariable = el("div", [el("label", "Layer"), this.elVariableInput]);
+
+    if (!showLayers) {
+      this.elVariable.style.display = "none";
+    }
 
     /**
      * Player
@@ -780,6 +843,23 @@ export class TimeMapLegend {
     this._elImageLegend = el("img", { src: null });
 
     /**
+     *  Date
+     */
+    this.elTime = el("span", defaultDateSql);
+    this.elDate = el("div", [
+      el("label", "Date"),
+      el("div", { class: "input-group" }, [this.elDateInput, elButtonsPlayer]),
+      el(
+        "div",
+        {
+          class: "text-muted",
+          style: { display: "flex", justifyContent: "center" },
+        },
+        this.elTime,
+      ),
+    ]);
+
+    /**
      * Form
      */
     this._elInputContainer = el(
@@ -790,16 +870,7 @@ export class TimeMapLegend {
           padding: "20px",
         },
       },
-      [
-        el("label", "Date"),
-        el("div", { class: "input-group" }, [
-          this.elDateInput,
-          elButtonsPlayer,
-        ]),
-        this.elElevation,
-        this.elStyle,
-        this.elLayer,
-      ],
+      [this.elDate, this.elElevation, this.elStyle, this.elVariable],
     );
 
     this._opt.elLegend.innerHTML = "";
