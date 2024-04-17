@@ -253,8 +253,8 @@ export class Item {
   async add() {
     const it = this;
     const up = it.up;
-    up.addItem(it);
     await it.buildItem();
+    up.addItem(it);
     it.buildFiles(it.files);
     it.validate();
     it.up.update();
@@ -558,6 +558,7 @@ export class Item {
       it._el_form_wrapper,
     ]);
     it.up._el_container.appendChild(it._el_item);
+    
     return true;
   }
 
@@ -581,7 +582,7 @@ export class Item {
     }
 
     it.remove();
-    up.disable();
+    it._up.disable();
 
     try {
       for (let i = 0; i < nFiles; i++) {
@@ -642,7 +643,7 @@ export class Item {
     } catch (e) {
       console.error(e);
     }
-    up.enable();
+    it._up.enable();
   }
 
   /**

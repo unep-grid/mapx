@@ -128,6 +128,7 @@ export class Uploader {
    * @returns {Promise<void>} Promise that resolves when the message is finished displaying
    */
   async message(id, opt) {
+    const up = this;
     opt = Object.assign(
       {},
       {
@@ -137,7 +138,6 @@ export class Uploader {
       opt,
     );
 
-    const up = this;
     if (isArray(id)) {
       id = id[0];
     }

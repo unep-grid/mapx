@@ -227,9 +227,10 @@ export function btn_opt_download(dataset) {
  * @param {DOMStringMap} dataset
  * @returns {void}
  */
-export function btn_opt_get_geojson(dataset) {
+export async function btn_opt_get_geojson(dataset) {
   const viewTarget = dataset.view_action_target;
-  downloadViewGeoJSON({ idView: viewTarget, mode: "file" });
+  await downloadViewGeoJSON({ idView: viewTarget, mode: "file" });
+  return true;
 }
 
 /**
@@ -244,6 +245,7 @@ export async function btn_upload_geojson(dataset) {
   const geojson = item?.view?.data?.source?.data;
   const noGeojson = isEmpty(geojson);
   if (noGeojson) {
+    console.warn("Missing geojson data");
     return;
   }
   let filename = getViewTitle(idView);
@@ -254,7 +256,8 @@ export async function btn_upload_geojson(dataset) {
   const strGeoJSON = JSON.stringify(geojson);
   const blob = new Blob([strGeoJSON], { type: "application/json" });
   const file = new File([blob], filename, { type: "application/json" });
-  new Uploader({ file });
+  const uploader = new Uploader({ file });
+  await uploader.init();
 }
 
 /**
