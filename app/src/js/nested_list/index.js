@@ -29,9 +29,6 @@ class NestedList {
     li.meta = [];
     li.contextMenu = null;
     li.drag = {};
-    if (opt.autoInit) {
-      li.init().catch(console.error);
-    }
   }
   /**
    * Init/destroy
@@ -1441,7 +1438,6 @@ export { NestedList };
  * Mouse click
  */
 function handleClick(evt) {
-  console.log("handle click");
   const li = this;
   const elTarget = li.getTarget(evt.target);
   const idAction = elTarget.dataset.li_id_action;

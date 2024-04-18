@@ -101,6 +101,10 @@ export class ViewsListManager {
     await vlm.clear();
     vlm.mData.views.push(...vlm._views);
 
+    /**
+    * Instantiate NestedList : views item + group container
+    * - initialized after viewsFilter
+    */ 
     vlm.mData.viewsList = new NestedList(vlm.elViewsList, {
       id: settings.project.id,
       state: vlm.state,
@@ -134,6 +138,10 @@ export class ViewsListManager {
       ],
     });
 
+
+    /**
+    * Init viewsFilter : filtering views item
+    */ 
     vlm.mData.viewsFilter = new ViewsFilter(vlm.views, {
       elFilterActivated: vlm.elFilterActivated,
       elFilterTags: vlm.elFilterTags,
@@ -161,6 +169,7 @@ export class ViewsListManager {
       },
     });
 
+    
     await vlm.mData.viewsList.init();
   }
 
