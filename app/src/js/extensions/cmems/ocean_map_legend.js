@@ -27,6 +27,8 @@ const defaultOptions = {
   dpr: window.devicePixelRatio,
   showLayers: true,
   showStyles: true,
+  // cb
+  onRender: () => {},
 };
 
 export class TimeMapLegend {
@@ -35,6 +37,7 @@ export class TimeMapLegend {
     this._i = 0;
     this._layers = new Array();
     this._id_anim = new Set();
+    this._on_render = this._opt.onRender.bind(this);
   }
 
   async init() {
@@ -69,18 +72,23 @@ export class TimeMapLegend {
     this.updateLegend();
   }
 
-  play() {
+  render() {
+    this.next();
+    this.onRender();
+    const id_anim_play = setTimeout(() => {
+      this.render();
+    }, this._opt.transitionDuration);
+    this._id_anim.add(id_anim_play);
+  }
+
+  start() {
     if (this._playing) {
       return;
     }
-    this.elButtonPlay?.classList.add("playing");
+    this.stop();
     this._playing = true;
-    this.next();
-    const id_anim_play = setTimeout(() => {
-      this.stop();
-      this.play();
-    }, this._opt.transitionDuration);
-    this._id_anim.add(id_anim_play);
+    this.elButtonPlay?.classList.add("playing");
+    this.render();
   }
 
   stop() {
@@ -96,6 +104,10 @@ export class TimeMapLegend {
     }
   }
 
+  onRender() {
+    this._on_render();
+  }
+
   set(ts, updateUi = true) {
     const { time, slot } = ts;
     this.setSlot(slot);
@@ -108,7 +120,7 @@ export class TimeMapLegend {
   }
 
   next(stop) {
-    if (stop) {
+    if (stop === true) {
       this.stop();
     }
     const ts = this.getNextTimeSlot();
@@ -803,7 +815,7 @@ export class TimeMapLegend {
       "button",
       {
         class: ["btn", "btn-default"],
-        on: { click: () => this.play() },
+        on: { click: () => this.start() },
       },
       el("i", { class: ["fa", "fa-play"], title: "play" }),
     );
