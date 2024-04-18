@@ -1,16 +1,5 @@
 version: "3.8"
-# ports : host:container
-# Service format order :
-# image,
-# restart
-# depends_pn
-# env_file,
-# port,
-# networks,
-# volumes,
-# command,
-# deploy
-# labels
+
 volumes:
   searchmeili:
 networks:
@@ -32,7 +21,6 @@ services:
     command:
       - --api.insecure=true
       - --providers.docker=true
-      #- --providers.docker.swarmmode=true
       - --providers.docker.watch=true
       - --providers.docker.exposedbydefault=false
       - --entrypoints.web.address=:80
