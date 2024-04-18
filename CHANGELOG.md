@@ -1,3 +1,8 @@
+  - [1.13.5-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.5-alpha.5) 
+
+    - CMEMS 
+        - Animation logic improvement
+
   - [1.13.5-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.5-alpha.4) 
 
     - Uploader 
