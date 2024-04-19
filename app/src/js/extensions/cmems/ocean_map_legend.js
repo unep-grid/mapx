@@ -69,8 +69,8 @@ export class TimeMapLegend {
     return !!this._destroyed;
   }
 
-  update() {
-    this.updateMapSource();
+  update(skipTransition) {
+    this.updateMapSource(skipTransition);
     this.updateLegend();
   }
 
@@ -160,7 +160,7 @@ export class TimeMapLegend {
     }
   }
 
-  transition(a, b) {
+  transition(a, b, skip) {
     const layerA = this._opt.map.getLayer(a);
     const layerB = this._opt.map.getLayer(b);
 
@@ -172,25 +172,30 @@ export class TimeMapLegend {
       return;
     }
 
-    if (!this._opt.animation) {
+    if (!this._opt.animation || skip) {
       this.clear(a);
       return;
     }
 
+    /**
+     * Reduce layer opacity
+     */
     const id_anim_opacity = setTimeout(() => {
       if (this._opt.map.getLayer(a)) {
         this._opt.map.setPaintProperty(a, "raster-opacity", 0);
       }
     }, this._opt.transitionDuration * 2);
-
     this._id_anim.add(id_anim_opacity);
 
+    /**
+     * Remove layer a, after duration,  with a margin
+     */
     setTimeout(() => {
       this.clear(a);
     }, this._opt.transitionDuration * 3);
   }
 
-  updateMapSource() {
+  updateMapSource(skipTransition) {
     const selectedDate = this.getTimeISOstring();
     const selectedElevation = this?.elElevationInput?.value;
     const selectedStyle = this.elStyleInput.value;
@@ -206,7 +211,7 @@ export class TimeMapLegend {
 
     this.clear(idLayer);
     this.add(idLayer, newWmsUrl, idBefore);
-    this.transition(idLayerCurrent, idLayer);
+    this.transition(idLayerCurrent, idLayer, skipTransition);
 
     layersOrderAuto("tml");
   }
@@ -611,6 +616,9 @@ export class TimeMapLegend {
     let futureTime;
 
     switch (incrementDuration) {
+      case "week":
+        futureTime = currentTime.plus({ weeks: n });
+        break;
       case "month":
         futureTime = currentTime.plus({ months: n });
         break;
@@ -744,7 +752,7 @@ export class TimeMapLegend {
       this.elElevationInput = el(
         "select",
         { class: "form-control" },
-        { on: { change: () => this.updateMapSource() } },
+        { on: { change: () => this.updateMapSource(true) } },
         optElevation,
       );
       this.elElevation = el("div", [
@@ -770,7 +778,7 @@ export class TimeMapLegend {
     this.elStyleInput = el(
       "select",
       { class: "form-control" },
-      { on: { change: () => this.update() } },
+      { on: { change: () => this.update(true) } },
       optStyles,
     );
 
@@ -802,7 +810,7 @@ export class TimeMapLegend {
     });
 
     /**
-     * Step size
+     * Increment duration
      */
     const optIncrementDurations = ["default", "week", "month", "year"].map(
       (v) =>
@@ -840,7 +848,7 @@ export class TimeMapLegend {
     }
 
     /**
-     * Layers
+     * Variable
      */
     const optVariables = variables.map((name) =>
       el(
