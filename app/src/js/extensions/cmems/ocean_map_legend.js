@@ -27,6 +27,8 @@ const defaultOptions = {
   dpr: window.devicePixelRatio,
   showLayers: true,
   showStyles: true,
+  showIncrementDuration: true,
+  incrementDuration: "default",
   // cb
   onRender: () => {},
 };
@@ -603,10 +605,27 @@ export class TimeMapLegend {
   getTimeSlotMove(n = 1) {
     const slotc = this.getCurrentSlot();
     const currentTime = this.getTime();
+    const incrementDuration = this.getIncrementDuration();
     const { interval, start, step } = slotc;
-    const nStepCurrent = Math.ceil(currentTime.diff(start) / step);
-    const nStepMove = step * (nStepCurrent + n);
-    const moved = start.plus(nStepMove);
+
+    let futureTime;
+
+    switch (incrementDuration) {
+      case "month":
+        futureTime = currentTime.plus({ months: n });
+        break;
+      case "year":
+        futureTime = currentTime.plus({ years: n });
+        break;
+      case "auto":
+      default:
+        futureTime = currentTime.plus(step * n);
+    }
+
+    // Get plain number of step from start to future
+    const nStepFuture = Math.ceil(futureTime.diff(start) / step);
+    const moved = start.plus(nStepFuture * step);
+
     // _m__|-----|___
     const usePrevious = interval.isAfter(moved);
     // ___|-----|__m_
@@ -641,6 +660,13 @@ export class TimeMapLegend {
 
   getSlot() {
     return this._slot;
+  }
+  getIncrementDuration() {
+    return this._opt.incrementDuration;
+  }
+
+  setIncrementDuration(s) {
+    this._opt.incrementDuration = s;
   }
 
   getPreviousTimeSlot() {
@@ -698,7 +724,8 @@ export class TimeMapLegend {
       variable,
     } = this.getLayerInfoAll();
 
-    const { showLayers, showStyles } = this._opt;
+    const { showLayers, showStyles, showIncrementDuration, incrementDuration } =
+      this._opt;
 
     const defaultDate = time_default.toISO();
     const defaultDateSql = time_default.toSQL();
@@ -773,6 +800,44 @@ export class TimeMapLegend {
         this.onInputChange();
       },
     });
+
+    /**
+     * Step size
+     */
+    const optIncrementDurations = ["default", "week", "month", "year"].map(
+      (v) =>
+        el(
+          "option",
+          {
+            value: v,
+            selected: v === incrementDuration ? true : null,
+          },
+          el("span", v),
+        ),
+    );
+
+    this.elIncrementDurationInput = el(
+      "select",
+      {
+        class: "form-control",
+        on: {
+          change: (e) => {
+            this.stop();
+            this.setIncrementDuration(e.target.value);
+          },
+        },
+      },
+      optIncrementDurations,
+    );
+
+    this.elIncrementDuration = el("div", [
+      el("label", "Increment duration"),
+      this.elIncrementDurationInput,
+    ]);
+
+    if (!showIncrementDuration) {
+      this.elIncrementDuration.style.display = "none";
+    }
 
     /**
      * Layers
@@ -882,7 +947,13 @@ export class TimeMapLegend {
           padding: "20px",
         },
       },
-      [this.elDate, this.elElevation, this.elStyle, this.elVariable],
+      [
+        this.elDate,
+        this.elIncrementDuration,
+        this.elElevation,
+        this.elStyle,
+        this.elVariable,
+      ],
     );
 
     this._opt.elLegend.innerHTML = "";
