@@ -8,6 +8,22 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const meta = require("./meta.json");
 
 const { GenerateSW } = require("workbox-webpack-plugin");
+
+const runtimeCacheOptions1week = {
+  cacheName: "data-cache-1week",
+  expiration: {
+    maxAgeSeconds: 7 * 24 * 60 * 60,
+    maxEntries: 200,
+  },
+};
+const runtimeCacheOptions6months = {
+  cacheName: "data-cache-6months",
+  expiration: {
+    maxAgeSeconds: 6 * 30 * 24 * 60 * 60,
+    maxEntries: 200,
+  },
+};
+
 module.exports = merge(common, {
   cache: false,
   mode: "production",
@@ -32,6 +48,7 @@ module.exports = merge(common, {
         to: "sw_listen_skip_waiting_install.js",
       },
     ]),
+    //https://developer.chrome.com/docs/workbox/modules/workbox-build#method-generateSW
     new GenerateSW({
       swDest: "./service-worker.js",
       mode: "production",
@@ -45,33 +62,36 @@ module.exports = merge(common, {
         /^CHANGELOG/,
       ],
       importScripts: ["/sw_listen_skip_waiting_install.js"],
-      maximumFileSizeToCacheInBytes: 50_000_000, //50MB
+      maximumFileSizeToCacheInBytes: 50 * 1e6, //50MB
       runtimeCaching: [
         {
-          urlPattern: /^https:\/\/api\.mapbox\.com\//,
+          urlPattern: new RegExp("^https://api.mapbox.com/", "i"),
           handler: "CacheFirst",
+          options: runtimeCacheOptions6months,
         },
         {
-          urlPattern: /^https:\/\/tiles\.mapbox\.com\//,
+          urlPattern: new RegExp("^https://tiles.mapbox.com/", "i"),
           handler: "CacheFirst",
+          options: runtimeCacheOptions6months,
         },
         {
-          urlPattern:
-            /^(https|http):\/\/(api|apidev)\.mapx\..*\/get\/views\/list\//,
-          handler: "NetworkFirst",
-        },
-        {
-          urlPattern:
-            /^(https|http):\/\/(api|apidev)\.mapx\..*\/get\/source\/table\//,
-          handler: "NetworkFirst",
-        },
-        {
-          urlPattern: /^https:\/\/.*\/wms\/.*bbox=/is,
+          urlPattern: new RegExp("^https://.*api.here.com/maptile", "i"),
           handler: "CacheFirst",
+          options: runtimeCacheOptions6months,
         },
         {
-          urlPattern: /^https:\/\/.*api\.here\.com\/maptile/,
+          urlPattern: new RegExp("^https://.*/wms/.*bbox=", "i"),
           handler: "CacheFirst",
+          options: runtimeCacheOptions1week,
+        },
+
+        {
+          urlPattern: new RegExp(
+            "SERVICE=WMTS.*REQUEST=GetTile|REQUEST=GetTile.*SERVICE=WMTS",
+            "i",
+          ),
+          handler: "CacheFirst",
+          options: runtimeCacheOptions1week,
         },
       ],
     }),

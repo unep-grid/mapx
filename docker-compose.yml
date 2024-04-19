@@ -2,8 +2,8 @@ version: "3.8"
 volumes:
   searchmeili:
 networks:
-  frontend:
   backend:
+  frontend:
 services:
   traefik:
     image: traefik:v2.3.2
