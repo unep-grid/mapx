@@ -1,7 +1,18 @@
+  - [1.13.5-beta.1](https://github.com/unep-grid/mapx/tree/1.13.5-beta.1) 
+    
+    - CMEMS 
+        - Support for increments : week, month, year + default interval. 
+        - Remove animation when switching elevation, variable, etc. 
+    - Service worker caching :
+        - maintenance 
+        - added WMTS caching support 
+        - Set TTL and max item to cache for various cache items
+
   - [1.13.5-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.5-alpha.5) 
 
     - CMEMS 
         - Animation logic improvement
+        - Expose callback, triggered by animation render step
 
   - [1.13.5-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.5-alpha.4) 
 
