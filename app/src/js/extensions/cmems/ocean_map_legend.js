@@ -1,4 +1,5 @@
 import { DateTime, Duration, Interval } from "luxon";
+
 import { el } from "../../el";
 import flatpickr from "flatpickr";
 import "../../search/style_flatpickr.less";
@@ -608,13 +609,13 @@ export class TimeMapLegend {
     return this.getTimeSlotDefault();
   }
 
-  getTimeSlotMove(n = 1) {
+  getTimeSlotMove(backward) {
     const slotc = this.getCurrentSlot();
     const currentTime = this.getTime();
     const increment = this.getIncrementDuration();
     const { interval, start, step } = slotc;
     const duration = Duration.fromISO(increment);
-    const futureTime = currentTime.plus(duration * n);
+    const futureTime = currentTime[backward ? "minus" : "plus"](duration);
 
     // Get plain number of step from start to future
     const nStepFuture = Math.ceil(futureTime.diff(start) / step);
@@ -668,11 +669,11 @@ export class TimeMapLegend {
   }
 
   getPreviousTimeSlot() {
-    return this.getTimeSlotMove(-1);
+    return this.getTimeSlotMove(true);
   }
 
   getNextTimeSlot() {
-    return this.getTimeSlotMove(1);
+    return this.getTimeSlotMove();
   }
 
   validate(time) {
@@ -806,7 +807,7 @@ export class TimeMapLegend {
 
     const incrementsChoices = [
       {
-        label: firstStep.toHuman(),
+        label: durationToHuman(firstStep),
         iso: firstStep.toISO(),
       },
     ];
@@ -815,7 +816,7 @@ export class TimeMapLegend {
       const duration = Duration.fromISO(iso);
       if (duration > firstStep) {
         incrementsChoices.push({
-          label: duration.toHuman(),
+          label: durationToHuman(duration),
           iso: duration.toISO(),
         });
       }
@@ -977,4 +978,32 @@ export class TimeMapLegend {
     this._opt.elLegend.appendChild(this._elImageLegend);
     this._opt.elInputs.appendChild(this._elInputContainer);
   }
+}
+
+/**
+ * Converts milliseconds to a human-readable string format.
+ *
+ * @param {duration} duration The duration to convert
+ * @returns {string} A string representing the duration in years, months, days, hours, minutes, and seconds.
+ */
+function durationToHuman(durationInput) {
+  const duration = durationInput.shiftTo(
+    "years",
+    "months",
+    "days",
+    "hours",
+    "minutes",
+    "seconds",
+  );
+
+  const durationObject = duration.toObject();
+
+  for (const item in durationObject) {
+    if (!durationObject[item]) {
+      delete durationObject[item];
+    }
+  }
+  const durationClean = Duration.fromObject(durationObject);
+
+  return durationClean.toHuman();
 }

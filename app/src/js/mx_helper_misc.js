@@ -271,7 +271,7 @@ export function patchObject(source, patch) {
     return source;
   }
 
-  const result = { ...source }; 
+  const result = { ...source };
 
   for (const key in patch) {
     if (!patch.hasOwnProperty(key)) {
@@ -323,7 +323,6 @@ export function mergeDeep(target, source) {
   }
   return target;
 }
-
 
 /**
  * Update title based on settings
@@ -722,7 +721,6 @@ export function toHttps(urlString) {
     return urlString;
   }
 }
-
 
 /**
  * Convert a simple object to an HTML list
