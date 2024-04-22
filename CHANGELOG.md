@@ -1,3 +1,9 @@
+  - [1.13.5-beta.2](https://github.com/unep-grid/mapx/tree/1.13.5-beta.2) 
+
+  - CMEMS 
+        - Increments list : use choice with ISO 8601 values, and default to the service first interval
+        - Allow user to set it's own ISO durations list as parameter 
+
   - [1.13.5-beta.1](https://github.com/unep-grid/mapx/tree/1.13.5-beta.1) 
     
     - CMEMS 
