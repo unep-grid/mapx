@@ -1,6 +1,11 @@
+  - [1.13.5-beta.3](https://github.com/unep-grid/mapx/tree/1.13.5-beta.3) 
+
+    - CMEMS 
+        - Improve duration name in increment duration
+
   - [1.13.5-beta.2](https://github.com/unep-grid/mapx/tree/1.13.5-beta.2) 
 
-  - CMEMS 
+    - CMEMS 
         - Increments list : use choice with ISO 8601 values, and default to the service first interval
         - Allow user to set it's own ISO durations list as parameter 
 
