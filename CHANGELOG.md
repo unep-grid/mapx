@@ -1,3 +1,7 @@
+  - [1.13.5-beta.6](https://github.com/unep-grid/mapx/tree/1.13.5-beta.6) 
+    
+    - SelectAuto : views selection cache improvement
+
   - [1.13.5-beta.5](https://github.com/unep-grid/mapx/tree/1.13.5-beta.5) 
 
     - StoryMap : should fix broken views filter after an edit
