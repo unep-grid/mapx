@@ -1,5 +1,11 @@
 import { el } from "../../el_mapx";
-import { isViewId, isEmpty, isNotEmpty, isArray } from "../../is_test_mapx";
+import {
+  isViewId,
+  isEmpty,
+  isNotEmpty,
+  isArray,
+  isArrayOfViews,
+} from "../../is_test_mapx";
 import { getViewAuto } from "../../map_helpers";
 import { fetchViews } from "../../map_helpers/views_fetch";
 import { miniCacheGet, miniCacheSet } from "../../minicache";
@@ -7,6 +13,10 @@ import { nc } from "../../mx";
 import { path } from "../../mx_helper_misc";
 import { settings } from "../../settings";
 import { _get_config } from "./utils";
+
+const localCache = {
+  viewsPromiseCache: {},
+};
 
 const def = {
   maxOptions: 50,
@@ -141,32 +151,44 @@ async function create(id, callback) {
 }
 
 async function load(query, callback) {
-  const config = this.settings;
-  const { types, includeAllPublic } = config.loader_config;
-  const views = await getViews(types, includeAllPublic);
-  const viewsFiltered = filterViews(query, views, def.maxOptions);
-  callback(viewsFiltered);
+  try {
+    const config = this.settings.loader_config;
+    const cacheKey = generateCacheKey(settings.user.id, settings.project.id);
+    const noPendingPromise = !localCache.viewsPromiseCache[cacheKey];
+    if (noPendingPromise) {
+      localCache.viewsPromiseCache[cacheKey] = fetchViewsFromCacheOrRemote(
+        config,
+        cacheKey,
+      ).finally(() => delete localCache.viewsPromiseCache[cacheKey]);
+    }
+    const views = await localCache.viewsPromiseCache[cacheKey];
+    const viewsFiltered = filterViews(query, views, def.maxOptions);
+    callback(viewsFiltered);
+  } catch (error) {
+    console.error("Error loading views:", error);
+    callback([]);
+  }
 }
 
-async function getViews(types, includeAllPublic) {
-  const idUser = settings.user.id;
-  const idProject = settings.project.id;
-  const key = `ts_views_${idProject}_${idUser}`;
-  const views = [];
-  const viewsCache = await miniCacheGet(key);
-  const hasCache = isNotEmpty(viewsCache) && isArray(viewsCache);
-  if (hasCache) {
-    views.push(...viewsCache);
-  } else {
-    const { views: viewsRemote } = await fetchViews({
-      includeAllPublic,
-      types,
-      onProgress: () => {},
-    });
-    views.push(...viewsRemote);
-    await miniCacheSet(key, views, { ttl: def.cacheTtl });
+async function fetchViewsFromCacheOrRemote(
+  { types, includeAllPublic },
+  cacheKey,
+) {
+  const cachedViews = await miniCacheGet(cacheKey);
+  if (isArrayOfViews(cachedViews)) {
+    return cachedViews;
   }
+  return fetchAndCacheViews(types, includeAllPublic, cacheKey);
+}
+
+async function fetchAndCacheViews(types, includeAllPublic, cacheKey) {
+  const { views } = await fetchViews({ types, includeAllPublic });
+  await miniCacheSet(cacheKey, views, { ttl: def.cacheTtl });
   return views;
+}
+
+function generateCacheKey(userId, projectId) {
+  return `ts_views_${projectId}_${userId}`;
 }
 
 function filterViews(str, views, maxOptions) {
