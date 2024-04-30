@@ -13,6 +13,7 @@ import { isElement, isEmpty } from "./../is_test/index.js";
 import { settings } from "./../settings";
 
 import "./style.less";
+import { isViewOpen } from "../is_test_mapx/index.js";
 const settingsDefault = {
   onFilter: (idViews) => {
     console.log(idViews);
@@ -321,7 +322,7 @@ class ViewsFilter {
      */
     const views = vf.getViews();
     const idViews = views.reduce((a, v) => {
-      let isOpen = v._vb.isOpen();
+      let isOpen = isViewOpen(v);
       if (enable && isOpen) {
         a.push(v.id);
       }

@@ -114,7 +114,6 @@ export class ButtonPanel extends EventSimple {
   }
 
   saveSize() {
-    console.log("this in saveSize", this);
     const panel = this;
     const id = panel.opt.id;
     if (panel.isSmall()) {

@@ -87,14 +87,14 @@ observeEvent(input$btnViewCloseStory, {
   view <- reactData$viewDataEdited
 
   if (isTRUE(reactData$storyPreviewed)) {
+    reactData$storyPreviewed <- FALSE
     mglReadStory(
       close = TRUE
     )
-    reactData$storyPreviewed <- FALSE
   }
   if (isTRUE(reactData$storySaved)) {
-    mglUpdateView(view)
     reactData$storySaved <- FALSE
+    mglUpdateView(view)
   }
 
   mxModal(
