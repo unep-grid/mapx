@@ -1,3 +1,7 @@
+  - [1.13.5-beta.5](https://github.com/unep-grid/mapx/tree/1.13.5-beta.5) 
+
+    - StoryMap : should fix broken views filter after an edit
+
   - [1.13.5-beta.4](https://github.com/unep-grid/mapx/tree/1.13.5-beta.4) 
 
     - Legends improved in static mode [demo] 
