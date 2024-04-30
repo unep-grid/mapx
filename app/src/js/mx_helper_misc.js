@@ -2182,6 +2182,41 @@ export function getContentSize(divElement) {
 }
 
 /**
+ * Calculates the total bounding rectangle for all child elements of an element.
+ *
+ * @param {Element} parentElement
+ * @returns {Object|null} inner content rect
+ */
+export function getInnerContentRect(parentElement) {
+  const children = parentElement.children;
+  let totalRect = null;
+
+  for (const child of children) {
+    const rect = child.getBoundingClientRect();
+
+    if (totalRect === null) {
+      totalRect = rect;
+    } else {
+      totalRect.left = Math.min(totalRect.left, rect.left);
+      totalRect.top = Math.min(totalRect.top, rect.top);
+      totalRect.right = Math.max(totalRect.right, rect.right);
+      totalRect.bottom = Math.max(totalRect.bottom, rect.bottom);
+    }
+  }
+
+  if (totalRect !== null) {
+    return {
+      left: totalRect.left,
+      top: totalRect.top,
+      width: totalRect.right - totalRect.left,
+      height: totalRect.bottom - totalRect.top,
+    };
+  }
+
+  return null;
+}
+
+/**
  * Get the padding values of an element as numbers.
  *
  * @param {HTMLElement} element - The element to get padding from.
@@ -2606,4 +2641,3 @@ export async function urlToImageBase64(url) {
     });
   }
 }
-

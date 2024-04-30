@@ -147,6 +147,7 @@ import {
 import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
 import { fetchViews } from "./views_fetch.js";
+import { ButtonPanelLegend } from "../panel_legend/index.js";
 export * from "./view_filters.js";
 
 /**
@@ -1474,6 +1475,7 @@ export async function initMapxStatic(o) {
   ]);
 
   const idViews = getArrayDistinct(idViewsQuery).reverse();
+  const hasViews = idViews.length > 0;
 
   /**
    * Update language
@@ -1483,12 +1485,12 @@ export async function initMapxStatic(o) {
   /**
    * If no views, send mapx_ready early
    */
-
-  if (idViews.length) {
+  if (hasViews) {
     /**
-     * Get view and set order
+     * Get views and set order
      */
-    mapData.views = await getViewsRemote(idViews);
+    const views = await getViewsRemote(idViews)
+    mapData.views.push(...views);
 
     /*
      * If a story is found, ignore other options
@@ -1509,34 +1511,24 @@ export async function initMapxStatic(o) {
    * Create button panel for legends
    * -> Story module add its own legend panel.
    */
-  mx_local.panel_legend = new ButtonPanel({
-    id: "legend_panel",
-    elContainer: document.body,
-    panelFull: true,
+  mx_local.panel_legend = new ButtonPanelLegend({
+    id: "button_panel_legend_static",
     position: "top-left",
     tooltip_position: "right",
-    button_text: getDictItem("button_legend_button"),
-    button_lang_key: "button_legend_button",
-    button_classes: ["fa", "fa-list-ul"],
-    container_style: {
-      width: "300px",
-      height: "300px",
-      minWidth: "200px",
-      minHeight: "200px",
-    },
   });
 
   /**
-   * If there is view, render all
+   * If there are views, render all
    */
-  if (mapData.views && mapData.views.length) {
+  if (hasViews) {
     /**
      * Display views
      */
+    const elLegendContainer = mx_local.panel_legend.getContainer();
     const promAdd = mapData.views.map((view) => {
       return viewRender({
-        view: view,
-        elLegendContainer: mx_local.panel_legend.elPanelContent,
+        view,
+        elLegendContainer,
         addTitle: true,
       });
     });
@@ -1548,6 +1540,12 @@ export async function initMapxStatic(o) {
     });
 
     /**
+    * Adapt the panel
+    */
+    mx_local.panel_legend.resizeAuto('content');
+
+
+    /**
      * Extract all views bounds
      */
     if (zoomToViews) {
@@ -1557,16 +1555,26 @@ export async function initMapxStatic(o) {
   }
 
   /**
-   * Panels (app  handled in initMapx)
+   * Panels
+   * - for app mode, handled in initMapx
    */
   const panelState = getQueryParameter("panels")[0];
   const panelControls = panels.get("controls_panel");
 
   if (isNotEmpty(panelState)) {
+    /**
+    * Execute batch commands
+    */ 
     panels.batch(panelState);
   } else if (!settings.initClosedPanels) {
+    /**
+    * Init panel not closed, open
+    */ 
     panelControls.open();
   }
+
+
+
 
   events.fire({
     type: "mapx_ready",

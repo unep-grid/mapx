@@ -1,13 +1,13 @@
 import "./style.less";
-import { getDictItem, getLabelFromObjectPath } from "./../language";
+import { getLabelFromObjectPath } from "./../language";
 import { el } from "./../el/src/index.js";
-import { ButtonPanel } from "./../button_panel/index.js";
 import { errorHandler } from "./../error_handler/index.js";
 import { modal } from "./../mx_helper_modal.js";
 import { settings as settingsMapx } from "./../settings";
 import { settings as storySettings } from "./settings.js";
 import { theme, panels, events, controls, listeners } from "./../mx";
 import { UAParser } from "ua-parser-js";
+import { ButtonPanelLegend } from "../panel_legend/index.js";
 import {
   onNextFrame,
   cancelFrame,
@@ -1363,25 +1363,13 @@ async function initLegendPanel() {
   /**
    * Button Legend
    */
-  state.buttonLegend = new ButtonPanel({
-    elContainer: document.body,
-    panelFull: true,
+  state.buttonLegend = new ButtonPanelLegend({
+    id: "button_panel_legend_story",
     position: "bottom-left",
     tooltip_position: "right",
-    button_text: getDictItem("button_legend_button"),
-    button_lang_key: "button_legend_button",
-    button_classes: ["fa", "fa-list-ul"],
-    item_content_classes: ["button-panel--item-content-flex-col"],
-    container_classes: ["button-panel--container-no-full-width"],
-    container_style: {
-      width: "300px",
-      height: "300px",
-      minWidth: "200px",
-      minHeight: "200px",
-      maxWidth: "50vw",
-    },
   });
 }
+
 function removeLegendPanel() {
   const state = getState();
   state.buttonLegend.destroy();
@@ -1621,7 +1609,7 @@ export async function storyPlayStep(stepNum) {
     const story = getStory();
     const settings = getSettings();
     const steps = path(story, "steps", []);
-    const elLegendContainer = state?.buttonLegend?.elPanelContent;
+    const elLegendContainer = state?.buttonLegend?.getContainer();
     const map = state.map;
     if (steps.length === 0) {
       return;

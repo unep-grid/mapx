@@ -123,28 +123,7 @@
   font-weight: normal;
 }
 
-/**
-* Legend in button panel
-*/
-.button-panel--item-content .mx-view-legend-group {
-  width: 100%;
-  padding: 0px;
-  user-select: none;
-}
 
-/**
-* For legend in button panel without wrapper
-*/
-.button-panel--item-content > .mx-view-legend-group {
-  padding: 20px;
-}
-
-.button-panel--item-content .mx-legend-box {
-  max-height: 200px;
-  padding: 10px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
 .mx-story-layout .mx-legend-box {
   max-height: 100%;
 }

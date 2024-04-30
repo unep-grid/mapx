@@ -6,6 +6,7 @@ import { shake } from "../elshake";
 import "./style.less";
 import { ButtonPanelManager } from "./manager.js";
 import { bindAll } from "../bind_class_methods/index.js";
+import { getContentSize } from "../mx_helper_misc.js";
 
 export class ButtonPanel extends EventSimple {
   constructor(opt) {
@@ -30,9 +31,9 @@ export class ButtonPanel extends EventSimple {
       handles: ["free", "resize"],
       animateDurationMs: 200,
     };
+
     panel.opt = Object.assign({}, options, opt);
     panel.ls = new ListenerStore();
-
     panel.init();
     bindAll(panel);
     panel.initListeners();
@@ -85,8 +86,8 @@ export class ButtonPanel extends EventSimple {
     });
 
     panel.restoreSize();
-    panel.on("resize", panel.saveSize);
-    panel.on("resize-auto", panel.saveSize);
+    panel.on("resize-end", () => panel.saveSize());
+    panel.on("resize-auto", () => panel.saveSize());
   }
 
   get id() {
@@ -113,6 +114,7 @@ export class ButtonPanel extends EventSimple {
   }
 
   saveSize() {
+    console.log("this in saveSize", this);
     const panel = this;
     const id = panel.opt.id;
     if (panel.isSmall()) {
@@ -227,7 +229,7 @@ export class ButtonPanel extends EventSimple {
       el("span", {
         class: ["button-panel--btn-icon", ...panel.opt.button_classes],
       }),
-      panel.elBtnFlag
+      panel.elBtnFlag,
     );
 
     /**
@@ -252,7 +254,7 @@ export class ButtonPanel extends EventSimple {
       panel._el_handles("top-left"),
       panel._el_handles("top-right"),
       panel._el_handles("bottom-right"),
-      panel._el_handles("bottom-left")
+      panel._el_handles("bottom-left"),
     );
 
     /**
@@ -277,7 +279,7 @@ export class ButtonPanel extends EventSimple {
       },
       panel.elPanelContent,
       panel.elFooter,
-      panel.elHandles
+      panel.elHandles,
     );
 
     /**
@@ -294,7 +296,7 @@ export class ButtonPanel extends EventSimple {
         style: panel.opt.container_style,
       },
       panel.elBtnPanel,
-      panel.elPanel
+      panel.elPanel,
     );
 
     panel.elMain.appendChild(panel.elContainer);
@@ -360,7 +362,7 @@ export class ButtonPanel extends EventSimple {
         class: ["button-panel--item-handle"],
         dataset: { action: "resize", type: "free", corner: pos },
       },
-      el("i", { class: ["button-panel--item-handle-icon", "fa", "fa-circle"] })
+      el("i", { class: ["button-panel--item-handle-icon", "fa", "fa-circle"] }),
     );
   }
 
@@ -376,8 +378,8 @@ export class ButtonPanel extends EventSimple {
             class: ["button-panel--item-handle"],
             dataset: { action: "resize", type: "auto", id: "half-width" },
           },
-          el("i", { class: ["button-panel--item-handle-icon"] })
-        )
+          el("i", { class: ["button-panel--item-handle-icon"] }),
+        ),
       );
       elGroup.appendChild(
         el(
@@ -386,8 +388,8 @@ export class ButtonPanel extends EventSimple {
             class: ["button-panel--item-handle"],
             dataset: { action: "resize", type: "auto", id: "half-height" },
           },
-          el("i", { class: ["button-panel--item-handle-icon"] })
-        )
+          el("i", { class: ["button-panel--item-handle-icon"] }),
+        ),
       );
       elGroup.appendChild(
         el(
@@ -396,8 +398,8 @@ export class ButtonPanel extends EventSimple {
             class: ["button-panel--item-handle"],
             dataset: { action: "resize", type: "auto", id: "full" },
           },
-          el("i", { class: ["button-panel--item-handle-icon"] })
-        )
+          el("i", { class: ["button-panel--item-handle-icon"] }),
+        ),
       );
     }
     return elGroup;
@@ -549,13 +551,17 @@ export class ButtonPanel extends EventSimple {
     /**
      * Solve bug where the first animation did not work
      */
-    panel.setWidth(panel.width - 1, silent);
-    panel.setHeight(panel.height - 1, silent);
+    panel.setWidth(panel.width, silent);
+    panel.setHeight(panel.height, silent);
 
     /**
-     * Animate
+     * Set dimension
      */
     switch (type) {
+      case "content":
+        panel.setWidth(panel.rectInnerContent.width, silent);
+        panel.setHeight(panel.rectInnerContent.height, silent);
+        break;
       case "half":
         panel.setWidth(panel.rectParent.width / 2, silent);
         panel.setHeight(panel.rectParent.height / 2, silent);
@@ -590,7 +596,7 @@ export class ButtonPanel extends EventSimple {
           panel.fire("resize-auto", type);
           panel.fire("resize-button");
         },
-        animate ? panel.opt.animateDurationMs : 0
+        animate ? panel.opt.animateDurationMs : 0,
       );
     }
   }
@@ -599,6 +605,9 @@ export class ButtonPanel extends EventSimple {
   }
   get rectContent() {
     return this.elPanel.getBoundingClientRect();
+  }
+  get rectInnerContent() {
+    return getContentSize(this.elPanelContent);
   }
   get rectButton() {
     return this.elBtnPanel.getBoundingClientRect();

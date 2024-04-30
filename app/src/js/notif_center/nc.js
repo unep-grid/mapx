@@ -27,7 +27,7 @@ const def = {
     elContainer: null,
     button_lang_key: "nc_button",
     button_classes: ["fa", "fa-bell"],
-    tooltip_position: "bottom-left",
+    tooltip_position: "top-right",
     position: "bottom-left",
     container_style: {
       minWidth: "470px",

@@ -1,0 +1,30 @@
+/**
+* Legend in button panel
+*/
+.button-panel--legends {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  user-select: none;
+  padding: 10px;
+}
+
+/**
+* For legend in button panel without wrapper
+*/
+.button-panel--legends > .mx-view-legend-group {
+  padding: 20px;
+  border: 1px solid var(--mx_ui_border);
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: var(--mx_ui_box_shadow);
+}
+
+.button-panel--legends  .mx-legend-box {
+  max-height: 200px;
+  padding: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
