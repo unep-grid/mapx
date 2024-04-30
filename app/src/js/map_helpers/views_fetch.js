@@ -92,7 +92,7 @@ export async function fetchViews(o) {
   for (let id of queryItems) {
     url.searchParams.set(id, opt[id]);
   }
-  
+
   const data = await fetchJsonProgress(url, {
     onProgress: opt.onProgress || onProgress,
     onError: opt.onError || onError,
@@ -151,13 +151,14 @@ export async function fetchViews(o) {
 
 /**
  * Progress default
+ * e.g. Math.round((d.loaded / d.total) * 100));
  */
-function onProgress(d) {
-  console.log(Math.round((d.loaded / d.total) * 100));
+function onProgress() {
+  return;
 }
 
 function onError(d) {
-  console.log(d);
+  console.error(d);
 }
 
 function onComplete() {

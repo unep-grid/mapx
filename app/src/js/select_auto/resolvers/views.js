@@ -1,11 +1,5 @@
 import { el } from "../../el_mapx";
-import {
-  isViewId,
-  isEmpty,
-  isNotEmpty,
-  isArray,
-  isArrayOfViews,
-} from "../../is_test_mapx";
+import { isViewId, isEmpty, isArrayOfViews } from "../../is_test_mapx";
 import { getViewAuto } from "../../map_helpers";
 import { fetchViews } from "../../map_helpers/views_fetch";
 import { miniCacheGet, miniCacheSet } from "../../minicache";
