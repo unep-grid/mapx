@@ -37,6 +37,10 @@ export const config = {
   loadThrottle: 50,
   createFilter: isViewId,
   load: load,
+  onInitialize: function () {
+    const tom = this;
+    tom._options_handler = options_handler.bind(tom);
+  },
   render: {
     option: renderOption,
     item: renderItem,
@@ -103,6 +107,16 @@ function renderOption(view, escape) {
   );
 }
 
+async function options_handler(idViews) {
+  const ts = this;
+  for (const idView of idViews) {
+    if (isViewId(idView)) {
+      const view = await getViewAuto(idView);
+      ts.addOption(view);
+    }
+  }
+}
+
 async function create(id, callback) {
   try {
     if (isViewId(id)) {
@@ -128,6 +142,13 @@ async function create(id, callback) {
 
 async function load(query, callback) {
   const config = this.settings;
+  const { types, includeAllPublic } = config.loader_config;
+  const views = await getViews(types, includeAllPublic);
+  const viewsFiltered = filterViews(query, views, def.maxOptions);
+  callback(viewsFiltered);
+}
+
+async function getViews(types, includeAllPublic) {
   const idUser = settings.user.id;
   const idProject = settings.project.id;
   const key = `ts_views_${idProject}_${idUser}`;
@@ -138,20 +159,20 @@ async function load(query, callback) {
     views.push(...viewsCache);
   } else {
     const { views: viewsRemote } = await fetchViews({
-      includeAllPublic: config.loader_config.includeAllPublic,
-      types: config.loader_config.types,
+      includeAllPublic,
+      types,
       onProgress: () => {},
     });
     views.push(...viewsRemote);
     await miniCacheSet(key, views, { ttl: def.cacheTtl });
   }
-
-  const viewsFiltered = filterViews(query, views, def.maxOptions);
-
-  callback(viewsFiltered);
+  return views;
 }
 
 function filterViews(str, views, maxOptions) {
+  if (isEmpty(str)) {
+    return [];
+  }
   const strSplit = str.split(" ");
   const regex = new RegExp(`${strSplit.join("|")}`, "i");
   const keys = def.selectKeys;

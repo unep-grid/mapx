@@ -71,6 +71,8 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     editor.container.appendChild(editor.error_holder);
     editor.input.ts = new TomSelect(editor.input, config);
 
+    editor.input.ts.load();
+
     editor.input.ts.on("change", () => {
       editor._refresh_value();
       editor.onChange(true);
@@ -85,7 +87,7 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
       await editor.input.ts._update();
     }
 
-    editor._on_ready();
+    await editor._on_ready();
   }
 
   async _build_config(options) {
@@ -133,14 +135,14 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     }
   }
 
-  _on_ready() {
+  async _on_ready() {
     const editor = this;
     /*
      * Set ready
      */
     editor._is_ready = true;
     if (editor._queued_value) {
-      editor.setValue(editor._queued_value);
+      await editor.setValue(editor._queued_value);
       delete editor._queued_value;
     }
   }
@@ -165,28 +167,29 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
   }
 
   async setValue(value) {
-    const editor = this;
-    const { ts } = editor?.input || {};
-    const isEmptyValue =
-      isEmpty(value) || (isArray(value) && value.every((v) => isEmpty(v)));
+    try {
+      const editor = this;
+      const { ts } = editor?.input || {};
+      const isEmptyValue =
+        isEmpty(value) || (isArray(value) && value.every((v) => isEmpty(v)));
+      const valueArray = isEmptyValue ? [] : [value].flat();
+      const useQueue = !editor._is_ready;
 
-    const valueArray = isEmptyValue ? [] : [value].flat();
-
-    /*
-     * Not ready if init time or watched editor value changed
-     */
-    if (editor._is_ready) {
-      for (const value of valueArray) {
-        const opt = ts.getOption(value);
-        if (!opt) {
-          await new Promise((resolve) => ts.createItem(value, resolve));
+      /*
+       * Not ready if init time or watched editor value changed
+       */
+      if (useQueue) {
+        editor._queued_value = valueArray;
+      } else {
+        if (ts._options_handler) {
+          await ts._options_handler(valueArray);
         }
+        ts.setValue(valueArray);
       }
-      ts.setValue(valueArray);
-    } else {
-      editor._queued_value = valueArray;
+      editor._refresh_value();
+    } catch (e) {
+      console.error("async setValue issue", e);
     }
-    editor._refresh_value();
   }
 
   /**
@@ -220,7 +223,7 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
       try {
         await editor._update_if_change(watch_path);
       } catch (e) {
-        console.error(e);
+        console.error("async watcher issue", e);
       }
     });
   }
@@ -247,6 +250,6 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
      */
     editor._is_ready = false;
     await ts._update();
-    editor._on_ready();
+    await editor._on_ready();
   }
 };
