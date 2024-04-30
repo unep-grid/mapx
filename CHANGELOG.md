@@ -1,3 +1,8 @@
+  - [1.13.5-beta.4](https://github.com/unep-grid/mapx/tree/1.13.5-beta.4) 
+
+    - Legends improved in static mode [demo] 
+    - StoryMap : issues with views order when external views used
+
   - [1.13.5-beta.3](https://github.com/unep-grid/mapx/tree/1.13.5-beta.3) 
 
     - CMEMS 
