@@ -71,8 +71,6 @@ JSONEditor.defaults.editors.tomSelectAuto = class mxeditors extends (
     editor.container.appendChild(editor.error_holder);
     editor.input.ts = new TomSelect(editor.input, config);
 
-    editor.input.ts.load();
-
     editor.input.ts.on("change", () => {
       editor._refresh_value();
       editor.onChange(true);
