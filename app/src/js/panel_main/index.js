@@ -25,11 +25,12 @@ const settings = {
     button_text: "click me",
     button_classes: ["fa", "fa-list-ul"],
     container_style: {
-      width: "480px",
-      maxHeight: "90%",
-      maxWidth: "90%",
-      minWidth: "200px",
-      minHeight: "80%",
+      width: "470px",
+      height: "100%",
+      maxHeight: "calc(100% - 50px)",
+      maxWidth: "550px",
+      minWidth: "340px",
+      minHeight: "450px",
     },
   },
 };
@@ -66,7 +67,7 @@ class MainPanel extends EventSimple {
       {
         class: ["mx-panel"],
       },
-      htmlImport
+      htmlImport,
     );
     mp.panel = new ButtonPanel(mp.opt.panel);
     mp.panel.elPanelContent.appendChild(mp.elContent);

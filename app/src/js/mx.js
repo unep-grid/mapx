@@ -12,7 +12,7 @@ import { Magnifier } from "./magnifier/index.js";
 import { theme } from "./init_theme";
 import { ProjectManager } from "./project/index.js";
 import { ButtonPanelManager } from "./button_panel/manager.js";
-import { ControlsPanelInstance } from "./panel_controls/instance.js";
+import { ControlsPanel } from "./panel_controls/index.js";
 
 const panels = new ButtonPanelManager();
 const version = settings.version;
@@ -36,7 +36,7 @@ const data = {
 const initQueryParams = {}; // set in init_common.js
 const listeners = new ListenerStore();
 const events = new EventSimple();
-const controls = new ControlsPanelInstance();
+const controls = new ControlsPanel();
 const mg = new Magnifier(); // see demo.js in /magnifier package
 const hinthack = new HintHack();
 const project = new ProjectManager();

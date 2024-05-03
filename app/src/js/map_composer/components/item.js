@@ -14,7 +14,14 @@ class Item extends Box {
     item._config = config;
     item._type = config.type;
     item._editable = config.editable === true;
-    // box option
+
+    const width = config.width || item.state.item_width;
+    const height = config.height || item.state.item_height;
+    const { height: maxHeight, width: maxWidth } = boxParent;
+
+    const itemWidth = width < maxWidth ? width : maxWidth;
+    const itemHeight = height < maxHeight ? height : maxHeight;
+
     item.init({
       title: `item-${item._type}`,
       class: `mc-${item._type}`,
@@ -25,8 +32,8 @@ class Item extends Box {
       draggable: true,
       resizable: true,
       removable: config.removable === true,
-      width: config.width || item.state.item_width,
-      height: config.height || item.state.item_height,
+      width: itemWidth,
+      height: itemHeight,
     });
   }
 
@@ -72,7 +79,7 @@ class Item extends Box {
         class: ["mc-item", "mc-item-element", "mc-item-scalable-font"],
       },
       // must be first level <div mc-item><h1>..</h1><p>...</p>
-      [...content.children]
+      [...content.children],
     );
     return elOut;
   }
@@ -90,7 +97,7 @@ class Item extends Box {
           dataset: { mc_editable: item.editable },
           class: [...elEditable.classList, "mc-item-editable"],
         },
-        el("div", elEditable.innerText)
+        el("div", elEditable.innerText),
       );
       elEditable.replaceWith(elEditableNew);
     }
@@ -100,7 +107,7 @@ class Item extends Box {
       {
         class: ["mc-item", "mc-item-element", "mc-item-scalable-font"],
       },
-      elContent
+      elContent,
     );
 
     return elOut;
@@ -117,7 +124,7 @@ class Item extends Box {
           mc_editable: item.editable,
         },
       },
-      el("span", text)
+      el("span", text),
     );
 
     return elOut;
@@ -140,13 +147,13 @@ class Item extends Box {
         trackResize: false, // handled in mapcomposer
         renderWorldCopies: false,
       },
-      item._config.options
+      item._config.options,
     );
 
     item.map = new mapboxgl.Map(mapOptions);
     item.map.addControl(
       new MapControlScale({ mode: "center" }),
-      "bottom-right"
+      "bottom-right",
     );
     item.map.addControl(new MapNorthArrow(), "top-right");
     item.scaler = new MapScaler(item.map);

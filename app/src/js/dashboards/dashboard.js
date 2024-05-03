@@ -2,7 +2,7 @@ import Muuri from "muuri";
 import { Widget } from "./widget.js";
 import { ButtonPanel } from "./../button_panel";
 import { modulesLoad } from "./../modules_loader_async";
-import { all } from "./../mx_helper_misc.js";
+import { all, patchObject } from "./../mx_helper_misc.js";
 import { el, elAuto, elSpanTranslate } from "./../el_mapx";
 import "./style.less";
 import { EventSimple } from "../event_simple";
@@ -65,10 +65,7 @@ class Dashboard extends EventSimple {
   constructor(opt) {
     super();
     const d = this;
-    d.opt = {};
-    for (const k in defaults) {
-      d.opt[k] = Object.assign({}, defaults[k], opt[k]);
-    }
+    d.opt = patchObject(defaults, { ...opt });
     bindAll(d);
     d.init();
   }
@@ -165,7 +162,7 @@ class Dashboard extends EventSimple {
         for (const module of modulesFound) {
           if (!conf.modules.includes(module)) {
             console.warn(
-              `Module ${module} apparently used, but not registered`
+              `Module ${module} apparently used, but not registered`,
             );
           }
           modulesNames.add(module);
@@ -553,7 +550,7 @@ class Dashboard extends EventSimple {
       if (first) {
         first = false;
         const elAttributionLabel = elSpanTranslate(
-          "view_dashboard_attribution_made_with"
+          "view_dashboard_attribution_made_with",
         );
         d.panel.elFooter.appendChild(elAttributionLabel);
       }
@@ -563,7 +560,7 @@ class Dashboard extends EventSimple {
         elAuto("url", a.homepage, {
           urlDefaultLabel: a.name,
           urlDefaultTitle: a.description,
-        })
+        }),
       );
       d.panel.elFooter.appendChild(elAttribution);
     }
@@ -584,7 +581,7 @@ class Dashboard extends EventSimple {
       const elAttribution = el(
         "span",
         { class: "button-panel--item-footer-attribution" },
-        html
+        html,
       );
       d.panel.elFooter.appendChild(elAttribution);
     }

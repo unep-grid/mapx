@@ -2155,18 +2155,13 @@ export function flattenBlockElements(element) {
 /**
  * Estimate the natural content size of a div element without constraints.
  *
- * @param {HTMLElement} divElement - The div element to measure.
+ * @param {Element} elOrig - The div element to measure.
  * @returns {Object} An object containing the width and height of the content.
- *
- * @example
- * const divElement = document.querySelector("#yourDivId");
- * const size = getContentSize(divElement);
- * console.log(`Width: ${size.width}, Height: ${size.height}`);
  */
-export function getContentSize(divElement) {
-  const elClone = divElement.cloneNode(true);
+export function getContentSize(elOrig, inBody = true, debug = false) {
+  const elClone = elOrig.cloneNode(true);
   Object.assign(elClone.style, {
-    visibility: "hidden",
+    visibility: debug ? "visible" : "hidden",
     position: "absolute",
     left: 0,
     top: 0,
@@ -2175,9 +2170,17 @@ export function getContentSize(divElement) {
     overflow: "visible",
     zIndex: 1000,
   });
-  document.body.appendChild(elClone);
-  const { width, height } = elClone.getBoundingClientRect();
-  document.body.removeChild(elClone);
+  if (inBody) {
+    document.body.appendChild(elClone);
+  } else {
+    elOrig.appendChild(elClone);
+  }
+  const { width, height } = getInnerContentRect(elClone);
+  if (inBody) {
+    document.body.removeChild(elClone);
+  } else {
+    elOrig.removeChild(elClone);
+  }
   return { width, height };
 }
 
@@ -2189,13 +2192,20 @@ export function getContentSize(divElement) {
  */
 export function getInnerContentRect(parentElement) {
   const children = parentElement.children;
-  let totalRect = null;
+  let totalRect = {};
+
+  if (isEmpty(children)) {
+    return parentElement.getBoundingClientRect();
+  }
 
   for (const child of children) {
     const rect = child.getBoundingClientRect();
 
-    if (totalRect === null) {
-      totalRect = rect;
+    if (isEmpty(totalRect)) {
+      for (const k in rect) {
+        // spread, assign, clone won't work with DOMRect...
+        totalRect[k] = rect[k];
+      }
     } else {
       totalRect.left = Math.min(totalRect.left, rect.left);
       totalRect.top = Math.min(totalRect.top, rect.top);
@@ -2204,16 +2214,12 @@ export function getInnerContentRect(parentElement) {
     }
   }
 
-  if (totalRect !== null) {
-    return {
-      left: totalRect.left,
-      top: totalRect.top,
-      width: totalRect.right - totalRect.left,
-      height: totalRect.bottom - totalRect.top,
-    };
-  }
-
-  return null;
+  return {
+    left: totalRect.left,
+    top: totalRect.top,
+    width: totalRect.right - totalRect.left,
+    height: totalRect.bottom - totalRect.top,
+  };
 }
 
 /**

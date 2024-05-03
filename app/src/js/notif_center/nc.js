@@ -2,7 +2,7 @@ import { el } from "./../el/src/index.js";
 import { ButtonPanel } from "../button_panel";
 import { isFunction, isObject, isEmpty } from "../is_test/index.js";
 import { tt } from "../el_mapx";
-import { mergeDeep } from "../mx_helper_misc.js";
+import { patchObject } from "../mx_helper_misc.js";
 import "font-awesome/css/font-awesome.min.css";
 import "./style.less";
 
@@ -32,6 +32,8 @@ const def = {
     container_style: {
       minWidth: "470px",
       minHeight: "250px",
+      maxWidth: "50%",
+      maxHeight: "50%",
     },
   },
   items: {
@@ -42,7 +44,7 @@ const def = {
 export class NotifCenter {
   constructor(opt) {
     const nc = this;
-    nc._opt = mergeDeep(def, opt);
+    nc._opt = patchObject(def, opt);
 
     /* bind methods used in cb */
     nc._handler_info = nc._handler_info.bind(nc);
@@ -274,7 +276,7 @@ export class NotifCenter {
   getElProgress(o) {
     const nc = this;
     let elProgress = document.getElementById(
-      `nc_progress_${o.idGroup}_${o.idMerge}`
+      `nc_progress_${o.idGroup}_${o.idMerge}`,
     );
     if (!elProgress) {
       const elGroup = nc.getElGroup(o);
@@ -475,9 +477,9 @@ export class NotifCenter {
           },
           el("i", {
             class: ["fa", "fa-trash"],
-          })
-        )
-      )
+          }),
+        ),
+      ),
     );
   }
 
@@ -506,13 +508,13 @@ export class NotifCenter {
           {
             class: ["nc-group-date"],
           },
-          new Date(notif.timestamp).toLocaleString()
-        )
+          new Date(notif.timestamp).toLocaleString(),
+        ),
       ),
       el("div", {
         id: `nc_group_${notif.idGroup}`,
         class: ["nc-group"],
-      })
+      }),
     );
   }
 
@@ -523,7 +525,7 @@ export class NotifCenter {
         id: `nc_merge_${notif.idGroup}_${notif.idMerge}`,
         class: ["nc-merge"],
       },
-      el("summary", tt("nc_label_merge"))
+      el("summary", tt("nc_label_merge")),
     );
   }
 
@@ -534,7 +536,7 @@ export class NotifCenter {
         id: notif.id,
         class: ["nc-notif", `nc-notif-info-${notif.level || "default"}`],
       },
-      notif.message
+      notif.message,
     );
   }
 
@@ -550,7 +552,7 @@ export class NotifCenter {
         {
           class: ["nc-progress-message"],
         },
-        notif.message
+        notif.message,
       ),
       el(
         "div",
@@ -562,8 +564,8 @@ export class NotifCenter {
           style: {
             width: `${notif.value}%`,
           },
-        })
-      )
+        }),
+      ),
     );
   }
 }

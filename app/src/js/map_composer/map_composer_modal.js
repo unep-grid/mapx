@@ -10,7 +10,11 @@ import {
   getViewTitle,
 } from "./../map_helpers/index.js";
 import { getViewMetaToHtml } from "../metadata/utils";
-import { objectToArray, getContentSize } from "./../mx_helper_misc.js";
+import {
+  objectToArray,
+  getContentSize,
+  getInnerContentRect,
+} from "./../mx_helper_misc.js";
 
 const store = {
   mc: null,
@@ -96,12 +100,13 @@ export class MapComposerModal {
       });
 
       const dimLegend = getContentSize(elLegend);
+      const dimTitle = getContentSize(elTitle);
 
       config.items.push({
         type: "legend",
         element: elLegend,
-        width: dimLegend.width + 10,
-        height: dimLegend.height + 10,
+        width: dimLegend.width + 30,
+        height: dimLegend.height + 30,
         editable: true,
         removable: true,
       });
@@ -111,11 +116,13 @@ export class MapComposerModal {
         element: elTitle,
         editable: true,
         removable: true,
+        width: dimTitle.width + 30,
+        height: dimTitle.height + 30,
       });
 
       /**
-      * Provide metadata as files
-      */ 
+       * Provide metadata as files
+       */
       const meta = await getViewMetaToHtml(id);
 
       config.files.push({
@@ -135,15 +142,13 @@ export class MapComposerModal {
       name: "disclaimer.md",
     });
 
-    const { default: attribution } = await import(
-      "./../../md/attribution.md"
-    );
+    const { default: attribution } = await import("./../../md/attribution.md");
     config.files.push({
       type: "file",
       content: new Blob([attribution], { type: "text/markdown" }),
       name: "attribution.md",
     });
-    
+
     /**
      * Remove canvas source and layers
      */

@@ -1,6 +1,7 @@
 import { bindAll } from "../bind_class_methods";
 import { ButtonPanel } from "../button_panel";
 import { el } from "../el_mapx";
+import { patchObject } from "../mx_helper_misc";
 import "./style.css";
 
 const settings = {
@@ -15,23 +16,24 @@ const settings = {
   container_style: {
     width: "300px",
     height: "300px",
-    minWidth: "200px",
-    minHeight: "200px",
-    maxWidth: "50vw",
+    minWidth: "330px",
+    minHeight: "300px",
+    maxWidth: "50%",
+    maxHeight: "calc(100% - 50px)",
   },
+  save_size_on_resize: false,
 };
 
 export class ButtonPanelLegend extends ButtonPanel {
   constructor(opt) {
-    opt = Object.assign({}, settings, opt);
+    opt = patchObject(settings, { ...opt });
     super(opt);
     const panel = this;
-    panel.buildWrapper();
+    panel.buildContent();
     bindAll(panel);
-    panel.saveSize();
   }
 
-  buildWrapper() {
+  buildContent() {
     this._el_container = el("div", { class: "button-panel--legends" });
     this.elPanelContent.appendChild(this._el_container);
   }

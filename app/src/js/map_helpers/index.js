@@ -17,7 +17,6 @@ import {
 import { featuresToPopup } from "./features_to_popup.js";
 import { RadialProgress } from "./../radial_progress";
 import { handleViewClick } from "./../views_click";
-import { ButtonPanel } from "./../button_panel";
 import { RasterMiniMap } from "./../raster_mini_map";
 import { el, elSpanTranslate as tt } from "./../el_mapx/index.js";
 import { shake } from "./../elshake/index.js";
@@ -1210,12 +1209,6 @@ export async function initMapx(o) {
         button_lang_key: "btn_panel_main",
         tooltip_position: "bottom-right",
         button_classes: ["fa", "fa-list-ul"],
-        container_style: {
-          width: "470px",
-          height: "90%",
-          minWidth: "340px",
-          minHeight: "450px",
-        },
       },
     });
 
@@ -1489,7 +1482,7 @@ export async function initMapxStatic(o) {
     /**
      * Get views and set order
      */
-    const views = await getViewsRemote(idViews)
+    const views = await getViewsRemote(idViews);
     mapData.views.push(...views);
 
     /*
@@ -1517,6 +1510,14 @@ export async function initMapxStatic(o) {
     tooltip_position: "right",
   });
 
+  events.on({
+    type: ["view_legend_updated"],
+    idGroup: "panel_legend",
+    callback: () => {
+      mx_local.panel_legend.resizeAuto("content");
+    },
+  });
+
   /**
    * If there are views, render all
    */
@@ -1540,10 +1541,10 @@ export async function initMapxStatic(o) {
     });
 
     /**
-    * Adapt the panel
-    */
-    mx_local.panel_legend.resizeAuto('content');
-
+     * Adapt the panel
+     * - Note : in case of image of raster image,
+     */
+    mx_local.panel_legend.resizeAuto("content");
 
     /**
      * Extract all views bounds
@@ -1563,18 +1564,15 @@ export async function initMapxStatic(o) {
 
   if (isNotEmpty(panelState)) {
     /**
-    * Execute batch commands
-    */ 
+     * Execute batch commands
+     */
     panels.batch(panelState);
   } else if (!settings.initClosedPanels) {
     /**
-    * Init panel not closed, open
-    */ 
+     * Init panel not closed, open
+     */
     panelControls.open();
   }
-
-
-
 
   events.fire({
     type: "mapx_ready",
@@ -3409,49 +3407,47 @@ export function elLegendBuild(view, opt) {
     hasLegend = elLegendContainer.childElementCount > 0;
   }
 
+  /**
+   * View title in legend
+   * - static
+   * - story
+   */
   const title = getLabelFromObjectPath({
     obj: view,
     path: "data.title",
     defaultValue: "[ missing title ]",
   });
 
-  const elLegendTitle = el("div", [
-    el(
-      "div",
-      {
-        class: ["mx-legend-view-title-container"],
+  const elLegendTitle = el(
+    "span",
+    {
+      class: ["mx-legend-view-title", "text-muted", "hint--bottom"],
+      "aria-label": `${title}`,
+    },
+    title,
+  );
+
+  const elLegendMeta = el(
+    "span",
+    {
+      class: "hint--bottom",
+      dataset: {
+        view_action_key: "btn_opt_meta",
+        view_action_target: view.id,
+        lang_key: "btn_opt_meta",
+        lang_type: "tooltip",
       },
-      el(
-        "span",
-        {
-          class: ["mx-legend-view-title", "text-muted", "hint--bottom"],
-          "aria-label": `${title}`,
-        },
-        opt.addTitle ? title : "",
-      ),
-      el(
-        "span",
-        {
-          class: "hint--bottom",
-          dataset: {
-            view_action_key: "btn_opt_meta",
-            view_action_target: view.id,
-            lang_key: "btn_opt_meta",
-            lang_type: "tooltip",
-          },
-        },
-        el("i", {
-          class: ["fa", "fa-info-circle", "text-muted", "mx-legend-btn-meta"],
-        }),
-      ),
-    ),
-  ]);
+    },
+    el("i", {
+      class: ["fa", "fa-info-circle", "text-muted", "mx-legend-btn-meta"],
+    }),
+  );
 
   /**
    * Legend element
    */
   const elLegend = el("div", {
-    class: "mx-view-legend-" + opt.type,
+    class: `mx-view-legend-${opt.type}`,
     id: idLegend,
   });
 
@@ -3465,8 +3461,7 @@ export function elLegendBuild(view, opt) {
       dataset: { id_view: idView },
       style: { order: 0 },
     },
-    opt.addTitle ? elLegendTitle : null,
-    elLegend,
+    opt.addTitle ? [elLegendTitle, elLegend, elLegendMeta] : elLegend,
   );
 
   if (hasLegend) {
@@ -3853,6 +3848,7 @@ async function viewRenderRt(o) {
         onAdded: (miniMap) => {
           /* Raster MiniMap added, here */
           view._miniMap = miniMap;
+          events.fire("view_legend_updated");
         },
       });
     });
@@ -3923,6 +3919,7 @@ async function viewRenderRt(o) {
     img.style.width = img.naturalWidth / dpr + "px";
     img.style.height = img.naturalHeight / dpr + "px";
     elLegendImageBox.appendChild(img);
+    events.fire("view_legend_updated");
   }
   /* error callback */
   function handleImgError() {
@@ -3974,6 +3971,7 @@ export async function viewRenderVt(o) {
       elLegendContainer: o.elLegendContainer,
       addTitle: o.addTitle,
     });
+    events.fire("view_legend_updated");
   }
 
   /*

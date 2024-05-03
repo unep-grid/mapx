@@ -461,7 +461,7 @@ export class LegendVt {
         el(
           "span",
           {
-            class: ["mx-legend-vt-title"],
+            class: ["mx-legend-title","text-muted"],
           },
           titleLegend,
         ),
@@ -505,7 +505,7 @@ export class LegendVt {
       path: "data.style.titleLegend",
     });
     const elLegendTitle = lvt._el_container.querySelector(
-      ".mx-legend-vt-title",
+      ".mx-legend-title",
     );
     if (isElement(elLegendTitle)) {
       elLegendTitle.innerText = titleLegend;
