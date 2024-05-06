@@ -324,7 +324,7 @@ async function clearViewsVisible() {
     const map = getMap();
     map.stop();
     const state = getState();
-    const elLegendContainer = state?.buttonLegend?.elPanelContent;
+    const elLegendContainer = state?.button_legend?.elPanelContent;
     const vVisible = getViewsLayersVisibles();
     for (const v of vVisible) {
       await viewClear({
@@ -332,6 +332,7 @@ async function clearViewsVisible() {
         elLegendContainer,
       });
     }
+    events.fire("story_legend_update");
   } catch (e) {
     console.warn(e);
   }
@@ -1357,22 +1358,32 @@ function resetPanels() {
 
 async function initLegendPanel() {
   const state = getState();
-  if (state.buttonLegend) {
+  if (state.button_legend instanceof ButtonPanelLegend) {
     return;
   }
   /**
    * Button Legend
    */
-  state.buttonLegend = new ButtonPanelLegend({
+  state.button_legend = new ButtonPanelLegend({
     id: "button_panel_legend_story",
     position: "bottom-left",
     tooltip_position: "right",
+  });
+
+  events.on({
+    type: ["story_legend_update"],
+    idGroup: "story_legends",
+    callback: () => {
+      state.button_legend.resizeAuto("content");
+    },
   });
 }
 
 function removeLegendPanel() {
   const state = getState();
-  state.buttonLegend.destroy();
+  events.offGroup("story_legends");
+  state.button_legend.destroy();
+  delete state.button_legend;
 }
 
 function resetMapStyle() {
@@ -1609,7 +1620,7 @@ export async function storyPlayStep(stepNum) {
     const story = getStory();
     const settings = getSettings();
     const steps = path(story, "steps", []);
-    const elLegendContainer = state?.buttonLegend?.getContainer();
+    const elLegendContainer = state?.button_legend?.getContainer();
     const map = state.map;
     if (steps.length === 0) {
       return;
@@ -1725,6 +1736,11 @@ export async function storyPlayStep(stepNum) {
      * Update panels behaviour
      */
     await updatePanelBehaviour(settings, step);
+
+    /**
+    * Update panel legend size 
+    */ 
+    events.fire("story_legend_update");
   } catch (e) {
     console.warn(e);
   }
@@ -1843,10 +1859,10 @@ async function updatePanelBehaviour(settings, step) {
 
   switch (lBehaviour) {
     case "open":
-      state.buttonLegend.open();
+      state.button_legend.open();
       break;
     case "closed":
-      state.buttonLegend.close();
+      state.button_legend.close();
       break;
     default:
       null;

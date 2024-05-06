@@ -1508,6 +1508,7 @@ export async function initMapxStatic(o) {
     id: "button_panel_legend_static",
     position: "top-left",
     tooltip_position: "right",
+    container_classes: ["button-panel--shadow-inset"],
   });
 
   events.on({
@@ -3846,8 +3847,9 @@ async function viewRenderRt(o) {
         mapSync: map,
         tiles: tilesCopy,
         onAdded: (miniMap) => {
-          /* Raster MiniMap added, here */
           view._miniMap = miniMap;
+        },
+        onLoad: () => {
           events.fire("view_legend_updated");
         },
       });

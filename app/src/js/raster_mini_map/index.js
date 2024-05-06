@@ -1,6 +1,7 @@
 import mapboxgl from "mapbox-gl";
 import style from '!postcss-loader!less-loader?{"mimetype":"text/css"}!./style.less';
 import { settings } from "./../settings";
+import { isFunction } from "../is_test";
 
 const def = {
   elContainer: document.body,
@@ -12,6 +13,7 @@ const def = {
   tiles: [],
   mapSync: null,
   onAdded: null,
+  onLoad: null,
 };
 
 class RasterMiniMap {
@@ -152,8 +154,14 @@ class RasterMiniMap {
       /**
        * onAdded Callback
        */
-      if (mm.opt.onAdded) {
+      if (isFunction(mm.opt.onAdded)) {
         mm.opt.onAdded(mm);
+      }
+
+      if (isFunction(mm.opt.onLoad)) {
+        mm.map.once("style.load", () => {
+          mm.opt.onLoad(mm);
+        });
       }
     } catch (e) {
       mm.onError(e);

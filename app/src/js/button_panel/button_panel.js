@@ -111,10 +111,11 @@ export class ButtonPanel extends EventSimple {
       return;
     }
     panel._destroyed = true;
-    panel.manager.remove(panel);
-    panel.clearCallbacks();
-    panel.fire("destroy");
     panel.ls.destroy();
+    panel.clearCallbacks();
+    panel.manager.remove(panel);
+    panel.elMain.removeChild(panel.elContainer);
+    panel.fire("destroy");
   }
 
   setAnimmateDuration(ms) {
