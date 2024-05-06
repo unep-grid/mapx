@@ -1,7 +1,7 @@
   - [1.13.5-beta.8](https://github.com/unep-grid/mapx/tree/1.13.5-beta.8) 
     
     - Panel Legend in Story Maps 
-        - Fit legend to panel when the panel is open
+        -  Dynamically fit legends to panel when views are added / removed, during the step evaluation. Visible if the panel is open. 
 
   
 - [1.13.5-beta.7](https://github.com/unep-grid/mapx/tree/1.13.5-beta.7) 
