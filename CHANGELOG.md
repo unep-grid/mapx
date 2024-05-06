@@ -1,4 +1,10 @@
-  - [1.13.5-beta.7](https://github.com/unep-grid/mapx/tree/1.13.5-beta.7) 
+  - [1.13.5-beta.8](https://github.com/unep-grid/mapx/tree/1.13.5-beta.8) 
+    
+    - Panel Legend in Story Maps 
+        - Fit legend to panel when the panel is open
+
+  
+- [1.13.5-beta.7](https://github.com/unep-grid/mapx/tree/1.13.5-beta.7) 
     
     - Pannels :
         - Improved auto-sizing panel. Impacts also parts were element size are measured, such as map composer and almost all panels. 
