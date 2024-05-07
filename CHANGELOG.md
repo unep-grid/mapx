@@ -1,3 +1,8 @@
+  - [1.13.5-beta.9](https://github.com/unep-grid/mapx/tree/1.13.5-beta.9) 
+
+    - Improve Button Panel auto resize for raster minimaps and raster legends
+    - Implements feature request from  #885 : improvement for view's metadata
+
   - [1.13.5-beta.8](https://github.com/unep-grid/mapx/tree/1.13.5-beta.8) 
     
     - Panel Legend in Story Maps 
