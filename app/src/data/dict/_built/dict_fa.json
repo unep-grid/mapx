@@ -6585,9 +6585,9 @@
     "fa": "تعداد فعالسازی توسط کاربران ثبت نام شده"
   },
   {
-    "id": "meta_view_stat_n_add_by_users_distinct",
-    "en": "distinct user(s)",
-    "fa": "کاربر(های) متمایز"
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "fa": "تعداد کاربر متمایز"
   },
   {
     "id": "meta_view_stat_n_add_by_guests",

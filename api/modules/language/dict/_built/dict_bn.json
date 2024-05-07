@@ -6585,9 +6585,9 @@
     "bn": "নিবন্ধিত ব্যবহারকারীদের দ্বারা সক্রিয়করণের সংখ্যা"
   },
   {
-    "id": "meta_view_stat_n_add_by_users_distinct",
-    "en": "distinct user(s)",
-    "bn": "স্বতন্ত্র ব্যবহারকারী(গুলি)"
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "bn": "স্বতন্ত্র ব্যবহারকারীর সংখ্যা"
   },
   {
     "id": "meta_view_stat_n_add_by_guests",

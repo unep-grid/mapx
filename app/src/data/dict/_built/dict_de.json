@@ -6585,9 +6585,9 @@
     "de": "Anzahl der Aktivierungen durch registrierte Benutzer"
   },
   {
-    "id": "meta_view_stat_n_add_by_users_distinct",
-    "en": "distinct user(s)",
-    "de": "unterschiedliche Benutzer"
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "de": "Anzahl der unterschiedlichen Benutzer"
   },
   {
     "id": "meta_view_stat_n_add_by_guests",

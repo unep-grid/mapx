@@ -34,9 +34,9 @@ export async function ioViewMetaGet(socket, config, cb) {
       throw new Error("Missing session");
     }
 
-    const { idView } = config;
+    const { idView, stat_n_days } = config;
 
-    const metaView = await getViewMetadata({ id: idView });
+    const metaView = await getViewMetadata({ id: idView, stat_n_days });
 
     return cb(metaView);
   } catch (e) {
@@ -52,6 +52,7 @@ export async function ioViewMetaGet(socket, config, cb) {
  * Helper to get view metadata items
  * @param {Object} opt options
  * @param {String} opt.id Id of the view
+ * @param {Number} opt.stat_n_days  Number of days to computed stat frow now
  * @return {Promise<Object>} view metadata
  */
 export async function getViewMetadata(opt) {
@@ -59,8 +60,13 @@ export async function getViewMetadata(opt) {
   if (!isViewId(id)) {
     throw Error("No valid id");
   }
+  const start = Date.now();
+  const nDays = Math.ceil(opt.stat_n_days || 0);
   const sql = templates.getViewMetadata;
-  const result = await pgRead.query(sql, [id]);
+  const result = await pgRead.query(sql, [id, nDays]);
+  const duration = Date.now() - start;
+
+  console.log(` view meta + stat duration : ${duration}ms (${nDays} days)`);
   if (result && result.rowCount > 0) {
     return result.rows[0].meta;
   } else {
@@ -71,7 +77,6 @@ export async function getViewMetadata(opt) {
 async function getViewSourceMetadata(idView) {
   try {
     const view = await getView(idView);
-
     const type = view.type;
 
     const out = [];
@@ -97,6 +102,7 @@ async function getViewSourceMetadata(idView) {
       default:
         throw new Error("Unknown view type");
     }
+
     return out;
   } catch (err) {
     console.error("Error getting view source metadata: ", err.message);

@@ -232,6 +232,15 @@ function elAuto(render, data, opt) {
     return el("div", arr.map(renderString));
   }
   function renderArrayAuto(arr) {
+    const modeList = test.isArrayOfString(arr);
+
+    if (modeList && arr.length > 1) {
+      return el(
+        "ul",
+        arr.map((item) => el("li", renderAuto(item))),
+      );
+    }
+
     return el("div", arr.map(renderAuto));
   }
   function renderArrayTable(array) {

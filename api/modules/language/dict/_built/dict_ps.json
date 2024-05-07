@@ -6585,9 +6585,9 @@
     "ps": "د راجستر شوي کاروونکو لخوا د فعالیتونو شمیر"
   },
   {
-    "id": "meta_view_stat_n_add_by_users_distinct",
-    "en": "distinct user(s)",
-    "ps": "جلا کارونکي"
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "ps": "د جلا کاروونکو شمیر"
   },
   {
     "id": "meta_view_stat_n_add_by_guests",

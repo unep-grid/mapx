@@ -6585,9 +6585,9 @@
     "ar": "عدد عمليات التنشيط من قبل المستخدمين المسجلين"
   },
   {
-    "id": "meta_view_stat_n_add_by_users_distinct",
-    "en": "distinct user(s)",
-    "ar": "مستخدم (مستخدمون) مميزون"
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "ar": "عدد المستخدمين المميزين"
   },
   {
     "id": "meta_view_stat_n_add_by_guests",

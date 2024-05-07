@@ -27,11 +27,13 @@ import {
   isArray,
   isView,
   isNotEmpty,
+  isEmail,
 } from "./../is_test_mapx";
 
 const def_opt = {
   add_menu: true,
   add_views_stats: true,
+  stat_n_days: 365,
 };
 
 /**
@@ -75,8 +77,10 @@ export async function getAttributesAlias(idSource, attributes) {
 /**
  * Get view metadata
  * @param {String} id Name/Id of the view
+ * @param {Number} stat_n_days Number of days back from now to collect stats. 365 = past year
+ * @returns {Promise<Object>} View Metadata and stats
  */
-export async function getViewMetadata(id) {
+export async function getViewMetadata(id, stat_n_days = 1) {
   if (!isViewId(id)) {
     return console.warn("getViewMetadata : invalid id");
   }
@@ -84,6 +88,7 @@ export async function getViewMetadata(id) {
     "/client/view/get/metadata",
     {
       idView: id,
+      stat_n_days,
     },
     settings.maxTimeFetch,
   );
@@ -185,7 +190,7 @@ async function viewMetaToUi(idView, elTarget, opt) {
   /**
    * View meta section
    */
-  const viewMeta = await getViewMetadata(idView);
+  const viewMeta = await getViewMetadata(idView, opt.stat_n_days);
   await metaViewToUi(viewMeta, elTarget, opt);
 
   /**
@@ -274,16 +279,14 @@ async function metaViewToUi(meta, elTarget, opt) {
     "date_created",
     "project_title",
     "projects_data",
-    "collections",
+    //"collections",
     "readers",
     "editors",
     "stat_n_add",
     "stat_n_add_by_guests",
     "stat_n_add_by_users",
+    "stat_n_add_by_distinct_users",
   ];
-  const txtDistinct = await getDictItem(
-    "meta_view_stat_n_add_by_users_distinct",
-  );
   const tblSummaryFull = objectToArray(meta, true);
 
   const tblSummary = tblSummaryFull
@@ -292,17 +295,6 @@ async function metaViewToUi(meta, elTarget, opt) {
       return keys.indexOf(a.key) - keys.indexOf(b.key);
     })
     .map((row) => {
-      /**
-       * Add distinct user in by_user
-       */
-      if (row.key === "stat_n_add_by_users") {
-        const rowDistinct = tblSummaryFull.find(
-          (row) => row.key === "stat_n_add_by_distinct_users",
-        );
-        const valueDistinct = rowDistinct.value;
-        row.value = `${row.value} ( ${valueDistinct} ${txtDistinct} )`;
-      }
-
       /**
        * Add project link
        */
@@ -371,6 +363,27 @@ async function metaViewToUi(meta, elTarget, opt) {
       }
 
       /**
+       * Use email instead of id for editors, readers ,
+       * Remove 'self'
+       */
+      if (row.key === "readers" || row.key === "editors") {
+        row.value = row.value.sort();
+        const index = row.value.indexOf("self");
+        if (index !== -1) {
+          row.value.splice(index, 1);
+        }
+        if (row.key === "editors") {
+          for (let i = 0, iL = row.value.length; i < iL; i++) {
+            const id = row.value[i] * 1;
+            const editor = meta.table_editors.find((e) => e.id === id);
+            if (editor && isEmail(editor.email)) {
+              row.value[i] = editor.email;
+            }
+          }
+        }
+      }
+
+      /**
        * Match sql table with dict labels
        * e.g. "meta_view_"+ "stat_n_add_by_users"
        */
@@ -413,7 +426,7 @@ async function metaViewToUi(meta, elTarget, opt) {
       numberStyle: { marginRight: "5px" },
     }),
     elPlotPanel,
-    elAuto("array_table", meta.table_editors, {
+    elAuto("array_table", meta.table_changes_editors, {
       booleanValues: ["✓", ""],
       tableHeadersClasses: ["col-sm-6", "col-sm-3", "col-sm-3"],
       tableTitleAsLanguageKey: true,

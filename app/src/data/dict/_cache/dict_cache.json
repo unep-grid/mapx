@@ -17121,17 +17121,17 @@
     "de": "Anzahl der Aktivierungen durch registrierte Benutzer"
   },
   {
-    "id": "meta_view_stat_n_add_by_users_distinct",
-    "en": "distinct user(s)",
-    "fr": "utilisateur(s) distinct(s)",
-    "es": "usuario (s) distinto",
-    "ru": "отдельный пользователь (и)",
-    "zh": "不同的用户",
-    "ar": "مستخدم (مستخدمون) مميزون",
-    "fa": "کاربر(های) متمایز",
-    "ps": "جلا کارونکي",
-    "bn": "স্বতন্ত্র ব্যবহারকারী(গুলি)",
-    "de": "unterschiedliche Benutzer"
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "fr": "Nombre d'utilisateurs distincts",
+    "es": "Número de usuario distinto",
+    "ru": "Количество отдельных пользователей",
+    "zh": "不同用户数",
+    "ar": "عدد المستخدمين المميزين",
+    "fa": "تعداد کاربر متمایز",
+    "ps": "د جلا کاروونکو شمیر",
+    "bn": "স্বতন্ত্র ব্যবহারকারীর সংখ্যা",
+    "de": "Anzahl der unterschiedlichen Benutzer"
   },
   {
     "id": "meta_view_stat_n_add_by_guests",
@@ -18536,6 +18536,19 @@
     "ps": "د بګ / فیچر غوښتنه راپور کړئ",
     "bn": "একটি বাগ / বৈশিষ্ট্য অনুরোধ রিপোর্ট করুন",
     "de": "Melden Sie einen Fehler / eine Feature-Anfrage"
+  },
+  {
+    "id": "btn_doc_wiki",
+    "en": "MapX documentation",
+    "fr": "Documentation MapX",
+    "es": "Documentación de MapX",
+    "ru": "Документация MapX",
+    "zh": "MapX文档",
+    "ar": "توثيق MapX",
+    "fa": "مستندات MapX",
+    "ps": "MapX سندونه",
+    "bn": "MapX ডকুমেন্টেশন",
+    "de": "MapX-Dokumentation"
   },
   {
     "id": "fetch_views_not_found_modal_title",
