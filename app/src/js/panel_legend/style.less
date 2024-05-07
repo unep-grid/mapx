@@ -1,0 +1,49 @@
+// Variables
+@border: var(--mx_ui_border);
+@box-shadow: var(--mx_ui_box_shadow);
+@text-faded: var(--mx_ui_text_faded);
+
+// Legend in button panel
+.button-panel--legends {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  user-select: none;
+  padding: 10px;
+
+  // For legend in button panel without wrapper
+  > .mx-view-legend-group {
+    padding: 20px;
+    border: 1px solid @border;
+    margin: 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: @box-shadow;
+  }
+
+  .mx-legend-box {
+    max-height: 210px;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .mx-view-legend-rt .mx-legend-box {
+    min-height: 60px;
+    min-width: 60px;
+  }
+
+  &:empty::after {
+    content: "No legend";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: @text-faded;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+  }
+}

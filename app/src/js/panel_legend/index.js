@@ -2,7 +2,7 @@ import { bindAll } from "../bind_class_methods";
 import { ButtonPanel } from "../button_panel";
 import { el } from "../el_mapx";
 import { patchObject } from "../mx_helper_misc";
-import "./style.css";
+import "./style.less";
 
 const settings = {
   id: "button_panel_legend_default",
@@ -36,6 +36,7 @@ export class ButtonPanelLegend extends ButtonPanel {
   buildContent() {
     this._el_container = el("div", { class: "button-panel--legends" });
     this.elPanelContent.appendChild(this._el_container);
+    this.open();
   }
 
   getContainer() {

@@ -1512,7 +1512,7 @@ export async function initMapxStatic(o) {
   });
 
   events.on({
-    type: ["view_legend_updated"],
+    type: ["view_legend_updated", "view_removed", "view_added"],
     idGroup: "panel_legend",
     callback: () => {
       mx_local.panel_legend.resizeAuto("content");

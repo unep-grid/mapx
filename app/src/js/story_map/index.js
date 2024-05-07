@@ -20,6 +20,7 @@ import {
   easingFun,
   scrollFromTo,
   cssTransform,
+  debounce,
 } from "./../mx_helper_misc.js";
 import { dashboard } from "./../dashboards/dashboard_instances.js";
 import { getArrayDiff } from "./../array_stat/index.js";
@@ -332,7 +333,6 @@ async function clearViewsVisible() {
         elLegendContainer,
       });
     }
-    events.fire("story_legend_update");
   } catch (e) {
     console.warn(e);
   }
@@ -1371,12 +1371,20 @@ async function initLegendPanel() {
   });
 
   events.on({
-    type: ["story_legend_update"],
+    type: [
+      "story_legend_update",
+      "view_legend_updated",
+      "view_removed",
+      "view_added",
+    ],
     idGroup: "story_legends",
-    callback: () => {
-      state.button_legend.resizeAuto("content");
-    },
+    callback: debounce(updateLegendsSize, 500),
   });
+}
+
+function updateLegendsSize() {
+  const state = getState();
+  state.button_legend.resizeAuto("content");
 }
 
 function removeLegendPanel() {
@@ -1736,11 +1744,6 @@ export async function storyPlayStep(stepNum) {
      * Update panels behaviour
      */
     await updatePanelBehaviour(settings, step);
-
-    /**
-    * Update panel legend size 
-    */ 
-    events.fire("story_legend_update");
   } catch (e) {
     console.warn(e);
   }
