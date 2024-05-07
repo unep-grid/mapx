@@ -36,7 +36,6 @@ export class ButtonPanelLegend extends ButtonPanel {
   buildContent() {
     this._el_container = el("div", { class: "button-panel--legends" });
     this.elPanelContent.appendChild(this._el_container);
-    this.open();
   }
 
   getContainer() {
