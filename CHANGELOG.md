@@ -1,3 +1,16 @@
+  - [1.13.5-beta.10](https://github.com/unep-grid/mapx/tree/1.13.5-beta.10) 
+
+    - Dashboard in story map 
+        - Solve conflict with panel size, when dashboard is in mode 'fit to largest' 
+    - View metadata
+        - Added view meta button for story maps, works when no source meta are available.
+        - Added id in editors table
+        - Fixed an issue when editor email was missing
+        - Added editor email as reader and editors in all cases
+        - Replaced 'self' by the current editor email, overwrite previous change for #885
+    - Button panel legend
+        - Removed "panel open" command at init
+
   - [1.13.5-beta.9](https://github.com/unep-grid/mapx/tree/1.13.5-beta.9) 
 
     - Improve Button Panel auto resize for raster minimaps and raster legends
