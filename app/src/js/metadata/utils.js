@@ -27,7 +27,6 @@ import {
   isArray,
   isView,
   isNotEmpty,
-  isEmail,
   isViewSm,
 } from "./../is_test_mapx";
 import { getArrayDistinct } from "../array_stat/index.js";
@@ -792,10 +791,9 @@ export function metaSourceToUi(meta, prefix) {
     },
   );
   const elStartAt = elAuto("date", p("temporal.range.start_at", null));
-
   const elEndAt = elAuto("date", p("temporal.range.end_at", null));
+  const elId = el("span", p("_id_source", null));
 
-  const elId = el("span", p("_id_source"));
   /**
    * Summary table
    */

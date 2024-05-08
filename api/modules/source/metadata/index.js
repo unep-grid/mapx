@@ -78,11 +78,21 @@ async function getMetadataRow(id, pgClient = pgRead) {
 
   const res = await pgClient.query(sql, [id]);
 
+  const out = {
+    metadata: {},
+    join_config: [],
+    date_modified: null,
+    email_editor: null,
+    services: [],
+  };
+
   if (res.rowCount === 0) {
-    return {};
+    return out;
   }
 
-  return res.rows[0];
+  Object.assign(out, res.rows[0]);
+
+  return out;
 }
 
 /**
@@ -195,10 +205,9 @@ export async function getAttributesAlias(id_source, attributes) {
   return aliases;
 }
 
-
 /**
-* Get source data from mx_sources
-*/ 
+ * Get source data from mx_sources
+ */
 export async function getSourceData(idSource, client = pgRead) {
   const res = await client.query(templates.getSourceJoinData, [idSource]);
   if (res.rowCount === 0) {
