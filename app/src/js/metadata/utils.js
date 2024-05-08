@@ -29,6 +29,7 @@ import {
   isNotEmpty,
   isEmail,
 } from "./../is_test_mapx";
+import { getArrayDistinct } from "../array_stat/index.js";
 
 const def_opt = {
   add_menu: true,
@@ -364,13 +365,14 @@ async function metaViewToUi(meta, elTarget, opt) {
 
       /**
        * Use email instead of id for editors, readers ,
-       * Remove 'self'
+       * Replace 'self' by the current editor id
        */
       if (row.key === "readers" || row.key === "editors") {
         row.value = row.value.sort();
         const index = row.value.indexOf("self");
         if (index !== -1) {
-          row.value.splice(index, 1);
+          const editor = meta.table_editors.find((e) => e.id === meta.editor);
+          row.value[index] = editor.email;
         }
         if (row.key === "editors") {
           for (let i = 0, iL = row.value.length; i < iL; i++) {
@@ -381,6 +383,7 @@ async function metaViewToUi(meta, elTarget, opt) {
             }
           }
         }
+        row.value = getArrayDistinct(row.value);
       }
 
       /**
