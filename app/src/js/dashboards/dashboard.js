@@ -51,6 +51,7 @@ const defaults = {
     on_open_close_others: ["controls_panel"],
     position: "bottom-right",
     add_footer: true,
+    save_size_on_resize: false,
   },
 };
 
@@ -87,7 +88,7 @@ class Dashboard extends EventSimple {
      * Panel
      */
     d.panel = new ButtonPanel(d.opt.panel);
-    if (d.panel.isSmallHeight()) {
+    if (d.panel.isMediaSmallHeight()) {
       d.panel.setHeight("50vh", true);
     }
     d.panel.elPanelContent.appendChild(d.elDashboard);
@@ -333,7 +334,10 @@ class Dashboard extends EventSimple {
     const layout = d.opt.dashboard.layout;
 
     if (layout === "fit" || layout === "full") {
-      // don't resize panel when  'fit' or 'full'
+      if (d.panel.isSmall()) {
+        // too small, at least render orig value
+        d.updatePanelLayout(animate);
+      }
       return;
     }
 
@@ -372,7 +376,7 @@ class Dashboard extends EventSimple {
    */
   fitPanelToWidgetsWidth(animate) {
     const d = this;
-    if (d.panel.isSmallWidth()) {
+    if (d.panel.isMediaSmallWidth()) {
       return;
     }
     d.panel.setAnimate(animate);
@@ -392,7 +396,7 @@ class Dashboard extends EventSimple {
    */
   fitPanelToWidgetsHeight(animate) {
     const d = this;
-    if (d.panel.isSmallHeight()) {
+    if (d.panel.isMediaSmallHeight()) {
       return;
     }
     d.panel.setAnimate(animate);
@@ -412,7 +416,7 @@ class Dashboard extends EventSimple {
    */
   fitPanelToWidgetsAuto(animate) {
     const d = this;
-    if (d.panel.isSmallHeight() || d.panel.isSmallWidth()) {
+    if (d.panel.isMediaSmall()) {
       return;
     }
     d.panel.setAnimate(animate);

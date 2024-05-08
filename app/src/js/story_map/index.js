@@ -1384,6 +1384,11 @@ async function initLegendPanel() {
 
 function updateLegendsSize() {
   const state = getState();
+
+  if (!state.enable) {
+    return;
+  }
+
   state.button_legend.resizeAuto("content");
 }
 

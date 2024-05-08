@@ -127,7 +127,7 @@ export class ButtonPanel extends EventSimple {
   saveSize() {
     const panel = this;
     const id = panel.opt.id;
-    if (panel.isSmall()) {
+    if (panel.isMediaSmall()) {
       return;
     }
     if (id && window.localStorage) {
@@ -149,7 +149,7 @@ export class ButtonPanel extends EventSimple {
   restoreSize() {
     const panel = this;
     const id = panel.opt.id;
-    if (panel.isSmall()) {
+    if (panel.isMediaSmall()) {
       return;
     }
     if (id && window.localStorage) {
@@ -798,21 +798,32 @@ export class ButtonPanel extends EventSimple {
     return this.elPanelContent.childElementCount === 0;
   }
 
-  isSmall() {
-    return this.isSmallHeight() || this.isSmallWidth();
+  isMediaSmall() {
+    return this.isMediaSmallHeight() || this.isMediaSmallWidth();
   }
-  isSmallHeight() {
+  isMediaSmallHeight() {
     // should match @media (max-height: 640px) {
     return window.innerHeight <= 640;
   }
-  isSmallWidth() {
+  isMediaSmallWidth() {
     // should match @media (max-width: 640px) {
     return window.innerWidth <= 640;
   }
+
+  isSmallHeight() {
+    return this.rect.height <= 200;
+  }
+  isSmallWidth() {
+    return this.rect.height <= 200;
+  }
+  isSmall() {
+    return this.isSmallHeight() || this.isSmallWidth();
+  }
+
   setExclusiveMode(enable) {
     const panel = this;
     panel.exclusiveMode =
-      typeof enable === "boolean" ? enable : panel.isSmallWidth();
+      typeof enable === "boolean" ? enable : panel.isMediaSmallWidth();
   }
 }
 

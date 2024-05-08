@@ -249,6 +249,7 @@ export class DashboardManager {
 
   /**
    * Create the view's dashboard, and populate widgets
+   * NOTE: story map uses directly dashboard.viewAddWidgetsAsync(v);
    * @param {string} idView
    * @returns {Promise<boolean>}
    */

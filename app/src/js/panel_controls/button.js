@@ -203,15 +203,7 @@ class Button extends EventSimple {
     this.elButton.remove();
     this.fire("destroy");
   }
-  isSmall() {
-    return this.isSmallHeight() || this.isSmallWidth();
-  }
-  isSmallHeight() {
-    return window.innerHeight < 800;
-  }
-  isSmallWidth() {
-    return window.innerWidth < 800;
-  }
+
 }
 
 export { Button };
