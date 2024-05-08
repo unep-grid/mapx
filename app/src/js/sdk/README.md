@@ -1,96 +1,190 @@
-
 # MapX SDK
 
-The package `MxSdk` ease the integration of MapX. It features a simple way to interact with MapX within a static web page or from a full featured application.
+## Introduction
 
-## Usage
+The MapX SDK enables developers to seamlessly integrate the [MapX](https://unepgrid.ch/en/mapx) single page application into web projects, providing access to comprehensive geospatial environmental data. Key MapX features include:
 
-As an integrator you will use the `Manager` class to embed an instance of MapX and allow to interact with MapX's specific methods or events.
+- Scientific and geospatial visualizations
+- Curated list of thousands of 'views', including [geological maps](https://app.mapx.org/static.html?language=en&views=MX-JH8E4-MZKY6-WNG6M&zoomToViews=true&p=0&b=0&z=3.195&lat=37.95&lng=43.542&t3d=false&sat=false&theme=water_dark&globe=true), or near real-time data, e.g., [Active Fires Assessment](https://app.mapx.org/static.html?language=en&views=MX-CY3C3-R9YDU-EXGPW&zoomToViews=true&p=0&b=0&z=2.063&lat=-0.799&lng=46.195&t3d=false&sat=false&theme=water_light&globe=true), or [Near Real-Time Active Fires](https://app.mapx.org/static.html?views=MX-6BI2W-R1HNH-THYSG&zoomToViews=true&theme=water_dark&globe=true) 
+- UN official boundaries base maps, customizable themes, styles, and fonts, including GL fonts
+- Dashboards
+- Story maps
+- Vector drawing tools
+- Multi-user, real-time attribute table editing
+- Many more : projects, users management, upload, download, metadata, vector tiles, WMS ... 
 
-### Module include
+The goal of the SDK is to embed MapX and facilitate interaction with it. While it doesn't offer all the functionalities of MapX, it provides most features useful for integration into other web applications.
 
+The primary usage is in 'static' mode: a lightweight, login- and user-roles-free, performant version of MapX. However, the 'app' mode allows interaction with a more comprehensive version of MapX, providing greater control, but is more complex to operate.
+
+## License
+
+The MapX SDK is provided under an MIT license
+
+## Resources
+
+- [Mapx Documentation](https://github.com/unep-grid/mapx/wiki)
+- [Demo site with example of integration in React, JQuery or Vanilla JS, with a link to the source code](https://unep-grid.github.io/mapx-demo/index.html)
+- [Observable collection / Showcase](https://observablehq.com/collection/@trepmag/mapx-sdk)
+- [Starter project example](https://git.unepgrid.ch/drikc/mapx-sdk-starter-project)
+- [Prototype presentation (1-Jul-2020)](https://unepgrid.ch/storage/app/media/platforms/mapx-sdk-prototype-presentation-20200701.html)
+- [Package at npm registry](https://www.npmjs.com/package/@fxi/mxsdk)
+- [Wiki example](https://github.com/unep-grid/mapx/wiki/SDK-usage-examples)
+- [A paper [unpublished] is available in the repo](https://github.com/unep-grid/mapx/blob/staging/app/src/js/sdk/paper/paper.pdf)
+
+
+## Installation and Configuration
+
+To get started, include the MapX SDK.
+For the latest version that match the guest's version, e.g. `https://app.mapx.org` you can use ES6 imports:
+
+```javascript
+import { Manager } from "https://app.mapx.org/sdk/mxsdk.modern.js";
 ```
-$ npm install @fxi/mxsdk
-...
-import {Manager} from '@fxi/mxsdk';
-```
 
-### HTML inline 
+## Basic Usage
 
-```html
-<script src="https://app.mapx.org/sdk/mxsdk.umd.js"></script>
-```
+- Create a new MapX manager instance:
 
-```js
-const mapx = new mxsdk.Manager({
-  container: document.getElementById('mapx'),
-  url: {
-    host: 'app.mapx.org'
-  },
-  static: true,
-  verbose: true,
+```javascript
+const mapx = new Manager({
+  // where to render MapX 
+  container: document.getElementById("mapx"),
+  // instance to connect to
+  url: "https://app.mapx.org:443?language=en",
+  // mode static ( recommended )
+  static : true,
+  // additional search parameters
   params: {
-    closePanels: true,
-    views: ['MX-Z741Z-HA4JJ-OGV29'],
-    language: 'fr'
-  }
+    theme: "color_light",
+    project: "MX-YBJ-YYF-08R-UUR-QW6",
+    language : "fr"
+  },
+});
+```
+- Handle the `ready` event and call the `ask` method to interact with MapX:
+
+```javascript
+mapx.once("ready", async () => {
+  console.log("ready!");
+  const res = await mapx.ask("<cmd id>", "<object config>");
+  // Your logic here
 });
 ```
 
-### Search parameters 
 
-Mapx has a set of valid search parameters in its query string. The SDK will use the `params` object to build the querry string.
+### Search Parameters `params`
+
+MapX has a set of valid search parameters in its query string. The SDK uses the `params` object to build the initial query string, which already covers a lot of ground.
 
 Current supported parameters are [defined in the wiki](https://github.com/unep-grid/mapx/wiki/URL-parameters).
 
 
-## Methods and events
+## Methods
 
-The `ready` event is the entry point on which methods are to be used; example:
+### `ask(cmdId, config)`
 
-```js
-/**
- * Embed a MapX instance
- */
-const mapx = new Manager({
-  container: document.getElementById('mapx'),
-  url: 'https://app.mapx.org/?project=MX-YBJ-YYF-08R-UUR-QW6&language=en',
+- Sends a command to the MapX API and returns the result.
+
+- **Parameters**:
+
+	- `cmdId` (string): The command identifier.
+	- `config` (object): The command configuration object.
+
+- **Example**:
+
+```javascript
+// Test if user is guest
+const isGuest = await mapx.ask("is_user_guest");
+console.log(`User is guest: ${isGuest}`);
+
+// List available commands
+const methods =  await mapx.ask("get_sdk_methods");
+console.log(`Methods: ${JSON.stringify(methods,0,2)}`);
+
+// Create a sample GeoJSON
+const view = await mapx.ask("view_geojson_create", {
+    random: { n: 100 },
+    save: false,
+});
+const res = await mapx.ask("download_view_source_geojson", {
+    idView: view.id,
 });
 
-/**
- * Use methods upon the ready event
- */
-mapx.on('ready', async () => {
+console.log(res.data);
 
-  /**
-   * Get list of views
-   */
-  const views = await mapx.ask('get_views')
-  console.log(views);
+// Add a view
+await mapx.ask('view_add', {idView: 'MX-ML9PZ-PZ1SI-WVV85'});
 
-  /**
-   * Add a view to be displayed on the embedded map
-   */
-  await mapx.ask('view_add', {idView: 'MX-ML9PZ-PZ1SI-WVV85'});
+```
 
-  // Etc, ...
 
+### `on(event, callback)` `once(event, callback)` `off(event, callback)`
+
+Adds an event listener for the specified event.
+
+- **Parameters**:
+	- `event` (string): The event name.
+	- `callback` (function): The callback function to execute when the event is triggered.
+- **Example**:
+
+```javascript
+mapx.on("message",log);
+mapx.off("message", log);
+function log(m){console.log(m)};
+```
+
+```javascript
+// once can use a callback
+mapx.once("ready", ()=>{console.log('ready'});
+// and returns a  promise 
+const res = await mapx.once('view_panel_click');
+```
+
+## Events
+
+MapX SDK provides several events that can be listened for via the `.on` and `.once` methods:
+
+- `ready`
+
+	- Fired when the SDK is fully loaded and initialized.
+	- Usage:
+
+```javascript
+mapx.once("ready", () => {
+  console.log("MapX SDK is ready!");
 });
 ```
 
-### Methods
+- `message`
 
-Methods are handled by the [MapxResolvers class](#MapxResolversApp) and are call using `mapx.ask(<method name>[, <object param(s)>])` which returns a Promise or a Promisified value. E.g. `mapx.ask('get_user_ip').then(console.log)`. In app mode, all methods from [MapxResolvers app](#MapxResolversApp) and [MapxResolvers static](#MapxResolversStatic) are avaible. In static mode, only the subset from [MapxResolvers static](#MapxResolversStatic) can be used.
+	- Triggered when there is a message from `mapx` or the `worker`.
+	- Usage:
 
-### Events
+```javascript
+mapx.on("message", (message) => {
+  const { level, text } = message;
+  switch (level) {
+    case "message":
+      console.info(text);
+      break;
+    case "warning":
+      console.warn(text);
+      break;
+    case "error":
+      console.error(text);
+      break;
+    default:
+      console.log(message);
+  }
+});
+```
 
-Events are hookable using `Manager.on(<event name>, <callback>)`. Here are the available events.
-
-SDK events:
+### SDK events:
 - message
 - ready
 
-MapX events:
+### MapX events:
 - language_change
 - project_change
 - session_start
@@ -116,17 +210,8 @@ MapX events:
 - story_step
 - view_panel_click
 
-### Resources
 
-Further usage resources:
-- [Observable collection](https://observablehq.com/collection/@trepmag/mapx-sdk) to have an interactive showcase
-- [Examples](examples/) within this repository
-- [Starter project example](https://git.unepgrid.ch/drikc/mapx-sdk-starter-project)
-- [Prototype presentation (1-Jul-2020)](https://unepgrid.ch/storage/app/media/platforms/mapx-sdk-prototype-presentation-20200701.html)
-- [Package at npm registry](https://www.npmjs.com/package/@fxi/mxsdk)
-- [Wiki example](https://github.com/unep-grid/mapx/wiki/SDK-usage-examples)
-
-## Documentation
+## Commands Documentation
 
 ### Classes
 
@@ -3147,5 +3232,5 @@ Checks if a panel is hidden.
 
 * * *
 
-
 &copy; 2019-present unepgrid.ch
+
