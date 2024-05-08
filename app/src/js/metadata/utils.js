@@ -368,12 +368,15 @@ async function metaViewToUi(meta, elTarget, opt) {
        * Replace 'self' by the current editor id
        */
       if (row.key === "readers" || row.key === "editors") {
-        row.value = row.value.sort();
+        row.value.sort();
         const index = row.value.indexOf("self");
+        const editor = meta.table_editors.find((e) => e.id === meta.editor);
         if (index !== -1) {
-          const editor = meta.table_editors.find((e) => e.id === meta.editor);
           row.value[index] = editor.email;
+        } else {
+          row.value.unshift(editor.email);
         }
+
         if (row.key === "editors") {
           for (let i = 0, iL = row.value.length; i < iL; i++) {
             const id = row.value[i] * 1;
