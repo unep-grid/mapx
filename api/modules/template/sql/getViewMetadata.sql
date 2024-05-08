@@ -79,9 +79,10 @@ v_changes_editors AS (
 ),
 v_changes_editors_email AS (
   SELECT 
-  u.email AS editor_email, 
+  u.id as id,
+  u.email AS email, 
   vc.n_changes AS n_changes, 
-  vc.editor = vl.editor AS current_editor
+  vc.editor = vl.editor AS is_current
   FROM 
   v_changes_editors vc, 
   v_last_editor vl, 

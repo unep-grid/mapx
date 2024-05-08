@@ -6560,6 +6560,11 @@
     "ps": "مدیر "
   },
   {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "ps": "ID"
+  },
+  {
     "id": "meta_view_table_editors_current",
     "en": "Latest edit",
     "ps": "وروستی سمون "

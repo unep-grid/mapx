@@ -60,13 +60,10 @@ export async function getViewMetadata(opt) {
   if (!isViewId(id)) {
     throw Error("No valid id");
   }
-  const start = Date.now();
   const nDays = Math.ceil(opt.stat_n_days || 0);
   const sql = templates.getViewMetadata;
   const result = await pgRead.query(sql, [id, nDays]);
-  const duration = Date.now() - start;
 
-  console.log(` view meta + stat duration : ${duration}ms (${nDays} days)`);
   if (result && result.rowCount > 0) {
     return result.rows[0].meta;
   } else {

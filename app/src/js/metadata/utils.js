@@ -28,6 +28,7 @@ import {
   isView,
   isNotEmpty,
   isEmail,
+  isViewSm,
 } from "./../is_test_mapx";
 import { getArrayDistinct } from "../array_stat/index.js";
 
@@ -104,9 +105,15 @@ export async function getViewMetadata(id, stat_n_days = 1) {
  */
 export async function getViewSourceMetadata(view) {
   view = getView(view);
+
   if (!isView(view)) {
     return [];
   }
+
+  if (isViewSm(view)) {
+    return [];
+  }
+
   const metadata = await ws.emitAsync(
     "/client/view/source/get/metadata",
     {
@@ -370,20 +377,18 @@ async function metaViewToUi(meta, elTarget, opt) {
       if (row.key === "readers" || row.key === "editors") {
         row.value.sort();
         const index = row.value.indexOf("self");
-        const editor = meta.table_editors.find((e) => e.id === meta.editor);
+        const editorEmail = getEditorEmailFromMeta(meta, meta.editor);
         if (index !== -1) {
-          row.value[index] = editor.email;
+          row.value[index] = editorEmail;
         } else {
-          row.value.unshift(editor.email);
+          row.value.unshift(editorEmail);
         }
 
         if (row.key === "editors") {
           for (let i = 0, iL = row.value.length; i < iL; i++) {
             const id = row.value[i] * 1;
-            const editor = meta.table_editors.find((e) => e.id === id);
-            if (editor && isEmail(editor.email)) {
-              row.value[i] = editor.email;
-            }
+            const email = getEditorEmailFromMeta(meta, id);
+            row.value[i] = email;
           }
         }
         row.value = getArrayDistinct(row.value);
@@ -437,6 +442,7 @@ async function metaViewToUi(meta, elTarget, opt) {
       tableHeadersClasses: ["col-sm-6", "col-sm-3", "col-sm-3"],
       tableTitleAsLanguageKey: true,
       tableHeadersLabels: [
+        "meta_view_table_editors_id",
         "meta_view_table_editors_email",
         "meta_view_table_editors_changes",
         "meta_view_table_editors_current",
@@ -450,6 +456,22 @@ async function metaViewToUi(meta, elTarget, opt) {
   if (opt.add_views_stats) {
     await metaCountByCountryToPlot(meta.stat_n_add_by_country, elPlot);
   }
+}
+
+/**
+ * Get editor email from view meta object
+ */
+function getEditorEmailFromMeta(meta, id) {
+  id = isEmpty(id) ? meta.editor : id;
+  const editor = meta.table_editors.find((e) => e.id === meta.editor);
+  if (editor?.email) {
+    return editor.email;
+  }
+  const lastEditor = meta.table_changes_editors.find((i) => i.is_current);
+  if (lastEditor?.email) {
+    return lastEditor.email;
+  }
+  throw new Error(`getLastEditorEmail : no editor found for id ${id}`);
 }
 
 /**

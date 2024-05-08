@@ -128,6 +128,13 @@ export function isViewGj(item) {
   return isViewType(item, "gj");
 }
 /**
+ * Test if it's a MapX view of type gj
+ * @param {Object} item to test
+ */
+export function isViewSm(item) {
+  return isViewType(item, "sm");
+}
+/**
  * Test if it's a MapX view is editable
  * @param {Object} item to test
  */

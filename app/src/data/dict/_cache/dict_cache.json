@@ -17056,6 +17056,19 @@
     "de": "Editor "
   },
   {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "fr": "ID",
+    "es": "ID",
+    "ru": "ИДЕНТИФИКАТОР",
+    "zh": "ID",
+    "ar": "بطاقة تعريف",
+    "fa": "شناسه",
+    "ps": "ID",
+    "bn": "আইডি",
+    "de": "AUSWEIS"
+  },
+  {
     "id": "meta_view_table_editors_current",
     "en": "Latest edit",
     "fr": "Dernière édition",

@@ -6560,6 +6560,11 @@
     "zh": "编辑者"
   },
   {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "zh": "ID"
+  },
+  {
     "id": "meta_view_table_editors_current",
     "en": "Latest edit",
     "zh": "最新编辑"

@@ -5248,6 +5248,10 @@
     "en": "Editor"
   },
   {
+    "id": "meta_view_table_editors_id",
+    "en": "ID"
+  },
+  {
     "id": "meta_view_table_editors_current",
     "en": "Latest edit"
   },

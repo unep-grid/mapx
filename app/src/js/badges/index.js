@@ -48,6 +48,7 @@ export async function setViewBadges(view) {
     const hasEdit = view._edit === true || view.type === "gj";
     const isShared = view.project !== settings.project.id;
     const isValidable = ["rt", "vt", "cc"].includes(view.type);
+    const hasViewMetadata = ['rt','vt','cc','sm'].includes(view.type);
     const hasPublic = readers.includes("public");
     const elBadges = viewBase.elBadges;
     const isTemp = view._temp === true;
@@ -114,7 +115,7 @@ export async function setViewBadges(view) {
     /**
      * View metadata button / badge
      */
-    if (isValidable) {
+    if (hasViewMetadata) {
       const elBadgeMeta = elBadge("meta", { id: view.id });
       badges.push(elBadgeMeta);
     }

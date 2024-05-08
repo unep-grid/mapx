@@ -6560,6 +6560,11 @@
     "bn": "সম্পাদক "
   },
   {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "bn": "আইডি"
+  },
+  {
     "id": "meta_view_table_editors_current",
     "en": "Latest edit",
     "bn": "সর্বশেষ সম্পাদনা "

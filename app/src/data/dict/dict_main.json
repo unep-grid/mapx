@@ -9717,6 +9717,19 @@
     "de": ""
   },
   {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "fr": "ID",
+    "es": "ID",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "meta_view_table_editors_current",
     "en": "Latest edit",
     "fr": "Dernière édition",

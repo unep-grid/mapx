@@ -6560,6 +6560,11 @@
     "es": "Editor"
   },
   {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "es": "ID"
+  },
+  {
     "id": "meta_view_table_editors_current",
     "en": "Latest edit",
     "es": "Últimos cambios"

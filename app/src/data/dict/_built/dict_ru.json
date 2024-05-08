@@ -6560,6 +6560,11 @@
     "ru": "редактор "
   },
   {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "ru": "ИДЕНТИФИКАТОР"
+  },
+  {
     "id": "meta_view_table_editors_current",
     "en": "Latest edit",
     "ru": "Последнее изменение "
