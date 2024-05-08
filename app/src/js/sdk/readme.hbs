@@ -5,17 +5,17 @@
 The MapX SDK enables developers to seamlessly integrate the [MapX](https://unepgrid.ch/en/mapx) single page application into web projects, providing access to comprehensive geospatial environmental data. Key MapX features include:
 
 - Scientific and geospatial visualizations
-- Curated list of thousands of 'views', including [geological maps](https://app.mapx.org/static.html?language=en&views=MX-JH8E4-MZKY6-WNG6M&zoomToViews=true&p=0&b=0&z=3.195&lat=37.95&lng=43.542&t3d=false&sat=false&theme=water_dark&globe=true), or near real-time data, e.g., [Active Fires Assessment](https://app.mapx.org/static.html?language=en&views=MX-CY3C3-R9YDU-EXGPW&zoomToViews=true&p=0&b=0&z=2.063&lat=-0.799&lng=46.195&t3d=false&sat=false&theme=water_light&globe=true), or [Near Real-Time Active Fires](https://app.mapx.org/static.html?views=MX-6BI2W-R1HNH-THYSG&zoomToViews=true&theme=water_dark&globe=true) 
+- Curated list of thousands of [views](https://github.com/unep-grid/mapx/wiki/Views), including [geological maps](https://app.mapx.org/static.html?language=en&views=MX-JH8E4-MZKY6-WNG6M&zoomToViews=true&p=0&b=0&z=3.195&lat=37.95&lng=43.542&t3d=false&sat=false&theme=water_dark&globe=true), or near real-time data, e.g., [Active Fires Assessment](https://app.mapx.org/static.html?language=en&views=MX-CY3C3-R9YDU-EXGPW&zoomToViews=true&p=0&b=0&z=2.063&lat=-0.799&lng=46.195&t3d=false&sat=false&theme=water_light&globe=true), or [Near Real-Time Active Fires](https://app.mapx.org/static.html?views=MX-6BI2W-R1HNH-THYSG&zoomToViews=true&theme=water_dark&globe=true) 
 - UN official boundaries base maps, customizable themes, styles, and fonts, including GL fonts
-- Dashboards
-- Story maps
-- Vector drawing tools
-- Multi-user, real-time attribute table editing
-- Many more : projects, users management, upload, download, metadata, vector tiles, WMS ... 
+- [Dashboards](https://github.com/unep-grid/mapx/wiki/Views#dashboards)
+- [Story maps](https://github.com/unep-grid/mapx/wiki/Story-maps)
+- [Vector drawing tools](https://github.com/unep-grid/mapx/wiki/Draw-tool)
+- [Multi-user, real-time attribute table editing](https://github.com/unep-grid/mapx/wiki/Attribute-table-edition)
+- Many more : [projects](https://github.com/unep-grid/mapx/wiki/Project-management), [users management](https://github.com/unep-grid/mapx/wiki/Introduction#roles), [complex join](https://github.com/unep-grid/mapx/wiki/Table-join-tool), [upload](https://github.com/unep-grid/mapx/wiki/Sources#publication-of-new-sources), [download](https://github.com/unep-grid/mapx/wiki/Download-tool), [metadata](https://github.com/unep-grid/mapx/wiki/Metadata), [WMS](https://github.com/unep-grid/mapx/wiki/Sources#tips--tricks:~:text=the%20data%20catalog.-,Enable%20WMS%20services,-%3A%20In%20a%20public) ... 
 
-The goal of the SDK is to embed MapX and facilitate interaction with it. While it doesn't offer all the functionalities of MapX, it provides most features useful for integration into other web applications.
+The SDK aims to embed MapX and simplify interaction with it. Although it doesn't include all of MapX's functionalities, it offers most features essential for seamless integration into other web applications.
 
-The primary usage is in 'static' mode: a lightweight, login- and user-roles-free, performant version of MapX. However, the 'app' mode allows interaction with a more comprehensive version of MapX, providing greater control, but is more complex to operate.
+The primary usage is in 'static' mode: a lightweight, performant version of MapX without login and user roles. Alternatively, the 'app' mode provides a more comprehensive version of MapX with enhanced control but is more complex and resource-intensive.
 
 ## License
 
@@ -42,6 +42,15 @@ For the latest version that match the guest's version, e.g. `https://app.mapx.or
 import { Manager } from "https://app.mapx.org/sdk/mxsdk.modern.js";
 ```
 
+Classic `npm` package installation 
+
+```javascript
+$ npm install @fxi/mxsdk
+...
+import { Manager } from '@fxi/mxsdk';
+```
+
+
 ## Basic Usage
 
 - Create a new MapX manager instance:
@@ -51,13 +60,14 @@ const mapx = new Manager({
   // where to render MapX 
   container: document.getElementById("mapx"),
   // instance to connect to
-  url: "https://app.mapx.org:443?language=en",
+  url: "https://app.mapx.org:443",
   // mode static ( recommended )
   static : true,
   // additional search parameters
   params: {
     theme: "color_light",
     project: "MX-YBJ-YYF-08R-UUR-QW6",
+    // Most UN languages supported
     language : "fr"
   },
 });
@@ -67,7 +77,7 @@ const mapx = new Manager({
 ```javascript
 mapx.once("ready", async () => {
   console.log("ready!");
-  const res = await mapx.ask("<cmd id>", "<object config>");
+  const res = await mapx.ask("<command>", "<config>");
   // Your logic here
 });
 ```
@@ -82,13 +92,13 @@ Current supported parameters are [defined in the wiki](https://github.com/unep-g
 
 ## Methods
 
-### `ask(cmdId, config)`
+### `ask(<command>, <config>)`
 
 - Sends a command to the MapX API and returns the result.
 
 - **Parameters**:
 
-	- `cmdId` (string): The command identifier.
+	- `command` (string): The command identifier.
 	- `config` (object): The command configuration object.
 
 - **Example**:
