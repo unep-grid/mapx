@@ -27,7 +27,7 @@ affiliations:
       index: 1
     - name: University of Geneva, Institute for Environmental Sciences, EnviroSPACE Lab., Bd Carl-Vogt 66, CH-1211 Geneva, Switzerland
       index: 2
-date: 2024-04-11
+date: 11 April 2024
 bibliography: paper.bib
 ---
 
