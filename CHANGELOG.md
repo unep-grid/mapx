@@ -1,3 +1,8 @@
+  - [1.13.5-beta.11](https://github.com/unep-grid/mapx/tree/1.13.5-beta.11) 
+
+    - Metadata api retriever
+        - Handle case when metadata object is not present in mx_sources record 
+
   - [1.13.5-beta.10](https://github.com/unep-grid/mapx/tree/1.13.5-beta.10) 
 
     - Dashboard in story map 
