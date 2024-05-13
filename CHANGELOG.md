@@ -1,3 +1,7 @@
+  - [1.13.6](https://github.com/unep-grid/mapx/tree/1.13.6) 
+
+    - Should solve legends rendering issue in static mode
+
   - [1.13.5](https://github.com/unep-grid/mapx/tree/1.13.5) 
 
   - [1.13.5-beta.11](https://github.com/unep-grid/mapx/tree/1.13.5-beta.11) 
