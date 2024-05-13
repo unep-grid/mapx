@@ -1,3 +1,5 @@
+  - [1.13.5](https://github.com/unep-grid/mapx/tree/1.13.5) 
+
   - [1.13.5-beta.11](https://github.com/unep-grid/mapx/tree/1.13.5-beta.11) 
 
     - Metadata api retriever
