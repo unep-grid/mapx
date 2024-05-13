@@ -2804,7 +2804,7 @@ export async function viewAddAuto(idView, options) {
   } else {
     await viewRender({
       view: view,
-      elLegendContainer: mx_local.panel_legend.elPanelContent,
+      elLegendContainer: mx_local.panel_legend.getContainer(),
       addTitle: true,
     });
   }
@@ -3099,7 +3099,7 @@ export async function viewRender(o) {
     o.idView = o.idView.split(settings.separators.sublayer)[0];
   }
   if (!o.elLegendContainer && mx_local.panel_legend) {
-    o.elLegendContainer = mx_local.panel_legend.elPanelContent;
+    o.elLegendContainer = mx_local.panel_legend.getContainer();
   }
   const isStory = isStoryPlaying();
   const idLayerBefore = o.before
