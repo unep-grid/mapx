@@ -76,13 +76,35 @@ async function saveLogs(logs, ipGeo) {
 }
 /**
  * Format : add date and ip
+ * ipGeo sample
+ * { ip: '192.168.65.1',
+ *   country: null,
+ *   country_name: null,
+ *   source: 'redis'
+ * }
+ * log sample
+ * {
+ *   "date_modified": "2024-05-14T15:20:50.698Z",
+ *   "id_log": "session_start",
+ *   "data": {},
+ *   "is_static": false,
+ *   "is_guest": false,
+ *   "id_user": 1,
+ *   "id_project": "MX-A3M-LVK-V7S-XOT-J48",
+ *   "side": "browser",
+ *   "level": "USER_ACTION",
+ *   "ip_user": "192.168.65.1"
+ * }
  */
 function formatLogs(logs, ipGeo) {
+  const save_geo = ["session_start", "view_add"];
   logs = logs || [];
+  const { ip } = ipGeo;
   for (const l of logs) {
-    l.ip_user = ipGeo.ip;
+    const includeGeo = save_geo.includes(l.id_log);
+    l.ip_user = ip;
     l.date_modified = new Date(l.date_modified);
-    if (l.id_log === "session_start") {
+    if (includeGeo) {
       l.data = {
         ...ipGeo,
         ...l.data,
