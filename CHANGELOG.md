@@ -1,3 +1,9 @@
+  - [1.13.7-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.7-alpha.1) 
+   
+    - View's statistics : 
+        - Separate view's meta from view's statistics 
+        - New (test) button, to try the feature
+
   - [1.13.6](https://github.com/unep-grid/mapx/tree/1.13.6) 
 
     - Should solve legends rendering issue in static mode
