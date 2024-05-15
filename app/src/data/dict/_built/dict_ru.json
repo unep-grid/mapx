@@ -3355,6 +3355,11 @@
     "ru": "Показать метаданные "
   },
   {
+    "id": "btn_opt_stats",
+    "en": "Display view's statistics",
+    "ru": "Отображение статистики вида"
+  },
+  {
     "id": "btn_opt_numeric",
     "en": "Filter by numeric value",
     "ru": "Фильтр по числовому значению "

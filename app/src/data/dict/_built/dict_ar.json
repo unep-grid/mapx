@@ -3355,6 +3355,11 @@
     "ar": "عرض البيانات الوصفية "
   },
   {
+    "id": "btn_opt_stats",
+    "en": "Display view's statistics",
+    "ar": "عرض إحصاءات العرض"
+  },
+  {
     "id": "btn_opt_numeric",
     "en": "Filter by numeric value",
     "ar": "تصفية حسب القيمة الرقمية "

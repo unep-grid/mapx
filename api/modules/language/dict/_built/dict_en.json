@@ -2684,6 +2684,10 @@
     "en": "Display metadata"
   },
   {
+    "id": "btn_opt_stats",
+    "en": "Display view's statistics"
+  },
+  {
     "id": "btn_opt_numeric",
     "en": "Filter by numeric value"
   },

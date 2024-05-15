@@ -3355,6 +3355,11 @@
     "ps": "میتا ډیټا ښکاره کړئ"
   },
   {
+    "id": "btn_opt_stats",
+    "en": "Display view's statistics",
+    "ps": "د لیدنې احصایې ښکاره کړئ"
+  },
+  {
     "id": "btn_opt_numeric",
     "en": "Filter by numeric value",
     "ps": "د عددي ارزښت له مخې چاter "

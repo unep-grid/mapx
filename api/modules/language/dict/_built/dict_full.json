@@ -8723,6 +8723,19 @@
     "de": "Metadaten anzeigen "
   },
   {
+    "id": "btn_opt_stats",
+    "en": "Display view's statistics",
+    "fr": "Afficher les statistiques de la vue",
+    "es": "Mostrar estadísticas de la vista",
+    "ru": "Отображение статистики вида",
+    "zh": "显示视图的统计数据",
+    "ar": "عرض إحصاءات العرض",
+    "fa": "نمایش آمار نما",
+    "ps": "د لیدنې احصایې ښکاره کړئ",
+    "bn": "দেখার পরিসংখ্যান প্রদর্শন করুন",
+    "de": "Ansichtsstatistiken anzeigen"
+  },
+  {
     "id": "btn_opt_numeric",
     "en": "Filter by numeric value",
     "fr": "Filtrer par valeur numerique",

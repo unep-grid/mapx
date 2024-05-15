@@ -3355,6 +3355,11 @@
     "bn": "মেটাডেটা প্রদর্শন করুন "
   },
   {
+    "id": "btn_opt_stats",
+    "en": "Display view's statistics",
+    "bn": "দেখার পরিসংখ্যান প্রদর্শন করুন"
+  },
+  {
     "id": "btn_opt_numeric",
     "en": "Filter by numeric value",
     "bn": "সংখ্যার মান অনুসারে ফিল্টার করুন "

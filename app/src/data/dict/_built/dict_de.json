@@ -3355,6 +3355,11 @@
     "de": "Metadaten anzeigen "
   },
   {
+    "id": "btn_opt_stats",
+    "en": "Display view's statistics",
+    "de": "Ansichtsstatistiken anzeigen"
+  },
+  {
     "id": "btn_opt_numeric",
     "en": "Filter by numeric value",
     "de": "Nach numerischem Wert filtern "

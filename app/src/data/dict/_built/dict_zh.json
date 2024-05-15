@@ -3355,6 +3355,11 @@
     "zh": "显示元数据"
   },
   {
+    "id": "btn_opt_stats",
+    "en": "Display view's statistics",
+    "zh": "显示视图的统计数据"
+  },
+  {
     "id": "btn_opt_numeric",
     "en": "Filter by numeric value",
     "zh": "按数值筛选"

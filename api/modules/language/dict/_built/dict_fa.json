@@ -3355,6 +3355,11 @@
     "fa": "نمایش ابرداده"
   },
   {
+    "id": "btn_opt_stats",
+    "en": "Display view's statistics",
+    "fa": "نمایش آمار نما"
+  },
+  {
     "id": "btn_opt_numeric",
     "en": "Filter by numeric value",
     "fa": "با مقدار عددی فیلتر کنید "
