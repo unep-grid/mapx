@@ -48,11 +48,32 @@ export async function ioViewMetaGet(socket, config, cb) {
   cb(false);
 }
 
+export async function ioViewStatsGet(socket, config, cb) {
+  try {
+    const session = socket.session;
+
+    if (!session) {
+      throw new Error("Missing session");
+    }
+
+    const { idView, stat_n_days } = config;
+
+    const statsView = await getViewStats({ id: idView, stat_n_days });
+
+    return cb(statsView);
+  } catch (e) {
+    socket.notifyInfoError({
+      idGroup: config.id_request,
+      message: e?.message || e,
+    });
+  }
+  cb(false);
+}
+
 /**
  * Helper to get view metadata items
  * @param {Object} opt options
  * @param {String} opt.id Id of the view
- * @param {Number} opt.stat_n_days  Number of days to computed stat frow now
  * @return {Promise<Object>} view metadata
  */
 export async function getViewMetadata(opt) {
@@ -60,12 +81,33 @@ export async function getViewMetadata(opt) {
   if (!isViewId(id)) {
     throw Error("No valid id");
   }
-  const nDays = Math.ceil(opt.stat_n_days || 0);
   const sql = templates.getViewMetadata;
-  const result = await pgRead.query(sql, [id, nDays]);
+  const result = await pgRead.query(sql, [id]);
 
   if (result && result.rowCount > 0) {
     return result.rows[0].meta;
+  } else {
+    return {};
+  }
+}
+
+/**
+ * Helper to get view stat items
+ * @param {Object} opt options
+ * @param {String} opt.id Id of the view
+ * @param {Number} opt.stat_n_days  Number of days to computed stat frow now
+ * @return {Promise<Object>} view metadata
+ */
+export async function getViewStats(opt) {
+  const id = opt.id.toUpperCase();
+  if (!isViewId(id)) {
+    throw Error("No valid id");
+  }
+  const nDays = Math.ceil(opt.stat_n_days || 30);
+  const sql = templates.getViewStats;
+  const result = await pgRead.query(sql, [id, nDays]);
+  if (result && result.rowCount > 0) {
+    return result.rows[0].stats;
   } else {
     return {};
   }

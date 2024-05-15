@@ -48,7 +48,8 @@ export async function setViewBadges(view) {
     const hasEdit = view._edit === true || view.type === "gj";
     const isShared = view.project !== settings.project.id;
     const isValidable = ["rt", "vt", "cc"].includes(view.type);
-    const hasViewMetadata = ['rt','vt','cc','sm'].includes(view.type);
+    const hasViewMetadata = ["rt", "vt", "cc", "sm"].includes(view.type);
+    const hasStats = ["rt", "vt", "cc", "sm"].includes(view.type);
     const hasPublic = readers.includes("public");
     const elBadges = viewBase.elBadges;
     const isTemp = view._temp === true;
@@ -118,6 +119,13 @@ export async function setViewBadges(view) {
     if (hasViewMetadata) {
       const elBadgeMeta = elBadge("meta", { id: view.id });
       badges.push(elBadgeMeta);
+    }
+    /**
+     * View stats button / badge
+     */
+    if (hasStats) {
+      const elBadgeStats = elBadge("stats", { id: view.id });
+      badges.push(elBadgeStats);
     }
     /**
      * Single loop add badge
@@ -212,6 +220,20 @@ function elBadge(type, opt) {
         },
         dataset: {
           view_action_key: "btn_opt_meta",
+          view_action_target: opt.id,
+        },
+      });
+    }
+    case "stats": {
+      return createViewBadge({
+        iconClasses: ["fa", "fa-bar-chart"],
+        tooltipClasses: ["hint--bottom-right"],
+        tooltipKey: "btn_opt_stats",
+        style: {
+          color: "indianred",
+        },
+        dataset: {
+          view_action_key: "btn_opt_stats",
           view_action_target: opt.id,
         },
       });

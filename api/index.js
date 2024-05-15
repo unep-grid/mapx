@@ -25,7 +25,12 @@ import { ioEcho } from "#mapx/io";
 import { ioTestSum, ioTestEcho } from "#mapx/io";
 import { ioUploadSource } from "#mapx/upload";
 
-import { ioViewPin, ioViewSourceMetaGet, ioViewMetaGet } from "#mapx/view";
+import {
+  ioViewPin,
+  ioViewSourceMetaGet,
+  ioViewMetaGet,
+  ioViewStatsGet,
+} from "#mapx/view";
 import {
   ioDownloadSource,
   ioEditSource,
@@ -108,6 +113,7 @@ io.use((socket, next) => {
   socket.on("/client/view/pin", use(ioViewPin));
   socket.on("/client/view/source/get/metadata", use(ioViewSourceMetaGet));
   socket.on("/client/view/get/metadata", use(ioViewMetaGet));
+  socket.on("/client/view/get/stats", use(ioViewStatsGet));
   socket.on("/client/project/validate/name", use(ioProjectNameValidate));
   socket.on("/client/project/create", use(ioProjectCreate));
   socket.on(

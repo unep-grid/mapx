@@ -1,15 +1,8 @@
 import { getGemetConcept, getGemetConceptLink } from "./../gemet_util/index.js";
-import { el, elAuto, elPanel, elSpanTranslate } from "./../el_mapx";
-import { theme } from "./../mx";
+import { el, elAuto, elPanel, elSpanTranslate, elWait } from "./../el_mapx";
 import { getView, getViewAuto, viewLink } from "./../map_helpers";
 import { modal } from "./../mx_helper_modal.js";
-import {
-  path,
-  objectToArray,
-  debounce,
-  parseTemplate,
-} from "./../mx_helper_misc.js";
-import { moduleLoad } from "./../modules_loader_async";
+import { path, objectToArray, parseTemplate } from "./../mx_helper_misc.js";
 import { MenuBuilder } from "./menu.js";
 import { ws, settings } from "./../mx.js";
 import {
@@ -33,8 +26,6 @@ import { getArrayDistinct } from "../array_stat/index.js";
 
 const def_opt = {
   add_menu: true,
-  add_views_stats: true,
-  stat_n_days: 365,
 };
 
 /**
@@ -78,10 +69,9 @@ export async function getAttributesAlias(idSource, attributes) {
 /**
  * Get view metadata
  * @param {String} id Name/Id of the view
- * @param {Number} stat_n_days Number of days back from now to collect stats. 365 = past year
- * @returns {Promise<Object>} View Metadata and stats
+ * @returns {Promise<Object>} View Metadata
  */
-export async function getViewMetadata(id, stat_n_days = 1) {
+export async function getViewMetadata(id) {
   if (!isViewId(id)) {
     return console.warn("getViewMetadata : invalid id");
   }
@@ -89,7 +79,6 @@ export async function getViewMetadata(id, stat_n_days = 1) {
     "/client/view/get/metadata",
     {
       idView: id,
-      stat_n_days,
     },
     settings.maxTimeFetch,
   );
@@ -145,7 +134,7 @@ export async function viewToMetaModal(idView) {
   /**
    * UI
    */
-  const elContent = el("div", "Please wait...");
+  const elContent = el("div", elWait("Please wait..."));
   const elTitleModal = el("span", {
     dataset: { lang_key: "meta_view_modal_title" },
   });
@@ -171,7 +160,6 @@ export async function viewToMetaModal(idView) {
 export async function getViewMetaToHtml(idView) {
   const elDoc = el("div");
   const opt = {
-    add_views_stats: false,
     add_menu: true,
   };
   const elRes = await viewMetaToUi(idView, elDoc, opt);
@@ -188,24 +176,22 @@ async function viewMetaToUi(idView, elTarget, opt) {
   opt = Object.assign({}, def_opt, opt);
 
   const view = await getViewAuto(idView);
-
-  /**
-   * Clear
-   */
-  elTarget.innerHTML = "";
+  idView = view?.id;
 
   /**
    * View meta section
    */
-  const viewMeta = await getViewMetadata(idView, opt.stat_n_days);
-  await metaViewToUi(viewMeta, elTarget, opt);
+  const viewMeta = await getViewMetadata(idView);
+  const elViewMeta = buildViewMetaUi(viewMeta);
+  elTarget.innerHTML = "";
+  elTarget.appendChild(elViewMeta);
 
   /**
    * Raster meta section
    */
   const metaRasterLink = path(view, "data.source.urlMetadata");
   if (metaRasterLink) {
-    const elRasterMetaLink = metaSourceRasterToUi({
+    const elRasterMetaLink = buildViewMetaRasterUi({
       url: metaRasterLink,
     });
     if (elRasterMetaLink) {
@@ -222,13 +208,13 @@ async function viewMetaToUi(idView, elTarget, opt) {
     const mainMeta = meta.splice(0, 1);
     const joinMeta = meta;
 
-    const elSourceMeta = metaSourceToUi(mainMeta[0]);
+    const elSourceMeta = buildSourceMetaUi(mainMeta[0]);
     if (elSourceMeta) {
       elTarget.appendChild(elSourceMeta);
     }
 
     if (isNotEmpty(joinMeta)) {
-      const elMetaJoin = metaJoinSourceToUi(joinMeta);
+      const elMetaJoin = buildMetaJoinUi(joinMeta);
       if (isNotEmpty(elMetaJoin)) {
         elTarget.appendChild(elMetaJoin);
       }
@@ -250,7 +236,7 @@ async function viewMetaToUi(idView, elTarget, opt) {
   return elTarget;
 }
 
-export function metaSourceRasterToUi(rasterMeta) {
+export function buildViewMetaRasterUi(rasterMeta) {
   rasterMeta = rasterMeta || {};
 
   if (!isUrl(rasterMeta.url)) {
@@ -274,9 +260,7 @@ export function metaSourceRasterToUi(rasterMeta) {
   });
 }
 
-async function metaViewToUi(meta, elTarget, opt) {
-  opt = Object.assign({}, def_opt, opt);
-
+function buildViewMetaUi(meta) {
   const prefixKey = "meta_view_";
   const keys = [
     "title",
@@ -286,13 +270,8 @@ async function metaViewToUi(meta, elTarget, opt) {
     "date_created",
     "project_title",
     "projects_data",
-    //"collections",
     "readers",
     "editors",
-    "stat_n_add",
-    "stat_n_add_by_guests",
-    "stat_n_add_by_users",
-    "stat_n_add_by_distinct_users",
   ];
   const tblSummaryFull = objectToArray(meta, true);
 
@@ -395,38 +374,13 @@ async function metaViewToUi(meta, elTarget, opt) {
 
       /**
        * Match sql table with dict labels
-       * e.g. "meta_view_"+ "stat_n_add_by_users"
+       * e.g. "meta_view_"+ "editors"
        */
-      row.key = prefixKey + row.key; // to match dict labels
+      row.key = `${prefixKey}${row.key}`; // to match dict labels
       return row;
     });
 
-  /**
-   * highcharts needs the container to be rendered
-   * to find the size.. Create the container now,
-   * render later :
-   */
-  let elPlotPanel, elPlot;
-
-  if (opt.add_views_stats) {
-    elPlot = el("div", {
-      class: ["panel", "panel-default"],
-      style: {
-        width: "100%",
-        maxWidth: "100%",
-        display: "flex",
-        justifyContent: "center",
-        overflow: "visible",
-      },
-    });
-    elPlotPanel = elPanel({
-      title: elSpanTranslate("meta_view_stat_n_add_by_country"),
-      content: elPlot,
-    });
-  }
-
-  const elMeta = el(
-    "div",
+  const elMeta = el("div", [
     elAuto("array_table", tblSummary, {
       render: "array_table",
       tableHeadersSkip: true,
@@ -435,7 +389,6 @@ async function metaViewToUi(meta, elTarget, opt) {
       stringAsLanguageKey: true,
       numberStyle: { marginRight: "5px" },
     }),
-    elPlotPanel,
     elAuto("array_table", meta.table_changes_editors, {
       booleanValues: ["✓", ""],
       tableHeadersClasses: ["col-sm-6", "col-sm-3", "col-sm-3"],
@@ -448,13 +401,8 @@ async function metaViewToUi(meta, elTarget, opt) {
       ],
       tableTitle: "meta_view_table_editors_title",
     }),
-  );
-
-  elTarget.appendChild(elMeta);
-
-  if (opt.add_views_stats) {
-    await metaCountByCountryToPlot(meta.stat_n_add_by_country, elPlot);
-  }
+  ]);
+  return elMeta;
 }
 
 /**
@@ -474,139 +422,12 @@ function getEditorEmailFromMeta(meta, id) {
 }
 
 /**
- * Build plot
- * @param {Array} table Array of value [{country:<2 leter code>,contry_name:<string>,count:<integer>},<...>]
- * @param {Element} elPlot Plot element
- * @param {Boolean} useRandom Use rando data ( for dev)
- * @return {Object} Highcharts instance
- */
-async function metaCountByCountryToPlot(table, elPlot) {
-  try {
-    if (isEmpty(table)) {
-      return;
-    }
-
-    const highcharts = await moduleLoad("highcharts");
-    const nCountryMap = new Map();
-
-    for (let i = 0, iL = table.length; i < iL; i++) {
-      const t = table[i];
-      if (!t.country) {
-        t.country = "?";
-      }
-      nCountryMap.set(t.country, t.country_name || t.country || "Unknown");
-    }
-
-    const data = table.map((r) => {
-      return {
-        name: r.country,
-        y: r.count,
-      };
-    });
-    if (data.length > 20) {
-      const merged = data.splice(20, data.length);
-      const sum = merged.reduce((a, d) => a + d.y, 0);
-      data.push({
-        name: await getDictItem("meta_view_stat_others_countries"),
-        y: sum,
-      });
-    }
-
-    const txtReads = await getDictItem("meta_view_stat_activations");
-    const colors = theme.colors();
-
-    const chart = highcharts.chart(elPlot, {
-      chart: {
-        type: "column",
-        height: chartHeight(),
-        inverted: true,
-        styledMode: false,
-        backgroundColor: colors.mx_ui_background,
-        plotBackgroundColor: colors.mx_ui_background.color,
-        plotBorderWidth: 0,
-        plotShadow: false,
-      },
-      title: {
-        text: await getDictItem("meta_view_stat_n_add_by_country_last_year"),
-      },
-      xAxis: {
-        categories: data.map((d) => d.name),
-        title: {
-          text: null,
-        },
-      },
-      yAxis: {
-        type: "logarithmic",
-        title: {
-          text: await getDictItem("meta_view_stat_n_add_by_country_axis"),
-        },
-      },
-      legend: {
-        enabled: false,
-      },
-      tooltip: {
-        formatter: function () {
-          return ` ${nCountryMap.get(this.x)} : ${this.y} ${txtReads}`;
-        },
-      },
-      series: [
-        {
-          name: await getDictItem("meta_view_stat_n_add_by_country"),
-          data: data,
-        },
-      ],
-      credits: {
-        enabled: false,
-      },
-      exporting: {
-        buttons: {
-          contextButton: {
-            menuItems: [
-              "printChart",
-              "separator",
-              "downloadPNG",
-              "downloadJPEG",
-              "downloadSVG",
-              "separator",
-              "downloadCSV",
-              "downloadXLS",
-            ],
-          },
-        },
-      },
-    });
-    /**
-     * Small height = panel from file menu hidden.
-     * -> overflow visible to fix that
-     */
-    chart.container.style.overflow = "visible";
-
-    /**
-     * Handle resize
-     */
-    elPlot._ro = new ResizeObserver(debounce(updateChart, 100));
-    elPlot._ro.observe(elPlot);
-
-    function updateChart() {
-      const w = elPlot.getBoundingClientRect().width;
-      chart.setSize(w);
-    }
-
-    function chartHeight() {
-      return data.length * 20 + 100;
-    }
-  } catch (e) {
-    console.warn(e);
-  }
-}
-
-/**
  * Render join metadata
  */
-function metaJoinSourceToUi(metaJoin) {
+function buildMetaJoinUi(metaJoin) {
   const elOut = el("div", { style: { padding: "20px" } });
   for (const meta of metaJoin) {
-    elOut.appendChild(metaSourceToUi(meta, meta._prefix));
+    elOut.appendChild(buildSourceMetaUi(meta, meta._prefix));
   }
   return elPanel({
     title: elSpanTranslate("join_meta_title"),
@@ -617,7 +438,7 @@ function metaJoinSourceToUi(metaJoin) {
 /**
  * Vector source meta data to UI
  */
-export function metaSourceToUi(meta, prefix) {
+function buildSourceMetaUi(meta, prefix) {
   const glfo = getLabelFromObjectPath;
   const oToA = objectToArray;
 

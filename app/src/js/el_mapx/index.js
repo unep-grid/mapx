@@ -761,3 +761,27 @@ export function elToggle({ containerClass, iconDefault, iconActive, on }) {
 
   return el("div", { class: containerClass }, [checkbox, label]);
 }
+
+/**
+ *  Simple spinner
+ * @param {String || Element}  content
+ * @return {HTMLElement}
+ */
+export function elWait(content) {
+  return el(
+    "div",
+    {
+      style: {
+        display: "flex",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+      },
+    },
+    [
+      el("i", { class: ["fa", "fa-cog", "fa-spin", "fa-2x", "fa-fw"] }),
+      el("span", content),
+    ],
+  );
+}

@@ -7,6 +7,7 @@ import { displayMetadataIssuesModal } from "./../badges/index.js";
 import { storyRead } from "./../story_map/index.js";
 import { viewToTableAttributeModal } from "./../source/display/index.js";
 import { viewToMetaModal } from "./../metadata/utils.js";
+import { viewToStatsModal } from "./../metadata/view_stats.js";
 import { getDictItem, getLanguageCurrent } from "./../language";
 import { Uploader } from "./../uploader";
 import { modalMirror } from "./../mirror_util";
@@ -394,6 +395,16 @@ export async function btn_opt_attribute_table(dataset) {
 export async function btn_opt_meta(dataset) {
   const idView = dataset.view_action_target;
   await viewToMetaModal(idView);
+}
+
+/**
+ * Display view stats
+ * @param {DOMStringMap} dataset
+ * @returns {void}
+ */
+export async function btn_opt_stats(dataset) {
+  const idView = dataset.view_action_target;
+  await viewToStatsModal(idView);
 }
 
 /**
