@@ -1,3 +1,4 @@
+import { isEmail } from "../../is_test";
 import { el, elSpanTranslate } from "./../../el_mapx";
 const st = elSpanTranslate;
 
@@ -16,7 +17,7 @@ export function buildForm(md) {
       id: "dl_epsg_code",
       name: "epsgCode",
       dataset: { type: "epsg" },
-    })
+    }),
   );
 
   const elFormCountries = el(
@@ -29,13 +30,13 @@ export function buildForm(md) {
       {
         for: "dl_iso3codes",
       },
-      st("dl_select_clip_countries")
+      st("dl_select_clip_countries"),
     ),
     el("select", {
       id: "dl_iso3codes",
       name: "iso3codes",
       dataset: { type: "countries" },
-    })
+    }),
   );
 
   const elFormFormat = el(
@@ -48,13 +49,13 @@ export function buildForm(md) {
       {
         for: "dl_format",
       },
-      st("dl_select_file_format")
+      st("dl_select_file_format"),
     ),
     el("select", {
       id: "dl_format",
       name: "format",
       dataset: { type: "format_vector_download" },
-    })
+    }),
   );
 
   const elFormFilename = el(
@@ -71,8 +72,8 @@ export function buildForm(md) {
         id: "dl_filename",
         type: "text",
       },
-      opt.filename
-    )
+      opt.filename,
+    ),
   );
 
   const elFormEmail = el(
@@ -92,16 +93,16 @@ export function buildForm(md) {
         type: "email",
         name: "email",
         id: "dl_email",
-        //disabled: isEmail(opt.email) ? true : null
+        disabled: isEmail(opt.email) ? true : null,
       },
-      opt.email
-    )
+      isEmail(opt.email) ? opt.email : "",
+    ),
   );
 
   const elForm = el(
     "form",
     { name: "dl_form", id: "dl_modal", on: ["change", md.update] },
-    [elFormFormat, elFormEpsg, elFormCountries, elFormEmail, elFormFilename]
+    [elFormFormat, elFormEpsg, elFormCountries, elFormEmail, elFormFilename],
   );
 
   return {

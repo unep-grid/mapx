@@ -223,7 +223,7 @@ export class DownloadSourceModal extends EventSimple {
     /**
      * Modal content
      */
-    const elContent = el("div", elForm, elMsgContainer);
+    const elContent = el("div", [elForm, elMsgContainer]);
 
     md._modal = modal({
       title: elSpanTranslate("dl_title"),
