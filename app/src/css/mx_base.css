@@ -1064,16 +1064,6 @@ code {
   margin: 2px;
 }
 
-/**
-* Multiline support
-* https://github.com/chinchang/hint.css/issues/24#issuecomment-311977579
-*/
-[class*="hint--"]:after {
-  line-height: 20px;
-  white-space: normal;
-  max-width: 500px;
-  width: max-content;
-}
 
 .mx-version {
   cursor: pointer;

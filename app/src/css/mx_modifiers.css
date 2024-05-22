@@ -252,32 +252,11 @@ span.mx-badge-role {
 .mx .selectize-dropdown .active.create,
 .mx .selectize-dropdown .active.create *,
 .mx .btn-default:hover,
-.mx .btn-default:hover > *,
-.mx [class*="hint--"]:after {
+.mx .btn-default:hover > * {
   color: var(--mx_ui_text);
   background-color: var(--mx_ui_background_contrast);
   outline: 0;
   text-shadow: none;
-}
-
-.mx [class*="hint--"]:after {
-  box-shadow: var(--mx_ui_box_shadow);
-}
-
-/**
-* Hint arrow. 
-*/
-.mx [class*="hint--left"]:before {
-  border-left-color: var(--mx_ui_background_contrast);
-}
-.mx [class*="hint--right"]:before {
-  border-right-color: var(--mx_ui_background_contrast);
-}
-.mx [class*="hint--bottom"]:before {
-  border-bottom-color: var(--mx_ui_background_contrast);
-}
-.mx [class*="hint--top"]:before {
-  border-top-color: var(--mx_ui_background_contrast);
 }
 
 .mx .btn-circle,
@@ -459,7 +438,6 @@ span.mx-badge-role {
 /*.mx .panel-default  > .panel-heading.panel-heading-light span {*/
 /*color: var(--mx_ui_text);*/
 /*}*/
-
 
 .mx .panel {
   background-color: var(--mx_ui_background);

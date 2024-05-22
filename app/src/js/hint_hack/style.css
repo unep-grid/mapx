@@ -1,0 +1,30 @@
+
+
+/**
+* Hint arrow. 
+*/
+.mx [class*="hint--"]:before {
+  background-color: var(--mx_ui_background_contrast);
+  box-shadow : 0 0 7px 3px var(--mx_ui_shadow);
+}
+
+.mx [class*="hint--"]:after {
+  color: var(--mx_ui_text);
+  background-color: var(--mx_ui_background_contrast);
+  outline: 0;
+  text-shadow: none;
+  box-shadow : 0 0 7px 3px var(--mx_ui_shadow);
+}
+
+/**
+* Multiline support
+* https://github.com/chinchang/hint.css/issues/24#issuecomment-311977579
+*/
+.mx [class*="hint--"]:after {
+  line-height: 20px;
+  white-space: normal;
+  max-width: 500px;
+  width: max-content;
+  border-radius : 6px;
+  font-size: 0.9em;
+}

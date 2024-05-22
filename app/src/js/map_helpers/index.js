@@ -928,14 +928,17 @@ async function updateUiSettings_base() {
     /**
      * Project labels
      */
-    const elBtnProject = document.getElementById("btnShowProjectLabel");
+    const elBtnProject = document.getElementById("btnShowProject");
+    const elBtnProjectLabel = document.getElementById("btnShowProjectLabel");
     const elBtnProjectPrivate = document.getElementById(
       "btnShowProjectPrivate",
     );
     const title = path(mx, "settings.project.title");
 
-    elBtnProject.innerText =
-      title[lang] || title[langDef] || settings.project.id;
+    const label = title[lang] || title[langDef] || settings.project.id;
+
+    elBtnProjectLabel.innerText = label;
+    elBtnProject.setAttribute("aria-label", label);
 
     if (settings.project.public) {
       elBtnProjectPrivate.classList.remove("fa-lock");

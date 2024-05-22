@@ -179,6 +179,28 @@
   }
 }
 
+@container button-panel--item (max-width: 469px) {
+  .mx-tab--tabs {
+    .mx-tab--tab {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+@container button-panel--item (max-width: 339px) {
+  .mx-tab--tabs {
+    .mx-tab--tab span {
+      display: none;
+    }
+  }
+  .mx-panel {
+    .mx-panel--header-btn span {
+      display: none;
+    }
+  }
+}
+
 @media screen and (max-width: 800px), (max-height: 800px) {
   .mx-panel {
     .mx-panel--header {

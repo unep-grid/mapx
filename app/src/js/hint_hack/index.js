@@ -1,20 +1,22 @@
-import {isTouchDevice} from '../is_touch_device/index.js';
-import {getDictItem} from '../language';
+import { isTouchDevice } from "../is_touch_device/index.js";
+import { getDictItem } from "../language";
+import './style.css';
+import 'hint.css';
 
 const def = {
   style: {
-    width: '1px',
-    height: '1px',
-    position: 'absolute',
-    overflow: 'visible',
+    width: "1px",
+    height: "1px",
+    position: "absolute",
+    overflow: "visible",
     top: 0,
     left: 0,
-    display: 'none',
-    pointerEvents: 'none'
+    display: "none",
+    pointerEvents: "none",
   },
   options: {
-    delay: 1000
-  }
+    delay: 1000,
+  },
 };
 
 class HintHack {
@@ -33,8 +35,8 @@ class HintHack {
       return;
     }
     hh.opt = Object.assign({}, def.options, opt);
-    hh._el = document.createElement('span');
-    hh._el_style = document.createElement('style');
+    hh._el = document.createElement("span");
+    hh._el_style = document.createElement("style");
     hh._el_style.innerText = `
     [class*="hint--"]:not(.hint--always)::after,
     [class*="hint--"]:not(.hint--always)::before {
@@ -45,27 +47,32 @@ class HintHack {
     if (isTouchDevice()) {
       return;
     }
-    document.addEventListener('mouseenter', hh.update, true);
-    document.addEventListener('mouseleave', hh.cancel, true);
-    document.addEventListener('mousedown', hh.cancel, true);
-    document.addEventListener('wheel', hh.cancel, true);
+    document.addEventListener("mouseenter", hh.update, true);
+    document.addEventListener("mouseleave", hh.cancel, true);
+    document.addEventListener("mousedown", hh.cancel, true);
+    document.addEventListener("wheel", hh.cancel, true);
   }
   async update(e) {
     const hh = this;
     try {
-      if (!e.target || !e.target.getAttribute || !e.target.className || !e.target.className.match) {
+      if (
+        !e.target ||
+        !e.target.getAttribute ||
+        !e.target.className ||
+        !e.target.className.match
+      ) {
         return;
       }
       if (hh._target && hh._target.contains(e.target)) {
         return;
       }
-      const isHint = !!e.target.className.match('hint--');
-      
-      if(!isHint){
+      const isHint = !!e.target.className.match("hint--");
+
+      if (!isHint) {
         return;
       }
 
-      let label = e.target.getAttribute('aria-label');
+      let label = e.target.getAttribute("aria-label");
       let keyLabel = e.target.dataset.lang_key;
       if (!label) {
         label = await getDictItem(keyLabel);
@@ -84,9 +91,9 @@ class HintHack {
   reset() {
     const hh = this;
     hh._el.remove();
-    hh._el.className = '';
+    hh._el.className = "";
     hh._target = null;
-    hh._el.setAttribute('aria-label', '');
+    hh._el.setAttribute("aria-label", "");
     hh.applyStyle(def.style);
   }
   applyStyle(style) {
@@ -106,15 +113,15 @@ class HintHack {
           hh._el.classList.add(clName);
         }
       }
-      hh._el.setAttribute('aria-label', hh._label);
-      hh._el.classList.add('hint--always');
+      hh._el.setAttribute("aria-label", hh._label);
+      hh._el.classList.add("hint--always");
 
       hh.applyStyle({
         top: `${pos.top}px`,
         left: `${pos.left}px`,
         width: `${pos.width}px`,
         height: `${pos.height}px`,
-        display: 'block'
+        display: "block",
       });
       document.body.appendChild(this._el);
     }
@@ -127,10 +134,10 @@ class HintHack {
   destroy() {
     const hh = this;
     hh.reset();
-    document.removeEventListener('mouseenter', hh.update);
-    document.removeEventListener('mouse', hh.cancel);
+    document.removeEventListener("mouseenter", hh.update);
+    document.removeEventListener("mouse", hh.cancel);
     hh._el_style.remove();
   }
 }
 
-export {HintHack};
+export { HintHack };
