@@ -1,3 +1,8 @@
+  - [1.13.8-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.1) 
+
+    - View deletion : warn the user if the view is listed in external projects #287
+    - CMEMS extension : solve an issue where the selected increment was not read after init. mapx-data #12 
+
   - [1.13.7](https://github.com/unep-grid/mapx/tree/1.13.7) 
 
     - Download vector source : bug when no email set, e.g. download as guest.
