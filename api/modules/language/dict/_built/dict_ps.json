@@ -3290,6 +3290,16 @@
     "ps": "ایا تاسو غواړئ دا لید ړنګ کړئ؟ "
   },
   {
+    "id": "delete_view_shared_warning_modal",
+    "en": "This view is shared in other projects. Continue ?",
+    "ps": "دا نظر په نورو پروژو کې شریک شوی. ادامه ورکوی؟"
+  },
+  {
+    "id": "delete_view_shared_warning_modal_title",
+    "en": "View shared in other projects",
+    "ps": "په نورو پروژو کې شریک شوي وګورئ"
+  },
+  {
     "id": "confirm_keep_view_temp_modal_title",
     "en": "Keep this view in the list",
     "ps": "دا لید په لیست کې وساتئ"
@@ -4941,8 +4951,8 @@
   },
   {
     "id": "view_delete_confirm",
-    "en": "Click on the confirm button to delete this view, its history and all translations.",
-    "ps": "ددې لیدنې، د هغې د تاریخچې او ټولو ژباړو د پاکولو لپاره د تائید تڼۍ کیکاږئ "
+    "en": "Click on the confirm button to delete this view. This action cannot be undone. The view will also be removed from other projects, including ‘Story Maps’, ‘GeoServer’ layers, and all references will be lost. The data source, if any, will not be affected.",
+    "ps": "د دې لید د حذفولو لپاره د تایید تڼۍ کلیک کړئ. دا عمل نشي بیرته اخیستل کیدی. دا لید به هم له نورو پروژو څخه لرې شي، په شمول 'Story Maps'، 'GeoServer' پرتې، او ټولې حوالې به له منځه ولاړې شي. د ډیټا سرچینه، که کومه وي، به اغیزمنه نشي."
   },
   {
     "id": "view_remove_dashboard_confirm",

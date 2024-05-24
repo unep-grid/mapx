@@ -3290,6 +3290,16 @@
     "zh": "您要删除此视图吗？ "
   },
   {
+    "id": "delete_view_shared_warning_modal",
+    "en": "This view is shared in other projects. Continue ?",
+    "zh": "此视图已在其他项目中共享。继续吗？"
+  },
+  {
+    "id": "delete_view_shared_warning_modal_title",
+    "en": "View shared in other projects",
+    "zh": "查看其他项目中的共享"
+  },
+  {
     "id": "confirm_keep_view_temp_modal_title",
     "en": "Keep this view in the list",
     "zh": "将此视图保留在列表中"
@@ -4941,8 +4951,8 @@
   },
   {
     "id": "view_delete_confirm",
-    "en": "Click on the confirm button to delete this view, its history and all translations.",
-    "zh": "单击确认按钮以删除此视图，包括历史记录和所有翻译。"
+    "en": "Click on the confirm button to delete this view. This action cannot be undone. The view will also be removed from other projects, including ‘Story Maps’, ‘GeoServer’ layers, and all references will be lost. The data source, if any, will not be affected.",
+    "zh": "点击确认按钮删除此视图。此操作无法撤消。该视图也将从其他项目中移除，包括 '故事地图'、'GeoServer' 图层，并且所有引用将丢失。数据源（如果有）不会受到影响。"
   },
   {
     "id": "view_remove_dashboard_confirm",

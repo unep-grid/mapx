@@ -3290,6 +3290,16 @@
     "ru": "Вы хотите удалить это представление? "
   },
   {
+    "id": "delete_view_shared_warning_modal",
+    "en": "This view is shared in other projects. Continue ?",
+    "ru": "Эта точка зрения распространена и в других проектах. Продолжать ?"
+  },
+  {
+    "id": "delete_view_shared_warning_modal_title",
+    "en": "View shared in other projects",
+    "ru": "Посмотреть общий доступ в других проектах"
+  },
+  {
     "id": "confirm_keep_view_temp_modal_title",
     "en": "Keep this view in the list",
     "ru": "Сохранить это представление в списке"
@@ -4941,8 +4951,8 @@
   },
   {
     "id": "view_delete_confirm",
-    "en": "Click on the confirm button to delete this view, its history and all translations.",
-    "ru": "Нажмите кнопку подтверждения, чтобы удалить это представление, его историю и все переводы. "
+    "en": "Click on the confirm button to delete this view. This action cannot be undone. The view will also be removed from other projects, including ‘Story Maps’, ‘GeoServer’ layers, and all references will be lost. The data source, if any, will not be affected.",
+    "ru": "Нажмите кнопку подтверждения, чтобы удалить этот вид. Это действие нельзя будет отменить. Вид также будет удален из других проектов, включая слои 'Story Maps' и 'GeoServer', и все ссылки будут потеряны. Источник данных, если он есть, не будет затронут."
   },
   {
     "id": "view_remove_dashboard_confirm",

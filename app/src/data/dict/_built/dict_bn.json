@@ -3290,6 +3290,16 @@
     "bn": "আপনি এই দৃশ্যটি মুছতে চান? "
   },
   {
+    "id": "delete_view_shared_warning_modal",
+    "en": "This view is shared in other projects. Continue ?",
+    "bn": "এই দৃশ্য অন্যান্য প্রকল্পে ভাগ করা হয়. চালিয়ে যান?"
+  },
+  {
+    "id": "delete_view_shared_warning_modal_title",
+    "en": "View shared in other projects",
+    "bn": "অন্যান্য প্রকল্পে শেয়ার করা দেখুন"
+  },
+  {
     "id": "confirm_keep_view_temp_modal_title",
     "en": "Keep this view in the list",
     "bn": "এই ভিউটি তালিকায় রাখুন"
@@ -4941,8 +4951,8 @@
   },
   {
     "id": "view_delete_confirm",
-    "en": "Click on the confirm button to delete this view, its history and all translations.",
-    "bn": "এই দৃশ্যটি, এর ইতিহাস এবং সমস্ত অনুবাদ মুছতে কনফার্ম বাটনে ক্লিক করুন। "
+    "en": "Click on the confirm button to delete this view. This action cannot be undone. The view will also be removed from other projects, including ‘Story Maps’, ‘GeoServer’ layers, and all references will be lost. The data source, if any, will not be affected.",
+    "bn": "এই ভিউটি মুছে ফেলতে নিশ্চিতকরণ বোতামে ক্লিক করুন। এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না। ভিউটিও অন্যান্য প্রকল্প থেকে সরিয়ে ফেলা হবে, যার মধ্যে রয়েছে 'Story Maps', 'GeoServer' স্তর এবং সমস্ত রেফারেন্স হারিয়ে যাবে। ডেটা উৎস, যদি থাকে, প্রভাবিত হবে না।"
   },
   {
     "id": "view_remove_dashboard_confirm",

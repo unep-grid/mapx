@@ -1,14 +1,18 @@
 import { el, elSpanTranslate } from "./../el_mapx/index.js";
-import { isEmpty } from "./../is_test_mapx";
+import { isEmpty, isNotEmpty } from "./../is_test_mapx";
 import { makeId, path } from "./../mx_helper_misc.js";
 import { modal, modalConfirm } from "./../mx_helper_modal.js";
 import { FlashItem } from "./../icon_flash";
 import { displayMetadataIssuesModal } from "./../badges/index.js";
 import { storyRead } from "./../story_map/index.js";
 import { viewToTableAttributeModal } from "./../source/display/index.js";
-import { viewToMetaModal } from "./../metadata/utils.js";
+import { getViewMetadata, viewToMetaModal } from "./../metadata/utils.js";
 import { viewToStatsModal } from "./../metadata/view_stats.js";
-import { getDictItem, getLanguageCurrent } from "./../language";
+import {
+  getDictItem,
+  getLabelFromObjectPath,
+  getLanguageCurrent,
+} from "./../language";
 import { Uploader } from "./../uploader";
 import { modalMirror } from "./../mirror_util";
 import { ShareModal } from "./../share_modal/index.js";
@@ -136,6 +140,7 @@ export async function btn_opt_code_integration(dataset) {
  * @returns {void}
  */
 export async function btn_opt_delete_geojson(dataset) {
+  const { view_action_target: idView } = dataset;
   const ok = await modalConfirm({
     title: elSpanTranslate("delete_confirm_geojson_modal_title"),
     content: elSpanTranslate("delete_confirm_geojson_modal"),
@@ -145,8 +150,59 @@ export async function btn_opt_delete_geojson(dataset) {
     return;
   }
 
-  const arg = dataset;
-  await viewDelete(arg.view_action_target);
+  await viewDelete(idView);
+}
+
+/**
+ * Start view deletion process
+ *
+ * @param {DOMStringMap} dataset
+ * @returns {void}
+ */
+export async function btn_opt_delete(dataset) {
+  const { view_action_target: idView } = dataset;
+  const meta = await getViewMetadata(idView);
+
+  const projects = meta.projects_data;
+
+  if (isNotEmpty(projects)) {
+    const elItems = projects.map((project) => {
+      const title = getLabelFromObjectPath({
+        obj: project,
+        path: "title",
+        defaultValue: project.id,
+      });
+      return el("li", { title: project.id }, el("span", title));
+    });
+
+    const elList = el(
+      "div",
+      { style: { maxHeight: "100px", overflowY: "auto" } },
+      el("ul", elItems),
+    );
+
+    const elMessage = elSpanTranslate("delete_view_shared_warning_modal");
+    const elModalTitle = elSpanTranslate(
+      "delete_view_shared_warning_modal_title",
+    );
+
+    const elContent = el("div", [elMessage, elList]);
+
+    const ok = await modalConfirm({
+      title: elModalTitle,
+      content: elContent,
+    });
+
+    if(!ok){
+      return; 
+    }
+  }
+
+  window.Shiny.onInputChange("mx_client_view_action", {
+    target: idView,
+    action: "btn_opt_delete",
+    time: new Date(),
+  });
 }
 
 /**

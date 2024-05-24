@@ -8554,6 +8554,32 @@
     "de": "Möchten Sie diese Ansicht löschen? "
   },
   {
+    "id": "delete_view_shared_warning_modal",
+    "en": "This view is shared in other projects. Continue ?",
+    "fr": "Cette vue est partagée dans d'autres projets. Continuer ?",
+    "es": "Esta visión se comparte en otros proyectos. Continuar ?",
+    "ru": "Эта точка зрения распространена и в других проектах. Продолжать ?",
+    "zh": "此视图已在其他项目中共享。继续吗？",
+    "ar": "تتم مشاركة هذا الرأي في مشاريع أخرى. يكمل ؟",
+    "fa": "این دیدگاه در پروژه های دیگر نیز به اشتراک گذاشته شده است. ادامه هید ؟",
+    "ps": "دا نظر په نورو پروژو کې شریک شوی. ادامه ورکوی؟",
+    "bn": "এই দৃশ্য অন্যান্য প্রকল্পে ভাগ করা হয়. চালিয়ে যান?",
+    "de": "Diese Ansicht wird in anderen Projekten geteilt. Fortfahren?"
+  },
+  {
+    "id": "delete_view_shared_warning_modal_title",
+    "en": "View shared in other projects",
+    "fr": "Vue partagée dans d'autres projets",
+    "es": "Ver compartido en otros proyectos",
+    "ru": "Посмотреть общий доступ в других проектах",
+    "zh": "查看其他项目中的共享",
+    "ar": "عرض مشترك في مشاريع أخرى",
+    "fa": "مشاهده به اشتراک گذاشته شده در پروژه های دیگر",
+    "ps": "په نورو پروژو کې شریک شوي وګورئ",
+    "bn": "অন্যান্য প্রকল্পে শেয়ার করা দেখুন",
+    "de": "In anderen Projekten geteilte Ansicht"
+  },
+  {
     "id": "confirm_keep_view_temp_modal_title",
     "en": "Keep this view in the list",
     "fr": "Garder cette vue dans la liste",
@@ -8721,6 +8747,19 @@
     "ps": "میتا ډیټا ښکاره کړئ",
     "bn": "মেটাডেটা প্রদর্শন করুন ",
     "de": "Metadaten anzeigen "
+  },
+  {
+    "id": "btn_opt_stats",
+    "en": "Display view's statistics",
+    "fr": "Afficher les statistiques de la vue",
+    "es": "Mostrar estadísticas de la vista",
+    "ru": "Отображение статистики вида",
+    "zh": "显示视图的统计数据",
+    "ar": "عرض إحصاءات العرض",
+    "fa": "نمایش آمار نما",
+    "ps": "د لیدنې احصایې ښکاره کړئ",
+    "bn": "দেখার পরিসংখ্যান প্রদর্শন করুন",
+    "de": "Ansichtsstatistiken anzeigen"
   },
   {
     "id": "btn_opt_numeric",

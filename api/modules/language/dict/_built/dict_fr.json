@@ -3290,6 +3290,16 @@
     "fr": "Souhaitez-vous supprimer cette vue ?"
   },
   {
+    "id": "delete_view_shared_warning_modal",
+    "en": "This view is shared in other projects. Continue ?",
+    "fr": "Cette vue est partagée dans d'autres projets. Continuer ?"
+  },
+  {
+    "id": "delete_view_shared_warning_modal_title",
+    "en": "View shared in other projects",
+    "fr": "Vue partagée dans d'autres projets"
+  },
+  {
     "id": "confirm_keep_view_temp_modal_title",
     "en": "Keep this view in the list",
     "fr": "Garder cette vue dans la liste"
@@ -4941,8 +4951,8 @@
   },
   {
     "id": "view_delete_confirm",
-    "en": "Click on the confirm button to delete this view, its history and all translations.",
-    "fr": "Cliquer sur le button de confirmation pour supprimer cette vue, ainsi que son historique et toutes les traductions."
+    "en": "Click on the confirm button to delete this view. This action cannot be undone. The view will also be removed from other projects, including ‘Story Maps’, ‘GeoServer’ layers, and all references will be lost. The data source, if any, will not be affected.",
+    "fr": "Cliquez sur le bouton de confirmation pour supprimer cette vue. Cette action est irréversible. La vue sera également supprimée d'autres projets, y compris les couches 'Story Maps' et 'GeoServer', et toutes les références seront perdues. La source de données, le cas échéant, ne sera pas affectée."
   },
   {
     "id": "view_remove_dashboard_confirm",

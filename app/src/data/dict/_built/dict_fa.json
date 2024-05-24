@@ -3290,6 +3290,16 @@
     "fa": "آیا می خواهید این نمای را حذف کنید؟ "
   },
   {
+    "id": "delete_view_shared_warning_modal",
+    "en": "This view is shared in other projects. Continue ?",
+    "fa": "این دیدگاه در پروژه های دیگر نیز به اشتراک گذاشته شده است. ادامه هید ؟"
+  },
+  {
+    "id": "delete_view_shared_warning_modal_title",
+    "en": "View shared in other projects",
+    "fa": "مشاهده به اشتراک گذاشته شده در پروژه های دیگر"
+  },
+  {
     "id": "confirm_keep_view_temp_modal_title",
     "en": "Keep this view in the list",
     "fa": "این نمای را در لیست نگه دارید"
@@ -4941,8 +4951,8 @@
   },
   {
     "id": "view_delete_confirm",
-    "en": "Click on the confirm button to delete this view, its history and all translations.",
-    "fa": "بالای کلید تایید کلیک نمایید تا این نمایش، تاریخچه اش و تمام ترجمه هایش حذف گردد."
+    "en": "Click on the confirm button to delete this view. This action cannot be undone. The view will also be removed from other projects, including ‘Story Maps’, ‘GeoServer’ layers, and all references will be lost. The data source, if any, will not be affected.",
+    "fa": "برای حذف این نما روی دکمه تأیید کلیک کنید. این عمل قابل بازگشت نیست. این نما همچنین از پروژه‌های دیگر، از جمله لایه‌های 'Story Maps' و 'GeoServer'، حذف خواهد شد و تمامی ارجاعات از بین خواهد رفت. منبع داده، در صورت وجود، تحت تأثیر قرار نخواهد گرفت."
   },
   {
     "id": "view_remove_dashboard_confirm",
