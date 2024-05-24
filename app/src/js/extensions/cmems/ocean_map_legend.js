@@ -259,6 +259,17 @@ export class TimeMapLegend {
     }
   }
 
+  updateVariable(reset = true) {
+    this._opt.variable = this.elVariableInput.value;
+    if (reset) {
+      this.reset();
+    }
+  }
+  updateIncrement() {
+    this.stop();
+    this.setIncrementDuration(this.elIncrementDurationInput.value);
+  }
+
   constructWmtsUrl(selectedDate, selectedElevation, selectedStyle) {
     const { variable, baseURL, product, dataset, dpr } = this._opt;
 
@@ -803,24 +814,35 @@ export class TimeMapLegend {
     /**
      * Increment duration
      */
-    const [{ step: firstStep }] = this.getSlots();
+
+    const slots = this.getSlots();
+    const allSteps = slots.map((slot) => slot.step);
+    const uniqueSteps = [...new Set(allSteps.map((step) => step.toISO()))]
+      .map((iso) => Duration.fromISO(iso))
+      .sort((a, b) => a - b);
+
+    const smallestStep = uniqueSteps[0];
 
     const incrementsChoices = [
       {
-        label: durationToHuman(firstStep),
-        iso: firstStep.toISO(),
+        label: durationToHuman(smallestStep),
+        iso: smallestStep.toISO(),
       },
     ];
 
     for (const iso of increments) {
       const duration = Duration.fromISO(iso);
-      if (duration > firstStep) {
+      if (
+        duration > smallestStep &&
+        !uniqueSteps.some((step) => step.equals(duration))
+      ) {
         incrementsChoices.push({
           label: durationToHuman(duration),
           iso: duration.toISO(),
         });
       }
     }
+
 
     const optIncrements = incrementsChoices.map((increment) =>
       el(
@@ -838,9 +860,8 @@ export class TimeMapLegend {
       {
         class: "form-control",
         on: {
-          change: (e) => {
-            this.stop();
-            this.setIncrementDuration(e.target.value);
+          change: () => {
+            this.updateIncrement();
           },
         },
       },
@@ -875,9 +896,8 @@ export class TimeMapLegend {
       { class: "form-control" },
       {
         on: {
-          change: (e) => {
-            this._opt.variable = e.target.value;
-            this.reset();
+          change: () => {
+            this.updateVariable();
           },
         },
       },
@@ -977,6 +997,9 @@ export class TimeMapLegend {
     this._opt.elInputs.innerHTML = "";
     this._opt.elLegend.appendChild(this._elImageLegend);
     this._opt.elInputs.appendChild(this._elInputContainer);
+
+    this.updateVariable(false);
+    this.updateIncrement();
   }
 }
 
