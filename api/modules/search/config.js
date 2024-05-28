@@ -20,7 +20,7 @@ export const config = {
       'view_type',
       'source_keywords',
       'source_keywords_m49',
-      'source_keywords_gemet',
+      'source_keywords_gemet_label',
       'projects_id'
     ],
     /**
@@ -49,6 +49,8 @@ export const config = {
       'source_keywords',
       'source_keywords_m49',
       'source_keywords_gemet',
+      'source_keywords_m49_label',
+      'source_keywords_gemet_label',
       'source_notes',
       'project_title',
       'project_abstract',
@@ -67,7 +69,8 @@ export const config = {
       'range_end_at_year',
       'range_years',
       'projects_data',
-      'projects_id'
+      'projects_id',
+      'projects_title'
     ]
   }
 };

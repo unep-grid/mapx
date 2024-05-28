@@ -22152,16 +22152,16 @@
     "de": "Schlüsselwörter"
   },
   {
-    "id": "search_source_keywords_gemet",
+    "id": "search_source_keywords_gemet_label",
     "en": "Keywords GEMET",
     "fr": "Mots-clés GEMET",
     "es": "Palabras clave GEMET",
-    "ru": "Ключевые слова GEMET",
+    "ru": "Ключевые слова",
     "zh": "关键词 GEMET",
-    "ar": "الكلمات المفتاحية GEMET",
+    "ar": "الكلمات الرئيسية جيميت",
     "fa": "کلمات کلیدی GEMET",
-    "ps": "کلیدي ټیمونه",
-    "bn": "কীওয়ার্ডগুলি",
+    "ps": "کلیدي کلمې GEMET",
+    "bn": "মূলশব্দ GEMET",
     "de": "Schlüsselwörter GEMET"
   },
   {

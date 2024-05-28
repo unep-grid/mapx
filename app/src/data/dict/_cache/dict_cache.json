@@ -12871,16 +12871,16 @@
   },
   {
     "id": "view_delete_confirm",
-    "en": "Click on the confirm button to delete this view, its history and all translations.",
-    "fr": "Cliquer sur le button de confirmation pour supprimer cette vue, ainsi que son historique et toutes les traductions.",
-    "es": "Haz clic en el botón de confirmación para eliminar esta vista, su narración y todas las traducciones.",
-    "ru": "Нажмите кнопку подтверждения, чтобы удалить это представление, его историю и все переводы. ",
-    "zh": "单击确认按钮以删除此视图，包括历史记录和所有翻译。",
-    "ar": "انقر فوق زر التأكيد لحذف هذا العرض وتاريخه وجميع الترجمات. ",
-    "fa": "بالای کلید تایید کلیک نمایید تا این نمایش، تاریخچه اش و تمام ترجمه هایش حذف گردد.",
-    "ps": "ددې لیدنې، د هغې د تاریخچې او ټولو ژباړو د پاکولو لپاره د تائید تڼۍ کیکاږئ ",
-    "bn": "এই দৃশ্যটি, এর ইতিহাস এবং সমস্ত অনুবাদ মুছতে কনফার্ম বাটনে ক্লিক করুন। ",
-    "de": "Klicken Sie auf die Schaltfläche Bestätigen, um diese Ansicht, ihren Verlauf und alle Übersetzungen zu löschen. "
+    "en": "Click on the confirm button to delete this view. This action cannot be undone. The view will also be removed from other projects, including ‘Story Maps’, ‘GeoServer’ layers, and all references will be lost. The data source, if any, will not be affected.",
+    "fr": "Cliquez sur le bouton de confirmation pour supprimer cette vue. Cette action est irréversible. La vue sera également supprimée d'autres projets, y compris les couches 'Story Maps' et 'GeoServer', et toutes les références seront perdues. La source de données, le cas échéant, ne sera pas affectée.",
+    "es": "Haga clic en el botón de confirmar para eliminar esta vista. Esta acción no se puede deshacer. La vista también se eliminará de otros proyectos, incluidas las capas de 'Story Maps' y 'GeoServer', y se perderán todas las referencias. La fuente de datos, si la hay, no se verá afectada.",
+    "ru": "Нажмите кнопку подтверждения, чтобы удалить этот вид. Это действие нельзя будет отменить. Вид также будет удален из других проектов, включая слои 'Story Maps' и 'GeoServer', и все ссылки будут потеряны. Источник данных, если он есть, не будет затронут.",
+    "zh": "点击确认按钮删除此视图。此操作无法撤消。该视图也将从其他项目中移除，包括 '故事地图'、'GeoServer' 图层，并且所有引用将丢失。数据源（如果有）不会受到影响。",
+    "ar": "انقر على زر التأكيد لحذف هذه العرض. لا يمكن التراجع عن هذا الإجراء. سيتم أيضًا إزالة العرض من المشاريع الأخرى، بما في ذلك طبقات 'Story Maps' و 'GeoServer'، وستفقد جميع المراجع. لن تتأثر مصدر البيانات، إن وجد.",
+    "fa": "برای حذف این نما روی دکمه تأیید کلیک کنید. این عمل قابل بازگشت نیست. این نما همچنین از پروژه‌های دیگر، از جمله لایه‌های 'Story Maps' و 'GeoServer'، حذف خواهد شد و تمامی ارجاعات از بین خواهد رفت. منبع داده، در صورت وجود، تحت تأثیر قرار نخواهد گرفت.",
+    "ps": "د دې لید د حذفولو لپاره د تایید تڼۍ کلیک کړئ. دا عمل نشي بیرته اخیستل کیدی. دا لید به هم له نورو پروژو څخه لرې شي، په شمول 'Story Maps'، 'GeoServer' پرتې، او ټولې حوالې به له منځه ولاړې شي. د ډیټا سرچینه، که کومه وي، به اغیزمنه نشي.",
+    "bn": "এই ভিউটি মুছে ফেলতে নিশ্চিতকরণ বোতামে ক্লিক করুন। এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না। ভিউটিও অন্যান্য প্রকল্প থেকে সরিয়ে ফেলা হবে, যার মধ্যে রয়েছে 'Story Maps', 'GeoServer' স্তর এবং সমস্ত রেফারেন্স হারিয়ে যাবে। ডেটা উৎস, যদি থাকে, প্রভাবিত হবে না।",
+    "de": "Klicken Sie auf die Bestätigungsschaltfläche, um diese Ansicht zu löschen. Diese Aktion kann nicht rückgängig gemacht werden. Die Ansicht wird auch aus anderen Projekten entfernt, einschließlich 'Story Maps' und 'GeoServer' Schichten, und alle Verweise werden verloren gehen. Die Datenquelle, falls vorhanden, wird nicht beeinflusst."
   },
   {
     "id": "view_remove_dashboard_confirm",
@@ -22152,16 +22152,16 @@
     "de": "Schlüsselwörter"
   },
   {
-    "id": "search_source_keywords_gemet",
+    "id": "search_source_keywords_gemet_label",
     "en": "Keywords GEMET",
     "fr": "Mots-clés GEMET",
     "es": "Palabras clave GEMET",
-    "ru": "Ключевые слова GEMET",
+    "ru": "Ключевые слова",
     "zh": "关键词 GEMET",
-    "ar": "الكلمات المفتاحية GEMET",
+    "ar": "الكلمات الرئيسية جيميت",
     "fa": "کلمات کلیدی GEMET",
-    "ps": "کلیدي ټیمونه",
-    "bn": "কীওয়ার্ডগুলি",
+    "ps": "کلیدي کلمې GEMET",
+    "bn": "মূলশব্দ GEMET",
     "de": "Schlüsselwörter GEMET"
   },
   {

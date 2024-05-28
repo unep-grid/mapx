@@ -2,15 +2,16 @@ import { meili, pgRead } from "#mapx/db";
 import { getParamsValidator } from "#mapx/route_validation";
 import { isObject } from "@fxi/mx_valid";
 import { validateTokenHandler } from "#mapx/authentication";
-import { sendError, sendJSON, wait } from "#mapx/helpers";
+import { clone, sendError, sendJSON, wait } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { settings } from "#root/settings";
 import { htmlToText } from "html-to-text";
 import { config } from "./config.js";
 import { getDictM49iso3 } from "#mapx/language";
-
-const { validation_defaults } = settings;
-const { languages } = validation_defaults;
+const keysStripHTML = config.idx_views.attributesStripHTML;
+const {
+  validation_defaults: { languages },
+} = settings;
 
 const validateParamsHandler = getParamsValidator({
   required: ["idUser", "token"],
@@ -26,157 +27,167 @@ const mwGetSearchKey = [
 
 export { mwSearch, mwGetSearchKey, updateIndexes };
 
-//updateIndexes();
-
+/**
+ * Updates MeiliSearch indexes for all languages.
+ * @async
+ */
 async function updateIndexes() {
   try {
     const cid = config.idx_views;
     const start = Date.now();
-    const result = await pgRead.query(templates.getViewsPublicForSearchIndex);
-    /**
-     * TODO this step, m49 dict matching, could be done within the query
-     */
+    const { rows: results } = await pgRead.query(
+      templates.getViewsPublicForSearchIndex
+    );
+    const documents = results.map((doc) => ({
+      ...doc,
+      source_keywords: cleanKeywords(doc.source_keywords),
+    }));
 
-    const m49iso3 = await getDictM49iso3();
-    const documents = result.rows;
-
-    /**
-     * Clean keywords: trim, lowercase, ..
-     * NOTE: this should have been done at save time : it's not
-     * easy to do in postgres OR this add a step ... here.
-     */
-
-    for (let item of documents) {
-      item.source_keywords = cleanKeywords(item.source_keywords);
-    }
-    /**
-     * Views.
-     * - Primary key, e.g. 'view_id' column, must be present in documents
-     * - Create an index for each language.
-     * NOTE: we could search in the multilingual object, but the search
-     * tool do not <em> stuff in object or array. Client side, this step should be added.
-     * In addition, views could be matched, but the search terms does not appears in ui
-     * if another language – not dispayed – matched the query.
-     */
-    for (let language of languages.codes) {
-      const indexView = await meili.getOrCreateIndex(`views_${language}`, {
-        primaryKey: cid.primaryKey,
-      });
-
-      /**
-       * Remove previous documents
-       * Alternative : retrieve all id -> for each, delete those not in new documents
-       */
-
-      console.log(`Delete all documents for index ${language}`);
-      await indexView.deleteAllDocuments();
-
-      /**
-       * Update settings
-       */
-      console.log(`Update settings for language ${language}`);
-      await indexView.updateAttributesForFaceting(cid.atributesForFaceting);
-      await indexView.updateSettings({
-        rankingRules: cid.rankingRules,
-        searchableAttributes: cid.searchableAttributes,
-      });
-
-      /*
-       * Update synonyms
-       */
-      console.log(`Update synonyms for language ${language}`);
-      const locsyn = {};
-      for (let loc of m49iso3) {
-        const code = loc.id;
-        const str = loc[language];
-        if (str && code) {
-          locsyn[code] = [str];
-          locsyn[str] = [code];
-        }
-      }
-      await indexView.updateSynonyms(locsyn);
-
-      /**
-       * Update index
-       */
-      console.log(`Update index for language ${language}`);
-      const doc = documents.map((item) => flatLanguageStrings(item, language));
-
-      await indexView.addDocuments(doc);
-      /**
-       * Avoid bug https://github.com/meilisearch/MeiliSearch/issues/1196
-       */
-
-      await wait(5000);
+    for (const language of languages.codes) {
+      await updateIndexForLanguage(language, documents, cid);
     }
     console.log(`Created search index in ${Date.now() - start} ms`);
   } catch (e) {
-    console.log(`Failed to create search index`);
-    console.error(e);
+    console.error("Failed to create search index", e);
   }
+  return true;
 }
 
+/**
+ * Updates MeiliSearch index for a specific language.
+ * @param {string} language - The language code.
+ * @param {Array} documents - Array of documents to index.
+ * @param {Object} cid - Configuration object for index.
+ * @async
+ */
+async function updateIndexForLanguage(language, documents, cid) {
+  const indexView = await meili.getOrCreateIndex(`views_${language}`, {
+    primaryKey: cid.primaryKey,
+  });
+
+  await indexView.deleteAllDocuments();
+  await indexView.updateAttributesForFaceting(cid.atributesForFaceting);
+  await indexView.updateSettings({
+    rankingRules: cid.rankingRules,
+    searchableAttributes: cid.searchableAttributes,
+  });
+
+  const locsyn = generateLocaleSynonyms(language);
+  await indexView.updateSynonyms(locsyn);
+
+  const docsToIndex = documents.map((doc) => processDocuments(doc, language));
+  await indexView.addDocuments(docsToIndex);
+
+  await wait(5000);
+}
+
+/**
+ * Generates synonyms for locale-based searches.
+ * @async
+ * @param {string} language - The language code.
+ * @returns {Promise<Object>} Locale synonyms.
+ */
+async function generateLocaleSynonyms(language) {
+  const m49iso3 = await getDictM49iso3();
+  const locsyn = {};
+  for (const loc of m49iso3) {
+    const code = loc.id;
+    const str = loc[language];
+    if (str && code) {
+      locsyn[code] = [str];
+      locsyn[str] = [code];
+    }
+  }
+  return locsyn;
+}
+
+/**
+ * Handler to get MeiliSearch keys.
+ * @param {Object} _ - Request object.
+ * @param {Object} res - Response object.
+ * @async
+ */
 async function handlerKey(_, res) {
   try {
     const keys = await meili.getKeys();
-    sendJSON(
-      res,
-      {
-        key: keys.private,
-      },
-      { end: true }
-    );
+    sendJSON(res, { key: keys.private }, { end: true });
   } catch (err) {
     sendError(res, err);
   }
 }
 
+/**
+ * Handler to perform a search on MeiliSearch.
+ * @param {Object} req - Request object.
+ * @param {Object} res - Response object.
+ * @async
+ */
 async function handlerSearch(req, res) {
   try {
     const index = meili.index(req.query.searchIndexName);
     const result = await index.search(req.query.searchQuery);
-    await res.notifyData("search_result", {
-      msg: result,
-    });
+    await res.notifyData("search_result", { msg: result });
   } catch (err) {
     sendError(res, err);
   }
 }
 
-function flatLanguageStrings(item, language) {
-  const itemClone = JSON.parse(JSON.stringify(item));
+/**
+ * Processes documents for a specific language.
+ * @param {Object} item - Document item.
+ * @param {string} language - The language code.
+ * @returns {Object} Processed document.
+ */
+function processDocuments(item, language) {
+  const itemClone = clone(item);
   const ml = itemClone.meta_multilingual || {};
   const pd = itemClone.projects_data || [];
-  const gm = itemClone.source_keywords_gemet_multilingual;
+  const gm = itemClone.source_keywords_gemet_multilingual || [];
+  const m4 = itemClone.source_keywords_m49_multilingual || [];
 
-  const g = itemClone.source_keywords_gemet;
-  g.length = 0; // id replaced by label
-  for (let k of gm) {
-    if (k.language === language) {
-      g.push(k.label);
-    }
+  /**
+   * New arrays for the document
+   * - specific for current language
+   * - not practical to set in DB query
+   */
+  itemClone.projects_title = [];
+  itemClone.source_keywords_gemet_label = [];
+  itemClone.source_keywords_m49_label = [];
+
+  /**
+   * Gemet multilingual
+   * - Add new array  of labels
+   * - Remove multilingual object
+   */
+  for (const g of gm) {
+    itemClone.source_keywords_gemet_label.push(
+      g[language] || g[languages.default]
+    );
   }
   delete itemClone.source_keywords_gemet_multilingual;
+
   /**
-   * Extend document with itemClones from meta_multilingual
+   * M49 / ISO3 geo codes
+   * - Add new array of labels
+   * - Remove multilingual object
    */
-  for (let m in ml) {
-    /*
-     * e.g. 'view_title', 'source_notes',...
-     */
+  for (const m of m4) {
+    itemClone.source_keywords_m49_label.push(
+      m[language] || m[languages.default]
+    );
+  }
+  delete itemClone.source_keywords_m49_multilingual;
 
+  /**
+   * Meta multilingual
+   * - Convert to text
+   * - Save at first level
+   * - Remmove multilingual object
+   */
+  for (const m in ml) {
     const tr = ml[m] || {};
-    /*
-     * e.g. {en:'My view title',fr:'Mon titre'}
-     */
-
     itemClone[m] = tr[language] || tr[languages.default];
-    /*
-     * e.g. {view_title:'My view title', ...}
-     */
-
-    const as = config.idx_views.attributesStripHTML;
-    const toStrip = as.includes(m);
+    const toStrip = keysStripHTML.includes(m);
     if (toStrip) {
       itemClone[m] = htmlToText(itemClone[m], { wordwrap: false });
     }
@@ -184,20 +195,30 @@ function flatLanguageStrings(item, language) {
   delete itemClone.meta_multilingual;
 
   /**
-   * Set language in project data. Object => string
-   * {title:{en:'Title','fr':'Titre'},...} => {title:'Title',...}
+   * Project multilingual
+   * - Add new aray of label
+   * - Remove projects_data
    */
   for (let p of pd) {
     for (let k in p) {
       if (isObject(p[k])) {
-        p[k] = p[k][language] || p[k][languages.default];
+        const label = p[k][language] || p[k][languages.default];
+        if (label) {
+          itemClone.projects_title.push(label);
+        }
       }
     }
   }
+  delete itemClone.projects_data;
 
   return itemClone;
 }
 
+/**
+ * Cleans keywords by trimming and converting to lowercase.
+ * @param {Array} arr - Array of keywords.
+ * @returns {Array} Cleaned keywords.
+ */
 function cleanKeywords(arr) {
   return arr.map((k) => k.trim().toLowerCase());
 }

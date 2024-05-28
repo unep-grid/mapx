@@ -1,11 +1,6 @@
-import {
-  isBoolean,
-} from "./../is_test/index.js";
+import { isBoolean } from "./../is_test/index.js";
 
-import {
-  el,
-  elSpanTranslate,
-} from "../el_mapx/index.js";
+import { el, elSpanTranslate } from "../el_mapx/index.js";
 
 export class Facet {
   constructor(opt) {
@@ -21,7 +16,7 @@ export class Facet {
         order: 0,
         enable: true,
       },
-      opt
+      opt,
     );
     fc.init();
   }
@@ -51,7 +46,7 @@ export class Facet {
     fc._elLabel = el(
       "label",
       { class: "search--filter-facet-item-label", for: fc._elCheckbox.id },
-      elLabelContent
+      elLabelContent,
     );
     fc._elCount = el("span", {
       count: fc._opt.count,
@@ -62,7 +57,7 @@ export class Facet {
       {
         class: "search--filter-facet-item",
       },
-      [fc._elCheckbox, fc._elLabel, fc._elCount]
+      [fc._elCheckbox, fc._elLabel, fc._elCount],
     );
     fc.order = -fc._opt.count;
   }

@@ -32,7 +32,7 @@ const def = {
       "source_abstract",
       "source_keywords",
       "source_keywords_m49",
-      "source_keywords_gemet",
+      "source_keywords_gemet_label",
       "source_notes",
       "project_title",
       "project_abstract",
@@ -56,7 +56,7 @@ const def = {
       "source_abstract",
       "source_keywords",
       "source_keywords_m49",
-      "source_keywords_gemet",
+      "source_keywords_gemet_label",
       "source_notes",
       "project_title",
       "project_abstract",
@@ -71,7 +71,7 @@ const def = {
       icon: "fa-tag",
     },
     {
-      type: "source_keywords_gemet",
+      type: "source_keywords_gemet_label",
       icon: "fa-leaf",
     },
     {
