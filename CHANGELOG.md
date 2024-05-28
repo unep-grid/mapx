@@ -1,3 +1,10 @@
+  - [1.13.8-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.2) 
+
+    - Search Index : 
+        - Refactor index creator
+        - Added geographic keywords to the base request
+        - Expose m49 id + gemet concept and their label in current index language 
+
   - [1.13.8-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.1) 
 
     - View deletion : warn the user if the view is listed in external projects #287
