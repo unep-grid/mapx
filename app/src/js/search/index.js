@@ -367,7 +367,6 @@ class Search extends EventSimple {
       if (subgroups) {
         elFacetItems.className = "search--filter-facets-sub-items";
         for (let g of subgroups) {
-          console.log(g);
           const { elFacetGroup: elFg, elFacetItems: elFi } = build_facets_group(
             g.key,
             { details: false, addSortBtn: false },
