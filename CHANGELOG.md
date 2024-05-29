@@ -1,3 +1,7 @@
+  - [1.13.8-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.3) 
+
+    - Search Index : Fix projects_title an projects_description merged
+
   - [1.13.8-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.2) 
 
     - Search Index : 
