@@ -133,18 +133,8 @@ WITH
     SELECT
       id_view,
       json_agg(id_project) as projects_id,
-      json_agg(
-        jsonb_build_object(
-          'id_project',
-          id_project,
-          'origin',
-          origin,
-          'title',
-          project_title,
-          'description',
-          project_description
-        )
-      ) as projects_data
+      json_agg(project_title) as projects_title_multilingual,
+      json_agg(project_description) as projects_description_multilingual
     FROM
       tmp_views_public_loooong
     GROUP BY
@@ -249,8 +239,9 @@ WITH
           m.meta #> '{text, notes}'
         )
       ) AS meta_multilingual,
-      p.projects_data,
       p.projects_id,
+      p.projects_title_multilingual,
+      p.projects_description_multilingual,
       /**
        * R jsonlite bug : list of one converted to 'string'
        */
@@ -410,8 +401,9 @@ WITH
       view_id,
       project_id,
       meta_multilingual,
-      projects_data,
       projects_id,
+      projects_title_multilingual,
+      projects_description_multilingual,
       view_type,
       source_keywords,
       source_keywords_m49,

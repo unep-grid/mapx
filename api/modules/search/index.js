@@ -2,7 +2,13 @@ import { meili, pgRead } from "#mapx/db";
 import { getParamsValidator } from "#mapx/route_validation";
 import { isObject } from "@fxi/mx_valid";
 import { validateTokenHandler } from "#mapx/authentication";
-import { clone, sendError, sendJSON, wait } from "#mapx/helpers";
+import {
+  clone,
+  sendError,
+  sendJSON,
+  sortObjectByKeys,
+  wait,
+} from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { settings } from "#root/settings";
 import { htmlToText } from "html-to-text";
@@ -141,7 +147,8 @@ async function handlerSearch(req, res) {
 function processDocuments(item, language) {
   const itemClone = clone(item);
   const ml = itemClone.meta_multilingual || {};
-  const pd = itemClone.projects_data || [];
+  const pt = itemClone.projects_title_multilingual || [];
+  const pd = itemClone.projects_description_multilingual || [];
   const gm = itemClone.source_keywords_gemet_multilingual || [];
   const m4 = itemClone.source_keywords_m49_multilingual || [];
 
@@ -150,9 +157,10 @@ function processDocuments(item, language) {
    * - specific for current language
    * - not practical to set in DB query
    */
-  itemClone.projects_title = [];
   itemClone.source_keywords_gemet_label = [];
   itemClone.source_keywords_m49_label = [];
+  itemClone.projects_title = [];
+  itemClone.projects_description = [];
 
   /**
    * Gemet multilingual
@@ -200,18 +208,29 @@ function processDocuments(item, language) {
    * - Remove projects_data
    */
   for (let p of pd) {
-    for (let k in p) {
-      if (isObject(p[k])) {
-        const label = p[k][language] || p[k][languages.default];
-        if (label) {
-          itemClone.projects_title.push(label);
-        }
+    if (isObject(p)) {
+      const desc = p[language] || p[languages.default];
+      if (desc) {
+        itemClone.projects_description.push(desc);
       }
     }
   }
-  delete itemClone.projects_data;
+  for (let p of pt) {
+    if (isObject(p)) {
+      const title = p[language] || p[languages.default];
+      if (title) {
+        itemClone.projects_title.push(title);
+      }
+    }
+  }
+  delete itemClone.projects_description_multilingual;
+  delete itemClone.projects_title_multilingual;
 
-  return itemClone;
+  /**
+   * Sort for readability
+   */
+  const itemCloneSorted = sortObjectByKeys(itemClone);
+  return itemCloneSorted;
 }
 
 /**

@@ -525,9 +525,25 @@ function timeStep(start) {
 }
 
 /**
+ * Sorts an object by its keys.
+ *
+ * @param {Object} obj - The object to be sorted.
+ * @returns {Object} - A new object with keys sorted in ascending order.
+ */
+function sortObjectByKeys(obj) {
+  const sortedKeys = Object.keys(obj).sort();
+  const sortedObj = {};
+  for (const key of sortedKeys) {
+    sortedObj[key] = obj[key];
+  }
+  return sortedObj;
+}
+
+/**
  * Exports
  */
 export {
+  sortObjectByKeys,
   deleteOldFiles,
   clearDownload,
   clone,
