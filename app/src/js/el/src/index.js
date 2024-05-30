@@ -47,7 +47,7 @@ export class ElementCreator {
      */
     this.config.interval = setInterval(
       this.cleanListeners.bind(this),
-      this.config.interval_delay
+      this.config.interval_delay,
     );
   }
 
@@ -176,11 +176,6 @@ export class ElementCreator {
           elOut.className = value;
         }
         break;
-      case "checked":
-        if (tagName === "input" && isBoolean(value)) {
-          elOut.checked = value;
-        }
-        break;
       case "disabled":
         if (tagName === "input" && value == true) {
           elOut.disabled = value;
@@ -206,8 +201,8 @@ export class ElementCreator {
     const type = isArray(listeners)
       ? "array"
       : isObject(listeners)
-      ? "object"
-      : null;
+        ? "object"
+        : null;
 
     switch (type) {
       case "array":
@@ -277,7 +272,7 @@ export class ElementCreator {
       console.warn(
         "ElementCreator : unsupported event",
         eventName,
-        eventHandler
+        eventHandler,
       );
       return;
     }
