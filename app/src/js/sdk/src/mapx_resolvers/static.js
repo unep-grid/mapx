@@ -47,7 +47,7 @@ import {
   commonLocGetTableCodes,
 } from "../../../commonloc/index.js";
 import { isArray, isMap, isView } from "./../../../is_test";
-import { dashboard } from "./../../../dashboards/dashboard_instances.js";
+import { dashboard } from "./../../../dashboards/instances.js";
 import {
   getSourceMetadata,
   getViewMetadata,

@@ -160,6 +160,13 @@ class Dashboard extends EventSimple {
       const script = cw.script;
       if (isNotEmpty(script)) {
         const modulesFound = script.match(reg) || [];
+
+        if (isNotEmpty(modulesFound)) {
+          console.warn(
+            `Module ${module} loading using 'modules.' is obsolete, update the code`,
+          );
+        }
+
         for (const module of modulesFound) {
           if (!conf.modules.includes(module)) {
             console.warn(

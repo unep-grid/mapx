@@ -52,7 +52,7 @@ import {
   viewsListAddSingle,
 } from "./../views_list_manager";
 import { initLog } from "./../mx_helper_log.js";
-import { dashboard } from "./../dashboards/dashboard_instances.js";
+import { dashboard } from "./../dashboards/instances.js";
 import {
   updateIfEmpty,
   round,
@@ -3195,7 +3195,7 @@ export async function viewRender(o) {
    *   it's rendered inside the story
    */
   if (!isStory) {
-    await dashboard.viewAutoDashboardAsync(view);
+    await dashboard.createFromView(view);
     await dashboard.autoDestroy();
   }
 
@@ -4146,9 +4146,8 @@ export async function viewModulesRemove(view) {
     delete view._elLegend;
   }
 
-  if (dashboard.viewHasWidget(view)) {
-    await dashboard.viewRmWidgets(view);
-    await dashboard.autoDestroy();
+  if (dashboard.hasViewWidgets(view)) {
+    await dashboard.removeWidgetsFromView(view);
   }
 
   if (view._miniMap) {

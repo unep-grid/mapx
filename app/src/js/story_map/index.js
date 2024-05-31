@@ -22,7 +22,7 @@ import {
   cssTransform,
   debounce,
 } from "./../mx_helper_misc.js";
-import { dashboard } from "./../dashboards/dashboard_instances.js";
+import { dashboard } from "./../dashboards/instances.js";
 import { getArrayDiff } from "./../array_stat/index.js";
 import { createCanvas } from "./../mx_helper_canvas.js";
 import {
@@ -1802,13 +1802,13 @@ async function updatePanelBehaviour(settings, step) {
   }
 
   if (dBehaviour === "disabled") {
-    dashboard.rmInstance();
+    dashboard.remove();
   } else {
     /**
      * Add widgets if any
      */
     for (const v of idViews) {
-      await dashboard.viewAddWidgetsAsync(v);
+      await dashboard.addWidgetsToView(v);
     }
 
     /**
@@ -1827,7 +1827,7 @@ async function updatePanelBehaviour(settings, step) {
          * view with config
          */
         for (const v of idViews) {
-          const config = dashboard.viewConfigGet(v);
+          const config = dashboard.getConfigFromView(v);
           if (!config) {
             continue;
           }

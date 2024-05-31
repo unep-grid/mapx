@@ -3,8 +3,9 @@ import { ListenerStore } from "./../listener_store/index.js";
 import { path, any, setClickHandler } from "./../mx_helper_misc.js";
 import { getLayersPropertiesAtPoint } from "./../map_helpers/index.js";
 import { isEmpty, isFunction, isUndefined } from "./../is_test/index.js";
-import { settings } from "./../mx.js";
+import { settings } from "../settings/index.js";
 const { valuesMap } = settings;
+
 /**
  * Widget method
  */
@@ -13,6 +14,7 @@ const defaults = {
   conf: {
     disabled: false,
     source: "none",
+    alwaysOnTop: false,
     width: "x50",
     height: "y50",
     addColorBackground: false,
@@ -275,7 +277,7 @@ class Widget {
         })),
         el("button", {
           class: ["btn-circle", "btn-widget", "fa", "fa-arrows", "handle"],
-        })
+        }),
       ),
       (widget.elContent = el("div", {
         class: ["widget--content", "shadow"],
@@ -284,7 +286,7 @@ class Widget {
             ? conf.colorBackground
             : null,
         },
-      }))
+      })),
     );
   }
 
@@ -409,7 +411,7 @@ class Widget {
     const widgets = widget.dashboard.widgets;
     widget._handleClick = enable === true;
     const dashboardHandleClick = any(
-      widgets.map((w) => w._handleClick === true)
+      widgets.map((w) => w._handleClick === true),
     );
     /**
      * Update global click handling
@@ -463,7 +465,7 @@ class Widget {
       if (hasFunction) {
         strToEval = strToEval.substring(
           strToEval.indexOf("{") + 1,
-          strToEval.lastIndexOf("}")
+          strToEval.lastIndexOf("}"),
         );
       }
 

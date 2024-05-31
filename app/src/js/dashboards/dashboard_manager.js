@@ -3,6 +3,8 @@ import { path } from "./../mx_helper_misc.js";
 import { storyMapLock, isStoryPlaying } from "../story_map";
 import { getDictItem } from "../language";
 import { isString, isEmpty, isView, isArray } from "./../is_test";
+import { Dashboard } from "./dashboard.js";
+
 /**
  * DashboardManager: A high-level manager for Dashboard instances.
  *
@@ -26,18 +28,19 @@ export class DashboardManager {
    */
   hasInstance() {
     const dm = this;
-    return dm._dashboard && !dm._dashboard.isDestroyed();
+    const dashboard = dm._dashboard;
+    return dashboard instanceof Dashboard && !dashboard.isDestroyed();
   }
 
   /**
    * Retrieves the dashboard instance if it exists and is not destroyed.
-   * @returns {Dashboard|null} The current dashboard instance or null if none
+   * @returns {Dashboard|Boolean} The current dashboard instance or null if none
    * exists or it has been destroyed.
    */
   getInstance() {
     const dm = this;
     if (!dm.hasInstance()) {
-      return;
+      return false;
     }
     return dm._dashboard;
   }
@@ -55,8 +58,8 @@ export class DashboardManager {
       if (!dm.hasInstance()) {
         return;
       }
-      const d = dm.getInstance();
-      return d[cmd](value);
+      const dashboard = dm.getInstance();
+      return dashboard[cmd](value);
     } catch (e) {
       console.warn(e);
     }
@@ -66,7 +69,7 @@ export class DashboardManager {
    * Destroys the dashboard instance if it exists.
    * @returns {void}
    */
-  rmInstance() {
+  remove() {
     const dm = this;
     if (!dm.hasInstance()) {
       return;
@@ -87,11 +90,11 @@ export class DashboardManager {
     return dm._dashboard.autoDestroy();
   }
   /**
-   * Retrieves the configuration for a view with dashoard
+   * Retrieves the configuration for a view with dashboard
    * @param {string} idView The identifier for the view
-   * @returns {Object|null} The view dashoard config
+   * @returns {Object|null} The view dashboard config
    */
-  viewConfigGet(idView) {
+  getConfigFromView(idView) {
     const view = getView(idView);
 
     if (!isView(view)) {
@@ -122,7 +125,7 @@ export class DashboardManager {
    * @param {string} idView
    * @returns {boolean}
    */
-  viewHasWidget(idView) {
+  hasViewWidgets(idView) {
     const view = getView(idView);
     if (!isView(view)) {
       return false;
@@ -135,9 +138,10 @@ export class DashboardManager {
    * @param {string} idView
    * @returns {Promise<boolean>} Done
    */
-  async viewRmWidgets(idView) {
+  async removeWidgetsFromView(idView) {
     const dm = this;
-    const hasWidgets = dm.viewHasWidget(idView);
+    const hasWidgets = dm.hasViewWidgets(idView);
+    const dashboard = dm.getInstance();
     if (!hasWidgets) {
       return;
     }
@@ -148,6 +152,8 @@ export class DashboardManager {
     }
 
     view._widgets.length = 0;
+
+    await dashboard.autoDestroy();
     return true;
   }
 
@@ -156,18 +162,17 @@ export class DashboardManager {
    * @param {string} idView
    * @returns {Promise<Array>} Added widgets
    */
-  async viewAddWidgetsAsync(idView) {
+  async addWidgetsToView(idView) {
     const dm = this;
-    const config = dm.viewConfigGet(idView);
+    const config = dm.getConfigFromView(idView);
     if (!config) {
       return false;
     }
     const view = getView(idView);
     const map = getMap();
-    await dm.viewRmWidgets(idView);
-    await dm.viewCreateDashboardAsync(idView);
-    const d = dm.getInstance();
-    view._widgets = await d.addWidgetsAsync({
+    await dm.removeWidgetsFromView(idView);
+    const dashboard = await dm.createDashboard(config);
+    view._widgets = await dashboard.addWidgetsAsync({
       widgets: config.widgets,
       modules: config.modules,
       view: view,
@@ -177,21 +182,19 @@ export class DashboardManager {
   }
 
   /**
-   * Create the view's dashboard
-   * @param {string} idView
-   * @returns {Promise<boolean>}
+   * Create a dashboard if it doesn't exist'
+   * @param {Object} Config
+   * @returns {Promise<Boolean>}
    */
-  async viewCreateDashboardAsync(idView) {
+  async createDashboard(config) {
     const dm = this;
-    const { Dashboard } = await import("./dashboard.js");
 
-    const d = dm.getInstance();
-    if (d instanceof Dashboard) {
+    if (isEmpty(config)) {
       return false;
     }
-    const config = dm.viewConfigGet(idView);
-    if (!config) {
-      return;
+
+    if (dm.hasInstance()) {
+      return dm.getInstance();
     }
 
     dm._dashboard = new Dashboard({
@@ -244,42 +247,44 @@ export class DashboardManager {
       }
     });
 
-    return true;
+    return dm._dashboard;
   }
 
   /**
    * Create the view's dashboard, and populate widgets
-   * NOTE: story map uses directly dashboard.viewAddWidgetsAsync(v);
+   * NOTE: story map uses directly dashboard.addWidgetsToView(v);
    * @param {string} idView
    * @returns {Promise<boolean>}
    */
-  async viewAutoDashboardAsync(idView) {
+  async createFromView(idView) {
     const dm = this;
-    const { Dashboard } = await import("./dashboard.js");
-    const created = await dm.viewCreateDashboardAsync(idView);
-    const widgets = await dm.viewAddWidgetsAsync(idView);
-    const d = dm.getInstance();
-    const hasDashboard = d instanceof Dashboard;
+    const config = dm.getConfigFromView(idView);
+    if (isEmpty(config)) {
+      return false;
+    }
+    const dashboard = await dm.createDashboard(config);
+    const widgets = await dm.addWidgetsToView(idView);
+    const hasDashboard = dashboard instanceof Dashboard;
     if (!hasDashboard) {
+      console.error(
+        "createDashboardFromView : missing dashboard / not created",
+      );
       return;
     }
-    if (created) {
-      const config = dm.viewConfigGet(idView);
-      if (!config.panel_init_close) {
-        await d.show();
-        d.updatePanelLayout();
-        d.updateAttributions();
-      }
+    if (!config.panel_init_close) {
+      await dashboard.show();
+      dashboard.updatePanelLayout();
+      dashboard.updateAttributions();
     }
     if (widgets && widgets.length > 0) {
-      const isActive = d.isActive();
+      const isActive = dashboard.isActive();
       if (!isActive) {
-        d.shakeButton({
+        dashboard.shakeButton({
           type: "look_at_me",
         });
       } else {
-        d.updateAttributions();
-        d.updateGridLayout();
+        dashboard.updateAttributions();
+        dashboard.updateGridLayout();
       }
     }
   }
