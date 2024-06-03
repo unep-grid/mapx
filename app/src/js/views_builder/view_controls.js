@@ -120,7 +120,7 @@ export async function createViewControls(view) {
     );
   }
 
-  if (isSm) {
+  if (!isSm) {
     /**
      * The story map views are the only one where the reset does not make sense.
      */
