@@ -6555,6 +6555,11 @@
     "zh": "视图元数据"
   },
   {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "zh": "源的元数据"
+  },
+  {
     "id": "meta_view_raster_meta",
     "en": "Metadata Entry",
     "zh": "元数据项"

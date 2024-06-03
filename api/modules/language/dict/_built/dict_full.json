@@ -17043,6 +17043,19 @@
     "de": "Metadaten der Ansicht "
   },
   {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "fr": "Métadonnées de la source",
+    "es": "Metadatos de la fuente",
+    "ru": "Метаданные источника",
+    "zh": "源的元数据",
+    "ar": "البيانات الوصفية للمصدر",
+    "fa": "فراداده منبع",
+    "ps": "د سرچینې میټاډاټا",
+    "bn": "উৎসের মেটাডেটা",
+    "de": "Metadaten der Quelle"
+  },
+  {
     "id": "meta_view_raster_meta",
     "en": "Metadata Entry",
     "fr": "Entrée de métadonnées",

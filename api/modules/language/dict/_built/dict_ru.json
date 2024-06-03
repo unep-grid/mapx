@@ -6555,6 +6555,11 @@
     "ru": "Метаданные представления "
   },
   {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "ru": "Метаданные источника"
+  },
+  {
     "id": "meta_view_raster_meta",
     "en": "Metadata Entry",
     "ru": "Запись метаданных "

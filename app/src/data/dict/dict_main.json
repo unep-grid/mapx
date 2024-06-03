@@ -9705,6 +9705,19 @@
     "de": ""
   },
   {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "fr": "Métadonnées de la source",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "meta_view_raster_meta",
     "en": "Metadata Entry",
     "fr": "Entrée de métadonnées",

@@ -6555,6 +6555,11 @@
     "fr": "Métadonnées de la vue"
   },
   {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "fr": "Métadonnées de la source"
+  },
+  {
     "id": "meta_view_raster_meta",
     "en": "Metadata Entry",
     "fr": "Entrée de métadonnées"

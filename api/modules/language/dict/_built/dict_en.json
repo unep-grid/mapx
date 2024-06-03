@@ -5244,6 +5244,10 @@
     "en": "Metadata of the view"
   },
   {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source"
+  },
+  {
     "id": "meta_view_raster_meta",
     "en": "Metadata Entry"
   },

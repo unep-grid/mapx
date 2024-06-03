@@ -6555,6 +6555,11 @@
     "ar": "البيانات الوصفية لطريقة العرض "
   },
   {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "ar": "البيانات الوصفية للمصدر"
+  },
+  {
     "id": "meta_view_raster_meta",
     "en": "Metadata Entry",
     "ar": "إدخال البيانات الوصفية "

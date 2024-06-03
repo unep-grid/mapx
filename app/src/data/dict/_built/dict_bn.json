@@ -6555,6 +6555,11 @@
     "bn": "দেখার মেটাডেটা "
   },
   {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "bn": "উৎসের মেটাডেটা"
+  },
+  {
     "id": "meta_view_raster_meta",
     "en": "Metadata Entry",
     "bn": "মেটাডেটা এন্ট্রি "

@@ -6555,6 +6555,11 @@
     "ps": "د لید میډیډاټا "
   },
   {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "ps": "د سرچینې میټاډاټا"
+  },
+  {
     "id": "meta_view_raster_meta",
     "en": "Metadata Entry",
     "ps": "د میټاډاټا ننوتل "

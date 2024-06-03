@@ -6555,6 +6555,11 @@
     "fa": "فراداده نمایش "
   },
   {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "fa": "فراداده منبع"
+  },
+  {
     "id": "meta_view_raster_meta",
     "en": "Metadata Entry",
     "fa": "ورودی فراداده "
