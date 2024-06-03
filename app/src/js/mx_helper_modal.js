@@ -1,11 +1,5 @@
 import { el } from "./el/src/index.js";
-import {
-  moveEl,
-  makeId,
-  textToDom,
-  isShinyReady,
-  debounce,
-} from "./mx_helper_misc.js";
+import { makeId, textToDom, isShinyReady, debounce } from "./mx_helper_misc.js";
 import { getDictItem } from "./language";
 import { draggable } from "./mx_helper_draggable.js";
 import {
@@ -26,6 +20,8 @@ import {
 } from "./is_test/index.js";
 import { SelectAuto } from "./select_auto";
 import { jed } from "./json_editor/index.js";
+import { ElementMover } from "./elmove/index.js";
+
 /**
  * TODO:
  * - this helper should be converted to Class
@@ -244,6 +240,11 @@ export function modal(o) {
   }
 
   /**
+   * Move modal programatically
+   */
+  const moveModal = new ElementMover(elModal);
+
+  /**
    * Return final element
    */
   return elModal;
@@ -285,7 +286,7 @@ export function modal(o) {
             elBtnCollapse.classList.remove("fa-plus");
             elModal.classList.remove("mx-modal-collapsed");
           }
-          moveEl(elModal, {
+          moveModal.to({
             left: 0,
             right: "auto",
             margin: 0,
@@ -315,7 +316,7 @@ export function modal(o) {
             elBtnCollapse.classList.remove("fa-plus-square");
             elModal.classList.remove("mx-modal-collapsed");
           }
-          moveEl(elModal, {
+          moveModal.to({
             right: 0,
             left: "auto",
             margin: 0,

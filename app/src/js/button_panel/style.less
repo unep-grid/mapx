@@ -8,6 +8,7 @@
   right: 10px;
   display: block;
   --animate-transition-ms: 350ms;
+  --animate-transition-slow-ms: 500ms;
   .button-panel--container {
     pointer-events: none;
     position: absolute;
@@ -106,7 +107,7 @@
       width: 100%;
       z-index: 0;
       padding: 0px;
-      transition: transform ease-in-out 500ms;
+      transition: transform cubic-bezier(0.68, -0.6, 0.32, 1.6) var(--animate-transition-slow-ms);
       pointer-events: none;
       container-type: inline-size;
       container-name: button-panel--item;
