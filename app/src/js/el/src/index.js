@@ -177,8 +177,9 @@ export class ElementCreator {
         }
         break;
       case "disabled":
-        if (tagName === "input" && value == true) {
-          elOut.disabled = value;
+        //Use == to support truthy values
+        if (value === true || value === "true") {
+          elOut.disabled = true;
         }
         break;
       default:

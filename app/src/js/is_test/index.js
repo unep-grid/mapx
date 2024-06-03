@@ -177,14 +177,6 @@ export function isViewRtWithLegend(item) {
   return isViewRt(item) && isUrl(item?.data?.source?.legend);
 }
 
-/**
- * Test if view is downloadable
- * For accurate version, use isViewDownloadableRemote
- * @param {Object} item to test
- */
-export function isViewDownloadable(item) {
-  return isView(item) && item._has_download;
-}
 
 /**
  * Test if view rt has tiles

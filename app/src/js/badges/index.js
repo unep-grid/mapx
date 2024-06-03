@@ -53,6 +53,7 @@ export async function setViewBadges(view) {
     const hasPublic = readers.includes("public");
     const elBadges = viewBase.elBadges;
     const isTemp = view._temp === true;
+    const hasLock = !(isTemp || isShared);
 
     if (!elBadges) {
       return;
@@ -110,8 +111,10 @@ export async function setViewBadges(view) {
      * Add editable badge:
      * lock open or closed
      */
-    const elBadgeEdit = elBadge("edit", { editable: hasEdit });
-    badges.push(elBadgeEdit);
+    if (hasLock) {
+      const elBadgeEdit = elBadge("edit", { editable: hasEdit });
+      badges.push(elBadgeEdit);
+    }
 
     /**
      * View metadata button / badge

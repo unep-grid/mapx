@@ -19,7 +19,7 @@ const version = settings.version;
 
 const templates = {
   viewListOptions: require("../dot/view_list_options.dot.html"),
-  viewListControls: require("../dot/view_list_controls.dot.html"),
+  //viewListControls: require("../dot/view_list_controls.dot.html"),
   viewListFilters: require("../dot/view_list_filters.dot.html"),
 };
 

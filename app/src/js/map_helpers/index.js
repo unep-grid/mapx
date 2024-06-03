@@ -147,6 +147,7 @@ import { FlashItem } from "../icon_flash/index.js";
 import { viewFiltersInit } from "./view_filters.js";
 import { fetchViews } from "./views_fetch.js";
 import { ButtonPanelLegend } from "../panel_legend/index.js";
+import { createViewControls } from "../views_builder/view_controls.js";
 export * from "./view_filters.js";
 
 /**
@@ -3114,13 +3115,6 @@ export async function viewRender(o) {
    */
   const view = await getViewAuto(o.view || o.idView);
 
-  /**
-   * Set download flag
-   * -> used in isViewDownloadable
-   * -> async not possible in view_list_controles.dot.html
-   */
-  view._has_download = await isViewDownloadableRemote(view);
-
   /*
    * Validation
    */
@@ -4116,7 +4110,9 @@ export async function viewUiContent(id) {
   const elFilters = elView.querySelector(`#view_filters_container_${view.id}`);
 
   if (elControls) {
-    elControls.innerHTML = templates.viewListControls(view);
+    elControls.innerHTML = "";
+    const elControlsList = await createViewControls(view);
+    elControls.appendChild(elControlsList);
   }
   if (elFilters) {
     elFilters.innerHTML = templates.viewListFilters(view);

@@ -666,17 +666,15 @@ tr {
   margin: 4px;
 }
 
+button:disabled,
+button[disabled],
+.disabled,
 .btn-circle.disabled,
+.btn-circle:disabled,
 .btn.disabled,
 .btn.disabled-alt {
   cursor: not-allowed;
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-.disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.7;
   pointer-events: none;
 }
 
@@ -686,7 +684,8 @@ tr {
   opacity: 0.5;
 }
 
-.btn-circle > i {
+.btn-circle > i,
+.btn-circle:hover > i {
   position: relative;
   display: flex;
   align-items: center;
@@ -696,17 +695,14 @@ tr {
 
 .btn-circle-medium {
   width: 40px;
-  margin-right: 5px;
-  margin-bottom: 5px;
   height: 40px;
   border: none;
 }
 .btn-circle-small {
   width: 25px;
   height: 25px;
-  margin-right: 0px;
-  margin-bottom: 0px;
-  font-size: 0.8em;
+  font-size: 0.9em;
+  border: none; /* view controls*/
 }
 
 /*
@@ -885,7 +881,6 @@ tr {
   transition: transform 0.3s ease-in-out;
 }
 
-
 /**
 * Filter switch operator
 */
@@ -1063,7 +1058,6 @@ code {
   width: 100%;
   margin: 2px;
 }
-
 
 .mx-version {
   cursor: pointer;
