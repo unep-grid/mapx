@@ -120,26 +120,31 @@ export async function createViewControls(view) {
     );
   }
 
-  controlItems.push(
-    el(
-      "li",
-      {
-        class: "hint--top",
-        dataset: { lang_key: "btn_opt_reset", lang_type: "tooltip" },
-      },
+  if (isSm) {
+    /**
+     * The story map views are the only one where the reset does not make sense.
+     */
+    controlItems.push(
       el(
-        "button",
+        "li",
         {
-          class: "btn-circle btn-circle-small",
-          dataset: {
-            view_action_key: "btn_opt_reset",
-            view_action_target: view.id,
-          },
+          class: "hint--top",
+          dataset: { lang_key: "btn_opt_reset", lang_type: "tooltip" },
         },
-        el("i", { class: "fa fa-undo" }),
+        el(
+          "button",
+          {
+            class: "btn-circle btn-circle-small",
+            dataset: {
+              view_action_key: "btn_opt_reset",
+              view_action_target: view.id,
+            },
+          },
+          el("i", { class: "fa fa-undo" }),
+        ),
       ),
-    ),
-  );
+    );
+  }
 
   if (isGj || isVt || isRt) {
     controlItems.push(
@@ -165,7 +170,7 @@ export async function createViewControls(view) {
     );
   }
 
-  if (isVtWithAttr) {
+  if (isRt || isCc || isVtWithAttr) {
     controlItems.push(
       el(
         "li",
@@ -184,47 +189,10 @@ export async function createViewControls(view) {
               {
                 class: "btn-circle btn-circle-small",
                 dataset: {
-                  view_action_key: "btn_opt_download",
+                  view_action_key:
+                    isRt || isCc ? "btn_opt_get_external" : "btn_opt_download",
                   view_action_target: view.id,
                 },
-              },
-              el("i", { class: "fa fa-cloud-download" }),
-            )
-          : el(
-              "button",
-              {
-                class: "btn-circle btn-circle-small",
-                disabled: true,
-              },
-              el("i", { class: "fa fa-cloud-download" }),
-            ),
-      ),
-    );
-  }
-
-  if (isRt || isCc) {
-    controlItems.push(
-      el(
-        "li",
-        {
-          class: `hint--top`,
-          dataset: {
-            lang_type: "tooltip",
-            lang_key: isDownloadable
-              ? "btn_opt_download"
-              : "btn_opt_download_not_allowed",
-          },
-        },
-        isDownloadable
-          ? el(
-              "button",
-              {
-                class: "btn-circle btn-circle-small",
-                dataset: {
-                  view_action_key: "btn_opt_get_external",
-                  view_action_target: view.id,
-                },
-                disabled: true,
               },
               el("i", { class: "fa fa-cloud-download" }),
             )
@@ -283,29 +251,31 @@ export async function createViewControls(view) {
     );
   }
 
-  controlItems.push(
-    el(
-      "li",
-      {
-        class: "hint--top",
-        dataset: {
-          lang_key: "btn_opt_code_integration",
-          lang_type: "tooltip",
-        },
-      },
+  if (isVtWithAttr) {
+    controlItems.push(
       el(
-        "button",
+        "li",
         {
-          class: "btn-circle btn-circle-small",
+          class: "hint--top",
           dataset: {
-            view_action_key: "btn_opt_code_integration",
-            view_action_target: view.id,
+            lang_key: "btn_opt_code_integration",
+            lang_type: "tooltip",
           },
         },
-        el("i", { class: "fa fa-file-code-o" }),
+        el(
+          "button",
+          {
+            class: "btn-circle btn-circle-small",
+            dataset: {
+              view_action_key: "btn_opt_code_integration",
+              view_action_target: view.id,
+            },
+          },
+          el("i", { class: "fa fa-file-code-o" }),
+        ),
       ),
-    ),
-  );
+    );
+  }
 
   if (isGj && (uIsPublisher || uIsAdmin)) {
     controlItems.push(
@@ -356,7 +326,7 @@ export async function createViewControls(view) {
     );
   }
 
-  if (hasEditRight) {
+  if ((isVt || isRt || isCc) && hasEditRight) {
     controlItems.push(
       el(
         "li",
@@ -378,9 +348,7 @@ export async function createViewControls(view) {
         ),
       ),
     );
-  }
 
-  if ((isVt || isRt || isCc) && hasEditRight) {
     controlItems.push(
       el(
         "li",
@@ -418,7 +386,7 @@ export async function createViewControls(view) {
     );
   }
 
-  if (isCc) {
+  if (isCc && hasEditRight) {
     controlItems.push(
       el(
         "li",
@@ -502,7 +470,7 @@ export async function createViewControls(view) {
       ),
     );
 
-  if (isRegistered && (isSm || isVt || isRt || isCc) && !isTemp) {
+  if (isRegistered && (isSm || isVt || isRt || isCc)) {
     controlItems.push(
       el(
         "li",

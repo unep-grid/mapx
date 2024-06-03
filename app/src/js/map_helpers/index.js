@@ -5395,10 +5395,10 @@ export async function isViewDownloadableRemote(idView) {
 
   const { type } = view;
   switch (type) {
-    case "cc":
     case "sm":
       return false;
     case "rt":
+    case "cc":
       return hasDownloadUrlItemsFromViewMeta(view);
     case "vt":
       const idSource = getViewVtSourceId(view);
