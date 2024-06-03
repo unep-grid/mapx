@@ -24,9 +24,6 @@ import {
 } from "./../is_test_mapx";
 import { getArrayDistinct } from "../array_stat/index.js";
 
-const def_opt = {
-  add_menu: true,
-};
 
 /**
  * Get source metadata
@@ -114,29 +111,40 @@ export async function getViewSourceMetadata(view) {
 }
 
 /**
- * Display view metadata in a modal panel
- * @param {Object|String} view View or view id
+ * Display metadata in a modal panel
+ * @param {String} id Identifier of the view or source
+ * @param {String} type Type of the entity ("view" or "source")
  */
-export async function viewToMetaModal(idView) {
-  const view = await getViewAuto(idView);
+export async function entityToMetaModal(id, type) {
+  let entity, titleLangKey, fetchMetaToUi;
 
-  if (!isView(view)) {
-    return modal({
-      content: "View not found",
-    });
+  switch (type) {
+    case "view":
+      entity = await getViewAuto(id);
+      if (!isView(entity)) {
+        return modal({
+          content: "View not found",
+        });
+      }
+      id = entity?.id;
+      titleLangKey = "meta_view_modal_title";
+      fetchMetaToUi = viewMetaToUi;
+      break;
+    case "source":
+      titleLangKey = "meta_source_modal_title";
+      fetchMetaToUi = sourceMetaToUi;
+      break;
+    default:
+      throw new Error("Invalid entity type");
   }
-
-  /**
-   * Case when idView is a view, reassign idView
-   */
-  idView = view?.id;
 
   /**
    * UI
    */
-  const elContent = el("div", elWait("Please wait..."));
+  const elWaitItem = elWait("Please wait...");
+  const elContent = el("div", elWaitItem);
   const elTitleModal = el("span", {
-    dataset: { lang_key: "meta_view_modal_title" },
+    dataset: { lang_key: titleLangKey },
   });
 
   /*
@@ -152,17 +160,49 @@ export async function viewToMetaModal(idView) {
     },
   });
 
-  await viewMetaToUi(idView, elContent);
+  /**
+  * Fetch meta : view or source 
+  */ 
+  await fetchMetaToUi(id, elContent);
+  elWaitItem.remove();
+
+
+  /**
+  * Add Menu
+  */ 
+  new MenuBuilder(elContent);
+
+
+  /**
+   * Update language element
+   */
+  await updateLanguageElements({
+    el: elContent,
+  });
+
 
   return elModal;
 }
 
+/**
+ * Display view metadata in a modal panel
+ * @param {Object|String} view View or view id
+ */
+export async function viewToMetaModal(idView) {
+  return entityToMetaModal(idView, "view");
+}
+
+/**
+ * Display source metadata in a modal
+ * @param {String} idSource Source id
+ */
+export async function sourceToMetaModal(idSource) {
+  return entityToMetaModal(idSource, "source");
+}
+
 export async function getViewMetaToHtml(idView) {
   const elDoc = el("div");
-  const opt = {
-    add_menu: true,
-  };
-  const elRes = await viewMetaToUi(idView, elDoc, opt);
+  const elRes = await viewMetaToUi(idView, elDoc);
   const html = elRes.innerHTML;
   const { default: template } = await import("./export_template.html");
   const out = parseTemplate(template, {
@@ -172,8 +212,44 @@ export async function getViewMetaToHtml(idView) {
   return out;
 }
 
-async function viewMetaToUi(idView, elTarget, opt) {
-  opt = Object.assign({}, def_opt, opt);
+/**
+ * Append source metadata, formated to a target element
+ * @param {String} idItem id of the view or the source
+ * @param {Element} elTarget target element
+ */
+async function sourceMetaToUi(idItem, elTarget) {
+  const modeView = isViewId(idItem);
+  let meta;
+  if (modeView) {
+    meta = await getViewSourceMetadata(idItem);
+  } else {
+    meta = await getSourceMetadata(idItem);
+  }
+
+  const isValid = isNotEmpty(meta) && isArray(meta);
+
+  if (!isValid) {
+    console.warn(`No metadata for ${idItem}`);
+    return;
+  }
+
+  const mainMeta = meta.splice(0, 1);
+  const joinMeta = meta;
+
+  const elSourceMeta = buildSourceMetaUi(mainMeta[0]);
+  if (elSourceMeta) {
+    elTarget.appendChild(elSourceMeta);
+  }
+
+  if (isNotEmpty(joinMeta)) {
+    const elMetaJoin = buildMetaJoinUi(joinMeta);
+    if (isNotEmpty(elMetaJoin)) {
+      elTarget.appendChild(elMetaJoin);
+    }
+  }
+}
+
+async function viewMetaToUi(idView, elTarget) {
 
   const view = await getViewAuto(idView);
   idView = view?.id;
@@ -202,37 +278,9 @@ async function viewMetaToUi(idView, elTarget, opt) {
   /**
    * Vector meta section
    */
-  const meta = await getViewSourceMetadata(view);
+  await sourceMetaToUi(idView, elTarget);
 
-  if (isNotEmpty(meta) && isArray(meta)) {
-    const mainMeta = meta.splice(0, 1);
-    const joinMeta = meta;
 
-    const elSourceMeta = buildSourceMetaUi(mainMeta[0]);
-    if (elSourceMeta) {
-      elTarget.appendChild(elSourceMeta);
-    }
-
-    if (isNotEmpty(joinMeta)) {
-      const elMetaJoin = buildMetaJoinUi(joinMeta);
-      if (isNotEmpty(elMetaJoin)) {
-        elTarget.appendChild(elMetaJoin);
-      }
-    }
-  }
-
-  /**
-   * Build menu
-   */
-  if (opt.add_menu) {
-    new MenuBuilder(elTarget);
-  }
-  /**
-   * Update language element
-   */
-  await updateLanguageElements({
-    el: elTarget,
-  });
   return elTarget;
 }
 
