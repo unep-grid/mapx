@@ -24,7 +24,6 @@ import {
 } from "./../is_test_mapx";
 import { getArrayDistinct } from "../array_stat/index.js";
 
-
 /**
  * Get source metadata
  * @note sdk only
@@ -46,6 +45,12 @@ export async function getSourceMetadata(idSource) {
   return meta;
 }
 
+/**
+* Get a dictionnary of alias for attributes
+* @param {String} idSource Of the source 
+* @param {Object} attributes
+* @return {Promise<Object>} dictionnary
+*/ 
 export async function getAttributesAlias(idSource, attributes) {
   if (!isSourceId(idSource)) {
     throw new Error("getAttributesAlias : invalid id");
@@ -143,9 +148,7 @@ export async function entityToMetaModal(id, type) {
    */
   const elWaitItem = elWait("Please wait...");
   const elContent = el("div", elWaitItem);
-  const elTitleModal = el("span", {
-    dataset: { lang_key: titleLangKey },
-  });
+  const elTitleModal = elSpanTranslate(titleLangKey);
 
   /*
    * Display modal now, append later
@@ -161,17 +164,15 @@ export async function entityToMetaModal(id, type) {
   });
 
   /**
-  * Fetch meta : view or source 
-  */ 
+   * Fetch meta : view or source
+   */
   await fetchMetaToUi(id, elContent);
   elWaitItem.remove();
 
-
   /**
-  * Add Menu
-  */ 
+   * Add Menu
+   */
   new MenuBuilder(elContent);
-
 
   /**
    * Update language element
@@ -179,7 +180,6 @@ export async function entityToMetaModal(id, type) {
   await updateLanguageElements({
     el: elContent,
   });
-
 
   return elModal;
 }
@@ -250,7 +250,6 @@ async function sourceMetaToUi(idItem, elTarget) {
 }
 
 async function viewMetaToUi(idView, elTarget) {
-
   const view = await getViewAuto(idView);
   idView = view?.id;
 
@@ -279,7 +278,6 @@ async function viewMetaToUi(idView, elTarget) {
    * Vector meta section
    */
   await sourceMetaToUi(idView, elTarget);
-
 
   return elTarget;
 }

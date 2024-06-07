@@ -41,19 +41,6 @@
   margin-bottom: 10px;
 }
 
-.mx-legend-view-title-container {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.mx-legend-view-title {
-  text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 .mx-legend-btn-meta {
   cursor: pointer;
 }

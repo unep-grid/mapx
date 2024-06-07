@@ -47,7 +47,7 @@ import {
   commonLocGetTableCodes,
 } from "../../../commonloc/index.js";
 import { isArray, isMap, isView } from "./../../../is_test";
-import { dashboard } from "./../../../dashboards/instances.js";
+import { dashboard } from "./../../../dashboards/index.js";
 import {
   getSourceMetadata,
   getViewMetadata,
@@ -325,7 +325,7 @@ export class MapxResolversStatic extends MapxResolversPanels {
     if (!rslv.has_dashboard()) {
       throw new Error("No dashboard container found");
     }
-    const { panel } = dashboard.getInstance();
+    const { panel } = dashboard.get();
     return rslv._handle_panel_visibility(panel, opt);
   }
 

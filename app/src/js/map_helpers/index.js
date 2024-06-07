@@ -14,7 +14,7 @@ import {
   panels,
   controls,
 } from "./../mx.js";
-import { featuresToPopup } from "./features_to_popup.js";
+import { FeaturesToWidget } from "../features_to_widget";
 import { RadialProgress } from "./../radial_progress";
 import { handleViewClick } from "./../views_click";
 import { RasterMiniMap } from "./../raster_mini_map";
@@ -52,7 +52,7 @@ import {
   viewsListAddSingle,
 } from "./../views_list_manager";
 import { initLog } from "./../mx_helper_log.js";
-import { dashboard } from "./../dashboards/instances.js";
+import { dashboard } from "./../dashboards/index.js";
 import {
   updateIfEmpty,
   round,
@@ -1700,25 +1700,13 @@ export async function handleClickEvent(e, idMap) {
   const hasDraw = clickModes.includes("draw");
   const hasSdk = clickModes.includes("sdk");
   const hasCC = clickModes.includes("cc");
-  const addPopup = !(hasCC || hasSdk || hasDraw || hasDashboard);
+  const addWidget = !(hasDashboard || hasCC || hasSdk || hasDraw);
   const addHighlight = !hasDraw && !hasDashboard;
 
-  const retrieveAttributes = addPopup || hasSdk;
+  const retrieveAttributes = addWidget || hasSdk;
 
   if (!hasLayer && type !== "click") {
     return;
-  }
-
-  if (addHighlight) {
-    /**
-     * Update highlighter after displaying popup:
-     * The popup, when closed **on map click**, should remove highlighting : this should
-     * be done BEFORE updating highlighter.
-     * onNextFrame seems to do the job by delaying the upadte to the next animation frame.
-     */
-    onNextFrame(() => {
-      highlighter.set({ point: e.point });
-    });
   }
 
   if (!retrieveAttributes) {
@@ -1741,18 +1729,13 @@ export async function handleClickEvent(e, idMap) {
     return;
   }
 
-  /**
-   * Dispatch to event
-   */
-  await attributesToEvent(layersAttributes, e);
+  if (addWidget) {
+    debugger;
+    const fw = new FeaturesToWidget();
 
-  if (addPopup) {
-    /**
-     * Click event : make a popup with attributes
-     */
-    const popup = new mapboxgl.Popup()
-      .setLngLat(map.unproject(e.point))
-      .addTo(map);
+    fw.on("destroyed", () => {
+      highlighter.reset();
+    });
 
     events.once({
       type: [
@@ -1763,27 +1746,26 @@ export async function handleClickEvent(e, idMap) {
         "story_close",
         "view_filter_legend",
       ],
-      idGroup: "click_popup",
+      idGroup: "click_feature_widget",
       callback: () => {
-        popup.remove();
+        fw.destroy();
       },
     });
 
-    /**
-     * Remove highlighter too
-     */
-    popup.on("close", () => {
-      highlighter.reset();
-    });
-
-    /**
-     * NOTE: see features_popup.js
-     */
-    featuresToPopup({
-      layersAttributes: layersAttributes,
-      popup: popup,
+    await fw.init({
+      layersAttributes,
     });
   }
+
+  if (addHighlight) {
+    highlighter.set({ point: e.point });
+  }
+
+  /**
+   * Dispatch to event
+   * - If something listens to "click_attributes", return values
+   */
+  await attributesToEvent(layersAttributes, e);
 }
 
 /**
@@ -2478,6 +2460,20 @@ export function getSpriteImage(id, opt) {
 }
 
 /**
+ * Get views order from list
+ *  - app : ui list / user order
+ *  - static :views_active / original order
+ * @returns {Array}
+ */
+export function getViewsOrder() {
+  const isStatic = !!settings.mode.static;
+  const order = isStatic
+    ? Array.from(mx_local.views_active)
+    : getViewsListOrder();
+  return order;
+}
+
+/**
  * Set layers position according to current views order
  * - app : list of view
  * - static : current views_active NOTE: will change
@@ -2485,10 +2481,7 @@ export function getSpriteImage(id, opt) {
  * @return {Array} order
  */
 export function layersOrderAuto(origin) {
-  const isStatic = !!settings.mode.static;
-  const order = isStatic
-    ? Array.from(mx_local.views_active)
-    : getViewsListOrder();
+  const order = getViewsOrder();
   return viewsLayersOrderUpdate({
     order,
     orig: origin || "views_list_order",
@@ -3362,9 +3355,17 @@ export function elLegendBuild(view, opt) {
       type: "vt",
       addTitle: false,
       elLegendContainer: null,
+      order: 0,
     },
     opt,
   );
+
+  if (isEmpty(opt.order)) {
+    const idViews = getQueryParameter("views");
+    if (idViews.includes(view.id)) {
+      opt.order = idViews.indexOf(view.id);
+    }
+  }
 
   const idView = view.id;
   const elView = getViewEl(view);
@@ -3457,7 +3458,7 @@ export function elLegendBuild(view, opt) {
     {
       class: "mx-view-legend-group",
       dataset: { id_view: idView },
-      style: { order: 0 },
+      style: { order: opt.order },
     },
     opt.addTitle ? [elLegendTitle, elLegend, elLegendMeta] : elLegend,
   );
@@ -4329,6 +4330,30 @@ export function getBoundsArray(o) {
   const map = getMap(o);
   const a = map.getBounds();
   return [a.getWest(), a.getSouth(), a.getEast(), a.getNorth()];
+}
+
+/**
+ * Get view source attributes / properties, in correct order
+ * @param {Object} view
+ * @returns {Array} properties list
+ */
+export function getViewAttributes(
+  view,
+  excludeProp = ["gid", "mx_t0", "mx_t1"],
+) {
+  const attrSet = view?.data?.attribute?.names;
+
+  // no attribute
+  if (isEmpty(attrSet)) {
+    return [];
+  }
+  // string attribute (back compatibility)
+  if (isString(attrSet)) {
+    return [attrSet];
+  }
+
+  const attr = attrSet.filter((n) => !excludeProp.includes(n)) || [];
+  return attr;
 }
 
 /**

@@ -6,7 +6,7 @@ import { all, patchObject } from "./../mx_helper_misc.js";
 import { el, elAuto, elSpanTranslate } from "./../el_mapx";
 import "./style.less";
 import { EventSimple } from "../event_simple";
-import { isEmpty, isNotEmpty } from "../is_test";
+import { isEmpty } from "../is_test";
 import { bindAll } from "../bind_class_methods/index.js";
 
 /**
@@ -48,7 +48,8 @@ const defaults = {
     button_classes: ["fa", "fa-pie-chart"],
     tooltip_position: "top-left",
     container_classes: ["button-panel--container-no-full-height"],
-    on_open_close_others: ["controls_panel"],
+    //on_open_close_others: ["controls_panel"],
+    on_open_close_others: [],
     position: "bottom-right",
     add_footer: true,
     save_size_on_resize: false,
@@ -79,6 +80,7 @@ class Dashboard extends EventSimple {
     if (d._init) {
       return;
     }
+    d._init = true;
     d._open = false;
     d.modules = {};
     d.widgets = [];
@@ -89,7 +91,7 @@ class Dashboard extends EventSimple {
      */
     d.panel = new ButtonPanel(d.opt.panel);
     if (d.panel.isMediaSmallHeight()) {
-      d.panel.setHeight("50vh", true);
+      d.setHeight("50vh", true);
     }
     d.panel.elPanelContent.appendChild(d.elDashboard);
 
@@ -105,7 +107,7 @@ class Dashboard extends EventSimple {
      *  -> updateGridLayout
      */
     d.panel.on(["resize", "resize-auto", "resize-end"], () => {
-      d.updateGridLayout();
+      d.updateWidgetsSize();
     });
 
     /*
@@ -116,10 +118,19 @@ class Dashboard extends EventSimple {
       d.fitPanelToWidgetsBbox(true, false);
     });
 
+    d.on("panel_layout", () => {
+      d.updateGridLayout();
+    });
+
+    d.on("widgets_size", (data) => {
+      d.updateGridLayout();
+    });
+
     /**
      * Init event
      */
     d.fire("init");
+
     /**
      * Debug
      */
@@ -136,7 +147,7 @@ class Dashboard extends EventSimple {
    * @param {Object} conf.view - View instance.
    * @returns {Promise<Array>} Returns a promise that resolves to an array of widgets.
    */
-  async addWidgetsAsync(conf) {
+  async addWidgets(conf) {
     const d = this;
     const widgets = [];
     /**
@@ -147,36 +158,6 @@ class Dashboard extends EventSimple {
     conf = Object.assign({}, { modules: [] }, conf);
 
     const modulesNames = new Set(conf.modules);
-
-    /**
-     * TODO: remove this hack after v 1.10.0 is in prod
-     * Fix missing modules
-     * NOTE: some dashboards have been coded using `modules.highcharts`, without
-     * using the checkbox select to list modules to load, due to a glitch were
-     * some modules where automatically loaded. e.g. highcharts;
-     */
-    const reg = /(?<=modules\.)\w+/g;
-    for (const cw of conf.widgets) {
-      const script = cw.script;
-      if (isNotEmpty(script)) {
-        const modulesFound = script.match(reg) || [];
-
-        if (isNotEmpty(modulesFound)) {
-          console.warn(
-            `Module ${module} loading using 'modules.' is obsolete, update the code`,
-          );
-        }
-
-        for (const module of modulesFound) {
-          if (!conf.modules.includes(module)) {
-            console.warn(
-              `Module ${module} apparently used, but not registered`,
-            );
-          }
-          modulesNames.add(module);
-        }
-      }
-    }
 
     /**
      * Register and load modules
@@ -212,7 +193,6 @@ class Dashboard extends EventSimple {
           attributions: attributions,
         });
         d.widgets.push(widget);
-        widget._id = conf.view.id;
         widgets.push(widget);
         promWidgets.push(widget.init());
       }
@@ -318,6 +298,22 @@ class Dashboard extends EventSimple {
     const d = this;
     d.grid.layout();
     d.grid.refreshItems().layout(!animate);
+
+    d.fire("grid_layout");
+  }
+
+  updateWidgetsSize(origin) {
+    const d = this;
+    d.widgets.forEach((w) => w.updateSize());
+    d.fire("widgets_size", { origin });
+  }
+
+  updateLayout(animate = true) {
+    const d = this;
+    d.updatePanelLayout(animate);
+    d.updateWidgetsSize(animate);
+    d.updateGridLayout(animate);
+    d.updatePanelLayout(animate);
   }
 
   /**
@@ -370,11 +366,37 @@ class Dashboard extends EventSimple {
     const hBbox = bbox.bottom - bbox.top + marginH;
 
     if (wBbox > 0 && wBbox !== d.panel.width) {
-      d.panel.setWidth(wBbox, silent);
+      d.setWidth(wBbox, silent);
     }
     if (hBbox > 0 && hBbox !== d.panel.height) {
-      d.panel.setHeight(hBbox, silent);
+      d.setHeight(hBbox, silent);
     }
+  }
+
+  setWidth(w, silent) {
+    const d = this;
+    d.panel.setWidth(w, silent);
+  }
+
+  setHeight(h, silent) {
+    const d = this;
+    d.panel.setHeight(h, silent);
+  }
+
+  get width() {
+    const d = this;
+    if (!d._init) {
+      return;
+    }
+    return d.panel.width;
+  }
+
+  get height() {
+    const d = this;
+    if (!d._init) {
+      return;
+    }
+    return this.panel.height;
   }
 
   /**

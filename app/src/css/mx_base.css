@@ -104,6 +104,10 @@ picture {
   object-fit: contain;
 }
 
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
 /**
 * Global content-visibility
 * perf improvement

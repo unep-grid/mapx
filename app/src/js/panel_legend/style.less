@@ -5,20 +5,23 @@
 
 // Legend in button panel
 .button-panel--legends {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  user-select: none;
-  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17em, 1fr));
+  grid-gap: 20px;
+  padding: 20px;
 
   // For legend in button panel without wrapper
   > .mx-view-legend-group {
     padding: 20px;
     border: 1px solid @border;
-    margin: 10px;
-    margin-bottom: 15px;
     border-radius: 10px;
     box-shadow: @box-shadow;
+  }
+
+  .mx-legend-view-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
 
   .mx-legend-box {

@@ -15,8 +15,8 @@
     margin: 5px;
     min-height: 0px;
     min-width: 0px;
-    max-width: calc(100vw - 30px);
-    max-height: calc(100vh - 30px);
+    max-width: calc(100vw - 75px);
+    max-height: calc(100vh - 75px);
     &.button-panel--pinned {
       z-index: 1001;
     }
@@ -107,10 +107,21 @@
       width: 100%;
       z-index: 0;
       padding: 0px;
-      transition: transform cubic-bezier(0.68, -0.6, 0.32, 1.6) var(--animate-transition-slow-ms);
+      transition: transform cubic-bezier(0.68, -0.6, 0.32, 1.6)
+        var(--animate-transition-slow-ms);
       pointer-events: none;
       container-type: inline-size;
       container-name: button-panel--item;
+      &:before {
+        /* hit box (used to set z-index) */ 
+        content: "";
+        /*outline: 1px solid red;*/
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        width: calc(100% + 30px);
+        height: calc(100% + 30px);
+      }
       .button-panel--item-content {
         position: absolute;
         height: 100%;

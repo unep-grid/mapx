@@ -37,12 +37,25 @@ export class DashboardManager {
    * @returns {Dashboard|Boolean} The current dashboard instance or null if none
    * exists or it has been destroyed.
    */
-  getInstance() {
+  get() {
     const dm = this;
     if (!dm.hasInstance()) {
       return false;
     }
     return dm._dashboard;
+  }
+
+  /**
+   * Get or create a dashboard instance;
+   * @param {Object} opt Options for creating a dashboard
+   * @returns {}
+   */
+  async getOrCreate(opt) {
+    const dm = this;
+    if (dm.hasInstance()) {
+      return dm.get();
+    }
+    return dm.create(opt);
   }
 
   /**
@@ -58,7 +71,7 @@ export class DashboardManager {
       if (!dm.hasInstance()) {
         return;
       }
-      const dashboard = dm.getInstance();
+      const dashboard = dm.get();
       return dashboard[cmd](value);
     } catch (e) {
       console.warn(e);
@@ -141,7 +154,6 @@ export class DashboardManager {
   async removeWidgetsFromView(idView) {
     const dm = this;
     const hasWidgets = dm.hasViewWidgets(idView);
-    const dashboard = dm.getInstance();
     if (!hasWidgets) {
       return;
     }
@@ -153,7 +165,7 @@ export class DashboardManager {
 
     view._widgets.length = 0;
 
-    await dashboard.autoDestroy();
+    await dm.autoDestroy();
     return true;
   }
 
@@ -171,8 +183,8 @@ export class DashboardManager {
     const view = getView(idView);
     const map = getMap();
     await dm.removeWidgetsFromView(idView);
-    const dashboard = await dm.createDashboard(config);
-    view._widgets = await dashboard.addWidgetsAsync({
+    const dashboard = await dm.getOrCreate(config);
+    view._widgets = await dashboard.addWidgets({
       widgets: config.widgets,
       modules: config.modules,
       view: view,
@@ -184,17 +196,19 @@ export class DashboardManager {
   /**
    * Create a dashboard if it doesn't exist'
    * @param {Object} Config
-   * @returns {Promise<Boolean>}
+   * @param {String} config.layout layout of the dashboard :
+   * @returns {Promise<Dashboard>}
    */
-  async createDashboard(config) {
+  async create(config = { layout: "fit" }) {
     const dm = this;
 
     if (isEmpty(config)) {
-      return false;
+      config = { layout: "fit" };
     }
 
     if (dm.hasInstance()) {
-      return dm.getInstance();
+      console.warn("Dashboard already created. Use getOrCreate method if needed");
+      return dm.get();
     }
 
     dm._dashboard = new Dashboard({
@@ -262,15 +276,8 @@ export class DashboardManager {
     if (isEmpty(config)) {
       return false;
     }
-    const dashboard = await dm.createDashboard(config);
+    const dashboard = await dm.getOrCreate(config);
     const widgets = await dm.addWidgetsToView(idView);
-    const hasDashboard = dashboard instanceof Dashboard;
-    if (!hasDashboard) {
-      console.error(
-        "createDashboardFromView : missing dashboard / not created",
-      );
-      return;
-    }
     if (!config.panel_init_close) {
       await dashboard.show();
       dashboard.updatePanelLayout();
@@ -288,4 +295,5 @@ export class DashboardManager {
       }
     }
   }
+
 }

@@ -22,7 +22,7 @@ import {
   cssTransform,
   debounce,
 } from "./../mx_helper_misc.js";
-import { dashboard } from "./../dashboards/instances.js";
+import { dashboard } from "./../dashboards/index.js";
 import { getArrayDiff } from "./../array_stat/index.js";
 import { createCanvas } from "./../mx_helper_canvas.js";
 import {

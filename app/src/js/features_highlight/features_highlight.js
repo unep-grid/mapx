@@ -1,4 +1,3 @@
-import { cancelFrame, onNextFrame } from "../animation_frame";
 import { bindAll } from "../bind_class_methods";
 import { isEmpty, isString } from "./../is_test/index";
 const def = {
@@ -19,7 +18,7 @@ const def = {
   highlight_radius: 20,
   supported_types: ["circle", "symbol", "fill", "line"],
   regex_layer_id: /^MX-/,
-  max_layers_render: 10,
+  max_layers_render: 3,
 };
 
 const defConfig = {
@@ -189,19 +188,19 @@ class Highlighter {
     const opt = Object.assign({}, { animate: false }, renderOptions);
     const max = hl.opt.max_layers_render;
     const animate = opt.animate && hl.opt.use_animation;
-    cancelFrame(hl._id_render);
-    hl._id_render = onNextFrame(() => {
-      let i = 0;
-      for (const layer of hl._layers.values()) {
-        if (i++ >= max) {
-          return;
-        }
-        hl.addHighlightLayer(layer);
+    //cancelFrame(hl._id_render);
+    //hl._id_render = onNextFrame(() => {
+    let i = 0;
+    for (const layer of hl._layers.values()) {
+      if (i++ >= max) {
+        return;
       }
-      if (animate) {
-        hl.animate();
-      }
-    });
+      hl.addHighlightLayer(layer);
+    }
+    if (animate) {
+      hl.animate();
+    }
+    //});
   }
 
   /**
@@ -379,7 +378,7 @@ class Highlighter {
     if (isEmpty(item.gid)) {
       console.warn(
         "Missing gid / feature.properties.gid, skip item to highlight",
-        item
+        item,
       );
       return acc;
     }
@@ -553,7 +552,7 @@ class Animate {
     }
     anim._idInterval = setInterval(
       () => anim.animate(),
-      anim._opt.transition_duration
+      anim._opt.transition_duration,
     );
   }
 
@@ -577,7 +576,7 @@ class Animate {
             map.setPaintProperty(
               anim._idLayer,
               `${anim._s.param}-transition`,
-              anim._t
+              anim._t,
             );
           }
           anim._transition_set = true;

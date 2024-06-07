@@ -1,9 +1,21 @@
 import { el } from "./../el/src/index.js";
 import { ListenerStore } from "./../listener_store/index.js";
-import { path, any, setClickHandler } from "./../mx_helper_misc.js";
+import {
+  path,
+  any,
+  setClickHandler,
+  getContentSize,
+} from "./../mx_helper_misc.js";
 import { getLayersPropertiesAtPoint } from "./../map_helpers/index.js";
-import { isEmpty, isFunction, isUndefined } from "./../is_test/index.js";
+import {
+  isEmpty,
+  isFunction,
+  isNotEmpty,
+  isNumeric,
+  isUndefined,
+} from "./../is_test/index.js";
 import { settings } from "../settings/index.js";
+import { EventSimple } from "../event_simple/index.js";
 const { valuesMap } = settings;
 
 /**
@@ -11,19 +23,23 @@ const { valuesMap } = settings;
  */
 
 const defaults = {
+  // user conf ( will be merged)
   conf: {
     disabled: false,
     source: "none",
     alwaysOnTop: false,
     width: "x50",
     height: "y50",
+    style: null,
     addColorBackground: false,
     colorBackground: "#000000",
     sourceIgnoreEmpty: true,
     atribution: "",
+    hanlders: null,
     script:
       "return { async onAdd:console.log, async onRemove:console.log, async onData:console.log}",
   },
+  // internal conf
   language: "en",
   map: null,
   view: null,
@@ -35,7 +51,8 @@ const defaults = {
  * A widget class that provides a customizable UI element for displaying and manipulating data.
  * @class
  * @property {Object} opt - Widget options.
- * @property {Object} opt.conf - Widget configuration.
+ * @property {Object} opt.conf - Widget user configuration.
+ * @property {Object} opt.priority - Priority. Higher priority move the widget on top
  * @property {boolean} opt.conf.disabled - Flag indicating whether the widget is disabled.
  * @property {string} opt.conf.source - The source of data for the widget.
  * @property {string} opt.conf.width - The width of the widget.
@@ -44,7 +61,8 @@ const defaults = {
  * @property {string} opt.conf.colorBackground - The color of the background to add to the widget.
  * @property {boolean} opt.conf.sourceIgnoreEmpty - Flag indicating whether to ignore empty data from the data source.
  * @property {string} opt.conf.atribution - The attribution string for the widget.
- * @property {string} opt.conf.script - The script for the widget.
+ * @property {string} opt.conf.script - The script of handlers for the widget.
+ * @property {string} opt.conf.handlers - The handlers for the widget.
  * @property {string} opt.language - The language used for the widget.
  * @property {Object} opt.map - The map object associated with the widget.
  * @property {Object} opt.view - The view object associated with the widget.
@@ -61,11 +79,22 @@ const defaults = {
  * @property {boolean} destroyed - Flag indicating whether the widget is destroyed.
  * @property {boolean} initialized - Flag indicating whether the widget is initialized.
  */
-class Widget {
+class Widget extends EventSimple {
   constructor(opt) {
+    super();
     const widget = this;
+    widget.id = Math.random().toString(32);
     widget.opt = Object.assign({}, defaults, opt);
     widget.opt.conf = Object.assign({}, defaults.conf, opt.conf);
+    /**
+     * Merge user config and widget config
+     */
+    widget.config = Object.assign(
+      {},
+      { id: widget.id },
+      widget.opt.conf,
+      widget.opt,
+    );
   }
 
   async init() {
@@ -81,44 +110,60 @@ class Widget {
      * -> async action later
      * -> need in destroy()
      */
-
     widget._init = true;
-
     widget._ls = new ListenerStore();
-    widget.id = Math.random().toString(32);
+
     /**
      * Build and set size
      */
     widget.build();
-    widget.setSize(widget.opt.conf.height, widget.opt.conf.width);
-
-    /**
-     * Retro-compatibility
-     */
-    widget.config = Object.assign({}, widget, widget.opt.conf, widget.opt);
 
     /**
      * Eval the script, dump error in console
      */
     try {
-      const register = widget.strToObj(widget.opt.conf.script);
+      const handlers =
+        widget.config.handlers || widget.strToObj(widget.config.script);
       /**
-       * Copy cb as widget method
+       * Set handler as widget method
+       * - onAdd,onRemove,onData
        */
-      for (const r in register) {
-        widget[r] = register[r];
+      for (const cb in handlers) {
+        widget[cb] = handlers[cb];
       }
       widget.modules = path(widget.opt, "dashboard.modules", {});
+
       widget.add();
+      widget.on("set_size", () => {
+        /**
+         * With dynamic, non-fixed size, grid should be updated
+         */
+        widget.dashboard.updateGridLayout();
+      });
+
+      /**
+       * Initial size
+       */
+      widget.updateSize("init");
     } catch (e) {
       widget.warn("code evaluation issue. Removing widget.", e);
       await widget.destroy();
     }
   }
 
+  /**
+   * Will be replaced by handlers, set in option or script
+   */
+  async onData() {}
+  async onAdd() {}
+  async onRemove() {}
+
+  /**
+   * Check if the widgetr is disabled
+   */
   get disabled() {
     const widget = this;
-    return path(widget, "opt.conf.disabled", false);
+    return path(widget, "config.disabled", false);
   }
 
   /**
@@ -186,7 +231,7 @@ class Widget {
   async setUpdateDataMethod() {
     const widget = this;
     const map = widget.opt.map;
-    switch (widget.opt.conf.source) {
+    switch (widget.config.source) {
       case "none":
         break;
       case "viewFreqTable":
@@ -215,6 +260,7 @@ class Widget {
         });
         break;
       case "layerOver":
+        widget.handleClick(true);
         widget.ls.addListener({
           target: map,
           bind: widget,
@@ -226,30 +272,34 @@ class Widget {
     }
   }
 
+  updateSize() {
+    const widget = this;
+    widget.setSize(widget.config.height, widget.config.width);
+  }
+
   setSize(height, width) {
     const w = this;
     w.width = width;
     w.height = height;
+    w.fire("set_size");
   }
 
   set width(width) {
     const w = this;
-    w._width = sizeWithGutter(toDim(width));
-    w.el.style.width = w.width + "px";
+    w.el.style.width = w.toCSS(width, "width");
   }
 
   set height(height) {
     const w = this;
-    w._height = sizeWithGutter(toDim(height));
-    this.el.style.height = w.height + "px";
+    w.el.style.height = w.toCSS(height, "height");
   }
 
   get width() {
-    return this._width;
+    return this.rect.width;
   }
 
   get height() {
-    return this._height;
+    return this.rect.height;
   }
 
   get rect() {
@@ -258,13 +308,36 @@ class Widget {
 
   build() {
     const widget = this;
-    const conf = widget.opt.conf;
-    const title = path(widget, "opt.view._title", "");
+    const title = path(widget, "config.view._title", "");
+
+    widget.elButtonClose = el("button", {
+      class: ["btn-circle", "btn-widget", "fa", "fa-times"],
+      on: [
+        "click",
+        () => {
+          this.destroy();
+        },
+      ],
+    });
+
+    widget.elContent = el("div", {
+      class: ["widget--content", "shadow"],
+      style: {
+        backgroundColor: widget.config.addColorBackground
+          ? widget.config.colorBackground
+          : null,
+      },
+    });
+
+    widget.elButtonHandle = el("button", {
+      class: ["btn-circle", "btn-widget", "fa", "fa-arrows", "handle"],
+    });
 
     widget.el = el(
       "div",
       {
         class: ["noselect", "widget"],
+        style: widget.config.style,
       },
       el(
         "div",
@@ -272,21 +345,9 @@ class Widget {
           class: ["btn-widget-group"],
           title: title,
         },
-        (widget.elButtonClose = el("button", {
-          class: ["btn-circle", "btn-widget", "fa", "fa-times"],
-        })),
-        el("button", {
-          class: ["btn-circle", "btn-widget", "fa", "fa-arrows", "handle"],
-        }),
+        [widget.elButtonClose, widget.elButtonHandle],
       ),
-      (widget.elContent = el("div", {
-        class: ["widget--content", "shadow"],
-        style: {
-          backgroundColor: conf.addColorBackground
-            ? conf.colorBackground
-            : null,
-        },
-      })),
+      [widget.elContent],
     );
   }
 
@@ -295,6 +356,9 @@ class Widget {
     return new Promise((resolve) => {
       widget.grid.on("add", resolve);
       widget.grid.add(widget.el);
+      if (isNotEmpty(widget.config.priority)) {
+        widget.grid.move(widget.el, widget.config.priority);
+      }
     });
   }
 
@@ -302,14 +366,6 @@ class Widget {
     const widget = this;
     try {
       await widget.addToGrid();
-      widget.ls.addListener({
-        target: widget.elButtonClose,
-        bind: widget,
-        callback: widget.destroy,
-        group: "base",
-        type: "click",
-      });
-
       /**
        * Do not wait, use promise + catch,
        * as wait would block all other widgets to render
@@ -401,6 +457,13 @@ class Widget {
        * Remove from dashboard config
        */
       await dashboard.removeWidget(widget);
+
+      /**
+       * Destroy parent
+       */
+      super.destroy();
+
+      this.fire("destroyed");
     } catch (e) {
       widget.warn("Issue when destroying widget", e);
     }
@@ -434,7 +497,7 @@ class Widget {
       return;
     }
     const hasData = !isEmpty(d);
-    const ignoreEmptyData = widget.opt.conf.sourceIgnoreEmpty;
+    const ignoreEmptyData = widget.config.sourceIgnoreEmpty;
     const triggerOnData = hasData || (!hasData && !ignoreEmptyData);
     if (triggerOnData) {
       widget.data = hasData ? await d : [];
@@ -498,38 +561,57 @@ class Widget {
   warn(message, e) {
     console.warn("WIDGET ISSUE: ", message, e);
   }
+
+  /**
+   * Dim handler
+   * x300
+   * 300
+   * fit-content
+   * fit-dasboard
+   * @param {String|Number} dim value to set
+   * @param  {String} type width/height
+   * @returns {Number} Numeric dimension
+   */
+  toCSS(dim, type) {
+    const widget = this;
+    const oldClasses = {
+      x50: 50,
+      x1: 150,
+      x2: 300,
+      x3: 450,
+      x4: 600,
+      y50: 50,
+      y1: 150,
+      y2: 300,
+      y3: 450,
+      y4: 600,
+    };
+    const isNum = isNumeric(dim);
+
+    if (isNum) {
+      return Math.ceil((dim * 100) / 100) + "px";
+    }
+
+    if (oldClasses[dim]) {
+      return oldClasses[dim] + "px";
+    }
+
+    let out;
+
+    switch (dim) {
+      case "fit-content":
+        out = getContentSize(widget.el, false, false)[type] + "px";
+        break;
+      case "fit-dashboard":
+        const s = window.getComputedStyle(widget.el);
+        out = `calc(100% - ${s.marginLeft} * 2 )`;
+        break;
+      default:
+        out = "auto";
+    }
+
+    return out;
+  }
 }
 
 export { Widget };
-
-/*
- * Set dim + adding gutter size
- * @param {Number} size size
- * @param {Number} sizeGrid width/height of grid
- * @param {Number} sizeGutter gutter width
- */
-function sizeWithGutter(size, sizeGrid, sizeGutter) {
-  var s = size * 1 || 100;
-  var gu = sizeGutter / 2 || 5;
-  var gr = sizeGrid * 1 || 50;
-  return s + (s / gr) * gu - gu;
-}
-
-/**
- * Backward compability for classes
- */
-function toDim(dim) {
-  var oldClasses = {
-    x50: 50,
-    x1: 150,
-    x2: 300,
-    x3: 450,
-    x4: 600,
-    y50: 50,
-    y1: 150,
-    y2: 300,
-    y3: 450,
-    y4: 600,
-  };
-  return dim * 1 ? dim : oldClasses[dim] || 100;
-}

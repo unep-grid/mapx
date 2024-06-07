@@ -6,7 +6,12 @@ import {
 } from "./../language";
 import * as test from "./../is_test_mapx/index.js";
 import { parseTemplate, makeId } from "../mx_helper_misc.js";
-import { isElement, isNotEmpty } from "./../is_test_mapx/index.js";
+import {
+  isEmpty,
+  isString,
+  isElement,
+  isNotEmpty,
+} from "./../is_test_mapx/index.js";
 
 export { el, svg, elAuto, elPanel, elButtonIcon, elSpanTranslate };
 
@@ -618,7 +623,6 @@ export function elInput(key, opt) {
  * @param {String} opt.action Callback
  * @param {String} opt.name Form name item, if not equal to key
  * @param {Boolean} opt.checked Checked at start
- * @param {Boolean} opt.checked Disabled at start
  * @param {Boolean} opt.tooltip Add tooltip (false)
  * @param {Boolean} opt.keyLabel Optional translation key for label
  * @param {Boolean} opt.keyDesc Optional translation key for descriptiom
@@ -635,6 +639,59 @@ export function elCheckbox(key, opt) {
   );
 
   return elInput(key, opt);
+}
+
+/**
+ * Creates a toggle button element.
+ *
+ * @param {Object} opt - Options for the toggle button.
+ * @param {string|HTMLElement} opt.label - The label for the toggle button.
+ * @param {Function} [opt.onChange] - The function to call on toggle change.
+ * @param {Object} [opt.data] - Data attributes for the input element.
+ * @param {boolean} [opt.checked] - Initial checked state of the toggle.
+ * @param {boolean} [opt.classLabel] - Class for label
+ * @returns {HTMLElement} The constructed toggle button element.
+ */
+export function elCheckToggle(opt) {
+  const isEl = isElement(opt.label);
+  const isStr = !isEl && isString(opt.label);
+  const label = isEl || isStr ? opt.label : JSON.stringify(opt.label);
+  const onChange = opt.onChange || function () {};
+  const checked = opt.checked || false;
+  const data = opt.data || {};
+  const id = makeId();
+  const noLabel = isEmpty(label);
+  const elLabelSpan = noLabel
+    ? elSpanTranslate("noValue")
+    : isEl
+      ? label
+      : el("span", label);
+
+  if (isStr) {
+    elLabelSpan.className = "hint hint--bottom";
+    elLabelSpan.ariaLabel = opt.label;
+  }
+
+  const elInput = el("input", {
+    id: id,
+    type: "checkbox",
+    on: { click: onChange },
+    dataset: data,
+  });
+
+  elInput.checked = checked;
+
+  const elLabel = el(
+    "label",
+    {
+      for: id,
+      class: opt.classLabel,
+    },
+    elLabelSpan,
+    elInput,
+  );
+
+  return elLabel;
 }
 
 /**

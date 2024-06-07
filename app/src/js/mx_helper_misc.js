@@ -76,8 +76,6 @@ export function asBoolean(value) {
   throw new Error("Value can't be coerced to boolean");
 }
 
-
-
 /**
  * File selector hack
  * -> file input "cancel" event do not exists.
@@ -558,49 +556,6 @@ export function cssTransformFun() {
   })();
 }
 export var cssTransform = cssTransformFun();
-
-export function uiToggleBtn(o) {
-  o.label =
-    isString(o.label) || isElement(o.label) ? o.label : JSON.stringify(o.label);
-  const noLabel = isEmpty(o.label);
-  const label = noLabel ? "" : o.label;
-  const onChange = o.onChange || function () {};
-  const data = o.data || {};
-  const checked = o.checked || false;
-  const id = makeId();
-  const elInput = el("input", {
-    class: "check-toggle-input",
-    id: id,
-    type: "checkbox",
-    on: { click: onChange },
-    dataset: data,
-  });
-
-  const elLabel = el(
-    "label",
-    {
-      class: `check-toggle-label ${
-        o.labelBoxed ? "check-toggle-label-boxed" : ""
-      }`,
-      for: id,
-    },
-    label,
-  );
-
-  elInput.checked = checked;
-
-  const elContainer = el("div", { class: "check-toggle" }, [elInput, elLabel]);
-
-  if (noLabel) {
-    getDictItem("noValue")
-      .then((na) => {
-        elLabel.innerText = na;
-      })
-      .catch(console.error);
-  }
-
-  return elContainer;
-}
 
 /**
  * Create a foldable element
@@ -2128,6 +2083,7 @@ export function flattenBlockElements(element) {
  * Estimate the natural content size of a div element without constraints.
  *
  * @param {Element} elOrig - The div element to measure.
+ * @param {Boolean} inBody - Measure in body instead of parent
  * @returns {Object} An object containing the width and height of the content.
  */
 export function getContentSize(elOrig, inBody = true, debug = false) {

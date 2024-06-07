@@ -20,7 +20,7 @@ const settings = {
     handles: ["free"],
     container_classes: [
       "button-panel--container-no-full-width",
-      "button-panel--pinned-always",
+      //"button-panel--pinned-always" // mess with dashbpards,
     ],
     item_content_classes: ["button-panel--item-content-transparent-background"],
     panel_style: {
