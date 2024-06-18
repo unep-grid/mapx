@@ -1,6 +1,5 @@
 import { getArrayStat } from "./../array_stat/index.js";
 import { getDictItem, getLabelFromObjectPath } from "./../language";
-import { onNextFrame } from "../animation_frame/index.js";
 import {
   getView,
   getViewAttributes,
@@ -22,10 +21,7 @@ import { EventSimple } from "../event_simple/index.js";
 import { Widget } from "../dashboards/widget.js";
 import { elWait, el, elCheckToggle } from "../el_mapx/index.js";
 import "./style.less";
-
-const state = {
-  widget: null,
-};
+import { onNextFrame } from "../animation_frame/index.js";
 
 const defaults = {
   fw_anim: {
@@ -63,6 +59,11 @@ const defaults = {
   },
 };
 
+const state = {
+  widget: null,
+  filters: {},
+};
+
 window._fw_state = state;
 
 export class FeaturesToWidget extends EventSimple {
@@ -73,7 +74,6 @@ export class FeaturesToWidget extends EventSimple {
   async init(options) {
     const fw = this;
     fw.attributes = options.layersAttributes;
-    fw.filters = {};
     const hasPrevious =
       state.widget instanceof Widget && !state.widget.destroyed;
     if (hasPrevious) {
@@ -87,25 +87,34 @@ export class FeaturesToWidget extends EventSimple {
       state.widget.on("destroyed", () => {
         fw.destroy();
       });
+      await state.widget.dashboard.show();
+      await state.widget.dashboard.setWidth(defaults.fw_dashboard.width, false);
     }
     while (fw.elContainer.firstElementChild) {
       fw.elContainer.removeChild(fw.elContainer.firstElementChild);
     }
+    fw.resetFilter();
     await fw.render();
-    await state.widget.dashboard.show();
-    await state.widget.dashboard.setWidth(defaults.fw_dashboard.width, false);
-    fw.updateSize();
+    await fw.fit();
   }
 
-  updateSize() {
+  updateWidgetSize() {
     state.widget.updateSize();
   }
 
-  updateGridLayout() {
-    // animation frame cb is required as detail click event is returned
-    // before the actual details is actually open.
-    onNextFrame(() => {
-      state.widget.dashboard.updateGridLayout();
+  async fit() {
+    return new Promise((resolve, reject) => {
+      // animation frame cb is required as detail click event is returned
+      // before the actual details is actually open.
+      onNextFrame(() => {
+        try {
+          state.widget.dashboard.updatePanelLayout();
+          resolve(true);
+        } catch (e) {
+          console.error(e);
+          reject(e);
+        }
+      });
     });
   }
 
@@ -114,8 +123,11 @@ export class FeaturesToWidget extends EventSimple {
       return;
     }
     this.resetFilter();
-    state.widget?.destroy();
-    state.widget = null;
+    if (state.widget?.destroy) {
+      state.widget.destroy();
+    }
+    state.widget = {};
+    state.filters = {};
     this._is_destroyed = true;
     this.fire("destroyed");
   }
@@ -132,14 +144,16 @@ export class FeaturesToWidget extends EventSimple {
   async setWidget() {
     const conf = defaults.fw_widget;
     const d = await dashboard.getOrCreate(conf);
+    d.setLayout(conf.layout); //overwrite current layout
     const [widget] = await d.addWidgets(conf);
     return widget;
   }
 
   async render() {
+    const fw = this;
     const proms = [];
-    for (const idView in this.attributes) {
-      proms.push(this._render_item(idView, this.attributes[idView]));
+    for (const idView in fw.attributes) {
+      proms.push(fw._render_item(idView, fw.attributes[idView]));
     }
     await Promise.all(proms);
   }
@@ -240,7 +254,7 @@ export class FeaturesToWidget extends EventSimple {
       "details",
       {
         class: "mx-feature-widget--attribute",
-        on: ["click", () => fw.updateGridLayout()],
+        on: ["click", () => fw.fit()],
       },
       [elAttributeTitle, elAttributeValues],
     );
@@ -299,7 +313,7 @@ export class FeaturesToWidget extends EventSimple {
     function renderMore() {
       elBtnMore.remove();
       elTarget.appendChild(elFragItems);
-      fw.updateSize();
+      fw.updateWidgetSize();
     }
   }
 
@@ -344,7 +358,7 @@ export class FeaturesToWidget extends EventSimple {
   }
 
   resetFilter() {
-    for (const idV in this.filters) {
+    for (const idV in state.filters) {
       const view = getView(idV);
 
       if (!view._setFilter) {
@@ -364,7 +378,7 @@ export class FeaturesToWidget extends EventSimple {
     const layer = elBtn.dataset.layer;
     const elChecks = elContainer.querySelectorAll(`[data-layer=${layer}]`);
 
-    this.filters[layer] = ["any"];
+    state.filters[layer] = ["any"];
 
     for (const elCheck of elChecks) {
       this.updateFilters(elCheck);
@@ -395,12 +409,12 @@ export class FeaturesToWidget extends EventSimple {
           rule = ["==", ["get", attribute], value];
         }
       }
-      this.filters[layer].push(rule);
+      state.filters[layer].push(rule);
     }
   }
 
   applyFilters(idV) {
-    const filter = this.filters[idV];
+    const filter = state.filters[idV];
     const view = getView(idV);
     if (!view._setFilter) {
       return;
@@ -410,6 +424,6 @@ export class FeaturesToWidget extends EventSimple {
       type: "popup_filter",
     });
 
-    this.filters[idV] = [];
+    state.filters[idV] = filter;
   }
 }

@@ -5,6 +5,7 @@ import {
   any,
   setClickHandler,
   getContentSize,
+  makeId,
 } from "./../mx_helper_misc.js";
 import { getLayersPropertiesAtPoint } from "./../map_helpers/index.js";
 import {
@@ -16,6 +17,8 @@ import {
 } from "./../is_test/index.js";
 import { settings } from "../settings/index.js";
 import { EventSimple } from "../event_simple/index.js";
+import { onNext } from "../pickolor/onNextFrame.js";
+import { onNextFrame } from "../animation_frame/index.js";
 const { valuesMap } = settings;
 
 /**
@@ -84,18 +87,33 @@ class Widget extends EventSimple {
   constructor(opt) {
     super();
     const widget = this;
-    widget.id = Math.random().toString(32);
-    widget.opt = Object.assign({}, defaults, opt);
-    widget.opt.conf = Object.assign({}, defaults.conf, opt.conf);
+    widget.id = makeId(5);
+
     /**
-     * Merge user config and widget config
+     * Merge config
+     * - default user config
+     * - user config
      */
-    widget.config = Object.assign(
-      {},
-      { id: widget.id },
-      widget.opt.conf,
-      widget.opt,
-    );
+    opt.conf = {
+      ...defaults.conf,
+      ...opt.conf,
+    };
+
+    /**
+     * All config
+     */
+    widget._config = {
+      ...defaults,
+      ...opt,
+      ...opt.conf,
+    };
+  }
+
+  get config() {
+    return this._config;
+  }
+  get opt() {
+    return this.config;
   }
 
   async init() {
@@ -122,11 +140,13 @@ class Widget extends EventSimple {
     /**
      * Adjust dashboard grid layout after resize
      */
-    widget.on("resize", () => {
+    widget.on("set_size", () => {
       const d = widget.dashboard;
-      if (d) {
-        d.updatePanelLayout();
+      if (!d) {
+        return;
       }
+      console.log("widget::on_set_size")
+      d.updatePanelLayout(true, false, "widget::set_size");
     });
 
     /**
@@ -136,15 +156,21 @@ class Widget extends EventSimple {
       const handlers =
         widget.config.handlers || widget.strToObj(widget.config.script);
       /**
-       * Set handler as widget method
+       * Set/replace handler as widget method
        * - onAdd,onRemove,onData
        */
-      for (const cb in handlers) {
-        widget[cb] = handlers[cb];
+      const handlersKeys = ["onAdd", "onRemove", "onData"];
+      for (const key of handlersKeys) {
+        const handler = handlers[key];
+        if (isFunction(handler)) {
+          widget[key] = handlers[key];
+        }
       }
-      widget.modules = path(widget.opt, "dashboard.modules", {});
+      widget.modules = path(widget.config, "dashboard.modules", {});
 
       await widget.add();
+
+      widget._ready = true;
     } catch (e) {
       widget.warn("code evaluation issue. Removing widget.", e);
       await widget.destroy();
@@ -161,9 +187,9 @@ class Widget extends EventSimple {
   /**
    * Update anim duration
    */
-  setAnimmateDuration(ms) {
+  setAnimateDuration(ms) {
     const w = this;
-    ms = isEmpty(ms) ? defaults.fw_anim.duration : ms;
+    ms = isEmpty(ms) ? w.config.animDurationMs : ms;
     w.el.style.setProperty("--animate-transition-ms", `${ms}ms`);
   }
 
@@ -175,13 +201,20 @@ class Widget extends EventSimple {
     return path(widget, "config.disabled", false);
   }
 
+  get data() {
+    return this._data || {};
+  }
+  set data(value) {
+    this._data = value || [];
+  }
+
   /**
    * Update widget data using attributes
    */
   async updateDataFromAttribute() {
     const widget = this;
     try {
-      const d = path(widget.opt, "view.data.attribute.table", []);
+      const d = path(widget.config, "view.data.attribute.table", []);
       await widget.setData(d);
     } catch (e) {
       widget.warn("error with data from attribute", e);
@@ -219,14 +252,14 @@ class Widget extends EventSimple {
    */
   getWidgetDataFromLinkedView(e) {
     const widget = this;
-    const idView = path(widget.opt, "view.id", widget.id);
-    const viewType = path(widget.opt, "view.type", null);
+    const idView = path(widget.config, "view.id", widget.id);
+    const viewType = path(widget.config, "view.type", null);
 
     if (!viewType || !idView) {
       return [];
     }
     const items = getLayersPropertiesAtPoint({
-      map: widget.opt.map,
+      map: widget.config.map,
       type: viewType,
       point: e ? e.point : null,
       idView: idView,
@@ -239,7 +272,7 @@ class Widget extends EventSimple {
    */
   async setUpdateDataMethod() {
     const widget = this;
-    const map = widget.opt.map;
+    const map = widget.config.map;
     switch (widget.config.source) {
       case "none":
         break;
@@ -281,27 +314,31 @@ class Widget extends EventSimple {
     }
   }
 
-  updateSize() {
+  updateSize(animate = true) {
     const widget = this;
-    widget.setSize(widget.config.height, widget.config.width);
+    widget.setSize(widget.config.height, widget.config.width, animate);
   }
 
-  setSize(height, width) {
+  setSize(height, width, animate = true) {
     const w = this;
+    if (animate) {
+      w.setAnimateDuration();
+    }
     w.width = width;
     w.height = height;
+    w.fire("set_size");
   }
 
   set width(width) {
     const w = this;
     w.el.style.width = w.toCSS(width, "width");
-    w.fire("resize");
+    w.fire("set_size_width");
   }
 
   set height(height) {
     const w = this;
     w.el.style.height = w.toCSS(height, "height");
-    w.fire("resize");
+    w.fire("set_size_height");
   }
 
   get width() {
@@ -379,9 +416,9 @@ class Widget extends EventSimple {
   async add() {
     const widget = this;
     try {
-      await widget.setUpdateDataMethod();
       await widget.addToGrid();
       await widget.onAdd(widget); //script cb
+      await widget.setUpdateDataMethod();
       widget.updateSize();
       widget.fire("added");
     } catch (e) {
@@ -391,19 +428,19 @@ class Widget extends EventSimple {
   }
 
   get grid() {
-    return path(this.opt, "grid", {});
+    return path(this.config, "grid", {});
   }
   get ls() {
     return this._ls;
   }
   get dashboard() {
-    return path(this.opt, "dashboard", {});
+    return path(this.config, "dashboard", {});
   }
   get map() {
-    return path(this.opt, "map", {});
+    return path(this.config, "map", {});
   }
   get view() {
-    return path(this.opt, "view", {});
+    return path(this.config, "view", {});
   }
 
   get destroyed() {
@@ -575,7 +612,8 @@ class Widget extends EventSimple {
   }
 
   warn(message, e) {
-    console.warn("WIDGET ISSUE: ", message, e);
+    const widget = this;
+    console.warn("WIDGET ISSUE: ", message, e, widget);
   }
 
   /**

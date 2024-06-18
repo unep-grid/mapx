@@ -76,6 +76,7 @@
       position: absolute;
       pointer-events: auto;
       border-radius: 10px;
+      border: none;
       opacity: 1;
       background: var(--mx_ui_background);
       transition: opacity 300ms ease-in-out;
@@ -83,6 +84,16 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      &::before {
+        /* hit box (used to set z-index) */
+        content: "";
+        /*outline: 1px solid red;*/
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        width: calc(100% + 30px);
+        height: calc(100% + 30px);
+      }
       .button-panel--btn-flag {
         background-color: red;
         position: absolute;
@@ -100,6 +111,13 @@
         font-size: 20px;
         color: inherit;
       }
+      .button-panel--btn-hint {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
     }
     .button-panel--item {
       position: absolute;
@@ -112,8 +130,8 @@
       pointer-events: none;
       container-type: inline-size;
       container-name: button-panel--item;
-      &:before {
-        /* hit box (used to set z-index) */ 
+      &::before {
+        /* hit box (used to set z-index) */
         content: "";
         /*outline: 1px solid red;*/
         position: absolute;

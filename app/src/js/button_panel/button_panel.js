@@ -60,7 +60,7 @@ export class ButtonPanel extends EventSimple {
       type: ["click", "tap"],
     });
     panel.ls.addListener({
-      target: panel.elPanel,
+      target: panel.elContainer,
       bind: panel,
       callback: panel.setPinned,
       group: "base",
@@ -225,26 +225,35 @@ export class ButtonPanel extends EventSimple {
      * The button
      */
     panel.elBtnPanel = el(
-      "div",
+      "button",
       {
         class: [
           "button-panel--btn",
           `button-panel--${panel.opt.position}`,
-          "hint",
-          `hint--${panel.opt.tooltip_position}`,
           "button-panel--shadow",
         ],
         role: "button",
         dataset: {
-          lang_key: panel.opt.button_lang_key,
-          lang_type: "tooltip",
           button_panel_action: "toggle",
         },
       },
-      el("span", {
-        class: ["button-panel--btn-icon", ...panel.opt.button_classes],
-      }),
-      panel.elBtnFlag,
+      [
+        el("span", {
+          class: ["button-panel--btn-icon", ...panel.opt.button_classes],
+        }),
+        el("span", {
+          dataset: {
+            lang_key: panel.opt.button_lang_key,
+            lang_type: "tooltip",
+          },
+          class: [
+            "button-panel--btn-hint",
+            "hint",
+            `hint--${panel.opt.tooltip_position}`,
+          ],
+        }),
+        panel.elBtnFlag,
+      ],
     );
 
     /**
