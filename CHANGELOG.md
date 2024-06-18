@@ -1,3 +1,31 @@
+  - [1.13.8-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.5) 
+
+    -  Attribute Visualisation
+        - Solved notification panel tooltip issue (#985).
+
+    - Dashboards
+        - Improved dynamic widget sizing to address event chain issues.
+        - Refactored code and started adaptation for non-view widgets.
+
+    - Feature to Widget
+        - Fixed reset filters not firing after feature-widget removal.
+        - Resolved item order issue.
+        - Addressed most animation/resize issues and conflicts with other widgets.
+        - Initial working version of the feature-to-widget functionality.
+
+    - Source/View Meta Modal
+        - Added title translation.
+        - Resolved missing helpers for displaying metadata in modals from custom code views and dashboards. Replaced 'metaSourceToUi' and managed modal's lifecycle.
+
+    - Views Controls
+        - Fixed button reset condition issue.
+        - Corrected some logic issues in the view controls.
+        - Refactored dot template for views controls, utilizing a base template.
+
+    - General Refactoring
+        - Enhanced coherence of element animations across various parts of the app.
+        - Ensured 'checked' key for input elements is handled by setAttribute, using default.
+
   - [1.13.8-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.3) 
 
     - Search Index : Fix projects_title an projects_description merged
