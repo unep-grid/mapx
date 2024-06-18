@@ -771,7 +771,9 @@ export class ButtonPanel extends EventSimple {
     panel.elContainer.classList.add("active");
     panel.hintHandles();
     if (!skipFire) {
-      panel.fire("open");
+      setTimeout(() => {
+        panel.fire("open");
+      }, panel.opt.animate_duration || 0);
     }
   }
 

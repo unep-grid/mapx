@@ -2,13 +2,16 @@
   width: 100%;
   height: 100%;
   overflow: visible;
-  /*margin-bottom: 100px;*/
   .widget {
+    --animate-transition-ms: 350ms;
     display: block;
     position: absolute;
     margin-left: 5px;
     margin-top: 5px;
     margin-bottom: 0px;
+    transition:
+      width var(--animate-transition-ms) ease-in-out,
+      height var(--animate-transition-ms) ease-in-out;
   }
   .widget--content {
     background: var(--mx_ui_background);
@@ -28,7 +31,9 @@
     border: 1px solid #ccc;
     margin: 2px;
     font-size: 10px;
-    transition: opacity 0.3s ease-in-out, width 0.3s ease-in-out,
+    transition:
+      opacity 0.3s ease-in-out,
+      width 0.3s ease-in-out,
       height 0.3s ease-in-out;
     z-index: 100;
     &:hover {

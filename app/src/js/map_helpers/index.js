@@ -1730,7 +1730,6 @@ export async function handleClickEvent(e, idMap) {
   }
 
   if (addWidget) {
-    debugger;
     const fw = new FeaturesToWidget();
 
     fw.on("destroyed", () => {

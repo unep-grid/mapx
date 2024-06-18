@@ -45,6 +45,7 @@ const defaults = {
   view: null,
   dashboard: null,
   attributions: [],
+  animDurationMs: 350,
 };
 
 /**
@@ -119,6 +120,16 @@ class Widget extends EventSimple {
     widget.build();
 
     /**
+     * Adjust dashboard grid layout after resize
+     */
+    widget.on("resize", () => {
+      const d = widget.dashboard;
+      if (d) {
+        d.updatePanelLayout();
+      }
+    });
+
+    /**
      * Eval the script, dump error in console
      */
     try {
@@ -133,18 +144,7 @@ class Widget extends EventSimple {
       }
       widget.modules = path(widget.opt, "dashboard.modules", {});
 
-      widget.add();
-      widget.on("set_size", () => {
-        /**
-         * With dynamic, non-fixed size, grid should be updated
-         */
-        widget.dashboard.updateGridLayout();
-      });
-
-      /**
-       * Initial size
-       */
-      widget.updateSize("init");
+      await widget.add();
     } catch (e) {
       widget.warn("code evaluation issue. Removing widget.", e);
       await widget.destroy();
@@ -157,6 +157,15 @@ class Widget extends EventSimple {
   async onData() {}
   async onAdd() {}
   async onRemove() {}
+
+  /**
+   * Update anim duration
+   */
+  setAnimmateDuration(ms) {
+    const w = this;
+    ms = isEmpty(ms) ? defaults.fw_anim.duration : ms;
+    w.el.style.setProperty("--animate-transition-ms", `${ms}ms`);
+  }
 
   /**
    * Check if the widgetr is disabled
@@ -281,17 +290,18 @@ class Widget extends EventSimple {
     const w = this;
     w.width = width;
     w.height = height;
-    w.fire("set_size");
   }
 
   set width(width) {
     const w = this;
     w.el.style.width = w.toCSS(width, "width");
+    w.fire("resize");
   }
 
   set height(height) {
     const w = this;
     w.el.style.height = w.toCSS(height, "height");
+    w.fire("resize");
   }
 
   get width() {
@@ -361,17 +371,19 @@ class Widget extends EventSimple {
       }
     });
   }
-
+  /**
+   * Add the widget
+   * Do not wait, use promise + catch,
+   * as wait would block all other widgets to render
+   */
   async add() {
     const widget = this;
     try {
-      await widget.addToGrid();
-      /**
-       * Do not wait, use promise + catch,
-       * as wait would block all other widgets to render
-       */
-      await widget.onAdd(widget);
       await widget.setUpdateDataMethod();
+      await widget.addToGrid();
+      await widget.onAdd(widget); //script cb
+      widget.updateSize();
+      widget.fire("added");
     } catch (e) {
       widget.warn("adding widget failed. Will be removed", e);
       widget.destroy();
@@ -405,7 +417,6 @@ class Widget extends EventSimple {
   async destroy(skipOnRemove) {
     const widget = this;
     try {
-      const dashboard = widget.dashboard;
       if (widget.destroyed) {
         return;
       }
@@ -413,6 +424,7 @@ class Widget extends EventSimple {
       if (!widget.initialized) {
         return;
       }
+      const dashboard = widget.dashboard;
       /**
        * Remove from grid
        */
@@ -563,17 +575,14 @@ class Widget extends EventSimple {
   }
 
   /**
-   * Dim handler
-   * x300
-   * 300
-   * fit-content
-   * fit-dasboard
-   * @param {String|Number} dim value to set
-   * @param  {String} type width/height
-   * @returns {Number} Numeric dimension
+   * Convert dimension to CSS value
+   *
+   * @param {String|Number} dimension - The dimension value to set.
+   * @param {String} type - The type of dimension (width/height).
+   * @returns {String} CSS dimension value with units.
    */
-  toCSS(dim, type) {
-    const widget = this;
+  toCSS(dimension, type) {
+    const w = this;
     const oldClasses = {
       x50: 50,
       x1: 150,
@@ -586,31 +595,49 @@ class Widget extends EventSimple {
       y3: 450,
       y4: 600,
     };
-    const isNum = isNumeric(dim);
 
-    if (isNum) {
-      return Math.ceil((dim * 100) / 100) + "px";
+    if (isNumeric(dimension)) {
+      return `${w.snap(dimension)}px`;
     }
 
-    if (oldClasses[dim]) {
-      return oldClasses[dim] + "px";
+    if (oldClasses[dimension]) {
+      return `${oldClasses[dimension]}px`;
     }
 
-    let out;
-
-    switch (dim) {
-      case "fit-content":
-        out = getContentSize(widget.el, false, false)[type] + "px";
+    let output = 0;
+    let margin = 0;
+    switch (dimension) {
+      case "fit_content":
+        const dim_f = w.snap(getContentSize(w.el, false)[type]);
+        output = `${dim_f}px`;
         break;
-      case "fit-dashboard":
-        const s = window.getComputedStyle(widget.el);
-        out = `calc(100% - ${s.marginLeft} * 2 )`;
+      case "fit_dashboard":
+        const cs = window.getComputedStyle(w.el);
+        switch (type) {
+          case "width":
+            margin = parseFloat(cs.marginLeft) + parseFloat(cs.marginRight);
+            break;
+          case "height":
+          default:
+            margin = parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
+        }
+        output = `calc(100% - ${margin}px)`;
         break;
       default:
-        out = "auto";
+        output = "auto";
     }
+    return output;
+  }
 
-    return out;
+  /**
+   * Snap the number to the nearest multiple of the given value.
+   *
+   * @param {Number} num - The number to snap.
+   * @param {Number} [multiple=50] - The multiple to snap to.
+   * @returns {Number} Snapped number.
+   */
+  snap(num, multiple = 10) {
+    return Math.ceil(parseInt(num, 10) / multiple) * multiple;
   }
 }
 

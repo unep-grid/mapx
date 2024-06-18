@@ -21,12 +21,16 @@ import { EventSimple } from "../event_simple/index.js";
 import { Widget } from "../dashboards/widget.js";
 import { elWait, el, elCheckToggle } from "../el_mapx/index.js";
 import "./style.less";
+import { onNextFrame } from "../animation_frame/index.js";
 
 const state = {
   widget: null,
 };
 
 const defaults = {
+  fw_anim: {
+    delay: 50,
+  },
   fw_dashboard: {
     width: 350,
   },
@@ -38,10 +42,9 @@ const defaults = {
     widgets: [
       {
         priority: 0,
-        width: "fit-dashboard",
-        height: "fit-content",
+        width: "fit_dashboard",
+        height: "auto",
         style: {
-          minHeight: "200px",
           minWidth: "200px",
         },
         handlers: {
@@ -88,23 +91,20 @@ export class FeaturesToWidget extends EventSimple {
     while (fw.elContainer.firstElementChild) {
       fw.elContainer.removeChild(fw.elContainer.firstElementChild);
     }
-
     await fw.render();
-    console.log("rendered, show dasboard");
     await state.widget.dashboard.show();
-
-    console.log("dashboard show, set dashboard width");
     await state.widget.dashboard.setWidth(defaults.fw_dashboard.width, false);
-
-    setTimeout(() => {
-      fw.updateSize();
-      state.widget.dashboard.updateWidgetsSize();
-      console.log("init ok");
-    }, 300);
+    fw.updateSize();
   }
 
   updateSize() {
-    state.widget.dashboard.updateWidgetsSize();
+    state.widget.updateSize();
+  }
+
+  updateGridLayout() {
+    onNextFrame(() => {
+      state.widget.dashboard.updateGridLayout();
+    });
   }
 
   destroy() {
@@ -210,6 +210,7 @@ export class FeaturesToWidget extends EventSimple {
   }
 
   _render_attribute(item, attribute, values, labels, idView, isVector, order) {
+    const fw = this;
     const label = getLabelFromObjectPath({
       obj: labels[attribute],
       defaultValue: attribute,
@@ -235,7 +236,10 @@ export class FeaturesToWidget extends EventSimple {
     );
     const elAttribute = el(
       "details",
-      { class: "mx-feature-widget--attribute" },
+      {
+        class: "mx-feature-widget--attribute",
+        on: ["click", () => fw.updateGridLayout()],
+      },
       [elAttributeTitle, elAttributeValues],
     );
     // raster = -1, vector 0

@@ -85,6 +85,22 @@ observeEvent(input$dashboardEdit_init, {
     widgetSizesValues <- as.list(paste(widgetSizes))
     widgetSizesLabels <- as.list(paste(widgetSizes, "px"))
 
+    #
+    # dynamic sizes
+    #
+    widgetSizesValues <- c(
+      widgetSizesValues,
+      list("fit_dashboard", "fit_content")
+    )
+    widgetSizesLabels <- c(
+      widgetSizesLabels,
+      list(
+        t("view_dashboard_fit_dashboard"),
+        t("view_dashboard_fit_content")
+      )
+    )
+
+
     sc <- list(
       title = t("view_dashboard"),
       type = "object",

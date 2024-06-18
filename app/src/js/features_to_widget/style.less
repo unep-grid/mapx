@@ -1,17 +1,13 @@
 .mx-feature-widget--container {
   max-height: 100%;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
   padding: 5px;
-
   display: flex;
   flex-direction: column;
-
   .mx-feature-widget--item {
     padding: 10px;
     color: #fff;
-    margin: 10px;
-    /*box-shadow: var(--mx_ui_box_shadow);*/
     border-radius: 5px;
     max-width: 100%;
     max-height: 100%;
@@ -47,7 +43,7 @@
           border-radius: 5px;
           display: grid;
           grid-gap: 10px;
-          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
           padding: 10px;
 
           .mx-feature-widget--value {

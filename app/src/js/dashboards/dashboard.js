@@ -2,7 +2,7 @@ import Muuri from "muuri";
 import { Widget } from "./widget.js";
 import { ButtonPanel } from "./../button_panel";
 import { modulesLoad } from "./../modules_loader_async";
-import { all, patchObject } from "./../mx_helper_misc.js";
+import { all, getContentSize, patchObject } from "./../mx_helper_misc.js";
 import { el, elAuto, elSpanTranslate } from "./../el_mapx";
 import "./style.less";
 import { EventSimple } from "../event_simple";
@@ -48,7 +48,10 @@ const defaults = {
     button_classes: ["fa", "fa-pie-chart"],
     tooltip_position: "top-left",
     container_classes: ["button-panel--container-no-full-height"],
-    //on_open_close_others: ["controls_panel"],
+    /*
+     * Close those panels when this one is open
+     * on_open_close_others: ["controls_panel"],
+     */
     on_open_close_others: [],
     position: "bottom-right",
     add_footer: true,
@@ -104,26 +107,36 @@ class Dashboard extends EventSimple {
 
     /**
      * If the panel is resized
-     *  -> updateGridLayout
      */
-    d.panel.on(["resize", "resize-auto", "resize-end"], () => {
-      d.updateWidgetsSize();
+    d.panel.on(["resize"], () => {
+      d.updatePanelLayout();
+    });
+    d.panel.on(["resize-auto", "resize-end"], () => {
+      d.updateGridLayout();
     });
 
     /*
      * Grid
      */
     d.grid = new Muuri(d.elDashboard, d.opt.grid);
-    d.grid.on("layoutEnd", () => {
-      d.fitPanelToWidgetsBbox(true, false);
+    d.grid.on("layoutEnd", () => {});
+
+    d.on("widgets_size", () => {
+      d.updatePanelLayout();
     });
 
     d.on("panel_layout", () => {
       d.updateGridLayout();
     });
 
-    d.on("widgets_size", (data) => {
-      d.updateGridLayout();
+    d.on("widgets_added", () => {
+      if (d.isOpen()) {
+        d.updateWidgetsSize();
+      } else {
+        d.panel.once("open", () => {
+          d.updateWidgetsSize();
+        });
+      }
     });
 
     /**
@@ -199,6 +212,8 @@ class Dashboard extends EventSimple {
     }
     await Promise.all(promWidgets);
 
+    d.fire("widgets_added");
+
     /**
      * Return only added widgets
      */
@@ -212,6 +227,15 @@ class Dashboard extends EventSimple {
   isVisible() {
     const d = this;
     return d.panel.isVisible();
+  }
+
+  /**
+   * Checks if the dashboard is open.
+   * @returns {boolean} - True if open, false otherwise.
+   */
+  isOpen() {
+    const d = this;
+    return d.panel.isOpen();
   }
 
   /**
@@ -298,22 +322,13 @@ class Dashboard extends EventSimple {
     const d = this;
     d.grid.layout();
     d.grid.refreshItems().layout(!animate);
-
     d.fire("grid_layout");
   }
 
-  updateWidgetsSize(origin) {
+  updateWidgetsSize() {
     const d = this;
     d.widgets.forEach((w) => w.updateSize());
-    d.fire("widgets_size", { origin });
-  }
-
-  updateLayout(animate = true) {
-    const d = this;
-    d.updatePanelLayout(animate);
-    d.updateWidgetsSize(animate);
-    d.updateGridLayout(animate);
-    d.updatePanelLayout(animate);
+    d.fire("widgets_size");
   }
 
   /**
@@ -323,8 +338,8 @@ class Dashboard extends EventSimple {
    */
   fitPanelToWidgets(animate = true, silent = false) {
     const d = this;
-    d.fitPanelToWidgetsHeight(animate, silent);
     d.fitPanelToWidgetsWidth(animate, silent);
+    d.fitPanelToWidgetsHeight(animate, silent);
   }
 
   /**
@@ -450,16 +465,11 @@ class Dashboard extends EventSimple {
     }
     d.panel.setAnimate(animate);
     const m = d.opt.dashboard.marginFitHeight;
-    const htot = d.widgets.reduce((a, w) => {
-      return (a += w.height);
-    }, 0);
 
-    const wtot = d.widgets.reduce((a, w) => {
-      return (a += w.width);
-    }, 0);
+    const { width, height } = getContentSize(d.elDashboard, true);
 
-    d.panel.height = wtot / 2 + m;
-    d.panel.width = htot / 2 + m;
+    d.panel.height = height + m;
+    d.panel.width = width + m;
   }
 
   /**
