@@ -471,11 +471,15 @@ class Widget extends EventSimple {
       await dashboard.removeWidget(widget);
 
       /**
+       * Fire destroyed event
+       * ( before destroying parent, as 'fire' depend on it)
+       */
+      this.fire("destroyed");
+
+      /**
        * Destroy parent
        */
       super.destroy();
-
-      this.fire("destroyed");
     } catch (e) {
       widget.warn("Issue when destroying widget", e);
     }
