@@ -21,7 +21,7 @@ class NotifCenterMapx extends NotifCenter {
         elContainer: document.body,
         button_lang_key: "nc_button",
         button_classes: ["fa", "fa-bell"],
-        tooltip_position: "bottom-left",
+        tooltip_position: "top-right",
         position: "bottom-left",
         container_classes : ['button-panel--pinned-always'],
         container_style: {
