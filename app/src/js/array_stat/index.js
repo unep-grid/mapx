@@ -21,6 +21,23 @@ function sortNumber(a, b) {
 }
 
 /**
+ * Sorts an array based on the order of elements specified in another array.
+ *
+ * @param {Array} arr1 - The array to be sorted.
+ * @param {Array} arr2 - The array that defines the sort order.
+ * @returns {Array} - The sorted array.
+ */
+export function sortByOrder(arr1, arr2) {
+  const orderMap = new Map();
+  
+  for (const [index, item] of arr2.entries()) {
+    orderMap.set(item, index);
+  }
+
+  return arr1.sort((a, b) => orderMap.get(a) - orderMap.get(b));
+}
+
+/**
  *  Natural sort
  * @note https://gist.github.com/devinus/453520
  * @param {Any} a First element
@@ -253,4 +270,3 @@ function getArrayIntersect(a, b) {
 function getArrayDistinct(a) {
   return Array.from(new Set(a));
 }
-

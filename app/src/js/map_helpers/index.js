@@ -81,7 +81,7 @@ import {
 } from "./../mx_helper_modal.js";
 import { errorHandler } from "./../error_handler/index.js";
 import { waitTimeoutAsync } from "./../animation_frame";
-import { getArrayDistinct } from "./../array_stat/index.js";
+import { getArrayDistinct, sortByOrder } from "./../array_stat/index.js";
 import { getApiUrl } from "./../api_routes";
 import { getViewSourceSummary } from "./../mx_helper_source_summary";
 import {
@@ -4371,7 +4371,6 @@ export function getLayersPropertiesAtPoint(opt) {
   const modeObject = opt.asObject === true || false;
   const items = {};
   const excludeProp = ["mx_t0", "mx_t1", "gid"];
-  //const excludeProp = [];
   let idViews = [];
   let type = opt.type || "vt" || "rt" || "gj" || "cc";
   type = isArray(type) ? type : [type];
@@ -4389,13 +4388,17 @@ export function getLayersPropertiesAtPoint(opt) {
     return items;
   }
 
+  const idViewsOrder = getViewsOrder();
+
+  const idViewsSorted = sortByOrder(idViews, idViewsOrder);
+
   const sources = getMap().getStyle()?.sources;
 
   /**
    * Fetch view data for one or many views
    * and fetch properties
    */
-  idViews
+  idViewsSorted
     .map((idView) => getView(idView))
     .filter((view) => type.includes(view?.type))
     .forEach((view) => {

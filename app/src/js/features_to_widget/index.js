@@ -1,5 +1,6 @@
 import { getArrayStat } from "./../array_stat/index.js";
 import { getDictItem, getLabelFromObjectPath } from "./../language";
+import { onNextFrame } from "../animation_frame/index.js";
 import {
   getView,
   getViewAttributes,
@@ -21,7 +22,6 @@ import { EventSimple } from "../event_simple/index.js";
 import { Widget } from "../dashboards/widget.js";
 import { elWait, el, elCheckToggle } from "../el_mapx/index.js";
 import "./style.less";
-import { onNextFrame } from "../animation_frame/index.js";
 
 const state = {
   widget: null,
@@ -102,6 +102,8 @@ export class FeaturesToWidget extends EventSimple {
   }
 
   updateGridLayout() {
+    // animation frame cb is required as detail click event is returned
+    // before the actual details is actually open.
     onNextFrame(() => {
       state.widget.dashboard.updateGridLayout();
     });
