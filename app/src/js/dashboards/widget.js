@@ -17,8 +17,6 @@ import {
 } from "./../is_test/index.js";
 import { settings } from "../settings/index.js";
 import { EventSimple } from "../event_simple/index.js";
-import { onNext } from "../pickolor/onNextFrame.js";
-import { onNextFrame } from "../animation_frame/index.js";
 const { valuesMap } = settings;
 
 /**
@@ -145,7 +143,7 @@ class Widget extends EventSimple {
       if (!d) {
         return;
       }
-      console.log("widget::on_set_size")
+      console.log("widget::on_set_size");
       d.updatePanelLayout(true, false, "widget::set_size");
     });
 
@@ -201,11 +199,17 @@ class Widget extends EventSimple {
     return path(widget, "config.disabled", false);
   }
 
+  /**
+  * Get/Set the latest stored data 
+  * - some widgets requires this to be 'null'
+  * - don't attempt to set a default, like []
+  */ 
   get data() {
-    return this._data || {};
+    return this._data;
   }
+
   set data(value) {
-    this._data = value || [];
+    this._data = value;
   }
 
   /**
