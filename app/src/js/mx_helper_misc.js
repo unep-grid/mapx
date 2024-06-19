@@ -25,7 +25,6 @@ import { isSourceId } from "./is_test";
 import { el, tt } from "./el_mapx";
 import { cancelFrame, onNextFrame } from "./animation_frame";
 import { moduleLoad } from "./modules_loader_async";
-import { getDictItem } from "./language";
 import { readCookie } from "./mx_helper_cookies";
 import { modalDialog } from "./mx_helper_modal";
 

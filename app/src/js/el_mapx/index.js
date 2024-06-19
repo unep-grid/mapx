@@ -572,8 +572,10 @@ export function elInput(key, opt) {
   );
 
   if (opt.type === "checkbox") {
-    inputOptions.checked = opt.checked;
-    inputOptions.value = "true"; // for form data. If not set, "on" will be returned.
+    //only set checked attr if true
+    inputOptions.checked = opt.checked ? true : null;
+    // for form data. If not set, "on" will be returned.
+    inputOptions.value = "true";
   }
 
   const elInput = el("input", inputOptions);
@@ -637,6 +639,9 @@ export function elCheckbox(key, opt) {
     },
     opt,
   );
+  if (!opt.checked) {
+    delete opt.checked;
+  }
 
   return elInput(key, opt);
 }
