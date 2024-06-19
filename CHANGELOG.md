@@ -1,3 +1,12 @@
+  - [1.13.8-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.6) 
+
+    - Dashboard
+        - Added a method to set gutter sizes
+        - Fix issue with some widgets using hardcoded values for content sizing
+        - Widget : data accessor should return null if not set, not empty array  as some widget require that behavior.
+    - El 
+        - Issue with  checkbox not having the correct check default value 
+        - 
   - [1.13.8-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.5) 
 
     -  Attribute Visualisation
