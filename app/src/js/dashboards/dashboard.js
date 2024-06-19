@@ -2,7 +2,12 @@ import Muuri from "muuri";
 import { Widget } from "./widget.js";
 import { ButtonPanel } from "./../button_panel";
 import { modulesLoad } from "./../modules_loader_async";
-import { all, getContentSize, patchObject } from "./../mx_helper_misc.js";
+import {
+  all,
+  debounce,
+  getContentSize,
+  patchObject,
+} from "./../mx_helper_misc.js";
 import { el, elAuto, elSpanTranslate } from "./../el_mapx";
 import "./style.less";
 import { EventSimple } from "../event_simple";
@@ -19,7 +24,7 @@ const defaults = {
     widgets: [],
     modules: [],
     language: "en",
-    marginFitWidth: 20,
+    marginFitWidth: 5, //~gutter size
     marginFitHeight: 50,
     layout: "fit",
   },
@@ -73,6 +78,9 @@ class Dashboard extends EventSimple {
     const d = this;
     d.opt = patchObject(defaults, { ...opt });
     bindAll(d);
+    d.updateGridLayout = debounce(d.updateGridLayout, 50);
+    d.updatePanelLayout = debounce(d.updatePanelLayout, 50);
+    d.updateWidgetsSize = debounce(d.updateWidgetsSize, 50);
     d.init();
   }
 
@@ -122,12 +130,10 @@ class Dashboard extends EventSimple {
     d.grid = new Muuri(d.elDashboard, d.opt.grid);
 
     d.on("widgets_size", () => {
-      d.updatePanelLayout(true, true, "widgets_size cb");
+      //d.updatePanelLayout(true, true, "widgets_size cb");
     });
 
-    d.on("grid_layout", () => {
-      d.updatePanelLayout(true, true);
-    });
+    d.on("grid_layout", () => {});
 
     d.on("panel_layout", () => {
       d.updateGridLayout(true, true);
@@ -390,52 +396,6 @@ class Dashboard extends EventSimple {
     d.fitPanelToWidgetsHeight(animate, silent);
   }
 
-  /**
-   * Updates the panel: size to the widgets bounding box
-   * @param {boolean} animate
-   * @param {boolean} silent - Don't fire event
-   */
-  fitPanelToWidgetsBbox(animate = false, silent = false) {
-    const d = this;
-    const layout = d.opt.dashboard.layout;
-
-    if (layout === "fit" || layout === "full") {
-      if (d.panel.isSmall()) {
-        // too small, at least render orig value
-        d.updatePanelLayout(animate, silent, "fitPanelToWidgetsBbox");
-      }
-      return;
-    }
-
-    d.panel.setAnimate(animate);
-    const marginW = d.opt.dashboard.marginFitWidth;
-    const marginH = d.opt.dashboard.marginFitHeight;
-    const bbox = { top: null, left: null, right: null, bottom: null };
-
-    for (const widget of d.widgets) {
-      const r = widget.rect;
-      if (isEmpty(bbox.top)) {
-        for (const p of Object.keys(bbox)) {
-          bbox[p] = r[p];
-        }
-      } else {
-        bbox.top = r.top < bbox.top ? r.top : bbox.top;
-        bbox.left = r.left < bbox.left ? r.left : bbox.left;
-        bbox.bottom = r.bottom > bbox.bottom ? r.bottom : bbox.bottom;
-        bbox.right = r.right > bbox.right ? r.right : bbox.right;
-      }
-    }
-    const wBbox = bbox.right - bbox.left + marginW;
-    const hBbox = bbox.bottom - bbox.top + marginH;
-
-    if (wBbox > 0 && wBbox !== d.panel.width) {
-      d.setWidth(wBbox, silent);
-    }
-    if (hBbox > 0 && hBbox !== d.panel.height) {
-      d.setHeight(hBbox, silent);
-    }
-  }
-
   setWidth(w, silent) {
     const d = this;
     d.panel.setWidth(w, silent);
@@ -512,12 +472,13 @@ class Dashboard extends EventSimple {
       return;
     }
     d.panel.setAnimate(animate);
-    const m = d.opt.dashboard.marginFitHeight;
+    const mh = d.opt.dashboard.marginFitHeight;
+    const mw = d.opt.dashboard.marginFitWidth;
 
-    const { width, height } = getContentSize(d.elDashboard, false);
+    const { height, width } = getContentSize(d.elDashboard, false);
 
-    d.panel.height = height + m;
-    d.panel.width = width + m;
+    d.panel.height = height + mh;
+    d.panel.width = width + mw;
   }
 
   /**

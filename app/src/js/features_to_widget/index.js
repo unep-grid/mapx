@@ -102,13 +102,18 @@ export class FeaturesToWidget extends EventSimple {
     state.widget.updateSize();
   }
 
+  /**
+   * Update size after a change, e.g. feature_to_widget details open
+   * - the widget size could change
+   * - it must trigger grid lyout update later
+   */
   async fit() {
     return new Promise((resolve, reject) => {
       // animation frame cb is required as detail click event is returned
       // before the actual details is actually open.
       onNextFrame(() => {
         try {
-          state.widget.dashboard.updatePanelLayout();
+          state.widget.updateSize();
           resolve(true);
         } catch (e) {
           console.error(e);

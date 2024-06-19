@@ -4,10 +4,11 @@
   overflow: visible;
   .widget {
     --animate-transition-ms: 350ms;
+    --gutter-size: 30px;
     display: block;
     position: absolute;
-    margin-left: 5px;
-    margin-top: 5px;
+    margin-left: var(--gutter-size);
+    margin-top: var(--gutter-size);
     margin-bottom: 0px;
     transition:
       width var(--animate-transition-ms) ease-in-out,

@@ -47,6 +47,7 @@ const defaults = {
   dashboard: null,
   attributions: [],
   animDurationMs: 350,
+  gutterSize: 5,
 };
 
 /**
@@ -122,6 +123,7 @@ class Widget extends EventSimple {
     if (widget.disabled) {
       return;
     }
+
     /**
      * Set init state now :
      * -> async action later
@@ -134,17 +136,19 @@ class Widget extends EventSimple {
      * Build and set size
      */
     widget.build();
+    widget.setGutterSize();
 
     /**
      * Adjust dashboard grid layout after resize
+     * - avoid updating the layout, to avoid layout shift 
+     * - updating the grid to make sure widgets don't overlap
      */
     widget.on("set_size", () => {
       const d = widget.dashboard;
       if (!d) {
         return;
       }
-      console.log("widget::on_set_size");
-      d.updatePanelLayout(true, false, "widget::set_size");
+      d.updateGridLayout(true, false, "widget::set_size");
     });
 
     /**
@@ -192,6 +196,20 @@ class Widget extends EventSimple {
   }
 
   /**
+   * Update anim duration
+   */
+  setGutterSize(size) {
+    const w = this;
+    w._gutter_size = isEmpty(size) ? w.gutterSize : size;
+    w.el.style.setProperty("--gutter-size", `${w.gutterSize}px`);
+  }
+
+  get gutterSize() {
+    const w = this;
+    return this._gutter_size || w.config.gutterSize;
+  }
+
+  /**
    * Check if the widgetr is disabled
    */
   get disabled() {
@@ -200,10 +218,10 @@ class Widget extends EventSimple {
   }
 
   /**
-  * Get/Set the latest stored data 
-  * - some widgets requires this to be 'null'
-  * - don't attempt to set a default, like []
-  */ 
+   * Get/Set the latest stored data
+   * - some widgets requires this to be 'null'
+   * - don't attempt to set a default, like []
+   */
   get data() {
     return this._data;
   }
@@ -244,7 +262,7 @@ class Widget extends EventSimple {
   async updateDataFromLayerOnRender() {
     const widget = this;
     try {
-      const data = widget.getWidgetDataFromLinkedView();
+      const data = await widget.getWidgetDataFromLinkedView();
       await widget.setData(data);
     } catch (e) {
       widget.warn("error with data on layer render", e);
@@ -254,7 +272,7 @@ class Widget extends EventSimple {
   /**
    * Data from layers
    */
-  getWidgetDataFromLinkedView(e) {
+  async getWidgetDataFromLinkedView(e) {
     const widget = this;
     const idView = path(widget.config, "view.id", widget.id);
     const viewType = path(widget.config, "view.type", null);
@@ -421,9 +439,10 @@ class Widget extends EventSimple {
     const widget = this;
     try {
       await widget.addToGrid();
+      // size can be requested by widget cb 'onAdd'
+      widget.updateSize();
       await widget.onAdd(widget); //script cb
       await widget.setUpdateDataMethod();
-      widget.updateSize();
       widget.fire("added");
     } catch (e) {
       widget.warn("adding widget failed. Will be removed", e);
@@ -556,18 +575,24 @@ class Widget extends EventSimple {
     const hasData = !isEmpty(d);
     const ignoreEmptyData = widget.config.sourceIgnoreEmpty;
     const triggerOnData = hasData || (!hasData && !ignoreEmptyData);
-    if (triggerOnData) {
-      widget.data = hasData ? await d : [];
-      for (const row of widget.data) {
-        for (const [key, value] of Object.entries(row)) {
-          // e.g. convert $NULL to real null, to use in code
-          if (!isUndefined(valuesMap[value])) {
-            row[key] = valuesMap[value];
-          }
+    if (!triggerOnData) {
+      return;
+    }
+    widget.data = hasData ? d : [];
+
+    /**
+     * Convert/map values
+     * - e.g. convert $NULL to real null, to use in code
+     */
+    for (const row of widget.data) {
+      for (const [key, value] of Object.entries(row)) {
+        const mapedValue = valuesMap[value];
+        if (!isUndefined(mapedValue)) {
+          row[key] = mapedValue;
         }
       }
-      await widget.onData(widget, widget.data);
     }
+    await widget.onData(widget, widget.data);
   }
 
   strToObj(str) {
@@ -643,30 +668,21 @@ class Widget extends EventSimple {
     };
 
     if (isNumeric(dimension)) {
-      return `${w.snap(dimension)}px`;
+      return `${w.snapGrid(dimension)}px`;
     }
 
     if (oldClasses[dimension]) {
-      return `${oldClasses[dimension]}px`;
+      return `${w.snapGrid(oldClasses[dimension])}px`;
     }
 
     let output = 0;
-    let margin = 0;
     switch (dimension) {
       case "fit_content":
-        const dim_f = w.snap(getContentSize(w.el, false)[type]);
+        const dim_f = w.snapGrid(getContentSize(w.el, false)[type]);
         output = `${dim_f}px`;
         break;
       case "fit_dashboard":
-        const cs = window.getComputedStyle(w.el);
-        switch (type) {
-          case "width":
-            margin = parseFloat(cs.marginLeft) + parseFloat(cs.marginRight);
-            break;
-          case "height":
-          default:
-            margin = parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
-        }
+        const margin = w.gutterSize * 2;
         output = `calc(100% - ${margin}px)`;
         break;
       default:
@@ -675,9 +691,20 @@ class Widget extends EventSimple {
     return output;
   }
 
+  /*
+   * Set dim + adding gutter size
+   * @param {Number} size size
+   * @param {Number} sizeGrid width/height of grid
+   */
+  snapGrid(size, sizeGrid = 50) {
+    const s = this.snap(size * 1 || 100);
+    const gu = this.gutterSize;
+    const gr = sizeGrid;
+    return s + (s / gr) * gu - gu;
+  }
+
   /**
-   * Snap the number to the nearest multiple of the given value.
-   *
+   * Snap the number to the nearest multiple of the given value
    * @param {Number} num - The number to snap.
    * @param {Number} [multiple=50] - The multiple to snap to.
    * @returns {Number} Snapped number.
