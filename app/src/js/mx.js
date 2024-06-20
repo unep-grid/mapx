@@ -33,6 +33,7 @@ const data = {
   }),
 };
 
+
 const initQueryParams = {}; // set in init_common.js
 const listeners = new ListenerStore();
 const events = new EventSimple();

@@ -833,17 +833,17 @@ export function unicodeToChar(text) {
  * leading edge, instead of the trailing.
  */
 export function debounce(func, wait, immediate) {
-  var timeout;
+  let timeout;
   return function () {
-    var context = this,
+    let context = this,
       args = arguments;
-    var later = function () {
+    let later = function () {
       timeout = null;
       if (!immediate) {
         func.apply(context, args);
       }
     };
-    var callNow = immediate && !timeout;
+    let callNow = immediate && !timeout;
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
     if (callNow) {
@@ -912,6 +912,46 @@ export function throttle(func, delay) {
         func.apply(this, args);
         timeout = null; // Once function is executed, reset timeout
       }, delay);
+    }
+  };
+}
+
+/**
+ * Throttles a function such that it is called immediately if no timeout is present,
+ * and then calls the function again with the last provided arguments after a specified delay,
+ * discarding all intermediate calls.
+ *
+ * @param {Function} func - The function to throttle.
+ * @param {number} delay - The delay in milliseconds after which the last call should be executed.
+ * @returns {Function} A throttled version of the provided function.
+ *
+ * @example
+ * const throttledFunc = throttleNowOrLast((msg) => console.log(msg), 2000);
+ * throttledFunc("Call 1"); // Immediate call
+ * throttledFunc("Call 2"); // Will be discarded
+ * throttledFunc("Call 3"); // Will be discarded
+ * setTimeout(() => throttledFunc("Call 4"), 1000); // Will be discarded
+ * setTimeout(() => throttledFunc("Call 5"), 2500); // Will be executed after 2500ms (2s + 500ms)
+ */
+export function throttleNowAndLast(func, delay) {
+  let timeoutId = null;
+  let lastArgs = null;
+
+  return function (...args) {
+    if (timeoutId === null) {
+      // No timeout is present, call the function immediately
+      func(...args);
+      timeoutId = setTimeout(() => {
+        // After the delay, call the function with the last arguments
+        if (lastArgs !== null) {
+          func(...lastArgs);
+          lastArgs = null;
+        }
+        timeoutId = null;
+      }, delay);
+    } else {
+      // Store the last arguments for the next call
+      lastArgs = args;
     }
   };
 }

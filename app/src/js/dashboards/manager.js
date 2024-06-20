@@ -4,6 +4,7 @@ import { storyMapLock, isStoryPlaying } from "../story_map";
 import { getDictItem } from "../language";
 import { isString, isEmpty, isView, isArray } from "./../is_test";
 import { Dashboard } from "./dashboard.js";
+import { isNotEmpty } from "../is_test";
 
 /**
  * DashboardManager: A high-level manager for Dashboard instances.
@@ -207,7 +208,9 @@ export class DashboardManager {
     }
 
     if (dm.hasInstance()) {
-      console.warn("Dashboard already created. Use getOrCreate method if needed");
+      console.warn(
+        "Dashboard already created. Use getOrCreate method if needed",
+      );
       return dm.get();
     }
 
@@ -277,23 +280,20 @@ export class DashboardManager {
       return false;
     }
     const dashboard = await dm.getOrCreate(config);
+    const isActive = dashboard.isActive();
     const widgets = await dm.addWidgetsToView(idView);
+    const widgetsAdded = isNotEmpty(widgets);
+    if (!widgetsAdded) {
+      return;
+    }
     if (!config.panel_init_close) {
       await dashboard.show();
-      dashboard.updatePanelLayout();
-      dashboard.updateAttributions();
     }
-    if (widgets && widgets.length > 0) {
-      const isActive = dashboard.isActive();
-      if (!isActive) {
-        dashboard.shakeButton({
-          type: "look_at_me",
-        });
-      } else {
-        dashboard.updateAttributions();
-        dashboard.updateGridLayout();
-      }
+
+    if (!isActive) {
+      dashboard.shakeButton({
+        type: "look_at_me",
+      });
     }
   }
-
 }

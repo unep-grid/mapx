@@ -80,12 +80,12 @@ export function getQueryViewsInit() {
     idViews: getQueryParameterInit(["idViews", "views"]),
     collectionsSelectOperator: getQueryParameterInit(
       "collectionsSelectOperator",
-      ""
+      "",
     )[0],
     noViews: getQueryParameterInit("noViews", false)[0],
     roleMax: getQueryParameterInit(
       ["viewsRoleMax", "filterViewsByRoleMax"],
-      ""
+      "",
     )[0],
   };
 }
@@ -95,7 +95,7 @@ export function getQueryInit() {
     isFlatMode: getQueryParameterInit("viewsListFlatMode", false)[0],
     isFilterActivated: getQueryParameterInit(
       "viewsListFilterActivated",
-      false
+      false,
     )[0],
   };
   Object.assign(config, qViews);
@@ -175,39 +175,47 @@ function asArray(str) {
   return !str
     ? []
     : isJSON(str)
-    ? [JSON.parse(str)]
-    : isArray(str)
-    ? str
-    : isString(str)
-    ? str.split(",")
-    : [str];
+      ? [JSON.parse(str)]
+      : isArray(str)
+        ? str
+        : isString(str)
+          ? str.split(",")
+          : [str];
 }
 
 function asString(array) {
   return isString(array)
     ? array
     : isArray(array)
-    ? array.join(",")
-    : JSON.stringify(array);
+      ? array.join(",")
+      : JSON.stringify(array);
 }
 
 /**
- * Replace current url state using object values
- * @param {Object} params params
- * @param {Object} opt Options
- * @param {Boolean} opt.update Update current ? if false, reset
- * @return null
+ * Replace current URL state using object values.
+ * @param {Object} params - Object with search params as key/value pairs.
+ * @param {Object} [opt] - Options.
+ * @param {Boolean} [opt.update=true] - Update current state? If false, reset.
+ * @return {null}
  */
-export function setQueryParameters(params, opt) {
-  opt = opt || {};
-  const searchString = opt.update ? window.location.search : "";
-  const searchParams = new URLSearchParams(searchString);
-  Object.keys(params).forEach((k) => {
-    searchParams.set(k, asString(params[k]));
-  });
-  const state = window.location.pathname + "?" + searchParams.toString();
-  history.pushState(null, "", state);
+export function setQueryParameters(params, opt = { update: true }) {
+  const currentUrl = new URL(window.location.href);
+  const searchParams = currentUrl.searchParams;
+
+  if (!opt.update) {
+    for (const k of searchParams) {
+      searchParams.delete(k);
+    }
+  }
+
+  for (const key of Object.keys(params)) {
+    const value = asString(params[key]);
+    searchParams.set(key, value);
+  }
+
+  history.replaceState(null, null, currentUrl);
 }
+
 /**
  * Update only version.
  * Shiny need a one parameter handler for binding, setQueryParameters takes two.

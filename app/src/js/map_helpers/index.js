@@ -516,6 +516,11 @@ export async function setProject(idProject, opt) {
     console.log("Project change requires a valid app session");
     return;
   }
+
+  if (!isProjectId(idProject)) {
+    return;
+  }
+
   opt = Object.assign({}, { askConfirmIfModal: true, askConfirm: false }, opt);
   const idCurrentProject = path(mx, "settings.project.id");
   const isGuest = settings.user.guest;
@@ -648,6 +653,22 @@ export function initListenerGlobal() {
    */
   events.fire({
     type: "session_start",
+  });
+
+  /**
+   * Handle project state navigation
+   */
+  listeners.addListener({
+    target: window,
+    type: "popstate",
+    idGroup: "base",
+    callback: async (event) => {
+      const state = event.state;
+      if (!state) {
+        return;
+      }
+      await setProject(state.project);
+    },
   });
 
   /**
@@ -789,6 +810,7 @@ export function initListenersApp() {
 
   /**
    * After project change
+   * - url search params  'project' is set in ../url_utils
    */
   events.on({
     type: "project_changed",

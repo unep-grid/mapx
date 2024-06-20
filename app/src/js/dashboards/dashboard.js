@@ -2,16 +2,10 @@ import Muuri from "muuri";
 import { Widget } from "./widget.js";
 import { ButtonPanel } from "./../button_panel";
 import { modulesLoad } from "./../modules_loader_async";
-import {
-  all,
-  debounce,
-  getContentSize,
-  patchObject,
-} from "./../mx_helper_misc.js";
+import { all, getContentSize, patchObject } from "./../mx_helper_misc.js";
 import { el, elAuto, elSpanTranslate } from "./../el_mapx";
 import "./style.less";
 import { EventSimple } from "../event_simple";
-import { isEmpty } from "../is_test";
 import { bindAll } from "../bind_class_methods/index.js";
 import { isNotEmpty } from "../is_test/index.js";
 
@@ -20,15 +14,17 @@ import { isNotEmpty } from "../is_test/index.js";
  * @type {Object}
  */
 const defaults = {
+  debug: false,
   dashboard: {
     widgets: [],
     modules: [],
     language: "en",
-    marginFitWidth: 5, //~gutter size
-    marginFitHeight: 50,
+    marginFitWidth: 10, //~gutter size
+    marginFitHeight: 30,
     layout: "fit",
   },
   grid: {
+    layoutDuration: 0,
     dragEnabled: true,
     dragHandle: ".handle",
     dragSortPredicate: {
@@ -78,9 +74,6 @@ class Dashboard extends EventSimple {
     const d = this;
     d.opt = patchObject(defaults, { ...opt });
     bindAll(d);
-    d.updateGridLayout = debounce(d.updateGridLayout, 50);
-    d.updatePanelLayout = debounce(d.updatePanelLayout, 50);
-    d.updateWidgetsSize = debounce(d.updateWidgetsSize, 50);
     d.init();
   }
 
@@ -107,46 +100,31 @@ class Dashboard extends EventSimple {
     }
     d.panel.elPanelContent.appendChild(d.elDashboard);
 
-    d.panel.on("open", () => {
-      d.show("panel open");
-    });
-    d.panel.on("close", () => {
-      d.hide();
-    });
-
-    /**
-     * If the panel is resized
-     */
-    d.panel.on(["resize"], () => {
-      d.updatePanelLayout(true, false, "panel resize cb");
-    });
-    d.panel.on(["resize-auto", "resize-end"], () => {
-      d.updateGridLayout();
-    });
-
     /*
      * Grid
      */
     d.grid = new Muuri(d.elDashboard, d.opt.grid);
 
-    d.on("widgets_size", () => {
-      //d.updatePanelLayout(true, true, "widgets_size cb");
+    /**
+     * Handle events
+     */
+    d.panel.on("open", () => {
+      d.show();
+    });
+    d.panel.on("close", () => {
+      d.hide();
     });
 
-    d.on("grid_layout", () => {});
+    d.panel.on(["resize-free", "resize-auto", "resize-end"], () => {
+      d.updateGridLayout(true, true, "resize-free/auto/end");
+    });
+
+    d.on(["grid_layout", "widgets_added"], () => {
+      d.updatePanelLayout(true, false, "grid_layout/widgets size");
+    });
 
     d.on("panel_layout", () => {
-      d.updateGridLayout(true, true);
-    });
-
-    d.on("widgets_added", () => {
-      if (d.isOpen()) {
-        d.updateWidgetsSize();
-      } else {
-        d.panel.once("open", () => {
-          d.updateWidgetsSize();
-        });
-      }
+      d.updateGridLayout(true, false, "panel_layout");
     });
 
     /**
@@ -331,58 +309,69 @@ class Dashboard extends EventSimple {
    * Updates the layout of the panel.
    * @param {boolean} animate - If true, animates the layout change.
    */
-  updatePanelLayout(animate = false, silent = false) {
+  updatePanelLayout(animate = false, silent = false, origin = null) {
     const d = this;
+    clearTimeout(d._panel_timeout);
+    d._panel_timeout = setTimeout(() => {
+      if (defaults.debug) {
+        console.log("updatePanelLayout requested from", origin);
+      }
 
-    const layout = d.opt.dashboard.layout;
-    switch (layout) {
-      case "fit":
-        d.fitPanelToWidgets(animate);
-        break;
-      case "vertical":
-        d.panel.resizeAuto("full-height", animate);
-        d.fitPanelToWidgetsWidth(animate);
-        break;
-      case "horizontal":
-        d.panel.resizeAuto("full-width", animate);
-        d.fitPanelToWidgetsHeight(animate);
-        break;
-      case "full":
-        d.panel.resizeAuto("full", true, true);
-        break;
-      case "auto":
-      default:
-        d.fitPanelToWidgetsAuto(animate);
-        break;
-    }
-    if (!silent) {
-      d.fire("panel_layout");
-    }
+      const layout = d.opt.dashboard.layout;
+      switch (layout) {
+        case "fit":
+          d.fitPanelToWidgets(animate);
+          break;
+        case "vertical":
+          d.panel.resizeAuto("full-height", animate);
+          d.fitPanelToWidgetsWidth(animate);
+          break;
+        case "horizontal":
+          d.panel.resizeAuto("full-width", animate);
+          d.fitPanelToWidgetsHeight(animate);
+          break;
+        case "full":
+          d.panel.resizeAuto("full", true, true);
+          break;
+        case "auto":
+        default:
+          d.fitPanelToWidgetsAuto(animate);
+          break;
+      }
+      if (!silent) {
+        d.fire("panel_layout");
+      }
+    }, 500);
   }
 
   /**
    * Updates the layout of the grid.
    * @param {boolean} animate - If true, animates the layout change.
    */
-  updateGridLayout(animate = true, silent = false) {
+  updateGridLayout(animate = true, silent = false, origin = null) {
     const d = this;
-    if (!silent) {
-      d.grid.on("layoutEnd", cb);
-    }
-    d.grid.layout();
-    d.grid.refreshItems().layout(!animate);
-    function cb() {
-      d.grid.off(cb);
-      d.fire("grid_layout");
-    }
-  }
-
-  updateWidgetsSize(animate = true, silent = false) {
-    const d = this;
-    d.widgets.forEach((w) => w.updateSize(animate));
-    if (!silent) {
-      d.fire("widgets_size");
-    }
+    clearTimeout(d._grid_timeout);
+    d._grid_timeout = setTimeout(() => {
+      if (defaults.debug) {
+        console.log("updateGridLayout requested from", origin);
+      }
+      if (!silent) {
+        d.grid.on("layoutEnd", cb);
+      }
+      d.grid.layout();
+      d.grid.refreshItems().layout(!animate);
+      function cb(items) {
+        d.grid.off(cb);
+        /**
+         * Only fire if an actual change occured
+         */
+        const hash = JSON.stringify(items.map((i) => i.getPosition()));
+        if (hash !== d._grid_hash) {
+          d.fire("grid_layout");
+        }
+        d._grid_hash = hash;
+      }
+    }, 500);
   }
 
   /**
@@ -517,7 +506,7 @@ class Dashboard extends EventSimple {
       await d.widgets[id].destroy();
       d.widgets.pop();
     }
-    d.updateGridLayout();
+    d.updateGridLayout(true, false, "remove widgets");
     d.updateAttributions();
     d.autoDestroy();
   }
@@ -534,7 +523,7 @@ class Dashboard extends EventSimple {
       await d.widgets[pos].destroy();
       d.widgets.splice(pos, 1);
     }
-    d.updateGridLayout();
+    d.updateGridLayout(true, false, "remove single widget");
     d.updateAttributions();
     d.autoDestroy();
   }

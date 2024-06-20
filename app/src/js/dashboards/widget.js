@@ -17,6 +17,7 @@ import {
 } from "./../is_test/index.js";
 import { settings } from "../settings/index.js";
 import { EventSimple } from "../event_simple/index.js";
+import { Dashboard } from "./index.js";
 const { valuesMap } = settings;
 
 /**
@@ -140,15 +141,11 @@ class Widget extends EventSimple {
 
     /**
      * Adjust dashboard grid layout after resize
-     * - avoid updating the layout, to avoid layout shift 
+     * - avoid updating the layout, to avoid layout shift
      * - updating the grid to make sure widgets don't overlap
      */
-    widget.on("set_size", () => {
-      const d = widget.dashboard;
-      if (!d) {
-        return;
-      }
-      d.updateGridLayout(true, false, "widget::set_size");
+    widget.on("resize-end", () => {
+      widget.dashboard.updateGridLayout(true, false, "widget::resize-end");
     });
 
     /**
@@ -336,31 +333,31 @@ class Widget extends EventSimple {
     }
   }
 
-  updateSize(animate = true) {
+  updateSize(animate = true, silent = false) {
     const widget = this;
-    widget.setSize(widget.config.height, widget.config.width, animate);
+    widget.setSize(widget.config.height, widget.config.width, animate, silent);
   }
 
-  setSize(height, width, animate = true) {
+  setSize(height, width, animate = true, silent = false) {
     const w = this;
     if (animate) {
       w.setAnimateDuration();
     }
     w.width = width;
     w.height = height;
-    w.fire("set_size");
+    if (!silent) {
+      w.fire("resize");
+    }
   }
 
   set width(width) {
     const w = this;
     w.el.style.width = w.toCSS(width, "width");
-    w.fire("set_size_width");
   }
 
   set height(height) {
     const w = this;
     w.el.style.height = w.toCSS(height, "height");
-    w.fire("set_size_height");
   }
 
   get width() {
@@ -405,6 +402,15 @@ class Widget extends EventSimple {
     widget.el = el(
       "div",
       {
+        on: [
+          "transitionend",
+          (e) => {
+            const to_repport = ["width", "height"];
+            if (to_repport.includes(e.propertyName)) {
+              widget.fire("resize-end");
+            }
+          },
+        ],
         class: ["noselect", "widget"],
         style: widget.config.style,
       },
@@ -440,7 +446,7 @@ class Widget extends EventSimple {
     try {
       await widget.addToGrid();
       // size can be requested by widget cb 'onAdd'
-      widget.updateSize();
+      widget.updateSize(true, false);
       await widget.onAdd(widget); //script cb
       await widget.setUpdateDataMethod();
       widget.fire("added");
@@ -459,6 +465,11 @@ class Widget extends EventSimple {
   get dashboard() {
     return path(this.config, "dashboard", {});
   }
+
+  get hasDashboard() {
+    return this.dashboard instanceof Dashboard;
+  }
+
   get map() {
     return path(this.config, "map", {});
   }
@@ -534,7 +545,7 @@ class Widget extends EventSimple {
        * Fire destroyed event
        * ( before destroying parent, as 'fire' depend on it)
        */
-      this.fire("destroyed");
+      widget.fire("destroyed");
 
       /**
        * Destroy parent

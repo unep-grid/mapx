@@ -295,6 +295,15 @@ export class ButtonPanel extends EventSimple {
     panel.elPanel = el(
       "div",
       {
+        on: [
+          "transitionend",
+          (e) => {
+            const to_repport = ["transform", "width", "height"];
+            if (to_repport.includes(e.propertyName)) {
+              panel.fire("resize-end");
+            }
+          },
+        ],
         class: [
           "button-panel--item",
           panel.opt.panelFull ? "button-panel--item-full" : null,

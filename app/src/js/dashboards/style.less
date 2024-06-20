@@ -13,6 +13,29 @@
     transition:
       width var(--animate-transition-ms) ease-in-out,
       height var(--animate-transition-ms) ease-in-out;
+    .btn-widget {
+      opacity: 0;
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--mx_ui_border);
+      margin: -4px;
+      font-size: 10px;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 100;
+    }
+    &:hover {
+      .btn-widget {
+        opacity: 1;
+      }
+    }
+    .btn-widget-group {
+      position: absolute;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      z-index: 1;
+      bottom: 0;
+    }
   }
   .widget--content {
     background: var(--mx_ui_background);
@@ -25,30 +48,7 @@
     border: 1px solid var(--mx_ui_border);
     border-radius: 11px;
   }
-  .btn-widget {
-    opacity: 0.2;
-    width: 20px;
-    height: 20px;
-    border: 1px solid #ccc;
-    margin: 2px;
-    font-size: 10px;
-    transition:
-      opacity 0.3s ease-in-out,
-      width 0.3s ease-in-out,
-      height 0.3s ease-in-out;
-    z-index: 100;
-    &:hover {
-      opacity: 1;
-    }
-  }
-  .btn-widget-group {
-    position: absolute;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    z-index: 1;
-    bottom: 0;
-  }
+
   .widget.muuri-item-dragging {
     z-index: 3;
   }
