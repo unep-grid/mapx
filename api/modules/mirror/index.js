@@ -20,10 +20,34 @@ async function mwMirror(req, res) {
     if (!isUrl(url)) {
       throw new Error("Invalid URL");
     }
-    const response = await fetch(url);
+
+    const response = await fetch(url, {
+      method: req.method,
+    });
+
+    const headersToTransfer = [
+      "content-type",
+      "content-length",
+      "content-encoding",
+      "cache-control",
+      "last-modified",
+      "etag",
+      "accept-ranges",
+      "vary",
+      "expires",
+      "transfer-encoding",
+    ];
+
+    for (const header of headersToTransfer) {
+      if (response.headers.has(header)) {
+        res.setHeader(header, response.headers.get(header));
+      }
+    }
+
     if (isNotEmpty(contentType)) {
       res.setHeader("Content-type", contentType);
     }
+
     return response.body.pipe(res);
   } catch (e) {
     return sendError(res, e, 500);
