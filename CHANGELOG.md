@@ -1,3 +1,12 @@
+  - [1.13.8-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.7) 
+
+    - Dashboard
+        - Refactor : removed muuri, use simple flex 
+        - Simple tool to visualise code
+        - Overwrite panel resize with dashboard own handlers
+    - Mirror 
+        - Headers transfer #997 
+
   - [1.13.8-alpha.6](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.6) 
 
     - Dashboard
