@@ -37,11 +37,12 @@ const defaults = {
     disabled: false,
     widgets: [
       {
-        priority: 0,
         width: "fit_dashboard",
         height: "auto",
         style: {
           minWidth: "200px",
+          maxWidth: "600px",
+          order: -1,
         },
         handlers: {
           onAdd: () => {},

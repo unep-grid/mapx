@@ -443,13 +443,7 @@ span.mx-badge-role {
   background-color: var(--mx_ui_background);
 }
 
-/**
-* Dashboard rules
-*/
-.mx .dashboard {
-  line-height: 1.4em;
-  font-size: var(--mx_ui_font_size_base);
-}
+
 
 /**
 * picker

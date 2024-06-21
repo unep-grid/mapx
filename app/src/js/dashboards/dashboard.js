@@ -1,13 +1,17 @@
-import Muuri from "muuri";
 import { Widget } from "./widget.js";
 import { ButtonPanel } from "./../button_panel";
 import { modulesLoad } from "./../modules_loader_async";
-import { all, getContentSize, patchObject } from "./../mx_helper_misc.js";
+import {
+  all,
+  getContentSize,
+  patchObject,
+  throttleNowAndLast,
+} from "./../mx_helper_misc.js";
 import { el, elAuto, elSpanTranslate } from "./../el_mapx";
 import "./style.less";
 import { EventSimple } from "../event_simple";
 import { bindAll } from "../bind_class_methods/index.js";
-import { isNotEmpty } from "../is_test/index.js";
+import { isEmpty, isNotEmpty } from "../is_test/index.js";
 
 /**
  * Default options for the Dashboard.
@@ -18,26 +22,13 @@ const defaults = {
   dashboard: {
     widgets: [],
     modules: [],
+    view: null,
+    map: null,
     language: "en",
-    marginFitWidth: 10, //~gutter size
-    marginFitHeight: 30,
+    gutterSize: 5,
+    marginWidth: 20,
+    marginHeight: 50,
     layout: "fit",
-  },
-  grid: {
-    layoutDuration: 0,
-    dragEnabled: true,
-    dragHandle: ".handle",
-    dragSortPredicate: {
-      action: "move",
-      threshold: 10,
-    },
-    layout: {
-      horizontal: false,
-      fillGaps: true,
-      alignRight: true,
-      alignBottom: true,
-      rounding: true,
-    },
   },
   panel: {
     id: "dashboard_panel",
@@ -50,6 +41,7 @@ const defaults = {
     button_classes: ["fa", "fa-pie-chart"],
     tooltip_position: "top-left",
     container_classes: ["button-panel--container-no-full-height"],
+    //handles: ["free"],
     /*
      * Close those panels when this one is open
      * on_open_close_others: ["controls_panel"],
@@ -72,8 +64,9 @@ class Dashboard extends EventSimple {
   constructor(opt) {
     super();
     const d = this;
-    d.opt = patchObject(defaults, { ...opt });
+    d.opt = patchObject(defaults, opt);
     bindAll(d);
+    d.updatePanelLayout = throttleNowAndLast(d.updatePanelLayout, 200);
     d.init();
   }
 
@@ -89,21 +82,42 @@ class Dashboard extends EventSimple {
     d._open = false;
     d.modules = {};
     d.widgets = [];
+    d._attributions = [];
     d.elDashboard = el("div", { class: "dashboard" });
 
     /*
      * Panel
+     * - Add custom handlers. Will overwrite default panel resizes handlers,
+     *   - Current panel button resizer does'nt work well with widgets
+     *   - We need to handle margin and custom behavior
+     * - Set default sizes
      */
+    d.opt.panel.resize_handlers = {
+      reset: () => {
+        d.updatePanelLayout(true);
+      },
+      "half-height": () => {
+        d.setPanelLayout("horizontal", true);
+      },
+      "half-width": () => {
+        d.setPanelLayout("vertical",true);
+      },
+      content: () => {
+        d.setPanelLayout("auto", true);
+      },
+    };
+
     d.panel = new ButtonPanel(d.opt.panel);
+
     if (d.panel.isMediaSmallHeight()) {
       d.setHeight("50vh", true);
     }
     d.panel.elPanelContent.appendChild(d.elDashboard);
 
-    /*
-     * Grid
+    /**
+     *  Update gutter size
      */
-    d.grid = new Muuri(d.elDashboard, d.opt.grid);
+    d.setGutterSize();
 
     /**
      * Handle events
@@ -113,18 +127,6 @@ class Dashboard extends EventSimple {
     });
     d.panel.on("close", () => {
       d.hide();
-    });
-
-    d.panel.on(["resize-free", "resize-auto", "resize-end"], () => {
-      d.updateGridLayout(true, true, "resize-free/auto/end");
-    });
-
-    d.on(["grid_layout", "widgets_added"], () => {
-      d.updatePanelLayout(true, false, "grid_layout/widgets size");
-    });
-
-    d.on("panel_layout", () => {
-      d.updateGridLayout(true, false, "panel_layout");
     });
 
     /**
@@ -141,7 +143,7 @@ class Dashboard extends EventSimple {
   /**
    * Adds widgets to the dashboard.
    * @async
-   * @param {Object} conf - Configuration for the widgets.
+   * @param {Object} conf - Dashboard configuration for the widgets.
    * @param {Array} conf.widgets - Widgets data.
    * @param {Array} conf.modules - Names of the modules e.g. ["d3"].
    * @param {Object} conf.map - Mapbox gl map instance.
@@ -150,13 +152,12 @@ class Dashboard extends EventSimple {
    */
   async addWidgets(conf) {
     const d = this;
-    const widgets = [];
     /**
      * Store modules
      */
     let idM = 0;
 
-    conf = Object.assign({}, { modules: [] }, conf);
+    conf = patchObject(d.opt.dashboard, conf);
 
     const modulesNames = new Set(conf.modules);
 
@@ -189,7 +190,6 @@ class Dashboard extends EventSimple {
      */
     d.opt.dashboard.modules = Array.from(modulesNames);
     const modules = await modulesLoad(d.opt.dashboard.modules);
-    const attributions = [];
 
     for (const name of modulesNames) {
       const module = modules[idM++];
@@ -198,7 +198,7 @@ class Dashboard extends EventSimple {
        * Add credits / attributions
        */
       if (module._attrib_info) {
-        attributions.push(module._attrib_info);
+        d._attributions.push(module._attrib_info);
       }
     }
 
@@ -206,30 +206,45 @@ class Dashboard extends EventSimple {
      * Build widgets
      */
     const promWidgets = [];
-    for (const cw of conf.widgets) {
-      if (!cw.disabled) {
-        const widget = new Widget({
-          conf: cw,
-          grid: d.grid,
-          dashboard: d,
-          modules: d.modules,
-          view: conf.view,
-          map: conf.map,
-          attributions: attributions,
-        });
-        d.widgets.push(widget);
-        widgets.push(widget);
-        promWidgets.push(widget.init());
+    for (const confWidget of conf.widgets) {
+      if (confWidget.disabled) {
+        continue;
       }
+      promWidgets.push(d.addWidget(confWidget, conf));
     }
-    await Promise.all(promWidgets);
+    const widgetsAdded = await Promise.all(promWidgets);
 
     d.fire("widgets_added");
 
     /**
      * Return only added widgets
      */
-    return widgets;
+    return widgetsAdded;
+  }
+
+  async addWidget(confWidget, confDashboard) {
+    const dashboard = this;
+    const widget = new Widget({
+      confWidget,
+      confDashboard,
+      dashboard,
+    });
+    await widget.init();
+    return widget;
+  }
+
+  /**
+   * Update anim duration
+   */
+  setGutterSize(size) {
+    const d = this;
+    d._gutter_size = isEmpty(size) ? d.gutterSize : size;
+    d.elDashboard.style.setProperty("--gutter-size", `${d.gutterSize}px`);
+  }
+
+  get gutterSize() {
+    const d = this;
+    return this._gutter_size || d.opt.dashboard.gutterSize;
   }
 
   /**
@@ -270,7 +285,6 @@ class Dashboard extends EventSimple {
     }
     d._open = true;
     d.panel.open();
-    d.grid.show(d.grid.getItems());
     d.fire("show");
   }
 
@@ -284,7 +298,6 @@ class Dashboard extends EventSimple {
     }
     d._open = false;
     d.panel.close();
-    d.grid.hide(d.grid.getItems());
     d.fire("hide");
   }
 
@@ -311,67 +324,38 @@ class Dashboard extends EventSimple {
    */
   updatePanelLayout(animate = false, silent = false, origin = null) {
     const d = this;
-    clearTimeout(d._panel_timeout);
-    d._panel_timeout = setTimeout(() => {
-      if (defaults.debug) {
-        console.log("updatePanelLayout requested from", origin);
-      }
-
-      const layout = d.opt.dashboard.layout;
-      switch (layout) {
-        case "fit":
-          d.fitPanelToWidgets(animate);
-          break;
-        case "vertical":
-          d.panel.resizeAuto("full-height", animate);
-          d.fitPanelToWidgetsWidth(animate);
-          break;
-        case "horizontal":
-          d.panel.resizeAuto("full-width", animate);
-          d.fitPanelToWidgetsHeight(animate);
-          break;
-        case "full":
-          d.panel.resizeAuto("full", true, true);
-          break;
-        case "auto":
-        default:
-          d.fitPanelToWidgetsAuto(animate);
-          break;
-      }
-      if (!silent) {
-        d.fire("panel_layout");
-      }
-    }, 500);
+    const layout = d.opt.dashboard.layout;
+    return d.setPanelLayout(layout, animate, silent, origin);
   }
 
-  /**
-   * Updates the layout of the grid.
-   * @param {boolean} animate - If true, animates the layout change.
-   */
-  updateGridLayout(animate = true, silent = false, origin = null) {
+  setPanelLayout(type, animate = false, silent = false, origin = null) {
     const d = this;
-    clearTimeout(d._grid_timeout);
-    d._grid_timeout = setTimeout(() => {
-      if (defaults.debug) {
-        console.log("updateGridLayout requested from", origin);
-      }
-      if (!silent) {
-        d.grid.on("layoutEnd", cb);
-      }
-      d.grid.layout();
-      d.grid.refreshItems().layout(!animate);
-      function cb(items) {
-        d.grid.off(cb);
-        /**
-         * Only fire if an actual change occured
-         */
-        const hash = JSON.stringify(items.map((i) => i.getPosition()));
-        if (hash !== d._grid_hash) {
-          d.fire("grid_layout");
-        }
-        d._grid_hash = hash;
-      }
-    }, 500);
+    if (defaults.debug) {
+      console.log("updatePanelLayout requested from", origin);
+    }
+    switch (type) {
+      case "fit":
+        d.fitPanelToWidgets(animate);
+        break;
+      case "vertical":
+        d.panel.resizeAuto("full-height", animate);
+        d.fitPanelToWidgetsWidth(animate, silent);
+        break;
+      case "horizontal":
+        d.panel.resizeAuto("full-width", animate);
+        d.fitPanelToWidgetsHeight(animate, silent);
+        break;
+      case "full":
+        d.panel.resizeAuto("full", true, true);
+        break;
+      case "auto":
+      default:
+        d.fitPanelToWidgetsAuto(animate);
+        break;
+    }
+    if (!silent) {
+      d.fire("panel_layout");
+    }
   }
 
   /**
@@ -421,14 +405,12 @@ class Dashboard extends EventSimple {
       return;
     }
     d.panel.setAnimate(animate);
-    const m = d.opt.dashboard.marginFitWidth;
+    const m = d.opt.dashboard.marginWidth;
     const wmax = d.widgets.reduce((a, w) => {
       const ww = w.width;
       return ww > a ? ww : a;
     }, 0);
-    if (wmax > 0 && wmax !== d.panel.width + m) {
-      d.panel.width = wmax + m;
-    }
+    d.panel.width = wmax + m;
   }
 
   /**
@@ -441,14 +423,12 @@ class Dashboard extends EventSimple {
       return;
     }
     d.panel.setAnimate(animate);
-    const m = d.opt.dashboard.marginFitHeight;
+    const m = d.opt.dashboard.marginHeight;
     const hmax = d.widgets.reduce((a, w) => {
       const hw = w.height;
       return hw > a ? hw : a;
     }, 0);
-    if (hmax > 0 && hmax !== d.panel.height + m) {
-      d.panel.height = hmax + m;
-    }
+    d.panel.height = hmax + m;
   }
 
   /**
@@ -461,8 +441,8 @@ class Dashboard extends EventSimple {
       return;
     }
     d.panel.setAnimate(animate);
-    const mh = d.opt.dashboard.marginFitHeight;
-    const mw = d.opt.dashboard.marginFitWidth;
+    const mh = d.opt.dashboard.marginHeight;
+    const mw = d.opt.dashboard.marginWidth;
 
     const { height, width } = getContentSize(d.elDashboard, false);
 
@@ -491,7 +471,6 @@ class Dashboard extends EventSimple {
     await d.removeWidgets();
     d.clearCallbacks(); // from EventSimple
     d.panel.destroy();
-    d.grid.destroy();
     d.fire("destroy");
   }
 
@@ -506,7 +485,6 @@ class Dashboard extends EventSimple {
       await d.widgets[id].destroy();
       d.widgets.pop();
     }
-    d.updateGridLayout(true, false, "remove widgets");
     d.updateAttributions();
     d.autoDestroy();
   }
@@ -523,7 +501,9 @@ class Dashboard extends EventSimple {
       await d.widgets[pos].destroy();
       d.widgets.splice(pos, 1);
     }
-    d.updateGridLayout(true, false, "remove single widget");
+    if (d.elDashboard.contains(widget.el)) {
+      d.elDashboard.removeChild(widget.el);
+    }
     d.updateAttributions();
     d.autoDestroy();
   }
@@ -626,6 +606,28 @@ class Dashboard extends EventSimple {
       );
       d.panel.elFooter.appendChild(elAttribution);
     }
+  }
+
+  /*
+   * Set dim + adding gutter size
+   * @param {Number} size size
+   * @param {Number} sizeGrid width/height of grid
+   */
+  snapGrid(size, sizeGrid = 50) {
+    const s = this.snap(size * 1 || 100);
+    const gu = this.gutterSize;
+    const gr = sizeGrid;
+    return s + (s / gr) * gu - gu;
+  }
+
+  /**
+   * Snap the number to the nearest multiple of the given value
+   * @param {Number} num - The number to snap.
+   * @param {Number} [multiple=50] - The multiple to snap to.
+   * @returns {Number} Snapped number.
+   */
+  snap(num, multiple = 10) {
+    return Math.ceil(parseInt(num, 10) / multiple) * multiple;
   }
 
   /**

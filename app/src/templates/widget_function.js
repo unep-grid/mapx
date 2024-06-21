@@ -1,116 +1,76 @@
 /**
- * Widget handler
+ * Template script for widget handlers
+ *
+ * This script provides examples of asynchronous handlers for widget lifecycle events.
+ * Customize the onAdd, onRemove, and onData handlers to perform actions specific to your needs.
+ *
+ * Public Widget Methods:
+ * @method setContent - Sets the HTML content of the widget.
+ *    @param {string|Element} content - The HTML or Element content to be displayed inside the widget.
+ * @method setData - Sets the data manually
+ *    @async
+ *    @param {Array} data - the data, as an array of object
+ *
+ * Public Widget Properties:
+ * @property {Object} config - Gets the widget configuration.
+ * @property {Object} modules - Gets the dashboard modules.
+ * @property {boolean} disabled - Checks if the widget is disabled.
+ * @property {Array} data - Gets the latest stored data.
+ * @property {Dashboard} dashboard - Gets the dashboard instance.
+ * @property {Map} map - Gets the map instance.
+ * @property {View} view - Gets the linked view.
+ * @property {boolean} destroyed - Checks if the widget is destroyed.
+ * @property {boolean} ready - Checks if the widget is ready.
+ * @property {number} height - Gets/Set height
+ * @property {number} width - Gets/Set width
  */
 function handler() {
+  /**
+   * local object for ref accross handlers
+   */
+  const local = {
+    text: "Hello world",
+    data: [{ a: "1", b: "2" }],
+  };
+  const { mx } = window;
+  const { helpers } = mx;
+  const { el, isEmpty } = helpers;
+
   return {
     /**
-     * Callback called once when the widget is added
-     * @param { Widget } widget - The widget instance.
-     * @property { Object } widget.opt - Widget options
-     * @property { Object } widget.opt.map - The map.
-     * @property { Object } widget.opt.view - The view
-     * @property { Object } widget.opt.dashboard - The dashboard instance
-     * @property { string } widget.id - The ID of the widget.
-     * @property { HTMLElement } widget.elContent - The content element
-     * @property { Object } widget.modules - The modules
-     * @property { Array } widget.data - The current data array
-     * @property { boolean } widget.destroyed - Flag for destroyed widget.
-     * @property { boolean } widget.initialized - Flag for initialized widget.
-     * @return { void }
+     * Called when the widget is added to the dashboard.
+     * @param {Object} widget - The widget instance.
+     * @returns {Promise<void>}
      */
-    onAdd: async function (widget) {
-      /*
-       * Prepare data
-       */
-      const h = mx.helpers; // Reference to mapx helpers.
-      const s = h.svg; // build svg in javascript
-      const csvjson = await h.moduleLoad("csvjson"); // Load module CSV
-      const data = csvjson.toObject("key,value\nhello,10"); // Parse CSV;
-      const item = data[0];
-
-      /**
-       * Build simple SVG
-       */
-      const W = widget.width;
-      const H = widget.height;
-
-      const svg = s("svg", {
-        width: W,
-        height: H,
-        viewBox: `0 0  ${W} ${H}`,
-      });
-
-      const circle = s(
-        "circle",
-        {
-          cx: W / 2,
-          cy: H / 2,
-          r: item.value,
-          style: {
-            fill: "var(--mx_ui_background_contrast)",
-            stroke: "var(--mx_ui_border)",
-            strokeWidth: "2px",
-          },
-        },
-        s("animate", {
-          attributeName: "r",
-          values: `${item.value};${W};${item.value}`,
-          repeatCount: "indefinite",
-          dur: "2s",
-        })
-      );
-      const txt = s(
-        "text",
-        {
-          x: W / 2,
-          y: H / 2,
-          "dominant-baseline": "middle",
-          "text-anchor": "middle",
-          style: {
-            fill: "var(--mx_ui_text)",
-          },
-        },
-        item.key
-      );
-
-      /**
-       * Append nodes
-       */
-      svg.appendChild(circle);
-      svg.appendChild(txt);
-      widget.elContent.appendChild(svg);
-
-      /**
-       * References
-       */
-      widget._txt = txt; // keep ref for text update;
-      widget._svg = svg; // kep ref for SVG update;
+    async onAdd(widget) {
+      const elText = el("span", local.text);
+      const elData = el("div");
+      const elGroup = el("div", [elText, elData]);
+      widget.setContent(elGroup);
+      local._el_data = elData;
+      widget.setData(local.data);
     },
+
     /**
-     *
-     * Callback called once when the widget is removed or errored
-     * @param {Widget} widget Widget instance
-     * @return {void}
+     * Called when the widget is removed from the dashboard.
+     * @param {Object} widget - The widget instance.
+     * @returns {Promise<void>}
      */
-    onRemove: async function (widget) {
-      widget._svg.remove();
-      console.log("removed");
+    async onRemove(widget) {
+      console.log("Widget removed:", widget.id);
     },
+
     /**
-     *
-     * Callback called each time data is received
-     * @param {Widget} widget instance
-     * @param {Array<Object>} data Array of object / table
-     * @return {void}
+     * Called when/if the widget receives new data.
+     * @param {Object} widget - The widget instance.
+     * @param {Object} data - The new data for the widget.
+     * @returns {Promise<void>}
      */
-    onData: async function (widget, data) {
-      /**
-       * Do something with the data:
-       * - Update sizes, text, etc...
-       */
-      console.log("data received", data);
-      const l = data.length;
-      widget._txt.textContent = `Received ${l} item${l > 1 ? "s" : ""}`;
+    async onData(widget, data) {
+      if (isEmpty(data)) {
+        data = local.data;
+      }
+      local._el_data.innerText = JSON.stringify(data);
     },
   };
 }

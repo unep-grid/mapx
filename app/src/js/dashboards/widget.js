@@ -9,6 +9,7 @@ import {
 } from "./../mx_helper_misc.js";
 import { getLayersPropertiesAtPoint } from "./../map_helpers/index.js";
 import {
+  isElement,
   isEmpty,
   isFunction,
   isNotEmpty,
@@ -18,6 +19,10 @@ import {
 import { settings } from "../settings/index.js";
 import { EventSimple } from "../event_simple/index.js";
 import { Dashboard } from "./index.js";
+import { modalSimple } from "../mx_helper_modal.js";
+import { moduleLoad } from "../modules_loader_async/index.js";
+import { theme } from "../init_theme.js";
+import { elButtonFa } from "../el_mapx/index.js";
 const { valuesMap } = settings;
 
 /**
@@ -36,10 +41,15 @@ const defaults = {
     addColorBackground: false,
     colorBackground: "#000000",
     sourceIgnoreEmpty: true,
-    atribution: "",
+    attribution: "",
     hanlders: null,
-    script:
-      "return { async onAdd:console.log, async onRemove:console.log, async onData:console.log}",
+    script: `function handler() {
+      return {
+      onAdd: console.log,
+        onRemove: console.log,
+        onData: console.log
+        }
+    }`,
   },
   // internal conf
   language: "en",
@@ -48,42 +58,17 @@ const defaults = {
   dashboard: null,
   attributions: [],
   animDurationMs: 350,
-  gutterSize: 5,
 };
 
 /**
- * A widget class that provides a customizable UI element for displaying and manipulating data.
- * @class
- * @property {Object} opt - Widget options.
- * @property {Object} opt.conf - Widget user configuration.
- * @property {Object} opt.priority - Priority. Higher priority move the widget on top
- * @property {boolean} opt.conf.disabled - Flag indicating whether the widget is disabled.
- * @property {string} opt.conf.source - The source of data for the widget.
- * @property {string} opt.conf.width - The width of the widget.
- * @property {string} opt.conf.height - The height of the widget.
- * @property {boolean} opt.conf.addColorBackground - Flag indicating whether to add a color background to the widget.
- * @property {string} opt.conf.colorBackground - The color of the background to add to the widget.
- * @property {boolean} opt.conf.sourceIgnoreEmpty - Flag indicating whether to ignore empty data from the data source.
- * @property {string} opt.conf.atribution - The attribution string for the widget.
- * @property {string} opt.conf.script - The script of handlers for the widget.
- * @property {string} opt.conf.handlers - The handlers for the widget.
- * @property {string} opt.language - The language used for the widget.
- * @property {Object} opt.map - The map object associated with the widget.
- * @property {Object} opt.view - The view object associated with the widget.
- * @property {Object} opt.dashboard - The dashboard object associated with the widget.
- * @property {Array} opt.attributions - An array of attributions for the widget.
- * @property {string} id - The ID of the widget.
- * @property {ListenerStore} ls - A listener store for the widget.
- * @property {HTMLElement} el - The HTML element for the widget.
- * @property {HTMLElement} elButtonClose - The close button element for the widget.
- * @property {HTMLElement} elContent - The content element for the widget.
- * @property {Object} config - The configuration object for the widget (retro compatibility).
- * @property {Object} modules - The modules object for the widget.
- * @property {Array} data - The current data array for the widget
- * @property {boolean} destroyed - Flag indicating whether the widget is destroyed.
- * @property {boolean} initialized - Flag indicating whether the widget is initialized.
+ * Widget class for the MapX app
  */
 class Widget extends EventSimple {
+  /**
+   * Constructor for the Widget class
+   * @param {Object} opt - Configuration options for the widget.
+   * @public
+   */
   constructor(opt) {
     super();
     const widget = this;
@@ -96,7 +81,8 @@ class Widget extends EventSimple {
      */
     opt.conf = {
       ...defaults.conf,
-      ...opt.conf,
+      ...opt.confWidget,
+      ...opt.confDashboard,
     };
 
     /**
@@ -109,66 +95,79 @@ class Widget extends EventSimple {
     };
   }
 
+  /**
+   * Gets the merged configuration.
+   * @returns {Object} - The widget configuration.
+   * @public
+   */
   get config() {
     return this._config;
   }
+
+  /**
+   * Legacy method to access the configuration.
+   * @returns {Object} - The widget configuration.
+   * @public
+   */
   get opt() {
     return this.config;
   }
 
+  /**
+   * Access to dashboard lazy-loaded modules.
+   * @returns {Object} - Dashboard modules.
+   * @public
+   */
+  get modules() {
+    return this.dashboard.modules;
+  }
+
+  /**
+   * Initializes the widget.
+   * @returns {Promise<void>}
+   * @internal
+   */
   async init() {
     const widget = this;
-    if (widget.initialized) {
-      return;
-    }
-    if (widget.disabled) {
-      return;
-    }
-
-    /**
-     * Set init state now :
-     * -> async action later
-     * -> need in destroy()
-     */
-    widget._init = true;
-    widget._ls = new ListenerStore();
-
-    /**
-     * Build and set size
-     */
-    widget.build();
-    widget.setGutterSize();
-
-    /**
-     * Adjust dashboard grid layout after resize
-     * - avoid updating the layout, to avoid layout shift
-     * - updating the grid to make sure widgets don't overlap
-     */
-    widget.on("resize-end", () => {
-      widget.dashboard.updateGridLayout(true, false, "widget::resize-end");
-    });
-
-    /**
-     * Eval the script, dump error in console
-     */
     try {
-      const handlers =
-        widget.config.handlers || widget.strToObj(widget.config.script);
-      /**
-       * Set/replace handler as widget method
-       * - onAdd,onRemove,onData
-       */
-      const handlersKeys = ["onAdd", "onRemove", "onData"];
-      for (const key of handlersKeys) {
-        const handler = handlers[key];
-        if (isFunction(handler)) {
-          widget[key] = handlers[key];
-        }
+      if (
+        widget.ready ||
+        widget.initializing ||
+        widget.disabled ||
+        widget.destroyed
+      ) {
+        return;
       }
-      widget.modules = path(widget.config, "dashboard.modules", {});
+      const { dashboard } = widget;
+      /**
+       * Set init state now :
+       * -> async action later
+       * -> need in destroy()
+       */
+      widget._init = true;
+      widget._ls = new ListenerStore();
 
-      await widget.add();
+      widget.on(["resize", "destroyed"], () => {
+        dashboard.updatePanelLayout();
+      });
 
+      /**
+       *  Set handlers
+       */
+      widget.updateHandlers();
+
+      /**
+       * Build and set size
+       */
+      widget.build();
+
+      dashboard.elDashboard.appendChild(widget.el);
+      dashboard.widgets.push(widget);
+
+      widget.updateSize(false);
+
+      await widget.onAdd(widget); //script cb
+      await widget.setUpdateDataMethod();
       widget._ready = true;
     } catch (e) {
       widget.warn("code evaluation issue. Removing widget.", e);
@@ -177,37 +176,50 @@ class Widget extends EventSimple {
   }
 
   /**
-   * Will be replaced by handlers, set in option or script
+   * Updates event handlers.
+   * @internal
+   */
+  updateHandlers() {
+    const widget = this;
+    /**
+     * Attach handlers
+     * - from config onAdd, onData, onRemove
+     * - from script
+     */
+    const handlers = widget.hasHandlers
+      ? widget.config.handlers
+      : widget.strToObj(widget.config.script);
+    const handlersKeys = ["onAdd", "onRemove", "onData"];
+    for (const key of handlersKeys) {
+      const handler = handlers[key];
+      if (isFunction(handler)) {
+        widget[key] = handlers[key];
+      }
+    }
+  }
+
+  /**
+   * Checks if the widget has handlers.
+   * @returns {boolean}
+   * @internal
+   */
+  get hasHandlers() {
+    return isNotEmpty(this.config.handlers);
+  }
+
+  /**
+   * Placeholder for onData/onAdd/inRemove handlers.
+   * @returns {Promise<void>}
+   * @internal
    */
   async onData() {}
   async onAdd() {}
   async onRemove() {}
 
   /**
-   * Update anim duration
-   */
-  setAnimateDuration(ms) {
-    const w = this;
-    ms = isEmpty(ms) ? w.config.animDurationMs : ms;
-    w.el.style.setProperty("--animate-transition-ms", `${ms}ms`);
-  }
-
-  /**
-   * Update anim duration
-   */
-  setGutterSize(size) {
-    const w = this;
-    w._gutter_size = isEmpty(size) ? w.gutterSize : size;
-    w.el.style.setProperty("--gutter-size", `${w.gutterSize}px`);
-  }
-
-  get gutterSize() {
-    const w = this;
-    return this._gutter_size || w.config.gutterSize;
-  }
-
-  /**
-   * Check if the widgetr is disabled
+   * Checks if the widget is disabled.
+   * @returns {boolean}
+   * @public
    */
   get disabled() {
     const widget = this;
@@ -215,20 +227,28 @@ class Widget extends EventSimple {
   }
 
   /**
-   * Get/Set the latest stored data
-   * - some widgets requires this to be 'null'
-   * - don't attempt to set a default, like []
+   * Gets the latest stored data.
+   * @returns {Object}
+   * @public
    */
   get data() {
+    // some widget expects 'null' if nodata.
     return this._data;
   }
 
+  /**
+   * Sets the latest stored data.
+   * @param {Object} value - Data to set.
+   * @internal
+   */
   set data(value) {
     this._data = value;
   }
 
   /**
-   * Update widget data using attributes
+   * Updates widget data from attributes.
+   * @returns {Promise<void>}
+   * @internal
    */
   async updateDataFromAttribute() {
     const widget = this;
@@ -241,7 +261,10 @@ class Widget extends EventSimple {
   }
 
   /**
-   * Update widget data after a click
+   * Updates widget data from mouse click position.
+   * @param {Event} e - Event object.
+   * @returns {Promise<void>}
+   * @internal
    */
   async updateDataFromLayerAtMousePosition(e) {
     const widget = this;
@@ -254,7 +277,9 @@ class Widget extends EventSimple {
   }
 
   /**
-   * Update widget data after any map rendering
+   * Updates widget data on layer render.
+   * @returns {Promise<void>}
+   * @internal
    */
   async updateDataFromLayerOnRender() {
     const widget = this;
@@ -267,7 +292,10 @@ class Widget extends EventSimple {
   }
 
   /**
-   * Data from layers
+   * Gets data from linked view layers.
+   * @param {Event} [e] - Event object.
+   * @returns {Promise<Object[]>}
+   * @internal
    */
   async getWidgetDataFromLinkedView(e) {
     const widget = this;
@@ -285,9 +313,11 @@ class Widget extends EventSimple {
     });
     return items[idView] || [];
   }
+
   /**
-   * Instantiate widget method for setting data
-   * NOTE: updateData* function are async. Make sure it's try/catched.
+   * Sets the method for updating data.
+   * @returns {Promise<void>}
+   * @internal
    */
   async setUpdateDataMethod() {
     const widget = this;
@@ -333,45 +363,92 @@ class Widget extends EventSimple {
     }
   }
 
+  /**
+   * Updates the widget size.
+   * @param {boolean} [animate=true] - Whether to animate the resize.
+   * @param {boolean} [silent=false] - Whether to silently resize.
+   * @internal
+   */
   updateSize(animate = true, silent = false) {
     const widget = this;
-    widget.setSize(widget.config.height, widget.config.width, animate, silent);
+    return widget.setSize(
+      widget.config.height,
+      widget.config.width,
+      animate,
+      silent,
+    );
   }
 
+  /**
+   * Sets the widget size.
+   * @param {string|number} height - Height of the widget.
+   * @param {string|number} width - Width of the widget.
+   * @param {boolean} [animate=true] - Whether to animate the resize.
+   * @param {boolean} [silent=false] - Whether to silently resize.
+   * @internal
+   */
   setSize(height, width, animate = true, silent = false) {
     const w = this;
-    if (animate) {
-      w.setAnimateDuration();
-    }
+    //const promAnim = w.setAnimateDuration(animate ? null : 0);
     w.width = width;
     w.height = height;
+    //await promAnim;
     if (!silent) {
       w.fire("resize");
     }
   }
 
+  /**
+   * Sets the widget width.
+   * @param {string|number} width - Width of the widget.
+   * @internal
+   */
   set width(width) {
     const w = this;
     w.el.style.width = w.toCSS(width, "width");
   }
 
+  /**
+   * Sets the widget height.
+   * @param {string|number} height - Height of the widget.
+   * @internal
+   */
   set height(height) {
     const w = this;
     w.el.style.height = w.toCSS(height, "height");
   }
 
+  /**
+   * Gets the widget width.
+   * @returns {number} - Width of the widget.
+   * @internal
+   */
   get width() {
     return this.rect.width;
   }
 
+  /**
+   * Gets the widget height.
+   * @returns {number} - Height of the widget.
+   * @internal
+   */
   get height() {
     return this.rect.height;
   }
 
+  /**
+   * Gets the widget's bounding rectangle.
+   * @returns {DOMRect} - Bounding rectangle of the widget.
+   * @internal
+   */
   get rect() {
     return this.el.getBoundingClientRect();
   }
 
+  /**
+   * Builds the widget's DOM structure.
+   * @internal
+   */
   build() {
     const widget = this;
     const title = path(widget, "config.view._title", "");
@@ -395,9 +472,21 @@ class Widget extends EventSimple {
       },
     });
 
-    widget.elButtonHandle = el("button", {
-      class: ["btn-circle", "btn-widget", "fa", "fa-arrows", "handle"],
+    widget.elButtonEdit = el("button", {
+      class: ["btn-circle", "btn-widget", "fa", "fa-pencil-square-o"],
+      on: [
+        "click",
+        async () => {
+          await widget.editCode();
+        },
+      ],
     });
+
+    const buttons = [widget.elButtonClose];
+
+    if (!widget.hasHandlers) {
+      buttons.push(widget.elButtonEdit);
+    }
 
     widget.el = el(
       "div",
@@ -420,71 +509,150 @@ class Widget extends EventSimple {
           class: ["btn-widget-group"],
           title: title,
         },
-        [widget.elButtonClose, widget.elButtonHandle],
+        buttons,
       ),
       [widget.elContent],
     );
   }
 
-  async addToGrid() {
-    const widget = this;
-    return new Promise((resolve) => {
-      widget.grid.on("add", resolve);
-      widget.grid.add(widget.el);
-      if (isNotEmpty(widget.config.priority)) {
-        widget.grid.move(widget.el, widget.config.priority);
-      }
-    });
-  }
   /**
-   * Add the widget
-   * Do not wait, use promise + catch,
-   * as wait would block all other widgets to render
+   * Gets the listener store.
+   * @returns {ListenerStore}
+   * @internal
    */
-  async add() {
-    const widget = this;
-    try {
-      await widget.addToGrid();
-      // size can be requested by widget cb 'onAdd'
-      widget.updateSize(true, false);
-      await widget.onAdd(widget); //script cb
-      await widget.setUpdateDataMethod();
-      widget.fire("added");
-    } catch (e) {
-      widget.warn("adding widget failed. Will be removed", e);
-      widget.destroy();
-    }
-  }
-
-  get grid() {
-    return path(this.config, "grid", {});
-  }
   get ls() {
     return this._ls;
   }
+
+  /**
+   * Gets the dashboard.
+   * @returns {Object}
+   * @public
+   */
   get dashboard() {
     return path(this.config, "dashboard", {});
   }
 
+  /**
+   * Checks if the dashboard exists.
+   * @returns {boolean}
+   * @internal
+   */
   get hasDashboard() {
     return this.dashboard instanceof Dashboard;
   }
 
+  /**
+   * Gets the map.
+   * @returns {Object}
+   * @public
+   */
   get map() {
     return path(this.config, "map", {});
   }
+
+  /**
+   * Gets the linked view.
+   * @returns {Object}
+   * @public
+   */
   get view() {
     return path(this.config, "view", {});
   }
 
+  /**
+   * Checks if the widget is destroyed.
+   * @returns {boolean}
+   * @public
+   */
   get destroyed() {
     return this._destroyed;
   }
 
+  /**
+   * Checks if the widget is ready.
+   * @returns {boolean}
+   * @public
+   */
+  get ready() {
+    return this._ready;
+  }
+  /**
+   * Legacy method to check if the widget is ready.
+   * @returns {boolean}
+   * @internal
+   */
   get initialized() {
+    return this.ready;
+  }
+
+  /**
+   * Checks if the widget is initializing.
+   * @returns {boolean}
+   * @internal
+   */
+  get initializing() {
     return this._init;
   }
 
+  /**
+   * Shows the code editor for the widget.
+   * @returns {Promise<void>}
+   * @internal
+   */
+  async editCode() {
+    const w = this;
+    if (w._code_modal) {
+      console.warn("Only one isntance per widget");
+      return;
+    }
+    w._el_code = el("div", {
+      style: {
+        width: "100%",
+        height: "100%",
+      },
+    });
+    const elBtnPreview = elButtonFa("preview", {
+      icon: "refresh",
+      action: async () => {
+        await w.onRemove(w);
+        const script = w._code_editor.getValue();
+        w.config.script = script;
+        w.updateHandlers();
+        await w.onAdd(w);
+      },
+    });
+    w._code_modal = modalSimple({
+      addBackground: false,
+      title: "Widget Code Preview",
+      content: w._el_code,
+      onClose: () => {
+        w._code_editor.dispose();
+        delete w._code_modal;
+      },
+      buttons: [elBtnPreview],
+      style: {
+        height: "500px",
+      },
+      onResize: () => {
+        w._code_editor.layout();
+      },
+    });
+    // load late to show the modal first, then the editor
+    const monaco = await moduleLoad("monaco-editor");
+    w._code_editor = monaco.editor.create(w._el_code, {
+      value: w.config.script,
+      language: "javascript",
+      theme: theme.isDarkMode() ? "vs-dark" : "vs-light",
+    });
+  }
+
+  /**
+   * Destroys the widget.
+   * @param {boolean} [skipOnRemove] - Whether to skip the onRemove handler.
+   * @returns {Promise<void>}
+   * @internal
+   */
   async destroy(skipOnRemove) {
     const widget = this;
     try {
@@ -492,14 +660,14 @@ class Widget extends EventSimple {
         return;
       }
       widget._destroyed = true;
-      if (!widget.initialized) {
+      if (!widget.initializing) {
         return;
       }
-      const dashboard = widget.dashboard;
-      /**
-       * Remove from grid
-       */
-      widget.grid.remove(widget.el);
+      const { dashboard } = widget;
+
+      if (widget._code_modal) {
+        widget._code_modal.close();
+      }
 
       /**
        * Remove all listeners
@@ -556,6 +724,11 @@ class Widget extends EventSimple {
     }
   }
 
+  /**
+   * Sets the click handler.
+   * @param {boolean} enable - Whether to enable the click handler.
+   * @internal
+   */
   handleClick(enable) {
     const widget = this;
     const widgets = widget.dashboard.widgets;
@@ -572,12 +745,38 @@ class Widget extends EventSimple {
     });
   }
 
+  /**
+   * Sets the widget content.
+   * @param {string|Element} c - Content to set.
+   * @public
+   */
   setContent(c) {
     const widget = this;
-    c = c || `<p> content for widget ${widget.id} </p> `;
-    widget.elContent.innerHTML = c;
+    widget.clearContent();
+    if (isElement(c)) {
+      widget.elContent.appendChild(c);
+    } else {
+      widget.elContent.innerHTML = c;
+    }
   }
 
+  /**
+   * Clear content
+   * @internal
+   */
+  clearContent() {
+    const widget = this;
+    while (widget.elContent.firstElementChild) {
+      widget.elContent.removeChild(widget.elContent.firstElementChild);
+    }
+  }
+
+  /**
+   * Sets the data for the widget.
+   * @param {Object} d - Data to set.
+   * @returns {Promise<void>}
+   * @public
+   */
   async setData(d) {
     const widget = this;
     if (widget._destroyed) {
@@ -606,6 +805,12 @@ class Widget extends EventSimple {
     await widget.onData(widget, widget.data);
   }
 
+  /**
+   * Parses a script string into an object.
+   * @param {string} str - Script string to parse.
+   * @returns {Object}
+   * @internal
+   */
   strToObj(str) {
     const w = this;
     try {
@@ -639,6 +844,13 @@ class Widget extends EventSimple {
     }
   }
 
+  /**
+   * Wrapper to catch errors in functions.
+   * @param {Function} fun - Function to wrap.
+   * @param {boolean} [skipDestroy] - Whether to skip destroying on error.
+   * @returns {Function}
+   * @internal
+   */
   tryCatched(fun, skipDestroy) {
     const widget = this;
     return async function (...args) {
@@ -651,17 +863,23 @@ class Widget extends EventSimple {
     };
   }
 
+  /**
+   * Logs a warning message.
+   * @param {string} message - Warning message.
+   * @param {Error} e - Error object.
+   * @internal
+   */
   warn(message, e) {
     const widget = this;
     console.warn("WIDGET ISSUE: ", message, e, widget);
   }
 
   /**
-   * Convert dimension to CSS value
-   *
-   * @param {String|Number} dimension - The dimension value to set.
-   * @param {String} type - The type of dimension (width/height).
-   * @returns {String} CSS dimension value with units.
+   * Converts a dimension to a CSS value.
+   * @param {string|number} dimension - The dimension value.
+   * @param {string} type - The type of dimension (width/height).
+   * @returns {string} - CSS dimension value.
+   * @internal
    */
   toCSS(dimension, type) {
     const w = this;
@@ -679,49 +897,27 @@ class Widget extends EventSimple {
     };
 
     if (isNumeric(dimension)) {
-      return `${w.snapGrid(dimension)}px`;
+      return `${w.dashboard.snapGrid(dimension)}px`;
     }
 
     if (oldClasses[dimension]) {
-      return `${w.snapGrid(oldClasses[dimension])}px`;
+      return `${w.dashboard.snapGrid(oldClasses[dimension])}px`;
     }
 
     let output = 0;
     switch (dimension) {
       case "fit_content":
-        const dim_f = w.snapGrid(getContentSize(w.el, false)[type]);
+        const dim_f = w.dashboard.snapGrid(getContentSize(w.el, false)[type]);
         output = `${dim_f}px`;
         break;
       case "fit_dashboard":
-        const margin = w.gutterSize * 2;
+        const margin = w.dashboard.gutterSize * 2;
         output = `calc(100% - ${margin}px)`;
         break;
       default:
         output = "auto";
     }
     return output;
-  }
-
-  /*
-   * Set dim + adding gutter size
-   * @param {Number} size size
-   * @param {Number} sizeGrid width/height of grid
-   */
-  snapGrid(size, sizeGrid = 50) {
-    const s = this.snap(size * 1 || 100);
-    const gu = this.gutterSize;
-    const gr = sizeGrid;
-    return s + (s / gr) * gu - gu;
-  }
-
-  /**
-   * Snap the number to the nearest multiple of the given value
-   * @param {Number} num - The number to snap.
-   * @param {Number} [multiple=50] - The multiple to snap to.
-   * @returns {Number} Snapped number.
-   */
-  snap(num, multiple = 10) {
-    return Math.ceil(parseInt(num, 10) / multiple) * multiple;
   }
 }
 
