@@ -1240,14 +1240,11 @@ mapx.once("ready", async () => {
         test: (r) => {
           const keys = [
             "id",
-            "stat_n_add",
-            "stat_n_add_by_guests",
-            "stat_n_add_by_users",
-            "stat_n_add_by_distinct_users",
-            "stat_n_add_by_country",
             "editor",
             "project",
+            "projects",
             "project_title",
+            "projects_data",
             "readers",
             "editors",
             "date_modified",
@@ -1255,7 +1252,11 @@ mapx.once("ready", async () => {
             "type",
             "title",
             "abstract",
+            "collections",
+            "table_changes_editors",
             "table_editors",
+            "table_readers",
+            "meta",// Required by some tools : duplicate meta
           ];
           const keysMeta = Object.keys(r);
 
