@@ -1,3 +1,10 @@
+  - [1.13.8-alpha.8](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.8) 
+
+    - Dashboard 
+        - Improved widget positionning
+        - Removed refs to animate – use panel animation only 
+        - Promisified show/hide
+
   - [1.13.8-alpha.7](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.7) 
 
     - Dashboard
