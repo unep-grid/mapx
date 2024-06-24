@@ -28,7 +28,7 @@ const defaults = {
     delay: 50,
   },
   fw_dashboard: {
-    width: 350,
+    minWidth: 400,
   },
   fw_widget: {
     modules: [],
@@ -40,8 +40,8 @@ const defaults = {
         width: "fit_dashboard",
         height: "auto",
         style: {
-          minWidth: "200px",
-          maxWidth: "600px",
+          minWidth: "325px",
+          maxWidth: "655px",
           order: -1,
         },
         handlers: {
@@ -75,8 +75,7 @@ export class FeaturesToWidget extends EventSimple {
   async init(options) {
     const fw = this;
     fw.attributes = options.layersAttributes;
-    const hasPrevious =
-      state.widget instanceof Widget && !state.widget.destroyed;
+    const hasPrevious = fw.hasWidget;
     if (hasPrevious) {
       fw.elContainer = state.widget.elContent.firstElementChild;
     } else {
@@ -88,19 +87,34 @@ export class FeaturesToWidget extends EventSimple {
       state.widget.on("destroyed", () => {
         fw.destroy();
       });
-      await state.widget.dashboard.show();
-      await state.widget.dashboard.setWidth(defaults.fw_dashboard.width, false);
     }
+    await fw.render();
+    await fw.show();
+  }
+
+  clear() {
+    const fw = this;
+    fw.resetFilter();
     while (fw.elContainer.firstElementChild) {
       fw.elContainer.removeChild(fw.elContainer.firstElementChild);
     }
-    fw.resetFilter();
-    await fw.render();
-    await fw.fit();
   }
 
-  updateWidgetSize() {
-    state.widget.updateSize();
+  setDashboardWidth() {
+    const fw = this;
+    fw.dashboard.elDashboard.style.minWidth = `${defaults.fw_dashboard.minWidth}px`;
+  }
+
+  get dashboard() {
+    return this.widget.dashboard;
+  }
+
+  get widget() {
+    return state.widget;
+  }
+
+  get hasWidget() {
+    return this.widget instanceof Widget && !this.widget.destroyed;
   }
 
   /**
@@ -118,7 +132,6 @@ export class FeaturesToWidget extends EventSimple {
           resolve(true);
         } catch (e) {
           console.error(e);
-          reject(e);
         }
       });
     });
@@ -157,11 +170,17 @@ export class FeaturesToWidget extends EventSimple {
 
   async render() {
     const fw = this;
+    fw.clear();
     const proms = [];
     for (const idView in fw.attributes) {
       proms.push(fw._render_item(idView, fw.attributes[idView]));
     }
     await Promise.all(proms);
+  }
+
+  async show() {
+    const fw = this;
+    return fw.dashboard.show();
   }
 
   async _render_item(idView, promAttributes) {
@@ -319,7 +338,7 @@ export class FeaturesToWidget extends EventSimple {
     function renderMore() {
       elBtnMore.remove();
       elTarget.appendChild(elFragItems);
-      fw.updateWidgetSize();
+      fw.fit();
     }
   }
 

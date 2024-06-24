@@ -18,7 +18,6 @@ import { isEmpty, isNotEmpty } from "../is_test/index.js";
  * @type {Object}
  */
 const defaults = {
-  debug: false,
   dashboard: {
     widgets: [],
     modules: [],
@@ -94,23 +93,23 @@ class Dashboard extends EventSimple {
      */
     d.opt.panel.resize_handlers = {
       reset: () => {
-        d.updatePanelLayout(true);
+        d.updatePanelLayout();
       },
       "half-height": () => {
-        d.setPanelLayout("horizontal", true);
+        d.setPanelLayout("horizontal");
       },
       "half-width": () => {
-        d.setPanelLayout("vertical",true);
+        d.setPanelLayout("vertical");
       },
       content: () => {
-        d.setPanelLayout("auto", true);
+        d.setPanelLayout("auto");
       },
     };
 
     d.panel = new ButtonPanel(d.opt.panel);
 
     if (d.panel.isMediaSmallHeight()) {
-      d.setHeight("50vh", true);
+      d.setHeight("50vh");
     }
     d.panel.elPanelContent.appendChild(d.elDashboard);
 
@@ -266,8 +265,8 @@ class Dashboard extends EventSimple {
   }
 
   /**
-   * Checks if the dashboard is active.
-   * @returns {boolean} - True if active, false otherwise.
+   * Same as isOpen.
+   * @returns {boolean} - True if open, false otherwise.
    */
   isActive() {
     const d = this;
@@ -276,29 +275,39 @@ class Dashboard extends EventSimple {
 
   /**
    * Shows the dashboard.
+   * -note, panel will fire 'open' after a timeout on the ainimation duration
    * @async
    */
   async show() {
     const d = this;
-    if (d._open === true) {
-      return;
+    if (d.isOpen()) {
+      return true;
     }
-    d._open = true;
-    d.panel.open();
-    d.fire("show");
+    return new Promise((resolve) => {
+      d.panel.once("open", () => {
+        resolve(true);
+      });
+      d.panel.open();
+      d.fire("show");
+    });
   }
 
   /**
    * Hides the dashboard.
+   * @async
    */
-  hide() {
+  async hide() {
     const d = this;
-    if (d._open === false) {
-      return;
+    if (!d.isOpen()) {
+      return true;
     }
-    d._open = false;
-    d.panel.close();
-    d.fire("hide");
+    return new Promise((resolve) => {
+      d.panel.once("close", () => {
+        resolve(true);
+      });
+      d.panel.close();
+      d.fire("hide");
+    });
   }
 
   /**
@@ -320,63 +329,57 @@ class Dashboard extends EventSimple {
 
   /**
    * Updates the layout of the panel.
-   * @param {boolean} animate - If true, animates the layout change.
+   * @returns void
    */
-  updatePanelLayout(animate = false, silent = false, origin = null) {
+  updatePanelLayout() {
     const d = this;
     const layout = d.opt.dashboard.layout;
-    return d.setPanelLayout(layout, animate, silent, origin);
+    return d.setPanelLayout(layout);
   }
 
-  setPanelLayout(type, animate = false, silent = false, origin = null) {
+  setPanelLayout(type) {
     const d = this;
-    if (defaults.debug) {
-      console.log("updatePanelLayout requested from", origin);
-    }
     switch (type) {
       case "fit":
-        d.fitPanelToWidgets(animate);
+        d.fitPanelToWidgets();
         break;
       case "vertical":
-        d.panel.resizeAuto("full-height", animate);
-        d.fitPanelToWidgetsWidth(animate, silent);
+        d.panel.resizeAuto("full-height");
+        d.fitPanelToWidgetsWidth();
         break;
       case "horizontal":
-        d.panel.resizeAuto("full-width", animate);
-        d.fitPanelToWidgetsHeight(animate, silent);
+        d.panel.resizeAuto("full-width");
+        d.fitPanelToWidgetsHeight();
         break;
       case "full":
-        d.panel.resizeAuto("full", true, true);
+        d.panel.resizeAuto("full");
         break;
       case "auto":
       default:
-        d.fitPanelToWidgetsAuto(animate);
+        d.fitPanelToWidgetsAuto();
         break;
     }
-    if (!silent) {
-      d.fire("panel_layout");
-    }
+    d.fire("panel_layout");
   }
 
   /**
    * Updates the panel: size to the largest widget
-   * @param {boolean} animate
-   * @param {boolean} silent - Don't fire event
+   * @returns void
    */
-  fitPanelToWidgets(animate = true, silent = false) {
+  fitPanelToWidgets() {
     const d = this;
-    d.fitPanelToWidgetsWidth(animate, silent);
-    d.fitPanelToWidgetsHeight(animate, silent);
+    d.fitPanelToWidgetsWidth();
+    d.fitPanelToWidgetsHeight();
   }
 
-  setWidth(w, silent) {
+  setWidth(w) {
     const d = this;
-    d.panel.setWidth(w, silent);
+    d.panel.setWidth(w);
   }
 
-  setHeight(h, silent) {
+  setHeight(h) {
     const d = this;
-    d.panel.setHeight(h, silent);
+    d.panel.setHeight(h);
   }
 
   get width() {
@@ -397,14 +400,13 @@ class Dashboard extends EventSimple {
 
   /**
    * Updates the panel: size to the widest widget
-   * @param {boolean} animate
+   * @returns void
    */
-  fitPanelToWidgetsWidth(animate) {
+  fitPanelToWidgetsWidth() {
     const d = this;
     if (d.panel.isMediaSmallWidth()) {
       return;
     }
-    d.panel.setAnimate(animate);
     const m = d.opt.dashboard.marginWidth;
     const wmax = d.widgets.reduce((a, w) => {
       const ww = w.width;
@@ -415,14 +417,12 @@ class Dashboard extends EventSimple {
 
   /**
    * Updates the panel: size to the highest widget
-   * @param {boolean} animate
    */
-  fitPanelToWidgetsHeight(animate) {
+  fitPanelToWidgetsHeight() {
     const d = this;
     if (d.panel.isMediaSmallHeight()) {
       return;
     }
-    d.panel.setAnimate(animate);
     const m = d.opt.dashboard.marginHeight;
     const hmax = d.widgets.reduce((a, w) => {
       const hw = w.height;
@@ -433,14 +433,12 @@ class Dashboard extends EventSimple {
 
   /**
    * Updates the panel: half sum height / width.
-   * @param {boolean} animate
    */
-  fitPanelToWidgetsAuto(animate) {
+  fitPanelToWidgetsAuto() {
     const d = this;
     if (d.panel.isMediaSmall()) {
       return;
     }
-    d.panel.setAnimate(animate);
     const mh = d.opt.dashboard.marginHeight;
     const mw = d.opt.dashboard.marginWidth;
 

@@ -23,6 +23,7 @@ import { modalSimple } from "../mx_helper_modal.js";
 import { moduleLoad } from "../modules_loader_async/index.js";
 import { theme } from "../init_theme.js";
 import { elButtonFa } from "../el_mapx/index.js";
+import { onNextFrame } from "../animation_frame/index.js";
 const { valuesMap } = settings;
 
 /**
@@ -147,8 +148,14 @@ class Widget extends EventSimple {
       widget._init = true;
       widget._ls = new ListenerStore();
 
-      widget.on(["resize", "destroyed"], () => {
-        dashboard.updatePanelLayout();
+      widget.on(["destroyed", "ready"], () => {
+        if (dashboard.isOpen()) {
+          dashboard.updatePanelLayout();
+        } else {
+          dashboard.once("show", () => {
+            dashboard.updatePanelLayout();
+          });
+        }
       });
 
       /**
@@ -169,6 +176,7 @@ class Widget extends EventSimple {
       await widget.onAdd(widget); //script cb
       await widget.setUpdateDataMethod();
       widget._ready = true;
+      widget.fire("ready");
     } catch (e) {
       widget.warn("code evaluation issue. Removing widget.", e);
       await widget.destroy();
@@ -365,37 +373,25 @@ class Widget extends EventSimple {
 
   /**
    * Updates the widget size.
-   * @param {boolean} [animate=true] - Whether to animate the resize.
-   * @param {boolean} [silent=false] - Whether to silently resize.
    * @internal
    */
-  updateSize(animate = true, silent = false) {
+  updateSize() {
     const widget = this;
-    return widget.setSize(
-      widget.config.height,
-      widget.config.width,
-      animate,
-      silent,
-    );
+    const r = widget.setSize(widget.config.height, widget.config.width);
+    return r;
   }
 
   /**
    * Sets the widget size.
    * @param {string|number} height - Height of the widget.
    * @param {string|number} width - Width of the widget.
-   * @param {boolean} [animate=true] - Whether to animate the resize.
-   * @param {boolean} [silent=false] - Whether to silently resize.
    * @internal
    */
-  setSize(height, width, animate = true, silent = false) {
+  setSize(height, width) {
     const w = this;
-    //const promAnim = w.setAnimateDuration(animate ? null : 0);
     w.width = width;
     w.height = height;
-    //await promAnim;
-    if (!silent) {
-      w.fire("resize");
-    }
+    w.fire("resize");
   }
 
   /**
@@ -491,15 +487,6 @@ class Widget extends EventSimple {
     widget.el = el(
       "div",
       {
-        on: [
-          "transitionend",
-          (e) => {
-            const to_repport = ["width", "height"];
-            if (to_repport.includes(e.propertyName)) {
-              widget.fire("resize-end");
-            }
-          },
-        ],
         class: ["noselect", "widget"],
         style: widget.config.style,
       },

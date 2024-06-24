@@ -793,7 +793,9 @@ export class ButtonPanel extends EventSimple {
     }
     panel.elContainer.classList.remove("active");
     if (!skipFire) {
-      panel.fire("close");
+      setTimeout(() => {
+        panel.fire("close");
+      }, panel.opt.animate_duration || 0);
     }
   }
   toggle() {
