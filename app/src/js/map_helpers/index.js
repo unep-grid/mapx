@@ -1754,6 +1754,7 @@ export async function handleClickEvent(e, idMap) {
   if (addWidget) {
     const fw = new FeaturesToWidget();
 
+    window._fw =fw;
     fw.on("destroyed", () => {
       highlighter.reset();
     });

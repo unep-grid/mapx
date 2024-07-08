@@ -21,9 +21,12 @@ import { EventSimple } from "../event_simple/index.js";
 import { Widget } from "../dashboards/widget.js";
 import { elWait, el, elCheckToggle } from "../el_mapx/index.js";
 import "./style.less";
-import { onNextFrame } from "../animation_frame/index.js";
+import { onNextFrame, waitTimeoutAsync } from "../animation_frame/index.js";
 
 const defaults = {
+  fw_timeout: {
+    attribute: 5e3,
+  },
   fw_anim: {
     delay: 50,
   },
@@ -88,7 +91,7 @@ export class FeaturesToWidget extends EventSimple {
         fw.destroy();
       });
     }
-    await fw.render();
+    fw.render();
     await fw.show();
   }
 
@@ -123,7 +126,7 @@ export class FeaturesToWidget extends EventSimple {
    * - it must trigger grid lyout update later
    */
   async fit() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _) => {
       // animation frame cb is required as detail click event is returned
       // before the actual details is actually open.
       onNextFrame(() => {
@@ -135,6 +138,10 @@ export class FeaturesToWidget extends EventSimple {
         }
       });
     });
+  }
+
+  updateLayout() {
+    this.widget.dashboard.updatePanelLayout();
   }
 
   destroy() {
@@ -168,14 +175,12 @@ export class FeaturesToWidget extends EventSimple {
     return widget;
   }
 
-  async render() {
+  render() {
     const fw = this;
     fw.clear();
-    const proms = [];
     for (const idView in fw.attributes) {
-      proms.push(fw._render_item(idView, fw.attributes[idView]));
+      fw._render_item(idView, fw.attributes[idView]);
     }
-    await Promise.all(proms);
   }
 
   async show() {
@@ -198,7 +203,15 @@ export class FeaturesToWidget extends EventSimple {
       this.elContainer.appendChild(item.elItem);
 
       // Wait for the attributes promise to resolve
-      const attributes = await promAttributes;
+      const promWait = waitTimeoutAsync(
+        defaults.fw_timeout.attribute,
+        null,
+        "timeout",
+      );
+      const attributes = await Promise.race([promAttributes, promWait]);
+      if (attributes === "timeout") {
+        throw new Error("Attribute took too long to render");
+      }
       item.elSpinner.remove();
 
       const attrNames = Object.keys(attributes);
@@ -231,6 +244,8 @@ export class FeaturesToWidget extends EventSimple {
           position,
         );
       }
+
+      this.updateLayout();
     } catch (err) {
       this._render_on_error(item, err);
     }
