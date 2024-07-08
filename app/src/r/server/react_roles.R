@@ -18,16 +18,18 @@ getUserRole <- reactive({
   idUser <- reactUser$data$id
 
   #
-  # Session roles
+  # DB roles
+  # - not complete roles : missing global roles
+  #
+  roles <- mxDbGetProjectUserRoles(idUser, idProject)
+
+  #
+  # Global roles
+  # - Developer : should also be a project publisher to consolidate the role
   #
   isGuest <- isGuestUser()
   isRoot <- mxIsUserRoot(idUser)
-  isDev <- mxIsUserDev(idUser)
-
-  #
-  # DB roles
-  #
-  roles <- mxDbGetProjectUserRoles(idUser, idProject)
+  isDev <- roles$publisher && mxIsUserDev(idUser)
 
   #
   # Add session roles to groups

@@ -25,7 +25,7 @@ export async function ioSourceJoin(socket, data, cb) {
       throw new Error(msg("No Session"));
     }
 
-    if (!session.user_authenticated || !session.user_roles.publisher) {
+    if (!session.user_authenticated || !session.user_roles.developer) {
       throw new Error(msg("Unauthorized"));
     }
 

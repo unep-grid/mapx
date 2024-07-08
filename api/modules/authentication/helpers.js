@@ -28,6 +28,7 @@ export async function getUserRoles(idUser, idProject) {
     member: false,
     guest: false,
     root: false,
+    developer: false,
     group_max: "guests",
   };
 
@@ -47,11 +48,12 @@ export async function getUserRoles(idUser, idProject) {
    * All admin are publisher, member
    * All publisher are member
    */
-  roles.root = isRootUser(idUser);
+  roles.root = isUserRoot(idUser);
   roles.admin = roles.root || pData.admins.includes(idUser);
   roles.publisher = roles.admin || pData.publishers.includes(idUser);
   roles.member = roles.publisher || pData.members.includes(idUser);
   roles.guest = !roles.member && pData.public;
+  roles.developer = roles.publisher && isUserDeveloper(idUser);
 
   if (roles.guest) {
     roles.list.push("guest");
@@ -83,8 +85,17 @@ export async function getUserRoles(idUser, idProject) {
  * @param {Number} idUser
  * @return {Boolean} User is in root group
  */
-export function isRootUser(idUser) {
+export function isUserRoot(idUser) {
   return settings.mapx.users.root.includes(idUser);
+}
+
+/**
+ * Is the user in dev group ? .
+ * @param {Number} idUser
+ * @return {Boolean} User is in dev group
+ */
+export function isUserDeveloper(idUser) {
+  return settings.mapx.users.dev.includes(idUser);
 }
 
 /**
@@ -161,4 +172,8 @@ export function isAdmin(socket) {
 export function isRoot(socket) {
   const s = socket.session || {};
   return !!s?.user_authenticated && s?.user_roles.root;
+}
+export function isDeveloper(socket) {
+  const s = socket.session || {};
+  return !!s?.user_authenticated && s?.user_roles.developer;
 }

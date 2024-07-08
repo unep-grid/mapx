@@ -3,6 +3,7 @@ const settings_global = {
     users: {
       root: [1],
       project_creator: [1],
+      dev: [1],
     },
   },
   session: {

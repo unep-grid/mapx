@@ -3,7 +3,7 @@ import { isEmail, isEmpty } from "@fxi/mx_valid";
 import {
   validateToken,
   validateUser,
-  isRootUser,
+  isUserRoot,
   getUserRoles,
 } from "./helpers.js";
 /**
@@ -91,7 +91,7 @@ export function validateRoleSuperUserHandler(req, res, next) {
       idUser = req.query.idUser;
     }
 
-    if (!isRootUser(idUser)) {
+    if (!isUserRoot(idUser)) {
       throw new Error("Require root privileges");
     }
 
