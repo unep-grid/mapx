@@ -104,10 +104,6 @@ picture {
   object-fit: contain;
 }
 
-input[type="checkbox"] {
-  cursor: pointer;
-}
-
 /**
 * Global content-visibility
 * perf improvement
@@ -1050,11 +1046,16 @@ code {
   border-color: var(--mx_ui_message_danger);
 }
 
+input[type="checkbox"] {
+  cursor: pointer;
+}
 .checkbox label,
 .radio label {
   display: flex;
   align-items: start;
-  /*justify-content: space-between;*/
+  min-height: 20px;
+  padding-left: inherit;
+  margin: 0;
 }
 
 .checkbox-inline input[type="checkbox"],
