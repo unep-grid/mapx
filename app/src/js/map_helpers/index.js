@@ -2732,9 +2732,6 @@ export async function viewClear(o) {
   const now = Date.now();
   const viewDuration = now - view._added_at || 0;
 
-  if (viewDuration === 0) {
-    return;
-  }
   delete view._added_at;
 
   await viewModulesRemove(view);
