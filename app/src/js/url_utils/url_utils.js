@@ -203,14 +203,18 @@ export function setQueryParameters(params, opt = { update: true }) {
   const searchParams = currentUrl.searchParams;
 
   if (!opt.update) {
-    for (const k of searchParams) {
-      searchParams.delete(k);
+    /**
+     * - don't delete + iterate.
+     * - split logic to avoid issues
+     */
+    const keys = [...searchParams.keys()];
+    for (const key of keys) {
+      searchParams.delete(key);
     }
   }
 
-  for (const key of Object.keys(params)) {
-    const value = asString(params[key]);
-    searchParams.set(key, value);
+  for (const [key, value] of Object.entries(params)) {
+    searchParams.set(key, asString(value));
   }
 
   history.replaceState(null, null, currentUrl);
