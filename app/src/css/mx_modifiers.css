@@ -202,6 +202,10 @@ span.mx-badge-role {
   background-color: var(--mx_ui_background);
 }
 
+.mx input[type="checkbox"] {
+  margin: 0px;
+}
+
 .mx .btn-warning {
   border-color: var(--mx_ui_message_warning);
 }
@@ -442,8 +446,6 @@ span.mx-badge-role {
 .mx .panel {
   background-color: var(--mx_ui_background);
 }
-
-
 
 /**
 * picker

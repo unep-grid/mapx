@@ -672,10 +672,8 @@ export function elCheckToggle(opt) {
       ? label
       : el("span", label);
 
-  if (isStr) {
-    elLabelSpan.className = "hint hint--bottom";
-    elLabelSpan.ariaLabel = opt.label;
-  }
+  elLabelSpan.className = "hint hint--bottom";
+  elLabelSpan.ariaLabel = label;
 
   const elInput = el("input", {
     id: id,

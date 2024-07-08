@@ -46,26 +46,31 @@
           grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
           padding: 10px;
 
+          .mx-feature-widget--value-group span,
           .mx-feature-widget--value {
-            display: flex;
-            align-items: center;
-            flex-direction: row-reverse;
-            justify-content: space-between;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 80%;
+            white-space: nowrap;
+          }
+
+          .mx-feature-widget--value,
+          .mx-feature-widget--value-group {
             background: var(--mx_ui_background_accent);
             border: 1px solid var(--mx_ui_border);
-
             border-radius: 5px;
             margin: 0px;
             padding: 5px;
             padding-left: 10px;
             padding-right: 10px;
+          }
 
-            span {
-              overflow: hidden;
-              text-overflow: ellipsis;
-              max-width: 80%;
-              white-space: nowrap;
-            }
+          .mx-feature-widget--value-group {
+            display: flex;
+            align-items: center;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+
             &.mx-feature-widget--value-clickable {
               cursor: pointer;
             }

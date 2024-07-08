@@ -237,17 +237,19 @@ export class FeaturesToWidget extends EventSimple {
   }
 
   _render_init_item(item, title) {
-    item.elTitle = el("span", { class: "mx-feature-widget--title" }, title);
+    item.elTitle = el("spane", { class: "mx-feature-widget--title" }, title);
     item.elSpinner = elWait("Fetch values...");
     item.elAttributesContainer = el("div", {
       class: "mx-feature-widget--attributes",
     });
 
-    item.elItem = el("div", { class: "mx-feature-widget--item" }, [
-      item.elTitle,
-      item.elSpinner,
-      item.elAttributesContainer,
-    ]);
+    item.elItem = el(
+      "div",
+      {
+        class: "mx-feature-widget--item",
+      },
+      [item.elTitle, item.elSpinner, item.elAttributesContainer],
+    );
   }
 
   _render_attribute(item, attribute, values, labels, idView, isVector, order) {
@@ -359,11 +361,11 @@ export class FeaturesToWidget extends EventSimple {
             },
             checked: false,
             classLabel: [
-              "mx-feature-widget--value",
+              "mx-feature-widget--value-group",
               "mx-feature-widget--value-clickable",
             ],
           })
-        : el("label", { class: "mx-feature-widget--value" }, val);
+        : el("span", { class: "mx-feature-widget--value", title: val }, val);
       elFrag.appendChild(elValue);
     }
 
