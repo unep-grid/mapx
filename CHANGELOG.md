@@ -1,3 +1,38 @@
+  - [1.13.8-alpha.9](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.9) 
+
+    - FeatureTo Widget Performance
+        - Improved handling of slow responses:
+        - Display other attributes while waiting
+        - Show progress wheel
+        - Display message on failure if needed
+
+        -  UI Enhancements
+            - Reduced padding on checkboxes
+            - Fixed checkbox layout issues
+            - Enhanced widget feature style:
+            - Added ellipsis for long text
+            - Improved title display
+            - Adjusted checkbox margins
+
+    - Access Control
+        - Granted join tool access to project publishers who are also developers (#998)
+
+
+    - Raster Layer Management
+        - Fixed issue with raster layers not being removed from style:
+        - Addresses problem where long-lasting queries block WMS raster view creation
+        - Ensures removing the layer not affected by WMS query
+        - Impacts features to widget functionality
+
+    - View Persistence
+        - Fixed bug where views persiste in ULR  after mapx initialization finished
+
+    - SDK Updates
+
+        - Updated `get_view_meta` tests
+        - Adjusted keys
+        - Removed view stats from view metadata
+
   - [1.13.8-alpha.8](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.8) 
 
     - Dashboard 
