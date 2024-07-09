@@ -1,3 +1,11 @@
+  - [1.13.8-alpha.10](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.10) 
+
+    - Fix CSS flex-start: support issue
+    - Fix conditional UI for developer + join tools
+    - Improve error handler, error to warning conversion + keep message or trace stack
+    - Removed small 100ms delay before rendering a view
+    - isViewOpen is also true in static mode, where if the view is there, it's considered as open, no inactive view should be stored.  
+
   - [1.13.8-alpha.9](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.9) 
 
     - FeatureTo Widget Performance
