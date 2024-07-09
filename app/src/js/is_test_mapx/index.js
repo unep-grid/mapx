@@ -61,12 +61,12 @@ export function isLanguageObjectArray(arr) {
  */
 export function isViewOpen(view) {
   view = getView(view);
-  return isView(view) && view._open === true;
+  return isView(view) && (view._open === true || settings.mode.static);
 }
 
 /**
  * Check if a view is an instance
- * @note : 'instance' is just a test on  _vb === ViewBase, but a test will be 
+ * @note : 'instance' is just a test on  _vb === ViewBase, but a test will be
  *         performed to check if view === ViewInstance
  * @param {String|Object} view View or view id
  * @return {Boolean}

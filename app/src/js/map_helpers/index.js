@@ -1754,7 +1754,7 @@ export async function handleClickEvent(e, idMap) {
   if (addWidget) {
     const fw = new FeaturesToWidget();
 
-    window._fw =fw;
+    window._fw = fw;
     fw.on("destroyed", () => {
       highlighter.reset();
     });
@@ -2776,19 +2776,19 @@ export async function viewClear(o) {
 export async function viewAdd(idView) {
   try {
     const view = await getViewAuto(idView);
-
+    console.log(isViewOpen(view));
     if (!isView(view)) {
       throw new Error("viewAdd : not a view");
     }
 
-    await waitTimeoutAsync(100);
-
     if (view._vb instanceof ViewBase) {
       view._vb.open();
     }
+
     await viewRender({
       view: view,
     });
+
     await updateLanguageElements({
       el: getViewEl(view),
     });
@@ -3513,7 +3513,7 @@ export async function getViewLegendImage(opt) {
   const isVt = isViewVt(view);
   const isRt = !isVt && isViewRt(view);
   const isValid = isVt || isRt;
-  const isOpen = isValid && isViewOpen(view);
+  const isOpen = isViewOpen(view);
 
   let out = "";
   if (!isValid) {
@@ -4794,7 +4794,7 @@ export async function resetViewStyle(o) {
 
   const view = getView(o.idView);
 
-  const isOpen = isViewOpen(view) || settings.mode.static;
+  const isOpen = isViewOpen(view);
 
   updateLanguageElements({
     el: view._el,
