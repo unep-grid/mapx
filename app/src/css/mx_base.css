@@ -1052,7 +1052,7 @@ input[type="checkbox"] {
 .checkbox label,
 .radio label {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   min-height: 20px;
   padding-left: inherit;
   margin: 0;
