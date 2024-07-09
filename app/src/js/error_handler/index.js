@@ -13,10 +13,11 @@ export function errorHandler(err) {
   }
 
   if (errObject._to_warn) {
-    console.warn(errObject);
+    console.warn(errObject.message);
   } else {
-    console.error(errObject);
-  } 
+    console.error(errObject.message);
+    console.trace(errObject);
+  }
 }
 
 /**
