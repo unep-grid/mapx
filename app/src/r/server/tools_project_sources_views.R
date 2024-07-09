@@ -5,7 +5,9 @@ observe({
   userRole <- getUserRole()
 
   isolate({
-    isPublisher <- "publishers" %in% userRole$groups
+    isPublisher <- isTRUE(userRole$publisher)
+    isDeveloper <- isTRUE(userRole$developer)
+
     project <- reactData$project
     idUser <- .get(reactUser$data, c("id"))
     isRoot <- mxIsUserRoot(idUser)
@@ -52,7 +54,7 @@ observe({
             "btn_edit_source_attributes_table",
             language,
             "table"
-            ),
+          ),
           inputId = "btnEditSourceTable",
           class = "btn btn-default"
         ),
@@ -76,6 +78,11 @@ observe({
             inputId = "btnRebuildGeoserverRecalcStyle",
             class = "btn btn-default",
           ),
+        )
+      }
+      if (isRoot || isDeveloper) {
+        uiSourceEdit <- tagList(
+          uiSourceEdit,
           actionButton(
             label = mxLabel("btn_join_editor_new", language, "plus"),
             inputId = "btnJoinEditorNew",
