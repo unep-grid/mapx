@@ -363,13 +363,13 @@ function elPanel(opt) {
  * @param {String} keys Key to look for in the dictionnary
  * @param {Object} opt Options 
  * @param {String} opt.lang Two letter code language 
- * @param {String} opt.tooltip Add tooltip (default:true) 
+ * @param {String} opt.tooltip Add tooltip (default:false) 
  * @param {Object} opt.data Data for templating
 
  * @return {Element} span element with dataset-lang_key
  */
 function elSpanTranslate(key, opt) {
-  opt = Object.assign({}, { lang: null, data: null, tooltip: true }, opt);
+  opt = Object.assign({}, { lang: null, data: null, tooltip: false }, opt);
 
   const promText = getDictItem(key, opt.lang).then((t) => {
     if (opt.data) {

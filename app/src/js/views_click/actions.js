@@ -193,8 +193,8 @@ export async function btn_opt_delete(dataset) {
       content: elContent,
     });
 
-    if(!ok){
-      return; 
+    if (!ok) {
+      return;
     }
   }
 
