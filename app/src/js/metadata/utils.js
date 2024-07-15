@@ -21,6 +21,7 @@ import {
   isView,
   isNotEmpty,
   isViewSm,
+  isNumeric,
 } from "./../is_test_mapx";
 import { getArrayDistinct } from "../array_stat/index.js";
 
@@ -46,11 +47,11 @@ export async function getSourceMetadata(idSource) {
 }
 
 /**
-* Get a dictionnary of alias for attributes
-* @param {String} idSource Of the source 
-* @param {Object} attributes
-* @return {Promise<Object>} dictionnary
-*/ 
+ * Get a dictionnary of alias for attributes
+ * @param {String} idSource Of the source
+ * @param {Object} attributes
+ * @return {Promise<Object>} dictionnary
+ */
 export async function getAttributesAlias(idSource, attributes) {
   if (!isSourceId(idSource)) {
     throw new Error("getAttributesAlias : invalid id");
@@ -410,12 +411,15 @@ function buildViewMetaUi(meta) {
 
         if (row.key === "editors") {
           for (let i = 0, iL = row.value.length; i < iL; i++) {
-            const id = row.value[i] * 1;
-            const email = getEditorEmailFromMeta(meta, id);
-            row.value[i] = email;
+            if (isNumeric(row.value[i])) {
+              const id = row.value[i] * 1;
+              const email = getEditorEmailFromMeta(meta, id);
+              row.value[i] = email;
+            }
           }
         }
         row.value = getArrayDistinct(row.value);
+        row.value.sort();
       }
 
       /**
