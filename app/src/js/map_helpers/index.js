@@ -2776,7 +2776,6 @@ export async function viewClear(o) {
 export async function viewAdd(idView) {
   try {
     const view = await getViewAuto(idView);
-    console.log(isViewOpen(view));
     if (!isView(view)) {
       throw new Error("viewAdd : not a view");
     }

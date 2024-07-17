@@ -32,8 +32,6 @@ async function send(data) {
   const emailContent = generateEmailContent(data);
   const recipients = await getRecipients(data);
 
-  debugger;
-
   if (!isArrayOf(recipients, isEmail)) {
     throw new Error("No valid recipients found");
   }
