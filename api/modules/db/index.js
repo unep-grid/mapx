@@ -85,7 +85,6 @@ try {
     console.error("Unexpected error on postgres client test", err);
   });
 
-
   /**
    * Set long read pool
    */
@@ -172,8 +171,8 @@ try {
   redisGet = clientRedis.get.bind(clientRedis);
   redisSet = clientRedis.set.bind(clientRedis);
 
-  redisSetJSON = async (k, d) => redisSet(k, JSON.stringify(d));
-  redisGetJSON = async (k) => JSON.parse(await redisGet(k));
+  redisSetJSON = async (k, d, ...opt) => redisSet(k, JSON.stringify(d, ...opt));
+  redisGetJSON = async (k, ...opt) => JSON.parse(await redisGet(k, ...opt));
 
   /**
    * MeiliSearch

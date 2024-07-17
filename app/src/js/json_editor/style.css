@@ -22,10 +22,11 @@
   position: relative;
 }
 
-.jed-container .help-block.errormsg {
-  position: absolute;
+
+.jed-container .help-block {
+  position: inherit;
   margin: 2px;
-  width: 800px;
+  width: auto;
 }
 
 .jed-container .table > tbody > tr > td,
@@ -103,7 +104,7 @@
 .jed-container h3 {
   /**
   * -> chould match "label"
-  */ 
+  */
   font-size: 1rem;
   display: inline-block;
   max-width: 100%;

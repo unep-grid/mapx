@@ -18603,6 +18603,32 @@
     "de": "Melden Sie einen Fehler / eine Feature-Anfrage"
   },
   {
+    "id": "btn_report",
+    "en": "Flag/Report content",
+    "fr": "Signaler le contenu",
+    "es": "Marcar/Reportar contenido",
+    "ru": "Пожаловаться на контент",
+    "zh": "标记/报告内容",
+    "ar": "الإبلاغ عن المحتوى",
+    "fa": "گزارش/علامت‌گذاری محتوا",
+    "ps": "د محتوا راپور ورکول",
+    "bn": "বিষয়বস্তু প্রতিবেদন করুন",
+    "de": "Inhalt melden"
+  },
+  {
+    "id": "btn_submit",
+    "en": "Submit...",
+    "fr": "Soumettre...",
+    "es": "Enviar...",
+    "ru": "Отправить...",
+    "zh": "提交...",
+    "ar": "إرسال...",
+    "fa": "ارسال...",
+    "ps": "لېږل...",
+    "bn": "জমা দিন...",
+    "de": "Einreichen..."
+  },
+  {
     "id": "btn_doc_wiki",
     "en": "MapX documentation",
     "fr": "Documentation MapX",

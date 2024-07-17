@@ -7155,6 +7155,16 @@
     "ps": "د بګ / فیچر غوښتنه راپور کړئ"
   },
   {
+    "id": "btn_report",
+    "en": "Flag/Report content",
+    "ps": "د محتوا راپور ورکول"
+  },
+  {
+    "id": "btn_submit",
+    "en": "Submit...",
+    "ps": "لېږل..."
+  },
+  {
     "id": "btn_doc_wiki",
     "en": "MapX documentation",
     "ps": "MapX سندونه"

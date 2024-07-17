@@ -1,5 +1,6 @@
 import {
   isEmail,
+  isArrayOf,
   isViewId,
   isArrayOfString,
   isProjectId,
@@ -433,7 +434,7 @@ const rules = [
   {
     key: ["email", "from", "to"],
     test: (d) => ({
-      valid: isEmail(d),
+      valid: isEmail(d) || isArrayOf(d, isEmail),
       value: d,
     }),
   },

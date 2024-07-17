@@ -7155,6 +7155,16 @@
     "es": "Informar de un error/solicitud de función"
   },
   {
+    "id": "btn_report",
+    "en": "Flag/Report content",
+    "es": "Marcar/Reportar contenido"
+  },
+  {
+    "id": "btn_submit",
+    "en": "Submit...",
+    "es": "Enviar..."
+  },
+  {
     "id": "btn_doc_wiki",
     "en": "MapX documentation",
     "es": "Documentación de MapX"

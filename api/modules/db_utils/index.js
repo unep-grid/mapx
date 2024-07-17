@@ -218,7 +218,7 @@ async function tableHasValues(idTable, schema) {
 /**
  * Decrypt message using default key
  * @param {String} txt Message to decrypt
- * @return {String} decrypted message
+ * @return {Promise<String>} decrypted message
  */
 async function decrypt(txt) {
   const sqlDecrypt = `SELECT mx_decrypt('` + txt + `','` + key + `') as msg`;

@@ -17,6 +17,7 @@ import { modalMarkdown } from "../modal_markdown/index.js";
 import { settings } from "./../settings";
 import { UAParser } from "ua-parser-js";
 import { theme } from "./../mx.js";
+import { ReportContent } from "../report_content/index.js";
 
 const uaparser = new UAParser();
 const isNotBlink = uaparser.getEngine().name !== "Blink";
@@ -208,6 +209,14 @@ export function generateButtons() {
       classesIcon: ["fa", "fa-bug"],
       action: () => {
         window.open(settings.links.repositoryIssues, "_blank");
+      },
+    }),
+    new Button({
+      key: "btn_report",
+      classesIcon: ["fa", "fa-flag"],
+      action: async () => {
+        const rc = new ReportContent();
+        await rc.init();
       },
     }),
     new Button({

@@ -142,17 +142,17 @@ async function loadShapefile() {
 async function loadJsonEditor() {
   const { JSONEditor } = await import("@json-editor/json-editor");
   await Promise.all([
-    import("./../json_editor/number_na.js"),
-    import("./../json_editor/position.js"),
-    import("./../json_editor/array_confirm_delete"),
-    import("./../json_editor/monaco.js"),
-    import("./../json_editor/validation.js"),
-    import("./../json_editor/table_source_stat.js"),
-    import("./../json_editor/select_tom.js"),
-    import("./../json_editor/select_tom_simple.js"),
-    import("./../json_editor/select_gemet.js"),
-    import("./../json_editor/select_group.js"),
-    import("./../json_editor/select_keywords.js"),
+    import("./../json_editor/validators/validation.js"),
+    import("./../json_editor/editors/number_na.js"),
+    import("./../json_editor/editors/position.js"),
+    import("./../json_editor/editors/array_confirm_delete"),
+    import("./../json_editor/editors/monaco.js"),
+    import("./../json_editor/editors/table_source_stat.js"),
+    import("./../json_editor/editors/select_tom.js"),
+    import("./../json_editor/editors/select_tom_simple.js"),
+    import("./../json_editor/editors/select_gemet.js"),
+    import("./../json_editor/editors/select_group.js"),
+    import("./../json_editor/editors/select_keywords.js"),
   ]);
   return { JSONEditor };
 }

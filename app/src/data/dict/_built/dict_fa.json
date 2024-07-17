@@ -7155,6 +7155,16 @@
     "fa": "گزارش یک اشکال / درخواست ویژگی"
   },
   {
+    "id": "btn_report",
+    "en": "Flag/Report content",
+    "fa": "گزارش/علامت‌گذاری محتوا"
+  },
+  {
+    "id": "btn_submit",
+    "en": "Submit...",
+    "fa": "ارسال..."
+  },
+  {
     "id": "btn_doc_wiki",
     "en": "MapX documentation",
     "fa": "مستندات MapX"

@@ -7155,6 +7155,16 @@
     "de": "Melden Sie einen Fehler / eine Feature-Anfrage"
   },
   {
+    "id": "btn_report",
+    "en": "Flag/Report content",
+    "de": "Inhalt melden"
+  },
+  {
+    "id": "btn_submit",
+    "en": "Submit...",
+    "de": "Einreichen..."
+  },
+  {
     "id": "btn_doc_wiki",
     "en": "MapX documentation",
     "de": "MapX-Dokumentation"

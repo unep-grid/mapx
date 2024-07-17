@@ -383,7 +383,7 @@ export class NotifCenter {
     if (granted) {
       new Notification(notif.title, {
         body: notif.message,
-        icon: nc._opt.ui.logo,
+        badge: nc._opt.ui.logo,
       });
     } else {
       console.warn("User refused notifications. Notif:", notif);

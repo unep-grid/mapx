@@ -1,22 +1,22 @@
 import { JSONEditor } from "@json-editor/json-editor";
-import { getGemetConcept, searchGemet } from "./../gemet_util/index.js";
-import { el } from "./../el_mapx";
-import { isArray } from "./../is_test/index.js";
-import TomSelect from "tom-select";
+import TomSelect from "tom-select"; 
+import { el } from "./../../el_mapx";
+import { isArray, isEmpty, isNotEmpty } from "./../../is_test/index.js";
+import { getMetadataKeywords } from "./../../metadata/keywords.js";
 
 JSONEditor.defaults.resolvers.unshift(function (schema) {
-  if (schema.type === "array" && schema.format === "selectizeGemet") {
-    return "selectizeGemet";
+  if (schema.type === "array" && schema.format === "selectizeMetaKeywords") {
+    return "selectizeMetaKeywords";
   }
 });
 
 /**
- * Gemet specific input : remote fetch
+ * Metadata keywords input : remote websocket fetch
  */
-JSONEditor.defaults.editors.selectizeGemet = class mxeditors extends (
+JSONEditor.defaults.editors.selectizeMetaKeywords = class mxeditors extends (
   JSONEditor.AbstractEditor
 ) {
-  async initValue(value) {
+  async initValue(keywords) {
     const editor = this;
     const selectize = editor.input.selectize;
     if (editor._init_value) {
@@ -24,13 +24,10 @@ JSONEditor.defaults.editors.selectizeGemet = class mxeditors extends (
     }
     /*
      * Add initial option:
-     * Fetch concepts and push items like
-     * {value:<string>,definition:<string>,label:<string>}
      */
-    if (value.length > 0) {
-      const concepts = await getGemetConcept(value);
-      for (let c of concepts) {
-        selectize.addOption(c);
+    if (isNotEmpty(keywords)) {
+      for (const keyword of keywords) {
+        selectize.addOption({ keyword, score: 1 });
       }
       editor._init_value = true;
     }
@@ -62,12 +59,11 @@ JSONEditor.defaults.editors.selectizeGemet = class mxeditors extends (
 
     editor.input.selectize = new TomSelect(editor.input, {
       plugins: ["remove_button"],
-      valueField: "concept",
-      labelField: "label",
-      searchField: ["label", "definition"],
-      //sortField : 'score', //do not work :(
+      valueField: "keyword",
+      labelField: "keyword",
+      searchField: "keyword",
       options: [],
-      create: false,
+      create: true,
       multiple: true,
       maxItems: 20,
       render: {
@@ -75,26 +71,31 @@ JSONEditor.defaults.editors.selectizeGemet = class mxeditors extends (
           return el(
             "div",
             {
-              class: ["hint", "hint--top-right"],
               style: {
-                padding: "10px",
                 display: "flex",
+                justifyContent: "space-between",
+                padding: "10px",
+                paddingLeft: "15px",
               },
-              "aria-label": escape(item.definition),
             },
-            el("span", escape(item.label)),
+            [
+              el("span", escape(item.keyword)),
+              el(
+                "span",
+                {
+                  title: ` Proximity score : ${escape(
+                    Math.round(item.similarity * 100) / 100,
+                  )}`,
+                },
+                `(${escape(item.count || 1)})`,
+              ),
+            ],
           );
         },
       },
       score: function () {
-        /**
-         * For sifter score on the 'github repos' example, check this:
-         * https://github.com/selectize/selectize.js/blob/efcd689fc1590bc085aee728bcda71373f6bd0ff/examples/github.html#L129
-         * Here, we use score from similarity, trgm
-         */
-
         return function (item) {
-          return item.score;
+          return item.similarity;
         };
       },
       load: async function (query, callback) {
@@ -102,11 +103,13 @@ JSONEditor.defaults.editors.selectizeGemet = class mxeditors extends (
          * When the user search, fetch and
          * format results for the callback
          */
-        if (!query.length) return callback();
+        if (isEmpty(query)) {
+          return callback();
+        }
         this.clearOptions();
         try {
-          const data = await searchGemet(query);
-          return callback(data.hits);
+          const data = await getMetadataKeywords(query);
+          return callback(data);
         } catch (e) {
           console.warn(e);
           return callback();
@@ -156,3 +159,4 @@ JSONEditor.defaults.editors.selectizeGemet = class mxeditors extends (
     editor.value = editor.input.selectize.getValue();
   }
 };
+

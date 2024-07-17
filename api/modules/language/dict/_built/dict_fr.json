@@ -7155,6 +7155,16 @@
     "fr": "Signaler un bug / demande de fonctionnalité"
   },
   {
+    "id": "btn_report",
+    "en": "Flag/Report content",
+    "fr": "Signaler le contenu"
+  },
+  {
+    "id": "btn_submit",
+    "en": "Submit...",
+    "fr": "Soumettre..."
+  },
+  {
     "id": "btn_doc_wiki",
     "en": "MapX documentation",
     "fr": "Documentation MapX"

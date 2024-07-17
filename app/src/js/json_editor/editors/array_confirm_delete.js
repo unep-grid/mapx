@@ -1,5 +1,5 @@
 import { JSONEditor } from "@json-editor/json-editor";
-import { modal } from "./../mx_helper_modal.js";
+import { modal } from "./../../mx_helper_modal.js";
 
 /*
  * Add an array format asking user to confirm removal

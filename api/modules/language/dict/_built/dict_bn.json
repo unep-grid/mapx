@@ -7155,6 +7155,16 @@
     "bn": "একটি বাগ / বৈশিষ্ট্য অনুরোধ রিপোর্ট করুন"
   },
   {
+    "id": "btn_report",
+    "en": "Flag/Report content",
+    "bn": "বিষয়বস্তু প্রতিবেদন করুন"
+  },
+  {
+    "id": "btn_submit",
+    "en": "Submit...",
+    "bn": "জমা দিন..."
+  },
+  {
     "id": "btn_doc_wiki",
     "en": "MapX documentation",
     "bn": "MapX ডকুমেন্টেশন"

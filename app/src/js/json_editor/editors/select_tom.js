@@ -1,8 +1,8 @@
 import { JSONEditor } from "@json-editor/json-editor";
-import { el } from "./../el_mapx";
-import { isEmpty, isArray, isObject } from "./../is_test/index.js";
+import { el } from "./../../el_mapx";
+import { isEmpty, isArray, isObject } from "./../../is_test/index.js";
+import { getConfig } from "./../../select_auto/utils.js";
 import TomSelect from "tom-select";
-import { getConfig } from "../select_auto/utils.js";
 
 JSONEditor.defaults.resolvers.unshift((schema) => {
   const { type, format, mx_options } = schema;

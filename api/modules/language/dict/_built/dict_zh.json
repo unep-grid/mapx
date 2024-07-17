@@ -7155,6 +7155,16 @@
     "zh": "报告错误/功能请求"
   },
   {
+    "id": "btn_report",
+    "en": "Flag/Report content",
+    "zh": "标记/报告内容"
+  },
+  {
+    "id": "btn_submit",
+    "en": "Submit...",
+    "zh": "提交..."
+  },
+  {
     "id": "btn_doc_wiki",
     "en": "MapX documentation",
     "zh": "MapX文档"

@@ -1,8 +1,8 @@
 import { JSONEditor } from "@json-editor/json-editor";
-import { el } from "./../el/src/index.js";
-import { elButtonFa } from "./../el_mapx";
-import { isNotEmpty } from "./../is_test/index.js";
-import { getMapPos, resetMaxBounds } from "./../map_helpers";
+import { el } from "./../../el/src/index.js";
+import { elButtonFa } from "./../../el_mapx";
+import { isNotEmpty } from "./../../is_test/index.js";
+import { getMapPos, resetMaxBounds } from "./../../map_helpers";
 
 /**
  * Set a resolver for the map position format

@@ -1,10 +1,10 @@
 import { JSONEditor } from "@json-editor/json-editor";
-import { isArray } from "./../is_test/index.js";
 import TomSelect from "tom-select";
+import { el } from "./../../el_mapx/index.js";
 
 JSONEditor.defaults.resolvers.unshift(function (schema) {
-  if (schema.type === "array" && schema.format === "selectizeOptGroup") {
-    return "selectizeOptGroup";
+  if (schema.type === "string" && schema.format === "selectizeSingle") {
+    return "selectizeSingle";
   }
 });
 
@@ -12,7 +12,7 @@ JSONEditor.defaults.resolvers.unshift(function (schema) {
  * Generic input with group + async translation
  */
 
-JSONEditor.defaults.editors.selectizeOptGroup = class mxeditors extends (
+JSONEditor.defaults.editors.selectizeSingle = class mxeditors extends (
   JSONEditor.AbstractEditor
 ) {
   build() {
@@ -29,10 +29,7 @@ JSONEditor.defaults.editors.selectizeOptGroup = class mxeditors extends (
       );
     }
 
-    editor.input = document.createElement("select");
-    editor.input.setAttribute("multiple", "multiple");
-
-    editor.input.classList.add("plugin-remove_button");
+    editor.input = el("input", { type: "text" });
 
     const group = editor.theme.getFormControl(
       editor.title,
@@ -43,18 +40,21 @@ JSONEditor.defaults.editors.selectizeOptGroup = class mxeditors extends (
     editor.container.appendChild(group);
     editor.container.appendChild(editor.error_holder);
 
-    const { options, optgroups } = editor.schema.options;
+    const values = editor.schema.enum;
+    const titles = editor.schema.options.enum_titles;
+
+    const options = values.map((v, i) => {
+      return { value: v, text: titles[i] };
+    });
 
     editor.input.selectize = new TomSelect(editor.input, {
-      plugins: ["remove_button"],
       options,
-      optgroups,
       delimiter: ",",
       createOnBlur: false,
       create: false,
       showAddOptionOnCreate: false,
       searchField: ["text", "value"],
-      optgroupValueField: "value",
+      maxItems: 1,
     });
     editor.refreshValue();
   }
@@ -84,7 +84,6 @@ JSONEditor.defaults.editors.selectizeOptGroup = class mxeditors extends (
     const editor = this;
     const selectize = editor.input.selectize;
     selectize.clear(true);
-    value = isArray(value) ? value : [value];
     editor.input.selectize.setValue(value);
     editor.refreshValue();
   }

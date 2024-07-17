@@ -5,7 +5,7 @@ import { Server as SocketServer } from "socket.io";
 import query from "#mapx/query";
 import * as project from "#mapx/project";
 import mirror from "#mapx/mirror";
-import mail from "#mapx/mail";
+import { mwSendMail, ioMailReportIssue } from "#mapx/mail";
 import ip from "#mapx/ip";
 import tile from "#mapx/tile";
 import log from "#mapx/log";
@@ -116,6 +116,7 @@ io.use((socket, next) => {
   socket.on("/client/view/get/stats", use(ioViewStatsGet));
   socket.on("/client/project/validate/name", use(ioProjectNameValidate));
   socket.on("/client/project/create", use(ioProjectCreate));
+  socket.on("/client/mail/report/issue", use(ioMailReportIssue));
   socket.on(
     "/client/source/get/attributes/alias",
     use(ioSourceAttributesAlias)
@@ -158,7 +159,7 @@ app.get("/get/projects/list/user/", project.mwGetListByUser);
 app.get("/get/project/search", project.mwProjectSearchText);
 
 app.post("/upload/image/", upload.mwImage);
-app.post("/send/mail/", mail.mwSend);
+app.post("/send/mail/", mwSendMail);
 app.post("/collect/logs/", log.mwCollect);
 
 server.listen(port);

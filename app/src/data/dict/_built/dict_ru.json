@@ -7155,6 +7155,16 @@
     "ru": "Сообщить об ошибке / запросе функции"
   },
   {
+    "id": "btn_report",
+    "en": "Flag/Report content",
+    "ru": "Пожаловаться на контент"
+  },
+  {
+    "id": "btn_submit",
+    "en": "Submit...",
+    "ru": "Отправить..."
+  },
+  {
     "id": "btn_doc_wiki",
     "en": "MapX documentation",
     "ru": "Документация MapX"

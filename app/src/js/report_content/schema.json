@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Report content or issues",
+  "description": "MapX reporting system allows you to send a message anonymously and directly to the right people. Any abuse of this tool could lead to a temporary ban of our IP and that's the only case where we would store identifiable data. Any other case, the data is held in memory for a limited time",
+  "properties": {
+    "type": {
+      "type": "string",
+      "title": "Report Type",
+      "description": "The type of report or issue being submitted",
+      "enum": [
+        "view_dashboard_issue",
+        "bug_feature_request",
+        "project_issue",
+        "admin_issue"
+      ],
+      "options": {
+        "enum_titles": [
+          "View, data or dashboard issue",
+          "Bug or feature request",
+          "Project issue",
+          "Administrative, institutional issue"
+        ]
+      },
+      "default": "bug_feature_request"
+    },
+    "priority": {
+      "type": "string",
+      "title": "Priority",
+      "description": "The urgency of the report",
+      "enum": ["low", "medium", "high"],
+      "default": "medium",
+      "format": "radio"
+    },
+    "includeActivatedViews": {
+      "type": "boolean",
+      "title": "Include current activated views list",
+      "description": "Add current activated views id to the message for easier reviewing and context",
+      "default": false,
+      "format": "checkbox"
+    },
+    "includeMapConfig": {
+      "type": "boolean",
+      "title": "Include map configuration",
+      "description": "Add map current extent, zoom, theme, globe mode, aerial view, for easier reviewing and context",
+      "default": false,
+      "format": "checkbox"
+    },
+    "contactEmail": {
+      "type": "string",
+      "format": "email",
+      "title": "Contact Email",
+      "description": "Optional email address for follow-up communication. Invalid email will be ignored.",
+      "minLength": 0,
+      "maxLength": 100
+    },
+    "subject": {
+      "type": "string",
+      "title": "Subject",
+      "description": "Brief subject of the report",
+      "minLength": 10,
+      "maxLength": 200
+    },
+    "description": {
+      "type": "string",
+      "title": "Description",
+      "description": "Detailed description of the issue",
+      "minLength": 10,
+      "maxLength": 1000,
+      "format": "textarea"
+    }
+  },
+  "required": [
+    "type",
+    "priority",
+    "subject",
+    "description",
+    "includeMapConfig",
+    "includeActivatedViews"
+  ],
+  "additionalProperties": false
+}

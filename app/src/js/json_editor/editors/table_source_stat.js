@@ -1,9 +1,9 @@
 import { JSONEditor } from "@json-editor/json-editor";
 import localforage from "localforage";
-import { path } from "./../mx_helper_misc.js";
-import { AutoStyle } from "./../auto_style/index.js";
-import { elButtonFa } from "./../el_mapx/index.js";
-import { settings } from "./../settings";
+import { path } from "./../../mx_helper_misc.js";
+import { AutoStyle } from "./../../auto_style/index.js";
+import { elButtonFa } from "./../../el_mapx/index.js";
+import { settings } from "./../../settings";
 
 const dbAutoStyle = localforage.createInstance("auto_style");
 

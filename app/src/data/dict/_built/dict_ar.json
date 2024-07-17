@@ -7155,6 +7155,16 @@
     "ar": "الإبلاغ عن خطأ / طلب ميزة"
   },
   {
+    "id": "btn_report",
+    "en": "Flag/Report content",
+    "ar": "الإبلاغ عن المحتوى"
+  },
+  {
+    "id": "btn_submit",
+    "en": "Submit...",
+    "ar": "إرسال..."
+  },
+  {
     "id": "btn_doc_wiki",
     "en": "MapX documentation",
     "ar": "توثيق MapX"

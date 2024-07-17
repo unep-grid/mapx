@@ -72,7 +72,6 @@ export async function jedInit(o) {
     iconlib: "bootstrap3",
     disable_collapse: false,
     disable_properties: true,
-    disableSelectize: false,
     disable_edit_json: false,
     required_by_default: true,
     show_errors: "always",
@@ -95,11 +94,7 @@ export async function jedInit(o) {
     draftDbTimeStamp = opt_final.draftAutoSaveDbTimestamp;
   }
 
-  /*
-   * legacy option
-   * JSONEditor.plugins.selectize.enable = !opt_final.disableSelectize;
-   */
-
+  
   /**
    * Remove old editor if already exists
    */
@@ -129,6 +124,10 @@ export async function jedInit(o) {
    */
   editor.on("ready", async function () {
     const hasShiny = isShinyReady();
+
+
+
+
     /**
      * Auto save draft
      */

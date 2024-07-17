@@ -1,10 +1,10 @@
 import { JSONEditor } from "@json-editor/json-editor";
-import { modalSimple } from "./../mx_helper_modal.js";
-import { moduleLoad } from "./../modules_loader_async";
-import { textToDom } from "./../mx_helper_misc.js";
-import { el, elSpanTranslate, elButtonFa } from "./../el_mapx/index.js";
-import { theme } from "./../mx.js";
-import { jed } from "./index.js";
+import { modalSimple } from "./../../mx_helper_modal.js";
+import { moduleLoad } from "./../../modules_loader_async";
+import { textToDom } from "./../../mx_helper_misc.js";
+import { el, elSpanTranslate, elButtonFa } from "./../../el_mapx/index.js";
+import { theme } from "./../../mx.js";
+import { jed } from "./../index.js";
 
 JSONEditor.defaults.resolvers.unshift(function (schema) {
   if (
@@ -79,9 +79,9 @@ JSONEditor.defaults.editors.monaco = class mxeditors extends (
     const editor = this;
     const mode = editor.options.language;
 
-   /* === "javascript"*/
-        /*? "typescript"*/
-        /*: editor.options.language;*/
+    /* === "javascript"*/
+    /*? "typescript"*/
+    /*: editor.options.language;*/
 
     const editors = jed.monacoEditors;
 

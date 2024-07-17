@@ -5,6 +5,7 @@ import zlib from "zlib";
 import { settings } from "#root/settings";
 import { readFile } from "fs/promises";
 import { clearDownload, deleteOldFiles } from "./deleteOldFiles.js";
+import crypto from "crypto";
 
 /**
  * Conversion of array of column names to pg columns
@@ -206,6 +207,13 @@ function randomString(prefix, nRep, nChar, toLower, toUpper, sep) {
     outStr = outStr.toUpperCase();
   }
   return outStr;
+}
+
+/**
+ * Create ID
+ */
+function uid() {
+  return crypto.randomBytes(16).toString("hex");
 }
 
 /*
@@ -561,6 +569,7 @@ export {
   sendError,
   toBoolean,
   randomString,
+  uid,
   readTxt,
   readTemplate,
   stop,

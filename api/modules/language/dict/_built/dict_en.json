@@ -5724,6 +5724,14 @@
     "en": "Report a bug / feature request"
   },
   {
+    "id": "btn_report",
+    "en": "Flag/Report content"
+  },
+  {
+    "id": "btn_submit",
+    "en": "Submit..."
+  },
+  {
     "id": "btn_doc_wiki",
     "en": "MapX documentation"
   },
