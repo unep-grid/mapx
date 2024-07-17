@@ -1,3 +1,7 @@
+  - [1.13.9-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.1) 
+
+    - Reporting tool : first version. See issue #876
+
   - [1.13.8](https://github.com/unep-grid/mapx/tree/1.13.8) 
 
   - [1.13.8-alpha.10](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.10) 
