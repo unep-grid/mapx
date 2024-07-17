@@ -1,3 +1,5 @@
+  - [1.13.8](https://github.com/unep-grid/mapx/tree/1.13.8) 
+
   - [1.13.8-alpha.10](https://github.com/unep-grid/mapx/tree/1.13.8-alpha.10) 
 
     - Fix CSS flex-start: support issue
