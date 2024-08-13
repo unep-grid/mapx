@@ -23,7 +23,6 @@ import { modalSimple } from "../mx_helper_modal.js";
 import { moduleLoad } from "../modules_loader_async/index.js";
 import { theme } from "../init_theme.js";
 import { elButtonFa } from "../el_mapx/index.js";
-import { onNextFrame } from "../animation_frame/index.js";
 const { valuesMap } = settings;
 
 /**
