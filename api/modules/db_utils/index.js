@@ -3,7 +3,14 @@ import { settings } from "#root/settings";
 import { parseTemplate } from "#mapx/helpers";
 import { templates } from "#mapx/template";
 import { getUserRoles } from "#mapx/authentication";
-import { isEmpty, isArray, isSourceId, isProjectId } from "@fxi/mx_valid";
+import {
+  isArrayOf,
+  isNumeric,
+  isEmpty,
+  isArray,
+  isSourceId,
+  isProjectId,
+} from "@fxi/mx_valid";
 import { isLayerValid, areLayersValid } from "./geom_validation.js";
 import { insertRow } from "./insert.js";
 import { hasSourceDependencies } from "#mapx/source";
@@ -584,6 +591,36 @@ async function getTableDimension(idTable) {
 }
 
 /**
+ * Deletes one or more rows from a specified table based on their IDs.
+ *
+ * @async
+ * @function deleteRowById
+ * @param {string} idTable - The name of the table from which to delete rows.
+ * @param {number[]} idsRow - An array of numeric IDs identifying the rows to be deleted.
+ * @throws {Error} Throws an error if the input array is not an array of numbers.
+ * @throws {Error} Throws an error if the number of deleted rows doesn't match the number of input IDs.
+ * @returns {Promise<void>} A promise that resolves when the deletion is successful.
+ */
+async function deleteRowByGid(idTable, idsRow) {
+  if (!isArrayOf(idsRow, isNumeric)) {
+    throw new Error("Invalid rows id");
+  }
+  const nRows = idsRow.length;
+  await withTransaction(async (pgClient) => {
+    const deleteQuery = `
+      DELETE FROM ${idTable}
+      WHERE gid = ANY($1::int[])
+    `;
+    const result = await pgClient.query(deleteQuery, [idsRow]);
+    if (result.rowCount !== nRows) {
+      throw new Error(
+        `Expected to delete ${nRows} row(s), but deleted ${result.rowCount} row(s)`
+      );
+    }
+  });
+}
+
+/**
  * Get columns types
  * @async
  * @param {String} idSource Id of the source
@@ -1065,6 +1102,7 @@ async function withTransaction(action) {
  * Exports
  */
 export {
+  deleteRowByGid,
   withTransaction,
   insertRow,
   getLayerViewsAttributes,

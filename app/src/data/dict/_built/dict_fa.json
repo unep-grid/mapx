@@ -2040,6 +2040,36 @@
     "fa": "ترتیب ستون ها را تنظیم کنید"
   },
   {
+    "id": "edit_table_modal_remove_rows_no_selection_title",
+    "en": "No Rows Selected",
+    "fa": "هیچ ردیفی انتخاب نشده است"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_no_selection_content",
+    "en": "Please select one or more rows to remove.",
+    "fa": "لطفاً یک یا چند ردیف را برای حذف انتخاب کنید."
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_title",
+    "en": "Confirm Row Removal",
+    "fa": "تأیید حذف ردیف‌ها"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_text",
+    "en": "Are you sure you want to remove <code>{{count}}</code> row(s)? This action cannot be undone.",
+    "fa": "آیا مطمئن هستید که می‌خواهید <code>{{count}}</code> ردیف را حذف کنید؟ این عمل قابل بازگشت نیست."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_rows_confirm",
+    "en": "Remove Rows",
+    "fa": "حذف ردیف‌ها"
+  },
+  {
+    "id": "btn_edit_remove_rows",
+    "en": "Remove selected rows",
+    "fa": "حذف ردیف‌های انتخاب شده"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fa": "ابزار هندسه: لایه منبع را انتخاب کنید"

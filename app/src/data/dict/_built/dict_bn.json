@@ -2040,6 +2040,36 @@
     "bn": "কলামের ক্রম সেট করুন"
   },
   {
+    "id": "edit_table_modal_remove_rows_no_selection_title",
+    "en": "No Rows Selected",
+    "bn": "কোনো সারি নির্বাচিত হয়নি"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_no_selection_content",
+    "en": "Please select one or more rows to remove.",
+    "bn": "অনুগ্রহ করে মুছে ফেলার জন্য একটি বা একাধিক সারি নির্বাচন করুন।"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_title",
+    "en": "Confirm Row Removal",
+    "bn": "সারি অপসারণ নিশ্চিত করুন"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_text",
+    "en": "Are you sure you want to remove <code>{{count}}</code> row(s)? This action cannot be undone.",
+    "bn": "আপনি কি নিশ্চিত যে আপনি <code>{{count}}</code>টি সারি মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।"
+  },
+  {
+    "id": "btn_edit_table_modal_remove_rows_confirm",
+    "en": "Remove Rows",
+    "bn": "সারি মুছে ফেলুন"
+  },
+  {
+    "id": "btn_edit_remove_rows",
+    "en": "Remove selected rows",
+    "bn": "নির্বাচিত সারিগুলি মুছে ফেলুন"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "bn": "জ্যামিতি সরঞ্জাম: উৎস স্তর নির্বাচন করুন"

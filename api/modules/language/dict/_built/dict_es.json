@@ -2040,6 +2040,36 @@
     "es": "Establecer el orden de las columnas"
   },
   {
+    "id": "edit_table_modal_remove_rows_no_selection_title",
+    "en": "No Rows Selected",
+    "es": "No hay filas seleccionadas"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_no_selection_content",
+    "en": "Please select one or more rows to remove.",
+    "es": "Por favor, seleccione una o más filas para eliminar."
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_title",
+    "en": "Confirm Row Removal",
+    "es": "Confirmar eliminación de filas"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_text",
+    "en": "Are you sure you want to remove <code>{{count}}</code> row(s)? This action cannot be undone.",
+    "es": "¿Está seguro de que desea eliminar <code>{{count}}</code> fila(s)? Esta acción no se puede deshacer."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_rows_confirm",
+    "en": "Remove Rows",
+    "es": "Eliminar filas"
+  },
+  {
+    "id": "btn_edit_remove_rows",
+    "en": "Remove selected rows",
+    "es": "Eliminar filas seleccionadas"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "es": "Herramientas de geometría: seleccione la capa de origen"

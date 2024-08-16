@@ -22,6 +22,7 @@ import {
   removeColumnMetadata,
   updateTableCellByGid,
   updateViewsAttributeBatch,
+  deleteRowByGid,
 } from "#mapx/db_utils";
 import {
   getSourceAttributeTable,
@@ -815,12 +816,19 @@ class EditTableSession {
                     views,
                   });
                   et.emitSpread(events.server_spread_join_editor_update, {
-                    source_columns_rename : updates
+                    source_columns_rename: updates,
                   });
                   await et.updateAltStyleClient(id_table);
                   return;
                 }
               );
+            }
+            break;
+          case "remove_rows":
+            {
+              const { id_rows } = update;
+              await deleteRowByGid(id_table, id_rows);
+              tables_update.add(id_table);
             }
             break;
 

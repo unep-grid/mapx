@@ -2040,6 +2040,36 @@
     "ru": "Установить порядок столбцов"
   },
   {
+    "id": "edit_table_modal_remove_rows_no_selection_title",
+    "en": "No Rows Selected",
+    "ru": "Строки не выбраны"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_no_selection_content",
+    "en": "Please select one or more rows to remove.",
+    "ru": "Пожалуйста, выберите одну или несколько строк для удаления."
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_title",
+    "en": "Confirm Row Removal",
+    "ru": "Подтвердить удаление строк"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_text",
+    "en": "Are you sure you want to remove <code>{{count}}</code> row(s)? This action cannot be undone.",
+    "ru": "Вы уверены, что хотите удалить <code>{{count}}</code> строк(и)? Это действие нельзя отменить."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_rows_confirm",
+    "en": "Remove Rows",
+    "ru": "Удалить строки"
+  },
+  {
+    "id": "btn_edit_remove_rows",
+    "en": "Remove selected rows",
+    "ru": "Удалить выбранные строки"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ru": "Инструменты геометрии: выберите исходный слой"

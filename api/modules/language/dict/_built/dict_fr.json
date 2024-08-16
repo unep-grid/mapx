@@ -2040,6 +2040,36 @@
     "fr": "Définir l'ordre des colonnes"
   },
   {
+    "id": "edit_table_modal_remove_rows_no_selection_title",
+    "en": "No Rows Selected",
+    "fr": "Aucune ligne sélectionnée"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_no_selection_content",
+    "en": "Please select one or more rows to remove.",
+    "fr": "Veuillez sélectionner une ou plusieurs lignes à supprimer."
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_title",
+    "en": "Confirm Row Removal",
+    "fr": "Confirmer la suppression des lignes"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_text",
+    "en": "Are you sure you want to remove <code>{{count}}</code> row(s)? This action cannot be undone.",
+    "fr": "Êtes-vous sûr de vouloir supprimer <code>{{count}}</code> ligne(s) ? Cette action ne peut pas être annulée."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_rows_confirm",
+    "en": "Remove Rows",
+    "fr": "Supprimer les lignes"
+  },
+  {
+    "id": "btn_edit_remove_rows",
+    "en": "Remove selected rows",
+    "fr": "Supprimer les lignes sélectionnées"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "fr": "Outils de géométrie : sélectionner le calque source"

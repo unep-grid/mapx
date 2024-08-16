@@ -1,6 +1,5 @@
 import { JSONEditor } from "@json-editor/json-editor";
 
-debugger;
 JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   getSelectInput: function (options) {
     var el = this._super(options);
@@ -58,7 +57,6 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
 
     if (description) group.appendChild(description);
 
-    debugger;
     return group;
   },
   getIndentedPanel: function () {

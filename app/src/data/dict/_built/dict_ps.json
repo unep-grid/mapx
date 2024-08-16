@@ -2040,6 +2040,36 @@
     "ps": "د کالمونو ترتیب ترتیب کړئ"
   },
   {
+    "id": "edit_table_modal_remove_rows_no_selection_title",
+    "en": "No Rows Selected",
+    "ps": "هیڅ قطار نه دی ټاکل شوی"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_no_selection_content",
+    "en": "Please select one or more rows to remove.",
+    "ps": "د لرې کولو لپاره مهرباني وکړئ یو یا څو قطارونه وټاکئ."
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_title",
+    "en": "Confirm Row Removal",
+    "ps": "د قطارونو د لرې کولو تایید"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_text",
+    "en": "Are you sure you want to remove <code>{{count}}</code> row(s)? This action cannot be undone.",
+    "ps": "آیا تاسو ډاډه یاست چې غواړئ <code>{{count}}</code> قطار(ونه) لرې کړئ؟ دا عمل نشي بېرته کېدای."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_rows_confirm",
+    "en": "Remove Rows",
+    "ps": "قطارونه لرې کړئ"
+  },
+  {
+    "id": "btn_edit_remove_rows",
+    "en": "Remove selected rows",
+    "ps": "ټاکل شوي قطارونه لرې کړئ"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "ps": "د جیومیټري وسیلې: د سرچینې پرت غوره کړئ"

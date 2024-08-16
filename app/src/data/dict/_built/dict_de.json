@@ -2040,6 +2040,36 @@
     "de": "Spaltenreihenfolge festlegen"
   },
   {
+    "id": "edit_table_modal_remove_rows_no_selection_title",
+    "en": "No Rows Selected",
+    "de": "Keine Zeilen ausgewählt"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_no_selection_content",
+    "en": "Please select one or more rows to remove.",
+    "de": "Bitte wählen Sie eine oder mehrere Zeilen zum Entfernen aus."
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_title",
+    "en": "Confirm Row Removal",
+    "de": "Zeilenentfernung bestätigen"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_text",
+    "en": "Are you sure you want to remove <code>{{count}}</code> row(s)? This action cannot be undone.",
+    "de": "Sind Sie sicher, dass Sie <code>{{count}}</code> Zeile(n) entfernen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_rows_confirm",
+    "en": "Remove Rows",
+    "de": "Zeilen entfernen"
+  },
+  {
+    "id": "btn_edit_remove_rows",
+    "en": "Remove selected rows",
+    "de": "Ausgewählte Zeilen entfernen"
+  },
+  {
     "id": "geom_tools_modal_select_title",
     "en": "Geometry tools : select source layer",
     "de": "Geometriewerkzeuge: Quellebene auswählen"

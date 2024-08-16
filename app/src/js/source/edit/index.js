@@ -48,7 +48,7 @@ import { onNextFrame, waitFrameAsync } from "../../animation_frame";
 
 const defaults = {
   debug: false,
-  log_perf: false, 
+  log_perf: false,
   id_table: null,
   ht_license: "non-commercial-and-evaluation",
   id_column_main: "gid",
@@ -436,6 +436,14 @@ export class EditTableSessionClient extends EditTableBase {
     });
 
     /**
+     *  Rows
+     */
+    et._el_button_remove_rows = elButtonFa("btn_edit_remove_rows", {
+      icon: "trash",
+      action: et._l(et.dialogRemoveRows),
+    });
+
+    /**
      * Geom
      */
     et._el_button_geom_validate = elButtonFa("btn_edit_geom_validate", {
@@ -458,6 +466,7 @@ export class EditTableSessionClient extends EditTableBase {
         et._el_button_remove_column,
         et._el_button_rename_column,
         et._el_button_duplicate_column,
+        et._el_button_remove_rows,
         et._el_button_geom_validate,
         et._el_button_geom_repair,
         et._el_button_stat,
@@ -1437,6 +1446,7 @@ export class EditTableSessionClient extends EditTableBase {
       afterLoadData: et.afterLoadData, //also reload/updateData
       height: et.updateHeight,
       disableVisualSelection: false,
+      outsideClickDeselects: false,
       comment: false,
     });
 
@@ -1468,6 +1478,65 @@ export class EditTableSessionClient extends EditTableBase {
   hasHt() {
     const et = this;
     return et._handsontable && et._ht instanceof et._handsontable;
+  }
+
+  getSelectedRowsId() {
+    const ht = this._ht;
+    const selected = ht.getSelected();
+
+    if (isEmpty(selected)) {
+      return [];
+    }
+
+    const rowIdSet = new Set();
+    const columnIndex = this.column_index;
+
+    for (const [startRow, , endRow] of selected) {
+      for (let row = startRow; row <= endRow; row++) {
+        const rowData = ht.getSourceDataAtRow(row);
+        if (isNotEmpty(rowData) && isNotEmpty(rowData[columnIndex])) {
+          rowIdSet.add(rowData[columnIndex]);
+        }
+      }
+    }
+
+    return Array.from(rowIdSet);
+  }
+
+  async dialogRemoveRows() {
+    const et = this;
+    const ids = et.getSelectedRowsId();
+    const source = et._config.id_source_dialog;
+
+    if (isEmpty(ids)) {
+      await modalDialog({
+        title: tt("edit_table_modal_remove_rows_no_selection_title"),
+        content: tt("edit_table_modal_remove_rows_no_selection_content"),
+      });
+      return;
+    }
+
+    const confirmRemove = await modalConfirm({
+      title: tt("edit_table_modal_remove_rows_confirm_title"),
+      content: tt("edit_table_modal_remove_rows_confirm_text", {
+        data: {
+          count: ids.length,
+        },
+      }),
+      confirm: tt("btn_edit_table_modal_remove_rows_confirm"),
+      cancel: tt("btn_cancel"),
+    });
+
+    if (!confirmRemove) {
+      return;
+    }
+
+    const update = {
+      type: "remove_rows",
+      id_table: et._id_table,
+      id_rows: ids,
+    };
+    await et.handlerUpdateRowsRemove(update, source);
   }
 
   async dialogColumnOrder() {
@@ -1710,14 +1779,14 @@ export class EditTableSessionClient extends EditTableBase {
       et.addDispached(message);
 
       if (message.end) {
-        et.processDispached();
+        et.processDispatched();
       }
     } catch (e) {
       console.error(e);
     }
   }
 
-  async processDispached() {
+  async processDispatched() {
     const et = this;
     try {
       const idDispatch = `${et._config.id_source_dispatch}@${makeId()}`;
@@ -1752,6 +1821,10 @@ export class EditTableSessionClient extends EditTableBase {
               case "order_columns":
                 await et.handlerUpdateColumnsOrder(update, idDispatch);
                 break;
+              case "remove_rows":
+                await et.handlerUpdateRowsRemove(update, idDispatch);
+                break;
+
               default:
                 console.warn("unhandled update:", message);
             }
@@ -1934,6 +2007,10 @@ export class EditTableSessionClient extends EditTableBase {
        * Remove refs : undo/redo/updates
        */
       et.clearRef(colRemoved.name);
+      /**
+       * Update column meta
+       */
+      et.updateTableColumns();
 
       /**
        * ⚠️ Column removal using alter('remove_col',) is not
@@ -1946,24 +2023,16 @@ export class EditTableSessionClient extends EditTableBase {
        * - Alter table
        * et._ht.alter("remove_col", id);
        */
-      et.updateTableColumns();
-
       const data = et._ht.getSourceData();
       for (const row of data) {
         delete row[update.column_name];
       }
-
       await et.updateData(data, "column_remove_handler");
 
       /**
        * Update buttons state
        */
       et.updateButtons();
-
-      /**
-       * Render table
-       */
-      et._ht.render();
 
       if (et.isFromDispatch(source)) {
         return;
@@ -1997,7 +2066,8 @@ export class EditTableSessionClient extends EditTableBase {
       et._ht.loadData(data);
     }
     await et.once("table_ready", null);
-
+    et._ht.render();
+    et._ht.deselectCell();
     et.updateTableColumns();
     /**
      * ht clear undo redo and add insert : we don't want that
@@ -2390,6 +2460,44 @@ export class EditTableSessionClient extends EditTableBase {
       console.error(e);
       return false;
     }
+  }
+
+  /**
+   * Handle rows removal from update
+   * @param {Object} update
+   * @param {String} source (edit, dispatch..)
+   */
+  async handlerUpdateRowsRemove(update, source) {
+    const et = this;
+    try {
+      await et._remove_rows(update);
+
+      if (et.isFromDispatch(source)) {
+        /**
+         * Dispatched event : don't re-dispatch
+         */
+        return;
+      }
+
+      await et.emitUpdatesDb([update]);
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  }
+
+  async _remove_rows(update) {
+    const et = this;
+    const data = et._ht.getSourceData();
+    const idsRemove = new Set(update.id_rows);
+    const columnIndex = et.column_index;
+    // Using Set + filter is 5x faster than for of...
+    const filteredData = data.filter((row) => !idsRemove.has(row[columnIndex]));
+
+    await et.updateData(filteredData, "column_remove_handler");
+
+    return true;
   }
 
   /**

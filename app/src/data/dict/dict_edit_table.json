@@ -1157,5 +1157,83 @@
     "ps": "",
     "bn": "",
     "de": ""
+  },
+  {
+    "id": "edit_table_modal_remove_rows_no_selection_title",
+    "en": "No Rows Selected",
+    "fr": "Aucune ligne sélectionnée",
+    "es": "No hay filas seleccionadas",
+    "ru": "Строки не выбраны",
+    "zh": "未选择行",
+    "ar": "لم يتم تحديد أي صفوف",
+    "fa": "هیچ ردیفی انتخاب نشده است",
+    "ps": "هیڅ قطار نه دی ټاکل شوی",
+    "bn": "কোনো সারি নির্বাচিত হয়নি",
+    "de": "Keine Zeilen ausgewählt"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_no_selection_content",
+    "en": "Please select one or more rows to remove.",
+    "fr": "Veuillez sélectionner une ou plusieurs lignes à supprimer.",
+    "es": "Por favor, seleccione una o más filas para eliminar.",
+    "ru": "Пожалуйста, выберите одну или несколько строк для удаления.",
+    "zh": "请选择一行或多行以删除。",
+    "ar": "الرجاء تحديد صف واحد أو أكثر للإزالة.",
+    "fa": "لطفاً یک یا چند ردیف را برای حذف انتخاب کنید.",
+    "ps": "د لرې کولو لپاره مهرباني وکړئ یو یا څو قطارونه وټاکئ.",
+    "bn": "অনুগ্রহ করে মুছে ফেলার জন্য একটি বা একাধিক সারি নির্বাচন করুন।",
+    "de": "Bitte wählen Sie eine oder mehrere Zeilen zum Entfernen aus."
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_title",
+    "en": "Confirm Row Removal",
+    "fr": "Confirmer la suppression des lignes",
+    "es": "Confirmar eliminación de filas",
+    "ru": "Подтвердить удаление строк",
+    "zh": "确认删除行",
+    "ar": "تأكيد إزالة الصفوف",
+    "fa": "تأیید حذف ردیف‌ها",
+    "ps": "د قطارونو د لرې کولو تایید",
+    "bn": "সারি অপসারণ নিশ্চিত করুন",
+    "de": "Zeilenentfernung bestätigen"
+  },
+  {
+    "id": "edit_table_modal_remove_rows_confirm_text",
+    "en": "Are you sure you want to remove <code>{{count}}</code> row(s)? This action cannot be undone.",
+    "fr": "Êtes-vous sûr de vouloir supprimer <code>{{count}}</code> ligne(s) ? Cette action ne peut pas être annulée.",
+    "es": "¿Está seguro de que desea eliminar <code>{{count}}</code> fila(s)? Esta acción no se puede deshacer.",
+    "ru": "Вы уверены, что хотите удалить <code>{{count}}</code> строк(и)? Это действие нельзя отменить.",
+    "zh": "您确定要删除 <code>{{count}}</code> 行吗？此操作无法撤消。",
+    "ar": "هل أنت متأكد أنك تريد إزالة <code>{{count}}</code> صف (صفوف)؟ لا يمكن التراجع عن هذا الإجراء.",
+    "fa": "آیا مطمئن هستید که می‌خواهید <code>{{count}}</code> ردیف را حذف کنید؟ این عمل قابل بازگشت نیست.",
+    "ps": "آیا تاسو ډاډه یاست چې غواړئ <code>{{count}}</code> قطار(ونه) لرې کړئ؟ دا عمل نشي بېرته کېدای.",
+    "bn": "আপনি কি নিশ্চিত যে আপনি <code>{{count}}</code>টি সারি মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+    "de": "Sind Sie sicher, dass Sie <code>{{count}}</code> Zeile(n) entfernen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+  },
+  {
+    "id": "btn_edit_table_modal_remove_rows_confirm",
+    "en": "Remove Rows",
+    "fr": "Supprimer les lignes",
+    "es": "Eliminar filas",
+    "ru": "Удалить строки",
+    "zh": "删除行",
+    "ar": "إزالة الصفوف",
+    "fa": "حذف ردیف‌ها",
+    "ps": "قطارونه لرې کړئ",
+    "bn": "সারি মুছে ফেলুন",
+    "de": "Zeilen entfernen"
+  },
+  {
+    "id": "btn_edit_remove_rows",
+    "en": "Remove selected rows",
+    "fr": "Supprimer les lignes sélectionnées",
+    "es": "Eliminar filas seleccionadas",
+    "ru": "Удалить выбранные строки",
+    "zh": "删除选定行",
+    "ar": "إزالة الصفوف المحددة",
+    "fa": "حذف ردیف‌های انتخاب شده",
+    "ps": "ټاکل شوي قطارونه لرې کړئ",
+    "bn": "নির্বাচিত সারিগুলি মুছে ফেলুন",
+    "de": "Ausgewählte Zeilen entfernen"
   }
 ]
