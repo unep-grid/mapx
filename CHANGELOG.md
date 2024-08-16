@@ -1,3 +1,11 @@
+  - [1.13.9-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.2) 
+
+    - Table Editor
+        - Implemetned #908 :
+            - removal of one or many rows, sequentially or not 
+            - propagate change 
+            - DB transctional handling
+
   - [1.13.9-alpha.1](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.1) 
 
     - Reporting tool : first version. See issue #876
