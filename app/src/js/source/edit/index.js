@@ -102,6 +102,7 @@ export class EditTableSessionClient extends EditTableBase {
 
   /**
    * Get generic state
+   * TODO : remove, as not used
    */
   get state() {
     const et = this;
@@ -300,7 +301,7 @@ export class EditTableSessionClient extends EditTableBase {
     const e = et._config.events;
 
     try {
-      if (et._destroyed) {
+      if (et._destroyed || et._destroying) {
         return;
       }
       /**
@@ -314,7 +315,7 @@ export class EditTableSessionClient extends EditTableBase {
       /**
        * Clean
        */
-      et._destroyed = true;
+      et._destroying = true;
       et._lock_table_concurrent = false;
       et._lock_table_by_user_id = null;
 
@@ -371,6 +372,7 @@ export class EditTableSessionClient extends EditTableBase {
       et.fire("destroy").catch((e) => {
         console.error(e);
       });
+      et._destroyed = true;
     } catch (e) {
       console.error(e);
     }
@@ -385,7 +387,6 @@ export class EditTableSessionClient extends EditTableBase {
     if (et._built) {
       return;
     }
-    et._built = true;
     et._el_button_close = elButtonFa("btn_close", {
       icon: "times",
       action: et.destroy,
@@ -574,6 +575,7 @@ export class EditTableSessionClient extends EditTableBase {
       },
     });
 
+    et._built = true;
     await et.fire("built");
   }
 
@@ -3034,6 +3036,18 @@ export class EditTableSessionClient extends EditTableBase {
   /**
    * Get locked state
    */
+  get destroyed() {
+    const et = this;
+    return !!et._destroyed;
+  }
+  get destroying() {
+    const et = this;
+    return !!et._destroying;
+  }
+
+  /**
+   * Get locked state
+   */
   get locked() {
     const et = this;
     return !!et._locked;
@@ -3119,9 +3133,20 @@ export class EditTableSessionClient extends EditTableBase {
    */
   async emit(type, message, timeout) {
     const et = this;
-    if (!et.state.built || et.locked) {
+
+    if (et.destroyed) {
+      console.warn("Trying to emit from a destroyed instance", type, message);
       return false;
     }
+    if (!et._built) {
+      console.warn("Trying to emit when it's not fully built", type, message);
+      return false;
+    }
+    if (!et.destroying && et.locked) {
+      console.warn("Trying to emit when it's locked", type, message);
+      return false;
+    }
+
     const maxTime = isEmpty(timeout) ? et._config.timeout_emit : timeout;
     const messageEmit = et.message_formater(message);
     return et._ws.emitAsync(type, messageEmit, maxTime);
