@@ -1,3 +1,8 @@
+  - [1.13.9-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.3) 
+    
+    - Table Editor
+        - Fixed bug preventing the table to exit properly, resulting in duplicated emits, server errors, and wrong concurrent user count. 
+
   - [1.13.9-alpha.2](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.2) 
 
     - Table Editor
