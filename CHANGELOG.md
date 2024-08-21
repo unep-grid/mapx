@@ -1,3 +1,11 @@
+  - [1.13.9-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.4) 
+
+    - View Metadata
+        - Added a list of available service:
+            - WMS/WFS/WMTS + Tool to prepare query with the correct namespace and layer, if available.  
+            - Download source + Shortcut to the download tool
+            - PostGIS vector tile ( for information ) 
+
   - [1.13.9-alpha.3](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.3) 
     
     - Table Editor
