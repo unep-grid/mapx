@@ -3390,11 +3390,6 @@
     "ps": "ددې لیدنې شکل تنظیم کړئ"
   },
   {
-    "id": "btn_opt_meta",
-    "en": "Display metadata",
-    "ps": "میتا ډیټا ښکاره کړئ"
-  },
-  {
     "id": "btn_opt_stats",
     "en": "Display view's statistics",
     "ps": "د لیدنې احصایې ښکاره کړئ"
@@ -6560,301 +6555,6 @@
     "ps": "معلومات په اونۍ کې نوي کیږي "
   },
   {
-    "id": "meta_display_source_title",
-    "en": "Metadata of the source",
-    "ps": "د سرچینې میډیډاټا "
-  },
-  {
-    "id": "meta_display_view_title",
-    "en": "Summary of the view metadata",
-    "ps": "د لید میټاټاټا لنډیز "
-  },
-  {
-    "id": "meta_last_editor_id",
-    "en": "Editor id",
-    "ps": "ایډیټ ID "
-  },
-  {
-    "id": "meta_all_editor_id",
-    "en": "Id of all editors",
-    "ps": "د ټولو ایډیټرانو شناخت "
-  },
-  {
-    "id": "meta_view_modal_title",
-    "en": "Metadata of the view",
-    "ps": "د لید میډیډاټا "
-  },
-  {
-    "id": "meta_source_modal_title",
-    "en": "Metadata of the source",
-    "ps": "د سرچینې میټاډاټا"
-  },
-  {
-    "id": "meta_view_raster_meta",
-    "en": "Metadata Entry",
-    "ps": "د میټاډاټا ننوتل "
-  },
-  {
-    "id": "meta_view_table_editors_title",
-    "en": "Changes overview",
-    "ps": "بدلونونه بیاکتنه "
-  },
-  {
-    "id": "meta_view_table_editors_changes",
-    "en": "N. of changes",
-    "ps": "د بدلونونو N "
-  },
-  {
-    "id": "meta_view_table_editors_email",
-    "en": "Editor",
-    "ps": "مدیر "
-  },
-  {
-    "id": "meta_view_table_editors_id",
-    "en": "ID",
-    "ps": "ID"
-  },
-  {
-    "id": "meta_view_table_editors_current",
-    "en": "Latest edit",
-    "ps": "وروستی سمون "
-  },
-  {
-    "id": "meta_view_title",
-    "en": "View title",
-    "ps": "سرلیک وګورئ "
-  },
-  {
-    "id": "meta_view_abstract",
-    "en": "Abstract",
-    "ps": "خلاصول "
-  },
-  {
-    "id": "meta_view_stat_n_add",
-    "en": "Number of activations",
-    "ps": "د فعالیتونو شمیر"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_users",
-    "en": "Number of activations by registered users",
-    "ps": "د راجستر شوي کاروونکو لخوا د فعالیتونو شمیر"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_distinct_users",
-    "en": "Number of distinct user",
-    "ps": "د جلا کاروونکو شمیر"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_guests",
-    "en": "Number of activations by guests",
-    "ps": "د میلمنو لخوا د فعالیتونو شمیر"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country",
-    "en": "Activations per countries",
-    "ps": "په هر هیواد کې فعالیتونه"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_last_year",
-    "en": "Activations per country ( last 12 months ) ",
-    "ps": "په هر هیواد کې فعالیتونه (په تیرو 12 میاشتو کې)"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_axis",
-    "en": "Number of activations (logarithmic scale)",
-    "ps": "د فعالیتونو شمیر (لوګاریتمیک پیمانه)"
-  },
-  {
-    "id": "meta_view_stat_activations",
-    "en": "activations",
-    "ps": "فعاليتونه"
-  },
-  {
-    "id": "meta_view_stat_others_countries",
-    "en": "Others",
-    "ps": "نور"
-  },
-  {
-    "id": "meta_source_title",
-    "en": "Title",
-    "ps": "سرلیک "
-  },
-  {
-    "id": "meta_source_abstract",
-    "en": "Abstract",
-    "ps": "خلاصول "
-  },
-  {
-    "id": "meta_source_notes",
-    "en": "Notes",
-    "ps": "یادونه "
-  },
-  {
-    "id": "meta_source_licenses",
-    "en": "Licenses",
-    "ps": "جوازونه"
-  },
-  {
-    "id": "meta_source_keywords",
-    "en": "Keywords",
-    "ps": "کلیدي ټکي "
-  },
-  {
-    "id": "meta_source_keywords_gemet",
-    "en": "GEMET keywords",
-    "ps": "د GEET ټکي"
-  },
-  {
-    "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords",
-    "ps": "د جغرافیایی کلیمې"
-  },
-  {
-    "id": "meta_source_languages",
-    "en": "Languages used in the data",
-    "ps": "په معلوماتو کې کارول شوې ژبې "
-  },
-  {
-    "id": "meta_source_contacts",
-    "en": "Contacts list",
-    "ps": "د اړیکو لیست "
-  },
-  {
-    "id": "meta_source_periodicity",
-    "en": "Periodicity",
-    "ps": "دوره ای "
-  },
-  {
-    "id": "meta_source_released_at",
-    "en": "Date of release",
-    "ps": "د خوشې کیدو نیټه "
-  },
-  {
-    "id": "meta_source_modified_at",
-    "en": "Date of modification",
-    "ps": "د تعدیل نیټه "
-  },
-  {
-    "id": "meta_source_start_at",
-    "en": "Data values starting date",
-    "ps": "د نیټې نیټه د پیل نیټه "
-  },
-  {
-    "id": "meta_source_end_at",
-    "en": "Data values ending date",
-    "ps": "د نیټې نیټه نیټه د ارزښتونو ارزښت "
-  },
-  {
-    "id": "meta_source_is_timeless",
-    "en": "Data without temporal values",
-    "ps": "د لنډمهاله ارزښتونو پرته معلومات "
-  },
-  {
-    "id": "meta_view_projects_data",
-    "en": "Also published in those projects",
-    "ps": "په هغو پروژو کې هم خپاره شوي دي"
-  },
-  {
-    "id": "meta_view_project_title",
-    "en": "Original project",
-    "ps": "اصلي پروژه "
-  },
-  {
-    "id": "meta_view_projects",
-    "en": "Projects",
-    "ps": "پروژې "
-  },
-  {
-    "id": "meta_view_id",
-    "en": "View id",
-    "ps": "ID وګوره "
-  },
-  {
-    "id": "meta_view_collections",
-    "en": "Collections",
-    "ps": "ټولګه "
-  },
-  {
-    "id": "meta_view_date_modified",
-    "en": "Modification date",
-    "ps": "د بدلون نیټه "
-  },
-  {
-    "id": "meta_view_date_created",
-    "en": "Creation date",
-    "ps": "د جوړېدو نیټه "
-  },
-  {
-    "id": "meta_view_editor",
-    "en": "Editor",
-    "ps": "مدیر "
-  },
-  {
-    "id": "meta_view_editors",
-    "en": "Groups with editing access",
-    "ps": "ډلې د ترمیم لاسرسي سره "
-  },
-  {
-    "id": "meta_view_readers",
-    "en": "Groups with reading access",
-    "ps": "ډلې د لوستلو لاسرسی سره "
-  },
-  {
-    "id": "meta_view_type",
-    "en": "Type",
-    "ps": "ډول "
-  },
-  {
-    "id": "meta_view_table_summary_title",
-    "en": "Summary of the view",
-    "ps": "د لید لنډیز "
-  },
-  {
-    "id": "meta_source_id",
-    "en": "Source id",
-    "ps": "سرچینه ای ډي "
-  },
-  {
-    "id": "meta_source_table_summary_title",
-    "en": "Summary of the source",
-    "ps": "د سرچینې لنډیز "
-  },
-  {
-    "id": "meta_source_homepage",
-    "en": "Source homepage",
-    "ps": "سرچینه کور پا .ه "
-  },
-  {
-    "id": "meta_source_url_download",
-    "en": "Download original source",
-    "ps": "اصلي سرچینه ډاونلوډ کړئ "
-  },
-  {
-    "id": "meta_source_url_annexes",
-    "en": "Download annexes",
-    "ps": "ضمیمه ډاونلوډ کړئ "
-  },
-  {
-    "id": "meta_source_integrity_score",
-    "en": "Integrity score",
-    "ps": "د بشپړتیا سکور "
-  },
-  {
-    "id": "meta_source_time_range",
-    "en": "Temporal range",
-    "ps": "لنډمهاله لړۍ "
-  },
-  {
-    "id": "meta_source_time_range_min",
-    "en": "From",
-    "ps": "له "
-  },
-  {
-    "id": "meta_source_time_range_max",
-    "en": "To",
-    "ps": "ته "
-  },
-  {
     "id": "dont_know",
     "en": "I don't know",
     "ps": "زه نه پوهیږم"
@@ -7638,6 +7338,331 @@
     "id": "un_map_disclaimer_asterisk_3",
     "en": "A dispute exists between the Governments of Argentina and the United Kingdom of Great Britain and Northern Ireland concerning sovereignty over the Falkland Islands (Malvinas).",
     "ps": "د ارجنټاین د حکومتونو او د انګلستان لوی بریتانیا او شمالي آیرلینډ ترمنځ د فاکلینډ ټاپوګانو (مالویناس) د حاکمیت په اړه شخړه شتون لري."
+  },
+  {
+    "id": "btn_opt_meta",
+    "en": "Display metadata",
+    "ps": "میتا ډیټا ښکاره کړئ"
+  },
+  {
+    "id": "meta_display_source_title",
+    "en": "Metadata of the source",
+    "ps": "د سرچینې میډیډاټا "
+  },
+  {
+    "id": "meta_display_view_title",
+    "en": "Summary of the view metadata",
+    "ps": "د لید میټاټاټا لنډیز "
+  },
+  {
+    "id": "meta_last_editor_id",
+    "en": "Editor id",
+    "ps": "ایډیټ ID "
+  },
+  {
+    "id": "meta_all_editor_id",
+    "en": "Id of all editors",
+    "ps": "د ټولو ایډیټرانو شناخت "
+  },
+  {
+    "id": "meta_view_modal_title",
+    "en": "Metadata of the view",
+    "ps": "د لید میډیډاټا "
+  },
+  {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "ps": "د سرچینې میټاډاټا"
+  },
+  {
+    "id": "meta_view_raster_meta",
+    "en": "Metadata Entry",
+    "ps": "د میټاډاټا ننوتل "
+  },
+  {
+    "id": "meta_view_table_editors_title",
+    "en": "Changes overview",
+    "ps": "بدلونونه بیاکتنه "
+  },
+  {
+    "id": "meta_view_table_editors_changes",
+    "en": "N. of changes",
+    "ps": "د بدلونونو N "
+  },
+  {
+    "id": "meta_view_table_editors_email",
+    "en": "Editor",
+    "ps": "مدیر "
+  },
+  {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "ps": "ID"
+  },
+  {
+    "id": "meta_view_table_editors_current",
+    "en": "Latest edit",
+    "ps": "وروستی سمون "
+  },
+  {
+    "id": "meta_view_title",
+    "en": "View title",
+    "ps": "سرلیک وګورئ "
+  },
+  {
+    "id": "meta_view_abstract",
+    "en": "Abstract",
+    "ps": "خلاصول "
+  },
+  {
+    "id": "meta_view_stat_n_add",
+    "en": "Number of activations",
+    "ps": "د فعالیتونو شمیر"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_users",
+    "en": "Number of activations by registered users",
+    "ps": "د راجستر شوي کاروونکو لخوا د فعالیتونو شمیر"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "ps": "د جلا کاروونکو شمیر"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_guests",
+    "en": "Number of activations by guests",
+    "ps": "د میلمنو لخوا د فعالیتونو شمیر"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country",
+    "en": "Activations per countries",
+    "ps": "په هر هیواد کې فعالیتونه"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_last_year",
+    "en": "Activations per country ( last 12 months ) ",
+    "ps": "په هر هیواد کې فعالیتونه (په تیرو 12 میاشتو کې)"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_axis",
+    "en": "Number of activations (logarithmic scale)",
+    "ps": "د فعالیتونو شمیر (لوګاریتمیک پیمانه)"
+  },
+  {
+    "id": "meta_view_stat_activations",
+    "en": "activations",
+    "ps": "فعاليتونه"
+  },
+  {
+    "id": "meta_view_stat_others_countries",
+    "en": "Others",
+    "ps": "نور"
+  },
+  {
+    "id": "meta_source_title",
+    "en": "Title",
+    "ps": "سرلیک "
+  },
+  {
+    "id": "meta_source_abstract",
+    "en": "Abstract",
+    "ps": "خلاصول "
+  },
+  {
+    "id": "meta_source_notes",
+    "en": "Notes",
+    "ps": "یادونه "
+  },
+  {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "ps": "جوازونه"
+  },
+  {
+    "id": "meta_source_keywords",
+    "en": "Keywords",
+    "ps": "کلیدي ټکي "
+  },
+  {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "ps": "د GEET ټکي"
+  },
+  {
+    "id": "meta_source_keywords_m49",
+    "en": "Geographic Keywords",
+    "ps": "د جغرافیایی کلیمې"
+  },
+  {
+    "id": "meta_source_languages",
+    "en": "Languages used in the data",
+    "ps": "په معلوماتو کې کارول شوې ژبې "
+  },
+  {
+    "id": "meta_source_contacts",
+    "en": "Contacts list",
+    "ps": "د اړیکو لیست "
+  },
+  {
+    "id": "meta_source_periodicity",
+    "en": "Periodicity",
+    "ps": "دوره ای "
+  },
+  {
+    "id": "meta_source_released_at",
+    "en": "Date of release",
+    "ps": "د خوشې کیدو نیټه "
+  },
+  {
+    "id": "meta_source_modified_at",
+    "en": "Date of modification",
+    "ps": "د تعدیل نیټه "
+  },
+  {
+    "id": "meta_source_start_at",
+    "en": "Data values starting date",
+    "ps": "د نیټې نیټه د پیل نیټه "
+  },
+  {
+    "id": "meta_source_end_at",
+    "en": "Data values ending date",
+    "ps": "د نیټې نیټه نیټه د ارزښتونو ارزښت "
+  },
+  {
+    "id": "meta_source_is_timeless",
+    "en": "Data without temporal values",
+    "ps": "د لنډمهاله ارزښتونو پرته معلومات "
+  },
+  {
+    "id": "meta_view_projects_data",
+    "en": "Also published in those projects",
+    "ps": "په هغو پروژو کې هم خپاره شوي دي"
+  },
+  {
+    "id": "meta_view_project_title",
+    "en": "Original project",
+    "ps": "اصلي پروژه "
+  },
+  {
+    "id": "meta_view_projects",
+    "en": "Projects",
+    "ps": "پروژې "
+  },
+  {
+    "id": "meta_view_id",
+    "en": "View id",
+    "ps": "ID وګوره "
+  },
+  {
+    "id": "meta_view_collections",
+    "en": "Collections",
+    "ps": "ټولګه "
+  },
+  {
+    "id": "meta_view_date_modified",
+    "en": "Modification date",
+    "ps": "د بدلون نیټه "
+  },
+  {
+    "id": "meta_view_date_created",
+    "en": "Creation date",
+    "ps": "د جوړېدو نیټه "
+  },
+  {
+    "id": "meta_view_editor",
+    "en": "Editor",
+    "ps": "مدیر "
+  },
+  {
+    "id": "meta_view_editors",
+    "en": "Groups with editing access",
+    "ps": "ډلې د ترمیم لاسرسي سره "
+  },
+  {
+    "id": "meta_view_readers",
+    "en": "Groups with reading access",
+    "ps": "ډلې د لوستلو لاسرسی سره "
+  },
+  {
+    "id": "meta_view_type",
+    "en": "Type",
+    "ps": "ډول "
+  },
+  {
+    "id": "meta_view_table_summary_title",
+    "en": "Summary of the view",
+    "ps": "د لید لنډیز "
+  },
+  {
+    "id": "meta_source_id",
+    "en": "Source id",
+    "ps": "سرچینه ای ډي "
+  },
+  {
+    "id": "meta_source_table_summary_title",
+    "en": "Summary of the source",
+    "ps": "د سرچینې لنډیز "
+  },
+  {
+    "id": "meta_source_homepage",
+    "en": "Source homepage",
+    "ps": "سرچینه کور پا .ه "
+  },
+  {
+    "id": "meta_source_url_download",
+    "en": "Download original source",
+    "ps": "اصلي سرچینه ډاونلوډ کړئ "
+  },
+  {
+    "id": "meta_source_url_annexes",
+    "en": "Download annexes",
+    "ps": "ضمیمه ډاونلوډ کړئ "
+  },
+  {
+    "id": "meta_source_integrity_score",
+    "en": "Integrity score",
+    "ps": "د بشپړتیا سکور "
+  },
+  {
+    "id": "meta_source_time_range",
+    "en": "Temporal range",
+    "ps": "لنډمهاله لړۍ "
+  },
+  {
+    "id": "meta_source_time_range_min",
+    "en": "From",
+    "ps": "له "
+  },
+  {
+    "id": "meta_source_time_range_max",
+    "en": "To",
+    "ps": "ته "
+  },
+  {
+    "id": "meta_gs_ws_b",
+    "en": "wms/wfs/wmts",
+    "ps": "wms/wfs/wmts"
+  },
+  {
+    "id": "meta_gs_ws_b_not_public",
+    "en": "wms/wfs/wmts – inactive, project not public",
+    "ps": "wms/wfs/wmts - غیر فعال، پروژه عامه نه ده"
+  },
+  {
+    "id": "meta_mx_download",
+    "en": "Download",
+    "ps": "ډاونلوډ"
+  },
+  {
+    "id": "meta_mx_postgis_tiler",
+    "en": "PostGIS native tiles",
+    "ps": "PostGIS اصلي ټایلونه"
+  },
+  {
+    "id": "meta_view_services",
+    "en": "Enabled services",
+    "ps": "فعال شوي خدمتونه"
   },
   {
     "id": "tool_mirror_enable",

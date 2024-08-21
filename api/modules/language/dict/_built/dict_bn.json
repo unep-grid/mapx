@@ -3390,11 +3390,6 @@
     "bn": "এই দৃশ্যের স্টাইলটি সেট করুন "
   },
   {
-    "id": "btn_opt_meta",
-    "en": "Display metadata",
-    "bn": "মেটাডেটা প্রদর্শন করুন "
-  },
-  {
     "id": "btn_opt_stats",
     "en": "Display view's statistics",
     "bn": "দেখার পরিসংখ্যান প্রদর্শন করুন"
@@ -6560,301 +6555,6 @@
     "bn": "সাপ্তাহিক ভিত্তিতে ডেটা আপডেট করা হয় "
   },
   {
-    "id": "meta_display_source_title",
-    "en": "Metadata of the source",
-    "bn": "উত্সটির মেটাডেটা "
-  },
-  {
-    "id": "meta_display_view_title",
-    "en": "Summary of the view metadata",
-    "bn": "মেটাডেটা দেখার সংক্ষিপ্তসার "
-  },
-  {
-    "id": "meta_last_editor_id",
-    "en": "Editor id",
-    "bn": "সম্পাদক আইডি "
-  },
-  {
-    "id": "meta_all_editor_id",
-    "en": "Id of all editors",
-    "bn": "সমস্ত সম্পাদকের আইডি "
-  },
-  {
-    "id": "meta_view_modal_title",
-    "en": "Metadata of the view",
-    "bn": "দেখার মেটাডেটা "
-  },
-  {
-    "id": "meta_source_modal_title",
-    "en": "Metadata of the source",
-    "bn": "উৎসের মেটাডেটা"
-  },
-  {
-    "id": "meta_view_raster_meta",
-    "en": "Metadata Entry",
-    "bn": "মেটাডেটা এন্ট্রি "
-  },
-  {
-    "id": "meta_view_table_editors_title",
-    "en": "Changes overview",
-    "bn": "পরিবর্তন ওভারভিউ "
-  },
-  {
-    "id": "meta_view_table_editors_changes",
-    "en": "N. of changes",
-    "bn": "পরিবর্তনের এন "
-  },
-  {
-    "id": "meta_view_table_editors_email",
-    "en": "Editor",
-    "bn": "সম্পাদক "
-  },
-  {
-    "id": "meta_view_table_editors_id",
-    "en": "ID",
-    "bn": "আইডি"
-  },
-  {
-    "id": "meta_view_table_editors_current",
-    "en": "Latest edit",
-    "bn": "সর্বশেষ সম্পাদনা "
-  },
-  {
-    "id": "meta_view_title",
-    "en": "View title",
-    "bn": "শিরোনাম দেখুন "
-  },
-  {
-    "id": "meta_view_abstract",
-    "en": "Abstract",
-    "bn": "বিমূর্ত "
-  },
-  {
-    "id": "meta_view_stat_n_add",
-    "en": "Number of activations",
-    "bn": "সক্রিয়করণের সংখ্যা"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_users",
-    "en": "Number of activations by registered users",
-    "bn": "নিবন্ধিত ব্যবহারকারীদের দ্বারা সক্রিয়করণের সংখ্যা"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_distinct_users",
-    "en": "Number of distinct user",
-    "bn": "স্বতন্ত্র ব্যবহারকারীর সংখ্যা"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_guests",
-    "en": "Number of activations by guests",
-    "bn": "অতিথিদের দ্বারা সক্রিয়তার সংখ্যা"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country",
-    "en": "Activations per countries",
-    "bn": "দেশ প্রতি সক্রিয়তা"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_last_year",
-    "en": "Activations per country ( last 12 months ) ",
-    "bn": "দেশ প্রতি সক্রিয়তা (গত 12 মাস)"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_axis",
-    "en": "Number of activations (logarithmic scale)",
-    "bn": "সক্রিয়করণের সংখ্যা (লগারিদমিক স্কেল)"
-  },
-  {
-    "id": "meta_view_stat_activations",
-    "en": "activations",
-    "bn": "সক্রিয়করণ"
-  },
-  {
-    "id": "meta_view_stat_others_countries",
-    "en": "Others",
-    "bn": "অন্যান্য"
-  },
-  {
-    "id": "meta_source_title",
-    "en": "Title",
-    "bn": "শিরোনাম "
-  },
-  {
-    "id": "meta_source_abstract",
-    "en": "Abstract",
-    "bn": "বিমূর্ত "
-  },
-  {
-    "id": "meta_source_notes",
-    "en": "Notes",
-    "bn": "মন্তব্য "
-  },
-  {
-    "id": "meta_source_licenses",
-    "en": "Licenses",
-    "bn": "লাইসেন্স"
-  },
-  {
-    "id": "meta_source_keywords",
-    "en": "Keywords",
-    "bn": "কীওয়ার্ডস "
-  },
-  {
-    "id": "meta_source_keywords_gemet",
-    "en": "GEMET keywords",
-    "bn": "গেমেট কীওয়ার্ড"
-  },
-  {
-    "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords",
-    "bn": "ভৌগলিক কীওয়ার্ড এম 49"
-  },
-  {
-    "id": "meta_source_languages",
-    "en": "Languages used in the data",
-    "bn": "ডেটা ব্যবহৃত ভাষা "
-  },
-  {
-    "id": "meta_source_contacts",
-    "en": "Contacts list",
-    "bn": "যোগাযোগ তালিকা "
-  },
-  {
-    "id": "meta_source_periodicity",
-    "en": "Periodicity",
-    "bn": "পর্যায়ক্রম "
-  },
-  {
-    "id": "meta_source_released_at",
-    "en": "Date of release",
-    "bn": "মুক্তির তারিখ "
-  },
-  {
-    "id": "meta_source_modified_at",
-    "en": "Date of modification",
-    "bn": "পরিবর্তনের তারিখ "
-  },
-  {
-    "id": "meta_source_start_at",
-    "en": "Data values starting date",
-    "bn": "ডেটা মান শুরু হওয়ার তারিখ "
-  },
-  {
-    "id": "meta_source_end_at",
-    "en": "Data values ending date",
-    "bn": "ডেটার মান শেষ হওয়ার তারিখ "
-  },
-  {
-    "id": "meta_source_is_timeless",
-    "en": "Data without temporal values",
-    "bn": "অস্থায়ী মান ব্যতীত ডেটা "
-  },
-  {
-    "id": "meta_view_projects_data",
-    "en": "Also published in those projects",
-    "bn": "সেইসব প্রকল্পেও প্রকাশিত হয়েছে"
-  },
-  {
-    "id": "meta_view_project_title",
-    "en": "Original project",
-    "bn": "মূল প্রকল্প "
-  },
-  {
-    "id": "meta_view_projects",
-    "en": "Projects",
-    "bn": "প্রকল্প "
-  },
-  {
-    "id": "meta_view_id",
-    "en": "View id",
-    "bn": "আইডি দেখুন "
-  },
-  {
-    "id": "meta_view_collections",
-    "en": "Collections",
-    "bn": "সংগ্রহ "
-  },
-  {
-    "id": "meta_view_date_modified",
-    "en": "Modification date",
-    "bn": "পরিবর্তনের তারিখ "
-  },
-  {
-    "id": "meta_view_date_created",
-    "en": "Creation date",
-    "bn": "তৈরির তারিখ "
-  },
-  {
-    "id": "meta_view_editor",
-    "en": "Editor",
-    "bn": "সম্পাদক "
-  },
-  {
-    "id": "meta_view_editors",
-    "en": "Groups with editing access",
-    "bn": "সম্পাদনা অ্যাক্সেস সহ গোষ্ঠী "
-  },
-  {
-    "id": "meta_view_readers",
-    "en": "Groups with reading access",
-    "bn": "পাঠ্য অ্যাক্সেস সহ গ্রুপগুলি "
-  },
-  {
-    "id": "meta_view_type",
-    "en": "Type",
-    "bn": "প্রকার "
-  },
-  {
-    "id": "meta_view_table_summary_title",
-    "en": "Summary of the view",
-    "bn": "দেখার সংক্ষিপ্তসার "
-  },
-  {
-    "id": "meta_source_id",
-    "en": "Source id",
-    "bn": "উত্স আইডি "
-  },
-  {
-    "id": "meta_source_table_summary_title",
-    "en": "Summary of the source",
-    "bn": "উত্স সংক্ষিপ্তসার "
-  },
-  {
-    "id": "meta_source_homepage",
-    "en": "Source homepage",
-    "bn": "উত্স হোমপেজ "
-  },
-  {
-    "id": "meta_source_url_download",
-    "en": "Download original source",
-    "bn": "আসল উত্স ডাউনলোড করুন "
-  },
-  {
-    "id": "meta_source_url_annexes",
-    "en": "Download annexes",
-    "bn": "সংযুক্তিগুলি ডাউনলোড করুন "
-  },
-  {
-    "id": "meta_source_integrity_score",
-    "en": "Integrity score",
-    "bn": "সত্যতা স্কোর "
-  },
-  {
-    "id": "meta_source_time_range",
-    "en": "Temporal range",
-    "bn": "অস্থায়ী পরিসীমা "
-  },
-  {
-    "id": "meta_source_time_range_min",
-    "en": "From",
-    "bn": "থেকে "
-  },
-  {
-    "id": "meta_source_time_range_max",
-    "en": "To",
-    "bn": "প্রতি "
-  },
-  {
     "id": "dont_know",
     "en": "I don't know",
     "bn": "আমি জানি না "
@@ -7638,6 +7338,331 @@
     "id": "un_map_disclaimer_asterisk_3",
     "en": "A dispute exists between the Governments of Argentina and the United Kingdom of Great Britain and Northern Ireland concerning sovereignty over the Falkland Islands (Malvinas).",
     "bn": "ফকল্যান্ড দ্বীপপুঞ্জের (মালভিনাস) সার্বভৌমত্ব নিয়ে আর্জেন্টিনা সরকার এবং গ্রেট ব্রিটেনের যুক্তরাজ্য এবং উত্তর আয়ারল্যান্ডের মধ্যে একটি বিরোধ বিদ্যমান।"
+  },
+  {
+    "id": "btn_opt_meta",
+    "en": "Display metadata",
+    "bn": "মেটাডেটা প্রদর্শন করুন "
+  },
+  {
+    "id": "meta_display_source_title",
+    "en": "Metadata of the source",
+    "bn": "উত্সটির মেটাডেটা "
+  },
+  {
+    "id": "meta_display_view_title",
+    "en": "Summary of the view metadata",
+    "bn": "মেটাডেটা দেখার সংক্ষিপ্তসার "
+  },
+  {
+    "id": "meta_last_editor_id",
+    "en": "Editor id",
+    "bn": "সম্পাদক আইডি "
+  },
+  {
+    "id": "meta_all_editor_id",
+    "en": "Id of all editors",
+    "bn": "সমস্ত সম্পাদকের আইডি "
+  },
+  {
+    "id": "meta_view_modal_title",
+    "en": "Metadata of the view",
+    "bn": "দেখার মেটাডেটা "
+  },
+  {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "bn": "উৎসের মেটাডেটা"
+  },
+  {
+    "id": "meta_view_raster_meta",
+    "en": "Metadata Entry",
+    "bn": "মেটাডেটা এন্ট্রি "
+  },
+  {
+    "id": "meta_view_table_editors_title",
+    "en": "Changes overview",
+    "bn": "পরিবর্তন ওভারভিউ "
+  },
+  {
+    "id": "meta_view_table_editors_changes",
+    "en": "N. of changes",
+    "bn": "পরিবর্তনের এন "
+  },
+  {
+    "id": "meta_view_table_editors_email",
+    "en": "Editor",
+    "bn": "সম্পাদক "
+  },
+  {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "bn": "আইডি"
+  },
+  {
+    "id": "meta_view_table_editors_current",
+    "en": "Latest edit",
+    "bn": "সর্বশেষ সম্পাদনা "
+  },
+  {
+    "id": "meta_view_title",
+    "en": "View title",
+    "bn": "শিরোনাম দেখুন "
+  },
+  {
+    "id": "meta_view_abstract",
+    "en": "Abstract",
+    "bn": "বিমূর্ত "
+  },
+  {
+    "id": "meta_view_stat_n_add",
+    "en": "Number of activations",
+    "bn": "সক্রিয়করণের সংখ্যা"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_users",
+    "en": "Number of activations by registered users",
+    "bn": "নিবন্ধিত ব্যবহারকারীদের দ্বারা সক্রিয়করণের সংখ্যা"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "bn": "স্বতন্ত্র ব্যবহারকারীর সংখ্যা"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_guests",
+    "en": "Number of activations by guests",
+    "bn": "অতিথিদের দ্বারা সক্রিয়তার সংখ্যা"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country",
+    "en": "Activations per countries",
+    "bn": "দেশ প্রতি সক্রিয়তা"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_last_year",
+    "en": "Activations per country ( last 12 months ) ",
+    "bn": "দেশ প্রতি সক্রিয়তা (গত 12 মাস)"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_axis",
+    "en": "Number of activations (logarithmic scale)",
+    "bn": "সক্রিয়করণের সংখ্যা (লগারিদমিক স্কেল)"
+  },
+  {
+    "id": "meta_view_stat_activations",
+    "en": "activations",
+    "bn": "সক্রিয়করণ"
+  },
+  {
+    "id": "meta_view_stat_others_countries",
+    "en": "Others",
+    "bn": "অন্যান্য"
+  },
+  {
+    "id": "meta_source_title",
+    "en": "Title",
+    "bn": "শিরোনাম "
+  },
+  {
+    "id": "meta_source_abstract",
+    "en": "Abstract",
+    "bn": "বিমূর্ত "
+  },
+  {
+    "id": "meta_source_notes",
+    "en": "Notes",
+    "bn": "মন্তব্য "
+  },
+  {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "bn": "লাইসেন্স"
+  },
+  {
+    "id": "meta_source_keywords",
+    "en": "Keywords",
+    "bn": "কীওয়ার্ডস "
+  },
+  {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "bn": "গেমেট কীওয়ার্ড"
+  },
+  {
+    "id": "meta_source_keywords_m49",
+    "en": "Geographic Keywords",
+    "bn": "ভৌগলিক কীওয়ার্ড এম 49"
+  },
+  {
+    "id": "meta_source_languages",
+    "en": "Languages used in the data",
+    "bn": "ডেটা ব্যবহৃত ভাষা "
+  },
+  {
+    "id": "meta_source_contacts",
+    "en": "Contacts list",
+    "bn": "যোগাযোগ তালিকা "
+  },
+  {
+    "id": "meta_source_periodicity",
+    "en": "Periodicity",
+    "bn": "পর্যায়ক্রম "
+  },
+  {
+    "id": "meta_source_released_at",
+    "en": "Date of release",
+    "bn": "মুক্তির তারিখ "
+  },
+  {
+    "id": "meta_source_modified_at",
+    "en": "Date of modification",
+    "bn": "পরিবর্তনের তারিখ "
+  },
+  {
+    "id": "meta_source_start_at",
+    "en": "Data values starting date",
+    "bn": "ডেটা মান শুরু হওয়ার তারিখ "
+  },
+  {
+    "id": "meta_source_end_at",
+    "en": "Data values ending date",
+    "bn": "ডেটার মান শেষ হওয়ার তারিখ "
+  },
+  {
+    "id": "meta_source_is_timeless",
+    "en": "Data without temporal values",
+    "bn": "অস্থায়ী মান ব্যতীত ডেটা "
+  },
+  {
+    "id": "meta_view_projects_data",
+    "en": "Also published in those projects",
+    "bn": "সেইসব প্রকল্পেও প্রকাশিত হয়েছে"
+  },
+  {
+    "id": "meta_view_project_title",
+    "en": "Original project",
+    "bn": "মূল প্রকল্প "
+  },
+  {
+    "id": "meta_view_projects",
+    "en": "Projects",
+    "bn": "প্রকল্প "
+  },
+  {
+    "id": "meta_view_id",
+    "en": "View id",
+    "bn": "আইডি দেখুন "
+  },
+  {
+    "id": "meta_view_collections",
+    "en": "Collections",
+    "bn": "সংগ্রহ "
+  },
+  {
+    "id": "meta_view_date_modified",
+    "en": "Modification date",
+    "bn": "পরিবর্তনের তারিখ "
+  },
+  {
+    "id": "meta_view_date_created",
+    "en": "Creation date",
+    "bn": "তৈরির তারিখ "
+  },
+  {
+    "id": "meta_view_editor",
+    "en": "Editor",
+    "bn": "সম্পাদক "
+  },
+  {
+    "id": "meta_view_editors",
+    "en": "Groups with editing access",
+    "bn": "সম্পাদনা অ্যাক্সেস সহ গোষ্ঠী "
+  },
+  {
+    "id": "meta_view_readers",
+    "en": "Groups with reading access",
+    "bn": "পাঠ্য অ্যাক্সেস সহ গ্রুপগুলি "
+  },
+  {
+    "id": "meta_view_type",
+    "en": "Type",
+    "bn": "প্রকার "
+  },
+  {
+    "id": "meta_view_table_summary_title",
+    "en": "Summary of the view",
+    "bn": "দেখার সংক্ষিপ্তসার "
+  },
+  {
+    "id": "meta_source_id",
+    "en": "Source id",
+    "bn": "উত্স আইডি "
+  },
+  {
+    "id": "meta_source_table_summary_title",
+    "en": "Summary of the source",
+    "bn": "উত্স সংক্ষিপ্তসার "
+  },
+  {
+    "id": "meta_source_homepage",
+    "en": "Source homepage",
+    "bn": "উত্স হোমপেজ "
+  },
+  {
+    "id": "meta_source_url_download",
+    "en": "Download original source",
+    "bn": "আসল উত্স ডাউনলোড করুন "
+  },
+  {
+    "id": "meta_source_url_annexes",
+    "en": "Download annexes",
+    "bn": "সংযুক্তিগুলি ডাউনলোড করুন "
+  },
+  {
+    "id": "meta_source_integrity_score",
+    "en": "Integrity score",
+    "bn": "সত্যতা স্কোর "
+  },
+  {
+    "id": "meta_source_time_range",
+    "en": "Temporal range",
+    "bn": "অস্থায়ী পরিসীমা "
+  },
+  {
+    "id": "meta_source_time_range_min",
+    "en": "From",
+    "bn": "থেকে "
+  },
+  {
+    "id": "meta_source_time_range_max",
+    "en": "To",
+    "bn": "প্রতি "
+  },
+  {
+    "id": "meta_gs_ws_b",
+    "en": "wms/wfs/wmts",
+    "bn": "wms/wfs/wmts"
+  },
+  {
+    "id": "meta_gs_ws_b_not_public",
+    "en": "wms/wfs/wmts – inactive, project not public",
+    "bn": "wms/wfs/wmts - নিষ্ক্রিয়, প্রকল্প প্রকাশ্য নয়"
+  },
+  {
+    "id": "meta_mx_download",
+    "en": "Download",
+    "bn": "ডাউনলোড"
+  },
+  {
+    "id": "meta_mx_postgis_tiler",
+    "en": "PostGIS native tiles",
+    "bn": "পোস্টজিআইএস নেটিভ টাইলস"
+  },
+  {
+    "id": "meta_view_services",
+    "en": "Enabled services",
+    "bn": "সক্রিয় পরিষেবাগুলি"
   },
   {
     "id": "tool_mirror_enable",

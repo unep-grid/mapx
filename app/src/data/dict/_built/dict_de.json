@@ -3390,11 +3390,6 @@
     "de": "Legen Sie den Stil dieser Ansicht fest "
   },
   {
-    "id": "btn_opt_meta",
-    "en": "Display metadata",
-    "de": "Metadaten anzeigen "
-  },
-  {
     "id": "btn_opt_stats",
     "en": "Display view's statistics",
     "de": "Ansichtsstatistiken anzeigen"
@@ -6560,301 +6555,6 @@
     "de": "Die Daten werden wöchentlich aktualisiert "
   },
   {
-    "id": "meta_display_source_title",
-    "en": "Metadata of the source",
-    "de": "Metadaten der Quelle "
-  },
-  {
-    "id": "meta_display_view_title",
-    "en": "Summary of the view metadata",
-    "de": "Zusammenfassung der Ansichtsmetadaten "
-  },
-  {
-    "id": "meta_last_editor_id",
-    "en": "Editor id",
-    "de": "Editor-ID "
-  },
-  {
-    "id": "meta_all_editor_id",
-    "en": "Id of all editors",
-    "de": "ID aller Editoren "
-  },
-  {
-    "id": "meta_view_modal_title",
-    "en": "Metadata of the view",
-    "de": "Metadaten der Ansicht "
-  },
-  {
-    "id": "meta_source_modal_title",
-    "en": "Metadata of the source",
-    "de": "Metadaten der Quelle"
-  },
-  {
-    "id": "meta_view_raster_meta",
-    "en": "Metadata Entry",
-    "de": "Metadateneintrag "
-  },
-  {
-    "id": "meta_view_table_editors_title",
-    "en": "Changes overview",
-    "de": "Änderungsübersicht "
-  },
-  {
-    "id": "meta_view_table_editors_changes",
-    "en": "N. of changes",
-    "de": "Anzahl der Änderungen "
-  },
-  {
-    "id": "meta_view_table_editors_email",
-    "en": "Editor",
-    "de": "Editor "
-  },
-  {
-    "id": "meta_view_table_editors_id",
-    "en": "ID",
-    "de": "AUSWEIS"
-  },
-  {
-    "id": "meta_view_table_editors_current",
-    "en": "Latest edit",
-    "de": "Letzte Änderung "
-  },
-  {
-    "id": "meta_view_title",
-    "en": "View title",
-    "de": "Titel anzeigen "
-  },
-  {
-    "id": "meta_view_abstract",
-    "en": "Abstract",
-    "de": "Abstrakt "
-  },
-  {
-    "id": "meta_view_stat_n_add",
-    "en": "Number of activations",
-    "de": "Anzahl der Aktivierungen"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_users",
-    "en": "Number of activations by registered users",
-    "de": "Anzahl der Aktivierungen durch registrierte Benutzer"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_distinct_users",
-    "en": "Number of distinct user",
-    "de": "Anzahl der unterschiedlichen Benutzer"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_guests",
-    "en": "Number of activations by guests",
-    "de": "Anzahl der Aktivierungen durch Gäste"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country",
-    "en": "Activations per countries",
-    "de": "Aktivierungen nach Ländern"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_last_year",
-    "en": "Activations per country ( last 12 months ) ",
-    "de": "Aktivierungen pro Land ( letzte 12 Monate )"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_axis",
-    "en": "Number of activations (logarithmic scale)",
-    "de": "Anzahl der Aktivierungen (logarithmische Skala)"
-  },
-  {
-    "id": "meta_view_stat_activations",
-    "en": "activations",
-    "de": "Aktivierungen"
-  },
-  {
-    "id": "meta_view_stat_others_countries",
-    "en": "Others",
-    "de": "Andere"
-  },
-  {
-    "id": "meta_source_title",
-    "en": "Title",
-    "de": "Titel "
-  },
-  {
-    "id": "meta_source_abstract",
-    "en": "Abstract",
-    "de": "Abstrakt "
-  },
-  {
-    "id": "meta_source_notes",
-    "en": "Notes",
-    "de": "Anmerkungen "
-  },
-  {
-    "id": "meta_source_licenses",
-    "en": "Licenses",
-    "de": "Lizenzen"
-  },
-  {
-    "id": "meta_source_keywords",
-    "en": "Keywords",
-    "de": "Schlüsselwörter "
-  },
-  {
-    "id": "meta_source_keywords_gemet",
-    "en": "GEMET keywords",
-    "de": "GEMET-Schlüsselwörter"
-  },
-  {
-    "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords",
-    "de": "Geografische Schlüsselwortliste"
-  },
-  {
-    "id": "meta_source_languages",
-    "en": "Languages used in the data",
-    "de": "In den Daten verwendete Sprachen "
-  },
-  {
-    "id": "meta_source_contacts",
-    "en": "Contacts list",
-    "de": "Kontaktliste "
-  },
-  {
-    "id": "meta_source_periodicity",
-    "en": "Periodicity",
-    "de": "Periodizität "
-  },
-  {
-    "id": "meta_source_released_at",
-    "en": "Date of release",
-    "de": "Erscheinungsdatum "
-  },
-  {
-    "id": "meta_source_modified_at",
-    "en": "Date of modification",
-    "de": "Datum der Änderung "
-  },
-  {
-    "id": "meta_source_start_at",
-    "en": "Data values starting date",
-    "de": "Startdatum der Datenwerte "
-  },
-  {
-    "id": "meta_source_end_at",
-    "en": "Data values ending date",
-    "de": "Enddatum der Datenwerte "
-  },
-  {
-    "id": "meta_source_is_timeless",
-    "en": "Data without temporal values",
-    "de": "Daten ohne zeitliche Werte "
-  },
-  {
-    "id": "meta_view_projects_data",
-    "en": "Also published in those projects",
-    "de": "Auch in diesen Projekten veröffentlicht"
-  },
-  {
-    "id": "meta_view_project_title",
-    "en": "Original project",
-    "de": "Ursprüngliches Projekt "
-  },
-  {
-    "id": "meta_view_projects",
-    "en": "Projects",
-    "de": "Projekte "
-  },
-  {
-    "id": "meta_view_id",
-    "en": "View id",
-    "de": "ID anzeigen "
-  },
-  {
-    "id": "meta_view_collections",
-    "en": "Collections",
-    "de": "Sammlungen "
-  },
-  {
-    "id": "meta_view_date_modified",
-    "en": "Modification date",
-    "de": "Änderungsdatum "
-  },
-  {
-    "id": "meta_view_date_created",
-    "en": "Creation date",
-    "de": "Erstellungsdatum "
-  },
-  {
-    "id": "meta_view_editor",
-    "en": "Editor",
-    "de": "Editor "
-  },
-  {
-    "id": "meta_view_editors",
-    "en": "Groups with editing access",
-    "de": "Gruppen mit Bearbeitungszugriff "
-  },
-  {
-    "id": "meta_view_readers",
-    "en": "Groups with reading access",
-    "de": "Gruppen mit Lesezugriff "
-  },
-  {
-    "id": "meta_view_type",
-    "en": "Type",
-    "de": "Art "
-  },
-  {
-    "id": "meta_view_table_summary_title",
-    "en": "Summary of the view",
-    "de": "Zusammenfassung der Ansicht "
-  },
-  {
-    "id": "meta_source_id",
-    "en": "Source id",
-    "de": "Quell-ID "
-  },
-  {
-    "id": "meta_source_table_summary_title",
-    "en": "Summary of the source",
-    "de": "Zusammenfassung der Quelle "
-  },
-  {
-    "id": "meta_source_homepage",
-    "en": "Source homepage",
-    "de": "Quellhomepage "
-  },
-  {
-    "id": "meta_source_url_download",
-    "en": "Download original source",
-    "de": "Originalquelle herunterladen "
-  },
-  {
-    "id": "meta_source_url_annexes",
-    "en": "Download annexes",
-    "de": "Anhänge herunterladen "
-  },
-  {
-    "id": "meta_source_integrity_score",
-    "en": "Integrity score",
-    "de": "Integritätsbewertung "
-  },
-  {
-    "id": "meta_source_time_range",
-    "en": "Temporal range",
-    "de": "Zeitbereich "
-  },
-  {
-    "id": "meta_source_time_range_min",
-    "en": "From",
-    "de": "Von "
-  },
-  {
-    "id": "meta_source_time_range_max",
-    "en": "To",
-    "de": "Zu "
-  },
-  {
     "id": "dont_know",
     "en": "I don't know",
     "de": "Ich weiß es nicht "
@@ -7638,6 +7338,331 @@
     "id": "un_map_disclaimer_asterisk_3",
     "en": "A dispute exists between the Governments of Argentina and the United Kingdom of Great Britain and Northern Ireland concerning sovereignty over the Falkland Islands (Malvinas).",
     "de": "Zwischen den Regierungen Argentiniens und des Vereinigten Königreichs Großbritannien und Nordirland besteht ein Streit über die Souveränität über die Falklandinseln (Malvinas)."
+  },
+  {
+    "id": "btn_opt_meta",
+    "en": "Display metadata",
+    "de": "Metadaten anzeigen "
+  },
+  {
+    "id": "meta_display_source_title",
+    "en": "Metadata of the source",
+    "de": "Metadaten der Quelle "
+  },
+  {
+    "id": "meta_display_view_title",
+    "en": "Summary of the view metadata",
+    "de": "Zusammenfassung der Ansichtsmetadaten "
+  },
+  {
+    "id": "meta_last_editor_id",
+    "en": "Editor id",
+    "de": "Editor-ID "
+  },
+  {
+    "id": "meta_all_editor_id",
+    "en": "Id of all editors",
+    "de": "ID aller Editoren "
+  },
+  {
+    "id": "meta_view_modal_title",
+    "en": "Metadata of the view",
+    "de": "Metadaten der Ansicht "
+  },
+  {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "de": "Metadaten der Quelle"
+  },
+  {
+    "id": "meta_view_raster_meta",
+    "en": "Metadata Entry",
+    "de": "Metadateneintrag "
+  },
+  {
+    "id": "meta_view_table_editors_title",
+    "en": "Changes overview",
+    "de": "Änderungsübersicht "
+  },
+  {
+    "id": "meta_view_table_editors_changes",
+    "en": "N. of changes",
+    "de": "Anzahl der Änderungen "
+  },
+  {
+    "id": "meta_view_table_editors_email",
+    "en": "Editor",
+    "de": "Editor "
+  },
+  {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "de": "AUSWEIS"
+  },
+  {
+    "id": "meta_view_table_editors_current",
+    "en": "Latest edit",
+    "de": "Letzte Änderung "
+  },
+  {
+    "id": "meta_view_title",
+    "en": "View title",
+    "de": "Titel anzeigen "
+  },
+  {
+    "id": "meta_view_abstract",
+    "en": "Abstract",
+    "de": "Abstrakt "
+  },
+  {
+    "id": "meta_view_stat_n_add",
+    "en": "Number of activations",
+    "de": "Anzahl der Aktivierungen"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_users",
+    "en": "Number of activations by registered users",
+    "de": "Anzahl der Aktivierungen durch registrierte Benutzer"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "de": "Anzahl der unterschiedlichen Benutzer"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_guests",
+    "en": "Number of activations by guests",
+    "de": "Anzahl der Aktivierungen durch Gäste"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country",
+    "en": "Activations per countries",
+    "de": "Aktivierungen nach Ländern"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_last_year",
+    "en": "Activations per country ( last 12 months ) ",
+    "de": "Aktivierungen pro Land ( letzte 12 Monate )"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_axis",
+    "en": "Number of activations (logarithmic scale)",
+    "de": "Anzahl der Aktivierungen (logarithmische Skala)"
+  },
+  {
+    "id": "meta_view_stat_activations",
+    "en": "activations",
+    "de": "Aktivierungen"
+  },
+  {
+    "id": "meta_view_stat_others_countries",
+    "en": "Others",
+    "de": "Andere"
+  },
+  {
+    "id": "meta_source_title",
+    "en": "Title",
+    "de": "Titel "
+  },
+  {
+    "id": "meta_source_abstract",
+    "en": "Abstract",
+    "de": "Abstrakt "
+  },
+  {
+    "id": "meta_source_notes",
+    "en": "Notes",
+    "de": "Anmerkungen "
+  },
+  {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "de": "Lizenzen"
+  },
+  {
+    "id": "meta_source_keywords",
+    "en": "Keywords",
+    "de": "Schlüsselwörter "
+  },
+  {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "de": "GEMET-Schlüsselwörter"
+  },
+  {
+    "id": "meta_source_keywords_m49",
+    "en": "Geographic Keywords",
+    "de": "Geografische Schlüsselwortliste"
+  },
+  {
+    "id": "meta_source_languages",
+    "en": "Languages used in the data",
+    "de": "In den Daten verwendete Sprachen "
+  },
+  {
+    "id": "meta_source_contacts",
+    "en": "Contacts list",
+    "de": "Kontaktliste "
+  },
+  {
+    "id": "meta_source_periodicity",
+    "en": "Periodicity",
+    "de": "Periodizität "
+  },
+  {
+    "id": "meta_source_released_at",
+    "en": "Date of release",
+    "de": "Erscheinungsdatum "
+  },
+  {
+    "id": "meta_source_modified_at",
+    "en": "Date of modification",
+    "de": "Datum der Änderung "
+  },
+  {
+    "id": "meta_source_start_at",
+    "en": "Data values starting date",
+    "de": "Startdatum der Datenwerte "
+  },
+  {
+    "id": "meta_source_end_at",
+    "en": "Data values ending date",
+    "de": "Enddatum der Datenwerte "
+  },
+  {
+    "id": "meta_source_is_timeless",
+    "en": "Data without temporal values",
+    "de": "Daten ohne zeitliche Werte "
+  },
+  {
+    "id": "meta_view_projects_data",
+    "en": "Also published in those projects",
+    "de": "Auch in diesen Projekten veröffentlicht"
+  },
+  {
+    "id": "meta_view_project_title",
+    "en": "Original project",
+    "de": "Ursprüngliches Projekt "
+  },
+  {
+    "id": "meta_view_projects",
+    "en": "Projects",
+    "de": "Projekte "
+  },
+  {
+    "id": "meta_view_id",
+    "en": "View id",
+    "de": "ID anzeigen "
+  },
+  {
+    "id": "meta_view_collections",
+    "en": "Collections",
+    "de": "Sammlungen "
+  },
+  {
+    "id": "meta_view_date_modified",
+    "en": "Modification date",
+    "de": "Änderungsdatum "
+  },
+  {
+    "id": "meta_view_date_created",
+    "en": "Creation date",
+    "de": "Erstellungsdatum "
+  },
+  {
+    "id": "meta_view_editor",
+    "en": "Editor",
+    "de": "Editor "
+  },
+  {
+    "id": "meta_view_editors",
+    "en": "Groups with editing access",
+    "de": "Gruppen mit Bearbeitungszugriff "
+  },
+  {
+    "id": "meta_view_readers",
+    "en": "Groups with reading access",
+    "de": "Gruppen mit Lesezugriff "
+  },
+  {
+    "id": "meta_view_type",
+    "en": "Type",
+    "de": "Art "
+  },
+  {
+    "id": "meta_view_table_summary_title",
+    "en": "Summary of the view",
+    "de": "Zusammenfassung der Ansicht "
+  },
+  {
+    "id": "meta_source_id",
+    "en": "Source id",
+    "de": "Quell-ID "
+  },
+  {
+    "id": "meta_source_table_summary_title",
+    "en": "Summary of the source",
+    "de": "Zusammenfassung der Quelle "
+  },
+  {
+    "id": "meta_source_homepage",
+    "en": "Source homepage",
+    "de": "Quellhomepage "
+  },
+  {
+    "id": "meta_source_url_download",
+    "en": "Download original source",
+    "de": "Originalquelle herunterladen "
+  },
+  {
+    "id": "meta_source_url_annexes",
+    "en": "Download annexes",
+    "de": "Anhänge herunterladen "
+  },
+  {
+    "id": "meta_source_integrity_score",
+    "en": "Integrity score",
+    "de": "Integritätsbewertung "
+  },
+  {
+    "id": "meta_source_time_range",
+    "en": "Temporal range",
+    "de": "Zeitbereich "
+  },
+  {
+    "id": "meta_source_time_range_min",
+    "en": "From",
+    "de": "Von "
+  },
+  {
+    "id": "meta_source_time_range_max",
+    "en": "To",
+    "de": "Zu "
+  },
+  {
+    "id": "meta_gs_ws_b",
+    "en": "wms/wfs/wmts",
+    "de": "wms/wfs/wmts"
+  },
+  {
+    "id": "meta_gs_ws_b_not_public",
+    "en": "wms/wfs/wmts – inactive, project not public",
+    "de": "wms/wfs/wmts – inaktiv, Projekt nicht öffentlich"
+  },
+  {
+    "id": "meta_mx_download",
+    "en": "Download",
+    "de": "Herunterladen"
+  },
+  {
+    "id": "meta_mx_postgis_tiler",
+    "en": "PostGIS native tiles",
+    "de": "Native PostGIS-Kacheln"
+  },
+  {
+    "id": "meta_view_services",
+    "en": "Enabled services",
+    "de": "Aktivierte Dienste"
   },
   {
     "id": "tool_mirror_enable",

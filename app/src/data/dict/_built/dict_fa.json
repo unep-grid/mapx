@@ -3390,11 +3390,6 @@
     "fa": "تنظیم ستایل این نمایه"
   },
   {
-    "id": "btn_opt_meta",
-    "en": "Display metadata",
-    "fa": "نمایش ابرداده"
-  },
-  {
     "id": "btn_opt_stats",
     "en": "Display view's statistics",
     "fa": "نمایش آمار نما"
@@ -6560,301 +6555,6 @@
     "fa": "اطلاعات به صورت هفته وار تجدید می شوند"
   },
   {
-    "id": "meta_display_source_title",
-    "en": "Metadata of the source",
-    "fa": "فراداده منبع "
-  },
-  {
-    "id": "meta_display_view_title",
-    "en": "Summary of the view metadata",
-    "fa": "خلاصه فوق داده مشاهده "
-  },
-  {
-    "id": "meta_last_editor_id",
-    "en": "Editor id",
-    "fa": "شناسه ویرایشگر "
-  },
-  {
-    "id": "meta_all_editor_id",
-    "en": "Id of all editors",
-    "fa": "شناسه همه ویراستاران "
-  },
-  {
-    "id": "meta_view_modal_title",
-    "en": "Metadata of the view",
-    "fa": "فراداده نمایش "
-  },
-  {
-    "id": "meta_source_modal_title",
-    "en": "Metadata of the source",
-    "fa": "فراداده منبع"
-  },
-  {
-    "id": "meta_view_raster_meta",
-    "en": "Metadata Entry",
-    "fa": "ورودی فراداده "
-  },
-  {
-    "id": "meta_view_table_editors_title",
-    "en": "Changes overview",
-    "fa": "بررسی اجمالی تغییرات "
-  },
-  {
-    "id": "meta_view_table_editors_changes",
-    "en": "N. of changes",
-    "fa": "N. تغییرات "
-  },
-  {
-    "id": "meta_view_table_editors_email",
-    "en": "Editor",
-    "fa": "ویرایشگر "
-  },
-  {
-    "id": "meta_view_table_editors_id",
-    "en": "ID",
-    "fa": "شناسه"
-  },
-  {
-    "id": "meta_view_table_editors_current",
-    "en": "Latest edit",
-    "fa": "آخرین ویرایش "
-  },
-  {
-    "id": "meta_view_title",
-    "en": "View title",
-    "fa": "مشاهده عنوان "
-  },
-  {
-    "id": "meta_view_abstract",
-    "en": "Abstract",
-    "fa": "خلاصه "
-  },
-  {
-    "id": "meta_view_stat_n_add",
-    "en": "Number of activations",
-    "fa": "تعداد فعال سازی ها"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_users",
-    "en": "Number of activations by registered users",
-    "fa": "تعداد فعالسازی توسط کاربران ثبت نام شده"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_distinct_users",
-    "en": "Number of distinct user",
-    "fa": "تعداد کاربر متمایز"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_guests",
-    "en": "Number of activations by guests",
-    "fa": "تعداد فعالسازی توسط مهمانان"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country",
-    "en": "Activations per countries",
-    "fa": "فعال سازی در هر کشور"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_last_year",
-    "en": "Activations per country ( last 12 months ) ",
-    "fa": "فعال سازی در هر کشور (12 ماه گذشته)"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_axis",
-    "en": "Number of activations (logarithmic scale)",
-    "fa": "تعداد فعال سازی (مقیاس لگاریتمی)"
-  },
-  {
-    "id": "meta_view_stat_activations",
-    "en": "activations",
-    "fa": "فعال سازی ها"
-  },
-  {
-    "id": "meta_view_stat_others_countries",
-    "en": "Others",
-    "fa": "دیگران"
-  },
-  {
-    "id": "meta_source_title",
-    "en": "Title",
-    "fa": "عنوان "
-  },
-  {
-    "id": "meta_source_abstract",
-    "en": "Abstract",
-    "fa": "خلاصه "
-  },
-  {
-    "id": "meta_source_notes",
-    "en": "Notes",
-    "fa": "یادداشت "
-  },
-  {
-    "id": "meta_source_licenses",
-    "en": "Licenses",
-    "fa": "مجوزها"
-  },
-  {
-    "id": "meta_source_keywords",
-    "en": "Keywords",
-    "fa": "کلید واژه ها "
-  },
-  {
-    "id": "meta_source_keywords_gemet",
-    "en": "GEMET keywords",
-    "fa": "کلمات کلیدی GEMET"
-  },
-  {
-    "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords",
-    "fa": "کلیدواژه های جغرافیایی"
-  },
-  {
-    "id": "meta_source_languages",
-    "en": "Languages used in the data",
-    "fa": "زبانهای مورد استفاده در داده ها "
-  },
-  {
-    "id": "meta_source_contacts",
-    "en": "Contacts list",
-    "fa": "لیست مخاطبین "
-  },
-  {
-    "id": "meta_source_periodicity",
-    "en": "Periodicity",
-    "fa": "دوره ای بودن "
-  },
-  {
-    "id": "meta_source_released_at",
-    "en": "Date of release",
-    "fa": "تاریخ انتشار "
-  },
-  {
-    "id": "meta_source_modified_at",
-    "en": "Date of modification",
-    "fa": "تاریخ اصلاح "
-  },
-  {
-    "id": "meta_source_start_at",
-    "en": "Data values starting date",
-    "fa": "مقادیر تاریخ شروع تاریخ "
-  },
-  {
-    "id": "meta_source_end_at",
-    "en": "Data values ending date",
-    "fa": "مقادیر تاریخ پایان تاریخ "
-  },
-  {
-    "id": "meta_source_is_timeless",
-    "en": "Data without temporal values",
-    "fa": "داده بدون مقادیر زمانی "
-  },
-  {
-    "id": "meta_view_projects_data",
-    "en": "Also published in those projects",
-    "fa": "همچنین در آن پروژه ها منتشر شده است"
-  },
-  {
-    "id": "meta_view_project_title",
-    "en": "Original project",
-    "fa": "پروژه اصلی "
-  },
-  {
-    "id": "meta_view_projects",
-    "en": "Projects",
-    "fa": "پروژه ها "
-  },
-  {
-    "id": "meta_view_id",
-    "en": "View id",
-    "fa": "شناسه را مشاهده کنید "
-  },
-  {
-    "id": "meta_view_collections",
-    "en": "Collections",
-    "fa": "مجموعه ها "
-  },
-  {
-    "id": "meta_view_date_modified",
-    "en": "Modification date",
-    "fa": "تاریخ اصلاح "
-  },
-  {
-    "id": "meta_view_date_created",
-    "en": "Creation date",
-    "fa": "تاریخ ایجاد "
-  },
-  {
-    "id": "meta_view_editor",
-    "en": "Editor",
-    "fa": "ویرایشگر "
-  },
-  {
-    "id": "meta_view_editors",
-    "en": "Groups with editing access",
-    "fa": "گروههایی با دسترسی ویرایش "
-  },
-  {
-    "id": "meta_view_readers",
-    "en": "Groups with reading access",
-    "fa": "گروههایی که دسترسی خواندن دارند "
-  },
-  {
-    "id": "meta_view_type",
-    "en": "Type",
-    "fa": "تایپ کنید "
-  },
-  {
-    "id": "meta_view_table_summary_title",
-    "en": "Summary of the view",
-    "fa": "خلاصه دیدگاه "
-  },
-  {
-    "id": "meta_source_id",
-    "en": "Source id",
-    "fa": "شناسه منبع "
-  },
-  {
-    "id": "meta_source_table_summary_title",
-    "en": "Summary of the source",
-    "fa": "خلاصه منبع "
-  },
-  {
-    "id": "meta_source_homepage",
-    "en": "Source homepage",
-    "fa": "صفحه اصلی منبع "
-  },
-  {
-    "id": "meta_source_url_download",
-    "en": "Download original source",
-    "fa": "منبع اصلی را بارگیری کنید "
-  },
-  {
-    "id": "meta_source_url_annexes",
-    "en": "Download annexes",
-    "fa": "ضمیمه ها را بارگیری کنید "
-  },
-  {
-    "id": "meta_source_integrity_score",
-    "en": "Integrity score",
-    "fa": "نمره یکپارچگی "
-  },
-  {
-    "id": "meta_source_time_range",
-    "en": "Temporal range",
-    "fa": "محدوده زمانی "
-  },
-  {
-    "id": "meta_source_time_range_min",
-    "en": "From",
-    "fa": "از جانب "
-  },
-  {
-    "id": "meta_source_time_range_max",
-    "en": "To",
-    "fa": "به "
-  },
-  {
     "id": "dont_know",
     "en": "I don't know",
     "fa": "من نمی دانم"
@@ -7638,6 +7338,331 @@
     "id": "un_map_disclaimer_asterisk_3",
     "en": "A dispute exists between the Governments of Argentina and the United Kingdom of Great Britain and Northern Ireland concerning sovereignty over the Falkland Islands (Malvinas).",
     "fa": "اختلافی بین دولت های آرژانتین و پادشاهی متحده بریتانیای کبیر و ایرلند شمالی در مورد حاکمیت بر جزایر فالکلند (مالویناس) وجود دارد."
+  },
+  {
+    "id": "btn_opt_meta",
+    "en": "Display metadata",
+    "fa": "نمایش ابرداده"
+  },
+  {
+    "id": "meta_display_source_title",
+    "en": "Metadata of the source",
+    "fa": "فراداده منبع "
+  },
+  {
+    "id": "meta_display_view_title",
+    "en": "Summary of the view metadata",
+    "fa": "خلاصه فوق داده مشاهده "
+  },
+  {
+    "id": "meta_last_editor_id",
+    "en": "Editor id",
+    "fa": "شناسه ویرایشگر "
+  },
+  {
+    "id": "meta_all_editor_id",
+    "en": "Id of all editors",
+    "fa": "شناسه همه ویراستاران "
+  },
+  {
+    "id": "meta_view_modal_title",
+    "en": "Metadata of the view",
+    "fa": "فراداده نمایش "
+  },
+  {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "fa": "فراداده منبع"
+  },
+  {
+    "id": "meta_view_raster_meta",
+    "en": "Metadata Entry",
+    "fa": "ورودی فراداده "
+  },
+  {
+    "id": "meta_view_table_editors_title",
+    "en": "Changes overview",
+    "fa": "بررسی اجمالی تغییرات "
+  },
+  {
+    "id": "meta_view_table_editors_changes",
+    "en": "N. of changes",
+    "fa": "N. تغییرات "
+  },
+  {
+    "id": "meta_view_table_editors_email",
+    "en": "Editor",
+    "fa": "ویرایشگر "
+  },
+  {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "fa": "شناسه"
+  },
+  {
+    "id": "meta_view_table_editors_current",
+    "en": "Latest edit",
+    "fa": "آخرین ویرایش "
+  },
+  {
+    "id": "meta_view_title",
+    "en": "View title",
+    "fa": "مشاهده عنوان "
+  },
+  {
+    "id": "meta_view_abstract",
+    "en": "Abstract",
+    "fa": "خلاصه "
+  },
+  {
+    "id": "meta_view_stat_n_add",
+    "en": "Number of activations",
+    "fa": "تعداد فعال سازی ها"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_users",
+    "en": "Number of activations by registered users",
+    "fa": "تعداد فعالسازی توسط کاربران ثبت نام شده"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "fa": "تعداد کاربر متمایز"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_guests",
+    "en": "Number of activations by guests",
+    "fa": "تعداد فعالسازی توسط مهمانان"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country",
+    "en": "Activations per countries",
+    "fa": "فعال سازی در هر کشور"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_last_year",
+    "en": "Activations per country ( last 12 months ) ",
+    "fa": "فعال سازی در هر کشور (12 ماه گذشته)"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_axis",
+    "en": "Number of activations (logarithmic scale)",
+    "fa": "تعداد فعال سازی (مقیاس لگاریتمی)"
+  },
+  {
+    "id": "meta_view_stat_activations",
+    "en": "activations",
+    "fa": "فعال سازی ها"
+  },
+  {
+    "id": "meta_view_stat_others_countries",
+    "en": "Others",
+    "fa": "دیگران"
+  },
+  {
+    "id": "meta_source_title",
+    "en": "Title",
+    "fa": "عنوان "
+  },
+  {
+    "id": "meta_source_abstract",
+    "en": "Abstract",
+    "fa": "خلاصه "
+  },
+  {
+    "id": "meta_source_notes",
+    "en": "Notes",
+    "fa": "یادداشت "
+  },
+  {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "fa": "مجوزها"
+  },
+  {
+    "id": "meta_source_keywords",
+    "en": "Keywords",
+    "fa": "کلید واژه ها "
+  },
+  {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "fa": "کلمات کلیدی GEMET"
+  },
+  {
+    "id": "meta_source_keywords_m49",
+    "en": "Geographic Keywords",
+    "fa": "کلیدواژه های جغرافیایی"
+  },
+  {
+    "id": "meta_source_languages",
+    "en": "Languages used in the data",
+    "fa": "زبانهای مورد استفاده در داده ها "
+  },
+  {
+    "id": "meta_source_contacts",
+    "en": "Contacts list",
+    "fa": "لیست مخاطبین "
+  },
+  {
+    "id": "meta_source_periodicity",
+    "en": "Periodicity",
+    "fa": "دوره ای بودن "
+  },
+  {
+    "id": "meta_source_released_at",
+    "en": "Date of release",
+    "fa": "تاریخ انتشار "
+  },
+  {
+    "id": "meta_source_modified_at",
+    "en": "Date of modification",
+    "fa": "تاریخ اصلاح "
+  },
+  {
+    "id": "meta_source_start_at",
+    "en": "Data values starting date",
+    "fa": "مقادیر تاریخ شروع تاریخ "
+  },
+  {
+    "id": "meta_source_end_at",
+    "en": "Data values ending date",
+    "fa": "مقادیر تاریخ پایان تاریخ "
+  },
+  {
+    "id": "meta_source_is_timeless",
+    "en": "Data without temporal values",
+    "fa": "داده بدون مقادیر زمانی "
+  },
+  {
+    "id": "meta_view_projects_data",
+    "en": "Also published in those projects",
+    "fa": "همچنین در آن پروژه ها منتشر شده است"
+  },
+  {
+    "id": "meta_view_project_title",
+    "en": "Original project",
+    "fa": "پروژه اصلی "
+  },
+  {
+    "id": "meta_view_projects",
+    "en": "Projects",
+    "fa": "پروژه ها "
+  },
+  {
+    "id": "meta_view_id",
+    "en": "View id",
+    "fa": "شناسه را مشاهده کنید "
+  },
+  {
+    "id": "meta_view_collections",
+    "en": "Collections",
+    "fa": "مجموعه ها "
+  },
+  {
+    "id": "meta_view_date_modified",
+    "en": "Modification date",
+    "fa": "تاریخ اصلاح "
+  },
+  {
+    "id": "meta_view_date_created",
+    "en": "Creation date",
+    "fa": "تاریخ ایجاد "
+  },
+  {
+    "id": "meta_view_editor",
+    "en": "Editor",
+    "fa": "ویرایشگر "
+  },
+  {
+    "id": "meta_view_editors",
+    "en": "Groups with editing access",
+    "fa": "گروههایی با دسترسی ویرایش "
+  },
+  {
+    "id": "meta_view_readers",
+    "en": "Groups with reading access",
+    "fa": "گروههایی که دسترسی خواندن دارند "
+  },
+  {
+    "id": "meta_view_type",
+    "en": "Type",
+    "fa": "تایپ کنید "
+  },
+  {
+    "id": "meta_view_table_summary_title",
+    "en": "Summary of the view",
+    "fa": "خلاصه دیدگاه "
+  },
+  {
+    "id": "meta_source_id",
+    "en": "Source id",
+    "fa": "شناسه منبع "
+  },
+  {
+    "id": "meta_source_table_summary_title",
+    "en": "Summary of the source",
+    "fa": "خلاصه منبع "
+  },
+  {
+    "id": "meta_source_homepage",
+    "en": "Source homepage",
+    "fa": "صفحه اصلی منبع "
+  },
+  {
+    "id": "meta_source_url_download",
+    "en": "Download original source",
+    "fa": "منبع اصلی را بارگیری کنید "
+  },
+  {
+    "id": "meta_source_url_annexes",
+    "en": "Download annexes",
+    "fa": "ضمیمه ها را بارگیری کنید "
+  },
+  {
+    "id": "meta_source_integrity_score",
+    "en": "Integrity score",
+    "fa": "نمره یکپارچگی "
+  },
+  {
+    "id": "meta_source_time_range",
+    "en": "Temporal range",
+    "fa": "محدوده زمانی "
+  },
+  {
+    "id": "meta_source_time_range_min",
+    "en": "From",
+    "fa": "از جانب "
+  },
+  {
+    "id": "meta_source_time_range_max",
+    "en": "To",
+    "fa": "به "
+  },
+  {
+    "id": "meta_gs_ws_b",
+    "en": "wms/wfs/wmts",
+    "fa": "wms/wfs/wmts"
+  },
+  {
+    "id": "meta_gs_ws_b_not_public",
+    "en": "wms/wfs/wmts – inactive, project not public",
+    "fa": "wms/wfs/wmts - غیرفعال، پروژه عمومی نیست"
+  },
+  {
+    "id": "meta_mx_download",
+    "en": "Download",
+    "fa": "دانلود"
+  },
+  {
+    "id": "meta_mx_postgis_tiler",
+    "en": "PostGIS native tiles",
+    "fa": "کاشی های بومی PostGIS"
+  },
+  {
+    "id": "meta_view_services",
+    "en": "Enabled services",
+    "fa": "سرویس‌های فعال شده"
   },
   {
     "id": "tool_mirror_enable",

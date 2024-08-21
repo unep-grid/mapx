@@ -3390,11 +3390,6 @@
     "ar": "اضبط أسلوب هذا العرض "
   },
   {
-    "id": "btn_opt_meta",
-    "en": "Display metadata",
-    "ar": "عرض البيانات الوصفية "
-  },
-  {
     "id": "btn_opt_stats",
     "en": "Display view's statistics",
     "ar": "عرض إحصاءات العرض"
@@ -6560,301 +6555,6 @@
     "ar": "يتم تحديث البيانات على أساس أسبوعي "
   },
   {
-    "id": "meta_display_source_title",
-    "en": "Metadata of the source",
-    "ar": "البيانات الوصفية للمصدر "
-  },
-  {
-    "id": "meta_display_view_title",
-    "en": "Summary of the view metadata",
-    "ar": "ملخص عرض البيانات الوصفية "
-  },
-  {
-    "id": "meta_last_editor_id",
-    "en": "Editor id",
-    "ar": "معرف المحرر "
-  },
-  {
-    "id": "meta_all_editor_id",
-    "en": "Id of all editors",
-    "ar": "معرف جميع المحررين "
-  },
-  {
-    "id": "meta_view_modal_title",
-    "en": "Metadata of the view",
-    "ar": "البيانات الوصفية لطريقة العرض "
-  },
-  {
-    "id": "meta_source_modal_title",
-    "en": "Metadata of the source",
-    "ar": "البيانات الوصفية للمصدر"
-  },
-  {
-    "id": "meta_view_raster_meta",
-    "en": "Metadata Entry",
-    "ar": "إدخال البيانات الوصفية "
-  },
-  {
-    "id": "meta_view_table_editors_title",
-    "en": "Changes overview",
-    "ar": "نظرة عامة على التغييرات "
-  },
-  {
-    "id": "meta_view_table_editors_changes",
-    "en": "N. of changes",
-    "ar": "نون من التغييرات "
-  },
-  {
-    "id": "meta_view_table_editors_email",
-    "en": "Editor",
-    "ar": "محرر "
-  },
-  {
-    "id": "meta_view_table_editors_id",
-    "en": "ID",
-    "ar": "بطاقة تعريف"
-  },
-  {
-    "id": "meta_view_table_editors_current",
-    "en": "Latest edit",
-    "ar": "أحدث تعديل "
-  },
-  {
-    "id": "meta_view_title",
-    "en": "View title",
-    "ar": "عرض العنوان "
-  },
-  {
-    "id": "meta_view_abstract",
-    "en": "Abstract",
-    "ar": "خلاصة "
-  },
-  {
-    "id": "meta_view_stat_n_add",
-    "en": "Number of activations",
-    "ar": "عدد التفعيل"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_users",
-    "en": "Number of activations by registered users",
-    "ar": "عدد عمليات التنشيط من قبل المستخدمين المسجلين"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_distinct_users",
-    "en": "Number of distinct user",
-    "ar": "عدد المستخدمين المميزين"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_guests",
-    "en": "Number of activations by guests",
-    "ar": "عدد عمليات التفعيل من قبل الضيوف"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country",
-    "en": "Activations per countries",
-    "ar": "التنشيط لكل دولة"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_last_year",
-    "en": "Activations per country ( last 12 months ) ",
-    "ar": "التنشيط لكل بلد (آخر 12 شهرًا)"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_axis",
-    "en": "Number of activations (logarithmic scale)",
-    "ar": "عدد عمليات التنشيط (المقياس اللوغاريتمي)"
-  },
-  {
-    "id": "meta_view_stat_activations",
-    "en": "activations",
-    "ar": "التنشيط"
-  },
-  {
-    "id": "meta_view_stat_others_countries",
-    "en": "Others",
-    "ar": "آحرون"
-  },
-  {
-    "id": "meta_source_title",
-    "en": "Title",
-    "ar": "لقب "
-  },
-  {
-    "id": "meta_source_abstract",
-    "en": "Abstract",
-    "ar": "خلاصة "
-  },
-  {
-    "id": "meta_source_notes",
-    "en": "Notes",
-    "ar": "ملاحظات "
-  },
-  {
-    "id": "meta_source_licenses",
-    "en": "Licenses",
-    "ar": "التراخيص"
-  },
-  {
-    "id": "meta_source_keywords",
-    "en": "Keywords",
-    "ar": "الكلمات الدالة "
-  },
-  {
-    "id": "meta_source_keywords_gemet",
-    "en": "GEMET keywords",
-    "ar": "كلمات GEMET"
-  },
-  {
-    "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords",
-    "ar": "الكلمات الرئيسية الجغرافية"
-  },
-  {
-    "id": "meta_source_languages",
-    "en": "Languages used in the data",
-    "ar": "اللغات المستخدمة في البيانات "
-  },
-  {
-    "id": "meta_source_contacts",
-    "en": "Contacts list",
-    "ar": "قائمة جهات الاتصال "
-  },
-  {
-    "id": "meta_source_periodicity",
-    "en": "Periodicity",
-    "ar": "دورية "
-  },
-  {
-    "id": "meta_source_released_at",
-    "en": "Date of release",
-    "ar": "تاريخ الإفراج "
-  },
-  {
-    "id": "meta_source_modified_at",
-    "en": "Date of modification",
-    "ar": "تاريخ التعديل "
-  },
-  {
-    "id": "meta_source_start_at",
-    "en": "Data values starting date",
-    "ar": "تاريخ بدء قيم البيانات "
-  },
-  {
-    "id": "meta_source_end_at",
-    "en": "Data values ending date",
-    "ar": "تاريخ انتهاء قيم البيانات "
-  },
-  {
-    "id": "meta_source_is_timeless",
-    "en": "Data without temporal values",
-    "ar": "بيانات بدون قيم زمنية "
-  },
-  {
-    "id": "meta_view_projects_data",
-    "en": "Also published in those projects",
-    "ar": "نشرت أيضا في تلك المشاريع"
-  },
-  {
-    "id": "meta_view_project_title",
-    "en": "Original project",
-    "ar": "المشروع الأصلي "
-  },
-  {
-    "id": "meta_view_projects",
-    "en": "Projects",
-    "ar": "المشاريع "
-  },
-  {
-    "id": "meta_view_id",
-    "en": "View id",
-    "ar": "مشاهدة معرف "
-  },
-  {
-    "id": "meta_view_collections",
-    "en": "Collections",
-    "ar": "المجموعات "
-  },
-  {
-    "id": "meta_view_date_modified",
-    "en": "Modification date",
-    "ar": "تاريخ التعديل "
-  },
-  {
-    "id": "meta_view_date_created",
-    "en": "Creation date",
-    "ar": "تاريخ الإنشاء "
-  },
-  {
-    "id": "meta_view_editor",
-    "en": "Editor",
-    "ar": "محرر "
-  },
-  {
-    "id": "meta_view_editors",
-    "en": "Groups with editing access",
-    "ar": "المجموعات التي لها حق التعديل "
-  },
-  {
-    "id": "meta_view_readers",
-    "en": "Groups with reading access",
-    "ar": "المجموعات التي لها حق الوصول للقراءة "
-  },
-  {
-    "id": "meta_view_type",
-    "en": "Type",
-    "ar": "اكتب "
-  },
-  {
-    "id": "meta_view_table_summary_title",
-    "en": "Summary of the view",
-    "ar": "ملخص العرض "
-  },
-  {
-    "id": "meta_source_id",
-    "en": "Source id",
-    "ar": "معرف المصدر "
-  },
-  {
-    "id": "meta_source_table_summary_title",
-    "en": "Summary of the source",
-    "ar": "ملخص المصدر "
-  },
-  {
-    "id": "meta_source_homepage",
-    "en": "Source homepage",
-    "ar": "الصفحة الرئيسية المصدر "
-  },
-  {
-    "id": "meta_source_url_download",
-    "en": "Download original source",
-    "ar": "تنزيل المصدر الأصلي "
-  },
-  {
-    "id": "meta_source_url_annexes",
-    "en": "Download annexes",
-    "ar": "تحميل المرفقات "
-  },
-  {
-    "id": "meta_source_integrity_score",
-    "en": "Integrity score",
-    "ar": "درجة النزاهة "
-  },
-  {
-    "id": "meta_source_time_range",
-    "en": "Temporal range",
-    "ar": "النطاق الزمني "
-  },
-  {
-    "id": "meta_source_time_range_min",
-    "en": "From",
-    "ar": "من "
-  },
-  {
-    "id": "meta_source_time_range_max",
-    "en": "To",
-    "ar": "إلى "
-  },
-  {
     "id": "dont_know",
     "en": "I don't know",
     "ar": "لا أعلم "
@@ -7638,6 +7338,331 @@
     "id": "un_map_disclaimer_asterisk_3",
     "en": "A dispute exists between the Governments of Argentina and the United Kingdom of Great Britain and Northern Ireland concerning sovereignty over the Falkland Islands (Malvinas).",
     "ar": "وجد نزاع بين حكومتي الأرجنتين والمملكة المتحدة لبريطانيا العظمى وأيرلندا الشمالية بشأن السيادة على جزر فوكلاند (مالفيناس)."
+  },
+  {
+    "id": "btn_opt_meta",
+    "en": "Display metadata",
+    "ar": "عرض البيانات الوصفية "
+  },
+  {
+    "id": "meta_display_source_title",
+    "en": "Metadata of the source",
+    "ar": "البيانات الوصفية للمصدر "
+  },
+  {
+    "id": "meta_display_view_title",
+    "en": "Summary of the view metadata",
+    "ar": "ملخص عرض البيانات الوصفية "
+  },
+  {
+    "id": "meta_last_editor_id",
+    "en": "Editor id",
+    "ar": "معرف المحرر "
+  },
+  {
+    "id": "meta_all_editor_id",
+    "en": "Id of all editors",
+    "ar": "معرف جميع المحررين "
+  },
+  {
+    "id": "meta_view_modal_title",
+    "en": "Metadata of the view",
+    "ar": "البيانات الوصفية لطريقة العرض "
+  },
+  {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "ar": "البيانات الوصفية للمصدر"
+  },
+  {
+    "id": "meta_view_raster_meta",
+    "en": "Metadata Entry",
+    "ar": "إدخال البيانات الوصفية "
+  },
+  {
+    "id": "meta_view_table_editors_title",
+    "en": "Changes overview",
+    "ar": "نظرة عامة على التغييرات "
+  },
+  {
+    "id": "meta_view_table_editors_changes",
+    "en": "N. of changes",
+    "ar": "نون من التغييرات "
+  },
+  {
+    "id": "meta_view_table_editors_email",
+    "en": "Editor",
+    "ar": "محرر "
+  },
+  {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "ar": "بطاقة تعريف"
+  },
+  {
+    "id": "meta_view_table_editors_current",
+    "en": "Latest edit",
+    "ar": "أحدث تعديل "
+  },
+  {
+    "id": "meta_view_title",
+    "en": "View title",
+    "ar": "عرض العنوان "
+  },
+  {
+    "id": "meta_view_abstract",
+    "en": "Abstract",
+    "ar": "خلاصة "
+  },
+  {
+    "id": "meta_view_stat_n_add",
+    "en": "Number of activations",
+    "ar": "عدد التفعيل"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_users",
+    "en": "Number of activations by registered users",
+    "ar": "عدد عمليات التنشيط من قبل المستخدمين المسجلين"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "ar": "عدد المستخدمين المميزين"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_guests",
+    "en": "Number of activations by guests",
+    "ar": "عدد عمليات التفعيل من قبل الضيوف"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country",
+    "en": "Activations per countries",
+    "ar": "التنشيط لكل دولة"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_last_year",
+    "en": "Activations per country ( last 12 months ) ",
+    "ar": "التنشيط لكل بلد (آخر 12 شهرًا)"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_axis",
+    "en": "Number of activations (logarithmic scale)",
+    "ar": "عدد عمليات التنشيط (المقياس اللوغاريتمي)"
+  },
+  {
+    "id": "meta_view_stat_activations",
+    "en": "activations",
+    "ar": "التنشيط"
+  },
+  {
+    "id": "meta_view_stat_others_countries",
+    "en": "Others",
+    "ar": "آحرون"
+  },
+  {
+    "id": "meta_source_title",
+    "en": "Title",
+    "ar": "لقب "
+  },
+  {
+    "id": "meta_source_abstract",
+    "en": "Abstract",
+    "ar": "خلاصة "
+  },
+  {
+    "id": "meta_source_notes",
+    "en": "Notes",
+    "ar": "ملاحظات "
+  },
+  {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "ar": "التراخيص"
+  },
+  {
+    "id": "meta_source_keywords",
+    "en": "Keywords",
+    "ar": "الكلمات الدالة "
+  },
+  {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "ar": "كلمات GEMET"
+  },
+  {
+    "id": "meta_source_keywords_m49",
+    "en": "Geographic Keywords",
+    "ar": "الكلمات الرئيسية الجغرافية"
+  },
+  {
+    "id": "meta_source_languages",
+    "en": "Languages used in the data",
+    "ar": "اللغات المستخدمة في البيانات "
+  },
+  {
+    "id": "meta_source_contacts",
+    "en": "Contacts list",
+    "ar": "قائمة جهات الاتصال "
+  },
+  {
+    "id": "meta_source_periodicity",
+    "en": "Periodicity",
+    "ar": "دورية "
+  },
+  {
+    "id": "meta_source_released_at",
+    "en": "Date of release",
+    "ar": "تاريخ الإفراج "
+  },
+  {
+    "id": "meta_source_modified_at",
+    "en": "Date of modification",
+    "ar": "تاريخ التعديل "
+  },
+  {
+    "id": "meta_source_start_at",
+    "en": "Data values starting date",
+    "ar": "تاريخ بدء قيم البيانات "
+  },
+  {
+    "id": "meta_source_end_at",
+    "en": "Data values ending date",
+    "ar": "تاريخ انتهاء قيم البيانات "
+  },
+  {
+    "id": "meta_source_is_timeless",
+    "en": "Data without temporal values",
+    "ar": "بيانات بدون قيم زمنية "
+  },
+  {
+    "id": "meta_view_projects_data",
+    "en": "Also published in those projects",
+    "ar": "نشرت أيضا في تلك المشاريع"
+  },
+  {
+    "id": "meta_view_project_title",
+    "en": "Original project",
+    "ar": "المشروع الأصلي "
+  },
+  {
+    "id": "meta_view_projects",
+    "en": "Projects",
+    "ar": "المشاريع "
+  },
+  {
+    "id": "meta_view_id",
+    "en": "View id",
+    "ar": "مشاهدة معرف "
+  },
+  {
+    "id": "meta_view_collections",
+    "en": "Collections",
+    "ar": "المجموعات "
+  },
+  {
+    "id": "meta_view_date_modified",
+    "en": "Modification date",
+    "ar": "تاريخ التعديل "
+  },
+  {
+    "id": "meta_view_date_created",
+    "en": "Creation date",
+    "ar": "تاريخ الإنشاء "
+  },
+  {
+    "id": "meta_view_editor",
+    "en": "Editor",
+    "ar": "محرر "
+  },
+  {
+    "id": "meta_view_editors",
+    "en": "Groups with editing access",
+    "ar": "المجموعات التي لها حق التعديل "
+  },
+  {
+    "id": "meta_view_readers",
+    "en": "Groups with reading access",
+    "ar": "المجموعات التي لها حق الوصول للقراءة "
+  },
+  {
+    "id": "meta_view_type",
+    "en": "Type",
+    "ar": "اكتب "
+  },
+  {
+    "id": "meta_view_table_summary_title",
+    "en": "Summary of the view",
+    "ar": "ملخص العرض "
+  },
+  {
+    "id": "meta_source_id",
+    "en": "Source id",
+    "ar": "معرف المصدر "
+  },
+  {
+    "id": "meta_source_table_summary_title",
+    "en": "Summary of the source",
+    "ar": "ملخص المصدر "
+  },
+  {
+    "id": "meta_source_homepage",
+    "en": "Source homepage",
+    "ar": "الصفحة الرئيسية المصدر "
+  },
+  {
+    "id": "meta_source_url_download",
+    "en": "Download original source",
+    "ar": "تنزيل المصدر الأصلي "
+  },
+  {
+    "id": "meta_source_url_annexes",
+    "en": "Download annexes",
+    "ar": "تحميل المرفقات "
+  },
+  {
+    "id": "meta_source_integrity_score",
+    "en": "Integrity score",
+    "ar": "درجة النزاهة "
+  },
+  {
+    "id": "meta_source_time_range",
+    "en": "Temporal range",
+    "ar": "النطاق الزمني "
+  },
+  {
+    "id": "meta_source_time_range_min",
+    "en": "From",
+    "ar": "من "
+  },
+  {
+    "id": "meta_source_time_range_max",
+    "en": "To",
+    "ar": "إلى "
+  },
+  {
+    "id": "meta_gs_ws_b",
+    "en": "wms/wfs/wmts",
+    "ar": "wms/wfs/wmts"
+  },
+  {
+    "id": "meta_gs_ws_b_not_public",
+    "en": "wms/wfs/wmts – inactive, project not public",
+    "ar": "wms/wfs/wmts - غير نشط، المشروع غير عام"
+  },
+  {
+    "id": "meta_mx_download",
+    "en": "Download",
+    "ar": "تحميل"
+  },
+  {
+    "id": "meta_mx_postgis_tiler",
+    "en": "PostGIS native tiles",
+    "ar": "بلاط PostGIS الأصلي"
+  },
+  {
+    "id": "meta_view_services",
+    "en": "Enabled services",
+    "ar": "الخدمات المفعلة"
   },
   {
     "id": "tool_mirror_enable",

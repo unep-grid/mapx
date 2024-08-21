@@ -3390,11 +3390,6 @@
     "ru": "Установите стиль этого вида "
   },
   {
-    "id": "btn_opt_meta",
-    "en": "Display metadata",
-    "ru": "Показать метаданные "
-  },
-  {
     "id": "btn_opt_stats",
     "en": "Display view's statistics",
     "ru": "Отображение статистики вида"
@@ -6560,301 +6555,6 @@
     "ru": "Данные обновляются еженедельно "
   },
   {
-    "id": "meta_display_source_title",
-    "en": "Metadata of the source",
-    "ru": "Метаданные источника "
-  },
-  {
-    "id": "meta_display_view_title",
-    "en": "Summary of the view metadata",
-    "ru": "Сводка метаданных представления "
-  },
-  {
-    "id": "meta_last_editor_id",
-    "en": "Editor id",
-    "ru": "Идентификатор редактора "
-  },
-  {
-    "id": "meta_all_editor_id",
-    "en": "Id of all editors",
-    "ru": "Id всех редакторов "
-  },
-  {
-    "id": "meta_view_modal_title",
-    "en": "Metadata of the view",
-    "ru": "Метаданные представления "
-  },
-  {
-    "id": "meta_source_modal_title",
-    "en": "Metadata of the source",
-    "ru": "Метаданные источника"
-  },
-  {
-    "id": "meta_view_raster_meta",
-    "en": "Metadata Entry",
-    "ru": "Запись метаданных "
-  },
-  {
-    "id": "meta_view_table_editors_title",
-    "en": "Changes overview",
-    "ru": "Обзор изменений "
-  },
-  {
-    "id": "meta_view_table_editors_changes",
-    "en": "N. of changes",
-    "ru": "Кол-во изменений "
-  },
-  {
-    "id": "meta_view_table_editors_email",
-    "en": "Editor",
-    "ru": "редактор "
-  },
-  {
-    "id": "meta_view_table_editors_id",
-    "en": "ID",
-    "ru": "ИДЕНТИФИКАТОР"
-  },
-  {
-    "id": "meta_view_table_editors_current",
-    "en": "Latest edit",
-    "ru": "Последнее изменение "
-  },
-  {
-    "id": "meta_view_title",
-    "en": "View title",
-    "ru": "Просмотр заголовка "
-  },
-  {
-    "id": "meta_view_abstract",
-    "en": "Abstract",
-    "ru": "Абстрактный "
-  },
-  {
-    "id": "meta_view_stat_n_add",
-    "en": "Number of activations",
-    "ru": "Количество активаций"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_users",
-    "en": "Number of activations by registered users",
-    "ru": "Количество активаций зарегистрированными пользователями"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_distinct_users",
-    "en": "Number of distinct user",
-    "ru": "Количество отдельных пользователей"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_guests",
-    "en": "Number of activations by guests",
-    "ru": "Количество активаций гостями"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country",
-    "en": "Activations per countries",
-    "ru": "Активации по странам"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_last_year",
-    "en": "Activations per country ( last 12 months ) ",
-    "ru": "Активаций на страну (за последние 12 месяцев)"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_axis",
-    "en": "Number of activations (logarithmic scale)",
-    "ru": "Количество активаций (логарифмическая шкала)"
-  },
-  {
-    "id": "meta_view_stat_activations",
-    "en": "activations",
-    "ru": "активации"
-  },
-  {
-    "id": "meta_view_stat_others_countries",
-    "en": "Others",
-    "ru": "Другие"
-  },
-  {
-    "id": "meta_source_title",
-    "en": "Title",
-    "ru": "Заголовок "
-  },
-  {
-    "id": "meta_source_abstract",
-    "en": "Abstract",
-    "ru": "Абстрактный "
-  },
-  {
-    "id": "meta_source_notes",
-    "en": "Notes",
-    "ru": "Примечания "
-  },
-  {
-    "id": "meta_source_licenses",
-    "en": "Licenses",
-    "ru": "Лицензии"
-  },
-  {
-    "id": "meta_source_keywords",
-    "en": "Keywords",
-    "ru": "Ключевые слова "
-  },
-  {
-    "id": "meta_source_keywords_gemet",
-    "en": "GEMET keywords",
-    "ru": "GEMET ключевые слова"
-  },
-  {
-    "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords",
-    "ru": "Географические ключевые слова"
-  },
-  {
-    "id": "meta_source_languages",
-    "en": "Languages used in the data",
-    "ru": "Языки, используемые в данных "
-  },
-  {
-    "id": "meta_source_contacts",
-    "en": "Contacts list",
-    "ru": "Список контактов "
-  },
-  {
-    "id": "meta_source_periodicity",
-    "en": "Periodicity",
-    "ru": "Периодичность "
-  },
-  {
-    "id": "meta_source_released_at",
-    "en": "Date of release",
-    "ru": "Дата выпуска "
-  },
-  {
-    "id": "meta_source_modified_at",
-    "en": "Date of modification",
-    "ru": "Дата модификации "
-  },
-  {
-    "id": "meta_source_start_at",
-    "en": "Data values starting date",
-    "ru": "Дата начала значений данных "
-  },
-  {
-    "id": "meta_source_end_at",
-    "en": "Data values ending date",
-    "ru": "Дата окончания значений данных "
-  },
-  {
-    "id": "meta_source_is_timeless",
-    "en": "Data without temporal values",
-    "ru": "Данные без временных значений "
-  },
-  {
-    "id": "meta_view_projects_data",
-    "en": "Also published in those projects",
-    "ru": "Также опубликовано в этих проектах"
-  },
-  {
-    "id": "meta_view_project_title",
-    "en": "Original project",
-    "ru": "Оригинальный проект "
-  },
-  {
-    "id": "meta_view_projects",
-    "en": "Projects",
-    "ru": "Проекты "
-  },
-  {
-    "id": "meta_view_id",
-    "en": "View id",
-    "ru": "Просмотреть идентификатор "
-  },
-  {
-    "id": "meta_view_collections",
-    "en": "Collections",
-    "ru": "Коллекции "
-  },
-  {
-    "id": "meta_view_date_modified",
-    "en": "Modification date",
-    "ru": "Дата модификации "
-  },
-  {
-    "id": "meta_view_date_created",
-    "en": "Creation date",
-    "ru": "Дата создания "
-  },
-  {
-    "id": "meta_view_editor",
-    "en": "Editor",
-    "ru": "редактор "
-  },
-  {
-    "id": "meta_view_editors",
-    "en": "Groups with editing access",
-    "ru": "Группы с доступом для редактирования "
-  },
-  {
-    "id": "meta_view_readers",
-    "en": "Groups with reading access",
-    "ru": "Группы с доступом для чтения "
-  },
-  {
-    "id": "meta_view_type",
-    "en": "Type",
-    "ru": "Тип "
-  },
-  {
-    "id": "meta_view_table_summary_title",
-    "en": "Summary of the view",
-    "ru": "Краткое изложение мнения "
-  },
-  {
-    "id": "meta_source_id",
-    "en": "Source id",
-    "ru": "Идентификатор источника "
-  },
-  {
-    "id": "meta_source_table_summary_title",
-    "en": "Summary of the source",
-    "ru": "Краткое содержание источника "
-  },
-  {
-    "id": "meta_source_homepage",
-    "en": "Source homepage",
-    "ru": "Исходная домашняя страница "
-  },
-  {
-    "id": "meta_source_url_download",
-    "en": "Download original source",
-    "ru": "Скачать исходный код "
-  },
-  {
-    "id": "meta_source_url_annexes",
-    "en": "Download annexes",
-    "ru": "Скачать приложения "
-  },
-  {
-    "id": "meta_source_integrity_score",
-    "en": "Integrity score",
-    "ru": "Оценка целостности "
-  },
-  {
-    "id": "meta_source_time_range",
-    "en": "Temporal range",
-    "ru": "Временной диапазон "
-  },
-  {
-    "id": "meta_source_time_range_min",
-    "en": "From",
-    "ru": "Из "
-  },
-  {
-    "id": "meta_source_time_range_max",
-    "en": "To",
-    "ru": "К "
-  },
-  {
     "id": "dont_know",
     "en": "I don't know",
     "ru": "Я не знаю "
@@ -7638,6 +7338,331 @@
     "id": "un_map_disclaimer_asterisk_3",
     "en": "A dispute exists between the Governments of Argentina and the United Kingdom of Great Britain and Northern Ireland concerning sovereignty over the Falkland Islands (Malvinas).",
     "ru": "Между правительствами Аргентины и Соединенного Королевства Великобритании и Северной Ирландии существует спор по поводу суверенитета над Фолклендскими (Мальвинскими) островами."
+  },
+  {
+    "id": "btn_opt_meta",
+    "en": "Display metadata",
+    "ru": "Показать метаданные "
+  },
+  {
+    "id": "meta_display_source_title",
+    "en": "Metadata of the source",
+    "ru": "Метаданные источника "
+  },
+  {
+    "id": "meta_display_view_title",
+    "en": "Summary of the view metadata",
+    "ru": "Сводка метаданных представления "
+  },
+  {
+    "id": "meta_last_editor_id",
+    "en": "Editor id",
+    "ru": "Идентификатор редактора "
+  },
+  {
+    "id": "meta_all_editor_id",
+    "en": "Id of all editors",
+    "ru": "Id всех редакторов "
+  },
+  {
+    "id": "meta_view_modal_title",
+    "en": "Metadata of the view",
+    "ru": "Метаданные представления "
+  },
+  {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "ru": "Метаданные источника"
+  },
+  {
+    "id": "meta_view_raster_meta",
+    "en": "Metadata Entry",
+    "ru": "Запись метаданных "
+  },
+  {
+    "id": "meta_view_table_editors_title",
+    "en": "Changes overview",
+    "ru": "Обзор изменений "
+  },
+  {
+    "id": "meta_view_table_editors_changes",
+    "en": "N. of changes",
+    "ru": "Кол-во изменений "
+  },
+  {
+    "id": "meta_view_table_editors_email",
+    "en": "Editor",
+    "ru": "редактор "
+  },
+  {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "ru": "ИДЕНТИФИКАТОР"
+  },
+  {
+    "id": "meta_view_table_editors_current",
+    "en": "Latest edit",
+    "ru": "Последнее изменение "
+  },
+  {
+    "id": "meta_view_title",
+    "en": "View title",
+    "ru": "Просмотр заголовка "
+  },
+  {
+    "id": "meta_view_abstract",
+    "en": "Abstract",
+    "ru": "Абстрактный "
+  },
+  {
+    "id": "meta_view_stat_n_add",
+    "en": "Number of activations",
+    "ru": "Количество активаций"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_users",
+    "en": "Number of activations by registered users",
+    "ru": "Количество активаций зарегистрированными пользователями"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "ru": "Количество отдельных пользователей"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_guests",
+    "en": "Number of activations by guests",
+    "ru": "Количество активаций гостями"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country",
+    "en": "Activations per countries",
+    "ru": "Активации по странам"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_last_year",
+    "en": "Activations per country ( last 12 months ) ",
+    "ru": "Активаций на страну (за последние 12 месяцев)"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_axis",
+    "en": "Number of activations (logarithmic scale)",
+    "ru": "Количество активаций (логарифмическая шкала)"
+  },
+  {
+    "id": "meta_view_stat_activations",
+    "en": "activations",
+    "ru": "активации"
+  },
+  {
+    "id": "meta_view_stat_others_countries",
+    "en": "Others",
+    "ru": "Другие"
+  },
+  {
+    "id": "meta_source_title",
+    "en": "Title",
+    "ru": "Заголовок "
+  },
+  {
+    "id": "meta_source_abstract",
+    "en": "Abstract",
+    "ru": "Абстрактный "
+  },
+  {
+    "id": "meta_source_notes",
+    "en": "Notes",
+    "ru": "Примечания "
+  },
+  {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "ru": "Лицензии"
+  },
+  {
+    "id": "meta_source_keywords",
+    "en": "Keywords",
+    "ru": "Ключевые слова "
+  },
+  {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "ru": "GEMET ключевые слова"
+  },
+  {
+    "id": "meta_source_keywords_m49",
+    "en": "Geographic Keywords",
+    "ru": "Географические ключевые слова"
+  },
+  {
+    "id": "meta_source_languages",
+    "en": "Languages used in the data",
+    "ru": "Языки, используемые в данных "
+  },
+  {
+    "id": "meta_source_contacts",
+    "en": "Contacts list",
+    "ru": "Список контактов "
+  },
+  {
+    "id": "meta_source_periodicity",
+    "en": "Periodicity",
+    "ru": "Периодичность "
+  },
+  {
+    "id": "meta_source_released_at",
+    "en": "Date of release",
+    "ru": "Дата выпуска "
+  },
+  {
+    "id": "meta_source_modified_at",
+    "en": "Date of modification",
+    "ru": "Дата модификации "
+  },
+  {
+    "id": "meta_source_start_at",
+    "en": "Data values starting date",
+    "ru": "Дата начала значений данных "
+  },
+  {
+    "id": "meta_source_end_at",
+    "en": "Data values ending date",
+    "ru": "Дата окончания значений данных "
+  },
+  {
+    "id": "meta_source_is_timeless",
+    "en": "Data without temporal values",
+    "ru": "Данные без временных значений "
+  },
+  {
+    "id": "meta_view_projects_data",
+    "en": "Also published in those projects",
+    "ru": "Также опубликовано в этих проектах"
+  },
+  {
+    "id": "meta_view_project_title",
+    "en": "Original project",
+    "ru": "Оригинальный проект "
+  },
+  {
+    "id": "meta_view_projects",
+    "en": "Projects",
+    "ru": "Проекты "
+  },
+  {
+    "id": "meta_view_id",
+    "en": "View id",
+    "ru": "Просмотреть идентификатор "
+  },
+  {
+    "id": "meta_view_collections",
+    "en": "Collections",
+    "ru": "Коллекции "
+  },
+  {
+    "id": "meta_view_date_modified",
+    "en": "Modification date",
+    "ru": "Дата модификации "
+  },
+  {
+    "id": "meta_view_date_created",
+    "en": "Creation date",
+    "ru": "Дата создания "
+  },
+  {
+    "id": "meta_view_editor",
+    "en": "Editor",
+    "ru": "редактор "
+  },
+  {
+    "id": "meta_view_editors",
+    "en": "Groups with editing access",
+    "ru": "Группы с доступом для редактирования "
+  },
+  {
+    "id": "meta_view_readers",
+    "en": "Groups with reading access",
+    "ru": "Группы с доступом для чтения "
+  },
+  {
+    "id": "meta_view_type",
+    "en": "Type",
+    "ru": "Тип "
+  },
+  {
+    "id": "meta_view_table_summary_title",
+    "en": "Summary of the view",
+    "ru": "Краткое изложение мнения "
+  },
+  {
+    "id": "meta_source_id",
+    "en": "Source id",
+    "ru": "Идентификатор источника "
+  },
+  {
+    "id": "meta_source_table_summary_title",
+    "en": "Summary of the source",
+    "ru": "Краткое содержание источника "
+  },
+  {
+    "id": "meta_source_homepage",
+    "en": "Source homepage",
+    "ru": "Исходная домашняя страница "
+  },
+  {
+    "id": "meta_source_url_download",
+    "en": "Download original source",
+    "ru": "Скачать исходный код "
+  },
+  {
+    "id": "meta_source_url_annexes",
+    "en": "Download annexes",
+    "ru": "Скачать приложения "
+  },
+  {
+    "id": "meta_source_integrity_score",
+    "en": "Integrity score",
+    "ru": "Оценка целостности "
+  },
+  {
+    "id": "meta_source_time_range",
+    "en": "Temporal range",
+    "ru": "Временной диапазон "
+  },
+  {
+    "id": "meta_source_time_range_min",
+    "en": "From",
+    "ru": "Из "
+  },
+  {
+    "id": "meta_source_time_range_max",
+    "en": "To",
+    "ru": "К "
+  },
+  {
+    "id": "meta_gs_ws_b",
+    "en": "wms/wfs/wmts",
+    "ru": "wms/wfs/wmts"
+  },
+  {
+    "id": "meta_gs_ws_b_not_public",
+    "en": "wms/wfs/wmts – inactive, project not public",
+    "ru": "wms/wfs/wmts – неактивно, проект не публичный"
+  },
+  {
+    "id": "meta_mx_download",
+    "en": "Download",
+    "ru": "Скачать"
+  },
+  {
+    "id": "meta_mx_postgis_tiler",
+    "en": "PostGIS native tiles",
+    "ru": "Собственные плитки PostGIS"
+  },
+  {
+    "id": "meta_view_services",
+    "en": "Enabled services",
+    "ru": "Включенные сервисы"
   },
   {
     "id": "tool_mirror_enable",

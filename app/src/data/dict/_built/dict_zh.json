@@ -3390,11 +3390,6 @@
     "zh": "设置视图样式"
   },
   {
-    "id": "btn_opt_meta",
-    "en": "Display metadata",
-    "zh": "显示元数据"
-  },
-  {
     "id": "btn_opt_stats",
     "en": "Display view's statistics",
     "zh": "显示视图的统计数据"
@@ -6560,301 +6555,6 @@
     "zh": "数据每周更新一次"
   },
   {
-    "id": "meta_display_source_title",
-    "en": "Metadata of the source",
-    "zh": "源的元数据"
-  },
-  {
-    "id": "meta_display_view_title",
-    "en": "Summary of the view metadata",
-    "zh": "视图元数据摘要"
-  },
-  {
-    "id": "meta_last_editor_id",
-    "en": "Editor id",
-    "zh": "编辑者ID"
-  },
-  {
-    "id": "meta_all_editor_id",
-    "en": "Id of all editors",
-    "zh": "所有编辑者的ID"
-  },
-  {
-    "id": "meta_view_modal_title",
-    "en": "Metadata of the view",
-    "zh": "视图元数据"
-  },
-  {
-    "id": "meta_source_modal_title",
-    "en": "Metadata of the source",
-    "zh": "源的元数据"
-  },
-  {
-    "id": "meta_view_raster_meta",
-    "en": "Metadata Entry",
-    "zh": "元数据项"
-  },
-  {
-    "id": "meta_view_table_editors_title",
-    "en": "Changes overview",
-    "zh": "更改概述"
-  },
-  {
-    "id": "meta_view_table_editors_changes",
-    "en": "N. of changes",
-    "zh": "更改次数"
-  },
-  {
-    "id": "meta_view_table_editors_email",
-    "en": "Editor",
-    "zh": "编辑者"
-  },
-  {
-    "id": "meta_view_table_editors_id",
-    "en": "ID",
-    "zh": "ID"
-  },
-  {
-    "id": "meta_view_table_editors_current",
-    "en": "Latest edit",
-    "zh": "最新编辑"
-  },
-  {
-    "id": "meta_view_title",
-    "en": "View title",
-    "zh": "视图标题"
-  },
-  {
-    "id": "meta_view_abstract",
-    "en": "Abstract",
-    "zh": "摘要"
-  },
-  {
-    "id": "meta_view_stat_n_add",
-    "en": "Number of activations",
-    "zh": "激活次数"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_users",
-    "en": "Number of activations by registered users",
-    "zh": "注册用户激活次数"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_distinct_users",
-    "en": "Number of distinct user",
-    "zh": "不同用户数"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_guests",
-    "en": "Number of activations by guests",
-    "zh": "客人激活次数"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country",
-    "en": "Activations per countries",
-    "zh": "每个国家的激活"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_last_year",
-    "en": "Activations per country ( last 12 months ) ",
-    "zh": "每个国家/地区的激活次数（过去 12 个月）"
-  },
-  {
-    "id": "meta_view_stat_n_add_by_country_axis",
-    "en": "Number of activations (logarithmic scale)",
-    "zh": "激活次数（对数刻度）"
-  },
-  {
-    "id": "meta_view_stat_activations",
-    "en": "activations",
-    "zh": "激活"
-  },
-  {
-    "id": "meta_view_stat_others_countries",
-    "en": "Others",
-    "zh": "其他"
-  },
-  {
-    "id": "meta_source_title",
-    "en": "Title",
-    "zh": "标题"
-  },
-  {
-    "id": "meta_source_abstract",
-    "en": "Abstract",
-    "zh": "摘要"
-  },
-  {
-    "id": "meta_source_notes",
-    "en": "Notes",
-    "zh": "注释"
-  },
-  {
-    "id": "meta_source_licenses",
-    "en": "Licenses",
-    "zh": "执照"
-  },
-  {
-    "id": "meta_source_keywords",
-    "en": "Keywords",
-    "zh": "关键字"
-  },
-  {
-    "id": "meta_source_keywords_gemet",
-    "en": "GEMET keywords",
-    "zh": "GEMET关键词"
-  },
-  {
-    "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords",
-    "zh": "地理关键字M49"
-  },
-  {
-    "id": "meta_source_languages",
-    "en": "Languages used in the data",
-    "zh": "数据使用的语言"
-  },
-  {
-    "id": "meta_source_contacts",
-    "en": "Contacts list",
-    "zh": "联系人列表"
-  },
-  {
-    "id": "meta_source_periodicity",
-    "en": "Periodicity",
-    "zh": "周期"
-  },
-  {
-    "id": "meta_source_released_at",
-    "en": "Date of release",
-    "zh": "发布日期"
-  },
-  {
-    "id": "meta_source_modified_at",
-    "en": "Date of modification",
-    "zh": "修改日期"
-  },
-  {
-    "id": "meta_source_start_at",
-    "en": "Data values starting date",
-    "zh": "数据值开始日期"
-  },
-  {
-    "id": "meta_source_end_at",
-    "en": "Data values ending date",
-    "zh": "数据值结束日期"
-  },
-  {
-    "id": "meta_source_is_timeless",
-    "en": "Data without temporal values",
-    "zh": "没有时间值的数据"
-  },
-  {
-    "id": "meta_view_projects_data",
-    "en": "Also published in those projects",
-    "zh": "也发布在这些项目中"
-  },
-  {
-    "id": "meta_view_project_title",
-    "en": "Original project",
-    "zh": "原始项目"
-  },
-  {
-    "id": "meta_view_projects",
-    "en": "Projects",
-    "zh": "项目"
-  },
-  {
-    "id": "meta_view_id",
-    "en": "View id",
-    "zh": "视图ID"
-  },
-  {
-    "id": "meta_view_collections",
-    "en": "Collections",
-    "zh": "集合"
-  },
-  {
-    "id": "meta_view_date_modified",
-    "en": "Modification date",
-    "zh": "修改日期"
-  },
-  {
-    "id": "meta_view_date_created",
-    "en": "Creation date",
-    "zh": "创建日期"
-  },
-  {
-    "id": "meta_view_editor",
-    "en": "Editor",
-    "zh": "编辑"
-  },
-  {
-    "id": "meta_view_editors",
-    "en": "Groups with editing access",
-    "zh": "具有编辑权限的访问组"
-  },
-  {
-    "id": "meta_view_readers",
-    "en": "Groups with reading access",
-    "zh": "具有读取权限的访问组"
-  },
-  {
-    "id": "meta_view_type",
-    "en": "Type",
-    "zh": "类型"
-  },
-  {
-    "id": "meta_view_table_summary_title",
-    "en": "Summary of the view",
-    "zh": "视图摘要"
-  },
-  {
-    "id": "meta_source_id",
-    "en": "Source id",
-    "zh": "源ID"
-  },
-  {
-    "id": "meta_source_table_summary_title",
-    "en": "Summary of the source",
-    "zh": "源摘要"
-  },
-  {
-    "id": "meta_source_homepage",
-    "en": "Source homepage",
-    "zh": "源主页"
-  },
-  {
-    "id": "meta_source_url_download",
-    "en": "Download original source",
-    "zh": "下载原始的源"
-  },
-  {
-    "id": "meta_source_url_annexes",
-    "en": "Download annexes",
-    "zh": "下载附件"
-  },
-  {
-    "id": "meta_source_integrity_score",
-    "en": "Integrity score",
-    "zh": "完整性评分"
-  },
-  {
-    "id": "meta_source_time_range",
-    "en": "Temporal range",
-    "zh": "时间范围"
-  },
-  {
-    "id": "meta_source_time_range_min",
-    "en": "From",
-    "zh": "从"
-  },
-  {
-    "id": "meta_source_time_range_max",
-    "en": "To",
-    "zh": "到"
-  },
-  {
     "id": "dont_know",
     "en": "I don't know",
     "zh": "我不知道"
@@ -7638,6 +7338,331 @@
     "id": "un_map_disclaimer_asterisk_3",
     "en": "A dispute exists between the Governments of Argentina and the United Kingdom of Great Britain and Northern Ireland concerning sovereignty over the Falkland Islands (Malvinas).",
     "zh": "阿根廷政府和大不列颠及爱尔兰联合王国政府之间就福克兰(马尔维纳斯)群岛的主权问题存在着争议。"
+  },
+  {
+    "id": "btn_opt_meta",
+    "en": "Display metadata",
+    "zh": "显示元数据"
+  },
+  {
+    "id": "meta_display_source_title",
+    "en": "Metadata of the source",
+    "zh": "源的元数据"
+  },
+  {
+    "id": "meta_display_view_title",
+    "en": "Summary of the view metadata",
+    "zh": "视图元数据摘要"
+  },
+  {
+    "id": "meta_last_editor_id",
+    "en": "Editor id",
+    "zh": "编辑者ID"
+  },
+  {
+    "id": "meta_all_editor_id",
+    "en": "Id of all editors",
+    "zh": "所有编辑者的ID"
+  },
+  {
+    "id": "meta_view_modal_title",
+    "en": "Metadata of the view",
+    "zh": "视图元数据"
+  },
+  {
+    "id": "meta_source_modal_title",
+    "en": "Metadata of the source",
+    "zh": "源的元数据"
+  },
+  {
+    "id": "meta_view_raster_meta",
+    "en": "Metadata Entry",
+    "zh": "元数据项"
+  },
+  {
+    "id": "meta_view_table_editors_title",
+    "en": "Changes overview",
+    "zh": "更改概述"
+  },
+  {
+    "id": "meta_view_table_editors_changes",
+    "en": "N. of changes",
+    "zh": "更改次数"
+  },
+  {
+    "id": "meta_view_table_editors_email",
+    "en": "Editor",
+    "zh": "编辑者"
+  },
+  {
+    "id": "meta_view_table_editors_id",
+    "en": "ID",
+    "zh": "ID"
+  },
+  {
+    "id": "meta_view_table_editors_current",
+    "en": "Latest edit",
+    "zh": "最新编辑"
+  },
+  {
+    "id": "meta_view_title",
+    "en": "View title",
+    "zh": "视图标题"
+  },
+  {
+    "id": "meta_view_abstract",
+    "en": "Abstract",
+    "zh": "摘要"
+  },
+  {
+    "id": "meta_view_stat_n_add",
+    "en": "Number of activations",
+    "zh": "激活次数"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_users",
+    "en": "Number of activations by registered users",
+    "zh": "注册用户激活次数"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of distinct user",
+    "zh": "不同用户数"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_guests",
+    "en": "Number of activations by guests",
+    "zh": "客人激活次数"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country",
+    "en": "Activations per countries",
+    "zh": "每个国家的激活"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_last_year",
+    "en": "Activations per country ( last 12 months ) ",
+    "zh": "每个国家/地区的激活次数（过去 12 个月）"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_axis",
+    "en": "Number of activations (logarithmic scale)",
+    "zh": "激活次数（对数刻度）"
+  },
+  {
+    "id": "meta_view_stat_activations",
+    "en": "activations",
+    "zh": "激活"
+  },
+  {
+    "id": "meta_view_stat_others_countries",
+    "en": "Others",
+    "zh": "其他"
+  },
+  {
+    "id": "meta_source_title",
+    "en": "Title",
+    "zh": "标题"
+  },
+  {
+    "id": "meta_source_abstract",
+    "en": "Abstract",
+    "zh": "摘要"
+  },
+  {
+    "id": "meta_source_notes",
+    "en": "Notes",
+    "zh": "注释"
+  },
+  {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "zh": "执照"
+  },
+  {
+    "id": "meta_source_keywords",
+    "en": "Keywords",
+    "zh": "关键字"
+  },
+  {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "zh": "GEMET关键词"
+  },
+  {
+    "id": "meta_source_keywords_m49",
+    "en": "Geographic Keywords",
+    "zh": "地理关键字M49"
+  },
+  {
+    "id": "meta_source_languages",
+    "en": "Languages used in the data",
+    "zh": "数据使用的语言"
+  },
+  {
+    "id": "meta_source_contacts",
+    "en": "Contacts list",
+    "zh": "联系人列表"
+  },
+  {
+    "id": "meta_source_periodicity",
+    "en": "Periodicity",
+    "zh": "周期"
+  },
+  {
+    "id": "meta_source_released_at",
+    "en": "Date of release",
+    "zh": "发布日期"
+  },
+  {
+    "id": "meta_source_modified_at",
+    "en": "Date of modification",
+    "zh": "修改日期"
+  },
+  {
+    "id": "meta_source_start_at",
+    "en": "Data values starting date",
+    "zh": "数据值开始日期"
+  },
+  {
+    "id": "meta_source_end_at",
+    "en": "Data values ending date",
+    "zh": "数据值结束日期"
+  },
+  {
+    "id": "meta_source_is_timeless",
+    "en": "Data without temporal values",
+    "zh": "没有时间值的数据"
+  },
+  {
+    "id": "meta_view_projects_data",
+    "en": "Also published in those projects",
+    "zh": "也发布在这些项目中"
+  },
+  {
+    "id": "meta_view_project_title",
+    "en": "Original project",
+    "zh": "原始项目"
+  },
+  {
+    "id": "meta_view_projects",
+    "en": "Projects",
+    "zh": "项目"
+  },
+  {
+    "id": "meta_view_id",
+    "en": "View id",
+    "zh": "视图ID"
+  },
+  {
+    "id": "meta_view_collections",
+    "en": "Collections",
+    "zh": "集合"
+  },
+  {
+    "id": "meta_view_date_modified",
+    "en": "Modification date",
+    "zh": "修改日期"
+  },
+  {
+    "id": "meta_view_date_created",
+    "en": "Creation date",
+    "zh": "创建日期"
+  },
+  {
+    "id": "meta_view_editor",
+    "en": "Editor",
+    "zh": "编辑"
+  },
+  {
+    "id": "meta_view_editors",
+    "en": "Groups with editing access",
+    "zh": "具有编辑权限的访问组"
+  },
+  {
+    "id": "meta_view_readers",
+    "en": "Groups with reading access",
+    "zh": "具有读取权限的访问组"
+  },
+  {
+    "id": "meta_view_type",
+    "en": "Type",
+    "zh": "类型"
+  },
+  {
+    "id": "meta_view_table_summary_title",
+    "en": "Summary of the view",
+    "zh": "视图摘要"
+  },
+  {
+    "id": "meta_source_id",
+    "en": "Source id",
+    "zh": "源ID"
+  },
+  {
+    "id": "meta_source_table_summary_title",
+    "en": "Summary of the source",
+    "zh": "源摘要"
+  },
+  {
+    "id": "meta_source_homepage",
+    "en": "Source homepage",
+    "zh": "源主页"
+  },
+  {
+    "id": "meta_source_url_download",
+    "en": "Download original source",
+    "zh": "下载原始的源"
+  },
+  {
+    "id": "meta_source_url_annexes",
+    "en": "Download annexes",
+    "zh": "下载附件"
+  },
+  {
+    "id": "meta_source_integrity_score",
+    "en": "Integrity score",
+    "zh": "完整性评分"
+  },
+  {
+    "id": "meta_source_time_range",
+    "en": "Temporal range",
+    "zh": "时间范围"
+  },
+  {
+    "id": "meta_source_time_range_min",
+    "en": "From",
+    "zh": "从"
+  },
+  {
+    "id": "meta_source_time_range_max",
+    "en": "To",
+    "zh": "到"
+  },
+  {
+    "id": "meta_gs_ws_b",
+    "en": "wms/wfs/wmts",
+    "zh": "wms/wfs/wmts"
+  },
+  {
+    "id": "meta_gs_ws_b_not_public",
+    "en": "wms/wfs/wmts – inactive, project not public",
+    "zh": "wms/wfs/wmts – 不活跃，项目不公开"
+  },
+  {
+    "id": "meta_mx_download",
+    "en": "Download",
+    "zh": "下载"
+  },
+  {
+    "id": "meta_mx_postgis_tiler",
+    "en": "PostGIS native tiles",
+    "zh": "PostGIS 原生图块"
+  },
+  {
+    "id": "meta_view_services",
+    "en": "Enabled services",
+    "zh": "启用的服务"
   },
   {
     "id": "tool_mirror_enable",
