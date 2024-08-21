@@ -653,6 +653,8 @@ tr {
   height: 100%;
   display: inline;
   position: relative;
+  margin-left: 1px;
+  margin-right: 1px;
 }
 .btn-circle {
   position: relative;

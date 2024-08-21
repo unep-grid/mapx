@@ -385,10 +385,17 @@ function findValues(obj, key) {
 }
 
 /**
- * Get config from client
+ * Get map config from client
  */
 function mwGetConfigMap(_, res) {
   return sendJSON(res, settings.map);
+}
+
+/**
+ * Get geoserver from client
+ */
+function mwGetConfigGeoServer(_, res) {
+  return sendJSON(res, settings.geoserver_public);
 }
 
 /**
@@ -586,6 +593,7 @@ export {
    * Middleware
    */
   mwGetConfigMap,
+  mwGetConfigGeoServer,
   mwSetHeaders,
   /** probably not used **/
   ip,

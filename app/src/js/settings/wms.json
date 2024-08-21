@@ -31,5 +31,9 @@
   {
     "label": "geointa.inta.gov.ar",
     "value": "http://geointa.inta.gov.ar/geoserver/gwc/service/wms"
+  },
+  {
+    "label": "MapX Prod",
+    "value": "https://geoserver.mapx.org/geoserver/wms"
   }
 ]

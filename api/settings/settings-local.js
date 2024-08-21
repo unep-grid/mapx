@@ -2,7 +2,6 @@ import { mkdir } from "fs/promises";
 import { settings_global } from "./settings-global.js";
 const env = process.env;
 
-
 try {
   await mkdir(env.MAPX_PATH_DOWNLOAD, { recursive: true });
   await mkdir(env.MAPX_PATH_USERDATA, { recursive: true });
@@ -52,7 +51,9 @@ const settings = Object.assign({}, settings_global, {
     password: env.GEOSERVER_ADMIN_PASSWORD,
     user: env.GEOSERVER_ADMIN_USERNAME,
     url: env.GEOSERVER_URL,
-    url_public: env.GEOSERVER_URL_PUBLIC,
+  },
+  geoserver_public: {
+    url: env.GEOSERVER_URL_PUBLIC,
   },
   db: {
     name: env.POSTGRES_DB,

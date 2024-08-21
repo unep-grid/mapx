@@ -4657,7 +4657,7 @@ export async function zoomToViewId(o) {
  * @returns {Promise<Object>} Promise resolving to the extent / bbox.
  */
 export async function getViewExtent(view) {
-  const timeout = settings.maxTimeFetch;
+  const timeout = settings.maxTimeFetchQuick;
   let cancelByTimeout = false;
 
   const def = {

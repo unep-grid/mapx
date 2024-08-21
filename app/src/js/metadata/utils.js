@@ -1,7 +1,20 @@
 import { getGemetConcept, getGemetConceptLink } from "./../gemet_util/index.js";
-import { el, elAuto, elPanel, elSpanTranslate, elWait } from "./../el_mapx";
-import { getView, getViewAuto, viewLink } from "./../map_helpers";
-import { modal } from "./../mx_helper_modal.js";
+import {
+  el,
+  elAuto,
+  elButtonFa,
+  elPanel,
+  elSpanTranslate,
+  elWait,
+} from "./../el_mapx";
+import {
+  downloadViewVector,
+  getView,
+  getViewAuto,
+  getViewExtent,
+  viewLink,
+} from "./../map_helpers";
+import { modal, modalDialog } from "./../mx_helper_modal.js";
 import { path, objectToArray, parseTemplate } from "./../mx_helper_misc.js";
 import { MenuBuilder } from "./menu.js";
 import { ws, settings } from "./../mx.js";
@@ -24,6 +37,7 @@ import {
   isNumeric,
 } from "./../is_test_mapx";
 import { getArrayDistinct } from "../array_stat/index.js";
+import { viewOgcDoc } from "../geoserver/index.js";
 
 /**
  * Get source metadata
@@ -258,7 +272,7 @@ async function viewMetaToUi(idView, elTarget) {
    * View meta section
    */
   const viewMeta = await getViewMetadata(idView);
-  const elViewMeta = buildViewMetaUi(viewMeta);
+  const elViewMeta = await buildViewMetaUi(viewMeta);
   elTarget.innerHTML = "";
   elTarget.appendChild(elViewMeta);
 
@@ -307,7 +321,7 @@ export function buildViewMetaRasterUi(rasterMeta) {
   });
 }
 
-function buildViewMetaUi(meta) {
+async function buildViewMetaUi(meta) {
   const prefixKey = "meta_view_";
   const keys = [
     "title",
@@ -319,6 +333,7 @@ function buildViewMetaUi(meta) {
     "projects_data",
     "readers",
     "editors",
+    "services",
   ];
   const tblSummaryFull = objectToArray(meta, true);
 
@@ -420,6 +435,72 @@ function buildViewMetaUi(meta) {
         }
         row.value = getArrayDistinct(row.value);
         row.value.sort();
+      }
+
+      if (row.key === "services" && isNotEmpty(row.value)) {
+        row.value = row.value.map((v) => {
+          const conf = {
+            key: `meta_${v}`,
+            action: null,
+            icon: "cog",
+            tag: "a",
+          };
+
+          switch (v) {
+            case "mx_download":
+              {
+                conf.action = [
+                  "click",
+                  async (e) => {
+                    e.preventDefault();
+                    await downloadViewVector(meta.id);
+                  },
+                ];
+                conf.icon = "download";
+              }
+              break;
+            case "gs_ws_b":
+              {
+                const isPublic =
+                  meta.readers.includes("public") && meta.project_public;
+                if (isPublic) {
+                  conf.action = [
+                    "click",
+                    async (e) => {
+                      e.preventDefault();
+                      await viewOgcDoc(meta.id);
+                    },
+                  ];
+                } else {
+                  conf.tag = "span";
+                  conf.key = `${conf.key}_not_public`;
+                }
+                conf.icon = "link";
+              }
+              break;
+            case "mx_postgis_tiler": {
+              conf.tag = "span";
+              conf.icon = "info";
+            }
+          }
+
+          const elLink = el(
+            conf.tag,
+            {
+              href: "#",
+              target: "_blank",
+              style: {
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              },
+              on: conf.action,
+            },
+            elSpanTranslate(conf.key),
+            el("i", { class: ["fa", `fa-${conf.icon}`] }),
+          );
+          return elLink;
+        });
       }
 
       /**

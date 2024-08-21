@@ -321,7 +321,11 @@ export async function getDictItem(key, lang, data) {
  */
 export async function getDictTemplate(key, data, lang) {
   const template = await getDictItem(key, lang);
-  return template.replace(/{{([^{}]+)}}/g, (_, key) => {
+  return templateHandler(template, data);
+}
+
+export function templateHandler(text, data = {}) {
+  return text.replace(/{{([^{}]+)}}/g, (_, key) => {
     return data[key];
   });
 }

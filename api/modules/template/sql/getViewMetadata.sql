@@ -9,6 +9,23 @@ WITH
     LIMIT
       1
   ),
+  v_source_id AS (
+    SELECT
+      data #>> '{source,layerInfo,name}' as id_source
+    FROM
+      v_latest
+    WHERE
+    type = 'vt'
+  ),
+  v_services AS (
+    SELECT
+      coalesce(services, '[]') AS services
+    FROM
+      mx_sources,
+      v_source_id
+    WHERE
+      mx_sources.id = v_source_id.id_source
+  ),
   v_last_editor AS (
     SELECT
       editor
@@ -69,7 +86,6 @@ WITH
     WHERE
       vl.editors ? u.id::varchar
   ),
-  --- if readers not public, but unclude a specific user ( not implemetned yet )
   v_readers_table AS (
     SELECT
       coalesce(
@@ -82,8 +98,9 @@ WITH
     WHERE
       vl.readers ? u.id::varchar
   ),
-  v_project_title AS (
+  v_project_info AS (
     SELECT
+      p.public as public,
       p.title AS title
     FROM
       mx_projects p,
@@ -157,7 +174,9 @@ WITH
         'projects',
         (vl.data #> '{"projects"}')::json,
         'project_title',
-        to_json(vpt.title),
+        to_json(vpi.title),
+        'project_public',
+        to_json(vpi.public),
         'projects_data',
         to_json(vpds.tbl),
         'readers',
@@ -183,16 +202,19 @@ WITH
         'table_editors',
         vet.tbl,
         'table_readers',
-        vrt.tbl
+        vrt.tbl,
+        'services',
+        vs.services
       ) AS meta
     FROM
       v_latest vl,
       v_date_created vc,
-      v_project_title vpt,
+      v_project_info vpi,
       v_projects_table vpds,
       v_changes_editors_table vct,
       v_editors_table vet,
-      v_readers_table vrt
+      v_readers_table vrt,
+      v_services vs
   )
 SELECT
   *

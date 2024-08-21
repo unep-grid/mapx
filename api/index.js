@@ -13,7 +13,6 @@ import * as upload from "#mapx/upload";
 import * as view from "#mapx/view";
 import * as source from "#mapx/source";
 import { mwHealth } from "#mapx/health";
-import { mwSetHeaders, mwGetConfigMap } from "#mapx/helpers";
 import { mwGemetSearchText, mwGemetSearchConcept } from "#mapx/gemet";
 import { mwGetSearchKey } from "#mapx/search";
 import { mwGetBbox } from "#mapx/bbox";
@@ -24,7 +23,11 @@ import { ioUpdateGeoserver } from "#mapx/geoserver";
 import { ioEcho } from "#mapx/io";
 import { ioTestSum, ioTestEcho } from "#mapx/io";
 import { ioUploadSource } from "#mapx/upload";
-
+import {
+  mwSetHeaders,
+  mwGetConfigMap,
+  mwGetConfigGeoServer,
+} from "#mapx/helpers";
 import {
   ioViewPin,
   ioViewSourceMetaGet,
@@ -143,6 +146,7 @@ app.get("/get/sql/", query.mwGet);
 app.get("/get/mirror/", mirror.mwGet);
 
 app.get("/get/config/map", mwGetConfigMap);
+app.get("/get/config/geoserver", mwGetConfigGeoServer);
 app.get("/get/epsg/codes/full", mwGetEpsgCodesFull);
 app.get("/get/file/formats/list", mwGetFormatsList);
 app.get("/get/source/summary/", source.mwGetSummary);

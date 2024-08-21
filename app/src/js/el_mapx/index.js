@@ -430,6 +430,7 @@ function elButtonIcon(key, opt) {
       style: null,
       content: null,
       config: null,
+      hint: true,
     },
     opt,
   );
@@ -441,9 +442,11 @@ function elButtonIcon(key, opt) {
   const addBadge = !!opt.badgeContent;
   const addContent = !!opt.content;
 
-  opt.dataset.lang_type = "tooltip";
-  opt.classes.push("hint--bottom");
-  opt.dataset.lang_key = key;
+  if (opt.hint) {
+    opt.dataset.lang_type = "tooltip";
+    opt.classes.push("hint--bottom");
+    opt.dataset.lang_key = key;
+  }
 
   const content = [
     addBadge ? el("span", { class: ["badge"] }, `${opt.badgeContent}`) : false,
@@ -462,16 +465,24 @@ function elButtonIcon(key, opt) {
     content.reverse();
   }
 
+  const elContent = el(
+    "div",
+    {
+      class: ["btn-icon"],
+    },
+    content,
+  );
+
   const elBtn = el(
     opt.tag,
     {
       type: "button",
-      class: ["btn", "btn-default", "btn-icon", ...opt.classes],
+      class: ["btn", "btn-default", ...opt.classes],
       dataset: opt.dataset,
       style: opt.style,
       ...opt.config,
     },
-    content,
+    elContent,
   );
   /**
    * Detached async dict operation
