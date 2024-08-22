@@ -1,3 +1,12 @@
+  - [1.13.9-alpha.5](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.5) 
+
+    - Views Filter
+        - Implemented #945 
+        - 75% module refactoring 
+            - Faster stats
+            - Integrated methods
+            - Externalised helpers
+
   - [1.13.9-alpha.4](https://github.com/unep-grid/mapx/tree/1.13.9-alpha.4) 
 
     - View Metadata
